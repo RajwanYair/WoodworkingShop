@@ -4,23 +4,22 @@ import type { CutSheet, CutRect } from '../../src/engine/types';
 
 const mockPart: CutRect = {
   partId: 'P01',
+  label: 'Side Panel',
   x: 10,
   y: 10,
   width: 300,
   length: 600,
-  thickness: 18,
   grainVertical: true,
 };
 
 const mockSheet: CutSheet = {
   sheetIndex: 0,
-  materialId: 'melamine18',
+  material: 'melamine-18',
   thickness: 18,
   sheetWidth: 2440,
   sheetLength: 1220,
   parts: [mockPart],
   yieldPercent: 95,
-  wasteArea: 100000,
 };
 
 describe('cutSheetToDxf', () => {
