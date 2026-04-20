@@ -8,6 +8,13 @@
 
 > **Collection note:** Plan A is the flagship layout in the pantry cabinet collection. It keeps the full 600 mm depth, uses the warmest material specification, and is the version to choose when the project should read like built-in furniture rather than utility storage.
 
+### Download PDFs
+
+| Cabinet | English | Hebrew |
+|---------|---------|--------|
+| Large (2000 × 1000 × 600 mm) | [Large\_Pantry\_Cabinet\_Plan\_A\_EN.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Large_Pantry_Cabinet_Plan_A_EN.pdf) | [Large\_Pantry\_Cabinet\_Plan\_A\_HE.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Large_Pantry_Cabinet_Plan_A_HE.pdf) |
+| Small (480 × 780 × 600 mm) | [Small\_Pantry\_Cabinet\_Plan\_A\_EN.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Small_Pantry_Cabinet_Plan_A_EN.pdf) | [Small\_Pantry\_Cabinet\_Plan\_A\_HE.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Small_Pantry_Cabinet_Plan_A_HE.pdf) |
+
 ### Plan A at a Glance
 
 | Stat | Value |

@@ -6,6 +6,9 @@
 > Detailed Carpentry Plan – Small Pantry Cabinet (48-78-60).pdf,
 > Specification & Prompt – Double Pantry Cabinet.pdf
 
+> **Download PDFs (Plan A — 600 mm depth):**
+> [Large Cabinet EN](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Large_Pantry_Cabinet_Plan_A_EN.pdf) · [Large Cabinet HE](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Large_Pantry_Cabinet_Plan_A_HE.pdf) · [Small Cabinet EN](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Small_Pantry_Cabinet_Plan_A_EN.pdf) · [Small Cabinet HE](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Small_Pantry_Cabinet_Plan_A_HE.pdf)
+
 ---
 
 ## Project Context

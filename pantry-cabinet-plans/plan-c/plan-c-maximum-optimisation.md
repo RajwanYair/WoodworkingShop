@@ -8,6 +8,12 @@
 
 > **Collection note:** Plan C is the leanest version in the collection, engineered around smarter strip nesting so a whole sheet disappears while all parts remain sandwich plywood. Choose it when total sheet count and sourcing simplicity matter more than maximum pantry depth.
 
+### Download PDFs
+
+| Cabinet | English | Hebrew |
+|---------|---------|--------|
+| Double combined | [Double\_Pantry\_Cabinet\_Plan\_C\_EN.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Double_Pantry_Cabinet_Plan_C_EN.pdf) | [Double\_Pantry\_Cabinet\_Plan\_C\_HE.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Double_Pantry_Cabinet_Plan_C_HE.pdf) |
+
 ### Plan C at a Glance
 
 | Stat | Value |

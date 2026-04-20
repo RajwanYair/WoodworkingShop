@@ -8,6 +8,13 @@
 
 > **Collection note:** Plan B is the pragmatic middle option. It trims the cabinet depth enough to save a full sheet, but avoids the sharper compromise of Plan C. Use it when cost reduction matters, yet the cabinet still needs comfortable everyday storage depth.
 
+### Download PDFs
+
+| Cabinet | English | Hebrew |
+|---------|---------|--------|
+| Large (2000 × 1000 × 404 mm) | [Large\_Pantry\_Cabinet\_Plan\_B\_EN.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Large_Pantry_Cabinet_Plan_B_EN.pdf) | [Large\_Pantry\_Cabinet\_Plan\_B\_HE.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Large_Pantry_Cabinet_Plan_B_HE.pdf) |
+| Small (480 × 780 × 404 mm) | [Small\_Pantry\_Cabinet\_Plan\_B\_EN.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Small_Pantry_Cabinet_Plan_B_EN.pdf) | [Small\_Pantry\_Cabinet\_Plan\_B\_HE.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Small_Pantry_Cabinet_Plan_B_HE.pdf) |
+
 ### Plan B at a Glance
 
 | Stat | Value |

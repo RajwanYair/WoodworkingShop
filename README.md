@@ -77,11 +77,39 @@ Each generated PDF includes premium catalog-style pages:
 - **Cut sheet layouts** — material yield plates with warm-tone part legend
 - **Bilingual rendering** — full Hebrew RTL support via `python-bidi`
 
-## Releases
+## Downloads
 
-Tagged releases (`v*`) automatically build all 12 PDFs and attach them to the
-GitHub release. Download the latest from the
-[Releases page](https://github.com/RajwanYair/WoodworkingShop/releases).
+All 12 plans are available as ready-to-print PDFs on the
+[v1.0.0 release](https://github.com/RajwanYair/WoodworkingShop/releases/tag/v1.0.0).
+
+### Plan A — Full Depth 600 mm
+
+| Cabinet | English | Hebrew |
+|---------|---------|--------|
+| Large (2000 × 1000 × 600 mm) | [Large\_Pantry\_Cabinet\_Plan\_A\_EN.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Large_Pantry_Cabinet_Plan_A_EN.pdf) | [Large\_Pantry\_Cabinet\_Plan\_A\_HE.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Large_Pantry_Cabinet_Plan_A_HE.pdf) |
+| Small (480 × 780 × 600 mm) | [Small\_Pantry\_Cabinet\_Plan\_A\_EN.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Small_Pantry_Cabinet_Plan_A_EN.pdf) | [Small\_Pantry\_Cabinet\_Plan\_A\_HE.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Small_Pantry_Cabinet_Plan_A_HE.pdf) |
+
+### Plan B — Balanced Depth 404 mm
+
+| Cabinet | English | Hebrew |
+|---------|---------|--------|
+| Large (2000 × 1000 × 404 mm) | [Large\_Pantry\_Cabinet\_Plan\_B\_EN.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Large_Pantry_Cabinet_Plan_B_EN.pdf) | [Large\_Pantry\_Cabinet\_Plan\_B\_HE.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Large_Pantry_Cabinet_Plan_B_HE.pdf) |
+| Small (480 × 780 × 404 mm) | [Small\_Pantry\_Cabinet\_Plan\_B\_EN.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Small_Pantry_Cabinet_Plan_B_EN.pdf) | [Small\_Pantry\_Cabinet\_Plan\_B\_HE.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Small_Pantry_Cabinet_Plan_B_HE.pdf) |
+
+### Plan C — Maximum Optimisation 368 mm
+
+| Cabinet | English | Hebrew |
+|---------|---------|--------|
+| Double (combined) | [Double\_Pantry\_Cabinet\_Plan\_C\_EN.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Double_Pantry_Cabinet_Plan_C_EN.pdf) | [Double\_Pantry\_Cabinet\_Plan\_C\_HE.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Double_Pantry_Cabinet_Plan_C_HE.pdf) |
+
+### Unified Collection — Cross-Plan Comparison
+
+| English | Hebrew |
+|---------|--------|
+| [Unified\_Pantry\_Cabinet\_Plans\_A\_B\_C\_EN.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Unified_Pantry_Cabinet_Plans_A_B_C_EN.pdf) | [Unified\_Pantry\_Cabinet\_Plans\_A\_B\_C\_HE.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Unified_Pantry_Cabinet_Plans_A_B_C_HE.pdf) |
+
+> Tagged releases (`v*`) automatically rebuild all PDFs via the release workflow.
+> See all releases on the [Releases page](https://github.com/RajwanYair/WoodworkingShop/releases).
 
 ## Requirements
 
