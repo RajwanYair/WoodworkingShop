@@ -62,6 +62,7 @@ export function optimizeCutSheets(parts: Part[]): OptimizationResult {
           x: r.x,
           y: r.y,
           edgeBanding: r.edgeBanding,
+          grainVertical: !r.rotated, // grain along Y when not rotated (length = Y in strip packing)
         })),
         yieldPercent: round2((usedArea / sheetArea) * 100),
       });
@@ -98,6 +99,7 @@ interface Rect {
 interface PlacedRect extends Rect {
   x: number;
   y: number;
+  rotated: boolean; // true if length/width were swapped during packing
 }
 
 /**
@@ -119,8 +121,8 @@ function packFFD(
   for (const rect of rects) {
     // Try both orientations — pick the one that fits better
     const orientations = [
-      { l: rect.length, w: rect.width },
-      { l: rect.width, w: rect.length },
+      { l: rect.length, w: rect.width, rot: false },
+      { l: rect.width, w: rect.length, rot: true },
     ];
 
     let placed = false;
@@ -136,6 +138,7 @@ function packFFD(
             width: o.w,
             x: strip.usedX,
             y: strip.y,
+            rotated: o.rot,
           };
           sheets[si].push(pr);
           strip.usedX += o.w + kerf;
@@ -157,6 +160,7 @@ function packFFD(
               width: o.w,
               x: 0,
               y: newY,
+              rotated: o.rot,
             };
             strip.usedX = o.w + kerf;
             sheetStrips[si].push(strip);
@@ -170,8 +174,8 @@ function packFFD(
 
     // Need a new sheet
     if (!placed) {
-      const o =
-        rect.length <= sheetLength && rect.width <= sheetWidth
+      const isNatural = rect.length <= sheetLength && rect.width <= sheetWidth;
+      const o = isNatural
           ? { l: rect.length, w: rect.width }
           : { l: rect.width, w: rect.length };
 
@@ -182,6 +186,7 @@ function packFFD(
         width: o.w,
         x: 0,
         y: 0,
+        rotated: !isNatural,
       };
       sheets.push([pr]);
       sheetStrips.push([strip]);

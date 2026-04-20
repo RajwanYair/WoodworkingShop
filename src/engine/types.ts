@@ -89,6 +89,7 @@ export interface CutRect {
   x: number;       // placed x on sheet
   y: number;       // placed y on sheet
   edgeBanding?: string; // edge banding description (e.g. 'Front edge', '4 edges')
+  grainVertical: boolean; // true if grain (length) runs along the sheet Y axis
 }
 
 export interface CutSheet {

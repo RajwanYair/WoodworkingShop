@@ -205,6 +205,20 @@ function PartRect({
           )}
         </>
       )}
+      {/* Grain direction arrow */}
+      {w > 8 && h > 8 && (
+        part.grainVertical ? (
+          <g opacity={isFaded ? 0.15 : 0.45} pointerEvents="none">
+            <line x1={x + w - 3} y1={y + 4} x2={x + w - 3} y2={y + h - 4} stroke="#444" strokeWidth={0.6} />
+            <polygon points={`${x + w - 3},${y + 4} ${x + w - 4.5},${y + 7} ${x + w - 1.5},${y + 7}`} fill="#444" />
+          </g>
+        ) : (
+          <g opacity={isFaded ? 0.15 : 0.45} pointerEvents="none">
+            <line x1={x + 4} y1={y + h - 3} x2={x + w - 4} y2={y + h - 3} stroke="#444" strokeWidth={0.6} />
+            <polygon points={`${x + w - 4},${y + h - 3} ${x + w - 7},${y + h - 4.5} ${x + w - 7},${y + h - 1.5}`} fill="#444" />
+          </g>
+        )
+      )}
       <text
         x={x + w / 2}
         y={y + h / 2 - 2}
@@ -226,7 +240,7 @@ function PartRect({
       >
         {part.width}×{part.length}
       </text>
-      <title>{`${part.partId}: ${part.label}\n${part.width} × ${part.length} mm${hasEB ? `\nEdge: ${part.edgeBanding}` : ''}`}</title>
+      <title>{`${part.partId}: ${part.label}\n${part.width} × ${part.length} mm\nGrain: ${part.grainVertical ? '↕ vertical' : '↔ horizontal'}${hasEB ? `\nEdge: ${part.edgeBanding}` : ''}`}</title>
     </g>
   );
 }
