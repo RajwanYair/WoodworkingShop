@@ -14,7 +14,6 @@ from reportlab.lib.units import mm
 from reportlab.lib.enums import TA_LEFT, TA_RIGHT, TA_CENTER
 from reportlab.platypus import (
     SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle,
-    PageBreak, KeepTogether,
 )
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
@@ -732,7 +731,6 @@ def make_divider(label=None, styles=None):
 
 def make_plan_badge(plan_key, plan_label, styles, *, is_he=False):
     """Return a small colored badge row identifying the plan variant."""
-    badge_text = f'<font color="#{_hex(colors.white)}"><b>{plan_key}</b></font>'
     badge_style = ParagraphStyle("Badge", parent=styles["eyebrow"],
                                  fontSize=9, leading=12,
                                  textColor=colors.white,

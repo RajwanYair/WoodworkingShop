@@ -1,0 +1,7 @@
+[lint]
+# E402: Module-level import not at top of file — generators use sys.path.insert()
+#       before importing shared.pdf_utils (legitimate sibling-package pattern).
+# E702: Multiple statements on one line (semicolon) — used throughout plan-c for
+#       compact draw/spacer pairs and cab+scale assignments.
+# E731: Lambda assignment — compact helper lambdas (H1, H2, P) in plan-c.
+ignore = ["E402", "E702", "E731"]

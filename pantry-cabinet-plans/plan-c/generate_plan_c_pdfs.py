@@ -150,12 +150,9 @@ def build_pdf(lang):
     doc = create_doc(filename)
 
     sty = make_styles(is_he)
-    s_title  = sty["title"]
     s_h1     = sty["h1"]
     s_h2     = sty["h2"]
     s_body   = sty["body"]
-    s_small  = sty["small"]
-    s_ctr    = sty["center"]
 
     story = []
     H1 = lambda en, he: story.append(Paragraph(T(he) if is_he else en, s_h1))
@@ -277,7 +274,7 @@ def build_pdf(lang):
             ["Back material", "4 mm sandwich plywood"],
             ["Sheet size", "2440 × 1220 mm"],
             ["Saw kerf", "4 mm"],
-            [f"External dims (H×W×D)", f"Large: 2000×1000×{DEPTH} | Small: 480×780×{DEPTH}"],
+            ["External dims (H×W×D)", f"Large: 2000×1000×{DEPTH} | Small: 480×780×{DEPTH}"],
         ]
         ctx_cw = [120, 310]
     story.append(tbl(ctx_h, ctx_r, ctx_cw))
@@ -425,10 +422,10 @@ def build_pdf(lang):
        "5. תוכנית חיתוך — 3 גיליונות 17 מ\"מ")
 
     P("Sheets 1 & 2 use mixed-width rip: door strip (496) + depth strip (368) + "
-      f"shelf strip (348) = 1220 mm exactly. Small doors (S-05) are cut from the "
+      "shelf strip (348) = 1220 mm exactly. Small doors (S-05) are cut from the "
       "offcut after each large door (442 × 496 mm piece) — rotated 386 × 474.",
       "גיליונות 1 ו-2 משתמשים בחיתוך רצועות מעורב: רצועת דלת (496) + רצועת עומק (368) + "
-      f"רצועת מדף (348) = 1220 מ\"מ בדיוק. דלתות קטנות (S-05) נחתכות מהפסולת "
+      "רצועת מדף (348) = 1220 מ\"מ בדיוק. דלתות קטנות (S-05) נחתכות מהפסולת "
       "שאחרי כל דלת גדולה (חתיכת 442×496 מ\"מ) — מסובבות 386×474.")
     story.append(Spacer(1, 4))
 

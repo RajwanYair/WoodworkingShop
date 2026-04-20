@@ -7,7 +7,6 @@ Plan A — Original design: depth 600 mm, 5 sheets of 17 mm sandwich plywood.
 import os
 import sys
 
-from reportlab.lib.enums import TA_LEFT, TA_RIGHT, TA_CENTER
 from reportlab.platypus import Paragraph, Spacer, PageBreak, KeepTogether
 
 # Add shared module to path

@@ -200,7 +200,6 @@ def build_pdf(lang):
     )
     doc = create_doc(filename)
     styles = make_styles(is_he)
-    s_title = styles["title"]
     s_h1 = styles["h1"]
     s_h2 = styles["h2"]
     s_body = styles["body"]

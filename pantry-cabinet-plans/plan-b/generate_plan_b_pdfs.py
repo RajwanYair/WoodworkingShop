@@ -363,12 +363,10 @@ def build_pdf(lang, cab_key):
     doc = create_doc(filename)
 
     sty = make_styles(is_he)
-    s_title  = sty["title"]
     s_h1     = sty["h1"]
     s_h2     = sty["h2"]
     s_body   = sty["body"]
     s_small  = sty["small"]
-    s_center = sty["center"]
 
     story = []
 
