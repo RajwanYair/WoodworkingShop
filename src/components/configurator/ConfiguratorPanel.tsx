@@ -4,6 +4,7 @@ import { DimensionSliders } from './DimensionSliders';
 import { MaterialSelector } from './MaterialSelector';
 import { ShelfConfig } from './ShelfConfig';
 import { DoorConfig } from './DoorConfig';
+import { SaveLoadPanel } from './SaveLoadPanel';
 
 export function ConfiguratorPanel() {
   const { t } = useTranslation();
@@ -11,6 +12,7 @@ export function ConfiguratorPanel() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-8">
+      <SaveLoadPanel />
       <DimensionSliders />
       <MaterialSelector />
       <ShelfConfig />

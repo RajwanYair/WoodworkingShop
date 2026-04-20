@@ -96,5 +96,13 @@
   "footer": {
     "darkMode": "Dark Mode",
     "language": "Language"
+  },
+  "saves": {
+    "title": "My Saved Cabinets",
+    "save": "Save",
+    "load": "Load",
+    "delete": "Delete",
+    "placeholder": "Cabinet name…",
+    "empty": "No saved configurations"
   }
 }

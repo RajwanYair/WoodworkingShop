@@ -96,5 +96,13 @@
   "footer": {
     "darkMode": "מצב כהה",
     "language": "שפה"
+  },
+  "saves": {
+    "title": "הארונות שלי",
+    "save": "שמור",
+    "load": "טען",
+    "delete": "מחק",
+    "placeholder": "שם הארון…",
+    "empty": "אין הגדרות שמורות"
   }
 }
