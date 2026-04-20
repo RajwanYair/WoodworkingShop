@@ -7,6 +7,7 @@ import { CabinetPreview } from './components/preview/CabinetPreview';
 import { OptimizerView } from './components/optimizer/OptimizerView';
 import { SmartOptimizerPanel } from './components/optimizer/SmartOptimizerPanel';
 import { PartsTable, HardwareTable } from './components/optimizer/Tables';
+import { PdfExportPanel } from './components/pdf/PdfExportPanel';
 import { useCabinetStore } from './store/cabinet-store';
 
 function App() {
@@ -29,14 +30,7 @@ function App() {
                 <OptimizerView />
               </div>
             )}
-            {activeTab === 'pdf' && (
-              <div className="text-center py-20 space-y-4">
-                <p className="text-wood-400">PDF export with @react-pdf/renderer — coming soon</p>
-                <p className="text-sm text-wood-300">
-                  Switch to <strong>Cut Sheets</strong> tab for full parts list, hardware BOM, and optimizer diagrams.
-                </p>
-              </div>
-            )}
+            {activeTab === 'pdf' && <PdfExportPanel />}
           </main>
         </div>
       </div>
