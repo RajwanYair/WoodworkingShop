@@ -12,6 +12,7 @@ export function configToParams(cfg: CabinetConfig): URLSearchParams {
   if (cfg.width !== def.width) params.set('w', String(cfg.width));
   if (cfg.height !== def.height) params.set('h', String(cfg.height));
   if (cfg.depth !== def.depth) params.set('d', String(cfg.depth));
+  if (cfg.furnitureType !== def.furnitureType) params.set('ft', cfg.furnitureType);
   if (cfg.shelfCount !== def.shelfCount) params.set('sc', String(cfg.shelfCount));
   if (cfg.shelfSpacing !== def.shelfSpacing) params.set('ss', cfg.shelfSpacing);
   if (cfg.shelfSpacing === 'custom' && cfg.customShelfPositions.length > 0) {
@@ -23,6 +24,7 @@ export function configToParams(cfg: CabinetConfig): URLSearchParams {
   if (cfg.doorStyle !== def.doorStyle) params.set('ds', cfg.doorStyle);
   if (cfg.doorReveal !== def.doorReveal) params.set('dr', String(cfg.doorReveal));
   if (cfg.handleStyle !== def.handleStyle) params.set('hs', cfg.handleStyle);
+  if (cfg.drawerCount !== def.drawerCount) params.set('drc', String(cfg.drawerCount));
   if (cfg.edgeBanding !== def.edgeBanding) params.set('eb', cfg.edgeBanding);
   if (cfg.lang !== def.lang) params.set('lang', cfg.lang);
 
@@ -42,6 +44,8 @@ export function paramsToConfig(params: URLSearchParams): Partial<CabinetConfig> 
   if (h) patch.height = Number(h);
   const d = params.get('d');
   if (d) patch.depth = Number(d);
+  const ft = params.get('ft');
+  if (ft === 'cabinet' || ft === 'bookshelf' || ft === 'desk' || ft === 'wardrobe') patch.furnitureType = ft;
   const sc = params.get('sc');
   if (sc) patch.shelfCount = Number(sc);
   const ss = params.get('ss');
@@ -55,11 +59,13 @@ export function paramsToConfig(params: URLSearchParams): Partial<CabinetConfig> 
   const dc = params.get('dc');
   if (dc === '1' || dc === '2') patch.doorCount = Number(dc) as 1 | 2;
   const ds = params.get('ds');
-  if (ds === 'flat' || ds === 'none') patch.doorStyle = ds;
+  if (ds === 'flat' || ds === 'none' || ds === 'shaker' || ds === 'glass') patch.doorStyle = ds;
   const dr = params.get('dr');
   if (dr) patch.doorReveal = Number(dr);
   const hs = params.get('hs');
   if (hs === 'bar' || hs === 'knob' || hs === 'cup' || hs === 'none') patch.handleStyle = hs;
+  const drc = params.get('drc');
+  if (drc) patch.drawerCount = Number(drc);
   const eb = params.get('eb');
   if (eb === 'all-visible' || eb === 'doors-only' || eb === 'none') patch.edgeBanding = eb;
   const lang = params.get('lang');

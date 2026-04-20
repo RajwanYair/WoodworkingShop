@@ -90,7 +90,21 @@ describe('url-state', () => {
     it('validates doorStyle values', () => {
       expect(paramsToConfig(new URLSearchParams('ds=flat')).doorStyle).toBe('flat');
       expect(paramsToConfig(new URLSearchParams('ds=none')).doorStyle).toBe('none');
+      expect(paramsToConfig(new URLSearchParams('ds=shaker')).doorStyle).toBe('shaker');
+      expect(paramsToConfig(new URLSearchParams('ds=glass')).doorStyle).toBe('glass');
       expect(paramsToConfig(new URLSearchParams('ds=invalid')).doorStyle).toBeUndefined();
+    });
+
+    it('validates furnitureType values', () => {
+      expect(paramsToConfig(new URLSearchParams('ft=cabinet')).furnitureType).toBe('cabinet');
+      expect(paramsToConfig(new URLSearchParams('ft=desk')).furnitureType).toBe('desk');
+      expect(paramsToConfig(new URLSearchParams('ft=wardrobe')).furnitureType).toBe('wardrobe');
+      expect(paramsToConfig(new URLSearchParams('ft=bookshelf')).furnitureType).toBe('bookshelf');
+      expect(paramsToConfig(new URLSearchParams('ft=invalid')).furnitureType).toBeUndefined();
+    });
+
+    it('parses drawerCount', () => {
+      expect(paramsToConfig(new URLSearchParams('drc=2')).drawerCount).toBe(2);
     });
 
     it('validates handleStyle values', () => {
@@ -112,9 +126,12 @@ describe('url-state', () => {
         width: 800,
         height: 1800,
         depth: 500,
+        furnitureType: 'wardrobe',
         shelfCount: 6,
         doorCount: 1,
+        doorStyle: 'shaker',
         handleStyle: 'knob',
+        drawerCount: 3,
         edgeBanding: 'none',
         lang: 'he',
       });
@@ -123,9 +140,12 @@ describe('url-state', () => {
       expect(decoded.width).toBe(800);
       expect(decoded.height).toBe(1800);
       expect(decoded.depth).toBe(500);
+      expect(decoded.furnitureType).toBe('wardrobe');
       expect(decoded.shelfCount).toBe(6);
       expect(decoded.doorCount).toBe(1);
+      expect(decoded.doorStyle).toBe('shaker');
       expect(decoded.handleStyle).toBe('knob');
+      expect(decoded.drawerCount).toBe(3);
       expect(decoded.edgeBanding).toBe('none');
       expect(decoded.lang).toBe('he');
     });
