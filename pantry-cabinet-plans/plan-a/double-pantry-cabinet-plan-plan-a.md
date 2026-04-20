@@ -1,3 +1,13 @@
+# Plan A — Pantry Cabinet Collection
+
+## Catalog Cover
+
+| Edition | Positioning | Material language | Primary use |
+|---|---|---|---|
+| April 2026 | Premium full-depth version | 17 mm sandwich plywood carcass + 4 mm sandwich plywood backer | Kitchen pantry installation |
+
+> **Collection note:** Plan A is the flagship layout in the pantry cabinet collection. It keeps the full 600 mm depth, uses the warmest material specification, and is the version to choose when the project should read like built-in furniture rather than utility storage.
+
 # Double Pantry Cabinet — Complete DIY Build Plan
 
 > **Project date:** April 2026
@@ -23,6 +33,15 @@
 | Back panel material | 4 mm sandwich plywood |
 | Sheet size | Standard 2440 × 1220 mm |
 | Saw kerf allowance | 4 mm |
+
+## Signature Features
+
+| Feature | Why it matters |
+|---|---|
+| Full-depth 600 mm carcass | Best usable storage volume and strongest visual presence |
+| Finished front-edge banding | Cleaner furniture-style read from the front elevation |
+| All-sandwich body and doors | Better long-term durability with one consistent material family |
+| Shared hardware language | Keeps hinges, fasteners, and drilling patterns consistent with Plans B/C |
 
 ---
 

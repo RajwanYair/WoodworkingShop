@@ -1,46 +1,28 @@
 #!/usr/bin/env python3
 """Generate Plan C combined PDF — both cabinets in one document, EN + HE.
 
-Plan C: Depth 368 mm · 3 sheets of 17 mm chipboard · 82.5 % yield
+Plan C: Depth 368 mm · 3 sheets of 17 mm sandwich plywood · 82.5 % yield
 Co-nests door strips (496) + depth strips (368) + shelf strips (348)
 on the same sheet: 496 + 4 + 368 + 4 + 348 = 1220 mm exactly.
 """
 
 import os
-from reportlab.lib import colors
-from reportlab.lib.pagesizes import A4
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import mm
-from reportlab.lib.enums import TA_LEFT, TA_RIGHT, TA_CENTER
-from reportlab.platypus import (
-    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle,
-    PageBreak, KeepTogether,
-)
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.graphics.shapes import (
-    Drawing, Rect, Line, String, Circle, Polygon,
+import sys
+
+from reportlab.platypus import Paragraph, Spacer, PageBreak, KeepTogether
+
+# Add shared module to path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from shared.pdf_utils import (
+    build_part_lookup, register_fonts, heb, make_table, make_styles, create_doc,
+    draw_front_closed, draw_front_open, draw_side_elevation,
+    draw_top_view, draw_3d_isometric, draw_cut_sheet,
+    make_catalog_cover, make_product_card, make_feature_callout,
 )
 
-try:
-    from bidi.algorithm import get_display
-    HAS_BIDI = True
-except ImportError:
-    HAS_BIDI = False
-
-# ── Paths & Fonts ──────────────────────────────────────────────────────────
-FONTS_DIR = os.path.join(os.environ.get("WINDIR", r"C:\Windows"), "Fonts")
+# ── Paths ──────────────────────────────────────────────────────────────────
 OUT_DIR = os.path.dirname(os.path.abspath(__file__))
-
-pdfmetrics.registerFont(TTFont("Arial",   os.path.join(FONTS_DIR, "arial.ttf")))
-pdfmetrics.registerFont(TTFont("ArialBd", os.path.join(FONTS_DIR, "arialbd.ttf")))
-pdfmetrics.registerFont(TTFont("David",   os.path.join(FONTS_DIR, "david.ttf")))
-pdfmetrics.registerFont(TTFont("DavidBd", os.path.join(FONTS_DIR, "davidbd.ttf")))
-
-def heb(text):
-    if HAS_BIDI:
-        return get_display(text)
-    return text[::-1]
+register_fonts()
 
 # ═══════════════════════════════════════════════════════════════════════════
 #  DATA — Plan C  (depth 368 mm)
@@ -54,19 +36,19 @@ LARGE = {
     "ext": (2000, 1000, DEPTH),
     "int_w": 966, "int_h": 1966, "int_d": DEPTH,
     "parts": [
-        ("L-01","Side panel","לוח צד",2,"Chipboard","שבבית מלמין",17,2000,DEPTH,
+        ("L-01","Side panel","לוח צד",2,"Sandwich plywood","סנדוויץ'",17,2000,DEPTH,
          "None","ללא"),
-        ("L-02","Top panel","לוח עליון",1,"Chipboard","שבבית מלמין",17,966,DEPTH,
+        ("L-02","Top panel","לוח עליון",1,"Sandwich plywood","סנדוויץ'",17,966,DEPTH,
          "None","ללא"),
-        ("L-03","Bottom panel","לוח תחתון",1,"Chipboard","שבבית מלמין",17,966,DEPTH,
+        ("L-03","Bottom panel","לוח תחתון",1,"Sandwich plywood","סנדוויץ'",17,966,DEPTH,
          "None","ללא"),
-        ("L-04","Fixed shelf","מדף קבוע",1,"Chipboard","שבבית מלמין",17,966,SD,
+        ("L-04","Fixed shelf","מדף קבוע",1,"Sandwich plywood","סנדוויץ'",17,966,SD,
          "None","ללא"),
-        ("L-05","Adjustable shelf","מדף מתכוונן",4,"Chipboard","שבבית מלמין",17,964,SD,
+        ("L-05","Adjustable shelf","מדף מתכוונן",4,"Sandwich plywood","סנדוויץ'",17,964,SD,
          "None","ללא"),
-        ("L-06","Door","דלת",2,"Chipboard","שבבית מלמין",17,1994,496,
+        ("L-06","Door","דלת",2,"Sandwich plywood","סנדוויץ'",17,1994,496,
          "Optional 4 edges","אופציונלי 4 צדדים"),
-        ("L-07","Back panel","לוח גב",1,"MDF","MDF",4,1980,980,
+        ("L-07","Back panel","לוח גב",1,"Sandwich plywood","סנדוויץ'",4,1980,980,
          "None","ללא"),
     ],
     "hinges_total": 8, "hinges_per_door": 4,
@@ -80,17 +62,17 @@ SMALL = {
     "ext": (480, 780, DEPTH),
     "int_w": 746, "int_h": 446, "int_d": DEPTH,
     "parts": [
-        ("S-01","Side panel","לוח צד",2,"Chipboard","שבבית מלמין",17,480,DEPTH,
+        ("S-01","Side panel","לוח צד",2,"Sandwich plywood","סנדוויץ'",17,480,DEPTH,
          "None","ללא"),
-        ("S-02","Top panel","לוח עליון",1,"Chipboard","שבבית מלמין",17,746,DEPTH,
+        ("S-02","Top panel","לוח עליון",1,"Sandwich plywood","סנדוויץ'",17,746,DEPTH,
          "None","ללא"),
-        ("S-03","Bottom panel","לוח תחתון",1,"Chipboard","שבבית מלמין",17,746,DEPTH,
+        ("S-03","Bottom panel","לוח תחתון",1,"Sandwich plywood","סנדוויץ'",17,746,DEPTH,
          "None","ללא"),
-        ("S-04","Fixed shelf","מדף קבוע",1,"Chipboard","שבבית מלמין",17,745,SD,
+        ("S-04","Fixed shelf","מדף קבוע",1,"Sandwich plywood","סנדוויץ'",17,745,SD,
          "None","ללא"),
-        ("S-05","Door","דלת",2,"Chipboard","שבבית מלמין",17,474,386,
+        ("S-05","Door","דלת",2,"Sandwich plywood","סנדוויץ'",17,474,386,
          "Optional 4 edges","אופציונלי 4 צדדים"),
-        ("S-06","Back panel","לוח גב",1,"MDF","MDF",4,456,760,
+        ("S-06","Back panel","לוח גב",1,"Sandwich plywood","סנדוויץ'",4,456,760,
          "None","ללא"),
     ],
     "hinges_total": 4, "hinges_per_door": 2,
@@ -99,140 +81,10 @@ SMALL = {
     "door_h": 474, "door_w": 386,
 }
 
-# ═══════════════════════════════════════════════════════════════════════════
-#  DRAWING COLOURS
-# ═══════════════════════════════════════════════════════════════════════════
-
-C_PANEL   = colors.Color(0.886, 0.906, 0.925)
-C_SHELF   = colors.Color(0.796, 0.835, 0.859)
-C_DOOR    = colors.Color(0.996, 0.886, 0.886)
-C_BACK    = colors.Color(0.996, 0.953, 0.780)
-C_HINGE   = colors.Color(0.863, 0.149, 0.149)
-C_OUTLINE = colors.Color(0.059, 0.090, 0.165)
-C_DIM     = colors.Color(0.278, 0.333, 0.412)
-C_HIDDEN  = colors.Color(0.392, 0.459, 0.525)
-
-# ═══════════════════════════════════════════════════════════════════════════
-#  DRAWING HELPERS
-# ═══════════════════════════════════════════════════════════════════════════
-
-def _dim(d, x1, y1, x2, y2, label, off=12, fs=7, horiz=True):
-    d.add(Line(x1, y1, x2, y2, strokeColor=C_DIM, strokeWidth=0.7))
-    t = 4
-    if horiz:
-        d.add(Line(x1, y1-t, x1, y1+t, strokeColor=C_DIM, strokeWidth=0.7))
-        d.add(Line(x2, y2-t, x2, y2+t, strokeColor=C_DIM, strokeWidth=0.7))
-        d.add(String((x1+x2)/2, y1-off, str(label), fontSize=fs,
-                      fillColor=C_DIM, fontName="Arial", textAnchor="middle"))
-    else:
-        d.add(Line(x1-t, y1, x1+t, y1, strokeColor=C_DIM, strokeWidth=0.7))
-        d.add(Line(x2-t, y2, x2+t, y2, strokeColor=C_DIM, strokeWidth=0.7))
-        d.add(String(x1-off, (y1+y2)/2, str(label), fontSize=fs,
-                      fillColor=C_DIM, fontName="Arial", textAnchor="middle"))
-
-
-def draw_front_closed(cab, sc):
-    H, W, D = cab["ext"]; w = W*sc; h = H*sc
-    d = Drawing(420, h+60); ox, oy = 40, 30
-    d.add(Rect(ox, oy, w, h, fillColor=colors.Color(.973,.98,.988),
-               strokeColor=C_OUTLINE, strokeWidth=1.5))
-    g = 3*sc; dw = cab["door_w"]*sc
-    for xd in (ox+g, ox+w-g-dw):
-        d.add(Rect(xd, oy+g, dw, h-2*g, fillColor=C_DOOR,
-                   strokeColor=colors.Color(.6,.11,.11), strokeWidth=1))
-    for hp in cab["hinge_positions"]:
-        yh = oy+hp*sc
-        d.add(Circle(ox+g+4, yh, 2, fillColor=C_HINGE, strokeColor=C_HINGE))
-        d.add(Circle(ox+w-g-4, yh, 2, fillColor=C_HINGE, strokeColor=C_HINGE))
-    _dim(d, ox, oy-14, ox+w, oy-14, W, horiz=True)
-    _dim(d, ox-14, oy, ox-14, oy+h, H, off=14, horiz=False)
-    return d
-
-
-def draw_front_open(cab, sc):
-    H, W, D = cab["ext"]; w = W*sc; h = H*sc; p = 17*sc
-    d = Drawing(420, h+60); ox, oy = 40, 30
-    d.add(Rect(ox, oy, w, h, fillColor=colors.Color(.973,.98,.988),
-               strokeColor=C_OUTLINE, strokeWidth=1.5))
-    d.add(Rect(ox, oy, p, h, fillColor=C_PANEL, strokeColor=C_OUTLINE))
-    d.add(Rect(ox+w-p, oy, p, h, fillColor=C_PANEL, strokeColor=C_OUTLINE))
-    d.add(Rect(ox+p, oy+h-p, w-2*p, p, fillColor=C_PANEL, strokeColor=C_OUTLINE))
-    d.add(Rect(ox+p, oy, w-2*p, p, fillColor=C_PANEL, strokeColor=C_OUTLINE))
-    mid = h/2
-    d.add(Rect(ox+p, oy+mid-p/2, w-2*p, p, fillColor=C_SHELF, strokeColor=C_OUTLINE, strokeWidth=.8))
-    if any(pt[0].endswith("-05") for pt in cab["parts"]):
-        for fr in (.2,.35,.65,.8):
-            d.add(Line(ox+p, oy+h*fr, ox+w-p, oy+h*fr,
-                       strokeColor=C_HIDDEN, strokeWidth=.8, strokeDashArray=[4,3]))
-    _dim(d, ox+p, oy-14, ox+w-p, oy-14, cab["int_w"], horiz=True)
-    return d
-
-
-def draw_side(cab, sc):
-    H, W, D = cab["ext"]; h = H*sc; dp = D*sc; p = 17*sc
-    d = Drawing(320, h+60); ox, oy = 40, 30
-    d.add(Rect(ox, oy, dp, h, fillColor=C_PANEL, strokeColor=C_OUTLINE, strokeWidth=1.5))
-    for yy in (oy+p, oy+h-p, oy+h/2):
-        d.add(Line(ox+4, yy, ox+dp-4, yy, strokeColor=C_HIDDEN, strokeWidth=.6, strokeDashArray=[4,3]))
-    d.add(Rect(ox+dp-1, oy+2, 1, h-4, fillColor=C_BACK,
-               strokeColor=colors.Color(.573,.251,.055), strokeWidth=.5))
-    _dim(d, ox, oy-14, ox+dp, oy-14, D, horiz=True)
-    _dim(d, ox-14, oy, ox-14, oy+h, H, off=14, horiz=False)
-    return d
-
-
-def draw_top(cab, sc):
-    H, W, D = cab["ext"]; w = W*sc; dp = D*sc; p = 17*sc
-    d = Drawing(420, dp+60); ox, oy = 40, 20
-    d.add(Rect(ox, oy, w, dp, fillColor=colors.Color(.973,.98,.988),
-               strokeColor=C_OUTLINE, strokeWidth=1.5))
-    d.add(Rect(ox, oy, p, dp, fillColor=C_PANEL, strokeColor=C_OUTLINE))
-    d.add(Rect(ox+w-p, oy, p, dp, fillColor=C_PANEL, strokeColor=C_OUTLINE))
-    d.add(Line(ox, oy+dp-1, ox+w, oy+dp-1, strokeColor=C_BACK, strokeWidth=1))
-    _dim(d, ox, oy-10, ox+w, oy-10, W, off=9, horiz=True)
-    _dim(d, ox+w+10, oy, ox+w+10, oy+dp, D, off=-16, horiz=False)
-    return d
-
-
-def draw_3d(cab, sc):
-    H, W, D = cab["ext"]; fw = W*sc; fh = H*sc
-    dx = D*sc*.4; dy = D*sc*.25; p = 17*sc
-    d = Drawing(fw+dx+80, fh+dy+80); ox, oy = 40, 20
-    d.add(Rect(ox, oy, fw, fh, fillColor=C_PANEL, strokeColor=C_OUTLINE, strokeWidth=1.5))
-    d.add(Polygon([ox,oy+fh, ox+dx,oy+fh+dy, ox+fw+dx,oy+fh+dy, ox+fw,oy+fh],
-                  fillColor=colors.Color(.945,.961,.976), strokeColor=C_OUTLINE, strokeWidth=1.5))
-    d.add(Polygon([ox+fw,oy, ox+fw+dx,oy+dy, ox+fw+dx,oy+fh+dy, ox+fw,oy+fh],
-                  fillColor=colors.Color(.796,.835,.859), strokeColor=C_OUTLINE, strokeWidth=1.5))
-    dw = cab["door_w"]*sc
-    d.add(Rect(ox+2, oy+2, dw, fh-4, fillColor=C_DOOR,
-               strokeColor=colors.Color(.6,.11,.11), strokeWidth=.8, fillOpacity=.4))
-    mid = fh/2
-    d.add(Line(ox+fw, oy+mid, ox+fw+dx, oy+mid+dy, strokeColor=C_OUTLINE, strokeWidth=.8))
-    d.add(Line(ox+p, oy+mid, ox+fw-p, oy+mid, strokeColor=C_HIDDEN, strokeWidth=.8, strokeDashArray=[4,3]))
-    _dim(d, ox-14, oy, ox-14, oy+fh, H, off=14, horiz=False)
-    _dim(d, ox, oy-14, ox+fw, oy-14, W, horiz=True)
-    d.add(String(ox+fw+dx/2+6, oy+fh+dy/2+8, str(D), fontSize=7,
-                 fillColor=C_DIM, fontName="Arial", textAnchor="middle"))
-    return d
-
-
-def draw_cut_sheet(parts, sw, sh, sc, num, yld):
-    ssw = sw*sc; ssh = sh*sc
-    d = Drawing(ssw+80, ssh+60); ox, oy = 40, 30
-    d.add(Rect(ox, oy, ssw, ssh, fillColor=colors.Color(.945,.961,.976),
-               strokeColor=C_OUTLINE, strokeWidth=1.5))
-    d.add(String(ox, oy+ssh+14, f"Sheet {num}  ({yld}%)", fontSize=9,
-                 fillColor=colors.black, fontName="ArialBd", textAnchor="start"))
-    for (x, y, pw, ph, lbl, big) in parts:
-        px = ox+x*sc; py = oy+y*sc; ppw = pw*sc; pph = ph*sc
-        c = colors.Color(.859,.918,.996) if big else colors.Color(.863,.988,.906)
-        d.add(Rect(px, py, ppw, pph, fillColor=c, strokeColor=C_OUTLINE, strokeWidth=.8))
-        d.add(String(px+ppw/2, py+pph/2+4, lbl, fontSize=6,
-                     fillColor=C_OUTLINE, fontName="ArialBd", textAnchor="middle"))
-        d.add(String(px+ppw/2, py+pph/2-5, f"{pw}\u00d7{ph}", fontSize=5,
-                     fillColor=C_DIM, fontName="Arial", textAnchor="middle"))
-    return d
-
+# Aliases for shorter names used in Plan C build_pdf
+draw_side = draw_side_elevation
+draw_top  = draw_top_view
+draw_3d   = draw_3d_isometric
 
 # ═══════════════════════════════════════════════════════════════════════════
 #  CUT PLAN LAYOUTS — Plan C  (3 sheets of 17 mm)
@@ -292,22 +144,17 @@ def build_pdf(lang):
     is_he = lang == "he"
     T = (lambda t: heb(t)) if is_he else (lambda t: t)
 
-    fn  = "David"   if is_he else "Arial"
-    fnb = "DavidBd" if is_he else "ArialBd"
-    al  = TA_RIGHT  if is_he else TA_LEFT
-
     filename = os.path.join(OUT_DIR,
-        f"Double_Pantry_Cabinet_PlanC_{'HE' if is_he else 'EN'}.pdf")
-    doc = SimpleDocTemplate(filename, pagesize=A4,
-        topMargin=20*mm, bottomMargin=15*mm, leftMargin=15*mm, rightMargin=15*mm)
+        f"Double_Pantry_Cabinet_Plan_C_{'HE' if is_he else 'EN'}.pdf")
+    doc = create_doc(filename)
 
-    sty = getSampleStyleSheet()
-    s_title  = ParagraphStyle("T",  parent=sty["Title"],    fontName=fnb, fontSize=18, alignment=TA_CENTER, spaceAfter=6)
-    s_h1     = ParagraphStyle("H1", parent=sty["Heading1"], fontName=fnb, fontSize=14, alignment=al, spaceAfter=4, spaceBefore=10)
-    s_h2     = ParagraphStyle("H2", parent=sty["Heading2"], fontName=fnb, fontSize=11, alignment=al, spaceAfter=3, spaceBefore=6)
-    s_body   = ParagraphStyle("B",  parent=sty["Normal"],   fontName=fn,  fontSize=9,  alignment=al, spaceAfter=2, leading=13)
-    s_small  = ParagraphStyle("S",  parent=sty["Normal"],   fontName=fn,  fontSize=8,  alignment=al, spaceAfter=1, leading=11)
-    s_ctr    = ParagraphStyle("C",  parent=sty["Normal"],   fontName=fn,  fontSize=9,  alignment=TA_CENTER, spaceAfter=2, leading=13)
+    sty = make_styles(is_he)
+    s_title  = sty["title"]
+    s_h1     = sty["h1"]
+    s_h2     = sty["h2"]
+    s_body   = sty["body"]
+    s_small  = sty["small"]
+    s_ctr    = sty["center"]
 
     story = []
     H1 = lambda en, he: story.append(Paragraph(T(he) if is_he else en, s_h1))
@@ -319,32 +166,48 @@ def build_pdf(lang):
             story.append(Paragraph(f"{i}. {T(he) if is_he else en}", s_body))
 
     def tbl(headers, rows, cw=None):
-        data = [headers] + rows
-        ts = TableStyle([
-            ("BACKGROUND",    (0,0),(-1,0), colors.Color(.2,.2,.3)),
-            ("TEXTCOLOR",     (0,0),(-1,0), colors.white),
-            ("FONTNAME",      (0,0),(-1,0), fnb), ("FONTSIZE", (0,0),(-1,0), 8),
-            ("FONTNAME",      (0,1),(-1,-1), fn), ("FONTSIZE", (0,1),(-1,-1), 7.5),
-            ("ALIGN",         (0,0),(-1,-1), "RIGHT" if is_he else "LEFT"),
-            ("VALIGN",        (0,0),(-1,-1), "MIDDLE"),
-            ("GRID",          (0,0),(-1,-1), .5, colors.Color(.7,.7,.7)),
-            ("ROWBACKGROUNDS",(0,1),(-1,-1), [colors.white, colors.Color(.96,.96,.98)]),
-            ("TOPPADDING",    (0,0),(-1,-1), 2),
-            ("BOTTOMPADDING", (0,0),(-1,-1), 2),
-        ])
-        t = Table(data, colWidths=cw, repeatRows=1); t.setStyle(ts); return t
+        return make_table(headers, rows, cw, is_he=is_he)
 
     # ── PAGE 1 — Title + Overview ──────────────────────────────────────
-    story.append(Paragraph(
-        T("ארונות מזווה כפולים — תוכנית ג'") if is_he else
-        "Double Pantry Cabinets — Plan C", s_title))
-    story.append(Paragraph(
-        T("אופטימיזציה מקסימלית: עומק 368 מ\"מ · 3 גיליונות בלבד · ניצולת 82.5%") if is_he else
-        "Maximum optimisation: Depth 368 mm · 3 sheets only · 82.5 % yield", s_ctr))
-    story.append(Paragraph(
-        T("תאריך: אפריל 2026 | מיקום: חדר מחסן | חומר: שבבית מלמין 17 מ\"מ (זולה)") if is_he else
-        "Date: April 2026 | Location: Storage room | Material: 17 mm melamine chipboard (low-cost)", s_ctr))
+    story.extend(make_catalog_cover(
+        T("ארונות מזווה כפולים — תוכנית ג'") if is_he else "Double Pantry Cabinets — Plan C",
+        T("מהדורת קטלוג אופטימלית עם מספר גיליונות מינימלי") if is_he else "Maximum-optimisation catalog edition with the leanest sheet count",
+        T("אפריל 2026 | תוכנית ג' | 3 גיליונות בלבד") if is_he else "April 2026 | Plan C | Only 3 structural sheets",
+        T("הגרסה החכמה ביותר בפריסה: שילוב רצועות חיתוך שמבטל גיליון שלם תוך שמירה על סנדוויץ' בכל החלקים.") if is_he else "The leanest version in the collection, engineered around smarter strip nesting so a whole sheet disappears while all parts remain sandwich plywood.",
+        [
+            (T("עומק") if is_he else "Depth", f"{DEPTH} mm"),
+            (T("גיליונות 17 מ\"מ") if is_he else "17 mm sheets", "3"),
+            (T("ניצולת") if is_he else "Yield", "82.5 %"),
+        ],
+        sty,
+        is_he=is_he,
+        eyebrow=T("קולקציית ארונות מזווה") if is_he else "PANTRY CABINET COLLECTION",
+    ))
+    story.append(make_product_card(
+        T("כרטיס קולקציה") if is_he else "Collection Card",
+        T("שני הארונות נשמרים בגובה וברוחב המקוריים, אך עומק הגוף מותאם למיקסום חומר.") if is_he else "Both cabinets keep the original height and width, but the body depth is tuned specifically for strip-based sheet optimisation.",
+        [
+            (T("ארון גדול") if is_he else "Large cabinet", f"2000 x 1000 x {DEPTH}"),
+            (T("ארון קטן") if is_he else "Small cabinet", f"480 x 780 x {DEPTH}"),
+            (T("חומר גוף") if is_he else "Carcass material", T("סנדוויץ'") if is_he else "Sandwich plywood"),
+            (T("עומק מדף") if is_he else "Shelf depth", str(SD)),
+        ],
+        T("מומלץ כאשר מספר הגיליונות ופשטות הרכש חשובים יותר מעומק אחסון מלא, בלי לשנות את החומר.") if is_he else "Best when total sheet count and sourcing simplicity matter more than maximum pantry depth, without changing the material family.",
+        sty,
+        is_he=is_he,
+    ))
     story.append(Spacer(1, 8))
+    story.append(make_feature_callout(
+        T("קריאות אופטימיזציה") if is_he else "Optimisation Callouts",
+        [
+            T("שילוב רצועת דלת, רצועת עומק ורצועת מדף על אותו גיליון מייצר חיסכון אמיתי של גיליון שלם.") if is_he else "Combining door, depth, and shelf strips on the same sheet removes an entire structural sheet from the plan.",
+            T("עומק 368 מ\"מ מתאים במיוחד למחסן, חדר שירות, או שימוש שבו קומפקטיות עדיפה על קיבולת מרבית.") if is_he else "368 mm depth is best suited to storage rooms and service zones where compactness beats maximum capacity.",
+            T("פחות גיליונות משמע פחות שינוע, פחות אחסון זמני, ופחות בלבול בשטח העבודה.") if is_he else "Fewer sheets mean less transport, less temporary storage, and a cleaner workshop flow.",
+        ],
+        sty,
+        is_he=is_he,
+    ))
+    story.append(PageBreak())
 
     # Comparison table
     if is_he:
@@ -353,7 +216,7 @@ def build_pdf(lang):
             [T("368 מ\"מ"), T("404 מ\"מ"), T("600 מ\"מ"), T("עומק")],
             [T("3"), T("4"), T("5"), T("גיליונות 17 מ\"מ")],
             [T("82.5%"), T("66.1%"), T("71.2%"), T("ניצולת")],
-            [T("שבבית זולה"), T("שבבית זולה"), T("סנדוויץ'/פלייווד"), T("חומר")],
+            [T("סנדוויץ'"), T("סנדוויץ'"), T("סנדוויץ'"), T("חומר")],
             [T("ללא (מחסן)"), T("ללא (מחסן)"), T("כן — 30 מטר"), T("קנטים")],
         ]
         comp_cw = [90, 90, 90, 100]
@@ -363,7 +226,7 @@ def build_pdf(lang):
             ["Depth", "600 mm", "404 mm", "368 mm"],
             ["17 mm sheets", "5", "4", "3"],
             ["Yield", "71.2 %", "66.1 %", "82.5 %"],
-            ["Material", "Plywood", "Chipboard", "Chipboard"],
+            ["Material", "Sandwich plywood", "Sandwich plywood", "Sandwich plywood"],
             ["Edge banding", "Yes — 30 m", "None", "None"],
         ]
         comp_cw = [100, 90, 90, 90]
@@ -384,8 +247,8 @@ def build_pdf(lang):
         ctx_r = [
             [T("חדר מחסן"), T("מיקום")],
             [T("ללא מסגרת (אירופאי)"), T("סגנון")],
-            [T("שבבית מלמין 17 מ\"מ (זולה)"), T("חומר גוף")],
-            [T("MDF 4 מ\"מ"), T("חומר גב")],
+            [T("סנדוויץ' 17 מ\"מ"), T("חומר גוף")],
+            [T("סנדוויץ' 4 מ\"מ"), T("חומר גב")],
             [T("2440 × 1220 מ\"מ"), T("גודל גיליון")],
             [T("4 מ\"מ"), T("רוחב חיתוך מסור")],
             [T(f"ארון גדול: 2000×1000×{DEPTH} | ארון קטן: 480×780×{DEPTH}"), T("מידות חיצוניות (ג×ר×ע)")],
@@ -396,8 +259,8 @@ def build_pdf(lang):
         ctx_r = [
             ["Location", "Storage room"],
             ["Style", "Frameless / Euro"],
-            ["Carcass material", "17 mm melamine chipboard (low-cost)"],
-            ["Back material", "4 mm MDF"],
+            ["Carcass material", "17 mm sandwich plywood"],
+            ["Back material", "4 mm sandwich plywood"],
             ["Sheet size", "2440 × 1220 mm"],
             ["Saw kerf", "4 mm"],
             [f"External dims (H×W×D)", f"Large: 2000×1000×{DEPTH} | Small: 480×780×{DEPTH}"],
@@ -417,10 +280,10 @@ def build_pdf(lang):
          "שתי האלכסונים חייבים להיות שווים בסטייה של עד 2 מ\"מ לפני חיבור הגב."),
         ("Tall cabinet MUST be wall-secured with heavy-duty L-brackets.",
          "הארון הגדול חייב להיות מעוגן לקיר עם לפחות 2 זוויתניות L כבדות."),
-        ("Chipboard splits easily — ALWAYS pre-drill 3 mm pilot holes!",
-         "שבבית נוטה להיסדק — חובה לקדוח חורי פיילוט 3 מ\"מ לפני כל בורג!"),
-        ("Measure actual chipboard thickness — may vary ±0.5 mm.",
-         "מד את עובי השבבית בפועל — ייתכן סטייה של ±0.5 מ\"מ."),
+        ("Pre-drill 3 mm pilot holes for cleaner screw tracking and edge control.",
+         "קדח חורי פיילוט 3 מ\"מ לקבלת הברגה נקייה ושליטה טובה יותר בקצה."),
+        ("Measure actual sandwich plywood thickness — may vary ±0.5 mm.",
+         "מד את עובי הסנדוויץ' בפועל — ייתכן סטייה של ±0.5 מ\"מ."),
         ("Storage room — edge banding optional (doors only if desired).",
          "מיקום: חדר מחסן — אין צורך בקנטים (אלא אם רוצים בדלתות)."),
         (f"Depth {DEPTH} mm ≈ 37 cm — adequate for cans, jars, bottles, cereal boxes.",
@@ -529,17 +392,18 @@ def build_pdf(lang):
         ac_h = ["ID","Part","Qty","Thick","Length","Width","Area/pc","Total area"]
         ac_r = []
         for p in all_parts:
-            a = p[7]*p[8]; ta = a*p[3]
+            a = p[7] * p[8]
+            ta = a * p[3]
             ac_r.append([p[0], p[1], str(p[3]), str(p[6]),
                          str(p[7]), str(p[8]), f"{a:,}", f"{ta:,}"])
         ac_cw = [30,75,25,30,45,45,60,65]
     story.append(tbl(ac_h, ac_r, ac_cw))
     story.append(Spacer(1, 4))
 
-    P(f"17 mm chipboard net area: {total_17:,} mm² ≈ {total_17/1e6:.2f} m²",
-      f"שטח שבבית 17 מ\"מ נטו: {total_17:,} ממ\"ר ≈ {total_17/1e6:.2f} מ\"ר")
-    P(f"4 mm MDF backer net area: {total_4:,} mm² ≈ {total_4/1e6:.2f} m²",
-      f"שטח גב MDF 4 מ\"מ נטו: {total_4:,} ממ\"ר ≈ {total_4/1e6:.2f} מ\"ר")
+    P(f"17 mm sandwich plywood net area: {total_17:,} mm² ≈ {total_17/1e6:.2f} m²",
+      f"שטח סנדוויץ' 17 מ\"מ נטו: {total_17:,} ממ\"ר ≈ {total_17/1e6:.2f} מ\"ר")
+    P(f"4 mm sandwich plywood net area: {total_4:,} mm² ≈ {total_4/1e6:.2f} m²",
+      f"שטח סנדוויץ' 4 מ\"מ נטו: {total_4:,} ממ\"ר ≈ {total_4/1e6:.2f} מ\"ר")
 
     # ── §5 Sheet Cut Plan ───────────────────────────────────────────────
     story.append(PageBreak())
@@ -559,13 +423,14 @@ def build_pdf(lang):
     story.append(Spacer(1, 4))
 
     sc = 0.19
+    part_lookup = build_part_lookup(LARGE, SMALL)
     for i, (yld, parts) in enumerate(SHEETS_17MM, 1):
-        d = draw_cut_sheet(parts, 2440, 1220, sc, i, yld)
+        d = draw_cut_sheet(parts, 2440, 1220, sc, i, yld, part_lookup=part_lookup)
         story.append(KeepTogether([d, Spacer(1, 4)]))
 
     H2("4 mm Backer Sheet", "גיליון גב 4 מ\"מ")
     for yld, parts in SHEET_4MM:
-        story.append(draw_cut_sheet(parts, 2440, 1220, sc, 1, yld))
+        story.append(draw_cut_sheet(parts, 2440, 1220, sc, 1, yld, part_lookup=part_lookup))
 
     # ── §6 Drilling & Boring ────────────────────────────────────────────
     story.append(PageBreak())
@@ -657,15 +522,15 @@ def build_pdf(lang):
     if is_he:
         sh_h = [T("כמות"), T("גודל"), T("פריט")]
         sh_r = [
-            [T("3 גיליונות"), T("2440×1220"), T("שבבית מלמין 17 מ\"מ (זולה)")],
-            [T("1 גיליון"), T("2440×1220"), T("גב MDF 4 מ\"מ")],
+            [T("3 גיליונות"), T("2440×1220"), T("סנדוויץ' 17 מ\"מ")],
+            [T("1 גיליון"), T("2440×1220"), T("סנדוויץ' 4 מ\"מ")],
         ]
         sh_cw = [80, 100, 220]
     else:
         sh_h = ["Item", "Size", "Qty"]
         sh_r = [
-            ["17 mm melamine chipboard (low-cost)", "2440×1220", "3 sheets"],
-            ["4 mm MDF backer", "2440×1220", "1 sheet"],
+            ["17 mm sandwich plywood", "2440×1220", "3 sheets"],
+            ["4 mm sandwich plywood", "2440×1220", "1 sheet"],
         ]
         sh_cw = [220, 100, 80]
     story.append(tbl(sh_h, sh_r, sh_cw))
@@ -734,8 +599,8 @@ def build_pdf(lang):
     story.append(PageBreak())
     H1("11. Verify Before Cutting", "11. בדוק לפני חיתוך")
     checks = [
-        ("Measure actual chipboard thickness with calipers.",
-         "מדוד עובי שבבית בפועל עם קליבר."),
+        ("Measure actual sandwich plywood thickness with calipers.",
+         "מדוד עובי סנדוויץ' בפועל עם קליבר."),
         ("Verify every sheet is full 2440 × 1220 before marking.",
          "אמת מידות כל גיליון לפני סימון."),
         ("Confirm hinge cup center-to-edge from manufacturer datasheet.",
@@ -746,8 +611,8 @@ def build_pdf(lang):
          "סמן כל חלק עם מזהה (L-01…S-06) מיד אחרי חיתוך."),
         ("Dry-fit all carcass joints before committing any screws.",
          "הרכב יבש לפני הברגה — ודא שהלוחות נכנסים בלי כוח."),
-        ("MANDATORY: Pre-drill 3 mm pilot holes — chipboard splits easily!",
-         "חובה: קדח פיילוט 3 מ\"מ לפני כל בורג — שבבית נסדקת בקלות!"),
+        ("Pre-drill 3 mm pilot holes before final assembly.",
+         "קדח פיילוט 3 מ\"מ לפני הרכבה סופית."),
         ("Align shelf-pin columns with a drilling jig or template.",
          "יישר עמודות פיני מדף עם מכוון קידוח."),
         ("Locate wall studs before mounting. Pantry loads need solid framing.",

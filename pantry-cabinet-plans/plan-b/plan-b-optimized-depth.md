@@ -1,9 +1,19 @@
+# Plan B — Pantry Cabinet Collection
+
+## Catalog Cover
+
+| Edition | Positioning | Material language | Primary use |
+|---|---|---|---|
+| April 2026 | Balanced depth / sheet-count version | 17 mm sandwich plywood + 4 mm sandwich plywood backer | Storage room or service zone |
+
+> **Collection note:** Plan B is the pragmatic middle option. It trims the cabinet depth enough to save a full sheet, but avoids the sharper compromise of Plan C. Use it when cost reduction matters, yet the cabinet still needs comfortable everyday storage depth.
+
 # Plan B — Cost-Optimized Double Pantry Cabinet
 
-> **Based on:** Plan A (double-pantry-cabinet-plan.md)
-> **Optimization goal:** Reduce plywood sheet count by adjusting depth only.
+> **Based on:** Plan A (double-pantry-cabinet-plan-plan-a.md)
+> **Optimization goal:** Reduce sandwich plywood sheet count by adjusting depth only.
 > **Location:** Storage room — appearance is not a priority.
-> **Material change:** Use **low-cost melamine chipboard 17 mm** instead of plywood/sandwich.
+> **Material change:** Keep **sandwich plywood** for all parts, including the back panels.
 > **Edge banding:** Minimal — only front-facing door edges if desired; all other edges left raw.
 
 ---
@@ -15,11 +25,20 @@
 | Depth (both cabinets) | 600 mm | **404 mm** | Max depth that fits 3 rip-strips per sheet (3 × 404 + 2 × 4 kerf = 1220 mm exactly) |
 | 17 mm sheet count | **5** | **4** | 1 sheet saved (20 % reduction) |
 | 4 mm backer sheets | 1 | 1 | Unchanged |
-| Carcass material | Plywood (sandwich/melamine-faced) | **Low-cost melamine chipboard 17 mm** | Storage room — no aesthetic requirement |
+| Carcass material | Sandwich plywood | **Sandwich plywood 17 mm** | Same material family as Plan A |
 | Edge banding | All visible front edges | **Optional / none** | Storage room |
 | Cabinet widths & heights | Unchanged | Unchanged | — |
 
 > **404 mm depth** is comfortable for standard pantry items (cans, jars, cereal boxes). It is roughly equivalent to a standard 40 cm kitchen cabinet depth.
+
+## Signature Features
+
+| Feature | Why it matters |
+|---|---|
+| 404 mm reduced depth | Saves one structural sheet while staying practical for daily pantry goods |
+| Minimal finishing strategy | Raw carcass edges reduce labor and finishing cost |
+| Shared joinery with Plan A | Keeps drilling, screw layout, and hinge setup familiar |
+| Single material family | Keeps machining, fastening, and finishing consistent with Plan A |
 
 ---
 
@@ -63,24 +82,24 @@
 
 | Part | ID | Qty | Material | Thick | Length | Width | Notes |
 |---|---|---|---|---|---|---|---|
-| Side panel | L-01 | 2 | Chipboard | 17 | 2000 | 404 | Full-height |
-| Top panel | L-02 | 1 | Chipboard | 17 | 966 | 404 | Captured between sides |
-| Bottom panel | L-03 | 1 | Chipboard | 17 | 966 | 404 | Captured between sides |
-| Fixed shelf | L-04 | 1 | Chipboard | 17 | 966 | 384 | 20 mm setback from front |
-| Adjustable shelf | L-05 | 4 | Chipboard | 17 | 964 | 384 | 1 mm clearance per side |
-| Door | L-06 | 2 | Chipboard | 17 | 1994 | 496 | 3 mm outer reveal, 2 mm center gap |
-| Back panel | L-07 | 1 | MDF | 4 | 1980 | 980 | 10 mm inset per edge |
+| Side panel | L-01 | 2 | Sandwich plywood | 17 | 2000 | 404 | Full-height |
+| Top panel | L-02 | 1 | Sandwich plywood | 17 | 966 | 404 | Captured between sides |
+| Bottom panel | L-03 | 1 | Sandwich plywood | 17 | 966 | 404 | Captured between sides |
+| Fixed shelf | L-04 | 1 | Sandwich plywood | 17 | 966 | 384 | 20 mm setback from front |
+| Adjustable shelf | L-05 | 4 | Sandwich plywood | 17 | 964 | 384 | 1 mm clearance per side |
+| Door | L-06 | 2 | Sandwich plywood | 17 | 1994 | 496 | 3 mm outer reveal, 2 mm center gap |
+| Back panel | L-07 | 1 | Sandwich plywood | 4 | 1980 | 980 | 10 mm inset per edge |
 
 ### Cabinet 2 — Small Upper Unit
 
 | Part | ID | Qty | Material | Thick | Length | Width | Notes |
 |---|---|---|---|---|---|---|---|
-| Side panel | S-01 | 2 | Chipboard | 17 | 480 | 404 | Full-height |
-| Top panel | S-02 | 1 | Chipboard | 17 | 746 | 404 | Captured between sides |
-| Bottom panel | S-03 | 1 | Chipboard | 17 | 746 | 404 | Captured between sides |
-| Fixed shelf | S-04 | 1 | Chipboard | 17 | 745 | 384 | 20 mm setback from front |
-| Door | S-05 | 2 | Chipboard | 17 | 474 | 386 | 3 mm outer reveal, 2 mm center gap |
-| Back panel | S-06 | 1 | MDF | 4 | 456 | 760 | Trimmed for kerf (see Plan A §1 note 10) |
+| Side panel | S-01 | 2 | Sandwich plywood | 17 | 480 | 404 | Full-height |
+| Top panel | S-02 | 1 | Sandwich plywood | 17 | 746 | 404 | Captured between sides |
+| Bottom panel | S-03 | 1 | Sandwich plywood | 17 | 746 | 404 | Captured between sides |
+| Fixed shelf | S-04 | 1 | Sandwich plywood | 17 | 745 | 384 | 20 mm setback from front |
+| Door | S-05 | 2 | Sandwich plywood | 17 | 474 | 386 | 3 mm outer reveal, 2 mm center gap |
+| Back panel | S-06 | 1 | Sandwich plywood | 4 | 456 | 760 | Trimmed for kerf (see Plan A §1 note 10) |
 
 ### Combined Cut List (both cabinets, 20 parts total)
 
@@ -103,14 +122,14 @@
 
 **Material totals:**
 
-- 17 mm chipboard net part area: **7 868 840 mm² ≈ 7.87 m²**
-- 4 mm MDF backer net part area: **2 286 960 mm² ≈ 2.29 m²**
+- 17 mm sandwich plywood net part area: **7 868 840 mm² ≈ 7.87 m²**
+- 4 mm sandwich plywood backer net part area: **2 286 960 mm² ≈ 2.29 m²**
 
 ---
 
-## 3. Sheet Layout Strategy — 4 Sheets of 17 mm Chipboard
+## 3. Sheet Layout Strategy — 4 Sheets of 17 mm Sandwich Plywood
 
-**Total 17 mm chipboard required:** 4 standard sheets (2440 × 1220 mm).
+**Total 17 mm sandwich plywood required:** 4 standard sheets (2440 × 1220 mm).
 **Total 4 mm backer required:** 1 standard sheet.
 **Overall yield (17 mm):** 7 868 840 mm² / 11 907 200 mm² = **66.1 %**.
 
@@ -185,8 +204,8 @@ Rip into **3 strips**: 384 + 4 + 384 + 4 + 386 = **1162 mm** (58 mm waste strip)
 
 | Item | Size | Qty | Notes |
 |---|---|---|---|
-| **17 mm melamine chipboard (low-cost)** | 2440 × 1220 | **4 sheets** | ↓ 1 sheet vs Plan A |
-| 4 mm MDF backer | 2440 × 1220 | 1 sheet | Same as Plan A |
+| **17 mm sandwich plywood** | 2440 × 1220 | **4 sheets** | ↓ 1 sheet vs Plan A |
+| 4 mm sandwich plywood | 2440 × 1220 | 1 sheet | Same as Plan A |
 
 ### Hardware (same as Plan A)
 
@@ -214,7 +233,7 @@ Rip into **3 strips**: 384 + 4 + 384 + 4 + 386 = **1162 mm** (58 mm waste strip)
 
 | Item | Plan A | Plan B | Savings |
 |---|---|---|---|
-| 17 mm sheets | 5 × plywood/sandwich | 4 × low-cost chipboard | **−1 sheet + cheaper per sheet** |
+| 17 mm sheets | 5 × sandwich plywood | 4 × sandwich plywood | **−1 sheet** |
 | 4 mm backer | 1 sheet | 1 sheet | — |
 | Edge banding | ~30 m | 0 m (optional) | **~30 m saved** |
 | Hardware | Same | Same | — |
@@ -225,7 +244,7 @@ Rip into **3 strips**: 384 + 4 + 384 + 4 + 386 = **1162 mm** (58 mm waste strip)
 ## 6. Notes
 
 1. **All drilling, hinge, and assembly instructions from Plan A apply unchanged.** Only depth-dependent dimensions (side panel width, top/bottom width, shelf depth) are modified.
-2. **Chipboard edge quality.** Pre-drill all screw holes carefully — chipboard splits more easily than plywood. Use 3 mm pilot holes without exception.
+2. **Sandwich plywood consistency.** Keep the same drilling discipline as Plan A. Use 3 mm pilot holes for clean screw tracking and reliable assembly.
 3. **Shelf load.** At 384 mm shelf depth, center-span deflection under 25 kg load is lower than at 580 mm — shelves will actually be stiffer.
 4. **Anti-tip.** Wall mounting remains mandatory for the tall cabinet.
 5. **Door fitment.** Doors are identical to Plan A. The reduced depth means doors will protrude beyond the cabinet sides by 496 − 404 = 92 mm on the hinge side — this is normal for overlay doors on shallow cabinets but verify clearance.
