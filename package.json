@@ -17,7 +17,9 @@
     "format:check": "prettier --check .",
     "typecheck": "tsc -b --noEmit",
     "check": "npm run typecheck && npm run lint && npm run format:check && npm run test",
-    "ci": "npm run check && npm run build"
+    "ci": "npm run check && npm run build",
+    "i18n:coverage": "node scripts/i18n-coverage.js",
+    "bundle:report": "node scripts/bundle-report.js"
   },
   "engines": {
     "node": ">=20.0.0"
