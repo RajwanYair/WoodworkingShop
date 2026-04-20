@@ -2,6 +2,7 @@ import './i18n';
 import './index.css';
 import { Header } from './components/layout/Header';
 import { Sidebar } from './components/layout/Sidebar';
+import { ConfiguratorPanel } from './components/configurator/ConfiguratorPanel';
 import { useCabinetStore } from './store/cabinet-store';
 
 function App() {
@@ -14,11 +15,7 @@ function App() {
         <div className="flex">
           <Sidebar />
           <main className="flex-1 p-6">
-            {activeTab === 'configurator' && (
-              <div className="text-center text-wood-400 py-20">
-                Configurator panel — coming in Sprint 7
-              </div>
-            )}
+            {activeTab === 'configurator' && <ConfiguratorPanel />}
             {activeTab === 'preview' && (
               <div className="text-center text-wood-400 py-20">
                 SVG Preview — coming in Sprint 8
