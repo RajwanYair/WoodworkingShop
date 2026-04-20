@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environment
+.venv/
+venv/
+ENV/
+
+# mypy / type checkers
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pytype/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Generated PDF outputs (rebuild with: python generate_*.py)
+pantry-cabinet-plans/plan-a/large-cabinet/*.pdf
+pantry-cabinet-plans/plan-a/small-cabinet/*.pdf
+pantry-cabinet-plans/plan-b/large-cabinet/*.pdf
+pantry-cabinet-plans/plan-b/small-cabinet/*.pdf
+pantry-cabinet-plans/plan-c/*.pdf
+
+# Test / coverage
+.coverage
+htmlcov/
+.pytest_cache/
