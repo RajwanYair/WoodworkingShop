@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { getMaterial } from '../../engine/materials';
@@ -11,9 +11,11 @@ type ViewId = 'front' | 'frontOpen' | 'side' | 'top' | 'back';
 
 export function CabinetPreview() {
   const { t } = useTranslation();
-  const { config, dimensions: d } = useCabinetStore();
+  const { config, dimensions: d, setConfig } = useCabinetStore();
   const [activeView, setActiveView] = useState<ViewId>('front');
   const [showDims, setShowDims] = useState(true);
+  const [dragIdx, setDragIdx] = useState<number | null>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
 
   const thick = getMaterial(config.carcassMaterial).thickness;
   const bt = getMaterial(config.backPanelMaterial).thickness;
@@ -28,6 +30,41 @@ export function CabinetPreview() {
   const D = config.depth * S;
   const T = thick * S;
   const dimPad = showDims ? 45 : 30; // extra space for dimension lines
+
+  /** Convert a mouse/pointer Y in SVG space to a shelf position (mm from bottom of internal space) */
+  const svgYToShelfPos = useCallback(
+    (clientY: number) => {
+      if (!svgRef.current) return 0;
+      const svg = svgRef.current;
+      const pt = svg.createSVGPoint();
+      pt.x = 0;
+      pt.y = clientY;
+      const svgPt = pt.matrixTransform(svg.getScreenCTM()!.inverse());
+      // SVG y is from top; shelf position is mm from bottom of internal space
+      const bottomY = dimPad + H - T; // SVG y of bottom panel top edge
+      const topY = dimPad + T;        // SVG y of top panel bottom edge
+      const clampedY = Math.max(topY + T * 0.6, Math.min(bottomY - T * 0.6, svgPt.y));
+      return Math.round((bottomY - clampedY) / S);
+    },
+    [H, T, S, dimPad],
+  );
+
+  const handleShelfDrag = useCallback(
+    (e: React.PointerEvent) => {
+      if (dragIdx === null) return;
+      const pos = svgYToShelfPos(e.clientY);
+      const newPositions = [...shelfPositions];
+      newPositions[dragIdx] = pos;
+      // Keep sorted
+      newPositions.sort((a, b) => a - b);
+      setConfig({ shelfSpacing: 'custom', customShelfPositions: newPositions });
+    },
+    [dragIdx, shelfPositions, svgYToShelfPos, setConfig],
+  );
+
+  const handleShelfDragEnd = useCallback(() => {
+    setDragIdx(null);
+  }, []);
 
   const views: { id: ViewId; label: string }[] = [
     { id: 'front', label: t('preview.front') },
@@ -88,26 +125,56 @@ export function CabinetPreview() {
       )}
 
       {activeView === 'frontOpen' && (
-        <ViewBox w={W + dimPad * 2} h={H + dimPad * 2}>
+        <ViewBox
+          w={W + dimPad * 2}
+          h={H + dimPad * 2}
+          svgRef={svgRef}
+          onPointerMove={dragIdx !== null ? handleShelfDrag : undefined}
+          onPointerUp={dragIdx !== null ? handleShelfDragEnd : undefined}
+        >
           <g transform={`translate(${dimPad},${dimPad})`}>
             <rect x={0} y={0} width={W} height={H} fill="none" stroke="#444" strokeWidth={1.5} />
             <PartRect x={0} y={0} w={T} h={H} fill={color} label="Side Panel" dim={`${thick}×${config.height}`} />
             <PartRect x={W - T} y={0} w={T} h={H} fill={color} label="Side Panel" dim={`${thick}×${config.height}`} />
             <PartRect x={T} y={0} w={W - 2 * T} h={T} fill={color} label="Top Panel" dim={`${d.internalWidth}×${thick}`} />
             <PartRect x={T} y={H - T} w={W - 2 * T} h={T} fill={color} label="Bottom Panel" dim={`${d.internalWidth}×${thick}`} />
-            {shelfPositions.map((pos, i) => (
-              <PartRect
-                key={i}
-                x={T + 1}
-                y={H - T - pos * S}
-                w={(W - 2 * T) - 2}
-                h={T * 0.6}
-                fill={color}
-                dashed
-                label={`Shelf ${i + 1}`}
-                dim={`${d.shelfWidth}×${d.shelfDepth}`}
-              />
-            ))}
+            {shelfPositions.map((pos, i) => {
+              const sy = H - T - pos * S;
+              return (
+                <g
+                  key={i}
+                  onPointerDown={(e) => {
+                    setDragIdx(i);
+                    (e.target as Element).setPointerCapture(e.pointerId);
+                  }}
+                  style={{ cursor: 'ns-resize' }}
+                >
+                  <rect
+                    x={T + 1}
+                    y={sy}
+                    width={(W - 2 * T) - 2}
+                    height={T * 0.6}
+                    fill={dragIdx === i ? '#FFD700' : color}
+                    stroke={dragIdx === i ? '#B8860B' : '#666'}
+                    strokeWidth={dragIdx === i ? 1.5 : 0.5}
+                    strokeDasharray="3,2"
+                    opacity={0.85}
+                  >
+                    <title>{`Shelf ${i + 1}\n${d.shelfWidth}×${d.shelfDepth} mm\n↕ Drag to reposition`}</title>
+                  </rect>
+                  {/* Drag grip indicator */}
+                  <text
+                    x={T + 6}
+                    y={sy + T * 0.3 + 1}
+                    fontSize={4}
+                    fill="#999"
+                    pointerEvents="none"
+                  >
+                    ⇕
+                  </text>
+                </g>
+              );
+            })}
             {showDims && (
               <>
                 <DimLine x1={0} y1={-8} x2={W} y2={-8} label={`${config.width}`} pos="above" />
@@ -188,14 +255,24 @@ export function CabinetPreview() {
 
 // ─── SVG sub-components ───
 
-function ViewBox({ w, h, children }: { w: number; h: number; children: React.ReactNode }) {
+function ViewBox({
+  w, h, children, svgRef, onPointerMove, onPointerUp,
+}: {
+  w: number; h: number; children: React.ReactNode;
+  svgRef?: React.Ref<SVGSVGElement>;
+  onPointerMove?: (e: React.PointerEvent) => void;
+  onPointerUp?: (e: React.PointerEvent) => void;
+}) {
   return (
     <svg
+      ref={svgRef}
       viewBox={`0 0 ${w} ${h}`}
       role="img"
       aria-label="Cabinet drawing"
       className="w-full max-w-lg border border-wood-200 dark:border-wood-700 rounded bg-white dark:bg-wood-800"
-      style={{ maxHeight: 500 }}
+      style={{ maxHeight: 500, touchAction: 'none' }}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
     >
       {children}
     </svg>
