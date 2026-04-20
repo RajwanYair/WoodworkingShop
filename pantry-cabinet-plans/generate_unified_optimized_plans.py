@@ -27,7 +27,10 @@ from shared.pdf_utils import (
     draw_top_view,
     heb,
     make_catalog_cover,
+    make_divider,
+    make_edition_footer,
     make_feature_callout,
+    make_plan_badge,
     make_product_card,
     make_styles,
     make_table,
@@ -241,7 +244,17 @@ def build_pdf(lang):
         is_he=is_he,
         eyebrow=text("קולקציית ארונות מזווה") if is_he else "PANTRY CABINET COLLECTION",
     ))
+    story.extend(make_divider(
+        text("סקירת תוכניות") if is_he else "PLAN OVERVIEW",
+        styles,
+    ))
     for plan in PLANS:
+        story.append(make_plan_badge(
+            plan["key"],
+            text(f"תוכנית {plan['key']}") if is_he else f"Plan {plan['key']}",
+            styles, is_he=is_he,
+        ))
+        story.append(Spacer(1, 4))
         story.append(make_product_card(
             text(f"תוכנית {plan['key']}") if is_he else f"Plan {plan['key']}",
             text(plan["subtitle_he"]) if is_he else plan["subtitle_en"],
@@ -264,6 +277,13 @@ def build_pdf(lang):
         ],
         styles,
         is_he=is_he,
+    ))
+    story.append(Spacer(1, 6))
+    story.append(make_edition_footer(
+        text("מהדורת קטלוג אפריל 2026 · קולקציה מאוחדת · RajwanYair/WoodworkingShop")
+        if is_he else
+        "Catalog Edition April 2026 · Unified Collection · RajwanYair/WoodworkingShop",
+        styles,
     ))
     story.append(PageBreak())
 

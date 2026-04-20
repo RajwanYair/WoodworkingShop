@@ -53,4 +53,10 @@
     <text x="0" y="0" class="sz">Note: S-06 nominal height is 460 mm. Trimming to 456 mm increases the top-edge inset from 10 mm to 12 mm — structurally irrelevant for a back panel.</text>
     <text x="0" y="20" class="sz">Single crosscut at 1980 mm from the left edge separates L-07 from S-06.</text>
   </g>
+
+  <!-- Catalog edition footer -->
+  <rect x="24" y="500" width="752" height="14" rx="3" fill="#8e6940" opacity="0.12" />
+  <text x="400" y="511" text-anchor="middle" class="eyebrow"
+    style="font-size:8px; letter-spacing:2.5px;">CATALOG EDITION APRIL 2026 · PLAN A ·
+    RAJWANYAIR/WOODWORKINGSHOP</text>
 </svg>

@@ -88,6 +88,8 @@ C_HEADER_BG = colors.Color(0.463, 0.365, 0.271)
 C_HEADER_TEXT = colors.Color(0.992, 0.980, 0.953)
 C_ROW_ALT = colors.Color(0.978, 0.965, 0.937)
 C_ACCENT = colors.Color(0.557, 0.412, 0.271)
+C_ACCENT_LIGHT = colors.Color(0.753, 0.647, 0.525)
+C_DIVIDER = colors.Color(0.820, 0.773, 0.710)
 
 
 def build_part_lookup(*cabs):
@@ -635,6 +637,10 @@ def make_catalog_cover(title, subtitle, meta_line, intro, stats, styles, *, is_h
     card_value = styles["card_value"]
     card_label = styles["card_label"]
 
+    # Accent bar at top
+    accent_bar = Drawing(500, 4)
+    accent_bar.add(Rect(0, 0, 500, 4, fillColor=C_ACCENT, strokeColor=None))
+
     hero_rows = []
     if eyebrow:
         hero_rows.append([Paragraph(eyebrow, eyebrow_style)])
@@ -663,7 +669,7 @@ def make_catalog_cover(title, subtitle, meta_line, intro, stats, styles, *, is_h
             valign="MIDDLE",
         ))
 
-    flowables = [hero, Spacer(1, 8)]
+    flowables = [accent_bar, Spacer(1, 4), hero, Spacer(1, 8)]
     if stat_cards:
         flowables.append(Table([stat_cards], colWidths=[160] * len(stat_cards)))
         flowables.append(Spacer(1, 10))
@@ -671,7 +677,9 @@ def make_catalog_cover(title, subtitle, meta_line, intro, stats, styles, *, is_h
 
 
 def make_product_card(title, subtitle, specs, blurb, styles, *, is_he=False):
-    rows = [[Paragraph(title, styles["card_title"])]]
+    header_style = ParagraphStyle("CardHeader", parent=styles["card_title"],
+                                  textColor=C_HEADER_TEXT)
+    rows = [[Paragraph(title, header_style)]]
     if subtitle:
         rows.append([Paragraph(subtitle, styles["card_body"])])
     if specs:
@@ -683,15 +691,78 @@ def make_product_card(title, subtitle, specs, blurb, styles, *, is_he=False):
         rows.append([spec_table])
     if blurb:
         rows.append([Paragraph(blurb, styles["card_body"])])
-    return _catalog_card_table(rows, [440], background=colors.white, border=C_CARD_BORDER, padding=12)
+    card = Table(rows, colWidths=[440])
+    card.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (0, 0), C_ACCENT),
+        ("BACKGROUND", (0, 1), (-1, -1), colors.white),
+        ("BOX", (0, 0), (-1, -1), 0.8, C_CARD_BORDER),
+        ("INNERGRID", (0, 0), (-1, -1), 0.4, C_CARD_BORDER),
+        ("LEFTPADDING", (0, 0), (-1, -1), 12),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 12),
+        ("TOPPADDING", (0, 0), (-1, -1), 10),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 10),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+    ]))
+    return card
 
 
 def make_feature_callout(title, items, styles, *, is_he=False):
     rows = [[Paragraph(title, styles["card_title"])]]
-    for item in items:
-        bullet = "• " + item
+    for idx, item in enumerate(items, 1):
+        bullet = f'<font color="#{_hex(C_ACCENT)}">{idx}.</font>  {item}'
         rows.append([Paragraph(bullet, styles["card_body"])])
     return _catalog_card_table(rows, [440], background=C_ROW_ALT, border=C_CARD_BORDER, padding=12)
+
+
+def _hex(c):
+    """Convert a reportlab Color to a hex string (without #)."""
+    return "%02x%02x%02x" % (int(c.red * 255), int(c.green * 255), int(c.blue * 255))
+
+
+def make_divider(label=None, styles=None):
+    """Return a thin accent-coloured ruled line, optionally with a centered label."""
+    d = Drawing(500, 18)
+    d.add(Line(0, 9, 500, 9, strokeColor=C_DIVIDER, strokeWidth=0.7))
+    if label and styles:
+        d.add(Rect(190, 2, 120, 14, fillColor=colors.white, strokeColor=None))
+        d.add(String(250, 4, label, fontName=styles["eyebrow"].fontName,
+                      fontSize=7.5, fillColor=C_ACCENT, textAnchor="middle"))
+    return [Spacer(1, 6), d, Spacer(1, 6)]
+
+
+def make_plan_badge(plan_key, plan_label, styles, *, is_he=False):
+    """Return a small colored badge row identifying the plan variant."""
+    badge_text = f'<font color="#{_hex(colors.white)}"><b>{plan_key}</b></font>'
+    badge_style = ParagraphStyle("Badge", parent=styles["eyebrow"],
+                                 fontSize=9, leading=12,
+                                 textColor=colors.white,
+                                 alignment=TA_CENTER)
+    label_style = ParagraphStyle("BadgeLabel", parent=styles["card_body"],
+                                 fontSize=9, leading=12,
+                                 textColor=C_OUTLINE)
+    badge_cell = Paragraph(plan_key, badge_style)
+    label_cell = Paragraph(plan_label, label_style)
+    tbl = Table([[badge_cell, label_cell]], colWidths=[36, 440])
+    tbl.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (0, 0), C_ACCENT),
+        ("BACKGROUND", (1, 0), (1, 0), C_CARD_BG),
+        ("BOX", (0, 0), (-1, -1), 0.6, C_CARD_BORDER),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 8),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 5),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+    ]))
+    return tbl
+
+
+def make_edition_footer(edition_text, styles):
+    """Return a small centered footer line for the bottom of a catalog page."""
+    footer_style = ParagraphStyle("EditionFooter", parent=styles["small"],
+                                  fontSize=7, leading=9,
+                                  textColor=C_ACCENT_LIGHT,
+                                  alignment=TA_CENTER)
+    return Paragraph(edition_text, footer_style)
 
 
 # ═══════════════════════════════════════════════════════════════════════════

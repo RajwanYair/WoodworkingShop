@@ -214,4 +214,10 @@
     <text x="16" y="220" class="txt">Dimensions in mm</text>
     <text x="16" y="240" class="txt">Hinge distances measured from top of door</text>
   </g>
+
+  <!-- Catalog edition footer -->
+  <rect x="24" y="1280" width="1602" height="14" rx="3" fill="#8e6940" opacity="0.12" />
+  <text x="825" y="1291" text-anchor="middle" class="eyebrow"
+    style="font-size:8px; letter-spacing:2.5px;">CATALOG EDITION APRIL 2026 · PLAN A ·
+    RAJWANYAIR/WOODWORKINGSHOP</text>
 </svg>

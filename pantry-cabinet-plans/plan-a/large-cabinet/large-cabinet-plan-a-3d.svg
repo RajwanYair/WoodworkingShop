@@ -123,4 +123,10 @@
   </g>
 
   <text x="40" y="920" class="txt">All dimensions in mm. Right door removed to show interior. Shelves set back 20 mm from front edge.</text>
+
+  <!-- Catalog edition footer -->
+  <rect x="24" y="932" width="1052" height="14" rx="3" fill="#8e6940" opacity="0.12" />
+  <text x="550" y="943" text-anchor="middle" class="eyebrow"
+    style="font-size:8px; letter-spacing:2.5px;">CATALOG EDITION APRIL 2026 · PLAN A ·
+    RAJWANYAIR/WOODWORKINGSHOP</text>
 </svg>

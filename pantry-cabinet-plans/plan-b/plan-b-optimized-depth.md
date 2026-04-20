@@ -8,6 +8,23 @@
 
 > **Collection note:** Plan B is the pragmatic middle option. It trims the cabinet depth enough to save a full sheet, but avoids the sharper compromise of Plan C. Use it when cost reduction matters, yet the cabinet still needs comfortable everyday storage depth.
 
+### Plan B at a Glance
+
+| Stat | Value |
+|---|---|
+| Depth | 404 mm |
+| 17 mm sheets | 4 |
+| Saving vs Plan A | 1 sheet (20 %) |
+| Material | Sandwich plywood throughout |
+
+### Design Callouts
+
+1. **404 mm depth** still supports jars, cans, cereal boxes, and daily storage use.
+2. **All parts stay in sandwich plywood**, so cutting, fastening, and finishing stay aligned with Plan A.
+3. **Leaving most carcass edges raw** reduces labor time and avoids unnecessary finishing cost.
+
+---
+
 # Plan B — Cost-Optimized Double Pantry Cabinet
 
 > **Based on:** Plan A (double-pantry-cabinet-plan-plan-a.md)

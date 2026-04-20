@@ -17,6 +17,7 @@ from shared.pdf_utils import (
     draw_front_closed, draw_front_open, draw_side_elevation,
     draw_top_view, draw_back_elevation, draw_3d_isometric, draw_cut_sheet,
     make_catalog_cover, make_product_card, make_feature_callout,
+    make_divider, make_plan_badge, make_edition_footer,
 )
 
 # ── Paths ──────────────────────────────────────────────────────────────────
@@ -384,6 +385,12 @@ def build_pdf(lang, cab_key):
         is_he=is_he,
         eyebrow=T("קולקציית ארונות מזווה") if is_he else "PANTRY CABINET COLLECTION",
     ))
+    story.append(make_plan_badge(
+        "A",
+        T("תוכנית א' — מהדורת עומק מלא") if is_he else "Plan A — Full-Depth Premium Edition",
+        sty, is_he=is_he,
+    ))
+    story.extend(make_divider())
 
     product_specs = [
         (T("פרופיל") if is_he else "Profile", T("ארון גבוה") if is_he and is_large else (T("יחידה עליונה") if is_he else ("Tall cabinet" if is_large else "Upper unit"))),
@@ -409,6 +416,13 @@ def build_pdf(lang, cab_key):
         ],
         sty,
         is_he=is_he,
+    ))
+    story.append(Spacer(1, 6))
+    story.append(make_edition_footer(
+        T("מהדורת קטלוג אפריל 2026 · תוכנית א' · RajwanYair/WoodworkingShop")
+        if is_he else
+        "Catalog Edition April 2026 · Plan A · RajwanYair/WoodworkingShop",
+        sty,
     ))
     story.append(PageBreak())
 

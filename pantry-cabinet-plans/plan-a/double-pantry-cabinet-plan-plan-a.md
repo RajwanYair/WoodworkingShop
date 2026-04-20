@@ -8,6 +8,23 @@
 
 > **Collection note:** Plan A is the flagship layout in the pantry cabinet collection. It keeps the full 600 mm depth, uses the warmest material specification, and is the version to choose when the project should read like built-in furniture rather than utility storage.
 
+### Plan A at a Glance
+
+| Stat | Value |
+|---|---|
+| Depth | 600 mm |
+| 17 mm sheets | 5 |
+| Material | Premium sandwich plywood |
+| Edge banding | All visible front edges (~30 m) |
+
+### Design Callouts
+
+1. **Full 600 mm depth** for bulk pantry storage and the strongest visual presence.
+2. **Visible front edges are fully finished** for a cleaner furniture-grade presentation.
+3. **All carcass, door, and back panels** stay in sandwich plywood for a fully consistent material spec.
+
+---
+
 # Double Pantry Cabinet — Complete DIY Build Plan
 
 > **Project date:** April 2026

@@ -165,4 +165,10 @@
     <text x="16" y="270" class="txt">3. Two 110° hinges per door (2 per side).</text>
     <text x="16" y="290" class="txt">4. Can be used as wall-mounted or stacked on Cabinet 1.</text>
   </g>
+
+  <!-- Catalog edition footer -->
+  <rect x="24" y="1060" width="1602" height="14" rx="3" fill="#8e6940" opacity="0.12" />
+  <text x="825" y="1071" text-anchor="middle" class="eyebrow"
+    style="font-size:8px; letter-spacing:2.5px;">CATALOG EDITION APRIL 2026 · PLAN A ·
+    RAJWANYAIR/WOODWORKINGSHOP</text>
 </svg>

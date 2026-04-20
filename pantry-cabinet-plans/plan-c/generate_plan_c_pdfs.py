@@ -18,6 +18,7 @@ from shared.pdf_utils import (
     draw_front_closed, draw_front_open, draw_side_elevation,
     draw_top_view, draw_3d_isometric, draw_cut_sheet,
     make_catalog_cover, make_product_card, make_feature_callout,
+    make_divider, make_plan_badge, make_edition_footer,
 )
 
 # ── Paths ──────────────────────────────────────────────────────────────────
@@ -183,6 +184,12 @@ def build_pdf(lang):
         is_he=is_he,
         eyebrow=T("קולקציית ארונות מזווה") if is_he else "PANTRY CABINET COLLECTION",
     ))
+    story.append(make_plan_badge(
+        "C",
+        T("תוכנית ג' — מהדורת אופטימיזציה מקסימלית") if is_he else "Plan C — Maximum Optimisation Edition",
+        sty, is_he=is_he,
+    ))
+    story.extend(make_divider())
     story.append(make_product_card(
         T("כרטיס קולקציה") if is_he else "Collection Card",
         T("שני הארונות נשמרים בגובה וברוחב המקוריים, אך עומק הגוף מותאם למיקסום חומר.") if is_he else "Both cabinets keep the original height and width, but the body depth is tuned specifically for strip-based sheet optimisation.",
@@ -206,6 +213,13 @@ def build_pdf(lang):
         ],
         sty,
         is_he=is_he,
+    ))
+    story.append(Spacer(1, 6))
+    story.append(make_edition_footer(
+        T("מהדורת קטלוג אפריל 2026 · תוכנית ג' · RajwanYair/WoodworkingShop")
+        if is_he else
+        "Catalog Edition April 2026 · Plan C · RajwanYair/WoodworkingShop",
+        sty,
     ))
     story.append(PageBreak())
 
