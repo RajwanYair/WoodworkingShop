@@ -5,6 +5,7 @@ import { computeDimensions } from '../engine/dimensions';
 import { generateParts, computeEdgeBandingTotal } from '../engine/parts';
 import { generateHardware } from '../engine/hardware';
 import { optimizeCutSheets } from '../engine/cut-optimizer';
+import { readConfigFromUrl, pushConfigToUrl } from '../utils/url-state';
 
 export interface CabinetState {
   // Config
@@ -38,10 +39,12 @@ function derive(config: CabinetConfig) {
 }
 
 export const useCabinetStore = create<CabinetState>((set) => {
-  const initial = derive(DEFAULT_CONFIG);
+  const urlPatch = readConfigFromUrl();
+  const initialConfig = { ...DEFAULT_CONFIG, ...urlPatch };
+  const initial = derive(initialConfig);
 
   return {
-    config: DEFAULT_CONFIG,
+    config: initialConfig,
     ...initial,
     activeTab: 'configurator',
     darkMode: false,
@@ -49,14 +52,18 @@ export const useCabinetStore = create<CabinetState>((set) => {
     setConfig: (patch) =>
       set((state) => {
         const config = { ...state.config, ...patch };
+        pushConfigToUrl(config);
         return { config, ...derive(config) };
       }),
 
     resetConfig: () =>
-      set(() => ({
-        config: DEFAULT_CONFIG,
-        ...derive(DEFAULT_CONFIG),
-      })),
+      set(() => {
+        pushConfigToUrl(DEFAULT_CONFIG);
+        return {
+          config: DEFAULT_CONFIG,
+          ...derive(DEFAULT_CONFIG),
+        };
+      }),
 
     setActiveTab: (tab) => set({ activeTab: tab }),
     toggleDarkMode: () => set((s) => ({ darkMode: !s.darkMode })),

@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { configToUrl } from '../../utils/url-state';
 
 const tabs = ['configurator', 'preview', 'optimizer', 'pdf'] as const;
 
@@ -41,6 +42,16 @@ export function Header() {
 
       {/* Controls */}
       <div className="flex items-center gap-3">
+        <button
+          onClick={() => {
+            const url = configToUrl(useCabinetStore.getState().config);
+            navigator.clipboard.writeText(url);
+          }}
+          className="text-wood-200 hover:text-white text-sm"
+          title="Copy shareable link"
+        >
+          🔗
+        </button>
         <button
           onClick={toggleDarkMode}
           className="text-wood-200 hover:text-white text-sm"
