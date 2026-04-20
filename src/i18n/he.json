@@ -1,0 +1,86 @@
+{
+  "app": {
+    "title": "מתכנן ארון",
+    "subtitle": "כלי עיצוב נגרות אינטראקטיבי"
+  },
+  "tabs": {
+    "configurator": "הגדרות",
+    "preview": "תצוגה מקדימה",
+    "optimizer": "גיליונות חיתוך",
+    "pdf": "ייצוא PDF"
+  },
+  "config": {
+    "dimensions": "מידות",
+    "width": "רוחב",
+    "height": "גובה",
+    "depth": "עומק",
+    "unit": "מ\"מ",
+    "material": "חומר",
+    "carcass": "חומר שלד",
+    "backPanel": "חומר לוח גב",
+    "shelves": "מדפים",
+    "shelfCount": "מספר מדפים",
+    "shelfSpacing": "מרווח מדפים",
+    "equal": "שווה",
+    "custom": "מותאם אישית",
+    "doors": "דלתות",
+    "doorCount": "מספר דלתות",
+    "doorStyle": "סגנון דלת",
+    "flat": "שטוח",
+    "none": "ללא",
+    "doorReveal": "מרווח דלת",
+    "handles": "ידיות",
+    "bar": "ידית ברזל",
+    "knob": "כפתור עגול",
+    "cup": "ידית שקועה",
+    "edge": "פרופיל אחיזה",
+    "noHandle": "ללא ידית",
+    "edgeBanding": "פסי קצה",
+    "allVisible": "כל הקצוות הנראים",
+    "doorsOnly": "דלתות בלבד",
+    "noBanding": "ללא",
+    "reset": "איפוס לברירות מחדל"
+  },
+  "parts": {
+    "title": "רשימת חלקים",
+    "id": "מזהה",
+    "name": "שם חלק",
+    "qty": "כמות",
+    "material": "חומר",
+    "length": "אורך",
+    "width": "רוחב",
+    "thickness": "עובי",
+    "edge": "פס קצה"
+  },
+  "hardware": {
+    "title": "רשימת חומרה",
+    "name": "פריט",
+    "qty": "כמות",
+    "unit": "יחידה"
+  },
+  "optimizer": {
+    "title": "אופטימיזציה של גיליונות חיתוך",
+    "sheets": "גיליונות נדרשים",
+    "yield": "ניצולת חומר",
+    "waste": "פחת כולל",
+    "sheet": "גיליון"
+  },
+  "preview": {
+    "title": "תצוגה מקדימה",
+    "front": "חזית (סגור)",
+    "frontOpen": "חזית (פתוח)",
+    "side": "צד",
+    "top": "מבט עליון",
+    "back": "גב"
+  },
+  "pdf": {
+    "title": "ייצוא PDF",
+    "generate": "צור PDF",
+    "download": "הורד PDF",
+    "generating": "מייצר…"
+  },
+  "footer": {
+    "darkMode": "מצב כהה",
+    "language": "שפה"
+  }
+}

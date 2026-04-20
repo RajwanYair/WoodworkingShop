@@ -1,0 +1,86 @@
+{
+  "app": {
+    "title": "Cabinet Planner",
+    "subtitle": "Interactive Woodworking Design Tool"
+  },
+  "tabs": {
+    "configurator": "Configure",
+    "preview": "Preview",
+    "optimizer": "Cut Sheets",
+    "pdf": "Export PDF"
+  },
+  "config": {
+    "dimensions": "Dimensions",
+    "width": "Width",
+    "height": "Height",
+    "depth": "Depth",
+    "unit": "mm",
+    "material": "Material",
+    "carcass": "Carcass Material",
+    "backPanel": "Back Panel Material",
+    "shelves": "Shelves",
+    "shelfCount": "Number of Shelves",
+    "shelfSpacing": "Shelf Spacing",
+    "equal": "Equal",
+    "custom": "Custom",
+    "doors": "Doors",
+    "doorCount": "Number of Doors",
+    "doorStyle": "Door Style",
+    "flat": "Flat",
+    "none": "None",
+    "doorReveal": "Door Reveal (gap)",
+    "handles": "Handles",
+    "bar": "Bar Handle",
+    "knob": "Round Knob",
+    "cup": "Cup Pull",
+    "edge": "Edge Pull",
+    "noHandle": "No Handle",
+    "edgeBanding": "Edge Banding",
+    "allVisible": "All Visible Edges",
+    "doorsOnly": "Doors Only",
+    "noBanding": "None",
+    "reset": "Reset to Defaults"
+  },
+  "parts": {
+    "title": "Parts List",
+    "id": "ID",
+    "name": "Part Name",
+    "qty": "Qty",
+    "material": "Material",
+    "length": "Length",
+    "width": "Width",
+    "thickness": "Thick.",
+    "edge": "Edge Band"
+  },
+  "hardware": {
+    "title": "Hardware List",
+    "name": "Item",
+    "qty": "Qty",
+    "unit": "Unit"
+  },
+  "optimizer": {
+    "title": "Cut Sheet Optimization",
+    "sheets": "Sheets Required",
+    "yield": "Material Yield",
+    "waste": "Total Waste",
+    "sheet": "Sheet"
+  },
+  "preview": {
+    "title": "Cabinet Preview",
+    "front": "Front (Closed)",
+    "frontOpen": "Front (Open)",
+    "side": "Side",
+    "top": "Top",
+    "back": "Back"
+  },
+  "pdf": {
+    "title": "Export PDF",
+    "generate": "Generate PDF",
+    "download": "Download PDF",
+    "generating": "Generating…"
+  },
+  "footer": {
+    "darkMode": "Dark Mode",
+    "language": "Language"
+  }
+}
