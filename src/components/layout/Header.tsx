@@ -17,7 +17,7 @@ export function Header() {
   };
 
   return (
-    <header className="bg-wood-700 text-white px-4 py-3 flex items-center justify-between">
+    <header className="bg-wood-700 text-white px-4 py-3 flex items-center justify-between" data-print="hide">
       <div>
         <h1 className="text-xl font-bold">{t('app.title')}</h1>
         <p className="text-wood-200 text-sm hidden sm:block">{t('app.subtitle')}</p>

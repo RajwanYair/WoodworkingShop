@@ -34,6 +34,17 @@ function App() {
               </div>
             )}
             {activeTab === 'pdf' && <PdfExportPanel />}
+
+            {/* Print button — hidden when printing */}
+            <button
+              data-print="hide"
+              onClick={() => window.print()}
+              className="fixed bottom-5 right-5 bg-wood-600 hover:bg-wood-700 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg text-lg z-40 transition-colors print:hidden"
+              title="Print current view"
+              aria-label="Print current view"
+            >
+              🖨
+            </button>
           </main>
         </div>
       </div>

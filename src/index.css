@@ -22,3 +22,32 @@
   direction: rtl;
   text-align: right;
 }
+
+/* ─── Print-friendly styles ─── */
+@media print {
+  /* Reset background colors for paper */
+  body, html { background: white !important; color: black !important; }
+
+  /* Hide non-essential UI */
+  header, nav, aside,
+  [data-print="hide"],
+  button:not([data-print="show"]),
+  .no-print { display: none !important; }
+
+  /* Full-width main content */
+  main { width: 100% !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
+
+  /* Make tables print-friendly */
+  table { font-size: 10pt !important; border-collapse: collapse !important; width: 100% !important; }
+  th, td { border: 0.5pt solid #999 !important; padding: 4pt 6pt !important; }
+  th { background: #eee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  /* SVG previews scale to fit page */
+  svg { max-width: 100% !important; height: auto !important; max-height: 400pt !important; }
+
+  /* Avoid page breaks inside key elements */
+  tr, .print-keep { break-inside: avoid; }
+
+  /* Force color printing for cut sheets */
+  rect, line, text { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
