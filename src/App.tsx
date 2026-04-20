@@ -9,6 +9,7 @@ import { OptimizerView } from './components/optimizer/OptimizerView';
 import { SmartOptimizerPanel } from './components/optimizer/SmartOptimizerPanel';
 import { PartsTable, HardwareTable } from './components/optimizer/Tables';
 import { AssemblyGuide } from './components/assembly/AssemblyGuide';
+import { ToastContainer } from './components/layout/ToastContainer';
 import { useCabinetStore, type CabinetState } from './store/cabinet-store';
 
 // Lazy-load PDF panel (heavy @react-pdf/renderer dependency)
@@ -92,6 +93,7 @@ function App() {
             </button>
           </main>
         </div>
+        <ToastContainer />
       </div>
     </div>
   );

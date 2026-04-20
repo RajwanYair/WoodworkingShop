@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { useToastStore } from '../../store/toast-store';
 import { loadSavedConfigs, saveConfig, deleteSavedConfig, type SavedConfig } from '../../utils/local-storage';
 import type { CabinetConfig } from '../../engine/types';
 
 export function SaveLoadPanel() {
   const { t } = useTranslation();
   const { config, setConfig } = useCabinetStore();
+  const addToast = useToastStore((s) => s.addToast);
   const [configs, setConfigs] = useState<SavedConfig[]>([]);
   const [saveName, setSaveName] = useState('');
   const [showSaved, setShowSaved] = useState(false);
@@ -21,15 +23,18 @@ export function SaveLoadPanel() {
     saveConfig(name, config);
     setConfigs(loadSavedConfigs());
     setSaveName('');
+    addToast(t('toast.saved'), 'success');
   };
 
   const handleLoad = (saved: SavedConfig) => {
     setConfig(saved.config);
+    addToast(t('toast.loaded'), 'success');
   };
 
   const handleDelete = (id: string) => {
     deleteSavedConfig(id);
     setConfigs(loadSavedConfigs());
+    addToast(t('toast.deleted'), 'info');
   };
 
   const handleExport = () => {
@@ -41,6 +46,7 @@ export function SaveLoadPanel() {
     a.download = `cabinet-${config.width}x${config.height}x${config.depth}.json`;
     a.click();
     URL.revokeObjectURL(url);
+    addToast(t('toast.exported'), 'success');
   };
 
   const handleImport = () => {
@@ -56,9 +62,12 @@ export function SaveLoadPanel() {
         const parsed = JSON.parse(reader.result as string);
         if (isValidConfig(parsed)) {
           setConfig(parsed);
+          addToast(t('toast.imported'), 'success');
+        } else {
+          addToast(t('toast.invalidFile'), 'error');
         }
       } catch {
-        // invalid JSON — silently ignore
+        addToast(t('toast.invalidFile'), 'error');
       }
     };
     reader.readAsText(file);

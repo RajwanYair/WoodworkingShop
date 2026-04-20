@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { useToastStore } from '../../store/toast-store';
 import { configToUrl } from '../../utils/url-state';
 
 const tabs = ['configurator', 'preview', 'optimizer', 'assembly', 'pdf'] as const;
@@ -59,6 +60,7 @@ export function Header() {
           onClick={() => {
             const url = configToUrl(useCabinetStore.getState().config);
             navigator.clipboard.writeText(url);
+            useToastStore.getState().addToast(t('toast.linkCopied'), 'success');
           }}
           className="text-wood-200 hover:text-white text-sm"
           title="Copy shareable link"

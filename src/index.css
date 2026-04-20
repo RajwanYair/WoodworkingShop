@@ -31,6 +31,10 @@
 @keyframes slide-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
 .animate-slide-up { animation: slide-up 0.25s ease-out; }
 
+/* Toast fade-in */
+@keyframes fade-in { from { opacity: 0; transform: translateY(0.5rem); } to { opacity: 1; transform: translateY(0); } }
+.animate-fade-in { animation: fade-in 0.2s ease-out; }
+
 /* ─── Print-friendly styles ─── */
 @media print {
   /* Reset background colors for paper */

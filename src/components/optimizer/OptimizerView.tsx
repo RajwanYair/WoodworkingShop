@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { useToastStore } from '../../store/toast-store';
 import { getMaterial } from '../../engine/materials';
 import { downloadDxfForSheet, downloadAllSheetsDxf } from '../../utils/dxf-export';
 import type { Lang, CutSheet, CutRect } from '../../engine/types';
@@ -34,7 +35,7 @@ export function OptimizerView() {
         </div>
         <div className="ms-4 flex gap-2">
           <button
-            onClick={() => downloadAllSheetsDxf(displayOpt.sheets, 'cabinet')}
+            onClick={() => { downloadAllSheetsDxf(displayOpt.sheets, 'cabinet'); useToastStore.getState().addToast(t('toast.dxfExported'), 'success'); }}
             className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors"
             title={t('optimizer.exportDxf')}
           >
@@ -104,7 +105,7 @@ function SheetCard({
           {t('optimizer.sheet')} #{sheet.sheetIndex + 1} — {mat.name[lang]} ({sheet.thickness} mm) — {sheet.yieldPercent}%
         </h3>
         <button
-          onClick={() => downloadDxfForSheet(sheet, `sheet-${sheet.sheetIndex + 1}.dxf`)}
+          onClick={() => { downloadDxfForSheet(sheet, `sheet-${sheet.sheetIndex + 1}.dxf`); useToastStore.getState().addToast(t('toast.dxfExported'), 'success'); }}
           className="text-[10px] px-2 py-0.5 rounded border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors"
           title={`Download DXF for sheet ${sheet.sheetIndex + 1}`}
         >

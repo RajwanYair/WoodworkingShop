@@ -138,5 +138,15 @@
     "prev": "Previous",
     "next": "Next",
     "partsInStep": "Parts in this step:"
+  },
+  "toast": {
+    "saved": "Configuration saved",
+    "loaded": "Configuration loaded",
+    "deleted": "Configuration deleted",
+    "exported": "JSON exported",
+    "imported": "Configuration imported",
+    "invalidFile": "Invalid configuration file",
+    "dxfExported": "DXF file downloaded",
+    "linkCopied": "Shareable link copied to clipboard"
   }
 }

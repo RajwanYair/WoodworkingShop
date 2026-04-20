@@ -138,5 +138,15 @@
     "prev": "הקודם",
     "next": "הבא",
     "partsInStep": "חלקים בשלב זה:"
+  },
+  "toast": {
+    "saved": "תצורה נשמרה",
+    "loaded": "תצורה נטענה",
+    "deleted": "תצורה נמחקה",
+    "exported": "קובץ JSON יוצא",
+    "imported": "תצורה יובאה",
+    "invalidFile": "קובץ תצורה לא תקין",
+    "dxfExported": "קובץ DXF הורד",
+    "linkCopied": "קישור שיתוף הועתק ללוח"
   }
 }
