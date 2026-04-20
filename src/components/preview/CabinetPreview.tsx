@@ -9,6 +9,14 @@ const S = 0.2;
 
 type ViewId = 'front' | 'frontOpen' | 'side' | 'top' | 'back' | '3d';
 
+interface TooltipInfo {
+  label: string;
+  dim: string;
+  material?: string;
+  x: number;
+  y: number;
+}
+
 /** Serialize the first <svg> inside a container element and trigger a download */
 function downloadSvg(container: HTMLElement, filename: string) {
   const svgEl = container.querySelector('svg');
@@ -31,6 +39,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
   const previewRef = useRef<HTMLDivElement>(null);
   const [showDims, setShowDims] = useState(true);
   const [dragIdx, setDragIdx] = useState<number | null>(null);
+  const [tooltip, setTooltip] = useState<TooltipInfo | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
 
   const thick = getMaterial(config.carcassMaterial).thickness;
@@ -46,6 +55,20 @@ export const CabinetPreview = memo(function CabinetPreview() {
   const D = config.depth * S;
   const T = thick * S;
   const dimPad = showDims ? 45 : 30; // extra space for dimension lines
+
+  const carcassMatName = getMaterial(config.carcassMaterial).name[config.lang];
+  const backMatName = getMaterial(config.backPanelMaterial).name[config.lang];
+
+  const showTooltip = useCallback((e: React.MouseEvent, label: string, dim: string, material?: string) => {
+    setTooltip({ label, dim, material, x: e.clientX, y: e.clientY });
+  }, []);
+  const hideTooltip = useCallback(() => setTooltip(null), []);
+  const moveTooltip = useCallback((e: React.MouseEvent) => {
+    setTooltip(prev => prev ? { ...prev, x: e.clientX, y: e.clientY } : null);
+  }, []);
+
+  /** Common tooltip event props for PartRect */
+  const tp = { onHover: showTooltip, onLeave: hideTooltip, onMove: moveTooltip };
 
   /** Convert a mouse/pointer Y in SVG space to a shelf position (mm from bottom of internal space) */
   const svgYToShelfPos = useCallback(
@@ -130,16 +153,26 @@ export const CabinetPreview = memo(function CabinetPreview() {
       </div>
 
       {/* Active view */}
-      <div ref={previewRef}>
+      <div ref={previewRef} className="relative">
+      {tooltip && (
+        <div
+          className="fixed z-50 pointer-events-none px-3 py-2 rounded shadow-lg text-xs bg-wood-900 dark:bg-wood-100 text-white dark:text-wood-900 border border-wood-600 dark:border-wood-300"
+          style={{ left: tooltip.x + 12, top: tooltip.y - 40 }}
+        >
+          <div className="font-semibold">{tooltip.label}</div>
+          <div>{tooltip.dim} mm</div>
+          {tooltip.material && <div className="opacity-75">{tooltip.material}</div>}
+        </div>
+      )}
       {activeView === 'front' && (
         <ViewBox w={W + dimPad * 2} h={H + dimPad * 2}>
           <g transform={`translate(${dimPad},${dimPad})`}>
             <rect x={0} y={0} width={W} height={H} fill="none" stroke="#444" strokeWidth={1.5} />
-            <PartRect x={0} y={0} w={T} h={H} fill={color} label="Side Panel" dim={`${thick}×${config.height}`} />
-            <PartRect x={W - T} y={0} w={T} h={H} fill={color} label="Side Panel" dim={`${thick}×${config.height}`} />
-            <PartRect x={T} y={0} w={W - 2 * T} h={T} fill={color} label="Top Panel" dim={`${d.internalWidth}×${thick}`} />
-            <PartRect x={T} y={H - T} w={W - 2 * T} h={T} fill={color} label="Bottom Panel" dim={`${d.internalWidth}×${thick}`} />
-            {config.doorStyle !== 'none' && renderDoors(config, d, S, color)}
+            <PartRect x={0} y={0} w={T} h={H} fill={color} label="Side Panel" dim={`${thick}×${config.height}`} material={carcassMatName} {...tp} />
+            <PartRect x={W - T} y={0} w={T} h={H} fill={color} label="Side Panel" dim={`${thick}×${config.height}`} material={carcassMatName} {...tp} />
+            <PartRect x={T} y={0} w={W - 2 * T} h={T} fill={color} label="Top Panel" dim={`${d.internalWidth}×${thick}`} material={carcassMatName} {...tp} />
+            <PartRect x={T} y={H - T} w={W - 2 * T} h={T} fill={color} label="Bottom Panel" dim={`${d.internalWidth}×${thick}`} material={carcassMatName} {...tp} />
+            {config.doorStyle !== 'none' && renderDoors(config, d, S, color, carcassMatName, tp)}
             {showDims && (
               <>
                 <DimLine x1={0} y1={-8} x2={W} y2={-8} label={`${config.width}`} pos="above" />
@@ -160,10 +193,10 @@ export const CabinetPreview = memo(function CabinetPreview() {
         >
           <g transform={`translate(${dimPad},${dimPad})`}>
             <rect x={0} y={0} width={W} height={H} fill="none" stroke="#444" strokeWidth={1.5} />
-            <PartRect x={0} y={0} w={T} h={H} fill={color} label="Side Panel" dim={`${thick}×${config.height}`} />
-            <PartRect x={W - T} y={0} w={T} h={H} fill={color} label="Side Panel" dim={`${thick}×${config.height}`} />
-            <PartRect x={T} y={0} w={W - 2 * T} h={T} fill={color} label="Top Panel" dim={`${d.internalWidth}×${thick}`} />
-            <PartRect x={T} y={H - T} w={W - 2 * T} h={T} fill={color} label="Bottom Panel" dim={`${d.internalWidth}×${thick}`} />
+            <PartRect x={0} y={0} w={T} h={H} fill={color} label="Side Panel" dim={`${thick}×${config.height}`} material={carcassMatName} {...tp} />
+            <PartRect x={W - T} y={0} w={T} h={H} fill={color} label="Side Panel" dim={`${thick}×${config.height}`} material={carcassMatName} {...tp} />
+            <PartRect x={T} y={0} w={W - 2 * T} h={T} fill={color} label="Top Panel" dim={`${d.internalWidth}×${thick}`} material={carcassMatName} {...tp} />
+            <PartRect x={T} y={H - T} w={W - 2 * T} h={T} fill={color} label="Bottom Panel" dim={`${d.internalWidth}×${thick}`} material={carcassMatName} {...tp} />
             {shelfPositions.map((pos, i) => {
               const sy = H - T - pos * S;
               return (
@@ -217,7 +250,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
           <g transform={`translate(${dimPad},${dimPad})`}>
             <rect x={0} y={0} width={D} height={H} fill="none" stroke="#444" strokeWidth={1.5} />
             <rect x={0} y={0} width={D} height={H} fill={color} opacity={0.3} />
-            <PartRect x={D - bt * S} y={0} w={bt * S} h={H} fill="#cba" label="Back Panel" dim={`${bt}×${config.height}`} />
+            <PartRect x={D - bt * S} y={0} w={bt * S} h={H} fill="#cba" label="Back Panel" dim={`${bt}×${config.height}`} material={backMatName} {...tp} />
             {shelfPositions.map((pos, i) => (
               <PartRect
                 key={i}
@@ -229,6 +262,8 @@ export const CabinetPreview = memo(function CabinetPreview() {
                 dashed
                 label={`Shelf ${i + 1}`}
                 dim={`${d.shelfDepth}×${thick}`}
+                material={carcassMatName}
+                {...tp}
               />
             ))}
             {showDims && (
@@ -245,10 +280,10 @@ export const CabinetPreview = memo(function CabinetPreview() {
         <ViewBox w={W + dimPad * 2} h={D + dimPad * 2}>
           <g transform={`translate(${dimPad},${dimPad})`}>
             <rect x={0} y={0} width={W} height={D} fill="none" stroke="#444" strokeWidth={1.5} />
-            <PartRect x={0} y={0} w={T} h={D} fill={color} label="Side Panel" dim={`${thick}×${config.depth}`} />
-            <PartRect x={W - T} y={0} w={T} h={D} fill={color} label="Side Panel" dim={`${thick}×${config.depth}`} />
-            <PartRect x={T} y={0} w={W - 2 * T} h={T} fill={color} label="Top Panel" dim={`${d.internalWidth}×${thick}`} />
-            <PartRect x={T} y={D - bt * S} w={W - 2 * T} h={bt * S} fill="#cba" label="Back Panel" dim={`${d.backPanelWidth}×${bt}`} />
+            <PartRect x={0} y={0} w={T} h={D} fill={color} label="Side Panel" dim={`${thick}×${config.depth}`} material={carcassMatName} {...tp} />
+            <PartRect x={W - T} y={0} w={T} h={D} fill={color} label="Side Panel" dim={`${thick}×${config.depth}`} material={carcassMatName} {...tp} />
+            <PartRect x={T} y={0} w={W - 2 * T} h={T} fill={color} label="Top Panel" dim={`${d.internalWidth}×${thick}`} material={carcassMatName} {...tp} />
+            <PartRect x={T} y={D - bt * S} w={W - 2 * T} h={bt * S} fill="#cba" label="Back Panel" dim={`${d.backPanelWidth}×${bt}`} material={backMatName} {...tp} />
             {showDims && (
               <>
                 <DimLine x1={0} y1={-8} x2={W} y2={-8} label={`${config.width}`} pos="above" />
@@ -262,7 +297,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
       {activeView === 'back' && (
         <ViewBox w={W + dimPad * 2} h={H + dimPad * 2}>
           <g transform={`translate(${dimPad},${dimPad})`}>
-            <PartRect x={0} y={0} w={W} h={H} fill="#cba" label="Back Panel" dim={`${d.backPanelWidth}×${d.backPanelHeight}`} />
+            <PartRect x={0} y={0} w={W} h={H} fill="#cba" label="Back Panel" dim={`${d.backPanelWidth}×${d.backPanelHeight}`} material={backMatName} {...tp} />
             <text x={W / 2} y={H / 2} textAnchor="middle" dominantBaseline="middle" fontSize={11} fill="#666">
               {Math.round(d.backPanelWidth)} × {Math.round(d.backPanelHeight)}
             </text>
@@ -325,19 +360,30 @@ function ViewBox({
 
 /** Interactive part rectangle with hover tooltip */
 function PartRect({
-  x, y, w, h, fill, label, dim, dashed,
+  x, y, w, h, fill, label, dim, dashed, material,
+  onHover, onLeave, onMove,
 }: {
   x: number; y: number; w: number; h: number;
   fill: string; label: string; dim: string; dashed?: boolean;
+  material?: string;
+  onHover?: (e: React.MouseEvent, label: string, dim: string, material?: string) => void;
+  onLeave?: () => void;
+  onMove?: (e: React.MouseEvent) => void;
 }) {
+  const [hovered, setHovered] = useState(false);
   return (
     <rect
       x={x} y={y} width={w} height={h}
-      fill={fill} stroke="#666" strokeWidth={0.5}
+      fill={fill} stroke={hovered ? '#FFD700' : '#666'}
+      strokeWidth={hovered ? 2 : 0.5}
       strokeDasharray={dashed ? '3,2' : undefined}
-      opacity={0.85}
+      opacity={hovered ? 1 : 0.85}
+      style={{ cursor: 'pointer', transition: 'stroke 0.15s, stroke-width 0.15s, opacity 0.15s' }}
+      onMouseEnter={(e) => { setHovered(true); onHover?.(e, label, dim, material); }}
+      onMouseMove={onMove}
+      onMouseLeave={() => { setHovered(false); onLeave?.(); }}
     >
-      <title>{`${label}\n${dim} mm`}</title>
+      <title>{`${label}\n${dim} mm${material ? `\n${material}` : ''}`}</title>
     </rect>
   );
 }
@@ -391,6 +437,8 @@ function renderDoors(
   d: { doorHeight: number; doorWidth: number },
   scale: number,
   color: string,
+  material?: string,
+  tp?: { onHover: (e: React.MouseEvent, label: string, dim: string, material?: string) => void; onLeave: () => void; onMove: (e: React.MouseEvent) => void },
 ) {
   const r = config.doorReveal * scale;
   const dw = d.doorWidth * scale;
@@ -407,6 +455,8 @@ function renderDoors(
         fill={color}
         label={`Door ${i + 1}`}
         dim={`${Math.round(d.doorWidth)}×${Math.round(d.doorHeight)}`}
+        material={material}
+        {...(tp ?? {})}
       />,
     );
     if (config.doorStyle === 'shaker' && dw > shakerInset * 2.5 && dh > shakerInset * 2.5) {
