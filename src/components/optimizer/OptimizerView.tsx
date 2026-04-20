@@ -142,7 +142,7 @@ function SheetCard({
   );
 }
 
-/** Interactive part rect with hover highlight + tooltip */
+/** Interactive part rect with hover highlight + tooltip + edge banding indicators */
 function PartRect({
   part, scale, color, isHovered, isFaded, onHover,
 }: {
@@ -154,6 +154,9 @@ function PartRect({
   const y = part.y * scale;
   const w = part.width * scale;
   const h = part.length * scale;
+  const hasEB = part.edgeBanding && part.edgeBanding !== 'None' && part.edgeBanding !== 'ללא';
+  const is4Edge = hasEB && part.edgeBanding!.includes('4');
+  const ebColor = '#FF6B35'; // orange indicator for edge banding
 
   return (
     <g
@@ -169,6 +172,20 @@ function PartRect({
         opacity={isFaded ? 0.3 : 0.85}
         className="transition-all duration-150"
       />
+      {/* Edge banding indicators — colored lines on banded edges */}
+      {hasEB && (
+        <>
+          {/* Front edge (bottom of part) */}
+          <line x1={x} y1={y + h} x2={x + w} y2={y + h} stroke={ebColor} strokeWidth={2} opacity={isFaded ? 0.2 : 0.9} />
+          {is4Edge && (
+            <>
+              <line x1={x} y1={y} x2={x + w} y2={y} stroke={ebColor} strokeWidth={2} opacity={isFaded ? 0.2 : 0.9} />
+              <line x1={x} y1={y} x2={x} y2={y + h} stroke={ebColor} strokeWidth={2} opacity={isFaded ? 0.2 : 0.9} />
+              <line x1={x + w} y1={y} x2={x + w} y2={y + h} stroke={ebColor} strokeWidth={2} opacity={isFaded ? 0.2 : 0.9} />
+            </>
+          )}
+        </>
+      )}
       <text
         x={x + w / 2}
         y={y + h / 2 - 2}
@@ -190,7 +207,7 @@ function PartRect({
       >
         {part.width}×{part.length}
       </text>
-      <title>{`${part.partId}: ${part.label}\n${part.width} × ${part.length} mm`}</title>
+      <title>{`${part.partId}: ${part.label}\n${part.width} × ${part.length} mm${hasEB ? `\nEdge: ${part.edgeBanding}` : ''}`}</title>
     </g>
   );
 }

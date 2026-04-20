@@ -88,6 +88,7 @@ export interface CutRect {
   width: number;   // mm
   x: number;       // placed x on sheet
   y: number;       // placed y on sheet
+  edgeBanding?: string; // edge banding description (e.g. 'Front edge', '4 edges')
 }
 
 export interface CutSheet {

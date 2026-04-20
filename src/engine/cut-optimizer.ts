@@ -22,6 +22,7 @@ export function optimizeCutSheets(parts: Part[]): OptimizationResult {
         label: p.name.en,
         length: p.length,
         width: p.width,
+        edgeBanding: p.edgeBanding.en,
       });
     }
     groups.set(p.material, group);
@@ -60,6 +61,7 @@ export function optimizeCutSheets(parts: Part[]): OptimizationResult {
           width: r.width,
           x: r.x,
           y: r.y,
+          edgeBanding: r.edgeBanding,
         })),
         yieldPercent: round2((usedArea / sheetArea) * 100),
       });
@@ -90,6 +92,7 @@ interface Rect {
   label: string;
   length: number;
   width: number;
+  edgeBanding?: string;
 }
 
 interface PlacedRect extends Rect {
