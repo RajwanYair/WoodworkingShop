@@ -105,7 +105,8 @@
     "original": "Original",
     "optimized": "Optimized",
     "changes": "What Changes",
-    "exportDxf": "Export DXF for CNC"
+    "exportDxf": "Export DXF for CNC",
+    "exportGcode": "Export G-code for CNC"
   },
   "preview": {
     "title": "Cabinet Preview",
@@ -164,6 +165,7 @@
     "imported": "Configuration imported",
     "invalidFile": "Invalid configuration file",
     "dxfExported": "DXF file downloaded",
+    "gcodeExported": "G-code file downloaded",
     "linkCopied": "Shareable link copied to clipboard"
   },
   "onboarding": {

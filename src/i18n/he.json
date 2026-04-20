@@ -105,7 +105,8 @@
     "original": "מקורי",
     "optimized": "מוטב",
     "changes": "מה משתנה",
-    "exportDxf": "ייצוא DXF לCNC"
+    "exportDxf": "ייצוא DXF לCNC",
+    "exportGcode": "ייצוא G-code לCNC"
   },
   "preview": {
     "title": "תצוגה מקדימה",
@@ -164,6 +165,7 @@
     "imported": "תצורה יובאה",
     "invalidFile": "קובץ תצורה לא תקין",
     "dxfExported": "קובץ DXF הורד",
+    "gcodeExported": "קובץ G-code הורד",
     "linkCopied": "קישור שיתוף הועתק ללוח"
   },
   "onboarding": {
