@@ -41,7 +41,7 @@ function App() {
         <Header />
         <div className="flex">
           <Sidebar />
-          <main id="main-content" className="flex-1 p-6" role="main" aria-label="Cabinet planner workspace">
+          <main id="main-content" className="flex-1 p-3 sm:p-6" role="main" aria-label="Cabinet planner workspace">
             {activeTab === 'configurator' && <ConfiguratorPanel />}
             {activeTab === 'preview' && <CabinetPreview />}
             {activeTab === 'optimizer' && (

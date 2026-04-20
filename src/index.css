@@ -23,6 +23,14 @@
   text-align: right;
 }
 
+/* Hide scrollbar for tab overflow */
+.scrollbar-none { scrollbar-width: none; -ms-overflow-style: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
+
+/* Mobile bottom sheet animation */
+@keyframes slide-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.animate-slide-up { animation: slide-up 0.25s ease-out; }
+
 /* ─── Print-friendly styles ─── */
 @media print {
   /* Reset background colors for paper */
