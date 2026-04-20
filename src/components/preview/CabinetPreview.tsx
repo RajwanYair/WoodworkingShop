@@ -9,10 +9,26 @@ const S = 0.2;
 
 type ViewId = 'front' | 'frontOpen' | 'side' | 'top' | 'back' | '3d';
 
+/** Serialize the first <svg> inside a container element and trigger a download */
+function downloadSvg(container: HTMLElement, filename: string) {
+  const svgEl = container.querySelector('svg');
+  if (!svgEl) return;
+  const clone = svgEl.cloneNode(true) as SVGSVGElement;
+  clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+  const blob = new Blob([clone.outerHTML], { type: 'image/svg+xml;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 export const CabinetPreview = memo(function CabinetPreview() {
   const { t } = useTranslation();
   const { config, dimensions: d, setConfig } = useCabinetStore();
   const [activeView, setActiveView] = useState<ViewId>('front');
+  const previewRef = useRef<HTMLDivElement>(null);
   const [showDims, setShowDims] = useState(true);
   const [dragIdx, setDragIdx] = useState<number | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -103,9 +119,18 @@ export const CabinetPreview = memo(function CabinetPreview() {
           />
           Dimensions
         </label>
+        <button
+          onClick={() => previewRef.current && downloadSvg(previewRef.current, `cabinet-${activeView}.svg`)}
+          className="ms-2 px-2 py-0.5 rounded text-xs font-medium bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700 transition-colors"
+          aria-label={t('preview.exportSvg')}
+          title={t('preview.exportSvg')}
+        >
+          ⬇ SVG
+        </button>
       </div>
 
       {/* Active view */}
+      <div ref={previewRef}>
       {activeView === 'front' && (
         <ViewBox w={W + dimPad * 2} h={H + dimPad * 2}>
           <g transform={`translate(${dimPad},${dimPad})`}>
@@ -267,6 +292,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
           showDims={showDims}
         />
       )}
+      </div>
     </div>
   );
 });

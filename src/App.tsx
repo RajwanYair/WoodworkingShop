@@ -10,6 +10,7 @@ import { SmartOptimizerPanel } from './components/optimizer/SmartOptimizerPanel'
 import { PartsTable, HardwareTable } from './components/optimizer/Tables';
 import { AssemblyGuide } from './components/assembly/AssemblyGuide';
 import { ToastContainer } from './components/layout/ToastContainer';
+import { OnboardingManager } from './components/layout/OnboardingOverlay';
 import { useCabinetStore, type CabinetState } from './store/cabinet-store';
 
 // Lazy-load PDF panel (heavy @react-pdf/renderer dependency)
@@ -94,6 +95,7 @@ function App() {
           </main>
         </div>
         <ToastContainer />
+        <OnboardingManager />
       </div>
     </div>
   );

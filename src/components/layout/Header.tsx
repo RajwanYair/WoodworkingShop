@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useToastStore } from '../../store/toast-store';
 import { configToUrl } from '../../utils/url-state';
+import { HelpButton } from './OnboardingOverlay';
 
 const tabs = ['configurator', 'preview', 'optimizer', 'assembly', 'pdf'] as const;
 
@@ -69,6 +70,7 @@ export function Header() {
         </button>
         <button onClick={toggleDarkMode} className="text-wood-200 hover:text-white text-sm" title={t('footer.darkMode')}>{darkMode ? '☀️' : '🌙'}</button>
         <button onClick={toggleLang} className="text-wood-200 hover:text-white text-sm font-medium">{lang === 'en' ? 'עב' : 'EN'}</button>
+        <HelpButton />
       </div>
     </header>
   );

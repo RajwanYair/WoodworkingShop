@@ -114,7 +114,8 @@
     "side": "Side",
     "top": "Top",
     "back": "Back",
-    "iso": "3D"
+    "iso": "3D",
+    "exportSvg": "Export SVG"
   },
   "pdf": {
     "title": "Export PDF",
@@ -164,5 +165,21 @@
     "invalidFile": "Invalid configuration file",
     "dxfExported": "DXF file downloaded",
     "linkCopied": "Shareable link copied to clipboard"
+  },
+  "onboarding": {
+    "title": "Welcome to Cabinet Planner!",
+    "subtitle": "Design, optimize, and build your furniture in 5 easy steps.",
+    "stepConfigure": "Configure",
+    "descConfigure": "Choose furniture type, dimensions, materials, doors, and shelves.",
+    "stepPreview": "Preview",
+    "descPreview": "See front, side, top, back, and 3D views of your design. Export as SVG.",
+    "stepOptimize": "Cut Sheets",
+    "descOptimize": "Get optimized cut layouts, parts list, hardware, and DXF exports.",
+    "stepAssembly": "Assembly",
+    "descAssembly": "Follow step-by-step assembly instructions for your build.",
+    "stepPdf": "PDF Export",
+    "descPdf": "Generate a printable PDF with all plans and cut sheets.",
+    "getStarted": "Get Started",
+    "help": "Help"
   }
 }
