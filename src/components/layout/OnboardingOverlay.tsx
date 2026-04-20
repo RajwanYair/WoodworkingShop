@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const SEEN_KEY = 'onboarding-seen';
@@ -26,17 +26,44 @@ export function OnboardingOverlay() {
     setVisible(false);
   };
 
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      dismiss();
+      return;
+    }
+    // Focus trap
+    if (e.key === 'Tab' && dialogRef.current) {
+      const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }, []);
+
   if (!visible) return null;
 
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
       onClick={dismiss}
+      onKeyDown={handleKeyDown}
       role="dialog"
       aria-modal="true"
       aria-label={t('onboarding.title')}
     >
       <div
+        ref={dialogRef}
         className="bg-white dark:bg-wood-800 rounded-xl shadow-2xl max-w-md w-full mx-4 p-6 space-y-5"
         onClick={(e) => e.stopPropagation()}
       >

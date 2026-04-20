@@ -29,17 +29,19 @@ export function Header() {
         <div className="flex items-center gap-2 sm:hidden">
           <button onClick={undo} disabled={!canUndo} className="text-wood-200 hover:text-white text-sm disabled:opacity-30" aria-label="Undo">↩</button>
           <button onClick={redo} disabled={!canRedo} className="text-wood-200 hover:text-white text-sm disabled:opacity-30" aria-label="Redo">↪</button>
-          <button onClick={toggleDarkMode} className="text-wood-200 hover:text-white text-sm">{darkMode ? '☀️' : '🌙'}</button>
-          <button onClick={toggleLang} className="text-wood-200 hover:text-white text-sm font-medium">{lang === 'en' ? 'עב' : 'EN'}</button>
+          <button onClick={toggleDarkMode} className="text-wood-200 hover:text-white text-sm" aria-label={darkMode ? 'Light mode' : 'Dark mode'}>{darkMode ? '☀️' : '🌙'}</button>
+          <button onClick={toggleLang} className="text-wood-200 hover:text-white text-sm font-medium" aria-label="Toggle language">{lang === 'en' ? 'עב' : 'EN'}</button>
         </div>
       </div>
 
       {/* Tab nav — horizontally scrollable on mobile */}
-      <nav className="flex gap-1 overflow-x-auto -mx-3 px-3 sm:mx-0 sm:px-0 scrollbar-none" aria-label="Main navigation">
+      <nav className="flex gap-1 overflow-x-auto -mx-3 px-3 sm:mx-0 sm:px-0 scrollbar-none" role="tablist" aria-label="Main navigation">
         {tabs.map((tab, i) => (
           <button
             key={tab}
+            role="tab"
             onClick={() => setActiveTab(tab)}
+            aria-selected={activeTab === tab}
             aria-current={activeTab === tab ? 'page' : undefined}
             title={`${t(`tabs.${tab}`)} (Alt+${i + 1})`}
             className={`px-3 py-1.5 rounded text-sm font-medium whitespace-nowrap transition-colors ${
@@ -65,10 +67,11 @@ export function Header() {
           }}
           className="text-wood-200 hover:text-white text-sm"
           title="Copy shareable link"
+          aria-label="Copy shareable link"
         >
           🔗
         </button>
-        <button onClick={toggleDarkMode} className="text-wood-200 hover:text-white text-sm" title={t('footer.darkMode')}>{darkMode ? '☀️' : '🌙'}</button>
+        <button onClick={toggleDarkMode} className="text-wood-200 hover:text-white text-sm" title={t('footer.darkMode')} aria-label={darkMode ? 'Light mode' : 'Dark mode'}>{darkMode ? '☀️' : '🌙'}</button>
         <button onClick={toggleLang} className="text-wood-200 hover:text-white text-sm font-medium">{lang === 'en' ? 'עב' : 'EN'}</button>
         <HelpButton />
       </div>

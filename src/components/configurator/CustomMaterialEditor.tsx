@@ -62,6 +62,7 @@ export function CustomMaterialEditor() {
       <button
         onClick={() => setOpen(!open)}
         className="text-sm text-wood-500 dark:text-wood-400 hover:underline"
+        aria-expanded={open}
       >
         {open ? '▾ ' : '▸ '}{t('config.addCustomMaterial')}
       </button>

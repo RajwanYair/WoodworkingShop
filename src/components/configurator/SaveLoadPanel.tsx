@@ -84,6 +84,8 @@ export function SaveLoadPanel() {
         <button
           onClick={() => setShowSaved(!showSaved)}
           className="text-xs text-wood-500 hover:text-wood-700 dark:text-wood-400 dark:hover:text-wood-200"
+          aria-expanded={showSaved}
+          aria-label={t('saves.title')}
         >
           {showSaved ? '▲' : '▼'} {configs.length > 0 && `(${configs.length})`}
         </button>

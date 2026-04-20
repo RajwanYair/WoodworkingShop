@@ -49,7 +49,7 @@ export function Sidebar() {
 
       {/* Mobile overlay */}
       {mobileOpen && (
-        <div className="lg:hidden fixed inset-0 z-40" data-print="hide">
+        <div className="lg:hidden fixed inset-0 z-40" data-print="hide" onKeyDown={(e) => e.key === 'Escape' && setMobileOpen(false)}>
           <div className="absolute inset-0 bg-black/40" onClick={() => setMobileOpen(false)} />
           <aside className="absolute bottom-0 left-0 right-0 max-h-[70vh] bg-wood-50 dark:bg-wood-900 border-t border-wood-200 dark:border-wood-800 p-4 rounded-t-xl overflow-y-auto animate-slide-up" role="complementary" aria-label="Cabinet summary">
             <div className="w-10 h-1 bg-wood-300 dark:bg-wood-600 rounded-full mx-auto mb-3" />
