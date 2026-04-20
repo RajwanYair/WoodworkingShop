@@ -1,44 +1,24 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.egg-info/
-dist/
-build/
-.eggs/
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Virtual environment
-.venv/
-venv/
-ENV/
+node_modules
+dist
+dist-ssr
+*.local
 
-# mypy / type checkers
-.mypy_cache/
-.dmypy.json
-dmypy.json
-.pytype/
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
 .DS_Store
-Thumbs.db
-desktop.ini
-
-# Generated PDF outputs (rebuild with: python generate_*.py)
-pantry-cabinet-plans/plan-a/large-cabinet/*.pdf
-pantry-cabinet-plans/plan-a/small-cabinet/*.pdf
-pantry-cabinet-plans/plan-b/large-cabinet/*.pdf
-pantry-cabinet-plans/plan-b/small-cabinet/*.pdf
-pantry-cabinet-plans/plan-c/*.pdf
-pantry-cabinet-plans/unified-optimized/*.pdf
-
-# Test / coverage
-.coverage
-htmlcov/
-.pytest_cache/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

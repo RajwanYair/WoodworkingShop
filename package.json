@@ -1,0 +1,23 @@
+{
+    "name": "woodworkingshop",
+    "version": "2.0.0",
+    "description": "Interactive cabinet planner — configure, preview, and download PDF build plans",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc -b && vite build",
+        "preview": "vite preview",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "test:coverage": "vitest run --coverage",
+        "lint": "eslint --cache --cache-location node_modules/.cache/eslint/ --max-warnings 0 .",
+        "typecheck": "tsc -b --noEmit",
+        "check": "npm run typecheck && npm run lint && npm run test",
+        "ci": "npm run check && npm run build"
+    },
+    "engines": {
+        "node": ">=22.0.0"
+    },
+    "comment:deps": "All devDependencies are installed in the parent MyScripts/ workspace. Run `npm install` from ../MyScripts to provision."
+}
