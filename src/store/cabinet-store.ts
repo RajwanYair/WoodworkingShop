@@ -29,12 +29,14 @@ export interface CabinetState {
   // UI state
   activeTab: 'configurator' | 'preview' | 'optimizer' | 'pdf';
   darkMode: boolean;
+  colorBlindMode: boolean;
 
   // Actions
   setConfig: (patch: Partial<CabinetConfig>) => void;
   resetConfig: () => void;
   setActiveTab: (tab: CabinetState['activeTab']) => void;
   toggleDarkMode: () => void;
+  toggleColorBlindMode: () => void;
   undo: () => void;
   redo: () => void;
 }
@@ -62,6 +64,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
     canRedo: false,
     activeTab: 'configurator',
     darkMode: false,
+    colorBlindMode: false,
 
     setConfig: (patch) =>
       set((state) => {
@@ -119,5 +122,6 @@ export const useCabinetStore = create<CabinetState>((set) => {
 
     setActiveTab: (tab) => set({ activeTab: tab }),
     toggleDarkMode: () => set((s) => ({ darkMode: !s.darkMode })),
+    toggleColorBlindMode: () => set((s) => ({ colorBlindMode: !s.colorBlindMode })),
   };
 });

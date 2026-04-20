@@ -7,22 +7,40 @@ import type { Lang, CutSheet, CutRect } from '../../engine/types';
 /** Scale factor: mm → SVG px */
 const S = 0.12;
 
+/** Deuteranopia-safe palette (Wong 2011) — distinguishable without red/green */
+const CB_PALETTE = ['#0072B2', '#E69F00', '#56B4E9', '#009E73', '#F0E442', '#CC79A7', '#D55E00', '#999999'];
+
+function cbColor(index: number) {
+  return CB_PALETTE[index % CB_PALETTE.length];
+}
+
 export function OptimizerView() {
   const { t, i18n } = useTranslation();
-  const { optimization } = useCabinetStore();
+  const { optimization, colorBlindMode, toggleColorBlindMode } = useCabinetStore();
   const lang = i18n.language as Lang;
   const [hoveredPartId, setHoveredPartId] = useState<string | null>(null);
 
   return (
     <div className="space-y-6">
-      {/* Summary stats */}
-      <div className="grid grid-cols-3 gap-4">
-        <Stat label={t('optimizer.sheets')} value={String(optimization.totalSheets)} />
-        <Stat label={t('optimizer.yield')} value={`${optimization.overallYield}%`} />
-        <Stat
-          label={t('optimizer.waste')}
-          value={`${(optimization.totalWaste / 1_000_000).toFixed(2)} m²`}
-        />
+      {/* Summary stats + color-blind toggle */}
+      <div className="flex items-center justify-between">
+        <div className="grid grid-cols-3 gap-4 flex-1">
+          <Stat label={t('optimizer.sheets')} value={String(optimization.totalSheets)} />
+          <Stat label={t('optimizer.yield')} value={`${optimization.overallYield}%`} />
+          <Stat label={t('optimizer.waste')} value={`${(optimization.totalWaste / 1_000_000).toFixed(2)} m²`} />
+        </div>
+        <button
+          onClick={toggleColorBlindMode}
+          className={`ms-4 px-3 py-1.5 rounded text-xs font-medium border transition-colors ${
+            colorBlindMode
+              ? 'bg-blue-100 dark:bg-blue-900 border-blue-400 text-blue-700 dark:text-blue-200'
+              : 'border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800'
+          }`}
+          title="Toggle color-blind safe palette"
+          aria-pressed={colorBlindMode}
+        >
+          👁 CB
+        </button>
       </div>
 
       {/* Individual sheets */}
@@ -33,6 +51,7 @@ export function OptimizerView() {
           lang={lang}
           hoveredPartId={hoveredPartId}
           onHoverPart={setHoveredPartId}
+          colorBlindMode={colorBlindMode}
           t={t}
         />
       ))}
@@ -48,10 +67,11 @@ export function OptimizerView() {
 }
 
 function SheetCard({
-  sheet, lang, hoveredPartId, onHoverPart, t,
+  sheet, lang, hoveredPartId, onHoverPart, colorBlindMode, t,
 }: {
   sheet: CutSheet; lang: Lang; hoveredPartId: string | null;
   onHoverPart: (id: string | null) => void;
+  colorBlindMode: boolean;
   t: (key: string) => string;
 }) {
   const mat = getMaterial(sheet.material);
@@ -86,7 +106,7 @@ function SheetCard({
             key={i}
             part={p}
             scale={S}
-            color={mat.color}
+            color={colorBlindMode ? cbColor(i) : mat.color}
             isHovered={hoveredPartId === p.partId}
             isFaded={hoveredPartId !== null && hoveredPartId !== p.partId}
             onHover={onHoverPart}
