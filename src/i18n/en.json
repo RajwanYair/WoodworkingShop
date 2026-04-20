@@ -107,7 +107,8 @@
     "optimized": "Optimized",
     "changes": "What Changes",
     "exportDxf": "Export DXF for CNC",
-    "exportGcode": "Export G-code for CNC"
+    "exportGcode": "Export G-code for CNC",
+    "exportBom": "Export Bill of Materials CSV"
   },
   "preview": {
     "title": "Cabinet Preview",
@@ -169,6 +170,7 @@
     "invalidFile": "Invalid configuration file",
     "dxfExported": "DXF file downloaded",
     "gcodeExported": "G-code file downloaded",
+    "bomExported": "BOM CSV downloaded",
     "linkCopied": "Shareable link copied to clipboard"
   },
   "onboarding": {
