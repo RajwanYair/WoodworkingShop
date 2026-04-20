@@ -17,6 +17,9 @@ export const MATERIALS: Material[] = [
   // Thin panels (back)
   { key: 'plywood-4',    name: { en: 'Plywood 4 mm (back)',    he: 'דיקט 4 מ"מ (גב)' },     thickness: 4,  sheetWidth: 1220, sheetLength: 2440, pricePerSheet: 65,  category: 'back',  color: '#E8D8B0' },
   { key: 'mdf-3',        name: { en: 'MDF/HDF 3 mm (back)',    he: 'סיבית 3 מ"מ (גב)' },    thickness: 3,  sheetWidth: 1220, sheetLength: 2440, pricePerSheet: 50,  category: 'back',  color: '#D4C4A0' },
+
+  // Glass (doors — pre-cut to size)
+  { key: 'tempered-glass-4', name: { en: 'Tempered Glass 4 mm', he: 'זכוכית מחוסמת 4 מ"מ' }, thickness: 4, sheetWidth: 1220, sheetLength: 2440, pricePerSheet: 220, category: 'door', color: '#b8d8f0' },
 ];
 
 export const SAW_KERF = 4; // mm

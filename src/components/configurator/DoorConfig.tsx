@@ -40,6 +40,7 @@ export function DoorConfig() {
         >
           <option value="flat">{t('config.flat')}</option>
           <option value="shaker">{t('config.shaker')}</option>
+          <option value="glass">{t('config.glass')}</option>
           <option value="none">{t('config.none')}</option>
         </select>
       </label>

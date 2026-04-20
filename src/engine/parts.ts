@@ -124,12 +124,16 @@ export function generateParts(cfg: CabinetConfig): Part[] {
 
   // ── Doors ──
   if (cfg.doorStyle !== 'none' && !isBookshelf && !isDesk) {
+    const isGlass = cfg.doorStyle === 'glass';
     parts.push({
       id: id(), qty: cfg.doorCount,
-      name: { en: 'Door', he: 'דלת' },
-      material: cfg.carcassMaterial, thickness: t,
+      name: isGlass
+        ? { en: 'Glass Door', he: 'דלת זכוכית' }
+        : { en: 'Door', he: 'דלת' },
+      material: isGlass ? 'tempered-glass-4' : cfg.carcassMaterial,
+      thickness: isGlass ? 4 : t,
       length: d.doorHeight, width: d.doorWidth,
-      edgeBanding: edgeLabel(eb !== 'none' ? '4-edges' : 'none'),
+      edgeBanding: edgeLabel(isGlass ? 'none' : (eb !== 'none' ? '4-edges' : 'none')),
     });
   }
 

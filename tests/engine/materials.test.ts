@@ -10,8 +10,8 @@ import {
 } from '../../src/engine/materials';
 
 describe('materials', () => {
-  it('has 11 materials total', () => {
-    expect(MATERIALS).toHaveLength(11);
+  it('has 12 materials total', () => {
+    expect(MATERIALS).toHaveLength(12);
   });
 
   it('has 9 panel materials and 2 back materials', () => {

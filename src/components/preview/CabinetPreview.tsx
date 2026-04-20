@@ -320,6 +320,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
           color={color}
           shelfPositions={shelfPositions}
           hasDoors={config.doorStyle !== 'none'}
+          doorStyle={config.doorStyle}
           doorCount={config.doorCount}
           doorReveal={config.doorReveal}
           doorWidth={d.doorWidth}
@@ -448,17 +449,31 @@ function renderDoors(
 
   for (let i = 0; i < config.doorCount; i++) {
     const x = r + i * (dw + r);
+    const isGlass = config.doorStyle === 'glass';
+    const doorFill = isGlass ? '#b8d8f0' : color;
+    const doorLabel = isGlass ? `Glass Door ${i + 1}` : `Door ${i + 1}`;
     doors.push(
       <PartRect
         key={`door-${i}`}
         x={x} y={r} w={dw} h={dh}
-        fill={color}
-        label={`Door ${i + 1}`}
+        fill={doorFill}
+        label={doorLabel}
         dim={`${Math.round(d.doorWidth)}×${Math.round(d.doorHeight)}`}
-        material={material}
+        material={isGlass ? 'Tempered Glass 4mm' : material}
         {...(tp ?? {})}
       />,
     );
+    if (isGlass) {
+      // Glass shine effect
+      doors.push(
+        <line
+          key={`glass-shine-${i}`}
+          x1={x + dw * 0.2} y1={r + dh * 0.1}
+          x2={x + dw * 0.35} y2={r + dh * 0.9}
+          stroke="#ffffff80" strokeWidth={2} strokeLinecap="round"
+        />,
+      );
+    }
     if (config.doorStyle === 'shaker' && dw > shakerInset * 2.5 && dh > shakerInset * 2.5) {
       doors.push(
         <rect
@@ -499,11 +514,11 @@ function isoQuad(
 }
 
 function IsometricView({
-  w, h, d, thick, bt, color, shelfPositions, hasDoors, doorCount, doorReveal, doorWidth, doorHeight, showDims,
+  w, h, d, thick, bt, color, shelfPositions, hasDoors, doorStyle, doorCount, doorReveal, doorWidth, doorHeight, showDims,
 }: {
   w: number; h: number; d: number; thick: number; bt: number;
   color: string; shelfPositions: number[]; hasDoors: boolean;
-  doorCount: number; doorReveal: number; doorWidth: number; doorHeight: number;
+  doorStyle: string; doorCount: number; doorReveal: number; doorWidth: number; doorHeight: number;
   showDims: boolean;
 }) {
   const sc = 0.18; // scale
@@ -609,14 +624,17 @@ function IsometricView({
           const dw = doorWidth * sc;
           const dh = doorHeight * sc;
           const dx = dr + i * (dw + dr);
+          const isGlass = doorStyle === 'glass';
+          const doorFill = isGlass ? '#b8d8f0' : color;
+          const doorLabel = isGlass ? `Glass Door ${i + 1}` : `Door ${i + 1}`;
           return (
             <g key={`door-${i}`}>
               {/* Door front face */}
               <polygon
                 points={isoQuad([dx, dr, 0], [dx + dw, dr, 0], [dx + dw, dr + dh, 0], [dx, dr + dh, 0])}
-                fill={color} stroke="#555" strokeWidth={0.8} opacity={0.9}
+                fill={doorFill} stroke="#555" strokeWidth={0.8} opacity={isGlass ? 0.4 : 0.9}
               >
-                <title>{`Door ${i + 1}\n${Math.round(doorWidth)}×${Math.round(doorHeight)} mm`}</title>
+                <title>{`${doorLabel}\n${Math.round(doorWidth)}×${Math.round(doorHeight)} mm`}</title>
               </polygon>
               {/* Handle indicator */}
               <polygon

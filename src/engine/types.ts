@@ -15,7 +15,7 @@ export interface Material {
   color: string;           // hex for preview rendering
 }
 
-export type DoorStyle = 'flat' | 'shaker' | 'none';
+export type DoorStyle = 'flat' | 'shaker' | 'glass' | 'none';
 export type EdgeBanding = 'all-visible' | 'doors-only' | 'none';
 export type ShelfSpacing = 'equal' | 'custom';
 export type HandleStyle = 'bar' | 'knob' | 'cup' | 'none';

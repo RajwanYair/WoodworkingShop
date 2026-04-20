@@ -148,13 +148,21 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
   });
 
   if (hasDoors) {
+    const isGlass = cfg.doorStyle === 'glass';
     steps.push({
       stepNumber: n++,
-      title: { en: 'Mount Hinges & Doors', he: 'הרכבת צירים ודלתות' },
-      description: {
-        en: 'Screw the mounting plates into the side panels. Clip the hinge cups into the 35mm holes on the doors. Attach doors to mounting plates and adjust alignment.',
-        he: 'הברג את פלטות הצירים לדפנות. הכנס את כוסות הצירים לחורי 35 מ"מ בדלתות. חבר דלתות לפלטות וכוון יישור.',
-      },
+      title: isGlass
+        ? { en: 'Mount Glass Door Hinges', he: 'הרכבת צירים לדלתות זכוכית' }
+        : { en: 'Mount Hinges & Doors', he: 'הרכבת צירים ודלתות' },
+      description: isGlass
+        ? {
+            en: 'Use glass-specific clip-on hinges. Attach the mounting plates to the side panels. Clip the hinges onto the 4mm tempered glass doors. Adjust alignment carefully — glass cannot be trimmed.',
+            he: 'השתמש בצירים ייעודיים לזכוכית. חבר את פלטות ההרכבה לדפנות. הצמד את הצירים לדלתות הזכוכית המחוסמת (4 מ"מ). כוון יישור בזהירות — לא ניתן לחתוך זכוכית.',
+          }
+        : {
+            en: 'Screw the mounting plates into the side panels. Clip the hinge cups into the 35mm holes on the doors. Attach doors to mounting plates and adjust alignment.',
+            he: 'הברג את פלטות הצירים לדפנות. הכנס את כוסות הצירים לחורי 35 מ"מ בדלתות. חבר דלתות לפלטות וכוון יישור.',
+          },
       parts: [hasFixedShelf ? 'P06' : 'P05'],
       icon: '🚪',
     });
