@@ -28,8 +28,11 @@ function App() {
               </div>
             )}
             {activeTab === 'pdf' && (
-              <div className="text-center text-wood-400 py-20">
-                PDF Export — coming in Sprint 10
+              <div className="text-center py-20 space-y-4">
+                <p className="text-wood-400">PDF export with @react-pdf/renderer — coming soon</p>
+                <p className="text-sm text-wood-300">
+                  Switch to <strong>Cut Sheets</strong> tab for full parts list, hardware BOM, and optimizer diagrams.
+                </p>
               </div>
             )}
           </main>
