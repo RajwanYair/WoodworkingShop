@@ -1,6 +1,6 @@
 import './i18n';
 import './index.css';
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { Header } from './components/layout/Header';
 import { Sidebar } from './components/layout/Sidebar';
 import { ConfiguratorPanel } from './components/configurator/ConfiguratorPanel';
@@ -8,8 +8,12 @@ import { CabinetPreview } from './components/preview/CabinetPreview';
 import { OptimizerView } from './components/optimizer/OptimizerView';
 import { SmartOptimizerPanel } from './components/optimizer/SmartOptimizerPanel';
 import { PartsTable, HardwareTable } from './components/optimizer/Tables';
-import { PdfExportPanel } from './components/pdf/PdfExportPanel';
 import { useCabinetStore, type CabinetState } from './store/cabinet-store';
+
+// Lazy-load PDF panel (heavy @react-pdf/renderer dependency)
+const PdfExportPanel = lazy(() =>
+  import('./components/pdf/PdfExportPanel').then((m) => ({ default: m.PdfExportPanel })),
+);
 
 function App() {
   const { activeTab, darkMode } = useCabinetStore();
@@ -68,7 +72,11 @@ function App() {
                 <OptimizerView />
               </div>
             )}
-            {activeTab === 'pdf' && <PdfExportPanel />}
+            {activeTab === 'pdf' && (
+              <Suspense fallback={<div className="text-center py-12 text-wood-400">Loading PDF tools…</div>}>
+                <PdfExportPanel />
+              </Suspense>
+            )}
 
             {/* Print button — hidden when printing */}
             <button

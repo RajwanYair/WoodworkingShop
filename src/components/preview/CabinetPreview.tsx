@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { getMaterial } from '../../engine/materials';
@@ -9,7 +9,7 @@ const S = 0.2;
 
 type ViewId = 'front' | 'frontOpen' | 'side' | 'top' | 'back';
 
-export function CabinetPreview() {
+export const CabinetPreview = memo(function CabinetPreview() {
   const { t } = useTranslation();
   const { config, dimensions: d, setConfig } = useCabinetStore();
   const [activeView, setActiveView] = useState<ViewId>('front');
@@ -251,7 +251,7 @@ export function CabinetPreview() {
       )}
     </div>
   );
-}
+});
 
 // ─── SVG sub-components ───
 

@@ -6,4 +6,13 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   base: '/WoodworkingShop/',
   plugins: [react(), tailwindcss()],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'pdf-renderer': ['@react-pdf/renderer'],
+        },
+      },
+    },
+  },
 })
