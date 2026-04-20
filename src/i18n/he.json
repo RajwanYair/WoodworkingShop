@@ -40,7 +40,10 @@
     "allVisible": "כל הקצוות הנראים",
     "doorsOnly": "דלתות בלבד",
     "noBanding": "ללא",
-    "reset": "איפוס לברירות מחדל"
+    "reset": "איפוס לברירת מחדל",
+    "furnitureType": "סוג רהיט",
+    "ft_cabinet": "ארון",
+    "ft_bookshelf": "כוננייה"
   },
   "parts": {
     "title": "רשימת חלקים",

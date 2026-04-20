@@ -16,6 +16,7 @@ export function generateParts(cfg: CabinetConfig): Part[] {
   const parts: Part[] = [];
   let idx = 1;
   const id = () => `P${String(idx++).padStart(2, '0')}`;
+  const isBookshelf = cfg.furnitureType === 'bookshelf';
 
   // ── Carcass sides (left + right) ──
   parts.push({
@@ -66,7 +67,7 @@ export function generateParts(cfg: CabinetConfig): Part[] {
   }
 
   // ── Doors ──
-  if (cfg.doorStyle !== 'none') {
+  if (cfg.doorStyle !== 'none' && !isBookshelf) {
     parts.push({
       id: id(), qty: cfg.doorCount,
       name: { en: 'Door', he: 'דלת' },

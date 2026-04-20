@@ -40,7 +40,10 @@
     "allVisible": "All Visible Edges",
     "doorsOnly": "Doors Only",
     "noBanding": "None",
-    "reset": "Reset to Defaults"
+    "reset": "Reset to Defaults",
+    "furnitureType": "Furniture Type",
+    "ft_cabinet": "Cabinet",
+    "ft_bookshelf": "Bookshelf"
   },
   "parts": {
     "title": "Parts List",

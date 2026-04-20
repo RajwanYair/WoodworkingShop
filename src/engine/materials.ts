@@ -40,6 +40,7 @@ export function backMaterials(): Material[] {
 // ─── Default config ───
 
 export const DEFAULT_CONFIG: CabinetConfig = {
+  furnitureType: 'cabinet',
   width: 1000,
   height: 2000,
   depth: 600,
@@ -54,6 +55,18 @@ export const DEFAULT_CONFIG: CabinetConfig = {
   handleStyle: 'bar',
   edgeBanding: 'all-visible',
   lang: 'en',
+};
+
+export const BOOKSHELF_DEFAULTS: Partial<CabinetConfig> = {
+  furnitureType: 'bookshelf',
+  width: 800,
+  height: 1800,
+  depth: 300,
+  shelfCount: 5,
+  doorStyle: 'none',
+  doorCount: 1,
+  handleStyle: 'none',
+  edgeBanding: 'all-visible',
 };
 
 // ─── Validation constraints ───
