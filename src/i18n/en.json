@@ -149,6 +149,8 @@
     "title": "Cost Estimate",
     "edgeBanding": "Edge banding",
     "hardware": "Hardware",
+    "waste": "Material waste",
+    "perUnit": "Cost per unit",
     "total": "Estimated Total",
     "disclaimer": "Prices are approximate and may vary by supplier."
   },

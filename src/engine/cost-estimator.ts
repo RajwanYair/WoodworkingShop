@@ -5,6 +5,7 @@ export interface CostBreakdown {
   sheetCosts: SheetCost[];
   edgeBandingCost: number;
   hardwareCost: number;
+  wasteCost: number;
   totalMaterialCost: number;
   totalCost: number;
 }
@@ -79,10 +80,17 @@ export function estimateCost(
     hardwareCost += hw.qty * unitPrice;
   }
 
+  // Waste cost — proportional value of wasted material
+  const wastePercent = optimization.sheets.length > 0
+    ? (100 - optimization.overallYield) / 100
+    : 0;
+  const wasteCost = Math.round(totalMaterialCost * wastePercent);
+
   return {
     sheetCosts,
     edgeBandingCost,
     hardwareCost,
+    wasteCost,
     totalMaterialCost,
     totalCost: totalMaterialCost + edgeBandingCost + hardwareCost,
   };
