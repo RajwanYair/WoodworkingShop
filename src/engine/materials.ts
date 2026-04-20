@@ -81,6 +81,18 @@ export const DESK_DEFAULTS: Partial<CabinetConfig> = {
   edgeBanding: 'all-visible',
 };
 
+export const WARDROBE_DEFAULTS: Partial<CabinetConfig> = {
+  furnitureType: 'wardrobe',
+  width: 1000,
+  height: 2100,
+  depth: 600,
+  shelfCount: 1,
+  doorStyle: 'flat',
+  doorCount: 2,
+  handleStyle: 'bar',
+  edgeBanding: 'all-visible',
+};
+
 // ─── Validation constraints ───
 
 export const CONSTRAINTS = {

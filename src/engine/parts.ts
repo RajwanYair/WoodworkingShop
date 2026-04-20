@@ -72,6 +72,8 @@ export function generateParts(cfg: CabinetConfig): Part[] {
     return parts;
   }
 
+  const isWardrobe = cfg.furnitureType === 'wardrobe';
+
   // ── Carcass sides (left + right) ──
   parts.push({
     id: id(), qty: 2,
@@ -121,7 +123,7 @@ export function generateParts(cfg: CabinetConfig): Part[] {
   }
 
   // ── Doors ──
-  if (cfg.doorStyle !== 'none' && !isBookshelf) {
+  if (cfg.doorStyle !== 'none' && !isBookshelf && !isDesk) {
     parts.push({
       id: id(), qty: cfg.doorCount,
       name: { en: 'Door', he: 'דלת' },
@@ -139,6 +141,17 @@ export function generateParts(cfg: CabinetConfig): Part[] {
     length: d.backPanelHeight, width: d.backPanelWidth,
     edgeBanding: edgeLabel('none'),
   });
+
+  // ── Wardrobe hanging rail ──
+  if (isWardrobe) {
+    parts.push({
+      id: id(), qty: 1,
+      name: { en: 'Hanging Rail', he: 'מוט תלייה' },
+      material: cfg.carcassMaterial, thickness: 25,
+      length: d.internalWidth, width: 25,
+      edgeBanding: edgeLabel('none'),
+    });
+  }
 
   return parts;
 }

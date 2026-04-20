@@ -19,7 +19,7 @@ export type DoorStyle = 'flat' | 'none';
 export type EdgeBanding = 'all-visible' | 'doors-only' | 'none';
 export type ShelfSpacing = 'equal' | 'custom';
 export type HandleStyle = 'bar' | 'knob' | 'cup' | 'none';
-export type FurnitureType = 'cabinet' | 'bookshelf' | 'desk';
+export type FurnitureType = 'cabinet' | 'bookshelf' | 'desk' | 'wardrobe';
 
 export interface CabinetConfig {
   // Furniture type

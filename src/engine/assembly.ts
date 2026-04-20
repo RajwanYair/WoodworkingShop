@@ -17,9 +17,10 @@ export interface AssemblyStep {
  */
 export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
   const steps: AssemblyStep[] = [];
-  const hasDoors = cfg.doorStyle !== 'none' && cfg.furnitureType === 'cabinet';
+  const hasDoors = cfg.doorStyle !== 'none' && (cfg.furnitureType === 'cabinet' || cfg.furnitureType === 'wardrobe');
   const hasFixedShelf = cfg.height > 1200 && cfg.furnitureType !== 'desk';
   const isDesk = cfg.furnitureType === 'desk';
+  const isWardrobe = cfg.furnitureType === 'wardrobe';
   let n = 1;
 
   // ── Desk-specific assembly ──
@@ -167,6 +168,19 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
       },
       parts: [],
       icon: '🔧',
+    });
+  }
+
+  if (isWardrobe) {
+    steps.push({
+      stepNumber: n++,
+      title: { en: 'Install Hanging Rail', he: 'התקנת מוט תלייה' },
+      description: {
+        en: 'Mount the hanging rail brackets on each side panel at the desired height (typically 1600-1700mm from the bottom). Insert the rail and secure with screws.',
+        he: 'הרכב את תושבות מוט התלייה על כל דפנה בגובה הרצוי (בדרך כלל 1600-1700 מ"מ מהתחתית). הכנס את המוט וחזק בברגים.',
+      },
+      parts: [],
+      icon: '👔',
     });
   }
 

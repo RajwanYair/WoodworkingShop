@@ -45,7 +45,8 @@
     "furnitureType": "Furniture Type",
     "ft_cabinet": "Cabinet",
     "ft_bookshelf": "Bookshelf",
-    "ft_desk": "Desk"
+    "ft_desk": "Desk",
+    "ft_wardrobe": "Wardrobe"
   },
   "parts": {
     "title": "Parts List",

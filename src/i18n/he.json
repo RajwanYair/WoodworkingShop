@@ -45,7 +45,8 @@
     "furnitureType": "סוג רהיט",
     "ft_cabinet": "ארון",
     "ft_bookshelf": "כוננייה",
-    "ft_desk": "שולחן"
+    "ft_desk": "שולחן",
+    "ft_wardrobe": "ארון בגדים"
   },
   "parts": {
     "title": "רשימת חלקים",
