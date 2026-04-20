@@ -4,6 +4,7 @@ import { useCabinetStore } from '../../store/cabinet-store';
 import { useToastStore } from '../../store/toast-store';
 import { getMaterial } from '../../engine/materials';
 import { downloadDxfForSheet, downloadAllSheetsDxf } from '../../utils/dxf-export';
+import { downloadGcodeForSheet, downloadAllSheetsGcode } from '../../utils/gcode-export';
 import type { Lang, CutSheet, CutRect } from '../../engine/types';
 
 /** Scale factor: mm → SVG px */
@@ -40,6 +41,14 @@ export function OptimizerView() {
             title={t('optimizer.exportDxf')}
           >
             📐 DXF
+          </button>
+          <button
+            onClick={() => { downloadAllSheetsGcode(displayOpt.sheets, 'cabinet'); useToastStore.getState().addToast(t('toast.gcodeExported'), 'success'); }}
+            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors"
+            title={t('optimizer.exportGcode')}
+            aria-label={t('optimizer.exportGcode')}
+          >
+            ⚙ G-code
           </button>
           <button
             onClick={toggleColorBlindMode}
@@ -110,6 +119,14 @@ function SheetCard({
           title={`Download DXF for sheet ${sheet.sheetIndex + 1}`}
         >
           📐 DXF
+        </button>
+        <button
+          onClick={() => { downloadGcodeForSheet(sheet, `sheet-${sheet.sheetIndex + 1}.nc`); useToastStore.getState().addToast(t('toast.gcodeExported'), 'success'); }}
+          className="text-[10px] px-2 py-0.5 rounded border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors"
+          title={`Download G-code for sheet ${sheet.sheetIndex + 1}`}
+          aria-label={`Download G-code for sheet ${sheet.sheetIndex + 1}`}
+        >
+          ⚙ G-code
         </button>
       </div>
       <svg
