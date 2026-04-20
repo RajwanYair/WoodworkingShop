@@ -7,6 +7,7 @@ export interface AssemblyStep {
   parts: string[];   // part IDs highlighted in this step
   icon: string;       // emoji icon
   tip?: { en: string; he: string };
+  videoKeyword?: string;  // YouTube search keyword for tutorial lookup
 }
 
 /**
@@ -34,6 +35,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
       },
       parts: ['P01', 'P02'],
       icon: '🔩',
+      videoKeyword: 'confirmat screw drilling jig cabinet',
     });
     steps.push({
       stepNumber: n++,
@@ -44,6 +46,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
       },
       parts: ['P02', 'P03'],
       icon: '🪚',
+      videoKeyword: 'how to assemble desk side panels confirmat',
     });
     steps.push({
       stepNumber: n++,
@@ -54,6 +57,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
       },
       parts: ['P01'],
       icon: '🔨',
+      videoKeyword: 'attach desk top to legs from below',
     });
     if (cfg.shelfCount > 0) {
       steps.push({
@@ -91,6 +95,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     },
     parts: ['P01', 'P02', 'P03'],
     icon: '🔩',
+    videoKeyword: 'confirmat screw drilling jig cabinet',
     tip: {
       en: 'Use a drill press or jig for accurate perpendicular holes.',
       he: 'השתמש במכונת קדיחה או ג\'יג לחורים מדויקים ומאונכים.',
@@ -106,6 +111,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     },
     parts: ['P01', 'P03'],
     icon: '🪚',
+    videoKeyword: 'cabinet carcass assembly confirmat screws',
   });
 
   if (hasFixedShelf) {
@@ -118,6 +124,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
       },
       parts: ['P04'],
       icon: '📏',
+      videoKeyword: 'install fixed shelf in cabinet',
     });
   }
 
@@ -130,6 +137,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     },
     parts: ['P02'],
     icon: '🔨',
+    videoKeyword: 'attach top panel cabinet carcass',
   });
 
   steps.push({
@@ -141,6 +149,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     },
     parts: [hasFixedShelf ? 'P07' : 'P06'],
     icon: '📐',
+    videoKeyword: 'install cabinet back panel square',
     tip: {
       en: 'Start from one corner and work around to keep the carcass square.',
       he: 'התחל מפינה אחת והמשך מסביב כדי לשמור על ריבועיות השלד.',
@@ -164,8 +173,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
             he: 'הברג את פלטות הצירים לדפנות. הכנס את כוסות הצירים לחורי 35 מ"מ בדלתות. חבר דלתות לפלטות וכוון יישור.',
           },
       parts: [hasFixedShelf ? 'P06' : 'P05'],
-      icon: '🚪',
-    });
+      icon: '🚪',      videoKeyword: isGlass ? 'glass door hinge installation cabinet' : 'concealed hinge installation 35mm cabinet',    });
 
     steps.push({
       stepNumber: n++,
@@ -176,6 +184,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
       },
       parts: [],
       icon: '🔧',
+      videoKeyword: 'install cabinet door handles drill template',
     });
   }
 
@@ -189,6 +198,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
       },
       parts: [],
       icon: '👔',
+      videoKeyword: 'wardrobe hanging rail installation',
     });
   }
 
@@ -201,6 +211,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     },
     parts: [hasFixedShelf ? 'P05' : 'P04'],
     icon: '📚',
+    videoKeyword: 'shelf pin installation 32mm system',
   });
 
   if (cfg.edgeBanding !== 'none') {
@@ -213,6 +224,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
       },
       parts: [],
       icon: '🪵',
+      videoKeyword: 'iron on edge banding melamine cabinet',
       tip: {
         en: 'Apply banding before assembly for best results on shelf front edges.',
         he: 'הדבק פסי קצה לפני ההרכבה לתוצאות טובות על קצוות קדמיים של מדפים.',
@@ -229,6 +241,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     },
     parts: [],
     icon: '🏗️',
+    videoKeyword: 'wall mount cabinet L bracket',
   });
 
   return steps;

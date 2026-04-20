@@ -159,7 +159,8 @@
     "title": "Assembly Guide",
     "prev": "Previous",
     "next": "Next",
-    "partsInStep": "Parts in this step:"
+    "partsInStep": "Parts in this step:",
+    "watchVideo": "Watch tutorial on YouTube"
   },
   "toast": {
     "saved": "Configuration saved",

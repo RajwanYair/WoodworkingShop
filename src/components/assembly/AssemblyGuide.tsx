@@ -61,6 +61,16 @@ export function AssemblyGuide() {
                 </p>
               </div>
             )}
+            {step.videoKeyword && (
+              <a
+                href={`https://www.youtube.com/results?search_query=${encodeURIComponent(step.videoKeyword)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 mt-3 text-xs font-medium text-red-600 dark:text-red-400 hover:underline"
+              >
+                ▶ {t('assembly.watchVideo')}
+              </a>
+            )}
           </div>
         </div>
 
