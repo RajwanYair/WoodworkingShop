@@ -63,7 +63,21 @@
     "sheets": "גיליונות נדרשים",
     "yield": "ניצולת חומר",
     "waste": "פחת כולל",
-    "sheet": "גיליון"
+    "sheet": "גיליון",
+    "smart": "מיטוב חכם",
+    "smartDesc": "מצא שינויי מידות שמפחיתים גיליונות או משפרים ניצולת",
+    "strategies": "אסטרטגיות",
+    "tolerance": "סבילות",
+    "find": "חפש מיטובים",
+    "noResults": "לא נמצאו שיפורים בטווח הסבילות",
+    "apply": "החל",
+    "sheetsRemoved": "גיליונות נחסכו",
+    "yieldGain": "שיפור ניצולת",
+    "strategy_reduce-depth": "מיטוב עומק",
+    "strategy_co-nest-strips": "חיתוך משולב",
+    "strategy_adjust-width": "התאמת רוחב",
+    "strategy_adjust-height": "התאמת גובה",
+    "strategy_material-swap": "חומר חלופי"
   },
   "preview": {
     "title": "תצוגה מקדימה",

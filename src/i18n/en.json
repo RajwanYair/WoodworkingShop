@@ -63,7 +63,21 @@
     "sheets": "Sheets Required",
     "yield": "Material Yield",
     "waste": "Total Waste",
-    "sheet": "Sheet"
+    "sheet": "Sheet",
+    "smart": "Smart Optimizer",
+    "smartDesc": "Find dimension tweaks that reduce sheets or improve yield",
+    "strategies": "Strategies",
+    "tolerance": "Tolerance",
+    "find": "Find Optimizations",
+    "noResults": "No improvements found within tolerance",
+    "apply": "Apply",
+    "sheetsRemoved": "sheets saved",
+    "yieldGain": "yield gain",
+    "strategy_reduce-depth": "Optimize Depth",
+    "strategy_co-nest-strips": "Co-Nest Strips",
+    "strategy_adjust-width": "Adjust Width",
+    "strategy_adjust-height": "Adjust Height",
+    "strategy_material-swap": "Material Swap"
   },
   "preview": {
     "title": "Cabinet Preview",

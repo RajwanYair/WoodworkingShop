@@ -5,6 +5,7 @@ import { Sidebar } from './components/layout/Sidebar';
 import { ConfiguratorPanel } from './components/configurator/ConfiguratorPanel';
 import { CabinetPreview } from './components/preview/CabinetPreview';
 import { OptimizerView } from './components/optimizer/OptimizerView';
+import { SmartOptimizerPanel } from './components/optimizer/SmartOptimizerPanel';
 import { PartsTable, HardwareTable } from './components/optimizer/Tables';
 import { useCabinetStore } from './store/cabinet-store';
 
@@ -22,6 +23,7 @@ function App() {
             {activeTab === 'preview' && <CabinetPreview />}
             {activeTab === 'optimizer' && (
               <div className="space-y-8">
+                <SmartOptimizerPanel />
                 <PartsTable />
                 <HardwareTable />
                 <OptimizerView />
