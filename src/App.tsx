@@ -1,5 +1,6 @@
 import './i18n';
 import './index.css';
+import { useEffect } from 'react';
 import { Header } from './components/layout/Header';
 import { Sidebar } from './components/layout/Sidebar';
 import { ConfiguratorPanel } from './components/configurator/ConfiguratorPanel';
@@ -12,6 +13,24 @@ import { useCabinetStore } from './store/cabinet-store';
 
 function App() {
   const { activeTab, darkMode } = useCabinetStore();
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key === 'z') {
+        e.preventDefault();
+        useCabinetStore.getState().undo();
+      } else if (
+        (e.ctrlKey || e.metaKey) &&
+        (e.key === 'y' || (e.shiftKey && e.key === 'z') || (e.shiftKey && e.key === 'Z'))
+      ) {
+        e.preventDefault();
+        useCabinetStore.getState().redo();
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
 
   return (
     <div className={darkMode ? 'dark' : ''}>

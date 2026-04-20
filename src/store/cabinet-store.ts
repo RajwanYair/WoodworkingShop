@@ -7,6 +7,8 @@ import { generateHardware } from '../engine/hardware';
 import { optimizeCutSheets } from '../engine/cut-optimizer';
 import { readConfigFromUrl, pushConfigToUrl } from '../utils/url-state';
 
+const MAX_HISTORY = 50;
+
 export interface CabinetState {
   // Config
   config: CabinetConfig;
@@ -18,6 +20,12 @@ export interface CabinetState {
   optimization: OptimizationResult;
   edgeBandingTotal: number; // mm
 
+  // Undo / Redo
+  _past: CabinetConfig[];
+  _future: CabinetConfig[];
+  canUndo: boolean;
+  canRedo: boolean;
+
   // UI state
   activeTab: 'configurator' | 'preview' | 'optimizer' | 'pdf';
   darkMode: boolean;
@@ -27,6 +35,8 @@ export interface CabinetState {
   resetConfig: () => void;
   setActiveTab: (tab: CabinetState['activeTab']) => void;
   toggleDarkMode: () => void;
+  undo: () => void;
+  redo: () => void;
 }
 
 function derive(config: CabinetConfig) {
@@ -46,6 +56,10 @@ export const useCabinetStore = create<CabinetState>((set) => {
   return {
     config: initialConfig,
     ...initial,
+    _past: [],
+    _future: [],
+    canUndo: false,
+    canRedo: false,
     activeTab: 'configurator',
     darkMode: false,
 
@@ -53,15 +67,53 @@ export const useCabinetStore = create<CabinetState>((set) => {
       set((state) => {
         const config = { ...state.config, ...patch };
         pushConfigToUrl(config);
-        return { config, ...derive(config) };
+        const past = [...state._past, state.config].slice(-MAX_HISTORY);
+        return { config, ...derive(config), _past: past, _future: [], canUndo: true, canRedo: false };
       }),
 
     resetConfig: () =>
-      set(() => {
+      set((state) => {
         pushConfigToUrl(DEFAULT_CONFIG);
+        const past = [...state._past, state.config].slice(-MAX_HISTORY);
         return {
           config: DEFAULT_CONFIG,
           ...derive(DEFAULT_CONFIG),
+          _past: past,
+          _future: [],
+          canUndo: true,
+          canRedo: false,
+        };
+      }),
+
+    undo: () =>
+      set((state) => {
+        if (state._past.length === 0) return state;
+        const prev = state._past[state._past.length - 1];
+        const past = state._past.slice(0, -1);
+        pushConfigToUrl(prev);
+        return {
+          config: prev,
+          ...derive(prev),
+          _past: past,
+          _future: [state.config, ...state._future],
+          canUndo: past.length > 0,
+          canRedo: true,
+        };
+      }),
+
+    redo: () =>
+      set((state) => {
+        if (state._future.length === 0) return state;
+        const next = state._future[0];
+        const future = state._future.slice(1);
+        pushConfigToUrl(next);
+        return {
+          config: next,
+          ...derive(next),
+          _past: [...state._past, state.config],
+          _future: future,
+          canUndo: true,
+          canRedo: future.length > 0,
         };
       }),
 

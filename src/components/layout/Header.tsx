@@ -6,7 +6,7 @@ const tabs = ['configurator', 'preview', 'optimizer', 'pdf'] as const;
 
 export function Header() {
   const { t, i18n } = useTranslation();
-  const { activeTab, setActiveTab, darkMode, toggleDarkMode } = useCabinetStore();
+  const { activeTab, setActiveTab, darkMode, toggleDarkMode, canUndo, canRedo, undo, redo } = useCabinetStore();
   const lang = i18n.language;
 
   const toggleLang = () => {
@@ -43,6 +43,24 @@ export function Header() {
 
       {/* Controls */}
       <div className="flex items-center gap-3">
+        <button
+          onClick={undo}
+          disabled={!canUndo}
+          className="text-wood-200 hover:text-white text-sm disabled:opacity-30 disabled:cursor-not-allowed"
+          title="Undo (Ctrl+Z)"
+          aria-label="Undo"
+        >
+          ↩
+        </button>
+        <button
+          onClick={redo}
+          disabled={!canRedo}
+          className="text-wood-200 hover:text-white text-sm disabled:opacity-30 disabled:cursor-not-allowed"
+          title="Redo (Ctrl+Y)"
+          aria-label="Redo"
+        >
+          ↪
+        </button>
         <button
           onClick={() => {
             const url = configToUrl(useCabinetStore.getState().config);
