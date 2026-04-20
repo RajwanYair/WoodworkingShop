@@ -50,11 +50,26 @@ def _find_font(name):
     )
 
 
+_FONT_BUILTIN_FALLBACKS = {
+    "Arial":   "Helvetica",
+    "ArialBd": "Helvetica-Bold",
+    "David":   "Helvetica",
+    "DavidBd": "Helvetica-Bold",
+}
+# Populated by register_fonts(); maps alias -> actual name to use in styles.
+_REGISTERED_FONTS: dict[str, str] = {}
+
+
+def _font(alias: str) -> str:
+    """Return the registered name for a font alias, or its built-in fallback."""
+    return _REGISTERED_FONTS.get(alias, _FONT_BUILTIN_FALLBACKS.get(alias, alias))
+
+
 def register_fonts():
     """Register Arial (EN) and David (HE) font families with reportlab.
 
     On systems where a font file is missing (e.g. Linux CI without David),
-    the function logs a warning and falls back to Helvetica / Courier.
+    the function logs a warning and falls back to Helvetica / Helvetica-Bold.
     """
     _font_map = [
         ("Arial",   "arial.ttf"),
@@ -65,9 +80,14 @@ def register_fonts():
     for alias, filename in _font_map:
         try:
             pdfmetrics.registerFont(TTFont(alias, _find_font(filename)))
+            _REGISTERED_FONTS[alias] = alias
         except (FileNotFoundError, OSError):
             import warnings
-            warnings.warn(f"Font '{filename}' not found — using built-in fallback for '{alias}'")
+            fallback = _FONT_BUILTIN_FALLBACKS.get(alias, "Helvetica")
+            warnings.warn(
+                f"Font '{filename}' not found — '{alias}' will use built-in '{fallback}'"
+            )
+            _REGISTERED_FONTS[alias] = fallback
             # reportlab will use its default if a registered name is unknown
 
 
@@ -207,7 +227,7 @@ def _draw_cut_part(d, px, py, ppw, pph, label, is_large, part=None, raw_w=None, 
 
     d.add(String(px + ppw / 2, py + pph / 2 + 4, label,
                  fontSize=6, fillColor=C_OUTLINE,
-                 fontName="ArialBd", textAnchor="middle"))
+                 fontName=_font("ArialBd"), textAnchor="middle"))
 
 
 def _draw_cut_sheet_legend(d, ox, top_y):
@@ -220,12 +240,12 @@ def _draw_cut_sheet_legend(d, ox, top_y):
     d.add(String(ox + 254, legend_y - 2,
                  "edge cover required",
                  fontSize=6.5, fillColor=C_OUTLINE,
-                 fontName="Arial", textAnchor="start"))
+                 fontName=_font("Arial"), textAnchor="start"))
     _highlight_edge(d, ox + 334, legend_y + 1, ox + 352, legend_y + 1, optional=True, stroke_width=2.3)
     d.add(String(ox + 358, legend_y - 2,
                  "edge cover optional",
                  fontSize=6.5, fillColor=C_OUTLINE,
-                 fontName="Arial", textAnchor="start"))
+                 fontName=_font("Arial"), textAnchor="start"))
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -241,13 +261,13 @@ def dim_line(d, x1, y1, x2, y2, label, offset=12, font_size=7, horiz=True):
         d.add(Line(x2, y2 - tick, x2, y2 + tick, strokeColor=C_DIM, strokeWidth=0.7))
         d.add(String((x1 + x2) / 2, y1 - offset, str(label),
                       fontSize=font_size, fillColor=C_DIM,
-                      fontName="Arial", textAnchor="middle"))
+                      fontName=_font("Arial"), textAnchor="middle"))
     else:
         d.add(Line(x1 - tick, y1, x1 + tick, y1, strokeColor=C_DIM, strokeWidth=0.7))
         d.add(Line(x2 - tick, y2, x2 + tick, y2, strokeColor=C_DIM, strokeWidth=0.7))
         d.add(String(x1 - offset, (y1 + y2) / 2, str(label),
                       fontSize=font_size, fillColor=C_DIM,
-                      fontName="Arial", textAnchor="middle"))
+                      fontName=_font("Arial"), textAnchor="middle"))
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -432,7 +452,7 @@ def draw_back_elevation(cab, scale):
             d.add(String(ox + w / 2, oy + h / 2,
                          f"{bp_h} x {bp_w} x {pt[6]}",
                          fontSize=7, fillColor=C_DIM,
-                         fontName="Arial", textAnchor="middle"))
+                         fontName=_font("Arial"), textAnchor="middle"))
             break
 
     d.add(Line(ox + 1, oy + h - 1.4, ox + w - 1, oy + h - 1.4,
@@ -499,7 +519,7 @@ def draw_3d_isometric(cab, scale):
     dim_line(d, ox, oy - 14, ox + fw, oy - 14, W, offset=10, horiz=True)
     d.add(String(ox + fw + dx / 2 + 6, oy + fh + dy / 2 + 8, str(D),
                  fontSize=7, fillColor=C_DIM,
-                 fontName="Arial", textAnchor="middle"))
+                 fontName=_font("Arial"), textAnchor="middle"))
     return d
 
 
@@ -519,7 +539,7 @@ def draw_cut_sheet(parts_on_sheet, sheet_w, sheet_h, scale, sheet_num, yield_pct
     d.add(String(ox, oy + sh + 14,
                  f"Sheet {sheet_num}  ({yield_pct}%)",
                  fontSize=9, fillColor=colors.black,
-                 fontName="ArialBd", textAnchor="start"))
+                 fontName=_font("ArialBd"), textAnchor="start"))
     _draw_cut_sheet_legend(d, ox, oy + sh)
 
     for (x, y, pw, ph, label, is_large) in parts_on_sheet:
@@ -535,7 +555,7 @@ def draw_cut_sheet(parts_on_sheet, sheet_w, sheet_h, scale, sheet_num, yield_pct
         d.add(String(px + ppw / 2, py + pph / 2 - 5,
                      f"{pw}\u00d7{ph}",
                      fontSize=5, fillColor=C_DIM,
-                     fontName="Arial", textAnchor="middle"))
+                     fontName=_font("Arial"), textAnchor="middle"))
     return d
 
 
@@ -545,8 +565,8 @@ def draw_cut_sheet(parts_on_sheet, sheet_w, sheet_h, scale, sheet_num, yield_pct
 
 def make_table(headers, rows, col_widths=None, *, is_he=False):
     """Build a styled Table with standard header/row formatting."""
-    fn  = "David"   if is_he else "Arial"
-    fnb = "DavidBd" if is_he else "ArialBd"
+    fn  = _font("David"   if is_he else "Arial")
+    fnb = _font("DavidBd" if is_he else "ArialBd")
     data = [headers] + rows
     style_cmds = [
         ("BACKGROUND",    (0, 0), (-1, 0), C_HEADER_BG),
@@ -579,8 +599,8 @@ def make_table(headers, rows, col_widths=None, *, is_he=False):
 
 def make_styles(is_he):
     """Create and return a dict of ParagraphStyles for the given language."""
-    fn  = "David"   if is_he else "Arial"
-    fnb = "DavidBd" if is_he else "ArialBd"
+    fn  = _font("David"   if is_he else "Arial")
+    fnb = _font("DavidBd" if is_he else "ArialBd")
     al  = TA_RIGHT  if is_he else TA_LEFT
     base = getSampleStyleSheet()
     return {
