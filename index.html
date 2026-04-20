@@ -162,27 +162,39 @@
         },
       });
 
-      // Fetch README.md (relative path — works under /<repo>/ subpath)
-      fetch("./README.md")
+      // Try real HTML content first (main.html); fall back to README.md renderer
+      fetch("./main.html", { method: "HEAD" })
         .then(function (r) {
-          if (!r.ok) throw new Error(r.status);
-          return r.text();
-        })
-        .then(function (md) {
-          var html = marked.parse(md);
-          document.getElementById("loading").hidden = true;
-          var el = document.getElementById("readme");
-          el.innerHTML = html;
-          el.hidden = false;
-
-          // Apply highlight.js to any code blocks marked missed
-          el.querySelectorAll("pre code").forEach(function (block) {
-            hljs.highlightElement(block);
-          });
+          if (r.ok) {
+            // Real content exists — redirect to it
+            window.location.replace("./main.html");
+          } else {
+            throw new Error("no main.html");
+          }
         })
         .catch(function () {
-          document.getElementById("loading").hidden = true;
-          document.getElementById("error").hidden = false;
+          // No real content — render README.md
+          fetch("./README.md")
+            .then(function (r) {
+              if (!r.ok) throw new Error(r.status);
+              return r.text();
+            })
+            .then(function (md) {
+              var html = marked.parse(md);
+              document.getElementById("loading").hidden = true;
+              var el = document.getElementById("readme");
+              el.innerHTML = html;
+              el.hidden = false;
+
+              // Apply highlight.js to any code blocks marked missed
+              el.querySelectorAll("pre code").forEach(function (block) {
+                hljs.highlightElement(block);
+              });
+            })
+            .catch(function () {
+              document.getElementById("loading").hidden = true;
+              document.getElementById("error").hidden = false;
+            });
         });
     })();
   </script>
