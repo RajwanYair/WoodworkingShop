@@ -2,12 +2,22 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/WoodworkingShop/favicon.svg" />
+    <link rel="manifest" href="/WoodworkingShop/manifest.json" />
+    <meta name="theme-color" content="#5a4218" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Interactive woodworking cabinet design tool with smart cut optimization, PDF export, and bilingual support." />
     <title>Cabinet Planner — Woodworking Design Tool</title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/WoodworkingShop/sw.js');
+        });
+      }
+    </script>
   </body>
 </html>
