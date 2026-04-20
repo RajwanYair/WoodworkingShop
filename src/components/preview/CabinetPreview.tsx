@@ -1,8 +1,9 @@
-import { useState, useCallback, useRef, memo } from 'react';
+import { useState, useCallback, useRef, useMemo, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { getMaterial } from '../../engine/materials';
 import { computeEqualShelfPositions } from '../../engine/dimensions';
+import { useTouchGestures } from '../../hooks/useTouchGestures';
 
 /** Scale factor: mm → SVG px */
 const S = 0.2;
@@ -40,6 +41,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
   const [showDims, setShowDims] = useState(true);
   const [dragIdx, setDragIdx] = useState<number | null>(null);
   const [tooltip, setTooltip] = useState<TooltipInfo | null>(null);
+  const [zoomScale, setZoomScale] = useState(1);
   const svgRef = useRef<SVGSVGElement>(null);
 
   const thick = getMaterial(config.carcassMaterial).thickness;
@@ -114,6 +116,20 @@ export const CabinetPreview = memo(function CabinetPreview() {
     { id: '3d', label: t('preview.iso') },
   ];
 
+  const viewIds = useMemo(() => views.map(v => v.id), [views]);
+
+  const touchGestures = useTouchGestures(previewRef, {
+    onPinchZoom: setZoomScale,
+    onSwipeLeft: () => {
+      const idx = viewIds.indexOf(activeView);
+      if (idx < viewIds.length - 1) { setActiveView(viewIds[idx + 1]); setZoomScale(1); }
+    },
+    onSwipeRight: () => {
+      const idx = viewIds.indexOf(activeView);
+      if (idx > 0) { setActiveView(viewIds[idx - 1]); setZoomScale(1); }
+    },
+  });
+
   return (
     <div className="space-y-4">
       {/* View tab bar */}
@@ -150,10 +166,25 @@ export const CabinetPreview = memo(function CabinetPreview() {
         >
           ⬇ SVG
         </button>
+        {zoomScale !== 1 && (
+          <button
+            onClick={() => setZoomScale(1)}
+            className="ms-1 px-2 py-0.5 rounded text-xs font-medium bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-800 transition-colors"
+          >
+            🔍 {Math.round(zoomScale * 100)}% ✕
+          </button>
+        )}
       </div>
 
       {/* Active view */}
-      <div ref={previewRef} className="relative">
+      <div
+        ref={previewRef}
+        className="relative overflow-auto touch-none"
+        onTouchStart={touchGestures.onTouchStart}
+        onTouchMove={touchGestures.onTouchMove}
+        onTouchEnd={touchGestures.onTouchEnd}
+        style={{ transform: `scale(${zoomScale})`, transformOrigin: 'top left' }}
+      >
       {tooltip && (
         <div
           className="fixed z-50 pointer-events-none px-3 py-2 rounded shadow-lg text-xs bg-wood-900 dark:bg-wood-100 text-white dark:text-wood-900 border border-wood-600 dark:border-wood-300"
