@@ -353,6 +353,12 @@ export function CabinetPdfDocument({
 
       {/* ── Assembly Sequence ── */}
       <Page size="A4" style={s.page}>
+        <Text style={s.sectionTitle}>Exploded Assembly View</Text>
+        <ExplodedView config={config} dimensions={d} cMat={cMat.name[lang]} bMat={bMat.name[lang]} />
+        <PageFooter />
+      </Page>
+
+      <Page size="A4" style={s.page}>
         <Text style={s.sectionTitle}>Assembly Sequence</Text>
 
         {assemblySteps(config, d, cMat.name[lang], bMat.name[lang]).map((step, i) => (
@@ -523,6 +529,107 @@ function PageFooter() {
     <View style={s.footer} fixed>
       <Text>Cabinet Planner</Text>
       <Text render={({ pageNumber, totalPages }) => `Page ${pageNumber} / ${totalPages}`} />
+    </View>
+  );
+}
+
+/** Exploded-view assembly diagram using positioned Views */
+function ExplodedView({
+  config, dimensions: d, cMat, bMat,
+}: {
+  config: CabinetConfig; dimensions: DerivedDimensions; cMat: string; bMat: string;
+}) {
+  // Scale to fit A4 printable area (~500pt wide, ~650pt tall)
+  const maxW = 400;
+  const maxH = 500;
+  const sc = Math.min(maxW / config.width, maxH / config.height) * 0.7;
+
+  const W = config.width * sc;
+  const H = config.height * sc;
+  const D = config.depth * sc * 0.3; // perspective depth
+  const t = getMaterial(config.carcassMaterial).thickness * sc;
+  const gap = 25; // exploded gap between parts
+
+  const partLabel = (text: string, top: number, left: number) => (
+    <Text style={{ position: 'absolute', top, left, fontSize: 6, color: colors.muted }}>{text}</Text>
+  );
+
+  const partBox = (
+    top: number, left: number, width: number, height: number,
+    bg: string, label: string, border?: string,
+  ) => (
+    <View style={{
+      position: 'absolute', top, left, width, height,
+      backgroundColor: bg, borderWidth: 0.5, borderColor: border ?? '#8B7355',
+      justifyContent: 'center', alignItems: 'center',
+    }}>
+      <Text style={{ fontSize: 5.5, color: '#333', textAlign: 'center' }}>{label}</Text>
+    </View>
+  );
+
+  const baseX = 60;
+  const baseY = 30;
+
+  return (
+    <View style={{ width: maxW + 120, height: maxH + 40, position: 'relative', marginTop: 8 }}>
+      {/* Reference text */}
+      <Text style={{ fontSize: 8, color: colors.muted, marginBottom: 4 }}>
+        Parts shown separated for clarity. Arrows indicate assembly direction.
+      </Text>
+
+      {/* Bottom panel — shifted down from carcass position */}
+      {partBox(baseY + H + gap, baseX + t, W - 2 * t, t, '#DEB887', `Bottom (${config.width - 2 * getMaterial(config.carcassMaterial).thickness}×${config.depth})`)}
+      {partLabel('① Bottom Panel', baseY + H + gap - 10, baseX + t)}
+      {/* Arrow up */}
+      <Text style={{ position: 'absolute', top: baseY + H + gap - 5, left: baseX + W / 2 - 4, fontSize: 10, color: colors.primary }}>↑</Text>
+
+      {/* Left side panel */}
+      {partBox(baseY, baseX - gap, t, H, '#D2B48C', `Side L`)}
+      {partLabel('② Left Side', baseY - 10, baseX - gap)}
+      <Text style={{ position: 'absolute', top: baseY + H / 2 - 5, left: baseX - gap + t + 2, fontSize: 10, color: colors.primary }}>→</Text>
+
+      {/* Right side panel */}
+      {partBox(baseY, baseX + W + gap, t, H, '#D2B48C', `Side R`)}
+      {partLabel('③ Right Side', baseY - 10, baseX + W + gap)}
+      <Text style={{ position: 'absolute', top: baseY + H / 2 - 5, left: baseX + W + gap - 12, fontSize: 10, color: colors.primary }}>←</Text>
+
+      {/* Top panel — shifted above carcass position */}
+      {partBox(baseY - gap - t, baseX + t, W - 2 * t, t, '#DEB887', `Top (${config.width - 2 * getMaterial(config.carcassMaterial).thickness}×${config.depth})`)}
+      {partLabel('④ Top Panel', baseY - gap - t - 10, baseX + t)}
+      <Text style={{ position: 'absolute', top: baseY - gap + 2, left: baseX + W / 2 - 4, fontSize: 10, color: colors.primary }}>↓</Text>
+
+      {/* Assembled carcass outline (ghost) */}
+      <View style={{
+        position: 'absolute', top: baseY, left: baseX,
+        width: W, height: H,
+        borderWidth: 0.5, borderColor: '#ccc', borderStyle: 'dashed',
+      }} />
+
+      {/* Shelves inside ghost outline */}
+      {config.shelfCount > 0 && Array.from({ length: Math.min(config.shelfCount, 4) }).map((_, i) => {
+        const shelfY = baseY + (H / (config.shelfCount + 1)) * (i + 1);
+        return partBox(shelfY - t / 2, baseX + t + 2, W - 2 * t - 4, t, '#F5DEB3', `Shelf ${i + 1}`);
+      })}
+
+      {/* Back panel — offset behind */}
+      {partBox(baseY + 5, baseX + W + gap * 2.5, D * 0.4, H - 10, '#C8B090', `Back\n${bMat}`)}
+      {partLabel('⑤ Back Panel', baseY - 5, baseX + W + gap * 2.5)}
+
+      {/* Doors — offset in front */}
+      {config.doorStyle !== 'none' && Array.from({ length: config.doorCount }).map((_, i) => {
+        const doorW = (W / config.doorCount) * 0.9;
+        const doorX = baseX + (W / config.doorCount) * i + (W / config.doorCount) * 0.05;
+        return partBox(baseY + 5 + gap * 2.5, doorX, doorW, H * 0.15, '#E8D5B7', `Door ${i + 1}`);
+      })}
+      {config.doorStyle !== 'none' && partLabel('⑥ Door(s)', baseY + gap * 2.5 - 5, baseX)}
+
+      {/* Dimensions */}
+      <Text style={{ position: 'absolute', top: baseY + H + gap + t + 15, left: baseX, fontSize: 7, color: colors.secondary }}>
+        {config.width} mm wide × {config.height} mm tall × {config.depth} mm deep
+      </Text>
+      <Text style={{ position: 'absolute', top: baseY + H + gap + t + 25, left: baseX, fontSize: 6, color: colors.muted }}>
+        Material: {cMat} | Shelves: {config.shelfCount} | Doors: {config.doorCount}
+      </Text>
     </View>
   );
 }
