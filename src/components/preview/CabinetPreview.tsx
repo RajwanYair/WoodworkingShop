@@ -7,7 +7,7 @@ import { computeEqualShelfPositions } from '../../engine/dimensions';
 /** Scale factor: mm → SVG px */
 const S = 0.2;
 
-type ViewId = 'front' | 'frontOpen' | 'side' | 'top' | 'back';
+type ViewId = 'front' | 'frontOpen' | 'side' | 'top' | 'back' | '3d';
 
 export const CabinetPreview = memo(function CabinetPreview() {
   const { t } = useTranslation();
@@ -72,6 +72,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
     { id: 'side', label: t('preview.side') },
     { id: 'top', label: t('preview.top') },
     { id: 'back', label: t('preview.back') },
+    { id: '3d', label: t('preview.iso') },
   ];
 
   return (
@@ -249,6 +250,23 @@ export const CabinetPreview = memo(function CabinetPreview() {
           </g>
         </ViewBox>
       )}
+      {activeView === '3d' && (
+        <IsometricView
+          w={config.width}
+          h={config.height}
+          d={config.depth}
+          thick={thick}
+          bt={bt}
+          color={color}
+          shelfPositions={shelfPositions}
+          hasDoors={config.doorStyle !== 'none'}
+          doorCount={config.doorCount}
+          doorReveal={config.doorReveal}
+          doorWidth={d.doorWidth}
+          doorHeight={d.doorHeight}
+          showDims={showDims}
+        />
+      )}
     </div>
   );
 });
@@ -366,4 +384,211 @@ function renderDoors(
     );
   }
   return <>{doors}</>;
+}
+
+// ─── Isometric 3D view ───
+
+/** Isometric projection helpers: convert (x, y, z) → SVG (sx, sy).
+ *  Uses standard 30° isometric angles: cos30 ≈ 0.866, sin30 = 0.5 */
+function iso(x: number, y: number, z: number): [number, number] {
+  const sx = (x - z) * 0.866;
+  const sy = (x + z) * 0.5 - y;
+  return [sx, sy];
+}
+
+function isoQuad(
+  p1: [number, number, number],
+  p2: [number, number, number],
+  p3: [number, number, number],
+  p4: [number, number, number],
+): string {
+  const pts = [p1, p2, p3, p4].map(([x, y, z]) => iso(x, y, z));
+  return pts.map(([sx, sy]) => `${sx},${sy}`).join(' ');
+}
+
+function IsometricView({
+  w, h, d, thick, bt, color, shelfPositions, hasDoors, doorCount, doorReveal, doorWidth, doorHeight, showDims,
+}: {
+  w: number; h: number; d: number; thick: number; bt: number;
+  color: string; shelfPositions: number[]; hasDoors: boolean;
+  doorCount: number; doorReveal: number; doorWidth: number; doorHeight: number;
+  showDims: boolean;
+}) {
+  const sc = 0.18; // scale
+  const W = w * sc;
+  const H = h * sc;
+  const D = d * sc;
+  const T = thick * sc;
+  const BT = bt * sc;
+
+  // Compute SVG bounding box from iso projection
+  const corners: [number, number, number][] = [
+    [0, 0, 0], [W, 0, 0], [0, H, 0], [W, H, 0],
+    [0, 0, D], [W, 0, D], [0, H, D], [W, H, D],
+  ];
+  const projected = corners.map(([x, y, z]) => iso(x, y, z));
+  const minX = Math.min(...projected.map(p => p[0]));
+  const maxX = Math.max(...projected.map(p => p[0]));
+  const minY = Math.min(...projected.map(p => p[1]));
+  const maxY = Math.max(...projected.map(p => p[1]));
+  const pad = showDims ? 60 : 30;
+  const vw = maxX - minX + pad * 2;
+  const vh = maxY - minY + pad * 2;
+  const ox = -minX + pad;
+  const oy = -minY + pad;
+
+  const darkFill = adjustBrightness(color, -30);
+  const lightFill = adjustBrightness(color, 20);
+
+  return (
+    <svg
+      viewBox={`0 0 ${vw} ${vh}`}
+      role="img"
+      aria-label="3D isometric cabinet drawing"
+      className="w-full max-w-lg border border-wood-200 dark:border-wood-700 rounded bg-white dark:bg-wood-800"
+      style={{ maxHeight: 500 }}
+    >
+      <g transform={`translate(${ox},${oy})`}>
+        {/* Back panel */}
+        <polygon
+          points={isoQuad([T, T, D - BT], [W - T, T, D - BT], [W - T, H - T, D - BT], [T, H - T, D - BT])}
+          fill="#cba" stroke="#666" strokeWidth={0.5} opacity={0.4}
+        >
+          <title>{`Back Panel\n${Math.round(w - 2 * thick)}×${Math.round(h - 2 * thick)} mm`}</title>
+        </polygon>
+
+        {/* Bottom panel – top face */}
+        <polygon
+          points={isoQuad([T, T, 0], [W - T, T, 0], [W - T, T, D - BT], [T, T, D - BT])}
+          fill={lightFill} stroke="#666" strokeWidth={0.5} opacity={0.85}
+        >
+          <title>{`Bottom Panel\n${Math.round(w - 2 * thick)}×${Math.round(d - bt)} mm`}</title>
+        </polygon>
+        {/* Bottom panel – front face */}
+        <polygon
+          points={isoQuad([T, 0, 0], [W - T, 0, 0], [W - T, T, 0], [T, T, 0])}
+          fill={darkFill} stroke="#666" strokeWidth={0.5} opacity={0.85}
+        />
+
+        {/* Shelves */}
+        {shelfPositions.map((pos, i) => {
+          const sy = T + pos * sc;
+          const sT = T * 0.6;
+          return (
+            <g key={i}>
+              <polygon
+                points={isoQuad([T, sy + sT, 0], [W - T, sy + sT, 0], [W - T, sy + sT, D - BT], [T, sy + sT, D - BT])}
+                fill={lightFill} stroke="#888" strokeWidth={0.3} opacity={0.6}
+                strokeDasharray="2,2"
+              >
+                <title>{`Shelf ${i + 1}\n${Math.round(w - 2 * thick)}×${Math.round(d - bt)} mm`}</title>
+              </polygon>
+            </g>
+          );
+        })}
+
+        {/* Left side panel – outer face */}
+        <polygon
+          points={isoQuad([0, 0, 0], [0, 0, D], [0, H, D], [0, H, 0])}
+          fill={darkFill} stroke="#666" strokeWidth={0.5} opacity={0.85}
+        >
+          <title>{`Side Panel\n${thick}×${h} mm`}</title>
+        </polygon>
+
+        {/* Right side panel – outer face */}
+        <polygon
+          points={isoQuad([W, 0, 0], [W, H, 0], [W, H, D], [W, 0, D])}
+          fill={color} stroke="#666" strokeWidth={0.5} opacity={0.65}
+        >
+          <title>{`Side Panel\n${thick}×${h} mm`}</title>
+        </polygon>
+
+        {/* Top panel – top face */}
+        <polygon
+          points={isoQuad([0, H, 0], [0, H, D], [W, H, D], [W, H, 0])}
+          fill={lightFill} stroke="#666" strokeWidth={0.5} opacity={0.85}
+        >
+          <title>{`Top Panel\n${Math.round(w - 2 * thick)}×${Math.round(d - bt)} mm`}</title>
+        </polygon>
+
+        {/* Doors (front face) */}
+        {hasDoors && Array.from({ length: doorCount }).map((_, i) => {
+          const dr = doorReveal * sc;
+          const dw = doorWidth * sc;
+          const dh = doorHeight * sc;
+          const dx = dr + i * (dw + dr);
+          return (
+            <g key={`door-${i}`}>
+              {/* Door front face */}
+              <polygon
+                points={isoQuad([dx, dr, 0], [dx + dw, dr, 0], [dx + dw, dr + dh, 0], [dx, dr + dh, 0])}
+                fill={color} stroke="#555" strokeWidth={0.8} opacity={0.9}
+              >
+                <title>{`Door ${i + 1}\n${Math.round(doorWidth)}×${Math.round(doorHeight)} mm`}</title>
+              </polygon>
+              {/* Handle indicator */}
+              <polygon
+                points={isoQuad(
+                  [dx + dw - 8 * sc, dr + dh * 0.45, -0.5 * sc],
+                  [dx + dw - 6 * sc, dr + dh * 0.45, -0.5 * sc],
+                  [dx + dw - 6 * sc, dr + dh * 0.55, -0.5 * sc],
+                  [dx + dw - 8 * sc, dr + dh * 0.55, -0.5 * sc],
+                )}
+                fill="#888" stroke="#666" strokeWidth={0.3}
+              />
+            </g>
+          );
+        })}
+
+        {/* Dimension annotations */}
+        {showDims && (
+          <>
+            {/* Width – along front bottom edge */}
+            <IsoDimLine
+              p1={[0, 0, -12 * sc]} p2={[W, 0, -12 * sc]}
+              label={`${w}`} offset={-6}
+            />
+            {/* Height – along front left edge */}
+            <IsoDimLine
+              p1={[-12 * sc, 0, 0]} p2={[-12 * sc, H, 0]}
+              label={`${h}`} offset={-6}
+            />
+            {/* Depth – along bottom left edge */}
+            <IsoDimLine
+              p1={[-12 * sc, 0, 0]} p2={[-12 * sc, 0, D]}
+              label={`${d}`} offset={-6}
+            />
+          </>
+        )}
+      </g>
+    </svg>
+  );
+}
+
+function IsoDimLine({ p1, p2, label, offset: _offset }: {
+  p1: [number, number, number]; p2: [number, number, number]; label: string; offset: number;
+}) {
+  const [x1, y1] = iso(...p1);
+  const [x2, y2] = iso(...p2);
+  const mx = (x1 + x2) / 2;
+  const my = (y1 + y2) / 2;
+  return (
+    <g fill="#888" stroke="#888" strokeWidth={0.5}>
+      <line x1={x1} y1={y1} x2={x2} y2={y2} />
+      <circle cx={x1} cy={y1} r={1.5} />
+      <circle cx={x2} cy={y2} r={1.5} />
+      <text x={mx} y={my - 4} textAnchor="middle" fontSize={7} fill="#888" stroke="none">
+        {label}
+      </text>
+    </g>
+  );
+}
+
+/** Simple brightness adjustment for hex colors */
+function adjustBrightness(hex: string, amount: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, Math.max(0, ((num >> 16) & 0xFF) + amount));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0xFF) + amount));
+  const b = Math.min(255, Math.max(0, (num & 0xFF) + amount));
+  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
 }
