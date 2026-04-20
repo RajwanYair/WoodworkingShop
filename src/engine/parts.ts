@@ -17,6 +17,60 @@ export function generateParts(cfg: CabinetConfig): Part[] {
   let idx = 1;
   const id = () => `P${String(idx++).padStart(2, '0')}`;
   const isBookshelf = cfg.furnitureType === 'bookshelf';
+  const isDesk = cfg.furnitureType === 'desk';
+
+  // ── Desk-specific parts ──
+  if (isDesk) {
+    // Desktop (top surface)
+    parts.push({
+      id: id(), qty: 1,
+      name: { en: 'Desktop', he: 'משטח שולחן' },
+      material: cfg.carcassMaterial, thickness: t,
+      length: cfg.width, width: cfg.depth,
+      edgeBanding: edgeLabel(eb !== 'none' ? '4-edges' : 'none'),
+    });
+
+    // Side panels (legs)
+    parts.push({
+      id: id(), qty: 2,
+      name: { en: 'Side Panel', he: 'דופן צד' },
+      material: cfg.carcassMaterial, thickness: t,
+      length: cfg.height - t, width: cfg.depth,
+      edgeBanding: edgeLabel(eb !== 'none' ? 'front' : 'none'),
+    });
+
+    // Modesty panel (back kick board)
+    const modestyHeight = Math.round(cfg.height * 0.4);
+    parts.push({
+      id: id(), qty: 1,
+      name: { en: 'Modesty Panel', he: 'לוח צניעות' },
+      material: cfg.carcassMaterial, thickness: t,
+      length: cfg.width - 2 * t, width: modestyHeight,
+      edgeBanding: edgeLabel('none'),
+    });
+
+    // Back panel
+    parts.push({
+      id: id(), qty: 1,
+      name: { en: 'Back Panel', he: 'לוח גב' },
+      material: cfg.backPanelMaterial, thickness: bm.thickness,
+      length: d.backPanelHeight, width: d.backPanelWidth,
+      edgeBanding: edgeLabel('none'),
+    });
+
+    // Optional shelves (under-desk storage)
+    if (cfg.shelfCount > 0) {
+      parts.push({
+        id: id(), qty: cfg.shelfCount,
+        name: { en: 'Under-desk Shelf', he: 'מדף תחתון' },
+        material: cfg.carcassMaterial, thickness: t,
+        length: d.shelfWidth, width: d.shelfDepth,
+        edgeBanding: edgeLabel(eb !== 'none' ? 'front' : 'none'),
+      });
+    }
+
+    return parts;
+  }
 
   // ── Carcass sides (left + right) ──
   parts.push({

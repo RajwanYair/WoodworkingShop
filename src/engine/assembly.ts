@@ -17,9 +17,69 @@ export interface AssemblyStep {
  */
 export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
   const steps: AssemblyStep[] = [];
-  const hasDoors = cfg.doorStyle !== 'none' && cfg.furnitureType !== 'bookshelf';
-  const hasFixedShelf = cfg.height > 1200;
+  const hasDoors = cfg.doorStyle !== 'none' && cfg.furnitureType === 'cabinet';
+  const hasFixedShelf = cfg.height > 1200 && cfg.furnitureType !== 'desk';
+  const isDesk = cfg.furnitureType === 'desk';
   let n = 1;
+
+  // ── Desk-specific assembly ──
+  if (isDesk) {
+    steps.push({
+      stepNumber: n++,
+      title: { en: 'Mark & Drill Holes', he: 'סימון וקדיחת חורים' },
+      description: {
+        en: 'Mark confirmat screw positions on side panels and desktop underside. Drill pilot holes for all connections.',
+        he: 'סמן מיקומי ברגי קונפירמט על דפנות הצד ותחתית משטח השולחן. קדח חורים מקדימים לכל החיבורים.',
+      },
+      parts: ['P01', 'P02'],
+      icon: '🔩',
+    });
+    steps.push({
+      stepNumber: n++,
+      title: { en: 'Assemble Side Panels', he: 'הרכבת דפנות צד' },
+      description: {
+        en: 'Stand both side panels upright and attach the modesty panel between them using confirmat screws.',
+        he: 'העמד את שתי דפנות הצד וחבר את לוח הצניעות ביניהן באמצעות ברגי קונפירמט.',
+      },
+      parts: ['P02', 'P03'],
+      icon: '🪚',
+    });
+    steps.push({
+      stepNumber: n++,
+      title: { en: 'Attach Desktop', he: 'חיבור משטח שולחן' },
+      description: {
+        en: 'Place the desktop on top of the side panels. Secure with confirmat screws from below. Check that the assembly is square.',
+        he: 'הנח את משטח השולחן על דפנות הצד. חבר עם ברגי קונפירמט מלמטה. ודא שההרכבה מרובעת.',
+      },
+      parts: ['P01'],
+      icon: '🔨',
+    });
+    if (cfg.shelfCount > 0) {
+      steps.push({
+        stepNumber: n++,
+        title: { en: 'Install Under-desk Shelves', he: 'התקנת מדפים תחתונים' },
+        description: {
+          en: `Install ${cfg.shelfCount} shelves between the side panels for storage.`,
+          he: `התקן ${cfg.shelfCount} מדפים בין דפנות הצד לאחסון.`,
+        },
+        parts: ['P05'],
+        icon: '📚',
+      });
+    }
+    if (cfg.edgeBanding !== 'none') {
+      steps.push({
+        stepNumber: n++,
+        title: { en: 'Apply Edge Banding', he: 'הדבקת פסי קצה' },
+        description: {
+          en: 'Iron on edge banding tape to all visible edges of the desktop and side panels. Trim and sand smooth.',
+          he: 'הדבק פסי קצה בגיהוץ על כל הקצוות הנראים של משטח השולחן והדפנות. חתוך והשחזה.',
+        },
+        parts: [],
+        icon: '🪵',
+      });
+    }
+    return steps;
+  }
 
   steps.push({
     stepNumber: n++,

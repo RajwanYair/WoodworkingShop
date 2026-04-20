@@ -44,7 +44,8 @@
     "reset": "Reset to Defaults",
     "furnitureType": "Furniture Type",
     "ft_cabinet": "Cabinet",
-    "ft_bookshelf": "Bookshelf"
+    "ft_bookshelf": "Bookshelf",
+    "ft_desk": "Desk"
   },
   "parts": {
     "title": "Parts List",

@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { BOOKSHELF_DEFAULTS } from '../../engine/materials';
+import { BOOKSHELF_DEFAULTS, DESK_DEFAULTS } from '../../engine/materials';
 import { CabinetSelector } from './CabinetSelector';
 import { DimensionSliders } from './DimensionSliders';
 import { MaterialSelector } from './MaterialSelector';
@@ -16,6 +16,8 @@ export function ConfiguratorPanel() {
   const handleFurnitureChange = (type: FurnitureType) => {
     if (type === 'bookshelf') {
       setConfig({ ...BOOKSHELF_DEFAULTS });
+    } else if (type === 'desk') {
+      setConfig({ ...DESK_DEFAULTS });
     } else {
       setConfig({ furnitureType: 'cabinet', doorStyle: 'flat', doorCount: 2, handleStyle: 'bar', depth: 600 });
     }
@@ -32,7 +34,7 @@ export function ConfiguratorPanel() {
           {t('config.furnitureType')}
         </legend>
         <div className="flex gap-3">
-          {(['cabinet', 'bookshelf'] as const).map((ft) => (
+          {(['cabinet', 'bookshelf', 'desk'] as const).map((ft) => (
             <label
               key={ft}
               className={`flex-1 text-center cursor-pointer rounded border px-3 py-2 text-sm font-medium transition-colors ${
@@ -58,7 +60,7 @@ export function ConfiguratorPanel() {
       <DimensionSliders />
       <MaterialSelector />
       <ShelfConfig />
-      {config.furnitureType !== 'bookshelf' && <DoorConfig />}
+      {config.furnitureType === 'cabinet' && <DoorConfig />}
 
       <button
         onClick={resetConfig}

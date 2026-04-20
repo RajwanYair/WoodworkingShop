@@ -69,6 +69,18 @@ export const BOOKSHELF_DEFAULTS: Partial<CabinetConfig> = {
   edgeBanding: 'all-visible',
 };
 
+export const DESK_DEFAULTS: Partial<CabinetConfig> = {
+  furnitureType: 'desk',
+  width: 1200,
+  height: 750,
+  depth: 600,
+  shelfCount: 0,
+  doorStyle: 'none',
+  doorCount: 1,
+  handleStyle: 'none',
+  edgeBanding: 'all-visible',
+};
+
 // ─── Validation constraints ───
 
 export const CONSTRAINTS = {

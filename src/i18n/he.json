@@ -44,7 +44,8 @@
     "reset": "איפוס לברירת מחדל",
     "furnitureType": "סוג רהיט",
     "ft_cabinet": "ארון",
-    "ft_bookshelf": "כוננייה"
+    "ft_bookshelf": "כוננייה",
+    "ft_desk": "שולחן"
   },
   "parts": {
     "title": "רשימת חלקים",
