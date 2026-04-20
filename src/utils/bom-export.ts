@@ -1,17 +1,6 @@
 import type { Part, HardwareItem, Lang } from '../engine/types';
 import { getMaterial } from '../engine/materials';
-
-interface _BomRow {
-  cabinet: string;
-  partId: string;
-  name: string;
-  qty: number;
-  material: string;
-  thickness: number;
-  length: number;
-  width: number;
-  edgeBanding: string;
-}
+import { triggerDownload } from './download';
 
 /**
  * Generate a full Bill of Materials CSV for all cabinets in the project.
@@ -29,17 +18,19 @@ export function generateBomCsv(
   for (const cab of cabinets) {
     for (const p of cab.parts) {
       const matName = safeGetMaterialName(p.material, lang);
-      rows.push(csvRow([
-        cab.name,
-        p.id,
-        p.name[lang],
-        String(p.qty),
-        matName,
-        String(p.thickness),
-        String(p.length),
-        String(p.width),
-        p.edgeBanding[lang],
-      ]));
+      rows.push(
+        csvRow([
+          cab.name,
+          p.id,
+          p.name[lang],
+          String(p.qty),
+          matName,
+          String(p.thickness),
+          String(p.length),
+          String(p.width),
+          p.edgeBanding[lang],
+        ]),
+      );
     }
   }
 
@@ -48,14 +39,7 @@ export function generateBomCsv(
   rows.push('Cabinet,Hardware ID,Hardware Name,Qty,Unit,,,, ');
   for (const cab of cabinets) {
     for (const hw of cab.hardware) {
-      rows.push(csvRow([
-        cab.name,
-        hw.id,
-        hw.name[lang],
-        String(hw.qty),
-        hw.unit[lang],
-        '', '', '', '',
-      ]));
+      rows.push(csvRow([cab.name, hw.id, hw.name[lang], String(hw.qty), hw.unit[lang], '', '', '', '']));
     }
   }
 
@@ -71,12 +55,14 @@ function safeGetMaterialName(key: string, lang: Lang): string {
 }
 
 function csvRow(fields: string[]): string {
-  return fields.map(f => {
-    if (f.includes(',') || f.includes('"') || f.includes('\n')) {
-      return `"${f.replace(/"/g, '""')}"`;
-    }
-    return f;
-  }).join(',');
+  return fields
+    .map((f) => {
+      if (f.includes(',') || f.includes('"') || f.includes('\n')) {
+        return `"${f.replace(/"/g, '""')}"`;
+      }
+      return f;
+    })
+    .join(',');
 }
 
 export function downloadBomCsv(
@@ -85,11 +71,5 @@ export function downloadBomCsv(
   filename = 'bill-of-materials.csv',
 ) {
   const csv = generateBomCsv(cabinets, lang);
-  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
+  triggerDownload('\uFEFF' + csv, 'text/csv;charset=utf-8', filename);
 }

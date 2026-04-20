@@ -24,9 +24,7 @@ export function ShelfConfig() {
             onChange={(e) => setConfig({ shelfCount: Number(e.target.value) })}
             className="flex-1 accent-primary"
           />
-          <span className="w-8 text-right text-sm font-mono font-medium">
-            {config.shelfCount}
-          </span>
+          <span className="w-8 text-right text-sm font-mono font-medium">{config.shelfCount}</span>
         </div>
       </label>
 

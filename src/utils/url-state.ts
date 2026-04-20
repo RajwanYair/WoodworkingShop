@@ -51,7 +51,11 @@ export function paramsToConfig(params: URLSearchParams): Partial<CabinetConfig> 
   const ss = params.get('ss');
   if (ss === 'equal' || ss === 'custom') patch.shelfSpacing = ss;
   const csp = params.get('csp');
-  if (csp) patch.customShelfPositions = csp.split(',').map(Number).filter((n) => !isNaN(n));
+  if (csp)
+    patch.customShelfPositions = csp
+      .split(',')
+      .map(Number)
+      .filter((n) => !isNaN(n));
   const cm = params.get('cm');
   if (cm) patch.carcassMaterial = cm;
   const bm = params.get('bm');
@@ -78,7 +82,9 @@ export function paramsToConfig(params: URLSearchParams): Partial<CabinetConfig> 
 export function configToUrl(cfg: CabinetConfig): string {
   const params = configToParams(cfg);
   const qs = params.toString();
-  return qs ? `${window.location.origin}${window.location.pathname}?${qs}` : window.location.origin + window.location.pathname;
+  return qs
+    ? `${window.location.origin}${window.location.pathname}?${qs}`
+    : window.location.origin + window.location.pathname;
 }
 
 /** Read config from current URL */
@@ -90,8 +96,6 @@ export function readConfigFromUrl(): Partial<CabinetConfig> {
 export function pushConfigToUrl(cfg: CabinetConfig): void {
   const params = configToParams(cfg);
   const qs = params.toString();
-  const url = qs
-    ? `${window.location.pathname}?${qs}`
-    : window.location.pathname;
+  const url = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
   window.history.replaceState(null, '', url);
 }

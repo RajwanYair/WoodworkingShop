@@ -8,9 +8,8 @@ trim_trailing_whitespace = true
 indent_style = space
 indent_size = 4
 
-[*.{py,pyi,pyw}]
-indent_size = 4
-max_line_length = 100
+[*.{ts,tsx,js,jsx}]
+indent_size = 2
 
 [*.{ps1,psm1,psd1}]
 indent_size = 4
@@ -25,6 +24,3 @@ indent_size = 2
 [*.md]
 trim_trailing_whitespace = false
 max_line_length = off
-
-[Makefile]
-indent_style = tab

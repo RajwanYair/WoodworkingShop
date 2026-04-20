@@ -1,9 +1,4 @@
-import type {
-  CabinetConfig,
-  OptimizationResult,
-  OptimizationSuggestion,
-  SmartStrategy,
-} from './types';
+import type { CabinetConfig, OptimizationResult, OptimizationSuggestion, SmartStrategy } from './types';
 import { MATERIALS, SAW_KERF, getMaterial, CONSTRAINTS } from './materials';
 import { computeDimensions } from './dimensions';
 import { generateParts } from './parts';
@@ -11,8 +6,8 @@ import { optimizeCutSheets } from './cut-optimizer';
 
 export interface SmartOptimizerOptions {
   strategies: SmartStrategy[];
-  tolerance: number;        // max mm deviation from original dimension
-  maxResults?: number;       // top N suggestions (default 5)
+  tolerance: number; // max mm deviation from original dimension
+  maxResults?: number; // top N suggestions (default 5)
 }
 
 const DEFAULT_OPTIONS: SmartOptimizerOptions = {
@@ -69,18 +64,12 @@ export function findOptimizations(
     }
   }
 
-  return [...seen.values()]
-    .sort((a, b) => a.score - b.score)
-    .slice(0, opts.maxResults);
+  return [...seen.values()].sort((a, b) => a.score - b.score).slice(0, opts.maxResults);
 }
 
 // ─── Candidate generators per strategy ───
 
-function generateCandidates(
-  cfg: CabinetConfig,
-  strategy: SmartStrategy,
-  tolerance: number,
-): CabinetConfig[] {
+function generateCandidates(cfg: CabinetConfig, strategy: SmartStrategy, tolerance: number): CabinetConfig[] {
   switch (strategy) {
     case 'reduce-depth':
       return tryDepthVariations(cfg, tolerance);
@@ -111,7 +100,11 @@ function tryDepthVariations(cfg: CabinetConfig, tolerance: number): CabinetConfi
   for (let n = 1; n <= 6; n++) {
     // depth = (sheetWidth - (n-1) × kerf) / n
     const idealDepth = (sheetW - (n - 1) * SAW_KERF) / n;
-    if (Math.abs(idealDepth - cfg.depth) <= tolerance && idealDepth >= CONSTRAINTS.minDepth && idealDepth <= CONSTRAINTS.maxDepth) {
+    if (
+      Math.abs(idealDepth - cfg.depth) <= tolerance &&
+      idealDepth >= CONSTRAINTS.minDepth &&
+      idealDepth <= CONSTRAINTS.maxDepth
+    ) {
       candidates.push({ ...cfg, depth: Math.round(idealDepth) });
     }
   }
@@ -148,7 +141,11 @@ function tryCoNestStrips(cfg: CabinetConfig, tolerance: number): CabinetConfig[]
   // doorWidth + 2*kerf + 2*depth - 20 = sheetWidth
   // depth = (sheetWidth - doorWidth - 2*kerf + 20) / 2
   const idealDepth = (sheetW - d.doorWidth - 2 * SAW_KERF + 20) / 2;
-  if (Math.abs(idealDepth - cfg.depth) <= tolerance && idealDepth >= CONSTRAINTS.minDepth && idealDepth <= CONSTRAINTS.maxDepth) {
+  if (
+    Math.abs(idealDepth - cfg.depth) <= tolerance &&
+    idealDepth >= CONSTRAINTS.minDepth &&
+    idealDepth <= CONSTRAINTS.maxDepth
+  ) {
     candidates.push({ ...cfg, depth: Math.round(idealDepth) });
   }
 
@@ -157,7 +154,11 @@ function tryCoNestStrips(cfg: CabinetConfig, tolerance: number): CabinetConfig[]
   // 2*depth + kerf - 20 = sheetWidth
   // depth = (sheetWidth - kerf + 20) / 2
   const idealDepth2 = (sheetW - SAW_KERF + 20) / 2;
-  if (Math.abs(idealDepth2 - cfg.depth) <= tolerance && idealDepth2 >= CONSTRAINTS.minDepth && idealDepth2 <= CONSTRAINTS.maxDepth) {
+  if (
+    Math.abs(idealDepth2 - cfg.depth) <= tolerance &&
+    idealDepth2 >= CONSTRAINTS.minDepth &&
+    idealDepth2 <= CONSTRAINTS.maxDepth
+  ) {
     candidates.push({ ...cfg, depth: Math.round(idealDepth2) });
   }
 
@@ -168,17 +169,14 @@ function tryCoNestStrips(cfg: CabinetConfig, tolerance: number): CabinetConfig[]
  * Strategy: adjust-width / adjust-height
  * Try ±1..tolerance mm variations for better nesting.
  */
-function tryDimensionVariations(
-  cfg: CabinetConfig,
-  dim: 'width' | 'height',
-  tolerance: number,
-): CabinetConfig[] {
+function tryDimensionVariations(cfg: CabinetConfig, dim: 'width' | 'height', tolerance: number): CabinetConfig[] {
   const mat = getMaterial(cfg.carcassMaterial);
   const sheetL = mat.sheetLength;
   const sheetW = mat.sheetWidth;
-  const constraints = dim === 'width'
-    ? { min: CONSTRAINTS.minWidth, max: CONSTRAINTS.maxWidth }
-    : { min: CONSTRAINTS.minHeight, max: CONSTRAINTS.maxHeight };
+  const constraints =
+    dim === 'width'
+      ? { min: CONSTRAINTS.minWidth, max: CONSTRAINTS.maxWidth }
+      : { min: CONSTRAINTS.minHeight, max: CONSTRAINTS.maxHeight };
 
   const candidates: CabinetConfig[] = [];
   const original = cfg[dim];
@@ -232,9 +230,12 @@ function evaluate(cfg: CabinetConfig): OptimizationResult {
 
 function isValid(cfg: CabinetConfig): boolean {
   return (
-    cfg.width >= CONSTRAINTS.minWidth && cfg.width <= CONSTRAINTS.maxWidth &&
-    cfg.height >= CONSTRAINTS.minHeight && cfg.height <= CONSTRAINTS.maxHeight &&
-    cfg.depth >= CONSTRAINTS.minDepth && cfg.depth <= CONSTRAINTS.maxDepth
+    cfg.width >= CONSTRAINTS.minWidth &&
+    cfg.width <= CONSTRAINTS.maxWidth &&
+    cfg.height >= CONSTRAINTS.minHeight &&
+    cfg.height <= CONSTRAINTS.maxHeight &&
+    cfg.depth >= CONSTRAINTS.minDepth &&
+    cfg.depth <= CONSTRAINTS.maxDepth
   );
 }
 
@@ -274,11 +275,11 @@ function buildExplanation(
   }
 
   const stratLabels: Record<SmartStrategy, { en: string; he: string }> = {
-    'reduce-depth':   { en: 'Optimize depth for sheet nesting', he: 'מיטוב עומק לחיתוך גיליון' },
+    'reduce-depth': { en: 'Optimize depth for sheet nesting', he: 'מיטוב עומק לחיתוך גיליון' },
     'co-nest-strips': { en: 'Co-nest door and shelf strips', he: 'חיתוך משולב דלת ומדף' },
-    'adjust-width':   { en: 'Adjust width for better yield', he: 'התאמת רוחב לניצולת טובה' },
-    'adjust-height':  { en: 'Adjust height for better yield', he: 'התאמת גובה לניצולת טובה' },
-    'material-swap':  { en: 'Try alternative material', he: 'חומר חלופי' },
+    'adjust-width': { en: 'Adjust width for better yield', he: 'התאמת רוחב לניצולת טובה' },
+    'adjust-height': { en: 'Adjust height for better yield', he: 'התאמת גובה לניצולת טובה' },
+    'material-swap': { en: 'Try alternative material', he: 'חומר חלופי' },
   };
 
   return {

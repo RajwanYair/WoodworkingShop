@@ -23,9 +23,7 @@ export function DrawerConfig() {
             onChange={(e) => setConfig({ drawerCount: Number(e.target.value) })}
             className="flex-1 accent-primary"
           />
-          <span className="w-8 text-right text-sm font-mono font-medium">
-            {config.drawerCount}
-          </span>
+          <span className="w-8 text-right text-sm font-mono font-medium">{config.drawerCount}</span>
         </div>
       </label>
     </fieldset>

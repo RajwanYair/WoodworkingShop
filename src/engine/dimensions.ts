@@ -9,16 +9,17 @@ export function computeDimensions(cfg: CabinetConfig): DerivedDimensions {
   const t = getMaterial(cfg.carcassMaterial).thickness;
   const r = cfg.doorReveal;
 
-  const internalWidth  = cfg.width  - 2 * t;
+  const internalWidth = cfg.width - 2 * t;
   const internalHeight = cfg.height - 2 * t;
-  const shelfDepth     = cfg.depth  - 20;           // 20 mm front setback
-  const shelfWidth     = internalWidth - 2;          // 1 mm clearance per side
-  const doorHeight     = cfg.height - r - r;         // top + bottom reveal
-  const doorWidth      = cfg.doorCount === 2
-    ? (cfg.width - r - r - (r - 1)) / 2             // outer reveals + center gap
-    : cfg.width - r - r;                             // single door
-  const backPanelHeight = cfg.height - 20;           // 10 mm inset per edge
-  const backPanelWidth  = cfg.width  - 20;
+  const shelfDepth = cfg.depth - 20; // 20 mm front setback
+  const shelfWidth = internalWidth - 2; // 1 mm clearance per side
+  const doorHeight = cfg.height - r - r; // top + bottom reveal
+  const doorWidth =
+    cfg.doorCount === 2
+      ? (cfg.width - r - r - (r - 1)) / 2 // outer reveals + center gap
+      : cfg.width - r - r; // single door
+  const backPanelHeight = cfg.height - 20; // 10 mm inset per edge
+  const backPanelWidth = cfg.width - 20;
 
   const hingesPerDoor = computeHingesPerDoor(doorHeight);
   const hingePositions = computeHingePositions(doorHeight, hingesPerDoor);
@@ -39,7 +40,7 @@ export function computeDimensions(cfg: CabinetConfig): DerivedDimensions {
 
 /** Auto-calculate number of hinges based on door height. */
 export function computeHingesPerDoor(doorHeight: number): number {
-  if (doorHeight <= 600)  return 2;
+  if (doorHeight <= 600) return 2;
   if (doorHeight <= 1200) return 3;
   if (doorHeight <= 1800) return 4;
   if (doorHeight <= 2200) return 5;
@@ -63,13 +64,8 @@ export function computeHingePositions(doorHeight: number, count: number): number
 }
 
 /** Compute equal shelf positions (mm from cabinet bottom, internal). */
-export function computeEqualShelfPositions(
-  internalHeight: number,
-  shelfCount: number,
-): number[] {
+export function computeEqualShelfPositions(internalHeight: number, shelfCount: number): number[] {
   if (shelfCount <= 0) return [];
   const spacing = internalHeight / (shelfCount + 1);
-  return Array.from({ length: shelfCount }, (_, i) =>
-    Math.round(spacing * (i + 1)),
-  );
+  return Array.from({ length: shelfCount }, (_, i) => Math.round(spacing * (i + 1)));
 }

@@ -1,11 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { configToParams, paramsToConfig } from '../../src/utils/url-state';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
-import type { CabinetConfig } from '../../src/engine/types';
-
-function cfg(overrides: Partial<CabinetConfig> = {}): CabinetConfig {
-  return { ...DEFAULT_CONFIG, ...overrides };
-}
+import { cfg } from '../helpers';
 
 describe('url-state', () => {
   describe('configToParams', () => {
@@ -42,10 +38,12 @@ describe('url-state', () => {
     });
 
     it('encodes custom shelf positions', () => {
-      const params = configToParams(cfg({
-        shelfSpacing: 'custom',
-        customShelfPositions: [200, 400, 600],
-      }));
+      const params = configToParams(
+        cfg({
+          shelfSpacing: 'custom',
+          customShelfPositions: [200, 400, 600],
+        }),
+      );
       expect(params.get('ss')).toBe('custom');
       expect(params.get('csp')).toBe('200,400,600');
     });

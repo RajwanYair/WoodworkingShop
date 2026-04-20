@@ -1,21 +1,19 @@
 # CODEOWNERS
 # =============================================================================
-# WoodworkingShop — Pantry Cabinet Plans
-# =============================================================================
-# Owners are requested for review when a pull request changes files
-# matching the patterns below.
+# WoodworkingShop — Cabinet Planner SPA
 # =============================================================================
 
 # Default: all files
 * @RajwanYair
 
-# Workspace-level configs
+# CI/CD and configs
 /.github/                   @RajwanYair
-/.editorconfig              @RajwanYair
-/.gitignore                 @RajwanYair
-/.gitattributes             @RajwanYair
-/.markdownlint.json         @RajwanYair
-/requirements.txt           @RajwanYair
+/.vscode/                   @RajwanYair
 
-# Shared rendering library
-/pantry-cabinet-plans/shared/ @RajwanYair
+# Core engine
+/src/engine/                @RajwanYair
+
+# Build config
+/vite.config.ts             @RajwanYair
+/tsconfig*.json             @RajwanYair
+/eslint.config.js           @RajwanYair

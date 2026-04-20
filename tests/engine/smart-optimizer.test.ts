@@ -1,11 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { findOptimizations } from '../../src/engine/smart-optimizer';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
-import type { CabinetConfig } from '../../src/engine/types';
-
-function cfg(overrides: Partial<CabinetConfig> = {}): CabinetConfig {
-  return { ...DEFAULT_CONFIG, ...overrides };
-}
+import { cfg } from '../helpers';
 
 describe('smart-optimizer', () => {
   describe('findOptimizations', () => {
@@ -60,7 +56,8 @@ describe('smart-optimizer', () => {
         tolerance: 30,
       });
       const fingerprints = results.map(
-        (r) => `${r.optimizedConfig.width}|${r.optimizedConfig.height}|${r.optimizedConfig.depth}|${r.optimizedConfig.carcassMaterial}`,
+        (r) =>
+          `${r.optimizedConfig.width}|${r.optimizedConfig.height}|${r.optimizedConfig.depth}|${r.optimizedConfig.carcassMaterial}`,
       );
       const unique = new Set(fingerprints);
       expect(unique.size).toBe(fingerprints.length);

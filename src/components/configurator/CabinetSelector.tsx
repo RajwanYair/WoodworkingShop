@@ -4,7 +4,8 @@ import { useCabinetStore } from '../../store/cabinet-store';
 
 export function CabinetSelector() {
   const { t } = useTranslation();
-  const { cabinets, activeCabinetIndex, addCabinet, removeCabinet, setActiveCabinet, renameCabinet } = useCabinetStore();
+  const { cabinets, activeCabinetIndex, addCabinet, removeCabinet, setActiveCabinet, renameCabinet } =
+    useCabinetStore();
   const [editingIdx, setEditingIdx] = useState<number | null>(null);
   const [editName, setEditName] = useState('');
 
@@ -44,7 +45,7 @@ export function CabinetSelector() {
                 onBlur={commitRename}
                 onKeyDown={(e) => e.key === 'Enter' && commitRename()}
                 className="text-xs px-2 py-1 rounded border border-wood-400 dark:border-wood-500 bg-white dark:bg-wood-800 w-24"
-                autoFocus
+                ref={(el) => el?.focus()}
               />
             ) : (
               <button
@@ -73,11 +74,7 @@ export function CabinetSelector() {
         ))}
       </div>
 
-      {cabinets.length > 1 && (
-        <p className="text-[10px] text-wood-400 dark:text-wood-500">
-          {t('project.hint')}
-        </p>
-      )}
+      {cabinets.length > 1 && <p className="text-[10px] text-wood-400 dark:text-wood-500">{t('project.hint')}</p>}
     </div>
   );
 }

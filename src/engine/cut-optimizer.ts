@@ -44,17 +44,14 @@ export function optimizeCutSheets(parts: Part[]): OptimizationResult {
     const sheets = packFFD(rects, sheetL, sheetW, SAW_KERF);
 
     for (const packedRects of sheets) {
-      const usedArea = packedRects.reduce(
-        (sum, r) => sum + r.length * r.width,
-        0,
-      );
+      const usedArea = packedRects.reduce((sum, r) => sum + r.length * r.width, 0);
       allSheets.push({
         sheetIndex: sheetIdx++,
         material: group.materialKey,
         thickness: mat.thickness,
         sheetLength: sheetL,
         sheetWidth: sheetW,
-        parts: packedRects.map(r => ({
+        parts: packedRects.map((r) => ({
           partId: r.partId,
           label: r.label,
           length: r.length,
@@ -69,14 +66,8 @@ export function optimizeCutSheets(parts: Part[]): OptimizationResult {
     }
   }
 
-  const totalArea = allSheets.reduce(
-    (s, sh) => s + sh.sheetLength * sh.sheetWidth,
-    0,
-  );
-  const usedArea = allSheets.reduce(
-    (s, sh) => s + sh.parts.reduce((a, p) => a + p.length * p.width, 0),
-    0,
-  );
+  const totalArea = allSheets.reduce((s, sh) => s + sh.sheetLength * sh.sheetWidth, 0);
+  const usedArea = allSheets.reduce((s, sh) => s + sh.parts.reduce((a, p) => a + p.length * p.width, 0), 0);
 
   return {
     sheets: allSheets,
@@ -106,12 +97,7 @@ interface PlacedRect extends Rect {
  * FFD strip-based packing.
  * Returns an array of sheets, each sheet being an array of placed rects.
  */
-function packFFD(
-  rects: Rect[],
-  sheetLength: number,
-  sheetWidth: number,
-  kerf: number,
-): PlacedRect[][] {
+function packFFD(rects: Rect[], sheetLength: number, sheetWidth: number, kerf: number): PlacedRect[][] {
   if (rects.length === 0) return [];
 
   const sheets: PlacedRect[][] = [];
@@ -175,9 +161,7 @@ function packFFD(
     // Need a new sheet
     if (!placed) {
       const isNatural = rect.length <= sheetLength && rect.width <= sheetWidth;
-      const o = isNatural
-          ? { l: rect.length, w: rect.width }
-          : { l: rect.width, w: rect.length };
+      const o = isNatural ? { l: rect.length, w: rect.width } : { l: rect.width, w: rect.length };
 
       const strip: Strip = { y: 0, usedX: o.w + kerf, maxHeight: o.l };
       const pr: PlacedRect = {
@@ -197,8 +181,8 @@ function packFFD(
 }
 
 interface Strip {
-  y: number;       // top-edge Y offset on the sheet
-  usedX: number;   // rightmost used X
+  y: number; // top-edge Y offset on the sheet
+  usedX: number; // rightmost used X
   maxHeight: number;
 }
 

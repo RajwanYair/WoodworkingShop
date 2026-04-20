@@ -16,7 +16,7 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
       id: 'H01',
       name: { en: 'Euro Hinge 35 mm (110°)', he: 'ציר מטבח 35 מ"מ (110°)' },
       qty: d.hingesPerDoor * cfg.doorCount,
-      unit: { en: 'pcs', he: 'יח\'' },
+      unit: { en: 'pcs', he: "יח'" },
     });
 
     // Mounting plates (one per hinge)
@@ -24,7 +24,7 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
       id: 'H02',
       name: { en: 'Hinge Mounting Plate', he: 'פלטת ציר' },
       qty: d.hingesPerDoor * cfg.doorCount,
-      unit: { en: 'pcs', he: 'יח\'' },
+      unit: { en: 'pcs', he: "יח'" },
     });
   }
 
@@ -34,7 +34,7 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
       id: 'H03',
       name: { en: 'Shelf Pin 5 mm', he: 'פין מדף 5 מ"מ' },
       qty: cfg.shelfCount * 4,
-      unit: { en: 'pcs', he: 'יח\'' },
+      unit: { en: 'pcs', he: "יח'" },
     });
   }
 
@@ -46,7 +46,7 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
     id: 'H04',
     name: { en: 'Confirmat Screw 7×50 mm', he: 'בורג קונפירמט 7×50 מ"מ' },
     qty: confirmatQty,
-    unit: { en: 'pcs', he: 'יח\'' },
+    unit: { en: 'pcs', he: "יח'" },
   });
 
   // ── Confirmat covers ──
@@ -54,7 +54,7 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
     id: 'H05',
     name: { en: 'Confirmat Cover Cap', he: 'כיסוי קונפירמט' },
     qty: confirmatQty,
-    unit: { en: 'pcs', he: 'יח\'' },
+    unit: { en: 'pcs', he: "יח'" },
   });
 
   // ── Back panel nails / screws (every ~150 mm around perimeter) ──
@@ -64,7 +64,7 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
     id: 'H06',
     name: { en: 'Back Panel Nail 25 mm', he: 'מסמר גב 25 מ"מ' },
     qty: backNailQty,
-    unit: { en: 'pcs', he: 'יח\'' },
+    unit: { en: 'pcs', he: "יח'" },
   });
 
   // ── L-brackets for wall mounting ──
@@ -72,7 +72,7 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
     id: 'H07',
     name: { en: 'L-Bracket (wall mount)', he: 'זווית L (תלייה)' },
     qty: cfg.width >= 800 ? 4 : 2,
-    unit: { en: 'pcs', he: 'יח\'' },
+    unit: { en: 'pcs', he: "יח'" },
   });
 
   // ── Wall screws + dowels for L-brackets ──
@@ -81,7 +81,7 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
     id: 'H08',
     name: { en: 'Wall Screw + Dowel 8×60 mm', he: 'בורג+דיבל קיר 8×60 מ"מ' },
     qty: bracketQty * 2, // 2 screws per bracket
-    unit: { en: 'pcs', he: 'יח\'' },
+    unit: { en: 'pcs', he: "יח'" },
   });
 
   // ── Handles ──
@@ -90,7 +90,7 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
       id: 'H09',
       name: handleName(cfg.handleStyle),
       qty: cfg.doorCount,
-      unit: { en: 'pcs', he: 'יח\'' },
+      unit: { en: 'pcs', he: "יח'" },
     });
   }
 
@@ -117,7 +117,7 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
         id: 'H12',
         name: handleName(cfg.handleStyle),
         qty: cfg.drawerCount,
-        unit: { en: 'pcs', he: 'יח\'' },
+        unit: { en: 'pcs', he: "יח'" },
       });
     }
   }
@@ -127,10 +127,15 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
 
 function handleName(style: string): { en: string; he: string } {
   switch (style) {
-    case 'bar':   return { en: 'Bar Handle 160 mm', he: 'ידית ברזל 160 מ"מ' };
-    case 'knob':  return { en: 'Round Knob 35 mm',  he: 'כפתור עגול 35 מ"מ' };
-    case 'cup':   return { en: 'Cup Pull 96 mm',    he: 'ידית שקועה 96 מ"מ' };
-    case 'edge':  return { en: 'Edge Pull Profile',  he: 'פרופיל אחיזה' };
-    default:      return { en: style,                he: style };
+    case 'bar':
+      return { en: 'Bar Handle 160 mm', he: 'ידית ברזל 160 מ"מ' };
+    case 'knob':
+      return { en: 'Round Knob 35 mm', he: 'כפתור עגול 35 מ"מ' };
+    case 'cup':
+      return { en: 'Cup Pull 96 mm', he: 'ידית שקועה 96 מ"מ' };
+    case 'edge':
+      return { en: 'Edge Pull Profile', he: 'פרופיל אחיזה' };
+    default:
+      return { en: style, he: style };
   }
 }

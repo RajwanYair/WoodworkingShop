@@ -9,9 +9,9 @@ export function DimensionSliders() {
   const step = sliderStep(units);
 
   const sliders: { key: 'width' | 'height' | 'depth'; min: number; max: number }[] = [
-    { key: 'width',  min: CONSTRAINTS.minWidth,  max: CONSTRAINTS.maxWidth },
+    { key: 'width', min: CONSTRAINTS.minWidth, max: CONSTRAINTS.maxWidth },
     { key: 'height', min: CONSTRAINTS.minHeight, max: CONSTRAINTS.maxHeight },
-    { key: 'depth',  min: CONSTRAINTS.minDepth,  max: CONSTRAINTS.maxDepth },
+    { key: 'depth', min: CONSTRAINTS.minDepth, max: CONSTRAINTS.maxDepth },
   ];
 
   return (
@@ -30,9 +30,7 @@ export function DimensionSliders() {
       </div>
       {sliders.map(({ key, min, max }) => (
         <label key={key} className="block">
-          <span className="text-sm text-wood-600 dark:text-wood-300">
-            {t(`config.${key}`)}
-          </span>
+          <span className="text-sm text-wood-600 dark:text-wood-300">{t(`config.${key}`)}</span>
           <div className="flex items-center gap-3 mt-1">
             <input
               type="range"
@@ -47,9 +45,7 @@ export function DimensionSliders() {
               onChange={(e) => setConfig({ [key]: Number(e.target.value) })}
               className="flex-1 accent-primary"
             />
-            <span className="w-20 text-right text-sm font-mono font-medium">
-              {formatDim(config[key], units)}
-            </span>
+            <span className="w-20 text-right text-sm font-mono font-medium">{formatDim(config[key], units)}</span>
           </div>
         </label>
       ))}

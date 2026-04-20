@@ -1,26 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { cutSheetToGcode } from '../../src/utils/gcode-export';
-import type { CutSheet, CutRect } from '../../src/engine/types';
-
-const mockPart: CutRect = {
-  partId: 'P01',
-  label: 'Side Panel',
-  x: 10,
-  y: 10,
-  width: 300,
-  length: 600,
-  grainVertical: true,
-};
-
-const mockSheet: CutSheet = {
-  sheetIndex: 0,
-  material: 'melamine-18',
-  thickness: 18,
-  sheetWidth: 2440,
-  sheetLength: 1220,
-  parts: [mockPart],
-  yieldPercent: 95,
-};
+import { mockSheet } from '../helpers';
 
 describe('cutSheetToGcode', () => {
   it('returns a string containing G-code header', () => {
@@ -49,7 +29,7 @@ describe('cutSheetToGcode', () => {
   it('generates multi-pass cuts when thickness > passDepth', () => {
     const gc = cutSheetToGcode(mockSheet); // 18mm thick, 3mm pass = 6 passes
     // Each pass has a Z plunge line (G1 Z-...)
-    const plunges = gc.split('\n').filter(l => l.match(/^G1 Z-/));
+    const plunges = gc.split('\n').filter((l) => l.match(/^G1 Z-/));
     expect(plunges.length).toBe(6); // ceil(18/3) = 6
   });
 
@@ -83,7 +63,7 @@ describe('cutSheetToGcode', () => {
   it('generates rectangular profile (4 G1 moves per pass)', () => {
     const gc = cutSheetToGcode(mockSheet, { cutDepth: 3, passDepth: 3 });
     // 1 pass: plunge + 4 sides = 5 G1 lines total for the part
-    const g1Lines = gc.split('\n').filter(l => l.startsWith('G1'));
+    const g1Lines = gc.split('\n').filter((l) => l.startsWith('G1'));
     expect(g1Lines.length).toBe(5); // 1 plunge + 4 rectangle sides
   });
 });

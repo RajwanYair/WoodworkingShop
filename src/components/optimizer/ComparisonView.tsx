@@ -10,9 +10,7 @@ export function ComparisonView({ suggestion }: { suggestion: OptimizationSuggest
       <h4 className="text-xs font-semibold text-wood-700 dark:text-wood-200 uppercase tracking-wide">
         {t('optimizer.comparison')}
       </h4>
-      <p className="text-xs text-wood-500 dark:text-wood-400">
-        {suggestion.explanation[lang]}
-      </p>
+      <p className="text-xs text-wood-500 dark:text-wood-400">{suggestion.explanation[lang]}</p>
 
       <div className="grid grid-cols-2 gap-4">
         <ConfigCard
@@ -33,9 +31,7 @@ export function ComparisonView({ suggestion }: { suggestion: OptimizationSuggest
 
       {/* Changes summary */}
       <div className="border-t border-wood-200 dark:border-wood-700 pt-3">
-        <h5 className="text-xs font-medium text-wood-600 dark:text-wood-300 mb-2">
-          {t('optimizer.changes')}
-        </h5>
+        <h5 className="text-xs font-medium text-wood-600 dark:text-wood-300 mb-2">{t('optimizer.changes')}</h5>
         <div className="flex flex-wrap gap-3 text-xs">
           {renderDiff('W', suggestion.originalConfig.width, suggestion.optimizedConfig.width, 'mm')}
           {renderDiff('H', suggestion.originalConfig.height, suggestion.optimizedConfig.height, 'mm')}
@@ -52,18 +48,23 @@ export function ComparisonView({ suggestion }: { suggestion: OptimizationSuggest
 }
 
 function ConfigCard({
-  title, config, result, t, accent,
+  title,
+  config,
+  result,
+  t,
+  accent,
 }: {
-  title: string; config: CabinetConfig; result: OptimizationResult;
-  t: (k: string) => string; accent: 'red' | 'green';
+  title: string;
+  config: CabinetConfig;
+  result: OptimizationResult;
+  t: (k: string) => string;
+  accent: 'red' | 'green';
 }) {
   const ringColor = accent === 'red' ? 'ring-red-300 dark:ring-red-700' : 'ring-green-300 dark:ring-green-700';
 
   return (
     <div className={`ring-2 ${ringColor} rounded p-3 bg-white dark:bg-wood-800 space-y-2`}>
-      <div className={`text-xs font-bold ${accent === 'red' ? 'text-red-600' : 'text-green-600'}`}>
-        {title}
-      </div>
+      <div className={`text-xs font-bold ${accent === 'red' ? 'text-red-600' : 'text-green-600'}`}>{title}</div>
       <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
         <span className="text-wood-500">{t('config.width')}</span>
         <span className="font-medium">{config.width} mm</span>
@@ -90,7 +91,8 @@ function renderDiff(label: string, oldVal: number, newVal: number, unit: string)
   const color = diff < 0 ? 'text-green-600' : 'text-orange-600';
   return (
     <span className={`${color} font-medium`}>
-      {label}: {oldVal}→{newVal} {unit} ({diff > 0 ? '+' : ''}{diff})
+      {label}: {oldVal}→{newVal} {unit} ({diff > 0 ? '+' : ''}
+      {diff})
     </span>
   );
 }

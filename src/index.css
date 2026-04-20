@@ -1,7 +1,7 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
-  --color-wood-50:  #fdf8f0;
+  --color-wood-50: #fdf8f0;
   --color-wood-100: #f5ead6;
   --color-wood-200: #e8d4ab;
   --color-wood-300: #d4b87a;
@@ -12,54 +12,116 @@
   --color-wood-800: #3d2d10;
   --color-wood-900: #241a0a;
 
-  --color-primary:  #a67c2e;
-  --color-surface:  #fdf8f0;
+  --color-primary: #a67c2e;
+  --color-surface: #fdf8f0;
   --color-surface-dark: #1a1510;
 }
 
 /* RTL support */
-[dir="rtl"] {
+[dir='rtl'] {
   direction: rtl;
   text-align: right;
 }
 
 /* Hide scrollbar for tab overflow */
-.scrollbar-none { scrollbar-width: none; -ms-overflow-style: none; }
-.scrollbar-none::-webkit-scrollbar { display: none; }
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
 
 /* Mobile bottom sheet animation */
-@keyframes slide-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
-.animate-slide-up { animation: slide-up 0.25s ease-out; }
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.animate-slide-up {
+  animation: slide-up 0.25s ease-out;
+}
 
 /* Toast fade-in */
-@keyframes fade-in { from { opacity: 0; transform: translateY(0.5rem); } to { opacity: 1; transform: translateY(0); } }
-.animate-fade-in { animation: fade-in 0.2s ease-out; }
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
 
 /* ─── Print-friendly styles ─── */
 @media print {
   /* Reset background colors for paper */
-  body, html { background: white !important; color: black !important; }
+  body,
+  html {
+    background: white !important;
+    color: black !important;
+  }
 
   /* Hide non-essential UI */
-  header, nav, aside,
-  [data-print="hide"],
-  button:not([data-print="show"]),
-  .no-print { display: none !important; }
+  header,
+  nav,
+  aside,
+  [data-print='hide'],
+  button:not([data-print='show']),
+  .no-print {
+    display: none !important;
+  }
 
   /* Full-width main content */
-  main { width: 100% !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
+  main {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
 
   /* Make tables print-friendly */
-  table { font-size: 10pt !important; border-collapse: collapse !important; width: 100% !important; }
-  th, td { border: 0.5pt solid #999 !important; padding: 4pt 6pt !important; }
-  th { background: #eee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  table {
+    font-size: 10pt !important;
+    border-collapse: collapse !important;
+    width: 100% !important;
+  }
+  th,
+  td {
+    border: 0.5pt solid #999 !important;
+    padding: 4pt 6pt !important;
+  }
+  th {
+    background: #eee !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 
   /* SVG previews scale to fit page */
-  svg { max-width: 100% !important; height: auto !important; max-height: 400pt !important; }
+  svg {
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 400pt !important;
+  }
 
   /* Avoid page breaks inside key elements */
-  tr, .print-keep { break-inside: avoid; }
+  tr,
+  .print-keep {
+    break-inside: avoid;
+  }
 
   /* Force color printing for cut sheets */
-  rect, line, text { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  rect,
+  line,
+  text {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 }

@@ -25,9 +25,7 @@ export function SmartOptimizerPanel() {
   const [comparing, setComparing] = useState<number | null>(null);
 
   const toggleStrategy = (s: SmartStrategy) => {
-    setStrategies((prev) =>
-      prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s],
-    );
+    setStrategies((prev) => (prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]));
   };
 
   const handleFind = () => {
@@ -56,12 +54,8 @@ export function SmartOptimizerPanel() {
   return (
     <div className="border border-wood-200 dark:border-wood-700 rounded-lg p-4 space-y-4">
       <div>
-        <h3 className="text-sm font-semibold text-wood-700 dark:text-wood-200">
-          {t('optimizer.smart')}
-        </h3>
-        <p className="text-xs text-wood-400 dark:text-wood-500 mt-0.5">
-          {t('optimizer.smartDesc')}
-        </p>
+        <h3 className="text-sm font-semibold text-wood-700 dark:text-wood-200">{t('optimizer.smart')}</h3>
+        <p className="text-xs text-wood-400 dark:text-wood-500 mt-0.5">{t('optimizer.smartDesc')}</p>
       </div>
 
       {/* Strategy checkboxes */}
@@ -120,18 +114,13 @@ export function SmartOptimizerPanel() {
       {results && results.length > 0 && (
         <div className="space-y-3">
           {results.map((s, idx) => (
-            <div
-              key={idx}
-              className="border border-wood-200 dark:border-wood-700 rounded p-3 space-y-2"
-            >
+            <div key={idx} className="border border-wood-200 dark:border-wood-700 rounded p-3 space-y-2">
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1">
                   <span className="text-xs font-medium px-1.5 py-0.5 rounded bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300">
                     {t(`optimizer.strategy_${s.strategy}`)}
                   </span>
-                  <p className="text-xs text-wood-600 dark:text-wood-300 mt-1">
-                    {s.explanation[lang]}
-                  </p>
+                  <p className="text-xs text-wood-600 dark:text-wood-300 mt-1">{s.explanation[lang]}</p>
                 </div>
                 <div className="flex gap-1.5 shrink-0">
                   <button
@@ -161,7 +150,8 @@ export function SmartOptimizerPanel() {
                   </span>
                 )}
                 <span>
-                  {s.optimizedResult.totalSheets} {t('optimizer.sheets').toLowerCase()} / {s.optimizedResult.overallYield}%
+                  {s.optimizedResult.totalSheets} {t('optimizer.sheets').toLowerCase()} /{' '}
+                  {s.optimizedResult.overallYield}%
                 </span>
               </div>
             </div>

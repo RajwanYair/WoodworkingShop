@@ -4,10 +4,10 @@ export interface AssemblyStep {
   stepNumber: number;
   title: { en: string; he: string };
   description: { en: string; he: string };
-  parts: string[];   // part IDs highlighted in this step
-  icon: string;       // emoji icon
+  parts: string[]; // part IDs highlighted in this step
+  icon: string; // emoji icon
   tip?: { en: string; he: string };
-  videoKeyword?: string;  // YouTube search keyword for tutorial lookup
+  videoKeyword?: string; // YouTube search keyword for tutorial lookup
 }
 
 /**
@@ -98,7 +98,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     videoKeyword: 'confirmat screw drilling jig cabinet',
     tip: {
       en: 'Use a drill press or jig for accurate perpendicular holes.',
-      he: 'השתמש במכונת קדיחה או ג\'יג לחורים מדויקים ומאונכים.',
+      he: "השתמש במכונת קדיחה או ג'יג לחורים מדויקים ומאונכים.",
     },
   });
 
@@ -173,7 +173,9 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
             he: 'הברג את פלטות הצירים לדפנות. הכנס את כוסות הצירים לחורי 35 מ"מ בדלתות. חבר דלתות לפלטות וכוון יישור.',
           },
       parts: [hasFixedShelf ? 'P06' : 'P05'],
-      icon: '🚪',      videoKeyword: isGlass ? 'glass door hinge installation cabinet' : 'concealed hinge installation 35mm cabinet',    });
+      icon: '🚪',
+      videoKeyword: isGlass ? 'glass door hinge installation cabinet' : 'concealed hinge installation 35mm cabinet',
+    });
 
     steps.push({
       stepNumber: n++,

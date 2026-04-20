@@ -35,10 +35,7 @@ export {
   computeEqualShelfPositions,
 } from './dimensions';
 
-export {
-  generateParts,
-  computeEdgeBandingTotal,
-} from './parts';
+export { generateParts, computeEdgeBandingTotal } from './parts';
 
 export { generateHardware } from './hardware';
 

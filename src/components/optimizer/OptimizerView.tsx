@@ -39,14 +39,20 @@ export function OptimizerView() {
         </div>
         <div className="ms-4 flex gap-2">
           <button
-            onClick={() => { downloadAllSheetsDxf(displayOpt.sheets, 'cabinet'); useToastStore.getState().addToast(t('toast.dxfExported'), 'success'); }}
+            onClick={() => {
+              downloadAllSheetsDxf(displayOpt.sheets, 'cabinet');
+              useToastStore.getState().addToast(t('toast.dxfExported'), 'success');
+            }}
             className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors"
             title={t('optimizer.exportDxf')}
           >
             📐 DXF
           </button>
           <button
-            onClick={() => { downloadAllSheetsGcode(displayOpt.sheets, 'cabinet'); useToastStore.getState().addToast(t('toast.gcodeExported'), 'success'); }}
+            onClick={() => {
+              downloadAllSheetsGcode(displayOpt.sheets, 'cabinet');
+              useToastStore.getState().addToast(t('toast.gcodeExported'), 'success');
+            }}
             className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors"
             title={t('optimizer.exportGcode')}
             aria-label={t('optimizer.exportGcode')}
@@ -55,7 +61,7 @@ export function OptimizerView() {
           </button>
           <button
             onClick={() => {
-              const bomData = cabinets.map(c => ({
+              const bomData = cabinets.map((c) => ({
                 name: c.name,
                 parts: generateParts(c.config),
                 hardware: generateHardware(c.config),
@@ -115,9 +121,16 @@ export function OptimizerView() {
 }
 
 function SheetCard({
-  sheet, lang, hoveredPartId, onHoverPart, colorBlindMode, t,
+  sheet,
+  lang,
+  hoveredPartId,
+  onHoverPart,
+  colorBlindMode,
+  t,
 }: {
-  sheet: CutSheet; lang: Lang; hoveredPartId: string | null;
+  sheet: CutSheet;
+  lang: Lang;
+  hoveredPartId: string | null;
   onHoverPart: (id: string | null) => void;
   colorBlindMode: boolean;
   t: (key: string) => string;
@@ -130,17 +143,24 @@ function SheetCard({
     <div className="border border-wood-200 dark:border-wood-700 rounded p-4">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm font-medium text-wood-600 dark:text-wood-300">
-          {t('optimizer.sheet')} #{sheet.sheetIndex + 1} — {mat.name[lang]} ({sheet.thickness} mm) — {sheet.yieldPercent}%
+          {t('optimizer.sheet')} #{sheet.sheetIndex + 1} — {mat.name[lang]} ({sheet.thickness} mm) —{' '}
+          {sheet.yieldPercent}%
         </h3>
         <button
-          onClick={() => { downloadDxfForSheet(sheet, `sheet-${sheet.sheetIndex + 1}.dxf`); useToastStore.getState().addToast(t('toast.dxfExported'), 'success'); }}
+          onClick={() => {
+            downloadDxfForSheet(sheet, `sheet-${sheet.sheetIndex + 1}.dxf`);
+            useToastStore.getState().addToast(t('toast.dxfExported'), 'success');
+          }}
           className="text-[10px] px-2 py-0.5 rounded border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors"
           title={`Download DXF for sheet ${sheet.sheetIndex + 1}`}
         >
           📐 DXF
         </button>
         <button
-          onClick={() => { downloadGcodeForSheet(sheet, `sheet-${sheet.sheetIndex + 1}.nc`); useToastStore.getState().addToast(t('toast.gcodeExported'), 'success'); }}
+          onClick={() => {
+            downloadGcodeForSheet(sheet, `sheet-${sheet.sheetIndex + 1}.nc`);
+            useToastStore.getState().addToast(t('toast.gcodeExported'), 'success');
+          }}
           className="text-[10px] px-2 py-0.5 rounded border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors"
           title={`Download G-code for sheet ${sheet.sheetIndex + 1}`}
           aria-label={`Download G-code for sheet ${sheet.sheetIndex + 1}`}
@@ -159,7 +179,13 @@ function SheetCard({
         <rect x={0} y={0} width={sw} height={sl} fill="#E8DFCF" stroke="#aaa" strokeWidth={1} />
         {/* Waste hatch pattern */}
         <defs>
-          <pattern id={`waste-${sheet.sheetIndex}`} width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <pattern
+            id={`waste-${sheet.sheetIndex}`}
+            width="6"
+            height="6"
+            patternUnits="userSpaceOnUse"
+            patternTransform="rotate(45)"
+          >
             <line x1="0" y1="0" x2="0" y2="6" stroke="#D4C4A0" strokeWidth="0.5" />
           </pattern>
         </defs>
@@ -200,10 +226,18 @@ function SheetCard({
 
 /** Interactive part rect with hover highlight + tooltip + edge banding indicators */
 function PartRect({
-  part, scale, color, isHovered, isFaded, onHover,
+  part,
+  scale,
+  color,
+  isHovered,
+  isFaded,
+  onHover,
 }: {
-  part: CutRect; scale: number; color: string;
-  isHovered: boolean; isFaded: boolean;
+  part: CutRect;
+  scale: number;
+  color: string;
+  isHovered: boolean;
+  isFaded: boolean;
   onHover: (id: string | null) => void;
 }) {
   const x = part.x * scale;
@@ -215,13 +249,12 @@ function PartRect({
   const ebColor = '#FF6B35'; // orange indicator for edge banding
 
   return (
-    <g
-      onMouseEnter={() => onHover(part.partId)}
-      onMouseLeave={() => onHover(null)}
-      style={{ cursor: 'pointer' }}
-    >
+    <g onMouseEnter={() => onHover(part.partId)} onMouseLeave={() => onHover(null)} style={{ cursor: 'pointer' }}>
       <rect
-        x={x} y={y} width={w} height={h}
+        x={x}
+        y={y}
+        width={w}
+        height={h}
         fill={isHovered ? '#FFD700' : color}
         stroke={isHovered ? '#B8860B' : '#555'}
         strokeWidth={isHovered ? 1.5 : 0.5}
@@ -232,19 +265,36 @@ function PartRect({
       {hasEB && (
         <>
           {/* Front edge (bottom of part) */}
-          <line x1={x} y1={y + h} x2={x + w} y2={y + h} stroke={ebColor} strokeWidth={2} opacity={isFaded ? 0.2 : 0.9} />
+          <line
+            x1={x}
+            y1={y + h}
+            x2={x + w}
+            y2={y + h}
+            stroke={ebColor}
+            strokeWidth={2}
+            opacity={isFaded ? 0.2 : 0.9}
+          />
           {is4Edge && (
             <>
               <line x1={x} y1={y} x2={x + w} y2={y} stroke={ebColor} strokeWidth={2} opacity={isFaded ? 0.2 : 0.9} />
               <line x1={x} y1={y} x2={x} y2={y + h} stroke={ebColor} strokeWidth={2} opacity={isFaded ? 0.2 : 0.9} />
-              <line x1={x + w} y1={y} x2={x + w} y2={y + h} stroke={ebColor} strokeWidth={2} opacity={isFaded ? 0.2 : 0.9} />
+              <line
+                x1={x + w}
+                y1={y}
+                x2={x + w}
+                y2={y + h}
+                stroke={ebColor}
+                strokeWidth={2}
+                opacity={isFaded ? 0.2 : 0.9}
+              />
             </>
           )}
         </>
       )}
       {/* Grain direction arrow */}
-      {w > 8 && h > 8 && (
-        part.grainVertical ? (
+      {w > 8 &&
+        h > 8 &&
+        (part.grainVertical ? (
           <g opacity={isFaded ? 0.15 : 0.45} pointerEvents="none">
             <line x1={x + w - 3} y1={y + 4} x2={x + w - 3} y2={y + h - 4} stroke="#444" strokeWidth={0.6} />
             <polygon points={`${x + w - 3},${y + 4} ${x + w - 4.5},${y + 7} ${x + w - 1.5},${y + 7}`} fill="#444" />
@@ -252,10 +302,12 @@ function PartRect({
         ) : (
           <g opacity={isFaded ? 0.15 : 0.45} pointerEvents="none">
             <line x1={x + 4} y1={y + h - 3} x2={x + w - 4} y2={y + h - 3} stroke="#444" strokeWidth={0.6} />
-            <polygon points={`${x + w - 4},${y + h - 3} ${x + w - 7},${y + h - 4.5} ${x + w - 7},${y + h - 1.5}`} fill="#444" />
+            <polygon
+              points={`${x + w - 4},${y + h - 3} ${x + w - 7},${y + h - 4.5} ${x + w - 7},${y + h - 1.5}`}
+              fill="#444"
+            />
           </g>
-        )
-      )}
+        ))}
       <text
         x={x + w / 2}
         y={y + h / 2 - 2}

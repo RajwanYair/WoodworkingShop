@@ -1,26 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { cutSheetToDxf } from '../../src/utils/dxf-export';
-import type { CutSheet, CutRect } from '../../src/engine/types';
-
-const mockPart: CutRect = {
-  partId: 'P01',
-  label: 'Side Panel',
-  x: 10,
-  y: 10,
-  width: 300,
-  length: 600,
-  grainVertical: true,
-};
-
-const mockSheet: CutSheet = {
-  sheetIndex: 0,
-  material: 'melamine-18',
-  thickness: 18,
-  sheetWidth: 2440,
-  sheetLength: 1220,
-  parts: [mockPart],
-  yieldPercent: 95,
-};
+import { mockSheet } from '../helpers';
 
 describe('cutSheetToDxf', () => {
   it('returns a valid DXF string', () => {

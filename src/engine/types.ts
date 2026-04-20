@@ -7,12 +7,12 @@ export type MaterialCategory = 'panel' | 'back' | 'door';
 export interface Material {
   key: string;
   name: { en: string; he: string };
-  thickness: number;       // mm
-  sheetWidth: number;      // mm (standard 1220)
-  sheetLength: number;     // mm (standard 2440)
-  pricePerSheet?: number;  // optional cost estimation
+  thickness: number; // mm
+  sheetWidth: number; // mm (standard 1220)
+  sheetLength: number; // mm (standard 2440)
+  pricePerSheet?: number; // optional cost estimation
   category: MaterialCategory;
-  color: string;           // hex for preview rendering
+  color: string; // hex for preview rendering
 }
 
 export type DoorStyle = 'flat' | 'shaker' | 'glass' | 'none';
@@ -32,16 +32,16 @@ export interface CabinetConfig {
   // Structure
   shelfCount: number;
   shelfSpacing: ShelfSpacing;
-  customShelfPositions: number[];  // mm from bottom, used when shelfSpacing === 'custom'
+  customShelfPositions: number[]; // mm from bottom, used when shelfSpacing === 'custom'
 
   // Material
-  carcassMaterial: string;     // material key
-  backPanelMaterial: string;   // material key
+  carcassMaterial: string; // material key
+  backPanelMaterial: string; // material key
 
   // Doors
   doorCount: 1 | 2;
   doorStyle: DoorStyle;
-  doorReveal: number;  // mm gap around doors (default 3)
+  doorReveal: number; // mm gap around doors (default 3)
 
   // Drawers
   drawerCount: number; // 0–4 drawers at bottom of cabinet
@@ -66,17 +66,17 @@ export interface DerivedDimensions {
   backPanelHeight: number;
   backPanelWidth: number;
   hingesPerDoor: number;
-  hingePositions: number[];  // mm from top of door
+  hingePositions: number[]; // mm from top of door
 }
 
 export interface Part {
   id: string;
   name: { en: string; he: string };
   qty: number;
-  material: string;       // material key
-  thickness: number;      // mm
-  length: number;         // mm (grain direction)
-  width: number;          // mm
+  material: string; // material key
+  thickness: number; // mm
+  length: number; // mm (grain direction)
+  width: number; // mm
   edgeBanding: { en: string; he: string };
 }
 
@@ -90,10 +90,10 @@ export interface HardwareItem {
 export interface CutRect {
   partId: string;
   label: string;
-  length: number;  // mm
-  width: number;   // mm
-  x: number;       // placed x on sheet
-  y: number;       // placed y on sheet
+  length: number; // mm
+  width: number; // mm
+  x: number; // placed x on sheet
+  y: number; // placed y on sheet
   edgeBanding?: string; // edge banding description (e.g. 'Front edge', '4 edges')
   grainVertical: boolean; // true if grain (length) runs along the sheet Y axis
 }
@@ -111,16 +111,11 @@ export interface CutSheet {
 export interface OptimizationResult {
   sheets: CutSheet[];
   totalSheets: number;
-  overallYield: number;     // 0–100 %
-  totalWaste: number;       // mm²
+  overallYield: number; // 0–100 %
+  totalWaste: number; // mm²
 }
 
-export type SmartStrategy =
-  | 'reduce-depth'
-  | 'co-nest-strips'
-  | 'adjust-width'
-  | 'adjust-height'
-  | 'material-swap';
+export type SmartStrategy = 'reduce-depth' | 'co-nest-strips' | 'adjust-width' | 'adjust-height' | 'material-swap';
 
 export interface OptimizationSuggestion {
   originalConfig: CabinetConfig;
@@ -129,10 +124,10 @@ export interface OptimizationSuggestion {
   optimizedResult: OptimizationResult;
   savings: {
     sheetsRemoved: number;
-    yieldImprovement: number;  // percentage points
-    wasteReduced: number;      // mm²
+    yieldImprovement: number; // percentage points
+    wasteReduced: number; // mm²
   };
   strategy: SmartStrategy;
   explanation: { en: string; he: string };
-  score: number;  // lower is better: sheets×1000 - yield
+  score: number; // lower is better: sheets×1000 - yield
 }

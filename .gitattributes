@@ -4,7 +4,10 @@
 * text=auto
 
 # Force LF for all text source files
-*.py text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
 *.md text eol=lf
 *.csv text eol=lf
 *.json text eol=lf
@@ -12,9 +15,6 @@
 *.yaml text eol=lf
 *.html text eol=lf
 *.css text eol=lf
-*.js text eol=lf
-*.toml text eol=lf
-*.cfg text eol=lf
 *.txt text eol=lf
 *.sh text eol=lf
 *.svg text eol=lf

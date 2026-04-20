@@ -1,7 +1,7 @@
 ---
 name: Feature Request
 about: Suggest a new feature or enhancement
-title: "[Feature] "
+title: '[Feature] '
 labels: enhancement
 assignees: ''
 ---
@@ -12,7 +12,7 @@ One-sentence description of the feature.
 
 ## Project / Component
 
-Which plan or component would benefit? (e.g., `shared / pdf_utils.py`, `plan-c / cut sheet`)
+Which area would benefit? (e.g., `engine`, `configurator`, `preview`, `optimizer`)
 
 ## Motivation
 

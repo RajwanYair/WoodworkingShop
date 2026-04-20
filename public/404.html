@@ -11,10 +11,12 @@
       var search = window.location.search;
       var hash = window.location.hash;
       window.location.replace(
-        window.location.origin + '/WoodworkingShop/' +
-        '?p=' + encodeURIComponent(path.replace('/WoodworkingShop/', '')) +
-        (search ? '&' + search.slice(1) : '') +
-        hash
+        window.location.origin +
+          '/WoodworkingShop/' +
+          '?p=' +
+          encodeURIComponent(path.replace('/WoodworkingShop/', '')) +
+          (search ? '&' + search.slice(1) : '') +
+          hash,
       );
     </script>
   </head>

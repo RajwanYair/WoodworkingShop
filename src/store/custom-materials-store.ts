@@ -13,15 +13,11 @@ export const useCustomMaterialsStore = create<CustomMaterialsState>()(
   persist(
     (set) => ({
       materials: [],
-      addMaterial: (m) =>
-        set((s) => ({ materials: [...s.materials, m] })),
-      removeMaterial: (key) =>
-        set((s) => ({ materials: s.materials.filter((m) => m.key !== key) })),
+      addMaterial: (m) => set((s) => ({ materials: [...s.materials, m] })),
+      removeMaterial: (key) => set((s) => ({ materials: s.materials.filter((m) => m.key !== key) })),
       updateMaterial: (key, patch) =>
         set((s) => ({
-          materials: s.materials.map((m) =>
-            m.key === key ? { ...m, ...patch } : m,
-          ),
+          materials: s.materials.map((m) => (m.key === key ? { ...m, ...patch } : m)),
         })),
     }),
     { name: 'custom-materials' },

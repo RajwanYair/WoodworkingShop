@@ -7,6 +7,8 @@
     "types": ["vite/client"],
     "skipLibCheck": true,
 
+    /* Strict type checking */
+    "strict": true,
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,

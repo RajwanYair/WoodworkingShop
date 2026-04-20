@@ -64,7 +64,8 @@ export function CustomMaterialEditor() {
         className="text-sm text-wood-500 dark:text-wood-400 hover:underline"
         aria-expanded={open}
       >
-        {open ? '▾ ' : '▸ '}{t('config.addCustomMaterial')}
+        {open ? '▾ ' : '▸ '}
+        {t('config.addCustomMaterial')}
       </button>
 
       {open && (
@@ -74,9 +75,7 @@ export function CustomMaterialEditor() {
             <input
               type="text"
               value={draft.name[lang]}
-              onChange={(e) =>
-                setDraft({ ...draft, name: { ...draft.name, [lang]: e.target.value } })
-              }
+              onChange={(e) => setDraft({ ...draft, name: { ...draft.name, [lang]: e.target.value } })}
               className="mt-0.5 block w-full rounded border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-900 px-2 py-1 text-sm"
               placeholder={lang === 'he' ? 'שם החומר' : 'Material name'}
             />

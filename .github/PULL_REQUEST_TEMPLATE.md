@@ -4,15 +4,15 @@ Brief description of what this PR changes.
 
 ## Type of Change
 
-- [ ] Plan data / dimensions update
-- [ ] PDF generation code change
-- [ ] Visual / catalog styling change
+- [ ] Feature / enhancement
+- [ ] Bug fix
+- [ ] Refactor / code quality
 - [ ] CI / workflow change
 - [ ] Documentation update
 
 ## Verification
 
-- [ ] All 12 PDFs generate without errors
-- [ ] English and Hebrew layouts render correctly
-- [ ] SVG assets match the updated catalog language
-- [ ] CI workflow passes
+- [ ] `npm run check` passes (typecheck + lint + format + test)
+- [ ] `npm run build` succeeds with 0 warnings
+- [ ] UI tested in browser (if applicable)
+- [ ] Scope lock: web-only, no new unused dependencies

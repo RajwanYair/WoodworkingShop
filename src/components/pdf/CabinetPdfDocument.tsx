@@ -1,10 +1,4 @@
-import {
-  Document,
-  Page,
-  Text,
-  View,
-  StyleSheet,
-} from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 import type {
   CabinetConfig,
   DerivedDimensions,
@@ -31,25 +25,61 @@ const colors = {
 const s = StyleSheet.create({
   page: { padding: 40, fontFamily: 'Helvetica', fontSize: 10, color: colors.text, backgroundColor: colors.white },
   // Cover
-  coverPage: { padding: 40, fontFamily: 'Helvetica', backgroundColor: colors.bg, justifyContent: 'center', alignItems: 'center' },
+  coverPage: {
+    padding: 40,
+    fontFamily: 'Helvetica',
+    backgroundColor: colors.bg,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   coverTitle: { fontSize: 32, fontFamily: 'Helvetica-Bold', color: colors.primary, marginBottom: 8 },
   coverSubtitle: { fontSize: 14, color: colors.secondary, marginBottom: 40 },
   coverMeta: { fontSize: 10, color: colors.muted, marginTop: 4 },
   // Section
-  sectionTitle: { fontSize: 14, fontFamily: 'Helvetica-Bold', color: colors.primary, marginBottom: 8, borderBottomWidth: 1, borderBottomColor: colors.border, paddingBottom: 4 },
+  sectionTitle: {
+    fontSize: 14,
+    fontFamily: 'Helvetica-Bold',
+    color: colors.primary,
+    marginBottom: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+    paddingBottom: 4,
+  },
   // Specs
   specRow: { flexDirection: 'row', borderBottomWidth: 0.5, borderBottomColor: colors.border, paddingVertical: 3 },
   specLabel: { width: '40%', fontFamily: 'Helvetica-Bold', fontSize: 9, color: colors.muted },
   specValue: { width: '60%', fontSize: 10 },
   specGroup: { marginBottom: 16 },
   // Table
-  tableHeader: { flexDirection: 'row', backgroundColor: colors.headerBg, paddingVertical: 4, paddingHorizontal: 2, borderBottomWidth: 1, borderBottomColor: colors.border },
-  tableRow: { flexDirection: 'row', paddingVertical: 3, paddingHorizontal: 2, borderBottomWidth: 0.5, borderBottomColor: colors.border },
+  tableHeader: {
+    flexDirection: 'row',
+    backgroundColor: colors.headerBg,
+    paddingVertical: 4,
+    paddingHorizontal: 2,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  tableRow: {
+    flexDirection: 'row',
+    paddingVertical: 3,
+    paddingHorizontal: 2,
+    borderBottomWidth: 0.5,
+    borderBottomColor: colors.border,
+  },
   tableRowAlt: { backgroundColor: '#FAFAF5' },
   thText: { fontFamily: 'Helvetica-Bold', fontSize: 8, color: colors.primary },
   tdText: { fontSize: 8 },
   // Footer
-  footer: { position: 'absolute', bottom: 20, left: 40, right: 40, flexDirection: 'row', justifyContent: 'space-between', fontSize: 7, color: colors.muted },
+  footer: {
+    position: 'absolute',
+    bottom: 20,
+    left: 40,
+    right: 40,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    fontSize: 7,
+    color: colors.muted,
+  },
   // Summary stat
   statRow: { flexDirection: 'row', gap: 20, marginBottom: 12 },
   statBox: { flex: 1, borderWidth: 1, borderColor: colors.border, borderRadius: 4, padding: 8, alignItems: 'center' },
@@ -60,8 +90,25 @@ const s = StyleSheet.create({
   guideText: { fontSize: 9, color: colors.text, marginBottom: 2, paddingLeft: 4 },
   guideIndent: { fontSize: 9, color: colors.text, marginBottom: 1, paddingLeft: 20 },
   // Assembly
-  assemblyStep: { flexDirection: 'row', marginBottom: 10, paddingBottom: 8, borderBottomWidth: 0.5, borderBottomColor: colors.border },
-  stepNumber: { width: 24, height: 24, borderRadius: 12, backgroundColor: colors.primary, color: colors.white, fontSize: 12, fontFamily: 'Helvetica-Bold', textAlign: 'center', lineHeight: 24, marginRight: 10 },
+  assemblyStep: {
+    flexDirection: 'row',
+    marginBottom: 10,
+    paddingBottom: 8,
+    borderBottomWidth: 0.5,
+    borderBottomColor: colors.border,
+  },
+  stepNumber: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: colors.primary,
+    color: colors.white,
+    fontSize: 12,
+    fontFamily: 'Helvetica-Bold',
+    textAlign: 'center',
+    lineHeight: 24,
+    marginRight: 10,
+  },
   stepContent: { flex: 1 },
   stepTitle: { fontSize: 10, fontFamily: 'Helvetica-Bold', color: colors.text, marginBottom: 2 },
   stepDesc: { fontSize: 9, color: colors.muted },
@@ -105,7 +152,9 @@ export function CabinetPdfDocument({
         <Text style={s.coverSubtitle}>
           {config.width} × {config.height} × {config.depth} mm
         </Text>
-        <Text style={s.coverMeta}>{cMat.name[lang]} — {config.doorCount} door(s)</Text>
+        <Text style={s.coverMeta}>
+          {cMat.name[lang]} — {config.doorCount} door(s)
+        </Text>
         <Text style={s.coverMeta}>Generated {date}</Text>
         <Text style={[s.coverMeta, { marginTop: 60, fontSize: 8 }]}>
           Cabinet Planner — Interactive Woodworking Design Tool
@@ -172,7 +221,9 @@ export function CabinetPdfDocument({
         {/* Header */}
         <View style={s.tableHeader}>
           {['ID', 'Part Name', 'Qty', 'Material', 'Length', 'Width', 'Thick.', 'Edge Band'].map((h, i) => (
-            <Text key={i} style={[s.thText, { width: partsColWidths[i] }]}>{h}</Text>
+            <Text key={i} style={[s.thText, { width: partsColWidths[i] }]}>
+              {h}
+            </Text>
           ))}
         </View>
 
@@ -199,7 +250,9 @@ export function CabinetPdfDocument({
 
         <View style={s.tableHeader}>
           {['Item', 'Qty', 'Unit', ''].map((h, i) => (
-            <Text key={i} style={[s.thText, { width: hwColWidths[i] }]}>{h}</Text>
+            <Text key={i} style={[s.thText, { width: hwColWidths[i] }]}>
+              {h}
+            </Text>
           ))}
         </View>
 
@@ -227,7 +280,16 @@ export function CabinetPdfDocument({
             </Text>
 
             {/* Sheet SVG-like layout using View/Text */}
-            <View style={{ width: sheet.sheetLength * scale, height: sheet.sheetWidth * scale, borderWidth: 1, borderColor: colors.border, backgroundColor: '#F5F0E8', position: 'relative' }}>
+            <View
+              style={{
+                width: sheet.sheetLength * scale,
+                height: sheet.sheetWidth * scale,
+                borderWidth: 1,
+                borderColor: colors.border,
+                backgroundColor: '#F5F0E8',
+                position: 'relative',
+              }}
+            >
               {sheet.parts.map((p, i) => (
                 <View
                   key={i}
@@ -244,9 +306,7 @@ export function CabinetPdfDocument({
                     alignItems: 'center',
                   }}
                 >
-                  <Text style={{ fontSize: Math.min(7, p.width * scale * 0.12), color: '#333' }}>
-                    {p.partId}
-                  </Text>
+                  <Text style={{ fontSize: Math.min(7, p.width * scale * 0.12), color: '#333' }}>{p.partId}</Text>
                   <Text style={{ fontSize: Math.min(5, p.width * scale * 0.08), color: '#666' }}>
                     {p.width}×{p.length}
                   </Text>
@@ -274,15 +334,9 @@ export function CabinetPdfDocument({
 
         <View style={s.specGroup}>
           <Text style={s.guideSubtitle}>Hinge Cup Boring</Text>
-          <Text style={s.guideText}>
-            • Bore 35 mm diameter cups, 12 mm deep on door inside face
-          </Text>
-          <Text style={s.guideText}>
-            • Hinge cup center: 22.5 mm from door edge
-          </Text>
-          <Text style={s.guideText}>
-            • {d.hingesPerDoor} hinge(s) per door — positions from top:
-          </Text>
+          <Text style={s.guideText}>• Bore 35 mm diameter cups, 12 mm deep on door inside face</Text>
+          <Text style={s.guideText}>• Hinge cup center: 22.5 mm from door edge</Text>
+          <Text style={s.guideText}>• {d.hingesPerDoor} hinge(s) per door — positions from top:</Text>
           {d.hingePositions.map((pos, i) => (
             <Text key={i} style={s.guideIndent}>
               Hinge {i + 1}: {pos} mm from top
@@ -292,31 +346,20 @@ export function CabinetPdfDocument({
 
         <View style={s.specGroup}>
           <Text style={s.guideSubtitle}>Mounting Plates</Text>
-          <Text style={s.guideText}>
-            • Fix mounting plates on side panels, aligned with hinge positions
-          </Text>
-          <Text style={s.guideText}>
-            • Plate center: 37 mm from panel front edge
-          </Text>
-          <Text style={s.guideText}>
-            • Pre-drill 3 mm pilot holes for plate screws
-          </Text>
+          <Text style={s.guideText}>• Fix mounting plates on side panels, aligned with hinge positions</Text>
+          <Text style={s.guideText}>• Plate center: 37 mm from panel front edge</Text>
+          <Text style={s.guideText}>• Pre-drill 3 mm pilot holes for plate screws</Text>
         </View>
 
         <View style={s.specGroup}>
           <Text style={s.guideSubtitle}>Shelf Pin Holes</Text>
+          <Text style={s.guideText}>• Drill 5 mm holes, 10 mm deep, on both side panels (inner face)</Text>
           <Text style={s.guideText}>
-            • Drill 5 mm holes, 10 mm deep, on both side panels (inner face)
+            • Two columns per side: 37 mm and {d.internalWidth > 400 ? d.shelfDepth - 37 : Math.round(d.shelfDepth / 2)}{' '}
+            mm from front edge
           </Text>
-          <Text style={s.guideText}>
-            • Two columns per side: 37 mm and {d.internalWidth > 400 ? d.shelfDepth - 37 : Math.round(d.shelfDepth / 2)} mm from front edge
-          </Text>
-          <Text style={s.guideText}>
-            • Spacing: 32 mm on-center (system 32 line boring)
-          </Text>
-          <Text style={s.guideText}>
-            • First hole: 37 mm from bottom of internal space
-          </Text>
+          <Text style={s.guideText}>• Spacing: 32 mm on-center (system 32 line boring)</Text>
+          <Text style={s.guideText}>• First hole: 37 mm from bottom of internal space</Text>
           <Text style={s.guideText}>
             • Total rows: {Math.max(1, Math.floor((d.internalHeight - 74) / 32) + 1)} per column
           </Text>
@@ -324,24 +367,17 @@ export function CabinetPdfDocument({
 
         <View style={s.specGroup}>
           <Text style={s.guideSubtitle}>Confirmat / Assembly Screws</Text>
-          <Text style={s.guideText}>
-            • Pre-drill 5 mm through-holes on outer face of top/bottom panels
-          </Text>
-          <Text style={s.guideText}>
-            • Pilot drill 3.5 mm × 40 mm into end-grain of side panels
-          </Text>
-          <Text style={s.guideText}>
-            • Spacing: ~150 mm apart along each joint
-          </Text>
-          <Text style={s.guideText}>
-            • First/last confirmat: ~50 mm from panel edge
-          </Text>
+          <Text style={s.guideText}>• Pre-drill 5 mm through-holes on outer face of top/bottom panels</Text>
+          <Text style={s.guideText}>• Pilot drill 3.5 mm × 40 mm into end-grain of side panels</Text>
+          <Text style={s.guideText}>• Spacing: ~150 mm apart along each joint</Text>
+          <Text style={s.guideText}>• First/last confirmat: ~50 mm from panel edge</Text>
         </View>
 
         <View style={s.specGroup}>
           <Text style={s.guideSubtitle}>Back Panel</Text>
           <Text style={s.guideText}>
-            • {bMat.name[lang]} ({bMat.thickness} mm) — {Math.round(d.backPanelWidth)} × {Math.round(d.backPanelHeight)} mm
+            • {bMat.name[lang]} ({bMat.thickness} mm) — {Math.round(d.backPanelWidth)} × {Math.round(d.backPanelHeight)}{' '}
+            mm
           </Text>
           <Text style={s.guideText}>
             • Fix into 10 × {bMat.thickness} mm rabbet, or staple/nail at ~150 mm intervals
@@ -381,7 +417,9 @@ export function CabinetPdfDocument({
         <Text style={s.guideSubtitle}>Sheet Goods</Text>
         <View style={s.tableHeader}>
           {['Material', 'Size', 'Qty'].map((h, i) => (
-            <Text key={i} style={[s.thText, { width: ['50%', '30%', '20%'][i] }]}>{h}</Text>
+            <Text key={i} style={[s.thText, { width: ['50%', '30%', '20%'][i] }]}>
+              {h}
+            </Text>
           ))}
         </View>
         {sheetSummary(optimization, lang).map((row, i) => (
@@ -395,7 +433,9 @@ export function CabinetPdfDocument({
         <Text style={[s.guideSubtitle, { marginTop: 16 }]}>Hardware</Text>
         <View style={s.tableHeader}>
           {['Item', 'Qty', 'Unit'].map((h, i) => (
-            <Text key={i} style={[s.thText, { width: ['50%', '25%', '25%'][i] }]}>{h}</Text>
+            <Text key={i} style={[s.thText, { width: ['50%', '25%', '25%'][i] }]}>
+              {h}
+            </Text>
           ))}
         </View>
         {hardware.map((hw, i) => (
@@ -409,9 +449,7 @@ export function CabinetPdfDocument({
         {edgeBandingTotal > 0 && (
           <View style={{ marginTop: 16 }}>
             <Text style={s.guideSubtitle}>Edge Banding</Text>
-            <Text style={s.guideText}>
-              Total edge banding required: {(edgeBandingTotal / 1000).toFixed(1)} meters
-            </Text>
+            <Text style={s.guideText}>Total edge banding required: {(edgeBandingTotal / 1000).toFixed(1)} meters</Text>
           </View>
         )}
 
@@ -423,10 +461,16 @@ export function CabinetPdfDocument({
 
 // ─── Helpers ───
 
-interface AssemblyStep { title: string; description: string }
+interface AssemblyStep {
+  title: string;
+  description: string;
+}
 
 function assemblySteps(
-  config: CabinetConfig, d: DerivedDimensions, carcassName: string, backName: string,
+  config: CabinetConfig,
+  d: DerivedDimensions,
+  carcassName: string,
+  backName: string,
 ): AssemblyStep[] {
   const steps: AssemblyStep[] = [
     {
@@ -492,7 +536,11 @@ function assemblySteps(
   return steps;
 }
 
-interface SheetRow { material: string; size: string; qty: number }
+interface SheetRow {
+  material: string;
+  size: string;
+  qty: number;
+}
 
 function sheetSummary(optimization: OptimizationResult, lang: Lang): SheetRow[] {
   const map = new Map<string, SheetRow>();
@@ -535,9 +583,15 @@ function PageFooter() {
 
 /** Exploded-view assembly diagram using positioned Views */
 function ExplodedView({
-  config, dimensions: _dimensions, cMat, bMat,
+  config,
+  dimensions: _dimensions,
+  cMat,
+  bMat,
 }: {
-  config: CabinetConfig; dimensions: DerivedDimensions; cMat: string; bMat: string;
+  config: CabinetConfig;
+  dimensions: DerivedDimensions;
+  cMat: string;
+  bMat: string;
 }) {
   // Scale to fit A4 printable area (~500pt wide, ~650pt tall)
   const maxW = 400;
@@ -555,14 +609,28 @@ function ExplodedView({
   );
 
   const partBox = (
-    top: number, left: number, width: number, height: number,
-    bg: string, label: string, border?: string,
+    top: number,
+    left: number,
+    width: number,
+    height: number,
+    bg: string,
+    label: string,
+    border?: string,
   ) => (
-    <View style={{
-      position: 'absolute', top, left, width, height,
-      backgroundColor: bg, borderWidth: 0.5, borderColor: border ?? '#8B7355',
-      justifyContent: 'center', alignItems: 'center',
-    }}>
+    <View
+      style={{
+        position: 'absolute',
+        top,
+        left,
+        width,
+        height,
+        backgroundColor: bg,
+        borderWidth: 0.5,
+        borderColor: border ?? '#8B7355',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
       <Text style={{ fontSize: 5.5, color: '#333', textAlign: 'center' }}>{label}</Text>
     </View>
   );
@@ -578,56 +646,129 @@ function ExplodedView({
       </Text>
 
       {/* Bottom panel — shifted down from carcass position */}
-      {partBox(baseY + H + gap, baseX + t, W - 2 * t, t, '#DEB887', `Bottom (${config.width - 2 * getMaterial(config.carcassMaterial).thickness}×${config.depth})`)}
+      {partBox(
+        baseY + H + gap,
+        baseX + t,
+        W - 2 * t,
+        t,
+        '#DEB887',
+        `Bottom (${config.width - 2 * getMaterial(config.carcassMaterial).thickness}×${config.depth})`,
+      )}
       {partLabel('① Bottom Panel', baseY + H + gap - 10, baseX + t)}
       {/* Arrow up */}
-      <Text style={{ position: 'absolute', top: baseY + H + gap - 5, left: baseX + W / 2 - 4, fontSize: 10, color: colors.primary }}>↑</Text>
+      <Text
+        style={{
+          position: 'absolute',
+          top: baseY + H + gap - 5,
+          left: baseX + W / 2 - 4,
+          fontSize: 10,
+          color: colors.primary,
+        }}
+      >
+        ↑
+      </Text>
 
       {/* Left side panel */}
       {partBox(baseY, baseX - gap, t, H, '#D2B48C', `Side L`)}
       {partLabel('② Left Side', baseY - 10, baseX - gap)}
-      <Text style={{ position: 'absolute', top: baseY + H / 2 - 5, left: baseX - gap + t + 2, fontSize: 10, color: colors.primary }}>→</Text>
+      <Text
+        style={{
+          position: 'absolute',
+          top: baseY + H / 2 - 5,
+          left: baseX - gap + t + 2,
+          fontSize: 10,
+          color: colors.primary,
+        }}
+      >
+        →
+      </Text>
 
       {/* Right side panel */}
       {partBox(baseY, baseX + W + gap, t, H, '#D2B48C', `Side R`)}
       {partLabel('③ Right Side', baseY - 10, baseX + W + gap)}
-      <Text style={{ position: 'absolute', top: baseY + H / 2 - 5, left: baseX + W + gap - 12, fontSize: 10, color: colors.primary }}>←</Text>
+      <Text
+        style={{
+          position: 'absolute',
+          top: baseY + H / 2 - 5,
+          left: baseX + W + gap - 12,
+          fontSize: 10,
+          color: colors.primary,
+        }}
+      >
+        ←
+      </Text>
 
       {/* Top panel — shifted above carcass position */}
-      {partBox(baseY - gap - t, baseX + t, W - 2 * t, t, '#DEB887', `Top (${config.width - 2 * getMaterial(config.carcassMaterial).thickness}×${config.depth})`)}
+      {partBox(
+        baseY - gap - t,
+        baseX + t,
+        W - 2 * t,
+        t,
+        '#DEB887',
+        `Top (${config.width - 2 * getMaterial(config.carcassMaterial).thickness}×${config.depth})`,
+      )}
       {partLabel('④ Top Panel', baseY - gap - t - 10, baseX + t)}
-      <Text style={{ position: 'absolute', top: baseY - gap + 2, left: baseX + W / 2 - 4, fontSize: 10, color: colors.primary }}>↓</Text>
+      <Text
+        style={{
+          position: 'absolute',
+          top: baseY - gap + 2,
+          left: baseX + W / 2 - 4,
+          fontSize: 10,
+          color: colors.primary,
+        }}
+      >
+        ↓
+      </Text>
 
       {/* Assembled carcass outline (ghost) */}
-      <View style={{
-        position: 'absolute', top: baseY, left: baseX,
-        width: W, height: H,
-        borderWidth: 0.5, borderColor: '#ccc', borderStyle: 'dashed',
-      }} />
+      <View
+        style={{
+          position: 'absolute',
+          top: baseY,
+          left: baseX,
+          width: W,
+          height: H,
+          borderWidth: 0.5,
+          borderColor: '#ccc',
+          borderStyle: 'dashed',
+        }}
+      />
 
       {/* Shelves inside ghost outline */}
-      {config.shelfCount > 0 && Array.from({ length: Math.min(config.shelfCount, 4) }).map((_, i) => {
-        const shelfY = baseY + (H / (config.shelfCount + 1)) * (i + 1);
-        return partBox(shelfY - t / 2, baseX + t + 2, W - 2 * t - 4, t, '#F5DEB3', `Shelf ${i + 1}`);
-      })}
+      {config.shelfCount > 0 &&
+        Array.from({ length: Math.min(config.shelfCount, 4) }).map((_, i) => {
+          const shelfY = baseY + (H / (config.shelfCount + 1)) * (i + 1);
+          return partBox(shelfY - t / 2, baseX + t + 2, W - 2 * t - 4, t, '#F5DEB3', `Shelf ${i + 1}`);
+        })}
 
       {/* Back panel — offset behind */}
       {partBox(baseY + 5, baseX + W + gap * 2.5, D * 0.4, H - 10, '#C8B090', `Back\n${bMat}`)}
       {partLabel('⑤ Back Panel', baseY - 5, baseX + W + gap * 2.5)}
 
       {/* Doors — offset in front */}
-      {config.doorStyle !== 'none' && Array.from({ length: config.doorCount }).map((_, i) => {
-        const doorW = (W / config.doorCount) * 0.9;
-        const doorX = baseX + (W / config.doorCount) * i + (W / config.doorCount) * 0.05;
-        return partBox(baseY + 5 + gap * 2.5, doorX, doorW, H * 0.15, '#E8D5B7', `Door ${i + 1}`);
-      })}
+      {config.doorStyle !== 'none' &&
+        Array.from({ length: config.doorCount }).map((_, i) => {
+          const doorW = (W / config.doorCount) * 0.9;
+          const doorX = baseX + (W / config.doorCount) * i + (W / config.doorCount) * 0.05;
+          return partBox(baseY + 5 + gap * 2.5, doorX, doorW, H * 0.15, '#E8D5B7', `Door ${i + 1}`);
+        })}
       {config.doorStyle !== 'none' && partLabel('⑥ Door(s)', baseY + gap * 2.5 - 5, baseX)}
 
       {/* Dimensions */}
-      <Text style={{ position: 'absolute', top: baseY + H + gap + t + 15, left: baseX, fontSize: 7, color: colors.secondary }}>
+      <Text
+        style={{
+          position: 'absolute',
+          top: baseY + H + gap + t + 15,
+          left: baseX,
+          fontSize: 7,
+          color: colors.secondary,
+        }}
+      >
         {config.width} mm wide × {config.height} mm tall × {config.depth} mm deep
       </Text>
-      <Text style={{ position: 'absolute', top: baseY + H + gap + t + 25, left: baseX, fontSize: 6, color: colors.muted }}>
+      <Text
+        style={{ position: 'absolute', top: baseY + H + gap + t + 25, left: baseX, fontSize: 6, color: colors.muted }}
+      >
         Material: {cMat} | Shelves: {config.shelfCount} | Doors: {config.doorCount}
       </Text>
     </View>

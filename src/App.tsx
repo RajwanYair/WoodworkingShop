@@ -46,9 +46,18 @@ function App() {
       }
       // Tab switching: Alt+1-5
       if (e.altKey && !ctrl) {
-        const tabMap: Record<string, CabinetState['activeTab']> = { '1': 'configurator', '2': 'preview', '3': 'optimizer', '4': 'assembly', '5': 'pdf' };
+        const tabMap: Record<string, CabinetState['activeTab']> = {
+          '1': 'configurator',
+          '2': 'preview',
+          '3': 'optimizer',
+          '4': 'assembly',
+          '5': 'pdf',
+        };
         const tab = tabMap[e.key];
-        if (tab) { e.preventDefault(); useCabinetStore.getState().setActiveTab(tab); }
+        if (tab) {
+          e.preventDefault();
+          useCabinetStore.getState().setActiveTab(tab);
+        }
       }
     };
     window.addEventListener('keydown', handler);
@@ -58,7 +67,10 @@ function App() {
   return (
     <div className={darkMode ? 'dark' : ''}>
       <div className="min-h-screen bg-white dark:bg-wood-900 text-wood-800 dark:text-wood-100">
-        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 bg-wood-500 text-white px-3 py-1 rounded text-sm">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 bg-wood-500 text-white px-3 py-1 rounded text-sm"
+        >
           Skip to content
         </a>
         <Header />

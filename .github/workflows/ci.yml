@@ -35,11 +35,18 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Format check
+        run: npm run format:check
+
       - name: Test
         run: npm test
 
+      - name: Test coverage
+        if: matrix.node-version == 22
+        run: npm run test:coverage
+
       - name: Build
-        run: npx vite build
+        run: npm run build
 
       - name: Upload dist
         if: matrix.node-version == 22

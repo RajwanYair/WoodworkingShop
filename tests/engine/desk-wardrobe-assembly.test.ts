@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { generateAssemblySteps } from '../../src/engine/assembly';
 import { DEFAULT_CONFIG, DESK_DEFAULTS, WARDROBE_DEFAULTS } from '../../src/engine/materials';
 import type { CabinetConfig } from '../../src/engine/types';
+import { expectSequentialSteps, expectBilingualSteps } from '../assertions';
 
 describe('desk assembly', () => {
   const deskCfg: CabinetConfig = { ...DEFAULT_CONFIG, ...DESK_DEFAULTS };
@@ -12,20 +13,15 @@ describe('desk assembly', () => {
   });
 
   it('step numbers are sequential', () => {
-    steps.forEach((s, i) => expect(s.stepNumber).toBe(i + 1));
+    expectSequentialSteps(steps);
   });
 
   it('each step has bilingual title and description', () => {
-    for (const s of steps) {
-      expect(s.title.en).toBeTruthy();
-      expect(s.title.he).toBeTruthy();
-      expect(s.description.en).toBeTruthy();
-      expect(s.description.he).toBeTruthy();
-    }
+    expectBilingualSteps(steps);
   });
 
   it('does NOT include a door step', () => {
-    const doorStep = steps.find(s => s.title.en.toLowerCase().includes('door'));
+    const doorStep = steps.find((s) => s.title.en.toLowerCase().includes('door'));
     expect(doorStep).toBeUndefined();
   });
 });
@@ -39,25 +35,22 @@ describe('wardrobe assembly', () => {
   });
 
   it('step numbers are sequential', () => {
-    steps.forEach((s, i) => expect(s.stepNumber).toBe(i + 1));
+    expectSequentialSteps(steps);
   });
 
   it('includes a door step', () => {
-    const doorStep = steps.find(s => s.title.en.toLowerCase().includes('door'));
+    const doorStep = steps.find((s) => s.title.en.toLowerCase().includes('door'));
     expect(doorStep).toBeDefined();
   });
 
   it('includes a hanging rail step', () => {
-    const railStep = steps.find(s => s.title.en.toLowerCase().includes('hanging') || s.title.en.toLowerCase().includes('rail'));
+    const railStep = steps.find(
+      (s) => s.title.en.toLowerCase().includes('hanging') || s.title.en.toLowerCase().includes('rail'),
+    );
     expect(railStep).toBeDefined();
   });
 
   it('each step has bilingual title and description', () => {
-    for (const s of steps) {
-      expect(s.title.en).toBeTruthy();
-      expect(s.title.he).toBeTruthy();
-      expect(s.description.en).toBeTruthy();
-      expect(s.description.he).toBeTruthy();
-    }
+    expectBilingualSteps(steps);
   });
 });

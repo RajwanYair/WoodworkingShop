@@ -9,7 +9,11 @@ vi.mock('zustand/middleware', async () => {
   };
 });
 
-import { useCustomMaterialsStore, getCustomPanelMaterials, getCustomBackMaterials } from '../../src/store/custom-materials-store';
+import {
+  useCustomMaterialsStore,
+  getCustomPanelMaterials,
+  getCustomBackMaterials,
+} from '../../src/store/custom-materials-store';
 import type { Material } from '../../src/engine/types';
 
 const panelMaterial: Material = {

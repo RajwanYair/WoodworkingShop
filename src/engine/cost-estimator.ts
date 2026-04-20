@@ -81,9 +81,7 @@ export function estimateCost(
   }
 
   // Waste cost — proportional value of wasted material
-  const wastePercent = optimization.sheets.length > 0
-    ? (100 - optimization.overallYield) / 100
-    : 0;
+  const wastePercent = optimization.sheets.length > 0 ? (100 - optimization.overallYield) / 100 : 0;
   const wasteCost = Math.round(totalMaterialCost * wastePercent);
 
   return {

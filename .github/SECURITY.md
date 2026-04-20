@@ -2,9 +2,10 @@
 
 ## Supported Versions
 
-
-![Supported Versions](svg/SECURITY-table-01.svg)
-
+| Version | Supported |
+| ------- | --------- |
+| 2.x     | Yes       |
+| < 2.0   | No        |
 
 ## Reporting a Vulnerability
 
@@ -23,20 +24,18 @@ If you discover a security vulnerability, please follow these steps:
 ### Code Security
 
 - **No Hardcoded Credentials**: Never commit passwords, API keys, or tokens
-- **No Hardcoded Paths**: Use `Path(__file__).parent` for relative paths
 - **Input Validation**: Validate and sanitize all user input
-- **Parameterized Commands**: Never use string concatenation for shell commands
+- **Use GitHub Secrets**: For tokens and sensitive CI variables
 
 ### Dependency Security
 
 - Keep dependencies updated via Dependabot
 - Review security advisories for dependencies
-- Use `pip audit` to check for known vulnerabilities
+- Run `npm audit` to check for known vulnerabilities
 
 ## Security Checklist
 
 - [ ] No hardcoded credentials in code
-- [ ] No hardcoded absolute paths
 - [ ] All user input validated
 - [ ] Dependencies are up-to-date
-- [ ] Code passes `bandit` security linting
+- [ ] `npm audit` reports no critical vulnerabilities

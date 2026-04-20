@@ -12,9 +12,10 @@ Thank you for your interest in contributing to **WoodworkingShop**!
 
 ### Prerequisites
 
-- Python 3.11 or higher
+- Node.js 20 or higher
+- npm 10+
 - Git
-- VS Code (recommended)
+- VS Code (recommended — see `.vscode/extensions.json`)
 
 ### Setup Steps
 
@@ -25,29 +26,37 @@ Thank you for your interest in contributing to **WoodworkingShop**!
    cd WoodworkingShop
    ```
 
-2. Install Python dependencies:
+2. Install dependencies:
 
    ```bash
-   pip install -r requirements.txt
+   npm ci
    ```
 
-3. Generate all 12 PDFs:
+3. Start the dev server:
 
    ```bash
-   python pantry-cabinet-plans/plan-a/generate_plan_a_pdfs.py
-   python pantry-cabinet-plans/plan-b/generate_plan_b_pdfs.py
-   python pantry-cabinet-plans/plan-c/generate_plan_c_pdfs.py
-   python pantry-cabinet-plans/generate_unified_optimized_plans.py
+   npm run dev
+   ```
+
+4. Run the full check suite:
+
+   ```bash
+   npm run check   # typecheck + lint + format check + test
    ```
 
 ## Coding Standards
 
-### Python Style
+### TypeScript
 
-- Follow PEP 8 with 100-character line limit
-- Use type hints for all functions
-- Use `ruff format` for formatting
-- Use `ruff check` for linting
+- Strict mode enabled
+- No unused variables or parameters (enforced by TS + ESLint)
+- Use `type` imports for type-only references (`import type { ... }`)
+
+### Formatting & Linting
+
+- **Prettier** for formatting (`npm run format`)
+- **ESLint** for code quality (`npm run lint`)
+- Both are enforced in CI with zero warnings allowed
 
 ### Commit Messages
 
@@ -64,12 +73,9 @@ Use [Conventional Commits](https://www.conventionalcommits.org/):
 
 1. Create a feature branch from `main`
 2. Make your changes
-3. Ensure all 12 PDFs generate without errors
-4. Open a PR — the CI workflow will verify the build automatically
+3. Run `npm run check` to verify everything passes
+4. Open a PR — CI will verify typecheck, lint, format, test, and build
 
-## Architecture Notes
+## Architecture
 
-- **`pantry-cabinet-plans/shared/pdf_utils.py`** — shared rendering library used by all generators
-- Each plan (`plan-a`, `plan-b`, `plan-c`) has its own generator and markdown
-- The unified generator aggregates all plans into a comparison document
-- SVG assets are hand-authored; PDFs are generated and not committed
+See [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md) for project structure, data flow, and module descriptions.

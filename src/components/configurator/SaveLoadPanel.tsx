@@ -76,7 +76,7 @@ export function SaveLoadPanel() {
         if (isProjectExport(parsed)) {
           loadProject(parsed.cabinets);
           addToast(t('toast.imported'), 'success');
-        // Legacy single-config format
+          // Legacy single-config format
         } else if (isValidConfig(parsed)) {
           setConfig(parsed);
           addToast(t('toast.imported'), 'success');
@@ -95,9 +95,7 @@ export function SaveLoadPanel() {
   return (
     <div className="border border-wood-200 dark:border-wood-700 rounded-lg p-3 space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-xs font-semibold text-wood-700 dark:text-wood-200">
-          {t('saves.title')}
-        </h3>
+        <h3 className="text-xs font-semibold text-wood-700 dark:text-wood-200">{t('saves.title')}</h3>
         <button
           onClick={() => setShowSaved(!showSaved)}
           className="text-xs text-wood-500 hover:text-wood-700 dark:text-wood-400 dark:hover:text-wood-200"
@@ -176,13 +174,7 @@ export function SaveLoadPanel() {
         >
           ↑ {t('saves.import')}
         </button>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".json"
-          className="hidden"
-          onChange={handleFileChange}
-        />
+        <input ref={fileInputRef} type="file" accept=".json" className="hidden" onChange={handleFileChange} />
       </div>
     </div>
   );
@@ -193,9 +185,15 @@ function isValidConfig(obj: unknown): obj is CabinetConfig {
   if (typeof obj !== 'object' || obj === null) return false;
   const c = obj as Record<string, unknown>;
   return (
-    typeof c.width === 'number' && c.width >= 300 && c.width <= 1200 &&
-    typeof c.height === 'number' && c.height >= 300 && c.height <= 2400 &&
-    typeof c.depth === 'number' && c.depth >= 200 && c.depth <= 800 &&
+    typeof c.width === 'number' &&
+    c.width >= 300 &&
+    c.width <= 1200 &&
+    typeof c.height === 'number' &&
+    c.height >= 300 &&
+    c.height <= 2400 &&
+    typeof c.depth === 'number' &&
+    c.depth >= 200 &&
+    c.depth <= 800 &&
     typeof c.shelfCount === 'number' &&
     typeof c.carcassMaterial === 'string' &&
     typeof c.backPanelMaterial === 'string'

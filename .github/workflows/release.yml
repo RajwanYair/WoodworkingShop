@@ -34,29 +34,23 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Typecheck
-        run: npm run typecheck
+      - name: Quality checks
+        run: npm run ci
 
-      - name: Lint
-        run: npm run lint
-
-      - name: Test
-        run: npm test
-
-      - name: Build
-        run: npm run build
-
-      - name: Create dist archive
+      - name: Create dist archive + checksums
         run: |
           cd dist
           tar -czf ../woodworkingshop-dist.tar.gz .
           cd ..
+          sha256sum woodworkingshop-dist.tar.gz > woodworkingshop-dist.tar.gz.sha256
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: woodworkingshop-dist
-          path: woodworkingshop-dist.tar.gz
+          path: |
+            woodworkingshop-dist.tar.gz
+            woodworkingshop-dist.tar.gz.sha256
 
   release:
     name: Create GitHub Release
@@ -81,6 +75,22 @@ jobs:
             echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
           fi
 
+      - name: Extract changelog
+        id: changelog
+        run: |
+          VER="${{ steps.version.outputs.version }}"
+          VER="${VER#v}"
+          # Extract the section for this version from CHANGELOG.md
+          NOTES=$(awk "/^## \\[${VER}\\]/{found=1; next} /^## \\[/{if(found) exit} found{print}" CHANGELOG.md)
+          if [ -z "$NOTES" ]; then
+            NOTES="Release ${VER}"
+          fi
+          {
+            echo "notes<<EOF"
+            echo "$NOTES"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
@@ -88,12 +98,13 @@ jobs:
           name: WoodworkingShop ${{ steps.version.outputs.version }}
           draft: false
           prerelease: false
-          files: woodworkingshop-dist.tar.gz
+          files: |
+            woodworkingshop-dist.tar.gz
+            woodworkingshop-dist.tar.gz.sha256
           body: |
-            ## WoodworkingShop — Cabinet Planner SPA
+            ${{ steps.changelog.outputs.notes }}
 
-            Interactive cabinet planner with bilingual EN/HE support,
-            real-time SVG previews, PDF export, and cut-list optimization.
+            ---
 
             ### Artifacts
             - **woodworkingshop-dist.tar.gz** — Production build of the SPA (deploy to any static host)

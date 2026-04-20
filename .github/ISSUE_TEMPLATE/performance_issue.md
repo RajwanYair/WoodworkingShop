@@ -1,7 +1,7 @@
 ---
 name: Performance Issue
-about: Report a performance problem (slow PDF generation, high memory, etc.)
-title: "[Perf] "
+about: Report a performance problem (slow rendering, large bundle, etc.)
+title: '[Perf] '
 labels: performance
 assignees: ''
 ---
@@ -10,31 +10,29 @@ assignees: ''
 
 Brief description of the performance issue.
 
-## Project / Component
+## Component
 
-Which plan or operation is slow? (e.g., `plan-c / PDF generation`, `shared / draw_cut_sheet`)
+Which area is affected? (e.g., `preview rendering`, `PDF generation`, `optimizer`, `initial load`)
 
 ## Observed Performance
 
-- **Operation:** (e.g., generating Plan A PDFs)
-- **Time taken:** (e.g., 45 seconds)
-- **Expected time:** (e.g., ~5 seconds)
-- **Memory used:** (e.g., 2 GB peak)
+- **Operation:** (e.g., opening cut sheet view with 50+ parts)
+- **Time taken:** (e.g., 3 seconds)
+- **Expected time:** (e.g., < 500ms)
 
-## Profiling Data
+## Browser DevTools Data
 
 <details>
-<summary>Profile output (optional)</summary>
+<summary>Performance timeline / console output (optional)</summary>
 
 ```
-Paste cProfile / line_profiler / memory_profiler output here
+Paste relevant data here
 ```
 
 </details>
 
 ## Environment
 
+- **Browser:** (e.g., Chrome 125, Firefox 128)
 - **OS:** (e.g., Windows 11 / Ubuntu 24.04)
-- **CPU:** (e.g., Intel Core i7-12700K)
-- **RAM:** (e.g., 32 GB)
-- **Storage:** (e.g., NVMe SSD / HDD)
+- **Device:** (e.g., desktop / mobile)

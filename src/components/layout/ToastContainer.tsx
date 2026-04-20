@@ -20,7 +20,9 @@ export function ToastContainer() {
         >
           <span className="font-bold text-base">{icons[t.type]}</span>
           <span className="flex-1">{t.message}</span>
-          <button onClick={() => removeToast(t.id)} className="opacity-70 hover:opacity-100 ml-1" aria-label="Dismiss">✕</button>
+          <button onClick={() => removeToast(t.id)} className="opacity-70 hover:opacity-100 ml-1" aria-label="Dismiss">
+            ✕
+          </button>
         </div>
       ))}
     </div>

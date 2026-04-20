@@ -1,4 +1,5 @@
 import type { CutSheet, CutRect } from '../engine/types';
+import { triggerDownload } from './download';
 
 /**
  * Generate basic G-code for a CNC router to cut parts from a sheet.
@@ -8,12 +9,12 @@ import type { CutSheet, CutRect } from '../engine/types';
  * Parameters are conservative defaults for a typical hobby CNC router.
  */
 export interface GcodeOptions {
-  feedRate: number;      // mm/min XY cutting feed (default 1500)
-  plungeRate: number;    // mm/min Z plunge feed (default 600)
-  safeZ: number;         // mm safe retract height (default 5)
-  cutDepth: number;      // mm total cut depth (material thickness)
-  passDepth: number;     // mm depth per pass (default 3)
-  toolDiameter: number;  // mm router bit diameter (default 6)
+  feedRate: number; // mm/min XY cutting feed (default 1500)
+  plungeRate: number; // mm/min Z plunge feed (default 600)
+  safeZ: number; // mm safe retract height (default 5)
+  cutDepth: number; // mm total cut depth (material thickness)
+  passDepth: number; // mm depth per pass (default 3)
+  toolDiameter: number; // mm router bit diameter (default 6)
 }
 
 const DEFAULTS: GcodeOptions = {
@@ -61,12 +62,7 @@ export function cutSheetToGcode(sheet: CutSheet, opts?: Partial<GcodeOptions>): 
   return lines.join('\n');
 }
 
-function addPartProfile(
-  lines: string[],
-  part: CutRect,
-  opts: GcodeOptions,
-  offset: number,
-) {
+function addPartProfile(lines: string[], part: CutRect, opts: GcodeOptions, offset: number) {
   // Outer profile cut — offset outward from part edges
   const x1 = part.x - offset;
   const y1 = part.y - offset;
@@ -98,13 +94,7 @@ function addPartProfile(
 /** Trigger G-code download for a single sheet */
 export function downloadGcodeForSheet(sheet: CutSheet, filename: string, opts?: Partial<GcodeOptions>) {
   const content = cutSheetToGcode(sheet, opts);
-  const blob = new Blob([content], { type: 'text/plain' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
+  triggerDownload(content, 'text/plain', filename);
 }
 
 /** Download G-code for all sheets as separate files (zipped in a single combined file) */
@@ -114,11 +104,5 @@ export function downloadAllSheetsGcode(sheets: CutSheet[], projectName: string, 
     combined.push(cutSheetToGcode(sheet, opts));
     combined.push(''); // blank line between sheets
   }
-  const blob = new Blob([combined.join('\n')], { type: 'text/plain' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${projectName}-all-sheets.nc`;
-  a.click();
-  URL.revokeObjectURL(url);
+  triggerDownload(combined.join('\n'), 'text/plain', `${projectName}-all-sheets.nc`);
 }

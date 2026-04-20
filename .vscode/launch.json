@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Chrome (Dev)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5173/WoodworkingShop/",
+      "webRoot": "${workspaceFolder}/src",
+      "preLaunchTask": "Dev Server"
+    }
+  ]
+}

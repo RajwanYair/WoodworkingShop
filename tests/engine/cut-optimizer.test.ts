@@ -23,10 +23,7 @@ describe('optimizeCutSheets', () => {
     const result = optimizeCutSheets(parts);
 
     // Count total placed parts across all sheets
-    const placedCount = result.sheets.reduce(
-      (sum, s) => sum + s.parts.length,
-      0,
-    );
+    const placedCount = result.sheets.reduce((sum, s) => sum + s.parts.length, 0);
 
     // Count total individual parts (expand qty)
     const expectedCount = parts.reduce((sum, p) => sum + p.qty, 0);
@@ -38,7 +35,7 @@ describe('optimizeCutSheets', () => {
     const result = optimizeCutSheets(parts);
 
     // Should have sheets for both panel and back material
-    const materials = new Set(result.sheets.map(s => s.material));
+    const materials = new Set(result.sheets.map((s) => s.material));
     expect(materials.size).toBeGreaterThanOrEqual(1);
   });
 

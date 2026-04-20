@@ -16,9 +16,11 @@ export function CostEstimatePanel() {
   // Build segments for bar visualization
   const segments: { label: string; value: number; color: string }[] = [];
   cost.sheetCosts.forEach((sc, i) => {
-    if (sc.subtotal > 0) segments.push({ label: sc.materialName[lang], value: sc.subtotal, color: BAR_COLORS[i % BAR_COLORS.length] });
+    if (sc.subtotal > 0)
+      segments.push({ label: sc.materialName[lang], value: sc.subtotal, color: BAR_COLORS[i % BAR_COLORS.length] });
   });
-  if (cost.edgeBandingCost > 0) segments.push({ label: t('cost.edgeBanding'), value: cost.edgeBandingCost, color: '#D4A574' });
+  if (cost.edgeBandingCost > 0)
+    segments.push({ label: t('cost.edgeBanding'), value: cost.edgeBandingCost, color: '#D4A574' });
   if (cost.hardwareCost > 0) segments.push({ label: t('cost.hardware'), value: cost.hardwareCost, color: '#708090' });
 
   return (
@@ -58,9 +60,7 @@ export function CostEstimatePanel() {
             <span className="text-wood-600 dark:text-wood-300">
               {sc.materialName[lang]} ×{sc.qty}
             </span>
-            <span className="font-medium text-wood-700 dark:text-wood-200">
-              ₪{sc.subtotal}
-            </span>
+            <span className="font-medium text-wood-700 dark:text-wood-200">₪{sc.subtotal}</span>
           </div>
         ))}
       </div>
@@ -84,9 +84,7 @@ export function CostEstimatePanel() {
         <div className="border-t border-wood-100 dark:border-wood-800 pt-2">
           <div className="flex justify-between text-xs">
             <span className="text-wood-500 dark:text-wood-400">{t('cost.waste')}</span>
-            <span className="font-medium text-amber-600 dark:text-amber-400">
-              ₪{cost.wasteCost}
-            </span>
+            <span className="font-medium text-amber-600 dark:text-amber-400">₪{cost.wasteCost}</span>
           </div>
         </div>
       )}
@@ -106,16 +104,10 @@ export function CostEstimatePanel() {
       {/* Total */}
       <div className="border-t border-wood-300 dark:border-wood-600 pt-2">
         <div className="flex justify-between">
-          <span className="text-sm font-bold text-wood-700 dark:text-wood-200">
-            {t('cost.total')}
-          </span>
-          <span className="text-sm font-bold text-green-700 dark:text-green-400">
-            ₪{cost.totalCost}
-          </span>
+          <span className="text-sm font-bold text-wood-700 dark:text-wood-200">{t('cost.total')}</span>
+          <span className="text-sm font-bold text-green-700 dark:text-green-400">₪{cost.totalCost}</span>
         </div>
-        <p className="text-[10px] text-wood-400 dark:text-wood-500 mt-1">
-          {t('cost.disclaimer')}
-        </p>
+        <p className="text-[10px] text-wood-400 dark:text-wood-500 mt-1">{t('cost.disclaimer')}</p>
       </div>
     </div>
   );

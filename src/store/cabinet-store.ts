@@ -111,7 +111,14 @@ export const useCabinetStore = create<CabinetState>((set) => {
         );
         pushConfigToUrl(cabinets[state.activeCabinetIndex].config);
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
-        return { cabinets, ...deriveProject(cabinets, state.activeCabinetIndex), _past: past, _future: [], canUndo: true, canRedo: false };
+        return {
+          cabinets,
+          ...deriveProject(cabinets, state.activeCabinetIndex),
+          _past: past,
+          _future: [],
+          canUndo: true,
+          canRedo: false,
+        };
       }),
 
     resetConfig: () =>
@@ -124,7 +131,10 @@ export const useCabinetStore = create<CabinetState>((set) => {
         return {
           cabinets,
           ...deriveProject(cabinets, state.activeCabinetIndex),
-          _past: past, _future: [], canUndo: true, canRedo: false,
+          _past: past,
+          _future: [],
+          canUndo: true,
+          canRedo: false,
         };
       }),
 
@@ -172,9 +182,13 @@ export const useCabinetStore = create<CabinetState>((set) => {
         const idx = cabinets.length - 1;
         pushConfigToUrl(cabinets[idx].config);
         return {
-          cabinets, activeCabinetIndex: idx,
+          cabinets,
+          activeCabinetIndex: idx,
           ...deriveProject(cabinets, idx),
-          _past: past, _future: [], canUndo: true, canRedo: false,
+          _past: past,
+          _future: [],
+          canUndo: true,
+          canRedo: false,
         };
       }),
 
@@ -186,9 +200,13 @@ export const useCabinetStore = create<CabinetState>((set) => {
         const idx = Math.min(state.activeCabinetIndex, cabinets.length - 1);
         pushConfigToUrl(cabinets[idx].config);
         return {
-          cabinets, activeCabinetIndex: idx,
+          cabinets,
+          activeCabinetIndex: idx,
           ...deriveProject(cabinets, idx),
-          _past: past, _future: [], canUndo: true, canRedo: false,
+          _past: past,
+          _future: [],
+          canUndo: true,
+          canRedo: false,
         };
       }),
 
@@ -210,7 +228,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
 
     loadProject: (cabinets) =>
       set((state) => {
-        pushHistory(state);
+        const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         const migrated = cabinets.map((c) => ({
           ...c,
           config: { ...DEFAULT_CONFIG, ...c.config },
@@ -219,12 +237,16 @@ export const useCabinetStore = create<CabinetState>((set) => {
           cabinets: migrated,
           activeCabinetIndex: 0,
           ...deriveProject(migrated, 0),
+          _past: past,
+          _future: [],
+          canUndo: true,
+          canRedo: false,
         };
       }),
 
     setActiveTab: (tab) => set({ activeTab: tab }),
     toggleDarkMode: () => set((s) => ({ darkMode: !s.darkMode })),
     toggleColorBlindMode: () => set((s) => ({ colorBlindMode: !s.colorBlindMode })),
-    toggleUnits: () => set((s) => ({ units: s.units === 'metric' ? 'imperial' : 'metric' as UnitSystem })),
+    toggleUnits: () => set((s) => ({ units: s.units === 'metric' ? 'imperial' : ('metric' as UnitSystem) })),
   };
 });

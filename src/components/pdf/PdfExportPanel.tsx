@@ -42,12 +42,10 @@ export function PdfExportPanel() {
   return (
     <div className="space-y-6">
       <div className="text-center py-8 space-y-4">
-        <h2 className="text-lg font-semibold text-wood-700 dark:text-wood-200">
-          {t('pdf.title')}
-        </h2>
+        <h2 className="text-lg font-semibold text-wood-700 dark:text-wood-200">{t('pdf.title')}</h2>
         <p className="text-sm text-wood-400 dark:text-wood-500 max-w-md mx-auto">
-          Generate a complete PDF build plan including specifications, parts list,
-          hardware list, and cut sheet diagrams.
+          Generate a complete PDF build plan including specifications, parts list, hardware list, and cut sheet
+          diagrams.
         </p>
         <button
           onClick={handleGenerate}

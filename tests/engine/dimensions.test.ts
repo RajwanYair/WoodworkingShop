@@ -11,10 +11,10 @@ describe('computeDimensions', () => {
   it('computes internal dimensions from default config', () => {
     const d = computeDimensions(DEFAULT_CONFIG);
     // plywood-17: thickness = 17
-    expect(d.internalWidth).toBe(1000 - 2 * 17);   // 966
-    expect(d.internalHeight).toBe(2000 - 2 * 17);  // 1966
-    expect(d.shelfDepth).toBe(600 - 20);            // 580
-    expect(d.shelfWidth).toBe(966 - 2);             // 964
+    expect(d.internalWidth).toBe(1000 - 2 * 17); // 966
+    expect(d.internalHeight).toBe(2000 - 2 * 17); // 1966
+    expect(d.shelfDepth).toBe(600 - 20); // 580
+    expect(d.shelfWidth).toBe(966 - 2); // 964
   });
 
   it('computes door dimensions for double doors', () => {
@@ -40,7 +40,7 @@ describe('computeDimensions', () => {
   it('responds to material thickness changes', () => {
     const cfg = { ...DEFAULT_CONFIG, carcassMaterial: 'melamine-16' };
     const d = computeDimensions(cfg);
-    expect(d.internalWidth).toBe(1000 - 2 * 16);  // 968
+    expect(d.internalWidth).toBe(1000 - 2 * 16); // 968
     expect(d.internalHeight).toBe(2000 - 2 * 16); // 1968
   });
 });
@@ -92,8 +92,8 @@ describe('computeEqualShelfPositions', () => {
     const positions = computeEqualShelfPositions(1966, 4);
     expect(positions).toHaveLength(4);
     // Spacing = 1966/5 = 393.2
-    expect(positions[0]).toBe(Math.round(1966 / 5 * 1));
-    expect(positions[3]).toBe(Math.round(1966 / 5 * 4));
+    expect(positions[0]).toBe(Math.round((1966 / 5) * 1));
+    expect(positions[3]).toBe(Math.round((1966 / 5) * 4));
   });
 
   it('returns empty for 0 shelves', () => {

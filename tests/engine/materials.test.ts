@@ -54,12 +54,8 @@ describe('materials', () => {
     });
   });
 
-  describe('all materials have bilingual names', () => {
-    for (const m of MATERIALS) {
-      it(`${m.key} has en and he names`, () => {
-        expect(m.name.en).toBeTruthy();
-        expect(m.name.he).toBeTruthy();
-      });
-    }
+  it.each(MATERIALS.map((m) => [m.key, m]))('%s has bilingual name', (_key, m) => {
+    expect(m.name.en).toBeTruthy();
+    expect(m.name.he).toBeTruthy();
   });
 });
