@@ -40,10 +40,12 @@ export function CabinetPreview() {
   return (
     <div className="space-y-4">
       {/* View tab bar */}
-      <div className="flex flex-wrap gap-1 items-center">
+      <div className="flex flex-wrap gap-1 items-center" role="tablist" aria-label="Cabinet view selector">
         {views.map((v) => (
           <button
             key={v.id}
+            role="tab"
+            aria-selected={activeView === v.id}
             onClick={() => setActiveView(v.id)}
             className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
               activeView === v.id
@@ -190,6 +192,8 @@ function ViewBox({ w, h, children }: { w: number; h: number; children: React.Rea
   return (
     <svg
       viewBox={`0 0 ${w} ${h}`}
+      role="img"
+      aria-label="Cabinet drawing"
       className="w-full max-w-lg border border-wood-200 dark:border-wood-700 rounded bg-white dark:bg-wood-800"
       style={{ maxHeight: 500 }}
     >

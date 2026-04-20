@@ -16,10 +16,13 @@ function App() {
   return (
     <div className={darkMode ? 'dark' : ''}>
       <div className="min-h-screen bg-white dark:bg-wood-900 text-wood-800 dark:text-wood-100">
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 bg-wood-500 text-white px-3 py-1 rounded text-sm">
+          Skip to content
+        </a>
         <Header />
         <div className="flex">
           <Sidebar />
-          <main className="flex-1 p-6">
+          <main id="main-content" className="flex-1 p-6" role="main" aria-label="Cabinet planner workspace">
             {activeTab === 'configurator' && <ConfiguratorPanel />}
             {activeTab === 'preview' && <CabinetPreview />}
             {activeTab === 'optimizer' && (

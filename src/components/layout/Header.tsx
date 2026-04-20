@@ -24,11 +24,12 @@ export function Header() {
       </div>
 
       {/* Tab nav */}
-      <nav className="flex gap-1">
+      <nav className="flex gap-1" aria-label="Main navigation">
         {tabs.map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
+            aria-current={activeTab === tab ? 'page' : undefined}
             className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
               activeTab === tab
                 ? 'bg-wood-500 text-white'

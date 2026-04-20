@@ -29,6 +29,10 @@ export function DimensionSliders() {
               max={max}
               step={10}
               value={config[key]}
+              aria-label={`${t(`config.${key}`)} (${t('config.unit')})`}
+              aria-valuenow={config[key]}
+              aria-valuemin={min}
+              aria-valuemax={max}
               onChange={(e) => setConfig({ [key]: Number(e.target.value) })}
               className="flex-1 accent-primary"
             />

@@ -4,7 +4,7 @@ export function Sidebar() {
   const { parts, hardware, optimization } = useCabinetStore();
 
   return (
-    <aside className="w-64 bg-wood-50 dark:bg-wood-900 border-e border-wood-200 dark:border-wood-800 p-4 hidden lg:block overflow-y-auto">
+    <aside className="w-64 bg-wood-50 dark:bg-wood-900 border-e border-wood-200 dark:border-wood-800 p-4 hidden lg:block overflow-y-auto" role="complementary" aria-label="Cabinet summary">
       <h2 className="text-sm font-semibold text-wood-700 dark:text-wood-200 uppercase tracking-wide mb-3">
         Summary
       </h2>
