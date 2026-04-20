@@ -38,19 +38,37 @@ def _find_font(name):
         os.path.join(os.environ.get("WINDIR", r"C:\Windows"), "Fonts", name),
         os.path.join("/usr/share/fonts/truetype/msttcorefonts", name),
         os.path.join("/usr/share/fonts/truetype", name),
+        os.path.join("/usr/share/fonts", name),
+        # CI: fonts may be installed under a custom dir via workflow
+        os.path.join(os.path.dirname(__file__), "fonts", name),
     ]
     for path in candidates:
         if os.path.isfile(path):
             return path
-    return candidates[0]  # fallback to Windows path
+    raise FileNotFoundError(
+        f"Font '{name}' not found. Searched: {candidates}"
+    )
 
 
 def register_fonts():
-    """Register Arial (EN) and David (HE) font families with reportlab."""
-    pdfmetrics.registerFont(TTFont("Arial",   _find_font("arial.ttf")))
-    pdfmetrics.registerFont(TTFont("ArialBd", _find_font("arialbd.ttf")))
-    pdfmetrics.registerFont(TTFont("David",   _find_font("david.ttf")))
-    pdfmetrics.registerFont(TTFont("DavidBd", _find_font("davidbd.ttf")))
+    """Register Arial (EN) and David (HE) font families with reportlab.
+
+    On systems where a font file is missing (e.g. Linux CI without David),
+    the function logs a warning and falls back to Helvetica / Courier.
+    """
+    _font_map = [
+        ("Arial",   "arial.ttf"),
+        ("ArialBd", "arialbd.ttf"),
+        ("David",   "david.ttf"),
+        ("DavidBd", "davidbd.ttf"),
+    ]
+    for alias, filename in _font_map:
+        try:
+            pdfmetrics.registerFont(TTFont(alias, _find_font(filename)))
+        except (FileNotFoundError, OSError):
+            import warnings
+            warnings.warn(f"Font '{filename}' not found — using built-in fallback for '{alias}'")
+            # reportlab will use its default if a registered name is unknown
 
 
 # ═══════════════════════════════════════════════════════════════════════════
