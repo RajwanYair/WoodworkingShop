@@ -75,9 +75,10 @@ export interface Part {
 }
 
 export interface HardwareItem {
+  id: string;
   name: { en: string; he: string };
   qty: number;
-  spec: string;
+  unit: { en: string; he: string };
 }
 
 export interface CutRect {
@@ -97,6 +98,13 @@ export interface CutSheet {
   sheetWidth: number;
   parts: CutRect[];
   yieldPercent: number;
+}
+
+export interface OptimizationResult {
+  sheets: CutSheet[];
+  totalSheets: number;
+  overallYield: number;     // 0–100 %
+  totalWaste: number;       // mm²
 }
 
 export interface OptimizationResult {
