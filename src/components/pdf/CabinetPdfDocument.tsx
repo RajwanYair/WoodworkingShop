@@ -55,6 +55,16 @@ const s = StyleSheet.create({
   statBox: { flex: 1, borderWidth: 1, borderColor: colors.border, borderRadius: 4, padding: 8, alignItems: 'center' },
   statValue: { fontSize: 16, fontFamily: 'Helvetica-Bold', color: colors.primary },
   statLabel: { fontSize: 7, color: colors.muted, marginTop: 2 },
+  // Guide
+  guideSubtitle: { fontSize: 11, fontFamily: 'Helvetica-Bold', color: colors.secondary, marginBottom: 4, marginTop: 4 },
+  guideText: { fontSize: 9, color: colors.text, marginBottom: 2, paddingLeft: 4 },
+  guideIndent: { fontSize: 9, color: colors.text, marginBottom: 1, paddingLeft: 20 },
+  // Assembly
+  assemblyStep: { flexDirection: 'row', marginBottom: 10, paddingBottom: 8, borderBottomWidth: 0.5, borderBottomColor: colors.border },
+  stepNumber: { width: 24, height: 24, borderRadius: 12, backgroundColor: colors.primary, color: colors.white, fontSize: 12, fontFamily: 'Helvetica-Bold', textAlign: 'center', lineHeight: 24, marginRight: 10 },
+  stepContent: { flex: 1 },
+  stepTitle: { fontSize: 10, fontFamily: 'Helvetica-Bold', color: colors.text, marginBottom: 2 },
+  stepDesc: { fontSize: 9, color: colors.muted },
 });
 
 // ─── Column width definitions ───
@@ -257,8 +267,244 @@ export function CabinetPdfDocument({
           </Page>
         );
       })}
+
+      {/* ── Drilling & Boring Guide ── */}
+      <Page size="A4" style={s.page}>
+        <Text style={s.sectionTitle}>Drilling &amp; Boring Guide</Text>
+
+        <View style={s.specGroup}>
+          <Text style={s.guideSubtitle}>Hinge Cup Boring</Text>
+          <Text style={s.guideText}>
+            • Bore 35 mm diameter cups, 12 mm deep on door inside face
+          </Text>
+          <Text style={s.guideText}>
+            • Hinge cup center: 22.5 mm from door edge
+          </Text>
+          <Text style={s.guideText}>
+            • {d.hingesPerDoor} hinge(s) per door — positions from top:
+          </Text>
+          {d.hingePositions.map((pos, i) => (
+            <Text key={i} style={s.guideIndent}>
+              Hinge {i + 1}: {pos} mm from top
+            </Text>
+          ))}
+        </View>
+
+        <View style={s.specGroup}>
+          <Text style={s.guideSubtitle}>Mounting Plates</Text>
+          <Text style={s.guideText}>
+            • Fix mounting plates on side panels, aligned with hinge positions
+          </Text>
+          <Text style={s.guideText}>
+            • Plate center: 37 mm from panel front edge
+          </Text>
+          <Text style={s.guideText}>
+            • Pre-drill 3 mm pilot holes for plate screws
+          </Text>
+        </View>
+
+        <View style={s.specGroup}>
+          <Text style={s.guideSubtitle}>Shelf Pin Holes</Text>
+          <Text style={s.guideText}>
+            • Drill 5 mm holes, 10 mm deep, on both side panels (inner face)
+          </Text>
+          <Text style={s.guideText}>
+            • Two columns per side: 37 mm and {d.internalWidth > 400 ? d.shelfDepth - 37 : Math.round(d.shelfDepth / 2)} mm from front edge
+          </Text>
+          <Text style={s.guideText}>
+            • Spacing: 32 mm on-center (system 32 line boring)
+          </Text>
+          <Text style={s.guideText}>
+            • First hole: 37 mm from bottom of internal space
+          </Text>
+          <Text style={s.guideText}>
+            • Total rows: {Math.max(1, Math.floor((d.internalHeight - 74) / 32) + 1)} per column
+          </Text>
+        </View>
+
+        <View style={s.specGroup}>
+          <Text style={s.guideSubtitle}>Confirmat / Assembly Screws</Text>
+          <Text style={s.guideText}>
+            • Pre-drill 5 mm through-holes on outer face of top/bottom panels
+          </Text>
+          <Text style={s.guideText}>
+            • Pilot drill 3.5 mm × 40 mm into end-grain of side panels
+          </Text>
+          <Text style={s.guideText}>
+            • Spacing: ~150 mm apart along each joint
+          </Text>
+          <Text style={s.guideText}>
+            • First/last confirmat: ~50 mm from panel edge
+          </Text>
+        </View>
+
+        <View style={s.specGroup}>
+          <Text style={s.guideSubtitle}>Back Panel</Text>
+          <Text style={s.guideText}>
+            • {bMat.name[lang]} ({bMat.thickness} mm) — {Math.round(d.backPanelWidth)} × {Math.round(d.backPanelHeight)} mm
+          </Text>
+          <Text style={s.guideText}>
+            • Fix into 10 × {bMat.thickness} mm rabbet, or staple/nail at ~150 mm intervals
+          </Text>
+        </View>
+
+        <PageFooter />
+      </Page>
+
+      {/* ── Assembly Sequence ── */}
+      <Page size="A4" style={s.page}>
+        <Text style={s.sectionTitle}>Assembly Sequence</Text>
+
+        {assemblySteps(config, d, cMat.name[lang], bMat.name[lang]).map((step, i) => (
+          <View key={i} style={s.assemblyStep} wrap={false}>
+            <Text style={s.stepNumber}>{i + 1}</Text>
+            <View style={s.stepContent}>
+              <Text style={s.stepTitle}>{step.title}</Text>
+              <Text style={s.stepDesc}>{step.description}</Text>
+            </View>
+          </View>
+        ))}
+
+        <PageFooter />
+      </Page>
+
+      {/* ── Shopping List ── */}
+      <Page size="A4" style={s.page}>
+        <Text style={s.sectionTitle}>Shopping List</Text>
+
+        <Text style={s.guideSubtitle}>Sheet Goods</Text>
+        <View style={s.tableHeader}>
+          {['Material', 'Size', 'Qty'].map((h, i) => (
+            <Text key={i} style={[s.thText, { width: ['50%', '30%', '20%'][i] }]}>{h}</Text>
+          ))}
+        </View>
+        {sheetSummary(optimization, lang).map((row, i) => (
+          <View key={i} style={[s.tableRow, i % 2 === 1 ? s.tableRowAlt : {}]} wrap={false}>
+            <Text style={[s.tdText, { width: '50%' }]}>{row.material}</Text>
+            <Text style={[s.tdText, { width: '30%' }]}>{row.size}</Text>
+            <Text style={[s.tdText, { width: '20%' }]}>{row.qty}</Text>
+          </View>
+        ))}
+
+        <Text style={[s.guideSubtitle, { marginTop: 16 }]}>Hardware</Text>
+        <View style={s.tableHeader}>
+          {['Item', 'Qty', 'Unit'].map((h, i) => (
+            <Text key={i} style={[s.thText, { width: ['50%', '25%', '25%'][i] }]}>{h}</Text>
+          ))}
+        </View>
+        {hardware.map((hw, i) => (
+          <View key={i} style={[s.tableRow, i % 2 === 1 ? s.tableRowAlt : {}]} wrap={false}>
+            <Text style={[s.tdText, { width: '50%' }]}>{hw.name[lang]}</Text>
+            <Text style={[s.tdText, { width: '25%' }]}>{hw.qty}</Text>
+            <Text style={[s.tdText, { width: '25%' }]}>{hw.unit[lang]}</Text>
+          </View>
+        ))}
+
+        {edgeBandingTotal > 0 && (
+          <View style={{ marginTop: 16 }}>
+            <Text style={s.guideSubtitle}>Edge Banding</Text>
+            <Text style={s.guideText}>
+              Total edge banding required: {(edgeBandingTotal / 1000).toFixed(1)} meters
+            </Text>
+          </View>
+        )}
+
+        <PageFooter />
+      </Page>
     </Document>
   );
+}
+
+// ─── Helpers ───
+
+interface AssemblyStep { title: string; description: string }
+
+function assemblySteps(
+  config: CabinetConfig, d: DerivedDimensions, carcassName: string, backName: string,
+): AssemblyStep[] {
+  const steps: AssemblyStep[] = [
+    {
+      title: 'Prepare all panels',
+      description: `Cut all parts per the cut list. Sand faces to 180 grit. Apply edge banding (${config.edgeBanding}) to designated edges.`,
+    },
+    {
+      title: 'Drill shelf pin holes',
+      description: `Drill 5 mm × 10 mm holes on both side panels (inner face), 32 mm apart, two columns per side. Use a jig for consistency.`,
+    },
+    {
+      title: 'Pre-drill confirmat holes',
+      description: `Drill 5 mm through-holes on top and bottom panels. Drill 3.5 mm × 40 mm pilot holes into side panel end-grain. Mark positions ~50 mm from edges, ~150 mm apart.`,
+    },
+    {
+      title: 'Assemble the carcass box',
+      description: `Join side panels to top and bottom with confirmat screws. Use ${carcassName} panels. Internal width: ${d.internalWidth} mm. Verify square with diagonal measurements.`,
+    },
+  ];
+
+  if (config.height > 1200) {
+    steps.push({
+      title: 'Install fixed shelf',
+      description: `Install the fixed structural shelf at mid-height. This shelf is required for cabinets taller than 1200 mm for rigidity. Secure with confirmats.`,
+    });
+  }
+
+  steps.push(
+    {
+      title: 'Attach back panel',
+      description: `Fit the ${backName} back panel (${Math.round(d.backPanelWidth)} × ${Math.round(d.backPanelHeight)} mm) into the rabbet or staple at ~150 mm intervals. Ensure cabinet remains square.`,
+    },
+    {
+      title: 'Bore hinge cups on doors',
+      description: `Bore 35 mm cups, 12 mm deep, center 22.5 mm from door edge. ${d.hingesPerDoor} hinges per door at positions: ${d.hingePositions.join(', ')} mm from top.`,
+    },
+    {
+      title: 'Mount hinge plates on carcass',
+      description: `Screw mounting plates on side panels aligned with hinge positions. Plate center: 37 mm from front edge. Pre-drill pilot holes.`,
+    },
+    {
+      title: 'Hang doors and adjust',
+      description: `Clip hinges into mounting plates. Adjust 3-way (in/out, up/down, lateral) until doors are flush with ${config.doorReveal} mm reveal all around.`,
+    },
+    {
+      title: 'Install shelf pins and shelves',
+      description: `Insert shelf pins at desired heights. Place ${config.shelfCount} adjustable shelf/shelves (${d.shelfWidth} × ${d.shelfDepth} mm).`,
+    },
+  );
+
+  if (config.handleStyle !== 'none') {
+    steps.push({
+      title: 'Install handles',
+      description: `Mount ${config.handleStyle} handles on door(s). For bar handles, use 128 mm or 160 mm center-to-center. Pre-drill before fastening.`,
+    });
+  }
+
+  steps.push({
+    title: 'Final checks',
+    description: `Verify all doors open/close smoothly. Check shelf levels. Tighten any loose confirmats. Clean sawdust.`,
+  });
+
+  return steps;
+}
+
+interface SheetRow { material: string; size: string; qty: number }
+
+function sheetSummary(optimization: OptimizationResult, lang: Lang): SheetRow[] {
+  const map = new Map<string, SheetRow>();
+  for (const sheet of optimization.sheets) {
+    const mat = getMaterial(sheet.material);
+    const key = `${sheet.material}-${sheet.thickness}`;
+    const existing = map.get(key);
+    if (existing) {
+      existing.qty++;
+    } else {
+      map.set(key, {
+        material: `${mat.name[lang]} (${sheet.thickness} mm)`,
+        size: `${mat.sheetWidth} × ${mat.sheetLength} mm`,
+        qty: 1,
+      });
+    }
+  }
+  return Array.from(map.values());
 }
 
 // ─── Sub-components ───
