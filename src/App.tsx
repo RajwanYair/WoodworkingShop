@@ -9,7 +9,7 @@ import { OptimizerView } from './components/optimizer/OptimizerView';
 import { SmartOptimizerPanel } from './components/optimizer/SmartOptimizerPanel';
 import { PartsTable, HardwareTable } from './components/optimizer/Tables';
 import { PdfExportPanel } from './components/pdf/PdfExportPanel';
-import { useCabinetStore } from './store/cabinet-store';
+import { useCabinetStore, type CabinetState } from './store/cabinet-store';
 
 function App() {
   const { activeTab, darkMode } = useCabinetStore();
@@ -17,15 +17,31 @@ function App() {
   // Keyboard shortcuts
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key === 'z') {
+      const ctrl = e.ctrlKey || e.metaKey;
+
+      // Undo: Ctrl+Z
+      if (ctrl && !e.shiftKey && e.key === 'z') {
         e.preventDefault();
         useCabinetStore.getState().undo();
-      } else if (
-        (e.ctrlKey || e.metaKey) &&
-        (e.key === 'y' || (e.shiftKey && e.key === 'z') || (e.shiftKey && e.key === 'Z'))
-      ) {
+        return;
+      }
+      // Redo: Ctrl+Y or Ctrl+Shift+Z
+      if (ctrl && (e.key === 'y' || (e.shiftKey && (e.key === 'z' || e.key === 'Z')))) {
         e.preventDefault();
         useCabinetStore.getState().redo();
+        return;
+      }
+      // Print: Ctrl+P
+      if (ctrl && e.key === 'p') {
+        e.preventDefault();
+        window.print();
+        return;
+      }
+      // Tab switching: Alt+1-4
+      if (e.altKey && !ctrl) {
+        const tabMap: Record<string, CabinetState['activeTab']> = { '1': 'configurator', '2': 'preview', '3': 'optimizer', '4': 'pdf' };
+        const tab = tabMap[e.key];
+        if (tab) { e.preventDefault(); useCabinetStore.getState().setActiveTab(tab); }
       }
     };
     window.addEventListener('keydown', handler);

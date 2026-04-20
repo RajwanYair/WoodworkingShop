@@ -34,11 +34,12 @@ export function Header() {
 
       {/* Tab nav — horizontally scrollable on mobile */}
       <nav className="flex gap-1 overflow-x-auto -mx-3 px-3 sm:mx-0 sm:px-0 scrollbar-none" aria-label="Main navigation">
-        {tabs.map((tab) => (
+        {tabs.map((tab, i) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
             aria-current={activeTab === tab ? 'page' : undefined}
+            title={`${t(`tabs.${tab}`)} (Alt+${i + 1})`}
             className={`px-3 py-1.5 rounded text-sm font-medium whitespace-nowrap transition-colors ${
               activeTab === tab
                 ? 'bg-wood-500 text-white'
