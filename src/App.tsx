@@ -3,6 +3,7 @@ import './index.css';
 import { Header } from './components/layout/Header';
 import { Sidebar } from './components/layout/Sidebar';
 import { ConfiguratorPanel } from './components/configurator/ConfiguratorPanel';
+import { CabinetPreview } from './components/preview/CabinetPreview';
 import { useCabinetStore } from './store/cabinet-store';
 
 function App() {
@@ -16,11 +17,7 @@ function App() {
           <Sidebar />
           <main className="flex-1 p-6">
             {activeTab === 'configurator' && <ConfiguratorPanel />}
-            {activeTab === 'preview' && (
-              <div className="text-center text-wood-400 py-20">
-                SVG Preview — coming in Sprint 8
-              </div>
-            )}
+            {activeTab === 'preview' && <CabinetPreview />}
             {activeTab === 'optimizer' && (
               <div className="text-center text-wood-400 py-20">
                 Cut Sheet Optimizer — coming in Sprint 9
