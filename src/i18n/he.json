@@ -103,6 +103,8 @@
     "load": "טען",
     "delete": "מחק",
     "placeholder": "שם הארון…",
-    "empty": "אין הגדרות שמורות"
+    "empty": "אין הגדרות שמורות",
+    "export": "ייצוא JSON",
+    "import": "ייבוא JSON"
   }
 }

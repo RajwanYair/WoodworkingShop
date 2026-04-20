@@ -103,6 +103,8 @@
     "load": "Load",
     "delete": "Delete",
     "placeholder": "Cabinet name…",
-    "empty": "No saved configurations"
+    "empty": "No saved configurations",
+    "export": "Export JSON",
+    "import": "Import JSON"
   }
 }

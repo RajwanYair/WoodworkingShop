@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { loadSavedConfigs, saveConfig, deleteSavedConfig, type SavedConfig } from '../../utils/local-storage';
+import type { CabinetConfig } from '../../engine/types';
 
 export function SaveLoadPanel() {
   const { t } = useTranslation();
@@ -9,6 +10,7 @@ export function SaveLoadPanel() {
   const [configs, setConfigs] = useState<SavedConfig[]>([]);
   const [saveName, setSaveName] = useState('');
   const [showSaved, setShowSaved] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setConfigs(loadSavedConfigs());
@@ -28,6 +30,40 @@ export function SaveLoadPanel() {
   const handleDelete = (id: string) => {
     deleteSavedConfig(id);
     setConfigs(loadSavedConfigs());
+  };
+
+  const handleExport = () => {
+    const payload = JSON.stringify(config, null, 2);
+    const blob = new Blob([payload], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `cabinet-${config.width}x${config.height}x${config.depth}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImport = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(reader.result as string);
+        if (isValidConfig(parsed)) {
+          setConfig(parsed);
+        }
+      } catch {
+        // invalid JSON — silently ignore
+      }
+    };
+    reader.readAsText(file);
+    // reset input so re-importing the same file works
+    e.target.value = '';
   };
 
   return (
@@ -97,6 +133,43 @@ export function SaveLoadPanel() {
       {showSaved && configs.length === 0 && (
         <p className="text-xs text-wood-400 text-center py-2">{t('saves.empty')}</p>
       )}
+
+      {/* Export / Import */}
+      <div className="flex gap-2 pt-1 border-t border-wood-100 dark:border-wood-800">
+        <button
+          onClick={handleExport}
+          className="flex-1 px-2 py-1.5 text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 rounded hover:bg-wood-50 dark:hover:bg-wood-700 transition-colors"
+        >
+          ↓ {t('saves.export')}
+        </button>
+        <button
+          onClick={handleImport}
+          className="flex-1 px-2 py-1.5 text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 rounded hover:bg-wood-50 dark:hover:bg-wood-700 transition-colors"
+        >
+          ↑ {t('saves.import')}
+        </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".json"
+          className="hidden"
+          onChange={handleFileChange}
+        />
+      </div>
     </div>
+  );
+}
+
+/** Minimal validation — checks that required numeric fields exist and are in range */
+function isValidConfig(obj: unknown): obj is CabinetConfig {
+  if (typeof obj !== 'object' || obj === null) return false;
+  const c = obj as Record<string, unknown>;
+  return (
+    typeof c.width === 'number' && c.width >= 300 && c.width <= 1200 &&
+    typeof c.height === 'number' && c.height >= 300 && c.height <= 2400 &&
+    typeof c.depth === 'number' && c.depth >= 200 && c.depth <= 800 &&
+    typeof c.shelfCount === 'number' &&
+    typeof c.carcassMaterial === 'string' &&
+    typeof c.backPanelMaterial === 'string'
   );
 }
