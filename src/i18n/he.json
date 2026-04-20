@@ -77,7 +77,13 @@
     "strategy_co-nest-strips": "חיתוך משולב",
     "strategy_adjust-width": "התאמת רוחב",
     "strategy_adjust-height": "התאמת גובה",
-    "strategy_material-swap": "חומר חלופי"
+    "strategy_material-swap": "חומר חלופי",
+    "compare": "השוואה",
+    "hideCompare": "הסתר",
+    "comparison": "מקורי מול מוטב",
+    "original": "מקורי",
+    "optimized": "מוטב",
+    "changes": "מה משתנה"
   },
   "preview": {
     "title": "תצוגה מקדימה",

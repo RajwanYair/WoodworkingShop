@@ -77,7 +77,13 @@
     "strategy_co-nest-strips": "Co-Nest Strips",
     "strategy_adjust-width": "Adjust Width",
     "strategy_adjust-height": "Adjust Height",
-    "strategy_material-swap": "Material Swap"
+    "strategy_material-swap": "Material Swap",
+    "compare": "Compare",
+    "hideCompare": "Hide",
+    "comparison": "Original vs Optimized",
+    "original": "Original",
+    "optimized": "Optimized",
+    "changes": "What Changes"
   },
   "preview": {
     "title": "Cabinet Preview",

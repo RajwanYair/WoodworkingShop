@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { findOptimizations, type SmartOptimizerOptions } from '../../engine/smart-optimizer';
+import { ComparisonView } from './ComparisonView';
 import type { OptimizationSuggestion, SmartStrategy, Lang } from '../../engine/types';
 
 const ALL_STRATEGIES: SmartStrategy[] = [
@@ -21,6 +22,7 @@ export function SmartOptimizerPanel() {
   const [tolerance, setTolerance] = useState(20);
   const [results, setResults] = useState<OptimizationSuggestion[] | null>(null);
   const [running, setRunning] = useState(false);
+  const [comparing, setComparing] = useState<number | null>(null);
 
   const toggleStrategy = (s: SmartStrategy) => {
     setStrategies((prev) =>
@@ -131,13 +133,22 @@ export function SmartOptimizerPanel() {
                     {s.explanation[lang]}
                   </p>
                 </div>
-                <button
-                  onClick={() => handleApply(s)}
-                  className="px-3 py-1 text-xs font-medium bg-green-600 text-white rounded hover:bg-green-700 transition-colors shrink-0"
-                >
-                  {t('optimizer.apply')}
-                </button>
+                <div className="flex gap-1.5 shrink-0">
+                  <button
+                    onClick={() => setComparing(comparing === idx ? null : idx)}
+                    className="px-3 py-1 text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 rounded hover:bg-wood-50 dark:hover:bg-wood-700 transition-colors"
+                  >
+                    {comparing === idx ? t('optimizer.hideCompare') : t('optimizer.compare')}
+                  </button>
+                  <button
+                    onClick={() => handleApply(s)}
+                    className="px-3 py-1 text-xs font-medium bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+                  >
+                    {t('optimizer.apply')}
+                  </button>
+                </div>
               </div>
+              {comparing === idx && <ComparisonView suggestion={s} />}
               <div className="flex gap-4 text-xs text-wood-500 dark:text-wood-400">
                 {s.savings.sheetsRemoved > 0 && (
                   <span className="text-green-600 font-medium">
