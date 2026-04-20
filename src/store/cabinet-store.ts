@@ -41,7 +41,7 @@ export interface CabinetState {
   canRedo: boolean;
 
   // UI state
-  activeTab: 'configurator' | 'preview' | 'optimizer' | 'pdf';
+  activeTab: 'configurator' | 'preview' | 'optimizer' | 'assembly' | 'pdf';
   darkMode: boolean;
   colorBlindMode: boolean;
   units: UnitSystem;

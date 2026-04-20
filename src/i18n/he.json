@@ -7,6 +7,7 @@
     "configurator": "הגדרות",
     "preview": "תצוגה מקדימה",
     "optimizer": "גיליונות חיתוך",
+    "assembly": "הרכבה",
     "pdf": "ייצוא PDF"
   },
   "config": {
@@ -131,5 +132,11 @@
     "hardware": "פרזול",
     "total": "סה\"כ משוער",
     "disclaimer": "המחירים משוערים ועשויים להשתנות לפי ספק."
+  },
+  "assembly": {
+    "title": "מדריך הרכבה",
+    "prev": "הקודם",
+    "next": "הבא",
+    "partsInStep": "חלקים בשלב זה:"
   }
 }

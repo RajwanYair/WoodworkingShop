@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { configToUrl } from '../../utils/url-state';
 
-const tabs = ['configurator', 'preview', 'optimizer', 'pdf'] as const;
+const tabs = ['configurator', 'preview', 'optimizer', 'assembly', 'pdf'] as const;
 
 export function Header() {
   const { t, i18n } = useTranslation();

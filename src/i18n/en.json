@@ -7,6 +7,7 @@
     "configurator": "Configure",
     "preview": "Preview",
     "optimizer": "Cut Sheets",
+    "assembly": "Assembly",
     "pdf": "Export PDF"
   },
   "config": {
@@ -131,5 +132,11 @@
     "hardware": "Hardware",
     "total": "Estimated Total",
     "disclaimer": "Prices are approximate and may vary by supplier."
+  },
+  "assembly": {
+    "title": "Assembly Guide",
+    "prev": "Previous",
+    "next": "Next",
+    "partsInStep": "Parts in this step:"
   }
 }

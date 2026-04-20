@@ -8,6 +8,7 @@ import { CabinetPreview } from './components/preview/CabinetPreview';
 import { OptimizerView } from './components/optimizer/OptimizerView';
 import { SmartOptimizerPanel } from './components/optimizer/SmartOptimizerPanel';
 import { PartsTable, HardwareTable } from './components/optimizer/Tables';
+import { AssemblyGuide } from './components/assembly/AssemblyGuide';
 import { useCabinetStore, type CabinetState } from './store/cabinet-store';
 
 // Lazy-load PDF panel (heavy @react-pdf/renderer dependency)
@@ -41,9 +42,9 @@ function App() {
         window.print();
         return;
       }
-      // Tab switching: Alt+1-4
+      // Tab switching: Alt+1-5
       if (e.altKey && !ctrl) {
-        const tabMap: Record<string, CabinetState['activeTab']> = { '1': 'configurator', '2': 'preview', '3': 'optimizer', '4': 'pdf' };
+        const tabMap: Record<string, CabinetState['activeTab']> = { '1': 'configurator', '2': 'preview', '3': 'optimizer', '4': 'assembly', '5': 'pdf' };
         const tab = tabMap[e.key];
         if (tab) { e.preventDefault(); useCabinetStore.getState().setActiveTab(tab); }
       }
@@ -72,6 +73,7 @@ function App() {
                 <OptimizerView />
               </div>
             )}
+            {activeTab === 'assembly' && <AssemblyGuide />}
             {activeTab === 'pdf' && (
               <Suspense fallback={<div className="text-center py-12 text-wood-400">Loading PDF tools…</div>}>
                 <PdfExportPanel />
