@@ -1,5 +1,20 @@
 # Roadmap
 
+## Sprint: v3.0.0 — Test Coverage & CI Tooling (April 2026)
+
+### Completed
+
+- [x] **Task 1**: Cost estimator tests — 11 tests for `estimateCost()` (Sprint 74)
+- [x] **Task 2**: BOM export tests — 10 tests for `generateBomCsv()` (Sprint 74)
+- [x] **Task 3**: Local storage tests — 9 tests with in-memory localStorage mock (Sprint 74)
+- [x] **Task 4**: i18n key parity test — 5 tests verifying en/he structure (Sprint 74)
+- [x] **Task 5**: Bundle analysis in CI — `scripts/bundle-report.js`, 2 MB budget (Sprint 75)
+- [x] **Task 6**: Raise coverage thresholds — 70/60/60/70 (Sprint 75)
+- [x] **Task 7**: Lighthouse CI budget — `lighthouserc.json` with perf/a11y/SEO assertions (Sprint 76)
+- [x] **Task 8**: i18n coverage script — `scripts/i18n-coverage.js`, npm script (Sprint 76)
+- [x] **Task 9**: Version bump to 3.0.0 + CHANGELOG + ROADMAP update (Sprint 77)
+- [x] **Task 10**: GitHub release v3.0.0 (Sprint 77)
+
 ## Sprint: v2.9.0 — Production Readiness (April 2026)
 
 ### Completed
@@ -70,7 +85,7 @@
 ## Future
 
 - [ ] Playwright E2E smoke tests
-- [ ] Lighthouse CI integration
-- [ ] Bundle analysis reporting in CI
+- [x] ~~Lighthouse CI integration~~ (v3.0.0)
+- [x] ~~Bundle analysis reporting in CI~~ (v3.0.0)
 - [ ] Storybook for component documentation
-- [ ] Auto-generate i18n coverage report
+- [x] ~~Auto-generate i18n coverage report~~ (v3.0.0)

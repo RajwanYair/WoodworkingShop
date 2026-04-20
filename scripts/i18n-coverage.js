@@ -69,7 +69,13 @@ if (emptyCount === 0) {
   console.log('\n✅ No empty translation values found.');
 }
 
-const coverage = ((Math.min(enKeys.length, heKeys.length) - missingInHe.length - extraInHe.length + Math.min(enKeys.length, heKeys.length)) / (enKeys.length + heKeys.length)) * 100;
+const coverage =
+  ((Math.min(enKeys.length, heKeys.length) -
+    missingInHe.length -
+    extraInHe.length +
+    Math.min(enKeys.length, heKeys.length)) /
+    (enKeys.length + heKeys.length)) *
+  100;
 console.log(`\n📊 Coverage: ${coverage.toFixed(1)}%`);
 
 if (missingInHe.length > 0 || missingInEn.length > 0) {

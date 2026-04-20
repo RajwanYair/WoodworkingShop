@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] — 2026-04-20
+
+### Added
+
+- **Cost estimator tests** — 11 tests covering sheet costs, grouping, edge banding, hardware pricing, waste calc, zero-sheet edge case, bilingual names
+- **BOM export tests** — 10 tests covering CSV headers, EN/HE values, hardware section, multi-cabinet, empty array, comma/quote escaping, unknown material fallback
+- **Local storage tests** — 9 tests with custom in-memory localStorage mock for `loadSavedConfigs`, `saveConfig`, `deleteSavedConfig`
+- **i18n key parity test** — 5 tests verifying en.json/he.json identical key structure, count, no missing keys, all leaf values non-empty
+- **Bundle analysis script** (`scripts/bundle-report.js`) — file-size report by type, enforces 2 MB JS budget in CI
+- **i18n coverage script** (`scripts/i18n-coverage.js`) — reports key parity and empty values across locales
+- **Lighthouse CI config** (`lighthouserc.json`) — performance ≥ 0.8, accessibility ≥ 0.9, best-practices ≥ 0.8, SEO ≥ 0.8
+- `npm run i18n:coverage` and `npm run bundle:report` convenience scripts
+
+### Changed
+
+- Coverage thresholds raised to 70/60/60/70 (statements/branches/functions/lines)
+- CI workflow: added bundle size report step (Node 22 only)
+- 249 tests across 23 test files, all passing
+
 ## [2.9.0] — 2026-04-20
 
 ### Added
