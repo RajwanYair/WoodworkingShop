@@ -39,6 +39,7 @@ export function DoorConfig() {
           className="mt-1 block w-full rounded border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-800 px-3 py-2 text-sm"
         >
           <option value="flat">{t('config.flat')}</option>
+          <option value="shaker">{t('config.shaker')}</option>
           <option value="none">{t('config.none')}</option>
         </select>
       </label>

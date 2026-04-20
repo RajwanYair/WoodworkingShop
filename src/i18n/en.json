@@ -29,6 +29,7 @@
     "doorCount": "Number of Doors",
     "doorStyle": "Door Style",
     "flat": "Flat",
+    "shaker": "Shaker",
     "none": "None",
     "doorReveal": "Door Reveal (gap)",
     "handles": "Handles",

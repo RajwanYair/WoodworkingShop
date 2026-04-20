@@ -361,7 +361,7 @@ function DimLine({
 }
 
 function renderDoors(
-  config: { doorCount: number; doorReveal: number; width: number; height: number },
+  config: { doorCount: number; doorReveal: number; doorStyle: string; width: number; height: number },
   d: { doorHeight: number; doorWidth: number },
   scale: number,
   color: string,
@@ -370,18 +370,34 @@ function renderDoors(
   const dw = d.doorWidth * scale;
   const dh = d.doorHeight * scale;
   const doors = [];
+  const shakerInset = 30 * scale; // 30mm inset for shaker frame
 
   for (let i = 0; i < config.doorCount; i++) {
     const x = r + i * (dw + r);
     doors.push(
       <PartRect
-        key={i}
+        key={`door-${i}`}
         x={x} y={r} w={dw} h={dh}
         fill={color}
         label={`Door ${i + 1}`}
         dim={`${Math.round(d.doorWidth)}×${Math.round(d.doorHeight)}`}
       />,
     );
+    if (config.doorStyle === 'shaker' && dw > shakerInset * 2.5 && dh > shakerInset * 2.5) {
+      doors.push(
+        <rect
+          key={`shaker-${i}`}
+          x={x + shakerInset}
+          y={r + shakerInset}
+          width={dw - shakerInset * 2}
+          height={dh - shakerInset * 2}
+          fill="none"
+          stroke="#00000030"
+          strokeWidth={1.5}
+          rx={1}
+        />,
+      );
+    }
   }
   return <>{doors}</>;
 }
