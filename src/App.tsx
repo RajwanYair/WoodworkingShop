@@ -4,6 +4,8 @@ import { Header } from './components/layout/Header';
 import { Sidebar } from './components/layout/Sidebar';
 import { ConfiguratorPanel } from './components/configurator/ConfiguratorPanel';
 import { CabinetPreview } from './components/preview/CabinetPreview';
+import { OptimizerView } from './components/optimizer/OptimizerView';
+import { PartsTable, HardwareTable } from './components/optimizer/Tables';
 import { useCabinetStore } from './store/cabinet-store';
 
 function App() {
@@ -19,8 +21,10 @@ function App() {
             {activeTab === 'configurator' && <ConfiguratorPanel />}
             {activeTab === 'preview' && <CabinetPreview />}
             {activeTab === 'optimizer' && (
-              <div className="text-center text-wood-400 py-20">
-                Cut Sheet Optimizer — coming in Sprint 9
+              <div className="space-y-8">
+                <PartsTable />
+                <HardwareTable />
+                <OptimizerView />
               </div>
             )}
             {activeTab === 'pdf' && (
