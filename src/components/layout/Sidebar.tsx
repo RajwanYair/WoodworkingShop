@@ -1,4 +1,5 @@
 import { useCabinetStore } from '../../store/cabinet-store';
+import { CostEstimatePanel } from '../configurator/CostEstimatePanel';
 
 export function Sidebar() {
   const { parts, hardware, optimization } = useCabinetStore();
@@ -9,7 +10,7 @@ export function Sidebar() {
         Summary
       </h2>
 
-      <dl className="space-y-2 text-sm">
+      <dl className="space-y-2 text-sm mb-4">
         <div className="flex justify-between">
           <dt className="text-wood-600 dark:text-wood-300">Parts</dt>
           <dd className="font-medium">{parts.length}</dd>
@@ -27,6 +28,8 @@ export function Sidebar() {
           <dd className="font-medium">{optimization.overallYield}%</dd>
         </div>
       </dl>
+
+      <CostEstimatePanel />
     </aside>
   );
 }

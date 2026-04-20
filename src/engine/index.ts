@@ -45,3 +45,6 @@ export { generateHardware } from './hardware';
 export { optimizeCutSheets } from './cut-optimizer';
 
 export { findOptimizations } from './smart-optimizer';
+
+export { estimateCost } from './cost-estimator';
+export type { CostBreakdown, SheetCost } from './cost-estimator';

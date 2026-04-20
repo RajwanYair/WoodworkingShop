@@ -112,5 +112,12 @@
     "empty": "No saved configurations",
     "export": "Export JSON",
     "import": "Import JSON"
+  },
+  "cost": {
+    "title": "Cost Estimate",
+    "edgeBanding": "Edge banding",
+    "hardware": "Hardware",
+    "total": "Estimated Total",
+    "disclaimer": "Prices are approximate and may vary by supplier."
   }
 }
