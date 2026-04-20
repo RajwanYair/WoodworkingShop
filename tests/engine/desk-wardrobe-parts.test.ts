@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { generateParts } from '../../src/engine/parts';
 import { DEFAULT_CONFIG, DESK_DEFAULTS, WARDROBE_DEFAULTS } from '../../src/engine/materials';
 import type { CabinetConfig } from '../../src/engine/types';

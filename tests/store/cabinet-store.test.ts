@@ -34,7 +34,6 @@ describe('cabinet-store', () => {
   });
 
   it('recomputes derived state on config change', () => {
-    const before = useCabinetStore.getState().parts.length;
     useCabinetStore.getState().setConfig({ shelfCount: 10 });
     // More shelves → should still have parts
     expect(useCabinetStore.getState().parts.length).toBeGreaterThan(0);

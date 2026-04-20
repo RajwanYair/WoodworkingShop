@@ -535,7 +535,7 @@ function PageFooter() {
 
 /** Exploded-view assembly diagram using positioned Views */
 function ExplodedView({
-  config, dimensions: d, cMat, bMat,
+  config, dimensions: _dimensions, cMat, bMat,
 }: {
   config: CabinetConfig; dimensions: DerivedDimensions; cMat: string; bMat: string;
 }) {

@@ -141,8 +141,6 @@ function tryCoNestStrips(cfg: CabinetConfig, tolerance: number): CabinetConfig[]
 
   // Current derived dims
   const d = computeDimensions(cfg);
-  const shelfDepth = cfg.depth - 20;
-
   // target: doorWidth + kerf + depth + kerf + shelfDepth = sheetWidth
   // depth = (sheetWidth - doorWidth - shelfDepth - 2*kerf) ... but shelfDepth depends on depth
   // shelfDepth = depth - 20, so:

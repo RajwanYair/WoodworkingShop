@@ -1,4 +1,4 @@
-import type { CabinetConfig, DerivedDimensions, Part } from './types';
+import type { CabinetConfig, Part } from './types';
 import { getMaterial } from './materials';
 import { computeDimensions } from './dimensions';
 

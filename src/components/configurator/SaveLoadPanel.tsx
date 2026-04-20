@@ -13,7 +13,7 @@ interface ProjectExport {
 
 export function SaveLoadPanel() {
   const { t } = useTranslation();
-  const { config, setConfig, cabinets } = useCabinetStore();
+  const { config, setConfig } = useCabinetStore();
   const loadProject = useCabinetStore((s) => s.loadProject);
   const addToast = useToastStore((s) => s.addToast);
   const [configs, setConfigs] = useState<SavedConfig[]>([]);

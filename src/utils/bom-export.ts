@@ -1,7 +1,7 @@
 import type { Part, HardwareItem, Lang } from '../engine/types';
 import { getMaterial } from '../engine/materials';
 
-interface BomRow {
+interface _BomRow {
   cabinet: string;
   partId: string;
   name: string;

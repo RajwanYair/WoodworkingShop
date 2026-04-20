@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { ConfiguratorPanel } from '../../src/components/configurator/ConfiguratorPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';

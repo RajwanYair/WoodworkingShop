@@ -87,7 +87,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
       const clampedY = Math.max(topY + T * 0.6, Math.min(bottomY - T * 0.6, svgPt.y));
       return Math.round((bottomY - clampedY) / S);
     },
-    [H, T, S, dimPad],
+    [H, T, dimPad],
   );
 
   const handleShelfDrag = useCallback(
@@ -114,14 +114,14 @@ export const CabinetPreview = memo(function CabinetPreview() {
     setDragIdx(null);
   }, []);
 
-  const views: { id: ViewId; label: string }[] = [
+  const views = useMemo<{ id: ViewId; label: string }[]>(() => [
     { id: 'front', label: t('preview.front') },
     { id: 'frontOpen', label: t('preview.frontOpen') },
     { id: 'side', label: t('preview.side') },
     { id: 'top', label: t('preview.top') },
     { id: 'back', label: t('preview.back') },
     { id: '3d', label: t('preview.iso') },
-  ];
+  ], [t]);
 
   const viewIds = useMemo(() => views.map(v => v.id), [views]);
 
@@ -765,8 +765,8 @@ function IsometricView({
   );
 }
 
-function IsoDimLine({ p1, p2, label, offset: _offset }: {
-  p1: [number, number, number]; p2: [number, number, number]; label: string; offset: number;
+function IsoDimLine({ p1, p2, label }: {
+  p1: [number, number, number]; p2: [number, number, number]; label: string; offset?: number;
 }) {
   const [x1, y1] = iso(...p1);
   const [x2, y2] = iso(...p2);

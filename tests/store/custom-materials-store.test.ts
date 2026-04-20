@@ -5,7 +5,7 @@ vi.mock('zustand/middleware', async () => {
   const actual = await vi.importActual<typeof import('zustand/middleware')>('zustand/middleware');
   return {
     ...actual,
-    persist: (fn: any) => fn,
+    persist: (fn: (...args: unknown[]) => unknown) => fn,
   };
 });
 

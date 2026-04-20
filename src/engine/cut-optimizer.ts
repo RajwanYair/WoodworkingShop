@@ -1,4 +1,4 @@
-import type { Part, CutRect, CutSheet, OptimizationResult } from './types';
+import type { Part, CutSheet, OptimizationResult } from './types';
 import { getMaterial, SAW_KERF } from './materials';
 
 /**

@@ -1,4 +1,4 @@
-import type { OptimizationResult, Lang } from './types';
+import type { OptimizationResult } from './types';
 import { getMaterial } from './materials';
 
 export interface CostBreakdown {
