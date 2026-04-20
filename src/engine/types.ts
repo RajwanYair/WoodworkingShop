@@ -43,6 +43,9 @@ export interface CabinetConfig {
   doorStyle: DoorStyle;
   doorReveal: number;  // mm gap around doors (default 3)
 
+  // Drawers
+  drawerCount: number; // 0–4 drawers at bottom of cabinet
+
   // Hardware
   handleStyle: HandleStyle;
 

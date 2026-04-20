@@ -6,6 +6,7 @@ import { DimensionSliders } from './DimensionSliders';
 import { MaterialSelector } from './MaterialSelector';
 import { ShelfConfig } from './ShelfConfig';
 import { DoorConfig } from './DoorConfig';
+import { DrawerConfig } from './DrawerConfig';
 import { CustomMaterialEditor } from './CustomMaterialEditor';
 import { SaveLoadPanel } from './SaveLoadPanel';
 import type { FurnitureType } from '../../engine/types';
@@ -65,6 +66,7 @@ export function ConfiguratorPanel() {
       <CustomMaterialEditor />
       <ShelfConfig />
       {(config.furnitureType === 'cabinet' || config.furnitureType === 'wardrobe') && <DoorConfig />}
+      {(config.furnitureType === 'cabinet' || config.furnitureType === 'wardrobe') && <DrawerConfig />}
 
       <button
         onClick={resetConfig}

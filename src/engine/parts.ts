@@ -137,6 +137,49 @@ export function generateParts(cfg: CabinetConfig): Part[] {
     });
   }
 
+  // ── Drawers ──
+  if (cfg.drawerCount > 0 && !isBookshelf && !isDesk) {
+    const drawerHeight = 150; // mm standard drawer box height
+    const drawerWidth = d.internalWidth - 26; // 13mm clearance each side for slides
+    const drawerDepth = Math.min(cfg.depth - t - 30, 500); // leave clearance for back panel + face
+
+    // Drawer front panel (decorative, same material as carcass)
+    parts.push({
+      id: id(), qty: cfg.drawerCount,
+      name: { en: 'Drawer Front', he: 'חזית מגירה' },
+      material: cfg.carcassMaterial, thickness: t,
+      length: drawerHeight + 30, width: drawerWidth + 26, // overlay front
+      edgeBanding: edgeLabel(eb !== 'none' ? '4-edges' : 'none'),
+    });
+
+    // Drawer box sides (2 per drawer)
+    parts.push({
+      id: id(), qty: cfg.drawerCount * 2,
+      name: { en: 'Drawer Box Side', he: 'דופן מגירה' },
+      material: cfg.carcassMaterial, thickness: t,
+      length: drawerDepth, width: drawerHeight,
+      edgeBanding: edgeLabel('none'),
+    });
+
+    // Drawer box front+back (2 per drawer, inner structural pieces)
+    parts.push({
+      id: id(), qty: cfg.drawerCount * 2,
+      name: { en: 'Drawer Box End', he: 'קצה מגירה' },
+      material: cfg.carcassMaterial, thickness: t,
+      length: drawerWidth - 2 * t, width: drawerHeight,
+      edgeBanding: edgeLabel('none'),
+    });
+
+    // Drawer bottom (plywood/HDF, uses back panel material)
+    parts.push({
+      id: id(), qty: cfg.drawerCount,
+      name: { en: 'Drawer Bottom', he: 'תחתית מגירה' },
+      material: cfg.backPanelMaterial, thickness: bm.thickness,
+      length: drawerDepth - 2, width: drawerWidth - 2 * t,
+      edgeBanding: edgeLabel('none'),
+    });
+  }
+
   // ── Back panel ──
   parts.push({
     id: id(), qty: 1,

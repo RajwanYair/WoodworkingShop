@@ -214,6 +214,20 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     videoKeyword: 'shelf pin installation 32mm system',
   });
 
+  if (cfg.drawerCount > 0) {
+    steps.push({
+      stepNumber: n++,
+      title: { en: 'Assemble & Install Drawers', he: 'הרכבה והתקנת מגירות' },
+      description: {
+        en: `Assemble ${cfg.drawerCount} drawer box(es): attach sides to front/back pieces with screws, slide in the bottom panel. Mount drawer slides on side panels, then install drawer boxes. Attach decorative drawer fronts with screws from inside.`,
+        he: `הרכב ${cfg.drawerCount} קופסת/ות מגירה: חבר דפנות לחלקים קדמיים/אחוריים עם ברגים, החלק את לוח התחתית. הרכב מסילות על הדפנות, ואז התקן את קופסאות המגירה. חבר חזיתות מגירה דקורטיביות עם ברגים מבפנים.`,
+      },
+      parts: [],
+      icon: '🗄️',
+      videoKeyword: 'install drawer slides cabinet box assembly',
+    });
+  }
+
   if (cfg.edgeBanding !== 'none') {
     steps.push({
       stepNumber: n++,

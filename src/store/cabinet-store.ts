@@ -211,10 +211,14 @@ export const useCabinetStore = create<CabinetState>((set) => {
     loadProject: (cabinets) =>
       set((state) => {
         pushHistory(state);
+        const migrated = cabinets.map((c) => ({
+          ...c,
+          config: { ...DEFAULT_CONFIG, ...c.config },
+        }));
         return {
-          cabinets,
+          cabinets: migrated,
           activeCabinetIndex: 0,
-          ...deriveProject(cabinets, 0),
+          ...deriveProject(migrated, 0),
         };
       }),
 

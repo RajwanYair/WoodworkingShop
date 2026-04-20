@@ -302,6 +302,28 @@ export const CabinetPreview = memo(function CabinetPreview() {
                 </g>
               );
             })}
+            {/* Drawers at bottom */}
+            {config.drawerCount > 0 && Array.from({ length: config.drawerCount }).map((_, i) => {
+              const drawerH = (d.internalHeight * 0.15); // ~15% of internal height per drawer
+              const gap = 2;
+              const dy = H - T - (i + 1) * (drawerH + gap) + gap;
+              return (
+                <g key={`drawer-${i}`}>
+                  <rect
+                    x={T + 2} y={dy} width={W - 2 * T - 4} height={drawerH}
+                    fill="#b8956a" stroke="#8B7355" strokeWidth={0.8} rx={1}
+                  >
+                    <title>{`Drawer ${i + 1}`}</title>
+                  </rect>
+                  {/* Handle */}
+                  <rect
+                    x={(W / 2) - 12} y={dy + drawerH / 2 - 1.5}
+                    width={24} height={3} rx={1}
+                    fill="#888" stroke="#666" strokeWidth={0.4}
+                  />
+                </g>
+              );
+            })}
             {showDims && (
               <>
                 <DimLine x1={0} y1={-8} x2={W} y2={-8} label={`${config.width}`} pos="above" />

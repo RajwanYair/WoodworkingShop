@@ -102,6 +102,26 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
     unit: { en: 'bottle', he: 'בקבוק' },
   });
 
+  // ── Drawer slides (pair per drawer) ──
+  if (cfg.drawerCount > 0) {
+    items.push({
+      id: 'H11',
+      name: { en: 'Drawer Slide Pair 450 mm', he: 'זוג מסילות מגירה 450 מ"מ' },
+      qty: cfg.drawerCount,
+      unit: { en: 'pairs', he: 'זוגות' },
+    });
+
+    // Drawer handle (one per drawer)
+    if (cfg.handleStyle !== 'none') {
+      items.push({
+        id: 'H12',
+        name: handleName(cfg.handleStyle),
+        qty: cfg.drawerCount,
+        unit: { en: 'pcs', he: 'יח\'' },
+      });
+    }
+  }
+
   return items;
 }
 
