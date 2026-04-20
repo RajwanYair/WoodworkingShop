@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { CabinetSelector } from './CabinetSelector';
 import { DimensionSliders } from './DimensionSliders';
 import { MaterialSelector } from './MaterialSelector';
 import { ShelfConfig } from './ShelfConfig';
@@ -12,6 +13,7 @@ export function ConfiguratorPanel() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-8">
+      <CabinetSelector />
       <SaveLoadPanel />
       <DimensionSliders />
       <MaterialSelector />

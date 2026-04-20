@@ -9,20 +9,33 @@ import { readConfigFromUrl, pushConfigToUrl } from '../utils/url-state';
 
 const MAX_HISTORY = 50;
 
+export interface CabinetEntry {
+  name: string;
+  config: CabinetConfig;
+}
+
 export interface CabinetState {
-  // Config
+  // Multi-cabinet project
+  cabinets: CabinetEntry[];
+  activeCabinetIndex: number;
+
+  // Active cabinet config (convenience alias)
   config: CabinetConfig;
 
-  // Derived (recomputed on every config change)
+  // Derived for active cabinet
   dimensions: DerivedDimensions;
   parts: Part[];
   hardware: HardwareItem[];
   optimization: OptimizationResult;
   edgeBandingTotal: number; // mm
 
+  // Combined project-level optimization (all cabinets)
+  allParts: Part[];
+  combinedOptimization: OptimizationResult;
+
   // Undo / Redo
-  _past: CabinetConfig[];
-  _future: CabinetConfig[];
+  _past: CabinetEntry[][];
+  _future: CabinetEntry[][];
   canUndo: boolean;
   canRedo: boolean;
 
@@ -39,6 +52,10 @@ export interface CabinetState {
   toggleColorBlindMode: () => void;
   undo: () => void;
   redo: () => void;
+  addCabinet: () => void;
+  removeCabinet: (index: number) => void;
+  setActiveCabinet: (index: number) => void;
+  renameCabinet: (index: number, name: string) => void;
 }
 
 function derive(config: CabinetConfig) {
@@ -50,13 +67,29 @@ function derive(config: CabinetConfig) {
   return { dimensions, parts, hardware, optimization, edgeBandingTotal };
 }
 
+function deriveProject(cabinets: CabinetEntry[], activeIndex: number) {
+  const activeConfig = cabinets[activeIndex].config;
+  const active = derive(activeConfig);
+  // Combined parts from all cabinets (prefixed with cabinet index)
+  const allParts: Part[] = cabinets.flatMap((cab, ci) =>
+    generateParts(cab.config).map((p) => ({
+      ...p,
+      id: cabinets.length > 1 ? `C${ci + 1}-${p.id}` : p.id,
+    })),
+  );
+  const combinedOptimization = optimizeCutSheets(allParts);
+  return { config: activeConfig, ...active, allParts, combinedOptimization };
+}
+
 export const useCabinetStore = create<CabinetState>((set) => {
   const urlPatch = readConfigFromUrl();
   const initialConfig = { ...DEFAULT_CONFIG, ...urlPatch };
-  const initial = derive(initialConfig);
+  const initialCabinets: CabinetEntry[] = [{ name: 'Cabinet 1', config: initialConfig }];
+  const initial = deriveProject(initialCabinets, 0);
 
   return {
-    config: initialConfig,
+    cabinets: initialCabinets,
+    activeCabinetIndex: 0,
     ...initial,
     _past: [],
     _future: [],
@@ -68,37 +101,41 @@ export const useCabinetStore = create<CabinetState>((set) => {
 
     setConfig: (patch) =>
       set((state) => {
-        const config = { ...state.config, ...patch };
-        pushConfigToUrl(config);
-        const past = [...state._past, state.config].slice(-MAX_HISTORY);
-        return { config, ...derive(config), _past: past, _future: [], canUndo: true, canRedo: false };
+        const cabinets = state.cabinets.map((cab, i) =>
+          i === state.activeCabinetIndex ? { ...cab, config: { ...cab.config, ...patch } } : cab,
+        );
+        pushConfigToUrl(cabinets[state.activeCabinetIndex].config);
+        const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
+        return { cabinets, ...deriveProject(cabinets, state.activeCabinetIndex), _past: past, _future: [], canUndo: true, canRedo: false };
       }),
 
     resetConfig: () =>
       set((state) => {
+        const cabinets = state.cabinets.map((cab, i) =>
+          i === state.activeCabinetIndex ? { ...cab, config: DEFAULT_CONFIG } : cab,
+        );
         pushConfigToUrl(DEFAULT_CONFIG);
-        const past = [...state._past, state.config].slice(-MAX_HISTORY);
+        const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         return {
-          config: DEFAULT_CONFIG,
-          ...derive(DEFAULT_CONFIG),
-          _past: past,
-          _future: [],
-          canUndo: true,
-          canRedo: false,
+          cabinets,
+          ...deriveProject(cabinets, state.activeCabinetIndex),
+          _past: past, _future: [], canUndo: true, canRedo: false,
         };
       }),
 
     undo: () =>
       set((state) => {
         if (state._past.length === 0) return state;
-        const prev = state._past[state._past.length - 1];
+        const prevCabinets = state._past[state._past.length - 1];
         const past = state._past.slice(0, -1);
-        pushConfigToUrl(prev);
+        const idx = Math.min(state.activeCabinetIndex, prevCabinets.length - 1);
+        pushConfigToUrl(prevCabinets[idx].config);
         return {
-          config: prev,
-          ...derive(prev),
+          cabinets: prevCabinets,
+          activeCabinetIndex: idx,
+          ...deriveProject(prevCabinets, idx),
           _past: past,
-          _future: [state.config, ...state._future],
+          _future: [state.cabinets, ...state._future],
           canUndo: past.length > 0,
           canRedo: true,
         };
@@ -107,17 +144,63 @@ export const useCabinetStore = create<CabinetState>((set) => {
     redo: () =>
       set((state) => {
         if (state._future.length === 0) return state;
-        const next = state._future[0];
+        const nextCabinets = state._future[0];
         const future = state._future.slice(1);
-        pushConfigToUrl(next);
+        const idx = Math.min(state.activeCabinetIndex, nextCabinets.length - 1);
+        pushConfigToUrl(nextCabinets[idx].config);
         return {
-          config: next,
-          ...derive(next),
-          _past: [...state._past, state.config],
+          cabinets: nextCabinets,
+          activeCabinetIndex: idx,
+          ...deriveProject(nextCabinets, idx),
+          _past: [...state._past, state.cabinets],
           _future: future,
           canUndo: true,
           canRedo: future.length > 0,
         };
+      }),
+
+    addCabinet: () =>
+      set((state) => {
+        const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
+        const newCab: CabinetEntry = { name: `Cabinet ${state.cabinets.length + 1}`, config: { ...DEFAULT_CONFIG } };
+        const cabinets = [...state.cabinets, newCab];
+        const idx = cabinets.length - 1;
+        pushConfigToUrl(cabinets[idx].config);
+        return {
+          cabinets, activeCabinetIndex: idx,
+          ...deriveProject(cabinets, idx),
+          _past: past, _future: [], canUndo: true, canRedo: false,
+        };
+      }),
+
+    removeCabinet: (index) =>
+      set((state) => {
+        if (state.cabinets.length <= 1) return state;
+        const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
+        const cabinets = state.cabinets.filter((_, i) => i !== index);
+        const idx = Math.min(state.activeCabinetIndex, cabinets.length - 1);
+        pushConfigToUrl(cabinets[idx].config);
+        return {
+          cabinets, activeCabinetIndex: idx,
+          ...deriveProject(cabinets, idx),
+          _past: past, _future: [], canUndo: true, canRedo: false,
+        };
+      }),
+
+    setActiveCabinet: (index) =>
+      set((state) => {
+        if (index < 0 || index >= state.cabinets.length) return state;
+        pushConfigToUrl(state.cabinets[index].config);
+        return {
+          activeCabinetIndex: index,
+          ...deriveProject(state.cabinets, index),
+        };
+      }),
+
+    renameCabinet: (index, name) =>
+      set((state) => {
+        const cabinets = state.cabinets.map((cab, i) => (i === index ? { ...cab, name } : cab));
+        return { cabinets };
       }),
 
     setActiveTab: (tab) => set({ activeTab: tab }),

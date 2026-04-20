@@ -113,6 +113,12 @@
     "export": "Export JSON",
     "import": "Import JSON"
   },
+  "project": {
+    "title": "Project",
+    "add": "Add Cabinet",
+    "remove": "Remove",
+    "hint": "Multiple cabinets share optimized cut sheets. Double-click to rename."
+  },
   "cost": {
     "title": "Cost Estimate",
     "edgeBanding": "Edge banding",

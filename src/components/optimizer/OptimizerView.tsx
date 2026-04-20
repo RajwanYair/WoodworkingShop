@@ -16,18 +16,20 @@ function cbColor(index: number) {
 
 export function OptimizerView() {
   const { t, i18n } = useTranslation();
-  const { optimization, colorBlindMode, toggleColorBlindMode } = useCabinetStore();
+  const { optimization, combinedOptimization, cabinets, colorBlindMode, toggleColorBlindMode } = useCabinetStore();
   const lang = i18n.language as Lang;
   const [hoveredPartId, setHoveredPartId] = useState<string | null>(null);
+  const multiCabinet = cabinets.length > 1;
+  const displayOpt = multiCabinet ? combinedOptimization : optimization;
 
   return (
     <div className="space-y-6">
       {/* Summary stats + color-blind toggle */}
       <div className="flex items-center justify-between">
         <div className="grid grid-cols-3 gap-4 flex-1">
-          <Stat label={t('optimizer.sheets')} value={String(optimization.totalSheets)} />
-          <Stat label={t('optimizer.yield')} value={`${optimization.overallYield}%`} />
-          <Stat label={t('optimizer.waste')} value={`${(optimization.totalWaste / 1_000_000).toFixed(2)} m²`} />
+          <Stat label={t('optimizer.sheets')} value={String(displayOpt.totalSheets)} />
+          <Stat label={t('optimizer.yield')} value={`${displayOpt.overallYield}%`} />
+          <Stat label={t('optimizer.waste')} value={`${(displayOpt.totalWaste / 1_000_000).toFixed(2)} m²`} />
         </div>
         <button
           onClick={toggleColorBlindMode}
@@ -43,8 +45,15 @@ export function OptimizerView() {
         </button>
       </div>
 
+      {/* Multi-cabinet label */}
+      {multiCabinet && (
+        <p className="text-xs text-wood-500 dark:text-wood-400 italic">
+          Combined optimization for {cabinets.length} cabinets
+        </p>
+      )}
+
       {/* Individual sheets */}
-      {optimization.sheets.map((sheet) => (
+      {displayOpt.sheets.map((sheet) => (
         <SheetCard
           key={sheet.sheetIndex}
           sheet={sheet}
