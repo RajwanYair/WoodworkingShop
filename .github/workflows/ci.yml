@@ -48,6 +48,10 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Bundle size report
+        if: matrix.node-version == 22
+        run: node scripts/bundle-report.js
+
       - name: Upload dist
         if: matrix.node-version == 22
         uses: actions/upload-artifact@v4
