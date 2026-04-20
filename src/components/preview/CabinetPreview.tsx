@@ -98,6 +98,13 @@ export const CabinetPreview = memo(function CabinetPreview() {
       newPositions[dragIdx] = pos;
       // Keep sorted
       newPositions.sort((a, b) => a - b);
+      // Enforce minimum spacing (50mm between shelves and from edges)
+      const MIN_GAP = 50;
+      for (let i = 1; i < newPositions.length; i++) {
+        if (newPositions[i] - newPositions[i - 1] < MIN_GAP) {
+          newPositions[i] = newPositions[i - 1] + MIN_GAP;
+        }
+      }
       setConfig({ shelfSpacing: 'custom', customShelfPositions: newPositions });
     },
     [dragIdx, shelfPositions, svgYToShelfPos, setConfig],
@@ -262,6 +269,36 @@ export const CabinetPreview = memo(function CabinetPreview() {
                   >
                     ⇕
                   </text>
+                  {/* Position label during drag */}
+                  {dragIdx === i && (
+                    <g pointerEvents="none">
+                      <rect
+                        x={W - T - 38}
+                        y={sy - 8}
+                        width={36}
+                        height={10}
+                        rx={2}
+                        fill="#333"
+                        opacity={0.85}
+                      />
+                      <text
+                        x={W - T - 20}
+                        y={sy - 1}
+                        fontSize={6}
+                        fill="#FFD700"
+                        textAnchor="middle"
+                        fontWeight="bold"
+                      >
+                        {pos}mm
+                      </text>
+                      {/* Horizontal guide line */}
+                      <line
+                        x1={0} y1={sy + T * 0.3}
+                        x2={W} y2={sy + T * 0.3}
+                        stroke="#FFD700" strokeWidth={0.3} strokeDasharray="2,2" opacity={0.5}
+                      />
+                    </g>
+                  )}
                 </g>
               );
             })}
