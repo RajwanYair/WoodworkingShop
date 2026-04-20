@@ -59,6 +59,7 @@ export interface CabinetState {
   removeCabinet: (index: number) => void;
   setActiveCabinet: (index: number) => void;
   renameCabinet: (index: number, name: string) => void;
+  loadProject: (cabinets: CabinetEntry[]) => void;
 }
 
 function derive(config: CabinetConfig) {
@@ -205,6 +206,16 @@ export const useCabinetStore = create<CabinetState>((set) => {
       set((state) => {
         const cabinets = state.cabinets.map((cab, i) => (i === index ? { ...cab, name } : cab));
         return { cabinets };
+      }),
+
+    loadProject: (cabinets) =>
+      set((state) => {
+        pushHistory(state);
+        return {
+          cabinets,
+          activeCabinetIndex: 0,
+          ...deriveProject(cabinets, 0),
+        };
       }),
 
     setActiveTab: (tab) => set({ activeTab: tab }),

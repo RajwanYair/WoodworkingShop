@@ -4,10 +4,17 @@ import { useCabinetStore } from '../../store/cabinet-store';
 import { useToastStore } from '../../store/toast-store';
 import { loadSavedConfigs, saveConfig, deleteSavedConfig, type SavedConfig } from '../../utils/local-storage';
 import type { CabinetConfig } from '../../engine/types';
+import type { CabinetEntry } from '../../store/cabinet-store';
+
+interface ProjectExport {
+  version: 1;
+  cabinets: CabinetEntry[];
+}
 
 export function SaveLoadPanel() {
   const { t } = useTranslation();
-  const { config, setConfig } = useCabinetStore();
+  const { config, setConfig, cabinets } = useCabinetStore();
+  const loadProject = useCabinetStore((s) => s.loadProject);
   const addToast = useToastStore((s) => s.addToast);
   const [configs, setConfigs] = useState<SavedConfig[]>([]);
   const [saveName, setSaveName] = useState('');
@@ -38,12 +45,17 @@ export function SaveLoadPanel() {
   };
 
   const handleExport = () => {
-    const payload = JSON.stringify(config, null, 2);
-    const blob = new Blob([payload], { type: 'application/json' });
+    const state = useCabinetStore.getState();
+    const payload: ProjectExport = {
+      version: 1,
+      cabinets: state.cabinets,
+    };
+    const json = JSON.stringify(payload, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `cabinet-${config.width}x${config.height}x${config.depth}.json`;
+    a.download = `project-${config.width}x${config.height}x${config.depth}.json`;
     a.click();
     URL.revokeObjectURL(url);
     addToast(t('toast.exported'), 'success');
@@ -60,7 +72,12 @@ export function SaveLoadPanel() {
     reader.onload = () => {
       try {
         const parsed = JSON.parse(reader.result as string);
-        if (isValidConfig(parsed)) {
+        // Project format (multi-cabinet)
+        if (isProjectExport(parsed)) {
+          loadProject(parsed.cabinets);
+          addToast(t('toast.imported'), 'success');
+        // Legacy single-config format
+        } else if (isValidConfig(parsed)) {
           setConfig(parsed);
           addToast(t('toast.imported'), 'success');
         } else {
@@ -183,4 +200,15 @@ function isValidConfig(obj: unknown): obj is CabinetConfig {
     typeof c.carcassMaterial === 'string' &&
     typeof c.backPanelMaterial === 'string'
   );
+}
+
+function isProjectExport(obj: unknown): obj is ProjectExport {
+  if (typeof obj !== 'object' || obj === null) return false;
+  const p = obj as Record<string, unknown>;
+  if (p.version !== 1 || !Array.isArray(p.cabinets) || p.cabinets.length === 0) return false;
+  return p.cabinets.every((c: unknown) => {
+    if (typeof c !== 'object' || c === null) return false;
+    const cab = c as Record<string, unknown>;
+    return typeof cab.name === 'string' && isValidConfig(cab.config);
+  });
 }
