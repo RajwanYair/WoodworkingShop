@@ -46,7 +46,20 @@
     "ft_cabinet": "Cabinet",
     "ft_bookshelf": "Bookshelf",
     "ft_desk": "Desk",
-    "ft_wardrobe": "Wardrobe"
+    "ft_wardrobe": "Wardrobe",
+    "customMaterials": "Custom Materials",
+    "addCustomMaterial": "Add custom material",
+    "materialName": "Name",
+    "thickness": "Thickness",
+    "category": "Category",
+    "catPanel": "Panel",
+    "catBack": "Back Panel",
+    "sheetW": "Sheet Width",
+    "sheetL": "Sheet Length",
+    "price": "Price / Sheet",
+    "color": "Color",
+    "addMaterial": "Add Material",
+    "remove": "Remove"
   },
   "parts": {
     "title": "Parts List",

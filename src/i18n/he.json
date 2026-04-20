@@ -46,7 +46,20 @@
     "ft_cabinet": "ארון",
     "ft_bookshelf": "כוננייה",
     "ft_desk": "שולחן",
-    "ft_wardrobe": "ארון בגדים"
+    "ft_wardrobe": "ארון בגדים",
+    "customMaterials": "חומרים מותאמים אישית",
+    "addCustomMaterial": "הוסף חומר מותאם אישית",
+    "materialName": "שם",
+    "thickness": "עובי",
+    "category": "קטגוריה",
+    "catPanel": "לוח",
+    "catBack": "לוח גב",
+    "sheetW": "רוחב לוח",
+    "sheetL": "אורך לוח",
+    "price": "מחיר / לוח",
+    "color": "צבע",
+    "addMaterial": "הוסף חומר",
+    "remove": "הסר"
   },
   "parts": {
     "title": "רשימת חלקים",

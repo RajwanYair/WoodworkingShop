@@ -23,8 +23,9 @@ export const SAW_KERF = 4; // mm
 
 // ─── Lookup helpers ───
 
-export function getMaterial(key: string): Material {
-  const m = MATERIALS.find(mat => mat.key === key);
+export function getMaterial(key: string, extraMaterials?: Material[]): Material {
+  const all = extraMaterials ? [...MATERIALS, ...extraMaterials] : MATERIALS;
+  const m = all.find(mat => mat.key === key);
   if (!m) throw new Error(`Unknown material: ${key}`);
   return m;
 }
