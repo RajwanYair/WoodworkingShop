@@ -1,0 +1,17 @@
+## v2.6.0 — Session 7 (Sprints 51–60)
+
+### New Features
+- **Part hover tooltips** — Hover over any part in the preview to see dimensions and material info (Sprint 51)
+- **Glass door style** — New "Glass" option for door style with tempered glass material and translucent rendering (Sprint 52)
+- **Enhanced cost estimation** — Waste cost calculation, stacked bar chart visualization, and per-unit cost for multi-cabinet projects (Sprint 53)
+- **Multi-cabinet BOM CSV export** — Export combined bill of materials across all cabinets from the optimizer view (Sprint 54)
+- **Assembly video links** — Each assembly step now includes a YouTube tutorial search link (Sprint 55)
+- **Full project JSON export/import** — Save and load entire multi-cabinet projects with backward-compatible legacy format support (Sprint 56)
+- **Touch gestures for mobile** — Pinch-to-zoom and swipe navigation in the cabinet preview (Sprint 57)
+- **Enhanced shelf drag** — Position labels, horizontal guide lines, and 50mm minimum spacing enforcement during shelf repositioning (Sprint 58)
+- **Drawer component support** — Configurable drawers (0–4) with full parts generation, hardware (drawer slides), assembly steps, and preview rendering (Sprint 59)
+
+### Technical
+- 198 tests passing across 18 test files
+- Build output: ~358 KB main bundle + ~1.47 MB PDF renderer chunk (code-split)
+- Backward-compatible project import with automatic migration for new config fields
