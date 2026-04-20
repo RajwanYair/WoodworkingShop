@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="838" height="353" viewBox="0 0 838 353">
+<style>text{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}</style>
+<text x="419" y="22.0" text-anchor="middle" font-size="15" font-weight="700" fill="#5a4218">Cabinet 2 — Small Upper Unit (480 × 780 × 404)</text>
+<rect x="1" y="33" width="836" height="29" fill="#5a4218" rx="4"/>
+<rect x="1" y="58" width="836" height="4" fill="#5a4218"/>
+<text x="91" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Dimension</text>
+<text x="345" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Calculation</text>
+<text x="673" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Result</text>
+<rect x="1" y="62" width="836" height="29" fill="#ffffff"/>
+<line x1="1" y1="91" x2="837" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">External H × W × D</text>
+<text x="193" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">Given</text>
+<line x1="181" y1="62" x2="181" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="521" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">480 × 780 × 404</text>
+<line x1="509" y1="62" x2="509" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="91" width="836" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="120" x2="837" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">Internal width</text>
+<text x="193" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">780 − 2 × 17</text>
+<line x1="181" y1="91" x2="181" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="521" y="110.0" font-size="13" font-weight="700" fill="#2d2d2d">746</text>
+<line x1="509" y1="91" x2="509" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="120" width="836" height="29" fill="#ffffff"/>
+<line x1="1" y1="149" x2="837" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">Internal height</text>
+<text x="193" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">480 − 2 × 17</text>
+<line x1="181" y1="120" x2="181" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="521" y="139.1" font-size="13" font-weight="700" fill="#2d2d2d">446</text>
+<line x1="509" y1="120" x2="509" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="149" width="836" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="178" x2="837" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">Internal depth</text>
+<text x="193" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">= side depth</text>
+<line x1="181" y1="149" x2="181" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="521" y="168.1" font-size="13" font-weight="700" fill="#2d2d2d">404</text>
+<line x1="509" y1="149" x2="509" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="178" width="836" height="29" fill="#ffffff"/>
+<line x1="1" y1="207" x2="837" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">Fixed shelf position</text>
+<text x="193" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">Mid-height: 240 mm from bottom exterior</text>
+<line x1="181" y1="178" x2="181" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="521" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">Top surface at 223 from internal bottom</text>
+<line x1="509" y1="178" x2="509" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="207" width="836" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="236" x2="837" y2="236" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="226.1" font-size="13" font-weight="400" fill="#2d2d2d">Door height</text>
+<text x="193" y="226.1" font-size="13" font-weight="400" fill="#2d2d2d">480 − 3 − 3</text>
+<line x1="181" y1="207" x2="181" y2="236" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="521" y="226.1" font-size="13" font-weight="700" fill="#2d2d2d">474</text>
+<line x1="509" y1="207" x2="509" y2="236" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="236" width="836" height="29" fill="#ffffff"/>
+<line x1="1" y1="265" x2="837" y2="265" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="255.1" font-size="13" font-weight="400" fill="#2d2d2d">Door width (each)</text>
+<text x="193" y="255.1" font-size="13" font-weight="400" fill="#2d2d2d">(780 − 3 − 2 − 3) / 2</text>
+<line x1="181" y1="236" x2="181" y2="265" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="521" y="255.1" font-size="13" font-weight="700" fill="#2d2d2d">386</text>
+<line x1="509" y1="236" x2="509" y2="265" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="265" width="836" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="294" x2="837" y2="294" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="284.1" font-size="13" font-weight="400" fill="#2d2d2d">Shelf depth</text>
+<text x="193" y="284.1" font-size="13" font-weight="400" fill="#2d2d2d">404 − 20</text>
+<line x1="181" y1="265" x2="181" y2="294" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="521" y="284.1" font-size="13" font-weight="700" fill="#2d2d2d">384</text>
+<line x1="509" y1="265" x2="509" y2="294" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="294" width="836" height="29" fill="#ffffff"/>
+<line x1="1" y1="323" x2="837" y2="323" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="313.1" font-size="13" font-weight="400" fill="#2d2d2d">Fixed shelf width</text>
+<text x="193" y="313.1" font-size="13" font-weight="400" fill="#2d2d2d">746 − 2 × 0.5</text>
+<line x1="181" y1="294" x2="181" y2="323" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="521" y="313.1" font-size="13" font-weight="700" fill="#2d2d2d">745</text>
+<line x1="509" y1="294" x2="509" y2="323" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="323" width="836" height="29" fill="#f8f4ee"/>
+<text x="13" y="342.1" font-size="13" font-weight="400" fill="#2d2d2d">Back panel H × W</text>
+<text x="193" y="342.1" font-size="13" font-weight="400" fill="#2d2d2d">(480 − 2 × 10) × (780 − 2 × 10)</text>
+<line x1="181" y1="323" x2="181" y2="352" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="521" y="342.1" font-size="13" font-weight="700" fill="#2d2d2d">460 × 760</text>
+<line x1="509" y1="323" x2="509" y2="352" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="33" width="836" height="319" fill="none" stroke="#d4c4a0" stroke-width="1" rx="4"/>
+</svg>

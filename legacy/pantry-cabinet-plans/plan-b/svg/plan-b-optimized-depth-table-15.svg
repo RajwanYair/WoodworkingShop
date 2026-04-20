@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="370" height="121" viewBox="0 0 370 121">
+<style>text{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}</style>
+<text x="185" y="22.0" text-anchor="middle" font-size="15" font-weight="700" fill="#5a4218">4 mm Backer — Single Sheet (unchanged from Plan A)</text>
+<rect x="1" y="33" width="368" height="29" fill="#5a4218" rx="4"/>
+<rect x="1" y="58" width="368" height="4" fill="#5a4218"/>
+<text x="72" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Part</text>
+<text x="193" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Size</text>
+<text x="307" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Position</text>
+<rect x="1" y="62" width="368" height="29" fill="#ffffff"/>
+<line x1="1" y1="91" x2="369" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">L-07 back panel</text>
+<text x="154" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">1980 × 980</text>
+<line x1="142" y1="62" x2="142" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="256" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">Left portion</text>
+<line x1="244" y1="62" x2="244" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="91" width="368" height="29" fill="#f8f4ee"/>
+<text x="13" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">S-06 back panel</text>
+<text x="154" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">456 × 760</text>
+<line x1="142" y1="91" x2="142" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="256" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">Right portion</text>
+<line x1="244" y1="91" x2="244" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="33" width="368" height="87" fill="none" stroke="#d4c4a0" stroke-width="1" rx="4"/>
+</svg>

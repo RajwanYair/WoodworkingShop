@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="613" height="121" viewBox="0 0 613 121">
+<style>text{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}</style>
+<text x="306" y="22.0" text-anchor="middle" font-size="15" font-weight="700" fill="#5a4218">Sheet Goods</text>
+<rect x="1" y="33" width="611" height="29" fill="#5a4218" rx="4"/>
+<rect x="1" y="58" width="611" height="4" fill="#5a4218"/>
+<text x="99" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Item</text>
+<text x="252" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Size</text>
+<text x="350" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Qty</text>
+<text x="502" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Notes</text>
+<rect x="1" y="62" width="611" height="29" fill="#ffffff"/>
+<line x1="1" y1="91" x2="612" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">17 mm sandwich plywood</text>
+<text x="209" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">2440 × 1220</text>
+<line x1="197" y1="62" x2="197" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="318" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">5 sheets</text>
+<line x1="306" y1="62" x2="306" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="405" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">See § 7 for nesting</text>
+<line x1="393" y1="62" x2="393" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="91" width="611" height="29" fill="#f8f4ee"/>
+<text x="13" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">4 mm sandwich plywood</text>
+<text x="209" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">2440 × 1220</text>
+<line x1="197" y1="91" x2="197" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="318" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">1 sheet</text>
+<line x1="306" y1="91" x2="306" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="405" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">Both backs from one sheet</text>
+<line x1="393" y1="91" x2="393" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="33" width="611" height="87" fill="none" stroke="#d4c4a0" stroke-width="1" rx="4"/>
+</svg>

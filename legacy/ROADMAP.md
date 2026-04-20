@@ -9,28 +9,15 @@
 
 ### Recommended Stack: Full Client-Side SPA
 
-| Layer | Technology | Rationale |
-|---|---|---|
-| **Framework** | React 19 + TypeScript | Component model fits configurator UI; strong ecosystem |
-| **Build** | Vite 6 | Fast HMR, tree-shaking, GitHub Pages deploy in seconds |
-| **Styling** | Tailwind CSS 4 | Rapid UI, dark/light theme, responsive out of the box |
-| **State** | Zustand | Lightweight, perfect for a config-object store |
-| **PDF Engine** | `@react-pdf/renderer` | React components → multi-page PDF; supports RTL, custom fonts, SVG drawings |
-| **Cabinet Preview** | Inline SVG (React) | Port existing ReportLab Drawing logic to SVG components; live preview |
-| **i18n** | `react-i18next` | EN + HE with RTL layout switching |
-| **Deployment** | GitHub Pages (existing `pages.yml`) | Zero cost, already configured |
-| **Testing** | Vitest + React Testing Library | Fast, Vite-native |
-| **Linting** | ESLint + Prettier | Replaces ruff (Python era) |
+
+![Recommended Stack: Full Client-Side SPA](svg/ROADMAP-table-01.svg)
+
 
 ### Why Not a Python Backend?
 
-| Consideration | Client-Side (✅ chosen) | Python Backend |
-|---|---|---|
-| Hosting cost | Free (GitHub Pages) | Needs Vercel/Railway/etc. |
-| Latency | Instant (runs in browser) | Network round-trip per PDF |
-| Offline capable | Yes (PWA possible) | No |
-| Reuse of ReportLab code | Must port to TS | Direct reuse |
-| Complexity | Single repo, single deploy | Two deploys, CORS, auth |
+
+![Why Not a Python Backend?](svg/ROADMAP-table-02.svg)
+
 
 The existing Python code is ~820 lines of drawing + ~400 lines per generator. The core math
 (dimension formulas, cut optimization, nesting) is straightforward arithmetic that ports
@@ -41,17 +28,9 @@ The PDF premium catalog features (`@react-pdf/renderer`) can replicate the Repor
 
 ## Current State → Target State
 
-```
-CURRENT (static)                          TARGET (interactive)
-┌─────────────────────┐                   ┌──────────────────────────────┐
-│ Python scripts ×4   │                   │ React SPA                    │
-│ Hard-coded dims     │                   │  ├─ Configurator Panel       │
-│ 12 pre-built PDFs   │  ──────────────►  │  ├─ Live SVG Preview         │
-│ 3 plan variants     │                   │  ├─ Smart Optimizer          │
-│ GitHub Pages = README│                  │  ├─ PDF Generator (browser)  │
-└─────────────────────┘                   │  └─ EN/HE bilingual          │
-                                          └──────────────────────────────┘
-```
+
+![Current State → Target State](svg/ROADMAP-diagram-03.svg)
+
 
 ---
 
@@ -70,42 +49,9 @@ CURRENT (static)                          TARGET (interactive)
 - Dark/light mode toggle (CSS custom properties)
 
 ### 0.3 Project structure
-```
-app/
-├── public/
-│   └── fonts/                  # Arial, David TTF files
-├── src/
-│   ├── main.tsx
-│   ├── App.tsx
-│   ├── components/
-│   │   ├── configurator/       # Phase 1
-│   │   ├── preview/            # Phase 2
-│   │   ├── optimizer/          # Phase 3
-│   │   └── pdf/                # Phase 4
-│   ├── engine/                 # Core calculation logic
-│   │   ├── dimensions.ts       # Formulas (port from Python)
-│   │   ├── parts.ts            # Parts list generator
-│   │   ├── materials.ts        # Material database
-│   │   ├── hardware.ts         # Hardware calculator
-│   │   ├── cut-optimizer.ts    # Sheet nesting engine
-│   │   └── types.ts            # TypeScript interfaces
-│   ├── i18n/
-│   │   ├── en.json
-│   │   └── he.json
-│   ├── store/
-│   │   └── cabinet-store.ts    # Zustand store
-│   └── styles/
-│       └── index.css           # Tailwind entry
-├── tests/
-│   ├── engine/                 # Unit tests for all formulas
-│   └── components/             # Component tests
-├── index.html
-├── package.json
-├── tsconfig.json
-├── vite.config.ts
-├── tailwind.config.ts
-└── eslint.config.js
-```
+
+![0.3 Project structure](svg/ROADMAP-diagram-04.svg)
+
 
 ### 0.4 CI/CD update
 - Replace Python CI with Node.js CI (lint, type-check, test, build)
@@ -189,50 +135,15 @@ const MATERIALS: Material[] = [
 
 ### 1.3 UI layout (responsive)
 
-```
-┌────────────────────────────────────────────────────────────┐
-│  🪵 WoodworkingShop Cabinet Planner         [EN|עב] [☀🌙] │
-├──────────────────────┬─────────────────────────────────────┤
-│                      │                                     │
-│  CONFIGURATOR PANEL  │     LIVE CABINET PREVIEW            │
-│                      │     (SVG — updates in real-time)    │
-│  ┌────────────────┐  │                                     │
-│  │ Dimensions     │  │     ┌───────────────────────┐       │
-│  │ W: [====●===]  │  │     │                       │       │
-│  │ H: [======●=]  │  │     │   Front View (open)   │       │
-│  │ D: [===●====]  │  │     │                       │       │
-│  └────────────────┘  │     │   ┌───┐  ┌───┐        │       │
-│                      │     │   │   │  │   │        │       │
-│  ┌────────────────┐  │     └───────────────────────┘       │
-│  │ Material  [▼]  │  │                                     │
-│  │ Shelves   [4]  │  │     [Front] [Side] [Top] [3D]      │
-│  │ Doors    [2]   │  │                                     │
-│  │ Handles  [▼]   │  │     ┌───────────────────────┐       │
-│  │ Edge     [▼]   │  │     │  Parts Summary Table   │       │
-│  └────────────────┘  │     │  (auto-generated)      │       │
-│                      │     └───────────────────────┘       │
-│  ┌────────────────┐  │                                     │
-│  │ 💡 OPTIMIZER   │  │     ┌───────────────────────┐       │
-│  │  [Run Smart    │  │     │  Cost / Sheets Summary │       │
-│  │   Optimizer]   │  │     └───────────────────────┘       │
-│  └────────────────┘  │                                     │
-│                      │     [ ⬇ Download PDF Plan ]         │
-│  Shopping List  ─────│─────────────────────────────────────│
-│  (collapsible)       │                                     │
-└──────────────────────┴─────────────────────────────────────┘
-```
+
+![1.3 UI layout (responsive)](svg/ROADMAP-diagram-05.svg)
+
 
 ### 1.4 Configurator components
 
-| Component | Description |
-|---|---|
-| `DimensionSliders` | Width/Height/Depth with numeric input + range slider, real-time validation |
-| `MaterialSelector` | Dropdown grouped by category, shows thickness + color swatch |
-| `ShelfConfigurator` | Shelf count stepper + equal/custom spacing toggle; drag shelf positions |
-| `DoorConfigurator` | Single/double, handle style, reveal gap |
-| `EdgeBandingSelector` | All/doors-only/none with linear-meter estimate |
-| `LanguageToggle` | EN ↔ HE with full RTL layout flip |
-| `ThemeToggle` | Light / dark |
+
+![1.4 Configurator components](svg/ROADMAP-table-06.svg)
+
 
 ### 1.5 Validation rules
 
@@ -284,16 +195,9 @@ const CONSTRAINTS = {
 
 ### 2.2 Mapping from Python → React SVG
 
-| Python (reportlab) | React SVG |
-|---|---|
-| `Drawing(w, h)` | `<svg viewBox="0 0 {w} {h}">` |
-| `Rect(x, y, w, h, fill)` | `<rect x y width height fill />` |
-| `Line(x1, y1, x2, y2)` | `<line x1 y1 x2 y2 />` |
-| `String(x, y, text, font, size)` | `<text x y font-family font-size>` |
-| `_shadowed_rect(...)` | `<ShadowedRect />` component with `<filter>` |
-| `dim_line(...)` | `<DimensionLine />` component (line + ticks + label) |
-| `_highlight_edge(...)` | `<EdgeHighlight />` with dashed/solid stroke |
-| `_draw_handle(...)` | `<Handle />` component |
+
+![2.2 Mapping from Python → React SVG](svg/ROADMAP-table-07.svg)
+
 
 ### 2.3 View switcher
 - Tab bar: Front (Closed) | Front (Open) | Side | Top | Back | 3D
@@ -361,42 +265,15 @@ The optimizer implements the **same strip-nesting math** from the existing plans
 
 ### 3.3 User-facing optimizer modes
 
-| Mode | Description | User selects |
-|---|---|---|
-| **Auto-optimize** | "Find best dimensions" — optimizer tries all parameters | Which param(s) can change |
-| **Fix external, flex depth** | Keep W×H, vary D (Plan B/C approach) | Max depth reduction tolerance |
-| **Fix depth, flex width** | Keep D, nudge W for better nesting | Max width change tolerance |
-| **Budget mode** | Target a sheet count, find dims that fit | Target sheet count |
-| **Material swap** | Same dims, different material thickness | Candidate materials |
+
+![3.3 User-facing optimizer modes](svg/ROADMAP-table-08.svg)
+
 
 ### 3.4 Optimizer UI
 
-```
-┌─────────────────────────────────────────┐
-│  💡 Smart Optimizer                      │
-│                                          │
-│  What can I adjust?                      │
-│  [✓] Depth   [✓] Width   [ ] Height     │
-│                                          │
-│  Max change tolerance: [±50mm]           │
-│                                          │
-│  [ 🔍 Find Optimizations ]              │
-│                                          │
-│  ── Results ──────────────────────────── │
-│                                          │
-│  🥇 Reduce depth 600→404mm              │
-│     Saves 1 sheet (5→4) · Yield +3.2%   │
-│     [ Apply ]                            │
-│                                          │
-│  🥈 Reduce depth 600→368mm              │
-│     Saves 2 sheets (5→3) · Yield +11.3% │
-│     [ Apply ]                            │
-│                                          │
-│  🥉 Swap to 18mm melamine               │
-│     Same sheets, saves ₪85              │
-│     [ Apply ]                            │
-└─────────────────────────────────────────┘
-```
+
+![3.4 Optimizer UI](svg/ROADMAP-diagram-09.svg)
+
 
 ### 3.5 Comparison view
 - Side-by-side: original config vs optimized config
@@ -436,17 +313,9 @@ const CabinetPlan: React.FC<{ config: CabinetConfig; parts: Part[] }> = ({ confi
 
 ### 4.2 PDF page structure (matches existing quality)
 
-| Page | Content | Source |
-|---|---|---|
-| 1 | **Catalog cover** — title, project meta, at-a-glance stats | `make_catalog_cover()` |
-| 2 | **Product card** — hero specs, feature callouts | `make_product_card()` |
-| 3 | **Dimensioned specs** — all formulas + calculated values | Inline table |
-| 4 | **Cut list** — full parts table with edge banding | `make_table()` |
-| 5–7 | **Cut plan** — sheet layouts with yield % | `draw_cut_sheet()` |
-| 8–9 | **Technical drawings** — front, side, top, 3D views | SVG → PDF |
-| 10 | **Drilling & boring** — hinge cups, shelf pins | Text + diagram |
-| 11 | **Assembly sequence** — step-by-step instructions | Numbered list |
-| 12 | **Shopping list** — sheet goods + hardware + edge banding | Summary table |
+
+![4.2 PDF page structure (matches existing quality)](svg/ROADMAP-table-10.svg)
+
 
 ### 4.3 SVG drawings in PDF
 - Render the same React SVG components from Phase 2
@@ -557,15 +426,9 @@ function optimizeCutSheets(
 
 > These are stretch goals, not part of the initial build.
 
-| Feature | Description |
-|---|---|
-| **Multi-cabinet project** | Design a full room: multiple cabinets with shared material optimization |
-| **3D WebGL preview** | Three.js-based interactive 3D view with orbit controls |
-| **Price calculator** | Per-material pricing with supplier integration |
-| **Export to CNC** | Generate DXF/G-code for CNC router |
-| **Assembly video links** | Embed step-by-step video guides |
-| **Community gallery** | Users share their built cabinets (photos + config) |
-| **More furniture types** | Bookshelves, desks, wardrobes using the same parametric engine |
+
+![Table 11](svg/ROADMAP-table-11.svg)
+
 
 ---
 
@@ -627,13 +490,9 @@ function optimizeCutSheets(
 
 ## Risk Register
 
-| Risk | Impact | Mitigation |
-|---|---|---|
-| `@react-pdf/renderer` can't replicate all drawings | High | Prototype the most complex drawing (cut sheet) in Phase 0 as a spike |
-| Hebrew RTL in PDF breaks layout | Medium | Test RTL rendering early; fallback to `jsPDF` if needed |
-| Cut optimizer doesn't match manual quality | Medium | Use existing plan A→B→C transitions as golden-path regression tests |
-| Font licensing on web | Low | Arial/David are system fonts; bundle with license or use open alternatives (Inter, Noto) |
-| Performance with large part lists | Low | Web Workers for optimization; memoize SVG renders |
+
+![Risk Register](svg/ROADMAP-table-12.svg)
+
 
 ---
 

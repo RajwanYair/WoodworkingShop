@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="535" height="147" viewBox="0 0 535 147">
+<style>text{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}</style>
+<rect x="1" y="1" width="533" height="29" fill="#5a4218" rx="4"/>
+<rect x="1" y="26" width="533" height="4" fill="#5a4218"/>
+<text x="83" y="20.1" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Part</text>
+<text x="212" y="20.1" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Size</text>
+<text x="338" y="20.1" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Orientation</text>
+<text x="475" y="20.1" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Position</text>
+<rect x="1" y="30" width="533" height="29" fill="#ffffff"/>
+<line x1="1" y1="59" x2="534" y2="59" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="49.0" font-size="13" font-weight="400" fill="#2d2d2d">L-04 fixed shelf</text>
+<text x="177" y="49.0" font-size="13" font-weight="400" fill="#2d2d2d">966 × 580</text>
+<line x1="165" y1="30" x2="165" y2="59" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="272" y="49.0" font-size="13" font-weight="400" fill="#2d2d2d">Length along 2440</text>
+<line x1="260" y1="30" x2="260" y2="59" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="428" y="49.0" font-size="13" font-weight="400" fill="#2d2d2d">Row A, left</text>
+<line x1="416" y1="30" x2="416" y2="59" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="59" width="533" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="88" x2="534" y2="88" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="78.0" font-size="13" font-weight="400" fill="#2d2d2d">L-05 adj. shelf ×1</text>
+<text x="177" y="78.0" font-size="13" font-weight="400" fill="#2d2d2d">964 × 580</text>
+<line x1="165" y1="59" x2="165" y2="88" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="272" y="78.0" font-size="13" font-weight="400" fill="#2d2d2d">Length along 2440</text>
+<line x1="260" y1="59" x2="260" y2="88" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="428" y="78.0" font-size="13" font-weight="400" fill="#2d2d2d">Row A, right</text>
+<line x1="416" y1="59" x2="416" y2="88" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="88" width="533" height="29" fill="#ffffff"/>
+<line x1="1" y1="117" x2="534" y2="117" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="107.0" font-size="13" font-weight="400" fill="#2d2d2d">L-05 adj. shelf ×1</text>
+<text x="177" y="107.0" font-size="13" font-weight="400" fill="#2d2d2d">964 × 580</text>
+<line x1="165" y1="88" x2="165" y2="117" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="272" y="107.0" font-size="13" font-weight="400" fill="#2d2d2d">Length along 2440</text>
+<line x1="260" y1="88" x2="260" y2="117" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="428" y="107.0" font-size="13" font-weight="400" fill="#2d2d2d">Row B, left</text>
+<line x1="416" y1="88" x2="416" y2="117" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="117" width="533" height="29" fill="#f8f4ee"/>
+<text x="13" y="136.1" font-size="13" font-weight="400" fill="#2d2d2d">S-04 fixed shelf</text>
+<text x="177" y="136.1" font-size="13" font-weight="400" fill="#2d2d2d">745 × 580</text>
+<line x1="165" y1="117" x2="165" y2="146" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="272" y="136.1" font-size="13" font-weight="400" fill="#2d2d2d">Length along 2440</text>
+<line x1="260" y1="117" x2="260" y2="146" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="428" y="136.1" font-size="13" font-weight="400" fill="#2d2d2d">Row B, right</text>
+<line x1="416" y1="117" x2="416" y2="146" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="1" width="533" height="145" fill="none" stroke="#d4c4a0" stroke-width="1" rx="4"/>
+</svg>

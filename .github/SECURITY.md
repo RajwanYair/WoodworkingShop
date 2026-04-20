@@ -2,10 +2,9 @@
 
 ## Supported Versions
 
-| Version | Supported          |
-| ------- | ------------------ |
-| Latest  | :white_check_mark: |
-| < 1.0   | :x:                |
+
+![Supported Versions](svg/SECURITY-table-01.svg)
+
 
 ## Reporting a Vulnerability
 

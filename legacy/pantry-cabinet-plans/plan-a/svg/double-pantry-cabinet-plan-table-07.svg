@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="713" height="179" viewBox="0 0 713 179">
+<style>text{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}</style>
+<text x="356" y="22.0" text-anchor="middle" font-size="15" font-weight="700" fill="#5a4218">4.1 Hinge Cup Boring (doors)</text>
+<rect x="1" y="33" width="711" height="29" fill="#5a4218" rx="4"/>
+<rect x="1" y="58" width="711" height="4" fill="#5a4218"/>
+<text x="153" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Parameter</text>
+<text x="509" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Value</text>
+<rect x="1" y="62" width="711" height="29" fill="#ffffff"/>
+<line x1="1" y1="91" x2="712" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">Cup diameter</text>
+<text x="318" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">35 mm (Forstner bit)</text>
+<line x1="306" y1="62" x2="306" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="91" width="711" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="120" x2="712" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">Cup depth</text>
+<text x="318" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">12–13 mm into 17 mm panel</text>
+<line x1="306" y1="91" x2="306" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="120" width="711" height="29" fill="#ffffff"/>
+<line x1="1" y1="149" x2="712" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">Cup center from hinge-side door edge</text>
+<text x="318" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">22.5 mm (standard for 110° overlay hinge)</text>
+<line x1="306" y1="120" x2="306" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="149" width="711" height="29" fill="#f8f4ee"/>
+<text x="13" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">Mounting plate screw holes</text>
+<text x="318" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">Pre-drill 3 mm × 10 mm into side panel inner face</text>
+<line x1="306" y1="149" x2="306" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="33" width="711" height="145" fill="none" stroke="#d4c4a0" stroke-width="1" rx="4"/>
+</svg>

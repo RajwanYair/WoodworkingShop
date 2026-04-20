@@ -24,17 +24,9 @@ A React single-page application for designing pantry/storage cabinets with real-
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | React 19 + TypeScript 5.8 |
-| Build | Vite 8 |
-| Styling | Tailwind CSS 4 |
-| State | Zustand 5 |
-| i18n | i18next + react-i18next |
-| PDF | @react-pdf/renderer 4 |
-| Testing | Vitest (92 unit tests across 7 files) |
-| CI | GitHub Actions (Node 20+22 matrix) |
-| Deploy | GitHub Pages |
+
+![Tech Stack](svg/README-table-01.svg)
+
 
 ## Quick Start
 
@@ -47,30 +39,9 @@ npm run build      # production build → dist/
 
 ## Project Structure
 
-```
-src/
-  engine/           # Pure TypeScript calculation engine
-    types.ts        # Domain types (CabinetConfig, Part, etc.)
-    materials.ts    # Material database, defaults, constraints, prices
-    dimensions.ts   # Derived dimensions from config
-    parts.ts        # Parts list generation
-    hardware.ts     # Hardware BOM generation
-    cut-optimizer.ts    # FFD 2D bin-packing
-    smart-optimizer.ts  # 5-strategy optimization engine
-    cost-estimator.ts   # Price calculation engine
-  components/
-    layout/         # Header, Sidebar (with cost estimate)
-    configurator/   # DimensionSliders, MaterialSelector, DoorConfig, SaveLoad, CostEstimate
-    preview/        # CabinetPreview (SVG with draggable shelves)
-    optimizer/      # OptimizerView (interactive), SmartOptimizerPanel, ComparisonView, Tables
-    pdf/            # CabinetPdfDocument (8+ pages), PdfExportPanel
-  store/            # Zustand store (cabinet-store.ts)
-  utils/            # URL state, localStorage helpers
-  i18n/             # en.json, he.json
-tests/
-  engine/           # Unit tests for engine modules + smart optimizer
-  utils/            # URL state round-trip tests
-```
+
+![Project Structure](svg/README-diagram-02.svg)
+
 
 ## License
 

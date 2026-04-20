@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="654" height="382" viewBox="0 0 654 382">
+<style>text{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}</style>
+<text x="327" y="22.0" text-anchor="middle" font-size="15" font-weight="700" fill="#5a4218">Project Context</text>
+<rect x="1" y="33" width="652" height="29" fill="#5a4218" rx="4"/>
+<rect x="1" y="58" width="652" height="4" fill="#5a4218"/>
+<text x="87" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Parameter</text>
+<text x="413" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Value</text>
+<rect x="1" y="62" width="652" height="29" fill="#ffffff"/>
+<line x1="1" y1="91" x2="653" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">Location</text>
+<text x="185" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">Kitchen pantry wall</text>
+<line x1="173" y1="62" x2="173" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="91" width="652" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="120" x2="653" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">Cabinet style</text>
+<text x="185" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">Frameless / Euro (no face frame)</text>
+<line x1="173" y1="91" x2="173" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="120" width="652" height="29" fill="#ffffff"/>
+<line x1="1" y1="149" x2="653" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">Skill level</text>
+<text x="185" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">Intermediate</text>
+<line x1="173" y1="120" x2="173" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="149" width="652" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="178" x2="653" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">Tools assumed</text>
+<text x="185" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">Track saw or circular saw + guide rail, drill/driver, 35 mm Forstner bit, 5 mm brad-point bit, 3 mm pilot bit, edge banding iron or trimmer, bar clamps, square</text>
+<line x1="173" y1="149" x2="173" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="178" width="652" height="29" fill="#ffffff"/>
+<line x1="1" y1="207" x2="653" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">Preferred joinery</text>
+<text x="185" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">Pre-drilled screws into panel edge (4.0 × 50 mm); pilot hole 3 mm</text>
+<line x1="173" y1="178" x2="173" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="207" width="652" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="236" x2="653" y2="236" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="226.1" font-size="13" font-weight="400" fill="#2d2d2d">Finish</text>
+<text x="185" y="226.1" font-size="13" font-weight="400" fill="#2d2d2d">PVC edge banding 0.5–1 mm on visible edges; paint or clear coat per preference</text>
+<line x1="173" y1="207" x2="173" y2="236" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="236" width="652" height="29" fill="#ffffff"/>
+<line x1="1" y1="265" x2="653" y2="265" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="255.1" font-size="13" font-weight="400" fill="#2d2d2d">Hardware</text>
+<text x="185" y="255.1" font-size="13" font-weight="400" fill="#2d2d2d">110° concealed soft-close hinges (Blum Clip-Top or equivalent); 5 mm metal shelf pins</text>
+<line x1="173" y1="236" x2="173" y2="265" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="265" width="652" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="294" x2="653" y2="294" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="284.1" font-size="13" font-weight="400" fill="#2d2d2d">Carcass material</text>
+<text x="185" y="284.1" font-size="13" font-weight="400" fill="#2d2d2d">17 mm sandwich plywood</text>
+<line x1="173" y1="265" x2="173" y2="294" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="294" width="652" height="29" fill="#ffffff"/>
+<line x1="1" y1="323" x2="653" y2="323" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="313.1" font-size="13" font-weight="400" fill="#2d2d2d">Back panel material</text>
+<text x="185" y="313.1" font-size="13" font-weight="400" fill="#2d2d2d">4 mm sandwich plywood</text>
+<line x1="173" y1="294" x2="173" y2="323" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="323" width="652" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="352" x2="653" y2="352" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="342.1" font-size="13" font-weight="400" fill="#2d2d2d">Sheet size</text>
+<text x="185" y="342.1" font-size="13" font-weight="400" fill="#2d2d2d">Standard 2440 × 1220 mm</text>
+<line x1="173" y1="323" x2="173" y2="352" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="352" width="652" height="29" fill="#ffffff"/>
+<text x="13" y="371.1" font-size="13" font-weight="400" fill="#2d2d2d">Saw kerf allowance</text>
+<text x="185" y="371.1" font-size="13" font-weight="400" fill="#2d2d2d">4 mm</text>
+<line x1="173" y1="352" x2="173" y2="381" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="33" width="652" height="348" fill="none" stroke="#d4c4a0" stroke-width="1" rx="4"/>
+</svg>

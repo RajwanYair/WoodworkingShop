@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1089" height="92" viewBox="0 0 1089 92">
+<style>text{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}</style>
+<text x="544" y="22.0" text-anchor="middle" font-size="15" font-weight="700" fill="#5a4218">Catalog Cover</text>
+<rect x="1" y="33" width="1087" height="29" fill="#5a4218" rx="4"/>
+<rect x="1" y="58" width="1087" height="4" fill="#5a4218"/>
+<text x="52" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Edition</text>
+<text x="255" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Positioning</text>
+<text x="626" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Material language</text>
+<text x="966" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Primary use</text>
+<rect x="1" y="62" width="1087" height="29" fill="#ffffff"/>
+<text x="13" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">April 2026</text>
+<text x="115" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">Balanced depth / sheet-count version</text>
+<line x1="103" y1="62" x2="103" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="420" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">17 mm sandwich plywood + 4 mm sandwich plywood backer</text>
+<line x1="408" y1="62" x2="408" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="857" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">Storage room or service zone</text>
+<line x1="845" y1="62" x2="845" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="33" width="1087" height="58" fill="none" stroke="#d4c4a0" stroke-width="1" rx="4"/>
+</svg>

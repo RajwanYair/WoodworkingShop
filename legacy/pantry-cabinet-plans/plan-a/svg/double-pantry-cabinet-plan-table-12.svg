@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="984" height="295" viewBox="0 0 984 295">
+<style>text{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}</style>
+<text x="492" y="22.0" text-anchor="middle" font-size="15" font-weight="700" fill="#5a4218">Hardware</text>
+<rect x="1" y="33" width="982" height="29" fill="#5a4218" rx="4"/>
+<rect x="1" y="58" width="982" height="4" fill="#5a4218"/>
+<text x="138" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Item</text>
+<text x="458" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Spec</text>
+<text x="672" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Qty</text>
+<text x="842" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Notes</text>
+<rect x="1" y="62" width="982" height="29" fill="#ffffff"/>
+<line x1="1" y1="91" x2="983" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">Concealed hinge, 110° soft-close</text>
+<text x="287" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">Full overlay, 35 mm cup (e.g., Blum 71B3550)</text>
+<line x1="275" y1="62" x2="275" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="654" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">12</text>
+<line x1="642" y1="62" x2="642" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="714" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">8 for Cab 1, 4 for Cab 2</text>
+<line x1="702" y1="62" x2="702" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="91" width="982" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="120" x2="983" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">Hinge mounting plate</text>
+<text x="287" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">Cruciform, system 0 mm</text>
+<line x1="275" y1="91" x2="275" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="654" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">12</text>
+<line x1="642" y1="91" x2="642" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="714" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">Match hinge brand</text>
+<line x1="702" y1="91" x2="702" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="120" width="982" height="29" fill="#ffffff"/>
+<line x1="1" y1="149" x2="983" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">Shelf support pin, 5 mm</text>
+<text x="287" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">Metal, spoon or cylindrical</text>
+<line x1="275" y1="120" x2="275" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="654" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">20</text>
+<line x1="642" y1="120" x2="642" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="714" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">16 active + 4 spare</text>
+<line x1="702" y1="120" x2="702" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="149" width="982" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="178" x2="983" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">Structural screws</text>
+<text x="287" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">4.0 × 50 mm, self-tapping, yellow zinc</text>
+<line x1="275" y1="149" x2="275" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="654" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">100</text>
+<line x1="642" y1="149" x2="642" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="714" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">~66 needed + 34 spare</text>
+<line x1="702" y1="149" x2="702" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="178" width="982" height="29" fill="#ffffff"/>
+<line x1="1" y1="207" x2="983" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">Hardware screws</text>
+<text x="287" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">3.5 × 16 mm, pan head</text>
+<line x1="275" y1="178" x2="275" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="654" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">60</text>
+<line x1="642" y1="178" x2="642" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="714" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">Hinges, plates, handles, brackets</text>
+<line x1="702" y1="178" x2="702" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="207" width="982" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="236" x2="983" y2="236" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="226.1" font-size="13" font-weight="400" fill="#2d2d2d">Cabinet handles / pulls</text>
+<text x="287" y="226.1" font-size="13" font-weight="400" fill="#2d2d2d">User&#x27;s choice</text>
+<line x1="275" y1="207" x2="275" y2="236" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="654" y="226.1" font-size="13" font-weight="400" fill="#2d2d2d">4</text>
+<line x1="642" y1="207" x2="642" y2="236" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="714" y="226.1" font-size="13" font-weight="400" fill="#2d2d2d">2 per cabinet</text>
+<line x1="702" y1="207" x2="702" y2="236" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="236" width="982" height="29" fill="#ffffff"/>
+<line x1="1" y1="265" x2="983" y2="265" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="255.1" font-size="13" font-weight="400" fill="#2d2d2d">Wall-fixing L-brackets</text>
+<text x="287" y="255.1" font-size="13" font-weight="400" fill="#2d2d2d">Heavy-duty steel, min 50 × 50 mm</text>
+<line x1="275" y1="236" x2="275" y2="265" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="654" y="255.1" font-size="13" font-weight="400" fill="#2d2d2d">6</text>
+<line x1="642" y1="236" x2="642" y2="265" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="714" y="255.1" font-size="13" font-weight="400" fill="#2d2d2d">4 for Cab 1, 2 for Cab 2</text>
+<line x1="702" y1="236" x2="702" y2="265" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="265" width="982" height="29" fill="#f8f4ee"/>
+<text x="13" y="284.1" font-size="13" font-weight="400" fill="#2d2d2d">Wall anchors</text>
+<text x="287" y="284.1" font-size="13" font-weight="400" fill="#2d2d2d">Match wall type (concrete / stud)</text>
+<line x1="275" y1="265" x2="275" y2="294" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="654" y="284.1" font-size="13" font-weight="400" fill="#2d2d2d">6</text>
+<line x1="642" y1="265" x2="642" y2="294" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="714" y="284.1" font-size="13" font-weight="400" fill="#2d2d2d">For L-brackets</text>
+<line x1="702" y1="265" x2="702" y2="294" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="33" width="982" height="261" fill="none" stroke="#d4c4a0" stroke-width="1" rx="4"/>
+</svg>

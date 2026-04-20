@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="535" viewBox="0 0 360 535">
+<style>text{font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;white-space:pre}</style>
+<text x="180" y="22.0" text-anchor="middle" font-size="15" font-weight="700" fill="#5a4218" style="font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">3.4 Optimizer UI</text>
+<rect x="1" y="33" width="358" height="501" fill="#f6f1ea" rx="6" stroke="#d4c4a0" stroke-width="1"/>
+<rect x="1" y="33" width="4" height="501" fill="#5a4218" rx="2"/>
+<text x="24" y="67.4" font-size="12" fill="#2d2d2d">┌─────────────────────────────────────────┐</text>
+<text x="24" y="86.6" font-size="12" fill="#2d2d2d">│  💡 Smart Optimizer                      │</text>
+<text x="24" y="105.8" font-size="12" fill="#2d2d2d">│                                          │</text>
+<text x="24" y="125.0" font-size="12" fill="#2d2d2d">│  What can I adjust?                      │</text>
+<text x="24" y="144.2" font-size="12" fill="#2d2d2d">│  [✓] Depth   [✓] Width   [ ] Height     │</text>
+<text x="24" y="163.4" font-size="12" fill="#2d2d2d">│                                          │</text>
+<text x="24" y="182.6" font-size="12" fill="#2d2d2d">│  Max change tolerance: [±50mm]           │</text>
+<text x="24" y="201.8" font-size="12" fill="#2d2d2d">│                                          │</text>
+<text x="24" y="221.0" font-size="12" fill="#2d2d2d">│  [ 🔍 Find Optimizations ]              │</text>
+<text x="24" y="240.2" font-size="12" fill="#2d2d2d">│                                          │</text>
+<text x="24" y="259.4" font-size="12" fill="#2d2d2d">│  ── Results ──────────────────────────── │</text>
+<text x="24" y="278.6" font-size="12" fill="#2d2d2d">│                                          │</text>
+<text x="24" y="297.8" font-size="12" fill="#2d2d2d">│  🥇 Reduce depth 600→404mm              │</text>
+<text x="24" y="317.0" font-size="12" fill="#2d2d2d">│     Saves 1 sheet (5→4) · Yield +3.2%   │</text>
+<text x="24" y="336.2" font-size="12" fill="#2d2d2d">│     [ Apply ]                            │</text>
+<text x="24" y="355.4" font-size="12" fill="#2d2d2d">│                                          │</text>
+<text x="24" y="374.6" font-size="12" fill="#2d2d2d">│  🥈 Reduce depth 600→368mm              │</text>
+<text x="24" y="393.8" font-size="12" fill="#2d2d2d">│     Saves 2 sheets (5→3) · Yield +11.3% │</text>
+<text x="24" y="413.0" font-size="12" fill="#2d2d2d">│     [ Apply ]                            │</text>
+<text x="24" y="432.2" font-size="12" fill="#2d2d2d">│                                          │</text>
+<text x="24" y="451.4" font-size="12" fill="#2d2d2d">│  🥉 Swap to 18mm melamine               │</text>
+<text x="24" y="470.6" font-size="12" fill="#2d2d2d">│     Same sheets, saves ₪85              │</text>
+<text x="24" y="489.8" font-size="12" fill="#2d2d2d">│     [ Apply ]                            │</text>
+<text x="24" y="509.0" font-size="12" fill="#2d2d2d">└─────────────────────────────────────────┘</text>
+</svg>

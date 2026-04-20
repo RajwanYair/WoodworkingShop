@@ -2,26 +2,23 @@
 
 ## Catalog Cover
 
-| Edition | Positioning | Material language | Primary use |
-|---|---|---|---|
-| April 2026 | Maximum-optimisation edition | 17 mm sandwich plywood + 4 mm sandwich plywood backer | Storage room or service zone |
+
+![Catalog Cover](svg/plan-c-maximum-optimisation-table-01.svg)
+
 
 > **Collection note:** Plan C is the leanest version in the collection, engineered around smarter strip nesting so a whole sheet disappears while all parts remain sandwich plywood. Choose it when total sheet count and sourcing simplicity matter more than maximum pantry depth.
 
 ### Download PDFs
 
-| Cabinet | English | Hebrew |
-|---------|---------|--------|
-| Double combined | [Double\_Pantry\_Cabinet\_Plan\_C\_EN.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Double_Pantry_Cabinet_Plan_C_EN.pdf) | [Double\_Pantry\_Cabinet\_Plan\_C\_HE.pdf](https://github.com/RajwanYair/WoodworkingShop/releases/download/v1.0.0/Double_Pantry_Cabinet_Plan_C_HE.pdf) |
+
+![Download PDFs](svg/plan-c-maximum-optimisation-table-02.svg)
+
 
 ### Plan C at a Glance
 
-| Stat | Value |
-|---|---|
-| Depth | 368 mm |
-| 17 mm sheets | 3 |
-| Yield | 82.5 % |
-| Material | Sandwich plywood throughout |
+
+![Plan C at a Glance](svg/plan-c-maximum-optimisation-table-03.svg)
+
 
 ### Optimisation Callouts
 
@@ -31,13 +28,9 @@
 
 ### Cross-Plan Comparison
 
-| Parameter | Plan A | Plan B | Plan C |
-|---|---|---|---|
-| Depth | 600 mm | 404 mm | **368 mm** |
-| 17 mm sheets | 5 | 4 | **3** |
-| Yield | 71.2 % | 66.1 % | **82.5 %** |
-| Material | Sandwich plywood | Sandwich plywood | Sandwich plywood |
-| Edge banding | Yes — 30 m | None | None |
+
+![Cross-Plan Comparison](svg/plan-c-maximum-optimisation-table-04.svg)
+
 
 ---
 
@@ -50,16 +43,12 @@
 
 ## Cabinet Dimensions
 
-| Cabinet | H × W × D (mm) |
-|---|---|
-| Large | 2000 × 1000 × 368 |
-| Small | 480 × 780 × 368 |
+
+![Cabinet Dimensions](svg/plan-c-maximum-optimisation-table-05.svg)
+
 
 ## Sheet Layout
 
-| Sheet | Contents | Yield |
-|---|---|---|
-| Sheet 1 | 2 × side panels (large) | High |
-| Sheet 2 | Top/bottom (large) + side (small) + shelves | High |
-| Sheet 3 | Doors (both) + depth strips + shelf strips | 82.5 % |
-| 4 mm sheet | Back panels (both cabinets) | Standard |
+
+![Sheet Layout](svg/plan-c-maximum-optimisation-table-06.svg)
+

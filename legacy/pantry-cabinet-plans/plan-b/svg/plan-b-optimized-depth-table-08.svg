@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="906" height="266" viewBox="0 0 906 266">
+<style>text{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}</style>
+<text x="453" y="22.0" text-anchor="middle" font-size="15" font-weight="700" fill="#5a4218">Cabinet 1 — Large Pantry</text>
+<rect x="1" y="33" width="904" height="29" fill="#5a4218" rx="4"/>
+<rect x="1" y="58" width="904" height="4" fill="#5a4218"/>
+<text x="75" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Part</text>
+<text x="180" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">ID</text>
+<text x="240" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Qty</text>
+<text x="344" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Material</text>
+<text x="450" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Thick</text>
+<text x="517" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Length</text>
+<text x="584" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Width</text>
+<text x="760" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Notes</text>
+<rect x="1" y="62" width="904" height="29" fill="#ffffff"/>
+<line x1="1" y1="91" x2="905" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">Side panel</text>
+<text x="162" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">L-01</text>
+<line x1="150" y1="62" x2="150" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="222" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">2</text>
+<line x1="210" y1="62" x2="210" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="282" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">Sandwich plywood</text>
+<line x1="270" y1="62" x2="270" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="431" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">17</text>
+<line x1="419" y1="62" x2="419" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="494" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">2000</text>
+<line x1="482" y1="62" x2="482" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="564" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">404</text>
+<line x1="552" y1="62" x2="552" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="627" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">Full-height</text>
+<line x1="615" y1="62" x2="615" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="91" width="904" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="120" x2="905" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">Top panel</text>
+<text x="162" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">L-02</text>
+<line x1="150" y1="91" x2="150" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="222" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">1</text>
+<line x1="210" y1="91" x2="210" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="282" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">Sandwich plywood</text>
+<line x1="270" y1="91" x2="270" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="431" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">17</text>
+<line x1="419" y1="91" x2="419" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="494" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">966</text>
+<line x1="482" y1="91" x2="482" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="564" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">404</text>
+<line x1="552" y1="91" x2="552" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="627" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">Captured between sides</text>
+<line x1="615" y1="91" x2="615" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="120" width="904" height="29" fill="#ffffff"/>
+<line x1="1" y1="149" x2="905" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">Bottom panel</text>
+<text x="162" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">L-03</text>
+<line x1="150" y1="120" x2="150" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="222" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">1</text>
+<line x1="210" y1="120" x2="210" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="282" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">Sandwich plywood</text>
+<line x1="270" y1="120" x2="270" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="431" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">17</text>
+<line x1="419" y1="120" x2="419" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="494" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">966</text>
+<line x1="482" y1="120" x2="482" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="564" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">404</text>
+<line x1="552" y1="120" x2="552" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="627" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">Captured between sides</text>
+<line x1="615" y1="120" x2="615" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="149" width="904" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="178" x2="905" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">Fixed shelf</text>
+<text x="162" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">L-04</text>
+<line x1="150" y1="149" x2="150" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="222" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">1</text>
+<line x1="210" y1="149" x2="210" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="282" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">Sandwich plywood</text>
+<line x1="270" y1="149" x2="270" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="431" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">17</text>
+<line x1="419" y1="149" x2="419" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="494" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">966</text>
+<line x1="482" y1="149" x2="482" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="564" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">384</text>
+<line x1="552" y1="149" x2="552" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="627" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">20 mm setback from front</text>
+<line x1="615" y1="149" x2="615" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="178" width="904" height="29" fill="#ffffff"/>
+<line x1="1" y1="207" x2="905" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">Adjustable shelf</text>
+<text x="162" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">L-05</text>
+<line x1="150" y1="178" x2="150" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="222" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">4</text>
+<line x1="210" y1="178" x2="210" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="282" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">Sandwich plywood</text>
+<line x1="270" y1="178" x2="270" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="431" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">17</text>
+<line x1="419" y1="178" x2="419" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="494" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">964</text>
+<line x1="482" y1="178" x2="482" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="564" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">384</text>
+<line x1="552" y1="178" x2="552" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="627" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">1 mm clearance per side</text>
+<line x1="615" y1="178" x2="615" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="207" width="904" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="236" x2="905" y2="236" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="226.1" font-size="13" font-weight="400" fill="#2d2d2d">Door</text>
+<text x="162" y="226.1" font-size="13" font-weight="400" fill="#2d2d2d">L-06</text>
+<line x1="150" y1="207" x2="150" y2="236" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="222" y="226.1" font-size="13" font-weight="400" fill="#2d2d2d">2</text>
+<line x1="210" y1="207" x2="210" y2="236" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="282" y="226.1" font-size="13" font-weight="400" fill="#2d2d2d">Sandwich plywood</text>
+<line x1="270" y1="207" x2="270" y2="236" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="431" y="226.1" font-size="13" font-weight="400" fill="#2d2d2d">17</text>
+<line x1="419" y1="207" x2="419" y2="236" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="494" y="226.1" font-size="13" font-weight="400" fill="#2d2d2d">1994</text>
+<line x1="482" y1="207" x2="482" y2="236" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="564" y="226.1" font-size="13" font-weight="400" fill="#2d2d2d">496</text>
+<line x1="552" y1="207" x2="552" y2="236" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="627" y="226.1" font-size="13" font-weight="400" fill="#2d2d2d">3 mm outer reveal, 2 mm center gap</text>
+<line x1="615" y1="207" x2="615" y2="236" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="236" width="904" height="29" fill="#ffffff"/>
+<text x="13" y="255.1" font-size="13" font-weight="400" fill="#2d2d2d">Back panel</text>
+<text x="162" y="255.1" font-size="13" font-weight="400" fill="#2d2d2d">L-07</text>
+<line x1="150" y1="236" x2="150" y2="265" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="222" y="255.1" font-size="13" font-weight="400" fill="#2d2d2d">1</text>
+<line x1="210" y1="236" x2="210" y2="265" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="282" y="255.1" font-size="13" font-weight="400" fill="#2d2d2d">Sandwich plywood</text>
+<line x1="270" y1="236" x2="270" y2="265" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="431" y="255.1" font-size="13" font-weight="400" fill="#2d2d2d">4</text>
+<line x1="419" y1="236" x2="419" y2="265" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="494" y="255.1" font-size="13" font-weight="400" fill="#2d2d2d">1980</text>
+<line x1="482" y1="236" x2="482" y2="265" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="564" y="255.1" font-size="13" font-weight="400" fill="#2d2d2d">980</text>
+<line x1="552" y1="236" x2="552" y2="265" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="627" y="255.1" font-size="13" font-weight="400" fill="#2d2d2d">10 mm inset per edge</text>
+<line x1="615" y1="236" x2="615" y2="265" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="33" width="904" height="232" fill="none" stroke="#d4c4a0" stroke-width="1" rx="4"/>
+</svg>

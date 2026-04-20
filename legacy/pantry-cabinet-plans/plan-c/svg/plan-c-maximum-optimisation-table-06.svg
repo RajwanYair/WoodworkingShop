@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="550" height="179" viewBox="0 0 550 179">
+<style>text{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}</style>
+<text x="275" y="22.0" text-anchor="middle" font-size="15" font-weight="700" fill="#5a4218">Sheet Layout</text>
+<rect x="1" y="33" width="548" height="29" fill="#5a4218" rx="4"/>
+<rect x="1" y="58" width="548" height="4" fill="#5a4218"/>
+<text x="52" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Sheet</text>
+<text x="283" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Contents</text>
+<text x="506" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Yield</text>
+<rect x="1" y="62" width="548" height="29" fill="#ffffff"/>
+<line x1="1" y1="91" x2="549" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">Sheet 1</text>
+<text x="115" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">2 × side panels (large)</text>
+<line x1="103" y1="62" x2="103" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="474" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">High</text>
+<line x1="462" y1="62" x2="462" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="91" width="548" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="120" x2="549" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">Sheet 2</text>
+<text x="115" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">Top/bottom (large) + side (small) + shelves</text>
+<line x1="103" y1="91" x2="103" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="474" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">High</text>
+<line x1="462" y1="91" x2="462" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="120" width="548" height="29" fill="#ffffff"/>
+<line x1="1" y1="149" x2="549" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">Sheet 3</text>
+<text x="115" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">Doors (both) + depth strips + shelf strips</text>
+<line x1="103" y1="120" x2="103" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="474" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">82.5 %</text>
+<line x1="462" y1="120" x2="462" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="149" width="548" height="29" fill="#f8f4ee"/>
+<text x="13" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">4 mm sheet</text>
+<text x="115" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">Back panels (both cabinets)</text>
+<line x1="103" y1="149" x2="103" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="474" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">Standard</text>
+<line x1="462" y1="149" x2="462" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="33" width="548" height="145" fill="none" stroke="#d4c4a0" stroke-width="1" rx="4"/>
+</svg>

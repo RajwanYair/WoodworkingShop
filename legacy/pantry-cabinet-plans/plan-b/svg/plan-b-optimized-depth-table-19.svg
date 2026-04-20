@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="855" height="208" viewBox="0 0 855 208">
+<style>text{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}</style>
+<text x="427" y="22.0" text-anchor="middle" font-size="15" font-weight="700" fill="#5a4218">5. Cost Comparison Summary</text>
+<rect x="1" y="33" width="853" height="29" fill="#5a4218" rx="4"/>
+<rect x="1" y="58" width="853" height="4" fill="#5a4218"/>
+<text x="60" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Item</text>
+<text x="209" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Plan A</text>
+<text x="389" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Plan B</text>
+<text x="666" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Savings</text>
+<rect x="1" y="62" width="853" height="29" fill="#ffffff"/>
+<line x1="1" y1="91" x2="854" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">17 mm sheets</text>
+<text x="131" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">5 × sandwich plywood</text>
+<line x1="119" y1="62" x2="119" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="311" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">4 × sandwich plywood</text>
+<line x1="299" y1="62" x2="299" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="491" y="81.0" font-size="13" font-weight="700" fill="#2d2d2d">−1 sheet</text>
+<line x1="479" y1="62" x2="479" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="91" width="853" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="120" x2="854" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">4 mm backer</text>
+<text x="131" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">1 sheet</text>
+<line x1="119" y1="91" x2="119" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="311" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">1 sheet</text>
+<line x1="299" y1="91" x2="299" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="491" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">—</text>
+<line x1="479" y1="91" x2="479" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="120" width="853" height="29" fill="#ffffff"/>
+<line x1="1" y1="149" x2="854" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">Edge banding</text>
+<text x="131" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">~30 m</text>
+<line x1="119" y1="120" x2="119" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="311" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">0 m (optional)</text>
+<line x1="299" y1="120" x2="299" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="491" y="139.1" font-size="13" font-weight="700" fill="#2d2d2d">~30 m saved</text>
+<line x1="479" y1="120" x2="479" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="149" width="853" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="178" x2="854" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">Hardware</text>
+<text x="131" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">Same</text>
+<line x1="119" y1="149" x2="119" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="311" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">Same</text>
+<line x1="299" y1="149" x2="299" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="491" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">—</text>
+<line x1="479" y1="149" x2="479" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="178" width="853" height="29" fill="#ffffff"/>
+<text x="13" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">Usable depth</text>
+<text x="131" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">600 mm</text>
+<line x1="119" y1="178" x2="119" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="311" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">404 mm</text>
+<line x1="299" y1="178" x2="299" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="491" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">−196 mm (still ≈ 40 cm, adequate for storage)</text>
+<line x1="479" y1="178" x2="479" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="33" width="853" height="174" fill="none" stroke="#d4c4a0" stroke-width="1" rx="4"/>
+</svg>

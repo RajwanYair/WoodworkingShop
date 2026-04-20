@@ -13,19 +13,9 @@
 
 ## Project Context
 
-| Parameter | Value |
-|---|---|
-| Location | Kitchen pantry wall |
-| Cabinet style | Frameless / Euro (no face frame) |
-| Skill level | Intermediate |
-| Tools assumed | Track saw or circular saw + guide rail, drill/driver, 35 mm Forstner bit, 5 mm brad-point bit, 3 mm pilot bit, edge banding iron or trimmer, bar clamps, square |
-| Preferred joinery | Pre-drilled screws into panel edge (4.0 × 50 mm); pilot hole 3 mm |
-| Finish | PVC edge banding 0.5–1 mm on visible edges; paint or clear coat per preference |
-| Hardware | 110° concealed soft-close hinges (Blum Clip-Top or equivalent); 5 mm metal shelf pins |
-| Carcass material | 17 mm sandwich plywood |
-| Back panel material | 4 mm sandwich plywood |
-| Sheet size | Standard 2440 × 1220 mm |
-| Saw kerf allowance | 4 mm |
+
+![Project Context](svg/double-pantry-cabinet-plan-table-01.svg)
+
 
 ---
 
@@ -48,33 +38,15 @@
 
 ### Cabinet 1 — Large Pantry (2000 × 1000 × 600)
 
-| Dimension | Calculation | Result |
-|---|---|---|
-| External H × W × D | Given | 2000 × 1000 × 600 |
-| Internal width | 1000 − 2 × 17 | **966** |
-| Internal height | 2000 − 2 × 17 | **1966** |
-| Internal depth | = side depth (open front) | **600** |
-| Fixed shelf position | Mid-height: 1000 mm from bottom exterior | Top surface at **983** from internal bottom |
-| Door height | 2000 − 3 (top) − 3 (bottom) | **1994** |
-| Door width (each) | (1000 − 3 − 2 − 3) / 2 | **496** |
-| Shelf depth (setback) | 600 − 20 | **580** |
-| Adjustable shelf width | 966 − 2 × 1 (pin clearance) | **964** |
-| Back panel H × W | (2000 − 2 × 10) × (1000 − 2 × 10) | **1980 × 980** |
+
+![Cabinet 1 — Large Pantry (2000 × 1000 × 600)](svg/double-pantry-cabinet-plan-table-02.svg)
+
 
 ### Cabinet 2 — Small Upper Unit (480 × 780 × 600)
 
-| Dimension | Calculation | Result |
-|---|---|---|
-| External H × W × D | Given | 480 × 780 × 600 |
-| Internal width | 780 − 2 × 17 | **746** |
-| Internal height | 480 − 2 × 17 | **446** |
-| Internal depth | = side depth | **600** |
-| Fixed shelf position | Mid-height: 240 mm from bottom exterior | Top surface at **223** from internal bottom |
-| Door height | 480 − 3 − 3 | **474** |
-| Door width (each) | (780 − 3 − 2 − 3) / 2 | **386** |
-| Shelf depth | 600 − 20 | **580** |
-| Fixed shelf width | 746 − 2 × 0.5 (fitting clearance) | **745** |
-| Back panel H × W | (480 − 2 × 10) × (780 − 2 × 10) | **460 × 760** |
+
+![Cabinet 2 — Small Upper Unit (480 × 780 × 600)](svg/double-pantry-cabinet-plan-table-03.svg)
+
 
 ---
 
@@ -82,45 +54,21 @@
 
 ### Cabinet 1 — Large Pantry
 
-| Part | ID | Qty | Material | Thick | Length | Width | Edge banding (which edges) | Notes |
-|---|---|---|---|---|---|---|---|---|
-| Side panel | L-01 | 2 | Sandwich plywood | 17 | 2000 | 600 | 1 × front long edge (2000) | Full-height; grain vertical |
-| Top panel | L-02 | 1 | Sandwich plywood | 17 | 966 | 600 | 1 × front long edge (966) | Captured between sides |
-| Bottom panel | L-03 | 1 | Sandwich plywood | 17 | 966 | 600 | 1 × front long edge (966) | Captured between sides |
-| Fixed shelf | L-04 | 1 | Sandwich plywood | 17 | 966 | 580 | 1 × front long edge (966) | 20 mm setback from front |
-| Adjustable shelf | L-05 | 4 | Sandwich plywood | 17 | 964 | 580 | 1 × front long edge (964) | 1 mm clearance per side |
-| Door | L-06 | 2 | Sandwich plywood | 17 | 1994 | 496 | All 4 edges | 3 mm outer reveal, 2 mm center gap |
-| Back panel | L-07 | 1 | Sandwich plywood | 4 | 1980 | 980 | None | 10 mm inset per edge |
+
+![Cabinet 1 — Large Pantry](svg/double-pantry-cabinet-plan-table-04.svg)
+
 
 ### Cabinet 2 — Small Upper Unit
 
-| Part | ID | Qty | Material | Thick | Length | Width | Edge banding (which edges) | Notes |
-|---|---|---|---|---|---|---|---|---|
-| Side panel | S-01 | 2 | Sandwich plywood | 17 | 480 | 600 | 1 × front long edge (480) | Full-height; grain vertical |
-| Top panel | S-02 | 1 | Sandwich plywood | 17 | 746 | 600 | 1 × front long edge (746) | Captured between sides |
-| Bottom panel | S-03 | 1 | Sandwich plywood | 17 | 746 | 600 | 1 × front long edge (746) | Captured between sides |
-| Fixed shelf | S-04 | 1 | Sandwich plywood | 17 | 745 | 580 | 1 × front long edge (745) | 20 mm setback from front |
-| Door | S-05 | 2 | Sandwich plywood | 17 | 474 | 386 | All 4 edges | 3 mm outer reveal, 2 mm center gap |
-| Back panel | S-06 | 1 | Sandwich plywood | 4 | 456 | 760 | None | Trimmed from 460 to 456 for kerf (see §1 note 10) |
+
+![Cabinet 2 — Small Upper Unit](svg/double-pantry-cabinet-plan-table-05.svg)
+
 
 ### Combined Cut List (both cabinets, 20 parts total)
 
-| ID | Part | Qty | Thick | Length × Width | Area per piece (mm²) | Total area (mm²) |
-|---|---|---|---|---|---|---|
-| L-01 | Side panel | 2 | 17 | 2000 × 600 | 1 200 000 | 2 400 000 |
-| L-02 | Top panel | 1 | 17 | 966 × 600 | 579 600 | 579 600 |
-| L-03 | Bottom panel | 1 | 17 | 966 × 600 | 579 600 | 579 600 |
-| L-04 | Fixed shelf | 1 | 17 | 966 × 580 | 560 280 | 560 280 |
-| L-05 | Adj. shelf | 4 | 17 | 964 × 580 | 559 120 | 2 236 480 |
-| L-06 | Door | 2 | 17 | 1994 × 496 | 989 024 | 1 978 048 |
-| L-07 | Back panel | 1 | 4 | 1980 × 980 | 1 940 400 | 1 940 400 |
-| S-01 | Side panel | 2 | 17 | 480 × 600 | 288 000 | 576 000 |
-| S-02 | Top panel | 1 | 17 | 746 × 600 | 447 600 | 447 600 |
-| S-03 | Bottom panel | 1 | 17 | 746 × 600 | 447 600 | 447 600 |
-| S-04 | Fixed shelf | 1 | 17 | 745 × 580 | 432 100 | 432 100 |
-| S-05 | Door | 2 | 17 | 474 × 386 | 182 964 | 365 928 |
-| S-06 | Back panel | 1 | 4 | 456 × 760 | 346 560 | 346 560 |
-| | | **20** | | | | **12 890 196** |
+
+![Combined Cut List (both cabinets, 20 parts total)](svg/double-pantry-cabinet-plan-table-06.svg)
+
 
 **Material totals:**
 
@@ -133,43 +81,31 @@
 
 ### 4.1 Hinge Cup Boring (doors)
 
-| Parameter | Value |
-|---|---|
-| Cup diameter | 35 mm (Forstner bit) |
-| Cup depth | 12–13 mm into 17 mm panel |
-| Cup center from hinge-side door edge | 22.5 mm (standard for 110° overlay hinge) |
-| Mounting plate screw holes | Pre-drill 3 mm × 10 mm into side panel inner face |
+
+![4.1 Hinge Cup Boring (doors)](svg/double-pantry-cabinet-plan-table-07.svg)
+
 
 **Cabinet 1 doors (1994 mm tall, 4 hinges per door):**
 
-| Hinge # | Distance from top of door |
-|---|---|
-| 1 | 100 mm |
-| 2 | 698 mm |
-| 3 | 1296 mm |
-| 4 | 1894 mm |
+
+![Table 8](svg/double-pantry-cabinet-plan-table-08.svg)
+
 
 Spacing = (1994 − 200) / 3 ≈ **598 mm** between hinges.
 
 **Cabinet 2 doors (474 mm tall, 2 hinges per door):**
 
-| Hinge # | Distance from top of door |
-|---|---|
-| 1 | 80 mm |
-| 2 | 394 mm |
+
+![Table 9](svg/double-pantry-cabinet-plan-table-09.svg)
+
 
 Spacing = 474 − 160 = **314 mm** between hinges.
 
 ### 4.2 Shelf Pin Boring (Cabinet 1 only)
 
-| Parameter | Value |
-|---|---|
-| Pin hole diameter | 5 mm (brad-point bit) |
-| Hole depth | 10 mm |
-| Row spacing (vertical) | 32 mm on-center (standard 32 mm system) |
-| Number of rows per side panel | 4 (2 front, 2 back) |
-| Front row center from front edge | 37 mm |
-| Back row center from back rabbet edge | 37 mm |
+
+![4.2 Shelf Pin Boring (Cabinet 1 only)](svg/double-pantry-cabinet-plan-table-10.svg)
+
 
 Bore two columns of holes (front and back) on each side panel, running from **96 mm above the bottom panel** to **96 mm below the top panel**. The fixed shelf interrupts the column at mid-height; drill holes above and below it. Each column has approximately **28 holes** (14 above fixed shelf, 14 below).
 
@@ -221,32 +157,21 @@ Bore two columns of holes (front and back) on each side panel, running from **96
 
 ### Sheet Goods
 
-| Item | Size | Qty | Notes |
-|---|---|---|---|
-| 17 mm sandwich plywood | 2440 × 1220 | 5 sheets | See § 7 for nesting |
-| 4 mm sandwich plywood | 2440 × 1220 | 1 sheet | Both backs from one sheet |
+
+![Sheet Goods](svg/double-pantry-cabinet-plan-table-11.svg)
+
 
 ### Hardware
 
-| Item | Spec | Qty | Notes |
-|---|---|---|---|
-| Concealed hinge, 110° soft-close | Full overlay, 35 mm cup (e.g., Blum 71B3550) | 12 | 8 for Cab 1, 4 for Cab 2 |
-| Hinge mounting plate | Cruciform, system 0 mm | 12 | Match hinge brand |
-| Shelf support pin, 5 mm | Metal, spoon or cylindrical | 20 | 16 active + 4 spare |
-| Structural screws | 4.0 × 50 mm, self-tapping, yellow zinc | 100 | ~66 needed + 34 spare |
-| Hardware screws | 3.5 × 16 mm, pan head | 60 | Hinges, plates, handles, brackets |
-| Cabinet handles / pulls | User's choice | 4 | 2 per cabinet |
-| Wall-fixing L-brackets | Heavy-duty steel, min 50 × 50 mm | 6 | 4 for Cab 1, 2 for Cab 2 |
-| Wall anchors | Match wall type (concrete / stud) | 6 | For L-brackets |
+
+![Hardware](svg/double-pantry-cabinet-plan-table-12.svg)
+
 
 ### Consumables
 
-| Item | Qty | Notes |
-|---|---|---|
-| PVC edge banding, 22 mm wide, 0.5–1 mm thick | 30 m | ≈ 27.3 m needed + 10 % waste |
-| Wood glue (PVA) | 250 ml | Optional for edge joints |
-| 120-grit sandpaper | 3 sheets | Edge-band flush trimming |
-| 220-grit sandpaper | 3 sheets | Final smoothing |
+
+![Consumables](svg/double-pantry-cabinet-plan-table-13.svg)
+
 
 ---
 
@@ -263,63 +188,49 @@ Bore two columns of holes (front and back) on each side panel, running from **96
 
 **Sheet 1** — Yield 92.9 %
 
-| Part | Size | Orientation | Position |
-|---|---|---|---|
-| L-01 side panel ×1 | 2000 × 600 | Length along 2440 | First 600 mm strip |
-| L-01 side panel ×1 | 2000 × 600 | Length along 2440 | Second 600 mm strip (4 mm kerf between) |
-| S-05 door ×1 | 474 × 386 | Rotated: 386 along 2440 | Offcut zone (440 × 1220), first position |
-| S-05 door ×1 | 474 × 386 | Rotated: 386 along 2440 | Offcut zone, second position |
+
+![Table 14](svg/double-pantry-cabinet-plan-table-14.svg)
+
 
 Rip the sheet into two 600 mm strips (1204 mm total + 16 mm waste strip). Crosscut each strip at 2000 mm for side panels. The remaining 440 × 1220 offcut yields both small doors (386 × 474 each, rotated).
 
 **Sheet 2** — Yield 66.4 %
 
-| Part | Size | Orientation | Position |
-|---|---|---|---|
-| L-06 door ×1 | 1994 × 496 | Length along 2440 | First 496 mm strip |
-| L-06 door ×1 | 1994 × 496 | Length along 2440 | Second 496 mm strip |
+
+![Table 15](svg/double-pantry-cabinet-plan-table-15.svg)
+
 
 Rip two 496 mm strips (996 mm + 224 mm waste). Crosscut each at 1994 mm. Reserve the 442 × 1220 and 1994 × 224 offcuts (useful for jigs, test pieces, or future shelving).
 
 **Sheet 3** — Yield 88.4 %
 
-| Part | Size | Orientation | Position |
-|---|---|---|---|
-| L-02 top panel | 966 × 600 | Length along 2440 | Row A, left |
-| S-01 side panel | 480 × 600 | Length along 2440 | Row A, center |
-| S-02 top panel | 746 × 600 | Length along 2440 | Row A, right |
-| L-03 bottom panel | 966 × 600 | Length along 2440 | Row B, left |
-| S-01 side panel | 480 × 600 | Length along 2440 | Row B, center |
-| S-03 bottom panel | 746 × 600 | Length along 2440 | Row B, right |
+
+![Table 16](svg/double-pantry-cabinet-plan-table-16.svg)
+
 
 Rip into two 600 mm strips (1204 mm + 16 mm waste). In each strip crosscut at 966, 480, and 746 mm (with 4 mm kerf between parts). Each strip consumes 966 + 4 + 480 + 4 + 746 = **2200 mm** of the 2440 mm length, leaving a 240 × 600 offcut per strip.
 
 **Sheet 4** — Yield 70.9 %
 
-| Part | Size | Orientation | Position |
-|---|---|---|---|
-| L-04 fixed shelf | 966 × 580 | Length along 2440 | Row A, left |
-| L-05 adj. shelf ×1 | 964 × 580 | Length along 2440 | Row A, right |
-| L-05 adj. shelf ×1 | 964 × 580 | Length along 2440 | Row B, left |
-| S-04 fixed shelf | 745 × 580 | Length along 2440 | Row B, right |
+
+![Table 17](svg/double-pantry-cabinet-plan-table-17.svg)
+
 
 Rip into two 580 mm strips (1164 mm + 56 mm waste). Row A: crosscut at 966 and 964 (total 1934 mm). Row B: crosscut at 964 and 745 (total 1713 mm).
 
 **Sheet 5** — Yield 37.6 %
 
-| Part | Size | Orientation | Position |
-|---|---|---|---|
-| L-05 adj. shelf ×1 | 964 × 580 | Length along 2440 | Row A, left |
-| L-05 adj. shelf ×1 | 964 × 580 | Length along 2440 | Row A, right |
+
+![Table 18](svg/double-pantry-cabinet-plan-table-18.svg)
+
 
 Single 580 mm rip. Crosscut at 964 + 4 + 964 = 1932 mm. Large offcut (2440 × 640 mm) remains—save for shelving or test cuts.
 
 ### 4 mm Backer — Single Sheet
 
-| Part | Size | Position |
-|---|---|---|
-| L-07 back panel | 1980 × 980 | Left portion |
-| S-06 back panel | 456 × 760 | Right portion (4 mm trimmed from height for kerf) |
+
+![4 mm Backer — Single Sheet](svg/double-pantry-cabinet-plan-table-19.svg)
+
 
 Rip one 980 mm strip. Crosscut at 1980 mm for L-07. The remaining strip (456 × 980 minimum) yields S-06 (456 × 760). One saw cut separates the two parts.
 
@@ -348,12 +259,6 @@ Rip one 980 mm strip. Crosscut at 1980 mm for L-07. The remaining strip (456 × 
 
 ## Drawing Files
 
-| Drawing | File |
-|---|---|
-| Large cabinet — 2D orthographic views | [plan-a-large-cabinet-2d-views.svg](plan-a-large-cabinet-2d-views.svg) |
-| Small cabinet — 2D orthographic views | [plan-a-small-cabinet-2d-views.svg](plan-a-small-cabinet-2d-views.svg) |
-| Large cabinet — 3D isometric | [plan-a-large-cabinet-3d.svg](plan-a-large-cabinet-3d.svg) |
-| Small cabinet — 3D isometric | [plan-a-small-cabinet-3d.svg](plan-a-small-cabinet-3d.svg) |
-| 17 mm sandwich plywood cut plan (5 sheets) | [plan-a-cut-plan-17mm.svg](plan-a-cut-plan-17mm.svg) |
-| 4 mm backer cut plan (1 sheet) | [plan-a-cut-plan-4mm.svg](plan-a-cut-plan-4mm.svg) |
-| Machine-readable parts table | [parts-table-plan-a.csv](parts-table-plan-a.csv) |
+
+![Drawing Files](svg/double-pantry-cabinet-plan-table-20.svg)
+

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="566" height="208" viewBox="0 0 566 208">
+<style>text{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}</style>
+<text x="283" y="22.0" text-anchor="middle" font-size="15" font-weight="700" fill="#5a4218">Cross-Plan Comparison</text>
+<rect x="1" y="33" width="564" height="29" fill="#5a4218" rx="4"/>
+<rect x="1" y="58" width="564" height="4" fill="#5a4218"/>
+<text x="60" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Parameter</text>
+<text x="193" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Plan A</text>
+<text x="342" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Plan B</text>
+<text x="491" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Plan C</text>
+<rect x="1" y="62" width="564" height="29" fill="#ffffff"/>
+<line x1="1" y1="91" x2="565" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">Depth</text>
+<text x="131" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">600 mm</text>
+<line x1="119" y1="62" x2="119" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="279" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">404 mm</text>
+<line x1="267" y1="62" x2="267" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="428" y="81.0" font-size="13" font-weight="700" fill="#2d2d2d">368 mm</text>
+<line x1="416" y1="62" x2="416" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="91" width="564" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="120" x2="565" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">17 mm sheets</text>
+<text x="131" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">5</text>
+<line x1="119" y1="91" x2="119" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="279" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">4</text>
+<line x1="267" y1="91" x2="267" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="428" y="110.0" font-size="13" font-weight="700" fill="#2d2d2d">3</text>
+<line x1="416" y1="91" x2="416" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="120" width="564" height="29" fill="#ffffff"/>
+<line x1="1" y1="149" x2="565" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">Yield</text>
+<text x="131" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">71.2 %</text>
+<line x1="119" y1="120" x2="119" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="279" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">66.1 %</text>
+<line x1="267" y1="120" x2="267" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="428" y="139.1" font-size="13" font-weight="700" fill="#2d2d2d">82.5 %</text>
+<line x1="416" y1="120" x2="416" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="149" width="564" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="178" x2="565" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">Material</text>
+<text x="131" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">Sandwich plywood</text>
+<line x1="119" y1="149" x2="119" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="279" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">Sandwich plywood</text>
+<line x1="267" y1="149" x2="267" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="428" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">Sandwich plywood</text>
+<line x1="416" y1="149" x2="416" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="178" width="564" height="29" fill="#ffffff"/>
+<text x="13" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">Edge banding</text>
+<text x="131" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">Yes — 30 m</text>
+<line x1="119" y1="178" x2="119" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="279" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">None</text>
+<line x1="267" y1="178" x2="267" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="428" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">None</text>
+<line x1="416" y1="178" x2="416" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="33" width="564" height="174" fill="none" stroke="#d4c4a0" stroke-width="1" rx="4"/>
+</svg>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="175" height="121" viewBox="0 0 175 121">
+<style>text{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}</style>
+<text x="87" y="22.0" text-anchor="middle" font-size="15" font-weight="700" fill="#5a4218">Supported Versions</text>
+<rect x="1" y="33" width="173" height="29" fill="#5a4218" rx="4"/>
+<rect x="1" y="58" width="173" height="4" fill="#5a4218"/>
+<text x="40" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Version</text>
+<text x="127" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Supported</text>
+<rect x="1" y="62" width="173" height="29" fill="#ffffff"/>
+<line x1="1" y1="91" x2="174" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">Latest</text>
+<text x="92" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">✅</text>
+<line x1="80" y1="62" x2="80" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="91" width="173" height="29" fill="#f8f4ee"/>
+<text x="13" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">&lt; 1.0</text>
+<text x="92" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">❌</text>
+<line x1="80" y1="91" x2="80" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="33" width="173" height="87" fill="none" stroke="#d4c4a0" stroke-width="1" rx="4"/>
+</svg>

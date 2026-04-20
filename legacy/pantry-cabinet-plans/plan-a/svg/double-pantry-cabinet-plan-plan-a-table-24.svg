@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="635" height="266" viewBox="0 0 635 266">
+<style>text{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}</style>
+<text x="318" y="22.0" text-anchor="middle" font-size="15" font-weight="700" fill="#5a4218">Drawing Files</text>
+<rect x="1" y="33" width="633" height="29" fill="#5a4218" rx="4"/>
+<rect x="1" y="58" width="633" height="4" fill="#5a4218"/>
+<text x="177" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Drawing</text>
+<text x="493" y="52.0" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">File</text>
+<rect x="1" y="62" width="633" height="29" fill="#ffffff"/>
+<line x1="1" y1="91" x2="634" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">Large cabinet — 2D orthographic views</text>
+<text x="365" y="81.0" font-size="13" font-weight="400" fill="#2d2d2d">plan-a-large-cabinet-2d-views.svg</text>
+<line x1="353" y1="62" x2="353" y2="91" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="91" width="633" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="120" x2="634" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">Small cabinet — 2D orthographic views</text>
+<text x="365" y="110.0" font-size="13" font-weight="400" fill="#2d2d2d">plan-a-small-cabinet-2d-views.svg</text>
+<line x1="353" y1="91" x2="353" y2="120" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="120" width="633" height="29" fill="#ffffff"/>
+<line x1="1" y1="149" x2="634" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">Large cabinet — 3D isometric</text>
+<text x="365" y="139.1" font-size="13" font-weight="400" fill="#2d2d2d">plan-a-large-cabinet-3d.svg</text>
+<line x1="353" y1="120" x2="353" y2="149" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="149" width="633" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="178" x2="634" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">Small cabinet — 3D isometric</text>
+<text x="365" y="168.1" font-size="13" font-weight="400" fill="#2d2d2d">plan-a-small-cabinet-3d.svg</text>
+<line x1="353" y1="149" x2="353" y2="178" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="178" width="633" height="29" fill="#ffffff"/>
+<line x1="1" y1="207" x2="634" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">17 mm sandwich plywood cut plan (5 sheets)</text>
+<text x="365" y="197.1" font-size="13" font-weight="400" fill="#2d2d2d">plan-a-cut-plan-17mm.svg</text>
+<line x1="353" y1="178" x2="353" y2="207" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="207" width="633" height="29" fill="#f8f4ee"/>
+<line x1="1" y1="236" x2="634" y2="236" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="226.1" font-size="13" font-weight="400" fill="#2d2d2d">4 mm backer cut plan (1 sheet)</text>
+<text x="365" y="226.1" font-size="13" font-weight="400" fill="#2d2d2d">plan-a-cut-plan-4mm.svg</text>
+<line x1="353" y1="207" x2="353" y2="236" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="236" width="633" height="29" fill="#ffffff"/>
+<text x="13" y="255.1" font-size="13" font-weight="400" fill="#2d2d2d">Machine-readable parts table</text>
+<text x="365" y="255.1" font-size="13" font-weight="400" fill="#2d2d2d">parts-table-plan-a.csv</text>
+<line x1="353" y1="236" x2="353" y2="265" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="33" width="633" height="232" fill="none" stroke="#d4c4a0" stroke-width="1" rx="4"/>
+</svg>

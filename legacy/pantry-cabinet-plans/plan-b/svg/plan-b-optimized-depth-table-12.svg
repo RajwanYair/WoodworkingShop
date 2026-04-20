@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="605" height="89" viewBox="0 0 605 89">
+<style>text{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}</style>
+<rect x="1" y="1" width="603" height="29" fill="#5a4218" rx="4"/>
+<rect x="1" y="26" width="603" height="4" fill="#5a4218"/>
+<text x="75" y="20.1" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Strip</text>
+<text x="209" y="20.1" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Part</text>
+<text x="318" y="20.1" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Size</text>
+<text x="487" y="20.1" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Length consumed</text>
+<rect x="1" y="30" width="603" height="29" fill="#ffffff"/>
+<line x1="1" y1="59" x2="604" y2="59" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="13" y="49.0" font-size="13" font-weight="400" fill="#2d2d2d">Strip 1 (496 mm)</text>
+<text x="162" y="49.0" font-size="13" font-weight="400" fill="#2d2d2d">L-06 door ×1</text>
+<line x1="150" y1="30" x2="150" y2="59" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="279" y="49.0" font-size="13" font-weight="400" fill="#2d2d2d">1994 × 496</text>
+<line x1="267" y1="30" x2="267" y2="59" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="381" y="49.0" font-size="13" font-weight="400" fill="#2d2d2d">1994 mm (offcut: 442 × 496)</text>
+<line x1="369" y1="30" x2="369" y2="59" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="59" width="603" height="29" fill="#f8f4ee"/>
+<text x="13" y="78.0" font-size="13" font-weight="400" fill="#2d2d2d">Strip 2 (496 mm)</text>
+<text x="162" y="78.0" font-size="13" font-weight="400" fill="#2d2d2d">L-06 door ×1</text>
+<line x1="150" y1="59" x2="150" y2="88" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="279" y="78.0" font-size="13" font-weight="400" fill="#2d2d2d">1994 × 496</text>
+<line x1="267" y1="59" x2="267" y2="88" stroke="#d4c4a0" stroke-width="0.5"/>
+<text x="381" y="78.0" font-size="13" font-weight="400" fill="#2d2d2d">1994 mm (offcut: 442 × 496)</text>
+<line x1="369" y1="59" x2="369" y2="88" stroke="#d4c4a0" stroke-width="0.5"/>
+<rect x="1" y="1" width="603" height="87" fill="none" stroke="#d4c4a0" stroke-width="1" rx="4"/>
+</svg>
