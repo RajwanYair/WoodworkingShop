@@ -1,0 +1,14 @@
+Cabinet,PartID,PartName,Qty,Material,Thickness_mm,Length_mm,Width_mm,EdgeBand_Edges,EdgeBand_Total_mm,Area_per_piece_mm2,Notes
+Large,L-01,Side panel,2,Plywood,17,2000,600,1x front long (2000),2000,1200000,Full-height; grain vertical
+Large,L-02,Top panel,1,Plywood,17,966,600,1x front long (966),966,579600,Captured between sides
+Large,L-03,Bottom panel,1,Plywood,17,966,600,1x front long (966),966,579600,Captured between sides
+Large,L-04,Fixed shelf,1,Plywood,17,966,580,1x front long (966),966,560280,20 mm front setback
+Large,L-05,Adjustable shelf,4,Plywood,17,964,580,1x front long (964),964,559120,1 mm side clearance per side
+Large,L-06,Door,2,Plywood,17,1994,496,All 4 edges (2x1994+2x496),4980,989024,3 mm outer reveal; 2 mm center gap
+Large,L-07,Back panel,1,MDF/Plywood,4,1980,980,None,0,1940400,10 mm inset per edge
+Small,S-01,Side panel,2,Plywood,17,480,600,1x front long (480),480,288000,Full-height; grain vertical
+Small,S-02,Top panel,1,Plywood,17,746,600,1x front long (746),746,447600,Captured between sides
+Small,S-03,Bottom panel,1,Plywood,17,746,600,1x front long (746),746,447600,Captured between sides
+Small,S-04,Fixed shelf,1,Plywood,17,745,580,1x front long (745),745,432100,20 mm front setback
+Small,S-05,Door,2,Plywood,17,474,386,All 4 edges (2x474+2x386),1720,182964,3 mm outer reveal; 2 mm center gap
+Small,S-06,Back panel,1,MDF/Plywood,4,456,760,None,0,346560,Trimmed 460->456 for kerf on shared backer sheet

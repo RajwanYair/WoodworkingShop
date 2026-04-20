@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="520" viewBox="0 0 800 520">
+  <defs>
+    <style>
+      .title { font: 700 22px Arial, sans-serif; fill: #1f2937; }
+      .sub { font: 700 14px Arial, sans-serif; fill: #1f2937; }
+      .lbl { font: 600 13px Arial, sans-serif; fill: #92400e; }
+      .sz { font: 11px Arial, sans-serif; fill: #475569; }
+      .pct { font: 600 13px Arial, sans-serif; fill: #0f766e; }
+      .sheet { fill: #f1f5f9; stroke: #334155; stroke-width: 2; }
+      .back { fill: #fef3c7; stroke: #92400e; stroke-width: 1.5; }
+      .backS { fill: #fde68a; stroke: #92400e; stroke-width: 1.5; }
+      .waste { fill: #f3f4f6; stroke: #9ca3af; stroke-width: 1; stroke-dasharray: 4 3; }
+      .kerf { stroke: #ef4444; stroke-width: 0.7; stroke-dasharray: 2 2; }
+    </style>
+  </defs>
+
+  <!-- Scale: 1:4  →  Sheet 2440×1220 = 610×305 px -->
+
+  <text x="40" y="36" class="title">4 mm Backer Cut Plan — 1 Sheet at 1 : 4 Scale</text>
+  <text x="40" y="58" class="sz">Sheet: 2440 × 1220 mm | S-06 trimmed 460 → 456 mm to absorb the single kerf cut</text>
+
+  <g transform="translate(60,100)">
+    <text x="0" y="-12" class="sub">Backer Sheet 1</text>
+    <text x="500" y="-12" class="pct">Yield 76.9 %</text>
+    <rect x="0" y="0" width="610" height="305" class="sheet"/>
+
+    <!-- L-07: 1980×980 → 495×245 -->
+    <rect x="0" y="0" width="495" height="245" class="back"/>
+    <text x="200" y="118" class="lbl">L-07</text>
+    <text x="180" y="138" class="sz">1980 × 980</text>
+
+    <!-- kerf line -->
+    <line x1="495" y1="0" x2="495" y2="305" class="kerf"/>
+
+    <!-- S-06 trimmed: 456×760 → 114×190 -->
+    <rect x="496" y="0" width="114" height="190" class="backS"/>
+    <text x="518" y="90" class="lbl">S-06</text>
+    <text x="504" y="110" class="sz">456 × 760</text>
+
+    <!-- waste zones -->
+    <rect x="0" y="246" width="495" height="59" class="waste"/>
+    <text x="200" y="282" class="sz">waste (1980 × 236)</text>
+    <rect x="496" y="191" width="114" height="114" class="waste"/>
+    <text x="504" y="254" class="sz">waste</text>
+  </g>
+
+  <g transform="translate(60,440)">
+    <text x="0" y="0" class="sz">Note: S-06 nominal height is 460 mm. Trimming to 456 mm increases the top-edge inset from 10 mm to 12 mm — structurally irrelevant for a back panel.</text>
+    <text x="0" y="20" class="sz">Single crosscut at 1980 mm from the left edge separates L-07 from S-06.</text>
+  </g>
+</svg>
