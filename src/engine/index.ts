@@ -14,6 +14,8 @@ export type {
   CutRect,
   CutSheet,
   OptimizationResult,
+  SmartStrategy,
+  OptimizationSuggestion,
 } from './types';
 
 export {
@@ -41,3 +43,5 @@ export {
 export { generateHardware } from './hardware';
 
 export { optimizeCutSheets } from './cut-optimizer';
+
+export { findOptimizations } from './smart-optimizer';

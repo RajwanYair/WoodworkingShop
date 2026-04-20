@@ -107,14 +107,24 @@ export interface OptimizationResult {
   totalWaste: number;       // mm²
 }
 
-export interface OptimizationResult {
+export type SmartStrategy =
+  | 'reduce-depth'
+  | 'co-nest-strips'
+  | 'adjust-width'
+  | 'adjust-height'
+  | 'material-swap';
+
+export interface OptimizationSuggestion {
   originalConfig: CabinetConfig;
   optimizedConfig: CabinetConfig;
+  originalResult: OptimizationResult;
+  optimizedResult: OptimizationResult;
   savings: {
     sheetsRemoved: number;
-    yieldImprovement: number;
-    wasteReduced: number;  // mm²
+    yieldImprovement: number;  // percentage points
+    wasteReduced: number;      // mm²
   };
-  strategy: string;
+  strategy: SmartStrategy;
   explanation: { en: string; he: string };
+  score: number;  // lower is better: sheets×1000 - yield
 }
