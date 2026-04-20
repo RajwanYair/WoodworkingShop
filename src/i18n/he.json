@@ -15,6 +15,7 @@
     "height": "גובה",
     "depth": "עומק",
     "unit": "מ\"מ",
+    "toggleUnits": "החלף יחידות (מ\"מ/אינץ')",
     "material": "חומר",
     "carcass": "חומר שלד",
     "backPanel": "חומר לוח גב",

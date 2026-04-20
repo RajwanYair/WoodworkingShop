@@ -15,6 +15,7 @@
     "height": "Height",
     "depth": "Depth",
     "unit": "mm",
+    "toggleUnits": "Switch units (mm/inches)",
     "material": "Material",
     "carcass": "Carcass Material",
     "backPanel": "Back Panel Material",

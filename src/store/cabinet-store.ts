@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { CabinetConfig, Part, HardwareItem, OptimizationResult, DerivedDimensions } from '../engine/types';
+import type { UnitSystem } from '../utils/units';
 import { DEFAULT_CONFIG } from '../engine/materials';
 import { computeDimensions } from '../engine/dimensions';
 import { generateParts, computeEdgeBandingTotal } from '../engine/parts';
@@ -43,6 +44,7 @@ export interface CabinetState {
   activeTab: 'configurator' | 'preview' | 'optimizer' | 'pdf';
   darkMode: boolean;
   colorBlindMode: boolean;
+  units: UnitSystem;
 
   // Actions
   setConfig: (patch: Partial<CabinetConfig>) => void;
@@ -50,6 +52,7 @@ export interface CabinetState {
   setActiveTab: (tab: CabinetState['activeTab']) => void;
   toggleDarkMode: () => void;
   toggleColorBlindMode: () => void;
+  toggleUnits: () => void;
   undo: () => void;
   redo: () => void;
   addCabinet: () => void;
@@ -98,6 +101,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
     activeTab: 'configurator',
     darkMode: false,
     colorBlindMode: false,
+    units: 'metric' as UnitSystem,
 
     setConfig: (patch) =>
       set((state) => {
@@ -206,5 +210,6 @@ export const useCabinetStore = create<CabinetState>((set) => {
     setActiveTab: (tab) => set({ activeTab: tab }),
     toggleDarkMode: () => set((s) => ({ darkMode: !s.darkMode })),
     toggleColorBlindMode: () => set((s) => ({ colorBlindMode: !s.colorBlindMode })),
+    toggleUnits: () => set((s) => ({ units: s.units === 'metric' ? 'imperial' : 'metric' as UnitSystem })),
   };
 });
