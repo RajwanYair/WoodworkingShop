@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { getMaterial } from '../../engine/materials';
+import { downloadDxfForSheet, downloadAllSheetsDxf } from '../../utils/dxf-export';
 import type { Lang, CutSheet, CutRect } from '../../engine/types';
 
 /** Scale factor: mm → SVG px */
@@ -31,18 +32,27 @@ export function OptimizerView() {
           <Stat label={t('optimizer.yield')} value={`${displayOpt.overallYield}%`} />
           <Stat label={t('optimizer.waste')} value={`${(displayOpt.totalWaste / 1_000_000).toFixed(2)} m²`} />
         </div>
-        <button
-          onClick={toggleColorBlindMode}
-          className={`ms-4 px-3 py-1.5 rounded text-xs font-medium border transition-colors ${
-            colorBlindMode
-              ? 'bg-blue-100 dark:bg-blue-900 border-blue-400 text-blue-700 dark:text-blue-200'
-              : 'border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800'
-          }`}
-          title="Toggle color-blind safe palette"
-          aria-pressed={colorBlindMode}
-        >
-          👁 CB
-        </button>
+        <div className="ms-4 flex gap-2">
+          <button
+            onClick={() => downloadAllSheetsDxf(displayOpt.sheets, 'cabinet')}
+            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors"
+            title={t('optimizer.exportDxf')}
+          >
+            📐 DXF
+          </button>
+          <button
+            onClick={toggleColorBlindMode}
+            className={`px-3 py-1.5 rounded text-xs font-medium border transition-colors ${
+              colorBlindMode
+                ? 'bg-blue-100 dark:bg-blue-900 border-blue-400 text-blue-700 dark:text-blue-200'
+                : 'border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800'
+            }`}
+            title="Toggle color-blind safe palette"
+            aria-pressed={colorBlindMode}
+          >
+            👁 CB
+          </button>
+        </div>
       </div>
 
       {/* Multi-cabinet label */}
@@ -89,9 +99,18 @@ function SheetCard({
 
   return (
     <div className="border border-wood-200 dark:border-wood-700 rounded p-4">
-      <h3 className="text-sm font-medium text-wood-600 dark:text-wood-300 mb-2">
-        {t('optimizer.sheet')} #{sheet.sheetIndex + 1} — {mat.name[lang]} ({sheet.thickness} mm) — {sheet.yieldPercent}%
-      </h3>
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="text-sm font-medium text-wood-600 dark:text-wood-300">
+          {t('optimizer.sheet')} #{sheet.sheetIndex + 1} — {mat.name[lang]} ({sheet.thickness} mm) — {sheet.yieldPercent}%
+        </h3>
+        <button
+          onClick={() => downloadDxfForSheet(sheet, `sheet-${sheet.sheetIndex + 1}.dxf`)}
+          className="text-[10px] px-2 py-0.5 rounded border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors"
+          title={`Download DXF for sheet ${sheet.sheetIndex + 1}`}
+        >
+          📐 DXF
+        </button>
+      </div>
       <svg
         viewBox={`-5 -5 ${sw + 10} ${sl + 10}`}
         className="w-full max-w-lg border border-wood-100 dark:border-wood-800 rounded bg-white dark:bg-wood-800"

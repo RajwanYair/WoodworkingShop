@@ -83,7 +83,8 @@
     "comparison": "Original vs Optimized",
     "original": "Original",
     "optimized": "Optimized",
-    "changes": "What Changes"
+    "changes": "What Changes",
+    "exportDxf": "Export DXF for CNC"
   },
   "preview": {
     "title": "Cabinet Preview",

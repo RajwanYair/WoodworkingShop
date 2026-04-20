@@ -83,7 +83,8 @@
     "comparison": "מקורי מול מוטב",
     "original": "מקורי",
     "optimized": "מוטב",
-    "changes": "מה משתנה"
+    "changes": "מה משתנה",
+    "exportDxf": "ייצוא DXF לCNC"
   },
   "preview": {
     "title": "תצוגה מקדימה",
