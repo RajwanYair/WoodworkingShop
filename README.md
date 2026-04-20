@@ -1,73 +1,70 @@
-# React + TypeScript + Vite
+# Cabinet Planner — Interactive Woodworking Design Tool
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React single-page application for designing pantry/storage cabinets with real-time preview, cut-sheet optimization, and PDF export.
 
-Currently, two official plugins are available:
+**[Live Demo →](https://rajwanyair.github.io/WoodworkingShop/)**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- **Interactive Configurator** — sliders and selectors for dimensions, materials, shelves, doors, handles, edge banding
+- **5-View SVG Preview** — Front (closed/open), Side, Top, Back with dimension annotations and part tooltips
+- **Smart Optimizer** — 5 strategies (reduce depth, co-nest strips, adjust width/height, material swap) to minimize sheet waste
+- **Cut Sheet Optimizer** — FFD 2D bin-packing with per-sheet yield visualization
+- **PDF Export** — full build plan: cover page, specifications, parts table, hardware BOM, cut diagrams
+- **Save/Load** — persist cabinet configurations in localStorage
+- **Shareable URLs** — config encoded in URL query params; copy-link button
+- **Bilingual** — English + Hebrew (RTL) with i18next
+- **Dark Mode** — toggle with Tailwind CSS dark variant
+- **Accessible** — ARIA landmarks, keyboard navigation, skip-to-content
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+| Layer | Technology |
+|-------|-----------|
+| Framework | React 19 + TypeScript 5.8 |
+| Build | Vite 8 |
+| Styling | Tailwind CSS 4 |
+| State | Zustand 5 |
+| i18n | i18next + react-i18next |
+| PDF | @react-pdf/renderer 4 |
+| Testing | Vitest (63 engine unit tests) |
+| CI | GitHub Actions (Node 20+22 matrix) |
+| Deploy | GitHub Pages |
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Quick Start
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev        # development server at localhost:5173
+npm run test       # run unit tests
+npm run build      # production build → dist/
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Project Structure
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+src/
+  engine/           # Pure TypeScript calculation engine
+    types.ts        # Domain types (CabinetConfig, Part, etc.)
+    materials.ts    # Material database, defaults, constraints
+    dimensions.ts   # Derived dimensions from config
+    parts.ts        # Parts list generation
+    hardware.ts     # Hardware BOM generation
+    cut-optimizer.ts    # FFD 2D bin-packing
+    smart-optimizer.ts  # 5-strategy optimization engine
+  components/
+    layout/         # Header, Sidebar
+    configurator/   # DimensionSliders, MaterialSelector, DoorConfig, etc.
+    preview/        # CabinetPreview (SVG with DimLine, PartRect)
+    optimizer/      # OptimizerView, SmartOptimizerPanel, Tables
+    pdf/            # CabinetPdfDocument, PdfExportPanel
+  store/            # Zustand store (cabinet-store.ts)
+  utils/            # URL state, localStorage helpers
+  i18n/             # en.json, he.json
+tests/
+  engine/           # Vitest unit tests for all engine modules
+```
+
+## License
+
+MIT
