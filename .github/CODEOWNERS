@@ -1,0 +1,21 @@
+# CODEOWNERS
+# =============================================================================
+# WoodworkingShop — Pantry Cabinet Plans
+# =============================================================================
+# Owners are requested for review when a pull request changes files
+# matching the patterns below.
+# =============================================================================
+
+# Default: all files
+* @RajwanYair
+
+# Workspace-level configs
+/.github/                   @RajwanYair
+/.editorconfig              @RajwanYair
+/.gitignore                 @RajwanYair
+/.gitattributes             @RajwanYair
+/.markdownlint.json         @RajwanYair
+/requirements.txt           @RajwanYair
+
+# Shared rendering library
+/pantry-cabinet-plans/shared/ @RajwanYair

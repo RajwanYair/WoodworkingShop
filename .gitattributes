@@ -17,12 +17,20 @@
 *.cfg text eol=lf
 *.txt text eol=lf
 *.sh text eol=lf
+*.svg text eol=lf
+
+# Windows script files — CRLF
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
 
 # Binary files
 *.pdf binary
-*.svg binary
 *.png binary
 *.jpg binary
 *.jpeg binary
 *.gif binary
 *.webp binary
+*.ttf binary
+*.woff binary
+*.woff2 binary

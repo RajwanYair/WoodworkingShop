@@ -36,6 +36,7 @@ pantry-cabinet-plans/plan-a/small-cabinet/*.pdf
 pantry-cabinet-plans/plan-b/large-cabinet/*.pdf
 pantry-cabinet-plans/plan-b/small-cabinet/*.pdf
 pantry-cabinet-plans/plan-c/*.pdf
+pantry-cabinet-plans/unified-optimized/*.pdf
 
 # Test / coverage
 .coverage
