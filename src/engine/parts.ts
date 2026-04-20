@@ -1,0 +1,119 @@
+import type { CabinetConfig, DerivedDimensions, Part } from './types';
+import { getMaterial } from './materials';
+import { computeDimensions } from './dimensions';
+
+/**
+ * Generate the full cut-list / parts table from a cabinet configuration.
+ * Each part includes bilingual names, dimensions, quantity, and edge info.
+ */
+export function generateParts(cfg: CabinetConfig): Part[] {
+  const d = computeDimensions(cfg);
+  const cm = getMaterial(cfg.carcassMaterial);
+  const bm = getMaterial(cfg.backPanelMaterial);
+  const t = cm.thickness;
+  const eb = cfg.edgeBanding;
+
+  const parts: Part[] = [];
+  let idx = 1;
+  const id = () => `P${String(idx++).padStart(2, '0')}`;
+
+  // ── Carcass sides (left + right) ──
+  parts.push({
+    id: id(), qty: 2,
+    name: { en: 'Side Panel', he: 'דופן צד' },
+    material: cfg.carcassMaterial, thickness: t,
+    length: cfg.height, width: cfg.depth,
+    edgeBanding: edgeLabel(eb !== 'none' ? 'front' : 'none'),
+  });
+
+  // ── Top + bottom panels ──
+  const tbWidth = cfg.width - 2 * t; // sits between side panels
+  parts.push({
+    id: id(), qty: 1,
+    name: { en: 'Top Panel', he: 'משטח עליון' },
+    material: cfg.carcassMaterial, thickness: t,
+    length: tbWidth, width: cfg.depth,
+    edgeBanding: edgeLabel(eb !== 'none' ? 'front' : 'none'),
+  });
+  parts.push({
+    id: id(), qty: 1,
+    name: { en: 'Bottom Panel', he: 'משטח תחתון' },
+    material: cfg.carcassMaterial, thickness: t,
+    length: tbWidth, width: cfg.depth,
+    edgeBanding: edgeLabel(eb !== 'none' ? 'front' : 'none'),
+  });
+
+  // ── Fixed shelf (middle) — only if height > 1200 ──
+  if (cfg.height > 1200) {
+    parts.push({
+      id: id(), qty: 1,
+      name: { en: 'Fixed Shelf', he: 'מדף קבוע' },
+      material: cfg.carcassMaterial, thickness: t,
+      length: d.internalWidth, width: d.shelfDepth,
+      edgeBanding: edgeLabel(eb !== 'none' ? 'front' : 'none'),
+    });
+  }
+
+  // ── Adjustable shelves ──
+  if (cfg.shelfCount > 0) {
+    parts.push({
+      id: id(), qty: cfg.shelfCount,
+      name: { en: 'Adjustable Shelf', he: 'מדף מתכוונן' },
+      material: cfg.carcassMaterial, thickness: t,
+      length: d.shelfWidth, width: d.shelfDepth,
+      edgeBanding: edgeLabel(eb !== 'none' ? 'front' : 'none'),
+    });
+  }
+
+  // ── Doors ──
+  if (cfg.doorStyle !== 'none') {
+    parts.push({
+      id: id(), qty: cfg.doorCount,
+      name: { en: 'Door', he: 'דלת' },
+      material: cfg.carcassMaterial, thickness: t,
+      length: d.doorHeight, width: d.doorWidth,
+      edgeBanding: edgeLabel(eb !== 'none' ? '4-edges' : 'none'),
+    });
+  }
+
+  // ── Back panel ──
+  parts.push({
+    id: id(), qty: 1,
+    name: { en: 'Back Panel', he: 'לוח גב' },
+    material: cfg.backPanelMaterial, thickness: bm.thickness,
+    length: d.backPanelHeight, width: d.backPanelWidth,
+    edgeBanding: edgeLabel('none'),
+  });
+
+  return parts;
+}
+
+/** Get the derived dimensions — convenience re-export. */
+export { computeDimensions } from './dimensions';
+
+// ─── Helpers ───
+
+type EdgeCode = 'none' | 'front' | '4-edges';
+
+function edgeLabel(code: EdgeCode): { en: string; he: string } {
+  switch (code) {
+    case 'front':   return { en: 'Front edge', he: 'קצה קדמי' };
+    case '4-edges': return { en: 'All 4 edges', he: 'כל 4 הקצוות' };
+    default:        return { en: 'None', he: 'ללא' };
+  }
+}
+
+/**
+ * Compute total edge banding length in mm for cost estimation.
+ */
+export function computeEdgeBandingTotal(parts: Part[]): number {
+  let total = 0;
+  for (const p of parts) {
+    if (p.edgeBanding.en === 'Front edge') {
+      total += p.length * p.qty;  // one long edge per piece
+    } else if (p.edgeBanding.en === 'All 4 edges') {
+      total += 2 * (p.length + p.width) * p.qty;
+    }
+  }
+  return total;
+}
