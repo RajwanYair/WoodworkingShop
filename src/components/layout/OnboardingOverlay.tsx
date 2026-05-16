@@ -54,25 +54,23 @@ export function OnboardingOverlay() {
   if (!visible) return null;
 
   return (
-    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <div
+      ref={dialogRef}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
-      onClick={dismiss}
-      onKeyDown={handleKeyDown}
       role="dialog"
       aria-modal="true"
-      aria-label={t('onboarding.title')}
-      tabIndex={-1}
+      aria-labelledby="onboarding-title"
+      onKeyDown={handleKeyDown}
     >
-      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
-      <div
-        ref={dialogRef}
-        className="bg-white dark:bg-wood-800 rounded-xl shadow-2xl max-w-md w-full mx-4 p-6 space-y-5"
-        onClick={(e) => e.stopPropagation()}
-        onKeyDown={(e) => e.stopPropagation()}
-        role="document"
-      >
-        <h2 className="text-lg font-bold text-wood-700 dark:text-wood-100 text-center">{t('onboarding.title')}</h2>
+      <button
+        type="button"
+        aria-label={t('onboarding.dismissBackdrop')}
+        className="absolute inset-0 w-full h-full cursor-default"
+        onClick={dismiss}
+        tabIndex={-1}
+      />
+      <div className="relative bg-white dark:bg-wood-800 rounded-xl shadow-2xl max-w-md w-full mx-4 p-6 space-y-5">
+        <h2 id="onboarding-title" className="text-lg font-bold text-wood-700 dark:text-wood-100 text-center">{t('onboarding.title')}</h2>
         <p className="text-sm text-wood-500 dark:text-wood-400 text-center">{t('onboarding.subtitle')}</p>
         <ol className="space-y-3">
           {STEPS.map((s, i) => (

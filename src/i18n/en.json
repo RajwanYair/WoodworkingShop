@@ -190,6 +190,7 @@
     "stepPdf": "PDF Export",
     "descPdf": "Generate a printable PDF with all plans and cut sheets.",
     "getStarted": "Get Started",
-    "help": "Help"
+    "help": "Help",
+    "dismissBackdrop": "Dismiss onboarding"
   }
 }
