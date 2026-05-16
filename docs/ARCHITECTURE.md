@@ -17,7 +17,7 @@ graph LR
 
 ## Directory Layout
 
-```
+```text
 src/
 ├── main.tsx                 # React 19 entry point
 ├── App.tsx                  # Root component: tabs, keyboard shortcuts, layout

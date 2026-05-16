@@ -25,7 +25,7 @@ Which area is affected? (e.g., `preview rendering`, `PDF generation`, `optimizer
 <details>
 <summary>Performance timeline / console output (optional)</summary>
 
-```
+```text
 Paste relevant data here
 ```
 

@@ -39,7 +39,7 @@ What actually happens. Include error messages and screenshots if available.
 <details>
 <summary>Relevant log excerpt</summary>
 
-```
+```text
 Paste relevant log lines here
 ```
 
