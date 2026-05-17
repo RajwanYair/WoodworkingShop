@@ -2,7 +2,20 @@ import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { panelMaterials, backMaterials } from '../../engine/materials';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
-import type { Lang } from '../../engine/types';
+import type { Lang, Material } from '../../engine/types';
+
+/** Sprint 172 — colored swatch square for the currently selected material */
+function MaterialSwatch({ color }: { color?: string }) {
+  if (!color) return null;
+  return (
+    <span
+      aria-hidden="true"
+      className="inline-block w-4 h-4 rounded border border-wood-300 dark:border-wood-600 shrink-0"
+      style={{ backgroundColor: color }}
+      title={color}
+    />
+  );
+}
 
 export function MaterialSelector() {
   const { t, i18n } = useTranslation();
@@ -10,8 +23,11 @@ export function MaterialSelector() {
   const customMaterials = useCustomMaterialsStore((s) => s.materials);
   const lang = i18n.language as Lang;
 
-  const panels = [...panelMaterials(), ...customMaterials.filter((m) => m.category === 'panel')];
-  const backs = [...backMaterials(), ...customMaterials.filter((m) => m.category === 'back')];
+  const panels = [...panelMaterials(), ...customMaterials.filter((m) => m.category === 'panel')] as Material[];
+  const backs = [...backMaterials(), ...customMaterials.filter((m) => m.category === 'back')] as Material[];
+
+  const carcassColor = panels.find((m) => m.key === config.carcassMaterial)?.color;
+  const backColor = backs.find((m) => m.key === config.backPanelMaterial)?.color;
 
   return (
     <fieldset className="space-y-4">
@@ -20,7 +36,10 @@ export function MaterialSelector() {
       </legend>
 
       <label className="block">
-        <span className="text-sm text-wood-600 dark:text-wood-300">{t('config.carcass')}</span>
+        <span className="flex items-center gap-2 text-sm text-wood-600 dark:text-wood-300">
+          {t('config.carcass')}
+          <MaterialSwatch color={carcassColor} />
+        </span>
         <select
           value={config.carcassMaterial}
           onChange={(e) => setConfig({ carcassMaterial: e.target.value })}
@@ -35,7 +54,10 @@ export function MaterialSelector() {
       </label>
 
       <label className="block">
-        <span className="text-sm text-wood-600 dark:text-wood-300">{t('config.backPanel')}</span>
+        <span className="flex items-center gap-2 text-sm text-wood-600 dark:text-wood-300">
+          {t('config.backPanel')}
+          <MaterialSwatch color={backColor} />
+        </span>
         <select
           value={config.backPanelMaterial}
           onChange={(e) => setConfig({ backPanelMaterial: e.target.value })}
