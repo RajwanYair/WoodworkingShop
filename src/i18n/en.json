@@ -132,6 +132,8 @@
     "grainLegend": "Grain direction must run vertically (parts were not rotated 90°)",
     "sawKerf": "Saw kerf",
     "exportHardware": "Export Hardware List CSV",
+    "labels": "Labels",
+    "toggleLabels": "Toggle part name labels inside cut sheet rects",
     "notes": "Optimization Notes",
     "notesDesc": "Auto-detected suggestions that reduce sheets or improve yield",
     "notesEmpty": "No suggestions within the current tolerance — design is well optimized.",

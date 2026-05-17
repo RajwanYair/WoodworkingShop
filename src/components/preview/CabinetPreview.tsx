@@ -6,6 +6,7 @@ import { computeEqualShelfPositions } from '../../engine/dimensions';
 import { formatDim } from '../../utils/units';
 import type { UnitSystem } from '../../utils/units';
 import { useTouchGestures } from '../../hooks/useTouchGestures';
+import { IconDownload } from '../layout/Icons';
 
 /** Scale factor: mm → SVG px */
 const S = 0.2;
@@ -217,26 +218,26 @@ export const CabinetPreview = memo(function CabinetPreview() {
         </label>
         <button
           onClick={() => previewRef.current && downloadSvg(previewRef.current, `cabinet-${activeView}.svg`)}
-          className="ms-2 px-2 py-0.5 rounded text-xs font-medium bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700 transition-colors"
+          className="ms-2 px-2 py-0.5 rounded text-xs font-medium bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700 transition-colors flex items-center gap-1"
           aria-label={t('preview.exportSvg')}
           title={t('preview.exportSvg')}
         >
-          ⬇ SVG
+          <IconDownload size={11} /> SVG
         </button>
         <button
           onClick={() => previewRef.current && downloadPng(previewRef.current, `cabinet-${activeView}.png`)}
-          className="ms-1 px-2 py-0.5 rounded text-xs font-medium bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700 transition-colors"
+          className="ms-1 px-2 py-0.5 rounded text-xs font-medium bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700 transition-colors flex items-center gap-1"
           aria-label={t('preview.exportPng')}
           title={t('preview.exportPng')}
         >
-          ⬇ PNG
+          <IconDownload size={11} /> PNG
         </button>
         {zoomScale !== 1 && (
           <button
             onClick={() => setZoomScale(1)}
             className="ms-1 px-2 py-0.5 rounded text-xs font-medium bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-800 transition-colors"
           >
-            🔍 {Math.round(zoomScale * 100)}% ✕
+            {Math.round(zoomScale * 100)}% ✕
           </button>
         )}
       </div>

@@ -3,6 +3,7 @@ import { useCabinetStore } from '../../store/cabinet-store';
 import { CONSTRAINTS, HARD_LIMITS, getMaterial } from '../../engine/materials';
 import { computeEqualShelfPositions, computeShelfDeflection } from '../../engine/dimensions';
 import { SliderInput } from './SliderInput';
+import { IconWarning } from '../layout/Icons';
 
 export function ShelfConfig() {
   const { t } = useTranslation();
@@ -71,14 +72,14 @@ export function ShelfConfig() {
       {deflection && deflection.overLimit && (
         <div
           role="alert"
-          className="rounded border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 px-3 py-2 text-xs text-amber-800 dark:text-amber-200"
+          className="rounded border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 px-3 py-2 text-xs text-amber-800 dark:text-amber-200 flex items-start gap-1.5"
         >
-          ⚠{' '}
-          {t('shelves.deflectionWarning', {
+          <IconWarning size={13} className="shrink-0 mt-0.5" />
+          <span>{t('shelves.deflectionWarning', {
             span: Math.round(dimensions.shelfWidth),
             sag: deflection.deflectionMm.toFixed(1),
             limit: deflection.limitMm.toFixed(1),
-          })}
+          })}</span>
         </div>
       )}
 

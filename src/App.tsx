@@ -11,6 +11,7 @@ import { PartsTable, HardwareTable } from './components/optimizer/Tables';
 import { ToastContainer } from './components/layout/ToastContainer';
 import { OnboardingManager } from './components/layout/OnboardingOverlay';
 import { ShortcutsModal } from './components/layout/ShortcutsModal';
+import { IconPrint } from './components/layout/Icons';
 import { useCabinetStore, type CabinetState } from './store/cabinet-store';
 
 // Lazy-load heavy / route-isolated panels so the initial bundle stays lean
@@ -126,11 +127,11 @@ function App() {
             <button
               data-print="hide"
               onClick={() => window.print()}
-              className="fixed bottom-5 right-5 bg-wood-600 hover:bg-wood-700 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg text-lg z-40 transition-colors print:hidden"
+              className="fixed bottom-5 right-5 bg-wood-600 hover:bg-wood-700 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg z-40 transition-colors print:hidden"
               title="Print current view"
               aria-label="Print current view"
             >
-              🖨
+              <IconPrint size={20} />
             </button>
           </main>
         </div>

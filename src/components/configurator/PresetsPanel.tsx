@@ -1,10 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import type { CabinetConfig } from '../../engine/types';
+import {
+  IconKitchen, IconWallUnit, IconWardrobe, IconBookshelf, IconBathroom,
+} from '../layout/Icons';
 
 interface Preset {
   key: string;
-  icon: string;
+  icon: React.ReactElement;
   nameEn: string;
   nameHe: string;
   descEn: string;
@@ -15,7 +18,7 @@ interface Preset {
 const PRESETS: Preset[] = [
   {
     key: 'kitchen-base',
-    icon: '🍳',
+    icon: <IconKitchen size={20} />,
     nameEn: 'Kitchen Base',
     nameHe: 'ארון בסיס מטבח',
     descEn: '600×720×550 mm — standard base unit with toe kick',
@@ -38,7 +41,7 @@ const PRESETS: Preset[] = [
   },
   {
     key: 'kitchen-wall',
-    icon: '🪟',
+    icon: <IconWallUnit size={20} />,
     nameEn: 'Kitchen Wall Unit',
     nameHe: 'ארון עליון מטבח',
     descEn: '600×700×300 mm — standard overhead cabinet',
@@ -61,7 +64,7 @@ const PRESETS: Preset[] = [
   },
   {
     key: 'tall-pantry',
-    icon: '🏠',
+    icon: <IconWardrobe size={20} />,
     nameEn: 'Tall Pantry',
     nameHe: 'ארון מזווה גבוה',
     descEn: '600×2000×550 mm — full-height storage',
@@ -84,7 +87,7 @@ const PRESETS: Preset[] = [
   },
   {
     key: 'bookcase',
-    icon: '📚',
+    icon: <IconBookshelf size={20} />,
     nameEn: 'Bookcase',
     nameHe: 'כוננית ספרים',
     descEn: '800×1800×300 mm — open bookshelf',
@@ -107,7 +110,7 @@ const PRESETS: Preset[] = [
   },
   {
     key: 'wardrobe-double',
-    icon: '👔',
+    icon: <IconWardrobe size={20} />,
     nameEn: 'Double Wardrobe',
     nameHe: 'ארון בגדים כפול',
     descEn: '1200×2200×600 mm — two-door hanging wardrobe',
@@ -130,7 +133,7 @@ const PRESETS: Preset[] = [
   },
   {
     key: 'bathroom-vanity',
-    icon: '🚿',
+    icon: <IconBathroom size={20} />,
     nameEn: 'Bathroom Vanity',
     nameHe: 'ארון אמבטיה',
     descEn: '800×850×450 mm — with drawers, soft-close',
@@ -172,7 +175,7 @@ export function PresetsPanel() {
             className="flex flex-col items-start gap-0.5 rounded border border-wood-200 dark:border-wood-700 bg-wood-50 dark:bg-wood-800 hover:bg-wood-100 dark:hover:bg-wood-700 px-3 py-2 text-left transition-colors"
             title={isHe ? p.descHe : p.descEn}
           >
-            <span className="text-base leading-none">{p.icon}</span>
+            <span className="text-wood-600 dark:text-wood-300 leading-none">{p.icon}</span>
             <span className="text-xs font-medium text-wood-700 dark:text-wood-200 leading-tight mt-1">
               {isHe ? p.nameHe : p.nameEn}
             </span>

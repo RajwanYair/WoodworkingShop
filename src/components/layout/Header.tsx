@@ -3,8 +3,20 @@ import { useCabinetStore } from '../../store/cabinet-store';
 import { useToastStore } from '../../store/toast-store';
 import { configToUrl } from '../../utils/url-state';
 import { HelpButton } from './OnboardingOverlay';
+import {
+  IconSun, IconMoon, IconUndo, IconRedo, IconLink, IconHelp,
+  IconSettings, IconEye, IconScissors, IconHammer, IconDocument,
+} from './Icons';
 
 const tabs = ['configurator', 'preview', 'optimizer', 'assembly', 'pdf'] as const;
+
+const TAB_ICONS = {
+  configurator: <IconSettings size={14} className="shrink-0" />,
+  preview:      <IconEye     size={14} className="shrink-0" />,
+  optimizer:    <IconScissors size={14} className="shrink-0" />,
+  assembly:     <IconHammer  size={14} className="shrink-0" />,
+  pdf:          <IconDocument size={14} className="shrink-0" />,
+} as const;
 
 export function Header() {
   const { t, i18n } = useTranslation();
@@ -34,25 +46,25 @@ export function Header() {
           <button
             onClick={undo}
             disabled={!canUndo}
-            className="text-wood-200 hover:text-white text-sm disabled:opacity-30"
+            className="text-wood-200 hover:text-white disabled:opacity-30 flex items-center"
             aria-label="Undo"
           >
-            ↩
+            <IconUndo size={16} />
           </button>
           <button
             onClick={redo}
             disabled={!canRedo}
-            className="text-wood-200 hover:text-white text-sm disabled:opacity-30"
+            className="text-wood-200 hover:text-white disabled:opacity-30 flex items-center"
             aria-label="Redo"
           >
-            ↪
+            <IconRedo size={16} />
           </button>
           <button
             onClick={toggleDarkMode}
-            className="text-wood-200 hover:text-white text-sm"
+            className="text-wood-200 hover:text-white flex items-center"
             aria-label={darkMode ? 'Light mode' : 'Dark mode'}
           >
-            {darkMode ? '☀️' : '🌙'}
+            {darkMode ? <IconSun size={16} /> : <IconMoon size={16} />}
           </button>
           <button
             onClick={toggleLang}
@@ -78,10 +90,11 @@ export function Header() {
             aria-selected={activeTab === tab ? 'true' : 'false'}
             aria-current={activeTab === tab ? 'page' : undefined}
             title={`${t(`tabs.${tab}`)} (Alt+${i + 1})`}
-            className={`px-3 py-1.5 rounded text-sm font-medium whitespace-nowrap transition-colors ${
+            className={`px-3 py-1.5 rounded text-sm font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 ${
               activeTab === tab ? 'bg-wood-500 text-white' : 'text-wood-200 hover:bg-wood-600'
             }`}
           >
+            {TAB_ICONS[tab]}
             {t(`tabs.${tab}`)}
           </button>
         ))}
@@ -92,20 +105,20 @@ export function Header() {
         <button
           onClick={undo}
           disabled={!canUndo}
-          className="text-wood-200 hover:text-white text-sm disabled:opacity-30 disabled:cursor-not-allowed"
+          className="text-wood-200 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed flex items-center"
           title="Undo (Ctrl+Z)"
           aria-label="Undo"
         >
-          ↩
+          <IconUndo size={16} />
         </button>
         <button
           onClick={redo}
           disabled={!canRedo}
-          className="text-wood-200 hover:text-white text-sm disabled:opacity-30 disabled:cursor-not-allowed"
+          className="text-wood-200 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed flex items-center"
           title="Redo (Ctrl+Y)"
           aria-label="Redo"
         >
-          ↪
+          <IconRedo size={16} />
         </button>
         <button
           onClick={() => {
@@ -113,19 +126,19 @@ export function Header() {
             navigator.clipboard.writeText(url);
             useToastStore.getState().addToast(t('toast.linkCopied'), 'success');
           }}
-          className="text-wood-200 hover:text-white text-sm"
+          className="text-wood-200 hover:text-white flex items-center"
           title="Copy shareable link"
           aria-label="Copy shareable link"
         >
-          🔗
+          <IconLink size={16} />
         </button>
         <button
           onClick={toggleDarkMode}
-          className="text-wood-200 hover:text-white text-sm"
+          className="text-wood-200 hover:text-white flex items-center"
           title={t('footer.darkMode')}
           aria-label={darkMode ? 'Light mode' : 'Dark mode'}
         >
-          {darkMode ? '☀️' : '🌙'}
+          {darkMode ? <IconSun size={16} /> : <IconMoon size={16} />}
         </button>
         <button
           onClick={toggleUnits}
@@ -140,11 +153,11 @@ export function Header() {
         </button>
         <button
           onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: '?' }))}
-          className="text-wood-200 hover:text-white text-sm font-bold"
+          className="text-wood-200 hover:text-white flex items-center"
           title="Keyboard shortcuts (?)"
           aria-label="Keyboard shortcuts"
         >
-          ?
+          <IconHelp size={16} />
         </button>
         <HelpButton />
       </div>

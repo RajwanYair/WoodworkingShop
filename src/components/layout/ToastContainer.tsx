@@ -1,6 +1,11 @@
 import { useToastStore, type ToastType } from '../../store/toast-store';
+import { IconCheck, IconX, IconInfo } from './Icons';
 
-const icons: Record<ToastType, string> = { success: '✓', error: '✕', info: 'ℹ' };
+const IconMap: Record<ToastType, React.ReactElement> = {
+  success: <IconCheck size={16} />,
+  error:   <IconX     size={16} />,
+  info:    <IconInfo  size={16} />,
+};
 const colors: Record<ToastType, string> = {
   success: 'bg-green-600',
   error: 'bg-red-600',
@@ -18,10 +23,10 @@ export function ToastContainer() {
           key={t.id}
           className={`${colors[t.type]} text-white px-4 py-2 rounded shadow-lg flex items-center gap-2 text-sm animate-fade-in`}
         >
-          <span className="font-bold text-base">{icons[t.type]}</span>
+          <span className="shrink-0">{IconMap[t.type]}</span>
           <span className="flex-1">{t.message}</span>
-          <button onClick={() => removeToast(t.id)} className="opacity-70 hover:opacity-100 ml-1" aria-label="Dismiss">
-            ✕
+          <button onClick={() => removeToast(t.id)} className="opacity-70 hover:opacity-100 ml-1 flex items-center" aria-label="Dismiss">
+            <IconX size={14} />
           </button>
         </div>
       ))}

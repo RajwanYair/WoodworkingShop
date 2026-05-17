@@ -1,15 +1,19 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import {
+  IconSettings, IconEye, IconRuler, IconHammer, IconDocument, IconHelp,
+} from './Icons';
 
 const SEEN_KEY = 'onboarding-seen';
 
-const STEPS = [
-  { icon: '⚙️', titleKey: 'onboarding.stepConfigure', descKey: 'onboarding.descConfigure' },
-  { icon: '👁️', titleKey: 'onboarding.stepPreview', descKey: 'onboarding.descPreview' },
-  { icon: '📐', titleKey: 'onboarding.stepOptimize', descKey: 'onboarding.descOptimize' },
-  { icon: '🔨', titleKey: 'onboarding.stepAssembly', descKey: 'onboarding.descAssembly' },
-  { icon: '📄', titleKey: 'onboarding.stepPdf', descKey: 'onboarding.descPdf' },
-] as const;
+type StepIcon = React.ReactElement;
+const STEPS: { icon: StepIcon; titleKey: string; descKey: string }[] = [
+  { icon: <IconSettings size={22} />, titleKey: 'onboarding.stepConfigure', descKey: 'onboarding.descConfigure' },
+  { icon: <IconEye      size={22} />, titleKey: 'onboarding.stepPreview',   descKey: 'onboarding.descPreview'   },
+  { icon: <IconRuler    size={22} />, titleKey: 'onboarding.stepOptimize',  descKey: 'onboarding.descOptimize'  },
+  { icon: <IconHammer   size={22} />, titleKey: 'onboarding.stepAssembly',  descKey: 'onboarding.descAssembly'  },
+  { icon: <IconDocument size={22} />, titleKey: 'onboarding.stepPdf',       descKey: 'onboarding.descPdf'       },
+];
 
 export function OnboardingOverlay() {
   const { t } = useTranslation();
@@ -77,7 +81,7 @@ export function OnboardingOverlay() {
         <ol className="space-y-3">
           {STEPS.map((s, i) => (
             <li key={i} className="flex items-start gap-3">
-              <span className="text-xl">{s.icon}</span>
+              <span className="text-wood-500 dark:text-wood-300 mt-0.5 shrink-0">{s.icon}</span>
               <div>
                 <div className="text-sm font-semibold text-wood-700 dark:text-wood-200">{t(s.titleKey)}</div>
                 <div className="text-xs text-wood-500 dark:text-wood-400">{t(s.descKey)}</div>
@@ -110,11 +114,11 @@ export function HelpButton() {
   return (
     <button
       onClick={open}
-      className="text-xs text-wood-400 hover:text-wood-600 dark:hover:text-wood-300 transition-colors"
+      className="text-wood-300 hover:text-white transition-colors flex items-center"
       aria-label={t('onboarding.help')}
       title={t('onboarding.help')}
     >
-      ?
+      <IconHelp size={16} />
     </button>
   );
 }

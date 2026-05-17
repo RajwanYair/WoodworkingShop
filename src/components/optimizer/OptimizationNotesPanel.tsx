@@ -3,13 +3,17 @@ import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { findOptimizations } from '../../engine/smart-optimizer';
 import type { Lang, OptimizationSuggestion, SmartStrategy } from '../../engine/types';
+import {
+  IconLightbulb, IconRefresh, IconGrainVertical, IconGrainHorizontal,
+  IconChevronDown, IconChevronRight, IconX,
+} from '../layout/Icons';
 
-const STRATEGY_ICON: Record<SmartStrategy, string> = {
-  'reduce-depth': '↕',
-  'co-nest-strips': '⟩⟨',
-  'adjust-width': '↔',
-  'adjust-height': '↕',
-  'material-swap': '🔄',
+const STRATEGY_ICON: Record<SmartStrategy, React.ReactElement> = {
+  'reduce-depth':  <IconGrainVertical   size={14} className="text-amber-600" />,
+  'co-nest-strips': <IconRefresh         size={14} className="text-amber-600" />,
+  'adjust-width':  <IconGrainHorizontal size={14} className="text-amber-600" />,
+  'adjust-height': <IconGrainVertical   size={14} className="text-amber-600" />,
+  'material-swap': <IconRefresh         size={14} className="text-amber-600" />,
 };
 
 function suggestionKey(s: OptimizationSuggestion): string {
@@ -65,7 +69,7 @@ export function OptimizationNotesPanel() {
       {/* ── Header ── */}
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-amber-200 dark:border-amber-700/50">
         <div className="flex items-center gap-2">
-          <span className="text-amber-600 dark:text-amber-400 text-sm">💡</span>
+          <span className="text-amber-600 dark:text-amber-400"><IconLightbulb size={16} /></span>
           <h3 className="text-sm font-semibold text-amber-800 dark:text-amber-300">
             {t('optimizer.notes')}
           </h3>
@@ -93,10 +97,10 @@ export function OptimizationNotesPanel() {
           </label>
           <button
             onClick={() => setOpen((o) => !o)}
-            className="text-amber-600 dark:text-amber-400 text-xs hover:underline select-none"
+            className="text-amber-600 dark:text-amber-400 hover:underline select-none flex items-center gap-0.5"
             aria-expanded={open}
           >
-            {open ? '▾' : '▸'}
+            {open ? <IconChevronDown size={14} /> : <IconChevronRight size={14} />}
           </button>
         </div>
       </div>
@@ -118,7 +122,7 @@ export function OptimizationNotesPanel() {
                 >
                   {/* Left: icon + description */}
                   <div className="flex items-start gap-2 min-w-0 flex-1">
-                    <span className="text-base leading-none mt-0.5 shrink-0">
+                    <span className="text-base leading-none mt-0.5 shrink-0 flex items-center">
                       {STRATEGY_ICON[s.strategy]}
                     </span>
                     <div className="min-w-0">
@@ -157,9 +161,9 @@ export function OptimizationNotesPanel() {
                     </button>
                     <button
                       onClick={() => handleDismiss(s)}
-                      className="px-2.5 py-1 text-[11px] font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 rounded hover:bg-wood-100 dark:hover:bg-wood-700 transition-colors"
+                      className="px-2.5 py-1 text-[11px] font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 rounded hover:bg-wood-100 dark:hover:bg-wood-700 transition-colors flex items-center"
                     >
-                      ✕
+                      <IconX size={12} />
                     </button>
                   </div>
                 </div>

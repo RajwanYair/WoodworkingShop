@@ -9,6 +9,11 @@ import { downloadDxfForSheet, downloadAllSheetsDxf } from '../../utils/dxf-expor
 import { downloadGcodeForSheet, downloadAllSheetsGcode } from '../../utils/gcode-export';
 import { downloadBomCsv, downloadHardwareCsv } from '../../utils/bom-export';
 import { OptimizationNotesPanel } from './OptimizationNotesPanel';
+import {
+  IconDxf, IconGcode, IconList, IconWrench,
+  IconEye, IconTag, IconWarning, IconLightbulb,
+  IconGrainVertical, IconSawKerf,
+} from '../layout/Icons';
 import type { Lang, CutSheet, CutRect } from '../../engine/types';
 
 /** Scale factor: mm → SVG px */
@@ -26,6 +31,7 @@ export function OptimizerView() {
   const { optimization, combinedOptimization, cabinets, colorBlindMode, toggleColorBlindMode, sawKerf, setSawKerf } = useCabinetStore();
   const lang = i18n.language as Lang;
   const [hoveredPartId, setHoveredPartId] = useState<string | null>(null);
+  const [showPartNames, setShowPartNames] = useState(false); // Sprint 146 — part name labels
   const multiCabinet = cabinets.length > 1;
   const displayOpt = multiCabinet ? combinedOptimization : optimization;
 
@@ -55,16 +61,18 @@ export function OptimizerView() {
       {(lowYieldSheet || materialSwapPair) && (
         <div className="space-y-2">
           {lowYieldSheet && (
-            <div className="rounded border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 px-3 py-2 text-xs text-amber-800 dark:text-amber-200">
-              ⚠ {t('optimizer.lowYieldWarning', {
+            <div className="rounded border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 px-3 py-2 text-xs text-amber-800 dark:text-amber-200 flex items-start gap-2">
+              <IconWarning size={14} className="shrink-0 mt-0.5" />
+              {t('optimizer.lowYieldWarning', {
                 num: lowYieldSheet.sheetIndex + 1,
                 yield: lowYieldSheet.yieldPercent,
               })}
             </div>
           )}
           {materialSwapPair && (
-            <div className="rounded border border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/20 px-3 py-2 text-xs text-blue-800 dark:text-blue-200">
-              💡 {t('optimizer.materialSwapHint', {
+            <div className="rounded border border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/20 px-3 py-2 text-xs text-blue-800 dark:text-blue-200 flex items-start gap-2">
+              <IconLightbulb size={14} className="shrink-0 mt-0.5" />
+              {t('optimizer.materialSwapHint', {
                 a: getMaterial(materialSwapPair.a).name[lang],
                 b: getMaterial(materialSwapPair.b).name[lang],
                 t: materialSwapPair.t,
@@ -86,7 +94,8 @@ export function OptimizerView() {
           />
         </div>
         {/* Sprint 136 — saw kerf input */}
-        <label className="ms-4 flex items-center gap-1 text-xs text-wood-600 dark:text-wood-300">
+        <label className="ms-4 flex items-center gap-1.5 text-xs text-wood-600 dark:text-wood-300">
+          <IconSawKerf size={14} className="shrink-0" />
           {t('optimizer.sawKerf')}
           <input
             type="number"
@@ -106,21 +115,21 @@ export function OptimizerView() {
               downloadAllSheetsDxf(displayOpt.sheets, 'cabinet');
               useToastStore.getState().addToast(t('toast.dxfExported'), 'success');
             }}
-            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors"
+            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
             title={t('optimizer.exportDxf')}
           >
-            📐 DXF
+            <IconDxf size={14} /> DXF
           </button>
           <button
             onClick={() => {
               downloadAllSheetsGcode(displayOpt.sheets, 'cabinet');
               useToastStore.getState().addToast(t('toast.gcodeExported'), 'success');
             }}
-            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors"
+            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
             title={t('optimizer.exportGcode')}
             aria-label={t('optimizer.exportGcode')}
           >
-            ⚙ G-code
+            <IconGcode size={14} /> G-code
           </button>
           <button
             onClick={() => {
@@ -132,11 +141,11 @@ export function OptimizerView() {
               downloadBomCsv(bomData, lang);
               useToastStore.getState().addToast(t('toast.bomExported'), 'success');
             }}
-            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors"
+            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
             title={t('optimizer.exportBom')}
             aria-label={t('optimizer.exportBom')}
           >
-            📋 BOM
+            <IconList size={14} /> BOM
           </button>
           {/* Sprint 137 — hardware CSV */}
           <button
@@ -148,15 +157,15 @@ export function OptimizerView() {
               downloadHardwareCsv(hwData, lang);
               useToastStore.getState().addToast(t('toast.hardwareExported'), 'success');
             }}
-            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors"
+            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
             title={t('optimizer.exportHardware')}
             aria-label={t('optimizer.exportHardware')}
           >
-            🔧 HW
+            <IconWrench size={14} /> HW
           </button>
           <button
             onClick={toggleColorBlindMode}
-            className={`px-3 py-1.5 rounded text-xs font-medium border transition-colors ${
+            className={`px-3 py-1.5 rounded text-xs font-medium border transition-colors flex items-center gap-1.5 ${
               colorBlindMode
                 ? 'bg-blue-100 dark:bg-blue-900 border-blue-400 text-blue-700 dark:text-blue-200'
                 : 'border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800'
@@ -164,7 +173,20 @@ export function OptimizerView() {
             title="Toggle color-blind safe palette"
             aria-pressed={colorBlindMode}
           >
-            👁 CB
+            <IconEye size={14} /> CB
+          </button>
+          {/* Sprint 146 — toggle part name labels inside SVG rects */}
+          <button
+            onClick={() => setShowPartNames((v) => !v)}
+            className={`px-3 py-1.5 rounded text-xs font-medium border transition-colors flex items-center gap-1.5 ${
+              showPartNames
+                ? 'bg-wood-200 dark:bg-wood-700 border-wood-400 text-wood-700 dark:text-wood-200'
+                : 'border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800'
+            }`}
+            title={t('optimizer.toggleLabels')}
+            aria-pressed={showPartNames}
+          >
+            <IconTag size={14} /> {t('optimizer.labels')}
           </button>
         </div>
       </div>
@@ -188,6 +210,7 @@ export function OptimizerView() {
           hoveredPartId={hoveredPartId}
           onHoverPart={setHoveredPartId}
           colorBlindMode={colorBlindMode}
+          showPartNames={showPartNames}
           t={t}
         />
       ))}
@@ -208,6 +231,7 @@ function SheetCard({
   hoveredPartId,
   onHoverPart,
   colorBlindMode,
+  showPartNames,
   t,
 }: {
   sheet: CutSheet;
@@ -215,6 +239,7 @@ function SheetCard({
   hoveredPartId: string | null;
   onHoverPart: (id: string | null) => void;
   colorBlindMode: boolean;
+  showPartNames: boolean;
   t: (key: string) => string;
 }) {
   const mat = getMaterial(sheet.material);
@@ -228,10 +253,10 @@ function SheetCard({
           {t('optimizer.sheet')} #{sheet.sheetIndex + 1} — {mat.name[lang]} ({sheet.thickness} mm)
           {mat.hasGrain && (
             <span
-              className="ml-1.5 text-[10px] font-normal text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/30 px-1 rounded"
+              className="ml-1.5 text-[10px] font-normal text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/30 px-1 rounded inline-flex items-center gap-0.5"
               title="Grain direction preserved — parts were not rotated 90°"
             >
-              ↕ grain
+              <IconGrainVertical size={10} className="inline" /> grain
             </span>
           )}
         </h3>
@@ -251,33 +276,31 @@ function SheetCard({
             downloadDxfForSheet(sheet, `sheet-${sheet.sheetIndex + 1}.dxf`);
             useToastStore.getState().addToast(t('toast.dxfExported'), 'success');
           }}
-          className="text-[10px] px-2 py-0.5 rounded border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors"
+          className="text-[10px] px-2 py-0.5 rounded border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1"
           title={`Download DXF for sheet ${sheet.sheetIndex + 1}`}
         >
-          📐 DXF
+          <IconDxf size={11} /> DXF
         </button>
         <button
           onClick={() => {
             downloadGcodeForSheet(sheet, `sheet-${sheet.sheetIndex + 1}.nc`);
             useToastStore.getState().addToast(t('toast.gcodeExported'), 'success');
           }}
-          className="text-[10px] px-2 py-0.5 rounded border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors"
+          className="text-[10px] px-2 py-0.5 rounded border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1"
           title={`Download G-code for sheet ${sheet.sheetIndex + 1}`}
           aria-label={`Download G-code for sheet ${sheet.sheetIndex + 1}`}
         >
-          ⚙ G-code
+          <IconGcode size={11} /> G-code
         </button>
       </div>
       <svg
-        viewBox={`-5 -5 ${sw + 10} ${sl + 10}`}
+        viewBox={`-18 -18 ${sw + 36} ${sl + 36}`}
         className="w-full max-w-lg border border-wood-100 dark:border-wood-800 rounded bg-white dark:bg-wood-800"
-        style={{ maxHeight: 350 }}
+        style={{ maxHeight: 380 }}
         role="img"
         aria-label={`Cut sheet ${sheet.sheetIndex + 1}`}
       >
-        {/* Sheet background (waste = visible background) */}
-        <rect x={0} y={0} width={sw} height={sl} fill="#E8DFCF" stroke="#aaa" strokeWidth={1} />
-        {/* Waste hatch pattern */}
+        {/* ── Defs ── */}
         <defs>
           <pattern
             id={`waste-${sheet.sheetIndex}`}
@@ -286,10 +309,59 @@ function SheetCard({
             patternUnits="userSpaceOnUse"
             patternTransform="rotate(45)"
           >
-            <line x1="0" y1="0" x2="0" y2="6" stroke="#D4C4A0" strokeWidth="0.5" />
+            <line x1="0" y1="0" x2="0" y2="6" stroke="#C8B89A" strokeWidth="0.6" />
           </pattern>
+          {/* Drop shadow filter for part rects */}
+          <filter id={`shadow-${sheet.sheetIndex}`} x="-10%" y="-10%" width="120%" height="120%">
+            <feDropShadow dx="0.5" dy="0.5" stdDeviation="0.8" floodColor="#0003" />
+          </filter>
         </defs>
+
+        {/* Sheet background (waste = visible background) */}
+        <rect x={0} y={0} width={sw} height={sl} fill="#EDE4D2" stroke="#999" strokeWidth={1} rx={1} />
         <rect x={0} y={0} width={sw} height={sl} fill={`url(#waste-${sheet.sheetIndex})`} />
+
+        {/* ── Ruler ticks — top edge (every 100 mm) ── */}
+        {Array.from({ length: Math.floor(sheet.sheetWidth / 100) + 1 }).map((_, ti) => {
+          const tx = ti * 100 * S;
+          const isMajor = ti % 5 === 0;
+          return (
+            <g key={`tx-${ti}`}>
+              <line x1={tx} y1={-2} x2={tx} y2={isMajor ? -8 : -5} stroke="#888" strokeWidth={0.5} />
+              {isMajor && (
+                <text x={tx} y={-10} textAnchor="middle" fontSize={4} fill="#888">{ti * 100}</text>
+              )}
+            </g>
+          );
+        })}
+        {/* ── Ruler ticks — left edge (every 100 mm) ── */}
+        {Array.from({ length: Math.floor(sheet.sheetLength / 100) + 1 }).map((_, ti) => {
+          const ty = ti * 100 * S;
+          const isMajor = ti % 5 === 0;
+          return (
+            <g key={`ty-${ti}`}>
+              <line x1={-2} y1={ty} x2={isMajor ? -8 : -5} y2={ty} stroke="#888" strokeWidth={0.5} />
+              {isMajor && (
+                <text x={-10} y={ty + 1.5} textAnchor="end" fontSize={4} fill="#888">{ti * 100}</text>
+              )}
+            </g>
+          );
+        })}
+        {/* Sheet dimension labels */}
+        <text x={sw / 2} y={-12} textAnchor="middle" fontSize={5} fill="#666" fontWeight="500">
+          {sheet.sheetWidth} mm
+        </text>
+        <text
+          x={-14}
+          y={sl / 2}
+          textAnchor="middle"
+          fontSize={5}
+          fill="#666"
+          fontWeight="500"
+          transform={`rotate(-90, -14, ${sl / 2})`}
+        >
+          {sheet.sheetLength} mm
+        </text>
 
         {/* Placed parts */}
         {sheet.parts.map((p, i) => (
@@ -301,6 +373,8 @@ function SheetCard({
             isHovered={hoveredPartId === p.partId}
             isFaded={hoveredPartId !== null && hoveredPartId !== p.partId}
             onHover={onHoverPart}
+            showLabel={showPartNames}
+            shadowFilterId={`shadow-${sheet.sheetIndex}`}
           />
         ))}
       </svg>
@@ -324,7 +398,7 @@ function SheetCard({
       {/* Sprint 131 — Grain direction legend: only shown for grain-locked materials */}
       {mat.hasGrain && (
         <p className="mt-1.5 text-[10px] text-amber-700 dark:text-amber-300 flex items-center gap-1">
-          <span aria-hidden="true">↕</span>
+          <IconGrainVertical size={12} className="inline" />
           {t('optimizer.grainLegend')}
         </p>
       )}
@@ -340,6 +414,8 @@ function PartRect({
   isHovered,
   isFaded,
   onHover,
+  showLabel,
+  shadowFilterId,
 }: {
   part: CutRect;
   scale: number;
@@ -347,6 +423,8 @@ function PartRect({
   isHovered: boolean;
   isFaded: boolean;
   onHover: (id: string | null) => void;
+  showLabel: boolean;
+  shadowFilterId?: string;
 }) {
   const x = part.x * scale;
   const y = part.y * scale;
@@ -359,14 +437,16 @@ function PartRect({
   return (
     <g onMouseEnter={() => onHover(part.partId)} onMouseLeave={() => onHover(null)} style={{ cursor: 'pointer' }}>
       <rect
-        x={x}
-        y={y}
-        width={w}
-        height={h}
+        x={x + 0.3}
+        y={y + 0.3}
+        width={w - 0.6}
+        height={h - 0.6}
         fill={isHovered ? '#FFD700' : color}
         stroke={isHovered ? '#B8860B' : '#555'}
-        strokeWidth={isHovered ? 1.5 : 0.5}
-        opacity={isFaded ? 0.3 : 0.85}
+        strokeWidth={isHovered ? 1.5 : 0.6}
+        opacity={isFaded ? 0.25 : 0.88}
+        rx={1}
+        filter={shadowFilterId ? `url(#${shadowFilterId})` : undefined}
         className="transition-all duration-150"
       />
       {/* Edge banding indicators — colored lines on banded edges */}
@@ -416,9 +496,24 @@ function PartRect({
             />
           </g>
         ))}
+      {/* Part label (name) — shown when showLabel is true and rect is tall enough */}
+      {showLabel && w > 12 && h > 16 && (
+        <text
+          x={x + w / 2}
+          y={y + h / 2 - 8}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          fontSize={Math.min(5.5, w * 0.10)}
+          fill={isHovered ? '#333' : '#666'}
+          opacity={isFaded ? 0.3 : 0.9}
+          pointerEvents="none"
+        >
+          {part.label.length > 13 ? part.label.slice(0, 12) + '…' : part.label}
+        </text>
+      )}
       <text
         x={x + w / 2}
-        y={y + h / 2 - 2}
+        y={showLabel && w > 12 && h > 16 ? y + h / 2 + 1 : y + h / 2 - 2}
         textAnchor="middle"
         dominantBaseline="middle"
         fontSize={Math.min(7, w * 0.14)}
@@ -429,7 +524,7 @@ function PartRect({
       </text>
       <text
         x={x + w / 2}
-        y={y + h / 2 + 5}
+        y={showLabel && w > 12 && h > 16 ? y + h / 2 + 9 : y + h / 2 + 5}
         textAnchor="middle"
         dominantBaseline="middle"
         fontSize={Math.min(5, w * 0.1)}

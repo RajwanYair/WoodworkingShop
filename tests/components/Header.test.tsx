@@ -44,8 +44,9 @@ describe('Header', () => {
 
   it('renders dark mode toggle', () => {
     render(<Header />);
-    // Should find moon emoji for light mode
-    expect(screen.getAllByText('🌙').length).toBeGreaterThanOrEqual(1);
+    // Button uses SVG icon now — verify by aria-label
+    const darkBtns = screen.getAllByLabelText(/dark mode|light mode/i);
+    expect(darkBtns.length).toBeGreaterThanOrEqual(1);
   });
 
   it('renders language toggle', () => {

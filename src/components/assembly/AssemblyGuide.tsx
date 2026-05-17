@@ -4,6 +4,7 @@ import { useCabinetStore } from '../../store/cabinet-store';
 import { generateAssemblySteps } from '../../engine/assembly';
 import type { AssemblyStep } from '../../engine/assembly';
 import type { Lang, Part } from '../../engine/types';
+import { IconPrint, IconLightbulb } from '../layout/Icons';
 
 type ViewMode = 'paginated' | 'all';
 
@@ -24,11 +25,11 @@ export function AssemblyGuide() {
           <button
             type="button"
             onClick={() => window.print()}
-            className="px-3 py-1.5 text-xs rounded border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors print:hidden"
+            className="px-3 py-1.5 text-xs rounded border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors print:hidden flex items-center gap-1.5"
             title={t('assembly.print')}
             aria-label={t('assembly.print')}
           >
-            🖨 {t('assembly.print')}
+            <IconPrint size={13} /> {t('assembly.print')}
           </button>
           {/* View mode toggle */}
           <div
@@ -151,7 +152,10 @@ function StepCard({ step, stepCount, parts, lang, t }: StepCardProps) {
           <p className="text-sm text-wood-600 dark:text-wood-300 leading-relaxed">{step.description[lang]}</p>
           {step.tip && (
             <div className="mt-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded px-3 py-2">
-              <p className="text-xs text-amber-700 dark:text-amber-300">💡 {step.tip[lang]}</p>
+              <p className="text-xs text-amber-700 dark:text-amber-300 flex items-start gap-1.5">
+                <IconLightbulb size={13} className="shrink-0 mt-0.5" />
+                {step.tip[lang]}
+              </p>
             </div>
           )}
           {step.videoKeyword && (
