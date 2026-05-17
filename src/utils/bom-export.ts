@@ -97,3 +97,31 @@ export function downloadBomCsv(
   const csv = generateBomCsv(cabinets, lang);
   triggerDownload('\uFEFF' + csv, 'text/csv;charset=utf-8', filename);
 }
+
+/**
+ * Sprint 137 — standalone hardware-only CSV for procurement.
+ * Aggregates quantities across all cabinets so the buyer sees a single
+ * consolidated shopping list.
+ */
+export function generateHardwareCsv(
+  cabinets: { name: string; hardware: HardwareItem[] }[],
+  lang: Lang,
+): string {
+  const rows: string[] = [];
+  rows.push('Hardware ID,Hardware Name,Cabinet,Qty,Unit');
+  for (const cab of cabinets) {
+    for (const hw of cab.hardware) {
+      rows.push(csvRow([hw.id, hw.name[lang], cab.name, String(hw.qty), hw.unit[lang]]));
+    }
+  }
+  return rows.join('\n');
+}
+
+export function downloadHardwareCsv(
+  cabinets: { name: string; hardware: HardwareItem[] }[],
+  lang: Lang,
+  filename = 'hardware-list.csv',
+) {
+  const csv = generateHardwareCsv(cabinets, lang);
+  triggerDownload('\uFEFF' + csv, 'text/csv;charset=utf-8', filename);
+}
