@@ -6,17 +6,22 @@ import { Header } from './components/layout/Header';
 import { Sidebar } from './components/layout/Sidebar';
 import { ConfiguratorPanel } from './components/configurator/ConfiguratorPanel';
 import { CabinetPreview } from './components/preview/CabinetPreview';
-import { OptimizerView } from './components/optimizer/OptimizerView';
 import { SmartOptimizerPanel } from './components/optimizer/SmartOptimizerPanel';
 import { PartsTable, HardwareTable } from './components/optimizer/Tables';
-import { AssemblyGuide } from './components/assembly/AssemblyGuide';
 import { ToastContainer } from './components/layout/ToastContainer';
 import { OnboardingManager } from './components/layout/OnboardingOverlay';
 import { useCabinetStore, type CabinetState } from './store/cabinet-store';
 
-// Lazy-load PDF panel (heavy @react-pdf/renderer dependency)
+// Lazy-load heavy / route-isolated panels so the initial bundle stays lean
+// (Sprint 110). PDF in particular pulls in @react-pdf/renderer (~1.6 MB).
 const PdfExportPanel = lazy(() =>
   import('./components/pdf/PdfExportPanel').then((m) => ({ default: m.PdfExportPanel })),
+);
+const OptimizerView = lazy(() =>
+  import('./components/optimizer/OptimizerView').then((m) => ({ default: m.OptimizerView })),
+);
+const AssemblyGuide = lazy(() =>
+  import('./components/assembly/AssemblyGuide').then((m) => ({ default: m.AssemblyGuide })),
 );
 
 function App() {
@@ -91,14 +96,20 @@ function App() {
             {activeTab === 'configurator' && <ConfiguratorPanel />}
             {activeTab === 'preview' && <CabinetPreview />}
             {activeTab === 'optimizer' && (
-              <div className="space-y-8">
-                <SmartOptimizerPanel />
-                <PartsTable />
-                <HardwareTable />
-                <OptimizerView />
-              </div>
+              <Suspense fallback={<div className="text-center py-12 text-wood-400">Loading optimizer…</div>}>
+                <div className="space-y-8">
+                  <SmartOptimizerPanel />
+                  <PartsTable />
+                  <HardwareTable />
+                  <OptimizerView />
+                </div>
+              </Suspense>
             )}
-            {activeTab === 'assembly' && <AssemblyGuide />}
+            {activeTab === 'assembly' && (
+              <Suspense fallback={<div className="text-center py-12 text-wood-400">Loading assembly guide…</div>}>
+                <AssemblyGuide />
+              </Suspense>
+            )}
             {activeTab === 'pdf' && (
               <Suspense fallback={<div className="text-center py-12 text-wood-400">Loading PDF tools…</div>}>
                 <PdfExportPanel />
