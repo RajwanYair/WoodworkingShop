@@ -39,12 +39,29 @@ function cbColor(index: number) {
 
 export function OptimizerView() {
   const { t, i18n } = useTranslation();
-  const { optimization, combinedOptimization, cabinets, colorBlindMode, toggleColorBlindMode, sawKerf, setSawKerf, materialPriceOverrides } = useCabinetStore();
+  const {
+    optimization,
+    combinedOptimization,
+    cabinets,
+    colorBlindMode,
+    toggleColorBlindMode,
+    sawKerf,
+    setSawKerf,
+    materialPriceOverrides,
+    projectName,
+  } = useCabinetStore();
   const lang = i18n.language as Lang;
   const [hoveredPartId, setHoveredPartId] = useState<string | null>(null);
   const [showPartNames, setShowPartNames] = useState(false); // Sprint 146 — part name labels
   const multiCabinet = cabinets.length > 1;
   const displayOpt = multiCabinet ? combinedOptimization : optimization;
+
+  /** Sanitized project name for use in filenames (Sprint 156) */
+  const filePrefix =
+    (projectName.trim() || 'cabinet')
+      .replace(/[^\w\u05D0-\u05EA.-]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '') || 'cabinet';
 
   // Sprint A3 part 2: hints — surface low-yield sheets and same-thickness
   // material consolidation opportunities so the user knows to consult the
@@ -123,7 +140,7 @@ export function OptimizerView() {
         <div className="ms-2 flex gap-2">
           <button
             onClick={() => {
-              downloadAllSheetsDxf(displayOpt.sheets, 'cabinet');
+              downloadAllSheetsDxf(displayOpt.sheets, filePrefix);
               useToastStore.getState().addToast(t('toast.dxfExported'), 'success');
             }}
             className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
@@ -133,7 +150,7 @@ export function OptimizerView() {
           </button>
           <button
             onClick={() => {
-              downloadAllSheetsGcode(displayOpt.sheets, 'cabinet');
+              downloadAllSheetsGcode(displayOpt.sheets, filePrefix);
               useToastStore.getState().addToast(t('toast.gcodeExported'), 'success');
             }}
             className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
@@ -149,7 +166,7 @@ export function OptimizerView() {
                 parts: generateParts(c.config),
                 hardware: generateHardware(c.config),
               }));
-              downloadBomCsv(bomData, lang);
+              downloadBomCsv(bomData, lang, `${filePrefix}-bill-of-materials.csv`);
               useToastStore.getState().addToast(t('toast.bomExported'), 'success');
             }}
             className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
@@ -165,7 +182,7 @@ export function OptimizerView() {
                 name: c.name,
                 hardware: generateHardware(c.config),
               }));
-              downloadHardwareCsv(hwData, lang);
+              downloadHardwareCsv(hwData, lang, `${filePrefix}-hardware-list.csv`);
               useToastStore.getState().addToast(t('toast.hardwareExported'), 'success');
             }}
             className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
@@ -232,6 +249,7 @@ export function OptimizerView() {
             onHoverPart={setHoveredPartId}
             colorBlindMode={colorBlindMode}
             showPartNames={showPartNames}
+            filePrefix={filePrefix}
             t={t}
           />
         ))}
@@ -435,6 +453,7 @@ function SheetCard({
   onHoverPart,
   colorBlindMode,
   showPartNames,
+  filePrefix,
   t,
 }: {
   sheet: CutSheet;
@@ -443,6 +462,7 @@ function SheetCard({
   onHoverPart: (id: string | null) => void;
   colorBlindMode: boolean;
   showPartNames: boolean;
+  filePrefix: string;
   t: (key: string, opts?: Record<string, unknown>) => string;
 }) {
   const mat = getMaterial(sheet.material);
@@ -476,7 +496,7 @@ function SheetCard({
         )}
         <button
           onClick={() => {
-            downloadDxfForSheet(sheet, `sheet-${sheet.sheetIndex + 1}.dxf`);
+            downloadDxfForSheet(sheet, `${filePrefix}-sheet-${sheet.sheetIndex + 1}.dxf`);
             useToastStore.getState().addToast(t('toast.dxfExported'), 'success');
           }}
           className="text-[10px] px-2 py-0.5 rounded border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1"
@@ -486,7 +506,7 @@ function SheetCard({
         </button>
         <button
           onClick={() => {
-            downloadGcodeForSheet(sheet, `sheet-${sheet.sheetIndex + 1}.nc`);
+            downloadGcodeForSheet(sheet, `${filePrefix}-sheet-${sheet.sheetIndex + 1}.nc`);
             useToastStore.getState().addToast(t('toast.gcodeExported'), 'success');
           }}
           className="text-[10px] px-2 py-0.5 rounded border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1"
