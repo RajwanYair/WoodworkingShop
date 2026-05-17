@@ -86,6 +86,7 @@ export interface CabinetState {
   materialPriceOverrides: Record<string, number>; // Sprint 139: materialKey → ₪ per sheet
   edgeBandingRate: number; // Sprint 141: ₪ per meter, default 3
   hardwarePriceOverrides: Record<string, number>; // Sprint 148: hw.id → ₪ per unit
+  sheetSizeOverrides: Record<string, { width: number; length: number }>; // Sprint 165: per-material sheet size overrides (mm)
 
   // Actions
   setConfig: (patch: Partial<CabinetConfig>) => void;
@@ -106,22 +107,23 @@ export interface CabinetState {
   setMaterialPriceOverride: (materialKey: string, price: number | null) => void;
   setEdgeBandingRate: (rate: number) => void;
   setHardwarePriceOverride: (id: string, price: number | null) => void;
+  setSheetSizeOverride: (materialKey: string, size: { width: number; length: number } | null) => void; // Sprint 165
   setProjectName: (name: string) => void;
   loadProject: (cabinets: CabinetEntry[]) => void;
 }
 
-function derive(config: CabinetConfig) {
+function derive(config: CabinetConfig, sawKerfMm = 4, sheetSizeOverrides: Record<string, { width: number; length: number }> = {}) {
   const dimensions = computeDimensions(config);
   const parts = generateParts(config);
   const hardware = generateHardware(config);
-  const optimization = optimizeCutSheets(parts);
+  const optimization = optimizeCutSheets(parts, sawKerfMm, sheetSizeOverrides);
   const edgeBandingTotal = computeEdgeBandingTotal(parts);
   return { dimensions, parts, hardware, optimization, edgeBandingTotal };
 }
 
-function deriveProject(cabinets: CabinetEntry[], activeIndex: number, sawKerfMm = 4) {
+function deriveProject(cabinets: CabinetEntry[], activeIndex: number, sawKerfMm = 4, sheetSizeOverrides: Record<string, { width: number; length: number }> = {}) {
   const activeConfig = cabinets[activeIndex].config;
-  const active = derive(activeConfig);
+  const active = derive(activeConfig, sawKerfMm, sheetSizeOverrides);
   // Combined parts from all cabinets (prefixed with cabinet index)
   const allParts: Part[] = cabinets.flatMap((cab, ci) =>
     generateParts(cab.config).map((p) => ({
@@ -129,7 +131,7 @@ function deriveProject(cabinets: CabinetEntry[], activeIndex: number, sawKerfMm 
       id: cabinets.length > 1 ? `C${ci + 1}-${p.id}` : p.id,
     })),
   );
-  const combinedOptimization = optimizeCutSheets(allParts, sawKerfMm);
+  const combinedOptimization = optimizeCutSheets(allParts, sawKerfMm, sheetSizeOverrides);
   return { config: activeConfig, ...active, allParts, combinedOptimization };
 }
 
@@ -158,6 +160,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
     materialPriceOverrides: {}, // Sprint 139
     edgeBandingRate: 3, // ₪/m — Sprint 141
     hardwarePriceOverrides: {}, // Sprint 148
+    sheetSizeOverrides: {}, // Sprint 165
 
     setConfig: (patch) =>
       set((state) => {
@@ -168,7 +171,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         return {
           cabinets,
-          ...deriveProject(cabinets, state.activeCabinetIndex, state.sawKerf),
+          ...deriveProject(cabinets, state.activeCabinetIndex, state.sawKerf, state.sheetSizeOverrides),
           _past: past,
           _future: [],
           canUndo: true,
@@ -185,7 +188,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         return {
           cabinets,
-          ...deriveProject(cabinets, state.activeCabinetIndex, state.sawKerf),
+          ...deriveProject(cabinets, state.activeCabinetIndex, state.sawKerf, state.sheetSizeOverrides),
           _past: past,
           _future: [],
           canUndo: true,
@@ -203,7 +206,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         return {
           cabinets: prevCabinets,
           activeCabinetIndex: idx,
-          ...deriveProject(prevCabinets, idx, state.sawKerf),
+          ...deriveProject(prevCabinets, idx, state.sawKerf, state.sheetSizeOverrides),
           _past: past,
           _future: [state.cabinets, ...state._future],
           canUndo: past.length > 0,
@@ -221,7 +224,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         return {
           cabinets: nextCabinets,
           activeCabinetIndex: idx,
-          ...deriveProject(nextCabinets, idx, state.sawKerf),
+          ...deriveProject(nextCabinets, idx, state.sawKerf, state.sheetSizeOverrides),
           _past: [...state._past, state.cabinets],
           _future: future,
           canUndo: true,
@@ -239,7 +242,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         return {
           cabinets,
           activeCabinetIndex: idx,
-          ...deriveProject(cabinets, idx, state.sawKerf),
+          ...deriveProject(cabinets, idx, state.sawKerf, state.sheetSizeOverrides),
           _past: past,
           _future: [],
           canUndo: true,
@@ -257,7 +260,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         return {
           cabinets,
           activeCabinetIndex: idx,
-          ...deriveProject(cabinets, idx, state.sawKerf),
+          ...deriveProject(cabinets, idx, state.sawKerf, state.sheetSizeOverrides),
           _past: past,
           _future: [],
           canUndo: true,
@@ -281,7 +284,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         return {
           cabinets,
           activeCabinetIndex: newIndex,
-          ...deriveProject(cabinets, newIndex, state.sawKerf),
+          ...deriveProject(cabinets, newIndex, state.sawKerf, state.sheetSizeOverrides),
           _past: past,
           _future: [],
           canUndo: true,
@@ -295,7 +298,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         pushConfigToUrl(state.cabinets[index].config);
         return {
           activeCabinetIndex: index,
-          ...deriveProject(state.cabinets, index, state.sawKerf),
+          ...deriveProject(state.cabinets, index, state.sawKerf, state.sheetSizeOverrides),
         };
       }),
 
@@ -321,7 +324,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         return {
           cabinets: migrated,
           activeCabinetIndex: 0,
-          ...deriveProject(migrated, 0, state.sawKerf),
+          ...deriveProject(migrated, 0, state.sawKerf, state.sheetSizeOverrides),
           _past: past,
           _future: [],
           canUndo: true,
@@ -337,7 +340,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
     setSawKerf: (mm) =>
       set((state) => ({
         sawKerf: Math.max(0, Math.min(8, mm)),
-        ...deriveProject(state.cabinets, state.activeCabinetIndex, Math.max(0, Math.min(8, mm))),
+        ...deriveProject(state.cabinets, state.activeCabinetIndex, Math.max(0, Math.min(8, mm)), state.sheetSizeOverrides),
       })),
     setMaterialPriceOverride: (materialKey, price) =>
       set((state) => {
@@ -360,6 +363,20 @@ export const useCabinetStore = create<CabinetState>((set) => {
           overrides[id] = Math.max(0, price);
         }
         return { hardwarePriceOverrides: overrides };
+      }),
+    // Sprint 165 — per-material sheet size overrides
+    setSheetSizeOverride: (materialKey, size) =>
+      set((state) => {
+        const sheetSizeOverrides = { ...state.sheetSizeOverrides };
+        if (size === null) {
+          delete sheetSizeOverrides[materialKey];
+        } else {
+          sheetSizeOverrides[materialKey] = size;
+        }
+        return {
+          sheetSizeOverrides,
+          ...deriveProject(state.cabinets, state.activeCabinetIndex, state.sawKerf, sheetSizeOverrides),
+        };
       }),
     toggleDarkMode: () =>
       set((s) => {

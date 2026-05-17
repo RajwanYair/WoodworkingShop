@@ -49,6 +49,8 @@ export function OptimizerView() {
     setSawKerf,
     materialPriceOverrides,
     projectName,
+    sheetSizeOverrides,
+    setSheetSizeOverride,
   } = useCabinetStore();
   const lang = i18n.language as Lang;
   const [hoveredPartId, setHoveredPartId] = useState<string | null>(null);
@@ -275,7 +277,7 @@ export function OptimizerView() {
       </div>
 
       {/* Sprint 160 — Material usage summary */}
-      <MaterialSummaryPanel sheets={displayOpt.sheets} materialPriceOverrides={materialPriceOverrides} t={t} lang={lang} />
+      <MaterialSummaryPanel sheets={displayOpt.sheets} materialPriceOverrides={materialPriceOverrides} sheetSizeOverrides={sheetSizeOverrides} setSheetSizeOverride={setSheetSizeOverride} t={t} lang={lang} />
 
       {/* Sprint 150 — Shopping list / sheets-needed summary */}
       <ShoppingListPanel sheets={displayOpt.sheets} materialPriceOverrides={materialPriceOverrides} t={t} lang={lang} />
@@ -393,18 +395,26 @@ function OffcutsPanel({ sheets, t }: { sheets: CutSheet[]; t: (k: string) => str
 function MaterialSummaryPanel({
   sheets,
   materialPriceOverrides,
+  sheetSizeOverrides,
+  setSheetSizeOverride,
   t,
   lang,
 }: {
   sheets: CutSheet[];
   materialPriceOverrides: Record<string, number>;
+  sheetSizeOverrides: Record<string, { width: number; length: number }>; // Sprint 165
+  setSheetSizeOverride: (key: string, size: { width: number; length: number } | null) => void; // Sprint 165
   t: (key: string) => string;
   lang: Lang;
 }) {
   const [open, setOpen] = useState(true);
+  /** Sprint 165 — which material row is currently being edited */
+  const [editingKey, setEditingKey] = useState<string | null>(null);
+  const [editW, setEditW] = useState('');
+  const [editL, setEditL] = useState('');
 
-  // Group by material + thickness
-  const groups = new Map<string, { name: { en: string; he: string }; thickness: number; sheetArea: number; qty: number; pricePerSheet: number }>();
+  // Group by material + thickness — Sprint 165: include materialKey in row data
+  const groups = new Map<string, { materialKey: string; name: { en: string; he: string }; thickness: number; sheetArea: number; qty: number; pricePerSheet: number; defaultW: number; defaultL: number }>();
   for (const sheet of sheets) {
     const mat = getMaterial(sheet.material);
     const key = `${sheet.material}-${sheet.thickness}`;
@@ -412,11 +422,14 @@ function MaterialSummaryPanel({
       const pricePerSheet =
         materialPriceOverrides[sheet.material] ?? mat.pricePerSheet ?? 0;
       groups.set(key, {
+        materialKey: sheet.material,
         name: mat.name,
         thickness: sheet.thickness,
         sheetArea: (sheet.sheetWidth * sheet.sheetLength) / 1e6, // m²
         qty: 0,
         pricePerSheet,
+        defaultW: mat.sheetWidth,
+        defaultL: mat.sheetLength,
       });
     }
     groups.get(key)!.qty += 1;
@@ -424,6 +437,19 @@ function MaterialSummaryPanel({
 
   const rows = [...groups.values()];
   if (rows.length === 0) return null;
+
+  const startEdit = (key: string, defaultW: number, defaultL: number) => {
+    const ov = sheetSizeOverrides[key];
+    setEditW(String(ov?.width ?? defaultW));
+    setEditL(String(ov?.length ?? defaultL));
+    setEditingKey(key);
+  };
+  const commitEdit = (key: string) => {
+    const w = parseFloat(editW);
+    const l = parseFloat(editL);
+    if (w > 0 && l > 0) setSheetSizeOverride(key, { width: w, length: l });
+    setEditingKey(null);
+  };
 
   return (
     <div className="border border-wood-200 dark:border-wood-700 rounded-lg overflow-hidden print:hidden">
@@ -443,13 +469,16 @@ function MaterialSummaryPanel({
                 <th className="py-1 pr-4 font-medium">{t('optimizer.materialSummaryMaterial')}</th>
                 <th className="py-1 pr-4 font-medium text-right">{t('optimizer.materialSummarySheets')}</th>
                 <th className="py-1 pr-4 font-medium text-right">{t('optimizer.materialSummaryArea')}</th>
-                <th className="py-1 font-medium text-right">{t('optimizer.materialSummaryCost')}</th>
+                <th className="py-1 pr-4 font-medium text-right">{t('optimizer.materialSummaryCost')}</th>
+                <th className="py-1 font-medium text-right">{t('optimizer.sheetSize')}</th>
               </tr>
             </thead>
             <tbody>
               {rows.map((row, i) => {
                 const totalArea = (row.sheetArea * row.qty).toFixed(2);
                 const totalCost = row.pricePerSheet > 0 ? (row.pricePerSheet * row.qty).toFixed(0) : null;
+                const hasOverride = !!sheetSizeOverrides[row.materialKey];
+                const isEditing = editingKey === row.materialKey;
                 return (
                   <tr key={i} className="border-t border-wood-100 dark:border-wood-800">
                     <td className="py-1.5 pr-4 text-wood-700 dark:text-wood-300 font-medium">
@@ -457,8 +486,64 @@ function MaterialSummaryPanel({
                     </td>
                     <td className="py-1.5 pr-4 text-right text-wood-500 dark:text-wood-400">×{row.qty}</td>
                     <td className="py-1.5 pr-4 text-right text-wood-500 dark:text-wood-400">{totalArea} m²</td>
-                    <td className="py-1.5 text-right font-semibold text-wood-700 dark:text-wood-200">
+                    <td className="py-1.5 pr-4 text-right font-semibold text-wood-700 dark:text-wood-200">
                       {totalCost ? `₪${totalCost}` : '—'}
+                    </td>
+                    {/* Sprint 165 — inline sheet size override editor */}
+                    <td className="py-1.5 text-right">
+                      {isEditing ? (
+                        <span className="inline-flex items-center gap-1">
+                          <input
+                            type="number" min={100} max={5000} step={10}
+                            value={editW}
+                            onChange={(e) => setEditW(e.target.value)}
+                            className="w-16 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-1 py-0.5 text-xs text-center focus:outline-none focus:ring-1 focus:ring-wood-400"
+                            aria-label="Sheet width mm"
+                          />
+                          <span className="text-wood-400">×</span>
+                          <input
+                            type="number" min={100} max={5000} step={10}
+                            value={editL}
+                            onChange={(e) => setEditL(e.target.value)}
+                            className="w-16 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-1 py-0.5 text-xs text-center focus:outline-none focus:ring-1 focus:ring-wood-400"
+                            aria-label="Sheet length mm"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => commitEdit(row.materialKey)}
+                            className="text-green-600 dark:text-green-400 hover:underline text-xs px-1"
+                            title="Apply"
+                          >✓</button>
+                          <button
+                            type="button"
+                            onClick={() => setEditingKey(null)}
+                            className="text-wood-400 hover:text-wood-600 text-xs px-1"
+                            title="Cancel"
+                          >✗</button>
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1">
+                          <span className={`font-mono ${hasOverride ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'text-wood-400 dark:text-wood-500'}`}>
+                            {hasOverride
+                              ? `${sheetSizeOverrides[row.materialKey].width}×${sheetSizeOverrides[row.materialKey].length}`
+                              : `${row.defaultW}×${row.defaultL}`}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => startEdit(row.materialKey, row.defaultW, row.defaultL)}
+                            className="text-wood-400 hover:text-wood-600 dark:hover:text-wood-300 text-xs"
+                            title={t('optimizer.sheetSizeEdit')}
+                          >✎</button>
+                          {hasOverride && (
+                            <button
+                              type="button"
+                              onClick={() => setSheetSizeOverride(row.materialKey, null)}
+                              className="text-red-400 hover:text-red-600 text-xs"
+                              title={t('optimizer.sheetSizeReset')}
+                            >↺</button>
+                          )}
+                        </span>
+                      )}
                     </td>
                   </tr>
                 );

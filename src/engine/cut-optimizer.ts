@@ -19,7 +19,12 @@ import { getMaterial, SAW_KERF } from './materials';
  *
  * Axes: y is along the sheet length (grain direction), x is across.
  */
-export function optimizeCutSheets(parts: Part[], sawKerfMm = SAW_KERF): OptimizationResult {
+export function optimizeCutSheets(
+  parts: Part[],
+  sawKerfMm = SAW_KERF,
+  /** Sprint 165 — per-material sheet size overrides (mm). When present, overrides mat.sheetWidth / mat.sheetLength. */
+  sheetSizeOverrides: Record<string, { width: number; length: number }> = {},
+): OptimizationResult {
   // Group parts by material key (which implies thickness).
   const groups = new Map<string, { rects: Rect[]; materialKey: string }>();
   for (const p of parts) {
@@ -41,17 +46,20 @@ export function optimizeCutSheets(parts: Part[], sawKerfMm = SAW_KERF): Optimiza
 
   for (const [, group] of groups) {
     const mat = getMaterial(group.materialKey);
-    const packed = packMaxRects(group.rects, mat.sheetLength, mat.sheetWidth, sawKerfMm, !mat.hasGrain);
+    const override = sheetSizeOverrides[group.materialKey];
+    const sheetLength = override?.length ?? mat.sheetLength;
+    const sheetWidth = override?.width ?? mat.sheetWidth;
+    const packed = packMaxRects(group.rects, sheetLength, sheetWidth, sawKerfMm, !mat.hasGrain);
 
     for (const sheet of packed) {
-      const sheetArea = mat.sheetLength * mat.sheetWidth;
+      const sheetArea = sheetLength * sheetWidth;
       const usedArea = sheet.reduce((s, r) => s + r.length * r.width, 0);
       allSheets.push({
         sheetIndex: sheetIdx++,
         material: group.materialKey,
         thickness: mat.thickness,
-        sheetLength: mat.sheetLength,
-        sheetWidth: mat.sheetWidth,
+        sheetLength,
+        sheetWidth,
         parts: sheet.map((r) => ({
           partId: r.partId,
           label: r.label,
