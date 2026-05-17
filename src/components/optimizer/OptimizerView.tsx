@@ -10,9 +10,19 @@ import { downloadGcodeForSheet, downloadAllSheetsGcode } from '../../utils/gcode
 import { downloadBomCsv, downloadHardwareCsv } from '../../utils/bom-export';
 import { OptimizationNotesPanel } from './OptimizationNotesPanel';
 import {
-  IconDxf, IconGcode, IconList, IconWrench,
-  IconEye, IconTag, IconWarning, IconLightbulb,
-  IconGrainVertical, IconSawKerf, IconChevronDown, IconChevronRight, IconScissors,
+  IconDxf,
+  IconGcode,
+  IconList,
+  IconWrench,
+  IconEye,
+  IconTag,
+  IconWarning,
+  IconLightbulb,
+  IconGrainVertical,
+  IconSawKerf,
+  IconChevronDown,
+  IconChevronRight,
+  IconScissors,
 } from '../layout/Icons';
 import type { Lang, CutSheet, CutRect } from '../../engine/types';
 
@@ -428,7 +438,9 @@ function SheetCard({
             <g key={`tx-${ti}`}>
               <line x1={tx} y1={-2} x2={tx} y2={isMajor ? -8 : -5} stroke="#888" strokeWidth={0.5} />
               {isMajor && (
-                <text x={tx} y={-10} textAnchor="middle" fontSize={4} fill="#888">{ti * 100}</text>
+                <text x={tx} y={-10} textAnchor="middle" fontSize={4} fill="#888">
+                  {ti * 100}
+                </text>
               )}
             </g>
           );
@@ -441,7 +453,9 @@ function SheetCard({
             <g key={`ty-${ti}`}>
               <line x1={-2} y1={ty} x2={isMajor ? -8 : -5} y2={ty} stroke="#888" strokeWidth={0.5} />
               {isMajor && (
-                <text x={-10} y={ty + 1.5} textAnchor="end" fontSize={4} fill="#888">{ti * 100}</text>
+                <text x={-10} y={ty + 1.5} textAnchor="end" fontSize={4} fill="#888">
+                  {ti * 100}
+                </text>
               )}
             </g>
           );

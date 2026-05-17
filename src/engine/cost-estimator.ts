@@ -3,6 +3,7 @@ import { getMaterial } from './materials';
 
 export interface CostBreakdown {
   sheetCosts: SheetCost[];
+  hardwareItems: HardwareCost[];
   edgeBandingCost: number;
   hardwareCost: number;
   wasteCost: number;
@@ -19,7 +20,15 @@ export interface SheetCost {
   subtotal: number;
 }
 
-/** Estimated hardware prices (₪) */
+export interface HardwareCost {
+  id: string;
+  name: { en: string; he: string };
+  qty: number;
+  unitPrice: number;
+  subtotal: number;
+}
+
+/** Estimated hardware prices (₪) by semantic key OR hardware H-id */
 const HARDWARE_PRICES: Record<string, number> = {
   hinge: 12,
   'mounting-plate': 6,
@@ -28,6 +37,17 @@ const HARDWARE_PRICES: Record<string, number> = {
   handle: 15,
   'L-bracket': 4,
   'wood-glue': 25,
+  // H-id aliases
+  H01: 12,   // Euro Hinge
+  H02: 6,    // Hinge Mounting Plate
+  H03: 0.5,  // Shelf Pin
+  H04: 0.8,  // Confirmat Screw
+  H05: 0.3,  // Confirmat Cover Cap
+  H06: 0.2,  // Back Panel Nail
+  H07: 4,    // L-Bracket
+  H08: 1.5,  // Wall Screw + Dowel
+  H09: 15,   // Handle
+  H10: 25,   // Wood Glue
 };
 
 /** Edge banding price per meter (₪) */
@@ -39,13 +59,15 @@ const EDGE_BANDING_PER_METER = 3;
  *
  * Sprint 139: accepts optional `priceOverrides` map of materialKey → price per sheet (₪).
  * Sprint 141: accepts optional `edgeBandingRate` (₪/m, default EDGE_BANDING_PER_METER).
+ * Sprint 148: accepts optional `hardwarePriceOverrides` map of hw.id → unit price (₪).
  */
 export function estimateCost(
   optimization: OptimizationResult,
-  hardware: { id: string; qty: number }[],
+  hardware: { id: string; qty: number; name?: { en: string; he: string } }[],
   edgeBandingTotal: number,
   priceOverrides: Record<string, number> = {},
   edgeBandingRate: number = EDGE_BANDING_PER_METER,
+  hardwarePriceOverrides: Record<string, number> = {},
 ): CostBreakdown {
   // Group sheets by material
   const sheetMap = new Map<string, { qty: number; mat: ReturnType<typeof getMaterial> }>();
@@ -79,12 +101,19 @@ export function estimateCost(
   // Edge banding
   const edgeBandingCost = Math.round((edgeBandingTotal / 1000) * edgeBandingRate);
 
-  // Hardware
-  let hardwareCost = 0;
-  for (const hw of hardware) {
-    const unitPrice = HARDWARE_PRICES[hw.id] ?? 0;
-    hardwareCost += hw.qty * unitPrice;
-  }
+  // Hardware — Sprint 148: per-item breakdown with price overrides
+  const hardwareItems: HardwareCost[] = hardware.map((hw) => {
+    const basePrice = HARDWARE_PRICES[hw.id] ?? 0;
+    const unitPrice = hardwarePriceOverrides[hw.id] ?? basePrice;
+    return {
+      id: hw.id,
+      name: hw.name ?? { en: hw.id, he: hw.id },
+      qty: hw.qty,
+      unitPrice,
+      subtotal: Math.round(hw.qty * unitPrice * 10) / 10,
+    };
+  });
+  const hardwareCost = Math.round(hardwareItems.reduce((sum, h) => sum + h.subtotal, 0) * 10) / 10;
 
   // Waste cost — proportional value of wasted material
   const wastePercent = optimization.sheets.length > 0 ? (100 - optimization.overallYield) / 100 : 0;
@@ -92,6 +121,7 @@ export function estimateCost(
 
   return {
     sheetCosts,
+    hardwareItems,
     edgeBandingCost,
     hardwareCost,
     wasteCost,
