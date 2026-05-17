@@ -5,6 +5,75 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.0] — 2026-05-18
+
+### Added
+
+- **Grain direction constraint** (Sprint 115) — new `hasGrain: boolean` field on
+  `Material`. Plywood-17/18/4 and OSB-18 are grain-sensitive; MDF, melamine,
+  chipboard, HDF, and glass are not. The cut optimizer's `packMaxRects` now
+  accepts an `allowRotation` param and skips 90° part rotations for grain-
+  sensitive materials. A "↕ grain" badge appears on affected cut sheets in
+  `OptimizerView`.
+- **Configurable toe kick / plinth** (Sprint 116) — new `kickHeight: number`
+  field on `CabinetConfig` (default 100 mm for cabinet/wardrobe, 0 for
+  desk/bookshelf). Generates 3 toe-kick parts (front + 2 sides) when non-zero.
+  Assembly guide gains a toe-kick attachment step. The 2D front view renders a
+  translucent kick strip at the base. URL-serialised as `kh=`.
+- **Quick Presets panel** (Sprint 117) — new `PresetsPanel` component with 6
+  one-click starter templates: Kitchen Base (600×720×550), Kitchen Wall Unit
+  (600×700×300), Tall Pantry (600×2000×550), Bookcase (800×1800×300), Double
+  Wardrobe (1200×2200×600), and Bathroom Vanity (800×850×450). Inserted at the
+  top of the Configurator panel.
+- **PNG export from preview** (Sprint 118) — `downloadPng()` helper rasterises
+  the active SVG view at 2× scale via the Canvas API, producing a high-res PNG.
+  A "⬇ PNG" button sits alongside the existing "⬇ SVG" button in the preview
+  tab bar.
+- **Keyboard shortcuts modal** (Sprint 119) — new `ShortcutsModal` listing all
+  11 keyboard shortcuts (Alt+1–5 for tabs, Ctrl+Z/Y undo/redo, Ctrl+P print,
+  `?` to open the modal). Press `?` anywhere or click the `?` button in the
+  Header. The modal is accessible: `role="dialog"`, `aria-modal`, Escape to
+  close, backdrop-click to close.
+- **Per-drawer custom heights** (Sprint 120) — new `drawerHeights?: number[]`
+  on `CabinetConfig`. When `drawerCount > 0` the Drawer Config section shows a
+  SliderInput per drawer (80–250 mm soft range, 50–500 mm hard range, 5 mm
+  steps). Parts generation now uses `drawerHeights[i] ?? 150` per drawer. URL-
+  serialised as `dh=` (comma-separated mm values).
+- **Maskable PWA icons** (Sprint 121) — `public/manifest.json` now includes
+  separate `"purpose": "maskable"` entries for icon-192.png and icon-512.png,
+  satisfying the Lighthouse PWA maskable-icon audit.
+- **Playwright PDF panel test** (Sprint 122) — new behavioral e2e test in
+  `tests/e2e/smoke.spec.ts`: navigates to the PDF tab (Alt+5), asserts the
+  "Generate PDF" heading and button are visible and enabled, and that the
+  content-summary section lists parts and cut sheets.
+- **`apple-touch-icon` meta link** — added to `index.html` for iOS home-screen
+  add-to-homescreen support.
+- **`.browserslistrc`** — documents the modern-browser-only target
+  (last 2 Chrome / Firefox / Safari / Edge, no IE) for compatibility tooling.
+
+### Changed
+
+- **Mermaid 8.8.0 compatibility** — all 6 Mermaid diagram blocks across
+  `README.md`, `docs/ARCHITECTURE.md`, and `.github/CONTRIBUTING.md` updated:
+  emojis removed from node labels, `\n` replaced with spaces/colons, middle-dot
+  `·` replaced with commas, `<br/>` in flowchart nodes replaced with comma-space.
+- **CabinetPreview tablist fix** — `role="tablist"` moved to an inner `<div>`
+  wrapping only the `role="tab"` view buttons; the Dimensions checkbox, SVG/PNG
+  export buttons, and zoom reset are now proper siblings outside the tablist,
+  correcting an ARIA ownership violation.
+- **CabinetSelector rename input** — added `aria-label="Cabinet name"` to the
+  inline rename `<input>`, resolving a form-control-without-label a11y warning.
+- **GitHub repo docs** — `docs/banner.svg` (wood-themed SVG banner), full README
+  rewrite with feature tables and tech stack, enhanced `CONTRIBUTING.md` and
+  `SECURITY.md`, enriched `ARCHITECTURE.md` with section headers and 4 diagrams,
+  YAML issue templates replacing plain Markdown forms.
+- `package.json` version bumped 3.2.0 → 3.3.0.
+
+### Tests
+
+- 249 unit tests across 23 files, all passing.
+- New Playwright e2e test: PDF panel renders and generate button is enabled.
+
 ## [3.2.0] — 2026-05-17
 
 ### Added

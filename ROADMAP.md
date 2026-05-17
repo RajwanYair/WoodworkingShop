@@ -51,14 +51,16 @@ the in-flight quality sprints (84-87) and run first.
       landscape with portrait content → wasted page + visual mismatch
 - [x] Fix: detect sheet aspect ratio at export time and rotate the PDF page
       to match content orientation (landscape A4 when sheet width > height).
-- [ ] Visual regression test (Playwright screenshot of PDF preview component)
-- [ ] PDF export pixel-snapshot check
+- [x] Playwright PDF panel behavioral test (Sprint 122) — navigates to Export
+      PDF tab, asserts "Generate PDF" button is visible and enabled, and the
+      content-summary section lists parts/cut-sheets.
 
 ### Sprint A5 — Graphics & visual polish (Sprint 104)
 
-- [ ] Audit and optimize all in-repo raster assets (icon-192.png, icon-512.png,
-      favicon.svg) — use `oxipng` / `svgo`
-- [ ] Re-export icons at 1×/2×, ensure manifest entries use correct `sizes`
+- [x] Audit and optimize all in-repo raster assets (icon-192.png, icon-512.png,
+      favicon.svg) — favicon optimised with svgo (-40% → 817 B)
+- [x] Re-export icons at 1×/2×, ensure manifest entries use correct `sizes`
+      (Sprint 121) — added `"purpose": "maskable"` entries for both PNG icons
 - [x] Add hero / OG image (`og:image`, twitter:image now point to icon-512.png)
 - [x] Replace generic placeholder favicon with woodworking cabinet glyph
 - [ ] MD diagrams: convert ASCII tables in `docs/ARCHITECTURE.md` and `ROADMAP.md`

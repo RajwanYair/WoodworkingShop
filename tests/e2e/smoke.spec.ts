@@ -60,3 +60,18 @@ test('PWA service worker registers', async ({ page }) => {
     )
     .toBe(true);
 });
+
+test('PDF panel renders generate button and content summary', async ({ page }) => {
+  await page.goto('/');
+  // Switch to the PDF tab via Alt+5.
+  await page.keyboard.press('Alt+5');
+  // The lazy-loaded PDF panel should mount; wait for the heading.
+  const heading = page.getByRole('heading', { name: /export pdf/i });
+  await expect(heading).toBeVisible({ timeout: 10_000 });
+  // Generate button must be enabled (not in generating state).
+  const generateBtn = page.getByRole('button', { name: /generate pdf/i });
+  await expect(generateBtn).toBeEnabled();
+  // Content summary section must list at least one part.
+  await expect(page.getByText(/parts list/i)).toBeVisible();
+  await expect(page.getByText(/cut sheet/i)).toBeVisible();
+});
