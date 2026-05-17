@@ -5,6 +5,51 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.0] — 2026-05-17
+
+### Added
+
+- **Optimizer yield-meter Playwright test** (Sprint 105) — behavioural e2e
+  asserting the cut-sheet optimizer renders an accessible `<meter>` per sheet
+  with a sane `aria-valuenow` in `[0, 100]`. Pixel-free, OS-font-stable.
+- **Per-asset bundle budgets** (Sprint 106) — `bundle-budget.json` now exposes
+  `perAssetKB` for PNG/SVG/ICO files; `scripts/bundle-report.js` checks each
+  static asset against its limit. Favicon optimised with svgo (-40 % → 817 B).
+- **MaxRects optimizer Mermaid diagram** (Sprint 107) — new flowchart in
+  `docs/ARCHITECTURE.md` visualising the v3.1 MaxRects/BSSF packer pipeline.
+- **2D preview scale bar** (Sprint 108) — every cabinet preview SVG now
+  renders a labelled mm/m scale bar in the bottom-left corner, snapping to
+  50 / 100 / 200 / 500 / 1000 / 2000 mm depending on viewport width.
+- **Localised skip-link and main-landmark** (Sprint 109) — `a11y.skipToContent`
+  and `a11y.mainWorkspace` keys for EN and HE; the skip-link target now uses
+  i18n instead of a hardcoded English string.
+- **Lazy-load Optimizer and Assembly routes** (Sprint 110) — both panels are
+  now `React.lazy`/`Suspense` code-split into their own chunks (~13 KB each),
+  keeping the initial entry bundle leaner alongside the existing PDF chunk.
+- **Print stylesheet polish** (Sprint 111) — `@page A4 12mm`, forced-light
+  override of the dark theme on paper, break-after/avoid hints for headings,
+  `break-inside: avoid` for SVGs, new `.print-page-break` utility class.
+- **Persistent unit preference + Header unit toggle** (Sprint 112) — `units`,
+  `darkMode`, and `colorBlindMode` now survive reload via a small
+  `woodworkingshop:prefs` localStorage layer in `cabinet-store`. The Header
+  ships a dedicated mm / in toggle button.
+- **Hardware library expansion** (Sprint 113) — soft-close hinge dampers
+  (H13), silicone door bumper pads (H14), cabinet leveller feet (H15),
+  edge-banding rolls (H16), and drawer slides now scale to cabinet depth
+  via the nearest standard length (250–600 mm).
+- **Assembly Guide "Show all stages" mode** — toggle group lets users
+  switch between paginated and stacked-all-cards views; ideal for short
+  builds and full-guide printing.
+- **Custom shelf position editor** — picking the "Custom" shelf-spacing
+  radio now reveals an editable grid of per-shelf mm inputs (seeded from
+  equal spacing, clamped to internal height, sorted on blur) plus a
+  "Reset to equal spacing" button.
+
+### Changed
+
+- `package.json` version bumped 3.1.0 → 3.2.0.
+- Tests: 252 → 258 passing across 23 files.
+
 ## [3.1.0] — 2026-05-15
 
 ### Added

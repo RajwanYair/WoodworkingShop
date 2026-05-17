@@ -1,6 +1,6 @@
 {
   "name": "woodworkingshop",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "Interactive cabinet planner — configure, preview, and download PDF build plans",
   "type": "module",
   "private": true,
