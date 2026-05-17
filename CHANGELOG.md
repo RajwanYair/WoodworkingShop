@@ -5,6 +5,55 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.6.0] — 2026-05-21
+
+### Added
+
+- **SVG icon library** (Sprint 146+graphics) — new `src/components/layout/Icons.tsx`
+  with 40+ inline SVG icon components (`IconSun`, `IconMoon`, `IconUndo`, `IconRedo`,
+  `IconPrint`, `IconDownload`, `IconScissors`, `IconHammer`, `IconCabinet`, and more).
+  All emoji and text-glyph buttons across the app replaced with proper SVG icons for
+  accessibility, consistency, and high-DPI rendering.
+- **Part name labels in cut sheets** (Sprint 146) — a "Labels" toggle button in the
+  Optimizer toolbar switches `showPartNames` state. When enabled, each cut-sheet rect
+  that is large enough (>12 mm wide, >16 mm tall) shows the abbreviated part name as
+  a third text element inside the SVG rect, above the existing ID and dimensions text.
+- **Enriched SVG cut sheet visualization** (Sprint 146+graphics) — viewBox expanded
+  with 18 mm margin on all sides; ruler tick marks (every 100 mm, major at 500 mm)
+  along top and left edges with numeric labels; sheet dimension labels; rounded rect
+  corners; per-part drop shadow via `feDropShadow` SVG filter.
+- **Usable offcuts panel** (Sprint 147) — a collapsible "Usable Offcuts" section in
+  the Optimizer tab computes free right-side and bottom strips (≥100×100 mm) per
+  sheet and lists them grouped by material, sorted largest-first, showing dimensions
+  and area in m².
+- **Hardware price overrides** (Sprint 148) — each hardware item in `CostEstimatePanel`
+  now shows its per-item subtotal as a clickable button opening an inline price editor.
+  Overridden prices are highlighted in amber. `estimateCost()` accepts a new
+  `hardwarePriceOverrides` map; H-id price table (`H01`–`H10`) added to match real
+  hardware IDs from `generateHardware()`.
+- **Shopping list panel** (Sprint 150) — a new collapsible "Shopping List" panel in the
+  Optimizer tab groups sheets by material, shows quantity and total cost (using current
+  price overrides), and provides a supplier-order-ready summary with grand total.
+- **Print cut sheets** (Sprint 151) — a "Print" button in the Optimizer toolbar calls
+  `window.print()`. Enhanced `@media print` CSS with `[data-print-sheets]` attribute
+  selector forces each sheet card onto its own page and hides analysis panels.
+- **Project name field** (Sprint 152) — a free-text "Project Name" input at the top of
+  `SaveLoadPanel` stores the name in `CabinetState.projectName`. The document `<title>`
+  updates reactively (`<name> — Cabinet Planner`). The name is also used as the JSON
+  export filename prefix.
+
+### Fixed
+
+- **Drawer-parts tests** (Sprint 144) — `drawer-parts.test.ts` updated to use
+  `.filter()` + `.includes()` for flexible part-name matching after the engine
+  switched to indexed part names (`Bottom-0`, `Bottom-1` etc.).
+- **Pre-existing compile error** — `SheetCard` prop type `t` widened from
+  `(key: string) => string` to `(key: string, opts?: Record<string, unknown>) => string`
+  to allow the interpolated `sheetWasteCost` translation call.
+- **Hardware cost calculation** — `HARDWARE_PRICES` table now includes H-id aliases
+  (`H01`–`H10`) matching the actual IDs emitted by `generateHardware()`, so hardware
+  cost is no longer always 0.
+
 ## [3.5.0] — 2026-05-20
 
 ### Added
