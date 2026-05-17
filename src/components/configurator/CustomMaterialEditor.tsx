@@ -12,6 +12,7 @@ const EMPTY: Omit<Material, 'key'> = {
   category: 'panel',
   color: '#C8B88A',
   hasGrain: false,
+  densityKgM3: 680,
 };
 
 export function CustomMaterialEditor() {

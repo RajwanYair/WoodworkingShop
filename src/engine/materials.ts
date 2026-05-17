@@ -14,6 +14,7 @@ export const MATERIALS: Material[] = [
     category: 'panel',
     color: '#C8B88A',
     hasGrain: true,
+    densityKgM3: 620,
   },
   {
     key: 'plywood-18',
@@ -25,6 +26,7 @@ export const MATERIALS: Material[] = [
     category: 'panel',
     color: '#D4C4A0',
     hasGrain: true,
+    densityKgM3: 640,
   },
   {
     key: 'melamine-16',
@@ -36,6 +38,7 @@ export const MATERIALS: Material[] = [
     category: 'panel',
     color: '#F5F0E8',
     hasGrain: false,
+    densityKgM3: 700,
   },
   {
     key: 'melamine-18',
@@ -47,6 +50,7 @@ export const MATERIALS: Material[] = [
     category: 'panel',
     color: '#F5F0E8',
     hasGrain: false,
+    densityKgM3: 700,
   },
   {
     key: 'mdf-16',
@@ -58,6 +62,7 @@ export const MATERIALS: Material[] = [
     category: 'panel',
     color: '#BFA87A',
     hasGrain: false,
+    densityKgM3: 780,
   },
   {
     key: 'mdf-18',
@@ -69,6 +74,7 @@ export const MATERIALS: Material[] = [
     category: 'panel',
     color: '#BFA87A',
     hasGrain: false,
+    densityKgM3: 780,
   },
   {
     key: 'chipboard-16',
@@ -80,6 +86,7 @@ export const MATERIALS: Material[] = [
     category: 'panel',
     color: '#C9B97A',
     hasGrain: false,
+    densityKgM3: 640,
   },
   {
     key: 'chipboard-18',
@@ -91,6 +98,7 @@ export const MATERIALS: Material[] = [
     category: 'panel',
     color: '#C9B97A',
     hasGrain: false,
+    densityKgM3: 640,
   },
   {
     key: 'osb-18',
@@ -102,6 +110,7 @@ export const MATERIALS: Material[] = [
     category: 'panel',
     color: '#D4B87A',
     hasGrain: true,
+    densityKgM3: 640,
   },
 
   // Thin panels (back)
@@ -115,6 +124,7 @@ export const MATERIALS: Material[] = [
     category: 'back',
     color: '#E8D8B0',
     hasGrain: true,
+    densityKgM3: 600,
   },
   {
     key: 'mdf-3',
@@ -126,6 +136,7 @@ export const MATERIALS: Material[] = [
     category: 'back',
     color: '#D4C4A0',
     hasGrain: false,
+    densityKgM3: 800,
   },
 
   // Glass (doors — pre-cut to size)
@@ -139,6 +150,7 @@ export const MATERIALS: Material[] = [
     category: 'door',
     color: '#b8d8f0',
     hasGrain: false,
+    densityKgM3: 2500,
   },
 ];
 
@@ -161,6 +173,25 @@ export function backMaterials(): Material[] {
   return MATERIALS.filter((m) => m.category === 'back');
 }
 
+/**
+ * Compute panel weight in kg.
+ * @param lengthMm - part length in mm
+ * @param widthMm - part width in mm
+ * @param thicknessMm - part thickness in mm
+ * @param qty - quantity of parts
+ * @param densityKgM3 - material density in kg/m³
+ */
+export function computePartWeightKg(
+  lengthMm: number,
+  widthMm: number,
+  thicknessMm: number,
+  qty: number,
+  densityKgM3: number,
+): number {
+  // volume in m³ = (l × w × t in mm³) × 1e-9
+  return (lengthMm * widthMm * thicknessMm * qty * densityKgM3) / 1e9;
+}
+
 // ─── Default config ───
 
 export const DEFAULT_CONFIG: CabinetConfig = {
@@ -179,6 +210,7 @@ export const DEFAULT_CONFIG: CabinetConfig = {
   doorReveal: 3,
   drawerCount: 0,
   drawerSlideType: 'standard',
+  kickHeight: 100,
   handleStyle: 'bar',
   edgeBanding: 'all-visible',
   lang: 'en',

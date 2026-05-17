@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { estimateCost } from '../../engine/cost-estimator';
-import { getMaterial } from '../../engine/materials';
+import { getMaterial, computePartWeightKg } from '../../engine/materials';
 import type { Lang } from '../../engine/types';
 
 const BAR_COLORS = ['#8B6F47', '#A0845C', '#C49A6C', '#6B8E23', '#4682B4'];
@@ -14,8 +14,19 @@ export function CostEstimatePanel() {
     materialPriceOverrides, setMaterialPriceOverride,
     edgeBandingRate, setEdgeBandingRate,
     hardwarePriceOverrides, setHardwarePriceOverride,
+    allParts,
   } = useCabinetStore();
   const lang = i18n.language as Lang;
+
+  // Compute total panel weight from all parts across all cabinets
+  const totalWeightKg = allParts.reduce((sum, p) => {
+    try {
+      const mat = getMaterial(p.material);
+      return sum + computePartWeightKg(p.length, p.width, p.thickness, p.qty, mat.densityKgM3);
+    } catch {
+      return sum;
+    }
+  }, 0);
 
   // Sprint 139 — which material row is being price-edited
   const [editingPrice, setEditingPrice] = useState<string | null>(null);
@@ -252,6 +263,12 @@ export function CostEstimatePanel() {
           <span className="text-sm font-bold text-wood-700 dark:text-wood-200">{t('cost.total')}</span>
           <span className="text-sm font-bold text-green-700 dark:text-green-400">₪{cost.totalCost}</span>
         </div>
+        {totalWeightKg > 0 && (
+          <div className="flex justify-between mt-1">
+            <span className="text-xs text-wood-500 dark:text-wood-400">{t('cost.totalWeight')}</span>
+            <span className="text-xs text-wood-600 dark:text-wood-300">~{totalWeightKg.toFixed(1)} kg</span>
+          </div>
+        )}
         <p className="text-[10px] text-wood-400 dark:text-wood-500 mt-1">{t('cost.disclaimer')}</p>
       </div>
     </div>

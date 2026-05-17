@@ -15,6 +15,8 @@ export interface Material {
   color: string; // hex for preview rendering
   /** When true the cut optimizer will not rotate parts 90 ° (grain direction must be preserved). */
   hasGrain: boolean;
+  /** Material density in kg/m³ — used for weight estimation. */
+  densityKgM3: number;
 }
 
 export type DoorStyle = 'flat' | 'shaker' | 'glass' | 'none';
