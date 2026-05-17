@@ -271,10 +271,21 @@ export function CabinetPdfDocument({
       {/* ── Pages 5+: Cut Sheet Diagrams ── */}
       {optimization.sheets.map((sheet) => {
         const mat = getMaterial(sheet.material);
-        const scale = Math.min(500 / sheet.sheetLength, 420 / sheet.sheetWidth);
+        // Sprint A4: pick orientation based on sheet aspect ratio so the
+        // diagram fills the page. Landscape A4 ≈ 842×595 pt content area,
+        // Portrait A4 ≈ 595×842 pt content area.
+        const isLandscape = sheet.sheetLength > sheet.sheetWidth;
+        const maxLen = isLandscape ? 720 : 500;
+        const maxWid = isLandscape ? 420 : 420;
+        const scale = Math.min(maxLen / sheet.sheetLength, maxWid / sheet.sheetWidth);
 
         return (
-          <Page key={sheet.sheetIndex} size="A4" style={s.page}>
+          <Page
+            key={sheet.sheetIndex}
+            size="A4"
+            orientation={isLandscape ? 'landscape' : 'portrait'}
+            style={s.page}
+          >
             <Text style={s.sectionTitle}>
               Sheet #{sheet.sheetIndex + 1} — {mat.name[lang]} ({sheet.thickness} mm) — {sheet.yieldPercent}% yield
             </Text>
