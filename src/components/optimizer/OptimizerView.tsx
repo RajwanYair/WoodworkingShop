@@ -28,8 +28,51 @@ export function OptimizerView() {
   const multiCabinet = cabinets.length > 1;
   const displayOpt = multiCabinet ? combinedOptimization : optimization;
 
+  // Sprint A3 part 2: hints — surface low-yield sheets and same-thickness
+  // material consolidation opportunities so the user knows to consult the
+  // Smart Optimizer below.
+  const lowYieldSheet = displayOpt.sheets.find((s) => s.yieldPercent > 0 && s.yieldPercent < 25);
+  const materialSwapPair = (() => {
+    const byThickness = new Map<number, Set<string>>();
+    for (const s of displayOpt.sheets) {
+      const set = byThickness.get(s.thickness) ?? new Set<string>();
+      set.add(s.material);
+      byThickness.set(s.thickness, set);
+    }
+    for (const [thickness, mats] of byThickness) {
+      if (mats.size >= 2) {
+        const arr = Array.from(mats);
+        return { a: arr[0], b: arr[1], t: thickness };
+      }
+    }
+    return null;
+  })();
+
   return (
     <div className="space-y-6">
+      {/* Hints (Sprint A3 part 2) */}
+      {(lowYieldSheet || materialSwapPair) && (
+        <div className="space-y-2">
+          {lowYieldSheet && (
+            <div className="rounded border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 px-3 py-2 text-xs text-amber-800 dark:text-amber-200">
+              ⚠ {t('optimizer.lowYieldWarning', {
+                num: lowYieldSheet.sheetIndex + 1,
+                yield: lowYieldSheet.yieldPercent,
+              })}
+            </div>
+          )}
+          {materialSwapPair && (
+            <div className="rounded border border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/20 px-3 py-2 text-xs text-blue-800 dark:text-blue-200">
+              💡 {t('optimizer.materialSwapHint', {
+                a: getMaterial(materialSwapPair.a).name[lang],
+                b: getMaterial(materialSwapPair.b).name[lang],
+                t: materialSwapPair.t,
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Summary stats + color-blind toggle */}
       <div className="flex items-center justify-between">
         <div className="grid grid-cols-3 gap-4 flex-1">
@@ -141,11 +184,11 @@ function SheetCard({
 
   return (
     <div className="border border-wood-200 dark:border-wood-700 rounded p-4">
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="text-sm font-medium text-wood-600 dark:text-wood-300">
-          {t('optimizer.sheet')} #{sheet.sheetIndex + 1} — {mat.name[lang]} ({sheet.thickness} mm) —{' '}
-          {sheet.yieldPercent}%
+      <div className="flex items-center justify-between mb-2 gap-3">
+        <h3 className="text-sm font-medium text-wood-600 dark:text-wood-300 flex-1 min-w-0 truncate">
+          {t('optimizer.sheet')} #{sheet.sheetIndex + 1} — {mat.name[lang]} ({sheet.thickness} mm)
         </h3>
+        <YieldBar yieldPercent={sheet.yieldPercent} />
         <button
           onClick={() => {
             downloadDxfForSheet(sheet, `sheet-${sheet.sheetIndex + 1}.dxf`);
@@ -339,6 +382,33 @@ function Stat({ label, value }: { label: string; value: string }) {
     <div className="bg-wood-50 dark:bg-wood-800 rounded p-3 text-center">
       <div className="text-lg font-bold text-wood-700 dark:text-wood-200">{value}</div>
       <div className="text-xs text-wood-500 dark:text-wood-400">{label}</div>
+    </div>
+  );
+}
+
+function YieldBar({ yieldPercent }: { yieldPercent: number }) {
+  // Color: <33 red, <66 amber, else green.
+  const color =
+    yieldPercent < 33
+      ? 'bg-red-500'
+      : yieldPercent < 66
+        ? 'bg-amber-500'
+        : 'bg-green-500';
+  const label = `${yieldPercent}%`;
+  return (
+    <div
+      className="flex items-center gap-2 shrink-0"
+      title={`Sheet utilization ${label}`}
+      role="meter"
+      aria-valuenow={yieldPercent}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-label={`Yield ${label}`}
+    >
+      <div className="w-24 h-2 bg-wood-200 dark:bg-wood-700 rounded overflow-hidden">
+        <div className={`${color} h-full transition-all`} style={{ width: `${Math.min(100, yieldPercent)}%` }} />
+      </div>
+      <span className="text-xs font-mono w-10 text-right text-wood-600 dark:text-wood-300">{label}</span>
     </div>
   );
 }

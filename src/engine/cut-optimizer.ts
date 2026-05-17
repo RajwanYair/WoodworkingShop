@@ -158,7 +158,6 @@ function packMaxRects(
       if (!candidate) {
         // Piece doesn't even fit on an empty sheet — skip with a warning.
         // (Engine validation should prevent this in normal flow.)
-        // eslint-disable-next-line no-console
         console.warn(`Part ${rect.label} (${rect.length}×${rect.width}) larger than sheet`);
         continue;
       }

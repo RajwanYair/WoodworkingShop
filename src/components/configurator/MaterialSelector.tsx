@@ -56,6 +56,7 @@ export function MaterialSelector() {
           checked={config.hasBack !== false}
           onChange={(e) => setConfig({ hasBack: e.target.checked })}
           className="mt-0.5 accent-primary"
+          aria-label={t('config.hasBack')}
         />
         <span className="text-sm">
           <span className="block text-wood-700 dark:text-wood-200">{t('config.hasBack')}</span>

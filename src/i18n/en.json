@@ -94,6 +94,8 @@
     "sheet": "Sheet",
     "smart": "Smart Optimizer",
     "smartDesc": "Find dimension tweaks that reduce sheets or improve yield",
+    "lowYieldWarning": "Sheet #{{num}} is only {{yield}}% used. Try the Smart Optimizer below to consolidate.",
+    "materialSwapHint": "Materials {{a}} and {{b}} share thickness {{t}} mm. Consolidating may reduce sheets used.",
     "strategies": "Strategies",
     "tolerance": "Tolerance",
     "find": "Find Optimizations",
