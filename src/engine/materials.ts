@@ -258,6 +258,21 @@ export const WARDROBE_DEFAULTS: Partial<CabinetConfig> = {
   edgeBanding: 'all-visible',
 };
 
+export const PANEL_DEFAULTS: Partial<CabinetConfig> = {
+  furnitureType: 'panel',
+  width: 600,
+  height: 800,
+  depth: 18, // informational only; actual thickness comes from selected material
+  shelfCount: 0,
+  drawerCount: 0,
+  kickHeight: 0,
+  doorStyle: 'none',
+  doorCount: 1,
+  handleStyle: 'none',
+  edgeBanding: 'all-visible',
+  panelMaterialSource: 'carcass',
+};
+
 // ─── Validation constraints ───
 
 /**

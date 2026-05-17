@@ -23,8 +23,10 @@ export type DoorStyle = 'flat' | 'shaker' | 'glass' | 'none';
 export type EdgeBanding = 'all-visible' | 'doors-only' | 'none';
 export type ShelfSpacing = 'equal' | 'custom';
 export type HandleStyle = 'bar' | 'knob' | 'cup' | 'none';
-export type FurnitureType = 'cabinet' | 'bookshelf' | 'desk' | 'wardrobe';
+export type FurnitureType = 'cabinet' | 'bookshelf' | 'desk' | 'wardrobe' | 'panel';
 export type DrawerSlideType = 'standard' | 'soft-close' | 'full-extension';
+/** Which material's thickness governs a plain panel's depth. */
+export type PanelMaterialSource = 'carcass' | 'back';
 
 export interface CabinetConfig {
   // Furniture type
@@ -43,6 +45,8 @@ export interface CabinetConfig {
   carcassMaterial: string; // material key
   backPanelMaterial: string; // material key
   hasBack?: boolean; // Sprint A2: defaults to true; when false, no back panel is produced
+  /** For furnitureType === 'panel': which material thickness determines the plate depth. Defaults to 'carcass'. */
+  panelMaterialSource?: PanelMaterialSource;
 
   // Doors
   doorCount: 1 | 2;

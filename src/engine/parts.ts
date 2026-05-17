@@ -19,6 +19,22 @@ export function generateParts(cfg: CabinetConfig): Part[] {
   const isBookshelf = cfg.furnitureType === 'bookshelf';
   const isDesk = cfg.furnitureType === 'desk';
 
+  // ── Panel (plain plate) ──
+  if (cfg.furnitureType === 'panel') {
+    const mat = cfg.panelMaterialSource === 'back' ? bm : cm;
+    parts.push({
+      id: id(),
+      qty: 1,
+      name: { en: 'Panel', he: 'לוח' },
+      material: mat.key,
+      thickness: mat.thickness,
+      length: cfg.width,
+      width: cfg.height,
+      edgeBanding: edgeLabel(eb !== 'none' ? '4-edges' : 'none'),
+    });
+    return parts;
+  }
+
   // ── Desk-specific parts ──
   if (isDesk) {
     // Desktop (top surface)

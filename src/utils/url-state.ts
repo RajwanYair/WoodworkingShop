@@ -33,6 +33,7 @@ export function configToParams(cfg: CabinetConfig): URLSearchParams {
     params.set('dst', cfg.drawerSlideType ?? 'standard');
   if (cfg.edgeBanding !== def.edgeBanding) params.set('eb', cfg.edgeBanding);
   if (cfg.lang !== def.lang) params.set('lang', cfg.lang);
+  if ((cfg.panelMaterialSource ?? 'carcass') !== 'carcass') params.set('pms', cfg.panelMaterialSource!);
 
   return params;
 }
@@ -51,7 +52,7 @@ export function paramsToConfig(params: URLSearchParams): Partial<CabinetConfig> 
   const d = params.get('d');
   if (d) patch.depth = Number(d);
   const ft = params.get('ft');
-  if (ft === 'cabinet' || ft === 'bookshelf' || ft === 'desk' || ft === 'wardrobe') patch.furnitureType = ft;
+  if (ft === 'cabinet' || ft === 'bookshelf' || ft === 'desk' || ft === 'wardrobe' || ft === 'panel') patch.furnitureType = ft;
   const sc = params.get('sc');
   if (sc) patch.shelfCount = Number(sc);
   const ss = params.get('ss');
@@ -88,6 +89,8 @@ export function paramsToConfig(params: URLSearchParams): Partial<CabinetConfig> 
   if (eb === 'all-visible' || eb === 'doors-only' || eb === 'none') patch.edgeBanding = eb;
   const lang = params.get('lang');
   if (lang === 'en' || lang === 'he') patch.lang = lang;
+  const pms = params.get('pms');
+  if (pms === 'carcass' || pms === 'back') patch.panelMaterialSource = pms;
 
   return patch;
 }

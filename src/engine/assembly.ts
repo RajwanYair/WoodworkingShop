@@ -24,6 +24,55 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
   const isWardrobe = cfg.furnitureType === 'wardrobe';
   let n = 1;
 
+  // ── Panel (plain plate) assembly ──
+  if (cfg.furnitureType === 'panel') {
+    steps.push({
+      stepNumber: n++,
+      title: { en: 'Measure and Mark', he: 'מדידה וסימון' },
+      description: {
+        en: `Measure and mark the panel to ${cfg.width} × ${cfg.height} mm on the sheet material.`,
+        he: `מדוד וסמן את הלוח ל-${cfg.width} × ${cfg.height} מ״מ על חומר הגיליון.`,
+      },
+      parts: ['P01'],
+      icon: '📐',
+      tip: { en: 'Use a marking knife for a crisp, accurate line.', he: 'השתמש בסכין סימון לקו מדויק וחד.' },
+    });
+    steps.push({
+      stepNumber: n++,
+      title: { en: 'Cut to Size', he: 'חיתוך למידה' },
+      description: {
+        en: 'Cut the panel to the marked dimensions using a table saw or track saw. Check squareness after cutting.',
+        he: 'חתוך את הלוח לפי הסימונים באמצעות מסור שולחן או מסור מסילה. בדוק ריבוע לאחר החיתוך.',
+      },
+      parts: ['P01'],
+      icon: '🪥',
+      videoKeyword: 'cut sheet panel table saw track saw',
+    });
+    if (cfg.edgeBanding !== 'none') {
+      steps.push({
+        stepNumber: n++,
+        title: { en: 'Apply Edge Banding', he: 'הדבקת פסי קצה' },
+        description: {
+          en: 'Iron on edge banding tape to all four edges. Use a sharp trimmer and sand flush.',
+          he: 'הדבק פסי קצה בגיהוץ על כל ארבעת הקצוות. השתמש בחותך חד ושייף.',
+        },
+        parts: ['P01'],
+        icon: '🔧',
+      });
+    }
+    steps.push({
+      stepNumber: n++,
+      title: { en: 'Sand and Inspect', he: 'שיוף ובדיקה' },
+      description: {
+        en: 'Sand all edges to 120 grit. Inspect the surface for chips or rough spots. Panel is ready.',
+        he: 'שייף את כל הקצוות עד גריט 120. בדוק את המשטח לנסורת ועקומות. הלוח מוכן.',
+      },
+      parts: ['P01'],
+      icon: '✅',
+    });
+    return steps;
+  }
+
   // ── Desk-specific assembly ──
   if (isDesk) {
     steps.push({

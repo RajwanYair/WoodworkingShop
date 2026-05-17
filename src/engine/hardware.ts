@@ -6,6 +6,9 @@ import { computeDimensions } from './dimensions';
  * Quantities follow standard Israeli carpentry practice.
  */
 export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
+  // Plain plates have no hardware
+  if (cfg.furnitureType === 'panel') return [];
+
   const d = computeDimensions(cfg);
   const items: HardwareItem[] = [];
   const hasDoors = cfg.doorStyle !== 'none' && cfg.doorCount > 0;

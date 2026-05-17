@@ -59,7 +59,7 @@ export function DimensionSliders() {
         </button>
       </div>
 
-      {SPECS.map((spec) => (
+      {SPECS.filter((spec) => config.furnitureType !== 'panel' || spec.key !== 'depth').map((spec) => (
         <DimensionRow
           key={spec.key}
           spec={spec}
