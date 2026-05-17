@@ -83,6 +83,7 @@ export interface CabinetState {
   units: UnitSystem;
   sawKerf: number; // mm, default 4 (Sprint 136)
   materialPriceOverrides: Record<string, number>; // Sprint 139: materialKey → ₪ per sheet
+  edgeBandingRate: number; // Sprint 141: ₪ per meter, default 3
 
   // Actions
   setConfig: (patch: Partial<CabinetConfig>) => void;
@@ -101,6 +102,7 @@ export interface CabinetState {
   setNotes: (index: number, notes: string) => void;
   setSawKerf: (mm: number) => void;
   setMaterialPriceOverride: (materialKey: string, price: number | null) => void;
+  setEdgeBandingRate: (rate: number) => void;
   loadProject: (cabinets: CabinetEntry[]) => void;
 }
 
@@ -149,6 +151,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
     units: prefs.units ?? ('metric' as UnitSystem),
     sawKerf: 4, // mm — Sprint 136
     materialPriceOverrides: {}, // Sprint 139
+    edgeBandingRate: 3, // ₪/m — Sprint 141
 
     setConfig: (patch) =>
       set((state) => {
@@ -336,6 +339,8 @@ export const useCabinetStore = create<CabinetState>((set) => {
         }
         return { materialPriceOverrides: overrides };
       }),
+    setEdgeBandingRate: (rate) =>
+      set({ edgeBandingRate: Math.max(0, rate) }),
     toggleDarkMode: () =>
       set((s) => {
         const darkMode = !s.darkMode;

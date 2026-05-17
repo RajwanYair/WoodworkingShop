@@ -9,15 +9,21 @@ const BAR_COLORS = ['#8B6F47', '#A0845C', '#C49A6C', '#6B8E23', '#4682B4'];
 
 export function CostEstimatePanel() {
   const { t, i18n } = useTranslation();
-  const { optimization, hardware, edgeBandingTotal, cabinets, materialPriceOverrides, setMaterialPriceOverride } =
-    useCabinetStore();
+  const {
+    optimization, hardware, edgeBandingTotal, cabinets,
+    materialPriceOverrides, setMaterialPriceOverride,
+    edgeBandingRate, setEdgeBandingRate,
+  } = useCabinetStore();
   const lang = i18n.language as Lang;
 
   // Sprint 139 — which material row is being price-edited
   const [editingPrice, setEditingPrice] = useState<string | null>(null);
   const [priceInput, setPriceInput] = useState('');
+  // Sprint 141 — editing edge-banding rate
+  const [editingEb, setEditingEb] = useState(false);
+  const [ebInput, setEbInput] = useState('');
 
-  const cost = estimateCost(optimization, hardware, edgeBandingTotal, materialPriceOverrides);
+  const cost = estimateCost(optimization, hardware, edgeBandingTotal, materialPriceOverrides, edgeBandingRate);
   const totalNonZero = cost.totalCost > 0;
 
   // Build segments for bar visualization
@@ -118,9 +124,41 @@ export function CostEstimatePanel() {
       {/* Other costs */}
       <div className="border-t border-wood-100 dark:border-wood-800 pt-2 space-y-1">
         {cost.edgeBandingCost > 0 && (
-          <div className="flex justify-between text-xs">
-            <span className="text-wood-600 dark:text-wood-300">{t('cost.edgeBanding')}</span>
-            <span className="font-medium">₪{cost.edgeBandingCost}</span>
+          <div className="flex justify-between items-center text-xs gap-2">
+            <span className="text-wood-600 dark:text-wood-300 flex-1">{t('cost.edgeBanding')}</span>
+            {editingEb ? (
+              <div className="flex items-center gap-1 shrink-0">
+                <span className="text-wood-400">₪</span>
+                <input
+                  type="number"
+                  min={0}
+                  step={0.5}
+                  value={ebInput}
+                  onChange={(e) => setEbInput(e.target.value)}
+                  onBlur={() => {
+                    const val = Number(ebInput);
+                    if (!isNaN(val) && val >= 0) setEdgeBandingRate(val);
+                    setEditingEb(false);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
+                    if (e.key === 'Escape') setEditingEb(false);
+                  }}
+                  className="w-14 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-1 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-wood-400"
+                  ref={(el) => el?.focus()}
+                  aria-label="Edge banding rate per meter"
+                />
+                <span className="text-wood-400 text-[10px]">₪/m</span>
+              </div>
+            ) : (
+              <button
+                onClick={() => { setEditingEb(true); setEbInput(String(edgeBandingRate)); }}
+                className="font-medium shrink-0 hover:underline text-wood-700 dark:text-wood-200"
+                title={t('cost.editEbRate')}
+              >
+                ₪{cost.edgeBandingCost}
+              </button>
+            )}
           </div>
         )}
         <div className="flex justify-between text-xs">

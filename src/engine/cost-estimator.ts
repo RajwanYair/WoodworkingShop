@@ -38,12 +38,14 @@ const EDGE_BANDING_PER_METER = 3;
  * and hardware/edge banding quantities.
  *
  * Sprint 139: accepts optional `priceOverrides` map of materialKey → price per sheet (₪).
+ * Sprint 141: accepts optional `edgeBandingRate` (₪/m, default EDGE_BANDING_PER_METER).
  */
 export function estimateCost(
   optimization: OptimizationResult,
   hardware: { id: string; qty: number }[],
   edgeBandingTotal: number,
   priceOverrides: Record<string, number> = {},
+  edgeBandingRate: number = EDGE_BANDING_PER_METER,
 ): CostBreakdown {
   // Group sheets by material
   const sheetMap = new Map<string, { qty: number; mat: ReturnType<typeof getMaterial> }>();
@@ -75,7 +77,7 @@ export function estimateCost(
   }
 
   // Edge banding
-  const edgeBandingCost = Math.round((edgeBandingTotal / 1000) * EDGE_BANDING_PER_METER);
+  const edgeBandingCost = Math.round((edgeBandingTotal / 1000) * edgeBandingRate);
 
   // Hardware
   let hardwareCost = 0;

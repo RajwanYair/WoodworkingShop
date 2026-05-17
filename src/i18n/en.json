@@ -187,7 +187,8 @@
     "total": "Estimated Total",
     "disclaimer": "Prices are approximate and may vary by supplier.",
     "editPrice": "Click to override price per sheet",
-    "resetPrice": "Reset to default price"
+    "resetPrice": "Reset to default price",
+    "editEbRate": "Click to set edge banding rate (₪/m)"
   },
   "assembly": {
     "title": "Assembly Guide",
