@@ -181,4 +181,19 @@
   [data-assembly-controls] {
     display: none !important;
   }
+
+  /* Sprint 151 — Cut sheet print mode:
+     When printing from the Optimizer tab, each sheet card breaks to its own page.
+     Panels (notes, offcuts, shopping list) are hidden during print — only SVG sheets shown. */
+  [data-print-sheets] {
+    display: block !important;
+  }
+  [data-print-sheets] > * {
+    break-inside: avoid;
+    break-after: page;
+    margin-bottom: 0 !important;
+  }
+  [data-print-sheets] > *:last-child {
+    break-after: auto;
+  }
 }

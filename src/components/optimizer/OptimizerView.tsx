@@ -23,6 +23,7 @@ import {
   IconChevronDown,
   IconChevronRight,
   IconScissors,
+  IconPrint,
 } from '../layout/Icons';
 import type { Lang, CutSheet, CutRect } from '../../engine/types';
 
@@ -198,6 +199,15 @@ export function OptimizerView() {
           >
             <IconTag size={14} /> {t('optimizer.labels')}
           </button>
+          {/* Sprint 151 — print cut sheets */}
+          <button
+            onClick={() => window.print()}
+            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
+            title={t('optimizer.printSheets')}
+            aria-label={t('optimizer.printSheets')}
+          >
+            <IconPrint size={14} /> {t('optimizer.print')}
+          </button>
         </div>
       </div>
 
@@ -211,19 +221,21 @@ export function OptimizerView() {
       {/* Optimization Notes — auto-running suggestions panel */}
       <OptimizationNotesPanel />
 
-      {/* Individual sheets */}
-      {displayOpt.sheets.map((sheet) => (
-        <SheetCard
-          key={sheet.sheetIndex}
-          sheet={sheet}
-          lang={lang}
-          hoveredPartId={hoveredPartId}
-          onHoverPart={setHoveredPartId}
-          colorBlindMode={colorBlindMode}
-          showPartNames={showPartNames}
-          t={t}
-        />
-      ))}
+      {/* Individual sheets — data-print-sheets targets print CSS (Sprint 151) */}
+      <div data-print-sheets>
+        {displayOpt.sheets.map((sheet) => (
+          <SheetCard
+            key={sheet.sheetIndex}
+            sheet={sheet}
+            lang={lang}
+            hoveredPartId={hoveredPartId}
+            onHoverPart={setHoveredPartId}
+            colorBlindMode={colorBlindMode}
+            showPartNames={showPartNames}
+            t={t}
+          />
+        ))}
+      </div>
 
       {/* Sprint 150 — Shopping list / sheets-needed summary */}
       <ShoppingListPanel sheets={displayOpt.sheets} materialPriceOverrides={materialPriceOverrides} t={t} lang={lang} />
