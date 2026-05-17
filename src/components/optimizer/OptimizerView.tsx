@@ -112,13 +112,32 @@ export function OptimizerView() {
 
       {/* Summary stats + color-blind toggle */}
       <div className="flex items-center justify-between">
-        <div className="grid grid-cols-4 gap-4 flex-1">
+        <div className="grid grid-cols-5 gap-4 flex-1">
           <Stat label={t('optimizer.sheets')} value={String(displayOpt.totalSheets)} />
           <Stat label={t('optimizer.yield')} value={`${displayOpt.overallYield}%`} />
           <Stat label={t('optimizer.waste')} value={`${(displayOpt.totalWaste / 1_000_000).toFixed(2)} m²`} />
           <Stat
             label={t('optimizer.totalParts')}
             value={String(displayOpt.sheets.reduce((s, sh) => s + sh.parts.length, 0))}
+          />
+          <Stat
+            label={t('optimizer.cuts')}
+            value={String(
+              /* Sprint 164 — count unique cut lines per sheet (excluding sheet boundary) */
+              displayOpt.sheets.reduce((acc, sh) => {
+                const xs = new Set<number>();
+                const ys = new Set<number>();
+                for (const p of sh.parts) {
+                  if (p.x > 0) xs.add(p.x);
+                  const x2 = p.x + p.width;
+                  if (x2 < sh.sheetWidth) xs.add(x2);
+                  if (p.y > 0) ys.add(p.y);
+                  const y2 = p.y + p.length;
+                  if (y2 < sh.sheetLength) ys.add(y2);
+                }
+                return acc + xs.size + ys.size;
+              }, 0),
+            )}
           />
         </div>
         {/* Sprint 136 — saw kerf input */}
