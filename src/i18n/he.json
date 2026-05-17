@@ -122,7 +122,9 @@
     "changes": "מה משתנה",
     "exportDxf": "ייצוא DXF לCNC",
     "exportGcode": "ייצוא G-code לCNC",
-    "exportBom": "ייצוא רשימת חומרים CSV"
+    "exportBom": "ייצוא רשימת חומרים CSV",
+    "sheetWasteCost": "עלות פסולת: ₪{{cost}}",
+    "sheetWasteCostTitle": "עלות חומר מוערכת שהולכת לאיבוד בגזירות"
   },
   "preview": {
     "title": "תצוגה מקדימה",

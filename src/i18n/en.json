@@ -122,7 +122,9 @@
     "changes": "What Changes",
     "exportDxf": "Export DXF for CNC",
     "exportGcode": "Export G-code for CNC",
-    "exportBom": "Export Bill of Materials CSV"
+    "exportBom": "Export Bill of Materials CSV",
+    "sheetWasteCost": "Waste cost: ₪{{cost}}",
+    "sheetWasteCostTitle": "Estimated material cost lost to offcuts"
   },
   "preview": {
     "title": "Cabinet Preview",

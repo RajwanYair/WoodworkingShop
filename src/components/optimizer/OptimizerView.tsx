@@ -197,6 +197,16 @@ function SheetCard({
           )}
         </h3>
         <YieldBar yieldPercent={sheet.yieldPercent} />
+        {mat.pricePerSheet != null && (
+          <span
+            className="text-[10px] text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-700 px-1.5 py-0.5 rounded whitespace-nowrap"
+            title={t('optimizer.sheetWasteCostTitle')}
+          >
+            {t('optimizer.sheetWasteCost', {
+              cost: (mat.pricePerSheet * (1 - sheet.yieldPercent / 100)).toFixed(2),
+            })}
+          </span>
+        )}
         <button
           onClick={() => {
             downloadDxfForSheet(sheet, `sheet-${sheet.sheetIndex + 1}.dxf`);
