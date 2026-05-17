@@ -1,6 +1,51 @@
 # Roadmap
 
-## Sprint: v3.1.0 — UX & Output Quality (May 2026, TOP PRIORITY)
+## Release Timeline
+
+```mermaid
+timeline
+    title Cabinet Planner — Release History
+    section v2.7–v2.9 (April 2026)
+        v2.7.0 : Project modernization
+               : TypeScript strict mode
+               : GitHub Actions CI
+        v2.8.0 : Accessibility audit
+               : Bundle analysis
+               : PWA icons
+        v2.9.0 : Test coverage
+               : Shared test helpers
+               : i18n coverage script
+    section v3.0–v3.1 (April–May 2026)
+        v3.0.0 : Cost estimator tests
+               : Lighthouse CI
+               : 70% coverage thresholds
+        v3.1.0 : Slider numeric entry
+               : Optional back panel
+               : MaxRects bin-packing
+               : PDF orientation parity
+               : SVG asset optimisation
+    section v3.2–v3.4 (May 2026)
+        v3.2.0 : Smart optimizer
+               : SmartOptimizerPanel
+               : DXF / G-code export
+               : Multi-cabinet tabs
+               : Undo / Redo history
+        v3.3.0 : Assembly guide PDF
+               : Hardware CSV export
+               : BOM with notes
+               : Cabinet notes field
+        v3.4.0 : Earliest-sheet packing fix
+               : OptimizationNotesPanel
+               : Part count stat
+               : Saw kerf control
+    section v3.5 (Current)
+        v3.5.0 : Custom material inline edit
+               : Material price overrides
+               : Configurable edge-banding rate
+               : Hardware CSV export
+```
+
+
 
 User-reported needs from live preview review (`localhost:5173`). These supersede
 the in-flight quality sprints (84-87) and run first.
@@ -63,8 +108,9 @@ the in-flight quality sprints (84-87) and run first.
       (Sprint 121) — added `"purpose": "maskable"` entries for both PNG icons
 - [x] Add hero / OG image (`og:image`, twitter:image now point to icon-512.png)
 - [x] Replace generic placeholder favicon with woodworking cabinet glyph
-- [ ] MD diagrams: convert ASCII tables in `docs/ARCHITECTURE.md` and `ROADMAP.md`
+- [x] MD diagrams: convert ASCII tables in `docs/ARCHITECTURE.md` and `ROADMAP.md`
       diagrams (where applicable) to Mermaid for crisp scaling on GitHub
+      **Done — Sprint 142**: release timeline Mermaid diagram added to ROADMAP.md
 - [ ] Web preview: review color contrast and the cabinet 2D preview SVG for
       higher visual fidelity (axis labels, scale bar, dimension annotations)
       **Done — Sprint 114**: dimension lines use `currentColor`, arrow-heads,
