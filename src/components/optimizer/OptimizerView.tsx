@@ -255,6 +255,9 @@ export function OptimizerView() {
         ))}
       </div>
 
+      {/* Sprint 160 — Material usage summary */}
+      <MaterialSummaryPanel sheets={displayOpt.sheets} materialPriceOverrides={materialPriceOverrides} t={t} lang={lang} />
+
       {/* Sprint 150 — Shopping list / sheets-needed summary */}
       <ShoppingListPanel sheets={displayOpt.sheets} materialPriceOverrides={materialPriceOverrides} t={t} lang={lang} />
 
@@ -361,6 +364,88 @@ function OffcutsPanel({ sheets, t }: { sheets: CutSheet[]; t: (k: string) => str
               </div>
             ))}
           </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Sprint 160: Material usage summary — area, sheets, cost per material. */
+function MaterialSummaryPanel({
+  sheets,
+  materialPriceOverrides,
+  t,
+  lang,
+}: {
+  sheets: CutSheet[];
+  materialPriceOverrides: Record<string, number>;
+  t: (key: string) => string;
+  lang: Lang;
+}) {
+  const [open, setOpen] = useState(true);
+
+  // Group by material + thickness
+  const groups = new Map<string, { name: { en: string; he: string }; thickness: number; sheetArea: number; qty: number; pricePerSheet: number }>();
+  for (const sheet of sheets) {
+    const mat = getMaterial(sheet.material);
+    const key = `${sheet.material}-${sheet.thickness}`;
+    if (!groups.has(key)) {
+      const pricePerSheet =
+        materialPriceOverrides[sheet.material] ?? mat.pricePerSheet ?? 0;
+      groups.set(key, {
+        name: mat.name,
+        thickness: sheet.thickness,
+        sheetArea: (sheet.sheetWidth * sheet.sheetLength) / 1e6, // m²
+        qty: 0,
+        pricePerSheet,
+      });
+    }
+    groups.get(key)!.qty += 1;
+  }
+
+  const rows = [...groups.values()];
+  if (rows.length === 0) return null;
+
+  return (
+    <div className="border border-wood-200 dark:border-wood-700 rounded-lg overflow-hidden print:hidden">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="w-full flex items-center justify-between px-4 py-3 bg-wood-50 dark:bg-wood-800 hover:bg-wood-100 dark:hover:bg-wood-750 transition-colors text-sm font-semibold text-wood-700 dark:text-wood-200"
+      >
+        {t('optimizer.materialSummary')}
+        <span className="text-wood-400">{open ? '▲' : '▼'}</span>
+      </button>
+      {open && (
+        <div className="px-4 pb-4 pt-2 overflow-x-auto">
+          <table className="w-full text-xs border-collapse">
+            <thead>
+              <tr className="text-wood-400 dark:text-wood-500 text-left">
+                <th className="py-1 pr-4 font-medium">{t('optimizer.materialSummaryMaterial')}</th>
+                <th className="py-1 pr-4 font-medium text-right">{t('optimizer.materialSummarySheets')}</th>
+                <th className="py-1 pr-4 font-medium text-right">{t('optimizer.materialSummaryArea')}</th>
+                <th className="py-1 font-medium text-right">{t('optimizer.materialSummaryCost')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, i) => {
+                const totalArea = (row.sheetArea * row.qty).toFixed(2);
+                const totalCost = row.pricePerSheet > 0 ? (row.pricePerSheet * row.qty).toFixed(0) : null;
+                return (
+                  <tr key={i} className="border-t border-wood-100 dark:border-wood-800">
+                    <td className="py-1.5 pr-4 text-wood-700 dark:text-wood-300 font-medium">
+                      {row.name[lang]} {row.thickness} mm
+                    </td>
+                    <td className="py-1.5 pr-4 text-right text-wood-500 dark:text-wood-400">×{row.qty}</td>
+                    <td className="py-1.5 pr-4 text-right text-wood-500 dark:text-wood-400">{totalArea} m²</td>
+                    <td className="py-1.5 text-right font-semibold text-wood-700 dark:text-wood-200">
+                      {totalCost ? `₪${totalCost}` : '—'}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
