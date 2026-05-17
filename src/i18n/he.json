@@ -3,6 +3,10 @@
     "title": "מתכנן ארון",
     "subtitle": "כלי עיצוב נגרות אינטראקטיבי"
   },
+  "a11y": {
+    "skipToContent": "דלג לתוכן",
+    "mainWorkspace": "סביבת העבודה של מתכנן הארון"
+  },
   "tabs": {
     "configurator": "הגדרות",
     "preview": "תצוגה מקדימה",

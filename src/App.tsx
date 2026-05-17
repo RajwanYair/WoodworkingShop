@@ -1,6 +1,7 @@
 import './i18n';
 import './index.css';
 import { useEffect, lazy, Suspense } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Header } from './components/layout/Header';
 import { Sidebar } from './components/layout/Sidebar';
 import { ConfiguratorPanel } from './components/configurator/ConfiguratorPanel';
@@ -20,6 +21,7 @@ const PdfExportPanel = lazy(() =>
 
 function App() {
   const { activeTab, darkMode } = useCabinetStore();
+  const { t } = useTranslation();
 
   // Sync dark mode to <html> so browser-level UI (scrollbar, form controls,
   // color-scheme) follows. The Tailwind `dark:` variant is class-based via
@@ -80,12 +82,12 @@ function App() {
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 bg-wood-500 text-white px-3 py-1 rounded text-sm"
         >
-          Skip to content
+          {t('a11y.skipToContent')}
         </a>
         <Header />
         <div className="flex">
           <Sidebar />
-          <main id="main-content" className="flex-1 p-3 sm:p-6" role="main" aria-label="Cabinet planner workspace">
+          <main id="main-content" className="flex-1 p-3 sm:p-6" role="main" aria-label={t('a11y.mainWorkspace')}>
             {activeTab === 'configurator' && <ConfiguratorPanel />}
             {activeTab === 'preview' && <CabinetPreview />}
             {activeTab === 'optimizer' && (

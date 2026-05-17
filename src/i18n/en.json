@@ -3,6 +3,10 @@
     "title": "Cabinet Planner",
     "subtitle": "Interactive Woodworking Design Tool"
   },
+  "a11y": {
+    "skipToContent": "Skip to content",
+    "mainWorkspace": "Cabinet planner workspace"
+  },
   "tabs": {
     "configurator": "Configure",
     "preview": "Preview",
