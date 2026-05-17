@@ -207,11 +207,14 @@
     "title": "מדריך הרכבה",
     "prev": "הקודם",
     "next": "הבא",
-    "partsInStep": "חלקים בשלב זה:",
+    "hardwareChecklist": "רשימת חומרה",
+    "hardwareChecklistDesc": "סמן כל פריט בעת איסוף החומרה לפני ההרכבה.",
+    "hardwareChecklistDone": "כל החומרה נאספה — מוכן להרכבה!",
     "watchVideo": "צפה בהדרכה ביוטיוב",
     "viewStepByStep": "שלב אחר שלב",
     "viewAll": "הצג את כל השלבים",
-    "print": "הדפס"
+    "print": "הדפס",
+    "partsInStep": "חלקים בשלב זה:"
   },
   "shelves": {
     "customHeading": "מיקומי מדפים מותאמים (מ\"מ מהתחתית)",
