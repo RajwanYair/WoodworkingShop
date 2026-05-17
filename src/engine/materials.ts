@@ -13,6 +13,7 @@ export const MATERIALS: Material[] = [
     pricePerSheet: 180,
     category: 'panel',
     color: '#C8B88A',
+    hasGrain: true,
   },
   {
     key: 'plywood-18',
@@ -23,6 +24,7 @@ export const MATERIALS: Material[] = [
     pricePerSheet: 260,
     category: 'panel',
     color: '#D4C4A0',
+    hasGrain: true,
   },
   {
     key: 'melamine-16',
@@ -33,6 +35,7 @@ export const MATERIALS: Material[] = [
     pricePerSheet: 140,
     category: 'panel',
     color: '#F5F0E8',
+    hasGrain: false,
   },
   {
     key: 'melamine-18',
@@ -43,6 +46,7 @@ export const MATERIALS: Material[] = [
     pricePerSheet: 165,
     category: 'panel',
     color: '#F5F0E8',
+    hasGrain: false,
   },
   {
     key: 'mdf-16',
@@ -53,6 +57,7 @@ export const MATERIALS: Material[] = [
     pricePerSheet: 120,
     category: 'panel',
     color: '#BFA87A',
+    hasGrain: false,
   },
   {
     key: 'mdf-18',
@@ -63,6 +68,7 @@ export const MATERIALS: Material[] = [
     pricePerSheet: 145,
     category: 'panel',
     color: '#BFA87A',
+    hasGrain: false,
   },
   {
     key: 'chipboard-16',
@@ -73,6 +79,7 @@ export const MATERIALS: Material[] = [
     pricePerSheet: 85,
     category: 'panel',
     color: '#C9B97A',
+    hasGrain: false,
   },
   {
     key: 'chipboard-18',
@@ -83,6 +90,7 @@ export const MATERIALS: Material[] = [
     pricePerSheet: 100,
     category: 'panel',
     color: '#C9B97A',
+    hasGrain: false,
   },
   {
     key: 'osb-18',
@@ -93,6 +101,7 @@ export const MATERIALS: Material[] = [
     pricePerSheet: 95,
     category: 'panel',
     color: '#D4B87A',
+    hasGrain: true,
   },
 
   // Thin panels (back)
@@ -105,6 +114,7 @@ export const MATERIALS: Material[] = [
     pricePerSheet: 65,
     category: 'back',
     color: '#E8D8B0',
+    hasGrain: true,
   },
   {
     key: 'mdf-3',
@@ -115,6 +125,7 @@ export const MATERIALS: Material[] = [
     pricePerSheet: 50,
     category: 'back',
     color: '#D4C4A0',
+    hasGrain: false,
   },
 
   // Glass (doors — pre-cut to size)
@@ -127,6 +138,7 @@ export const MATERIALS: Material[] = [
     pricePerSheet: 220,
     category: 'door',
     color: '#b8d8f0',
+    hasGrain: false,
   },
 ];
 

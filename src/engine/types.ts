@@ -13,6 +13,8 @@ export interface Material {
   pricePerSheet?: number; // optional cost estimation
   category: MaterialCategory;
   color: string; // hex for preview rendering
+  /** When true the cut optimizer will not rotate parts 90 ° (grain direction must be preserved). */
+  hasGrain: boolean;
 }
 
 export type DoorStyle = 'flat' | 'shaker' | 'glass' | 'none';

@@ -41,7 +41,7 @@ export function optimizeCutSheets(parts: Part[]): OptimizationResult {
 
   for (const [, group] of groups) {
     const mat = getMaterial(group.materialKey);
-    const packed = packMaxRects(group.rects, mat.sheetLength, mat.sheetWidth, SAW_KERF);
+    const packed = packMaxRects(group.rects, mat.sheetLength, mat.sheetWidth, SAW_KERF, !mat.hasGrain);
 
     for (const sheet of packed) {
       const sheetArea = mat.sheetLength * mat.sheetWidth;
@@ -115,6 +115,7 @@ function packMaxRects(
   sheetLength: number,
   sheetWidth: number,
   kerf: number,
+  allowRotation = true,
 ): PlacedRect[][] {
   if (rects.length === 0) return [];
 
@@ -141,7 +142,7 @@ function packMaxRects(
     } | null = null;
 
     for (let si = 0; si < sheets.length; si++) {
-      const candidate = findBestPlacement(sheets[si].free, rect, kerf);
+      const candidate = findBestPlacement(sheets[si].free, rect, kerf, allowRotation);
       if (candidate && (!best || candidate.score < best.score)) {
         best = { sheetIdx: si, ...candidate };
       }
@@ -154,7 +155,7 @@ function packMaxRects(
         free: [{ x: 0, y: 0, w: sheetWidth, h: sheetLength }],
       };
       sheets.push(sheet);
-      const candidate = findBestPlacement(sheet.free, rect, kerf);
+      const candidate = findBestPlacement(sheet.free, rect, kerf, allowRotation);
       if (!candidate) {
         // Piece doesn't even fit on an empty sheet — skip with a warning.
         // (Engine validation should prevent this in normal flow.)
@@ -194,15 +195,18 @@ function findBestPlacement(
   free: FreeRect[],
   rect: Rect,
   kerf: number,
+  allowRotation = true,
 ): { freeIdx: number; x: number; y: number; w: number; h: number; rotated: boolean; score: number } | null {
   let best: ReturnType<typeof findBestPlacement> = null;
 
   for (let i = 0; i < free.length; i++) {
     const f = free[i];
-    const orientations = [
-      { w: rect.width, h: rect.length, rotated: false },
-      { w: rect.length, h: rect.width, rotated: true },
-    ];
+    const orientations = allowRotation
+      ? [
+          { w: rect.width, h: rect.length, rotated: false },
+          { w: rect.length, h: rect.width, rotated: true },
+        ]
+      : [{ w: rect.width, h: rect.length, rotated: false }];
     for (const o of orientations) {
       // Account for saw kerf around the placement (no kerf needed against
       // the sheet edge, but easier and safe to always reserve it).

@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **2D preview dimension polish** (Sprint 114) — dimension lines throughout the
+  2D preview (front, open-front, side, top, back) and the isometric 3D view now
+  use `currentColor` so they adapt to the active colour theme (dark / light /
+  high-contrast).  Arrow-heads replace plain tick marks for standard drafting
+  appearance.  All labels now use the active unit system (`mm` or fractional
+  inches) via `formatDim`.  The open-front view adds per-bay height annotations
+  in the cleared shelf compartments, making unequal shelf spacing easy to verify
+  visually.
 - **Optimizer yield-meter Playwright test** (Sprint 105) — behavioural e2e
   asserting the cut-sheet optimizer renders an accessible `<meter>` per sheet
   with a sane `aria-valuenow` in `[0, 100]`. Pixel-free, OS-font-stable.

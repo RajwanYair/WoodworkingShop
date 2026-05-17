@@ -65,6 +65,8 @@ the in-flight quality sprints (84-87) and run first.
       diagrams (where applicable) to Mermaid for crisp scaling on GitHub
 - [ ] Web preview: review color contrast and the cabinet 2D preview SVG for
       higher visual fidelity (axis labels, scale bar, dimension annotations)
+      **Done — Sprint 114**: dimension lines use `currentColor`, arrow-heads,
+      unit-aware labels, and per-bay height annotations in the open-front view.
 - [ ] All raster outputs lint-checked via `bundle:check` per-file budgets
 
 ---

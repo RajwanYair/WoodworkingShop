@@ -11,6 +11,7 @@ const EMPTY: Omit<Material, 'key'> = {
   pricePerSheet: 100,
   category: 'panel',
   color: '#C8B88A',
+  hasGrain: false,
 };
 
 export function CustomMaterialEditor() {
@@ -146,6 +147,16 @@ export function CustomMaterialEditor() {
               onChange={(e) => setDraft({ ...draft, color: e.target.value })}
               className="mt-0.5 block w-full h-8 rounded border border-wood-200 dark:border-wood-700"
             />
+          </label>
+
+          <label className="block col-span-2 flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={draft.hasGrain}
+              onChange={(e) => setDraft({ ...draft, hasGrain: e.target.checked })}
+              className="rounded border-wood-300"
+            />
+            <span className="text-xs text-wood-600 dark:text-wood-300">{t('config.hasGrain')}</span>
           </label>
 
           <button

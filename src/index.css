@@ -1,7 +1,9 @@
 @import 'tailwindcss';
 
-/* Class-based dark mode (Tailwind 4 ships with media-query by default). */
-@custom-variant dark (&:where(.dark, .dark *));
+/* Class-based dark mode — use `.dark &` so dark: utilities gain an extra class
+   of specificity (0,2,0) vs plain utilities (0,1,0), making them cascade-safe
+   regardless of Tailwind's internal generation order. */
+@custom-variant dark (.dark &);
 
 @theme {
   --color-wood-50: #fdf8f0;

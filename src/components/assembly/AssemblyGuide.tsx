@@ -13,7 +13,7 @@ export function AssemblyGuide() {
   const lang = i18n.language as Lang;
   const steps = generateAssemblySteps(config);
   const [activeStep, setActiveStep] = useState(0);
-  const [viewMode, setViewMode] = useState<ViewMode>('paginated');
+  const [viewMode, setViewMode] = useState<ViewMode>('all');
 
   return (
     <div className="space-y-6">

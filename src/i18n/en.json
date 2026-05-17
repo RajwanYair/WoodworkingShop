@@ -71,6 +71,7 @@
     "price": "Price / Sheet",
     "color": "Color",
     "addMaterial": "Add Material",
+    "hasGrain": "Preserve grain direction (no 90° rotation)",
     "remove": "Remove"
   },
   "parts": {

@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { getMaterial } from '../../engine/materials';
 import { computeEqualShelfPositions } from '../../engine/dimensions';
+import { formatDim } from '../../utils/units';
+import type { UnitSystem } from '../../utils/units';
 import { useTouchGestures } from '../../hooks/useTouchGestures';
 
 /** Scale factor: mm → SVG px */
@@ -35,7 +37,9 @@ function downloadSvg(container: HTMLElement, filename: string) {
 
 export const CabinetPreview = memo(function CabinetPreview() {
   const { t } = useTranslation();
-  const { config, dimensions: d, setConfig } = useCabinetStore();
+  const { config, dimensions: d, setConfig, units } = useCabinetStore();
+  /** Format a mm value using the active unit system */
+  const fd = (mm: number) => formatDim(mm, units);
   const [activeView, setActiveView] = useState<ViewId>('front');
   const previewRef = useRef<HTMLDivElement>(null);
   const [showDims, setShowDims] = useState(true);
@@ -262,8 +266,8 @@ export const CabinetPreview = memo(function CabinetPreview() {
               {config.doorStyle !== 'none' && renderDoors(config, d, S, color, carcassMatName, tp)}
               {showDims && (
                 <>
-                  <DimLine x1={0} y1={-8} x2={W} y2={-8} label={`${config.width}`} pos="above" />
-                  <DimLine x1={W + 8} y1={0} x2={W + 8} y2={H} label={`${config.height}`} pos="right" />
+                  <DimLine x1={0} y1={-8} x2={W} y2={-8} label={fd(config.width)} pos="above" />
+                  <DimLine x1={W + 8} y1={0} x2={W + 8} y2={H} label={fd(config.height)} pos="right" />
                 </>
               )}
             </g>
@@ -418,11 +422,36 @@ export const CabinetPreview = memo(function CabinetPreview() {
                 })}
               {showDims && (
                 <>
-                  <DimLine x1={0} y1={-8} x2={W} y2={-8} label={`${config.width}`} pos="above" />
-                  <DimLine x1={T} y1={-20} x2={W - T} y2={-20} label={`${d.internalWidth}`} pos="above" />
-                  <DimLine x1={W + 8} y1={0} x2={W + 8} y2={H} label={`${config.height}`} pos="right" />
+                  <DimLine x1={0} y1={-8} x2={W} y2={-8} label={fd(config.width)} pos="above" />
+                  <DimLine x1={T} y1={-20} x2={W - T} y2={-20} label={fd(d.internalWidth)} pos="above" />
+                  <DimLine x1={W + 8} y1={0} x2={W + 8} y2={H} label={fd(config.height)} pos="right" />
                 </>
               )}
+              {/* Bay-height annotations: cleared space in each shelf compartment */}
+              {showDims &&
+                shelfPositions.length > 0 &&
+                (() => {
+                  const sorted = [...shelfPositions].sort((a, b) => a - b);
+                  const edges = [0, ...sorted, d.internalHeight];
+                  return edges.slice(0, -1).map((lo, i) => {
+                    const gap = edges[i + 1] - lo;
+                    return (
+                      <text
+                        key={`bay-${i}`}
+                        x={T + (W - 2 * T) * 0.06}
+                        y={H - T - (lo + gap / 2) * S}
+                        textAnchor="start"
+                        dominantBaseline="middle"
+                        fontSize={6}
+                        fill="currentColor"
+                        opacity={0.6}
+                        pointerEvents="none"
+                      >
+                        {fd(gap)}
+                      </text>
+                    );
+                  });
+                })()}
             </g>
           </ViewBox>
         )}
@@ -460,8 +489,8 @@ export const CabinetPreview = memo(function CabinetPreview() {
               ))}
               {showDims && (
                 <>
-                  <DimLine x1={0} y1={-8} x2={D} y2={-8} label={`${config.depth}`} pos="above" />
-                  <DimLine x1={D + 8} y1={0} x2={D + 8} y2={H} label={`${config.height}`} pos="right" />
+                  <DimLine x1={0} y1={-8} x2={D} y2={-8} label={fd(config.depth)} pos="above" />
+                  <DimLine x1={D + 8} y1={0} x2={D + 8} y2={H} label={fd(config.height)} pos="right" />
                 </>
               )}
             </g>
@@ -518,8 +547,8 @@ export const CabinetPreview = memo(function CabinetPreview() {
               />
               {showDims && (
                 <>
-                  <DimLine x1={0} y1={-8} x2={W} y2={-8} label={`${config.width}`} pos="above" />
-                  <DimLine x1={W + 8} y1={0} x2={W + 8} y2={D} label={`${config.depth}`} pos="right" />
+                  <DimLine x1={0} y1={-8} x2={W} y2={-8} label={fd(config.width)} pos="above" />
+                  <DimLine x1={W + 8} y1={0} x2={W + 8} y2={D} label={fd(config.depth)} pos="right" />
                 </>
               )}
             </g>
@@ -545,8 +574,8 @@ export const CabinetPreview = memo(function CabinetPreview() {
               </text>
               {showDims && (
                 <>
-                  <DimLine x1={0} y1={-8} x2={W} y2={-8} label={`${config.width}`} pos="above" />
-                  <DimLine x1={W + 8} y1={0} x2={W + 8} y2={H} label={`${config.height}`} pos="right" />
+                  <DimLine x1={0} y1={-8} x2={W} y2={-8} label={fd(config.width)} pos="above" />
+                  <DimLine x1={W + 8} y1={0} x2={W + 8} y2={H} label={fd(config.height)} pos="right" />
                 </>
               )}
             </g>
@@ -568,6 +597,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
             doorWidth={d.doorWidth}
             doorHeight={d.doorHeight}
             showDims={showDims}
+            units={units}
           />
         )}
       </div>
@@ -598,7 +628,7 @@ function ViewBox({
       viewBox={`0 0 ${w} ${h}`}
       role="img"
       aria-label="Cabinet drawing"
-      className="w-full max-w-lg border border-wood-200 dark:border-wood-700 rounded bg-white dark:bg-wood-800"
+      className="w-full max-w-lg border border-wood-200 dark:border-wood-700 rounded bg-white dark:bg-wood-800 text-wood-600 dark:text-wood-200"
       style={{ maxHeight: 500, touchAction: 'none' }}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
@@ -626,11 +656,11 @@ function ScaleBar({ viewW, viewH }: { viewW: number; viewH: number }) {
   const padY = 8;
   const y = viewH - padY;
   return (
-    <g aria-hidden="true" pointerEvents="none">
-      <line x1={padX} y1={y} x2={padX + barPx} y2={y} stroke="#444" strokeWidth={1.2} />
-      <line x1={padX} y1={y - 3} x2={padX} y2={y + 3} stroke="#444" strokeWidth={1.2} />
-      <line x1={padX + barPx} y1={y - 3} x2={padX + barPx} y2={y + 3} stroke="#444" strokeWidth={1.2} />
-      <text x={padX + barPx / 2} y={y - 4} fontSize={7} textAnchor="middle" fill="#444">
+    <g aria-hidden="true" pointerEvents="none" fill="currentColor" stroke="currentColor">
+      <line x1={padX} y1={y} x2={padX + barPx} y2={y} strokeWidth={1.2} />
+      <line x1={padX} y1={y - 3} x2={padX} y2={y + 3} strokeWidth={1.2} />
+      <line x1={padX + barPx} y1={y - 3} x2={padX + barPx} y2={y + 3} strokeWidth={1.2} />
+      <text x={padX + barPx / 2} y={y - 4} fontSize={7} textAnchor="middle" stroke="none">
         {niceMm >= 1000 ? `${niceMm / 1000} m` : `${niceMm} mm`}
       </text>
     </g>
@@ -693,7 +723,8 @@ function PartRect({
   );
 }
 
-/** Dimension annotation line with ticks and centered label */
+/** Dimension annotation line with arrowheads and centred label.
+ * Uses `currentColor` so it adapts to the SVG's Tailwind text-colour class. */
 function DimLine({
   x1,
   y1,
@@ -709,23 +740,34 @@ function DimLine({
   label: string;
   pos: 'above' | 'right';
 }) {
+  const AH = 2.5; // arrowhead half-width
+  const AL = 5; // arrowhead length
   const tickLen = 4;
   const isHorizontal = pos === 'above';
-  const mid = isHorizontal ? { x: (x1 + x2) / 2, y: y1 - 5 } : { x: x1 + 6, y: (y1 + y2) / 2 };
+  const mid = isHorizontal ? { x: (x1 + x2) / 2, y: y1 - 6 } : { x: x1 + 8, y: (y1 + y2) / 2 };
 
   return (
-    <g className="text-wood-500" fill="#888" stroke="#888" strokeWidth={0.5}>
+    <g fill="currentColor" stroke="currentColor" strokeWidth={0.5} strokeLinecap="round">
       <line x1={x1} y1={y1} x2={x2} y2={y2} />
-      {/* End ticks */}
       {isHorizontal ? (
         <>
+          {/* Extension ticks */}
           <line x1={x1} y1={y1 - tickLen} x2={x1} y2={y1 + tickLen} />
           <line x1={x2} y1={y2 - tickLen} x2={x2} y2={y2 + tickLen} />
+          {/* Left-pointing arrowhead */}
+          <polygon points={`${x1},${y1} ${x1 + AL},${y1 - AH} ${x1 + AL},${y1 + AH}`} stroke="none" />
+          {/* Right-pointing arrowhead */}
+          <polygon points={`${x2},${y2} ${x2 - AL},${y2 - AH} ${x2 - AL},${y2 + AH}`} stroke="none" />
         </>
       ) : (
         <>
+          {/* Extension ticks */}
           <line x1={x1 - tickLen} y1={y1} x2={x1 + tickLen} y2={y1} />
           <line x1={x2 - tickLen} y1={y2} x2={x2 + tickLen} y2={y2} />
+          {/* Up-pointing arrowhead */}
+          <polygon points={`${x1},${y1} ${x1 - AH},${y1 + AL} ${x1 + AH},${y1 + AL}`} stroke="none" />
+          {/* Down-pointing arrowhead */}
+          <polygon points={`${x2},${y2} ${x2 - AH},${y2 - AL} ${x2 + AH},${y2 - AL}`} stroke="none" />
         </>
       )}
       <text
@@ -733,8 +775,8 @@ function DimLine({
         y={mid.y}
         textAnchor="middle"
         dominantBaseline="middle"
-        fontSize={7}
-        fill="#888"
+        fontSize={8}
+        fill="currentColor"
         stroke="none"
         style={isHorizontal ? undefined : { writingMode: 'vertical-rl' as const }}
       >
@@ -850,6 +892,7 @@ function IsometricView({
   doorWidth,
   doorHeight,
   showDims,
+  units,
 }: {
   w: number;
   h: number;
@@ -865,6 +908,7 @@ function IsometricView({
   doorWidth: number;
   doorHeight: number;
   showDims: boolean;
+  units: UnitSystem;
 }) {
   const sc = 0.18; // scale
   const W = w * sc;
@@ -903,7 +947,7 @@ function IsometricView({
       viewBox={`0 0 ${vw} ${vh}`}
       role="img"
       aria-label="3D isometric cabinet drawing"
-      className="w-full max-w-lg border border-wood-200 dark:border-wood-700 rounded bg-white dark:bg-wood-800"
+      className="w-full max-w-lg border border-wood-200 dark:border-wood-700 rounded bg-white dark:bg-wood-800 text-wood-600 dark:text-wood-200"
       style={{ maxHeight: 500 }}
     >
       <g transform={`translate(${ox},${oy})`}>
@@ -1032,11 +1076,11 @@ function IsometricView({
         {showDims && (
           <>
             {/* Width – along front bottom edge */}
-            <IsoDimLine p1={[0, 0, -12 * sc]} p2={[W, 0, -12 * sc]} label={`${w}`} offset={-6} />
+            <IsoDimLine p1={[0, 0, -12 * sc]} p2={[W, 0, -12 * sc]} label={formatDim(w, units)} offset={-6} />
             {/* Height – along front left edge */}
-            <IsoDimLine p1={[-12 * sc, 0, 0]} p2={[-12 * sc, H, 0]} label={`${h}`} offset={-6} />
+            <IsoDimLine p1={[-12 * sc, 0, 0]} p2={[-12 * sc, H, 0]} label={formatDim(h, units)} offset={-6} />
             {/* Depth – along bottom left edge */}
-            <IsoDimLine p1={[-12 * sc, 0, 0]} p2={[-12 * sc, 0, D]} label={`${d}`} offset={-6} />
+            <IsoDimLine p1={[-12 * sc, 0, 0]} p2={[-12 * sc, 0, D]} label={formatDim(d, units)} offset={-6} />
           </>
         )}
       </g>
@@ -1059,11 +1103,11 @@ function IsoDimLine({
   const mx = (x1 + x2) / 2;
   const my = (y1 + y2) / 2;
   return (
-    <g fill="#888" stroke="#888" strokeWidth={0.5}>
+    <g fill="currentColor" stroke="currentColor" strokeWidth={0.5}>
       <line x1={x1} y1={y1} x2={x2} y2={y2} />
-      <circle cx={x1} cy={y1} r={1.5} />
-      <circle cx={x2} cy={y2} r={1.5} />
-      <text x={mx} y={my - 4} textAnchor="middle" fontSize={7} fill="#888" stroke="none">
+      <circle cx={x1} cy={y1} r={1.5} stroke="none" />
+      <circle cx={x2} cy={y2} r={1.5} stroke="none" />
+      <text x={mx} y={my - 4} textAnchor="middle" fontSize={7} stroke="none">
         {label}
       </text>
     </g>

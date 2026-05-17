@@ -187,6 +187,14 @@ function SheetCard({
       <div className="flex items-center justify-between mb-2 gap-3">
         <h3 className="text-sm font-medium text-wood-600 dark:text-wood-300 flex-1 min-w-0 truncate">
           {t('optimizer.sheet')} #{sheet.sheetIndex + 1} — {mat.name[lang]} ({sheet.thickness} mm)
+          {mat.hasGrain && (
+            <span
+              className="ml-1.5 text-[10px] font-normal text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/30 px-1 rounded"
+              title="Grain direction preserved — parts were not rotated 90°"
+            >
+              ↕ grain
+            </span>
+          )}
         </h3>
         <YieldBar yieldPercent={sheet.yieldPercent} />
         <button

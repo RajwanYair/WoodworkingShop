@@ -56,37 +56,37 @@ export function ShelfConfig() {
         step={1}
       />
 
-      <div className="flex gap-4">
-        {(['equal', 'custom'] as const).map((mode) => (
-          <label key={mode} className="flex items-center gap-2 text-sm">
-            <input
-              type="radio"
-              name="shelfSpacing"
-              value={mode}
-              checked={config.shelfSpacing === mode}
-              onChange={() => {
-                if (mode === 'custom' && config.customShelfPositions.length !== config.shelfCount) {
-                  setConfig({
-                    shelfSpacing: 'custom',
-                    customShelfPositions: computeEqualShelfPositions(internalH, config.shelfCount),
-                  });
-                } else {
-                  setConfig({ shelfSpacing: mode });
-                }
-              }}
-              className="accent-primary"
-            />
-            {t(`config.${mode}`)}
-          </label>
-        ))}
-      </div>
+      {config.shelfCount > 0 && (
+        <div className="flex gap-4">
+          {(['equal', 'custom'] as const).map((mode) => (
+            <label key={mode} className="flex items-center gap-2 text-sm">
+              <input
+                type="radio"
+                name="shelfSpacing"
+                value={mode}
+                checked={config.shelfSpacing === mode}
+                onChange={() => {
+                  if (mode === 'custom') {
+                    setConfig({
+                      shelfSpacing: 'custom',
+                      customShelfPositions: computeEqualShelfPositions(internalH, config.shelfCount),
+                    });
+                  } else {
+                    setConfig({ shelfSpacing: mode });
+                  }
+                }}
+                className="accent-primary"
+              />
+              {t(`config.${mode}`)}
+            </label>
+          ))}
+        </div>
+      )}
 
       {config.shelfSpacing === 'custom' && config.shelfCount > 0 && (
         <div className="space-y-2 border-t border-wood-100 dark:border-wood-800 pt-3">
           <div className="flex items-center justify-between gap-2 flex-wrap">
-            <p className="text-xs font-medium text-wood-600 dark:text-wood-300">
-              {t('shelves.customHeading')}
-            </p>
+            <p className="text-xs font-medium text-wood-600 dark:text-wood-300">{t('shelves.customHeading')}</p>
             <button
               type="button"
               onClick={resetEqual}
@@ -95,9 +95,7 @@ export function ShelfConfig() {
               {t('shelves.resetEqual')}
             </button>
           </div>
-          <p className="text-[10px] text-wood-400">
-            {t('shelves.internalHeight', { h: internalH })}
-          </p>
+          <p className="text-[10px] text-wood-400">{t('shelves.internalHeight', { h: internalH })}</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {positions.map((pos, idx) => (
               <label key={idx} className="text-xs text-wood-600 dark:text-wood-300 flex flex-col gap-1">
