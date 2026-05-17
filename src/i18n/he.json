@@ -212,6 +212,7 @@
     "title": "מדריך הרכבה",
     "prev": "הקודם",
     "next": "הבא",
+    "cabinetNotes": "הערות ארון",
     "hardwareChecklist": "רשימת חומרה",
     "hardwareChecklistDesc": "סמן כל פריט בעת איסוף החומרה לפני ההרכבה.",
     "hardwareChecklistDone": "כל החומרה נאספה — מוכן להרכבה!",

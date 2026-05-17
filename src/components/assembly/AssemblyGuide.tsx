@@ -10,11 +10,12 @@ type ViewMode = 'paginated' | 'all';
 
 export function AssemblyGuide() {
   const { t, i18n } = useTranslation();
-  const { config, parts, hardware } = useCabinetStore();
+  const { config, parts, hardware, cabinets, activeCabinetIndex } = useCabinetStore();
   const lang = i18n.language as Lang;
   const steps = generateAssemblySteps(config);
   const [activeStep, setActiveStep] = useState(0);
   const [viewMode, setViewMode] = useState<ViewMode>('all');
+  const notes = cabinets[activeCabinetIndex]?.notes ?? '';
 
   return (
     <div className="space-y-6">
@@ -64,6 +65,14 @@ export function AssemblyGuide() {
         </div>
         </div>
       </div>
+
+      {/* Sprint 161 — Cabinet notes banner */}
+      {notes.trim() && (
+        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg px-4 py-3 text-sm text-amber-800 dark:text-amber-200 print-keep whitespace-pre-wrap">
+          <span className="font-semibold block mb-1">{t('assembly.cabinetNotes')}</span>
+          {notes.trim()}
+        </div>
+      )}
 
       {viewMode === 'paginated' ? (
         <>

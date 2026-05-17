@@ -214,6 +214,7 @@
     "title": "Assembly Guide",
     "prev": "Previous",
     "next": "Next",
+    "cabinetNotes": "Cabinet Notes",
     "hardwareChecklist": "Hardware Checklist",
     "hardwareChecklistDesc": "Check off each item as you gather hardware before assembly.",
     "hardwareChecklistDone": "All hardware gathered — ready to assemble!",
