@@ -4,7 +4,7 @@
 
 # Roadmap
 
-## Release Timeline
+## 📅 Release Timeline
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0b040', 'primaryTextColor': '#1a0e06', 'primaryBorderColor': '#8b5022', 'lineColor': '#7a4010'}}}%%
@@ -41,7 +41,7 @@ gantt
 - [x] Tests: deflection ratings for standard and overloaded spans (13 new tests — 27 total in dimensions.test.ts)
 - [x] i18n: `shelves.deflectionSafe` and `shelves.deflectionDanger` keys in en.json + he.json
 
-### Sprint 174 — Isometric 3D View Enhancements
+### Sprint 174 — Isometric 3D View Enhancements 🎲
 
 - [ ] Add interior depth shading to the isometric view SVG
 - [ ] Render individual shelf lines in isometric mode
@@ -49,7 +49,7 @@ gantt
 - [ ] Ensure grain arrows overlay correctly in isometric
 - [ ] Tests: snapshot comparison for cabinet/bookshelf/wardrobe isometric paths
 
-### Sprint 175 — Bulk Material Reassignment
+### Sprint 175 — Bulk Material Reassignment 🔄
 
 - [ ] "Reassign material" dropdown on the material summary panel (Optimizer tab)
 - [ ] Selecting a new material updates all parts currently using the old material
@@ -57,7 +57,7 @@ gantt
 - [ ] Undo history entry: "Reassigned carcass from Birch Ply → Oak Ply"
 - [ ] Tests: bulk reassign updates all part materials and triggers re-optimization
 
-### Sprint 176 — Cabinet Template Library
+### Sprint 176 — Cabinet Template Library 📚
 
 - [ ] Expand presets panel to 12 templates: add TV unit, bathroom vanity wall, bathroom vanity base, corner cabinet (blind), wine rack
 - [ ] Each template encoded as a full `CabinetConfig` (not just dimension defaults)
@@ -65,7 +65,7 @@ gantt
 - [ ] URL param `tpl=` to deep-link directly to a template
 - [ ] Tests: each template produces valid parts and hardware lists
 
-### Sprint 177 — Advanced Hardware Catalog
+### Sprint 177 — Advanced Hardware Catalog 🔩
 
 - [ ] Hardware panel in Configurator: interactive catalog with 20+ hardware items
 - [ ] Per-item supplier links (configurable, not hardcoded)
@@ -73,7 +73,7 @@ gantt
 - [ ] Export hardware list with overrides to CSV
 - [ ] Tests: overridden quantities appear in BOM and cost calculation
 
-### Sprint 178 — Multi-Project Workspace Panel
+### Sprint 178 — Multi-Project Workspace Panel 🗂️
 
 - [ ] A "Projects" side panel (collapsible) listing all named projects saved in localStorage
 - [ ] One-click switch between projects without losing current unsaved work (prompt to save)
@@ -81,7 +81,7 @@ gantt
 - [ ] Export all projects as a single ZIP archive (one JSON per cabinet)
 - [ ] Tests: project list persistence, thumbnail generation
 
-### Sprint 179 — Print & PDF Improvements
+### Sprint 179 — Print & PDF Improvements 🖨️
 
 - [ ] Print dialog opens with correct page orientation auto-detected per sheet
 - [ ] PDF cover page: project thumbnail, creation date, version, author field
@@ -89,7 +89,7 @@ gantt
 - [ ] PDF bookmarks (outline) for: cover, parts, cut sheets, hardware, assembly
 - [ ] Tests: PDF document structure (page count, bookmark names)
 
-### Sprint 180 — Accessibility & Keyboard Navigation
+### Sprint 180 — Accessibility & Keyboard Navigation ♿
 
 - [ ] Full keyboard navigation within the configurator sidebar (Tab order, Enter/Space)
 - [ ] Focus trap in modal dialogs (keyboard shortcuts help, material editor)
@@ -97,7 +97,7 @@ gantt
 - [ ] High-contrast mode: CSS custom properties switch to WCAG AA-contrast palette
 - [ ] Tests: axe-core a11y audit in ConfiguratorPanel and OptimizerView
 
-### Sprint 181 — Performance & Bundle Optimization
+### Sprint 181 — Performance & Bundle Optimization ⚡
 
 - [ ] Split `cut-optimizer.ts` into a Web Worker to avoid blocking the main thread on large projects (5+ cabinets)
 - [ ] Memoize `generateParts()` and `generateHardware()` with deep-equal config comparison
@@ -179,7 +179,7 @@ the in-flight quality sprints (84-87) and run first.
 
 ---
 
-## Sprint: v3.0.0 — Test Coverage & CI Tooling (April 2026)
+## Sprint: v3.0.0 — Test Coverage & CI Tooling (April 2026) 🧪
 
 ### Completed
 
@@ -194,7 +194,7 @@ the in-flight quality sprints (84-87) and run first.
 - [x] **Task 9**: Version bump to 3.0.0 + CHANGELOG + ROADMAP update (Sprint 77)
 - [x] **Task 10**: GitHub release v3.0.0 (Sprint 77)
 
-## Sprint: v2.9.0 — Production Readiness (April 2026)
+## Sprint: v2.9.0 — Production Readiness (April 2026) 🔒
 
 ### Completed
 
@@ -211,7 +211,7 @@ the in-flight quality sprints (84-87) and run first.
 - [x] **Task 11**: Fix markdownlint config — disabled MD022/MD024 false positives
 - [x] **Task 12**: Version bump to 2.9.0 with CHANGELOG entry
 
-## Sprint: v2.8.0 — Quality & Accessibility (April 2026)
+## Sprint: v2.8.0 — Quality & Accessibility (April 2026) ♿
 
 ### Completed
 
@@ -236,7 +236,7 @@ the in-flight quality sprints (84-87) and run first.
 - [x] **Task 19**: Consolidate docs — updated ROADMAP, final doc pass
 - [x] **Task 20**: Final consolidation — version bump, CI validation
 
-## Sprint: v2.7.0 — Project Modernization (April 2026)
+## Sprint: v2.7.0 — Project Modernization (April 2026) 🏗️
 
 ### Completed
 
@@ -261,7 +261,7 @@ the in-flight quality sprints (84-87) and run first.
 - [x] **Task 19**: Consolidate docs — removed `release-notes.md` (superseded by CHANGELOG)
 - [x] **Task 20**: Final consolidation — footprint reduction, dead asset removal
 
-## Future
+## 🔮 Future
 
 - [ ] Playwright E2E smoke tests
 - [x] ~~Lighthouse CI integration~~ (v3.0.0)
@@ -269,7 +269,7 @@ the in-flight quality sprints (84-87) and run first.
 - [ ] Storybook for component documentation
 - [x] ~~Auto-generate i18n coverage report~~ (v3.0.0)
 
-## Competitive Landscape
+## 🏆 Competitive Landscape
 
 How Cabinet Planner compares to popular cabinet / cut-list / planner tools as
 of v3.1.0. Legend: ✅ first-class, 🟡 partial / limited, ❌ not available.

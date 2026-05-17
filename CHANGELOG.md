@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.9.0] — 2026-06-02
 
-### Added
+### ✨ Added
 
 - **Three-tier shelf deflection rating** (Sprint 173) — `computeShelfDeflection()` now returns
   a `deflectionRating` field (`'safe'` / `'warning'` / `'danger'`) in addition to the existing
@@ -23,19 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   every consumer without re-running the calculation. i18n: `shelves.deflectionSafe` and
   `shelves.deflectionDanger` keys added to `en.json` and `he.json`. 13 new tests.
 
-## [3.9.0] — 2026-06-02
-
-### Added
-
-- **Three-tier shelf deflection rating** (Sprint 173) — `computeShelfDeflection()` now returns
-  a `deflectionRating` field (`'safe'` / `'warning'` / `'danger'`) in addition to the existing
-  `overLimit` boolean. The amber zone covers L/360–L/240 and the red zone covers > L/240 per
-  furniture serviceability standards. `DerivedDimensions` gains a `shelfDeflections` array
-  (one entry per shelf) populated by `computeDimensions()`, making the ratings available to
-  every consumer without re-running the calculation. i18n: `shelves.deflectionSafe` and
-  `shelves.deflectionDanger` keys added to `en.json` and `he.json`. 13 new tests.
-
-### Changed
+### 🔄 Changed
 
 - **ESLint ecmaVersion** raised from `2020` → `2023` to match TypeScript target ES2023.
 - **Vitest coverage** expanded to include `src/store/**` and `src/hooks/**`; excluded
@@ -47,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `filesystem` output in `.lighthouseci/`.
 - **Config files** `lighthouserc.json` and `bundle-budget.json` moved to `config/` subdirectory.
 
-### Fixed
+### 🐛 Fixed
 
 - **AssemblyGuide.tsx** — ternary expression used as statement replaced with `if/else`
   to satisfy `@typescript-eslint/no-unused-expressions`.
@@ -62,7 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.8.0] — 2026-05-18
 
-### Added
+### ✨ Added
 
 - **Saw Passes stat card** (Sprint 164) — a fifth stat card "Saw Passes" appears in
   the Optimizer summary row, showing the total number of unique cut lines across all
@@ -100,7 +88,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.7.0] — 2026-05-17
 
-### Added
+### ✨ Added
 
 - **Drawer slide type selection** (Sprint 154) — new `drawerSlideType` field
   (`'standard' | 'soft-close' | 'full-extension'`) on `CabinetConfig`. When
@@ -139,7 +127,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   includes a `Weight (kg)` column for every part row. The material summary section
   also gains a weight column showing total kg per material.
 
-### Fixed
+### 🐛 Fixed
 
 - **banner.svg broken by orphaned content** (Sprint 156) — the file contained a full
   1200×220 SVG followed by raw elements from an old 900×160 version outside any
@@ -150,7 +138,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.6.0] — 2026-05-17
 
-### Added
+### ✨ Added
 
 - **SVG icon library** (Sprint 146+graphics) — new `src/components/layout/Icons.tsx`
   with 40+ inline SVG icon components (`IconSun`, `IconMoon`, `IconUndo`, `IconRedo`,
@@ -185,7 +173,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   updates reactively (`<name> — Cabinet Planner`). The name is also used as the JSON
   export filename prefix.
 
-### Fixed
+### 🐛 Fixed
 
 - **Drawer-parts tests** (Sprint 144) — `drawer-parts.test.ts` updated to use
   `.filter()` + `.includes()` for flexible part-name matching after the engine
@@ -199,7 +187,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.5.0] — 2026-05-20
 
-### Added
+### ✨ Added
 
 - **Custom material inline edit** (Sprint 134) — the custom materials list now
   shows a ✎ pencil button on each row that opens an inline edit form. All
@@ -242,7 +230,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   of `ROADMAP.md` charts all releases from v2.7.0 through v3.5.0 with key
   feature highlights per version.
 
-### Fixed
+### 🐛 Fixed
 
 - **i18n key parity** — added `cost.editPrice`, `cost.resetPrice`, and
   `cost.editEbRate` to both `en.json` and `he.json` so the key-parity test
@@ -250,7 +238,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.4.0] — 2026-05-19
 
-### Added
+### ✨ Added
 
 - **OS dark-mode auto-detect** (Sprint 124) — `detectOsDarkMode()` reads
   `prefers-color-scheme` at startup so the app launches in the correct theme
@@ -284,7 +272,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   diagram in `docs/ARCHITECTURE.md` summarising major feature milestones from
   v3.0.0 through v3.4.0 across four release sections.
 
-### Changed
+### 🔄 Changed
 
 - **Shelf span deflection warning** (Sprint 126) — `computeShelfDeflection()`
   in `dimensions.ts` uses the Euler-Bernoulli beam formula
@@ -293,13 +281,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   exceeds the limit.
 - `package.json` version bumped 3.3.1 → 3.4.0.
 
-### Fixed
+### 🐛 Fixed
 
 - `ConfiguratorPanel.test.tsx` — `getByText(/height/i)` and `getByText(/reset/i)`
   updated to `getAllByText(...)` after new UI elements (Toe Kick Height label,
   Reset section legend) introduced ambiguous matches.
 
-### Tests
+### 🧪 Tests
 
 - 263 unit tests across 23 files, all passing.
 - New tests: `detectOsDarkMode`, `duplicateCabinet`, `computeShelfDeflection`,
@@ -307,7 +295,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.3.0] — 2026-05-18
 
-### Added
+### ✨ Added
 
 - **Grain direction constraint** (Sprint 115) — new `hasGrain: boolean` field on
   `Material`. Plywood-17/18/4 and OSB-18 are grain-sensitive; MDF, melamine,
@@ -351,7 +339,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`.browserslistrc`** — documents the modern-browser-only target
   (last 2 Chrome / Firefox / Safari / Edge, no IE) for compatibility tooling.
 
-### Changed
+### 🔄 Changed
 
 - **Mermaid 8.8.0 compatibility** — all 6 Mermaid diagram blocks across
   `README.md`, `docs/ARCHITECTURE.md`, and `.github/CONTRIBUTING.md` updated:
@@ -369,14 +357,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   YAML issue templates replacing plain Markdown forms.
 - `package.json` version bumped 3.2.0 → 3.3.0.
 
-### Tests
+### 🧪 Tests
 
 - 249 unit tests across 23 files, all passing.
 - New Playwright e2e test: PDF panel renders and generate button is enabled.
 
 ## [3.2.0] — 2026-05-17
 
-### Added
+### ✨ Added
 
 - **2D preview dimension polish** (Sprint 114) — dimension lines throughout the
   2D preview (front, open-front, side, top, back) and the isometric 3D view now
@@ -422,14 +410,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   equal spacing, clamped to internal height, sorted on blur) plus a
   "Reset to equal spacing" button.
 
-### Changed
+### 🔄 Changed
 
 - `package.json` version bumped 3.1.0 → 3.2.0.
 - Tests: 252 → 258 passing across 23 files.
 
 ## [3.1.0] — 2026-05-15
 
-### Added
+### ✨ Added
 
 - **Slider free-text numeric entry** (Sprint A1) — every dimension slider (width,
   height, depth, shelves, drawers, door reveal) now has a paired number input
@@ -460,21 +448,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Competitive landscape table** (Sprint 85) — ROADMAP.md now compares Cabinet
   Planner against nine cabinet/cut-list tools across sixteen capability axes.
 
-### Fixed
+### 🐛 Fixed
 
 - **Dark mode toggle had no effect** — Tailwind 4 defaults to `prefers-color-scheme`
   for the `dark:` variant; added `@custom-variant dark` in `index.css` and an
   `<html>.dark` class sync in `App.tsx` so the user-controlled toggle actually
   switches themes.
 
-### Tests
+### 🧪 Tests
 
 - 252 unit tests across 23 files (was 249); added bookshelf cut-optimizer
   regression test and two `hasBack` tests.
 
 ## [3.0.0] — 2026-04-20
 
-### Added
+### ✨ Added
 
 - **Cost estimator tests** — 11 tests covering sheet costs, grouping, edge banding, hardware pricing, waste calc, zero-sheet edge case, bilingual names
 - **BOM export tests** — 10 tests covering CSV headers, EN/HE values, hardware section, multi-cabinet, empty array, comma/quote escaping, unknown material fallback
@@ -485,7 +473,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Lighthouse CI config** (`lighthouserc.json`) — performance ≥ 0.8, accessibility ≥ 0.9, best-practices ≥ 0.8, SEO ≥ 0.8
 - `npm run i18n:coverage` and `npm run bundle:report` convenience scripts
 
-### Changed
+### 🔄 Changed
 
 - Coverage thresholds raised to 70/60/60/70 (statements/branches/functions/lines)
 - CI workflow: added bundle size report step (Node 22 only)
@@ -493,14 +481,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.9.0] — 2026-04-20
 
-### Added
+### ✨ Added
 
 - `tests/helpers.ts` — shared test fixtures (`cfg()`, `mockSheet`, `mockPart`)
 - `tests/assertions.ts` — reusable assertion helpers (`expectBilingualNames`, `expectSequentialSteps`, `expectBilingualSteps`)
 - `it.each` parameterized test for material bilingual names in `materials.test.ts`
 - npm cache in Pages workflow for faster deploys
 
-### Changed
+### 🔄 Changed
 
 - Consolidated duplicate `cfg()` helper from 3 test files into shared `tests/helpers.ts`
 - Consolidated duplicate `mockSheet`/`mockPart` from dxf + gcode tests into `tests/helpers.ts`
@@ -510,14 +498,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated ARCHITECTURE.md directory layout (added `download.ts`, test helpers, fixed `index.html` location)
 - Disabled MD022/MD024 in markdownlint config (false positives on CODEOWNERS and changelog)
 
-### Removed
+### 🗑️ Removed
 
 - `public/icons.svg` — unused social brand icon sprite (bluesky, discord, github, x)
 - Legacy Python entries from `.gitignore` (`__pycache__`, `.mypy_cache`, `*.pyc`)
 
 ## [2.8.0] — 2026-04-20
 
-### Added
+### ✨ Added
 
 - `eslint-plugin-jsx-a11y` — accessibility linting for all JSX components
 - `@vitest/coverage-v8` — test coverage reporting with thresholds (60% statements/lines)
@@ -529,14 +517,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Coverage step in CI workflow (Node 22 only)
 - Auto-extracted changelog notes in release workflow
 
-### Changed
+### 🔄 Changed
 
 - Service worker cache versioned to `cabinet-planner-v2.8.0` (was hardcoded `v1`)
 - PWA manifest SVG icon: `purpose` changed from `any maskable` to `any` (per spec)
 - ESLint config: added jsx-a11y recommended ruleset
 - Release workflow: body auto-generated from CHANGELOG.md section
 
-### Fixed
+### 🐛 Fixed
 
 - 11 accessibility lint errors across `CabinetSelector`, `Header`, `OnboardingOverlay`, `Sidebar`
   - Replaced `autoFocus` prop with `ref` callback focus
@@ -544,7 +532,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added `tabIndex`, keyboard listeners, and ARIA roles to modal overlays
   - Removed redundant `role="complementary"` on `<aside>` elements
 
-### Removed
+### 🗑️ Removed
 
 - `src/assets/hero.png`, `react.svg`, `vite.svg` — unused Vite scaffold assets
 - `.mypy_cache/` — leftover Python type-checker cache
@@ -552,7 +540,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.7.0] — 2026-04-20
 
-### Added
+### ✨ Added
 
 - `docs/ARCHITECTURE.md` — full architecture documentation with Mermaid diagrams
 - `CHANGELOG.md` — adopting Keep a Changelog format with SemVer
@@ -565,7 +553,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - SHA-256 checksums in release workflow artifacts
 - Format check step in CI and release workflows
 
-### Changed
+### 🔄 Changed
 
 - Enabled TypeScript strict mode (`strict: true` in `tsconfig.app.json`)
 - Updated `.vscode/settings.json` with formatter, ESLint, and TypeScript SDK config
@@ -580,14 +568,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `chunkSizeWarningLimit` set to 1600 for expected @react-pdf/renderer chunk
 - `.editorconfig` updated — added TS/TSX indent rules
 
-### Fixed
+### 🐛 Fixed
 
 - `useTouchGestures.ts` — removed unused `ref` parameter, fixed `React.Touch` type mismatch
 - `cabinet-store.ts` — replaced missing `pushHistory()` call with inline history logic
 - `bom-export.ts` — removed unused `_BomRow` interface
 - `CabinetPreview.tsx` — updated `useTouchGestures()` call site for new signature
 
-### Removed
+### 🗑️ Removed
 
 - `legacy/` directory — Python plan generators, ruff config, requirements.txt, reference files
 - `generate_md_svgs.py` — Python SVG generator script
@@ -596,7 +584,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.6.0]
 
-### Added
+### ✨ Added
 
 - G-code export for CNC routers
 - BOM CSV export for multi-cabinet projects
@@ -604,7 +592,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.5.0]
 
-### Added
+### ✨ Added
 
 - Desk and wardrobe furniture types
 - Custom Materials Editor (persisted in localStorage)

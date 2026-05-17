@@ -121,20 +121,20 @@ npm run build
 
 ## 🏗 Tech Stack
 
-| Layer         | Technology                        |
-| ------------- | --------------------------------- |
-| Framework     | React 19                          |
-| Language      | TypeScript 5.8 (strict mode)      |
-| Styling       | Tailwind CSS 4                    |
-| State         | Zustand 5                         |
-| PDF           | @react-pdf/renderer 4             |
-| i18n          | i18next 25 + react-i18next        |
-| Build         | Vite 6                            |
-| Unit tests    | Vitest 4 + @testing-library/react |
-| E2E tests     | Playwright                        |
-| Lint / format | ESLint 9 (flat config) + Prettier |
-| CI/CD         | GitHub Actions                    |
-| Deploy        | GitHub Pages                      |
+| Layer         | Technology                           |
+| ------------- | ------------------------------------ |
+| Framework     | ⚛️ React 19                          |
+| Language      | 🔷 TypeScript 5.8 (strict mode)      |
+| Styling       | 🎨 Tailwind CSS 4                    |
+| State         | 🐻 Zustand 5                         |
+| PDF           | 📄 @react-pdf/renderer 4             |
+| i18n          | 🌐 i18next 25 + react-i18next        |
+| Build         | ⚡ Vite 6                            |
+| Unit tests    | 🧪 Vitest 4 + @testing-library/react |
+| E2E tests     | 🎭 Playwright                        |
+| Lint / format | 🧹 ESLint 9 (flat config) + Prettier |
+| CI/CD         | 🤖 GitHub Actions                    |
+| Deploy        | 🚀 GitHub Pages                      |
 
 ---
 
@@ -265,7 +265,7 @@ Quick checklist before opening a PR:
 
 ---
 
-## � GitHub Topics & Discoverability
+## 🔍 GitHub Topics & Discoverability
 
 <!-- GitHub repository topics (set via Settings → Topics):
      woodworking  cabinet-design  cut-optimizer  furniture-planner  woodworking-tools

@@ -50,7 +50,7 @@ npm run check   # typecheck + lint + format:check + test
 
 ## 📐 Coding Standards
 
-### TypeScript
+### 🔷 TypeScript
 
 | Rule             | Detail                                         |
 | ---------------- | ---------------------------------------------- |
@@ -59,17 +59,17 @@ npm run check   # typecheck + lint + format:check + test
 | **Type imports** | `import type { Foo }` for type-only references |
 | **Unused vars**  | Enforced by ESLint — fix, don't suppress       |
 
-### Style
+### 🎨 Style
 
 - **Prettier** auto-formats on save (`.prettierrc` in repo root). Run `npm run format`.
 - **ESLint** enforces correctness (`npm run lint`). Zero warnings allowed — this is a hard CI gate.
 
-### i18n
+### 🌐 i18n
 
 All UI strings must exist in **both** `src/i18n/en.json` **and** `src/i18n/he.json`.  
 Run `npm run i18n:coverage` to verify parity.
 
-### Engine vs UI
+### ⚙️ Engine vs UI
 
 `src/engine/` is **pure TypeScript** — no React imports, no DOM. Keep it that way so it stays testable without jsdom.
 
