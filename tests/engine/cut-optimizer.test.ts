@@ -66,4 +66,25 @@ describe('optimizeCutSheets', () => {
     const result = optimizeCutSheets(parts);
     expect(result.totalSheets).toBeLessThanOrEqual(2);
   });
+
+  it('tall narrow bookshelf with many shelves packs efficiently (Sprint A3)', () => {
+    // The bug-report case: 2400h × 800w × 100d, 12 shelves. Old strip packer
+    // wasted a second plywood-17 sheet at <10% yield. MaxRects should fit
+    // all carcass parts on one sheet.
+    const bookshelf = {
+      ...DEFAULT_CONFIG,
+      furnitureType: 'bookshelf' as const,
+      width: 800,
+      height: 2400,
+      depth: 100,
+      shelfCount: 12,
+      doorStyle: 'none' as const,
+      doorCount: 1 as const,
+      drawerCount: 0,
+    };
+    const parts = generateParts(bookshelf);
+    const result = optimizeCutSheets(parts);
+    const panelSheets = result.sheets.filter((s) => s.material === bookshelf.carcassMaterial);
+    expect(panelSheets.length).toBeLessThanOrEqual(1);
+  });
 });

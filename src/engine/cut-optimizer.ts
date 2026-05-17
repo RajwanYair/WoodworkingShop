@@ -2,17 +2,25 @@ import type { Part, CutSheet, OptimizationResult } from './types';
 import { getMaterial, SAW_KERF } from './materials';
 
 /**
- * First-Fit Decreasing (FFD) 2-D shelf/strip bin-packing optimizer.
+ * 2-D Maximal Rectangles bin-packing optimizer (Best Short Side Fit).
  *
- * Groups parts by material+thickness, then packs each group into
- * standard sheets using a strip-based approach:
- *   1. Sort pieces by descending height (length)
- *   2. Place into horizontal strips across the sheet
- *   3. Within each strip, pack left-to-right with saw kerf gaps
- *   4. Open a new sheet when the current one is full
+ * Replaces the previous strip-based FFD packer (Sprint A3). The MaxRects
+ * algorithm keeps a list of maximal empty rectangles per sheet; for every
+ * piece it picks the placement minimising the *shorter* leftover side
+ * (BSSF), considering both orientations. Critically, before opening a new
+ * sheet it re-tries the piece against every free rectangle on every
+ * existing sheet — so leftover gaps next to tall vertical strips are
+ * actually used.
+ *
+ * Reference: Jukka Jylänki, "A Thousand Ways to Pack the Bin" (2010),
+ * section 4.3. The split step here uses the maximal-rectangles approach
+ * (split *every* free rect that intersects the placement, then merge
+ * away contained rectangles).
+ *
+ * Axes: y is along the sheet length (grain direction), x is across.
  */
 export function optimizeCutSheets(parts: Part[]): OptimizationResult {
-  // Group parts by material key (which implies thickness)
+  // Group parts by material key (which implies thickness).
   const groups = new Map<string, { rects: Rect[]; materialKey: string }>();
   for (const p of parts) {
     const group = groups.get(p.material) ?? { rects: [], materialKey: p.material };
@@ -33,25 +41,18 @@ export function optimizeCutSheets(parts: Part[]): OptimizationResult {
 
   for (const [, group] of groups) {
     const mat = getMaterial(group.materialKey);
-    const sheetW = mat.sheetWidth;
-    const sheetL = mat.sheetLength;
-    const sheetArea = sheetW * sheetL;
+    const packed = packMaxRects(group.rects, mat.sheetLength, mat.sheetWidth, SAW_KERF);
 
-    // FFD: sort descending by length (height in grain direction)
-    const rects = [...group.rects].sort((a, b) => b.length - a.length);
-
-    // Pack into sheets
-    const sheets = packFFD(rects, sheetL, sheetW, SAW_KERF);
-
-    for (const packedRects of sheets) {
-      const usedArea = packedRects.reduce((sum, r) => sum + r.length * r.width, 0);
+    for (const sheet of packed) {
+      const sheetArea = mat.sheetLength * mat.sheetWidth;
+      const usedArea = sheet.reduce((s, r) => s + r.length * r.width, 0);
       allSheets.push({
         sheetIndex: sheetIdx++,
         material: group.materialKey,
         thickness: mat.thickness,
-        sheetLength: sheetL,
-        sheetWidth: sheetW,
-        parts: packedRects.map((r) => ({
+        sheetLength: mat.sheetLength,
+        sheetWidth: mat.sheetWidth,
+        parts: sheet.map((r) => ({
           partId: r.partId,
           label: r.label,
           length: r.length,
@@ -59,7 +60,7 @@ export function optimizeCutSheets(parts: Part[]): OptimizationResult {
           x: r.x,
           y: r.y,
           edgeBanding: r.edgeBanding,
-          grainVertical: !r.rotated, // grain along Y when not rotated (length = Y in strip packing)
+          grainVertical: !r.rotated,
         })),
         yieldPercent: round2((usedArea / sheetArea) * 100),
       });
@@ -67,7 +68,10 @@ export function optimizeCutSheets(parts: Part[]): OptimizationResult {
   }
 
   const totalArea = allSheets.reduce((s, sh) => s + sh.sheetLength * sh.sheetWidth, 0);
-  const usedArea = allSheets.reduce((s, sh) => s + sh.parts.reduce((a, p) => a + p.length * p.width, 0), 0);
+  const usedArea = allSheets.reduce(
+    (s, sh) => s + sh.parts.reduce((a, p) => a + p.length * p.width, 0),
+    0,
+  );
 
   return {
     sheets: allSheets,
@@ -82,131 +86,211 @@ export function optimizeCutSheets(parts: Part[]): OptimizationResult {
 interface Rect {
   partId: string;
   label: string;
-  length: number;
-  width: number;
+  length: number; // along grain (y)
+  width: number; // across grain (x)
   edgeBanding?: string;
 }
 
 interface PlacedRect extends Rect {
   x: number;
   y: number;
-  rotated: boolean; // true if length/width were swapped during packing
+  rotated: boolean;
+}
+
+/** An axis-aligned empty rectangle on a sheet. */
+interface FreeRect {
+  x: number;
+  y: number;
+  w: number; // along x (sheetWidth axis)
+  h: number; // along y (sheetLength axis)
+}
+
+interface Sheet {
+  placed: PlacedRect[];
+  free: FreeRect[];
+}
+
+function packMaxRects(
+  rects: Rect[],
+  sheetLength: number,
+  sheetWidth: number,
+  kerf: number,
+): PlacedRect[][] {
+  if (rects.length === 0) return [];
+
+  // Sort by descending max-side; ties broken by descending area.
+  const queue = [...rects].sort((a, b) => {
+    const aMax = Math.max(a.length, a.width);
+    const bMax = Math.max(b.length, b.width);
+    if (bMax !== aMax) return bMax - aMax;
+    return b.length * b.width - a.length * a.width;
+  });
+
+  const sheets: Sheet[] = [];
+
+  for (const rect of queue) {
+    let best: {
+      sheetIdx: number;
+      freeIdx: number;
+      x: number;
+      y: number;
+      w: number;
+      h: number;
+      rotated: boolean;
+      score: number;
+    } | null = null;
+
+    for (let si = 0; si < sheets.length; si++) {
+      const candidate = findBestPlacement(sheets[si].free, rect, kerf);
+      if (candidate && (!best || candidate.score < best.score)) {
+        best = { sheetIdx: si, ...candidate };
+      }
+    }
+
+    if (!best) {
+      // Open a new sheet.
+      const sheet: Sheet = {
+        placed: [],
+        free: [{ x: 0, y: 0, w: sheetWidth, h: sheetLength }],
+      };
+      sheets.push(sheet);
+      const candidate = findBestPlacement(sheet.free, rect, kerf);
+      if (!candidate) {
+        // Piece doesn't even fit on an empty sheet — skip with a warning.
+        // (Engine validation should prevent this in normal flow.)
+        // eslint-disable-next-line no-console
+        console.warn(`Part ${rect.label} (${rect.length}×${rect.width}) larger than sheet`);
+        continue;
+      }
+      best = { sheetIdx: sheets.length - 1, ...candidate };
+    }
+
+    const sheet = sheets[best.sheetIdx];
+    const placed: PlacedRect = {
+      ...rect,
+      length: best.h,
+      width: best.w,
+      x: best.x,
+      y: best.y,
+      rotated: best.rotated,
+    };
+    sheet.placed.push(placed);
+    splitFreeRects(sheet.free, {
+      x: best.x,
+      y: best.y,
+      w: best.w + kerf,
+      h: best.h + kerf,
+    });
+    pruneContained(sheet.free);
+  }
+
+  return sheets.map((s) => s.placed);
 }
 
 /**
- * FFD strip-based packing.
- * Returns an array of sheets, each sheet being an array of placed rects.
+ * Best Short Side Fit across both orientations: score = min(leftoverX, leftoverY).
+ * Lower score wins.
  */
-function packFFD(rects: Rect[], sheetLength: number, sheetWidth: number, kerf: number): PlacedRect[][] {
-  if (rects.length === 0) return [];
+function findBestPlacement(
+  free: FreeRect[],
+  rect: Rect,
+  kerf: number,
+): { freeIdx: number; x: number; y: number; w: number; h: number; rotated: boolean; score: number } | null {
+  let best: ReturnType<typeof findBestPlacement> = null;
 
-  const sheets: PlacedRect[][] = [];
-  // Track remaining space per sheet as a list of strips (shelves)
-  const sheetStrips: Strip[][] = [];
-
-  for (const rect of rects) {
-    // Try both orientations — pick the one that fits better
+  for (let i = 0; i < free.length; i++) {
+    const f = free[i];
     const orientations = [
-      { l: rect.length, w: rect.width, rot: false },
-      { l: rect.width, w: rect.length, rot: true },
+      { w: rect.width, h: rect.length, rotated: false },
+      { w: rect.length, h: rect.width, rotated: true },
     ];
-
-    let placed = false;
-
-    for (let si = 0; si < sheets.length && !placed; si++) {
-      for (const o of orientations) {
-        const stripIdx = tryFitInStrip(sheetStrips[si], o.l, o.w, sheetLength, sheetWidth, kerf);
-        if (stripIdx >= 0) {
-          const strip = sheetStrips[si][stripIdx];
-          const pr: PlacedRect = {
-            ...rect,
-            length: o.l,
-            width: o.w,
-            x: strip.usedX,
-            y: strip.y,
-            rotated: o.rot,
-          };
-          sheets[si].push(pr);
-          strip.usedX += o.w + kerf;
-          strip.maxHeight = Math.max(strip.maxHeight, o.l);
-          placed = true;
-          break;
-        }
-      }
-
-      // Try opening a new strip on this sheet
-      if (!placed) {
-        for (const o of orientations) {
-          const newY = nextStripY(sheetStrips[si], kerf);
-          if (newY + o.l <= sheetLength && o.w <= sheetWidth) {
-            const strip: Strip = { y: newY, usedX: 0, maxHeight: o.l };
-            const pr: PlacedRect = {
-              ...rect,
-              length: o.l,
-              width: o.w,
-              x: 0,
-              y: newY,
-              rotated: o.rot,
-            };
-            strip.usedX = o.w + kerf;
-            sheetStrips[si].push(strip);
-            sheets[si].push(pr);
-            placed = true;
-            break;
-          }
-        }
+    for (const o of orientations) {
+      // Account for saw kerf around the placement (no kerf needed against
+      // the sheet edge, but easier and safe to always reserve it).
+      const needW = o.w;
+      const needH = o.h;
+      if (needW > f.w || needH > f.h) continue;
+      const leftoverX = f.w - needW;
+      const leftoverY = f.h - needH;
+      const score = Math.min(leftoverX, leftoverY) * 1e6 + Math.max(leftoverX, leftoverY);
+      if (!best || score < best.score) {
+        best = {
+          freeIdx: i,
+          x: f.x,
+          y: f.y,
+          w: o.w,
+          h: o.h,
+          rotated: o.rotated,
+          score,
+        };
       }
     }
+    void kerf; // kerf used downstream when splitting
+  }
+  return best;
+}
 
-    // Need a new sheet
-    if (!placed) {
-      const isNatural = rect.length <= sheetLength && rect.width <= sheetWidth;
-      const o = isNatural ? { l: rect.length, w: rect.width } : { l: rect.width, w: rect.length };
+/**
+ * Replace every free rectangle that overlaps `used` with up to four
+ * sub-rectangles representing the still-empty L-shape around it. This is
+ * the canonical Maximal Rectangles split step.
+ */
+function splitFreeRects(free: FreeRect[], used: FreeRect): void {
+  for (let i = free.length - 1; i >= 0; i--) {
+    const f = free[i];
+    if (!overlaps(f, used)) continue;
 
-      const strip: Strip = { y: 0, usedX: o.w + kerf, maxHeight: o.l };
-      const pr: PlacedRect = {
-        ...rect,
-        length: o.l,
-        width: o.w,
-        x: 0,
-        y: 0,
-        rotated: !isNatural,
-      };
-      sheets.push([pr]);
-      sheetStrips.push([strip]);
+    // Remove the intersected free rect; add up to four pieces back.
+    free.splice(i, 1);
+
+    // Left piece
+    if (used.x > f.x && used.x < f.x + f.w) {
+      free.push({ x: f.x, y: f.y, w: used.x - f.x, h: f.h });
+    }
+    // Right piece
+    if (used.x + used.w > f.x && used.x + used.w < f.x + f.w) {
+      free.push({ x: used.x + used.w, y: f.y, w: f.x + f.w - (used.x + used.w), h: f.h });
+    }
+    // Bottom piece
+    if (used.y > f.y && used.y < f.y + f.h) {
+      free.push({ x: f.x, y: f.y, w: f.w, h: used.y - f.y });
+    }
+    // Top piece
+    if (used.y + used.h > f.y && used.y + used.h < f.y + f.h) {
+      free.push({ x: f.x, y: used.y + used.h, w: f.w, h: f.y + f.h - (used.y + used.h) });
     }
   }
-
-  return sheets;
 }
 
-interface Strip {
-  y: number; // top-edge Y offset on the sheet
-  usedX: number; // rightmost used X
-  maxHeight: number;
+function overlaps(a: FreeRect, b: FreeRect): boolean {
+  return (
+    a.x < b.x + b.w &&
+    a.x + a.w > b.x &&
+    a.y < b.y + b.h &&
+    a.y + a.h > b.y
+  );
 }
 
-function tryFitInStrip(
-  strips: Strip[],
-  rectLength: number,
-  rectWidth: number,
-  _sheetLength: number,
-  sheetWidth: number,
-  _kerf: number,
-): number {
-  for (let i = 0; i < strips.length; i++) {
-    const s = strips[i];
-    if (rectLength <= s.maxHeight && s.usedX + rectWidth <= sheetWidth) {
-      return i;
+/** Drop any free rectangle wholly contained in another. */
+function pruneContained(free: FreeRect[]): void {
+  for (let i = free.length - 1; i >= 0; i--) {
+    for (let j = 0; j < free.length; j++) {
+      if (i === j) continue;
+      if (contains(free[j], free[i])) {
+        free.splice(i, 1);
+        break;
+      }
     }
   }
-  return -1;
 }
 
-function nextStripY(strips: Strip[], kerf: number): number {
-  if (strips.length === 0) return 0;
-  const last = strips[strips.length - 1];
-  return last.y + last.maxHeight + kerf;
+function contains(outer: FreeRect, inner: FreeRect): boolean {
+  return (
+    inner.x >= outer.x &&
+    inner.y >= outer.y &&
+    inner.x + inner.w <= outer.x + outer.w &&
+    inner.y + inner.h <= outer.y + outer.h
+  );
 }
 
 function round2(n: number): number {

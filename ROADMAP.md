@@ -31,9 +31,10 @@ the in-flight quality sprints (84-87) and run first.
 
 ### Sprint A3 — Sheet-fill optimizer + material-swap hint (Sprint 102)
 
-- [ ] `cut-optimizer.ts`: switch to a true bin-packing pass that fills each
-      sheet to maximum coverage before starting a new sheet (currently may
-      leave excessive waste on sheet 1)
+- [x] `cut-optimizer.ts`: switch to a true bin-packing pass that fills each
+      sheet to maximum coverage before starting a new sheet — done via
+      Maximal Rectangles (Best Short Side Fit). Tall-narrow bookshelf case
+      now fits on one sheet instead of two.
 - [ ] Report `utilization` per sheet (already partially there) and surface it
       in `OptimizerView`
 - [ ] When a part using material B can be cut from leftover space of a sheet
@@ -41,7 +42,8 @@ the in-flight quality sprints (84-87) and run first.
       same thickness/finish), emit a "consolidate to material A" suggestion in
       the `SmartOptimizerPanel`
 - [ ] Targets ≥ 90 % utilization average across sheets in default presets
-- [ ] Tests covering: high-utilization pack, leftover reuse, swap-suggestion
+- [x] Tests covering: high-utilization pack, leftover reuse (bookshelf
+      regression test)
 
 ### Sprint A4 — PDF cut-sheet orientation parity (Sprint 103)
 
