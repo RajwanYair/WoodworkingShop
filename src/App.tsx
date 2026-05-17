@@ -21,6 +21,15 @@ const PdfExportPanel = lazy(() =>
 function App() {
   const { activeTab, darkMode } = useCabinetStore();
 
+  // Sync dark mode to <html> so browser-level UI (scrollbar, form controls,
+  // color-scheme) follows. The Tailwind `dark:` variant is class-based via
+  // @custom-variant in index.css.
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.toggle('dark', darkMode);
+    root.style.colorScheme = darkMode ? 'dark' : 'light';
+  }, [darkMode]);
+
   // Keyboard shortcuts
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {

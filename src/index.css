@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+/* Class-based dark mode (Tailwind 4 ships with media-query by default). */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-wood-50: #fdf8f0;
   --color-wood-100: #f5ead6;
