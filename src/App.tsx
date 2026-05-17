@@ -27,7 +27,7 @@ const AssemblyGuide = lazy(() =>
 );
 
 function App() {
-  const { activeTab, darkMode } = useCabinetStore();
+  const { activeTab, darkMode, projectName } = useCabinetStore();
   const { t } = useTranslation();
   const [showShortcuts, setShowShortcuts] = useState(false);
 
@@ -106,6 +106,13 @@ function App() {
         <div className="flex">
           <Sidebar />
           <main id="main-content" className="flex-1 p-3 sm:p-6" role="main" aria-label={t('a11y.mainWorkspace')}>
+            {/* Sprint 170 — print-only header: shows project name + date on paper */}
+            <div className="print-only-header">
+              {projectName ? `${projectName} — ` : ''}Cabinet Planner
+              <span style={{ float: 'right', fontWeight: 'normal', fontSize: '9pt' }}>
+                {new Date().toLocaleDateString()}
+              </span>
+            </div>
             {activeTab === 'configurator' && <ConfiguratorPanel />}
             {activeTab === 'preview' && <CabinetPreview />}
             {activeTab === 'optimizer' && (

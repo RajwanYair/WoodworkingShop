@@ -28,6 +28,11 @@
   text-align: right;
 }
 
+/* Sprint 170 — hidden in screen, visible only during print */
+.print-only-header {
+  display: none;
+}
+
 /* Hide scrollbar for tab overflow */
 /* stylelint-disable-next-line property-no-unknown */
 .scrollbar-none {
@@ -195,5 +200,16 @@
   }
   [data-print-sheets] > *:last-child {
     break-after: auto;
+  }
+
+  /* Sprint 170 — print-only header showing project name and date */
+  .print-only-header {
+    display: block !important;
+    font-size: 11pt;
+    font-weight: bold;
+    color: black !important;
+    border-bottom: 1pt solid #999;
+    padding-bottom: 4pt;
+    margin-bottom: 8pt;
   }
 }
