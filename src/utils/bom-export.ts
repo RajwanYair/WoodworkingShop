@@ -1,5 +1,5 @@
 import type { Part, HardwareItem, Lang } from '../engine/types';
-import { getMaterial } from '../engine/materials';
+import { getMaterial, computePartWeightKg } from '../engine/materials';
 import { triggerDownload } from './download';
 
 /**
@@ -14,34 +14,46 @@ export function generateBomCsv(
   // ── Material area summary section ─────────────────────────────────────────
   // Group all parts across all cabinets by material key and total their area.
   const areaMm2ByMat = new Map<string, number>();
+  const weightKgByMat = new Map<string, number>(); // Sprint 162
   for (const cab of cabinets) {
     for (const p of cab.parts) {
       const area = p.qty * p.length * p.width;
       areaMm2ByMat.set(p.material, (areaMm2ByMat.get(p.material) ?? 0) + area);
+      // Sprint 162: accumulate weight
+      try {
+        const density = getMaterial(p.material).densityKgM3;
+        const wKg = computePartWeightKg(p.length, p.width, p.thickness, p.qty, density);
+        weightKgByMat.set(p.material, (weightKgByMat.get(p.material) ?? 0) + wKg);
+      } catch { /* unknown material — skip */ }
     }
   }
-  rows.push('Material Summary,,,,,,,,');
-  rows.push('Material,Total Area (m²),Board-Feet (nominal 1 inch),,,,,,');
+  rows.push('Material Summary,,,,,,,,,');
+  rows.push('Material,Total Area (m²),Board-Feet (nominal 1 inch),Weight (kg),,,,,,');
   for (const [matKey, areaMm2] of areaMm2ByMat) {
     const matName = safeGetMaterialName(matKey, lang);
     const areaM2 = (areaMm2 / 1e6).toFixed(3);
-    // 1 mm² = 1.076391e-5 ft²; board-feet = ft² (at nominal 1 inch thickness)
     const boardFeet = ((areaMm2 * 1.076391e-5) / 1).toFixed(2);
-    rows.push(csvRow([matName, areaM2, boardFeet, '', '', '', '', '', '']));
+    const weightKg = (weightKgByMat.get(matKey) ?? 0).toFixed(2);
+    rows.push(csvRow([matName, areaM2, boardFeet, weightKg, '', '', '', '', '', '']));
   }
   rows.push('');
 
   // Header
-  rows.push('Cabinet,Part ID,Part Name,Qty,Material,Thickness (mm),Length (mm),Width (mm),Edge Banding');
+  rows.push('Cabinet,Part ID,Part Name,Qty,Material,Thickness (mm),Length (mm),Width (mm),Edge Banding,Weight (kg)');
 
   // Parts section
   for (const cab of cabinets) {
     // Sprint 135 — emit cabinet notes as a comment row if present
     if (cab.notes && cab.notes.trim()) {
-      rows.push(csvRow([`# ${cab.name} notes: ${cab.notes.trim()}`, '', '', '', '', '', '', '', '']));
+      rows.push(csvRow([`# ${cab.name} notes: ${cab.notes.trim()}`, '', '', '', '', '', '', '', '', '']));
     }
     for (const p of cab.parts) {
       const matName = safeGetMaterialName(p.material, lang);
+      let partWeight = '';
+      try {
+        const density = getMaterial(p.material).densityKgM3;
+        partWeight = computePartWeightKg(p.length, p.width, p.thickness, p.qty, density).toFixed(3);
+      } catch { /* skip */ }
       rows.push(
         csvRow([
           cab.name,
@@ -53,6 +65,7 @@ export function generateBomCsv(
           String(p.length),
           String(p.width),
           p.edgeBanding[lang],
+          partWeight,
         ]),
       );
     }
@@ -60,10 +73,10 @@ export function generateBomCsv(
 
   // Blank separator + hardware section
   rows.push('');
-  rows.push('Cabinet,Hardware ID,Hardware Name,Qty,Unit,,,, ');
+  rows.push('Cabinet,Hardware ID,Hardware Name,Qty,Unit,,,,, ');
   for (const cab of cabinets) {
     for (const hw of cab.hardware) {
-      rows.push(csvRow([cab.name, hw.id, hw.name[lang], String(hw.qty), hw.unit[lang], '', '', '', '']));
+      rows.push(csvRow([cab.name, hw.id, hw.name[lang], String(hw.qty), hw.unit[lang], '', '', '', '', '']));
     }
   }
 
