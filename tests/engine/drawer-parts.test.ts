@@ -4,42 +4,44 @@ import { generateHardware } from '../../src/engine/hardware';
 import { cfg } from '../helpers';
 
 describe('drawer parts generation', () => {
+  // Parts are generated per-drawer with indexed names:
+  // "Drawer 1 Front", "Drawer 1 Box Side" (qty=2), "Drawer 1 Box End" (qty=2), "Drawer 1 Bottom"
   const drawerCfg = cfg({ drawerCount: 2 });
   const parts = generateParts(drawerCfg);
 
-  it('generates drawer front parts', () => {
-    const front = parts.find((p) => p.name.en === 'Drawer Front');
-    expect(front).toBeDefined();
-    expect(front!.qty).toBe(2);
+  it('generates drawer front parts (one per drawer, indexed)', () => {
+    const fronts = parts.filter((p) => p.name.en.includes('Front') && p.name.en.includes('Drawer'));
+    expect(fronts.length).toBe(2);
+    expect(fronts[0].qty).toBe(1);
   });
 
-  it('generates drawer box sides (2 per drawer)', () => {
-    const sides = parts.find((p) => p.name.en === 'Drawer Box Side');
-    expect(sides).toBeDefined();
-    expect(sides!.qty).toBe(4);
+  it('generates drawer box sides (2 per drawer, one part with qty=2)', () => {
+    const sides = parts.filter((p) => p.name.en.includes('Box Side'));
+    expect(sides.length).toBe(2); // one per drawer
+    expect(sides[0].qty).toBe(2); // 2 sides each
   });
 
-  it('generates drawer box ends (2 per drawer)', () => {
-    const ends = parts.find((p) => p.name.en === 'Drawer Box End');
-    expect(ends).toBeDefined();
-    expect(ends!.qty).toBe(4);
+  it('generates drawer box ends (2 per drawer, one part with qty=2)', () => {
+    const ends = parts.filter((p) => p.name.en.includes('Box End'));
+    expect(ends.length).toBe(2); // one per drawer
+    expect(ends[0].qty).toBe(2); // 2 ends each
   });
 
-  it('generates drawer bottom panels', () => {
-    const bottom = parts.find((p) => p.name.en === 'Drawer Bottom');
-    expect(bottom).toBeDefined();
-    expect(bottom!.qty).toBe(2);
+  it('generates drawer bottom panels (one per drawer)', () => {
+    const bottoms = parts.filter((p) => p.name.en.includes('Bottom') && p.name.en.includes('Drawer'));
+    expect(bottoms.length).toBe(2);
+    expect(bottoms[0].qty).toBe(1);
   });
 
   it('drawer front is overlay sized (wider + taller than box)', () => {
-    const front = parts.find((p) => p.name.en === 'Drawer Front')!;
-    const side = parts.find((p) => p.name.en === 'Drawer Box Side')!;
+    const front = parts.find((p) => p.name.en === 'Drawer 1 Front')!;
+    const side = parts.find((p) => p.name.en === 'Drawer 1 Box Side')!;
     // front.length = drawerHeight + 30, side.width = drawerHeight
     expect(front.length).toBe(side.width + 30);
   });
 
   it('drawer bottom uses back panel material', () => {
-    const bottom = parts.find((p) => p.name.en === 'Drawer Bottom')!;
+    const bottom = parts.find((p) => p.name.en === 'Drawer 1 Bottom')!;
     expect(bottom.material).toBe(drawerCfg.backPanelMaterial);
   });
 
@@ -61,12 +63,13 @@ describe('drawer parts generation', () => {
     expect(drawerPart).toBeUndefined();
   });
 
-  it('scales qty with drawerCount', () => {
+  it('scales count with drawerCount', () => {
     const fourDrawers = generateParts(cfg({ drawerCount: 4 }));
-    const front = fourDrawers.find((p) => p.name.en === 'Drawer Front')!;
-    expect(front.qty).toBe(4);
-    const sides = fourDrawers.find((p) => p.name.en === 'Drawer Box Side')!;
-    expect(sides.qty).toBe(8);
+    const fronts = fourDrawers.filter((p) => p.name.en.includes('Front') && p.name.en.includes('Drawer'));
+    expect(fronts.length).toBe(4);
+    const sides = fourDrawers.filter((p) => p.name.en.includes('Box Side'));
+    expect(sides.length).toBe(4); // 4 drawers × 1 part each (qty=2)
+    expect(sides.reduce((sum, s) => sum + s.qty, 0)).toBe(8); // total 8 sides
   });
 });
 
