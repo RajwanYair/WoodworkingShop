@@ -204,3 +204,39 @@ flowchart TD
   newSheet --> split
   split --> next
 ```
+
+## 🗓 Sprint Release Timeline
+
+Key milestones from v3.0.0 to the current release:
+
+```mermaid
+timeline
+  title Cabinet Planner — Major Feature Timeline
+  section v3.0.0 (Foundation)
+    Core engine  : Cabinet, bookshelf, desk, wardrobe part generation
+    Cut optimizer : MaxRects BSSF algorithm, yield % per sheet
+    SVG preview  : 6-view cabinet renderer, isometric 3D
+  section v3.1.0 (Export & Sharing)
+    DXF export   : AutoCAD R12 sheets for CNC cutting
+    G-code export : Router-ready toolpaths
+    BOM CSV      : Bill of materials with hardware
+    URL state    : Shareable configuration links
+  section v3.2.0 (UX & i18n)
+    Hebrew i18n  : Full RTL support
+    PWA          : Service worker, offline mode
+    PDF export   : @react-pdf/renderer full build plan
+    Smart Optimizer : 5 strategies — depth, width, height, co-nest, material swap
+  section v3.3.0 (Accessibility & Precision)
+    Colour-blind mode  : Accessible part palette
+    Grain direction    : Arrows on grain-locked materials
+    Shelf deflection   : L/360 sag warning for long spans
+    Assembly guide     : Paginated + show-all, video links
+  section v3.4.0 (Quality of Life)
+    OS dark-mode sync  : Auto-detects system preference
+    Cabinet duplication : One-click duplicate in project panel
+    Print assembly     : Browser print with all steps visible
+    BOM area summary   : Material total area + board-feet
+    Waste cost badge   : Per-sheet offcut cost estimate
+    Kick presets       : 0 / 75 / 100 / 150 mm quick-select
+    Grain legend       : Reminder row on grain-locked sheets
+```
