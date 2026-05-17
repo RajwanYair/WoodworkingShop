@@ -6,5 +6,11 @@
   "perFileKB": {
     "_default": 500,
     "pdf-renderer": 1600
+  },
+  "perAssetKB": {
+    "_default": 50,
+    "icon-512.png": 10,
+    "icon-192.png": 5,
+    "favicon.svg": 5
   }
 }

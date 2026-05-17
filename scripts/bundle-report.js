@@ -100,6 +100,29 @@ for (const f of groups.js) {
   }
 }
 
+// Sprint 106 — per-asset budgets for static files (icons, images, etc.).
+function assetBudgetKB(path) {
+  const name = basename(path).toLowerCase();
+  const perAsset = budget.perAssetKB ?? { _default: 50 };
+  if (Object.prototype.hasOwnProperty.call(perAsset, name)) return perAsset[name];
+  return perAsset._default;
+}
+
+const staticAssets = groups.other.filter((f) =>
+  /\.(png|jpg|jpeg|gif|webp|avif|svg|ico)$/i.test(f.path),
+);
+if (staticAssets.length > 0) {
+  console.log('\nPer-asset checks (images/icons):');
+  for (const f of staticAssets) {
+    const limitKB = assetBudgetKB(f.path);
+    const okSym = f.size / 1024 > limitKB ? '❌' : '✅';
+    console.log(`  ${okSym} ${fmtKB(f.size).padStart(10)} / ${limitKB} KB    ${f.path}`);
+    if (f.size / 1024 > limitKB) {
+      violations.push(`${f.path} ${fmtKB(f.size)} > ${limitKB} KB`);
+    }
+  }
+}
+
 if (violations.length > 0) {
   console.error(`\n❌ Bundle budget violations (${violations.length}):`);
   for (const v of violations) console.error(`  - ${v}`);
