@@ -29,11 +29,15 @@
 }
 
 /* Hide scrollbar for tab overflow */
+/* stylelint-disable-next-line property-no-unknown */
 .scrollbar-none {
+  /* Modern browsers (Chrome 121+, Firefox 64+, Edge 79+) */
   scrollbar-width: none;
+  /* IE / old Edge */
   -ms-overflow-style: none;
 }
 .scrollbar-none::-webkit-scrollbar {
+  /* WebKit / Chromium < 121, Safari */
   display: none;
 }
 
@@ -76,7 +80,11 @@
   /* Force light theme on paper even if user has dark mode on (Sprint 111) */
   html.dark,
   .dark {
+    /* Modern browsers */
     color-scheme: light !important;
+    /* Fallback for browsers without color-scheme support */
+    background-color: #fff !important;
+    color: #000 !important;
   }
   .dark *,
   html.dark * {

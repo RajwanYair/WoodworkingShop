@@ -12,7 +12,7 @@
 [![Vite](https://img.shields.io/badge/Vite-6-646cff?logo=vite&logoColor=white)](vite.config.ts)
 [![PWA](https://img.shields.io/badge/PWA-offline--ready-5a0fc8?logo=pwa&logoColor=white)](public/manifest.json)
 [![i18n](https://img.shields.io/badge/i18n-EN%20%2B%20HE-orange)](src/i18n)
-[![Tests](https://img.shields.io/badge/tests-258%2B-brightgreen?logo=vitest)](tests/)
+[![Tests](https://img.shields.io/badge/tests-249%2B-brightgreen?logo=vitest)](tests/)
 
 **[🚀 Live Demo](https://rajwanyair.github.io/WoodworkingShop/)** · **[📋 Changelog](CHANGELOG.md)** · **[🗺 Roadmap](ROADMAP.md)** · **[🏛 Architecture](docs/ARCHITECTURE.md)**
 

@@ -33,7 +33,7 @@ export function AssemblyGuide() {
                 ? 'bg-wood-500 text-white'
                 : 'bg-wood-50 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-700'
             }`}
-            aria-pressed={viewMode === 'paginated'}
+            aria-pressed={viewMode === 'paginated' ? 'true' : 'false'}
           >
             {t('assembly.viewStepByStep')}
           </button>
@@ -45,7 +45,7 @@ export function AssemblyGuide() {
                 ? 'bg-wood-500 text-white'
                 : 'bg-wood-50 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-700'
             }`}
-            aria-pressed={viewMode === 'all'}
+            aria-pressed={viewMode === 'all' ? 'true' : 'false'}
           >
             {t('assembly.viewAll')}
           </button>

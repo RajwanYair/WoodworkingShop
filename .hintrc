@@ -1,0 +1,33 @@
+{
+  "browserslist": [
+    "last 2 Chrome versions",
+    "last 2 Firefox versions",
+    "last 2 Safari versions",
+    "last 2 Edge versions",
+    "not dead",
+    "not ie 11",
+    "not ie_mob 11"
+  ],
+  "hints": {
+    "compat-api/css": [
+      "error",
+      {
+        "ignore": [
+          "scrollbar-width",
+          "print-color-adjust",
+          "color-scheme",
+          "-webkit-scrollbar",
+          "-ms-overflow-style"
+        ]
+      }
+    ],
+    "compat-api/html": [
+      "error",
+      {
+        "ignore": ["theme-color"]
+      }
+    ],
+    "no-inline-styles": "off",
+    "axe/aria": "off"
+  }
+}

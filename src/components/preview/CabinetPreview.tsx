@@ -194,7 +194,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
             <button
               key={v.id}
               role="tab"
-              aria-selected={activeView === v.id}
+              aria-selected={activeView === v.id ? 'true' : 'false'}
               onClick={() => setActiveView(v.id)}
               className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
                 activeView === v.id
@@ -395,7 +395,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
                       setDragIdx(i);
                       (e.target as Element).setPointerCapture(e.pointerId);
                     }}
-                    style={{ cursor: 'ns-resize' }}
+                    className="cursor-ns-resize"
                   >
                     <rect
                       x={T + 1}
@@ -686,8 +686,7 @@ function ViewBox({
       viewBox={`0 0 ${w} ${h}`}
       role="img"
       aria-label="Cabinet drawing"
-      className="w-full max-w-lg border border-wood-200 dark:border-wood-700 rounded bg-white dark:bg-wood-800 text-wood-600 dark:text-wood-200"
-      style={{ maxHeight: 500, touchAction: 'none' }}
+      className="w-full max-w-lg max-h-[500px] border border-wood-200 dark:border-wood-700 rounded bg-white dark:bg-wood-800 text-wood-600 dark:text-wood-200 touch-none"
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
     >
@@ -765,7 +764,7 @@ function PartRect({
       strokeWidth={hovered ? 2 : 0.5}
       strokeDasharray={dashed ? '3,2' : undefined}
       opacity={hovered ? 1 : 0.85}
-      style={{ cursor: 'pointer', transition: 'stroke 0.15s, stroke-width 0.15s, opacity 0.15s' }}
+      className="cursor-pointer [transition:stroke_0.15s,stroke-width_0.15s,opacity_0.15s]"
       onMouseEnter={(e) => {
         setHovered(true);
         onHover?.(e, label, dim, material);
@@ -836,7 +835,7 @@ function DimLine({
         fontSize={8}
         fill="currentColor"
         stroke="none"
-        style={isHorizontal ? undefined : { writingMode: 'vertical-rl' as const }}
+        className={isHorizontal ? undefined : '[writing-mode:vertical-rl]'}
       >
         {label}
       </text>
@@ -1005,8 +1004,7 @@ function IsometricView({
       viewBox={`0 0 ${vw} ${vh}`}
       role="img"
       aria-label="3D isometric cabinet drawing"
-      className="w-full max-w-lg border border-wood-200 dark:border-wood-700 rounded bg-white dark:bg-wood-800 text-wood-600 dark:text-wood-200"
-      style={{ maxHeight: 500 }}
+      className="w-full max-w-lg max-h-[500px] border border-wood-200 dark:border-wood-700 rounded bg-white dark:bg-wood-800 text-wood-600 dark:text-wood-200"
     >
       <g transform={`translate(${ox},${oy})`}>
         {/* Back panel */}

@@ -1,7 +1,37 @@
 {
   "name": "woodworkingshop",
   "version": "3.3.0",
-  "description": "Interactive cabinet planner — configure, preview, and download PDF build plans",
+  "description": "Browser-based woodworking cabinet planner — parametric design, MaxRects cut-sheet optimizer, PDF/DXF/G-code export, 6-view SVG preview, bilingual EN+HE, PWA offline",
+  "keywords": [
+    "woodworking",
+    "cabinet-design",
+    "cut-optimizer",
+    "furniture-planner",
+    "react",
+    "typescript",
+    "pwa",
+    "pdf-export",
+    "dxf-export",
+    "gcode",
+    "bin-packing",
+    "maxrects",
+    "tailwindcss",
+    "zustand",
+    "vite",
+    "bilingual",
+    "hebrew",
+    "rtl",
+    "woodworking-tools",
+    "cabinet-maker"
+  ],
+  "homepage": "https://rajwanyair.github.io/WoodworkingShop/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RajwanYair/WoodworkingShop.git"
+  },
+  "bugs": {
+    "url": "https://github.com/RajwanYair/WoodworkingShop/issues"
+  },
   "type": "module",
   "private": true,
   "scripts": {

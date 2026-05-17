@@ -8,8 +8,29 @@
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "eslint.useFlatConfig": true,
   "files.eol": "\n",
+
+  "files.exclude": {
+    "**/dist/**": true,
+    "**/coverage/**": true,
+    "**/playwright-report/**": true,
+    "**/test-results/**": true
+  },
   "search.exclude": {
     "**/dist": true,
-    "**/node_modules": true
+    "**/node_modules": true,
+    "**/coverage": true
+  },
+
+  "css.lint.unknownVendorSpecificProperties": "ignore",
+  "css.lint.compatibleVendorPrefixes": "ignore",
+
+  "html.validate.scripts": true,
+  "html.validate.styles": true,
+
+  "[tsx]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[ts]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }

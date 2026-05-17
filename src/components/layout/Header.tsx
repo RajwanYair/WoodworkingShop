@@ -75,7 +75,7 @@ export function Header() {
             key={tab}
             role="tab"
             onClick={() => setActiveTab(tab)}
-            aria-selected={activeTab === tab}
+            aria-selected={activeTab === tab ? 'true' : 'false'}
             aria-current={activeTab === tab ? 'page' : undefined}
             title={`${t(`tabs.${tab}`)} (Alt+${i + 1})`}
             className={`px-3 py-1.5 rounded text-sm font-medium whitespace-nowrap transition-colors ${

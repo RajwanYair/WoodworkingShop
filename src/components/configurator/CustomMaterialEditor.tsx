@@ -43,6 +43,7 @@ export function CustomMaterialEditor() {
               <span
                 className="inline-block w-4 h-4 rounded border border-wood-300 dark:border-wood-600"
                 style={{ backgroundColor: m.color }}
+                aria-hidden="true"
               />
               <span className="flex-1 text-wood-700 dark:text-wood-200">
                 {m.name[lang]} ({m.thickness} mm, {m.category})
@@ -63,7 +64,7 @@ export function CustomMaterialEditor() {
       <button
         onClick={() => setOpen(!open)}
         className="text-sm text-wood-500 dark:text-wood-400 hover:underline"
-        aria-expanded={open}
+        aria-expanded={open ? 'true' : 'false'}
       >
         {open ? '▾ ' : '▸ '}
         {t('config.addCustomMaterial')}
