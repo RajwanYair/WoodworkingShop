@@ -36,11 +36,14 @@ const EDGE_BANDING_PER_METER = 3;
 /**
  * Estimate the total cost of a cabinet project based on optimization results
  * and hardware/edge banding quantities.
+ *
+ * Sprint 139: accepts optional `priceOverrides` map of materialKey → price per sheet (₪).
  */
 export function estimateCost(
   optimization: OptimizationResult,
   hardware: { id: string; qty: number }[],
   edgeBandingTotal: number,
+  priceOverrides: Record<string, number> = {},
 ): CostBreakdown {
   // Group sheets by material
   const sheetMap = new Map<string, { qty: number; mat: ReturnType<typeof getMaterial> }>();
@@ -57,7 +60,8 @@ export function estimateCost(
   const sheetCosts: SheetCost[] = [];
   let totalMaterialCost = 0;
   for (const [, { qty, mat }] of sheetMap) {
-    const price = mat.pricePerSheet ?? 0;
+    // Sprint 139: use override price if present, otherwise mat.pricePerSheet
+    const price = priceOverrides[mat.key] ?? mat.pricePerSheet ?? 0;
     const subtotal = qty * price;
     sheetCosts.push({
       material: mat.key,

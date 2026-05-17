@@ -82,6 +82,7 @@ export interface CabinetState {
   colorBlindMode: boolean;
   units: UnitSystem;
   sawKerf: number; // mm, default 4 (Sprint 136)
+  materialPriceOverrides: Record<string, number>; // Sprint 139: materialKey → ₪ per sheet
 
   // Actions
   setConfig: (patch: Partial<CabinetConfig>) => void;
@@ -99,6 +100,7 @@ export interface CabinetState {
   renameCabinet: (index: number, name: string) => void;
   setNotes: (index: number, notes: string) => void;
   setSawKerf: (mm: number) => void;
+  setMaterialPriceOverride: (materialKey: string, price: number | null) => void;
   loadProject: (cabinets: CabinetEntry[]) => void;
 }
 
@@ -146,6 +148,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
     colorBlindMode: prefs.colorBlindMode ?? false,
     units: prefs.units ?? ('metric' as UnitSystem),
     sawKerf: 4, // mm — Sprint 136
+    materialPriceOverrides: {}, // Sprint 139
 
     setConfig: (patch) =>
       set((state) => {
@@ -323,6 +326,16 @@ export const useCabinetStore = create<CabinetState>((set) => {
         sawKerf: Math.max(0, Math.min(8, mm)),
         ...deriveProject(state.cabinets, state.activeCabinetIndex, Math.max(0, Math.min(8, mm))),
       })),
+    setMaterialPriceOverride: (materialKey, price) =>
+      set((state) => {
+        const overrides = { ...state.materialPriceOverrides };
+        if (price === null) {
+          delete overrides[materialKey];
+        } else {
+          overrides[materialKey] = price;
+        }
+        return { materialPriceOverrides: overrides };
+      }),
     toggleDarkMode: () =>
       set((s) => {
         const darkMode = !s.darkMode;

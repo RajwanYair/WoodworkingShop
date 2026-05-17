@@ -4,8 +4,16 @@ import { useCabinetStore } from '../../store/cabinet-store';
 
 export function CabinetSelector() {
   const { t } = useTranslation();
-  const { cabinets, activeCabinetIndex, addCabinet, removeCabinet, duplicateCabinet, setActiveCabinet, renameCabinet, setNotes } =
-    useCabinetStore();
+  const {
+    cabinets,
+    activeCabinetIndex,
+    addCabinet,
+    removeCabinet,
+    duplicateCabinet,
+    setActiveCabinet,
+    renameCabinet,
+    setNotes,
+  } = useCabinetStore();
   const [editingIdx, setEditingIdx] = useState<number | null>(null);
   const [editName, setEditName] = useState('');
   const [notesOpen, setNotesOpen] = useState(false);

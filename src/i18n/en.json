@@ -185,7 +185,9 @@
     "waste": "Material waste",
     "perUnit": "Cost per unit",
     "total": "Estimated Total",
-    "disclaimer": "Prices are approximate and may vary by supplier."
+    "disclaimer": "Prices are approximate and may vary by supplier.",
+    "editPrice": "Click to override price per sheet",
+    "resetPrice": "Reset to default price"
   },
   "assembly": {
     "title": "Assembly Guide",

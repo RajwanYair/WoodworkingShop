@@ -1,16 +1,23 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { estimateCost } from '../../engine/cost-estimator';
+import { getMaterial } from '../../engine/materials';
 import type { Lang } from '../../engine/types';
 
 const BAR_COLORS = ['#8B6F47', '#A0845C', '#C49A6C', '#6B8E23', '#4682B4'];
 
 export function CostEstimatePanel() {
   const { t, i18n } = useTranslation();
-  const { optimization, hardware, edgeBandingTotal, cabinets } = useCabinetStore();
+  const { optimization, hardware, edgeBandingTotal, cabinets, materialPriceOverrides, setMaterialPriceOverride } =
+    useCabinetStore();
   const lang = i18n.language as Lang;
 
-  const cost = estimateCost(optimization, hardware, edgeBandingTotal);
+  // Sprint 139 — which material row is being price-edited
+  const [editingPrice, setEditingPrice] = useState<string | null>(null);
+  const [priceInput, setPriceInput] = useState('');
+
+  const cost = estimateCost(optimization, hardware, edgeBandingTotal, materialPriceOverrides);
   const totalNonZero = cost.totalCost > 0;
 
   // Build segments for bar visualization
@@ -55,14 +62,57 @@ export function CostEstimatePanel() {
 
       {/* Sheet costs */}
       <div className="space-y-1">
-        {cost.sheetCosts.map((sc, i) => (
-          <div key={i} className="flex justify-between text-xs">
-            <span className="text-wood-600 dark:text-wood-300">
-              {sc.materialName[lang]} ×{sc.qty}
-            </span>
-            <span className="font-medium text-wood-700 dark:text-wood-200">₪{sc.subtotal}</span>
-          </div>
-        ))}
+        {cost.sheetCosts.map((sc, i) => {
+          const isEditing = editingPrice === sc.material;
+          const hasOverride = sc.material in materialPriceOverrides;
+          const defaultPrice = getMaterial(sc.material).pricePerSheet ?? 0;
+          return (
+            <div key={i} className="flex justify-between items-center text-xs gap-2">
+              <span className="text-wood-600 dark:text-wood-300 truncate flex-1">
+                {sc.materialName[lang]} ×{sc.qty}
+              </span>
+              {isEditing ? (
+                <div className="flex items-center gap-1 shrink-0">
+                  <span className="text-wood-400">₪</span>
+                  <input
+                    type="number"
+                    min={0}
+                    step={5}
+                    value={priceInput}
+                    onChange={(e) => setPriceInput(e.target.value)}
+                    onBlur={() => {
+                      const val = Number(priceInput);
+                      setMaterialPriceOverride(sc.material, isNaN(val) || val <= 0 ? null : val);
+                      setEditingPrice(null);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
+                      if (e.key === 'Escape') setEditingPrice(null);
+                    }}
+                    className="w-16 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-1 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-wood-400"
+                    ref={(el) => el?.focus()}
+                    aria-label={`Price per sheet for ${sc.materialName.en}`}
+                  />
+                  {hasOverride && (
+                    <button
+                      onClick={() => { setMaterialPriceOverride(sc.material, null); setEditingPrice(null); }}
+                      className="text-wood-400 hover:text-red-500 text-[10px]"
+                      title={t('cost.resetPrice')}
+                    >↺</button>
+                  )}
+                </div>
+              ) : (
+                <button
+                  onClick={() => { setEditingPrice(sc.material); setPriceInput(String(sc.pricePerSheet || defaultPrice)); }}
+                  className={`font-medium shrink-0 hover:underline ${hasOverride ? 'text-amber-600 dark:text-amber-400' : 'text-wood-700 dark:text-wood-200'}`}
+                  title={t('cost.editPrice')}
+                >
+                  ₪{sc.subtotal} {hasOverride && <span className="text-[10px]">✎</span>}
+                </button>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {/* Other costs */}

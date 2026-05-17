@@ -205,4 +205,4 @@ describe('cabinet-store', () => {
       window.matchMedia = orig;
     });
   });
-});
+};);
