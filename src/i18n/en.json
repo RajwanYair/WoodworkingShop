@@ -100,6 +100,7 @@
     "sheets": "Sheets Required",
     "yield": "Material Yield",
     "waste": "Total Waste",
+    "totalParts": "Total Parts",
     "sheet": "Sheet",
     "smart": "Smart Optimizer",
     "smartDesc": "Find dimension tweaks that reduce sheets or improve yield",
