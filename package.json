@@ -21,6 +21,7 @@
     "i18n:coverage": "node scripts/i18n-coverage.js",
     "bundle:report": "node scripts/bundle-report.js",
     "bundle:check": "node scripts/bundle-report.js",
+    "lighthouse": "npx --yes @lhci/cli@0.14.x autorun",
     "lint:md": "markdownlint-cli2 \"*.md\" \"docs/**/*.md\" \".github/**/*.md\"",
     "test:e2e": "playwright test",
     "test:e2e:install": "playwright install --with-deps chromium firefox"

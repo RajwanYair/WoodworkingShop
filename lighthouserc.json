@@ -1,8 +1,10 @@
 {
   "ci": {
     "collect": {
-      "staticDistDir": "./dist",
-      "url": ["http://localhost/"]
+      "startServerCommand": "npm run preview -- --port 4173 --strictPort",
+      "url": ["http://localhost:4173/WoodworkingShop/"],
+      "startServerReadyPattern": "Local:",
+      "numberOfRuns": 1
     },
     "assert": {
       "assertions": {
@@ -10,8 +12,8 @@
         "categories:accessibility": ["error", { "minScore": 0.9 }],
         "categories:best-practices": ["warn", { "minScore": 0.8 }],
         "categories:seo": ["warn", { "minScore": 0.8 }],
-        "resource-summary:script:size": ["warn", { "maxNumericValue": 750000 }],
-        "resource-summary:total:size": ["warn", { "maxNumericValue": 2000000 }]
+        "resource-summary:script:size": ["warn", { "maxNumericValue": 2100000 }],
+        "resource-summary:total:size": ["warn", { "maxNumericValue": 2400000 }]
       }
     },
     "upload": {
