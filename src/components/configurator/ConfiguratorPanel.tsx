@@ -8,6 +8,7 @@ import { ShelfConfig } from './ShelfConfig';
 import { DoorConfig } from './DoorConfig';
 import { DrawerConfig } from './DrawerConfig';
 import { CustomMaterialEditor } from './CustomMaterialEditor';
+import { PresetsPanel } from './PresetsPanel';
 import { SaveLoadPanel } from './SaveLoadPanel';
 import type { FurnitureType } from '../../engine/types';
 
@@ -31,6 +32,7 @@ export function ConfiguratorPanel() {
     <div className="max-w-2xl mx-auto space-y-8">
       <CabinetSelector />
       <SaveLoadPanel />
+      <PresetsPanel />
 
       {/* Furniture type selector */}
       <fieldset className="space-y-2">
