@@ -3,6 +3,7 @@ import { useState, useEffect, useId } from 'react';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { CONSTRAINTS, HARD_LIMITS } from '../../engine/materials';
 import { formatDim, sliderStep } from '../../utils/units';
+import { SliderInput } from './SliderInput';
 
 type DimKey = 'width' | 'height' | 'depth';
 
@@ -83,6 +84,21 @@ export function DimensionSliders() {
           }}
         />
       ))}
+
+      {/* Toe kick height — only relevant for floor-standing cabinets/wardrobes */}
+      {(config.furnitureType === 'cabinet' || config.furnitureType === 'wardrobe') && (
+        <SliderInput
+          label={t('config.kickHeight')}
+          value={config.kickHeight ?? 0}
+          onChange={(v) => setConfig({ kickHeight: v })}
+          softMin={0}
+          softMax={200}
+          hardMin={0}
+          hardMax={500}
+          step={5}
+          unit="mm"
+        />
+      )}
     </fieldset>
   );
 }

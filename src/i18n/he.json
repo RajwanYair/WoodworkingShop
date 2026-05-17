@@ -21,6 +21,7 @@
     "depth": "עומק",
     "hasBack": "כולל לוח אחורי",
     "hasBackDesc": "בטל לארונות פתוחים או מדפים",
+    "kickHeight": "גובה כיכר רגל (0 = ללא כיכר)",
     "outOfRange": "הערך חייב להיות בין {{min}} ל-{{max}} {{unit}}",
     "outsideRecommended": "מחוץ לטווח המומלץ ({{rmin}}–{{rmax}} {{unit}})",
     "unit": "מ\"מ",

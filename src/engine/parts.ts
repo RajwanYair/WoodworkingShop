@@ -238,6 +238,33 @@ export function generateParts(cfg: CabinetConfig): Part[] {
     });
   }
 
+  // ── Toe kick / plinth ──
+  if ((cfg.kickHeight ?? 0) > 0 && !isDesk && !isBookshelf) {
+    const kh = cfg.kickHeight;
+    // Front kick board
+    parts.push({
+      id: id(),
+      qty: 1,
+      name: { en: 'Toe Kick (Front)', he: 'לוח בסיס קדמי' },
+      material: cfg.carcassMaterial,
+      thickness: t,
+      length: cfg.width,
+      width: kh,
+      edgeBanding: edgeLabel(eb !== 'none' ? 'front' : 'none'),
+    });
+    // Side kick boards
+    parts.push({
+      id: id(),
+      qty: 2,
+      name: { en: 'Toe Kick (Side)', he: 'לוח בסיס צדדי' },
+      material: cfg.carcassMaterial,
+      thickness: t,
+      length: cfg.depth - t,
+      width: kh,
+      edgeBanding: edgeLabel('none'),
+    });
+  }
+
   // ── Wardrobe hanging rail ──
   if (isWardrobe) {
     parts.push({

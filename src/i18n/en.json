@@ -21,6 +21,7 @@
     "depth": "Depth",
     "hasBack": "Include back panel",
     "hasBackDesc": "Uncheck for open-back cabinets or shelving",
+    "kickHeight": "Toe Kick Height (0 = no kick)",
     "outOfRange": "Value must be between {{min}} and {{max}} {{unit}}",
     "outsideRecommended": "Outside recommended range ({{rmin}}–{{rmax}} {{unit}})",
     "unit": "mm",

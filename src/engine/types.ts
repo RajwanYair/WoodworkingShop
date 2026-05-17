@@ -49,6 +49,10 @@ export interface CabinetConfig {
   // Drawers
   drawerCount: number; // 0–4 drawers at bottom of cabinet
 
+  // Toe kick / plinth
+  /** Plinth/toe-kick height in mm. 0 = no kick (flush-to-floor or wall-mounted). */
+  kickHeight: number;
+
   // Hardware
   handleStyle: HandleStyle;
 

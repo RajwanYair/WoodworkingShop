@@ -51,6 +51,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
   const thick = getMaterial(config.carcassMaterial).thickness;
   const bt = getMaterial(config.backPanelMaterial).thickness;
   const color = getMaterial(config.carcassMaterial).color;
+  const kickH = (config.kickHeight ?? 0) * S; // SVG-px height of toe kick
   const shelfPositions =
     config.shelfSpacing === 'custom' && config.customShelfPositions.length > 0
       ? config.customShelfPositions
@@ -264,6 +265,19 @@ export const CabinetPreview = memo(function CabinetPreview() {
                 {...tp}
               />
               {config.doorStyle !== 'none' && renderDoors(config, d, S, color, carcassMatName, tp)}
+              {/* Toe kick strip */}
+              {kickH > 0 && (
+                <rect
+                  x={T * 0.6}
+                  y={H - kickH}
+                  width={W - T * 0.6 * 2}
+                  height={kickH}
+                  fill={color}
+                  opacity={0.55}
+                  stroke="#666"
+                  strokeWidth={0.5}
+                />
+              )}
               {showDims && (
                 <>
                   <DimLine x1={0} y1={-8} x2={W} y2={-8} label={fd(config.width)} pos="above" />

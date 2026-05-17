@@ -274,5 +274,19 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     videoKeyword: 'wall mount cabinet L bracket',
   });
 
+  if ((cfg.kickHeight ?? 0) > 0 && !isDesk) {
+    steps.push({
+      stepNumber: n++,
+      title: { en: 'Attach Toe Kick', he: 'חיבור לוח בסיס (כיכר רגל)' },
+      description: {
+        en: `Cut the front toe kick board (${cfg.kickHeight} mm tall) to the full cabinet width and the two side kick boards to depth − thickness. Clip or screw them to the underside of the bottom panel. The kick should be set back 50 mm from the front face.`,
+        he: `חתוך את לוח הבסיס הקדמי (${cfg.kickHeight} מ"מ) לרוחב מלא של הארון ואת שני לוחות הצד לעומק פחות עובי. חבר עם קליפסים או ברגים לתחתית לוח הבסיס. הכיכר צריכה להיות מוזחת 50 מ"מ מהחזית.`,
+      },
+      parts: [],
+      icon: '🦶',
+      videoKeyword: 'toe kick plinth attach kitchen cabinet',
+    });
+  }
+
   return steps;
 }
