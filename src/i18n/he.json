@@ -124,7 +124,8 @@
     "exportGcode": "ייצוא G-code לCNC",
     "exportBom": "ייצוא רשימת חומרים CSV",
     "sheetWasteCost": "עלות פסולת: ₪{{cost}}",
-    "sheetWasteCostTitle": "עלות חומר מוערכת שהולכת לאיבוד בגזירות"
+    "sheetWasteCostTitle": "עלות חומר מוערכת שהולכת לאיבוד בגזירות",
+    "grainLegend": "כיוון ערוע חייב לרוץ אנכית (חלקים לא סובבו 90°)"
   },
   "preview": {
     "title": "תצוגה מקדימה",

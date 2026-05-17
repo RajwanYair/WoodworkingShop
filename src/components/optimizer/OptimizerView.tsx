@@ -281,6 +281,14 @@ function SheetCard({
           </span>
         ))}
       </div>
+
+      {/* Sprint 131 — Grain direction legend: only shown for grain-locked materials */}
+      {mat.hasGrain && (
+        <p className="mt-1.5 text-[10px] text-amber-700 dark:text-amber-300 flex items-center gap-1">
+          <span aria-hidden="true">↕</span>
+          {t('optimizer.grainLegend')}
+        </p>
+      )}
     </div>
   );
 }
