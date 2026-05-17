@@ -125,9 +125,42 @@ describe('cabinet-store', () => {
   it('combines parts from all cabinets', () => {
     useCabinetStore.getState().addCabinet();
     const { allParts } = useCabinetStore.getState();
-    // With 2 cabinets, should have prefixed part IDs
     expect(allParts.some((p) => p.id.startsWith('C1-'))).toBe(true);
     expect(allParts.some((p) => p.id.startsWith('C2-'))).toBe(true);
+  });
+
+  // Sprint 125 — cabinet duplication
+  describe('duplicateCabinet', () => {
+    it('inserts a copy immediately after the source', () => {
+      useCabinetStore.getState().duplicateCabinet(0);
+      const { cabinets, activeCabinetIndex } = useCabinetStore.getState();
+      expect(cabinets).toHaveLength(2);
+      expect(activeCabinetIndex).toBe(1);
+      expect(cabinets[1].name).toBe('Cabinet 1 (copy)');
+    });
+
+    it('copies the source cabinet config exactly', () => {
+      useCabinetStore.getState().setConfig({ width: 999 });
+      useCabinetStore.getState().duplicateCabinet(0);
+      const { cabinets } = useCabinetStore.getState();
+      expect(cabinets[1].config.width).toBe(999);
+    });
+
+    it('generates incrementing copy names', () => {
+      useCabinetStore.getState().duplicateCabinet(0); // Cabinet 1 (copy)
+      useCabinetStore.getState().setActiveCabinet(0);
+      useCabinetStore.getState().duplicateCabinet(0); // Cabinet 1 (copy 2)
+      const { cabinets } = useCabinetStore.getState();
+      const names = cabinets.map((c) => c.name);
+      expect(names).toContain('Cabinet 1 (copy)');
+      expect(names).toContain('Cabinet 1 (copy 2)');
+    });
+
+    it('is a no-op for out-of-range index', () => {
+      const before = useCabinetStore.getState().cabinets.length;
+      useCabinetStore.getState().duplicateCabinet(99);
+      expect(useCabinetStore.getState().cabinets).toHaveLength(before);
+    });
   });
 
   // Sprint 124 — OS dark-mode detection

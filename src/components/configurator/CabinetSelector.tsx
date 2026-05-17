@@ -4,7 +4,7 @@ import { useCabinetStore } from '../../store/cabinet-store';
 
 export function CabinetSelector() {
   const { t } = useTranslation();
-  const { cabinets, activeCabinetIndex, addCabinet, removeCabinet, setActiveCabinet, renameCabinet } =
+  const { cabinets, activeCabinetIndex, addCabinet, removeCabinet, duplicateCabinet, setActiveCabinet, renameCabinet } =
     useCabinetStore();
   const [editingIdx, setEditingIdx] = useState<number | null>(null);
   const [editName, setEditName] = useState('');
@@ -71,6 +71,15 @@ export function CabinetSelector() {
                 ×
               </button>
             )}
+            {/* Sprint 125 — duplicate button */}
+            <button
+              onClick={() => duplicateCabinet(i)}
+              className="text-wood-400 hover:text-wood-600 dark:hover:text-wood-200 text-xs leading-none"
+              title={t('project.duplicate')}
+              aria-label={`Duplicate ${cab.name}`}
+            >
+              ⧉
+            </button>
           </div>
         ))}
       </div>

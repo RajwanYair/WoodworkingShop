@@ -159,6 +159,7 @@
     "title": "Project",
     "add": "Add Cabinet",
     "remove": "Remove",
+    "duplicate": "Duplicate cabinet",
     "hint": "Multiple cabinets share optimized cut sheets. Double-click to rename."
   },
   "cost": {

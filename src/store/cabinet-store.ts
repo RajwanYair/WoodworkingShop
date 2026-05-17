@@ -92,6 +92,7 @@ export interface CabinetState {
   redo: () => void;
   addCabinet: () => void;
   removeCabinet: (index: number) => void;
+  duplicateCabinet: (index: number) => void;
   setActiveCabinet: (index: number) => void;
   renameCabinet: (index: number, name: string) => void;
   loadProject: (cabinets: CabinetEntry[]) => void;
@@ -240,6 +241,30 @@ export const useCabinetStore = create<CabinetState>((set) => {
           cabinets,
           activeCabinetIndex: idx,
           ...deriveProject(cabinets, idx),
+          _past: past,
+          _future: [],
+          canUndo: true,
+          canRedo: false,
+        };
+      }),
+
+    // Sprint 125 — duplicate an existing cabinet with an incremented name
+    duplicateCabinet: (index) =>
+      set((state) => {
+        if (index < 0 || index >= state.cabinets.length) return state;
+        const src = state.cabinets[index];
+        const baseName = src.name.replace(/\s*\(copy\s*\d*\)\s*$/, '');
+        const copies = state.cabinets.filter((c) => c.name.startsWith(baseName + ' (copy')).length;
+        const newName = copies === 0 ? `${baseName} (copy)` : `${baseName} (copy ${copies + 1})`;
+        const newEntry: CabinetEntry = { name: newName, config: { ...src.config } };
+        const cabinets = [...state.cabinets.slice(0, index + 1), newEntry, ...state.cabinets.slice(index + 1)];
+        const newIndex = index + 1;
+        const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
+        pushConfigToUrl(cabinets[newIndex].config);
+        return {
+          cabinets,
+          activeCabinetIndex: newIndex,
+          ...deriveProject(cabinets, newIndex),
           _past: past,
           _future: [],
           canUndo: true,
