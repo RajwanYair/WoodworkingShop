@@ -1,12 +1,61 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { getMaterial } from '../../engine/materials';
-import type { Lang } from '../../engine/types';
+import type { Lang, Part } from '../../engine/types';
+
+type SortKey = 'id' | 'name' | 'qty' | 'material' | 'length' | 'width' | 'thickness';
+type SortDir = 'asc' | 'desc';
+
+function sortParts(parts: Part[], key: SortKey, dir: SortDir, lang: Lang): Part[] {
+  return [...parts].sort((a, b) => {
+    let cmp = 0;
+    switch (key) {
+      case 'id': cmp = a.id.localeCompare(b.id); break;
+      case 'name': cmp = a.name[lang].localeCompare(b.name[lang]); break;
+      case 'qty': cmp = a.qty - b.qty; break;
+      case 'material': cmp = getMaterial(a.material).name[lang].localeCompare(getMaterial(b.material).name[lang]); break;
+      case 'length': cmp = a.length - b.length; break;
+      case 'width': cmp = a.width - b.width; break;
+      case 'thickness': cmp = a.thickness - b.thickness; break;
+    }
+    return dir === 'asc' ? cmp : -cmp;
+  });
+}
 
 export function PartsTable() {
   const { t, i18n } = useTranslation();
   const { parts } = useCabinetStore();
   const lang = i18n.language as Lang;
+  /** Sprint 171 — sortable column headers */
+  const [sortKey, setSortKey] = useState<SortKey>('id');
+  const [sortDir, setSortDir] = useState<SortDir>('asc');
+
+  const handleSort = (key: SortKey) => {
+    if (key === sortKey) {
+      setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortKey(key);
+      setSortDir('asc');
+    }
+  };
+  const arrow = (key: SortKey) =>
+    sortKey === key ? (sortDir === 'asc' ? ' ▲' : ' ▼') : '';
+
+  const sorted = sortParts(parts, sortKey, sortDir, lang);
+
+  const thBtn = (key: SortKey, label: string, align = 'text-start') => (
+    <th className={`px-2 py-1 ${align}`}>
+      <button
+        type="button"
+        onClick={() => handleSort(key)}
+        className="font-semibold hover:text-wood-500 dark:hover:text-wood-100 transition-colors"
+        aria-sort={sortKey === key ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
+      >
+        {label}{arrow(key)}
+      </button>
+    </th>
+  );
 
   return (
     <div className="overflow-x-auto">
@@ -16,18 +65,18 @@ export function PartsTable() {
       <table className="w-full text-sm border-collapse">
         <thead>
           <tr className="bg-wood-100 dark:bg-wood-800 text-wood-700 dark:text-wood-300">
-            <th className="px-2 py-1 text-start">{t('parts.id')}</th>
-            <th className="px-2 py-1 text-start">{t('parts.name')}</th>
-            <th className="px-2 py-1 text-end">{t('parts.qty')}</th>
-            <th className="px-2 py-1 text-start">{t('parts.material')}</th>
-            <th className="px-2 py-1 text-end">{t('parts.length')}</th>
-            <th className="px-2 py-1 text-end">{t('parts.width')}</th>
-            <th className="px-2 py-1 text-end">{t('parts.thickness')}</th>
+            {thBtn('id', t('parts.id'))}
+            {thBtn('name', t('parts.name'))}
+            {thBtn('qty', t('parts.qty'), 'text-end')}
+            {thBtn('material', t('parts.material'))}
+            {thBtn('length', t('parts.length'), 'text-end')}
+            {thBtn('width', t('parts.width'), 'text-end')}
+            {thBtn('thickness', t('parts.thickness'), 'text-end')}
             <th className="px-2 py-1 text-start">{t('parts.edge')}</th>
           </tr>
         </thead>
         <tbody>
-          {parts.map((p) => {
+          {sorted.map((p) => {
             const mat = getMaterial(p.material);
             return (
               <tr key={p.id} className="border-b border-wood-100 dark:border-wood-800">
