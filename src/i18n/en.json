@@ -227,7 +227,8 @@
     "watchVideo": "Watch tutorial on YouTube",
     "viewStepByStep": "Step by step",
     "viewAll": "Show all stages",
-    "print": "Print"
+    "print": "Print",
+    "stepsCount": "steps"
   },
   "shelves": {
     "customHeading": "Custom shelf positions (mm from bottom)",

@@ -225,7 +225,8 @@
     "viewStepByStep": "שלב אחר שלב",
     "viewAll": "הצג את כל השלבים",
     "print": "הדפס",
-    "partsInStep": "חלקים בשלב זה:"
+    "partsInStep": "חלקים בשלב זה:",
+    "stepsCount": "שלבים"
   },
   "shelves": {
     "customHeading": "מיקומי מדפים מותאמים (מ\"מ מהתחתית)",

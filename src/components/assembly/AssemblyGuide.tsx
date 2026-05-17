@@ -20,7 +20,13 @@ export function AssemblyGuide() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-3 flex-wrap">
-        <h2 className="text-lg font-bold text-wood-700 dark:text-wood-200">{t('assembly.title')}</h2>
+        <h2 className="text-lg font-bold text-wood-700 dark:text-wood-200">
+          {t('assembly.title')}
+          {/* Sprint 169 — step count badge */}
+          <span className="ms-2 text-sm font-normal text-wood-400 dark:text-wood-500">
+            ({steps.length} {t('assembly.stepsCount')})
+          </span>
+        </h2>
         <div className="flex items-center gap-2">
           {/* Sprint 127 — print button */}
           <button
