@@ -5,7 +5,58 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.4.0] — 2026-05-19
+## [3.5.0] — 2026-05-20
+
+### Added
+
+- **Custom material inline edit** (Sprint 134) — the custom materials list now
+  shows a ✎ pencil button on each row that opens an inline edit form. All
+  fields (name EN/HE, thickness, price, grain, kerf) are editable without a
+  modal; Save / Cancel buttons confirm or discard the change. Tailwind v4
+  `block flex` conflict resolved by removing `block` from label classNames.
+- **Cabinet notes field** (Sprint 135) — each cabinet tab has a collapsible
+  "Notes" area with a freeform textarea persisted in `CabinetEntry.notes`.
+  Notes are included in BOM CSV exports as a comment row before the part list.
+- **Configurable saw kerf** (Sprint 136) — a numeric input (0–8 mm, default
+  4 mm) in the Optimizer tab controls how much material the blade removes
+  per cut. The value is stored as `sawKerf` in the project state, passed
+  through `optimizeCutSheets()`, and included in all yield calculations.
+- **Hardware CSV export** (Sprint 137) — a new 🔧 Hardware button in the
+  Optimizer header calls `downloadHardwareCsv()`, generating a CSV listing
+  every hardware item (hinges, shelf pins, drawer slides, etc.) across all
+  cabinets with ID, localised name, cabinet, quantity, and unit columns.
+- **Total part count stat** (Sprint 138) — the Optimizer stats grid now shows
+  four metrics: sheets used, overall yield, waste area, and total part count
+  across all sheets.
+- **Earliest-sheet packing fix** — the MaxRects bin-packer now always fills
+  earlier sheets first before opening a new one.
+  `SHEET_PREFERENCE_PENALTY = 1e12` per sheet index ensures the geometric
+  BSSF score never beats the penalty of jumping to a fresher sheet.
+- **OptimizationNotesPanel** — a new always-visible amber panel in the
+  Optimizer tab auto-computes dimension / material suggestions with a
+  configurable tolerance slider (2–60 mm). Each suggestion shows savings
+  badges (sheets saved, yield gain, waste reduced) and Apply / Dismiss
+  buttons; dismissed suggestions are tracked per session with a Restore link.
+- **Material price overrides** (Sprint 139) — clicking any sheet-cost subtotal
+  in the Cost Estimate panel opens an inline number input to override that
+  material's price per sheet. Overrides are stored in `materialPriceOverrides`
+  in the project state and highlighted in amber to distinguish them from
+  catalogue defaults. A ↺ reset button removes the override.
+- **Configurable edge-banding rate** (Sprint 141) — clicking the edge-banding
+  cost line opens an inline input (₪/m) to adjust the rate used in cost
+  calculations. Default remains ₪3/m; the value is stored as `edgeBandingRate`
+  in the project state.
+- **ROADMAP Mermaid timeline** (Sprint 142) — a `timeline` diagram at the top
+  of `ROADMAP.md` charts all releases from v2.7.0 through v3.5.0 with key
+  feature highlights per version.
+
+### Fixed
+
+- **i18n key parity** — added `cost.editPrice`, `cost.resetPrice`, and
+  `cost.editEbRate` to both `en.json` and `he.json` so the key-parity test
+  continues to pass.
+
+
 
 ### Added
 
