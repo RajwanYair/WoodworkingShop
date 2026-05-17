@@ -8,7 +8,8 @@ const tabs = ['configurator', 'preview', 'optimizer', 'assembly', 'pdf'] as cons
 
 export function Header() {
   const { t, i18n } = useTranslation();
-  const { activeTab, setActiveTab, darkMode, toggleDarkMode, canUndo, canRedo, undo, redo } = useCabinetStore();
+  const { activeTab, setActiveTab, darkMode, toggleDarkMode, units, toggleUnits, canUndo, canRedo, undo, redo } =
+    useCabinetStore();
   const lang = i18n.language;
 
   const toggleLang = () => {
@@ -125,6 +126,14 @@ export function Header() {
           aria-label={darkMode ? 'Light mode' : 'Dark mode'}
         >
           {darkMode ? '☀️' : '🌙'}
+        </button>
+        <button
+          onClick={toggleUnits}
+          className="text-wood-200 hover:text-white text-sm font-medium px-1"
+          title={t('config.toggleUnits')}
+          aria-label={units === 'metric' ? 'Switch to imperial' : 'Switch to metric'}
+        >
+          {units === 'metric' ? 'mm' : 'in'}
         </button>
         <button onClick={toggleLang} className="text-wood-200 hover:text-white text-sm font-medium">
           {lang === 'en' ? 'עב' : 'EN'}

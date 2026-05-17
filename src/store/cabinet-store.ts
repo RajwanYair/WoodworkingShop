@@ -10,6 +10,31 @@ import { readConfigFromUrl, pushConfigToUrl } from '../utils/url-state';
 
 const MAX_HISTORY = 50;
 
+// Persisted user preferences (Sprint 112). Survives reload via localStorage.
+const PREFS_KEY = 'woodworkingshop:prefs';
+interface PersistedPrefs {
+  darkMode?: boolean;
+  colorBlindMode?: boolean;
+  units?: UnitSystem;
+}
+function loadPrefs(): PersistedPrefs {
+  if (typeof window === 'undefined') return {};
+  try {
+    const raw = window.localStorage.getItem(PREFS_KEY);
+    return raw ? (JSON.parse(raw) as PersistedPrefs) : {};
+  } catch {
+    return {};
+  }
+}
+function savePrefs(prefs: PersistedPrefs): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
+  } catch {
+    /* quota / disabled — ignore */
+  }
+}
+
 export interface CabinetEntry {
   name: string;
   config: CabinetConfig;
@@ -90,6 +115,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
   const initialConfig = { ...DEFAULT_CONFIG, ...urlPatch };
   const initialCabinets: CabinetEntry[] = [{ name: 'Cabinet 1', config: initialConfig }];
   const initial = deriveProject(initialCabinets, 0);
+  const prefs = loadPrefs();
 
   return {
     cabinets: initialCabinets,
@@ -100,9 +126,9 @@ export const useCabinetStore = create<CabinetState>((set) => {
     canUndo: false,
     canRedo: false,
     activeTab: 'configurator',
-    darkMode: false,
-    colorBlindMode: false,
-    units: 'metric' as UnitSystem,
+    darkMode: prefs.darkMode ?? false,
+    colorBlindMode: prefs.colorBlindMode ?? false,
+    units: prefs.units ?? ('metric' as UnitSystem),
 
     setConfig: (patch) =>
       set((state) => {
@@ -245,8 +271,23 @@ export const useCabinetStore = create<CabinetState>((set) => {
       }),
 
     setActiveTab: (tab) => set({ activeTab: tab }),
-    toggleDarkMode: () => set((s) => ({ darkMode: !s.darkMode })),
-    toggleColorBlindMode: () => set((s) => ({ colorBlindMode: !s.colorBlindMode })),
-    toggleUnits: () => set((s) => ({ units: s.units === 'metric' ? 'imperial' : ('metric' as UnitSystem) })),
+    toggleDarkMode: () =>
+      set((s) => {
+        const darkMode = !s.darkMode;
+        savePrefs({ darkMode, colorBlindMode: s.colorBlindMode, units: s.units });
+        return { darkMode };
+      }),
+    toggleColorBlindMode: () =>
+      set((s) => {
+        const colorBlindMode = !s.colorBlindMode;
+        savePrefs({ darkMode: s.darkMode, colorBlindMode, units: s.units });
+        return { colorBlindMode };
+      }),
+    toggleUnits: () =>
+      set((s) => {
+        const units: UnitSystem = s.units === 'metric' ? 'imperial' : 'metric';
+        savePrefs({ darkMode: s.darkMode, colorBlindMode: s.colorBlindMode, units });
+        return { units };
+      }),
   };
 });
