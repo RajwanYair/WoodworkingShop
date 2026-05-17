@@ -5,6 +5,51 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] — 2026-05-15
+
+### Added
+
+- **Slider free-text numeric entry** (Sprint A1) — every dimension slider (width,
+  height, depth, shelves, drawers, door reveal) now has a paired number input
+  accepting values outside the slider's visual range up to engine hard limits,
+  with inline mm/in validation. New `SliderInput` and rewritten `DimensionSliders`.
+- **Optional cabinet back panel** (Sprint A2) — new `hasBack` config flag with a
+  Configurator toggle. Back is omitted from parts, BOM, cost estimate, PDF and
+  assembly guide when disabled; assembly substitutes a "square the carcass" step.
+  Round-trips through shareable URL (`?hb=0`).
+- **Maximal Rectangles cut optimizer** (Sprint A3 part 1) — replaces strip-FFD
+  packer with a Best-Short-Side-Fit MaxRects implementation that tries free
+  rectangles on all existing sheets in both orientations before opening a new
+  one. Fixes the 2400×800×100 12-shelf bookshelf "40% + 8% across two sheets"
+  case to fit on one sheet.
+- **Per-sheet yield bars + advisory banners** (Sprint A3 part 2) — each cut sheet
+  shows a color-coded utilisation bar (red <33%, amber <66%, green ≥66%). The
+  view now surfaces a low-yield warning when any sheet falls below 25% and a
+  material-swap hint when two sheets share thickness but use different materials.
+- **Auto-landscape PDF cut sheets** (Sprint A4) — cut-sheet pages in the exported
+  PDF rotate to A4 landscape when the sheet is wider than tall, so 2440×1220
+  panels fill the page instead of being cramped.
+- **Woodworking favicon + og:image** (Sprint A5) — replaces the placeholder
+  purple "Z" icon with a cabinet glyph (gradient carcass, inset doors, brass
+  knobs, grain hints) and adds `og:image` / `twitter:image` meta tags so link
+  previews on social platforms render correctly.
+- **gitleaks secret scanning** (Sprint 84) — `.gitleaks.toml` + GitHub Actions
+  workflow `secret-scan.yml` runs on every push, PR, and weekly schedule.
+- **Competitive landscape table** (Sprint 85) — ROADMAP.md now compares Cabinet
+  Planner against nine cabinet/cut-list tools across sixteen capability axes.
+
+### Fixed
+
+- **Dark mode toggle had no effect** — Tailwind 4 defaults to `prefers-color-scheme`
+  for the `dark:` variant; added `@custom-variant dark` in `index.css` and an
+  `<html>.dark` class sync in `App.tsx` so the user-controlled toggle actually
+  switches themes.
+
+### Tests
+
+- 252 unit tests across 23 files (was 249); added bookshelf cut-optimizer
+  regression test and two `hasBack` tests.
+
 ## [3.0.0] — 2026-04-20
 
 ### Added
