@@ -5,7 +5,57 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.6.0] — 2026-05-21
+## [3.7.0] — 2026-05-17
+
+### Added
+
+- **Drawer slide type selection** (Sprint 154) — new `drawerSlideType` field
+  (`'standard' | 'soft-close' | 'full-extension'`) on `CabinetConfig`. When
+  `drawerCount > 0`, a radio group in `DrawerConfig` lets the user choose the slide
+  type. Hardware list emits the correct slide name and adds an H17 soft-close damper
+  (one per drawer) when `soft-close` is selected. URL state encodes `dst=` param.
+- **Material density and panel weight estimation** (Sprint 155) — all 13 built-in
+  materials now carry a `densityKgM3` property. New engine function
+  `computePartWeightKg(l, w, t, qty, density)` computes kg from mm dimensions.
+  `CostEstimatePanel` shows an "Estimated panel weight" line (e.g. `~12.4 kg`)
+  computed across all cabinets in the project. Custom material editor defaults to
+  `680 kg/m³`.
+- **Export filenames use project name** (Sprint 156) — all DXF, G-code, BOM CSV, and
+  hardware CSV downloads now use the current project name as filename prefix (e.g.
+  `my-kitchen-bill-of-materials.csv`). Per-sheet files also include the prefix. Falls
+  back to `'cabinet'` when no name is set.
+- **Project name persisted in URL** (Sprint 157) — `setProjectName()` now calls
+  `pushProjectNameToUrl()` which writes a `pn=` query param into the current URL
+  without clearing other params. On store init, `readProjectNameFromUrl()` restores
+  the name from the URL. `pushConfigToUrl()` preserves the `pn=` param across config
+  changes.
+- **Assembly hardware checklist** (Sprint 158) — a "Hardware Checklist" card at the
+  bottom of the Assembly Guide lists all hardware items with interactive checkboxes.
+  Checked items get a strikethrough style; when all items are ticked a "ready to
+  assemble" confirmation appears. Print-friendly (checkboxes visible on paper).
+- **100 mm scale bar on cut sheets** (Sprint 159) — each cut-sheet SVG now shows a
+  small 100 mm reference bar with end-ticks and a label in the bottom-right margin
+  area, making printed sheets immediately measurable.
+- **Material usage summary panel** (Sprint 160) — a new collapsible table above the
+  Shopping List in the Optimizer tab groups all sheets by material and thickness,
+  showing sheet count, total area in m², and estimated cost per material type.
+- **Cabinet notes in assembly guide** (Sprint 161) — when the active cabinet has
+  notes set (via the project panel), a highlighted amber banner shows them at the top
+  of the Assembly Guide page, both on screen and when printing.
+- **Weight column in BOM CSV** (Sprint 162) — the exported Bill of Materials CSV now
+  includes a `Weight (kg)` column for every part row. The material summary section
+  also gains a weight column showing total kg per material.
+
+### Fixed
+
+- **banner.svg broken by orphaned content** (Sprint 156) — the file contained a full
+  1200×220 SVG followed by raw elements from an old 900×160 version outside any
+  `<svg>` root, making it invalid XML. The orphaned block was removed. Version badge
+  updated to v3.7.0.
+- **i18n key parity** — `assembly.partsInStep` was present in `en.json` but missing
+  from `he.json`; added Hebrew translation.
+
+
 
 ### Added
 
