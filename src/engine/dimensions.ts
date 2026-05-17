@@ -2,6 +2,25 @@ import type { CabinetConfig, DerivedDimensions } from './types';
 import { getMaterial } from './materials';
 
 /**
+ * Elastic moduli (N/mm²) used for shelf deflection calculations.
+ * Values are conservative design estimates (lower bound) rather than
+ * published nominal values so warnings err on the side of caution.
+ */
+const ELASTIC_MODULUS_BY_KEY: Record<string, number> = {
+  'plywood-17': 6500,
+  'plywood-18': 7000,
+  'melamine-16': 2800,
+  'melamine-18': 2800,
+  'mdf-16': 2500,
+  'mdf-18': 2500,
+  'chipboard-16': 2200,
+  'chipboard-18': 2200,
+  'osb-18': 3500,
+};
+/** Default modulus (N/mm²) for materials not in the lookup (e.g. custom). */
+const DEFAULT_MODULUS = 3000;
+
+/**
  * Compute all derived internal dimensions from the external config.
  * Formulas ported from the legacy Python generators (Plan A/B/C).
  */
@@ -68,4 +87,49 @@ export function computeEqualShelfPositions(internalHeight: number, shelfCount: n
   if (shelfCount <= 0) return [];
   const spacing = internalHeight / (shelfCount + 1);
   return Array.from({ length: shelfCount }, (_, i) => Math.round(spacing * (i + 1)));
+}
+
+/**
+ * Sprint 126 — Shelf span deflection check using the simply-supported beam
+ * formula for a uniformly distributed load:
+ *   δ = (5 × w × L⁴) / (384 × E × I)
+ *
+ * where:
+ *   w = uniform load intensity (N/mm) — fixed at 0.05 N/mm ≈ 5 kg/m (light bookshelf load)
+ *   L = clear shelf span (mm)
+ *   E = elastic modulus of the sheet material (N/mm²)
+ *   I = second moment of area = (shelfDepth × thickness³) / 12   (mm⁴)
+ *
+ * The serviceability limit is L/360 per common furniture standards.
+ *
+ * @returns deflection in mm, allowed limit in mm, and whether it exceeds the limit.
+ */
+export interface ShelfDeflectionResult {
+  /** Mid-span deflection under design load (mm). */
+  deflectionMm: number;
+  /** Serviceability limit = span / 360 (mm). */
+  limitMm: number;
+  /** true when deflection > limit — show a warning. */
+  overLimit: boolean;
+}
+
+export function computeShelfDeflection(
+  spanMm: number,
+  thicknessMm: number,
+  shelfDepthMm: number,
+  materialKey: string,
+): ShelfDeflectionResult {
+  const E = ELASTIC_MODULUS_BY_KEY[materialKey] ?? DEFAULT_MODULUS;
+  // Second moment of area for a rectangular section
+  const I = (shelfDepthMm * Math.pow(thicknessMm, 3)) / 12;
+  // Uniform load intensity (N/mm)
+  const w = 0.05;
+  const L = spanMm;
+  const deflectionMm = (5 * w * Math.pow(L, 4)) / (384 * E * I);
+  const limitMm = L / 360;
+  return {
+    deflectionMm: Math.round(deflectionMm * 100) / 100,
+    limitMm: Math.round(limitMm * 100) / 100,
+    overLimit: deflectionMm > limitMm,
+  };
 }

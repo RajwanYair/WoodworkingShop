@@ -4,6 +4,7 @@ import {
   computeHingesPerDoor,
   computeHingePositions,
   computeEqualShelfPositions,
+  computeShelfDeflection,
 } from '../../src/engine/dimensions';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 
@@ -91,12 +92,40 @@ describe('computeEqualShelfPositions', () => {
   it('distributes shelves equally', () => {
     const positions = computeEqualShelfPositions(1966, 4);
     expect(positions).toHaveLength(4);
-    // Spacing = 1966/5 = 393.2
     expect(positions[0]).toBe(Math.round((1966 / 5) * 1));
     expect(positions[3]).toBe(Math.round((1966 / 5) * 4));
   });
 
   it('returns empty for 0 shelves', () => {
     expect(computeEqualShelfPositions(1966, 0)).toEqual([]);
+  });
+});
+
+// Sprint 126 — shelf deflection
+describe('computeShelfDeflection', () => {
+  it('returns overLimit=false for a short, thick plywood shelf', () => {
+    // 600 mm span, 18 mm birch plywood, 300 mm depth
+    const result = computeShelfDeflection(600, 18, 300, 'plywood-18');
+    expect(result.overLimit).toBe(false);
+    expect(result.deflectionMm).toBeGreaterThan(0);
+  });
+
+  it('returns overLimit=true for a very long, thin chipboard shelf', () => {
+    // 1100 mm span, 16 mm chipboard — known to sag
+    const result = computeShelfDeflection(1100, 16, 400, 'chipboard-16');
+    expect(result.overLimit).toBe(true);
+    expect(result.deflectionMm).toBeGreaterThan(result.limitMm);
+  });
+
+  it('limitMm equals span/360', () => {
+    const result = computeShelfDeflection(900, 18, 300, 'mdf-18');
+    expect(result.limitMm).toBeCloseTo(900 / 360, 2);
+  });
+
+  it('uses default modulus for unknown material key', () => {
+    // Should not throw and should return a numeric result
+    const result = computeShelfDeflection(800, 18, 300, 'custom-exotic-wood');
+    expect(typeof result.deflectionMm).toBe('number');
+    expect(typeof result.overLimit).toBe('boolean');
   });
 });

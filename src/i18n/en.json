@@ -184,7 +184,8 @@
     "customHeading": "Custom shelf positions (mm from bottom)",
     "resetEqual": "Reset to equal spacing",
     "position": "Shelf {{n}}",
-    "internalHeight": "Internal height: {{h}} mm"
+    "internalHeight": "Internal height: {{h}} mm",
+    "deflectionWarning": "Shelf span {{span}} mm: estimated mid-sag {{sag}} mm exceeds L/360 limit ({{limit}} mm). Consider a thicker panel, a centre support, or a shorter span."
   },
   "toast": {
     "saved": "Configuration saved",

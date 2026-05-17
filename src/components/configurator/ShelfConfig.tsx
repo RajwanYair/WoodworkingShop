@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { CONSTRAINTS, HARD_LIMITS } from '../../engine/materials';
-import { computeEqualShelfPositions } from '../../engine/dimensions';
+import { CONSTRAINTS, HARD_LIMITS, getMaterial } from '../../engine/materials';
+import { computeEqualShelfPositions, computeShelfDeflection } from '../../engine/dimensions';
 import { SliderInput } from './SliderInput';
 
 export function ShelfConfig() {
@@ -39,6 +39,17 @@ export function ShelfConfig() {
 
   const positions = config.shelfSpacing === 'custom' ? seededCustom() : [];
 
+  // Sprint 126 — shelf span deflection check
+  const deflection =
+    config.shelfCount > 0
+      ? computeShelfDeflection(
+          dimensions.shelfWidth,
+          getMaterial(config.carcassMaterial).thickness,
+          dimensions.shelfDepth,
+          config.carcassMaterial,
+        )
+      : null;
+
   return (
     <fieldset className="space-y-4">
       <legend className="text-sm font-semibold text-wood-700 dark:text-wood-200 uppercase tracking-wide">
@@ -55,6 +66,21 @@ export function ShelfConfig() {
         hardMax={HARD_LIMITS.maxShelves}
         step={1}
       />
+
+      {/* Sprint 126 — Shelf deflection warning */}
+      {deflection && deflection.overLimit && (
+        <div
+          role="alert"
+          className="rounded border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 px-3 py-2 text-xs text-amber-800 dark:text-amber-200"
+        >
+          ⚠{' '}
+          {t('shelves.deflectionWarning', {
+            span: Math.round(dimensions.shelfWidth),
+            sag: deflection.deflectionMm.toFixed(1),
+            limit: deflection.limitMm.toFixed(1),
+          })}
+        </div>
+      )}
 
       {config.shelfCount > 0 && (
         <div className="flex gap-4">
