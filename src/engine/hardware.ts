@@ -109,15 +109,29 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
     const slideTarget = cfg.depth - 50;
     const standards = [250, 300, 350, 400, 450, 500, 550, 600];
     const slideLen = standards.reduce((best, v) => (v <= slideTarget ? v : best), standards[0]);
+    const slideType = cfg.drawerSlideType ?? 'standard';
+    const slideTypeLabel =
+      slideType === 'soft-close'
+        ? { en: `Soft-Close Drawer Slide Pair ${slideLen} mm`, he: `זוג מסילות סגירה רכה ${slideLen} מ"מ` }
+        : slideType === 'full-extension'
+          ? { en: `Full-Extension Drawer Slide Pair ${slideLen} mm`, he: `זוג מסילות הוצאה מלאה ${slideLen} מ"מ` }
+          : { en: `Drawer Slide Pair ${slideLen} mm`, he: `זוג מסילות מגירה ${slideLen} מ"מ` };
     items.push({
       id: 'H11',
-      name: {
-        en: `Drawer Slide Pair ${slideLen} mm`,
-        he: `זוג מסילות מגירה ${slideLen} מ"מ`,
-      },
+      name: slideTypeLabel,
       qty: cfg.drawerCount,
       unit: { en: 'pairs', he: 'זוגות' },
     });
+
+    // Soft-close under-mount dampers (one per drawer when soft-close type)
+    if (slideType === 'soft-close') {
+      items.push({
+        id: 'H17',
+        name: { en: 'Soft-Close Drawer Damper', he: 'בולם סגירה רכה למגירה' },
+        qty: cfg.drawerCount,
+        unit: { en: 'pcs', he: "יח'" },
+      });
+    }
 
     // Drawer handle (one per drawer)
     if (cfg.handleStyle !== 'none') {

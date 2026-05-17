@@ -1,4 +1,4 @@
-import type { CabinetConfig } from '../engine/types';
+import type { CabinetConfig, DrawerSlideType } from '../engine/types';
 import { DEFAULT_CONFIG } from '../engine/materials';
 
 /**
@@ -29,6 +29,8 @@ export function configToParams(cfg: CabinetConfig): URLSearchParams {
   if (cfg.drawerHeights && cfg.drawerHeights.length > 0)
     params.set('dh', cfg.drawerHeights.join(','));
   if ((cfg.kickHeight ?? 0) !== (def.kickHeight ?? 0)) params.set('kh', String(cfg.kickHeight ?? 0));
+  if ((cfg.drawerSlideType ?? 'standard') !== (def.drawerSlideType ?? 'standard'))
+    params.set('dst', cfg.drawerSlideType ?? 'standard');
   if (cfg.edgeBanding !== def.edgeBanding) params.set('eb', cfg.edgeBanding);
   if (cfg.lang !== def.lang) params.set('lang', cfg.lang);
 
@@ -80,6 +82,8 @@ export function paramsToConfig(params: URLSearchParams): Partial<CabinetConfig> 
   if (dh) patch.drawerHeights = dh.split(',').map(Number).filter((n) => !isNaN(n) && n > 0);
   const kh = params.get('kh');
   if (kh !== null) patch.kickHeight = Number(kh);
+  const dst = params.get('dst');
+  if (dst === 'standard' || dst === 'soft-close' || dst === 'full-extension') patch.drawerSlideType = dst as DrawerSlideType;
   const eb = params.get('eb');
   if (eb === 'all-visible' || eb === 'doors-only' || eb === 'none') patch.edgeBanding = eb;
   const lang = params.get('lang');

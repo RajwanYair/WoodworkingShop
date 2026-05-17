@@ -178,6 +178,7 @@ export const DEFAULT_CONFIG: CabinetConfig = {
   doorStyle: 'flat',
   doorReveal: 3,
   drawerCount: 0,
+  drawerSlideType: 'standard',
   handleStyle: 'bar',
   edgeBanding: 'all-visible',
   lang: 'en',

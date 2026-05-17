@@ -22,6 +22,7 @@ export type EdgeBanding = 'all-visible' | 'doors-only' | 'none';
 export type ShelfSpacing = 'equal' | 'custom';
 export type HandleStyle = 'bar' | 'knob' | 'cup' | 'none';
 export type FurnitureType = 'cabinet' | 'bookshelf' | 'desk' | 'wardrobe';
+export type DrawerSlideType = 'standard' | 'soft-close' | 'full-extension';
 
 export interface CabinetConfig {
   // Furniture type
@@ -50,6 +51,8 @@ export interface CabinetConfig {
   drawerCount: number; // 0–4 drawers at bottom of cabinet
   /** Optional per-drawer box heights in mm. Index 0 = bottom drawer. Falls back to 150 mm. */
   drawerHeights?: number[];
+  /** Drawer slide hardware type (default: 'standard'). */
+  drawerSlideType?: DrawerSlideType;
 
   // Toe kick / plinth
   /** Plinth/toe-kick height in mm. 0 = no kick (flush-to-floor or wall-mounted). */

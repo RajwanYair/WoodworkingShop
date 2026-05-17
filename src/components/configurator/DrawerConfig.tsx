@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { HARD_LIMITS } from '../../engine/materials';
 import { SliderInput } from './SliderInput';
+import type { DrawerSlideType } from '../../engine/types';
 
 export function DrawerConfig() {
   const { t, i18n } = useTranslation();
@@ -37,25 +38,48 @@ export function DrawerConfig() {
       />
 
       {config.drawerCount > 0 && (
-        <div className="space-y-2 ps-2 border-s-2 border-wood-200 dark:border-wood-700">
-          <p className="text-xs text-wood-500 dark:text-wood-400">
-            {isHe ? 'גובה קופסת מגירה (מ"מ)' : 'Drawer box height (mm)'}
-          </p>
-          {Array.from({ length: config.drawerCount }, (_, i) => (
-            <SliderInput
-              key={i}
-              label={isHe ? `מגירה ${i + 1}` : `Drawer ${i + 1}`}
-              value={config.drawerHeights?.[i] ?? 150}
-              onChange={(v) => setDrawerHeight(i, v)}
-              softMin={80}
-              softMax={250}
-              hardMin={50}
-              hardMax={500}
-              step={5}
-              unit="mm"
-            />
-          ))}
-        </div>
+        <>
+          {/* Drawer slide type */}
+          <div className="space-y-1">
+            <p className="text-sm text-wood-600 dark:text-wood-300">{t('config.drawerSlideType')}</p>
+            <div className="flex flex-wrap gap-3">
+              {(['standard', 'soft-close', 'full-extension'] as DrawerSlideType[]).map((type) => (
+                <label key={type} className="flex items-center gap-1.5 text-sm cursor-pointer">
+                  <input
+                    type="radio"
+                    name="drawerSlideType"
+                    value={type}
+                    checked={(config.drawerSlideType ?? 'standard') === type}
+                    onChange={() => setConfig({ drawerSlideType: type })}
+                    className="accent-primary"
+                  />
+                  {t(`config.drawerSlide_${type.replace('-', '_')}`)}
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Per-drawer heights */}
+          <div className="space-y-2 ps-2 border-s-2 border-wood-200 dark:border-wood-700">
+            <p className="text-xs text-wood-500 dark:text-wood-400">
+              {isHe ? 'גובה קופסת מגירה (מ"מ)' : 'Drawer box height (mm)'}
+            </p>
+            {Array.from({ length: config.drawerCount }, (_, i) => (
+              <SliderInput
+                key={i}
+                label={isHe ? `מגירה ${i + 1}` : `Drawer ${i + 1}`}
+                value={config.drawerHeights?.[i] ?? 150}
+                onChange={(v) => setDrawerHeight(i, v)}
+                softMin={80}
+                softMax={250}
+                hardMin={50}
+                hardMax={500}
+                step={5}
+                unit="mm"
+              />
+            ))}
+          </div>
+        </>
       )}
     </fieldset>
   );
