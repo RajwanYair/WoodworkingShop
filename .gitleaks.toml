@@ -1,0 +1,29 @@
+# gitleaks config — Sprint 84
+# Built on top of the bundled default ruleset so all common provider
+# patterns (AWS, GitHub, Slack, Stripe, Generic API keys, JWTs, etc.)
+# remain active. Customise via [extend] and [allowlist] below.
+
+title = "WoodworkingShop gitleaks ruleset"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Global allowlist for known-safe matches"
+# Skip vendor/build/test fixture trees entirely.
+paths = [
+  '''(.*?)node_modules(.*?)''',
+  '''(.*?)dist(.*?)''',
+  '''(.*?)coverage(.*?)''',
+  '''(.*?)test-results(.*?)''',
+  '''(.*?)playwright-report(.*?)''',
+  '''package-lock\.json''',
+]
+# Common placeholder / example tokens that should never trip a finding.
+regexes = [
+  '''ghp_[xX]{20,}''',
+  '''sk-[xX]{20,}''',
+  '''AKIA[xX]{16}''',
+  '''EXAMPLE[_-]?KEY''',
+  '''YOUR[_-]?TOKEN[_-]?HERE''',
+]
