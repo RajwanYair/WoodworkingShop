@@ -128,7 +128,8 @@
     "exportBom": "Export Bill of Materials CSV",
     "sheetWasteCost": "Waste cost: ₪{{cost}}",
     "sheetWasteCostTitle": "Estimated material cost lost to offcuts",
-    "grainLegend": "Grain direction must run vertically (parts were not rotated 90°)"
+    "grainLegend": "Grain direction must run vertically (parts were not rotated 90°)",
+    "sawKerf": "Saw kerf"
   },
   "preview": {
     "title": "Cabinet Preview",

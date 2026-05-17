@@ -19,7 +19,7 @@ import { getMaterial, SAW_KERF } from './materials';
  *
  * Axes: y is along the sheet length (grain direction), x is across.
  */
-export function optimizeCutSheets(parts: Part[]): OptimizationResult {
+export function optimizeCutSheets(parts: Part[], sawKerfMm = SAW_KERF): OptimizationResult {
   // Group parts by material key (which implies thickness).
   const groups = new Map<string, { rects: Rect[]; materialKey: string }>();
   for (const p of parts) {
@@ -41,7 +41,7 @@ export function optimizeCutSheets(parts: Part[]): OptimizationResult {
 
   for (const [, group] of groups) {
     const mat = getMaterial(group.materialKey);
-    const packed = packMaxRects(group.rects, mat.sheetLength, mat.sheetWidth, SAW_KERF, !mat.hasGrain);
+    const packed = packMaxRects(group.rects, mat.sheetLength, mat.sheetWidth, sawKerfMm, !mat.hasGrain);
 
     for (const sheet of packed) {
       const sheetArea = mat.sheetLength * mat.sheetWidth;

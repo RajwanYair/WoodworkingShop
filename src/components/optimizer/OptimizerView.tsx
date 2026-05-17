@@ -22,7 +22,7 @@ function cbColor(index: number) {
 
 export function OptimizerView() {
   const { t, i18n } = useTranslation();
-  const { optimization, combinedOptimization, cabinets, colorBlindMode, toggleColorBlindMode } = useCabinetStore();
+  const { optimization, combinedOptimization, cabinets, colorBlindMode, toggleColorBlindMode, sawKerf, setSawKerf } = useCabinetStore();
   const lang = i18n.language as Lang;
   const [hoveredPartId, setHoveredPartId] = useState<string | null>(null);
   const multiCabinet = cabinets.length > 1;
@@ -80,7 +80,22 @@ export function OptimizerView() {
           <Stat label={t('optimizer.yield')} value={`${displayOpt.overallYield}%`} />
           <Stat label={t('optimizer.waste')} value={`${(displayOpt.totalWaste / 1_000_000).toFixed(2)} m²`} />
         </div>
-        <div className="ms-4 flex gap-2">
+        {/* Sprint 136 — saw kerf input */}
+        <label className="ms-4 flex items-center gap-1 text-xs text-wood-600 dark:text-wood-300">
+          {t('optimizer.sawKerf')}
+          <input
+            type="number"
+            min={0}
+            max={8}
+            step={0.5}
+            value={sawKerf}
+            onChange={(e) => setSawKerf(Number(e.target.value))}
+            className="w-14 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-1 py-0.5 text-xs text-center focus:outline-none focus:ring-1 focus:ring-wood-400"
+            aria-label={t('optimizer.sawKerf')}
+          />
+          mm
+        </label>
+        <div className="ms-2 flex gap-2">
           <button
             onClick={() => {
               downloadAllSheetsDxf(displayOpt.sheets, 'cabinet');

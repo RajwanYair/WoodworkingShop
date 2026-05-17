@@ -81,6 +81,7 @@ export interface CabinetState {
   darkMode: boolean;
   colorBlindMode: boolean;
   units: UnitSystem;
+  sawKerf: number; // mm, default 4 (Sprint 136)
 
   // Actions
   setConfig: (patch: Partial<CabinetConfig>) => void;
@@ -97,6 +98,7 @@ export interface CabinetState {
   setActiveCabinet: (index: number) => void;
   renameCabinet: (index: number, name: string) => void;
   setNotes: (index: number, notes: string) => void;
+  setSawKerf: (mm: number) => void;
   loadProject: (cabinets: CabinetEntry[]) => void;
 }
 
@@ -109,7 +111,7 @@ function derive(config: CabinetConfig) {
   return { dimensions, parts, hardware, optimization, edgeBandingTotal };
 }
 
-function deriveProject(cabinets: CabinetEntry[], activeIndex: number) {
+function deriveProject(cabinets: CabinetEntry[], activeIndex: number, sawKerfMm = 4) {
   const activeConfig = cabinets[activeIndex].config;
   const active = derive(activeConfig);
   // Combined parts from all cabinets (prefixed with cabinet index)
@@ -119,7 +121,7 @@ function deriveProject(cabinets: CabinetEntry[], activeIndex: number) {
       id: cabinets.length > 1 ? `C${ci + 1}-${p.id}` : p.id,
     })),
   );
-  const combinedOptimization = optimizeCutSheets(allParts);
+  const combinedOptimization = optimizeCutSheets(allParts, sawKerfMm);
   return { config: activeConfig, ...active, allParts, combinedOptimization };
 }
 
@@ -143,6 +145,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
     darkMode: prefs.darkMode ?? detectOsDarkMode(),
     colorBlindMode: prefs.colorBlindMode ?? false,
     units: prefs.units ?? ('metric' as UnitSystem),
+    sawKerf: 4, // mm — Sprint 136
 
     setConfig: (patch) =>
       set((state) => {
@@ -153,7 +156,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         return {
           cabinets,
-          ...deriveProject(cabinets, state.activeCabinetIndex),
+          ...deriveProject(cabinets, state.activeCabinetIndex, state.sawKerf),
           _past: past,
           _future: [],
           canUndo: true,
@@ -170,7 +173,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         return {
           cabinets,
-          ...deriveProject(cabinets, state.activeCabinetIndex),
+          ...deriveProject(cabinets, state.activeCabinetIndex, state.sawKerf),
           _past: past,
           _future: [],
           canUndo: true,
@@ -188,7 +191,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         return {
           cabinets: prevCabinets,
           activeCabinetIndex: idx,
-          ...deriveProject(prevCabinets, idx),
+          ...deriveProject(prevCabinets, idx, state.sawKerf),
           _past: past,
           _future: [state.cabinets, ...state._future],
           canUndo: past.length > 0,
@@ -206,7 +209,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         return {
           cabinets: nextCabinets,
           activeCabinetIndex: idx,
-          ...deriveProject(nextCabinets, idx),
+          ...deriveProject(nextCabinets, idx, state.sawKerf),
           _past: [...state._past, state.cabinets],
           _future: future,
           canUndo: true,
@@ -224,7 +227,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         return {
           cabinets,
           activeCabinetIndex: idx,
-          ...deriveProject(cabinets, idx),
+          ...deriveProject(cabinets, idx, state.sawKerf),
           _past: past,
           _future: [],
           canUndo: true,
@@ -242,7 +245,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         return {
           cabinets,
           activeCabinetIndex: idx,
-          ...deriveProject(cabinets, idx),
+          ...deriveProject(cabinets, idx, state.sawKerf),
           _past: past,
           _future: [],
           canUndo: true,
@@ -266,7 +269,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         return {
           cabinets,
           activeCabinetIndex: newIndex,
-          ...deriveProject(cabinets, newIndex),
+          ...deriveProject(cabinets, newIndex, state.sawKerf),
           _past: past,
           _future: [],
           canUndo: true,
@@ -280,7 +283,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         pushConfigToUrl(state.cabinets[index].config);
         return {
           activeCabinetIndex: index,
-          ...deriveProject(state.cabinets, index),
+          ...deriveProject(state.cabinets, index, state.sawKerf),
         };
       }),
 
@@ -306,7 +309,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         return {
           cabinets: migrated,
           activeCabinetIndex: 0,
-          ...deriveProject(migrated, 0),
+          ...deriveProject(migrated, 0, state.sawKerf),
           _past: past,
           _future: [],
           canUndo: true,
@@ -315,6 +318,11 @@ export const useCabinetStore = create<CabinetState>((set) => {
       }),
 
     setActiveTab: (tab) => set({ activeTab: tab }),
+    setSawKerf: (mm) =>
+      set((state) => ({
+        sawKerf: Math.max(0, Math.min(8, mm)),
+        ...deriveProject(state.cabinets, state.activeCabinetIndex, Math.max(0, Math.min(8, mm))),
+      })),
     toggleDarkMode: () =>
       set((s) => {
         const darkMode = !s.darkMode;
