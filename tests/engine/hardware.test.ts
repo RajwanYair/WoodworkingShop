@@ -72,3 +72,51 @@ describe('generateHardware', () => {
     expectBilingualNames(hw);
   });
 });
+
+describe('generateHardware — Sprint 113 expansion', () => {
+  it('includes soft-close hinge dampers (one per hinge)', () => {
+    const hw = generateHardware(DEFAULT_CONFIG);
+    const damper = hw.find((h) => h.id === 'H13');
+    const hinges = hw.find((h) => h.id === 'H01');
+    expect(damper).toBeDefined();
+    expect(damper!.qty).toBe(hinges!.qty);
+  });
+
+  it('omits soft-close dampers when there are no doors', () => {
+    const cfg = { ...DEFAULT_CONFIG, doorStyle: 'none' as const };
+    const hw = generateHardware(cfg);
+    expect(hw.find((h) => h.id === 'H13')).toBeUndefined();
+    expect(hw.find((h) => h.id === 'H14')).toBeUndefined();
+  });
+
+  it('includes door bumper pads (2 per door)', () => {
+    const hw = generateHardware(DEFAULT_CONFIG);
+    const pads = hw.find((h) => h.id === 'H14');
+    expect(pads).toBeDefined();
+    expect(pads!.qty).toBe(DEFAULT_CONFIG.doorCount * 2);
+  });
+
+  it('includes 4 cabinet leveller feet regardless of doors', () => {
+    const cfg = { ...DEFAULT_CONFIG, doorStyle: 'none' as const };
+    const hw = generateHardware(cfg);
+    const feet = hw.find((h) => h.id === 'H15');
+    expect(feet).toBeDefined();
+    expect(feet!.qty).toBe(4);
+  });
+
+  it('always ships at least one edge-banding roll', () => {
+    const hw = generateHardware({ ...DEFAULT_CONFIG, width: 400, height: 400 });
+    const roll = hw.find((h) => h.id === 'H16');
+    expect(roll).toBeDefined();
+    expect(roll!.qty).toBeGreaterThanOrEqual(1);
+  });
+
+  it('scales drawer slide length to cabinet depth', () => {
+    const shallow = generateHardware({ ...DEFAULT_CONFIG, drawerCount: 1, depth: 320 });
+    const deep = generateHardware({ ...DEFAULT_CONFIG, drawerCount: 1, depth: 600 });
+    const shallowSlide = shallow.find((h) => h.id === 'H11');
+    const deepSlide = deep.find((h) => h.id === 'H11');
+    expect(shallowSlide?.name.en).toMatch(/250 mm/);
+    expect(deepSlide?.name.en).toMatch(/550 mm/);
+  });
+});

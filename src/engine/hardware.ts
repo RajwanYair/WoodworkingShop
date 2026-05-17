@@ -27,7 +27,6 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
       unit: { en: 'pcs', he: "יח'" },
     });
   }
-
   // ── Shelf pins (4 per adjustable shelf) ──
   if (cfg.shelfCount > 0) {
     items.push({
@@ -104,9 +103,18 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
 
   // ── Drawer slides (pair per drawer) ──
   if (cfg.drawerCount > 0) {
+    // Pick the next standard slide length down from the cabinet depth
+    // (≈ depth − 50 mm allowance for back panel + clearance). Standard
+    // ranges: 250/300/350/400/450/500/550/600 mm.
+    const slideTarget = cfg.depth - 50;
+    const standards = [250, 300, 350, 400, 450, 500, 550, 600];
+    const slideLen = standards.reduce((best, v) => (v <= slideTarget ? v : best), standards[0]);
     items.push({
       id: 'H11',
-      name: { en: 'Drawer Slide Pair 450 mm', he: 'זוג מסילות מגירה 450 מ"מ' },
+      name: {
+        en: `Drawer Slide Pair ${slideLen} mm`,
+        he: `זוג מסילות מגירה ${slideLen} מ"מ`,
+      },
       qty: cfg.drawerCount,
       unit: { en: 'pairs', he: 'זוגות' },
     });
@@ -121,6 +129,43 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
       });
     }
   }
+
+  // ── Soft-close hinge dampers (Sprint 113) — one per hinge ──
+  if (hasDoors) {
+    items.push({
+      id: 'H13',
+      name: { en: 'Soft-Close Hinge Damper', he: 'בולם סגירה רכה לציר' },
+      qty: d.hingesPerDoor * cfg.doorCount,
+      unit: { en: 'pcs', he: "יח'" },
+    });
+
+    // Door bumper pads — 2 per door
+    items.push({
+      id: 'H14',
+      name: { en: 'Door Bumper Pad (silicone)', he: 'פד בולם דלת (סיליקון)' },
+      qty: cfg.doorCount * 2,
+      unit: { en: 'pcs', he: "יח'" },
+    });
+  }
+
+  // ── Cabinet leveller feet (4 per cabinet, Sprint 113) ──
+  items.push({
+    id: 'H15',
+    name: { en: 'Cabinet Leveller Foot', he: 'רגל מפלסת לארון' },
+    qty: 4,
+    unit: { en: 'pcs', he: "יח'" },
+  });
+
+  // ── Edge banding roll (Sprint 113) — approximate metres based on the
+  //    visible carcass front edges. One roll per 50 m of edge demand,
+  //    minimum 1 roll. ──
+  const visibleEdgeM = ((cfg.width + cfg.height) * 2) / 1000;
+  items.push({
+    id: 'H16',
+    name: { en: 'Edge Banding Roll (50 m)', he: 'גליל סרט קצוות (50 מ׳)' },
+    qty: Math.max(1, Math.ceil(visibleEdgeM / 50)),
+    unit: { en: 'rolls', he: 'גלילים' },
+  });
 
   return items;
 }
