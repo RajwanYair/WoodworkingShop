@@ -11,6 +11,26 @@ export function generateBomCsv(
 ): string {
   const rows: string[] = [];
 
+  // ── Material area summary section ─────────────────────────────────────────
+  // Group all parts across all cabinets by material key and total their area.
+  const areaMm2ByMat = new Map<string, number>();
+  for (const cab of cabinets) {
+    for (const p of cab.parts) {
+      const area = p.qty * p.length * p.width;
+      areaMm2ByMat.set(p.material, (areaMm2ByMat.get(p.material) ?? 0) + area);
+    }
+  }
+  rows.push('Material Summary,,,,,,,,');
+  rows.push('Material,Total Area (m²),Board-Feet (nominal 1 inch),,,,,,');
+  for (const [matKey, areaMm2] of areaMm2ByMat) {
+    const matName = safeGetMaterialName(matKey, lang);
+    const areaM2 = (areaMm2 / 1e6).toFixed(3);
+    // 1 mm² = 1.076391e-5 ft²; board-feet = ft² (at nominal 1 inch thickness)
+    const boardFeet = ((areaMm2 * 1.076391e-5) / 1).toFixed(2);
+    rows.push(csvRow([matName, areaM2, boardFeet, '', '', '', '', '', '']));
+  }
+  rows.push('');
+
   // Header
   rows.push('Cabinet,Part ID,Part Name,Qty,Material,Thickness (mm),Length (mm),Width (mm),Edge Banding');
 

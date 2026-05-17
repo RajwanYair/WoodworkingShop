@@ -29,12 +29,19 @@ const singleCabinet = [
 ];
 
 describe('generateBomCsv', () => {
-  it('starts with a CSV header row', () => {
+  it('starts with a material summary section', () => {
     const csv = generateBomCsv(singleCabinet, 'en');
-    const firstLine = csv.split('\n')[0];
-    expect(firstLine).toContain('Cabinet');
-    expect(firstLine).toContain('Part ID');
-    expect(firstLine).toContain('Thickness');
+    const lines = csv.split('\n');
+    expect(lines[0]).toContain('Material Summary');
+    expect(lines[1]).toContain('Total Area');
+    expect(lines[1]).toContain('Board-Feet');
+  });
+
+  it('includes a parts header row after the summary', () => {
+    const csv = generateBomCsv(singleCabinet, 'en');
+    const lines = csv.split('\n');
+    const headerIdx = lines.findIndex((l) => l.includes('Part ID') && l.includes('Thickness'));
+    expect(headerIdx).toBeGreaterThan(0);
   });
 
   it('includes part rows with correct EN values', () => {
@@ -51,12 +58,12 @@ describe('generateBomCsv', () => {
     expect(csv).toContain('קצה קדמי');
   });
 
-  it('includes hardware section after a blank line', () => {
+  it('includes hardware section after parts section', () => {
     const csv = generateBomCsv(singleCabinet, 'en');
     const lines = csv.split('\n');
-    const blankIdx = lines.findIndex((l) => l.trim() === '');
-    expect(blankIdx).toBeGreaterThan(0);
-    expect(lines[blankIdx + 1]).toContain('Hardware');
+    // Find the last blank line which separates parts from hardware
+    const lastBlankIdx = lines.map((l, i) => ({ l, i })).filter(({ l }) => l.trim() === '').at(-1)!.i;
+    expect(lines[lastBlankIdx + 1]).toContain('Hardware');
     expect(csv).toContain('Hinge 35mm');
     expect(csv).toContain('4');
   });
@@ -71,10 +78,27 @@ describe('generateBomCsv', () => {
     expect(csv).toContain('Lower');
   });
 
+  it('material summary row has correct area for a single material', () => {
+    // mockPart: qty=2, length=2000, width=580 → area = 2*2000*580 = 2,320,000 mm² = 2.320 m²
+    const csv = generateBomCsv(singleCabinet, 'en');
+    expect(csv).toContain('2.320');
+  });
+
+  it('aggregates area for same material across multiple cabinets', () => {
+    const cabs = [
+      { name: 'Upper', parts: [mockPart], hardware: [] },
+      { name: 'Lower', parts: [mockPart], hardware: [] },
+    ];
+    // total area = 2 × 2,320,000 mm² = 4,640,000 mm² = 4.640 m²
+    const csv = generateBomCsv(cabs, 'en');
+    expect(csv).toContain('4.640');
+  });
+
   it('handles empty cabinets array', () => {
     const csv = generateBomCsv([], 'en');
     const lines = csv.split('\n').filter((l) => l.trim() !== '');
-    expect(lines.length).toBeGreaterThanOrEqual(2); // header + hardware header
+    // Material Summary header + column header + parts header + hardware header = 4 lines minimum
+    expect(lines.length).toBeGreaterThanOrEqual(3);
   });
 
   it('escapes fields containing commas', () => {
