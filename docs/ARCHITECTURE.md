@@ -1,21 +1,27 @@
-# Architecture
+<div align="center">
+  <img src="banner.svg" alt="Cabinet Planner" width="100%"/>
+</div>
+
+# 🏛 Architecture
 
 Cabinet Planner is a client-side React SPA (no backend). All computation — dimensions, parts, hardware, cut-sheet optimization, cost estimation — runs in the browser.
 
-## High-Level Data Flow
+## ⚡ High-Level Data Flow
 
 ```mermaid
 graph LR
-  UI[Configurator UI] -->|patch| Store[Zustand Store]
-  Store -->|config| Engine[Engine Module]
-  Engine -->|derived| Store
-  Store -->|state| Preview[SVG Preview]
-  Store -->|state| Optimizer[Cut Sheet Optimizer]
-  Store -->|state| Assembly[Assembly Guide]
-  Store -->|state| PDF[PDF Export]
+  UI["🎛 Configurator UI"] -->|"patch config"| Store["🗄 Zustand Store"]
+  Store -->|config| Engine["⚙ Engine Module\n(pure TypeScript)"]
+  Engine -->|"parts · hardware\ndimensions · cost"| Store
+  Store --> Preview["🖼 SVG Preview\n(6 views)"]
+  Store --> Optimizer["📐 Cut Optimizer\n(MaxRects)"]
+  Optimizer --> Smart["🧠 Smart Optimizer\n(5 strategies)"]
+  Store --> Assembly["🔩 Assembly Guide"]
+  Store --> PDF["📄 PDF Export"]
+  Store --> Exports["💾 DXF · G-code · CSV"]
 ```
 
-## Directory Layout
+## 📁 Directory Layout
 
 ```text
 src/
@@ -83,7 +89,7 @@ tests/                       # Vitest unit tests (mirrors src/ structure)
 └── dependabot.yml
 ```
 
-## Engine Module
+## ⚙ Engine Module
 
 The engine is a set of pure functions with no React dependency. All functions take a `CabinetConfig` and return derived data:
 
@@ -96,7 +102,7 @@ The engine is a set of pure functions with no React dependency. All functions ta
 | `findOptimizations` | `CabinetConfig`                  | `OptimizationSuggestion[]` (5 strategies with scores)        |
 | `estimateCost`      | `Part[], HardwareItem[], config` | `CostBreakdown` (per-material, hardware, total)              |
 
-## State Management
+## 🗄 State Management
 
 A single Zustand store (`cabinet-store.ts`) holds:
 
@@ -110,14 +116,14 @@ Two supplementary stores:
 - `custom-materials-store.ts` — user-defined materials persisted to localStorage
 - `toast-store.ts` — notification queue with auto-dismiss
 
-## Build & Deploy
+## 📦 Build & Deploy
 
 - **Bundler**: Vite 6 with React plugin + Tailwind CSS plugin
 - **Code splitting**: `@react-pdf/renderer` is split into a separate chunk via `manualChunks` and lazy-loaded
 - **Deploy target**: GitHub Pages (base path: `/WoodworkingShop/`)
 - **PWA**: service worker in `public/sw.js` with cache-first strategy
 
-## Supported Furniture Types
+## 🪑 Supported Furniture Types
 
 | Type        | Parts                                                  | Features                     |
 | ----------- | ------------------------------------------------------ | ---------------------------- |
@@ -126,36 +132,34 @@ Two supplementary stores:
 | `desk`      | Desktop, legs, back panel, modesty panel, shelf        | Adjustable height            |
 | `wardrobe`  | Top, bottom, sides, shelves, back, doors, hanging rail | Rail + shelf combo           |
 
-## Component Tree
+## 🧩 Component Tree
 
 ```mermaid
 graph TD
   App[App.tsx]
-  App --> Header[Header]
-  App --> Sidebar[ConfiguratorPanel]
-  App --> Preview[CabinetPreview]
-  App --> Optimizer[CutSheetPanel]
-  App --> Assembly[AssemblyGuide]
-  App --> PDF[PdfExportPanel]
-  App --> Toast[ToastContainer]
+  App --> Header["🎛 Header\n(tabs · undo/redo · dark mode · lang · ?)"]
+  App --> Sidebar["🔧 ConfiguratorPanel\n(presets · dims · materials · doors · drawers)"]
+  App --> Preview["🖼 CabinetPreview\n(6 views · SVG/PNG export)"]
+  App --> Optimizer["📐 Optimizer\n(cut sheets · smart optimizer · comparison)"]
+  App --> Assembly["🔩 AssemblyGuide\n(steps · progress · tips)"]
+  App --> PDF["📄 PdfExportPanel\n(full build plan)"]
 
-  Sidebar --> CabSel[CabinetSelector]
-  Sidebar --> DimSliders[DimensionSliders]
-  Sidebar --> MatSel[MaterialSelector]
-  Sidebar --> CostPanel[CostEstimatePanel]
+  Sidebar --> PresetsPanel["⚡ PresetsPanel\n(6 quick-start templates)"]
+  Sidebar --> DimSliders["📏 DimensionSliders\n(w·h·d·kick height)"]
+  Sidebar --> MatSel["🪵 MaterialSelector"]
+  Sidebar --> DoorConfig["🚪 DoorConfig"]
+  Sidebar --> DrawerConfig["🗂 DrawerConfig\n(per-drawer heights)"]
+  Sidebar --> ShelfConfig["📚 ShelfConfig"]
 
-  Preview --> FrontView[FrontView]
-  Preview --> SideView[SideView]
-  Preview --> TopView[TopView]
-  Preview --> BackView[BackView]
-  Preview --> Iso3D[Isometric3DView]
-
-  Optimizer --> SmartOpt[SmartOptimizer]
-  Optimizer --> Compare[ComparisonView]
-  Optimizer --> CutSheet[CutSheetSVG]
+  Preview --> FrontClosed["Front (closed)"]
+  Preview --> FrontOpen["Front (open) — draggable shelves"]
+  Preview --> SideView["Side"]
+  Preview --> TopView["Top"]
+  Preview --> BackView["Back"]
+  Preview --> Iso3D["Isometric 3D"]
 ```
 
-## State Flow
+## 🔄 State Flow
 
 ```mermaid
 sequenceDiagram

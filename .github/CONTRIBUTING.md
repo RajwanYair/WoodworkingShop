@@ -1,81 +1,120 @@
-# Contributing Guidelines
+<div align="center">
+  <img src="../docs/banner.svg" alt="Cabinet Planner" width="100%"/>
+</div>
 
-Thank you for your interest in contributing to **WoodworkingShop**!
+# 🤝 Contributing to Cabinet Planner
 
-## Code of Conduct
+[![CI](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/ci.yml/badge.svg)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/ci.yml)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)](../tsconfig.json)
+[![ESLint](https://img.shields.io/badge/ESLint-0%20warnings-4b32c3?logo=eslint)](../eslint.config.js)
+[![Prettier](https://img.shields.io/badge/code%20style-prettier-f7b93e?logo=prettier)](../.prettierrc)
 
-- Be respectful and inclusive
-- Provide constructive feedback
-- Focus on the issue, not the person
+Thank you for your interest in contributing! Every improvement — bug fix, feature, translation, or doc update — is appreciated.
 
-## Development Setup
+---
 
-### Prerequisites
+## 🧭 Contribution Workflow
 
-- Node.js 20 or higher
-- npm 10+
-- Git
-- VS Code (recommended — see `.vscode/extensions.json`)
+```mermaid
+flowchart LR
+    F([Fork repo]) --> C([Clone locally])
+    C --> B([Create branch\nfeat/my-feature])
+    B --> D([Develop + test\nnpm run check])
+    D --> P([Open Pull Request])
+    P --> CI([CI passes\ntypecheck·lint·test·build])
+    CI --> R([Review & merge])
+```
 
-### Setup Steps
+---
 
-1. Clone the repository:
+## ⚡ Quick Setup
 
-   ```bash
-   git clone https://github.com/RajwanYair/WoodworkingShop.git
-   cd WoodworkingShop
-   ```
+**Prerequisites:** Node.js ≥ 20, npm 10+, Git
 
-2. Install dependencies:
+```bash
+# 1 — fork on GitHub, then clone your fork
+git clone https://github.com/<your-username>/WoodworkingShop.git
+cd WoodworkingShop
 
-   ```bash
-   npm ci
-   ```
+# 2 — install
+npm ci
 
-3. Start the dev server:
+# 3 — start dev server  →  http://localhost:5173/WoodworkingShop/
+npm run dev
 
-   ```bash
-   npm run dev
-   ```
+# 4 — full gate check (run before every commit)
+npm run check   # typecheck + lint + format:check + test
+```
 
-4. Run the full check suite:
+---
 
-   ```bash
-   npm run check   # typecheck + lint + format check + test
-   ```
-
-## Coding Standards
+## 📐 Coding Standards
 
 ### TypeScript
 
-- Strict mode enabled
-- No unused variables or parameters (enforced by TS + ESLint)
-- Use `type` imports for type-only references (`import type { ... }`)
+| Rule | Detail |
+|---|---|
+| **Strict mode** | `tsconfig.json` has `strict: true` |
+| **No `any`** | Explicit types required everywhere |
+| **Type imports** | `import type { Foo }` for type-only references |
+| **Unused vars** | Enforced by ESLint — fix, don't suppress |
 
-### Formatting & Linting
+### Style
 
-- **Prettier** for formatting (`npm run format`)
-- **ESLint** for code quality (`npm run lint`)
-- Both are enforced in CI with zero warnings allowed
+- **Prettier** auto-formats on save (`.prettierrc` in repo root). Run `npm run format`.  
+- **ESLint** enforces correctness (`npm run lint`). Zero warnings allowed — this is a hard CI gate.
 
-### Commit Messages
+### i18n
+
+All UI strings must exist in **both** `src/i18n/en.json` **and** `src/i18n/he.json`.  
+Run `npm run i18n:coverage` to verify parity.
+
+### Engine vs UI
+
+`src/engine/` is **pure TypeScript** — no React imports, no DOM. Keep it that way so it stays testable without jsdom.
+
+---
+
+## 💬 Commit Messages
 
 Use [Conventional Commits](https://www.conventionalcommits.org/):
 
-- `feat:` new feature
-- `fix:` bug fix
-- `docs:` documentation only
-- `refactor:` restructuring without behaviour change
-- `ci:` CI/CD changes
-- `chore:` maintenance tasks
+| Prefix | When to use |
+|---|---|
+| `feat:` | New feature or behaviour |
+| `fix:` | Bug fix |
+| `docs:` | Documentation only |
+| `refactor:` | Restructure without behaviour change |
+| `test:` | Add or update tests |
+| `ci:` | CI / workflow change |
+| `chore:` | Maintenance (deps, config) |
 
-### Pull Requests
+**Example:** `feat(engine): add per-drawer custom heights`
 
-1. Create a feature branch from `main`
-2. Make your changes
-3. Run `npm run check` to verify everything passes
-4. Open a PR — CI will verify typecheck, lint, format, test, and build
+---
 
-## Architecture
+## ✅ Pull Request Checklist
 
-See [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md) for project structure, data flow, and module descriptions.
+Before opening a PR:
+
+- [ ] `npm run check` passes (typecheck + lint + format + tests)
+- [ ] `npm run build` produces 0 warnings
+- [ ] New logic is covered by unit tests in `tests/`
+- [ ] i18n: keys added to **both** `en.json` and `he.json`
+- [ ] No hardcoded absolute paths, no `console.log` left in
+- [ ] CHANGELOG.md updated if the change is user-visible
+
+---
+
+## 🏛 Architecture Overview
+
+See [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md) for the full module map, data flow diagram, and design decisions.
+
+```
+src/engine/     ← pure TypeScript; no React; all computation
+src/components/ ← React UI components
+src/store/      ← Zustand state stores
+src/i18n/       ← EN + HE translation files
+tests/          ← Vitest unit tests (mirrors src/ layout)
+```
+

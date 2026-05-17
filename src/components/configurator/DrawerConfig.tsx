@@ -4,8 +4,17 @@ import { HARD_LIMITS } from '../../engine/materials';
 import { SliderInput } from './SliderInput';
 
 export function DrawerConfig() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { config, setConfig } = useCabinetStore();
+  const isHe = i18n.language === 'he';
+
+  const setDrawerHeight = (idx: number, val: number) => {
+    const heights = Array.from({ length: config.drawerCount }, (_, i) =>
+      config.drawerHeights?.[i] ?? 150,
+    );
+    heights[idx] = val;
+    setConfig({ drawerHeights: heights });
+  };
 
   return (
     <fieldset className="space-y-4">
@@ -16,13 +25,38 @@ export function DrawerConfig() {
       <SliderInput
         label={t('config.drawerCount')}
         value={config.drawerCount}
-        onChange={(v) => setConfig({ drawerCount: v })}
+        onChange={(v) => {
+          // Reset drawerHeights when count changes
+          setConfig({ drawerCount: v, drawerHeights: undefined });
+        }}
         softMin={0}
         softMax={4}
         hardMin={0}
         hardMax={HARD_LIMITS.maxDrawers}
         step={1}
       />
+
+      {config.drawerCount > 0 && (
+        <div className="space-y-2 ps-2 border-s-2 border-wood-200 dark:border-wood-700">
+          <p className="text-xs text-wood-500 dark:text-wood-400">
+            {isHe ? 'גובה קופסת מגירה (מ"מ)' : 'Drawer box height (mm)'}
+          </p>
+          {Array.from({ length: config.drawerCount }, (_, i) => (
+            <SliderInput
+              key={i}
+              label={isHe ? `מגירה ${i + 1}` : `Drawer ${i + 1}`}
+              value={config.drawerHeights?.[i] ?? 150}
+              onChange={(v) => setDrawerHeight(i, v)}
+              softMin={80}
+              softMax={250}
+              hardMin={50}
+              hardMax={500}
+              step={5}
+              unit="mm"
+            />
+          ))}
+        </div>
+      )}
     </fieldset>
   );
 }

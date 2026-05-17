@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 160" width="900" height="160">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="900" y2="160" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2d1a0e"/>
+      <stop offset="100%" stop-color="#5c3a1e"/>
+    </linearGradient>
+    <linearGradient id="ac" x1="0" y1="0" x2="900" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#b8722a"/>
+      <stop offset="100%" stop-color="#e8a96a"/>
+    </linearGradient>
+    <linearGradient id="acV" x1="0" y1="0" x2="0" y2="160" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#e8a96a"/>
+      <stop offset="100%" stop-color="#b8722a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="160" fill="url(#bg)" rx="10"/>
+
+  <!-- Wood grain lines -->
+  <path d="M0,35 Q300,31 600,37 Q750,39 900,35" stroke="#3d2010" stroke-width="1" fill="none" opacity="0.4"/>
+  <path d="M0,72 Q200,68 500,74 Q700,76 900,72" stroke="#3d2010" stroke-width="0.8" fill="none" opacity="0.28"/>
+  <path d="M0,108 Q350,105 600,111 Q750,113 900,108" stroke="#3d2010" stroke-width="1" fill="none" opacity="0.38"/>
+  <path d="M0,142 Q250,139 500,143 Q700,145 900,142" stroke="#3d2010" stroke-width="0.8" fill="none" opacity="0.25"/>
+
+  <!-- Left accent bar -->
+  <rect x="0" y="0" width="5" height="160" fill="url(#acV)" rx="3"/>
+
+  <!-- ── Cabinet icon (front view) ── -->
+  <!-- Outer carcass -->
+  <rect x="38" y="18" width="110" height="118" rx="3" fill="#3a1f0a" stroke="#c8894a" stroke-width="2"/>
+  <!-- Toe-kick recess -->
+  <rect x="46" y="124" width="94" height="10" rx="2" fill="#2d1a0e" stroke="#a06830" stroke-width="1" opacity="0.85"/>
+  <!-- Center door split -->
+  <line x1="93" y1="21" x2="93" y2="122" stroke="#c8894a" stroke-width="1.5" opacity="0.75"/>
+  <!-- Shelf line (dashed) -->
+  <line x1="41" y1="73" x2="145" y2="73" stroke="#c8894a" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.55"/>
+  <!-- Left door handle -->
+  <rect x="79" y="84" width="7" height="18" rx="3" fill="#e8a96a"/>
+  <!-- Right door handle -->
+  <rect x="100" y="84" width="7" height="18" rx="3" fill="#e8a96a"/>
+  <!-- Hinges (left door) -->
+  <circle cx="48" cy="49" r="2.5" fill="#c8894a" opacity="0.8"/>
+  <circle cx="48" cy="108" r="2.5" fill="#c8894a" opacity="0.8"/>
+  <!-- Hinges (right door) -->
+  <circle cx="138" cy="49" r="2.5" fill="#c8894a" opacity="0.8"/>
+  <circle cx="138" cy="108" r="2.5" fill="#c8894a" opacity="0.8"/>
+
+  <!-- Isometric projection hints (top + right faces) -->
+  <polygon points="38,18 148,18 160,8 48,8" fill="#c8894a" fill-opacity="0.12" stroke="#c8894a" stroke-width="1" opacity="0.6"/>
+  <polygon points="148,18 160,8 160,114 148,124" fill="#8b5e2a" fill-opacity="0.18" stroke="#c8894a" stroke-width="1" opacity="0.55"/>
+
+  <!-- ── Typography ── -->
+  <!-- Main title -->
+  <text x="187" y="75"
+    font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif"
+    font-size="46" font-weight="700" fill="#f5e6d3" letter-spacing="-1.5">Cabinet Planner</text>
+
+  <!-- Accent underline -->
+  <rect x="187" y="83" width="420" height="3" fill="url(#ac)" rx="1.5" opacity="0.85"/>
+
+  <!-- Tagline -->
+  <text x="187" y="108"
+    font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif"
+    font-size="16" fill="#c8a070" letter-spacing="0.4">React 19 · TypeScript 5 · PWA · Bilingual · PDF Export · DXF/G-code</text>
+
+  <!-- Sub-description -->
+  <text x="187" y="132"
+    font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif"
+    font-size="13.5" fill="#9e7850">Configure, optimize, and export custom woodworking cabinets — right in the browser.</text>
+
+  <!-- Bottom accent bar -->
+  <rect x="5" y="154" width="890" height="4" fill="url(#ac)" rx="2" opacity="0.65"/>
+</svg>

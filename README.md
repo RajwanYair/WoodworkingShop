@@ -1,106 +1,251 @@
-# Cabinet Planner — Interactive Woodworking Design Tool
+<div align="center">
+  <img src="docs/banner.svg" alt="Cabinet Planner — Interactive Woodworking Design Tool" width="100%"/>
+</div>
+
+<div align="center">
 
 [![CI](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/ci.yml/badge.svg)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/ci.yml)
 [![Deploy](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/pages.yml/badge.svg)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/pages.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178c6?logo=typescript&logoColor=white)](tsconfig.json)
+[![React](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=white)](package.json)
+[![Vite](https://img.shields.io/badge/Vite-6-646cff?logo=vite&logoColor=white)](vite.config.ts)
+[![PWA](https://img.shields.io/badge/PWA-offline--ready-5a0fc8?logo=pwa&logoColor=white)](public/manifest.json)
+[![i18n](https://img.shields.io/badge/i18n-EN%20%2B%20HE-orange)](src/i18n)
+[![Tests](https://img.shields.io/badge/tests-258%2B-brightgreen?logo=vitest)](tests/)
 
-A React single-page application for designing pantry/storage cabinets with real-time preview, cut-sheet optimization, and PDF export.
+**[🚀 Live Demo](https://rajwanyair.github.io/WoodworkingShop/)** · **[📋 Changelog](CHANGELOG.md)** · **[🗺 Roadmap](ROADMAP.md)** · **[🏛 Architecture](docs/ARCHITECTURE.md)**
 
-**[Live Demo →](https://rajwanyair.github.io/WoodworkingShop/)**
+</div>
 
-## Features
+---
 
-- **Interactive Configurator** — sliders and selectors for dimensions, materials, shelves, doors, handles, edge banding
-- **Multi-Cabinet Projects** — design multiple cabinets in one project with combined cut-sheet optimization
-- **5-View + 3D SVG Preview** — Front (closed/open), Side, Top, Back, and Isometric 3D view with dimension annotations and part tooltips
-- **Draggable Shelves** — drag shelves in Front (Open) view to reposition; auto-switches to custom spacing
-- **Smart Optimizer** — 5 strategies (reduce depth, co-nest strips, adjust width/height, material swap) to minimize sheet waste
-- **Comparison View** — side-by-side original vs optimized config with diff summary
-- **Interactive Cut Sheets** — hover to highlight parts, waste hatch patterns, edge banding indicators, grain direction arrows, per-part dimensions
-- **DXF Export** — export cut sheets as AutoCAD R12 DXF files for CNC routers (per-sheet or combined)
-- **Color-Blind Safe Mode** — deuteranopia-safe Wong palette toggle for cut sheet visualization
-- **Imperial/Metric Units** — toggle between mm and fractional inches (nearest 1/16")
-- **Furniture Types** — cabinet, bookshelf, desk, and wardrobe presets with type-specific part generation
-- **Assembly Guide** — step-by-step build instructions with progress bar, part highlighting, and pro tips
-- **Toast Notifications** — real-time feedback for save, load, export, and error events
-- **PDF Export** — full build plan: cover, specs, parts table, hardware BOM, cut diagrams, exploded assembly view, drilling guide, assembly sequence, shopping list
-- **Cost Estimator** — per-material sheet costs, hardware, edge banding with total estimate in sidebar
-- **Undo/Redo** — full history with Ctrl+Z / Ctrl+Y keyboard shortcuts
-- **Keyboard Shortcuts** — Ctrl+Z undo, Ctrl+Y redo, Ctrl+P print, Alt+1-5 switch tabs
-- **Responsive Design** — mobile-first layout with bottom sheet sidebar, scrollable tabs
-- **Export/Import** — save/load configs to localStorage or download/upload as JSON files
-- **Shareable URLs** — config encoded in URL query params; copy-link button
-- **Print-Friendly** — @media print CSS hides UI chrome, optimizes tables and SVGs for paper
-- **PWA / Offline** — service worker with cache-first strategy; installable web app
-- **Bilingual** — English + Hebrew (RTL) with i18next
-- **Dark Mode** — toggle with Tailwind CSS dark variant
-- **Accessible** — ARIA landmarks, keyboard navigation, skip-to-content, color-blind support
+> **Cabinet Planner** is a browser-based woodworking design tool: configure any cabinet or furniture piece, see a live 6-view 3D preview, optimize your cut sheets, and export a complete PDF build plan, DXF, G-code, or BOM — all without a server or an account.
 
-## Tech Stack
+---
 
-| Category  | Technology                        |
-| --------- | --------------------------------- |
-| Framework | React 19                          |
-| Language  | TypeScript 5.8 (strict)           |
-| Styling   | Tailwind CSS 4                    |
-| State     | Zustand 5                         |
-| PDF       | @react-pdf/renderer 4             |
-| i18n      | i18next 25                        |
-| Build     | Vite 6                            |
-| Test      | Vitest 4 + Testing Library        |
-| Lint      | ESLint 9 (flat config) + Prettier |
-| CI/CD     | GitHub Actions                    |
-| Deploy    | GitHub Pages                      |
+## ✨ Features
 
-## Quick Start
+### 🎛 Configurator
+
+| Feature | Details |
+|---|---|
+| **Quick Presets** | 6 one-click templates: kitchen base/wall, tall pantry, bookcase, wardrobe, bathroom vanity |
+| **Furniture types** | Cabinet · Bookshelf · Desk · Wardrobe — each with type-specific part generation |
+| **Dimensions** | Width / height / depth sliders with free-text numeric entry; metric mm or fractional inches |
+| **Toe kick / plinth** | Configurable kick height (0 = flush-to-floor or wall-mounted) |
+| **Shelves** | Count, equal or custom spacing, drag-to-reposition in the preview |
+| **Doors** | Flat · Shaker · Glass · None; 1 or 2 doors; configurable reveal |
+| **Drawers** | 0–6 drawers with individual per-drawer box height |
+| **Materials** | Built-in library (plywood, melamine, MDF, chipboard, glass) + custom material editor |
+| **Grain direction** | Mark materials as grain-sensitive — cut optimizer never rotates those parts 90° |
+| **Edge banding** | All-visible · Doors-only · None |
+| **Handles** | Bar · Knob · Cup pull · None |
+| **Save / Load** | localStorage presets + download/upload JSON config files |
+| **Shareable URLs** | Full config encoded in URL query params; one-click copy |
+
+### 🖼 Preview
+
+| Feature | Details |
+|---|---|
+| **6 views** | Front (closed) · Front (open) · Side · Top · Back · Isometric 3D |
+| **Dimension annotations** | Arrowhead dim lines; unit-aware labels (mm or fractional in) |
+| **Grain arrows** | Per-part grain direction overlaid on cut sheets |
+| **SVG + PNG export** | Download any view as a vector SVG or 2× rasterised PNG |
+| **Pinch / swipe** | Touch zoom and swipe-between-views on mobile |
+| **Dark mode** | Full dark theme; SVG dim lines use `currentColor` |
+
+### 📐 Cut-Sheet Optimizer
+
+| Feature | Details |
+|---|---|
+| **MaxRects bin-packing** | State-of-the-art 2D bin-packing across standard 2440×1220 mm sheets |
+| **Grain constraints** | Grain-sensitive materials skip 90° rotation during placement |
+| **Smart optimizer** | 5 strategies: reduce depth · co-nest strips · adjust width/height · material swap |
+| **Comparison view** | Side-by-side original vs optimised config with waste diff |
+| **Interactive sheets** | Hover to highlight parts; waste hatch patterns; edge-banding and grain indicators |
+| **Color-blind safe** | Wong palette toggle (deuteranopia-friendly) |
+| **Multi-cabinet** | Combine all cabinets in a project into one optimised cut run |
+
+### 📤 Export
+
+| Format | Details |
+|---|---|
+| **PDF** | Cover · specs · parts table · hardware BOM · cut diagrams · assembly sequence · shopping list |
+| **DXF** | AutoCAD R12 DXF for CNC routers; per-sheet or combined |
+| **G-code** | CNC router toolpath export |
+| **CSV BOM** | Bill of materials as spreadsheet-ready CSV |
+| **SVG / PNG** | Preview panels as vector or raster image |
+| **JSON** | Full config export/import |
+
+### 🛠 Other
+
+- 🏗 **Assembly guide** — numbered steps with progress bar, part highlighting, and pro tips  
+- 💰 **Cost estimator** — per-material sheet costs + hardware + edge banding; live sidebar total  
+- ↩ **Undo / Redo** — full change history (`Ctrl+Z` / `Ctrl+Y`)  
+- ⌨ **Keyboard shortcuts** — `Alt+1-5` tabs, `Ctrl+Z/Y`, `Ctrl+P`, `?` for help modal  
+- 📱 **PWA / Offline** — service worker; installable as a desktop or mobile app  
+- 🌐 **Bilingual** — English + Hebrew (RTL layout) via i18next  
+- ♿ **Accessible** — ARIA landmarks, keyboard nav, skip-to-content, screen-reader labels  
+- 🖨 **Print-friendly** — `@media print` hides UI chrome; optimises tables and SVGs for paper  
+
+---
+
+## 🚀 Quick Start
 
 ```bash
-npm ci             # install dependencies (deterministic)
-npm run dev        # development server at localhost:5173
-npm run test       # run 214+ unit tests
-npm run build      # production build → dist/
+# 1 — clone
+git clone https://github.com/RajwanYair/WoodworkingShop.git
+cd WoodworkingShop
+
+# 2 — install (deterministic, uses package-lock.json)
+npm ci
+
+# 3 — dev server  →  http://localhost:5173/WoodworkingShop/
+npm run dev
+
+# 4 — run 258+ unit tests
+npm test
+
+# 5 — production build  →  dist/
+npm run build
 ```
 
-## Development
+> **Node.js ≥ 20** is required.
+
+---
+
+## 🏗 Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | React 19 |
+| Language | TypeScript 5.8 (strict mode) |
+| Styling | Tailwind CSS 4 |
+| State | Zustand 5 |
+| PDF | @react-pdf/renderer 4 |
+| i18n | i18next 25 + react-i18next |
+| Build | Vite 6 |
+| Unit tests | Vitest 4 + @testing-library/react |
+| E2E tests | Playwright |
+| Lint / format | ESLint 9 (flat config) + Prettier |
+| CI/CD | GitHub Actions |
+| Deploy | GitHub Pages |
+
+---
+
+## 🏛 Architecture
+
+All computation runs **client-side** — no backend, no account required.
+
+```mermaid
+graph TD
+    UI["🎛 Configurator UI\n(React + Zustand)"]
+    Store["🗄 Cabinet Store\n(Zustand 5)"]
+    Engine["⚙ Engine\n(Pure TypeScript)"]
+    Preview["🖼 SVG Preview\n(6 views + isometric)"]
+    Optimizer["📐 Cut Optimizer\n(MaxRects bin-pack)"]
+    Smart["🧠 Smart Optimizer\n(5 strategies)"]
+    Assembly["🔩 Assembly Guide"]
+    PDF["📄 PDF Export\n(@react-pdf/renderer)"]
+    Exports["📤 DXF · G-code · CSV · JSON"]
+
+    UI -->|"setConfig(patch)"| Store
+    Store -->|config| Engine
+    Engine -->|"parts, hardware,\ndimensions, cost"| Store
+    Store --> Preview
+    Store --> Optimizer
+    Optimizer --> Smart
+    Store --> Assembly
+    Store --> PDF
+    Store --> Exports
+```
+
+**Engine modules** (`src/engine/`) are pure TypeScript with no React dependencies — fully testable without a DOM.
+
+```
+src/
+├── engine/          # Pure TS — types, materials, dimensions, parts, hardware,
+│                    #   cut-optimizer, smart-optimizer, assembly, cost-estimator
+├── components/      # React UI — configurator, preview, optimizer, assembly, pdf, layout
+├── store/           # Zustand — cabinet-store, custom-materials-store, toast-store
+├── hooks/           # useTouchGestures
+├── i18n/            # en.json · he.json · setup
+└── utils/           # bom-export · dxf-export · gcode-export · url-state · units · download
+```
+
+→ Full architecture docs: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+
+---
+
+## 🔧 Development Commands
 
 ```bash
-npm run typecheck       # TypeScript strict mode check
-npm run lint            # ESLint (0 warnings allowed)
-npm run format          # Prettier formatting
-npm run format:check    # Verify formatting (CI)
-npm run check           # All of the above + tests
-npm run ci              # check + build (full CI pipeline)
+npm run typecheck       # TypeScript strict-mode check (tsc --noEmit)
+npm run lint            # ESLint — 0 warnings policy
+npm run format          # Prettier auto-format
+npm run format:check    # Verify formatting (used in CI)
+npm run i18n:coverage   # Check EN ↔ HE translation parity
+npm run bundle:report   # Bundle size breakdown
+npm run check           # typecheck + lint + format:check + test  (pre-commit gate)
+npm run ci              # check + build + bundle:check  (full CI pipeline)
+npm run test:e2e        # Playwright end-to-end tests
 ```
 
-## Project Structure
+---
 
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for detailed architecture documentation.
+## 🌐 Internationalization
 
-## Deployment
+The app ships with full **English** and **Hebrew** (RTL) translations.  
+All UI strings live in `src/i18n/en.json` and `src/i18n/he.json`.  
+Run `npm run i18n:coverage` to verify both files are in sync.
 
-The app auto-deploys to GitHub Pages on push to `main` via the Pages workflow.
+---
 
-For manual releases:
+## 🚢 Deployment
 
-1. Update version in `package.json`
-2. Update `CHANGELOG.md`
-3. Tag: `git tag vX.Y.Z && git push --tags`
-4. The release workflow builds and publishes artifacts to GitHub Releases
+The app auto-deploys to **GitHub Pages** on every push to `main` via [`.github/workflows/pages.yml`](.github/workflows/pages.yml).
 
-## Troubleshooting
+For a tagged release:
 
-| Issue                          | Solution                                                                      |
-| ------------------------------ | ----------------------------------------------------------------------------- |
-| `npm ci` fails                 | Ensure Node.js ≥ 20. Delete `node_modules` and retry                          |
-| TypeScript errors              | Run `npm run typecheck` for details. Strict mode is enabled                   |
-| Lint failures                  | Run `npm run lint` — 0 warnings policy. Fix root causes, no suppressions      |
-| Build warning about chunk size | Expected for `@react-pdf/renderer` (~1.5 MB). It's code-split and lazy-loaded |
-| Tests fail                     | Run `npm test` — requires `jsdom`. Check `vitest.config.ts`                   |
+```bash
+# 1 — bump version
+npm version patch   # or minor / major
 
-## Contributing
+# 2 — update CHANGELOG.md, push
+git push --follow-tags
 
-See [.github/CONTRIBUTING.md](.github/CONTRIBUTING.md).
+# 3 — create GitHub Release (CI builds and attaches artifacts)
+gh release create vX.Y.Z --generate-notes
+```
 
-## License
+---
 
-MIT
+## ❓ Troubleshooting
+
+| Issue | Solution |
+|---|---|
+| `npm ci` fails | Ensure **Node.js ≥ 20**. Delete `node_modules` and retry |
+| TypeScript errors | Run `npm run typecheck` for details. Strict mode is on |
+| Lint failures | Run `npm run lint` — 0 warnings policy; fix root causes |
+| Chunk size warning | Expected for `@react-pdf/renderer` (~1.5 MB) — it is code-split and lazy-loaded |
+| Tests fail | Run `npm test` — requires jsdom. Check `vitest.config.ts` |
+| Hebrew layout broken | Ensure `<html dir="rtl">` is set when language is `he` |
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please read [`.github/CONTRIBUTING.md`](.github/CONTRIBUTING.md) first.
+
+Quick checklist before opening a PR:
+1. `npm run check` passes (typecheck + lint + format + tests)
+2. `npm run build` succeeds with 0 warnings
+3. New features include unit tests
+4. i18n keys added to **both** `en.json` and `he.json`
+
+---
+
+## 📄 License
+
+[MIT](LICENSE) © RajwanYair

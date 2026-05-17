@@ -26,6 +26,8 @@ export function configToParams(cfg: CabinetConfig): URLSearchParams {
   if (cfg.doorReveal !== def.doorReveal) params.set('dr', String(cfg.doorReveal));
   if (cfg.handleStyle !== def.handleStyle) params.set('hs', cfg.handleStyle);
   if (cfg.drawerCount !== def.drawerCount) params.set('drc', String(cfg.drawerCount));
+  if (cfg.drawerHeights && cfg.drawerHeights.length > 0)
+    params.set('dh', cfg.drawerHeights.join(','));
   if ((cfg.kickHeight ?? 0) !== (def.kickHeight ?? 0)) params.set('kh', String(cfg.kickHeight ?? 0));
   if (cfg.edgeBanding !== def.edgeBanding) params.set('eb', cfg.edgeBanding);
   if (cfg.lang !== def.lang) params.set('lang', cfg.lang);
@@ -74,6 +76,8 @@ export function paramsToConfig(params: URLSearchParams): Partial<CabinetConfig> 
   if (hs === 'bar' || hs === 'knob' || hs === 'cup' || hs === 'none') patch.handleStyle = hs;
   const drc = params.get('drc');
   if (drc) patch.drawerCount = Number(drc);
+  const dh = params.get('dh');
+  if (dh) patch.drawerHeights = dh.split(',').map(Number).filter((n) => !isNaN(n) && n > 0);
   const kh = params.get('kh');
   if (kh !== null) patch.kickHeight = Number(kh);
   const eb = params.get('eb');

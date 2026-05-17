@@ -1,0 +1,92 @@
+name: 🐛 Bug Report
+description: Report unexpected behaviour or a broken feature
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+        **Please check the [live demo](https://rajwanyair.github.io/WoodworkingShop/) and the [Changelog](https://github.com/RajwanYair/WoodworkingShop/blob/main/CHANGELOG.md) first** — your issue may already be fixed.
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: "🧩 Affected component"
+      description: Which part of the app is broken?
+      options:
+        - Configurator (sliders, presets, materials)
+        - Preview (SVG views, SVG/PNG export)
+        - Cut-sheet Optimizer
+        - Smart Optimizer / Comparison view
+        - Assembly Guide
+        - PDF Export
+        - DXF / G-code / CSV Export
+        - Cost Estimator
+        - Keyboard shortcuts / UI
+        - PWA / Offline
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "📝 Description"
+      description: A clear, concise description of the bug.
+      placeholder: When I do X, Y happens instead of Z.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: "🔁 Steps to reproduce"
+      description: How can we reproduce the bug?
+      value: |
+        1. Open the app
+        2. Configure …
+        3. Click …
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: "✅ Expected behaviour"
+      placeholder: What should happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: "❌ Actual behaviour"
+      placeholder: What actually happens? Paste error messages or attach a screenshot.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: browser
+    attributes:
+      label: "🌐 Browser / environment"
+      options:
+        - Chrome / Edge (latest)
+        - Firefox (latest)
+        - Safari (latest)
+        - Mobile — Chrome (Android)
+        - Mobile — Safari (iOS)
+        - Other
+      multiple: true
+    validations:
+      required: false
+
+  - type: input
+    id: version
+    attributes:
+      label: "📦 App version"
+      description: Find this in the page title or package.json
+      placeholder: e.g. 3.2.0
+    validations:
+      required: false

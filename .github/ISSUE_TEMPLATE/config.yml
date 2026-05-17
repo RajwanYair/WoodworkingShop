@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Ask a Question (GitHub Discussions)
+    url: https://github.com/RajwanYair/WoodworkingShop/discussions
+    about: For questions, ideas, and general support — please use Discussions rather than Issues.
+  - name: 🚀 Live Demo
+    url: https://rajwanyair.github.io/WoodworkingShop/
+    about: Try Cabinet Planner in the browser before filing an issue.
+  - name: 📋 Changelog
+    url: https://github.com/RajwanYair/WoodworkingShop/blob/main/CHANGELOG.md
+    about: Check the changelog to see if your issue is already fixed in the latest version.

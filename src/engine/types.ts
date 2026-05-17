@@ -48,6 +48,8 @@ export interface CabinetConfig {
 
   // Drawers
   drawerCount: number; // 0–4 drawers at bottom of cabinet
+  /** Optional per-drawer box heights in mm. Index 0 = bottom drawer. Falls back to 150 mm. */
+  drawerHeights?: number[];
 
   // Toe kick / plinth
   /** Plinth/toe-kick height in mm. 0 = no kick (flush-to-floor or wall-mounted). */
