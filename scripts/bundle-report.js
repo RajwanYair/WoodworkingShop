@@ -1,13 +1,22 @@
 /**
- * Bundle size report — runs after `npm run build` in CI.
- * Reports the size of each output file and warns if the total
- * JS bundle exceeds the budget (300 KB gzipped estimate).
+ * Bundle size report & budget enforcer — runs after `npm run build` in CI.
+ *
+ * Budgets are loaded from bundle-budget.json (versioned alongside source).
+ * Process exits non-zero on any budget violation.
+ *
+ * Checks:
+ *   - Total JS size
+ *   - Total CSS size
+ *   - Total dist size
+ *   - Per-file budget (configurable per chunk name prefix, with default fallback)
  */
-import { readdirSync, statSync } from 'node:fs';
-import { join, extname } from 'node:path';
+import { readdirSync, statSync, readFileSync } from 'node:fs';
+import { join, extname, basename } from 'node:path';
 
 const DIST_DIR = 'dist';
-const BUDGET_KB = 2000; // Total JS budget in KB (includes lazy-loaded chunks like pdf-renderer)
+const BUDGET_FILE = 'bundle-budget.json';
+
+const budget = JSON.parse(readFileSync(BUDGET_FILE, 'utf8'));
 
 function walkDir(dir) {
   const results = [];
@@ -39,8 +48,17 @@ function fmtKB(bytes) {
   return (bytes / 1024).toFixed(1) + ' KB';
 }
 
+function fileBudgetKB(path) {
+  const name = basename(path).toLowerCase();
+  for (const [prefix, kb] of Object.entries(budget.perFileKB)) {
+    if (prefix === '_default') continue;
+    if (name.startsWith(prefix.toLowerCase())) return kb;
+  }
+  return budget.perFileKB._default;
+}
+
 console.log('📦 Bundle Size Report');
-console.log('='.repeat(50));
+console.log('='.repeat(60));
 
 for (const [label, items] of Object.entries(groups)) {
   if (items.length === 0) continue;
@@ -55,15 +73,38 @@ const totalJS = groups.js.reduce((sum, f) => sum + f.size, 0);
 const totalCSS = groups.css.reduce((sum, f) => sum + f.size, 0);
 const totalAll = files.reduce((sum, f) => sum + statSync(f).size, 0);
 
-console.log('\n' + '='.repeat(50));
-console.log(`Total JS:  ${fmtKB(totalJS)}`);
-console.log(`Total CSS: ${fmtKB(totalCSS)}`);
-console.log(`Total:     ${fmtKB(totalAll)}`);
-console.log(`JS Budget: ${BUDGET_KB} KB`);
+console.log('\n' + '='.repeat(60));
+console.log(`Total JS:  ${fmtKB(totalJS).padStart(12)}    Budget: ${budget.totalJsKB} KB`);
+console.log(`Total CSS: ${fmtKB(totalCSS).padStart(12)}    Budget: ${budget.totalCssKB} KB`);
+console.log(`Total:     ${fmtKB(totalAll).padStart(12)}    Budget: ${budget.totalAllKB} KB`);
 
-if (totalJS / 1024 > BUDGET_KB) {
-  console.error(`\n❌ JS bundle (${fmtKB(totalJS)}) exceeds budget of ${BUDGET_KB} KB!`);
+const violations = [];
+
+if (totalJS / 1024 > budget.totalJsKB) {
+  violations.push(`Total JS ${fmtKB(totalJS)} > ${budget.totalJsKB} KB`);
+}
+if (totalCSS / 1024 > budget.totalCssKB) {
+  violations.push(`Total CSS ${fmtKB(totalCSS)} > ${budget.totalCssKB} KB`);
+}
+if (totalAll / 1024 > budget.totalAllKB) {
+  violations.push(`Total ${fmtKB(totalAll)} > ${budget.totalAllKB} KB`);
+}
+
+console.log('\nPer-file checks (JS):');
+for (const f of groups.js) {
+  const limitKB = fileBudgetKB(f.path);
+  const okSym = f.size / 1024 > limitKB ? '❌' : '✅';
+  console.log(`  ${okSym} ${fmtKB(f.size).padStart(10)} / ${limitKB} KB    ${f.path}`);
+  if (f.size / 1024 > limitKB) {
+    violations.push(`${f.path} ${fmtKB(f.size)} > ${limitKB} KB`);
+  }
+}
+
+if (violations.length > 0) {
+  console.error(`\n❌ Bundle budget violations (${violations.length}):`);
+  for (const v of violations) console.error(`  - ${v}`);
+  console.error(`\nUpdate ${BUDGET_FILE} (with justification) or reduce bundle size.`);
   process.exit(1);
 }
 
-console.log('\n✅ Bundle within budget.');
+console.log('\n✅ All budgets within limits.');
