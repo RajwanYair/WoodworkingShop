@@ -39,7 +39,8 @@ export function MaterialSelector() {
         <select
           value={config.backPanelMaterial}
           onChange={(e) => setConfig({ backPanelMaterial: e.target.value })}
-          className="mt-1 block w-full rounded border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-800 px-3 py-2 text-sm"
+          disabled={config.hasBack === false}
+          className="mt-1 block w-full rounded border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-800 px-3 py-2 text-sm disabled:opacity-50"
         >
           {backs.map((m) => (
             <option key={m.key} value={m.key}>
@@ -47,6 +48,21 @@ export function MaterialSelector() {
             </option>
           ))}
         </select>
+      </label>
+
+      <label className="flex items-start gap-2 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={config.hasBack !== false}
+          onChange={(e) => setConfig({ hasBack: e.target.checked })}
+          className="mt-0.5 accent-primary"
+        />
+        <span className="text-sm">
+          <span className="block text-wood-700 dark:text-wood-200">{t('config.hasBack')}</span>
+          <span className="block text-[11px] text-wood-500 dark:text-wood-400">
+            {t('config.hasBackDesc')}
+          </span>
+        </span>
       </label>
     </fieldset>
   );

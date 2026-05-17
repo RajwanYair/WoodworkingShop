@@ -59,16 +59,18 @@ export function generateParts(cfg: CabinetConfig): Part[] {
     });
 
     // Back panel
-    parts.push({
-      id: id(),
-      qty: 1,
-      name: { en: 'Back Panel', he: 'לוח גב' },
-      material: cfg.backPanelMaterial,
-      thickness: bm.thickness,
-      length: d.backPanelHeight,
-      width: d.backPanelWidth,
-      edgeBanding: edgeLabel('none'),
-    });
+    if (cfg.hasBack !== false) {
+      parts.push({
+        id: id(),
+        qty: 1,
+        name: { en: 'Back Panel', he: 'לוח גב' },
+        material: cfg.backPanelMaterial,
+        thickness: bm.thickness,
+        length: d.backPanelHeight,
+        width: d.backPanelWidth,
+        edgeBanding: edgeLabel('none'),
+      });
+    }
 
     // Optional shelves (under-desk storage)
     if (cfg.shelfCount > 0) {
@@ -223,16 +225,18 @@ export function generateParts(cfg: CabinetConfig): Part[] {
   }
 
   // ── Back panel ──
-  parts.push({
-    id: id(),
-    qty: 1,
-    name: { en: 'Back Panel', he: 'לוח גב' },
-    material: cfg.backPanelMaterial,
-    thickness: bm.thickness,
-    length: d.backPanelHeight,
-    width: d.backPanelWidth,
-    edgeBanding: edgeLabel('none'),
-  });
+  if (cfg.hasBack !== false) {
+    parts.push({
+      id: id(),
+      qty: 1,
+      name: { en: 'Back Panel', he: 'לוח גב' },
+      material: cfg.backPanelMaterial,
+      thickness: bm.thickness,
+      length: d.backPanelHeight,
+      width: d.backPanelWidth,
+      edgeBanding: edgeLabel('none'),
+    });
+  }
 
   // ── Wardrobe hanging rail ──
   if (isWardrobe) {

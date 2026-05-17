@@ -161,6 +161,7 @@ export const DEFAULT_CONFIG: CabinetConfig = {
   customShelfPositions: [],
   carcassMaterial: 'plywood-17',
   backPanelMaterial: 'plywood-4',
+  hasBack: true,
   doorCount: 2,
   doorStyle: 'flat',
   doorReveal: 3,

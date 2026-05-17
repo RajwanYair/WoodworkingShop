@@ -20,6 +20,7 @@ export function configToParams(cfg: CabinetConfig): URLSearchParams {
   }
   if (cfg.carcassMaterial !== def.carcassMaterial) params.set('cm', cfg.carcassMaterial);
   if (cfg.backPanelMaterial !== def.backPanelMaterial) params.set('bm', cfg.backPanelMaterial);
+  if ((cfg.hasBack ?? true) !== (def.hasBack ?? true)) params.set('hb', cfg.hasBack === false ? '0' : '1');
   if (cfg.doorCount !== def.doorCount) params.set('dc', String(cfg.doorCount));
   if (cfg.doorStyle !== def.doorStyle) params.set('ds', cfg.doorStyle);
   if (cfg.doorReveal !== def.doorReveal) params.set('dr', String(cfg.doorReveal));
@@ -60,6 +61,8 @@ export function paramsToConfig(params: URLSearchParams): Partial<CabinetConfig> 
   if (cm) patch.carcassMaterial = cm;
   const bm = params.get('bm');
   if (bm) patch.backPanelMaterial = bm;
+  const hb = params.get('hb');
+  if (hb === '0' || hb === '1') patch.hasBack = hb === '1';
   const dc = params.get('dc');
   if (dc === '1' || dc === '2') patch.doorCount = Number(dc) as 1 | 2;
   const ds = params.get('ds');

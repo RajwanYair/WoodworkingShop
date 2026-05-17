@@ -62,6 +62,21 @@ describe('generateParts', () => {
     expect(doors).toBeUndefined();
   });
 
+  it('omits back panel when hasBack=false (Sprint A2)', () => {
+    const cfg = { ...DEFAULT_CONFIG, hasBack: false };
+    const p = generateParts(cfg);
+    const back = p.find((x) => x.name.en === 'Back Panel');
+    expect(back).toBeUndefined();
+  });
+
+  it('keeps back panel when hasBack=undefined (backward compat)', () => {
+    const cfg = { ...DEFAULT_CONFIG };
+    delete (cfg as { hasBack?: boolean }).hasBack;
+    const p = generateParts(cfg);
+    const back = p.find((x) => x.name.en === 'Back Panel');
+    expect(back).toBeDefined();
+  });
+
   it('all parts have bilingual names', () => {
     expectBilingualNames(parts);
   });

@@ -37,6 +37,7 @@ export interface CabinetConfig {
   // Material
   carcassMaterial: string; // material key
   backPanelMaterial: string; // material key
+  hasBack?: boolean; // Sprint A2: defaults to true; when false, no back panel is produced
 
   // Doors
   doorCount: 1 | 2;

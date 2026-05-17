@@ -140,21 +140,35 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     videoKeyword: 'attach top panel cabinet carcass',
   });
 
-  steps.push({
-    stepNumber: n++,
-    title: { en: 'Install Back Panel', he: 'התקנת לוח גב' },
-    description: {
-      en: 'Place the back panel into the rabbet and nail/screw around the perimeter every 150mm. The back panel squares the entire carcass.',
-      he: 'הנח את לוח הגב בשפה וחבר עם מסמרים/ברגים כל 150 מ"מ לאורך ההיקף. לוח הגב מיישר את כל השלד.',
-    },
-    parts: [hasFixedShelf ? 'P07' : 'P06'],
-    icon: '📐',
-    videoKeyword: 'install cabinet back panel square',
-    tip: {
-      en: 'Start from one corner and work around to keep the carcass square.',
-      he: 'התחל מפינה אחת והמשך מסביב כדי לשמור על ריבועיות השלד.',
-    },
-  });
+  if (cfg.hasBack !== false) {
+    steps.push({
+      stepNumber: n++,
+      title: { en: 'Install Back Panel', he: 'התקנת לוח גב' },
+      description: {
+        en: 'Place the back panel into the rabbet and nail/screw around the perimeter every 150mm. The back panel squares the entire carcass.',
+        he: 'הנח את לוח הגב בשפה וחבר עם מסמרים/ברגים כל 150 מ"מ לאורך ההיקף. לוח הגב מיישר את כל השלד.',
+      },
+      parts: [hasFixedShelf ? 'P07' : 'P06'],
+      icon: '📐',
+      videoKeyword: 'install cabinet back panel square',
+      tip: {
+        en: 'Start from one corner and work around to keep the carcass square.',
+        he: 'התחל מפינה אחת והמשך מסביב כדי לשמור על ריבועיות השלד.',
+      },
+    });
+  } else {
+    steps.push({
+      stepNumber: n++,
+      title: { en: 'Square the Carcass (no back)', he: 'יישור השלד (ללא גב)' },
+      description: {
+        en: 'Without a back panel, brace the open frame diagonally during glue-up and verify diagonals are equal. Add a temporary stretcher or face frame so the unit stays square until permanently fixed in place.',
+        he: 'ללא לוח גב, חזק את המסגרת אלכסונית בעת ההדבקה וודא שהאלכסונים שווים. הוסף מסגרת קדמית או חיזוק זמני עד לקיבוע סופי.',
+      },
+      parts: [],
+      icon: '📐',
+      videoKeyword: 'square cabinet face frame no back',
+    });
+  }
 
   if (hasDoors) {
     const isGlass = cfg.doorStyle === 'glass';
