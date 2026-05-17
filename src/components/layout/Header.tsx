@@ -138,6 +138,14 @@ export function Header() {
         <button onClick={toggleLang} className="text-wood-200 hover:text-white text-sm font-medium">
           {lang === 'en' ? 'עב' : 'EN'}
         </button>
+        <button
+          onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: '?' }))}
+          className="text-wood-200 hover:text-white text-sm font-bold"
+          title="Keyboard shortcuts (?)"
+          aria-label="Keyboard shortcuts"
+        >
+          ?
+        </button>
         <HelpButton />
       </div>
     </header>

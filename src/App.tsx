@@ -1,6 +1,6 @@
 import './i18n';
 import './index.css';
-import { useEffect, lazy, Suspense } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Header } from './components/layout/Header';
 import { Sidebar } from './components/layout/Sidebar';
@@ -10,6 +10,7 @@ import { SmartOptimizerPanel } from './components/optimizer/SmartOptimizerPanel'
 import { PartsTable, HardwareTable } from './components/optimizer/Tables';
 import { ToastContainer } from './components/layout/ToastContainer';
 import { OnboardingManager } from './components/layout/OnboardingOverlay';
+import { ShortcutsModal } from './components/layout/ShortcutsModal';
 import { useCabinetStore, type CabinetState } from './store/cabinet-store';
 
 // Lazy-load heavy / route-isolated panels so the initial bundle stays lean
@@ -27,6 +28,7 @@ const AssemblyGuide = lazy(() =>
 function App() {
   const { activeTab, darkMode } = useCabinetStore();
   const { t } = useTranslation();
+  const [showShortcuts, setShowShortcuts] = useState(false);
 
   // Sync dark mode to <html> so browser-level UI (scrollbar, form controls,
   // color-scheme) follows. The Tailwind `dark:` variant is class-based via
@@ -74,6 +76,10 @@ function App() {
           e.preventDefault();
           useCabinetStore.getState().setActiveTab(tab);
         }
+      }
+      // Shortcuts help: ?
+      if (e.key === '?' && !ctrl) {
+        setShowShortcuts((v) => !v);
       }
     };
     window.addEventListener('keydown', handler);
@@ -130,6 +136,7 @@ function App() {
         </div>
         <ToastContainer />
         <OnboardingManager />
+        {showShortcuts && <ShortcutsModal onClose={() => setShowShortcuts(false)} />}
       </div>
     </div>
   );
