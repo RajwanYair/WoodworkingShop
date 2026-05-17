@@ -38,7 +38,7 @@ function cbColor(index: number) {
 
 export function OptimizerView() {
   const { t, i18n } = useTranslation();
-  const { optimization, combinedOptimization, cabinets, colorBlindMode, toggleColorBlindMode, sawKerf, setSawKerf } = useCabinetStore();
+  const { optimization, combinedOptimization, cabinets, colorBlindMode, toggleColorBlindMode, sawKerf, setSawKerf, materialPriceOverrides } = useCabinetStore();
   const lang = i18n.language as Lang;
   const [hoveredPartId, setHoveredPartId] = useState<string | null>(null);
   const [showPartNames, setShowPartNames] = useState(false); // Sprint 146 — part name labels
@@ -225,6 +225,9 @@ export function OptimizerView() {
         />
       ))}
 
+      {/* Sprint 150 — Shopping list / sheets-needed summary */}
+      <ShoppingListPanel sheets={displayOpt.sheets} materialPriceOverrides={materialPriceOverrides} t={t} lang={lang} />
+
       {/* Sprint 147 — Usable Offcuts panel */}
       <OffcutsPanel sheets={displayOpt.sheets} t={t} />
 
@@ -328,6 +331,85 @@ function OffcutsPanel({ sheets, t }: { sheets: CutSheet[]; t: (k: string) => str
               </div>
             ))}
           </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Sprint 150: Group sheets by material+thickness and show shopping list. */
+function ShoppingListPanel({
+  sheets,
+  materialPriceOverrides,
+  t,
+  lang,
+}: {
+  sheets: CutSheet[];
+  materialPriceOverrides: Record<string, number>;
+  t: (k: string) => string;
+  lang: Lang;
+}) {
+  const [open, setOpen] = useState(true);
+
+  if (sheets.length === 0) return null;
+
+  // Group by material+thickness
+  const groups = new Map<string, { material: string; thickness: number; name: { en: string; he: string }; qty: number; pricePerSheet: number }>();
+  for (const sheet of sheets) {
+    const key = `${sheet.material}-${sheet.thickness}`;
+    if (!groups.has(key)) {
+      const mat = getMaterial(sheet.material);
+      const price = materialPriceOverrides[sheet.material] ?? mat.pricePerSheet ?? 0;
+      groups.set(key, { material: sheet.material, thickness: sheet.thickness, name: mat.name, qty: 0, pricePerSheet: price });
+    }
+    groups.get(key)!.qty++;
+  }
+
+  const rows = Array.from(groups.values()).sort((a, b) => b.qty - a.qty);
+  const totalSheets = rows.reduce((s, r) => s + r.qty, 0);
+  const totalCost = rows.reduce((s, r) => s + r.qty * r.pricePerSheet, 0);
+
+  return (
+    <div className="rounded-xl border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-900 overflow-hidden">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-wood-800 dark:text-wood-100 hover:bg-wood-50 dark:hover:bg-wood-800 transition-colors"
+        aria-expanded={open}
+      >
+        <span className="flex items-center gap-2">
+          <IconList size={15} />
+          {t('optimizer.shoppingList')}
+          <span className="ml-1 text-xs font-normal text-wood-500 dark:text-wood-400">
+            {totalSheets} {t('optimizer.sheets').toLowerCase()} · ₪{totalCost.toFixed(0)}
+          </span>
+        </span>
+        {open ? <IconChevronDown size={14} /> : <IconChevronRight size={14} />}
+      </button>
+
+      {open && (
+        <div className="px-4 pb-4">
+          <p className="text-xs text-wood-500 dark:text-wood-400 mb-3">{t('optimizer.shoppingListDesc')}</p>
+          <div className="space-y-1.5">
+            {rows.map((row) => (
+              <div
+                key={`${row.material}-${row.thickness}`}
+                className="flex items-center justify-between text-xs rounded-lg bg-wood-50 dark:bg-wood-800 px-3 py-2"
+              >
+                <span className="font-medium text-wood-700 dark:text-wood-300 flex-1">
+                  {row.name[lang]} {row.thickness} mm
+                </span>
+                <span className="text-wood-500 dark:text-wood-400 mx-3">×{row.qty}</span>
+                <span className="font-semibold text-wood-700 dark:text-wood-200">
+                  {row.pricePerSheet > 0 ? `₪${(row.qty * row.pricePerSheet).toFixed(0)}` : '—'}
+                </span>
+              </div>
+            ))}
+          </div>
+          {totalCost > 0 && (
+            <div className="flex justify-end mt-2 text-xs font-bold text-wood-800 dark:text-wood-100">
+              {t('cost.total')}: ₪{totalCost.toFixed(0)}
+            </div>
+          )}
         </div>
       )}
     </div>

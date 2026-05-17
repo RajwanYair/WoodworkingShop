@@ -136,6 +136,8 @@
     "toggleLabels": "Toggle part name labels inside cut sheet rects",
     "offcuts": "Usable Offcuts",
     "offcutsDesc": "Free strips ≥100×100 mm remaining on each sheet — suitable for future cuts",
+    "shoppingList": "Shopping List",
+    "shoppingListDesc": "Sheets required grouped by material — use for supplier orders",
     "notes": "Optimization Notes",
     "notesDesc": "Auto-detected suggestions that reduce sheets or improve yield",
     "notesEmpty": "No suggestions within the current tolerance — design is well optimized.",
