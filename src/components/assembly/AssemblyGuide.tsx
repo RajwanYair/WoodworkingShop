@@ -19,12 +19,23 @@ export function AssemblyGuide() {
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <h2 className="text-lg font-bold text-wood-700 dark:text-wood-200">{t('assembly.title')}</h2>
-        {/* View mode toggle */}
-        <div
-          className="inline-flex rounded-md border border-wood-200 dark:border-wood-700 overflow-hidden text-xs"
-          role="group"
-          aria-label="Assembly view mode"
-        >
+        <div className="flex items-center gap-2">
+          {/* Sprint 127 — print button */}
+          <button
+            type="button"
+            onClick={() => window.print()}
+            className="px-3 py-1.5 text-xs rounded border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors print:hidden"
+            title={t('assembly.print')}
+            aria-label={t('assembly.print')}
+          >
+            🖨 {t('assembly.print')}
+          </button>
+          {/* View mode toggle */}
+          <div
+            className="inline-flex rounded-md border border-wood-200 dark:border-wood-700 overflow-hidden text-xs print:hidden"
+            role="group"
+            aria-label="Assembly view mode"
+          >
           <button
             type="button"
             onClick={() => setViewMode('paginated')}
@@ -50,12 +61,13 @@ export function AssemblyGuide() {
             {t('assembly.viewAll')}
           </button>
         </div>
+        </div>
       </div>
 
       {viewMode === 'paginated' ? (
         <>
-          {/* Step progress bar */}
-          <div className="flex gap-1">
+          {/* Step progress bar — hidden on print */}
+          <div className="flex gap-1 print:hidden" data-assembly-controls="true">
             {steps.map((s, i) => (
               <button
                 key={i}
@@ -74,8 +86,15 @@ export function AssemblyGuide() {
 
           <StepCard step={steps[activeStep]} stepCount={steps.length} parts={parts} lang={lang} t={t} />
 
+          {/* All steps hidden on screen but shown when printing in paginated mode */}
+          <div className="hidden print:block space-y-4">
+            {steps.map((s, i) => (
+              <StepCard key={i} step={s} stepCount={steps.length} parts={parts} lang={lang} t={t} />
+            ))}
+          </div>
+
           {/* Navigation buttons */}
-          <div className="flex justify-between">
+          <div className="flex justify-between print:hidden" data-assembly-controls="true">
             <button
               onClick={() => setActiveStep(Math.max(0, activeStep - 1))}
               disabled={activeStep === 0}
@@ -117,7 +136,7 @@ interface StepCardProps {
 function StepCard({ step, stepCount, parts, lang, t }: StepCardProps) {
   const highlightedParts = new Set(step.parts);
   return (
-    <div className="border border-wood-200 dark:border-wood-700 rounded-lg p-5 print-keep">
+    <div className="border border-wood-200 dark:border-wood-700 rounded-lg p-5 print-keep" data-assembly-step="true">
       <div className="flex items-start gap-4">
         <span className="text-3xl" role="img" aria-hidden="true">
           {step.icon}

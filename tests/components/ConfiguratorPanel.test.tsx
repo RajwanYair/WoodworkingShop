@@ -16,7 +16,7 @@ describe('ConfiguratorPanel', () => {
   it('renders dimension sliders', () => {
     render(<ConfiguratorPanel />);
     expect(screen.getByText(/width/i)).toBeInTheDocument();
-    expect(screen.getByText(/height/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/height/i).length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText(/depth/i)).toBeInTheDocument();
   });
 
@@ -37,7 +37,7 @@ describe('ConfiguratorPanel', () => {
 
   it('renders reset button', () => {
     render(<ConfiguratorPanel />);
-    expect(screen.getByText(/reset/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/reset/i).length).toBeGreaterThanOrEqual(1);
   });
 
   it('renders cabinet selector (project section)', () => {

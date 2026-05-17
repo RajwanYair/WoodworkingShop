@@ -169,4 +169,16 @@
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
+
+  /* Sprint 127 — Assembly guide print mode:
+     Force all steps visible regardless of pagination state,
+     and give each step a clean page boundary when long. */
+  [data-assembly-step] {
+    display: block !important;
+    break-inside: avoid;
+    margin-bottom: 12pt;
+  }
+  [data-assembly-controls] {
+    display: none !important;
+  }
 }
