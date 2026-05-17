@@ -109,6 +109,31 @@ export function readConfigFromUrl(): Partial<CabinetConfig> {
 /** Update browser URL without reload */
 export function pushConfigToUrl(cfg: CabinetConfig): void {
   const params = configToParams(cfg);
+  // Preserve projectName param so it survives config changes (Sprint 157)
+  const currentPn = new URLSearchParams(window.location.search).get('pn');
+  if (currentPn) params.set('pn', currentPn);
+  const qs = params.toString();
+  const url = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
+  window.history.replaceState(null, '', url);
+}
+
+/** Read project name from current URL (Sprint 157) */
+export function readProjectNameFromUrl(): string {
+  return new URLSearchParams(window.location.search).get('pn') ?? '';
+}
+
+/**
+ * Write project name into the current URL without discarding other params (Sprint 157).
+ * Truncated to 60 characters. Removes the param when name is empty.
+ */
+export function pushProjectNameToUrl(name: string): void {
+  const params = new URLSearchParams(window.location.search);
+  const trimmed = name.trim().slice(0, 60);
+  if (trimmed) {
+    params.set('pn', trimmed);
+  } else {
+    params.delete('pn');
+  }
   const qs = params.toString();
   const url = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
   window.history.replaceState(null, '', url);

@@ -6,7 +6,7 @@ import { computeDimensions } from '../engine/dimensions';
 import { generateParts, computeEdgeBandingTotal } from '../engine/parts';
 import { generateHardware } from '../engine/hardware';
 import { optimizeCutSheets } from '../engine/cut-optimizer';
-import { readConfigFromUrl, pushConfigToUrl } from '../utils/url-state';
+import { readConfigFromUrl, pushConfigToUrl, readProjectNameFromUrl, pushProjectNameToUrl } from '../utils/url-state';
 
 const MAX_HISTORY = 50;
 
@@ -149,7 +149,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
     canUndo: false,
     canRedo: false,
     activeTab: 'configurator',
-    projectName: '', // Sprint 152
+    projectName: readProjectNameFromUrl(), // Sprint 157: persist in URL
     // Sprint 124 — fall back to OS preference when no saved pref exists
     darkMode: prefs.darkMode ?? detectOsDarkMode(),
     colorBlindMode: prefs.colorBlindMode ?? false,
@@ -330,7 +330,10 @@ export const useCabinetStore = create<CabinetState>((set) => {
       }),
 
     setActiveTab: (tab) => set({ activeTab: tab }),
-    setProjectName: (name) => set({ projectName: name }),
+    setProjectName: (name) => {
+      set({ projectName: name });
+      pushProjectNameToUrl(name); // Sprint 157
+    },
     setSawKerf: (mm) =>
       set((state) => ({
         sawKerf: Math.max(0, Math.min(8, mm)),
