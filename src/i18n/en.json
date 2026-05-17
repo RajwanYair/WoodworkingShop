@@ -172,7 +172,15 @@
     "prev": "Previous",
     "next": "Next",
     "partsInStep": "Parts in this step:",
-    "watchVideo": "Watch tutorial on YouTube"
+    "watchVideo": "Watch tutorial on YouTube",
+    "viewStepByStep": "Step by step",
+    "viewAll": "Show all stages"
+  },
+  "shelves": {
+    "customHeading": "Custom shelf positions (mm from bottom)",
+    "resetEqual": "Reset to equal spacing",
+    "position": "Shelf {{n}}",
+    "internalHeight": "Internal height: {{h}} mm"
   },
   "toast": {
     "saved": "Configuration saved",

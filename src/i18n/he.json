@@ -172,7 +172,15 @@
     "prev": "הקודם",
     "next": "הבא",
     "partsInStep": "חלקים בשלב זה:",
-    "watchVideo": "צפה בהדרכה ביוטיוב"
+    "watchVideo": "צפה בהדרכה ביוטיוב",
+    "viewStepByStep": "שלב אחר שלב",
+    "viewAll": "הצג את כל השלבים"
+  },
+  "shelves": {
+    "customHeading": "מיקומי מדפים מותאמים (מ\"מ מהתחתית)",
+    "resetEqual": "אפס למרווחים שווים",
+    "position": "מדף {{n}}",
+    "internalHeight": "גובה פנימי: {{h}} מ\"מ"
   },
   "toast": {
     "saved": "תצורה נשמרה",
