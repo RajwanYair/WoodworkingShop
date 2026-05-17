@@ -95,6 +95,24 @@ describe('cabinet-store', () => {
     expect(useCabinetStore.getState().cabinets[0].name).toBe('Kitchen Pantry');
   });
 
+  // Sprint 135 — cabinet notes
+  it('setNotes stores notes on a cabinet', () => {
+    useCabinetStore.getState().setNotes(0, 'Measure twice, cut once.');
+    expect(useCabinetStore.getState().cabinets[0].notes).toBe('Measure twice, cut once.');
+  });
+
+  it('setNotes does not affect other cabinets', () => {
+    useCabinetStore.getState().addCabinet();
+    useCabinetStore.getState().setNotes(0, 'Cabinet A notes');
+    expect(useCabinetStore.getState().cabinets[1].notes).toBeUndefined();
+  });
+
+  it('setNotes can clear notes with empty string', () => {
+    useCabinetStore.getState().setNotes(0, 'some note');
+    useCabinetStore.getState().setNotes(0, '');
+    expect(useCabinetStore.getState().cabinets[0].notes).toBe('');
+  });
+
   it('edits only the active cabinet config', () => {
     useCabinetStore.getState().addCabinet();
     useCabinetStore.getState().setActiveCabinet(0);

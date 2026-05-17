@@ -6,7 +6,7 @@ import { triggerDownload } from './download';
  * Generate a full Bill of Materials CSV for all cabinets in the project.
  */
 export function generateBomCsv(
-  cabinets: { name: string; parts: Part[]; hardware: HardwareItem[] }[],
+  cabinets: { name: string; parts: Part[]; hardware: HardwareItem[]; notes?: string }[],
   lang: Lang,
 ): string {
   const rows: string[] = [];
@@ -36,6 +36,10 @@ export function generateBomCsv(
 
   // Parts section
   for (const cab of cabinets) {
+    // Sprint 135 — emit cabinet notes as a comment row if present
+    if (cab.notes && cab.notes.trim()) {
+      rows.push(csvRow([`# ${cab.name} notes: ${cab.notes.trim()}`, '', '', '', '', '', '', '', '']));
+    }
     for (const p of cab.parts) {
       const matName = safeGetMaterialName(p.material, lang);
       rows.push(
@@ -86,7 +90,7 @@ function csvRow(fields: string[]): string {
 }
 
 export function downloadBomCsv(
-  cabinets: { name: string; parts: Part[]; hardware: HardwareItem[] }[],
+  cabinets: { name: string; parts: Part[]; hardware: HardwareItem[]; notes?: string }[],
   lang: Lang,
   filename = 'bill-of-materials.csv',
 ) {

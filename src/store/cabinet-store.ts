@@ -48,6 +48,7 @@ function savePrefs(prefs: PersistedPrefs): void {
 export interface CabinetEntry {
   name: string;
   config: CabinetConfig;
+  notes?: string;
 }
 
 export interface CabinetState {
@@ -95,6 +96,7 @@ export interface CabinetState {
   duplicateCabinet: (index: number) => void;
   setActiveCabinet: (index: number) => void;
   renameCabinet: (index: number, name: string) => void;
+  setNotes: (index: number, notes: string) => void;
   loadProject: (cabinets: CabinetEntry[]) => void;
 }
 
@@ -285,6 +287,12 @@ export const useCabinetStore = create<CabinetState>((set) => {
     renameCabinet: (index, name) =>
       set((state) => {
         const cabinets = state.cabinets.map((cab, i) => (i === index ? { ...cab, name } : cab));
+        return { cabinets };
+      }),
+
+    setNotes: (index, notes) =>
+      set((state) => {
+        const cabinets = state.cabinets.map((cab, i) => (i === index ? { ...cab, notes } : cab));
         return { cabinets };
       }),
 

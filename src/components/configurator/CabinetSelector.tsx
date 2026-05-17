@@ -4,10 +4,11 @@ import { useCabinetStore } from '../../store/cabinet-store';
 
 export function CabinetSelector() {
   const { t } = useTranslation();
-  const { cabinets, activeCabinetIndex, addCabinet, removeCabinet, duplicateCabinet, setActiveCabinet, renameCabinet } =
+  const { cabinets, activeCabinetIndex, addCabinet, removeCabinet, duplicateCabinet, setActiveCabinet, renameCabinet, setNotes } =
     useCabinetStore();
   const [editingIdx, setEditingIdx] = useState<number | null>(null);
   const [editName, setEditName] = useState('');
+  const [notesOpen, setNotesOpen] = useState(false);
 
   const startRename = (i: number) => {
     setEditingIdx(i);
@@ -85,6 +86,25 @@ export function CabinetSelector() {
       </div>
 
       {cabinets.length > 1 && <p className="text-[10px] text-wood-400 dark:text-wood-500">{t('project.hint')}</p>}
+
+      {/* Sprint 135 — per-cabinet notes */}
+      <div>
+        <button
+          onClick={() => setNotesOpen((o) => !o)}
+          className="text-[10px] text-wood-500 dark:text-wood-400 hover:underline"
+        >
+          {notesOpen ? '▾' : '▸'} {t('project.notes')}
+        </button>
+        {notesOpen && (
+          <textarea
+            rows={3}
+            value={cabinets[activeCabinetIndex]?.notes ?? ''}
+            onChange={(e) => setNotes(activeCabinetIndex, e.target.value)}
+            placeholder={t('project.notesPlaceholder')}
+            className="mt-1 w-full text-xs rounded border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-800 text-wood-700 dark:text-wood-200 placeholder-wood-400 p-1.5 resize-y focus:outline-none focus:ring-1 focus:ring-wood-400"
+          />
+        )}
+      </div>
     </div>
   );
 }
