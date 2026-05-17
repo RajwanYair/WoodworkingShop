@@ -129,7 +129,13 @@
     "sheetWasteCost": "עלות פסולת: ₪{{cost}}",
     "sheetWasteCostTitle": "עלות חומר מוערכת שהולכת לאיבוד בגזירות",
     "grainLegend": "כיוון ערוע חייב לרוץ אנכית (חלקים לא סובבו 90°)",
-    "sawKerf": "רוחב מסור"
+    "sawKerf": "רוחב מסור",
+    "exportHardware": "ייצוא CSV רשימת פרזול",
+    "notes": "הצעות אופטימיזציה",
+    "notesDesc": "הצעות שמזוהות אוטומטית להפחתת לוחות או שיפור ניצולת",
+    "notesEmpty": "אין הצעות בסף הנוכחי — העיצוב מאוד מותאם.",
+    "notesRestore": "שחזר הצעות שנדחו",
+    "wasteReduced": "פסולת מופחתת"
   },
   "preview": {
     "title": "תצוגה מקדימה",
@@ -207,6 +213,7 @@
     "dxfExported": "קובץ DXF הורד",
     "gcodeExported": "קובץ G-code הורד",
     "bomExported": "רשימת חומרים CSV הורדה",
+    "hardwareExported": "קובץ CSV של פרזול הורד",
     "linkCopied": "קישור שיתוף הועתק ללוח"
   },
   "onboarding": {

@@ -7,7 +7,8 @@ import { generateParts } from '../../engine/parts';
 import { generateHardware } from '../../engine/hardware';
 import { downloadDxfForSheet, downloadAllSheetsDxf } from '../../utils/dxf-export';
 import { downloadGcodeForSheet, downloadAllSheetsGcode } from '../../utils/gcode-export';
-import { downloadBomCsv } from '../../utils/bom-export';
+import { downloadBomCsv, downloadHardwareCsv } from '../../utils/bom-export';
+import { OptimizationNotesPanel } from './OptimizationNotesPanel';
 import type { Lang, CutSheet, CutRect } from '../../engine/types';
 
 /** Scale factor: mm → SVG px */
@@ -133,6 +134,22 @@ export function OptimizerView() {
           >
             📋 BOM
           </button>
+          {/* Sprint 137 — hardware CSV */}
+          <button
+            onClick={() => {
+              const hwData = cabinets.map((c) => ({
+                name: c.name,
+                hardware: generateHardware(c.config),
+              }));
+              downloadHardwareCsv(hwData, lang);
+              useToastStore.getState().addToast(t('toast.hardwareExported'), 'success');
+            }}
+            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors"
+            title={t('optimizer.exportHardware')}
+            aria-label={t('optimizer.exportHardware')}
+          >
+            🔧 HW
+          </button>
           <button
             onClick={toggleColorBlindMode}
             className={`px-3 py-1.5 rounded text-xs font-medium border transition-colors ${
@@ -154,6 +171,9 @@ export function OptimizerView() {
           Combined optimization for {cabinets.length} cabinets
         </p>
       )}
+
+      {/* Optimization Notes — auto-running suggestions panel */}
+      <OptimizationNotesPanel />
 
       {/* Individual sheets */}
       {displayOpt.sheets.map((sheet) => (

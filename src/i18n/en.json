@@ -129,7 +129,13 @@
     "sheetWasteCost": "Waste cost: ₪{{cost}}",
     "sheetWasteCostTitle": "Estimated material cost lost to offcuts",
     "grainLegend": "Grain direction must run vertically (parts were not rotated 90°)",
-    "sawKerf": "Saw kerf"
+    "sawKerf": "Saw kerf",
+    "exportHardware": "Export Hardware List CSV",
+    "notes": "Optimization Notes",
+    "notesDesc": "Auto-detected suggestions that reduce sheets or improve yield",
+    "notesEmpty": "No suggestions within the current tolerance — design is well optimized.",
+    "notesRestore": "Restore dismissed suggestions",
+    "wasteReduced": "waste reduced"
   },
   "preview": {
     "title": "Cabinet Preview",
@@ -207,6 +213,8 @@
     "dxfExported": "DXF file downloaded",
     "gcodeExported": "G-code file downloaded",
     "bomExported": "BOM CSV downloaded",
+    "hardwareExported": "Hardware CSV downloaded",
+    "hardwareExported": "Hardware CSV downloaded",
     "linkCopied": "Shareable link copied to clipboard"
   },
   "onboarding": {

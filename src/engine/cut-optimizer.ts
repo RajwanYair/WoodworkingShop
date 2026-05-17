@@ -140,11 +140,20 @@ function packMaxRects(
       rotated: boolean;
       score: number;
     } | null = null;
+    // Prefer the *earliest* (most-filled) sheet: add a large penalty per
+    // sheet index so we only open a new sheet when no older sheet fits.
+    // Max raw BSSF score ≈ 3000 * 1e6 = 3e9, so 1e12 dominates.
+    const SHEET_PREFERENCE_PENALTY = 1e12;
+    let bestEffective = Infinity;
 
     for (let si = 0; si < sheets.length; si++) {
       const candidate = findBestPlacement(sheets[si].free, rect, kerf, allowRotation);
-      if (candidate && (!best || candidate.score < best.score)) {
-        best = { sheetIdx: si, ...candidate };
+      if (candidate) {
+        const effective = candidate.score + si * SHEET_PREFERENCE_PENALTY;
+        if (effective < bestEffective) {
+          best = { sheetIdx: si, ...candidate };
+          bestEffective = effective;
+        }
       }
     }
 

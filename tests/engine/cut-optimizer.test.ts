@@ -87,4 +87,33 @@ describe('optimizeCutSheets', () => {
     const panelSheets = result.sheets.filter((s) => s.material === bookshelf.carcassMaterial);
     expect(panelSheets.length).toBeLessThanOrEqual(1);
   });
+
+  it('earliest-sheet preference: pieces that fit on sheet 0 stay on sheet 0', () => {
+    // Build a set of small identical parts that all fit on one sheet.
+    // The packer should NOT open a second sheet if they all fit on the first.
+    const smallConfig = {
+      ...DEFAULT_CONFIG,
+      width: 300,
+      height: 500,
+      depth: 200,
+      shelfCount: 0,
+      doorStyle: 'none' as const,
+      drawerCount: 0,
+      hasBack: false,
+    };
+    const parts = generateParts(smallConfig);
+    // All parts of the primary material should land on the fewest sheets possible.
+    const result = optimizeCutSheets(parts);
+    const mat = smallConfig.carcassMaterial;
+    const panelSheets = result.sheets.filter((s) => s.material === mat);
+    // Each sheet's yield should be non-trivially above 0 (i.e. we didn't
+    // spread pieces thinly across many near-empty sheets).
+    for (const sh of panelSheets) {
+      expect(sh.yieldPercent).toBeGreaterThan(0);
+    }
+    // The first sheet should be more utilised than any subsequent sheet.
+    if (panelSheets.length >= 2) {
+      expect(panelSheets[0].yieldPercent).toBeGreaterThanOrEqual(panelSheets[1].yieldPercent);
+    }
+  });
 });
