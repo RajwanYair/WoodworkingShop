@@ -73,7 +73,10 @@
     "color": "Color",
     "addMaterial": "Add Material",
     "hasGrain": "Preserve grain direction (no 90° rotation)",
-    "remove": "Remove"
+    "remove": "Remove",
+    "edit": "Edit",
+    "saveEdit": "Save",
+    "cancel": "Cancel"
   },
   "parts": {
     "title": "Parts List",

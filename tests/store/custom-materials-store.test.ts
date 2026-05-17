@@ -90,4 +90,34 @@ describe('custom-materials-store', () => {
     expect(backs).toHaveLength(1);
     expect(backs[0].category).toBe('back');
   });
+
+  // Sprint 134 — inline edit coverage
+  it('updateMaterial can change the name', () => {
+    useCustomMaterialsStore.getState().addMaterial(panelMaterial);
+    useCustomMaterialsStore.getState().updateMaterial('custom-oak-20', {
+      name: { en: 'Oak Veneer 20 mm', he: 'פורניר אלון 20 מ"מ' },
+    });
+    expect(useCustomMaterialsStore.getState().materials[0].name.en).toBe('Oak Veneer 20 mm');
+    expect(useCustomMaterialsStore.getState().materials[0].name.he).toBe('פורניר אלון 20 מ"מ');
+  });
+
+  it('updateMaterial can change hasGrain', () => {
+    useCustomMaterialsStore.getState().addMaterial({ ...panelMaterial, hasGrain: false });
+    useCustomMaterialsStore.getState().updateMaterial('custom-oak-20', { hasGrain: true });
+    expect(useCustomMaterialsStore.getState().materials[0].hasGrain).toBe(true);
+  });
+
+  it('updateMaterial ignores unknown keys', () => {
+    useCustomMaterialsStore.getState().addMaterial(panelMaterial);
+    useCustomMaterialsStore.getState().updateMaterial('no-such-key', { pricePerSheet: 999 });
+    expect(useCustomMaterialsStore.getState().materials[0].pricePerSheet).toBe(350);
+  });
+
+  it('addMaterial then updateMaterial then removeMaterial leaves empty list', () => {
+    useCustomMaterialsStore.getState().addMaterial(panelMaterial);
+    useCustomMaterialsStore.getState().updateMaterial('custom-oak-20', { thickness: 22 });
+    expect(useCustomMaterialsStore.getState().materials[0].thickness).toBe(22);
+    useCustomMaterialsStore.getState().removeMaterial('custom-oak-20');
+    expect(useCustomMaterialsStore.getState().materials).toHaveLength(0);
+  });
 });

@@ -73,7 +73,10 @@
     "color": "צבע",
     "addMaterial": "הוסף חומר",
     "hasGrain": "שמור כיוון סיבי יער (ללא סיבוב ב-90°)",
-    "remove": "הסר"
+    "remove": "הסר",
+    "edit": "ערוך",
+    "saveEdit": "שמור",
+    "cancel": "בטל"
   },
   "parts": {
     "title": "רשימת חלקים",
