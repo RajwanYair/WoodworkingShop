@@ -134,6 +134,8 @@
     "exportHardware": "Export Hardware List CSV",
     "labels": "Labels",
     "toggleLabels": "Toggle part name labels inside cut sheet rects",
+    "offcuts": "Usable Offcuts",
+    "offcutsDesc": "Free strips ≥100×100 mm remaining on each sheet — suitable for future cuts",
     "notes": "Optimization Notes",
     "notesDesc": "Auto-detected suggestions that reduce sheets or improve yield",
     "notesEmpty": "No suggestions within the current tolerance — design is well optimized.",

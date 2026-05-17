@@ -12,7 +12,7 @@ import { OptimizationNotesPanel } from './OptimizationNotesPanel';
 import {
   IconDxf, IconGcode, IconList, IconWrench,
   IconEye, IconTag, IconWarning, IconLightbulb,
-  IconGrainVertical, IconSawKerf,
+  IconGrainVertical, IconSawKerf, IconChevronDown, IconChevronRight, IconScissors,
 } from '../layout/Icons';
 import type { Lang, CutSheet, CutRect } from '../../engine/types';
 
@@ -215,10 +215,109 @@ export function OptimizerView() {
         />
       ))}
 
+      {/* Sprint 147 — Usable Offcuts panel */}
+      <OffcutsPanel sheets={displayOpt.sheets} t={t} />
+
       {/* Part legend */}
       {hoveredPartId && (
         <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-wood-800 text-white text-xs px-3 py-1.5 rounded shadow-lg z-50 pointer-events-none">
           {hoveredPartId}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Sprint 147: compute usable free strips per sheet.
+ *  Strategy: find the largest axis-aligned free rectangle by checking
+ *  the right-side strip (after maxX of all parts) and bottom strip (after maxY).
+ *  Only strips ≥ 100 mm in both dimensions are reported. */
+function computeOffcuts(sheet: CutSheet): { w: number; h: number; area: number }[] {
+  const MIN = 100; // mm
+  if (sheet.parts.length === 0) {
+    // Entirely empty sheet
+    if (sheet.sheetWidth >= MIN && sheet.sheetLength >= MIN) {
+      return [{ w: sheet.sheetWidth, h: sheet.sheetLength, area: sheet.sheetWidth * sheet.sheetLength }];
+    }
+    return [];
+  }
+  const offcuts: { w: number; h: number; area: number }[] = [];
+  const maxX = Math.max(...sheet.parts.map((p) => p.x + p.width));
+  const maxY = Math.max(...sheet.parts.map((p) => p.y + p.length));
+  // Right strip: from maxX to sheetWidth, full height
+  const rightW = sheet.sheetWidth - maxX;
+  if (rightW >= MIN && sheet.sheetLength >= MIN) {
+    offcuts.push({ w: rightW, h: sheet.sheetLength, area: rightW * sheet.sheetLength });
+  }
+  // Bottom strip: full width, from maxY to sheetLength
+  const bottomH = sheet.sheetLength - maxY;
+  if (sheet.sheetWidth >= MIN && bottomH >= MIN) {
+    offcuts.push({ w: sheet.sheetWidth, h: bottomH, area: sheet.sheetWidth * bottomH });
+  }
+  return offcuts;
+}
+
+interface Offcut {
+  material: string;
+  thickness: number;
+  w: number;
+  h: number;
+  area: number; // mm²
+}
+
+function OffcutsPanel({ sheets, t }: { sheets: CutSheet[]; t: (k: string) => string }) {
+  const [open, setOpen] = useState(true);
+
+  const offcuts: Offcut[] = sheets
+    .flatMap((sheet) =>
+      computeOffcuts(sheet).map((oc) => ({
+        material: sheet.material,
+        thickness: sheet.thickness,
+        w: oc.w,
+        h: oc.h,
+        area: oc.area,
+      }))
+    )
+    .sort((a, b) => b.area - a.area);
+
+  if (offcuts.length === 0) return null;
+
+  return (
+    <div className="rounded-xl border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-900 overflow-hidden">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-wood-800 dark:text-wood-100 hover:bg-wood-50 dark:hover:bg-wood-800 transition-colors"
+        aria-expanded={open}
+      >
+        <span className="flex items-center gap-2">
+          <IconScissors size={15} />
+          {t('optimizer.offcuts')}
+          <span className="ml-1 text-xs font-normal text-wood-500 dark:text-wood-400">({offcuts.length})</span>
+        </span>
+        {open ? <IconChevronDown size={14} /> : <IconChevronRight size={14} />}
+      </button>
+
+      {open && (
+        <div className="px-4 pb-4">
+          <p className="text-xs text-wood-500 dark:text-wood-400 mb-3">{t('optimizer.offcutsDesc')}</p>
+          <div className="space-y-1.5">
+            {offcuts.map((oc, i) => (
+              <div
+                key={i}
+                className="flex items-center justify-between text-xs rounded-lg bg-wood-50 dark:bg-wood-800 px-3 py-2"
+              >
+                <span className="font-medium text-wood-700 dark:text-wood-300">
+                  {oc.material} {oc.thickness}mm
+                </span>
+                <span className="text-wood-500 dark:text-wood-400">
+                  {Math.round(oc.w)} × {Math.round(oc.h)} mm
+                </span>
+                <span className="text-wood-400 dark:text-wood-500">
+                  {(oc.area / 1_000_000).toFixed(3)} m²
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>
@@ -240,7 +339,7 @@ function SheetCard({
   onHoverPart: (id: string | null) => void;
   colorBlindMode: boolean;
   showPartNames: boolean;
-  t: (key: string) => string;
+  t: (key: string, opts?: Record<string, unknown>) => string;
 }) {
   const mat = getMaterial(sheet.material);
   const sw = sheet.sheetWidth * S;
