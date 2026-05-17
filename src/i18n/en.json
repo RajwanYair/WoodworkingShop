@@ -190,7 +190,8 @@
     "placeholder": "Cabinet name…",
     "empty": "No saved configurations",
     "export": "Export JSON",
-    "import": "Import JSON"
+    "import": "Import JSON",
+    "share": "Share Link"
   },
   "project": {
     "title": "Project",

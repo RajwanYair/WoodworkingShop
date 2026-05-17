@@ -49,6 +49,25 @@ export function SaveLoadPanel() {
     addToast(t('toast.deleted'), 'info');
   };
 
+  const handleShare = async () => {
+    const url = window.location.href;
+    const title = projectName ? `${projectName} — Cabinet Planner` : 'Cabinet Planner';
+    // Sprint 166 — use native share sheet on mobile; fall back to clipboard
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, url });
+        return;
+      } catch {
+        /* user cancelled or API failed — fall through to clipboard */
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      addToast(t('toast.linkCopied'), 'success');
+    } catch {
+      addToast(t('toast.invalidFile'), 'error');
+    }
+  };
   const handleExport = () => {
     const state = useCabinetStore.getState();
     const payload: ProjectExport = {
@@ -193,6 +212,14 @@ export function SaveLoadPanel() {
           className="flex-1 px-2 py-1.5 text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 rounded hover:bg-wood-50 dark:hover:bg-wood-700 transition-colors"
         >
           ↑ {t('saves.import')}
+        </button>
+        {/* Sprint 166 — share / copy link */}
+        <button
+          onClick={handleShare}
+          className="flex-1 px-2 py-1.5 text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 rounded hover:bg-wood-50 dark:hover:bg-wood-700 transition-colors"
+          aria-label={t('saves.share')}
+        >
+          ⎘ {t('saves.share')}
         </button>
         <input ref={fileInputRef} type="file" accept=".json" className="hidden" onChange={handleFileChange} aria-hidden="true" tabIndex={-1} />
       </div>

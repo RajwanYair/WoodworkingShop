@@ -188,7 +188,8 @@
     "placeholder": "שם הארון…",
     "empty": "אין הגדרות שמורות",
     "export": "ייצוא JSON",
-    "import": "ייבוא JSON"
+    "import": "ייבוא JSON",
+    "share": "שתף קישור"
   },
   "project": {
     "title": "פרויקט",
