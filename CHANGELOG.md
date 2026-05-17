@@ -11,6 +11,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.9.1] — 2025-05-17
+
+### ✨ Added
+
+- **Emoji visual improvements** across all documentation files for better GitHub readability.
+
+### 🔄 Changed
+
+- **CHANGELOG.md**: section headers across all 13 versions now use ✨/🔄/🐛/🧪/🗑️ emojis
+  (`### ✨ Added`, `### 🔄 Changed`, `### 🐛 Fixed`, `### 🧪 Tests`, `### 🗑️ Removed`).
+- **README.md**: tech stack table updated with per-row technology emojis (⚛️ React, 🔷 TypeScript,
+  🎨 Tailwind, 🐻 Zustand, 📄 PDF, 🌐 i18n, ⚡ Vite, 🧪 Vitest, 🎭 Playwright, 🧹 ESLint/Prettier,
+  🤖 GitHub Actions, 🚀 GitHub Pages); fixed broken `U+FFFD` replacement character in
+  `## GitHub Topics & Discoverability` heading.
+- **ROADMAP.md**: sprint 174–181 topic emojis and section header emojis
+  (📅 Release Timeline, 🔮 Future, 🏆 Competitive Landscape).
+- **CONTRIBUTING.md**: subsection header emojis (🔷 TypeScript, 🎨 Style, 🌐 i18n, ⚙️ Engine vs UI).
+
 ## [3.9.0] — 2026-06-02
 
 ### ✨ Added
