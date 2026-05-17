@@ -604,7 +604,36 @@ function ViewBox({
       onPointerUp={onPointerUp}
     >
       {children}
+      <ScaleBar viewW={w} viewH={h} />
     </svg>
+  );
+}
+
+/**
+ * Sprint 108 — Scale bar overlay. 1 SVG px = 1/S = 5 mm at S=0.2.
+ * Picks a "nice" length (100/200/500/1000 mm) that fits in ~20% of the
+ * view width, draws a labelled bracket in the bottom-left.
+ */
+function ScaleBar({ viewW, viewH }: { viewW: number; viewH: number }) {
+  const mmPerPx = 1 / 0.2; // matches the S constant above
+  const targetPx = viewW * 0.2;
+  const targetMm = targetPx * mmPerPx;
+  // Snap to a friendly value.
+  const ladder = [50, 100, 200, 500, 1000, 2000];
+  const niceMm = ladder.reduce((best, v) => (Math.abs(v - targetMm) < Math.abs(best - targetMm) ? v : best), ladder[0]);
+  const barPx = niceMm / mmPerPx;
+  const padX = 8;
+  const padY = 8;
+  const y = viewH - padY;
+  return (
+    <g aria-hidden="true" pointerEvents="none">
+      <line x1={padX} y1={y} x2={padX + barPx} y2={y} stroke="#444" strokeWidth={1.2} />
+      <line x1={padX} y1={y - 3} x2={padX} y2={y + 3} stroke="#444" strokeWidth={1.2} />
+      <line x1={padX + barPx} y1={y - 3} x2={padX + barPx} y2={y + 3} stroke="#444" strokeWidth={1.2} />
+      <text x={padX + barPx / 2} y={y - 4} fontSize={7} textAnchor="middle" fill="#444">
+        {niceMm >= 1000 ? `${niceMm / 1000} m` : `${niceMm} mm`}
+      </text>
+    </g>
   );
 }
 
