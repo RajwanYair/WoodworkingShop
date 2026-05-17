@@ -65,6 +65,24 @@
 
 /* ─── Print-friendly styles ─── */
 @media print {
+  /* Set page margins and size (Sprint 111) */
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  /* Force light theme on paper even if user has dark mode on (Sprint 111) */
+  html.dark,
+  .dark {
+    color-scheme: light !important;
+  }
+  .dark *,
+  html.dark * {
+    background-color: transparent !important;
+    color: black !important;
+    border-color: #999 !important;
+  }
+
   /* Reset background colors for paper */
   body,
   html {
@@ -117,6 +135,20 @@
   /* Avoid page breaks inside key elements */
   tr,
   .print-keep {
+    break-inside: avoid;
+  }
+
+  /* Page-break helpers (Sprint 111) */
+  .print-page-break {
+    break-after: page;
+  }
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+  img,
+  svg {
     break-inside: avoid;
   }
 
