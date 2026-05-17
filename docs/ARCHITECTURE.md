@@ -178,3 +178,25 @@ sequenceDiagram
   E-->>S: OptimizationResult
   S-->>V: Re-render with new state
 ```
+
+## Cut Optimizer Pipeline (v3.1.0+)
+
+The cut optimizer uses a Maximal Rectangles (MaxRects) algorithm with the
+Best Short Side Fit (BSSF) heuristic. Parts are queued in descending
+max-side order, then each part probes every free rectangle on every open
+sheet in both orientations before opening a new sheet.
+
+```mermaid
+flowchart TD
+  parts[Part[] from generateParts] --> group{Group by material}
+  group --> queue[Sort queue by max-side desc, area desc]
+  queue --> next{More parts?}
+  next -- no --> done[Return CutSheet[] with yieldPercent]
+  next -- yes --> probe[Try each free rect on every sheet,<br/>both orientations]
+  probe --> score[Score: BSSF<br/>min leftover side wins]
+  score --> place{Any fit?}
+  place -- yes --> split[Split free rect L-shape,<br/>prune contained rects]
+  place -- no --> newSheet[Open new sheet]
+  newSheet --> split
+  split --> next
+```
