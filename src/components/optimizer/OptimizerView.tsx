@@ -604,6 +604,17 @@ function SheetCard({
             shadowFilterId={`shadow-${sheet.sheetIndex}`}
           />
         ))}
+
+        {/* ── Scale bar (Sprint 159): 100 mm reference at bottom-right ── */}
+        {/* 100 mm × S = 12 SVG units */}
+        <g transform={`translate(${sw - 14}, ${sl + 6})`}>
+          <line x1={0} y1={0} x2={12} y2={0} stroke="#888" strokeWidth={1} />
+          <line x1={0} y1={-2} x2={0} y2={2} stroke="#888" strokeWidth={0.8} />
+          <line x1={12} y1={-2} x2={12} y2={2} stroke="#888" strokeWidth={0.8} />
+          <text x={6} y={-3} textAnchor="middle" fontSize={3.5} fill="#888">
+            100 mm
+          </text>
+        </g>
       </svg>
 
       {/* Part legend below the sheet */}
