@@ -23,6 +23,9 @@
 
   "css.lint.unknownVendorSpecificProperties": "ignore",
   "css.lint.compatibleVendorPrefixes": "ignore",
+  "css.lint.ieHack": "ignore",
+
+  "webhint.ignoreHintedFiles": ["**/dist/**", "**/node_modules/**", "**/coverage/**", "**/playwright-report/**"],
 
   "html.validate.scripts": true,
   "html.validate.styles": true,

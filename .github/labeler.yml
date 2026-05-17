@@ -1,0 +1,65 @@
+# Path-based automatic labeling for pull requests
+# Docs: https://github.com/actions/labeler
+
+engine:
+  - changed-files:
+      - any-glob-to-any-file: 'src/engine/**'
+
+components:
+  - changed-files:
+      - any-glob-to-any-file: 'src/components/**'
+
+store:
+  - changed-files:
+      - any-glob-to-any-file: 'src/store/**'
+
+i18n:
+  - changed-files:
+      - any-glob-to-any-file: 'src/i18n/**'
+
+tests:
+  - changed-files:
+      - any-glob-to-any-file: 'tests/**'
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file: '.github/workflows/**'
+      - any-glob-to-any-file: '.github/**'
+
+docs:
+  - changed-files:
+      - any-glob-to-any-file: 'docs/**'
+      - any-glob-to-any-file: '*.md'
+      - any-glob-to-any-file: '.github/*.md'
+
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file: 'package.json'
+      - any-glob-to-any-file: 'package-lock.json'
+
+config:
+  - changed-files:
+      - any-glob-to-any-file: 'vite.config.ts'
+      - any-glob-to-any-file: 'vitest.config.ts'
+      - any-glob-to-any-file: 'tsconfig*.json'
+      - any-glob-to-any-file: 'eslint.config.js'
+      - any-glob-to-any-file: '.prettierrc.json'
+      - any-glob-to-any-file: 'config/lighthouserc.json'
+      - any-glob-to-any-file: 'config/bundle-budget.json'
+
+pwa:
+  - changed-files:
+      - any-glob-to-any-file: 'public/**'
+
+export:
+  - changed-files:
+      - any-glob-to-any-file: 'src/utils/dxf-export.ts'
+      - any-glob-to-any-file: 'src/utils/gcode-export.ts'
+      - any-glob-to-any-file: 'src/utils/bom-export.ts'
+      - any-glob-to-any-file: 'src/components/pdf/**'
+
+optimizer:
+  - changed-files:
+      - any-glob-to-any-file: 'src/engine/cut-optimizer.ts'
+      - any-glob-to-any-file: 'src/engine/smart-optimizer.ts'
+      - any-glob-to-any-file: 'src/components/optimizer/**'

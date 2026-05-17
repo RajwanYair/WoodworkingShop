@@ -1,18 +1,16 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  IconSettings, IconEye, IconRuler, IconHammer, IconDocument, IconHelp,
-} from './Icons';
+import { IconSettings, IconEye, IconRuler, IconHammer, IconDocument, IconHelp } from './Icons';
 
 const SEEN_KEY = 'onboarding-seen';
 
 type StepIcon = React.ReactElement;
 const STEPS: { icon: StepIcon; titleKey: string; descKey: string }[] = [
   { icon: <IconSettings size={22} />, titleKey: 'onboarding.stepConfigure', descKey: 'onboarding.descConfigure' },
-  { icon: <IconEye      size={22} />, titleKey: 'onboarding.stepPreview',   descKey: 'onboarding.descPreview'   },
-  { icon: <IconRuler    size={22} />, titleKey: 'onboarding.stepOptimize',  descKey: 'onboarding.descOptimize'  },
-  { icon: <IconHammer   size={22} />, titleKey: 'onboarding.stepAssembly',  descKey: 'onboarding.descAssembly'  },
-  { icon: <IconDocument size={22} />, titleKey: 'onboarding.stepPdf',       descKey: 'onboarding.descPdf'       },
+  { icon: <IconEye size={22} />, titleKey: 'onboarding.stepPreview', descKey: 'onboarding.descPreview' },
+  { icon: <IconRuler size={22} />, titleKey: 'onboarding.stepOptimize', descKey: 'onboarding.descOptimize' },
+  { icon: <IconHammer size={22} />, titleKey: 'onboarding.stepAssembly', descKey: 'onboarding.descAssembly' },
+  { icon: <IconDocument size={22} />, titleKey: 'onboarding.stepPdf', descKey: 'onboarding.descPdf' },
 ];
 
 export function OnboardingOverlay() {

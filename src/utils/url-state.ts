@@ -26,8 +26,7 @@ export function configToParams(cfg: CabinetConfig): URLSearchParams {
   if (cfg.doorReveal !== def.doorReveal) params.set('dr', String(cfg.doorReveal));
   if (cfg.handleStyle !== def.handleStyle) params.set('hs', cfg.handleStyle);
   if (cfg.drawerCount !== def.drawerCount) params.set('drc', String(cfg.drawerCount));
-  if (cfg.drawerHeights && cfg.drawerHeights.length > 0)
-    params.set('dh', cfg.drawerHeights.join(','));
+  if (cfg.drawerHeights && cfg.drawerHeights.length > 0) params.set('dh', cfg.drawerHeights.join(','));
   if ((cfg.kickHeight ?? 0) !== (def.kickHeight ?? 0)) params.set('kh', String(cfg.kickHeight ?? 0));
   if ((cfg.drawerSlideType ?? 'standard') !== (def.drawerSlideType ?? 'standard'))
     params.set('dst', cfg.drawerSlideType ?? 'standard');
@@ -52,7 +51,8 @@ export function paramsToConfig(params: URLSearchParams): Partial<CabinetConfig> 
   const d = params.get('d');
   if (d) patch.depth = Number(d);
   const ft = params.get('ft');
-  if (ft === 'cabinet' || ft === 'bookshelf' || ft === 'desk' || ft === 'wardrobe' || ft === 'panel') patch.furnitureType = ft;
+  if (ft === 'cabinet' || ft === 'bookshelf' || ft === 'desk' || ft === 'wardrobe' || ft === 'panel')
+    patch.furnitureType = ft;
   const sc = params.get('sc');
   if (sc) patch.shelfCount = Number(sc);
   const ss = params.get('ss');
@@ -80,11 +80,16 @@ export function paramsToConfig(params: URLSearchParams): Partial<CabinetConfig> 
   const drc = params.get('drc');
   if (drc) patch.drawerCount = Number(drc);
   const dh = params.get('dh');
-  if (dh) patch.drawerHeights = dh.split(',').map(Number).filter((n) => !isNaN(n) && n > 0);
+  if (dh)
+    patch.drawerHeights = dh
+      .split(',')
+      .map(Number)
+      .filter((n) => !isNaN(n) && n > 0);
   const kh = params.get('kh');
   if (kh !== null) patch.kickHeight = Number(kh);
   const dst = params.get('dst');
-  if (dst === 'standard' || dst === 'soft-close' || dst === 'full-extension') patch.drawerSlideType = dst as DrawerSlideType;
+  if (dst === 'standard' || dst === 'soft-close' || dst === 'full-extension')
+    patch.drawerSlideType = dst as DrawerSlideType;
   const eb = params.get('eb');
   if (eb === 'all-visible' || eb === 'doors-only' || eb === 'none') patch.edgeBanding = eb;
   const lang = params.get('lang');

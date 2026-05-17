@@ -76,10 +76,7 @@ export function optimizeCutSheets(
   }
 
   const totalArea = allSheets.reduce((s, sh) => s + sh.sheetLength * sh.sheetWidth, 0);
-  const usedArea = allSheets.reduce(
-    (s, sh) => s + sh.parts.reduce((a, p) => a + p.length * p.width, 0),
-    0,
-  );
+  const usedArea = allSheets.reduce((s, sh) => s + sh.parts.reduce((a, p) => a + p.length * p.width, 0), 0);
 
   return {
     sheets: allSheets,
@@ -283,12 +280,7 @@ function splitFreeRects(free: FreeRect[], used: FreeRect): void {
 }
 
 function overlaps(a: FreeRect, b: FreeRect): boolean {
-  return (
-    a.x < b.x + b.w &&
-    a.x + a.w > b.x &&
-    a.y < b.y + b.h &&
-    a.y + a.h > b.y
-  );
+  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
 }
 
 /** Drop any free rectangle wholly contained in another. */

@@ -1,71 +1,111 @@
+<div align="center">
+  <img src="docs/banner.svg" alt="Cabinet Planner" width="100%"/>
+</div>
+
 # Roadmap
 
 ## Release Timeline
 
 ```mermaid
-timeline
-    title Cabinet Planner -- Release History
-    section v2.7-v2.9 (April 2026)
-        v2.7.0 : Project modernization
-               : TypeScript strict mode
-               : GitHub Actions CI
-        v2.8.0 : Accessibility audit
-               : Bundle analysis
-               : PWA icons
-        v2.9.0 : Test coverage
-               : Shared test helpers
-               : i18n coverage script
-    section v3.0-v3.1 (April-May 2026)
-        v3.0.0 : Cost estimator tests
-               : Lighthouse CI
-               : 70% coverage thresholds
-        v3.1.0 : Slider numeric entry
-               : Optional back panel
-               : MaxRects bin-packing
-               : PDF orientation parity
-               : SVG asset optimisation
-    section v3.2-v3.4 (May 2026)
-        v3.2.0 : Smart optimizer
-               : SmartOptimizerPanel
-               : DXF / G-code export
-               : Multi-cabinet tabs
-               : Undo / Redo history
-        v3.3.0 : Assembly guide PDF
-               : Hardware CSV export
-               : BOM with notes
-               : Cabinet notes field
-        v3.4.0 : Earliest-sheet packing fix
-               : OptimizationNotesPanel
-               : Part count stat
-               : Saw kerf control
-    section v3.5-v3.6 (May 2026)
-        v3.5.0 : Custom material inline edit
-               : Material price overrides
-               : Configurable edge-banding rate
-               : Hardware CSV export
-        v3.6.0 : SVG icon library
-               : Enriched cut-sheet visualization
-               : Usable offcuts panel
-               : Hardware price overrides
-               : Shopping list panel
-               : Project name field
-    section v3.7-v3.8 (May 2026)
-        v3.7.0 : Drawer slide type selection
-               : Material density and weight
-               : 100mm scale bar on cut sheets
-               : Assembly hardware checklist
-               : Material usage summary
-               : Weight column in BOM CSV
-        v3.8.0 : Saw passes stat card
-               : Per-material sheet size overrides
-               : PWA share button
-               : Grain direction in BOM
-               : Alt+D dark mode shortcut
-               : Sortable parts table
-               : Material color swatches
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0b040', 'primaryTextColor': '#1a0e06', 'primaryBorderColor': '#8b5022', 'lineColor': '#7a4010'}}}%%
+gantt
+  title Cabinet Planner Release History
+  dateFormat YYYY-MM-DD
+  axisFormat %b %Y
+  section April 2026
+    v2.7.0 Project modernization, TypeScript strict mode  :done, v270, 2026-04-01, 5d
+    v2.8.0 Accessibility audit, bundle analysis, PWA      :done, v280, after v270, 5d
+    v2.9.0 Test coverage, shared helpers, i18n coverage   :done, v290, after v280, 5d
+  section Early May 2026
+    v3.0.0 Cost estimator tests, Lighthouse CI, thresholds :done, v300, 2026-04-24, 4d
+    v3.1.0 Slider entry, optional back panel, MaxRects     :done, v310, after v300, 4d
+    v3.2.0 Smart optimizer, DXF export, multi-cabinet undo :done, v320, after v310, 3d
+    v3.3.0 Assembly guide PDF, hardware CSV, cabinet notes :done, v330, after v320, 3d
+    v3.4.0 Earliest-sheet fix, saw kerf, part count stat   :done, v340, after v330, 2d
+  section Mid May 2026
+    v3.5.0 Custom material editor, price overrides         :done, v350, after v340, 2d
+    v3.6.0 SVG icons, enriched cut sheets, offcuts panel   :done, v360, after v350, 2d
+    v3.7.0 Drawer slides, weight, scale bar, checklist     :done, v370, after v360, 2d
+    v3.8.0 Saw passes, share button, sortable table        :done, v380, after v370, 2d
+  section Upcoming
+    v3.9.0 Shelf deflection, isometric, bulk reassign      :active, v390, after v380, 14d
 ```
 
+## 🗺 v3.9.0 Sprint Plan (Sprints 173–181)
 
+### Sprint 173 — Shelf Deflection Improvements ✅
+
+- [x] Display a per-shelf deflection badge (δ mm) calculated from span, load, and E-modulus stored in `materials.ts`
+- [x] Color-code badges: green (safe), amber (L/360–L/240), red (> L/240)
+- [x] Add `deflectionMm` and `deflectionRating` to `DerivedDimensions`
+- [x] Tests: deflection ratings for standard and overloaded spans (13 new tests — 27 total in dimensions.test.ts)
+- [x] i18n: `shelves.deflectionSafe` and `shelves.deflectionDanger` keys in en.json + he.json
+
+### Sprint 174 — Isometric 3D View Enhancements
+
+- [ ] Add interior depth shading to the isometric view SVG
+- [ ] Render individual shelf lines in isometric mode
+- [ ] Show drawer stack outlines in isometric projection
+- [ ] Ensure grain arrows overlay correctly in isometric
+- [ ] Tests: snapshot comparison for cabinet/bookshelf/wardrobe isometric paths
+
+### Sprint 175 — Bulk Material Reassignment
+
+- [ ] "Reassign material" dropdown on the material summary panel (Optimizer tab)
+- [ ] Selecting a new material updates all parts currently using the old material
+- [ ] Rerun optimization automatically after reassignment
+- [ ] Undo history entry: "Reassigned carcass from Birch Ply → Oak Ply"
+- [ ] Tests: bulk reassign updates all part materials and triggers re-optimization
+
+### Sprint 176 — Cabinet Template Library
+
+- [ ] Expand presets panel to 12 templates: add TV unit, bathroom vanity wall, bathroom vanity base, corner cabinet (blind), wine rack
+- [ ] Each template encoded as a full `CabinetConfig` (not just dimension defaults)
+- [ ] Template thumbnails: 80×60 SVG mini-preview per template
+- [ ] URL param `tpl=` to deep-link directly to a template
+- [ ] Tests: each template produces valid parts and hardware lists
+
+### Sprint 177 — Advanced Hardware Catalog
+
+- [ ] Hardware panel in Configurator: interactive catalog with 20+ hardware items
+- [ ] Per-item supplier links (configurable, not hardcoded)
+- [ ] Override quantity: user can increase/decrease any hardware count
+- [ ] Export hardware list with overrides to CSV
+- [ ] Tests: overridden quantities appear in BOM and cost calculation
+
+### Sprint 178 — Multi-Project Workspace Panel
+
+- [ ] A "Projects" side panel (collapsible) listing all named projects saved in localStorage
+- [ ] One-click switch between projects without losing current unsaved work (prompt to save)
+- [ ] Project thumbnails: store a low-res preview SVG (front view) per project
+- [ ] Export all projects as a single ZIP archive (one JSON per cabinet)
+- [ ] Tests: project list persistence, thumbnail generation
+
+### Sprint 179 — Print & PDF Improvements
+
+- [ ] Print dialog opens with correct page orientation auto-detected per sheet
+- [ ] PDF cover page: project thumbnail, creation date, version, author field
+- [ ] Page numbers on all PDF pages (e.g. "Page 3 of 12")
+- [ ] PDF bookmarks (outline) for: cover, parts, cut sheets, hardware, assembly
+- [ ] Tests: PDF document structure (page count, bookmark names)
+
+### Sprint 180 — Accessibility & Keyboard Navigation
+
+- [ ] Full keyboard navigation within the configurator sidebar (Tab order, Enter/Space)
+- [ ] Focus trap in modal dialogs (keyboard shortcuts help, material editor)
+- [ ] `prefers-reduced-motion` media query: disable all CSS transitions when set
+- [ ] High-contrast mode: CSS custom properties switch to WCAG AA-contrast palette
+- [ ] Tests: axe-core a11y audit in ConfiguratorPanel and OptimizerView
+
+### Sprint 181 — Performance & Bundle Optimization
+
+- [ ] Split `cut-optimizer.ts` into a Web Worker to avoid blocking the main thread on large projects (5+ cabinets)
+- [ ] Memoize `generateParts()` and `generateHardware()` with deep-equal config comparison
+- [ ] Lazy-load the Assembly Guide and Cost Estimator tabs on first access
+- [ ] Lighthouse CI perf budget: TTI ≤ 2 s on simulated 4G
+- [ ] Tests: Web Worker message roundtrip, memoization cache hit/miss
+
+---
 
 User-reported needs from live preview review (`localhost:5173`). These supersede
 the in-flight quality sprints (84-87) and run first.
@@ -234,24 +274,24 @@ the in-flight quality sprints (84-87) and run first.
 How Cabinet Planner compares to popular cabinet / cut-list / planner tools as
 of v3.1.0. Legend: ✅ first-class, 🟡 partial / limited, ❌ not available.
 
-| Capability                          | Cabinet Planner | CutList Optimizer Pro | OpenCutList (SketchUp) | MaxCut       | SketchUp + plugins | Polyboard | KitchenDraw | IKEA Home Planner | Sketchlist 3D |
-| ----------------------------------- | --------------- | --------------------- | ---------------------- | ------------ | ------------------ | --------- | ----------- | ----------------- | ------------- |
-| Browser-based, no install           | ✅              | ✅                    | ❌                     | ❌           | 🟡 (web viewer)    | ❌        | ❌          | ✅                | ❌            |
-| Free / open-source                  | ✅ (MIT)        | 🟡 (freemium)         | ✅                     | 🟡 (free 1.x)| 🟡 (free tier)     | ❌        | ❌          | ✅ (vendor-locked)| ❌            |
-| Parametric cabinet generation       | ✅              | ❌                    | 🟡                     | ❌           | 🟡 (plugins)       | ✅        | ✅          | 🟡 (catalog)      | 🟡            |
-| Cut-sheet optimizer (bin-packing)   | ✅ (MaxRects)   | ✅                    | ✅                     | ✅           | 🟡 (plugins)       | ✅        | ❌          | ❌                | 🟡            |
-| BOM / parts list export             | ✅ (CSV)        | ✅                    | ✅                     | ✅           | 🟡                 | ✅        | ✅          | 🟡                | ✅            |
-| PDF assembly guide (steps + photos) | ✅              | ❌                    | 🟡                     | 🟡           | 🟡                 | ✅        | ✅          | ❌                | ✅            |
-| DXF / G-code export                 | ✅              | 🟡                    | ✅                     | 🟡           | ✅                 | ✅        | ❌          | ❌                | 🟡            |
-| 3D preview                          | 🟡 (2D today)   | ❌                    | ✅ (host)              | ❌           | ✅                 | ✅        | ✅          | ✅                | ✅            |
-| Smart dimension optimizer           | ✅              | ❌                    | ❌                     | ❌           | ❌                 | 🟡        | ❌          | ❌                | ❌            |
-| Cost estimation                     | ✅              | 🟡                    | 🟡                     | ✅           | ❌                 | ✅        | ✅          | ✅                | ✅            |
-| Bilingual UI (EN + HE, RTL)         | ✅              | ❌                    | 🟡                     | ❌           | 🟡                 | 🟡        | 🟡          | ✅                | ❌            |
-| Offline / PWA                       | ✅              | ❌                    | ✅ (host)              | ✅           | ❌                 | ✅        | ❌          | ❌                | ✅            |
-| Shareable design URL                | ✅              | ❌                    | ❌                     | ❌           | 🟡                 | ❌        | ❌          | 🟡                | ❌            |
-| Hardware list (hinges, slides, etc) | ✅              | ❌                    | 🟡                     | ❌           | 🟡                 | ✅        | ✅          | 🟡                | 🟡            |
-| Material library, custom materials  | ✅              | ✅                    | ✅                     | ✅           | 🟡                 | ✅        | ✅          | ❌                | ✅            |
-| Price                               | Free            | $79–199               | Free                   | Free / $149  | $0–$349/yr         | €1500+    | €1500+      | Free              | $99–199       |
+| Capability                          | Cabinet Planner | CutList Optimizer Pro | OpenCutList (SketchUp) | MaxCut        | SketchUp + plugins | Polyboard | KitchenDraw | IKEA Home Planner  | Sketchlist 3D |
+| ----------------------------------- | --------------- | --------------------- | ---------------------- | ------------- | ------------------ | --------- | ----------- | ------------------ | ------------- |
+| Browser-based, no install           | ✅              | ✅                    | ❌                     | ❌            | 🟡 (web viewer)    | ❌        | ❌          | ✅                 | ❌            |
+| Free / open-source                  | ✅ (MIT)        | 🟡 (freemium)         | ✅                     | 🟡 (free 1.x) | 🟡 (free tier)     | ❌        | ❌          | ✅ (vendor-locked) | ❌            |
+| Parametric cabinet generation       | ✅              | ❌                    | 🟡                     | ❌            | 🟡 (plugins)       | ✅        | ✅          | 🟡 (catalog)       | 🟡            |
+| Cut-sheet optimizer (bin-packing)   | ✅ (MaxRects)   | ✅                    | ✅                     | ✅            | 🟡 (plugins)       | ✅        | ❌          | ❌                 | 🟡            |
+| BOM / parts list export             | ✅ (CSV)        | ✅                    | ✅                     | ✅            | 🟡                 | ✅        | ✅          | 🟡                 | ✅            |
+| PDF assembly guide (steps + photos) | ✅              | ❌                    | 🟡                     | 🟡            | 🟡                 | ✅        | ✅          | ❌                 | ✅            |
+| DXF / G-code export                 | ✅              | 🟡                    | ✅                     | 🟡            | ✅                 | ✅        | ❌          | ❌                 | 🟡            |
+| 3D preview                          | 🟡 (2D today)   | ❌                    | ✅ (host)              | ❌            | ✅                 | ✅        | ✅          | ✅                 | ✅            |
+| Smart dimension optimizer           | ✅              | ❌                    | ❌                     | ❌            | ❌                 | 🟡        | ❌          | ❌                 | ❌            |
+| Cost estimation                     | ✅              | 🟡                    | 🟡                     | ✅            | ❌                 | ✅        | ✅          | ✅                 | ✅            |
+| Bilingual UI (EN + HE, RTL)         | ✅              | ❌                    | 🟡                     | ❌            | 🟡                 | 🟡        | 🟡          | ✅                 | ❌            |
+| Offline / PWA                       | ✅              | ❌                    | ✅ (host)              | ✅            | ❌                 | ✅        | ❌          | ❌                 | ✅            |
+| Shareable design URL                | ✅              | ❌                    | ❌                     | ❌            | 🟡                 | ❌        | ❌          | 🟡                 | ❌            |
+| Hardware list (hinges, slides, etc) | ✅              | ❌                    | 🟡                     | ❌            | 🟡                 | ✅        | ✅          | 🟡                 | 🟡            |
+| Material library, custom materials  | ✅              | ✅                    | ✅                     | ✅            | 🟡                 | ✅        | ✅          | ❌                 | ✅            |
+| Price                               | Free            | $79–199               | Free                   | Free / $149   | $0–$349/yr         | €1500+    | €1500+      | Free               | $99–199       |
 
 Where Cabinet Planner is intentionally narrow: no 3D walkthrough renderer,
 no kitchen-layout floor-planner (the dream-kitchen niche owned by KitchenDraw /

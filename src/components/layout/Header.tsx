@@ -4,18 +4,27 @@ import { useToastStore } from '../../store/toast-store';
 import { configToUrl } from '../../utils/url-state';
 import { HelpButton } from './OnboardingOverlay';
 import {
-  IconSun, IconMoon, IconUndo, IconRedo, IconLink, IconHelp,
-  IconSettings, IconEye, IconScissors, IconHammer, IconDocument,
+  IconSun,
+  IconMoon,
+  IconUndo,
+  IconRedo,
+  IconLink,
+  IconHelp,
+  IconSettings,
+  IconEye,
+  IconScissors,
+  IconHammer,
+  IconDocument,
 } from './Icons';
 
 const tabs = ['configurator', 'preview', 'optimizer', 'assembly', 'pdf'] as const;
 
 const TAB_ICONS = {
   configurator: <IconSettings size={14} className="shrink-0" />,
-  preview:      <IconEye     size={14} className="shrink-0" />,
-  optimizer:    <IconScissors size={14} className="shrink-0" />,
-  assembly:     <IconHammer  size={14} className="shrink-0" />,
-  pdf:          <IconDocument size={14} className="shrink-0" />,
+  preview: <IconEye size={14} className="shrink-0" />,
+  optimizer: <IconScissors size={14} className="shrink-0" />,
+  assembly: <IconHammer size={14} className="shrink-0" />,
+  pdf: <IconDocument size={14} className="shrink-0" />,
 } as const;
 
 export function Header() {

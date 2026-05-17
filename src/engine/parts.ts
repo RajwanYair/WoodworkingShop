@@ -191,7 +191,7 @@ export function generateParts(cfg: CabinetConfig): Part[] {
     const drawerDepth = Math.min(cfg.depth - t - 30, 500); // leave clearance for back panel + face
 
     for (let i = 0; i < cfg.drawerCount; i++) {
-      const drawerHeight = (cfg.drawerHeights?.[i] ?? 150);
+      const drawerHeight = cfg.drawerHeights?.[i] ?? 150;
 
       // Drawer front panel (decorative, same material as carcass)
       parts.push({

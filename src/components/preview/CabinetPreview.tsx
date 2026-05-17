@@ -687,7 +687,7 @@ function ViewBox({
       viewBox={`0 0 ${w} ${h}`}
       role="img"
       aria-label="Cabinet drawing"
-      className="w-full max-w-lg max-h-[500px] border border-wood-200 dark:border-wood-700 rounded bg-white dark:bg-wood-800 text-wood-600 dark:text-wood-200 touch-none"
+      className="w-full max-w-lg max-h-125 border border-wood-200 dark:border-wood-700 rounded bg-white dark:bg-wood-800 text-wood-600 dark:text-wood-200 touch-none"
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
     >
@@ -1005,7 +1005,7 @@ function IsometricView({
       viewBox={`0 0 ${vw} ${vh}`}
       role="img"
       aria-label="3D isometric cabinet drawing"
-      className="w-full max-w-lg max-h-[500px] border border-wood-200 dark:border-wood-700 rounded bg-white dark:bg-wood-800 text-wood-600 dark:text-wood-200"
+      className="w-full max-w-lg max-h-125 border border-wood-200 dark:border-wood-700 rounded bg-white dark:bg-wood-800 text-wood-600 dark:text-wood-200"
     >
       <g transform={`translate(${ox},${oy})`}>
         {/* Back panel */}

@@ -10,10 +10,16 @@ const BAR_COLORS = ['#8B6F47', '#A0845C', '#C49A6C', '#6B8E23', '#4682B4'];
 export function CostEstimatePanel() {
   const { t, i18n } = useTranslation();
   const {
-    optimization, hardware, edgeBandingTotal, cabinets,
-    materialPriceOverrides, setMaterialPriceOverride,
-    edgeBandingRate, setEdgeBandingRate,
-    hardwarePriceOverrides, setHardwarePriceOverride,
+    optimization,
+    hardware,
+    edgeBandingTotal,
+    cabinets,
+    materialPriceOverrides,
+    setMaterialPriceOverride,
+    edgeBandingRate,
+    setEdgeBandingRate,
+    hardwarePriceOverrides,
+    setHardwarePriceOverride,
     allParts,
   } = useCabinetStore();
   const lang = i18n.language as Lang;
@@ -38,7 +44,14 @@ export function CostEstimatePanel() {
   const [editingHw, setEditingHw] = useState<string | null>(null);
   const [hwPriceInput, setHwPriceInput] = useState('');
 
-  const cost = estimateCost(optimization, hardware, edgeBandingTotal, materialPriceOverrides, edgeBandingRate, hardwarePriceOverrides);
+  const cost = estimateCost(
+    optimization,
+    hardware,
+    edgeBandingTotal,
+    materialPriceOverrides,
+    edgeBandingRate,
+    hardwarePriceOverrides,
+  );
   const totalNonZero = cost.totalCost > 0;
 
   // Build segments for bar visualization
@@ -116,15 +129,23 @@ export function CostEstimatePanel() {
                   />
                   {hasOverride && (
                     <button
-                      onClick={() => { setMaterialPriceOverride(sc.material, null); setEditingPrice(null); }}
+                      onClick={() => {
+                        setMaterialPriceOverride(sc.material, null);
+                        setEditingPrice(null);
+                      }}
                       className="text-wood-400 hover:text-red-500 text-[10px]"
                       title={t('cost.resetPrice')}
-                    >↺</button>
+                    >
+                      ↺
+                    </button>
                   )}
                 </div>
               ) : (
                 <button
-                  onClick={() => { setEditingPrice(sc.material); setPriceInput(String(sc.pricePerSheet || defaultPrice)); }}
+                  onClick={() => {
+                    setEditingPrice(sc.material);
+                    setPriceInput(String(sc.pricePerSheet || defaultPrice));
+                  }}
                   className={`font-medium shrink-0 hover:underline ${hasOverride ? 'text-amber-600 dark:text-amber-400' : 'text-wood-700 dark:text-wood-200'}`}
                   title={t('cost.editPrice')}
                 >
@@ -167,7 +188,10 @@ export function CostEstimatePanel() {
               </div>
             ) : (
               <button
-                onClick={() => { setEditingEb(true); setEbInput(String(edgeBandingRate)); }}
+                onClick={() => {
+                  setEditingEb(true);
+                  setEbInput(String(edgeBandingRate));
+                }}
                 className="font-medium shrink-0 hover:underline text-wood-700 dark:text-wood-200"
                 title={t('cost.editEbRate')}
               >
@@ -177,56 +201,66 @@ export function CostEstimatePanel() {
           </div>
         )}
         {/* Sprint 148 — per-item hardware with price overrides */}
-        {cost.hardwareItems.length > 0 && cost.hardwareItems.map((hw) => {
-          const isEditingThisHw = editingHw === hw.id;
-          const hasHwOverride = hw.id in hardwarePriceOverrides;
-          return (
-            <div key={hw.id} className="flex justify-between items-center text-xs gap-2">
-              <span className="text-wood-600 dark:text-wood-300 truncate flex-1">
-                {hw.name[lang]} ×{hw.qty}
-              </span>
-              {isEditingThisHw ? (
-                <div className="flex items-center gap-1 shrink-0">
-                  <span className="text-wood-400">₪</span>
-                  <input
-                    type="number"
-                    min={0}
-                    step={0.5}
-                    value={hwPriceInput}
-                    onChange={(e) => setHwPriceInput(e.target.value)}
-                    onBlur={() => {
-                      const val = Number(hwPriceInput);
-                      setHardwarePriceOverride(hw.id, isNaN(val) || val < 0 ? null : val);
-                      setEditingHw(null);
+        {cost.hardwareItems.length > 0 &&
+          cost.hardwareItems.map((hw) => {
+            const isEditingThisHw = editingHw === hw.id;
+            const hasHwOverride = hw.id in hardwarePriceOverrides;
+            return (
+              <div key={hw.id} className="flex justify-between items-center text-xs gap-2">
+                <span className="text-wood-600 dark:text-wood-300 truncate flex-1">
+                  {hw.name[lang]} ×{hw.qty}
+                </span>
+                {isEditingThisHw ? (
+                  <div className="flex items-center gap-1 shrink-0">
+                    <span className="text-wood-400">₪</span>
+                    <input
+                      type="number"
+                      min={0}
+                      step={0.5}
+                      value={hwPriceInput}
+                      onChange={(e) => setHwPriceInput(e.target.value)}
+                      onBlur={() => {
+                        const val = Number(hwPriceInput);
+                        setHardwarePriceOverride(hw.id, isNaN(val) || val < 0 ? null : val);
+                        setEditingHw(null);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
+                        if (e.key === 'Escape') setEditingHw(null);
+                      }}
+                      className="w-14 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-1 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-wood-400"
+                      ref={(el) => el?.focus()}
+                      aria-label={`Price per unit for ${hw.name.en}`}
+                    />
+                    {hasHwOverride && (
+                      <button
+                        onClick={() => {
+                          setHardwarePriceOverride(hw.id, null);
+                          setEditingHw(null);
+                        }}
+                        className="text-wood-400 hover:text-red-500 text-[10px]"
+                        title={t('cost.resetPrice')}
+                      >
+                        ↺
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => {
+                      setEditingHw(hw.id);
+                      setHwPriceInput(String(hw.unitPrice));
                     }}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
-                      if (e.key === 'Escape') setEditingHw(null);
-                    }}
-                    className="w-14 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-1 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-wood-400"
-                    ref={(el) => el?.focus()}
-                    aria-label={`Price per unit for ${hw.name.en}`}
-                  />
-                  {hasHwOverride && (
-                    <button
-                      onClick={() => { setHardwarePriceOverride(hw.id, null); setEditingHw(null); }}
-                      className="text-wood-400 hover:text-red-500 text-[10px]"
-                      title={t('cost.resetPrice')}
-                    >↺</button>
-                  )}
-                </div>
-              ) : (
-                <button
-                  onClick={() => { setEditingHw(hw.id); setHwPriceInput(String(hw.unitPrice)); }}
-                  className={`font-medium shrink-0 hover:underline ${hasHwOverride ? 'text-amber-600 dark:text-amber-400' : 'text-wood-700 dark:text-wood-200'}`}
-                  title={t('cost.editPrice')}
-                >
-                  ₪{hw.subtotal}{hasHwOverride && <span className="text-[10px]"> ✎</span>}
-                </button>
-              )}
-            </div>
-          );
-        })}
+                    className={`font-medium shrink-0 hover:underline ${hasHwOverride ? 'text-amber-600 dark:text-amber-400' : 'text-wood-700 dark:text-wood-200'}`}
+                    title={t('cost.editPrice')}
+                  >
+                    ₪{hw.subtotal}
+                    {hasHwOverride && <span className="text-[10px]"> ✎</span>}
+                  </button>
+                )}
+              </div>
+            );
+          })}
         {cost.hardwareItems.length === 0 && (
           <div className="flex justify-between text-xs">
             <span className="text-wood-600 dark:text-wood-300">{t('cost.hardware')}</span>

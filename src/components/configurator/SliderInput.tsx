@@ -63,18 +63,18 @@ export function SliderInput({
 
   const validNumeric = parsed !== null;
   const outOfHard = validNumeric && (parsed < hMin || parsed > hMax);
-  const outOfSoft =
-    validNumeric && !outOfHard && (parsed < softMin || parsed > softMax);
+  const outOfSoft = validNumeric && !outOfHard && (parsed < softMin || parsed > softMax);
 
-  const message = !validNumeric || outOfHard
-    ? t('config.outOfRange', { min: hMin, max: hMax, unit: unit ?? '' })
-    : outOfSoft
-      ? t('config.outsideRecommended', { rmin: softMin, rmax: softMax, unit: unit ?? '' })
-      : '';
+  const message =
+    !validNumeric || outOfHard
+      ? t('config.outOfRange', { min: hMin, max: hMax, unit: unit ?? '' })
+      : outOfSoft
+        ? t('config.outsideRecommended', { rmin: softMin, rmax: softMax, unit: unit ?? '' })
+        : '';
 
   const isInvalid = !validNumeric || outOfHard;
-  const ariaInvalidProp = isInvalid ? ({ 'aria-invalid': 'true' as const }) : {};
-  const ariaLiveProp = isInvalid ? ({ 'aria-live': 'assertive' as const }) : ({ 'aria-live': 'polite' as const });
+  const ariaInvalidProp = isInvalid ? { 'aria-invalid': 'true' as const } : {};
+  const ariaLiveProp = isInvalid ? { 'aria-live': 'assertive' as const } : { 'aria-live': 'polite' as const };
 
   const sliderValue = Math.min(softMax, Math.max(softMin, value));
 
@@ -143,10 +143,7 @@ export function SliderInput({
         <p
           id={errorId}
           {...ariaLiveProp}
-          className={
-            'mt-1 text-[11px] ' +
-            (isInvalid ? 'text-red-600' : 'text-amber-600 dark:text-amber-400')
-          }
+          className={'mt-1 text-[11px] ' + (isInvalid ? 'text-red-600' : 'text-amber-600 dark:text-amber-400')}
         >
           {message}
         </p>

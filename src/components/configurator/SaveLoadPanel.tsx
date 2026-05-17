@@ -221,7 +221,15 @@ export function SaveLoadPanel() {
         >
           ⎘ {t('saves.share')}
         </button>
-        <input ref={fileInputRef} type="file" accept=".json" className="hidden" onChange={handleFileChange} aria-hidden="true" tabIndex={-1} />
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".json"
+          className="hidden"
+          onChange={handleFileChange}
+          aria-hidden="true"
+          tabIndex={-1}
+        />
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 name: 🚀 Feature Request
 description: Suggest a new feature or enhancement
-title: "[Feature] "
-labels: ["enhancement"]
+title: '[Feature] '
+labels: ['enhancement']
 body:
   - type: markdown
     attributes:
@@ -12,7 +12,7 @@ body:
   - type: dropdown
     id: area
     attributes:
-      label: "🗂 Area"
+      label: '🗂 Area'
       description: Which part of the app would this improve?
       options:
         - Configurator (new controls, presets, materials)
@@ -31,16 +31,16 @@ body:
   - type: textarea
     id: summary
     attributes:
-      label: "💡 Feature summary"
+      label: '💡 Feature summary'
       description: One-sentence description of what you want.
-      placeholder: "Add X so that users can Y."
+      placeholder: 'Add X so that users can Y.'
     validations:
       required: true
 
   - type: textarea
     id: motivation
     attributes:
-      label: "🎯 Motivation"
+      label: '🎯 Motivation'
       description: Why is this useful? What problem does it solve?
     validations:
       required: true
@@ -48,7 +48,7 @@ body:
   - type: textarea
     id: proposal
     attributes:
-      label: "🔧 Proposed solution"
+      label: '🔧 Proposed solution'
       description: How should it work? Include example configs, mockups, or links.
     validations:
       required: false
@@ -56,7 +56,7 @@ body:
   - type: textarea
     id: alternatives
     attributes:
-      label: "🔀 Alternatives considered"
+      label: '🔀 Alternatives considered'
       description: Any other approaches you've thought about?
     validations:
       required: false

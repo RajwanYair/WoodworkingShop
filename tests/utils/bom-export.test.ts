@@ -62,7 +62,10 @@ describe('generateBomCsv', () => {
     const csv = generateBomCsv(singleCabinet, 'en');
     const lines = csv.split('\n');
     // Find the last blank line which separates parts from hardware
-    const lastBlankIdx = lines.map((l, i) => ({ l, i })).filter(({ l }) => l.trim() === '').at(-1)!.i;
+    const lastBlankIdx = lines
+      .map((l, i) => ({ l, i }))
+      .filter(({ l }) => l.trim() === '')
+      .at(-1)!.i;
     expect(lines[lastBlankIdx + 1]).toContain('Hardware');
     expect(csv).toContain('Hinge 35mm');
     expect(csv).toContain('4');

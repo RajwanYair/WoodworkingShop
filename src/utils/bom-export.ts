@@ -24,7 +24,9 @@ export function generateBomCsv(
         const density = getMaterial(p.material).densityKgM3;
         const wKg = computePartWeightKg(p.length, p.width, p.thickness, p.qty, density);
         weightKgByMat.set(p.material, (weightKgByMat.get(p.material) ?? 0) + wKg);
-      } catch { /* unknown material — skip */ }
+      } catch {
+        /* unknown material — skip */
+      }
     }
   }
   rows.push('Material Summary,,,,,,,,,,');
@@ -39,7 +41,9 @@ export function generateBomCsv(
   rows.push('');
 
   // Header
-  rows.push('Cabinet,Part ID,Part Name,Qty,Material,Thickness (mm),Length (mm),Width (mm),Edge Banding,Weight (kg),Grain Direction');
+  rows.push(
+    'Cabinet,Part ID,Part Name,Qty,Material,Thickness (mm),Length (mm),Width (mm),Edge Banding,Weight (kg),Grain Direction',
+  );
 
   // Parts section
   for (const cab of cabinets) {
@@ -53,12 +57,16 @@ export function generateBomCsv(
       try {
         const density = getMaterial(p.material).densityKgM3;
         partWeight = computePartWeightKg(p.length, p.width, p.thickness, p.qty, density).toFixed(3);
-      } catch { /* skip */ }
+      } catch {
+        /* skip */
+      }
       // Sprint 167 — grain direction: 'Along length' for grain materials, '—' otherwise
       let grainDir = '\u2014';
       try {
         grainDir = getMaterial(p.material).hasGrain ? 'Along length' : '\u2014';
-      } catch { /* skip */ }
+      } catch {
+        /* skip */
+      }
       rows.push(
         csvRow([
           cab.name,
@@ -122,10 +130,7 @@ export function downloadBomCsv(
  * Aggregates quantities across all cabinets so the buyer sees a single
  * consolidated shopping list.
  */
-export function generateHardwareCsv(
-  cabinets: { name: string; hardware: HardwareItem[] }[],
-  lang: Lang,
-): string {
+export function generateHardwareCsv(cabinets: { name: string; hardware: HardwareItem[] }[], lang: Lang): string {
   const rows: string[] = [];
   rows.push('Hardware ID,Hardware Name,Cabinet,Qty,Unit');
   for (const cab of cabinets) {

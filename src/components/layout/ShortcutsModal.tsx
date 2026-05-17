@@ -40,17 +40,23 @@ export function ShortcutsModal({ onClose }: ShortcutsModalProps) {
   }, []);
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-      role="dialog"
-      aria-modal="true"
-      aria-label={isHe ? 'קיצורי מקלדת' : 'Keyboard Shortcuts'}
-      onClick={(e) => e.target === e.currentTarget && onClose()}
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* Backdrop — interactive button for click-outside-to-close */}
+      <button
+        type="button"
+        className="absolute inset-0 w-full h-full bg-black/50 cursor-default"
+        onClick={onClose}
+        aria-label={isHe ? 'סגור' : 'Close dialog'}
+        tabIndex={-1}
+      />
+      {/* Dialog panel */}
       <div
         ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={isHe ? 'קיצורי מקלדת' : 'Keyboard Shortcuts'}
         tabIndex={-1}
-        className="relative bg-white dark:bg-wood-900 rounded-xl shadow-2xl w-full max-w-sm mx-4 outline-none"
+        className="relative z-10 bg-white dark:bg-wood-900 rounded-xl shadow-2xl w-full max-w-sm mx-4 outline-none"
       >
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-wood-200 dark:border-wood-700">
@@ -71,18 +77,13 @@ export function ShortcutsModal({ onClose }: ShortcutsModalProps) {
           <table className="w-full text-sm">
             <tbody>
               {SHORTCUTS.map((s) => (
-                <tr
-                  key={s.key}
-                  className="border-b border-wood-100 dark:border-wood-800 last:border-0"
-                >
+                <tr key={s.key} className="border-b border-wood-100 dark:border-wood-800 last:border-0">
                   <td className="py-1.5 pr-4 whitespace-nowrap">
                     <kbd className="font-mono bg-wood-100 dark:bg-wood-800 text-wood-700 dark:text-wood-200 px-1.5 py-0.5 rounded text-xs">
                       {s.key}
                     </kbd>
                   </td>
-                  <td className="py-1.5 text-wood-600 dark:text-wood-300">
-                    {isHe ? s.descHe : s.descEn}
-                  </td>
+                  <td className="py-1.5 text-wood-600 dark:text-wood-300">{isHe ? s.descHe : s.descEn}</td>
                 </tr>
               ))}
             </tbody>

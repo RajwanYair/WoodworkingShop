@@ -75,11 +75,13 @@ export function ShelfConfig() {
           className="rounded border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 px-3 py-2 text-xs text-amber-800 dark:text-amber-200 flex items-start gap-1.5"
         >
           <IconWarning size={13} className="shrink-0 mt-0.5" />
-          <span>{t('shelves.deflectionWarning', {
-            span: Math.round(dimensions.shelfWidth),
-            sag: deflection.deflectionMm.toFixed(1),
-            limit: deflection.limitMm.toFixed(1),
-          })}</span>
+          <span>
+            {t('shelves.deflectionWarning', {
+              span: Math.round(dimensions.shelfWidth),
+              sag: deflection.deflectionMm.toFixed(1),
+              limit: deflection.limitMm.toFixed(1),
+            })}
+          </span>
         </div>
       )}
 

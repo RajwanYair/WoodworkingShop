@@ -280,12 +280,7 @@ export function CabinetPdfDocument({
         const scale = Math.min(maxLen / sheet.sheetLength, maxWid / sheet.sheetWidth);
 
         return (
-          <Page
-            key={sheet.sheetIndex}
-            size="A4"
-            orientation={isLandscape ? 'landscape' : 'portrait'}
-            style={s.page}
-          >
+          <Page key={sheet.sheetIndex} size="A4" orientation={isLandscape ? 'landscape' : 'portrait'} style={s.page}>
             <Text style={s.sectionTitle}>
               Sheet #{sheet.sheetIndex + 1} — {mat.name[lang]} ({sheet.thickness} mm) — {sheet.yieldPercent}% yield
             </Text>

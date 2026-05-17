@@ -1,0 +1,117 @@
+# GitHub Labels definition — managed via GitHub CLI or actions/github-script
+# To apply:  gh label create --force ... (or use a labels sync action)
+#
+# Usage: gh api repos/{owner}/{repo}/labels --method POST -f name="..." -f color="..." -f description="..."
+# Or use: peaceiris/actions-gh-pages labels sync
+
+labels:
+  # ── Type ─────────────────────────────────────────────────────────────────
+  - name: 'bug'
+    color: 'd73a4a'
+    description: "Something isn't working"
+
+  - name: 'enhancement'
+    color: 'a2eeef'
+    description: 'New feature or improvement'
+
+  - name: 'documentation'
+    color: '0075ca'
+    description: 'Improvements or additions to docs'
+
+  - name: 'question'
+    color: 'd876e3'
+    description: 'Further information requested'
+
+  - name: 'discussion'
+    color: 'e4e669'
+    description: 'Needs community input'
+
+  # ── Status ────────────────────────────────────────────────────────────────
+  - name: 'stale'
+    color: 'cfd3d7'
+    description: 'No activity for 60+ days — will be auto-closed'
+
+  - name: 'auto-closed'
+    color: 'e4e4e4'
+    description: 'Automatically closed due to inactivity'
+
+  - name: 'in-progress'
+    color: 'fbca04'
+    description: 'Actively being worked on'
+
+  - name: 'pinned'
+    color: 'e11d48'
+    description: 'Kept open indefinitely — exempt from stale bot'
+
+  - name: 'do-not-merge'
+    color: 'b60205'
+    description: 'PR must not be merged as-is'
+
+  - name: 'ready-for-review'
+    color: '0e8a16'
+    description: 'PR is ready for human review'
+
+  - name: 'needs-triage'
+    color: 'fef2c0'
+    description: 'Newly filed — needs initial assessment'
+
+  # ── Area ─────────────────────────────────────────────────────────────────
+  - name: 'engine'
+    color: '2a5a9a'
+    description: 'Pure TypeScript engine modules (src/engine/)'
+
+  - name: 'components'
+    color: '7b3ac9'
+    description: 'React components (src/components/)'
+
+  - name: 'store'
+    color: '3a7a50'
+    description: 'Zustand state management (src/store/)'
+
+  - name: 'optimizer'
+    color: 'f0b040'
+    description: 'Cut-sheet optimizer or SmartOptimizer'
+
+  - name: 'export'
+    color: 'c08040'
+    description: 'PDF, DXF, G-code, BOM, CSV export'
+
+  - name: 'i18n'
+    color: 'e8a060'
+    description: 'Translations — English or Hebrew (RTL)'
+
+  - name: 'pwa'
+    color: '5a0fc8'
+    description: 'Service worker, manifest, offline capability'
+
+  - name: 'tests'
+    color: '0e8a16'
+    description: 'Unit tests (Vitest) or E2E (Playwright)'
+
+  - name: 'ci'
+    color: '1f6feb'
+    description: 'GitHub Actions workflows or CI configuration'
+
+  - name: 'config'
+    color: '8b949e'
+    description: 'Build / linting / TypeScript configuration'
+
+  - name: 'dependencies'
+    color: '0366d6'
+    description: 'npm dependency updates'
+
+  - name: 'security'
+    color: 'ee0701'
+    description: 'Security vulnerability or hardening — exempt from stale bot'
+
+  - name: 'roadmap'
+    color: '6f42c1'
+    description: 'Tracked on the public ROADMAP — exempt from stale bot'
+
+  - name: 'good first issue'
+    color: '7057ff'
+    description: 'Good for newcomers to the project'
+
+  - name: 'help wanted'
+    color: '008672'
+    description: 'Extra attention needed from contributors'

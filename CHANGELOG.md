@@ -1,9 +1,64 @@
+<div align="center">
+  <img src="docs/banner.svg" alt="Cabinet Planner" width="100%"/>
+</div>
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [3.9.0] — 2026-06-02
+
+### Added
+
+- **Three-tier shelf deflection rating** (Sprint 173) — `computeShelfDeflection()` now returns
+  a `deflectionRating` field (`'safe'` / `'warning'` / `'danger'`) in addition to the existing
+  `overLimit` boolean. The amber zone covers L/360–L/240 and the red zone covers > L/240 per
+  furniture serviceability standards. `DerivedDimensions` gains a `shelfDeflections` array
+  (one entry per shelf) populated by `computeDimensions()`, making the ratings available to
+  every consumer without re-running the calculation. i18n: `shelves.deflectionSafe` and
+  `shelves.deflectionDanger` keys added to `en.json` and `he.json`. 13 new tests.
+
+## [3.9.0] — 2026-06-02
+
+### Added
+
+- **Three-tier shelf deflection rating** (Sprint 173) — `computeShelfDeflection()` now returns
+  a `deflectionRating` field (`'safe'` / `'warning'` / `'danger'`) in addition to the existing
+  `overLimit` boolean. The amber zone covers L/360–L/240 and the red zone covers > L/240 per
+  furniture serviceability standards. `DerivedDimensions` gains a `shelfDeflections` array
+  (one entry per shelf) populated by `computeDimensions()`, making the ratings available to
+  every consumer without re-running the calculation. i18n: `shelves.deflectionSafe` and
+  `shelves.deflectionDanger` keys added to `en.json` and `he.json`. 13 new tests.
+
+### Changed
+
+- **ESLint ecmaVersion** raised from `2020` → `2023` to match TypeScript target ES2023.
+- **Vitest coverage** expanded to include `src/store/**` and `src/hooks/**`; excluded
+  non-executable files (`types.ts`, `index.ts`, `download.ts`, `useTouchGestures.ts`);
+  thresholds raised to 80/75/75/80 (statements/branches/functions/lines).
+- **Vite config** — added `resolve.alias {'@': './src'}` path alias and explicit
+  `build.target: 'es2022'`.
+- **Lighthouse CI** upload changed from anonymous `temporary-public-storage` to deterministic
+  `filesystem` output in `.lighthouseci/`.
+- **Config files** `lighthouserc.json` and `bundle-budget.json` moved to `config/` subdirectory.
+
+### Fixed
+
+- **AssemblyGuide.tsx** — ternary expression used as statement replaced with `if/else`
+  to satisfy `@typescript-eslint/no-unused-expressions`.
+- **ShortcutsModal.tsx** — backdrop converted to accessible `<button>` element; dialog
+  `<div>` properly uses `role="dialog" aria-modal="true"` without click-event violations.
+- **Tables.tsx** — `aria-sort` attribute moved from `<button>` to its parent `<th>` element
+  (WAI-ARIA spec requires `aria-sort` on `columnheader` role).
+- **ESLint** — added `coverage` to `globalIgnores` to prevent generated Istanbul/v8 files
+  from triggering unused-disable-directive warnings.
+- **Prettier** — all markdown, YAML workflow files, and source files reformatted to ensure
+  `format:check` passes cleanly.
 
 ## [3.8.0] — 2026-05-18
 
@@ -193,7 +248,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `cost.editEbRate` to both `en.json` and `he.json` so the key-parity test
   continues to pass.
 
-
+## [3.4.0] — 2026-05-19
 
 ### Added
 
@@ -326,9 +381,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **2D preview dimension polish** (Sprint 114) — dimension lines throughout the
   2D preview (front, open-front, side, top, back) and the isometric 3D view now
   use `currentColor` so they adapt to the active colour theme (dark / light /
-  high-contrast).  Arrow-heads replace plain tick marks for standard drafting
-  appearance.  All labels now use the active unit system (`mm` or fractional
-  inches) via `formatDim`.  The open-front view adds per-bay height annotations
+  high-contrast). Arrow-heads replace plain tick marks for standard drafting
+  appearance. All labels now use the active unit system (`mm` or fractional
+  inches) via `formatDim`. The open-front view adds per-bay height annotations
   in the cleared shelf compartments, making unequal shelf spacing easy to verify
   visually.
 - **Optimizer yield-meter Playwright test** (Sprint 105) — behavioural e2e

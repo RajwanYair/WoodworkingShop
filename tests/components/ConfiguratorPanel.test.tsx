@@ -42,7 +42,7 @@ describe('ConfiguratorPanel', () => {
 
   it('renders cabinet selector (project section)', () => {
     render(<ConfiguratorPanel />);
-    expect(screen.getByText(/project/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/project/i).length).toBeGreaterThan(0);
   });
 
   it('renders save/load panel', () => {

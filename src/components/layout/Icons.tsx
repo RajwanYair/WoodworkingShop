@@ -8,7 +8,12 @@ type IconProps = {
   'aria-label'?: string;
 };
 
-function Icon({ children, className = '', size = 16, 'aria-label': ariaLabel }: IconProps & { children: React.ReactNode }) {
+function Icon({
+  children,
+  className = '',
+  size = 16,
+  'aria-label': ariaLabel,
+}: IconProps & { children: React.ReactNode }) {
   return (
     <svg
       viewBox="0 0 24 24"

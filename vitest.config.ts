@@ -11,12 +11,13 @@ export default defineConfig({
     setupFiles: ['tests/setup.ts'],
     coverage: {
       provider: 'v8',
-      include: ['src/engine/**', 'src/utils/**'],
+      include: ['src/engine/**', 'src/utils/**', 'src/store/**', 'src/hooks/**'],
+      exclude: ['src/engine/types.ts', 'src/engine/index.ts', 'src/utils/download.ts', 'src/hooks/useTouchGestures.ts'],
       thresholds: {
-        statements: 70,
-        branches: 60,
-        functions: 60,
-        lines: 70,
+        statements: 80,
+        branches: 75,
+        functions: 75,
+        lines: 80,
       },
     },
   },

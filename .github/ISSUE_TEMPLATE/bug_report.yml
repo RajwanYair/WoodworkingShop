@@ -1,7 +1,7 @@
 name: 🐛 Bug Report
 description: Report unexpected behaviour or a broken feature
-title: "[Bug] "
-labels: ["bug"]
+title: '[Bug] '
+labels: ['bug']
 body:
   - type: markdown
     attributes:
@@ -12,7 +12,7 @@ body:
   - type: dropdown
     id: component
     attributes:
-      label: "🧩 Affected component"
+      label: '🧩 Affected component'
       description: Which part of the app is broken?
       options:
         - Configurator (sliders, presets, materials)
@@ -32,7 +32,7 @@ body:
   - type: textarea
     id: description
     attributes:
-      label: "📝 Description"
+      label: '📝 Description'
       description: A clear, concise description of the bug.
       placeholder: When I do X, Y happens instead of Z.
     validations:
@@ -41,7 +41,7 @@ body:
   - type: textarea
     id: steps
     attributes:
-      label: "🔁 Steps to reproduce"
+      label: '🔁 Steps to reproduce'
       description: How can we reproduce the bug?
       value: |
         1. Open the app
@@ -54,7 +54,7 @@ body:
   - type: textarea
     id: expected
     attributes:
-      label: "✅ Expected behaviour"
+      label: '✅ Expected behaviour'
       placeholder: What should happen?
     validations:
       required: true
@@ -62,7 +62,7 @@ body:
   - type: textarea
     id: actual
     attributes:
-      label: "❌ Actual behaviour"
+      label: '❌ Actual behaviour'
       placeholder: What actually happens? Paste error messages or attach a screenshot.
     validations:
       required: true
@@ -70,7 +70,7 @@ body:
   - type: dropdown
     id: browser
     attributes:
-      label: "🌐 Browser / environment"
+      label: '🌐 Browser / environment'
       options:
         - Chrome / Edge (latest)
         - Firefox (latest)
@@ -85,7 +85,7 @@ body:
   - type: input
     id: version
     attributes:
-      label: "📦 App version"
+      label: '📦 App version'
       description: Find this in the page title or package.json
       placeholder: e.g. 3.2.0
     validations:

@@ -112,7 +112,11 @@ export interface CabinetState {
   loadProject: (cabinets: CabinetEntry[]) => void;
 }
 
-function derive(config: CabinetConfig, sawKerfMm = 4, sheetSizeOverrides: Record<string, { width: number; length: number }> = {}) {
+function derive(
+  config: CabinetConfig,
+  sawKerfMm = 4,
+  sheetSizeOverrides: Record<string, { width: number; length: number }> = {},
+) {
   const dimensions = computeDimensions(config);
   const parts = generateParts(config);
   const hardware = generateHardware(config);
@@ -121,7 +125,12 @@ function derive(config: CabinetConfig, sawKerfMm = 4, sheetSizeOverrides: Record
   return { dimensions, parts, hardware, optimization, edgeBandingTotal };
 }
 
-function deriveProject(cabinets: CabinetEntry[], activeIndex: number, sawKerfMm = 4, sheetSizeOverrides: Record<string, { width: number; length: number }> = {}) {
+function deriveProject(
+  cabinets: CabinetEntry[],
+  activeIndex: number,
+  sawKerfMm = 4,
+  sheetSizeOverrides: Record<string, { width: number; length: number }> = {},
+) {
   const activeConfig = cabinets[activeIndex].config;
   const active = derive(activeConfig, sawKerfMm, sheetSizeOverrides);
   // Combined parts from all cabinets (prefixed with cabinet index)
@@ -340,7 +349,12 @@ export const useCabinetStore = create<CabinetState>((set) => {
     setSawKerf: (mm) =>
       set((state) => ({
         sawKerf: Math.max(0, Math.min(8, mm)),
-        ...deriveProject(state.cabinets, state.activeCabinetIndex, Math.max(0, Math.min(8, mm)), state.sheetSizeOverrides),
+        ...deriveProject(
+          state.cabinets,
+          state.activeCabinetIndex,
+          Math.max(0, Math.min(8, mm)),
+          state.sheetSizeOverrides,
+        ),
       })),
     setMaterialPriceOverride: (materialKey, price) =>
       set((state) => {
@@ -352,8 +366,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         }
         return { materialPriceOverrides: overrides };
       }),
-    setEdgeBandingRate: (rate) =>
-      set({ edgeBandingRate: Math.max(0, rate) }),
+    setEdgeBandingRate: (rate) => set({ edgeBandingRate: Math.max(0, rate) }),
     setHardwarePriceOverride: (id, price) =>
       set((state) => {
         const overrides = { ...state.hardwarePriceOverrides };

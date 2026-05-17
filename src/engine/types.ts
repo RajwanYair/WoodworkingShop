@@ -85,6 +85,14 @@ export interface DerivedDimensions {
   backPanelWidth: number;
   hingesPerDoor: number;
   hingePositions: number[]; // mm from top of door
+  /** Per-shelf deflection results (one entry per shelf, Sprint 173). */
+  shelfDeflections: Array<{
+    deflectionMm: number;
+    limitMm: number;
+    overLimit: boolean;
+    /** 'safe' ≤ L/360 · 'warning' L/360–L/240 · 'danger' > L/240 */
+    deflectionRating: 'safe' | 'warning' | 'danger';
+  }>;
 }
 
 export interface Part {

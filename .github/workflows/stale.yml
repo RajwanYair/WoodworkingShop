@@ -1,0 +1,59 @@
+name: Stale Issues and PRs
+
+on:
+  schedule:
+    # Run daily at 02:00 UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  stale:
+    name: Mark and close stale items
+    runs-on: ubuntu-latest
+    steps:
+      - name: Stale action
+        uses: actions/stale@v9
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+          # ── Issues ──────────────────────────────────────────────────────────
+          days-before-issue-stale: 60
+          days-before-issue-close: 14
+          stale-issue-label: 'stale'
+          close-issue-label: 'auto-closed'
+          stale-issue-message: >
+            This issue has been open for 60 days with no activity.
+            It will be automatically closed in 14 days unless there is new
+            activity. If this is still relevant, please leave a comment or
+            remove the `stale` label.
+          close-issue-message: >
+            This issue was automatically closed after 14 days of inactivity
+            following the stale notice. Feel free to re-open it if the problem
+            persists or is still relevant.
+
+          # ── Pull Requests ────────────────────────────────────────────────────
+          days-before-pr-stale: 30
+          days-before-pr-close: 14
+          stale-pr-label: 'stale'
+          close-pr-label: 'auto-closed'
+          stale-pr-message: >
+            This pull request has been open for 30 days with no activity.
+            It will be automatically closed in 14 days unless there is new
+            activity. If this PR is still relevant, please leave a comment,
+            rebase, or remove the `stale` label.
+          close-pr-message: >
+            This pull request was automatically closed after 14 days of
+            inactivity following the stale notice. Please re-open if you
+            intend to continue working on it.
+
+          # ── Exemptions ───────────────────────────────────────────────────────
+          exempt-issue-labels: 'pinned,security,roadmap,in-progress'
+          exempt-pr-labels: 'pinned,security,do-not-merge'
+          exempt-all-milestones: true
+
+          # Only process a limited number per run to stay within rate limits
+          operations-per-run: 100

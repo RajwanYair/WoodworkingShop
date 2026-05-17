@@ -150,20 +150,14 @@ function DimensionRow({ spec, value, step, unitLabel, metric, label, displayValu
 
   const numericMm = parseToMm(text, metric);
   const validNumeric = numericMm !== null && Number.isFinite(numericMm);
-  const outOfHard =
-    validNumeric && (numericMm < spec.hardMin || numericMm > spec.hardMax);
-  const outOfSoft =
-    validNumeric && !outOfHard && (numericMm < spec.softMin || numericMm > spec.softMax);
+  const outOfHard = validNumeric && (numericMm < spec.hardMin || numericMm > spec.hardMax);
+  const outOfSoft = validNumeric && !outOfHard && (numericMm < spec.softMin || numericMm > spec.softMax);
 
-  const message = !validNumeric || outOfHard
-    ? tMessages.outOfRange
-    : outOfSoft
-      ? tMessages.outsideRecommended
-      : '';
+  const message = !validNumeric || outOfHard ? tMessages.outOfRange : outOfSoft ? tMessages.outsideRecommended : '';
 
   const isInvalid = !validNumeric || outOfHard;
-  const ariaInvalidProp = isInvalid ? ({ 'aria-invalid': 'true' as const }) : {};
-  const ariaLiveProp = isInvalid ? ({ 'aria-live': 'assertive' as const }) : ({ 'aria-live': 'polite' as const });
+  const ariaInvalidProp = isInvalid ? { 'aria-invalid': 'true' as const } : {};
+  const ariaLiveProp = isInvalid ? { 'aria-live': 'assertive' as const } : { 'aria-live': 'polite' as const };
 
   const sliderValue = Math.min(spec.softMax, Math.max(spec.softMin, value));
 
@@ -237,10 +231,7 @@ function DimensionRow({ spec, value, step, unitLabel, metric, label, displayValu
         <p
           id={errorId}
           {...ariaLiveProp}
-          className={
-            'mt-1 text-[11px] ' +
-            (isInvalid ? 'text-red-600' : 'text-amber-600 dark:text-amber-400')
-          }
+          className={'mt-1 text-[11px] ' + (isInvalid ? 'text-red-600' : 'text-amber-600 dark:text-amber-400')}
         >
           {message}
         </p>

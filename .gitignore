@@ -35,3 +35,6 @@ playwright-report
 test-results
 blob-report
 playwright/.cache
+
+# Lighthouse CI
+.lighthouseci

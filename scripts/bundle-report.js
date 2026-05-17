@@ -1,7 +1,7 @@
 /**
  * Bundle size report & budget enforcer — runs after `npm run build` in CI.
  *
- * Budgets are loaded from bundle-budget.json (versioned alongside source).
+ * Budgets are loaded from config/bundle-budget.json (versioned alongside source).
  * Process exits non-zero on any budget violation.
  *
  * Checks:
@@ -14,7 +14,7 @@ import { readdirSync, statSync, readFileSync } from 'node:fs';
 import { join, extname, basename } from 'node:path';
 
 const DIST_DIR = 'dist';
-const BUDGET_FILE = 'bundle-budget.json';
+const BUDGET_FILE = 'config/bundle-budget.json';
 
 const budget = JSON.parse(readFileSync(BUDGET_FILE, 'utf8'));
 
@@ -108,9 +108,7 @@ function assetBudgetKB(path) {
   return perAsset._default;
 }
 
-const staticAssets = groups.other.filter((f) =>
-  /\.(png|jpg|jpeg|gif|webp|avif|svg|ico)$/i.test(f.path),
-);
+const staticAssets = groups.other.filter((f) => /\.(png|jpg|jpeg|gif|webp|avif|svg|ico)$/i.test(f.path));
 if (staticAssets.length > 0) {
   console.log('\nPer-asset checks (images/icons):');
   for (const f of staticAssets) {

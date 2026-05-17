@@ -11,13 +11,27 @@ function sortParts(parts: Part[], key: SortKey, dir: SortDir, lang: Lang): Part[
   return [...parts].sort((a, b) => {
     let cmp = 0;
     switch (key) {
-      case 'id': cmp = a.id.localeCompare(b.id); break;
-      case 'name': cmp = a.name[lang].localeCompare(b.name[lang]); break;
-      case 'qty': cmp = a.qty - b.qty; break;
-      case 'material': cmp = getMaterial(a.material).name[lang].localeCompare(getMaterial(b.material).name[lang]); break;
-      case 'length': cmp = a.length - b.length; break;
-      case 'width': cmp = a.width - b.width; break;
-      case 'thickness': cmp = a.thickness - b.thickness; break;
+      case 'id':
+        cmp = a.id.localeCompare(b.id);
+        break;
+      case 'name':
+        cmp = a.name[lang].localeCompare(b.name[lang]);
+        break;
+      case 'qty':
+        cmp = a.qty - b.qty;
+        break;
+      case 'material':
+        cmp = getMaterial(a.material).name[lang].localeCompare(getMaterial(b.material).name[lang]);
+        break;
+      case 'length':
+        cmp = a.length - b.length;
+        break;
+      case 'width':
+        cmp = a.width - b.width;
+        break;
+      case 'thickness':
+        cmp = a.thickness - b.thickness;
+        break;
     }
     return dir === 'asc' ? cmp : -cmp;
   });
@@ -39,20 +53,22 @@ export function PartsTable() {
       setSortDir('asc');
     }
   };
-  const arrow = (key: SortKey) =>
-    sortKey === key ? (sortDir === 'asc' ? ' ▲' : ' ▼') : '';
+  const arrow = (key: SortKey) => (sortKey === key ? (sortDir === 'asc' ? ' ▲' : ' ▼') : '');
 
   const sorted = sortParts(parts, sortKey, sortDir, lang);
 
   const thBtn = (key: SortKey, label: string, align = 'text-start') => (
-    <th className={`px-2 py-1 ${align}`}>
+    <th
+      className={`px-2 py-1 ${align}`}
+      aria-sort={sortKey === key ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
+    >
       <button
         type="button"
         onClick={() => handleSort(key)}
         className="font-semibold hover:text-wood-500 dark:hover:text-wood-100 transition-colors"
-        aria-sort={sortKey === key ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
       >
-        {label}{arrow(key)}
+        {label}
+        {arrow(key)}
       </button>
     </th>
   );

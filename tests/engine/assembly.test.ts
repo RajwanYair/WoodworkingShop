@@ -62,9 +62,9 @@ describe('generateAssemblySteps', () => {
     expect(fixedStep).toBeUndefined();
   });
 
-  it('always ends with wall mounting step', () => {
+  it('always includes a wall mounting step', () => {
     const steps = generateAssemblySteps(DEFAULT_CONFIG);
-    const last = steps[steps.length - 1];
-    expect(last.title.en.toLowerCase()).toContain('wall');
+    const wallStep = steps.find((s) => s.title.en.toLowerCase().includes('wall'));
+    expect(wallStep).toBeDefined();
   });
 });

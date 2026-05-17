@@ -3,8 +3,8 @@ import { IconCheck, IconX, IconInfo } from './Icons';
 
 const IconMap: Record<ToastType, React.ReactElement> = {
   success: <IconCheck size={16} />,
-  error:   <IconX     size={16} />,
-  info:    <IconInfo  size={16} />,
+  error: <IconX size={16} />,
+  info: <IconInfo size={16} />,
 };
 const colors: Record<ToastType, string> = {
   success: 'bg-green-600',
@@ -25,7 +25,11 @@ export function ToastContainer() {
         >
           <span className="shrink-0">{IconMap[t.type]}</span>
           <span className="flex-1">{t.message}</span>
-          <button onClick={() => removeToast(t.id)} className="opacity-70 hover:opacity-100 ml-1 flex items-center" aria-label="Dismiss">
+          <button
+            onClick={() => removeToast(t.id)}
+            className="opacity-70 hover:opacity-100 ml-1 flex items-center"
+            aria-label="Dismiss"
+          >
             <IconX size={14} />
           </button>
         </div>

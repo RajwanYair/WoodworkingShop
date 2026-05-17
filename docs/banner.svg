@@ -1,184 +1,265 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 220" width="1200" height="220">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 260" width="1200" height="260">
   <defs>
-    <!-- Main background gradient -->
-    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="220" gradientUnits="userSpaceOnUse">
-      <stop offset="0%"   stop-color="#1a0e06"/>
-      <stop offset="45%"  stop-color="#2d1a0e"/>
-      <stop offset="100%" stop-color="#4a2a12"/>
+    <!-- Rich dark wood background -->
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="260" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#140a03"/>
+      <stop offset="35%"  stop-color="#231208"/>
+      <stop offset="75%"  stop-color="#311a0c"/>
+      <stop offset="100%" stop-color="#421f0e"/>
     </linearGradient>
-    <!-- Amber accent gradient -->
+    <!-- Amber title gradient -->
     <linearGradient id="amber" x1="0" y1="0" x2="1200" y2="0" gradientUnits="userSpaceOnUse">
-      <stop offset="0%"   stop-color="#b8722a"/>
-      <stop offset="50%"  stop-color="#f0b060"/>
-      <stop offset="100%" stop-color="#c07830"/>
+      <stop offset="0%"   stop-color="#a06820"/>
+      <stop offset="40%"  stop-color="#f0c060"/>
+      <stop offset="70%"  stop-color="#e8a840"/>
+      <stop offset="100%" stop-color="#b87830"/>
     </linearGradient>
-    <!-- Left vertical accent -->
-    <linearGradient id="acV" x1="0" y1="0" x2="0" y2="220" gradientUnits="userSpaceOnUse">
-      <stop offset="0%"   stop-color="#f0b060"/>
-      <stop offset="100%" stop-color="#8b5022"/>
+    <!-- Left vertical accent glow -->
+    <linearGradient id="acV" x1="0" y1="0" x2="0" y2="260" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#f0c060"/>
+      <stop offset="50%"  stop-color="#d08030"/>
+      <stop offset="100%" stop-color="#7a4010"/>
     </linearGradient>
-    <!-- Cabinet face wood gradient -->
-    <linearGradient id="cabFace" x1="0" y1="0" x2="150" y2="0" gradientUnits="userSpaceOnUse">
-      <stop offset="0%"   stop-color="#4a2810"/>
-      <stop offset="50%"  stop-color="#6b3a18"/>
-      <stop offset="100%" stop-color="#4a2810"/>
+    <!-- Cabinet face -->
+    <linearGradient id="cabFace" x1="0" y1="0" x2="170" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#3a1e08"/>
+      <stop offset="40%"  stop-color="#5e3218"/>
+      <stop offset="80%"  stop-color="#4a2810"/>
+      <stop offset="100%" stop-color="#2e1606"/>
     </linearGradient>
-    <!-- Door panel gradient -->
-    <linearGradient id="door" x1="0" y1="0" x2="60" y2="0" gradientUnits="userSpaceOnUse">
-      <stop offset="0%"   stop-color="#3d1e08"/>
-      <stop offset="40%"  stop-color="#5c3018"/>
-      <stop offset="100%" stop-color="#3d1e08"/>
+    <!-- Door panel -->
+    <linearGradient id="door" x1="0" y1="0" x2="70" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#2e1406"/>
+      <stop offset="45%"  stop-color="#502a14"/>
+      <stop offset="100%" stop-color="#2e1406"/>
     </linearGradient>
-    <!-- Right subtle glow for text area -->
-    <radialGradient id="textGlow" cx="60%" cy="50%" r="50%" gradientUnits="objectBoundingBox">
-      <stop offset="0%"   stop-color="#3d2010" stop-opacity="0.4"/>
-      <stop offset="100%" stop-color="#1a0e06" stop-opacity="0"/>
+    <!-- Iso top face -->
+    <linearGradient id="isoTop" x1="0" y1="0" x2="180" y2="20" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#9a6030"/>
+      <stop offset="100%" stop-color="#6a4020"/>
+    </linearGradient>
+    <!-- Right text glow -->
+    <radialGradient id="textGlow" cx="65%" cy="45%" r="45%" gradientUnits="objectBoundingBox">
+      <stop offset="0%"   stop-color="#3a2010" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#140a03" stop-opacity="0"/>
     </radialGradient>
-    <!-- Clip for rounded corners -->
+    <!-- Shine overlay -->
+    <linearGradient id="shine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.04"/>
+      <stop offset="40%"  stop-color="#ffffff" stop-opacity="0.01"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.08"/>
+    </linearGradient>
+    <!-- Pill background -->
+    <linearGradient id="pillBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#4a2408"/>
+      <stop offset="100%" stop-color="#2e1406"/>
+    </linearGradient>
+    <!-- Clip rounded corners -->
     <clipPath id="rounded">
-      <rect width="1200" height="220" rx="12"/>
+      <rect width="1200" height="260" rx="14"/>
     </clipPath>
+    <!-- Drop shadow for cabinet -->
+    <filter id="cabShadow" x="-10%" y="-5%" width="130%" height="120%">
+      <feDropShadow dx="4" dy="6" stdDeviation="6" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
   </defs>
 
-  <!-- Background + glow -->
-  <rect width="1200" height="220" fill="url(#bg)" rx="12"/>
-  <rect width="1200" height="220" fill="url(#textGlow)" rx="12"/>
+  <!-- Base background -->
+  <rect width="1200" height="260" fill="url(#bg)" rx="14"/>
+  <rect width="1200" height="260" fill="url(#textGlow)" rx="14"/>
+  <rect width="1200" height="260" fill="url(#shine)" rx="14"/>
 
-  <!-- Wood grain texture lines -->
-  <g clip-path="url(#rounded)" opacity="0.25">
-    <path d="M0,28  Q400,22  800,30  Q1000,33 1200,28"  stroke="#6b3a18" stroke-width="1.2" fill="none"/>
-    <path d="M0,60  Q300,56  700,63  Q950,66 1200,60"  stroke="#6b3a18" stroke-width="0.9" fill="none"/>
-    <path d="M0,95  Q450,90  800,97  Q1050,100 1200,95" stroke="#6b3a18" stroke-width="1.1" fill="none"/>
-    <path d="M0,130 Q350,126 750,133 Q1000,136 1200,130" stroke="#6b3a18" stroke-width="0.8" fill="none"/>
-    <path d="M0,168 Q500,163 850,170 Q1050,173 1200,168" stroke="#6b3a18" stroke-width="1.0" fill="none"/>
-    <path d="M0,200 Q300,197 700,202 Q950,204 1200,200" stroke="#6b3a18" stroke-width="0.7" fill="none"/>
+  <!-- Wood grain texture -->
+  <g clip-path="url(#rounded)" opacity="0.18">
+    <path d="M0,22  Q380,16  780,24  Q980,27  1200,22"  stroke="#7a4520" stroke-width="1.4" fill="none"/>
+    <path d="M0,52  Q280,47  680,55  Q920,58  1200,52"  stroke="#6a3a18" stroke-width="1.0" fill="none"/>
+    <path d="M0,86  Q420,80  820,88  Q1040,91  1200,86" stroke="#7a4520" stroke-width="1.3" fill="none"/>
+    <path d="M0,118 Q320,113 720,121 Q970,124 1200,118" stroke="#5a3010" stroke-width="0.9" fill="none"/>
+    <path d="M0,154 Q460,148 860,156 Q1060,159 1200,154" stroke="#6a3a18" stroke-width="1.2" fill="none"/>
+    <path d="M0,190 Q340,185 740,193 Q990,196 1200,190" stroke="#7a4520" stroke-width="0.8" fill="none"/>
+    <path d="M0,224 Q500,218 900,226 Q1080,229 1200,224" stroke="#5a3010" stroke-width="1.1" fill="none"/>
   </g>
 
-  <!-- Left accent strip -->
-  <rect x="0" y="0" width="6" height="220" fill="url(#acV)" rx="3"/>
+  <!-- Left accent strip with glow -->
+  <rect x="0" y="0" width="7" height="260" fill="url(#acV)" rx="3.5"/>
+  <rect x="0" y="0" width="2" height="260" fill="#f0c060" opacity="0.6"/>
 
-  <!-- ══ Cabinet illustration (front + isometric hint) ══ -->
-  <!-- Shadow -->
-  <ellipse cx="148" cy="206" rx="60" ry="7" fill="#000" opacity="0.35"/>
+  <!-- ══ Cabinet illustration (isometric-front view) ══ -->
+  <!-- Ground shadow -->
+  <ellipse cx="158" cy="247" rx="72" ry="8" fill="#000" opacity="0.45"/>
 
-  <!-- Carcass body -->
-  <rect x="38" y="14" width="152" height="176" rx="4" fill="url(#cabFace)" stroke="#c08040" stroke-width="2"/>
+  <!-- Cabinet main body -->
+  <rect x="30" y="14" width="168" height="210" rx="4" fill="url(#cabFace)" stroke="#c08040" stroke-width="2" filter="url(#cabShadow)"/>
 
   <!-- Iso top face -->
-  <polygon points="38,14 190,14 206,2 54,2"
-    fill="#8b5a28" fill-opacity="0.55" stroke="#d09050" stroke-width="1.2"/>
+  <polygon points="30,14 198,14 218,0 50,0" fill="url(#isoTop)" fill-opacity="0.75" stroke="#d09050" stroke-width="1.4"/>
   <!-- Iso right face -->
-  <polygon points="190,14 206,2 206,158 190,172"
-    fill="#5a3010" fill-opacity="0.6" stroke="#c08040" stroke-width="1.2"/>
+  <polygon points="198,14 218,0 218,188 198,204" fill="#3a1e0a" fill-opacity="0.75" stroke="#b07030" stroke-width="1.2"/>
 
   <!-- Toe kick -->
-  <rect x="46" y="178" width="136" height="10" rx="2"
-    fill="#2d1608" stroke="#9a6030" stroke-width="1" opacity="0.9"/>
+  <rect x="38" y="214" width="152" height="10" rx="2" fill="#1e0e04" stroke="#906020" stroke-width="1" opacity="0.95"/>
 
-  <!-- Center stile (door divider) -->
-  <line x1="114" y1="16" x2="114" y2="176" stroke="#c08040" stroke-width="2" opacity="0.7"/>
+  <!-- Center stile -->
+  <line x1="114" y1="16" x2="114" y2="212" stroke="#c08040" stroke-width="2.5" opacity="0.65"/>
 
-  <!-- Shelf line (dashed) -->
-  <line x1="42" y1="100" x2="186" y2="100"
-    stroke="#d09050" stroke-width="1.2" stroke-dasharray="5,3" opacity="0.5"/>
+  <!-- Shelf line (upper) -->
+  <line x1="34" y1="95" x2="194" y2="95" stroke="#d09050" stroke-width="1.4" stroke-dasharray="6,4" opacity="0.55"/>
+  <!-- Shelf line (lower) -->
+  <line x1="34" y1="148" x2="194" y2="148" stroke="#d09050" stroke-width="1.4" stroke-dasharray="6,4" opacity="0.45"/>
 
   <!-- Left door -->
-  <rect x="44" y="18" width="67" height="158" rx="2" fill="url(#door)" opacity="0.95"/>
-  <!-- Left door inset panel -->
-  <rect x="52" y="28" width="51" height="68" rx="2" fill="none" stroke="#a07040" stroke-width="1" opacity="0.6"/>
-  <rect x="52" y="104" width="51" height="64" rx="2" fill="none" stroke="#a07040" stroke-width="1" opacity="0.6"/>
+  <rect x="34" y="18" width="77" height="194" rx="2.5" fill="url(#door)" opacity="0.96"/>
+  <!-- Left door inset panels -->
+  <rect x="42" y="28" width="61" height="80" rx="3" fill="none" stroke="#9a7040" stroke-width="1.2" opacity="0.6"/>
+  <rect x="42" y="116" width="61" height="88" rx="3" fill="none" stroke="#9a7040" stroke-width="1.2" opacity="0.5"/>
   <!-- Left handle -->
-  <rect x="104" y="90" width="6" height="24" rx="3" fill="#e8a850"/>
-  <circle cx="107" cy="90"  r="3.5" fill="#f0b860"/>
-  <circle cx="107" cy="114" r="3.5" fill="#f0b860"/>
+  <rect x="104" y="102" width="6" height="28" rx="3" fill="#e0a040"/>
+  <circle cx="107" cy="102" r="4" fill="#f0b850"/>
+  <circle cx="107" cy="130" r="4" fill="#f0b850"/>
 
-  <!-- Right door -->
-  <rect x="117" y="18" width="69" height="158" rx="2" fill="url(#door)" opacity="0.95"/>
-  <!-- Right door inset panel -->
-  <rect x="124" y="28" width="54" height="68" rx="2" fill="none" stroke="#a07040" stroke-width="1" opacity="0.6"/>
-  <rect x="124" y="104" width="54" height="64" rx="2" fill="none" stroke="#a07040" stroke-width="1" opacity="0.6"/>
+  <!-- Right door (slightly ajar showing interior) -->
+  <rect x="117" y="18" width="77" height="194" rx="2.5" fill="url(#door)" opacity="0.96"/>
+  <!-- Right door inset panels -->
+  <rect x="124" y="28" width="63" height="80" rx="3" fill="none" stroke="#9a7040" stroke-width="1.2" opacity="0.6"/>
+  <rect x="124" y="116" width="63" height="88" rx="3" fill="none" stroke="#9a7040" stroke-width="1.2" opacity="0.5"/>
   <!-- Right handle -->
-  <rect x="117" y="90" width="6" height="24" rx="3" fill="#e8a850"/>
-  <circle cx="120" cy="90"  r="3.5" fill="#f0b860"/>
-  <circle cx="120" cy="114" r="3.5" fill="#f0b860"/>
+  <rect x="117" y="102" width="6" height="28" rx="3" fill="#e0a040"/>
+  <circle cx="120" cy="102" r="4" fill="#f0b850"/>
+  <circle cx="120" cy="130" r="4" fill="#f0b850"/>
 
   <!-- Hinges left door -->
-  <rect x="40" y="42" width="8" height="12" rx="1.5" fill="#c09050" opacity="0.85"/>
-  <rect x="40" y="142" width="8" height="12" rx="1.5" fill="#c09050" opacity="0.85"/>
+  <rect x="31" y="44" width="8" height="14" rx="2" fill="#b89040" opacity="0.9"/>
+  <rect x="31" y="170" width="8" height="14" rx="2" fill="#b89040" opacity="0.9"/>
   <!-- Hinges right door -->
-  <rect x="180" y="42" width="8" height="12" rx="1.5" fill="#c09050" opacity="0.85"/>
-  <rect x="180" y="142" width="8" height="12" rx="1.5" fill="#c09050" opacity="0.85"/>
+  <rect x="189" y="44" width="8" height="14" rx="2" fill="#b89040" opacity="0.9"/>
+  <rect x="189" y="170" width="8" height="14" rx="2" fill="#b89040" opacity="0.9"/>
 
-  <!-- Dimension annotations (decorative) -->
-  <line x1="32" y1="14" x2="32" y2="188" stroke="#e8a850" stroke-width="0.8" opacity="0.5"/>
-  <line x1="28" y1="14"  x2="36" y2="14"  stroke="#e8a850" stroke-width="0.8" opacity="0.5"/>
-  <line x1="28" y1="188" x2="36" y2="188" stroke="#e8a850" stroke-width="0.8" opacity="0.5"/>
-  <text x="20" y="102" font-family="monospace" font-size="9" fill="#e8a850" opacity="0.65"
-    transform="rotate(-90,20,102)" text-anchor="middle">720mm</text>
+  <!-- Dimension annotation (left side) -->
+  <line x1="20" y1="14" x2="20" y2="224" stroke="#e8a840" stroke-width="0.9" opacity="0.55"/>
+  <line x1="16" y1="14"  x2="24" y2="14"  stroke="#e8a840" stroke-width="0.9" opacity="0.55"/>
+  <line x1="16" y1="224" x2="24" y2="224" stroke="#e8a840" stroke-width="0.9" opacity="0.55"/>
+  <text x="12" y="120" font-family="'Segoe UI',monospace,Arial" font-size="9" fill="#e8a840" opacity="0.7"
+    transform="rotate(-90,12,120)" text-anchor="middle">720 mm</text>
+
+  <!-- Width annotation (bottom) -->
+  <line x1="30" y1="232" x2="198" y2="232" stroke="#e8a840" stroke-width="0.9" opacity="0.45"/>
+  <line x1="30"  y1="228" x2="30"  y2="236" stroke="#e8a840" stroke-width="0.9" opacity="0.45"/>
+  <line x1="198" y1="228" x2="198" y2="236" stroke="#e8a840" stroke-width="0.9" opacity="0.45"/>
+  <text x="114" y="244" font-family="'Segoe UI',monospace,Arial" font-size="9" fill="#e8a840" opacity="0.6" text-anchor="middle">600 mm</text>
 
   <!-- ══ Main text block ══ -->
-  <!-- "Cabinet Planner" -->
-  <text x="250" y="92"
+  <!-- Title: Cabinet Planner -->
+  <text x="242" y="86"
     font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif"
-    font-size="58" font-weight="800" fill="#f8e8d0" letter-spacing="-2"
-    opacity="0.97">Cabinet Planner</text>
+    font-size="62" font-weight="800" fill="url(#amber)" letter-spacing="-2"
+    opacity="0.98">Cabinet Planner</text>
 
-  <!-- Underline accent -->
-  <rect x="250" y="100" width="550" height="3.5" fill="url(#amber)" rx="2" opacity="0.9"/>
+  <!-- Underline accent bar -->
+  <rect x="242" y="94" width="600" height="4" fill="url(#amber)" rx="2" opacity="0.85"/>
 
   <!-- Version badge -->
-  <rect x="830" y="66" width="80" height="22" rx="11" fill="#8b5022" opacity="0.9"/>
-  <text x="870" y="81"
-    font-family="'Segoe UI',Arial,sans-serif" font-size="11" font-weight="600"
-    fill="#f0b060" text-anchor="middle">v3.8.0</text>
+  <rect x="858" y="58" width="86" height="26" rx="13" fill="#7a4010" stroke="#c08030" stroke-width="1" opacity="0.95"/>
+  <text x="901" y="75"
+    font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="700"
+    fill="#f0c060" text-anchor="middle">v3.8.0</text>
 
   <!-- Tagline -->
-  <text x="250" y="133"
+  <text x="242" y="124"
     font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif"
-    font-size="17" fill="#c8966a" letter-spacing="0.3">
-    Browser-based woodworking design · No install · No account · Free
+    font-size="16" fill="#c09060" letter-spacing="0.4">
+    Browser-based woodworking design  ·  No install  ·  No account  ·  Free &amp; open-source
   </text>
 
-  <!-- Feature pills row -->
-  <!-- Pill 1 -->
-  <rect x="250" y="153" width="112" height="22" rx="11" fill="#3d1e08" stroke="#8b5022" stroke-width="1"/>
-  <text x="306" y="168" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">MaxRects Optimizer</text>
-  <!-- Pill 2 -->
-  <rect x="370" y="153" width="90" height="22" rx="11" fill="#3d1e08" stroke="#8b5022" stroke-width="1"/>
-  <text x="415" y="168" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">PDF · DXF · G-code</text>
-  <!-- Pill 3 -->
-  <rect x="468" y="153" width="82" height="22" rx="11" fill="#3d1e08" stroke="#8b5022" stroke-width="1"/>
-  <text x="509" y="168" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">6-view Preview</text>
-  <!-- Pill 4 -->
-  <rect x="558" y="153" width="78" height="22" rx="11" fill="#3d1e08" stroke="#8b5022" stroke-width="1"/>
-  <text x="597" y="168" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">PWA Offline</text>
-  <!-- Pill 5 -->
-  <rect x="644" y="153" width="82" height="22" rx="11" fill="#3d1e08" stroke="#8b5022" stroke-width="1"/>
-  <text x="685" y="168" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">EN + HE (RTL)</text>
-  <!-- Pill 6 -->
-  <rect x="734" y="153" width="78" height="22" rx="11" fill="#3d1e08" stroke="#8b5022" stroke-width="1"/>
-  <text x="773" y="168" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">258+ Tests</text>
-  <!-- Pill 7 -->
-  <rect x="820" y="153" width="68" height="22" rx="11" fill="#3d1e08" stroke="#8b5022" stroke-width="1"/>
-  <text x="854" y="168" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">MIT License</text>
+  <!-- ── Feature pills — row 1 ── -->
+  <rect x="242" y="144" width="116" height="23" rx="11.5" fill="url(#pillBg)" stroke="#7a4010" stroke-width="1"/>
+  <text x="300" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">MaxRects Optimizer</text>
 
-  <!-- Stack logos area (right side) -->
-  <text x="920" y="92"
-    font-family="'Segoe UI',Arial,sans-serif" font-size="12" fill="#9a6840" text-anchor="middle"
-    opacity="0.8">Built with</text>
-  <!-- React badge -->
-  <rect x="860" y="100" width="56" height="20" rx="4" fill="#20232a" opacity="0.8"/>
-  <text x="888" y="114" font-family="monospace" font-size="10" fill="#61dafb" text-anchor="middle">React 19</text>
-  <!-- TS badge -->
-  <rect x="922" y="100" width="66" height="20" rx="4" fill="#3178c6" opacity="0.85"/>
-  <text x="955" y="114" font-family="monospace" font-size="10" fill="#fff" text-anchor="middle">TypeScript 5</text>
-  <!-- Vite badge -->
-  <rect x="860" y="126" width="56" height="20" rx="4" fill="#1a1a2e" opacity="0.85"/>
-  <text x="888" y="140" font-family="monospace" font-size="10" fill="#646cff" text-anchor="middle">Vite 6</text>
-  <!-- TW badge -->
-  <rect x="922" y="126" width="66" height="20" rx="4" fill="#0f172a" opacity="0.85"/>
-  <text x="955" y="140" font-family="monospace" font-size="10" fill="#38bdf8" text-anchor="middle">Tailwind 4</text>
+  <rect x="365" y="144" width="94" height="23" rx="11.5" fill="url(#pillBg)" stroke="#7a4010" stroke-width="1"/>
+  <text x="412" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">PDF · DXF · G-code</text>
 
+  <rect x="466" y="144" width="84" height="23" rx="11.5" fill="url(#pillBg)" stroke="#7a4010" stroke-width="1"/>
+  <text x="508" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">6-view Preview</text>
+
+  <rect x="557" y="144" width="82" height="23" rx="11.5" fill="url(#pillBg)" stroke="#7a4010" stroke-width="1"/>
+  <text x="598" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">PWA Offline</text>
+
+  <rect x="646" y="144" width="85" height="23" rx="11.5" fill="url(#pillBg)" stroke="#7a4010" stroke-width="1"/>
+  <text x="688" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">EN + HE (RTL)</text>
+
+  <rect x="738" y="144" width="80" height="23" rx="11.5" fill="url(#pillBg)" stroke="#7a4010" stroke-width="1"/>
+  <text x="778" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">280+ Tests</text>
+
+  <rect x="825" y="144" width="72" height="23" rx="11.5" fill="url(#pillBg)" stroke="#7a4010" stroke-width="1"/>
+  <text x="861" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">MIT License</text>
+
+  <!-- ── Tech stack row ── -->
+  <text x="914" y="100"
+    font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#906040"
+    text-anchor="middle" opacity="0.9">Built with</text>
+
+  <!-- React -->
+  <rect x="858" y="107" width="58" height="21" rx="5" fill="#20232a" opacity="0.9"/>
+  <text x="887" y="121" font-family="monospace,'Courier New'" font-size="10" fill="#61dafb" text-anchor="middle">React 19</text>
+  <!-- TypeScript -->
+  <rect x="924" y="107" width="66" height="21" rx="5" fill="#3178c6" opacity="0.9"/>
+  <text x="957" y="121" font-family="monospace,'Courier New'" font-size="10" fill="#fff" text-anchor="middle">TypeScript 5</text>
+  <!-- Vite -->
+  <rect x="858" y="133" width="58" height="21" rx="5" fill="#1a1a2e" opacity="0.9"/>
+  <text x="887" y="147" font-family="monospace,'Courier New'" font-size="10" fill="#646cff" text-anchor="middle">Vite 6</text>
+  <!-- Tailwind -->
+  <rect x="924" y="133" width="66" height="21" rx="5" fill="#0f172a" opacity="0.9"/>
+  <text x="957" y="147" font-family="monospace,'Courier New'" font-size="10" fill="#38bdf8" text-anchor="middle">Tailwind 4</text>
+  <!-- Zustand -->
+  <rect x="858" y="159" width="58" height="21" rx="5" fill="#1c1917" opacity="0.9"/>
+  <text x="887" y="173" font-family="monospace,'Courier New'" font-size="10" fill="#f59e0b" text-anchor="middle">Zustand 5</text>
+  <!-- Vitest -->
+  <rect x="924" y="159" width="66" height="21" rx="5" fill="#0d0d0d" opacity="0.9"/>
+  <text x="957" y="173" font-family="monospace,'Courier New'" font-size="10" fill="#acd268" text-anchor="middle">Vitest 4</text>
+
+  <!-- ── Bottom stats bar ── -->
+  <rect x="7" y="202" width="1186" height="50" rx="0" fill="#0e0804" opacity="0.55"/>
+
+  <!-- Stat 1: Live Demo -->
+  <text x="260" y="222" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#906040" text-anchor="middle">LIVE DEMO</text>
+  <text x="260" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="600" fill="#f0c060" text-anchor="middle">GitHub Pages</text>
+
+  <!-- Divider -->
+  <line x1="332" y1="208" x2="332" y2="246" stroke="#5a3010" stroke-width="1" opacity="0.6"/>
+
+  <!-- Stat 2: Tests -->
+  <text x="400" y="222" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#906040" text-anchor="middle">UNIT TESTS</text>
+  <text x="400" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="600" fill="#f0c060" text-anchor="middle">280+ passing</text>
+
+  <!-- Divider -->
+  <line x1="472" y1="208" x2="472" y2="246" stroke="#5a3010" stroke-width="1" opacity="0.6"/>
+
+  <!-- Stat 3: CI -->
+  <text x="540" y="222" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#906040" text-anchor="middle">CI PIPELINE</text>
+  <text x="540" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="600" fill="#f0c060" text-anchor="middle">GitHub Actions</text>
+
+  <!-- Divider -->
+  <line x1="612" y1="208" x2="612" y2="246" stroke="#5a3010" stroke-width="1" opacity="0.6"/>
+
+  <!-- Stat 4: Export formats -->
+  <text x="682" y="222" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#906040" text-anchor="middle">EXPORT</text>
+  <text x="682" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="600" fill="#f0c060" text-anchor="middle">PDF · DXF · CSV · G-code</text>
+
+  <!-- Divider -->
+  <line x1="772" y1="208" x2="772" y2="246" stroke="#5a3010" stroke-width="1" opacity="0.6"/>
+
+  <!-- Stat 5: Languages -->
+  <text x="840" y="222" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#906040" text-anchor="middle">LANGUAGES</text>
+  <text x="840" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="600" fill="#f0c060" text-anchor="middle">EN + עברית (RTL)</text>
+
+  <!-- Divider -->
+  <line x1="910" y1="208" x2="910" y2="246" stroke="#5a3010" stroke-width="1" opacity="0.6"/>
+
+  <!-- Stat 6: License -->
+  <text x="980" y="222" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#906040" text-anchor="middle">LICENSE</text>
+  <text x="980" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="600" fill="#f0c060" text-anchor="middle">MIT — Free forever</text>
+
+  <!-- Top accent line -->
+  <rect x="7" y="0" width="1186" height="4" fill="url(#amber)" rx="2" opacity="0.5"/>
   <!-- Bottom accent bar -->
-  <rect x="6" y="212" width="1188" height="5" fill="url(#amber)" rx="2.5" opacity="0.7"/>
+  <rect x="7" y="253" width="1186" height="5" fill="url(#amber)" rx="2.5" opacity="0.75"/>
 </svg>

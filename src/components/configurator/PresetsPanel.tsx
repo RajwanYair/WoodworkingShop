@@ -1,9 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import type { CabinetConfig } from '../../engine/types';
-import {
-  IconKitchen, IconWallUnit, IconWardrobe, IconBookshelf, IconBathroom,
-} from '../layout/Icons';
+import { IconKitchen, IconWallUnit, IconWardrobe, IconBookshelf, IconBathroom } from '../layout/Icons';
 
 interface Preset {
   key: string;

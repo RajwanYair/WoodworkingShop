@@ -10,9 +10,7 @@ export function DrawerConfig() {
   const isHe = i18n.language === 'he';
 
   const setDrawerHeight = (idx: number, val: number) => {
-    const heights = Array.from({ length: config.drawerCount }, (_, i) =>
-      config.drawerHeights?.[i] ?? 150,
-    );
+    const heights = Array.from({ length: config.drawerCount }, (_, i) => config.drawerHeights?.[i] ?? 150);
     heights[idx] = val;
     setConfig({ drawerHeights: heights });
   };

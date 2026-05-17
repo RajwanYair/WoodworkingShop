@@ -277,7 +277,14 @@ export function OptimizerView() {
       </div>
 
       {/* Sprint 160 — Material usage summary */}
-      <MaterialSummaryPanel sheets={displayOpt.sheets} materialPriceOverrides={materialPriceOverrides} sheetSizeOverrides={sheetSizeOverrides} setSheetSizeOverride={setSheetSizeOverride} t={t} lang={lang} />
+      <MaterialSummaryPanel
+        sheets={displayOpt.sheets}
+        materialPriceOverrides={materialPriceOverrides}
+        sheetSizeOverrides={sheetSizeOverrides}
+        setSheetSizeOverride={setSheetSizeOverride}
+        t={t}
+        lang={lang}
+      />
 
       {/* Sprint 150 — Shopping list / sheets-needed summary */}
       <ShoppingListPanel sheets={displayOpt.sheets} materialPriceOverrides={materialPriceOverrides} t={t} lang={lang} />
@@ -343,7 +350,7 @@ function OffcutsPanel({ sheets, t }: { sheets: CutSheet[]; t: (k: string) => str
         w: oc.w,
         h: oc.h,
         area: oc.area,
-      }))
+      })),
     )
     .sort((a, b) => b.area - a.area);
 
@@ -379,9 +386,7 @@ function OffcutsPanel({ sheets, t }: { sheets: CutSheet[]; t: (k: string) => str
                 <span className="text-wood-500 dark:text-wood-400">
                   {Math.round(oc.w)} × {Math.round(oc.h)} mm
                 </span>
-                <span className="text-wood-400 dark:text-wood-500">
-                  {(oc.area / 1_000_000).toFixed(3)} m²
-                </span>
+                <span className="text-wood-400 dark:text-wood-500">{(oc.area / 1_000_000).toFixed(3)} m²</span>
               </div>
             ))}
           </div>
@@ -414,13 +419,24 @@ function MaterialSummaryPanel({
   const [editL, setEditL] = useState('');
 
   // Group by material + thickness — Sprint 165: include materialKey in row data
-  const groups = new Map<string, { materialKey: string; name: { en: string; he: string }; thickness: number; sheetArea: number; qty: number; pricePerSheet: number; defaultW: number; defaultL: number }>();
+  const groups = new Map<
+    string,
+    {
+      materialKey: string;
+      name: { en: string; he: string };
+      thickness: number;
+      sheetArea: number;
+      qty: number;
+      pricePerSheet: number;
+      defaultW: number;
+      defaultL: number;
+    }
+  >();
   for (const sheet of sheets) {
     const mat = getMaterial(sheet.material);
     const key = `${sheet.material}-${sheet.thickness}`;
     if (!groups.has(key)) {
-      const pricePerSheet =
-        materialPriceOverrides[sheet.material] ?? mat.pricePerSheet ?? 0;
+      const pricePerSheet = materialPriceOverrides[sheet.material] ?? mat.pricePerSheet ?? 0;
       groups.set(key, {
         materialKey: sheet.material,
         name: mat.name,
@@ -494,7 +510,10 @@ function MaterialSummaryPanel({
                       {isEditing ? (
                         <span className="inline-flex items-center gap-1">
                           <input
-                            type="number" min={100} max={5000} step={10}
+                            type="number"
+                            min={100}
+                            max={5000}
+                            step={10}
                             value={editW}
                             onChange={(e) => setEditW(e.target.value)}
                             className="w-16 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-1 py-0.5 text-xs text-center focus:outline-none focus:ring-1 focus:ring-wood-400"
@@ -502,7 +521,10 @@ function MaterialSummaryPanel({
                           />
                           <span className="text-wood-400">×</span>
                           <input
-                            type="number" min={100} max={5000} step={10}
+                            type="number"
+                            min={100}
+                            max={5000}
+                            step={10}
                             value={editL}
                             onChange={(e) => setEditL(e.target.value)}
                             className="w-16 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-1 py-0.5 text-xs text-center focus:outline-none focus:ring-1 focus:ring-wood-400"
@@ -513,17 +535,23 @@ function MaterialSummaryPanel({
                             onClick={() => commitEdit(row.materialKey)}
                             className="text-green-600 dark:text-green-400 hover:underline text-xs px-1"
                             title="Apply"
-                          >✓</button>
+                          >
+                            ✓
+                          </button>
                           <button
                             type="button"
                             onClick={() => setEditingKey(null)}
                             className="text-wood-400 hover:text-wood-600 text-xs px-1"
                             title="Cancel"
-                          >✗</button>
+                          >
+                            ✗
+                          </button>
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1">
-                          <span className={`font-mono ${hasOverride ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'text-wood-400 dark:text-wood-500'}`}>
+                          <span
+                            className={`font-mono ${hasOverride ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'text-wood-400 dark:text-wood-500'}`}
+                          >
                             {hasOverride
                               ? `${sheetSizeOverrides[row.materialKey].width}×${sheetSizeOverrides[row.materialKey].length}`
                               : `${row.defaultW}×${row.defaultL}`}
@@ -533,14 +561,18 @@ function MaterialSummaryPanel({
                             onClick={() => startEdit(row.materialKey, row.defaultW, row.defaultL)}
                             className="text-wood-400 hover:text-wood-600 dark:hover:text-wood-300 text-xs"
                             title={t('optimizer.sheetSizeEdit')}
-                          >✎</button>
+                          >
+                            ✎
+                          </button>
                           {hasOverride && (
                             <button
                               type="button"
                               onClick={() => setSheetSizeOverride(row.materialKey, null)}
                               className="text-red-400 hover:text-red-600 text-xs"
                               title={t('optimizer.sheetSizeReset')}
-                            >↺</button>
+                            >
+                              ↺
+                            </button>
                           )}
                         </span>
                       )}
@@ -573,13 +605,22 @@ function ShoppingListPanel({
   if (sheets.length === 0) return null;
 
   // Group by material+thickness
-  const groups = new Map<string, { material: string; thickness: number; name: { en: string; he: string }; qty: number; pricePerSheet: number }>();
+  const groups = new Map<
+    string,
+    { material: string; thickness: number; name: { en: string; he: string }; qty: number; pricePerSheet: number }
+  >();
   for (const sheet of sheets) {
     const key = `${sheet.material}-${sheet.thickness}`;
     if (!groups.has(key)) {
       const mat = getMaterial(sheet.material);
       const price = materialPriceOverrides[sheet.material] ?? mat.pricePerSheet ?? 0;
-      groups.set(key, { material: sheet.material, thickness: sheet.thickness, name: mat.name, qty: 0, pricePerSheet: price });
+      groups.set(key, {
+        material: sheet.material,
+        thickness: sheet.thickness,
+        name: mat.name,
+        qty: 0,
+        pricePerSheet: price,
+      });
     }
     groups.get(key)!.qty++;
   }
@@ -930,7 +971,7 @@ function PartRect({
           y={y + h / 2 - 8}
           textAnchor="middle"
           dominantBaseline="middle"
-          fontSize={Math.min(5.5, w * 0.10)}
+          fontSize={Math.min(5.5, w * 0.1)}
           fill={isHovered ? '#333' : '#666'}
           opacity={isFaded ? 0.3 : 0.9}
           pointerEvents="none"
@@ -975,12 +1016,7 @@ function Stat({ label, value }: { label: string; value: string }) {
 
 function YieldBar({ yieldPercent }: { yieldPercent: number }) {
   // Color: <33 red, <66 amber, else green.
-  const color =
-    yieldPercent < 33
-      ? 'bg-red-500'
-      : yieldPercent < 66
-        ? 'bg-amber-500'
-        : 'bg-green-500';
+  const color = yieldPercent < 33 ? 'bg-red-500' : yieldPercent < 66 ? 'bg-amber-500' : 'bg-green-500';
   const label = `${yieldPercent}%`;
   return (
     <div

@@ -8,7 +8,7 @@ import eslintConfigPrettier from 'eslint-config-prettier';
 import { defineConfig, globalIgnores } from 'eslint/config';
 
 export default defineConfig([
-  globalIgnores(['dist', 'tests/e2e', 'playwright-report', 'test-results']),
+  globalIgnores(['dist', 'coverage', 'tests/e2e', 'playwright-report', 'test-results']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
@@ -19,7 +19,7 @@ export default defineConfig([
       jsxA11y.flatConfigs.recommended,
     ],
     languageOptions: {
-      ecmaVersion: 2020,
+      ecmaVersion: 2023,
       globals: globals.browser,
     },
     rules: {

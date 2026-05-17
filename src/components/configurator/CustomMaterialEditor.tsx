@@ -30,7 +30,10 @@ export function CustomMaterialEditor() {
     setEditingKey(m.key);
     setEditDraft({ ...m, name: { ...m.name } });
   };
-  const cancelEdit = () => { setEditingKey(null); setEditDraft(null); };
+  const cancelEdit = () => {
+    setEditingKey(null);
+    setEditDraft(null);
+  };
   const commitEdit = () => {
     if (!editDraft) return;
     const nameText = editDraft.name[lang].trim();
@@ -59,62 +62,94 @@ export function CustomMaterialEditor() {
           {materials.map((m) =>
             editingKey === m.key && editDraft ? (
               /* ── Inline edit form ── */
-              <li key={m.key} className="space-y-2 p-2 rounded border border-wood-300 dark:border-wood-600 bg-wood-50 dark:bg-wood-800">
+              <li
+                key={m.key}
+                className="space-y-2 p-2 rounded border border-wood-300 dark:border-wood-600 bg-wood-50 dark:bg-wood-800"
+              >
                 <div className="grid grid-cols-2 gap-2">
                   <label className="block col-span-2">
                     <span className="text-xs text-wood-600 dark:text-wood-300">{t('config.materialName')}</span>
                     <input
                       type="text"
                       value={editDraft.name[lang]}
-                      onChange={(e) => setEditDraft({ ...editDraft, name: { ...editDraft.name, [lang]: e.target.value } })}
+                      onChange={(e) =>
+                        setEditDraft({ ...editDraft, name: { ...editDraft.name, [lang]: e.target.value } })
+                      }
                       className="mt-0.5 block w-full rounded border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-900 px-2 py-1 text-sm"
                     />
                   </label>
                   <label className="block">
                     <span className="text-xs text-wood-600 dark:text-wood-300">{t('config.thickness')} (mm)</span>
-                    <input type="number" min={1} max={50} value={editDraft.thickness}
+                    <input
+                      type="number"
+                      min={1}
+                      max={50}
+                      value={editDraft.thickness}
                       onChange={(e) => setEditDraft({ ...editDraft, thickness: Number(e.target.value) })}
-                      className="mt-0.5 block w-full rounded border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-900 px-2 py-1 text-sm" />
+                      className="mt-0.5 block w-full rounded border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-900 px-2 py-1 text-sm"
+                    />
                   </label>
                   <label className="block">
                     <span className="text-xs text-wood-600 dark:text-wood-300">{t('config.price')}</span>
-                    <input type="number" min={0} value={editDraft.pricePerSheet ?? 0}
+                    <input
+                      type="number"
+                      min={0}
+                      value={editDraft.pricePerSheet ?? 0}
                       onChange={(e) => setEditDraft({ ...editDraft, pricePerSheet: Number(e.target.value) })}
-                      className="mt-0.5 block w-full rounded border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-900 px-2 py-1 text-sm" />
+                      className="mt-0.5 block w-full rounded border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-900 px-2 py-1 text-sm"
+                    />
                   </label>
                   <label className="block">
                     <span className="text-xs text-wood-600 dark:text-wood-300">{t('config.sheetW')} (mm)</span>
-                    <input type="number" min={100} value={editDraft.sheetWidth}
+                    <input
+                      type="number"
+                      min={100}
+                      value={editDraft.sheetWidth}
                       onChange={(e) => setEditDraft({ ...editDraft, sheetWidth: Number(e.target.value) })}
-                      className="mt-0.5 block w-full rounded border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-900 px-2 py-1 text-sm" />
+                      className="mt-0.5 block w-full rounded border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-900 px-2 py-1 text-sm"
+                    />
                   </label>
                   <label className="block">
                     <span className="text-xs text-wood-600 dark:text-wood-300">{t('config.sheetL')} (mm)</span>
-                    <input type="number" min={100} value={editDraft.sheetLength}
+                    <input
+                      type="number"
+                      min={100}
+                      value={editDraft.sheetLength}
                       onChange={(e) => setEditDraft({ ...editDraft, sheetLength: Number(e.target.value) })}
-                      className="mt-0.5 block w-full rounded border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-900 px-2 py-1 text-sm" />
+                      className="mt-0.5 block w-full rounded border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-900 px-2 py-1 text-sm"
+                    />
                   </label>
                   <label className="block">
                     <span className="text-xs text-wood-600 dark:text-wood-300">{t('config.color')}</span>
-                    <input type="color" value={editDraft.color}
+                    <input
+                      type="color"
+                      value={editDraft.color}
                       onChange={(e) => setEditDraft({ ...editDraft, color: e.target.value })}
-                      className="mt-0.5 block w-full h-8 rounded border border-wood-200 dark:border-wood-700" />
+                      className="mt-0.5 block w-full h-8 rounded border border-wood-200 dark:border-wood-700"
+                    />
                   </label>
                   <label className="col-span-2 flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" checked={editDraft.hasGrain}
+                    <input
+                      type="checkbox"
+                      checked={editDraft.hasGrain}
                       onChange={(e) => setEditDraft({ ...editDraft, hasGrain: e.target.checked })}
-                      className="rounded border-wood-300" />
+                      className="rounded border-wood-300"
+                    />
                     <span className="text-xs text-wood-600 dark:text-wood-300">{t('config.hasGrain')}</span>
                   </label>
                 </div>
                 <div className="flex gap-2">
-                  <button onClick={commitEdit}
+                  <button
+                    onClick={commitEdit}
                     disabled={!editDraft.name[lang].trim()}
-                    className="flex-1 rounded bg-wood-500 px-2 py-1 text-xs font-medium text-white hover:bg-wood-600 disabled:opacity-40 transition-colors">
+                    className="flex-1 rounded bg-wood-500 px-2 py-1 text-xs font-medium text-white hover:bg-wood-600 disabled:opacity-40 transition-colors"
+                  >
                     {t('config.saveEdit')}
                   </button>
-                  <button onClick={cancelEdit}
-                    className="flex-1 rounded border border-wood-300 dark:border-wood-600 px-2 py-1 text-xs text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-700 transition-colors">
+                  <button
+                    onClick={cancelEdit}
+                    className="flex-1 rounded border border-wood-300 dark:border-wood-600 px-2 py-1 text-xs text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-700 transition-colors"
+                  >
                     {t('config.cancel')}
                   </button>
                 </div>
@@ -145,7 +180,7 @@ export function CustomMaterialEditor() {
                   ✕
                 </button>
               </li>
-            )
+            ),
           )}
         </ul>
       )}

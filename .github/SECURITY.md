@@ -8,11 +8,11 @@
 
 ## 📋 Supported Versions
 
-| Version | Supported | Notes |
-|---|---|---|
-| **3.x** | ✅ Active | Current release — patches issued as needed |
-| 2.x | ⚠️ Critical only | Security-critical fixes only |
-| < 2.0 | ❌ End of life | No longer supported |
+| Version | Supported        | Notes                                      |
+| ------- | ---------------- | ------------------------------------------ |
+| **3.x** | ✅ Active        | Current release — patches issued as needed |
+| 2.x     | ⚠️ Critical only | Security-critical fixes only               |
+| < 2.0   | ❌ End of life   | No longer supported                        |
 
 ## 🚨 Reporting a Vulnerability
 
@@ -27,12 +27,12 @@
 
 **Response timeline:**
 
-| Step | Target |
-|---|---|
-| Initial acknowledgement | ≤ 48 hours |
-| Triage and severity assessment | ≤ 5 business days |
-| Fix or mitigation | ≤ 30 days for critical |
-| Public disclosure | After fix is released |
+| Step                           | Target                 |
+| ------------------------------ | ---------------------- |
+| Initial acknowledgement        | ≤ 48 hours             |
+| Triage and severity assessment | ≤ 5 business days      |
+| Fix or mitigation              | ≤ 30 days for critical |
+| Public disclosure              | After fix is released  |
 
 ## 🛡 Security Best Practices for Contributors
 

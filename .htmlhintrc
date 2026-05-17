@@ -10,7 +10,7 @@
   "attr-no-duplication": true,
   "title-require": false,
 
-  "aria-valid-attr-value": false,
+  "aria-valid-attr-value": true,
   "aria-valid-attr": true,
-  "inline-style-disabled": false
+  "inline-style-disabled": true
 }

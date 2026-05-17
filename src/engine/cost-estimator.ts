@@ -38,16 +38,16 @@ const HARDWARE_PRICES: Record<string, number> = {
   'L-bracket': 4,
   'wood-glue': 25,
   // H-id aliases
-  H01: 12,   // Euro Hinge
-  H02: 6,    // Hinge Mounting Plate
-  H03: 0.5,  // Shelf Pin
-  H04: 0.8,  // Confirmat Screw
-  H05: 0.3,  // Confirmat Cover Cap
-  H06: 0.2,  // Back Panel Nail
-  H07: 4,    // L-Bracket
-  H08: 1.5,  // Wall Screw + Dowel
-  H09: 15,   // Handle
-  H10: 25,   // Wood Glue
+  H01: 12, // Euro Hinge
+  H02: 6, // Hinge Mounting Plate
+  H03: 0.5, // Shelf Pin
+  H04: 0.8, // Confirmat Screw
+  H05: 0.3, // Confirmat Cover Cap
+  H06: 0.2, // Back Panel Nail
+  H07: 4, // L-Bracket
+  H08: 1.5, // Wall Screw + Dowel
+  H09: 15, // Handle
+  H10: 25, // Wood Glue
 };
 
 /** Edge banding price per meter (₪) */

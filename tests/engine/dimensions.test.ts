@@ -129,3 +129,79 @@ describe('computeShelfDeflection', () => {
     expect(typeof result.overLimit).toBe('boolean');
   });
 });
+
+// Sprint 173 — deflection rating (three-tier: safe / warning / danger)
+describe('computeShelfDeflection — deflectionRating', () => {
+  it('rates a short thick plywood shelf as safe', () => {
+    const result = computeShelfDeflection(600, 18, 300, 'plywood-18');
+    expect(result.deflectionRating).toBe('safe');
+    expect(result.overLimit).toBe(false);
+  });
+
+  it('rates a very long thin chipboard shelf as danger', () => {
+    // 1400 mm span, 16 mm chipboard, 400 mm depth: δ ≈8.3 mm > L/240 = 5.83 mm
+    const result = computeShelfDeflection(1400, 16, 400, 'chipboard-16');
+    expect(result.deflectionRating).toBe('danger');
+    expect(result.deflectionMm).toBeGreaterThan(1400 / 240);
+  });
+
+  it('rates a borderline shelf in the warning zone (L/360 < δ ≤ L/240)', () => {
+    // 1200 mm span, 16 mm MDF, 400 mm depth: δ ≈3.95 mm is between L/360 (3.33) and L/240 (5.0)
+    const result = computeShelfDeflection(1200, 16, 400, 'mdf-16');
+    expect(result.deflectionRating).toBe('warning');
+    expect(result.overLimit).toBe(true);
+    expect(result.deflectionMm).toBeGreaterThan(1200 / 360);
+    expect(result.deflectionMm).toBeLessThanOrEqual(1200 / 240);
+  });
+
+  it('deflectionRating is consistent with overLimit', () => {
+    const cases: Array<[number, number, number, string]> = [
+      [600, 18, 300, 'plywood-18'],
+      [900, 18, 350, 'melamine-18'],
+      [1100, 16, 400, 'chipboard-16'],
+      [700, 16, 280, 'mdf-16'],
+    ];
+    for (const [span, thick, depth, mat] of cases) {
+      const r = computeShelfDeflection(span, thick, depth, mat);
+      if (r.deflectionRating === 'safe') {
+        expect(r.overLimit).toBe(false);
+      } else {
+        expect(r.overLimit).toBe(true);
+      }
+    }
+  });
+});
+
+// Sprint 173 — computeDimensions includes shelfDeflections
+describe('computeDimensions — shelfDeflections', () => {
+  it('returns shelfDeflections array matching shelfCount', () => {
+    const cfg = { ...DEFAULT_CONFIG, shelfCount: 3 };
+    const d = computeDimensions(cfg);
+    expect(d.shelfDeflections).toHaveLength(3);
+  });
+
+  it('returns empty shelfDeflections when shelfCount is 0', () => {
+    const cfg = { ...DEFAULT_CONFIG, shelfCount: 0 };
+    const d = computeDimensions(cfg);
+    expect(d.shelfDeflections).toHaveLength(0);
+  });
+
+  it('each shelfDeflection entry has required fields', () => {
+    const d = computeDimensions(DEFAULT_CONFIG);
+    for (const entry of d.shelfDeflections) {
+      expect(typeof entry.deflectionMm).toBe('number');
+      expect(typeof entry.limitMm).toBe('number');
+      expect(typeof entry.overLimit).toBe('boolean');
+      expect(['safe', 'warning', 'danger']).toContain(entry.deflectionRating);
+    }
+  });
+
+  it('wide cabinet with thin chipboard gets warning or danger shelves', () => {
+    // width=1434: shelfWidth = 1434-2*16-2 = 1400 mm, chipboard-16 at 580 mm depth
+    // δ ≈5.7 mm between L/360 (3.89) and L/240 (5.83) → 'warning'
+    const cfg = { ...DEFAULT_CONFIG, width: 1434, carcassMaterial: 'chipboard-16', shelfCount: 2 };
+    const d = computeDimensions(cfg);
+    const hasIssue = d.shelfDeflections.some((s) => s.deflectionRating !== 'safe');
+    expect(hasIssue).toBe(true);
+  });
+});

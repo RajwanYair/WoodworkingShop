@@ -4,16 +4,21 @@ import { useCabinetStore } from '../../store/cabinet-store';
 import { findOptimizations } from '../../engine/smart-optimizer';
 import type { Lang, OptimizationSuggestion, SmartStrategy } from '../../engine/types';
 import {
-  IconLightbulb, IconRefresh, IconGrainVertical, IconGrainHorizontal,
-  IconChevronDown, IconChevronRight, IconX,
+  IconLightbulb,
+  IconRefresh,
+  IconGrainVertical,
+  IconGrainHorizontal,
+  IconChevronDown,
+  IconChevronRight,
+  IconX,
 } from '../layout/Icons';
 
 const STRATEGY_ICON: Record<SmartStrategy, React.ReactElement> = {
-  'reduce-depth':  <IconGrainVertical   size={14} className="text-amber-600" />,
-  'co-nest-strips': <IconRefresh         size={14} className="text-amber-600" />,
-  'adjust-width':  <IconGrainHorizontal size={14} className="text-amber-600" />,
-  'adjust-height': <IconGrainVertical   size={14} className="text-amber-600" />,
-  'material-swap': <IconRefresh         size={14} className="text-amber-600" />,
+  'reduce-depth': <IconGrainVertical size={14} className="text-amber-600" />,
+  'co-nest-strips': <IconRefresh size={14} className="text-amber-600" />,
+  'adjust-width': <IconGrainHorizontal size={14} className="text-amber-600" />,
+  'adjust-height': <IconGrainVertical size={14} className="text-amber-600" />,
+  'material-swap': <IconRefresh size={14} className="text-amber-600" />,
 };
 
 function suggestionKey(s: OptimizationSuggestion): string {
@@ -69,10 +74,10 @@ export function OptimizationNotesPanel() {
       {/* ── Header ── */}
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-amber-200 dark:border-amber-700/50">
         <div className="flex items-center gap-2">
-          <span className="text-amber-600 dark:text-amber-400"><IconLightbulb size={16} /></span>
-          <h3 className="text-sm font-semibold text-amber-800 dark:text-amber-300">
-            {t('optimizer.notes')}
-          </h3>
+          <span className="text-amber-600 dark:text-amber-400">
+            <IconLightbulb size={16} />
+          </span>
+          <h3 className="text-sm font-semibold text-amber-800 dark:text-amber-300">{t('optimizer.notes')}</h3>
           {visible.length > 0 && (
             <span className="text-[10px] bg-amber-500 text-white rounded-full px-1.5 py-0.5 font-medium leading-none">
               {visible.length}
@@ -146,7 +151,8 @@ export function OptimizationNotesPanel() {
                           </span>
                         )}
                         <span className="text-[11px] text-wood-400 dark:text-wood-500">
-                          → {s.optimizedResult.totalSheets} {t('optimizer.sheets').toLowerCase()} / {s.optimizedResult.overallYield}%
+                          → {s.optimizedResult.totalSheets} {t('optimizer.sheets').toLowerCase()} /{' '}
+                          {s.optimizedResult.overallYield}%
                         </span>
                       </div>
                     </div>

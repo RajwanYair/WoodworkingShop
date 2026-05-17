@@ -259,61 +259,189 @@ flowchart TD
 Key milestones from v3.0.0 to the current release:
 
 ```mermaid
-timeline
-  title Cabinet Planner -- Major Feature Timeline
-  section v3.0.0 (Foundation)
-    Core engine  : Cabinet, bookshelf, desk, wardrobe part generation
-    Cut optimizer : MaxRects BSSF algorithm, yield % per sheet
-    SVG preview  : 6-view cabinet renderer, isometric 3D
-  section v3.1.0 (Export and Sharing)
-    DXF export   : AutoCAD R12 sheets for CNC cutting
-    G-code export : Router-ready toolpaths
-    BOM CSV      : Bill of materials with hardware
-    URL state    : Shareable configuration links
-  section v3.2.0 (UX and i18n)
-    Hebrew i18n  : Full RTL support
-    PWA          : Service worker, offline mode
-    PDF export   : react-pdf/renderer full build plan
-    Smart Optimizer : 5 strategies, depth, width, height, co-nest, material swap
-  section v3.3.0 (Accessibility and Precision)
-    Colour-blind mode  : Accessible part palette
-    Grain direction    : Arrows on grain-locked materials
-    Shelf deflection   : L/360 sag warning for long spans
-    Assembly guide     : Paginated plus show-all, video links
-  section v3.4.0 (Quality of Life)
-    OS dark-mode sync  : Auto-detects system preference
-    Cabinet duplication : One-click duplicate in project panel
-    Print assembly     : Browser print with all steps visible
-    BOM area summary   : Material total area plus board-feet
-    Waste cost badge   : Per-sheet offcut cost estimate
-    Kick presets       : 0 / 75 / 100 / 150 mm quick-select
-    Grain legend       : Reminder row on grain-locked sheets
-  section v3.5.0 (Materials and Export)
-    Custom material editor : Inline edit with all fields
-    Cabinet notes      : Freeform notes per cabinet
-    Saw kerf control   : Configurable blade kerf in optimizer
-    Material price overrides : Per-material price per sheet
-    Edge-banding rate  : Configurable cost per metre
-  section v3.6.0 (Visualisation and UI)
-    SVG icon library   : 40+ inline SVG icon components
-    Enriched cut sheets : Ruler ticks, drop shadows, part labels
-    Usable offcuts panel : Grouped offcut inventory
-    Hardware price overrides : Per-item price editing
-    Shopping list panel : Supplier-ready material summary
-    Project name field : Filename prefix plus document title
-  section v3.7.0 (Estimation and Assembly)
-    Drawer slide types : Standard, soft-close, full-extension
-    Material density   : Panel weight estimation per cabinet
-    100mm scale bar    : Reference ruler on cut sheets
-    Assembly hardware checklist : Interactive print-friendly list
-    Material usage summary : Area and cost per material group
-    Weight in BOM CSV  : kg column in bill of materials
-  section v3.8.0 (UX Polish)
-    Saw passes stat    : Total cut count in Optimizer summary
-    Sheet size overrides : Per-material sheet dimensions
-    PWA share button   : Native share API with URL fallback
-    Grain direction in BOM : Grain column in CSV export
-    Dark mode shortcut : Alt+D keyboard shortcut
-    Sortable parts table : Click column headers to sort
-    Material color swatches : Visual swatch in selector
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0b040', 'primaryTextColor': '#1a0e06', 'primaryBorderColor': '#8b5022', 'lineColor': '#7a4010'}}}%%
+gantt
+  title Cabinet Planner Major Feature Timeline
+  dateFormat YYYY-MM-DD
+  axisFormat v%d
+  section v3.0 Foundation
+    Core engine - cabinet, bookshelf, desk, wardrobe  :done, e300, 2026-03-01, 3d
+    Cut optimizer - MaxRects BSSF                      :done, e301, after e300, 2d
+    SVG preview - 6-view renderer plus isometric 3D   :done, e302, after e301, 2d
+  section v3.1 Export
+    DXF export for CNC cutting                         :done, e310, after e302, 2d
+    G-code toolpaths, BOM CSV, URL state sharing       :done, e311, after e310, 2d
+  section v3.2 UX and i18n
+    Hebrew RTL, PWA offline, PDF export                :done, e320, after e311, 2d
+    Smart Optimizer - 5 strategies                     :done, e321, after e320, 2d
+  section v3.3 Precision
+    Colour-blind mode, grain direction, deflection     :done, e330, after e321, 2d
+    Assembly guide paginated plus show-all             :done, e331, after e330, 2d
+  section v3.4 Quality of Life
+    Dark-mode sync, cabinet duplication, print         :done, e340, after e331, 2d
+    BOM area summary, waste cost badge, kick presets   :done, e341, after e340, 2d
+  section v3.5 Materials
+    Custom material editor, price overrides            :done, e350, after e341, 2d
+    Saw kerf control, edge-banding rate                :done, e351, after e350, 2d
+  section v3.6 Visualisation
+    SVG icon library, enriched cut sheets              :done, e360, after e351, 2d
+    Offcuts panel, hardware prices, shopping list      :done, e361, after e360, 2d
+  section v3.7 Estimation
+    Drawer slide types, material density and weight    :done, e370, after e361, 2d
+    Scale bar, assembly checklist, material summary    :done, e371, after e370, 2d
+  section v3.8 UX Polish
+    Saw passes, sheet size overrides, PWA share        :done, e380, after e371, 2d
+    Grain in BOM, Alt+D shortcut, sortable table       :done, e381, after e380, 2d
+  section v3.9 Planned
+    Shelf deflection ratings, isometric enhancements   :active, e390, after e381, 7d
+    Bulk reassign, template library, hardware catalog  :        e391, after e390, 7d
+```
+
+## 🚀 CI/CD Pipeline
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0b040', 'primaryTextColor': '#1a0e06', 'primaryBorderColor': '#8b5022', 'lineColor': '#7a4010', 'edgeLabelBackground': '#fef7ed'}}}%%
+graph TD
+  push["Push or PR to main"] --> ci["CI workflow\nci.yml"]
+  push --> pages["Pages workflow\npages.yml"]
+
+  subgraph CI [CI - Runs on Node 20 and 22]
+    ci --> tc["Typecheck\ntsc --noEmit"]
+    tc --> lint["ESLint\n0 warnings"]
+    lint --> mdlint["markdownlint"]
+    mdlint --> fmt["format:check\nPrettier"]
+    fmt --> test["Vitest unit tests\n280+ tests"]
+    test --> cov["Coverage report\nNode 22 only"]
+    cov --> build["Vite build"]
+    build --> bcheck["Bundle budget check\n2 MB gzip limit"]
+    bcheck --> e2e["Playwright E2E\nChromium + Firefox"]
+    e2e --> lhci["Lighthouse CI\nperf / a11y / SEO"]
+  end
+
+  subgraph Deploy [Deploy - on main push]
+    pages --> dbuild["npm run build"]
+    dbuild --> upload["Upload dist artifact"]
+    upload --> ghpages["actions/deploy-pages\nGitHub Pages"]
+  end
+
+  subgraph Release [Release - on v-star tag]
+    tag["git push --follow-tags"] --> rbuild["Build + quality check"]
+    rbuild --> archive["dist.tar.gz + SHA-256"]
+    archive --> ghrelease["gh release create\nauto-extract CHANGELOG"]
+  end
+
+  classDef trigger fill:#8b5022,stroke:#f0b040,color:#fff,font-weight:bold
+  classDef step fill:#fae7c0,stroke:#c08040,color:#3a1806
+  classDef gate fill:#3a7a50,stroke:#1e4a30,color:#fff,font-weight:bold
+  class push,tag trigger
+  class ghpages,ghrelease gate
+  class tc,lint,mdlint,fmt,test,cov,build,bcheck,e2e,lhci,dbuild,upload,rbuild,archive step
+```
+
+## 📤 Export Pipeline
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0b040', 'primaryTextColor': '#1a0e06', 'primaryBorderColor': '#8b5022', 'lineColor': '#7a4010', 'edgeLabelBackground': '#fef7ed'}}}%%
+graph LR
+  config["CabinetConfig\nZustand store"] --> engine["Engine\ngenerateParts\ngenerateHardware"]
+  engine --> parts["Part[]"]
+  engine --> hw["HardwareItem[]"]
+  parts --> opt["optimizeCutSheets\nMaxRects BSSF"]
+  opt --> sheets["CutSheet[]\nwith placed rects"]
+
+  parts --> bom["bom-export.ts\ngenerateBomCsv"]
+  bom --> csv[("CSV download")]
+
+  parts --> dxf["dxf-export.ts\ngenerateDxf"]
+  dxf --> dxffile[("DXF download")]
+
+  parts --> gcode["gcode-export.ts\ngenerateGcode"]
+  gcode --> gcfile[("G-code download")]
+
+  sheets --> pdf["PdfDocument.tsx\nreact-pdf/renderer"]
+  hw --> pdf
+  parts --> pdf
+  pdf --> pdffile[("PDF download")]
+
+  config --> preview["CabinetPreview.tsx\nSVG renderer"]
+  preview --> svgpng[("SVG / PNG download")]
+
+  config --> url["url-state.ts\npushConfigToUrl"]
+  url --> share[("Clipboard / Web Share API")]
+
+  classDef store fill:#3a7a50,stroke:#1e4a30,color:#fff,font-weight:bold
+  classDef engine fill:#2a5a9a,stroke:#1a3a6e,color:#fff,font-weight:bold
+  classDef file fill:#f0b040,stroke:#8b5022,color:#1a0806,font-weight:bold
+  classDef output fill:#fae7c0,stroke:#c08040,color:#3a1806
+  class config store
+  class engine,opt engine
+  class bom,dxf,gcode,pdf,preview,url file
+  class csv,dxffile,gcfile,pdffile,svgpng,share output
+```
+
+## 📱 PWA Architecture
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0b040', 'primaryTextColor': '#1a0e06', 'primaryBorderColor': '#8b5022', 'lineColor': '#7a4010', 'edgeLabelBackground': '#fef7ed'}}}%%
+graph TD
+  browser["Browser / Install prompt"]
+
+  subgraph SW [Service Worker - public/sw.js]
+    sw["Cache-first strategy"]
+    cache[("Cache Storage\napp shell + assets")]
+    sw -- "cache miss" --> network["Network fetch"]
+    sw -- "cache hit" --> cache
+    network -- "cache update" --> cache
+  end
+
+  subgraph App [React SPA]
+    app["App.tsx"]
+    ls[("localStorage\npresets, materials,\ndark mode, undo")]
+    urlp["URL query params\nconfig + project name"]
+    app --- ls
+    app --- urlp
+  end
+
+  browser --> sw
+  sw --> app
+  manifest["public/manifest.json\nname, icons, start_url"] --> browser
+
+  classDef sw fill:#5a0fc8,stroke:#3a0a8a,color:#fff,font-weight:bold
+  classDef app fill:#2a5a9a,stroke:#1a3a6e,color:#fff,font-weight:bold
+  classDef storage fill:#f0b040,stroke:#8b5022,color:#1a0806
+  class sw,cache sw
+  class app,ls,urlp app
+  class manifest,browser storage
+```
+
+## 🌐 i18n Architecture
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0b040', 'primaryTextColor': '#1a0e06', 'primaryBorderColor': '#8b5022', 'lineColor': '#7a4010'}}}%%
+graph LR
+  init["src/i18n/index.ts\ni18next.init()"]
+  en["en.json\nEnglish LTR"]
+  he["he.json\nHebrew RTL"]
+  init --> en
+  init --> he
+
+  store["cabinet-store.ts\nlanguage state"]
+  store -- "changeLanguage he" --> rtl["document dir=rtl\nTailwind RTL classes"]
+  store -- "changeLanguage en" --> ltr["document dir=ltr"]
+
+  comp["React components\nt('key.path')"]
+  init --> comp
+  en --> comp
+  he --> comp
+
+  ci["CI: i18n:coverage\ni18n-coverage.js\nverifies key parity"]
+  en --> ci
+  he --> ci
+
+  classDef file fill:#3a7a50,stroke:#1e4a30,color:#fff,font-weight:bold
+  classDef process fill:#fae7c0,stroke:#c08040,color:#3a1806
+  classDef check fill:#2a5a9a,stroke:#1a3a6e,color:#fff
+  class en,he file
+  class init,store,comp process
+  class ci check
 ```

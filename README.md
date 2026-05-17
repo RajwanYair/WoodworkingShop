@@ -6,13 +6,17 @@
 
 [![CI](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/ci.yml/badge.svg)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/ci.yml)
 [![Deploy](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/pages.yml/badge.svg)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/pages.yml)
+[![CodeQL](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/codeql.yml/badge.svg)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/codeql.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178c6?logo=typescript&logoColor=white)](tsconfig.json)
 [![React](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=white)](package.json)
 [![Vite](https://img.shields.io/badge/Vite-6-646cff?logo=vite&logoColor=white)](vite.config.ts)
+[![Tailwind](https://img.shields.io/badge/Tailwind-4-38bdf8?logo=tailwindcss&logoColor=white)](src/index.css)
 [![PWA](https://img.shields.io/badge/PWA-offline--ready-5a0fc8?logo=pwa&logoColor=white)](public/manifest.json)
-[![i18n](https://img.shields.io/badge/i18n-EN%20%2B%20HE-orange)](src/i18n)
-[![Tests](https://img.shields.io/badge/tests-249%2B-brightgreen?logo=vitest)](tests/)
+[![i18n](https://img.shields.io/badge/i18n-EN%20%2B%20HE%20RTL-orange?logo=googletranslate&logoColor=white)](src/i18n)
+[![Tests](https://img.shields.io/badge/tests-280%2B-brightgreen?logo=vitest&logoColor=white)](tests/)
+[![Last Commit](https://img.shields.io/github/last-commit/RajwanYair/WoodworkingShop?logo=github)](https://github.com/RajwanYair/WoodworkingShop/commits/main)
+[![GitHub Stars](https://img.shields.io/github/stars/RajwanYair/WoodworkingShop?style=social)](https://github.com/RajwanYair/WoodworkingShop/stargazers)
 
 **[🚀 Live Demo](https://rajwanyair.github.io/WoodworkingShop/)** · **[📋 Changelog](CHANGELOG.md)** · **[🗺 Roadmap](ROADMAP.md)** · **[🏛 Architecture](docs/ARCHITECTURE.md)**
 
@@ -28,66 +32,66 @@
 
 ### 🎛 Configurator
 
-| Feature | Details |
-|---|---|
-| **Quick Presets** | 6 one-click templates: kitchen base/wall, tall pantry, bookcase, wardrobe, bathroom vanity |
-| **Furniture types** | Cabinet · Bookshelf · Desk · Wardrobe — each with type-specific part generation |
-| **Dimensions** | Width / height / depth sliders with free-text numeric entry; metric mm or fractional inches |
-| **Toe kick / plinth** | Configurable kick height (0 = flush-to-floor or wall-mounted) |
-| **Shelves** | Count, equal or custom spacing, drag-to-reposition in the preview |
-| **Doors** | Flat · Shaker · Glass · None; 1 or 2 doors; configurable reveal |
-| **Drawers** | 0–6 drawers with individual per-drawer box height |
-| **Materials** | Built-in library (plywood, melamine, MDF, chipboard, glass) + custom material editor |
-| **Grain direction** | Mark materials as grain-sensitive — cut optimizer never rotates those parts 90° |
-| **Edge banding** | All-visible · Doors-only · None |
-| **Handles** | Bar · Knob · Cup pull · None |
-| **Save / Load** | localStorage presets + download/upload JSON config files |
-| **Shareable URLs** | Full config encoded in URL query params; one-click copy |
+| Feature               | Details                                                                                     |
+| --------------------- | ------------------------------------------------------------------------------------------- |
+| **Quick Presets**     | 6 one-click templates: kitchen base/wall, tall pantry, bookcase, wardrobe, bathroom vanity  |
+| **Furniture types**   | Cabinet · Bookshelf · Desk · Wardrobe — each with type-specific part generation             |
+| **Dimensions**        | Width / height / depth sliders with free-text numeric entry; metric mm or fractional inches |
+| **Toe kick / plinth** | Configurable kick height (0 = flush-to-floor or wall-mounted)                               |
+| **Shelves**           | Count, equal or custom spacing, drag-to-reposition in the preview                           |
+| **Doors**             | Flat · Shaker · Glass · None; 1 or 2 doors; configurable reveal                             |
+| **Drawers**           | 0–6 drawers with individual per-drawer box height                                           |
+| **Materials**         | Built-in library (plywood, melamine, MDF, chipboard, glass) + custom material editor        |
+| **Grain direction**   | Mark materials as grain-sensitive — cut optimizer never rotates those parts 90°             |
+| **Edge banding**      | All-visible · Doors-only · None                                                             |
+| **Handles**           | Bar · Knob · Cup pull · None                                                                |
+| **Save / Load**       | localStorage presets + download/upload JSON config files                                    |
+| **Shareable URLs**    | Full config encoded in URL query params; one-click copy                                     |
 
 ### 🖼 Preview
 
-| Feature | Details |
-|---|---|
-| **6 views** | Front (closed) · Front (open) · Side · Top · Back · Isometric 3D |
-| **Dimension annotations** | Arrowhead dim lines; unit-aware labels (mm or fractional in) |
-| **Grain arrows** | Per-part grain direction overlaid on cut sheets |
-| **SVG + PNG export** | Download any view as a vector SVG or 2× rasterised PNG |
-| **Pinch / swipe** | Touch zoom and swipe-between-views on mobile |
-| **Dark mode** | Full dark theme; SVG dim lines use `currentColor` |
+| Feature                   | Details                                                          |
+| ------------------------- | ---------------------------------------------------------------- |
+| **6 views**               | Front (closed) · Front (open) · Side · Top · Back · Isometric 3D |
+| **Dimension annotations** | Arrowhead dim lines; unit-aware labels (mm or fractional in)     |
+| **Grain arrows**          | Per-part grain direction overlaid on cut sheets                  |
+| **SVG + PNG export**      | Download any view as a vector SVG or 2× rasterised PNG           |
+| **Pinch / swipe**         | Touch zoom and swipe-between-views on mobile                     |
+| **Dark mode**             | Full dark theme; SVG dim lines use `currentColor`                |
 
 ### 📐 Cut-Sheet Optimizer
 
-| Feature | Details |
-|---|---|
-| **MaxRects bin-packing** | State-of-the-art 2D bin-packing across standard 2440×1220 mm sheets |
-| **Grain constraints** | Grain-sensitive materials skip 90° rotation during placement |
-| **Smart optimizer** | 5 strategies: reduce depth · co-nest strips · adjust width/height · material swap |
-| **Comparison view** | Side-by-side original vs optimised config with waste diff |
-| **Interactive sheets** | Hover to highlight parts; waste hatch patterns; edge-banding and grain indicators |
-| **Color-blind safe** | Wong palette toggle (deuteranopia-friendly) |
-| **Multi-cabinet** | Combine all cabinets in a project into one optimised cut run |
+| Feature                  | Details                                                                           |
+| ------------------------ | --------------------------------------------------------------------------------- |
+| **MaxRects bin-packing** | State-of-the-art 2D bin-packing across standard 2440×1220 mm sheets               |
+| **Grain constraints**    | Grain-sensitive materials skip 90° rotation during placement                      |
+| **Smart optimizer**      | 5 strategies: reduce depth · co-nest strips · adjust width/height · material swap |
+| **Comparison view**      | Side-by-side original vs optimised config with waste diff                         |
+| **Interactive sheets**   | Hover to highlight parts; waste hatch patterns; edge-banding and grain indicators |
+| **Color-blind safe**     | Wong palette toggle (deuteranopia-friendly)                                       |
+| **Multi-cabinet**        | Combine all cabinets in a project into one optimised cut run                      |
 
 ### 📤 Export
 
-| Format | Details |
-|---|---|
-| **PDF** | Cover · specs · parts table · hardware BOM · cut diagrams · assembly sequence · shopping list |
-| **DXF** | AutoCAD R12 DXF for CNC routers; per-sheet or combined |
-| **G-code** | CNC router toolpath export |
-| **CSV BOM** | Bill of materials as spreadsheet-ready CSV |
-| **SVG / PNG** | Preview panels as vector or raster image |
-| **JSON** | Full config export/import |
+| Format        | Details                                                                                       |
+| ------------- | --------------------------------------------------------------------------------------------- |
+| **PDF**       | Cover · specs · parts table · hardware BOM · cut diagrams · assembly sequence · shopping list |
+| **DXF**       | AutoCAD R12 DXF for CNC routers; per-sheet or combined                                        |
+| **G-code**    | CNC router toolpath export                                                                    |
+| **CSV BOM**   | Bill of materials as spreadsheet-ready CSV                                                    |
+| **SVG / PNG** | Preview panels as vector or raster image                                                      |
+| **JSON**      | Full config export/import                                                                     |
 
 ### 🛠 Other
 
-- 🏗 **Assembly guide** — numbered steps with progress bar, part highlighting, and pro tips  
-- 💰 **Cost estimator** — per-material sheet costs + hardware + edge banding; live sidebar total  
-- ↩ **Undo / Redo** — full change history (`Ctrl+Z` / `Ctrl+Y`)  
-- ⌨ **Keyboard shortcuts** — `Alt+1-5` tabs, `Ctrl+Z/Y`, `Ctrl+P`, `?` for help modal  
-- 📱 **PWA / Offline** — service worker; installable as a desktop or mobile app  
-- 🌐 **Bilingual** — English + Hebrew (RTL layout) via i18next  
-- ♿ **Accessible** — ARIA landmarks, keyboard nav, skip-to-content, screen-reader labels  
-- 🖨 **Print-friendly** — `@media print` hides UI chrome; optimises tables and SVGs for paper  
+- 🏗 **Assembly guide** — numbered steps with progress bar, part highlighting, and pro tips
+- 💰 **Cost estimator** — per-material sheet costs + hardware + edge banding; live sidebar total
+- ↩ **Undo / Redo** — full change history (`Ctrl+Z` / `Ctrl+Y`)
+- ⌨ **Keyboard shortcuts** — `Alt+1-5` tabs, `Ctrl+Z/Y`, `Ctrl+P`, `?` for help modal
+- 📱 **PWA / Offline** — service worker; installable as a desktop or mobile app
+- 🌐 **Bilingual** — English + Hebrew (RTL layout) via i18next
+- ♿ **Accessible** — ARIA landmarks, keyboard nav, skip-to-content, screen-reader labels
+- 🖨 **Print-friendly** — `@media print` hides UI chrome; optimises tables and SVGs for paper
 
 ---
 
@@ -104,7 +108,7 @@ npm ci
 # 3 — dev server  →  http://localhost:5173/WoodworkingShop/
 npm run dev
 
-# 4 — run 258+ unit tests
+# 4 — run 280+ unit tests
 npm test
 
 # 5 — production build  →  dist/
@@ -117,20 +121,20 @@ npm run build
 
 ## 🏗 Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | React 19 |
-| Language | TypeScript 5.8 (strict mode) |
-| Styling | Tailwind CSS 4 |
-| State | Zustand 5 |
-| PDF | @react-pdf/renderer 4 |
-| i18n | i18next 25 + react-i18next |
-| Build | Vite 6 |
-| Unit tests | Vitest 4 + @testing-library/react |
-| E2E tests | Playwright |
+| Layer         | Technology                        |
+| ------------- | --------------------------------- |
+| Framework     | React 19                          |
+| Language      | TypeScript 5.8 (strict mode)      |
+| Styling       | Tailwind CSS 4                    |
+| State         | Zustand 5                         |
+| PDF           | @react-pdf/renderer 4             |
+| i18n          | i18next 25 + react-i18next        |
+| Build         | Vite 6                            |
+| Unit tests    | Vitest 4 + @testing-library/react |
+| E2E tests     | Playwright                        |
 | Lint / format | ESLint 9 (flat config) + Prettier |
-| CI/CD | GitHub Actions |
-| Deploy | GitHub Pages |
+| CI/CD         | GitHub Actions                    |
+| Deploy        | GitHub Pages                      |
 
 ---
 
@@ -177,7 +181,7 @@ graph TD
 
 **Engine modules** (`src/engine/`) are pure TypeScript with no React dependencies — fully testable without a DOM.
 
-```
+```text
 src/
 ├── engine/          # Pure TS — types, materials, dimensions, parts, hardware,
 │                    #   cut-optimizer, smart-optimizer, assembly, cost-estimator
@@ -237,14 +241,14 @@ gh release create vX.Y.Z --generate-notes
 
 ## ❓ Troubleshooting
 
-| Issue | Solution |
-|---|---|
-| `npm ci` fails | Ensure **Node.js ≥ 20**. Delete `node_modules` and retry |
-| TypeScript errors | Run `npm run typecheck` for details. Strict mode is on |
-| Lint failures | Run `npm run lint` — 0 warnings policy; fix root causes |
-| Chunk size warning | Expected for `@react-pdf/renderer` (~1.5 MB) — it is code-split and lazy-loaded |
-| Tests fail | Run `npm test` — requires jsdom. Check `vitest.config.ts` |
-| Hebrew layout broken | Ensure `<html dir="rtl">` is set when language is `he` |
+| Issue                | Solution                                                                        |
+| -------------------- | ------------------------------------------------------------------------------- |
+| `npm ci` fails       | Ensure **Node.js ≥ 20**. Delete `node_modules` and retry                        |
+| TypeScript errors    | Run `npm run typecheck` for details. Strict mode is on                          |
+| Lint failures        | Run `npm run lint` — 0 warnings policy; fix root causes                         |
+| Chunk size warning   | Expected for `@react-pdf/renderer` (~1.5 MB) — it is code-split and lazy-loaded |
+| Tests fail           | Run `npm test` — requires jsdom. Check `vitest.config.ts`                       |
+| Hebrew layout broken | Ensure `<html dir="rtl">` is set when language is `he`                          |
 
 ---
 
@@ -253,6 +257,7 @@ gh release create vX.Y.Z --generate-notes
 Contributions are welcome! Please read [`.github/CONTRIBUTING.md`](.github/CONTRIBUTING.md) first.
 
 Quick checklist before opening a PR:
+
 1. `npm run check` passes (typecheck + lint + format + tests)
 2. `npm run build` succeeds with 0 warnings
 3. New features include unit tests
@@ -260,6 +265,19 @@ Quick checklist before opening a PR:
 
 ---
 
-## 📄 License
+## � GitHub Topics & Discoverability
+
+<!-- GitHub repository topics (set via Settings → Topics):
+     woodworking  cabinet-design  cut-optimizer  furniture-planner  woodworking-tools
+     cabinet-maker  bin-packing  maxrects  pdf-export  dxf-export  gcode  bom
+     react  typescript  vite  tailwindcss  zustand  pwa  offline-app  web-app
+     bilingual  hebrew  rtl  open-source  mit-license  browser-based  no-backend
+-->
+
+**Keywords:** cabinet planner, woodworking design tool, cut list optimizer, furniture layout, sheet goods optimizer, MaxRects bin packing, CNC export DXF G-code, cabinet maker software, free woodworking app, browser-based cabinet design, parametric furniture, bilingual RTL, PWA offline, React TypeScript woodworking, cut sheet optimizer free, cabinet layout generator
+
+---
+
+## �📄 License
 
 [MIT](LICENSE) © RajwanYair

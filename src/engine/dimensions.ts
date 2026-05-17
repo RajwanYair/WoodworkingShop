@@ -43,6 +43,12 @@ export function computeDimensions(cfg: CabinetConfig): DerivedDimensions {
   const hingesPerDoor = computeHingesPerDoor(doorHeight);
   const hingePositions = computeHingePositions(doorHeight, hingesPerDoor);
 
+  // Sprint 173 — per-shelf deflection ratings
+  const mat = getMaterial(cfg.carcassMaterial);
+  const shelfDeflections = Array.from({ length: cfg.shelfCount }, () =>
+    computeShelfDeflection(shelfWidth, mat.thickness, shelfDepth, cfg.carcassMaterial),
+  );
+
   return {
     internalWidth,
     internalHeight,
@@ -54,6 +60,7 @@ export function computeDimensions(cfg: CabinetConfig): DerivedDimensions {
     backPanelWidth,
     hingesPerDoor,
     hingePositions,
+    shelfDeflections,
   };
 }
 
@@ -111,6 +118,13 @@ export interface ShelfDeflectionResult {
   limitMm: number;
   /** true when deflection > limit — show a warning. */
   overLimit: boolean;
+  /**
+   * Sprint 173 — three-tier colour-coded rating:
+   *   'safe'    — deflectionMm ≤ L/360
+   *   'warning' — L/360 < deflectionMm ≤ L/240  (amber)
+   *   'danger'  — deflectionMm > L/240            (red)
+   */
+  deflectionRating: 'safe' | 'warning' | 'danger';
 }
 
 export function computeShelfDeflection(
@@ -127,9 +141,13 @@ export function computeShelfDeflection(
   const L = spanMm;
   const deflectionMm = (5 * w * Math.pow(L, 4)) / (384 * E * I);
   const limitMm = L / 360;
+  const warnLimitMm = L / 240;
+  const deflectionRating: 'safe' | 'warning' | 'danger' =
+    deflectionMm <= limitMm ? 'safe' : deflectionMm <= warnLimitMm ? 'warning' : 'danger';
   return {
     deflectionMm: Math.round(deflectionMm * 100) / 100,
     limitMm: Math.round(limitMm * 100) / 100,
     overLimit: deflectionMm > limitMm,
+    deflectionRating,
   };
 }

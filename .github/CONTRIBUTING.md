@@ -52,16 +52,16 @@ npm run check   # typecheck + lint + format:check + test
 
 ### TypeScript
 
-| Rule | Detail |
-|---|---|
-| **Strict mode** | `tsconfig.json` has `strict: true` |
-| **No `any`** | Explicit types required everywhere |
+| Rule             | Detail                                         |
+| ---------------- | ---------------------------------------------- |
+| **Strict mode**  | `tsconfig.json` has `strict: true`             |
+| **No `any`**     | Explicit types required everywhere             |
 | **Type imports** | `import type { Foo }` for type-only references |
-| **Unused vars** | Enforced by ESLint — fix, don't suppress |
+| **Unused vars**  | Enforced by ESLint — fix, don't suppress       |
 
 ### Style
 
-- **Prettier** auto-formats on save (`.prettierrc` in repo root). Run `npm run format`.  
+- **Prettier** auto-formats on save (`.prettierrc` in repo root). Run `npm run format`.
 - **ESLint** enforces correctness (`npm run lint`). Zero warnings allowed — this is a hard CI gate.
 
 ### i18n
@@ -79,15 +79,15 @@ Run `npm run i18n:coverage` to verify parity.
 
 Use [Conventional Commits](https://www.conventionalcommits.org/):
 
-| Prefix | When to use |
-|---|---|
-| `feat:` | New feature or behaviour |
-| `fix:` | Bug fix |
-| `docs:` | Documentation only |
+| Prefix      | When to use                          |
+| ----------- | ------------------------------------ |
+| `feat:`     | New feature or behaviour             |
+| `fix:`      | Bug fix                              |
+| `docs:`     | Documentation only                   |
 | `refactor:` | Restructure without behaviour change |
-| `test:` | Add or update tests |
-| `ci:` | CI / workflow change |
-| `chore:` | Maintenance (deps, config) |
+| `test:`     | Add or update tests                  |
+| `ci:`       | CI / workflow change                 |
+| `chore:`    | Maintenance (deps, config)           |
 
 **Example:** `feat(engine): add per-drawer custom heights`
 
@@ -110,11 +110,10 @@ Before opening a PR:
 
 See [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md) for the full module map, data flow diagram, and design decisions.
 
-```
+```text
 src/engine/     ← pure TypeScript; no React; all computation
 src/components/ ← React UI components
 src/store/      ← Zustand state stores
 src/i18n/       ← EN + HE translation files
 tests/          ← Vitest unit tests (mirrors src/ layout)
 ```
-

@@ -44,31 +44,31 @@ export function AssemblyGuide() {
             role="group"
             aria-label="Assembly view mode"
           >
-          <button
-            type="button"
-            onClick={() => setViewMode('paginated')}
-            className={`px-3 py-1.5 transition-colors ${
-              viewMode === 'paginated'
-                ? 'bg-wood-500 text-white'
-                : 'bg-wood-50 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-700'
-            }`}
-            aria-pressed={viewMode === 'paginated' ? 'true' : 'false'}
-          >
-            {t('assembly.viewStepByStep')}
-          </button>
-          <button
-            type="button"
-            onClick={() => setViewMode('all')}
-            className={`px-3 py-1.5 transition-colors ${
-              viewMode === 'all'
-                ? 'bg-wood-500 text-white'
-                : 'bg-wood-50 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-700'
-            }`}
-            aria-pressed={viewMode === 'all' ? 'true' : 'false'}
-          >
-            {t('assembly.viewAll')}
-          </button>
-        </div>
+            <button
+              type="button"
+              onClick={() => setViewMode('paginated')}
+              className={`px-3 py-1.5 transition-colors ${
+                viewMode === 'paginated'
+                  ? 'bg-wood-500 text-white'
+                  : 'bg-wood-50 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-700'
+              }`}
+              aria-pressed={viewMode === 'paginated' ? 'true' : 'false'}
+            >
+              {t('assembly.viewStepByStep')}
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('all')}
+              className={`px-3 py-1.5 transition-colors ${
+                viewMode === 'all'
+                  ? 'bg-wood-500 text-white'
+                  : 'bg-wood-50 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-700'
+              }`}
+              aria-pressed={viewMode === 'all' ? 'true' : 'false'}
+            >
+              {t('assembly.viewAll')}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -159,7 +159,11 @@ function HardwareChecklist({
   const toggle = (id: string) =>
     setChecked((prev) => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
       return next;
     });
 
@@ -185,13 +189,10 @@ function HardwareChecklist({
               <label
                 htmlFor={id}
                 className={`text-sm cursor-pointer select-none transition-colors ${
-                  isChecked
-                    ? 'line-through text-wood-300 dark:text-wood-600'
-                    : 'text-wood-600 dark:text-wood-300'
+                  isChecked ? 'line-through text-wood-300 dark:text-wood-600' : 'text-wood-600 dark:text-wood-300'
                 }`}
               >
-                <span className="font-medium">×{hw.qty}</span>{' '}
-                {typeof hw.name === 'object' ? hw.name[lang] : hw.name}
+                <span className="font-medium">×{hw.qty}</span> {typeof hw.name === 'object' ? hw.name[lang] : hw.name}
               </label>
             </li>
           );
@@ -208,6 +209,7 @@ function HardwareChecklist({
 
 // ── Step card ─────────────────────────────────────────────────────────────────
 
+interface StepCardProps {
   step: AssemblyStep;
   stepCount: number;
   parts: Part[];
