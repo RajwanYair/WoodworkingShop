@@ -130,7 +130,7 @@
   <rect x="830" y="66" width="80" height="22" rx="11" fill="#8b5022" opacity="0.9"/>
   <text x="870" y="81"
     font-family="'Segoe UI',Arial,sans-serif" font-size="11" font-weight="600"
-    fill="#f0b060" text-anchor="middle">v3.7.0</text>
+    fill="#f0b060" text-anchor="middle">v3.8.0</text>
 
   <!-- Tagline -->
   <text x="250" y="133"

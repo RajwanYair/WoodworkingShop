@@ -4,8 +4,8 @@
 
 ```mermaid
 timeline
-    title Cabinet Planner — Release History
-    section v2.7–v2.9 (April 2026)
+    title Cabinet Planner -- Release History
+    section v2.7-v2.9 (April 2026)
         v2.7.0 : Project modernization
                : TypeScript strict mode
                : GitHub Actions CI
@@ -15,7 +15,7 @@ timeline
         v2.9.0 : Test coverage
                : Shared test helpers
                : i18n coverage script
-    section v3.0–v3.1 (April–May 2026)
+    section v3.0-v3.1 (April-May 2026)
         v3.0.0 : Cost estimator tests
                : Lighthouse CI
                : 70% coverage thresholds
@@ -24,7 +24,7 @@ timeline
                : MaxRects bin-packing
                : PDF orientation parity
                : SVG asset optimisation
-    section v3.2–v3.4 (May 2026)
+    section v3.2-v3.4 (May 2026)
         v3.2.0 : Smart optimizer
                : SmartOptimizerPanel
                : DXF / G-code export
@@ -38,11 +38,31 @@ timeline
                : OptimizationNotesPanel
                : Part count stat
                : Saw kerf control
-    section v3.5 (Current)
+    section v3.5-v3.6 (May 2026)
         v3.5.0 : Custom material inline edit
                : Material price overrides
                : Configurable edge-banding rate
                : Hardware CSV export
+        v3.6.0 : SVG icon library
+               : Enriched cut-sheet visualization
+               : Usable offcuts panel
+               : Hardware price overrides
+               : Shopping list panel
+               : Project name field
+    section v3.7-v3.8 (May 2026)
+        v3.7.0 : Drawer slide type selection
+               : Material density and weight
+               : 100mm scale bar on cut sheets
+               : Assembly hardware checklist
+               : Material usage summary
+               : Weight column in BOM CSV
+        v3.8.0 : Saw passes stat card
+               : Per-material sheet size overrides
+               : PWA share button
+               : Grain direction in BOM
+               : Alt+D dark mode shortcut
+               : Sortable parts table
+               : Material color swatches
 ```
 
 

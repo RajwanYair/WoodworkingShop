@@ -139,26 +139,40 @@ npm run build
 All computation runs **client-side** — no backend, no account required.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0b040', 'primaryTextColor': '#1a0e06', 'primaryBorderColor': '#8b5022', 'lineColor': '#7a4010', 'secondaryColor': '#f8ede0', 'tertiaryColor': '#fef7ed', 'edgeLabelBackground': '#fef7ed'}}}%%
 graph TD
-    UI["Configurator UI (React + Zustand)"]
-    Store["Cabinet Store (Zustand 5)"]
-    Engine["Engine (Pure TypeScript)"]
-    Preview["SVG Preview (6 views + isometric)"]
-    Optimizer["Cut Optimizer (MaxRects bin-pack)"]
-    Smart["Smart Optimizer (5 strategies)"]
-    Assembly["Assembly Guide"]
-    PDF["PDF Export"]
-    Exports["DXF, G-code, CSV, JSON"]
+    UI["Configurator UI\nReact + Zustand"]
+    Store[("Cabinet Store\nZustand 5")]
+    Engine[["Engine\nPure TypeScript"]]
+
+    subgraph Outputs["Rendered and Exported"]
+        Preview["SVG Preview\n6 views + isometric 3D"]
+        Optimizer["Cut Optimizer\nMaxRects bin-pack"]
+        Smart["Smart Optimizer\n5 strategies"]
+        Assembly["Assembly Guide"]
+        PDF["PDF Export"]
+        Exports["DXF, G-code, CSV, JSON"]
+    end
 
     UI -->|"setConfig(patch)"| Store
     Store -->|config| Engine
-    Engine -->|"parts, hardware, dimensions, cost"| Store
+    Engine -->|"parts, hardware, dims, cost"| Store
     Store --> Preview
     Store --> Optimizer
     Optimizer --> Smart
     Store --> Assembly
     Store --> PDF
     Store --> Exports
+
+    classDef ui fill:#f0b040,stroke:#8b5022,color:#1a0806,font-weight:bold
+    classDef store fill:#3a7a50,stroke:#1e4a30,color:#ffffff,font-weight:bold
+    classDef engine fill:#2a5a9a,stroke:#1a3a6e,color:#ffffff,font-weight:bold
+    classDef output fill:#fae7c0,stroke:#c08040,color:#3a1806
+
+    class UI ui
+    class Store store
+    class Engine engine
+    class Preview,Optimizer,Smart,Assembly,PDF,Exports output
 ```
 
 **Engine modules** (`src/engine/`) are pure TypeScript with no React dependencies — fully testable without a DOM.

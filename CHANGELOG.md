@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.8.0] — 2026-05-18
+
+### Added
+
+- **Saw Passes stat card** (Sprint 164) — a fifth stat card "Saw Passes" appears in
+  the Optimizer summary row, showing the total number of unique cut lines across all
+  sheets (mapped from `optimizer.cuts`).
+- **Per-material sheet size overrides** (Sprint 165) — users can edit the sheet width
+  and length for each material key directly in the Material Summary table inside the
+  Optimizer tab. Overrides are stored in `sheetSizeOverrides` in the Zustand store
+  and passed to `optimizeCutSheets()` as an optional third parameter. A reset button
+  restores the default size for that material.
+- **PWA share button** (Sprint 166) — a "Share Link" button in `SaveLoadPanel` calls
+  the native Web Share API (`navigator.share`) when available, with a
+  `navigator.clipboard.writeText` fallback that copies the URL to the clipboard.
+- **Grain direction column in BOM CSV** (Sprint 167) — the exported Bill of Materials
+  CSV now includes a `Grain Direction` column for every part row (`Along length` for
+  materials with grain, `—` otherwise). All separator rows were updated to match the
+  new 11-column width.
+- **Alt+D keyboard shortcut for dark mode** (Sprint 168) — pressing `Alt+D` anywhere
+  in the app toggles dark mode. The shortcut is listed in the Keyboard Shortcuts help
+  modal.
+- **Step count in Assembly Guide title** (Sprint 169) — the Assembly Guide heading
+  now shows a secondary count badge, e.g. "Assembly Guide (12 steps)", keeping the
+  user oriented without having to page through all steps.
+- **Print-only project header** (Sprint 170) — a hidden `div.print-only-header` is
+  injected at the top of the page containing the project name and current date. It is
+  invisible on screen and becomes visible only when printing, giving printed sheets a
+  proper title and date stamp.
+- **Sortable columns in Parts Table** (Sprint 171) — clicking any column header in
+  the Optimizer Parts Table sorts the rows by that column. Clicking the same header
+  again reverses direction. An up/down arrow indicates the active sort column and
+  direction. Sort is client-side (no re-optimization needed).
+- **Material color swatches in selector** (Sprint 172) — a small 16×16 px colored
+  square swatch (sourced from the material's `color` property) appears next to the
+  Carcass and Back Panel label in `MaterialSelector`, giving an immediate visual
+  preview of the selected material finish.
+
 ## [3.7.0] — 2026-05-17
 
 ### Added
@@ -55,7 +93,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **i18n key parity** — `assembly.partsInStep` was present in `en.json` but missing
   from `he.json`; added Hebrew translation.
 
-
+## [3.6.0] — 2026-05-17
 
 ### Added
 
