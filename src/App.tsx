@@ -63,7 +63,7 @@ function App() {
         window.print();
         return;
       }
-      // Tab switching: Alt+1-5
+      // Tab switching: Alt+1-5; Dark mode: Alt+D (Sprint 168)
       if (e.altKey && !ctrl) {
         const tabMap: Record<string, CabinetState['activeTab']> = {
           '1': 'configurator',
@@ -76,6 +76,12 @@ function App() {
         if (tab) {
           e.preventDefault();
           useCabinetStore.getState().setActiveTab(tab);
+          return;
+        }
+        if (e.key === 'd' || e.key === 'D') {
+          e.preventDefault();
+          useCabinetStore.getState().toggleDarkMode();
+          return;
         }
       }
       // Shortcuts help: ?

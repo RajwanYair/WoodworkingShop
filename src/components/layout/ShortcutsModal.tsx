@@ -11,6 +11,7 @@ const SHORTCUTS = [
   { key: 'Alt + 3', descEn: 'Optimizer tab', descHe: 'לשונית אופטימיזציה' },
   { key: 'Alt + 4', descEn: 'Assembly tab', descHe: 'לשונית הרכבה' },
   { key: 'Alt + 5', descEn: 'PDF tab', descHe: 'לשונית PDF' },
+  { key: 'Alt + D', descEn: 'Toggle dark mode', descHe: 'החלפת מצב כהה' },
   { key: 'Ctrl + Z', descEn: 'Undo', descHe: 'בטל' },
   { key: 'Ctrl + Y', descEn: 'Redo', descHe: 'בצע שוב' },
   { key: 'Ctrl + Shift + Z', descEn: 'Redo (alternate)', descHe: 'בצע שוב (חלופי)' },
