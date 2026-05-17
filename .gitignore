@@ -29,3 +29,9 @@ coverage
 
 # Secrets
 .env.ps1
+
+# Playwright
+playwright-report
+test-results
+blob-report
+playwright/.cache

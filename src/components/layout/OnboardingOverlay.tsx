@@ -70,7 +70,9 @@ export function OnboardingOverlay() {
         tabIndex={-1}
       />
       <div className="relative bg-white dark:bg-wood-800 rounded-xl shadow-2xl max-w-md w-full mx-4 p-6 space-y-5">
-        <h2 id="onboarding-title" className="text-lg font-bold text-wood-700 dark:text-wood-100 text-center">{t('onboarding.title')}</h2>
+        <h2 id="onboarding-title" className="text-lg font-bold text-wood-700 dark:text-wood-100 text-center">
+          {t('onboarding.title')}
+        </h2>
         <p className="text-sm text-wood-500 dark:text-wood-400 text-center">{t('onboarding.subtitle')}</p>
         <ol className="space-y-3">
           {STEPS.map((s, i) => (
