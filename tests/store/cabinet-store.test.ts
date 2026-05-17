@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { useCabinetStore } from '../../src/store/cabinet-store';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { useCabinetStore, detectOsDarkMode } from '../../src/store/cabinet-store';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 
 describe('cabinet-store', () => {
@@ -128,5 +128,30 @@ describe('cabinet-store', () => {
     // With 2 cabinets, should have prefixed part IDs
     expect(allParts.some((p) => p.id.startsWith('C1-'))).toBe(true);
     expect(allParts.some((p) => p.id.startsWith('C2-'))).toBe(true);
+  });
+
+  // Sprint 124 — OS dark-mode detection
+  describe('detectOsDarkMode', () => {
+    it('returns false when matchMedia is unavailable', () => {
+      const orig = window.matchMedia;
+      // @ts-expect-error — deliberately remove matchMedia
+      window.matchMedia = undefined;
+      expect(detectOsDarkMode()).toBe(false);
+      window.matchMedia = orig;
+    });
+
+    it('returns true when prefers-color-scheme: dark matches', () => {
+      const orig = window.matchMedia;
+      window.matchMedia = vi.fn().mockReturnValue({ matches: true });
+      expect(detectOsDarkMode()).toBe(true);
+      window.matchMedia = orig;
+    });
+
+    it('returns false when prefers-color-scheme: dark does not match', () => {
+      const orig = window.matchMedia;
+      window.matchMedia = vi.fn().mockReturnValue({ matches: false });
+      expect(detectOsDarkMode()).toBe(false);
+      window.matchMedia = orig;
+    });
   });
 });

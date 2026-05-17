@@ -26,6 +26,16 @@ function loadPrefs(): PersistedPrefs {
     return {};
   }
 }
+
+/**
+ * Sprint 124 — Detect the OS dark-mode preference.
+ * Returns `true` when `(prefers-color-scheme: dark)` matches.
+ * Falls back to `false` in environments where matchMedia is unavailable.
+ */
+export function detectOsDarkMode(): boolean {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false;
+  return window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
 function savePrefs(prefs: PersistedPrefs): void {
   if (typeof window === 'undefined') return;
   try {
@@ -126,7 +136,8 @@ export const useCabinetStore = create<CabinetState>((set) => {
     canUndo: false,
     canRedo: false,
     activeTab: 'configurator',
-    darkMode: prefs.darkMode ?? false,
+    // Sprint 124 — fall back to OS preference when no saved pref exists
+    darkMode: prefs.darkMode ?? detectOsDarkMode(),
     colorBlindMode: prefs.colorBlindMode ?? false,
     units: prefs.units ?? ('metric' as UnitSystem),
 
