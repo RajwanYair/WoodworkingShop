@@ -5,6 +5,63 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.0] — 2026-05-19
+
+### Added
+
+- **OS dark-mode auto-detect** (Sprint 124) — `detectOsDarkMode()` reads
+  `prefers-color-scheme` at startup so the app launches in the correct theme
+  without requiring a manual toggle. A `matchMedia` listener in `main.tsx`
+  keeps the store in sync when the OS theme changes at runtime (only when no
+  saved preference exists in localStorage).
+- **Cabinet duplication** (Sprint 125) — a ⧉ duplicate button appears next to
+  each cabinet name in the project panel. Clicking it inserts an identical copy
+  immediately after the source, with a `"Name (copy)"` / `"Name (copy 2)"` name
+  to avoid collisions. The action is undoable via Ctrl+Z.
+- **Assembly guide print button** (Sprint 127) — a 🖨 Print button in the
+  assembly guide header calls `window.print()`. The print button and view-mode
+  toggle are hidden via `print:hidden`; in paginated mode a hidden-on-screen
+  div renders all steps so every step appears on paper regardless of which step
+  is currently active. `data-assembly-step` / `data-assembly-controls`
+  attributes enable precise CSS targeting.
+- **BOM material area summary** (Sprint 128) — `generateBomCsv()` now prepends
+  a Material Summary section to every exported CSV showing total panel area (m²)
+  and nominal board-feet per material group, making material ordering easier.
+- **Per-sheet waste cost badge** (Sprint 129) — when a material has
+  `pricePerSheet` set, each cut-sheet card in the Optimizer tab displays an
+  amber "Waste cost: ₪X.XX" badge calculated as
+  `pricePerSheet × (1 − yieldPercent / 100)`.
+- **Kick height quick-select presets** (Sprint 130) — four preset buttons
+  (0 / 75 / 100 / 150 mm) appear below the toe kick slider for cabinet and
+  wardrobe furniture types, with the active preset highlighted.
+- **Grain direction legend row** (Sprint 131) — cut-sheet cards for
+  grain-sensitive materials (plywood, OSB) now show a ↕ legend line reminding
+  the user that parts were not rotated 90°.
+- **ARCHITECTURE.md sprint timeline** (Sprint 132) — new Mermaid `timeline`
+  diagram in `docs/ARCHITECTURE.md` summarising major feature milestones from
+  v3.0.0 through v3.4.0 across four release sections.
+
+### Changed
+
+- **Shelf span deflection warning** (Sprint 126) — `computeShelfDeflection()`
+  in `dimensions.ts` uses the Euler-Bernoulli beam formula
+  (δ = 5wL⁴/384EI, load 0.05 N/mm, limit L/360) with material-specific elastic
+  modulus values. `ShelfConfig` shows an amber alert when the calculated sag
+  exceeds the limit.
+- `package.json` version bumped 3.3.1 → 3.4.0.
+
+### Fixed
+
+- `ConfiguratorPanel.test.tsx` — `getByText(/height/i)` and `getByText(/reset/i)`
+  updated to `getAllByText(...)` after new UI elements (Toe Kick Height label,
+  Reset section legend) introduced ambiguous matches.
+
+### Tests
+
+- 263 unit tests across 23 files, all passing.
+- New tests: `detectOsDarkMode`, `duplicateCabinet`, `computeShelfDeflection`,
+  BOM material area summary (area m², board-feet, aggregate across cabinets).
+
 ## [3.3.0] — 2026-05-18
 
 ### Added
