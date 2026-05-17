@@ -140,19 +140,19 @@ All computation runs **client-side** — no backend, no account required.
 
 ```mermaid
 graph TD
-    UI["🎛 Configurator UI\n(React + Zustand)"]
-    Store["🗄 Cabinet Store\n(Zustand 5)"]
-    Engine["⚙ Engine\n(Pure TypeScript)"]
-    Preview["🖼 SVG Preview\n(6 views + isometric)"]
-    Optimizer["📐 Cut Optimizer\n(MaxRects bin-pack)"]
-    Smart["🧠 Smart Optimizer\n(5 strategies)"]
-    Assembly["🔩 Assembly Guide"]
-    PDF["📄 PDF Export\n(@react-pdf/renderer)"]
-    Exports["📤 DXF · G-code · CSV · JSON"]
+    UI["Configurator UI (React + Zustand)"]
+    Store["Cabinet Store (Zustand 5)"]
+    Engine["Engine (Pure TypeScript)"]
+    Preview["SVG Preview (6 views + isometric)"]
+    Optimizer["Cut Optimizer (MaxRects bin-pack)"]
+    Smart["Smart Optimizer (5 strategies)"]
+    Assembly["Assembly Guide"]
+    PDF["PDF Export"]
+    Exports["DXF, G-code, CSV, JSON"]
 
     UI -->|"setConfig(patch)"| Store
     Store -->|config| Engine
-    Engine -->|"parts, hardware,\ndimensions, cost"| Store
+    Engine -->|"parts, hardware, dimensions, cost"| Store
     Store --> Preview
     Store --> Optimizer
     Optimizer --> Smart

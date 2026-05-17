@@ -188,22 +188,24 @@ export const CabinetPreview = memo(function CabinetPreview() {
   return (
     <div className="space-y-4">
       {/* View tab bar */}
-      <div className="flex flex-wrap gap-1 items-center" role="tablist" aria-label="Cabinet view selector">
-        {views.map((v) => (
-          <button
-            key={v.id}
-            role="tab"
-            aria-selected={activeView === v.id}
-            onClick={() => setActiveView(v.id)}
-            className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
-              activeView === v.id
-                ? 'bg-wood-500 text-white'
-                : 'bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700'
-            }`}
-          >
-            {v.label}
-          </button>
-        ))}
+      <div className="flex flex-wrap gap-1 items-center">
+        <div role="tablist" aria-label="Cabinet view selector" className="flex flex-wrap gap-1">
+          {views.map((v) => (
+            <button
+              key={v.id}
+              role="tab"
+              aria-selected={activeView === v.id}
+              onClick={() => setActiveView(v.id)}
+              className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
+                activeView === v.id
+                  ? 'bg-wood-500 text-white'
+                  : 'bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700'
+              }`}
+            >
+              {v.label}
+            </button>
+          ))}
+        </div>
         <label className="ms-auto flex items-center gap-1.5 text-xs text-wood-500 dark:text-wood-400 cursor-pointer select-none">
           <input
             type="checkbox"

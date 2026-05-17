@@ -18,11 +18,11 @@ Thank you for your interest in contributing! Every improvement — bug fix, feat
 ```mermaid
 flowchart LR
     F([Fork repo]) --> C([Clone locally])
-    C --> B([Create branch\nfeat/my-feature])
-    B --> D([Develop + test\nnpm run check])
+    C --> B([Create branch: feat/my-feature])
+    B --> D([Develop and test: npm run check])
     D --> P([Open Pull Request])
-    P --> CI([CI passes\ntypecheck·lint·test·build])
-    CI --> R([Review & merge])
+    P --> CI([CI passes: typecheck, lint, test, build])
+    CI --> R([Review and merge])
 ```
 
 ---

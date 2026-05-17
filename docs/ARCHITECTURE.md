@@ -10,15 +10,15 @@ Cabinet Planner is a client-side React SPA (no backend). All computation — dim
 
 ```mermaid
 graph LR
-  UI["🎛 Configurator UI"] -->|"patch config"| Store["🗄 Zustand Store"]
-  Store -->|config| Engine["⚙ Engine Module\n(pure TypeScript)"]
-  Engine -->|"parts · hardware\ndimensions · cost"| Store
-  Store --> Preview["🖼 SVG Preview\n(6 views)"]
-  Store --> Optimizer["📐 Cut Optimizer\n(MaxRects)"]
-  Optimizer --> Smart["🧠 Smart Optimizer\n(5 strategies)"]
-  Store --> Assembly["🔩 Assembly Guide"]
-  Store --> PDF["📄 PDF Export"]
-  Store --> Exports["💾 DXF · G-code · CSV"]
+  UI["Configurator UI"] -->|"patch config"| Store["Zustand Store"]
+  Store -->|config| Engine["Engine Module (pure TypeScript)"]
+  Engine -->|"parts, hardware, dimensions, cost"| Store
+  Store --> Preview["SVG Preview (6 views)"]
+  Store --> Optimizer["Cut Optimizer (MaxRects)"]
+  Optimizer --> Smart["Smart Optimizer (5 strategies)"]
+  Store --> Assembly["Assembly Guide"]
+  Store --> PDF["PDF Export"]
+  Store --> Exports["DXF, G-code, CSV"]
 ```
 
 ## 📁 Directory Layout
@@ -137,22 +137,22 @@ Two supplementary stores:
 ```mermaid
 graph TD
   App[App.tsx]
-  App --> Header["🎛 Header\n(tabs · undo/redo · dark mode · lang · ?)"]
-  App --> Sidebar["🔧 ConfiguratorPanel\n(presets · dims · materials · doors · drawers)"]
-  App --> Preview["🖼 CabinetPreview\n(6 views · SVG/PNG export)"]
-  App --> Optimizer["📐 Optimizer\n(cut sheets · smart optimizer · comparison)"]
-  App --> Assembly["🔩 AssemblyGuide\n(steps · progress · tips)"]
-  App --> PDF["📄 PdfExportPanel\n(full build plan)"]
+  App --> Header["Header: tabs, undo/redo, dark mode, lang"]
+  App --> Sidebar["ConfiguratorPanel: presets, dims, materials, doors, drawers"]
+  App --> Preview["CabinetPreview: 6 views, SVG/PNG export"]
+  App --> Optimizer["Optimizer: cut sheets, smart optimizer, comparison"]
+  App --> Assembly["AssemblyGuide: steps, progress, tips"]
+  App --> PDF["PdfExportPanel: full build plan"]
 
-  Sidebar --> PresetsPanel["⚡ PresetsPanel\n(6 quick-start templates)"]
-  Sidebar --> DimSliders["📏 DimensionSliders\n(w·h·d·kick height)"]
-  Sidebar --> MatSel["🪵 MaterialSelector"]
-  Sidebar --> DoorConfig["🚪 DoorConfig"]
-  Sidebar --> DrawerConfig["🗂 DrawerConfig\n(per-drawer heights)"]
-  Sidebar --> ShelfConfig["📚 ShelfConfig"]
+  Sidebar --> PresetsPanel["PresetsPanel: 6 quick-start templates"]
+  Sidebar --> DimSliders["DimensionSliders: w, h, d, kick height"]
+  Sidebar --> MatSel["MaterialSelector"]
+  Sidebar --> DoorConfig["DoorConfig"]
+  Sidebar --> DrawerConfig["DrawerConfig: per-drawer heights"]
+  Sidebar --> ShelfConfig["ShelfConfig"]
 
-  Preview --> FrontClosed["Front (closed)"]
-  Preview --> FrontOpen["Front (open) — draggable shelves"]
+  Preview --> FrontClosed["Front closed"]
+  Preview --> FrontOpen["Front open - draggable shelves"]
   Preview --> SideView["Side"]
   Preview --> TopView["Top"]
   Preview --> BackView["Back"]
@@ -192,14 +192,14 @@ sheet in both orientations before opening a new sheet.
 
 ```mermaid
 flowchart TD
-  parts[Part[] from generateParts] --> group{Group by material}
-  group --> queue[Sort queue by max-side desc, area desc]
+  parts[Part list from generateParts] --> group{Group by material}
+  group --> queue[Sort by max-side desc, area desc]
   queue --> next{More parts?}
-  next -- no --> done[Return CutSheet[] with yieldPercent]
-  next -- yes --> probe[Try each free rect on every sheet,<br/>both orientations]
-  probe --> score[Score: BSSF<br/>min leftover side wins]
+  next -- no --> done[Return CutSheet list with yieldPercent]
+  next -- yes --> probe[Try each free rect on every sheet, both orientations]
+  probe --> score[Score: BSSF, min leftover side wins]
   score --> place{Any fit?}
-  place -- yes --> split[Split free rect L-shape,<br/>prune contained rects]
+  place -- yes --> split[Split free rect L-shape, prune contained rects]
   place -- no --> newSheet[Open new sheet]
   newSheet --> split
   split --> next

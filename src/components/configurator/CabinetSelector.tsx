@@ -46,6 +46,7 @@ export function CabinetSelector() {
                 onKeyDown={(e) => e.key === 'Enter' && commitRename()}
                 className="text-xs px-2 py-1 rounded border border-wood-400 dark:border-wood-500 bg-white dark:bg-wood-800 w-24"
                 ref={(el) => el?.focus()}
+                aria-label="Cabinet name"
               />
             ) : (
               <button
