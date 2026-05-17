@@ -87,17 +87,37 @@ export function DimensionSliders() {
 
       {/* Toe kick height — only relevant for floor-standing cabinets/wardrobes */}
       {(config.furnitureType === 'cabinet' || config.furnitureType === 'wardrobe') && (
-        <SliderInput
-          label={t('config.kickHeight')}
-          value={config.kickHeight ?? 0}
-          onChange={(v) => setConfig({ kickHeight: v })}
-          softMin={0}
-          softMax={200}
-          hardMin={0}
-          hardMax={500}
-          step={5}
-          unit="mm"
-        />
+        <>
+          <SliderInput
+            label={t('config.kickHeight')}
+            value={config.kickHeight ?? 0}
+            onChange={(v) => setConfig({ kickHeight: v })}
+            softMin={0}
+            softMax={200}
+            hardMin={0}
+            hardMax={500}
+            step={5}
+            unit="mm"
+          />
+          {/* Quick-select presets for common kick heights */}
+          <div className="flex gap-1.5 flex-wrap -mt-1">
+            {[0, 75, 100, 150].map((preset) => (
+              <button
+                key={preset}
+                type="button"
+                onClick={() => setConfig({ kickHeight: preset })}
+                className={`text-[10px] px-2 py-0.5 rounded border transition-colors ${
+                  (config.kickHeight ?? 0) === preset
+                    ? 'border-wood-500 bg-wood-500 text-white'
+                    : 'border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800'
+                }`}
+                aria-label={`Set kick height to ${preset} mm`}
+              >
+                {preset} mm
+              </button>
+            ))}
+          </div>
+        </>
       )}
     </fieldset>
   );
