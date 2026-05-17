@@ -78,6 +78,7 @@ export interface CabinetState {
 
   // UI state
   activeTab: 'configurator' | 'preview' | 'optimizer' | 'assembly' | 'pdf';
+  projectName: string; // Sprint 152
   darkMode: boolean;
   colorBlindMode: boolean;
   units: UnitSystem;
@@ -105,6 +106,7 @@ export interface CabinetState {
   setMaterialPriceOverride: (materialKey: string, price: number | null) => void;
   setEdgeBandingRate: (rate: number) => void;
   setHardwarePriceOverride: (id: string, price: number | null) => void;
+  setProjectName: (name: string) => void;
   loadProject: (cabinets: CabinetEntry[]) => void;
 }
 
@@ -147,6 +149,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
     canUndo: false,
     canRedo: false,
     activeTab: 'configurator',
+    projectName: '', // Sprint 152
     // Sprint 124 — fall back to OS preference when no saved pref exists
     darkMode: prefs.darkMode ?? detectOsDarkMode(),
     colorBlindMode: prefs.colorBlindMode ?? false,
@@ -327,6 +330,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
       }),
 
     setActiveTab: (tab) => set({ activeTab: tab }),
+    setProjectName: (name) => set({ projectName: name }),
     setSawKerf: (mm) =>
       set((state) => ({
         sawKerf: Math.max(0, Math.min(8, mm)),

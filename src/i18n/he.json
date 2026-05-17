@@ -167,6 +167,8 @@
   },
   "saves": {
     "title": "הארונות שלי",
+    "projectName": "שם פרויקט",
+    "projectNamePlaceholder": "לדוגמא: שיפוץ מטבח 2025",
     "save": "שמור",
     "load": "טען",
     "delete": "מחק",

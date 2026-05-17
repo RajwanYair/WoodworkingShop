@@ -13,13 +13,18 @@ interface ProjectExport {
 
 export function SaveLoadPanel() {
   const { t } = useTranslation();
-  const { config, setConfig } = useCabinetStore();
+  const { config, setConfig, projectName, setProjectName } = useCabinetStore();
   const loadProject = useCabinetStore((s) => s.loadProject);
   const addToast = useToastStore((s) => s.addToast);
   const [configs, setConfigs] = useState<SavedConfig[]>([]);
   const [saveName, setSaveName] = useState('');
   const [showSaved, setShowSaved] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Sprint 152 — sync project name to document title
+  useEffect(() => {
+    document.title = projectName ? `${projectName} — Cabinet Planner` : 'Cabinet Planner';
+  }, [projectName]);
 
   useEffect(() => {
     setConfigs(loadSavedConfigs());
@@ -55,7 +60,7 @@ export function SaveLoadPanel() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `project-${config.width}x${config.height}x${config.depth}.json`;
+    a.download = `${projectName || `project-${config.width}x${config.height}x${config.depth}`}.json`;
     a.click();
     URL.revokeObjectURL(url);
     addToast(t('toast.exported'), 'success');
@@ -94,6 +99,21 @@ export function SaveLoadPanel() {
 
   return (
     <div className="border border-wood-200 dark:border-wood-700 rounded-lg p-3 space-y-3">
+      {/* Sprint 152 — project name */}
+      <div>
+        <label className="block text-xs font-semibold text-wood-700 dark:text-wood-200 mb-1">
+          {t('saves.projectName')}
+        </label>
+        <input
+          type="text"
+          value={projectName}
+          onChange={(e) => setProjectName(e.target.value)}
+          placeholder={t('saves.projectNamePlaceholder')}
+          className="w-full rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-wood-400 text-wood-800 dark:text-wood-100"
+          maxLength={80}
+          aria-label={t('saves.projectName')}
+        />
+      </div>
       <div className="flex items-center justify-between">
         <h3 className="text-xs font-semibold text-wood-700 dark:text-wood-200">{t('saves.title')}</h3>
         <button

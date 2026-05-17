@@ -169,6 +169,8 @@
   },
   "saves": {
     "title": "My Saved Cabinets",
+    "projectName": "Project Name",
+    "projectNamePlaceholder": "e.g. Kitchen Renovation 2025",
     "save": "Save",
     "load": "Load",
     "delete": "Delete",
