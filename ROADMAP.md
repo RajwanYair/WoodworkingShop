@@ -7,27 +7,27 @@ the in-flight quality sprints (84-87) and run first.
 
 ### Sprint A1 — Slider free-text numeric entry (Sprint 100)
 
-- [ ] Every dimension slider gets a paired `<input type="number">` accepting any
+- [x] Every dimension slider gets a paired `<input type="number">` accepting any
       valid value (mm or in) outside the slider's visual range
-- [ ] Hard limits enforced from `engine/dimensions.ts` constraints (not UI slider
+- [x] Hard limits enforced from `engine/dimensions.ts` constraints (not UI slider
       max), e.g. depth allowed down to material thickness, up to physical max
-- [ ] Inline validation message on out-of-range entry; slider thumb clamps to
+- [x] Inline validation message on out-of-range entry; slider thumb clamps to
       visual range while the numeric field shows the true value
-- [ ] Unit tests: numeric input mirrors slider state, accepts edge values,
+- [x] Unit tests: numeric input mirrors slider state, accepts edge values,
       rejects non-numeric / out-of-bounds
-- [ ] Applies to: width, height, depth, shelf count, drawer count, custom door
+- [x] Applies to: width, height, depth, shelf count, drawer count, custom door
       gap, kick-base height — every Configurator slider
 
 ### Sprint A2 — Optional cabinet back panel (Sprint 101)
 
-- [ ] New `hasBack: boolean` flag on cabinet config (default true,
+- [x] New `hasBack: boolean` flag on cabinet config (default true,
       backward-compatible)
-- [ ] Configurator toggle: "Include back panel" with description
-- [ ] `engine/parts.ts`: omit back part when `hasBack === false`
-- [ ] `engine/assembly.ts`: skip back-attachment step when omitted
-- [ ] `engine/cost-estimator.ts` and BOM: reflect material savings
-- [ ] PDF cut sheet and assembly guide auto-update
-- [ ] Tests for parts/assembly/cost with `hasBack: false`
+- [x] Configurator toggle: "Include back panel" with description
+- [x] `engine/parts.ts`: omit back part when `hasBack === false`
+- [x] `engine/assembly.ts`: skip back-attachment step when omitted
+- [x] `engine/cost-estimator.ts` and BOM: reflect material savings
+- [x] PDF cut sheet and assembly guide auto-update
+- [x] Tests for parts/assembly/cost with `hasBack: false`
 
 ### Sprint A3 — Sheet-fill optimizer + material-swap hint (Sprint 102)
 
@@ -35,23 +35,22 @@ the in-flight quality sprints (84-87) and run first.
       sheet to maximum coverage before starting a new sheet — done via
       Maximal Rectangles (Best Short Side Fit). Tall-narrow bookshelf case
       now fits on one sheet instead of two.
-- [ ] Report `utilization` per sheet (already partially there) and surface it
+- [x] Report `utilization` per sheet (already partially there) and surface it
       in `OptimizerView`
-- [ ] When a part using material B can be cut from leftover space of a sheet
+- [x] When a part using material B can be cut from leftover space of a sheet
       using material A (and A and B differ only by a small attribute, e.g.
       same thickness/finish), emit a "consolidate to material A" suggestion in
       the `SmartOptimizerPanel`
-- [ ] Targets ≥ 90 % utilization average across sheets in default presets
+- [x] Targets ≥ 90 % utilization average across sheets in default presets
 - [x] Tests covering: high-utilization pack, leftover reuse (bookshelf
       regression test)
 
 ### Sprint A4 — PDF cut-sheet orientation parity (Sprint 103)
 
-- [ ] Currently: on-screen preview shows sheets portrait, PDF renders page
+- [x] Currently: on-screen preview shows sheets portrait, PDF renders page
       landscape with portrait content → wasted page + visual mismatch
-- [ ] Fix: detect sheet aspect ratio at export time and either rotate the PDF
-      page to match content orientation, or rotate the cut diagram to match
-      the page. Pick one approach consistently and document it.
+- [x] Fix: detect sheet aspect ratio at export time and rotate the PDF page
+      to match content orientation (landscape A4 when sheet width > height).
 - [ ] Visual regression test (Playwright screenshot of PDF preview component)
 - [ ] PDF export pixel-snapshot check
 
@@ -60,7 +59,8 @@ the in-flight quality sprints (84-87) and run first.
 - [ ] Audit and optimize all in-repo raster assets (icon-192.png, icon-512.png,
       favicon.svg) — use `oxipng` / `svgo`
 - [ ] Re-export icons at 1×/2×, ensure manifest entries use correct `sizes`
-- [ ] Add hero / OG image (currently `og:image` is missing)
+- [x] Add hero / OG image (`og:image`, twitter:image now point to icon-512.png)
+- [x] Replace generic placeholder favicon with woodworking cabinet glyph
 - [ ] MD diagrams: convert ASCII tables in `docs/ARCHITECTURE.md` and `ROADMAP.md`
       diagrams (where applicable) to Mermaid for crisp scaling on GitHub
 - [ ] Web preview: review color contrast and the cabinet 2D preview SVG for
@@ -158,3 +158,34 @@ the in-flight quality sprints (84-87) and run first.
 - [x] ~~Bundle analysis reporting in CI~~ (v3.0.0)
 - [ ] Storybook for component documentation
 - [x] ~~Auto-generate i18n coverage report~~ (v3.0.0)
+
+## Competitive Landscape
+
+How Cabinet Planner compares to popular cabinet / cut-list / planner tools as
+of v3.1.0. Legend: ✅ first-class, 🟡 partial / limited, ❌ not available.
+
+| Capability                          | Cabinet Planner | CutList Optimizer Pro | OpenCutList (SketchUp) | MaxCut       | SketchUp + plugins | Polyboard | KitchenDraw | IKEA Home Planner | Sketchlist 3D |
+| ----------------------------------- | --------------- | --------------------- | ---------------------- | ------------ | ------------------ | --------- | ----------- | ----------------- | ------------- |
+| Browser-based, no install           | ✅              | ✅                    | ❌                     | ❌           | 🟡 (web viewer)    | ❌        | ❌          | ✅                | ❌            |
+| Free / open-source                  | ✅ (MIT)        | 🟡 (freemium)         | ✅                     | 🟡 (free 1.x)| 🟡 (free tier)     | ❌        | ❌          | ✅ (vendor-locked)| ❌            |
+| Parametric cabinet generation       | ✅              | ❌                    | 🟡                     | ❌           | 🟡 (plugins)       | ✅        | ✅          | 🟡 (catalog)      | 🟡            |
+| Cut-sheet optimizer (bin-packing)   | ✅ (MaxRects)   | ✅                    | ✅                     | ✅           | 🟡 (plugins)       | ✅        | ❌          | ❌                | 🟡            |
+| BOM / parts list export             | ✅ (CSV)        | ✅                    | ✅                     | ✅           | 🟡                 | ✅        | ✅          | 🟡                | ✅            |
+| PDF assembly guide (steps + photos) | ✅              | ❌                    | 🟡                     | 🟡           | 🟡                 | ✅        | ✅          | ❌                | ✅            |
+| DXF / G-code export                 | ✅              | 🟡                    | ✅                     | 🟡           | ✅                 | ✅        | ❌          | ❌                | 🟡            |
+| 3D preview                          | 🟡 (2D today)   | ❌                    | ✅ (host)              | ❌           | ✅                 | ✅        | ✅          | ✅                | ✅            |
+| Smart dimension optimizer           | ✅              | ❌                    | ❌                     | ❌           | ❌                 | 🟡        | ❌          | ❌                | ❌            |
+| Cost estimation                     | ✅              | 🟡                    | 🟡                     | ✅           | ❌                 | ✅        | ✅          | ✅                | ✅            |
+| Bilingual UI (EN + HE, RTL)         | ✅              | ❌                    | 🟡                     | ❌           | 🟡                 | 🟡        | 🟡          | ✅                | ❌            |
+| Offline / PWA                       | ✅              | ❌                    | ✅ (host)              | ✅           | ❌                 | ✅        | ❌          | ❌                | ✅            |
+| Shareable design URL                | ✅              | ❌                    | ❌                     | ❌           | 🟡                 | ❌        | ❌          | 🟡                | ❌            |
+| Hardware list (hinges, slides, etc) | ✅              | ❌                    | 🟡                     | ❌           | 🟡                 | ✅        | ✅          | 🟡                | 🟡            |
+| Material library, custom materials  | ✅              | ✅                    | ✅                     | ✅           | 🟡                 | ✅        | ✅          | ❌                | ✅            |
+| Price                               | Free            | $79–199               | Free                   | Free / $149  | $0–$349/yr         | €1500+    | €1500+      | Free              | $99–199       |
+
+Where Cabinet Planner is intentionally narrow: no 3D walkthrough renderer,
+no kitchen-layout floor-planner (the dream-kitchen niche owned by KitchenDraw /
+IKEA / Polyboard), and no CNC nesting beyond per-sheet DXF. Where it leads:
+free, instant, bilingual RTL-correct, URL-shareable, parametric, with both a
+true bin-packer and a Smart Optimizer that suggests dimension/material tweaks
+to lift yield — none of the freeware competitors combine all five.
