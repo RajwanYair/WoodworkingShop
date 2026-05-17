@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { HARD_LIMITS } from '../../engine/materials';
+import { SliderInput } from './SliderInput';
 
 export function DrawerConfig() {
   const { t } = useTranslation();
@@ -11,21 +13,16 @@ export function DrawerConfig() {
         {t('config.drawers')}
       </legend>
 
-      <label className="block">
-        <span className="text-sm text-wood-600 dark:text-wood-300">{t('config.drawerCount')}</span>
-        <div className="flex items-center gap-3 mt-1">
-          <input
-            type="range"
-            min={0}
-            max={4}
-            step={1}
-            value={config.drawerCount}
-            onChange={(e) => setConfig({ drawerCount: Number(e.target.value) })}
-            className="flex-1 accent-primary"
-          />
-          <span className="w-8 text-right text-sm font-mono font-medium">{config.drawerCount}</span>
-        </div>
-      </label>
+      <SliderInput
+        label={t('config.drawerCount')}
+        value={config.drawerCount}
+        onChange={(v) => setConfig({ drawerCount: v })}
+        softMin={0}
+        softMax={4}
+        hardMin={0}
+        hardMax={HARD_LIMITS.maxDrawers}
+        step={1}
+      />
     </fieldset>
   );
 }

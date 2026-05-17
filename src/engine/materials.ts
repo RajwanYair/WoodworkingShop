@@ -211,6 +211,10 @@ export const WARDROBE_DEFAULTS: Partial<CabinetConfig> = {
 
 // ─── Validation constraints ───
 
+/**
+ * Slider visual bounds — the *recommended* design range shown on UI controls.
+ * Numeric text inputs accept anything within HARD_LIMITS, even outside this.
+ */
 export const CONSTRAINTS = {
   minWidth: 300,
   maxWidth: 1200,
@@ -222,4 +226,24 @@ export const CONSTRAINTS = {
   maxShelves: 12,
   minReveal: 1,
   maxReveal: 6,
+} as const;
+
+/**
+ * Absolute physical limits accepted by the engine. Numeric text entry is
+ * validated against these (Sprint A1). Going outside the slider's CONSTRAINTS
+ * but inside HARD_LIMITS is fully supported.
+ */
+export const HARD_LIMITS = {
+  minWidth: 100,
+  maxWidth: 3000,
+  minHeight: 100,
+  maxHeight: 3000,
+  minDepth: 50,
+  maxDepth: 3000,
+  minShelves: 0,
+  maxShelves: 24,
+  minReveal: 0,
+  maxReveal: 20,
+  minDrawers: 0,
+  maxDrawers: 12,
 } as const;

@@ -1,18 +1,47 @@
 import { useTranslation } from 'react-i18next';
+import { useState, useEffect, useId } from 'react';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { CONSTRAINTS } from '../../engine/materials';
+import { CONSTRAINTS, HARD_LIMITS } from '../../engine/materials';
 import { formatDim, sliderStep } from '../../utils/units';
+
+type DimKey = 'width' | 'height' | 'depth';
+
+interface DimSpec {
+  key: DimKey;
+  softMin: number;
+  softMax: number;
+  hardMin: number;
+  hardMax: number;
+}
+
+const SPECS: DimSpec[] = [
+  {
+    key: 'width',
+    softMin: CONSTRAINTS.minWidth,
+    softMax: CONSTRAINTS.maxWidth,
+    hardMin: HARD_LIMITS.minWidth,
+    hardMax: HARD_LIMITS.maxWidth,
+  },
+  {
+    key: 'height',
+    softMin: CONSTRAINTS.minHeight,
+    softMax: CONSTRAINTS.maxHeight,
+    hardMin: HARD_LIMITS.minHeight,
+    hardMax: HARD_LIMITS.maxHeight,
+  },
+  {
+    key: 'depth',
+    softMin: CONSTRAINTS.minDepth,
+    softMax: CONSTRAINTS.maxDepth,
+    hardMin: HARD_LIMITS.minDepth,
+    hardMax: HARD_LIMITS.maxDepth,
+  },
+];
 
 export function DimensionSliders() {
   const { t } = useTranslation();
   const { config, setConfig, units, toggleUnits } = useCabinetStore();
   const step = sliderStep(units);
-
-  const sliders: { key: 'width' | 'height' | 'depth'; min: number; max: number }[] = [
-    { key: 'width', min: CONSTRAINTS.minWidth, max: CONSTRAINTS.maxWidth },
-    { key: 'height', min: CONSTRAINTS.minHeight, max: CONSTRAINTS.maxHeight },
-    { key: 'depth', min: CONSTRAINTS.minDepth, max: CONSTRAINTS.maxDepth },
-  ];
 
   return (
     <fieldset className="space-y-4">
@@ -28,27 +57,171 @@ export function DimensionSliders() {
           {units === 'metric' ? 'mm → in' : 'in → mm'}
         </button>
       </div>
-      {sliders.map(({ key, min, max }) => (
-        <label key={key} className="block">
-          <span className="text-sm text-wood-600 dark:text-wood-300">{t(`config.${key}`)}</span>
-          <div className="flex items-center gap-3 mt-1">
-            <input
-              type="range"
-              min={min}
-              max={max}
-              step={step}
-              value={config[key]}
-              aria-label={`${t(`config.${key}`)} (${units === 'metric' ? 'mm' : 'in'})`}
-              aria-valuenow={config[key]}
-              aria-valuemin={min}
-              aria-valuemax={max}
-              onChange={(e) => setConfig({ [key]: Number(e.target.value) })}
-              className="flex-1 accent-primary"
-            />
-            <span className="w-20 text-right text-sm font-mono font-medium">{formatDim(config[key], units)}</span>
-          </div>
-        </label>
+
+      {SPECS.map((spec) => (
+        <DimensionRow
+          key={spec.key}
+          spec={spec}
+          value={config[spec.key]}
+          step={step}
+          unitLabel={units === 'metric' ? 'mm' : 'in'}
+          metric={units === 'metric'}
+          label={t(`config.${spec.key}`)}
+          onChange={(v) => setConfig({ [spec.key]: v })}
+          displayValue={formatDim(config[spec.key], units)}
+          tMessages={{
+            outOfRange: t('config.outOfRange', {
+              min: spec.hardMin,
+              max: spec.hardMax,
+              unit: 'mm',
+            }),
+            outsideRecommended: t('config.outsideRecommended', {
+              rmin: spec.softMin,
+              rmax: spec.softMax,
+              unit: 'mm',
+            }),
+          }}
+        />
       ))}
     </fieldset>
   );
+}
+
+interface RowProps {
+  spec: DimSpec;
+  value: number;
+  step: number;
+  unitLabel: string;
+  metric: boolean;
+  label: string;
+  displayValue: string;
+  onChange: (mm: number) => void;
+  tMessages: { outOfRange: string; outsideRecommended: string };
+}
+
+const MM_PER_INCH = 25.4;
+
+function DimensionRow({ spec, value, step, unitLabel, metric, label, displayValue, onChange, tMessages }: RowProps) {
+  const inputId = useId();
+  const errorId = useId();
+  // The text input always edits in current display units; mm is the store value.
+  const [text, setText] = useState<string>(() => valueToText(value, metric));
+
+  // Keep the input in sync when the value changes externally (slider, presets, undo).
+  useEffect(() => {
+    setText(valueToText(value, metric));
+  }, [value, metric]);
+
+  const numericMm = parseToMm(text, metric);
+  const validNumeric = numericMm !== null && Number.isFinite(numericMm);
+  const outOfHard =
+    validNumeric && (numericMm < spec.hardMin || numericMm > spec.hardMax);
+  const outOfSoft =
+    validNumeric && !outOfHard && (numericMm < spec.softMin || numericMm > spec.softMax);
+
+  const message = !validNumeric || outOfHard
+    ? tMessages.outOfRange
+    : outOfSoft
+      ? tMessages.outsideRecommended
+      : '';
+
+  const isInvalid = !validNumeric || outOfHard;
+  const ariaInvalidProp = isInvalid ? ({ 'aria-invalid': 'true' as const }) : {};
+  const ariaLiveProp = isInvalid ? ({ 'aria-live': 'assertive' as const }) : ({ 'aria-live': 'polite' as const });
+
+  const sliderValue = Math.min(spec.softMax, Math.max(spec.softMin, value));
+
+  const commitText = () => {
+    if (validNumeric && !outOfHard) {
+      onChange(numericMm);
+    } else {
+      // Revert to last good value.
+      setText(valueToText(value, metric));
+    }
+  };
+
+  return (
+    <div className="block">
+      <div className="flex items-baseline justify-between gap-2">
+        <label htmlFor={inputId} className="text-sm text-wood-600 dark:text-wood-300">
+          {label}
+        </label>
+        <span className="text-xs text-wood-400 font-mono">{displayValue}</span>
+      </div>
+
+      <div className="flex items-center gap-3 mt-1">
+        <input
+          type="range"
+          min={spec.softMin}
+          max={spec.softMax}
+          step={step}
+          value={sliderValue}
+          aria-label={`${label} (${unitLabel})`}
+          onChange={(e) => {
+            const v = Number(e.target.value);
+            onChange(v);
+            setText(valueToText(v, metric));
+          }}
+          className="flex-1 accent-primary"
+        />
+
+        <div className="flex items-center">
+          <input
+            id={inputId}
+            type="number"
+            inputMode="decimal"
+            value={text}
+            min={metric ? spec.hardMin : Number((spec.hardMin / MM_PER_INCH).toFixed(2))}
+            max={metric ? spec.hardMax : Number((spec.hardMax / MM_PER_INCH).toFixed(2))}
+            step={metric ? 1 : 0.25}
+            aria-describedby={message ? errorId : undefined}
+            {...ariaInvalidProp}
+            onChange={(e) => setText(e.target.value)}
+            onBlur={commitText}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                commitText();
+                (e.target as HTMLInputElement).blur();
+              }
+            }}
+            className={
+              'w-20 text-right text-sm font-mono px-2 py-0.5 rounded border bg-white dark:bg-wood-900 ' +
+              (outOfHard || !validNumeric
+                ? 'border-red-500 text-red-600'
+                : outOfSoft
+                  ? 'border-amber-500 text-amber-700 dark:text-amber-400'
+                  : 'border-wood-300 dark:border-wood-600 text-wood-700 dark:text-wood-200')
+            }
+          />
+          <span className="ml-1 text-[10px] text-wood-400">{unitLabel}</span>
+        </div>
+      </div>
+
+      {message && (
+        <p
+          id={errorId}
+          {...ariaLiveProp}
+          className={
+            'mt-1 text-[11px] ' +
+            (isInvalid ? 'text-red-600' : 'text-amber-600 dark:text-amber-400')
+          }
+        >
+          {message}
+        </p>
+      )}
+    </div>
+  );
+}
+
+function valueToText(mm: number, metric: boolean): string {
+  if (metric) return String(mm);
+  return (mm / MM_PER_INCH).toFixed(2);
+}
+
+function parseToMm(text: string, metric: boolean): number | null {
+  const trimmed = text.trim();
+  if (trimmed === '') return null;
+  const n = Number(trimmed);
+  if (!Number.isFinite(n)) return null;
+  return metric ? Math.round(n) : Math.round(n * MM_PER_INCH);
 }

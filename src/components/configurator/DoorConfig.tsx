@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { CONSTRAINTS } from '../../engine/materials';
+import { CONSTRAINTS, HARD_LIMITS } from '../../engine/materials';
 import type { HandleStyle, DoorStyle, EdgeBanding } from '../../engine/types';
+import { SliderInput } from './SliderInput';
 
 export function DoorConfig() {
   const { t } = useTranslation();
@@ -46,23 +47,18 @@ export function DoorConfig() {
       </label>
 
       {/* Door reveal */}
-      <label className="block">
-        <span className="text-sm text-wood-600 dark:text-wood-300">{t('config.doorReveal')}</span>
-        <div className="flex items-center gap-3 mt-1">
-          <input
-            type="range"
-            min={CONSTRAINTS.minReveal}
-            max={CONSTRAINTS.maxReveal}
-            step={0.5}
-            value={config.doorReveal}
-            onChange={(e) => setConfig({ doorReveal: Number(e.target.value) })}
-            className="flex-1 accent-primary"
-          />
-          <span className="w-12 text-right text-sm font-mono font-medium">
-            {config.doorReveal} {t('config.unit')}
-          </span>
-        </div>
-      </label>
+      <SliderInput
+        label={t('config.doorReveal')}
+        value={config.doorReveal}
+        onChange={(v) => setConfig({ doorReveal: v })}
+        softMin={CONSTRAINTS.minReveal}
+        softMax={CONSTRAINTS.maxReveal}
+        hardMin={HARD_LIMITS.minReveal}
+        hardMax={HARD_LIMITS.maxReveal}
+        step={0.5}
+        decimals={1}
+        unit={t('config.unit')}
+      />
 
       {/* Handle style */}
       <label className="block">

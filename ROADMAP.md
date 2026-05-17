@@ -1,5 +1,72 @@
 # Roadmap
 
+## Sprint: v3.1.0 — UX & Output Quality (May 2026, TOP PRIORITY)
+
+User-reported needs from live preview review (`localhost:5173`). These supersede
+the in-flight quality sprints (84-87) and run first.
+
+### Sprint A1 — Slider free-text numeric entry (Sprint 100)
+
+- [ ] Every dimension slider gets a paired `<input type="number">` accepting any
+      valid value (mm or in) outside the slider's visual range
+- [ ] Hard limits enforced from `engine/dimensions.ts` constraints (not UI slider
+      max), e.g. depth allowed down to material thickness, up to physical max
+- [ ] Inline validation message on out-of-range entry; slider thumb clamps to
+      visual range while the numeric field shows the true value
+- [ ] Unit tests: numeric input mirrors slider state, accepts edge values,
+      rejects non-numeric / out-of-bounds
+- [ ] Applies to: width, height, depth, shelf count, drawer count, custom door
+      gap, kick-base height — every Configurator slider
+
+### Sprint A2 — Optional cabinet back panel (Sprint 101)
+
+- [ ] New `hasBack: boolean` flag on cabinet config (default true,
+      backward-compatible)
+- [ ] Configurator toggle: "Include back panel" with description
+- [ ] `engine/parts.ts`: omit back part when `hasBack === false`
+- [ ] `engine/assembly.ts`: skip back-attachment step when omitted
+- [ ] `engine/cost-estimator.ts` and BOM: reflect material savings
+- [ ] PDF cut sheet and assembly guide auto-update
+- [ ] Tests for parts/assembly/cost with `hasBack: false`
+
+### Sprint A3 — Sheet-fill optimizer + material-swap hint (Sprint 102)
+
+- [ ] `cut-optimizer.ts`: switch to a true bin-packing pass that fills each
+      sheet to maximum coverage before starting a new sheet (currently may
+      leave excessive waste on sheet 1)
+- [ ] Report `utilization` per sheet (already partially there) and surface it
+      in `OptimizerView`
+- [ ] When a part using material B can be cut from leftover space of a sheet
+      using material A (and A and B differ only by a small attribute, e.g.
+      same thickness/finish), emit a "consolidate to material A" suggestion in
+      the `SmartOptimizerPanel`
+- [ ] Targets ≥ 90 % utilization average across sheets in default presets
+- [ ] Tests covering: high-utilization pack, leftover reuse, swap-suggestion
+
+### Sprint A4 — PDF cut-sheet orientation parity (Sprint 103)
+
+- [ ] Currently: on-screen preview shows sheets portrait, PDF renders page
+      landscape with portrait content → wasted page + visual mismatch
+- [ ] Fix: detect sheet aspect ratio at export time and either rotate the PDF
+      page to match content orientation, or rotate the cut diagram to match
+      the page. Pick one approach consistently and document it.
+- [ ] Visual regression test (Playwright screenshot of PDF preview component)
+- [ ] PDF export pixel-snapshot check
+
+### Sprint A5 — Graphics & visual polish (Sprint 104)
+
+- [ ] Audit and optimize all in-repo raster assets (icon-192.png, icon-512.png,
+      favicon.svg) — use `oxipng` / `svgo`
+- [ ] Re-export icons at 1×/2×, ensure manifest entries use correct `sizes`
+- [ ] Add hero / OG image (currently `og:image` is missing)
+- [ ] MD diagrams: convert ASCII tables in `docs/ARCHITECTURE.md` and `ROADMAP.md`
+      diagrams (where applicable) to Mermaid for crisp scaling on GitHub
+- [ ] Web preview: review color contrast and the cabinet 2D preview SVG for
+      higher visual fidelity (axis labels, scale bar, dimension annotations)
+- [ ] All raster outputs lint-checked via `bundle:check` per-file budgets
+
+---
+
 ## Sprint: v3.0.0 — Test Coverage & CI Tooling (April 2026)
 
 ### Completed
