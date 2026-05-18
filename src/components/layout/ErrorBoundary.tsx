@@ -37,7 +37,6 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     this.props.onError?.(error, info);
     // Log to console in development only — never in production bundles
     if (import.meta.env.DEV) {
-      // eslint-disable-next-line no-console
       console.error('[ErrorBoundary]', this.props.panelName ?? 'Unknown panel', error, info);
     }
   }

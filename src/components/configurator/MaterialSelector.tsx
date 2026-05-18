@@ -1,9 +1,11 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { panelMaterials, backMaterials } from '../../engine/materials';
+import { panelMaterials, backMaterials, getMaterial } from '../../engine/materials';
+import { findSubstitutions } from '../../engine/substitution';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { useToastStore } from '../../store/toast-store';
-import type { Lang, Material } from '../../engine/types';
+import type { Lang, Material, MaterialSubstitution } from '../../engine/types';
 
 /** Sprint 172 — colored swatch square for the currently selected material */
 function MaterialSwatch({ color }: { color?: string }) {
@@ -32,6 +34,8 @@ export function MaterialSelector() {
 
   const carcassColor = panels.find((m) => m.key === config.carcassMaterial)?.color;
   const backColor = backs.find((m) => m.key === config.backPanelMaterial)?.color;
+
+  const substitutions = useMemo(() => findSubstitutions(config, customMaterials), [config, customMaterials]);
 
   return (
     <fieldset className="space-y-4">
@@ -75,6 +79,14 @@ export function MaterialSelector() {
           >
             {t('material.reassignAll')}
           </button>
+        )}
+        {substitutions.length > 0 && (
+          <SubstitutionHints
+            substitutions={substitutions}
+            lang={lang}
+            panels={panels}
+            onSwitch={(key) => setConfig({ carcassMaterial: key })}
+          />
         )}
       </label>
 
@@ -132,5 +144,67 @@ export function MaterialSelector() {
         </span>
       </label>
     </fieldset>
+  );
+}
+
+// ── SubstitutionHints ────────────────────────────────────────────────────────
+
+const BENEFIT_COLORS: Record<MaterialSubstitution['benefit'], string> = {
+  deflection:
+    'border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 text-amber-800 dark:text-amber-200',
+  weight: 'border-sky-300 dark:border-sky-700 bg-sky-50 dark:bg-sky-900/20 text-sky-800 dark:text-sky-200',
+  cost: 'border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200',
+};
+
+interface SubstitutionHintsProps {
+  substitutions: MaterialSubstitution[];
+  lang: Lang;
+  panels: Material[];
+  onSwitch: (key: string) => void;
+}
+
+function SubstitutionHints({ substitutions, lang, panels, onSwitch }: SubstitutionHintsProps) {
+  const { t } = useTranslation();
+  return (
+    <div className="mt-2 space-y-1.5" aria-label={t('substitution.title')}>
+      {substitutions.map((sub) => {
+        const suggestedMat = panels.find((m) => m.key === sub.suggestedKey);
+        let suggestedName = sub.suggestedKey;
+        try {
+          suggestedName = getMaterial(sub.suggestedKey).name[lang];
+        } catch {
+          /* fall back to key */
+        }
+        return (
+          <div
+            key={`${sub.currentKey}-${sub.suggestedKey}-${sub.benefit}`}
+            className={`rounded border px-2.5 py-1.5 text-[11px] flex items-start justify-between gap-2 ${BENEFIT_COLORS[sub.benefit]}`}
+            role="note"
+          >
+            <span className="flex items-start gap-1.5">
+              <span className="font-semibold shrink-0">{t(`substitution.benefit.${sub.benefit}`)}</span>
+              <span>{sub.reason[lang]}</span>
+            </span>
+            <div className="flex items-center gap-1 shrink-0">
+              {suggestedMat?.color && (
+                <span
+                  aria-hidden="true"
+                  className="inline-block w-3 h-3 rounded-sm border border-current/30"
+                  style={{ backgroundColor: suggestedMat.color }}
+                />
+              )}
+              <button
+                type="button"
+                onClick={() => onSwitch(sub.suggestedKey)}
+                className="underline font-medium hover:no-underline"
+                aria-label={t('substitution.switch', { name: suggestedName })}
+              >
+                {t('substitution.switchShort')}
+              </button>
+            </div>
+          </div>
+        );
+      })}
+    </div>
   );
 }

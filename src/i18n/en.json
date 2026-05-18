@@ -345,6 +345,16 @@
     "fieldHint": "Field: {{field}}",
     "suggestedValue": "Suggested: {{value}}"
   },
+  "substitution": {
+    "title": "Material Suggestions",
+    "switch": "Switch to {{name}}",
+    "switchShort": "Use this",
+    "benefit": {
+      "deflection": "Deflection",
+      "weight": "Weight",
+      "cost": "Cost"
+    }
+  },
   "bulkReplace": {
     "title": "Bulk Material Replace",
     "short": "Replace",

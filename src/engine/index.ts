@@ -47,4 +47,5 @@ export { estimateCost } from './cost-estimator';
 export type { CostBreakdown, SheetCost } from './cost-estimator';
 
 export { validateConfig } from './validation';
+export { findSubstitutions } from './substitution';
 export type { ValidationIssue, ValidationSeverity, MaterialSubstitution } from './types';

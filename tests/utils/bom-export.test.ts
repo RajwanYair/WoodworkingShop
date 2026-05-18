@@ -32,9 +32,11 @@ describe('generateBomCsv', () => {
   it('starts with a material summary section', () => {
     const csv = generateBomCsv(singleCabinet, 'en');
     const lines = csv.split('\n');
-    expect(lines[0]).toContain('Material Summary');
-    expect(lines[1]).toContain('Total Area');
-    expect(lines[1]).toContain('Board-Feet');
+    // Sprint 4 added 4 metadata comment rows before Material Summary
+    const summaryIdx = lines.findIndex((l) => l.includes('Material Summary'));
+    expect(summaryIdx).toBeGreaterThanOrEqual(0);
+    expect(lines[summaryIdx + 1]).toContain('Total Area');
+    expect(lines[summaryIdx + 1]).toContain('Board-Feet');
   });
 
   it('includes a parts header row after the summary', () => {

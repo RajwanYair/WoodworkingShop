@@ -344,6 +344,16 @@
     "fieldHint": "שדה: {{field}}",
     "suggestedValue": "מוצע: {{value}}"
   },
+  "substitution": {
+    "title": "הצעות חומר",
+    "switch": "עבור ל-{{name}}",
+    "switchShort": "בחר זאת",
+    "benefit": {
+      "deflection": "כיווץ",
+      "weight": "משקל",
+      "cost": "עלות"
+    }
+  },
   "bulkReplace": {
     "title": "החלפת חומר מרוכזת",
     "short": "החלף",
