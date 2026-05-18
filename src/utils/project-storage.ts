@@ -93,3 +93,62 @@ export function importProjectJson(file: File): Promise<SavedProject> {
     reader.readAsText(file);
   });
 }
+
+/** Export multiple projects as a single `.cabinet-projects.json` bundle */
+export function exportProjectsBundle(projects: SavedProject[]): void {
+  const payload = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    projects,
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `cabinet-projects-bundle-${new Date().toISOString().slice(0, 10)}.cabinet-projects.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/** Import a `.cabinet-projects.json` bundle, merging all contained projects */
+export function importProjectsBundle(file: File): Promise<SavedProject[]> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const parsed = JSON.parse(e.target?.result as string) as {
+          version?: number;
+          projects?: SavedProject[];
+        };
+        const incoming = parsed.projects;
+        if (!Array.isArray(incoming)) {
+          reject(new Error('Invalid bundle: missing projects array'));
+          return;
+        }
+        const existing = load();
+        const existingNames = new Set(existing.map((p) => p.name.toLowerCase()));
+        const added: SavedProject[] = [];
+        for (const proj of incoming) {
+          if (!proj.cabinets || !Array.isArray(proj.cabinets)) continue;
+          const merged: SavedProject = {
+            ...proj,
+            id: `proj-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+            savedAt: new Date().toISOString(),
+            name: existingNames.has(proj.name.toLowerCase()) ? `${proj.name} (imported)` : proj.name,
+          };
+          existing.push(merged);
+          existingNames.add(merged.name.toLowerCase());
+          added.push(merged);
+        }
+        save(existing);
+        resolve(added);
+      } catch (err) {
+        reject(err);
+      }
+    };
+    reader.onerror = () => reject(new Error('Failed to read file'));
+    reader.readAsText(file);
+  });
+}

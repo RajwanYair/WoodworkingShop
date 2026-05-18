@@ -224,7 +224,14 @@
     "empty": "No saved configurations",
     "export": "Export JSON",
     "import": "Import JSON",
-    "share": "Share Link"
+    "share": "Share Link",
+    "exportAll": "Export All Projects",
+    "exportAllTip": "Download all saved projects as a single bundle file",
+    "importBundle": "Import Bundle",
+    "importBundleTip": "Import multiple projects from a bundle file",
+    "noProjectsToExport": "No saved projects to export",
+    "exportedAll": "Exported {{count}} project(s)",
+    "importedBundle": "Imported {{count}} project(s)"
   },
   "project": {
     "title": "Project",

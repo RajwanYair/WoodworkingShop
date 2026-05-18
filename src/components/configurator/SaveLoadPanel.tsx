@@ -3,6 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useToastStore } from '../../store/toast-store';
 import { loadSavedConfigs, saveConfig, deleteSavedConfig, type SavedConfig } from '../../utils/local-storage';
+import {
+  listProjects,
+  exportProjectsBundle,
+  importProjectsBundle,
+} from '../../utils/project-storage';
 import type { CabinetConfig } from '../../engine/types';
 import type { CabinetEntry } from '../../store/cabinet-store';
 
@@ -20,6 +25,7 @@ export function SaveLoadPanel() {
   const [saveName, setSaveName] = useState('');
   const [showSaved, setShowSaved] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const bundleInputRef = useRef<HTMLInputElement>(null);
 
   // Sprint 152 — sync project name to document title
   useEffect(() => {
@@ -47,6 +53,33 @@ export function SaveLoadPanel() {
     deleteSavedConfig(id);
     setConfigs(loadSavedConfigs());
     addToast(t('toast.deleted'), 'info');
+  };
+
+  const handleExportAll = () => {
+    const projects = listProjects();
+    if (projects.length === 0) {
+      addToast(t('saves.noProjectsToExport'), 'info');
+      return;
+    }
+    exportProjectsBundle(projects);
+    addToast(t('saves.exportedAll', { count: projects.length }), 'success');
+  };
+
+  const handleImportBundle = () => {
+    bundleInputRef.current?.click();
+  };
+
+  const handleBundleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    importProjectsBundle(file)
+      .then((added) => {
+        addToast(t('saves.importedBundle', { count: added.length }), 'success');
+      })
+      .catch(() => {
+        addToast(t('toast.invalidFile'), 'error');
+      });
+    e.target.value = '';
   };
 
   const handleShare = async () => {
@@ -227,6 +260,33 @@ export function SaveLoadPanel() {
           accept=".json"
           className="hidden"
           onChange={handleFileChange}
+          aria-hidden="true"
+          tabIndex={-1}
+        />
+      </div>
+
+      {/* Export All / Import Bundle */}
+      <div className="flex gap-2">
+        <button
+          onClick={handleExportAll}
+          className="flex-1 px-2 py-1.5 text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 rounded hover:bg-wood-50 dark:hover:bg-wood-700 transition-colors"
+          title={t('saves.exportAllTip')}
+        >
+          ⬇ {t('saves.exportAll')}
+        </button>
+        <button
+          onClick={handleImportBundle}
+          className="flex-1 px-2 py-1.5 text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 rounded hover:bg-wood-50 dark:hover:bg-wood-700 transition-colors"
+          title={t('saves.importBundleTip')}
+        >
+          ⬆ {t('saves.importBundle')}
+        </button>
+        <input
+          ref={bundleInputRef}
+          type="file"
+          accept=".json,.cabinet-projects.json"
+          className="hidden"
+          onChange={handleBundleFileChange}
           aria-hidden="true"
           tabIndex={-1}
         />

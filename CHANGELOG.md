@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.37.0] — 2026-05-18
+
+### ✨ Added
+
+- **Multi-project bundle export/import**: new `exportProjectsBundle` and `importProjectsBundle` functions in `project-storage.ts` let users download all saved projects as a single `.cabinet-projects.json` envelope file and re-import it on another device (name-collision-safe, deduplication via `(imported)` suffix).
+- **Save/Load panel — Export All / Import Bundle buttons**: two new buttons below the existing Export/Import row trigger the bundle workflow.
+- `saves.exportAll`, `saves.importBundle`, `saves.noProjectsToExport`, `saves.exportedAll`, `saves.importedBundle` i18n keys added to EN + HE bundles.
+
 ## [3.36.0] — 2026-05-18
 
 ### ✨ Enhanced

@@ -224,7 +224,14 @@
     "empty": "אין הגדרות שמורות",
     "export": "ייצוא JSON",
     "import": "ייבוא JSON",
-    "share": "שתף קישור"
+    "share": "שתף קישור",
+    "exportAll": "ייצוא כל הפרוייקטים",
+    "exportAllTip": "הורדת כל הפרוייקטים השמורים כקובץ חבילה אחד",
+    "importBundle": "ייבוא חבילה",
+    "importBundleTip": "ייבוא פרוייקטים מרובים מקובץ חבילה",
+    "noProjectsToExport": "אין פרוייקטים שמורים לייצוא",
+    "exportedAll": "יוייצאו {{count}} פרוייקט",
+    "importedBundle": "יוייבאו {{count}} פרוייקט"
   },
   "project": {
     "title": "פרויקט",
