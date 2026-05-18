@@ -11,7 +11,7 @@ export interface SmartOptimizerOptions {
 }
 
 const DEFAULT_OPTIONS: SmartOptimizerOptions = {
-  strategies: ['reduce-depth', 'co-nest-strips', 'adjust-width', 'adjust-height', 'material-swap'],
+  strategies: ['reduce-depth', 'co-nest-strips', 'adjust-width', 'adjust-height', 'material-swap', 'shelf-count-reduce'],
   tolerance: 20,
   maxResults: 5,
 };
@@ -81,6 +81,8 @@ function generateCandidates(cfg: CabinetConfig, strategy: SmartStrategy, toleran
       return tryDimensionVariations(cfg, 'height', tolerance);
     case 'material-swap':
       return tryMaterialSwaps(cfg);
+    case 'shelf-count-reduce':
+      return tryShelfCountReduce(cfg);
     default:
       return [];
   }
@@ -221,6 +223,17 @@ function tryMaterialSwaps(cfg: CabinetConfig): CabinetConfig[] {
   return candidates;
 }
 
+/**
+ * Strategy: shelf-count-reduce (v3.26.0)
+ * Try reducing the number of fixed shelves by 1.
+ * Fewer shelves = fewer parts = potentially fewer sheets used.
+ * Only suggests this when numShelves ≥ 2 (keeps at least 1 shelf).
+ */
+function tryShelfCountReduce(cfg: CabinetConfig): CabinetConfig[] {
+  if ((cfg.numShelves ?? 0) < 2) return [];
+  return [{ ...cfg, numShelves: (cfg.numShelves ?? 2) - 1 }];
+}
+
 // ─── Helpers ───
 
 function evaluate(cfg: CabinetConfig): OptimizationResult {
@@ -240,7 +253,8 @@ function isValid(cfg: CabinetConfig): boolean {
 }
 
 function configFingerprint(cfg: CabinetConfig): string {
-  return `${cfg.width}|${cfg.height}|${cfg.depth}|${cfg.carcassMaterial}|${cfg.backPanelMaterial}`;
+  // v3.26.0: include shelves, doors, drawers in fingerprint to avoid incorrect deduplication
+  return `${cfg.width}|${cfg.height}|${cfg.depth}|${cfg.carcassMaterial}|${cfg.backPanelMaterial}|${cfg.numShelves ?? 0}|${cfg.numDrawers ?? 0}|${cfg.doorStyle ?? 'none'}`;
 }
 
 function round2(n: number): number {
@@ -273,6 +287,10 @@ function buildExplanation(
     changes.push(`material ${from.name.en} → ${to.name.en}`);
     changesHe.push(`חומר ${from.name.he} → ${to.name.he}`);
   }
+  if ((optimized.numShelves ?? 0) !== (original.numShelves ?? 0)) {
+    changes.push(`shelves ${original.numShelves ?? 0} → ${optimized.numShelves ?? 0}`);
+    changesHe.push(`מדפים ${original.numShelves ?? 0} → ${optimized.numShelves ?? 0}`);
+  }
 
   const stratLabels: Record<SmartStrategy, { en: string; he: string }> = {
     'reduce-depth': { en: 'Optimize depth for sheet nesting', he: 'מיטוב עומק לחיתוך גיליון' },
@@ -280,6 +298,7 @@ function buildExplanation(
     'adjust-width': { en: 'Adjust width for better yield', he: 'התאמת רוחב לניצולת טובה' },
     'adjust-height': { en: 'Adjust height for better yield', he: 'התאמת גובה לניצולת טובה' },
     'material-swap': { en: 'Try alternative material', he: 'חומר חלופי' },
+    'shelf-count-reduce': { en: 'Reduce shelf count to save material', he: 'הפחתת מספר מדפים לחיסכון בחומר' },
   };
 
   return {

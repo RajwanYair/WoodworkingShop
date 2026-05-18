@@ -145,7 +145,7 @@ export interface OptimizationResult {
   totalWaste: number; // mm²
 }
 
-export type SmartStrategy = 'reduce-depth' | 'co-nest-strips' | 'adjust-width' | 'adjust-height' | 'material-swap';
+export type SmartStrategy = 'reduce-depth' | 'co-nest-strips' | 'adjust-width' | 'adjust-height' | 'material-swap' | 'shelf-count-reduce';
 
 export interface OptimizationSuggestion {
   originalConfig: CabinetConfig;
