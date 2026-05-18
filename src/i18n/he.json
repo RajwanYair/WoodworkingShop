@@ -183,7 +183,14 @@
   },
   "footer": {
     "darkMode": "מצב כהה",
+    "highContrast": "ניגודיות גבוהה",
     "language": "שפה"
+  },
+  "templates": {
+    "title": "תבניות ארון",
+    "subtitle": "התחל מתבנית מוכנה, ואז התאם",
+    "apply": "השתמש בתבנית",
+    "close": "סגור"
   },
   "saves": {
     "title": "הארונות שלי",

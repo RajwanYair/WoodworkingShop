@@ -28,6 +28,50 @@
   text-align: right;
 }
 
+/* v3.12.0 — High-contrast mode: override the wood palette with near-black/white
+   tones so all text/UI meets WCAG 2.2 AA contrast ratios (≥ 4.5:1 for normal
+   text, ≥ 3:1 for large text and UI components). */
+.high-contrast {
+  --color-wood-50: #ffffff;
+  --color-wood-100: #f0f0f0;
+  --color-wood-200: #cccccc;
+  --color-wood-300: #888888;
+  --color-wood-400: #555555;
+  --color-wood-500: #222222;
+  --color-wood-600: #111111;
+  --color-wood-700: #000000;
+  --color-wood-800: #000000;
+  --color-wood-900: #000000;
+  --color-primary: #000000;
+}
+
+.high-contrast.dark {
+  --color-wood-50: #000000;
+  --color-wood-100: #111111;
+  --color-wood-200: #222222;
+  --color-wood-300: #666666;
+  --color-wood-400: #999999;
+  --color-wood-500: #cccccc;
+  --color-wood-600: #dddddd;
+  --color-wood-700: #f0f0f0;
+  --color-wood-800: #f8f8f8;
+  --color-wood-900: #ffffff;
+  --color-primary: #ffffff;
+}
+
+/* v3.12.0 — Respect the OS reduced-motion preference: suppress all CSS
+   transitions and animations to prevent vestibular/cognitive overload. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Sprint 170 — hidden in screen, visible only during print */
 .print-only-header {
   display: none;

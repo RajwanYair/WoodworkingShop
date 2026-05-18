@@ -28,6 +28,7 @@ const AssemblyGuide = lazy(() =>
 
 function App() {
   const { activeTab, darkMode, projectName } = useCabinetStore();
+  const highContrastMode = useCabinetStore((s) => s.highContrastMode);
   const { t } = useTranslation();
   const [showShortcuts, setShowShortcuts] = useState(false);
 
@@ -94,7 +95,7 @@ function App() {
   }, []);
 
   return (
-    <div className={darkMode ? 'dark' : ''}>
+    <div className={[darkMode ? 'dark' : '', highContrastMode ? 'high-contrast' : ''].filter(Boolean).join(' ') || undefined}>
       <div className="min-h-screen bg-white dark:bg-wood-900 text-wood-800 dark:text-wood-100">
         <a
           href="#main-content"

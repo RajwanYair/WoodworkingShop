@@ -460,3 +460,45 @@ export function IconEdgeBand(p: IconProps) {
     </Icon>
   );
 }
+
+/** High-contrast / accessibility mode toggle — half-filled circle */
+export function IconContrast(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 2a10 10 0 0 1 0 20z" fill="currentColor" stroke="none" />
+    </Icon>
+  );
+}
+
+/** Folder/project open icon */
+export function IconFolder(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+    </Icon>
+  );
+}
+
+/** Swap/exchange icon for bulk material reassignment */
+export function IconSwap(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <polyline points="17 1 21 5 17 9" />
+      <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+      <polyline points="7 23 3 19 7 15" />
+      <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+    </Icon>
+  );
+}
+
+/** Layers/template icon */
+export function IconLayers(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <polygon points="12 2 2 7 12 12 22 7 12 2" />
+      <polyline points="2 17 12 22 22 17" />
+      <polyline points="2 12 12 17 22 12" />
+    </Icon>
+  );
+}

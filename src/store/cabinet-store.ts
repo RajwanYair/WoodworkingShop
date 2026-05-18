@@ -16,6 +16,7 @@ const PREFS_KEY = 'woodworkingshop:prefs';
 interface PersistedPrefs {
   darkMode?: boolean;
   colorBlindMode?: boolean;
+  highContrastMode?: boolean;
   units?: UnitSystem;
 }
 function loadPrefs(): PersistedPrefs {
@@ -82,6 +83,7 @@ export interface CabinetState {
   projectName: string; // Sprint 152
   darkMode: boolean;
   colorBlindMode: boolean;
+  highContrastMode: boolean; // v3.12.0
   units: UnitSystem;
   sawKerf: number; // mm, default 4 (Sprint 136)
   materialPriceOverrides: Record<string, number>; // Sprint 139: materialKey → ₪ per sheet
@@ -95,6 +97,7 @@ export interface CabinetState {
   setActiveTab: (tab: CabinetState['activeTab']) => void;
   toggleDarkMode: () => void;
   toggleColorBlindMode: () => void;
+  toggleHighContrast: () => void; // v3.12.0
   toggleUnits: () => void;
   undo: () => void;
   redo: () => void;
@@ -169,6 +172,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
     // Sprint 124 — fall back to OS preference when no saved pref exists
     darkMode: prefs.darkMode ?? detectOsDarkMode(),
     colorBlindMode: prefs.colorBlindMode ?? false,
+    highContrastMode: prefs.highContrastMode ?? false,
     units: prefs.units ?? ('metric' as UnitSystem),
     sawKerf: 4, // mm — Sprint 136
     materialPriceOverrides: {}, // Sprint 139
@@ -399,19 +403,25 @@ export const useCabinetStore = create<CabinetState>((set) => {
     toggleDarkMode: () =>
       set((s) => {
         const darkMode = !s.darkMode;
-        savePrefs({ darkMode, colorBlindMode: s.colorBlindMode, units: s.units });
+        savePrefs({ darkMode, colorBlindMode: s.colorBlindMode, highContrastMode: s.highContrastMode, units: s.units });
         return { darkMode };
       }),
     toggleColorBlindMode: () =>
       set((s) => {
         const colorBlindMode = !s.colorBlindMode;
-        savePrefs({ darkMode: s.darkMode, colorBlindMode, units: s.units });
+        savePrefs({ darkMode: s.darkMode, colorBlindMode, highContrastMode: s.highContrastMode, units: s.units });
         return { colorBlindMode };
+      }),
+    toggleHighContrast: () =>
+      set((s) => {
+        const highContrastMode = !s.highContrastMode;
+        savePrefs({ darkMode: s.darkMode, colorBlindMode: s.colorBlindMode, highContrastMode, units: s.units });
+        return { highContrastMode };
       }),
     toggleUnits: () =>
       set((s) => {
         const units: UnitSystem = s.units === 'metric' ? 'imperial' : 'metric';
-        savePrefs({ darkMode: s.darkMode, colorBlindMode: s.colorBlindMode, units });
+        savePrefs({ darkMode: s.darkMode, colorBlindMode: s.colorBlindMode, highContrastMode: s.highContrastMode, units });
         return { units };
       }),
   };

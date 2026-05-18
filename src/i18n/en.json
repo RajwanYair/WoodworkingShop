@@ -183,7 +183,14 @@
   },
   "footer": {
     "darkMode": "Dark Mode",
+    "highContrast": "High Contrast",
     "language": "Language"
+  },
+  "templates": {
+    "title": "Cabinet Templates",
+    "subtitle": "Start from a preset, then customise",
+    "apply": "Use Template",
+    "close": "Close"
   },
   "saves": {
     "title": "My Saved Cabinets",

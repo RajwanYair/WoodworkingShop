@@ -15,6 +15,7 @@ import {
   IconScissors,
   IconHammer,
   IconDocument,
+  IconContrast,
 } from './Icons';
 
 const tabs = ['configurator', 'preview', 'optimizer', 'assembly', 'pdf'] as const;
@@ -29,7 +30,7 @@ const TAB_ICONS = {
 
 export function Header() {
   const { t, i18n } = useTranslation();
-  const { activeTab, setActiveTab, darkMode, toggleDarkMode, units, toggleUnits, canUndo, canRedo, undo, redo } =
+  const { activeTab, setActiveTab, darkMode, toggleDarkMode, highContrastMode, toggleHighContrast, units, toggleUnits, canUndo, canRedo, undo, redo } =
     useCabinetStore();
   const lang = i18n.language;
 
@@ -156,6 +157,15 @@ export function Header() {
           aria-label={darkMode ? 'Light mode' : 'Dark mode'}
         >
           {darkMode ? <IconSun size={16} /> : <IconMoon size={16} />}
+        </button>
+        <button
+          onClick={toggleHighContrast}
+          className={`flex items-center ${highContrastMode ? 'text-white' : 'text-wood-200 hover:text-white'}`}
+          title={t('footer.highContrast')}
+          aria-label={highContrastMode ? 'Disable high contrast' : 'Enable high contrast'}
+          aria-pressed={highContrastMode}
+        >
+          <IconContrast size={16} />
         </button>
         <button
           onClick={toggleUnits}
