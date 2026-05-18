@@ -11,6 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.39.0] — 2026-05-18
+
+### ✨ Enhanced
+
+- **PDF cover page — cabinet count**: when the project contains more than one cabinet, the cover page info box now shows a `Cabinets in project` row (e.g. `3 cabinets`). New `cabinetCount` prop added to `CabinetPdfDocument`.
+- **PDF page numbers** (confirmed): every content page already carries a running `Page X / Y` counter in the footer via react-pdf’s `render` callback — documented in changelog.
+
 ## [3.38.0] — 2026-05-18
 
 ### ✨ Added

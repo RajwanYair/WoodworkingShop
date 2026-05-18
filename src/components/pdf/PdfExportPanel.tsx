@@ -26,6 +26,7 @@ export function PdfExportPanel() {
           lang={lang}
           projectName={store.projectName}
           includeCover={includeCover}
+          cabinetCount={store.cabinets.length}
         />
       );
       const blob = await pdf(doc).toBlob();

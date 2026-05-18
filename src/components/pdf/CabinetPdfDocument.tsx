@@ -300,6 +300,8 @@ export interface CabinetPdfProps {
   projectName?: string;
   /** v3.19.0 — whether to render the cover page (default: true) */
   includeCover?: boolean;
+  /** v3.39.0 — total number of cabinets in the project (shown on cover) */
+  cabinetCount?: number;
 }
 
 // ─── Document ───
@@ -314,6 +316,7 @@ export function CabinetPdfDocument({
   lang,
   projectName,
   includeCover = true,
+  cabinetCount = 1,
 }: CabinetPdfProps) {
   const cMat = getMaterial(config.carcassMaterial);
   const bMat = getMaterial(config.backPanelMaterial);
@@ -370,6 +373,12 @@ export function CabinetPdfDocument({
                   {hardware.length} item type{hardware.length !== 1 ? 's' : ''}
                 </Text>
               </View>
+              {cabinetCount > 1 && (
+                <View style={s.coverInfoRow}>
+                  <Text style={s.coverInfoLabel}>🗄️ Cabinets in project</Text>
+                  <Text style={s.coverInfoValue}>{cabinetCount} cabinets</Text>
+                </View>
+              )}
               <View style={s.coverInfoRowLast}>
                 <Text style={s.coverInfoLabel}>📅 Generated</Text>
                 <Text style={s.coverInfoValue}>{date}</Text>
