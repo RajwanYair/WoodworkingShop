@@ -143,7 +143,7 @@ export function SliderInput({
         <p
           id={errorId}
           {...ariaLiveProp}
-          className={'mt-1 text-[11px] ' + (isInvalid ? 'text-red-600' : 'text-amber-600 dark:text-amber-400')}
+          className={'mt-1 text-[11px] ' + (isInvalid ? 'text-red-600' : 'text-amber-800 dark:text-amber-300')}
         >
           {message}
         </p>

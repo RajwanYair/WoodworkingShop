@@ -82,7 +82,7 @@ export function MaterialSelector() {
         />
         <span className="text-sm">
           <span className="block text-wood-700 dark:text-wood-200">{t('config.hasBack')}</span>
-          <span className="block text-[11px] text-wood-500 dark:text-wood-400">{t('config.hasBackDesc')}</span>
+          <span className="block text-[11px] text-wood-600 dark:text-wood-300">{t('config.hasBackDesc')}</span>
         </span>
       </label>
     </fieldset>

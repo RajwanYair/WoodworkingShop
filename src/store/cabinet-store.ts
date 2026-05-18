@@ -226,10 +226,7 @@ function deriveProject(
 // v3.21.0 — Base derivation (parts, hardware, dimensions) WITHOUT cut optimization.
 // Used for synchronous state updates so the UI renders new parts instantly while
 // the worker computes fresh optimization in the background.
-function deriveBaseProject(
-  cabinets: CabinetEntry[],
-  activeIndex: number,
-) {
+function deriveBaseProject(cabinets: CabinetEntry[], activeIndex: number) {
   const activeConfig = cabinets[activeIndex].config;
   const dimensions = computeDimensions(activeConfig);
   const parts = generateParts(activeConfig);
@@ -565,7 +562,8 @@ export const useCabinetStore = create<CabinetState>((set) => {
       }),
 
     toggleDarkMode: () =>
-      set((s) => {        const darkMode = !s.darkMode;
+      set((s) => {
+        const darkMode = !s.darkMode;
         savePrefs({ darkMode, colorBlindMode: s.colorBlindMode, highContrastMode: s.highContrastMode, units: s.units });
         return { darkMode };
       }),
@@ -584,7 +582,12 @@ export const useCabinetStore = create<CabinetState>((set) => {
     toggleUnits: () =>
       set((s) => {
         const units: UnitSystem = s.units === 'metric' ? 'imperial' : 'metric';
-        savePrefs({ darkMode: s.darkMode, colorBlindMode: s.colorBlindMode, highContrastMode: s.highContrastMode, units });
+        savePrefs({
+          darkMode: s.darkMode,
+          colorBlindMode: s.colorBlindMode,
+          highContrastMode: s.highContrastMode,
+          units,
+        });
         return { units };
       }),
   };

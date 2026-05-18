@@ -137,7 +137,7 @@ export function SaveLoadPanel() {
         <h3 className="text-xs font-semibold text-wood-700 dark:text-wood-200">{t('saves.title')}</h3>
         <button
           onClick={() => setShowSaved(!showSaved)}
-          className="text-xs text-wood-500 hover:text-wood-700 dark:text-wood-400 dark:hover:text-wood-200"
+          className="text-xs text-wood-600 hover:text-wood-700 dark:text-wood-400 dark:hover:text-wood-200"
           aria-expanded={showSaved ? 'true' : 'false'}
           aria-label={t('saves.title')}
         >
@@ -157,7 +157,7 @@ export function SaveLoadPanel() {
         />
         <button
           onClick={handleSave}
-          className="px-3 py-1.5 text-xs font-medium bg-wood-500 text-white rounded hover:bg-wood-600 transition-colors"
+          className="px-3 py-1.5 text-xs font-medium bg-wood-600 text-white rounded hover:bg-wood-600 transition-colors"
         >
           {t('saves.save')}
         </button>
@@ -179,7 +179,7 @@ export function SaveLoadPanel() {
               </div>
               <button
                 onClick={() => handleLoad(c)}
-                className="px-2 py-0.5 text-xs bg-wood-500 text-white rounded hover:bg-wood-600 shrink-0"
+                className="px-2 py-0.5 text-xs bg-wood-600 text-white rounded hover:bg-wood-600 shrink-0"
               >
                 {t('saves.load')}
               </button>

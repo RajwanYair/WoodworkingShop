@@ -39,14 +39,23 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
     );
     if (focusable.length > 0) focusable[0].focus();
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { onClose(); return; }
+      if (e.key === 'Escape') {
+        onClose();
+        return;
+      }
       if (e.key !== 'Tab') return;
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
       if (e.shiftKey) {
-        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
       } else {
-        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
       }
     };
     el.addEventListener('keydown', onKey);
@@ -94,20 +103,29 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
   };
 
   const fmt = (iso: string) => {
-    try { return new Date(iso).toLocaleDateString(); } catch { return iso; }
+    try {
+      return new Date(iso).toLocaleDateString();
+    } catch {
+      return iso;
+    }
   };
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="pm-title"
-      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* Backdrop — click outside to close */}
+      <button
+        type="button"
+        className="absolute inset-0 bg-black/50 w-full h-full border-0 p-0 cursor-default"
+        onClick={onClose}
+        aria-label="Close dialog"
+        tabIndex={-1}
+      />
       <div
         ref={dialogRef}
-        className="bg-white dark:bg-wood-800 rounded-xl shadow-2xl w-full max-w-xl max-h-[85vh] overflow-hidden flex flex-col mx-4"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="pm-title"
+        className="relative bg-white dark:bg-wood-800 rounded-xl shadow-2xl w-full max-w-xl max-h-[85vh] overflow-hidden flex flex-col mx-4"
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-wood-200 dark:border-wood-700">
@@ -131,7 +149,9 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
               type="text"
               value={saveName}
               onChange={(e) => setSaveName(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') handleSave(); }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleSave();
+              }}
               placeholder={t('projects.namePlaceholder')}
               className="flex-1 px-3 py-1.5 text-sm rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-700 text-wood-800 dark:text-wood-100 focus:outline-none focus:border-wood-500"
             />
@@ -155,7 +175,7 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
                 key={project.id}
                 className="flex items-center gap-3 p-3 rounded-lg border border-wood-200 dark:border-wood-700 hover:border-wood-400 dark:hover:border-wood-500 transition-colors"
               >
-                <IconFolder size={16} className="text-wood-500 dark:text-wood-400 shrink-0" />
+                <IconFolder size={16} className="text-wood-600 dark:text-wood-300 shrink-0" />
                 <div className="flex-1 min-w-0">
                   <div className="font-medium text-sm text-wood-800 dark:text-wood-100 truncate">{project.name}</div>
                   <div className="text-xs text-wood-400 dark:text-wood-500">
@@ -191,7 +211,14 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
 
         {/* Footer — import button */}
         <div className="p-4 border-t border-wood-200 dark:border-wood-700 flex justify-between items-center">
-          <input ref={fileInputRef} type="file" accept=".json" onChange={handleImport} className="hidden" id="pm-import-file" />
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".json"
+            onChange={handleImport}
+            className="hidden"
+            id="pm-import-file"
+          />
           <label
             htmlFor="pm-import-file"
             className="cursor-pointer text-sm px-3 py-1.5 rounded bg-wood-100 dark:bg-wood-700 text-wood-700 dark:text-wood-200 hover:bg-wood-200 dark:hover:bg-wood-600 transition-colors"

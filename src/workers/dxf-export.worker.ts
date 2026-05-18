@@ -70,26 +70,67 @@ function addLayer(lines: string[], name: string, color: number) {
 
 function addRect(lines: string[], x: number, y: number, w: number, h: number, layer: string) {
   lines.push(
-    '0', 'LWPOLYLINE', '8', layer,
-    '90', '4', '70', '1',
-    '10', String(x), '20', String(y),
-    '10', String(x + w), '20', String(y),
-    '10', String(x + w), '20', String(y + h),
-    '10', String(x), '20', String(y + h),
+    '0',
+    'LWPOLYLINE',
+    '8',
+    layer,
+    '90',
+    '4',
+    '70',
+    '1',
+    '10',
+    String(x),
+    '20',
+    String(y),
+    '10',
+    String(x + w),
+    '20',
+    String(y),
+    '10',
+    String(x + w),
+    '20',
+    String(y + h),
+    '10',
+    String(x),
+    '20',
+    String(y + h),
   );
 }
 
-function addLabel(lines: string[], part: { x: number; y: number; width: number; length: number; label: string }, yOffset: number, layer: string) {
+function addLabel(
+  lines: string[],
+  part: { x: number; y: number; width: number; length: number; label: string },
+  yOffset: number,
+  layer: string,
+) {
   const cx = part.x + part.width / 2;
   const cy = part.y + part.length / 2 + yOffset;
   const text = `${part.label} (${part.width}×${part.length})`;
   lines.push(
-    '0', 'TEXT', '8', layer,
-    '10', String(cx), '20', String(cy), '30', '0',
-    '40', '10', // text height
-    '1', text,
-    '72', '1', '73', '2',
-    '11', String(cx), '21', String(cy), '31', '0',
+    '0',
+    'TEXT',
+    '8',
+    layer,
+    '10',
+    String(cx),
+    '20',
+    String(cy),
+    '30',
+    '0',
+    '40',
+    '10', // text height
+    '1',
+    text,
+    '72',
+    '1',
+    '73',
+    '2',
+    '11',
+    String(cx),
+    '21',
+    String(cy),
+    '31',
+    '0',
   );
 }
 

@@ -75,21 +75,21 @@ export function OnboardingOverlay() {
         <h2 id="onboarding-title" className="text-lg font-bold text-wood-700 dark:text-wood-100 text-center">
           {t('onboarding.title')}
         </h2>
-        <p className="text-sm text-wood-500 dark:text-wood-400 text-center">{t('onboarding.subtitle')}</p>
+        <p className="text-sm text-wood-600 dark:text-wood-300 text-center">{t('onboarding.subtitle')}</p>
         <ol className="space-y-3">
           {STEPS.map((s, i) => (
             <li key={i} className="flex items-start gap-3">
-              <span className="text-wood-500 dark:text-wood-300 mt-0.5 shrink-0">{s.icon}</span>
+              <span className="text-wood-600 dark:text-wood-300 mt-0.5 shrink-0">{s.icon}</span>
               <div>
                 <div className="text-sm font-semibold text-wood-700 dark:text-wood-200">{t(s.titleKey)}</div>
-                <div className="text-xs text-wood-500 dark:text-wood-400">{t(s.descKey)}</div>
+                <div className="text-xs text-wood-600 dark:text-wood-300">{t(s.descKey)}</div>
               </div>
             </li>
           ))}
         </ol>
         <button
           onClick={dismiss}
-          className="w-full rounded bg-wood-500 px-4 py-2 text-sm font-medium text-white hover:bg-wood-600 transition-colors"
+          className="w-full rounded bg-wood-600 px-4 py-2 text-sm font-medium text-white hover:bg-wood-700 transition-colors"
           ref={(el) => el?.focus()}
         >
           {t('onboarding.getStarted')}

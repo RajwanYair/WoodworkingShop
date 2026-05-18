@@ -177,7 +177,7 @@ export function PresetsPanel() {
             <span className="text-xs font-medium text-wood-700 dark:text-wood-200 leading-tight mt-1">
               {isHe ? p.nameHe : p.nameEn}
             </span>
-            <span className="text-[10px] text-wood-500 dark:text-wood-400 leading-tight">
+            <span className="text-[10px] text-wood-600 dark:text-wood-300 leading-tight">
               {isHe ? p.descHe : p.descEn}
             </span>
           </button>

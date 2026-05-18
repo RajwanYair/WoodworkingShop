@@ -65,7 +65,7 @@ export function PartsTable() {
       <button
         type="button"
         onClick={() => handleSort(key)}
-        className="font-semibold hover:text-wood-500 dark:hover:text-wood-100 transition-colors"
+        className="font-semibold hover:text-wood-600 dark:hover:text-wood-100 transition-colors"
       >
         {label}
         {arrow(key)}
@@ -136,7 +136,10 @@ export function HardwareTable() {
             const overridden = hardwareQtyOverrides[h.id];
             const displayQty = overridden ?? h.qty;
             return (
-              <tr key={h.id} className={`border-b border-wood-100 dark:border-wood-800 ${overridden !== undefined ? 'bg-amber-50 dark:bg-amber-900/20' : ''}`}>
+              <tr
+                key={h.id}
+                className={`border-b border-wood-100 dark:border-wood-800 ${overridden !== undefined ? 'bg-amber-50 dark:bg-amber-900/20' : ''}`}
+              >
                 <td className="px-2 py-1">{h.name[lang]}</td>
                 <td className="px-2 py-1 text-end">
                   <input

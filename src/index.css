@@ -303,9 +303,9 @@
     outline: none !important;
     box-shadow: none !important;
   }
-  [role="tooltip"],
+  [role='tooltip'],
   [data-tooltip],
-  [aria-describedby] > [role="tooltip"] {
+  [aria-describedby] > [role='tooltip'] {
     display: none !important;
   }
 }

@@ -101,7 +101,7 @@ export function SmartOptimizerPanel() {
       <button
         onClick={handleFind}
         disabled={running || strategies.length === 0}
-        className="w-full py-2 rounded text-sm font-medium bg-wood-500 text-white hover:bg-wood-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className="w-full py-2 rounded text-sm font-medium bg-wood-600 text-white hover:bg-wood-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
         {running ? '…' : t('optimizer.find')}
       </button>
@@ -138,7 +138,7 @@ export function SmartOptimizerPanel() {
                 </div>
               </div>
               {comparing === idx && <ComparisonView suggestion={s} />}
-              <div className="flex gap-4 text-xs text-wood-500 dark:text-wood-400">
+              <div className="flex gap-4 text-xs text-wood-600 dark:text-wood-300">
                 {s.savings.sheetsRemoved > 0 && (
                   <span className="text-green-600 font-medium">
                     −{s.savings.sheetsRemoved} {t('optimizer.sheetsRemoved')}

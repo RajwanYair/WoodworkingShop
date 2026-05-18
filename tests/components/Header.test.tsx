@@ -25,7 +25,7 @@ describe('Header', () => {
     render(<Header />);
     const configureButtons = screen.getAllByText(/configure/i);
     // At least one button should have the active class
-    const hasActive = configureButtons.some((btn) => btn.className.includes('bg-wood-500'));
+    const hasActive = configureButtons.some((btn) => btn.className.includes('bg-wood-600'));
     expect(hasActive).toBe(true);
   });
 

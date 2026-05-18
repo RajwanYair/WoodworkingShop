@@ -59,7 +59,7 @@ export function DrawerConfig() {
 
           {/* Per-drawer heights */}
           <div className="space-y-2 ps-2 border-s-2 border-wood-200 dark:border-wood-700">
-            <p className="text-xs text-wood-500 dark:text-wood-400">
+            <p className="text-xs text-wood-600 dark:text-wood-300">
               {isHe ? 'גובה קופסת מגירה (מ"מ)' : 'Drawer box height (mm)'}
             </p>
             {Array.from({ length: config.drawerCount }, (_, i) => (

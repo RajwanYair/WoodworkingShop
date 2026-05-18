@@ -13,11 +13,7 @@
     "node_modules/**",
     "coverage/**"
   ],
-  "hints": {
-    "compat-api/css": "off",
-    "compat-api/html": "off",
-    "compat-api/js": "off",
-    "no-inline-styles": "off",
+"hints": {
     "axe/aria": "error"
   }
 }

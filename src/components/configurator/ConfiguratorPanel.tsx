@@ -47,7 +47,7 @@ export function ConfiguratorPanel() {
               key={ft}
               className={`flex-1 text-center cursor-pointer rounded border px-3 py-2 text-sm font-medium transition-colors ${
                 config.furnitureType === ft
-                  ? 'bg-wood-500 text-white border-wood-500'
+                  ? 'bg-wood-600 text-white border-wood-500'
                   : 'bg-wood-50 dark:bg-wood-800 text-wood-600 dark:text-wood-300 border-wood-200 dark:border-wood-700 hover:bg-wood-100 dark:hover:bg-wood-700'
               }`}
             >
@@ -77,7 +77,7 @@ export function ConfiguratorPanel() {
                 key={src}
                 className={`flex-1 text-center cursor-pointer rounded border px-3 py-2 text-sm font-medium transition-colors ${
                   (config.panelMaterialSource ?? 'carcass') === src
-                    ? 'bg-wood-500 text-white border-wood-500'
+                    ? 'bg-wood-600 text-white border-wood-500'
                     : 'bg-wood-50 dark:bg-wood-800 text-wood-600 dark:text-wood-300 border-wood-200 dark:border-wood-700 hover:bg-wood-100 dark:hover:bg-wood-700'
                 }`}
               >

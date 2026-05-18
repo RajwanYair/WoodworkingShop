@@ -142,7 +142,7 @@ export function CustomMaterialEditor() {
                   <button
                     onClick={commitEdit}
                     disabled={!editDraft.name[lang].trim()}
-                    className="flex-1 rounded bg-wood-500 px-2 py-1 text-xs font-medium text-white hover:bg-wood-600 disabled:opacity-40 transition-colors"
+                    className="flex-1 rounded bg-wood-600 px-2 py-1 text-xs font-medium text-white hover:bg-wood-700 disabled:opacity-40 transition-colors"
                   >
                     {t('config.saveEdit')}
                   </button>
@@ -188,7 +188,7 @@ export function CustomMaterialEditor() {
       {/* Toggle form */}
       <button
         onClick={() => setOpen(!open)}
-        className="text-sm text-wood-500 dark:text-wood-400 hover:underline"
+        className="text-sm text-wood-600 dark:text-wood-300 hover:underline"
         aria-expanded={open ? 'true' : 'false'}
       >
         {open ? '▾ ' : '▸ '}
@@ -288,7 +288,7 @@ export function CustomMaterialEditor() {
           <button
             onClick={handleAdd}
             disabled={!draft.name[lang].trim()}
-            className="col-span-2 rounded bg-wood-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-wood-600 disabled:opacity-40 transition-colors"
+            className="col-span-2 rounded bg-wood-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-wood-700 disabled:opacity-40 transition-colors"
           >
             {t('config.addMaterial')}
           </button>

@@ -11,7 +11,14 @@ export interface SmartOptimizerOptions {
 }
 
 const DEFAULT_OPTIONS: SmartOptimizerOptions = {
-  strategies: ['reduce-depth', 'co-nest-strips', 'adjust-width', 'adjust-height', 'material-swap', 'shelf-count-reduce'],
+  strategies: [
+    'reduce-depth',
+    'co-nest-strips',
+    'adjust-width',
+    'adjust-height',
+    'material-swap',
+    'shelf-count-reduce',
+  ],
   tolerance: 20,
   maxResults: 5,
 };

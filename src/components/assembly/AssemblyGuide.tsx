@@ -32,7 +32,7 @@ export function AssemblyGuide() {
           <button
             type="button"
             onClick={() => window.print()}
-            className="px-3 py-1.5 text-xs rounded border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors print:hidden flex items-center gap-1.5"
+            className="px-3 py-1.5 text-xs rounded border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors print:hidden flex items-center gap-1.5"
             title={t('assembly.print')}
             aria-label={t('assembly.print')}
           >
@@ -49,7 +49,7 @@ export function AssemblyGuide() {
               onClick={() => setViewMode('paginated')}
               className={`px-3 py-1.5 transition-colors ${
                 viewMode === 'paginated'
-                  ? 'bg-wood-500 text-white'
+                  ? 'bg-wood-600 text-white'
                   : 'bg-wood-50 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-700'
               }`}
               aria-pressed={viewMode === 'paginated' ? 'true' : 'false'}
@@ -61,7 +61,7 @@ export function AssemblyGuide() {
               onClick={() => setViewMode('all')}
               className={`px-3 py-1.5 transition-colors ${
                 viewMode === 'all'
-                  ? 'bg-wood-500 text-white'
+                  ? 'bg-wood-600 text-white'
                   : 'bg-wood-50 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-700'
               }`}
               aria-pressed={viewMode === 'all' ? 'true' : 'false'}
@@ -124,7 +124,7 @@ export function AssemblyGuide() {
             <button
               onClick={() => setActiveStep(Math.min(steps.length - 1, activeStep + 1))}
               disabled={activeStep === steps.length - 1}
-              className="px-4 py-2 rounded text-sm font-medium bg-wood-500 text-white hover:bg-wood-600 disabled:opacity-30 transition-colors"
+              className="px-4 py-2 rounded text-sm font-medium bg-wood-600 text-white hover:bg-wood-700 disabled:opacity-30 transition-colors"
             >
               {t('assembly.next')} →
             </button>
@@ -227,7 +227,7 @@ function StepCard({ step, stepCount, parts, lang, t }: StepCardProps) {
         </span>
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-bold bg-wood-500 text-white px-2 py-0.5 rounded-full">
+            <span className="text-xs font-bold bg-wood-600 text-white px-2 py-0.5 rounded-full">
               {step.stepNumber}/{stepCount}
             </span>
             <h3 className="text-base font-semibold text-wood-700 dark:text-wood-200">{step.title[lang]}</h3>
@@ -257,7 +257,7 @@ function StepCard({ step, stepCount, parts, lang, t }: StepCardProps) {
       {/* Parts involved in this step */}
       {step.parts.length > 0 && (
         <div className="mt-4 pt-3 border-t border-wood-100 dark:border-wood-800">
-          <p className="text-xs font-medium text-wood-500 dark:text-wood-400 mb-2">{t('assembly.partsInStep')}</p>
+          <p className="text-xs font-medium text-wood-600 dark:text-wood-300 mb-2">{t('assembly.partsInStep')}</p>
           <div className="flex flex-wrap gap-2">
             {parts
               .filter((p) => highlightedParts.has(p.id))

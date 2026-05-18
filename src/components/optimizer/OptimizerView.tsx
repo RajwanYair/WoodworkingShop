@@ -183,8 +183,15 @@ export function OptimizerView() {
     <div className="space-y-6">
       {/* v3.21.0 — Worker recalculation indicator */}
       {optimizationPending && (
-        <div className="flex items-center gap-2 text-xs text-wood-500 dark:text-wood-400 animate-pulse">
-          <svg className="h-3 w-3 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+        <div className="flex items-center gap-2 text-xs text-wood-600 dark:text-wood-300 animate-pulse">
+          <svg
+            className="h-3 w-3 animate-spin"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            aria-hidden="true"
+          >
             <circle cx="12" cy="12" r="10" strokeOpacity={0.25} />
             <path d="M12 2a10 10 0 0 1 10 10" />
           </svg>
@@ -266,12 +273,19 @@ export function OptimizerView() {
           <button
             onClick={handleDxfExportWorker}
             disabled={dxfExporting}
-            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
             title={t('optimizer.exportDxf')}
             aria-busy={dxfExporting}
           >
             {dxfExporting ? (
-              <svg className="h-3 w-3 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+              <svg
+                className="h-3 w-3 animate-spin"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                aria-hidden="true"
+              >
                 <circle cx="12" cy="12" r="10" strokeOpacity={0.25} />
                 <path d="M12 2a10 10 0 0 1 10 10" />
               </svg>
@@ -285,7 +299,7 @@ export function OptimizerView() {
               downloadAllSheetsGcode(displayOpt.sheets, filePrefix);
               useToastStore.getState().addToast(t('toast.gcodeExported'), 'success');
             }}
-            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
             title={t('optimizer.exportGcode')}
             aria-label={t('optimizer.exportGcode')}
           >
@@ -294,7 +308,7 @@ export function OptimizerView() {
           <button
             onClick={handleBomExportWorker}
             disabled={bomExporting}
-            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 disabled:opacity-50 disabled:cursor-wait transition-colors flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 disabled:opacity-50 disabled:cursor-wait transition-colors flex items-center gap-1.5"
             title={t('optimizer.exportBom')}
             aria-label={t('optimizer.exportBom')}
           >
@@ -310,7 +324,7 @@ export function OptimizerView() {
               downloadHardwareCsv(hwData, lang, `${filePrefix}-hardware-list.csv`);
               useToastStore.getState().addToast(t('toast.hardwareExported'), 'success');
             }}
-            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
             title={t('optimizer.exportHardware')}
             aria-label={t('optimizer.exportHardware')}
           >
@@ -321,7 +335,7 @@ export function OptimizerView() {
             className={`px-3 py-1.5 rounded text-xs font-medium border transition-colors flex items-center gap-1.5 ${
               colorBlindMode
                 ? 'bg-blue-100 dark:bg-blue-900 border-blue-400 text-blue-700 dark:text-blue-200'
-                : 'border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800'
+                : 'border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800'
             }`}
             title="Toggle color-blind safe palette"
             aria-pressed={colorBlindMode}
@@ -334,7 +348,7 @@ export function OptimizerView() {
             className={`px-3 py-1.5 rounded text-xs font-medium border transition-colors flex items-center gap-1.5 ${
               showPartNames
                 ? 'bg-wood-200 dark:bg-wood-700 border-wood-400 text-wood-700 dark:text-wood-200'
-                : 'border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800'
+                : 'border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800'
             }`}
             title={t('optimizer.toggleLabels')}
             aria-pressed={showPartNames}
@@ -344,7 +358,7 @@ export function OptimizerView() {
           {/* Sprint 151 — print cut sheets */}
           <button
             onClick={() => window.print()}
-            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
             title={t('optimizer.printSheets')}
             aria-label={t('optimizer.printSheets')}
           >
@@ -353,7 +367,7 @@ export function OptimizerView() {
           {/* v3.18.0 — bulk material replacement */}
           <button
             onClick={() => setShowBulkReplace(true)}
-            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
             title={t('bulkReplace.title', 'Bulk Material Replace')}
             aria-label={t('bulkReplace.title', 'Bulk Material Replace')}
           >
@@ -367,7 +381,7 @@ export function OptimizerView() {
 
       {/* Multi-cabinet label */}
       {multiCabinet && (
-        <p className="text-xs text-wood-500 dark:text-wood-400 italic">
+        <p className="text-xs text-wood-600 dark:text-wood-300 italic">
           Combined optimization for {cabinets.length} cabinets
         </p>
       )}
@@ -380,9 +394,7 @@ export function OptimizerView() {
       <div
         data-print-sheets
         className={
-          displayOpt.sheets.some((s) => s.sheetWidth > 1500 || s.sheetLength > 1500)
-            ? 'print-landscape'
-            : undefined
+          displayOpt.sheets.some((s) => s.sheetWidth > 1500 || s.sheetLength > 1500) ? 'print-landscape' : undefined
         }
       >
         {displayOpt.sheets.map((sheet) => (
@@ -400,8 +412,8 @@ export function OptimizerView() {
         ))}
         {/* v3.28.0 — print-only footer with stats */}
         <div className="print-only-footer hidden">
-          {filePrefix} — {displayOpt.totalSheets} {t('optimizer.sheets').toLowerCase()},{' '}
-          {displayOpt.overallYield}% {t('optimizer.yield').toLowerCase()}
+          {filePrefix} — {displayOpt.totalSheets} {t('optimizer.sheets').toLowerCase()}, {displayOpt.overallYield}%{' '}
+          {t('optimizer.yield').toLowerCase()}
         </div>
       </div>
 
@@ -495,14 +507,14 @@ function OffcutsPanel({ sheets, t }: { sheets: CutSheet[]; t: (k: string) => str
         <span className="flex items-center gap-2">
           <IconScissors size={15} />
           {t('optimizer.offcuts')}
-          <span className="ml-1 text-xs font-normal text-wood-500 dark:text-wood-400">({offcuts.length})</span>
+          <span className="ml-1 text-xs font-normal text-wood-600 dark:text-wood-300">({offcuts.length})</span>
         </span>
         {open ? <IconChevronDown size={14} /> : <IconChevronRight size={14} />}
       </button>
 
       {open && (
         <div className="px-4 pb-4">
-          <p className="text-xs text-wood-500 dark:text-wood-400 mb-3">{t('optimizer.offcutsDesc')}</p>
+          <p className="text-xs text-wood-600 dark:text-wood-300 mb-3">{t('optimizer.offcutsDesc')}</p>
           <div className="space-y-1.5">
             {offcuts.map((oc, i) => (
               <div
@@ -512,7 +524,7 @@ function OffcutsPanel({ sheets, t }: { sheets: CutSheet[]; t: (k: string) => str
                 <span className="font-medium text-wood-700 dark:text-wood-300">
                   {oc.material} {oc.thickness}mm
                 </span>
-                <span className="text-wood-500 dark:text-wood-400">
+                <span className="text-wood-600 dark:text-wood-300">
                   {Math.round(oc.w)} × {Math.round(oc.h)} mm
                 </span>
                 <span className="text-wood-400 dark:text-wood-500">{(oc.area / 1_000_000).toFixed(3)} m²</span>
@@ -629,8 +641,8 @@ function MaterialSummaryPanel({
                     <td className="py-1.5 pr-4 text-wood-700 dark:text-wood-300 font-medium">
                       {row.name[lang]} {row.thickness} mm
                     </td>
-                    <td className="py-1.5 pr-4 text-right text-wood-500 dark:text-wood-400">×{row.qty}</td>
-                    <td className="py-1.5 pr-4 text-right text-wood-500 dark:text-wood-400">{totalArea} m²</td>
+                    <td className="py-1.5 pr-4 text-right text-wood-600 dark:text-wood-300">×{row.qty}</td>
+                    <td className="py-1.5 pr-4 text-right text-wood-600 dark:text-wood-300">{totalArea} m²</td>
                     <td className="py-1.5 pr-4 text-right font-semibold text-wood-700 dark:text-wood-200">
                       {totalCost ? `₪${totalCost}` : '—'}
                     </td>
@@ -768,7 +780,7 @@ function ShoppingListPanel({
         <span className="flex items-center gap-2">
           <IconList size={15} />
           {t('optimizer.shoppingList')}
-          <span className="ml-1 text-xs font-normal text-wood-500 dark:text-wood-400">
+          <span className="ml-1 text-xs font-normal text-wood-600 dark:text-wood-300">
             {totalSheets} {t('optimizer.sheets').toLowerCase()} · ₪{totalCost.toFixed(0)}
           </span>
         </span>
@@ -777,7 +789,7 @@ function ShoppingListPanel({
 
       {open && (
         <div className="px-4 pb-4">
-          <p className="text-xs text-wood-500 dark:text-wood-400 mb-3">{t('optimizer.shoppingListDesc')}</p>
+          <p className="text-xs text-wood-600 dark:text-wood-300 mb-3">{t('optimizer.shoppingListDesc')}</p>
           <div className="space-y-1.5">
             {rows.map((row) => (
               <div
@@ -787,7 +799,7 @@ function ShoppingListPanel({
                 <span className="font-medium text-wood-700 dark:text-wood-300 flex-1">
                   {row.name[lang]} {row.thickness} mm
                 </span>
-                <span className="text-wood-500 dark:text-wood-400 mx-3">×{row.qty}</span>
+                <span className="text-wood-600 dark:text-wood-300 mx-3">×{row.qty}</span>
                 <span className="font-semibold text-wood-700 dark:text-wood-200">
                   {row.pricePerSheet > 0 ? `₪${(row.qty * row.pricePerSheet).toFixed(0)}` : '—'}
                 </span>
@@ -858,7 +870,7 @@ function SheetCard({
             downloadDxfForSheet(sheet, `${filePrefix}-sheet-${sheet.sheetIndex + 1}.dxf`);
             useToastStore.getState().addToast(t('toast.dxfExported'), 'success');
           }}
-          className="text-[10px] px-2 py-0.5 rounded border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1"
+          className="text-[10px] px-2 py-0.5 rounded border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1"
           title={`Download DXF for sheet ${sheet.sheetIndex + 1}`}
         >
           <IconDxf size={11} /> DXF
@@ -868,7 +880,7 @@ function SheetCard({
             downloadGcodeForSheet(sheet, `${filePrefix}-sheet-${sheet.sheetIndex + 1}.nc`);
             useToastStore.getState().addToast(t('toast.gcodeExported'), 'success');
           }}
-          className="text-[10px] px-2 py-0.5 rounded border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1"
+          className="text-[10px] px-2 py-0.5 rounded border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1"
           title={`Download G-code for sheet ${sheet.sheetIndex + 1}`}
           aria-label={`Download G-code for sheet ${sheet.sheetIndex + 1}`}
         >
@@ -983,7 +995,7 @@ function SheetCard({
             key={i}
             className={`text-[10px] cursor-default transition-opacity ${
               hoveredPartId && hoveredPartId !== p.partId ? 'opacity-30' : ''
-            } ${hoveredPartId === p.partId ? 'font-bold text-wood-700 dark:text-wood-100' : 'text-wood-500 dark:text-wood-400'}`}
+            } ${hoveredPartId === p.partId ? 'font-bold text-wood-700 dark:text-wood-100' : 'text-wood-600 dark:text-wood-300'}`}
             onMouseEnter={() => onHoverPart(p.partId)}
             onMouseLeave={() => onHoverPart(null)}
           >
@@ -1138,7 +1150,7 @@ function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="bg-wood-50 dark:bg-wood-800 rounded p-3 text-center">
       <div className="text-lg font-bold text-wood-700 dark:text-wood-200">{value}</div>
-      <div className="text-xs text-wood-500 dark:text-wood-400">{label}</div>
+      <div className="text-xs text-wood-600 dark:text-wood-300">{label}</div>
     </div>
   );
 }

@@ -95,11 +95,15 @@ function App() {
   }, []);
 
   return (
-    <div className={[darkMode ? 'dark' : '', highContrastMode ? 'high-contrast' : ''].filter(Boolean).join(' ') || undefined}>
+    <div
+      className={
+        [darkMode ? 'dark' : '', highContrastMode ? 'high-contrast' : ''].filter(Boolean).join(' ') || undefined
+      }
+    >
       <div className="min-h-screen bg-white dark:bg-wood-900 text-wood-800 dark:text-wood-100">
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 bg-wood-500 text-white px-3 py-1 rounded text-sm"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 bg-wood-600 text-white px-3 py-1 rounded text-sm"
         >
           {t('a11y.skipToContent')}
         </a>

@@ -199,7 +199,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
               onClick={() => setActiveView(v.id)}
               className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
                 activeView === v.id
-                  ? 'bg-wood-500 text-white'
+                  ? 'bg-wood-600 text-white'
                   : 'bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700'
               }`}
             >
@@ -207,7 +207,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
             </button>
           ))}
         </div>
-        <label className="ms-auto flex items-center gap-1.5 text-xs text-wood-500 dark:text-wood-400 cursor-pointer select-none">
+        <label className="ms-auto flex items-center gap-1.5 text-xs text-wood-600 dark:text-wood-300 cursor-pointer select-none">
           <input
             type="checkbox"
             checked={showDims}
@@ -1171,7 +1171,9 @@ function IsometricView({
           const gx = T + grainStep + i * grainStep;
           const [ax, ay] = iso(gx, H, 0);
           const [bx, by] = iso(gx, H, D);
-          return <line key={`grain-${i}`} x1={ax} y1={ay} x2={bx} y2={by} stroke="#cba" strokeWidth={0.3} opacity={0.5} />;
+          return (
+            <line key={`grain-${i}`} x1={ax} y1={ay} x2={bx} y2={by} stroke="#cba" strokeWidth={0.3} opacity={0.5} />
+          );
         })}
 
         {/* Drawer fronts (visible on the front face when no doors) */}
@@ -1184,7 +1186,12 @@ function IsometricView({
           return (
             <g key={`drawer-${i}`}>
               <polygon
-                points={isoQuad([fx, dy + reveal, 0], [fx + fw, dy + reveal, 0], [fx + fw, dy + fh - reveal, 0], [fx, dy + fh - reveal, 0])}
+                points={isoQuad(
+                  [fx, dy + reveal, 0],
+                  [fx + fw, dy + reveal, 0],
+                  [fx + fw, dy + fh - reveal, 0],
+                  [fx, dy + fh - reveal, 0],
+                )}
                 fill={color}
                 stroke="#555"
                 strokeWidth={0.7}

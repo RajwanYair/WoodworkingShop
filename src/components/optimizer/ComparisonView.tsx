@@ -10,7 +10,7 @@ export function ComparisonView({ suggestion }: { suggestion: OptimizationSuggest
       <h4 className="text-xs font-semibold text-wood-700 dark:text-wood-200 uppercase tracking-wide">
         {t('optimizer.comparison')}
       </h4>
-      <p className="text-xs text-wood-500 dark:text-wood-400">{suggestion.explanation[lang]}</p>
+      <p className="text-xs text-wood-600 dark:text-wood-300">{suggestion.explanation[lang]}</p>
 
       <div className="grid grid-cols-2 gap-4">
         <ConfigCard
@@ -66,19 +66,19 @@ function ConfigCard({
     <div className={`ring-2 ${ringColor} rounded p-3 bg-white dark:bg-wood-800 space-y-2`}>
       <div className={`text-xs font-bold ${accent === 'red' ? 'text-red-600' : 'text-green-600'}`}>{title}</div>
       <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
-        <span className="text-wood-500">{t('config.width')}</span>
+        <span className="text-wood-600 dark:text-wood-300">{t('config.width')}</span>
         <span className="font-medium">{config.width} mm</span>
-        <span className="text-wood-500">{t('config.height')}</span>
+        <span className="text-wood-600 dark:text-wood-300">{t('config.height')}</span>
         <span className="font-medium">{config.height} mm</span>
-        <span className="text-wood-500">{t('config.depth')}</span>
+        <span className="text-wood-600 dark:text-wood-300">{t('config.depth')}</span>
         <span className="font-medium">{config.depth} mm</span>
       </div>
       <div className="border-t border-wood-100 dark:border-wood-700 pt-1 grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
-        <span className="text-wood-500">{t('optimizer.sheets')}</span>
+        <span className="text-wood-600 dark:text-wood-300">{t('optimizer.sheets')}</span>
         <span className="font-medium">{result.totalSheets}</span>
-        <span className="text-wood-500">{t('optimizer.yield')}</span>
+        <span className="text-wood-600 dark:text-wood-300">{t('optimizer.yield')}</span>
         <span className="font-medium">{result.overallYield}%</span>
-        <span className="text-wood-500">{t('optimizer.waste')}</span>
+        <span className="text-wood-600 dark:text-wood-300">{t('optimizer.waste')}</span>
         <span className="font-medium">{(result.totalWaste / 1_000_000).toFixed(2)} m²</span>
       </div>
     </div>

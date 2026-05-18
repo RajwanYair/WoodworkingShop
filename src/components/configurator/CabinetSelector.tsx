@@ -38,7 +38,7 @@ export function CabinetSelector() {
         </h3>
         <button
           onClick={addCabinet}
-          className="text-xs bg-wood-500 hover:bg-wood-600 text-white px-2 py-0.5 rounded transition-colors"
+          className="text-xs bg-wood-600 hover:bg-wood-700 text-white px-2 py-0.5 rounded transition-colors"
         >
           + {t('project.add')}
         </button>
@@ -63,7 +63,7 @@ export function CabinetSelector() {
                 onDoubleClick={() => startRename(i)}
                 className={`text-xs px-2 py-1 rounded transition-colors ${
                   i === activeCabinetIndex
-                    ? 'bg-wood-500 text-white'
+                    ? 'bg-wood-600 text-white'
                     : 'bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700'
                 }`}
                 title={`${cab.name} — double-click to rename`}
@@ -99,7 +99,7 @@ export function CabinetSelector() {
       <div>
         <button
           onClick={() => setNotesOpen((o) => !o)}
-          className="text-[10px] text-wood-500 dark:text-wood-400 hover:underline"
+          className="text-[10px] text-wood-600 dark:text-wood-300 hover:underline"
         >
           {notesOpen ? '▾' : '▸'} {t('project.notes')}
         </button>

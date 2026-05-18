@@ -103,7 +103,7 @@ export function CostEstimatePanel() {
           </div>
           <div className="flex flex-wrap gap-x-3 gap-y-0.5">
             {segments.map((seg, i) => (
-              <span key={i} className="flex items-center gap-1 text-[10px] text-wood-500 dark:text-wood-400">
+              <span key={i} className="flex items-center gap-1 text-[10px] text-wood-600 dark:text-wood-300">
                 <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: seg.color }} />
                 {seg.label}
               </span>
@@ -164,7 +164,7 @@ export function CostEstimatePanel() {
                     setEditingPrice(sc.material);
                     setPriceInput(String(sc.pricePerSheet || defaultPrice));
                   }}
-                  className={`font-medium shrink-0 hover:underline ${hasOverride ? 'text-amber-600 dark:text-amber-400' : 'text-wood-700 dark:text-wood-200'}`}
+                  className={`font-medium shrink-0 hover:underline ${hasOverride ? 'text-amber-800 dark:text-amber-300' : 'text-wood-700 dark:text-wood-200'}`}
                   title={t('cost.editPrice')}
                 >
                   ₪{sc.subtotal} {hasOverride && <span className="text-[10px]">✎</span>}
@@ -269,7 +269,7 @@ export function CostEstimatePanel() {
                       setEditingHw(hw.id);
                       setHwPriceInput(String(hw.unitPrice));
                     }}
-                    className={`font-medium shrink-0 hover:underline ${hasHwOverride ? 'text-amber-600 dark:text-amber-400' : 'text-wood-700 dark:text-wood-200'}`}
+                    className={`font-medium shrink-0 hover:underline ${hasHwOverride ? 'text-amber-800 dark:text-amber-300' : 'text-wood-700 dark:text-wood-200'}`}
                     title={t('cost.editPrice')}
                   >
                     ₪{hw.subtotal}
@@ -291,8 +291,8 @@ export function CostEstimatePanel() {
       {cost.wasteCost > 0 && (
         <div className="border-t border-wood-100 dark:border-wood-800 pt-2">
           <div className="flex justify-between text-xs">
-            <span className="text-wood-500 dark:text-wood-400">{t('cost.waste')}</span>
-            <span className="font-medium text-amber-600 dark:text-amber-400">₪{cost.wasteCost}</span>
+            <span className="text-wood-600 dark:text-wood-300">{t('cost.waste')}</span>
+            <span className="font-medium text-amber-800 dark:text-amber-300">₪{cost.wasteCost}</span>
           </div>
         </div>
       )}
@@ -305,7 +305,10 @@ export function CostEstimatePanel() {
           {editingLabourHours ? (
             <div className="flex items-center gap-1 shrink-0">
               <input
-                type="number" min={0} step={0.5} value={labourHoursInput}
+                type="number"
+                min={0}
+                step={0.5}
+                value={labourHoursInput}
                 onChange={(e) => setLabourHoursInput(e.target.value)}
                 onBlur={() => {
                   const val = parseFloat(labourHoursInput);
@@ -324,7 +327,10 @@ export function CostEstimatePanel() {
             </div>
           ) : (
             <button
-              onClick={() => { setEditingLabourHours(true); setLabourHoursInput(String(labourHours)); }}
+              onClick={() => {
+                setEditingLabourHours(true);
+                setLabourHoursInput(String(labourHours));
+              }}
               className="font-medium shrink-0 hover:underline text-wood-700 dark:text-wood-200"
               title={t('cost.editLabourHours', 'Click to set estimated labour hours')}
             >
@@ -334,12 +340,15 @@ export function CostEstimatePanel() {
         </div>
         {/* Labour rate */}
         <div className="flex justify-between items-center text-xs gap-2">
-          <span className="text-wood-500 dark:text-wood-400 flex-1">{t('cost.labourRate')}</span>
+          <span className="text-wood-600 dark:text-wood-300 flex-1">{t('cost.labourRate')}</span>
           {editingLabourRate ? (
             <div className="flex items-center gap-1 shrink-0">
               <span className="text-wood-400">₪</span>
               <input
-                type="number" min={0} step={5} value={labourRateInput}
+                type="number"
+                min={0}
+                step={5}
+                value={labourRateInput}
                 onChange={(e) => setLabourRateInput(e.target.value)}
                 onBlur={() => {
                   const val = Number(labourRateInput);
@@ -358,8 +367,11 @@ export function CostEstimatePanel() {
             </div>
           ) : (
             <button
-              onClick={() => { setEditingLabourRate(true); setLabourRateInput(String(labourRate)); }}
-              className={`font-medium shrink-0 hover:underline ${labourRate !== DEFAULT_LABOUR_RATE ? 'text-amber-600 dark:text-amber-400' : 'text-wood-700 dark:text-wood-200'}`}
+              onClick={() => {
+                setEditingLabourRate(true);
+                setLabourRateInput(String(labourRate));
+              }}
+              className={`font-medium shrink-0 hover:underline ${labourRate !== DEFAULT_LABOUR_RATE ? 'text-amber-800 dark:text-amber-300' : 'text-wood-700 dark:text-wood-200'}`}
               title={t('cost.editLabourRate', 'Click to override labour rate (₪/hr)')}
             >
               ₪{labourRate}/h{labourRate !== DEFAULT_LABOUR_RATE && <span className="text-[10px]"> ✎</span>}
@@ -373,7 +385,10 @@ export function CostEstimatePanel() {
             <div className="flex items-center gap-1 shrink-0">
               <span className="text-wood-400">₪</span>
               <input
-                type="number" min={0} step={10} value={finishInput}
+                type="number"
+                min={0}
+                step={10}
+                value={finishInput}
                 onChange={(e) => setFinishInput(e.target.value)}
                 onBlur={() => {
                   const val = Number(finishInput);
@@ -391,7 +406,10 @@ export function CostEstimatePanel() {
             </div>
           ) : (
             <button
-              onClick={() => { setEditingFinish(true); setFinishInput(String(finishCost)); }}
+              onClick={() => {
+                setEditingFinish(true);
+                setFinishInput(String(finishCost));
+              }}
               className="font-medium shrink-0 hover:underline text-wood-700 dark:text-wood-200"
               title={t('cost.editFinish', 'Click to set finish/paint cost')}
             >
@@ -405,7 +423,7 @@ export function CostEstimatePanel() {
       {cabinets.length > 1 && totalNonZero && (
         <div className="border-t border-wood-100 dark:border-wood-800 pt-2">
           <div className="flex justify-between text-xs">
-            <span className="text-wood-500 dark:text-wood-400">{t('cost.perUnit')}</span>
+            <span className="text-wood-600 dark:text-wood-300">{t('cost.perUnit')}</span>
             <span className="font-medium text-wood-600 dark:text-wood-300">
               ~₪{Math.round(cost.totalCost / cabinets.length)}
             </span>
@@ -421,7 +439,7 @@ export function CostEstimatePanel() {
         </div>
         {totalWeightKg > 0 && (
           <div className="flex justify-between mt-1">
-            <span className="text-xs text-wood-500 dark:text-wood-400">{t('cost.totalWeight')}</span>
+            <span className="text-xs text-wood-600 dark:text-wood-300">{t('cost.totalWeight')}</span>
             <span className="text-xs text-wood-600 dark:text-wood-300">~{totalWeightKg.toFixed(1)} kg</span>
           </div>
         )}

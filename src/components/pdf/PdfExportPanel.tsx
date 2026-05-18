@@ -70,7 +70,7 @@ export function PdfExportPanel() {
         <button
           onClick={handleGenerate}
           disabled={generating}
-          className="px-6 py-3 rounded-lg text-sm font-medium bg-wood-500 text-white hover:bg-wood-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="px-6 py-3 rounded-lg text-sm font-medium bg-wood-600 text-white hover:bg-wood-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {generating ? t('pdf.generating') : t('pdf.generate')}
         </button>
@@ -79,7 +79,7 @@ export function PdfExportPanel() {
       {/* Preview summary */}
       <div className="border border-wood-200 dark:border-wood-700 rounded-lg p-4 space-y-2 max-w-md mx-auto">
         <h3 className="text-sm font-medium text-wood-600 dark:text-wood-300">PDF Contents:</h3>
-        <ul className="text-xs text-wood-500 dark:text-wood-400 space-y-1 list-disc list-inside">
+        <ul className="text-xs text-wood-600 dark:text-wood-300 space-y-1 list-disc list-inside">
           {includeCover && <li>Cover page{store.projectName.trim() ? ` — ${store.projectName.trim()}` : ''}</li>}
           <li>Full specifications</li>
           <li>Parts list ({store.parts.length} parts)</li>

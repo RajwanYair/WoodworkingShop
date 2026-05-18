@@ -11,6 +11,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.31.0] — 2026-05-18
+
+### ✨ Added
+
+- **Comprehensive ROADMAP.md rewrite** with competitive landscape table (10 products compared across 18+ capabilities), architecture decision log, decisions reconsidered audit, production readiness checklist, and continuous enhancement guidelines.
+
+### 🔧 Changed
+
+- **`.vscode/settings.json`**: removed redundant `css.lint.compatibleVendorPrefixes`, `css.lint.vendorPrefix`, `css.lint.unknownProperties` waivers — `css.validate: false` already covers Tailwind 4 projects.
+- **`.vscode/settings.json`**: removed `github-actions.workflows.pinned.enabled: false` waiver — extension auth issue, not a code problem.
+- **`.hintrc`**: removed disabled `compat-api/css`, `compat-api/html`, `compat-api/js`, `no-inline-styles` hints — browserslist already handles exclusions.
+- **`.prettierignore`**: added `coverage/`, `test-results/`, `playwright-report/` to prevent formatting of generated output.
+- **Header test**: updated active tab class assertion from `bg-wood-500` to `bg-wood-600` (WCAG AA fix from v3.28.0).
+
+### 🗑 Removed
+
+- **`scripts/fix-wcag.cjs`**: one-shot WCAG contrast fixer already applied; dead code removed.
+
 ## [3.30.0] — 2026-06-01
 
 ### ✨ Added
@@ -121,7 +139,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### ✨ Added
 
 - **Bulk material replacement** (`src/components/optimizer/BulkReplaceModal.tsx`):
-  - New modal (opened via the **Replace** toolbar button in the Optimizer) lets users swap any material with another across *all* cabinets in one click.
+  - New modal (opened via the **Replace** toolbar button in the Optimizer) lets users swap any material with another across _all_ cabinets in one click.
   - Shows a summary of how many cabinets will be affected before applying.
   - Operation is fully undoable via the existing undo stack (`Ctrl+Z`).
 - **`bulkReplaceMaterial(fromKey, toKey)`** action added to `cabinet-store.ts`; swaps `carcassMaterial` and `backPanelMaterial` on all cabinets.

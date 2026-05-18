@@ -36,9 +36,7 @@ test('homepage passes axe WCAG 2.1 AA checks', async ({ page }) => {
     .exclude('#radix-ui-portal') // exclude portals from third-party UI libs
     .analyze();
 
-  const violations = results.violations.filter(
-    (v) => !KNOWN_VIOLATIONS_ALLOWLIST.includes(v.id),
-  );
+  const violations = results.violations.filter((v) => !KNOWN_VIOLATIONS_ALLOWLIST.includes(v.id));
 
   // Report violations clearly before failing
   if (violations.length > 0) {
@@ -62,13 +60,9 @@ test('configurator tab passes axe WCAG 2.1 AA checks', async ({ page }) => {
   // Navigate to the configurator tab (first tab)
   await page.getByRole('tab').first().click();
 
-  const results = await new AxeBuilder({ page })
-    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
-    .analyze();
+  const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
 
-  const violations = results.violations.filter(
-    (v) => !KNOWN_VIOLATIONS_ALLOWLIST.includes(v.id),
-  );
+  const violations = results.violations.filter((v) => !KNOWN_VIOLATIONS_ALLOWLIST.includes(v.id));
 
   expect(violations, `Found ${violations.length} accessibility violation(s) in configurator`).toHaveLength(0);
 });

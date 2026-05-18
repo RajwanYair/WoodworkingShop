@@ -70,15 +70,21 @@ export function BulkReplaceModal({ onClose }: Props) {
   const targetMaterials = allMaterials.filter((m) => m.key !== fromKey);
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-label={t('bulkReplace.title', 'Bulk Material Replace')}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
-    >
-      <div className="absolute inset-0 bg-black/50" aria-hidden="true" />
-      <div className="relative bg-white dark:bg-wood-900 rounded-xl shadow-2xl w-full max-w-md p-6 flex flex-col gap-5">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Backdrop — click outside to close */}
+      <button
+        type="button"
+        className="absolute inset-0 bg-black/50 w-full h-full border-0 p-0 cursor-default"
+        onClick={onClose}
+        aria-label="Close dialog"
+        tabIndex={-1}
+      />
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={t('bulkReplace.title', 'Bulk Material Replace')}
+        className="relative bg-white dark:bg-wood-900 rounded-xl shadow-2xl w-full max-w-md p-6 flex flex-col gap-5"
+      >
         {/* Header */}
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold text-wood-900 dark:text-wood-50">
@@ -87,7 +93,7 @@ export function BulkReplaceModal({ onClose }: Props) {
           <button
             onClick={onClose}
             aria-label={t('common.close', 'Close')}
-            className="p-1.5 rounded hover:bg-wood-100 dark:hover:bg-wood-800 text-wood-500 dark:text-wood-400 transition-colors"
+            className="p-1.5 rounded hover:bg-wood-100 dark:hover:bg-wood-800 text-wood-600 dark:text-wood-300 transition-colors"
           >
             ✕
           </button>
@@ -95,7 +101,10 @@ export function BulkReplaceModal({ onClose }: Props) {
 
         {/* Description */}
         <p className="text-sm text-wood-600 dark:text-wood-400">
-          {t('bulkReplace.description', 'Replace one material with another across all cabinets in this project. This action is undoable.')}
+          {t(
+            'bulkReplace.description',
+            'Replace one material with another across all cabinets in this project. This action is undoable.',
+          )}
         </p>
 
         {/* From */}
@@ -106,39 +115,48 @@ export function BulkReplaceModal({ onClose }: Props) {
           <select
             ref={firstSelectRef}
             value={fromKey}
-            onChange={(e) => { setFromKey(e.target.value); setApplied(false); }}
+            onChange={(e) => {
+              setFromKey(e.target.value);
+              setApplied(false);
+            }}
             className="rounded-lg border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 text-wood-900 dark:text-wood-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
           >
             {usedMaterials.length > 0
               ? usedMaterials.map((m) => (
-                  <option key={m.key} value={m.key}>{materialLabel(m.key)}</option>
+                  <option key={m.key} value={m.key}>
+                    {materialLabel(m.key)}
+                  </option>
                 ))
               : allMaterials.map((m) => (
-                  <option key={m.key} value={m.key}>{materialLabel(m.key)}</option>
-                ))
-            }
+                  <option key={m.key} value={m.key}>
+                    {materialLabel(m.key)}
+                  </option>
+                ))}
           </select>
         </label>
 
         {/* To */}
         <label className="flex flex-col gap-1.5">
-          <span className="text-sm font-medium text-wood-700 dark:text-wood-300">
-            {t('bulkReplace.to', 'With')}
-          </span>
+          <span className="text-sm font-medium text-wood-700 dark:text-wood-300">{t('bulkReplace.to', 'With')}</span>
           <select
             value={toKey}
-            onChange={(e) => { setToKey(e.target.value); setApplied(false); }}
+            onChange={(e) => {
+              setToKey(e.target.value);
+              setApplied(false);
+            }}
             className="rounded-lg border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 text-wood-900 dark:text-wood-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
           >
             {targetMaterials.map((m) => (
-              <option key={m.key} value={m.key}>{materialLabel(m.key)}</option>
+              <option key={m.key} value={m.key}>
+                {materialLabel(m.key)}
+              </option>
             ))}
           </select>
         </label>
 
         {/* Summary */}
         {fromKey && toKey && fromKey !== toKey && (
-          <p className="text-xs text-wood-500 dark:text-wood-400 bg-amber-50 dark:bg-amber-950/30 rounded-lg p-3 border border-amber-200 dark:border-amber-800">
+          <p className="text-xs text-wood-600 dark:text-wood-300 bg-amber-50 dark:bg-amber-950/30 rounded-lg p-3 border border-amber-200 dark:border-amber-800">
             {t('bulkReplace.summary', {
               from: materialLabel(fromKey),
               to: materialLabel(toKey),

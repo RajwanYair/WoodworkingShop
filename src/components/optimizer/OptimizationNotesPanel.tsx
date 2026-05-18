@@ -14,11 +14,12 @@ import {
 } from '../layout/Icons';
 
 const STRATEGY_ICON: Record<SmartStrategy, React.ReactElement> = {
-  'reduce-depth': <IconGrainVertical size={14} className="text-amber-600" />,
-  'co-nest-strips': <IconRefresh size={14} className="text-amber-600" />,
-  'adjust-width': <IconGrainHorizontal size={14} className="text-amber-600" />,
-  'adjust-height': <IconGrainVertical size={14} className="text-amber-600" />,
-  'material-swap': <IconRefresh size={14} className="text-amber-600" />,
+  'reduce-depth': <IconGrainVertical size={14} className="text-amber-800 dark:text-amber-300" />,
+  'co-nest-strips': <IconRefresh size={14} className="text-amber-800 dark:text-amber-300" />,
+  'adjust-width': <IconGrainHorizontal size={14} className="text-amber-800 dark:text-amber-300" />,
+  'adjust-height': <IconGrainVertical size={14} className="text-amber-800 dark:text-amber-300" />,
+  'material-swap': <IconRefresh size={14} className="text-amber-800 dark:text-amber-300" />,
+  'shelf-count-reduce': <IconChevronDown size={14} className="text-amber-800 dark:text-amber-300" />,
 };
 
 function suggestionKey(s: OptimizationSuggestion): string {
@@ -74,7 +75,7 @@ export function OptimizationNotesPanel() {
       {/* ── Header ── */}
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-amber-200 dark:border-amber-700/50">
         <div className="flex items-center gap-2">
-          <span className="text-amber-600 dark:text-amber-400">
+          <span className="text-amber-800 dark:text-amber-300">
             <IconLightbulb size={16} />
           </span>
           <h3 className="text-sm font-semibold text-amber-800 dark:text-amber-300">{t('optimizer.notes')}</h3>
@@ -102,7 +103,7 @@ export function OptimizationNotesPanel() {
           </label>
           <button
             onClick={() => setOpen((o) => !o)}
-            className="text-amber-600 dark:text-amber-400 hover:underline select-none flex items-center gap-0.5"
+            className="text-amber-800 dark:text-amber-300 hover:underline select-none flex items-center gap-0.5"
             aria-expanded={open}
           >
             {open ? <IconChevronDown size={14} /> : <IconChevronRight size={14} />}
@@ -114,9 +115,7 @@ export function OptimizationNotesPanel() {
       {open && (
         <div className="p-3 space-y-2">
           {visible.length === 0 ? (
-            <p className="text-xs text-amber-600/70 dark:text-amber-400/60 text-center py-1">
-              {t('optimizer.notesEmpty')}
-            </p>
+            <p className="text-xs text-amber-800 dark:text-amber-300 text-center py-1">{t('optimizer.notesEmpty')}</p>
           ) : (
             visible.map((s) => {
               const key = suggestionKey(s);
@@ -146,7 +145,7 @@ export function OptimizationNotesPanel() {
                           </span>
                         )}
                         {s.savings.wasteReduced > 0 && (
-                          <span className="text-[11px] text-wood-500 dark:text-wood-400">
+                          <span className="text-[11px] text-wood-600 dark:text-wood-300">
                             −{(s.savings.wasteReduced / 1_000_000).toFixed(3)} m² {t('optimizer.wasteReduced')}
                           </span>
                         )}
@@ -167,7 +166,7 @@ export function OptimizationNotesPanel() {
                     </button>
                     <button
                       onClick={() => handleDismiss(s)}
-                      className="px-2.5 py-1 text-[11px] font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 rounded hover:bg-wood-100 dark:hover:bg-wood-700 transition-colors flex items-center"
+                      className="px-2.5 py-1 text-[11px] font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 rounded hover:bg-wood-100 dark:hover:bg-wood-700 transition-colors flex items-center"
                     >
                       <IconX size={12} />
                     </button>
@@ -179,7 +178,7 @@ export function OptimizationNotesPanel() {
           {dismissed.size > 0 && (
             <button
               onClick={() => setDismissed(new Set())}
-              className="text-[10px] text-amber-600/60 dark:text-amber-400/50 hover:underline w-full text-end"
+              className="text-[10px] text-amber-800 dark:text-amber-300 hover:underline w-full text-end"
             >
               {t('optimizer.notesRestore')}
             </button>

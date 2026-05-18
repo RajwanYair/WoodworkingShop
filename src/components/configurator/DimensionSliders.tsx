@@ -52,7 +52,7 @@ export function DimensionSliders() {
         </legend>
         <button
           onClick={toggleUnits}
-          className="text-[10px] px-2 py-0.5 rounded border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors"
+          className="text-[10px] px-2 py-0.5 rounded border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors"
           title={t('config.toggleUnits')}
         >
           {units === 'metric' ? 'mm → in' : 'in → mm'}
@@ -108,8 +108,8 @@ export function DimensionSliders() {
                 onClick={() => setConfig({ kickHeight: preset })}
                 className={`text-[10px] px-2 py-0.5 rounded border transition-colors ${
                   (config.kickHeight ?? 0) === preset
-                    ? 'border-wood-500 bg-wood-500 text-white'
-                    : 'border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800'
+                    ? 'border-wood-500 bg-wood-600 text-white'
+                    : 'border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800'
                 }`}
                 aria-label={`Set kick height to ${preset} mm`}
               >
@@ -231,7 +231,7 @@ function DimensionRow({ spec, value, step, unitLabel, metric, label, displayValu
         <p
           id={errorId}
           {...ariaLiveProp}
-          className={'mt-1 text-[11px] ' + (isInvalid ? 'text-red-600' : 'text-amber-600 dark:text-amber-400')}
+          className={'mt-1 text-[11px] ' + (isInvalid ? 'text-red-600' : 'text-amber-800 dark:text-amber-300')}
         >
           {message}
         </p>

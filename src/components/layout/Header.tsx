@@ -35,8 +35,20 @@ const TAB_ICONS = {
 
 export function Header() {
   const { t, i18n } = useTranslation();
-  const { activeTab, setActiveTab, darkMode, toggleDarkMode, highContrastMode, toggleHighContrast, units, toggleUnits, canUndo, canRedo, undo, redo } =
-    useCabinetStore();
+  const {
+    activeTab,
+    setActiveTab,
+    darkMode,
+    toggleDarkMode,
+    highContrastMode,
+    toggleHighContrast,
+    units,
+    toggleUnits,
+    canUndo,
+    canRedo,
+    undo,
+    redo,
+  } = useCabinetStore();
   const lang = i18n.language;
   const [showTemplates, setShowTemplates] = useState(false);
   const [showProjects, setShowProjects] = useState(false);
@@ -116,7 +128,7 @@ export function Header() {
             aria-current={activeTab === tab ? 'page' : undefined}
             title={`${t(`tabs.${tab}`)} (Alt+${i + 1})`}
             className={`px-3 py-1.5 rounded text-sm font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-              activeTab === tab ? 'bg-wood-500 text-white' : 'text-wood-200 hover:bg-wood-600'
+              activeTab === tab ? 'bg-wood-600 text-white' : 'text-wood-200 hover:bg-wood-600'
             }`}
           >
             {TAB_ICONS[tab]}
