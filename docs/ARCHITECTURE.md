@@ -447,3 +447,65 @@ graph LR
   class init,store,comp process
   class ci check
 ```
+
+## ♿ Accessibility (WCAG 2.2 AA) — v3.42.0
+
+Cabinet Planner targets **WCAG 2.2 Level AA** compliance. This section documents the patterns, CI gates, and runtime mechanisms in place.
+
+### Compliance Target
+
+| Standard | Level | Status |
+| -------- | ----- | ------ |
+| WCAG 2.2 | AA | ✅ Enforced in CI via axe-core |
+| WCAG 2.1 | AA | ✅ (subset of 2.2) |
+| WCAG 2.2 | AAA | ⚠ Partial (not fully targeted) |
+
+### CI Gate — axe-core + Playwright
+
+Every push to `main` runs `tests/e2e/accessibility.spec.ts`, which:
+
+1. Launches the built app with `@playwright/test`
+2. Injects `@axe-core/playwright` and runs a full audit
+3. Fails the CI pipeline on **any WCAG 2.1 AA violation** (rule set: `wcag2a`, `wcag2aa`, `wcag21aa`)
+
+The test covers the homepage and the configurator tab. Violations are surfaced as named assertion failures with the impacted selector and the WCAG criterion ID.
+
+### Focus Management
+
+| Pattern | Location |
+| ------- | -------- |
+| **Focus trap** | `ShortcutsModal.tsx` and `TemplatePicker.tsx` — modal dialogs trap focus within the modal boundary and restore it to the trigger element on close |
+| **Skip-to-main** | `index.html` — `<a href="#main-content">` skip link at the top of the DOM, translatable via `a11y.skipToContent` i18n key |
+| **Tab order** | All interactive elements follow logical DOM order; `tabIndex` is only used for hidden inputs (`tabIndex={-1}`) |
+| **Keyboard shortcuts** | `?` = shortcuts modal, `Ctrl+Z` = undo, `Ctrl+Y` = redo, `1`–`5` = tab navigation (documented in ShortcutsModal) |
+
+### Visual Accessibility
+
+| Feature | Implementation |
+| ------- | -------------- |
+| **High-contrast mode** | `.high-contrast` CSS class on `<body>`, toggled via `toggleHighContrast()` store action. Adds forced white-on-black overrides for all UI elements. |
+| **Color-blind mode** | `colorBlindMode` store toggle adds deuteranopia-friendly palette (amber → blue shift) for cut-sheet diagrams |
+| **`prefers-reduced-motion`** | CSS `@media (prefers-reduced-motion: reduce)` disables all transitions and animations (`transition: none !important`, `animation: none !important`) |
+| **`prefers-color-scheme`** | Dark mode auto-detected on first load via `detectOsDarkMode()`, persisted to localStorage |
+| **Minimum contrast** | Tailwind design tokens use `wood-600` (#5A3E28) on white, which exceeds 4.5:1 contrast ratio |
+
+### ARIA Patterns
+
+| Component | ARIA usage |
+| --------- | ---------- |
+| Tab bar (Header) | `role="tablist"`, `role="tab"`, `aria-selected`, `aria-controls` |
+| Modal dialogs | `role="dialog"`, `aria-modal="true"`, `aria-labelledby` |
+| Toggle buttons | `aria-pressed`, `aria-label` |
+| Expandable sections | `aria-expanded` |
+| SVG exports | `<title>` elements on every polygon (isometric view, cut-sheet diagrams) |
+| Form inputs | `aria-label` or `<label for>` on all inputs |
+
+### RTL Support
+
+Hebrew (`he`) locale triggers `document.dir = 'rtl'`. Tailwind's logical-property utilities (`start`, `end`, `ms-*`, `me-*`) are used throughout to ensure correct mirroring without manual CSS overrides.
+
+### Known Limitations
+
+- PDF exports (`@react-pdf/renderer`) are not keyboard-navigable (the generated PDF is a binary file; this is a platform constraint).
+- The isometric 3D SVG view does not expose individual panel labels to screen readers — only the cabinet-level `<title>` and `<desc>` are present (improvement tracked in ROADMAP).
+

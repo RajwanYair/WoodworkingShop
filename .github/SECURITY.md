@@ -56,3 +56,22 @@
 - [ ] No new `eval`, `Function()`, or `innerHTML` with user content
 - [ ] `npm audit` reports no new high/critical issues
 - [ ] Dependencies added are necessary and from trusted sources
+
+## ♿ Accessibility Security Stance — v3.42.0
+
+Accessibility violations are treated as **quality-blocking issues** in this project. The following measures ensure WCAG 2.2 AA compliance is maintained:
+
+| Gate | Details |
+| ---- | ------- |
+| **axe-core CI** | `@axe-core/playwright` runs on every PR. Any WCAG 2.1 AA violation fails the pipeline with a named assertion error. |
+| **Lighthouse CI** | Performance and accessibility categories are gated via `config/lighthouserc.json`. `categories:accessibility` must be ≥ 0.90 (error-level). |
+| **PR checklist** | Contributors are asked to run the app with keyboard-only navigation and a screen reader on any UI change. |
+
+### Reporting Accessibility Issues
+
+Accessibility barriers that affect users with disabilities are treated as **security-equivalent defects** — they restrict access and can violate applicable law (e.g. WCAG, ADA, EN 301 549).
+
+- Report via a **public GitHub issue** tagged `accessibility` (unlike security vulnerabilities, a11y issues may be reported publicly)
+- Include: browser/OS, assistive technology used, steps to reproduce, WCAG criterion affected
+- Target resolution: ≤ 14 days for Level A violations, ≤ 30 days for Level AA
+

@@ -11,6 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.42.0] — 2026-05-18
+
+### 📝 Documentation
+
+- **`docs/ARCHITECTURE.md` — Accessibility section added** (`## ♿ Accessibility (WCAG 2.2 AA)`): documents the compliance target, axe-core CI gate, focus trap pattern, skip-link, keyboard shortcuts, high-contrast mode, color-blind mode, `prefers-reduced-motion`, `prefers-color-scheme`, ARIA patterns, RTL support, and known limitations.
+- **`.github/SECURITY.md` — Accessibility security stance added**: defines a11y violations as quality-blocking issues, documents the axe-core + Lighthouse CI gates, and provides an a11y responsible-disclosure process (public GitHub issue, 14-day/30-day SLA for AA violations).
+
 ## [3.41.0] — 2026-05-18
 
 ### ✅ Tests
