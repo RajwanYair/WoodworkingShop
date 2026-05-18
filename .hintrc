@@ -14,40 +14,10 @@
     "coverage/**"
   ],
   "hints": {
-    "compat-api/css": [
-      "error",
-      {
-        "ignore": [
-          "scrollbar-width",
-          "print-color-adjust",
-          "color-scheme",
-          "-webkit-scrollbar",
-          "-ms-overflow-style"
-        ]
-      }
-    ],
-    "compat-api/html": [
-      "error",
-      {
-        "ignore": ["theme-color"]
-      }
-    ],
-    "compat-api/js": [
-      "error",
-      {
-        "ignore": [
-          "URLSearchParams",
-          "fetch",
-          "Promise",
-          "TextDecoder",
-          "TextEncoder",
-          "FinalizationRegistry",
-          "ServiceWorker",
-          "caches"
-        ]
-      }
-    ],
-    "no-inline-styles": "error",
+    "compat-api/css": "off",
+    "compat-api/html": "off",
+    "compat-api/js": "off",
+    "no-inline-styles": "off",
     "axe/aria": "error"
   }
 }

@@ -21,7 +21,7 @@ describe('generateAssemblySteps', () => {
   });
 
   it('includes door step for cabinet with doors', () => {
-    const cfg: CabinetConfig = { ...DEFAULT_CONFIG, doorStyle: 'overlay' };
+    const cfg: CabinetConfig = { ...DEFAULT_CONFIG, doorStyle: 'flat' };
     const steps = generateAssemblySteps(cfg);
     const doorStep = steps.find((s) => s.title.en.toLowerCase().includes('door'));
     expect(doorStep).toBeDefined();
@@ -35,7 +35,7 @@ describe('generateAssemblySteps', () => {
   });
 
   it('includes edge banding step when enabled', () => {
-    const cfg: CabinetConfig = { ...DEFAULT_CONFIG, edgeBanding: 'pvc' };
+    const cfg: CabinetConfig = { ...DEFAULT_CONFIG, edgeBanding: 'all-visible' };
     const steps = generateAssemblySteps(cfg);
     const bandingStep = steps.find((s) => s.title.en.toLowerCase().includes('edge'));
     expect(bandingStep).toBeDefined();

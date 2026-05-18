@@ -9,6 +9,12 @@
   "eslint.useFlatConfig": true,
   "files.eol": "\n",
 
+  // Built-in CSS validator produces false-positive browser-compat warnings
+  // (IE, older Safari) for Tailwind CSS projects. Tailwind IntelliSense
+  // extension handles CSS validation instead.
+  "css.validate": false,
+  "scss.validate": false,
+
   "files.exclude": {
     "**/dist/**": true,
     "**/coverage/**": true,
