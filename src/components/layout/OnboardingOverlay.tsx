@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { IconSettings, IconEye, IconRuler, IconHammer, IconDocument, IconHelp } from './Icons';
 
 const SEEN_KEY = 'onboarding-seen';
@@ -30,28 +31,8 @@ export function OnboardingOverlay() {
 
   const dialogRef = useRef<HTMLDivElement>(null);
 
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      dismiss();
-      return;
-    }
-    // Focus trap
-    if (e.key === 'Tab' && dialogRef.current) {
-      const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-      );
-      if (focusable.length === 0) return;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    }
-  }, []);
+  // Sprint 8 — focus trap (Tab cycling + Escape = dismiss) via shared hook
+  useFocusTrap(dialogRef, visible, dismiss);
 
   if (!visible) return null;
 
@@ -62,7 +43,6 @@ export function OnboardingOverlay() {
       role="dialog"
       aria-modal="true"
       aria-labelledby="onboarding-title"
-      onKeyDown={handleKeyDown}
     >
       <button
         type="button"
@@ -90,7 +70,6 @@ export function OnboardingOverlay() {
         <button
           onClick={dismiss}
           className="w-full rounded bg-wood-600 px-4 py-2 text-sm font-medium text-white hover:bg-wood-700 transition-colors"
-          ref={(el) => el?.focus()}
         >
           {t('onboarding.getStarted')}
         </button>

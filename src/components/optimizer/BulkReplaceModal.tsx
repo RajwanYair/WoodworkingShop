@@ -5,7 +5,8 @@
  * cabinets in the project. The operation is undoable via the normal undo stack.
  */
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
@@ -38,21 +39,10 @@ export function BulkReplaceModal({ onClose }: Props) {
   const [toKey, setToKey] = useState<string>(allMaterials[0]?.key ?? '');
   const [applied, setApplied] = useState(false);
 
-  const firstSelectRef = useRef<HTMLSelectElement>(null);
+  const dialogContainerRef = useRef<HTMLDivElement>(null);
 
-  // Focus trap
-  useEffect(() => {
-    firstSelectRef.current?.focus();
-  }, []);
-
-  // ESC closes
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', handler);
-    return () => document.removeEventListener('keydown', handler);
-  }, [onClose]);
+  // Sprint 8 — focus trap via shared hook (also handles ESC)
+  useFocusTrap(dialogContainerRef, true, onClose);
 
   function handleApply() {
     if (!fromKey || !toKey || fromKey === toKey) return;
@@ -80,6 +70,7 @@ export function BulkReplaceModal({ onClose }: Props) {
         tabIndex={-1}
       />
       <div
+        ref={dialogContainerRef}
         role="dialog"
         aria-modal="true"
         aria-label={t('bulkReplace.title', 'Bulk Material Replace')}
@@ -113,7 +104,6 @@ export function BulkReplaceModal({ onClose }: Props) {
             {t('bulkReplace.from', 'Replace')}
           </span>
           <select
-            ref={firstSelectRef}
             value={fromKey}
             onChange={(e) => {
               setFromKey(e.target.value);

@@ -1,4 +1,5 @@
-import { useRef, useEffect, useState, useCallback } from 'react';
+import { useRef, useState, useCallback } from 'react';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useToastStore } from '../../store/toast-store';
@@ -30,37 +31,8 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
 
   const refresh = useCallback(() => setProjects(listProjects()), []);
 
-  // Focus trap
-  useEffect(() => {
-    const el = dialogRef.current;
-    if (!el) return;
-    const focusable = el.querySelectorAll<HTMLElement>(
-      'button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])',
-    );
-    if (focusable.length > 0) focusable[0].focus();
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-        return;
-      }
-      if (e.key !== 'Tab') return;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (e.shiftKey) {
-        if (document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        }
-      } else {
-        if (document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        }
-      }
-    };
-    el.addEventListener('keydown', onKey);
-    return () => el.removeEventListener('keydown', onKey);
-  }, [onClose]);
+  // Sprint 8 — focus trap via shared hook
+  useFocusTrap(dialogRef, true, onClose);
 
   const handleSave = () => {
     if (!saveName.trim()) return;
