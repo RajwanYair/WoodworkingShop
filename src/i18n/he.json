@@ -374,5 +374,14 @@
     "apply": "החל על הכל",
     "applied": "בוצע! השתמש ב-Ctrl+Z לביטול.",
     "summary": "יעודכנו {{count}} ארון/ות: {{from}} ← {{to}}"
+  },
+  "snapshot": {
+    "title": "צילומי פרויקט",
+    "save": "שמור צילום",
+    "namePlaceholder": "שם צילום…",
+    "restore": "שחזור",
+    "delete": "מחק צילום",
+    "empty": "אין צילומים שמורים עדכה.",
+    "savedAt": "נשמר {{when}}"
   }
 }

@@ -150,6 +150,33 @@ export interface CabinetEntry {
   notes?: string;
 }
 
+// Sprint 10 — Project snapshot history
+export interface ProjectSnapshot {
+  id: string;
+  name: string;
+  cabinets: CabinetEntry[];
+  timestamp: string; // ISO 8601
+}
+
+const SNAPSHOTS_KEY = 'woodworkingshop:snapshots';
+function loadSnapshots(): ProjectSnapshot[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = window.localStorage.getItem(SNAPSHOTS_KEY);
+    return raw ? (JSON.parse(raw) as ProjectSnapshot[]) : [];
+  } catch {
+    return [];
+  }
+}
+function saveSnapshots(snaps: ProjectSnapshot[]): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(SNAPSHOTS_KEY, JSON.stringify(snaps));
+  } catch {
+    /* quota exceeded — ignore */
+  }
+}
+
 export interface CabinetState {
   // Multi-cabinet project
   cabinets: CabinetEntry[];
@@ -223,6 +250,12 @@ export interface CabinetState {
   loadProject: (cabinets: CabinetEntry[]) => void;
   /** v3.18.0 — Replace every occurrence of fromKey with toKey across all cabinets (undoable). */
   bulkReplaceMaterial: (fromKey: string, toKey: string) => void;
+
+  // Sprint 10 — Snapshot history
+  snapshots: ProjectSnapshot[];
+  saveSnapshot: (name: string) => void;
+  restoreSnapshot: (id: string) => void;
+  deleteSnapshot: (id: string) => void;
 }
 
 function derive(
@@ -309,6 +342,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
   const prefs = loadPrefs();
 
   return {
+    snapshots: loadSnapshots(),
     cabinets: initialCabinets,
     activeCabinetIndex: initialActiveIndex,
     ...initial,
@@ -612,6 +646,47 @@ export const useCabinetStore = create<CabinetState>((set) => {
           canUndo: true,
           canRedo: false,
         };
+      }),
+
+    saveSnapshot: (name) =>
+      set((state) => {
+        const snap: ProjectSnapshot = {
+          id: `snap-${Date.now()}`,
+          name: name.trim() || `Snapshot ${state.snapshots.length + 1}`,
+          cabinets: state.cabinets,
+          timestamp: new Date().toISOString(),
+        };
+        const snapshots = [...state.snapshots, snap];
+        saveSnapshots(snapshots);
+        return { snapshots };
+      }),
+
+    restoreSnapshot: (id) =>
+      set((state) => {
+        const snap = state.snapshots.find((s) => s.id === id);
+        if (!snap) return state;
+        const cabinets = snap.cabinets;
+        const activeCabinetIndex = Math.min(state.activeCabinetIndex, cabinets.length - 1);
+        const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
+        const base = deriveBaseProject(cabinets, activeCabinetIndex);
+        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
+        return {
+          cabinets,
+          activeCabinetIndex,
+          ...base,
+          optimizationPending: true,
+          _past: past,
+          _future: [],
+          canUndo: true,
+          canRedo: false,
+        };
+      }),
+
+    deleteSnapshot: (id) =>
+      set((state) => {
+        const snapshots = state.snapshots.filter((s) => s.id !== id);
+        saveSnapshots(snapshots);
+        return { snapshots };
       }),
 
     toggleDarkMode: () =>

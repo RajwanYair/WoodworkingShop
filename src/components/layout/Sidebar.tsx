@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { CostEstimatePanel } from '../configurator/CostEstimatePanel';
+import { SnapshotPanel } from './SnapshotPanel';
 import { IconBarChart, IconX } from './Icons';
 
 export function Sidebar() {
@@ -31,6 +32,7 @@ export function Sidebar() {
       </dl>
 
       <CostEstimatePanel />
+      <SnapshotPanel />
     </>
   );
 
