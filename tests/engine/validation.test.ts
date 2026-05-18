@@ -172,5 +172,36 @@ describe('validateConfig', () => {
     expect(issues.some((i) => i.code === 'HINGE_CLEARANCE_INSUFFICIENT')).toBe(false);
     expect(issues.some((i) => i.code === 'WIDE_SINGLE_DOOR')).toBe(false);
   });
+
+  // ── Drawer height rules (Sprint 13) ──
+
+  it('raises DRAWER_HEIGHT_TOO_SMALL when drawerHeights contains a value < 100 mm', () => {
+    const issues = validateConfig(cfg({ drawerCount: 2, drawerHeights: [150, 60] }));
+    expect(issues.some((i) => i.code === 'DRAWER_HEIGHT_TOO_SMALL')).toBe(true);
+    const issue = issues.find((i) => i.code === 'DRAWER_HEIGHT_TOO_SMALL')!;
+    expect(issue.severity).toBe('error');
+    expect(issue.suggestedValue).toBe(100);
+  });
+
+  it('does not raise DRAWER_HEIGHT_TOO_SMALL for adequate drawer heights', () => {
+    const issues = validateConfig(cfg({ drawerCount: 3, drawerHeights: [150, 150, 120] }));
+    expect(issues.some((i) => i.code === 'DRAWER_HEIGHT_TOO_SMALL')).toBe(false);
+  });
+
+  it('raises DRAWER_STACK_OVERFLOW when total drawer stack exceeds interior height', () => {
+    // height=600, plywood-17 → internalH ≈ 566, 3 drawers × 200mm + 2 gaps × 10 = 620mm > 566mm
+    const issues = validateConfig(
+      cfg({ height: 600, drawerCount: 3, drawerHeights: [200, 200, 200], shelfCount: 0 }),
+    );
+    expect(issues.some((i) => i.code === 'DRAWER_STACK_OVERFLOW')).toBe(true);
+    expect(issues.find((i) => i.code === 'DRAWER_STACK_OVERFLOW')!.severity).toBe('error');
+  });
+
+  it('does not raise DRAWER_STACK_OVERFLOW when stack fits', () => {
+    // height=900, drawerCount=2 × 150mm + 10mm gap = 310mm, internalH ≈ 866mm — fine
+    const issues = validateConfig(cfg({ height: 900, drawerCount: 2 }));
+    expect(issues.some((i) => i.code === 'DRAWER_STACK_OVERFLOW')).toBe(false);
+  });
 });
+
 

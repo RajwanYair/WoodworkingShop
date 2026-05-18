@@ -61,6 +61,17 @@ const MAX_SINGLE_DOOR_WIDTH_MM = 800;
 const MIN_PRACTICAL_DOOR_HEIGHT_MM = 200;
 
 /**
+ * Minimum internal clearance above the drawer stack (mm).
+ */
+const MIN_ABOVE_DRAWERS_MM = 200;
+
+/**
+ * Minimum drawer box height in mm — below this, standard side-mount runner
+ * hardware cannot be reliably installed.
+ */
+const MIN_DRAWER_HEIGHT_MM = 100;
+
+/**
  * Run all manufacturing constraint checks on a cabinet configuration.
  *
  * @returns Array of ValidationIssue. Empty array means the config is valid.
@@ -226,6 +237,41 @@ export function validateConfig(
         message: {
           en: `High drawer density: ${config.drawerCount} drawers in a ${config.height} mm cabinet. Verify that each drawer has at least 150 mm clear opening height.`,
           he: `צפיפות מגירות גבוהה: ${config.drawerCount} מגירות בארון של ${config.height} מ"מ. ודא שגובה הפתיחה של כל מגירה לפחות 150 מ"מ.`,
+        },
+        field: 'drawerCount',
+      });
+    }
+
+    // ── Per-drawer height checks (Sprint 13) ──
+
+    const drawerGapMm = 10; // clearance between drawer faces
+    const heights: number[] = Array.from(
+      { length: config.drawerCount },
+      (_, i) => config.drawerHeights?.[i] ?? 150,
+    );
+    const totalStackH = heights.reduce((s, h) => s + h, 0) + (config.drawerCount - 1) * drawerGapMm;
+
+    const tooShallowIdx = heights.findIndex((h) => h < MIN_DRAWER_HEIGHT_MM);
+    if (tooShallowIdx >= 0) {
+      issues.push({
+        code: 'DRAWER_HEIGHT_TOO_SMALL',
+        severity: 'error',
+        message: {
+          en: `Drawer ${tooShallowIdx + 1} height (${heights[tooShallowIdx]} mm) is below the minimum of ${MIN_DRAWER_HEIGHT_MM} mm. Standard side-mount runners need at least ${MIN_DRAWER_HEIGHT_MM} mm of box height.`,
+          he: `גובה מגירה ${tooShallowIdx + 1} (${heights[tooShallowIdx]} מ"מ) קטן מהמינימום ${MIN_DRAWER_HEIGHT_MM} מ"מ. מנגנוני הזזה סטנדרטיים דורשים לפחות ${MIN_DRAWER_HEIGHT_MM} מ"מ.`,
+        },
+        field: 'drawerCount',
+        suggestedValue: MIN_DRAWER_HEIGHT_MM,
+      });
+    }
+
+    if (totalStackH > dims.internalHeight) {
+      issues.push({
+        code: 'DRAWER_STACK_OVERFLOW',
+        severity: 'error',
+        message: {
+          en: `Total drawer stack height (${Math.round(totalStackH)} mm) exceeds the available interior height (${Math.round(dims.internalHeight)} mm). Reduce drawer heights or increase cabinet height.`,
+          he: `סך גובה המגירות (${Math.round(totalStackH)} מ"מ) חורג מגובה הפנים הזמין (${Math.round(dims.internalHeight)} מ"מ). הפחת גבהי מגירות או הגדל גובה הארון.`,
         },
         field: 'drawerCount',
       });
