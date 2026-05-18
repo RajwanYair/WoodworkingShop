@@ -11,6 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.40.0] — 2026-05-18
+
+### ⚡ Performance
+
+- **Lighthouse CI budget tightened** (`config/lighthouserc.json`):
+  - `categories:performance` upgraded from `warn` → `error` (min 0.80 — now a CI blocker)
+  - `largest-contentful-paint` tightened from 4 000 ms → **3 000 ms** (`warn` → `error`)
+  - `interactive` (TTI) tightened from 5 000 ms → **3 500 ms** (`warn` → `error`)
+  - `total-blocking-time` tightened from 500 ms → **400 ms**
+  - Added `cumulative-layout-shift` assertion: `warn` at ≤ 0.1
+- **`index.html` — CDN preconnect**: added `<link rel="preconnect">` and `<link rel="dns-prefetch">` for `cdnjs.cloudflare.com` (used by react-pdf Twemoji fallback at PDF generation time).
+
 ## [3.39.0] — 2026-05-18
 
 ### ✨ Enhanced
