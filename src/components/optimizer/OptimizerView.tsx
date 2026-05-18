@@ -376,7 +376,15 @@ export function OptimizerView() {
       <OptimizationNotesPanel />
 
       {/* Individual sheets — data-print-sheets targets print CSS (Sprint 151) */}
-      <div data-print-sheets>
+      {/* v3.28.0: wide sheets (>1500mm) get landscape page layout in print */}
+      <div
+        data-print-sheets
+        className={
+          displayOpt.sheets.some((s) => s.sheetWidth > 1500 || s.sheetLength > 1500)
+            ? 'print-landscape'
+            : undefined
+        }
+      >
         {displayOpt.sheets.map((sheet) => (
           <SheetCard
             key={sheet.sheetIndex}
@@ -390,6 +398,11 @@ export function OptimizerView() {
             t={t}
           />
         ))}
+        {/* v3.28.0 — print-only footer with stats */}
+        <div className="print-only-footer hidden">
+          {filePrefix} — {displayOpt.totalSheets} {t('optimizer.sheets').toLowerCase()},{' '}
+          {displayOpt.overallYield}% {t('optimizer.yield').toLowerCase()}
+        </div>
       </div>
 
       {/* Sprint 160 — Material usage summary */}

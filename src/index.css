@@ -256,4 +256,50 @@
     padding-bottom: 4pt;
     margin-bottom: 8pt;
   }
+
+  /* v3.28.0 — print-only footer with CSS page counter */
+  .print-only-footer {
+    display: block !important;
+    font-size: 9pt;
+    color: #666 !important;
+    border-top: 0.5pt solid #ccc;
+    padding-top: 3pt;
+    margin-top: 8pt;
+    text-align: center;
+  }
+
+  /* v3.28.0 — named @page for landscape cut sheets (apply class="print-landscape" to wrapper) */
+  @page landscape-cut {
+    size: A4 landscape;
+    margin: 10mm;
+  }
+  .print-landscape {
+    page: landscape-cut;
+  }
+
+  /* v3.28.0 — avoid orphaned single rows at bottom of page */
+  tr {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* v3.28.0 — ensure colored yield bars and part-color rectangles print in color */
+  [data-print-sheets] svg rect,
+  [data-print-sheets] svg text,
+  .print-color {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* v3.28.0 — hide interactive focus rings, tooltips, and scroll indicators on paper */
+  *:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  [role="tooltip"],
+  [data-tooltip],
+  [aria-describedby] > [role="tooltip"] {
+    display: none !important;
+  }
 }
