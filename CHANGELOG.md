@@ -11,6 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.38.0] — 2026-05-18
+
+### ✨ Added
+
+- **Bulk material reassignment UI**: when a project has more than one cabinet, an `Apply to all cabinets` underline button appears below each material dropdown in the Material Selector. Clicking it calls the existing `bulkReplaceMaterial` store action, replacing every cabinet's carcass (or back panel) material with the currently-selected one. Shows a toast confirming success or informing the user all cabinets are already uniform. Fully undoable.
+- `material.reassignAll`, `material.reassignAllTip`, `material.reassignedAll`, `material.alreadyUniform` i18n keys added to EN + HE.
+
 ## [3.37.0] — 2026-05-18
 
 ### ✨ Added

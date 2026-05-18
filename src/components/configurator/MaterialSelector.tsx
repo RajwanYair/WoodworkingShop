@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { panelMaterials, backMaterials } from '../../engine/materials';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
+import { useToastStore } from '../../store/toast-store';
 import type { Lang, Material } from '../../engine/types';
 
 /** Sprint 172 — colored swatch square for the currently selected material */
@@ -19,9 +20,12 @@ function MaterialSwatch({ color }: { color?: string }) {
 
 export function MaterialSelector() {
   const { t, i18n } = useTranslation();
-  const { config, setConfig } = useCabinetStore();
+  const { config, setConfig, cabinets } = useCabinetStore();
+  const bulkReplaceMaterial = useCabinetStore((s) => s.bulkReplaceMaterial);
+  const addToast = useToastStore((s) => s.addToast);
   const customMaterials = useCustomMaterialsStore((s) => s.materials);
   const lang = i18n.language as Lang;
+  const multiCabinet = cabinets.length > 1;
 
   const panels = [...panelMaterials(), ...customMaterials.filter((m) => m.category === 'panel')] as Material[];
   const backs = [...backMaterials(), ...customMaterials.filter((m) => m.category === 'back')] as Material[];
@@ -51,6 +55,27 @@ export function MaterialSelector() {
             </option>
           ))}
         </select>
+        {multiCabinet && (
+          <button
+            type="button"
+            onClick={() => {
+              const toKey = config.carcassMaterial;
+              const uniqueFromKeys = [
+                ...new Set(cabinets.map((c) => c.config.carcassMaterial).filter((k) => k !== toKey)),
+              ];
+              if (uniqueFromKeys.length === 0) {
+                addToast(t('material.alreadyUniform'), 'info');
+                return;
+              }
+              uniqueFromKeys.forEach((fromKey) => bulkReplaceMaterial(fromKey, toKey));
+              addToast(t('material.reassignedAll'), 'success');
+            }}
+            className="mt-1 text-xs text-wood-500 hover:text-wood-700 dark:text-wood-400 dark:hover:text-wood-200 underline"
+            title={t('material.reassignAllTip')}
+          >
+            {t('material.reassignAll')}
+          </button>
+        )}
       </label>
 
       <label className="block">
@@ -70,6 +95,27 @@ export function MaterialSelector() {
             </option>
           ))}
         </select>
+        {multiCabinet && config.hasBack !== false && (
+          <button
+            type="button"
+            onClick={() => {
+              const toKey = config.backPanelMaterial;
+              const uniqueFromKeys = [
+                ...new Set(cabinets.map((c) => c.config.backPanelMaterial).filter((k) => k !== toKey)),
+              ];
+              if (uniqueFromKeys.length === 0) {
+                addToast(t('material.alreadyUniform'), 'info');
+                return;
+              }
+              uniqueFromKeys.forEach((fromKey) => bulkReplaceMaterial(fromKey, toKey));
+              addToast(t('material.reassignedAll'), 'success');
+            }}
+            className="mt-1 text-xs text-wood-500 hover:text-wood-700 dark:text-wood-400 dark:hover:text-wood-200 underline"
+            title={t('material.reassignAllTip')}
+          >
+            {t('material.reassignAll')}
+          </button>
+        )}
       </label>
 
       <label className="flex items-start gap-2 cursor-pointer">

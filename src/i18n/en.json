@@ -106,6 +106,12 @@
     "supplier": "Supplier",
     "qtyHint": "Edit qty cells to override calculated amounts"
   },
+  "material": {
+    "reassignAll": "Apply to all cabinets",
+    "reassignAllTip": "Set this material on every cabinet in the project",
+    "reassignedAll": "Material applied to all cabinets",
+    "alreadyUniform": "All cabinets already use this material"
+  },
   "optimizer": {
     "title": "Cut Sheet Optimization",
     "sheets": "Sheets Required",
