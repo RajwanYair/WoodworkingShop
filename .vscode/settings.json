@@ -65,7 +65,15 @@
     "**/coverage": true
   },
 
-  "webhint.ignoreHintedFiles": ["**/dist/**", "**/node_modules/**", "**/coverage/**", "**/playwright-report/**"],
+  // ShellCheck: only lint actual shell scripts (.sh/.bash) — never YAML/JSON.
+  // GitHub Actions workflow files use ${{ }} expression syntax that shellcheck
+  // cannot parse; the GitHub Actions extension handles workflow validation.
+  "shellcheck.ignorePatterns": {
+    "**/*.yml": true,
+    "**/*.yaml": true,
+    "**/*.json": true,
+    "**/*.jsonc": true
+  },
 
   "html.validate.scripts": true,
   "html.validate.styles": true,

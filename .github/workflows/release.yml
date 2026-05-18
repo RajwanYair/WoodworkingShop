@@ -39,7 +39,7 @@ jobs:
 
       - name: Create dist archive + checksums
         run: |
-          cd dist
+          cd dist || exit 1
           tar -czf ../woodworkingshop-dist.tar.gz .
           cd ..
           sha256sum woodworkingshop-dist.tar.gz > woodworkingshop-dist.tar.gz.sha256
@@ -70,9 +70,9 @@ jobs:
         id: version
         run: |
           if [ -n "${{ github.event.inputs.version }}" ]; then
-            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+            echo "version=${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
           else
-            echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+            echo "version=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Extract changelog
@@ -89,7 +89,7 @@ jobs:
             echo "notes<<EOF"
             echo "$NOTES"
             echo "EOF"
-          } >> $GITHUB_OUTPUT
+          } >> "$GITHUB_OUTPUT"
 
       - name: Create Release
         uses: softprops/action-gh-release@v2

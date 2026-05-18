@@ -11,6 +11,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.33.0] — 2026-07-06
+
+### 🔧 Changed
+
+- **ShellCheck 0.11.0 integration**: installed system-wide via winget; added `.shellcheckrc` at project root (`shell=bash`, `severity=warning`); configured VS Code to ignore YAML/JSON files (GitHub Actions `${{ }}` syntax is not valid Bash — validation handled by the `github.vscode-github-actions` extension instead).
+- **CI workflow hardening** (`release.yml`): `cd dist` now uses `cd dist || exit 1` (SC2164 — prevents silent failure if directory is missing); all `>> $GITHUB_OUTPUT` occurrences now properly quoted as `>> "$GITHUB_OUTPUT"` (SC2086).
+- **CI workflow hardening** (`ci.yml`): quoted `$GITHUB_OUTPUT` in the Playwright cache-key step (SC2086).
+- **VS Code recommendations** (`.vscode/extensions.json`): added `timonwong.shellcheck` and `github.vscode-github-actions` — shellcheck extension uses the system binary; GitHub Actions extension validates workflow YAML natively.
+- **Dead config cleanup**: removed `.hintrc` (webhint — no CI runner), `.htmlhintrc` (htmlhint — no CI runner), and WoodworkingShop-local `.npmrc` (caused `npm warn config ignoring workspace config` in npm workspace context).
+- **`package.json`**: removed duplicate `bundle:report` alias (same as `bundle:check`); added `engines.node: >=22.0.0` constraint.
+- **`tsconfig.test.json`**: added `erasableSyntaxOnly: true` — now consistent with `tsconfig.app.json` and `tsconfig.node.json`.
+- **`playwright.config.ts`**: CI E2E runs now use the pre-built `dist/` via `npm run preview` (port 4173) instead of starting the dev server — matches production bundle, faster startup.
+
+### 🛠 Tooling
+
+- 0 errors, 0 warnings, 0 notes from: TypeScript, ESLint, Prettier, markdownlint, ShellCheck, Vitest (309/309 tests), bundle budget checks.
+
 ## [3.32.0] — 2026-07-06
 
 ### ✨ Added

@@ -1,6 +1,6 @@
 {
   "name": "woodworkingshop",
-  "version": "3.32.0",
+  "version": "3.33.0",
   "description": "Browser-based woodworking cabinet planner — parametric design, MaxRects cut-sheet optimizer, PDF/DXF/G-code export, 6-view SVG preview, bilingual EN+HE, PWA offline",
   "keywords": [
     "woodworking",
@@ -50,7 +50,6 @@
     "check": "npm run typecheck && npm run lint && npm run lint:md && npm run format:check && npm run test",
     "ci": "npm run check && npm run build && npm run bundle:check",
     "i18n:coverage": "node scripts/i18n-coverage.js",
-    "bundle:report": "node scripts/bundle-report.js",
     "bundle:check": "node scripts/bundle-report.js",
     "lighthouse": "npx --yes @lhci/cli@0.14.x autorun --config=config/lighthouserc.json",
     "lint:md": "markdownlint-cli2 \"*.md\" \"docs/**/*.md\" \".github/**/*.md\"",

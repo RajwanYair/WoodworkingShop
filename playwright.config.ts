@@ -16,7 +16,9 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'list',
   use: {
-    baseURL: 'http://localhost:5173/WoodworkingShop/',
+    // In CI: preview server serves the pre-built dist on port 4173.
+    // Locally: dev server on port 5173.
+    baseURL: process.env.CI ? 'http://localhost:4173/WoodworkingShop/' : 'http://localhost:5173/WoodworkingShop/',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
@@ -26,8 +28,10 @@ export default defineConfig({
     { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
   ],
   webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:5173/WoodworkingShop/',
+    // CI: serve the pre-built dist artifact via `vite preview` (no rebuild needed).
+    // Local: use the hot-reload dev server.
+    command: process.env.CI ? 'npm run preview -- --port 4173 --strictPort' : 'npm run dev',
+    url: process.env.CI ? 'http://localhost:4173/WoodworkingShop/' : 'http://localhost:5173/WoodworkingShop/',
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,
     stdout: 'ignore',

@@ -17,6 +17,7 @@
 
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
   "include": ["tests/**/*.ts", "tests/**/*.tsx", "src/env.d.ts"],
