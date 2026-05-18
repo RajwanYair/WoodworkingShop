@@ -134,9 +134,7 @@ function App() {
             {/* Sprint 170 — print-only header: shows project name + date on paper */}
             <div className="print-only-header">
               {projectName ? `${projectName} — ` : ''}Cabinet Planner
-              <span style={{ float: 'right', fontWeight: 'normal', fontSize: '9pt' }}>
-                {new Date().toLocaleDateString()}
-              </span>
+              <span className="float-end font-normal text-[9pt]">{new Date().toLocaleDateString()}</span>
             </div>
             {activeTab === 'configurator' && <ConfiguratorPanel />}
             {activeTab === 'preview' && <CabinetPreview />}

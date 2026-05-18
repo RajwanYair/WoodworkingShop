@@ -11,6 +11,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.45.2] — 2026-05-18
+
+### 🔧 Editor Diagnostics Cleanup
+
+- Added `forceConsistentCasingInFileNames: true` to `tsconfig.test.json`.
+- Replaced deprecated `flex-shrink-0` with modern `shrink-0` in `TemplatePicker.tsx`.
+- Replaced inline `style` on print header with Tailwind utility classes (`float-end`, `font-normal`, `text-[9pt]`).
+- Configured VS Code settings to suppress false-positive IE compatibility warnings (our `.browserslistrc` explicitly excludes IE) and vendor prefix noise.
+- Removed duplicate `html.validate` entries from `.vscode/settings.json`.
+
+### 🧪 Verification
+
+- `npm run ci` passed (typecheck, lint, markdown lint, format, 318 tests, build, bundle budgets).
+
 ## [3.45.1] — 2026-05-18
 
 ### ✅ Production Hardening Follow-up

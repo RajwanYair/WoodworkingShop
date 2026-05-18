@@ -49,6 +49,16 @@
   "css.validate": true,
   "scss.validate": true,
 
+  // CSS/HTML lint: our browserslist excludes IE entirely (see .browserslistrc).
+  // Inline styles are required for dynamic runtime values (data-driven colors/widths).
+  // ARIA attribute expressions are valid JSX producing correct string values at runtime.
+  // Progressive enhancement CSS (scrollbar-width, orphans, widows) is intentional.
+  "css.lint.compatibleVendorPrefixes": "ignore",
+  "css.lint.vendorPrefix": "ignore",
+  "css.lint.propertyIgnoredDueToDisplay": "ignore",
+  "html.validate.scripts": true,
+  "html.validate.styles": true,
+
   "files.exclude": {
     "**/dist/**": true,
     "**/coverage/**": true,
@@ -60,9 +70,6 @@
     "**/node_modules": true,
     "**/coverage": true
   },
-
-  "html.validate.scripts": true,
-  "html.validate.styles": true,
 
   "[tsx]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

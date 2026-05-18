@@ -24,7 +24,7 @@ function TemplateThumbnail({ tpl }: { tpl: CabinetTemplate }) {
   const doorMidX = ox + w / 2;
 
   return (
-    <svg viewBox="0 0 80 60" aria-hidden="true" className="w-20 h-15 flex-shrink-0 text-wood-700 dark:text-wood-200">
+    <svg viewBox="0 0 80 60" aria-hidden="true" className="w-20 h-15 shrink-0 text-wood-700 dark:text-wood-200">
       {/* Carcass outline */}
       <rect x={ox} y={oy} width={w} height={h} fill="none" stroke="currentColor" strokeWidth={T} rx={1} />
       {/* Toe kick — lighter fill at bottom */}
