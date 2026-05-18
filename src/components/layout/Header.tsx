@@ -47,7 +47,15 @@ export function Header() {
     >
       <div className="flex items-center justify-between">
         <div className="min-w-0">
-          <h1 className="text-lg sm:text-xl font-bold truncate">{t('app.title')}</h1>
+          <div className="flex items-baseline gap-2">
+            <h1 className="text-lg sm:text-xl font-bold truncate">{t('app.title')}</h1>
+            <span
+              className="hidden sm:inline text-xs font-mono text-wood-300 select-none"
+              aria-label={`Version ${__APP_VERSION__}`}
+            >
+              v{__APP_VERSION__}
+            </span>
+          </div>
           <p className="text-wood-200 text-xs sm:text-sm hidden sm:block">{t('app.subtitle')}</p>
         </div>
         {/* Mobile-only controls row */}
