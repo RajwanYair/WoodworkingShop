@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 
-const APP_VERSION = '3.40.0';
+const APP_VERSION = '3.41.0';
 const CACHE_NAME = `cabinet-planner-v${APP_VERSION}`;
 
 const PRECACHE_URLS = ['./', './index.html'];

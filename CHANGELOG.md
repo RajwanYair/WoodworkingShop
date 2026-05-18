@@ -11,6 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.41.0] — 2026-05-18
+
+### ✅ Tests
+
+- **`tests/engine/worker-integration.test.ts`** (9 tests): exercises the cut-optimizer sync fallback and `createJsonMemo` integration:
+  - `optimization` is always defined and structurally valid regardless of Worker availability
+  - optimization grows with cabinet size / kerf
+  - `combinedOptimization` equals single-cabinet result for one cabinet and grows for two
+  - all `PlacedPart` coordinates are within sheet bounds (y-axis along `sheetLength`, x-axis along `sheetWidth`)
+  - `createJsonMemo` wrapping `computeDimensions` returns the same reference on cache hit and a new result on miss
+
 ## [3.40.0] — 2026-05-18
 
 ### ⚡ Performance
