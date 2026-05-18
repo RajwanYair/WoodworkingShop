@@ -111,4 +111,32 @@ describe('estimateCost', () => {
     // 12 + 6 + 0.5 + 0.8 + 15 + 4 + 25 = 63.3
     expect(result.hardwareCost).toBeCloseTo(63.3);
   });
+
+  // v3.23.0 — labour + finish coat
+  describe('labour and finish coat (v3.23.0)', () => {
+    it('includes labourCost = labourHours × labourRate', () => {
+      const result = estimateCost(mockOptimization(), [], 0, {}, 3, {}, 80, 5, 0);
+      expect(result.labourHours).toBe(5);
+      expect(result.labourCost).toBe(400); // 5 × 80 = 400
+    });
+
+    it('includes finishCost in totalCost', () => {
+      const result = estimateCost(mockOptimization(), [], 0, {}, 3, {}, 75, 0, 300);
+      expect(result.finishCost).toBe(300);
+      expect(result.totalCost).toBeGreaterThanOrEqual(300);
+    });
+
+    it('labourCost defaults to 0 when labourHours is 0', () => {
+      const result = estimateCost(mockOptimization(), [], 0);
+      expect(result.labourCost).toBe(0);
+      expect(result.labourHours).toBe(0);
+      expect(result.finishCost).toBe(0);
+    });
+
+    it('totalCost includes labour + finish on top of materials', () => {
+      const materialOnlyResult = estimateCost(mockOptimization(), [], 0);
+      const withLabour = estimateCost(mockOptimization(), [], 0, {}, 3, {}, 75, 4, 200);
+      expect(withLabour.totalCost).toBe(materialOnlyResult.totalCost + 300 + 200); // 4h × 75 = 300
+    });
+  });
 });

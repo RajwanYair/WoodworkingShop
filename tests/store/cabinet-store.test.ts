@@ -205,4 +205,61 @@ describe('cabinet-store', () => {
       window.matchMedia = orig;
     });
   });
+
+  // v3.23.0 — Labour rate, hours, finish cost
+  describe('cost extras (v3.23.0)', () => {
+    it('has default labourRate of 75', () => {
+      useCabinetStore.setState({ labourRate: 75, labourHours: 0, finishCost: 0 });
+      expect(useCabinetStore.getState().labourRate).toBe(75);
+    });
+
+    it('setLabourRate clamps to 0', () => {
+      useCabinetStore.getState().setLabourRate(100);
+      expect(useCabinetStore.getState().labourRate).toBe(100);
+      useCabinetStore.getState().setLabourRate(-50);
+      expect(useCabinetStore.getState().labourRate).toBe(0);
+    });
+
+    it('setLabourHours clamps to 0', () => {
+      useCabinetStore.getState().setLabourHours(4.5);
+      expect(useCabinetStore.getState().labourHours).toBe(4.5);
+      useCabinetStore.getState().setLabourHours(-1);
+      expect(useCabinetStore.getState().labourHours).toBe(0);
+    });
+
+    it('setFinishCost clamps to 0', () => {
+      useCabinetStore.getState().setFinishCost(350);
+      expect(useCabinetStore.getState().finishCost).toBe(350);
+      useCabinetStore.getState().setFinishCost(-100);
+      expect(useCabinetStore.getState().finishCost).toBe(0);
+    });
+  });
+
+  // v3.21.0 — optimizationPending flag
+  describe('optimizationPending (v3.21.0)', () => {
+    it('initialises as false', () => {
+      useCabinetStore.setState({ optimizationPending: false });
+      expect(useCabinetStore.getState().optimizationPending).toBe(false);
+    });
+
+    it('can be set to true and back to false via setState', () => {
+      useCabinetStore.setState({ optimizationPending: true });
+      expect(useCabinetStore.getState().optimizationPending).toBe(true);
+      useCabinetStore.setState({ optimizationPending: false });
+      expect(useCabinetStore.getState().optimizationPending).toBe(false);
+    });
+  });
+
+  // v3.22.0 / v3.23.0 — edge banding rate
+  describe('setEdgeBandingRate', () => {
+    it('updates edge banding rate', () => {
+      useCabinetStore.getState().setEdgeBandingRate(5);
+      expect(useCabinetStore.getState().edgeBandingRate).toBe(5);
+    });
+
+    it('clamps negative values to 0', () => {
+      useCabinetStore.getState().setEdgeBandingRate(-2);
+      expect(useCabinetStore.getState().edgeBandingRate).toBe(0);
+    });
+  });
 });

@@ -104,5 +104,42 @@ describe('smart-optimizer', () => {
         expect(r.optimizedConfig.depth).toBeGreaterThanOrEqual(200);
       }
     });
+
+    // v3.26.0 — new shelf-count-reduce strategy
+    it('shelf-count-reduce decrements numShelves by 1', () => {
+      const results = findOptimizations(cfg({ numShelves: 3 }), {
+        strategies: ['shelf-count-reduce'],
+        tolerance: 20,
+      });
+      // May return 0 results if reducing shelves doesn't improve yield; that is valid.
+      for (const r of results) {
+        expect(r.strategy).toBe('shelf-count-reduce');
+        expect(r.optimizedConfig.numShelves).toBe(2);
+      }
+    });
+
+    it('shelf-count-reduce skips cabinets with fewer than 2 shelves', () => {
+      const results = findOptimizations(cfg({ numShelves: 1 }), {
+        strategies: ['shelf-count-reduce'],
+        tolerance: 20,
+      });
+      expect(results).toHaveLength(0);
+    });
+
+    // v3.26.0 — fingerprint includes shelves so different shelf counts are not deduplicated
+    it('does not deduplicate configs that differ only in numShelves', () => {
+      const results = findOptimizations(cfg({ numShelves: 4 }), {
+        strategies: ['shelf-count-reduce', 'reduce-depth'],
+        tolerance: 50,
+        maxResults: 10,
+      });
+      // Confirm no two entries have identical optimizedConfig fingerprints
+      const fingerprints = results.map(
+        (r) =>
+          `${r.optimizedConfig.width}|${r.optimizedConfig.height}|${r.optimizedConfig.depth}|${r.optimizedConfig.carcassMaterial}|${r.optimizedConfig.numShelves ?? 0}`,
+      );
+      const unique = new Set(fingerprints);
+      expect(unique.size).toBe(fingerprints.length);
+    });
   });
 });
