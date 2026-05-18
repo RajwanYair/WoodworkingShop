@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Header } from './components/layout/Header';
 import { Sidebar } from './components/layout/Sidebar';
+import { ErrorBoundary } from './components/layout/ErrorBoundary';
 import { ConfiguratorPanel } from './components/configurator/ConfiguratorPanel';
 import { CabinetPreview } from './components/preview/CabinetPreview';
 import { SmartOptimizerPanel } from './components/optimizer/SmartOptimizerPanel';
@@ -136,27 +137,41 @@ function App() {
               {projectName ? `${projectName} — ` : ''}Cabinet Planner
               <span className="float-end font-normal text-[9pt]">{new Date().toLocaleDateString()}</span>
             </div>
-            {activeTab === 'configurator' && <ConfiguratorPanel />}
-            {activeTab === 'preview' && <CabinetPreview />}
+            {activeTab === 'configurator' && (
+              <ErrorBoundary panelName="Configurator">
+                <ConfiguratorPanel />
+              </ErrorBoundary>
+            )}
+            {activeTab === 'preview' && (
+              <ErrorBoundary panelName="Preview">
+                <CabinetPreview />
+              </ErrorBoundary>
+            )}
             {activeTab === 'optimizer' && (
-              <Suspense fallback={<div className="text-center py-12 text-wood-400">Loading optimizer…</div>}>
-                <div className="space-y-8">
-                  <SmartOptimizerPanel />
-                  <PartsTable />
-                  <HardwareTable />
-                  <OptimizerView />
-                </div>
-              </Suspense>
+              <ErrorBoundary panelName="Optimizer">
+                <Suspense fallback={<div className="text-center py-12 text-wood-400">Loading optimizer…</div>}>
+                  <div className="space-y-8">
+                    <SmartOptimizerPanel />
+                    <PartsTable />
+                    <HardwareTable />
+                    <OptimizerView />
+                  </div>
+                </Suspense>
+              </ErrorBoundary>
             )}
             {activeTab === 'assembly' && (
-              <Suspense fallback={<div className="text-center py-12 text-wood-400">Loading assembly guide…</div>}>
-                <AssemblyGuide />
-              </Suspense>
+              <ErrorBoundary panelName="Assembly Guide">
+                <Suspense fallback={<div className="text-center py-12 text-wood-400">Loading assembly guide…</div>}>
+                  <AssemblyGuide />
+                </Suspense>
+              </ErrorBoundary>
             )}
             {activeTab === 'pdf' && (
-              <Suspense fallback={<div className="text-center py-12 text-wood-400">Loading PDF tools…</div>}>
-                <PdfExportPanel />
-              </Suspense>
+              <ErrorBoundary panelName="PDF Export">
+                <Suspense fallback={<div className="text-center py-12 text-wood-400">Loading PDF tools…</div>}>
+                  <PdfExportPanel />
+                </Suspense>
+              </ErrorBoundary>
             )}
 
             {/* Print button — hidden when printing */}
