@@ -12,6 +12,7 @@ import { triggerDownload } from '../../utils/download';
 import { OptimizationNotesPanel } from './OptimizationNotesPanel';
 import BomWorker from '../../workers/bom-export.worker?worker';
 import type { BomWorkerOutput } from '../../workers/bom-export.worker';
+import { BulkReplaceModal } from './BulkReplaceModal';
 import {
   IconDxf,
   IconGcode,
@@ -27,6 +28,7 @@ import {
   IconChevronRight,
   IconScissors,
   IconPrint,
+  IconSwap,
 } from '../layout/Icons';
 import type { Lang, CutSheet, CutRect } from '../../engine/types';
 
@@ -59,6 +61,7 @@ export function OptimizerView() {
   const [hoveredPartId, setHoveredPartId] = useState<string | null>(null);
   const [showPartNames, setShowPartNames] = useState(false); // Sprint 146 — part name labels
   const [bomExporting, setBomExporting] = useState(false); // v3.17.0 worker state
+  const [showBulkReplace, setShowBulkReplace] = useState(false); // v3.18.0
   const workerRef = useRef<Worker | null>(null);
   const multiCabinet = cabinets.length > 1;
   const displayOpt = multiCabinet ? combinedOptimization : optimization;
@@ -288,8 +291,20 @@ export function OptimizerView() {
           >
             <IconPrint size={14} /> {t('optimizer.print')}
           </button>
+          {/* v3.18.0 — bulk material replacement */}
+          <button
+            onClick={() => setShowBulkReplace(true)}
+            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
+            title={t('bulkReplace.title', 'Bulk Material Replace')}
+            aria-label={t('bulkReplace.title', 'Bulk Material Replace')}
+          >
+            <IconSwap size={14} /> {t('bulkReplace.short', 'Replace')}
+          </button>
         </div>
       </div>
+
+      {/* v3.18.0 — Bulk material replacement modal */}
+      {showBulkReplace && <BulkReplaceModal onClose={() => setShowBulkReplace(false)} />}
 
       {/* Multi-cabinet label */}
       {multiCabinet && (

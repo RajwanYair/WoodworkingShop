@@ -116,6 +116,8 @@ export interface CabinetState {
   setSheetSizeOverride: (materialKey: string, size: { width: number; length: number } | null) => void; // Sprint 165
   setProjectName: (name: string) => void;
   loadProject: (cabinets: CabinetEntry[]) => void;
+  /** v3.18.0 — Replace every occurrence of fromKey with toKey across all cabinets (undoable). */
+  bulkReplaceMaterial: (fromKey: string, toKey: string) => void;
 }
 
 function derive(
@@ -413,9 +415,29 @@ export const useCabinetStore = create<CabinetState>((set) => {
           ...deriveProjectMemo(state.cabinets, state.activeCabinetIndex, state.sawKerf, sheetSizeOverrides),
         };
       }),
+    // v3.18.0 — Bulk material replacement across all cabinets
+    bulkReplaceMaterial: (fromKey, toKey) =>
+      set((state) => {
+        if (fromKey === toKey) return state;
+        const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
+        const cabinets = state.cabinets.map((cab) => {
+          const config = { ...cab.config };
+          if (config.carcassMaterial === fromKey) config.carcassMaterial = toKey;
+          if (config.backPanelMaterial === fromKey) config.backPanelMaterial = toKey;
+          return { ...cab, config };
+        });
+        return {
+          cabinets,
+          ...deriveProjectMemo(cabinets, state.activeCabinetIndex, state.sawKerf, state.sheetSizeOverrides),
+          _past: past,
+          _future: [],
+          canUndo: true,
+          canRedo: false,
+        };
+      }),
+
     toggleDarkMode: () =>
-      set((s) => {
-        const darkMode = !s.darkMode;
+      set((s) => {        const darkMode = !s.darkMode;
         savePrefs({ darkMode, colorBlindMode: s.colorBlindMode, highContrastMode: s.highContrastMode, units: s.units });
         return { darkMode };
       }),

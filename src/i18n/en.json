@@ -300,5 +300,15 @@
     "getStarted": "Get Started",
     "help": "Help",
     "dismissBackdrop": "Dismiss onboarding"
+  },
+  "bulkReplace": {
+    "title": "Bulk Material Replace",
+    "short": "Replace",
+    "description": "Replace one material with another across all cabinets in this project. This action is undoable.",
+    "from": "Replace",
+    "to": "With",
+    "apply": "Apply to All",
+    "applied": "Done! Use Ctrl+Z to undo.",
+    "summary": "Will update {{count}} cabinet(s): {{from}} → {{to}}"
   }
 }
