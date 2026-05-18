@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { BOOKSHELF_DEFAULTS, DESK_DEFAULTS, WARDROBE_DEFAULTS, PANEL_DEFAULTS } from '../../engine/materials';
 import { validateConfig } from '../../engine/validation';
+import { getTemplateDefaults } from '../../engine/templates';
 import { ValidationPanel } from './ValidationPanel';
 import { CabinetSelector } from './CabinetSelector';
 import { DimensionSliders } from './DimensionSliders';
@@ -22,17 +22,7 @@ export function ConfiguratorPanel() {
   const validationIssues = useMemo(() => validateConfig(config), [config]);
 
   const handleFurnitureChange = (type: FurnitureType) => {
-    if (type === 'bookshelf') {
-      setConfig({ ...BOOKSHELF_DEFAULTS });
-    } else if (type === 'desk') {
-      setConfig({ ...DESK_DEFAULTS });
-    } else if (type === 'wardrobe') {
-      setConfig({ ...WARDROBE_DEFAULTS });
-    } else if (type === 'panel') {
-      setConfig({ ...PANEL_DEFAULTS });
-    } else {
-      setConfig({ furnitureType: 'cabinet', doorStyle: 'flat', doorCount: 2, handleStyle: 'bar', depth: 600 });
-    }
+    setConfig({ ...getTemplateDefaults(type) });
   };
 
   return (

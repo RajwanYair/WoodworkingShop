@@ -1,0 +1,97 @@
+import { describe, it, expect } from 'vitest';
+import { getTemplateDefaults, TEMPLATES, getTemplate } from '../../src/engine/templates';
+import type { FurnitureType } from '../../src/engine/types';
+
+describe('getTemplateDefaults', () => {
+  const allTypes: FurnitureType[] = ['cabinet', 'bookshelf', 'desk', 'wardrobe', 'panel'];
+
+  it('returns an object with furnitureType matching the requested type', () => {
+    for (const type of allTypes) {
+      const defaults = getTemplateDefaults(type);
+      expect(defaults.furnitureType).toBe(type);
+    }
+  });
+
+  it('cabinet defaults have expected shape', () => {
+    const d = getTemplateDefaults('cabinet');
+    expect(d.width).toBe(600);
+    expect(d.height).toBe(800);
+    expect(d.depth).toBe(500);
+    expect(d.shelfCount).toBe(2);
+    expect(d.doorStyle).toBe('flat');
+    expect(d.kickHeight).toBe(100);
+  });
+
+  it('bookshelf defaults have doorStyle=none and positive shelfCount', () => {
+    const d = getTemplateDefaults('bookshelf');
+    expect(d.doorStyle).toBe('none');
+    expect((d.shelfCount ?? 0)).toBeGreaterThan(0);
+    expect(d.kickHeight).toBe(0);
+  });
+
+  it('desk defaults have height ~750mm and low kickHeight', () => {
+    const d = getTemplateDefaults('desk');
+    expect(d.height).toBe(750);
+    expect(d.kickHeight).toBe(0);
+    expect(d.doorStyle).toBe('none');
+  });
+
+  it('wardrobe defaults have height >= 2000mm and doorStyle=flat', () => {
+    const d = getTemplateDefaults('wardrobe');
+    expect((d.height ?? 0)).toBeGreaterThanOrEqual(2000);
+    expect(d.doorStyle).toBe('flat');
+  });
+
+  it('panel defaults have depth=18 and doorStyle=none', () => {
+    const d = getTemplateDefaults('panel');
+    expect(d.depth).toBe(18);
+    expect(d.doorStyle).toBe('none');
+    expect(d.kickHeight).toBe(0);
+  });
+
+  it('returns a new object each call (no shared reference)', () => {
+    const a = getTemplateDefaults('cabinet');
+    const b = getTemplateDefaults('cabinet');
+    expect(a).not.toBe(b);
+  });
+
+  it('does not include carcassMaterial (material selection is independent)', () => {
+    for (const type of allTypes) {
+      const d = getTemplateDefaults(type);
+      // Material keys should not be forced by type defaults
+      expect(d.carcassMaterial).toBeUndefined();
+    }
+  });
+});
+
+describe('TEMPLATES', () => {
+  it('has at least 8 templates', () => {
+    expect(TEMPLATES.length).toBeGreaterThanOrEqual(8);
+  });
+
+  it('all templates have bilingual name and description', () => {
+    for (const tpl of TEMPLATES) {
+      expect(typeof tpl.name.en).toBe('string');
+      expect(tpl.name.en.length).toBeGreaterThan(0);
+      expect(typeof tpl.name.he).toBe('string');
+      expect(tpl.name.he.length).toBeGreaterThan(0);
+      expect(typeof tpl.description.en).toBe('string');
+      expect(typeof tpl.description.he).toBe('string');
+    }
+  });
+
+  it('all template ids are unique', () => {
+    const ids = TEMPLATES.map((t) => t.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it('getTemplate returns undefined for unknown id', () => {
+    expect(getTemplate('nonexistent-id-xyz')).toBeUndefined();
+  });
+
+  it('getTemplate finds a known template by id', () => {
+    const t = getTemplate('kitchen-base');
+    expect(t).toBeDefined();
+    expect(t?.name.en).toBe('Kitchen Base Unit');
+  });
+});

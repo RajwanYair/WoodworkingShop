@@ -273,6 +273,19 @@ export const PANEL_DEFAULTS: Partial<CabinetConfig> = {
   panelMaterialSource: 'carcass',
 };
 
+export const CABINET_DEFAULTS: Partial<CabinetConfig> = {
+  furnitureType: 'cabinet',
+  width: 600,
+  height: 800,
+  depth: 500,
+  shelfCount: 2,
+  doorCount: 1,
+  doorStyle: 'flat',
+  handleStyle: 'bar',
+  kickHeight: 100,
+  drawerCount: 0,
+};
+
 // ─── Validation constraints ───
 
 /**

@@ -1,5 +1,12 @@
-import type { CabinetConfig } from './types';
-import { DEFAULT_CONFIG } from './materials';
+import type { CabinetConfig, FurnitureType } from './types';
+import {
+  DEFAULT_CONFIG,
+  BOOKSHELF_DEFAULTS,
+  CABINET_DEFAULTS,
+  DESK_DEFAULTS,
+  WARDROBE_DEFAULTS,
+  PANEL_DEFAULTS,
+} from './materials';
 
 export interface CabinetTemplate {
   id: string;
@@ -307,4 +314,20 @@ export const TEMPLATES: CabinetTemplate[] = [
 
 export function getTemplate(id: string): CabinetTemplate | undefined {
   return TEMPLATES.find((t) => t.id === id);
+}
+
+/**
+ * Returns sensible default dimensions and settings for each furniture type.
+ * Use when the user switches furniture type in the configurator so the config
+ * reflects realistic starting values for the selected type.
+ */
+export function getTemplateDefaults(type: FurnitureType): Partial<CabinetConfig> {
+  switch (type) {
+    case 'bookshelf': return { ...BOOKSHELF_DEFAULTS };
+    case 'desk':      return { ...DESK_DEFAULTS };
+    case 'wardrobe':  return { ...WARDROBE_DEFAULTS };
+    case 'panel':     return { ...PANEL_DEFAULTS };
+    case 'cabinet':
+    default:          return { ...CABINET_DEFAULTS };
+  }
 }
