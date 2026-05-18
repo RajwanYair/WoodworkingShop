@@ -27,7 +27,6 @@
     "timonwong.shellcheck",
 
     // ── GitHub Copilot ────────────────────────────────────────────────────
-    "github.copilot",
     "github.copilot-chat"
   ]
 }

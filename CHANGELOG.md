@@ -11,6 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.44.0] — 2026-05-18
+
+### 💾 Session Auto-Save
+
+- **No more data loss on refresh** — The entire project state (`cabinets`, `activeCabinetIndex`, `projectName`, `sawKerf`, all price / quantity / sheet-size overrides, labour rate, labour hours, finish cost) is now automatically saved to `localStorage` under the key `woodworkingshop:session` after every state change (debounced 500 ms via `useCabinetStore.subscribe`).
+- **Transparent restore on load** — When the app boots with no URL config params (normal refresh / HMR reload), the session is restored from localStorage so all in-progress work survives. A shared URL (with explicit config params) overrides only the active cabinet's config while keeping the rest of the session intact.
+- **Forward-compat migration** — Each cabinet config is spread over `DEFAULT_CONFIG` on restore so new fields added in future versions fall back gracefully to their defaults.
+- Undo/redo history stacks and derived state (parts, hardware, optimization) are deliberately excluded from the session snapshot — they are too large and are recomputed on restore.
+
 ## [3.43.0] — 2026-05-18
 
 ### ♿ Accessibility

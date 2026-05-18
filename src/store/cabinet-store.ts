@@ -110,6 +110,40 @@ function savePrefs(prefs: PersistedPrefs): void {
   }
 }
 
+// v3.44.0 — Auto-save: snapshot of project state persisted across page refreshes.
+const SESSION_KEY = 'woodworkingshop:session';
+interface SessionSnapshot {
+  cabinets: CabinetEntry[];
+  activeCabinetIndex: number;
+  projectName: string;
+  sawKerf: number;
+  materialPriceOverrides: Record<string, number>;
+  edgeBandingRate: number;
+  hardwarePriceOverrides: Record<string, number>;
+  hardwareQtyOverrides: Record<string, number>;
+  sheetSizeOverrides: Record<string, { width: number; length: number }>;
+  labourRate: number;
+  labourHours: number;
+  finishCost: number;
+}
+function loadSession(): SessionSnapshot | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = window.localStorage.getItem(SESSION_KEY);
+    return raw ? (JSON.parse(raw) as SessionSnapshot) : null;
+  } catch {
+    return null;
+  }
+}
+function saveSession(snap: SessionSnapshot): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(SESSION_KEY, JSON.stringify(snap));
+  } catch {
+    /* quota exceeded — ignore */
+  }
+}
+
 export interface CabinetEntry {
   name: string;
   config: CabinetConfig;
@@ -250,35 +284,54 @@ export const useCabinetStore = create<CabinetState>((set) => {
   _workerApplyFn = set as (partial: Partial<CabinetState>) => void;
 
   const urlPatch = readConfigFromUrl();
-  const initialConfig = { ...DEFAULT_CONFIG, ...urlPatch };
-  const initialCabinets: CabinetEntry[] = [{ name: 'Cabinet 1', config: initialConfig }];
-  const initial = deriveProjectMemo(initialCabinets, 0);
+  // v3.44.0 — Restore session from localStorage when present.
+  // URL config params take precedence for the active cabinet (enables shared links).
+  const session = loadSession();
+  let initialCabinets: CabinetEntry[];
+  let initialActiveIndex = 0;
+  if (session) {
+    initialCabinets = session.cabinets.map((c) => ({
+      ...c,
+      config: { ...DEFAULT_CONFIG, ...c.config },
+    }));
+    initialActiveIndex = Math.min(session.activeCabinetIndex, initialCabinets.length - 1);
+    if (Object.keys(urlPatch).length > 0) {
+      // Shared-link scenario: apply URL params on top of the restored active cabinet
+      initialCabinets = initialCabinets.map((cab, i) =>
+        i === initialActiveIndex ? { ...cab, config: { ...cab.config, ...urlPatch } } : cab,
+      );
+    }
+  } else {
+    const initialConfig = { ...DEFAULT_CONFIG, ...urlPatch };
+    initialCabinets = [{ name: 'Cabinet 1', config: initialConfig }];
+  }
+  const initial = deriveProjectMemo(initialCabinets, initialActiveIndex);
   const prefs = loadPrefs();
 
   return {
     cabinets: initialCabinets,
-    activeCabinetIndex: 0,
+    activeCabinetIndex: initialActiveIndex,
     ...initial,
     _past: [],
     _future: [],
     canUndo: false,
     canRedo: false,
     activeTab: 'configurator',
-    projectName: readProjectNameFromUrl(), // Sprint 157: persist in URL
+    projectName: session?.projectName || readProjectNameFromUrl(),
     // Sprint 124 — fall back to OS preference when no saved pref exists
     darkMode: prefs.darkMode ?? detectOsDarkMode(),
     colorBlindMode: prefs.colorBlindMode ?? false,
     highContrastMode: prefs.highContrastMode ?? false,
     units: prefs.units ?? ('metric' as UnitSystem),
-    sawKerf: 4, // mm — Sprint 136
-    materialPriceOverrides: {}, // Sprint 139
-    edgeBandingRate: 3, // ₪/m — Sprint 141
-    hardwarePriceOverrides: {}, // Sprint 148
-    hardwareQtyOverrides: {}, // v3.15.0
-    sheetSizeOverrides: {}, // Sprint 165
-    labourRate: 75, // ₪/hr — v3.23.0
-    labourHours: 0, // hours — v3.23.0 (0 = not set, user inputs manually)
-    finishCost: 0, // ₪ — v3.23.0
+    sawKerf: session?.sawKerf ?? 4, // mm — Sprint 136
+    materialPriceOverrides: session?.materialPriceOverrides ?? {}, // Sprint 139
+    edgeBandingRate: session?.edgeBandingRate ?? 3, // ₪/m — Sprint 141
+    hardwarePriceOverrides: session?.hardwarePriceOverrides ?? {}, // Sprint 148
+    hardwareQtyOverrides: session?.hardwareQtyOverrides ?? {}, // v3.15.0
+    sheetSizeOverrides: session?.sheetSizeOverrides ?? {}, // Sprint 165
+    labourRate: session?.labourRate ?? 75, // ₪/hr — v3.23.0
+    labourHours: session?.labourHours ?? 0, // hours — v3.23.0 (0 = not set, user inputs manually)
+    finishCost: session?.finishCost ?? 0, // ₪ — v3.23.0
     optimizationPending: false, // v3.21.0
 
     setConfig: (patch) =>
@@ -591,4 +644,27 @@ export const useCabinetStore = create<CabinetState>((set) => {
         return { units };
       }),
   };
+});
+
+// v3.44.0 — Auto-save the full project session to localStorage on every state
+// change, debounced to 500 ms. Prevents data loss on HMR or manual page refresh.
+let _autoSaveTimer: ReturnType<typeof setTimeout> | null = null;
+useCabinetStore.subscribe((state) => {
+  if (_autoSaveTimer !== null) clearTimeout(_autoSaveTimer);
+  _autoSaveTimer = setTimeout(() => {
+    saveSession({
+      cabinets: state.cabinets,
+      activeCabinetIndex: state.activeCabinetIndex,
+      projectName: state.projectName,
+      sawKerf: state.sawKerf,
+      materialPriceOverrides: state.materialPriceOverrides,
+      edgeBandingRate: state.edgeBandingRate,
+      hardwarePriceOverrides: state.hardwarePriceOverrides,
+      hardwareQtyOverrides: state.hardwareQtyOverrides,
+      sheetSizeOverrides: state.sheetSizeOverrides,
+      labourRate: state.labourRate,
+      labourHours: state.labourHours,
+      finishCost: state.finishCost,
+    });
+  }, 500);
 });
