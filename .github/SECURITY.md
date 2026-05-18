@@ -74,4 +74,3 @@ Accessibility barriers that affect users with disabilities are treated as **secu
 - Report via a **public GitHub issue** tagged `accessibility` (unlike security vulnerabilities, a11y issues may be reported publicly)
 - Include: browser/OS, assistive technology used, steps to reproduce, WCAG criterion affected
 - Target resolution: ≤ 14 days for Level A violations, ≤ 30 days for Level AA
-

@@ -1,10 +1,33 @@
 {
   "recommendations": [
+    // ── Core IDE enhancements ─────────────────────────────────────────────
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
-    "bradlc.vscode-tailwindcss",
+    "usernamehw.errorlens",
+
+    // ── TypeScript + React ────────────────────────────────────────────────
+    // TypeScript Nightly required for TypeScript 6 language features.
+    // Activate it via the "TypeScript: Select TypeScript Version" command
+    // and choose "Use Workspace Version" (node_modules/typescript).
     "ms-vscode.vscode-typescript-next",
+
+    // ── Styling ───────────────────────────────────────────────────────────
+    // Tailwind v4 IntelliSense — class autocomplete, hover docs, lint.
+    // Requires enabling the v4 compatibility mode in VS Code settings.
+    "bradlc.vscode-tailwindcss",
+
+    // ── Testing ───────────────────────────────────────────────────────────
+    // Vitest test runner — run/debug individual tests in the editor gutter.
+    "vitest.explorer",
+    // Playwright test runner — run, debug, and trace E2E tests visually.
+    "ms-playwright.playwright",
+
+    // ── CI / DevOps ───────────────────────────────────────────────────────
+    "github.vscode-github-actions",
     "timonwong.shellcheck",
-    "github.vscode-github-actions"
+
+    // ── GitHub Copilot ────────────────────────────────────────────────────
+    "github.copilot",
+    "github.copilot-chat"
   ]
 }

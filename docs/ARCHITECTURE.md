@@ -508,4 +508,3 @@ Hebrew (`he`) locale triggers `document.dir = 'rtl'`. Tailwind's logical-propert
 
 - PDF exports (`@react-pdf/renderer`) are not keyboard-navigable (the generated PDF is a binary file; this is a platform constraint).
 - The isometric 3D SVG view does not expose individual panel labels to screen readers — only the cabinet-level `<title>` and `<desc>` are present (improvement tracked in ROADMAP).
-

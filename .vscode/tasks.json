@@ -41,7 +41,19 @@
       "type": "npm",
       "script": "dev",
       "isBackground": true,
-      "problemMatcher": []
+      // Tell VS Code when the Vite dev server is "ready" so that
+      // the Chrome debug launch (preLaunchTask) waits correctly.
+      "problemMatcher": [
+        {
+          "owner": "vite",
+          "pattern": [{ "regexp": "^(.*)$", "message": 1 }],
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": "^.*vite.*",
+            "endsPattern": "Local:.*http://localhost"
+          }
+        }
+      ]
     }
   ]
 }
