@@ -1,8 +1,92 @@
 import { useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TEMPLATES } from '../../engine/templates';
+import type { CabinetTemplate } from '../../engine/templates';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { IconX } from '../layout/Icons';
+
+/** 80×60 schematic front-face SVG for a template card.
+ *  Draws: outer carcass, optional toe-kick, door divider or shelves, handle dots. */
+function TemplateThumbnail({ tpl }: { tpl: CabinetTemplate }) {
+  const { config } = tpl;
+  const maxW = config.width;
+  const maxH = config.height;
+  // Scale so the larger dimension fits in 70 px (leaving 5 px margin each side).
+  const scale = 70 / Math.max(maxW, maxH);
+  const w = maxW * scale;
+  const h = maxH * scale;
+  const ox = (80 - w) / 2;
+  const oy = (60 - h) / 2;
+  const T = 2; // wall thickness in px
+  const kick = Math.round((config.kickHeight ?? 0) * scale);
+  const hasDoors = config.doorStyle !== 'none' && config.doorCount > 0;
+  const doorCount = config.doorCount ?? 1;
+  const doorMidX = ox + w / 2;
+
+  return (
+    <svg
+      viewBox="0 0 80 60"
+      aria-hidden="true"
+      className="w-20 h-15 flex-shrink-0 text-wood-700 dark:text-wood-200"
+    >
+      {/* Carcass outline */}
+      <rect x={ox} y={oy} width={w} height={h} fill="none" stroke="currentColor" strokeWidth={T} rx={1} />
+      {/* Toe kick — lighter fill at bottom */}
+      {kick > 0 && (
+        <rect
+          x={ox + T * 2}
+          y={oy + h - kick}
+          width={w - T * 4}
+          height={kick}
+          fill="currentColor"
+          opacity={0.15}
+        />
+      )}
+      {/* Door divider (for 2-door) or shelves */}
+      {hasDoors ? (
+        <>
+          {doorCount === 2 && (
+            <line
+              x1={doorMidX}
+              y1={oy + T}
+              x2={doorMidX}
+              y2={oy + h - kick - T}
+              stroke="currentColor"
+              strokeWidth={0.8}
+              opacity={0.5}
+            />
+          )}
+          {/* Handle dot(s) */}
+          {doorCount === 2 ? (
+            <>
+              <circle cx={doorMidX - w * 0.15} cy={oy + h * 0.55} r={1.5} fill="currentColor" opacity={0.7} />
+              <circle cx={doorMidX + w * 0.15} cy={oy + h * 0.55} r={1.5} fill="currentColor" opacity={0.7} />
+            </>
+          ) : (
+            <circle cx={ox + w * 0.65} cy={oy + h * 0.5} r={1.5} fill="currentColor" opacity={0.7} />
+          )}
+        </>
+      ) : (
+        /* Shelf lines */
+        Array.from({ length: Math.max(1, config.shelfCount) }, (_, i) => {
+          const shelfY = oy + T + ((h - 2 * T - kick) / (config.shelfCount + 1)) * (i + 1);
+          return (
+            <line
+              key={i}
+              x1={ox + T}
+              y1={shelfY}
+              x2={ox + w - T}
+              y2={shelfY}
+              stroke="currentColor"
+              strokeWidth={0.8}
+              opacity={0.5}
+            />
+          );
+        })
+      )}
+    </svg>
+  );
+}
 
 interface TemplatePickerProps {
   onClose: () => void;
@@ -96,12 +180,17 @@ export function TemplatePicker({ onClose }: TemplatePickerProps) {
             <button
               key={tpl.id}
               onClick={() => handleApply(tpl.id)}
-              className="text-left p-3 rounded-lg border border-wood-200 dark:border-wood-700 hover:border-wood-500 dark:hover:border-wood-400 hover:bg-wood-50 dark:hover:bg-wood-700 transition-colors group"
+              className="text-left p-3 rounded-lg border border-wood-200 dark:border-wood-700 hover:border-wood-500 dark:hover:border-wood-400 hover:bg-wood-50 dark:hover:bg-wood-700 transition-colors group flex flex-col items-center gap-2"
             >
-              <div className="font-semibold text-sm text-wood-800 dark:text-wood-100 group-hover:text-wood-600 dark:group-hover:text-wood-300 leading-tight mb-1">
-                {tpl.name[lang]}
+              <TemplateThumbnail tpl={tpl} />
+              <div className="w-full">
+                <div className="font-semibold text-xs text-wood-800 dark:text-wood-100 group-hover:text-wood-600 dark:group-hover:text-wood-300 leading-tight mb-0.5 text-center">
+                  {tpl.name[lang]}
+                </div>
+                <div className="text-xs text-wood-500 dark:text-wood-400 leading-snug text-center line-clamp-2">
+                  {tpl.description[lang]}
+                </div>
               </div>
-              <div className="text-xs text-wood-600 dark:text-wood-300 leading-snug">{tpl.description[lang]}</div>
             </button>
           ))}
         </div>

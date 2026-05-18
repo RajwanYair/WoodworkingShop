@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.34.0] — 2026-05-18
+
+### ✨ Added
+
+- **Template SVG mini-previews**: each template card in the Template Picker now shows an 80×60 schematic front-view SVG thumbnail — carcass outline, toe-kick shading, door divider + handle dots (for door styles), or shelf lines (for open/bookshelf styles). Renders in both light and dark mode via `currentColor`.
+
 ## [3.33.0] — 2026-07-06
 
 ### 🔧 Changed
