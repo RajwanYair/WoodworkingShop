@@ -96,3 +96,7 @@ The MaxRects BSSF cut-optimizer uses:
 - Add features not requested (no unsolicited refactors, no extra docstrings)
 - Hardcode pixel values — use Tailwind utility classes
 - Skip the `he.json` update when adding i18n keys
+
+## Intermediate Files & Caching
+
+- All intermediate build files, ESLint caches (`.eslintcache`), Vite caches (`.vite_cache`), Playwright test results, and test reports **MUST** be written to paths inside the OS `$TEMP` or `tempfile.gettempdir()` directory. We never pollute the root workspace or `node_modules/.cache` with intermediate build telemetry.
