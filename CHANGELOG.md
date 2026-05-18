@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.36.0] — 2026-05-18
+
+### ✨ Enhanced
+
+- **Isometric preview — shelf grain lines**: each shelf top face now shows parallel grain lines (running depth-wise) consistent with the cabinet top panel grain.
+- **Isometric preview — side panel grain**: the visible left-side outer panel face now carries horizontal grain lines matching its board direction.
+- **Isometric preview — shaker door inner frame**: when the door style is `shaker`, a recessed inset frame rectangle is rendered on each door in the isometric view.
+
 ## [3.35.0] — 2026-05-18
 
 ### ✨ Added

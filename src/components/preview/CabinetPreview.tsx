@@ -1106,10 +1106,11 @@ function IsometricView({
           </polygon>
         )}
 
-        {/* Shelves — top face + front edge */}
+        {/* Shelves — top face + front edge + grain lines */}
         {shelfPositions.map((pos, i) => {
           const sy = T + pos * sc;
           const sT = T * 0.6;
+          const shelfGrainStep = Math.max((W - 2 * T) / 5, 3);
           return (
             <g key={i}>
               {/* Shelf top face */}
@@ -1130,6 +1131,19 @@ function IsometricView({
                 strokeWidth={0.3}
                 opacity={0.5}
               />
+              {/* Grain lines on shelf top (run along depth direction) */}
+              {Array.from({ length: Math.floor((W - 2 * T) / shelfGrainStep) - 1 }, (_, j) => {
+                const gx = T + shelfGrainStep + j * shelfGrainStep;
+                const [ax, ay] = iso(gx, sy + sT, 0);
+                const [bx, by] = iso(gx, sy + sT, D - BT);
+                return (
+                  <line
+                    key={`sg-${i}-${j}`}
+                    x1={ax} y1={ay} x2={bx} y2={by}
+                    stroke="#cba" strokeWidth={0.25} opacity={0.4}
+                  />
+                );
+              })}
             </g>
           );
         })}
@@ -1144,6 +1158,15 @@ function IsometricView({
         >
           <title>{`Side Panel\n${thick}×${h} mm`}</title>
         </polygon>
+        {/* Grain lines on left side (horizontal, run along depth) */}
+        {Array.from({ length: Math.floor(H / (Math.max(H / 6, 4))) - 1 }, (_, i) => {
+          const gy = (Math.max(H / 6, 4)) + i * (Math.max(H / 6, 4));
+          const [ax, ay] = iso(0, gy, 0);
+          const [bx, by] = iso(0, gy, D);
+          return (
+            <line key={`lg-${i}`} x1={ax} y1={ay} x2={bx} y2={by} stroke="#cba" strokeWidth={0.25} opacity={0.35} />
+          );
+        })}
 
         {/* Right side panel – outer face */}
         <polygon
@@ -1235,6 +1258,23 @@ function IsometricView({
                 >
                   <title>{`${doorLabel}\n${Math.round(doorWidth)}×${Math.round(doorHeight)} mm`}</title>
                 </polygon>
+                {/* Shaker door: inner inset frame */}
+                {doorStyle === 'shaker' && (() => {
+                  const inset = 5 * sc;
+                  const fx = dx + inset;
+                  const fy = dr + inset;
+                  const fw = dw - 2 * inset;
+                  const fh = dh - 2 * inset;
+                  return (
+                    <polygon
+                      points={isoQuad([fx, fy, -0.3 * sc], [fx + fw, fy, -0.3 * sc], [fx + fw, fy + fh, -0.3 * sc], [fx, fy + fh, -0.3 * sc])}
+                      fill="none"
+                      stroke="#777"
+                      strokeWidth={0.7}
+                      opacity={0.6}
+                    />
+                  );
+                })()}
                 {/* Handle indicator */}
                 <polygon
                   points={isoQuad(
