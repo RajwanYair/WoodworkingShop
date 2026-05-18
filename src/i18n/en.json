@@ -193,6 +193,24 @@
     "apply": "Use Template",
     "close": "Close"
   },
+  "projects": {
+    "title": "Project Manager",
+    "saveCurrent": "Save Current Project",
+    "namePlaceholder": "Project name…",
+    "save": "Save",
+    "load": "Load",
+    "delete": "Delete",
+    "export": "Export JSON",
+    "import": "Import JSON",
+    "empty": "No saved projects",
+    "cabinets": "cabinet(s)",
+    "saved": "Project saved",
+    "loaded": "Project loaded",
+    "deleted": "Project deleted",
+    "exported": "Project exported",
+    "imported": "Project imported",
+    "importError": "Invalid project file"
+  },
   "saves": {
     "title": "My Saved Cabinets",
     "projectName": "Project Name",

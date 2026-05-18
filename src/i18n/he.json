@@ -193,6 +193,24 @@
     "apply": "השתמש בתבנית",
     "close": "סגור"
   },
+  "projects": {
+    "title": "ניהול פרויקטים",
+    "saveCurrent": "שמור פרויקט נוכחי",
+    "namePlaceholder": "שם פרויקט…",
+    "save": "שמור",
+    "load": "טען",
+    "delete": "מחק",
+    "export": "ייצוא JSON",
+    "import": "ייבוא JSON",
+    "empty": "אין פרויקטים שמורים",
+    "cabinets": "ארון(ות)",
+    "saved": "הפרויקט נשמר",
+    "loaded": "הפרויקט נטען",
+    "deleted": "הפרויקט נמחק",
+    "exported": "הפרויקט יוצא",
+    "imported": "הפרויקט יובא",
+    "importError": "קובץ פרויקט שגוי"
+  },
   "saves": {
     "title": "הארונות שלי",
     "projectName": "שם פרויקט",

@@ -5,6 +5,7 @@ import { useToastStore } from '../../store/toast-store';
 import { configToUrl } from '../../utils/url-state';
 import { HelpButton } from './OnboardingOverlay';
 import { TemplatePicker } from '../configurator/TemplatePicker';
+import { ProjectManagerModal } from './ProjectManagerModal';
 import {
   IconSun,
   IconMoon,
@@ -19,6 +20,7 @@ import {
   IconDocument,
   IconContrast,
   IconLayers,
+  IconFolder,
 } from './Icons';
 
 const tabs = ['configurator', 'preview', 'optimizer', 'assembly', 'pdf'] as const;
@@ -37,6 +39,7 @@ export function Header() {
     useCabinetStore();
   const lang = i18n.language;
   const [showTemplates, setShowTemplates] = useState(false);
+  const [showProjects, setShowProjects] = useState(false);
 
   const toggleLang = () => {
     const next = lang === 'en' ? 'he' : 'en';
@@ -191,6 +194,14 @@ export function Header() {
           <IconLayers size={16} />
         </button>
         <button
+          onClick={() => setShowProjects(true)}
+          className="text-wood-200 hover:text-white flex items-center"
+          title={t('projects.title')}
+          aria-label={t('projects.title')}
+        >
+          <IconFolder size={16} />
+        </button>
+        <button
           onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: '?' }))}
           className="text-wood-200 hover:text-white flex items-center"
           title="Keyboard shortcuts (?)"
@@ -201,6 +212,7 @@ export function Header() {
         <HelpButton />
       </div>
       {showTemplates && <TemplatePicker onClose={() => setShowTemplates(false)} />}
+      {showProjects && <ProjectManagerModal onClose={() => setShowProjects(false)} />}
     </header>
   );
 }
