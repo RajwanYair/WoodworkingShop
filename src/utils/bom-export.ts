@@ -11,6 +11,13 @@ export function generateBomCsv(
 ): string {
   const rows: string[] = [];
 
+  // ── File metadata header ───────────────────────────────────────────────────
+  const generatedAt = new Date().toISOString();
+  rows.push(csvRow(['# Cabinet Planner BOM Export', '', '', '', '', '', '', '', '', '', '']));
+  rows.push(csvRow([`# Version: ${__APP_VERSION__}  Schema: bom-csv-v1`, '', '', '', '', '', '', '', '', '', '']));
+  rows.push(csvRow([`# Generated: ${generatedAt}`, '', '', '', '', '', '', '', '', '', '']));
+  rows.push('');
+
   // ── Material area summary section ─────────────────────────────────────────
   // Group all parts across all cabinets by material key and total their area.
   const areaMm2ByMat = new Map<string, number>();

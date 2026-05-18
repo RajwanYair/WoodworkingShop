@@ -36,6 +36,10 @@ export function cutSheetToGcode(sheet: CutSheet, opts?: Partial<GcodeOptions>): 
   const lines: string[] = [];
 
   // Header
+  const generatedAt = new Date().toISOString();
+  lines.push(`; Cabinet Planner G-code Export`);
+  lines.push(`; Version: ${__APP_VERSION__}  Schema: gcode-v1`);
+  lines.push(`; Generated: ${generatedAt}`);
   lines.push(`; G-code for sheet ${sheet.sheetIndex + 1} - ${sheet.material} ${sheet.thickness}mm`);
   lines.push(`; Sheet size: ${sheet.sheetWidth} x ${sheet.sheetLength} mm`);
   lines.push(`; Tool diameter: ${o.toolDiameter} mm, Feed: ${o.feedRate} mm/min`);

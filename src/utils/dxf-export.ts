@@ -10,6 +10,21 @@ import { triggerDownload } from './download';
 export function cutSheetToDxf(sheet: CutSheet): string {
   const lines: string[] = [];
 
+  // ── File metadata (comments before first SECTION) ──
+  const generatedAt = new Date().toISOString();
+  lines.push(
+    `999`,
+    `Cabinet Planner DXF Export`,
+    `999`,
+    `Version: ${__APP_VERSION__}`,
+    `999`,
+    `Schema: dxf-r12-v1`,
+    `999`,
+    `Generated: ${generatedAt}`,
+    `999`,
+    `Sheet: ${sheet.sheetIndex + 1}  Material: ${sheet.material}  Thickness: ${sheet.thickness}mm`,
+  );
+
   // ── HEADER section ──
   lines.push('0', 'SECTION', '2', 'HEADER');
   lines.push('9', '$INSUNITS', '70', '4'); // 4 = millimeters
