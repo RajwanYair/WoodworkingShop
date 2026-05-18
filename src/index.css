@@ -90,6 +90,13 @@
   display: none;
 }
 
+/* No-JS fallback message */
+.noscript-msg {
+  text-align: center;
+  padding: 2rem;
+  font-family: system-ui, sans-serif;
+}
+
 /* Mobile bottom sheet animation */
 @keyframes slide-up {
   from {
@@ -289,7 +296,6 @@
   .print-color {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
-    color-adjust: exact !important;
   }
 
   /* v3.28.0 — hide interactive focus rings, tooltips, and scroll indicators on paper */

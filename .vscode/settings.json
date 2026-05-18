@@ -51,6 +51,11 @@
   // extension handles CSS validation instead.
   "css.validate": false,
   "scss.validate": false,
+  // Suppress individual CSS lint rules that fire even with validate:false in
+  // some VS Code versions (e.g. vendor-prefix compat warnings for print CSS).
+  "css.lint.compatibleVendorPrefixes": "ignore",
+  "css.lint.vendorPrefix": "ignore",
+  "css.lint.unknownProperties": "ignore",
 
   "files.exclude": {
     "**/dist/**": true,
@@ -65,6 +70,13 @@
   },
 
   "webhint.ignoreHintedFiles": ["**/dist/**", "**/node_modules/**", "**/coverage/**", "**/playwright-report/**"],
+
+  // ─── GitHub Actions extension ────────────────────────────────────────────
+  // Disable "action not pinned to SHA" warnings — we intentionally use
+  // named tags (v4, v5) for readability.  The "unable to resolve action"
+  // errors are a GitHub API authentication issue in the extension and do
+  // not indicate problems with the workflow YAML.
+  "github-actions.workflows.pinned.enabled": false,
 
   "html.validate.scripts": true,
   "html.validate.styles": true,
