@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useToastStore } from '../../store/toast-store';
@@ -7,8 +7,11 @@ import { generateParts } from '../../engine/parts';
 import { generateHardware } from '../../engine/hardware';
 import { downloadDxfForSheet, downloadAllSheetsDxf } from '../../utils/dxf-export';
 import { downloadGcodeForSheet, downloadAllSheetsGcode } from '../../utils/gcode-export';
-import { downloadBomCsv, downloadHardwareCsv } from '../../utils/bom-export';
+import { downloadHardwareCsv, generateBomCsv } from '../../utils/bom-export';
+import { triggerDownload } from '../../utils/download';
 import { OptimizationNotesPanel } from './OptimizationNotesPanel';
+import BomWorker from '../../workers/bom-export.worker?worker';
+import type { BomWorkerOutput } from '../../workers/bom-export.worker';
 import {
   IconDxf,
   IconGcode,
@@ -55,6 +58,8 @@ export function OptimizerView() {
   const lang = i18n.language as Lang;
   const [hoveredPartId, setHoveredPartId] = useState<string | null>(null);
   const [showPartNames, setShowPartNames] = useState(false); // Sprint 146 — part name labels
+  const [bomExporting, setBomExporting] = useState(false); // v3.17.0 worker state
+  const workerRef = useRef<Worker | null>(null);
   const multiCabinet = cabinets.length > 1;
   const displayOpt = multiCabinet ? combinedOptimization : optimization;
 
@@ -64,6 +69,50 @@ export function OptimizerView() {
       .replace(/[^\w\u05D0-\u05EA.-]/g, '-')
       .replace(/-+/g, '-')
       .replace(/^-|-$/g, '') || 'cabinet';
+
+  /** Worker-based BOM CSV export (v3.17.0) */
+  const handleBomExportWorker = useCallback(() => {
+    if (bomExporting) return;
+    setBomExporting(true);
+    const bomData = cabinets.map((c) => ({
+      name: c.name,
+      parts: generateParts(c.config),
+      hardware: generateHardware(c.config),
+      notes: c.notes,
+    }));
+    const filename = `${filePrefix}-bill-of-materials.csv`;
+
+    if (typeof Worker !== 'undefined') {
+      const worker = new BomWorker();
+      workerRef.current = worker;
+      worker.onmessage = (e: MessageEvent<BomWorkerOutput>) => {
+        if (e.data.type === 'done' && e.data.csv) {
+          triggerDownload(e.data.csv, 'text/csv;charset=utf-8', filename);
+          useToastStore.getState().addToast(t('toast.bomExported'), 'success');
+        } else {
+          useToastStore.getState().addToast(t('toast.bomExportError', 'BOM export failed'), 'error');
+        }
+        setBomExporting(false);
+        worker.terminate();
+        workerRef.current = null;
+      };
+      worker.onerror = () => {
+        // Fall back to synchronous export
+        const csv = generateBomCsv(bomData, lang);
+        triggerDownload(csv, 'text/csv;charset=utf-8', filename);
+        useToastStore.getState().addToast(t('toast.bomExported'), 'success');
+        setBomExporting(false);
+        workerRef.current = null;
+      };
+      worker.postMessage({ cabinets: bomData, lang });
+    } else {
+      // No Worker support — synchronous fallback
+      const csv = generateBomCsv(bomData, lang);
+      triggerDownload(csv, 'text/csv;charset=utf-8', filename);
+      useToastStore.getState().addToast(t('toast.bomExported'), 'success');
+      setBomExporting(false);
+    }
+  }, [bomExporting, cabinets, filePrefix, lang, t]);
 
   // Sprint A3 part 2: hints — surface low-yield sheets and same-thickness
   // material consolidation opportunities so the user knows to consult the
@@ -181,20 +230,13 @@ export function OptimizerView() {
             <IconGcode size={14} /> G-code
           </button>
           <button
-            onClick={() => {
-              const bomData = cabinets.map((c) => ({
-                name: c.name,
-                parts: generateParts(c.config),
-                hardware: generateHardware(c.config),
-              }));
-              downloadBomCsv(bomData, lang, `${filePrefix}-bill-of-materials.csv`);
-              useToastStore.getState().addToast(t('toast.bomExported'), 'success');
-            }}
-            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
+            onClick={handleBomExportWorker}
+            disabled={bomExporting}
+            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 disabled:opacity-50 disabled:cursor-wait transition-colors flex items-center gap-1.5"
             title={t('optimizer.exportBom')}
             aria-label={t('optimizer.exportBom')}
           >
-            <IconList size={14} /> BOM
+            <IconList size={14} /> {bomExporting ? '…' : 'BOM'}
           </button>
           {/* Sprint 137 — hardware CSV */}
           <button
