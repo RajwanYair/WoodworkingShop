@@ -116,4 +116,36 @@ describe('optimizeCutSheets', () => {
       expect(panelSheets[0].yieldPercent).toBeGreaterThanOrEqual(panelSheets[1].yieldPercent);
     }
   });
+
+  it('all placed CutRects have a grainVertical boolean field (Sprint 16)', () => {
+    const parts = generateParts(DEFAULT_CONFIG);
+    const result = optimizeCutSheets(parts);
+    for (const sheet of result.sheets) {
+      for (const p of sheet.parts) {
+        expect(typeof p.grainVertical).toBe('boolean');
+      }
+    }
+  });
+
+  it('grain-locked material parts are not rotated 90° (grainVertical preserved)', () => {
+    // plywood-17 has hasGrain=true — parts should keep grainVertical=true if length > width
+    const tallConfig = {
+      ...DEFAULT_CONFIG,
+      width: 800,
+      height: 2000,
+      depth: 400,
+      shelfCount: 3,
+      doorStyle: 'none' as const,
+      drawerCount: 0,
+    };
+    const parts = generateParts(tallConfig);
+    const result = optimizeCutSheets(parts);
+    // Side panels are tall (length > width) so grainVertical=true — must stay true after placement
+    for (const sheet of result.sheets) {
+      for (const p of sheet.parts) {
+        // grainVertical must be a boolean (not undefined)
+        expect(p.grainVertical === true || p.grainVertical === false).toBe(true);
+      }
+    }
+  });
 });

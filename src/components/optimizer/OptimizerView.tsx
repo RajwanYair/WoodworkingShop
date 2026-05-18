@@ -989,6 +989,7 @@ function SheetCard({
             onHover={onHoverPart}
             showLabel={showPartNames}
             shadowFilterId={`shadow-${sheet.sheetIndex}`}
+            showGrain={mat.hasGrain}
           />
         ))}
 
@@ -1041,6 +1042,7 @@ function PartRect({
   onHover,
   showLabel,
   shadowFilterId,
+  showGrain,
 }: {
   part: CutRect;
   scale: number;
@@ -1050,6 +1052,7 @@ function PartRect({
   onHover: (id: string | null) => void;
   showLabel: boolean;
   shadowFilterId?: string;
+  showGrain: boolean;
 }) {
   const x = part.x * scale;
   const y = part.y * scale;
@@ -1104,8 +1107,9 @@ function PartRect({
           )}
         </>
       )}
-      {/* Grain direction arrow */}
-      {w > 8 &&
+      {/* Grain direction arrow — only for grain-sensitive materials */}
+      {showGrain &&
+        w > 8 &&
         h > 8 &&
         (part.grainVertical ? (
           <g opacity={isFaded ? 0.15 : 0.45} pointerEvents="none">
