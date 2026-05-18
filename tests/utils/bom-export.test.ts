@@ -132,4 +132,37 @@ describe('generateBomCsv', () => {
     const csv = generateBomCsv([{ name: 'X', parts: [unknownPart], hardware: [] }], 'en');
     expect(csv).toContain('unicorn-wood-99');
   });
+
+  // ── Sprint 20: multi-cabinet Part ID prefix ────────────────────────────────
+
+  it('does NOT prefix Part ID in single-cabinet export', () => {
+    const csv = generateBomCsv(singleCabinet, 'en');
+    // With one cabinet, P01 should appear as-is
+    expect(csv).toContain(',P01,');
+    expect(csv).not.toContain('C1-P01');
+  });
+
+  it('prefixes Part ID with cabinet index in multi-cabinet export', () => {
+    const cabs = [
+      { name: 'Upper', parts: [{ ...mockPart, id: 'P01' }], hardware: [] },
+      { name: 'Lower', parts: [{ ...mockPart, id: 'P01' }], hardware: [] },
+    ];
+    const csv = generateBomCsv(cabs, 'en');
+    expect(csv).toContain('C1-P01');
+    expect(csv).toContain('C2-P01');
+    // Original bare P01 should not appear in multi-cabinet mode
+    expect(csv).not.toMatch(/,P01,/);
+  });
+
+  it('multi-cabinet prefix increments correctly for 3 cabinets', () => {
+    const cabs = [
+      { name: 'A', parts: [{ ...mockPart, id: 'P01' }], hardware: [] },
+      { name: 'B', parts: [{ ...mockPart, id: 'P01' }], hardware: [] },
+      { name: 'C', parts: [{ ...mockPart, id: 'P01' }], hardware: [] },
+    ];
+    const csv = generateBomCsv(cabs, 'en');
+    expect(csv).toContain('C1-P01');
+    expect(csv).toContain('C2-P01');
+    expect(csv).toContain('C3-P01');
+  });
 });

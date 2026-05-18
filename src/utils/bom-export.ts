@@ -52,8 +52,11 @@ export function generateBomCsv(
     'Cabinet,Part ID,Part Name,Qty,Material,Thickness (mm),Length (mm),Width (mm),Edge Banding,Weight (kg),Grain Direction',
   );
 
+  const isMultiCabinet = cabinets.length > 1;
+
   // Parts section
-  for (const cab of cabinets) {
+  for (let cabIdx = 0; cabIdx < cabinets.length; cabIdx++) {
+    const cab = cabinets[cabIdx];
     // Sprint 135 — emit cabinet notes as a comment row if present
     if (cab.notes && cab.notes.trim()) {
       rows.push(csvRow([`# ${cab.name} notes: ${cab.notes.trim()}`, '', '', '', '', '', '', '', '', '', '']));
@@ -74,10 +77,12 @@ export function generateBomCsv(
       } catch {
         /* skip */
       }
+      // Sprint 20 — prefix Part ID with cabinet index in multi-cabinet BOMs
+      const partId = isMultiCabinet ? `C${cabIdx + 1}-${p.id}` : p.id;
       rows.push(
         csvRow([
           cab.name,
-          p.id,
+          partId,
           p.name[lang],
           String(p.qty),
           matName,
