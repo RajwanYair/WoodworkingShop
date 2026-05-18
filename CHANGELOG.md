@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.35.0] — 2026-05-18
+
+### ✨ Added
+
+- **Hardware supplier links**: key hardware items (Euro hinges, mounting plates, hinge dampers, drawer slides, leveller feet) now carry `supplierUrl` + `supplierName` fields. The Hardware List table shows a clickable supplier badge (opens in new tab, `rel="noopener noreferrer"`) next to items that have a reference.
+- **`HardwareItem.supplierName`** field added to the domain type for display-friendly supplier names (e.g. `'Blum'`, `'Häfele'`).
+- **`hardware.supplier`** i18n key added to EN + HE bundles.
+
 ## [3.34.0] — 2026-05-18
 
 ### ✨ Added

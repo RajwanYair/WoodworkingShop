@@ -129,6 +129,7 @@ export function HardwareTable() {
             <th className="px-2 py-1 text-start">{t('hardware.name')}</th>
             <th className="px-2 py-1 text-end w-24">{t('hardware.qty')}</th>
             <th className="px-2 py-1 text-start">{t('hardware.unit')}</th>
+            <th className="px-2 py-1 text-start w-20">{t('hardware.supplier')}</th>
           </tr>
         </thead>
         <tbody>
@@ -157,6 +158,19 @@ export function HardwareTable() {
                   />
                 </td>
                 <td className="px-2 py-1">{h.unit[lang]}</td>
+                <td className="px-2 py-1">
+                  {h.supplierUrl && (
+                    <a
+                      href={h.supplierUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-wood-500 hover:text-wood-700 dark:text-wood-400 dark:hover:text-wood-200 underline"
+                      aria-label={`${h.supplierName ?? 'Supplier'} — opens in new tab`}
+                    >
+                      {h.supplierName ?? '↗'}
+                    </a>
+                  )}
+                </td>
               </tr>
             );
           })}

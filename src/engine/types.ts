@@ -113,6 +113,8 @@ export interface HardwareItem {
   unit: { en: string; he: string };
   /** Optional supplier product URL for reference. */
   supplierUrl?: string;
+  /** Display name for the supplier (e.g. 'Blum', 'Häfele'). */
+  supplierName?: string;
   /** Optional price per unit in local currency (for cost estimation). */
   unitPrice?: number;
 }

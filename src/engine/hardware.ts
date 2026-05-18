@@ -20,6 +20,8 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
       name: { en: 'Euro Hinge 35 mm (110°)', he: 'ציר מטבח 35 מ"מ (110°)' },
       qty: d.hingesPerDoor * cfg.doorCount,
       unit: { en: 'pcs', he: "יח'" },
+      supplierUrl: 'https://www.blum.com/in/en/products/hinges/',
+      supplierName: 'Blum',
     });
 
     // Mounting plates (one per hinge)
@@ -28,6 +30,8 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
       name: { en: 'Hinge Mounting Plate', he: 'פלטת ציר' },
       qty: d.hingesPerDoor * cfg.doorCount,
       unit: { en: 'pcs', he: "יח'" },
+      supplierUrl: 'https://www.blum.com/in/en/products/hinges/',
+      supplierName: 'Blum',
     });
   }
   // ── Shelf pins (4 per adjustable shelf) ──
@@ -37,6 +41,8 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
       name: { en: 'Shelf Pin 5 mm', he: 'פין מדף 5 מ"מ' },
       qty: cfg.shelfCount * 4,
       unit: { en: 'pcs', he: "יח'" },
+      supplierUrl: 'https://www.hafele.com/en/info/hafele-worldwide/hafele-companies/',
+      supplierName: 'Häfele',
     });
   }
 
@@ -124,6 +130,8 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
       name: slideTypeLabel,
       qty: cfg.drawerCount,
       unit: { en: 'pairs', he: 'זוגות' },
+      supplierUrl: 'https://www.blum.com/in/en/products/drawer-systems/',
+      supplierName: 'Blum',
     });
 
     // Soft-close under-mount dampers (one per drawer when soft-close type)
@@ -133,6 +141,8 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
         name: { en: 'Soft-Close Drawer Damper', he: 'בולם סגירה רכה למגירה' },
         qty: cfg.drawerCount,
         unit: { en: 'pcs', he: "יח'" },
+        supplierUrl: 'https://www.blum.com/in/en/products/drawer-systems/',
+        supplierName: 'Blum',
       });
     }
 
@@ -154,6 +164,8 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
       name: { en: 'Soft-Close Hinge Damper', he: 'בולם סגירה רכה לציר' },
       qty: d.hingesPerDoor * cfg.doorCount,
       unit: { en: 'pcs', he: "יח'" },
+      supplierUrl: 'https://www.blum.com/in/en/products/hinges/',
+      supplierName: 'Blum',
     });
 
     // Door bumper pads — 2 per door
@@ -172,6 +184,8 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
     qty: 4,
     unit: { en: 'pcs', he: "יח'" },
     unitPrice: 3.5,
+    supplierUrl: 'https://www.hafele.com/en/info/hafele-worldwide/hafele-companies/',
+    supplierName: 'Häfele',
   });
 
   // ── Edge banding roll (Sprint 113) — approximate metres based on the
