@@ -1,8 +1,11 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import { readFileSync } from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 
 const { version } = JSON.parse(readFileSync('./package.json', 'utf-8')) as { version: string };
+const tmpDir = path.join(os.tmpdir(), 'WoodworkingShop');
 
 export default defineConfig({
   plugins: [react()],
@@ -17,6 +20,7 @@ export default defineConfig({
     setupFiles: ['tests/setup.ts'],
     coverage: {
       provider: 'v8',
+      reportsDirectory: path.join(tmpDir, 'coverage'),
       include: ['src/engine/**', 'src/utils/**', 'src/store/**', 'src/hooks/**'],
       exclude: ['src/engine/types.ts', 'src/engine/index.ts', 'src/utils/download.ts', 'src/hooks/useTouchGestures.ts'],
       thresholds: {

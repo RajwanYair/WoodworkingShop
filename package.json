@@ -43,7 +43,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "lint": "eslint --cache --cache-location node_modules/.cache/eslint/ --max-warnings 0 .",
+    "lint": "node scripts/lint.js",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc -b --noEmit",

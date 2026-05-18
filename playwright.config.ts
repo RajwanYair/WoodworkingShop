@@ -1,4 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
+import os from 'os';
+import path from 'path';
+
+const tmpDir = path.join(os.tmpdir(), 'WoodworkingShop');
 
 /**
  * Playwright E2E config for WoodworkingShop SPA.
@@ -8,13 +12,16 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './tests/e2e',
+  outputDir: path.join(tmpDir, 'test-results'),
   timeout: 30_000,
   expect: { timeout: 5_000 },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'list',
+  reporter: process.env.CI
+    ? [['github'], ['html', { open: 'never', outputFolder: path.join(tmpDir, 'playwright-report') }]]
+    : [['list'], ['html', { open: 'never', outputFolder: path.join(tmpDir, 'playwright-report') }]],
   use: {
     // In CI: preview server serves the pre-built dist on port 4173.
     // Locally: dev server on port 5173.

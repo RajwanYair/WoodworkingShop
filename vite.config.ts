@@ -3,11 +3,13 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { resolve } from 'path';
 import { readFileSync } from 'fs';
+import os from 'os';
 
 const { version } = JSON.parse(readFileSync('./package.json', 'utf-8')) as { version: string };
 
 // https://vite.dev/config/
 export default defineConfig({
+  cacheDir: resolve(os.tmpdir(), 'WoodworkingShop', '.vite_cache'),
   base: '/WoodworkingShop/',
   plugins: [react(), tailwindcss()],
   define: {
