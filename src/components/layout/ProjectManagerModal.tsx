@@ -22,6 +22,7 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cabinets = useCabinetStore((s) => s.cabinets);
+  const snapshots = useCabinetStore((s) => s.snapshots);
   const projectName = useCabinetStore((s) => s.projectName);
   const loadProject = useCabinetStore((s) => s.loadProject);
   const setProjectName = useCabinetStore((s) => s.setProjectName);
@@ -56,7 +57,7 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
   };
 
   const handleExport = (project: SavedProject) => {
-    exportProjectJson(project);
+    exportProjectJson(project, snapshots);
     addToast(t('projects.exported'), 'success');
   };
 

@@ -1,12 +1,14 @@
-import type { CabinetEntry } from '../store/cabinet-store';
+import type { CabinetEntry, ProjectSnapshot } from '../store/cabinet-store';
 
 const STORAGE_KEY = 'cabinet-planner-projects-v1';
+const SNAPSHOTS_KEY = 'woodworkingshop:snapshots';
 
 export interface SavedProject {
   id: string;
   name: string;
   savedAt: string; // ISO timestamp
   cabinets: CabinetEntry[];
+  snapshots?: ProjectSnapshot[]; // Sprint 18 — snapshot history round-trip
 }
 
 function load(): SavedProject[] {
@@ -56,8 +58,9 @@ export function deleteProject(id: string): void {
   save(projects);
 }
 
-export function exportProjectJson(project: SavedProject): void {
-  const blob = new Blob([JSON.stringify(project, null, 2)], { type: 'application/json' });
+export function exportProjectJson(project: SavedProject, snapshots?: ProjectSnapshot[]): void {
+  const payload: SavedProject = snapshots ? { ...project, snapshots } : project;
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
@@ -77,6 +80,22 @@ export function importProjectJson(file: File): Promise<SavedProject> {
         if (!project.cabinets || !Array.isArray(project.cabinets)) {
           reject(new Error('Invalid project file'));
           return;
+        }
+        // Sprint 18 — restore snapshot history, merging by id to avoid duplicates
+        if (Array.isArray(project.snapshots) && project.snapshots.length > 0) {
+          try {
+            const existing: ProjectSnapshot[] = JSON.parse(
+              localStorage.getItem(SNAPSHOTS_KEY) ?? '[]',
+            ) as ProjectSnapshot[];
+            const existingIds = new Set(existing.map((s) => s.id));
+            const merged = [
+              ...existing,
+              ...project.snapshots.filter((s) => !existingIds.has(s.id)),
+            ];
+            localStorage.setItem(SNAPSHOTS_KEY, JSON.stringify(merged));
+          } catch {
+            // Non-critical — silently skip snapshot restore
+          }
         }
         // Re-save with a fresh id to avoid conflicts
         const projects = load();
