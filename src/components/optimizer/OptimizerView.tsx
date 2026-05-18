@@ -12,6 +12,8 @@ import { triggerDownload } from '../../utils/download';
 import { OptimizationNotesPanel } from './OptimizationNotesPanel';
 import BomWorker from '../../workers/bom-export.worker?worker';
 import type { BomWorkerOutput } from '../../workers/bom-export.worker';
+import DxfWorker from '../../workers/dxf-export.worker?worker';
+import type { DxfWorkerOutput } from '../../workers/dxf-export.worker';
 import { BulkReplaceModal } from './BulkReplaceModal';
 import {
   IconDxf,
@@ -62,8 +64,10 @@ export function OptimizerView() {
   const [hoveredPartId, setHoveredPartId] = useState<string | null>(null);
   const [showPartNames, setShowPartNames] = useState(false); // Sprint 146 — part name labels
   const [bomExporting, setBomExporting] = useState(false); // v3.17.0 worker state
+  const [dxfExporting, setDxfExporting] = useState(false); // v3.22.0 DXF worker state
   const [showBulkReplace, setShowBulkReplace] = useState(false); // v3.18.0
   const workerRef = useRef<Worker | null>(null);
+  const dxfWorkerRef = useRef<Worker | null>(null);
   const multiCabinet = cabinets.length > 1;
   const displayOpt = multiCabinet ? combinedOptimization : optimization;
 
@@ -117,6 +121,43 @@ export function OptimizerView() {
       setBomExporting(false);
     }
   }, [bomExporting, cabinets, filePrefix, lang, t]);
+
+  /** Worker-based DXF all-sheets export (v3.22.0) */
+  const handleDxfExportWorker = useCallback(() => {
+    if (dxfExporting || displayOpt.sheets.length === 0) return;
+    setDxfExporting(true);
+    const sheets = displayOpt.sheets;
+    const filename = `${filePrefix}-cut-sheets-all.dxf`;
+
+    if (typeof Worker !== 'undefined') {
+      const worker = new DxfWorker();
+      dxfWorkerRef.current = worker;
+      worker.onmessage = (e: MessageEvent<DxfWorkerOutput>) => {
+        if (e.data.type === 'done' && e.data.dxf) {
+          triggerDownload(e.data.dxf, 'application/dxf', e.data.filename ?? filename);
+          useToastStore.getState().addToast(t('toast.dxfExported'), 'success');
+        } else {
+          useToastStore.getState().addToast(t('toast.dxfExportError', 'DXF export failed'), 'error');
+        }
+        setDxfExporting(false);
+        worker.terminate();
+        dxfWorkerRef.current = null;
+      };
+      worker.onerror = () => {
+        // Fallback: synchronous export
+        downloadAllSheetsDxf(sheets, filePrefix);
+        useToastStore.getState().addToast(t('toast.dxfExported'), 'success');
+        setDxfExporting(false);
+        dxfWorkerRef.current = null;
+      };
+      worker.postMessage({ mode: 'all', sheets, projectName: filePrefix });
+    } else {
+      // No Worker support — synchronous fallback
+      downloadAllSheetsDxf(sheets, filePrefix);
+      useToastStore.getState().addToast(t('toast.dxfExported'), 'success');
+      setDxfExporting(false);
+    }
+  }, [dxfExporting, displayOpt.sheets, filePrefix, t]);
 
   // Sprint A3 part 2: hints — surface low-yield sheets and same-thickness
   // material consolidation opportunities so the user knows to consult the
@@ -223,14 +264,21 @@ export function OptimizerView() {
         </label>
         <div className="ms-2 flex gap-2">
           <button
-            onClick={() => {
-              downloadAllSheetsDxf(displayOpt.sheets, filePrefix);
-              useToastStore.getState().addToast(t('toast.dxfExported'), 'success');
-            }}
-            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
+            onClick={handleDxfExportWorker}
+            disabled={dxfExporting}
+            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
             title={t('optimizer.exportDxf')}
+            aria-busy={dxfExporting}
           >
-            <IconDxf size={14} /> DXF
+            {dxfExporting ? (
+              <svg className="h-3 w-3 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                <circle cx="12" cy="12" r="10" strokeOpacity={0.25} />
+                <path d="M12 2a10 10 0 0 1 10 10" />
+              </svg>
+            ) : (
+              <IconDxf size={14} />
+            )}
+            DXF
           </button>
           <button
             onClick={() => {
