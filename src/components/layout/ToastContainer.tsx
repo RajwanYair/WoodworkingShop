@@ -1,4 +1,4 @@
-import { useToastStore, type ToastType } from '../../store/toast-store';
+import { useToastStore, type Toast, type ToastType } from '../../store/toast-store';
 import { IconCheck, IconX, IconInfo } from './Icons';
 
 const IconMap: Record<ToastType, React.ReactElement> = {
@@ -12,12 +12,9 @@ const colors: Record<ToastType, string> = {
   info: 'bg-wood-600',
 };
 
-export function ToastContainer() {
-  const { toasts, removeToast } = useToastStore();
-  if (toasts.length === 0) return null;
-
+function ToastList({ toasts, removeToast }: { toasts: Toast[]; removeToast: (id: number) => void }) {
   return (
-    <div className="fixed bottom-16 right-5 z-50 flex flex-col gap-2 max-w-xs" role="status" aria-live="polite">
+    <>
       {toasts.map((t) => (
         <div
           key={t.id}
@@ -27,13 +24,34 @@ export function ToastContainer() {
           <span className="flex-1">{t.message}</span>
           <button
             onClick={() => removeToast(t.id)}
-            className="opacity-70 hover:opacity-100 ml-1 flex items-center"
+            className="opacity-70 hover:opacity-100 ms-1 flex items-center"
             aria-label="Dismiss"
           >
             <IconX size={14} />
           </button>
         </div>
       ))}
+    </>
+  );
+}
+
+export function ToastContainer() {
+  const { toasts, removeToast } = useToastStore();
+  if (toasts.length === 0) return null;
+
+  const errorToasts = toasts.filter((t) => t.type === 'error');
+  const otherToasts = toasts.filter((t) => t.type !== 'error');
+
+  return (
+    <div className="fixed bottom-16 end-5 z-50 flex flex-col gap-2 max-w-xs">
+      {/* Errors announced immediately — assertive interrupts the screen reader */}
+      <div role="alert" aria-live="assertive" aria-atomic="true">
+        <ToastList toasts={errorToasts} removeToast={removeToast} />
+      </div>
+      {/* Success / info announced politely when the reader is idle */}
+      <div role="status" aria-live="polite" aria-atomic="false">
+        <ToastList toasts={otherToasts} removeToast={removeToast} />
+      </div>
     </div>
   );
 }

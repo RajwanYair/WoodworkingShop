@@ -181,6 +181,19 @@ export function OptimizerView() {
 
   return (
     <div className="space-y-6">
+      {/* Sprint 11 — sr-only ARIA live region for screen-reader status announcements */}
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {optimizationPending
+          ? t('optimizer.statusPending')
+          : displayOpt.sheets.length > 0
+            ? t('optimizer.statusComplete', { count: displayOpt.sheets.length })
+            : ''}
+      </div>
       {/* v3.21.0 — Worker recalculation indicator */}
       {optimizationPending && (
         <div className="flex items-center gap-2 text-xs text-wood-600 dark:text-wood-300 animate-pulse">
@@ -195,7 +208,7 @@ export function OptimizerView() {
             <circle cx="12" cy="12" r="10" strokeOpacity={0.25} />
             <path d="M12 2a10 10 0 0 1 10 10" />
           </svg>
-          Recalculating cut sheets…
+          {t('optimizer.statusPending')}
         </div>
       )}
       {/* Hints (Sprint A3 part 2) */}

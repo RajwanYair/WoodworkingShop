@@ -181,7 +181,9 @@
       "qualityExcellent": "Excellent",
       "qualityGood": "Good",
       "qualityFair": "Fair — try Smart Optimizer for better yield"
-    }
+    },
+    "statusPending": "Computing cut sheets\u2026",
+    "statusComplete": "Optimization complete \u2014 {{count}} sheet(s) required"
   },
   "preview": {
     "title": "Cabinet Preview",
