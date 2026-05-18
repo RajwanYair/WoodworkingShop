@@ -292,7 +292,8 @@
     "gcodeExported": "קובץ G-code הורד",
     "bomExported": "רשימת חומרים CSV הורדה",
     "hardwareExported": "קובץ CSV של פרזול הורד",
-    "linkCopied": "קישור שיתוף הועתק ללוח"
+    "linkCopied": "קישור שיתוף הועתק ללוח",
+    "linkCopyFailed": "לא ניתן להעתיק קישור — אנא העתק את הכתובת מסרגל הכתובות"
   },
   "onboarding": {
     "title": "ברוכים הבאים למתכנן הארונות!",

@@ -1,5 +1,5 @@
 import type { CabinetConfig, DrawerSlideType } from '../engine/types';
-import { DEFAULT_CONFIG } from '../engine/materials';
+import { DEFAULT_CONFIG, CONSTRAINTS } from '../engine/materials';
 import { getTemplate } from '../engine/templates';
 
 /**
@@ -41,21 +41,22 @@ export function configToParams(cfg: CabinetConfig): URLSearchParams {
 /**
  * Decode URL search params into a partial CabinetConfig.
  * Returns only the fields present in the URL; merge with DEFAULT_CONFIG.
+ * v3.29.0: numeric params are clamped to CONSTRAINTS to prevent invalid configs from URLs.
  */
 export function paramsToConfig(params: URLSearchParams): Partial<CabinetConfig> {
   const patch: Partial<CabinetConfig> = {};
 
   const w = params.get('w');
-  if (w) patch.width = Number(w);
+  if (w) patch.width = Math.max(CONSTRAINTS.minWidth, Math.min(CONSTRAINTS.maxWidth, Number(w)));
   const h = params.get('h');
-  if (h) patch.height = Number(h);
+  if (h) patch.height = Math.max(CONSTRAINTS.minHeight, Math.min(CONSTRAINTS.maxHeight, Number(h)));
   const d = params.get('d');
-  if (d) patch.depth = Number(d);
+  if (d) patch.depth = Math.max(CONSTRAINTS.minDepth, Math.min(CONSTRAINTS.maxDepth, Number(d)));
   const ft = params.get('ft');
   if (ft === 'cabinet' || ft === 'bookshelf' || ft === 'desk' || ft === 'wardrobe' || ft === 'panel')
     patch.furnitureType = ft;
   const sc = params.get('sc');
-  if (sc) patch.shelfCount = Number(sc);
+  if (sc) patch.shelfCount = Math.max(0, Math.min(12, Number(sc)));
   const ss = params.get('ss');
   if (ss === 'equal' || ss === 'custom') patch.shelfSpacing = ss;
   const csp = params.get('csp');
@@ -75,11 +76,11 @@ export function paramsToConfig(params: URLSearchParams): Partial<CabinetConfig> 
   const ds = params.get('ds');
   if (ds === 'flat' || ds === 'none' || ds === 'shaker' || ds === 'glass') patch.doorStyle = ds;
   const dr = params.get('dr');
-  if (dr) patch.doorReveal = Number(dr);
+  if (dr) patch.doorReveal = Math.max(0, Math.min(20, Number(dr)));
   const hs = params.get('hs');
   if (hs === 'bar' || hs === 'knob' || hs === 'cup' || hs === 'none') patch.handleStyle = hs;
   const drc = params.get('drc');
-  if (drc) patch.drawerCount = Number(drc);
+  if (drc) patch.drawerCount = Math.max(0, Math.min(6, Number(drc)));
   const dh = params.get('dh');
   if (dh)
     patch.drawerHeights = dh
@@ -87,7 +88,7 @@ export function paramsToConfig(params: URLSearchParams): Partial<CabinetConfig> 
       .map(Number)
       .filter((n) => !isNaN(n) && n > 0);
   const kh = params.get('kh');
-  if (kh !== null) patch.kickHeight = Number(kh);
+  if (kh !== null) patch.kickHeight = Math.max(0, Math.min(200, Number(kh)));
   const dst = params.get('dst');
   if (dst === 'standard' || dst === 'soft-close' || dst === 'full-extension')
     patch.drawerSlideType = dst as DrawerSlideType;
@@ -101,9 +102,12 @@ export function paramsToConfig(params: URLSearchParams): Partial<CabinetConfig> 
   return patch;
 }
 
-/** Build a shareable URL from config */
-export function configToUrl(cfg: CabinetConfig): string {
+/** Build a shareable URL from config. Preserves the current ?pn= project name if set. */
+export function configToUrl(cfg: CabinetConfig, projectName?: string): string {
   const params = configToParams(cfg);
+  // v3.29.0: preserve project name in shareable link
+  const pn = projectName ?? new URLSearchParams(window.location.search).get('pn');
+  if (pn) params.set('pn', pn);
   const qs = params.toString();
   return qs
     ? `${window.location.origin}${window.location.pathname}?${qs}`

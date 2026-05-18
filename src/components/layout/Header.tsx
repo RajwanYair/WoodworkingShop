@@ -147,9 +147,12 @@ export function Header() {
         </button>
         <button
           onClick={() => {
-            const url = configToUrl(useCabinetStore.getState().config);
-            navigator.clipboard.writeText(url);
-            useToastStore.getState().addToast(t('toast.linkCopied'), 'success');
+            const { config, projectName } = useCabinetStore.getState();
+            const url = configToUrl(config, projectName);
+            navigator.clipboard.writeText(url).then(
+              () => useToastStore.getState().addToast(t('toast.linkCopied'), 'success'),
+              () => useToastStore.getState().addToast(t('toast.linkCopyFailed'), 'error'),
+            );
           }}
           className="text-wood-200 hover:text-white flex items-center"
           title="Copy shareable link"

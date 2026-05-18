@@ -293,7 +293,8 @@
     "bomExported": "BOM CSV downloaded",
     "hardwareExported": "Hardware CSV downloaded",
     "hardwareExported": "Hardware CSV downloaded",
-    "linkCopied": "Shareable link copied to clipboard"
+    "linkCopied": "Shareable link copied to clipboard",
+    "linkCopyFailed": "Could not copy link — please copy the URL from the address bar"
   },
   "onboarding": {
     "title": "Welcome to Cabinet Planner!",
