@@ -129,6 +129,11 @@ Two supplementary stores:
 - **Deploy target**: GitHub Pages (base path: `/WoodworkingShop/`)
 - **PWA**: service worker in `public/sw.js` with cache-first strategy
 
+Intermediate artifact policy:
+
+- Generated caches and reports (Vite cache, ESLint cache, Vitest coverage output, Playwright test results/reports) are configured to write to OS TEMP (`%TEMP%/WoodworkingShop` on Windows).
+- Workspace root should only contain source/config/documentation artifacts, not transient telemetry outputs.
+
 ## 🪑 Supported Furniture Types
 
 | Type        | Parts                                                  | Features                     |

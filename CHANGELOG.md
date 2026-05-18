@@ -11,6 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.45.1] — 2026-05-18
+
+### ✅ Production Hardening Follow-up
+
+- Fixed `tsconfig.test.json` to use supported TypeScript target/lib values so editor diagnostics and build tooling stay aligned.
+- Stabilized Firefox accessibility E2E execution by running axe-heavy checks serially with explicit per-test timeout headroom in `tests/e2e/accessibility.spec.ts`.
+- Corrected and tightened documentation around the current toolchain, shared MyScripts tooling ownership, and OS TEMP-only intermediate artifact policy in `README.md`, `ROADMAP.md`, and `docs/ARCHITECTURE.md`.
+
+### 🧪 Verification
+
+- `npm run ci` passed.
+- `npm run test:e2e` passed.
+
 ## [3.45.0] — 2026-05-18
 
 ### 🧭 Roadmap and Architecture

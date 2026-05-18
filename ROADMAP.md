@@ -148,8 +148,9 @@ Common development tools should be centralized under the parent MyScripts scope.
 Baseline:
 
 - Node runtime and package manager policy managed one level up where practical.
+- Shared reusable tooling assets are maintained under `../.tools` (MyScripts scope).
 - Project-level scripts remain authoritative for build/test/release.
-- Temporary/intermediate outputs should stay in temporary or ignored locations.
+- Temporary/intermediate outputs must be written to OS TEMP paths (for example `%TEMP%/WoodworkingShop`) rather than workspace-root folders.
 
 Operational policy:
 

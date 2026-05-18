@@ -110,7 +110,7 @@ npm ci
 # 3 — dev server  →  http://localhost:5173/WoodworkingShop/
 npm run dev
 
-# 4 — run 288 unit tests
+# 4 — run 318 unit tests
 npm test
 
 # 5 — production build  →  dist/
@@ -123,20 +123,20 @@ npm run build
 
 ## 🏗 Tech Stack
 
-| Layer         | Technology                           |
-| ------------- | ------------------------------------ |
-| Framework     | ⚛️ React 19                          |
-| Language      | 🔷 TypeScript 6 (strict mode)        |
-| Styling       | 🎨 Tailwind CSS 4                    |
-| State         | 🐻 Zustand 5                         |
-| PDF           | 📄 @react-pdf/renderer 4             |
-| i18n          | 🌐 i18next 25 + react-i18next        |
-| Build         | ⚡ Vite 8                            |
-| Unit tests    | 🧪 Vitest 3 + @testing-library/react |
-| E2E tests     | 🎭 Playwright                        |
-| Lint / format | 🧹 ESLint 9 (flat config) + Prettier |
-| CI/CD         | 🤖 GitHub Actions                    |
-| Deploy        | 🚀 GitHub Pages                      |
+| Layer         | Technology                            |
+| ------------- | ------------------------------------- |
+| Framework     | ⚛️ React 19                           |
+| Language      | 🔷 TypeScript 6 (strict mode)         |
+| Styling       | 🎨 Tailwind CSS 4                     |
+| State         | 🐻 Zustand 5                          |
+| PDF           | 📄 @react-pdf/renderer 4              |
+| i18n          | 🌐 i18next 26 + react-i18next         |
+| Build         | ⚡ Vite 8                             |
+| Unit tests    | 🧪 Vitest 4 + @testing-library/react  |
+| E2E tests     | 🎭 Playwright                         |
+| Lint / format | 🧹 ESLint 10 (flat config) + Prettier |
+| CI/CD         | 🤖 GitHub Actions                     |
+| Deploy        | 🚀 GitHub Pages                       |
 
 ---
 
@@ -206,11 +206,18 @@ npm run lint            # ESLint — 0 warnings policy
 npm run format          # Prettier auto-format
 npm run format:check    # Verify formatting (used in CI)
 npm run i18n:coverage   # Check EN ↔ HE translation parity
-npm run bundle:report   # Bundle size breakdown
+npm run bundle:check    # Bundle budget and size guard
 npm run check           # typecheck + lint + format:check + test  (pre-commit gate)
 npm run ci              # check + build + bundle:check  (full CI pipeline)
 npm run test:e2e        # Playwright end-to-end tests
 ```
+
+## 🧰 Tooling and Intermediate Files
+
+- Shared development tooling baseline is maintained one level up under `MyScripts/.tools`.
+- Project scripts remain the source of truth for this repository's behavior.
+- Intermediate artifacts and cache outputs are routed to OS TEMP paths (for example `%TEMP%/WoodworkingShop`) rather than committed workspace folders.
+- Generated outputs such as `dist`, `coverage`, `test-results`, and Playwright HTML reports are treated as disposable artifacts, not source-of-truth content.
 
 ---
 
