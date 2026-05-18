@@ -170,7 +170,18 @@
     "notesDesc": "Auto-detected suggestions that reduce sheets or improve yield",
     "notesEmpty": "No suggestions within the current tolerance — design is well optimized.",
     "notesRestore": "Restore dismissed suggestions",
-    "wasteReduced": "waste reduced"
+    "wasteReduced": "waste reduced",
+    "explainer": {
+      "title": "Why this layout? ",
+      "algorithm": "The optimizer uses MaxRects Best Short Side Fit — it places each part into the free rectangle that minimises wasted space after the cut.",
+      "placedParts": "{{total}} parts placed across {{sheets}} sheet(s)",
+      "rotatedParts": "{{count}} part(s) rotated 90° to improve fit (grain-free materials only)",
+      "grainLocked": "{{count}} part(s) kept upright to preserve wood grain direction",
+      "yieldResult": "Average yield: {{yield}}% — ratio of used area to total sheet area",
+      "qualityExcellent": "Excellent",
+      "qualityGood": "Good",
+      "qualityFair": "Fair — try Smart Optimizer for better yield"
+    }
   },
   "preview": {
     "title": "Cabinet Preview",

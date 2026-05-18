@@ -69,6 +69,7 @@ export function optimizeCutSheets(
           y: r.y,
           edgeBanding: r.edgeBanding,
           grainVertical: !r.rotated,
+          rotated: r.rotated,
         })),
         yieldPercent: round2((usedArea / sheetArea) * 100),
       });

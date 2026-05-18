@@ -128,6 +128,7 @@ export interface CutRect {
   y: number; // placed y on sheet
   edgeBanding?: string; // edge banding description (e.g. 'Front edge', '4 edges')
   grainVertical: boolean; // true if grain (length) runs along the sheet Y axis
+  rotated?: boolean; // true if the part was rotated 90° during placement
 }
 
 export interface CutSheet {
