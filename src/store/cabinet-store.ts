@@ -8,6 +8,69 @@ import { generateHardware } from '../engine/hardware';
 import { optimizeCutSheets } from '../engine/cut-optimizer';
 import { createJsonMemo } from '../engine/memo';
 import { readConfigFromUrl, pushConfigToUrl, readProjectNameFromUrl, pushProjectNameToUrl } from '../utils/url-state';
+import CutOptimizerWorker from '../workers/cut-optimizer.worker?worker';
+import type { CutOptimizerWorkerInput, CutOptimizerWorkerOutput } from '../workers/cut-optimizer.worker';
+
+// v3.21.0 — Module-level Web Worker singleton for cut optimization.
+// Kept outside Zustand state to avoid serialization. The worker result
+// callback closes over `_workerApplyFn` which is set during store creation.
+let _cutOptWorker: Worker | null = null;
+let _workerApplyFn: ((partial: Partial<CabinetState>) => void) | null = null;
+let _currentReqId = 0;
+
+function getCutOptWorker(): Worker | null {
+  if (typeof Worker === 'undefined') return null;
+  if (!_cutOptWorker) {
+    _cutOptWorker = new CutOptimizerWorker();
+    _cutOptWorker.onmessage = (e: MessageEvent<CutOptimizerWorkerOutput>) => {
+      const msg = e.data;
+      if (!_workerApplyFn || msg.requestId !== String(_currentReqId)) return; // stale
+      if (msg.type === 'done' && msg.activeResult && msg.combinedResult) {
+        _workerApplyFn({
+          optimization: msg.activeResult,
+          combinedOptimization: msg.combinedResult,
+          optimizationPending: false,
+        });
+      } else {
+        _workerApplyFn({ optimizationPending: false });
+      }
+    };
+  }
+  return _cutOptWorker;
+}
+
+/**
+ * Fire-and-forget: post a cut-optimization request to the worker.
+ * Falls back to synchronous computation when Workers are unavailable (e.g. tests).
+ */
+function scheduleOptimization(
+  activeParts: Part[],
+  allParts: Part[],
+  sawKerfMm: number,
+  sheetSizeOverrides: Record<string, { width: number; length: number }>,
+): void {
+  const worker = getCutOptWorker();
+  if (!worker) {
+    // Synchronous fallback (tests / browsers without Worker support)
+    if (_workerApplyFn) {
+      _workerApplyFn({
+        optimization: optimizeCutSheets(activeParts, sawKerfMm, sheetSizeOverrides),
+        combinedOptimization: optimizeCutSheets(allParts, sawKerfMm, sheetSizeOverrides),
+        optimizationPending: false,
+      });
+    }
+    return;
+  }
+  _currentReqId++;
+  const payload: CutOptimizerWorkerInput = {
+    activeParts,
+    allParts,
+    sawKerfMm,
+    sheetSizeOverrides,
+    requestId: String(_currentReqId),
+  };
+  worker.postMessage(payload);
+}
 
 const MAX_HISTORY = 50;
 
@@ -71,6 +134,8 @@ export interface CabinetState {
   // Combined project-level optimization (all cabinets)
   allParts: Part[];
   combinedOptimization: OptimizationResult;
+  /** v3.21.0 — true while the cut-optimizer Web Worker is computing a fresh result */
+  optimizationPending: boolean;
 
   // Undo / Redo
   _past: CabinetEntry[][];
@@ -152,11 +217,35 @@ function deriveProject(
   return { config: activeConfig, ...active, allParts, combinedOptimization };
 }
 
+// v3.21.0 — Base derivation (parts, hardware, dimensions) WITHOUT cut optimization.
+// Used for synchronous state updates so the UI renders new parts instantly while
+// the worker computes fresh optimization in the background.
+function deriveBaseProject(
+  cabinets: CabinetEntry[],
+  activeIndex: number,
+) {
+  const activeConfig = cabinets[activeIndex].config;
+  const dimensions = computeDimensions(activeConfig);
+  const parts = generateParts(activeConfig);
+  const hardware = generateHardware(activeConfig);
+  const edgeBandingTotal = computeEdgeBandingTotal(parts);
+  const allParts: Part[] = cabinets.flatMap((cab, ci) =>
+    generateParts(cab.config).map((p) => ({
+      ...p,
+      id: cabinets.length > 1 ? `C${ci + 1}-${p.id}` : p.id,
+    })),
+  );
+  return { config: activeConfig, dimensions, parts, hardware, edgeBandingTotal, allParts };
+}
+
 // v3.11.0 — Memoised wrappers: rapid undo/redo and repeated setConfig calls
 // with identical arguments skip the MaxRects computation entirely.
 const deriveProjectMemo = createJsonMemo(deriveProject);
 
 export const useCabinetStore = create<CabinetState>((set) => {
+  // v3.21.0 — Capture `set` so the worker response callback can update state.
+  _workerApplyFn = set as (partial: Partial<CabinetState>) => void;
+
   const urlPatch = readConfigFromUrl();
   const initialConfig = { ...DEFAULT_CONFIG, ...urlPatch };
   const initialCabinets: CabinetEntry[] = [{ name: 'Cabinet 1', config: initialConfig }];
@@ -184,6 +273,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
     hardwarePriceOverrides: {}, // Sprint 148
     hardwareQtyOverrides: {}, // v3.15.0
     sheetSizeOverrides: {}, // Sprint 165
+    optimizationPending: false, // v3.21.0
 
     setConfig: (patch) =>
       set((state) => {
@@ -192,9 +282,12 @@ export const useCabinetStore = create<CabinetState>((set) => {
         );
         pushConfigToUrl(cabinets[state.activeCabinetIndex].config);
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
+        const base = deriveBaseProject(cabinets, state.activeCabinetIndex);
+        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         return {
           cabinets,
-          ...deriveProjectMemo(cabinets, state.activeCabinetIndex, state.sawKerf, state.sheetSizeOverrides),
+          ...base,
+          optimizationPending: true,
           _past: past,
           _future: [],
           canUndo: true,
@@ -209,9 +302,12 @@ export const useCabinetStore = create<CabinetState>((set) => {
         );
         pushConfigToUrl(DEFAULT_CONFIG);
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
+        const base = deriveBaseProject(cabinets, state.activeCabinetIndex);
+        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         return {
           cabinets,
-          ...deriveProjectMemo(cabinets, state.activeCabinetIndex, state.sawKerf, state.sheetSizeOverrides),
+          ...base,
+          optimizationPending: true,
           _past: past,
           _future: [],
           canUndo: true,
@@ -226,10 +322,13 @@ export const useCabinetStore = create<CabinetState>((set) => {
         const past = state._past.slice(0, -1);
         const idx = Math.min(state.activeCabinetIndex, prevCabinets.length - 1);
         pushConfigToUrl(prevCabinets[idx].config);
+        const base = deriveBaseProject(prevCabinets, idx);
+        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         return {
           cabinets: prevCabinets,
           activeCabinetIndex: idx,
-          ...deriveProjectMemo(prevCabinets, idx, state.sawKerf, state.sheetSizeOverrides),
+          ...base,
+          optimizationPending: true,
           _past: past,
           _future: [state.cabinets, ...state._future],
           canUndo: past.length > 0,
@@ -244,10 +343,13 @@ export const useCabinetStore = create<CabinetState>((set) => {
         const future = state._future.slice(1);
         const idx = Math.min(state.activeCabinetIndex, nextCabinets.length - 1);
         pushConfigToUrl(nextCabinets[idx].config);
+        const base = deriveBaseProject(nextCabinets, idx);
+        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         return {
           cabinets: nextCabinets,
           activeCabinetIndex: idx,
-          ...deriveProjectMemo(nextCabinets, idx, state.sawKerf, state.sheetSizeOverrides),
+          ...base,
+          optimizationPending: true,
           _past: [...state._past, state.cabinets],
           _future: future,
           canUndo: true,
@@ -262,10 +364,13 @@ export const useCabinetStore = create<CabinetState>((set) => {
         const cabinets = [...state.cabinets, newCab];
         const idx = cabinets.length - 1;
         pushConfigToUrl(cabinets[idx].config);
+        const base = deriveBaseProject(cabinets, idx);
+        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         return {
           cabinets,
           activeCabinetIndex: idx,
-          ...deriveProjectMemo(cabinets, idx, state.sawKerf, state.sheetSizeOverrides),
+          ...base,
+          optimizationPending: true,
           _past: past,
           _future: [],
           canUndo: true,
@@ -280,10 +385,13 @@ export const useCabinetStore = create<CabinetState>((set) => {
         const cabinets = state.cabinets.filter((_, i) => i !== index);
         const idx = Math.min(state.activeCabinetIndex, cabinets.length - 1);
         pushConfigToUrl(cabinets[idx].config);
+        const base = deriveBaseProject(cabinets, idx);
+        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         return {
           cabinets,
           activeCabinetIndex: idx,
-          ...deriveProjectMemo(cabinets, idx, state.sawKerf, state.sheetSizeOverrides),
+          ...base,
+          optimizationPending: true,
           _past: past,
           _future: [],
           canUndo: true,
@@ -304,10 +412,13 @@ export const useCabinetStore = create<CabinetState>((set) => {
         const newIndex = index + 1;
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         pushConfigToUrl(cabinets[newIndex].config);
+        const base = deriveBaseProject(cabinets, newIndex);
+        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         return {
           cabinets,
           activeCabinetIndex: newIndex,
-          ...deriveProjectMemo(cabinets, newIndex, state.sawKerf, state.sheetSizeOverrides),
+          ...base,
+          optimizationPending: true,
           _past: past,
           _future: [],
           canUndo: true,
@@ -319,9 +430,12 @@ export const useCabinetStore = create<CabinetState>((set) => {
       set((state) => {
         if (index < 0 || index >= state.cabinets.length) return state;
         pushConfigToUrl(state.cabinets[index].config);
+        const base = deriveBaseProject(state.cabinets, index);
+        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         return {
           activeCabinetIndex: index,
-          ...deriveProjectMemo(state.cabinets, index, state.sawKerf, state.sheetSizeOverrides),
+          ...base,
+          optimizationPending: true,
         };
       }),
 
@@ -344,10 +458,13 @@ export const useCabinetStore = create<CabinetState>((set) => {
           ...c,
           config: { ...DEFAULT_CONFIG, ...c.config },
         }));
+        const base = deriveBaseProject(migrated, 0);
+        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         return {
           cabinets: migrated,
           activeCabinetIndex: 0,
-          ...deriveProjectMemo(migrated, 0, state.sawKerf, state.sheetSizeOverrides),
+          ...base,
+          optimizationPending: true,
           _past: past,
           _future: [],
           canUndo: true,
@@ -361,15 +478,12 @@ export const useCabinetStore = create<CabinetState>((set) => {
       pushProjectNameToUrl(name); // Sprint 157
     },
     setSawKerf: (mm) =>
-      set((state) => ({
-        sawKerf: Math.max(0, Math.min(8, mm)),
-        ...deriveProjectMemo(
-          state.cabinets,
-          state.activeCabinetIndex,
-          Math.max(0, Math.min(8, mm)),
-          state.sheetSizeOverrides,
-        ),
-      })),
+      set((state) => {
+        const sawKerf = Math.max(0, Math.min(8, mm));
+        const base = deriveBaseProject(state.cabinets, state.activeCabinetIndex);
+        scheduleOptimization(base.parts, base.allParts, sawKerf, state.sheetSizeOverrides);
+        return { sawKerf, ...base, optimizationPending: true };
+      }),
     setMaterialPriceOverride: (materialKey, price) =>
       set((state) => {
         const overrides = { ...state.materialPriceOverrides };
@@ -410,10 +524,9 @@ export const useCabinetStore = create<CabinetState>((set) => {
         } else {
           sheetSizeOverrides[materialKey] = size;
         }
-        return {
-          sheetSizeOverrides,
-          ...deriveProjectMemo(state.cabinets, state.activeCabinetIndex, state.sawKerf, sheetSizeOverrides),
-        };
+        const base = deriveBaseProject(state.cabinets, state.activeCabinetIndex);
+        scheduleOptimization(base.parts, base.allParts, state.sawKerf, sheetSizeOverrides);
+        return { sheetSizeOverrides, ...base, optimizationPending: true };
       }),
     // v3.18.0 — Bulk material replacement across all cabinets
     bulkReplaceMaterial: (fromKey, toKey) =>
@@ -426,9 +539,12 @@ export const useCabinetStore = create<CabinetState>((set) => {
           if (config.backPanelMaterial === fromKey) config.backPanelMaterial = toKey;
           return { ...cab, config };
         });
+        const base = deriveBaseProject(cabinets, state.activeCabinetIndex);
+        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         return {
           cabinets,
-          ...deriveProjectMemo(cabinets, state.activeCabinetIndex, state.sawKerf, state.sheetSizeOverrides),
+          ...base,
+          optimizationPending: true,
           _past: past,
           _future: [],
           canUndo: true,

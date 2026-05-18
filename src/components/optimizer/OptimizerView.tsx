@@ -47,6 +47,7 @@ export function OptimizerView() {
   const {
     optimization,
     combinedOptimization,
+    optimizationPending,
     cabinets,
     colorBlindMode,
     toggleColorBlindMode,
@@ -139,6 +140,16 @@ export function OptimizerView() {
 
   return (
     <div className="space-y-6">
+      {/* v3.21.0 — Worker recalculation indicator */}
+      {optimizationPending && (
+        <div className="flex items-center gap-2 text-xs text-wood-500 dark:text-wood-400 animate-pulse">
+          <svg className="h-3 w-3 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+            <circle cx="12" cy="12" r="10" strokeOpacity={0.25} />
+            <path d="M12 2a10 10 0 0 1 10 10" />
+          </svg>
+          Recalculating cut sheets…
+        </div>
+      )}
       {/* Hints (Sprint A3 part 2) */}
       {(lowYieldSheet || materialSwapPair) && (
         <div className="space-y-2">
