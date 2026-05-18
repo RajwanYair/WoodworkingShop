@@ -9,6 +9,15 @@
   "eslint.useFlatConfig": true,
   "files.eol": "\n",
 
+  // ─── Terminal / Shell Integration ─────────────────────────────────────────
+  // PowerShell has first-class shell integration on Windows (CWD tracking,
+  // command decorations, exit-code detection). cmd.exe has no integration
+  // support, which is why VS Code shows the "enable shell integration" prompt.
+  "terminal.integrated.shellIntegration.enabled": true,
+  "terminal.integrated.shellIntegration.decorationsEnabled": "both",
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "terminal.integrated.cwd": "${workspaceFolder}",
+
   // Built-in CSS validator produces false-positive browser-compat warnings
   // (IE, older Safari) for Tailwind CSS projects. Tailwind IntelliSense
   // extension handles CSS validation instead.
