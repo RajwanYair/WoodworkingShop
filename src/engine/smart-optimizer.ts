@@ -227,11 +227,11 @@ function tryMaterialSwaps(cfg: CabinetConfig): CabinetConfig[] {
  * Strategy: shelf-count-reduce (v3.26.0)
  * Try reducing the number of fixed shelves by 1.
  * Fewer shelves = fewer parts = potentially fewer sheets used.
- * Only suggests this when numShelves ≥ 2 (keeps at least 1 shelf).
+ * Only suggests this when shelfCount >= 2 (keeps at least 1 shelf).
  */
 function tryShelfCountReduce(cfg: CabinetConfig): CabinetConfig[] {
-  if ((cfg.numShelves ?? 0) < 2) return [];
-  return [{ ...cfg, numShelves: (cfg.numShelves ?? 2) - 1 }];
+  if ((cfg.shelfCount ?? 0) < 2) return [];
+  return [{ ...cfg, shelfCount: (cfg.shelfCount ?? 2) - 1 }];
 }
 
 // ─── Helpers ───
@@ -254,7 +254,7 @@ function isValid(cfg: CabinetConfig): boolean {
 
 function configFingerprint(cfg: CabinetConfig): string {
   // v3.26.0: include shelves, doors, drawers in fingerprint to avoid incorrect deduplication
-  return `${cfg.width}|${cfg.height}|${cfg.depth}|${cfg.carcassMaterial}|${cfg.backPanelMaterial}|${cfg.numShelves ?? 0}|${cfg.numDrawers ?? 0}|${cfg.doorStyle ?? 'none'}`;
+  return `${cfg.width}|${cfg.height}|${cfg.depth}|${cfg.carcassMaterial}|${cfg.backPanelMaterial}|${cfg.shelfCount ?? 0}|${cfg.drawerCount ?? 0}|${cfg.doorStyle ?? 'none'}`;
 }
 
 function round2(n: number): number {
@@ -287,9 +287,9 @@ function buildExplanation(
     changes.push(`material ${from.name.en} → ${to.name.en}`);
     changesHe.push(`חומר ${from.name.he} → ${to.name.he}`);
   }
-  if ((optimized.numShelves ?? 0) !== (original.numShelves ?? 0)) {
-    changes.push(`shelves ${original.numShelves ?? 0} → ${optimized.numShelves ?? 0}`);
-    changesHe.push(`מדפים ${original.numShelves ?? 0} → ${optimized.numShelves ?? 0}`);
+  if ((optimized.shelfCount ?? 0) !== (original.shelfCount ?? 0)) {
+    changes.push(`shelves ${original.shelfCount ?? 0} → ${optimized.shelfCount ?? 0}`);
+    changesHe.push(`מדפים ${original.shelfCount ?? 0} → ${optimized.shelfCount ?? 0}`);
   }
 
   const stratLabels: Record<SmartStrategy, { en: string; he: string }> = {
