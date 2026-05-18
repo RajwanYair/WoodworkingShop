@@ -158,16 +158,16 @@
   <rect x="242" y="94" width="600" height="4" fill="url(#amber)" rx="2" opacity="0.85"/>
 
   <!-- Version badge -->
-  <rect x="858" y="58" width="86" height="26" rx="13" fill="#7a4010" stroke="#c08030" stroke-width="1" opacity="0.95"/>
-  <text x="901" y="75"
+  <rect x="1080" y="58" width="96" height="26" rx="13" fill="#7a4010" stroke="#c08030" stroke-width="1" opacity="0.95"/>
+  <text x="1128" y="75"
     font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="700"
-    fill="#f0c060" text-anchor="middle">v3.8.0</text>
+    fill="#f0c060" text-anchor="middle">v3.10.0</text>
 
   <!-- Tagline -->
   <text x="242" y="124"
     font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif"
-    font-size="16" fill="#c09060" letter-spacing="0.4">
-    Browser-based woodworking design  ·  No install  ·  No account  ·  Free &amp; open-source
+    font-size="15" fill="#c09060" letter-spacing="0.3">
+    Browser-based woodworking design  ·  No install  ·  Free &amp; open-source
   </text>
 
   <!-- ── Feature pills — row 1 ── -->
@@ -187,34 +187,31 @@
   <text x="688" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">EN + HE (RTL)</text>
 
   <rect x="738" y="144" width="80" height="23" rx="11.5" fill="url(#pillBg)" stroke="#7a4010" stroke-width="1"/>
-  <text x="778" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">280+ Tests</text>
+  <text x="778" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">288 Tests</text>
 
-  <rect x="825" y="144" width="72" height="23" rx="11.5" fill="url(#pillBg)" stroke="#7a4010" stroke-width="1"/>
-  <text x="861" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">MIT License</text>
-
-  <!-- ── Tech stack row ── -->
-  <text x="914" y="100"
+  <!-- ── Tech stack row (shifted right to clear feature pills & tagline) ── -->
+  <text x="1080" y="100"
     font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#906040"
     text-anchor="middle" opacity="0.9">Built with</text>
 
   <!-- React -->
-  <rect x="858" y="107" width="58" height="21" rx="5" fill="#20232a" opacity="0.9"/>
-  <text x="887" y="121" font-family="monospace,'Courier New'" font-size="10" fill="#61dafb" text-anchor="middle">React 19</text>
+  <rect x="1024" y="107" width="58" height="21" rx="5" fill="#20232a" opacity="0.9"/>
+  <text x="1053" y="121" font-family="monospace,'Courier New'" font-size="10" fill="#61dafb" text-anchor="middle">React 19</text>
   <!-- TypeScript -->
-  <rect x="924" y="107" width="66" height="21" rx="5" fill="#3178c6" opacity="0.9"/>
-  <text x="957" y="121" font-family="monospace,'Courier New'" font-size="10" fill="#fff" text-anchor="middle">TypeScript 5</text>
+  <rect x="1090" y="107" width="66" height="21" rx="5" fill="#3178c6" opacity="0.9"/>
+  <text x="1123" y="121" font-family="monospace,'Courier New'" font-size="10" fill="#fff" text-anchor="middle">TypeScript 5</text>
   <!-- Vite -->
-  <rect x="858" y="133" width="58" height="21" rx="5" fill="#1a1a2e" opacity="0.9"/>
-  <text x="887" y="147" font-family="monospace,'Courier New'" font-size="10" fill="#646cff" text-anchor="middle">Vite 6</text>
+  <rect x="1024" y="133" width="58" height="21" rx="5" fill="#1a1a2e" opacity="0.9"/>
+  <text x="1053" y="147" font-family="monospace,'Courier New'" font-size="10" fill="#646cff" text-anchor="middle">Vite 6</text>
   <!-- Tailwind -->
-  <rect x="924" y="133" width="66" height="21" rx="5" fill="#0f172a" opacity="0.9"/>
-  <text x="957" y="147" font-family="monospace,'Courier New'" font-size="10" fill="#38bdf8" text-anchor="middle">Tailwind 4</text>
+  <rect x="1090" y="133" width="66" height="21" rx="5" fill="#0f172a" opacity="0.9"/>
+  <text x="1123" y="147" font-family="monospace,'Courier New'" font-size="10" fill="#38bdf8" text-anchor="middle">Tailwind 4</text>
   <!-- Zustand -->
-  <rect x="858" y="159" width="58" height="21" rx="5" fill="#1c1917" opacity="0.9"/>
-  <text x="887" y="173" font-family="monospace,'Courier New'" font-size="10" fill="#f59e0b" text-anchor="middle">Zustand 5</text>
+  <rect x="1024" y="159" width="58" height="21" rx="5" fill="#1c1917" opacity="0.9"/>
+  <text x="1053" y="173" font-family="monospace,'Courier New'" font-size="10" fill="#f59e0b" text-anchor="middle">Zustand 5</text>
   <!-- Vitest -->
-  <rect x="924" y="159" width="66" height="21" rx="5" fill="#0d0d0d" opacity="0.9"/>
-  <text x="957" y="173" font-family="monospace,'Courier New'" font-size="10" fill="#acd268" text-anchor="middle">Vitest 4</text>
+  <rect x="1090" y="159" width="66" height="21" rx="5" fill="#0d0d0d" opacity="0.9"/>
+  <text x="1123" y="173" font-family="monospace,'Courier New'" font-size="10" fill="#acd268" text-anchor="middle">Vitest 3</text>
 
   <!-- ── Bottom stats bar ── -->
   <rect x="7" y="202" width="1186" height="50" rx="0" fill="#0e0804" opacity="0.55"/>
@@ -228,7 +225,7 @@
 
   <!-- Stat 2: Tests -->
   <text x="400" y="222" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#906040" text-anchor="middle">UNIT TESTS</text>
-  <text x="400" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="600" fill="#f0c060" text-anchor="middle">280+ passing</text>
+  <text x="400" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="600" fill="#f0c060" text-anchor="middle">288 passing</text>
 
   <!-- Divider -->
   <line x1="472" y1="208" x2="472" y2="246" stroke="#5a3010" stroke-width="1" opacity="0.6"/>

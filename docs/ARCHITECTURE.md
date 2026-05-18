@@ -292,9 +292,11 @@ gantt
   section v3.8 UX Polish
     Saw passes, sheet size overrides, PWA share        :done, e380, after e371, 2d
     Grain in BOM, Alt+D shortcut, sortable table       :done, e381, after e380, 2d
-  section v3.9 Planned
-    Shelf deflection ratings, isometric enhancements   :active, e390, after e381, 7d
-    Bulk reassign, template library, hardware catalog  :        e391, after e390, 7d
+  section v3.9 Engineering
+    Shelf deflection ratings, isometric enhancements   :done, e390, after e381, 5d
+    Markdown polish, sw.js version sync                :done, e391, after e390, 2d
+  section v3.10 Production
+    MyScripts tooling, waiver removal, ROADMAP rewrite :active, e3100, after e391, 3d
 ```
 
 ## 🚀 CI/CD Pipeline
@@ -310,7 +312,7 @@ graph TD
     tc --> lint["ESLint\n0 warnings"]
     lint --> mdlint["markdownlint"]
     mdlint --> fmt["format:check\nPrettier"]
-    fmt --> test["Vitest unit tests\n280+ tests"]
+    fmt --> test["Vitest unit tests\n288 tests"]
     test --> cov["Coverage report\nNode 22 only"]
     cov --> build["Vite build"]
     build --> bcheck["Bundle budget check\n2 MB gzip limit"]

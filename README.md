@@ -108,7 +108,7 @@ npm ci
 # 3 — dev server  →  http://localhost:5173/WoodworkingShop/
 npm run dev
 
-# 4 — run 280+ unit tests
+# 4 — run 288 unit tests
 npm test
 
 # 5 — production build  →  dist/
@@ -130,7 +130,7 @@ npm run build
 | PDF           | 📄 @react-pdf/renderer 4             |
 | i18n          | 🌐 i18next 25 + react-i18next        |
 | Build         | ⚡ Vite 6                            |
-| Unit tests    | 🧪 Vitest 4 + @testing-library/react |
+| Unit tests    | 🧪 Vitest 3 + @testing-library/react |
 | E2E tests     | 🎭 Playwright                        |
 | Lint / format | 🧹 ESLint 9 (flat config) + Prettier |
 | CI/CD         | 🤖 GitHub Actions                    |
