@@ -6,6 +6,7 @@ import { computeDimensions } from '../engine/dimensions';
 import { generateParts, computeEdgeBandingTotal } from '../engine/parts';
 import { generateHardware } from '../engine/hardware';
 import { optimizeCutSheets } from '../engine/cut-optimizer';
+import { createJsonMemo } from '../engine/memo';
 import { readConfigFromUrl, pushConfigToUrl, readProjectNameFromUrl, pushProjectNameToUrl } from '../utils/url-state';
 
 const MAX_HISTORY = 50;
@@ -144,11 +145,15 @@ function deriveProject(
   return { config: activeConfig, ...active, allParts, combinedOptimization };
 }
 
+// v3.11.0 — Memoised wrappers: rapid undo/redo and repeated setConfig calls
+// with identical arguments skip the MaxRects computation entirely.
+const deriveProjectMemo = createJsonMemo(deriveProject);
+
 export const useCabinetStore = create<CabinetState>((set) => {
   const urlPatch = readConfigFromUrl();
   const initialConfig = { ...DEFAULT_CONFIG, ...urlPatch };
   const initialCabinets: CabinetEntry[] = [{ name: 'Cabinet 1', config: initialConfig }];
-  const initial = deriveProject(initialCabinets, 0);
+  const initial = deriveProjectMemo(initialCabinets, 0);
   const prefs = loadPrefs();
 
   return {
@@ -180,7 +185,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         return {
           cabinets,
-          ...deriveProject(cabinets, state.activeCabinetIndex, state.sawKerf, state.sheetSizeOverrides),
+          ...deriveProjectMemo(cabinets, state.activeCabinetIndex, state.sawKerf, state.sheetSizeOverrides),
           _past: past,
           _future: [],
           canUndo: true,
@@ -197,7 +202,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         return {
           cabinets,
-          ...deriveProject(cabinets, state.activeCabinetIndex, state.sawKerf, state.sheetSizeOverrides),
+          ...deriveProjectMemo(cabinets, state.activeCabinetIndex, state.sawKerf, state.sheetSizeOverrides),
           _past: past,
           _future: [],
           canUndo: true,
@@ -215,7 +220,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         return {
           cabinets: prevCabinets,
           activeCabinetIndex: idx,
-          ...deriveProject(prevCabinets, idx, state.sawKerf, state.sheetSizeOverrides),
+          ...deriveProjectMemo(prevCabinets, idx, state.sawKerf, state.sheetSizeOverrides),
           _past: past,
           _future: [state.cabinets, ...state._future],
           canUndo: past.length > 0,
@@ -233,7 +238,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         return {
           cabinets: nextCabinets,
           activeCabinetIndex: idx,
-          ...deriveProject(nextCabinets, idx, state.sawKerf, state.sheetSizeOverrides),
+          ...deriveProjectMemo(nextCabinets, idx, state.sawKerf, state.sheetSizeOverrides),
           _past: [...state._past, state.cabinets],
           _future: future,
           canUndo: true,
@@ -251,7 +256,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         return {
           cabinets,
           activeCabinetIndex: idx,
-          ...deriveProject(cabinets, idx, state.sawKerf, state.sheetSizeOverrides),
+          ...deriveProjectMemo(cabinets, idx, state.sawKerf, state.sheetSizeOverrides),
           _past: past,
           _future: [],
           canUndo: true,
@@ -269,7 +274,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         return {
           cabinets,
           activeCabinetIndex: idx,
-          ...deriveProject(cabinets, idx, state.sawKerf, state.sheetSizeOverrides),
+          ...deriveProjectMemo(cabinets, idx, state.sawKerf, state.sheetSizeOverrides),
           _past: past,
           _future: [],
           canUndo: true,
@@ -293,7 +298,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         return {
           cabinets,
           activeCabinetIndex: newIndex,
-          ...deriveProject(cabinets, newIndex, state.sawKerf, state.sheetSizeOverrides),
+          ...deriveProjectMemo(cabinets, newIndex, state.sawKerf, state.sheetSizeOverrides),
           _past: past,
           _future: [],
           canUndo: true,
@@ -307,7 +312,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         pushConfigToUrl(state.cabinets[index].config);
         return {
           activeCabinetIndex: index,
-          ...deriveProject(state.cabinets, index, state.sawKerf, state.sheetSizeOverrides),
+          ...deriveProjectMemo(state.cabinets, index, state.sawKerf, state.sheetSizeOverrides),
         };
       }),
 
@@ -333,7 +338,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         return {
           cabinets: migrated,
           activeCabinetIndex: 0,
-          ...deriveProject(migrated, 0, state.sawKerf, state.sheetSizeOverrides),
+          ...deriveProjectMemo(migrated, 0, state.sawKerf, state.sheetSizeOverrides),
           _past: past,
           _future: [],
           canUndo: true,
@@ -349,7 +354,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
     setSawKerf: (mm) =>
       set((state) => ({
         sawKerf: Math.max(0, Math.min(8, mm)),
-        ...deriveProject(
+        ...deriveProjectMemo(
           state.cabinets,
           state.activeCabinetIndex,
           Math.max(0, Math.min(8, mm)),
@@ -388,7 +393,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         }
         return {
           sheetSizeOverrides,
-          ...deriveProject(state.cabinets, state.activeCabinetIndex, state.sawKerf, sheetSizeOverrides),
+          ...deriveProjectMemo(state.cabinets, state.activeCabinetIndex, state.sawKerf, sheetSizeOverrides),
         };
       }),
     toggleDarkMode: () =>
