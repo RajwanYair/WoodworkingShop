@@ -68,7 +68,7 @@ const { t } = useTranslation();
 ```ts
 // Import directly — no store or React needed
 import { generateParts } from '../../src/engine/parts';
-import { makeConfig } from '../helpers';   // test factory
+import { cfg } from '../helpers';   // test factory — builds CabinetConfig from DEFAULT_CONFIG + overrides
 ```
 
 ### Worker imports (Vite)

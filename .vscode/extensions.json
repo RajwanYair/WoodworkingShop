@@ -26,7 +26,7 @@
     "github.vscode-github-actions",
     "timonwong.shellcheck",
 
-    // ── GitHub Copilot ────────────────────────────────────────────────────
-    "github.copilot-chat"
+    // ── GitHub Copilot ────────────────────────────────────────────────────    // Base Copilot extension (inline completions) + chat panel.
+    "github.copilot",    "github.copilot-chat"
   ]
 }

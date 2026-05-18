@@ -50,9 +50,8 @@ export function SliderInput({
   const [text, setText] = useState<string>(() => formatValue(value));
 
   useEffect(() => {
-    setText(formatValue(value));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+    setText(decimals > 0 ? value.toFixed(decimals) : String(value));
+  }, [value, decimals]);
 
   const parsed = (() => {
     const trimmed = text.trim();
