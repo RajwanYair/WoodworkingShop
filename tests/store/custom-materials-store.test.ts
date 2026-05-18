@@ -25,6 +25,8 @@ const panelMaterial: Material = {
   pricePerSheet: 350,
   category: 'panel',
   color: '#A0784C',
+  hasGrain: true,
+  densityKgM3: 750,
 };
 
 const backMaterial: Material = {
@@ -36,6 +38,8 @@ const backMaterial: Material = {
   pricePerSheet: 80,
   category: 'back',
   color: '#D4B87A',
+  hasGrain: false,
+  densityKgM3: 620,
 };
 
 describe('custom-materials-store', () => {

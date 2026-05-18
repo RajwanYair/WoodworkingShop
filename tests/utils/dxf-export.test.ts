@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import type { CutSheet } from '../../src/engine/types';
 import { cutSheetToDxf } from '../../src/utils/dxf-export';
 import { mockSheet } from '../helpers';
 

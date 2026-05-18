@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import type { CutSheet } from '../../src/engine/types';
 import { cutSheetToGcode } from '../../src/utils/gcode-export';
 import { mockSheet } from '../helpers';
 

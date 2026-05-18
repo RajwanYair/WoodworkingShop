@@ -10,7 +10,7 @@ import type {
 import { getMaterial } from '../../engine/materials';
 
 // ─── Emoji rendering (Twemoji via CDN) ───
-Font.setEmojiSource({
+Font.registerEmojiSource({
   format: 'png',
   url: 'https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/',
 });
