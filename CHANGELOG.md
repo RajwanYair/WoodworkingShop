@@ -11,6 +11,76 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.19.0] — 2026-05-19
+
+### ✨ Added
+
+- **PDF polish** (`src/components/pdf/CabinetPdfDocument.tsx`, `PdfExportPanel.tsx`):
+  - Cover page now shows the project name (from the project name field) instead of a hardcoded title.
+  - New `includeCover` prop lets callers omit the cover page.
+  - `PdfExportPanel` gains an **"Include cover page"** checkbox and uses the project name in the PDF filename.
+  - Page numbers (`Page N / Total`) were already in the fixed footer; this sprint confirms and documents that behavior.
+
+## [3.18.0] — 2026-05-19
+
+### ✨ Added
+
+- **Bulk material replacement** (`src/components/optimizer/BulkReplaceModal.tsx`):
+  - New modal (opened via the **Replace** toolbar button in the Optimizer) lets users swap any material with another across *all* cabinets in one click.
+  - Shows a summary of how many cabinets will be affected before applying.
+  - Operation is fully undoable via the existing undo stack (`Ctrl+Z`).
+- **`bulkReplaceMaterial(fromKey, toKey)`** action added to `cabinet-store.ts`; swaps `carcassMaterial` and `backPanelMaterial` on all cabinets.
+- i18n keys: `bulkReplace.*` in `en.json` and `he.json`.
+
+## [3.17.0] — 2026-05-19
+
+### ✨ Added
+
+- **Web Worker BOM CSV exporter** (`src/workers/bom-export.worker.ts`):
+  - BOM CSV generation now runs off the main thread, preventing UI jank on large multi-cabinet projects.
+  - The **BOM** export button in the Optimizer shows `…` and is disabled while exporting.
+  - Automatic synchronous fallback for environments without `Worker` support or if the worker errors.
+- Imports `triggerDownload` from `src/utils/download.ts` for a clean blob-URL download path.
+
+## [3.16.0] — 2026-05-19
+
+### ✨ Added
+
+- **Multi-project workspace** (`src/utils/project-storage.ts`, `src/components/layout/ProjectManagerModal.tsx`):
+  - Save, load, delete, export (JSON) and import (JSON) named projects to/from localStorage.
+  - `ProjectManagerModal` provides full CRUD UI with focus trap and ESC-to-close.
+  - Header exposes a **folder icon** button to open the modal.
+
+## [3.15.0] — 2026-05-19
+
+### ✨ Added
+
+- **Hardware catalog expansion** (`src/engine/hardware.ts`): H18 Cam Lock Set, H19 Shelf Support Stud 5mm, H20 Corner Brace, H21 Plastic Corner Protector, H22 Wood Screw 3.5×35mm, H23 Sanding Pad Assorted Pack, H24 Edge Banding Iron Trimmer — all with unit prices.
+- **Hardware qty overrides** (`hardwareQtyOverrides` in store): editable quantity cells in the hardware table; overridden rows are yellow-tinted.
+- `supplierUrl` and `unitPrice` optional fields on `HardwareItem`.
+
+## [3.14.0] — 2026-05-19
+
+### ✨ Added
+
+- **Cabinet template library** (`src/engine/templates.ts`): 12 presets (kitchen-base, kitchen-wall, tall-pantry, wardrobe, wardrobe-sliding, bookshelf, desk, bathroom-vanity, tv-unit, bedside, shaker-kitchen-base, open-display).
+- **TemplatePicker modal**: browsable grid of templates; click to apply and set `?tpl=` URL deep-link.
+- `readConfigFromUrl()` now merges `?tpl=` param from URL.
+
+## [3.13.0] — 2026-05-19
+
+### ✨ Added
+
+- **Isometric view polish** (`src/components/preview/CabinetPreview.tsx`): interior side walls (visible when doors absent), kick panel, shelf front edges, drawer fronts with handles, grain lines on top face. Accepts `drawerCount`, `drawerHeights`, `kickHeight` props.
+
+## [3.12.0] — 2026-05-18
+
+### ✨ Added
+
+- **High-contrast mode** toggle in header (`IconContrast`); CSS variables under `.high-contrast` class in `index.css`.
+- **`prefers-reduced-motion`** CSS block suppresses transitions for users who request it.
+- Focus trap utility used in modals (TemplatePicker, ProjectManagerModal).
+
 ## [3.10.0] — 2026-05-18
 
 ### ✨ Added
