@@ -202,6 +202,43 @@ describe('validateConfig', () => {
     const issues = validateConfig(cfg({ height: 900, drawerCount: 2 }));
     expect(issues.some((i) => i.code === 'DRAWER_STACK_OVERFLOW')).toBe(false);
   });
+
+  // ── Sprint 17: Wide-span and tall-cabinet structural checks ──
+
+  it('raises SPAN_TOO_WIDE warning when width > 1200 mm', () => {
+    const issues = validateConfig(cfg({ width: 1400, furnitureType: 'cabinet' }));
+    expect(issues.some((i) => i.code === 'SPAN_TOO_WIDE')).toBe(true);
+    expect(issues.find((i) => i.code === 'SPAN_TOO_WIDE')!.severity).toBe('warning');
+    expect(issues.find((i) => i.code === 'SPAN_TOO_WIDE')!.field).toBe('width');
+  });
+
+  it('does not raise SPAN_TOO_WIDE when width <= 1200 mm', () => {
+    const issues = validateConfig(cfg({ width: 1200 }));
+    expect(issues.some((i) => i.code === 'SPAN_TOO_WIDE')).toBe(false);
+  });
+
+  it('does not raise SPAN_TOO_WIDE for panel furniture type', () => {
+    // Panel type is exempt from SPAN_TOO_WIDE (it IS a single panel)
+    const issues = validateConfig(cfg({ width: 1800, furnitureType: 'panel', doorStyle: 'none', kickHeight: 0, depth: 18 }));
+    expect(issues.some((i) => i.code === 'SPAN_TOO_WIDE')).toBe(false);
+  });
+
+  it('raises CARCASS_HEIGHT_CRITICAL warning when height > 2400 mm', () => {
+    const issues = validateConfig(cfg({ height: 2500, furnitureType: 'wardrobe' }));
+    expect(issues.some((i) => i.code === 'CARCASS_HEIGHT_CRITICAL')).toBe(true);
+    expect(issues.find((i) => i.code === 'CARCASS_HEIGHT_CRITICAL')!.severity).toBe('warning');
+    expect(issues.find((i) => i.code === 'CARCASS_HEIGHT_CRITICAL')!.field).toBe('height');
+  });
+
+  it('does not raise CARCASS_HEIGHT_CRITICAL when height <= 2400 mm', () => {
+    const issues = validateConfig(cfg({ height: 2400 }));
+    expect(issues.some((i) => i.code === 'CARCASS_HEIGHT_CRITICAL')).toBe(false);
+  });
+
+  it('does not raise CARCASS_HEIGHT_CRITICAL for panel furniture type', () => {
+    const issues = validateConfig(cfg({ height: 2800, furnitureType: 'panel', doorStyle: 'none', kickHeight: 0, depth: 18 }));
+    expect(issues.some((i) => i.code === 'CARCASS_HEIGHT_CRITICAL')).toBe(false);
+  });
 });
 
 

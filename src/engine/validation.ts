@@ -72,6 +72,18 @@ const MIN_ABOVE_DRAWERS_MM = 200;
 const MIN_DRAWER_HEIGHT_MM = 100;
 
 /**
+ * Width threshold above which a single-bay carcass may need an intermediate
+ * vertical divider or full-height stretcher for racking resistance.
+ */
+const WIDE_SPAN_CARCASS_MM = 1200;
+
+/**
+ * Height threshold above which a freestanding carcass requires a dedicated
+ * anti-tip wall anchor or floor-to-ceiling fixing cleat.
+ */
+const CRITICAL_HEIGHT_MM = 2400;
+
+/**
  * Run all manufacturing constraint checks on a cabinet configuration.
  *
  * @returns Array of ValidationIssue. Empty array means the config is valid.
@@ -336,6 +348,32 @@ export function validateConfig(
         field: 'carcassMaterial',
       });
     }
+  }
+
+  // ── Wide-span and tall-cabinet structural checks (Sprint 17) ──
+
+  if (config.width > WIDE_SPAN_CARCASS_MM && config.furnitureType !== 'panel') {
+    issues.push({
+      code: 'SPAN_TOO_WIDE',
+      severity: 'warning',
+      message: {
+        en: `Cabinet width (${config.width} mm) exceeds ${WIDE_SPAN_CARCASS_MM} mm. A single-bay carcass this wide may rack under load — consider adding an intermediate vertical divider or full-height stretcher.`,
+        he: `רוחב הארון (${config.width} מ"מ) עולה על ${WIDE_SPAN_CARCASS_MM} מ"מ. תא בודד ברוחב זה עלול לאבד יציבות — שקול הוספת מחיצה אנכית או תמיכת-גובה.`,
+      },
+      field: 'width',
+    });
+  }
+
+  if (config.height > CRITICAL_HEIGHT_MM && config.furnitureType !== 'panel') {
+    issues.push({
+      code: 'CARCASS_HEIGHT_CRITICAL',
+      severity: 'warning',
+      message: {
+        en: `Cabinet height (${config.height} mm) exceeds ${CRITICAL_HEIGHT_MM} mm. A freestanding unit this tall has a high tip-over risk — a wall anchor or floor-to-ceiling fixing cleat is required.`,
+        he: `גובה הארון (${config.height} מ"מ) עולה על ${CRITICAL_HEIGHT_MM} מ"מ. יחידה עצמאית בגובה זה מסוכנת להתהפכות — נדרש עוגן קיר או פס קיבוע רצפה-תקרה.`,
+      },
+      field: 'height',
+    });
   }
 
   // ── Structural back panel warning ──
