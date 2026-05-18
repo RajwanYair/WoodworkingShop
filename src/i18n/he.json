@@ -293,6 +293,9 @@
     "internalHeight": "גובה פנימי: {{h}} ממ",
     "deflectionWarning": "משוך מדף {{span}} ממ: צפוי עיוות מרכזי {{sag}} ממ חורג ממגבלת L/360 (מגבלה {{limit}} ממ). שקול לשקול לוח עבה יותר, תמיכה מרכזית או משוך קצר יותר.",
     "deflectionSafe": "משוך מדף תקין — צפוי עיוות {{sag}} ממ (הרבה מתחת מגבלת L/360 ‏{{limit}} ממ)",
+    "deflectionRatingSafe": "עיוות תקין ({{sag}} ממ)",
+    "deflectionRatingWarning": "אזהרת עיוות ({{sag}} ממ)",
+    "deflectionRatingDanger": "סכנת עיוות ({{sag}} ממ)",
     "deflectionDanger": "אזהרת עיוות: {{sag}} ממ חורג מ-L/240 — נדרשת תמיכה מבניתית או לוח עבה יותר למשוך {{span}} ממ"
   },
   "toast": {

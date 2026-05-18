@@ -126,22 +126,50 @@ export function ShelfConfig() {
           </div>
           <p className="text-[10px] text-wood-400">{t('shelves.internalHeight', { h: internalH })}</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-            {positions.map((pos, idx) => (
-              <label key={idx} className="text-xs text-wood-600 dark:text-wood-300 flex flex-col gap-1">
-                <span>{t('shelves.position', { n: idx + 1 })}</span>
-                <input
-                  type="number"
-                  min={0}
-                  max={internalH}
-                  step={10}
-                  value={pos}
-                  onChange={(e) => updatePosition(idx, Number(e.target.value) || 0)}
-                  onBlur={commitSort}
-                  className="w-full px-2 py-1 rounded border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-900 text-sm"
-                  aria-label={`Shelf ${idx + 1} position in mm`}
-                />
-              </label>
-            ))}
+            {positions.map((pos, idx) => {
+              const d = dimensions.shelfDeflections[idx];
+              const rating = d?.deflectionRating ?? 'safe';
+              const deflectionKey =
+                rating === 'danger'
+                  ? 'shelves.deflectionRatingDanger'
+                  : rating === 'warning'
+                    ? 'shelves.deflectionRatingWarning'
+                    : 'shelves.deflectionRatingSafe';
+              const indicatorClass =
+                rating === 'danger'
+                  ? 'text-red-600 dark:text-red-400'
+                  : rating === 'warning'
+                    ? 'text-amber-600 dark:text-amber-400'
+                    : 'text-green-600 dark:text-green-400';
+              return (
+                <label key={idx} className="text-xs text-wood-600 dark:text-wood-300 flex flex-col gap-1">
+                  <span className="flex items-center gap-1">
+                    {t('shelves.position', { n: idx + 1 })}
+                    {d && (
+                      <span
+                        className={`text-[10px] font-normal ${indicatorClass}`}
+                        title={t(deflectionKey, { sag: d.deflectionMm.toFixed(1) })}
+                        aria-label={t(deflectionKey, { sag: d.deflectionMm.toFixed(1) })}
+                      >
+                        {rating !== 'safe' && <IconWarning size={10} className="inline me-0.5" aria-hidden="true" />}
+                        {t(deflectionKey, { sag: d.deflectionMm.toFixed(1) })}
+                      </span>
+                    )}
+                  </span>
+                  <input
+                    type="number"
+                    min={0}
+                    max={internalH}
+                    step={10}
+                    value={pos}
+                    onChange={(e) => updatePosition(idx, Number(e.target.value) || 0)}
+                    onBlur={commitSort}
+                    className="w-full px-2 py-1 rounded border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-900 text-sm"
+                    aria-label={`Shelf ${idx + 1} position in mm`}
+                  />
+                </label>
+              );
+            })}
           </div>
         </div>
       )}

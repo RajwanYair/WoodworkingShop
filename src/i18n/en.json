@@ -293,7 +293,10 @@
     "internalHeight": "Internal height: {{h}} mm",
     "deflectionWarning": "Shelf span {{span}} mm: estimated mid-sag {{sag}} mm exceeds L/360 limit ({{limit}} mm). Consider a thicker panel, a centre support, or a shorter span.",
     "deflectionSafe": "Shelf span OK — estimated sag {{sag}} mm (well within L/360 limit {{limit}} mm)",
-    "deflectionDanger": "Sag alert: {{sag}} mm exceeds L/240 — structural support or a thicker panel is required for this {{span}} mm span"
+    "deflectionDanger": "Sag alert: {{sag}} mm exceeds L/240 — structural support or a thicker panel is required for this {{span}} mm span",
+    "deflectionRatingSafe": "Sag OK ({{sag}} mm)",
+    "deflectionRatingWarning": "Sag warning ({{sag}} mm)",
+    "deflectionRatingDanger": "Sag danger ({{sag}} mm)"
   },
   "toast": {
     "saved": "Configuration saved",
