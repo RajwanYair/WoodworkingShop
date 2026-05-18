@@ -1,8 +1,8 @@
+# Changelog
+
 <div align="center">
   <img src="docs/banner.svg" alt="Cabinet Planner" width="100%"/>
 </div>
-
-# Changelog
 
 All notable changes to this project will be documented in this file.
 
@@ -10,6 +10,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [3.45.0] — 2026-05-18
+
+### 🧭 Roadmap and Architecture
+
+- Rewrote `ROADMAP.md` into a forward-only production program with consolidated legacy references, strategic phase gates, frontend/backend reconsideration, and release quality criteria.
+- Added a benchmark comparison table against top-class tools and translated the findings into concrete engineering actions for v3.45.0-v4.0.0.
+- Updated stale documentation metadata (`README.md`, `docs/ARCHITECTURE.md`, `docs/SPRINT-HISTORY.md`, `docs/banner.svg`, `.github/CONTRIBUTING.md`) to align with the current stack and test baseline.
+
+### ✅ Quality and Tooling Hardening
+
+- Removed suppression-oriented E2E accessibility filtering and enforced direct violation assertions in `tests/e2e/accessibility.spec.ts`.
+- Enabled VS Code CSS/SCSS validators and removed ShellCheck ignore-pattern waivers from `.vscode/settings.json`.
+- Replaced disabled markdownlint rules with explicit policy settings and fixed markdown structural violations across docs/templates.
+- Fixed Playwright PDF tab smoke test determinism by using explicit tab interaction and unambiguous heading matching.
+
+### ♿ Accessibility Fixes
+
+- Fixed real WCAG contrast defects by upgrading low-contrast `text-wood-400` unit/disclaimer tokens in:
+  - `src/components/configurator/DimensionSliders.tsx`
+  - `src/components/configurator/SliderInput.tsx`
+  - `src/components/configurator/CostEstimatePanel.tsx`
+- Verified the full Playwright accessibility suite passes in both Chromium and Firefox.
+
+### 🧪 Verification
+
+- `npm run ci` passed (typecheck, lint, markdown lint, format check, 318 unit tests, build, bundle budgets).
+- `npm run test:e2e` passed (16/16 Playwright tests).
 
 ## [3.44.0] — 2026-05-18
 

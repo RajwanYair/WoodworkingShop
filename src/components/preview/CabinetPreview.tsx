@@ -1139,8 +1139,13 @@ function IsometricView({
                 return (
                   <line
                     key={`sg-${i}-${j}`}
-                    x1={ax} y1={ay} x2={bx} y2={by}
-                    stroke="#cba" strokeWidth={0.25} opacity={0.4}
+                    x1={ax}
+                    y1={ay}
+                    x2={bx}
+                    y2={by}
+                    stroke="#cba"
+                    strokeWidth={0.25}
+                    opacity={0.4}
                   />
                 );
               })}
@@ -1159,8 +1164,8 @@ function IsometricView({
           <title>{`Side Panel\n${thick}×${h} mm`}</title>
         </polygon>
         {/* Grain lines on left side (horizontal, run along depth) */}
-        {Array.from({ length: Math.floor(H / (Math.max(H / 6, 4))) - 1 }, (_, i) => {
-          const gy = (Math.max(H / 6, 4)) + i * (Math.max(H / 6, 4));
+        {Array.from({ length: Math.floor(H / Math.max(H / 6, 4)) - 1 }, (_, i) => {
+          const gy = Math.max(H / 6, 4) + i * Math.max(H / 6, 4);
           const [ax, ay] = iso(0, gy, 0);
           const [bx, by] = iso(0, gy, D);
           return (
@@ -1259,22 +1264,28 @@ function IsometricView({
                   <title>{`${doorLabel}\n${Math.round(doorWidth)}×${Math.round(doorHeight)} mm`}</title>
                 </polygon>
                 {/* Shaker door: inner inset frame */}
-                {doorStyle === 'shaker' && (() => {
-                  const inset = 5 * sc;
-                  const fx = dx + inset;
-                  const fy = dr + inset;
-                  const fw = dw - 2 * inset;
-                  const fh = dh - 2 * inset;
-                  return (
-                    <polygon
-                      points={isoQuad([fx, fy, -0.3 * sc], [fx + fw, fy, -0.3 * sc], [fx + fw, fy + fh, -0.3 * sc], [fx, fy + fh, -0.3 * sc])}
-                      fill="none"
-                      stroke="#777"
-                      strokeWidth={0.7}
-                      opacity={0.6}
-                    />
-                  );
-                })()}
+                {doorStyle === 'shaker' &&
+                  (() => {
+                    const inset = 5 * sc;
+                    const fx = dx + inset;
+                    const fy = dr + inset;
+                    const fw = dw - 2 * inset;
+                    const fh = dh - 2 * inset;
+                    return (
+                      <polygon
+                        points={isoQuad(
+                          [fx, fy, -0.3 * sc],
+                          [fx + fw, fy, -0.3 * sc],
+                          [fx + fw, fy + fh, -0.3 * sc],
+                          [fx, fy + fh, -0.3 * sc],
+                        )}
+                        fill="none"
+                        stroke="#777"
+                        strokeWidth={0.7}
+                        opacity={0.6}
+                      />
+                    );
+                  })()}
                 {/* Handle indicator */}
                 <polygon
                   points={isoQuad(

@@ -46,12 +46,8 @@
     "args": ["-NoLogo", "-NonInteractive"]
   },
 
-  // Built-in CSS validator does not respect .browserslistrc — produces false
-  // IE/Safari compat warnings for modern CSS (color-scheme, scrollbar-width,
-  // print-color-adjust) that all our targeted browsers support. Tailwind CSS
-  // IntelliSense handles CSS validation; built-in validators are redundant.
-  "css.validate": false,
-  "scss.validate": false,
+  "css.validate": true,
+  "scss.validate": true,
 
   "files.exclude": {
     "**/dist/**": true,
@@ -63,16 +59,6 @@
     "**/dist": true,
     "**/node_modules": true,
     "**/coverage": true
-  },
-
-  // ShellCheck: only lint actual shell scripts (.sh/.bash) — never YAML/JSON.
-  // GitHub Actions workflow files use ${{ }} expression syntax that shellcheck
-  // cannot parse; the GitHub Actions extension handles workflow validation.
-  "shellcheck.ignorePatterns": {
-    "**/*.yml": true,
-    "**/*.yaml": true,
-    "**/*.json": true,
-    "**/*.jsonc": true
   },
 
   "html.validate.scripts": true,

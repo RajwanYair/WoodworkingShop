@@ -24,23 +24,12 @@ function TemplateThumbnail({ tpl }: { tpl: CabinetTemplate }) {
   const doorMidX = ox + w / 2;
 
   return (
-    <svg
-      viewBox="0 0 80 60"
-      aria-hidden="true"
-      className="w-20 h-15 flex-shrink-0 text-wood-700 dark:text-wood-200"
-    >
+    <svg viewBox="0 0 80 60" aria-hidden="true" className="w-20 h-15 flex-shrink-0 text-wood-700 dark:text-wood-200">
       {/* Carcass outline */}
       <rect x={ox} y={oy} width={w} height={h} fill="none" stroke="currentColor" strokeWidth={T} rx={1} />
       {/* Toe kick — lighter fill at bottom */}
       {kick > 0 && (
-        <rect
-          x={ox + T * 2}
-          y={oy + h - kick}
-          width={w - T * 4}
-          height={kick}
-          fill="currentColor"
-          opacity={0.15}
-        />
+        <rect x={ox + T * 2} y={oy + h - kick} width={w - T * 4} height={kick} fill="currentColor" opacity={0.15} />
       )}
       {/* Door divider (for 2-door) or shelves */}
       {hasDoors ? (

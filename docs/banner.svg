@@ -161,7 +161,7 @@
   <rect x="1080" y="58" width="96" height="26" rx="13" fill="#7a4010" stroke="#c08030" stroke-width="1" opacity="0.95"/>
   <text x="1128" y="75"
     font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="700"
-    fill="#f0c060" text-anchor="middle">v3.10.0</text>
+    fill="#f0c060" text-anchor="middle">v3.44.0</text>
 
   <!-- Tagline -->
   <text x="242" y="124"
@@ -187,7 +187,7 @@
   <text x="688" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">EN + HE (RTL)</text>
 
   <rect x="738" y="144" width="80" height="23" rx="11.5" fill="url(#pillBg)" stroke="#7a4010" stroke-width="1"/>
-  <text x="778" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">288 Tests</text>
+  <text x="778" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">318 Tests</text>
 
   <!-- ── Tech stack row (shifted right to clear feature pills & tagline) ── -->
   <text x="1080" y="100"
@@ -202,7 +202,7 @@
   <text x="1123" y="121" font-family="monospace,'Courier New'" font-size="10" fill="#fff" text-anchor="middle">TypeScript 5</text>
   <!-- Vite -->
   <rect x="1024" y="133" width="58" height="21" rx="5" fill="#1a1a2e" opacity="0.9"/>
-  <text x="1053" y="147" font-family="monospace,'Courier New'" font-size="10" fill="#646cff" text-anchor="middle">Vite 6</text>
+  <text x="1053" y="147" font-family="monospace,'Courier New'" font-size="10" fill="#646cff" text-anchor="middle">Vite 8</text>
   <!-- Tailwind -->
   <rect x="1090" y="133" width="66" height="21" rx="5" fill="#0f172a" opacity="0.9"/>
   <text x="1123" y="147" font-family="monospace,'Courier New'" font-size="10" fill="#38bdf8" text-anchor="middle">Tailwind 4</text>

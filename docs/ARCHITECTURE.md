@@ -1,8 +1,8 @@
+# 🏛 Architecture
+
 <div align="center">
   <img src="banner.svg" alt="Cabinet Planner" width="100%"/>
 </div>
-
-# 🏛 Architecture
 
 Cabinet Planner is a client-side React SPA (no backend). All computation — dimensions, parts, hardware, cut-sheet optimization, cost estimation — runs in the browser.
 
@@ -124,7 +124,7 @@ Two supplementary stores:
 
 ## 📦 Build & Deploy
 
-- **Bundler**: Vite 6 with React plugin + Tailwind CSS plugin
+- **Bundler**: Vite 8 with React plugin + Tailwind CSS plugin
 - **Code splitting**: `@react-pdf/renderer` is split into a separate chunk via `manualChunks` and lazy-loaded
 - **Deploy target**: GitHub Pages (base path: `/WoodworkingShop/`)
 - **PWA**: service worker in `public/sw.js` with cache-first strategy
@@ -307,12 +307,12 @@ graph TD
   push["Push or PR to main"] --> ci["CI workflow\nci.yml"]
   push --> pages["Pages workflow\npages.yml"]
 
-  subgraph CI [CI - Runs on Node 20 and 22]
+  subgraph CI [CI - Runs on Node 22, 24 and 26]
     ci --> tc["Typecheck\ntsc --noEmit"]
     tc --> lint["ESLint\n0 warnings"]
     lint --> mdlint["markdownlint"]
     mdlint --> fmt["format:check\nPrettier"]
-    fmt --> test["Vitest unit tests\n288 tests"]
+    fmt --> test["Vitest unit tests\n318 tests"]
     test --> cov["Coverage report\nNode 22 only"]
     cov --> build["Vite build"]
     build --> bcheck["Bundle budget check\n2 MB gzip limit"]
@@ -454,11 +454,11 @@ Cabinet Planner targets **WCAG 2.2 Level AA** compliance. This section documents
 
 ### Compliance Target
 
-| Standard | Level | Status |
-| -------- | ----- | ------ |
-| WCAG 2.2 | AA | ✅ Enforced in CI via axe-core |
-| WCAG 2.1 | AA | ✅ (subset of 2.2) |
-| WCAG 2.2 | AAA | ⚠ Partial (not fully targeted) |
+| Standard | Level | Status                         |
+| -------- | ----- | ------------------------------ |
+| WCAG 2.2 | AA    | ✅ Enforced in CI via axe-core |
+| WCAG 2.1 | AA    | ✅ (subset of 2.2)             |
+| WCAG 2.2 | AAA   | ⚠ Partial (not fully targeted) |
 
 ### CI Gate — axe-core + Playwright
 
@@ -472,33 +472,33 @@ The test covers the homepage and the configurator tab. Violations are surfaced a
 
 ### Focus Management
 
-| Pattern | Location |
-| ------- | -------- |
-| **Focus trap** | `ShortcutsModal.tsx` and `TemplatePicker.tsx` — modal dialogs trap focus within the modal boundary and restore it to the trigger element on close |
-| **Skip-to-main** | `index.html` — `<a href="#main-content">` skip link at the top of the DOM, translatable via `a11y.skipToContent` i18n key |
-| **Tab order** | All interactive elements follow logical DOM order; `tabIndex` is only used for hidden inputs (`tabIndex={-1}`) |
-| **Keyboard shortcuts** | `?` = shortcuts modal, `Ctrl+Z` = undo, `Ctrl+Y` = redo, `1`–`5` = tab navigation (documented in ShortcutsModal) |
+| Pattern                | Location                                                                                                                                          |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Focus trap**         | `ShortcutsModal.tsx` and `TemplatePicker.tsx` — modal dialogs trap focus within the modal boundary and restore it to the trigger element on close |
+| **Skip-to-main**       | `index.html` — `<a href="#main-content">` skip link at the top of the DOM, translatable via `a11y.skipToContent` i18n key                         |
+| **Tab order**          | All interactive elements follow logical DOM order; `tabIndex` is only used for hidden inputs (`tabIndex={-1}`)                                    |
+| **Keyboard shortcuts** | `?` = shortcuts modal, `Ctrl+Z` = undo, `Ctrl+Y` = redo, `1`–`5` = tab navigation (documented in ShortcutsModal)                                  |
 
 ### Visual Accessibility
 
-| Feature | Implementation |
-| ------- | -------------- |
-| **High-contrast mode** | `.high-contrast` CSS class on `<body>`, toggled via `toggleHighContrast()` store action. Adds forced white-on-black overrides for all UI elements. |
-| **Color-blind mode** | `colorBlindMode` store toggle adds deuteranopia-friendly palette (amber → blue shift) for cut-sheet diagrams |
+| Feature                      | Implementation                                                                                                                                      |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **High-contrast mode**       | `.high-contrast` CSS class on `<body>`, toggled via `toggleHighContrast()` store action. Adds forced white-on-black overrides for all UI elements.  |
+| **Color-blind mode**         | `colorBlindMode` store toggle adds deuteranopia-friendly palette (amber → blue shift) for cut-sheet diagrams                                        |
 | **`prefers-reduced-motion`** | CSS `@media (prefers-reduced-motion: reduce)` disables all transitions and animations (`transition: none !important`, `animation: none !important`) |
-| **`prefers-color-scheme`** | Dark mode auto-detected on first load via `detectOsDarkMode()`, persisted to localStorage |
-| **Minimum contrast** | Tailwind design tokens use `wood-600` (#5A3E28) on white, which exceeds 4.5:1 contrast ratio |
+| **`prefers-color-scheme`**   | Dark mode auto-detected on first load via `detectOsDarkMode()`, persisted to localStorage                                                           |
+| **Minimum contrast**         | Tailwind design tokens use `wood-600` (#5A3E28) on white, which exceeds 4.5:1 contrast ratio                                                        |
 
 ### ARIA Patterns
 
-| Component | ARIA usage |
-| --------- | ---------- |
-| Tab bar (Header) | `role="tablist"`, `role="tab"`, `aria-selected`, `aria-controls` |
-| Modal dialogs | `role="dialog"`, `aria-modal="true"`, `aria-labelledby` |
-| Toggle buttons | `aria-pressed`, `aria-label` |
-| Expandable sections | `aria-expanded` |
-| SVG exports | `<title>` elements on every polygon (isometric view, cut-sheet diagrams) |
-| Form inputs | `aria-label` or `<label for>` on all inputs |
+| Component           | ARIA usage                                                               |
+| ------------------- | ------------------------------------------------------------------------ |
+| Tab bar (Header)    | `role="tablist"`, `role="tab"`, `aria-selected`, `aria-controls`         |
+| Modal dialogs       | `role="dialog"`, `aria-modal="true"`, `aria-labelledby`                  |
+| Toggle buttons      | `aria-pressed`, `aria-label`                                             |
+| Expandable sections | `aria-expanded`                                                          |
+| SVG exports         | `<title>` elements on every polygon (isometric view, cut-sheet diagrams) |
+| Form inputs         | `aria-label` or `<label for>` on all inputs                              |
 
 ### RTL Support
 

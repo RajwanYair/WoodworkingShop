@@ -1,8 +1,8 @@
-<div align="center">
-  <img src="banner.svg" alt="Cabinet Planner" width="100%"/>
-</div>
-
 # 📜 Sprint History
+
+<div align="center">
+      <img src="banner.svg" alt="Cabinet Planner" width="100%"/>
+</div>
 
 This file is the archive of completed sprints and historical release planning.
 The live, forward-looking roadmap lives at [`ROADMAP.md`](../ROADMAP.md).
@@ -38,7 +38,7 @@ gantt
     v3.9.1 Markdown visual improvements                    :done, v391, after v390, 1d
     v3.9.2 Production readiness, sw.js version sync        :done, v392, after v391, 1d
   section Production
-    v3.10.0 Architecture overhaul, MyScripts tooling        :active, v3100, after v392, 3d
+      v3.10.0 Architecture overhaul, MyScripts tooling        :done, v3100, after v392, 3d
 ```
 
 ## 🗺 v3.9.0 Sprint Plan (Sprints 173–181)

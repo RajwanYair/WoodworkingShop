@@ -64,11 +64,11 @@ test('PWA service worker registers', async ({ page }) => {
 
 test('PDF panel renders generate button and content summary', async ({ page }) => {
   await page.goto('/');
-  // Switch to the PDF tab via Alt+5.
-  await page.keyboard.press('Alt+5');
+  // Switch to the PDF tab explicitly to avoid focus/timing variance in CI.
+  await page.getByRole('tab', { name: /pdf/i }).click();
   // The lazy-loaded PDF panel includes @react-pdf/renderer (~1.6 MB); give it
   // extra time to resolve on CI where Vite serves every sub-module individually.
-  const heading = page.getByRole('heading', { name: /export pdf/i });
+  const heading = page.getByRole('heading', { name: /^export pdf$/i });
   await expect(heading).toBeVisible({ timeout: 30_000 });
   // Generate button must be enabled (not in generating state).
   const generateBtn = page.getByRole('button', { name: /generate pdf/i });

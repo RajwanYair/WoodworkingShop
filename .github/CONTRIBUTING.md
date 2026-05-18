@@ -1,8 +1,8 @@
+# 🤝 Contributing to Cabinet Planner
+
 <div align="center">
   <img src="../docs/banner.svg" alt="Cabinet Planner" width="100%"/>
 </div>
-
-# 🤝 Contributing to Cabinet Planner
 
 [![CI](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/ci.yml/badge.svg)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/ci.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)](../tsconfig.json)
@@ -29,7 +29,7 @@ flowchart LR
 
 ## ⚡ Quick Setup
 
-**Prerequisites:** Node.js ≥ 20, npm 10+, Git
+**Prerequisites:** Node.js >= 22, npm 10+, Git
 
 ```bash
 # 1 — fork on GitHub, then clone your fork

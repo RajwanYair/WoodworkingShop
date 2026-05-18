@@ -176,7 +176,7 @@ function DimensionRow({ spec, value, step, unitLabel, metric, label, displayValu
         <label htmlFor={inputId} className="text-sm text-wood-600 dark:text-wood-300">
           {label}
         </label>
-        <span className="text-xs text-wood-400 font-mono">{displayValue}</span>
+        <span className="text-xs text-wood-600 dark:text-wood-300 font-mono">{displayValue}</span>
       </div>
 
       <div className="flex items-center gap-3 mt-1">
@@ -223,7 +223,7 @@ function DimensionRow({ spec, value, step, unitLabel, metric, label, displayValu
                   : 'border-wood-300 dark:border-wood-600 text-wood-700 dark:text-wood-200')
             }
           />
-          <span className="ml-1 text-[10px] text-wood-400">{unitLabel}</span>
+          <span className="ml-1 text-[10px] text-wood-600 dark:text-wood-300">{unitLabel}</span>
         </div>
       </div>
 

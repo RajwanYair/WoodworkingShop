@@ -1,9 +1,14 @@
 {
   "MD012": { "maximum": 1 },
-  "MD013": false,
+  "MD013": {
+    "line_length": 500,
+    "code_blocks": false,
+    "tables": false,
+    "headings": false
+  },
   "MD024": { "siblings_only": true },
   "MD033": {
     "allowed_elements": ["br", "details", "summary", "sub", "sup", "kbd", "div", "img", "a", "p", "picture", "source"]
   },
-  "MD041": false
+  "MD041": { "level": 1 }
 }

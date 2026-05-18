@@ -3,11 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useToastStore } from '../../store/toast-store';
 import { loadSavedConfigs, saveConfig, deleteSavedConfig, type SavedConfig } from '../../utils/local-storage';
-import {
-  listProjects,
-  exportProjectsBundle,
-  importProjectsBundle,
-} from '../../utils/project-storage';
+import { listProjects, exportProjectsBundle, importProjectsBundle } from '../../utils/project-storage';
 import type { CabinetConfig } from '../../engine/types';
 import type { CabinetEntry } from '../../store/cabinet-store';
 

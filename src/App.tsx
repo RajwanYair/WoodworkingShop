@@ -123,7 +123,14 @@ function App() {
         <Header />
         <div className="flex">
           <Sidebar />
-          <main ref={mainRef} id="main-content" tabIndex={-1} className="flex-1 p-3 sm:p-6 focus:outline-none" role="main" aria-label={t('a11y.mainWorkspace')}>
+          <main
+            ref={mainRef}
+            id="main-content"
+            tabIndex={-1}
+            className="flex-1 p-3 sm:p-6 focus:outline-none"
+            role="main"
+            aria-label={t('a11y.mainWorkspace')}
+          >
             {/* Sprint 170 — print-only header: shows project name + date on paper */}
             <div className="print-only-header">
               {projectName ? `${projectName} — ` : ''}Cabinet Planner

@@ -1,8 +1,8 @@
+# 🔐 Security Policy
+
 <div align="center">
   <img src="../docs/banner.svg" alt="Cabinet Planner" width="100%"/>
 </div>
-
-# 🔐 Security Policy
 
 [![Security: Responsible Disclosure](https://img.shields.io/badge/security-responsible%20disclosure-brightgreen)](SECURITY.md)
 
@@ -61,11 +61,11 @@
 
 Accessibility violations are treated as **quality-blocking issues** in this project. The following measures ensure WCAG 2.2 AA compliance is maintained:
 
-| Gate | Details |
-| ---- | ------- |
-| **axe-core CI** | `@axe-core/playwright` runs on every PR. Any WCAG 2.1 AA violation fails the pipeline with a named assertion error. |
+| Gate              | Details                                                                                                                                     |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **axe-core CI**   | `@axe-core/playwright` runs on every PR. Any WCAG 2.1 AA violation fails the pipeline with a named assertion error.                         |
 | **Lighthouse CI** | Performance and accessibility categories are gated via `config/lighthouserc.json`. `categories:accessibility` must be ≥ 0.90 (error-level). |
-| **PR checklist** | Contributors are asked to run the app with keyboard-only navigation and a screen reader on any UI change. |
+| **PR checklist**  | Contributors are asked to run the app with keyboard-only navigation and a screen reader on any UI change.                                   |
 
 ### Reporting Accessibility Issues
 

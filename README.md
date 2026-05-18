@@ -1,3 +1,5 @@
+# WoodworkingShop
+
 <div align="center">
   <img src="docs/banner.svg" alt="Cabinet Planner — Interactive Woodworking Design Tool" width="100%"/>
 </div>
@@ -115,7 +117,7 @@ npm test
 npm run build
 ```
 
-> **Node.js ≥ 20** is required.
+> **Node.js >= 22** is required.
 
 ---
 
@@ -124,12 +126,12 @@ npm run build
 | Layer         | Technology                           |
 | ------------- | ------------------------------------ |
 | Framework     | ⚛️ React 19                          |
-| Language      | 🔷 TypeScript 5.8 (strict mode)      |
+| Language      | 🔷 TypeScript 6 (strict mode)        |
 | Styling       | 🎨 Tailwind CSS 4                    |
 | State         | 🐻 Zustand 5                         |
 | PDF           | 📄 @react-pdf/renderer 4             |
 | i18n          | 🌐 i18next 25 + react-i18next        |
-| Build         | ⚡ Vite 6                            |
+| Build         | ⚡ Vite 8                            |
 | Unit tests    | 🧪 Vitest 3 + @testing-library/react |
 | E2E tests     | 🎭 Playwright                        |
 | Lint / format | 🧹 ESLint 9 (flat config) + Prettier |
@@ -243,7 +245,7 @@ gh release create vX.Y.Z --generate-notes
 
 | Issue                | Solution                                                                        |
 | -------------------- | ------------------------------------------------------------------------------- |
-| `npm ci` fails       | Ensure **Node.js ≥ 20**. Delete `node_modules` and retry                        |
+| `npm ci` fails       | Ensure **Node.js >= 22**. Delete `node_modules` and retry                       |
 | TypeScript errors    | Run `npm run typecheck` for details. Strict mode is on                          |
 | Lint failures        | Run `npm run lint` — 0 warnings policy; fix root causes                         |
 | Chunk size warning   | Expected for `@react-pdf/renderer` (~1.5 MB) — it is code-split and lazy-loaded |

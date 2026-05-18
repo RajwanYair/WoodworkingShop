@@ -135,7 +135,7 @@ export function SliderInput({
                   : 'border-wood-300 dark:border-wood-600 text-wood-700 dark:text-wood-200')
             }
           />
-          {unit && <span className="ml-1 text-[10px] text-wood-400">{unit}</span>}
+          {unit && <span className="ml-1 text-[10px] text-wood-600 dark:text-wood-300">{unit}</span>}
         </div>
       </div>
       {message && (

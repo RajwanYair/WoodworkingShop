@@ -443,7 +443,7 @@ export function CostEstimatePanel() {
             <span className="text-xs text-wood-600 dark:text-wood-300">~{totalWeightKg.toFixed(1)} kg</span>
           </div>
         )}
-        <p className="text-[10px] text-wood-400 dark:text-wood-500 mt-1">{t('cost.disclaimer')}</p>
+        <p className="mt-1 text-[10px] text-wood-600 dark:text-wood-300">{t('cost.disclaimer')}</p>
       </div>
     </div>
   );
