@@ -245,7 +245,17 @@
     "editPrice": "לחץ לעריכת מחיר לגיליון",
     "resetPrice": "אפס למחיר ברירת מחדל",
     "editEbRate": "לחץ להגדרת תעריף פסי קצה (₪/מ')",
-    "totalWeight": "משקל לוחות משוער"
+    "totalWeight": "משקל לוחות משוער",
+    "labour": "עבודה",
+    "labourRate": "תעריף שעתי",
+    "editLabourHours": "לחץ להגדרת שעות עבודה משוערות",
+    "editLabourRate": "לחץ לעריכת תעריף עבודה (₪/שעה)",
+    "labourHoursAriaLabel": "שעות עבודה",
+    "labourRateAriaLabel": "תעריף עבודה לשעה",
+    "finish": "גימור / צביעה",
+    "editFinish": "לחץ להגדרת עלות גימור",
+    "finishAriaLabel": "עלות גימור",
+    "notSet": "—"
   },
   "assembly": {
     "title": "מדריך הרכבה",

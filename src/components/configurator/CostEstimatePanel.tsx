@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { estimateCost } from '../../engine/cost-estimator';
+import { estimateCost, DEFAULT_LABOUR_RATE } from '../../engine/cost-estimator';
 import { getMaterial, computePartWeightKg } from '../../engine/materials';
 import type { Lang } from '../../engine/types';
 
@@ -21,6 +21,12 @@ export function CostEstimatePanel() {
     hardwarePriceOverrides,
     setHardwarePriceOverride,
     allParts,
+    labourRate,
+    setLabourRate,
+    labourHours,
+    setLabourHours,
+    finishCost,
+    setFinishCost,
   } = useCabinetStore();
   const lang = i18n.language as Lang;
 
@@ -43,6 +49,13 @@ export function CostEstimatePanel() {
   // Sprint 148 — which hardware row is being price-edited
   const [editingHw, setEditingHw] = useState<string | null>(null);
   const [hwPriceInput, setHwPriceInput] = useState('');
+  // v3.23.0 — labour rate and hours editing
+  const [editingLabourRate, setEditingLabourRate] = useState(false);
+  const [labourRateInput, setLabourRateInput] = useState('');
+  const [editingLabourHours, setEditingLabourHours] = useState(false);
+  const [labourHoursInput, setLabourHoursInput] = useState('');
+  const [editingFinish, setEditingFinish] = useState(false);
+  const [finishInput, setFinishInput] = useState('');
 
   const cost = estimateCost(
     optimization,
@@ -51,6 +64,9 @@ export function CostEstimatePanel() {
     materialPriceOverrides,
     edgeBandingRate,
     hardwarePriceOverrides,
+    labourRate,
+    labourHours,
+    finishCost,
   );
   const totalNonZero = cost.totalCost > 0;
 
@@ -63,6 +79,8 @@ export function CostEstimatePanel() {
   if (cost.edgeBandingCost > 0)
     segments.push({ label: t('cost.edgeBanding'), value: cost.edgeBandingCost, color: '#D4A574' });
   if (cost.hardwareCost > 0) segments.push({ label: t('cost.hardware'), value: cost.hardwareCost, color: '#708090' });
+  if (cost.labourCost > 0) segments.push({ label: t('cost.labour'), value: cost.labourCost, color: '#8B4513' });
+  if (cost.finishCost > 0) segments.push({ label: t('cost.finish'), value: cost.finishCost, color: '#9370DB' });
 
   return (
     <div className="border border-wood-200 dark:border-wood-700 rounded-lg p-3 space-y-3">
@@ -278,6 +296,110 @@ export function CostEstimatePanel() {
           </div>
         </div>
       )}
+
+      {/* Labour hours + finish coat (v3.23.0) */}
+      <div className="border-t border-wood-100 dark:border-wood-800 pt-2 space-y-1">
+        {/* Labour hours */}
+        <div className="flex justify-between items-center text-xs gap-2">
+          <span className="text-wood-600 dark:text-wood-300 flex-1">{t('cost.labour')}</span>
+          {editingLabourHours ? (
+            <div className="flex items-center gap-1 shrink-0">
+              <input
+                type="number" min={0} step={0.5} value={labourHoursInput}
+                onChange={(e) => setLabourHoursInput(e.target.value)}
+                onBlur={() => {
+                  const val = parseFloat(labourHoursInput);
+                  setLabourHours(isNaN(val) || val < 0 ? 0 : val);
+                  setEditingLabourHours(false);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
+                  if (e.key === 'Escape') setEditingLabourHours(false);
+                }}
+                className="w-14 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-1 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-wood-400"
+                ref={(el) => el?.focus()}
+                aria-label={t('cost.labourHoursAriaLabel', 'Labour hours')}
+              />
+              <span className="text-wood-400">h</span>
+            </div>
+          ) : (
+            <button
+              onClick={() => { setEditingLabourHours(true); setLabourHoursInput(String(labourHours)); }}
+              className="font-medium shrink-0 hover:underline text-wood-700 dark:text-wood-200"
+              title={t('cost.editLabourHours', 'Click to set estimated labour hours')}
+            >
+              {labourHours > 0 ? `${labourHours}h → ₪${cost.labourCost}` : t('cost.notSet', '—')}
+            </button>
+          )}
+        </div>
+        {/* Labour rate */}
+        <div className="flex justify-between items-center text-xs gap-2">
+          <span className="text-wood-500 dark:text-wood-400 flex-1">{t('cost.labourRate')}</span>
+          {editingLabourRate ? (
+            <div className="flex items-center gap-1 shrink-0">
+              <span className="text-wood-400">₪</span>
+              <input
+                type="number" min={0} step={5} value={labourRateInput}
+                onChange={(e) => setLabourRateInput(e.target.value)}
+                onBlur={() => {
+                  const val = Number(labourRateInput);
+                  setLabourRate(isNaN(val) || val <= 0 ? DEFAULT_LABOUR_RATE : val);
+                  setEditingLabourRate(false);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
+                  if (e.key === 'Escape') setEditingLabourRate(false);
+                }}
+                className="w-14 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-1 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-wood-400"
+                ref={(el) => el?.focus()}
+                aria-label={t('cost.labourRateAriaLabel', 'Labour rate per hour')}
+              />
+              <span className="text-wood-400">/h</span>
+            </div>
+          ) : (
+            <button
+              onClick={() => { setEditingLabourRate(true); setLabourRateInput(String(labourRate)); }}
+              className={`font-medium shrink-0 hover:underline ${labourRate !== DEFAULT_LABOUR_RATE ? 'text-amber-600 dark:text-amber-400' : 'text-wood-700 dark:text-wood-200'}`}
+              title={t('cost.editLabourRate', 'Click to override labour rate (₪/hr)')}
+            >
+              ₪{labourRate}/h{labourRate !== DEFAULT_LABOUR_RATE && <span className="text-[10px]"> ✎</span>}
+            </button>
+          )}
+        </div>
+        {/* Finish / paint cost */}
+        <div className="flex justify-between items-center text-xs gap-2">
+          <span className="text-wood-600 dark:text-wood-300 flex-1">{t('cost.finish')}</span>
+          {editingFinish ? (
+            <div className="flex items-center gap-1 shrink-0">
+              <span className="text-wood-400">₪</span>
+              <input
+                type="number" min={0} step={10} value={finishInput}
+                onChange={(e) => setFinishInput(e.target.value)}
+                onBlur={() => {
+                  const val = Number(finishInput);
+                  setFinishCost(isNaN(val) || val < 0 ? 0 : val);
+                  setEditingFinish(false);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
+                  if (e.key === 'Escape') setEditingFinish(false);
+                }}
+                className="w-16 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-1 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-wood-400"
+                ref={(el) => el?.focus()}
+                aria-label={t('cost.finishAriaLabel', 'Finish/paint cost')}
+              />
+            </div>
+          ) : (
+            <button
+              onClick={() => { setEditingFinish(true); setFinishInput(String(finishCost)); }}
+              className="font-medium shrink-0 hover:underline text-wood-700 dark:text-wood-200"
+              title={t('cost.editFinish', 'Click to set finish/paint cost')}
+            >
+              {finishCost > 0 ? `₪${finishCost}` : t('cost.notSet', '—')}
+            </button>
+          )}
+        </div>
+      </div>
 
       {/* Per-cabinet cost when multiple cabinets */}
       {cabinets.length > 1 && totalNonZero && (

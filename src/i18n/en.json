@@ -245,7 +245,17 @@
     "editPrice": "Click to override price per sheet",
     "resetPrice": "Reset to default price",
     "editEbRate": "Click to set edge banding rate (₪/m)",
-    "totalWeight": "Estimated panel weight"
+    "totalWeight": "Estimated panel weight",
+    "labour": "Labour",
+    "labourRate": "Labour rate",
+    "editLabourHours": "Click to set estimated labour hours",
+    "editLabourRate": "Click to override labour rate (₪/hr)",
+    "labourHoursAriaLabel": "Labour hours",
+    "labourRateAriaLabel": "Labour rate per hour",
+    "finish": "Finish / paint",
+    "editFinish": "Click to set finish/paint cost",
+    "finishAriaLabel": "Finish/paint cost",
+    "notSet": "—"
   },
   "assembly": {
     "title": "Assembly Guide",

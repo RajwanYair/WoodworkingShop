@@ -7,6 +7,12 @@ export interface CostBreakdown {
   edgeBandingCost: number;
   hardwareCost: number;
   wasteCost: number;
+  /** Estimated labour hours (assembly + finishing) — v3.23.0 */
+  labourHours: number;
+  /** Labour cost in ₪ (labourHours × labourRate) — v3.23.0 */
+  labourCost: number;
+  /** Finish/paint cost (user-supplied, ₪) — v3.23.0 */
+  finishCost: number;
   totalMaterialCost: number;
   totalCost: number;
 }
@@ -53,6 +59,9 @@ const HARDWARE_PRICES: Record<string, number> = {
 /** Edge banding price per meter (₪) */
 const EDGE_BANDING_PER_METER = 3;
 
+/** Default labour rate ₪ per hour (v3.23.0) */
+export const DEFAULT_LABOUR_RATE = 75;
+
 /**
  * Estimate the total cost of a cabinet project based on optimization results
  * and hardware/edge banding quantities.
@@ -60,6 +69,7 @@ const EDGE_BANDING_PER_METER = 3;
  * Sprint 139: accepts optional `priceOverrides` map of materialKey → price per sheet (₪).
  * Sprint 141: accepts optional `edgeBandingRate` (₪/m, default EDGE_BANDING_PER_METER).
  * Sprint 148: accepts optional `hardwarePriceOverrides` map of hw.id → unit price (₪).
+ * v3.23.0:   accepts optional `labourRate` (₪/hr), `labourHours`, `finishCost`.
  */
 export function estimateCost(
   optimization: OptimizationResult,
@@ -68,6 +78,9 @@ export function estimateCost(
   priceOverrides: Record<string, number> = {},
   edgeBandingRate: number = EDGE_BANDING_PER_METER,
   hardwarePriceOverrides: Record<string, number> = {},
+  labourRate: number = DEFAULT_LABOUR_RATE,
+  labourHours: number = 0,
+  finishCost: number = 0,
 ): CostBreakdown {
   // Group sheets by material
   const sheetMap = new Map<string, { qty: number; mat: ReturnType<typeof getMaterial> }>();
@@ -119,13 +132,18 @@ export function estimateCost(
   const wastePercent = optimization.sheets.length > 0 ? (100 - optimization.overallYield) / 100 : 0;
   const wasteCost = Math.round(totalMaterialCost * wastePercent);
 
+  const labourCost = Math.round(labourHours * labourRate);
+
   return {
     sheetCosts,
     hardwareItems,
     edgeBandingCost,
     hardwareCost,
     wasteCost,
+    labourHours,
+    labourCost,
+    finishCost: Math.round(finishCost),
     totalMaterialCost,
-    totalCost: totalMaterialCost + edgeBandingCost + hardwareCost,
+    totalCost: totalMaterialCost + edgeBandingCost + hardwareCost + labourCost + Math.round(finishCost),
   };
 }

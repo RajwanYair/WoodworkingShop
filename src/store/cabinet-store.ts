@@ -156,6 +156,9 @@ export interface CabinetState {
   hardwarePriceOverrides: Record<string, number>; // Sprint 148: hw.id → ₪ per unit
   hardwareQtyOverrides: Record<string, number>; // v3.15.0: hw.id → user-overridden qty
   sheetSizeOverrides: Record<string, { width: number; length: number }>; // Sprint 165: per-material sheet size overrides (mm)
+  labourRate: number; // v3.23.0: ₪ per hour, default 75
+  labourHours: number; // v3.23.0: estimated labour hours (user-overrideable)
+  finishCost: number; // v3.23.0: finish/paint cost in ₪
 
   // Actions
   setConfig: (patch: Partial<CabinetConfig>) => void;
@@ -179,6 +182,9 @@ export interface CabinetState {
   setHardwarePriceOverride: (id: string, price: number | null) => void;
   setHardwareQtyOverride: (id: string, qty: number | null) => void; // v3.15.0
   setSheetSizeOverride: (materialKey: string, size: { width: number; length: number } | null) => void; // Sprint 165
+  setLabourRate: (rate: number) => void; // v3.23.0
+  setLabourHours: (hours: number) => void; // v3.23.0
+  setFinishCost: (cost: number) => void; // v3.23.0
   setProjectName: (name: string) => void;
   loadProject: (cabinets: CabinetEntry[]) => void;
   /** v3.18.0 — Replace every occurrence of fromKey with toKey across all cabinets (undoable). */
@@ -273,6 +279,9 @@ export const useCabinetStore = create<CabinetState>((set) => {
     hardwarePriceOverrides: {}, // Sprint 148
     hardwareQtyOverrides: {}, // v3.15.0
     sheetSizeOverrides: {}, // Sprint 165
+    labourRate: 75, // ₪/hr — v3.23.0
+    labourHours: 0, // hours — v3.23.0 (0 = not set, user inputs manually)
+    finishCost: 0, // ₪ — v3.23.0
     optimizationPending: false, // v3.21.0
 
     setConfig: (patch) =>
@@ -495,6 +504,9 @@ export const useCabinetStore = create<CabinetState>((set) => {
         return { materialPriceOverrides: overrides };
       }),
     setEdgeBandingRate: (rate) => set({ edgeBandingRate: Math.max(0, rate) }),
+    setLabourRate: (rate) => set({ labourRate: Math.max(0, rate) }),
+    setLabourHours: (hours) => set({ labourHours: Math.max(0, hours) }),
+    setFinishCost: (cost) => set({ finishCost: Math.max(0, cost) }),
     setHardwarePriceOverride: (id, price) =>
       set((state) => {
         const overrides = { ...state.hardwarePriceOverrides };
