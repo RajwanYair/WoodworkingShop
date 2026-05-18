@@ -41,8 +41,9 @@ test('keyboard shortcut Alt+2 switches to preview', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('tablist')).toBeVisible();
   await page.keyboard.press('Alt+2');
-  // Preview tab content should now expose at least one <svg>.
-  await expect(page.locator('svg').first()).toBeVisible();
+  // Preview tab content exposes the cabinet drawing SVG (role="img").
+  // Avoid locator('svg').first() which can resolve to aria-hidden icon SVGs.
+  await expect(page.locator('[role="main"] svg[role="img"]').first()).toBeVisible({ timeout: 5_000 });
 });
 
 test('PWA service worker registers', async ({ page }) => {
@@ -65,13 +66,16 @@ test('PDF panel renders generate button and content summary', async ({ page }) =
   await page.goto('/');
   // Switch to the PDF tab via Alt+5.
   await page.keyboard.press('Alt+5');
-  // The lazy-loaded PDF panel should mount; wait for the heading.
+  // The lazy-loaded PDF panel includes @react-pdf/renderer (~1.6 MB); give it
+  // extra time to resolve on CI where Vite serves every sub-module individually.
   const heading = page.getByRole('heading', { name: /export pdf/i });
-  await expect(heading).toBeVisible({ timeout: 10_000 });
+  await expect(heading).toBeVisible({ timeout: 30_000 });
   // Generate button must be enabled (not in generating state).
   const generateBtn = page.getByRole('button', { name: /generate pdf/i });
   await expect(generateBtn).toBeEnabled();
-  // Content summary section must list at least one part.
-  await expect(page.getByText(/parts list/i)).toBeVisible();
-  await expect(page.getByText(/cut sheet/i)).toBeVisible();
+  // Content summary list items — use getByRole('listitem') to avoid matching the
+  // description paragraph which also contains "parts list" and "cut sheet"
+  // (strict-mode violation when two elements resolve to the same locator).
+  await expect(page.getByRole('listitem').filter({ hasText: /parts list/i })).toBeVisible();
+  await expect(page.getByRole('listitem').filter({ hasText: /cut sheet/i })).toBeVisible();
 });

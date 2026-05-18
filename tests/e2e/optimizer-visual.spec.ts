@@ -17,9 +17,12 @@ test.beforeEach(async ({ page }) => {
 
 test('optimizer view exposes a yield meter for at least one sheet', async ({ page }) => {
   await page.goto('/');
+  await expect(page.getByRole('tablist')).toBeVisible();
   await page.keyboard.press('Alt+3');
-  const meter = page.getByRole('meter').first();
-  await expect(meter).toBeVisible({ timeout: 10_000 });
+  // OptimizerView is lazy-loaded; wait for the chunk and the rendered meter.
+  // Use attribute selector to avoid ARIA-role lookup quirks in headless browsers.
+  const meter = page.locator('[role="meter"]').first();
+  await expect(meter).toBeVisible({ timeout: 20_000 });
 
   const valueNow = await meter.getAttribute('aria-valuenow');
   expect(valueNow).not.toBeNull();
