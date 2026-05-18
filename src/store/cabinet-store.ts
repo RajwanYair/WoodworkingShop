@@ -89,6 +89,7 @@ export interface CabinetState {
   materialPriceOverrides: Record<string, number>; // Sprint 139: materialKey → ₪ per sheet
   edgeBandingRate: number; // Sprint 141: ₪ per meter, default 3
   hardwarePriceOverrides: Record<string, number>; // Sprint 148: hw.id → ₪ per unit
+  hardwareQtyOverrides: Record<string, number>; // v3.15.0: hw.id → user-overridden qty
   sheetSizeOverrides: Record<string, { width: number; length: number }>; // Sprint 165: per-material sheet size overrides (mm)
 
   // Actions
@@ -111,6 +112,7 @@ export interface CabinetState {
   setMaterialPriceOverride: (materialKey: string, price: number | null) => void;
   setEdgeBandingRate: (rate: number) => void;
   setHardwarePriceOverride: (id: string, price: number | null) => void;
+  setHardwareQtyOverride: (id: string, qty: number | null) => void; // v3.15.0
   setSheetSizeOverride: (materialKey: string, size: { width: number; length: number } | null) => void; // Sprint 165
   setProjectName: (name: string) => void;
   loadProject: (cabinets: CabinetEntry[]) => void;
@@ -178,6 +180,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
     materialPriceOverrides: {}, // Sprint 139
     edgeBandingRate: 3, // ₪/m — Sprint 141
     hardwarePriceOverrides: {}, // Sprint 148
+    hardwareQtyOverrides: {}, // v3.15.0
     sheetSizeOverrides: {}, // Sprint 165
 
     setConfig: (patch) =>
@@ -385,6 +388,16 @@ export const useCabinetStore = create<CabinetState>((set) => {
           overrides[id] = Math.max(0, price);
         }
         return { hardwarePriceOverrides: overrides };
+      }),
+    setHardwareQtyOverride: (id, qty) =>
+      set((state) => {
+        const overrides = { ...state.hardwareQtyOverrides };
+        if (qty === null) {
+          delete overrides[id];
+        } else {
+          overrides[id] = Math.max(0, qty);
+        }
+        return { hardwareQtyOverrides: overrides };
       }),
     // Sprint 165 — per-material sheet size overrides
     setSheetSizeOverride: (materialKey, size) =>

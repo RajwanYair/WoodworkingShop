@@ -111,6 +111,10 @@ export interface HardwareItem {
   name: { en: string; he: string };
   qty: number;
   unit: { en: string; he: string };
+  /** Optional supplier product URL for reference. */
+  supplierUrl?: string;
+  /** Optional price per unit in local currency (for cost estimation). */
+  unitPrice?: number;
 }
 
 export interface CutRect {

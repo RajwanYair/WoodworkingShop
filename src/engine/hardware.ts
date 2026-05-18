@@ -171,6 +171,7 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
     name: { en: 'Cabinet Leveller Foot', he: 'רגל מפלסת לארון' },
     qty: 4,
     unit: { en: 'pcs', he: "יח'" },
+    unitPrice: 3.5,
   });
 
   // ── Edge banding roll (Sprint 113) — approximate metres based on the
@@ -182,6 +183,73 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
     name: { en: 'Edge Banding Roll (50 m)', he: 'גליל סרט קצוות (50 מ׳)' },
     qty: Math.max(1, Math.ceil(visibleEdgeM / 50)),
     unit: { en: 'rolls', he: 'גלילים' },
+    unitPrice: 45,
+  });
+
+  // ── Cam locks (confirmats) for carcass joints — 4 per panel join ──
+  const panelJoins = 4 + cfg.shelfCount; // top+bottom+2sides + shelves
+  items.push({
+    id: 'H18',
+    name: { en: 'Cam Lock Set (bolt + cam)', he: 'סט מנעול קאם (בורג + קאם)' },
+    qty: panelJoins * 4,
+    unit: { en: 'sets', he: 'סטים' },
+    unitPrice: 0.8,
+  });
+
+  // ── Shelf pins / studs (5 per shelf, 4 holes) ──
+  if (cfg.shelfCount > 0) {
+    items.push({
+      id: 'H19',
+      name: { en: 'Shelf Support Stud 5 mm', he: 'סיכת מדף 5 מ"מ' },
+      qty: cfg.shelfCount * 4,
+      unit: { en: 'pcs', he: "יח'" },
+      unitPrice: 0.15,
+    });
+  }
+
+  // ── Corner braces for top/bottom reinforcement ──
+  items.push({
+    id: 'H20',
+    name: { en: 'Corner Brace (metal)', he: 'זווית חיזוק מתכת' },
+    qty: 4,
+    unit: { en: 'pcs', he: "יח'" },
+    unitPrice: 1.2,
+  });
+
+  // ── Plastic corner protectors for carcass transport ──
+  items.push({
+    id: 'H21',
+    name: { en: 'Plastic Corner Protector', he: 'מגן פינה פלסטיק' },
+    qty: 8,
+    unit: { en: 'pcs', he: "יח'" },
+    unitPrice: 0.5,
+  });
+
+  // ── Assembly screws (3.5×35 mm, ~12 per carcass panel join) ──
+  items.push({
+    id: 'H22',
+    name: { en: 'Wood Screw 3.5×35 mm', he: 'בורג עץ 3.5×35 מ"מ' },
+    qty: panelJoins * 12,
+    unit: { en: 'pcs', he: "יח'" },
+    unitPrice: 0.05,
+  });
+
+  // ── Sanding pads (assorted grit pack) ──
+  items.push({
+    id: 'H23',
+    name: { en: 'Sanding Pad Assorted Pack', he: 'ערכת ספוגי שיוף מיקס' },
+    qty: 1,
+    unit: { en: 'pack', he: 'חבילה' },
+    unitPrice: 8,
+  });
+
+  // ── Touch-up edge banding iron ──
+  items.push({
+    id: 'H24',
+    name: { en: 'Edge Banding Iron Trimmer', he: 'גוזם קצוות סרט' },
+    qty: 1,
+    unit: { en: 'pcs', he: "יח'" },
+    unitPrice: 12,
   });
 
   return items;

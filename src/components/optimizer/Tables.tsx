@@ -115,7 +115,7 @@ export function PartsTable() {
 
 export function HardwareTable() {
   const { t, i18n } = useTranslation();
-  const { hardware } = useCabinetStore();
+  const { hardware, hardwareQtyOverrides, setHardwareQtyOverride } = useCabinetStore();
   const lang = i18n.language as Lang;
 
   return (
@@ -127,20 +127,39 @@ export function HardwareTable() {
         <thead>
           <tr className="bg-wood-100 dark:bg-wood-800 text-wood-700 dark:text-wood-300">
             <th className="px-2 py-1 text-start">{t('hardware.name')}</th>
-            <th className="px-2 py-1 text-end">{t('hardware.qty')}</th>
+            <th className="px-2 py-1 text-end w-24">{t('hardware.qty')}</th>
             <th className="px-2 py-1 text-start">{t('hardware.unit')}</th>
           </tr>
         </thead>
         <tbody>
-          {hardware.map((h) => (
-            <tr key={h.id} className="border-b border-wood-100 dark:border-wood-800">
-              <td className="px-2 py-1">{h.name[lang]}</td>
-              <td className="px-2 py-1 text-end">{h.qty}</td>
-              <td className="px-2 py-1">{h.unit[lang]}</td>
-            </tr>
-          ))}
+          {hardware.map((h) => {
+            const overridden = hardwareQtyOverrides[h.id];
+            const displayQty = overridden ?? h.qty;
+            return (
+              <tr key={h.id} className={`border-b border-wood-100 dark:border-wood-800 ${overridden !== undefined ? 'bg-amber-50 dark:bg-amber-900/20' : ''}`}>
+                <td className="px-2 py-1">{h.name[lang]}</td>
+                <td className="px-2 py-1 text-end">
+                  <input
+                    type="number"
+                    min={0}
+                    value={displayQty}
+                    onChange={(e) => {
+                      const v = parseInt(e.target.value, 10);
+                      if (isNaN(v)) return;
+                      if (v === h.qty) setHardwareQtyOverride(h.id, null);
+                      else setHardwareQtyOverride(h.id, v);
+                    }}
+                    className="w-16 text-end bg-transparent border-b border-dotted border-wood-400 dark:border-wood-500 focus:outline-none focus:border-wood-600 dark:focus:border-wood-300"
+                    aria-label={`Quantity for ${h.name['en']}`}
+                  />
+                </td>
+                <td className="px-2 py-1">{h.unit[lang]}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
+      <p className="text-xs text-wood-400 dark:text-wood-500 mt-1">{t('hardware.qtyHint')}</p>
     </div>
   );
 }

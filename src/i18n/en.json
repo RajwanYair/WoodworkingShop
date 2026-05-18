@@ -102,7 +102,8 @@
     "title": "Hardware List",
     "name": "Item",
     "qty": "Qty",
-    "unit": "Unit"
+    "unit": "Unit",
+    "qtyHint": "Edit qty cells to override calculated amounts"
   },
   "optimizer": {
     "title": "Cut Sheet Optimization",
