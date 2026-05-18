@@ -5,6 +5,5 @@
   "MD033": {
     "allowed_elements": ["br", "details", "summary", "sub", "sup", "kbd", "div", "img", "a", "p", "picture", "source"]
   },
-  "MD041": false,
-  "MD060": false
+  "MD041": false
 }

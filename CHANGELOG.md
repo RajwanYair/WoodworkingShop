@@ -11,6 +11,58 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.10.0] — 2026-05-18
+
+### ✨ Added
+
+- **Shared tooling scaffold** at `MyScripts/.tools/` (one level above this repo): `.nvmrc`,
+  `.npmrc`, shared `editorconfig.shared`, `prettierrc.shared.json`, and onboarding `README.md`
+  for any sibling project under `MyScripts/` to inherit.
+- **`.nvmrc` at repo root** — pins Node 22 LTS for `nvm` / `nvm-windows` / Corepack.
+- **Auto-sync of service worker version**: new `scripts/sync-sw-version.js` runs as
+  `prebuild`, copying `package.json.version` into `public/sw.js` `APP_VERSION`. No more
+  drift; the PWA cache key is always correct on release.
+- **`docs/SPRINT-HISTORY.md`** — archive of completed sprint plans (v2.7.0 → v3.9.x),
+  freeing `ROADMAP.md` to be a forward-looking, production-grade roadmap.
+- **Expanded competitive landscape** in `ROADMAP.md` — adds Fusion 360 and three new
+  capability rows (shelf deflection, drawer slide configurator, plugin API) to the
+  comparison matrix, plus a "What we harvest from the leaders" section.
+
+### 🔄 Changed
+
+- **`ROADMAP.md` rewritten** as a clean forward roadmap with: vision pillars, forward
+  Gantt timeline (v3.10 → v4.0), release-by-release theme table, production readiness
+  checklist, Architecture Decision Log, shared tooling section, and an explicit
+  intermediate-files / `$TEMP` convention.
+- **CI Lighthouse step** now invokes `npm run lighthouse` (which uses
+  `--config=config/lighthouserc.json`) so the relocated Lighthouse config is honoured.
+- **`.vscode/settings.json`** — removed `css.lint.unknownVendorSpecificProperties`,
+  `compatibleVendorPrefixes`, and `ieHack` `"ignore"` waivers. Production-relevant CSS
+  diagnostics now surface.
+- **`.editorconfig`** — removed dead PowerShell (`*.ps1` / CRLF) section; this is a
+  JS/TS-only project.
+- **`.htmlhintrc`** — re-enabled `doctype-first: true` and `title-require: true`. Both
+  pass against the current `index.html`.
+- **`.markdownlint.json`** — removed the `MD060: false` waiver (rule renamed and never
+  applied at this version anyway). MD013 (line length) and MD041 (first line h1) remain
+  intentionally off with documented rationale.
+
+### 🐛 Fixed
+
+- **PWA cache key drift** at the build pipeline level: previously a release could ship
+  with a stale `APP_VERSION` if a contributor forgot to update `public/sw.js`. The new
+  `prebuild` hook makes this impossible — the SW version is regenerated from
+  `package.json` on every build.
+- **CI Lighthouse regression** after relocating `lighthouserc.json` into `config/`: the
+  default `lhci autorun` invocation no longer found the config. Fixed by routing the
+  workflow through `npm run lighthouse`.
+
+### 🧪 Tests
+
+- 288 unit tests passing across 23 files; 0 ESLint warnings; 0 markdownlint errors;
+  Prettier clean; bundle budgets green.
+- Production build verified end-to-end with the new prebuild hook in place.
+
 ## [3.9.2] — 2026-05-18
 
 ### 🔄 Changed

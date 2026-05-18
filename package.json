@@ -1,6 +1,6 @@
 {
   "name": "woodworkingshop",
-  "version": "3.9.2",
+  "version": "3.10.0",
   "description": "Browser-based woodworking cabinet planner — parametric design, MaxRects cut-sheet optimizer, PDF/DXF/G-code export, 6-view SVG preview, bilingual EN+HE, PWA offline",
   "keywords": [
     "woodworking",
@@ -36,6 +36,7 @@
   "private": true,
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/sync-sw-version.js",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "clean": "rimraf dist tsconfig.tsbuildinfo",
