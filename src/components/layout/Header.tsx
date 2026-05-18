@@ -126,6 +126,7 @@ export function Header() {
             onClick={() => setActiveTab(tab)}
             aria-selected={activeTab === tab ? 'true' : 'false'}
             aria-current={activeTab === tab ? 'page' : undefined}
+            aria-controls="main-content"
             title={`${t(`tabs.${tab}`)} (Alt+${i + 1})`}
             className={`px-3 py-1.5 rounded text-sm font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 ${
               activeTab === tab ? 'bg-wood-600 text-white' : 'text-wood-200 hover:bg-wood-600'

@@ -1,6 +1,6 @@
 import './i18n';
 import './index.css';
-import { useEffect, useState, lazy, Suspense } from 'react';
+import { useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Header } from './components/layout/Header';
 import { Sidebar } from './components/layout/Sidebar';
@@ -31,6 +31,9 @@ function App() {
   const highContrastMode = useCabinetStore((s) => s.highContrastMode);
   const { t } = useTranslation();
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const mainRef = useRef<HTMLElement>(null);
+  // Track whether this is the initial render so we don't steal focus on load
+  const isFirstRender = useRef(true);
 
   // Sync dark mode to <html> so browser-level UI (scrollbar, form controls,
   // color-scheme) follows. The Tailwind `dark:` variant is class-based via
@@ -40,6 +43,16 @@ function App() {
     root.classList.toggle('dark', darkMode);
     root.style.colorScheme = darkMode ? 'dark' : 'light';
   }, [darkMode]);
+
+  // Focus restoration: move focus to the main landmark when the active tab changes
+  // so keyboard users land at the start of new content (WCAG 2.2 success criterion 2.4.3)
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    mainRef.current?.focus();
+  }, [activeTab]);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -110,7 +123,7 @@ function App() {
         <Header />
         <div className="flex">
           <Sidebar />
-          <main id="main-content" className="flex-1 p-3 sm:p-6" role="main" aria-label={t('a11y.mainWorkspace')}>
+          <main ref={mainRef} id="main-content" tabIndex={-1} className="flex-1 p-3 sm:p-6 focus:outline-none" role="main" aria-label={t('a11y.mainWorkspace')}>
             {/* Sprint 170 — print-only header: shows project name + date on paper */}
             <div className="print-only-header">
               {projectName ? `${projectName} — ` : ''}Cabinet Planner

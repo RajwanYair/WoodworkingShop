@@ -11,6 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.43.0] — 2026-05-18
+
+### ♿ Accessibility
+
+- **Skip-nav functional** — `<main id="main-content">` now has `tabIndex={-1}` and `className="focus:outline-none"`. The existing skip-to-main link (`href="#main-content"`) in `App.tsx` now correctly moves keyboard focus to the main landmark rather than only scrolling there.
+- **Focus restoration on tab switch** — A `useEffect` in `App.tsx` calls `mainRef.current?.focus()` whenever `activeTab` changes (initial render is skipped via `isFirstRender` ref). Keyboard and screen-reader users land at the start of the new panel content (WCAG 2.2 SC 2.4.3 Focus Order).
+- **`aria-controls` on tab buttons** — Each tab `<button role="tab">` in `Header.tsx` now carries `aria-controls="main-content"`, correctly expressing the tabpanel relationship to AT.
+
+### 📝 Documentation
+
+- **`ROADMAP.md`** — Gantt chart updated to show all 10 completed sprints (v3.34.0–v3.43.0) with `done` status; new "Session Sprint Block" summary table added; v3.33.0 a11y certification items marked `[x]`; Feature Growth and Pro Features sections labelled ✅ Shipped.
+
 ## [3.42.0] — 2026-05-18
 
 ### 📝 Documentation

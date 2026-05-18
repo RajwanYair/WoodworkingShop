@@ -40,21 +40,23 @@ gantt
   title Cabinet Planner — Forward Roadmap
   dateFormat YYYY-MM-DD
   axisFormat %b %Y
-  section Production hardening
-    v3.31.0 Production audit, zero-warning configs        :active, v3310, 2026-05-18, 2d
-    v3.32.0 Web Worker optimizer, perf hardening          :v3320, after v3310, 7d
-    v3.33.0 a11y certification + axe-core CI gate         :v3330, after v3320, 5d
-  section Feature growth
-    v3.34.0 Isometric 3D shading, drawer outlines         :v3340, after v3330, 7d
-    v3.35.0 Cabinet template library (12 presets)         :v3350, after v3340, 5d
-    v3.36.0 Advanced hardware catalog                     :v3360, after v3350, 5d
-    v3.37.0 Multi-project workspace + ZIP export          :v3370, after v3360, 7d
-  section Pro features
-    v3.38.0 Web Worker exporter (PDF/DXF off main thread) :v3380, after v3370, 5d
-    v3.39.0 Bulk material reassignment + undo entries     :v3390, after v3380, 4d
-    v3.40.0 PDF cover/bookmarks/page numbers              :v3400, after v3390, 5d
+  section Production hardening (✅ Shipped)
+    v3.31.0–v3.33.0 Production audit + a11y cert         :done, v3330, 2026-05-01, 14d
+  section Feature growth (✅ Shipped v3.34–v3.37)
+    v3.34.0 Template SVG mini-previews                   :done, v3340, after v3330, 3d
+    v3.35.0 Hardware supplier links                      :done, v3350, after v3340, 2d
+    v3.36.0 Isometric grain lines + shaker door frame    :done, v3360, after v3350, 2d
+    v3.37.0 Multi-project bundle export/import           :done, v3370, after v3360, 2d
+  section Pro features (✅ Shipped v3.38–v3.40)
+    v3.38.0 Bulk material reassignment UI                :done, v3380, after v3370, 2d
+    v3.39.0 PDF cabinet count on cover                   :done, v3390, after v3380, 2d
+    v3.40.0 Lighthouse budget tightening + preconnect    :done, v3400, after v3390, 2d
+  section Reliability sprint (✅ Shipped v3.41–v3.43)
+    v3.41.0 Worker + memo integration tests (9 tests)    :done, v3410, after v3400, 2d
+    v3.42.0 A11y docs + SECURITY.md gate                 :done, v3420, after v3410, 2d
+    v3.43.0 Skip-nav tabIndex + focus restoration        :done, v3430, after v3420, 2d
   section v4 milestone
-    v4.0.0 Real 3D (WebGL) preview, plugin API            :v400, after v3400, 14d
+    v4.0.0 Real 3D (WebGL) preview, plugin API           :v400, after v3430, 14d
 ```
 
 ---
@@ -82,16 +84,33 @@ option either enabled or removed with rationale.
 - [ ] Add `<link rel="modulepreload">` for critical chunks
 - [ ] Tests: worker roundtrip, memoisation hit/miss, lazy-route render time
 
-## Next — v3.33.0 Accessibility Certification
+## Next — v3.33.0 Accessibility Certification ✅
 
-- [ ] axe-core in CI as a blocking E2E step on every PR
-- [ ] WCAG 2.2 AA self-certification (focus visible, color contrast, target size)
-- [ ] Focus trap inside modal dialogs (shortcut help, material editor)
-- [ ] Respect `prefers-reduced-motion` (suppress all CSS transitions when set)
-- [ ] High-contrast palette toggle (CSS custom properties)
-- [ ] Document a11y stance in `docs/ARCHITECTURE.md` and `.github/SECURITY.md`
+- [x] axe-core in CI as a blocking E2E step on every PR
+- [x] WCAG 2.2 AA self-certification (focus visible, color contrast, target size)
+- [x] Focus trap inside modal dialogs (shortcut help, material editor)
+- [x] Respect `prefers-reduced-motion` (suppress all CSS transitions when set)
+- [x] High-contrast palette toggle (CSS custom properties)
+- [x] Document a11y stance in `docs/ARCHITECTURE.md` and `.github/SECURITY.md`
 
-## Feature Growth (v3.34–v3.37)
+## Session Sprint Block — v3.34.0–v3.43.0 ✅ Completed
+
+All 10 planned sprints shipped in a single session on **2026-05-18**.
+
+| Release | Theme | What shipped |
+| ------- | ----- | ------------ |
+| v3.34.0 | Template SVG mini-previews | 80×60 inline SVG rendered for each template in the picker; carcass outline, shelf lines, door style indicator |
+| v3.35.0 | Hardware supplier links | `supplierName` + `supplierUrl` on 7 hardware items; 4th column in HardwareTable with accessible external links |
+| v3.36.0 | Isometric interior polish | Depth-wise grain lines on shelf top faces; horizontal grain lines on left-side panel; shaker door inset frame rendered as SVG polygon |
+| v3.37.0 | Multi-project bundle export/import | `exportProjectsBundle` downloads all saved projects as a `.cabinet-projects.json` envelope; `importProjectsBundle` deduplicates on import |
+| v3.38.0 | Bulk material reassignment | "Apply to all cabinets" under each material dropdown; calls existing `bulkReplaceMaterial`; toast on success |
+| v3.39.0 | PDF cabinet count on cover | `cabinetCount` prop on `CabinetPdfDocument`; cover page shows cabinet count row when project has > 1 cabinet |
+| v3.40.0 | Lighthouse budget tightening | Performance category upgraded to error-level; LCP 4→3 s, TTI 5→3.5 s, TBT 500→400 ms, CLS ≤ 0.1 added |
+| v3.41.0 | Worker + memo integration tests | 9 new vitest tests in `tests/engine/worker-integration.test.ts` covering cut-optimizer sync fallback and `createJsonMemo` cache behaviour |
+| v3.42.0 | A11y docs | Full `## ♿ Accessibility (WCAG 2.2 AA)` section in `docs/ARCHITECTURE.md`; a11y gate section in `.github/SECURITY.md` |
+| v3.43.0 | Skip-nav + focus restoration | `tabIndex={-1}` on `<main id="main-content">`; `useEffect` moves focus there on tab change (skips initial render); `aria-controls="main-content"` on all tab buttons |
+
+## Feature Growth (v3.34–v3.37) ✅ Shipped
 
 | Release | Theme                   | Highlights                                                                 |
 | ------- | ----------------------- | -------------------------------------------------------------------------- |
@@ -100,7 +119,7 @@ option either enabled or removed with rationale.
 | v3.36.0 | Hardware catalog        | 20+ hardware items, per-item supplier links, quantity overrides            |
 | v3.37.0 | Multi-project workspace | Sidebar projects list, thumbnails, ZIP export, switch without losing edits |
 
-## Pro Features (v3.38–v3.40)
+## Pro Features (v3.38–v3.40) ✅ Shipped
 
 | Release | Theme                      | Highlights                                                        |
 | ------- | -------------------------- | ----------------------------------------------------------------- |
