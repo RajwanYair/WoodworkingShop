@@ -180,7 +180,8 @@
     "title": "ייצוא PDF",
     "generate": "צור PDF",
     "download": "הורד PDF",
-    "generating": "מייצר…"
+    "generating": "יוצר…",
+    "includeCover": "כלל שער עטיפה"
   },
   "footer": {
     "darkMode": "מצב כהה",

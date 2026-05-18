@@ -129,6 +129,10 @@ export interface CabinetPdfProps {
   optimization: OptimizationResult;
   edgeBandingTotal: number;
   lang: Lang;
+  /** v3.19.0 — project name shown on cover page title */
+  projectName?: string;
+  /** v3.19.0 — whether to render the cover page (default: true) */
+  includeCover?: boolean;
 }
 
 export function CabinetPdfDocument({
@@ -139,16 +143,20 @@ export function CabinetPdfDocument({
   optimization,
   edgeBandingTotal,
   lang,
+  projectName,
+  includeCover = true,
 }: CabinetPdfProps) {
   const cMat = getMaterial(config.carcassMaterial);
   const bMat = getMaterial(config.backPanelMaterial);
   const date = new Date().toLocaleDateString('en-GB');
+  const coverTitle = (projectName && projectName.trim()) ? projectName.trim() : 'Cabinet Build Plan';
 
   return (
-    <Document title={`Cabinet Plan — ${config.width}×${config.height}×${config.depth}`} author="Cabinet Planner">
-      {/* ── Page 1: Cover ── */}
+    <Document title={`${coverTitle} — ${config.width}×${config.height}×${config.depth}`} author="Cabinet Planner">
+      {/* ── Page 1: Cover (optional) ── */}
+      {includeCover && (
       <Page size="A4" style={s.coverPage}>
-        <Text style={s.coverTitle}>Cabinet Build Plan</Text>
+        <Text style={s.coverTitle}>{coverTitle}</Text>
         <Text style={s.coverSubtitle}>
           {config.width} × {config.height} × {config.depth} mm
         </Text>
@@ -160,6 +168,7 @@ export function CabinetPdfDocument({
           Cabinet Planner — Interactive Woodworking Design Tool
         </Text>
       </Page>
+      )}
 
       {/* ── Page 2: Specifications ── */}
       <Page size="A4" style={s.page}>

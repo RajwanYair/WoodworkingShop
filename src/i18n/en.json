@@ -180,7 +180,8 @@
     "title": "Export PDF",
     "generate": "Generate PDF",
     "download": "Download PDF",
-    "generating": "Generating…"
+    "generating": "Generating…",
+    "includeCover": "Include cover page"
   },
   "footer": {
     "darkMode": "Dark Mode",
