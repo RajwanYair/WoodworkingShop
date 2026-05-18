@@ -25,15 +25,12 @@ export default defineConfig({
     modulePreload: { polyfill: true },
     rollupOptions: {
       output: {
-        manualChunks: {
-          // Heavy PDF renderer — rarely changes, keep in its own long-lived chunk
-          'pdf-renderer': ['@react-pdf/renderer'],
-          // React runtime — changes least often; maximises cache hit rate
-          'react-vendor': ['react', 'react-dom', 'react-dom/client'],
-          // i18n — separate so language changes don't bust React cache
-          'i18n-vendor': ['i18next', 'react-i18next'],
-          // State + router utilities
-          'state-vendor': ['zustand'],
+        // Rollup 4+ requires manualChunks as a function (object form removed)
+        manualChunks: (id) => {
+          if (id.includes('@react-pdf/renderer')) return 'pdf-renderer';
+          if (id.includes('/react-dom/') || id.includes('/node_modules/react/')) return 'react-vendor';
+          if (id.includes('/i18next') || id.includes('/react-i18next')) return 'i18n-vendor';
+          if (id.includes('/zustand')) return 'state-vendor';
         },
       },
     },

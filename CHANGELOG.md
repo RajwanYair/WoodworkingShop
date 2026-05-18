@@ -11,6 +11,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.32.0] — 2026-07-06
+
+### ✨ Added
+
+- **npm workspace integration**: WoodworkingShop now resolves all packages from the shared `MyScripts/node_modules` central registry, eliminating ~420 duplicate packages and reducing local disk footprint to near zero.
+- **Rolldown-powered builds** (Vite 8): production build now uses Rolldown (Rust-based bundler), cutting build time from ~6s to ~2s.
+
+### 🔧 Changed
+
+- **TypeScript 6.0.3** (from 5.8.3): updated `tsconfig.json` — continued clean compile with zero type errors.
+- **Vite 8.0.13** (from 6.4.2): migrated `manualChunks` from object form (removed in Rollup 4) to function form; added `rolldown-runtime` micro-chunk to bundle budget allowlist.
+- **ESLint 10.4.0** (from 9.x): rewrote `eslint.config.js` for new `defineConfig` / `globalIgnores` API; manually registered `eslint-plugin-react-hooks` v7 rules (old-style export no longer wraps in `defineConfig`); removed `eslint-plugin-jsx-a11y` (incompatible with ESLint 10 — accessibility covered by axe-core E2E tests).
+- **vitest 4.1.6** (from 3.2.4): all 309 tests pass with no config changes required.
+- **i18next 26.0.6 + react-i18next 17.0.4** (from 25.x / 15.x): zero breaking changes in this project; all tests pass.
+- **@vitejs/plugin-react 6.0.2** (from 4.x), **tailwindcss 4.3.0**, **zustand 5.0.13**, **@playwright/test 1.60.0**: all upgraded to latest major; all tests and builds clean.
+- **eslint-config-prettier 10.1.8**: added to central `MyScripts/package.json` devDependencies; removes all formatting rules that conflict with Prettier.
+- **`src/engine/assembly.ts`**: fixed ESLint 10 `no-useless-assignment` rule — 3 final `n++` post-increments before `return steps` changed to `n` (value was never read after the increment).
+- **`.npmrc`**: added to both project root and `MyScripts` root with `engine-strict`, `save-exact`, `fund=false`, `audit-level=high`.
+- **`.editorconfig`**: extended glob to include `.mjs` and `.cjs` files.
+- **`engines.node`**: bumped minimum from `>=20.0.0` to `>=22.0.0` in `package.json`.
+
+### 🗑 Removed
+
+- **`WoodworkingShop/node_modules/`**: local node_modules directory deleted; all packages now resolve from `MyScripts/node_modules` workspace root.
+- **`eslint-plugin-jsx-a11y`**: removed from devDependencies (incompatible with ESLint 10).
+
 ## [3.31.0] — 2026-05-18
 
 ### ✨ Added

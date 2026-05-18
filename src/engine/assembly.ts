@@ -61,7 +61,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
       });
     }
     steps.push({
-      stepNumber: n++,
+      stepNumber: n,
       title: { en: 'Sand and Inspect', he: 'שיוף ובדיקה' },
       description: {
         en: 'Sand all edges to 120 grit. Inspect the surface for chips or rough spots. Panel is ready.',
@@ -122,7 +122,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     }
     if (cfg.edgeBanding !== 'none') {
       steps.push({
-        stepNumber: n++,
+        stepNumber: n,
         title: { en: 'Apply Edge Banding', he: 'הדבקת פסי קצה' },
         description: {
           en: 'Iron on edge banding tape to all visible edges of the desktop and side panels. Trim and sand smooth.',
@@ -325,7 +325,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
 
   if ((cfg.kickHeight ?? 0) > 0 && !isDesk) {
     steps.push({
-      stepNumber: n++,
+      stepNumber: n,
       title: { en: 'Attach Toe Kick', he: 'חיבור לוח בסיס (כיכר רגל)' },
       description: {
         en: `Cut the front toe kick board (${cfg.kickHeight} mm tall) to the full cabinet width and the two side kick boards to depth − thickness. Clip or screw them to the underside of the bottom panel. The kick should be set back 50 mm from the front face.`,
