@@ -169,3 +169,34 @@ export interface OptimizationSuggestion {
   explanation: { en: string; he: string };
   score: number; // lower is better: sheets×1000 - yield
 }
+
+// ─── Validation types ───
+
+export type ValidationSeverity = 'error' | 'warning' | 'info';
+
+/** A configuration issue raised by `validateConfig()`. */
+export interface ValidationIssue {
+  /** Machine-readable code for the issue (stable across app versions). */
+  code: string;
+  severity: ValidationSeverity;
+  /** Human-readable message in both UI languages. */
+  message: { en: string; he: string };
+  /** The config field most responsible for this issue, if any. */
+  field?: keyof CabinetConfig;
+  /** Suggested value to resolve the issue, if applicable. */
+  suggestedValue?: number | string;
+}
+
+// ─── Material substitution types ───
+
+/** A recommended alternative material with rationale. */
+export interface MaterialSubstitution {
+  /** Key of the current material. */
+  currentKey: string;
+  /** Key of the recommended alternative. */
+  suggestedKey: string;
+  /** Short rationale for the switch. */
+  reason: { en: string; he: string };
+  /** Expected benefit: 'deflection' | 'cost' | 'weight'. */
+  benefit: 'deflection' | 'cost' | 'weight';
+}

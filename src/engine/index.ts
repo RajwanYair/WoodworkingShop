@@ -45,3 +45,6 @@ export { findOptimizations } from './smart-optimizer';
 
 export { estimateCost } from './cost-estimator';
 export type { CostBreakdown, SheetCost } from './cost-estimator';
+
+export { validateConfig } from './validation';
+export type { ValidationIssue, ValidationSeverity, MaterialSubstitution } from './types';
