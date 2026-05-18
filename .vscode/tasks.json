@@ -46,7 +46,10 @@
       "problemMatcher": [
         {
           "owner": "vite",
-          "pattern": [{ "regexp": "^(.*)$", "message": 1 }],
+          "pattern": {
+            "regexp": "^(NOMATCH)$",
+            "message": 1
+          },
           "background": {
             "activeOnStart": true,
             "beginsPattern": "^.*vite.*",
