@@ -11,6 +11,101 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.30.0] — 2026-06-01
+
+### ✨ Added
+
+- **URL state enhancements** (`src/utils/url-state.ts`, `src/components/layout/Header.tsx`):
+  - `paramsToConfig` now clamps all numeric URL parameters (`w`, `h`, `d`, `sc`, `dr`, `drc`, `kh`) to their valid ranges defined in `CONSTRAINTS`, preventing crashes from malformed or malicious shared links.
+  - `configToUrl` and the **Copy shareable link** button now include the project name (`?pn=`) so shared links faithfully reproduce the project name for recipients.
+  - Clipboard write is now properly `await`-ed with error handling; if `navigator.clipboard` is unavailable the user sees a `toast.linkCopyFailed` message instead of a silent failure.
+  - Added `toast.linkCopyFailed` i18n key in EN and HE.
+
+### 🐛 Fixed
+
+- **`smart-optimizer.ts`** (`src/engine/smart-optimizer.ts`, `tests/engine/smart-optimizer.test.ts`):
+  - `configFingerprint` was using non-existent fields `cfg.numShelves` and `cfg.numDrawers`; corrected to `cfg.shelfCount` and `cfg.drawerCount`.
+  - `buildExplanation` shelf-change detection likewise used `numShelves`; corrected.
+  - Matching test descriptions and fixture data updated (`numShelves` → `shelfCount`).
+
+## [3.29.0] — 2026-05-31
+
+> Shipped as part of v3.30.0 release.
+
+### ✨ Added
+
+- URL numeric parameter clamping, project-name preservation in shareable links, and async clipboard error handling (see v3.30.0 above).
+
+## [3.28.0] — 2026-05-30
+
+### ✨ Added
+
+- **Print stylesheet polish** (`src/index.css`):
+  - Added `@page landscape-cut { size: A4 landscape; }` and `.print-landscape` class; the optimizer view applies it automatically when any cut sheet exceeds 1500 mm.
+  - `.print-only-footer` utility class — hidden on screen, shown in print.
+  - `tr { orphans: 3; widows: 3; }` keeps table rows from splitting across pages.
+  - `-webkit-print-color-adjust: exact` on SVG elements and `.print-color` so cut diagrams print in colour.
+  - Focus rings and tooltips suppressed in print media.
+
+## [3.27.0] — 2026-05-30
+
+### 🧪 Tests
+
+- **Smart optimizer unit tests** (`tests/engine/smart-optimizer.test.ts`):
+  - Added tests for `shelf-count-reduce` strategy (decrement, skip-if-fewer-than-2, fingerprint deduplication).
+- **Cabinet store tests** (`tests/store/cabinet-store.test.ts`):
+  - Added describe blocks for cost extras (`labourRate` default 75, clamp behaviour for `setLabourRate/Hours/FinishCost`), `optimizationPending` toggle, and `setEdgeBandingRate`.
+- **Cost estimator tests** (`tests/engine/cost-estimator.test.ts`):
+  - Added describe block for labour and finish coat: `labourCost = hours × rate`, defaults to 0, combined `totalCost`.
+
+## [3.26.0] — 2026-05-30
+
+### ✨ Added
+
+- **Smart optimizer: `shelf-count-reduce` strategy** (`src/engine/smart-optimizer.ts`, `src/engine/types.ts`):
+  - New strategy suggests reducing shelf count by 1 when `shelfCount ≥ 2`, potentially saving material.
+  - `configFingerprint` extended to include `shelfCount`, `drawerCount`, and `doorStyle` so configs that differ only in shelves or drawers are not incorrectly deduplicated.
+  - Strategy label added to `buildExplanation` in both EN and HE.
+
+## [3.25.0] — 2026-05-29
+
+### ✨ Added
+
+- **Accessibility E2E gate** (`tests/e2e/accessibility.spec.ts`):
+  - New Playwright spec using `@axe-core/playwright` runs WCAG 2.1 AA checks on the homepage and configurator tab.
+  - `@axe-core/playwright` added as a dev dependency.
+  - `KNOWN_VIOLATIONS_ALLOWLIST` pattern for future targeted suppressions.
+
+## [3.24.0] — 2026-05-29
+
+### ✨ Added
+
+- **Module preload polyfill + code splitting** (`vite.config.ts`, `index.html`):
+  - `modulePreload: { polyfill: true }` added to Vite config for cross-browser `<link rel="modulepreload">` support.
+  - Manual chunks: `pdf-renderer`, `react-vendor`, `i18n-vendor`, `state-vendor` for better long-term caching.
+  - `index.html` preloads `manifest.json` and `icon-192.png`.
+
+## [3.23.0] — 2026-05-28
+
+### ✨ Added
+
+- **Labour hours + finish coat cost** (`src/engine/cost-estimator.ts`, `src/store/cabinet-store.ts`, `src/components/configurator/CostEstimatePanel.tsx`):
+  - `estimateCost()` accepts optional `labourRate` (default `$75/hr`), `labourHours`, and `finishCost` parameters.
+  - `CostBreakdown` now includes `labourHours`, `labourCost`, `finishCost`.
+  - Store gains `labourRate`, `labourHours`, `finishCost` fields and matching actions (all clamp to ≥ 0).
+  - `CostEstimatePanel` renders click-to-edit inputs for each; bar chart shows labour (brown) and finish (purple) segments.
+  - i18n keys: `labour`, `labourRate`, `editLabourHours`, `editLabourRate`, `labourHoursAriaLabel`, `labourRateAriaLabel`, `finish`, `editFinish`, `finishAriaLabel`, `notSet`.
+
+## [3.22.0] — 2026-05-27
+
+### ✨ Added
+
+- **DXF Web Worker** (`src/workers/dxf-export.worker.ts`):
+  - DXF generation for cut sheets now runs off the main thread using a dedicated `?worker` module.
+  - Supports `'single'` (one sheet by index) and `'all'` (combined DXF stacking sheets vertically with 100 mm spacing) modes.
+  - `OptimizerView` uses the worker with request-ID stale-response cancellation and a sync fallback when workers are unavailable.
+  - DXF export button shows a spinner while the worker is running and is disabled during export.
+
 ## [3.19.0] — 2026-05-19
 
 ### ✨ Added
