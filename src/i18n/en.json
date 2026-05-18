@@ -332,6 +332,9 @@
     "linkCopied": "Shareable link copied to clipboard",
     "linkCopyFailed": "Could not copy link — please copy the URL from the address bar"
   },
+  "shortcuts": {
+    "saveSnapshot": "Snapshot saved"
+  },
   "onboarding": {
     "title": "Welcome to Cabinet Planner!",
     "subtitle": "Design, optimize, and build your furniture in 5 easy steps.",

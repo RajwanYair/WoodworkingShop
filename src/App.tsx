@@ -14,6 +14,7 @@ import { OnboardingManager } from './components/layout/OnboardingOverlay';
 import { ShortcutsModal } from './components/layout/ShortcutsModal';
 import { IconPrint } from './components/layout/Icons';
 import { useCabinetStore, type CabinetState } from './store/cabinet-store';
+import { useToastStore } from './store/toast-store';
 
 // Lazy-load heavy / route-isolated panels so the initial bundle stays lean
 // (Sprint 110). PDF in particular pulls in @react-pdf/renderer (~1.6 MB).
@@ -70,6 +71,13 @@ function App() {
       if (ctrl && (e.key === 'y' || (e.shiftKey && (e.key === 'z' || e.key === 'Z')))) {
         e.preventDefault();
         useCabinetStore.getState().redo();
+        return;
+      }
+      // Save snapshot: Ctrl+Shift+S
+      if (ctrl && e.shiftKey && (e.key === 's' || e.key === 'S')) {
+        e.preventDefault();
+        useCabinetStore.getState().saveSnapshot('');
+        useToastStore.getState().addToast(t('shortcuts.saveSnapshot'), 'success');
         return;
       }
       // Print: Ctrl+P

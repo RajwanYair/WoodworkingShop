@@ -650,11 +650,13 @@ export const useCabinetStore = create<CabinetState>((set) => {
 
     saveSnapshot: (name) =>
       set((state) => {
+        const now = new Date();
+        const autoName = `Snapshot ${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
         const snap: ProjectSnapshot = {
           id: `snap-${Date.now()}`,
-          name: name.trim() || `Snapshot ${state.snapshots.length + 1}`,
+          name: name.trim() || autoName,
           cabinets: state.cabinets,
-          timestamp: new Date().toISOString(),
+          timestamp: now.toISOString(),
         };
         const snapshots = [...state.snapshots, snap];
         saveSnapshots(snapshots);

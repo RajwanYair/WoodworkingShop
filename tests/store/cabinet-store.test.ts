@@ -262,4 +262,42 @@ describe('cabinet-store', () => {
       expect(useCabinetStore.getState().edgeBandingRate).toBe(0);
     });
   });
+
+  // Sprint 19 — Snapshot auto-naming with timestamp
+  describe('saveSnapshot auto-naming (Sprint 19)', () => {
+    beforeEach(() => {
+      useCabinetStore.setState({ snapshots: [] });
+    });
+
+    it('uses provided name when non-empty', () => {
+      useCabinetStore.getState().saveSnapshot('My custom name');
+      const { snapshots } = useCabinetStore.getState();
+      expect(snapshots[0].name).toBe('My custom name');
+    });
+
+    it('auto-names with "Snapshot YYYY-MM-DD HH:mm" format when name is empty', () => {
+      useCabinetStore.getState().saveSnapshot('');
+      const { snapshots } = useCabinetStore.getState();
+      // Matches "Snapshot 2025-01-15 14:30" style
+      expect(snapshots[0].name).toMatch(/^Snapshot \d{4}-\d{2}-\d{2} \d{2}:\d{2}$/);
+    });
+
+    it('auto-names with whitespace-only input', () => {
+      useCabinetStore.getState().saveSnapshot('   ');
+      const { snapshots } = useCabinetStore.getState();
+      expect(snapshots[0].name).toMatch(/^Snapshot \d{4}-\d{2}-\d{2} \d{2}:\d{2}$/);
+    });
+
+    it('snapshot has valid ISO timestamp', () => {
+      useCabinetStore.getState().saveSnapshot('test');
+      const { snapshots } = useCabinetStore.getState();
+      expect(() => new Date(snapshots[0].timestamp).toISOString()).not.toThrow();
+    });
+
+    it('snapshot id starts with "snap-"', () => {
+      useCabinetStore.getState().saveSnapshot('test');
+      const { snapshots } = useCabinetStore.getState();
+      expect(snapshots[0].id).toMatch(/^snap-\d+$/);
+    });
+  });
 });
