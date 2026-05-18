@@ -13,10 +13,38 @@
   // PowerShell has first-class shell integration on Windows (CWD tracking,
   // command decorations, exit-code detection). cmd.exe has no integration
   // support, which is why VS Code shows the "enable shell integration" prompt.
+  //
+  // `defaultProfile` controls interactive terminals.
+  // `automationProfile` controls task / debug / process execution terminals —
+  // without it VS Code falls back to cmd.exe, triggering the prompt even when
+  // the interactive terminal is already set to PowerShell.
   "terminal.integrated.shellIntegration.enabled": true,
   "terminal.integrated.shellIntegration.decorationsEnabled": "both",
   "terminal.integrated.defaultProfile.windows": "PowerShell",
   "terminal.integrated.cwd": "${workspaceFolder}",
+
+  // Explicit PowerShell profile — -NoLogo suppresses the banner so VS Code's
+  // command-position markers are not confused by extra output lines.
+  "terminal.integrated.profiles.windows": {
+    "PowerShell": {
+      "source": "PowerShell",
+      "icon": "terminal-powershell",
+      "args": ["-NoLogo"]
+    },
+    "Command Prompt": {
+      "path": "${env:windir}\\System32\\cmd.exe",
+      "icon": "terminal-cmd"
+    }
+  },
+
+  // Automation profile used by tasks, the debugger, and the test runner.
+  // -NoLogo keeps output clean; -NonInteractive prevents prompt/STDIN hangs
+  // in headless task runs.
+  "terminal.integrated.automationProfile.windows": {
+    "name": "PowerShell",
+    "source": "PowerShell",
+    "args": ["-NoLogo", "-NonInteractive"]
+  },
 
   // Built-in CSS validator produces false-positive browser-compat warnings
   // (IE, older Safari) for Tailwind CSS projects. Tailwind IntelliSense
