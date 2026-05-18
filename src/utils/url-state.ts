@@ -1,5 +1,6 @@
 import type { CabinetConfig, DrawerSlideType } from '../engine/types';
 import { DEFAULT_CONFIG } from '../engine/materials';
+import { getTemplate } from '../engine/templates';
 
 /**
  * Encode a CabinetConfig into URL search params.
@@ -109,9 +110,19 @@ export function configToUrl(cfg: CabinetConfig): string {
     : window.location.origin + window.location.pathname;
 }
 
-/** Read config from current URL */
+/** Read config from current URL, merging ?tpl= template if present */
 export function readConfigFromUrl(): Partial<CabinetConfig> {
-  return paramsToConfig(new URLSearchParams(window.location.search));
+  const params = new URLSearchParams(window.location.search);
+  const tplId = params.get('tpl');
+  if (tplId) {
+    const tpl = getTemplate(tplId);
+    if (tpl) {
+      // Template provides the full config; URL params then override individual fields
+      const urlOverrides = paramsToConfig(params);
+      return { ...tpl.config, ...urlOverrides };
+    }
+  }
+  return paramsToConfig(params);
 }
 
 /** Update browser URL without reload */

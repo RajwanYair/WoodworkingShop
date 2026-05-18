@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useToastStore } from '../../store/toast-store';
 import { configToUrl } from '../../utils/url-state';
 import { HelpButton } from './OnboardingOverlay';
+import { TemplatePicker } from '../configurator/TemplatePicker';
 import {
   IconSun,
   IconMoon,
@@ -16,6 +18,7 @@ import {
   IconHammer,
   IconDocument,
   IconContrast,
+  IconLayers,
 } from './Icons';
 
 const tabs = ['configurator', 'preview', 'optimizer', 'assembly', 'pdf'] as const;
@@ -33,6 +36,7 @@ export function Header() {
   const { activeTab, setActiveTab, darkMode, toggleDarkMode, highContrastMode, toggleHighContrast, units, toggleUnits, canUndo, canRedo, undo, redo } =
     useCabinetStore();
   const lang = i18n.language;
+  const [showTemplates, setShowTemplates] = useState(false);
 
   const toggleLang = () => {
     const next = lang === 'en' ? 'he' : 'en';
@@ -179,6 +183,14 @@ export function Header() {
           {lang === 'en' ? 'עב' : 'EN'}
         </button>
         <button
+          onClick={() => setShowTemplates(true)}
+          className="text-wood-200 hover:text-white flex items-center"
+          title={t('templates.title')}
+          aria-label={t('templates.title')}
+        >
+          <IconLayers size={16} />
+        </button>
+        <button
           onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: '?' }))}
           className="text-wood-200 hover:text-white flex items-center"
           title="Keyboard shortcuts (?)"
@@ -188,6 +200,7 @@ export function Header() {
         </button>
         <HelpButton />
       </div>
+      {showTemplates && <TemplatePicker onClose={() => setShowTemplates(false)} />}
     </header>
   );
 }
