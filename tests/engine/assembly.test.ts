@@ -67,4 +67,34 @@ describe('generateAssemblySteps', () => {
     const wallStep = steps.find((s) => s.title.en.toLowerCase().includes('wall'));
     expect(wallStep).toBeDefined();
   });
+
+  // ── Risk level annotations (Sprint 14) ──
+
+  it('every step has a riskLevel field', () => {
+    const steps = generateAssemblySteps(DEFAULT_CONFIG);
+    for (const step of steps) {
+      expect(['low', 'medium', 'high']).toContain(step.riskLevel);
+    }
+  });
+
+  it('wall mounting step is marked high risk', () => {
+    const steps = generateAssemblySteps(DEFAULT_CONFIG);
+    const wallStep = steps.find((s) => s.title.en.toLowerCase().includes('wall'));
+    expect(wallStep?.riskLevel).toBe('high');
+  });
+
+  it('edge banding step is marked low risk', () => {
+    const cfg: CabinetConfig = { ...DEFAULT_CONFIG, edgeBanding: 'all-visible' };
+    const steps = generateAssemblySteps(cfg);
+    const bandStep = steps.find((s) => s.title.en.toLowerCase().includes('edge banding'));
+    expect(bandStep?.riskLevel).toBe('low');
+  });
+
+  it('hinge/door mounting step is marked medium risk', () => {
+    const cfg: CabinetConfig = { ...DEFAULT_CONFIG, doorStyle: 'flat' };
+    const steps = generateAssemblySteps(cfg);
+    const hingeStep = steps.find((s) => s.title.en.toLowerCase().includes('hinge'));
+    expect(hingeStep?.riskLevel).toBe('medium');
+  });
 });
+

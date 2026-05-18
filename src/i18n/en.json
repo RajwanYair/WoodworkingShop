@@ -297,7 +297,13 @@
     "viewStepByStep": "Step by step",
     "viewAll": "Show all stages",
     "print": "Print",
-    "stepsCount": "steps"
+    "stepsCount": "steps",
+    "riskLabel": "Risk level",
+    "risk": {
+      "low": "Low risk",
+      "medium": "Medium risk",
+      "high": "High risk"
+    }
   },
   "shelves": {
     "customHeading": "Custom shelf positions (mm from bottom)",

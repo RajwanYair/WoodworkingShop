@@ -297,7 +297,13 @@
     "viewAll": "הצג את כל השלבים",
     "print": "הדפס",
     "partsInStep": "חלקים בשלב זה:",
-    "stepsCount": "שלבים"
+    "stepsCount": "שלבים",
+    "riskLabel": "רמת סיכון",
+    "risk": {
+      "low": "סיכון נמוך",
+      "medium": "סיכון בינוני",
+      "high": "סיכון גבוה"
+    }
   },
   "shelves": {
     "customHeading": "מיקומי מדפים מותאמים (מ\"מ מהתחתית)",
