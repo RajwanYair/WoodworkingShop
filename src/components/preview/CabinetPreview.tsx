@@ -655,6 +655,9 @@ export const CabinetPreview = memo(function CabinetPreview() {
             doorReveal={config.doorReveal}
             doorWidth={d.doorWidth}
             doorHeight={d.doorHeight}
+            drawerCount={config.drawerCount}
+            drawerHeights={config.drawerHeights ?? []}
+            kickHeight={config.kickHeight ?? 0}
             showDims={showDims}
             units={units}
           />
@@ -949,6 +952,9 @@ function IsometricView({
   doorReveal,
   doorWidth,
   doorHeight,
+  drawerCount,
+  drawerHeights,
+  kickHeight,
   showDims,
   units,
 }: {
@@ -965,6 +971,9 @@ function IsometricView({
   doorReveal: number;
   doorWidth: number;
   doorHeight: number;
+  drawerCount: number;
+  drawerHeights: number[];
+  kickHeight: number;
   showDims: boolean;
   units: UnitSystem;
 }) {
@@ -974,6 +983,7 @@ function IsometricView({
   const D = d * sc;
   const T = thick * sc;
   const BT = bt * sc;
+  const KH = kickHeight * sc;
 
   // Compute SVG bounding box from iso projection
   const corners: [number, number, number][] = [
@@ -999,6 +1009,31 @@ function IsometricView({
 
   const darkFill = adjustBrightness(color, -30);
   const lightFill = adjustBrightness(color, 20);
+  const interiorFill = adjustBrightness(color, -50); // darker inner face
+
+  // Derive drawer front height strips (distributed from bottom above kick)
+  const bottomY = KH;
+  const interiorH = H - 2 * T - KH;
+  const drawerFronts: { y: number; fh: number }[] = [];
+  if (drawerCount > 0 && !hasDoors) {
+    const totalSpecified = drawerHeights.reduce((s, v) => s + v, 0);
+    if (drawerHeights.length >= drawerCount && totalSpecified > 0) {
+      let y = bottomY + T;
+      for (let i = 0; i < drawerCount; i++) {
+        const fh = (drawerHeights[i] / totalSpecified) * interiorH * sc;
+        drawerFronts.push({ y, fh });
+        y += fh;
+      }
+    } else {
+      const fh = (interiorH * sc) / drawerCount;
+      for (let i = 0; i < drawerCount; i++) {
+        drawerFronts.push({ y: bottomY + T + i * fh, fh });
+      }
+    }
+  }
+
+  // Grain lines count for top face
+  const grainStep = Math.max(W / 6, 4);
 
   return (
     <svg
@@ -1019,6 +1054,26 @@ function IsometricView({
           <title>{`Back Panel\n${Math.round(w - 2 * thick)}×${Math.round(h - 2 * thick)} mm`}</title>
         </polygon>
 
+        {/* Interior side walls — visible only when no doors */}
+        {!hasDoors && (
+          <>
+            <polygon
+              points={isoQuad([T, T, 0], [T, T, D - BT], [T, H - T, D - BT], [T, H - T, 0])}
+              fill={interiorFill}
+              stroke="#777"
+              strokeWidth={0.3}
+              opacity={0.45}
+            />
+            <polygon
+              points={isoQuad([W - T, T, 0], [W - T, T, D - BT], [W - T, H - T, D - BT], [W - T, H - T, 0])}
+              fill={interiorFill}
+              stroke="#777"
+              strokeWidth={0.3}
+              opacity={0.25}
+            />
+          </>
+        )}
+
         {/* Bottom panel – top face */}
         <polygon
           points={isoQuad([T, T, 0], [W - T, T, 0], [W - T, T, D - BT], [T, T, D - BT])}
@@ -1038,22 +1093,43 @@ function IsometricView({
           opacity={0.85}
         />
 
-        {/* Shelves */}
+        {/* Kick panel */}
+        {KH > 0 && (
+          <polygon
+            points={isoQuad([T + 4 * sc, 0, 0], [W - T - 4 * sc, 0, 0], [W - T - 4 * sc, KH, 0], [T + 4 * sc, KH, 0])}
+            fill={darkFill}
+            stroke="#555"
+            strokeWidth={0.4}
+            opacity={0.6}
+          >
+            <title>{`Kick Panel\n${Math.round(w - 2 * thick - 8)}×${kickHeight} mm`}</title>
+          </polygon>
+        )}
+
+        {/* Shelves — top face + front edge */}
         {shelfPositions.map((pos, i) => {
           const sy = T + pos * sc;
           const sT = T * 0.6;
           return (
             <g key={i}>
+              {/* Shelf top face */}
               <polygon
                 points={isoQuad([T, sy + sT, 0], [W - T, sy + sT, 0], [W - T, sy + sT, D - BT], [T, sy + sT, D - BT])}
                 fill={lightFill}
                 stroke="#888"
                 strokeWidth={0.3}
-                opacity={0.6}
-                strokeDasharray="2,2"
+                opacity={0.7}
               >
                 <title>{`Shelf ${i + 1}\n${Math.round(w - 2 * thick)}×${Math.round(d - bt)} mm`}</title>
               </polygon>
+              {/* Shelf front edge */}
+              <polygon
+                points={isoQuad([T, sy, 0], [W - T, sy, 0], [W - T, sy + sT, 0], [T, sy + sT, 0])}
+                fill={darkFill}
+                stroke="#888"
+                strokeWidth={0.3}
+                opacity={0.5}
+              />
             </g>
           );
         })}
@@ -1080,7 +1156,7 @@ function IsometricView({
           <title>{`Side Panel\n${thick}×${h} mm`}</title>
         </polygon>
 
-        {/* Top panel – top face */}
+        {/* Top panel – top face with grain lines */}
         <polygon
           points={isoQuad([0, H, 0], [0, H, D], [W, H, D], [W, H, 0])}
           fill={lightFill}
@@ -1090,8 +1166,47 @@ function IsometricView({
         >
           <title>{`Top Panel\n${Math.round(w - 2 * thick)}×${Math.round(d - bt)} mm`}</title>
         </polygon>
+        {/* Grain lines on top face (run along depth/Z direction) */}
+        {Array.from({ length: Math.floor((W - 2 * T) / grainStep) - 1 }, (_, i) => {
+          const gx = T + grainStep + i * grainStep;
+          const [ax, ay] = iso(gx, H, 0);
+          const [bx, by] = iso(gx, H, D);
+          return <line key={`grain-${i}`} x1={ax} y1={ay} x2={bx} y2={by} stroke="#cba" strokeWidth={0.3} opacity={0.5} />;
+        })}
 
-        {/* Doors (front face) */}
+        {/* Drawer fronts (visible on the front face when no doors) */}
+        {drawerFronts.map(({ y: dy, fh }, i) => {
+          const reveal = 2 * sc;
+          const fx = T + reveal;
+          const fw = W - 2 * T - 2 * reveal;
+          const handleX = fx + fw * 0.5 - 6 * sc;
+          const handleY = dy + fh * 0.5;
+          return (
+            <g key={`drawer-${i}`}>
+              <polygon
+                points={isoQuad([fx, dy + reveal, 0], [fx + fw, dy + reveal, 0], [fx + fw, dy + fh - reveal, 0], [fx, dy + fh - reveal, 0])}
+                fill={color}
+                stroke="#555"
+                strokeWidth={0.7}
+                opacity={0.88}
+              >
+                <title>{`Drawer ${i + 1}`}</title>
+              </polygon>
+              {/* Drawer handle */}
+              <polygon
+                points={isoQuad(
+                  [handleX, handleY - 1 * sc, -0.5 * sc],
+                  [handleX + 12 * sc, handleY - 1 * sc, -0.5 * sc],
+                  [handleX + 12 * sc, handleY + 1 * sc, -0.5 * sc],
+                  [handleX, handleY + 1 * sc, -0.5 * sc],
+                )}
+                fill="#888"
+                stroke="#666"
+                strokeWidth={0.3}
+              />
+            </g>
+          );
+        })}
         {hasDoors &&
           Array.from({ length: doorCount }).map((_, i) => {
             const dr = doorReveal * sc;
