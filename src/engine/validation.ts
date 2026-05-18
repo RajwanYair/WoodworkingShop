@@ -36,10 +36,29 @@ const MAX_KICK_FRACTION = 0.5;
 const SAFE_SPAN_CHIPBOARD_MM = 900;
 
 /**
- * Minimum internal clearance above the drawer stack for at least one shelf
- * or door opening (mm).
+ * Minimum door width for reliable Euro-style hinge cup mounting.
+ * A 35 mm hinge cup needs ~32 mm from the edge; less than this makes
+ * boring too close to the edge and risks splitting the door panel.
  */
-const MIN_ABOVE_DRAWERS_MM = 200;
+const MIN_HINGE_OVERLAY_WIDTH_MM = 300;
+
+/**
+ * Maximum practical height for a single door leaf without heavy-duty hinges.
+ * Above this threshold, door mass and leverage cause rapid wear on standard hinges.
+ */
+const MAX_SINGLE_DOOR_HEIGHT_MM = 2200;
+
+/**
+ * Maximum width for a single-door cabinet before warping/sagging risk becomes
+ * significant. Wide doors need a thicker panel or an intermediate rail.
+ */
+const MAX_SINGLE_DOOR_WIDTH_MM = 800;
+
+/**
+ * Minimum door height for a sensible two-hinge layout.
+ * Below this, hinge spacing becomes impractical (<50 mm from each end).
+ */
+const MIN_PRACTICAL_DOOR_HEIGHT_MM = 200;
 
 /**
  * Run all manufacturing constraint checks on a cabinet configuration.
@@ -113,6 +132,57 @@ export function validateConfig(
           field: 'doorCount',
         });
       }
+    }
+
+    // ── Hinge clearance checks (Sprint 12) ──
+
+    if (dims.doorWidth < MIN_HINGE_OVERLAY_WIDTH_MM) {
+      issues.push({
+        code: 'HINGE_CLEARANCE_INSUFFICIENT',
+        severity: 'warning',
+        message: {
+          en: `Door width (${Math.round(dims.doorWidth)} mm) is below ${MIN_HINGE_OVERLAY_WIDTH_MM} mm. Standard 35 mm Euro-hinge cups require at least ${MIN_HINGE_OVERLAY_WIDTH_MM} mm for reliable boring without splitting the door panel.`,
+          he: `רוחב הדלת (${Math.round(dims.doorWidth)} מ"מ) קטן מ-${MIN_HINGE_OVERLAY_WIDTH_MM} מ"מ. צירי Euro בקוטר 35 מ"מ דורשים לפחות ${MIN_HINGE_OVERLAY_WIDTH_MM} מ"מ לקידוח בטוח ללא סיכון לפיצול.`,
+        },
+        field: 'doorCount',
+      });
+    }
+
+    if (dims.doorHeight < MIN_PRACTICAL_DOOR_HEIGHT_MM) {
+      issues.push({
+        code: 'DOOR_TOO_SHORT_FOR_HINGES',
+        severity: 'warning',
+        message: {
+          en: `Door height (${Math.round(dims.doorHeight)} mm) is below ${MIN_PRACTICAL_DOOR_HEIGHT_MM} mm. At this size, two-hinge spacing leaves insufficient clearance from the door edges.`,
+          he: `גובה הדלת (${Math.round(dims.doorHeight)} מ"מ) קטן מ-${MIN_PRACTICAL_DOOR_HEIGHT_MM} מ"מ. במידה זו, מרווח שני הצירים קצר מדי מקצות הדלת.`,
+        },
+        field: 'height',
+      });
+    }
+
+    if (dims.doorHeight > MAX_SINGLE_DOOR_HEIGHT_MM) {
+      issues.push({
+        code: 'DOOR_EXCEEDS_STANDARD_HINGE_RATING',
+        severity: 'warning',
+        message: {
+          en: `Door height (${Math.round(dims.doorHeight)} mm) exceeds ${MAX_SINGLE_DOOR_HEIGHT_MM} mm. At this size the door panel is heavy enough to require heavy-duty hinges (e.g. Blum Clip Top 170°) rated for ≥ 25 kg per door.`,
+          he: `גובה הדלת (${Math.round(dims.doorHeight)} מ"מ) עולה על ${MAX_SINGLE_DOOR_HEIGHT_MM} מ"מ. במשקל זה נדרשים צירים כבדי עומס (לדוגמה Blum Clip Top 170°) לפחות 25 ק"ג לדלת.`,
+        },
+        field: 'height',
+      });
+    }
+
+    if (config.doorCount === 1 && dims.doorWidth > MAX_SINGLE_DOOR_WIDTH_MM) {
+      issues.push({
+        code: 'WIDE_SINGLE_DOOR',
+        severity: 'warning',
+        message: {
+          en: `Single door width (${Math.round(dims.doorWidth)} mm) exceeds ${MAX_SINGLE_DOOR_WIDTH_MM} mm. Wide single-panel doors are prone to warping under humidity changes — consider two doors or a thicker door material.`,
+          he: `רוחב דלת בודדת (${Math.round(dims.doorWidth)} מ"מ) עולה על ${MAX_SINGLE_DOOR_WIDTH_MM} מ"מ. דלתות רחבות עלולות להתעוות עקב שינויי לחות — שקול שתי דלתות או חומר עבה יותר.`,
+        },
+        field: 'doorCount',
+        suggestedValue: 2,
+      });
     }
   }
 

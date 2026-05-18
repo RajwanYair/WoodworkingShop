@@ -122,4 +122,55 @@ describe('validateConfig', () => {
       expect(issue.message.he).toBeTruthy();
     }
   });
+
+  // ── Hinge clearance rules (Sprint 12) ──
+
+  it('raises HINGE_CLEARANCE_INSUFFICIENT when door width < 300 mm', () => {
+    // width=400, 2 doors → doorWidth ≈ (400-2*17)/2 ≈ 183 mm < 300
+    const issues = validateConfig(cfg({ width: 400, doorCount: 2, doorStyle: 'flat' }));
+    expect(issues.some((i) => i.code === 'HINGE_CLEARANCE_INSUFFICIENT')).toBe(true);
+    const issue = issues.find((i) => i.code === 'HINGE_CLEARANCE_INSUFFICIENT')!;
+    expect(issue.severity).toBe('warning');
+  });
+
+  it('does not raise HINGE_CLEARANCE_INSUFFICIENT for wide doors', () => {
+    // width=700, 1 door → doorWidth ≈ 666 mm > 300
+    const issues = validateConfig(cfg({ width: 700, doorCount: 1, doorStyle: 'flat' }));
+    expect(issues.some((i) => i.code === 'HINGE_CLEARANCE_INSUFFICIENT')).toBe(false);
+  });
+
+  it('raises DOOR_EXCEEDS_STANDARD_HINGE_RATING for very tall door', () => {
+    // height=2400 → doorHeight > 2200
+    const issues = validateConfig(cfg({ height: 2400, doorStyle: 'flat', doorCount: 1 }));
+    expect(issues.some((i) => i.code === 'DOOR_EXCEEDS_STANDARD_HINGE_RATING')).toBe(true);
+    const issue = issues.find((i) => i.code === 'DOOR_EXCEEDS_STANDARD_HINGE_RATING')!;
+    expect(issue.severity).toBe('warning');
+  });
+
+  it('does not raise DOOR_EXCEEDS_STANDARD_HINGE_RATING for standard door height', () => {
+    const issues = validateConfig(cfg({ height: 900, doorStyle: 'flat', doorCount: 1 }));
+    expect(issues.some((i) => i.code === 'DOOR_EXCEEDS_STANDARD_HINGE_RATING')).toBe(false);
+  });
+
+  it('raises WIDE_SINGLE_DOOR when single door exceeds 800 mm', () => {
+    // width=900, 1 door → doorWidth ≈ 866 mm > 800
+    const issues = validateConfig(cfg({ width: 900, doorCount: 1, doorStyle: 'flat' }));
+    expect(issues.some((i) => i.code === 'WIDE_SINGLE_DOOR')).toBe(true);
+    const issue = issues.find((i) => i.code === 'WIDE_SINGLE_DOOR')!;
+    expect(issue.severity).toBe('warning');
+    expect(issue.suggestedValue).toBe(2);
+  });
+
+  it('does not raise WIDE_SINGLE_DOOR for two-door cabinet over 800 mm wide', () => {
+    // width=1000, 2 doors → each door ≈ 483 mm — not a single wide door
+    const issues = validateConfig(cfg({ width: 1000, doorCount: 2, doorStyle: 'flat' }));
+    expect(issues.some((i) => i.code === 'WIDE_SINGLE_DOOR')).toBe(false);
+  });
+
+  it('hinge rules do not fire when doorStyle is none', () => {
+    const issues = validateConfig(cfg({ width: 900, doorCount: 1, doorStyle: 'none' }));
+    expect(issues.some((i) => i.code === 'HINGE_CLEARANCE_INSUFFICIENT')).toBe(false);
+    expect(issues.some((i) => i.code === 'WIDE_SINGLE_DOOR')).toBe(false);
+  });
 });
+
