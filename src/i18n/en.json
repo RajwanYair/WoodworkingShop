@@ -327,6 +327,21 @@
     "help": "Help",
     "dismissBackdrop": "Dismiss onboarding"
   },
+  "validation": {
+    "title": "Design Checks",
+    "noIssues": "No issues detected — design looks good!",
+    "error_one": "{{count}} error",
+    "error_other": "{{count}} errors",
+    "warning_one": "{{count}} warning",
+    "warning_other": "{{count}} warnings",
+    "info_one": "{{count}} note",
+    "info_other": "{{count}} notes",
+    "dismiss": "Dismiss",
+    "dismissAll": "Dismiss all",
+    "collapsed": "Show {{count}} issue(s)",
+    "fieldHint": "Field: {{field}}",
+    "suggestedValue": "Suggested: {{value}}"
+  },
   "bulkReplace": {
     "title": "Bulk Material Replace",
     "short": "Replace",

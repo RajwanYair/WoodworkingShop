@@ -1,6 +1,9 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { BOOKSHELF_DEFAULTS, DESK_DEFAULTS, WARDROBE_DEFAULTS, PANEL_DEFAULTS } from '../../engine/materials';
+import { validateConfig } from '../../engine/validation';
+import { ValidationPanel } from './ValidationPanel';
 import { CabinetSelector } from './CabinetSelector';
 import { DimensionSliders } from './DimensionSliders';
 import { MaterialSelector } from './MaterialSelector';
@@ -15,6 +18,8 @@ import type { FurnitureType } from '../../engine/types';
 export function ConfiguratorPanel() {
   const { t } = useTranslation();
   const { config, setConfig, resetConfig } = useCabinetStore();
+
+  const validationIssues = useMemo(() => validateConfig(config), [config]);
 
   const handleFurnitureChange = (type: FurnitureType) => {
     if (type === 'bookshelf') {
@@ -35,6 +40,9 @@ export function ConfiguratorPanel() {
       <CabinetSelector />
       <SaveLoadPanel />
       <PresetsPanel />
+
+      {/* Manufacturing constraint validation — shown when config has issues */}
+      {validationIssues.length > 0 && <ValidationPanel issues={validationIssues} />}
 
       {/* Furniture type selector */}
       <fieldset className="space-y-2">

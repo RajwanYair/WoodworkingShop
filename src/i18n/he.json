@@ -326,6 +326,21 @@
     "help": "עזרה",
     "dismissBackdrop": "סגור את ההיכרות"
   },
+  "validation": {
+    "title": "בדיקות עיצוב",
+    "noIssues": "לא נמצאו בעיות — העיצוב נראה טוב!",
+    "error_one": "{{count}} שגיאה",
+    "error_other": "{{count}} שגיאות",
+    "warning_one": "{{count}} אזהרה",
+    "warning_other": "{{count}} אזהרות",
+    "info_one": "{{count}} הערה",
+    "info_other": "{{count}} הערות",
+    "dismiss": "סגור",
+    "dismissAll": "סגור הכל",
+    "collapsed": "הצג {{count}} בעיה/ות",
+    "fieldHint": "שדה: {{field}}",
+    "suggestedValue": "מוצע: {{value}}"
+  },
   "bulkReplace": {
     "title": "החלפת חומר מרוכזת",
     "short": "החלף",
