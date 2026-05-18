@@ -11,6 +11,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.9.2] — 2026-05-18
+
+### 🔄 Changed
+
+- **Service Worker** (`public/sw.js`): bump `APP_VERSION` from `3.0.0` to `3.9.2` so the PWA
+  cache key matches the current release; old stale caches are evicted on the next visit.
+
+### 🧪 Tests
+
+- Full production build verified: 268 modules, bundle within all budgets
+  (JS 1887 KB / 2000 KB, CSS 37 KB / 100 KB, total 1936 KB / 2100 KB).
+- All 9 dist files present: `index.html`, `404.html`, `sw.js`, `manifest.json`,
+  `favicon.svg`, `icon-192.png`, `icon-512.png`, `robots.txt`, `sitemap.xml`.
+- 288 unit tests passing (23 test files), 0 ESLint warnings, 0 markdownlint errors.
+
 ## [3.9.1] — 2025-05-17
 
 ### ✨ Added
