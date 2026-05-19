@@ -104,7 +104,13 @@ export function ValidationPanel({ issues }: ValidationPanelProps) {
 
       {/* Issue list */}
       {!collapsed && (
-        <ul id="validation-issue-list" className="divide-y divide-wood-100 dark:divide-wood-800" role="list">
+        <ul
+          id="validation-issue-list"
+          className="divide-y divide-wood-100 dark:divide-wood-800"
+          role="list"
+          aria-live="polite"
+          aria-atomic="false"
+        >
           {visible.map((issue) => (
             <li
               key={issue.code}

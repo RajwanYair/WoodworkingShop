@@ -84,6 +84,28 @@ describe('ValidationPanel — ARIA / screen-reader attributes', () => {
     // The i18n template renders as "Suggested: 800"
     expect(screen.getByText(/800/)).toBeInTheDocument();
   });
+
+  // Sprint 18 — aria-live region for dynamic validation warnings
+  it('issue list has aria-live="polite" so screen readers announce new warnings', () => {
+    render(<ValidationPanel issues={[WARNING_ISSUE]} />);
+    const list = screen.getByRole('list');
+    expect(list).toHaveAttribute('aria-live', 'polite');
+  });
+
+  it('issue list has aria-atomic="false" to allow per-item announcements', () => {
+    render(<ValidationPanel issues={[WARNING_ISSUE]} />);
+    const list = screen.getByRole('list');
+    expect(list).toHaveAttribute('aria-atomic', 'false');
+  });
+
+  it('aria-live region still present after dismissing one of two issues', () => {
+    render(<ValidationPanel issues={[WARNING_ISSUE, ERROR_ISSUE]} />);
+    // Use exact "Dismiss" (not "Dismiss all") to target individual dismiss buttons
+    const [firstDismiss] = screen.getAllByRole('button', { name: /^Dismiss$/i });
+    fireEvent.click(firstDismiss);
+    // List should still exist (one item remaining) and keep aria-live
+    expect(screen.getByRole('list')).toHaveAttribute('aria-live', 'polite');
+  });
 });
 
 // ── DimensionSliders — fieldset / legend pattern ────────────────────────────
