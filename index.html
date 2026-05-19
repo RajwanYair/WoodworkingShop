@@ -58,6 +58,16 @@
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
 
     <title>Cabinet Planner — Woodworking Design Tool</title>
+
+    <!-- Content Security Policy (v3.53.33)
+         script-src: 'wasm-unsafe-eval' required for WebAssembly (cut-optimizer).
+         style-src 'unsafe-inline': Tailwind v4 injects critical CSS inline.
+         worker-src blob: : Vite wraps workers in blob URLs in dev mode.
+         connect-src cdnjs: react-pdf may fetch Twemoji font at runtime. -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; worker-src 'self' blob:; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' blob: https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self'"
+    />
   </head>
   <body>
     <div id="root"></div>
@@ -65,12 +75,7 @@
       <p class="noscript-msg">Cabinet Planner requires JavaScript to run. Please enable JavaScript in your browser.</p>
     </noscript>
     <script type="module" src="/src/main.tsx"></script>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/WoodworkingShop/sw.js');
-        });
-      }
-    </script>
+    <!-- SW registration moved to external file to avoid unsafe-inline in script-src -->
+    <script src="/WoodworkingShop/sw-register.js" defer></script>
   </body>
 </html>
