@@ -37,9 +37,8 @@ describe('VirtualSheetWrapper', () => {
   it('shows placeholder (not children) before intersection', () => {
     render(<VirtualSheetWrapper><div data-testid="real-content">Content</div></VirtualSheetWrapper>);
     expect(screen.queryByTestId('real-content')).not.toBeInTheDocument();
-    // Placeholder is aria-hidden
-    const placeholder = screen.getByTestId('virtual-sheet-wrapper').querySelector('[aria-hidden="true"]');
-    expect(placeholder).toBeInTheDocument();
+    // Placeholder has data-testid
+    expect(screen.getByTestId('virtual-sheet-placeholder')).toBeInTheDocument();
   });
 
   it('renders children after intersection fires', () => {
@@ -70,7 +69,6 @@ describe('VirtualSheetWrapper', () => {
 
   it('accepts custom placeholderHeight', () => {
     render(<VirtualSheetWrapper placeholderHeight={300}><div>Content</div></VirtualSheetWrapper>);
-    const placeholder = screen.getByTestId('virtual-sheet-wrapper').querySelector('[aria-hidden="true"]');
-    expect(placeholder).toHaveStyle({ height: '300px' });
+    expect(screen.getByTestId('virtual-sheet-placeholder')).toHaveStyle({ height: '300px' });
   });
 });

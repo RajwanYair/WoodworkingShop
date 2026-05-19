@@ -37,6 +37,7 @@ export function VirtualSheetWrapper({
       ) : (
         <div
           aria-hidden="true"
+          data-testid="virtual-sheet-placeholder"
           style={{ height: placeholderHeight }}
           className="rounded-lg border border-wood-200 dark:border-wood-700 bg-wood-50 dark:bg-wood-800 animate-pulse"
         />

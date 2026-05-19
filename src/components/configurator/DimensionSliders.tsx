@@ -46,10 +46,8 @@ export function DimensionSliders() {
 
   return (
     <fieldset className="space-y-4">
-      <div className="flex items-center justify-between">
-        <legend className="text-sm font-semibold text-wood-700 dark:text-wood-200 uppercase tracking-wide">
-          {t('config.dimensions')}
-        </legend>
+      <legend className="text-sm font-semibold text-wood-700 dark:text-wood-200 uppercase tracking-wide w-full flex items-center justify-between">
+        <span>{t('config.dimensions')}</span>
         <button
           onClick={toggleUnits}
           className="text-[10px] px-2 py-0.5 rounded border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors"
@@ -57,7 +55,7 @@ export function DimensionSliders() {
         >
           {units === 'metric' ? 'mm → in' : 'in → mm'}
         </button>
-      </div>
+      </legend>
 
       {SPECS.filter((spec) => config.furnitureType !== 'panel' || spec.key !== 'depth').map((spec) => (
         <DimensionRow

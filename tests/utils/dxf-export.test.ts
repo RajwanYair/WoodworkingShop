@@ -149,7 +149,7 @@ describe('downloadAllSheetsDxf — per-material layer (Sprint 37)', () => {
   it('defines separate layers for two different materials', () => {
     const mockAnchor = { href: '', download: '', click: vi.fn() };
     vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor as unknown as HTMLElement);
-    let capturedContent = '';
+    const capturedContent = '';
     vi.spyOn(URL, 'createObjectURL').mockImplementation((blob) => {
       if (blob instanceof Blob) {
         // We cannot easily read the blob synchronously here, skip

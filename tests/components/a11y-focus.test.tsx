@@ -120,13 +120,14 @@ describe('DimensionSliders — fieldset / legend for grouped controls', () => {
   });
 
   it('wraps controls in a <fieldset> for grouped keyboard navigation', () => {
-    const { container } = render(<DimensionSliders />);
-    expect(container.querySelector('fieldset')).not.toBeNull();
+    render(<DimensionSliders />);
+    expect(screen.getByRole('group')).toBeInTheDocument();
   });
 
   it('fieldset has a <legend> describing the group', () => {
-    const { container } = render(<DimensionSliders />);
-    expect(container.querySelector('fieldset > * legend, fieldset > legend')).not.toBeNull();
+    render(<DimensionSliders />);
+    // fieldset gets its accessible name from <legend>
+    expect(screen.getByRole('group', { name: /.+/ })).toBeInTheDocument();
   });
 
   it('units toggle button is keyboard-accessible (no tabIndex=-1)', () => {
@@ -175,8 +176,8 @@ describe('ConfiguratorPanel — furniture type radio group', () => {
   });
 
   it('furniture type fieldset has a <legend> for SR grouping', () => {
-    const { container } = render(<ConfiguratorPanel />);
-    const legends = container.querySelectorAll('legend');
-    expect(legends.length).toBeGreaterThanOrEqual(1);
+    render(<ConfiguratorPanel />);
+    // At least one fieldset group must have an accessible name (from <legend>)
+    expect(screen.queryAllByRole('group', { name: /.+/ }).length).toBeGreaterThanOrEqual(1);
   });
 });

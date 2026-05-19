@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { render } from '@testing-library/react';
-import { fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { useRef } from 'react';
 import { useFocusTrap } from '../../src/hooks/useFocusTrap';
 
@@ -25,129 +24,129 @@ function Trap({
 
 describe('useFocusTrap', () => {
   it('does nothing when active is false', () => {
-    const { getByTestId } = render(<Trap active={false} />);
+    render(<Trap active={false} />);
     // Should not throw and container should not receive focus automatically
-    expect(getByTestId('trap')).toBeInTheDocument();
+    expect(screen.getByTestId('trap')).toBeInTheDocument();
   });
 
   it('focuses container when no focusable children exist', () => {
-    const { getByTestId } = render(<Trap active={true} />);
+    render(<Trap active={true} />);
     // The container itself should receive focus as the fallback
-    expect(document.activeElement).toBe(getByTestId('trap'));
+    expect(screen.getByTestId('trap')).toHaveFocus();
   });
 
   it('focuses first focusable child on mount', () => {
-    const { getByRole } = render(
+    render(
       <Trap active={true}>
         <button>First</button>
         <button>Second</button>
       </Trap>,
     );
-    expect(document.activeElement).toBe(getByRole('button', { name: 'First' }));
+    expect(screen.getByRole('button', { name: 'First' })).toHaveFocus();
   });
 
   it('calls onEscape when Escape key is pressed', () => {
     const onEscape = vi.fn();
-    const { getByTestId } = render(
+    render(
       <Trap active={true} onEscape={onEscape}>
         <button>OK</button>
       </Trap>,
     );
-    fireEvent.keyDown(getByTestId('trap'), { key: 'Escape' });
+    fireEvent.keyDown(screen.getByTestId('trap'), { key: 'Escape' });
     expect(onEscape).toHaveBeenCalledOnce();
   });
 
   it('wraps Tab from last focusable element to first', () => {
-    const { getAllByRole } = render(
+    render(
       <Trap active={true}>
         <button>First</button>
         <button>Last</button>
       </Trap>,
     );
-    const [first, last] = getAllByRole('button');
+    const [first, last] = screen.getAllByRole('button');
     last.focus();
     fireEvent.keyDown(last, { key: 'Tab', shiftKey: false });
-    expect(document.activeElement).toBe(first);
+    expect(first).toHaveFocus();
   });
 
   it('wraps Shift+Tab from first focusable element to last', () => {
-    const { getAllByRole } = render(
+    render(
       <Trap active={true}>
         <button>First</button>
         <button>Last</button>
       </Trap>,
     );
-    const [first, last] = getAllByRole('button');
+    const [first, last] = screen.getAllByRole('button');
     first.focus();
     fireEvent.keyDown(first, { key: 'Tab', shiftKey: true });
-    expect(document.activeElement).toBe(last);
+    expect(last).toHaveFocus();
   });
 
   it('ignores non-Tab, non-Escape keys', () => {
-    const { getByRole } = render(
+    render(
       <Trap active={true}>
         <button>OK</button>
       </Trap>,
     );
     // Should not throw or misbehave
-    fireEvent.keyDown(getByRole('button', { name: 'OK' }), { key: 'Enter' });
-    expect(getByRole('button', { name: 'OK' })).toBeInTheDocument();
+    fireEvent.keyDown(screen.getByRole('button', { name: 'OK' }), { key: 'Enter' });
+    expect(screen.getByRole('button', { name: 'OK' })).toBeInTheDocument();
   });
 
   it('does not wrap Tab when active element is not the last', () => {
-    const { getAllByRole } = render(
+    render(
       <Trap active={true}>
         <button>First</button>
         <button>Second</button>
         <button>Last</button>
       </Trap>,
     );
-    const [first, second] = getAllByRole('button');
+    const [first, second] = screen.getAllByRole('button');
     second.focus();
     // Tab from middle — focus should remain on second (browser handles natural Tab, we don't intercept)
     fireEvent.keyDown(second, { key: 'Tab', shiftKey: false });
-    expect(document.activeElement).not.toBe(first);
+    expect(first).not.toHaveFocus();
   });
 
   it('does not wrap Shift+Tab when active element is not the first', () => {
-    const { getAllByRole } = render(
+    render(
       <Trap active={true}>
         <button>First</button>
         <button>Second</button>
         <button>Last</button>
       </Trap>,
     );
-    const [, second, last] = getAllByRole('button');
+    const [, second, last] = screen.getAllByRole('button');
     second.focus();
     // Shift+Tab from middle — should not wrap to last
     fireEvent.keyDown(second, { key: 'Tab', shiftKey: true });
-    expect(document.activeElement).not.toBe(last);
+    expect(last).not.toHaveFocus();
   });
 
   it('Tab with no focusable items does not throw', () => {
-    const { getByTestId } = render(<Trap active={true} />);
+    render(<Trap active={true} />);
     // container has tabIndex=-1, excluded from FOCUSABLE — items list will be empty
-    fireEvent.keyDown(getByTestId('trap'), { key: 'Tab' });
-    expect(getByTestId('trap')).toBeInTheDocument();
+    fireEvent.keyDown(screen.getByTestId('trap'), { key: 'Tab' });
+    expect(screen.getByTestId('trap')).toBeInTheDocument();
   });
 
   it('Escape without onEscape callback does not throw', () => {
-    const { getByTestId } = render(
+    render(
       <Trap active={true}>
         <button>OK</button>
       </Trap>,
     );
-    expect(() => fireEvent.keyDown(getByTestId('trap'), { key: 'Escape' })).not.toThrow();
+    expect(() => fireEvent.keyDown(screen.getByTestId('trap'), { key: 'Escape' })).not.toThrow();
   });
 
   it('removes keydown listener on unmount', () => {
     const onEscape = vi.fn();
-    const { container, unmount } = render(
+    const { unmount } = render(
       <Trap active={true} onEscape={onEscape}>
         <button>OK</button>
       </Trap>,
     );
-    const trapEl = container.querySelector('[data-testid="trap"]') as HTMLElement;
+    const trapEl = screen.getByTestId('trap');
     unmount();
     // After unmount the cleanup removes the listener — Escape should NOT call onEscape
     fireEvent.keyDown(trapEl, { key: 'Escape' });

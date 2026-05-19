@@ -26,7 +26,7 @@ function SkeletonLine({ width = 'full', height = 'h-4' }: SkeletonLineProps) {
 function SkeletonCard({ rows = 3 }: { rows?: number }) {
   const widths: SkeletonLineProps['width'][] = ['full', '3/4', '1/2'];
   return (
-    <div className="rounded-lg border border-wood-200 dark:border-wood-700 p-4 space-y-3">
+    <div className="rounded-lg border border-wood-200 dark:border-wood-700 p-4 space-y-3" data-testid="skeleton-card">
       <SkeletonLine height="h-5" width="2/3" />
       {Array.from({ length: rows }, (_, i) => (
         <SkeletonLine key={i} width={widths[i % widths.length]} />

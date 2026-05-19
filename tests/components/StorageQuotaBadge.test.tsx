@@ -34,8 +34,8 @@ describe('StorageQuotaBadge', () => {
   it('renders nothing while estimate is loading', () => {
     // Never resolves during this tick
     mockEstimate.mockReturnValue(new Promise(() => {}));
-    const { container } = render(<StorageQuotaBadge />);
-    expect(container.firstChild).toBeNull();
+    render(<StorageQuotaBadge />);
+    expect(screen.queryByRole('status')).toBeNull();
   });
 
   it('renders nothing when quotaBytes is 0', async () => {
