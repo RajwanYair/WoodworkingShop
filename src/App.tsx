@@ -18,6 +18,7 @@ import { SwUpdateBanner } from './components/layout/SwUpdateBanner';
 import { IconPrint } from './components/layout/Icons';
 import { useCabinetStore, type CabinetState } from './store/cabinet-store';
 import { useToastStore } from './store/toast-store';
+import { useSystemDarkMode } from './hooks/useSystemDarkMode';
 
 // Lazy-load heavy / route-isolated panels so the initial bundle stays lean
 // (Sprint 110). PDF in particular pulls in @react-pdf/renderer (~1.6 MB).
@@ -48,6 +49,9 @@ function App() {
     root.classList.toggle('dark', darkMode);
     root.style.colorScheme = darkMode ? 'dark' : 'light';
   }, [darkMode]);
+
+  // Sprint 48 — follow OS (prefers-color-scheme) changes in real-time
+  useSystemDarkMode();
 
   // Focus restoration: move focus to the main landmark when the active tab changes
   // so keyboard users land at the start of new content (WCAG 2.2 success criterion 2.4.3)
