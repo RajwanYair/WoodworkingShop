@@ -10,6 +10,7 @@ import { estimateCost } from '../engine/cost-estimator';
 import { generateAssemblySteps, type AssemblyStep } from '../engine/assembly';
 import { createJsonMemo } from '../engine/memo';
 import { readConfigFromUrl, pushConfigToUrl, readProjectNameFromUrl, pushProjectNameToUrl } from '../utils/url-state';
+import { idbLoadSnapshots, idbSaveSnapshots } from '../utils/indexed-db-storage';
 import CutOptimizerWorker from '../workers/cut-optimizer.worker?worker';
 import type { CutOptimizerWorkerInput, CutOptimizerWorkerOutput } from '../workers/cut-optimizer.worker';
 import CostEstimatorWorker from '../workers/cost-estimator.worker?worker';
@@ -295,10 +296,13 @@ function loadSnapshots(): ProjectSnapshot[] {
 function saveSnapshots(snaps: ProjectSnapshot[]): void {
   if (typeof window === 'undefined') return;
   try {
+    // Persist synchronously to localStorage (immediate next-load availability)
     window.localStorage.setItem(SNAPSHOTS_KEY, JSON.stringify(snaps));
   } catch {
     /* quota exceeded — ignore */
   }
+  // Also persist asynchronously to IndexedDB (reliable long-term storage)
+  void idbSaveSnapshots<ProjectSnapshot>(snaps);
 }
 
 export interface CabinetState {
@@ -947,4 +951,14 @@ useCabinetStore.subscribe((state) => {
       finishCost: state.finishCost,
     });
   }, 500);
+});
+
+// Hydrate snapshots from IndexedDB after the store is created.
+// idbLoadSnapshots handles one-way migration from localStorage on first run.
+// We only overwrite state when IndexedDB has data, to avoid wiping a session
+// that already loaded from localStorage before the async call resolves.
+void idbLoadSnapshots<ProjectSnapshot>().then((snaps) => {
+  if (snaps.length > 0) {
+    useCabinetStore.setState({ snapshots: snaps });
+  }
 });

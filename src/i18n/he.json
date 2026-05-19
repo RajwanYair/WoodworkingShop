@@ -398,6 +398,8 @@
     "restore": "שחזור",
     "delete": "מחק צילום",
     "empty": "אין צילומים שמורים עדכה.",
-    "savedAt": "נשמר {{when}}"
+    "savedAt": "נשמר {{when}}",
+    "cabinetCount": "{{count}} ארון",
+    "cabinetCount_other": "{{count}} ארונות"
   }
 }

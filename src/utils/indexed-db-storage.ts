@@ -13,8 +13,11 @@
 import { get, set, del, keys, createStore } from 'idb-keyval';
 
 // One custom idb-keyval store per logical namespace so keys don't collide.
-const projectStore = createStore('cabinet-planner', 'projects');
-const configStore = createStore('cabinet-planner', 'saved-configs');
+// Each uses a distinct DB name so that idb-keyval's createStore can fire
+// onupgradeneeded for every store — sharing one DB name only lets the first
+// object store be created (subsequent opens see an already-versioned DB).
+const projectStore = createStore('cabinet-planner-projects', 'projects');
+const configStore = createStore('cabinet-planner-configs', 'saved-configs');
 
 // ─── Projects ───────────────────────────────────────────────────────────────
 
@@ -71,7 +74,7 @@ export async function idbSaveConfigs<T>(configs: T[]): Promise<void> {
 
 const LS_SNAPSHOTS_KEY = 'woodworkingshop:snapshots';
 const IDB_SNAPSHOTS_KEY = 'all-snapshots';
-const snapshotStore = createStore('cabinet-planner', 'snapshots');
+const snapshotStore = createStore('cabinet-planner-snapshots', 'snapshots');
 
 /** Load all snapshots from IndexedDB, migrating from localStorage on first run. */
 export async function idbLoadSnapshots<T>(): Promise<T[]> {

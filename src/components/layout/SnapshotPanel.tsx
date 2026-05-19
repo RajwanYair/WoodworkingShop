@@ -14,6 +14,19 @@ export function SnapshotPanel() {
     setName('');
   }
 
+  function fmtTimestamp(iso: string): string {
+    try {
+      return new Date(iso).toLocaleString(undefined, {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    } catch {
+      return iso;
+    }
+  }
+
   return (
     <div className="mt-4 border-t border-wood-200 dark:border-wood-700 pt-3">
       <button
@@ -24,6 +37,11 @@ export function SnapshotPanel() {
       >
         <IconFolder size={14} />
         <span className="grow">{t('snapshot.title')}</span>
+        {snapshots.length > 0 && (
+          <span className="text-xs font-normal text-wood-400 dark:text-wood-500 me-1">
+            ({snapshots.length})
+          </span>
+        )}
         {open ? <IconChevronDown size={14} /> : <IconChevronRight size={14} />}
       </button>
 
@@ -56,14 +74,21 @@ export function SnapshotPanel() {
             <p className="text-xs text-wood-400 dark:text-wood-500 italic">{t('snapshot.empty')}</p>
           ) : (
             <ul className="space-y-1" role="list">
-              {snapshots.map((snap) => (
+              {[...snapshots].reverse().map((snap) => (
                 <li
                   key={snap.id}
                   className="flex items-center gap-1 rounded bg-wood-100 dark:bg-wood-800 px-2 py-1 text-xs"
                 >
-                  <span className="grow truncate text-wood-700 dark:text-wood-200" title={snap.name}>
-                    {snap.name}
-                  </span>
+                  <div className="grow min-w-0">
+                    <div className="truncate text-wood-700 dark:text-wood-200 font-medium" title={snap.name}>
+                      {snap.name}
+                    </div>
+                    <div className="text-wood-400 dark:text-wood-500 text-xs">
+                      {fmtTimestamp(snap.timestamp)}
+                      {' · '}
+                      {t('snapshot.cabinetCount', { count: snap.cabinets.length })}
+                    </div>
+                  </div>
                   <button
                     type="button"
                     className="shrink-0 text-wood-500 hover:text-wood-700 dark:hover:text-wood-200 transition-colors"
@@ -89,3 +114,4 @@ export function SnapshotPanel() {
     </div>
   );
 }
+
