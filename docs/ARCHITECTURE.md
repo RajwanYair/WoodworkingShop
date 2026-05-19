@@ -153,6 +153,30 @@ Cross-Origin-Embedder-Policy: require-corp
 'Cross-Origin-Embedder-Policy': 'require-corp',
 ```
 
+## 🎮 WebGL 3-D Preview (Phase 7 Evaluation)
+
+A lightweight WebGL renderer is available for evaluating material-texture previews in a future v4.0 release.
+
+**Feature probe** — `src/engine/webgl-probe.ts`:
+
+| Function | Description |
+|---|---|
+| `probeWebGLTier()` | Returns `'webgl2' \| 'webgl1' \| 'unavailable'` |
+| `isWebGLAvailable()` | Quick boolean gate |
+| `isWebGL2Available()` | Check for full shader support |
+
+**Component** — `src/components/preview/WebGLPreviewCanvas.tsx`:
+- Renders a simplified 3-D box approximating the configured cabinet dimensions.
+- Uses raw WebGL (no external library) to keep bundle impact near zero.
+- Falls back gracefully to a descriptive message if WebGL is unsupported.
+- Slow y-axis rotation demonstrates per-face shading with a warm-oak colour palette.
+
+**Evaluation status (Sprint 32)**:
+- ✅ WebGL 1/2 detection works in all tested browsers.
+- ✅ Basic box geometry renders with face shading.
+- ⏳ Material texture mapping deferred to v4.0 (requires UV coords + texture atlas).
+- ⏳ GLTF cabinet models deferred to v4.0 (requires model pipeline and compression).
+
 ## 🪑 Supported Furniture Types
 
 | Type        | Parts                                                  | Features                     |
