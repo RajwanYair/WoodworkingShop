@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { configToParams, paramsToConfig } from '../../src/utils/url-state';
+import { configToParams, paramsToConfig, readConfigFromUrl } from '../../src/utils/url-state';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 import { cfg } from '../helpers';
 
@@ -152,6 +152,56 @@ describe('url-state', () => {
       const params = configToParams(DEFAULT_CONFIG);
       const decoded = paramsToConfig(params);
       expect(Object.keys(decoded).length).toBe(0);
+    });
+  });
+
+  describe('readConfigFromUrl — tpl= deep-link', () => {
+    function withSearch(qs: string, fn: () => void) {
+      const original = window.location.search;
+      Object.defineProperty(window, 'location', {
+        writable: true,
+        value: { ...window.location, search: qs },
+      });
+      try { fn(); } finally {
+        Object.defineProperty(window, 'location', {
+          writable: true,
+          value: { ...window.location, search: original },
+        });
+      }
+    }
+
+    it('returns empty patch when no params present', () => {
+      withSearch('', () => {
+        const result = readConfigFromUrl();
+        expect(Object.keys(result).length).toBe(0);
+      });
+    });
+
+    it('returns template config for known tpl= id', () => {
+      withSearch('?tpl=kitchen-base', () => {
+        const result = readConfigFromUrl();
+        // kitchen-base template exists; must return a full config object
+        expect(typeof result.width).toBe('number');
+        expect(typeof result.height).toBe('number');
+        expect(result.furnitureType).toBe('cabinet');
+      });
+    });
+
+    it('merges URL overrides on top of the template config', () => {
+      withSearch('?tpl=kitchen-base&w=1200', () => {
+        const result = readConfigFromUrl();
+        expect(result.width).toBe(1200);
+      });
+    });
+
+    it('falls back to raw URL params for unknown tpl= id', () => {
+      withSearch('?tpl=nonexistent-template-xyz&w=600', () => {
+        const result = readConfigFromUrl();
+        // Template not found → parse URL params directly
+        expect(result.width).toBe(600);
+        // furnitureType should not be set (no template applied)
+        expect(result.furnitureType).toBeUndefined();
+      });
     });
   });
 });
