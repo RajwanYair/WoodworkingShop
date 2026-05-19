@@ -195,7 +195,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
             <button
               key={v.id}
               role="tab"
-              aria-selected={activeView === v.id ? 'true' : 'false'}
+              aria-selected={activeView === v.id}
               onClick={() => setActiveView(v.id)}
               className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
                 activeView === v.id

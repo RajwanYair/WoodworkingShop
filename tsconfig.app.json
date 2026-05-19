@@ -9,6 +9,8 @@
 
     /* Strict type checking */
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
+
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,

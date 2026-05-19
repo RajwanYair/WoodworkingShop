@@ -78,7 +78,7 @@ export function ValidationPanel({ issues }: ValidationPanelProps) {
           type="button"
           className="flex items-center gap-2 text-sm font-semibold text-wood-700 dark:text-wood-200 hover:text-wood-900 dark:hover:text-wood-50 transition-colors"
           onClick={() => setCollapsed((c) => !c)}
-          aria-expanded={!collapsed ? 'true' : 'false'}
+          aria-expanded={!collapsed}
           aria-controls="validation-issue-list"
         >
           {errorCount > 0 ? (

@@ -104,6 +104,4 @@ export const LARGE_PROJECT_PARTS: Part[] = [
  * v3.51.0 — Oversized part that exceeds a single sheet dimension.
  * Optimizer must handle gracefully (skip or report unplaceable).
  */
-export const OVERSIZED_PART: Part[] = [
-  part('OS01', 1, 'melamine-18', 18, 3000, 1500),
-];
+export const OVERSIZED_PART: Part[] = [part('OS01', 1, 'melamine-18', 18, 3000, 1500)];

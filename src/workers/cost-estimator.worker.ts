@@ -34,7 +34,7 @@ self.onmessage = (e: MessageEvent<CostEstimatorWorkerInput>) => {
       data.hardwarePriceOverrides,
       data.labourRate,
       data.labourHours,
-      data.finishCost
+      data.finishCost,
     );
     self.postMessage({ type: 'done', requestId: data.requestId, cost });
   } catch (error) {

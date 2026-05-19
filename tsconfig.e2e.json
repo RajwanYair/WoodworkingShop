@@ -8,6 +8,8 @@
     "skipLibCheck": true,
 
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
+
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,

@@ -124,7 +124,7 @@ export function Header() {
             key={tab}
             role="tab"
             onClick={() => setActiveTab(tab)}
-            aria-selected={activeTab === tab ? 'true' : 'false'}
+            aria-selected={activeTab === tab}
             aria-current={activeTab === tab ? 'page' : undefined}
             aria-controls="main-content"
             title={`${t(`tabs.${tab}`)} (Alt+${i + 1})`}

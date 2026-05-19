@@ -139,7 +139,7 @@ function scheduleCost(
   hardwarePriceOverrides: Record<string, number>,
   labourRate: number,
   labourHours: number,
-  finishCost: number
+  finishCost: number,
 ): void {
   const worker = getCostEstimatorWorker();
   if (!worker) {
@@ -154,7 +154,7 @@ function scheduleCost(
           hardwarePriceOverrides,
           labourRate,
           labourHours,
-          finishCost
+          finishCost,
         ),
         costPending: false,
       });
@@ -176,7 +176,13 @@ function scheduleCost(
   });
 }
 
-function scheduleCostFromState(state: CabinetState, optimizationOverride?: OptimizationResult, hardwareOverride?: HardwareItem[], edgeBandingTotalOverride?: number, partialOverrides?: Partial<CabinetState>) {
+function scheduleCostFromState(
+  state: CabinetState,
+  optimizationOverride?: OptimizationResult,
+  hardwareOverride?: HardwareItem[],
+  edgeBandingTotalOverride?: number,
+  partialOverrides?: Partial<CabinetState>,
+) {
   scheduleCost(
     optimizationOverride || state.optimization,
     hardwareOverride || state.hardware,
@@ -186,7 +192,7 @@ function scheduleCostFromState(state: CabinetState, optimizationOverride?: Optim
     partialOverrides?.hardwarePriceOverrides ?? state.hardwarePriceOverrides,
     partialOverrides?.labourRate ?? state.labourRate,
     partialOverrides?.labourHours ?? state.labourHours,
-    partialOverrides?.finishCost ?? state.finishCost
+    partialOverrides?.finishCost ?? state.finishCost,
   );
 }
 
@@ -503,7 +509,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
       session?.hardwarePriceOverrides ?? {},
       session?.labourRate ?? 75,
       session?.labourHours ?? 0,
-      session?.finishCost ?? 0
+      session?.finishCost ?? 0,
     ),
     assemblySteps: generateAssemblySteps(initial.config),
 
@@ -755,10 +761,30 @@ export const useCabinetStore = create<CabinetState>((set) => {
         scheduleCostFromState(state, undefined, undefined, undefined, { materialPriceOverrides: overrides });
         return { materialPriceOverrides: overrides, costPending: true };
       }),
-    setEdgeBandingRate: (rate) => set((state) => { const r = Math.max(0, rate); scheduleCostFromState(state, undefined, undefined, undefined, { edgeBandingRate: r }); return { edgeBandingRate: r, costPending: true }; }),
-    setLabourRate: (rate) => set((state) => { const r = Math.max(0, rate); scheduleCostFromState(state, undefined, undefined, undefined, { labourRate: r }); return { labourRate: r, costPending: true }; }),
-    setLabourHours: (hours) => set((state) => { const h = Math.max(0, hours); scheduleCostFromState(state, undefined, undefined, undefined, { labourHours: h }); return { labourHours: h, costPending: true }; }),
-    setFinishCost: (cost) => set((state) => { const c = Math.max(0, cost); scheduleCostFromState(state, undefined, undefined, undefined, { finishCost: c }); return { finishCost: c, costPending: true }; }),
+    setEdgeBandingRate: (rate) =>
+      set((state) => {
+        const r = Math.max(0, rate);
+        scheduleCostFromState(state, undefined, undefined, undefined, { edgeBandingRate: r });
+        return { edgeBandingRate: r, costPending: true };
+      }),
+    setLabourRate: (rate) =>
+      set((state) => {
+        const r = Math.max(0, rate);
+        scheduleCostFromState(state, undefined, undefined, undefined, { labourRate: r });
+        return { labourRate: r, costPending: true };
+      }),
+    setLabourHours: (hours) =>
+      set((state) => {
+        const h = Math.max(0, hours);
+        scheduleCostFromState(state, undefined, undefined, undefined, { labourHours: h });
+        return { labourHours: h, costPending: true };
+      }),
+    setFinishCost: (cost) =>
+      set((state) => {
+        const c = Math.max(0, cost);
+        scheduleCostFromState(state, undefined, undefined, undefined, { finishCost: c });
+        return { finishCost: c, costPending: true };
+      }),
     setHardwarePriceOverride: (id, price) =>
       set((state) => {
         const overrides = { ...state.hardwarePriceOverrides };

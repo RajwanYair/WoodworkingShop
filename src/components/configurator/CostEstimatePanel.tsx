@@ -55,7 +55,6 @@ export function CostEstimatePanel() {
   const [editingFinish, setEditingFinish] = useState(false);
   const [finishInput, setFinishInput] = useState('');
 
-
   const totalNonZero = cost.totalCost > 0;
 
   // Build segments for bar visualization

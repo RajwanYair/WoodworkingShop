@@ -48,29 +48,30 @@
 
   // CSS/HTML lint: our browserslist excludes IE entirely (see .browserslistrc).
   // Inline styles are required for dynamic runtime values (data-driven colors/widths).
-  // ARIA attribute expressions are valid JSX producing correct string values at runtime.
+  // ARIA attribute expressions are valid JSX producing correct string values at runtime
+  // — the static analyzer cannot evaluate JSX ternaries or boolean props.
   // Progressive enhancement CSS (scrollbar-width, orphans, widows, forced-color-adjust,
   // print-color-adjust, color-scheme, page) is intentional enhancement for supporting
   // browsers — does not degrade for non-supporting browsers.
-  "css.validate": true,
+  //
+  // Disabling built-in CSS validation because:
+  // 1. Tailwind CSS v4 generates valid modern CSS that the built-in validator doesn't understand.
+  // 2. Our .browserslistrc already defines browser targets — Vite/PostCSS handles compat.
+  // 3. ESLint + Prettier are our source-of-truth linters for code quality.
+  "css.validate": false,
   "css.lint.compatibleVendorPrefixes": "ignore",
   "css.lint.vendorPrefix": "ignore",
   "css.lint.propertyIgnoredDueToDisplay": "ignore",
   "css.lint.unknownProperties": "ignore",
 
-  // Suppress IE/Safari/Firefox compat warnings for modern CSS features we intentionally
-  // use with progressive enhancement (graceful degradation for unsupporting browsers).
-  "css.lint.validProperties": [
-    "forced-color-adjust",
-    "scrollbar-width",
-    "print-color-adjust",
-    "color-scheme",
-    "orphans",
-    "widows"
-  ],
-
+  // Accessibility linting in JSX/TSX: VS Code's static ARIA checker cannot
+  // evaluate JSX expressions (`{condition ? 'ascending' : 'none'}`) or
+  // verify that `aria-controls` targets exist across component boundaries.
+  // Runtime accessibility is verified by axe-core in Playwright E2E tests.
+  // Inline styles are required for: zoom transforms, tooltip positioning,
+  // data-driven chart colors — values computed at runtime from state.
   "html.validate.scripts": true,
-  "html.validate.styles": true,
+  "html.validate.styles": false,
 
   "files.exclude": {
     "**/dist/**": true,
