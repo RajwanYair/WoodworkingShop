@@ -2,9 +2,22 @@ import type { CutSheet, CutRect } from '../engine/types';
 import { triggerDownload } from './download';
 
 /**
+ * Convert a material key to a valid DXF layer name.
+ * DXF layer names must be ≤ 255 chars, no spaces, uppercase recommended.
+ * Prefix with `MAT_` to distinguish from SHEET/PARTS/LABELS layers.
+ *
+ * @example materialLayerName('plywood-17') → 'MAT_PLYWOOD-17'
+ */
+export function materialLayerName(material: string): string {
+  return `MAT_${material.toUpperCase().replace(/\s+/g, '_').slice(0, 248)}`;
+}
+
+/**
  * Generate a minimal DXF (AutoCAD R12) string for a cut sheet.
  * Each part is drawn as a LWPOLYLINE rectangle with a TEXT label.
- * Sheet outline is drawn on layer "SHEET", parts on "PARTS", labels on "LABELS".
+ * Sheet outline is drawn on layer "SHEET", labels on "LABELS".
+ * Parts are drawn on a per-material layer (e.g. "MAT_PLYWOOD-17") so CAM
+ * software can assign separate toolpaths per material.
  * All units are millimeters.
  */
 export function cutSheetToDxf(sheet: CutSheet): string {
@@ -33,11 +46,13 @@ export function cutSheetToDxf(sheet: CutSheet): string {
   lines.push('0', 'ENDSEC');
 
   // ── TABLES section (layers) ──
+  const matLayer = materialLayerName(sheet.material);
   lines.push('0', 'SECTION', '2', 'TABLES');
-  lines.push('0', 'TABLE', '2', 'LAYER', '70', '3');
-  addLayer(lines, 'SHEET', 7); // white
-  addLayer(lines, 'PARTS', 3); // green
-  addLayer(lines, 'LABELS', 5); // blue
+  lines.push('0', 'TABLE', '2', 'LAYER', '70', '4');
+  addLayer(lines, 'SHEET', 7);    // white
+  addLayer(lines, matLayer, 3);   // green — per-material parts layer
+  addLayer(lines, 'LABELS', 5);   // blue
+  addLayer(lines, 'PARTS', 3);    // green — legacy fallback layer (kept for compatibility)
   lines.push('0', 'ENDTAB');
   lines.push('0', 'ENDSEC');
 
@@ -47,9 +62,9 @@ export function cutSheetToDxf(sheet: CutSheet): string {
   // Sheet outline
   addRect(lines, 0, 0, sheet.sheetWidth, sheet.sheetLength, 'SHEET');
 
-  // Parts
+  // Parts on per-material layer
   for (const part of sheet.parts) {
-    addRect(lines, part.x, part.y, part.width, part.length, 'PARTS');
+    addRect(lines, part.x, part.y, part.width, part.length, matLayer);
     addLabel(lines, part, 'LABELS');
   }
 
@@ -137,17 +152,24 @@ export function downloadAllSheetsDxf(sheets: CutSheet[], projectName: string) {
   const lines: string[] = [];
   const spacing = 100; // mm gap between sheets
 
+  // Collect unique material layer names
+  const matLayers = [...new Set(sheets.map((s) => materialLayerName(s.material)))];
+
   // HEADER
   lines.push('0', 'SECTION', '2', 'HEADER');
   lines.push('9', '$INSUNITS', '70', '4');
   lines.push('0', 'ENDSEC');
 
-  // TABLES
+  // TABLES — one layer per material + SHEET, LABELS, PARTS
+  const totalLayers = 3 + matLayers.length;
   lines.push('0', 'SECTION', '2', 'TABLES');
-  lines.push('0', 'TABLE', '2', 'LAYER', '70', '3');
+  lines.push('0', 'TABLE', '2', 'LAYER', '70', String(totalLayers));
   addLayer(lines, 'SHEET', 7);
-  addLayer(lines, 'PARTS', 3);
   addLayer(lines, 'LABELS', 5);
+  addLayer(lines, 'PARTS', 3); // legacy fallback
+  for (const ml of matLayers) {
+    addLayer(lines, ml, 3);
+  }
   lines.push('0', 'ENDTAB');
   lines.push('0', 'ENDSEC');
 
@@ -156,13 +178,14 @@ export function downloadAllSheetsDxf(sheets: CutSheet[], projectName: string) {
 
   let yOffset = 0;
   for (const sheet of sheets) {
+    const matLayer = materialLayerName(sheet.material);
     // Sheet outline
     addRect(lines, 0, yOffset, sheet.sheetWidth, sheet.sheetLength, 'SHEET');
 
-    // Parts offset by current yOffset
+    // Parts on per-material layer, offset by current yOffset
     for (const part of sheet.parts) {
       const shifted: CutRect = { ...part, y: part.y + yOffset };
-      addRect(lines, shifted.x, shifted.y, shifted.width, shifted.length, 'PARTS');
+      addRect(lines, shifted.x, shifted.y, shifted.width, shifted.length, matLayer);
       addLabel(lines, shifted, 'LABELS');
     }
 

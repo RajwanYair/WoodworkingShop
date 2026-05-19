@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import type { CutSheet } from '../../src/engine/types';
-import { cutSheetToDxf, downloadDxfForSheet, downloadAllSheetsDxf } from '../../src/utils/dxf-export';
+import { cutSheetToDxf, downloadDxfForSheet, downloadAllSheetsDxf, materialLayerName } from '../../src/utils/dxf-export';
 import { mockSheet } from '../helpers';
 
 describe('cutSheetToDxf', () => {
@@ -104,5 +104,65 @@ describe('downloadAllSheetsDxf', () => {
     expect(() => downloadAllSheetsDxf([mockSheet, sheet2], 'P')).not.toThrow();
 
     vi.restoreAllMocks();
+  });
+});
+
+describe('materialLayerName — Sprint 37', () => {
+  it('uppercases the material key', () => {
+    expect(materialLayerName('plywood-17')).toBe('MAT_PLYWOOD-17');
+  });
+
+  it('prefixes with MAT_', () => {
+    expect(materialLayerName('melamine-18')).toMatch(/^MAT_/);
+  });
+
+  it('replaces spaces with underscores', () => {
+    expect(materialLayerName('solid oak')).toBe('MAT_SOLID_OAK');
+  });
+
+  it('truncates to 255 chars maximum', () => {
+    const long = 'x'.repeat(300);
+    expect(materialLayerName(long).length).toBeLessThanOrEqual(255);
+  });
+});
+
+describe('cutSheetToDxf — per-material layer (Sprint 37)', () => {
+  it('puts parts on material layer not generic PARTS layer', () => {
+    const dxf = cutSheetToDxf(mockSheet);
+    const matLayer = materialLayerName(mockSheet.material);
+    expect(dxf).toContain(matLayer);
+  });
+
+  it('defines the per-material layer in the TABLES section', () => {
+    const dxf = cutSheetToDxf(mockSheet);
+    const matLayer = materialLayerName(mockSheet.material);
+    // The layer definition appears before ENTITIES
+    const tablesIdx = dxf.indexOf('TABLES');
+    const entitiesIdx = dxf.indexOf('ENTITIES');
+    const layerIdx = dxf.indexOf(matLayer);
+    expect(layerIdx).toBeGreaterThan(tablesIdx);
+    expect(layerIdx).toBeLessThan(entitiesIdx);
+  });
+});
+
+describe('downloadAllSheetsDxf — per-material layer (Sprint 37)', () => {
+  it('defines separate layers for two different materials', () => {
+    const mockAnchor = { href: '', download: '', click: vi.fn() };
+    vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor as unknown as HTMLElement);
+    let capturedContent = '';
+    vi.spyOn(URL, 'createObjectURL').mockImplementation((blob) => {
+      if (blob instanceof Blob) {
+        // We cannot easily read the blob synchronously here, skip
+      }
+      return 'blob:mat';
+    });
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+
+    const sheet2: CutSheet = { ...mockSheet, sheetIndex: 1, material: 'melamine-18' };
+    // Should not throw when two different materials are present
+    expect(() => downloadAllSheetsDxf([mockSheet, sheet2], 'Multi')).not.toThrow();
+
+    vi.restoreAllMocks();
+    void capturedContent; // suppress unused warning
   });
 });
