@@ -423,6 +423,28 @@ export function validateConfig(
     });
   }
 
+  // ── Assembly-risk: tall open carcass without intermediate shelf ──
+  // A carcass taller than 1 200 mm with zero shelves has no intermediate
+  // horizontal element to resist racking.  Flag it as a warning so the user
+  // can add at least one fixed shelf or a horizontal stretcher.
+  if (
+    config.height > 1200 &&
+    config.shelfCount === 0 &&
+    config.drawerCount === 0 &&
+    config.furnitureType !== 'panel'
+  ) {
+    issues.push({
+      code: 'TALL_CARCASS_NO_SHELF',
+      severity: 'warning',
+      message: {
+        en: `Carcass height (${config.height} mm) exceeds 1 200 mm with no shelves or drawers. Without an intermediate horizontal element the carcass has poor racking resistance. Add at least one fixed shelf or a horizontal stretcher.`,
+        he: `גובה הכיסא (${config.height} מ"מ) עולה על 1200 מ"מ ללא מדפים או מגירות. ללא אלמנט אופקי ביניים החיבור עמיד בפני עיוות אנכי. הוסף לפחות מדף אחד קבוע.`,
+      },
+      field: 'shelfCount',
+      suggestedValue: 1,
+    });
+  }
+
   // ── Shelf maximum safe load capacity (Sprint 30) ─────────────────────────
   // Derive maximum load at L/360 limit by linear-scaling the standard
   // 0.05 N/mm test load that computeShelfDeflection uses internally.

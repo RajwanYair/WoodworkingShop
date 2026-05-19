@@ -357,4 +357,41 @@ describe('validateConfig — SHELF_LOAD_CAPACITY_LOW (Sprint 30)', () => {
     const issues = validateConfig(cfg({ width: 100, doorStyle: 'none' }));
     expect(issues.some((i) => i.code === 'HINGE_CUP_EDGE_DISTANCE_UNSAFE')).toBe(false);
   });
+
+  // ── Assembly-risk: tall carcass without shelf (Sprint 7) ──
+
+  it('raises TALL_CARCASS_NO_SHELF for tall open carcass without shelves or drawers', () => {
+    const issues = validateConfig(
+      cfg({ height: 1800, shelfCount: 0, drawerCount: 0, doorStyle: 'none', furnitureType: 'cabinet' }),
+    );
+    expect(issues.some((i) => i.code === 'TALL_CARCASS_NO_SHELF')).toBe(true);
+    const issue = issues.find((i) => i.code === 'TALL_CARCASS_NO_SHELF')!;
+    expect(issue.severity).toBe('warning');
+    expect(issue.field).toBe('shelfCount');
+    expect(issue.suggestedValue).toBe(1);
+  });
+
+  it('does not raise TALL_CARCASS_NO_SHELF when shelves are present', () => {
+    const issues = validateConfig(cfg({ height: 1800, shelfCount: 2, furnitureType: 'cabinet' }));
+    expect(issues.some((i) => i.code === 'TALL_CARCASS_NO_SHELF')).toBe(false);
+  });
+
+  it('does not raise TALL_CARCASS_NO_SHELF when drawers are present', () => {
+    const issues = validateConfig(
+      cfg({ height: 1800, shelfCount: 0, drawerCount: 3, doorStyle: 'none', furnitureType: 'cabinet' }),
+    );
+    expect(issues.some((i) => i.code === 'TALL_CARCASS_NO_SHELF')).toBe(false);
+  });
+
+  it('does not raise TALL_CARCASS_NO_SHELF for short cabinet without shelves', () => {
+    const issues = validateConfig(
+      cfg({ height: 800, shelfCount: 0, drawerCount: 0, doorStyle: 'none', furnitureType: 'cabinet' }),
+    );
+    expect(issues.some((i) => i.code === 'TALL_CARCASS_NO_SHELF')).toBe(false);
+  });
+
+  it('does not raise TALL_CARCASS_NO_SHELF for panel type', () => {
+    const issues = validateConfig(cfg({ height: 1800, shelfCount: 0, drawerCount: 0, furnitureType: 'panel' }));
+    expect(issues.some((i) => i.code === 'TALL_CARCASS_NO_SHELF')).toBe(false);
+  });
 });
