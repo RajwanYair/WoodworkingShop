@@ -53,4 +53,48 @@ describe('Header', () => {
     render(<Header />);
     expect(screen.getAllByText('עב').length).toBeGreaterThanOrEqual(1);
   });
+
+  // ── Keyboard tab navigation (Sprint 22 — Phase 4 keyboard-only workflow) ──
+
+  it('active tab button has tabIndex=0; others have tabIndex=-1 (roving tabindex)', () => {
+    render(<Header />);
+    const tabButtons = screen.getAllByRole('tab');
+    const active = tabButtons.find((b) => b.getAttribute('aria-selected') === 'true');
+    const inactive = tabButtons.filter((b) => b.getAttribute('aria-selected') !== 'true');
+    expect(active).toBeDefined();
+    expect(active!.tabIndex).toBe(0);
+    inactive.forEach((b) => expect(b.tabIndex).toBe(-1));
+  });
+
+  it('ArrowRight moves focus to the next tab', () => {
+    render(<Header />);
+    // Start on configurator (index 0). ArrowRight should move to preview (index 1).
+    const tabButtons = screen.getAllByRole('tab');
+    fireEvent.keyDown(tabButtons[0], { key: 'ArrowRight' });
+    expect(useCabinetStore.getState().activeTab).toBe('preview');
+  });
+
+  it('ArrowLeft wraps from first tab to last tab', () => {
+    render(<Header />);
+    const tabButtons = screen.getAllByRole('tab');
+    // configurator is first; ArrowLeft should wrap to pdf (last)
+    fireEvent.keyDown(tabButtons[0], { key: 'ArrowLeft' });
+    expect(useCabinetStore.getState().activeTab).toBe('pdf');
+  });
+
+  it('Home key navigates to the first tab', () => {
+    useCabinetStore.setState({ activeTab: 'assembly' });
+    render(<Header />);
+    const tabButtons = screen.getAllByRole('tab');
+    const assemblyTab = tabButtons.find((b) => b.getAttribute('aria-selected') === 'true')!;
+    fireEvent.keyDown(assemblyTab, { key: 'Home' });
+    expect(useCabinetStore.getState().activeTab).toBe('configurator');
+  });
+
+  it('End key navigates to the last tab', () => {
+    render(<Header />);
+    const tabButtons = screen.getAllByRole('tab');
+    fireEvent.keyDown(tabButtons[0], { key: 'End' });
+    expect(useCabinetStore.getState().activeTab).toBe('pdf');
+  });
 });

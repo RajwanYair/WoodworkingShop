@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useToastStore } from '../../store/toast-store';
@@ -52,6 +52,29 @@ export function Header() {
   const lang = i18n.language;
   const [showTemplates, setShowTemplates] = useState(false);
   const [showProjects, setShowProjects] = useState(false);
+  const tabListRef = useRef<HTMLDivElement>(null);
+
+  /** Arrow-key / Home / End navigation inside the tab list.
+   *  Follows WAI-ARIA Authoring Practices Guide § 3.22 (Tabs Pattern). */
+  const handleTabKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
+    const isRtl = document.documentElement.dir === 'rtl';
+    let next = -1;
+    if ((e.key === 'ArrowRight' && !isRtl) || (e.key === 'ArrowLeft' && isRtl)) {
+      next = (currentIndex + 1) % tabs.length;
+    } else if ((e.key === 'ArrowLeft' && !isRtl) || (e.key === 'ArrowRight' && isRtl)) {
+      next = (currentIndex - 1 + tabs.length) % tabs.length;
+    } else if (e.key === 'Home') {
+      next = 0;
+    } else if (e.key === 'End') {
+      next = tabs.length - 1;
+    }
+    if (next >= 0) {
+      e.preventDefault();
+      setActiveTab(tabs[next]);
+      const buttons = tabListRef.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+      buttons?.[next]?.focus();
+    }
+  };
 
   const toggleLang = () => {
     const next = lang === 'en' ? 'he' : 'en';
@@ -115,6 +138,7 @@ export function Header() {
 
       {/* Tab nav — horizontally scrollable on mobile */}
       <div
+        ref={tabListRef}
         className="flex gap-1 overflow-x-auto -mx-3 px-3 sm:mx-0 sm:px-0 scrollbar-none"
         role="tablist"
         aria-label="Main navigation"
@@ -124,6 +148,8 @@ export function Header() {
             key={tab}
             role="tab"
             onClick={() => setActiveTab(tab)}
+            onKeyDown={(e) => handleTabKeyDown(e, i)}
+            tabIndex={activeTab === tab ? 0 : -1}
             aria-selected={activeTab === tab}
             aria-current={activeTab === tab ? 'page' : undefined}
             aria-controls="main-content"
