@@ -233,6 +233,10 @@
     "imported": "הפרויקט יובא",
     "importError": "קובץ פרויקט שגוי"
   },
+  "storage": {
+    "usageLabel": "{{used}} KB / {{quota}} MB",
+    "nearLimitWarning": "האחסון כמעט מלא — שקול לייצא ולמחוק פרויקטים ישנים"
+  },
   "saves": {
     "title": "הארונות שלי",
     "projectName": "שם פרויקט",

@@ -233,6 +233,10 @@
     "imported": "Project imported",
     "importError": "Invalid project file"
   },
+  "storage": {
+    "usageLabel": "{{used}} KB / {{quota}} MB",
+    "nearLimitWarning": "Storage nearly full — consider exporting and deleting old projects"
+  },
   "saves": {
     "title": "My Saved Cabinets",
     "projectName": "Project Name",

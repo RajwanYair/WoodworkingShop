@@ -12,6 +12,7 @@ import {
   type SavedProject,
 } from '../../utils/project-storage';
 import { IconX, IconDownload, IconFolder } from '../layout/Icons';
+import { StorageQuotaBadge } from './StorageQuotaBadge';
 
 interface ProjectManagerModalProps {
   onClose: () => void;
@@ -114,13 +115,16 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
           <h2 id="pm-title" className="text-lg font-bold text-wood-800 dark:text-wood-100">
             {t('projects.title')}
           </h2>
-          <button
-            onClick={onClose}
-            className="text-wood-400 hover:text-wood-700 dark:hover:text-wood-200 flex items-center"
-            aria-label="Close"
-          >
-            <IconX size={20} />
-          </button>
+          <div className="flex items-center gap-3">
+            <StorageQuotaBadge />
+            <button
+              onClick={onClose}
+              className="text-wood-400 hover:text-wood-700 dark:hover:text-wood-200 flex items-center"
+              aria-label="Close"
+            >
+              <IconX size={20} />
+            </button>
+          </div>
         </div>
 
         {/* Save current project */}
