@@ -124,7 +124,7 @@ Exit criteria: stable optimization runtime, no performance regressions.
 - [x] Profile large multi-cabinet projects (10+ cabinets) and optimize.
 - [x] Improve memoization boundaries — avoid recomputing unaffected cabinets.
 - [x] Add performance budget CI check (Lighthouse TBT < 300ms).
-- [ ] Investigate SharedArrayBuffer for zero-copy worker communication.
+- [x] Investigate SharedArrayBuffer for zero-copy worker communication.
 
 ### Phase 3: Persistence and Versioning (v3.52.0)
 
@@ -179,9 +179,9 @@ Exit criteria: full CI green, reproducible builds, complete docs.
 - [x] Advanced G-code with arc interpolation and tool-change sequences (G2/G3 arc commands, circularPocketToGcode, v3.53.23).
 - [x] Complete security audit and CSP hardening.
 - [x] Publish migration notes and breaking change documentation.
-- [ ] Performance benchmarks published in README.
+- [x] Performance benchmarks published in README.
 - [x] Marketing site and documentation portal.
-- [ ] Evaluate WebGL renderer for material texture previews.
+- [x] Evaluate WebGL renderer for material texture previews.
 
 ---
 
