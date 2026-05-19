@@ -26,3 +26,39 @@ describe('index.css media queries', () => {
     expect(css).toContain('Highlight');
   });
 });
+
+describe('index.css — WCAG AA high-contrast class (beyond forced-colors)', () => {
+  it('provides focus-visible outline for .high-contrast', () => {
+    expect(css).toContain('.high-contrast :focus-visible');
+  });
+
+  it('provides dark-mode focus ring in yellow for .high-contrast.dark', () => {
+    expect(css).toContain('.high-contrast.dark :focus-visible');
+    expect(css).toContain('#ffff00');
+  });
+
+  it('adds interactive element borders in .high-contrast', () => {
+    expect(css).toContain(".high-contrast button");
+    expect(css).toContain('border: 2px solid #000000');
+  });
+
+  it('adds link underline and colour in .high-contrast', () => {
+    expect(css).toContain('.high-contrast a');
+    expect(css).toContain('text-decoration: underline');
+  });
+
+  it('adds dark-mode link underline in .high-contrast.dark', () => {
+    expect(css).toContain('.high-contrast.dark a');
+    expect(css).toContain('#aaaaff');
+  });
+});
+
+describe('index.css — tablet portrait responsive layout', () => {
+  it('contains orientation portrait media query for tablet', () => {
+    expect(css).toContain('@media (orientation: portrait) and (min-width: 640px) and (max-width: 1023px)');
+  });
+
+  it('applies inline padding to main-content in tablet portrait', () => {
+    expect(css).toContain('padding-inline: 1.5rem');
+  });
+});

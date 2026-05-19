@@ -45,6 +45,28 @@
   --color-primary: #000000;
 }
 
+/* WCAG AA 2.2: visible focus rings, interactive borders, link underlines —
+   these apply to our CSS class (.high-contrast) rather than OS forced-colors,
+   so users who enable high-contrast in the app UI get full WCAG AA coverage
+   even when the OS forced-colors media query is not active. */
+.high-contrast :focus-visible {
+  outline: 3px solid #0044cc;
+  outline-offset: 2px;
+}
+
+.high-contrast button,
+.high-contrast [role='button'],
+.high-contrast input,
+.high-contrast select,
+.high-contrast textarea {
+  border: 2px solid #000000;
+}
+
+.high-contrast a {
+  text-decoration: underline;
+  color: #0000cc;
+}
+
 .high-contrast.dark {
   --color-wood-50: #000000;
   --color-wood-100: #111111;
@@ -59,6 +81,24 @@
   --color-primary: #ffffff;
 }
 
+.high-contrast.dark :focus-visible {
+  outline: 3px solid #ffff00;
+  outline-offset: 2px;
+}
+
+.high-contrast.dark button,
+.high-contrast.dark [role='button'],
+.high-contrast.dark input,
+.high-contrast.dark select,
+.high-contrast.dark textarea {
+  border: 2px solid #ffffff;
+}
+
+.high-contrast.dark a {
+  color: #aaaaff;
+  text-decoration: underline;
+}
+
 /* v3.12.0 — Respect the OS reduced-motion preference: suppress all CSS
    transitions and animations to prevent vestibular/cognitive overload. */
 @media (prefers-reduced-motion: reduce) {
@@ -69,6 +109,18 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Sprint 3 — Tablet portrait layout: on portrait tablets (640px–1023px)
+   the sidebar is hidden (bottom-sheet FAB pattern handles it), so we maximise
+   the main workspace width and adjust padding to give breathing room. */
+@media (orientation: portrait) and (min-width: 640px) and (max-width: 1023px) {
+  /* Main workspace stretches edge-to-edge with comfortable inline padding */
+  #main-content {
+    max-width: 100%;
+    padding-inline: 1.5rem;
+    padding-block: 1.25rem;
   }
 }
 

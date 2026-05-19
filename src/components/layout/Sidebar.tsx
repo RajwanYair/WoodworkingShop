@@ -41,7 +41,7 @@ export function Sidebar() {
       {/* Mobile toggle button */}
       <button
         onClick={() => setMobileOpen(!mobileOpen)}
-        className="lg:hidden fixed bottom-5 left-5 z-50 bg-wood-600 hover:bg-wood-700 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg transition-colors"
+        className="lg:hidden fixed bottom-5 start-5 z-50 bg-wood-600 hover:bg-wood-700 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg transition-colors"
         data-print="hide"
         aria-label="Toggle summary panel"
       >
@@ -68,7 +68,7 @@ export function Sidebar() {
             aria-label="Close panel"
           />
           <aside
-            className="absolute bottom-0 left-0 right-0 max-h-[70vh] bg-wood-50 dark:bg-wood-900 border-t border-wood-200 dark:border-wood-800 p-4 rounded-t-xl overflow-y-auto animate-slide-up"
+            className="absolute bottom-0 inset-x-0 max-h-[70vh] bg-wood-50 dark:bg-wood-900 border-t border-wood-200 dark:border-wood-800 p-4 rounded-t-xl overflow-y-auto animate-slide-up"
             aria-label="Cabinet summary"
           >
             <div className="relative">
