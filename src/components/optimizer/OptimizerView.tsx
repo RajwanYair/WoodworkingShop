@@ -10,6 +10,7 @@ import { downloadGcodeForSheet, downloadAllSheetsGcode } from '../../utils/gcode
 import { downloadHardwareCsv, generateBomCsv } from '../../utils/bom-export';
 import { triggerDownload } from '../../utils/download';
 import { OptimizationNotesPanel } from './OptimizationNotesPanel';
+import { VirtualSheetWrapper } from './VirtualSheetWrapper';
 import BomWorker from '../../workers/bom-export.worker?worker';
 import type { BomWorkerOutput } from '../../workers/bom-export.worker';
 import DxfWorker from '../../workers/dxf-export.worker?worker';
@@ -409,17 +410,18 @@ export function OptimizerView() {
         }
       >
         {displayOpt.sheets.map((sheet) => (
-          <SheetCard
-            key={sheet.sheetIndex}
-            sheet={sheet}
-            lang={lang}
-            hoveredPartId={hoveredPartId}
-            onHoverPart={setHoveredPartId}
-            colorBlindMode={colorBlindMode}
-            showPartNames={showPartNames}
-            filePrefix={filePrefix}
-            t={t}
-          />
+          <VirtualSheetWrapper key={sheet.sheetIndex}>
+            <SheetCard
+              sheet={sheet}
+              lang={lang}
+              hoveredPartId={hoveredPartId}
+              onHoverPart={setHoveredPartId}
+              colorBlindMode={colorBlindMode}
+              showPartNames={showPartNames}
+              filePrefix={filePrefix}
+              t={t}
+            />
+          </VirtualSheetWrapper>
         ))}
         {/* v3.28.0 — print-only footer with stats */}
         <div className="print-only-footer hidden">
