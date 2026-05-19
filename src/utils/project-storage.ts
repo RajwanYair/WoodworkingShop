@@ -1,7 +1,5 @@
 import type { CabinetEntry, ProjectSnapshot } from '../store/cabinet-store';
-
-const STORAGE_KEY = 'cabinet-planner-projects-v1';
-const SNAPSHOTS_KEY = 'woodworkingshop:snapshots';
+import { idbLoadProjects, idbSaveProjects, idbLoadSnapshots, idbSaveSnapshots } from './indexed-db-storage';
 
 export interface SavedProject {
   id: string;
@@ -15,30 +13,20 @@ export interface SavedProject {
   snapshots?: ProjectSnapshot[]; // Sprint 18 — snapshot history round-trip
 }
 
-function load(): SavedProject[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
-    return JSON.parse(raw) as SavedProject[];
-  } catch {
-    return [];
-  }
+async function load(): Promise<SavedProject[]> {
+  return idbLoadProjects<SavedProject>();
 }
 
-function save(projects: SavedProject[]): void {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
-  } catch {
-    // localStorage quota exceeded — silently drop
-  }
+async function save(projects: SavedProject[]): Promise<void> {
+  await idbSaveProjects(projects);
 }
 
-export function listProjects(): SavedProject[] {
+export async function listProjects(): Promise<SavedProject[]> {
   return load();
 }
 
-export function saveProject(name: string, cabinets: CabinetEntry[]): SavedProject {
-  const projects = load();
+export async function saveProject(name: string, cabinets: CabinetEntry[]): Promise<SavedProject> {
+  const projects = await load();
   const id = `proj-${Date.now()}`;
   const project: SavedProject = {
     id,
@@ -53,13 +41,13 @@ export function saveProject(name: string, cabinets: CabinetEntry[]): SavedProjec
   } else {
     projects.push(project);
   }
-  save(projects);
+  await save(projects);
   return project;
 }
 
-export function deleteProject(id: string): void {
-  const projects = load().filter((p) => p.id !== id);
-  save(projects);
+export async function deleteProject(id: string): Promise<void> {
+  const projects = (await load()).filter((p) => p.id !== id);
+  await save(projects);
 }
 
 export function exportProjectJson(project: SavedProject, snapshots?: ProjectSnapshot[]): void {
@@ -79,43 +67,26 @@ export function exportProjectJson(project: SavedProject, snapshots?: ProjectSnap
   URL.revokeObjectURL(url);
 }
 
-export function importProjectJson(file: File): Promise<SavedProject> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        const project = JSON.parse(e.target?.result as string) as SavedProject;
-        if (!project.cabinets || !Array.isArray(project.cabinets)) {
-          reject(new Error('Invalid project file'));
-          return;
-        }
-        // Sprint 18 — restore snapshot history, merging by id to avoid duplicates
-        if (Array.isArray(project.snapshots) && project.snapshots.length > 0) {
-          try {
-            const existing: ProjectSnapshot[] = JSON.parse(
-              localStorage.getItem(SNAPSHOTS_KEY) ?? '[]',
-            ) as ProjectSnapshot[];
-            const existingIds = new Set(existing.map((s) => s.id));
-            const merged = [...existing, ...project.snapshots.filter((s) => !existingIds.has(s.id))];
-            localStorage.setItem(SNAPSHOTS_KEY, JSON.stringify(merged));
-          } catch {
-            // Non-critical — silently skip snapshot restore
-          }
-        }
-        // Re-save with a fresh id to avoid conflicts
-        const projects = load();
-        project.id = `proj-${Date.now()}`;
-        project.savedAt = new Date().toISOString();
-        projects.push(project);
-        save(projects);
-        resolve(project);
-      } catch (err) {
-        reject(err);
-      }
-    };
-    reader.onerror = () => reject(new Error('Failed to read file'));
-    reader.readAsText(file);
-  });
+export async function importProjectJson(file: File): Promise<SavedProject> {
+  const text = await file.text();
+  const project = JSON.parse(text) as SavedProject;
+  if (!project.cabinets || !Array.isArray(project.cabinets)) {
+    throw new Error('Invalid project file');
+  }
+  // Restore snapshot history, merging by id to avoid duplicates
+  if (Array.isArray(project.snapshots) && project.snapshots.length > 0) {
+    const existing = await idbLoadSnapshots<ProjectSnapshot>();
+    const existingIds = new Set(existing.map((s) => s.id));
+    const merged = [...existing, ...project.snapshots.filter((s) => !existingIds.has(s.id))];
+    await idbSaveSnapshots(merged);
+  }
+  // Re-save with a fresh id to avoid conflicts
+  const projects = await load();
+  project.id = `proj-${Date.now()}`;
+  project.savedAt = new Date().toISOString();
+  projects.push(project);
+  await save(projects);
+  return project;
 }
 
 /** Export multiple projects as a single `.cabinet-projects.json` bundle */
@@ -137,42 +108,28 @@ export function exportProjectsBundle(projects: SavedProject[]): void {
 }
 
 /** Import a `.cabinet-projects.json` bundle, merging all contained projects */
-export function importProjectsBundle(file: File): Promise<SavedProject[]> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        const parsed = JSON.parse(e.target?.result as string) as {
-          version?: number;
-          projects?: SavedProject[];
-        };
-        const incoming = parsed.projects;
-        if (!Array.isArray(incoming)) {
-          reject(new Error('Invalid bundle: missing projects array'));
-          return;
-        }
-        const existing = load();
-        const existingNames = new Set(existing.map((p) => p.name.toLowerCase()));
-        const added: SavedProject[] = [];
-        for (const proj of incoming) {
-          if (!proj.cabinets || !Array.isArray(proj.cabinets)) continue;
-          const merged: SavedProject = {
-            ...proj,
-            id: `proj-${Date.now()}-${Math.random().toString(36).slice(2)}`,
-            savedAt: new Date().toISOString(),
-            name: existingNames.has(proj.name.toLowerCase()) ? `${proj.name} (imported)` : proj.name,
-          };
-          existing.push(merged);
-          existingNames.add(merged.name.toLowerCase());
-          added.push(merged);
-        }
-        save(existing);
-        resolve(added);
-      } catch (err) {
-        reject(err);
-      }
+export async function importProjectsBundle(file: File): Promise<SavedProject[]> {
+  const text = await file.text();
+  const parsed = JSON.parse(text) as { version?: number; projects?: SavedProject[] };
+  const incoming = parsed.projects;
+  if (!Array.isArray(incoming)) {
+    throw new Error('Invalid bundle: missing projects array');
+  }
+  const existing = await load();
+  const existingNames = new Set(existing.map((p) => p.name.toLowerCase()));
+  const added: SavedProject[] = [];
+  for (const proj of incoming) {
+    if (!proj.cabinets || !Array.isArray(proj.cabinets)) continue;
+    const merged: SavedProject = {
+      ...proj,
+      id: `proj-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      savedAt: new Date().toISOString(),
+      name: existingNames.has(proj.name.toLowerCase()) ? `${proj.name} (imported)` : proj.name,
     };
-    reader.onerror = () => reject(new Error('Failed to read file'));
-    reader.readAsText(file);
-  });
+    existing.push(merged);
+    existingNames.add(merged.name.toLowerCase());
+    added.push(merged);
+  }
+  await save(existing);
+  return added;
 }

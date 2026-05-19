@@ -29,15 +29,16 @@ export function SaveLoadPanel() {
   }, [projectName]);
 
   useEffect(() => {
-    setConfigs(loadSavedConfigs());
+    void loadSavedConfigs().then(setConfigs);
   }, []);
 
   const handleSave = () => {
     const name = saveName.trim() || `${config.width}×${config.height}×${config.depth}`;
-    saveConfig(name, config);
-    setConfigs(loadSavedConfigs());
-    setSaveName('');
-    addToast(t('toast.saved'), 'success');
+    void saveConfig(name, config).then(() => {
+      void loadSavedConfigs().then(setConfigs);
+      setSaveName('');
+      addToast(t('toast.saved'), 'success');
+    });
   };
 
   const handleLoad = (saved: SavedConfig) => {
@@ -46,19 +47,21 @@ export function SaveLoadPanel() {
   };
 
   const handleDelete = (id: string) => {
-    deleteSavedConfig(id);
-    setConfigs(loadSavedConfigs());
+    void deleteSavedConfig(id).then(() => {
+      void loadSavedConfigs().then(setConfigs);
+    });
     addToast(t('toast.deleted'), 'info');
   };
 
   const handleExportAll = () => {
-    const projects = listProjects();
-    if (projects.length === 0) {
-      addToast(t('saves.noProjectsToExport'), 'info');
-      return;
-    }
-    exportProjectsBundle(projects);
-    addToast(t('saves.exportedAll', { count: projects.length }), 'success');
+    void listProjects().then((projects) => {
+      if (projects.length === 0) {
+        addToast(t('saves.noProjectsToExport'), 'info');
+        return;
+      }
+      exportProjectsBundle(projects);
+      addToast(t('saves.exportedAll', { count: projects.length }), 'success');
+    });
   };
 
   const handleImportBundle = () => {

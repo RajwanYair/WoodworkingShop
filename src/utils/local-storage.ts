@@ -1,6 +1,5 @@
 import type { CabinetConfig } from '../engine/types';
-
-const STORAGE_KEY = 'cabinet-planner-saved-configs';
+import { idbLoadConfigs, idbSaveConfigs } from './indexed-db-storage';
 
 export interface SavedConfig {
   id: string;
@@ -9,22 +8,22 @@ export interface SavedConfig {
   savedAt: string; // ISO date
 }
 
+async function loadAll(): Promise<SavedConfig[]> {
+  return idbLoadConfigs<SavedConfig>();
+}
+
+async function saveAll(configs: SavedConfig[]): Promise<void> {
+  await idbSaveConfigs(configs);
+}
+
 /** Load all saved configurations */
-export function loadSavedConfigs(): SavedConfig[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return [];
-    return parsed;
-  } catch {
-    return [];
-  }
+export async function loadSavedConfigs(): Promise<SavedConfig[]> {
+  return loadAll();
 }
 
 /** Save a configuration with a name */
-export function saveConfig(name: string, config: CabinetConfig): SavedConfig {
-  const configs = loadSavedConfigs();
+export async function saveConfig(name: string, config: CabinetConfig): Promise<SavedConfig> {
+  const configs = await loadAll();
   const entry: SavedConfig = {
     id: crypto.randomUUID(),
     name,
@@ -32,12 +31,12 @@ export function saveConfig(name: string, config: CabinetConfig): SavedConfig {
     savedAt: new Date().toISOString(),
   };
   configs.push(entry);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(configs));
+  await saveAll(configs);
   return entry;
 }
 
 /** Delete a saved configuration by ID */
-export function deleteSavedConfig(id: string): void {
-  const configs = loadSavedConfigs().filter((c) => c.id !== id);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(configs));
+export async function deleteSavedConfig(id: string): Promise<void> {
+  const configs = (await loadAll()).filter((c) => c.id !== id);
+  await saveAll(configs);
 }

@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
@@ -27,20 +27,28 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
   const loadProject = useCabinetStore((s) => s.loadProject);
   const setProjectName = useCabinetStore((s) => s.setProjectName);
   const addToast = useToastStore((s) => s.addToast);
-  const [projects, setProjects] = useState<SavedProject[]>(() => listProjects());
+  const [projects, setProjects] = useState<SavedProject[]>([]);
   const [saveName, setSaveName] = useState(projectName || '');
 
-  const refresh = useCallback(() => setProjects(listProjects()), []);
+  const refresh = useCallback(() => {
+    void listProjects().then(setProjects);
+  }, []);
+
+  // Load projects from IndexedDB on mount
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
 
   // Sprint 8 — focus trap via shared hook
   useFocusTrap(dialogRef, true, onClose);
 
   const handleSave = () => {
     if (!saveName.trim()) return;
-    saveProject(saveName.trim(), cabinets);
-    setProjectName(saveName.trim());
-    addToast(t('projects.saved'), 'success');
-    refresh();
+    void saveProject(saveName.trim(), cabinets).then(() => {
+      setProjectName(saveName.trim());
+      addToast(t('projects.saved'), 'success');
+      refresh();
+    });
   };
 
   const handleLoad = (project: SavedProject) => {
@@ -51,9 +59,10 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
   };
 
   const handleDelete = (project: SavedProject) => {
-    deleteProject(project.id);
-    addToast(t('projects.deleted'), 'info');
-    refresh();
+    void deleteProject(project.id).then(() => {
+      addToast(t('projects.deleted'), 'info');
+      refresh();
+    });
   };
 
   const handleExport = (project: SavedProject) => {
