@@ -11,6 +11,7 @@ import { SmartOptimizerPanel } from './components/optimizer/SmartOptimizerPanel'
 import { PartsTable, HardwareTable } from './components/optimizer/Tables';
 import { ToastContainer } from './components/layout/ToastContainer';
 import { OnboardingManager } from './components/layout/OnboardingOverlay';
+import { TouchGestureTutorial } from './components/layout/TouchGestureTutorial';
 import { ShortcutsModal } from './components/layout/ShortcutsModal';
 import { IconPrint } from './components/layout/Icons';
 import { useCabinetStore, type CabinetState } from './store/cabinet-store';
@@ -196,6 +197,7 @@ function App() {
         </div>
         <ToastContainer />
         <OnboardingManager />
+        <TouchGestureTutorial />
         {showShortcuts && <ShortcutsModal onClose={() => setShowShortcuts(false)} />}
       </div>
     </div>

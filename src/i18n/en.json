@@ -370,6 +370,16 @@
     "help": "Help",
     "dismissBackdrop": "Dismiss onboarding"
   },
+  "gestures": {
+    "title": "Touch Gestures",
+    "subtitle": "Use these gestures in the Preview and Optimizer tabs:",
+    "pinchZoom": "Pinch to zoom in or out",
+    "panDrag": "Drag with one finger to pan",
+    "doubleTap": "Double-tap to reset zoom",
+    "swipeTabs": "Swipe left/right to switch tabs",
+    "gotIt": "Got it",
+    "dismiss": "Dismiss gesture tutorial"
+  },
   "validation": {
     "title": "Design Checks",
     "noIssues": "No issues detected — design looks good!",
