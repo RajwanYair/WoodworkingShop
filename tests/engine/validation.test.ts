@@ -241,4 +241,44 @@ describe('validateConfig', () => {
   });
 });
 
+describe('validateConfig — SHELF_LOAD_CAPACITY_LOW (Sprint 30)', () => {
+  it('raises SHELF_LOAD_CAPACITY_LOW for a very wide span with chipboard', () => {
+    // 1600 mm span with chipboard-18 has very low stiffness → < 15 kg safe load
+    const issues = validateConfig(cfg({
+      width: 1700,
+      shelfCount: 2,
+      carcassMaterial: 'chipboard-18',
+      doorStyle: 'none',
+    }));
+    expect(issues.some((i) => i.code === 'SHELF_LOAD_CAPACITY_LOW')).toBe(true);
+  });
+
+  it('does not raise SHELF_LOAD_CAPACITY_LOW for a normal span with plywood', () => {
+    const issues = validateConfig(cfg({
+      width: 800,
+      shelfCount: 2,
+      carcassMaterial: 'plywood-18',
+      doorStyle: 'none',
+    }));
+    expect(issues.some((i) => i.code === 'SHELF_LOAD_CAPACITY_LOW')).toBe(false);
+  });
+
+  it('does not raise SHELF_LOAD_CAPACITY_LOW when there are no shelves', () => {
+    const issues = validateConfig(cfg({ shelfCount: 0 }));
+    expect(issues.some((i) => i.code === 'SHELF_LOAD_CAPACITY_LOW')).toBe(false);
+  });
+
+  it('SHELF_LOAD_CAPACITY_LOW points to shelfCount field', () => {
+    const issues = validateConfig(cfg({
+      width: 1700,
+      shelfCount: 1,
+      carcassMaterial: 'chipboard-18',
+      doorStyle: 'none',
+    }));
+    const issue = issues.find((i) => i.code === 'SHELF_LOAD_CAPACITY_LOW');
+    expect(issue?.field).toBe('shelfCount');
+    expect(issue?.severity).toBe('warning');
+  });
+});
+
 

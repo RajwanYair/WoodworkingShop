@@ -84,6 +84,12 @@ const WIDE_SPAN_CARCASS_MM = 1200;
 const CRITICAL_HEIGHT_MM = 2400;
 
 /**
+ * Minimum practical load capacity per shelf (kg) at the L/360 deflection limit.
+ * Below this a shelf cannot hold even a light row of books without visible sag.
+ */
+const MIN_SHELF_LOAD_KG = 15;
+
+/**
  * Run all manufacturing constraint checks on a cabinet configuration.
  *
  * @returns Array of ValidationIssue. Empty array means the config is valid.
@@ -389,6 +395,29 @@ export function validateConfig(
       field: 'hasBack',
       suggestedValue: 'true',
     });
+  }
+
+  // ── Shelf maximum safe load capacity (Sprint 30) ─────────────────────────
+  // Derive maximum load at L/360 limit by linear-scaling the standard
+  // 0.05 N/mm test load that computeShelfDeflection uses internally.
+  if (config.shelfCount > 0 && dims.shelfDeflections.length > 0) {
+    const { deflectionMm } = dims.shelfDeflections[0];
+    if (deflectionMm > 0) {
+      const L = dims.shelfWidth;
+      const wMaxNperMm = 0.05 * (L / 360) / deflectionMm;
+      const maxLoadKg = Math.round((wMaxNperMm * L) / 9.81);
+      if (maxLoadKg < MIN_SHELF_LOAD_KG) {
+        issues.push({
+          code: 'SHELF_LOAD_CAPACITY_LOW',
+          severity: 'warning',
+          message: {
+            en: `Maximum safe shelf load is only ~${maxLoadKg} kg (L/360 limit). Reduce span, increase panel thickness, or add a centre support to achieve at least ${MIN_SHELF_LOAD_KG} kg per shelf.`,
+            he: `עומס מדף בטוח מרבי הוא ~${maxLoadKg} ק"ג (מגבלת L/360). הקטן ספן, הגדל עובי הלוח, או הוסף תמיכת אמצע כדי לשאת לפחות ${MIN_SHELF_LOAD_KG} ק"ג למדף.`,
+          },
+          field: 'shelfCount',
+        });
+      }
+    }
   }
 
   // Sort: errors → warnings → info
