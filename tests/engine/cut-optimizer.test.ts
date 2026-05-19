@@ -148,4 +148,92 @@ describe('optimizeCutSheets', () => {
       }
     }
   });
+
+  // ── Grain conflict detection (Sprint 8) ──────────────────────────────────
+
+  it('grainConflictCount is 0 for default config (no forced rotations)', () => {
+    const parts = generateParts(DEFAULT_CONFIG);
+    const result = optimizeCutSheets(parts);
+    expect(result.grainConflictCount).toBe(0);
+  });
+
+  it('detects grain conflict when part can only fit via forced rotation', () => {
+    // plywood-17 has hasGrain=true; use a sheet override so the sheet is
+    // narrow (500 mm wide, 1000 mm long). A part with length=400, width=700
+    // cannot fit without rotation (700 > 500) but CAN fit rotated (700 ≤ 1000).
+    const grainPart: import('../../src/engine/types').Part = {
+      id: 'test-wide',
+      name: { en: 'Wide Panel', he: 'לוח רחב' },
+      qty: 1,
+      material: 'plywood-17',
+      thickness: 17,
+      length: 400,
+      width: 700,
+      edgeBanding: { en: '', he: '' },
+    };
+    const result = optimizeCutSheets([grainPart], 3, { 'plywood-17': { width: 500, length: 1000 } });
+    expect(result.grainConflictCount).toBe(1);
+    const conflictedPart = result.sheets.flatMap((s) => s.parts).find((p) => p.grainConflict);
+    expect(conflictedPart).toBeDefined();
+    expect(conflictedPart?.rotated).toBe(true);
+  });
+
+  it('no grain conflict when part fits without rotation on narrow sheet', () => {
+    // length=400, width=300 → fits on 500×1000 sheet without rotation
+    const grainPart: import('../../src/engine/types').Part = {
+      id: 'test-narrow',
+      name: { en: 'Narrow Panel', he: 'לוח צר' },
+      qty: 1,
+      material: 'plywood-17',
+      thickness: 17,
+      length: 400,
+      width: 300,
+      edgeBanding: { en: '', he: '' },
+    };
+    const result = optimizeCutSheets([grainPart], 3, { 'plywood-17': { width: 500, length: 1000 } });
+    expect(result.grainConflictCount).toBe(0);
+    const placed = result.sheets.flatMap((s) => s.parts)[0];
+    expect(placed?.grainConflict).toBeUndefined();
+  });
+
+  it('non-grain material parts never have grainConflict flag', () => {
+    // melamine-18 has hasGrain=false → rotation is fine, no conflict flag
+    const nonGrainPart: import('../../src/engine/types').Part = {
+      id: 'test-mdf',
+      name: { en: 'Back Panel', he: 'גב' },
+      qty: 1,
+      material: 'melamine-18',
+      thickness: 18,
+      length: 400,
+      width: 700,
+      edgeBanding: { en: '', he: '' },
+    };
+    const result = optimizeCutSheets([nonGrainPart], 3, {
+      'melamine-18': { width: 500, length: 1000 },
+    });
+    expect(result.grainConflictCount).toBe(0);
+    for (const sheet of result.sheets) {
+      for (const p of sheet.parts) {
+        expect(p.grainConflict).toBeUndefined();
+      }
+    }
+  });
+
+  it('counts multiple grain conflicts across sheets', () => {
+    // Two parts that each need forced rotation on a narrow grain sheet
+    const mkPart = (id: string): import('../../src/engine/types').Part => ({
+      id,
+      name: { en: id, he: id },
+      qty: 1,
+      material: 'plywood-17',
+      thickness: 17,
+      length: 400,
+      width: 700,
+      edgeBanding: { en: '', he: '' },
+    });
+    const result = optimizeCutSheets([mkPart('a'), mkPart('b')], 3, {
+      'plywood-17': { width: 500, length: 1000 },
+    });
+    expect(result.grainConflictCount).toBe(2);
+  });
 });

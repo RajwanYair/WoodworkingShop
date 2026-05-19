@@ -9,6 +9,7 @@ function mockOptimization(overrides: Partial<OptimizationResult> = {}): Optimiza
     totalSheets: 1,
     overallYield: 85,
     totalWaste: 50000,
+    grainConflictCount: 0,
     ...overrides,
   };
 }

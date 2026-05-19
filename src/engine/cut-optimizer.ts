@@ -49,7 +49,7 @@ export function optimizeCutSheets(
     const override = sheetSizeOverrides[group.materialKey];
     const sheetLength = override?.length ?? mat.sheetLength;
     const sheetWidth = override?.width ?? mat.sheetWidth;
-    const packed = packMaxRects(group.rects, sheetLength, sheetWidth, sawKerfMm, !mat.hasGrain);
+    const packed = packMaxRects(group.rects, sheetLength, sheetWidth, sawKerfMm, !mat.hasGrain, mat.hasGrain);
 
     for (const sheet of packed) {
       const sheetArea = sheetLength * sheetWidth;
@@ -70,6 +70,7 @@ export function optimizeCutSheets(
           edgeBanding: r.edgeBanding,
           grainVertical: !r.rotated,
           rotated: r.rotated,
+          grainConflict: r.grainConflict,
         })),
         yieldPercent: round2((usedArea / sheetArea) * 100),
       });
@@ -78,12 +79,17 @@ export function optimizeCutSheets(
 
   const totalArea = allSheets.reduce((s, sh) => s + sh.sheetLength * sh.sheetWidth, 0);
   const usedArea = allSheets.reduce((s, sh) => s + sh.parts.reduce((a, p) => a + p.length * p.width, 0), 0);
+  const grainConflictCount = allSheets.reduce(
+    (s, sh) => s + sh.parts.filter((p) => p.grainConflict).length,
+    0,
+  );
 
   return {
     sheets: allSheets,
     totalSheets: allSheets.length,
     overallYield: totalArea > 0 ? round2((usedArea / totalArea) * 100) : 0,
     totalWaste: totalArea - usedArea,
+    grainConflictCount,
   };
 }
 
@@ -101,6 +107,8 @@ interface PlacedRect extends Rect {
   x: number;
   y: number;
   rotated: boolean;
+  /** true when this grain-constrained part had to be rotated to fit (grain direction compromised). */
+  grainConflict?: boolean;
 }
 
 /** An axis-aligned empty rectangle on a sheet. */
@@ -122,6 +130,12 @@ function packMaxRects(
   sheetWidth: number,
   kerf: number,
   allowRotation = true,
+  /**
+   * When true (grain materials), attempt a forced rotation as last resort when
+   * a part cannot be placed in the preferred orientation; the placed rect is
+   * marked `grainConflict: true`.
+   */
+  trackGrainConflicts = false,
 ): PlacedRect[][] {
   if (rects.length === 0) return [];
 
@@ -136,6 +150,7 @@ function packMaxRects(
   const sheets: Sheet[] = [];
 
   for (const rect of queue) {
+    let grainConflict = false;
     let best: {
       sheetIdx: number;
       freeIdx: number;
@@ -163,6 +178,22 @@ function packMaxRects(
       }
     }
 
+    // Grain-conflict fallback: if no normal fit on existing sheets, try forced rotation.
+    if (!best && trackGrainConflicts) {
+      let bestForcedEffective = Infinity;
+      for (let si = 0; si < sheets.length; si++) {
+        const candidate = findBestPlacement(sheets[si].free, rect, kerf, true);
+        if (candidate) {
+          const effective = candidate.score + si * SHEET_PREFERENCE_PENALTY;
+          if (effective < bestForcedEffective) {
+            best = { sheetIdx: si, ...candidate };
+            bestForcedEffective = effective;
+            grainConflict = true;
+          }
+        }
+      }
+    }
+
     if (!best) {
       // Open a new sheet.
       const sheet: Sheet = {
@@ -170,7 +201,14 @@ function packMaxRects(
         free: [{ x: 0, y: 0, w: sheetWidth, h: sheetLength }],
       };
       sheets.push(sheet);
-      const candidate = findBestPlacement(sheet.free, rect, kerf, allowRotation);
+      let candidate = findBestPlacement(sheet.free, rect, kerf, allowRotation);
+      if (!candidate && trackGrainConflicts) {
+        // Last-resort forced rotation for grain-constrained materials.
+        candidate = findBestPlacement(sheet.free, rect, kerf, true);
+        if (candidate) {
+          grainConflict = true;
+        }
+      }
       if (!candidate) {
         // Piece doesn't even fit on an empty sheet — skip with a warning.
         // (Engine validation should prevent this in normal flow.)
@@ -188,6 +226,7 @@ function packMaxRects(
       x: best.x,
       y: best.y,
       rotated: best.rotated,
+      grainConflict: grainConflict || undefined,
     };
     sheet.placed.push(placed);
     splitFreeRects(sheet.free, {

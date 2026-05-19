@@ -131,6 +131,9 @@ export interface CutRect {
   edgeBanding?: string; // edge banding description (e.g. 'Front edge', '4 edges')
   grainVertical: boolean; // true if grain (length) runs along the sheet Y axis
   rotated?: boolean; // true if the part was rotated 90° during placement
+  /** true when the part belongs to a grain-constrained material but had to be
+   *  rotated to fit the sheet — grain direction is compromised. */
+  grainConflict?: boolean;
 }
 
 export interface CutSheet {
@@ -148,6 +151,8 @@ export interface OptimizationResult {
   totalSheets: number;
   overallYield: number; // 0–100 %
   totalWaste: number; // mm²
+  /** Number of parts placed with a grain direction conflict (rotated despite hasGrain=true). */
+  grainConflictCount: number;
 }
 
 export type SmartStrategy =
