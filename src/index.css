@@ -72,6 +72,43 @@
   }
 }
 
+/* v3.48.7 — High-contrast / forced-colours mode (Windows High Contrast,
+   Edge "Increase contrast"). Use system colour keywords so foreground and
+   background always meet contrast requirements regardless of user's chosen
+   theme. */
+@media (forced-colors: active) {
+  :root {
+    --wood-50: Canvas;
+    --wood-100: Canvas;
+    --wood-800: CanvasText;
+    --wood-900: CanvasText;
+  }
+
+  /* Ensure SVG preview lines remain visible */
+  svg line,
+  svg rect,
+  svg polygon,
+  svg path {
+    stroke: CanvasText;
+    fill: Canvas;
+  }
+
+  /* Buttons get system accent colours */
+  button,
+  [role='button'] {
+    forced-color-adjust: none;
+    background: ButtonFace;
+    color: ButtonText;
+    border: 2px solid ButtonBorder;
+  }
+
+  /* Focus ring must use system Highlight colour */
+  :focus-visible {
+    outline: 3px solid Highlight;
+    outline-offset: 2px;
+  }
+}
+
 /* Sprint 170 — hidden in screen, visible only during print */
 .print-only-header {
   display: none;
