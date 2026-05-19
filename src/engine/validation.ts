@@ -89,6 +89,35 @@ const CRITICAL_HEIGHT_MM = 2400;
  */
 const MIN_SHELF_LOAD_KG = 15;
 
+// ── Manufacturing constraint constants (Phase 5, Sprint 7) ─────────────────
+
+/**
+ * Dado joints must be at least 1/3 of the panel thickness deep to achieve
+ * structural strength; shallower dados pull out under load.
+ */
+const MIN_DADO_DEPTH_FRACTION = 1 / 3;
+
+/**
+ * Standard soft-close side-mount drawer runners (e.g. Blum Tandem) require
+ * at least 12 mm of clearance on each side of the drawer box.  Below this,
+ * runners cannot be fitted without machining the carcass sides.
+ */
+const MIN_RUNNER_SIDE_CLEARANCE_MM = 12;
+
+/**
+ * Minimum rebate depth for a back panel (mm).  Shallower rebates allow the
+ * back panel to rattle and can pop out under racking loads.
+ */
+const MIN_BACK_REBATE_DEPTH_MM = 8;
+
+/**
+ * Euro-style hinge cups require a minimum boring distance from the inner edge
+ * of the door to the centre of the cup (typically 22.5 mm for a 35 mm cup).
+ * If the door panel is too narrow for even one cup plus this clearance on each
+ * side the cup boring is structurally unsafe.
+ */
+const MIN_HINGE_CUP_EDGE_DISTANCE_MM = 22;
+
 /**
  * Run all manufacturing constraint checks on a cabinet configuration.
  *
@@ -415,6 +444,72 @@ export function validateConfig(
         });
       }
     }
+  }
+
+  // ── Manufacturing constraints (Phase 5, Sprint 7) ─────────────────────────
+
+  // 1. Dado depth: shelf dadoes must be ≥ 1/3 of panel thickness to resist
+  //    pullout under load.  Flag when t is so thin that 1/3 × t < 5 mm.
+  const dadoDepth = t * MIN_DADO_DEPTH_FRACTION;
+  if (config.shelfCount > 0 && dadoDepth < 5) {
+    issues.push({
+      code: 'DADO_DEPTH_TOO_SHALLOW',
+      severity: 'warning',
+      message: {
+        en: `Panel thickness (${t} mm) is too thin for adequate shelf dado joints. A 1/3-depth dado would be only ${dadoDepth.toFixed(1)} mm — not enough to resist pullout. Use ≥ 15 mm panels for fixed shelves.`,
+        he: `עובי הלוח (${t} מ"מ) דק מדי לחריצי מדף יציבים. חריץ עומק 1/3 יהיה רק ${dadoDepth.toFixed(1)} מ"מ — לא מספיק לחוזק. השתמש בלוחות ≥ 15 מ"מ למדפים קבועים.`,
+      },
+      field: 'carcassMaterial',
+    });
+  }
+
+  // 2. Drawer runner clearance: standard side-mount runners need ≥ 12 mm each
+  //    side.  Warn when the interior width leaves less than 2 × 12 mm for a
+  //    full-extension runner pair.
+  if (config.drawerCount > 0) {
+    const runnerClearanceNeeded = 2 * MIN_RUNNER_SIDE_CLEARANCE_MM;
+    const internalWidth = config.width - 2 * t;
+    if (internalWidth < runnerClearanceNeeded + 150) {
+      // Drawer box + two runners: box must be > 0, and runners take 24 mm total
+      issues.push({
+        code: 'DRAWER_RUNNER_CLEARANCE_INSUFFICIENT',
+        severity: 'warning',
+        message: {
+          en: `Interior width (${Math.round(internalWidth)} mm) may be too narrow for standard side-mount drawer runners, which need ${runnerClearanceNeeded} mm total clearance plus a minimum drawer box width. Minimum interior width for runners: ${runnerClearanceNeeded + 150} mm.`,
+          he: `הרוחב הפנימי (${Math.round(internalWidth)} מ"מ) עלול להיות צר מדי למנגנוני מגירה צדדיים הדורשים ${runnerClearanceNeeded} מ"מ פינוי. רוחב פנימי מינימלי: ${runnerClearanceNeeded + 150} מ"מ.`,
+        },
+        field: 'width',
+      });
+    }
+  }
+
+  // 3. Back panel rebate depth: a back panel rebated into the carcass sides needs
+  //    a groove of at least MIN_BACK_REBATE_DEPTH_MM.  When panel thickness is so
+  //    thin that a 1/2-depth rabbet would fall below this, flag it.
+  if (config.hasBack !== false && t / 2 < MIN_BACK_REBATE_DEPTH_MM) {
+    issues.push({
+      code: 'BACK_REBATE_TOO_SHALLOW',
+      severity: 'info',
+      message: {
+        en: `Panel thickness (${t} mm) is thin enough that a standard half-depth back rebate would be only ${(t / 2).toFixed(1)} mm — below the recommended ${MIN_BACK_REBATE_DEPTH_MM} mm minimum. Consider increasing panel thickness or using a face-frame attachment instead.`,
+        he: `עובי הלוח (${t} מ"מ) גורם לחריץ גב בעומק חצי להיות רק ${(t / 2).toFixed(1)} מ"מ — מתחת למינימום המומלץ ${MIN_BACK_REBATE_DEPTH_MM} מ"מ. שקול הגדלת עובי או שיטת חיבור אחרת לגב.`,
+      },
+      field: 'carcassMaterial',
+    });
+  }
+
+  // 4. Hinge cup edge distance: a 35mm Euro cup needs at least MIN_HINGE_CUP_EDGE_DISTANCE_MM
+  //    from the inner door edge to the cup centre. Flag if door width < 2 × that distance.
+  if (config.doorStyle !== 'none' && dims.doorWidth < 2 * MIN_HINGE_CUP_EDGE_DISTANCE_MM) {
+    issues.push({
+      code: 'HINGE_CUP_EDGE_DISTANCE_UNSAFE',
+      severity: 'error',
+      message: {
+        en: `Door width (${Math.round(dims.doorWidth)} mm) is too narrow to safely bore 35 mm hinge cups. The minimum edge-to-cup-centre distance is ${MIN_HINGE_CUP_EDGE_DISTANCE_MM} mm, requiring a door width of at least ${2 * MIN_HINGE_CUP_EDGE_DISTANCE_MM} mm.`,
+        he: `רוחב הדלת (${Math.round(dims.doorWidth)} מ"מ) צר מדי לקידוח ציר 35 מ"מ בבטחה. מרחק מינימלי מקצה לציר: ${MIN_HINGE_CUP_EDGE_DISTANCE_MM} מ"מ, דורש רוחב דלת ≥ ${2 * MIN_HINGE_CUP_EDGE_DISTANCE_MM} מ"מ.`,
+      },
+      field: 'doorCount',
+    });
   }
 
   // Sort: errors → warnings → info

@@ -279,4 +279,82 @@ describe('validateConfig — SHELF_LOAD_CAPACITY_LOW (Sprint 30)', () => {
     expect(issue?.field).toBe('shelfCount');
     expect(issue?.severity).toBe('warning');
   });
+
+  // ── Phase 5 Sprint 7: Manufacturing constraint checks ──
+
+  it('raises DADO_DEPTH_TOO_SHALLOW when panel is very thin with shelves', () => {
+    // plywood-4 has t=4 mm; dado depth = 4×(1/3) = 1.33 mm < 5 mm threshold
+    const issues = validateConfig(cfg({ shelfCount: 2, carcassMaterial: 'plywood-4' }));
+    expect(issues.some((i) => i.code === 'DADO_DEPTH_TOO_SHALLOW')).toBe(true);
+    const issue = issues.find((i) => i.code === 'DADO_DEPTH_TOO_SHALLOW')!;
+    expect(issue.severity).toBe('warning');
+    expect(issue.field).toBe('carcassMaterial');
+  });
+
+  it('does not raise DADO_DEPTH_TOO_SHALLOW for a standard 18mm panel', () => {
+    const issues = validateConfig(cfg({ shelfCount: 3, carcassMaterial: 'plywood-18' }));
+    expect(issues.some((i) => i.code === 'DADO_DEPTH_TOO_SHALLOW')).toBe(false);
+  });
+
+  it('does not raise DADO_DEPTH_TOO_SHALLOW when there are no shelves', () => {
+    const issues = validateConfig(cfg({ shelfCount: 0 }));
+    expect(issues.some((i) => i.code === 'DADO_DEPTH_TOO_SHALLOW')).toBe(false);
+  });
+
+  it('raises DRAWER_RUNNER_CLEARANCE_INSUFFICIENT for very narrow cabinet with drawers', () => {
+    // width=200, t≈17 → internalWidth=166, need 174 (24+150) → flag
+    const issues = validateConfig(cfg({ width: 200, drawerCount: 1, doorStyle: 'none' }));
+    expect(issues.some((i) => i.code === 'DRAWER_RUNNER_CLEARANCE_INSUFFICIENT')).toBe(true);
+    const issue = issues.find((i) => i.code === 'DRAWER_RUNNER_CLEARANCE_INSUFFICIENT')!;
+    expect(issue.severity).toBe('warning');
+    expect(issue.field).toBe('width');
+  });
+
+  it('does not raise DRAWER_RUNNER_CLEARANCE_INSUFFICIENT for standard-width cabinet', () => {
+    // width=600, t≈17 → internalWidth=566 >> 174 — fine
+    const issues = validateConfig(cfg({ width: 600, drawerCount: 2, doorStyle: 'none' }));
+    expect(issues.some((i) => i.code === 'DRAWER_RUNNER_CLEARANCE_INSUFFICIENT')).toBe(false);
+  });
+
+  it('does not raise DRAWER_RUNNER_CLEARANCE_INSUFFICIENT when drawerCount is 0', () => {
+    const issues = validateConfig(cfg({ width: 200, drawerCount: 0, doorStyle: 'none' }));
+    expect(issues.some((i) => i.code === 'DRAWER_RUNNER_CLEARANCE_INSUFFICIENT')).toBe(false);
+  });
+
+  it('raises BACK_REBATE_TOO_SHALLOW for a very thin panel with back', () => {
+    // plywood-4 has t=4 mm; 4/2 = 2 mm < 8 mm threshold
+    const issues = validateConfig(cfg({ carcassMaterial: 'plywood-4', hasBack: true }));
+    expect(issues.some((i) => i.code === 'BACK_REBATE_TOO_SHALLOW')).toBe(true);
+    const issue = issues.find((i) => i.code === 'BACK_REBATE_TOO_SHALLOW')!;
+    expect(issue.severity).toBe('info');
+  });
+
+  it('does not raise BACK_REBATE_TOO_SHALLOW for standard 18mm panel', () => {
+    const issues = validateConfig(cfg({ carcassMaterial: 'plywood-18', hasBack: true }));
+    expect(issues.some((i) => i.code === 'BACK_REBATE_TOO_SHALLOW')).toBe(false);
+  });
+
+  it('does not raise BACK_REBATE_TOO_SHALLOW when hasBack is false', () => {
+    // Even with thin material, no back → no rebate warning
+    const issues = validateConfig(cfg({ carcassMaterial: 'plywood-4', hasBack: false }));
+    expect(issues.some((i) => i.code === 'BACK_REBATE_TOO_SHALLOW')).toBe(false);
+  });
+
+  it('raises HINGE_CUP_EDGE_DISTANCE_UNSAFE for extremely narrow door cabinet', () => {
+    // width=80, doorCount=2, doorReveal=3 → doorWidth=(80-6)/2=37mm < 44mm (2×22)
+    const issues = validateConfig(cfg({ width: 80, doorCount: 2, doorStyle: 'flat' }));
+    expect(issues.some((i) => i.code === 'HINGE_CUP_EDGE_DISTANCE_UNSAFE')).toBe(true);
+    const issue = issues.find((i) => i.code === 'HINGE_CUP_EDGE_DISTANCE_UNSAFE')!;
+    expect(issue.severity).toBe('error');
+  });
+
+  it('does not raise HINGE_CUP_EDGE_DISTANCE_UNSAFE for a normal door width', () => {
+    const issues = validateConfig(cfg({ width: 600, doorCount: 1, doorStyle: 'flat' }));
+    expect(issues.some((i) => i.code === 'HINGE_CUP_EDGE_DISTANCE_UNSAFE')).toBe(false);
+  });
+
+  it('does not raise HINGE_CUP_EDGE_DISTANCE_UNSAFE when doorStyle is none', () => {
+    const issues = validateConfig(cfg({ width: 100, doorStyle: 'none' }));
+    expect(issues.some((i) => i.code === 'HINGE_CUP_EDGE_DISTANCE_UNSAFE')).toBe(false);
+  });
 });
