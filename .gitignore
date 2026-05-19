@@ -27,6 +27,9 @@ coverage
 *.sln
 *.sw?
 
+# Generated API docs (typedoc)
+docs/api/
+
 # Secrets
 .env.ps1
 

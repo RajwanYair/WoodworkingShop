@@ -365,7 +365,6 @@ describe('optimizeCutSheets — grain conflict indicators (Sprint 42)', () => {
       length: 400,
       width: 700,
       edgeBanding: { en: '', he: '' },
-      grainVertical: true,
     };
     const result = optimizeCutSheets([widePart], 3, { 'plywood-17': { width: 500, length: 1000 } });
     const placed = result.sheets.flatMap((s) => s.parts);
@@ -383,7 +382,6 @@ describe('optimizeCutSheets — grain conflict indicators (Sprint 42)', () => {
       length: 400,
       width: 700,
       edgeBanding: { en: '', he: '' },
-      grainVertical: true,
     };
     const result = optimizeCutSheets([widePart], 3, { 'plywood-17': { width: 500, length: 1000 } });
     const flagged = result.sheets.flatMap((s) => s.parts).filter((p) => p.grainConflict).length;

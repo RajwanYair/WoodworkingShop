@@ -22,7 +22,7 @@ interface UseIntersectionVisibleOptions {
  */
 export function useIntersectionVisible<T extends HTMLElement = HTMLDivElement>(
   options: UseIntersectionVisibleOptions = {},
-): { ref: React.RefObject<T>; isVisible: boolean } {
+): { ref: React.RefObject<T | null>; isVisible: boolean } {
   const { rootMargin = '200px 0px', keepMounted = true } = options;
   const ref = useRef<T>(null);
   // Default to true if IntersectionObserver is unavailable (prevents blank content in tests/SSR)

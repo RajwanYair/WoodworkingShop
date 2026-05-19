@@ -1,3 +1,25 @@
+/**
+ * @packageDocumentation
+ * Cabinet Planner engine public API.
+ *
+ * This barrel module re-exports every public symbol from the engine layer.
+ * Third-party plugins should import exclusively from this module — never from
+ * the individual engine files — to benefit from the versioned stability contract.
+ *
+ * @example
+ * ```ts
+ * import { registerPlugin, getPluginContract } from './engine';
+ * import type { CabinetPlannerPlugin } from './engine';
+ *
+ * const myPlugin: CabinetPlannerPlugin = {
+ *   id: 'com.example.my-plugin',
+ *   name: 'My Plugin',
+ *   version: '1.0.0',
+ *   onPartsGenerated: (parts) => parts,
+ * };
+ * registerPlugin(myPlugin);
+ * ```
+ */
 // Barrel export for the engine module
 export type {
   Lang,
@@ -16,6 +38,10 @@ export type {
   OptimizationResult,
   SmartStrategy,
   OptimizationSuggestion,
+  FurnitureType,
+  DrawerSlideType,
+  PanelMaterialSource,
+  QuantitativeRationale,
 } from './types';
 
 export {
@@ -40,9 +66,10 @@ export { generateParts, computeEdgeBandingTotal } from './parts';
 export { optimizeCutSheets } from './cut-optimizer';
 
 export { findOptimizations } from './smart-optimizer';
+export type { SmartOptimizerOptions } from './smart-optimizer';
 
 export { estimateCost } from './cost-estimator';
-export type { CostBreakdown, SheetCost } from './cost-estimator';
+export type { CostBreakdown, SheetCost, HardwareCost } from './cost-estimator';
 
 export { validateConfig } from './validation';
 export { findSubstitutions } from './substitution';

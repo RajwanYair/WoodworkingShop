@@ -1,0 +1,13 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["src/engine/index.ts"],
+  "out": "docs/api",
+  "name": "Cabinet Planner — Engine & Plugin API",
+  "readme": "none",
+  "tsconfig": "tsconfig.app.json",
+  "includeVersion": true,
+  "hideGenerator": true,
+  "categorizeByGroup": true,
+  "sort": ["source-order"],
+  "exclude": ["**/*.test.ts", "**/*.spec.ts", "**/workers/**"]
+}
