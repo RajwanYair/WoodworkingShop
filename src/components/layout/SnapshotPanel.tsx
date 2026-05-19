@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { IconChevronDown, IconChevronRight, IconX, IconCheck, IconFolder } from './Icons';
+import { IconChevronDown, IconChevronRight, IconX, IconCheck, IconFolder, IconDiff } from './Icons';
+import { SnapshotDiffModal } from './SnapshotDiffModal';
 
 export function SnapshotPanel() {
   const { t } = useTranslation();
   const { snapshots, saveSnapshot, restoreSnapshot, deleteSnapshot } = useCabinetStore();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
+  const [showDiff, setShowDiff] = useState(false);
 
   function handleSave() {
     saveSnapshot(name);
@@ -37,6 +39,16 @@ export function SnapshotPanel() {
       >
         <IconFolder size={14} />
         <span className="grow">{t('snapshot.title')}</span>
+        {snapshots.length >= 2 && (
+          <button
+            type="button"
+            className="me-1 text-xs px-1.5 py-0.5 rounded bg-wood-200 dark:bg-wood-700 text-wood-700 dark:text-wood-200 hover:bg-wood-300 dark:hover:bg-wood-600 transition-colors flex items-center gap-1"
+            aria-label={t('snapshot.diff.title')}
+            onClick={(e) => { e.stopPropagation(); setShowDiff(true); }}
+          >
+            <IconDiff size={11} />{t('snapshot.compare')}
+          </button>
+        )}
         {snapshots.length > 0 && (
           <span className="text-xs font-normal text-wood-400 dark:text-wood-500 me-1">
             ({snapshots.length})
@@ -110,6 +122,10 @@ export function SnapshotPanel() {
             </ul>
           )}
         </div>
+      )}
+
+      {showDiff && snapshots.length >= 2 && (
+        <SnapshotDiffModal snapshots={snapshots} onClose={() => setShowDiff(false)} />
       )}
     </div>
   );

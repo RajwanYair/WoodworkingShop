@@ -418,6 +418,35 @@
     "empty": "אין צילומים שמורים עדכה.",
     "savedAt": "נשמר {{when}}",
     "cabinetCount": "{{count}} ארון",
-    "cabinetCount_other": "{{count}} ארונות"
+    "cabinetCount_other": "{{count}} ארונות",
+    "compare": "השוואה",
+    "diff": {
+      "title": "השוואת צילומים",
+      "before": "לפני",
+      "after": "אחרי",
+      "close": "סגור",
+      "selectTwo": "בחר שני צילומים שונים להשוואה.",
+      "identical": "הצילומים זהים — לא זוהו שינויים.",
+      "cabinetsAdded": "{{count}} ארון נוסף",
+      "cabinetsAdded_other": "{{count}} ארונות נוספו",
+      "cabinetsRemoved": "{{count}} ארון הוסר",
+      "cabinetsRemoved_other": "{{count}} ארונות הוסרו"
+    }
+  },
+  "diff": {
+    "furnitureType": "סוג",
+    "width": "רוחב",
+    "height": "גובה",
+    "depth": "עומק",
+    "shelfCount": "מדפים",
+    "carcassMaterial": "חומר גוף",
+    "backPanelMaterial": "חומר גב",
+    "doorCount": "דלתות",
+    "doorStyle": "סגנון דלת",
+    "drawerCount": "מגירות",
+    "kickHeight": "גובה רגלית",
+    "handleStyle": "סגנון ידית",
+    "edgeBanding": "חיפוי קצוות",
+    "hasBack": "פאנל גב"
   }
 }

@@ -502,3 +502,14 @@ export function IconLayers(p: IconProps) {
     </Icon>
   );
 }
+
+/** Diff / compare icon — two overlapping documents with a vs arrow */
+export function IconDiff(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <rect x="2" y="4" width="8" height="14" rx="1" />
+      <rect x="14" y="4" width="8" height="14" rx="1" />
+      <path d="M10 11h4M12 9l2 2-2 2" />
+    </Icon>
+  );
+}

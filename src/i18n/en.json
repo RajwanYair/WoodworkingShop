@@ -419,6 +419,35 @@
     "empty": "No snapshots saved yet.",
     "savedAt": "Saved {{when}}",
     "cabinetCount": "{{count}} cabinet",
-    "cabinetCount_other": "{{count}} cabinets"
+    "cabinetCount_other": "{{count}} cabinets",
+    "compare": "Compare",
+    "diff": {
+      "title": "Compare Snapshots",
+      "before": "Before",
+      "after": "After",
+      "close": "Close",
+      "selectTwo": "Select two different snapshots to compare.",
+      "identical": "These snapshots are identical \u2014 no changes detected.",
+      "cabinetsAdded": "{{count}} cabinet added",
+      "cabinetsAdded_other": "{{count}} cabinets added",
+      "cabinetsRemoved": "{{count}} cabinet removed",
+      "cabinetsRemoved_other": "{{count}} cabinets removed"
+    }
+  },
+  "diff": {
+    "furnitureType": "Type",
+    "width": "Width",
+    "height": "Height",
+    "depth": "Depth",
+    "shelfCount": "Shelves",
+    "carcassMaterial": "Carcass material",
+    "backPanelMaterial": "Back material",
+    "doorCount": "Doors",
+    "doorStyle": "Door style",
+    "drawerCount": "Drawers",
+    "kickHeight": "Kick height",
+    "handleStyle": "Handle style",
+    "edgeBanding": "Edge banding",
+    "hasBack": "Has back panel"
   }
 }
