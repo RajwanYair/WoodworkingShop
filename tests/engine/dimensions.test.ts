@@ -205,3 +205,39 @@ describe('computeDimensions — shelfDeflections', () => {
     expect(hasIssue).toBe(true);
   });
 });
+
+// Sprint 8 — maxLoadKg per shelf
+describe('computeShelfDeflection — maxLoadKg', () => {
+  it('returns a positive maxLoadKg', () => {
+    const result = computeShelfDeflection(600, 18, 300, 'plywood-18');
+    expect(result.maxLoadKg).toBeGreaterThan(0);
+  });
+
+  it('maxLoadKg decreases as span increases (same material)', () => {
+    const short = computeShelfDeflection(600, 18, 300, 'plywood-18');
+    const long = computeShelfDeflection(1100, 18, 300, 'plywood-18');
+    expect(long.maxLoadKg).toBeLessThan(short.maxLoadKg);
+  });
+
+  it('maxLoadKg increases with thicker panel (same span)', () => {
+    const thin = computeShelfDeflection(900, 16, 350, 'mdf-16');
+    const thick = computeShelfDeflection(900, 18, 350, 'mdf-18');
+    expect(thick.maxLoadKg).toBeGreaterThan(thin.maxLoadKg);
+  });
+
+  it('computeDimensions shelfDeflections include maxLoadKg', () => {
+    const d = computeDimensions({ ...DEFAULT_CONFIG, shelfCount: 2 });
+    for (const entry of d.shelfDeflections) {
+      expect(typeof entry.maxLoadKg).toBe('number');
+      expect(entry.maxLoadKg).toBeGreaterThan(0);
+    }
+  });
+
+  it('a safe shelf has maxLoadKg consistent with limit (deflection at limit = limitMm)', () => {
+    // For a safe shelf: deflectionMm <= limitMm, so maxLoadKg = round(0.05 * limitMm * L / deflectionMm / 9.81)
+    // which should be >= (0.05 * limitMm * L / limitMm / 9.81) = 0.05 * L / 9.81
+    const r = computeShelfDeflection(600, 18, 300, 'plywood-18');
+    const expectedMin = Math.floor((0.05 * 600) / 9.81); // ~ 3 kg (conservative floor)
+    expect(r.maxLoadKg).toBeGreaterThanOrEqual(expectedMin);
+  });
+});

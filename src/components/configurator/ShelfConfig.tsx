@@ -155,6 +155,15 @@ export function ShelfConfig() {
                         {t(deflectionKey, { sag: d.deflectionMm.toFixed(1) })}
                       </span>
                     )}
+                    {d && (
+                      <span
+                        className="text-[10px] font-normal text-wood-400 dark:text-wood-500"
+                        title={t('shelves.loadCapacity', { kg: d.maxLoadKg })}
+                        aria-label={t('shelves.loadCapacity', { kg: d.maxLoadKg })}
+                      >
+                        {t('shelves.loadCapacity', { kg: d.maxLoadKg })}
+                      </span>
+                    )}
                   </span>
                   <input
                     type="number"

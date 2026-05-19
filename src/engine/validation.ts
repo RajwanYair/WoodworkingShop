@@ -445,16 +445,11 @@ export function validateConfig(
     });
   }
 
-  // ── Shelf maximum safe load capacity (Sprint 30) ─────────────────────────
-  // Derive maximum load at L/360 limit by linear-scaling the standard
-  // 0.05 N/mm test load that computeShelfDeflection uses internally.
+  // ── Shelf maximum safe load capacity ─────────────────────────────────────
+  // Sprint 8: maxLoadKg is now computed directly inside computeShelfDeflection.
   if (config.shelfCount > 0 && dims.shelfDeflections.length > 0) {
-    const { deflectionMm } = dims.shelfDeflections[0];
-    if (deflectionMm > 0) {
-      const L = dims.shelfWidth;
-      const wMaxNperMm = (0.05 * (L / 360)) / deflectionMm;
-      const maxLoadKg = Math.round((wMaxNperMm * L) / 9.81);
-      if (maxLoadKg < MIN_SHELF_LOAD_KG) {
+    const { maxLoadKg } = dims.shelfDeflections[0];
+    if (maxLoadKg < MIN_SHELF_LOAD_KG) {
         issues.push({
           code: 'SHELF_LOAD_CAPACITY_LOW',
           severity: 'warning',
@@ -464,7 +459,6 @@ export function validateConfig(
           },
           field: 'shelfCount',
         });
-      }
     }
   }
 

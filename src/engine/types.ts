@@ -94,6 +94,8 @@ export interface DerivedDimensions {
     overLimit: boolean;
     /** 'safe' ≤ L/360 · 'warning' L/360–L/240 · 'danger' > L/240 */
     deflectionRating: 'safe' | 'warning' | 'danger';
+    /** Sprint 8 — maximum safe UDL load at L/360 limit (kg). */
+    maxLoadKg: number;
   }>;
 }
 

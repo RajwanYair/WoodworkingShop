@@ -125,6 +125,12 @@ export interface ShelfDeflectionResult {
    *   'danger'  — deflectionMm > L/240            (red)
    */
   deflectionRating: 'safe' | 'warning' | 'danger';
+  /**
+   * Sprint 8 — Maximum safe uniformly-distributed load the shelf can carry
+   * before mid-span deflection reaches the L/360 serviceability limit (kg).
+   * Derived by scaling the design load proportionally to the limit.
+   */
+  maxLoadKg: number;
 }
 
 export function computeShelfDeflection(
@@ -144,10 +150,16 @@ export function computeShelfDeflection(
   const warnLimitMm = L / 240;
   const deflectionRating: 'safe' | 'warning' | 'danger' =
     deflectionMm <= limitMm ? 'safe' : deflectionMm <= warnLimitMm ? 'warning' : 'danger';
+  // Maximum safe load: scale 0.05 N/mm design load so that deflection == limitMm.
+  // If deflectionMm is zero (theoretically impossible for real material) return a
+  // large safe value to avoid division by zero.
+  const maxLoadKg =
+    deflectionMm > 0 ? Math.round((0.05 * limitMm * L) / deflectionMm / 9.81) : 9999;
   return {
     deflectionMm: Math.round(deflectionMm * 100) / 100,
     limitMm: Math.round(limitMm * 100) / 100,
     overLimit: deflectionMm > limitMm,
     deflectionRating,
+    maxLoadKg,
   };
 }

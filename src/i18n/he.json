@@ -333,7 +333,8 @@
     "deflectionRatingSafe": "עיוות תקין ({{sag}} ממ)",
     "deflectionRatingWarning": "אזהרת עיוות ({{sag}} ממ)",
     "deflectionRatingDanger": "סכנת עיוות ({{sag}} ממ)",
-    "deflectionDanger": "אזהרת עיוות: {{sag}} ממ חורג מ-L/240 — נדרשת תמיכה מבניתית או לוח עבה יותר למשוך {{span}} ממ"
+    "deflectionDanger": "אזהרת עיוות: {{sag}} ממ חורג מ-L/240 — נדרשת תמיכה מבניתית או לוח עבה יותר למשוך {{span}} ממ",
+    "loadCapacity": "מקס' {{kg}} ק\"ג"
   },
   "toast": {
     "saved": "תצורה נשמרה",

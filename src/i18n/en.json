@@ -333,7 +333,8 @@
     "deflectionDanger": "Sag alert: {{sag}} mm exceeds L/240 — structural support or a thicker panel is required for this {{span}} mm span",
     "deflectionRatingSafe": "Sag OK ({{sag}} mm)",
     "deflectionRatingWarning": "Sag warning ({{sag}} mm)",
-    "deflectionRatingDanger": "Sag danger ({{sag}} mm)"
+    "deflectionRatingDanger": "Sag danger ({{sag}} mm)",
+    "loadCapacity": "max {{kg}} kg"
   },
   "toast": {
     "saved": "Configuration saved",
