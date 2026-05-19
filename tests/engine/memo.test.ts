@@ -56,7 +56,7 @@ describe('createJsonMemo', () => {
     expect(callCount).toBe(2);
   });
 
-  it('evicts the oldest entry when cache exceeds MAX_CACHE_SIZE (8)', () => {
+  it('evicts the oldest entry when cache exceeds MAX_CACHE_SIZE (16)', () => {
     let callCount = 0;
     const fn = (n: number) => {
       callCount++;
@@ -64,24 +64,24 @@ describe('createJsonMemo', () => {
     };
     const memoFn = createJsonMemo(fn);
 
-    // Fill 9 distinct entries — entry 0 is evicted when entry 8 enters
-    for (let i = 0; i < 9; i++) memoFn(i);
-    expect(callCount).toBe(9);
+    // Fill 17 distinct entries — entry 0 is evicted when entry 16 enters
+    for (let i = 0; i < 17; i++) memoFn(i);
+    expect(callCount).toBe(17);
 
-    // Entry 8 is the most recent — must still be cached
-    memoFn(8);
-    expect(callCount).toBe(9);
+    // Entry 16 is the most recent — must still be cached
+    memoFn(16);
+    expect(callCount).toBe(17);
 
     // Entry 0 was evicted — must trigger a re-compute
     memoFn(0);
-    expect(callCount).toBe(10);
+    expect(callCount).toBe(18);
   });
 
   it('returns correct result after cache eviction', () => {
     const fn = (n: number) => n * 10;
     const memoFn = createJsonMemo(fn);
 
-    for (let i = 0; i < 9; i++) memoFn(i); // entry 0 evicted
+    for (let i = 0; i < 17; i++) memoFn(i); // entry 0 evicted
     expect(memoFn(0)).toBe(0); // re-computed — must still be correct
   });
 });

@@ -1,8 +1,8 @@
 {
   "$comment": "Bundle size budgets enforced by scripts/bundle-report.js. Values are KB. Tightening these (lowering numbers) is encouraged; loosening requires a justification in CHANGELOG.",
-  "totalJsKB": 2000,
+  "totalJsKB": 1975,
   "totalCssKB": 100,
-  "totalAllKB": 2100,
+  "totalAllKB": 2075,
   "perFileKB": {
     "_default": 500,
     "pdf-renderer": 1600

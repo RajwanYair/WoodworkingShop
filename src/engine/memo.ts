@@ -4,10 +4,14 @@
  * The cache holds at most MAX_CACHE_SIZE entries; the oldest entry is
  * evicted when the limit is reached (Map preserves insertion order).
  *
+ * v3.51.0 — Raised from 8 to 16 entries to better serve multi-cabinet
+ * projects (10+ cabinets) where rapid tab switching and undo/redo frequently
+ * revisit recently computed states.
+ *
  * Requirements: all arguments must be JSON-serialisable (plain objects,
  * primitives, arrays — no functions, class instances, or Symbols).
  */
-const MAX_CACHE_SIZE = 8;
+const MAX_CACHE_SIZE = 16;
 
 export function createJsonMemo<TArgs extends unknown[], TResult>(
   fn: (...args: TArgs) => TResult,

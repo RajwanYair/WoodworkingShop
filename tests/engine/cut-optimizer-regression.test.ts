@@ -7,6 +7,8 @@ import {
   GRAIN_FREE_PARTS,
   MULTI_SHEET_PARTS,
   NARROW_TALL_PARTS,
+  LARGE_PROJECT_PARTS,
+  OVERSIZED_PART,
 } from './fixtures';
 
 // ─── Helper ─────────────────────────────────────────────────────────────────
@@ -201,6 +203,71 @@ describe('cut-optimizer regression fixtures', () => {
       const r2 = optimizeCutSheets(MULTI_SHEET_PARTS);
       expect(r1.totalSheets).toBe(r2.totalSheets);
       expect(r1.overallYield).toBe(r2.overallYield);
+    });
+
+    it('two runs on LARGE_PROJECT_PARTS produce identical results', () => {
+      const r1 = optimizeCutSheets(LARGE_PROJECT_PARTS);
+      const r2 = optimizeCutSheets(LARGE_PROJECT_PARTS);
+      expect(r1.totalSheets).toBe(r2.totalSheets);
+      expect(r1.overallYield).toBe(r2.overallYield);
+      for (let si = 0; si < r1.sheets.length; si++) {
+        expect(r1.sheets[si].parts.length).toBe(r2.sheets[si].parts.length);
+      }
+    });
+  });
+
+  describe('LARGE_PROJECT_PARTS (10 cabinets)', () => {
+    it('all parts are placed', () => {
+      const r = optimizeCutSheets(LARGE_PROJECT_PARTS);
+      const totalQty = LARGE_PROJECT_PARTS.reduce((n, p) => n + p.qty, 0);
+      const placed = r.sheets.reduce((n, s) => n + s.parts.length, 0);
+      expect(placed).toBe(totalQty);
+    });
+
+    it('requires multiple sheets', () => {
+      const r = optimizeCutSheets(LARGE_PROJECT_PARTS);
+      expect(r.totalSheets).toBeGreaterThan(1);
+    });
+
+    it('yield is at least 60%', () => {
+      const r = optimizeCutSheets(LARGE_PROJECT_PARTS);
+      expect(r.overallYield).toBeGreaterThanOrEqual(60);
+    });
+
+    it('no overlapping parts on any sheet', () => {
+      const r = optimizeCutSheets(LARGE_PROJECT_PARTS);
+      for (const sheet of r.sheets) {
+        const ps = sheet.parts;
+        for (let i = 0; i < ps.length; i++) {
+          for (let j = i + 1; j < ps.length; j++) {
+            const a = ps[i];
+            const b = ps[j];
+            expect(rectsOverlap(a.x, a.y, a.width, a.length, b.x, b.y, b.width, b.length)).toBe(false);
+          }
+        }
+      }
+    });
+
+    it('all parts within sheet bounds', () => {
+      const r = optimizeCutSheets(LARGE_PROJECT_PARTS);
+      for (const sheet of r.sheets) {
+        for (const p of sheet.parts) {
+          expect(p.x + p.width).toBeLessThanOrEqual(sheet.sheetWidth + 0.01);
+          expect(p.y + p.length).toBeLessThanOrEqual(sheet.sheetLength + 0.01);
+        }
+      }
+    });
+  });
+
+  describe('OVERSIZED_PART', () => {
+    it('handles gracefully without crashing', () => {
+      expect(() => optimizeCutSheets(OVERSIZED_PART)).not.toThrow();
+    });
+
+    it('reports 0 placed parts (part exceeds sheet)', () => {
+      const r = optimizeCutSheets(OVERSIZED_PART);
+      const placed = r.sheets.reduce((n, s) => n + s.parts.length, 0);
+      expect(placed).toBe(0);
     });
   });
 });

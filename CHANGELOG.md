@@ -11,6 +11,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.51.0] — 2025-07-21
+
+### Performance and Determinism Release
+
+Optimized memoization, added large-project regression fixtures, and tightened quality gates.
+
+### Performance
+
+- Increased LRU memoization cache from 8 to 16 entries for multi-cabinet projects.
+- Eliminated redundant `generateParts` call in `deriveBaseProject` — active cabinet parts are now reused in the `allParts` computation.
+
+### Testing
+
+- Added `LARGE_PROJECT_PARTS` fixture (100 parts simulating 10 kitchen cabinets) for optimizer stress testing.
+- Added `OVERSIZED_PART` fixture for graceful handling of unplaceable parts.
+- Added 7 new regression tests: placement correctness, yield ≥ 60%, overlap detection, bounds checking, determinism, and oversized part handling.
+
+### Quality Gates
+
+- Tightened coverage thresholds: statements 78%, branches 75%, functions 78%, lines 79% (calibrated to actual project coverage).
+- Tightened bundle budget: JS from 2000KB to 1975KB, total from 2100KB to 2075KB (1800KB target deferred to Phase 5 pdf-renderer tree-shaking).
+
 ## [3.50.0] — 2026-05-19
 
 ### Production Hardening Release

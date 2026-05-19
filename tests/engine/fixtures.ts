@@ -78,3 +78,32 @@ export const NARROW_TALL_PARTS: Part[] = [
   part('N01', 4, 'melamine-16', 16, 1200, 100),
   part('N02', 2, 'melamine-16', 16, 600, 200),
 ];
+
+/**
+ * v3.51.0 — Large multi-cabinet project fixture (simulates 10 kitchen cabinets).
+ * Tests optimizer stability and determinism under realistic project load.
+ * Mix of grain-sensitive plywood and grain-free melamine parts.
+ * Expected: 8-12 sheets, all parts placed, yield > 60%.
+ */
+export const LARGE_PROJECT_PARTS: Part[] = [
+  // 10 side panels (plywood, grain-locked)
+  part('LP01', 10, 'plywood-17', 17, 720, 560),
+  // 10 top/bottom panels (plywood, grain-locked)
+  part('LP02', 20, 'plywood-17', 17, 560, 560),
+  // 10 back panels (melamine, rotation allowed)
+  part('LP03', 10, 'melamine-16', 16, 700, 540),
+  // 30 shelves (melamine, rotation allowed)
+  part('LP04', 30, 'melamine-18', 18, 540, 360),
+  // 10 kick plates (melamine)
+  part('LP05', 10, 'melamine-18', 18, 540, 100),
+  // 20 door panels (plywood, grain-locked)
+  part('LP06', 20, 'plywood-17', 17, 700, 280),
+];
+
+/**
+ * v3.51.0 — Oversized part that exceeds a single sheet dimension.
+ * Optimizer must handle gracefully (skip or report unplaceable).
+ */
+export const OVERSIZED_PART: Part[] = [
+  part('OS01', 1, 'melamine-18', 18, 3000, 1500),
+];

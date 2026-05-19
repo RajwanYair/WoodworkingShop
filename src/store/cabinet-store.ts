@@ -415,18 +415,21 @@ function deriveProject(
 // v3.21.0 — Base derivation (parts, hardware, dimensions) WITHOUT cut optimization.
 // Used for synchronous state updates so the UI renders new parts instantly while
 // the worker computes fresh optimization in the background.
+// v3.51.0 — Optimized: reuses the active cabinet's already-computed parts in the
+// allParts flatMap instead of calling generateParts twice for the same config.
 function deriveBaseProject(cabinets: CabinetEntry[], activeIndex: number) {
   const activeConfig = cabinets[activeIndex].config;
   const dimensions = computeDimensions(activeConfig);
   const parts = generateParts(activeConfig);
   const hardware = generateHardware(activeConfig);
   const edgeBandingTotal = computeEdgeBandingTotal(parts);
-  const allParts: Part[] = cabinets.flatMap((cab, ci) =>
-    generateParts(cab.config).map((p) => ({
+  const allParts: Part[] = cabinets.flatMap((cab, ci) => {
+    const cabParts = ci === activeIndex ? parts : generateParts(cab.config);
+    return cabParts.map((p) => ({
       ...p,
       id: cabinets.length > 1 ? `C${ci + 1}-${p.id}` : p.id,
-    })),
-  );
+    }));
+  });
   return { config: activeConfig, dimensions, parts, hardware, edgeBandingTotal, allParts };
 }
 
