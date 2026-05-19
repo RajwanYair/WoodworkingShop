@@ -1,12 +1,16 @@
 import type { CabinetConfig, Part } from './types';
 import { getMaterial } from './materials';
 import { computeDimensions } from './dimensions';
+import { createJsonMemo } from './memo';
 
 /**
  * Generate the full cut-list / parts table from a cabinet configuration.
  * Each part includes bilingual names, dimensions, quantity, and edge info.
+ * Result is JSON-memoised: repeated calls with the same config return the
+ * cached Part array without re-running the engine.
  */
-export function generateParts(cfg: CabinetConfig): Part[] {
+export const generateParts: (cfg: CabinetConfig) => Part[] = createJsonMemo(
+  function _generateParts(cfg: CabinetConfig): Part[] {
   const d = computeDimensions(cfg);
   const cm = getMaterial(cfg.carcassMaterial);
   const bm = getMaterial(cfg.backPanelMaterial);
@@ -299,7 +303,8 @@ export function generateParts(cfg: CabinetConfig): Part[] {
   }
 
   return parts;
-}
+  },
+);
 
 /** Get the derived dimensions — convenience re-export. */
 export { computeDimensions } from './dimensions';

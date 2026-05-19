@@ -85,3 +85,21 @@ describe('createJsonMemo', () => {
     expect(memoFn(0)).toBe(0); // re-computed — must still be correct
   });
 });
+
+describe('generateParts memoisation', () => {
+  it('returns same array reference for identical configs', async () => {
+    const { generateParts } = await import('../../src/engine/parts');
+    const { DEFAULT_CONFIG } = await import('../../src/engine/materials');
+    const result1 = generateParts(DEFAULT_CONFIG);
+    const result2 = generateParts(DEFAULT_CONFIG);
+    expect(result1).toBe(result2); // same reference = cache hit
+  });
+
+  it('returns different reference for different configs', async () => {
+    const { generateParts } = await import('../../src/engine/parts');
+    const { DEFAULT_CONFIG } = await import('../../src/engine/materials');
+    const result1 = generateParts(DEFAULT_CONFIG);
+    const result2 = generateParts({ ...DEFAULT_CONFIG, shelfCount: DEFAULT_CONFIG.shelfCount + 1 });
+    expect(result1).not.toBe(result2);
+  });
+});
