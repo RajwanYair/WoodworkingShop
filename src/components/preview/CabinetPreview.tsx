@@ -1211,8 +1211,39 @@ function IsometricView({
           const fw = W - 2 * T - 2 * reveal;
           const handleX = fx + fw * 0.5 - 6 * sc;
           const handleY = dy + fh * 0.5;
+          // Sprint 174 — drawer box depth: box occupies ~75% of cabinet interior depth
+          const boxDepth = (D - BT) * 0.75;
+          const boxTop = dy + reveal;
+          const boxBot = dy + fh - reveal;
           return (
             <g key={`drawer-${i}`}>
+              {/* Sprint 174 — Drawer box top face (visible above front face) */}
+              <polygon
+                points={isoQuad(
+                  [fx, boxTop, 0],
+                  [fx + fw, boxTop, 0],
+                  [fx + fw, boxTop, boxDepth],
+                  [fx, boxTop, boxDepth],
+                )}
+                fill={lightFill}
+                stroke="#777"
+                strokeWidth={0.3}
+                opacity={0.55}
+              />
+              {/* Sprint 174 — Drawer box right side face */}
+              <polygon
+                points={isoQuad(
+                  [fx + fw, boxTop, 0],
+                  [fx + fw, boxBot, 0],
+                  [fx + fw, boxBot, boxDepth],
+                  [fx + fw, boxTop, boxDepth],
+                )}
+                fill={darkFill}
+                stroke="#777"
+                strokeWidth={0.3}
+                opacity={0.45}
+              />
+              {/* Drawer front face */}
               <polygon
                 points={isoQuad(
                   [fx, dy + reveal, 0],

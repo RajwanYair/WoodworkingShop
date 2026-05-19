@@ -94,4 +94,34 @@ describe('TEMPLATES', () => {
     expect(t).toBeDefined();
     expect(t?.name.en).toBe('Kitchen Base Unit');
   });
-});
+
+  // ── Sprint 176: new templates ──────────────────────────────────────────────
+
+  it('has a wine-rack template', () => {
+    const t = getTemplate('wine-rack');
+    expect(t).toBeDefined();
+    expect(t?.config.furnitureType).toBe('bookshelf');
+    expect(t?.config.hasBack).toBe(false);
+    expect(t?.config.doorStyle).toBe('none');
+  });
+
+  it('has a corner-cabinet-blind template', () => {
+    const t = getTemplate('corner-cabinet-blind');
+    expect(t).toBeDefined();
+    expect(t?.config.furnitureType).toBe('cabinet');
+    expect(t?.config.width).toBe(900);
+    expect(t?.config.kickHeight).toBe(100);
+  });
+
+  it('has a bathroom-vanity-wall template', () => {
+    const t = getTemplate('bathroom-vanity-wall');
+    expect(t).toBeDefined();
+    expect(t?.config.furnitureType).toBe('cabinet');
+    expect(t?.config.kickHeight).toBe(0); // wall-mounted, no kick
+    expect(t?.config.depth).toBeLessThanOrEqual(250);
+  });
+
+  it('all templates now number at least 15', () => {
+    expect(TEMPLATES.length).toBeGreaterThanOrEqual(15);
+  });
+};);
