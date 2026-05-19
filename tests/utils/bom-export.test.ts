@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { generateBomCsv } from '../../src/utils/bom-export';
+import { describe, it, expect, vi } from 'vitest';
+import { generateBomCsv, generateHardwareCsv, downloadHardwareCsv } from '../../src/utils/bom-export';
 import type { Part, HardwareItem } from '../../src/engine/types';
 
 const mockPart: Part = {
@@ -175,5 +175,40 @@ describe('generateBomCsv', () => {
   it('includes generatedAt ISO timestamp in header', () => {
     const csv = generateBomCsv(singleCabinet, 'en');
     expect(csv).toMatch(/Generated: \d{4}-\d{2}-\d{2}T/);
+  });
+});
+
+describe('generateHardwareCsv', () => {
+  it('includes header row and hardware line', () => {
+    const csv = generateHardwareCsv([{ name: 'Cabinet A', hardware: [mockHardware] }], 'en');
+    expect(csv).toContain('Hardware ID');
+    expect(csv).toContain('Hinge 35mm');
+    expect(csv).toContain('Cabinet A');
+  });
+
+  it('renders Hebrew hardware names when lang=he', () => {
+    const csv = generateHardwareCsv([{ name: 'ארון', hardware: [mockHardware] }], 'he');
+    // name.he = 'ציר 35 מ"מ' — the " gets CSV-escaped to "" inside quoted field
+    expect(csv).toContain('35');
+    expect(csv).toContain('יח');
+  });
+
+  it('handles empty hardware list', () => {
+    const csv = generateHardwareCsv([{ name: 'Empty', hardware: [] }], 'en');
+    expect(csv).toContain('Hardware ID');
+    // Only the header row — no hardware entries
+    expect(csv.split('\n').length).toBe(1);
+  });
+
+  it('triggerDownload is called from downloadHardwareCsv', () => {
+    const mockAnchor = document.createElement('a');
+    vi.spyOn(mockAnchor, 'click').mockImplementation(() => {});
+    vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor);
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:test');
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+
+    downloadHardwareCsv([{ name: 'Cabinet A', hardware: [mockHardware] }], 'en');
+    expect(mockAnchor.click).toHaveBeenCalled();
+    vi.restoreAllMocks();
   });
 });

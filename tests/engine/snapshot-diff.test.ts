@@ -84,6 +84,33 @@ describe('diffSnapshots', () => {
     expect(diff.cabinetDiffs[0].cabinetName).toBe('My Wardrobe');
   });
 
+  it('falls back to "Cabinet N" when snapshotB cabinet name is empty', () => {
+    const a = makeSnap({ width: 600 });
+    const b = { cabinets: [{ name: '', config: cfg({ width: 900 }) }] };
+    const diff = diffSnapshots(a, b);
+    expect(diff.cabinetDiffs[0].cabinetName).toMatch(/Cabinet 1/);
+  });
+
+  it('fmt: formats undefined as em-dash', () => {
+    // Field `hasBack` is undefined by default in cfg() — if both are undefined, no delta.
+    // To test fmt(undefined), use a field that one side has and the other doesn't.
+    const a = { cabinets: [{ name: 'X', config: { ...cfg(), hasBack: true } }] };
+    const b = { cabinets: [{ name: 'X', config: { ...cfg(), hasBack: undefined } }] };
+    const diff = diffSnapshots(a, b);
+    const delta = diff.cabinetDiffs[0]?.deltas.find((d) => d.field === 'hasBack');
+    expect(delta?.oldValue).toBe('Yes');
+    expect(delta?.newValue).toBe('—');
+  });
+
+  it('fmt: formats boolean true as "Yes" and false as "No"', () => {
+    const a = { cabinets: [{ name: 'X', config: { ...cfg(), hasBack: false } }] };
+    const b = { cabinets: [{ name: 'X', config: { ...cfg(), hasBack: true } }] };
+    const diff = diffSnapshots(a, b);
+    const delta = diff.cabinetDiffs[0]?.deltas.find((d) => d.field === 'hasBack');
+    expect(delta?.oldValue).toBe('No');
+    expect(delta?.newValue).toBe('Yes');
+  });
+
   it('does not include unchanged cabinets in cabinetDiffs', () => {
     const a = {
       cabinets: [

@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import type { CutSheet } from '../../src/engine/types';
-import { cutSheetToGcode } from '../../src/utils/gcode-export';
+import { cutSheetToGcode, downloadAllSheetsGcode, downloadGcodeForSheet } from '../../src/utils/gcode-export';
 import { mockSheet } from '../helpers';
 
 describe('cutSheetToGcode', () => {
@@ -77,5 +77,32 @@ describe('cutSheetToGcode', () => {
   it('includes generatedAt ISO timestamp in header', () => {
     const gc = cutSheetToGcode(mockSheet);
     expect(gc).toMatch(/Generated: \d{4}-\d{2}-\d{2}T/);
+  });
+});
+
+describe('downloadGcodeForSheet + downloadAllSheetsGcode', () => {
+  function stubDownload() {
+    const mockAnchor = document.createElement('a');
+    vi.spyOn(mockAnchor, 'click').mockImplementation(() => {});
+    vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor);
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:test');
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+    return mockAnchor;
+  }
+
+  it('downloadGcodeForSheet triggers a download', () => {
+    const anchor = stubDownload();
+    downloadGcodeForSheet(mockSheet, 'sheet1.nc');
+    expect(anchor.click).toHaveBeenCalled();
+    vi.restoreAllMocks();
+  });
+
+  it('downloadAllSheetsGcode combines multiple sheets with blank separator', () => {
+    const anchor = stubDownload();
+    const sheet2: CutSheet = { ...mockSheet, sheetIndex: 2 };
+    downloadAllSheetsGcode([mockSheet, sheet2], 'MyProject');
+    expect(anchor.click).toHaveBeenCalled();
+    expect(anchor.download).toContain('MyProject');
+    vi.restoreAllMocks();
   });
 });
