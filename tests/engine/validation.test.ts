@@ -432,3 +432,40 @@ describe('validateConfig — SHELF_LOAD_CAPACITY_LOW (Sprint 30)', () => {
     expect(issue!.message.he).toContain('מ"מ');
   });
 });
+
+describe('validateConfig — NARROW_BACK_OMITTED (Sprint 34)', () => {
+  it('raises NARROW_BACK_OMITTED warning for narrow open-back cabinet', () => {
+    const issues = validateConfig(cfg({ hasBack: false, width: 350, furnitureType: 'cabinet' }));
+    expect(issues.some((i) => i.code === 'NARROW_BACK_OMITTED')).toBe(true);
+    const issue = issues.find((i) => i.code === 'NARROW_BACK_OMITTED')!;
+    expect(issue.severity).toBe('warning');
+    expect(issue.field).toBe('hasBack');
+  });
+
+  it('does not raise NARROW_BACK_OMITTED when cabinet has a back panel', () => {
+    const issues = validateConfig(cfg({ hasBack: true, width: 350, furnitureType: 'cabinet' }));
+    expect(issues.some((i) => i.code === 'NARROW_BACK_OMITTED')).toBe(false);
+  });
+
+  it('does not raise NARROW_BACK_OMITTED when width >= 400 mm', () => {
+    const issues = validateConfig(cfg({ hasBack: false, width: 450, furnitureType: 'cabinet' }));
+    expect(issues.some((i) => i.code === 'NARROW_BACK_OMITTED')).toBe(false);
+  });
+
+  it('does not raise NARROW_BACK_OMITTED for panel furniture type', () => {
+    const issues = validateConfig(cfg({ hasBack: false, width: 300, furnitureType: 'panel', doorStyle: 'none', kickHeight: 0, depth: 18 }));
+    expect(issues.some((i) => i.code === 'NARROW_BACK_OMITTED')).toBe(false);
+  });
+
+  it('NARROW_BACK_OMITTED fires at exactly 399 mm (boundary)', () => {
+    const issues = validateConfig(cfg({ hasBack: false, width: 399, furnitureType: 'bookshelf' }));
+    expect(issues.some((i) => i.code === 'NARROW_BACK_OMITTED')).toBe(true);
+  });
+
+  it('NARROW_BACK_OMITTED message has both en and he text', () => {
+    const issues = validateConfig(cfg({ hasBack: false, width: 300 }));
+    const issue = issues.find((i) => i.code === 'NARROW_BACK_OMITTED')!;
+    expect(issue.message.en).toBeTruthy();
+    expect(issue.message.he).toBeTruthy();
+  });
+});

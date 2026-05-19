@@ -579,6 +579,29 @@ export function validateConfig(
     }
   }
 
+  // ── Narrow open-back cabinet (Phase 5, Sprint 34) ──
+  // An open-back carcass narrower than 400 mm has very little racking
+  // resistance because neither the shelves nor the top/bottom panels can
+  // provide enough diagonal bracing. Flag it so the user knows to add a
+  // back panel, a wall-fixing cleat, or a frame-and-panel back insert.
+  const NARROW_OPEN_BACK_MM = 400;
+  if (
+    config.hasBack === false &&
+    config.width < NARROW_OPEN_BACK_MM &&
+    config.furnitureType !== 'panel'
+  ) {
+    issues.push({
+      code: 'NARROW_BACK_OMITTED',
+      severity: 'warning',
+      message: {
+        en: `Narrow cabinet (${config.width} mm wide) without a back panel has poor racking resistance. Add a back panel or fix the carcass to a wall stud to prevent racking.`,
+        he: `ארון צר (${config.width} מ"מ רוחב) ללא פנל גב עמיד בפני עיוות ירוד. הוסף פנל גב או קבע את הארון לקיר.`,
+      },
+      field: 'hasBack',
+      suggestedValue: 'true',
+    });
+  }
+
   // Sort: errors → warnings → info
   const order: Record<string, number> = { error: 0, warning: 1, info: 2 };
   issues.sort((a, b) => order[a.severity] - order[b.severity]);
