@@ -1,6 +1,6 @@
 {
   "name": "woodworkingshop",
-  "version": "3.49.3",
+  "version": "3.50.0",
   "description": "Browser-based woodworking cabinet planner — parametric design, MaxRects cut-sheet optimizer, PDF/DXF/G-code export, 6-view SVG preview, bilingual EN+HE, PWA offline",
   "keywords": [
     "woodworking",
@@ -51,7 +51,7 @@
     "ci": "npm run check && npm run build && npm run bundle:check",
     "i18n:coverage": "node scripts/i18n-coverage.js",
     "bundle:check": "node scripts/bundle-report.js",
-    "lighthouse": "npx --yes @lhci/cli@0.14.x autorun --config=config/lighthouserc.json",
+    "lighthouse": "node scripts/lighthouse.js",
     "lint:md": "markdownlint-cli2 \"*.md\" \"docs/**/*.md\" \".github/**/*.md\"",
     "test:e2e": "playwright test",
     "test:e2e:install": "playwright install --with-deps chromium firefox"
@@ -95,23 +95,3 @@
     "vitest": "^4.1.6"
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

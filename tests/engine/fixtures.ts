@@ -8,14 +8,7 @@
 import type { Part } from '../../src/engine/types';
 
 /** Helper: build a minimal Part record. */
-function part(
-  id: string,
-  qty: number,
-  material: string,
-  thickness: number,
-  length: number,
-  width: number,
-): Part {
+function part(id: string, qty: number, material: string, thickness: number, length: number, width: number): Part {
   return {
     id,
     name: { en: `Part ${id}`, he: `חלק ${id}` },
@@ -38,9 +31,7 @@ export const ZERO_PARTS: Part[] = [];
  * Sheet: 1220 × 2440 mm, part: 1000 × 800 mm.
  * Expected: 1 sheet, placed at (0,0), grainVertical=true.
  */
-export const SINGLE_GRAIN_PART: Part[] = [
-  part('P01', 1, 'plywood-17', 17, 1000, 800),
-];
+export const SINGLE_GRAIN_PART: Part[] = [part('P01', 1, 'plywood-17', 17, 1000, 800)];
 
 /**
  * Three plywood-17 parts (hasGrain=true → rotation never allowed).
@@ -73,8 +64,8 @@ export const GRAIN_FREE_PARTS: Part[] = [
  */
 export const MULTI_SHEET_PARTS: Part[] = [
   part('L01', 2, 'melamine-18', 18, 2200, 400), // tall side panels
-  part('L02', 6, 'melamine-18', 18, 800, 400),   // shelves
-  part('L03', 2, 'melamine-18', 18, 800, 380),   // top / bottom
+  part('L02', 6, 'melamine-18', 18, 800, 400), // shelves
+  part('L03', 2, 'melamine-18', 18, 800, 380), // top / bottom
 ];
 
 /**

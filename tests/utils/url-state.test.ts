@@ -162,7 +162,9 @@ describe('url-state', () => {
         writable: true,
         value: { ...window.location, search: qs },
       });
-      try { fn(); } finally {
+      try {
+        fn();
+      } finally {
         Object.defineProperty(window, 'location', {
           writable: true,
           value: { ...window.location, search: original },

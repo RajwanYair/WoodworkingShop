@@ -3,186 +3,283 @@
 This roadmap replaces legacy sprint fragments with a production-focused program plan.
 Historical details are consolidated in [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md).
 
+---
+
 ## North Star
 
 Build the best-in-class browser-based cabinet planning application for professional and advanced DIY workflows:
 
-- Fast: sub-second interactions and predictable optimization latency.
-- Accurate: manufacturing-grade outputs (BOM, DXF, G-code, PDF).
-- Accessible: WCAG 2.2 AA by default, no waivers.
-- Reliable: strict type/lint/test/build gates across local and CI.
-- Portable: no backend dependency required for core workflows.
+- **Fast**: sub-second interactions and predictable optimization latency.
+- **Accurate**: manufacturing-grade outputs (BOM, DXF, G-code, PDF).
+- **Accessible**: WCAG 2.2 AA by default, no waivers.
+- **Reliable**: strict type/lint/test/build gates across local and CI.
+- **Portable**: no backend dependency required for core workflows.
+- **Extensible**: formal plugin API with stability guarantees.
 
-## Strategic Re-Decision Summary
+---
 
-| Area                   | Previous posture                                    | New production posture                                                                                 |
-| ---------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| Product planning       | Mixed historical + future tasks in one file         | Single forward plan in this file, history archived in [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md) |
-| Quality waivers        | Some disabled validators/filters and legacy waivers | No disabled checks as a default posture; fix root cause first                                          |
-| Architecture narrative | Drifted from implemented reality                    | Align docs with actual runtime, workflows, and constraints                                             |
-| Tooling ownership      | Project-local and ad hoc conventions                | Shared tooling baseline under MyScripts, project-specific overrides documented                         |
-| Release readiness      | Feature-first sequencing                            | Reliability-first sequencing (gates, observability, reproducibility)                                   |
+## Strategic Decision Audit
 
-## Competitive Benchmark and Harvest Plan
+Every major architectural decision has been reconsidered against industry best practices:
 
-The table below compares category leaders and the methods we should harvest.
+### Frontend Architecture
 
-| Product                | Strength to learn from              | Current project gap                        | Action to harvest                                                        |
-| ---------------------- | ----------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------ |
-| Fusion 360             | End-to-end manufacturability checks | Limited advanced manufacturing constraints | Add joinery + collision + tolerance checks to engine validation phase    |
-| SketchUp + OpenCutList | Mature plugin ecosystem             | No extension API                           | Define plugin contract and safe extension surface (v4 program)           |
-| CutList Optimizer      | Optimization UX clarity             | Limited optimization explainability        | Add "why this layout" explainer and part-level placement rationale       |
-| Polyboard              | Detailed cabinetry rule modeling    | Partial parametric rule depth              | Expand rule graph (hinge clearances, shelf loading, panel nesting rules) |
-| Cabinet Vision         | Enterprise workflow integration     | No ERP/MRP export adapters                 | Add standardized CSV/JSON schema adapters for downstream systems         |
-| Onshape (cloud CAD)    | Collaboration and versioning        | Local-only project history                 | Add optional project snapshot/version timeline with diff                 |
-| Figma (design systems) | Token discipline and consistency    | Design token docs drift                    | Enforce token audit and visual regression per release                    |
+| Decision             | Current State                      | Reconsidered Outcome                                                                                                                                                                       |
+| -------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **UI Framework**     | React 19 + TypeScript 6 (strict)   | **Keep** — React 19 compiler optimizations, concurrent features, and ecosystem maturity make it the strongest choice. Solid/Svelte offer smaller bundles but lack PDF/SVG ecosystem depth. |
+| **State Management** | Zustand 5 single store + undo/redo | **Keep** — minimal API surface, excellent TS inference, no boilerplate. Redux Toolkit is heavier with no added benefit for this domain.                                                    |
+| **CSS Framework**    | Tailwind CSS v4 with design tokens | **Keep** — utility-first with logical properties (RTL), JIT compilation, zero runtime. CSS-in-JS alternatives add bundle weight.                                                           |
+| **Build Tool**       | Vite 8 (Rolldown bundler)          | **Keep** — fastest HMR, native ESM, proven chunking. Turbopack is Next.js-specific; Rspack lacks plugin maturity.                                                                          |
+| **i18n**             | i18next 26 + react-i18next         | **Keep** — strongest namespace/pluralization support. FormatJS is comparable but more verbose.                                                                                             |
+| **PDF Generation**   | @react-pdf/renderer (off-thread)   | **Keep** — declarative React-based PDF layout; only viable option for complex multi-page build plans without a server.                                                                     |
+| **Type Safety**      | TypeScript 6 strict, zero `any`    | **Keep** — `erasableSyntaxOnly` + strict mode catches entire classes of runtime errors.                                                                                                    |
 
-### Harvested Best Methods to Implement
+### Backend / Infrastructure
 
-1. Explainable optimization results (decision transparency).
-2. Formal rule engine for manufacturing constraints.
-3. Versioned project snapshots and diff workflow.
-4. Public extension points with stability guarantees.
-5. Stronger interoperability schemas for external systems.
+| Decision                    | Current State                | Reconsidered Outcome                                                                                                                                         |
+| --------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Server dependency**       | None (pure client SPA)       | **Keep as primary** — zero-server architecture eliminates hosting cost, latency, and auth complexity. Optional collaboration service is a future track only. |
+| **Persistence**             | localStorage + URL state     | **Enhance** — add IndexedDB via idb-keyval for large project sets. localStorage 5MB limit is a real constraint for multi-cabinet projects.                   |
+| **Hosting**                 | GitHub Pages (static)        | **Keep** — free, CDN-backed, no ops burden. Cloudflare Pages is an upgrade path if analytics/edge functions are needed.                                      |
+| **PWA**                     | Service worker (cache-first) | **Keep and harden** — add Workbox for reliable cache invalidation on deploy. Current hand-rolled SW has edge cases on version mismatch.                      |
+| **Database**                | None (browser storage)       | **Future optional** — IndexedDB for local, CRDTs for eventual sync. No external DB until collaboration is scoped.                                            |
+| **API / External Services** | None                         | **Keep zero-dependency** — no third-party APIs in critical path. Material databases are embedded.                                                            |
 
-## Production Program (v3.45.0 to v4.0.0)
+### Code Quality and Tooling
 
-## Phase 1: Stability and Trust (v3.45.0)
+| Decision          | Current State                                      | Reconsidered Outcome                                                                                |
+| ----------------- | -------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| **Testing**       | Vitest 4 (unit) + Playwright 1.60 (E2E) + axe-core | **Keep** — fastest unit test runner, Playwright cross-browser, axe-core for a11y regression.        |
+| **Linting**       | ESLint 10 flat config + Prettier                   | **Keep** — flat config is the forward standard. Add eslint-plugin-testing-library for test quality. |
+| **CI Matrix**     | Node 22, 24, 26                                    | **Keep** — tests against current LTS + upcoming releases.                                           |
+| **Coverage**      | V8 provider, 80% threshold                         | **Tighten to 85%** — engine code should reach 90%+.                                                 |
+| **Bundle Budget** | 2000KB JS, 100KB CSS                               | **Tighten** — target 1800KB JS after tree-shaking improvements.                                     |
 
-- Remove residual waivers/suppressions from code, config, and docs.
-- Enforce zero warnings across lint/typecheck/tests in CI and local.
-- Align README, architecture docs, and roadmap with current implementation.
-- Ensure generated artifacts are not kept in root workspace state.
-- Add release checklist automation script and pre-release validation task.
+### Documentation and Content
 
-Exit criteria:
+| Decision              | Current State                             | Reconsidered Outcome                                         |
+| --------------------- | ----------------------------------------- | ------------------------------------------------------------ |
+| **Architecture docs** | Single ARCHITECTURE.md + Mermaid diagrams | **Keep** — living document with visual flow diagrams.        |
+| **Changelog**         | Keep a Changelog format                   | **Keep** — machine-parseable and human-readable.             |
+| **Roadmap**           | This file (forward-only)                  | **Keep** — no mixing of history and plans.                   |
+| **API docs**          | JSDoc on engine exports                   | **Enhance** — add TypeDoc generation for plugin API surface. |
 
-- `npm run ci` passes locally and in CI.
-- No disabled quality rules without explicit architectural justification.
-- Documentation reflects real versions, test counts, and workflow topology.
+---
 
-## Phase 2: Performance and Determinism (v3.46.0)
+## Competitive Benchmark
 
-- Expand worker coverage for heavy computations where latency spikes.
-- Add deterministic fixtures for optimizer regression testing.
-- Add profile-driven thresholds for large multi-cabinet projects.
-- Improve memoization boundaries and cache invalidation policy.
+Comparison with category leaders — methods to harvest:
 
-Exit criteria:
+| Product                    | Category         | Key Strength                                                    | Our Gap                                     | Harvest Action                                                       |
+| -------------------------- | ---------------- | --------------------------------------------------------------- | ------------------------------------------- | -------------------------------------------------------------------- |
+| **Fusion 360**             | Desktop CAD      | End-to-end manufacturability checks, collision detection        | Limited manufacturing constraint validation | Add joinery + collision + tolerance checks to engine validation      |
+| **SketchUp + OpenCutList** | Plugin ecosystem | Mature extension marketplace, community plugins                 | No public extension API                     | Define plugin contract with versioned stability guarantees (Phase 6) |
+| **CutList Optimizer**      | Web optimizer    | Optimization explainability, "why this layout"                  | Optimizer is a black box to users           | Add placement rationale and waste-reduction explanation per sheet    |
+| **Polyboard**              | Cabinet CAD      | Deep parametric rule modeling (hinge clearances, shelf loading) | Partial rule depth                          | Expand rule graph: hinge interference, max span, nesting rules       |
+| **Cabinet Vision**         | Enterprise       | ERP/MRP integration, shop floor workflow                        | No export adapters for downstream systems   | Add standardized CSV/JSON schema adapters for ERP ingestion          |
+| **Onshape**                | Cloud CAD        | Real-time collaboration, version history with diff              | Local-only, no versioning                   | Add project snapshot timeline with visual diff (Phase 3)             |
+| **Figma**                  | Design system    | Design token discipline, visual regression per release          | Token docs can drift from code              | Enforce token audit and visual regression in CI                      |
+| **KCD Software**           | Kitchen design   | Room-level multi-cabinet layout                                 | Single cabinet focus                        | Add multi-cabinet room layout view (v4.0 scope)                      |
 
-- Stable optimization runtime under agreed thresholds.
-- No performance regressions in benchmark suite.
+### Harvested Best Methods (Priority Order)
 
-## Phase 3: Accessibility and UX Excellence (v3.47.0)
+1. **Explainable optimization** — show WHY each part was placed where it is.
+2. **Manufacturing constraint engine** — validate before export, not after cutting.
+3. **IndexedDB persistence** — unlock multi-project workflows without server.
+4. **Versioned project snapshots** — diff and rollback without git.
+5. **Public plugin API** — allow community extensions with stability contract.
+6. **Stronger interop schemas** — machine-readable exports for shop floor systems.
+7. **Visual regression CI** — catch UI drift automatically on every PR.
+8. **Multi-cabinet room layout** — the natural next product boundary.
 
-- Strengthen keyboard-only workflow end-to-end.
-- Add accessibility smoke checks for all major tabs and dialogs.
-- Add focus order and screen-reader narration tests for critical journeys.
-- Establish explicit "no allowlist" axe policy for first-party UI.
+---
 
-Exit criteria:
+## Production Program (v3.49 to v4.0)
 
-- All accessibility tests pass without allowlists.
-- No unresolved major/minor keyboard or focus defects.
+### Phase 1: Production Hardening (v3.50.0) — Current
 
-## Phase 4: Domain Intelligence (v3.48.0)
+Exit criteria: zero warnings, zero disabled checks, zero dead code.
 
-- Introduce manufacturing constraint validation layer.
-- Add assembly-risk warnings (deflection, unsupported spans, conflict hints).
-- Improve material substitution recommendations with rationale.
+- [x] Remove all residual suppressions/waivers from code, config, and docs.
+- [x] Enforce zero warnings across lint/typecheck/tests locally and in CI.
+- [x] Align all documentation with current implementation and versions.
+- [x] Ensure all intermediate artifacts write to OS TEMP only.
+- [x] Fix all VS Code extension diagnostic false positives at root cause.
+- [ ] Add visual regression baseline snapshots for core views.
+- [ ] Tighten coverage thresholds to 85% statements, 80% branches.
+- [ ] Add eslint-plugin-testing-library for test file quality.
 
-Exit criteria:
+### Phase 2: Performance and Determinism (v3.51.0)
 
-- Users receive actionable, explainable warnings before export.
-- Domain validation failures are test-covered and localized.
+Exit criteria: stable optimization runtime, no performance regressions.
 
-## Phase 5: Interoperability and Ecosystem (v3.49.0)
+- [ ] Expand Web Worker coverage for cost estimation and assembly generation.
+- [ ] Add deterministic fixtures for optimizer regression benchmarks.
+- [ ] Profile large multi-cabinet projects (10+ cabinets) and optimize.
+- [ ] Improve memoization boundaries — avoid recomputing unaffected cabinets.
+- [ ] Add performance budget CI check (Lighthouse TBT < 300ms).
+- [ ] Investigate SharedArrayBuffer for zero-copy worker communication.
 
-- Normalize export schemas for ERP/MRP/CAM ingestion.
-- Add machine-readable version metadata to export bundles.
-- Publish extension API draft and compatibility policy.
+### Phase 3: Persistence and Versioning (v3.52.0)
 
-Exit criteria:
+Exit criteria: projects persist reliably across sessions, snapshots are diffable.
 
-- External tool ingestion verified with sample adapters.
-- Extension API draft validated with at least one pilot plugin.
+- [ ] Migrate from localStorage to IndexedDB (via idb-keyval).
+- [ ] Add project snapshot/version timeline with named checkpoints.
+- [ ] Implement diff view between any two project versions.
+- [ ] Add import/export in standardized JSON schema with version migration.
+- [ ] Add project size indicator and storage quota monitoring.
 
-## Phase 6: v4.0.0 Launch Readiness
+### Phase 4: Accessibility and UX Excellence (v3.53.0)
 
-- Finalize architecture hardening and extensibility boundaries.
-- Complete quality and security release checklist.
-- Publish migration notes and deprecation plan.
+Exit criteria: all a11y tests pass without allowlists, keyboard-only workflow complete.
 
-Exit criteria:
+- [ ] Strengthen keyboard-only workflow for all tabs and dialogs.
+- [ ] Add focus order and screen-reader narration tests for critical journeys.
+- [ ] Add high-contrast mode support beyond `forced-colors`.
+- [ ] Add touch gesture tutorial overlay for mobile/tablet users.
+- [ ] Implement responsive layout for tablet portrait orientation.
 
-- Full CI suite green.
-- Release artifacts reproducible and validated.
-- Documentation and support runbooks complete.
+### Phase 5: Domain Intelligence (v3.54.0)
 
-## Frontend and Backend Reconsideration
+Exit criteria: users receive actionable warnings before export.
 
-This product remains frontend-centric by design, but production readiness requires explicit boundaries.
+- [ ] Introduce manufacturing constraint validation layer (joinery, clearances).
+- [ ] Add assembly-risk warnings (deflection, unsupported spans, hinge interference).
+- [ ] Improve material substitution recommendations with rationale text.
+- [ ] Add grain direction conflict detection in optimizer.
+- [ ] Add weight estimation per shelf with load capacity warnings.
 
-Frontend enhancement priorities:
+### Phase 6: Interoperability and Plugin API (v3.55.0)
 
-- Improve render segmentation for large project previews.
+Exit criteria: one pilot plugin validates the extension API.
+
+- [ ] Normalize export schemas for ERP/MRP/CAM ingestion.
+- [ ] Add machine-readable version metadata to export bundles.
+- [ ] Publish extension API draft with typed contracts.
+- [ ] Implement plugin sandbox with resource limits.
+- [ ] Add plugin registry UI and lifecycle management.
+
+### Phase 7: v4.0.0 Launch
+
+Exit criteria: full CI green, reproducible builds, complete docs.
+
+- [ ] Multi-cabinet room layout view.
+- [ ] Explainable optimizer with per-part placement rationale.
+- [ ] Complete security audit and CSP hardening.
+- [ ] Publish migration notes and breaking change documentation.
+- [ ] Performance benchmarks published in README.
+- [ ] Marketing site and documentation portal.
+
+---
+
+## Frontend Enhancement Priorities
+
+- Improve render segmentation for large project previews (virtualize off-screen parts).
 - Add visual regression tests for core configurator and preview states.
 - Harden error boundaries around heavy tabs and export workflows.
+- Lazy-load optimizer tab until first visit (reduces initial bundle).
+- Add skeleton loading states for worker-dependent computations.
 
-Backend/infrastructure posture:
+## Backend / Infrastructure Posture
 
-- Keep backend optional for core planner operations.
+- Keep backend **optional** for core planner operations (non-negotiable).
 - Define optional service endpoints only for collaboration/version history.
-- Keep local-first workflow as a non-negotiable baseline.
+- Keep local-first workflow as the fundamental guarantee.
+- No external API calls in the critical rendering/export path.
 
-Database direction (optional track):
+## Database Direction (Optional Track)
 
-- Current: localStorage/session persistence.
-- Next optional step: IndexedDB for larger project sets and snapshots.
-- Future optional service: remote sync with conflict-safe merge model.
+| Stage   | Technology               | Purpose                                  |
+| ------- | ------------------------ | ---------------------------------------- |
+| Current | localStorage + URL state | Simple persistence, shareable links      |
+| Next    | IndexedDB (idb-keyval)   | Large projects, snapshots, offline-first |
+| Future  | CRDTs (Yjs/Automerge)    | Optional real-time collaboration         |
+| Never   | Server-required DB       | Core workflows must remain serverless    |
+
+---
 
 ## Toolchain and Environment Standardization
 
-Common development tools should be centralized under the parent MyScripts scope.
+### Shared Development Tools (MyScripts scope)
 
-Baseline:
+Common tools are centralized one level up at `MyScripts/`:
 
-- Node runtime and package manager policy managed one level up where practical.
-- Shared reusable tooling assets are maintained under `../.tools` (MyScripts scope).
-- Project-level scripts remain authoritative for build/test/release.
-- Temporary/intermediate outputs must be written to OS TEMP paths (for example `%TEMP%/WoodworkingShop`) rather than workspace-root folders.
+| Tool           | Location                                  | Purpose                                |
+| -------------- | ----------------------------------------- | -------------------------------------- |
+| Node.js 22 LTS | System / `.nvmrc` at MyScripts root       | Runtime for all JS/TS projects         |
+| npm workspaces | `MyScripts/package.json`                  | Hoisted dependencies, single lock file |
+| EditorConfig   | `MyScripts/.editorconfig`                 | Shared formatting baseline             |
+| Prettier       | `MyScripts/.tools/prettierrc.shared.json` | Shared style rules                     |
+| TypeScript     | `MyScripts/node_modules/typescript`       | Shared compiler binary                 |
 
-Operational policy:
+### Project-Specific Configuration
 
-- Treat `coverage`, `dist`, and `test-results` as generated artifacts only.
-- Never treat generated output as source-of-truth documentation.
+| Config             | Location                    | Notes                                                |
+| ------------------ | --------------------------- | ---------------------------------------------------- |
+| tsconfig (4 files) | Workspace root              | App, node, test, e2e — all reference a solution root |
+| ESLint flat config | `eslint.config.js`          | Project-specific rules                               |
+| Vite config        | `vite.config.ts`            | Build/dev/preview configuration                      |
+| Vitest config      | `vitest.config.ts`          | Test environment, coverage                           |
+| Playwright config  | `playwright.config.ts`      | E2E browser matrix                                   |
+| Bundle budgets     | `config/bundle-budget.json` | JS/CSS size limits                                   |
+| Lighthouse         | `config/lighthouserc.json`  | Performance/a11y thresholds                          |
 
-## Legacy Roadmap Consolidation
+### Intermediate Artifact Policy
 
-Legacy roadmap items are consolidated as:
+All generated/transient outputs write to OS TEMP:
 
-- Completed historical sprints: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
-- Delivered release details: [CHANGELOG.md](CHANGELOG.md)
-- Current architecture baseline: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+| Artifact           | Path                                      |
+| ------------------ | ----------------------------------------- |
+| Vite cache         | `$TEMP/WoodworkingShop/.vite_cache`       |
+| ESLint cache       | `$TEMP/WoodworkingShop/.eslintcache`      |
+| Vitest coverage    | `$TEMP/WoodworkingShop/coverage`          |
+| Playwright results | `$TEMP/WoodworkingShop/test-results`      |
+| Playwright report  | `$TEMP/WoodworkingShop/playwright-report` |
+| Lighthouse output  | `$TEMP/WoodworkingShop/.lighthouseci`     |
+| TS build info      | `node_modules/.tmp/` (npm-managed)        |
 
-This file now contains only forward-looking execution priorities.
+Workspace root contains **only** source, configuration, and documentation.
+
+---
 
 ## Release Quality Gates (Must Pass)
 
-1. `npm run typecheck`
-2. `npm run lint`
-3. `npm run lint:md`
-4. `npm run format:check`
-5. `npm test`
-6. `npm run build`
-7. `npm run test:e2e`
+Every release requires all gates green:
 
-If any gate fails, release is blocked until root cause is fixed.
+1. `npm run typecheck` — zero errors
+2. `npm run lint` — zero warnings (`--max-warnings 0`)
+3. `npm run lint:md` — zero markdown issues
+4. `npm run format:check` — zero formatting drift
+5. `npm test` — all unit tests pass
+6. `npm run build` — clean production build
+7. `npm run bundle:check` — within budget limits
+8. `npm run test:e2e` — all E2E + a11y tests pass
+
+If any gate fails, the release is blocked until root cause is fixed (not suppressed).
+
+---
 
 ## Continuous Enhancement Rules
 
-1. No suppression-first fixes.
-2. No dead code, dead docs, or dead config retained.
-3. Every behavior change must include tests or a justified test update.
-4. Docs must be updated in the same change set as behavior changes.
-5. Keep roadmap, architecture, and changelog mutually consistent.
+1. **No suppression-first fixes** — fix root cause, never disable the check.
+2. **No dead code** — unused exports, unreachable branches, and stale tests are removed immediately.
+3. **No dead docs** — documentation must reflect current implementation. Stale sections are removed or updated in the same commit.
+4. **No dead config** — disabled rules, commented-out settings, and unused config keys are deleted.
+5. **Every behavior change includes tests** — or a justified test update.
+6. **Docs update with code** — roadmap, architecture, and changelog stay mutually consistent.
+7. **Badges reflect reality** — version badges, test counts, and status indicators are updated with each release.
+8. **Intermediate files never in workspace** — all caches, reports, and build telemetry go to `$TEMP`.
+
+---
+
+## Legacy Consolidation
+
+| Content                        | Location                                                           |
+| ------------------------------ | ------------------------------------------------------------------ |
+| Completed sprints (historical) | [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)                   |
+| Release details                | [CHANGELOG.md](CHANGELOG.md)                                       |
+| Architecture baseline          | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)                       |
+| Copilot coding conventions     | [.github/copilot-instructions.md](.github/copilot-instructions.md) |
+
+This file contains **only** forward-looking execution priorities.

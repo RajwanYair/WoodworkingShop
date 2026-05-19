@@ -40,9 +40,7 @@ describe('validateConfig', () => {
 
   it('raises DOOR_ASPECT_RATIO warning for tall narrow door', () => {
     // A single door with width=300 height=2000 → ratio = (2000-6)/(300-6) ≈ 6.8 > 5
-    const issues = validateConfig(
-      cfg({ width: 300, height: 2000, doorCount: 1, doorStyle: 'flat' }),
-    );
+    const issues = validateConfig(cfg({ width: 300, height: 2000, doorCount: 1, doorStyle: 'flat' }));
     expect(issues.some((i) => i.code === 'DOOR_ASPECT_RATIO')).toBe(true);
     const issue = issues.find((i) => i.code === 'DOOR_ASPECT_RATIO')!;
     expect(issue.severity).toBe('warning');
@@ -82,9 +80,7 @@ describe('validateConfig', () => {
 
   it('sorts issues: errors before warnings before info', () => {
     // Create a config with multiple issues
-    const issues = validateConfig(
-      cfg({ width: 100, height: 600, shelfCount: 10, kickHeight: 400 }),
-    );
+    const issues = validateConfig(cfg({ width: 100, height: 600, shelfCount: 10, kickHeight: 400 }));
     const severities = issues.map((i) => i.severity);
     const order: Record<string, number> = { error: 0, warning: 1, info: 2 };
     for (let i = 1; i < severities.length; i++) {
@@ -95,9 +91,7 @@ describe('validateConfig', () => {
   it('raises a span warning for wide chipboard span', () => {
     // width=1200 → shelfWidth ≈ 1162mm, chipboard-18 has low modulus
     // May emit SHELF_DEFLECTION_WARNING, SHELF_DEFLECTION_DANGER, or SHELF_SPAN_CHIPBOARD
-    const issues = validateConfig(
-      cfg({ width: 1200, carcassMaterial: 'chipboard-18', shelfCount: 2 }),
-    );
+    const issues = validateConfig(cfg({ width: 1200, carcassMaterial: 'chipboard-18', shelfCount: 2 }));
     const hasDef = issues.some(
       (i) =>
         i.code === 'SHELF_DEFLECTION_WARNING' ||
@@ -109,9 +103,7 @@ describe('validateConfig', () => {
 
   it('raises no deflection error for stiff plywood at moderate span', () => {
     // width=800, plywood-17 — should be fine
-    const issues = validateConfig(
-      cfg({ width: 800, carcassMaterial: 'plywood-17', shelfCount: 2 }),
-    );
+    const issues = validateConfig(cfg({ width: 800, carcassMaterial: 'plywood-17', shelfCount: 2 }));
     expect(issues.some((i) => i.code === 'SHELF_DEFLECTION_DANGER')).toBe(false);
   });
 
@@ -190,9 +182,7 @@ describe('validateConfig', () => {
 
   it('raises DRAWER_STACK_OVERFLOW when total drawer stack exceeds interior height', () => {
     // height=600, plywood-17 → internalH ≈ 566, 3 drawers × 200mm + 2 gaps × 10 = 620mm > 566mm
-    const issues = validateConfig(
-      cfg({ height: 600, drawerCount: 3, drawerHeights: [200, 200, 200], shelfCount: 0 }),
-    );
+    const issues = validateConfig(cfg({ height: 600, drawerCount: 3, drawerHeights: [200, 200, 200], shelfCount: 0 }));
     expect(issues.some((i) => i.code === 'DRAWER_STACK_OVERFLOW')).toBe(true);
     expect(issues.find((i) => i.code === 'DRAWER_STACK_OVERFLOW')!.severity).toBe('error');
   });
@@ -219,7 +209,9 @@ describe('validateConfig', () => {
 
   it('does not raise SPAN_TOO_WIDE for panel furniture type', () => {
     // Panel type is exempt from SPAN_TOO_WIDE (it IS a single panel)
-    const issues = validateConfig(cfg({ width: 1800, furnitureType: 'panel', doorStyle: 'none', kickHeight: 0, depth: 18 }));
+    const issues = validateConfig(
+      cfg({ width: 1800, furnitureType: 'panel', doorStyle: 'none', kickHeight: 0, depth: 18 }),
+    );
     expect(issues.some((i) => i.code === 'SPAN_TOO_WIDE')).toBe(false);
   });
 
@@ -236,7 +228,9 @@ describe('validateConfig', () => {
   });
 
   it('does not raise CARCASS_HEIGHT_CRITICAL for panel furniture type', () => {
-    const issues = validateConfig(cfg({ height: 2800, furnitureType: 'panel', doorStyle: 'none', kickHeight: 0, depth: 18 }));
+    const issues = validateConfig(
+      cfg({ height: 2800, furnitureType: 'panel', doorStyle: 'none', kickHeight: 0, depth: 18 }),
+    );
     expect(issues.some((i) => i.code === 'CARCASS_HEIGHT_CRITICAL')).toBe(false);
   });
 });
@@ -244,22 +238,26 @@ describe('validateConfig', () => {
 describe('validateConfig — SHELF_LOAD_CAPACITY_LOW (Sprint 30)', () => {
   it('raises SHELF_LOAD_CAPACITY_LOW for a very wide span with chipboard', () => {
     // 1600 mm span with chipboard-18 has very low stiffness → < 15 kg safe load
-    const issues = validateConfig(cfg({
-      width: 1700,
-      shelfCount: 2,
-      carcassMaterial: 'chipboard-18',
-      doorStyle: 'none',
-    }));
+    const issues = validateConfig(
+      cfg({
+        width: 1700,
+        shelfCount: 2,
+        carcassMaterial: 'chipboard-18',
+        doorStyle: 'none',
+      }),
+    );
     expect(issues.some((i) => i.code === 'SHELF_LOAD_CAPACITY_LOW')).toBe(true);
   });
 
   it('does not raise SHELF_LOAD_CAPACITY_LOW for a normal span with plywood', () => {
-    const issues = validateConfig(cfg({
-      width: 800,
-      shelfCount: 2,
-      carcassMaterial: 'plywood-18',
-      doorStyle: 'none',
-    }));
+    const issues = validateConfig(
+      cfg({
+        width: 800,
+        shelfCount: 2,
+        carcassMaterial: 'plywood-18',
+        doorStyle: 'none',
+      }),
+    );
     expect(issues.some((i) => i.code === 'SHELF_LOAD_CAPACITY_LOW')).toBe(false);
   });
 
@@ -269,16 +267,16 @@ describe('validateConfig — SHELF_LOAD_CAPACITY_LOW (Sprint 30)', () => {
   });
 
   it('SHELF_LOAD_CAPACITY_LOW points to shelfCount field', () => {
-    const issues = validateConfig(cfg({
-      width: 1700,
-      shelfCount: 1,
-      carcassMaterial: 'chipboard-18',
-      doorStyle: 'none',
-    }));
+    const issues = validateConfig(
+      cfg({
+        width: 1700,
+        shelfCount: 1,
+        carcassMaterial: 'chipboard-18',
+        doorStyle: 'none',
+      }),
+    );
     const issue = issues.find((i) => i.code === 'SHELF_LOAD_CAPACITY_LOW');
     expect(issue?.field).toBe('shelfCount');
     expect(issue?.severity).toBe('warning');
   });
 });
-
-

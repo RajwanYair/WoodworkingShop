@@ -1,10 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import {
-  saveProject,
-  listProjects,
-  deleteProject,
-  type SavedProject,
-} from '../../src/utils/project-storage';
+import { saveProject, listProjects, deleteProject, type SavedProject } from '../../src/utils/project-storage';
 import type { ProjectSnapshot } from '../../src/store/cabinet-store';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 
@@ -14,15 +9,19 @@ const SNAPSHOTS_KEY = 'woodworkingshop:snapshots';
 const store: Record<string, string> = {};
 const localStorageMock = {
   getItem: (key: string) => store[key] ?? null,
-  setItem: (key: string, value: string) => { store[key] = value; },
-  removeItem: (key: string) => { delete store[key]; },
-  clear: () => { for (const k in store) delete store[k]; },
+  setItem: (key: string, value: string) => {
+    store[key] = value;
+  },
+  removeItem: (key: string) => {
+    delete store[key];
+  },
+  clear: () => {
+    for (const k in store) delete store[k];
+  },
 };
 Object.defineProperty(globalThis, 'localStorage', { value: localStorageMock, writable: true });
 
-const sampleCabinets = [
-  { id: 'cab-1', name: 'Test Cabinet', config: DEFAULT_CONFIG, notes: '' },
-];
+const sampleCabinets = [{ id: 'cab-1', name: 'Test Cabinet', config: DEFAULT_CONFIG, notes: '' }];
 
 const sampleSnapshots: ProjectSnapshot[] = [
   {

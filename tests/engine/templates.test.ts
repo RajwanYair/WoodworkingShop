@@ -25,7 +25,7 @@ describe('getTemplateDefaults', () => {
   it('bookshelf defaults have doorStyle=none and positive shelfCount', () => {
     const d = getTemplateDefaults('bookshelf');
     expect(d.doorStyle).toBe('none');
-    expect((d.shelfCount ?? 0)).toBeGreaterThan(0);
+    expect(d.shelfCount ?? 0).toBeGreaterThan(0);
     expect(d.kickHeight).toBe(0);
   });
 
@@ -38,7 +38,7 @@ describe('getTemplateDefaults', () => {
 
   it('wardrobe defaults have height >= 2000mm and doorStyle=flat', () => {
     const d = getTemplateDefaults('wardrobe');
-    expect((d.height ?? 0)).toBeGreaterThanOrEqual(2000);
+    expect(d.height ?? 0).toBeGreaterThanOrEqual(2000);
     expect(d.doorStyle).toBe('flat');
   });
 

@@ -391,11 +391,16 @@ export function getTemplate(id: string): CabinetTemplate | undefined {
  */
 export function getTemplateDefaults(type: FurnitureType): Partial<CabinetConfig> {
   switch (type) {
-    case 'bookshelf': return { ...BOOKSHELF_DEFAULTS };
-    case 'desk':      return { ...DESK_DEFAULTS };
-    case 'wardrobe':  return { ...WARDROBE_DEFAULTS };
-    case 'panel':     return { ...PANEL_DEFAULTS };
+    case 'bookshelf':
+      return { ...BOOKSHELF_DEFAULTS };
+    case 'desk':
+      return { ...DESK_DEFAULTS };
+    case 'wardrobe':
+      return { ...WARDROBE_DEFAULTS };
+    case 'panel':
+      return { ...PANEL_DEFAULTS };
     case 'cabinet':
-    default:          return { ...CABINET_DEFAULTS };
+    default:
+      return { ...CABINET_DEFAULTS };
   }
 }

@@ -96,10 +96,7 @@ export function importProjectJson(file: File): Promise<SavedProject> {
               localStorage.getItem(SNAPSHOTS_KEY) ?? '[]',
             ) as ProjectSnapshot[];
             const existingIds = new Set(existing.map((s) => s.id));
-            const merged = [
-              ...existing,
-              ...project.snapshots.filter((s) => !existingIds.has(s.id)),
-            ];
+            const merged = [...existing, ...project.snapshots.filter((s) => !existingIds.has(s.id))];
             localStorage.setItem(SNAPSHOTS_KEY, JSON.stringify(merged));
           } catch {
             // Non-critical — silently skip snapshot restore

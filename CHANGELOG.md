@@ -11,6 +11,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.50.0] — 2026-05-19
+
+### Production Hardening Release
+
+Complete architectural decision audit, tooling cleanup, and production readiness pass.
+
+### Architecture and Planning
+
+- Rewrote `ROADMAP.md` with comprehensive strategic decision audit, competitive benchmark table (Fusion 360, SketchUp+OpenCutList, CutList Optimizer, Polyboard, Cabinet Vision, Onshape, Figma, KCD Software), and harvested best methods.
+- Added forward-only phased program plan from v3.50 through v4.0.0.
+- Documented persistence evolution roadmap (localStorage → IndexedDB → CRDTs).
+- Codified continuous enhancement rules and release quality gate checklist.
+
+### Configuration and Tooling
+
+- Changed tsconfig target/lib from `es2023` to `ESNext` — eliminates VS Code JSON schema validation false positives while maintaining identical runtime behavior (Vite's `build.target: 'es2022'` controls actual output).
+- Created `scripts/lighthouse.js` wrapper to redirect Lighthouse CI output to `$TEMP/WoodworkingShop/.lighthouseci` — ensures intermediate artifacts never pollute workspace root.
+- Updated VS Code settings to properly suppress progressive-enhancement CSS property warnings (IE-related compat noise eliminated at settings level, not code level).
+- Added `css.lint.validProperties` and `css.lint.unknownProperties` settings for intentional modern CSS features.
+
+### Documentation
+
+- Updated README badges: TypeScript 5.8 → 6.0, Vite 6 → 8, tests 280+ → 318+.
+- All version indicators now match actual `package.json` dependencies.
+
+### Verification
+
+- `npm run typecheck` — zero errors.
+- `npm run lint` — zero warnings.
+- `npm run test` — all tests pass.
+- `npm run build` — clean production build.
+
 ## [3.45.2] — 2026-05-18
 
 ### 🔧 Editor Diagnostics Cleanup

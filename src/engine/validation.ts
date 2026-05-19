@@ -263,10 +263,7 @@ export function validateConfig(
     // ── Per-drawer height checks (Sprint 13) ──
 
     const drawerGapMm = 10; // clearance between drawer faces
-    const heights: number[] = Array.from(
-      { length: config.drawerCount },
-      (_, i) => config.drawerHeights?.[i] ?? 150,
-    );
+    const heights: number[] = Array.from({ length: config.drawerCount }, (_, i) => config.drawerHeights?.[i] ?? 150);
     const totalStackH = heights.reduce((s, h) => s + h, 0) + (config.drawerCount - 1) * drawerGapMm;
 
     const tooShallowIdx = heights.findIndex((h) => h < MIN_DRAWER_HEIGHT_MM);
@@ -404,7 +401,7 @@ export function validateConfig(
     const { deflectionMm } = dims.shelfDeflections[0];
     if (deflectionMm > 0) {
       const L = dims.shelfWidth;
-      const wMaxNperMm = 0.05 * (L / 360) / deflectionMm;
+      const wMaxNperMm = (0.05 * (L / 360)) / deflectionMm;
       const maxLoadKg = Math.round((wMaxNperMm * L) / 9.81);
       if (maxLoadKg < MIN_SHELF_LOAD_KG) {
         issues.push({
@@ -428,10 +425,7 @@ export function validateConfig(
 }
 
 /** Safe wrapper so validation never throws on unknown materials. */
-function safeGetMaterial(
-  key: string,
-  extraMaterials?: Parameters<typeof getMaterial>[1],
-) {
+function safeGetMaterial(key: string, extraMaterials?: Parameters<typeof getMaterial>[1]) {
   try {
     return getMaterial(key, extraMaterials);
   } catch {

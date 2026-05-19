@@ -385,7 +385,8 @@
     "to": "With",
     "apply": "Apply to All",
     "applied": "Done! Use Ctrl+Z to undo.",
-    "summary": "Will update {{count}} cabinet(s): {{from}} → {{to}}"  },
+    "summary": "Will update {{count}} cabinet(s): {{from}} → {{to}}"
+  },
   "snapshot": {
     "title": "Project Snapshots",
     "save": "Save Snapshot",
@@ -393,5 +394,6 @@
     "restore": "Restore",
     "delete": "Delete snapshot",
     "empty": "No snapshots saved yet.",
-    "savedAt": "Saved {{when}}"  }
+    "savedAt": "Saved {{when}}"
+  }
 }

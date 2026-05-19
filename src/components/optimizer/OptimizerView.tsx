@@ -182,12 +182,7 @@ export function OptimizerView() {
   return (
     <div className="space-y-6">
       {/* Sprint 11 — sr-only ARIA live region for screen-reader status announcements */}
-      <div
-        role="status"
-        aria-live="polite"
-        aria-atomic="true"
-        className="sr-only"
-      >
+      <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
         {optimizationPending
           ? t('optimizer.statusPending')
           : displayOpt.sheets.length > 0
@@ -1213,9 +1208,7 @@ function OptimizerExplainerPanel({
   const rotatedParts = sheets.reduce((s, sh) => s + sh.parts.filter((p) => p.rotated).length, 0);
   const grainLockedParts = sheets.reduce((s, sh) => s + sh.parts.filter((p) => p.grainVertical).length, 0);
   const overallYield =
-    sheets.length > 0
-      ? Math.round(sheets.reduce((s, sh) => s + sh.yieldPercent, 0) / sheets.length)
-      : 0;
+    sheets.length > 0 ? Math.round(sheets.reduce((s, sh) => s + sh.yieldPercent, 0) / sheets.length) : 0;
 
   const qualityLabel =
     overallYield >= 75
@@ -1250,22 +1243,10 @@ function OptimizerExplainerPanel({
         <div className="px-3 pb-3 space-y-2 text-xs text-wood-600 dark:text-wood-300">
           <p>{t('optimizer.explainer.algorithm')}</p>
           <ul className="space-y-1 list-disc list-inside">
-            <li>
-              {t('optimizer.explainer.placedParts', { total: totalParts, sheets: sheets.length })}
-            </li>
-            {rotatedParts > 0 && (
-              <li>
-                {t('optimizer.explainer.rotatedParts', { count: rotatedParts })}
-              </li>
-            )}
-            {grainLockedParts > 0 && (
-              <li>
-                {t('optimizer.explainer.grainLocked', { count: grainLockedParts })}
-              </li>
-            )}
-            <li>
-              {t('optimizer.explainer.yieldResult', { yield: overallYield })}
-            </li>
+            <li>{t('optimizer.explainer.placedParts', { total: totalParts, sheets: sheets.length })}</li>
+            {rotatedParts > 0 && <li>{t('optimizer.explainer.rotatedParts', { count: rotatedParts })}</li>}
+            {grainLockedParts > 0 && <li>{t('optimizer.explainer.grainLocked', { count: grainLockedParts })}</li>}
+            <li>{t('optimizer.explainer.yieldResult', { yield: overallYield })}</li>
           </ul>
         </div>
       )}

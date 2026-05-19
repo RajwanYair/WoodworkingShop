@@ -97,4 +97,3 @@ describe('generateAssemblySteps', () => {
     expect(hingeStep?.riskLevel).toBe('medium');
   });
 });
-

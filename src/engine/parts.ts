@@ -9,8 +9,9 @@ import { createJsonMemo } from './memo';
  * Result is JSON-memoised: repeated calls with the same config return the
  * cached Part array without re-running the engine.
  */
-export const generateParts: (cfg: CabinetConfig) => Part[] = createJsonMemo(
-  function _generateParts(cfg: CabinetConfig): Part[] {
+export const generateParts: (cfg: CabinetConfig) => Part[] = createJsonMemo(function _generateParts(
+  cfg: CabinetConfig,
+): Part[] {
   const d = computeDimensions(cfg);
   const cm = getMaterial(cfg.carcassMaterial);
   const bm = getMaterial(cfg.backPanelMaterial);
@@ -303,8 +304,7 @@ export const generateParts: (cfg: CabinetConfig) => Part[] = createJsonMemo(
   }
 
   return parts;
-  },
-);
+});
 
 /** Get the derived dimensions — convenience re-export. */
 export { computeDimensions } from './dimensions';
