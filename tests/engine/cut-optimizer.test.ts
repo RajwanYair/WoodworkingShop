@@ -341,3 +341,69 @@ describe('optimizeCutSheets — grainConflictCount (Sprint 41)', () => {
     }
   });
 });
+
+describe('optimizeCutSheets — grain conflict indicators (Sprint 42)', () => {
+  it('non-grain-conflict parts have grainConflict undefined or false', () => {
+    const parts = generateParts(DEFAULT_CONFIG);
+    const result = optimizeCutSheets(parts);
+    for (const sheet of result.sheets) {
+      for (const p of sheet.parts) {
+        if (!p.grainConflict) {
+          expect(p.grainConflict).toBeFalsy();
+        }
+      }
+    }
+  });
+
+  it('grainConflict is truthy only when hasGrain material and part was forced to rotate', () => {
+    const widePart: import('../../src/engine/types').Part = {
+      id: 'wide',
+      name: { en: 'Wide', he: 'רחב' },
+      qty: 1,
+      material: 'plywood-17',
+      thickness: 17,
+      length: 400,
+      width: 700,
+      edgeBanding: { en: '', he: '' },
+      grainVertical: true,
+    };
+    const result = optimizeCutSheets([widePart], 3, { 'plywood-17': { width: 500, length: 1000 } });
+    const placed = result.sheets.flatMap((s) => s.parts);
+    // The 700mm-wide part must be rotated on a 500mm-wide sheet → grain conflict
+    expect(placed.some((p) => p.grainConflict === true)).toBe(true);
+  });
+
+  it('grainConflictCount in OptimizationResult matches per-part grainConflict flags', () => {
+    const widePart: import('../../src/engine/types').Part = {
+      id: 'wide2',
+      name: { en: 'Wide2', he: 'רחב2' },
+      qty: 1,
+      material: 'plywood-17',
+      thickness: 17,
+      length: 400,
+      width: 700,
+      edgeBanding: { en: '', he: '' },
+      grainVertical: true,
+    };
+    const result = optimizeCutSheets([widePart], 3, { 'plywood-17': { width: 500, length: 1000 } });
+    const flagged = result.sheets.flatMap((s) => s.parts).filter((p) => p.grainConflict).length;
+    expect(result.grainConflictCount).toBe(flagged);
+  });
+
+  it('sheets with zero grain conflicts have no parts with grainConflict=true', () => {
+    const normalPart: import('../../src/engine/types').Part = {
+      id: 'n1',
+      name: { en: 'Normal', he: 'רגיל' },
+      qty: 1,
+      material: 'plywood-17',
+      thickness: 17,
+      length: 300,
+      width: 200,
+      edgeBanding: { en: '', he: '' },
+    };
+    const result = optimizeCutSheets([normalPart], 3);
+    const conflicted = result.sheets.flatMap((s) => s.parts).filter((p) => p.grainConflict);
+    expect(conflicted.length).toBe(0);
+    expect(result.grainConflictCount).toBe(0);
+  });
+});

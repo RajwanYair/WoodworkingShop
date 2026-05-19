@@ -878,6 +878,18 @@ function SheetCard({
               <IconGrainVertical size={10} className="inline" /> grain
             </span>
           )}
+          {/* Sprint 42 — grain conflict badge on sheet header */}
+          {(() => {
+            const conflictCount = sheet.parts.filter((p) => p.grainConflict).length;
+            return conflictCount > 0 ? (
+              <span
+                className="ml-1.5 text-[10px] font-normal text-red-700 dark:text-red-300 bg-red-100 dark:bg-red-900/30 px-1 rounded inline-flex items-center gap-0.5"
+                title={`${conflictCount} part(s) had grain direction compromised to fit the sheet`}
+              >
+                ⚠ {conflictCount} grain {conflictCount === 1 ? 'conflict' : 'conflicts'}
+              </span>
+            ) : null;
+          })()}
         </h3>
         <YieldBar yieldPercent={sheet.yieldPercent} />
         {mat.pricePerSheet != null && (
@@ -1135,6 +1147,16 @@ function PartRect({
             />
           </g>
         ))}
+      {/* Sprint 42 — grain conflict indicator: red triangle in top-right corner */}
+      {part.grainConflict && (
+        <polygon
+          points={`${x + w},${y} ${x + w - 7},${y} ${x + w},${y + 7}`}
+          fill="#EF4444"
+          opacity={isFaded ? 0.2 : 0.85}
+          pointerEvents="none"
+          aria-label="Grain direction compromised"
+        />
+      )}
       {/* Part label (name) — shown when showLabel is true and rect is tall enough */}
       {showLabel && w > 12 && h > 16 && (
         <text
