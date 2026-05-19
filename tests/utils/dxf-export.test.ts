@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import type { CutSheet } from '../../src/engine/types';
-import { cutSheetToDxf } from '../../src/utils/dxf-export';
+import { cutSheetToDxf, downloadDxfForSheet, downloadAllSheetsDxf } from '../../src/utils/dxf-export';
 import { mockSheet } from '../helpers';
 
 describe('cutSheetToDxf', () => {
@@ -53,5 +53,51 @@ describe('cutSheetToDxf', () => {
   it('includes generatedAt ISO timestamp in header', () => {
     const dxf = cutSheetToDxf(mockSheet);
     expect(dxf).toMatch(/Generated: \d{4}-\d{2}-\d{2}T/);
+  });
+});
+
+describe('downloadDxfForSheet', () => {
+  it('triggers download with correct filename', () => {
+    const mockAnchor = { href: '', download: '', click: vi.fn() };
+    vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor as unknown as HTMLElement);
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:test');
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+
+    downloadDxfForSheet(mockSheet, 'sheet-1.dxf');
+
+    expect(mockAnchor.download).toBe('sheet-1.dxf');
+    expect(mockAnchor.href).toBe('blob:test');
+    expect(mockAnchor.click).toHaveBeenCalled();
+
+    vi.restoreAllMocks();
+  });
+});
+
+describe('downloadAllSheetsDxf', () => {
+  it('combines multiple sheets into one DXF and triggers download', () => {
+    const mockAnchor = { href: '', download: '', click: vi.fn() };
+    vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor as unknown as HTMLElement);
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:combined');
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+
+    const sheet2: CutSheet = { ...mockSheet, sheetIndex: 1 };
+    downloadAllSheetsDxf([mockSheet, sheet2], 'MyProject');
+
+    expect(mockAnchor.download).toContain('MyProject-cut-sheets.dxf');
+    expect(mockAnchor.click).toHaveBeenCalled();
+
+    vi.restoreAllMocks();
+  });
+
+  it('generates DXF containing content for all sheets (no throw)', () => {
+    const mockAnchor = { href: '', download: '', click: vi.fn() };
+    vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor as unknown as HTMLElement);
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:two');
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+
+    const sheet2: CutSheet = { ...mockSheet, sheetIndex: 1 };
+    expect(() => downloadAllSheetsDxf([mockSheet, sheet2], 'P')).not.toThrow();
+
+    vi.restoreAllMocks();
   });
 });

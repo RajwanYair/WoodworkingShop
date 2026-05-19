@@ -4,6 +4,8 @@ import {
   listProjects,
   deleteProject,
   migrateProject,
+  exportProjectJson,
+  importProjectsBundle,
   CURRENT_SCHEMA_VERSION,
   type SavedProject,
 } from '../../src/utils/project-storage';
@@ -120,6 +122,88 @@ describe('project-storage', () => {
     // snap-1 should appear exactly once
     expect(memSnapshots.filter((s) => s.id === 'snap-1')).toHaveLength(1);
     expect(memSnapshots.some((s) => s.id === 'snap-2')).toBe(true);
+  });
+
+  it('saveProject replaces a project with the same name, preserving its id', async () => {
+    const first = await saveProject('Same Name', sampleCabinets);
+    const second = await saveProject('Same Name', sampleCabinets);
+    const projects = await listProjects();
+    expect(projects).toHaveLength(1);
+    // id is preserved from the first save
+    expect(projects[0].id).toBe(first.id);
+    expect(second.name).toBe('Same Name');
+  });
+
+  it('exportProjectJson calls triggerDownload with serialised project', () => {
+    const mockAnchor = document.createElement('a');
+    const clickSpy = vi.spyOn(mockAnchor, 'click').mockImplementation(() => {});
+    vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor);
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:export-test');
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+
+    const project: SavedProject = {
+      id: 'export-id',
+      name: 'Export Test',
+      savedAt: new Date().toISOString(),
+      cabinets: sampleCabinets,
+    };
+
+    exportProjectJson(project);
+
+    expect(clickSpy).toHaveBeenCalled();
+    expect(mockAnchor.download).toContain('Export_Test');
+
+    vi.restoreAllMocks();
+  });
+
+  it('importProjectsBundle merges new projects from a bundle file', async () => {
+    const bundle = {
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      projects: [
+        { id: 'b1', name: 'Bundled A', savedAt: new Date().toISOString(), cabinets: sampleCabinets },
+        { id: 'b2', name: 'Bundled B', savedAt: new Date().toISOString(), cabinets: sampleCabinets },
+      ],
+    };
+    const file = new File([JSON.stringify(bundle)], 'bundle.cabinet-projects.json', { type: 'application/json' });
+    const added = await importProjectsBundle(file);
+    expect(added).toHaveLength(2);
+    expect(added[0].name).toBe('Bundled A');
+    expect(added[1].name).toBe('Bundled B');
+  });
+
+  it('importProjectsBundle renames duplicates with (imported) suffix', async () => {
+    await saveProject('Clash', sampleCabinets);
+    const bundle = {
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      projects: [
+        { id: 'clash-id', name: 'Clash', savedAt: new Date().toISOString(), cabinets: sampleCabinets },
+      ],
+    };
+    const file = new File([JSON.stringify(bundle)], 'bundle.json', { type: 'application/json' });
+    const added = await importProjectsBundle(file);
+    expect(added[0].name).toBe('Clash (imported)');
+  });
+
+  it('importProjectsBundle throws on missing projects array', async () => {
+    const file = new File([JSON.stringify({ version: 1 })], 'bad.json', { type: 'application/json' });
+    await expect(importProjectsBundle(file)).rejects.toThrow(/projects/i);
+  });
+
+  it('importProjectsBundle skips malformed project entries', async () => {
+    const bundle = {
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      projects: [
+        null, // malformed
+        { id: 'ok', name: 'Valid', savedAt: new Date().toISOString(), cabinets: sampleCabinets },
+      ],
+    };
+    const file = new File([JSON.stringify(bundle)], 'partial.json', { type: 'application/json' });
+    const added = await importProjectsBundle(file);
+    expect(added).toHaveLength(1);
+    expect(added[0].name).toBe('Valid');
   });
 
   it('exportProjectJson accepts optional snapshots without mutating original project', () => {

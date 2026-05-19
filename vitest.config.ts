@@ -24,10 +24,10 @@ export default defineConfig({
       include: ['src/engine/**', 'src/utils/**', 'src/store/**', 'src/hooks/**'],
       exclude: ['src/engine/types.ts', 'src/engine/index.ts', 'src/utils/download.ts', 'src/hooks/useTouchGestures.ts'],
       thresholds: {
-        statements: 78,
+        statements: 82,
         branches: 75,
-        functions: 78,
-        lines: 79,
+        functions: 81,
+        lines: 83,
       },
     },
   },
