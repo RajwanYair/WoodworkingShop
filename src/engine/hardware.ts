@@ -266,6 +266,15 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
     unitPrice: 12,
   });
 
+  // ── Hardware quantity overrides — caller can pin any item qty by id ──
+  if (cfg.hardwareOverrides) {
+    for (const item of items) {
+      if (Object.prototype.hasOwnProperty.call(cfg.hardwareOverrides, item.id)) {
+        item.qty = cfg.hardwareOverrides[item.id];
+      }
+    }
+  }
+
   return items;
 }
 

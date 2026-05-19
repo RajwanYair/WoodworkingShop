@@ -120,3 +120,33 @@ describe('generateHardware — Sprint 113 expansion', () => {
     expect(deepSlide?.name.en).toMatch(/550 mm/);
   });
 });
+
+describe('generateHardware — hardwareOverrides', () => {
+  it('overrides qty for a specified item id', () => {
+    const cfg = { ...DEFAULT_CONFIG, hardwareOverrides: { H15: 6 } };
+    const hw = generateHardware(cfg);
+    const feet = hw.find((h) => h.id === 'H15');
+    expect(feet).toBeDefined();
+    expect(feet!.qty).toBe(6);
+  });
+
+  it('leaves non-overridden items unchanged', () => {
+    const baseline = generateHardware(DEFAULT_CONFIG);
+    const withOverride = generateHardware({ ...DEFAULT_CONFIG, hardwareOverrides: { H15: 6 } });
+    const baselineHinges = baseline.find((h) => h.id === 'H01')!.qty;
+    const overrideHinges = withOverride.find((h) => h.id === 'H01')!.qty;
+    expect(overrideHinges).toBe(baselineHinges);
+  });
+
+  it('can override multiple items simultaneously', () => {
+    const cfg = { ...DEFAULT_CONFIG, hardwareOverrides: { H15: 8, H20: 6 } };
+    const hw = generateHardware(cfg);
+    expect(hw.find((h) => h.id === 'H15')!.qty).toBe(8);
+    expect(hw.find((h) => h.id === 'H20')!.qty).toBe(6);
+  });
+
+  it('ignores unknown override ids gracefully', () => {
+    const cfg = { ...DEFAULT_CONFIG, hardwareOverrides: { UNKNOWN_ID: 99 } };
+    expect(() => generateHardware(cfg)).not.toThrow();
+  });
+});

@@ -66,6 +66,8 @@ export interface CabinetConfig {
 
   // Hardware
   handleStyle: HandleStyle;
+  /** Override calculated qty for specific hardware items by item id (e.g. { 'H15': 6 }). */
+  hardwareOverrides?: Record<string, number>;
 
   // Edge banding
   edgeBanding: EdgeBanding;
