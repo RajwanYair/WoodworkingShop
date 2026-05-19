@@ -14,6 +14,7 @@ import { ToastContainer } from './components/layout/ToastContainer';
 import { OnboardingManager } from './components/layout/OnboardingOverlay';
 import { TouchGestureTutorial } from './components/layout/TouchGestureTutorial';
 import { ShortcutsModal } from './components/layout/ShortcutsModal';
+import { SwUpdateBanner } from './components/layout/SwUpdateBanner';
 import { IconPrint } from './components/layout/Icons';
 import { useCabinetStore, type CabinetState } from './store/cabinet-store';
 import { useToastStore } from './store/toast-store';
@@ -199,6 +200,7 @@ function App() {
         <ToastContainer />
         <OnboardingManager />
         <TouchGestureTutorial />
+        <SwUpdateBanner />
         {showShortcuts && <ShortcutsModal onClose={() => setShowShortcuts(false)} />}
       </div>
     </div>

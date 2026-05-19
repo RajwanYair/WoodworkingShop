@@ -478,6 +478,8 @@
     "disable": "Disable plugin",
     "enabled": "Enabled",
     "disabled": "Disabled",
-    "apiVersion": "API v{{version}}"
-  }
+    "apiVersion": "API v{{version}}"  },
+  "swUpdate": {
+    "available": "A new version is available!",
+    "reload": "Reload"  }
 }

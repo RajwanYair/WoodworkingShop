@@ -478,5 +478,9 @@
     "enabled": "פעיל",
     "disabled": "מושבת",
     "apiVersion": "API v{{version}}"
+  },
+  "swUpdate": {
+    "available": "גרסה חדשה זמינה!",
+    "reload": "טען מחדש"
   }
 }
