@@ -178,7 +178,7 @@ Exit criteria: full CI green, reproducible builds, complete docs.
 - [x] Multi-cabinet room layout view.
 - [x] Advanced G-code with arc interpolation and tool-change sequences (G2/G3 arc commands, circularPocketToGcode, v3.53.23).
 - [x] Complete security audit and CSP hardening.
-- [ ] Publish migration notes and breaking change documentation.
+- [x] Publish migration notes and breaking change documentation.
 - [ ] Performance benchmarks published in README.
 - [ ] Marketing site and documentation portal.
 - [ ] Evaluate WebGL renderer for material texture previews.
