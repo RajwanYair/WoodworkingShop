@@ -1,16 +1,45 @@
 import type { CabinetEntry, ProjectSnapshot } from '../store/cabinet-store';
 import { idbLoadProjects, idbSaveProjects, idbLoadSnapshots, idbSaveSnapshots } from './indexed-db-storage';
 
+/** Current schema version written on every export. */
+export const CURRENT_SCHEMA_VERSION = '1.0' as const;
+
 export interface SavedProject {
   id: string;
   name: string;
   savedAt: string; // ISO timestamp
-  /** Schema version for forward-compatibility checks (added v3.48.9). */
+  /** Schema version for forward-compatibility checks. */
   schemaVersion?: '1.0';
-  /** ISO timestamp of when the file was exported (added v3.48.9). */
+  /** ISO timestamp of when the file was exported. */
   generatedAt?: string;
   cabinets: CabinetEntry[];
-  snapshots?: ProjectSnapshot[]; // Sprint 18 — snapshot history round-trip
+  snapshots?: ProjectSnapshot[]; // snapshot history round-trip
+}
+
+/**
+ * Migrate an unknown imported payload to a valid SavedProject.
+ * Throws a descriptive Error if the payload is structurally invalid.
+ * Future schema versions add migration steps before the final return.
+ */
+export function migrateProject(raw: unknown): SavedProject {
+  if (raw === null || typeof raw !== 'object') {
+    throw new Error('Project file must be a JSON object');
+  }
+  const p = raw as Record<string, unknown>;
+  if (!Array.isArray(p['cabinets'])) {
+    throw new Error('Invalid project file: missing cabinets array');
+  }
+  // v1.0 — no structural migration needed; ensure required fields have defaults
+  const migrated: SavedProject = {
+    id: typeof p['id'] === 'string' ? p['id'] : `proj-${Date.now()}`,
+    name: typeof p['name'] === 'string' && p['name'].trim() ? p['name'].trim() : 'Untitled',
+    savedAt: typeof p['savedAt'] === 'string' ? p['savedAt'] : new Date().toISOString(),
+    schemaVersion: CURRENT_SCHEMA_VERSION,
+    cabinets: p['cabinets'] as CabinetEntry[],
+  };
+  if (typeof p['generatedAt'] === 'string') migrated.generatedAt = p['generatedAt'];
+  if (Array.isArray(p['snapshots'])) migrated.snapshots = p['snapshots'] as ProjectSnapshot[];
+  return migrated;
 }
 
 async function load(): Promise<SavedProject[]> {
@@ -53,7 +82,7 @@ export async function deleteProject(id: string): Promise<void> {
 export function exportProjectJson(project: SavedProject, snapshots?: ProjectSnapshot[]): void {
   const payload: SavedProject = {
     ...(snapshots ? { ...project, snapshots } : project),
-    schemaVersion: '1.0',
+    schemaVersion: CURRENT_SCHEMA_VERSION,
     generatedAt: new Date().toISOString(),
   };
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
@@ -69,10 +98,8 @@ export function exportProjectJson(project: SavedProject, snapshots?: ProjectSnap
 
 export async function importProjectJson(file: File): Promise<SavedProject> {
   const text = await file.text();
-  const project = JSON.parse(text) as SavedProject;
-  if (!project.cabinets || !Array.isArray(project.cabinets)) {
-    throw new Error('Invalid project file');
-  }
+  const raw = JSON.parse(text) as unknown;
+  const project = migrateProject(raw);
   // Restore snapshot history, merging by id to avoid duplicates
   if (Array.isArray(project.snapshots) && project.snapshots.length > 0) {
     const existing = await idbLoadSnapshots<ProjectSnapshot>();
@@ -110,7 +137,7 @@ export function exportProjectsBundle(projects: SavedProject[]): void {
 /** Import a `.cabinet-projects.json` bundle, merging all contained projects */
 export async function importProjectsBundle(file: File): Promise<SavedProject[]> {
   const text = await file.text();
-  const parsed = JSON.parse(text) as { version?: number; projects?: SavedProject[] };
+  const parsed = JSON.parse(text) as { version?: number; projects?: unknown[] };
   const incoming = parsed.projects;
   if (!Array.isArray(incoming)) {
     throw new Error('Invalid bundle: missing projects array');
@@ -118,8 +145,13 @@ export async function importProjectsBundle(file: File): Promise<SavedProject[]> 
   const existing = await load();
   const existingNames = new Set(existing.map((p) => p.name.toLowerCase()));
   const added: SavedProject[] = [];
-  for (const proj of incoming) {
-    if (!proj.cabinets || !Array.isArray(proj.cabinets)) continue;
+  for (const raw of incoming) {
+    let proj: SavedProject;
+    try {
+      proj = migrateProject(raw);
+    } catch {
+      continue; // skip malformed entries
+    }
     const merged: SavedProject = {
       ...proj,
       id: `proj-${Date.now()}-${Math.random().toString(36).slice(2)}`,

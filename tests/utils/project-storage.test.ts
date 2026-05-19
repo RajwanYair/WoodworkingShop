@@ -1,5 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { saveProject, listProjects, deleteProject, type SavedProject } from '../../src/utils/project-storage';
+import {
+  saveProject,
+  listProjects,
+  deleteProject,
+  migrateProject,
+  CURRENT_SCHEMA_VERSION,
+  type SavedProject,
+} from '../../src/utils/project-storage';
 import type { ProjectSnapshot } from '../../src/store/cabinet-store';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 
@@ -138,5 +145,51 @@ describe('project-storage', () => {
     };
     expect(project.schemaVersion).toBe('1.0');
     expect(typeof project.generatedAt).toBe('string');
+  });
+});
+
+describe('migrateProject', () => {
+  it('accepts a valid v1.0 payload and stamps schemaVersion', () => {
+    const raw = {
+      id: 'abc',
+      name: 'Valid',
+      savedAt: '2025-01-01T00:00:00.000Z',
+      cabinets: sampleCabinets,
+    };
+    const result = migrateProject(raw);
+    expect(result.schemaVersion).toBe(CURRENT_SCHEMA_VERSION);
+    expect(result.name).toBe('Valid');
+    expect(result.cabinets).toHaveLength(1);
+  });
+
+  it('throws when cabinets array is missing', () => {
+    expect(() => migrateProject({ id: 'x', name: 'Bad', savedAt: '' })).toThrow(
+      /cabinets/i,
+    );
+  });
+
+  it('throws for non-object input', () => {
+    expect(() => migrateProject(null)).toThrow();
+    expect(() => migrateProject('string')).toThrow();
+    expect(() => migrateProject(42)).toThrow();
+  });
+
+  it('fills in defaults when optional fields are missing', () => {
+    const raw = { cabinets: sampleCabinets };
+    const result = migrateProject(raw);
+    expect(result.name).toBe('Untitled');
+    expect(typeof result.savedAt).toBe('string');
+    expect(result.schemaVersion).toBe(CURRENT_SCHEMA_VERSION);
+  });
+
+  it('preserves optional fields when present', () => {
+    const raw = {
+      cabinets: sampleCabinets,
+      generatedAt: '2025-06-01T00:00:00.000Z',
+      snapshots: sampleSnapshots,
+    };
+    const result = migrateProject(raw);
+    expect(result.generatedAt).toBe('2025-06-01T00:00:00.000Z');
+    expect(result.snapshots).toHaveLength(2);
   });
 });
