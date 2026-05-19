@@ -3,6 +3,7 @@ import './index.css';
 import { useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Header } from './components/layout/Header';
+import { SkeletonPane } from './components/layout/SkeletonPane';
 import { Sidebar } from './components/layout/Sidebar';
 import { ErrorBoundary } from './components/layout/ErrorBoundary';
 import { ConfiguratorPanel } from './components/configurator/ConfiguratorPanel';
@@ -158,7 +159,7 @@ function App() {
             )}
             {activeTab === 'optimizer' && (
               <ErrorBoundary panelName="Optimizer">
-                <Suspense fallback={<div className="text-center py-12 text-wood-400">Loading optimizer…</div>}>
+                <Suspense fallback={<SkeletonPane label={t('skeleton.loadingOptimizer')} cards={4} />}>
                   <div className="space-y-8">
                     <SmartOptimizerPanel />
                     <PartsTable />
@@ -170,14 +171,14 @@ function App() {
             )}
             {activeTab === 'assembly' && (
               <ErrorBoundary panelName="Assembly Guide">
-                <Suspense fallback={<div className="text-center py-12 text-wood-400">Loading assembly guide…</div>}>
+                <Suspense fallback={<SkeletonPane label={t('skeleton.loadingAssembly')} cards={3} />}>
                   <AssemblyGuide />
                 </Suspense>
               </ErrorBoundary>
             )}
             {activeTab === 'pdf' && (
               <ErrorBoundary panelName="PDF Export">
-                <Suspense fallback={<div className="text-center py-12 text-wood-400">Loading PDF tools…</div>}>
+                <Suspense fallback={<SkeletonPane label={t('skeleton.loadingPdf')} cards={2} />}>
                   <PdfExportPanel />
                 </Suspense>
               </ErrorBoundary>

@@ -350,6 +350,12 @@
     "linkCopied": "קישור שיתוף הועתק ללוח",
     "linkCopyFailed": "לא ניתן להעתיק קישור — אנא העתק את הכתובת מסרגל הכתובות"
   },
+  "skeleton": {
+    "loading": "טוען לוח…",
+    "loadingOptimizer": "טוען אופטימיזציית גיליונות חיתוך…",
+    "loadingAssembly": "טוען מדריך הרכבה…",
+    "loadingPdf": "טוען כלי ייצוא PDF…"
+  },
   "shortcuts": {
     "saveSnapshot": "צילום מצב נשמר"
   },

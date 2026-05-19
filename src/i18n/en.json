@@ -354,6 +354,12 @@
   "shortcuts": {
     "saveSnapshot": "Snapshot saved"
   },
+  "skeleton": {
+    "loading": "Loading panel…",
+    "loadingOptimizer": "Loading cut sheet optimizer…",
+    "loadingAssembly": "Loading assembly guide…",
+    "loadingPdf": "Loading PDF export tools…"
+  },
   "onboarding": {
     "title": "Welcome to Cabinet Planner!",
     "subtitle": "Design, optimize, and build your furniture in 5 easy steps.",
