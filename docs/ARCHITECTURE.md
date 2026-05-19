@@ -134,6 +134,25 @@ Intermediate artifact policy:
 - Generated caches and reports (Vite cache, ESLint cache, Vitest coverage output, Playwright test results/reports) are configured to write to OS TEMP (`%TEMP%/WoodworkingShop` on Windows).
 - Workspace root should only contain source/config/documentation artifacts, not transient telemetry outputs.
 
+## 🔗 SharedArrayBuffer & Cross-Origin Isolation
+
+`SharedArrayBuffer` enables zero-copy memory sharing between the main thread and Web Workers. The cut-optimizer worker currently uses structured-clone transfer. A future optimisation could pass part data via a shared buffer to avoid serialisation overhead.
+
+**Requirement**: `SharedArrayBuffer` is only available when the page is *cross-origin isolated*. This requires the server to send:
+
+```
+Cross-Origin-Opener-Policy:  same-origin
+Cross-Origin-Embedder-Policy: require-corp
+```
+
+**Current status**: GitHub Pages does **not** set these headers, so `crossOriginIsolated` is `false` in production. The utility function `trySharedArrayBuffer(size)` in `src/workers/shared-buffer.ts` detects this and returns `null`, allowing the worker pipeline to fall back to standard transfer automatically.
+
+**To enable locally**: Add to `vite.config.ts` `server.headers`:
+```ts
+'Cross-Origin-Opener-Policy': 'same-origin',
+'Cross-Origin-Embedder-Policy': 'require-corp',
+```
+
 ## 🪑 Supported Furniture Types
 
 | Type        | Parts                                                  | Features                     |
