@@ -1,12 +1,16 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { CostEstimatePanel } from '../configurator/CostEstimatePanel';
 import { SnapshotPanel } from './SnapshotPanel';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { IconBarChart, IconX } from './Icons';
 
 export function Sidebar() {
   const { parts, hardware, optimization } = useCabinetStore();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const mobileDialogRef = useRef<HTMLElement>(null);
+
+  useFocusTrap(mobileDialogRef, mobileOpen, () => setMobileOpen(false));
 
   const content = (
     <>
@@ -68,6 +72,7 @@ export function Sidebar() {
             aria-label="Close panel"
           />
           <aside
+            ref={mobileDialogRef}
             className="absolute bottom-0 inset-x-0 max-h-[70vh] bg-wood-50 dark:bg-wood-900 border-t border-wood-200 dark:border-wood-800 p-4 rounded-t-xl overflow-y-auto animate-slide-up"
             aria-label="Cabinet summary"
           >

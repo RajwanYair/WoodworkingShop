@@ -1,8 +1,9 @@
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TEMPLATES } from '../../engine/templates';
 import type { CabinetTemplate } from '../../engine/templates';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { IconX } from '../layout/Icons';
 
 /** 80×60 schematic front-face SVG for a template card.
@@ -87,36 +88,7 @@ export function TemplatePicker({ onClose }: TemplatePickerProps) {
   const setConfig = useCabinetStore((s) => s.setConfig);
   const dialogRef = useRef<HTMLDivElement>(null);
 
-  // Focus trap
-  useEffect(() => {
-    const el = dialogRef.current;
-    if (!el) return;
-    const focusable = el.querySelectorAll<HTMLElement>('button:not([disabled]), [tabindex]:not([tabindex="-1"])');
-    if (focusable.length > 0) focusable[0].focus();
-
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-        return;
-      }
-      if (e.key !== 'Tab') return;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (e.shiftKey) {
-        if (document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        }
-      } else {
-        if (document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        }
-      }
-    };
-    el.addEventListener('keydown', onKey);
-    return () => el.removeEventListener('keydown', onKey);
-  }, [onClose]);
+  useFocusTrap(dialogRef, true, onClose);
 
   const handleApply = (templateId: string) => {
     const tpl = TEMPLATES.find((t) => t.id === templateId);

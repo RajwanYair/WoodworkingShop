@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { diffSnapshots } from '../../engine/snapshot-diff';
 import type { ProjectSnapshot } from '../../store/cabinet-store';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { IconX } from './Icons';
 
 interface Props {
@@ -13,6 +14,9 @@ export function SnapshotDiffModal({ snapshots, onClose }: Props) {
   const { t } = useTranslation();
   const [idA, setIdA] = useState(snapshots[1]?.id ?? snapshots[0]?.id ?? '');
   const [idB, setIdB] = useState(snapshots[0]?.id ?? '');
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  useFocusTrap(dialogRef, true, onClose);
 
   const snapA = snapshots.find((s) => s.id === idA);
   const snapB = snapshots.find((s) => s.id === idB);
@@ -26,7 +30,7 @@ export function SnapshotDiffModal({ snapshots, onClose }: Props) {
       aria-label={t('snapshot.diff.title')}
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
     >
-      <div className="w-full max-w-lg bg-white dark:bg-wood-900 rounded-xl shadow-2xl overflow-hidden">
+      <div ref={dialogRef} className="w-full max-w-lg bg-white dark:bg-wood-900 rounded-xl shadow-2xl overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-wood-200 dark:border-wood-700">
           <h2 className="text-sm font-semibold text-wood-800 dark:text-wood-100">{t('snapshot.diff.title')}</h2>
