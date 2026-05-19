@@ -186,6 +186,8 @@
     "rationale": {
       "tooltip": "מיקום: {{rationale}}"
     },
+    "grainConflicts": "גרגיר ⚠",
+    "grainConflictsTitle": "{{count}} חלק/חלקים שסיבוב פגע בכיוון הגרגיר",
     "statusPending": "מחשב גיליונות חיתוך\u2026",
     "statusComplete": "אופטימיזציה הסתיימה \u2014 {{count}} גיליונות נדרשים"
   },

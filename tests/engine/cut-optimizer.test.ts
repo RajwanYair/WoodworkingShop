@@ -294,3 +294,50 @@ describe('optimizeCutSheets', () => {
     }
   });
 });
+
+describe('optimizeCutSheets — grainConflictCount (Sprint 41)', () => {
+  it('grainConflictCount is 0 for grain-free material', () => {
+    const parts = generateParts({ ...DEFAULT_CONFIG, carcassMaterial: 'melamine-18' });
+    const result = optimizeCutSheets(parts);
+    expect(result.grainConflictCount).toBe(0);
+  });
+
+  it('grainConflictCount is a non-negative integer', () => {
+    const parts = generateParts(DEFAULT_CONFIG);
+    const result = optimizeCutSheets(parts);
+    expect(result.grainConflictCount).toBeGreaterThanOrEqual(0);
+    expect(Number.isInteger(result.grainConflictCount)).toBe(true);
+  });
+
+  it('grainConflict flag matches grainConflictCount aggregate', () => {
+    const parts = generateParts(DEFAULT_CONFIG);
+    const result = optimizeCutSheets(parts);
+    const flaggedCount = result.sheets
+      .flatMap((s) => s.parts)
+      .filter((p) => p.grainConflict === true).length;
+    expect(result.grainConflictCount).toBe(flaggedCount);
+  });
+
+  it('rationale is defined on every placed part', () => {
+    const parts = generateParts(DEFAULT_CONFIG);
+    const result = optimizeCutSheets(parts);
+    for (const sheet of result.sheets) {
+      for (const p of sheet.parts) {
+        expect(p.rationale).toBeDefined();
+        expect(typeof p.rationale).toBe('string');
+      }
+    }
+  });
+
+  it('grainConflict parts have "grain-forced" in their rationale', () => {
+    const parts = generateParts(DEFAULT_CONFIG);
+    const result = optimizeCutSheets(parts);
+    for (const sheet of result.sheets) {
+      for (const p of sheet.parts) {
+        if (p.grainConflict) {
+          expect(p.rationale).toMatch(/grain-forced/);
+        }
+      }
+    }
+  });
+});
