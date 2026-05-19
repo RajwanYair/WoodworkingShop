@@ -119,6 +119,14 @@ const MIN_BACK_REBATE_DEPTH_MM = 8;
 const MIN_HINGE_CUP_EDGE_DISTANCE_MM = 22;
 
 /**
+ * Minimum clearance (mm) between a hinge arm mounting point and the nearest
+ * shelf panel.  The hinge arm projects ~30 mm into the carcass; a shelf within
+ * this radius obstructs the arm and must be notched or repositioned.
+ * Phase 5 assembly-risk check: hinge interference.
+ */
+const HINGE_ARM_CLEARANCE_MM = 35;
+
+/**
  * Run all manufacturing constraint checks on a cabinet configuration.
  *
  * @returns Array of ValidationIssue. Empty array means the config is valid.
@@ -526,6 +534,49 @@ export function validateConfig(
       },
       field: 'doorCount',
     });
+  }
+
+  // ── Hinge-shelf interference check (Phase 5 assembly risk) ───────────────
+  // When a door is fitted and shelves are present, verify that no shelf panel
+  // falls within HINGE_ARM_CLEARANCE_MM of any hinge-arm mounting position on
+  // the carcass side.  The arm mounting height (from interior bottom) is:
+  //   internalHeight − (hingePos − doorTopInset)
+  // where doorTopInset = max(0, t − doorReveal): how far below the interior
+  // top surface the top of the door sits (the door overlaps the exterior face
+  // of the top panel by doorReveal mm, so it is inset t − doorReveal below
+  // the interior ceiling).
+  if (config.doorStyle !== 'none' && config.shelfCount > 0 && dims.hingePositions.length > 0) {
+    const doorTopInsetMm = Math.max(0, t - config.doorReveal);
+    const hingeArmsFromBottom = dims.hingePositions.map(
+      (pos) => dims.internalHeight - (pos - doorTopInsetMm),
+    );
+    // Equal-spacing shelf positions (mm from interior bottom); respects custom positions too.
+    const shelfPositions: number[] =
+      config.shelfSpacing === 'custom' && config.customShelfPositions.length === config.shelfCount
+        ? config.customShelfPositions
+        : Array.from({ length: config.shelfCount }, (_, i) =>
+            Math.round((dims.internalHeight * (i + 1)) / (config.shelfCount + 1)),
+          );
+    let interferenceReported = false;
+    for (const hPos of hingeArmsFromBottom) {
+      if (interferenceReported) break;
+      for (const sPos of shelfPositions) {
+        const gap = Math.abs(hPos - sPos);
+        if (gap < HINGE_ARM_CLEARANCE_MM) {
+          issues.push({
+            code: 'HINGE_SHELF_INTERFERENCE',
+            severity: 'warning',
+            message: {
+              en: `A hinge arm (~${Math.round(hPos)} mm from interior bottom) is within ${Math.round(gap)} mm of a shelf — less than the ${HINGE_ARM_CLEARANCE_MM} mm clearance needed to mount the hinge arm without notching the shelf. Adjust shelf count or spacing.`,
+              he: `זרוע ציר (~${Math.round(hPos)} מ"מ מתחתית הפנים) נמצאת ב-${Math.round(gap)} מ"מ ממדף — פחות מ-${HINGE_ARM_CLEARANCE_MM} מ"מ הנדרש לקיבוע הזרוע ללא חיתוך המדף. התאם מספר מדפים או ריווחם.`,
+            },
+            field: 'shelfCount',
+          });
+          interferenceReported = true;
+          break;
+        }
+      }
+    }
   }
 
   // Sort: errors → warnings → info

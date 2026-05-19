@@ -130,10 +130,10 @@ Exit criteria: stable optimization runtime, no performance regressions.
 
 Exit criteria: projects persist reliably across sessions, snapshots are diffable.
 
-- [ ] Migrate from localStorage to IndexedDB (via idb-keyval).
+- [x] Migrate from localStorage to IndexedDB (via idb-keyval, idb-crud + project-storage, v3.53.28).
 - [x] Add project snapshot/version timeline with named checkpoints (auto-named, ISO timestamp, v3.53.x).
 - [x] Implement diff view between any two project versions (snapshot diff view, v3.53.11).
-- [ ] Add import/export in standardized JSON schema with version migration.
+- [x] Add import/export in standardized JSON schema with version migration (migrateProject + importProjectJson + exportProjectJson, v3.53.28).
 - [x] Add project size indicator and storage quota monitoring (StorageQuotaBadge, v3.53.20).
 
 ### Phase 4: Test Hardening and Visual Regression (v3.53.0)
@@ -154,11 +154,11 @@ Exit criteria: 85%+ coverage, visual regression baselines, zero flaky tests.
 Exit criteria: users receive actionable warnings before export.
 
 - [x] Introduce manufacturing constraint validation layer (TALL_CARCASS_NO_SHELF warning, v3.53.17).
-- [ ] Add assembly-risk warnings (deflection, unsupported spans, hinge interference).
-- [ ] Improve material substitution recommendations with rationale text.
-- [ ] Add grain direction conflict detection in optimizer.
+- [x] Add assembly-risk warnings (deflection, unsupported spans, hinge interference — HINGE_SHELF_INTERFERENCE rule, v3.53.29).
+- [x] Improve material substitution recommendations with rationale text (quantitativeRationale with deflectionReductionPct, savedKgPerSheet, costDeltaPct, v3.53.28).
+- [x] Add grain direction conflict detection in optimizer (grainConflict flag + grainConflictCount, v3.53.28).
 - [x] Add weight estimation per shelf with load capacity warnings (per-shelf maxLoadKg + UI badge, v3.53.18).
-- [ ] Add explainable optimizer with per-part placement rationale.
+- [x] Add explainable optimizer with per-part placement rationale (rationale string on CutRect, BSSF placement description, v3.53.28).
 
 ### Phase 6: Interoperability and Plugin API (v3.55.0)
 

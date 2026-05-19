@@ -394,4 +394,41 @@ describe('validateConfig — SHELF_LOAD_CAPACITY_LOW (Sprint 30)', () => {
     const issues = validateConfig(cfg({ height: 1800, shelfCount: 0, drawerCount: 0, furnitureType: 'panel' }));
     expect(issues.some((i) => i.code === 'TALL_CARCASS_NO_SHELF')).toBe(false);
   });
+
+  // ── Hinge-shelf interference checks (Phase 5 assembly risk) ──
+
+  it('raises HINGE_SHELF_INTERFERENCE when middle hinge aligns with a shelf (1000mm cabinet, 3 shelves)', () => {
+    // height=1000, plywood-17, 3 shelves, flat door:
+    // hingesPerDoor=3, middle hinge ~497 from door top → arm at ~483mm from interior bottom
+    // 3 shelves equal → middle shelf also at ~483mm → gap 0 < 35mm
+    const issues = validateConfig(cfg({ height: 1000, shelfCount: 3, doorStyle: 'flat' }));
+    expect(issues.some((i) => i.code === 'HINGE_SHELF_INTERFERENCE')).toBe(true);
+    const issue = issues.find((i) => i.code === 'HINGE_SHELF_INTERFERENCE')!;
+    expect(issue.severity).toBe('warning');
+    expect(issue.field).toBe('shelfCount');
+  });
+
+  it('does not raise HINGE_SHELF_INTERFERENCE when doorStyle is none', () => {
+    const issues = validateConfig(cfg({ height: 1000, shelfCount: 3, doorStyle: 'none' }));
+    expect(issues.some((i) => i.code === 'HINGE_SHELF_INTERFERENCE')).toBe(false);
+  });
+
+  it('does not raise HINGE_SHELF_INTERFERENCE when shelfCount is 0', () => {
+    const issues = validateConfig(cfg({ height: 1000, shelfCount: 0, doorStyle: 'flat' }));
+    expect(issues.some((i) => i.code === 'HINGE_SHELF_INTERFERENCE')).toBe(false);
+  });
+
+  it('does not raise HINGE_SHELF_INTERFERENCE for the default 2000mm 4-shelf cabinet', () => {
+    // 5 hinges spread over 1994mm; 4 shelves at ~393, 786, 1180, 1573mm — all > 35mm from any hinge arm
+    const issues = validateConfig(cfg());
+    expect(issues.some((i) => i.code === 'HINGE_SHELF_INTERFERENCE')).toBe(false);
+  });
+
+  it('HINGE_SHELF_INTERFERENCE message contains both en and he text', () => {
+    const issues = validateConfig(cfg({ height: 1000, shelfCount: 3, doorStyle: 'flat' }));
+    const issue = issues.find((i) => i.code === 'HINGE_SHELF_INTERFERENCE');
+    expect(issue).toBeDefined();
+    expect(issue!.message.en).toContain('mm');
+    expect(issue!.message.he).toContain('מ"מ');
+  });
 });
