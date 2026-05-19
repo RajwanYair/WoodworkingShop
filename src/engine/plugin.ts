@@ -1,5 +1,85 @@
 import type { CabinetConfig, Part } from './types';
 
+// ─── Plugin Contract ─────────────────────────────────────────────────────────
+
+/**
+ * Stability tier for a plugin API hook.
+ *
+ * - `stable`       — guaranteed not to break within a major version.
+ * - `experimental` — may change without notice; opt-in only.
+ * - `deprecated`   — will be removed in the next major release.
+ */
+export type PluginStability = 'stable' | 'experimental' | 'deprecated';
+
+/**
+ * Describes the versioned stability contract of a single hook
+ * exposed by the Cabinet Planner plugin API.
+ */
+export interface PluginHookContract {
+  /** Name of the hook as it appears on CabinetPlannerPlugin. */
+  hookName: keyof Omit<CabinetPlannerPlugin, 'id' | 'name' | 'version'>;
+  /** Stability tier for this hook. */
+  stability: PluginStability;
+  /** The API version (semver) at which this hook was introduced. */
+  introducedIn: string;
+  /** If deprecated, the API version when it was deprecated. */
+  deprecatedIn?: string;
+  /** Short description of what the hook does. */
+  description: string;
+}
+
+/**
+ * The formal, versioned contract document for the Cabinet Planner plugin API.
+ *
+ * Third-party plugin authors should check this object to understand which
+ * hooks are safe to rely on in production.
+ */
+export interface PluginContract {
+  /** The Cabinet Planner API semver version this contract describes. */
+  apiVersion: string;
+  /** Overall stability of the plugin API surface. */
+  stability: PluginStability;
+  /** List of hook contracts. */
+  hooks: readonly PluginHookContract[];
+}
+
+/**
+ * The published stability contract for the Cabinet Planner Plugin API v1.
+ * Update this object whenever a hook is added, changed, or deprecated.
+ */
+export const PLUGIN_CONTRACT: PluginContract = {
+  apiVersion: '1.0.0',
+  stability: 'experimental',
+  hooks: [
+    {
+      hookName: 'onPartsGenerated',
+      stability: 'stable',
+      introducedIn: '1.0.0',
+      description:
+        'Intercepts the generated Part[] list. Return a modified copy; never mutate the input. ' +
+        'Return the same array reference to signal no change.',
+    },
+    {
+      hookName: 'onConfigChange',
+      stability: 'stable',
+      introducedIn: '1.0.0',
+      description:
+        'Intercepts a config change before it is committed to the store. ' +
+        'Return a modified CabinetConfig or the original object for no change.',
+    },
+  ],
+} as const;
+
+/**
+ * Returns the published PluginContract for the current API version.
+ * Use this to verify hook stability before depending on a hook.
+ */
+export function getPluginContract(): PluginContract {
+  return PLUGIN_CONTRACT;
+}
+
+// ─── Plugin interface ────────────────────────────────────────────────────────
+
 /**
  * Cabinet Planner Plugin API — v1 draft (v3.49.2)
  *

@@ -5,6 +5,8 @@ import {
   getPlugins,
   applyPartsPlugins,
   applyConfigPlugins,
+  getPluginContract,
+  PLUGIN_CONTRACT,
   type CabinetPlannerPlugin,
 } from '../../src/engine/plugin';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
@@ -143,5 +145,47 @@ describe('applyConfigPlugins', () => {
     const result = applyConfigPlugins(DEFAULT_CONFIG);
     expect(result.width).toBe(100);
     expect(result.height).toBe(200);
+  });
+});
+
+describe('PluginContract', () => {
+  it('PLUGIN_CONTRACT has apiVersion string', () => {
+    expect(typeof PLUGIN_CONTRACT.apiVersion).toBe('string');
+    expect(PLUGIN_CONTRACT.apiVersion).toMatch(/^\d+\.\d+\.\d+$/);
+  });
+
+  it('PLUGIN_CONTRACT.stability is a valid tier', () => {
+    expect(['stable', 'experimental', 'deprecated']).toContain(PLUGIN_CONTRACT.stability);
+  });
+
+  it('PLUGIN_CONTRACT.hooks is a non-empty array', () => {
+    expect(Array.isArray(PLUGIN_CONTRACT.hooks)).toBe(true);
+    expect(PLUGIN_CONTRACT.hooks.length).toBeGreaterThan(0);
+  });
+
+  it('every hook contract has a hookName, stability, introducedIn, and description', () => {
+    for (const hook of PLUGIN_CONTRACT.hooks) {
+      expect(typeof hook.hookName).toBe('string');
+      expect(['stable', 'experimental', 'deprecated']).toContain(hook.stability);
+      expect(typeof hook.introducedIn).toBe('string');
+      expect(typeof hook.description).toBe('string');
+      expect(hook.description.length).toBeGreaterThan(10);
+    }
+  });
+
+  it('getPluginContract() returns the same object as PLUGIN_CONTRACT', () => {
+    expect(getPluginContract()).toBe(PLUGIN_CONTRACT);
+  });
+
+  it('onPartsGenerated hook is listed as stable', () => {
+    const hook = PLUGIN_CONTRACT.hooks.find((h) => h.hookName === 'onPartsGenerated');
+    expect(hook).toBeDefined();
+    expect(hook?.stability).toBe('stable');
+  });
+
+  it('onConfigChange hook is listed as stable', () => {
+    const hook = PLUGIN_CONTRACT.hooks.find((h) => h.hookName === 'onConfigChange');
+    expect(hook).toBeDefined();
+    expect(hook?.stability).toBe('stable');
   });
 });

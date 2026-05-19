@@ -49,3 +49,14 @@ export { findSubstitutions } from './substitution';
 export type { ValidationIssue, ValidationSeverity, MaterialSubstitution, VendorHingeProfile } from './types';
 
 export { generateHardware, VENDOR_HINGE_PROFILES } from './hardware';
+
+export {
+  registerPlugin,
+  unregisterPlugin,
+  getPlugins,
+  applyPartsPlugins,
+  applyConfigPlugins,
+  getPluginContract,
+  PLUGIN_CONTRACT,
+} from './plugin';
+export type { CabinetPlannerPlugin, PluginContract, PluginHookContract, PluginStability } from './plugin';
