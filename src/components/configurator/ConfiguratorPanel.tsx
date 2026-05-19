@@ -4,6 +4,7 @@ import { useCabinetStore } from '../../store/cabinet-store';
 import { validateConfig } from '../../engine/validation';
 import { getTemplateDefaults } from '../../engine/templates';
 import { ValidationPanel } from './ValidationPanel';
+import { SubstitutionPanel } from './SubstitutionPanel';
 import { CabinetSelector } from './CabinetSelector';
 import { DimensionSliders } from './DimensionSliders';
 import { MaterialSelector } from './MaterialSelector';
@@ -33,6 +34,9 @@ export function ConfiguratorPanel() {
 
       {/* Manufacturing constraint validation — shown when config has issues */}
       {validationIssues.length > 0 && <ValidationPanel issues={validationIssues} />}
+
+      {/* Material substitution suggestions from engine (Sprint 43) */}
+      <SubstitutionPanel />
 
       {/* Furniture type selector */}
       <fieldset className="space-y-2">

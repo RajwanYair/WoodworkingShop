@@ -50,3 +50,57 @@ describe('ConfiguratorPanel', () => {
     expect(screen.getByText(/my saved cabinets/i)).toBeInTheDocument();
   });
 });
+
+describe('SubstitutionPanel integration (Sprint 43)', () => {
+  it('renders without error for default config', () => {
+    useCabinetStore.setState({
+      config: { ...DEFAULT_CONFIG },
+      cabinets: [{ name: 'C', config: { ...DEFAULT_CONFIG } }],
+      activeCabinetIndex: 0,
+    });
+    // Should render without throwing
+    expect(() => render(<ConfiguratorPanel />)).not.toThrow();
+  });
+
+  it('renders substitution panel when chipboard used on wide span', () => {
+    useCabinetStore.setState({
+      config: { ...DEFAULT_CONFIG, carcassMaterial: 'chipboard-18', width: 1000 },
+      cabinets: [{ name: 'C', config: { ...DEFAULT_CONFIG, carcassMaterial: 'chipboard-18', width: 1000 } }],
+      activeCabinetIndex: 0,
+    });
+    render(<ConfiguratorPanel />);
+    expect(screen.getByText(/material suggestions/i)).toBeInTheDocument();
+  });
+
+  it('shows Deflection benefit badge when deflection risk detected', () => {
+    useCabinetStore.setState({
+      config: { ...DEFAULT_CONFIG, carcassMaterial: 'chipboard-18', width: 1000 },
+      cabinets: [{ name: 'C', config: { ...DEFAULT_CONFIG, carcassMaterial: 'chipboard-18', width: 1000 } }],
+      activeCabinetIndex: 0,
+    });
+    render(<ConfiguratorPanel />);
+    const badges = screen.getAllByText(/deflection/i);
+    expect(badges.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('renders "Use this" switch button for each suggestion', () => {
+    useCabinetStore.setState({
+      config: { ...DEFAULT_CONFIG, carcassMaterial: 'chipboard-18', width: 1000 },
+      cabinets: [{ name: 'C', config: { ...DEFAULT_CONFIG, carcassMaterial: 'chipboard-18', width: 1000 } }],
+      activeCabinetIndex: 0,
+    });
+    render(<ConfiguratorPanel />);
+    const switchBtns = screen.getAllByText(/use this/i);
+    expect(switchBtns.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('panel has role section with correct aria-label', () => {
+    useCabinetStore.setState({
+      config: { ...DEFAULT_CONFIG, carcassMaterial: 'chipboard-18', width: 1000 },
+      cabinets: [{ name: 'C', config: { ...DEFAULT_CONFIG, carcassMaterial: 'chipboard-18', width: 1000 } }],
+      activeCabinetIndex: 0,
+    });
+    render(<ConfiguratorPanel />);
+    expect(screen.getByRole('region', { name: /material suggestions/i })).toBeInTheDocument();
+  });
+});
