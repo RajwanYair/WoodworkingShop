@@ -124,4 +124,4 @@ describe('TEMPLATES', () => {
   it('all templates now number at least 15', () => {
     expect(TEMPLATES.length).toBeGreaterThanOrEqual(15);
   });
-};);
+});
