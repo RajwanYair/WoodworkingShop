@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { getTemplateDefaults, TEMPLATES, getTemplate } from '../../src/engine/templates';
+import { generateParts } from '../../src/engine/parts';
 import type { FurnitureType } from '../../src/engine/types';
 
 describe('getTemplateDefaults', () => {
@@ -123,5 +124,52 @@ describe('TEMPLATES', () => {
 
   it('all templates now number at least 15', () => {
     expect(TEMPLATES.length).toBeGreaterThanOrEqual(15);
+  });
+});
+
+describe('TEMPLATES — Sprint 47 additions', () => {
+  it('has a pantry template', () => {
+    const t = getTemplate('pantry');
+    expect(t).toBeDefined();
+    expect(t?.config.furnitureType).toBe('cabinet');
+    expect(t?.config.shelfCount).toBeGreaterThanOrEqual(5);
+    expect(t?.config.height).toBeGreaterThanOrEqual(1800);
+  });
+
+  it('pantry template generates non-zero parts', () => {
+    const t = getTemplate('pantry')!;
+    // Override the back panel to a valid test material
+    const parts = generateParts({ ...t.config, backPanelMaterial: 'mdf-3' });
+    expect(parts.length).toBeGreaterThan(0);
+  });
+
+  it('bathroom-vanity template config is valid', () => {
+    const t = getTemplate('bathroom-vanity');
+    expect(t).toBeDefined();
+    expect(t?.config.drawerSlideType).toBe('soft-close');
+    expect(t?.config.kickHeight).toBe(80);
+  });
+
+  it('tv-unit template is wide and low', () => {
+    const t = getTemplate('tv-unit');
+    expect(t).toBeDefined();
+    expect(t?.config.width).toBeGreaterThanOrEqual(1600);
+    expect(t?.config.height).toBeLessThanOrEqual(600);
+    expect(t?.config.doorStyle).toBe('glass');
+  });
+
+  it('pantry name is bilingual', () => {
+    const t = getTemplate('pantry')!;
+    expect(t.name.en).toBeTruthy();
+    expect(t.name.he).toBeTruthy();
+  });
+
+  it('pantry description has mm dimensions', () => {
+    const t = getTemplate('pantry')!;
+    expect(t.description.en).toMatch(/\d+×\d+/);
+  });
+
+  it('all templates now number at least 16', () => {
+    expect(TEMPLATES.length).toBeGreaterThanOrEqual(16);
   });
 });

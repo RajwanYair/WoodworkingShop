@@ -378,6 +378,29 @@ export const TEMPLATES: CabinetTemplate[] = [
       edgeBanding: 'all-visible',
     },
   ),
+  // ── Sprint 47 additions ───────────────────────────────────────────────────
+  tpl(
+    'pantry',
+    'Pantry Cabinet',
+    'ארון מזווה',
+    '600×2000×580 mm tall pantry with 6 shelves and 2-door facade',
+    'ארון מזווה גבוה 600×2000×580 מ"מ, 6 מדפים, 2 דלתות',
+    'IconCabinet',
+    {
+      furnitureType: 'cabinet',
+      width: 600,
+      height: 2000,
+      depth: 580,
+      shelfCount: 6,
+      doorCount: 2,
+      doorStyle: 'flat',
+      handleStyle: 'bar',
+      kickHeight: 100,
+      carcassMaterial: 'melamine-18',
+      backPanelMaterial: 'mdf-3',
+      edgeBanding: 'all-visible',
+    },
+  ),
 ];
 
 export function getTemplate(id: string): CabinetTemplate | undefined {
