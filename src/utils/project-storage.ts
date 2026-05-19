@@ -7,6 +7,10 @@ export interface SavedProject {
   id: string;
   name: string;
   savedAt: string; // ISO timestamp
+  /** Schema version for forward-compatibility checks (added v3.48.9). */
+  schemaVersion?: '1.0';
+  /** ISO timestamp of when the file was exported (added v3.48.9). */
+  generatedAt?: string;
   cabinets: CabinetEntry[];
   snapshots?: ProjectSnapshot[]; // Sprint 18 — snapshot history round-trip
 }
@@ -59,7 +63,11 @@ export function deleteProject(id: string): void {
 }
 
 export function exportProjectJson(project: SavedProject, snapshots?: ProjectSnapshot[]): void {
-  const payload: SavedProject = snapshots ? { ...project, snapshots } : project;
+  const payload: SavedProject = {
+    ...(snapshots ? { ...project, snapshots } : project),
+    schemaVersion: '1.0',
+    generatedAt: new Date().toISOString(),
+  };
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');

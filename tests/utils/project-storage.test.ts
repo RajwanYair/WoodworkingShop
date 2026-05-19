@@ -134,4 +134,17 @@ describe('project-storage', () => {
     const withSnaps: SavedProject = { ...project, snapshots: sampleSnapshots };
     expect(withSnaps.snapshots).toHaveLength(2);
   });
+
+  it('SavedProject type allows schemaVersion and generatedAt fields', () => {
+    const project: SavedProject = {
+      id: 'schema-test',
+      name: 'Schema Test',
+      savedAt: new Date().toISOString(),
+      schemaVersion: '1.0',
+      generatedAt: new Date().toISOString(),
+      cabinets: sampleCabinets,
+    };
+    expect(project.schemaVersion).toBe('1.0');
+    expect(typeof project.generatedAt).toBe('string');
+  });
 });
