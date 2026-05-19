@@ -459,5 +459,16 @@
     "handleStyle": "סגנון ידית",
     "edgeBanding": "חיפוי קצוות",
     "hasBack": "פאנל גב"
+  },
+  "plugins": {
+    "title": "רישום תוספים",
+    "empty": "אין תוספים רשומים",
+    "version": "v{{version}}",
+    "stability": "יציבות API: {{level}}",
+    "enable": "הפעל תוסף",
+    "disable": "השבת תוסף",
+    "enabled": "פעיל",
+    "disabled": "מושבת",
+    "apiVersion": "API v{{version}}"
   }
 }
