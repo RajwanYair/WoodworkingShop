@@ -63,6 +63,7 @@ export function OptimizerView() {
   } = useCabinetStore();
   const lang = i18n.language as Lang;
   const [hoveredPartId, setHoveredPartId] = useState<string | null>(null);
+  const [partFilter, setPartFilter] = useState(''); // Sprint 46 — part search/highlight filter
   const [showPartNames, setShowPartNames] = useState(false); // Sprint 146 — part name labels
   const [bomExporting, setBomExporting] = useState(false); // v3.17.0 worker state
   const [dxfExporting, setDxfExporting] = useState(false); // v3.22.0 DXF worker state
@@ -274,6 +275,26 @@ export function OptimizerView() {
             </div>
           )}
         </div>
+        {/* Sprint 46 — part search/highlight filter */}
+        <label className="ms-4 flex items-center gap-1.5 text-xs text-wood-600 dark:text-wood-300">
+          <input
+            type="search"
+            value={partFilter}
+            onChange={(e) => setPartFilter(e.target.value)}
+            placeholder={t('optimizer.filterPartsPlaceholder')}
+            aria-label={t('optimizer.filterParts')}
+            className="w-32 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-2 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-wood-400"
+          />
+          {partFilter && (
+            <button
+              onClick={() => setPartFilter('')}
+              aria-label="Clear filter"
+              className="text-wood-400 hover:text-wood-600 dark:hover:text-wood-200 transition-colors"
+            >
+              ×
+            </button>
+          )}
+        </label>
         {/* Sprint 136 — saw kerf input */}
         <label className="ms-4 flex items-center gap-1.5 text-xs text-wood-600 dark:text-wood-300">
           <IconSawKerf size={14} className="shrink-0" />
@@ -431,6 +452,7 @@ export function OptimizerView() {
               colorBlindMode={colorBlindMode}
               showPartNames={showPartNames}
               filePrefix={filePrefix}
+              partFilter={partFilter}
               t={t}
             />
           </VirtualSheetWrapper>
@@ -850,6 +872,7 @@ function SheetCard({
   colorBlindMode,
   showPartNames,
   filePrefix,
+  partFilter,
   t,
 }: {
   sheet: CutSheet;
@@ -859,11 +882,14 @@ function SheetCard({
   colorBlindMode: boolean;
   showPartNames: boolean;
   filePrefix: string;
+  partFilter: string;
   t: (key: string, opts?: Record<string, unknown>) => string;
 }) {
   const mat = getMaterial(sheet.material);
   const sw = sheet.sheetWidth * S;
   const sl = sheet.sheetLength * S;
+  /** Sprint 46: lower-cased filter term for matching part IDs and labels */
+  const filterTerm = partFilter.trim().toLowerCase();
 
   return (
     <div className="border border-wood-200 dark:border-wood-700 rounded p-4">
@@ -1005,8 +1031,11 @@ function SheetCard({
             part={p}
             scale={S}
             color={colorBlindMode ? cbColor(i) : mat.color}
-            isHovered={hoveredPartId === p.partId}
-            isFaded={hoveredPartId !== null && hoveredPartId !== p.partId}
+            isHovered={hoveredPartId === p.partId || (filterTerm !== '' && (p.partId.toLowerCase().includes(filterTerm) || p.label.toLowerCase().includes(filterTerm)))}
+            isFaded={
+              (hoveredPartId !== null && hoveredPartId !== p.partId) ||
+              (filterTerm !== '' && !p.partId.toLowerCase().includes(filterTerm) && !p.label.toLowerCase().includes(filterTerm))
+            }
             onHover={onHoverPart}
             showLabel={showPartNames}
             shadowFilterId={`shadow-${sheet.sheetIndex}`}
@@ -1032,8 +1061,8 @@ function SheetCard({
           <span
             key={i}
             className={`text-[10px] cursor-default transition-opacity ${
-              hoveredPartId && hoveredPartId !== p.partId ? 'opacity-30' : ''
-            } ${hoveredPartId === p.partId ? 'font-bold text-wood-700 dark:text-wood-100' : 'text-wood-600 dark:text-wood-300'}`}
+              (hoveredPartId && hoveredPartId !== p.partId) || (filterTerm && !p.partId.toLowerCase().includes(filterTerm) && !p.label.toLowerCase().includes(filterTerm)) ? 'opacity-30' : ''
+            } ${(hoveredPartId === p.partId || (filterTerm && (p.partId.toLowerCase().includes(filterTerm) || p.label.toLowerCase().includes(filterTerm)))) ? 'font-bold text-wood-700 dark:text-wood-100' : 'text-wood-600 dark:text-wood-300'}`}
             onMouseEnter={() => onHoverPart(p.partId)}
             onMouseLeave={() => onHoverPart(null)}
             title={p.rationale ? `${p.partId}: ${p.label}\n${p.rationale}${p.grainConflict ? '\n⚠ Grain direction compromised' : ''}` : undefined}

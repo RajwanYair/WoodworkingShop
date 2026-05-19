@@ -187,8 +187,8 @@
       "tooltip": "Placement: {{rationale}}"
     },
     "grainConflicts": "Grain ⚠",
-    "grainConflictsTitle": "{{count}} part(s) had grain direction compromised — material requires grain but part was rotated to fit",
-    "statusPending": "Computing cut sheets\u2026",
+    "grainConflictsTitle": "{{count}} part(s) had grain direction compromised — material requires grain but part was rotated to fit",    "filterParts": "Filter parts",
+    "filterPartsPlaceholder": "Search parts…",    "statusPending": "Computing cut sheets\u2026",
     "statusComplete": "Optimization complete \u2014 {{count}} sheet(s) required"
   },
   "preview": {

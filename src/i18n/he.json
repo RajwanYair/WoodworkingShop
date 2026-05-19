@@ -188,6 +188,8 @@
     },
     "grainConflicts": "גרגיר ⚠",
     "grainConflictsTitle": "{{count}} חלק/חלקים שסיבוב פגע בכיוון הגרגיר",
+    "filterParts": "סנן חלקים",
+    "filterPartsPlaceholder": "חפש חלקים…",
     "statusPending": "מחשב גיליונות חיתוך\u2026",
     "statusComplete": "אופטימיזציה הסתיימה \u2014 {{count}} גיליונות נדרשים"
   },
