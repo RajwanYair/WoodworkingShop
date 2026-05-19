@@ -53,8 +53,7 @@ export function PdfExportPanel() {
       <div className="text-center py-8 space-y-4">
         <h2 className="text-lg font-semibold text-wood-700 dark:text-wood-200">{t('pdf.title')}</h2>
         <p className="text-sm text-wood-400 dark:text-wood-500 max-w-md mx-auto">
-          Generate a complete PDF build plan including specifications, parts list, hardware list, and cut sheet
-          diagrams.
+          {t('pdf.description')}
         </p>
 
         {/* v3.19.0 — Cover page toggle */}
@@ -79,14 +78,20 @@ export function PdfExportPanel() {
 
       {/* Preview summary */}
       <div className="border border-wood-200 dark:border-wood-700 rounded-lg p-4 space-y-2 max-w-md mx-auto">
-        <h3 className="text-sm font-medium text-wood-600 dark:text-wood-300">PDF Contents:</h3>
+        <h3 className="text-sm font-medium text-wood-600 dark:text-wood-300">{t('pdf.contentsTitle')}</h3>
         <ul className="text-xs text-wood-600 dark:text-wood-300 space-y-1 list-disc list-inside">
-          {includeCover && <li>Cover page{store.projectName.trim() ? ` — ${store.projectName.trim()}` : ''}</li>}
-          <li>Full specifications</li>
-          <li>Parts list ({store.parts.length} parts)</li>
-          <li>Hardware list ({store.hardware.length} items)</li>
-          <li>Cut sheet diagrams ({store.optimization.totalSheets} sheets)</li>
-          <li>Page numbers on every page</li>
+          {includeCover && (
+            <li>
+              {store.projectName.trim()
+                ? t('pdf.contentsCoverNamed', { name: store.projectName.trim() })
+                : t('pdf.contentsCover')}
+            </li>
+          )}
+          <li>{t('pdf.contentsSpecs')}</li>
+          <li>{t('pdf.contentsParts', { count: store.parts.length })}</li>
+          <li>{t('pdf.contentsHardware', { count: store.hardware.length })}</li>
+          <li>{t('pdf.contentsSheets', { count: store.optimization.totalSheets })}</li>
+          <li>{t('pdf.contentsPageNumbers')}</li>
         </ul>
       </div>
     </div>

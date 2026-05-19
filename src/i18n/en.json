@@ -205,7 +205,16 @@
     "generate": "Generate PDF",
     "download": "Download PDF",
     "generating": "Generating…",
-    "includeCover": "Include cover page"
+    "includeCover": "Include cover page",
+    "description": "Generate a complete PDF build plan including specifications, parts list, hardware list, and cut sheet diagrams.",
+    "contentsTitle": "PDF Contents",
+    "contentsCover": "Cover page",
+    "contentsCoverNamed": "Cover page — {{name}}",
+    "contentsSpecs": "Full specifications",
+    "contentsParts": "Parts list ({{count}} parts)",
+    "contentsHardware": "Hardware list ({{count}} items)",
+    "contentsSheets": "Cut sheet diagrams ({{count}} sheets)",
+    "contentsPageNumbers": "Page numbers on every page"
   },
   "footer": {
     "darkMode": "Dark Mode",

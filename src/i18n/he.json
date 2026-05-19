@@ -205,7 +205,16 @@
     "generate": "צור PDF",
     "download": "הורד PDF",
     "generating": "יוצר…",
-    "includeCover": "כלל שער עטיפה"
+    "includeCover": "כלל שער עטיפה",
+    "description": "צור תוכנית בנייה מלאה ב-PDF הכוללת מפרט, רשימת חלקים, רשימת חומרה וגיליונות חיתוך.",
+    "contentsTitle": "תוכן ה-PDF",
+    "contentsCover": "שער עטיפה",
+    "contentsCoverNamed": "שער עטיפה — {{name}}",
+    "contentsSpecs": "מפרט מלא",
+    "contentsParts": "רשימת חלקים ({{count}} חלקים)",
+    "contentsHardware": "רשימת חומרה ({{count}} פריטים)",
+    "contentsSheets": "גיליונות חיתוך ({{count}} גיליונות)",
+    "contentsPageNumbers": "מספרי עמודים בכל עמוד"
   },
   "footer": {
     "darkMode": "מצב כהה",
