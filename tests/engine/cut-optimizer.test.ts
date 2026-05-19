@@ -236,4 +236,61 @@ describe('optimizeCutSheets', () => {
     });
     expect(result.grainConflictCount).toBe(2);
   });
+
+  // ── Explainable per-part placement rationale (Sprint 10) ─────────────────
+
+  it('every placed part has a rationale string starting with "BSSF"', () => {
+    const parts = generateParts(DEFAULT_CONFIG);
+    const result = optimizeCutSheets(parts);
+    for (const sheet of result.sheets) {
+      for (const p of sheet.parts) {
+        expect(typeof p.rationale).toBe('string');
+        expect(p.rationale).toMatch(/^BSSF\(/);
+      }
+    }
+  });
+
+  it('rationale includes "normal" for non-rotated parts', () => {
+    // Tall grain-locked part must stay upright (not rotated)
+    const tallPart: import('../../src/engine/types').Part = {
+      id: 'tall',
+      name: { en: 'Tall Panel', he: 'לוח גבוה' },
+      qty: 1,
+      material: 'plywood-17',
+      thickness: 17,
+      length: 800,
+      width: 300,
+      edgeBanding: { en: '', he: '' },
+    };
+    const result = optimizeCutSheets([tallPart], 3, { 'plywood-17': { width: 500, length: 1000 } });
+    const placed = result.sheets.flatMap((s) => s.parts)[0];
+    expect(placed?.rationale).toMatch(/BSSF\(normal\)/);
+  });
+
+  it('rationale includes "grain-forced" for grain-conflict parts', () => {
+    const widePart: import('../../src/engine/types').Part = {
+      id: 'wide',
+      name: { en: 'Wide Panel', he: 'לוח רחב' },
+      qty: 1,
+      material: 'plywood-17',
+      thickness: 17,
+      length: 400,
+      width: 700,
+      edgeBanding: { en: '', he: '' },
+    };
+    const result = optimizeCutSheets([widePart], 3, { 'plywood-17': { width: 500, length: 1000 } });
+    const placed = result.sheets.flatMap((s) => s.parts)[0];
+    expect(placed?.rationale).toMatch(/grain-forced/);
+  });
+
+  it('rationale includes mm margin values', () => {
+    const parts = generateParts(DEFAULT_CONFIG);
+    const result = optimizeCutSheets(parts);
+    for (const sheet of result.sheets) {
+      for (const p of sheet.parts) {
+        // Should contain "Nmm × Mmm margin" pattern
+        expect(p.rationale).toMatch(/\d+mm × \d+mm margin/);
+      }
+    }
+  });
 });

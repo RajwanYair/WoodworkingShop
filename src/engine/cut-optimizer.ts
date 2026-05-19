@@ -71,6 +71,7 @@ export function optimizeCutSheets(
           grainVertical: !r.rotated,
           rotated: r.rotated,
           grainConflict: r.grainConflict,
+          rationale: r.rationale,
         })),
         yieldPercent: round2((usedArea / sheetArea) * 100),
       });
@@ -109,6 +110,8 @@ interface PlacedRect extends Rect {
   rotated: boolean;
   /** true when this grain-constrained part had to be rotated to fit (grain direction compromised). */
   grainConflict?: boolean;
+  /** Human-readable BSSF placement rationale — short/long margin and orientation. */
+  rationale?: string;
 }
 
 /** An axis-aligned empty rectangle on a sheet. */
@@ -160,6 +163,8 @@ function packMaxRects(
       h: number;
       rotated: boolean;
       score: number;
+      leftoverMin: number;
+      leftoverMax: number;
     } | null = null;
     // Prefer the *earliest* (most-filled) sheet: add a large penalty per
     // sheet index so we only open a new sheet when no older sheet fits.
@@ -219,6 +224,8 @@ function packMaxRects(
     }
 
     const sheet = sheets[best.sheetIdx];
+    const orientation = best.rotated ? 'rotated' : 'normal';
+    const conflictTag = grainConflict ? ', grain-forced' : '';
     const placed: PlacedRect = {
       ...rect,
       length: best.h,
@@ -227,6 +234,7 @@ function packMaxRects(
       y: best.y,
       rotated: best.rotated,
       grainConflict: grainConflict || undefined,
+      rationale: `BSSF(${orientation}${conflictTag}): ${Math.round(best.leftoverMin)}mm × ${Math.round(best.leftoverMax)}mm margin`,
     };
     sheet.placed.push(placed);
     splitFreeRects(sheet.free, {
@@ -250,7 +258,7 @@ function findBestPlacement(
   rect: Rect,
   kerf: number,
   allowRotation = true,
-): { freeIdx: number; x: number; y: number; w: number; h: number; rotated: boolean; score: number } | null {
+): { freeIdx: number; x: number; y: number; w: number; h: number; rotated: boolean; score: number; leftoverMin: number; leftoverMax: number } | null {
   let best: ReturnType<typeof findBestPlacement> = null;
 
   for (let i = 0; i < free.length; i++) {
@@ -269,7 +277,9 @@ function findBestPlacement(
       if (needW > f.w || needH > f.h) continue;
       const leftoverX = f.w - needW;
       const leftoverY = f.h - needH;
-      const score = Math.min(leftoverX, leftoverY) * 1e6 + Math.max(leftoverX, leftoverY);
+      const leftoverMin = Math.min(leftoverX, leftoverY);
+      const leftoverMax = Math.max(leftoverX, leftoverY);
+      const score = leftoverMin * 1e6 + leftoverMax;
       if (!best || score < best.score) {
         best = {
           freeIdx: i,
@@ -279,6 +289,8 @@ function findBestPlacement(
           h: o.h,
           rotated: o.rotated,
           score,
+          leftoverMin,
+          leftoverMax,
         };
       }
     }

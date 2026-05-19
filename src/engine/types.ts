@@ -134,6 +134,9 @@ export interface CutRect {
   /** true when the part belongs to a grain-constrained material but had to be
    *  rotated to fit the sheet — grain direction is compromised. */
   grainConflict?: boolean;
+  /** Human-readable description of how the BSSF packer placed this part.
+   *  Format: "BSSF(<orientation>[, grain-forced]): <short>mm × <long>mm margin" */
+  rationale?: string;
 }
 
 export interface CutSheet {

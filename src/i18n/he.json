@@ -183,6 +183,9 @@
       "qualityGood": "טוב",
       "qualityFair": "בינוני — נסה את האופטימייזר החכם לתפוקה טובה יותר"
     },
+    "rationale": {
+      "tooltip": "מיקום: {{rationale}}"
+    },
     "statusPending": "מחשב גיליונות חיתוך\u2026",
     "statusComplete": "אופטימיזציה הסתיימה \u2014 {{count}} גיליונות נדרשים"
   },
