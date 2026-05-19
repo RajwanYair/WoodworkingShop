@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { generateHardware } from '../../src/engine/hardware';
+import { generateHardware, VENDOR_HINGE_PROFILES } from '../../src/engine/hardware';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 import { expectBilingualNames } from '../assertions';
 
@@ -148,5 +148,87 @@ describe('generateHardware — hardwareOverrides', () => {
   it('ignores unknown override ids gracefully', () => {
     const cfg = { ...DEFAULT_CONFIG, hardwareOverrides: { UNKNOWN_ID: 99 } };
     expect(() => generateHardware(cfg)).not.toThrow();
+  });
+});
+
+// Sprint 10 — Vendor hinge profiles
+describe('VENDOR_HINGE_PROFILES catalog', () => {
+  it('contains exactly 3 profiles (Blum, Hettich, Grass)', () => {
+    expect(VENDOR_HINGE_PROFILES).toHaveLength(3);
+  });
+
+  it('all profiles have required fields', () => {
+    for (const p of VENDOR_HINGE_PROFILES) {
+      expect(p.id).toBeTruthy();
+      expect(p.brand).toBeTruthy();
+      expect(p.model).toBeTruthy();
+      expect(p.name.en).toBeTruthy();
+      expect(p.name.he).toBeTruthy();
+      expect(p.cupDiameter).toBe(35);
+      expect(p.openingAngle).toBeGreaterThanOrEqual(100);
+      expect(p.mountingDepth).toBeGreaterThan(0);
+      expect(p.minEdgeDistance).toBeGreaterThan(0);
+      expect(p.supplierUrl).toMatch(/^https:\/\//);
+    }
+  });
+
+  it('Blum profile has integrated soft-close', () => {
+    const blum = VENDOR_HINGE_PROFILES.find((p) => p.id === 'blum-clip-top-blumotion');
+    expect(blum).toBeDefined();
+    expect(blum!.softCloseIntegrated).toBe(true);
+  });
+
+  it('Hettich profile does NOT have integrated soft-close', () => {
+    const hettich = VENDOR_HINGE_PROFILES.find((p) => p.id === 'hettich-intermat-9936');
+    expect(hettich).toBeDefined();
+    expect(hettich!.softCloseIntegrated).toBe(false);
+  });
+
+  it('Grass profile has integrated soft-close', () => {
+    const grass = VENDOR_HINGE_PROFILES.find((p) => p.id === 'grass-tiomos-110');
+    expect(grass).toBeDefined();
+    expect(grass!.softCloseIntegrated).toBe(true);
+  });
+});
+
+describe('generateHardware — hingeProfile selection', () => {
+  it('uses vendor profile name for hinge when hingeProfile is set', () => {
+    const cfg = { ...DEFAULT_CONFIG, hingeProfile: 'blum-clip-top-blumotion' };
+    const hw = generateHardware(cfg);
+    const hinge = hw.find((h) => h.id === 'H01');
+    expect(hinge).toBeDefined();
+    expect(hinge!.name.en).toContain('Blum');
+    expect(hinge!.supplierName).toBe('Blum');
+  });
+
+  it('uses Hettich profile when specified', () => {
+    const cfg = { ...DEFAULT_CONFIG, hingeProfile: 'hettich-intermat-9936' };
+    const hw = generateHardware(cfg);
+    const hinge = hw.find((h) => h.id === 'H01');
+    expect(hinge!.name.en).toContain('Hettich');
+  });
+
+  it('falls back to generic hinge name when hingeProfile is unknown', () => {
+    const cfg = { ...DEFAULT_CONFIG, hingeProfile: 'unknown-vendor-xyz' };
+    const hw = generateHardware(cfg);
+    const hinge = hw.find((h) => h.id === 'H01');
+    expect(hinge!.name.en).toBe('Euro Hinge 35 mm (110°)');
+  });
+
+  it('skips separate soft-close damper (H13) for profiles with integrated soft-close', () => {
+    const cfg = { ...DEFAULT_CONFIG, hingeProfile: 'blum-clip-top-blumotion' };
+    const hw = generateHardware(cfg);
+    expect(hw.some((h) => h.id === 'H13')).toBe(false);
+  });
+
+  it('includes separate soft-close damper (H13) for Hettich (no integrated SC)', () => {
+    const cfg = { ...DEFAULT_CONFIG, hingeProfile: 'hettich-intermat-9936' };
+    const hw = generateHardware(cfg);
+    expect(hw.some((h) => h.id === 'H13')).toBe(true);
+  });
+
+  it('includes H13 when no hingeProfile is set (generic behaviour)', () => {
+    const hw = generateHardware(DEFAULT_CONFIG);
+    expect(hw.some((h) => h.id === 'H13')).toBe(true);
   });
 });

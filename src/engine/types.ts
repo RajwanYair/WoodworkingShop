@@ -28,6 +28,33 @@ export type DrawerSlideType = 'standard' | 'soft-close' | 'full-extension';
 /** Which material's thickness governs a plain panel's depth. */
 export type PanelMaterialSource = 'carcass' | 'back';
 
+/**
+ * Sprint 10 — Vendor hinge profile descriptor.
+ * Defines manufacturer-specific mounting rules and clearances for cup hinges.
+ */
+export interface VendorHingeProfile {
+  /** Stable identifier, e.g. 'blum-clip-top-blumotion'. */
+  id: string;
+  /** Brand name, e.g. 'Blum'. */
+  brand: string;
+  /** Model name, e.g. 'CLIP top Blumotion 110°'. */
+  model: string;
+  /** Bilingual display name for UI. */
+  name: { en: string; he: string };
+  /** Standard cup bore diameter in mm (nearly always 35 mm for Euro hinges). */
+  cupDiameter: number;
+  /** Door opening angle in degrees. */
+  openingAngle: number;
+  /** Cup bore depth in mm. */
+  mountingDepth: number;
+  /** True when the damper is integrated — no separate soft-close add-on needed. */
+  softCloseIntegrated: boolean;
+  /** Minimum panel edge to cup bore centre distance (mm). Typical: 3 mm overlay + 16 mm = 19 mm. */
+  minEdgeDistance: number;
+  /** Link to supplier product page. */
+  supplierUrl: string;
+}
+
 export interface CabinetConfig {
   // Furniture type
   furnitureType: FurnitureType;
@@ -66,6 +93,8 @@ export interface CabinetConfig {
 
   // Hardware
   handleStyle: HandleStyle;
+  /** Sprint 10 — vendor hinge profile id (e.g. 'blum-clip-top-blumotion'). When set, overrides generic hinge naming. */
+  hingeProfile?: string;
   /** Override calculated qty for specific hardware items by item id (e.g. { 'H15': 6 }). */
   hardwareOverrides?: Record<string, number>;
 

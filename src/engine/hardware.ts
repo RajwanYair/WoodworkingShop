@@ -1,5 +1,58 @@
-import type { CabinetConfig, HardwareItem } from './types';
+import type { CabinetConfig, HardwareItem, VendorHingeProfile } from './types';
 import { computeDimensions } from './dimensions';
+
+/**
+ * Sprint 10 — Catalog of vendor hinge profiles.
+ * Three leading European manufacturers: Blum, Hettich, Grass.
+ * All use the standard 35 mm Euro / clip-on cup bore.
+ */
+export const VENDOR_HINGE_PROFILES: VendorHingeProfile[] = [
+  {
+    id: 'blum-clip-top-blumotion',
+    brand: 'Blum',
+    model: 'CLIP top Blumotion 110°',
+    name: {
+      en: 'Blum CLIP top Blumotion 110° (35 mm)',
+      he: 'ציר בלום CLIP top Blumotion ‏110° (35 מ"מ)',
+    },
+    cupDiameter: 35,
+    openingAngle: 110,
+    mountingDepth: 13.5,
+    softCloseIntegrated: true,
+    minEdgeDistance: 19,
+    supplierUrl: 'https://www.blum.com/in/en/products/hinges/clip-top-blumotion/',
+  },
+  {
+    id: 'hettich-intermat-9936',
+    brand: 'Hettich',
+    model: 'Intermat 9936 110°',
+    name: {
+      en: 'Hettich Intermat 9936 110° (35 mm)',
+      he: 'ציר הטיך Intermat 9936 ‏110° (35 מ"מ)',
+    },
+    cupDiameter: 35,
+    openingAngle: 110,
+    mountingDepth: 12,
+    softCloseIntegrated: false,
+    minEdgeDistance: 18,
+    supplierUrl: 'https://www.hettich.com/en_EN/products/hinges/intermat.html',
+  },
+  {
+    id: 'grass-tiomos-110',
+    brand: 'Grass',
+    model: 'TIOMOS 110° Soft-close',
+    name: {
+      en: 'Grass TIOMOS 110° Soft-close (35 mm)',
+      he: 'ציר גראס TIOMOS ‏110° סגירה רכה (35 מ"מ)',
+    },
+    cupDiameter: 35,
+    openingAngle: 110,
+    mountingDepth: 13,
+    softCloseIntegrated: true,
+    minEdgeDistance: 19,
+    supplierUrl: 'https://www.grass.at/en/products/hinges/tiomos/',
+  },
+];
 
 /**
  * Generate the full hardware (ironmongery) list for a cabinet config.
@@ -13,15 +66,24 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
   const items: HardwareItem[] = [];
   const hasDoors = cfg.doorStyle !== 'none' && cfg.doorCount > 0;
 
+  // Sprint 10: resolve vendor hinge profile (if any)
+  const hingeProfile = cfg.hingeProfile
+    ? (VENDOR_HINGE_PROFILES.find((p) => p.id === cfg.hingeProfile) ?? null)
+    : null;
+
   // ── Hinges (35 mm Euro / clip-on) ──
   if (hasDoors) {
     items.push({
       id: 'H01',
-      name: { en: 'Euro Hinge 35 mm (110°)', he: 'ציר מטבח 35 מ"מ (110°)' },
+      name: hingeProfile
+        ? hingeProfile.name
+        : { en: 'Euro Hinge 35 mm (110°)', he: 'ציר מטבח 35 מ"מ (110°)' },
       qty: d.hingesPerDoor * cfg.doorCount,
       unit: { en: 'pcs', he: "יח'" },
-      supplierUrl: 'https://www.blum.com/in/en/products/hinges/',
-      supplierName: 'Blum',
+      supplierUrl: hingeProfile
+        ? hingeProfile.supplierUrl
+        : 'https://www.blum.com/in/en/products/hinges/',
+      supplierName: hingeProfile ? hingeProfile.brand : 'Blum',
     });
 
     // Mounting plates (one per hinge)
@@ -158,7 +220,8 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
   }
 
   // ── Soft-close hinge dampers (Sprint 113) — one per hinge ──
-  if (hasDoors) {
+  // Skip when a vendor profile with integrated soft-close is selected.
+  if (hasDoors && !hingeProfile?.softCloseIntegrated) {
     items.push({
       id: 'H13',
       name: { en: 'Soft-Close Hinge Damper', he: 'בולם סגירה רכה לציר' },

@@ -37,8 +37,6 @@ export {
 
 export { generateParts, computeEdgeBandingTotal } from './parts';
 
-export { generateHardware } from './hardware';
-
 export { optimizeCutSheets } from './cut-optimizer';
 
 export { findOptimizations } from './smart-optimizer';
@@ -48,4 +46,6 @@ export type { CostBreakdown, SheetCost } from './cost-estimator';
 
 export { validateConfig } from './validation';
 export { findSubstitutions } from './substitution';
-export type { ValidationIssue, ValidationSeverity, MaterialSubstitution } from './types';
+export type { ValidationIssue, ValidationSeverity, MaterialSubstitution, VendorHingeProfile } from './types';
+
+export { generateHardware, VENDOR_HINGE_PROFILES } from './hardware';
