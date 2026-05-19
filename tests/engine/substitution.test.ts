@@ -76,4 +76,41 @@ describe('findSubstitutions', () => {
       expect(['deflection', 'cost', 'weight']).toContain(sub.benefit);
     }
   });
+
+  // ── Quantitative rationale (Sprint 9) ────────────────────────────────────
+
+  it('deflection substitution includes deflectionReductionPct > 0', () => {
+    const result = findSubstitutions(cfg({ carcassMaterial: 'chipboard-18', width: 1000 }));
+    const sub = result.find((s) => s.benefit === 'deflection');
+    expect(sub?.quantitativeRationale?.deflectionReductionPct).toBeGreaterThan(0);
+    expect(sub?.quantitativeRationale?.deflectionReductionPct).toBeLessThanOrEqual(100);
+  });
+
+  it('weight substitution includes savedKgPerSheet > 0', () => {
+    const result = findSubstitutions(cfg({ carcassMaterial: 'mdf-18', width: 1200, height: 2000 }));
+    const sub = result.find((s) => s.benefit === 'weight');
+    expect(sub?.quantitativeRationale?.savedKgPerSheet).toBeGreaterThan(0);
+  });
+
+  it('cost substitution includes negative costDeltaPct (cheaper)', () => {
+    const result = findSubstitutions(cfg({ carcassMaterial: 'plywood-18', width: 600 }));
+    const sub = result.find((s) => s.benefit === 'cost');
+    // costDeltaPct should be negative (alt is cheaper)
+    expect(sub?.quantitativeRationale?.costDeltaPct).toBeLessThan(0);
+  });
+
+  it('quantitativeRationale.deflectionReductionPct matches chipboard→plywood stiffness ratio', () => {
+    // chipboard E=2.8 GPa, plywood E=7.0 GPa → 1 - 2.8/7.0 = 60% reduction
+    const result = findSubstitutions(cfg({ carcassMaterial: 'chipboard-18', width: 1000 }));
+    const sub = result.find((s) => s.benefit === 'deflection');
+    expect(sub?.quantitativeRationale?.deflectionReductionPct).toBe(60);
+  });
+
+  it('quantitativeRationale not set to undefined for active rules', () => {
+    const result = findSubstitutions(cfg({ carcassMaterial: 'mdf-18', width: 1000, height: 2100 }));
+    for (const sub of result) {
+      // Each substitution should have a non-null quantitativeRationale object
+      expect(sub.quantitativeRationale).toBeDefined();
+    }
+  });
 });

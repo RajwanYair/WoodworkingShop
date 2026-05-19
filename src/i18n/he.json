@@ -379,6 +379,11 @@
       "deflection": "כיווץ",
       "weight": "משקל",
       "cost": "עלות"
+    },
+    "quant": {
+      "savedKgPerSheet": "חוסך {{value}} ק\"ג/לוח",
+      "deflectionReductionPct": "{{value}}% פחות כיפוף",
+      "costDeltaPct": "{{value}}% שינוי עלות"
     }
   },
   "bulkReplace": {

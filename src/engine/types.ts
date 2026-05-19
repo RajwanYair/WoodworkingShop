@@ -198,6 +198,16 @@ export interface ValidationIssue {
 // ─── Material substitution types ───
 
 /** A recommended alternative material with rationale. */
+/** Quantitative metrics that back a MaterialSubstitution recommendation. */
+export interface QuantitativeRationale {
+  /** Weight saved per standard sheet compared to the current material (kg). */
+  savedKgPerSheet?: number;
+  /** Percentage reduction in mid-span bending deflection (positive = less sag). */
+  deflectionReductionPct?: number;
+  /** Percentage change in material cost relative to current (negative = cheaper). */
+  costDeltaPct?: number;
+}
+
 export interface MaterialSubstitution {
   /** Key of the current material. */
   currentKey: string;
@@ -207,4 +217,6 @@ export interface MaterialSubstitution {
   reason: { en: string; he: string };
   /** Expected benefit: 'deflection' | 'cost' | 'weight'. */
   benefit: 'deflection' | 'cost' | 'weight';
+  /** Optional quantitative data supporting the recommendation. */
+  quantitativeRationale?: QuantitativeRationale;
 }

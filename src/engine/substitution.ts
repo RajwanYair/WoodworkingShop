@@ -8,6 +8,31 @@ const DEFLECTION_SPAN_THRESHOLD_MM = 900;
 const HEAVY_DENSITY_KG_M3 = 750;
 
 /**
+ * Approximate bending modulus of elasticity (GPa) by material key prefix.
+ * Used to estimate deflection reduction when switching to a stiffer material.
+ * Source: typical industry values for furniture-grade sheet goods.
+ */
+const STIFFNESS_GPA: Record<string, number> = {
+  plywood: 7.0,
+  chipboard: 2.8,
+  mdf: 3.5,
+  melamine: 2.8,
+};
+
+function lookupStiffnessGPa(materialKey: string): number {
+  for (const [prefix, gpa] of Object.entries(STIFFNESS_GPA)) {
+    if (materialKey.startsWith(prefix)) return gpa;
+  }
+  return 3.5;
+}
+
+/** Mass of one full sheet in kg. */
+function sheetMassKg(mat: Material): number {
+  const volumeM3 = (mat.sheetWidth * mat.sheetLength * mat.thickness) / 1e9;
+  return mat.densityKgM3 * volumeM3;
+}
+
+/**
  * Find material substitution recommendations for the current cabinet config.
  * Returns an array of MaterialSubstitution objects, each suggesting a better
  * alternative material with a reason and benefit category.
@@ -39,6 +64,9 @@ export function findSubstitutions(config: CabinetConfig, extraMaterials?: Materi
       (m) => m.key.startsWith('plywood') && m.thickness >= current.thickness && m.key !== current.key,
     );
     if (plywoodAlt) {
+      const currentE = lookupStiffnessGPa(current.key);
+      const altE = lookupStiffnessGPa(plywoodAlt.key);
+      const deflectionReductionPct = altE > currentE ? Math.round((1 - currentE / altE) * 100) : 0;
       results.push({
         currentKey: current.key,
         suggestedKey: plywoodAlt.key,
@@ -47,6 +75,7 @@ export function findSubstitutions(config: CabinetConfig, extraMaterials?: Materi
           he: `מוטת מדף ${Math.round(shelfSpan)} מ"מ עולה על ${DEFLECTION_SPAN_THRESHOLD_MM} מ"מ — ל${plywoodAlt.name.he} קשיחות גבוהה יותר ופחות כיפוף.`,
         },
         benefit: 'deflection',
+        quantitativeRationale: { deflectionReductionPct },
       });
     }
   }
@@ -70,6 +99,7 @@ export function findSubstitutions(config: CabinetConfig, extraMaterials?: Materi
 
     if (lighterAlt) {
       const weightSavingPct = Math.round(((current.densityKgM3 - lighterAlt.densityKgM3) / current.densityKgM3) * 100);
+      const savedKgPerSheet = parseFloat((sheetMassKg(current) - sheetMassKg(lighterAlt)).toFixed(2));
       results.push({
         currentKey: current.key,
         suggestedKey: lighterAlt.key,
@@ -78,6 +108,7 @@ export function findSubstitutions(config: CabinetConfig, extraMaterials?: Materi
           he: `${lighterAlt.name.he} קל בכ-${weightSavingPct}% מ${current.name.he} — קל יותר לטיפול בארון גדול.`,
         },
         benefit: 'weight',
+        quantitativeRationale: { savedKgPerSheet },
       });
     }
   }
@@ -102,6 +133,7 @@ export function findSubstitutions(config: CabinetConfig, extraMaterials?: Materi
 
     if (cheaperAlt && cheaperAlt.pricePerSheet !== undefined) {
       const savingPct = Math.round(((currentPrice - cheaperAlt.pricePerSheet) / currentPrice) * 100);
+      const costDeltaPct = Math.round(((cheaperAlt.pricePerSheet - currentPrice) / currentPrice) * 100);
       results.push({
         currentKey: current.key,
         suggestedKey: cheaperAlt.key,
@@ -110,6 +142,7 @@ export function findSubstitutions(config: CabinetConfig, extraMaterials?: Materi
           he: `${cheaperAlt.name.he} חוסך כ-${savingPct}% בעלות חומר לעומת ${current.name.he}.`,
         },
         benefit: 'cost',
+        quantitativeRationale: { costDeltaPct },
       });
     }
   }
