@@ -9,7 +9,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [3.52.0] — 2025-07-21
+
+### Production Audit
+
+- Removed dead config files: `.hintrc` (webhint not suitable for React SPA), `.shellcheckrc` (no shell scripts in project).
+- Pinned all GitHub Actions to verified stable `@v4` tags (checkout, upload-artifact, download-artifact, cache).
+- Fixed accessibility: added `aria-label` with i18n key `optimizer.notesDismiss` on dismiss button in `OptimizationNotesPanel`.
+- Fixed Tailwind logical property: `end-5` → `inset-e-5` in `ToastContainer`.
+- Rewrote `ROADMAP.md` with expanded competitive benchmark (11 products), harvested best methods, and updated phase completion status.
+- Added `secret-scan.yml` workflow action version fix.
 
 ## [3.51.0] — 2025-07-21
 

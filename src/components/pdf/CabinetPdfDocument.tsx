@@ -15,6 +15,15 @@ Font.registerEmojiSource({
   url: 'https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/',
 });
 
+// ─── Hebrew font registration (Noto Sans Hebrew from Google Fonts) ───
+Font.register({
+  family: 'NotoSansHebrew',
+  fonts: [
+    { src: 'https://fonts.gstatic.com/s/notosanshebrew/v46/or3HQ7v33eiDljA1IufXTtVf7V6RvEEdhQlk0LlGxCyaeNKYZC0sq0G1.ttf', fontWeight: 400 },
+    { src: 'https://fonts.gstatic.com/s/notosanshebrew/v46/or3HQ7v33eiDljA1IufXTtVf7V6RvEEdhQlk0LlGxCyaeNKYZC0sq6e0.ttf', fontWeight: 700 },
+  ],
+});
+
 // ─── Design tokens ───
 
 const C = {
@@ -286,6 +295,276 @@ const s = StyleSheet.create({
 const partsColWidths = ['7%', '23%', '5%', '18%', '11%', '11%', '8%', '17%'];
 const hwColWidths = ['45%', '15%', '20%', '20%'];
 
+// ─── PDF i18n dictionary ───
+// @react-pdf/renderer runs outside the React tree so useTranslation() is unavailable.
+// This dictionary provides all structural labels in both languages.
+const pdfI18n = {
+  en: {
+    coverTitle: 'CABINET BUILD PLAN',
+    dimensions: 'Dimensions',
+    carcassMaterial: 'Carcass material',
+    doorsShelves: 'Doors / shelves',
+    cutSheets: 'Cut sheets',
+    hardwareItems: 'Hardware items',
+    cabinetsInProject: 'Cabinets in project',
+    generated: 'Generated',
+    brandFooter: 'Cabinet Planner — Interactive Woodworking Design Tool',
+    specTitle: 'Cabinet Specifications',
+    specDimensions: 'Dimensions',
+    specExternal: 'External (W × H × D)',
+    specInternalWidth: 'Internal width',
+    specInternalHeight: 'Internal height',
+    specShelfDepth: 'Shelf depth',
+    specShelfWidth: 'Shelf width',
+    specMaterials: 'Materials',
+    specCarcass: 'Carcass material',
+    specBackPanel: 'Back panel material',
+    specEdgeBanding: 'Edge banding',
+    specEdgeBandingTotal: 'Edge banding total',
+    specDoorsHardware: 'Doors & Hardware',
+    specDoorStyle: 'Door style',
+    specDoorCount: 'Door count',
+    specDoorDimensions: 'Door dimensions',
+    specDoorReveal: 'Door reveal',
+    specHingesPerDoor: 'Hinges per door',
+    specHandleStyle: 'Handle style',
+    specShelves: 'Shelves',
+    specShelfCount: 'Shelf count',
+    specShelfSpacing: 'Shelf spacing',
+    specBackPanelSize: 'Back panel',
+    cutSheetSummary: 'Cut Sheet Summary',
+    sheetsRequired: 'Sheets Required',
+    materialYield: 'Material Yield',
+    waste: 'Waste (m²)',
+    hardwareTypes: 'Hardware Types',
+    partsListTitle: 'Parts List',
+    partsTotal: 'parts total',
+    thId: 'ID',
+    thPartName: 'Part Name',
+    thQty: 'Qty',
+    thMaterial: 'Material',
+    thLength: 'Length',
+    thWidth: 'Width',
+    thThickness: 'Thick.',
+    thEdgeBand: 'Edge Band',
+    hardwareListTitle: 'Hardware List',
+    itemTypes: 'item types',
+    thItem: 'Item',
+    thUnit: 'Unit',
+    thNotes: 'Notes',
+    cutSheetPage: 'Cut Sheet',
+    yield: 'yield',
+    parts: 'parts',
+    drillingGuide: 'Drilling & Boring Guide',
+    hingeCupBoring: 'Hinge Cup Boring',
+    hingeCupDesc1: 'Bore 35 mm diameter cups, 12 mm deep on door inside face',
+    hingeCupDesc2: 'Hinge cup centre: 22.5 mm from door edge',
+    hingePositions: 'hinge(s) per door — positions from top:',
+    hingeFromTop: 'from top',
+    mountingPlates: 'Mounting Plates',
+    mountPlateDesc1: 'Fix mounting plates on side panels, aligned with hinge positions',
+    mountPlateDesc2: 'Plate centre: 37 mm from panel front edge',
+    mountPlateDesc3: 'Pre-drill 3 mm pilot holes for plate screws',
+    shelfPinHoles: 'Shelf Pin Holes (System 32)',
+    shelfPinDesc1: 'Drill 5 mm holes, 10 mm deep, on both side panels (inner face)',
+    shelfPinDesc2Front: 'Two columns per side: 37 mm and',
+    shelfPinDesc2Back: 'mm from front edge',
+    shelfPinDesc3: 'Spacing: 32 mm on-centre (System 32 line boring)',
+    shelfPinDesc4: 'First hole: 37 mm from bottom of internal space',
+    shelfPinDesc5: 'Total rows:',
+    shelfPinDesc5Suffix: 'per column',
+    confirmatScrews: 'Confirmat / Assembly Screws',
+    confirmatDesc1: 'Pre-drill 5 mm through-holes on outer face of top/bottom panels',
+    confirmatDesc2: 'Pilot drill 3.5 mm × 40 mm into end-grain of side panels',
+    confirmatDesc3: 'Spacing: ~150 mm apart along each joint',
+    confirmatDesc4: 'First/last confirmat: ~50 mm from panel edge',
+    backPanelSection: 'Back Panel',
+    backPanelFix: 'Fix into 10 ×',
+    backPanelMethod: 'mm rabbet, or staple/nail at ~150 mm intervals',
+    explodedView: 'Exploded Assembly View',
+    explodedNote: 'Parts shown separated for clarity — arrows indicate assembly direction.',
+    assemblySequence: 'Assembly Sequence',
+    shoppingList: 'Shopping List',
+    sheetGoods: 'Sheet Goods',
+    thSize: 'Size (mm)',
+    edgeBandingSection: 'Edge Banding',
+    edgeBandingRequired: 'Total edge banding required:',
+    metres: 'metres',
+    door: 'door',
+    doors: 'doors',
+    sheet: 'sheet',
+    sheets: 'sheets',
+    cabinets: 'cabinets',
+    itemType: 'item type',
+    itemTypePlural: 'item types',
+    page: 'Page',
+    sideL: 'Side L',
+    sideR: 'Side R',
+    topPanel: 'Top panel',
+    bottomPanel: 'Bottom panel',
+    shelf: 'Shelf',
+    back: 'Back',
+    doorLabel: 'Door',
+    stepPrepare: 'Prepare all panels',
+    stepPrepareDesc: 'Cut all parts per the cut list. Sand faces to 180 grit. Apply edge banding ({edgeBanding}) to all designated edges.',
+    stepDrillPins: 'Drill shelf pin holes',
+    stepDrillPinsDesc: 'Drill 5 mm × 10 mm holes on both side panels (inner face), 32 mm apart, two columns per side. Use a line-boring jig for precision.',
+    stepPreDrill: 'Pre-drill confirmat holes',
+    stepPreDrillDesc: 'Drill 5 mm through-holes on top and bottom panels. Drill 3.5 mm × 40 mm pilot holes into side panel end-grain. Mark positions ~50 mm from edges, ~150 mm apart.',
+    stepAssemble: 'Assemble the carcass box',
+    stepAssembleDesc: 'Join side panels to top and bottom with confirmat screws. Use {carcass} panels. Internal width: {internalWidth} mm. Verify square with diagonal measurements — both diagonals must match.',
+    stepCentreShelf: 'Install fixed centre shelf',
+    stepCentreShelfDesc: 'Install the fixed structural shelf at mid-height (required for cabinets > 1200 mm tall). Secure with confirmats through both side panels.',
+    stepBackPanel: 'Attach back panel',
+    stepBackPanelDesc: 'Fit the {back} back panel ({w} × {h} mm) into the rabbet or staple/nail at ~150 mm intervals. The back panel keeps the carcass square — check again before fastening.',
+    stepBoreHinges: 'Bore hinge cups on doors',
+    stepBoreHingesDesc: 'Bore 35 mm cups, 12 mm deep, centre 22.5 mm from door edge. {hinges} hinges per door at positions: {positions} mm from top.',
+    stepMountPlates: 'Mount hinge plates on carcass',
+    stepMountPlatesDesc: 'Screw mounting plates on side panels aligned with hinge positions. Plate centre: 37 mm from front edge. Pre-drill pilot holes.',
+    stepHangDoors: 'Hang doors and adjust',
+    stepHangDoorsDesc: 'Clip hinges into mounting plates. Adjust 3-way (in/out, up/down, lateral) until doors are flush with {reveal} mm reveal all around.',
+    stepShelves: 'Install shelf pins and shelves',
+    stepShelvesDesc: 'Insert shelf pins at desired heights. Place {count} adjustable shelf/shelves ({w} × {d} mm).',
+    stepHandles: 'Install handles',
+    stepHandlesDesc: 'Mount {style} handles on door(s). For bar handles use 128 mm or 160 mm centre-to-centre. Pre-drill before fastening to avoid tear-out.',
+    stepFinal: 'Final checks',
+    stepFinalDesc: 'Verify all doors open and close smoothly with consistent reveal. Check shelf levels with a spirit level. Tighten any loose confirmats. Clean all sawdust.',
+  },
+  he: {
+    coverTitle: 'תוכנית בנייה לארון',
+    dimensions: 'מידות',
+    carcassMaterial: 'חומר שלד',
+    doorsShelves: 'דלתות / מדפים',
+    cutSheets: 'גיליונות חיתוך',
+    hardwareItems: 'פריטי חומרה',
+    cabinetsInProject: 'ארונות בפרויקט',
+    generated: 'תאריך הפקה',
+    brandFooter: 'מתכנן ארונות — כלי עיצוב נגרות אינטראקטיבי',
+    specTitle: 'מפרט הארון',
+    specDimensions: 'מידות',
+    specExternal: 'חיצוני (ר × ג × ע)',
+    specInternalWidth: 'רוחב פנימי',
+    specInternalHeight: 'גובה פנימי',
+    specShelfDepth: 'עומק מדף',
+    specShelfWidth: 'רוחב מדף',
+    specMaterials: 'חומרים',
+    specCarcass: 'חומר שלד',
+    specBackPanel: 'חומר גב',
+    specEdgeBanding: 'קנט',
+    specEdgeBandingTotal: 'סה"כ קנט',
+    specDoorsHardware: 'דלתות וחומרה',
+    specDoorStyle: 'סגנון דלת',
+    specDoorCount: 'מספר דלתות',
+    specDoorDimensions: 'מידות דלת',
+    specDoorReveal: 'מרווח דלת',
+    specHingesPerDoor: 'צירים לדלת',
+    specHandleStyle: 'סגנון ידית',
+    specShelves: 'מדפים',
+    specShelfCount: 'מספר מדפים',
+    specShelfSpacing: 'מרווח מדפים',
+    specBackPanelSize: 'גב',
+    cutSheetSummary: 'סיכום גיליונות חיתוך',
+    sheetsRequired: 'גיליונות נדרשים',
+    materialYield: 'ניצולת חומר',
+    waste: 'פסולת (מ"ר)',
+    hardwareTypes: 'סוגי חומרה',
+    partsListTitle: 'רשימת חלקים',
+    partsTotal: 'חלקים סה"כ',
+    thId: 'מזהה',
+    thPartName: 'שם חלק',
+    thQty: 'כמות',
+    thMaterial: 'חומר',
+    thLength: 'אורך',
+    thWidth: 'רוחב',
+    thThickness: 'עובי',
+    thEdgeBand: 'קנט',
+    hardwareListTitle: 'רשימת חומרה',
+    itemTypes: 'סוגי פריטים',
+    thItem: 'פריט',
+    thUnit: 'יחידה',
+    thNotes: 'הערות',
+    cutSheetPage: 'גיליון חיתוך',
+    yield: 'ניצולת',
+    parts: 'חלקים',
+    drillingGuide: 'מדריך קידוח',
+    hingeCupBoring: 'קידוח גביעי ציר',
+    hingeCupDesc1: 'קדח גביעים בקוטר 35 מ"מ, עומק 12 מ"מ בצד הפנימי של הדלת',
+    hingeCupDesc2: 'מרכז גביע: 22.5 מ"מ מקצה הדלת',
+    hingePositions: 'ציר(ים) לדלת — מיקומים מלמעלה:',
+    hingeFromTop: 'מלמעלה',
+    mountingPlates: 'פלטות הרכבה',
+    mountPlateDesc1: 'חבר פלטות הרכבה על פאנלים צדדיים, מיושרות עם מיקומי הצירים',
+    mountPlateDesc2: 'מרכז פלטה: 37 מ"מ מהקצה הקדמי',
+    mountPlateDesc3: 'קדח חורי טייס 3 מ"מ לברגי פלטה',
+    shelfPinHoles: 'חורי פיני מדף (מערכת 32)',
+    shelfPinDesc1: 'קדח חורים 5 מ"מ, עומק 10 מ"מ, בשני הפאנלים הצדדיים (צד פנימי)',
+    shelfPinDesc2Front: 'שני טורים בכל צד: 37 מ"מ ו-',
+    shelfPinDesc2Back: 'מ"מ מהקצה הקדמי',
+    shelfPinDesc3: 'מרווח: 32 מ"מ מרכז-למרכז (קידוח קו מערכת 32)',
+    shelfPinDesc4: 'חור ראשון: 37 מ"מ מתחתית החלל הפנימי',
+    shelfPinDesc5: 'סה"כ שורות:',
+    shelfPinDesc5Suffix: 'לטור',
+    confirmatScrews: 'ברגי קונפירמט / הרכבה',
+    confirmatDesc1: 'קדח חורים 5 מ"מ בצד החיצוני של פאנלים עליונים/תחתונים',
+    confirmatDesc2: 'קדח טייס 3.5 מ"מ × 40 מ"מ בסיבי הקצה של פאנלים צדדיים',
+    confirmatDesc3: 'מרווח: ~150 מ"מ בין כל חיבור',
+    confirmatDesc4: 'קונפירמט ראשון/אחרון: ~50 מ"מ מקצה הפאנל',
+    backPanelSection: 'פאנל גב',
+    backPanelFix: 'חבר לתוך חריץ 10 ×',
+    backPanelMethod: 'מ"מ, או סכך/מסמר כל ~150 מ"מ',
+    explodedView: 'תצוגת הרכבה מפורקת',
+    explodedNote: 'חלקים מוצגים בהפרדה לבהירות — חיצים מציינים כיוון הרכבה.',
+    assemblySequence: 'רצף הרכבה',
+    shoppingList: 'רשימת קניות',
+    sheetGoods: 'גיליונות חומר',
+    thSize: 'גודל (מ"מ)',
+    edgeBandingSection: 'קנט',
+    edgeBandingRequired: 'סה"כ קנט נדרש:',
+    metres: 'מטרים',
+    door: 'דלת',
+    doors: 'דלתות',
+    sheet: 'גיליון',
+    sheets: 'גיליונות',
+    cabinets: 'ארונות',
+    itemType: 'סוג פריט',
+    itemTypePlural: 'סוגי פריטים',
+    page: 'עמוד',
+    sideL: 'צד שמאל',
+    sideR: 'צד ימין',
+    topPanel: 'פאנל עליון',
+    bottomPanel: 'פאנל תחתון',
+    shelf: 'מדף',
+    back: 'גב',
+    doorLabel: 'דלת',
+    stepPrepare: 'הכנת כל הפאנלים',
+    stepPrepareDesc: 'חתוך את כל החלקים לפי רשימת החיתוך. לטש פנים ל-180 גריט. הדבק קנט ({edgeBanding}) על כל הקצוות המיועדים.',
+    stepDrillPins: 'קידוח חורי פיני מדף',
+    stepDrillPinsDesc: 'קדח חורים 5 מ"מ × 10 מ"מ בשני הפאנלים הצדדיים (צד פנימי), 32 מ"מ מרווח, שני טורים בכל צד. השתמש בג\'יג קידוח קו לדיוק.',
+    stepPreDrill: 'קידוח מוקדם לקונפירמט',
+    stepPreDrillDesc: 'קדח חורים 5 מ"מ בפאנלים עליונים ותחתונים. קדח טייס 3.5 מ"מ × 40 מ"מ בסיבי הקצה של הצדדיים. סמן מיקומים ~50 מ"מ מהקצוות, ~150 מ"מ מרווח.',
+    stepAssemble: 'הרכבת תיבת השלד',
+    stepAssembleDesc: 'חבר פאנלים צדדיים לעליון ותחתון עם ברגי קונפירמט. השתמש בפאנלים מ-{carcass}. רוחב פנימי: {internalWidth} מ"מ. וודא ריבוע עם מדידות אלכסוניות — שני האלכסונים חייבים להיות שווים.',
+    stepCentreShelf: 'התקנת מדף מרכזי קבוע',
+    stepCentreShelfDesc: 'התקן את המדף המבני הקבוע בגובה האמצע (נדרש לארונות מעל 1200 מ"מ). חזק עם קונפירמטים דרך שני הפאנלים הצדדיים.',
+    stepBackPanel: 'חיבור פאנל הגב',
+    stepBackPanelDesc: 'התקן את גב {back} ({w} × {h} מ"מ) בחריץ או סכך/מסמר כל ~150 מ"מ. פאנל הגב שומר על ריבוע השלד — בדוק שוב לפני החיזוק.',
+    stepBoreHinges: 'קידוח גביעי ציר בדלתות',
+    stepBoreHingesDesc: 'קדח גביעים 35 מ"מ, עומק 12 מ"מ, מרכז 22.5 מ"מ מקצה הדלת. {hinges} צירים לדלת במיקומים: {positions} מ"מ מלמעלה.',
+    stepMountPlates: 'הרכבת פלטות ציר על השלד',
+    stepMountPlatesDesc: 'הברג פלטות הרכבה על הפאנלים הצדדיים מיושרות עם מיקומי הצירים. מרכז פלטה: 37 מ"מ מהקצה הקדמי. קדח חורי טייס.',
+    stepHangDoors: 'תליית דלתות וכיוונון',
+    stepHangDoorsDesc: 'הכנס צירים לפלטות ההרכבה. כוונן ב-3 כיוונים (פנימה/החוצה, למעלה/למטה, צדדי) עד שהדלתות מיושרות עם מרווח {reveal} מ"מ מכל הצדדים.',
+    stepShelves: 'התקנת פיני מדף ומדפים',
+    stepShelvesDesc: 'הכנס פיני מדף בגבהים הרצויים. הנח {count} מדפים מתכווננים ({w} × {d} מ"מ).',
+    stepHandles: 'התקנת ידיות',
+    stepHandlesDesc: 'הרכב ידיות {style} על הדלת(ות). לידיות בר השתמש ב-128 מ"מ או 160 מ"מ מרכז-למרכז. קדח מראש למניעת קריעה.',
+    stepFinal: 'בדיקות סופיות',
+    stepFinalDesc: 'וודא שכל הדלתות נפתחות ונסגרות בצורה חלקה עם מרווח אחיד. בדוק פלס מדפים עם פלס מים. הדק קונפירמטים רופפים. נקה כל שבבי עץ.',
+  },
+} as const;
+
+type PdfLang = keyof typeof pdfI18n;
+
 // ─── Props ───
 
 export interface CabinetPdfProps {
@@ -318,10 +597,17 @@ export function CabinetPdfDocument({
   includeCover = true,
   cabinetCount = 1,
 }: CabinetPdfProps) {
+  const T = pdfI18n[lang as PdfLang] ?? pdfI18n.en;
+  const isRTL = lang === 'he';
+  const fontFamily = isRTL ? 'NotoSansHebrew' : 'Helvetica';
+  const fontFamilyBold = isRTL ? 'NotoSansHebrew' : 'Helvetica-Bold';
+  const textAlign = isRTL ? 'right' as const : 'left' as const;
+
   const cMat = getMaterial(config.carcassMaterial);
   const bMat = getMaterial(config.backPanelMaterial);
-  const date = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-  const coverTitle = projectName?.trim() ? projectName.trim() : 'Cabinet Build Plan';
+  const dateLocale = isRTL ? 'he-IL' : 'en-GB';
+  const date = new Date().toLocaleDateString(dateLocale, { day: '2-digit', month: 'short', year: 'numeric' });
+  const coverTitle = projectName?.trim() ? projectName.trim() : T.coverTitle;
   const docTitle = `${coverTitle} — ${config.width}×${config.height}×${config.depth}`;
 
   return (
@@ -334,62 +620,62 @@ export function CabinetPdfDocument({
           {/* Top dark band */}
           <View style={s.coverTopBand}>
             <Text style={s.coverBigEmoji}>🪚</Text>
-            <Text style={s.coverMainTitle}>CABINET BUILD PLAN</Text>
+            <Text style={[s.coverMainTitle, { fontFamily: fontFamilyBold }]}>{T.coverTitle}</Text>
             <View style={s.coverGoldLine} />
-            <Text style={s.coverProjectName}>{coverTitle}</Text>
+            <Text style={[s.coverProjectName, { fontFamily: fontFamilyBold }]}>{coverTitle}</Text>
           </View>
 
           {/* Mid body with info box */}
           <View style={s.coverMidBody}>
             <View style={s.coverInfoBox}>
-              <View style={s.coverInfoRow}>
-                <Text style={s.coverInfoLabel}>📐 Dimensions</Text>
-                <Text style={s.coverInfoValue}>
+              <View style={[s.coverInfoRow, isRTL ? { flexDirection: 'row-reverse' } : {}]}>
+                <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>📐 {T.dimensions}</Text>
+                <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>
                   {config.width} × {config.height} × {config.depth} mm
                 </Text>
               </View>
-              <View style={s.coverInfoRow}>
-                <Text style={s.coverInfoLabel}>🪵 Carcass material</Text>
-                <Text style={s.coverInfoValue}>
+              <View style={[s.coverInfoRow, isRTL ? { flexDirection: 'row-reverse' } : {}]}>
+                <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>🪵 {T.carcassMaterial}</Text>
+                <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>
                   {cMat.name[lang]} ({cMat.thickness} mm)
                 </Text>
               </View>
-              <View style={s.coverInfoRow}>
-                <Text style={s.coverInfoLabel}>🚪 Doors / shelves</Text>
-                <Text style={s.coverInfoValue}>
-                  {config.doorCount} door{config.doorCount > 1 ? 's' : ''} · {config.shelfCount} shelf/shelves
+              <View style={[s.coverInfoRow, isRTL ? { flexDirection: 'row-reverse' } : {}]}>
+                <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>🚪 {T.doorsShelves}</Text>
+                <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>
+                  {config.doorCount} {config.doorCount > 1 ? T.doors : T.door} · {config.shelfCount} {T.specShelves}
                 </Text>
               </View>
-              <View style={s.coverInfoRow}>
-                <Text style={s.coverInfoLabel}>✂️ Cut sheets</Text>
-                <Text style={s.coverInfoValue}>
-                  {optimization.totalSheets} sheet{optimization.totalSheets !== 1 ? 's' : ''} ·{' '}
-                  {optimization.overallYield}% yield
+              <View style={[s.coverInfoRow, isRTL ? { flexDirection: 'row-reverse' } : {}]}>
+                <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>✂️ {T.cutSheets}</Text>
+                <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>
+                  {optimization.totalSheets} {optimization.totalSheets !== 1 ? T.sheets : T.sheet} ·{' '}
+                  {optimization.overallYield}% {T.yield}
                 </Text>
               </View>
-              <View style={s.coverInfoRow}>
-                <Text style={s.coverInfoLabel}>🔩 Hardware items</Text>
-                <Text style={s.coverInfoValue}>
-                  {hardware.length} item type{hardware.length !== 1 ? 's' : ''}
+              <View style={[s.coverInfoRow, isRTL ? { flexDirection: 'row-reverse' } : {}]}>
+                <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>🔩 {T.hardwareItems}</Text>
+                <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>
+                  {hardware.length} {hardware.length !== 1 ? T.itemTypePlural : T.itemType}
                 </Text>
               </View>
               {cabinetCount > 1 && (
-                <View style={s.coverInfoRow}>
-                  <Text style={s.coverInfoLabel}>🗄️ Cabinets in project</Text>
-                  <Text style={s.coverInfoValue}>{cabinetCount} cabinets</Text>
+                <View style={[s.coverInfoRow, isRTL ? { flexDirection: 'row-reverse' } : {}]}>
+                  <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>🗄️ {T.cabinetsInProject}</Text>
+                  <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>{cabinetCount} {T.cabinets}</Text>
                 </View>
               )}
-              <View style={s.coverInfoRowLast}>
-                <Text style={s.coverInfoLabel}>📅 Generated</Text>
-                <Text style={s.coverInfoValue}>{date}</Text>
+              <View style={[s.coverInfoRowLast, isRTL ? { flexDirection: 'row-reverse' } : {}]}>
+                <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>📅 {T.generated}</Text>
+                <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>{date}</Text>
               </View>
             </View>
           </View>
 
           {/* Bottom dark strip */}
-          <View style={s.coverBottomStrip}>
-            <Text style={s.coverBottomText}>🪵 Cabinet Planner — Interactive Woodworking Design Tool</Text>
-            <Text style={s.coverBottomDate}>{date}</Text>
+          <View style={[s.coverBottomStrip, isRTL ? { flexDirection: 'row-reverse' } : {}]}>
+            <Text style={[s.coverBottomText, { fontFamily }]}>🪵 {T.brandFooter}</Text>
+            <Text style={[s.coverBottomDate, { fontFamily: fontFamilyBold }]}>{date}</Text>
           </View>
         </Page>
       )}
@@ -398,85 +684,85 @@ export function CabinetPdfDocument({
           PAGE 2  —  Specifications
          ══════════════════════════════════════════════════════ */}
       <Page size="A4" style={s.page}>
-        <PageHeader section="📐  Specifications" projectName={coverTitle} />
+        <PageHeader section={`📐  ${T.specTitle}`} projectName={coverTitle} lang={lang} />
 
-        <Text style={s.sectionTitle}>📐 Cabinet Specifications</Text>
+        <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>📐 {T.specTitle}</Text>
 
-        <Text style={s.specGroupTitle}>📏 Dimensions</Text>
+        <Text style={[s.specGroupTitle, { fontFamily: fontFamilyBold, textAlign }]}>📏 {T.specDimensions}</Text>
         <View style={s.specGroup}>
-          <SpecRow label="External (W × H × D)" value={`${config.width} × ${config.height} × ${config.depth} mm`} />
-          <SpecRow label="Internal width" value={`${d.internalWidth} mm`} />
-          <SpecRow label="Internal height" value={`${d.internalHeight} mm`} />
-          <SpecRow label="Shelf depth" value={`${d.shelfDepth} mm`} />
-          <SpecRow label="Shelf width" value={`${d.shelfWidth} mm`} />
+          <SpecRow label={T.specExternal} value={`${config.width} × ${config.height} × ${config.depth} mm`} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
+          <SpecRow label={T.specInternalWidth} value={`${d.internalWidth} mm`} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
+          <SpecRow label={T.specInternalHeight} value={`${d.internalHeight} mm`} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
+          <SpecRow label={T.specShelfDepth} value={`${d.shelfDepth} mm`} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
+          <SpecRow label={T.specShelfWidth} value={`${d.shelfWidth} mm`} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
         </View>
 
-        <Text style={s.specGroupTitle}>🪵 Materials</Text>
+        <Text style={[s.specGroupTitle, { fontFamily: fontFamilyBold, textAlign }]}>🪵 {T.specMaterials}</Text>
         <View style={s.specGroup}>
-          <SpecRow label="Carcass material" value={`${cMat.name[lang]} (${cMat.thickness} mm)`} />
-          <SpecRow label="Back panel material" value={`${bMat.name[lang]} (${bMat.thickness} mm)`} />
-          <SpecRow label="Edge banding" value={config.edgeBanding} />
-          <SpecRow label="Edge banding total" value={`${(edgeBandingTotal / 1000).toFixed(1)} m`} />
+          <SpecRow label={T.specCarcass} value={`${cMat.name[lang]} (${cMat.thickness} mm)`} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
+          <SpecRow label={T.specBackPanel} value={`${bMat.name[lang]} (${bMat.thickness} mm)`} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
+          <SpecRow label={T.specEdgeBanding} value={config.edgeBanding} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
+          <SpecRow label={T.specEdgeBandingTotal} value={`${(edgeBandingTotal / 1000).toFixed(1)} m`} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
         </View>
 
-        <Text style={s.specGroupTitle}>🚪 Doors & Hardware</Text>
+        <Text style={[s.specGroupTitle, { fontFamily: fontFamilyBold, textAlign }]}>🚪 {T.specDoorsHardware}</Text>
         <View style={s.specGroup}>
-          <SpecRow label="Door style" value={config.doorStyle} />
-          <SpecRow label="Door count" value={String(config.doorCount)} />
-          <SpecRow label="Door dimensions" value={`${Math.round(d.doorWidth)} × ${Math.round(d.doorHeight)} mm`} />
-          <SpecRow label="Door reveal" value={`${config.doorReveal} mm`} />
-          <SpecRow label="Hinges per door" value={String(d.hingesPerDoor)} />
-          <SpecRow label="Handle style" value={config.handleStyle} />
+          <SpecRow label={T.specDoorStyle} value={config.doorStyle} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
+          <SpecRow label={T.specDoorCount} value={String(config.doorCount)} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
+          <SpecRow label={T.specDoorDimensions} value={`${Math.round(d.doorWidth)} × ${Math.round(d.doorHeight)} mm`} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
+          <SpecRow label={T.specDoorReveal} value={`${config.doorReveal} mm`} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
+          <SpecRow label={T.specHingesPerDoor} value={String(d.hingesPerDoor)} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
+          <SpecRow label={T.specHandleStyle} value={config.handleStyle} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
         </View>
 
-        <Text style={s.specGroupTitle}>📚 Shelves</Text>
+        <Text style={[s.specGroupTitle, { fontFamily: fontFamilyBold, textAlign }]}>📚 {T.specShelves}</Text>
         <View style={s.specGroup}>
-          <SpecRow label="Shelf count" value={String(config.shelfCount)} />
-          <SpecRow label="Shelf spacing" value={config.shelfSpacing} />
-          <SpecRow label="Back panel" value={`${Math.round(d.backPanelWidth)} × ${Math.round(d.backPanelHeight)} mm`} />
+          <SpecRow label={T.specShelfCount} value={String(config.shelfCount)} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
+          <SpecRow label={T.specShelfSpacing} value={config.shelfSpacing} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
+          <SpecRow label={T.specBackPanelSize} value={`${Math.round(d.backPanelWidth)} × ${Math.round(d.backPanelHeight)} mm`} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
         </View>
 
-        <Text style={[s.sectionTitle, { marginTop: 14 }]}>📊 Cut Sheet Summary</Text>
-        <View style={s.statRow}>
+        <Text style={[s.sectionTitle, { marginTop: 14, fontFamily: fontFamilyBold, textAlign }]}>📊 {T.cutSheetSummary}</Text>
+        <View style={[s.statRow, isRTL ? { flexDirection: 'row-reverse' } : {}]}>
           <View style={s.statBox}>
             <Text style={s.statEmoji}>📋</Text>
             <Text style={s.statValue}>{optimization.totalSheets}</Text>
-            <Text style={s.statLabel}>Sheets Required</Text>
+            <Text style={[s.statLabel, { fontFamily }]}>{T.sheetsRequired}</Text>
           </View>
           <View style={s.statBox}>
             <Text style={s.statEmoji}>📊</Text>
             <Text style={s.statValue}>{optimization.overallYield}%</Text>
-            <Text style={s.statLabel}>Material Yield</Text>
+            <Text style={[s.statLabel, { fontFamily }]}>{T.materialYield}</Text>
           </View>
           <View style={s.statBox}>
             <Text style={s.statEmoji}>♻️</Text>
             <Text style={s.statValue}>{(optimization.totalWaste / 1_000_000).toFixed(2)}</Text>
-            <Text style={s.statLabel}>Waste (m²)</Text>
+            <Text style={[s.statLabel, { fontFamily }]}>{T.waste}</Text>
           </View>
           <View style={s.statBox}>
             <Text style={s.statEmoji}>🔩</Text>
             <Text style={s.statValue}>{hardware.length}</Text>
-            <Text style={s.statLabel}>Hardware Types</Text>
+            <Text style={[s.statLabel, { fontFamily }]}>{T.hardwareTypes}</Text>
           </View>
         </View>
 
-        <PageFooter date={date} />
+        <PageFooter date={date} lang={lang} />
       </Page>
 
       {/* ══════════════════════════════════════════════════════
           PAGE 3  —  Parts List
          ══════════════════════════════════════════════════════ */}
       <Page size="A4" style={s.page}>
-        <PageHeader section="🔲  Parts List" projectName={coverTitle} />
+        <PageHeader section={`🔲  ${T.partsListTitle}`} projectName={coverTitle} lang={lang} />
 
-        <Text style={s.sectionTitle}>
-          🔲 Parts List{' '}
-          <Text style={{ fontSize: 9, fontFamily: 'Helvetica', color: C.muted }}>— {parts.length} parts total</Text>
+        <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>
+          🔲 {T.partsListTitle}{' '}
+          <Text style={{ fontSize: 9, fontFamily, color: C.muted }}>— {parts.length} {T.partsTotal}</Text>
         </Text>
 
         <View style={s.tableHeader}>
-          {['ID', 'Part Name', 'Qty', 'Material', 'Length', 'Width', 'Thick.', 'Edge Band'].map((h, i) => (
-            <Text key={i} style={[s.thText, { width: partsColWidths[i] }]}>
+          {[T.thId, T.thPartName, T.thQty, T.thMaterial, T.thLength, T.thWidth, T.thThickness, T.thEdgeBand].map((h, i) => (
+            <Text key={i} style={[s.thText, { width: partsColWidths[i], fontFamily: fontFamilyBold }]}>
               {h}
             </Text>
           ))}
@@ -484,38 +770,38 @@ export function CabinetPdfDocument({
 
         {parts.map((p, i) => (
           <View key={p.id} style={[s.tableRow, i % 2 === 1 ? s.tableRowAlt : {}]} wrap={false}>
-            <Text style={[s.tdText, { width: partsColWidths[0], color: C.accent, fontFamily: 'Helvetica-Bold' }]}>
+            <Text style={[s.tdText, { width: partsColWidths[0], color: C.accent, fontFamily: fontFamilyBold }]}>
               {p.id}
             </Text>
-            <Text style={[s.tdText, { width: partsColWidths[1] }]}>{p.name[lang]}</Text>
+            <Text style={[s.tdText, { width: partsColWidths[1], fontFamily }]}>{p.name[lang]}</Text>
             <Text style={[s.tdText, { width: partsColWidths[2], textAlign: 'center' }]}>{p.qty}</Text>
-            <Text style={[s.tdText, { width: partsColWidths[3], color: C.secondary }]}>
+            <Text style={[s.tdText, { width: partsColWidths[3], color: C.secondary, fontFamily }]}>
               {getMaterial(p.material).name[lang]}
             </Text>
             <Text style={[s.tdText, { width: partsColWidths[4] }]}>{p.length}</Text>
             <Text style={[s.tdText, { width: partsColWidths[5] }]}>{p.width}</Text>
             <Text style={[s.tdText, { width: partsColWidths[6], textAlign: 'center' }]}>{p.thickness}</Text>
-            <Text style={[s.tdText, { width: partsColWidths[7], fontSize: 7 }]}>{p.edgeBanding[lang]}</Text>
+            <Text style={[s.tdText, { width: partsColWidths[7], fontSize: 7, fontFamily }]}>{p.edgeBanding[lang]}</Text>
           </View>
         ))}
 
-        <PageFooter date={date} />
+        <PageFooter date={date} lang={lang} />
       </Page>
 
       {/* ══════════════════════════════════════════════════════
           PAGE 4  —  Hardware List
          ══════════════════════════════════════════════════════ */}
       <Page size="A4" style={s.page}>
-        <PageHeader section="🔩  Hardware List" projectName={coverTitle} />
+        <PageHeader section={`🔩  ${T.hardwareListTitle}`} projectName={coverTitle} lang={lang} />
 
-        <Text style={s.sectionTitle}>
-          🔩 Hardware List{' '}
-          <Text style={{ fontSize: 9, fontFamily: 'Helvetica', color: C.muted }}>— {hardware.length} item types</Text>
+        <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>
+          🔩 {T.hardwareListTitle}{' '}
+          <Text style={{ fontSize: 9, fontFamily, color: C.muted }}>— {hardware.length} {T.itemTypes}</Text>
         </Text>
 
         <View style={s.tableHeader}>
-          {['Item', 'Qty', 'Unit', 'Notes'].map((h, i) => (
-            <Text key={i} style={[s.thText, { width: hwColWidths[i] }]}>
+          {[T.thItem, T.thQty, T.thUnit, T.thNotes].map((h, i) => (
+            <Text key={i} style={[s.thText, { width: hwColWidths[i], fontFamily: fontFamilyBold }]}>
               {h}
             </Text>
           ))}
@@ -523,14 +809,14 @@ export function CabinetPdfDocument({
 
         {hardware.map((hw, i) => (
           <View key={hw.id} style={[s.tableRow, i % 2 === 1 ? s.tableRowAlt : {}]} wrap={false}>
-            <Text style={[s.tdText, { width: hwColWidths[0], fontFamily: 'Helvetica-Bold' }]}>{hw.name[lang]}</Text>
+            <Text style={[s.tdText, { width: hwColWidths[0], fontFamily: fontFamilyBold }]}>{hw.name[lang]}</Text>
             <Text style={[s.tdText, { width: hwColWidths[1], textAlign: 'center' }]}>{hw.qty}</Text>
-            <Text style={[s.tdText, { width: hwColWidths[2], color: C.muted }]}>{hw.unit[lang]}</Text>
+            <Text style={[s.tdText, { width: hwColWidths[2], color: C.muted, fontFamily }]}>{hw.unit[lang]}</Text>
             <Text style={[s.tdText, { width: hwColWidths[3], fontSize: 7, color: C.muted }]}>{hw.id}</Text>
           </View>
         ))}
 
-        <PageFooter date={date} />
+        <PageFooter date={date} lang={lang} />
       </Page>
 
       {/* ══════════════════════════════════════════════════════
@@ -546,16 +832,17 @@ export function CabinetPdfDocument({
         return (
           <Page key={sheet.sheetIndex} size="A4" orientation={isLandscape ? 'landscape' : 'portrait'} style={s.page}>
             <PageHeader
-              section={`✂️  Cut Sheet ${sheet.sheetIndex + 1} / ${optimization.sheets.length}`}
+              section={`✂️  ${T.cutSheetPage} ${sheet.sheetIndex + 1} / ${optimization.sheets.length}`}
               projectName={coverTitle}
+              lang={lang}
             />
 
             {/* Sheet title banner */}
             <View
-              style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}
+              style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}
             >
-              <Text style={s.sectionTitle}>
-                ✂️ Sheet #{sheet.sheetIndex + 1} — {mat.name[lang]} ({sheet.thickness} mm)
+              <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>
+                ✂️ {T.cutSheetPage} #{sheet.sheetIndex + 1} — {mat.name[lang]} ({sheet.thickness} mm)
               </Text>
               <View style={{ flexDirection: 'row', gap: 8 }}>
                 <View
@@ -568,8 +855,8 @@ export function CabinetPdfDocument({
                     paddingVertical: 3,
                   }}
                 >
-                  <Text style={{ fontSize: 8, fontFamily: 'Helvetica-Bold', color: C.primary }}>
-                    📊 {sheet.yieldPercent}% yield
+                  <Text style={{ fontSize: 8, fontFamily: fontFamilyBold, color: C.primary }}>
+                    📊 {sheet.yieldPercent}% {T.yield}
                   </Text>
                 </View>
                 <View
@@ -582,7 +869,7 @@ export function CabinetPdfDocument({
                     paddingVertical: 3,
                   }}
                 >
-                  <Text style={{ fontSize: 8, color: C.muted }}>🔲 {sheet.parts.length} parts</Text>
+                  <Text style={{ fontSize: 8, color: C.muted, fontFamily }}>🔲 {sheet.parts.length} {T.parts}</Text>
                 </View>
               </View>
             </View>
@@ -657,7 +944,7 @@ export function CabinetPdfDocument({
               ))}
             </View>
 
-            <PageFooter date={date} />
+            <PageFooter date={date} lang={lang} />
           </Page>
         );
       })}
@@ -666,48 +953,53 @@ export function CabinetPdfDocument({
           DRILLING & BORING GUIDE
          ══════════════════════════════════════════════════════ */}
       <Page size="A4" style={s.page}>
-        <PageHeader section="🔧  Drilling Guide" projectName={coverTitle} />
+        <PageHeader section={`🔧  ${T.drillingGuide}`} projectName={coverTitle} lang={lang} />
 
-        <Text style={s.sectionTitle}>🔧 Drilling &amp; Boring Guide</Text>
+        <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>🔧 {T.drillingGuide}</Text>
 
-        <Text style={s.sectionSubtitle}>🪛 Hinge Cup Boring</Text>
-        <Text style={s.guideText}>• Bore 35 mm diameter cups, 12 mm deep on door inside face</Text>
-        <Text style={s.guideText}>• Hinge cup centre: 22.5 mm from door edge</Text>
-        <Text style={s.guideText}>• {d.hingesPerDoor} hinge(s) per door — positions from top:</Text>
+        <Text style={[s.sectionSubtitle, { fontFamily: fontFamilyBold, textAlign }]}>🪛 {T.hingeCupBoring}</Text>
+        <Text style={[s.guideText, { fontFamily, textAlign }]}>• {T.hingeCupDesc1}</Text>
+        <Text style={[s.guideText, { fontFamily, textAlign }]}>• {T.hingeCupDesc2}</Text>
+        <Text style={[s.guideText, { fontFamily, textAlign }]}>• {d.hingesPerDoor} {T.hingePositions}</Text>
         {d.hingePositions.map((pos, i) => (
-          <Text key={i} style={s.guideIndent}>
-            ↳ Hinge {i + 1}: {pos} mm from top
+          <Text key={i} style={[s.guideIndent, { fontFamily }]}>
+            {isRTL ? `← ציר ${i + 1}: ${pos} מ"מ ${T.hingeFromTop}` : `↳ Hinge ${i + 1}: ${pos} mm ${T.hingeFromTop}`}
           </Text>
         ))}
 
-        <Text style={s.sectionSubtitle}>🔩 Mounting Plates</Text>
-        <Text style={s.guideText}>• Fix mounting plates on side panels, aligned with hinge positions</Text>
-        <Text style={s.guideText}>• Plate centre: 37 mm from panel front edge</Text>
-        <Text style={s.guideText}>• Pre-drill 3 mm pilot holes for plate screws</Text>
+        <Text style={[s.sectionSubtitle, { fontFamily: fontFamilyBold, textAlign }]}>🔩 {T.mountingPlates}</Text>
+        <Text style={[s.guideText, { fontFamily, textAlign }]}>• {T.mountPlateDesc1}</Text>
+        <Text style={[s.guideText, { fontFamily, textAlign }]}>• {T.mountPlateDesc2}</Text>
+        <Text style={[s.guideText, { fontFamily, textAlign }]}>• {T.mountPlateDesc3}</Text>
 
-        <Text style={s.sectionSubtitle}>📌 Shelf Pin Holes (System 32)</Text>
-        <Text style={s.guideText}>• Drill 5 mm holes, 10 mm deep, on both side panels (inner face)</Text>
-        <Text style={s.guideText}>
-          {'• Two columns per side: 37 mm and '}
+        <Text style={[s.sectionSubtitle, { fontFamily: fontFamilyBold, textAlign }]}>📌 {T.shelfPinHoles}</Text>
+        <Text style={[s.guideText, { fontFamily, textAlign }]}>• {T.shelfPinDesc1}</Text>
+        <Text style={[s.guideText, { fontFamily, textAlign }]}>
+          {'• '}
+          {T.shelfPinDesc2Front}
           {d.internalWidth > 400 ? d.shelfDepth - 37 : Math.round(d.shelfDepth / 2)}
-          {' mm from front edge'}
+          {' '}
+          {T.shelfPinDesc2Back}
         </Text>
-        <Text style={s.guideText}>• Spacing: 32 mm on-centre (System 32 line boring)</Text>
-        <Text style={s.guideText}>• First hole: 37 mm from bottom of internal space</Text>
-        <Text style={s.guideText}>
-          {'• Total rows: '}
+        <Text style={[s.guideText, { fontFamily, textAlign }]}>• {T.shelfPinDesc3}</Text>
+        <Text style={[s.guideText, { fontFamily, textAlign }]}>• {T.shelfPinDesc4}</Text>
+        <Text style={[s.guideText, { fontFamily, textAlign }]}>
+          {'• '}
+          {T.shelfPinDesc5}
+          {' '}
           {Math.max(1, Math.floor((d.internalHeight - 74) / 32) + 1)}
-          {' per column'}
+          {' '}
+          {T.shelfPinDesc5Suffix}
         </Text>
 
-        <Text style={s.sectionSubtitle}>🪛 Confirmat / Assembly Screws</Text>
-        <Text style={s.guideText}>• Pre-drill 5 mm through-holes on outer face of top/bottom panels</Text>
-        <Text style={s.guideText}>• Pilot drill 3.5 mm × 40 mm into end-grain of side panels</Text>
-        <Text style={s.guideText}>• Spacing: ~150 mm apart along each joint</Text>
-        <Text style={s.guideText}>• First/last confirmat: ~50 mm from panel edge</Text>
+        <Text style={[s.sectionSubtitle, { fontFamily: fontFamilyBold, textAlign }]}>🪛 {T.confirmatScrews}</Text>
+        <Text style={[s.guideText, { fontFamily, textAlign }]}>• {T.confirmatDesc1}</Text>
+        <Text style={[s.guideText, { fontFamily, textAlign }]}>• {T.confirmatDesc2}</Text>
+        <Text style={[s.guideText, { fontFamily, textAlign }]}>• {T.confirmatDesc3}</Text>
+        <Text style={[s.guideText, { fontFamily, textAlign }]}>• {T.confirmatDesc4}</Text>
 
-        <Text style={s.sectionSubtitle}>🗂️ Back Panel</Text>
-        <Text style={s.guideText}>
+        <Text style={[s.sectionSubtitle, { fontFamily: fontFamilyBold, textAlign }]}>🗂️ {T.backPanelSection}</Text>
+        <Text style={[s.guideText, { fontFamily, textAlign }]}>
           {'• '}
           {bMat.name[lang]}
           {' ('}
@@ -718,99 +1010,102 @@ export function CabinetPdfDocument({
           {Math.round(d.backPanelHeight)}
           {' mm'}
         </Text>
-        <Text style={s.guideText}>
-          {'• Fix into 10 × '}
+        <Text style={[s.guideText, { fontFamily, textAlign }]}>
+          {'• '}
+          {T.backPanelFix}
+          {' '}
           {bMat.thickness}
-          {' mm rabbet, or staple/nail at ~150 mm intervals'}
+          {' '}
+          {T.backPanelMethod}
         </Text>
 
-        <PageFooter date={date} />
+        <PageFooter date={date} lang={lang} />
       </Page>
 
       {/* ══════════════════════════════════════════════════════
           EXPLODED VIEW
          ══════════════════════════════════════════════════════ */}
       <Page size="A4" style={s.page}>
-        <PageHeader section="🏗️  Exploded View" projectName={coverTitle} />
+        <PageHeader section={`🏗️  ${T.explodedView}`} projectName={coverTitle} lang={lang} />
 
-        <Text style={s.sectionTitle}>🏗️ Exploded Assembly View</Text>
-        <ExplodedView config={config} dimensions={d} cMat={cMat.name[lang]} bMat={bMat.name[lang]} />
-        <PageFooter date={date} />
+        <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>🏗️ {T.explodedView}</Text>
+        <ExplodedView config={config} dimensions={d} cMat={cMat.name[lang]} bMat={bMat.name[lang]} lang={lang} />
+        <PageFooter date={date} lang={lang} />
       </Page>
 
       {/* ══════════════════════════════════════════════════════
           ASSEMBLY SEQUENCE
          ══════════════════════════════════════════════════════ */}
       <Page size="A4" style={s.page}>
-        <PageHeader section="🔨  Assembly Sequence" projectName={coverTitle} />
+        <PageHeader section={`🔨  ${T.assemblySequence}`} projectName={coverTitle} lang={lang} />
 
-        <Text style={s.sectionTitle}>🔨 Assembly Sequence</Text>
+        <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>🔨 {T.assemblySequence}</Text>
 
-        {assemblySteps(config, d, cMat.name[lang], bMat.name[lang]).map((step, i) => (
-          <View key={i} style={s.assemblyStep} wrap={false}>
-            <View style={s.stepBadge}>
+        {assemblyStepsI18n(config, d, cMat.name[lang], bMat.name[lang], lang).map((step, i) => (
+          <View key={i} style={[s.assemblyStep, isRTL ? { flexDirection: 'row-reverse' } : {}]} wrap={false}>
+            <View style={[s.stepBadge, isRTL ? { marginRight: 0, marginLeft: 10 } : {}]}>
               <Text style={s.stepBadgeText}>{i + 1}</Text>
             </View>
             <View style={s.stepContent}>
-              <Text style={s.stepTitle}>
+              <Text style={[s.stepTitle, { fontFamily: fontFamilyBold, textAlign }]}>
                 {step.emoji} {step.title}
               </Text>
-              <Text style={s.stepDesc}>{step.description}</Text>
+              <Text style={[s.stepDesc, { fontFamily, textAlign }]}>{step.description}</Text>
             </View>
           </View>
         ))}
 
-        <PageFooter date={date} />
+        <PageFooter date={date} lang={lang} />
       </Page>
 
       {/* ══════════════════════════════════════════════════════
           SHOPPING LIST
          ══════════════════════════════════════════════════════ */}
       <Page size="A4" style={s.page}>
-        <PageHeader section="🛒  Shopping List" projectName={coverTitle} />
+        <PageHeader section={`🛒  ${T.shoppingList}`} projectName={coverTitle} lang={lang} />
 
-        <Text style={s.sectionTitle}>🛒 Shopping List</Text>
+        <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>🛒 {T.shoppingList}</Text>
 
-        <Text style={s.sectionSubtitle}>🪵 Sheet Goods</Text>
+        <Text style={[s.sectionSubtitle, { fontFamily: fontFamilyBold, textAlign }]}>🪵 {T.sheetGoods}</Text>
         <View style={s.tableHeader}>
-          {['Material', 'Size (mm)', 'Qty'].map((h, i) => (
-            <Text key={i} style={[s.thText, { width: ['50%', '32%', '18%'][i] }]}>
+          {[T.thMaterial, T.thSize, T.thQty].map((h, i) => (
+            <Text key={i} style={[s.thText, { width: ['50%', '32%', '18%'][i], fontFamily: fontFamilyBold }]}>
               {h}
             </Text>
           ))}
         </View>
         {sheetSummary(optimization, lang).map((row, i) => (
           <View key={i} style={[s.tableRow, i % 2 === 1 ? s.tableRowAlt : {}]} wrap={false}>
-            <Text style={[s.tdText, { width: '50%', fontFamily: 'Helvetica-Bold' }]}>{row.material}</Text>
+            <Text style={[s.tdText, { width: '50%', fontFamily: fontFamilyBold }]}>{row.material}</Text>
             <Text style={[s.tdText, { width: '32%', color: C.muted }]}>{row.size}</Text>
             <Text style={[s.tdText, { width: '18%', textAlign: 'center' }]}>{row.qty}</Text>
           </View>
         ))}
 
-        <Text style={[s.sectionSubtitle, { marginTop: 14 }]}>🔩 Hardware</Text>
+        <Text style={[s.sectionSubtitle, { marginTop: 14, fontFamily: fontFamilyBold, textAlign }]}>🔩 {T.hardwareListTitle}</Text>
         <View style={s.tableHeader}>
-          {['Item', 'Qty', 'Unit'].map((h, i) => (
-            <Text key={i} style={[s.thText, { width: ['55%', '20%', '25%'][i] }]}>
+          {[T.thItem, T.thQty, T.thUnit].map((h, i) => (
+            <Text key={i} style={[s.thText, { width: ['55%', '20%', '25%'][i], fontFamily: fontFamilyBold }]}>
               {h}
             </Text>
           ))}
         </View>
         {hardware.map((hw, i) => (
           <View key={i} style={[s.tableRow, i % 2 === 1 ? s.tableRowAlt : {}]} wrap={false}>
-            <Text style={[s.tdText, { width: '55%' }]}>{hw.name[lang]}</Text>
+            <Text style={[s.tdText, { width: '55%', fontFamily }]}>{hw.name[lang]}</Text>
             <Text style={[s.tdText, { width: '20%', textAlign: 'center' }]}>{hw.qty}</Text>
-            <Text style={[s.tdText, { width: '25%', color: C.muted }]}>{hw.unit[lang]}</Text>
+            <Text style={[s.tdText, { width: '25%', color: C.muted, fontFamily }]}>{hw.unit[lang]}</Text>
           </View>
         ))}
 
         {edgeBandingTotal > 0 && (
           <View style={{ marginTop: 14 }}>
-            <Text style={s.sectionSubtitle}>🎀 Edge Banding</Text>
-            <Text style={s.guideText}>Total edge banding required: {(edgeBandingTotal / 1000).toFixed(1)} metres</Text>
+            <Text style={[s.sectionSubtitle, { fontFamily: fontFamilyBold, textAlign }]}>🎀 {T.edgeBandingSection}</Text>
+            <Text style={[s.guideText, { fontFamily, textAlign }]}>{T.edgeBandingRequired} {(edgeBandingTotal / 1000).toFixed(1)} {T.metres}</Text>
           </View>
         )}
 
-        <PageFooter date={date} />
+        <PageFooter date={date} lang={lang} />
       </Page>
     </Document>
   );
@@ -820,31 +1115,38 @@ export function CabinetPdfDocument({
 //  Sub-components
 // ══════════════════════════════════════════════════════════════
 
-function PageHeader({ section, projectName }: { section: string; projectName: string }) {
+function PageHeader({ section, projectName, lang = 'en' }: { section: string; projectName: string; lang?: Lang }) {
+  const isRTL = lang === 'he';
+  const ff = isRTL ? 'NotoSansHebrew' : 'Helvetica';
+  const ffBold = isRTL ? 'NotoSansHebrew' : 'Helvetica-Bold';
   return (
-    <View style={s.pageHeader} fixed>
-      <Text style={s.pageHeaderBrand}>🪵 Cabinet Planner</Text>
-      <Text style={s.pageHeaderSection}>{section}</Text>
-      <Text style={s.pageHeaderRight}>{projectName}</Text>
+    <View style={[s.pageHeader, isRTL ? { flexDirection: 'row-reverse' } : {}]} fixed>
+      <Text style={[s.pageHeaderBrand, { fontFamily: ffBold }]}>🪵 {isRTL ? 'מתכנן ארונות' : 'Cabinet Planner'}</Text>
+      <Text style={[s.pageHeaderSection, { fontFamily: ff }]}>{section}</Text>
+      <Text style={[s.pageHeaderRight, { fontFamily: ffBold }]}>{projectName}</Text>
     </View>
   );
 }
 
-function PageFooter({ date }: { date: string }) {
+function PageFooter({ date, lang = 'en' }: { date: string; lang?: Lang }) {
+  const isRTL = lang === 'he';
+  const ff = isRTL ? 'NotoSansHebrew' : 'Helvetica';
+  const ffBold = isRTL ? 'NotoSansHebrew' : 'Helvetica-Bold';
+  const pageLabel = isRTL ? 'עמוד' : 'Page';
   return (
-    <View style={s.footer} fixed>
-      <Text style={s.footerLeft}>🪵 Cabinet Planner</Text>
-      <Text style={s.footerCenter}>📅 {date}</Text>
-      <Text style={s.footerRight} render={({ pageNumber, totalPages }) => `Page ${pageNumber} / ${totalPages}`} />
+    <View style={[s.footer, isRTL ? { flexDirection: 'row-reverse' } : {}]} fixed>
+      <Text style={[s.footerLeft, { fontFamily: ff }]}>🪵 {isRTL ? 'מתכנן ארונות' : 'Cabinet Planner'}</Text>
+      <Text style={[s.footerCenter, { fontFamily: ff }]}>📅 {date}</Text>
+      <Text style={[s.footerRight, { fontFamily: ffBold }]} render={({ pageNumber, totalPages }) => `${pageLabel} ${pageNumber} / ${totalPages}`} />
     </View>
   );
 }
 
-function SpecRow({ label, value }: { label: string; value: string }) {
+function SpecRow({ label, value, isRTL = false, fontFamily = 'Helvetica', fontFamilyBold = 'Helvetica-Bold' }: { label: string; value: string; isRTL?: boolean; fontFamily?: string; fontFamilyBold?: string }) {
   return (
-    <View style={s.specRow}>
-      <Text style={s.specLabel}>{label}</Text>
-      <Text style={s.specValue}>{value}</Text>
+    <View style={[s.specRow, isRTL ? { flexDirection: 'row-reverse' } : {}]}>
+      <Text style={[s.specLabel, { fontFamily, textAlign: isRTL ? 'right' : 'left' }]}>{label}</Text>
+      <Text style={[s.specValue, { fontFamily: fontFamilyBold, textAlign: isRTL ? 'right' : 'left' }]}>{value}</Text>
     </View>
   );
 }
@@ -859,83 +1161,93 @@ interface AssemblyStep {
   description: string;
 }
 
-function assemblySteps(
+function assemblyStepsI18n(
   config: CabinetConfig,
   d: DerivedDimensions,
   carcassName: string,
   backName: string,
+  lang: Lang,
 ): AssemblyStep[] {
+  const T = pdfI18n[lang as PdfLang] ?? pdfI18n.en;
   const steps: AssemblyStep[] = [
     {
       emoji: '✂️',
-      title: 'Prepare all panels',
-      description: `Cut all parts per the cut list. Sand faces to 180 grit. Apply edge banding (${config.edgeBanding}) to all designated edges.`,
+      title: T.stepPrepare,
+      description: T.stepPrepareDesc.replace('{edgeBanding}', config.edgeBanding),
     },
     {
       emoji: '📌',
-      title: 'Drill shelf pin holes',
-      description: `Drill 5 mm × 10 mm holes on both side panels (inner face), 32 mm apart, two columns per side. Use a line-boring jig for precision.`,
+      title: T.stepDrillPins,
+      description: T.stepDrillPinsDesc,
     },
     {
       emoji: '🔧',
-      title: 'Pre-drill confirmat holes',
-      description: `Drill 5 mm through-holes on top and bottom panels. Drill 3.5 mm × 40 mm pilot holes into side panel end-grain. Mark positions ~50 mm from edges, ~150 mm apart.`,
+      title: T.stepPreDrill,
+      description: T.stepPreDrillDesc,
     },
     {
       emoji: '🏗️',
-      title: 'Assemble the carcass box',
-      description: `Join side panels to top and bottom with confirmat screws. Use ${carcassName} panels. Internal width: ${d.internalWidth} mm. Verify square with diagonal measurements — both diagonals must match.`,
+      title: T.stepAssemble,
+      description: T.stepAssembleDesc.replace('{carcass}', carcassName).replace('{internalWidth}', String(d.internalWidth)),
     },
   ];
 
   if (config.height > 1200) {
     steps.push({
       emoji: '📐',
-      title: 'Install fixed centre shelf',
-      description: `Install the fixed structural shelf at mid-height (required for cabinets > 1200 mm tall). Secure with confirmats through both side panels.`,
+      title: T.stepCentreShelf,
+      description: T.stepCentreShelfDesc,
     });
   }
 
   steps.push(
     {
       emoji: '🗂️',
-      title: 'Attach back panel',
-      description: `Fit the ${backName} back panel (${Math.round(d.backPanelWidth)} × ${Math.round(d.backPanelHeight)} mm) into the rabbet or staple/nail at ~150 mm intervals. The back panel keeps the carcass square — check again before fastening.`,
+      title: T.stepBackPanel,
+      description: T.stepBackPanelDesc
+        .replace('{back}', backName)
+        .replace('{w}', String(Math.round(d.backPanelWidth)))
+        .replace('{h}', String(Math.round(d.backPanelHeight))),
     },
     {
       emoji: '🪛',
-      title: 'Bore hinge cups on doors',
-      description: `Bore 35 mm cups, 12 mm deep, centre 22.5 mm from door edge. ${d.hingesPerDoor} hinges per door at positions: ${d.hingePositions.join(', ')} mm from top.`,
+      title: T.stepBoreHinges,
+      description: T.stepBoreHingesDesc
+        .replace('{hinges}', String(d.hingesPerDoor))
+        .replace('{positions}', d.hingePositions.join(', ')),
     },
     {
       emoji: '🔩',
-      title: 'Mount hinge plates on carcass',
-      description: `Screw mounting plates on side panels aligned with hinge positions. Plate centre: 37 mm from front edge. Pre-drill pilot holes.`,
+      title: T.stepMountPlates,
+      description: T.stepMountPlatesDesc,
     },
     {
       emoji: '🚪',
-      title: 'Hang doors and adjust',
-      description: `Clip hinges into mounting plates. Adjust 3-way (in/out, up/down, lateral) until doors are flush with ${config.doorReveal} mm reveal all around.`,
+      title: T.stepHangDoors,
+      description: T.stepHangDoorsDesc.replace('{reveal}', String(config.doorReveal)),
     },
     {
       emoji: '📚',
-      title: 'Install shelf pins and shelves',
-      description: `Insert shelf pins at desired heights. Place ${config.shelfCount} adjustable shelf/shelves (${d.shelfWidth} × ${d.shelfDepth} mm).`,
+      title: T.stepShelves,
+      description: T.stepShelvesDesc
+        .replace('{count}', String(config.shelfCount))
+        .replace('{w}', String(d.shelfWidth))
+        .replace('{d}', String(d.shelfDepth)),
     },
   );
 
   if (config.handleStyle !== 'none') {
     steps.push({
       emoji: '🖐️',
-      title: 'Install handles',
-      description: `Mount ${config.handleStyle} handles on door(s). For bar handles use 128 mm or 160 mm centre-to-centre. Pre-drill before fastening to avoid tear-out.`,
+      title: T.stepHandles,
+      description: T.stepHandlesDesc.replace('{style}', config.handleStyle),
     });
   }
 
   steps.push({
     emoji: '✅',
-    title: 'Final checks',
-    description: `Verify all doors open and close smoothly with consistent reveal. Check shelf levels with a spirit level. Tighten any loose confirmats. Clean all sawdust.`,
+    title: T.stepFinal,
+    description: T.stepFinalDesc,
   });
 
   return steps;
@@ -975,12 +1287,16 @@ function ExplodedView({
   dimensions: _dimensions,
   cMat,
   bMat,
+  lang = 'en',
 }: {
   config: CabinetConfig;
   dimensions: DerivedDimensions;
   cMat: string;
   bMat: string;
+  lang?: Lang;
 }) {
+  const T = pdfI18n[lang as PdfLang] ?? pdfI18n.en;
+  const ff = lang === 'he' ? 'NotoSansHebrew' : 'Helvetica';
   const maxW = 400;
   const maxH = 480;
   const sc = Math.min(maxW / config.width, maxH / config.height) * 0.65;
@@ -1030,8 +1346,8 @@ function ExplodedView({
 
   return (
     <View style={{ width: maxW + 140, height: maxH + 60, position: 'relative', marginTop: 6 }}>
-      <Text style={{ fontSize: 8, color: C.muted, marginBottom: 6 }}>
-        Parts shown separated for clarity — arrows indicate assembly direction.
+      <Text style={{ fontSize: 8, color: C.muted, marginBottom: 6, fontFamily: ff }}>
+        {T.explodedNote}
       </Text>
 
       {/* Ghost carcass outline */}
@@ -1049,44 +1365,44 @@ function ExplodedView({
       />
 
       {/* ① Left side */}
-      {partBox(baseY, baseX - gap - t, t, H, '#D2B48C', 'Side L')}
-      {lbl('① Left', baseY - 11, baseX - gap - t)}
+      {partBox(baseY, baseX - gap - t, t, H, '#D2B48C', T.sideL)}
+      {lbl(`① ${T.sideL}`, baseY - 11, baseX - gap - t)}
       {arrow(baseY + H / 2 - 6, baseX - gap + 2, '→')}
 
       {/* ② Right side */}
-      {partBox(baseY, baseX + W + gap, t, H, '#D2B48C', 'Side R')}
-      {lbl('② Right', baseY - 11, baseX + W + gap)}
+      {partBox(baseY, baseX + W + gap, t, H, '#D2B48C', T.sideR)}
+      {lbl(`② ${T.sideR}`, baseY - 11, baseX + W + gap)}
       {arrow(baseY + H / 2 - 6, baseX + W + gap - 14, '←')}
 
       {/* ③ Top panel */}
-      {partBox(baseY - gap - t, baseX + t, W - 2 * t, t, '#DEB887', 'Top panel')}
-      {lbl('③ Top', baseY - gap - t - 11, baseX + t)}
+      {partBox(baseY - gap - t, baseX + t, W - 2 * t, t, '#DEB887', T.topPanel)}
+      {lbl(`③ ${T.topPanel}`, baseY - gap - t - 11, baseX + t)}
       {arrow(baseY - gap, baseX + W / 2 - 5, '↓')}
 
       {/* ④ Bottom panel */}
-      {partBox(baseY + H + gap, baseX + t, W - 2 * t, t, '#DEB887', 'Bottom panel')}
-      {lbl('④ Bottom', baseY + H + gap + t + 3, baseX + t)}
+      {partBox(baseY + H + gap, baseX + t, W - 2 * t, t, '#DEB887', T.bottomPanel)}
+      {lbl(`④ ${T.bottomPanel}`, baseY + H + gap + t + 3, baseX + t)}
       {arrow(baseY + H + gap - 14, baseX + W / 2 - 5, '↑')}
 
       {/* Shelves inside ghost */}
       {config.shelfCount > 0 &&
         Array.from({ length: Math.min(config.shelfCount, 5) }).map((_, i) => {
           const sy = baseY + (H / (config.shelfCount + 1)) * (i + 1);
-          return partBox(sy - t / 2, baseX + t + 2, W - 2 * t - 4, t, '#F5DEB3', `Shelf ${i + 1}`);
+          return partBox(sy - t / 2, baseX + t + 2, W - 2 * t - 4, t, '#F5DEB3', `${T.shelf} ${i + 1}`);
         })}
 
       {/* ⑤ Back panel */}
-      {partBox(baseY + 4, baseX + W + gap * 2.8, W * 0.12, H - 8, '#C8B090', `Back\n${bMat}`)}
-      {lbl('⑤ Back', baseY - 11, baseX + W + gap * 2.8)}
+      {partBox(baseY + 4, baseX + W + gap * 2.8, W * 0.12, H - 8, '#C8B090', `${T.back}\n${bMat}`)}
+      {lbl(`⑤ ${T.back}`, baseY - 11, baseX + W + gap * 2.8)}
 
       {/* ⑥ Door(s) */}
       {config.doorStyle !== 'none' &&
         Array.from({ length: config.doorCount }).map((_, i) => {
           const dw = (W / config.doorCount) * 0.88;
           const dx = baseX + (W / config.doorCount) * i + (W / config.doorCount) * 0.06;
-          return partBox(baseY + H + gap * 2.8, dx, dw, H * 0.14, '#E8D5B7', `Door ${i + 1}`);
+          return partBox(baseY + H + gap * 2.8, dx, dw, H * 0.14, '#E8D5B7', `${T.doorLabel} ${i + 1}`);
         })}
-      {config.doorStyle !== 'none' && lbl('⑥ Door(s)', baseY + H + gap * 2.8 - 11, baseX)}
+      {config.doorStyle !== 'none' && lbl(`⑥ ${T.doorLabel}(s)`, baseY + H + gap * 2.8 - 11, baseX)}
 
       {/* Dimension line */}
       <Text

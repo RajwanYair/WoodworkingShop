@@ -167,6 +167,7 @@ export function OptimizationNotesPanel() {
                     <button
                       onClick={() => handleDismiss(s)}
                       className="px-2.5 py-1 text-[11px] font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 rounded hover:bg-wood-100 dark:hover:bg-wood-700 transition-colors flex items-center"
+                      aria-label={t('optimizer.notesDismiss')}
                     >
                       <IconX size={12} />
                     </button>

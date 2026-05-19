@@ -1,8 +1,0 @@
-# .shellcheckrc — project-level ShellCheck configuration
-# Applies to any *.sh / *.bash scripts in this repo.
-# GitHub Actions YAML workflow files are excluded from shellcheck analysis
-# via .vscode/settings.json (shellcheck.ignorePatterns) — they are validated
-# by the github.vscode-github-actions VS Code extension instead.
-
-shell=bash
-severity=warning

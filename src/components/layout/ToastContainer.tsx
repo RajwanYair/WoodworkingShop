@@ -43,7 +43,7 @@ export function ToastContainer() {
   const otherToasts = toasts.filter((t) => t.type !== 'error');
 
   return (
-    <div className="fixed bottom-16 end-5 z-50 flex flex-col gap-2 max-w-xs">
+    <div className="fixed bottom-16 inset-e-5 z-50 flex flex-col gap-2 max-w-xs">
       {/* Errors announced immediately — assertive interrupts the screen reader */}
       <div role="alert" aria-live="assertive" aria-atomic="true">
         <ToastList toasts={errorToasts} removeToast={removeToast} />

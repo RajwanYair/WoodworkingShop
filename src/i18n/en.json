@@ -170,6 +170,7 @@
     "notesDesc": "Auto-detected suggestions that reduce sheets or improve yield",
     "notesEmpty": "No suggestions within the current tolerance — design is well optimized.",
     "notesRestore": "Restore dismissed suggestions",
+    "notesDismiss": "Dismiss suggestion",
     "wasteReduced": "waste reduced",
     "explainer": {
       "title": "Why this layout? ",
