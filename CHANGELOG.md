@@ -9,6 +9,53 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.53.58] — 2026-06-08
+
+### Sprints 41–50 — Domain Intelligence, UX Polish & API Documentation
+
+Covers Sprints 41 through 50 (v3.53.49 → v3.53.58). Each sprint was independently committed; 783 tests passing across 49 test files.
+
+### Optimizer — Grain Conflict UX (Phase 5)
+
+- **Sprint 41** — `grainConflictCount` stat pill in the optimizer toolbar showing total grain conflicts across all sheets, with a tooltip quoting the placement rationale of the first conflicting part. i18n keys: `optimizer.grainConflicts`, `optimizer.grainConflictsTitle`. 5 new tests. (v3.53.49)
+
+- **Sprint 42** — Per-part red triangle grain conflict marker on `PartRect` SVG elements; sheet-level conflict badge on `SheetCard` header when any part on that sheet has a grain conflict. 4 new tests. (v3.53.50)
+
+### Configurator — Material Intelligence (Phase 5)
+
+- **Sprint 43** — `SubstitutionPanel` component in `src/components/configurator/`: collapsible suggestion list with quantitative rationale (deflection reduction %, weight saved per sheet, cost delta %). "Use this" button applies the substitution via `setConfig`. Individual suggestions can be dismissed. `role="region"` + `aria-label`. 5 new tests. (v3.53.51)
+
+### PWA — Service Worker Updates (Phase 3)
+
+- **Sprint 44** — `useSwUpdate` hook (`src/hooks/useSwUpdate.ts`) detects an active `waiting` service worker. `SwUpdateBanner` fixed top-of-page banner with `role="alert"` / `aria-live="polite"` lets users reload into the new version without manual page refresh. i18n keys: `swUpdate.available`, `swUpdate.reload`. 5 new tests. (v3.53.52)
+
+### Validation — Joinery Rules (Phase 5)
+
+- **Sprint 45** — Two new validation rules in `src/engine/validation.ts`:
+  - `JOINERY_MAX_SPAN` (warning): fires when shelf width exceeds 900 mm on chipboard/MDF/melamine materials (deflection risk).
+  - `JOINERY_MIN_SHELF_GAP` (warning): fires when average shelf-to-shelf gap falls below 150 mm; suggests a reduced shelf count.
+  7 new tests. (v3.53.53)
+
+### Optimizer — Part Filter (Phase 5)
+
+- **Sprint 46** — Text filter input in the optimizer toolbar highlights matching parts across all sheets (bold labels, full opacity) while fading non-matches. Same highlight logic applied to legend colour swatches. i18n keys: `optimizer.filterParts`, `optimizer.filterPartsPlaceholder`. (v3.53.54)
+
+### Engine — Templates (Phase 5)
+
+- **Sprint 47** — `pantry` template added to `src/engine/templates.ts`: 600×2000×580 mm, 6 shelves, 2 flat-panel doors, melamine-18 carcass, bar handles, 100 mm kick. `backPanelMaterial` corrected to `mdf-3` (the valid material key). Additional template assertion tests for `bathroom-vanity`, `tv-unit`, and `pantry`; all templates now total ≥ 16. 7 new tests. (v3.53.55)
+
+### Hooks — OS Dark Mode Sync
+
+- **Sprint 48** — `useSystemDarkMode` hook (`src/hooks/useSystemDarkMode.ts`) listens to `window.matchMedia('(prefers-color-scheme: dark)')` change events. When the OS preference changes, the store's `darkMode` is updated only if the user has not manually diverged from the OS (i.e. store value still matches what the OS was before the change). Registered in `App.tsx`. 5 new tests. (v3.53.56)
+
+### Docs — TypeDoc Plugin API
+
+- **Sprint 49** — `typedoc.json` config targets `src/engine/index.ts`; `npm run docs:api` generates HTML docs under `docs/api/` (git-ignored). `@packageDocumentation` JSDoc added to the engine barrel with a usage example. Six missing type re-exports added to barrel (`FurnitureType`, `DrawerSlideType`, `PanelMaterialSource`, `QuantitativeRationale`, `HardwareCost`, `SmartOptimizerOptions`). Pre-existing `grainVertical` property on `Part` test literal fixed (property belongs to `CutRect`). TypeDoc generates with zero warnings. (v3.53.57)
+
+### Infrastructure
+
+- **Sprint 50** — CHANGELOG updated for Sprints 41–50. `gh release v3.53.58` published. 783 tests, 49 test files. (v3.53.58)
+
 ## [3.53.48] — 2026-06-07
 
 ### Sprints 31–40 — Phase 7 Completion + UX Polish
