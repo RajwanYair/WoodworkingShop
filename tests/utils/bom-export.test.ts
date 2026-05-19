@@ -165,4 +165,15 @@ describe('generateBomCsv', () => {
     expect(csv).toContain('C2-P01');
     expect(csv).toContain('C3-P01');
   });
+
+  it('includes version header line', () => {
+    const csv = generateBomCsv(singleCabinet, 'en');
+    expect(csv).toContain('Cabinet Planner BOM Export');
+    expect(csv).toContain('Schema: bom-csv-v1');
+  });
+
+  it('includes generatedAt ISO timestamp in header', () => {
+    const csv = generateBomCsv(singleCabinet, 'en');
+    expect(csv).toMatch(/Generated: \d{4}-\d{2}-\d{2}T/);
+  });
 });

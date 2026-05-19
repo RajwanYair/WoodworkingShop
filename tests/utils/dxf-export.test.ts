@@ -43,4 +43,15 @@ describe('cutSheetToDxf', () => {
     const polylines = dxf.split('LWPOLYLINE').length - 1;
     expect(polylines).toBe(1);
   });
+
+  it('includes version header comment', () => {
+    const dxf = cutSheetToDxf(mockSheet);
+    expect(dxf).toContain('Cabinet Planner DXF Export');
+    expect(dxf).toContain('Schema: dxf-r12-v1');
+  });
+
+  it('includes generatedAt ISO timestamp in header', () => {
+    const dxf = cutSheetToDxf(mockSheet);
+    expect(dxf).toMatch(/Generated: \d{4}-\d{2}-\d{2}T/);
+  });
 });

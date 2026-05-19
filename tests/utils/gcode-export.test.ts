@@ -67,4 +67,15 @@ describe('cutSheetToGcode', () => {
     const g1Lines = gc.split('\n').filter((l) => l.startsWith('G1'));
     expect(g1Lines.length).toBe(5); // 1 plunge + 4 rectangle sides
   });
+
+  it('includes version header comment', () => {
+    const gc = cutSheetToGcode(mockSheet);
+    expect(gc).toContain('Cabinet Planner G-code Export');
+    expect(gc).toContain('Schema: gcode-v1');
+  });
+
+  it('includes generatedAt ISO timestamp in header', () => {
+    const gc = cutSheetToGcode(mockSheet);
+    expect(gc).toMatch(/Generated: \d{4}-\d{2}-\d{2}T/);
+  });
 });
