@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { configToParams, paramsToConfig, readConfigFromUrl } from '../../src/utils/url-state';
+import { configToParams, paramsToConfig, readConfigFromUrl, compressConfigToBase64, decompressBase64ToConfig } from '../../src/utils/url-state';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 import { cfg } from '../helpers';
 
@@ -205,5 +205,54 @@ describe('url-state', () => {
         expect(result.furnitureType).toBeUndefined();
       });
     });
+  });
+});
+
+describe('url-state — compact base64 serialisation (Sprint 35)', () => {
+  it('compressConfigToBase64 returns a non-empty string for changed config', () => {
+    const b64 = compressConfigToBase64(cfg({ width: 800, height: 1800 }));
+    expect(b64).toBeTruthy();
+    expect(typeof b64).toBe('string');
+  });
+
+  it('compressConfigToBase64 returns an empty-diff string for default config', () => {
+    // Default config → empty diff → JSON {} → base64 of "{}"
+    const b64 = compressConfigToBase64(cfg());
+    expect(b64).toBeTruthy();
+  });
+
+  it('round-trip: compress then decompress recovers width and height', () => {
+    const original = cfg({ width: 750, height: 2100 });
+    const b64 = compressConfigToBase64(original);
+    const recovered = decompressBase64ToConfig(b64);
+    expect(recovered.width).toBe(750);
+    expect(recovered.height).toBe(2100);
+  });
+
+  it('round-trip: recovers material and door settings', () => {
+    const original = cfg({ carcassMaterial: 'melamine-18', doorCount: 1, doorStyle: 'shaker' });
+    const b64 = compressConfigToBase64(original);
+    const recovered = decompressBase64ToConfig(b64);
+    expect(recovered.carcassMaterial).toBe('melamine-18');
+    expect(recovered.doorCount).toBe(1);
+    expect(recovered.doorStyle).toBe('shaker');
+  });
+
+  it('round-trip: recovers custom shelf positions', () => {
+    const original = cfg({ shelfSpacing: 'custom', customShelfPositions: [200, 450, 700] });
+    const b64 = compressConfigToBase64(original);
+    const recovered = decompressBase64ToConfig(b64);
+    expect(recovered.customShelfPositions).toEqual([200, 450, 700]);
+  });
+
+  it('decompressBase64ToConfig returns empty object for malformed input', () => {
+    expect(decompressBase64ToConfig('!!not-valid-base64!!')).toEqual({});
+  });
+
+  it('base64url output contains no +, / or = characters', () => {
+    const b64 = compressConfigToBase64(cfg({ width: 800, carcassMaterial: 'melamine-18', doorStyle: 'shaker' }));
+    expect(b64).not.toContain('+');
+    expect(b64).not.toContain('/');
+    expect(b64).not.toContain('=');
   });
 });
