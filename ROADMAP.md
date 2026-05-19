@@ -164,7 +164,7 @@ Exit criteria: users receive actionable warnings before export.
 
 Exit criteria: one pilot plugin validates the extension API.
 
-- [ ] Normalize export schemas for ERP/MRP/CAM ingestion.
+- [x] Normalize export schemas for ERP/MRP/CAM ingestion.
 - [x] Add machine-readable version metadata to export bundles (export metadata schema, v3.53.19).
 - [x] Publish extension API draft with typed contracts (PluginContract with stability tiers, v3.53.21).
 - [x] Implement plugin sandbox with resource limits (runWithSandbox + SandboxTimeoutError, v3.53.26).

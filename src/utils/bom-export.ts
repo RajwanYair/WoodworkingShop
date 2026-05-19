@@ -164,3 +164,110 @@ export function downloadHardwareCsv(
   const csv = generateHardwareCsv(cabinets, lang);
   triggerDownload('\uFEFF' + csv, 'text/csv;charset=utf-8', filename);
 }
+
+// ── ERP / MRP / CAM normalised export (Phase 6) ───────────────────────────
+// Schema version pinned so downstream systems can detect changes.
+const ERP_SCHEMA_VERSION = '1';
+
+/**
+ * Generate a normalised, machine-readable CSV intended for ERP/MRP/CAM ingestion.
+ * Column names are stable snake_case identifiers; no localised text in data cells.
+ * Grain direction is encoded as the enum string 'along_length' | 'none'.
+ */
+export function generateErpCsv(
+  cabinets: { name: string; parts: Part[] }[],
+  meta?: { projectName?: string; revision?: string },
+): string {
+  const rows: string[] = [];
+
+  // ── File header (comment rows, stripped by most ERP importers) ────────────
+  rows.push(erpRow(['#schema', `bom-erp-csv-v${ERP_SCHEMA_VERSION}`]));
+  rows.push(erpRow(['#generated', new Date().toISOString()]));
+  if (meta?.projectName) rows.push(erpRow(['#project', meta.projectName]));
+  if (meta?.revision) rows.push(erpRow(['#revision', meta.revision]));
+
+  // ── Column header ─────────────────────────────────────────────────────────
+  rows.push(
+    erpRow([
+      'part_no',
+      'cabinet',
+      'description',
+      'qty',
+      'material_key',
+      'material_name_en',
+      'thickness_mm',
+      'length_mm',
+      'width_mm',
+      'area_m2',
+      'grain_direction',
+      'unit_weight_kg',
+      'total_weight_kg',
+    ]),
+  );
+
+  const isMultiCabinet = cabinets.length > 1;
+
+  for (let ci = 0; ci < cabinets.length; ci++) {
+    const cab = cabinets[ci];
+    for (const p of cab.parts) {
+      const areaM2 = ((p.qty * p.length * p.width) / 1e6).toFixed(4);
+      const partNo = isMultiCabinet ? `C${ci + 1}-${p.id}` : p.id;
+
+      let matNameEn = p.material;
+      let grainDirection = 'none';
+      let unitWeightKg = '';
+      let totalWeightKg = '';
+      try {
+        const mat = getMaterial(p.material);
+        matNameEn = mat.name.en;
+        grainDirection = mat.hasGrain ? 'along_length' : 'none';
+        const uW = computePartWeightKg(p.length, p.width, p.thickness, 1, mat.densityKgM3);
+        unitWeightKg = uW.toFixed(4);
+        totalWeightKg = (uW * p.qty).toFixed(4);
+      } catch {
+        /* unknown material — leave weight blank */
+      }
+
+      rows.push(
+        erpRow([
+          partNo,
+          cab.name,
+          p.name.en,
+          String(p.qty),
+          p.material,
+          matNameEn,
+          String(p.thickness),
+          String(p.length),
+          String(p.width),
+          areaM2,
+          grainDirection,
+          unitWeightKg,
+          totalWeightKg,
+        ]),
+      );
+    }
+  }
+
+  return rows.join('\n');
+}
+
+export function downloadErpCsv(
+  cabinets: { name: string; parts: Part[] }[],
+  meta?: { projectName?: string; revision?: string },
+  filename = 'bom-erp.csv',
+) {
+  const csv = generateErpCsv(cabinets, meta);
+  triggerDownload('\uFEFF' + csv, 'text/csv;charset=utf-8', filename);
+}
+
+/** Minimal CSV row encoder for ERP output (no blank padding). */
+function erpRow(fields: string[]): string {
+  return fields
+    .map((f) => {
+      if (f.includes(',') || f.includes('"') || f.includes('\n')) {
+        return `"${f.replace(/"/g, '""')}"`;
+      }
+      return f;
+    })
+    .join(',');
+}

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { generateBomCsv, generateHardwareCsv, downloadHardwareCsv } from '../../src/utils/bom-export';
+import { generateBomCsv, generateHardwareCsv, downloadHardwareCsv, generateErpCsv, downloadErpCsv } from '../../src/utils/bom-export';
 import type { Part, HardwareItem } from '../../src/engine/types';
 
 const mockPart: Part = {
@@ -241,5 +241,73 @@ describe('generateBomCsv — Sprint 9 metadata', () => {
   it('shows Cabinets: 0 for empty list', () => {
     const csv = generateBomCsv([], 'en');
     expect(csv).toContain('Cabinets: 0');
+  });
+});
+
+// ── Sprint 23: ERP / MRP / CAM normalised export (Phase 6) ───────────────────
+describe('generateErpCsv', () => {
+  it('contains the schema version comment header', () => {
+    const csv = generateErpCsv(singleCabinet);
+    expect(csv).toContain('#schema');
+    expect(csv).toContain('bom-erp-csv-v1');
+  });
+
+  it('has snake_case column headers required for ERP ingestion', () => {
+    const csv = generateErpCsv(singleCabinet);
+    const headerLine = csv.split('\n').find((l) => l.startsWith('part_no'));
+    expect(headerLine).toBeDefined();
+    expect(headerLine).toContain('material_key');
+    expect(headerLine).toContain('area_m2');
+    expect(headerLine).toContain('grain_direction');
+    expect(headerLine).toContain('unit_weight_kg');
+  });
+
+  it('encodes grain direction as along_length for grain materials', () => {
+    // plywood-17 has hasGrain=true in the engine
+    const grainPart: Part = { ...mockPart, material: 'plywood-17' };
+    const csv = generateErpCsv([{ name: 'Cabinet A', parts: [grainPart] }]);
+    expect(csv).toContain('along_length');
+  });
+
+  it('computes area_m2 correctly (qty × length × width / 1e6)', () => {
+    // mockPart: qty=2, length=2000, width=580 → total area = 2*2000*580/1e6 = 2.3200 m²
+    const csv = generateErpCsv(singleCabinet);
+    expect(csv).toContain('2.3200');
+  });
+
+  it('includes optional project meta in comment rows when provided', () => {
+    const csv = generateErpCsv(singleCabinet, { projectName: 'Kitchen-2025', revision: 'R2' });
+    expect(csv).toContain('#project');
+    expect(csv).toContain('Kitchen-2025');
+    expect(csv).toContain('#revision');
+    expect(csv).toContain('R2');
+  });
+
+  it('uses C<n>-<id> prefix for multi-cabinet exports', () => {
+    const cabs = [
+      { name: 'Upper', parts: [{ ...mockPart, id: 'P01' }] },
+      { name: 'Lower', parts: [{ ...mockPart, id: 'P01' }] },
+    ];
+    const csv = generateErpCsv(cabs);
+    expect(csv).toContain('C1-P01');
+    expect(csv).toContain('C2-P01');
+  });
+
+  it('falls back to material key as material_name_en for unknown materials', () => {
+    const unknownPart: Part = { ...mockPart, material: 'unknown-mat-99' };
+    const csv = generateErpCsv([{ name: 'Test', parts: [unknownPart] }]);
+    expect(csv).toContain('unknown-mat-99');
+  });
+
+  it('triggerDownload is called from downloadErpCsv', () => {
+    const mockAnchor = document.createElement('a');
+    vi.spyOn(mockAnchor, 'click').mockImplementation(() => {});
+    vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor);
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:test');
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+
+    downloadErpCsv(singleCabinet);
+    expect(mockAnchor.click).toHaveBeenCalled();
+    vi.restoreAllMocks();
   });
 });
