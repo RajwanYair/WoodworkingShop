@@ -15,6 +15,11 @@ export interface GcodeOptions {
   cutDepth: number; // mm total cut depth (material thickness)
   passDepth: number; // mm depth per pass (default 3)
   toolDiameter: number; // mm router bit diameter (default 6)
+  /**
+   * When true, `circularPocketToGcode` emits G2/G3 arc commands instead of
+   * linear approximations. Has no effect on rectangular profile cuts.
+   */
+  useArcs: boolean;
 }
 
 const DEFAULTS: GcodeOptions = {
@@ -24,6 +29,7 @@ const DEFAULTS: GcodeOptions = {
   cutDepth: 18,
   passDepth: 3,
   toolDiameter: 6,
+  useArcs: false,
 };
 
 /**
@@ -109,4 +115,74 @@ export function downloadAllSheetsGcode(sheets: CutSheet[], projectName: string, 
     combined.push(''); // blank line between sheets
   }
   triggerDownload(combined.join('\n'), 'text/plain', `${projectName}-all-sheets.nc`);
+}
+
+/**
+ * Generate G-code for a circular pocket (e.g. hinge cup, shelf-pin hole).
+ *
+ * When `opts.useArcs` is **true** (default for this function), the cut
+ * circles are output as `G2` arc commands — the preferred method for CNC
+ * controllers with arc interpolation.  When `opts.useArcs` is **false**, the
+ * circle is approximated using a 36-sided polygon of `G1` linear moves.
+ *
+ * Coordinate system: X/Y are the centre of the pocket; Z0 is the material
+ * surface. The tool starts and ends at safe-Z.
+ *
+ * @param cx - X coordinate of pocket centre (mm)
+ * @param cy - Y coordinate of pocket centre (mm)
+ * @param radius - Pocket radius (mm); e.g. 17.5 for a 35 mm hinge cup
+ * @param opts - GcodeOptions (merged with DEFAULTS)
+ * @returns G-code string for the circular pocket
+ */
+export function circularPocketToGcode(
+  cx: number,
+  cy: number,
+  radius: number,
+  opts?: Partial<GcodeOptions>,
+): string {
+  const o: GcodeOptions = { ...DEFAULTS, ...opts };
+  const lines: string[] = [];
+  const cutR = radius - o.toolDiameter / 2; // compensated cut radius
+
+  if (cutR <= 0) {
+    // Tool is larger than or equal to the pocket — single plunge at centre
+    lines.push(`; Circular pocket r=${radius} mm at (${cx.toFixed(2)},${cy.toFixed(2)}) — plunge only (tool≥pocket)`);
+    lines.push(`G0 X${cx.toFixed(2)} Y${cy.toFixed(2)}`);
+    const passes = Math.ceil(o.cutDepth / o.passDepth);
+    for (let p = 1; p <= passes; p++) {
+      const z = -Math.min(p * o.passDepth, o.cutDepth);
+      lines.push(`G1 Z${z.toFixed(2)} F${o.plungeRate}`);
+    }
+    lines.push(`G0 Z${o.safeZ.toFixed(1)}`);
+    return lines.join('\n');
+  }
+
+  const startX = cx + cutR; // entry point on the +X side of the circle
+
+  lines.push(`; Circular pocket r=${radius} mm at (${cx.toFixed(2)},${cy.toFixed(2)}) — ${o.useArcs ? 'G2 arc' : 'G1 polygon'} mode`);
+  lines.push(`G0 X${startX.toFixed(2)} Y${cy.toFixed(2)}`);
+
+  const passes = Math.ceil(o.cutDepth / o.passDepth);
+
+  for (let p = 1; p <= passes; p++) {
+    const z = -Math.min(p * o.passDepth, o.cutDepth);
+    lines.push(`G1 Z${z.toFixed(2)} F${o.plungeRate}`);
+
+    if (o.useArcs) {
+      // Full-circle G2 arc: I is offset from current pos to centre (−cutR on X)
+      lines.push(`G2 I${(-cutR).toFixed(3)} J0.000 F${o.feedRate} ; full CW arc`);
+    } else {
+      // 36-point polygon approximation (10° steps)
+      const STEPS = 36;
+      for (let s = 1; s <= STEPS; s++) {
+        const angle = (s / STEPS) * 2 * Math.PI;
+        const px = cx + cutR * Math.cos(angle);
+        const py = cy + cutR * Math.sin(angle);
+        lines.push(`G1 X${px.toFixed(3)} Y${py.toFixed(3)} F${o.feedRate}`);
+      }
+    }
+  }
+
+  lines.push(`G0 Z${o.safeZ.toFixed(1)}`);
+  return lines.join('\n');
 }

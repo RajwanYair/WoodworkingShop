@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import type { CutSheet } from '../../src/engine/types';
-import { cutSheetToGcode, downloadAllSheetsGcode, downloadGcodeForSheet } from '../../src/utils/gcode-export';
+import { cutSheetToGcode, downloadAllSheetsGcode, downloadGcodeForSheet, circularPocketToGcode } from '../../src/utils/gcode-export';
 import { mockSheet } from '../helpers';
 
 describe('cutSheetToGcode', () => {
@@ -104,5 +104,73 @@ describe('downloadGcodeForSheet + downloadAllSheetsGcode', () => {
     expect(anchor.click).toHaveBeenCalled();
     expect(anchor.download).toContain('MyProject');
     vi.restoreAllMocks();
+  });
+});
+
+// ── circularPocketToGcode — Arc interpolation (Sprint 14) ─────────────────
+
+describe('circularPocketToGcode', () => {
+  it('produces G2 arc command when useArcs=true', () => {
+    const gc = circularPocketToGcode(100, 100, 17.5, { useArcs: true });
+    expect(gc).toContain('G2');
+    expect(gc).not.toContain('G3'); // CW arc only
+  });
+
+  it('does NOT produce G2/G3 when useArcs=false', () => {
+    const gc = circularPocketToGcode(100, 100, 17.5, { useArcs: false });
+    expect(gc).not.toContain('G2');
+    expect(gc).not.toContain('G3');
+    // Linear polygon approximation uses G1 moves
+    expect(gc).toContain('G1');
+  });
+
+  it('G2 arc has correct I offset (negative radius)', () => {
+    const radius = 17.5;
+    const toolDia = 6;
+    const cutR = radius - toolDia / 2; // 14.5
+    const gc = circularPocketToGcode(100, 100, radius, { useArcs: true, toolDiameter: toolDia });
+    // I = -cutR = -14.500
+    expect(gc).toContain(`I${(-cutR).toFixed(3)}`);
+  });
+
+  it('includes safe Z retract at end', () => {
+    const gc = circularPocketToGcode(50, 50, 10, { useArcs: true, safeZ: 5 });
+    expect(gc).toMatch(/G0 Z5\.0/);
+  });
+
+  it('includes plunge moves with plungeRate', () => {
+    const gc = circularPocketToGcode(0, 0, 20, { useArcs: true, plungeRate: 400, cutDepth: 3, passDepth: 3 });
+    expect(gc).toContain('F400');
+  });
+
+  it('emits a centre-point comment line', () => {
+    const gc = circularPocketToGcode(50.5, 75.25, 17.5, { useArcs: true });
+    expect(gc).toContain('50.50');
+    expect(gc).toContain('75.25');
+  });
+
+  it('falls back to plunge-only when tool ≥ pocket radius', () => {
+    // toolDiameter = 40, radius = 10 → cutR = 10-20 < 0
+    const gc = circularPocketToGcode(0, 0, 10, { useArcs: true, toolDiameter: 40, cutDepth: 3, passDepth: 3 });
+    expect(gc).toContain('plunge only');
+    expect(gc).not.toContain('G2');
+  });
+
+  it('polygon mode produces 36 G1 arc steps per pass', () => {
+    const gc = circularPocketToGcode(0, 0, 20, {
+      useArcs: false,
+      cutDepth: 3,
+      passDepth: 3,
+      toolDiameter: 6,
+    });
+    const g1Lines = gc.split('\n').filter((l) => l.startsWith('G1 X'));
+    expect(g1Lines.length).toBe(36); // 1 pass × 36 steps
+  });
+
+  it('cutSheetToGcode includes useArcs option in merged defaults', () => {
+    // cutSheetToGcode should accept useArcs without TypeScript errors
+    const gc = cutSheetToGcode(mockSheet, { useArcs: true });
+    // Sheet gcode format is unchanged (still rectangular G1 profiles)
+    expect(gc).toContain('G21');
   });
 });
