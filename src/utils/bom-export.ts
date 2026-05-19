@@ -13,9 +13,12 @@ export function generateBomCsv(
 
   // ── File metadata header ───────────────────────────────────────────────────
   const generatedAt = new Date().toISOString();
+  const totalParts = cabinets.reduce((sum, c) => sum + c.parts.reduce((s, p) => s + p.qty, 0), 0);
+  const totalHardware = cabinets.reduce((sum, c) => sum + c.hardware.reduce((s, h) => s + h.qty, 0), 0);
   rows.push(csvRow(['# Cabinet Planner BOM Export', '', '', '', '', '', '', '', '', '', '']));
   rows.push(csvRow([`# Version: ${__APP_VERSION__}  Schema: bom-csv-v1`, '', '', '', '', '', '', '', '', '', '']));
   rows.push(csvRow([`# Generated: ${generatedAt}`, '', '', '', '', '', '', '', '', '', '']));
+  rows.push(csvRow([`# Cabinets: ${cabinets.length}  Parts: ${totalParts}  Hardware: ${totalHardware}`, '', '', '', '', '', '', '', '', '', '']));
   rows.push('');
 
   // ── Material area summary section ─────────────────────────────────────────

@@ -212,3 +212,34 @@ describe('generateHardwareCsv', () => {
     vi.restoreAllMocks();
   });
 });
+
+// Sprint 9 — machine-readable metadata in BOM header
+describe('generateBomCsv — Sprint 9 metadata', () => {
+  it('includes cabinet count in header', () => {
+    const cabs = [
+      { name: 'C1', parts: [mockPart], hardware: [] },
+      { name: 'C2', parts: [mockPart], hardware: [] },
+    ];
+    const csv = generateBomCsv(cabs, 'en');
+    expect(csv).toContain('Cabinets: 2');
+  });
+
+  it('includes total parts count (sum of qty) in header', () => {
+    // mockPart.qty = 2, so total parts = 2
+    const cabs = [{ name: 'C1', parts: [mockPart], hardware: [] }];
+    const csv = generateBomCsv(cabs, 'en');
+    expect(csv).toContain('Parts: 2');
+  });
+
+  it('includes hardware count (sum of qty) in header', () => {
+    // mockHardware.qty = 4
+    const cabs = [{ name: 'C1', parts: [], hardware: [mockHardware] }];
+    const csv = generateBomCsv(cabs, 'en');
+    expect(csv).toContain('Hardware: 4');
+  });
+
+  it('shows Cabinets: 0 for empty list', () => {
+    const csv = generateBomCsv([], 'en');
+    expect(csv).toContain('Cabinets: 0');
+  });
+});

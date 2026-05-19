@@ -54,6 +54,11 @@ describe('cutSheetToDxf', () => {
     const dxf = cutSheetToDxf(mockSheet);
     expect(dxf).toMatch(/Generated: \d{4}-\d{2}-\d{2}T/);
   });
+
+  it('includes Parts count in header (Sprint 9)', () => {
+    const dxf = cutSheetToDxf(mockSheet);
+    expect(dxf).toContain(`Parts: ${mockSheet.parts.length}`);
+  });
 });
 
 describe('downloadDxfForSheet', () => {

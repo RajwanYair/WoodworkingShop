@@ -23,6 +23,8 @@ export function cutSheetToDxf(sheet: CutSheet): string {
     `Generated: ${generatedAt}`,
     `999`,
     `Sheet: ${sheet.sheetIndex + 1}  Material: ${sheet.material}  Thickness: ${sheet.thickness}mm`,
+    `999`,
+    `Parts: ${sheet.parts.length}`,
   );
 
   // ── HEADER section ──
