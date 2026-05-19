@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
   registerPlugin,
   unregisterPlugin,
@@ -7,6 +7,8 @@ import {
   applyConfigPlugins,
   getPluginContract,
   PLUGIN_CONTRACT,
+  runWithSandbox,
+  SandboxTimeoutError,
   type CabinetPlannerPlugin,
 } from '../../src/engine/plugin';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
@@ -187,5 +189,93 @@ describe('PluginContract', () => {
     const hook = PLUGIN_CONTRACT.hooks.find((h) => h.hookName === 'onConfigChange');
     expect(hook).toBeDefined();
     expect(hook?.stability).toBe('stable');
+  });
+});
+
+describe('runWithSandbox — plugin sandbox', () => {
+  it('returns the function result when no error is thrown', () => {
+    const result = runWithSandbox(() => 42, 0);
+    expect(result).toBe(42);
+  });
+
+  it('returns the fallback value when fn throws', () => {
+    const result = runWithSandbox(() => {
+      throw new Error('boom');
+    }, 'fallback');
+    expect(result).toBe('fallback');
+  });
+
+  it('calls onError with the thrown error', () => {
+    const onError = vi.fn();
+    runWithSandbox(
+      () => {
+        throw new TypeError('bad plugin');
+      },
+      null,
+      { onError },
+    );
+    expect(onError).toHaveBeenCalledOnce();
+    expect(onError.mock.calls[0][0]).toBeInstanceOf(TypeError);
+  });
+
+  it('does not call onError when fn succeeds within time budget', () => {
+    const onError = vi.fn();
+    runWithSandbox(() => 'ok', '', { timeoutMs: 5000, onError });
+    expect(onError).not.toHaveBeenCalled();
+  });
+
+  it('calls onError with SandboxTimeoutError when fn is slow', () => {
+    const onError = vi.fn();
+    // Override Date.now to simulate a 100 ms elapsed time
+    const realDateNow = Date.now.bind(Date);
+    let callCount = 0;
+    vi.spyOn(Date, 'now').mockImplementation(() => {
+      callCount++;
+      return callCount === 1 ? 0 : 100; // t0=0, elapsed=100
+    });
+    runWithSandbox(() => 'slow result', '', { timeoutMs: 50, onError });
+    vi.spyOn(Date, 'now').mockRestore();
+    void realDateNow; // suppress unused warning
+    expect(onError).toHaveBeenCalledOnce();
+    const err = onError.mock.calls[0][0];
+    expect(err).toBeInstanceOf(SandboxTimeoutError);
+    expect((err as SandboxTimeoutError).limitMs).toBe(50);
+  });
+
+  it('returns the computed value even when timeout is exceeded', () => {
+    vi.spyOn(Date, 'now')
+      .mockReturnValueOnce(0)
+      .mockReturnValueOnce(200);
+    const result = runWithSandbox(() => 'computed', 'fallback', { timeoutMs: 10 });
+    vi.spyOn(Date, 'now').mockRestore();
+    expect(result).toBe('computed');
+  });
+
+  it('SandboxTimeoutError has correct message format', () => {
+    const err = new SandboxTimeoutError(75, 50);
+    expect(err.message).toMatch(/75 ms > 50 ms/);
+    expect(err.name).toBe('SandboxTimeoutError');
+    expect(err.elapsedMs).toBe(75);
+    expect(err.limitMs).toBe(50);
+  });
+
+  it('uses 50 ms default timeout when timeoutMs is omitted', () => {
+    const onError = vi.fn();
+    vi.spyOn(Date, 'now')
+      .mockReturnValueOnce(0)
+      .mockReturnValueOnce(51);
+    runWithSandbox(() => 'ok', '', { onError });
+    vi.spyOn(Date, 'now').mockRestore();
+    const err = onError.mock.calls[0]?.[0] as SandboxTimeoutError;
+    expect(err?.limitMs).toBe(50);
+  });
+
+  it('works with object fallback types', () => {
+    const fallback = { parts: [] };
+    const result = runWithSandbox<{ parts: string[] }>(
+      () => { throw new Error('fail'); },
+      fallback,
+    );
+    expect(result).toBe(fallback);
   });
 });

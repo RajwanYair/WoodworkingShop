@@ -161,3 +161,60 @@ export function applyConfigPlugins(cfg: CabinetConfig): CabinetConfig {
   }
   return result;
 }
+
+// ─── Plugin sandbox ──────────────────────────────────────────────────────────
+
+/** Options for {@link runWithSandbox}. */
+export interface SandboxOptions {
+  /**
+   * Soft wall-clock limit in milliseconds.
+   * If the hook runs longer than this, `onError` is called with a
+   * {@link SandboxTimeoutError}; the return value is still used.
+   * Defaults to 50 ms.
+   */
+  timeoutMs?: number;
+  /** Called when the function throws or exceeds `timeoutMs`. */
+  onError?: (error: unknown) => void;
+}
+
+/** Thrown (via onError) when a sandboxed function exceeds its time budget. */
+export class SandboxTimeoutError extends Error {
+  readonly elapsedMs: number;
+  readonly limitMs: number;
+
+  constructor(elapsedMs: number, limitMs: number) {
+    super(`Plugin exceeded time budget: ${elapsedMs} ms > ${limitMs} ms`);
+    this.name = 'SandboxTimeoutError';
+    this.elapsedMs = elapsedMs;
+    this.limitMs = limitMs;
+  }
+}
+
+/**
+ * Execute `fn` within a soft sandbox:
+ *
+ * - Catches all synchronous exceptions and returns `fallback` instead.
+ * - Measures wall-clock time; if `timeoutMs` is exceeded, reports a
+ *   {@link SandboxTimeoutError} via `onError` (the computed return value
+ *   is still returned to the caller).
+ *
+ * @param fn       The function to run inside the sandbox.
+ * @param fallback Value returned when `fn` throws.
+ * @param opts     Optional sandbox settings.
+ */
+export function runWithSandbox<T>(fn: () => T, fallback: T, opts: SandboxOptions = {}): T {
+  const { timeoutMs = 50, onError } = opts;
+  const t0 = Date.now();
+  let result: T;
+  try {
+    result = fn();
+  } catch (err) {
+    onError?.(err);
+    return fallback;
+  }
+  const elapsed = Date.now() - t0;
+  if (elapsed > timeoutMs) {
+    onError?.(new SandboxTimeoutError(elapsed, timeoutMs));
+  }
+  return result;
+}
