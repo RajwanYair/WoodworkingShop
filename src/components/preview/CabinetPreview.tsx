@@ -214,7 +214,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
             onChange={(e) => setShowDims(e.target.checked)}
             className="accent-primary"
           />
-          Dimensions
+          {t('preview.dimensions')}
         </label>
         <button
           onClick={() => previewRef.current && downloadSvg(previewRef.current, `cabinet-${activeView}.svg`)}

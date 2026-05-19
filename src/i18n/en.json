@@ -198,7 +198,8 @@
     "back": "Back",
     "iso": "3D",
     "exportSvg": "Export SVG",
-    "exportPng": "Export PNG (2×)"
+    "exportPng": "Export PNG (2×)",
+    "dimensions": "Dimensions"
   },
   "pdf": {
     "title": "Export PDF",

@@ -198,7 +198,8 @@
     "back": "גב",
     "iso": "תלת-ממד",
     "exportSvg": "ייצוא SVG",
-    "exportPng": "ייצוא PNG (2×)"
+    "exportPng": "ייצוא PNG (2×)",
+    "dimensions": "מידות"
   },
   "pdf": {
     "title": "ייצוא PDF",
