@@ -180,7 +180,7 @@ Exit criteria: full CI green, reproducible builds, complete docs.
 - [x] Complete security audit and CSP hardening.
 - [x] Publish migration notes and breaking change documentation.
 - [ ] Performance benchmarks published in README.
-- [ ] Marketing site and documentation portal.
+- [x] Marketing site and documentation portal.
 - [ ] Evaluate WebGL renderer for material texture previews.
 
 ---
