@@ -9,6 +9,52 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.53.48] — 2026-06-07
+
+### Sprints 31–40 — Phase 7 Completion + UX Polish
+
+Covers Sprints 31 through 40 (v3.53.39 → v3.53.48). Each sprint was independently committed; 745 tests passing across 47 test files.
+
+### UX — Loading States (Phase 7)
+
+- **Sprint 31** — `SkeletonPane` animated loading placeholder for lazy panels. `role="status"` / `aria-live="polite"` / `data-testid="skeleton-pane"`. Three `Suspense` fallbacks in `App.tsx` replaced with `<SkeletonPane label={t('skeleton.loading...')} />`. i18n keys added: `skeleton.loading`, `skeleton.loadingOptimizer`, `skeleton.loadingAssembly`, `skeleton.loadingPdf` in both EN and HE. 8 new tests. (v3.53.39)
+
+### Preview — WebGL Evaluation (Phase 7)
+
+- **Sprint 32** — `probeWebGLTier() → 'webgl2' | 'webgl1' | 'unavailable'` in `src/engine/webgl-probe.ts`; `WebGLPreviewCanvas` component renders a rotating 3-D box with per-face warm oak shading via raw WebGL2; falls back to a descriptive `div` when WebGL unavailable. ARCHITECTURE.md updated with WebGL evaluation section. 7 new tests. Phase 7 WebGL evaluation check-off. (v3.53.40)
+
+### Optimizer — Virtual Rendering (Phase 7)
+
+- **Sprint 33** — `useIntersectionVisible<T>` hook + `VirtualSheetWrapper` component defer cut-sheet rendering until visible in the viewport (`IntersectionObserver`). Each `<SheetCard>` in `OptimizerView` is wrapped; reduces initial paint time for large sheet counts. 6 new tests. (v3.53.41)
+
+### Validation (Phase 3)
+
+- **Sprint 34** — `NARROW_BACK_OMITTED` warning rule in `src/engine/validation.ts`: fires when `hasBack === false && width < 400 mm && furnitureType !== 'panel'`. `field: 'hasBack'`, `suggestedValue: 'true'`. 6 new tests. (v3.53.42)
+
+### URL State (Phase 6)
+
+- **Sprint 35** — `compressConfigToBase64` / `decompressBase64ToConfig` in `src/utils/url-state.ts`: base64url-encoded compact form of the URL diff (30–50 % shorter for configs with many non-default fields). Produces a single `?c=` parameter. 8 new tests. (v3.53.43)
+
+### Documentation (Phase 7)
+
+- **Sprint 36** — `docs/USER-GUIDE.md`: complete user guide covering all 5 tabs, keyboard shortcuts, sharing/URL state, dark mode, RTL, tips & troubleshooting. `docs/index.md`: docs navigation portal. README links updated. Phase 7 marketing/docs ROADMAP item checked off. (v3.53.44)
+
+### Export — DXF Layers (Phase 6)
+
+- **Sprint 37** — `materialLayerName(material)` helper in `src/utils/dxf-export.ts` converts material keys to valid DXF layer names (`MAT_PLYWOOD-17`). Parts are now placed on per-material layers instead of the generic `PARTS` layer, enabling material-specific toolpaths in CAM software. Legacy `PARTS` layer retained for compatibility. 8 new tests. (v3.53.45)
+
+### i18n (Phase 4)
+
+- **Sprint 38** — Full i18n key parity audit: 406 EN keys, 406 HE keys, 100 % coverage, 0 empty values. (v3.53.46)
+
+### ROADMAP Check-offs (Phase 2 + 7)
+
+- **Sprint 39** — Checked off Phase 2: `SharedArrayBuffer` zero-copy investigation (done in Sprint 26). Checked off Phase 7: performance benchmarks in README (Sprint 28), WebGL evaluation (Sprint 32), marketing/docs portal (Sprint 36). Full test suite: 745 tests, 47 test files. (v3.53.47)
+
+### Infrastructure
+
+- **Sprint 40** — CHANGELOG updated for Sprints 31–40. `gh release v3.53.48` published. (v3.53.48)
+
 ## [3.53.37] — 2026-05-19
 
 ### Sprints 22–29 — Phase 4–7 Feature Sweep
