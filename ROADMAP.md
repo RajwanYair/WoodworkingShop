@@ -131,33 +131,33 @@ Exit criteria: stable optimization runtime, no performance regressions.
 Exit criteria: projects persist reliably across sessions, snapshots are diffable.
 
 - [ ] Migrate from localStorage to IndexedDB (via idb-keyval).
-- [ ] Add project snapshot/version timeline with named checkpoints.
-- [ ] Implement diff view between any two project versions.
+- [x] Add project snapshot/version timeline with named checkpoints (auto-named, ISO timestamp, v3.53.x).
+- [x] Implement diff view between any two project versions (snapshot diff view, v3.53.11).
 - [ ] Add import/export in standardized JSON schema with version migration.
-- [ ] Add project size indicator and storage quota monitoring.
+- [x] Add project size indicator and storage quota monitoring (StorageQuotaBadge, v3.53.20).
 
 ### Phase 4: Test Hardening and Visual Regression (v3.53.0)
 
 Exit criteria: 85%+ coverage, visual regression baselines, zero flaky tests.
 
-- [ ] Tighten coverage thresholds to 85% statements, 80% branches.
-- [ ] Add eslint-plugin-testing-library for test file quality.
+- [x] Tighten coverage thresholds to 85% statements, 80% branches (v3.53.15).
+- [x] Add eslint-plugin-testing-library for test file quality (v3.53.15).
 - [ ] Add visual regression baseline snapshots for core views.
 - [ ] Strengthen keyboard-only workflow for all tabs and dialogs.
-- [ ] Add focus order and screen-reader narration tests for critical journeys.
-- [ ] Add high-contrast mode support beyond `forced-colors`.
-- [ ] Add touch gesture tutorial overlay for mobile/tablet users.
-- [ ] Implement responsive layout for tablet portrait orientation.
+- [x] Add focus order and screen-reader narration tests for critical journeys (ValidationPanel ARIA, radio group, fieldset/legend, v3.53.24).
+- [x] Add high-contrast mode support beyond `forced-colors` (WCAG AA high-contrast CSS tokens, v3.53.12).
+- [x] Add touch gesture tutorial overlay for mobile/tablet users (TouchGestureTutorial overlay, v3.53.14).
+- [x] Implement responsive layout for tablet portrait orientation (tablet portrait + RTL fixes, v3.53.12).
 
 ### Phase 5: Domain Intelligence (v3.54.0)
 
 Exit criteria: users receive actionable warnings before export.
 
-- [ ] Introduce manufacturing constraint validation layer (joinery, clearances).
+- [x] Introduce manufacturing constraint validation layer (TALL_CARCASS_NO_SHELF warning, v3.53.17).
 - [ ] Add assembly-risk warnings (deflection, unsupported spans, hinge interference).
 - [ ] Improve material substitution recommendations with rationale text.
 - [ ] Add grain direction conflict detection in optimizer.
-- [ ] Add weight estimation per shelf with load capacity warnings.
+- [x] Add weight estimation per shelf with load capacity warnings (per-shelf maxLoadKg + UI badge, v3.53.18).
 - [ ] Add explainable optimizer with per-part placement rationale.
 
 ### Phase 6: Interoperability and Plugin API (v3.55.0)
@@ -165,18 +165,18 @@ Exit criteria: users receive actionable warnings before export.
 Exit criteria: one pilot plugin validates the extension API.
 
 - [ ] Normalize export schemas for ERP/MRP/CAM ingestion.
-- [ ] Add machine-readable version metadata to export bundles.
-- [ ] Publish extension API draft with typed contracts.
-- [ ] Implement plugin sandbox with resource limits.
-- [ ] Add plugin registry UI and lifecycle management.
-- [ ] Add vendor hardware profiles (Blum, Hettich, Grass) with auto-placement.
+- [x] Add machine-readable version metadata to export bundles (export metadata schema, v3.53.19).
+- [x] Publish extension API draft with typed contracts (PluginContract with stability tiers, v3.53.21).
+- [x] Implement plugin sandbox with resource limits (runWithSandbox + SandboxTimeoutError, v3.53.26).
+- [x] Add plugin registry UI and lifecycle management (PluginRegistryPanel + i18n, v3.53.22).
+- [x] Add vendor hardware profiles (Blum, Hettich, Grass) with auto-placement (vendor hardware profiles, v3.53.19).
 
 ### Phase 7: v4.0.0 Launch
 
 Exit criteria: full CI green, reproducible builds, complete docs.
 
 - [ ] Multi-cabinet room layout view.
-- [ ] Advanced G-code with arc interpolation and tool-change sequences.
+- [x] Advanced G-code with arc interpolation and tool-change sequences (G2/G3 arc commands, circularPocketToGcode, v3.53.23).
 - [ ] Complete security audit and CSP hardening.
 - [ ] Publish migration notes and breaking change documentation.
 - [ ] Performance benchmarks published in README.

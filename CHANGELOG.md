@@ -9,6 +9,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.53.28] — 2025-07-22
+
+### Sprints 11–18 — Phase 3–7 Feature Sweep
+
+Covers Sprints 11 through 18 (v3.53.11 → v3.53.27). Each sprint was independently committed and tested.
+
+### Accessibility (Phase 4 & 8)
+
+- **Sprint 2** — WCAG AA high-contrast CSS design tokens; `wood-*` token palette extended with forced-colors media query fallbacks.
+- **Sprint 3** — Tablet portrait layout fixes; Tailwind logical properties (`ms-*`, `me-*`, `start-*`, `end-*`) enforced throughout; RTL fixes.
+- **Sprint 15** — Focus order and screen-reader narration tests: `ValidationPanel` ARIA attributes, radio group labeling, `fieldset`/`legend` patterns.
+- **Sprint 18** — `aria-live="polite"` and `aria-atomic="false"` on validation issue list (`<ul id="validation-issue-list">`); 3 new a11y tests.
+
+### UX and Interactivity (Phase 4)
+
+- **Sprint 1** — Project snapshot diff view with visual side-by-side comparison.
+- **Sprint 4** — Focus traps in all modals using `useFocusTrap` hook.
+- **Sprint 5** — `TouchGestureTutorial` overlay for mobile/tablet swipe guidance.
+
+### Coverage and Test Hardening (Phase 4)
+
+- **Sprint 6** — Coverage thresholds raised: statements 85%, branches 78%, functions 83%, lines 85%. `eslint-plugin-testing-library` 7.16.2 configured.
+- **Sprint 11** — `StorageQuotaBadge` component unit tests (quota usage display, threshold warning).
+- **Sprint 16** — Store coverage boost: `toggleHighContrast`, `toggleUnits`, `setSawKerf` (clamping 0–8 mm), `setMaterialPriceOverride`, `setHardwarePriceOverride`, `setHardwareQtyOverride`, `setSheetSizeOverride` (set + null-delete paths). `useFocusTrap` branch coverage: non-last-element Tab, non-first Shift+Tab, empty-items Tab guard, unmount cleanup.
+
+### Domain Intelligence (Phase 5)
+
+- **Sprint 7** — `TALL_CARCASS_NO_SHELF` validation warning: emitted when carcass height > 900 mm with no shelf panel, 5 new tests.
+- **Sprint 8** — Per-shelf `maxLoadKg` property; UI load-capacity badge; `validateConfig` extended with overloaded-shelf check.
+
+### Interoperability and Plugin API (Phase 6)
+
+- **Sprint 9** — Machine-readable export metadata schema added to BOM, DXF, G-code, and PDF export bundles (version, generator, timestamp, units).
+- **Sprint 10** — Vendor hardware profiles: Blum, Hettich, and Grass named profiles with model numbers, hinge types, and auto-placement hints.
+- **Sprint 12** — `PluginContract` interface with `PluginHookContract`, `PluginStability` tiers (`stable` / `experimental` / `deprecated`), and `getPluginContract()` accessor; 7 new tests.
+- **Sprint 13** — `PluginRegistryPanel` UI component with enable/disable lifecycle, `aria-label`, i18n EN + HE; 9 component tests.
+- **Sprint 17** — `runWithSandbox<T>()` function and `SandboxTimeoutError` class in `src/engine/plugin.ts`; catches plugin exceptions, measures wall-clock time, reports soft-limit violations via `onError`; 9 new tests.
+
+### Export (Phase 7)
+
+- **Sprint 14** — G-code arc interpolation: `circularPocketToGcode(cx, cy, radius, opts?)` emits `G2 I J` full CW arc when `useArcs=true`; falls back to 36-point G1 polygon; 9 new tests.
+
 ## [3.52.0] — 2025-07-21
 
 ### Production Audit
