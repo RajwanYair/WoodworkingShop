@@ -390,6 +390,51 @@ export function validateConfig(
     }
   }
 
+  // ── Joinery rules (Sprint 45) ────────────────────────────────────────────
+
+  // Rule 1 — JOINERY_MAX_SPAN: shelf wider than 900 mm on weak-core materials
+  // needs center support; flag explicitly as joinery issue rather than
+  // material issue so it appears even when deflection is within limit.
+  const JOINERY_SPAN_LIMIT_MM = 900;
+  const WEAK_CORE_MATERIALS = ['chipboard-16', 'chipboard-18', 'mdf-16', 'mdf-18', 'melamine-16', 'melamine-18'];
+  if (
+    config.shelfCount > 0 &&
+    dims.shelfWidth > JOINERY_SPAN_LIMIT_MM &&
+    mat &&
+    WEAK_CORE_MATERIALS.includes(mat.key)
+  ) {
+    issues.push({
+      code: 'JOINERY_MAX_SPAN',
+      severity: 'warning',
+      message: {
+        en: `Shelf span ${Math.round(dims.shelfWidth)} mm exceeds the ${JOINERY_SPAN_LIMIT_MM} mm joinery limit for ${mat.name.en}. Add a centre support or use a stronger panel material (e.g. plywood or solid-wood edging).`,
+        he: `ספן מדף ${Math.round(dims.shelfWidth)} מ"מ חורג ממגבלת חיבורי הנגרות ${JOINERY_SPAN_LIMIT_MM} מ"מ עבור ${mat.name.he}. הוסף תמיכת אמצע או עבור לחומר חזק יותר.`,
+      },
+      field: 'shelfCount',
+    });
+  }
+
+  // Rule 3 — JOINERY_MIN_SHELF_GAP: adjacent shelves < 150 mm apart are too
+  // close for a dado peg or shelf-pin to register properly; also prevents
+  // inserting or removing items.
+  const JOINERY_MIN_SHELF_GAP_MM = 150;
+  if (config.shelfCount >= 2) {
+    const availableH = dims.internalHeight;
+    const gapPerSlot = availableH / (config.shelfCount + 1);
+    if (gapPerSlot < JOINERY_MIN_SHELF_GAP_MM) {
+      issues.push({
+        code: 'JOINERY_MIN_SHELF_GAP',
+        severity: 'warning',
+        message: {
+          en: `Shelf pin spacing (${Math.round(gapPerSlot)} mm) is below the ${JOINERY_MIN_SHELF_GAP_MM} mm minimum for reliable shelf-pin drilling. Reduce shelf count or increase cabinet height.`,
+          he: `מרווח סיכות המדף (${Math.round(gapPerSlot)} מ"מ) פחות מהמינימום ${JOINERY_MIN_SHELF_GAP_MM} מ"מ לקדיחת סיכות מדף אמינה. הפחת מדפים או הגדל גובה.`,
+        },
+        field: 'shelfCount',
+        suggestedValue: Math.floor(availableH / JOINERY_MIN_SHELF_GAP_MM) - 1,
+      });
+    }
+  }
+
   // ── Wide-span and tall-cabinet structural checks (Sprint 17) ──
 
   if (config.width > WIDE_SPAN_CARCASS_MM && config.furnitureType !== 'panel') {

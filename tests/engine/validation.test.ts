@@ -469,3 +469,44 @@ describe('validateConfig — NARROW_BACK_OMITTED (Sprint 34)', () => {
     expect(issue.message.he).toBeTruthy();
   });
 });
+
+describe('validateConfig — joinery rules (Sprint 45)', () => {
+  it('JOINERY_MAX_SPAN fires for chipboard on span > 900 mm', () => {
+    const issues = validateConfig(cfg({ carcassMaterial: 'chipboard-18', width: 1000, shelfCount: 1 }));
+    expect(issues.some((i) => i.code === 'JOINERY_MAX_SPAN')).toBe(true);
+  });
+
+  it('JOINERY_MAX_SPAN does not fire for plywood on span > 900 mm', () => {
+    const issues = validateConfig(cfg({ carcassMaterial: 'plywood-18', width: 1000, shelfCount: 1 }));
+    expect(issues.some((i) => i.code === 'JOINERY_MAX_SPAN')).toBe(false);
+  });
+
+  it('JOINERY_MAX_SPAN does not fire for chipboard when no shelves', () => {
+    const issues = validateConfig(cfg({ carcassMaterial: 'chipboard-18', width: 1000, shelfCount: 0 }));
+    expect(issues.some((i) => i.code === 'JOINERY_MAX_SPAN')).toBe(false);
+  });
+
+  it('JOINERY_MIN_SHELF_GAP fires when many shelves crammed into a small cabinet', () => {
+    // 500 mm tall cabinet with 5 shelves — gap ≈ 500/6 ≈ 83 mm (< 150 mm)
+    const issues = validateConfig(cfg({ height: 500, shelfCount: 5, doorStyle: 'none' }));
+    expect(issues.some((i) => i.code === 'JOINERY_MIN_SHELF_GAP')).toBe(true);
+  });
+
+  it('JOINERY_MIN_SHELF_GAP does not fire for reasonable shelf spacing', () => {
+    // 2000 mm tall cabinet with 3 shelves — gap ≈ 2000/4 = 500 mm (> 150 mm)
+    const issues = validateConfig(cfg({ height: 2000, shelfCount: 3 }));
+    expect(issues.some((i) => i.code === 'JOINERY_MIN_SHELF_GAP')).toBe(false);
+  });
+
+  it('JOINERY_MIN_SHELF_GAP does not fire for single shelf', () => {
+    const issues = validateConfig(cfg({ height: 500, shelfCount: 1 }));
+    expect(issues.some((i) => i.code === 'JOINERY_MIN_SHELF_GAP')).toBe(false);
+  });
+
+  it('JOINERY_MAX_SPAN issue has both en and he message', () => {
+    const issues = validateConfig(cfg({ carcassMaterial: 'mdf-18', width: 1000, shelfCount: 1 }));
+    const issue = issues.find((i) => i.code === 'JOINERY_MAX_SPAN')!;
+    expect(issue?.message.en).toBeTruthy();
+    expect(issue?.message.he).toBeTruthy();
+  });
+});
