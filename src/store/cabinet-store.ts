@@ -6,17 +6,27 @@ import { computeDimensions } from '../engine/dimensions';
 import { generateParts, computeEdgeBandingTotal } from '../engine/parts';
 import { generateHardware } from '../engine/hardware';
 import { optimizeCutSheets } from '../engine/cut-optimizer';
+import { estimateCost } from '../engine/cost-estimator';
+import { generateAssemblySteps, type AssemblyStep } from '../engine/assembly';
 import { createJsonMemo } from '../engine/memo';
 import { readConfigFromUrl, pushConfigToUrl, readProjectNameFromUrl, pushProjectNameToUrl } from '../utils/url-state';
 import CutOptimizerWorker from '../workers/cut-optimizer.worker?worker';
 import type { CutOptimizerWorkerInput, CutOptimizerWorkerOutput } from '../workers/cut-optimizer.worker';
+import CostEstimatorWorker from '../workers/cost-estimator.worker?worker';
+import type { CostEstimatorWorkerOutput } from '../workers/cost-estimator.worker';
+import AssemblyWorker from '../workers/assembly.worker?worker';
+import type { AssemblyWorkerOutput } from '../workers/assembly.worker';
 
 // v3.21.0 — Module-level Web Worker singleton for cut optimization.
 // Kept outside Zustand state to avoid serialization. The worker result
 // callback closes over `_workerApplyFn` which is set during store creation.
 let _cutOptWorker: Worker | null = null;
+let _costOptWorker: Worker | null = null;
+let _assemblyWorker: Worker | null = null;
 let _workerApplyFn: ((partial: Partial<CabinetState>) => void) | null = null;
 let _currentReqId = 0;
+let _currentCostReqId = 0;
+let _currentAssemblyReqId = 0;
 
 function getCutOptWorker(): Worker | null {
   if (typeof Worker === 'undefined') return null;
@@ -30,13 +40,49 @@ function getCutOptWorker(): Worker | null {
           optimization: msg.activeResult,
           combinedOptimization: msg.combinedResult,
           optimizationPending: false,
+          costPending: true,
         });
+        scheduleCostFromState(useCabinetStore.getState(), msg.activeResult);
       } else {
         _workerApplyFn({ optimizationPending: false });
       }
     };
   }
   return _cutOptWorker;
+}
+
+function getCostEstimatorWorker(): Worker | null {
+  if (typeof Worker === 'undefined') return null;
+  if (!_costOptWorker) {
+    _costOptWorker = new CostEstimatorWorker();
+    _costOptWorker.onmessage = (e: MessageEvent<CostEstimatorWorkerOutput>) => {
+      const msg = e.data;
+      if (!_workerApplyFn || msg.requestId !== String(_currentCostReqId)) return; // stale
+      if (msg.type === 'done' && msg.cost) {
+        _workerApplyFn({ cost: msg.cost, costPending: false });
+      } else {
+        _workerApplyFn({ costPending: false });
+      }
+    };
+  }
+  return _costOptWorker;
+}
+
+function getAssemblyWorker(): Worker | null {
+  if (typeof Worker === 'undefined') return null;
+  if (!_assemblyWorker) {
+    _assemblyWorker = new AssemblyWorker();
+    _assemblyWorker.onmessage = (e: MessageEvent<AssemblyWorkerOutput>) => {
+      const msg = e.data;
+      if (!_workerApplyFn || msg.requestId !== String(_currentAssemblyReqId)) return; // stale
+      if (msg.type === 'done' && msg.steps) {
+        _workerApplyFn({ assemblySteps: msg.steps, assemblyPending: false });
+      } else {
+        _workerApplyFn({ assemblyPending: false });
+      }
+    };
+  }
+  return _assemblyWorker;
 }
 
 /**
@@ -70,6 +116,78 @@ function scheduleOptimization(
     requestId: String(_currentReqId),
   };
   worker.postMessage(payload);
+}
+
+function scheduleAssembly(config: CabinetConfig): void {
+  const worker = getAssemblyWorker();
+  if (!worker) {
+    if (_workerApplyFn) {
+      _workerApplyFn({ assemblySteps: generateAssemblySteps(config), assemblyPending: false });
+    }
+    return;
+  }
+  _currentAssemblyReqId++;
+  worker.postMessage({ requestId: String(_currentAssemblyReqId), config });
+}
+
+function scheduleCost(
+  optimization: OptimizationResult,
+  hardware: HardwareItem[],
+  edgeBandingTotal: number,
+  materialPriceOverrides: Record<string, number>,
+  edgeBandingRate: number,
+  hardwarePriceOverrides: Record<string, number>,
+  labourRate: number,
+  labourHours: number,
+  finishCost: number
+): void {
+  const worker = getCostEstimatorWorker();
+  if (!worker) {
+    if (_workerApplyFn) {
+      _workerApplyFn({
+        cost: estimateCost(
+          optimization,
+          hardware,
+          edgeBandingTotal,
+          materialPriceOverrides,
+          edgeBandingRate,
+          hardwarePriceOverrides,
+          labourRate,
+          labourHours,
+          finishCost
+        ),
+        costPending: false,
+      });
+    }
+    return;
+  }
+  _currentCostReqId++;
+  worker.postMessage({
+    requestId: String(_currentCostReqId),
+    optimization,
+    hardware,
+    edgeBandingTotal,
+    materialPriceOverrides,
+    edgeBandingRate,
+    hardwarePriceOverrides,
+    labourRate,
+    labourHours,
+    finishCost,
+  });
+}
+
+function scheduleCostFromState(state: CabinetState, optimizationOverride?: OptimizationResult, hardwareOverride?: HardwareItem[], edgeBandingTotalOverride?: number, partialOverrides?: Partial<CabinetState>) {
+  scheduleCost(
+    optimizationOverride || state.optimization,
+    hardwareOverride || state.hardware,
+    edgeBandingTotalOverride ?? state.edgeBandingTotal,
+    partialOverrides?.materialPriceOverrides ?? state.materialPriceOverrides,
+    partialOverrides?.edgeBandingRate ?? state.edgeBandingRate,
+    partialOverrides?.hardwarePriceOverrides ?? state.hardwarePriceOverrides,
+    partialOverrides?.labourRate ?? state.labourRate,
+    partialOverrides?.labourHours ?? state.labourHours,
+    partialOverrides?.finishCost ?? state.finishCost
+  );
 }
 
 const MAX_HISTORY = 50;
@@ -191,12 +309,16 @@ export interface CabinetState {
   hardware: HardwareItem[];
   optimization: OptimizationResult;
   edgeBandingTotal: number; // mm
+  cost: ReturnType<typeof estimateCost>;
+  assemblySteps: AssemblyStep[];
 
   // Combined project-level optimization (all cabinets)
   allParts: Part[];
   combinedOptimization: OptimizationResult;
   /** v3.21.0 — true while the cut-optimizer Web Worker is computing a fresh result */
   optimizationPending: boolean;
+  costPending: boolean;
+  assemblyPending: boolean;
 
   // Undo / Redo
   _past: CabinetEntry[][];
@@ -367,6 +489,20 @@ export const useCabinetStore = create<CabinetState>((set) => {
     labourHours: session?.labourHours ?? 0, // hours — v3.23.0 (0 = not set, user inputs manually)
     finishCost: session?.finishCost ?? 0, // ₪ — v3.23.0
     optimizationPending: false, // v3.21.0
+    costPending: false,
+    assemblyPending: false,
+    cost: estimateCost(
+      initial.optimization,
+      initial.hardware,
+      initial.edgeBandingTotal,
+      session?.materialPriceOverrides ?? {},
+      session?.edgeBandingRate ?? 3,
+      session?.hardwarePriceOverrides ?? {},
+      session?.labourRate ?? 75,
+      session?.labourHours ?? 0,
+      session?.finishCost ?? 0
+    ),
+    assemblySteps: generateAssemblySteps(initial.config),
 
     setConfig: (patch) =>
       set((state) => {
@@ -377,10 +513,13 @@ export const useCabinetStore = create<CabinetState>((set) => {
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         const base = deriveBaseProject(cabinets, state.activeCabinetIndex);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
+        scheduleAssembly(base.config);
         return {
           cabinets,
           ...base,
           optimizationPending: true,
+          costPending: true,
+          assemblyPending: true,
           _past: past,
           _future: [],
           canUndo: true,
@@ -397,10 +536,13 @@ export const useCabinetStore = create<CabinetState>((set) => {
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         const base = deriveBaseProject(cabinets, state.activeCabinetIndex);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
+        scheduleAssembly(base.config);
         return {
           cabinets,
           ...base,
           optimizationPending: true,
+          costPending: true,
+          assemblyPending: true,
           _past: past,
           _future: [],
           canUndo: true,
@@ -417,11 +559,14 @@ export const useCabinetStore = create<CabinetState>((set) => {
         pushConfigToUrl(prevCabinets[idx].config);
         const base = deriveBaseProject(prevCabinets, idx);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
+        scheduleAssembly(base.config);
         return {
           cabinets: prevCabinets,
           activeCabinetIndex: idx,
           ...base,
           optimizationPending: true,
+          costPending: true,
+          assemblyPending: true,
           _past: past,
           _future: [state.cabinets, ...state._future],
           canUndo: past.length > 0,
@@ -438,11 +583,14 @@ export const useCabinetStore = create<CabinetState>((set) => {
         pushConfigToUrl(nextCabinets[idx].config);
         const base = deriveBaseProject(nextCabinets, idx);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
+        scheduleAssembly(base.config);
         return {
           cabinets: nextCabinets,
           activeCabinetIndex: idx,
           ...base,
           optimizationPending: true,
+          costPending: true,
+          assemblyPending: true,
           _past: [...state._past, state.cabinets],
           _future: future,
           canUndo: true,
@@ -459,11 +607,14 @@ export const useCabinetStore = create<CabinetState>((set) => {
         pushConfigToUrl(cabinets[idx].config);
         const base = deriveBaseProject(cabinets, idx);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
+        scheduleAssembly(base.config);
         return {
           cabinets,
           activeCabinetIndex: idx,
           ...base,
           optimizationPending: true,
+          costPending: true,
+          assemblyPending: true,
           _past: past,
           _future: [],
           canUndo: true,
@@ -480,11 +631,14 @@ export const useCabinetStore = create<CabinetState>((set) => {
         pushConfigToUrl(cabinets[idx].config);
         const base = deriveBaseProject(cabinets, idx);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
+        scheduleAssembly(base.config);
         return {
           cabinets,
           activeCabinetIndex: idx,
           ...base,
           optimizationPending: true,
+          costPending: true,
+          assemblyPending: true,
           _past: past,
           _future: [],
           canUndo: true,
@@ -507,11 +661,14 @@ export const useCabinetStore = create<CabinetState>((set) => {
         pushConfigToUrl(cabinets[newIndex].config);
         const base = deriveBaseProject(cabinets, newIndex);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
+        scheduleAssembly(base.config);
         return {
           cabinets,
           activeCabinetIndex: newIndex,
           ...base,
           optimizationPending: true,
+          costPending: true,
+          assemblyPending: true,
           _past: past,
           _future: [],
           canUndo: true,
@@ -525,10 +682,13 @@ export const useCabinetStore = create<CabinetState>((set) => {
         pushConfigToUrl(state.cabinets[index].config);
         const base = deriveBaseProject(state.cabinets, index);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
+        scheduleAssembly(base.config);
         return {
           activeCabinetIndex: index,
           ...base,
           optimizationPending: true,
+          costPending: true,
+          assemblyPending: true,
         };
       }),
 
@@ -553,11 +713,14 @@ export const useCabinetStore = create<CabinetState>((set) => {
         }));
         const base = deriveBaseProject(migrated, 0);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
+        scheduleAssembly(base.config);
         return {
           cabinets: migrated,
           activeCabinetIndex: 0,
           ...base,
           optimizationPending: true,
+          costPending: true,
+          assemblyPending: true,
           _past: past,
           _future: [],
           canUndo: true,
@@ -575,6 +738,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         const sawKerf = Math.max(0, Math.min(8, mm));
         const base = deriveBaseProject(state.cabinets, state.activeCabinetIndex);
         scheduleOptimization(base.parts, base.allParts, sawKerf, state.sheetSizeOverrides);
+        scheduleAssembly(base.config);
         return { sawKerf, ...base, optimizationPending: true };
       }),
     setMaterialPriceOverride: (materialKey, price) =>
@@ -585,12 +749,13 @@ export const useCabinetStore = create<CabinetState>((set) => {
         } else {
           overrides[materialKey] = price;
         }
-        return { materialPriceOverrides: overrides };
+        scheduleCostFromState(state, undefined, undefined, undefined, { materialPriceOverrides: overrides });
+        return { materialPriceOverrides: overrides, costPending: true };
       }),
-    setEdgeBandingRate: (rate) => set({ edgeBandingRate: Math.max(0, rate) }),
-    setLabourRate: (rate) => set({ labourRate: Math.max(0, rate) }),
-    setLabourHours: (hours) => set({ labourHours: Math.max(0, hours) }),
-    setFinishCost: (cost) => set({ finishCost: Math.max(0, cost) }),
+    setEdgeBandingRate: (rate) => set((state) => { const r = Math.max(0, rate); scheduleCostFromState(state, undefined, undefined, undefined, { edgeBandingRate: r }); return { edgeBandingRate: r, costPending: true }; }),
+    setLabourRate: (rate) => set((state) => { const r = Math.max(0, rate); scheduleCostFromState(state, undefined, undefined, undefined, { labourRate: r }); return { labourRate: r, costPending: true }; }),
+    setLabourHours: (hours) => set((state) => { const h = Math.max(0, hours); scheduleCostFromState(state, undefined, undefined, undefined, { labourHours: h }); return { labourHours: h, costPending: true }; }),
+    setFinishCost: (cost) => set((state) => { const c = Math.max(0, cost); scheduleCostFromState(state, undefined, undefined, undefined, { finishCost: c }); return { finishCost: c, costPending: true }; }),
     setHardwarePriceOverride: (id, price) =>
       set((state) => {
         const overrides = { ...state.hardwarePriceOverrides };
@@ -599,7 +764,8 @@ export const useCabinetStore = create<CabinetState>((set) => {
         } else {
           overrides[id] = Math.max(0, price);
         }
-        return { hardwarePriceOverrides: overrides };
+        scheduleCostFromState(state, undefined, undefined, undefined, { hardwarePriceOverrides: overrides });
+        return { hardwarePriceOverrides: overrides, costPending: true };
       }),
     setHardwareQtyOverride: (id, qty) =>
       set((state) => {
@@ -609,7 +775,8 @@ export const useCabinetStore = create<CabinetState>((set) => {
         } else {
           overrides[id] = Math.max(0, qty);
         }
-        return { hardwareQtyOverrides: overrides };
+        scheduleCostFromState(state, undefined, undefined, undefined, { hardwareQtyOverrides: overrides });
+        return { hardwareQtyOverrides: overrides, costPending: true };
       }),
     // Sprint 165 — per-material sheet size overrides
     setSheetSizeOverride: (materialKey, size) =>
@@ -622,6 +789,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
         }
         const base = deriveBaseProject(state.cabinets, state.activeCabinetIndex);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, sheetSizeOverrides);
+        scheduleAssembly(base.config);
         return { sheetSizeOverrides, ...base, optimizationPending: true };
       }),
     // v3.18.0 — Bulk material replacement across all cabinets
@@ -637,10 +805,13 @@ export const useCabinetStore = create<CabinetState>((set) => {
         });
         const base = deriveBaseProject(cabinets, state.activeCabinetIndex);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
+        scheduleAssembly(base.config);
         return {
           cabinets,
           ...base,
           optimizationPending: true,
+          costPending: true,
+          assemblyPending: true,
           _past: past,
           _future: [],
           canUndo: true,
@@ -672,11 +843,14 @@ export const useCabinetStore = create<CabinetState>((set) => {
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         const base = deriveBaseProject(cabinets, activeCabinetIndex);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
+        scheduleAssembly(base.config);
         return {
           cabinets,
           activeCabinetIndex,
           ...base,
           optimizationPending: true,
+          costPending: true,
+          assemblyPending: true,
           _past: past,
           _future: [],
           canUndo: true,

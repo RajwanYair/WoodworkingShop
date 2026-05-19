@@ -16,7 +16,7 @@
         "resource-summary:total:size": ["warn", { "maxNumericValue": 2400000 }],
         "largest-contentful-paint": ["error", { "maxNumericValue": 3000 }],
         "interactive": ["error", { "maxNumericValue": 3500 }],
-        "total-blocking-time": ["warn", { "maxNumericValue": 400 }],
+        "total-blocking-time": ["warn", { "maxNumericValue": 300 }],
         "cumulative-layout-shift": ["warn", { "maxNumericValue": 0.1 }]
       }
     },

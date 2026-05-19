@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { estimateCost, DEFAULT_LABOUR_RATE } from '../../engine/cost-estimator';
+import { DEFAULT_LABOUR_RATE } from '../../engine/cost-estimator';
 import { getMaterial, computePartWeightKg } from '../../engine/materials';
 import type { Lang } from '../../engine/types';
 
@@ -10,9 +10,7 @@ const BAR_COLORS = ['#8B6F47', '#A0845C', '#C49A6C', '#6B8E23', '#4682B4'];
 export function CostEstimatePanel() {
   const { t, i18n } = useTranslation();
   const {
-    optimization,
-    hardware,
-    edgeBandingTotal,
+    cost,
     cabinets,
     materialPriceOverrides,
     setMaterialPriceOverride,
@@ -57,17 +55,7 @@ export function CostEstimatePanel() {
   const [editingFinish, setEditingFinish] = useState(false);
   const [finishInput, setFinishInput] = useState('');
 
-  const cost = estimateCost(
-    optimization,
-    hardware,
-    edgeBandingTotal,
-    materialPriceOverrides,
-    edgeBandingRate,
-    hardwarePriceOverrides,
-    labourRate,
-    labourHours,
-    finishCost,
-  );
+
   const totalNonZero = cost.totalCost > 0;
 
   // Build segments for bar visualization

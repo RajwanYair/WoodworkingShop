@@ -54,7 +54,8 @@
     "lighthouse": "node scripts/lighthouse.js",
     "lint:md": "markdownlint-cli2 \"*.md\" \"docs/**/*.md\" \".github/**/*.md\"",
     "test:e2e": "playwright test",
-    "test:e2e:install": "playwright install --with-deps chromium firefox"
+    "test:e2e:install": "playwright install --with-deps chromium firefox",
+    "bench": "vitest bench"
   },
   "engines": {
     "node": ">=22.0.0"

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { generateAssemblySteps } from '../../engine/assembly';
 import type { AssemblyStep } from '../../engine/assembly';
 import type { Lang, Part, HardwareItem } from '../../engine/types';
 import { IconPrint, IconLightbulb } from '../layout/Icons';
@@ -10,9 +9,8 @@ type ViewMode = 'paginated' | 'all';
 
 export function AssemblyGuide() {
   const { t, i18n } = useTranslation();
-  const { config, parts, hardware, cabinets, activeCabinetIndex } = useCabinetStore();
+  const { assemblySteps: steps, parts, hardware, cabinets, activeCabinetIndex } = useCabinetStore();
   const lang = i18n.language as Lang;
-  const steps = generateAssemblySteps(config);
   const [activeStep, setActiveStep] = useState(0);
   const [viewMode, setViewMode] = useState<ViewMode>('all');
   const notes = cabinets[activeCabinetIndex]?.notes ?? '';
