@@ -254,3 +254,43 @@ export interface MaterialSubstitution {
   /** Optional quantitative data supporting the recommendation. */
   quantitativeRationale?: QuantitativeRationale;
 }
+
+// ─── Multi-cabinet room layout (Phase 7) ─────────────────────────────────────
+
+/**
+ * A single cabinet placed inside a room layout.
+ * The x/y coordinates are the top-left corner of the cabinet's footprint
+ * on the room floor-plan, measured in millimetres from the room origin.
+ */
+export interface RoomCabinet {
+  /** Unique instance id within the room (UUID-style string). */
+  id: string;
+  /** Human-readable label for this cabinet instance. */
+  name: string;
+  /** Footprint origin — distance from the left wall in mm. */
+  x: number;
+  /** Footprint origin — distance from the top/back wall in mm. */
+  y: number;
+  /** Cabinet width in mm (mirrors CabinetConfig.width). */
+  width: number;
+  /** Cabinet depth in mm (mirrors CabinetConfig.depth). */
+  depth: number;
+  /** Optional rotation in degrees (0 | 90 | 180 | 270). */
+  rotation?: 0 | 90 | 180 | 270;
+}
+
+/**
+ * A complete room layout composed of zero or more cabinet instances.
+ */
+export interface RoomLayout {
+  /** Stable identifier for the layout. */
+  id: string;
+  /** Human-readable room name, e.g. 'Kitchen'. */
+  name: string;
+  /** Room width in mm (left-to-right wall). */
+  roomWidth: number;
+  /** Room depth in mm (front-to-back wall). */
+  roomDepth: number;
+  /** Cabinet instances placed in this room. */
+  cabinets: RoomCabinet[];
+}

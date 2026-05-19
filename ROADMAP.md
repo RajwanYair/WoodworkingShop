@@ -175,7 +175,7 @@ Exit criteria: one pilot plugin validates the extension API.
 
 Exit criteria: full CI green, reproducible builds, complete docs.
 
-- [ ] Multi-cabinet room layout view.
+- [x] Multi-cabinet room layout view.
 - [x] Advanced G-code with arc interpolation and tool-change sequences (G2/G3 arc commands, circularPocketToGcode, v3.53.23).
 - [ ] Complete security audit and CSP hardening.
 - [ ] Publish migration notes and breaking change documentation.
