@@ -300,4 +300,108 @@ describe('cabinet-store', () => {
       expect(snapshots[0].id).toMatch(/^snap-\d+$/);
     });
   });
+
+  // Sprint 16 coverage boost — previously uncovered store actions
+
+  describe('toggleHighContrast (v3.12.0)', () => {
+    it('flips highContrastMode from false to true', () => {
+      useCabinetStore.setState({ highContrastMode: false });
+      useCabinetStore.getState().toggleHighContrast();
+      expect(useCabinetStore.getState().highContrastMode).toBe(true);
+    });
+
+    it('flips highContrastMode from true to false', () => {
+      useCabinetStore.setState({ highContrastMode: true });
+      useCabinetStore.getState().toggleHighContrast();
+      expect(useCabinetStore.getState().highContrastMode).toBe(false);
+    });
+  });
+
+  describe('toggleUnits', () => {
+    it('switches from metric to imperial', () => {
+      useCabinetStore.setState({ units: 'metric' });
+      useCabinetStore.getState().toggleUnits();
+      expect(useCabinetStore.getState().units).toBe('imperial');
+    });
+
+    it('switches from imperial back to metric', () => {
+      useCabinetStore.setState({ units: 'imperial' });
+      useCabinetStore.getState().toggleUnits();
+      expect(useCabinetStore.getState().units).toBe('metric');
+    });
+  });
+
+  describe('setSawKerf', () => {
+    it('stores a valid saw kerf', () => {
+      useCabinetStore.getState().setSawKerf(3.2);
+      expect(useCabinetStore.getState().sawKerf).toBe(3.2);
+    });
+
+    it('clamps saw kerf to 0 when negative', () => {
+      useCabinetStore.getState().setSawKerf(-1);
+      expect(useCabinetStore.getState().sawKerf).toBe(0);
+    });
+
+    it('clamps saw kerf to 8 when too large', () => {
+      useCabinetStore.getState().setSawKerf(20);
+      expect(useCabinetStore.getState().sawKerf).toBe(8);
+    });
+  });
+
+  describe('setMaterialPriceOverride', () => {
+    it('stores a price override for a material key', () => {
+      useCabinetStore.getState().setMaterialPriceOverride('mdf18', 42.5);
+      expect(useCabinetStore.getState().materialPriceOverrides['mdf18']).toBe(42.5);
+    });
+
+    it('removes the override when price is null', () => {
+      useCabinetStore.getState().setMaterialPriceOverride('mdf18', 42.5);
+      useCabinetStore.getState().setMaterialPriceOverride('mdf18', null);
+      expect(useCabinetStore.getState().materialPriceOverrides['mdf18']).toBeUndefined();
+    });
+  });
+
+  describe('setHardwarePriceOverride', () => {
+    it('stores a price override for a hardware id', () => {
+      useCabinetStore.getState().setHardwarePriceOverride('hinge-soft', 3.99);
+      expect(useCabinetStore.getState().hardwarePriceOverrides['hinge-soft']).toBe(3.99);
+    });
+
+    it('removes the override when price is null', () => {
+      useCabinetStore.getState().setHardwarePriceOverride('hinge-soft', 3.99);
+      useCabinetStore.getState().setHardwarePriceOverride('hinge-soft', null);
+      expect(useCabinetStore.getState().hardwarePriceOverrides['hinge-soft']).toBeUndefined();
+    });
+
+    it('clamps negative price to 0', () => {
+      useCabinetStore.getState().setHardwarePriceOverride('hinge-soft', -5);
+      expect(useCabinetStore.getState().hardwarePriceOverrides['hinge-soft']).toBe(0);
+    });
+  });
+
+  describe('setHardwareQtyOverride', () => {
+    it('stores a quantity override for a hardware id', () => {
+      useCabinetStore.getState().setHardwareQtyOverride('drawer-slide', 4);
+      expect(useCabinetStore.getState().hardwareQtyOverrides['drawer-slide']).toBe(4);
+    });
+
+    it('removes the override when qty is null', () => {
+      useCabinetStore.getState().setHardwareQtyOverride('drawer-slide', 4);
+      useCabinetStore.getState().setHardwareQtyOverride('drawer-slide', null);
+      expect(useCabinetStore.getState().hardwareQtyOverrides['drawer-slide']).toBeUndefined();
+    });
+  });
+
+  describe('setSheetSizeOverride (Sprint 165)', () => {
+    it('stores a sheet size override for a material key', () => {
+      useCabinetStore.getState().setSheetSizeOverride('mdf18', { width: 1220, length: 2440 });
+      expect(useCabinetStore.getState().sheetSizeOverrides['mdf18']).toEqual({ width: 1220, length: 2440 });
+    });
+
+    it('removes the override when size is null', () => {
+      useCabinetStore.getState().setSheetSizeOverride('mdf18', { width: 1220, length: 2440 });
+      useCabinetStore.getState().setSheetSizeOverride('mdf18', null);
+      expect(useCabinetStore.getState().sheetSizeOverrides['mdf18']).toBeUndefined();
+    });
+  });
 });

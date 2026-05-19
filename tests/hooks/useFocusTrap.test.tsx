@@ -93,4 +93,64 @@ describe('useFocusTrap', () => {
     fireEvent.keyDown(getByRole('button', { name: 'OK' }), { key: 'Enter' });
     expect(getByRole('button', { name: 'OK' })).toBeInTheDocument();
   });
+
+  it('does not wrap Tab when active element is not the last', () => {
+    const { getAllByRole } = render(
+      <Trap active={true}>
+        <button>First</button>
+        <button>Second</button>
+        <button>Last</button>
+      </Trap>,
+    );
+    const [first, second] = getAllByRole('button');
+    second.focus();
+    // Tab from middle — focus should remain on second (browser handles natural Tab, we don't intercept)
+    fireEvent.keyDown(second, { key: 'Tab', shiftKey: false });
+    expect(document.activeElement).not.toBe(first);
+  });
+
+  it('does not wrap Shift+Tab when active element is not the first', () => {
+    const { getAllByRole } = render(
+      <Trap active={true}>
+        <button>First</button>
+        <button>Second</button>
+        <button>Last</button>
+      </Trap>,
+    );
+    const [, second, last] = getAllByRole('button');
+    second.focus();
+    // Shift+Tab from middle — should not wrap to last
+    fireEvent.keyDown(second, { key: 'Tab', shiftKey: true });
+    expect(document.activeElement).not.toBe(last);
+  });
+
+  it('Tab with no focusable items does not throw', () => {
+    const { getByTestId } = render(<Trap active={true} />);
+    // container has tabIndex=-1, excluded from FOCUSABLE — items list will be empty
+    fireEvent.keyDown(getByTestId('trap'), { key: 'Tab' });
+    expect(getByTestId('trap')).toBeInTheDocument();
+  });
+
+  it('Escape without onEscape callback does not throw', () => {
+    const { getByTestId } = render(
+      <Trap active={true}>
+        <button>OK</button>
+      </Trap>,
+    );
+    expect(() => fireEvent.keyDown(getByTestId('trap'), { key: 'Escape' })).not.toThrow();
+  });
+
+  it('removes keydown listener on unmount', () => {
+    const onEscape = vi.fn();
+    const { container, unmount } = render(
+      <Trap active={true} onEscape={onEscape}>
+        <button>OK</button>
+      </Trap>,
+    );
+    const trapEl = container.querySelector('[data-testid="trap"]') as HTMLElement;
+    unmount();
+    // After unmount the cleanup removes the listener — Escape should NOT call onEscape
+    fireEvent.keyDown(trapEl, { key: 'Escape' });
+    expect(onEscape).not.toHaveBeenCalled();
+  });
 });
