@@ -143,7 +143,7 @@ Exit criteria: 85%+ coverage, visual regression baselines, zero flaky tests.
 - [x] Tighten coverage thresholds to 85% statements, 80% branches (v3.53.15).
 - [x] Add eslint-plugin-testing-library for test file quality (v3.53.15).
 - [x] Add visual regression baseline snapshots for core views.
-- [ ] Strengthen keyboard-only workflow for all tabs and dialogs.
+- [x] Strengthen keyboard-only workflow for all tabs and dialogs.
 - [x] Add focus order and screen-reader narration tests for critical journeys (ValidationPanel ARIA, radio group, fieldset/legend, v3.53.24).
 - [x] Add high-contrast mode support beyond `forced-colors` (WCAG AA high-contrast CSS tokens, v3.53.12).
 - [x] Add touch gesture tutorial overlay for mobile/tablet users (TouchGestureTutorial overlay, v3.53.14).

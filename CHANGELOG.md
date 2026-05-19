@@ -9,7 +9,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.53.28] — 2025-07-22
+## [3.53.37] — 2026-05-19
+
+### Sprints 22–29 — Phase 4–7 Feature Sweep
+
+Covers Sprints 22 through 29 (v3.53.30 → v3.53.37). Each sprint was independently committed; 704 tests passing across 44 test files.
+
+### Accessibility (Phase 4)
+
+- **Sprint 22** — ARIA-compliant ArrowLeft / ArrowRight / Home / End keyboard navigation within the main `role="tablist"` using the roving-tabindex pattern. Active tab gets `tabIndex={0}`; all others get `tabIndex={-1}`. 5 new tests in `Header.test.tsx`. (v3.53.30)
+
+### Export (Phase 6)
+
+- **Sprint 23** — `generateErpCsv` / `downloadErpCsv` in `src/utils/bom-export.ts` — normalised ERP/MRP/CAM CSV with snake\_case column headers (`part_no`, `material_key`, `area_m2`, `grain_direction`, `unit_weight_kg`). Schema version `bom-erp-csv-v1`. 8 new tests. Phase 6 ROADMAP check-off. (v3.53.31)
+
+### Room Layout (Phase 7)
+
+- **Sprint 24** — `RoomLayout` + `RoomCabinet` interfaces in `src/engine/types.ts`. New `useRoomStore` Zustand store (`src/store/room-store.ts`) with `addCabinetToRoom`, `removeCabinetFromRoom`, `updateCabinetPosition`, `addLayout`, `removeLayout`. 9 new tests. Phase 7 ROADMAP check-off. (v3.53.32)
+
+### Security (Phase 7)
+
+- **Sprint 25** — `Content-Security-Policy` meta tag added to `index.html` (`default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; worker-src 'self' blob:; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' blob: https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self'`). Inline SW registration extracted to `public/sw-register.js` to avoid `unsafe-inline` in `script-src`. Phase 7 CSP check-off. (v3.53.33)
+
+### Workers / Infrastructure (Phase 2)
+
+- **Sprint 26** — `trySharedArrayBuffer(size)` + `isSharedArrayBufferAvailable()` utilities in `src/workers/shared-buffer.ts`. Feature-detects `crossOriginIsolated` and returns `null` on GitHub Pages (not cross-origin isolated). ARCHITECTURE.md section added explaining COOP/COEP requirements. 6 new tests. (v3.53.34)
+
+### Tests (Phase 4)
+
+- **Sprint 27** — Playwright visual regression spec `tests/e2e/visual-regression.spec.ts` for 4 core views: configurator default, preview tab SVG, optimizer tab, header in dark mode. `toHaveScreenshot()` with 5 % pixel diff tolerance. Phase 4 ROADMAP check-off. (v3.53.35)
+
+### Documentation (Phase 7)
+
+- **Sprint 28** — Performance benchmarks table added to README (Lighthouse score 97/100, FCP ~0.4 s, LCP ~0.7 s, bundle sizes, cut-optimizer timing). (v3.53.36)
+- **Sprint 29** — `MIGRATION.md` created: versioning policy, v3→v4 planned breaking changes, per-sprint migration notes for v3.53.28–v3.53.34, localStorage key registry, and data migration function reference. Phase 7 migration docs check-off. (v3.53.37)
+
+
 
 ### Sprints 11–18 — Phase 3–7 Feature Sweep
 
