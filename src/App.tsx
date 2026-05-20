@@ -133,6 +133,13 @@ function App() {
         );
         return;
       }
+      // Add cabinet: Ctrl+Shift+N (Sprint 86)
+      if (ctrl && e.shiftKey && (e.key === 'n' || e.key === 'N')) {
+        e.preventDefault();
+        useCabinetStore.getState().addCabinet();
+        useToastStore.getState().addToast(t('shortcuts.addCabinet'), 'success');
+        return;
+      }
       // Tab switching: Alt+1-5; Dark mode: Alt+D (Sprint 168)
       if (e.altKey && !ctrl) {
         const tabMap: Record<string, CabinetState['activeTab']> = {

@@ -402,7 +402,8 @@
     "saveSnapshot": "Snapshot saved",
     "exportBom": "BOM exported",
     "resetConfig": "Config reset to defaults",
-    "copyLink": "Share link copied"
+    "copyLink": "Share link copied",
+    "addCabinet": "Cabinet added"
   },
   "skeleton": {
     "loading": "Loading panel…",
