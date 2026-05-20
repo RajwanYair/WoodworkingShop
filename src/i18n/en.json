@@ -281,6 +281,10 @@
     "notes": "Notes",
     "notesPlaceholder": "Optional notes for this cabinet…"
   },
+  "errors": {
+    "copyDetails": "Copy error details",
+    "copied": "Copied!"
+  },
   "summary": {
     "title": "Project Summary",
     "sectionLabel": "Multi-cabinet project summary",

@@ -283,6 +283,10 @@
     "notes": "הערות",
     "notesPlaceholder": "הערות אופציונליות לארון זה…"
   },
+  "errors": {
+    "copyDetails": "העתק פרטי שגיאה",
+    "copied": "הועתק!"
+  },
   "summary": {
     "title": "סיכום פרויקט",
     "sectionLabel": "סיכום פרויקט רב-ארונות",
