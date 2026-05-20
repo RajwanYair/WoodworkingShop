@@ -146,6 +146,7 @@ export function ValidationPanel({ issues }: ValidationPanelProps) {
               key={issue.code}
               className={`flex items-start gap-2 px-3 py-2 text-sm border-s-2 ${SEVERITY_ROW_CLASS[issue.severity]}`}
               role="listitem"
+              title={issue.code}
             >
               <SeverityIcon severity={issue.severity} />
 
