@@ -639,3 +639,41 @@ describe('validateConfig — BACK_PANEL_OVERSIZED (Sprint 69)', () => {
     expect(issue.message.he).toBeTruthy();
   });
 });
+
+// ── Sprint 75 — DEPTH_TOO_SHALLOW_FOR_DOORS ─────────────────────────────────
+describe('validateConfig — DEPTH_TOO_SHALLOW_FOR_DOORS (Sprint 75)', () => {
+  it('raises DEPTH_TOO_SHALLOW_FOR_DOORS when depth < 250 and doorCount > 0', () => {
+    const issues = validateConfig(cfg({ depth: 200, doorCount: 1, doorStyle: 'flat' }));
+    expect(issues.some((i) => i.code === 'DEPTH_TOO_SHALLOW_FOR_DOORS')).toBe(true);
+  });
+
+  it('severity is warning', () => {
+    const issues = validateConfig(cfg({ depth: 200, doorCount: 1, doorStyle: 'flat' }));
+    const issue = issues.find((i) => i.code === 'DEPTH_TOO_SHALLOW_FOR_DOORS')!;
+    expect(issue.severity).toBe('warning');
+  });
+
+  it('suggestedValue is 250', () => {
+    const issues = validateConfig(cfg({ depth: 200, doorCount: 1, doorStyle: 'flat' }));
+    const issue = issues.find((i) => i.code === 'DEPTH_TOO_SHALLOW_FOR_DOORS')!;
+    expect(issue.suggestedValue).toBe(250);
+    expect(issue.field).toBe('depth');
+  });
+
+  it('does NOT raise when depth >= 250', () => {
+    const issues = validateConfig(cfg({ depth: 250, doorCount: 1, doorStyle: 'flat' }));
+    expect(issues.some((i) => i.code === 'DEPTH_TOO_SHALLOW_FOR_DOORS')).toBe(false);
+  });
+
+  it('does NOT raise when doorCount is 0', () => {
+    const issues = validateConfig(cfg({ depth: 200, doorCount: 0, doorStyle: 'none' }));
+    expect(issues.some((i) => i.code === 'DEPTH_TOO_SHALLOW_FOR_DOORS')).toBe(false);
+  });
+
+  it('message contains depth value in EN and HE', () => {
+    const issues = validateConfig(cfg({ depth: 180, doorCount: 2, doorStyle: 'flat' }));
+    const issue = issues.find((i) => i.code === 'DEPTH_TOO_SHALLOW_FOR_DOORS')!;
+    expect(issue.message.en).toContain('180');
+    expect(issue.message.he).toContain('180');
+  });
+});

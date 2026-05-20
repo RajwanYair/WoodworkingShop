@@ -713,6 +713,22 @@ export function validateConfig(
     }
   }
 
+  // ── Depth too shallow for door hinges (Sprint 75) ─────────────────────────
+
+  const MIN_DEPTH_FOR_DOORS_MM = 250;
+  if ((config.doorCount ?? 0) > 0 && config.depth < MIN_DEPTH_FOR_DOORS_MM) {
+    issues.push({
+      code: 'DEPTH_TOO_SHALLOW_FOR_DOORS',
+      severity: 'warning',
+      message: {
+        en: `Cabinet depth (${config.depth} mm) may be too shallow for door hinges — ${MIN_DEPTH_FOR_DOORS_MM} mm minimum recommended.`,
+        he: `עומק הארון (${config.depth} מ"מ) עשוי להיות רדוד מדי לצירי הדלת — מינימום ${MIN_DEPTH_FOR_DOORS_MM} מ"מ מומלץ.`,
+      },
+      field: 'depth',
+      suggestedValue: MIN_DEPTH_FOR_DOORS_MM,
+    });
+  }
+
   // Sort: errors → warnings → info
   const order: Record<string, number> = { error: 0, warning: 1, info: 2 };
   issues.sort((a, b) => order[a.severity] - order[b.severity]);
