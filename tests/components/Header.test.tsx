@@ -51,7 +51,7 @@ describe('Header', () => {
 
   it('renders language toggle', () => {
     render(<Header />);
-    expect(screen.getAllByText('עב').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('עברית').length).toBeGreaterThanOrEqual(1);
   });
 
   // ── Keyboard tab navigation (Sprint 22 — Phase 4 keyboard-only workflow) ──

@@ -128,17 +128,22 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
 
   return (
     <div
-      role="dialog"
-      aria-modal="true"
-      aria-label={t('gcode.previewTitle')}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
     >
+      {/* Invisible backdrop button — keyboard-accessible dismiss */}
+      <button
+        type="button"
+        className="absolute inset-0 w-full h-full cursor-default"
+        aria-label={t('gcodeValidator.dismiss')}
+        tabIndex={-1}
+        onClick={onClose}
+      />
       <div
         ref={trapRef}
-        className="bg-white dark:bg-wood-900 rounded-xl shadow-2xl w-full max-w-2xl flex flex-col gap-0 overflow-hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-label={t('gcode.previewTitle')}
+        className="relative bg-white dark:bg-wood-900 rounded-xl shadow-2xl w-full max-w-2xl flex flex-col gap-0 overflow-hidden"
       >
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-wood-200 dark:border-wood-700">

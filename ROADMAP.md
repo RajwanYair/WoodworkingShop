@@ -201,6 +201,17 @@ Exit criteria: stricter a11y, browserslist-aware CSS, root cleanup, zero VS Code
 - [x] `MyScripts/.tools/Install-DevTools.ps1` + `.sh` — one-shot idempotent dev-tool installer (Node 22 via nvm, gh CLI, Playwright browsers, stylelint, lhci).
 - [x] Update `MyScripts/.tools/README.md` version baseline (Node 22, TS 6, Vite 8, ESLint 10, Stylelint 17, Playwright 1.60).
 
+### Phase 9: Advanced Export and EventBus (v3.56.0 → v3.57.0)
+
+Exit criteria: zero lint errors, all 956 unit tests pass, full production quality gates green.
+
+- [x] **Sprint 16** — Part rotation lock: `_rotationLocks` map in store, `rotationLocked` flag on `Part`/`CutRect`, optimizer respects lock when placing/rotating; toggle buttons in sheet legend.
+- [x] **Sprint 17** — G-code M6 tool-change: `emitToolChange` option in `GcodeOptions` and `MachinePreset`; M6 T{n} block emitted between parts when enabled; checkbox in GcodePreviewModal settings panel.
+- [x] **Sprint 18** — Assembly weight indicator: `computePartsWeight` integration in `AssemblyGuide`, total weight `kg` displayed in assembly header; i18n for all 6 locales.
+- [x] **Sprint 19** — DXF layers for rotation-locked/edge-banded: `ROTATION_LOCKED` (magenta) and `EDGE_BANDED` (cyan) layers in DXF output; per-part layer precedence (grainConflict > rotationLocked > material).
+- [x] **Sprint 20** — Plugin EventBus: `PluginEventMap` interface with 4 events, `PluginEventBus` class (`Map<PluginEventName, Set<handler>>`), `pluginEventBus` singleton; store emits events on config change, optimization complete, rotation lock toggle.
+- [x] **Production hardening** — Fix pre-existing `jsx-a11y` lint errors in `GcodePreviewModal` (moved `role="dialog"` to inner content div, replaced onclick-backdrop div with semantic `<button>`, Escape handled by `useFocusTrap` hook); fix stale `Header.test.tsx` language label (`עב` → `עברית`); remove dead `scripts/fix-json-bom.js`; remove duplicate `browserslist` from `package.json` (`.browserslistrc` is canonical).
+
 ### Future Horizons (post-v4.0)
 
 These are exploratory candidates, not committed scope. Each requires its own discovery phase.
@@ -212,7 +223,7 @@ These are exploratory candidates, not committed scope. Each requires its own dis
 | Manufacturing  | Tool-path simulation preview (G-code lint + travel viz)       | Reduces "ran the file, mis-cut" cycles; matches Shaper/Carbide tooling           |
 | Vendor Catalog | First-party curated hardware database from public vendor PDFs | Eliminates manual hardware entry; matches GrabCAD Workbench                      |
 | Mobile-First   | Tablet-native gesture redesign for shop-floor use             | Matches KCD's tablet workflow; current tablet UX is responsive but not optimized |
-| Localization   | Add ES / DE / FR / AR translations                            | Expands TAM beyond EN+HE bilingual; AR shares RTL infrastructure with HE         |
+| Localization   | ~~Add ES / DE / FR / AR translations~~ **Done in v3.56.x**    | ES, DE, FR, AR locales added alongside EN+HE; AR shares RTL infrastructure with HE |
 | Standards      | IFC/STEP export for full BIM/CAD interoperability             | Opens enterprise integration paths                                               |
 
 ---
@@ -268,7 +279,7 @@ Common tools are centralized one level up at `MyScripts/`:
 | Playwright config  | `playwright.config.ts`      | E2E browser matrix                                   |
 | Bundle budgets     | `config/bundle-budget.json` | JS/CSS size limits                                   |
 | Lighthouse         | `config/lighthouserc.json`  | Performance/a11y thresholds                          |
-| Browserslist       | `.browserslistrc`           | Target browsers (last 2 versions, no IE)             |
+| Browserslist       | `.browserslistrc`           | Target browsers (last 2 versions, no IE/IE Mobile) — canonical source; `package.json browserslist` removed |
 | Markdown lint      | `.markdownlint.json`        | Doc style rules                                      |
 
 ### Intermediate Artifact Policy

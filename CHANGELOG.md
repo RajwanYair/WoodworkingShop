@@ -9,6 +9,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.57.0] — 2026-06-05
+
+### Production Hardening — Zero Lint Errors, Test & Config Cleanup
+
+#### Fixed
+
+- **`GcodePreviewModal` jsx-a11y lint errors** (pre-existing from Sprint 8): `role="dialog"` moved from
+  backdrop `<div>` to inner content `<div ref={trapRef}>`; backdrop click handled by a semantic
+  `<button>` overlay (not an `onClick` on a non-interactive element); Escape key is handled by the
+  already-present `useFocusTrap(trapRef, true, onClose)` hook — the redundant `onKeyDown` on the dialog
+  div was removed. Result: zero lint errors across the entire codebase.
+- **`Header.test.tsx` stale language label**: test expected `'עב'` (old abbreviation) but Header now
+  renders `l.nativeLabel` = `'עברית'`. Updated to `'עברית'` — all 12 Header tests pass.
+
+#### Removed
+
+- **`scripts/fix-json-bom.js`**: one-time utility for stripping UTF-8 BOM from i18n files; no longer
+  referenced anywhere and no longer needed.
+- **`browserslist` field from `package.json`**: duplicated `.browserslistrc`. The file takes precedence
+  and is the canonical source (`not ie_mob 11` coverage is retained).
+
+#### Documentation
+
+- **ROADMAP.md Phase 9** added: documents Sprints 16–20 (rotation lock, G-code tool-change, assembly
+  weight, DXF layers, Plugin EventBus) and the production-hardening items above.
+- **ROADMAP.md Future Horizons**: marked ES/DE/FR/AR localization as done (shipped in v3.56.x).
+- **ROADMAP.md Browserslist row** updated to reflect `.browserslistrc` as the sole canonical source.
+
 ## [3.54.0] — 2026-05-20
 
 ### Production Hardening Round 2 — Real-Fix-at-Source Pass
