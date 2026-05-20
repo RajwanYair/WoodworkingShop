@@ -203,7 +203,8 @@
     "iso": "3D",
     "exportSvg": "Export SVG",
     "exportPng": "Export PNG (2×)",
-    "dimensions": "Dimensions"
+    "dimensions": "Dimensions",
+    "dimensionSummary": "Cabinet dimensions W × H × D"
   },
   "pdf": {
     "title": "Export PDF",

@@ -663,6 +663,13 @@ export const CabinetPreview = memo(function CabinetPreview() {
           />
         )}
       </div>
+      {/* Sprint 76 — W × H × D dimension summary label */}
+      <p
+        className="text-center text-xs text-wood-500 dark:text-wood-400 tabular-nums"
+        aria-label={t('preview.dimensionSummary')}
+      >
+        W {fd(config.width)} × H {fd(config.height)} × D {fd(config.depth)}
+      </p>
     </div>
   );
 });

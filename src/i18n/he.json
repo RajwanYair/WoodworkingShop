@@ -205,7 +205,8 @@
     "iso": "תלת-ממד",
     "exportSvg": "ייצוא SVG",
     "exportPng": "ייצוא PNG (2×)",
-    "dimensions": "מידות"
+    "dimensions": "מידות",
+    "dimensionSummary": "מידות הארון ר × ג × ע"
   },
   "pdf": {
     "title": "ייצוא PDF",

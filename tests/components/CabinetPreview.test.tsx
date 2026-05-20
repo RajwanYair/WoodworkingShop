@@ -43,3 +43,46 @@ describe('CabinetPreview — isometric 3D view', () => {
     expect(polyCount + polygons.length).toBeGreaterThanOrEqual(6);
   });
 });
+
+// ── Sprint 76 — W×H×D dimension label strip ────────────────────────────────
+describe('CabinetPreview — dimension label strip (Sprint 76)', () => {
+  beforeEach(() => {
+    useCabinetStore.setState({
+      config: { ...DEFAULT_CONFIG, width: 600, height: 720, depth: 580 },
+      darkMode: false,
+      units: 'metric',
+    });
+  });
+
+  it('renders the dimension summary paragraph', () => {
+    render(<CabinetPreview />);
+    const label = screen.getByRole('paragraph');
+    expect(label).toBeInTheDocument();
+  });
+
+  it('contains all three dimensions: W, H, D', () => {
+    render(<CabinetPreview />);
+    const label = screen.getByRole('paragraph');
+    expect(label.textContent).toMatch(/W/);
+    expect(label.textContent).toMatch(/H/);
+    expect(label.textContent).toMatch(/D/);
+  });
+
+  it('shows the config width value (600 mm)', () => {
+    render(<CabinetPreview />);
+    const label = screen.getByRole('paragraph');
+    expect(label.textContent).toContain('600');
+  });
+
+  it('shows the config height value (720 mm)', () => {
+    render(<CabinetPreview />);
+    const label = screen.getByRole('paragraph');
+    expect(label.textContent).toContain('720');
+  });
+
+  it('shows the config depth value (580 mm)', () => {
+    render(<CabinetPreview />);
+    const label = screen.getByRole('paragraph');
+    expect(label.textContent).toContain('580');
+  });
+});
