@@ -291,7 +291,8 @@
     "importBundleTip": "ייבוא פרוייקטים מרובים מקובץ חבילה",
     "noProjectsToExport": "אין פרוייקטים שמורים לייצוא",
     "exportedAll": "יוייצאו {{count}} פרוייקט",
-    "importedBundle": "יוייבאו {{count}} פרוייקט"
+    "importedBundle": "יוייבאו {{count}} פרוייקט",
+    "manifestIncluded": "החבילה כוללת מפת אימות SHA-256"
   },
   "project": {
     "title": "פרויקט",

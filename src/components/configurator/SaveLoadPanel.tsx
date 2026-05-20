@@ -59,8 +59,9 @@ export function SaveLoadPanel() {
         addToast(t('saves.noProjectsToExport'), 'info');
         return;
       }
-      exportProjectsBundle(projects);
-      addToast(t('saves.exportedAll', { count: projects.length }), 'success');
+      void exportProjectsBundle(projects).then(() => {
+        addToast(t('saves.exportedAll', { count: projects.length }), 'success');
+      });
     });
   };
 

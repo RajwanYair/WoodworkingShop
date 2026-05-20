@@ -291,7 +291,8 @@
     "importBundleTip": "Mehrere Projekte aus einer Bundledatei importieren",
     "noProjectsToExport": "Keine gespeicherten Projekte zum Exportieren",
     "exportedAll": "{{count}} Projekt(e) exportiert",
-    "importedBundle": "{{count}} Projekt(e) importiert"
+    "importedBundle": "{{count}} Projekt(e) importiert",
+    "manifestIncluded": "Bundle enthält SHA-256-Integritätsmanifest"
   },
   "project": {
     "title": "Projekt",

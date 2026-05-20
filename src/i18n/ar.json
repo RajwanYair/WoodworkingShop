@@ -291,7 +291,8 @@
     "importBundleTip": "استيراد مشاريع متعددة من ملف حزمة",
     "noProjectsToExport": "لا توجد مشاريع محفوظة للتصدير",
     "exportedAll": "تم تصدير {{count}} مشروع",
-    "importedBundle": "تم استيراد {{count}} مشروع"
+    "importedBundle": "تم استيراد {{count}} مشروع",
+    "manifestIncluded": "يتضمن الحزمة بيانات سلامة SHA-256"
   },
   "project": {
     "title": "المشروع",

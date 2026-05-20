@@ -291,7 +291,8 @@
     "importBundleTip": "Import multiple projects from a bundle file",
     "noProjectsToExport": "No saved projects to export",
     "exportedAll": "Exported {{count}} project(s)",
-    "importedBundle": "Imported {{count}} project(s)"
+    "importedBundle": "Imported {{count}} project(s)",
+    "manifestIncluded": "Bundle includes SHA-256 integrity manifest"
   },
   "project": {
     "title": "Project",

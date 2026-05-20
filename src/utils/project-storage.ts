@@ -117,10 +117,28 @@ export async function importProjectJson(file: File): Promise<SavedProject> {
 }
 
 /** Export multiple projects as a single `.cabinet-projects.json` bundle */
-export function exportProjectsBundle(projects: SavedProject[]): void {
+export async function exportProjectsBundle(projects: SavedProject[]): Promise<void> {
+  // Sprint 10 — build individual file JSON strings and compute SHA-256 manifests
+  const fileEntries = projects.map((p) => {
+    const content = JSON.stringify(p, null, 2);
+    return { name: `${p.name.replace(/[^a-zA-Z0-9_-]/g, '_')}.cabinet-project.json`, content, project: p };
+  });
+
+  const manifest = await Promise.all(
+    fileEntries.map(async (f) => {
+      const encoded = new TextEncoder().encode(f.content);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', encoded);
+      const hashHex = Array.from(new Uint8Array(hashBuffer))
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join('');
+      return { name: f.name, size: encoded.byteLength, sha256: hashHex };
+    }),
+  );
+
   const payload = {
     version: 1,
     exportedAt: new Date().toISOString(),
+    manifest,
     projects,
   };
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
