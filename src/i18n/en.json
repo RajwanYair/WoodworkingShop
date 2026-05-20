@@ -387,6 +387,8 @@
     "allStepsDone": "All steps complete — your cabinet is built!",
     "estimatedTime": "Estimated time",
     "minutes": "min",
+    "totalWeight": "Total weight",
+    "kg": "kg",
     "riskLabel": "Risk level",
     "risk": {
       "low": "Low risk",

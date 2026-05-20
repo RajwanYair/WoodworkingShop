@@ -387,6 +387,8 @@
     "allStepsDone": "¡Todos los pasos completos — su armario está construido!",
     "estimatedTime": "Tiempo estimado",
     "minutes": "min",
+    "totalWeight": "Peso total",
+    "kg": "kg",
     "riskLabel": "Nivel de riesgo",
     "risk": {
       "low": "Riesgo bajo",

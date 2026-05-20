@@ -386,6 +386,8 @@
     "allStepsDone": "כל השלבים הושלמו — הארון שלך מוכן!",
     "estimatedTime": "זמן משוער",
     "minutes": "דק'",
+    "totalWeight": "משקל כולל",
+    "kg": "ק״ג",
     "riskLabel": "רמת סיכון",
     "risk": {
       "low": "סיכון נמוך",

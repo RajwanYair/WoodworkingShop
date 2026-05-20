@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { useCustomMaterialsStore } from '../../store/custom-materials-store';
+import { computePartWeightKg, getMaterial } from '../../engine/materials';
 import type { AssemblyStep } from '../../engine/assembly';
 import type { Lang, Part, HardwareItem } from '../../engine/types';
 import { triggerDownload } from '../../utils/download';
@@ -34,6 +36,14 @@ export function AssemblyGuide() {
   const resetProgress = () => setCompletedSteps(new Set());
   const totalMinutes = steps.reduce((sum, s) => sum + s.estimatedMinutes, 0);
 
+  // Sprint 18 — total assembly weight (sum of all parts' computed weights).
+  const customMaterials = useCustomMaterialsStore((s) => s.materials);
+  const totalWeightKg = parts.reduce((sum, p) => {
+    const mat = getMaterial(p.material, customMaterials);
+    const density = mat.densityKgM3 ?? 0;
+    return sum + computePartWeightKg(p.length, p.width, p.thickness, p.qty, density);
+  }, 0);
+
   /** Sprint 78 — generate plain-text assembly checklist and trigger download. */
   const downloadChecklist = () => {
     const lines: string[] = [
@@ -60,6 +70,10 @@ export function AssemblyGuide() {
           {/* Sprint 64 — total estimated time */}
           <span className="ms-2 text-xs font-normal text-wood-400 dark:text-wood-500">
             · {t('assembly.estimatedTime')}: {totalMinutes} {t('assembly.minutes')}
+          </span>
+          {/* Sprint 18 — total assembly weight */}
+          <span className="ms-2 text-xs font-normal text-wood-400 dark:text-wood-500">
+            · {t('assembly.totalWeight')}: {totalWeightKg.toFixed(1)} {t('assembly.kg')}
           </span>
         </h2>
         <div className="flex items-center gap-2">
