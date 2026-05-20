@@ -404,4 +404,49 @@ describe('cabinet-store', () => {
       expect(useCabinetStore.getState().sheetSizeOverrides['mdf18']).toBeUndefined();
     });
   });
+
+  describe('moveCabinet — Sprint 61', () => {
+    beforeEach(() => {
+      // Set up 3 cabinets: A, B, C
+      useCabinetStore.getState().addCabinet();
+      useCabinetStore.getState().renameCabinet(1, 'Cabinet B');
+      useCabinetStore.getState().addCabinet();
+      useCabinetStore.getState().renameCabinet(2, 'Cabinet C');
+      useCabinetStore.getState().setActiveCabinet(0);
+      useCabinetStore.getState().renameCabinet(0, 'Cabinet A');
+    });
+
+    it('moves cabinet down: swaps index 0 and index 1', () => {
+      useCabinetStore.getState().moveCabinet(0, 'down');
+      const names = useCabinetStore.getState().cabinets.map((c) => c.name);
+      expect(names[0]).toBe('Cabinet B');
+      expect(names[1]).toBe('Cabinet A');
+    });
+
+    it('moves cabinet up: swaps index 1 and index 0', () => {
+      useCabinetStore.getState().moveCabinet(1, 'up');
+      const names = useCabinetStore.getState().cabinets.map((c) => c.name);
+      expect(names[0]).toBe('Cabinet B');
+      expect(names[1]).toBe('Cabinet A');
+    });
+
+    it('active cabinet index follows the moved cabinet', () => {
+      useCabinetStore.getState().setActiveCabinet(0);
+      useCabinetStore.getState().moveCabinet(0, 'down');
+      expect(useCabinetStore.getState().activeCabinetIndex).toBe(1);
+    });
+
+    it('ignores move up on first cabinet', () => {
+      const before = useCabinetStore.getState().cabinets.map((c) => c.name);
+      useCabinetStore.getState().moveCabinet(0, 'up');
+      expect(useCabinetStore.getState().cabinets.map((c) => c.name)).toEqual(before);
+    });
+
+    it('ignores move down on last cabinet', () => {
+      const count = useCabinetStore.getState().cabinets.length;
+      const before = useCabinetStore.getState().cabinets.map((c) => c.name);
+      useCabinetStore.getState().moveCabinet(count - 1, 'down');
+      expect(useCabinetStore.getState().cabinets.map((c) => c.name)).toEqual(before);
+    });
+  });
 });

@@ -10,6 +10,7 @@ export function CabinetSelector() {
     addCabinet,
     removeCabinet,
     duplicateCabinet,
+    moveCabinet,
     setActiveCabinet,
     renameCabinet,
     setNotes,
@@ -89,6 +90,27 @@ export function CabinetSelector() {
             >
               ⧉
             </button>
+            {/* Sprint 61 — move up / move down */}
+            {cabinets.length > 1 && i > 0 && (
+              <button
+                onClick={() => moveCabinet(i, 'up')}
+                className="text-wood-400 hover:text-wood-600 dark:hover:text-wood-200 text-xs leading-none"
+                title={t('project.moveUp')}
+                aria-label={`${t('project.moveUp')}: ${cab.name}`}
+              >
+                ▲
+              </button>
+            )}
+            {cabinets.length > 1 && i < cabinets.length - 1 && (
+              <button
+                onClick={() => moveCabinet(i, 'down')}
+                className="text-wood-400 hover:text-wood-600 dark:hover:text-wood-200 text-xs leading-none"
+                title={t('project.moveDown')}
+                aria-label={`${t('project.moveDown')}: ${cab.name}`}
+              >
+                ▼
+              </button>
+            )}
           </div>
         ))}
       </div>

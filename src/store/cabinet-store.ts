@@ -366,6 +366,8 @@ export interface CabinetState {
   addCabinet: () => void;
   removeCabinet: (index: number) => void;
   duplicateCabinet: (index: number) => void;
+  /** Sprint 61 — swap cabinet at `index` one position up or down in the project list. */
+  moveCabinet: (index: number, direction: 'up' | 'down') => void;
   setActiveCabinet: (index: number) => void;
   renameCabinet: (index: number, name: string) => void;
   setNotes: (index: number, notes: string) => void;
@@ -678,6 +680,38 @@ export const useCabinetStore = create<CabinetState>((set) => {
         return {
           cabinets,
           activeCabinetIndex: newIndex,
+          ...base,
+          optimizationPending: true,
+          costPending: true,
+          assemblyPending: true,
+          _past: past,
+          _future: [],
+          canUndo: true,
+          canRedo: false,
+        };
+      }),
+
+    // Sprint 61 — reorder cabinets within the project list
+    moveCabinet: (index, direction) =>
+      set((state) => {
+        const targetIndex = direction === 'up' ? index - 1 : index + 1;
+        if (targetIndex < 0 || targetIndex >= state.cabinets.length) return state;
+        const cabinets = [...state.cabinets];
+        [cabinets[index], cabinets[targetIndex]] = [cabinets[targetIndex], cabinets[index]];
+        // Keep active index pointing at the moved cabinet
+        const newActive =
+          state.activeCabinetIndex === index
+            ? targetIndex
+            : state.activeCabinetIndex === targetIndex
+              ? index
+              : state.activeCabinetIndex;
+        const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
+        const base = deriveBaseProject(cabinets, newActive);
+        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
+        scheduleAssembly(base.config);
+        return {
+          cabinets,
+          activeCabinetIndex: newActive,
           ...base,
           optimizationPending: true,
           costPending: true,

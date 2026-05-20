@@ -283,6 +283,8 @@
     "add": "Add Cabinet",
     "remove": "Remove",
     "duplicate": "Duplicate cabinet",
+    "moveUp": "Move cabinet up",
+    "moveDown": "Move cabinet down",
     "hint": "Multiple cabinets share optimized cut sheets. Double-click to rename.",
     "notes": "Notes",
     "notesPlaceholder": "Optional notes for this cabinet…"
