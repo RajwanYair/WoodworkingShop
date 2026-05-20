@@ -543,5 +543,18 @@
   "swUpdate": {
     "available": "Une nouvelle version est disponible !",
     "reload": "Recharger"
+  },
+  "gcodeValidator": {
+    "title": "Validation G-code",
+    "valid": "Le G-code semble correct — aucune erreur détectée.",
+    "errors_one": "{{count}} erreur",
+    "errors_other": "{{count}} erreurs",
+    "warnings_one": "{{count}} avertissement",
+    "warnings_other": "{{count}} avertissements",
+    "infos_one": "{{count}} note",
+    "infos_other": "{{count}} notes",
+    "lineRef": "Ligne {{line}}",
+    "fileLevel": "Niveau fichier",
+    "dismiss": "Fermer"
   }
 }

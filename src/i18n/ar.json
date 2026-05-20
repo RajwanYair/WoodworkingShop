@@ -543,5 +543,18 @@
   "swUpdate": {
     "available": "يتوفر إصدار جديد!",
     "reload": "إعادة تحميل"
+  },
+  "gcodeValidator": {
+    "title": "التحقق من G-code",
+    "valid": "يبدو G-code صحيحاً — لا توجد أخطاء.",
+    "errors_one": "{{count}} خطأ",
+    "errors_other": "{{count}} أخطاء",
+    "warnings_one": "{{count}} تحذير",
+    "warnings_other": "{{count}} تحذيرات",
+    "infos_one": "{{count}} ملاحظة",
+    "infos_other": "{{count}} ملاحظات",
+    "lineRef": "سطر {{line}}",
+    "fileLevel": "مستوى الملف",
+    "dismiss": "إغلاق"
   }
 }

@@ -1,5 +1,6 @@
 import type { CutSheet, CutRect } from '../engine/types';
 import { triggerDownload } from './download';
+import { validateGcode, type GcodeValidationResult } from '../engine/gcode-validator';
 
 /**
  * Generate basic G-code for a CNC router to cut parts from a sheet.
@@ -101,10 +102,16 @@ function addPartProfile(lines: string[], part: CutRect, opts: GcodeOptions, offs
   lines.push(`G0 Z${opts.safeZ.toFixed(1)}`);
 }
 
-/** Trigger G-code download for a single sheet */
-export function downloadGcodeForSheet(sheet: CutSheet, filename: string, opts?: Partial<GcodeOptions>) {
+/** Trigger G-code download for a single sheet. Returns validation results. */
+export function downloadGcodeForSheet(
+  sheet: CutSheet,
+  filename: string,
+  opts?: Partial<GcodeOptions>,
+): GcodeValidationResult {
   const content = cutSheetToGcode(sheet, opts);
+  const validation = validateGcode(content);
   triggerDownload(content, 'text/plain', filename);
+  return validation;
 }
 
 /** Download G-code for all sheets as separate files (zipped in a single combined file) */
