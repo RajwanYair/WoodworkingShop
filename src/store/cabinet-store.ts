@@ -17,6 +17,7 @@ import CostEstimatorWorker from '../workers/cost-estimator.worker?worker';
 import type { CostEstimatorWorkerOutput } from '../workers/cost-estimator.worker';
 import AssemblyWorker from '../workers/assembly.worker?worker';
 import type { AssemblyWorkerOutput } from '../workers/assembly.worker';
+import { pluginEventBus } from '../engine/plugin';
 
 // v3.21.0 — Module-level Web Worker singleton for cut optimization.
 // Kept outside Zustand state to avoid serialization. The worker result
@@ -42,6 +43,11 @@ function getCutOptWorker(): Worker | null {
           combinedOptimization: msg.combinedResult,
           optimizationPending: false,
           costPending: true,
+        });
+        // Sprint 20 — notify plugins that optimization completed.
+        pluginEventBus.emit('optimization:complete', {
+          sheetCount: msg.activeResult.sheets.length,
+          yieldPercent: msg.activeResult.overallYield,
         });
         scheduleCostFromState(useCabinetStore.getState(), msg.activeResult);
       } else {
@@ -564,6 +570,8 @@ export const useCabinetStore = create<CabinetState>((set) => {
           i === state.activeCabinetIndex ? { ...cab, config: { ...cab.config, ...patch } } : cab,
         );
         pushConfigToUrl(cabinets[state.activeCabinetIndex].config);
+        // Sprint 20 — notify plugins that config changed.
+        pluginEventBus.emit('config:change', { config: cabinets[state.activeCabinetIndex].config });
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         const base = deriveBaseProject(cabinets, state.activeCabinetIndex);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
@@ -831,6 +839,8 @@ export const useCabinetStore = create<CabinetState>((set) => {
         }
         // Update module-level map BEFORE scheduling so the optimizer sees fresh locks.
         _rotationLocks = next;
+        // Sprint 20 — notify plugins.
+        pluginEventBus.emit('part:rotation-lock', { partId, locked: next[partId] === true });
         const base = deriveBaseProject(state.cabinets, state.activeCabinetIndex);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         return { rotationLockedPartIds: next, ...base, optimizationPending: true };

@@ -218,3 +218,85 @@ export function runWithSandbox<T>(fn: () => T, fallback: T, opts: SandboxOptions
   }
   return result;
 }
+
+// ───────────────────────────────────────────────────────────────────────────
+// Sprint 20 — Plugin Event Bus
+// ───────────────────────────────────────────────────────────────────────────
+
+/**
+ * Sprint 20 — strongly-typed payloads emitted by the plugin event bus.
+ *
+ * Plugins subscribe via {@link pluginEventBus}.on(event, handler) and receive
+ * the payload type associated with that event. Add new event entries here
+ * when wiring a new emit site.
+ */
+export interface PluginEventMap {
+  /** Cabinet configuration changed (any field). */
+  'config:change': { config: CabinetConfig };
+  /** Cut-optimization run completed. */
+  'optimization:complete': { sheetCount: number; yieldPercent: number };
+  /** A project session was saved (auto-save or explicit). */
+  'project:save': { projectName: string };
+  /** A part's rotation lock was toggled (Sprint 16 + 20). */
+  'part:rotation-lock': { partId: string; locked: boolean };
+}
+
+export type PluginEventName = keyof PluginEventMap;
+export type PluginEventHandler<E extends PluginEventName> = (payload: PluginEventMap[E]) => void;
+
+/**
+ * Sprint 20 — lightweight publish/subscribe event bus for the plugin API.
+ *
+ * Engine and store code can `emit()` named events; plugins (and other
+ * subscribers) call `on()` to react. Each handler runs inside a try/catch so a
+ * faulty subscriber cannot break the application.
+ *
+ * The bus is intentionally synchronous: handlers run on the emitter's tick.
+ * Keep handlers fast; for slow work, defer with `queueMicrotask` or
+ * `setTimeout`.
+ */
+export class PluginEventBus {
+  private readonly handlers: Map<PluginEventName, Set<(payload: unknown) => void>> = new Map();
+
+  /** Register a handler for `event`. Returns an `off` function for convenience. */
+  on<E extends PluginEventName>(event: E, handler: PluginEventHandler<E>): () => void {
+    let set = this.handlers.get(event);
+    if (!set) {
+      set = new Set<(payload: unknown) => void>();
+      this.handlers.set(event, set);
+    }
+    set.add(handler as (payload: unknown) => void);
+    return () => this.off(event, handler);
+  }
+
+  /** Remove a handler previously registered with `on`. No-op if not present. */
+  off<E extends PluginEventName>(event: E, handler: PluginEventHandler<E>): void {
+    this.handlers.get(event)?.delete(handler as (payload: unknown) => void);
+  }
+
+  /**
+   * Fire `event` with the given payload. Handlers run in registration order.
+   * A thrown handler is caught and reported via `console.error` so it cannot
+   * abort sibling handlers or the calling code.
+   */
+  emit<E extends PluginEventName>(event: E, payload: PluginEventMap[E]): void {
+    const set = this.handlers.get(event);
+    if (!set) return;
+    for (const handler of set) {
+      try {
+        handler(payload);
+      } catch (err) {
+        console.error(`[pluginEventBus] handler for "${event}" threw:`, err);
+      }
+    }
+  }
+
+  /** Remove all handlers (testing utility). */
+  clear(): void {
+    this.handlers.clear();
+  }
+}
+
+/** Process-wide singleton plugin event bus. */
+export const pluginEventBus = new PluginEventBus();
+

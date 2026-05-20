@@ -127,7 +127,7 @@ export function OptimizerView() {
       useToastStore.getState().addToast(t('toast.bomExported'), 'success');
       setBomExporting(false);
     }
-  }, [bomExporting, cabinets, filePrefix, lang, t]);
+  }, [bomExporting, cabinets, filePrefix, lang, t, i18n.language]);
 
   /** Worker-based DXF all-sheets export (v3.22.0) */
   const handleDxfExportWorker = useCallback(() => {
