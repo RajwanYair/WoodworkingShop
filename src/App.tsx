@@ -168,7 +168,7 @@ function App() {
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [t]);
+  }, [t, i18n.language]);
 
   return (
     <div

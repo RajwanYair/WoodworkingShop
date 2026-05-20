@@ -48,7 +48,7 @@ describe('CabinetPreview — isometric 3D view', () => {
 describe('CabinetPreview — dimension label strip (Sprint 76)', () => {
   beforeEach(() => {
     useCabinetStore.setState({
-      config: { ...DEFAULT_CONFIG, width: 600, height: 720, depth: 580, doorCount: 0, drawerCount: 0 },
+      config: { ...DEFAULT_CONFIG, width: 600, height: 720, depth: 580, doorStyle: 'none', drawerCount: 0 },
       darkMode: false,
       units: 'metric',
     });
@@ -101,7 +101,7 @@ describe('CabinetPreview — door/drawer count pills (Sprint 89)', () => {
 
   it('shows drawer count pill when drawerCount > 0', () => {
     useCabinetStore.setState({
-      config: { ...DEFAULT_CONFIG, doorCount: 0, drawerCount: 3 },
+      config: { ...DEFAULT_CONFIG, doorStyle: 'none', drawerCount: 3 },
       darkMode: false,
       units: 'metric',
     });
@@ -122,7 +122,7 @@ describe('CabinetPreview — door/drawer count pills (Sprint 89)', () => {
 
   it('hides pills when both counts are 0', () => {
     useCabinetStore.setState({
-      config: { ...DEFAULT_CONFIG, doorCount: 0, drawerCount: 0 },
+      config: { ...DEFAULT_CONFIG, doorStyle: 'none', drawerCount: 0 },
       darkMode: false,
       units: 'metric',
     });

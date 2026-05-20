@@ -2,7 +2,7 @@
  * Sprint 66 — Ctrl+R keyboard shortcut resets cabinet config to defaults.
  */
 
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
 import App from '../../src/App';
 import { useCabinetStore } from '../../src/store/cabinet-store';
@@ -39,9 +39,7 @@ describe('Ctrl+R reset shortcut — Sprint 66', () => {
   it('Ctrl+R resets a modified config back to defaults', () => {
     useCabinetStore.getState().setConfig({ width: 1800 });
     render(<App />);
-    act(() => {
-      fireEvent.keyDown(window, { key: 'r', ctrlKey: true });
-    });
+    fireEvent.keyDown(window, { key: 'r', ctrlKey: true });
     const { config } = useCabinetStore.getState();
     expect(config.width).toBe(DEFAULT_CONFIG.width);
   });
@@ -49,18 +47,14 @@ describe('Ctrl+R reset shortcut — Sprint 66', () => {
   it('Ctrl+R with capital R also resets', () => {
     useCabinetStore.getState().setConfig({ width: 1800 });
     render(<App />);
-    act(() => {
-      fireEvent.keyDown(window, { key: 'R', ctrlKey: true });
-    });
+    fireEvent.keyDown(window, { key: 'R', ctrlKey: true });
     expect(useCabinetStore.getState().config.width).toBe(DEFAULT_CONFIG.width);
   });
 
   it('Ctrl+R entry appears in ShortcutsModal', () => {
     render(<App />);
     // Open shortcuts modal with ?
-    act(() => {
-      fireEvent.keyDown(window, { key: '?' });
-    });
+    fireEvent.keyDown(window, { key: '?' });
     // The modal should list Ctrl + R
     expect(screen.getByText('Ctrl + R')).toBeInTheDocument();
   });

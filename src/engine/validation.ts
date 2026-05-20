@@ -716,7 +716,7 @@ export function validateConfig(
   // ── Depth too shallow for door hinges (Sprint 75) ─────────────────────────
 
   const MIN_DEPTH_FOR_DOORS_MM = 250;
-  if ((config.doorCount ?? 0) > 0 && config.depth < MIN_DEPTH_FOR_DOORS_MM) {
+  if (config.doorStyle !== 'none' && config.depth < MIN_DEPTH_FOR_DOORS_MM) {
     issues.push({
       code: 'DEPTH_TOO_SHALLOW_FOR_DOORS',
       severity: 'warning',

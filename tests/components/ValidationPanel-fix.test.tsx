@@ -3,7 +3,7 @@
  */
 
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { ValidationPanel } from '../../src/components/configurator/ValidationPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import type { ValidationIssue } from '../../src/engine/types';

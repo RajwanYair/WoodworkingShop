@@ -56,7 +56,7 @@ describe('ProjectSummaryPanel (Sprint 53)', () => {
   it('returns null for single-cabinet project', () => {
     seedSingle();
     const { container } = render(<ProjectSummaryPanel />);
-    expect(container.firstChild).toBeNull();
+    expect(container).toBeEmptyDOMElement();
   });
 
   it('renders summary section for multi-cabinet project', () => {
@@ -109,8 +109,24 @@ describe('ProjectSummaryPanel — avg sheet yield (Sprint 79)', () => {
       allParts: [],
       combinedOptimization: {
         sheets: [
-          { ...({} as never), yieldPercent: 80 },
-          { ...({} as never), yieldPercent: 60 },
+          {
+            sheetIndex: 0,
+            material: 'plywood-17',
+            thickness: 17,
+            sheetLength: 2440,
+            sheetWidth: 1220,
+            parts: [],
+            yieldPercent: 80,
+          },
+          {
+            sheetIndex: 1,
+            material: 'plywood-17',
+            thickness: 17,
+            sheetLength: 2440,
+            sheetWidth: 1220,
+            parts: [],
+            yieldPercent: 60,
+          },
         ],
         totalSheets: 2,
         overallYield: 70,
@@ -132,8 +148,24 @@ describe('ProjectSummaryPanel — avg sheet yield (Sprint 79)', () => {
       allParts: [],
       combinedOptimization: {
         sheets: [
-          { ...({} as never), yieldPercent: 80 },
-          { ...({} as never), yieldPercent: 60 },
+          {
+            sheetIndex: 0,
+            material: 'plywood-17',
+            thickness: 17,
+            sheetLength: 2440,
+            sheetWidth: 1220,
+            parts: [],
+            yieldPercent: 80,
+          },
+          {
+            sheetIndex: 1,
+            material: 'plywood-17',
+            thickness: 17,
+            sheetLength: 2440,
+            sheetWidth: 1220,
+            parts: [],
+            yieldPercent: 60,
+          },
         ],
         totalSheets: 2,
         overallYield: 70,

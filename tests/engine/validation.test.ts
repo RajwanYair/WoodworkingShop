@@ -666,7 +666,7 @@ describe('validateConfig — DEPTH_TOO_SHALLOW_FOR_DOORS (Sprint 75)', () => {
   });
 
   it('does NOT raise when doorCount is 0', () => {
-    const issues = validateConfig(cfg({ depth: 200, doorCount: 0, doorStyle: 'none' }));
+    const issues = validateConfig(cfg({ depth: 200, doorStyle: 'none' }));
     expect(issues.some((i) => i.code === 'DEPTH_TOO_SHALLOW_FOR_DOORS')).toBe(false);
   });
 

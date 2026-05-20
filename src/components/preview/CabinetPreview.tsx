@@ -671,13 +671,17 @@ export const CabinetPreview = memo(function CabinetPreview() {
         W {fd(config.width)} × H {fd(config.height)} × D {fd(config.depth)}
       </p>
       {/* Sprint 89 — door / drawer count indicator pills */}
-      {(config.doorCount > 0 || config.drawerCount > 0) && (
+      {(config.doorStyle !== 'none' || config.drawerCount > 0) && (
         <p className="text-center text-xs text-wood-400 dark:text-wood-500 flex justify-center gap-2 mt-0.5">
-          {config.doorCount > 0 && (
-            <span>{config.doorCount} {t('preview.doors')}</span>
+          {config.doorStyle !== 'none' && (
+            <span>
+              {config.doorCount} {t('preview.doors')}
+            </span>
           )}
           {config.drawerCount > 0 && (
-            <span>{config.drawerCount} {t('preview.drawers')}</span>
+            <span>
+              {config.drawerCount} {t('preview.drawers')}
+            </span>
           )}
         </p>
       )}

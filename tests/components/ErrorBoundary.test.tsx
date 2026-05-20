@@ -7,7 +7,7 @@
  *  - Button label changes to "Copied!" after a successful copy.
  *  - Error message is displayed in all environments (not just DEV).
  */
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { ErrorBoundary } from '../../src/components/layout/ErrorBoundary';
 
@@ -50,9 +50,7 @@ describe('ErrorBoundary — copy error details (Sprint 54)', () => {
     vi.stubGlobal('navigator', { ...navigator, clipboard: { writeText } });
 
     renderBroken();
-    await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /copy error details/i }));
-    });
+    fireEvent.click(screen.getByRole('button', { name: /copy error details/i }));
 
     expect(writeText).toHaveBeenCalledWith(expect.stringContaining('Test explosion'));
   });
@@ -62,11 +60,9 @@ describe('ErrorBoundary — copy error details (Sprint 54)', () => {
     vi.stubGlobal('navigator', { ...navigator, clipboard: { writeText } });
 
     renderBroken();
-    await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /copy error details/i }));
-    });
+    fireEvent.click(screen.getByRole('button', { name: /copy error details/i }));
 
-    expect(screen.getByRole('button', { name: /copied!/i })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: /copied!/i })).toBeInTheDocument();
   });
 
   it('shows the Retry button and alert role', () => {
