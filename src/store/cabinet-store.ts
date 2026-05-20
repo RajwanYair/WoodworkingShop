@@ -14,10 +14,11 @@ import { idbLoadSnapshots, idbSaveSnapshots } from '../utils/indexed-db-storage'
 import CutOptimizerWorker from '../workers/cut-optimizer.worker?worker';
 import type { CutOptimizerWorkerInput, CutOptimizerWorkerOutput } from '../workers/cut-optimizer.worker';
 import CostEstimatorWorker from '../workers/cost-estimator.worker?worker';
-import type { CostEstimatorWorkerOutput } from '../workers/cost-estimator.worker';
+import type { CostEstimatorWorkerInput, CostEstimatorWorkerOutput } from '../workers/cost-estimator.worker';
 import AssemblyWorker from '../workers/assembly.worker?worker';
-import type { AssemblyWorkerOutput } from '../workers/assembly.worker';
+import type { AssemblyWorkerInput, AssemblyWorkerOutput } from '../workers/assembly.worker';
 import { pluginEventBus } from '../engine/plugin';
+import { workerCall, nextRpcId } from '../workers/worker-rpc';
 
 // v3.21.0 — Module-level Web Worker singleton for cut optimization.
 // Kept outside Zustand state to avoid serialization. The worker result
@@ -26,34 +27,18 @@ let _cutOptWorker: Worker | null = null;
 let _costOptWorker: Worker | null = null;
 let _assemblyWorker: Worker | null = null;
 let _workerApplyFn: ((partial: Partial<CabinetState>) => void) | null = null;
-let _currentReqId = 0;
-let _currentCostReqId = 0;
-let _currentAssemblyReqId = 0;
+// Phase 11 — "latest-wins" sentinels replace the old _currentReqId counters.
+// Each scheduling call sets its sentinel; after the Promise resolves the call
+// compares its id against the sentinel to discard stale results.
+let _latestCutReqId = '';
+let _latestCostReqId = '';
+let _latestAssemblyReqId = '';
 
 function getCutOptWorker(): Worker | null {
   if (typeof Worker === 'undefined') return null;
   if (!_cutOptWorker) {
     _cutOptWorker = new CutOptimizerWorker();
-    _cutOptWorker.onmessage = (e: MessageEvent<CutOptimizerWorkerOutput>) => {
-      const msg = e.data;
-      if (!_workerApplyFn || msg.requestId !== String(_currentReqId)) return; // stale
-      if (msg.type === 'done' && msg.activeResult && msg.combinedResult) {
-        _workerApplyFn({
-          optimization: msg.activeResult,
-          combinedOptimization: msg.combinedResult,
-          optimizationPending: false,
-          costPending: true,
-        });
-        // Sprint 20 — notify plugins that optimization completed.
-        pluginEventBus.emit('optimization:complete', {
-          sheetCount: msg.activeResult.sheets.length,
-          yieldPercent: msg.activeResult.overallYield,
-        });
-        scheduleCostFromState(useCabinetStore.getState(), msg.activeResult);
-      } else {
-        _workerApplyFn({ optimizationPending: false });
-      }
-    };
+    // No onmessage handler — workerCall adds per-request listeners instead.
   }
   return _cutOptWorker;
 }
@@ -62,15 +47,6 @@ function getCostEstimatorWorker(): Worker | null {
   if (typeof Worker === 'undefined') return null;
   if (!_costOptWorker) {
     _costOptWorker = new CostEstimatorWorker();
-    _costOptWorker.onmessage = (e: MessageEvent<CostEstimatorWorkerOutput>) => {
-      const msg = e.data;
-      if (!_workerApplyFn || msg.requestId !== String(_currentCostReqId)) return; // stale
-      if (msg.type === 'done' && msg.cost) {
-        _workerApplyFn({ cost: msg.cost, costPending: false });
-      } else {
-        _workerApplyFn({ costPending: false });
-      }
-    };
   }
   return _costOptWorker;
 }
@@ -79,15 +55,6 @@ function getAssemblyWorker(): Worker | null {
   if (typeof Worker === 'undefined') return null;
   if (!_assemblyWorker) {
     _assemblyWorker = new AssemblyWorker();
-    _assemblyWorker.onmessage = (e: MessageEvent<AssemblyWorkerOutput>) => {
-      const msg = e.data;
-      if (!_workerApplyFn || msg.requestId !== String(_currentAssemblyReqId)) return; // stale
-      if (msg.type === 'done' && msg.steps) {
-        _workerApplyFn({ assemblySteps: msg.steps, assemblyPending: false });
-      } else {
-        _workerApplyFn({ assemblyPending: false });
-      }
-    };
   }
   return _assemblyWorker;
 }
@@ -136,15 +103,35 @@ function scheduleOptimization(
     }
     return;
   }
-  _currentReqId++;
-  const payload: CutOptimizerWorkerInput = {
-    activeParts: lockedActive,
-    allParts: lockedAll,
-    sawKerfMm,
-    sheetSizeOverrides,
-    requestId: String(_currentReqId),
-  };
-  worker.postMessage(payload);
+  const reqId = nextRpcId();
+  _latestCutReqId = reqId;
+  void workerCall<CutOptimizerWorkerInput, CutOptimizerWorkerOutput>(
+    worker,
+    { activeParts: lockedActive, allParts: lockedAll, sawKerfMm, sheetSizeOverrides },
+    reqId,
+  )
+    .then((msg) => {
+      if (!_workerApplyFn || _latestCutReqId !== reqId) return; // stale
+      if (msg.type === 'done' && msg.activeResult && msg.combinedResult) {
+        _workerApplyFn({
+          optimization: msg.activeResult,
+          combinedOptimization: msg.combinedResult,
+          optimizationPending: false,
+          costPending: true,
+        });
+        // Sprint 20 — notify plugins that optimization completed.
+        pluginEventBus.emit('optimization:complete', {
+          sheetCount: msg.activeResult.sheets.length,
+          yieldPercent: msg.activeResult.overallYield,
+        });
+        scheduleCostFromState(useCabinetStore.getState(), msg.activeResult);
+      } else {
+        _workerApplyFn({ optimizationPending: false });
+      }
+    })
+    .catch(() => {
+      _workerApplyFn?.({ optimizationPending: false });
+    });
 }
 
 function scheduleAssembly(config: CabinetConfig): void {
@@ -155,8 +142,20 @@ function scheduleAssembly(config: CabinetConfig): void {
     }
     return;
   }
-  _currentAssemblyReqId++;
-  worker.postMessage({ requestId: String(_currentAssemblyReqId), config });
+  const reqId = nextRpcId();
+  _latestAssemblyReqId = reqId;
+  void workerCall<AssemblyWorkerInput, AssemblyWorkerOutput>(worker, { config }, reqId)
+    .then((msg) => {
+      if (!_workerApplyFn || _latestAssemblyReqId !== reqId) return; // stale
+      if (msg.type === 'done' && msg.steps) {
+        _workerApplyFn({ assemblySteps: msg.steps, assemblyPending: false });
+      } else {
+        _workerApplyFn({ assemblyPending: false });
+      }
+    })
+    .catch(() => {
+      _workerApplyFn?.({ assemblyPending: false });
+    });
 }
 
 function scheduleCost(
@@ -190,19 +189,34 @@ function scheduleCost(
     }
     return;
   }
-  _currentCostReqId++;
-  worker.postMessage({
-    requestId: String(_currentCostReqId),
-    optimization,
-    hardware,
-    edgeBandingTotal,
-    materialPriceOverrides,
-    edgeBandingRate,
-    hardwarePriceOverrides,
-    labourRate,
-    labourHours,
-    finishCost,
-  });
+  const reqId = nextRpcId();
+  _latestCostReqId = reqId;
+  void workerCall<CostEstimatorWorkerInput, CostEstimatorWorkerOutput>(
+    worker,
+    {
+      optimization,
+      hardware,
+      edgeBandingTotal,
+      materialPriceOverrides,
+      edgeBandingRate,
+      hardwarePriceOverrides,
+      labourRate,
+      labourHours,
+      finishCost,
+    },
+    reqId,
+  )
+    .then((msg) => {
+      if (!_workerApplyFn || _latestCostReqId !== reqId) return; // stale
+      if (msg.type === 'done' && msg.cost) {
+        _workerApplyFn({ cost: msg.cost, costPending: false });
+      } else {
+        _workerApplyFn({ costPending: false });
+      }
+    })
+    .catch(() => {
+      _workerApplyFn?.({ costPending: false });
+    });
 }
 
 function scheduleCostFromState(
