@@ -354,3 +354,50 @@ describe('generateBomCsv — Sprint 73 sequential row numbers', () => {
   });
 });
 
+
+// ── Sprint 87 — area (m²) column in BOM CSV parts ────────────────────────────
+describe('BOM CSV — area (m²) column (Sprint 87)', () => {
+  it('parts header contains "Area (m²)" column', () => {
+    const csv = generateBomCsv(singleCabinet, 'en');
+    const partsHeader = csv.split('\n').find((l) => l.startsWith('#,Cabinet,Part ID'));
+    expect(partsHeader).toContain('Area');
+  });
+
+  it('area value is a numeric string with 6 decimal places', () => {
+    const csv = generateBomCsv(singleCabinet, 'en');
+    const lines = csv.split('\n').filter(Boolean);
+    const headerIdx = lines.findIndex((l) => l.startsWith('#,Cabinet,Part ID'));
+    const firstDataRow = lines.slice(headerIdx + 1).find((l) => l.trim() !== '' && !l.startsWith('#'))!;
+    const cols = firstDataRow.split(',');
+    // Area (m²) is column index 9
+    expect(cols[9]).toMatch(/^\d+\.\d{6}$/);
+    expect(isNaN(parseFloat(cols[9]))).toBe(false);
+  });
+
+  it('area value matches length * width * qty / 1_000_000', () => {
+    const csv = generateBomCsv(singleCabinet, 'en');
+    const lines = csv.split('\n').filter(Boolean);
+    const headerIdx = lines.findIndex((l) => l.startsWith('#,Cabinet,Part ID'));
+    const firstDataRow = lines.slice(headerIdx + 1).find((l) => l.trim() !== '' && !l.startsWith('#'))!;
+    const cols = firstDataRow.split(',');
+    const expected = (mockPart.length * mockPart.width * mockPart.qty / 1_000_000).toFixed(6);
+    expect(cols[9]).toBe(expected);
+  });
+
+  it('area column is present in multi-cabinet BOM for each part row', () => {
+    const part2: Part = { ...mockPart, id: 'P02', name: { en: 'Back Panel', he: 'לוח אחורי' } };
+    const multiCabs = [
+      { name: 'Upper', parts: [mockPart], hardware: [] },
+      { name: 'Lower', parts: [part2], hardware: [] },
+    ];
+    const csv = generateBomCsv(multiCabs, 'en');
+    const lines = csv.split('\n').filter(Boolean);
+    const headerIdx = lines.findIndex((l) => l.startsWith('#,Cabinet,Part ID'));
+    const hwHeaderIdx = lines.findIndex((l) => l.startsWith('#,Cabinet,Hardware ID'));
+    const dataRows = lines.slice(headerIdx + 1, hwHeaderIdx).filter((l) => !l.startsWith('#') && l.trim().length > 0);
+    for (const row of dataRows) {
+      const cols = row.split(',');
+      expect(isNaN(parseFloat(cols[9]))).toBe(false);
+    }
+  });
+});

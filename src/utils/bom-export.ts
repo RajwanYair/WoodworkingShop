@@ -52,7 +52,7 @@ export function generateBomCsv(
 
   // Header
   rows.push(
-    '#,Cabinet,Part ID,Part Name,Qty,Material,Thickness (mm),Length (mm),Width (mm),Edge Banding,Weight (kg),Grain Direction',
+    '#,Cabinet,Part ID,Part Name,Qty,Material,Thickness (mm),Length (mm),Width (mm),Area (m²),Edge Banding,Weight (kg),Grain Direction',
   );
 
   const isMultiCabinet = cabinets.length > 1;
@@ -84,6 +84,8 @@ export function generateBomCsv(
       // Sprint 20 — prefix Part ID with cabinet index in multi-cabinet BOMs
       const partId = isMultiCabinet ? `C${cabIdx + 1}-${p.id}` : p.id;
       partRowNum += 1;
+      // Sprint 87 — part face area in m²
+      const partArea = (p.length * p.width * p.qty / 1_000_000).toFixed(6);
       rows.push(
         csvRow([
           String(partRowNum),
@@ -95,6 +97,7 @@ export function generateBomCsv(
           String(p.thickness),
           String(p.length),
           String(p.width),
+          partArea,
           p.edgeBanding[lang],
           partWeight,
           grainDir,
