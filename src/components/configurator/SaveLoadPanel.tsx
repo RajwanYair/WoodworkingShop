@@ -14,7 +14,7 @@ interface ProjectExport {
 
 export function SaveLoadPanel() {
   const { t } = useTranslation();
-  const { config, setConfig, projectName, setProjectName } = useCabinetStore();
+  const { config, setConfig, projectName, setProjectName, projectNotes, setProjectNotes } = useCabinetStore();
   const loadProject = useCabinetStore((s) => s.loadProject);
   const addToast = useToastStore((s) => s.addToast);
   const [configs, setConfigs] = useState<SavedConfig[]>([]);
@@ -164,6 +164,22 @@ export function SaveLoadPanel() {
           className="w-full rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-wood-400 text-wood-800 dark:text-wood-100"
           maxLength={80}
           aria-label={t('saves.projectName')}
+        />
+      </div>
+      {/* Sprint 14 — project notes */}
+      <div>
+        <label className="block text-xs font-semibold text-wood-700 dark:text-wood-200 mb-1" htmlFor="project-notes">
+          {t('saves.projectNotes')}
+        </label>
+        <textarea
+          id="project-notes"
+          value={projectNotes}
+          onChange={(e) => setProjectNotes(e.target.value)}
+          placeholder={t('saves.projectNotesPlaceholder')}
+          rows={3}
+          className="w-full rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-wood-400 text-wood-800 dark:text-wood-100 resize-y"
+          maxLength={1000}
+          aria-label={t('saves.projectNotes')}
         />
       </div>
       <div className="flex items-center justify-between">

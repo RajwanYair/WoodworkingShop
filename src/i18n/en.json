@@ -285,6 +285,8 @@
     "title": "My Saved Cabinets",
     "projectName": "Project Name",
     "projectNamePlaceholder": "e.g. Kitchen Renovation 2025",
+    "projectNotes": "Project Notes",
+    "projectNotesPlaceholder": "Add notes, client details, special instructions…",
     "save": "Save",
     "load": "Load",
     "delete": "Delete",

@@ -285,6 +285,8 @@
     "title": "Mis armarios guardados",
     "projectName": "Nombre del proyecto",
     "projectNamePlaceholder": "p. ej. Reforma de cocina 2025",
+    "projectNotes": "Notas del proyecto",
+    "projectNotesPlaceholder": "A\u00f1ada notas, datos del cliente, instrucciones especiales\u2026",
     "save": "Guardar",
     "load": "Cargar",
     "delete": "Eliminar",

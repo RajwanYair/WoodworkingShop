@@ -241,6 +241,8 @@ interface SessionSnapshot {
   cabinets: CabinetEntry[];
   activeCabinetIndex: number;
   projectName: string;
+  /** Sprint 14 — project-level notes, optional so old sessions deserialise safely. */
+  projectNotes?: string;
   sawKerf: number;
   materialPriceOverrides: Record<string, number>;
   edgeBandingRate: number;
@@ -339,6 +341,8 @@ export interface CabinetState {
   // UI state
   activeTab: 'configurator' | 'preview' | 'optimizer' | 'assembly' | 'pdf';
   projectName: string; // Sprint 152
+  /** Sprint 14 — project-level free-text notes shown in PDF/BOM exports. */
+  projectNotes: string;
   darkMode: boolean;
   colorBlindMode: boolean;
   highContrastMode: boolean; // v3.12.0
@@ -381,6 +385,7 @@ export interface CabinetState {
   setLabourHours: (hours: number) => void; // v3.23.0
   setFinishCost: (cost: number) => void; // v3.23.0
   setProjectName: (name: string) => void;
+  setProjectNotes: (notes: string) => void;
   loadProject: (cabinets: CabinetEntry[]) => void;
   /** v3.18.0 — Replace every occurrence of fromKey with toKey across all cabinets (undoable). */
   bulkReplaceMaterial: (fromKey: string, toKey: string) => void;
@@ -489,6 +494,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
     canRedo: false,
     activeTab: 'configurator',
     projectName: session?.projectName || readProjectNameFromUrl(),
+    projectNotes: session?.projectNotes ?? '',
     // Sprint 124 — fall back to OS preference when no saved pref exists
     darkMode: prefs.darkMode ?? detectOsDarkMode(),
     colorBlindMode: prefs.colorBlindMode ?? false,
@@ -780,6 +786,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
       set({ projectName: name });
       pushProjectNameToUrl(name); // Sprint 157
     },
+    setProjectNotes: (notes) => set({ projectNotes: notes }),
     setSawKerf: (mm) =>
       set((state) => {
         const sawKerf = Math.max(0, Math.min(8, mm));
@@ -974,6 +981,7 @@ useCabinetStore.subscribe((state) => {
       cabinets: state.cabinets,
       activeCabinetIndex: state.activeCabinetIndex,
       projectName: state.projectName,
+      projectNotes: state.projectNotes,
       sawKerf: state.sawKerf,
       materialPriceOverrides: state.materialPriceOverrides,
       edgeBandingRate: state.edgeBandingRate,

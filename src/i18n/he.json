@@ -284,8 +284,8 @@
   "saves": {
     "title": "הארונות שלי",
     "projectName": "שם פרויקט",
-    "projectNamePlaceholder": "לדוגמא: שיפוץ מטבח 2025",
-    "save": "שמור",
+    "projectNamePlaceholder": "לדוגמא: שיפוץ מטבח 2025",    "projectNotes": "הערות פרוייקט",
+    "projectNotesPlaceholder": "הוסף הערות, פרטי לקוח, הוראות מיוחדות…",    "save": "שמור",
     "load": "טען",
     "delete": "מחק",
     "placeholder": "שם הארון…",

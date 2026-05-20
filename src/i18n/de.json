@@ -284,8 +284,8 @@
   "saves": {
     "title": "Meine gespeicherten Schränke",
     "projectName": "Projektname",
-    "projectNamePlaceholder": "z. B. Küchenrenovierung 2025",
-    "save": "Speichern",
+    "projectNamePlaceholder": "z. B. Küchenrenovierung 2025",    "projectNotes": "Projektnotizen",
+    "projectNotesPlaceholder": "Notizen, Kundendaten, Sonderanweisungen hinzufügen…",    "save": "Speichern",
     "load": "Laden",
     "delete": "Löschen",
     "placeholder": "Schrankname…",

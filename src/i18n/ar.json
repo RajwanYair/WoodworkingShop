@@ -284,8 +284,8 @@
   "saves": {
     "title": "خزائني المحفوظة",
     "projectName": "اسم المشروع",
-    "projectNamePlaceholder": "مثال: تجديد المطبخ 2025",
-    "save": "حفظ",
+    "projectNamePlaceholder": "مثال: تجديد المطبخ 2025",    "projectNotes": "ملاحظات المشروع",
+    "projectNotesPlaceholder": "أضف ملاحظات، بيانات العميل، تعليمات خاصة…",    "save": "حفظ",
     "load": "تحميل",
     "delete": "حذف",
     "placeholder": "اسم الخزانة…",

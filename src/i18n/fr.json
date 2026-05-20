@@ -284,8 +284,8 @@
   "saves": {
     "title": "Mes armoires enregistrées",
     "projectName": "Nom du projet",
-    "projectNamePlaceholder": "p. ex. Rénovation cuisine 2025",
-    "save": "Enregistrer",
+    "projectNamePlaceholder": "p. ex. Rénovation cuisine 2025",    "projectNotes": "Notes du projet",
+    "projectNotesPlaceholder": "Ajouter des notes, coordonnées client, instructions spéciales…",    "save": "Enregistrer",
     "load": "Charger",
     "delete": "Supprimer",
     "placeholder": "Nom de l'armoire…",
