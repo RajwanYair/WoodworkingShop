@@ -166,3 +166,38 @@ describe('downloadAllSheetsDxf — per-material layer (Sprint 37)', () => {
     void capturedContent; // suppress unused warning
   });
 });
+
+// ── Sprint 70 — GRAIN_CONFLICT layer ────────────────────────────────────────
+describe('cutSheetToDxf — GRAIN_CONFLICT layer (Sprint 70)', () => {
+  const conflictPart = { ...mockSheet.parts[0], grainConflict: true };
+
+  it('defines GRAIN_CONFLICT layer in TABLES section', () => {
+    const sheet: CutSheet = { ...mockSheet, parts: [conflictPart] };
+    const dxf = cutSheetToDxf(sheet);
+    expect(dxf).toContain('GRAIN_CONFLICT');
+  });
+
+  it('places grain-conflicted part on GRAIN_CONFLICT layer in ENTITIES', () => {
+    const sheet: CutSheet = { ...mockSheet, parts: [conflictPart] };
+    const dxf = cutSheetToDxf(sheet);
+    const entitiesStart = dxf.indexOf('ENTITIES');
+    const conflictIdx = dxf.indexOf('GRAIN_CONFLICT', entitiesStart);
+    expect(conflictIdx).toBeGreaterThan(entitiesStart);
+  });
+
+  it('places non-conflicted part on mat layer (not GRAIN_CONFLICT) in ENTITIES', () => {
+    const normalPart = { ...mockSheet.parts[0], grainConflict: false };
+    const sheet: CutSheet = { ...mockSheet, parts: [normalPart] };
+    const dxf = cutSheetToDxf(sheet);
+    const matLayer = materialLayerName(sheet.material);
+    const entitiesStart = dxf.indexOf('ENTITIES');
+    const matLayerIdx = dxf.indexOf(matLayer, entitiesStart);
+    expect(matLayerIdx).toBeGreaterThan(entitiesStart);
+  });
+
+  it('layer count in TABLES is 5 when GRAIN_CONFLICT added', () => {
+    const dxf = cutSheetToDxf(mockSheet);
+    // '70\n5' means 5 layers declared in the LAYER TABLE
+    expect(dxf).toContain('70\n5');
+  });
+});

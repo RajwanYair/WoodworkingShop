@@ -48,11 +48,12 @@ export function cutSheetToDxf(sheet: CutSheet): string {
   // ── TABLES section (layers) ──
   const matLayer = materialLayerName(sheet.material);
   lines.push('0', 'SECTION', '2', 'TABLES');
-  lines.push('0', 'TABLE', '2', 'LAYER', '70', '4');
-  addLayer(lines, 'SHEET', 7);    // white
-  addLayer(lines, matLayer, 3);   // green — per-material parts layer
-  addLayer(lines, 'LABELS', 5);   // blue
-  addLayer(lines, 'PARTS', 3);    // green — legacy fallback layer (kept for compatibility)
+  lines.push('0', 'TABLE', '2', 'LAYER', '70', '5');
+  addLayer(lines, 'SHEET', 7);           // white
+  addLayer(lines, matLayer, 3);          // green — per-material parts layer
+  addLayer(lines, 'LABELS', 5);          // blue
+  addLayer(lines, 'PARTS', 3);           // green — legacy fallback layer (kept for compatibility)
+  addLayer(lines, 'GRAIN_CONFLICT', 1);  // red — grain-direction conflicts (Sprint 70)
   lines.push('0', 'ENDTAB');
   lines.push('0', 'ENDSEC');
 
@@ -62,9 +63,10 @@ export function cutSheetToDxf(sheet: CutSheet): string {
   // Sheet outline
   addRect(lines, 0, 0, sheet.sheetWidth, sheet.sheetLength, 'SHEET');
 
-  // Parts on per-material layer
+  // Parts on per-material layer (grain-conflicted parts on GRAIN_CONFLICT layer)
   for (const part of sheet.parts) {
-    addRect(lines, part.x, part.y, part.width, part.length, matLayer);
+    const partLayer = part.grainConflict === true ? 'GRAIN_CONFLICT' : matLayer;
+    addRect(lines, part.x, part.y, part.width, part.length, partLayer);
     addLabel(lines, part, 'LABELS');
   }
 

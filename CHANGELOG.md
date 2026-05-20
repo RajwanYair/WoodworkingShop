@@ -9,6 +9,54 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.53.80] — 2026-06-11
+
+### Sprints 61–70 — Cabinet Reorder, Weight, Validation Fixes, Assembly Time, Parts Filter, Shortcuts, Room Numbers, Validation Rules, DXF Layers
+
+Covers Sprints 61 through 70 (v3.53.71 → v3.53.80). All tests passing.
+
+### Store — Move Cabinet Up/Down (Sprint 61)
+
+- **Sprint 61** — Added `moveCabinet(index, direction)` action to `cabinet-store`. ▲/▼ buttons in `CabinetSelector` let users reorder cabinets without removing and re-adding them. `activeCabinetIndex` follows the moved cabinet. 5 new tests. (v3.53.71)
+
+### Engine — Parts Total Weight (Sprint 62)
+
+- **Sprint 62** — Added `computePartsWeight(parts, extraMaterials?)` to `src/engine/parts.ts` and exported from `src/engine/index.ts`. `ProjectSummaryPanel` now shows a **Total weight** stat (kg). Silently skips parts with unknown materials. 5 new tests. (v3.53.72)
+
+### Configurator — ValidationPanel Fix Button (Sprint 63)
+
+- **Sprint 63** — `ValidationPanel` shows a **Fix** button for issues that carry `field` and `suggestedValue`. Clicking it calls `setConfig({ [field]: suggestedValue })` and dismisses the issue. 5 new tests in `tests/components/ValidationPanel-fix.test.tsx`. (v3.53.73)
+
+### Assembly — Estimated Time Per Step (Sprint 64)
+
+- **Sprint 64** — `AssemblyStep` gained `estimatedMinutes: number`. All 23 steps have time estimates (10–45 min each). `AssemblyGuide` header shows the total estimated build time in minutes. 5 new tests. (v3.53.74)
+
+### Optimizer — Parts Table Material Filter (Sprint 65)
+
+- **Sprint 65** — `Tables` (optimizer parts table) gained a material-filter `<select>` that appears when a cut plan contains more than one material. Filtering updates the sorted parts list; resetting restores all rows. Select has proper `aria-label`. 5 new tests. (v3.53.75)
+
+### Shortcuts — Ctrl+R Reset Config (Sprint 66)
+
+- **Sprint 66** — `App.tsx` keyboard handler: **Ctrl+R** calls `resetConfig()` and shows a toast. ShortcutsModal lists the new shortcut. i18n keys: `shortcuts.resetConfig`. 4 new tests in `tests/components/ctrl-r-reset.test.tsx`. (v3.53.76)
+
+### Room Layout — Cabinet Position Numbers (Sprint 67)
+
+- **Sprint 67** — SVG floor-plan cabinet labels now include a 1-based position number prefix: `(1) Base Unit`, `(2) Wall Unit`. `CabinetRect` takes an `index` prop; `FloorPlan` passes `i` from `map`. 4 new tests added to `tests/components/RoomLayoutView.test.tsx`. (v3.53.77)
+
+### Validation — WARDROBE_MISSING_TOEKICK (Sprint 68)
+
+- **Sprint 68** — New `info`-severity validation rule: wardrobes with `kickHeight === 0` raise `WARDROBE_MISSING_TOEKICK`, suggesting 80 mm (`suggestedValue: 80`, `field: 'kickHeight'`). 5 new tests. (v3.53.78)
+
+### Validation — BACK_PANEL_OVERSIZED (Sprint 69)
+
+- **Sprint 69** — New `info`-severity validation rule: when `hasBack !== false` and the back-panel material is thicker than 9 mm, raises `BACK_PANEL_OVERSIZED` (`field: 'backPanelMaterial'`) suggesting a thin 4–6 mm HDF sheet. 5 new tests. (v3.53.79)
+
+### DXF Export — GRAIN_CONFLICT Layer (Sprint 70)
+
+- **Sprint 70** — `cutSheetToDxf` now declares a `GRAIN_CONFLICT` layer (DXF color 1 = red) in the TABLES section. Parts with `grainConflict === true` are drawn on `GRAIN_CONFLICT` instead of the material layer, making grain violations immediately visible in CAM software. Layer count updated from 4 → 5. 4 new tests. (v3.53.80)
+
+---
+
 ## [3.53.69] — 2026-06-09
 
 ### Sprints 51–59 — Assembly Checklist, Project Summary, Error Boundary, Room Layout, Validation, Shortcuts, Optimizer & PDF
