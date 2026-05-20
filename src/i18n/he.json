@@ -191,7 +191,9 @@
     "filterParts": "סנן חלקים",
     "filterPartsPlaceholder": "חפש חלקים…",
     "statusPending": "מחשב גיליונות חיתוך\u2026",
-    "statusComplete": "אופטימיזציה הסתיימה \u2014 {{count}} גיליונות נדרשים"
+    "statusComplete": "אופטימיזציה הסתיימה \u2014 {{count}} גיליונות נדרשים",
+    "filterByMaterial": "סנן לפי חומר",
+    "allMaterials": "כל החומרים"
   },
   "preview": {
     "title": "תצוגה מקדימה",

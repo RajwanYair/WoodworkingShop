@@ -189,7 +189,9 @@
     "grainConflicts": "Grain ⚠",
     "grainConflictsTitle": "{{count}} part(s) had grain direction compromised — material requires grain but part was rotated to fit",    "filterParts": "Filter parts",
     "filterPartsPlaceholder": "Search parts…",    "statusPending": "Computing cut sheets\u2026",
-    "statusComplete": "Optimization complete \u2014 {{count}} sheet(s) required"
+    "statusComplete": "Optimization complete \u2014 {{count}} sheet(s) required",
+    "filterByMaterial": "Filter by material",
+    "allMaterials": "All materials"
   },
   "preview": {
     "title": "Cabinet Preview",

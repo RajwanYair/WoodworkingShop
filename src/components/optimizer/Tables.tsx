@@ -44,6 +44,8 @@ export function PartsTable() {
   /** Sprint 171 — sortable column headers */
   const [sortKey, setSortKey] = useState<SortKey>('id');
   const [sortDir, setSortDir] = useState<SortDir>('asc');
+  /** Sprint 65 — material filter */
+  const [materialFilter, setMaterialFilter] = useState<string>('');
 
   const handleSort = (key: SortKey) => {
     if (key === sortKey) {
@@ -55,7 +57,11 @@ export function PartsTable() {
   };
   const arrow = (key: SortKey) => (sortKey === key ? (sortDir === 'asc' ? ' ▲' : ' ▼') : '');
 
-  const sorted = sortParts(parts, sortKey, sortDir, lang);
+  // Sprint 65 — collect unique material keys for the filter dropdown
+  const uniqueMaterials = [...new Set(parts.map((p) => p.material))].sort();
+
+  const filtered = materialFilter ? parts.filter((p) => p.material === materialFilter) : parts;
+  const sorted = sortParts(filtered, sortKey, sortDir, lang);
 
   const thBtn = (key: SortKey, label: string, align = 'text-start') => (
     <th
@@ -75,9 +81,30 @@ export function PartsTable() {
 
   return (
     <div className="overflow-x-auto">
-      <h3 className="text-sm font-semibold text-wood-700 dark:text-wood-200 uppercase tracking-wide mb-2">
-        {t('parts.title')}
-      </h3>
+      <div className="flex items-center justify-between gap-3 mb-2 flex-wrap">
+        <h3 className="text-sm font-semibold text-wood-700 dark:text-wood-200 uppercase tracking-wide">
+          {t('parts.title')}
+        </h3>
+        {/* Sprint 65 — material filter dropdown */}
+        {uniqueMaterials.length > 1 && (
+          <label className="flex items-center gap-2 text-xs text-wood-600 dark:text-wood-300">
+            {t('optimizer.filterByMaterial')}
+            <select
+              value={materialFilter}
+              onChange={(e) => setMaterialFilter(e.target.value)}
+              className="border border-wood-300 dark:border-wood-600 rounded px-2 py-0.5 text-xs bg-white dark:bg-wood-800 text-wood-700 dark:text-wood-200"
+              aria-label={t('optimizer.filterByMaterial')}
+            >
+              <option value="">{t('optimizer.allMaterials')}</option>
+              {uniqueMaterials.map((mat) => {
+                let label = mat;
+                try { label = getMaterial(mat).name[lang]; } catch { /* keep key */ }
+                return <option key={mat} value={mat}>{label}</option>;
+              })}
+            </select>
+          </label>
+        )}
+      </div>
       <table className="w-full text-sm border-collapse">
         <thead>
           <tr className="bg-wood-100 dark:bg-wood-800 text-wood-700 dark:text-wood-300">
