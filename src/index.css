@@ -16,7 +16,6 @@
   --color-wood-700: #5a4218;
   --color-wood-800: #3d2d10;
   --color-wood-900: #241a0a;
-
   --color-primary: #a67c2e;
   --color-surface: #fdf8f0;
   --color-surface-dark: #1a1510;
@@ -32,17 +31,17 @@
    tones so all text/UI meets WCAG 2.2 AA contrast ratios (≥ 4.5:1 for normal
    text, ≥ 3:1 for large text and UI components). */
 .high-contrast {
-  --color-wood-50: #ffffff;
+  --color-wood-50: #fff;
   --color-wood-100: #f0f0f0;
-  --color-wood-200: #cccccc;
-  --color-wood-300: #888888;
-  --color-wood-400: #555555;
-  --color-wood-500: #222222;
-  --color-wood-600: #111111;
-  --color-wood-700: #000000;
-  --color-wood-800: #000000;
-  --color-wood-900: #000000;
-  --color-primary: #000000;
+  --color-wood-200: #ccc;
+  --color-wood-300: #888;
+  --color-wood-400: #555;
+  --color-wood-500: #222;
+  --color-wood-600: #111;
+  --color-wood-700: #000;
+  --color-wood-800: #000;
+  --color-wood-900: #000;
+  --color-primary: #000;
 }
 
 /* WCAG AA 2.2: visible focus rings, interactive borders, link underlines —
@@ -50,7 +49,7 @@
    so users who enable high-contrast in the app UI get full WCAG AA coverage
    even when the OS forced-colors media query is not active. */
 .high-contrast :focus-visible {
-  outline: 3px solid #0044cc;
+  outline: 3px solid #04c;
   outline-offset: 2px;
 }
 
@@ -59,30 +58,30 @@
 .high-contrast input,
 .high-contrast select,
 .high-contrast textarea {
-  border: 2px solid #000000;
+  border: 2px solid #000;
 }
 
 .high-contrast a {
   text-decoration: underline;
-  color: #0000cc;
+  color: #00c;
 }
 
 .high-contrast.dark {
-  --color-wood-50: #000000;
-  --color-wood-100: #111111;
-  --color-wood-200: #222222;
-  --color-wood-300: #666666;
-  --color-wood-400: #999999;
-  --color-wood-500: #cccccc;
-  --color-wood-600: #dddddd;
+  --color-wood-50: #000;
+  --color-wood-100: #111;
+  --color-wood-200: #222;
+  --color-wood-300: #666;
+  --color-wood-400: #999;
+  --color-wood-500: #ccc;
+  --color-wood-600: #ddd;
   --color-wood-700: #f0f0f0;
   --color-wood-800: #f8f8f8;
-  --color-wood-900: #ffffff;
-  --color-primary: #ffffff;
+  --color-wood-900: #fff;
+  --color-primary: #fff;
 }
 
 .high-contrast.dark :focus-visible {
-  outline: 3px solid #ffff00;
+  outline: 3px solid #ff0;
   outline-offset: 2px;
 }
 
@@ -91,11 +90,11 @@
 .high-contrast.dark input,
 .high-contrast.dark select,
 .high-contrast.dark textarea {
-  border: 2px solid #ffffff;
+  border: 2px solid #fff;
 }
 
 .high-contrast.dark a {
-  color: #aaaaff;
+  color: #aaf;
   text-decoration: underline;
 }
 
@@ -171,9 +170,11 @@
 .scrollbar-none {
   /* Modern browsers (Chrome 121+, Firefox 64+, Edge 79+) */
   scrollbar-width: none;
+
   /* IE / old Edge */
   -ms-overflow-style: none;
 }
+
 .scrollbar-none::-webkit-scrollbar {
   /* WebKit / Chromium < 121, Safari */
   display: none;
@@ -191,10 +192,12 @@
   from {
     transform: translateY(100%);
   }
+
   to {
     transform: translateY(0);
   }
 }
+
 .animate-slide-up {
   animation: slide-up 0.25s ease-out;
 }
@@ -205,11 +208,13 @@
     opacity: 0;
     transform: translateY(0.5rem);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
 .animate-fade-in {
   animation: fade-in 0.2s ease-out;
 }
@@ -218,7 +223,7 @@
 @media print {
   /* Set page margins and size (Sprint 111) */
   @page {
-    size: A4;
+    size: a4;
     margin: 12mm;
   }
 
@@ -227,10 +232,12 @@
   .dark {
     /* Modern browsers */
     color-scheme: light !important;
+
     /* Fallback for browsers without color-scheme support */
     background-color: #fff !important;
     color: #000 !important;
   }
+
   .dark *,
   html.dark * {
     background-color: transparent !important;
@@ -269,11 +276,13 @@
     border-collapse: collapse !important;
     width: 100% !important;
   }
+
   th,
   td {
     border: 0.5pt solid #999 !important;
     padding: 4pt 6pt !important;
   }
+
   th {
     background: #eee !important;
     -webkit-print-color-adjust: exact;
@@ -297,11 +306,13 @@
   .print-page-break {
     break-after: page;
   }
+
   h1,
   h2,
   h3 {
     break-after: avoid;
   }
+
   img,
   svg {
     break-inside: avoid;
@@ -323,6 +334,7 @@
     break-inside: avoid;
     margin-bottom: 12pt;
   }
+
   [data-assembly-controls] {
     display: none !important;
   }
@@ -333,11 +345,13 @@
   [data-print-sheets] {
     display: block !important;
   }
+
   [data-print-sheets] > * {
     break-inside: avoid;
     break-after: page;
     margin-bottom: 0 !important;
   }
+
   [data-print-sheets] > *:last-child {
     break-after: auto;
   }
@@ -366,9 +380,10 @@
 
   /* v3.28.0 — named @page for landscape cut sheets (apply class="print-landscape" to wrapper) */
   @page landscape-cut {
-    size: A4 landscape;
+    size: a4 landscape;
     margin: 10mm;
   }
+
   .print-landscape {
     page: landscape-cut;
   }
@@ -392,6 +407,7 @@
     outline: none !important;
     box-shadow: none !important;
   }
+
   [role='tooltip'],
   [data-tooltip],
   [aria-describedby] > [role='tooltip'] {

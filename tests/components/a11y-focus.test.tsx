@@ -168,9 +168,7 @@ describe('ConfiguratorPanel — furniture type radio group', () => {
   it('exactly one furnitureType radio button is checked on initial render', () => {
     render(<ConfiguratorPanel />);
     // Scope to the furnitureType group only — other radio groups also exist on the page
-    const ftRadios = (screen.getAllByRole('radio') as HTMLInputElement[]).filter(
-      (r) => r.name === 'furnitureType',
-    );
+    const ftRadios = (screen.getAllByRole('radio') as HTMLInputElement[]).filter((r) => r.name === 'furnitureType');
     const checked = ftRadios.filter((r) => r.checked);
     expect(checked.length).toBe(1);
   });

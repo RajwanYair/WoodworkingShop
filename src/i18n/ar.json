@@ -254,13 +254,20 @@
     "export": "تصدير JSON",
     "import": "استيراد JSON",
     "empty": "لا توجد مشاريع محفوظة",
+    "noResults": "لا توجد مشاريع تطابق “{{query}}”",
     "cabinets": "خزانة/خزائن",
     "saved": "تم حفظ المشروع",
     "loaded": "تم تحميل المشروع",
     "deleted": "تم حذف المشروع",
     "exported": "تم تصدير المشروع",
     "imported": "تم استيراد المشروع",
-    "importError": "ملف مشروع غير صالح"
+    "importError": "ملف مشروع غير صالح",
+    "searchPlaceholder": "البحث في المشاريع…",
+    "sortByDate": "الأحدث أولاً",
+    "sortByName": "أ-ي",
+    "sortLabel": "ترتيب",
+    "found_one": "{{count}} نتيجة",
+    "found_other": "{{count}} نتائج"
   },
   "storage": {
     "usageLabel": "{{used}} KB / {{quota}} MB",

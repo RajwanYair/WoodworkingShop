@@ -260,7 +260,14 @@
     "deleted": "הפרויקט נמחק",
     "exported": "הפרויקט יוצא",
     "imported": "הפרויקט יובא",
-    "importError": "קובץ פרויקט שגוי"
+    "importError": "קובץ פרויקט שגוי",
+    "noResults": "אין פרויקטים התואמים לחיפוש \"{{query}}\"",
+    "searchPlaceholder": "חיפוש פרויקטים…",
+    "sortByDate": "חדש ראשון",
+    "sortByName": "א-ת",
+    "sortLabel": "מיון",
+    "found_one": "תוצאה {{count}}",
+    "found_other": "{{count}} תוצאות"
   },
   "storage": {
     "usageLabel": "{{used}} KB / {{quota}} MB",
@@ -539,6 +546,3 @@
     "reload": "טען מחדש"
   }
 }
-
-
-

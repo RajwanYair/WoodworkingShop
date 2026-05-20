@@ -7,31 +7,31 @@
     "npm run bench:update  — run benchmarks then rewrite thresholds to 5× current mean"
   ],
 
-  "computeDimensions — base cabinet":                 { "maxMeanMs": 0.011, "baseline": 0.0022 },
-  "computeDimensions — wardrobe":                     { "maxMeanMs": 0.009, "baseline": 0.0018 },
-  "computeDimensions — desk":                         { "maxMeanMs": 0.007, "baseline": 0.0014 },
+  "computeDimensions — base cabinet": { "maxMeanMs": 0.011, "baseline": 0.0022 },
+  "computeDimensions — wardrobe": { "maxMeanMs": 0.009, "baseline": 0.0018 },
+  "computeDimensions — desk": { "maxMeanMs": 0.007, "baseline": 0.0014 },
 
-  "generateParts — base cabinet":                     { "maxMeanMs": 0.005, "baseline": 0.0009 },
-  "generateParts — wardrobe 4-shelf 2-drawer":        { "maxMeanMs": 0.005, "baseline": 0.0009 },
-  "generateParts — desk 2-drawer":                    { "maxMeanMs": 0.005, "baseline": 0.001 },
-  "computeEdgeBandingTotal — base cabinet":           { "maxMeanMs": 0.001, "baseline": 0.0001 },
+  "generateParts — base cabinet": { "maxMeanMs": 0.005, "baseline": 0.0009 },
+  "generateParts — wardrobe 4-shelf 2-drawer": { "maxMeanMs": 0.005, "baseline": 0.0009 },
+  "generateParts — desk 2-drawer": { "maxMeanMs": 0.005, "baseline": 0.001 },
+  "computeEdgeBandingTotal — base cabinet": { "maxMeanMs": 0.001, "baseline": 0.0001 },
 
-  "optimizeCutSheets — base cabinet (9 part types)":  { "maxMeanMs": 0.086, "baseline": 0.0172 },
-  "optimizeCutSheets — wardrobe (18 part types)":     { "maxMeanMs": 0.125, "baseline": 0.0249 },
+  "optimizeCutSheets — base cabinet (9 part types)": { "maxMeanMs": 0.086, "baseline": 0.0172 },
+  "optimizeCutSheets — wardrobe (18 part types)": { "maxMeanMs": 0.125, "baseline": 0.0249 },
 
-  "generateHardware — base cabinet":                  { "maxMeanMs": 0.01, "baseline": 0.0019 },
-  "generateHardware — wardrobe":                      { "maxMeanMs": 0.01, "baseline": 0.002 },
+  "generateHardware — base cabinet": { "maxMeanMs": 0.01, "baseline": 0.0019 },
+  "generateHardware — wardrobe": { "maxMeanMs": 0.01, "baseline": 0.002 },
 
-  "estimateCost — base cabinet":                      { "maxMeanMs": 0.016, "baseline": 0.0031 },
-  "estimateCost — wardrobe":                          { "maxMeanMs": 0.026, "baseline": 0.0051 },
+  "estimateCost — base cabinet": { "maxMeanMs": 0.016, "baseline": 0.0031 },
+  "estimateCost — wardrobe": { "maxMeanMs": 0.026, "baseline": 0.0051 },
 
   "findOptimizations — base cabinet (default strategies)": { "maxMeanMs": 10, "baseline": 1.833 },
 
-  "validateConfig — valid base cabinet":              { "maxMeanMs": 0.019, "baseline": 0.0038 },
-  "validateConfig — valid wardrobe":                  { "maxMeanMs": 0.014, "baseline": 0.0027 },
+  "validateConfig — valid base cabinet": { "maxMeanMs": 0.019, "baseline": 0.0038 },
+  "validateConfig — valid wardrobe": { "maxMeanMs": 0.014, "baseline": 0.0027 },
 
-  "Grain locked parts (small)":                       { "maxMeanMs": 0.013, "baseline": 0.0026 },
-  "Grain free parts (small)":                         { "maxMeanMs": 0.016, "baseline": 0.0032 },
-  "Multi-sheet optimization (medium)":                { "maxMeanMs": 0.036, "baseline": 0.0071 },
-  "Large multi-cabinet project (stress test)":        { "maxMeanMs": 127, "baseline": 25.4 }
+  "Grain locked parts (small)": { "maxMeanMs": 0.013, "baseline": 0.0026 },
+  "Grain free parts (small)": { "maxMeanMs": 0.016, "baseline": 0.0032 },
+  "Multi-sheet optimization (medium)": { "maxMeanMs": 0.036, "baseline": 0.0071 },
+  "Large multi-cabinet project (stress test)": { "maxMeanMs": 127, "baseline": 25.4 }
 }

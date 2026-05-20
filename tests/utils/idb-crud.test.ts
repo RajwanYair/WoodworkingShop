@@ -30,7 +30,10 @@ describe('idbLoadProjects / idbSaveProjects', () => {
   });
 
   it('round-trips an array of projects', async () => {
-    const projects = [{ id: 'p1', name: 'Alpha' }, { id: 'p2', name: 'Beta' }];
+    const projects = [
+      { id: 'p1', name: 'Alpha' },
+      { id: 'p2', name: 'Beta' },
+    ];
     await idbSaveProjects(projects);
     const loaded = await idbLoadProjects();
     expect(loaded).toEqual(projects);

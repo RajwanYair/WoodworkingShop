@@ -905,7 +905,12 @@ function SheetCard({
           </span>
           {/* Sprint 81 — per-sheet waste area label */}
           <span className="ms-1.5 text-[10px] font-normal text-wood-400 dark:text-wood-500">
-            · {t('optimizer.sheetWaste')}: {((sheet.sheetWidth * sheet.sheetLength - sheet.parts.reduce((s, p) => s + p.width * p.length, 0)) / 1_000_000).toFixed(3)} m²
+            · {t('optimizer.sheetWaste')}:{' '}
+            {(
+              (sheet.sheetWidth * sheet.sheetLength - sheet.parts.reduce((s, p) => s + p.width * p.length, 0)) /
+              1_000_000
+            ).toFixed(3)}{' '}
+            m²
           </span>
           {mat.hasGrain && (
             <span
@@ -1042,10 +1047,16 @@ function SheetCard({
             part={p}
             scale={S}
             color={colorBlindMode ? cbColor(i) : mat.color}
-            isHovered={hoveredPartId === p.partId || (filterTerm !== '' && (p.partId.toLowerCase().includes(filterTerm) || p.label.toLowerCase().includes(filterTerm)))}
+            isHovered={
+              hoveredPartId === p.partId ||
+              (filterTerm !== '' &&
+                (p.partId.toLowerCase().includes(filterTerm) || p.label.toLowerCase().includes(filterTerm)))
+            }
             isFaded={
               (hoveredPartId !== null && hoveredPartId !== p.partId) ||
-              (filterTerm !== '' && !p.partId.toLowerCase().includes(filterTerm) && !p.label.toLowerCase().includes(filterTerm))
+              (filterTerm !== '' &&
+                !p.partId.toLowerCase().includes(filterTerm) &&
+                !p.label.toLowerCase().includes(filterTerm))
             }
             onHover={onHoverPart}
             showLabel={showPartNames}
@@ -1072,11 +1083,20 @@ function SheetCard({
           <span
             key={i}
             className={`text-[10px] cursor-default transition-opacity ${
-              (hoveredPartId && hoveredPartId !== p.partId) || (filterTerm && !p.partId.toLowerCase().includes(filterTerm) && !p.label.toLowerCase().includes(filterTerm)) ? 'opacity-30' : ''
-            } ${(hoveredPartId === p.partId || (filterTerm && (p.partId.toLowerCase().includes(filterTerm) || p.label.toLowerCase().includes(filterTerm)))) ? 'font-bold text-wood-700 dark:text-wood-100' : 'text-wood-600 dark:text-wood-300'}`}
+              (hoveredPartId && hoveredPartId !== p.partId) ||
+              (filterTerm &&
+                !p.partId.toLowerCase().includes(filterTerm) &&
+                !p.label.toLowerCase().includes(filterTerm))
+                ? 'opacity-30'
+                : ''
+            } ${hoveredPartId === p.partId || (filterTerm && (p.partId.toLowerCase().includes(filterTerm) || p.label.toLowerCase().includes(filterTerm))) ? 'font-bold text-wood-700 dark:text-wood-100' : 'text-wood-600 dark:text-wood-300'}`}
             onMouseEnter={() => onHoverPart(p.partId)}
             onMouseLeave={() => onHoverPart(null)}
-            title={p.rationale ? `${p.partId}: ${p.label}\n${p.rationale}${p.grainConflict ? '\n⚠ Grain direction compromised' : ''}` : undefined}
+            title={
+              p.rationale
+                ? `${p.partId}: ${p.label}\n${p.rationale}${p.grainConflict ? '\n⚠ Grain direction compromised' : ''}`
+                : undefined
+            }
           >
             {p.partId}: {p.label} ({p.width}×{p.length}){p.grainConflict ? ' ⚠' : ''}
           </span>

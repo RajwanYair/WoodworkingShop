@@ -24,46 +24,46 @@ Every major architectural decision has been reconsidered against industry best p
 
 ### Frontend Architecture
 
-| Decision | Current State | Reconsidered Outcome |
-| --- | --- | --- |
-| **UI Framework** | React 19 + TypeScript 6 (strict) | **Keep** — React 19 compiler optimizations, concurrent features, and ecosystem maturity make it the strongest choice. Solid/Svelte offer smaller bundles but lack PDF/SVG ecosystem depth. |
-| **State Management** | Zustand 5 single store + undo/redo | **Keep** — minimal API surface, excellent TS inference, no boilerplate. Redux Toolkit is heavier with no added benefit for this domain. |
-| **CSS Framework** | Tailwind CSS v4 with design tokens | **Keep** — utility-first with logical properties (RTL), JIT compilation, zero runtime. CSS-in-JS alternatives add bundle weight. |
-| **Build Tool** | Vite 8 (Rolldown bundler) | **Keep** — fastest HMR, native ESM, proven chunking. Turbopack is Next.js-specific; Rspack lacks plugin maturity. |
-| **i18n** | i18next 26 + react-i18next | **Keep** — strongest namespace/pluralization support. FormatJS is comparable but more verbose. |
-| **PDF Generation** | @react-pdf/renderer (off-thread) | **Keep** — declarative React-based PDF layout; only viable option for complex multi-page build plans without a server. Hebrew font (Noto Sans Hebrew) registered for RTL support. |
-| **Type Safety** | TypeScript 6 strict, zero `any` | **Keep** — `erasableSyntaxOnly` + strict mode catches entire classes of runtime errors. |
+| Decision             | Current State                      | Reconsidered Outcome                                                                                                                                                                       |
+| -------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **UI Framework**     | React 19 + TypeScript 6 (strict)   | **Keep** — React 19 compiler optimizations, concurrent features, and ecosystem maturity make it the strongest choice. Solid/Svelte offer smaller bundles but lack PDF/SVG ecosystem depth. |
+| **State Management** | Zustand 5 single store + undo/redo | **Keep** — minimal API surface, excellent TS inference, no boilerplate. Redux Toolkit is heavier with no added benefit for this domain.                                                    |
+| **CSS Framework**    | Tailwind CSS v4 with design tokens | **Keep** — utility-first with logical properties (RTL), JIT compilation, zero runtime. CSS-in-JS alternatives add bundle weight.                                                           |
+| **Build Tool**       | Vite 8 (Rolldown bundler)          | **Keep** — fastest HMR, native ESM, proven chunking. Turbopack is Next.js-specific; Rspack lacks plugin maturity.                                                                          |
+| **i18n**             | i18next 26 + react-i18next         | **Keep** — strongest namespace/pluralization support. FormatJS is comparable but more verbose.                                                                                             |
+| **PDF Generation**   | @react-pdf/renderer (off-thread)   | **Keep** — declarative React-based PDF layout; only viable option for complex multi-page build plans without a server. Hebrew font (Noto Sans Hebrew) registered for RTL support.          |
+| **Type Safety**      | TypeScript 6 strict, zero `any`    | **Keep** — `erasableSyntaxOnly` + strict mode catches entire classes of runtime errors.                                                                                                    |
 
 ### Backend / Infrastructure
 
-| Decision | Current State | Reconsidered Outcome |
-| --- | --- | --- |
-| **Server dependency** | None (pure client SPA) | **Keep as primary** — zero-server architecture eliminates hosting cost, latency, and auth complexity. Optional collaboration service is a future track only. |
-| **Persistence** | localStorage + URL state | **Enhance** — add IndexedDB via idb-keyval for large project sets. localStorage 5MB limit is a real constraint for multi-cabinet projects. |
-| **Hosting** | GitHub Pages (static) | **Keep** — free, CDN-backed, no ops burden. Cloudflare Pages is an upgrade path if analytics/edge functions are needed. |
-| **PWA** | Service worker (cache-first) | **Keep and harden** — add Workbox for reliable cache invalidation on deploy. Current hand-rolled SW has edge cases on version mismatch. |
-| **Database** | None (browser storage) | **Future optional** — IndexedDB for local, CRDTs for eventual sync. No external DB until collaboration is scoped. |
-| **API / External Services** | None | **Keep zero-dependency** — no third-party APIs in critical path. Material databases are embedded. |
+| Decision                    | Current State                | Reconsidered Outcome                                                                                                                                         |
+| --------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Server dependency**       | None (pure client SPA)       | **Keep as primary** — zero-server architecture eliminates hosting cost, latency, and auth complexity. Optional collaboration service is a future track only. |
+| **Persistence**             | localStorage + URL state     | **Enhance** — add IndexedDB via idb-keyval for large project sets. localStorage 5MB limit is a real constraint for multi-cabinet projects.                   |
+| **Hosting**                 | GitHub Pages (static)        | **Keep** — free, CDN-backed, no ops burden. Cloudflare Pages is an upgrade path if analytics/edge functions are needed.                                      |
+| **PWA**                     | Service worker (cache-first) | **Keep and harden** — add Workbox for reliable cache invalidation on deploy. Current hand-rolled SW has edge cases on version mismatch.                      |
+| **Database**                | None (browser storage)       | **Future optional** — IndexedDB for local, CRDTs for eventual sync. No external DB until collaboration is scoped.                                            |
+| **API / External Services** | None                         | **Keep zero-dependency** — no third-party APIs in critical path. Material databases are embedded.                                                            |
 
 ### Code Quality and Tooling
 
-| Decision | Current State | Reconsidered Outcome |
-| --- | --- | --- |
-| **Testing** | Vitest 4 (unit) + Playwright 1.60 (E2E) + axe-core | **Keep** — fastest unit test runner, Playwright cross-browser, axe-core for a11y regression. |
-| **Linting** | ESLint 10 flat config + Prettier | **Keep** — flat config is the forward standard. Add eslint-plugin-testing-library for test quality. |
-| **CI Matrix** | Node 22, 24, 26 | **Keep** — tests against current LTS + upcoming releases. |
-| **Coverage** | V8 provider, 78/75/78/79% threshold | **Calibrated** — thresholds match actual coverage; 85%+ deferred to Phase 4 test hardening. |
-| **Bundle Budget** | 1975KB JS, 100KB CSS | **Tightened** from 2000KB; 1800KB target after pdf-renderer tree-shaking (Phase 5). |
-| **GitHub Actions** | Pinned to latest stable (`@v4`) | **Keep** — all actions use verified stable tags only; never use unreleased future versions. |
+| Decision           | Current State                                      | Reconsidered Outcome                                                                                |
+| ------------------ | -------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| **Testing**        | Vitest 4 (unit) + Playwright 1.60 (E2E) + axe-core | **Keep** — fastest unit test runner, Playwright cross-browser, axe-core for a11y regression.        |
+| **Linting**        | ESLint 10 flat config + Prettier                   | **Keep** — flat config is the forward standard. Add eslint-plugin-testing-library for test quality. |
+| **CI Matrix**      | Node 22, 24, 26                                    | **Keep** — tests against current LTS + upcoming releases.                                           |
+| **Coverage**       | V8 provider, 78/75/78/79% threshold                | **Calibrated** — thresholds match actual coverage; 85%+ deferred to Phase 4 test hardening.         |
+| **Bundle Budget**  | 1975KB JS, 100KB CSS                               | **Tightened** from 2000KB; 1800KB target after pdf-renderer tree-shaking (Phase 5).                 |
+| **GitHub Actions** | Pinned to latest stable (`@v4`)                    | **Keep** — all actions use verified stable tags only; never use unreleased future versions.         |
 
 ### Documentation and Content
 
-| Decision | Current State | Reconsidered Outcome |
-| --- | --- | --- |
-| **Architecture docs** | Single ARCHITECTURE.md + Mermaid diagrams | **Keep** — living document with visual flow diagrams. |
-| **Changelog** | Keep a Changelog format | **Keep** — machine-parseable and human-readable. |
-| **Roadmap** | This file (forward-only) | **Keep** — no mixing of history and plans. |
-| **API docs** | JSDoc on engine exports | **Enhance** — add TypeDoc generation for plugin API surface. |
+| Decision              | Current State                             | Reconsidered Outcome                                         |
+| --------------------- | ----------------------------------------- | ------------------------------------------------------------ |
+| **Architecture docs** | Single ARCHITECTURE.md + Mermaid diagrams | **Keep** — living document with visual flow diagrams.        |
+| **Changelog**         | Keep a Changelog format                   | **Keep** — machine-parseable and human-readable.             |
+| **Roadmap**           | This file (forward-only)                  | **Keep** — no mixing of history and plans.                   |
+| **API docs**          | JSDoc on engine exports                   | **Enhance** — add TypeDoc generation for plugin API surface. |
 
 ---
 
@@ -71,19 +71,23 @@ Every major architectural decision has been reconsidered against industry best p
 
 Comparison with category leaders — methods to harvest:
 
-| Product | Category | Key Strength | Our Gap | Harvest Action |
-| --- | --- | --- | --- | --- |
-| **Fusion 360** | Desktop CAD | End-to-end manufacturability checks, collision detection | Limited manufacturing constraint validation | Add joinery + collision + tolerance checks to engine validation |
-| **SketchUp + OpenCutList** | Plugin ecosystem | Mature extension marketplace, community plugins | No public extension API | Define plugin contract with versioned stability guarantees (Phase 6) |
-| **CutList Optimizer** | Web optimizer | Optimization explainability, "why this layout" | Optimizer is a black box to users | Add placement rationale and waste-reduction explanation per sheet |
-| **Polyboard** | Cabinet CAD | Deep parametric rule modeling (hinge clearances, shelf loading) | Partial rule depth | Expand rule graph: hinge interference, max span, nesting rules |
-| **Cabinet Vision** | Enterprise | ERP/MRP integration, shop floor workflow | No export adapters for downstream systems | Add standardized CSV/JSON schema adapters for ERP ingestion |
-| **Onshape** | Cloud CAD | Real-time collaboration, version history with diff | Local-only, no versioning | Add project snapshot timeline with visual diff (Phase 3) |
-| **Figma** | Design system | Design token discipline, visual regression per release | Token docs can drift from code | Enforce token audit and visual regression in CI |
-| **KCD Software** | Kitchen design | Room-level multi-cabinet layout | Single cabinet focus | Add multi-cabinet room layout view (v4.0 scope) |
-| **eCabinet Systems** | Cabinet manufacture | Automated nesting with toolpath optimization | G-code is basic linear paths | Add arc interpolation and tool-change optimization in G-code export |
-| **Pro100** | Furniture design | Photorealistic 3D preview with materials/textures | SVG/CSS-based preview only | Evaluate WebGL renderer for material texture previews (v4.0) |
-| **Blum DYNALOG** | Hardware vendor | Hardware-specific assembly automation | Generic hardware handling | Add vendor-specific hardware profiles with auto-placement rules |
+| Product                         | Category            | Key Strength                                                    | Our Gap                                     | Harvest Action                                                          |
+| ------------------------------- | ------------------- | --------------------------------------------------------------- | ------------------------------------------- | ----------------------------------------------------------------------- |
+| **Fusion 360**                  | Desktop CAD         | End-to-end manufacturability checks, collision detection        | Limited manufacturing constraint validation | Add joinery + collision + tolerance checks to engine validation         |
+| **SketchUp + OpenCutList**      | Plugin ecosystem    | Mature extension marketplace, community plugins                 | No public extension API                     | Define plugin contract with versioned stability guarantees (Phase 6)    |
+| **CutList Optimizer**           | Web optimizer       | Optimization explainability, "why this layout"                  | Optimizer is a black box to users           | Add placement rationale and waste-reduction explanation per sheet       |
+| **Polyboard**                   | Cabinet CAD         | Deep parametric rule modeling (hinge clearances, shelf loading) | Partial rule depth                          | Expand rule graph: hinge interference, max span, nesting rules          |
+| **Cabinet Vision**              | Enterprise          | ERP/MRP integration, shop floor workflow                        | No export adapters for downstream systems   | Add standardized CSV/JSON schema adapters for ERP ingestion             |
+| **Onshape**                     | Cloud CAD           | Real-time collaboration, version history with diff              | Local-only, no versioning                   | Add project snapshot timeline with visual diff (Phase 3)                |
+| **Figma**                       | Design system       | Design token discipline, visual regression per release          | Token docs can drift from code              | Enforce token audit and visual regression in CI                         |
+| **KCD Software**                | Kitchen design      | Room-level multi-cabinet layout                                 | Single cabinet focus                        | Add multi-cabinet room layout view (v4.0 scope)                         |
+| **eCabinet Systems**            | Cabinet manufacture | Automated nesting with toolpath optimization                    | G-code is basic linear paths                | Add arc interpolation and tool-change optimization in G-code export     |
+| **Pro100**                      | Furniture design    | Photorealistic 3D preview with materials/textures               | SVG/CSS-based preview only                  | Evaluate WebGL renderer for material texture previews (v4.0)            |
+| **Blum DYNALOG**                | Hardware vendor     | Hardware-specific assembly automation                           | Generic hardware handling                   | Add vendor-specific hardware profiles with auto-placement rules         |
+| **Autodesk Construction Cloud** | Cloud collaboration | Real-time multi-user editing with conflict-free merge           | Single-user local                           | Add CRDT-based optional collaboration (v4.x track)                      |
+| **Copilot / CAD AI assistants** | AI assistance       | Natural-language design, automated validation                   | No AI surface                               | Add optional AI prompt panel for design suggestions (v4.x experimental) |
+| **GrabCAD Workbench**           | Vendor ecosystem    | Catalog of vetted parts from manufacturers                      | Limited hardware catalog                    | Curate first-party hardware catalog from public vendor data             |
+| **Shaper Origin Plan**          | CAM web tool        | Tight web→tool feedback loop with calibration                   | Export-and-forget                           | Add post-export validation hooks (file lint, tool compatibility)        |
 
 ### Harvested Best Methods (Priority Order)
 
@@ -183,6 +187,34 @@ Exit criteria: full CI green, reproducible builds, complete docs.
 - [x] Marketing site and documentation portal.
 - [x] Evaluate WebGL renderer for material texture previews.
 
+### Phase 8: Production Hardening Round 2 (v3.54.0) ✅ Complete
+
+Exit criteria: stricter a11y, browserslist-aware CSS, root cleanup, zero VS Code waivers.
+
+- [x] Enable `eslint-plugin-jsx-a11y` flat config — replaces VS Code's broken HTML ARIA embedded checker with proper TSX-aware linting; caught and fixed 6 real `no-redundant-roles` + `no-noninteractive-element-interactions` issues in `SubstitutionPanel`, `ValidationPanel`, `PluginRegistryPanel`, `SnapshotPanel`, `Sidebar`.
+- [x] Add Stylelint with `stylelint-config-standard` + `stylelint-config-tailwindcss`, browserslist-aware. Removes need for `css.validate: false` waivers on Tailwind v4 directives; auto-fixed 45 hex-length / empty-line-before / case-style issues at source.
+- [x] Add `browserslist` in `package.json` so CSS compat warnings target real shipping targets (no IE noise).
+- [x] Move `MIGRATION.md` → `docs/MIGRATION.md` (cleaner root, no tool coupling).
+- [x] Remove redundant CSS/HTML waivers from `.vscode/settings.json` (real fix at source).
+- [x] Real `htmlFor`/`id` label association in `SnapshotDiffModal.tsx` (was implicit/missing).
+- [x] Add `github.copilot` recommendation alongside `copilot-chat` in `.vscode/extensions.json`.
+- [x] `MyScripts/.tools/Install-DevTools.ps1` + `.sh` — one-shot idempotent dev-tool installer (Node 22 via nvm, gh CLI, Playwright browsers, stylelint, lhci).
+- [x] Update `MyScripts/.tools/README.md` version baseline (Node 22, TS 6, Vite 8, ESLint 10, Stylelint 17, Playwright 1.60).
+
+### Future Horizons (post-v4.0)
+
+These are exploratory candidates, not committed scope. Each requires its own discovery phase.
+
+| Track          | Candidate                                                     | Why It Matters                                                                   |
+| -------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| Collaboration  | Yjs/Automerge CRDT for real-time multi-user editing           | Onshape parity; unblocks team workflows without losing local-first guarantee     |
+| AI Assistance  | Optional AI prompt panel (BYO key, no telemetry)              | Natural-language design suggestions, automated validation explanations           |
+| Manufacturing  | Tool-path simulation preview (G-code lint + travel viz)       | Reduces "ran the file, mis-cut" cycles; matches Shaper/Carbide tooling           |
+| Vendor Catalog | First-party curated hardware database from public vendor PDFs | Eliminates manual hardware entry; matches GrabCAD Workbench                      |
+| Mobile-First   | Tablet-native gesture redesign for shop-floor use             | Matches KCD's tablet workflow; current tablet UX is responsive but not optimized |
+| Localization   | Add ES / DE / FR / AR translations                            | Expands TAM beyond EN+HE bilingual; AR shares RTL infrastructure with HE         |
+| Standards      | IFC/STEP export for full BIM/CAD interoperability             | Opens enterprise integration paths                                               |
+
 ---
 
 ## Frontend Enhancement Priorities
@@ -202,12 +234,12 @@ Exit criteria: full CI green, reproducible builds, complete docs.
 
 ## Database Direction (Optional Track)
 
-| Stage | Technology | Purpose |
-| --- | --- | --- |
-| Current | localStorage + URL state | Simple persistence, shareable links |
-| Next | IndexedDB (idb-keyval) | Large projects, snapshots, offline-first |
-| Future | CRDTs (Yjs/Automerge) | Optional real-time collaboration |
-| Never | Server-required DB | Core workflows must remain serverless |
+| Stage   | Technology               | Purpose                                  |
+| ------- | ------------------------ | ---------------------------------------- |
+| Current | localStorage + URL state | Simple persistence, shareable links      |
+| Next    | IndexedDB (idb-keyval)   | Large projects, snapshots, offline-first |
+| Future  | CRDTs (Yjs/Automerge)    | Optional real-time collaboration         |
+| Never   | Server-required DB       | Core workflows must remain serverless    |
 
 ---
 
@@ -217,41 +249,41 @@ Exit criteria: full CI green, reproducible builds, complete docs.
 
 Common tools are centralized one level up at `MyScripts/`:
 
-| Tool | Location | Purpose |
-| --- | --- | --- |
-| Node.js 22 LTS | System / `.nvmrc` at MyScripts root | Runtime for all JS/TS projects |
-| npm workspaces | `MyScripts/package.json` | Hoisted dependencies, single lock file |
-| EditorConfig | `MyScripts/.editorconfig` | Shared formatting baseline |
-| Prettier | `MyScripts/.tools/prettierrc.shared.json` | Shared style rules |
-| TypeScript | `MyScripts/node_modules/typescript` | Shared compiler binary |
+| Tool           | Location                                  | Purpose                                |
+| -------------- | ----------------------------------------- | -------------------------------------- |
+| Node.js 22 LTS | System / `.nvmrc` at MyScripts root       | Runtime for all JS/TS projects         |
+| npm workspaces | `MyScripts/package.json`                  | Hoisted dependencies, single lock file |
+| EditorConfig   | `MyScripts/.editorconfig`                 | Shared formatting baseline             |
+| Prettier       | `MyScripts/.tools/prettierrc.shared.json` | Shared style rules                     |
+| TypeScript     | `MyScripts/node_modules/typescript`       | Shared compiler binary                 |
 
 ### Project-Specific Configuration
 
-| Config | Location | Notes |
-| --- | --- | --- |
-| tsconfig (4 files) | Workspace root | App, node, test, e2e — all reference a solution root |
-| ESLint flat config | `eslint.config.js` | Project-specific rules, zero disabled rules |
-| Vite config | `vite.config.ts` | Build/dev/preview configuration |
-| Vitest config | `vitest.config.ts` | Test environment, coverage |
-| Playwright config | `playwright.config.ts` | E2E browser matrix |
-| Bundle budgets | `config/bundle-budget.json` | JS/CSS size limits |
-| Lighthouse | `config/lighthouserc.json` | Performance/a11y thresholds |
-| Browserslist | `.browserslistrc` | Target browsers (last 2 versions, no IE) |
-| Markdown lint | `.markdownlint.json` | Doc style rules |
+| Config             | Location                    | Notes                                                |
+| ------------------ | --------------------------- | ---------------------------------------------------- |
+| tsconfig (4 files) | Workspace root              | App, node, test, e2e — all reference a solution root |
+| ESLint flat config | `eslint.config.js`          | Project-specific rules, zero disabled rules          |
+| Vite config        | `vite.config.ts`            | Build/dev/preview configuration                      |
+| Vitest config      | `vitest.config.ts`          | Test environment, coverage                           |
+| Playwright config  | `playwright.config.ts`      | E2E browser matrix                                   |
+| Bundle budgets     | `config/bundle-budget.json` | JS/CSS size limits                                   |
+| Lighthouse         | `config/lighthouserc.json`  | Performance/a11y thresholds                          |
+| Browserslist       | `.browserslistrc`           | Target browsers (last 2 versions, no IE)             |
+| Markdown lint      | `.markdownlint.json`        | Doc style rules                                      |
 
 ### Intermediate Artifact Policy
 
 All generated/transient outputs write to OS TEMP:
 
-| Artifact | Path |
-| --- | --- |
-| Vite cache | `$TEMP/WoodworkingShop/.vite_cache` |
-| ESLint cache | `$TEMP/WoodworkingShop/.eslintcache` |
-| Vitest coverage | `$TEMP/WoodworkingShop/coverage` |
-| Playwright results | `$TEMP/WoodworkingShop/test-results` |
-| Playwright report | `$TEMP/WoodworkingShop/playwright-report` |
-| Lighthouse output | `$TEMP/WoodworkingShop/.lighthouseci` |
-| TS build info | `node_modules/.tmp/` (npm-managed) |
+| Artifact           | Path                                      |
+| ------------------ | ----------------------------------------- |
+| Vite cache         | `$TEMP/WoodworkingShop/.vite_cache`       |
+| ESLint cache       | `$TEMP/WoodworkingShop/.eslintcache`      |
+| Vitest coverage    | `$TEMP/WoodworkingShop/coverage`          |
+| Playwright results | `$TEMP/WoodworkingShop/test-results`      |
+| Playwright report  | `$TEMP/WoodworkingShop/playwright-report` |
+| Lighthouse output  | `$TEMP/WoodworkingShop/.lighthouseci`     |
+| TS build info      | `node_modules/.tmp/` (npm-managed)        |
 
 Workspace root contains **only** source, configuration, and documentation.
 
@@ -292,11 +324,11 @@ If any gate fails, the release is blocked until root cause is fixed (not suppres
 
 ## Legacy Consolidation
 
-| Content | Location |
-| --- | --- |
-| Completed sprints (historical) | [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md) |
-| Release details | [CHANGELOG.md](CHANGELOG.md) |
-| Architecture baseline | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) |
-| Copilot coding conventions | [.github/copilot-instructions.md](.github/copilot-instructions.md) |
+| Content                        | Location                                                           |
+| ------------------------------ | ------------------------------------------------------------------ |
+| Completed sprints (historical) | [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)                   |
+| Release details                | [CHANGELOG.md](CHANGELOG.md)                                       |
+| Architecture baseline          | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)                       |
+| Copilot coding conventions     | [.github/copilot-instructions.md](.github/copilot-instructions.md) |
 
 This file contains **only** forward-looking execution priorities.

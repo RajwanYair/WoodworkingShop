@@ -212,4 +212,3 @@ export function decompressBase64ToConfig(compact: string): Partial<CabinetConfig
     return {};
   }
 }
-

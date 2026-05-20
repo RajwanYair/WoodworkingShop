@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { configToParams, paramsToConfig, readConfigFromUrl, compressConfigToBase64, decompressBase64ToConfig } from '../../src/utils/url-state';
+import {
+  configToParams,
+  paramsToConfig,
+  readConfigFromUrl,
+  compressConfigToBase64,
+  decompressBase64ToConfig,
+} from '../../src/utils/url-state';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 import { cfg } from '../helpers';
 

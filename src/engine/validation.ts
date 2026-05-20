@@ -495,12 +495,7 @@ export function validateConfig(
   // A carcass taller than 1 200 mm with zero shelves has no intermediate
   // horizontal element to resist racking.  Flag it as a warning so the user
   // can add at least one fixed shelf or a horizontal stretcher.
-  if (
-    config.height > 1200 &&
-    config.shelfCount === 0 &&
-    config.drawerCount === 0 &&
-    config.furnitureType !== 'panel'
-  ) {
+  if (config.height > 1200 && config.shelfCount === 0 && config.drawerCount === 0 && config.furnitureType !== 'panel') {
     issues.push({
       code: 'TALL_CARCASS_NO_SHELF',
       severity: 'warning',
@@ -518,15 +513,15 @@ export function validateConfig(
   if (config.shelfCount > 0 && dims.shelfDeflections.length > 0) {
     const { maxLoadKg } = dims.shelfDeflections[0];
     if (maxLoadKg < MIN_SHELF_LOAD_KG) {
-        issues.push({
-          code: 'SHELF_LOAD_CAPACITY_LOW',
-          severity: 'warning',
-          message: {
-            en: `Maximum safe shelf load is only ~${maxLoadKg} kg (L/360 limit). Reduce span, increase panel thickness, or add a centre support to achieve at least ${MIN_SHELF_LOAD_KG} kg per shelf.`,
-            he: `עומס מדף בטוח מרבי הוא ~${maxLoadKg} ק"ג (מגבלת L/360). הקטן ספן, הגדל עובי הלוח, או הוסף תמיכת אמצע כדי לשאת לפחות ${MIN_SHELF_LOAD_KG} ק"ג למדף.`,
-          },
-          field: 'shelfCount',
-        });
+      issues.push({
+        code: 'SHELF_LOAD_CAPACITY_LOW',
+        severity: 'warning',
+        message: {
+          en: `Maximum safe shelf load is only ~${maxLoadKg} kg (L/360 limit). Reduce span, increase panel thickness, or add a centre support to achieve at least ${MIN_SHELF_LOAD_KG} kg per shelf.`,
+          he: `עומס מדף בטוח מרבי הוא ~${maxLoadKg} ק"ג (מגבלת L/360). הקטן ספן, הגדל עובי הלוח, או הוסף תמיכת אמצע כדי לשאת לפחות ${MIN_SHELF_LOAD_KG} ק"ג למדף.`,
+        },
+        field: 'shelfCount',
+      });
     }
   }
 
@@ -607,9 +602,7 @@ export function validateConfig(
   // the interior ceiling).
   if (config.doorStyle !== 'none' && config.shelfCount > 0 && dims.hingePositions.length > 0) {
     const doorTopInsetMm = Math.max(0, t - config.doorReveal);
-    const hingeArmsFromBottom = dims.hingePositions.map(
-      (pos) => dims.internalHeight - (pos - doorTopInsetMm),
-    );
+    const hingeArmsFromBottom = dims.hingePositions.map((pos) => dims.internalHeight - (pos - doorTopInsetMm));
     // Equal-spacing shelf positions (mm from interior bottom); respects custom positions too.
     const shelfPositions: number[] =
       config.shelfSpacing === 'custom' && config.customShelfPositions.length === config.shelfCount
@@ -645,11 +638,7 @@ export function validateConfig(
   // provide enough diagonal bracing. Flag it so the user knows to add a
   // back panel, a wall-fixing cleat, or a frame-and-panel back insert.
   const NARROW_OPEN_BACK_MM = 400;
-  if (
-    config.hasBack === false &&
-    config.width < NARROW_OPEN_BACK_MM &&
-    config.furnitureType !== 'panel'
-  ) {
+  if (config.hasBack === false && config.width < NARROW_OPEN_BACK_MM && config.furnitureType !== 'panel') {
     issues.push({
       code: 'NARROW_BACK_OMITTED',
       severity: 'warning',

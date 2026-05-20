@@ -318,7 +318,7 @@ function buildExplanation(
     'adjust-height': { en: 'Adjust height for better yield', he: 'התאמת גובה לניצולת טובה' },
     'material-swap': { en: 'Try alternative material', he: 'חומר חלופי' },
     'shelf-count-reduce': { en: 'Reduce shelf count to save material', he: 'הפחתת מספר מדפים לחיסכון בחומר' },
-    'exhaustive': { en: 'Exhaustive — best across all strategies', he: 'מיצוי — הטוב מכל האסטרטגיות' },
+    exhaustive: { en: 'Exhaustive — best across all strategies', he: 'מיצוי — הטוב מכל האסטרטגיות' },
   };
 
   return {

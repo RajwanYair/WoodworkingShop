@@ -58,7 +58,11 @@ describe('getStorageEstimate', () => {
 
   it('handles estimate() throwing gracefully', async () => {
     Object.defineProperty(navigator, 'storage', {
-      value: { estimate: vi.fn(async () => { throw new Error('unavailable'); }) },
+      value: {
+        estimate: vi.fn(async () => {
+          throw new Error('unavailable');
+        }),
+      },
       configurable: true,
     });
     const est = await getStorageEstimate();

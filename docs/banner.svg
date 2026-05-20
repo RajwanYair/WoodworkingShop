@@ -161,7 +161,7 @@
   <rect x="1080" y="58" width="96" height="26" rx="13" fill="#7a4010" stroke="#c08030" stroke-width="1" opacity="0.95"/>
   <text x="1128" y="75"
     font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="700"
-    fill="#f0c060" text-anchor="middle">v3.44.0</text>
+    fill="#f0c060" text-anchor="middle">v3.54.0</text>
 
   <!-- Tagline -->
   <text x="242" y="124"

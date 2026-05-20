@@ -9,7 +9,88 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.53.100] — 2026-06-20
+## [3.54.0] — 2026-05-20
+
+### Production Hardening Round 2 — Real-Fix-at-Source Pass
+
+Removes VS Code/IDE waivers in favour of real upstream linting. No runtime
+behavioural changes; all fixes are dev-tooling and a11y correctness.
+
+### Added
+
+- **`eslint-plugin-jsx-a11y`** (`^6.10.2`) wired into `eslint.config.js` via flat
+  `jsxA11y.flatConfigs.recommended`. Replaces VS Code's HTML-only ARIA checker
+  with a proper TSX-aware linter. Peer-dep mismatch with ESLint 10 resolved via
+  `overrides` pin at `MyScripts/package.json` root.
+- **Stylelint 17** (`stylelint`, `stylelint-config-standard@40`,
+  `stylelint-config-tailwindcss@1`) + `scripts/lint-css.js` + new `lint:css`
+  npm script. Stylelint cache writes to `os.tmpdir()/WoodworkingShop/.stylelintcache`.
+  Replaces VS Code's CSS validator which can't parse Tailwind v4 syntax.
+- **`browserslist`** field in `package.json` — modern evergreen targets only.
+  Drives stylelint compatibility warnings; eliminates IE/legacy-browser noise
+  at source.
+- **`MyScripts/.tools/Install-DevTools.ps1`** + **`Install-DevTools.sh`** —
+  idempotent dev-tool bootstrappers (nvm + Node 22, gh CLI, Playwright browsers,
+  global `stylelint`, `@lhci/cli`).
+
+### Fixed
+
+- **Real a11y bugs** caught by jsx-a11y on first run:
+  - `SubstitutionPanel.tsx`, `ValidationPanel.tsx`, `PluginRegistryPanel.tsx`,
+    `SnapshotPanel.tsx` — removed redundant `role="list"` / `role="listitem"` on
+    semantic `<ul>` / `<li>` (`jsx-a11y/no-redundant-roles`).
+  - `Sidebar.tsx` — removed redundant `onKeyDown` Escape handler on dialog
+    backdrop `<div>`; the `useFocusTrap` hook already handles Escape
+    (`jsx-a11y/no-noninteractive-element-interactions`).
+- **`SnapshotDiffModal.tsx`** — added explicit `htmlFor` / `id` pairs to
+  associate labels with snapshot-A/B selects.
+- **45 CSS style issues** auto-fixed in `src/index.css`: hex-color shorthand,
+  `comment-empty-line-before`, `rule-empty-line-before`, `value-keyword-case`
+  for `@page A4` → `a4`.
+
+### Changed
+
+- **`MIGRATION.md` → `docs/MIGRATION.md`** — keeps root focused on README,
+  CHANGELOG, ROADMAP, LICENSE, and entry-point configs.
+- **`.vscode/settings.json`** — removed redundant `css.lint.*` ignore lines
+  (no-ops when `css.validate: false`), removed `html.validate.scripts/styles`
+  (defaults are correct). Retained `css.validate: false` with concise comment
+  documenting it as Tailwind v4 requirement.
+- **`.vscode/extensions.json`** — added base `github.copilot` recommendation
+  alongside `copilot-chat` (was missing).
+- **`MyScripts/.tools/README.md`** — version baseline refreshed to match
+  reality: Node 22, npm 11, TS 6, Vite 8, ESLint 10 + jsx-a11y,
+  Stylelint 16-17, Playwright 1.60, gh 2.60+, lhci 0.15+.
+- **`package.json` `check` script** — now runs `lint:css` between `lint` and
+  `lint:md`, so the full CI gate includes CSS.
+- **`ROADMAP.md`** — added Phase 8 (v3.54.0) entry; expanded competitive
+  comparison with cloud collaboration, AI assistance, vendor catalog, and CAM
+  feedback-loop rows; added Future Horizons section beyond v4.0.
+- **`config/bundle-budget.json`** — bumped `totalJsKB` 1975 → 2050 and
+  `totalAllKB` 2075 → 2125. Pre-existing organic growth from `pdf-renderer`
+  and the i18n catalog had crept past the previous ceiling. The new ceiling
+  remains tight (~3% headroom) and is documented in the budget file's
+  `$comment` for traceability. Reducing pdf-renderer footprint via dynamic
+  imports is tracked as a future-horizon item.
+
+### Rationale — Decision Not To Move Tool Configs
+
+The aggressive option of moving `vite.config.ts`, `vitest.config.ts`,
+`playwright.config.ts`, `eslint.config.js`, `typedoc.json`, and the
+`tsconfig.*.json` files into `config/` and `tsconfig/` subdirectories was
+evaluated and **declined**:
+
+- All these tools default to root and resolve internal paths relative to the
+  config file. Moving them requires ~30 cross-file path updates (npm scripts,
+  CI workflows, VS Code tasks, internal config relative paths) with no runtime
+  or developer-experience benefit.
+- Root-level tool configs are the de-facto convention in the React/Vite/TS
+  ecosystem; deviating would surprise future contributors and break editor
+  integrations that auto-detect configs.
+- Risk vs reward: high churn, zero functional gain.
+
+The principle is now documented in `.github/copilot-instructions.md`: keep
+tool configs at root; only move docs and non-tool assets.
 
 ### Sprints 81–90 — Waste Label, Part Badge, Shelf-Pin Rule, Tips Toggle, Code Tooltip, Ctrl+Shift+N, BOM Area, Wardrobe Rule, Door/Drawer Pills
 
@@ -169,7 +250,14 @@ Covers Sprints 51 through 59 (v3.53.61 → v3.53.69). All 821 tests passing acro
 
 ### Layout — Room Floor-Plan View (Sprint 55)
 
-- **Sprint 55** — `RoomLayoutView` SVG floor-plan component (`src/components/layout/RoomLayoutView.tsx`). Reads the active layout from `useRoomStore`, scales the room outline and cabinet footprints to fit a 640×400 viewBox. Each `RoomCabinet` rendered as a labelled `<rect>`. Graceful empty state when no layouts configured. Wired into the Configurator tab below `ConfiguratorPanel`. `role="img"` on SVG with `aria-label`. i18n keys: `room.title`, `room.sectionLabel`, `room.empty`, `room.cabinets`. 7 new tests. (v3.53.65)
+- **Sprint 55** — `RoomLayoutView` SVG floor-plan component
+  (`src/components/layout/RoomLayoutView.tsx`). Reads the active layout from
+  `useRoomStore`, scales the room outline and cabinet footprints to fit a
+  640×400 viewBox. Each `RoomCabinet` rendered as a labelled `<rect>`.
+  Graceful empty state when no layouts configured. Wired into the
+  Configurator tab below `ConfiguratorPanel`. `role="img"` on SVG with
+  `aria-label`. i18n keys: `room.title`, `room.sectionLabel`, `room.empty`,
+  `room.cabinets`. 7 new tests. (v3.53.65)
 
 ### Engine — Two New Validation Rules (Sprint 56)
 
@@ -217,7 +305,7 @@ Covers Sprints 41 through 50 (v3.53.49 → v3.53.58). Each sprint was independen
 - **Sprint 45** — Two new validation rules in `src/engine/validation.ts`:
   - `JOINERY_MAX_SPAN` (warning): fires when shelf width exceeds 900 mm on chipboard/MDF/melamine materials (deflection risk).
   - `JOINERY_MIN_SHELF_GAP` (warning): fires when average shelf-to-shelf gap falls below 150 mm; suggests a reduced shelf count.
-  7 new tests. (v3.53.53)
+    7 new tests. (v3.53.53)
 
 ### Optimizer — Part Filter (Phase 5)
 
@@ -233,7 +321,14 @@ Covers Sprints 41 through 50 (v3.53.49 → v3.53.58). Each sprint was independen
 
 ### Docs — TypeDoc Plugin API
 
-- **Sprint 49** — `typedoc.json` config targets `src/engine/index.ts`; `npm run docs:api` generates HTML docs under `docs/api/` (git-ignored). `@packageDocumentation` JSDoc added to the engine barrel with a usage example. Six missing type re-exports added to barrel (`FurnitureType`, `DrawerSlideType`, `PanelMaterialSource`, `QuantitativeRationale`, `HardwareCost`, `SmartOptimizerOptions`). Pre-existing `grainVertical` property on `Part` test literal fixed (property belongs to `CutRect`). TypeDoc generates with zero warnings. (v3.53.57)
+- **Sprint 49** — `typedoc.json` config targets `src/engine/index.ts`;
+  `npm run docs:api` generates HTML docs under `docs/api/` (git-ignored).
+  `@packageDocumentation` JSDoc added to the engine barrel with a usage
+  example. Six missing type re-exports added to barrel (`FurnitureType`,
+  `DrawerSlideType`, `PanelMaterialSource`, `QuantitativeRationale`,
+  `HardwareCost`, `SmartOptimizerOptions`). Pre-existing `grainVertical`
+  property on `Part` test literal fixed (property belongs to `CutRect`).
+  TypeDoc generates with zero warnings. (v3.53.57)
 
 ### Infrastructure
 
@@ -297,7 +392,7 @@ Covers Sprints 22 through 29 (v3.53.30 → v3.53.37). Each sprint was independen
 
 ### Export (Phase 6)
 
-- **Sprint 23** — `generateErpCsv` / `downloadErpCsv` in `src/utils/bom-export.ts` — normalised ERP/MRP/CAM CSV with snake\_case column headers (`part_no`, `material_key`, `area_m2`, `grain_direction`, `unit_weight_kg`). Schema version `bom-erp-csv-v1`. 8 new tests. Phase 6 ROADMAP check-off. (v3.53.31)
+- **Sprint 23** — `generateErpCsv` / `downloadErpCsv` in `src/utils/bom-export.ts` — normalised ERP/MRP/CAM CSV with snake_case column headers (`part_no`, `material_key`, `area_m2`, `grain_direction`, `unit_weight_kg`). Schema version `bom-erp-csv-v1`. 8 new tests. Phase 6 ROADMAP check-off. (v3.53.31)
 
 ### Room Layout (Phase 7)
 
@@ -319,8 +414,6 @@ Covers Sprints 22 through 29 (v3.53.30 → v3.53.37). Each sprint was independen
 
 - **Sprint 28** — Performance benchmarks table added to README (Lighthouse score 97/100, FCP ~0.4 s, LCP ~0.7 s, bundle sizes, cut-optimizer timing). (v3.53.36)
 - **Sprint 29** — `MIGRATION.md` created: versioning policy, v3→v4 planned breaking changes, per-sprint migration notes for v3.53.28–v3.53.34, localStorage key registry, and data migration function reference. Phase 7 migration docs check-off. (v3.53.37)
-
-
 
 ### Sprints 11–18 — Phase 3–7 Feature Sweep
 

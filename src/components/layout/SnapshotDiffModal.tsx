@@ -48,10 +48,11 @@ export function SnapshotDiffModal({ snapshots, onClose }: Props) {
         <div className="px-5 py-4 space-y-3 border-b border-wood-200 dark:border-wood-700">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-wood-600 dark:text-wood-400 mb-1">
+              <label htmlFor="snap-before" className="block text-xs font-medium text-wood-600 dark:text-wood-400 mb-1">
                 {t('snapshot.diff.before')}
               </label>
               <select
+                id="snap-before"
                 value={idA}
                 onChange={(e) => setIdA(e.target.value)}
                 className="w-full text-xs rounded border border-wood-300 dark:border-wood-600 bg-wood-50 dark:bg-wood-800 px-2 py-1.5 text-wood-800 dark:text-wood-100 focus:outline-none focus:ring-1 focus:ring-wood-400"
@@ -64,10 +65,11 @@ export function SnapshotDiffModal({ snapshots, onClose }: Props) {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-wood-600 dark:text-wood-400 mb-1">
+              <label htmlFor="snap-after" className="block text-xs font-medium text-wood-600 dark:text-wood-400 mb-1">
                 {t('snapshot.diff.after')}
               </label>
               <select
+                id="snap-after"
                 value={idB}
                 onChange={(e) => setIdB(e.target.value)}
                 className="w-full text-xs rounded border border-wood-300 dark:border-wood-600 bg-wood-50 dark:bg-wood-800 px-2 py-1.5 text-wood-800 dark:text-wood-100 focus:outline-none focus:ring-1 focus:ring-wood-400"
@@ -84,9 +86,7 @@ export function SnapshotDiffModal({ snapshots, onClose }: Props) {
 
         {/* Diff result */}
         <div className="px-5 py-4 max-h-80 overflow-y-auto space-y-4">
-          {!diff && (
-            <p className="text-xs text-wood-400 dark:text-wood-500 italic">{t('snapshot.diff.selectTwo')}</p>
-          )}
+          {!diff && <p className="text-xs text-wood-400 dark:text-wood-500 italic">{t('snapshot.diff.selectTwo')}</p>}
           {diff?.identical && (
             <p className="text-xs text-green-600 dark:text-green-400 font-medium">{t('snapshot.diff.identical')}</p>
           )}
@@ -104,16 +104,11 @@ export function SnapshotDiffModal({ snapshots, onClose }: Props) {
               )}
               {diff.cabinetDiffs.map((cd) => (
                 <div key={cd.index}>
-                  <h3 className="text-xs font-semibold text-wood-700 dark:text-wood-200 mb-1.5">
-                    {cd.cabinetName}
-                  </h3>
+                  <h3 className="text-xs font-semibold text-wood-700 dark:text-wood-200 mb-1.5">{cd.cabinetName}</h3>
                   <table className="w-full text-xs border-collapse">
                     <tbody>
                       {cd.deltas.map((delta) => (
-                        <tr
-                          key={delta.field}
-                          className="border-b border-wood-100 dark:border-wood-800 last:border-0"
-                        >
+                        <tr key={delta.field} className="border-b border-wood-100 dark:border-wood-800 last:border-0">
                           <td className="py-1 pe-3 text-wood-500 dark:text-wood-400 w-1/3">
                             {t(delta.labelKey, { defaultValue: delta.field })}
                           </td>

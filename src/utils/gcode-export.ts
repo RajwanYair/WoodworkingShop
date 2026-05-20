@@ -134,12 +134,7 @@ export function downloadAllSheetsGcode(sheets: CutSheet[], projectName: string, 
  * @param opts - GcodeOptions (merged with DEFAULTS)
  * @returns G-code string for the circular pocket
  */
-export function circularPocketToGcode(
-  cx: number,
-  cy: number,
-  radius: number,
-  opts?: Partial<GcodeOptions>,
-): string {
+export function circularPocketToGcode(cx: number, cy: number, radius: number, opts?: Partial<GcodeOptions>): string {
   const o: GcodeOptions = { ...DEFAULTS, ...opts };
   const lines: string[] = [];
   const cutR = radius - o.toolDiameter / 2; // compensated cut radius
@@ -159,7 +154,9 @@ export function circularPocketToGcode(
 
   const startX = cx + cutR; // entry point on the +X side of the circle
 
-  lines.push(`; Circular pocket r=${radius} mm at (${cx.toFixed(2)},${cy.toFixed(2)}) — ${o.useArcs ? 'G2 arc' : 'G1 polygon'} mode`);
+  lines.push(
+    `; Circular pocket r=${radius} mm at (${cx.toFixed(2)},${cy.toFixed(2)}) — ${o.useArcs ? 'G2 arc' : 'G1 polygon'} mode`,
+  );
   lines.push(`G0 X${startX.toFixed(2)} Y${cy.toFixed(2)}`);
 
   const passes = Math.ceil(o.cutDepth / o.passDepth);

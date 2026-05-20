@@ -38,10 +38,17 @@ tests/
 - **Zero suppression rule**: no `eslint-disable`, no `@ts-ignore`, no `@ts-nocheck`, no `as any`
 - **i18n parity**: every new `t('key')` call must have matching entries in both `en.json` and `he.json`
 - **Engine functions are pure**: `src/engine/` has no side effects, no React imports, fully tested
-- **ARIA on all interactive elements**: `aria-label` or `<label for>` required;
-  `tabIndex={-1}` only on programmatically focusable non-interactive elements
+- **ARIA via jsx-a11y**: `eslint-plugin-jsx-a11y` enforces correctness at lint time —
+  do NOT add redundant `role="list"` / `role="listitem"` on semantic `<ul>` / `<li>`;
+  do NOT attach `onKeyDown` to non-interactive `<div>` (use `useFocusTrap` or document-level listener)
 - **RTL-safe layout**: use Tailwind logical properties (`ms-*`, `me-*`, `start-*`, `end-*`) not `ml-*`/`mr-*`
 - **No hardcoded colours**: use `wood-*` design tokens or Tailwind semantic classes
+- **CSS via Stylelint**: `stylelint.config.js` + `browserslist` field drives compatibility.
+  Run `npm run lint:css` before commit; auto-fix with `npx stylelint --fix "src/**/*.css"`
+- **Tool configs stay at root**: do NOT move `vite.config.ts`, `vitest.config.ts`,
+  `playwright.config.ts`, `eslint.config.js`, `stylelint.config.js`, `typedoc.json`,
+  or `tsconfig.*.json` into subdirs. These match Vite/React/ESLint defaults and moving
+  them creates churn without benefit. Only docs and non-tool assets go in `docs/`
 
 ## Key Patterns
 

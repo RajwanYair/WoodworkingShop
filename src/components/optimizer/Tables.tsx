@@ -98,8 +98,16 @@ export function PartsTable() {
               <option value="">{t('optimizer.allMaterials')}</option>
               {uniqueMaterials.map((mat) => {
                 let label = mat;
-                try { label = getMaterial(mat).name[lang]; } catch { /* keep key */ }
-                return <option key={mat} value={mat}>{label}</option>;
+                try {
+                  label = getMaterial(mat).name[lang];
+                } catch {
+                  /* keep key */
+                }
+                return (
+                  <option key={mat} value={mat}>
+                    {label}
+                  </option>
+                );
               })}
             </select>
           </label>

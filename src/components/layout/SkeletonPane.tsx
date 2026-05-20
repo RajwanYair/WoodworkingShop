@@ -16,10 +16,7 @@ function SkeletonLine({ width = 'full', height = 'h-4' }: SkeletonLineProps) {
     '2/3': 'w-2/3',
   }[width];
   return (
-    <div
-      className={`${widthClass} ${height} rounded bg-wood-200 dark:bg-wood-700 animate-pulse`}
-      aria-hidden="true"
-    />
+    <div className={`${widthClass} ${height} rounded bg-wood-200 dark:bg-wood-700 animate-pulse`} aria-hidden="true" />
   );
 }
 
@@ -55,13 +52,7 @@ export function SkeletonPane({ label, cards = 3 }: SkeletonPaneProps) {
   const ariaLabel = label ?? t('skeleton.loading');
 
   return (
-    <div
-      role="status"
-      aria-live="polite"
-      aria-label={ariaLabel}
-      className="space-y-4 py-4"
-      data-testid="skeleton-pane"
-    >
+    <div role="status" aria-live="polite" aria-label={ariaLabel} className="space-y-4 py-4" data-testid="skeleton-pane">
       {/* Visually hidden status text for screen readers */}
       <span className="sr-only">{ariaLabel}</span>
 

@@ -453,7 +453,9 @@ describe('validateConfig — NARROW_BACK_OMITTED (Sprint 34)', () => {
   });
 
   it('does not raise NARROW_BACK_OMITTED for panel furniture type', () => {
-    const issues = validateConfig(cfg({ hasBack: false, width: 300, furnitureType: 'panel', doorStyle: 'none', kickHeight: 0, depth: 18 }));
+    const issues = validateConfig(
+      cfg({ hasBack: false, width: 300, furnitureType: 'panel', doorStyle: 'none', kickHeight: 0, depth: 18 }),
+    );
     expect(issues.some((i) => i.code === 'NARROW_BACK_OMITTED')).toBe(false);
   });
 
@@ -556,7 +558,7 @@ describe('validateConfig — Sprint 56 new rules', () => {
     expect(issue.severity).toBe('error');
     expect(issue.field).toBe('drawerCount');
     expect(typeof issue.suggestedValue).toBe('number');
-    expect((issue.suggestedValue as number)).toBeLessThan(20);
+    expect(issue.suggestedValue as number).toBeLessThan(20);
   });
 
   it('does not raise EXCESSIVE_DRAWER_COUNT for a sensible drawer count', () => {

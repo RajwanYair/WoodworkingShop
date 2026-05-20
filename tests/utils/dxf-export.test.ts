@@ -1,6 +1,11 @@
 import { describe, it, expect, vi } from 'vitest';
 import type { CutSheet } from '../../src/engine/types';
-import { cutSheetToDxf, downloadDxfForSheet, downloadAllSheetsDxf, materialLayerName } from '../../src/utils/dxf-export';
+import {
+  cutSheetToDxf,
+  downloadDxfForSheet,
+  downloadAllSheetsDxf,
+  materialLayerName,
+} from '../../src/utils/dxf-export';
 import { mockSheet } from '../helpers';
 
 describe('cutSheetToDxf', () => {

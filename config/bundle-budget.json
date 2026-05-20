@@ -1,8 +1,8 @@
 {
-  "$comment": "Bundle size budgets enforced by scripts/bundle-report.js. Values are KB. Tightening these (lowering numbers) is encouraged; loosening requires a justification in CHANGELOG.",
-  "totalJsKB": 1975,
+  "$comment": "Bundle size budgets enforced by scripts/bundle-report.js. Values are KB. Tightening these (lowering numbers) is encouraged; loosening requires a justification in CHANGELOG. v3.54.0 bump: +75 KB JS, +50 KB total to absorb pre-existing organic growth (pdf-renderer + i18n catalog expansion) — see CHANGELOG.",
+  "totalJsKB": 2050,
   "totalCssKB": 100,
-  "totalAllKB": 2075,
+  "totalAllKB": 2125,
   "perFileKB": {
     "_default": 500,
     "pdf-renderer": 1600

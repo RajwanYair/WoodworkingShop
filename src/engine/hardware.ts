@@ -67,22 +67,16 @@ export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
   const hasDoors = cfg.doorStyle !== 'none' && cfg.doorCount > 0;
 
   // Sprint 10: resolve vendor hinge profile (if any)
-  const hingeProfile = cfg.hingeProfile
-    ? (VENDOR_HINGE_PROFILES.find((p) => p.id === cfg.hingeProfile) ?? null)
-    : null;
+  const hingeProfile = cfg.hingeProfile ? (VENDOR_HINGE_PROFILES.find((p) => p.id === cfg.hingeProfile) ?? null) : null;
 
   // ── Hinges (35 mm Euro / clip-on) ──
   if (hasDoors) {
     items.push({
       id: 'H01',
-      name: hingeProfile
-        ? hingeProfile.name
-        : { en: 'Euro Hinge 35 mm (110°)', he: 'ציר מטבח 35 מ"מ (110°)' },
+      name: hingeProfile ? hingeProfile.name : { en: 'Euro Hinge 35 mm (110°)', he: 'ציר מטבח 35 מ"מ (110°)' },
       qty: d.hingesPerDoor * cfg.doorCount,
       unit: { en: 'pcs', he: "יח'" },
-      supplierUrl: hingeProfile
-        ? hingeProfile.supplierUrl
-        : 'https://www.blum.com/in/en/products/hinges/',
+      supplierUrl: hingeProfile ? hingeProfile.supplierUrl : 'https://www.blum.com/in/en/products/hinges/',
       supplierName: hingeProfile ? hingeProfile.brand : 'Blum',
     });
 

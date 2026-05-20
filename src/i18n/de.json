@@ -254,13 +254,20 @@
     "export": "JSON exportieren",
     "import": "JSON importieren",
     "empty": "Keine gespeicherten Projekte",
+    "noResults": "Keine Projekte entsprechen „{{query}}“",
     "cabinets": "Schrank/Schränke",
     "saved": "Projekt gespeichert",
     "loaded": "Projekt geladen",
     "deleted": "Projekt gelöscht",
     "exported": "Projekt exportiert",
     "imported": "Projekt importiert",
-    "importError": "Ungültige Projektdatei"
+    "importError": "Ungültige Projektdatei",
+    "searchPlaceholder": "Projekte suchen…",
+    "sortByDate": "Neueste zuerst",
+    "sortByName": "A–Z",
+    "sortLabel": "Sortieren",
+    "found_one": "{{count}} Ergebnis",
+    "found_other": "{{count}} Ergebnisse"
   },
   "storage": {
     "usageLabel": "{{used}} KB / {{quota}} MB",

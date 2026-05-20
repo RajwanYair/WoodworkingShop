@@ -138,9 +138,9 @@ Intermediate artifact policy:
 
 `SharedArrayBuffer` enables zero-copy memory sharing between the main thread and Web Workers. The cut-optimizer worker currently uses structured-clone transfer. A future optimisation could pass part data via a shared buffer to avoid serialisation overhead.
 
-**Requirement**: `SharedArrayBuffer` is only available when the page is *cross-origin isolated*. This requires the server to send:
+**Requirement**: `SharedArrayBuffer` is only available when the page is _cross-origin isolated_. This requires the server to send:
 
-```
+```text
 Cross-Origin-Opener-Policy:  same-origin
 Cross-Origin-Embedder-Policy: require-corp
 ```
@@ -148,6 +148,7 @@ Cross-Origin-Embedder-Policy: require-corp
 **Current status**: GitHub Pages does **not** set these headers, so `crossOriginIsolated` is `false` in production. The utility function `trySharedArrayBuffer(size)` in `src/workers/shared-buffer.ts` detects this and returns `null`, allowing the worker pipeline to fall back to standard transfer automatically.
 
 **To enable locally**: Add to `vite.config.ts` `server.headers`:
+
 ```ts
 'Cross-Origin-Opener-Policy': 'same-origin',
 'Cross-Origin-Embedder-Policy': 'require-corp',
@@ -159,19 +160,21 @@ A lightweight WebGL renderer is available for evaluating material-texture previe
 
 **Feature probe** — `src/engine/webgl-probe.ts`:
 
-| Function | Description |
-|---|---|
-| `probeWebGLTier()` | Returns `'webgl2' \| 'webgl1' \| 'unavailable'` |
-| `isWebGLAvailable()` | Quick boolean gate |
-| `isWebGL2Available()` | Check for full shader support |
+| Function              | Description                                     |
+| --------------------- | ----------------------------------------------- |
+| `probeWebGLTier()`    | Returns `'webgl2' \| 'webgl1' \| 'unavailable'` |
+| `isWebGLAvailable()`  | Quick boolean gate                              |
+| `isWebGL2Available()` | Check for full shader support                   |
 
 **Component** — `src/components/preview/WebGLPreviewCanvas.tsx`:
+
 - Renders a simplified 3-D box approximating the configured cabinet dimensions.
 - Uses raw WebGL (no external library) to keep bundle impact near zero.
 - Falls back gracefully to a descriptive message if WebGL is unsupported.
 - Slow y-axis rotation demonstrates per-face shading with a warm-oak colour palette.
 
 **Evaluation status (Sprint 32)**:
+
 - ✅ WebGL 1/2 detection works in all tested browsers.
 - ✅ Basic box geometry renders with face shading.
 - ⏳ Material texture mapping deferred to v4.0 (requires UV coords + texture atlas).
@@ -496,7 +499,7 @@ graph LR
   class ci check
 ```
 
-## ♿ Accessibility (WCAG 2.2 AA) — v3.42.0
+## ♿ Accessibility (WCAG 2.2 AA) — v3.54.0
 
 Cabinet Planner targets **WCAG 2.2 Level AA** compliance. This section documents the patterns, CI gates, and runtime mechanisms in place.
 

@@ -19,8 +19,14 @@ Font.registerEmojiSource({
 Font.register({
   family: 'NotoSansHebrew',
   fonts: [
-    { src: 'https://fonts.gstatic.com/s/notosanshebrew/v46/or3HQ7v33eiDljA1IufXTtVf7V6RvEEdhQlk0LlGxCyaeNKYZC0sq0G1.ttf', fontWeight: 400 },
-    { src: 'https://fonts.gstatic.com/s/notosanshebrew/v46/or3HQ7v33eiDljA1IufXTtVf7V6RvEEdhQlk0LlGxCyaeNKYZC0sq6e0.ttf', fontWeight: 700 },
+    {
+      src: 'https://fonts.gstatic.com/s/notosanshebrew/v46/or3HQ7v33eiDljA1IufXTtVf7V6RvEEdhQlk0LlGxCyaeNKYZC0sq0G1.ttf',
+      fontWeight: 400,
+    },
+    {
+      src: 'https://fonts.gstatic.com/s/notosanshebrew/v46/or3HQ7v33eiDljA1IufXTtVf7V6RvEEdhQlk0LlGxCyaeNKYZC0sq6e0.ttf',
+      fontWeight: 700,
+    },
   ],
 });
 
@@ -406,29 +412,40 @@ const pdfI18n = {
     back: 'Back',
     doorLabel: 'Door',
     stepPrepare: 'Prepare all panels',
-    stepPrepareDesc: 'Cut all parts per the cut list. Sand faces to 180 grit. Apply edge banding ({edgeBanding}) to all designated edges.',
+    stepPrepareDesc:
+      'Cut all parts per the cut list. Sand faces to 180 grit. Apply edge banding ({edgeBanding}) to all designated edges.',
     stepDrillPins: 'Drill shelf pin holes',
-    stepDrillPinsDesc: 'Drill 5 mm × 10 mm holes on both side panels (inner face), 32 mm apart, two columns per side. Use a line-boring jig for precision.',
+    stepDrillPinsDesc:
+      'Drill 5 mm × 10 mm holes on both side panels (inner face), 32 mm apart, two columns per side. Use a line-boring jig for precision.',
     stepPreDrill: 'Pre-drill confirmat holes',
-    stepPreDrillDesc: 'Drill 5 mm through-holes on top and bottom panels. Drill 3.5 mm × 40 mm pilot holes into side panel end-grain. Mark positions ~50 mm from edges, ~150 mm apart.',
+    stepPreDrillDesc:
+      'Drill 5 mm through-holes on top and bottom panels. Drill 3.5 mm × 40 mm pilot holes into side panel end-grain. Mark positions ~50 mm from edges, ~150 mm apart.',
     stepAssemble: 'Assemble the carcass box',
-    stepAssembleDesc: 'Join side panels to top and bottom with confirmat screws. Use {carcass} panels. Internal width: {internalWidth} mm. Verify square with diagonal measurements — both diagonals must match.',
+    stepAssembleDesc:
+      'Join side panels to top and bottom with confirmat screws. Use {carcass} panels. Internal width: {internalWidth} mm. Verify square with diagonal measurements — both diagonals must match.',
     stepCentreShelf: 'Install fixed centre shelf',
-    stepCentreShelfDesc: 'Install the fixed structural shelf at mid-height (required for cabinets > 1200 mm tall). Secure with confirmats through both side panels.',
+    stepCentreShelfDesc:
+      'Install the fixed structural shelf at mid-height (required for cabinets > 1200 mm tall). Secure with confirmats through both side panels.',
     stepBackPanel: 'Attach back panel',
-    stepBackPanelDesc: 'Fit the {back} back panel ({w} × {h} mm) into the rabbet or staple/nail at ~150 mm intervals. The back panel keeps the carcass square — check again before fastening.',
+    stepBackPanelDesc:
+      'Fit the {back} back panel ({w} × {h} mm) into the rabbet or staple/nail at ~150 mm intervals. The back panel keeps the carcass square — check again before fastening.',
     stepBoreHinges: 'Bore hinge cups on doors',
-    stepBoreHingesDesc: 'Bore 35 mm cups, 12 mm deep, centre 22.5 mm from door edge. {hinges} hinges per door at positions: {positions} mm from top.',
+    stepBoreHingesDesc:
+      'Bore 35 mm cups, 12 mm deep, centre 22.5 mm from door edge. {hinges} hinges per door at positions: {positions} mm from top.',
     stepMountPlates: 'Mount hinge plates on carcass',
-    stepMountPlatesDesc: 'Screw mounting plates on side panels aligned with hinge positions. Plate centre: 37 mm from front edge. Pre-drill pilot holes.',
+    stepMountPlatesDesc:
+      'Screw mounting plates on side panels aligned with hinge positions. Plate centre: 37 mm from front edge. Pre-drill pilot holes.',
     stepHangDoors: 'Hang doors and adjust',
-    stepHangDoorsDesc: 'Clip hinges into mounting plates. Adjust 3-way (in/out, up/down, lateral) until doors are flush with {reveal} mm reveal all around.',
+    stepHangDoorsDesc:
+      'Clip hinges into mounting plates. Adjust 3-way (in/out, up/down, lateral) until doors are flush with {reveal} mm reveal all around.',
     stepShelves: 'Install shelf pins and shelves',
     stepShelvesDesc: 'Insert shelf pins at desired heights. Place {count} adjustable shelf/shelves ({w} × {d} mm).',
     stepHandles: 'Install handles',
-    stepHandlesDesc: 'Mount {style} handles on door(s). For bar handles use 128 mm or 160 mm centre-to-centre. Pre-drill before fastening to avoid tear-out.',
+    stepHandlesDesc:
+      'Mount {style} handles on door(s). For bar handles use 128 mm or 160 mm centre-to-centre. Pre-drill before fastening to avoid tear-out.',
     stepFinal: 'Final checks',
-    stepFinalDesc: 'Verify all doors open and close smoothly with consistent reveal. Check shelf levels with a spirit level. Tighten any loose confirmats. Clean all sawdust.',
+    stepFinalDesc:
+      'Verify all doors open and close smoothly with consistent reveal. Check shelf levels with a spirit level. Tighten any loose confirmats. Clean all sawdust.',
   },
   he: {
     coverTitle: 'תוכנית בנייה לארון',
@@ -537,29 +554,40 @@ const pdfI18n = {
     back: 'גב',
     doorLabel: 'דלת',
     stepPrepare: 'הכנת כל הפאנלים',
-    stepPrepareDesc: 'חתוך את כל החלקים לפי רשימת החיתוך. לטש פנים ל-180 גריט. הדבק קנט ({edgeBanding}) על כל הקצוות המיועדים.',
+    stepPrepareDesc:
+      'חתוך את כל החלקים לפי רשימת החיתוך. לטש פנים ל-180 גריט. הדבק קנט ({edgeBanding}) על כל הקצוות המיועדים.',
     stepDrillPins: 'קידוח חורי פיני מדף',
-    stepDrillPinsDesc: 'קדח חורים 5 מ"מ × 10 מ"מ בשני הפאנלים הצדדיים (צד פנימי), 32 מ"מ מרווח, שני טורים בכל צד. השתמש בג\'יג קידוח קו לדיוק.',
+    stepDrillPinsDesc:
+      'קדח חורים 5 מ"מ × 10 מ"מ בשני הפאנלים הצדדיים (צד פנימי), 32 מ"מ מרווח, שני טורים בכל צד. השתמש בג\'יג קידוח קו לדיוק.',
     stepPreDrill: 'קידוח מוקדם לקונפירמט',
-    stepPreDrillDesc: 'קדח חורים 5 מ"מ בפאנלים עליונים ותחתונים. קדח טייס 3.5 מ"מ × 40 מ"מ בסיבי הקצה של הצדדיים. סמן מיקומים ~50 מ"מ מהקצוות, ~150 מ"מ מרווח.',
+    stepPreDrillDesc:
+      'קדח חורים 5 מ"מ בפאנלים עליונים ותחתונים. קדח טייס 3.5 מ"מ × 40 מ"מ בסיבי הקצה של הצדדיים. סמן מיקומים ~50 מ"מ מהקצוות, ~150 מ"מ מרווח.',
     stepAssemble: 'הרכבת תיבת השלד',
-    stepAssembleDesc: 'חבר פאנלים צדדיים לעליון ותחתון עם ברגי קונפירמט. השתמש בפאנלים מ-{carcass}. רוחב פנימי: {internalWidth} מ"מ. וודא ריבוע עם מדידות אלכסוניות — שני האלכסונים חייבים להיות שווים.',
+    stepAssembleDesc:
+      'חבר פאנלים צדדיים לעליון ותחתון עם ברגי קונפירמט. השתמש בפאנלים מ-{carcass}. רוחב פנימי: {internalWidth} מ"מ. וודא ריבוע עם מדידות אלכסוניות — שני האלכסונים חייבים להיות שווים.',
     stepCentreShelf: 'התקנת מדף מרכזי קבוע',
-    stepCentreShelfDesc: 'התקן את המדף המבני הקבוע בגובה האמצע (נדרש לארונות מעל 1200 מ"מ). חזק עם קונפירמטים דרך שני הפאנלים הצדדיים.',
+    stepCentreShelfDesc:
+      'התקן את המדף המבני הקבוע בגובה האמצע (נדרש לארונות מעל 1200 מ"מ). חזק עם קונפירמטים דרך שני הפאנלים הצדדיים.',
     stepBackPanel: 'חיבור פאנל הגב',
-    stepBackPanelDesc: 'התקן את גב {back} ({w} × {h} מ"מ) בחריץ או סכך/מסמר כל ~150 מ"מ. פאנל הגב שומר על ריבוע השלד — בדוק שוב לפני החיזוק.',
+    stepBackPanelDesc:
+      'התקן את גב {back} ({w} × {h} מ"מ) בחריץ או סכך/מסמר כל ~150 מ"מ. פאנל הגב שומר על ריבוע השלד — בדוק שוב לפני החיזוק.',
     stepBoreHinges: 'קידוח גביעי ציר בדלתות',
-    stepBoreHingesDesc: 'קדח גביעים 35 מ"מ, עומק 12 מ"מ, מרכז 22.5 מ"מ מקצה הדלת. {hinges} צירים לדלת במיקומים: {positions} מ"מ מלמעלה.',
+    stepBoreHingesDesc:
+      'קדח גביעים 35 מ"מ, עומק 12 מ"מ, מרכז 22.5 מ"מ מקצה הדלת. {hinges} צירים לדלת במיקומים: {positions} מ"מ מלמעלה.',
     stepMountPlates: 'הרכבת פלטות ציר על השלד',
-    stepMountPlatesDesc: 'הברג פלטות הרכבה על הפאנלים הצדדיים מיושרות עם מיקומי הצירים. מרכז פלטה: 37 מ"מ מהקצה הקדמי. קדח חורי טייס.',
+    stepMountPlatesDesc:
+      'הברג פלטות הרכבה על הפאנלים הצדדיים מיושרות עם מיקומי הצירים. מרכז פלטה: 37 מ"מ מהקצה הקדמי. קדח חורי טייס.',
     stepHangDoors: 'תליית דלתות וכיוונון',
-    stepHangDoorsDesc: 'הכנס צירים לפלטות ההרכבה. כוונן ב-3 כיוונים (פנימה/החוצה, למעלה/למטה, צדדי) עד שהדלתות מיושרות עם מרווח {reveal} מ"מ מכל הצדדים.',
+    stepHangDoorsDesc:
+      'הכנס צירים לפלטות ההרכבה. כוונן ב-3 כיוונים (פנימה/החוצה, למעלה/למטה, צדדי) עד שהדלתות מיושרות עם מרווח {reveal} מ"מ מכל הצדדים.',
     stepShelves: 'התקנת פיני מדף ומדפים',
     stepShelvesDesc: 'הכנס פיני מדף בגבהים הרצויים. הנח {count} מדפים מתכווננים ({w} × {d} מ"מ).',
     stepHandles: 'התקנת ידיות',
-    stepHandlesDesc: 'הרכב ידיות {style} על הדלת(ות). לידיות בר השתמש ב-128 מ"מ או 160 מ"מ מרכז-למרכז. קדח מראש למניעת קריעה.',
+    stepHandlesDesc:
+      'הרכב ידיות {style} על הדלת(ות). לידיות בר השתמש ב-128 מ"מ או 160 מ"מ מרכז-למרכז. קדח מראש למניעת קריעה.',
     stepFinal: 'בדיקות סופיות',
-    stepFinalDesc: 'וודא שכל הדלתות נפתחות ונסגרות בצורה חלקה עם מרווח אחיד. בדוק פלס מדפים עם פלס מים. הדק קונפירמטים רופפים. נקה כל שבבי עץ.',
+    stepFinalDesc:
+      'וודא שכל הדלתות נפתחות ונסגרות בצורה חלקה עם מרווח אחיד. בדוק פלס מדפים עם פלס מים. הדק קונפירמטים רופפים. נקה כל שבבי עץ.',
   },
 } as const;
 
@@ -607,7 +635,7 @@ export function CabinetPdfDocument({
   const isRTL = lang === 'he';
   const fontFamily = isRTL ? 'NotoSansHebrew' : 'Helvetica';
   const fontFamilyBold = isRTL ? 'NotoSansHebrew' : 'Helvetica-Bold';
-  const textAlign = isRTL ? 'right' as const : 'left' as const;
+  const textAlign = isRTL ? ('right' as const) : ('left' as const);
 
   const cMat = getMaterial(config.carcassMaterial);
   const bMat = getMaterial(config.backPanelMaterial);
@@ -668,7 +696,9 @@ export function CabinetPdfDocument({
               {cabinetCount > 1 && (
                 <View style={[s.coverInfoRow, isRTL ? { flexDirection: 'row-reverse' } : {}]}>
                   <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>🗄️ {T.cabinetsInProject}</Text>
-                  <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>{cabinetCount} {T.cabinets}</Text>
+                  <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>
+                    {cabinetCount} {T.cabinets}
+                  </Text>
                 </View>
               )}
               <View style={[s.coverInfoRowLast, isRTL ? { flexDirection: 'row-reverse' } : {}]}>
@@ -696,39 +726,149 @@ export function CabinetPdfDocument({
 
         <Text style={[s.specGroupTitle, { fontFamily: fontFamilyBold, textAlign }]}>📏 {T.specDimensions}</Text>
         <View style={s.specGroup}>
-          <SpecRow label={T.specExternal} value={`${config.width} × ${config.height} × ${config.depth} mm`} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
-          <SpecRow label={T.specInternalWidth} value={`${d.internalWidth} mm`} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
-          <SpecRow label={T.specInternalHeight} value={`${d.internalHeight} mm`} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
-          <SpecRow label={T.specShelfDepth} value={`${d.shelfDepth} mm`} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
-          <SpecRow label={T.specShelfWidth} value={`${d.shelfWidth} mm`} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
+          <SpecRow
+            label={T.specExternal}
+            value={`${config.width} × ${config.height} × ${config.depth} mm`}
+            isRTL={isRTL}
+            fontFamily={fontFamily}
+            fontFamilyBold={fontFamilyBold}
+          />
+          <SpecRow
+            label={T.specInternalWidth}
+            value={`${d.internalWidth} mm`}
+            isRTL={isRTL}
+            fontFamily={fontFamily}
+            fontFamilyBold={fontFamilyBold}
+          />
+          <SpecRow
+            label={T.specInternalHeight}
+            value={`${d.internalHeight} mm`}
+            isRTL={isRTL}
+            fontFamily={fontFamily}
+            fontFamilyBold={fontFamilyBold}
+          />
+          <SpecRow
+            label={T.specShelfDepth}
+            value={`${d.shelfDepth} mm`}
+            isRTL={isRTL}
+            fontFamily={fontFamily}
+            fontFamilyBold={fontFamilyBold}
+          />
+          <SpecRow
+            label={T.specShelfWidth}
+            value={`${d.shelfWidth} mm`}
+            isRTL={isRTL}
+            fontFamily={fontFamily}
+            fontFamilyBold={fontFamilyBold}
+          />
         </View>
 
         <Text style={[s.specGroupTitle, { fontFamily: fontFamilyBold, textAlign }]}>🪵 {T.specMaterials}</Text>
         <View style={s.specGroup}>
-          <SpecRow label={T.specCarcass} value={`${cMat.name[lang]} (${cMat.thickness} mm)`} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
-          <SpecRow label={T.specBackPanel} value={`${bMat.name[lang]} (${bMat.thickness} mm)`} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
-          <SpecRow label={T.specEdgeBanding} value={config.edgeBanding} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
-          <SpecRow label={T.specEdgeBandingTotal} value={`${(edgeBandingTotal / 1000).toFixed(1)} m`} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
+          <SpecRow
+            label={T.specCarcass}
+            value={`${cMat.name[lang]} (${cMat.thickness} mm)`}
+            isRTL={isRTL}
+            fontFamily={fontFamily}
+            fontFamilyBold={fontFamilyBold}
+          />
+          <SpecRow
+            label={T.specBackPanel}
+            value={`${bMat.name[lang]} (${bMat.thickness} mm)`}
+            isRTL={isRTL}
+            fontFamily={fontFamily}
+            fontFamilyBold={fontFamilyBold}
+          />
+          <SpecRow
+            label={T.specEdgeBanding}
+            value={config.edgeBanding}
+            isRTL={isRTL}
+            fontFamily={fontFamily}
+            fontFamilyBold={fontFamilyBold}
+          />
+          <SpecRow
+            label={T.specEdgeBandingTotal}
+            value={`${(edgeBandingTotal / 1000).toFixed(1)} m`}
+            isRTL={isRTL}
+            fontFamily={fontFamily}
+            fontFamilyBold={fontFamilyBold}
+          />
         </View>
 
         <Text style={[s.specGroupTitle, { fontFamily: fontFamilyBold, textAlign }]}>🚪 {T.specDoorsHardware}</Text>
         <View style={s.specGroup}>
-          <SpecRow label={T.specDoorStyle} value={config.doorStyle} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
-          <SpecRow label={T.specDoorCount} value={String(config.doorCount)} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
-          <SpecRow label={T.specDoorDimensions} value={`${Math.round(d.doorWidth)} × ${Math.round(d.doorHeight)} mm`} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
-          <SpecRow label={T.specDoorReveal} value={`${config.doorReveal} mm`} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
-          <SpecRow label={T.specHingesPerDoor} value={String(d.hingesPerDoor)} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
-          <SpecRow label={T.specHandleStyle} value={config.handleStyle} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
+          <SpecRow
+            label={T.specDoorStyle}
+            value={config.doorStyle}
+            isRTL={isRTL}
+            fontFamily={fontFamily}
+            fontFamilyBold={fontFamilyBold}
+          />
+          <SpecRow
+            label={T.specDoorCount}
+            value={String(config.doorCount)}
+            isRTL={isRTL}
+            fontFamily={fontFamily}
+            fontFamilyBold={fontFamilyBold}
+          />
+          <SpecRow
+            label={T.specDoorDimensions}
+            value={`${Math.round(d.doorWidth)} × ${Math.round(d.doorHeight)} mm`}
+            isRTL={isRTL}
+            fontFamily={fontFamily}
+            fontFamilyBold={fontFamilyBold}
+          />
+          <SpecRow
+            label={T.specDoorReveal}
+            value={`${config.doorReveal} mm`}
+            isRTL={isRTL}
+            fontFamily={fontFamily}
+            fontFamilyBold={fontFamilyBold}
+          />
+          <SpecRow
+            label={T.specHingesPerDoor}
+            value={String(d.hingesPerDoor)}
+            isRTL={isRTL}
+            fontFamily={fontFamily}
+            fontFamilyBold={fontFamilyBold}
+          />
+          <SpecRow
+            label={T.specHandleStyle}
+            value={config.handleStyle}
+            isRTL={isRTL}
+            fontFamily={fontFamily}
+            fontFamilyBold={fontFamilyBold}
+          />
         </View>
 
         <Text style={[s.specGroupTitle, { fontFamily: fontFamilyBold, textAlign }]}>📚 {T.specShelves}</Text>
         <View style={s.specGroup}>
-          <SpecRow label={T.specShelfCount} value={String(config.shelfCount)} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
-          <SpecRow label={T.specShelfSpacing} value={config.shelfSpacing} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
-          <SpecRow label={T.specBackPanelSize} value={`${Math.round(d.backPanelWidth)} × ${Math.round(d.backPanelHeight)} mm`} isRTL={isRTL} fontFamily={fontFamily} fontFamilyBold={fontFamilyBold} />
+          <SpecRow
+            label={T.specShelfCount}
+            value={String(config.shelfCount)}
+            isRTL={isRTL}
+            fontFamily={fontFamily}
+            fontFamilyBold={fontFamilyBold}
+          />
+          <SpecRow
+            label={T.specShelfSpacing}
+            value={config.shelfSpacing}
+            isRTL={isRTL}
+            fontFamily={fontFamily}
+            fontFamilyBold={fontFamilyBold}
+          />
+          <SpecRow
+            label={T.specBackPanelSize}
+            value={`${Math.round(d.backPanelWidth)} × ${Math.round(d.backPanelHeight)} mm`}
+            isRTL={isRTL}
+            fontFamily={fontFamily}
+            fontFamilyBold={fontFamilyBold}
+          />
         </View>
 
-        <Text style={[s.sectionTitle, { marginTop: 14, fontFamily: fontFamilyBold, textAlign }]}>📊 {T.cutSheetSummary}</Text>
+        <Text style={[s.sectionTitle, { marginTop: 14, fontFamily: fontFamilyBold, textAlign }]}>
+          📊 {T.cutSheetSummary}
+        </Text>
         <View style={[s.statRow, isRTL ? { flexDirection: 'row-reverse' } : {}]}>
           <View style={s.statBox}>
             <Text style={s.statEmoji}>📋</Text>
@@ -763,15 +903,19 @@ export function CabinetPdfDocument({
 
         <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>
           🔲 {T.partsListTitle}{' '}
-          <Text style={{ fontSize: 9, fontFamily, color: C.muted }}>— {parts.length} {T.partsTotal}</Text>
+          <Text style={{ fontSize: 9, fontFamily, color: C.muted }}>
+            — {parts.length} {T.partsTotal}
+          </Text>
         </Text>
 
         <View style={s.tableHeader}>
-          {[T.thId, T.thPartName, T.thQty, T.thMaterial, T.thLength, T.thWidth, T.thThickness, T.thEdgeBand].map((h, i) => (
-            <Text key={i} style={[s.thText, { width: partsColWidths[i], fontFamily: fontFamilyBold }]}>
-              {h}
-            </Text>
-          ))}
+          {[T.thId, T.thPartName, T.thQty, T.thMaterial, T.thLength, T.thWidth, T.thThickness, T.thEdgeBand].map(
+            (h, i) => (
+              <Text key={i} style={[s.thText, { width: partsColWidths[i], fontFamily: fontFamilyBold }]}>
+                {h}
+              </Text>
+            ),
+          )}
         </View>
 
         {parts.map((p, i) => (
@@ -802,7 +946,9 @@ export function CabinetPdfDocument({
 
         <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>
           🔩 {T.hardwareListTitle}{' '}
-          <Text style={{ fontSize: 9, fontFamily, color: C.muted }}>— {hardware.length} {T.itemTypes}</Text>
+          <Text style={{ fontSize: 9, fontFamily, color: C.muted }}>
+            — {hardware.length} {T.itemTypes}
+          </Text>
         </Text>
 
         <View style={s.tableHeader}>
@@ -836,7 +982,12 @@ export function CabinetPdfDocument({
         const scale = Math.min(maxLen / sheet.sheetLength, maxWid / sheet.sheetWidth);
 
         return (
-          <Page key={sheet.sheetIndex} size={pageSize} orientation={isLandscape ? 'landscape' : 'portrait'} style={s.page}>
+          <Page
+            key={sheet.sheetIndex}
+            size={pageSize}
+            orientation={isLandscape ? 'landscape' : 'portrait'}
+            style={s.page}
+          >
             <PageHeader
               section={`✂️  ${T.cutSheetPage} ${sheet.sheetIndex + 1} / ${optimization.sheets.length}`}
               projectName={coverTitle}
@@ -845,7 +996,12 @@ export function CabinetPdfDocument({
 
             {/* Sheet title banner */}
             <View
-              style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}
+              style={{
+                flexDirection: isRTL ? 'row-reverse' : 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: 8,
+              }}
             >
               <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>
                 ✂️ {T.cutSheetPage} #{sheet.sheetIndex + 1} — {mat.name[lang]} ({sheet.thickness} mm)
@@ -875,7 +1031,9 @@ export function CabinetPdfDocument({
                     paddingVertical: 3,
                   }}
                 >
-                  <Text style={{ fontSize: 8, color: C.muted, fontFamily }}>🔲 {sheet.parts.length} {T.parts}</Text>
+                  <Text style={{ fontSize: 8, color: C.muted, fontFamily }}>
+                    🔲 {sheet.parts.length} {T.parts}
+                  </Text>
                 </View>
               </View>
             </View>
@@ -966,7 +1124,9 @@ export function CabinetPdfDocument({
         <Text style={[s.sectionSubtitle, { fontFamily: fontFamilyBold, textAlign }]}>🪛 {T.hingeCupBoring}</Text>
         <Text style={[s.guideText, { fontFamily, textAlign }]}>• {T.hingeCupDesc1}</Text>
         <Text style={[s.guideText, { fontFamily, textAlign }]}>• {T.hingeCupDesc2}</Text>
-        <Text style={[s.guideText, { fontFamily, textAlign }]}>• {d.hingesPerDoor} {T.hingePositions}</Text>
+        <Text style={[s.guideText, { fontFamily, textAlign }]}>
+          • {d.hingesPerDoor} {T.hingePositions}
+        </Text>
         {d.hingePositions.map((pos, i) => (
           <Text key={i} style={[s.guideIndent, { fontFamily }]}>
             {isRTL ? `← ציר ${i + 1}: ${pos} מ"מ ${T.hingeFromTop}` : `↳ Hinge ${i + 1}: ${pos} mm ${T.hingeFromTop}`}
@@ -983,19 +1143,13 @@ export function CabinetPdfDocument({
         <Text style={[s.guideText, { fontFamily, textAlign }]}>
           {'• '}
           {T.shelfPinDesc2Front}
-          {d.internalWidth > 400 ? d.shelfDepth - 37 : Math.round(d.shelfDepth / 2)}
-          {' '}
-          {T.shelfPinDesc2Back}
+          {d.internalWidth > 400 ? d.shelfDepth - 37 : Math.round(d.shelfDepth / 2)} {T.shelfPinDesc2Back}
         </Text>
         <Text style={[s.guideText, { fontFamily, textAlign }]}>• {T.shelfPinDesc3}</Text>
         <Text style={[s.guideText, { fontFamily, textAlign }]}>• {T.shelfPinDesc4}</Text>
         <Text style={[s.guideText, { fontFamily, textAlign }]}>
           {'• '}
-          {T.shelfPinDesc5}
-          {' '}
-          {Math.max(1, Math.floor((d.internalHeight - 74) / 32) + 1)}
-          {' '}
-          {T.shelfPinDesc5Suffix}
+          {T.shelfPinDesc5} {Math.max(1, Math.floor((d.internalHeight - 74) / 32) + 1)} {T.shelfPinDesc5Suffix}
         </Text>
 
         <Text style={[s.sectionSubtitle, { fontFamily: fontFamilyBold, textAlign }]}>🪛 {T.confirmatScrews}</Text>
@@ -1018,11 +1172,7 @@ export function CabinetPdfDocument({
         </Text>
         <Text style={[s.guideText, { fontFamily, textAlign }]}>
           {'• '}
-          {T.backPanelFix}
-          {' '}
-          {bMat.thickness}
-          {' '}
-          {T.backPanelMethod}
+          {T.backPanelFix} {bMat.thickness} {T.backPanelMethod}
         </Text>
 
         <PageFooter date={date} lang={lang} />
@@ -1088,7 +1238,9 @@ export function CabinetPdfDocument({
           </View>
         ))}
 
-        <Text style={[s.sectionSubtitle, { marginTop: 14, fontFamily: fontFamilyBold, textAlign }]}>🔩 {T.hardwareListTitle}</Text>
+        <Text style={[s.sectionSubtitle, { marginTop: 14, fontFamily: fontFamilyBold, textAlign }]}>
+          🔩 {T.hardwareListTitle}
+        </Text>
         <View style={s.tableHeader}>
           {[T.thItem, T.thQty, T.thUnit].map((h, i) => (
             <Text key={i} style={[s.thText, { width: ['55%', '20%', '25%'][i], fontFamily: fontFamilyBold }]}>
@@ -1106,8 +1258,12 @@ export function CabinetPdfDocument({
 
         {edgeBandingTotal > 0 && (
           <View style={{ marginTop: 14 }}>
-            <Text style={[s.sectionSubtitle, { fontFamily: fontFamilyBold, textAlign }]}>🎀 {T.edgeBandingSection}</Text>
-            <Text style={[s.guideText, { fontFamily, textAlign }]}>{T.edgeBandingRequired} {(edgeBandingTotal / 1000).toFixed(1)} {T.metres}</Text>
+            <Text style={[s.sectionSubtitle, { fontFamily: fontFamilyBold, textAlign }]}>
+              🎀 {T.edgeBandingSection}
+            </Text>
+            <Text style={[s.guideText, { fontFamily, textAlign }]}>
+              {T.edgeBandingRequired} {(edgeBandingTotal / 1000).toFixed(1)} {T.metres}
+            </Text>
           </View>
         )}
 
@@ -1143,12 +1299,27 @@ function PageFooter({ date, lang = 'en' }: { date: string; lang?: Lang }) {
     <View style={[s.footer, isRTL ? { flexDirection: 'row-reverse' } : {}]} fixed>
       <Text style={[s.footerLeft, { fontFamily: ff }]}>🪵 {isRTL ? 'מתכנן ארונות' : 'Cabinet Planner'}</Text>
       <Text style={[s.footerCenter, { fontFamily: ff }]}>📅 {date}</Text>
-      <Text style={[s.footerRight, { fontFamily: ffBold }]} render={({ pageNumber, totalPages }) => `${pageLabel} ${pageNumber} / ${totalPages}`} />
+      <Text
+        style={[s.footerRight, { fontFamily: ffBold }]}
+        render={({ pageNumber, totalPages }) => `${pageLabel} ${pageNumber} / ${totalPages}`}
+      />
     </View>
   );
 }
 
-function SpecRow({ label, value, isRTL = false, fontFamily = 'Helvetica', fontFamilyBold = 'Helvetica-Bold' }: { label: string; value: string; isRTL?: boolean; fontFamily?: string; fontFamilyBold?: string }) {
+function SpecRow({
+  label,
+  value,
+  isRTL = false,
+  fontFamily = 'Helvetica',
+  fontFamilyBold = 'Helvetica-Bold',
+}: {
+  label: string;
+  value: string;
+  isRTL?: boolean;
+  fontFamily?: string;
+  fontFamilyBold?: string;
+}) {
   return (
     <View style={[s.specRow, isRTL ? { flexDirection: 'row-reverse' } : {}]}>
       <Text style={[s.specLabel, { fontFamily, textAlign: isRTL ? 'right' : 'left' }]}>{label}</Text>
@@ -1194,7 +1365,9 @@ function assemblyStepsI18n(
     {
       emoji: '🏗️',
       title: T.stepAssemble,
-      description: T.stepAssembleDesc.replace('{carcass}', carcassName).replace('{internalWidth}', String(d.internalWidth)),
+      description: T.stepAssembleDesc
+        .replace('{carcass}', carcassName)
+        .replace('{internalWidth}', String(d.internalWidth)),
     },
   ];
 
@@ -1352,9 +1525,7 @@ function ExplodedView({
 
   return (
     <View style={{ width: maxW + 140, height: maxH + 60, position: 'relative', marginTop: 6 }}>
-      <Text style={{ fontSize: 8, color: C.muted, marginBottom: 6, fontFamily: ff }}>
-        {T.explodedNote}
-      </Text>
+      <Text style={{ fontSize: 8, color: C.muted, marginBottom: 6, fontFamily: ff }}>{T.explodedNote}</Text>
 
       {/* Ghost carcass outline */}
       <View
@@ -1437,4 +1608,3 @@ function ExplodedView({
     </View>
   );
 }
-

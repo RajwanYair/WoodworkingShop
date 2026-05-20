@@ -49,11 +49,11 @@ export function cutSheetToDxf(sheet: CutSheet): string {
   const matLayer = materialLayerName(sheet.material);
   lines.push('0', 'SECTION', '2', 'TABLES');
   lines.push('0', 'TABLE', '2', 'LAYER', '70', '5');
-  addLayer(lines, 'SHEET', 7);           // white
-  addLayer(lines, matLayer, 3);          // green — per-material parts layer
-  addLayer(lines, 'LABELS', 5);          // blue
-  addLayer(lines, 'PARTS', 3);           // green — legacy fallback layer (kept for compatibility)
-  addLayer(lines, 'GRAIN_CONFLICT', 1);  // red — grain-direction conflicts (Sprint 70)
+  addLayer(lines, 'SHEET', 7); // white
+  addLayer(lines, matLayer, 3); // green — per-material parts layer
+  addLayer(lines, 'LABELS', 5); // blue
+  addLayer(lines, 'PARTS', 3); // green — legacy fallback layer (kept for compatibility)
+  addLayer(lines, 'GRAIN_CONFLICT', 1); // red — grain-direction conflicts (Sprint 70)
   lines.push('0', 'ENDTAB');
   lines.push('0', 'ENDSEC');
 

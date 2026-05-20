@@ -7,10 +7,8 @@ describe('trySharedArrayBuffer', () => {
 
   beforeEach(() => {
     // Save originals
-    origCrossOriginIsolated =
-      typeof crossOriginIsolated !== 'undefined' ? crossOriginIsolated : undefined;
-    origSharedArrayBuffer =
-      typeof SharedArrayBuffer !== 'undefined' ? SharedArrayBuffer : undefined;
+    origCrossOriginIsolated = typeof crossOriginIsolated !== 'undefined' ? crossOriginIsolated : undefined;
+    origSharedArrayBuffer = typeof SharedArrayBuffer !== 'undefined' ? SharedArrayBuffer : undefined;
   });
 
   afterEach(() => {

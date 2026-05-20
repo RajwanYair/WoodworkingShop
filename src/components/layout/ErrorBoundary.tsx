@@ -54,7 +54,9 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         this.setState({ copied: true });
         setTimeout(() => this.setState({ copied: false }), 2000);
       },
-      () => { /* clipboard unavailable — silent fail */ },
+      () => {
+        /* clipboard unavailable — silent fail */
+      },
     );
   };
 

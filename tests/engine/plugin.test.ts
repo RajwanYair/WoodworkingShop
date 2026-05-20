@@ -243,9 +243,7 @@ describe('runWithSandbox — plugin sandbox', () => {
   });
 
   it('returns the computed value even when timeout is exceeded', () => {
-    vi.spyOn(Date, 'now')
-      .mockReturnValueOnce(0)
-      .mockReturnValueOnce(200);
+    vi.spyOn(Date, 'now').mockReturnValueOnce(0).mockReturnValueOnce(200);
     const result = runWithSandbox(() => 'computed', 'fallback', { timeoutMs: 10 });
     vi.spyOn(Date, 'now').mockRestore();
     expect(result).toBe('computed');
@@ -261,9 +259,7 @@ describe('runWithSandbox — plugin sandbox', () => {
 
   it('uses 50 ms default timeout when timeoutMs is omitted', () => {
     const onError = vi.fn();
-    vi.spyOn(Date, 'now')
-      .mockReturnValueOnce(0)
-      .mockReturnValueOnce(51);
+    vi.spyOn(Date, 'now').mockReturnValueOnce(0).mockReturnValueOnce(51);
     runWithSandbox(() => 'ok', '', { onError });
     vi.spyOn(Date, 'now').mockRestore();
     const err = onError.mock.calls[0]?.[0] as SandboxTimeoutError;
@@ -272,10 +268,9 @@ describe('runWithSandbox — plugin sandbox', () => {
 
   it('works with object fallback types', () => {
     const fallback = { parts: [] };
-    const result = runWithSandbox<{ parts: string[] }>(
-      () => { throw new Error('fail'); },
-      fallback,
-    );
+    const result = runWithSandbox<{ parts: string[] }>(() => {
+      throw new Error('fail');
+    }, fallback);
     expect(result).toBe(fallback);
   });
 });

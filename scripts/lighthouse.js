@@ -4,15 +4,21 @@ import os from 'os';
 import path from 'path';
 
 /**
- * Lighthouse CI wrapper — resolves $TEMP-based output directory so that
- * intermediate artifacts never pollute the workspace root.
+ * Lighthouse CI wrapper.
+ * - CI: writes output to .lighthouseci/ in the workspace so actions/upload-artifact
+ *   can collect the report.
+ * - Local: writes to $TEMP/WoodworkingShop/.lighthouseci/ to avoid workspace pollution.
  */
-const tmpDir = path.join(os.tmpdir(), 'WoodworkingShop', '.lighthouseci');
-mkdirSync(tmpDir, { recursive: true });
+// In CI: write to .lighthouseci/ in the workspace so actions/upload-artifact can find it.
+// Locally: write to $TEMP to avoid workspace pollution.
+const outputDir = process.env.CI
+  ? path.resolve('.lighthouseci')
+  : path.join(os.tmpdir(), 'WoodworkingShop', '.lighthouseci');
+mkdirSync(outputDir, { recursive: true });
 
 const configPath = path.resolve('config/lighthouserc.json');
 const config = JSON.parse(readFileSync(configPath, 'utf-8'));
-config.ci.upload.outputDir = tmpDir;
+config.ci.upload.outputDir = outputDir;
 
 const resolvedConfigPath = path.join(os.tmpdir(), 'WoodworkingShop', 'lighthouserc.resolved.json');
 writeFileSync(resolvedConfigPath, JSON.stringify(config, null, 2));

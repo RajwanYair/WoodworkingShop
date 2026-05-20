@@ -49,7 +49,9 @@ describe('useSwUpdate (Sprint 44)', () => {
       configurable: true,
     });
     const { result } = renderHook(() => useSwUpdate());
-    await act(async () => { await Promise.resolve(); });
+    await act(async () => {
+      await Promise.resolve();
+    });
     expect(result.current.updateAvailable).toBe(false);
   });
 
@@ -60,7 +62,9 @@ describe('useSwUpdate (Sprint 44)', () => {
       configurable: true,
     });
     const { result } = renderHook(() => useSwUpdate());
-    await act(async () => { await Promise.resolve(); });
+    await act(async () => {
+      await Promise.resolve();
+    });
     expect(result.current.updateAvailable).toBe(false);
   });
 
@@ -72,7 +76,9 @@ describe('useSwUpdate (Sprint 44)', () => {
       configurable: true,
     });
     const { result } = renderHook(() => useSwUpdate());
-    await act(async () => { await Promise.resolve(); });
+    await act(async () => {
+      await Promise.resolve();
+    });
     expect(result.current.updateAvailable).toBe(true);
   });
 
@@ -100,7 +106,9 @@ describe('useSwUpdate (Sprint 44)', () => {
     });
 
     const { result } = renderHook(() => useSwUpdate());
-    await act(async () => { await Promise.resolve(); });
+    await act(async () => {
+      await Promise.resolve();
+    });
 
     // Simulate updatefound → statechange to 'installed'
     act(() => {
@@ -126,9 +134,13 @@ describe('useSwUpdate (Sprint 44)', () => {
     });
 
     const { result } = renderHook(() => useSwUpdate());
-    await act(async () => { await Promise.resolve(); });
+    await act(async () => {
+      await Promise.resolve();
+    });
 
-    act(() => { result.current.reload(); });
+    act(() => {
+      result.current.reload();
+    });
 
     expect(waiting.postMessage).toHaveBeenCalledWith({ type: 'SKIP_WAITING' });
     expect(reloadSpy).toHaveBeenCalled();

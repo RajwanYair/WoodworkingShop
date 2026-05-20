@@ -254,13 +254,20 @@
     "export": "Exportar JSON",
     "import": "Importar JSON",
     "empty": "No hay proyectos guardados",
+    "noResults": "Ningún proyecto coincide con “{{query}}”",
     "cabinets": "armario(s)",
     "saved": "Proyecto guardado",
     "loaded": "Proyecto cargado",
     "deleted": "Proyecto eliminado",
     "exported": "Proyecto exportado",
     "imported": "Proyecto importado",
-    "importError": "Archivo de proyecto no válido"
+    "importError": "Archivo de proyecto no válido",
+    "searchPlaceholder": "Buscar proyectos…",
+    "sortByDate": "Más reciente primero",
+    "sortByName": "A–Z",
+    "sortLabel": "Ordenar",
+    "found_one": "{{count}} resultado",
+    "found_other": "{{count}} resultados"
   },
   "storage": {
     "usageLabel": "{{used}} KB / {{quota}} MB",

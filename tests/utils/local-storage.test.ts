@@ -17,7 +17,12 @@ vi.mock('../../src/utils/indexed-db-storage', () => ({
   idbSaveSnapshots: vi.fn(async () => {}),
   idbDeleteSnapshot: vi.fn(async () => {}),
   getStorageEstimate: vi.fn(async () => ({
-    usedBytes: 0, quotaBytes: 0, usedKb: 0, quotaMb: 0, percentUsed: 0, nearLimit: false,
+    usedBytes: 0,
+    quotaBytes: 0,
+    usedKb: 0,
+    quotaMb: 0,
+    percentUsed: 0,
+    nearLimit: false,
   })),
 }));
 

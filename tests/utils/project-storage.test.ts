@@ -31,7 +31,12 @@ vi.mock('../../src/utils/indexed-db-storage', () => ({
   idbSaveConfigs: vi.fn(async () => {}),
   idbDeleteSnapshot: vi.fn(async () => {}),
   getStorageEstimate: vi.fn(async () => ({
-    usedBytes: 0, quotaBytes: 0, usedKb: 0, quotaMb: 0, percentUsed: 0, nearLimit: false,
+    usedBytes: 0,
+    quotaBytes: 0,
+    usedKb: 0,
+    quotaMb: 0,
+    percentUsed: 0,
+    nearLimit: false,
   })),
 }));
 
@@ -177,9 +182,7 @@ describe('project-storage', () => {
     const bundle = {
       version: 1,
       exportedAt: new Date().toISOString(),
-      projects: [
-        { id: 'clash-id', name: 'Clash', savedAt: new Date().toISOString(), cabinets: sampleCabinets },
-      ],
+      projects: [{ id: 'clash-id', name: 'Clash', savedAt: new Date().toISOString(), cabinets: sampleCabinets }],
     };
     const file = new File([JSON.stringify(bundle)], 'bundle.json', { type: 'application/json' });
     const added = await importProjectsBundle(file);
@@ -247,9 +250,7 @@ describe('migrateProject', () => {
   });
 
   it('throws when cabinets array is missing', () => {
-    expect(() => migrateProject({ id: 'x', name: 'Bad', savedAt: '' })).toThrow(
-      /cabinets/i,
-    );
+    expect(() => migrateProject({ id: 'x', name: 'Bad', savedAt: '' })).toThrow(/cabinets/i);
   });
 
   it('throws for non-object input', () => {

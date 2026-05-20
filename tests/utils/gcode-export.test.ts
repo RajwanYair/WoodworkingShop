@@ -1,6 +1,11 @@
 import { describe, it, expect, vi } from 'vitest';
 import type { CutSheet } from '../../src/engine/types';
-import { cutSheetToGcode, downloadAllSheetsGcode, downloadGcodeForSheet, circularPocketToGcode } from '../../src/utils/gcode-export';
+import {
+  cutSheetToGcode,
+  downloadAllSheetsGcode,
+  downloadGcodeForSheet,
+  circularPocketToGcode,
+} from '../../src/utils/gcode-export';
 import { mockSheet } from '../helpers';
 
 describe('cutSheetToGcode', () => {

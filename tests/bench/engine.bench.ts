@@ -59,79 +59,143 @@ const baseEdge = computeEdgeBandingTotal(baseParts);
 // ─── Benchmarks ─────────────────────────────────────────────────────────────
 
 describe('dimensions', () => {
-  bench('computeDimensions — base cabinet', () => {
-    computeDimensions(base);
-  }, FAST);
+  bench(
+    'computeDimensions — base cabinet',
+    () => {
+      computeDimensions(base);
+    },
+    FAST,
+  );
 
-  bench('computeDimensions — wardrobe', () => {
-    computeDimensions(wardrobe);
-  }, FAST);
+  bench(
+    'computeDimensions — wardrobe',
+    () => {
+      computeDimensions(wardrobe);
+    },
+    FAST,
+  );
 
-  bench('computeDimensions — desk', () => {
-    computeDimensions(desk);
-  }, FAST);
+  bench(
+    'computeDimensions — desk',
+    () => {
+      computeDimensions(desk);
+    },
+    FAST,
+  );
 });
 
 describe('parts', () => {
-  bench('generateParts — base cabinet', () => {
-    generateParts(base);
-  }, FAST);
+  bench(
+    'generateParts — base cabinet',
+    () => {
+      generateParts(base);
+    },
+    FAST,
+  );
 
-  bench('generateParts — wardrobe 4-shelf 2-drawer', () => {
-    generateParts(wardrobe);
-  }, FAST);
+  bench(
+    'generateParts — wardrobe 4-shelf 2-drawer',
+    () => {
+      generateParts(wardrobe);
+    },
+    FAST,
+  );
 
-  bench('generateParts — desk 2-drawer', () => {
-    generateParts(desk);
-  }, FAST);
+  bench(
+    'generateParts — desk 2-drawer',
+    () => {
+      generateParts(desk);
+    },
+    FAST,
+  );
 
-  bench('computeEdgeBandingTotal — base cabinet', () => {
-    computeEdgeBandingTotal(baseParts);
-  }, FAST);
+  bench(
+    'computeEdgeBandingTotal — base cabinet',
+    () => {
+      computeEdgeBandingTotal(baseParts);
+    },
+    FAST,
+  );
 });
 
 describe('cut optimizer', () => {
-  bench(`optimizeCutSheets — base cabinet (${baseParts.length} part types)`, () => {
-    optimizeCutSheets(baseParts);
-  }, SLOW);
+  bench(
+    `optimizeCutSheets — base cabinet (${baseParts.length} part types)`,
+    () => {
+      optimizeCutSheets(baseParts);
+    },
+    SLOW,
+  );
 
-  bench(`optimizeCutSheets — wardrobe (${wardrobeParts.length} part types)`, () => {
-    optimizeCutSheets(wardrobeParts);
-  }, SLOW);
+  bench(
+    `optimizeCutSheets — wardrobe (${wardrobeParts.length} part types)`,
+    () => {
+      optimizeCutSheets(wardrobeParts);
+    },
+    SLOW,
+  );
 });
 
 describe('hardware', () => {
-  bench('generateHardware — base cabinet', () => {
-    generateHardware(base);
-  }, FAST);
+  bench(
+    'generateHardware — base cabinet',
+    () => {
+      generateHardware(base);
+    },
+    FAST,
+  );
 
-  bench('generateHardware — wardrobe', () => {
-    generateHardware(wardrobe);
-  }, FAST);
+  bench(
+    'generateHardware — wardrobe',
+    () => {
+      generateHardware(wardrobe);
+    },
+    FAST,
+  );
 });
 
 describe('cost estimator', () => {
-  bench('estimateCost — base cabinet', () => {
-    estimateCost(baseOpt, baseHardware, baseEdge);
-  }, FAST);
+  bench(
+    'estimateCost — base cabinet',
+    () => {
+      estimateCost(baseOpt, baseHardware, baseEdge);
+    },
+    FAST,
+  );
 
-  bench('estimateCost — wardrobe', () => {
-    estimateCost(wardrobeOpt, generateHardware(wardrobe), computeEdgeBandingTotal(wardrobeParts));
-  }, FAST);
+  bench(
+    'estimateCost — wardrobe',
+    () => {
+      estimateCost(wardrobeOpt, generateHardware(wardrobe), computeEdgeBandingTotal(wardrobeParts));
+    },
+    FAST,
+  );
 });
 
 describe('smart optimizer', () => {
-  bench('findOptimizations — base cabinet (default strategies)', () => {
-    findOptimizations(base);
-  }, CRAWL);
+  bench(
+    'findOptimizations — base cabinet (default strategies)',
+    () => {
+      findOptimizations(base);
+    },
+    CRAWL,
+  );
 });
 
 describe('validation', () => {
-  bench('validateConfig — valid base cabinet', () => {
-    validateConfig(base);
-  }, FAST);
+  bench(
+    'validateConfig — valid base cabinet',
+    () => {
+      validateConfig(base);
+    },
+    FAST,
+  );
 
-  bench('validateConfig — valid wardrobe', () => {
-    validateConfig(wardrobe);
-  }, FAST);
+  bench(
+    'validateConfig — valid wardrobe',
+    () => {
+      validateConfig(wardrobe);
+    },
+    FAST,
+  );
 });

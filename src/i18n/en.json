@@ -188,8 +188,10 @@
       "tooltip": "Placement: {{rationale}}"
     },
     "grainConflicts": "Grain ⚠",
-    "grainConflictsTitle": "{{count}} part(s) had grain direction compromised — material requires grain but part was rotated to fit",    "filterParts": "Filter parts",
-    "filterPartsPlaceholder": "Search parts…",    "statusPending": "Computing cut sheets\u2026",
+    "grainConflictsTitle": "{{count}} part(s) had grain direction compromised — material requires grain but part was rotated to fit",
+    "filterParts": "Filter parts",
+    "filterPartsPlaceholder": "Search parts…",
+    "statusPending": "Computing cut sheets\u2026",
     "statusComplete": "Optimization complete \u2014 {{count}} sheet(s) required",
     "filterByMaterial": "Filter by material",
     "allMaterials": "All materials"
@@ -252,13 +254,20 @@
     "export": "Export JSON",
     "import": "Import JSON",
     "empty": "No saved projects",
+    "noResults": "No projects match “{{query}}”",
     "cabinets": "cabinet(s)",
     "saved": "Project saved",
     "loaded": "Project loaded",
     "deleted": "Project deleted",
     "exported": "Project exported",
     "imported": "Project imported",
-    "importError": "Invalid project file"
+    "importError": "Invalid project file",
+    "searchPlaceholder": "Search projects…",
+    "sortByDate": "Newest first",
+    "sortByName": "A–Z",
+    "sortLabel": "Sort",
+    "found_one": "{{count}} result",
+    "found_other": "{{count}} results"
   },
   "storage": {
     "usageLabel": "{{used}} KB / {{quota}} MB",
@@ -530,8 +539,10 @@
     "disable": "Disable plugin",
     "enabled": "Enabled",
     "disabled": "Disabled",
-    "apiVersion": "API v{{version}}"  },
+    "apiVersion": "API v{{version}}"
+  },
   "swUpdate": {
     "available": "A new version is available!",
-    "reload": "Reload"  }
+    "reload": "Reload"
+  }
 }

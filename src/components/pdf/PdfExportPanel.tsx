@@ -56,9 +56,7 @@ export function PdfExportPanel() {
     <div className="space-y-6">
       <div className="text-center py-8 space-y-4">
         <h2 className="text-lg font-semibold text-wood-700 dark:text-wood-200">{t('pdf.title')}</h2>
-        <p className="text-sm text-wood-400 dark:text-wood-500 max-w-md mx-auto">
-          {t('pdf.description')}
-        </p>
+        <p className="text-sm text-wood-400 dark:text-wood-500 max-w-md mx-auto">{t('pdf.description')}</p>
 
         {/* v3.19.0 — Cover page toggle */}
         <label className="inline-flex items-center gap-2 text-sm text-wood-600 dark:text-wood-400 cursor-pointer select-none">

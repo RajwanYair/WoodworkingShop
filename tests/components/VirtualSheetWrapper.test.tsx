@@ -30,19 +30,31 @@ describe('VirtualSheetWrapper', () => {
   });
 
   it('renders the outer wrapper with data-testid', () => {
-    render(<VirtualSheetWrapper><div>Content</div></VirtualSheetWrapper>);
+    render(
+      <VirtualSheetWrapper>
+        <div>Content</div>
+      </VirtualSheetWrapper>,
+    );
     expect(screen.getByTestId('virtual-sheet-wrapper')).toBeInTheDocument();
   });
 
   it('shows placeholder (not children) before intersection', () => {
-    render(<VirtualSheetWrapper><div data-testid="real-content">Content</div></VirtualSheetWrapper>);
+    render(
+      <VirtualSheetWrapper>
+        <div data-testid="real-content">Content</div>
+      </VirtualSheetWrapper>,
+    );
     expect(screen.queryByTestId('real-content')).not.toBeInTheDocument();
     // Placeholder has data-testid
     expect(screen.getByTestId('virtual-sheet-placeholder')).toBeInTheDocument();
   });
 
   it('renders children after intersection fires', () => {
-    render(<VirtualSheetWrapper><div data-testid="real-content">Content</div></VirtualSheetWrapper>);
+    render(
+      <VirtualSheetWrapper>
+        <div data-testid="real-content">Content</div>
+      </VirtualSheetWrapper>,
+    );
     expect(screen.queryByTestId('real-content')).not.toBeInTheDocument();
 
     act(() => {
@@ -53,7 +65,11 @@ describe('VirtualSheetWrapper', () => {
   });
 
   it('disconnects observer after becoming visible (keepMounted)', () => {
-    render(<VirtualSheetWrapper><div>Content</div></VirtualSheetWrapper>);
+    render(
+      <VirtualSheetWrapper>
+        <div>Content</div>
+      </VirtualSheetWrapper>,
+    );
 
     act(() => {
       observerCallback?.([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver);
@@ -63,12 +79,20 @@ describe('VirtualSheetWrapper', () => {
   });
 
   it('calls observe on mount', () => {
-    render(<VirtualSheetWrapper><div>Content</div></VirtualSheetWrapper>);
+    render(
+      <VirtualSheetWrapper>
+        <div>Content</div>
+      </VirtualSheetWrapper>,
+    );
     expect(observeStub).toHaveBeenCalled();
   });
 
   it('accepts custom placeholderHeight', () => {
-    render(<VirtualSheetWrapper placeholderHeight={300}><div>Content</div></VirtualSheetWrapper>);
+    render(
+      <VirtualSheetWrapper placeholderHeight={300}>
+        <div>Content</div>
+      </VirtualSheetWrapper>,
+    );
     expect(screen.getByTestId('virtual-sheet-placeholder')).toHaveStyle({ height: '300px' });
   });
 });

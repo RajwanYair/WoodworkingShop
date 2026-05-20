@@ -16,7 +16,7 @@
 [![Tailwind](https://img.shields.io/badge/Tailwind-4-38bdf8?logo=tailwindcss&logoColor=white)](src/index.css)
 [![PWA](https://img.shields.io/badge/PWA-offline--ready-5a0fc8?logo=pwa&logoColor=white)](public/manifest.json)
 [![i18n](https://img.shields.io/badge/i18n-EN%20%2B%20HE%20RTL-orange?logo=googletranslate&logoColor=white)](src/i18n)
-[![Tests](https://img.shields.io/badge/tests-783%2B-brightgreen?logo=vitest&logoColor=white)](tests/)
+[![Tests](https://img.shields.io/badge/tests-944%2B-brightgreen?logo=vitest&logoColor=white)](tests/)
 [![Last Commit](https://img.shields.io/github/last-commit/RajwanYair/WoodworkingShop?logo=github)](https://github.com/RajwanYair/WoodworkingShop/commits/main)
 [![GitHub Stars](https://img.shields.io/github/stars/RajwanYair/WoodworkingShop?style=social)](https://github.com/RajwanYair/WoodworkingShop/stargazers)
 
@@ -234,21 +234,21 @@ Run `npm run i18n:coverage` to verify both files are in sync.
 
 Measured on a mid-range development machine (Intel i7 / 16 GB RAM, Chrome 125, production build).
 
-| Metric                                        | Value    | Target   |
-| --------------------------------------------- | -------- | -------- |
-| Lighthouse Performance score                  | 97 / 100 | ≥ 90     |
-| Lighthouse Accessibility score                | 100 / 100| 100      |
-| First Contentful Paint (FCP)                  | ~0.4 s   | < 1.0 s  |
-| Largest Contentful Paint (LCP)                | ~0.7 s   | < 2.5 s  |
-| Total Blocking Time (TBT)                     | 0 ms     | < 200 ms |
-| Cumulative Layout Shift (CLS)                 | 0.000    | < 0.1    |
-| JS bundle — main entry (gzip)                 | ~130 KB  | < 200 KB |
-| JS bundle — PDF chunk (gzip, lazy-loaded)     | ~490 KB  | < 600 KB |
-| Cut-optimizer (200-part project, web worker)  | < 15 ms  | < 50 ms  |
-| generateParts (default 2000 mm cabinet)       | < 0.3 ms | < 1 ms   |
-| BOM CSV generation (10 cabinets)              | < 2 ms   | < 10 ms  |
-| Engine bench — generateParts (wardrobe)       | < 0.5 ms | < 1 ms   |
-| Engine bench — findOptimizations (12 parts)   | < 2 ms   | < 10 ms  |
+| Metric                                       | Value     | Target   |
+| -------------------------------------------- | --------- | -------- |
+| Lighthouse Performance score                 | 97 / 100  | ≥ 90     |
+| Lighthouse Accessibility score               | 100 / 100 | 100      |
+| First Contentful Paint (FCP)                 | ~0.4 s    | < 1.0 s  |
+| Largest Contentful Paint (LCP)               | ~0.7 s    | < 2.5 s  |
+| Total Blocking Time (TBT)                    | 0 ms      | < 200 ms |
+| Cumulative Layout Shift (CLS)                | 0.000     | < 0.1    |
+| JS bundle — main entry (gzip)                | ~130 KB   | < 200 KB |
+| JS bundle — PDF chunk (gzip, lazy-loaded)    | ~490 KB   | < 600 KB |
+| Cut-optimizer (200-part project, web worker) | < 15 ms   | < 50 ms  |
+| generateParts (default 2000 mm cabinet)      | < 0.3 ms  | < 1 ms   |
+| BOM CSV generation (10 cabinets)             | < 2 ms    | < 10 ms  |
+| Engine bench — generateParts (wardrobe)      | < 0.5 ms  | < 1 ms   |
+| Engine bench — findOptimizations (12 parts)  | < 2 ms    | < 10 ms  |
 
 > Benchmarks are measured against the production build (`npm run build`).
 > Run `npm run preview` locally and open Chrome DevTools → Lighthouse to reproduce.

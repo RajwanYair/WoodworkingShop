@@ -30,6 +30,17 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
   const addToast = useToastStore((s) => s.addToast);
   const [projects, setProjects] = useState<SavedProject[]>([]);
   const [saveName, setSaveName] = useState(projectName || '');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortMode, setSortMode] = useState<'date' | 'name'>('date');
+
+  /** Projects after search filter + sort. */
+  const visibleProjects = projects
+    .filter((p) => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
+    .sort((a, b) =>
+      sortMode === 'name'
+        ? a.name.localeCompare(b.name)
+        : new Date(b.savedAt).getTime() - new Date(a.savedAt).getTime(),
+    );
 
   const refresh = useCallback(() => {
     void listProjects().then(setProjects);
@@ -151,12 +162,41 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
           </div>
         </div>
 
+        {/* Search + sort toolbar */}
+        <div className="p-3 border-b border-wood-200 dark:border-wood-700 flex items-center gap-2">
+          <input
+            type="search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder={t('projects.searchPlaceholder')}
+            className="flex-1 px-2 py-1 text-sm rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-700 text-wood-800 dark:text-wood-100 focus:outline-none focus:border-wood-500"
+            aria-label={t('projects.searchPlaceholder')}
+          />
+          <label className="text-xs text-wood-500 dark:text-wood-400 shrink-0">{t('projects.sortLabel')}:</label>
+          <select
+            value={sortMode}
+            onChange={(e) => setSortMode(e.target.value as 'date' | 'name')}
+            className="text-xs px-1.5 py-1 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-700 text-wood-700 dark:text-wood-200"
+            aria-label={t('projects.sortLabel')}
+          >
+            <option value="date">{t('projects.sortByDate')}</option>
+            <option value="name">{t('projects.sortByName')}</option>
+          </select>
+          {searchQuery && (
+            <span className="text-xs text-wood-400 dark:text-wood-500 shrink-0">
+              {t('projects.found', { count: visibleProjects.length })}
+            </span>
+          )}
+        </div>
+
         {/* Project list */}
         <div className="flex-1 overflow-y-auto p-4 space-y-2">
-          {projects.length === 0 ? (
-            <p className="text-sm text-wood-400 dark:text-wood-500 text-center py-6">{t('projects.empty')}</p>
+          {visibleProjects.length === 0 ? (
+            <p className="text-sm text-wood-400 dark:text-wood-500 text-center py-6">
+              {searchQuery ? t('projects.noResults', { query: searchQuery }) : t('projects.empty')}
+            </p>
           ) : (
-            projects.map((project) => (
+            visibleProjects.map((project) => (
               <div
                 key={project.id}
                 className="flex items-center gap-3 p-3 rounded-lg border border-wood-200 dark:border-wood-700 hover:border-wood-400 dark:hover:border-wood-500 transition-colors"

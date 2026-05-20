@@ -1,5 +1,10 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { probeWebGLTier, isWebGLAvailable, isWebGL2Available, resetWebGLProbeCache } from '../../src/engine/webgl-probe';
+import {
+  probeWebGLTier,
+  isWebGLAvailable,
+  isWebGL2Available,
+  resetWebGLProbeCache,
+} from '../../src/engine/webgl-probe';
 
 describe('webgl-probe', () => {
   beforeEach(() => {

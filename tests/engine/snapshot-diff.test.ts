@@ -4,9 +4,7 @@ import { cfg } from '../helpers';
 
 function makeSnap(overrides: Parameters<typeof cfg>[0] = {}) {
   return {
-    cabinets: [
-      { name: 'Cabinet 1', config: cfg(overrides) },
-    ],
+    cabinets: [{ name: 'Cabinet 1', config: cfg(overrides) }],
   };
 }
 

@@ -34,12 +34,12 @@ describe('index.css — WCAG AA high-contrast class (beyond forced-colors)', () 
 
   it('provides dark-mode focus ring in yellow for .high-contrast.dark', () => {
     expect(css).toContain('.high-contrast.dark :focus-visible');
-    expect(css).toContain('#ffff00');
+    expect(css).toContain('#ff0');
   });
 
   it('adds interactive element borders in .high-contrast', () => {
-    expect(css).toContain(".high-contrast button");
-    expect(css).toContain('border: 2px solid #000000');
+    expect(css).toContain('.high-contrast button');
+    expect(css).toContain('border: 2px solid #000');
   });
 
   it('adds link underline and colour in .high-contrast', () => {
@@ -49,7 +49,7 @@ describe('index.css — WCAG AA high-contrast class (beyond forced-colors)', () 
 
   it('adds dark-mode link underline in .high-contrast.dark', () => {
     expect(css).toContain('.high-contrast.dark a');
-    expect(css).toContain('#aaaaff');
+    expect(css).toContain('#aaf');
   });
 });
 

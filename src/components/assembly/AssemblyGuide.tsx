@@ -314,7 +314,17 @@ interface StepCardProps {
   showTips?: boolean;
 }
 
-function StepCard({ step, stepIndex, stepCount, parts, lang, t, completed = false, onToggleComplete, showTips = true }: StepCardProps) {
+function StepCard({
+  step,
+  stepIndex,
+  stepCount,
+  parts,
+  lang,
+  t,
+  completed = false,
+  onToggleComplete,
+  showTips = true,
+}: StepCardProps) {
   const highlightedParts = new Set(step.parts);
   const checkboxId = stepIndex !== undefined ? `step-complete-${stepIndex}` : undefined;
   return (

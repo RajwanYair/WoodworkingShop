@@ -18,12 +18,12 @@ Cabinet Planner uses [Semantic Versioning](https://semver.org/):
 
 ### Planned breaking changes
 
-| Area | Change | Migration action |
-|------|--------|-----------------|
-| **URL state** | `?c=<base64>` config parameter encoded with new Zstandard compression (smaller URLs) | Old URLs remain readable via a compatibility shim; no user action needed |
-| **Project JSON** | Schema version bumped from `1` to `2`; `customShelfPositions` renamed to `shelfPositions` | Run `migrateProject()` — it handles v1→v2 automatically |
-| **Room layout** | `room-layouts` localStorage key added; format not backwards-compatible with v3 store state | First load in v4 starts with an empty room layout |
-| **CSP** | `script-src 'unsafe-inline'` removed; inline SW registration moved to `public/sw-register.js` | No user action; build artifact change only |
+| Area             | Change                                                                                        | Migration action                                                         |
+| ---------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| **URL state**    | `?c=<base64>` config parameter encoded with new Zstandard compression (smaller URLs)          | Old URLs remain readable via a compatibility shim; no user action needed |
+| **Project JSON** | Schema version bumped from `1` to `2`; `customShelfPositions` renamed to `shelfPositions`     | Run `migrateProject()` — it handles v1→v2 automatically                  |
+| **Room layout**  | `room-layouts` localStorage key added; format not backwards-compatible with v3 store state    | First load in v4 starts with an empty room layout                        |
+| **CSP**          | `script-src 'unsafe-inline'` removed; inline SW registration moved to `public/sw-register.js` | No user action; build artifact change only                               |
 
 ---
 
@@ -81,12 +81,12 @@ For persistent project storage, use **Project JSON** (`exportProjectJson`) which
 
 ## localStorage Keys
 
-| Key | Owner | Notes |
-|-----|-------|-------|
-| `cabinet-planner` | `cabinet-store.ts` | Main cabinet config + undo stack |
-| `custom-materials` | `custom-materials-store.ts` | User-defined materials |
-| `room-layouts` | `room-store.ts` | Multi-cabinet room layout (added v3.53.32) |
-| `onboarding-seen` | `OnboardingOverlay.tsx` | Set to `'1'` once tour is dismissed |
+| Key                | Owner                       | Notes                                      |
+| ------------------ | --------------------------- | ------------------------------------------ |
+| `cabinet-planner`  | `cabinet-store.ts`          | Main cabinet config + undo stack           |
+| `custom-materials` | `custom-materials-store.ts` | User-defined materials                     |
+| `room-layouts`     | `room-store.ts`             | Multi-cabinet room layout (added v3.53.32) |
+| `onboarding-seen`  | `OnboardingOverlay.tsx`     | Set to `'1'` once tour is dismissed        |
 
 ---
 

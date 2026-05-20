@@ -30,11 +30,9 @@ export function useSwUpdate(): { updateAvailable: boolean; reload: () => void } 
       });
     };
 
-    navigator.serviceWorker.ready
-      .then(checkRegistration)
-      .catch(() => {
-        // SW not available — silently ignore
-      });
+    navigator.serviceWorker.ready.then(checkRegistration).catch(() => {
+      // SW not available — silently ignore
+    });
   }, []);
 
   const reload = () => {

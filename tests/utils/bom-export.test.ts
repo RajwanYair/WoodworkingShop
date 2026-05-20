@@ -1,5 +1,11 @@
 import { describe, it, expect, vi } from 'vitest';
-import { generateBomCsv, generateHardwareCsv, downloadHardwareCsv, generateErpCsv, downloadErpCsv } from '../../src/utils/bom-export';
+import {
+  generateBomCsv,
+  generateHardwareCsv,
+  downloadHardwareCsv,
+  generateErpCsv,
+  downloadErpCsv,
+} from '../../src/utils/bom-export';
 import type { Part, HardwareItem } from '../../src/engine/types';
 
 const mockPart: Part = {
@@ -341,7 +347,10 @@ describe('generateBomCsv — Sprint 73 sequential row numbers', () => {
     const partsHeaderIdx = lines.findIndex((l) => l.startsWith('#,Cabinet,Part ID'));
     const dataRows = lines
       .slice(partsHeaderIdx + 1)
-      .filter((l) => l.trim() !== '' && !l.startsWith('#') && !l.startsWith('Cabinet,') && !l.startsWith('#,Cabinet,Hardware'));
+      .filter(
+        (l) =>
+          l.trim() !== '' && !l.startsWith('#') && !l.startsWith('Cabinet,') && !l.startsWith('#,Cabinet,Hardware'),
+      );
     expect(dataRows[0]).toMatch(/^1,/);
     expect(dataRows[1]).toMatch(/^2,/);
   });
@@ -353,7 +362,6 @@ describe('generateBomCsv — Sprint 73 sequential row numbers', () => {
     expect(hwHeaderIdx).toBeGreaterThanOrEqual(0);
   });
 });
-
 
 // ── Sprint 87 — area (m²) column in BOM CSV parts ────────────────────────────
 describe('BOM CSV — area (m²) column (Sprint 87)', () => {
@@ -380,7 +388,7 @@ describe('BOM CSV — area (m²) column (Sprint 87)', () => {
     const headerIdx = lines.findIndex((l) => l.startsWith('#,Cabinet,Part ID'));
     const firstDataRow = lines.slice(headerIdx + 1).find((l) => l.trim() !== '' && !l.startsWith('#'))!;
     const cols = firstDataRow.split(',');
-    const expected = (mockPart.length * mockPart.width * mockPart.qty / 1_000_000).toFixed(6);
+    const expected = ((mockPart.length * mockPart.width * mockPart.qty) / 1_000_000).toFixed(6);
     expect(cols[9]).toBe(expected);
   });
 

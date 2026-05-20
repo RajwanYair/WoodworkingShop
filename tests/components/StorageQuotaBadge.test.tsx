@@ -56,9 +56,7 @@ describe('StorageQuotaBadge', () => {
   });
 
   it('applies amber styling when nearLimit is true', async () => {
-    mockEstimate.mockResolvedValue(
-      makeEstimate({ nearLimit: true, percentUsed: 85, usedKb: 170000, quotaMb: 200 }),
-    );
+    mockEstimate.mockResolvedValue(makeEstimate({ nearLimit: true, percentUsed: 85, usedKb: 170000, quotaMb: 200 }));
     render(<StorageQuotaBadge />);
     await waitFor(() => {
       const badge = screen.getByRole('status');
@@ -76,9 +74,7 @@ describe('StorageQuotaBadge', () => {
   });
 
   it('shows ⚠ warning icon when nearLimit is true', async () => {
-    mockEstimate.mockResolvedValue(
-      makeEstimate({ nearLimit: true, percentUsed: 85, usedKb: 170000, quotaMb: 200 }),
-    );
+    mockEstimate.mockResolvedValue(makeEstimate({ nearLimit: true, percentUsed: 85, usedKb: 170000, quotaMb: 200 }));
     render(<StorageQuotaBadge />);
     await waitFor(() => {
       expect(screen.getByRole('status').textContent).toContain('⚠');
@@ -105,10 +101,15 @@ describe('StorageQuotaBadge', () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     mockEstimate.mockResolvedValue(makeEstimate());
     render(<StorageQuotaBadge />);
-    await act(async () => { await Promise.resolve(); });
+    await act(async () => {
+      await Promise.resolve();
+    });
     expect(mockEstimate).toHaveBeenCalledTimes(1);
 
-    await act(async () => { vi.advanceTimersByTime(30_000); await Promise.resolve(); });
+    await act(async () => {
+      vi.advanceTimersByTime(30_000);
+      await Promise.resolve();
+    });
     expect(mockEstimate).toHaveBeenCalledTimes(2);
     vi.useRealTimers();
   });

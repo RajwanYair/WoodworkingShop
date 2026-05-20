@@ -20,7 +20,10 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: process.env.CI
-    ? [['github'], ['html', { open: 'never', outputFolder: path.join(tmpDir, 'playwright-report') }]]
+    // In CI: write the HTML report to the workspace so actions/upload-artifact can find it.
+    // The 'github' reporter posts annotations directly to the PR without a file.
+    ? [['github'], ['html', { open: 'never', outputFolder: 'playwright-report' }]]
+    // Locally: keep the HTML report out of the workspace (avoid git noise).
     : [['list'], ['html', { open: 'never', outputFolder: path.join(tmpDir, 'playwright-report') }]],
   use: {
     // In CI: preview server serves the pre-built dist on port 4173.

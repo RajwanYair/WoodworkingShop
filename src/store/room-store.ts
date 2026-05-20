@@ -23,8 +23,7 @@ export const useRoomStore = create<RoomState>()(
       layouts: [],
       activeLayoutId: null,
 
-      addLayout: (layout) =>
-        set((s) => ({ layouts: [...s.layouts, layout] })),
+      addLayout: (layout) => set((s) => ({ layouts: [...s.layouts, layout] })),
 
       removeLayout: (id) =>
         set((s) => ({
@@ -36,17 +35,13 @@ export const useRoomStore = create<RoomState>()(
 
       addCabinetToRoom: (layoutId, cabinet) =>
         set((s) => ({
-          layouts: s.layouts.map((l) =>
-            l.id === layoutId ? { ...l, cabinets: [...l.cabinets, cabinet] } : l,
-          ),
+          layouts: s.layouts.map((l) => (l.id === layoutId ? { ...l, cabinets: [...l.cabinets, cabinet] } : l)),
         })),
 
       removeCabinetFromRoom: (layoutId, cabinetId) =>
         set((s) => ({
           layouts: s.layouts.map((l) =>
-            l.id === layoutId
-              ? { ...l, cabinets: l.cabinets.filter((c) => c.id !== cabinetId) }
-              : l,
+            l.id === layoutId ? { ...l, cabinets: l.cabinets.filter((c) => c.id !== cabinetId) } : l,
           ),
         })),
 
@@ -56,9 +51,7 @@ export const useRoomStore = create<RoomState>()(
             l.id === layoutId
               ? {
                   ...l,
-                  cabinets: l.cabinets.map((c) =>
-                    c.id === cabinetId ? { ...c, x, y } : c,
-                  ),
+                  cabinets: l.cabinets.map((c) => (c.id === cabinetId ? { ...c, x, y } : c)),
                 }
               : l,
           ),

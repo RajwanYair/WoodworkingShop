@@ -1,6 +1,6 @@
 # Cabinet Planner — User Guide
 
-> Version 3.53 · React 19 + TypeScript 6 · Progressive Web App
+> Version 3.54 · React 19 + TypeScript 6 · Progressive Web App
 
 ---
 
@@ -32,19 +32,19 @@ No account or installation required. All data is stored locally in your browser
 
 ## Workflow Overview
 
-```
+```text
 Configure → Preview → Cut Sheets → Assembly → PDF Export
 ```
 
 Each tab builds on the previous. Work left-to-right for a full project:
 
-| Step | Tab | Output |
-|---|---|---|
-| 1 | Configure | Cabinet dimensions, materials, doors, drawers |
-| 2 | Preview | SVG front / side / top / back / 3-D views |
-| 3 | Cut Sheets | Optimized sheet layouts, DXF, G-code, BOM |
-| 4 | Assembly | Step-by-step illustrated assembly instructions |
-| 5 | PDF Export | Print-ready PDF with all plans and cut lists |
+| Step | Tab        | Output                                         |
+| ---- | ---------- | ---------------------------------------------- |
+| 1    | Configure  | Cabinet dimensions, materials, doors, drawers  |
+| 2    | Preview    | SVG front / side / top / back / 3-D views      |
+| 3    | Cut Sheets | Optimized sheet layouts, DXF, G-code, BOM      |
+| 4    | Assembly   | Step-by-step illustrated assembly instructions |
+| 5    | PDF Export | Print-ready PDF with all plans and cut lists   |
 
 ---
 
@@ -52,13 +52,13 @@ Each tab builds on the previous. Work left-to-right for a full project:
 
 ### Furniture Types
 
-| Type | Description |
-|---|---|
-| Cabinet | Standard carcass with doors, drawers, shelves |
-| Bookshelf | Open or glass-door shelving unit |
-| Desk | Low carcass with drawer pedestals |
-| Wardrobe | Tall cabinet with hanging rail and shelves |
-| Panel | Single flat panel (for custom parts) |
+| Type      | Description                                   |
+| --------- | --------------------------------------------- |
+| Cabinet   | Standard carcass with doors, drawers, shelves |
+| Bookshelf | Open or glass-door shelving unit              |
+| Desk      | Low carcass with drawer pedestals             |
+| Wardrobe  | Tall cabinet with hanging rail and shelves    |
+| Panel     | Single flat panel (for custom parts)          |
 
 ### Dimensions
 
@@ -73,12 +73,12 @@ Each tab builds on the previous. Work left-to-right for a full project:
 
 ### Doors & Handles
 
-| Door Style | Description |
-|---|---|
-| Flat | Simple slab door |
-| Shaker | Recessed panel insert |
-| Glass | Glass panel (hardware only) |
-| None | No doors |
+| Door Style | Description                 |
+| ---------- | --------------------------- |
+| Flat       | Simple slab door            |
+| Shaker     | Recessed panel insert       |
+| Glass      | Glass panel (hardware only) |
+| None       | No doors                    |
 
 Door reveal (gap) is configurable per-millimetre.
 
@@ -91,11 +91,11 @@ Door reveal (gap) is configurable per-millimetre.
 
 The configurator highlights problems in real time:
 
-| Severity | Example |
-|---|---|
-| 🔴 Error | Carcass too narrow for material thickness |
-| 🟡 Warning | Door aspect ratio may cause warping |
-| 🔵 Info | Manufacturing note |
+| Severity   | Example                                   |
+| ---------- | ----------------------------------------- |
+| 🔴 Error   | Carcass too narrow for material thickness |
+| 🟡 Warning | Door aspect ratio may cause warping       |
+| 🔵 Info    | Manufacturing note                        |
 
 ---
 
@@ -111,11 +111,11 @@ Displays 5 orthographic views plus a simplified 3-D perspective:
 
 ### Interactions
 
-| Action | Effect |
-|---|---|
-| Pinch / scroll | Zoom in/out |
-| Drag | Pan |
-| Double-tap | Reset zoom |
+| Action            | Effect                          |
+| ----------------- | ------------------------------- |
+| Pinch / scroll    | Zoom in/out                     |
+| Drag              | Pan                             |
+| Double-tap        | Reset zoom                      |
 | Export SVG button | Download current view as `.svg` |
 
 ---
@@ -136,12 +136,12 @@ waste. The smart optimizer groups parts by material first, then packs per sheet.
 
 ### Exports
 
-| Format | Command | Use Case |
-|---|---|---|
-| DXF | Download DXF | CAD software, CNC router import |
-| G-code | Download G-code | Direct CNC machine |
-| BOM CSV | Download BOM | Parts list for ordering |
-| ERP CSV | Download ERP CSV | Shop-floor / MRP system import |
+| Format  | Command          | Use Case                        |
+| ------- | ---------------- | ------------------------------- |
+| DXF     | Download DXF     | CAD software, CNC router import |
+| G-code  | Download G-code  | Direct CNC machine              |
+| BOM CSV | Download BOM     | Parts list for ordering         |
+| ERP CSV | Download ERP CSV | Shop-floor / MRP system import  |
 
 ### Saw Kerf
 
@@ -183,21 +183,21 @@ Generates a print-ready PDF including:
 
 ## Keyboard Shortcuts
 
-| Shortcut | Action |
-|---|---|
-| `Alt+1` | Go to Configurator tab |
-| `Alt+2` | Go to Preview tab |
-| `Alt+3` | Go to Cut Sheets tab |
-| `Alt+4` | Go to Assembly tab |
-| `Alt+5` | Go to PDF Export tab |
-| `Alt+D` | Toggle dark mode |
-| `Ctrl+Z` | Undo last change |
-| `Ctrl+Y` / `Ctrl+Shift+Z` | Redo |
-| `Ctrl+Shift+S` | Save named snapshot |
-| `Ctrl+P` | Print current view |
-| `?` | Open keyboard shortcuts help |
-| `Arrow Left / Right` | Navigate tab bar when focused |
-| `Home / End` | Jump to first / last tab |
+| Shortcut                  | Action                        |
+| ------------------------- | ----------------------------- |
+| `Alt+1`                   | Go to Configurator tab        |
+| `Alt+2`                   | Go to Preview tab             |
+| `Alt+3`                   | Go to Cut Sheets tab          |
+| `Alt+4`                   | Go to Assembly tab            |
+| `Alt+5`                   | Go to PDF Export tab          |
+| `Alt+D`                   | Toggle dark mode              |
+| `Ctrl+Z`                  | Undo last change              |
+| `Ctrl+Y` / `Ctrl+Shift+Z` | Redo                          |
+| `Ctrl+Shift+S`            | Save named snapshot           |
+| `Ctrl+P`                  | Print current view            |
+| `?`                       | Open keyboard shortcuts help  |
+| `Arrow Left / Right`      | Navigate tab bar when focused |
+| `Home / End`              | Jump to first / last tab      |
 
 ---
 
@@ -254,11 +254,11 @@ Use `?tpl=kitchen-base` (or other template IDs) to pre-load a named template.
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---|---|---|
-| Preview is blank | SVG not loaded | Refresh the page |
-| Cut sheets show 0% yield | No parts generated | Check configurator for red errors |
-| PDF is empty | Lazy chunk not loaded | Switch to PDF tab and wait for `Loading…` to complete |
-| URL too long to share | Many non-default fields | Use the compact base64 URL format |
-| Cabinet data lost after refresh | localStorage cleared | Use Ctrl+Shift+S to save before closing |
-| App offline shows stale UI | Service worker cache | Hard-refresh (`Ctrl+Shift+R`) to bust the cache |
+| Symptom                         | Cause                   | Fix                                                   |
+| ------------------------------- | ----------------------- | ----------------------------------------------------- |
+| Preview is blank                | SVG not loaded          | Refresh the page                                      |
+| Cut sheets show 0% yield        | No parts generated      | Check configurator for red errors                     |
+| PDF is empty                    | Lazy chunk not loaded   | Switch to PDF tab and wait for `Loading…` to complete |
+| URL too long to share           | Many non-default fields | Use the compact base64 URL format                     |
+| Cabinet data lost after refresh | localStorage cleared    | Use Ctrl+Shift+S to save before closing               |
+| App offline shows stale UI      | Service worker cache    | Hard-refresh (`Ctrl+Shift+R`) to bust the cache       |

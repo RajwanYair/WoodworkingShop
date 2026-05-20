@@ -18,7 +18,21 @@ export function generateBomCsv(
   rows.push(csvRow(['# Cabinet Planner BOM Export', '', '', '', '', '', '', '', '', '', '']));
   rows.push(csvRow([`# Version: ${__APP_VERSION__}  Schema: bom-csv-v1`, '', '', '', '', '', '', '', '', '', '']));
   rows.push(csvRow([`# Generated: ${generatedAt}`, '', '', '', '', '', '', '', '', '', '']));
-  rows.push(csvRow([`# Cabinets: ${cabinets.length}  Parts: ${totalParts}  Hardware: ${totalHardware}`, '', '', '', '', '', '', '', '', '', '']));
+  rows.push(
+    csvRow([
+      `# Cabinets: ${cabinets.length}  Parts: ${totalParts}  Hardware: ${totalHardware}`,
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+    ]),
+  );
   rows.push('');
 
   // ── Material area summary section ─────────────────────────────────────────
@@ -85,7 +99,7 @@ export function generateBomCsv(
       const partId = isMultiCabinet ? `C${cabIdx + 1}-${p.id}` : p.id;
       partRowNum += 1;
       // Sprint 87 — part face area in m²
-      const partArea = (p.length * p.width * p.qty / 1_000_000).toFixed(6);
+      const partArea = ((p.length * p.width * p.qty) / 1_000_000).toFixed(6);
       rows.push(
         csvRow([
           String(partRowNum),
@@ -113,7 +127,22 @@ export function generateBomCsv(
   for (const cab of cabinets) {
     for (const hw of cab.hardware) {
       hwRowNum += 1;
-      rows.push(csvRow([String(hwRowNum), cab.name, hw.id, hw.name[lang], String(hw.qty), hw.unit[lang], '', '', '', '', '', '']));
+      rows.push(
+        csvRow([
+          String(hwRowNum),
+          cab.name,
+          hw.id,
+          hw.name[lang],
+          String(hw.qty),
+          hw.unit[lang],
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+        ]),
+      );
     }
   }
 

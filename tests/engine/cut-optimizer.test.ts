@@ -312,9 +312,7 @@ describe('optimizeCutSheets — grainConflictCount (Sprint 41)', () => {
   it('grainConflict flag matches grainConflictCount aggregate', () => {
     const parts = generateParts(DEFAULT_CONFIG);
     const result = optimizeCutSheets(parts);
-    const flaggedCount = result.sheets
-      .flatMap((s) => s.parts)
-      .filter((p) => p.grainConflict === true).length;
+    const flaggedCount = result.sheets.flatMap((s) => s.parts).filter((p) => p.grainConflict === true).length;
     expect(result.grainConflictCount).toBe(flaggedCount);
   });
 

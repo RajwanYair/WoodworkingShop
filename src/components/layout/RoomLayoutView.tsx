@@ -32,23 +32,8 @@ function CabinetRect({ cab, index, scale, offsetX, offsetY }: CabinetRectProps) 
   const d = cab.depth * scale;
   return (
     <g>
-      <rect
-        x={x}
-        y={y}
-        width={w}
-        height={d}
-        fill="#d4a96a33"
-        stroke="#7c4a2d"
-        strokeWidth={1.5}
-        rx={2}
-      />
-      <text
-        x={x + w / 2}
-        y={y + d / 2 + 4}
-        textAnchor="middle"
-        fontSize={10}
-        fill="#5a3520"
-      >
+      <rect x={x} y={y} width={w} height={d} fill="#d4a96a33" stroke="#7c4a2d" strokeWidth={1.5} rx={2} />
+      <text x={x + w / 2} y={y + d / 2 + 4} textAnchor="middle" fontSize={10} fill="#5a3520">
         ({index + 1}) {cab.name}
       </text>
     </g>
@@ -77,23 +62,9 @@ function FloorPlan({ layout }: FloorPlanProps) {
       className="w-full max-h-96 border border-wood-200 dark:border-wood-700 rounded-lg bg-wood-50 dark:bg-wood-900"
     >
       {/* Room outline */}
-      <rect
-        x={offsetX}
-        y={offsetY}
-        width={roomW}
-        height={roomH}
-        fill="none"
-        stroke="#7c4a2d"
-        strokeWidth={2}
-      />
+      <rect x={offsetX} y={offsetY} width={roomW} height={roomH} fill="none" stroke="#7c4a2d" strokeWidth={2} />
       {/* Width label (top) */}
-      <text
-        x={offsetX + roomW / 2}
-        y={offsetY - 8}
-        textAnchor="middle"
-        fontSize={11}
-        fill="#7c4a2d"
-      >
+      <text x={offsetX + roomW / 2} y={offsetY - 8} textAnchor="middle" fontSize={11} fill="#7c4a2d">
         {layout.roomWidth} mm
       </text>
       {/* Depth label (left) */}
@@ -109,14 +80,7 @@ function FloorPlan({ layout }: FloorPlanProps) {
       </text>
       {/* Cabinet footprints */}
       {layout.cabinets.map((cab, i) => (
-        <CabinetRect
-          key={cab.id}
-          cab={cab}
-          index={i}
-          scale={scale}
-          offsetX={offsetX}
-          offsetY={offsetY}
-        />
+        <CabinetRect key={cab.id} cab={cab} index={i} scale={scale} offsetX={offsetX} offsetY={offsetY} />
       ))}
     </svg>
   );
@@ -134,31 +98,26 @@ export function RoomLayoutView() {
         aria-label={t('room.sectionLabel')}
         className="border border-wood-200 dark:border-wood-700 rounded-lg p-4"
       >
-        <h3 className="text-sm font-semibold text-wood-600 dark:text-wood-300 mb-2">
-          {t('room.title')}
-        </h3>
+        <h3 className="text-sm font-semibold text-wood-600 dark:text-wood-300 mb-2">{t('room.title')}</h3>
         <p className="text-sm text-wood-400 dark:text-wood-500">{t('room.empty')}</p>
       </section>
     );
   }
 
   return (
-    <section
-      aria-label={t('room.sectionLabel')}
-      className="border border-wood-200 dark:border-wood-700 rounded-lg p-4"
-    >
+    <section aria-label={t('room.sectionLabel')} className="border border-wood-200 dark:border-wood-700 rounded-lg p-4">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm font-semibold text-wood-600 dark:text-wood-300">
           {t('room.title')}: {layout.name}
         </h3>
         <span className="text-xs text-wood-400 dark:text-wood-500">
-          {layout.roomWidth} × {layout.roomDepth} mm ·{' '}
-          {layout.cabinets.length} {t('room.cabinets')} ·{' '}
+          {layout.roomWidth} × {layout.roomDepth} mm · {layout.cabinets.length} {t('room.cabinets')} ·{' '}
           {(() => {
             const roomArea = layout.roomWidth * layout.roomDepth;
             const cabinetArea = layout.cabinets.reduce((sum, c) => sum + c.width * c.depth, 0);
             return roomArea > 0 ? Math.round((cabinetArea / roomArea) * 100) : 0;
-          })()}% {t('room.utilized')}
+          })()}
+          % {t('room.utilized')}
         </span>
       </div>
       <FloorPlan layout={layout} />

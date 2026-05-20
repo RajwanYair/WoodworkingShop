@@ -348,10 +348,7 @@ export function computeEdgeBandingTotal(parts: Part[]): number {
  * @param extraMaterials - Optional custom materials to include in the lookup
  * @returns Total weight in kilograms (0 when the list is empty)
  */
-export function computePartsWeight(
-  parts: Part[],
-  extraMaterials?: Parameters<typeof getMaterial>[1],
-): number {
+export function computePartsWeight(parts: Part[], extraMaterials?: Parameters<typeof getMaterial>[1]): number {
   let totalKg = 0;
   for (const p of parts) {
     try {

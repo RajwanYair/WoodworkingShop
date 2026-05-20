@@ -1,11 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  getPlugins,
-  getPluginContract,
-  type CabinetPlannerPlugin,
-  type PluginStability,
-} from '../../engine/plugin';
+import { getPlugins, getPluginContract, type CabinetPlannerPlugin, type PluginStability } from '../../engine/plugin';
 
 // ── Stability badge colours ───────────────────────────────────────────────
 
@@ -45,10 +40,7 @@ export function PluginRegistryPanel() {
   return (
     <section aria-labelledby="plugin-registry-heading" className="space-y-3">
       <div className="flex items-center justify-between">
-        <h2
-          id="plugin-registry-heading"
-          className="text-sm font-semibold text-wood-700 dark:text-wood-300"
-        >
+        <h2 id="plugin-registry-heading" className="text-sm font-semibold text-wood-700 dark:text-wood-300">
           {t('plugins.title')}
         </h2>
         <span
@@ -62,7 +54,7 @@ export function PluginRegistryPanel() {
       {plugins.length === 0 ? (
         <p className="text-xs text-wood-500 dark:text-wood-400 italic">{t('plugins.empty')}</p>
       ) : (
-        <ul className="space-y-2" role="list" aria-label={t('plugins.title')}>
+        <ul className="space-y-2" aria-label={t('plugins.title')}>
           {plugins.map((plugin) => {
             const isDisabled = disabledIds.has(plugin.id);
             return (
@@ -71,9 +63,7 @@ export function PluginRegistryPanel() {
                 className="flex items-center justify-between gap-3 rounded-lg border border-wood-200 dark:border-wood-700 px-3 py-2 text-sm"
               >
                 <div className="min-w-0 flex-1">
-                  <span className="font-medium text-wood-800 dark:text-wood-200 truncate block">
-                    {plugin.name}
-                  </span>
+                  <span className="font-medium text-wood-800 dark:text-wood-200 truncate block">{plugin.name}</span>
                   <span className="text-xs text-wood-500 dark:text-wood-400 font-mono">
                     {plugin.id} · {t('plugins.version', { version: plugin.version })}
                   </span>

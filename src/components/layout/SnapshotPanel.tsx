@@ -44,15 +44,17 @@ export function SnapshotPanel() {
             type="button"
             className="me-1 text-xs px-1.5 py-0.5 rounded bg-wood-200 dark:bg-wood-700 text-wood-700 dark:text-wood-200 hover:bg-wood-300 dark:hover:bg-wood-600 transition-colors flex items-center gap-1"
             aria-label={t('snapshot.diff.title')}
-            onClick={(e) => { e.stopPropagation(); setShowDiff(true); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowDiff(true);
+            }}
           >
-            <IconDiff size={11} />{t('snapshot.compare')}
+            <IconDiff size={11} />
+            {t('snapshot.compare')}
           </button>
         )}
         {snapshots.length > 0 && (
-          <span className="text-xs font-normal text-wood-400 dark:text-wood-500 me-1">
-            ({snapshots.length})
-          </span>
+          <span className="text-xs font-normal text-wood-400 dark:text-wood-500 me-1">({snapshots.length})</span>
         )}
         {open ? <IconChevronDown size={14} /> : <IconChevronRight size={14} />}
       </button>
@@ -85,7 +87,7 @@ export function SnapshotPanel() {
           {snapshots.length === 0 ? (
             <p className="text-xs text-wood-400 dark:text-wood-500 italic">{t('snapshot.empty')}</p>
           ) : (
-            <ul className="space-y-1" role="list">
+            <ul className="space-y-1">
               {[...snapshots].reverse().map((snap) => (
                 <li
                   key={snap.id}
@@ -130,4 +132,3 @@ export function SnapshotPanel() {
     </div>
   );
 }
-

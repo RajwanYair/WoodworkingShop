@@ -80,10 +80,7 @@ export function optimizeCutSheets(
 
   const totalArea = allSheets.reduce((s, sh) => s + sh.sheetLength * sh.sheetWidth, 0);
   const usedArea = allSheets.reduce((s, sh) => s + sh.parts.reduce((a, p) => a + p.length * p.width, 0), 0);
-  const grainConflictCount = allSheets.reduce(
-    (s, sh) => s + sh.parts.filter((p) => p.grainConflict).length,
-    0,
-  );
+  const grainConflictCount = allSheets.reduce((s, sh) => s + sh.parts.filter((p) => p.grainConflict).length, 0);
 
   return {
     sheets: allSheets,
@@ -258,7 +255,17 @@ function findBestPlacement(
   rect: Rect,
   kerf: number,
   allowRotation = true,
-): { freeIdx: number; x: number; y: number; w: number; h: number; rotated: boolean; score: number; leftoverMin: number; leftoverMax: number } | null {
+): {
+  freeIdx: number;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  rotated: boolean;
+  score: number;
+  leftoverMin: number;
+  leftoverMax: number;
+} | null {
   let best: ReturnType<typeof findBestPlacement> = null;
 
   for (let i = 0; i < free.length; i++) {

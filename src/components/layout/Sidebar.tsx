@@ -60,7 +60,6 @@ export function Sidebar() {
           role="dialog"
           aria-modal="true"
           aria-label="Cabinet summary"
-          onKeyDown={(e) => e.key === 'Escape' && setMobileOpen(false)}
           tabIndex={-1}
         >
           <div

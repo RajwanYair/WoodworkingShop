@@ -153,8 +153,7 @@ export function computeShelfDeflection(
   // Maximum safe load: scale 0.05 N/mm design load so that deflection == limitMm.
   // If deflectionMm is zero (theoretically impossible for real material) return a
   // large safe value to avoid division by zero.
-  const maxLoadKg =
-    deflectionMm > 0 ? Math.round((0.05 * limitMm * L) / deflectionMm / 9.81) : 9999;
+  const maxLoadKg = deflectionMm > 0 ? Math.round((0.05 * limitMm * L) / deflectionMm / 9.81) : 9999;
   return {
     deflectionMm: Math.round(deflectionMm * 100) / 100,
     limitMm: Math.round(limitMm * 100) / 100,

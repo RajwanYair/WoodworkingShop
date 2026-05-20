@@ -1,9 +1,6 @@
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
-  },
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "eslint.useFlatConfig": true,
@@ -46,32 +43,28 @@
     "args": ["-NoLogo", "-NonInteractive"]
   },
 
-  // CSS/HTML lint: our browserslist excludes IE entirely (see .browserslistrc).
-  // Inline styles are required for dynamic runtime values (data-driven colors/widths).
-  // ARIA attribute expressions are valid JSX producing correct string values at runtime
-  // — the static analyzer cannot evaluate JSX ternaries or boolean props.
-  // Progressive enhancement CSS (scrollbar-width, orphans, widows, forced-color-adjust,
-  // print-color-adjust, color-scheme, page) is intentional enhancement for supporting
-  // browsers — does not degrade for non-supporting browsers.
-  //
-  // Disabling built-in CSS validation because:
-  // 1. Tailwind CSS v4 generates valid modern CSS that the built-in validator doesn't understand.
-  // 2. Our .browserslistrc already defines browser targets — Vite/PostCSS handles compat.
-  // 3. ESLint + Prettier are our source-of-truth linters for code quality.
+  // Tailwind CSS v4 uses @theme, @custom-variant, and CSS custom properties
+  // that VS Code's built-in CSS validator doesn't understand. PostCSS + Vite
+  // handle all CSS processing; disable the built-in validator to avoid
+  // false positives on valid Tailwind v4 syntax.
   "css.validate": false,
-  "css.lint.compatibleVendorPrefixes": "ignore",
-  "css.lint.vendorPrefix": "ignore",
-  "css.lint.propertyIgnoredDueToDisplay": "ignore",
+  // Disable VS Code CSS lint rules that fire on valid progressive-enhancement
+  // CSS (forced-color-adjust, scrollbar-width, orphans/widows in @media print).
+  // These properties are unsupported only in IE 11 and older Safari, which are
+  // explicitly excluded by the project's browserslist.
   "css.lint.unknownProperties": "ignore",
-
-  // Accessibility linting in JSX/TSX: VS Code's static ARIA checker cannot
-  // evaluate JSX expressions (`{condition ? 'ascending' : 'none'}`) or
-  // verify that `aria-controls` targets exist across component boundaries.
-  // Runtime accessibility is verified by axe-core in Playwright E2E tests.
-  // Inline styles are required for: zoom transforms, tooltip positioning,
-  // data-driven chart colors — values computed at runtime from state.
-  "html.validate.scripts": true,
-  "html.validate.styles": false,
+  "css.lint.validProperties": [
+    "forced-color-adjust",
+    "scrollbar-width",
+    "print-color-adjust",
+    "color-scheme"
+  ],
+  // Stylelint extension: validate only CSS files (not TSX/JSX handled by ESLint).
+  "stylelint.validate": ["css"],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit"
+  },
 
   "files.exclude": {
     "**/dist/**": true,

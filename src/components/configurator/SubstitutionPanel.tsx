@@ -8,7 +8,8 @@ import type { Lang, MaterialSubstitution } from '../../engine/types';
 /** Benefit category badge colour map */
 const BENEFIT_CLASSES: Record<MaterialSubstitution['benefit'], string> = {
   deflection: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700',
-  weight: 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-700',
+  weight:
+    'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-700',
   cost: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 border-green-200 dark:border-green-700',
 };
 
@@ -42,13 +43,11 @@ export function SubstitutionPanel() {
         aria-expanded={open}
       >
         <span>💡 {t('substitution.title')}</span>
-        <span className="text-[10px] font-normal text-wood-500 dark:text-wood-400">
-          {visible.length}
-        </span>
+        <span className="text-[10px] font-normal text-wood-500 dark:text-wood-400">{visible.length}</span>
       </button>
 
       {open && (
-        <ul className="px-4 pb-4 space-y-3" role="list">
+        <ul className="px-4 pb-4 space-y-3">
           {visible.map((s) => {
             const key = `${s.currentKey}→${s.suggestedKey}`;
             let suggestedMat;
