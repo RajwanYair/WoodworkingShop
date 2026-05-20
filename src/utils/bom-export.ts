@@ -52,10 +52,11 @@ export function generateBomCsv(
 
   // Header
   rows.push(
-    'Cabinet,Part ID,Part Name,Qty,Material,Thickness (mm),Length (mm),Width (mm),Edge Banding,Weight (kg),Grain Direction',
+    '#,Cabinet,Part ID,Part Name,Qty,Material,Thickness (mm),Length (mm),Width (mm),Edge Banding,Weight (kg),Grain Direction',
   );
 
   const isMultiCabinet = cabinets.length > 1;
+  let partRowNum = 0;
 
   // Parts section
   for (let cabIdx = 0; cabIdx < cabinets.length; cabIdx++) {
@@ -82,8 +83,10 @@ export function generateBomCsv(
       }
       // Sprint 20 — prefix Part ID with cabinet index in multi-cabinet BOMs
       const partId = isMultiCabinet ? `C${cabIdx + 1}-${p.id}` : p.id;
+      partRowNum += 1;
       rows.push(
         csvRow([
+          String(partRowNum),
           cab.name,
           partId,
           p.name[lang],
@@ -102,10 +105,12 @@ export function generateBomCsv(
 
   // Blank separator + hardware section
   rows.push('');
-  rows.push('Cabinet,Hardware ID,Hardware Name,Qty,Unit,,,,,, ');
+  rows.push('#,Cabinet,Hardware ID,Hardware Name,Qty,Unit,,,,,, ');
+  let hwRowNum = 0;
   for (const cab of cabinets) {
     for (const hw of cab.hardware) {
-      rows.push(csvRow([cab.name, hw.id, hw.name[lang], String(hw.qty), hw.unit[lang], '', '', '', '', '', '']));
+      hwRowNum += 1;
+      rows.push(csvRow([String(hwRowNum), cab.name, hw.id, hw.name[lang], String(hw.qty), hw.unit[lang], '', '', '', '', '', '']));
     }
   }
 

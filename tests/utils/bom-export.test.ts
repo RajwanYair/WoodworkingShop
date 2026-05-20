@@ -311,3 +311,46 @@ describe('generateErpCsv', () => {
     vi.restoreAllMocks();
   });
 });
+
+// ── Sprint 73: sequential # row-number column in parts + hardware ─────────────
+describe('generateBomCsv — Sprint 73 sequential row numbers', () => {
+  it('parts header starts with #', () => {
+    const csv = generateBomCsv(singleCabinet, 'en');
+    const lines = csv.split('\n');
+    const partsHeaderIdx = lines.findIndex((l) => l.startsWith('#,Cabinet,Part ID'));
+    expect(partsHeaderIdx).toBeGreaterThanOrEqual(0);
+  });
+
+  it('first part data row starts with 1', () => {
+    const csv = generateBomCsv(singleCabinet, 'en');
+    const lines = csv.split('\n');
+    const partsHeaderIdx = lines.findIndex((l) => l.startsWith('#,Cabinet,Part ID'));
+    // Skip cabinet-notes comment row if present; find first data row
+    const dataRow = lines.slice(partsHeaderIdx + 1).find((l) => l.trim() !== '' && !l.startsWith('#'));
+    expect(dataRow).toMatch(/^1,/);
+  });
+
+  it('row numbers are sequential across multiple cabinets', () => {
+    const part2: Part = { ...mockPart, id: 'P02', name: { en: 'Back Panel', he: 'לוח אחורי' } };
+    const cabs = [
+      { name: 'Upper', parts: [mockPart], hardware: [] },
+      { name: 'Lower', parts: [part2], hardware: [] },
+    ];
+    const csv = generateBomCsv(cabs, 'en');
+    const lines = csv.split('\n');
+    const partsHeaderIdx = lines.findIndex((l) => l.startsWith('#,Cabinet,Part ID'));
+    const dataRows = lines
+      .slice(partsHeaderIdx + 1)
+      .filter((l) => l.trim() !== '' && !l.startsWith('#') && !l.startsWith('Cabinet,') && !l.startsWith('#,Cabinet,Hardware'));
+    expect(dataRows[0]).toMatch(/^1,/);
+    expect(dataRows[1]).toMatch(/^2,/);
+  });
+
+  it('hardware section header starts with #', () => {
+    const csv = generateBomCsv(singleCabinet, 'en');
+    const lines = csv.split('\n');
+    const hwHeaderIdx = lines.findIndex((l) => l.startsWith('#,Cabinet,Hardware ID'));
+    expect(hwHeaderIdx).toBeGreaterThanOrEqual(0);
+  });
+});
+
