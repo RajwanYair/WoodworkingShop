@@ -20,6 +20,7 @@ const STRATEGY_ICON: Record<SmartStrategy, React.ReactElement> = {
   'adjust-height': <IconGrainVertical size={14} className="text-amber-800 dark:text-amber-300" />,
   'material-swap': <IconRefresh size={14} className="text-amber-800 dark:text-amber-300" />,
   'shelf-count-reduce': <IconChevronDown size={14} className="text-amber-800 dark:text-amber-300" />,
+  'exhaustive': <IconRefresh size={14} className="text-amber-800 dark:text-amber-300" />,
 };
 
 function suggestionKey(s: OptimizationSuggestion): string {

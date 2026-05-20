@@ -143,3 +143,60 @@ describe('smart-optimizer', () => {
     });
   });
 });
+
+describe('smart-optimizer — exhaustive strategy (Sprint 58)', () => {
+  it('exhaustive strategy returns an array', () => {
+    const results = findOptimizations(cfg({ depth: 600 }), {
+      strategies: ['exhaustive'],
+      tolerance: 50,
+    });
+    expect(Array.isArray(results)).toBe(true);
+  });
+
+  it('exhaustive results are never worse than the original config', () => {
+    const results = findOptimizations(cfg({ depth: 600 }), {
+      strategies: ['exhaustive'],
+      tolerance: 50,
+    });
+    for (const r of results) {
+      expect(r.optimizedResult.totalSheets).toBeLessThanOrEqual(r.originalResult.totalSheets);
+    }
+  });
+
+  it('exhaustive finds at least as many suggestions as reduce-depth alone', () => {
+    const config = cfg({ depth: 600 });
+    const exhaustiveResults = findOptimizations(config, {
+      strategies: ['exhaustive'],
+      tolerance: 50,
+      maxResults: 20,
+    });
+    const singleResults = findOptimizations(config, {
+      strategies: ['reduce-depth'],
+      tolerance: 50,
+      maxResults: 20,
+    });
+    // Exhaustive covers all strategies so it should find >= single strategy results
+    expect(exhaustiveResults.length).toBeGreaterThanOrEqual(singleResults.length);
+  });
+
+  it('exhaustive results are sorted by score ascending', () => {
+    const results = findOptimizations(cfg({ depth: 600 }), {
+      strategies: ['exhaustive'],
+      tolerance: 50,
+    });
+    for (let i = 1; i < results.length; i++) {
+      expect(results[i].score).toBeGreaterThanOrEqual(results[i - 1].score);
+    }
+  });
+
+  it('exhaustive strategy provides bilingual explanations', () => {
+    const results = findOptimizations(cfg({ depth: 600 }), {
+      strategies: ['exhaustive'],
+      tolerance: 50,
+    });
+    for (const r of results) {
+      expect(r.explanation.en).toBeTruthy();
+      expect(r.explanation.he).toBeTruthy();
+    }
+  });
+});

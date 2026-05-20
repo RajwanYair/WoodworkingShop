@@ -90,6 +90,18 @@ function generateCandidates(cfg: CabinetConfig, strategy: SmartStrategy, toleran
       return tryMaterialSwaps(cfg);
     case 'shelf-count-reduce':
       return tryShelfCountReduce(cfg);
+    case 'exhaustive': {
+      // Aggregate candidates from every individual strategy, then dedup
+      const individual: SmartStrategy[] = [
+        'reduce-depth',
+        'co-nest-strips',
+        'adjust-width',
+        'adjust-height',
+        'material-swap',
+        'shelf-count-reduce',
+      ];
+      return individual.flatMap((s) => generateCandidates(cfg, s, tolerance));
+    }
     default:
       return [];
   }
@@ -306,6 +318,7 @@ function buildExplanation(
     'adjust-height': { en: 'Adjust height for better yield', he: 'התאמת גובה לניצולת טובה' },
     'material-swap': { en: 'Try alternative material', he: 'חומר חלופי' },
     'shelf-count-reduce': { en: 'Reduce shelf count to save material', he: 'הפחתת מספר מדפים לחיסכון בחומר' },
+    'exhaustive': { en: 'Exhaustive — best across all strategies', he: 'מיצוי — הטוב מכל האסטרטגיות' },
   };
 
   return {

@@ -195,7 +195,8 @@ export type SmartStrategy =
   | 'adjust-width'
   | 'adjust-height'
   | 'material-swap'
-  | 'shelf-count-reduce';
+  | 'shelf-count-reduce'
+  | 'exhaustive';
 
 export interface OptimizationSuggestion {
   originalConfig: CabinetConfig;
