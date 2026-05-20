@@ -401,7 +401,8 @@
   "shortcuts": {
     "saveSnapshot": "צילום מצב נשמר",
     "exportBom": "BOM יוצא",
-    "resetConfig": "ההגדרות אופסו לברירת מחדל"
+    "resetConfig": "ההגדרות אופסו לברירת מחדל",
+    "copyLink": "קישור שיתוף הועתק"
   },
   "onboarding": {
     "title": "ברוכים הבאים למתכנן הארונות!",

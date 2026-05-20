@@ -24,6 +24,7 @@ import { useSystemDarkMode } from './hooks/useSystemDarkMode';
 import { generateParts } from './engine/parts';
 import { generateHardware } from './engine/hardware';
 import { downloadBomCsv } from './utils/bom-export';
+import { configToUrl } from './utils/url-state';
 import type { Lang } from './engine/types';
 
 // Lazy-load heavy / route-isolated panels so the initial bundle stays lean
@@ -119,6 +120,17 @@ function App() {
         e.preventDefault();
         useCabinetStore.getState().resetConfig();
         useToastStore.getState().addToast(t('shortcuts.resetConfig'), 'info');
+        return;
+      }
+      // Copy share link: Ctrl+L (Sprint 71)
+      if (ctrl && (e.key === 'l' || e.key === 'L')) {
+        e.preventDefault();
+        const { config, projectName: pName } = useCabinetStore.getState();
+        const url = configToUrl(config, pName);
+        navigator.clipboard.writeText(url).then(
+          () => useToastStore.getState().addToast(t('shortcuts.copyLink'), 'success'),
+          () => useToastStore.getState().addToast(t('toast.linkCopyFailed'), 'error'),
+        );
         return;
       }
       // Tab switching: Alt+1-5; Dark mode: Alt+D (Sprint 168)

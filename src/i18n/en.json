@@ -394,7 +394,8 @@
   "shortcuts": {
     "saveSnapshot": "Snapshot saved",
     "exportBom": "BOM exported",
-    "resetConfig": "Config reset to defaults"
+    "resetConfig": "Config reset to defaults",
+    "copyLink": "Share link copied"
   },
   "skeleton": {
     "loading": "Loading panel…",
