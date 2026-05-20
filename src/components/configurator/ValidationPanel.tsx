@@ -54,6 +54,7 @@ export function ValidationPanel({ issues }: ValidationPanelProps) {
 
   const errorCount = visible.filter((i) => i.severity === 'error').length;
   const warnCount = visible.filter((i) => i.severity === 'warning').length;
+  const infoCount = visible.filter((i) => i.severity === 'info').length;
 
   const lang = (i18n.language?.startsWith('he') ? 'he' : 'en') as 'en' | 'he';
 
@@ -73,10 +74,6 @@ export function ValidationPanel({ issues }: ValidationPanelProps) {
   const dismissAll = () => {
     setDismissed(new Set(visible.map((i) => i.code)));
   };
-
-  const summaryParts: string[] = [];
-  if (errorCount > 0) summaryParts.push(t('validation.error', { count: errorCount, postProcess: 'interval' }));
-  if (warnCount > 0) summaryParts.push(t('validation.warning', { count: warnCount, postProcess: 'interval' }));
 
   return (
     <section
@@ -98,8 +95,30 @@ export function ValidationPanel({ issues }: ValidationPanelProps) {
             <IconWarning className="text-amber-500 dark:text-amber-400" size={16} />
           )}
           {t('validation.title')}
-          {summaryParts.length > 0 && (
-            <span className="text-xs font-normal text-wood-500 dark:text-wood-400">({summaryParts.join(', ')})</span>
+          {/* Sprint 72 — colored severity count badges */}
+          {errorCount > 0 && (
+            <span
+              className="inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1 rounded-full text-xs font-bold bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300"
+              aria-label={t('validation.error', { count: errorCount, postProcess: 'interval' })}
+            >
+              {errorCount}
+            </span>
+          )}
+          {warnCount > 0 && (
+            <span
+              className="inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300"
+              aria-label={t('validation.warning', { count: warnCount, postProcess: 'interval' })}
+            >
+              {warnCount}
+            </span>
+          )}
+          {infoCount > 0 && (
+            <span
+              className="inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1 rounded-full text-xs font-bold bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300"
+              aria-label={t('validation.info', { count: infoCount, postProcess: 'interval' })}
+            >
+              {infoCount}
+            </span>
           )}
         </button>
 
