@@ -896,6 +896,13 @@ function SheetCard({
       <div className="flex items-center justify-between mb-2 gap-3">
         <h3 className="text-sm font-medium text-wood-600 dark:text-wood-300 flex-1 min-w-0 truncate">
           {t('optimizer.sheet')} #{sheet.sheetIndex + 1} — {mat.name[lang]} ({sheet.thickness} mm)
+          {/* Sprint 77 — part count badge */}
+          <span
+            className="ms-1.5 text-[10px] font-semibold text-wood-100 dark:text-wood-800 bg-wood-500 dark:bg-wood-400 px-1.5 py-0.5 rounded-full"
+            aria-label={`${sheet.parts.length} parts`}
+          >
+            {sheet.parts.length}
+          </span>
           {mat.hasGrain && (
             <span
               className="ml-1.5 text-[10px] font-normal text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/30 px-1 rounded inline-flex items-center gap-0.5"
