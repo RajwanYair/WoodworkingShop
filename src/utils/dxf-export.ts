@@ -54,6 +54,8 @@ export function cutSheetToDxf(sheet: CutSheet): string {
   addLayer(lines, 'LABELS', 5); // blue
   addLayer(lines, 'PARTS', 3); // green — legacy fallback layer (kept for compatibility)
   addLayer(lines, 'GRAIN_CONFLICT', 1); // red — grain-direction conflicts (Sprint 70)
+  addLayer(lines, 'ROTATION_LOCKED', 6); // magenta — Sprint 19: visually flag rotation-locked parts
+  addLayer(lines, 'EDGE_BANDED', 4); // cyan — Sprint 19: parts requiring edge banding
   lines.push('0', 'ENDTAB');
   lines.push('0', 'ENDSEC');
 
@@ -63,10 +65,23 @@ export function cutSheetToDxf(sheet: CutSheet): string {
   // Sheet outline
   addRect(lines, 0, 0, sheet.sheetWidth, sheet.sheetLength, 'SHEET');
 
-  // Parts on per-material layer (grain-conflicted parts on GRAIN_CONFLICT layer)
+  // Sprint 19 — choose layer per-part by precedence:
+  //   grainConflict > rotationLocked > matLayer.  Edge-banded parts also receive
+  //   a duplicate outline on the EDGE_BANDED layer so a CAM operator can quickly
+  //   isolate them.
   for (const part of sheet.parts) {
-    const partLayer = part.grainConflict === true ? 'GRAIN_CONFLICT' : matLayer;
+    let partLayer: string;
+    if (part.grainConflict === true) {
+      partLayer = 'GRAIN_CONFLICT';
+    } else if (part.rotationLocked === true) {
+      partLayer = 'ROTATION_LOCKED';
+    } else {
+      partLayer = matLayer;
+    }
     addRect(lines, part.x, part.y, part.width, part.length, partLayer);
+    if (part.edgeBanding && part.edgeBanding.trim().length > 0) {
+      addRect(lines, part.x, part.y, part.width, part.length, 'EDGE_BANDED');
+    }
     addLabel(lines, part, 'LABELS');
   }
 
