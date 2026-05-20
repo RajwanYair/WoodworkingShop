@@ -9,6 +9,50 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.53.100] — 2026-06-20
+
+### Sprints 81–90 — Waste Label, Part Badge, Shelf-Pin Rule, Tips Toggle, Code Tooltip, Ctrl+Shift+N, BOM Area, Wardrobe Rule, Door/Drawer Pills
+
+Covers Sprints 81 through 90 (v3.53.91 → v3.53.100). All tests passing.
+
+### Optimizer — Per-Sheet Waste Area Label (Sprint 81)
+
+- **Sprint 81** — Each `SheetCard` header in `OptimizerView` now shows a waste area label (`Waste: N.NN m²`) next to the yield percentage. i18n key: `optimizer.sheetWaste`. 4 new tests. (v3.53.91)
+
+### Configurator — CabinetSelector Part-Count Badge (Sprint 82)
+
+- **Sprint 82** — Each cabinet tab in `CabinetSelector` displays a parenthesised part-count badge `(N)` rendered from `generateParts(cab.config).length`. Badge is hidden from screen readers via `aria-hidden`. 5 new tests in `tests/components/CabinetSelector.test.tsx`. (v3.53.92)
+
+### Validation — PANEL_TOO_THIN_FOR_SHELF_PINS Rule (Sprint 83)
+
+- **Sprint 83** — New `info`-severity validation rule fires when `shelfCount > 0` and carcass panel thickness `< 12 mm`. Code: `PANEL_TOO_THIN_FOR_SHELF_PINS`; field: `carcassMaterial`. Message explains the risk of split veneers under load. 5 new tests. (v3.53.93)
+
+### Assembly — Show/Hide Tips Toggle (Sprint 84)
+
+- **Sprint 84** — `AssemblyGuide` gains a **Show/Hide tips** toggle button (lightbulb icon). Tips blocks in each `StepCard` are hidden when toggled off. `aria-pressed` reflects state. i18n keys: `assembly.showTips`, `assembly.hideTips`. 4 new tests. (v3.53.94)
+
+### Configurator — ValidationPanel Issue Code Tooltip (Sprint 85)
+
+- **Sprint 85** — Each `<li>` in the `ValidationPanel` issue list now carries `title={issue.code}`, giving developers and power-users a tooltip with the machine-readable rule code on hover. 4 new tests. (v3.53.95)
+
+### Shortcuts — Ctrl+Shift+N Add Cabinet (Sprint 86)
+
+- **Sprint 86** — **Ctrl+Shift+N** keyboard shortcut calls `addCabinet()` on the store and shows a success toast. `ShortcutsModal` lists the new shortcut. i18n key: `shortcuts.addCabinet`. 4 new tests in `tests/components/ctrl-shift-n.test.tsx`. (v3.53.96)
+
+### Utils — BOM CSV Part Face Area Column (Sprint 87)
+
+- **Sprint 87** — The BOM CSV parts section gains an **Area (m²)** column (index 9) computed as `length × width × qty / 1_000_000` rounded to 6 decimal places. Parts header updated accordingly. 4 new tests. (v3.53.97)
+
+### Validation — SHELF_COUNT_WARDROBE_BARE Rule (Sprint 88)
+
+- **Sprint 88** — New `info`-severity validation rule fires when `furnitureType === 'wardrobe'`, `shelfCount === 0`, and `drawerCount === 0`. Code: `SHELF_COUNT_WARDROBE_BARE`; field: `shelfCount`; `suggestedValue: 1`. 5 new tests. (v3.53.98)
+
+### Preview — Door/Drawer Count Indicator Pills (Sprint 89)
+
+- **Sprint 89** — `CabinetPreview` shows a compact row of pills below the dimension strip when `doorCount > 0` or `drawerCount > 0` (e.g. `2 doors · 3 drawers`). Hidden when both are zero. i18n keys: `preview.doors`, `preview.drawers`. 4 new tests. (v3.53.99)
+
+---
+
 ## [3.53.90] — 2026-06-16
 
 ### Sprints 71–80 — Share Link, Validation Badges, BOM #, Room Utilization, Door Depth Rule, Dimension Label, Sheet Badge, Checklist Download, Avg Yield
