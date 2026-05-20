@@ -386,7 +386,8 @@
     "loadingPdf": "טוען כלי ייצוא PDF…"
   },
   "shortcuts": {
-    "saveSnapshot": "צילום מצב נשמר"
+    "saveSnapshot": "צילום מצב נשמר",
+    "exportBom": "BOM יוצא"
   },
   "onboarding": {
     "title": "ברוכים הבאים למתכנן הארונות!",

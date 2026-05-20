@@ -17,6 +17,7 @@ const SHORTCUTS = [
   { key: 'Ctrl + Y', descEn: 'Redo', descHe: 'בצע שוב' },
   { key: 'Ctrl + Shift + Z', descEn: 'Redo (alternate)', descHe: 'בצע שוב (חלופי)' },
   { key: 'Ctrl + P', descEn: 'Print', descHe: 'הדפס' },
+  { key: 'Ctrl + E', descEn: 'Export BOM CSV', descHe: 'ייצוא BOM CSV' },
   { key: '?', descEn: 'Show / hide this panel', descHe: 'הצג / הסתר לוח זה' },
   { key: 'Escape', descEn: 'Close this panel', descHe: 'סגור לוח זה' },
 ];

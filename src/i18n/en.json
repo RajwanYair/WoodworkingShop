@@ -379,7 +379,8 @@
     "linkCopyFailed": "Could not copy link — please copy the URL from the address bar"
   },
   "shortcuts": {
-    "saveSnapshot": "Snapshot saved"
+    "saveSnapshot": "Snapshot saved",
+    "exportBom": "BOM exported"
   },
   "skeleton": {
     "loading": "Loading panel…",

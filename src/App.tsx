@@ -21,6 +21,10 @@ import { IconPrint } from './components/layout/Icons';
 import { useCabinetStore, type CabinetState } from './store/cabinet-store';
 import { useToastStore } from './store/toast-store';
 import { useSystemDarkMode } from './hooks/useSystemDarkMode';
+import { generateParts } from './engine/parts';
+import { generateHardware } from './engine/hardware';
+import { downloadBomCsv } from './utils/bom-export';
+import type { Lang } from './engine/types';
 
 // Lazy-load heavy / route-isolated panels so the initial bundle stays lean
 // (Sprint 110). PDF in particular pulls in @react-pdf/renderer (~1.6 MB).
@@ -37,7 +41,7 @@ const AssemblyGuide = lazy(() =>
 function App() {
   const { activeTab, darkMode, projectName } = useCabinetStore();
   const highContrastMode = useCabinetStore((s) => s.highContrastMode);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [showShortcuts, setShowShortcuts] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
   // Track whether this is the initial render so we don't steal focus on load
@@ -93,6 +97,21 @@ function App() {
       if (ctrl && e.key === 'p') {
         e.preventDefault();
         window.print();
+        return;
+      }
+      // Export BOM CSV: Ctrl+E (Sprint 57)
+      if (ctrl && (e.key === 'e' || e.key === 'E')) {
+        e.preventDefault();
+        const { cabinets, projectName: pName, config } = useCabinetStore.getState();
+        const lang = (i18n.language as Lang) || (config.lang as Lang) || 'en';
+        const filePrefix = (pName.trim() || 'cabinet').replace(/[^\w\u05D0-\u05EA.-]/g, '-').replace(/-+/g, '-');
+        const bomData = (cabinets.length > 0 ? cabinets : [{ name: 'Cabinet', config }]).map((cab) => ({
+          name: cab.name,
+          parts: generateParts(cab.config),
+          hardware: generateHardware(cab.config),
+        }));
+        downloadBomCsv(bomData, lang, `${filePrefix}-bom.csv`);
+        useToastStore.getState().addToast(t('shortcuts.exportBom'), 'success');
         return;
       }
       // Tab switching: Alt+1-5; Dark mode: Alt+D (Sprint 168)
