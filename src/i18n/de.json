@@ -556,5 +556,14 @@
     "lineRef": "Zeile {{line}}",
     "fileLevel": "Dateiebene",
     "dismiss": "Schließen"
+  },
+  "gcode": {
+    "previewTitle": "G-code-Werkzeugweg-Vorschau",
+    "previewRapid": "Eilgang (G0)",
+    "previewCut": "Schnitt (G1)",
+    "previewArc": "Bogen (G2/G3)",
+    "moveCount_one": "{{count}} Bewegung",
+    "moveCount_other": "{{count}} Bewegungen",
+    "downloadAnyway": "Herunterladen"
   }
 }

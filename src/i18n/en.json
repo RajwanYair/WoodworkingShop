@@ -557,5 +557,14 @@
     "lineRef": "Line {{line}}",
     "fileLevel": "File-level",
     "dismiss": "Dismiss"
+  },
+  "gcode": {
+    "previewTitle": "G-code Toolpath Preview",
+    "previewRapid": "Rapid (G0)",
+    "previewCut": "Cut (G1)",
+    "previewArc": "Arc (G2/G3)",
+    "moveCount_one": "{{count}} move",
+    "moveCount_other": "{{count}} moves",
+    "downloadAnyway": "Download"
   }
 }

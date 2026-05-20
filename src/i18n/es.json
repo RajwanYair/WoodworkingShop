@@ -556,5 +556,14 @@
     "lineRef": "Línea {{line}}",
     "fileLevel": "Nivel de archivo",
     "dismiss": "Cerrar"
+  },
+  "gcode": {
+    "previewTitle": "Vista previa de trayectoria G-code",
+    "previewRapid": "Rápido (G0)",
+    "previewCut": "Corte (G1)",
+    "previewArc": "Arco (G2/G3)",
+    "moveCount_one": "{{count}} movimiento",
+    "moveCount_other": "{{count}} movimientos",
+    "downloadAnyway": "Descargar"
   }
 }

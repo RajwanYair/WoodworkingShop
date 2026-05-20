@@ -541,6 +541,28 @@
     "disabled": "מושבת",
     "apiVersion": "API v{{version}}"
   },
+  "gcodeValidator": {
+    "title": "אימות G-code",
+    "valid": "ה-G-code תקין — לא נמצאו שגיאות.",
+    "errors_one": "שגיאה {{count}}",
+    "errors_other": "{{count}} שגיאות",
+    "warnings_one": "אזהרה {{count}}",
+    "warnings_other": "{{count}} אזהרות",
+    "infos_one": "הערה {{count}}",
+    "infos_other": "{{count}} הערות",
+    "lineRef": "שורה {{line}}",
+    "fileLevel": "ברמת הקובץ",
+    "dismiss": "סגור"
+  },
+  "gcode": {
+    "previewTitle": "תצוגה מקדימה של נתיב G-code",
+    "previewRapid": "תזוזה מהירה (G0)",
+    "previewCut": "חיתוך (G1)",
+    "previewArc": "קשת (G2/G3)",
+    "moveCount_one": "תנועה {{count}}",
+    "moveCount_other": "{{count}} תנועות",
+    "downloadAnyway": "הורדה"
+  },
   "swUpdate": {
     "available": "גרסה חדשה זמינה!",
     "reload": "טען מחדש"

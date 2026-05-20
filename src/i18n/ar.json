@@ -556,5 +556,14 @@
     "lineRef": "سطر {{line}}",
     "fileLevel": "مستوى الملف",
     "dismiss": "إغلاق"
+  },
+  "gcode": {
+    "previewTitle": "معاينة مسار أداة G-code",
+    "previewRapid": "تحرك سريع (G0)",
+    "previewCut": "قطع (G1)",
+    "previewArc": "قوس (G2/G3)",
+    "moveCount_one": "حركة {{count}}",
+    "moveCount_other": "{{count}} حركات",
+    "downloadAnyway": "تنزيل"
   }
 }
