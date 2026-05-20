@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { generateParts } from '../../engine';
 
 export function CabinetSelector() {
   const { t } = useTranslation();
@@ -70,6 +71,13 @@ export function CabinetSelector() {
                 title={`${cab.name} — double-click to rename`}
               >
                 {cab.name}
+                {/* Sprint 82 — part count badge */}
+                <span
+                  className="ms-1 text-[9px] font-normal opacity-70"
+                  aria-label={`${generateParts(cab.config).length} parts`}
+                >
+                  ({generateParts(cab.config).length})
+                </span>
               </button>
             )}
             {cabinets.length > 1 && (
