@@ -19,12 +19,13 @@ const PAD = 32;
 
 interface CabinetRectProps {
   cab: RoomCabinet;
+  index: number;
   scale: number;
   offsetX: number;
   offsetY: number;
 }
 
-function CabinetRect({ cab, scale, offsetX, offsetY }: CabinetRectProps) {
+function CabinetRect({ cab, index, scale, offsetX, offsetY }: CabinetRectProps) {
   const x = offsetX + cab.x * scale;
   const y = offsetY + cab.y * scale;
   const w = cab.width * scale;
@@ -48,7 +49,7 @@ function CabinetRect({ cab, scale, offsetX, offsetY }: CabinetRectProps) {
         fontSize={10}
         fill="#5a3520"
       >
-        {cab.name}
+        ({index + 1}) {cab.name}
       </text>
     </g>
   );
@@ -107,10 +108,11 @@ function FloorPlan({ layout }: FloorPlanProps) {
         {layout.roomDepth} mm
       </text>
       {/* Cabinet footprints */}
-      {layout.cabinets.map((cab) => (
+      {layout.cabinets.map((cab, i) => (
         <CabinetRect
           key={cab.id}
           cab={cab}
+          index={i}
           scale={scale}
           offsetX={offsetX}
           offsetY={offsetY}

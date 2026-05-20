@@ -52,14 +52,14 @@ describe('RoomLayoutView', () => {
   it('renders cabinet labels in the SVG', () => {
     useRoomStore.setState({ layouts: [LAYOUT], activeLayoutId: 'l1' });
     render(<RoomLayoutView />);
-    expect(screen.getByText('Base Unit')).toBeInTheDocument();
-    expect(screen.getByText('Wall Unit')).toBeInTheDocument();
+    expect(screen.getByText(/\(1\) Base Unit/)).toBeInTheDocument();
+    expect(screen.getByText(/\(2\) Wall Unit/)).toBeInTheDocument();
   });
 
   it('shows cabinet count', () => {
     useRoomStore.setState({ layouts: [LAYOUT], activeLayoutId: 'l1' });
     render(<RoomLayoutView />);
-    expect(screen.getByText(/2/)).toBeInTheDocument();
+    expect(screen.getByText(/2\s+cabinets/)).toBeInTheDocument();
   });
 
   it('falls back to first layout when activeLayoutId is null', () => {
@@ -72,5 +72,32 @@ describe('RoomLayoutView', () => {
     useRoomStore.setState({ layouts: [LAYOUT], activeLayoutId: 'l1' });
     render(<RoomLayoutView />);
     expect(screen.getByRole('img', { name: 'Kitchen' })).toBeInTheDocument();
+  });
+
+  // Sprint 67 — position numbers in SVG floor plan
+  it('Sprint 67: first cabinet shows position (1)', () => {
+    useRoomStore.setState({ layouts: [LAYOUT], activeLayoutId: 'l1' });
+    render(<RoomLayoutView />);
+    expect(screen.getByText(/\(1\)/)).toBeInTheDocument();
+  });
+
+  it('Sprint 67: second cabinet shows position (2)', () => {
+    useRoomStore.setState({ layouts: [LAYOUT], activeLayoutId: 'l1' });
+    render(<RoomLayoutView />);
+    expect(screen.getByText(/\(2\)/)).toBeInTheDocument();
+  });
+
+  it('Sprint 67: single cabinet shows (1) prefix', () => {
+    const singleLayout = { ...LAYOUT, cabinets: [LAYOUT.cabinets[0]] };
+    useRoomStore.setState({ layouts: [singleLayout], activeLayoutId: 'l1' });
+    render(<RoomLayoutView />);
+    expect(screen.getByText(/\(1\) Base Unit/)).toBeInTheDocument();
+  });
+
+  it('Sprint 67: no position number shown when no cabinets', () => {
+    const emptyLayout = { ...LAYOUT, cabinets: [] };
+    useRoomStore.setState({ layouts: [emptyLayout], activeLayoutId: 'l1' });
+    render(<RoomLayoutView />);
+    expect(screen.queryByText(/\(1\)/)).not.toBeInTheDocument();
   });
 });
