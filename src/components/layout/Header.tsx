@@ -6,7 +6,7 @@ import { configToUrl } from '../../utils/url-state';
 import { HelpButton } from './OnboardingOverlay';
 import { TemplatePicker } from '../configurator/TemplatePicker';
 import { ProjectManagerModal } from './ProjectManagerModal';
-import { SUPPORTED_LANGUAGES, RTL_LANGS, type SupportedLang } from '../../i18n';
+import { SUPPORTED_LANGUAGES, RTL_LANGS, loadLocale, type SupportedLang } from '../../i18n';
 import {
   IconSun,
   IconMoon,
@@ -93,11 +93,13 @@ export function Header() {
   };
 
   const changeLang = (next: SupportedLang) => {
-    i18n.changeLanguage(next);
-    document.documentElement.dir = RTL_LANGS.has(next) ? 'rtl' : 'ltr';
-    // Engine-facing lang stays 'en'|'he' — AR/ES/DE/FR fall back to EN for BOM column headers.
-    const engineLang: 'en' | 'he' = next === 'he' || next === 'ar' ? 'he' : 'en';
-    useCabinetStore.getState().setConfig({ lang: engineLang });
+    void loadLocale(next).then(() => {
+      i18n.changeLanguage(next);
+      document.documentElement.dir = RTL_LANGS.has(next) ? 'rtl' : 'ltr';
+      // Engine-facing lang stays 'en'|'he' — AR/ES/DE/FR fall back to EN for BOM column headers.
+      const engineLang: 'en' | 'he' = next === 'he' || next === 'ar' ? 'he' : 'en';
+      useCabinetStore.getState().setConfig({ lang: engineLang });
+    });
   };
 
   return (

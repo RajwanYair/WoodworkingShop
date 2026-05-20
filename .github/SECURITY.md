@@ -57,7 +57,7 @@
 - [ ] `npm audit` reports no new high/critical issues
 - [ ] Dependencies added are necessary and from trusted sources
 
-## ♿ Accessibility Security Stance — v3.58.0
+## ♿ Accessibility Security Stance — v3.59.0
 
 Accessibility violations are treated as **quality-blocking issues** in this project. The following measures ensure WCAG 2.2 AA compliance is maintained:
 
