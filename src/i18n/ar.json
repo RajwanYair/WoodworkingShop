@@ -237,7 +237,9 @@
     "contentsParts": "قائمة القطع ({{count}} قطعة)",
     "contentsHardware": "قائمة الأجهزة ({{count}} صنف)",
     "contentsSheets": "مخططات خطط القطع ({{count}} ورقة)",
-    "contentsPageNumbers": "أرقام الصفحات على كل صفحة"
+    "contentsPageNumbers": "أرقام الصفحات في كل صفحة",
+    "exportErpJson": "تصدير JSON لل-ERP/MRP",
+    "erpExported": "تم تصدير بيانات ERP/MRP"
   },
   "footer": {
     "darkMode": "الوضع الداكن",

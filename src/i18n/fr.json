@@ -237,7 +237,9 @@
     "contentsParts": "Liste des pièces ({{count}} pièces)",
     "contentsHardware": "Liste de quincaillerie ({{count}} articles)",
     "contentsSheets": "Plans de découpe ({{count}} feuilles)",
-    "contentsPageNumbers": "Numéros de page sur chaque page"
+    "contentsPageNumbers": "Numéros de page sur chaque page",
+    "exportErpJson": "Exporter JSON ERP/MRP",
+    "erpExported": "Fichier ERP/MRP exporté"
   },
   "footer": {
     "darkMode": "Mode sombre",

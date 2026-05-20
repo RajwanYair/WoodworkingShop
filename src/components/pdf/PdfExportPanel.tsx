@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { pdf } from '@react-pdf/renderer';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { CabinetPdfDocument } from './CabinetPdfDocument';
+import { generateErpPayload, downloadErpJson } from '../../utils/erp-export';
+import { useToastStore } from '../../store/toast-store';
 import type { Lang } from '../../engine/types';
 
 export function PdfExportPanel() {
@@ -103,6 +105,29 @@ export function PdfExportPanel() {
           className="px-6 py-3 rounded-lg text-sm font-medium bg-wood-600 text-white hover:bg-wood-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {generating ? t('pdf.generating') : t('pdf.generate')}
+        </button>
+
+        {/* Sprint 13 — ERP/MRP JSON export */}
+        <button
+          onClick={() => {
+            const safeName =
+              (store.projectName.trim() || 'cabinet-plan')
+                .replace(/[^\w\u05D0-\u05EA.-]/g, '-')
+                .replace(/-+/g, '-')
+                .replace(/^-|-$/g, '') || 'cabinet-plan';
+            const payload = generateErpPayload(
+              store.projectName,
+              store.config,
+              store.parts,
+              store.hardware,
+              store.optimization,
+            );
+            downloadErpJson(payload, `${safeName}-erp.json`);
+            useToastStore.getState().addToast(t('pdf.erpExported'), 'success');
+          }}
+          className="px-6 py-3 rounded-lg text-sm font-medium bg-wood-100 dark:bg-wood-800 text-wood-700 dark:text-wood-200 border border-wood-300 dark:border-wood-600 hover:bg-wood-200 dark:hover:bg-wood-700 transition-colors"
+        >
+          {t('pdf.exportErpJson')}
         </button>
       </div>
 

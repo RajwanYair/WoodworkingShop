@@ -237,7 +237,9 @@
     "contentsParts": "Teileliste ({{count}} Teile)",
     "contentsHardware": "Beschlägeliste ({{count}} Artikel)",
     "contentsSheets": "Zuschnittpläne ({{count}} Blätter)",
-    "contentsPageNumbers": "Seitenzahlen auf jeder Seite"
+    "contentsPageNumbers": "Seitenzahlen auf jeder Seite",
+    "exportErpJson": "ERP/MRP JSON exportieren",
+    "erpExported": "ERP/MRP-Datei exportiert"
   },
   "footer": {
     "darkMode": "Dunkelmodus",

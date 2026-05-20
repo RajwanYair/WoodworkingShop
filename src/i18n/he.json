@@ -237,7 +237,9 @@
     "contentsParts": "רשימת חלקים ({{count}} חלקים)",
     "contentsHardware": "רשימת חומרה ({{count}} פריטים)",
     "contentsSheets": "גיליונות חיתוך ({{count}} גיליונות)",
-    "contentsPageNumbers": "מספרי עמודים בכל עמוד"
+    "contentsPageNumbers": "מספרי עמודים בכל עמוד",
+    "exportErpJson": "יצוא JSON ל-ERP/MRP",
+    "erpExported": "קובץ ERP/MRP יוצא בהצלחה"
   },
   "footer": {
     "darkMode": "מצב כהה",

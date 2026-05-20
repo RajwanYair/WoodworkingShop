@@ -237,7 +237,9 @@
     "contentsParts": "Lista de piezas ({{count}} piezas)",
     "contentsHardware": "Lista de herrajes ({{count}} artículos)",
     "contentsSheets": "Diagramas de hojas de corte ({{count}} hojas)",
-    "contentsPageNumbers": "Números de página en cada página"
+    "contentsPageNumbers": "Números de página en cada página",
+    "exportErpJson": "Exportar JSON ERP/MRP",
+    "erpExported": "Fichero ERP/MRP exportado"
   },
   "footer": {
     "darkMode": "Modo oscuro",

@@ -237,7 +237,9 @@
     "contentsParts": "Parts list ({{count}} parts)",
     "contentsHardware": "Hardware list ({{count}} items)",
     "contentsSheets": "Cut sheet diagrams ({{count}} sheets)",
-    "contentsPageNumbers": "Page numbers on every page"
+    "contentsPageNumbers": "Page numbers on every page",
+    "exportErpJson": "Export ERP/MRP JSON",
+    "erpExported": "ERP/MRP payload exported"
   },
   "footer": {
     "darkMode": "Dark Mode",
