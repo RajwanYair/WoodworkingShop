@@ -587,6 +587,7 @@
     "safeZ": "Sicherer Z-Wert (mm)",
     "passDepth": "Zustelltiefe (mm)",
     "toolDiameter": "Werkzeug-\u00d8 (mm)",
-    "useArcs": "Bogenbewegungen (G2/G3)"
+    "useArcs": "Bogenbewegungen (G2/G3)",
+    "emitToolChange": "M6-Werkzeugwechsel zwischen Teilen ausgeben"
   }
 }

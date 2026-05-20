@@ -584,7 +584,8 @@
     "safeZ": "גובה בטוח Z (מ\"מ)",
     "passDepth": "עומק מעבר (מ\"מ)",
     "toolDiameter": "\u05e7\u05d5\u05d8\u05e8 כלי (מ\"מ)",
-    "useArcs": "תנועות קשת (G2/G3)"
+    "useArcs": "תנועות קשת (G2/G3)",
+    "emitToolChange": "פלט M6 להחלפת כלי בין חלקים"
   },
   "swUpdate": {
     "available": "גרסה חדשה זמינה!",

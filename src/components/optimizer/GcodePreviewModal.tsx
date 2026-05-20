@@ -38,9 +38,9 @@ interface MachinePreset extends Omit<GcodeOptions, 'cutDepth'> {
 }
 
 const MACHINE_PRESETS: MachinePreset[] = [
-  { id: 'shapeoko3',  feedRate: 2000, plungeRate: 500, safeZ: 5, passDepth: 2, toolDiameter: 6,     useArcs: false },
-  { id: 'xcarve1000', feedRate: 1800, plungeRate: 500, safeZ: 5, passDepth: 2, toolDiameter: 6,     useArcs: false },
-  { id: 'genmitsu',   feedRate: 800,  plungeRate: 300, safeZ: 5, passDepth: 1, toolDiameter: 3.175, useArcs: false },
+  { id: 'shapeoko3',  feedRate: 2000, plungeRate: 500, safeZ: 5, passDepth: 2, toolDiameter: 6,     useArcs: false, emitToolChange: false },
+  { id: 'xcarve1000', feedRate: 1800, plungeRate: 500, safeZ: 5, passDepth: 2, toolDiameter: 6,     useArcs: false, emitToolChange: false },
+  { id: 'genmitsu',   feedRate: 800,  plungeRate: 300, safeZ: 5, passDepth: 1, toolDiameter: 3.175, useArcs: false, emitToolChange: false },
 ];
 
 /** Translation-key suffix map for named presets */
@@ -86,6 +86,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
     passDepth: 3,
     toolDiameter: 6,
     useArcs: false,
+    emitToolChange: false,
   });
 
   // Re-generate G-code + validation whenever sheet or options change
@@ -210,7 +211,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
                     { key: 'safeZ', label: t('gcode.safeZ') },
                     { key: 'passDepth', label: t('gcode.passDepth') },
                     { key: 'toolDiameter', label: t('gcode.toolDiameter') },
-                  ] as { key: keyof Omit<GcodeOptions, 'useArcs' | 'cutDepth'>; label: string }[]
+                  ] as { key: keyof Omit<GcodeOptions, 'useArcs' | 'cutDepth' | 'emitToolChange'>; label: string }[]
                 ).map(({ key, label }) => (
                   <label key={key} className="flex flex-col gap-0.5">
                     <span className="text-[9px] text-wood-500 dark:text-wood-400">{label}</span>
@@ -238,6 +239,22 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
                       }}
                       className="h-3.5 w-3.5 rounded border-wood-300 dark:border-wood-600"
                       aria-label={t('gcode.useArcs')}
+                    />
+                  </div>
+                </label>
+                {/* Sprint 17 — emitToolChange toggle */}
+                <label className="flex flex-col gap-0.5">
+                  <span className="text-[9px] text-wood-500 dark:text-wood-400">{t('gcode.emitToolChange')}</span>
+                  <div className="flex items-center pt-1.5">
+                    <input
+                      type="checkbox"
+                      checked={options.emitToolChange}
+                      onChange={(e) => {
+                        setActivePreset(null);
+                        setOptions((prev) => ({ ...prev, emitToolChange: e.target.checked }));
+                      }}
+                      className="h-3.5 w-3.5 rounded border-wood-300 dark:border-wood-600"
+                      aria-label={t('gcode.emitToolChange')}
                     />
                   </div>
                 </label>

@@ -590,6 +590,7 @@
     "safeZ": "Safe Z (mm)",
     "passDepth": "Pass depth (mm)",
     "toolDiameter": "Tool \u00d8 (mm)",
-    "useArcs": "Arc moves (G2/G3)"
+    "useArcs": "Arc moves (G2/G3)",
+    "emitToolChange": "Emit M6 tool-change between parts"
   }
 }

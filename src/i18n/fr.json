@@ -587,6 +587,7 @@
     "safeZ": "Z sécurisé (mm)",
     "passDepth": "Prof. de passe (mm)",
     "toolDiameter": "\u00d8 outil (mm)",
-    "useArcs": "Mouvements arc (G2/G3)"
+    "useArcs": "Mouvements arc (G2/G3)",
+    "emitToolChange": "Émettre changement d'outil M6 entre les pièces"
   }
 }

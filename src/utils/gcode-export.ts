@@ -21,6 +21,13 @@ export interface GcodeOptions {
    * linear approximations. Has no effect on rectangular profile cuts.
    */
   useArcs: boolean;
+  /**
+   * Sprint 17 — when true, emits an M5 (spindle stop) + M6 T1 (tool change) +
+   * M3 S18000 (spindle restart) sequence between parts on a sheet. Lets the
+   * operator pause to swap tools or inspect cuts on machines without an
+   * automatic tool-changer. Defaults to false.
+   */
+  emitToolChange: boolean;
 }
 
 const DEFAULTS: GcodeOptions = {
@@ -31,6 +38,7 @@ const DEFAULTS: GcodeOptions = {
   passDepth: 3,
   toolDiameter: 6,
   useArcs: false,
+  emitToolChange: false,
 };
 
 /**
@@ -58,7 +66,17 @@ export function cutSheetToGcode(sheet: CutSheet, opts?: Partial<GcodeOptions>): 
   lines.push('M3 S18000 ; spindle on');
   lines.push('');
 
-  for (const part of sheet.parts) {
+  for (let i = 0; i < sheet.parts.length; i++) {
+    const part = sheet.parts[i]!;
+    if (i > 0 && o.emitToolChange) {
+      // Sprint 17 — pause between parts for tool inspection / change.
+      lines.push('; --- Tool-change pause ---');
+      lines.push(`G0 Z${o.safeZ.toFixed(1)} ; retract before tool change`);
+      lines.push('M5 ; spindle off');
+      lines.push('M6 T1 ; tool change');
+      lines.push('M3 S18000 ; spindle on');
+      lines.push('');
+    }
     lines.push(`; --- Cut: ${part.partId} ${part.label} (${part.width}x${part.length}) ---`);
     addPartProfile(lines, part, o, offset);
     lines.push('');
