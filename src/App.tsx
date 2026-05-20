@@ -11,6 +11,7 @@ import { CabinetPreview } from './components/preview/CabinetPreview';
 import { SmartOptimizerPanel } from './components/optimizer/SmartOptimizerPanel';
 import { PartsTable, HardwareTable } from './components/optimizer/Tables';
 import { ProjectSummaryPanel } from './components/optimizer/ProjectSummaryPanel';
+import { RoomLayoutView } from './components/layout/RoomLayoutView';
 import { ToastContainer } from './components/layout/ToastContainer';
 import { OnboardingManager } from './components/layout/OnboardingOverlay';
 import { TouchGestureTutorial } from './components/layout/TouchGestureTutorial';
@@ -154,9 +155,12 @@ function App() {
               <span className="float-end font-normal text-[9pt]">{new Date().toLocaleDateString()}</span>
             </div>
             {activeTab === 'configurator' && (
-              <ErrorBoundary panelName="Configurator">
-                <ConfiguratorPanel />
-              </ErrorBoundary>
+              <div className="space-y-6">
+                <ErrorBoundary panelName="Configurator">
+                  <ConfiguratorPanel />
+                </ErrorBoundary>
+                <RoomLayoutView />
+              </div>
             )}
             {activeTab === 'preview' && (
               <ErrorBoundary panelName="Preview">

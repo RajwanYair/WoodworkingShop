@@ -285,6 +285,12 @@
     "copyDetails": "Copy error details",
     "copied": "Copied!"
   },
+  "room": {
+    "title": "Room Layout",
+    "sectionLabel": "Room floor plan",
+    "empty": "No room layouts configured",
+    "cabinets": "cabinets"
+  },
   "summary": {
     "title": "Project Summary",
     "sectionLabel": "Multi-cabinet project summary",
