@@ -320,6 +320,11 @@
     "print": "הדפס",
     "partsInStep": "חלקים בשלב זה:",
     "stepsCount": "שלבים",
+    "stepsCompleted": "שלבים הושלמו",
+    "resetProgress": "אפס התקדמות",
+    "markStepDone": "סמן כבוצע",
+    "stepDone": "בוצע",
+    "allStepsDone": "כל השלבים הושלמו — הארון שלך מוכן!",
     "riskLabel": "רמת סיכון",
     "risk": {
       "low": "סיכון נמוך",

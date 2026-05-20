@@ -14,6 +14,21 @@ export function AssemblyGuide() {
   const [activeStep, setActiveStep] = useState(0);
   const [viewMode, setViewMode] = useState<ViewMode>('all');
   const notes = cabinets[activeCabinetIndex]?.notes ?? '';
+  // Sprint 52 — step completion checklist
+  const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
+
+  const toggleStep = (index: number) =>
+    setCompletedSteps((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) {
+        next.delete(index);
+      } else {
+        next.add(index);
+      }
+      return next;
+    });
+
+  const resetProgress = () => setCompletedSteps(new Set());
 
   return (
     <div className="space-y-6">
@@ -26,6 +41,22 @@ export function AssemblyGuide() {
           </span>
         </h2>
         <div className="flex items-center gap-2">
+          {/* Sprint 52 — progress indicator + reset */}
+          {completedSteps.size > 0 && (
+            <>
+              <span className="text-xs text-wood-500 dark:text-wood-400" aria-live="polite" aria-atomic="true">
+                {completedSteps.size}/{steps.length} {t('assembly.stepsCompleted')}
+              </span>
+              <button
+                type="button"
+                onClick={resetProgress}
+                className="px-2 py-1 text-xs rounded border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors print:hidden"
+                aria-label={t('assembly.resetProgress')}
+              >
+                {t('assembly.resetProgress')}
+              </button>
+            </>
+          )}
           {/* Sprint 127 — print button */}
           <button
             type="button"
@@ -131,8 +162,23 @@ export function AssemblyGuide() {
       ) : (
         <div className="space-y-4">
           {steps.map((s, i) => (
-            <StepCard key={i} step={s} stepCount={steps.length} parts={parts} lang={lang} t={t} />
+            <StepCard
+              key={i}
+              step={s}
+              stepIndex={i}
+              stepCount={steps.length}
+              parts={parts}
+              lang={lang}
+              t={t}
+              completed={completedSteps.has(i)}
+              onToggleComplete={() => toggleStep(i)}
+            />
           ))}
+          {completedSteps.size === steps.length && steps.length > 0 && (
+            <p className="text-center text-sm font-semibold text-green-600 dark:text-green-400 py-2" role="status">
+              ✓ {t('assembly.allStepsDone')}
+            </p>
+          )}
         </div>
       )}
 
@@ -209,16 +255,44 @@ function HardwareChecklist({
 
 interface StepCardProps {
   step: AssemblyStep;
+  stepIndex?: number;
   stepCount: number;
   parts: Part[];
   lang: Lang;
   t: (key: string) => string;
+  /** Sprint 52 — whether this step is marked complete in the checklist */
+  completed?: boolean;
+  /** Sprint 52 — callback to toggle completion */
+  onToggleComplete?: () => void;
 }
 
-function StepCard({ step, stepCount, parts, lang, t }: StepCardProps) {
+function StepCard({ step, stepIndex, stepCount, parts, lang, t, completed = false, onToggleComplete }: StepCardProps) {
   const highlightedParts = new Set(step.parts);
+  const checkboxId = stepIndex !== undefined ? `step-complete-${stepIndex}` : undefined;
   return (
-    <div className="border border-wood-200 dark:border-wood-700 rounded-lg p-5 print-keep" data-assembly-step="true">
+    <div
+      className={`border rounded-lg p-5 print-keep transition-colors ${
+        completed
+          ? 'border-green-300 dark:border-green-800 bg-green-50/50 dark:bg-green-900/10'
+          : 'border-wood-200 dark:border-wood-700'
+      }`}
+      data-assembly-step="true"
+    >
+      {/* Sprint 52 — completion checkbox */}
+      {onToggleComplete && checkboxId && (
+        <div className="flex items-center gap-2 mb-3 print:hidden">
+          <input
+            type="checkbox"
+            id={checkboxId}
+            checked={completed}
+            onChange={onToggleComplete}
+            className="w-4 h-4 rounded accent-wood-500 cursor-pointer"
+          />
+          <label htmlFor={checkboxId} className="text-xs text-wood-500 dark:text-wood-400 cursor-pointer select-none">
+            {completed ? t('assembly.stepDone') : t('assembly.markStepDone')}
+          </label>
+        </div>
+      )}
       <div className="flex items-start gap-4">
         <span className="text-3xl" role="img" aria-hidden="true">
           {step.icon}

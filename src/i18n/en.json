@@ -318,6 +318,11 @@
     "viewAll": "Show all stages",
     "print": "Print",
     "stepsCount": "steps",
+    "stepsCompleted": "steps completed",
+    "resetProgress": "Reset progress",
+    "markStepDone": "Mark as done",
+    "stepDone": "Done",
+    "allStepsDone": "All steps complete — your cabinet is built!",
     "riskLabel": "Risk level",
     "risk": {
       "low": "Low risk",
