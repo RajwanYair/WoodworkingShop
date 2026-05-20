@@ -436,6 +436,7 @@
     "info_other": "{{count}} הערות",
     "dismiss": "סגור",
     "dismissAll": "סגור הכל",
+    "fix": "תקן",
     "collapsed": "הצג {{count}} בעיה/ות",
     "fieldHint": "שדה: {{field}}",
     "suggestedValue": "מוצע: {{value}}"

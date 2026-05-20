@@ -435,6 +435,7 @@
     "info_other": "{{count}} notes",
     "dismiss": "Dismiss",
     "dismissAll": "Dismiss all",
+    "fix": "Fix",
     "collapsed": "Show {{count}} issue(s)",
     "fieldHint": "Field: {{field}}",
     "suggestedValue": "Suggested: {{value}}"

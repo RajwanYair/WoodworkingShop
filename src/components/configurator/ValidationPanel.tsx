@@ -1,7 +1,8 @@
 import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { ValidationIssue, ValidationSeverity } from '../../engine/types';
+import type { ValidationIssue, ValidationSeverity, CabinetConfig } from '../../engine/types';
 import { IconWarning, IconInfo, IconX, IconCheck } from '../layout/Icons';
+import { useCabinetStore } from '../../store/cabinet-store';
 
 interface ValidationPanelProps {
   issues: ValidationIssue[];
@@ -37,6 +38,7 @@ const SEVERITY_TEXT_CLASS: Record<ValidationSeverity, string> = {
  */
 export function ValidationPanel({ issues }: ValidationPanelProps) {
   const { t, i18n } = useTranslation();
+  const { setConfig } = useCabinetStore();
   const [dismissed, setDismissed] = useState<Set<string>>(new Set());
   const [collapsed, setCollapsed] = useState(false);
 
@@ -57,6 +59,15 @@ export function ValidationPanel({ issues }: ValidationPanelProps) {
 
   const dismissIssue = (code: string) => {
     setDismissed((prev) => new Set([...prev, code]));
+  };
+
+  const fixIssue = (issue: ValidationIssue) => {
+    if (issue.field !== undefined && issue.suggestedValue !== undefined) {
+      const patch: Partial<CabinetConfig> = {};
+      Object.assign(patch, { [issue.field]: issue.suggestedValue });
+      setConfig(patch);
+    }
+    dismissIssue(issue.code);
   };
 
   const dismissAll = () => {
@@ -128,14 +139,26 @@ export function ValidationPanel({ issues }: ValidationPanelProps) {
                 )}
               </div>
 
-              <button
-                type="button"
-                className="shrink-0 text-wood-400 hover:text-wood-700 dark:hover:text-wood-200 transition-colors"
-                onClick={() => dismissIssue(issue.code)}
-                aria-label={t('validation.dismiss')}
-              >
-                <IconX size={14} />
-              </button>
+              <div className="shrink-0 flex items-center gap-1">
+                {issue.field !== undefined && issue.suggestedValue !== undefined && (
+                  <button
+                    type="button"
+                    className="text-xs px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800/60 transition-colors font-medium"
+                    onClick={() => fixIssue(issue)}
+                    aria-label={t('validation.fix')}
+                  >
+                    {t('validation.fix')}
+                  </button>
+                )}
+                <button
+                  type="button"
+                  className="text-wood-400 hover:text-wood-700 dark:hover:text-wood-200 transition-colors"
+                  onClick={() => dismissIssue(issue.code)}
+                  aria-label={t('validation.dismiss')}
+                >
+                  <IconX size={14} />
+                </button>
+              </div>
             </li>
           ))}
         </ul>
