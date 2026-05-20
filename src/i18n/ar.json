@@ -565,6 +565,18 @@
     "previewArc": "قوس (G2/G3)",
     "moveCount_one": "حركة {{count}}",
     "moveCount_other": "{{count}} حركات",
-    "downloadAnyway": "تنزيل"
+    "downloadAnyway": "تنزيل",
+    "cncOptions": "خيارات CNC",
+    "machinePreset": "إعداد مسبق للآلة",
+    "presetShapeoko3": "Shapeoko 3",
+    "presetXcarve1000": "X-Carve 1000",
+    "presetGenmitsu": "Genmitsu 3018 Pro",
+    "presetCustom": "مخصص",
+    "feedRate": "معدل التغذية (مم/دقيقة)",
+    "plungeRate": "معدل الغطس (مم/دقيقة)",
+    "safeZ": "ارتفاع Z آمن (مم)",
+    "passDepth": "عمق المرور (مم)",
+    "toolDiameter": "\u0642\u0637\u0631 الأداة (مم)",
+    "useArcs": "حركات القوس (G2/G3)"
   }
 }

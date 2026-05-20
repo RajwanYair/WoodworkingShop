@@ -6,10 +6,11 @@ import { getMaterial } from '../../engine/materials';
 import { generateParts } from '../../engine/parts';
 import { generateHardware } from '../../engine/hardware';
 import { downloadDxfForSheet, downloadAllSheetsDxf } from '../../utils/dxf-export';
-import { downloadGcodeForSheet, downloadAllSheetsGcode, cutSheetToGcode } from '../../utils/gcode-export';
+import { downloadAllSheetsGcode } from '../../utils/gcode-export';
+import { triggerDownload } from '../../utils/download';
 import { GcodePreviewModal } from './GcodePreviewModal';
 import { downloadHardwareCsv, generateBomCsv } from '../../utils/bom-export';
-import { triggerDownload } from '../../utils/download';
+
 import { OptimizationNotesPanel } from './OptimizationNotesPanel';
 import { VirtualSheetWrapper } from './VirtualSheetWrapper';
 import BomWorker from '../../workers/bom-export.worker?worker';
@@ -69,7 +70,7 @@ export function OptimizerView() {
   const [bomExporting, setBomExporting] = useState(false); // v3.17.0 worker state
   const [dxfExporting, setDxfExporting] = useState(false); // v3.22.0 DXF worker state
   const [showBulkReplace, setShowBulkReplace] = useState(false); // v3.18.0
-  const [gcodePreview, setGcodePreview] = useState<{ gcodeText: string; filename: string; sheet: CutSheet } | null>(null); // Sprint 8
+  const [gcodePreview, setGcodePreview] = useState<{ filename: string; sheet: CutSheet } | null>(null); // Sprint 8/11
   const workerRef = useRef<Worker | null>(null);
   const dxfWorkerRef = useRef<Worker | null>(null);
   const multiCabinet = cabinets.length > 1;
@@ -426,12 +427,11 @@ export function OptimizerView() {
       {/* Sprint 8 — G-code toolpath preview modal */}
       {gcodePreview && (
         <GcodePreviewModal
-          gcodeText={gcodePreview.gcodeText}
-          validation={null}
+          sheet={gcodePreview.sheet}
           filename={gcodePreview.filename}
           onClose={() => setGcodePreview(null)}
-          onDownload={() => {
-            downloadGcodeForSheet(gcodePreview.sheet, gcodePreview.filename);
+          onDownload={(gcodeText) => {
+            triggerDownload(gcodeText, 'text/plain', gcodePreview.filename);
             useToastStore.getState().addToast(t('toast.gcodeExported'), 'success');
           }}
         />
@@ -469,6 +469,7 @@ export function OptimizerView() {
               showPartNames={showPartNames}
               filePrefix={filePrefix}
               partFilter={partFilter}
+              onGcodePreview={(filename, s) => setGcodePreview({ filename, sheet: s })}
               t={t}
             />
           </VirtualSheetWrapper>
@@ -889,6 +890,7 @@ function SheetCard({
   showPartNames,
   filePrefix,
   partFilter,
+  onGcodePreview,
   t,
 }: {
   sheet: CutSheet;
@@ -899,6 +901,7 @@ function SheetCard({
   showPartNames: boolean;
   filePrefix: string;
   partFilter: string;
+  onGcodePreview: (filename: string, sheet: CutSheet) => void;
   t: (key: string, opts?: Record<string, unknown>) => string;
 }) {
   const mat = getMaterial(sheet.material);
@@ -973,8 +976,7 @@ function SheetCard({
         <button
           onClick={() => {
             const filename = `${filePrefix}-sheet-${sheet.sheetIndex + 1}.nc`;
-            const gcodeText = cutSheetToGcode(sheet);
-            setGcodePreview({ gcodeText, filename, sheet });
+            onGcodePreview(filename, sheet);
           }}
           className="text-[10px] px-2 py-0.5 rounded border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1"
           title={`Preview G-code for sheet ${sheet.sheetIndex + 1}`}

@@ -1,45 +1,65 @@
 /**
- * GcodePreviewModal — Sprint 8 (v3.55.3)
+ * GcodePreviewModal — Sprint 8 (v3.55.3) + Sprint 11 (v3.56.1)
  *
  * Renders a G-code toolpath as an SVG preview before the file is downloaded.
  * Rapids (G0) = red dashed lines, cutting moves (G1) = blue solid,
  * arcs (G2/G3) = green curved paths approximated as SVG cubic beziers.
  *
- * The modal is opened from the G-code export button in OptimizerView.
- * After reviewing, the user can dismiss or trigger the actual download.
+ * Sprint 11 additions:
+ * - Accepts a raw CutSheet and generates G-code internally.
+ * - Collapsible "CNC Options" panel with machine presets (Shapeoko 3,
+ *   X-Carve 1000, Genmitsu 3018 Pro) and individual field overrides.
+ * - G-code and validation are re-computed live when options change.
  */
 
-import { useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { parseToolpath, type ToolMove } from '../../engine/gcode-toolpath';
-import type { GcodeValidationResult } from '../../engine/gcode-validator';
+import { validateGcode } from '../../engine/gcode-validator';
+import { cutSheetToGcode, type GcodeOptions } from '../../utils/gcode-export';
+import type { CutSheet } from '../../engine/types';
 
 interface Props {
-  /** Raw G-code text to preview */
-  gcodeText: string;
-  /** Pre-run validation result (may be null if caller skipped validation) */
-  validation: GcodeValidationResult | null;
+  /** The cut sheet to generate and preview G-code for */
+  sheet: CutSheet;
   /** Called when the user dismisses without downloading */
   onClose: () => void;
-  /** Called when the user confirms download */
-  onDownload: () => void;
+  /** Called when the user confirms download — receives the generated G-code text */
+  onDownload: (gcodeText: string) => void;
   /** Human-readable file name shown in the title */
   filename: string;
 }
+
+// ── Machine presets ──────────────────────────────────────────────────────────
+
+interface MachinePreset extends Omit<GcodeOptions, 'cutDepth'> {
+  id: string;
+}
+
+const MACHINE_PRESETS: MachinePreset[] = [
+  { id: 'shapeoko3',  feedRate: 2000, plungeRate: 500, safeZ: 5, passDepth: 2, toolDiameter: 6,     useArcs: false },
+  { id: 'xcarve1000', feedRate: 1800, plungeRate: 500, safeZ: 5, passDepth: 2, toolDiameter: 6,     useArcs: false },
+  { id: 'genmitsu',   feedRate: 800,  plungeRate: 300, safeZ: 5, passDepth: 1, toolDiameter: 3.175, useArcs: false },
+];
+
+/** Translation-key suffix map for named presets */
+const PRESET_T_KEY: Record<string, string> = {
+  shapeoko3:  'gcode.presetShapeoko3',
+  xcarve1000: 'gcode.presetXcarve1000',
+  genmitsu:   'gcode.presetGenmitsu',
+};
 
 const PAD = 10; // SVG padding in user units
 const SVG_SIZE = 400; // rendered SVG square pixels
 
 /** Convert an arc (G2/G3) to an SVG path `d` attribute using a large-arc approximation. */
 function arcToSvgPath(move: ToolMove): string {
-  // Center of arc
   const cx = move.x1 + (move.i ?? 0);
   const cy = move.y1 + (move.j ?? 0);
   const r = Math.sqrt((move.x1 - cx) ** 2 + (move.y1 - cy) ** 2);
   if (r < 0.001) return `M${move.x1},${move.y1} L${move.x2},${move.y2}`;
 
-  // Compute angle span
   const startAngle = Math.atan2(move.y1 - cy, move.x1 - cx);
   const endAngle = Math.atan2(move.y2 - cy, move.x2 - cx);
   let span = endAngle - startAngle;
@@ -52,10 +72,25 @@ function arcToSvgPath(move: ToolMove): string {
   return `M${move.x1.toFixed(3)},${move.y1.toFixed(3)} A${r.toFixed(3)},${r.toFixed(3)} 0 ${largeArc} ${sweep} ${move.x2.toFixed(3)},${move.y2.toFixed(3)}`;
 }
 
-export function GcodePreviewModal({ gcodeText, validation, onClose, onDownload, filename }: Props) {
+export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Props) {
   const { t } = useTranslation();
-  const trapRef = useFocusTrap<HTMLDivElement>(true);
+  const trapRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(trapRef, true, onClose);
+  const [showSettings, setShowSettings] = useState(false);
+  const [activePreset, setActivePreset] = useState<string | null>(null);
+  const [options, setOptions] = useState<GcodeOptions>({
+    feedRate: 1500,
+    plungeRate: 600,
+    safeZ: 5,
+    cutDepth: sheet.thickness,
+    passDepth: 3,
+    toolDiameter: 6,
+    useArcs: false,
+  });
 
+  // Re-generate G-code + validation whenever sheet or options change
+  const gcodeText = useMemo(() => cutSheetToGcode(sheet, options), [sheet, options]);
+  const validation = useMemo(() => validateGcode(gcodeText), [gcodeText]);
   const toolpath = useMemo(() => parseToolpath(gcodeText), [gcodeText]);
 
   // Compute SVG viewBox from bounds
@@ -66,8 +101,29 @@ export function GcodePreviewModal({ gcodeText, validation, onClose, onDownload, 
   const vbH = bounds.height + PAD * 2 || 100;
   const viewBox = `${vbX.toFixed(1)} ${vbY.toFixed(1)} ${vbW.toFixed(1)} ${vbH.toFixed(1)}`;
 
-  const errorCount = validation?.issues.filter((i) => i.severity === 'error').length ?? 0;
-  const warnCount = validation?.issues.filter((i) => i.severity === 'warning').length ?? 0;
+  const errorCount = validation.issues.filter((i) => i.severity === 'error').length;
+  const warnCount = validation.issues.filter((i) => i.severity === 'warning').length;
+
+  function applyPreset(preset: MachinePreset) {
+    setActivePreset(preset.id);
+    setOptions((prev) => ({
+      ...prev,
+      feedRate: preset.feedRate,
+      plungeRate: preset.plungeRate,
+      safeZ: preset.safeZ,
+      passDepth: preset.passDepth,
+      toolDiameter: preset.toolDiameter,
+      useArcs: preset.useArcs,
+    }));
+  }
+
+  function setNum(key: keyof Omit<GcodeOptions, 'useArcs'>, raw: string) {
+    const n = parseFloat(raw);
+    if (!isNaN(n) && n > 0) {
+      setActivePreset(null); // no longer a named preset
+      setOptions((prev) => ({ ...prev, [key]: n }));
+    }
+  }
 
   return (
     <div
@@ -75,7 +131,9 @@ export function GcodePreviewModal({ gcodeText, validation, onClose, onDownload, 
       aria-modal="true"
       aria-label={t('gcode.previewTitle')}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
-      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
     >
       <div
         ref={trapRef}
@@ -96,16 +154,97 @@ export function GcodePreviewModal({ gcodeText, validation, onClose, onDownload, 
         </div>
 
         {/* Validation banner */}
-        {validation && (errorCount > 0 || warnCount > 0) && (
-          <div className={`px-4 py-2 text-xs flex gap-4 ${errorCount > 0 ? 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300' : 'bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300'}`}>
-            {errorCount > 0 && (
-              <span>⚠ {t('gcodeValidator.errors_other', { count: errorCount })}</span>
-            )}
-            {warnCount > 0 && (
-              <span>⚠ {t('gcodeValidator.warnings_other', { count: warnCount })}</span>
-            )}
+        {(errorCount > 0 || warnCount > 0) && (
+          <div
+            className={`px-4 py-2 text-xs flex gap-4 ${errorCount > 0 ? 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300' : 'bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300'}`}
+          >
+            {errorCount > 0 && <span>⚠ {t('gcodeValidator.errors_other', { count: errorCount })}</span>}
+            {warnCount > 0 && <span>⚠ {t('gcodeValidator.warnings_other', { count: warnCount })}</span>}
           </div>
         )}
+
+        {/* CNC Options panel (collapsible) — Sprint 11 */}
+        <div className="border-b border-wood-100 dark:border-wood-800">
+          <button
+            type="button"
+            onClick={() => setShowSettings((s) => !s)}
+            className="w-full flex items-center gap-2 px-4 py-2 text-xs font-medium text-wood-700 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-800 transition-colors"
+            aria-expanded={showSettings}
+            aria-controls="gcode-settings-panel"
+          >
+            <span aria-hidden="true">{showSettings ? '▾' : '▸'}</span>
+            {t('gcode.cncOptions')}
+            {activePreset !== null && (
+              <span className="ms-auto text-wood-400 text-[10px]">
+                {t(PRESET_T_KEY[activePreset] ?? 'gcode.presetCustom')}
+              </span>
+            )}
+          </button>
+          {showSettings && (
+            <div id="gcode-settings-panel" className="px-4 pb-3 space-y-3 bg-wood-50 dark:bg-wood-800">
+              {/* Machine presets */}
+              <div className="pt-2">
+                <p className="text-[10px] font-medium text-wood-500 dark:text-wood-400 mb-1.5">
+                  {t('gcode.machinePreset')}
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {MACHINE_PRESETS.map((preset) => (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      onClick={() => applyPreset(preset)}
+                      className={`px-2 py-0.5 text-[10px] rounded border transition-colors ${activePreset === preset.id ? 'bg-wood-700 text-white border-wood-700 dark:bg-wood-500 dark:border-wood-500' : 'border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-700'}`}
+                    >
+                      {t(PRESET_T_KEY[preset.id])}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Numeric option fields */}
+              <div className="grid grid-cols-3 gap-2">
+                {(
+                  [
+                    { key: 'feedRate', label: t('gcode.feedRate') },
+                    { key: 'plungeRate', label: t('gcode.plungeRate') },
+                    { key: 'safeZ', label: t('gcode.safeZ') },
+                    { key: 'passDepth', label: t('gcode.passDepth') },
+                    { key: 'toolDiameter', label: t('gcode.toolDiameter') },
+                  ] as { key: keyof Omit<GcodeOptions, 'useArcs' | 'cutDepth'>; label: string }[]
+                ).map(({ key, label }) => (
+                  <label key={key} className="flex flex-col gap-0.5">
+                    <span className="text-[9px] text-wood-500 dark:text-wood-400">{label}</span>
+                    <input
+                      type="number"
+                      value={options[key]}
+                      min={0.1}
+                      step={key === 'toolDiameter' ? 0.001 : 1}
+                      onChange={(e) => setNum(key, e.target.value)}
+                      className="w-full px-1.5 py-0.5 text-xs rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-900 text-wood-700 dark:text-wood-200"
+                      aria-label={label}
+                    />
+                  </label>
+                ))}
+                {/* useArcs toggle */}
+                <label className="flex flex-col gap-0.5">
+                  <span className="text-[9px] text-wood-500 dark:text-wood-400">{t('gcode.useArcs')}</span>
+                  <div className="flex items-center pt-1.5">
+                    <input
+                      type="checkbox"
+                      checked={options.useArcs}
+                      onChange={(e) => {
+                        setActivePreset(null);
+                        setOptions((prev) => ({ ...prev, useArcs: e.target.checked }));
+                      }}
+                      className="h-3.5 w-3.5 rounded border-wood-300 dark:border-wood-600"
+                      aria-label={t('gcode.useArcs')}
+                    />
+                  </div>
+                </label>
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* SVG toolpath preview */}
         <div className="bg-gray-50 dark:bg-wood-800 flex items-center justify-center p-2">
@@ -160,9 +299,7 @@ export function GcodePreviewModal({ gcodeText, validation, onClose, onDownload, 
               );
             })}
             {/* Start marker */}
-            {moves.length > 0 && (
-              <circle cx={moves[0].x1} cy={moves[0].y1} r={vbW / 60} fill="#22c55e" opacity={0.8} />
-            )}
+            {moves.length > 0 && <circle cx={moves[0].x1} cy={moves[0].y1} r={vbW / 60} fill="#22c55e" opacity={0.8} />}
           </svg>
         </div>
 
@@ -180,7 +317,9 @@ export function GcodePreviewModal({ gcodeText, validation, onClose, onDownload, 
             <span className="inline-block w-6 border-t-2 border-green-500" />
             {t('gcode.previewArc')}
           </span>
-          <span className="ms-auto text-wood-400">{moves.length} {t('gcode.moveCount', { count: moves.length })}</span>
+          <span className="ms-auto text-wood-400">
+            {moves.length} {t('gcode.moveCount', { count: moves.length })}
+          </span>
         </div>
 
         {/* Footer actions */}
@@ -192,7 +331,10 @@ export function GcodePreviewModal({ gcodeText, validation, onClose, onDownload, 
             {t('gcodeValidator.dismiss')}
           </button>
           <button
-            onClick={() => { onDownload(); onClose(); }}
+            onClick={() => {
+              onDownload(gcodeText);
+              onClose();
+            }}
             className="px-3 py-1.5 text-xs rounded bg-wood-700 dark:bg-wood-600 text-white hover:bg-wood-800 dark:hover:bg-wood-500 transition-colors"
           >
             {t('gcode.downloadAnyway')}

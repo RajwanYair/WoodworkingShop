@@ -565,6 +565,18 @@
     "previewArc": "Arc (G2/G3)",
     "moveCount_one": "{{count}} mouvement",
     "moveCount_other": "{{count}} mouvements",
-    "downloadAnyway": "Télécharger"
+    "downloadAnyway": "Télécharger",
+    "cncOptions": "Options CNC",
+    "machinePreset": "Préréglage machine",
+    "presetShapeoko3": "Shapeoko 3",
+    "presetXcarve1000": "X-Carve 1000",
+    "presetGenmitsu": "Genmitsu 3018 Pro",
+    "presetCustom": "Personnalisé",
+    "feedRate": "Avance (mm/min)",
+    "plungeRate": "Plongée (mm/min)",
+    "safeZ": "Z sécurisé (mm)",
+    "passDepth": "Prof. de passe (mm)",
+    "toolDiameter": "\u00d8 outil (mm)",
+    "useArcs": "Mouvements arc (G2/G3)"
   }
 }

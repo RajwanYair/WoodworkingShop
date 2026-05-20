@@ -562,7 +562,19 @@
     "previewArc": "קשת (G2/G3)",
     "moveCount_one": "תנועה {{count}}",
     "moveCount_other": "{{count}} תנועות",
-    "downloadAnyway": "הורדה"
+    "downloadAnyway": "הורדה",
+    "cncOptions": "הגדרות CNC",
+    "machinePreset": "פריסת מכונה",
+    "presetShapeoko3": "Shapeoko 3",
+    "presetXcarve1000": "X-Carve 1000",
+    "presetGenmitsu": "Genmitsu 3018 Pro",
+    "presetCustom": "מותאם אישית",
+    "feedRate": "הזנה (מ\"מ/דקה)",
+    "plungeRate": "צלילה (מ\"מ/דקה)",
+    "safeZ": "גובה בטוח Z (מ\"מ)",
+    "passDepth": "עומק מעבר (מ\"מ)",
+    "toolDiameter": "\u05e7\u05d5\u05d8\u05e8 כלי (מ\"מ)",
+    "useArcs": "תנועות קשת (G2/G3)"
   },
   "swUpdate": {
     "available": "גרסה חדשה זמינה!",
