@@ -352,6 +352,8 @@
     "markStepDone": "Mark as done",
     "stepDone": "Done",
     "allStepsDone": "All steps complete — your cabinet is built!",
+    "estimatedTime": "Estimated time",
+    "minutes": "min",
     "riskLabel": "Risk level",
     "risk": {
       "low": "Low risk",

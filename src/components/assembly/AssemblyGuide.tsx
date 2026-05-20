@@ -29,6 +29,7 @@ export function AssemblyGuide() {
     });
 
   const resetProgress = () => setCompletedSteps(new Set());
+  const totalMinutes = steps.reduce((sum, s) => sum + s.estimatedMinutes, 0);
 
   return (
     <div className="space-y-6">
@@ -38,6 +39,10 @@ export function AssemblyGuide() {
           {/* Sprint 169 — step count badge */}
           <span className="ms-2 text-sm font-normal text-wood-400 dark:text-wood-500">
             ({steps.length} {t('assembly.stepsCount')})
+          </span>
+          {/* Sprint 64 — total estimated time */}
+          <span className="ms-2 text-xs font-normal text-wood-400 dark:text-wood-500">
+            · {t('assembly.estimatedTime')}: {totalMinutes} {t('assembly.minutes')}
           </span>
         </h2>
         <div className="flex items-center gap-2">

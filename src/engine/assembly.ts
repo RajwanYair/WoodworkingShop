@@ -8,6 +8,8 @@ export interface AssemblyStep {
   icon: string; // emoji icon
   /** Risk level for the step — shown as a colour-coded badge in the UI. */
   riskLevel: 'low' | 'medium' | 'high';
+  /** Sprint 64 — estimated minutes to complete this step. */
+  estimatedMinutes: number;
   tip?: { en: string; he: string };
   videoKeyword?: string; // YouTube search keyword for tutorial lookup
 }
@@ -31,6 +33,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     steps.push({
       stepNumber: n++,
       riskLevel: 'low',
+      estimatedMinutes: 10,
       title: { en: 'Measure and Mark', he: 'מדידה וסימון' },
       description: {
         en: `Measure and mark the panel to ${cfg.width} × ${cfg.height} mm on the sheet material.`,
@@ -43,6 +46,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     steps.push({
       stepNumber: n++,
       riskLevel: 'medium',
+      estimatedMinutes: 15,
       title: { en: 'Cut to Size', he: 'חיתוך למידה' },
       description: {
         en: 'Cut the panel to the marked dimensions using a table saw or track saw. Check squareness after cutting.',
@@ -56,6 +60,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
       steps.push({
         stepNumber: n++,
         riskLevel: 'low',
+        estimatedMinutes: 20,
         title: { en: 'Apply Edge Banding', he: 'הדבקת פסי קצה' },
         description: {
           en: 'Iron on edge banding tape to all four edges. Use a sharp trimmer and sand flush.',
@@ -68,6 +73,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     steps.push({
       stepNumber: n,
       riskLevel: 'low',
+      estimatedMinutes: 10,
       title: { en: 'Sand and Inspect', he: 'שיוף ובדיקה' },
       description: {
         en: 'Sand all edges to 120 grit. Inspect the surface for chips or rough spots. Panel is ready.',
@@ -84,6 +90,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     steps.push({
       stepNumber: n++,
       riskLevel: 'medium',
+      estimatedMinutes: 20,
       title: { en: 'Mark & Drill Holes', he: 'סימון וקדיחת חורים' },
       description: {
         en: 'Mark confirmat screw positions on side panels and desktop underside. Drill pilot holes for all connections.',
@@ -96,6 +103,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     steps.push({
       stepNumber: n++,
       riskLevel: 'medium',
+      estimatedMinutes: 30,
       title: { en: 'Assemble Side Panels', he: 'הרכבת דפנות צד' },
       description: {
         en: 'Stand both side panels upright and attach the modesty panel between them using confirmat screws.',
@@ -108,6 +116,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     steps.push({
       stepNumber: n++,
       riskLevel: 'medium',
+      estimatedMinutes: 20,
       title: { en: 'Attach Desktop', he: 'חיבור משטח שולחן' },
       description: {
         en: 'Place the desktop on top of the side panels. Secure with confirmat screws from below. Check that the assembly is square.',
@@ -121,6 +130,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
       steps.push({
         stepNumber: n++,
         riskLevel: 'low',
+        estimatedMinutes: 15,
         title: { en: 'Install Under-desk Shelves', he: 'התקנת מדפים תחתונים' },
         description: {
           en: `Install ${cfg.shelfCount} shelves between the side panels for storage.`,
@@ -134,6 +144,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
       steps.push({
         stepNumber: n,
         riskLevel: 'low',
+        estimatedMinutes: 20,
         title: { en: 'Apply Edge Banding', he: 'הדבקת פסי קצה' },
         description: {
           en: 'Iron on edge banding tape to all visible edges of the desktop and side panels. Trim and sand smooth.',
@@ -149,6 +160,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
   steps.push({
     stepNumber: n++,
     riskLevel: 'medium',
+    estimatedMinutes: 25,
     title: { en: 'Mark & Drill Holes', he: 'סימון וקדיחת חורים' },
     description: {
       en: 'Mark all confirmat screw positions on side, top, and bottom panels. Use a 5mm drill bit for shelf pin holes (32mm system). Drill hinge cup holes (35mm Forstner) on doors if applicable.',
@@ -166,6 +178,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
   steps.push({
     stepNumber: n++,
     riskLevel: 'medium',
+    estimatedMinutes: 30,
     title: { en: 'Assemble Bottom & Sides', he: 'הרכבת תחתון ודפנות' },
     description: {
       en: 'Attach the bottom panel between the two side panels using confirmat screws. Ensure the assembly is square by measuring diagonals.',
@@ -180,6 +193,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     steps.push({
       stepNumber: n++,
       riskLevel: 'medium',
+      estimatedMinutes: 20,
       title: { en: 'Install Fixed Shelf', he: 'התקנת מדף קבוע' },
       description: {
         en: 'Attach the fixed shelf with confirmat screws. This shelf adds structural rigidity to the carcass.',
@@ -194,6 +208,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
   steps.push({
     stepNumber: n++,
     riskLevel: 'medium',
+    estimatedMinutes: 20,
     title: { en: 'Attach Top Panel', he: 'חיבור משטח עליון' },
     description: {
       en: 'Secure the top panel to the side panels with confirmat screws. Check squareness again.',
@@ -208,6 +223,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     steps.push({
       stepNumber: n++,
       riskLevel: 'medium',
+      estimatedMinutes: 25,
       title: { en: 'Install Back Panel', he: 'התקנת לוח גב' },
       description: {
         en: 'Place the back panel into the rabbet and nail/screw around the perimeter every 150mm. The back panel squares the entire carcass.',
@@ -225,6 +241,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     steps.push({
       stepNumber: n++,
       riskLevel: 'medium',
+      estimatedMinutes: 30,
       title: { en: 'Square the Carcass (no back)', he: 'יישור השלד (ללא גב)' },
       description: {
         en: 'Without a back panel, brace the open frame diagonally during glue-up and verify diagonals are equal. Add a temporary stretcher or face frame so the unit stays square until permanently fixed in place.',
@@ -241,6 +258,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     steps.push({
       stepNumber: n++,
       riskLevel: 'medium',
+      estimatedMinutes: 30,
       title: isGlass
         ? { en: 'Mount Glass Door Hinges', he: 'הרכבת צירים לדלתות זכוכית' }
         : { en: 'Mount Hinges & Doors', he: 'הרכבת צירים ודלתות' },
@@ -261,6 +279,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     steps.push({
       stepNumber: n++,
       riskLevel: 'low',
+      estimatedMinutes: 15,
       title: { en: 'Install Handles', he: 'התקנת ידיות' },
       description: {
         en: 'Mark handle positions on doors (typically 100mm from top/bottom edge). Drill and mount handles.',
@@ -276,6 +295,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     steps.push({
       stepNumber: n++,
       riskLevel: 'medium',
+      estimatedMinutes: 20,
       title: { en: 'Install Hanging Rail', he: 'התקנת מוט תלייה' },
       description: {
         en: 'Mount the hanging rail brackets on each side panel at the desired height (typically 1600-1700mm from the bottom). Insert the rail and secure with screws.',
@@ -290,6 +310,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
   steps.push({
     stepNumber: n++,
     riskLevel: 'low',
+    estimatedMinutes: 10,
     title: { en: 'Insert Shelf Pins & Shelves', he: 'הכנסת פיני מדפים ומדפים' },
     description: {
       en: `Insert 4 shelf pins per shelf at desired heights. Place the ${cfg.shelfCount} adjustable shelves on the pins.`,
@@ -304,6 +325,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     steps.push({
       stepNumber: n++,
       riskLevel: 'medium',
+      estimatedMinutes: 45,
       title: { en: 'Assemble & Install Drawers', he: 'הרכבה והתקנת מגירות' },
       description: {
         en: `Assemble ${cfg.drawerCount} drawer box(es): attach sides to front/back pieces with screws, slide in the bottom panel. Mount drawer slides on side panels, then install drawer boxes. Attach decorative drawer fronts with screws from inside.`,
@@ -319,6 +341,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     steps.push({
       stepNumber: n++,
       riskLevel: 'low',
+      estimatedMinutes: 20,
       title: { en: 'Apply Edge Banding', he: 'הדבקת פסי קצה' },
       description: {
         en: 'Iron on edge banding tape to all visible edges. Trim excess with a trimmer or utility knife. Sand edges smooth.',
@@ -337,6 +360,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
   steps.push({
     stepNumber: n++,
     riskLevel: 'high',
+    estimatedMinutes: 30,
     title: { en: 'Wall Mounting (optional)', he: 'תלייה על הקיר (אופציונלי)' },
     description: {
       en: 'Attach L-brackets to the back of the cabinet. Mark wall positions, drill, insert wall plugs, and secure with screws. Use a level to ensure the cabinet is plumb.',
@@ -351,6 +375,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     steps.push({
       stepNumber: n,
       riskLevel: 'low',
+      estimatedMinutes: 15,
       title: { en: 'Attach Toe Kick', he: 'חיבור לוח בסיס (כיכר רגל)' },
       description: {
         en: `Cut the front toe kick board (${cfg.kickHeight} mm tall) to the full cabinet width and the two side kick boards to depth − thickness. Clip or screw them to the underside of the bottom panel. The kick should be set back 50 mm from the front face.`,

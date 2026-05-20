@@ -354,6 +354,8 @@
     "markStepDone": "סמן כבוצע",
     "stepDone": "בוצע",
     "allStepsDone": "כל השלבים הושלמו — הארון שלך מוכן!",
+    "estimatedTime": "זמן משוער",
+    "minutes": "דק'",
     "riskLabel": "רמת סיכון",
     "risk": {
       "low": "סיכון נמוך",

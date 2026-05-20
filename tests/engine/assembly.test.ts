@@ -97,3 +97,42 @@ describe('generateAssemblySteps', () => {
     expect(hingeStep?.riskLevel).toBe('medium');
   });
 });
+
+describe('AssemblyStep.estimatedMinutes — Sprint 64', () => {
+  it('every step has a positive estimatedMinutes value', () => {
+    const steps = generateAssemblySteps(DEFAULT_CONFIG);
+    for (const step of steps) {
+      expect(step.estimatedMinutes).toBeGreaterThan(0);
+    }
+  });
+
+  it('total estimated time for default cabinet is at least 60 minutes', () => {
+    const steps = generateAssemblySteps(DEFAULT_CONFIG);
+    const total = steps.reduce((sum, s) => sum + s.estimatedMinutes, 0);
+    expect(total).toBeGreaterThanOrEqual(60);
+  });
+
+  it('panel assembly has lower total time than full cabinet', () => {
+    const panelSteps = generateAssemblySteps({ ...DEFAULT_CONFIG, furnitureType: 'panel' });
+    const cabinetSteps = generateAssemblySteps(DEFAULT_CONFIG);
+    const panelTime = panelSteps.reduce((sum, s) => sum + s.estimatedMinutes, 0);
+    const cabinetTime = cabinetSteps.reduce((sum, s) => sum + s.estimatedMinutes, 0);
+    expect(panelTime).toBeLessThan(cabinetTime);
+  });
+
+  it('cabinet with drawers has higher total time than cabinet without', () => {
+    const withDrawers = generateAssemblySteps({ ...DEFAULT_CONFIG, drawerCount: 2 });
+    const withoutDrawers = generateAssemblySteps({ ...DEFAULT_CONFIG, drawerCount: 0 });
+    const timeWith = withDrawers.reduce((sum, s) => sum + s.estimatedMinutes, 0);
+    const timeWithout = withoutDrawers.reduce((sum, s) => sum + s.estimatedMinutes, 0);
+    expect(timeWith).toBeGreaterThan(timeWithout);
+  });
+
+  it('estimatedMinutes is a positive integer for every step', () => {
+    const steps = generateAssemblySteps({ ...DEFAULT_CONFIG, furnitureType: 'wardrobe', drawerCount: 1 });
+    for (const step of steps) {
+      expect(Number.isInteger(step.estimatedMinutes)).toBe(true);
+      expect(step.estimatedMinutes).toBeGreaterThan(0);
+    }
+  });
+});
