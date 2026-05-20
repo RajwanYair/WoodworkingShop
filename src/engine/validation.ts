@@ -647,6 +647,40 @@ export function validateConfig(
     });
   }
 
+  // ── Sprint 56: New rules ─────────────────────────────────────────────────
+
+  // Rule: DEPTH_EXCEEDS_WIDTH — cabinet depth greater than width is an unusual
+  // proportion that likely indicates a measurement error and raises the tip-over
+  // risk for tall freestanding units.
+  if (config.depth > config.width && config.furnitureType !== 'panel') {
+    issues.push({
+      code: 'DEPTH_EXCEEDS_WIDTH',
+      severity: 'warning',
+      message: {
+        en: `Cabinet depth (${config.depth} mm) exceeds width (${config.width} mm). This unusual proportion may indicate a measurement error and increases tip-over risk for tall units.`,
+        he: `עומק הארון (${config.depth} מ"מ) גדול מרוחבו (${config.width} מ"מ). פרופורציה לא שגרתית זו עלולה להצביע על שגיאת מידה וליצור סיכון התהפכות ביחידות גבוהות.`,
+      },
+      field: 'depth',
+      suggestedValue: config.width,
+    });
+  }
+
+  // Rule: EXCESSIVE_DRAWER_COUNT — when drawer count is so high that each drawer
+  // would be shallower than the minimum height for standard side-mount hardware.
+  if (config.drawerCount > 0 && dims.internalHeight / config.drawerCount < MIN_DRAWER_HEIGHT_MM) {
+    const maxDrawers = Math.floor(dims.internalHeight / MIN_DRAWER_HEIGHT_MM);
+    issues.push({
+      code: 'EXCESSIVE_DRAWER_COUNT',
+      severity: 'error',
+      message: {
+        en: `${config.drawerCount} drawers in ${Math.round(dims.internalHeight)} mm internal height gives only ${Math.round(dims.internalHeight / config.drawerCount)} mm per drawer — below the ${MIN_DRAWER_HEIGHT_MM} mm minimum for standard side-mount hardware. Reduce to at most ${maxDrawers} drawer${maxDrawers !== 1 ? 's' : ''}.`,
+        he: `${config.drawerCount} מגירות בגובה פנימי ${Math.round(dims.internalHeight)} מ"מ נותנות רק ${Math.round(dims.internalHeight / config.drawerCount)} מ"מ למגירה — מתחת למינימום ${MIN_DRAWER_HEIGHT_MM} מ"מ לחומרה סטנדרטית. הפחת ל-${maxDrawers} מגירות לכל היותר.`,
+      },
+      field: 'drawerCount',
+      suggestedValue: maxDrawers,
+    });
+  }
+
   // Sort: errors → warnings → info
   const order: Record<string, number> = { error: 0, warning: 1, info: 2 };
   issues.sort((a, b) => order[a.severity] - order[b.severity]);

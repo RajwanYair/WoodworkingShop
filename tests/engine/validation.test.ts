@@ -510,3 +510,69 @@ describe('validateConfig — joinery rules (Sprint 45)', () => {
     expect(issue?.message.he).toBeTruthy();
   });
 });
+
+describe('validateConfig — Sprint 56 new rules', () => {
+  // ── DEPTH_EXCEEDS_WIDTH ──────────────────────────────────────────────────
+
+  it('raises DEPTH_EXCEEDS_WIDTH warning when depth > width', () => {
+    const issues = validateConfig(cfg({ width: 600, depth: 800 }));
+    expect(issues.some((i) => i.code === 'DEPTH_EXCEEDS_WIDTH')).toBe(true);
+    const issue = issues.find((i) => i.code === 'DEPTH_EXCEEDS_WIDTH')!;
+    expect(issue.severity).toBe('warning');
+    expect(issue.field).toBe('depth');
+    expect(issue.suggestedValue).toBe(600);
+  });
+
+  it('does not raise DEPTH_EXCEEDS_WIDTH when depth equals width', () => {
+    const issues = validateConfig(cfg({ width: 600, depth: 600 }));
+    expect(issues.some((i) => i.code === 'DEPTH_EXCEEDS_WIDTH')).toBe(false);
+  });
+
+  it('does not raise DEPTH_EXCEEDS_WIDTH when depth < width', () => {
+    const issues = validateConfig(cfg({ width: 1000, depth: 600 }));
+    expect(issues.some((i) => i.code === 'DEPTH_EXCEEDS_WIDTH')).toBe(false);
+  });
+
+  it('does not raise DEPTH_EXCEEDS_WIDTH for panel furniture type', () => {
+    const issues = validateConfig(cfg({ width: 300, depth: 600, furnitureType: 'panel' }));
+    expect(issues.some((i) => i.code === 'DEPTH_EXCEEDS_WIDTH')).toBe(false);
+  });
+
+  it('DEPTH_EXCEEDS_WIDTH message has both en and he text', () => {
+    const issues = validateConfig(cfg({ width: 400, depth: 700 }));
+    const issue = issues.find((i) => i.code === 'DEPTH_EXCEEDS_WIDTH')!;
+    expect(issue.message.en).toBeTruthy();
+    expect(issue.message.he).toBeTruthy();
+  });
+
+  // ── EXCESSIVE_DRAWER_COUNT ───────────────────────────────────────────────
+
+  it('raises EXCESSIVE_DRAWER_COUNT error when drawers too shallow', () => {
+    // default height 2000, kick 100, t≈17 → internalHeight ≈ 1866 mm
+    // 20 drawers → 1866/20 = 93 mm each < 100 mm minimum
+    const issues = validateConfig(cfg({ drawerCount: 20 }));
+    expect(issues.some((i) => i.code === 'EXCESSIVE_DRAWER_COUNT')).toBe(true);
+    const issue = issues.find((i) => i.code === 'EXCESSIVE_DRAWER_COUNT')!;
+    expect(issue.severity).toBe('error');
+    expect(issue.field).toBe('drawerCount');
+    expect(typeof issue.suggestedValue).toBe('number');
+    expect((issue.suggestedValue as number)).toBeLessThan(20);
+  });
+
+  it('does not raise EXCESSIVE_DRAWER_COUNT for a sensible drawer count', () => {
+    const issues = validateConfig(cfg({ drawerCount: 3 }));
+    expect(issues.some((i) => i.code === 'EXCESSIVE_DRAWER_COUNT')).toBe(false);
+  });
+
+  it('does not raise EXCESSIVE_DRAWER_COUNT when drawerCount is 0', () => {
+    const issues = validateConfig(cfg({ drawerCount: 0 }));
+    expect(issues.some((i) => i.code === 'EXCESSIVE_DRAWER_COUNT')).toBe(false);
+  });
+
+  it('EXCESSIVE_DRAWER_COUNT message has both en and he text', () => {
+    const issues = validateConfig(cfg({ drawerCount: 20 }));
+    const issue = issues.find((i) => i.code === 'EXCESSIVE_DRAWER_COUNT')!;
+    expect(issue.message.en).toBeTruthy();
+    expect(issue.message.he).toBeTruthy();
+  });
+});
