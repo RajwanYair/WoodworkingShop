@@ -696,6 +696,23 @@ export function validateConfig(
     });
   }
 
+  // ── Back panel oversized (Sprint 69) ──
+
+  if (config.hasBack !== false) {
+    const backMat = safeGetMaterial(config.backPanelMaterial, extraMaterials);
+    if (backMat && backMat.thickness > 9) {
+      issues.push({
+        code: 'BACK_PANEL_OVERSIZED',
+        severity: 'info',
+        message: {
+          en: `Back panel material "${backMat.name}" is ${backMat.thickness} mm thick. Consider a thin 4–6 mm HDF sheet to save weight and cost.`,
+          he: `חומר הגב "${backMat.name}" עבה ${backMat.thickness} מ"מ. שקול לוח HDF דק של 4–6 מ"מ לחיסכון במשקל ובעלות.`,
+        },
+        field: 'backPanelMaterial',
+      });
+    }
+  }
+
   // Sort: errors → warnings → info
   const order: Record<string, number> = { error: 0, warning: 1, info: 2 };
   issues.sort((a, b) => order[a.severity] - order[b.severity]);

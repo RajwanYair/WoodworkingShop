@@ -607,3 +607,35 @@ describe('validateConfig — WARDROBE_MISSING_TOEKICK (Sprint 68)', () => {
     expect(issues.some((i) => i.code === 'WARDROBE_MISSING_TOEKICK')).toBe(false);
   });
 });
+
+// ── Sprint 69 — BACK_PANEL_OVERSIZED ────────────────────────────────────────
+describe('validateConfig — BACK_PANEL_OVERSIZED (Sprint 69)', () => {
+  it('raises BACK_PANEL_OVERSIZED when back panel material thickness > 9 mm', () => {
+    const issues = validateConfig(cfg({ hasBack: true, backPanelMaterial: 'plywood-17' }));
+    expect(issues.some((i) => i.code === 'BACK_PANEL_OVERSIZED')).toBe(true);
+  });
+
+  it('BACK_PANEL_OVERSIZED has severity info', () => {
+    const issues = validateConfig(cfg({ hasBack: true, backPanelMaterial: 'plywood-17' }));
+    const issue = issues.find((i) => i.code === 'BACK_PANEL_OVERSIZED')!;
+    expect(issue.severity).toBe('info');
+    expect(issue.field).toBe('backPanelMaterial');
+  });
+
+  it('does NOT raise BACK_PANEL_OVERSIZED for thin back panel (4 mm)', () => {
+    const issues = validateConfig(cfg({ hasBack: true, backPanelMaterial: 'plywood-4' }));
+    expect(issues.some((i) => i.code === 'BACK_PANEL_OVERSIZED')).toBe(false);
+  });
+
+  it('does NOT raise BACK_PANEL_OVERSIZED when hasBack is false', () => {
+    const issues = validateConfig(cfg({ hasBack: false, backPanelMaterial: 'plywood-17', height: 600 }));
+    expect(issues.some((i) => i.code === 'BACK_PANEL_OVERSIZED')).toBe(false);
+  });
+
+  it('BACK_PANEL_OVERSIZED message contains both en and he text', () => {
+    const issues = validateConfig(cfg({ hasBack: true, backPanelMaterial: 'plywood-17' }));
+    const issue = issues.find((i) => i.code === 'BACK_PANEL_OVERSIZED')!;
+    expect(issue.message.en).toBeTruthy();
+    expect(issue.message.he).toBeTruthy();
+  });
+});
