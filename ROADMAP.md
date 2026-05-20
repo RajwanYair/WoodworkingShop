@@ -268,7 +268,8 @@ Every release requires all gates green:
 5. `npm test` — all unit tests pass
 6. `npm run build` — clean production build
 7. `npm run bundle:check` — within budget limits
-8. `npm run test:e2e` — all E2E + a11y tests pass
+8. `npm run bench:check` — engine benchmarks within 5× baseline thresholds
+9. `npm run test:e2e` — all E2E + a11y tests pass
 
 If any gate fails, the release is blocked until root cause is fixed (not suppressed).
 
