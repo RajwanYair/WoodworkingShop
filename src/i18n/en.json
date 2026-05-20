@@ -353,6 +353,8 @@
     "viewAll": "Show all stages",
     "print": "Print",
     "downloadChecklist": "Download checklist",
+    "showTips": "Show tips",
+    "hideTips": "Hide tips",
     "stepsCount": "steps",
     "stepsCompleted": "steps completed",
     "resetProgress": "Reset progress",

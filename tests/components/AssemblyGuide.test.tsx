@@ -130,3 +130,45 @@ describe('AssemblyGuide — download checklist (Sprint 78)', () => {
     vi.restoreAllMocks();
   });
 });
+
+// ── Sprint 84 — Show / hide tips toggle ──────────────────────────────────────
+describe('AssemblyGuide — show/hide tips toggle (Sprint 84)', () => {
+  beforeEach(() => {
+    seedStore();
+  });
+
+  it('renders the "Hide tips" button in all-steps view by default', () => {
+    render(<AssemblyGuide />);
+    expect(screen.getByRole('button', { name: /hide tips/i })).toBeInTheDocument();
+  });
+
+  it('tips are visible before toggling', () => {
+    render(<AssemblyGuide />);
+    // The default config generates steps, some of which have tips rendered in amber blocks.
+    // At least one step should contain a tip in the seeded DEFAULT_CONFIG.
+    const { assemblySteps } = useCabinetStore.getState();
+    const stepsWithTip = assemblySteps.filter((s) => s.tip);
+    if (stepsWithTip.length === 0) return; // no tips in this config — skip
+    // Amber tip containers use the lightbulb icon aria-hidden, so check text
+    const tipText = stepsWithTip[0].tip!['en'];
+    expect(screen.getByText(tipText)).toBeInTheDocument();
+  });
+
+  it('clicking the toggle button hides all tips', () => {
+    render(<AssemblyGuide />);
+    const { assemblySteps } = useCabinetStore.getState();
+    const stepsWithTip = assemblySteps.filter((s) => s.tip);
+    if (stepsWithTip.length === 0) return;
+    const tipText = stepsWithTip[0].tip!['en'];
+    const toggleBtn = screen.getByRole('button', { name: /hide tips/i });
+    fireEvent.click(toggleBtn);
+    expect(screen.queryByText(tipText)).not.toBeInTheDocument();
+  });
+
+  it('button label toggles to "Show tips" after hiding', () => {
+    render(<AssemblyGuide />);
+    const toggleBtn = screen.getByRole('button', { name: /hide tips/i });
+    fireEvent.click(toggleBtn);
+    expect(screen.getByRole('button', { name: /show tips/i })).toBeInTheDocument();
+  });
+});

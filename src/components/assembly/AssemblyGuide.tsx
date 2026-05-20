@@ -14,6 +14,8 @@ export function AssemblyGuide() {
   const lang = i18n.language as Lang;
   const [activeStep, setActiveStep] = useState(0);
   const [viewMode, setViewMode] = useState<ViewMode>('all');
+  // Sprint 84 — show/hide tips toggle (only applies in all-steps view)
+  const [showTips, setShowTips] = useState(true);
   const notes = cabinets[activeCabinetIndex]?.notes ?? '';
   // Sprint 52 — step completion checklist
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
@@ -97,6 +99,19 @@ export function AssemblyGuide() {
           >
             <IconDownload size={13} /> {t('assembly.downloadChecklist')}
           </button>
+          {/* Sprint 84 — show/hide tips toggle (visible in all-steps view only) */}
+          {viewMode === 'all' && (
+            <button
+              type="button"
+              onClick={() => setShowTips((v) => !v)}
+              className="px-3 py-1.5 text-xs rounded border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors print:hidden flex items-center gap-1.5"
+              aria-pressed={showTips}
+              aria-label={showTips ? t('assembly.hideTips') : t('assembly.showTips')}
+            >
+              <IconLightbulb size={13} />
+              {showTips ? t('assembly.hideTips') : t('assembly.showTips')}
+            </button>
+          )}
           {/* View mode toggle */}
           <div
             className="inline-flex rounded-md border border-wood-200 dark:border-wood-700 overflow-hidden text-xs print:hidden"
@@ -202,6 +217,7 @@ export function AssemblyGuide() {
               t={t}
               completed={completedSteps.has(i)}
               onToggleComplete={() => toggleStep(i)}
+              showTips={showTips}
             />
           ))}
           {completedSteps.size === steps.length && steps.length > 0 && (
@@ -294,9 +310,11 @@ interface StepCardProps {
   completed?: boolean;
   /** Sprint 52 — callback to toggle completion */
   onToggleComplete?: () => void;
+  /** Sprint 84 — when false, tips are hidden (only in all-steps view) */
+  showTips?: boolean;
 }
 
-function StepCard({ step, stepIndex, stepCount, parts, lang, t, completed = false, onToggleComplete }: StepCardProps) {
+function StepCard({ step, stepIndex, stepCount, parts, lang, t, completed = false, onToggleComplete, showTips = true }: StepCardProps) {
   const highlightedParts = new Set(step.parts);
   const checkboxId = stepIndex !== undefined ? `step-complete-${stepIndex}` : undefined;
   return (
@@ -348,7 +366,7 @@ function StepCard({ step, stepIndex, stepCount, parts, lang, t, completed = fals
             </span>
           </div>
           <p className="text-sm text-wood-600 dark:text-wood-300 leading-relaxed">{step.description[lang]}</p>
-          {step.tip && (
+          {showTips && step.tip && (
             <div className="mt-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded px-3 py-2">
               <p className="text-xs text-amber-700 dark:text-amber-300 flex items-start gap-1.5">
                 <IconLightbulb size={13} className="shrink-0 mt-0.5" />
