@@ -11,7 +11,6 @@ import { CabinetPreview } from './components/preview/CabinetPreview';
 import { SmartOptimizerPanel } from './components/optimizer/SmartOptimizerPanel';
 import { PartsTable, HardwareTable } from './components/optimizer/Tables';
 import { ProjectSummaryPanel } from './components/optimizer/ProjectSummaryPanel';
-import { RoomLayoutView } from './components/layout/RoomLayoutView';
 import { ToastContainer } from './components/layout/ToastContainer';
 import { OnboardingManager } from './components/layout/OnboardingOverlay';
 import { TouchGestureTutorial } from './components/layout/TouchGestureTutorial';
@@ -37,6 +36,10 @@ const OptimizerView = lazy(() =>
 );
 const AssemblyGuide = lazy(() =>
   import('./components/assembly/AssemblyGuide').then((m) => ({ default: m.AssemblyGuide })),
+);
+// Phase 11 — RoomLayoutView is route-isolated; lazy-load to trim initial parse.
+const RoomLayoutViewLazy = lazy(() =>
+  import('./components/layout/RoomLayoutView').then((m) => ({ default: m.RoomLayoutView })),
 );
 
 function App() {
@@ -204,7 +207,9 @@ function App() {
                 <ErrorBoundary panelName="Configurator">
                   <ConfiguratorPanel />
                 </ErrorBoundary>
-                <RoomLayoutView />
+                <Suspense fallback={<SkeletonPane label={t('skeleton.loading')} />}>
+                  <RoomLayoutViewLazy />
+                </Suspense>
               </div>
             )}
             {activeTab === 'preview' && (
