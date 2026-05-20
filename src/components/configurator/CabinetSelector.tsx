@@ -33,14 +33,14 @@ export function CabinetSelector() {
   };
 
   return (
-    <div className="border border-wood-200 dark:border-wood-700 rounded-lg p-3 space-y-2">
+    <div className="border-wood-200 dark:border-wood-700 space-y-2 rounded-lg border p-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-xs font-semibold text-wood-700 dark:text-wood-200 uppercase tracking-wide">
+        <h3 className="text-wood-700 dark:text-wood-200 text-xs font-semibold tracking-wide uppercase">
           {t('project.title')}
         </h3>
         <button
           onClick={addCabinet}
-          className="text-xs bg-wood-600 hover:bg-wood-700 text-white px-2 py-0.5 rounded transition-colors"
+          className="bg-wood-600 hover:bg-wood-700 rounded px-2 py-0.5 text-xs text-white transition-colors"
         >
           + {t('project.add')}
         </button>
@@ -55,7 +55,7 @@ export function CabinetSelector() {
                 onChange={(e) => setEditName(e.target.value)}
                 onBlur={commitRename}
                 onKeyDown={(e) => e.key === 'Enter' && commitRename()}
-                className="text-xs px-2 py-1 rounded border border-wood-400 dark:border-wood-500 bg-white dark:bg-wood-800 w-24"
+                className="border-wood-400 dark:border-wood-500 dark:bg-wood-800 w-24 rounded border bg-white px-2 py-1 text-xs"
                 ref={(el) => el?.focus()}
                 aria-label="Cabinet name"
               />
@@ -63,7 +63,7 @@ export function CabinetSelector() {
               <button
                 onClick={() => setActiveCabinet(i)}
                 onDoubleClick={() => startRename(i)}
-                className={`text-xs px-2 py-1 rounded transition-colors ${
+                className={`rounded px-2 py-1 text-xs transition-colors ${
                   i === activeCabinetIndex
                     ? 'bg-wood-600 text-white'
                     : 'bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700'
@@ -83,7 +83,7 @@ export function CabinetSelector() {
             {cabinets.length > 1 && (
               <button
                 onClick={() => removeCabinet(i)}
-                className="text-wood-400 hover:text-red-500 text-xs leading-none"
+                className="text-wood-400 text-xs leading-none hover:text-red-500"
                 title={t('project.remove')}
               >
                 ×
@@ -123,13 +123,13 @@ export function CabinetSelector() {
         ))}
       </div>
 
-      {cabinets.length > 1 && <p className="text-[10px] text-wood-400 dark:text-wood-500">{t('project.hint')}</p>}
+      {cabinets.length > 1 && <p className="text-wood-400 dark:text-wood-500 text-[10px]">{t('project.hint')}</p>}
 
       {/* Sprint 135 — per-cabinet notes */}
       <div>
         <button
           onClick={() => setNotesOpen((o) => !o)}
-          className="text-[10px] text-wood-600 dark:text-wood-300 hover:underline"
+          className="text-wood-600 dark:text-wood-300 text-[10px] hover:underline"
         >
           {notesOpen ? '▾' : '▸'} {t('project.notes')}
         </button>
@@ -139,7 +139,7 @@ export function CabinetSelector() {
             value={cabinets[activeCabinetIndex]?.notes ?? ''}
             onChange={(e) => setNotes(activeCabinetIndex, e.target.value)}
             placeholder={t('project.notesPlaceholder')}
-            className="mt-1 w-full text-xs rounded border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-800 text-wood-700 dark:text-wood-200 placeholder-wood-400 p-1.5 resize-y focus:outline-none focus:ring-1 focus:ring-wood-400"
+            className="border-wood-200 dark:border-wood-700 dark:bg-wood-800 text-wood-700 dark:text-wood-200 placeholder-wood-400 focus:ring-wood-400 mt-1 w-full resize-y rounded border bg-white p-1.5 text-xs focus:ring-1 focus:outline-none"
           />
         )}
       </div>

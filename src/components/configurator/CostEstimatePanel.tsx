@@ -70,15 +70,15 @@ export function CostEstimatePanel() {
   if (cost.finishCost > 0) segments.push({ label: t('cost.finish'), value: cost.finishCost, color: '#9370DB' });
 
   return (
-    <div className="border border-wood-200 dark:border-wood-700 rounded-lg p-3 space-y-3">
-      <h3 className="text-xs font-semibold text-wood-700 dark:text-wood-200 uppercase tracking-wide">
+    <div className="border-wood-200 dark:border-wood-700 space-y-3 rounded-lg border p-3">
+      <h3 className="text-wood-700 dark:text-wood-200 text-xs font-semibold tracking-wide uppercase">
         {t('cost.title')}
       </h3>
 
       {/* Visual cost breakdown bar */}
       {totalNonZero && (
         <div className="space-y-1">
-          <div className="flex h-3 rounded-full overflow-hidden bg-wood-100 dark:bg-wood-800">
+          <div className="bg-wood-100 dark:bg-wood-800 flex h-3 overflow-hidden rounded-full">
             {segments.map((seg, i) => (
               <div
                 key={i}
@@ -90,8 +90,8 @@ export function CostEstimatePanel() {
           </div>
           <div className="flex flex-wrap gap-x-3 gap-y-0.5">
             {segments.map((seg, i) => (
-              <span key={i} className="flex items-center gap-1 text-[10px] text-wood-600 dark:text-wood-300">
-                <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: seg.color }} />
+              <span key={i} className="text-wood-600 dark:text-wood-300 flex items-center gap-1 text-[10px]">
+                <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: seg.color }} />
                 {seg.label}
               </span>
             ))}
@@ -106,12 +106,12 @@ export function CostEstimatePanel() {
           const hasOverride = sc.material in materialPriceOverrides;
           const defaultPrice = getMaterial(sc.material).pricePerSheet ?? 0;
           return (
-            <div key={i} className="flex justify-between items-center text-xs gap-2">
-              <span className="text-wood-600 dark:text-wood-300 truncate flex-1">
+            <div key={i} className="flex items-center justify-between gap-2 text-xs">
+              <span className="text-wood-600 dark:text-wood-300 flex-1 truncate">
                 {sc.materialName[lang]} ×{sc.qty}
               </span>
               {isEditing ? (
-                <div className="flex items-center gap-1 shrink-0">
+                <div className="flex shrink-0 items-center gap-1">
                   <span className="text-wood-400">₪</span>
                   <input
                     type="number"
@@ -128,7 +128,7 @@ export function CostEstimatePanel() {
                       if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
                       if (e.key === 'Escape') setEditingPrice(null);
                     }}
-                    className="w-16 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-1 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-wood-400"
+                    className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-16 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
                     ref={(el) => el?.focus()}
                     aria-label={`Price per sheet for ${sc.materialName.en}`}
                   />
@@ -138,7 +138,7 @@ export function CostEstimatePanel() {
                         setMaterialPriceOverride(sc.material, null);
                         setEditingPrice(null);
                       }}
-                      className="text-wood-400 hover:text-red-500 text-[10px]"
+                      className="text-wood-400 text-[10px] hover:text-red-500"
                       title={t('cost.resetPrice')}
                     >
                       ↺
@@ -151,7 +151,7 @@ export function CostEstimatePanel() {
                     setEditingPrice(sc.material);
                     setPriceInput(String(sc.pricePerSheet || defaultPrice));
                   }}
-                  className={`font-medium shrink-0 hover:underline ${hasOverride ? 'text-amber-800 dark:text-amber-300' : 'text-wood-700 dark:text-wood-200'}`}
+                  className={`shrink-0 font-medium hover:underline ${hasOverride ? 'text-amber-800 dark:text-amber-300' : 'text-wood-700 dark:text-wood-200'}`}
                   title={t('cost.editPrice')}
                 >
                   ₪{sc.subtotal} {hasOverride && <span className="text-[10px]">✎</span>}
@@ -163,12 +163,12 @@ export function CostEstimatePanel() {
       </div>
 
       {/* Other costs */}
-      <div className="border-t border-wood-100 dark:border-wood-800 pt-2 space-y-1">
+      <div className="border-wood-100 dark:border-wood-800 space-y-1 border-t pt-2">
         {cost.edgeBandingCost > 0 && (
-          <div className="flex justify-between items-center text-xs gap-2">
+          <div className="flex items-center justify-between gap-2 text-xs">
             <span className="text-wood-600 dark:text-wood-300 flex-1">{t('cost.edgeBanding')}</span>
             {editingEb ? (
-              <div className="flex items-center gap-1 shrink-0">
+              <div className="flex shrink-0 items-center gap-1">
                 <span className="text-wood-400">₪</span>
                 <input
                   type="number"
@@ -185,7 +185,7 @@ export function CostEstimatePanel() {
                     if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
                     if (e.key === 'Escape') setEditingEb(false);
                   }}
-                  className="w-14 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-1 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-wood-400"
+                  className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-14 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
                   ref={(el) => el?.focus()}
                   aria-label="Edge banding rate per meter"
                 />
@@ -197,7 +197,7 @@ export function CostEstimatePanel() {
                   setEditingEb(true);
                   setEbInput(String(edgeBandingRate));
                 }}
-                className="font-medium shrink-0 hover:underline text-wood-700 dark:text-wood-200"
+                className="text-wood-700 dark:text-wood-200 shrink-0 font-medium hover:underline"
                 title={t('cost.editEbRate')}
               >
                 ₪{cost.edgeBandingCost}
@@ -211,12 +211,12 @@ export function CostEstimatePanel() {
             const isEditingThisHw = editingHw === hw.id;
             const hasHwOverride = hw.id in hardwarePriceOverrides;
             return (
-              <div key={hw.id} className="flex justify-between items-center text-xs gap-2">
-                <span className="text-wood-600 dark:text-wood-300 truncate flex-1">
+              <div key={hw.id} className="flex items-center justify-between gap-2 text-xs">
+                <span className="text-wood-600 dark:text-wood-300 flex-1 truncate">
                   {hw.name[lang]} ×{hw.qty}
                 </span>
                 {isEditingThisHw ? (
-                  <div className="flex items-center gap-1 shrink-0">
+                  <div className="flex shrink-0 items-center gap-1">
                     <span className="text-wood-400">₪</span>
                     <input
                       type="number"
@@ -233,7 +233,7 @@ export function CostEstimatePanel() {
                         if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
                         if (e.key === 'Escape') setEditingHw(null);
                       }}
-                      className="w-14 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-1 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-wood-400"
+                      className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-14 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
                       ref={(el) => el?.focus()}
                       aria-label={`Price per unit for ${hw.name.en}`}
                     />
@@ -243,7 +243,7 @@ export function CostEstimatePanel() {
                           setHardwarePriceOverride(hw.id, null);
                           setEditingHw(null);
                         }}
-                        className="text-wood-400 hover:text-red-500 text-[10px]"
+                        className="text-wood-400 text-[10px] hover:text-red-500"
                         title={t('cost.resetPrice')}
                       >
                         ↺
@@ -256,7 +256,7 @@ export function CostEstimatePanel() {
                       setEditingHw(hw.id);
                       setHwPriceInput(String(hw.unitPrice));
                     }}
-                    className={`font-medium shrink-0 hover:underline ${hasHwOverride ? 'text-amber-800 dark:text-amber-300' : 'text-wood-700 dark:text-wood-200'}`}
+                    className={`shrink-0 font-medium hover:underline ${hasHwOverride ? 'text-amber-800 dark:text-amber-300' : 'text-wood-700 dark:text-wood-200'}`}
                     title={t('cost.editPrice')}
                   >
                     ₪{hw.subtotal}
@@ -276,7 +276,7 @@ export function CostEstimatePanel() {
 
       {/* Waste info */}
       {cost.wasteCost > 0 && (
-        <div className="border-t border-wood-100 dark:border-wood-800 pt-2">
+        <div className="border-wood-100 dark:border-wood-800 border-t pt-2">
           <div className="flex justify-between text-xs">
             <span className="text-wood-600 dark:text-wood-300">{t('cost.waste')}</span>
             <span className="font-medium text-amber-800 dark:text-amber-300">₪{cost.wasteCost}</span>
@@ -285,12 +285,12 @@ export function CostEstimatePanel() {
       )}
 
       {/* Labour hours + finish coat (v3.23.0) */}
-      <div className="border-t border-wood-100 dark:border-wood-800 pt-2 space-y-1">
+      <div className="border-wood-100 dark:border-wood-800 space-y-1 border-t pt-2">
         {/* Labour hours */}
-        <div className="flex justify-between items-center text-xs gap-2">
+        <div className="flex items-center justify-between gap-2 text-xs">
           <span className="text-wood-600 dark:text-wood-300 flex-1">{t('cost.labour')}</span>
           {editingLabourHours ? (
-            <div className="flex items-center gap-1 shrink-0">
+            <div className="flex shrink-0 items-center gap-1">
               <input
                 type="number"
                 min={0}
@@ -306,7 +306,7 @@ export function CostEstimatePanel() {
                   if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
                   if (e.key === 'Escape') setEditingLabourHours(false);
                 }}
-                className="w-14 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-1 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-wood-400"
+                className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-14 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
                 ref={(el) => el?.focus()}
                 aria-label={t('cost.labourHoursAriaLabel', 'Labour hours')}
               />
@@ -318,7 +318,7 @@ export function CostEstimatePanel() {
                 setEditingLabourHours(true);
                 setLabourHoursInput(String(labourHours));
               }}
-              className="font-medium shrink-0 hover:underline text-wood-700 dark:text-wood-200"
+              className="text-wood-700 dark:text-wood-200 shrink-0 font-medium hover:underline"
               title={t('cost.editLabourHours', 'Click to set estimated labour hours')}
             >
               {labourHours > 0 ? `${labourHours}h → ₪${cost.labourCost}` : t('cost.notSet', '—')}
@@ -326,10 +326,10 @@ export function CostEstimatePanel() {
           )}
         </div>
         {/* Labour rate */}
-        <div className="flex justify-between items-center text-xs gap-2">
+        <div className="flex items-center justify-between gap-2 text-xs">
           <span className="text-wood-600 dark:text-wood-300 flex-1">{t('cost.labourRate')}</span>
           {editingLabourRate ? (
-            <div className="flex items-center gap-1 shrink-0">
+            <div className="flex shrink-0 items-center gap-1">
               <span className="text-wood-400">₪</span>
               <input
                 type="number"
@@ -346,7 +346,7 @@ export function CostEstimatePanel() {
                   if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
                   if (e.key === 'Escape') setEditingLabourRate(false);
                 }}
-                className="w-14 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-1 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-wood-400"
+                className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-14 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
                 ref={(el) => el?.focus()}
                 aria-label={t('cost.labourRateAriaLabel', 'Labour rate per hour')}
               />
@@ -358,7 +358,7 @@ export function CostEstimatePanel() {
                 setEditingLabourRate(true);
                 setLabourRateInput(String(labourRate));
               }}
-              className={`font-medium shrink-0 hover:underline ${labourRate !== DEFAULT_LABOUR_RATE ? 'text-amber-800 dark:text-amber-300' : 'text-wood-700 dark:text-wood-200'}`}
+              className={`shrink-0 font-medium hover:underline ${labourRate !== DEFAULT_LABOUR_RATE ? 'text-amber-800 dark:text-amber-300' : 'text-wood-700 dark:text-wood-200'}`}
               title={t('cost.editLabourRate', 'Click to override labour rate (₪/hr)')}
             >
               ₪{labourRate}/h{labourRate !== DEFAULT_LABOUR_RATE && <span className="text-[10px]"> ✎</span>}
@@ -366,10 +366,10 @@ export function CostEstimatePanel() {
           )}
         </div>
         {/* Finish / paint cost */}
-        <div className="flex justify-between items-center text-xs gap-2">
+        <div className="flex items-center justify-between gap-2 text-xs">
           <span className="text-wood-600 dark:text-wood-300 flex-1">{t('cost.finish')}</span>
           {editingFinish ? (
-            <div className="flex items-center gap-1 shrink-0">
+            <div className="flex shrink-0 items-center gap-1">
               <span className="text-wood-400">₪</span>
               <input
                 type="number"
@@ -386,7 +386,7 @@ export function CostEstimatePanel() {
                   if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
                   if (e.key === 'Escape') setEditingFinish(false);
                 }}
-                className="w-16 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-1 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-wood-400"
+                className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-16 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
                 ref={(el) => el?.focus()}
                 aria-label={t('cost.finishAriaLabel', 'Finish/paint cost')}
               />
@@ -397,7 +397,7 @@ export function CostEstimatePanel() {
                 setEditingFinish(true);
                 setFinishInput(String(finishCost));
               }}
-              className="font-medium shrink-0 hover:underline text-wood-700 dark:text-wood-200"
+              className="text-wood-700 dark:text-wood-200 shrink-0 font-medium hover:underline"
               title={t('cost.editFinish', 'Click to set finish/paint cost')}
             >
               {finishCost > 0 ? `₪${finishCost}` : t('cost.notSet', '—')}
@@ -408,10 +408,10 @@ export function CostEstimatePanel() {
 
       {/* Per-cabinet cost when multiple cabinets */}
       {cabinets.length > 1 && totalNonZero && (
-        <div className="border-t border-wood-100 dark:border-wood-800 pt-2">
+        <div className="border-wood-100 dark:border-wood-800 border-t pt-2">
           <div className="flex justify-between text-xs">
             <span className="text-wood-600 dark:text-wood-300">{t('cost.perUnit')}</span>
-            <span className="font-medium text-wood-600 dark:text-wood-300">
+            <span className="text-wood-600 dark:text-wood-300 font-medium">
               ~₪{Math.round(cost.totalCost / cabinets.length)}
             </span>
           </div>
@@ -419,18 +419,18 @@ export function CostEstimatePanel() {
       )}
 
       {/* Total */}
-      <div className="border-t border-wood-300 dark:border-wood-600 pt-2">
+      <div className="border-wood-300 dark:border-wood-600 border-t pt-2">
         <div className="flex justify-between">
-          <span className="text-sm font-bold text-wood-700 dark:text-wood-200">{t('cost.total')}</span>
+          <span className="text-wood-700 dark:text-wood-200 text-sm font-bold">{t('cost.total')}</span>
           <span className="text-sm font-bold text-green-700 dark:text-green-400">₪{cost.totalCost}</span>
         </div>
         {totalWeightKg > 0 && (
-          <div className="flex justify-between mt-1">
-            <span className="text-xs text-wood-600 dark:text-wood-300">{t('cost.totalWeight')}</span>
-            <span className="text-xs text-wood-600 dark:text-wood-300">~{totalWeightKg.toFixed(1)} kg</span>
+          <div className="mt-1 flex justify-between">
+            <span className="text-wood-600 dark:text-wood-300 text-xs">{t('cost.totalWeight')}</span>
+            <span className="text-wood-600 dark:text-wood-300 text-xs">~{totalWeightKg.toFixed(1)} kg</span>
           </div>
         )}
-        <p className="mt-1 text-[10px] text-wood-600 dark:text-wood-300">{t('cost.disclaimer')}</p>
+        <p className="text-wood-600 dark:text-wood-300 mt-1 text-[10px]">{t('cost.disclaimer')}</p>
       </div>
     </div>
   );

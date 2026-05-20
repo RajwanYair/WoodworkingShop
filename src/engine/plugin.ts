@@ -299,4 +299,3 @@ export class PluginEventBus {
 
 /** Process-wide singleton plugin event bus. */
 export const pluginEventBus = new PluginEventBus();
-

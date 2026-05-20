@@ -52,22 +52,22 @@ export function SmartOptimizerPanel() {
   };
 
   return (
-    <div className="border border-wood-200 dark:border-wood-700 rounded-lg p-4 space-y-4">
+    <div className="border-wood-200 dark:border-wood-700 space-y-4 rounded-lg border p-4">
       <div>
-        <h3 className="text-sm font-semibold text-wood-700 dark:text-wood-200">{t('optimizer.smart')}</h3>
-        <p className="text-xs text-wood-400 dark:text-wood-500 mt-0.5">{t('optimizer.smartDesc')}</p>
+        <h3 className="text-wood-700 dark:text-wood-200 text-sm font-semibold">{t('optimizer.smart')}</h3>
+        <p className="text-wood-400 dark:text-wood-500 mt-0.5 text-xs">{t('optimizer.smartDesc')}</p>
       </div>
 
       {/* Strategy checkboxes */}
       <div>
-        <label className="text-xs font-medium text-wood-600 dark:text-wood-300 block mb-1">
+        <label className="text-wood-600 dark:text-wood-300 mb-1 block text-xs font-medium">
           {t('optimizer.strategies')}
         </label>
         <div className="flex flex-wrap gap-2">
           {ALL_STRATEGIES.map((s) => (
             <label
               key={s}
-              className="flex items-center gap-1.5 text-xs text-wood-600 dark:text-wood-300 cursor-pointer select-none"
+              className="text-wood-600 dark:text-wood-300 flex cursor-pointer items-center gap-1.5 text-xs select-none"
             >
               <input
                 type="checkbox"
@@ -83,7 +83,7 @@ export function SmartOptimizerPanel() {
 
       {/* Tolerance slider */}
       <div>
-        <label className="text-xs font-medium text-wood-600 dark:text-wood-300 block mb-1">
+        <label className="text-wood-600 dark:text-wood-300 mb-1 block text-xs font-medium">
           {t('optimizer.tolerance')}: ±{tolerance} mm
         </label>
         <input
@@ -93,7 +93,7 @@ export function SmartOptimizerPanel() {
           step={2}
           value={tolerance}
           onChange={(e) => setTolerance(Number(e.target.value))}
-          className="w-full accent-primary"
+          className="accent-primary w-full"
         />
       </div>
 
@@ -101,51 +101,51 @@ export function SmartOptimizerPanel() {
       <button
         onClick={handleFind}
         disabled={running || strategies.length === 0}
-        className="w-full py-2 rounded text-sm font-medium bg-wood-600 text-white hover:bg-wood-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className="bg-wood-600 hover:bg-wood-700 w-full rounded py-2 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
       >
         {running ? '…' : t('optimizer.find')}
       </button>
 
       {/* Results */}
       {results !== null && results.length === 0 && (
-        <p className="text-xs text-wood-400 text-center py-2">{t('optimizer.noResults')}</p>
+        <p className="text-wood-400 py-2 text-center text-xs">{t('optimizer.noResults')}</p>
       )}
 
       {results && results.length > 0 && (
         <div className="space-y-3">
           {results.map((s, idx) => (
-            <div key={idx} className="border border-wood-200 dark:border-wood-700 rounded p-3 space-y-2">
+            <div key={idx} className="border-wood-200 dark:border-wood-700 space-y-2 rounded border p-3">
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1">
-                  <span className="text-xs font-medium px-1.5 py-0.5 rounded bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300">
+                  <span className="bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 rounded px-1.5 py-0.5 text-xs font-medium">
                     {t(`optimizer.strategy_${s.strategy}`)}
                   </span>
-                  <p className="text-xs text-wood-600 dark:text-wood-300 mt-1">{s.explanation[lang]}</p>
+                  <p className="text-wood-600 dark:text-wood-300 mt-1 text-xs">{s.explanation[lang]}</p>
                 </div>
-                <div className="flex gap-1.5 shrink-0">
+                <div className="flex shrink-0 gap-1.5">
                   <button
                     onClick={() => setComparing(comparing === idx ? null : idx)}
-                    className="px-3 py-1 text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 rounded hover:bg-wood-50 dark:hover:bg-wood-700 transition-colors"
+                    className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 rounded border px-3 py-1 text-xs font-medium transition-colors"
                   >
                     {comparing === idx ? t('optimizer.hideCompare') : t('optimizer.compare')}
                   </button>
                   <button
                     onClick={() => handleApply(s)}
-                    className="px-3 py-1 text-xs font-medium bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+                    className="rounded bg-green-600 px-3 py-1 text-xs font-medium text-white transition-colors hover:bg-green-700"
                   >
                     {t('optimizer.apply')}
                   </button>
                 </div>
               </div>
               {comparing === idx && <ComparisonView suggestion={s} />}
-              <div className="flex gap-4 text-xs text-wood-600 dark:text-wood-300">
+              <div className="text-wood-600 dark:text-wood-300 flex gap-4 text-xs">
                 {s.savings.sheetsRemoved > 0 && (
-                  <span className="text-green-600 font-medium">
+                  <span className="font-medium text-green-600">
                     −{s.savings.sheetsRemoved} {t('optimizer.sheetsRemoved')}
                   </span>
                 )}
                 {s.savings.yieldImprovement > 0 && (
-                  <span className="text-green-600 font-medium">
+                  <span className="font-medium text-green-600">
                     +{s.savings.yieldImprovement}% {t('optimizer.yieldGain')}
                   </span>
                 )}

@@ -46,11 +46,11 @@ export function DimensionSliders() {
 
   return (
     <fieldset className="space-y-4">
-      <legend className="text-sm font-semibold text-wood-700 dark:text-wood-200 uppercase tracking-wide w-full flex items-center justify-between">
+      <legend className="text-wood-700 dark:text-wood-200 flex w-full items-center justify-between text-sm font-semibold tracking-wide uppercase">
         <span>{t('config.dimensions')}</span>
         <button
           onClick={toggleUnits}
-          className="text-[10px] px-2 py-0.5 rounded border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors"
+          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 rounded border px-2 py-0.5 text-[10px] transition-colors"
           title={t('config.toggleUnits')}
         >
           {units === 'metric' ? 'mm → in' : 'in → mm'}
@@ -98,13 +98,13 @@ export function DimensionSliders() {
             unit="mm"
           />
           {/* Quick-select presets for common kick heights */}
-          <div className="flex gap-1.5 flex-wrap -mt-1">
+          <div className="-mt-1 flex flex-wrap gap-1.5">
             {[0, 75, 100, 150].map((preset) => (
               <button
                 key={preset}
                 type="button"
                 onClick={() => setConfig({ kickHeight: preset })}
-                className={`text-[10px] px-2 py-0.5 rounded border transition-colors ${
+                className={`rounded border px-2 py-0.5 text-[10px] transition-colors ${
                   (config.kickHeight ?? 0) === preset
                     ? 'border-wood-500 bg-wood-600 text-white'
                     : 'border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800'
@@ -171,13 +171,13 @@ function DimensionRow({ spec, value, step, unitLabel, metric, label, displayValu
   return (
     <div className="block">
       <div className="flex items-baseline justify-between gap-2">
-        <label htmlFor={inputId} className="text-sm text-wood-600 dark:text-wood-300">
+        <label htmlFor={inputId} className="text-wood-600 dark:text-wood-300 text-sm">
           {label}
         </label>
-        <span className="text-xs text-wood-600 dark:text-wood-300 font-mono">{displayValue}</span>
+        <span className="text-wood-600 dark:text-wood-300 font-mono text-xs">{displayValue}</span>
       </div>
 
-      <div className="flex items-center gap-3 mt-1">
+      <div className="mt-1 flex items-center gap-3">
         <input
           type="range"
           min={spec.softMin}
@@ -190,7 +190,7 @@ function DimensionRow({ spec, value, step, unitLabel, metric, label, displayValu
             onChange(v);
             setText(valueToText(v, metric));
           }}
-          className="flex-1 accent-primary"
+          className="accent-primary flex-1"
         />
 
         <div className="flex items-center">
@@ -213,7 +213,7 @@ function DimensionRow({ spec, value, step, unitLabel, metric, label, displayValu
               }
             }}
             className={
-              'w-20 text-right text-sm font-mono px-2 py-0.5 rounded border bg-white dark:bg-wood-900 ' +
+              'dark:bg-wood-900 w-20 rounded border bg-white px-2 py-0.5 text-right font-mono text-sm ' +
               (outOfHard || !validNumeric
                 ? 'border-red-500 text-red-600'
                 : outOfSoft
@@ -221,7 +221,7 @@ function DimensionRow({ spec, value, step, unitLabel, metric, label, displayValu
                   : 'border-wood-300 dark:border-wood-600 text-wood-700 dark:text-wood-200')
             }
           />
-          <span className="ml-1 text-[10px] text-wood-600 dark:text-wood-300">{unitLabel}</span>
+          <span className="text-wood-600 dark:text-wood-300 ml-1 text-[10px]">{unitLabel}</span>
         </div>
       </div>
 

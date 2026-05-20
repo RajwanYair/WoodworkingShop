@@ -37,7 +37,7 @@ export interface ParsedToolpath {
   bounds: ToolpathBounds;
 }
 
-const RE_WORD = /([A-Z])([-+]?[0-9]*\.?[0-9]+)/gi;
+const RE_WORD = /([A-Z])([-+]?\d*\.?\d+)/gi;
 
 function parseWords(line: string): Map<string, number> {
   const map = new Map<string, number>();
@@ -50,7 +50,10 @@ function parseWords(line: string): Map<string, number> {
 }
 
 function stripComment(line: string): string {
-  return line.replace(/\(.*?\)/g, '').replace(/;.*$/, '').trim();
+  return line
+    .replace(/\([^)]*\)/g, '')
+    .replace(/;[^\n]*$/, '')
+    .trim();
 }
 
 /** Parse G-code into a list of 2D toolpath moves (Z axis ignored for SVG). */
@@ -130,7 +133,12 @@ export function parseToolpath(gcode: string): ParsedToolpath {
   }
 
   // Default bounds when file has no motion
-  if (!isFinite(minX)) { minX = 0; minY = 0; maxX = 100; maxY = 100; }
+  if (!isFinite(minX)) {
+    minX = 0;
+    minY = 0;
+    maxX = 100;
+    maxY = 100;
+  }
 
   return {
     moves,

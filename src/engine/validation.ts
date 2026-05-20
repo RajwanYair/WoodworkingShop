@@ -383,6 +383,12 @@ export function validateConfig(
     const dangerCount = dims.shelfDeflections.filter((d) => d.deflectionRating === 'danger').length;
     const warnCount = dims.shelfDeflections.filter((d) => d.deflectionRating === 'warning').length;
 
+    // v3.58.0 — centre-support recommendation: split shelf span into bays of
+    // ≤ SAFE_SPAN_CHIPBOARD_MM. recommendedSupports = supportsNeeded - current.
+    const currentSupports = Math.max(0, config.shelfCentreSupports ?? 0);
+    const supportsNeededForSafeSpan = Math.max(1, Math.ceil(dims.shelfWidth / SAFE_SPAN_CHIPBOARD_MM)) - 1;
+    const recommendedCentreSupports = Math.min(5, Math.max(currentSupports + 1, supportsNeededForSafeSpan));
+
     if (dangerCount > 0) {
       issues.push({
         code: 'SHELF_DEFLECTION_DANGER',
@@ -392,6 +398,10 @@ export function validateConfig(
           he: `${dangerCount} מדף/ים חורגים ממגבלת הכפיפה L/240 תחת עומס טיפוסי. הוסף תמיכות אמצע, עבור לחומר קשיח יותר, או הגדל עובי.`,
         },
         field: 'shelfCount',
+        fix: {
+          patch: { shelfCentreSupports: recommendedCentreSupports },
+          labelKey: 'validation.fixAddCentreSupport',
+        },
       });
     } else if (warnCount > 0) {
       issues.push({
@@ -402,6 +412,10 @@ export function validateConfig(
           he: `${warnCount} מדף/ים חורגים מהמלצת הכפיפה L/360. שקול הוספת תמיכת אמצע או מעבר לדיקט.`,
         },
         field: 'shelfCount',
+        fix: {
+          patch: { shelfCentreSupports: recommendedCentreSupports },
+          labelKey: 'validation.fixAddCentreSupport',
+        },
       });
     } else if (
       dims.shelfWidth > SAFE_SPAN_CHIPBOARD_MM &&
@@ -416,6 +430,10 @@ export function validateConfig(
           he: `ספן מדף ${Math.round(dims.shelfWidth)} מ"מ עם ${mat.name.he} עלול להתכופף עם הזמן. שקול דיקט או תמיכת אמצע.`,
         },
         field: 'carcassMaterial',
+        fix: {
+          patch: { shelfCentreSupports: recommendedCentreSupports },
+          labelKey: 'validation.fixAddCentreSupport',
+        },
       });
     }
   }
@@ -433,6 +451,8 @@ export function validateConfig(
     mat &&
     WEAK_CORE_MATERIALS.includes(mat.key)
   ) {
+    const cur = Math.max(0, config.shelfCentreSupports ?? 0);
+    const need = Math.max(1, Math.ceil(dims.shelfWidth / JOINERY_SPAN_LIMIT_MM) - 1);
     issues.push({
       code: 'JOINERY_MAX_SPAN',
       severity: 'warning',
@@ -441,6 +461,10 @@ export function validateConfig(
         he: `ספן מדף ${Math.round(dims.shelfWidth)} מ"מ חורג ממגבלת חיבורי הנגרות ${JOINERY_SPAN_LIMIT_MM} מ"מ עבור ${mat.name.he}. הוסף תמיכת אמצע או עבור לחומר חזק יותר.`,
       },
       field: 'shelfCount',
+      fix: {
+        patch: { shelfCentreSupports: Math.min(5, Math.max(cur + 1, need)) },
+        labelKey: 'validation.fixAddCentreSupport',
+      },
     });
   }
 
@@ -476,6 +500,15 @@ export function validateConfig(
         he: `רוחב הארון (${config.width} מ"מ) עולה על ${WIDE_SPAN_CARCASS_MM} מ"מ. תא בודד ברוחב זה עלול לאבד יציבות — שקול הוספת מחיצה אנכית או תמיכת-גובה.`,
       },
       field: 'width',
+      fix: {
+        patch: {
+          shelfCentreSupports: Math.min(
+            5,
+            Math.max((config.shelfCentreSupports ?? 0) + 1, Math.ceil(config.width / WIDE_SPAN_CARCASS_MM) - 1),
+          ),
+        },
+        labelKey: 'validation.fixAddCentreSupport',
+      },
     });
   }
 
@@ -502,7 +535,10 @@ export function validateConfig(
         he: `ארון ללא פנל גב בגובה ${config.height} מ"מ עלול לחסר יציבות. שקול הוספת גב או פסי קיבוע לקיר.`,
       },
       field: 'hasBack',
-      suggestedValue: 'true',
+      fix: {
+        patch: { hasBack: true },
+        labelKey: 'validation.fixEnableBack',
+      },
     });
   }
 
@@ -528,6 +564,8 @@ export function validateConfig(
   if (config.shelfCount > 0 && dims.shelfDeflections.length > 0) {
     const { maxLoadKg } = dims.shelfDeflections[0];
     if (maxLoadKg < MIN_SHELF_LOAD_KG) {
+      const curCs = Math.max(0, config.shelfCentreSupports ?? 0);
+      const needCs = Math.min(5, Math.max(curCs + 1, Math.ceil(dims.shelfWidth / SAFE_SPAN_CHIPBOARD_MM) - 1));
       issues.push({
         code: 'SHELF_LOAD_CAPACITY_LOW',
         severity: 'warning',
@@ -536,6 +574,10 @@ export function validateConfig(
           he: `עומס מדף בטוח מרבי הוא ~${maxLoadKg} ק"ג (מגבלת L/360). הקטן ספן, הגדל עובי הלוח, או הוסף תמיכת אמצע כדי לשאת לפחות ${MIN_SHELF_LOAD_KG} ק"ג למדף.`,
         },
         field: 'shelfCount',
+        fix: {
+          patch: { shelfCentreSupports: needCs },
+          labelKey: 'validation.fixAddCentreSupport',
+        },
       });
     }
   }
@@ -662,7 +704,10 @@ export function validateConfig(
         he: `ארון צר (${config.width} מ"מ רוחב) ללא פנל גב עמיד בפני עיוות ירוד. הוסף פנל גב או קבע את הארון לקיר.`,
       },
       field: 'hasBack',
-      suggestedValue: 'true',
+      fix: {
+        patch: { hasBack: true },
+        labelKey: 'validation.fixEnableBack',
+      },
     });
   }
 

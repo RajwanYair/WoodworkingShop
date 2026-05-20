@@ -27,7 +27,7 @@ export function ConfiguratorPanel() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-8">
+    <div className="mx-auto max-w-2xl space-y-8">
       <CabinetSelector />
       <SaveLoadPanel />
       <PresetsPanel />
@@ -40,16 +40,16 @@ export function ConfiguratorPanel() {
 
       {/* Furniture type selector */}
       <fieldset className="space-y-2">
-        <legend className="text-sm font-semibold text-wood-700 dark:text-wood-200 uppercase tracking-wide">
+        <legend className="text-wood-700 dark:text-wood-200 text-sm font-semibold tracking-wide uppercase">
           {t('config.furnitureType')}
         </legend>
         <div className="flex gap-3">
           {(['cabinet', 'bookshelf', 'desk', 'wardrobe', 'panel'] as const).map((ft) => (
             <label
               key={ft}
-              className={`flex-1 text-center cursor-pointer rounded border px-3 py-2 text-sm font-medium transition-colors ${
+              className={`flex-1 cursor-pointer rounded border px-3 py-2 text-center text-sm font-medium transition-colors ${
                 config.furnitureType === ft
-                  ? 'bg-wood-600 text-white border-wood-500'
+                  ? 'bg-wood-600 border-wood-500 text-white'
                   : 'bg-wood-50 dark:bg-wood-800 text-wood-600 dark:text-wood-300 border-wood-200 dark:border-wood-700 hover:bg-wood-100 dark:hover:bg-wood-700'
               }`}
             >
@@ -70,16 +70,16 @@ export function ConfiguratorPanel() {
       {/* Panel: choose which material's thickness governs the plate depth */}
       {config.furnitureType === 'panel' && (
         <fieldset className="space-y-2">
-          <legend className="text-sm font-semibold text-wood-700 dark:text-wood-200 uppercase tracking-wide">
+          <legend className="text-wood-700 dark:text-wood-200 text-sm font-semibold tracking-wide uppercase">
             {t('config.panelMaterialSource')}
           </legend>
           <div className="flex gap-3">
             {(['carcass', 'back'] as const).map((src) => (
               <label
                 key={src}
-                className={`flex-1 text-center cursor-pointer rounded border px-3 py-2 text-sm font-medium transition-colors ${
+                className={`flex-1 cursor-pointer rounded border px-3 py-2 text-center text-sm font-medium transition-colors ${
                   (config.panelMaterialSource ?? 'carcass') === src
-                    ? 'bg-wood-600 text-white border-wood-500'
+                    ? 'bg-wood-600 border-wood-500 text-white'
                     : 'bg-wood-50 dark:bg-wood-800 text-wood-600 dark:text-wood-300 border-wood-200 dark:border-wood-700 hover:bg-wood-100 dark:hover:bg-wood-700'
                 }`}
               >
@@ -104,7 +104,7 @@ export function ConfiguratorPanel() {
 
       {/* Sprint 12 — Joinery type selector */}
       <fieldset className="space-y-2">
-        <legend className="text-sm font-semibold text-wood-700 dark:text-wood-200 uppercase tracking-wide">
+        <legend className="text-wood-700 dark:text-wood-200 text-sm font-semibold tracking-wide uppercase">
           {t('config.joineryType')}
         </legend>
         <div className="flex flex-wrap gap-2">
@@ -113,7 +113,7 @@ export function ConfiguratorPanel() {
               key={jt}
               className={`cursor-pointer rounded border px-3 py-1.5 text-xs font-medium transition-colors ${
                 (config.joineryType ?? 'screw') === jt
-                  ? 'bg-wood-600 text-white border-wood-500'
+                  ? 'bg-wood-600 border-wood-500 text-white'
                   : 'bg-wood-50 dark:bg-wood-800 text-wood-600 dark:text-wood-300 border-wood-200 dark:border-wood-700 hover:bg-wood-100 dark:hover:bg-wood-700'
               }`}
             >
@@ -137,7 +137,7 @@ export function ConfiguratorPanel() {
 
       <button
         onClick={resetConfig}
-        className="w-full rounded bg-wood-200 dark:bg-wood-700 px-4 py-2 text-sm font-medium text-wood-700 dark:text-wood-200 hover:bg-wood-300 dark:hover:bg-wood-600 transition-colors"
+        className="bg-wood-200 dark:bg-wood-700 text-wood-700 dark:text-wood-200 hover:bg-wood-300 dark:hover:bg-wood-600 w-full rounded px-4 py-2 text-sm font-medium transition-colors"
       >
         {t('config.reset')}
       </button>

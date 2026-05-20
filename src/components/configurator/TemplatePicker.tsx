@@ -25,7 +25,7 @@ function TemplateThumbnail({ tpl }: { tpl: CabinetTemplate }) {
   const doorMidX = ox + w / 2;
 
   return (
-    <svg viewBox="0 0 80 60" aria-hidden="true" className="w-20 h-15 shrink-0 text-wood-700 dark:text-wood-200">
+    <svg viewBox="0 0 80 60" aria-hidden="true" className="text-wood-700 dark:text-wood-200 h-15 w-20 shrink-0">
       {/* Carcass outline */}
       <rect x={ox} y={oy} width={w} height={h} fill="none" stroke="currentColor" strokeWidth={T} rx={1} />
       {/* Toe kick — lighter fill at bottom */}
@@ -106,7 +106,7 @@ export function TemplatePicker({ onClose }: TemplatePickerProps) {
       {/* Backdrop — click outside to close */}
       <button
         type="button"
-        className="absolute inset-0 bg-black/50 w-full h-full border-0 p-0 cursor-default"
+        className="absolute inset-0 h-full w-full cursor-default border-0 bg-black/50 p-0"
         onClick={onClose}
         aria-label="Close dialog"
         tabIndex={-1}
@@ -116,15 +116,15 @@ export function TemplatePicker({ onClose }: TemplatePickerProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="tpl-title"
-        className="relative bg-white dark:bg-wood-800 rounded-xl shadow-2xl w-full max-w-3xl max-h-[85vh] overflow-hidden flex flex-col mx-4"
+        className="dark:bg-wood-800 relative mx-4 flex max-h-[85vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl"
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-wood-200 dark:border-wood-700">
+        <div className="border-wood-200 dark:border-wood-700 flex items-center justify-between border-b p-4">
           <div>
-            <h2 id="tpl-title" className="text-lg font-bold text-wood-800 dark:text-wood-100">
+            <h2 id="tpl-title" className="text-wood-800 dark:text-wood-100 text-lg font-bold">
               {t('templates.title')}
             </h2>
-            <p className="text-xs text-wood-600 dark:text-wood-300 mt-0.5">{t('templates.subtitle')}</p>
+            <p className="text-wood-600 dark:text-wood-300 mt-0.5 text-xs">{t('templates.subtitle')}</p>
           </div>
           <button
             onClick={onClose}
@@ -136,19 +136,19 @@ export function TemplatePicker({ onClose }: TemplatePickerProps) {
         </div>
 
         {/* Grid */}
-        <div className="overflow-y-auto p-4 grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 gap-3 overflow-y-auto p-4 sm:grid-cols-3">
           {TEMPLATES.map((tpl) => (
             <button
               key={tpl.id}
               onClick={() => handleApply(tpl.id)}
-              className="text-left p-3 rounded-lg border border-wood-200 dark:border-wood-700 hover:border-wood-500 dark:hover:border-wood-400 hover:bg-wood-50 dark:hover:bg-wood-700 transition-colors group flex flex-col items-center gap-2"
+              className="border-wood-200 dark:border-wood-700 hover:border-wood-500 dark:hover:border-wood-400 hover:bg-wood-50 dark:hover:bg-wood-700 group flex flex-col items-center gap-2 rounded-lg border p-3 text-left transition-colors"
             >
               <TemplateThumbnail tpl={tpl} />
               <div className="w-full">
-                <div className="font-semibold text-xs text-wood-800 dark:text-wood-100 group-hover:text-wood-600 dark:group-hover:text-wood-300 leading-tight mb-0.5 text-center">
+                <div className="text-wood-800 dark:text-wood-100 group-hover:text-wood-600 dark:group-hover:text-wood-300 mb-0.5 text-center text-xs leading-tight font-semibold">
                   {tpl.name[lang]}
                 </div>
-                <div className="text-xs text-wood-500 dark:text-wood-400 leading-snug text-center line-clamp-2">
+                <div className="text-wood-500 dark:text-wood-400 line-clamp-2 text-center text-xs leading-snug">
                   {tpl.description[lang]}
                 </div>
               </div>
@@ -157,10 +157,10 @@ export function TemplatePicker({ onClose }: TemplatePickerProps) {
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-wood-200 dark:border-wood-700 flex justify-end">
+        <div className="border-wood-200 dark:border-wood-700 flex justify-end border-t p-4">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm rounded-lg bg-wood-100 dark:bg-wood-700 text-wood-700 dark:text-wood-200 hover:bg-wood-200 dark:hover:bg-wood-600 transition-colors"
+            className="bg-wood-100 dark:bg-wood-700 text-wood-700 dark:text-wood-200 hover:bg-wood-200 dark:hover:bg-wood-600 rounded-lg px-4 py-2 text-sm transition-colors"
           >
             {t('templates.close')}
           </button>

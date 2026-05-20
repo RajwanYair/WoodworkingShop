@@ -16,14 +16,14 @@ function SkeletonLine({ width = 'full', height = 'h-4' }: SkeletonLineProps) {
     '2/3': 'w-2/3',
   }[width];
   return (
-    <div className={`${widthClass} ${height} rounded bg-wood-200 dark:bg-wood-700 animate-pulse`} aria-hidden="true" />
+    <div className={`${widthClass} ${height} bg-wood-200 dark:bg-wood-700 animate-pulse rounded`} aria-hidden="true" />
   );
 }
 
 function SkeletonCard({ rows = 3 }: { rows?: number }) {
   const widths: SkeletonLineProps['width'][] = ['full', '3/4', '1/2'];
   return (
-    <div className="rounded-lg border border-wood-200 dark:border-wood-700 p-4 space-y-3" data-testid="skeleton-card">
+    <div className="border-wood-200 dark:border-wood-700 space-y-3 rounded-lg border p-4" data-testid="skeleton-card">
       <SkeletonLine height="h-5" width="2/3" />
       {Array.from({ length: rows }, (_, i) => (
         <SkeletonLine key={i} width={widths[i % widths.length]} />
@@ -57,8 +57,8 @@ export function SkeletonPane({ label, cards = 3 }: SkeletonPaneProps) {
       <span className="sr-only">{ariaLabel}</span>
 
       {/* Title bar skeleton */}
-      <div className="flex items-center gap-3 mb-6" aria-hidden="true">
-        <div className="w-8 h-8 rounded bg-wood-200 dark:bg-wood-700 animate-pulse" />
+      <div className="mb-6 flex items-center gap-3" aria-hidden="true">
+        <div className="bg-wood-200 dark:bg-wood-700 h-8 w-8 animate-pulse rounded" />
         <SkeletonLine height="h-6" width="1/3" />
       </div>
 

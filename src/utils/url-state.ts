@@ -19,6 +19,8 @@ export function configToParams(cfg: CabinetConfig): URLSearchParams {
   if (cfg.shelfSpacing === 'custom' && cfg.customShelfPositions.length > 0) {
     params.set('csp', cfg.customShelfPositions.join(','));
   }
+  if ((cfg.shelfCentreSupports ?? 0) !== (def.shelfCentreSupports ?? 0))
+    params.set('scs', String(cfg.shelfCentreSupports ?? 0));
   if (cfg.carcassMaterial !== def.carcassMaterial) params.set('cm', cfg.carcassMaterial);
   if (cfg.backPanelMaterial !== def.backPanelMaterial) params.set('bm', cfg.backPanelMaterial);
   if ((cfg.hasBack ?? true) !== (def.hasBack ?? true)) params.set('hb', cfg.hasBack === false ? '0' : '1');
@@ -65,6 +67,8 @@ export function paramsToConfig(params: URLSearchParams): Partial<CabinetConfig> 
       .split(',')
       .map(Number)
       .filter((n) => !isNaN(n));
+  const scs = params.get('scs');
+  if (scs !== null) patch.shelfCentreSupports = Math.max(0, Math.min(5, Number(scs) || 0));
   const cm = params.get('cm');
   if (cm) patch.carcassMaterial = cm;
   const bm = params.get('bm');
@@ -191,7 +195,7 @@ export function compressConfigToBase64(config: CabinetConfig): string {
   // btoa operates on Latin-1; encode UTF-8 first via encodeURIComponent
   const b64 = btoa(encodeURIComponent(json));
   // Convert to base64url: replace + → -, / → _, strip trailing =
-  return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/u, '');
 }
 
 /**

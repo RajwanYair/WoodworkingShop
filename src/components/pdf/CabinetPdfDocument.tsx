@@ -361,6 +361,10 @@ const pdfI18n = {
     cutSheetPage: 'Cut Sheet',
     yield: 'yield',
     parts: 'parts',
+    cabinetOfPrefix: 'Cabinet',
+    cabinetOfMiddle: 'of',
+    projectCutPlan: 'Project Cut Plan — All Cabinets',
+    projectHardware: 'Project Hardware — All Cabinets',
     drillingGuide: 'Drilling & Boring Guide',
     hingeCupBoring: 'Hinge Cup Boring',
     hingeCupDesc1: 'Bore 35 mm diameter cups, 12 mm deep on door inside face',
@@ -503,6 +507,10 @@ const pdfI18n = {
     cutSheetPage: 'גיליון חיתוך',
     yield: 'ניצולת',
     parts: 'חלקים',
+    cabinetOfPrefix: 'ארון',
+    cabinetOfMiddle: 'מתוך',
+    projectCutPlan: 'תוכנית חיתוך משולבת — כל הארונות',
+    projectHardware: 'חומרה לפרויקט — כל הארונות',
     drillingGuide: 'מדריך קידוח',
     hingeCupBoring: 'קידוח גביעי ציר',
     hingeCupDesc1: 'קדח גביעים בקוטר 35 מ"מ, עומק 12 מ"מ בצד הפנימי של הדלת',
@@ -593,6 +601,18 @@ const pdfI18n = {
 
 type PdfLang = keyof typeof pdfI18n;
 
+// ─── Per-cabinet data for multi-cabinet project PDF ───
+
+/** One cabinet's computed data, passed to the project-PDF export. */
+export interface CabinetPdfEntry {
+  name: string;
+  config: CabinetConfig;
+  dimensions: DerivedDimensions;
+  parts: Part[];
+  hardware: HardwareItem[];
+  edgeBandingTotal: number;
+}
+
 // ─── Props ───
 
 export interface CabinetPdfProps {
@@ -613,6 +633,16 @@ export interface CabinetPdfProps {
   pageSize?: 'A4' | 'LETTER';
   /** Sprint 59 — page orientation for non-cut-sheet pages (default: 'portrait') */
   orientation?: 'portrait' | 'landscape';
+  /**
+   * v3.58.0 — Full project export: when provided, the PDF renders one
+   * specs + parts section per cabinet and uses `combinedOptimization`
+   * for the shared cut plan (parts from all cabinets placed on shared sheets).
+   */
+  allCabinetsData?: CabinetPdfEntry[];
+  /** Shared cut optimisation across all cabinets (used when allCabinetsData is set). */
+  combinedOptimization?: OptimizationResult;
+  /** Merged hardware list across all cabinets (used when allCabinetsData is set). */
+  allHardware?: HardwareItem[];
 }
 
 // ─── Document ───
@@ -630,12 +660,20 @@ export function CabinetPdfDocument({
   cabinetCount = 1,
   pageSize = 'A4',
   orientation = 'portrait',
+  allCabinetsData,
+  combinedOptimization,
+  allHardware,
 }: CabinetPdfProps) {
   const T = pdfI18n[lang as PdfLang] ?? pdfI18n.en;
   const isRTL = lang === 'he';
   const fontFamily = isRTL ? 'NotoSansHebrew' : 'Helvetica';
   const fontFamilyBold = isRTL ? 'NotoSansHebrew' : 'Helvetica-Bold';
   const textAlign = isRTL ? ('right' as const) : ('left' as const);
+
+  // In multi-cabinet mode use the combined optimization and hardware.
+  const isMultiCabinet = Array.isArray(allCabinetsData) && allCabinetsData.length > 0;
+  const effectiveOptimization = isMultiCabinet ? (combinedOptimization ?? optimization) : optimization;
+  const effectiveHardware = isMultiCabinet ? (allHardware ?? hardware) : hardware;
 
   const cMat = getMaterial(config.carcassMaterial);
   const bMat = getMaterial(config.backPanelMaterial);
@@ -717,269 +755,461 @@ export function CabinetPdfDocument({
       )}
 
       {/* ══════════════════════════════════════════════════════
-          PAGE 2  —  Specifications
+          PAGES 2-4  —  Single-cabinet: Specs, Parts, Hardware
+          (hidden in multi-cabinet mode — each cabinet gets its own section)
          ══════════════════════════════════════════════════════ */}
-      <Page size={pageSize} orientation={orientation} style={s.page}>
-        <PageHeader section={`📐  ${T.specTitle}`} projectName={coverTitle} lang={lang} />
+      {!isMultiCabinet && (
+        <>
+          <Page size={pageSize} orientation={orientation} style={s.page}>
+            <PageHeader section={`📐  ${T.specTitle}`} projectName={coverTitle} lang={lang} />
 
-        <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>📐 {T.specTitle}</Text>
+            <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>📐 {T.specTitle}</Text>
 
-        <Text style={[s.specGroupTitle, { fontFamily: fontFamilyBold, textAlign }]}>📏 {T.specDimensions}</Text>
-        <View style={s.specGroup}>
-          <SpecRow
-            label={T.specExternal}
-            value={`${config.width} × ${config.height} × ${config.depth} mm`}
-            isRTL={isRTL}
-            fontFamily={fontFamily}
-            fontFamilyBold={fontFamilyBold}
-          />
-          <SpecRow
-            label={T.specInternalWidth}
-            value={`${d.internalWidth} mm`}
-            isRTL={isRTL}
-            fontFamily={fontFamily}
-            fontFamilyBold={fontFamilyBold}
-          />
-          <SpecRow
-            label={T.specInternalHeight}
-            value={`${d.internalHeight} mm`}
-            isRTL={isRTL}
-            fontFamily={fontFamily}
-            fontFamilyBold={fontFamilyBold}
-          />
-          <SpecRow
-            label={T.specShelfDepth}
-            value={`${d.shelfDepth} mm`}
-            isRTL={isRTL}
-            fontFamily={fontFamily}
-            fontFamilyBold={fontFamilyBold}
-          />
-          <SpecRow
-            label={T.specShelfWidth}
-            value={`${d.shelfWidth} mm`}
-            isRTL={isRTL}
-            fontFamily={fontFamily}
-            fontFamilyBold={fontFamilyBold}
-          />
-        </View>
+            <Text style={[s.specGroupTitle, { fontFamily: fontFamilyBold, textAlign }]}>📏 {T.specDimensions}</Text>
+            <View style={s.specGroup}>
+              <SpecRow
+                label={T.specExternal}
+                value={`${config.width} × ${config.height} × ${config.depth} mm`}
+                isRTL={isRTL}
+                fontFamily={fontFamily}
+                fontFamilyBold={fontFamilyBold}
+              />
+              <SpecRow
+                label={T.specInternalWidth}
+                value={`${d.internalWidth} mm`}
+                isRTL={isRTL}
+                fontFamily={fontFamily}
+                fontFamilyBold={fontFamilyBold}
+              />
+              <SpecRow
+                label={T.specInternalHeight}
+                value={`${d.internalHeight} mm`}
+                isRTL={isRTL}
+                fontFamily={fontFamily}
+                fontFamilyBold={fontFamilyBold}
+              />
+              <SpecRow
+                label={T.specShelfDepth}
+                value={`${d.shelfDepth} mm`}
+                isRTL={isRTL}
+                fontFamily={fontFamily}
+                fontFamilyBold={fontFamilyBold}
+              />
+              <SpecRow
+                label={T.specShelfWidth}
+                value={`${d.shelfWidth} mm`}
+                isRTL={isRTL}
+                fontFamily={fontFamily}
+                fontFamilyBold={fontFamilyBold}
+              />
+            </View>
 
-        <Text style={[s.specGroupTitle, { fontFamily: fontFamilyBold, textAlign }]}>🪵 {T.specMaterials}</Text>
-        <View style={s.specGroup}>
-          <SpecRow
-            label={T.specCarcass}
-            value={`${cMat.name[lang]} (${cMat.thickness} mm)`}
-            isRTL={isRTL}
-            fontFamily={fontFamily}
-            fontFamilyBold={fontFamilyBold}
-          />
-          <SpecRow
-            label={T.specBackPanel}
-            value={`${bMat.name[lang]} (${bMat.thickness} mm)`}
-            isRTL={isRTL}
-            fontFamily={fontFamily}
-            fontFamilyBold={fontFamilyBold}
-          />
-          <SpecRow
-            label={T.specEdgeBanding}
-            value={config.edgeBanding}
-            isRTL={isRTL}
-            fontFamily={fontFamily}
-            fontFamilyBold={fontFamilyBold}
-          />
-          <SpecRow
-            label={T.specEdgeBandingTotal}
-            value={`${(edgeBandingTotal / 1000).toFixed(1)} m`}
-            isRTL={isRTL}
-            fontFamily={fontFamily}
-            fontFamilyBold={fontFamilyBold}
-          />
-        </View>
+            <Text style={[s.specGroupTitle, { fontFamily: fontFamilyBold, textAlign }]}>🪵 {T.specMaterials}</Text>
+            <View style={s.specGroup}>
+              <SpecRow
+                label={T.specCarcass}
+                value={`${cMat.name[lang]} (${cMat.thickness} mm)`}
+                isRTL={isRTL}
+                fontFamily={fontFamily}
+                fontFamilyBold={fontFamilyBold}
+              />
+              <SpecRow
+                label={T.specBackPanel}
+                value={`${bMat.name[lang]} (${bMat.thickness} mm)`}
+                isRTL={isRTL}
+                fontFamily={fontFamily}
+                fontFamilyBold={fontFamilyBold}
+              />
+              <SpecRow
+                label={T.specEdgeBanding}
+                value={config.edgeBanding}
+                isRTL={isRTL}
+                fontFamily={fontFamily}
+                fontFamilyBold={fontFamilyBold}
+              />
+              <SpecRow
+                label={T.specEdgeBandingTotal}
+                value={`${(edgeBandingTotal / 1000).toFixed(1)} m`}
+                isRTL={isRTL}
+                fontFamily={fontFamily}
+                fontFamilyBold={fontFamilyBold}
+              />
+            </View>
 
-        <Text style={[s.specGroupTitle, { fontFamily: fontFamilyBold, textAlign }]}>🚪 {T.specDoorsHardware}</Text>
-        <View style={s.specGroup}>
-          <SpecRow
-            label={T.specDoorStyle}
-            value={config.doorStyle}
-            isRTL={isRTL}
-            fontFamily={fontFamily}
-            fontFamilyBold={fontFamilyBold}
-          />
-          <SpecRow
-            label={T.specDoorCount}
-            value={String(config.doorCount)}
-            isRTL={isRTL}
-            fontFamily={fontFamily}
-            fontFamilyBold={fontFamilyBold}
-          />
-          <SpecRow
-            label={T.specDoorDimensions}
-            value={`${Math.round(d.doorWidth)} × ${Math.round(d.doorHeight)} mm`}
-            isRTL={isRTL}
-            fontFamily={fontFamily}
-            fontFamilyBold={fontFamilyBold}
-          />
-          <SpecRow
-            label={T.specDoorReveal}
-            value={`${config.doorReveal} mm`}
-            isRTL={isRTL}
-            fontFamily={fontFamily}
-            fontFamilyBold={fontFamilyBold}
-          />
-          <SpecRow
-            label={T.specHingesPerDoor}
-            value={String(d.hingesPerDoor)}
-            isRTL={isRTL}
-            fontFamily={fontFamily}
-            fontFamilyBold={fontFamilyBold}
-          />
-          <SpecRow
-            label={T.specHandleStyle}
-            value={config.handleStyle}
-            isRTL={isRTL}
-            fontFamily={fontFamily}
-            fontFamilyBold={fontFamilyBold}
-          />
-        </View>
+            <Text style={[s.specGroupTitle, { fontFamily: fontFamilyBold, textAlign }]}>🚪 {T.specDoorsHardware}</Text>
+            <View style={s.specGroup}>
+              <SpecRow
+                label={T.specDoorStyle}
+                value={config.doorStyle}
+                isRTL={isRTL}
+                fontFamily={fontFamily}
+                fontFamilyBold={fontFamilyBold}
+              />
+              <SpecRow
+                label={T.specDoorCount}
+                value={String(config.doorCount)}
+                isRTL={isRTL}
+                fontFamily={fontFamily}
+                fontFamilyBold={fontFamilyBold}
+              />
+              <SpecRow
+                label={T.specDoorDimensions}
+                value={`${Math.round(d.doorWidth)} × ${Math.round(d.doorHeight)} mm`}
+                isRTL={isRTL}
+                fontFamily={fontFamily}
+                fontFamilyBold={fontFamilyBold}
+              />
+              <SpecRow
+                label={T.specDoorReveal}
+                value={`${config.doorReveal} mm`}
+                isRTL={isRTL}
+                fontFamily={fontFamily}
+                fontFamilyBold={fontFamilyBold}
+              />
+              <SpecRow
+                label={T.specHingesPerDoor}
+                value={String(d.hingesPerDoor)}
+                isRTL={isRTL}
+                fontFamily={fontFamily}
+                fontFamilyBold={fontFamilyBold}
+              />
+              <SpecRow
+                label={T.specHandleStyle}
+                value={config.handleStyle}
+                isRTL={isRTL}
+                fontFamily={fontFamily}
+                fontFamilyBold={fontFamilyBold}
+              />
+            </View>
 
-        <Text style={[s.specGroupTitle, { fontFamily: fontFamilyBold, textAlign }]}>📚 {T.specShelves}</Text>
-        <View style={s.specGroup}>
-          <SpecRow
-            label={T.specShelfCount}
-            value={String(config.shelfCount)}
-            isRTL={isRTL}
-            fontFamily={fontFamily}
-            fontFamilyBold={fontFamilyBold}
-          />
-          <SpecRow
-            label={T.specShelfSpacing}
-            value={config.shelfSpacing}
-            isRTL={isRTL}
-            fontFamily={fontFamily}
-            fontFamilyBold={fontFamilyBold}
-          />
-          <SpecRow
-            label={T.specBackPanelSize}
-            value={`${Math.round(d.backPanelWidth)} × ${Math.round(d.backPanelHeight)} mm`}
-            isRTL={isRTL}
-            fontFamily={fontFamily}
-            fontFamilyBold={fontFamilyBold}
-          />
-        </View>
+            <Text style={[s.specGroupTitle, { fontFamily: fontFamilyBold, textAlign }]}>📚 {T.specShelves}</Text>
+            <View style={s.specGroup}>
+              <SpecRow
+                label={T.specShelfCount}
+                value={String(config.shelfCount)}
+                isRTL={isRTL}
+                fontFamily={fontFamily}
+                fontFamilyBold={fontFamilyBold}
+              />
+              <SpecRow
+                label={T.specShelfSpacing}
+                value={config.shelfSpacing}
+                isRTL={isRTL}
+                fontFamily={fontFamily}
+                fontFamilyBold={fontFamilyBold}
+              />
+              <SpecRow
+                label={T.specBackPanelSize}
+                value={`${Math.round(d.backPanelWidth)} × ${Math.round(d.backPanelHeight)} mm`}
+                isRTL={isRTL}
+                fontFamily={fontFamily}
+                fontFamilyBold={fontFamilyBold}
+              />
+            </View>
 
-        <Text style={[s.sectionTitle, { marginTop: 14, fontFamily: fontFamilyBold, textAlign }]}>
-          📊 {T.cutSheetSummary}
-        </Text>
-        <View style={[s.statRow, isRTL ? { flexDirection: 'row-reverse' } : {}]}>
-          <View style={s.statBox}>
-            <Text style={s.statEmoji}>📋</Text>
-            <Text style={s.statValue}>{optimization.totalSheets}</Text>
-            <Text style={[s.statLabel, { fontFamily }]}>{T.sheetsRequired}</Text>
-          </View>
-          <View style={s.statBox}>
-            <Text style={s.statEmoji}>📊</Text>
-            <Text style={s.statValue}>{optimization.overallYield}%</Text>
-            <Text style={[s.statLabel, { fontFamily }]}>{T.materialYield}</Text>
-          </View>
-          <View style={s.statBox}>
-            <Text style={s.statEmoji}>♻️</Text>
-            <Text style={s.statValue}>{(optimization.totalWaste / 1_000_000).toFixed(2)}</Text>
-            <Text style={[s.statLabel, { fontFamily }]}>{T.waste}</Text>
-          </View>
-          <View style={s.statBox}>
-            <Text style={s.statEmoji}>🔩</Text>
-            <Text style={s.statValue}>{hardware.length}</Text>
-            <Text style={[s.statLabel, { fontFamily }]}>{T.hardwareTypes}</Text>
-          </View>
-        </View>
+            <Text style={[s.sectionTitle, { marginTop: 14, fontFamily: fontFamilyBold, textAlign }]}>
+              📊 {T.cutSheetSummary}
+            </Text>
+            <View style={[s.statRow, isRTL ? { flexDirection: 'row-reverse' } : {}]}>
+              <View style={s.statBox}>
+                <Text style={s.statEmoji}>📋</Text>
+                <Text style={s.statValue}>{optimization.totalSheets}</Text>
+                <Text style={[s.statLabel, { fontFamily }]}>{T.sheetsRequired}</Text>
+              </View>
+              <View style={s.statBox}>
+                <Text style={s.statEmoji}>📊</Text>
+                <Text style={s.statValue}>{optimization.overallYield}%</Text>
+                <Text style={[s.statLabel, { fontFamily }]}>{T.materialYield}</Text>
+              </View>
+              <View style={s.statBox}>
+                <Text style={s.statEmoji}>♻️</Text>
+                <Text style={s.statValue}>{(optimization.totalWaste / 1_000_000).toFixed(2)}</Text>
+                <Text style={[s.statLabel, { fontFamily }]}>{T.waste}</Text>
+              </View>
+              <View style={s.statBox}>
+                <Text style={s.statEmoji}>🔩</Text>
+                <Text style={s.statValue}>{hardware.length}</Text>
+                <Text style={[s.statLabel, { fontFamily }]}>{T.hardwareTypes}</Text>
+              </View>
+            </View>
 
-        <PageFooter date={date} lang={lang} />
-      </Page>
+            <PageFooter date={date} lang={lang} />
+          </Page>
 
-      {/* ══════════════════════════════════════════════════════
+          {/* ══════════════════════════════════════════════════════
           PAGE 3  —  Parts List
          ══════════════════════════════════════════════════════ */}
-      <Page size={pageSize} orientation={orientation} style={s.page}>
-        <PageHeader section={`🔲  ${T.partsListTitle}`} projectName={coverTitle} lang={lang} />
+          <Page size={pageSize} orientation={orientation} style={s.page}>
+            <PageHeader section={`🔲  ${T.partsListTitle}`} projectName={coverTitle} lang={lang} />
 
-        <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>
-          🔲 {T.partsListTitle}{' '}
-          <Text style={{ fontSize: 9, fontFamily, color: C.muted }}>
-            — {parts.length} {T.partsTotal}
-          </Text>
-        </Text>
-
-        <View style={s.tableHeader}>
-          {[T.thId, T.thPartName, T.thQty, T.thMaterial, T.thLength, T.thWidth, T.thThickness, T.thEdgeBand].map(
-            (h, i) => (
-              <Text key={i} style={[s.thText, { width: partsColWidths[i], fontFamily: fontFamilyBold }]}>
-                {h}
+            <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>
+              🔲 {T.partsListTitle}{' '}
+              <Text style={{ fontSize: 9, fontFamily, color: C.muted }}>
+                — {parts.length} {T.partsTotal}
               </Text>
-            ),
-          )}
-        </View>
-
-        {parts.map((p, i) => (
-          <View key={p.id} style={[s.tableRow, i % 2 === 1 ? s.tableRowAlt : {}]} wrap={false}>
-            <Text style={[s.tdText, { width: partsColWidths[0], color: C.accent, fontFamily: fontFamilyBold }]}>
-              {p.id}
             </Text>
-            <Text style={[s.tdText, { width: partsColWidths[1], fontFamily }]}>{p.name[lang]}</Text>
-            <Text style={[s.tdText, { width: partsColWidths[2], textAlign: 'center' }]}>{p.qty}</Text>
-            <Text style={[s.tdText, { width: partsColWidths[3], color: C.secondary, fontFamily }]}>
-              {getMaterial(p.material).name[lang]}
-            </Text>
-            <Text style={[s.tdText, { width: partsColWidths[4] }]}>{p.length}</Text>
-            <Text style={[s.tdText, { width: partsColWidths[5] }]}>{p.width}</Text>
-            <Text style={[s.tdText, { width: partsColWidths[6], textAlign: 'center' }]}>{p.thickness}</Text>
-            <Text style={[s.tdText, { width: partsColWidths[7], fontSize: 7, fontFamily }]}>{p.edgeBanding[lang]}</Text>
-          </View>
-        ))}
 
-        <PageFooter date={date} lang={lang} />
-      </Page>
+            <View style={s.tableHeader}>
+              {[T.thId, T.thPartName, T.thQty, T.thMaterial, T.thLength, T.thWidth, T.thThickness, T.thEdgeBand].map(
+                (h, i) => (
+                  <Text key={i} style={[s.thText, { width: partsColWidths[i], fontFamily: fontFamilyBold }]}>
+                    {h}
+                  </Text>
+                ),
+              )}
+            </View>
 
-      {/* ══════════════════════════════════════════════════════
+            {parts.map((p, i) => (
+              <View key={p.id} style={[s.tableRow, i % 2 === 1 ? s.tableRowAlt : {}]} wrap={false}>
+                <Text style={[s.tdText, { width: partsColWidths[0], color: C.accent, fontFamily: fontFamilyBold }]}>
+                  {p.id}
+                </Text>
+                <Text style={[s.tdText, { width: partsColWidths[1], fontFamily }]}>{p.name[lang]}</Text>
+                <Text style={[s.tdText, { width: partsColWidths[2], textAlign: 'center' }]}>{p.qty}</Text>
+                <Text style={[s.tdText, { width: partsColWidths[3], color: C.secondary, fontFamily }]}>
+                  {getMaterial(p.material).name[lang]}
+                </Text>
+                <Text style={[s.tdText, { width: partsColWidths[4] }]}>{p.length}</Text>
+                <Text style={[s.tdText, { width: partsColWidths[5] }]}>{p.width}</Text>
+                <Text style={[s.tdText, { width: partsColWidths[6], textAlign: 'center' }]}>{p.thickness}</Text>
+                <Text style={[s.tdText, { width: partsColWidths[7], fontSize: 7, fontFamily }]}>
+                  {p.edgeBanding[lang]}
+                </Text>
+              </View>
+            ))}
+
+            <PageFooter date={date} lang={lang} />
+          </Page>
+
+          {/* ══════════════════════════════════════════════════════
           PAGE 4  —  Hardware List
          ══════════════════════════════════════════════════════ */}
-      <Page size={pageSize} orientation={orientation} style={s.page}>
-        <PageHeader section={`🔩  ${T.hardwareListTitle}`} projectName={coverTitle} lang={lang} />
+          <Page size={pageSize} orientation={orientation} style={s.page}>
+            <PageHeader section={`🔩  ${T.hardwareListTitle}`} projectName={coverTitle} lang={lang} />
 
-        <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>
-          🔩 {T.hardwareListTitle}{' '}
-          <Text style={{ fontSize: 9, fontFamily, color: C.muted }}>
-            — {hardware.length} {T.itemTypes}
-          </Text>
-        </Text>
-
-        <View style={s.tableHeader}>
-          {[T.thItem, T.thQty, T.thUnit, T.thNotes].map((h, i) => (
-            <Text key={i} style={[s.thText, { width: hwColWidths[i], fontFamily: fontFamilyBold }]}>
-              {h}
+            <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>
+              🔩 {T.hardwareListTitle}{' '}
+              <Text style={{ fontSize: 9, fontFamily, color: C.muted }}>
+                — {hardware.length} {T.itemTypes}
+              </Text>
             </Text>
-          ))}
-        </View>
 
-        {hardware.map((hw, i) => (
-          <View key={hw.id} style={[s.tableRow, i % 2 === 1 ? s.tableRowAlt : {}]} wrap={false}>
-            <Text style={[s.tdText, { width: hwColWidths[0], fontFamily: fontFamilyBold }]}>{hw.name[lang]}</Text>
-            <Text style={[s.tdText, { width: hwColWidths[1], textAlign: 'center' }]}>{hw.qty}</Text>
-            <Text style={[s.tdText, { width: hwColWidths[2], color: C.muted, fontFamily }]}>{hw.unit[lang]}</Text>
-            <Text style={[s.tdText, { width: hwColWidths[3], fontSize: 7, color: C.muted }]}>{hw.id}</Text>
-          </View>
-        ))}
+            <View style={s.tableHeader}>
+              {[T.thItem, T.thQty, T.thUnit, T.thNotes].map((h, i) => (
+                <Text key={i} style={[s.thText, { width: hwColWidths[i], fontFamily: fontFamilyBold }]}>
+                  {h}
+                </Text>
+              ))}
+            </View>
 
-        <PageFooter date={date} lang={lang} />
-      </Page>
+            {hardware.map((hw, i) => (
+              <View key={hw.id} style={[s.tableRow, i % 2 === 1 ? s.tableRowAlt : {}]} wrap={false}>
+                <Text style={[s.tdText, { width: hwColWidths[0], fontFamily: fontFamilyBold }]}>{hw.name[lang]}</Text>
+                <Text style={[s.tdText, { width: hwColWidths[1], textAlign: 'center' }]}>{hw.qty}</Text>
+                <Text style={[s.tdText, { width: hwColWidths[2], color: C.muted, fontFamily }]}>{hw.unit[lang]}</Text>
+                <Text style={[s.tdText, { width: hwColWidths[3], fontSize: 7, color: C.muted }]}>{hw.id}</Text>
+              </View>
+            ))}
+
+            <PageFooter date={date} lang={lang} />
+          </Page>
+        </>
+      )}
 
       {/* ══════════════════════════════════════════════════════
-          PAGES 5+  —  Cut Sheet Diagrams
+          MULTI-CABINET MODE — one section per cabinet
+          Each section: cabinet header + compact specs + full parts list.
          ══════════════════════════════════════════════════════ */}
-      {optimization.sheets.map((sheet) => {
+      {isMultiCabinet &&
+        allCabinetsData!.map((cab, ci) => {
+          const cabCMat = getMaterial(cab.config.carcassMaterial);
+          const cabBMat = getMaterial(cab.config.backPanelMaterial);
+          const cabLabel = `${T.cabinetOfPrefix} ${ci + 1} ${T.cabinetOfMiddle} ${allCabinetsData!.length}`;
+          const cabTitle = cab.name.trim() || cabLabel;
+          return (
+            <Page key={`cab-${ci}`} size={pageSize} orientation={orientation} style={s.page}>
+              <PageHeader section={`🗄️  ${cabTitle}`} projectName={coverTitle} lang={lang} />
+
+              {/* Cabinet section header */}
+              <View
+                style={{
+                  backgroundColor: C.headerBg,
+                  borderRadius: 6,
+                  paddingHorizontal: 12,
+                  paddingVertical: 8,
+                  marginBottom: 10,
+                  flexDirection: isRTL ? 'row-reverse' : 'row',
+                  alignItems: 'center',
+                  gap: 10,
+                }}
+              >
+                <Text style={{ fontSize: 18 }}>🗄️</Text>
+                <View style={{ flex: 1 }}>
+                  <Text style={{ fontSize: 12, fontFamily: fontFamilyBold, color: C.primary }}>{cabTitle}</Text>
+                  <Text style={{ fontSize: 8, color: C.muted, fontFamily }}>
+                    {cab.config.width} × {cab.config.height} × {cab.config.depth} mm · {cabCMat.name[lang]} ·{' '}
+                    {cab.parts.length} {T.partsTotal}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    borderWidth: 1,
+                    borderColor: C.accent,
+                    borderRadius: 4,
+                    paddingHorizontal: 8,
+                    paddingVertical: 4,
+                  }}
+                >
+                  <Text style={{ fontSize: 8, fontFamily: fontFamilyBold, color: C.accent }}>{cabLabel}</Text>
+                </View>
+              </View>
+
+              {/* Compact specs row */}
+              <View
+                style={{
+                  flexDirection: isRTL ? 'row-reverse' : 'row',
+                  gap: 8,
+                  marginBottom: 12,
+                  flexWrap: 'wrap',
+                }}
+              >
+                {[
+                  {
+                    emoji: '📐',
+                    label: T.specExternal,
+                    val: `${cab.config.width}×${cab.config.height}×${cab.config.depth}`,
+                  },
+                  { emoji: '🪵', label: T.specCarcass, val: `${cabCMat.name[lang]} ${cabCMat.thickness}mm` },
+                  { emoji: '🗂️', label: T.specBackPanel, val: `${cabBMat.name[lang]} ${cabBMat.thickness}mm` },
+                  { emoji: '🚪', label: T.specDoorStyle, val: `${cab.config.doorCount} × ${cab.config.doorStyle}` },
+                  { emoji: '📚', label: T.specShelfCount, val: String(cab.config.shelfCount) },
+                  {
+                    emoji: '📏',
+                    label: T.specEdgeBandingTotal,
+                    val: `${(cab.edgeBandingTotal / 1000).toFixed(1)} m`,
+                  },
+                ].map(({ emoji, label, val }) => (
+                  <View
+                    key={label}
+                    style={{
+                      borderWidth: 0.5,
+                      borderColor: C.border,
+                      borderRadius: 4,
+                      paddingHorizontal: 6,
+                      paddingVertical: 4,
+                      backgroundColor: C.tableOdd,
+                    }}
+                  >
+                    <Text style={{ fontSize: 7, color: C.muted, fontFamily }}>
+                      {emoji} {label}
+                    </Text>
+                    <Text style={{ fontSize: 9, fontFamily: fontFamilyBold, color: C.text }}>{val}</Text>
+                  </View>
+                ))}
+              </View>
+
+              {/* Parts list for this cabinet */}
+              <Text style={[s.sectionSubtitle, { fontFamily: fontFamilyBold, textAlign }]}>
+                🔲 {T.partsListTitle} — {cab.parts.length} {T.partsTotal}
+              </Text>
+              <View style={s.tableHeader}>
+                {[T.thId, T.thPartName, T.thQty, T.thMaterial, T.thLength, T.thWidth, T.thThickness, T.thEdgeBand].map(
+                  (h, i) => (
+                    <Text key={i} style={[s.thText, { width: partsColWidths[i], fontFamily: fontFamilyBold }]}>
+                      {h}
+                    </Text>
+                  ),
+                )}
+              </View>
+              {cab.parts.map((p, i) => (
+                <View key={p.id} style={[s.tableRow, i % 2 === 1 ? s.tableRowAlt : {}]} wrap={false}>
+                  <Text style={[s.tdText, { width: partsColWidths[0], color: C.accent, fontFamily: fontFamilyBold }]}>
+                    {p.id}
+                  </Text>
+                  <Text style={[s.tdText, { width: partsColWidths[1], fontFamily }]}>{p.name[lang]}</Text>
+                  <Text style={[s.tdText, { width: partsColWidths[2], textAlign: 'center' }]}>{p.qty}</Text>
+                  <Text style={[s.tdText, { width: partsColWidths[3], color: C.secondary, fontFamily }]}>
+                    {getMaterial(p.material).name[lang]}
+                  </Text>
+                  <Text style={[s.tdText, { width: partsColWidths[4] }]}>{p.length}</Text>
+                  <Text style={[s.tdText, { width: partsColWidths[5] }]}>{p.width}</Text>
+                  <Text style={[s.tdText, { width: partsColWidths[6], textAlign: 'center' }]}>{p.thickness}</Text>
+                  <Text style={[s.tdText, { width: partsColWidths[7], fontSize: 7, fontFamily }]}>
+                    {p.edgeBanding[lang]}
+                  </Text>
+                </View>
+              ))}
+
+              <PageFooter date={date} lang={lang} />
+            </Page>
+          );
+        })}
+
+      {/* Multi-cabinet: combined hardware page */}
+      {isMultiCabinet && (
+        <Page size={pageSize} orientation={orientation} style={s.page}>
+          <PageHeader section={`🔩  ${T.projectHardware}`} projectName={coverTitle} lang={lang} />
+          <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>
+            🔩 {T.projectHardware}{' '}
+            <Text style={{ fontSize: 9, fontFamily, color: C.muted }}>
+              — {effectiveHardware.length} {T.itemTypes}
+            </Text>
+          </Text>
+          <View style={s.tableHeader}>
+            {[T.thItem, T.thQty, T.thUnit, T.thNotes].map((h, i) => (
+              <Text key={i} style={[s.thText, { width: hwColWidths[i], fontFamily: fontFamilyBold }]}>
+                {h}
+              </Text>
+            ))}
+          </View>
+          {effectiveHardware.map((hw, i) => (
+            <View key={hw.id} style={[s.tableRow, i % 2 === 1 ? s.tableRowAlt : {}]} wrap={false}>
+              <Text style={[s.tdText, { width: hwColWidths[0], fontFamily: fontFamilyBold }]}>{hw.name[lang]}</Text>
+              <Text style={[s.tdText, { width: hwColWidths[1], textAlign: 'center' }]}>{hw.qty}</Text>
+              <Text style={[s.tdText, { width: hwColWidths[2], color: C.muted, fontFamily }]}>{hw.unit[lang]}</Text>
+              <Text style={[s.tdText, { width: hwColWidths[3], fontSize: 7, color: C.muted }]}>{hw.id}</Text>
+            </View>
+          ))}
+          <PageFooter date={date} lang={lang} />
+        </Page>
+      )}
+
+      {/* ══════════════════════════════════════════════════════
+          PAGES N+  —  Cut Sheet Diagrams
+          In multi-cabinet mode uses combinedOptimization so all cabinets'
+          parts share sheets wherever the same material is used.
+         ══════════════════════════════════════════════════════ */}
+      {effectiveOptimization.sheets.map((sheet) => {
         const mat = getMaterial(sheet.material);
+        // ── Coordinate system note ──────────────────────────────────────────
+        // The cut-optimizer uses: x → across sheetWidth, y → along sheetLength
+        // (grain direction).  A standard 4×8 sheet has sheetWidth=1220 mm and
+        // sheetLength=2440 mm, so isLandscape is almost always true.
+        //
+        // For LANDSCAPE sheets we rotate the diagram 90° so the long grain
+        // direction runs left→right (matching how a sheet sits on a table):
+        //   Diagram box : width = sheetLength * scale, height = sheetWidth * scale
+        //   Part mapping : left = p.y * scale, top = p.x * scale,
+        //                  rendered-width = p.length * scale, rendered-height = p.width * scale
+        //
+        // For PORTRAIT sheets (rare — sheetWidth ≥ sheetLength) the natural
+        // orientation is already correct:
+        //   Diagram box : width = sheetWidth * scale, height = sheetLength * scale
+        //   Part mapping : left = p.x * scale, top = p.y * scale,
+        //                  rendered-width = p.width * scale, rendered-height = p.length * scale
         const isLandscape = sheet.sheetLength > sheet.sheetWidth;
-        const maxLen = isLandscape ? 700 : 460;
-        const maxWid = isLandscape ? 390 : 390;
-        const scale = Math.min(maxLen / sheet.sheetLength, maxWid / sheet.sheetWidth);
+
+        // Max diagram dimensions on the PDF page (in pt).
+        // Landscape A4 content area ≈ 762 × 470 pt (after header/footer/title).
+        // Portrait A4 content area ≈ 515 × 660 pt.
+        const maxHoriz = isLandscape ? 700 : 460;
+        const maxVert = isLandscape ? 380 : 600;
+        const diagHorizMm = isLandscape ? sheet.sheetLength : sheet.sheetWidth;
+        const diagVertMm = isLandscape ? sheet.sheetWidth : sheet.sheetLength;
+        const scale = Math.min(maxHoriz / diagHorizMm, maxVert / diagVertMm);
+
+        const diagW = diagHorizMm * scale;
+        const diagH = diagVertMm * scale;
 
         return (
           <Page
@@ -989,7 +1219,7 @@ export function CabinetPdfDocument({
             style={s.page}
           >
             <PageHeader
-              section={`✂️  ${T.cutSheetPage} ${sheet.sheetIndex + 1} / ${optimization.sheets.length}`}
+              section={`✂️  ${isMultiCabinet ? T.projectCutPlan : T.cutSheetPage} ${sheet.sheetIndex + 1} / ${effectiveOptimization.sheets.length}`}
               projectName={coverTitle}
               lang={lang}
             />
@@ -1004,7 +1234,8 @@ export function CabinetPdfDocument({
               }}
             >
               <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>
-                ✂️ {T.cutSheetPage} #{sheet.sheetIndex + 1} — {mat.name[lang]} ({sheet.thickness} mm)
+                ✂️ {T.cutSheetPage} #{sheet.sheetIndex + 1} / {effectiveOptimization.sheets.length} — {mat.name[lang]} (
+                {sheet.thickness} mm)
               </Text>
               <View style={{ flexDirection: 'row', gap: 8 }}>
                 <View
@@ -1041,16 +1272,16 @@ export function CabinetPdfDocument({
             {/* Sheet board diagram */}
             <View
               style={{
-                width: sheet.sheetLength * scale,
-                height: sheet.sheetWidth * scale,
+                width: diagW,
+                height: diagH,
                 borderWidth: 1.5,
                 borderColor: C.primary,
                 backgroundColor: mat.color ?? '#E8D5B0',
                 position: 'relative',
               }}
             >
-              {/* Grain lines overlay */}
-              {Array.from({ length: Math.floor((sheet.sheetWidth * scale) / 12) }).map((_, gi) => (
+              {/* Grain direction lines (run perpendicular to grain in diagram) */}
+              {Array.from({ length: Math.floor(diagH / 12) }).map((_, gi) => (
                 <View
                   key={gi}
                   style={{
@@ -1063,37 +1294,44 @@ export function CabinetPdfDocument({
                   }}
                 />
               ))}
-              {sheet.parts.map((p, i) => (
-                <View
-                  key={i}
-                  style={{
-                    position: 'absolute',
-                    left: p.x * scale,
-                    top: p.y * scale,
-                    width: p.width * scale,
-                    height: p.length * scale,
-                    backgroundColor: C.white,
-                    borderWidth: 0.75,
-                    borderColor: C.primary,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    overflow: 'hidden',
-                  }}
-                >
-                  <Text
+              {sheet.parts.map((p, i) => {
+                // Rotate coordinates for landscape: grain (y) → horizontal, width (x) → vertical
+                const pl = isLandscape ? p.y * scale : p.x * scale;
+                const pt = isLandscape ? p.x * scale : p.y * scale;
+                const pw = isLandscape ? p.length * scale : p.width * scale;
+                const ph = isLandscape ? p.width * scale : p.length * scale;
+                return (
+                  <View
+                    key={i}
                     style={{
-                      fontSize: Math.min(7, p.width * scale * 0.15),
-                      fontFamily: 'Helvetica-Bold',
-                      color: C.primary,
+                      position: 'absolute',
+                      left: pl,
+                      top: pt,
+                      width: pw,
+                      height: ph,
+                      backgroundColor: C.white,
+                      borderWidth: 0.75,
+                      borderColor: C.primary,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      overflow: 'hidden',
                     }}
                   >
-                    {p.partId}
-                  </Text>
-                  <Text style={{ fontSize: Math.min(5.5, p.width * scale * 0.1), color: C.muted }}>
-                    {p.width}×{p.length}
-                  </Text>
-                </View>
-              ))}
+                    <Text
+                      style={{
+                        fontSize: Math.min(7, Math.min(pw, ph) * 0.2),
+                        fontFamily: 'Helvetica-Bold',
+                        color: C.primary,
+                      }}
+                    >
+                      {p.partId}
+                    </Text>
+                    <Text style={{ fontSize: Math.min(5.5, Math.min(pw, ph) * 0.15), color: C.muted }}>
+                      {p.width}×{p.length}
+                    </Text>
+                  </View>
+                );
+              })}
             </View>
 
             {/* Legend */}

@@ -16,12 +16,12 @@ export function SwUpdateBanner() {
     <div
       role="alert"
       aria-live="polite"
-      className="fixed top-0 start-0 end-0 z-50 flex items-center justify-center gap-3 bg-wood-600 px-4 py-2 text-sm text-white shadow-md"
+      className="bg-wood-600 fixed start-0 end-0 top-0 z-50 flex items-center justify-center gap-3 px-4 py-2 text-sm text-white shadow-md"
     >
       <span>{t('swUpdate.available')}</span>
       <button
         onClick={reload}
-        className="rounded bg-white px-3 py-1 text-xs font-semibold text-wood-700 hover:bg-wood-100 transition-colors"
+        className="text-wood-700 hover:bg-wood-100 rounded bg-white px-3 py-1 text-xs font-semibold transition-colors"
       >
         {t('swUpdate.reload')}
       </button>

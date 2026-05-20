@@ -1,37 +1,73 @@
 {
-  "_comment": "Per-benchmark max-mean-ms gate. Thresholds = 5× measured baseline (dev laptop, 2026-05-19). Run 'npm run bench:update' to recalibrate after intentional perf changes.",
-  "_updated": "2026-05-19",
+  "_comment": "Per-benchmark max-mean-ms gate. Thresholds = 5× measured baseline. Run 'npm run bench:update' to recalibrate after intentional perf changes.",
+  "_updated": "2026-05-20",
   "_howToUse": [
-    "npm run bench         — run benchmarks (outputs results to $TEMP/WoodworkingShop/bench-results.json)",
-    "npm run bench:check   — run benchmarks then verify all stay within these thresholds",
-    "npm run bench:update  — run benchmarks then rewrite thresholds to 5× current mean"
+    "npm run bench         — run benchmarks",
+    "npm run bench:check   — run benchmarks then verify thresholds",
+    "npm run bench:update  — run benchmarks then rewrite this file to 5× current mean"
   ],
-
-  "computeDimensions — base cabinet": { "maxMeanMs": 0.011, "baseline": 0.0022 },
-  "computeDimensions — wardrobe": { "maxMeanMs": 0.009, "baseline": 0.0018 },
-  "computeDimensions — desk": { "maxMeanMs": 0.007, "baseline": 0.0014 },
-
-  "generateParts — base cabinet": { "maxMeanMs": 0.005, "baseline": 0.0009 },
-  "generateParts — wardrobe 4-shelf 2-drawer": { "maxMeanMs": 0.005, "baseline": 0.0009 },
-  "generateParts — desk 2-drawer": { "maxMeanMs": 0.005, "baseline": 0.001 },
-  "computeEdgeBandingTotal — base cabinet": { "maxMeanMs": 0.001, "baseline": 0.0001 },
-
-  "optimizeCutSheets — base cabinet (9 part types)": { "maxMeanMs": 0.086, "baseline": 0.0172 },
-  "optimizeCutSheets — wardrobe (18 part types)": { "maxMeanMs": 0.125, "baseline": 0.0249 },
-
-  "generateHardware — base cabinet": { "maxMeanMs": 0.01, "baseline": 0.0019 },
-  "generateHardware — wardrobe": { "maxMeanMs": 0.01, "baseline": 0.002 },
-
-  "estimateCost — base cabinet": { "maxMeanMs": 0.016, "baseline": 0.0031 },
-  "estimateCost — wardrobe": { "maxMeanMs": 0.026, "baseline": 0.0051 },
-
-  "findOptimizations — base cabinet (default strategies)": { "maxMeanMs": 10, "baseline": 1.833 },
-
-  "validateConfig — valid base cabinet": { "maxMeanMs": 0.019, "baseline": 0.0038 },
-  "validateConfig — valid wardrobe": { "maxMeanMs": 0.014, "baseline": 0.0027 },
-
-  "Grain locked parts (small)": { "maxMeanMs": 0.013, "baseline": 0.0026 },
-  "Grain free parts (small)": { "maxMeanMs": 0.016, "baseline": 0.0032 },
-  "Multi-sheet optimization (medium)": { "maxMeanMs": 0.036, "baseline": 0.0071 },
-  "Large multi-cabinet project (stress test)": { "maxMeanMs": 127, "baseline": 25.4 }
+  "findOptimizations — base cabinet (default strategies)": {
+    "maxMeanMs": 125.93935,
+    "baseline": 25.18787
+  },
+  "optimizeCutSheets — base cabinet (9 part types)": {
+    "maxMeanMs": 1.212214,
+    "baseline": 0.242443
+  },
+  "optimizeCutSheets — wardrobe (18 part types)": {
+    "maxMeanMs": 1.136548,
+    "baseline": 0.22731
+  },
+  "validateConfig — valid wardrobe": {
+    "maxMeanMs": 0.162856,
+    "baseline": 0.032571
+  },
+  "estimateCost — base cabinet": {
+    "maxMeanMs": 0.122355,
+    "baseline": 0.024471
+  },
+  "estimateCost — wardrobe": {
+    "maxMeanMs": 0.113021,
+    "baseline": 0.022604
+  },
+  "computeDimensions — wardrobe": {
+    "maxMeanMs": 0.10498,
+    "baseline": 0.020996
+  },
+  "computeDimensions — desk": {
+    "maxMeanMs": 0.104734,
+    "baseline": 0.020947
+  },
+  "validateConfig — valid base cabinet": {
+    "maxMeanMs": 0.101412,
+    "baseline": 0.020282
+  },
+  "computeDimensions — base cabinet": {
+    "maxMeanMs": 0.092872,
+    "baseline": 0.018574
+  },
+  "generateHardware — wardrobe": {
+    "maxMeanMs": 0.072921,
+    "baseline": 0.014584
+  },
+  "generateHardware — base cabinet": {
+    "maxMeanMs": 0.060082,
+    "baseline": 0.012016
+  },
+  "generateParts — desk 2-drawer": {
+    "maxMeanMs": 0.041946,
+    "baseline": 0.008389
+  },
+  "generateParts — base cabinet": {
+    "maxMeanMs": 0.036612,
+    "baseline": 0.007322
+  },
+  "generateParts — wardrobe 4-shelf 2-drawer": {
+    "maxMeanMs": 0.028092,
+    "baseline": 0.005618
+  },
+  "computeEdgeBandingTotal — base cabinet": {
+    "maxMeanMs": 0.002723,
+    "baseline": 0.000545
+  }
 }

@@ -202,6 +202,7 @@ export const DEFAULT_CONFIG: CabinetConfig = {
   shelfCount: 4,
   shelfSpacing: 'equal',
   customShelfPositions: [],
+  shelfCentreSupports: 0,
   carcassMaterial: 'plywood-17',
   backPanelMaterial: 'plywood-4',
   hasBack: true,

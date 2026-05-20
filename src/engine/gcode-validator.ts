@@ -38,7 +38,7 @@ const MIN_ARC_RADIUS = 0.1;
 
 // ─── Regex helpers ────────────────────────────────────────────────────────────
 
-const RE_WORD = /([A-Z])([-+]?[0-9]*\.?[0-9]+)/gi;
+const RE_WORD = /([A-Z])([-+]?\d*\.?\d+)/gi;
 const RE_G_MODAL_MOVE = /^G0?[01](?!\d)/i; // G0, G00, G1, G01 (not G10, G17…)
 const RE_G_ARC = /^G0?[23](?!\d)/i; // G2, G02, G3, G03 (not G21, G20…)
 
@@ -55,8 +55,8 @@ function parseWords(line: string): Map<string, number> {
 function stripComment(line: string): string {
   // Remove ';' comments and parenthetical '(…)' comments
   return line
-    .replace(/\(.*?\)/g, '')
-    .replace(/;.*$/, '')
+    .replace(/\([^)]*\)/g, '')
+    .replace(/;[^\n]*$/, '')
     .trim();
 }
 

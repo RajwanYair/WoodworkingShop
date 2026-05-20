@@ -142,7 +142,7 @@ self.onmessage = (e: MessageEvent<DxfWorkerInput>) => {
       const sheet = sheets[idx];
       if (!sheet) throw new Error(`Sheet index ${idx} out of range`);
       const dxf = cutSheetToDxf(sheet);
-      const mat = sheet.material.replace(/[^\w]/g, '-');
+      const mat = sheet.material.replace(/\W/g, '-');
       const filename = `${projectName}-sheet-${idx + 1}-${mat}.dxf`;
       self.postMessage({ type: 'done', dxf, filename } satisfies DxfWorkerOutput);
     } else {

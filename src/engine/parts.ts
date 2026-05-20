@@ -175,6 +175,23 @@ export const generateParts: (cfg: CabinetConfig) => Part[] = createJsonMemo(func
     });
   }
 
+  // ── Centre supports (vertical full-height dividers that break shelf span) ──
+  // v3.58.0 — emitted by the "Add centre support" validation fix to cure
+  // sag / wide-span / low-load-capacity warnings programmatically.
+  const centreSupports = Math.max(0, cfg.shelfCentreSupports ?? 0);
+  if (centreSupports > 0 && !isDesk) {
+    parts.push({
+      id: id(),
+      qty: centreSupports,
+      name: { en: 'Centre Support', he: 'תמיכת אמצע' },
+      material: cfg.carcassMaterial,
+      thickness: t,
+      length: d.internalHeight,
+      width: d.shelfDepth,
+      edgeBanding: edgeLabel(eb !== 'none' ? 'front' : 'none'),
+    });
+  }
+
   // ── Doors ──
   if (cfg.doorStyle !== 'none' && !isBookshelf && !isDesk) {
     const isGlass = cfg.doorStyle === 'glass';

@@ -10,7 +10,7 @@ describe('Header', () => {
 
   it('renders app title', () => {
     render(<Header />);
-    expect(screen.getByText('Cabinet Planner')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Cabinet Planner/ })).toBeInTheDocument();
   });
 
   it('renders all four tab buttons', () => {

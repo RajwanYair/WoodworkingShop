@@ -17,7 +17,7 @@ export function DrawerConfig() {
 
   return (
     <fieldset className="space-y-4">
-      <legend className="text-sm font-semibold text-wood-700 dark:text-wood-200 uppercase tracking-wide">
+      <legend className="text-wood-700 dark:text-wood-200 text-sm font-semibold tracking-wide uppercase">
         {t('config.drawers')}
       </legend>
 
@@ -39,10 +39,10 @@ export function DrawerConfig() {
         <>
           {/* Drawer slide type */}
           <div className="space-y-1">
-            <p className="text-sm text-wood-600 dark:text-wood-300">{t('config.drawerSlideType')}</p>
+            <p className="text-wood-600 dark:text-wood-300 text-sm">{t('config.drawerSlideType')}</p>
             <div className="flex flex-wrap gap-3">
               {(['standard', 'soft-close', 'full-extension'] as DrawerSlideType[]).map((type) => (
-                <label key={type} className="flex items-center gap-1.5 text-sm cursor-pointer">
+                <label key={type} className="flex cursor-pointer items-center gap-1.5 text-sm">
                   <input
                     type="radio"
                     name="drawerSlideType"
@@ -58,8 +58,8 @@ export function DrawerConfig() {
           </div>
 
           {/* Per-drawer heights */}
-          <div className="space-y-2 ps-2 border-s-2 border-wood-200 dark:border-wood-700">
-            <p className="text-xs text-wood-600 dark:text-wood-300">
+          <div className="border-wood-200 dark:border-wood-700 space-y-2 border-s-2 ps-2">
+            <p className="text-wood-600 dark:text-wood-300 text-xs">
               {isHe ? 'גובה קופסת מגירה (מ"מ)' : 'Drawer box height (mm)'}
             </p>
             {Array.from({ length: config.drawerCount }, (_, i) => (

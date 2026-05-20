@@ -59,7 +59,7 @@ function FloorPlan({ layout }: FloorPlanProps) {
       viewBox={`0 0 ${SVG_W} ${SVG_H}`}
       role="img"
       aria-label={layout.name}
-      className="w-full max-h-96 border border-wood-200 dark:border-wood-700 rounded-lg bg-wood-50 dark:bg-wood-900"
+      className="border-wood-200 dark:border-wood-700 bg-wood-50 dark:bg-wood-900 max-h-96 w-full rounded-lg border"
     >
       {/* Room outline */}
       <rect x={offsetX} y={offsetY} width={roomW} height={roomH} fill="none" stroke="#7c4a2d" strokeWidth={2} />
@@ -96,21 +96,21 @@ export function RoomLayoutView() {
     return (
       <section
         aria-label={t('room.sectionLabel')}
-        className="border border-wood-200 dark:border-wood-700 rounded-lg p-4"
+        className="border-wood-200 dark:border-wood-700 rounded-lg border p-4"
       >
-        <h3 className="text-sm font-semibold text-wood-600 dark:text-wood-300 mb-2">{t('room.title')}</h3>
-        <p className="text-sm text-wood-400 dark:text-wood-500">{t('room.empty')}</p>
+        <h3 className="text-wood-600 dark:text-wood-300 mb-2 text-sm font-semibold">{t('room.title')}</h3>
+        <p className="text-wood-400 dark:text-wood-500 text-sm">{t('room.empty')}</p>
       </section>
     );
   }
 
   return (
-    <section aria-label={t('room.sectionLabel')} className="border border-wood-200 dark:border-wood-700 rounded-lg p-4">
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-semibold text-wood-600 dark:text-wood-300">
+    <section aria-label={t('room.sectionLabel')} className="border-wood-200 dark:border-wood-700 rounded-lg border p-4">
+      <div className="mb-3 flex items-center justify-between">
+        <h3 className="text-wood-600 dark:text-wood-300 text-sm font-semibold">
           {t('room.title')}: {layout.name}
         </h3>
-        <span className="text-xs text-wood-400 dark:text-wood-500">
+        <span className="text-wood-400 dark:text-wood-500 text-xs">
           {layout.roomWidth} × {layout.roomDepth} mm · {layout.cabinets.length} {t('room.cabinets')} ·{' '}
           {(() => {
             const roomArea = layout.roomWidth * layout.roomDepth;

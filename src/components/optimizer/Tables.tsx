@@ -71,7 +71,7 @@ export function PartsTable() {
       <button
         type="button"
         onClick={() => handleSort(key)}
-        className="font-semibold hover:text-wood-600 dark:hover:text-wood-100 transition-colors"
+        className="hover:text-wood-600 dark:hover:text-wood-100 font-semibold transition-colors"
       >
         {label}
         {arrow(key)}
@@ -81,18 +81,18 @@ export function PartsTable() {
 
   return (
     <div className="overflow-x-auto">
-      <div className="flex items-center justify-between gap-3 mb-2 flex-wrap">
-        <h3 className="text-sm font-semibold text-wood-700 dark:text-wood-200 uppercase tracking-wide">
+      <div className="mb-2 flex flex-wrap items-center justify-between gap-3">
+        <h3 className="text-wood-700 dark:text-wood-200 text-sm font-semibold tracking-wide uppercase">
           {t('parts.title')}
         </h3>
         {/* Sprint 65 — material filter dropdown */}
         {uniqueMaterials.length > 1 && (
-          <label className="flex items-center gap-2 text-xs text-wood-600 dark:text-wood-300">
+          <label className="text-wood-600 dark:text-wood-300 flex items-center gap-2 text-xs">
             {t('optimizer.filterByMaterial')}
             <select
               value={materialFilter}
               onChange={(e) => setMaterialFilter(e.target.value)}
-              className="border border-wood-300 dark:border-wood-600 rounded px-2 py-0.5 text-xs bg-white dark:bg-wood-800 text-wood-700 dark:text-wood-200"
+              className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 text-wood-700 dark:text-wood-200 rounded border bg-white px-2 py-0.5 text-xs"
               aria-label={t('optimizer.filterByMaterial')}
             >
               <option value="">{t('optimizer.allMaterials')}</option>
@@ -113,7 +113,7 @@ export function PartsTable() {
           </label>
         )}
       </div>
-      <table className="w-full text-sm border-collapse">
+      <table className="w-full border-collapse text-sm">
         <thead>
           <tr className="bg-wood-100 dark:bg-wood-800 text-wood-700 dark:text-wood-300">
             {thBtn('id', t('parts.id'))}
@@ -130,7 +130,7 @@ export function PartsTable() {
           {sorted.map((p) => {
             const mat = getMaterial(p.material);
             return (
-              <tr key={p.id} className="border-b border-wood-100 dark:border-wood-800">
+              <tr key={p.id} className="border-wood-100 dark:border-wood-800 border-b">
                 <td className="px-2 py-1 font-mono">{p.id}</td>
                 <td className="px-2 py-1">{p.name[lang]}</td>
                 <td className="px-2 py-1 text-end">{p.qty}</td>
@@ -155,16 +155,16 @@ export function HardwareTable() {
 
   return (
     <div className="overflow-x-auto">
-      <h3 className="text-sm font-semibold text-wood-700 dark:text-wood-200 uppercase tracking-wide mb-2">
+      <h3 className="text-wood-700 dark:text-wood-200 mb-2 text-sm font-semibold tracking-wide uppercase">
         {t('hardware.title')}
       </h3>
-      <table className="w-full text-sm border-collapse">
+      <table className="w-full border-collapse text-sm">
         <thead>
           <tr className="bg-wood-100 dark:bg-wood-800 text-wood-700 dark:text-wood-300">
             <th className="px-2 py-1 text-start">{t('hardware.name')}</th>
-            <th className="px-2 py-1 text-end w-24">{t('hardware.qty')}</th>
+            <th className="w-24 px-2 py-1 text-end">{t('hardware.qty')}</th>
             <th className="px-2 py-1 text-start">{t('hardware.unit')}</th>
-            <th className="px-2 py-1 text-start w-20">{t('hardware.supplier')}</th>
+            <th className="w-20 px-2 py-1 text-start">{t('hardware.supplier')}</th>
           </tr>
         </thead>
         <tbody>
@@ -174,7 +174,7 @@ export function HardwareTable() {
             return (
               <tr
                 key={h.id}
-                className={`border-b border-wood-100 dark:border-wood-800 ${overridden !== undefined ? 'bg-amber-50 dark:bg-amber-900/20' : ''}`}
+                className={`border-wood-100 dark:border-wood-800 border-b ${overridden !== undefined ? 'bg-amber-50 dark:bg-amber-900/20' : ''}`}
               >
                 <td className="px-2 py-1">{h.name[lang]}</td>
                 <td className="px-2 py-1 text-end">
@@ -188,7 +188,7 @@ export function HardwareTable() {
                       if (v === h.qty) setHardwareQtyOverride(h.id, null);
                       else setHardwareQtyOverride(h.id, v);
                     }}
-                    className="w-16 text-end bg-transparent border-b border-dotted border-wood-400 dark:border-wood-500 focus:outline-none focus:border-wood-600 dark:focus:border-wood-300"
+                    className="border-wood-400 dark:border-wood-500 focus:border-wood-600 dark:focus:border-wood-300 w-16 border-b border-dotted bg-transparent text-end focus:outline-none"
                     aria-label={`Quantity for ${h.name['en']}`}
                   />
                 </td>
@@ -199,7 +199,7 @@ export function HardwareTable() {
                       href={h.supplierUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-wood-500 hover:text-wood-700 dark:text-wood-400 dark:hover:text-wood-200 underline"
+                      className="text-wood-500 hover:text-wood-700 dark:text-wood-400 dark:hover:text-wood-200 text-xs underline"
                       aria-label={`${h.supplierName ?? 'Supplier'} — opens in new tab`}
                     >
                       {h.supplierName ?? '↗'}
@@ -211,7 +211,7 @@ export function HardwareTable() {
           })}
         </tbody>
       </table>
-      <p className="text-xs text-wood-400 dark:text-wood-500 mt-1">{t('hardware.qtyHint')}</p>
+      <p className="text-wood-400 dark:text-wood-500 mt-1 text-xs">{t('hardware.qtyHint')}</p>
     </div>
   );
 }

@@ -713,7 +713,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
       set((state) => {
         if (index < 0 || index >= state.cabinets.length) return state;
         const src = state.cabinets[index];
-        const baseName = src.name.replace(/\s*\(copy\s*\d*\)\s*$/, '');
+        const baseName = src.name.replace(/\s*\(copy(?:\s+\d+)?\)\s*$/, '');
         const copies = state.cabinets.filter((c) => c.name.startsWith(baseName + ' (copy')).length;
         const newName = copies === 0 ? `${baseName} (copy)` : `${baseName} (copy ${copies + 1})`;
         const newEntry: CabinetEntry = { name: newName, config: { ...src.config } };

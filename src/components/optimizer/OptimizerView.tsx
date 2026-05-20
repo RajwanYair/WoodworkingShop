@@ -198,7 +198,7 @@ export function OptimizerView() {
       </div>
       {/* v3.21.0 — Worker recalculation indicator */}
       {optimizationPending && (
-        <div className="flex items-center gap-2 text-xs text-wood-600 dark:text-wood-300 animate-pulse">
+        <div className="text-wood-600 dark:text-wood-300 flex animate-pulse items-center gap-2 text-xs">
           <svg
             className="h-3 w-3 animate-spin"
             viewBox="0 0 24 24"
@@ -217,8 +217,8 @@ export function OptimizerView() {
       {(lowYieldSheet || materialSwapPair) && (
         <div className="space-y-2">
           {lowYieldSheet && (
-            <div className="rounded border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 px-3 py-2 text-xs text-amber-800 dark:text-amber-200 flex items-start gap-2">
-              <IconWarning size={14} className="shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2 rounded border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-amber-800 dark:border-amber-700 dark:bg-amber-900/20 dark:text-amber-200">
+              <IconWarning size={14} className="mt-0.5 shrink-0" />
               {t('optimizer.lowYieldWarning', {
                 num: lowYieldSheet.sheetIndex + 1,
                 yield: lowYieldSheet.yieldPercent,
@@ -226,8 +226,8 @@ export function OptimizerView() {
             </div>
           )}
           {materialSwapPair && (
-            <div className="rounded border border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/20 px-3 py-2 text-xs text-blue-800 dark:text-blue-200 flex items-start gap-2">
-              <IconLightbulb size={14} className="shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2 rounded border border-blue-300 bg-blue-50 px-3 py-2 text-xs text-blue-800 dark:border-blue-700 dark:bg-blue-900/20 dark:text-blue-200">
+              <IconLightbulb size={14} className="mt-0.5 shrink-0" />
               {t('optimizer.materialSwapHint', {
                 a: getMaterial(materialSwapPair.a).name[lang],
                 b: getMaterial(materialSwapPair.b).name[lang],
@@ -240,7 +240,7 @@ export function OptimizerView() {
 
       {/* Summary stats + color-blind toggle */}
       <div className="flex items-center justify-between">
-        <div className={`grid gap-4 flex-1 ${displayOpt.grainConflictCount > 0 ? 'grid-cols-6' : 'grid-cols-5'}`}>
+        <div className={`grid flex-1 gap-4 ${displayOpt.grainConflictCount > 0 ? 'grid-cols-6' : 'grid-cols-5'}`}>
           <Stat label={t('optimizer.sheets')} value={String(displayOpt.totalSheets)} />
           <Stat label={t('optimizer.yield')} value={`${displayOpt.overallYield}%`} />
           <Stat label={t('optimizer.waste')} value={`${(displayOpt.totalWaste / 1_000_000).toFixed(2)} m²`} />
@@ -270,7 +270,7 @@ export function OptimizerView() {
           {/* Sprint 41 — grain conflict count stat, only shown when > 0 */}
           {displayOpt.grainConflictCount > 0 && (
             <div
-              className="bg-amber-50 dark:bg-amber-900/20 rounded p-3 text-center border border-amber-300 dark:border-amber-700"
+              className="rounded border border-amber-300 bg-amber-50 p-3 text-center dark:border-amber-700 dark:bg-amber-900/20"
               title={t('optimizer.grainConflictsTitle', { count: displayOpt.grainConflictCount })}
             >
               <div className="text-lg font-bold text-amber-700 dark:text-amber-300">
@@ -281,14 +281,14 @@ export function OptimizerView() {
           )}
         </div>
         {/* Sprint 46 — part search/highlight filter */}
-        <label className="ms-4 flex items-center gap-1.5 text-xs text-wood-600 dark:text-wood-300">
+        <label className="text-wood-600 dark:text-wood-300 ms-4 flex items-center gap-1.5 text-xs">
           <input
             type="search"
             value={partFilter}
             onChange={(e) => setPartFilter(e.target.value)}
             placeholder={t('optimizer.filterPartsPlaceholder')}
             aria-label={t('optimizer.filterParts')}
-            className="w-32 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-2 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-wood-400"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-32 rounded border bg-white px-2 py-0.5 text-xs focus:ring-1 focus:outline-none"
           />
           {partFilter && (
             <button
@@ -301,7 +301,7 @@ export function OptimizerView() {
           )}
         </label>
         {/* Sprint 136 — saw kerf input */}
-        <label className="ms-4 flex items-center gap-1.5 text-xs text-wood-600 dark:text-wood-300">
+        <label className="text-wood-600 dark:text-wood-300 ms-4 flex items-center gap-1.5 text-xs">
           <IconSawKerf size={14} className="shrink-0" />
           {t('optimizer.sawKerf')}
           <input
@@ -311,7 +311,7 @@ export function OptimizerView() {
             step={0.5}
             value={sawKerf}
             onChange={(e) => setSawKerf(Number(e.target.value))}
-            className="w-14 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-1 py-0.5 text-xs text-center focus:outline-none focus:ring-1 focus:ring-wood-400"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-14 rounded border bg-white px-1 py-0.5 text-center text-xs focus:ring-1 focus:outline-none"
             aria-label={t('optimizer.sawKerf')}
           />
           mm
@@ -320,7 +320,7 @@ export function OptimizerView() {
           <button
             onClick={handleDxfExportWorker}
             disabled={dxfExporting}
-            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50"
             title={t('optimizer.exportDxf')}
             aria-busy={dxfExporting}
           >
@@ -346,7 +346,7 @@ export function OptimizerView() {
               downloadAllSheetsGcode(displayOpt.sheets, filePrefix);
               useToastStore.getState().addToast(t('toast.gcodeExported'), 'success');
             }}
-            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
+            className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-medium transition-colors"
             title={t('optimizer.exportGcode')}
             aria-label={t('optimizer.exportGcode')}
           >
@@ -355,7 +355,7 @@ export function OptimizerView() {
           <button
             onClick={handleBomExportWorker}
             disabled={bomExporting}
-            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 disabled:opacity-50 disabled:cursor-wait transition-colors flex items-center gap-1.5"
+            className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-medium transition-colors disabled:cursor-wait disabled:opacity-50"
             title={t('optimizer.exportBom')}
             aria-label={t('optimizer.exportBom')}
           >
@@ -371,7 +371,7 @@ export function OptimizerView() {
               downloadHardwareCsv(hwData, lang, `${filePrefix}-hardware-list.csv`);
               useToastStore.getState().addToast(t('toast.hardwareExported'), 'success');
             }}
-            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
+            className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-medium transition-colors"
             title={t('optimizer.exportHardware')}
             aria-label={t('optimizer.exportHardware')}
           >
@@ -379,9 +379,9 @@ export function OptimizerView() {
           </button>
           <button
             onClick={toggleColorBlindMode}
-            className={`px-3 py-1.5 rounded text-xs font-medium border transition-colors flex items-center gap-1.5 ${
+            className={`flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-medium transition-colors ${
               colorBlindMode
-                ? 'bg-blue-100 dark:bg-blue-900 border-blue-400 text-blue-700 dark:text-blue-200'
+                ? 'border-blue-400 bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200'
                 : 'border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800'
             }`}
             title="Toggle color-blind safe palette"
@@ -392,7 +392,7 @@ export function OptimizerView() {
           {/* Sprint 146 — toggle part name labels inside SVG rects */}
           <button
             onClick={() => setShowPartNames((v) => !v)}
-            className={`px-3 py-1.5 rounded text-xs font-medium border transition-colors flex items-center gap-1.5 ${
+            className={`flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-medium transition-colors ${
               showPartNames
                 ? 'bg-wood-200 dark:bg-wood-700 border-wood-400 text-wood-700 dark:text-wood-200'
                 : 'border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800'
@@ -405,7 +405,7 @@ export function OptimizerView() {
           {/* Sprint 151 — print cut sheets */}
           <button
             onClick={() => window.print()}
-            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
+            className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-medium transition-colors"
             title={t('optimizer.printSheets')}
             aria-label={t('optimizer.printSheets')}
           >
@@ -414,7 +414,7 @@ export function OptimizerView() {
           {/* v3.18.0 — bulk material replacement */}
           <button
             onClick={() => setShowBulkReplace(true)}
-            className="px-3 py-1.5 rounded text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1.5"
+            className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-medium transition-colors"
             title={t('bulkReplace.title', 'Bulk Material Replace')}
             aria-label={t('bulkReplace.title', 'Bulk Material Replace')}
           >
@@ -441,7 +441,7 @@ export function OptimizerView() {
 
       {/* Multi-cabinet label */}
       {multiCabinet && (
-        <p className="text-xs text-wood-600 dark:text-wood-300 italic">
+        <p className="text-wood-600 dark:text-wood-300 text-xs italic">
           Combined optimization for {cabinets.length} cabinets
         </p>
       )}
@@ -503,7 +503,7 @@ export function OptimizerView() {
 
       {/* Part legend */}
       {hoveredPartId && (
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-wood-800 text-white text-xs px-3 py-1.5 rounded shadow-lg z-50 pointer-events-none">
+        <div className="bg-wood-800 pointer-events-none fixed bottom-4 left-1/2 z-50 -translate-x-1/2 rounded px-3 py-1.5 text-xs text-white shadow-lg">
           {hoveredPartId}
         </div>
       )}
@@ -566,30 +566,30 @@ function OffcutsPanel({ sheets, t }: { sheets: CutSheet[]; t: (k: string) => str
   if (offcuts.length === 0) return null;
 
   return (
-    <div className="rounded-xl border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-900 overflow-hidden">
+    <div className="border-wood-200 dark:border-wood-700 dark:bg-wood-900 overflow-hidden rounded-xl border bg-white">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-wood-800 dark:text-wood-100 hover:bg-wood-50 dark:hover:bg-wood-800 transition-colors"
+        className="text-wood-800 dark:text-wood-100 hover:bg-wood-50 dark:hover:bg-wood-800 flex w-full items-center justify-between px-4 py-3 text-sm font-semibold transition-colors"
         aria-expanded={open}
       >
         <span className="flex items-center gap-2">
           <IconScissors size={15} />
           {t('optimizer.offcuts')}
-          <span className="ml-1 text-xs font-normal text-wood-600 dark:text-wood-300">({offcuts.length})</span>
+          <span className="text-wood-600 dark:text-wood-300 ml-1 text-xs font-normal">({offcuts.length})</span>
         </span>
         {open ? <IconChevronDown size={14} /> : <IconChevronRight size={14} />}
       </button>
 
       {open && (
         <div className="px-4 pb-4">
-          <p className="text-xs text-wood-600 dark:text-wood-300 mb-3">{t('optimizer.offcutsDesc')}</p>
+          <p className="text-wood-600 dark:text-wood-300 mb-3 text-xs">{t('optimizer.offcutsDesc')}</p>
           <div className="space-y-1.5">
             {offcuts.map((oc, i) => (
               <div
                 key={i}
-                className="flex items-center justify-between text-xs rounded-lg bg-wood-50 dark:bg-wood-800 px-3 py-2"
+                className="bg-wood-50 dark:bg-wood-800 flex items-center justify-between rounded-lg px-3 py-2 text-xs"
               >
-                <span className="font-medium text-wood-700 dark:text-wood-300">
+                <span className="text-wood-700 dark:text-wood-300 font-medium">
                   {oc.material} {oc.thickness}mm
                 </span>
                 <span className="text-wood-600 dark:text-wood-300">
@@ -677,25 +677,25 @@ function MaterialSummaryPanel({
   };
 
   return (
-    <div className="border border-wood-200 dark:border-wood-700 rounded-lg overflow-hidden print:hidden">
+    <div className="border-wood-200 dark:border-wood-700 overflow-hidden rounded-lg border print:hidden">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between px-4 py-3 bg-wood-50 dark:bg-wood-800 hover:bg-wood-100 dark:hover:bg-wood-750 transition-colors text-sm font-semibold text-wood-700 dark:text-wood-200"
+        className="bg-wood-50 dark:bg-wood-800 hover:bg-wood-100 dark:hover:bg-wood-750 text-wood-700 dark:text-wood-200 flex w-full items-center justify-between px-4 py-3 text-sm font-semibold transition-colors"
       >
         {t('optimizer.materialSummary')}
         <span className="text-wood-400">{open ? '▲' : '▼'}</span>
       </button>
       {open && (
-        <div className="px-4 pb-4 pt-2 overflow-x-auto">
-          <table className="w-full text-xs border-collapse">
+        <div className="overflow-x-auto px-4 pt-2 pb-4">
+          <table className="w-full border-collapse text-xs">
             <thead>
               <tr className="text-wood-400 dark:text-wood-500 text-left">
                 <th className="py-1 pr-4 font-medium">{t('optimizer.materialSummaryMaterial')}</th>
-                <th className="py-1 pr-4 font-medium text-right">{t('optimizer.materialSummarySheets')}</th>
-                <th className="py-1 pr-4 font-medium text-right">{t('optimizer.materialSummaryArea')}</th>
-                <th className="py-1 pr-4 font-medium text-right">{t('optimizer.materialSummaryCost')}</th>
-                <th className="py-1 font-medium text-right">{t('optimizer.sheetSize')}</th>
+                <th className="py-1 pr-4 text-right font-medium">{t('optimizer.materialSummarySheets')}</th>
+                <th className="py-1 pr-4 text-right font-medium">{t('optimizer.materialSummaryArea')}</th>
+                <th className="py-1 pr-4 text-right font-medium">{t('optimizer.materialSummaryCost')}</th>
+                <th className="py-1 text-right font-medium">{t('optimizer.sheetSize')}</th>
               </tr>
             </thead>
             <tbody>
@@ -705,13 +705,13 @@ function MaterialSummaryPanel({
                 const hasOverride = !!sheetSizeOverrides[row.materialKey];
                 const isEditing = editingKey === row.materialKey;
                 return (
-                  <tr key={i} className="border-t border-wood-100 dark:border-wood-800">
-                    <td className="py-1.5 pr-4 text-wood-700 dark:text-wood-300 font-medium">
+                  <tr key={i} className="border-wood-100 dark:border-wood-800 border-t">
+                    <td className="text-wood-700 dark:text-wood-300 py-1.5 pr-4 font-medium">
                       {row.name[lang]} {row.thickness} mm
                     </td>
-                    <td className="py-1.5 pr-4 text-right text-wood-600 dark:text-wood-300">×{row.qty}</td>
-                    <td className="py-1.5 pr-4 text-right text-wood-600 dark:text-wood-300">{totalArea} m²</td>
-                    <td className="py-1.5 pr-4 text-right font-semibold text-wood-700 dark:text-wood-200">
+                    <td className="text-wood-600 dark:text-wood-300 py-1.5 pr-4 text-right">×{row.qty}</td>
+                    <td className="text-wood-600 dark:text-wood-300 py-1.5 pr-4 text-right">{totalArea} m²</td>
+                    <td className="text-wood-700 dark:text-wood-200 py-1.5 pr-4 text-right font-semibold">
                       {totalCost ? `₪${totalCost}` : '—'}
                     </td>
                     {/* Sprint 165 — inline sheet size override editor */}
@@ -725,7 +725,7 @@ function MaterialSummaryPanel({
                             step={10}
                             value={editW}
                             onChange={(e) => setEditW(e.target.value)}
-                            className="w-16 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-1 py-0.5 text-xs text-center focus:outline-none focus:ring-1 focus:ring-wood-400"
+                            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-16 rounded border bg-white px-1 py-0.5 text-center text-xs focus:ring-1 focus:outline-none"
                             aria-label="Sheet width mm"
                           />
                           <span className="text-wood-400">×</span>
@@ -736,13 +736,13 @@ function MaterialSummaryPanel({
                             step={10}
                             value={editL}
                             onChange={(e) => setEditL(e.target.value)}
-                            className="w-16 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-1 py-0.5 text-xs text-center focus:outline-none focus:ring-1 focus:ring-wood-400"
+                            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-16 rounded border bg-white px-1 py-0.5 text-center text-xs focus:ring-1 focus:outline-none"
                             aria-label="Sheet length mm"
                           />
                           <button
                             type="button"
                             onClick={() => commitEdit(row.materialKey)}
-                            className="text-green-600 dark:text-green-400 hover:underline text-xs px-1"
+                            className="px-1 text-xs text-green-600 hover:underline dark:text-green-400"
                             title="Apply"
                           >
                             ✓
@@ -750,7 +750,7 @@ function MaterialSummaryPanel({
                           <button
                             type="button"
                             onClick={() => setEditingKey(null)}
-                            className="text-wood-400 hover:text-wood-600 text-xs px-1"
+                            className="text-wood-400 hover:text-wood-600 px-1 text-xs"
                             title="Cancel"
                           >
                             ✗
@@ -759,7 +759,7 @@ function MaterialSummaryPanel({
                       ) : (
                         <span className="inline-flex items-center gap-1">
                           <span
-                            className={`font-mono ${hasOverride ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'text-wood-400 dark:text-wood-500'}`}
+                            className={`font-mono ${hasOverride ? 'font-semibold text-blue-600 dark:text-blue-400' : 'text-wood-400 dark:text-wood-500'}`}
                           >
                             {hasOverride
                               ? `${sheetSizeOverrides[row.materialKey].width}×${sheetSizeOverrides[row.materialKey].length}`
@@ -777,7 +777,7 @@ function MaterialSummaryPanel({
                             <button
                               type="button"
                               onClick={() => setSheetSizeOverride(row.materialKey, null)}
-                              className="text-red-400 hover:text-red-600 text-xs"
+                              className="text-xs text-red-400 hover:text-red-600"
                               title={t('optimizer.sheetSizeReset')}
                             >
                               ↺
@@ -839,16 +839,16 @@ function ShoppingListPanel({
   const totalCost = rows.reduce((s, r) => s + r.qty * r.pricePerSheet, 0);
 
   return (
-    <div className="rounded-xl border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-900 overflow-hidden">
+    <div className="border-wood-200 dark:border-wood-700 dark:bg-wood-900 overflow-hidden rounded-xl border bg-white">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-wood-800 dark:text-wood-100 hover:bg-wood-50 dark:hover:bg-wood-800 transition-colors"
+        className="text-wood-800 dark:text-wood-100 hover:bg-wood-50 dark:hover:bg-wood-800 flex w-full items-center justify-between px-4 py-3 text-sm font-semibold transition-colors"
         aria-expanded={open}
       >
         <span className="flex items-center gap-2">
           <IconList size={15} />
           {t('optimizer.shoppingList')}
-          <span className="ml-1 text-xs font-normal text-wood-600 dark:text-wood-300">
+          <span className="text-wood-600 dark:text-wood-300 ml-1 text-xs font-normal">
             {totalSheets} {t('optimizer.sheets').toLowerCase()} · ₪{totalCost.toFixed(0)}
           </span>
         </span>
@@ -857,25 +857,25 @@ function ShoppingListPanel({
 
       {open && (
         <div className="px-4 pb-4">
-          <p className="text-xs text-wood-600 dark:text-wood-300 mb-3">{t('optimizer.shoppingListDesc')}</p>
+          <p className="text-wood-600 dark:text-wood-300 mb-3 text-xs">{t('optimizer.shoppingListDesc')}</p>
           <div className="space-y-1.5">
             {rows.map((row) => (
               <div
                 key={`${row.material}-${row.thickness}`}
-                className="flex items-center justify-between text-xs rounded-lg bg-wood-50 dark:bg-wood-800 px-3 py-2"
+                className="bg-wood-50 dark:bg-wood-800 flex items-center justify-between rounded-lg px-3 py-2 text-xs"
               >
-                <span className="font-medium text-wood-700 dark:text-wood-300 flex-1">
+                <span className="text-wood-700 dark:text-wood-300 flex-1 font-medium">
                   {row.name[lang]} {row.thickness} mm
                 </span>
                 <span className="text-wood-600 dark:text-wood-300 mx-3">×{row.qty}</span>
-                <span className="font-semibold text-wood-700 dark:text-wood-200">
+                <span className="text-wood-700 dark:text-wood-200 font-semibold">
                   {row.pricePerSheet > 0 ? `₪${(row.qty * row.pricePerSheet).toFixed(0)}` : '—'}
                 </span>
               </div>
             ))}
           </div>
           {totalCost > 0 && (
-            <div className="flex justify-end mt-2 text-xs font-bold text-wood-800 dark:text-wood-100">
+            <div className="text-wood-800 dark:text-wood-100 mt-2 flex justify-end text-xs font-bold">
               {t('cost.total')}: ₪{totalCost.toFixed(0)}
             </div>
           )}
@@ -919,19 +919,19 @@ function SheetCard({
   const filterTerm = partFilter.trim().toLowerCase();
 
   return (
-    <div className="border border-wood-200 dark:border-wood-700 rounded p-4">
-      <div className="flex items-center justify-between mb-2 gap-3">
-        <h3 className="text-sm font-medium text-wood-600 dark:text-wood-300 flex-1 min-w-0 truncate">
+    <div className="border-wood-200 dark:border-wood-700 rounded border p-4">
+      <div className="mb-2 flex items-center justify-between gap-3">
+        <h3 className="text-wood-600 dark:text-wood-300 min-w-0 flex-1 truncate text-sm font-medium">
           {t('optimizer.sheet')} #{sheet.sheetIndex + 1} — {mat.name[lang]} ({sheet.thickness} mm)
           {/* Sprint 77 — part count badge */}
           <span
-            className="ms-1.5 text-[10px] font-semibold text-wood-100 dark:text-wood-800 bg-wood-500 dark:bg-wood-400 px-1.5 py-0.5 rounded-full"
+            className="text-wood-100 dark:text-wood-800 bg-wood-500 dark:bg-wood-400 ms-1.5 rounded-full px-1.5 py-0.5 text-[10px] font-semibold"
             aria-label={`${sheet.parts.length} parts`}
           >
             {sheet.parts.length}
           </span>
           {/* Sprint 81 — per-sheet waste area label */}
-          <span className="ms-1.5 text-[10px] font-normal text-wood-400 dark:text-wood-500">
+          <span className="text-wood-400 dark:text-wood-500 ms-1.5 text-[10px] font-normal">
             · {t('optimizer.sheetWaste')}:{' '}
             {(
               (sheet.sheetWidth * sheet.sheetLength - sheet.parts.reduce((s, p) => s + p.width * p.length, 0)) /
@@ -941,7 +941,7 @@ function SheetCard({
           </span>
           {mat.hasGrain && (
             <span
-              className="ml-1.5 text-[10px] font-normal text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/30 px-1 rounded inline-flex items-center gap-0.5"
+              className="ml-1.5 inline-flex items-center gap-0.5 rounded bg-amber-100 px-1 text-[10px] font-normal text-amber-700 dark:bg-amber-900/30 dark:text-amber-300"
               title="Grain direction preserved — parts were not rotated 90°"
             >
               <IconGrainVertical size={10} className="inline" /> grain
@@ -952,7 +952,7 @@ function SheetCard({
             const conflictCount = sheet.parts.filter((p) => p.grainConflict).length;
             return conflictCount > 0 ? (
               <span
-                className="ml-1.5 text-[10px] font-normal text-red-700 dark:text-red-300 bg-red-100 dark:bg-red-900/30 px-1 rounded inline-flex items-center gap-0.5"
+                className="ml-1.5 inline-flex items-center gap-0.5 rounded bg-red-100 px-1 text-[10px] font-normal text-red-700 dark:bg-red-900/30 dark:text-red-300"
                 title={`${conflictCount} part(s) had grain direction compromised to fit the sheet`}
               >
                 ⚠ {conflictCount} grain {conflictCount === 1 ? 'conflict' : 'conflicts'}
@@ -963,7 +963,7 @@ function SheetCard({
         <YieldBar yieldPercent={sheet.yieldPercent} />
         {mat.pricePerSheet != null && (
           <span
-            className="text-[10px] text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-700 px-1.5 py-0.5 rounded whitespace-nowrap"
+            className="rounded border border-amber-200 bg-amber-50 px-1.5 py-0.5 text-[10px] whitespace-nowrap text-amber-700 dark:border-amber-700 dark:bg-amber-900/30 dark:text-amber-300"
             title={t('optimizer.sheetWasteCostTitle')}
           >
             {t('optimizer.sheetWasteCost', {
@@ -976,7 +976,7 @@ function SheetCard({
             downloadDxfForSheet(sheet, `${filePrefix}-sheet-${sheet.sheetIndex + 1}.dxf`);
             useToastStore.getState().addToast(t('toast.dxfExported'), 'success');
           }}
-          className="text-[10px] px-2 py-0.5 rounded border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1"
+          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1 rounded border px-2 py-0.5 text-[10px] transition-colors"
           title={`Download DXF for sheet ${sheet.sheetIndex + 1}`}
         >
           <IconDxf size={11} /> DXF
@@ -986,7 +986,7 @@ function SheetCard({
             const filename = `${filePrefix}-sheet-${sheet.sheetIndex + 1}.nc`;
             onGcodePreview(filename, sheet);
           }}
-          className="text-[10px] px-2 py-0.5 rounded border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors flex items-center gap-1"
+          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1 rounded border px-2 py-0.5 text-[10px] transition-colors"
           title={`Preview G-code for sheet ${sheet.sheetIndex + 1}`}
           aria-label={`Preview G-code for sheet ${sheet.sheetIndex + 1}`}
         >
@@ -995,7 +995,7 @@ function SheetCard({
       </div>
       <svg
         viewBox={`-18 -18 ${sw + 36} ${sl + 36}`}
-        className="w-full max-w-lg border border-wood-100 dark:border-wood-800 rounded bg-white dark:bg-wood-800"
+        className="border-wood-100 dark:border-wood-800 dark:bg-wood-800 w-full max-w-lg rounded border bg-white"
         style={{ maxHeight: 380 }}
         role="img"
         aria-label={`Cut sheet ${sheet.sheetIndex + 1}`}
@@ -1111,14 +1111,14 @@ function SheetCard({
           return (
             <span
               key={i}
-              className={`text-[10px] cursor-default transition-opacity ${
+              className={`cursor-default text-[10px] transition-opacity ${
                 (hoveredPartId && hoveredPartId !== p.partId) ||
                 (filterTerm &&
                   !p.partId.toLowerCase().includes(filterTerm) &&
                   !p.label.toLowerCase().includes(filterTerm))
                   ? 'opacity-30'
                   : ''
-              } ${hoveredPartId === p.partId || (filterTerm && (p.partId.toLowerCase().includes(filterTerm) || p.label.toLowerCase().includes(filterTerm))) ? 'font-bold text-wood-700 dark:text-wood-100' : 'text-wood-600 dark:text-wood-300'}`}
+              } ${hoveredPartId === p.partId || (filterTerm && (p.partId.toLowerCase().includes(filterTerm) || p.label.toLowerCase().includes(filterTerm))) ? 'text-wood-700 dark:text-wood-100 font-bold' : 'text-wood-600 dark:text-wood-300'}`}
               onMouseEnter={() => onHoverPart(p.partId)}
               onMouseLeave={() => onHoverPart(null)}
               title={
@@ -1132,7 +1132,7 @@ function SheetCard({
               <button
                 type="button"
                 onClick={() => onToggleRotationLock(p.partId)}
-                className="ms-1 inline-flex items-center text-[10px] hover:text-wood-900 dark:hover:text-wood-50 focus:outline-none focus:ring-1 focus:ring-wood-500 rounded"
+                className="hover:text-wood-900 dark:hover:text-wood-50 focus:ring-wood-500 ms-1 inline-flex items-center rounded text-[10px] focus:ring-1 focus:outline-none"
                 aria-label={isLocked ? t('optimizer.unlockRotation') : t('optimizer.lockRotation')}
                 title={isLocked ? t('optimizer.unlockRotation') : t('optimizer.lockRotation')}
                 aria-pressed={isLocked}
@@ -1146,7 +1146,7 @@ function SheetCard({
 
       {/* Sprint 131 — Grain direction legend: only shown for grain-locked materials */}
       {mat.hasGrain && (
-        <p className="mt-1.5 text-[10px] text-amber-700 dark:text-amber-300 flex items-center gap-1">
+        <p className="mt-1.5 flex items-center gap-1 text-[10px] text-amber-700 dark:text-amber-300">
           <IconGrainVertical size={12} className="inline" />
           {t('optimizer.grainLegend')}
         </p>
@@ -1299,7 +1299,17 @@ function PartRect({
       {part.rationale && w > 10 && h > 10 && (
         <g pointerEvents="none" opacity={isFaded ? 0.2 : 0.75} aria-hidden="true">
           <circle cx={x + 4} cy={y + 4} r={3} fill="#3b82f6" />
-          <text x={x + 4} y={y + 4} textAnchor="middle" dominantBaseline="central" fontSize={3.5} fill="white" fontWeight="bold">i</text>
+          <text
+            x={x + 4}
+            y={y + 4}
+            textAnchor="middle"
+            dominantBaseline="central"
+            fontSize={3.5}
+            fill="white"
+            fontWeight="bold"
+          >
+            i
+          </text>
         </g>
       )}
     </g>
@@ -1309,8 +1319,8 @@ function PartRect({
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="bg-wood-50 dark:bg-wood-800 rounded p-3 text-center">
-      <div className="text-lg font-bold text-wood-700 dark:text-wood-200">{value}</div>
-      <div className="text-xs text-wood-600 dark:text-wood-300">{label}</div>
+      <div className="text-wood-700 dark:text-wood-200 text-lg font-bold">{value}</div>
+      <div className="text-wood-600 dark:text-wood-300 text-xs">{label}</div>
     </div>
   );
 }
@@ -1321,7 +1331,7 @@ function YieldBar({ yieldPercent }: { yieldPercent: number }) {
   const label = `${yieldPercent}%`;
   return (
     <div
-      className="flex items-center gap-2 shrink-0"
+      className="flex shrink-0 items-center gap-2"
       title={`Sheet utilization ${label}`}
       role="meter"
       aria-valuenow={yieldPercent}
@@ -1329,10 +1339,10 @@ function YieldBar({ yieldPercent }: { yieldPercent: number }) {
       aria-valuemax={100}
       aria-label={`Yield ${label}`}
     >
-      <div className="w-24 h-2 bg-wood-200 dark:bg-wood-700 rounded overflow-hidden">
+      <div className="bg-wood-200 dark:bg-wood-700 h-2 w-24 overflow-hidden rounded">
         <div className={`${color} h-full transition-all`} style={{ width: `${Math.min(100, yieldPercent)}%` }} />
       </div>
-      <span className="text-xs font-mono w-10 text-right text-wood-600 dark:text-wood-300">{label}</span>
+      <span className="text-wood-600 dark:text-wood-300 w-10 text-right font-mono text-xs">{label}</span>
     </div>
   );
 }
@@ -1370,11 +1380,11 @@ function OptimizerExplainerPanel({
         : 'text-red-700 dark:text-red-400';
 
   return (
-    <div className="rounded border border-wood-200 dark:border-wood-700 bg-wood-50 dark:bg-wood-900/50 print:hidden">
+    <div className="border-wood-200 dark:border-wood-700 bg-wood-50 dark:bg-wood-900/50 rounded border print:hidden">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors rounded"
+        className="text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex w-full items-center justify-between rounded px-3 py-2 text-xs font-medium transition-colors"
         aria-expanded={open}
       >
         <span className="flex items-center gap-1.5">
@@ -1385,9 +1395,9 @@ function OptimizerExplainerPanel({
         {open ? <IconChevronDown size={12} /> : <IconChevronRight size={12} />}
       </button>
       {open && (
-        <div className="px-3 pb-3 space-y-2 text-xs text-wood-600 dark:text-wood-300">
+        <div className="text-wood-600 dark:text-wood-300 space-y-2 px-3 pb-3 text-xs">
           <p>{t('optimizer.explainer.algorithm')}</p>
-          <ul className="space-y-1 list-disc list-inside">
+          <ul className="list-inside list-disc space-y-1">
             <li>{t('optimizer.explainer.placedParts', { total: totalParts, sheets: sheets.length })}</li>
             {rotatedParts > 0 && <li>{t('optimizer.explainer.rotatedParts', { count: rotatedParts })}</li>}
             {grainLockedParts > 0 && <li>{t('optimizer.explainer.grainLocked', { count: grainLockedParts })}</li>}

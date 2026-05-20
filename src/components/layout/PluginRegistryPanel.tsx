@@ -40,11 +40,11 @@ export function PluginRegistryPanel() {
   return (
     <section aria-labelledby="plugin-registry-heading" className="space-y-3">
       <div className="flex items-center justify-between">
-        <h2 id="plugin-registry-heading" className="text-sm font-semibold text-wood-700 dark:text-wood-300">
+        <h2 id="plugin-registry-heading" className="text-wood-700 dark:text-wood-300 text-sm font-semibold">
           {t('plugins.title')}
         </h2>
         <span
-          className={`text-xs px-2 py-0.5 rounded-full font-mono ${STABILITY_CLASSES[contract.stability]}`}
+          className={`rounded-full px-2 py-0.5 font-mono text-xs ${STABILITY_CLASSES[contract.stability]}`}
           title={t('plugins.stability', { level: contract.stability })}
         >
           {t('plugins.apiVersion', { version: contract.apiVersion })}
@@ -52,7 +52,7 @@ export function PluginRegistryPanel() {
       </div>
 
       {plugins.length === 0 ? (
-        <p className="text-xs text-wood-500 dark:text-wood-400 italic">{t('plugins.empty')}</p>
+        <p className="text-wood-500 dark:text-wood-400 text-xs italic">{t('plugins.empty')}</p>
       ) : (
         <ul className="space-y-2" aria-label={t('plugins.title')}>
           {plugins.map((plugin) => {
@@ -60,11 +60,11 @@ export function PluginRegistryPanel() {
             return (
               <li
                 key={plugin.id}
-                className="flex items-center justify-between gap-3 rounded-lg border border-wood-200 dark:border-wood-700 px-3 py-2 text-sm"
+                className="border-wood-200 dark:border-wood-700 flex items-center justify-between gap-3 rounded-lg border px-3 py-2 text-sm"
               >
                 <div className="min-w-0 flex-1">
-                  <span className="font-medium text-wood-800 dark:text-wood-200 truncate block">{plugin.name}</span>
-                  <span className="text-xs text-wood-500 dark:text-wood-400 font-mono">
+                  <span className="text-wood-800 dark:text-wood-200 block truncate font-medium">{plugin.name}</span>
+                  <span className="text-wood-500 dark:text-wood-400 font-mono text-xs">
                     {plugin.id} · {t('plugins.version', { version: plugin.version })}
                   </span>
                 </div>

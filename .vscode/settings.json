@@ -45,20 +45,10 @@
 
   // Tailwind CSS v4 uses @theme, @custom-variant, and CSS custom properties
   // that VS Code's built-in CSS validator doesn't understand. PostCSS + Vite
-  // handle all CSS processing; disable the built-in validator to avoid
-  // false positives on valid Tailwind v4 syntax.
+  // handle all CSS processing; Stylelint (via the vscode-stylelint extension)
+  // is the sole CSS linter. Disable the built-in validator to avoid false
+  // positives on valid Tailwind v4 syntax.
   "css.validate": false,
-  // Disable VS Code CSS lint rules that fire on valid progressive-enhancement
-  // CSS (forced-color-adjust, scrollbar-width, orphans/widows in @media print).
-  // These properties are unsupported only in IE 11 and older Safari, which are
-  // explicitly excluded by the project's browserslist.
-  "css.lint.unknownProperties": "ignore",
-  "css.lint.validProperties": [
-    "forced-color-adjust",
-    "scrollbar-width",
-    "print-color-adjust",
-    "color-scheme"
-  ],
   // Stylelint extension: validate only CSS files (not TSX/JSX handled by ESLint).
   "stylelint.validate": ["css"],
   "editor.codeActionsOnSave": {
@@ -70,12 +60,15 @@
     "**/dist/**": true,
     "**/coverage/**": true,
     "**/playwright-report/**": true,
-    "**/test-results/**": true
+    "**/test-results/**": true,
+    // TypeDoc generates docs/api/ — exclude from VS Code to prevent false diagnostics on generated output.
+    "**/docs/api/**": true
   },
   "search.exclude": {
     "**/dist": true,
     "**/node_modules": true,
-    "**/coverage": true
+    "**/coverage": true,
+    "**/docs/api": true
   },
 
   "[tsx]": {

@@ -41,10 +41,12 @@ export function ShelfConfig() {
   const positions = config.shelfSpacing === 'custom' ? seededCustom() : [];
 
   // Sprint 126 — shelf span deflection check
+  // v3.58.0 — honour centre supports: effective span = shelfWidth / (n+1).
+  const effectiveShelfSpan = dimensions.shelfWidth / ((config.shelfCentreSupports ?? 0) + 1);
   const deflection =
     config.shelfCount > 0
       ? computeShelfDeflection(
-          dimensions.shelfWidth,
+          effectiveShelfSpan,
           getMaterial(config.carcassMaterial).thickness,
           dimensions.shelfDepth,
           config.carcassMaterial,
@@ -53,7 +55,7 @@ export function ShelfConfig() {
 
   return (
     <fieldset className="space-y-4">
-      <legend className="text-sm font-semibold text-wood-700 dark:text-wood-200 uppercase tracking-wide">
+      <legend className="text-wood-700 dark:text-wood-200 text-sm font-semibold tracking-wide uppercase">
         {t('config.shelves')}
       </legend>
 
@@ -68,16 +70,35 @@ export function ShelfConfig() {
         step={1}
       />
 
+      {/* v3.58.0 — Centre supports: full-height vertical dividers that split
+          the shelf span into smaller bays. Each support reduces effective span
+          to shelfWidth / (n+1), cutting deflection and increasing safe load. */}
+      <div className="space-y-1">
+        <SliderInput
+          label={t('config.shelfCentreSupports')}
+          value={config.shelfCentreSupports ?? 0}
+          onChange={(v) => setConfig({ shelfCentreSupports: v })}
+          softMin={0}
+          softMax={3}
+          hardMin={0}
+          hardMax={5}
+          step={1}
+        />
+        <p className="text-wood-500 dark:text-wood-400 text-[11px] leading-snug">
+          {t('config.shelfCentreSupportsHint')}
+        </p>
+      </div>
+
       {/* Sprint 126 — Shelf deflection warning */}
       {deflection && deflection.overLimit && (
         <div
           role="alert"
-          className="rounded border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 px-3 py-2 text-xs text-amber-800 dark:text-amber-200 flex items-start gap-1.5"
+          className="flex items-start gap-1.5 rounded border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-amber-800 dark:border-amber-700 dark:bg-amber-900/20 dark:text-amber-200"
         >
-          <IconWarning size={13} className="shrink-0 mt-0.5" />
+          <IconWarning size={13} className="mt-0.5 shrink-0" />
           <span>
             {t('shelves.deflectionWarning', {
-              span: Math.round(dimensions.shelfWidth),
+              span: Math.round(effectiveShelfSpan),
               sag: deflection.deflectionMm.toFixed(1),
               limit: deflection.limitMm.toFixed(1),
             })}
@@ -113,19 +134,19 @@ export function ShelfConfig() {
       )}
 
       {config.shelfSpacing === 'custom' && config.shelfCount > 0 && (
-        <div className="space-y-2 border-t border-wood-100 dark:border-wood-800 pt-3">
-          <div className="flex items-center justify-between gap-2 flex-wrap">
-            <p className="text-xs font-medium text-wood-600 dark:text-wood-300">{t('shelves.customHeading')}</p>
+        <div className="border-wood-100 dark:border-wood-800 space-y-2 border-t pt-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p className="text-wood-600 dark:text-wood-300 text-xs font-medium">{t('shelves.customHeading')}</p>
             <button
               type="button"
               onClick={resetEqual}
-              className="text-xs px-2 py-1 rounded bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700 transition-colors"
+              className="bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700 rounded px-2 py-1 text-xs transition-colors"
             >
               {t('shelves.resetEqual')}
             </button>
           </div>
-          <p className="text-[10px] text-wood-400">{t('shelves.internalHeight', { h: internalH })}</p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          <p className="text-wood-400 text-[10px]">{t('shelves.internalHeight', { h: internalH })}</p>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
             {positions.map((pos, idx) => {
               const d = dimensions.shelfDeflections[idx];
               const rating = d?.deflectionRating ?? 'safe';
@@ -142,7 +163,7 @@ export function ShelfConfig() {
                     ? 'text-amber-600 dark:text-amber-400'
                     : 'text-green-600 dark:text-green-400';
               return (
-                <label key={idx} className="text-xs text-wood-600 dark:text-wood-300 flex flex-col gap-1">
+                <label key={idx} className="text-wood-600 dark:text-wood-300 flex flex-col gap-1 text-xs">
                   <span className="flex items-center gap-1">
                     {t('shelves.position', { n: idx + 1 })}
                     {d && (
@@ -151,13 +172,13 @@ export function ShelfConfig() {
                         title={t(deflectionKey, { sag: d.deflectionMm.toFixed(1) })}
                         aria-label={t(deflectionKey, { sag: d.deflectionMm.toFixed(1) })}
                       >
-                        {rating !== 'safe' && <IconWarning size={10} className="inline me-0.5" aria-hidden="true" />}
+                        {rating !== 'safe' && <IconWarning size={10} className="me-0.5 inline" aria-hidden="true" />}
                         {t(deflectionKey, { sag: d.deflectionMm.toFixed(1) })}
                       </span>
                     )}
                     {d && (
                       <span
-                        className="text-[10px] font-normal text-wood-400 dark:text-wood-500"
+                        className="text-wood-400 dark:text-wood-500 text-[10px] font-normal"
                         title={t('shelves.loadCapacity', { kg: d.maxLoadKg })}
                         aria-label={t('shelves.loadCapacity', { kg: d.maxLoadKg })}
                       >
@@ -173,7 +194,7 @@ export function ShelfConfig() {
                     value={pos}
                     onChange={(e) => updatePosition(idx, Number(e.target.value) || 0)}
                     onBlur={commitSort}
-                    className="w-full px-2 py-1 rounded border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-900 text-sm"
+                    className="border-wood-200 dark:border-wood-700 dark:bg-wood-900 w-full rounded border bg-white px-2 py-1 text-sm"
                     aria-label={`Shelf ${idx + 1} position in mm`}
                   />
                 </label>

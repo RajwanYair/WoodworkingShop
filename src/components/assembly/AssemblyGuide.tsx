@@ -60,19 +60,19 @@ export function AssemblyGuide() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between gap-3 flex-wrap">
-        <h2 className="text-lg font-bold text-wood-700 dark:text-wood-200">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2 className="text-wood-700 dark:text-wood-200 text-lg font-bold">
           {t('assembly.title')}
           {/* Sprint 169 — step count badge */}
-          <span className="ms-2 text-sm font-normal text-wood-400 dark:text-wood-500">
+          <span className="text-wood-400 dark:text-wood-500 ms-2 text-sm font-normal">
             ({steps.length} {t('assembly.stepsCount')})
           </span>
           {/* Sprint 64 — total estimated time */}
-          <span className="ms-2 text-xs font-normal text-wood-400 dark:text-wood-500">
+          <span className="text-wood-400 dark:text-wood-500 ms-2 text-xs font-normal">
             · {t('assembly.estimatedTime')}: {totalMinutes} {t('assembly.minutes')}
           </span>
           {/* Sprint 18 — total assembly weight */}
-          <span className="ms-2 text-xs font-normal text-wood-400 dark:text-wood-500">
+          <span className="text-wood-400 dark:text-wood-500 ms-2 text-xs font-normal">
             · {t('assembly.totalWeight')}: {totalWeightKg.toFixed(1)} {t('assembly.kg')}
           </span>
         </h2>
@@ -80,13 +80,13 @@ export function AssemblyGuide() {
           {/* Sprint 52 — progress indicator + reset */}
           {completedSteps.size > 0 && (
             <>
-              <span className="text-xs text-wood-500 dark:text-wood-400" aria-live="polite" aria-atomic="true">
+              <span className="text-wood-500 dark:text-wood-400 text-xs" aria-live="polite" aria-atomic="true">
                 {completedSteps.size}/{steps.length} {t('assembly.stepsCompleted')}
               </span>
               <button
                 type="button"
                 onClick={resetProgress}
-                className="px-2 py-1 text-xs rounded border border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors print:hidden"
+                className="border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-800 rounded border px-2 py-1 text-xs transition-colors print:hidden"
                 aria-label={t('assembly.resetProgress')}
               >
                 {t('assembly.resetProgress')}
@@ -97,7 +97,7 @@ export function AssemblyGuide() {
           <button
             type="button"
             onClick={() => window.print()}
-            className="px-3 py-1.5 text-xs rounded border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors print:hidden flex items-center gap-1.5"
+            className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs transition-colors print:hidden"
             title={t('assembly.print')}
             aria-label={t('assembly.print')}
           >
@@ -107,7 +107,7 @@ export function AssemblyGuide() {
           <button
             type="button"
             onClick={downloadChecklist}
-            className="px-3 py-1.5 text-xs rounded border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors print:hidden flex items-center gap-1.5"
+            className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs transition-colors print:hidden"
             title={t('assembly.downloadChecklist')}
             aria-label={t('assembly.downloadChecklist')}
           >
@@ -118,7 +118,7 @@ export function AssemblyGuide() {
             <button
               type="button"
               onClick={() => setShowTips((v) => !v)}
-              className="px-3 py-1.5 text-xs rounded border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors print:hidden flex items-center gap-1.5"
+              className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs transition-colors print:hidden"
               aria-pressed={showTips}
               aria-label={showTips ? t('assembly.hideTips') : t('assembly.showTips')}
             >
@@ -128,7 +128,7 @@ export function AssemblyGuide() {
           )}
           {/* View mode toggle */}
           <div
-            className="inline-flex rounded-md border border-wood-200 dark:border-wood-700 overflow-hidden text-xs print:hidden"
+            className="border-wood-200 dark:border-wood-700 inline-flex overflow-hidden rounded-md border text-xs print:hidden"
             role="group"
             aria-label="Assembly view mode"
           >
@@ -162,8 +162,8 @@ export function AssemblyGuide() {
 
       {/* Sprint 161 — Cabinet notes banner */}
       {notes.trim() && (
-        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg px-4 py-3 text-sm text-amber-800 dark:text-amber-200 print-keep whitespace-pre-wrap">
-          <span className="font-semibold block mb-1">{t('assembly.cabinetNotes')}</span>
+        <div className="print-keep rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm whitespace-pre-wrap text-amber-800 dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-200">
+          <span className="mb-1 block font-semibold">{t('assembly.cabinetNotes')}</span>
           {notes.trim()}
         </div>
       )}
@@ -176,7 +176,7 @@ export function AssemblyGuide() {
               <button
                 key={i}
                 onClick={() => setActiveStep(i)}
-                className={`flex-1 h-2 rounded-full transition-colors ${
+                className={`h-2 flex-1 rounded-full transition-colors ${
                   i === activeStep
                     ? 'bg-wood-500'
                     : i < activeStep
@@ -191,7 +191,7 @@ export function AssemblyGuide() {
           <StepCard step={steps[activeStep]} stepCount={steps.length} parts={parts} lang={lang} t={t} />
 
           {/* All steps hidden on screen but shown when printing in paginated mode */}
-          <div className="hidden print:block space-y-4">
+          <div className="hidden space-y-4 print:block">
             {steps.map((s, i) => (
               <StepCard key={i} step={s} stepCount={steps.length} parts={parts} lang={lang} t={t} />
             ))}
@@ -202,17 +202,17 @@ export function AssemblyGuide() {
             <button
               onClick={() => setActiveStep(Math.max(0, activeStep - 1))}
               disabled={activeStep === 0}
-              className="px-4 py-2 rounded text-sm font-medium bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700 disabled:opacity-30 transition-colors"
+              className="bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700 rounded px-4 py-2 text-sm font-medium transition-colors disabled:opacity-30"
             >
               ← {t('assembly.prev')}
             </button>
-            <span className="text-xs text-wood-400 self-center">
+            <span className="text-wood-400 self-center text-xs">
               {activeStep + 1} / {steps.length}
             </span>
             <button
               onClick={() => setActiveStep(Math.min(steps.length - 1, activeStep + 1))}
               disabled={activeStep === steps.length - 1}
-              className="px-4 py-2 rounded text-sm font-medium bg-wood-600 text-white hover:bg-wood-700 disabled:opacity-30 transition-colors"
+              className="bg-wood-600 hover:bg-wood-700 rounded px-4 py-2 text-sm font-medium text-white transition-colors disabled:opacity-30"
             >
               {t('assembly.next')} →
             </button>
@@ -235,7 +235,7 @@ export function AssemblyGuide() {
             />
           ))}
           {completedSteps.size === steps.length && steps.length > 0 && (
-            <p className="text-center text-sm font-semibold text-green-600 dark:text-green-400 py-2" role="status">
+            <p className="py-2 text-center text-sm font-semibold text-green-600 dark:text-green-400" role="status">
               ✓ {t('assembly.allStepsDone')}
             </p>
           )}
@@ -272,11 +272,11 @@ function HardwareChecklist({
     });
 
   return (
-    <div className="border border-wood-200 dark:border-wood-700 rounded-lg p-5 print-keep">
-      <h3 className="text-base font-semibold text-wood-700 dark:text-wood-200 mb-3">
+    <div className="border-wood-200 dark:border-wood-700 print-keep rounded-lg border p-5">
+      <h3 className="text-wood-700 dark:text-wood-200 mb-3 text-base font-semibold">
         {t('assembly.hardwareChecklist')}
       </h3>
-      <p className="text-xs text-wood-400 dark:text-wood-500 mb-4">{t('assembly.hardwareChecklistDesc')}</p>
+      <p className="text-wood-400 dark:text-wood-500 mb-4 text-xs">{t('assembly.hardwareChecklistDesc')}</p>
       <ul className="space-y-2">
         {hardware.map((hw) => {
           const id = `${hw.id}-${hw.qty}`;
@@ -288,12 +288,12 @@ function HardwareChecklist({
                 id={id}
                 checked={isChecked}
                 onChange={() => toggle(id)}
-                className="w-4 h-4 rounded accent-wood-500 print:border print:border-wood-400 cursor-pointer"
+                className="accent-wood-500 print:border-wood-400 h-4 w-4 cursor-pointer rounded print:border"
               />
               <label
                 htmlFor={id}
-                className={`text-sm cursor-pointer select-none transition-colors ${
-                  isChecked ? 'line-through text-wood-300 dark:text-wood-600' : 'text-wood-600 dark:text-wood-300'
+                className={`cursor-pointer text-sm transition-colors select-none ${
+                  isChecked ? 'text-wood-300 dark:text-wood-600 line-through' : 'text-wood-600 dark:text-wood-300'
                 }`}
               >
                 <span className="font-medium">×{hw.qty}</span> {typeof hw.name === 'object' ? hw.name[lang] : hw.name}
@@ -343,24 +343,24 @@ function StepCard({
   const checkboxId = stepIndex !== undefined ? `step-complete-${stepIndex}` : undefined;
   return (
     <div
-      className={`border rounded-lg p-5 print-keep transition-colors ${
+      className={`print-keep rounded-lg border p-5 transition-colors ${
         completed
-          ? 'border-green-300 dark:border-green-800 bg-green-50/50 dark:bg-green-900/10'
+          ? 'border-green-300 bg-green-50/50 dark:border-green-800 dark:bg-green-900/10'
           : 'border-wood-200 dark:border-wood-700'
       }`}
       data-assembly-step="true"
     >
       {/* Sprint 52 — completion checkbox */}
       {onToggleComplete && checkboxId && (
-        <div className="flex items-center gap-2 mb-3 print:hidden">
+        <div className="mb-3 flex items-center gap-2 print:hidden">
           <input
             type="checkbox"
             id={checkboxId}
             checked={completed}
             onChange={onToggleComplete}
-            className="w-4 h-4 rounded accent-wood-500 cursor-pointer"
+            className="accent-wood-500 h-4 w-4 cursor-pointer rounded"
           />
-          <label htmlFor={checkboxId} className="text-xs text-wood-500 dark:text-wood-400 cursor-pointer select-none">
+          <label htmlFor={checkboxId} className="text-wood-500 dark:text-wood-400 cursor-pointer text-xs select-none">
             {completed ? t('assembly.stepDone') : t('assembly.markStepDone')}
           </label>
         </div>
@@ -370,30 +370,30 @@ function StepCard({
           {step.icon}
         </span>
         <div className="flex-1">
-          <div className="flex items-center gap-2 mb-1 flex-wrap">
-            <span className="text-xs font-bold bg-wood-600 text-white px-2 py-0.5 rounded-full">
+          <div className="mb-1 flex flex-wrap items-center gap-2">
+            <span className="bg-wood-600 rounded-full px-2 py-0.5 text-xs font-bold text-white">
               {step.stepNumber}/{stepCount}
             </span>
-            <h3 className="text-base font-semibold text-wood-700 dark:text-wood-200">{step.title[lang]}</h3>
+            <h3 className="text-wood-700 dark:text-wood-200 text-base font-semibold">{step.title[lang]}</h3>
             {/* Sprint 14 — risk level badge */}
             <span
-              className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+              className={`rounded-full px-2 py-0.5 text-xs font-medium ${
                 step.riskLevel === 'high'
-                  ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'
+                  ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
                   : step.riskLevel === 'medium'
-                    ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300'
-                    : 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+                    ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'
+                    : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
               }`}
               aria-label={`${t('assembly.riskLabel')}: ${t(`assembly.risk.${step.riskLevel}`)}`}
             >
               {t(`assembly.risk.${step.riskLevel}`)}
             </span>
           </div>
-          <p className="text-sm text-wood-600 dark:text-wood-300 leading-relaxed">{step.description[lang]}</p>
+          <p className="text-wood-600 dark:text-wood-300 text-sm leading-relaxed">{step.description[lang]}</p>
           {showTips && step.tip && (
-            <div className="mt-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded px-3 py-2">
-              <p className="text-xs text-amber-700 dark:text-amber-300 flex items-start gap-1.5">
-                <IconLightbulb size={13} className="shrink-0 mt-0.5" />
+            <div className="mt-3 rounded border border-amber-200 bg-amber-50 px-3 py-2 dark:border-amber-800 dark:bg-amber-900/20">
+              <p className="flex items-start gap-1.5 text-xs text-amber-700 dark:text-amber-300">
+                <IconLightbulb size={13} className="mt-0.5 shrink-0" />
                 {step.tip[lang]}
               </p>
             </div>
@@ -403,7 +403,7 @@ function StepCard({
               href={`https://www.youtube.com/results?search_query=${encodeURIComponent(step.videoKeyword)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 mt-3 text-xs font-medium text-red-600 dark:text-red-400 hover:underline"
+              className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-red-600 hover:underline dark:text-red-400"
             >
               ▶ {t('assembly.watchVideo')}
             </a>
@@ -413,15 +413,15 @@ function StepCard({
 
       {/* Parts involved in this step */}
       {step.parts.length > 0 && (
-        <div className="mt-4 pt-3 border-t border-wood-100 dark:border-wood-800">
-          <p className="text-xs font-medium text-wood-600 dark:text-wood-300 mb-2">{t('assembly.partsInStep')}</p>
+        <div className="border-wood-100 dark:border-wood-800 mt-4 border-t pt-3">
+          <p className="text-wood-600 dark:text-wood-300 mb-2 text-xs font-medium">{t('assembly.partsInStep')}</p>
           <div className="flex flex-wrap gap-2">
             {parts
               .filter((p) => highlightedParts.has(p.id))
               .map((p) => (
                 <span
                   key={p.id}
-                  className="text-xs bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 px-2 py-1 rounded"
+                  className="bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 rounded px-2 py-1 text-xs"
                 >
                   {p.id}: {p.name[lang]} ({p.length}×{p.width} mm)
                 </span>

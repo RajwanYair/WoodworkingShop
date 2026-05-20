@@ -38,7 +38,7 @@ export function ShortcutsModal({ onClose }: ShortcutsModalProps) {
       {/* Backdrop — interactive button for click-outside-to-close */}
       <button
         type="button"
-        className="absolute inset-0 w-full h-full bg-black/50 cursor-default"
+        className="absolute inset-0 h-full w-full cursor-default bg-black/50"
         onClick={onClose}
         aria-label={isHe ? 'סגור' : 'Close dialog'}
         tabIndex={-1}
@@ -50,11 +50,11 @@ export function ShortcutsModal({ onClose }: ShortcutsModalProps) {
         aria-modal="true"
         aria-label={isHe ? 'קיצורי מקלדת' : 'Keyboard Shortcuts'}
         tabIndex={-1}
-        className="relative z-10 bg-white dark:bg-wood-900 rounded-xl shadow-2xl w-full max-w-sm mx-4 outline-none"
+        className="dark:bg-wood-900 relative z-10 mx-4 w-full max-w-sm rounded-xl bg-white shadow-2xl outline-none"
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-wood-200 dark:border-wood-700">
-          <h2 className="text-base font-semibold text-wood-800 dark:text-wood-100">
+        <div className="border-wood-200 dark:border-wood-700 flex items-center justify-between border-b px-5 py-4">
+          <h2 className="text-wood-800 dark:text-wood-100 text-base font-semibold">
             {isHe ? 'קיצורי מקלדת' : 'Keyboard Shortcuts'}
           </h2>
           <button
@@ -71,13 +71,13 @@ export function ShortcutsModal({ onClose }: ShortcutsModalProps) {
           <table className="w-full text-sm">
             <tbody>
               {SHORTCUTS.map((s) => (
-                <tr key={s.key} className="border-b border-wood-100 dark:border-wood-800 last:border-0">
+                <tr key={s.key} className="border-wood-100 dark:border-wood-800 border-b last:border-0">
                   <td className="py-1.5 pr-4 whitespace-nowrap">
-                    <kbd className="font-mono bg-wood-100 dark:bg-wood-800 text-wood-700 dark:text-wood-200 px-1.5 py-0.5 rounded text-xs">
+                    <kbd className="bg-wood-100 dark:bg-wood-800 text-wood-700 dark:text-wood-200 rounded px-1.5 py-0.5 font-mono text-xs">
                       {s.key}
                     </kbd>
                   </td>
-                  <td className="py-1.5 text-wood-600 dark:text-wood-300">{isHe ? s.descHe : s.descEn}</td>
+                  <td className="text-wood-600 dark:text-wood-300 py-1.5">{isHe ? s.descHe : s.descEn}</td>
                 </tr>
               ))}
             </tbody>

@@ -14,23 +14,25 @@ export function Sidebar() {
 
   const content = (
     <>
-      <h2 className="text-sm font-semibold text-wood-700 dark:text-wood-200 uppercase tracking-wide mb-3">Summary</h2>
+      <h2 className="text-wood-700 dark:text-wood-200 mb-3 text-sm font-semibold tracking-wide uppercase">
+        🪵 Summary
+      </h2>
 
-      <dl className="space-y-2 text-sm mb-4">
+      <dl className="mb-4 space-y-2 text-sm">
         <div className="flex justify-between">
-          <dt className="text-wood-600 dark:text-wood-300">Parts</dt>
+          <dt className="text-wood-600 dark:text-wood-300">🔲 Parts</dt>
           <dd className="font-medium">{parts.length}</dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-wood-600 dark:text-wood-300">Hardware items</dt>
+          <dt className="text-wood-600 dark:text-wood-300">🔩 Hardware items</dt>
           <dd className="font-medium">{hardware.length}</dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-wood-600 dark:text-wood-300">Sheets needed</dt>
+          <dt className="text-wood-600 dark:text-wood-300">📋 Sheets needed</dt>
           <dd className="font-medium">{optimization.totalSheets}</dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-wood-600 dark:text-wood-300">Yield</dt>
+          <dt className="text-wood-600 dark:text-wood-300">📊 Yield</dt>
           <dd className="font-medium">{optimization.overallYield}%</dd>
         </div>
       </dl>
@@ -45,7 +47,7 @@ export function Sidebar() {
       {/* Mobile toggle button */}
       <button
         onClick={() => setMobileOpen(!mobileOpen)}
-        className="lg:hidden fixed bottom-5 start-5 z-50 bg-wood-600 hover:bg-wood-700 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg transition-colors"
+        className="bg-wood-600 hover:bg-wood-700 fixed start-5 bottom-5 z-50 flex h-12 w-12 items-center justify-center rounded-full text-white shadow-lg transition-colors lg:hidden"
         data-print="hide"
         aria-label="Toggle summary panel"
       >
@@ -55,7 +57,7 @@ export function Sidebar() {
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
-          className="lg:hidden fixed inset-0 z-40"
+          className="fixed inset-0 z-40 lg:hidden"
           data-print="hide"
           role="dialog"
           aria-modal="true"
@@ -72,14 +74,14 @@ export function Sidebar() {
           />
           <aside
             ref={mobileDialogRef}
-            className="absolute bottom-0 inset-x-0 max-h-[70vh] bg-wood-50 dark:bg-wood-900 border-t border-wood-200 dark:border-wood-800 p-4 rounded-t-xl overflow-y-auto animate-slide-up"
+            className="bg-wood-50 dark:bg-wood-900 border-wood-200 dark:border-wood-800 animate-slide-up absolute inset-x-0 bottom-0 max-h-[70vh] overflow-y-auto rounded-t-xl border-t p-4"
             aria-label="Cabinet summary"
           >
             <div className="relative">
-              <div className="w-10 h-1 bg-wood-300 dark:bg-wood-600 rounded-full mx-auto mb-3" />
+              <div className="bg-wood-300 dark:bg-wood-600 mx-auto mb-3 h-1 w-10 rounded-full" />
               <button
                 onClick={() => setMobileOpen(false)}
-                className="absolute top-0 right-0 text-wood-400 hover:text-wood-700 dark:hover:text-wood-200 flex items-center"
+                className="text-wood-400 hover:text-wood-700 dark:hover:text-wood-200 absolute top-0 right-0 flex items-center"
                 aria-label="Close panel"
               >
                 <IconX size={16} />
@@ -92,7 +94,7 @@ export function Sidebar() {
 
       {/* Desktop sidebar */}
       <aside
-        className="w-64 bg-wood-50 dark:bg-wood-900 border-e border-wood-200 dark:border-wood-800 p-4 hidden lg:block overflow-y-auto"
+        className="bg-wood-50 dark:bg-wood-900 border-wood-200 dark:border-wood-800 hidden w-64 overflow-y-auto border-e p-4 lg:block"
         aria-label="Cabinet summary"
         data-print="hide"
       >

@@ -6,11 +6,11 @@ export function ComparisonView({ suggestion }: { suggestion: OptimizationSuggest
   const lang = i18n.language as Lang;
 
   return (
-    <div className="border border-wood-200 dark:border-wood-700 rounded-lg p-4 space-y-3 bg-wood-50/50 dark:bg-wood-800/30">
-      <h4 className="text-xs font-semibold text-wood-700 dark:text-wood-200 uppercase tracking-wide">
+    <div className="border-wood-200 dark:border-wood-700 bg-wood-50/50 dark:bg-wood-800/30 space-y-3 rounded-lg border p-4">
+      <h4 className="text-wood-700 dark:text-wood-200 text-xs font-semibold tracking-wide uppercase">
         {t('optimizer.comparison')}
       </h4>
-      <p className="text-xs text-wood-600 dark:text-wood-300">{suggestion.explanation[lang]}</p>
+      <p className="text-wood-600 dark:text-wood-300 text-xs">{suggestion.explanation[lang]}</p>
 
       <div className="grid grid-cols-2 gap-4">
         <ConfigCard
@@ -30,14 +30,14 @@ export function ComparisonView({ suggestion }: { suggestion: OptimizationSuggest
       </div>
 
       {/* Changes summary */}
-      <div className="border-t border-wood-200 dark:border-wood-700 pt-3">
-        <h5 className="text-xs font-medium text-wood-600 dark:text-wood-300 mb-2">{t('optimizer.changes')}</h5>
+      <div className="border-wood-200 dark:border-wood-700 border-t pt-3">
+        <h5 className="text-wood-600 dark:text-wood-300 mb-2 text-xs font-medium">{t('optimizer.changes')}</h5>
         <div className="flex flex-wrap gap-3 text-xs">
           {renderDiff('W', suggestion.originalConfig.width, suggestion.optimizedConfig.width, 'mm')}
           {renderDiff('H', suggestion.originalConfig.height, suggestion.optimizedConfig.height, 'mm')}
           {renderDiff('D', suggestion.originalConfig.depth, suggestion.optimizedConfig.depth, 'mm')}
           {suggestion.originalConfig.carcassMaterial !== suggestion.optimizedConfig.carcassMaterial && (
-            <span className="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 px-2 py-0.5 rounded">
+            <span className="rounded bg-yellow-100 px-2 py-0.5 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300">
               Material changed
             </span>
           )}
@@ -63,7 +63,7 @@ function ConfigCard({
   const ringColor = accent === 'red' ? 'ring-red-300 dark:ring-red-700' : 'ring-green-300 dark:ring-green-700';
 
   return (
-    <div className={`ring-2 ${ringColor} rounded p-3 bg-white dark:bg-wood-800 space-y-2`}>
+    <div className={`ring-2 ${ringColor} dark:bg-wood-800 space-y-2 rounded bg-white p-3`}>
       <div className={`text-xs font-bold ${accent === 'red' ? 'text-red-600' : 'text-green-600'}`}>{title}</div>
       <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
         <span className="text-wood-600 dark:text-wood-300">{t('config.width')}</span>
@@ -73,7 +73,7 @@ function ConfigCard({
         <span className="text-wood-600 dark:text-wood-300">{t('config.depth')}</span>
         <span className="font-medium">{config.depth} mm</span>
       </div>
-      <div className="border-t border-wood-100 dark:border-wood-700 pt-1 grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
+      <div className="border-wood-100 dark:border-wood-700 grid grid-cols-2 gap-x-4 gap-y-1 border-t pt-1 text-xs">
         <span className="text-wood-600 dark:text-wood-300">{t('optimizer.sheets')}</span>
         <span className="font-medium">{result.totalSheets}</span>
         <span className="text-wood-600 dark:text-wood-300">{t('optimizer.yield')}</span>

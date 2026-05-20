@@ -150,10 +150,10 @@ export function SaveLoadPanel() {
   };
 
   return (
-    <div className="border border-wood-200 dark:border-wood-700 rounded-lg p-3 space-y-3">
+    <div className="border-wood-200 dark:border-wood-700 space-y-3 rounded-lg border p-3">
       {/* Sprint 152 — project name */}
       <div>
-        <label className="block text-xs font-semibold text-wood-700 dark:text-wood-200 mb-1">
+        <label className="text-wood-700 dark:text-wood-200 mb-1 block text-xs font-semibold">
           {t('saves.projectName')}
         </label>
         <input
@@ -161,14 +161,14 @@ export function SaveLoadPanel() {
           value={projectName}
           onChange={(e) => setProjectName(e.target.value)}
           placeholder={t('saves.projectNamePlaceholder')}
-          className="w-full rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-wood-400 text-wood-800 dark:text-wood-100"
+          className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 text-wood-800 dark:text-wood-100 w-full rounded border bg-white px-2 py-1 text-xs focus:ring-1 focus:outline-none"
           maxLength={80}
           aria-label={t('saves.projectName')}
         />
       </div>
       {/* Sprint 14 — project notes */}
       <div>
-        <label className="block text-xs font-semibold text-wood-700 dark:text-wood-200 mb-1" htmlFor="project-notes">
+        <label className="text-wood-700 dark:text-wood-200 mb-1 block text-xs font-semibold" htmlFor="project-notes">
           {t('saves.projectNotes')}
         </label>
         <textarea
@@ -177,16 +177,16 @@ export function SaveLoadPanel() {
           onChange={(e) => setProjectNotes(e.target.value)}
           placeholder={t('saves.projectNotesPlaceholder')}
           rows={3}
-          className="w-full rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-wood-400 text-wood-800 dark:text-wood-100 resize-y"
+          className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 text-wood-800 dark:text-wood-100 w-full resize-y rounded border bg-white px-2 py-1 text-xs focus:ring-1 focus:outline-none"
           maxLength={1000}
           aria-label={t('saves.projectNotes')}
         />
       </div>
       <div className="flex items-center justify-between">
-        <h3 className="text-xs font-semibold text-wood-700 dark:text-wood-200">{t('saves.title')}</h3>
+        <h3 className="text-wood-700 dark:text-wood-200 text-xs font-semibold">{t('saves.title')}</h3>
         <button
           onClick={() => setShowSaved(!showSaved)}
-          className="text-xs text-wood-600 hover:text-wood-700 dark:text-wood-400 dark:hover:text-wood-200"
+          className="text-wood-600 hover:text-wood-700 dark:text-wood-400 dark:hover:text-wood-200 text-xs"
           aria-expanded={showSaved}
           aria-label={t('saves.title')}
         >
@@ -201,12 +201,12 @@ export function SaveLoadPanel() {
           value={saveName}
           onChange={(e) => setSaveName(e.target.value)}
           placeholder={t('saves.placeholder')}
-          className="flex-1 text-xs px-2 py-1.5 rounded border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-800 text-wood-700 dark:text-wood-200"
+          className="border-wood-200 dark:border-wood-700 dark:bg-wood-800 text-wood-700 dark:text-wood-200 flex-1 rounded border bg-white px-2 py-1.5 text-xs"
           onKeyDown={(e) => e.key === 'Enter' && handleSave()}
         />
         <button
           onClick={handleSave}
-          className="px-3 py-1.5 text-xs font-medium bg-wood-600 text-white rounded hover:bg-wood-600 transition-colors"
+          className="bg-wood-600 hover:bg-wood-600 rounded px-3 py-1.5 text-xs font-medium text-white transition-colors"
         >
           {t('saves.save')}
         </button>
@@ -214,27 +214,27 @@ export function SaveLoadPanel() {
 
       {/* Saved list */}
       {showSaved && configs.length > 0 && (
-        <div className="space-y-1 max-h-48 overflow-y-auto">
+        <div className="max-h-48 space-y-1 overflow-y-auto">
           {configs.map((c) => (
             <div
               key={c.id}
-              className="flex items-center justify-between gap-2 px-2 py-1.5 rounded bg-wood-50 dark:bg-wood-800 text-xs"
+              className="bg-wood-50 dark:bg-wood-800 flex items-center justify-between gap-2 rounded px-2 py-1.5 text-xs"
             >
-              <div className="flex-1 min-w-0">
-                <div className="font-medium text-wood-700 dark:text-wood-200 truncate">{c.name}</div>
+              <div className="min-w-0 flex-1">
+                <div className="text-wood-700 dark:text-wood-200 truncate font-medium">{c.name}</div>
                 <div className="text-wood-400 dark:text-wood-500">
                   {c.config.width}×{c.config.height}×{c.config.depth} — {new Date(c.savedAt).toLocaleDateString()}
                 </div>
               </div>
               <button
                 onClick={() => handleLoad(c)}
-                className="px-2 py-0.5 text-xs bg-wood-600 text-white rounded hover:bg-wood-600 shrink-0"
+                className="bg-wood-600 hover:bg-wood-600 shrink-0 rounded px-2 py-0.5 text-xs text-white"
               >
                 {t('saves.load')}
               </button>
               <button
                 onClick={() => handleDelete(c.id)}
-                className="px-1.5 py-0.5 text-xs text-red-500 hover:text-red-700 shrink-0"
+                className="shrink-0 px-1.5 py-0.5 text-xs text-red-500 hover:text-red-700"
                 title={t('saves.delete')}
               >
                 ✕
@@ -245,27 +245,27 @@ export function SaveLoadPanel() {
       )}
 
       {showSaved && configs.length === 0 && (
-        <p className="text-xs text-wood-400 text-center py-2">{t('saves.empty')}</p>
+        <p className="text-wood-400 py-2 text-center text-xs">{t('saves.empty')}</p>
       )}
 
       {/* Export / Import */}
-      <div className="flex gap-2 pt-1 border-t border-wood-100 dark:border-wood-800">
+      <div className="border-wood-100 dark:border-wood-800 flex gap-2 border-t pt-1">
         <button
           onClick={handleExport}
-          className="flex-1 px-2 py-1.5 text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 rounded hover:bg-wood-50 dark:hover:bg-wood-700 transition-colors"
+          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 flex-1 rounded border px-2 py-1.5 text-xs font-medium transition-colors"
         >
           ↓ {t('saves.export')}
         </button>
         <button
           onClick={handleImport}
-          className="flex-1 px-2 py-1.5 text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 rounded hover:bg-wood-50 dark:hover:bg-wood-700 transition-colors"
+          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 flex-1 rounded border px-2 py-1.5 text-xs font-medium transition-colors"
         >
           ↑ {t('saves.import')}
         </button>
         {/* Sprint 166 — share / copy link */}
         <button
           onClick={handleShare}
-          className="flex-1 px-2 py-1.5 text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 rounded hover:bg-wood-50 dark:hover:bg-wood-700 transition-colors"
+          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 flex-1 rounded border px-2 py-1.5 text-xs font-medium transition-colors"
           aria-label={t('saves.share')}
         >
           ⎘ {t('saves.share')}
@@ -285,14 +285,14 @@ export function SaveLoadPanel() {
       <div className="flex gap-2">
         <button
           onClick={handleExportAll}
-          className="flex-1 px-2 py-1.5 text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 rounded hover:bg-wood-50 dark:hover:bg-wood-700 transition-colors"
+          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 flex-1 rounded border px-2 py-1.5 text-xs font-medium transition-colors"
           title={t('saves.exportAllTip')}
         >
           ⬇ {t('saves.exportAll')}
         </button>
         <button
           onClick={handleImportBundle}
-          className="flex-1 px-2 py-1.5 text-xs font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 rounded hover:bg-wood-50 dark:hover:bg-wood-700 transition-colors"
+          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 flex-1 rounded border px-2 py-1.5 text-xs font-medium transition-colors"
           title={t('saves.importBundleTip')}
         >
           ⬆ {t('saves.importBundle')}

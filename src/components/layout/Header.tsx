@@ -14,11 +14,6 @@ import {
   IconRedo,
   IconLink,
   IconHelp,
-  IconSettings,
-  IconEye,
-  IconScissors,
-  IconHammer,
-  IconDocument,
   IconContrast,
   IconLayers,
   IconFolder,
@@ -27,11 +22,31 @@ import {
 const tabs = ['configurator', 'preview', 'optimizer', 'assembly', 'pdf'] as const;
 
 const TAB_ICONS = {
-  configurator: <IconSettings size={14} className="shrink-0" />,
-  preview: <IconEye size={14} className="shrink-0" />,
-  optimizer: <IconScissors size={14} className="shrink-0" />,
-  assembly: <IconHammer size={14} className="shrink-0" />,
-  pdf: <IconDocument size={14} className="shrink-0" />,
+  configurator: (
+    <span aria-hidden="true" className="shrink-0 text-sm">
+      ⚙️
+    </span>
+  ),
+  preview: (
+    <span aria-hidden="true" className="shrink-0 text-sm">
+      👁️
+    </span>
+  ),
+  optimizer: (
+    <span aria-hidden="true" className="shrink-0 text-sm">
+      ✂️
+    </span>
+  ),
+  assembly: (
+    <span aria-hidden="true" className="shrink-0 text-sm">
+      🔨
+    </span>
+  ),
+  pdf: (
+    <span aria-hidden="true" className="shrink-0 text-sm">
+      📄
+    </span>
+  ),
 } as const;
 
 export function Header() {
@@ -87,28 +102,28 @@ export function Header() {
 
   return (
     <header
-      className="bg-wood-700 text-white px-3 sm:px-4 py-2 sm:py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+      className="bg-wood-700 flex flex-col gap-2 px-3 py-2 text-white sm:flex-row sm:items-center sm:justify-between sm:px-4 sm:py-3"
       data-print="hide"
     >
       <div className="flex items-center justify-between">
         <div className="min-w-0">
           <div className="flex items-baseline gap-2">
-            <h1 className="text-lg sm:text-xl font-bold truncate">{t('app.title')}</h1>
+            <h1 className="truncate text-lg font-bold sm:text-xl">🪵 {t('app.title')}</h1>
             <span
-              className="hidden sm:inline text-xs font-mono text-wood-300 select-none"
+              className="text-wood-300 hidden font-mono text-xs select-none sm:inline"
               aria-label={`Version ${__APP_VERSION__}`}
             >
               v{__APP_VERSION__}
             </span>
           </div>
-          <p className="text-wood-200 text-xs sm:text-sm hidden sm:block">{t('app.subtitle')}</p>
+          <p className="text-wood-200 hidden text-xs sm:block sm:text-sm">{t('app.subtitle')}</p>
         </div>
         {/* Mobile-only controls row */}
         <div className="flex items-center gap-2 sm:hidden">
           <button
             onClick={undo}
             disabled={!canUndo}
-            className="text-wood-200 hover:text-white disabled:opacity-30 flex items-center"
+            className="text-wood-200 flex items-center hover:text-white disabled:opacity-30"
             aria-label="Undo"
           >
             <IconUndo size={16} />
@@ -116,14 +131,14 @@ export function Header() {
           <button
             onClick={redo}
             disabled={!canRedo}
-            className="text-wood-200 hover:text-white disabled:opacity-30 flex items-center"
+            className="text-wood-200 flex items-center hover:text-white disabled:opacity-30"
             aria-label="Redo"
           >
             <IconRedo size={16} />
           </button>
           <button
             onClick={toggleDarkMode}
-            className="text-wood-200 hover:text-white flex items-center"
+            className="text-wood-200 flex items-center hover:text-white"
             aria-label={darkMode ? 'Light mode' : 'Dark mode'}
           >
             {darkMode ? <IconSun size={16} /> : <IconMoon size={16} />}
@@ -131,7 +146,7 @@ export function Header() {
           <select
             value={lang}
             onChange={(e) => changeLang(e.target.value as SupportedLang)}
-            className="bg-transparent text-wood-200 hover:text-white text-xs font-medium border-0 outline-none cursor-pointer"
+            className="text-wood-200 cursor-pointer border-0 bg-transparent text-xs font-medium outline-none hover:text-white"
             aria-label={t('footer.language')}
           >
             {SUPPORTED_LANGUAGES.map((l) => (
@@ -146,7 +161,7 @@ export function Header() {
       {/* Tab nav — horizontally scrollable on mobile */}
       <div
         ref={tabListRef}
-        className="flex gap-1 overflow-x-auto -mx-3 px-3 sm:mx-0 sm:px-0 scrollbar-none"
+        className="-mx-3 flex scrollbar-none gap-1 overflow-x-auto px-3 sm:mx-0 sm:px-0"
         role="tablist"
         aria-label="Main navigation"
       >
@@ -161,7 +176,7 @@ export function Header() {
             aria-current={activeTab === tab ? 'page' : undefined}
             aria-controls="main-content"
             title={`${t(`tabs.${tab}`)} (Alt+${i + 1})`}
-            className={`px-3 py-1.5 rounded text-sm font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 ${
+            className={`flex items-center gap-1.5 rounded px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-colors ${
               activeTab === tab ? 'bg-wood-600 text-white' : 'text-wood-200 hover:bg-wood-600'
             }`}
           >
@@ -172,11 +187,11 @@ export function Header() {
       </div>
 
       {/* Desktop controls */}
-      <div className="hidden sm:flex items-center gap-3">
+      <div className="hidden items-center gap-3 sm:flex">
         <button
           onClick={undo}
           disabled={!canUndo}
-          className="text-wood-200 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed flex items-center"
+          className="text-wood-200 flex items-center hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
           title="Undo (Ctrl+Z)"
           aria-label="Undo"
         >
@@ -185,7 +200,7 @@ export function Header() {
         <button
           onClick={redo}
           disabled={!canRedo}
-          className="text-wood-200 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed flex items-center"
+          className="text-wood-200 flex items-center hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
           title="Redo (Ctrl+Y)"
           aria-label="Redo"
         >
@@ -200,7 +215,7 @@ export function Header() {
               () => useToastStore.getState().addToast(t('toast.linkCopyFailed'), 'error'),
             );
           }}
-          className="text-wood-200 hover:text-white flex items-center"
+          className="text-wood-200 flex items-center hover:text-white"
           title="Copy shareable link"
           aria-label="Copy shareable link"
         >
@@ -208,7 +223,7 @@ export function Header() {
         </button>
         <button
           onClick={toggleDarkMode}
-          className="text-wood-200 hover:text-white flex items-center"
+          className="text-wood-200 flex items-center hover:text-white"
           title={t('footer.darkMode')}
           aria-label={darkMode ? 'Light mode' : 'Dark mode'}
         >
@@ -225,7 +240,7 @@ export function Header() {
         </button>
         <button
           onClick={toggleUnits}
-          className="text-wood-200 hover:text-white text-sm font-medium px-1"
+          className="text-wood-200 px-1 text-sm font-medium hover:text-white"
           title={t('config.toggleUnits')}
           aria-label={units === 'metric' ? 'Switch to imperial' : 'Switch to metric'}
         >
@@ -234,7 +249,7 @@ export function Header() {
         <select
           value={lang}
           onChange={(e) => changeLang(e.target.value as SupportedLang)}
-          className="bg-transparent text-wood-200 hover:text-white text-xs font-medium border-0 outline-none cursor-pointer"
+          className="text-wood-200 cursor-pointer border-0 bg-transparent text-xs font-medium outline-none hover:text-white"
           aria-label={t('footer.language')}
         >
           {SUPPORTED_LANGUAGES.map((l) => (
@@ -245,7 +260,7 @@ export function Header() {
         </select>
         <button
           onClick={() => setShowTemplates(true)}
-          className="text-wood-200 hover:text-white flex items-center"
+          className="text-wood-200 flex items-center hover:text-white"
           title={t('templates.title')}
           aria-label={t('templates.title')}
         >
@@ -253,7 +268,7 @@ export function Header() {
         </button>
         <button
           onClick={() => setShowProjects(true)}
-          className="text-wood-200 hover:text-white flex items-center"
+          className="text-wood-200 flex items-center hover:text-white"
           title={t('projects.title')}
           aria-label={t('projects.title')}
         >
@@ -261,7 +276,7 @@ export function Header() {
         </button>
         <button
           onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: '?' }))}
-          className="text-wood-200 hover:text-white flex items-center"
+          className="text-wood-200 flex items-center hover:text-white"
           title="Keyboard shortcuts (?)"
           aria-label="Keyboard shortcuts"
         >

@@ -79,6 +79,14 @@ export interface CabinetConfig {
   shelfCount: number;
   shelfSpacing: ShelfSpacing;
   customShelfPositions: number[]; // mm from bottom, used when shelfSpacing === 'custom'
+  /**
+   * Number of full-height vertical centre supports / dividers added inside the
+   * carcass to break long shelf spans into smaller bays. Each support divides
+   * the shelf span (effectiveSpan = shelfWidth / (centreSupports + 1)), which
+   * reduces deflection and increases the safe shelf load. Default 0.
+   * Used by the "Add centre support" fix on shelf deflection / wide span issues.
+   */
+  shelfCentreSupports?: number;
 
   // Material
   carcassMaterial: string; // material key
@@ -248,6 +256,16 @@ export interface ValidationIssue {
   field?: keyof CabinetConfig;
   /** Suggested value to resolve the issue, if applicable. */
   suggestedValue?: number | string;
+  /**
+   * Rich, multi-field programmatic fix. When present, the UI applies
+   * `fix.patch` via `setConfig` instead of using the legacy `field`/
+   * `suggestedValue` pair. `labelKey` is an i18n key for the Fix button.
+   * v3.58.0 — guarantees every actionable suggestion has a one-click fix.
+   */
+  fix?: {
+    patch: Partial<CabinetConfig>;
+    labelKey?: string;
+  };
 }
 
 // ─── Material substitution types ───

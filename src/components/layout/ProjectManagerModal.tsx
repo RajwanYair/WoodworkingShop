@@ -109,7 +109,7 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
       {/* Backdrop — click outside to close */}
       <button
         type="button"
-        className="absolute inset-0 bg-black/50 w-full h-full border-0 p-0 cursor-default"
+        className="absolute inset-0 h-full w-full cursor-default border-0 bg-black/50 p-0"
         onClick={onClose}
         aria-label="Close dialog"
         tabIndex={-1}
@@ -119,11 +119,11 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="pm-title"
-        className="relative bg-white dark:bg-wood-800 rounded-xl shadow-2xl w-full max-w-xl max-h-[85vh] overflow-hidden flex flex-col mx-4"
+        className="dark:bg-wood-800 relative mx-4 flex max-h-[85vh] w-full max-w-xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl"
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-wood-200 dark:border-wood-700">
-          <h2 id="pm-title" className="text-lg font-bold text-wood-800 dark:text-wood-100">
+        <div className="border-wood-200 dark:border-wood-700 flex items-center justify-between border-b p-4">
+          <h2 id="pm-title" className="text-wood-800 dark:text-wood-100 text-lg font-bold">
             {t('projects.title')}
           </h2>
           <div className="flex items-center gap-3">
@@ -139,8 +139,8 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
         </div>
 
         {/* Save current project */}
-        <div className="p-4 border-b border-wood-200 dark:border-wood-700 space-y-2">
-          <p className="text-sm font-semibold text-wood-700 dark:text-wood-200">{t('projects.saveCurrent')}</p>
+        <div className="border-wood-200 dark:border-wood-700 space-y-2 border-b p-4">
+          <p className="text-wood-700 dark:text-wood-200 text-sm font-semibold">{t('projects.saveCurrent')}</p>
           <div className="flex gap-2">
             <input
               type="text"
@@ -150,12 +150,12 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
                 if (e.key === 'Enter') handleSave();
               }}
               placeholder={t('projects.namePlaceholder')}
-              className="flex-1 px-3 py-1.5 text-sm rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-700 text-wood-800 dark:text-wood-100 focus:outline-none focus:border-wood-500"
+              className="border-wood-300 dark:border-wood-600 dark:bg-wood-700 text-wood-800 dark:text-wood-100 focus:border-wood-500 flex-1 rounded border bg-white px-3 py-1.5 text-sm focus:outline-none"
             />
             <button
               onClick={handleSave}
               disabled={!saveName.trim()}
-              className="px-4 py-1.5 text-sm rounded bg-wood-600 text-white hover:bg-wood-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="bg-wood-600 hover:bg-wood-700 rounded px-4 py-1.5 text-sm text-white transition-colors disabled:cursor-not-allowed disabled:opacity-40"
             >
               {t('projects.save')}
             </button>
@@ -163,54 +163,54 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
         </div>
 
         {/* Search + sort toolbar */}
-        <div className="p-3 border-b border-wood-200 dark:border-wood-700 flex items-center gap-2">
+        <div className="border-wood-200 dark:border-wood-700 flex items-center gap-2 border-b p-3">
           <input
             type="search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder={t('projects.searchPlaceholder')}
-            className="flex-1 px-2 py-1 text-sm rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-700 text-wood-800 dark:text-wood-100 focus:outline-none focus:border-wood-500"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-700 text-wood-800 dark:text-wood-100 focus:border-wood-500 flex-1 rounded border bg-white px-2 py-1 text-sm focus:outline-none"
             aria-label={t('projects.searchPlaceholder')}
           />
-          <label className="text-xs text-wood-500 dark:text-wood-400 shrink-0">{t('projects.sortLabel')}:</label>
+          <label className="text-wood-500 dark:text-wood-400 shrink-0 text-xs">{t('projects.sortLabel')}:</label>
           <select
             value={sortMode}
             onChange={(e) => setSortMode(e.target.value as 'date' | 'name')}
-            className="text-xs px-1.5 py-1 rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-700 text-wood-700 dark:text-wood-200"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-700 text-wood-700 dark:text-wood-200 rounded border bg-white px-1.5 py-1 text-xs"
             aria-label={t('projects.sortLabel')}
           >
             <option value="date">{t('projects.sortByDate')}</option>
             <option value="name">{t('projects.sortByName')}</option>
           </select>
           {searchQuery && (
-            <span className="text-xs text-wood-400 dark:text-wood-500 shrink-0">
+            <span className="text-wood-400 dark:text-wood-500 shrink-0 text-xs">
               {t('projects.found', { count: visibleProjects.length })}
             </span>
           )}
         </div>
 
         {/* Project list */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-2">
+        <div className="flex-1 space-y-2 overflow-y-auto p-4">
           {visibleProjects.length === 0 ? (
-            <p className="text-sm text-wood-400 dark:text-wood-500 text-center py-6">
+            <p className="text-wood-400 dark:text-wood-500 py-6 text-center text-sm">
               {searchQuery ? t('projects.noResults', { query: searchQuery }) : t('projects.empty')}
             </p>
           ) : (
             visibleProjects.map((project) => (
               <div
                 key={project.id}
-                className="flex items-center gap-3 p-3 rounded-lg border border-wood-200 dark:border-wood-700 hover:border-wood-400 dark:hover:border-wood-500 transition-colors"
+                className="border-wood-200 dark:border-wood-700 hover:border-wood-400 dark:hover:border-wood-500 flex items-center gap-3 rounded-lg border p-3 transition-colors"
               >
                 <IconFolder size={16} className="text-wood-600 dark:text-wood-300 shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <div className="font-medium text-sm text-wood-800 dark:text-wood-100 truncate">{project.name}</div>
-                  <div className="text-xs text-wood-400 dark:text-wood-500">
+                <div className="min-w-0 flex-1">
+                  <div className="text-wood-800 dark:text-wood-100 truncate text-sm font-medium">{project.name}</div>
+                  <div className="text-wood-400 dark:text-wood-500 text-xs">
                     {project.cabinets.length} {t('projects.cabinets')} · {fmt(project.savedAt)}
                   </div>
                 </div>
                 <button
                   onClick={() => handleLoad(project)}
-                  className="text-xs px-2 py-1 rounded bg-wood-100 dark:bg-wood-700 text-wood-700 dark:text-wood-200 hover:bg-wood-200 dark:hover:bg-wood-600 shrink-0"
+                  className="bg-wood-100 dark:bg-wood-700 text-wood-700 dark:text-wood-200 hover:bg-wood-200 dark:hover:bg-wood-600 shrink-0 rounded px-2 py-1 text-xs"
                 >
                   {t('projects.load')}
                 </button>
@@ -224,7 +224,7 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
                 </button>
                 <button
                   onClick={() => handleDelete(project)}
-                  className="text-wood-300 hover:text-red-500 dark:hover:text-red-400 shrink-0"
+                  className="text-wood-300 shrink-0 hover:text-red-500 dark:hover:text-red-400"
                   title={t('projects.delete')}
                   aria-label={t('projects.delete')}
                 >
@@ -236,7 +236,7 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
         </div>
 
         {/* Footer — import button */}
-        <div className="p-4 border-t border-wood-200 dark:border-wood-700 flex justify-between items-center">
+        <div className="border-wood-200 dark:border-wood-700 flex items-center justify-between border-t p-4">
           <input
             ref={fileInputRef}
             type="file"
@@ -247,13 +247,13 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
           />
           <label
             htmlFor="pm-import-file"
-            className="cursor-pointer text-sm px-3 py-1.5 rounded bg-wood-100 dark:bg-wood-700 text-wood-700 dark:text-wood-200 hover:bg-wood-200 dark:hover:bg-wood-600 transition-colors"
+            className="bg-wood-100 dark:bg-wood-700 text-wood-700 dark:text-wood-200 hover:bg-wood-200 dark:hover:bg-wood-600 cursor-pointer rounded px-3 py-1.5 text-sm transition-colors"
           >
             {t('projects.import')}
           </label>
           <button
             onClick={onClose}
-            className="text-sm px-4 py-1.5 rounded bg-wood-100 dark:bg-wood-700 text-wood-700 dark:text-wood-200 hover:bg-wood-200 dark:hover:bg-wood-600 transition-colors"
+            className="bg-wood-100 dark:bg-wood-700 text-wood-700 dark:text-wood-200 hover:bg-wood-200 dark:hover:bg-wood-600 rounded px-4 py-1.5 text-sm transition-colors"
           >
             {t('templates.close')}
           </button>

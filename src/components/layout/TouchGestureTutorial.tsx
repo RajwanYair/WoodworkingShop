@@ -38,16 +38,16 @@ export function TouchGestureTutorial() {
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center p-4 bg-black/50 sm:items-center">
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-4 sm:items-center">
       <div
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="gesture-tutorial-title"
-        className="w-full max-w-sm bg-white dark:bg-wood-900 rounded-t-2xl sm:rounded-2xl shadow-2xl p-5 space-y-4 animate-slide-up sm:animate-none"
+        className="dark:bg-wood-900 animate-slide-up w-full max-w-sm space-y-4 rounded-t-2xl bg-white p-5 shadow-2xl sm:animate-none sm:rounded-2xl"
       >
         <div className="flex items-center justify-between">
-          <h2 id="gesture-tutorial-title" className="text-sm font-semibold text-wood-800 dark:text-wood-100">
+          <h2 id="gesture-tutorial-title" className="text-wood-800 dark:text-wood-100 text-sm font-semibold">
             {t('gestures.title')}
           </h2>
           <button
@@ -60,12 +60,12 @@ export function TouchGestureTutorial() {
           </button>
         </div>
 
-        <p className="text-xs text-wood-600 dark:text-wood-400">{t('gestures.subtitle')}</p>
+        <p className="text-wood-600 dark:text-wood-400 text-xs">{t('gestures.subtitle')}</p>
 
         <ul className="space-y-2.5">
           {hints.map((h) => (
-            <li key={h.textKey} className="flex items-center gap-3 text-sm text-wood-700 dark:text-wood-200">
-              <span className="text-xl leading-none w-7 text-center" aria-hidden="true">
+            <li key={h.textKey} className="text-wood-700 dark:text-wood-200 flex items-center gap-3 text-sm">
+              <span className="w-7 text-center text-xl leading-none" aria-hidden="true">
                 {h.emoji}
               </span>
               <span>{t(h.textKey)}</span>
@@ -76,7 +76,7 @@ export function TouchGestureTutorial() {
         <button
           type="button"
           onClick={dismiss}
-          className="w-full rounded-lg bg-wood-600 px-4 py-2 text-sm font-medium text-white hover:bg-wood-700 transition-colors"
+          className="bg-wood-600 hover:bg-wood-700 w-full rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
         >
           {t('gestures.gotIt')}
         </button>

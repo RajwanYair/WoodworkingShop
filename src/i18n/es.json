@@ -31,6 +31,8 @@
     "backPanel": "Material del panel trasero",
     "shelves": "Estantes",
     "shelfCount": "Número de estantes",
+    "shelfCentreSupports": "Soportes centrales",
+    "shelfCentreSupportsHint": "Divisores verticales de altura completa que dividen el tramo del estante en bahías más pequeñas. Cada soporte reduce el tramo efectivo a la mitad, disminuyendo drásticamente la deflexión.",
     "shelfSpacing": "Separación de estantes",
     "equal": "Igual",
     "custom": "Personalizado",
@@ -222,6 +224,8 @@
   "pdf": {
     "title": "Exportar PDF",
     "generate": "Generar PDF",
+    "generateAll": "Exportar proyecto completo ({{count}} armarios)",
+    "generatingAll": "Creando PDF del proyecto…",
     "download": "Descargar PDF",
     "generating": "Generando…",
     "includeCover": "Incluir portada",
@@ -475,6 +479,8 @@
     "dismiss": "Descartar",
     "dismissAll": "Descartar todo",
     "fix": "Corregir",
+    "fixAddCentreSupport": "Añadir soporte central",
+    "fixEnableBack": "Añadir panel trasero",
     "collapsed": "Mostrar {{count}} problema(s)",
     "fieldHint": "Campo: {{field}}",
     "suggestedValue": "Sugerido: {{value}}"

@@ -189,7 +189,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
   return (
     <div className="space-y-4">
       {/* View tab bar */}
-      <div className="flex flex-wrap gap-1 items-center">
+      <div className="flex flex-wrap items-center gap-1">
         <div role="tablist" aria-label="Cabinet view selector" className="flex flex-wrap gap-1">
           {views.map((v) => (
             <button
@@ -197,7 +197,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
               role="tab"
               aria-selected={activeView === v.id}
               onClick={() => setActiveView(v.id)}
-              className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
+              className={`rounded px-3 py-1 text-xs font-medium transition-colors ${
                 activeView === v.id
                   ? 'bg-wood-600 text-white'
                   : 'bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700'
@@ -207,7 +207,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
             </button>
           ))}
         </div>
-        <label className="ms-auto flex items-center gap-1.5 text-xs text-wood-600 dark:text-wood-300 cursor-pointer select-none">
+        <label className="text-wood-600 dark:text-wood-300 ms-auto flex cursor-pointer items-center gap-1.5 text-xs select-none">
           <input
             type="checkbox"
             checked={showDims}
@@ -218,7 +218,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
         </label>
         <button
           onClick={() => previewRef.current && downloadSvg(previewRef.current, `cabinet-${activeView}.svg`)}
-          className="ms-2 px-2 py-0.5 rounded text-xs font-medium bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700 transition-colors flex items-center gap-1"
+          className="bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700 ms-2 flex items-center gap-1 rounded px-2 py-0.5 text-xs font-medium transition-colors"
           aria-label={t('preview.exportSvg')}
           title={t('preview.exportSvg')}
         >
@@ -226,7 +226,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
         </button>
         <button
           onClick={() => previewRef.current && downloadPng(previewRef.current, `cabinet-${activeView}.png`)}
-          className="ms-1 px-2 py-0.5 rounded text-xs font-medium bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700 transition-colors flex items-center gap-1"
+          className="bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700 ms-1 flex items-center gap-1 rounded px-2 py-0.5 text-xs font-medium transition-colors"
           aria-label={t('preview.exportPng')}
           title={t('preview.exportPng')}
         >
@@ -235,7 +235,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
         {zoomScale !== 1 && (
           <button
             onClick={() => setZoomScale(1)}
-            className="ms-1 px-2 py-0.5 rounded text-xs font-medium bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-800 transition-colors"
+            className="ms-1 rounded bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700 transition-colors hover:bg-amber-200 dark:bg-amber-900 dark:text-amber-300 dark:hover:bg-amber-800"
           >
             {Math.round(zoomScale * 100)}% ✕
           </button>
@@ -245,7 +245,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
       {/* Active view */}
       <div
         ref={previewRef}
-        className="relative overflow-auto touch-none"
+        className="relative touch-none overflow-auto"
         onTouchStart={touchGestures.onTouchStart}
         onTouchMove={touchGestures.onTouchMove}
         onTouchEnd={touchGestures.onTouchEnd}
@@ -253,7 +253,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
       >
         {tooltip && (
           <div
-            className="fixed z-50 pointer-events-none px-3 py-2 rounded shadow-lg text-xs bg-wood-900 dark:bg-wood-100 text-white dark:text-wood-900 border border-wood-600 dark:border-wood-300"
+            className="bg-wood-900 dark:bg-wood-100 dark:text-wood-900 border-wood-600 dark:border-wood-300 pointer-events-none fixed z-50 rounded border px-3 py-2 text-xs text-white shadow-lg"
             style={{ left: tooltip.x + 12, top: tooltip.y - 40 }}
           >
             <div className="font-semibold">{tooltip.label}</div>
@@ -665,14 +665,14 @@ export const CabinetPreview = memo(function CabinetPreview() {
       </div>
       {/* Sprint 76 — W × H × D dimension summary label */}
       <p
-        className="text-center text-xs text-wood-500 dark:text-wood-400 tabular-nums"
+        className="text-wood-500 dark:text-wood-400 text-center text-xs tabular-nums"
         aria-label={t('preview.dimensionSummary')}
       >
         W {fd(config.width)} × H {fd(config.height)} × D {fd(config.depth)}
       </p>
       {/* Sprint 89 — door / drawer count indicator pills */}
       {(config.doorStyle !== 'none' || config.drawerCount > 0) && (
-        <p className="text-center text-xs text-wood-400 dark:text-wood-500 flex justify-center gap-2 mt-0.5">
+        <p className="text-wood-400 dark:text-wood-500 mt-0.5 flex justify-center gap-2 text-center text-xs">
           {config.doorStyle !== 'none' && (
             <span>
               {config.doorCount} {t('preview.doors')}
@@ -712,7 +712,7 @@ function ViewBox({
       viewBox={`0 0 ${w} ${h}`}
       role="img"
       aria-label="Cabinet drawing"
-      className="w-full max-w-lg max-h-125 border border-wood-200 dark:border-wood-700 rounded bg-white dark:bg-wood-800 text-wood-600 dark:text-wood-200 touch-none"
+      className="border-wood-200 dark:border-wood-700 dark:bg-wood-800 text-wood-600 dark:text-wood-200 max-h-125 w-full max-w-lg touch-none rounded border bg-white"
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
     >
@@ -1062,7 +1062,7 @@ function IsometricView({
       viewBox={`0 0 ${vw} ${vh}`}
       role="img"
       aria-label="3D isometric cabinet drawing"
-      className="w-full max-w-lg max-h-125 border border-wood-200 dark:border-wood-700 rounded bg-white dark:bg-wood-800 text-wood-600 dark:text-wood-200"
+      className="border-wood-200 dark:border-wood-700 dark:bg-wood-800 text-wood-600 dark:text-wood-200 max-h-125 w-full max-w-lg rounded border bg-white"
     >
       <g transform={`translate(${ox},${oy})`}>
         {/* Back panel */}

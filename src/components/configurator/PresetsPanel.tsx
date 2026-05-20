@@ -161,7 +161,7 @@ export function PresetsPanel() {
 
   return (
     <fieldset className="space-y-3">
-      <legend className="text-sm font-semibold text-wood-700 dark:text-wood-200 uppercase tracking-wide">
+      <legend className="text-wood-700 dark:text-wood-200 text-sm font-semibold tracking-wide uppercase">
         {isHe ? 'תבניות מהירות' : 'Quick Presets'}
       </legend>
 
@@ -170,14 +170,14 @@ export function PresetsPanel() {
           <button
             key={p.key}
             onClick={() => setConfig(p.config)}
-            className="flex flex-col items-start gap-0.5 rounded border border-wood-200 dark:border-wood-700 bg-wood-50 dark:bg-wood-800 hover:bg-wood-100 dark:hover:bg-wood-700 px-3 py-2 text-left transition-colors"
+            className="border-wood-200 dark:border-wood-700 bg-wood-50 dark:bg-wood-800 hover:bg-wood-100 dark:hover:bg-wood-700 flex flex-col items-start gap-0.5 rounded border px-3 py-2 text-left transition-colors"
             title={isHe ? p.descHe : p.descEn}
           >
             <span className="text-wood-600 dark:text-wood-300 leading-none">{p.icon}</span>
-            <span className="text-xs font-medium text-wood-700 dark:text-wood-200 leading-tight mt-1">
+            <span className="text-wood-700 dark:text-wood-200 mt-1 text-xs leading-tight font-medium">
               {isHe ? p.nameHe : p.nameEn}
             </span>
-            <span className="text-[10px] text-wood-600 dark:text-wood-300 leading-tight">
+            <span className="text-wood-600 dark:text-wood-300 text-[10px] leading-tight">
               {isHe ? p.descHe : p.descEn}
             </span>
           </button>

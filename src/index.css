@@ -123,6 +123,59 @@
   }
 }
 
+/* ── Wood grain application background ────────────────────────────────────
+   Light mode: warm parchment (#f5ead6) with three layers of near-invisible
+   diagonal grain lines that simulate real wood.
+   Dark mode: deep espresso walnut (#1a1208) with amber-tinted grain.
+   High-contrast + forced-colors: plain solid, no image noise.
+   Print: overridden to white by the @media print block below.
+   ─────────────────────────────────────────────────────────────────────── */
+.app-bg {
+  background-color: #f5ead6;
+  background-image:
+    repeating-linear-gradient(170deg, transparent 0, transparent 5px, rgb(122 77 26 / 5%) 5px, rgb(122 77 26 / 5%) 6px),
+    repeating-linear-gradient(
+      175deg,
+      transparent 0,
+      transparent 16px,
+      rgb(100 60 15 / 4%) 16px,
+      rgb(100 60 15 / 4%) 17px
+    ),
+    repeating-linear-gradient(178deg, transparent 0, transparent 38px, rgb(80 45 10 / 3%) 38px, rgb(80 45 10 / 3%) 39px);
+}
+
+.dark .app-bg {
+  background-color: #1a1208;
+  background-image:
+    repeating-linear-gradient(
+      170deg,
+      transparent 0,
+      transparent 5px,
+      rgb(200 150 70 / 6%) 5px,
+      rgb(200 150 70 / 6%) 6px
+    ),
+    repeating-linear-gradient(
+      175deg,
+      transparent 0,
+      transparent 16px,
+      rgb(175 115 45 / 5%) 16px,
+      rgb(175 115 45 / 5%) 17px
+    ),
+    repeating-linear-gradient(
+      178deg,
+      transparent 0,
+      transparent 38px,
+      rgb(220 170 100 / 3%) 38px,
+      rgb(220 170 100 / 3%) 39px
+    );
+}
+
+/* Strip grain pattern in high-contrast and forced-color environments */
+.high-contrast .app-bg,
+.high-contrast.dark .app-bg {
+  background-image: none;
+}
+
 /* v3.48.7 — High-contrast / forced-colours mode (Windows High Contrast,
    Edge "Increase contrast"). Use system colour keywords so foreground and
    background always meet contrast requirements regardless of user's chosen

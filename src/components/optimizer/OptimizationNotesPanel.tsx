@@ -72,23 +72,23 @@ export function OptimizationNotesPanel() {
   // Always render the header/threshold even when no suggestions, so the user
   // can see the current tolerance setting. Hide the card list when empty.
   return (
-    <div className="border border-amber-200 dark:border-amber-700/50 bg-amber-50 dark:bg-amber-900/10 rounded-lg overflow-hidden">
+    <div className="overflow-hidden rounded-lg border border-amber-200 bg-amber-50 dark:border-amber-700/50 dark:bg-amber-900/10">
       {/* ── Header ── */}
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-amber-200 dark:border-amber-700/50">
+      <div className="flex items-center justify-between border-b border-amber-200 px-4 py-2.5 dark:border-amber-700/50">
         <div className="flex items-center gap-2">
           <span className="text-amber-800 dark:text-amber-300">
             <IconLightbulb size={16} />
           </span>
           <h3 className="text-sm font-semibold text-amber-800 dark:text-amber-300">{t('optimizer.notes')}</h3>
           {visible.length > 0 && (
-            <span className="text-[10px] bg-amber-500 text-white rounded-full px-1.5 py-0.5 font-medium leading-none">
+            <span className="rounded-full bg-amber-500 px-1.5 py-0.5 text-[10px] leading-none font-medium text-white">
               {visible.length}
             </span>
           )}
         </div>
         <div className="flex items-center gap-3">
           {/* Tolerance slider */}
-          <label className="flex items-center gap-1.5 text-xs text-amber-700 dark:text-amber-400 select-none">
+          <label className="flex items-center gap-1.5 text-xs text-amber-700 select-none dark:text-amber-400">
             {t('optimizer.tolerance')} ±
             <input
               type="number"
@@ -97,14 +97,14 @@ export function OptimizationNotesPanel() {
               step={2}
               value={tolerance}
               onChange={(e) => setTolerance(Number(e.target.value))}
-              className="w-12 rounded border border-amber-300 dark:border-amber-700 bg-white dark:bg-wood-800 px-1 py-0.5 text-xs text-center focus:outline-none focus:ring-1 focus:ring-amber-400"
+              className="dark:bg-wood-800 w-12 rounded border border-amber-300 bg-white px-1 py-0.5 text-center text-xs focus:ring-1 focus:ring-amber-400 focus:outline-none dark:border-amber-700"
               aria-label={t('optimizer.tolerance')}
             />
             mm
           </label>
           <button
             onClick={() => setOpen((o) => !o)}
-            className="text-amber-800 dark:text-amber-300 hover:underline select-none flex items-center gap-0.5"
+            className="flex items-center gap-0.5 text-amber-800 select-none hover:underline dark:text-amber-300"
             aria-expanded={open}
           >
             {open ? <IconChevronDown size={14} /> : <IconChevronRight size={14} />}
@@ -114,27 +114,27 @@ export function OptimizationNotesPanel() {
 
       {/* ── Suggestion cards ── */}
       {open && (
-        <div className="p-3 space-y-2">
+        <div className="space-y-2 p-3">
           {visible.length === 0 ? (
-            <p className="text-xs text-amber-800 dark:text-amber-300 text-center py-1">{t('optimizer.notesEmpty')}</p>
+            <p className="py-1 text-center text-xs text-amber-800 dark:text-amber-300">{t('optimizer.notesEmpty')}</p>
           ) : (
             visible.map((s) => {
               const key = suggestionKey(s);
               return (
                 <div
                   key={key}
-                  className="flex items-start justify-between gap-3 bg-white dark:bg-wood-800/60 rounded border border-amber-200 dark:border-amber-700/40 px-3 py-2"
+                  className="dark:bg-wood-800/60 flex items-start justify-between gap-3 rounded border border-amber-200 bg-white px-3 py-2 dark:border-amber-700/40"
                 >
                   {/* Left: icon + description */}
-                  <div className="flex items-start gap-2 min-w-0 flex-1">
-                    <span className="text-base leading-none mt-0.5 shrink-0 flex items-center">
+                  <div className="flex min-w-0 flex-1 items-start gap-2">
+                    <span className="mt-0.5 flex shrink-0 items-center text-base leading-none">
                       {STRATEGY_ICON[s.strategy]}
                     </span>
                     <div className="min-w-0">
-                      <p className="text-xs font-medium text-wood-700 dark:text-wood-200 truncate">
+                      <p className="text-wood-700 dark:text-wood-200 truncate text-xs font-medium">
                         {s.explanation[lang]}
                       </p>
-                      <div className="flex gap-3 mt-0.5 flex-wrap">
+                      <div className="mt-0.5 flex flex-wrap gap-3">
                         {s.savings.sheetsRemoved > 0 && (
                           <span className="text-[11px] font-semibold text-green-600 dark:text-green-400">
                             −{s.savings.sheetsRemoved} {t('optimizer.sheetsRemoved')}
@@ -146,11 +146,11 @@ export function OptimizationNotesPanel() {
                           </span>
                         )}
                         {s.savings.wasteReduced > 0 && (
-                          <span className="text-[11px] text-wood-600 dark:text-wood-300">
+                          <span className="text-wood-600 dark:text-wood-300 text-[11px]">
                             −{(s.savings.wasteReduced / 1_000_000).toFixed(3)} m² {t('optimizer.wasteReduced')}
                           </span>
                         )}
-                        <span className="text-[11px] text-wood-400 dark:text-wood-500">
+                        <span className="text-wood-400 dark:text-wood-500 text-[11px]">
                           → {s.optimizedResult.totalSheets} {t('optimizer.sheets').toLowerCase()} /{' '}
                           {s.optimizedResult.overallYield}%
                         </span>
@@ -158,16 +158,16 @@ export function OptimizationNotesPanel() {
                     </div>
                   </div>
                   {/* Right: actions */}
-                  <div className="flex gap-1.5 shrink-0">
+                  <div className="flex shrink-0 gap-1.5">
                     <button
                       onClick={() => handleApply(s)}
-                      className="px-2.5 py-1 text-[11px] font-medium bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+                      className="rounded bg-green-600 px-2.5 py-1 text-[11px] font-medium text-white transition-colors hover:bg-green-700"
                     >
                       {t('optimizer.apply')}
                     </button>
                     <button
                       onClick={() => handleDismiss(s)}
-                      className="px-2.5 py-1 text-[11px] font-medium border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 rounded hover:bg-wood-100 dark:hover:bg-wood-700 transition-colors flex items-center"
+                      className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-700 flex items-center rounded border px-2.5 py-1 text-[11px] font-medium transition-colors"
                       aria-label={t('optimizer.notesDismiss')}
                     >
                       <IconX size={12} />
@@ -180,7 +180,7 @@ export function OptimizationNotesPanel() {
           {dismissed.size > 0 && (
             <button
               onClick={() => setDismissed(new Set())}
-              className="text-[10px] text-amber-800 dark:text-amber-300 hover:underline w-full text-end"
+              className="w-full text-end text-[10px] text-amber-800 hover:underline dark:text-amber-300"
             >
               {t('optimizer.notesRestore')}
             </button>

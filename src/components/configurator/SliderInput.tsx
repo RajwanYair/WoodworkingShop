@@ -89,10 +89,10 @@ export function SliderInput({
 
   return (
     <div className="block">
-      <label htmlFor={inputId} className="text-sm text-wood-600 dark:text-wood-300">
+      <label htmlFor={inputId} className="text-wood-600 dark:text-wood-300 text-sm">
         {label}
       </label>
-      <div className="flex items-center gap-3 mt-1">
+      <div className="mt-1 flex items-center gap-3">
         <input
           type="range"
           min={softMin}
@@ -105,7 +105,7 @@ export function SliderInput({
             onChange(v);
             setText(formatValue(v));
           }}
-          className="flex-1 accent-primary"
+          className="accent-primary flex-1"
         />
         <div className="flex items-center">
           <input
@@ -127,7 +127,7 @@ export function SliderInput({
               }
             }}
             className={
-              'w-16 text-right text-sm font-mono px-2 py-0.5 rounded border bg-white dark:bg-wood-900 ' +
+              'dark:bg-wood-900 w-16 rounded border bg-white px-2 py-0.5 text-right font-mono text-sm ' +
               (isInvalid
                 ? 'border-red-500 text-red-600'
                 : outOfSoft
@@ -135,7 +135,7 @@ export function SliderInput({
                   : 'border-wood-300 dark:border-wood-600 text-wood-700 dark:text-wood-200')
             }
           />
-          {unit && <span className="ml-1 text-[10px] text-wood-600 dark:text-wood-300">{unit}</span>}
+          {unit && <span className="text-wood-600 dark:text-wood-300 ml-1 text-[10px]">{unit}</span>}
         </div>
       </div>
       {message && (

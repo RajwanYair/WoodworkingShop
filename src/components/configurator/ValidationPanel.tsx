@@ -63,13 +63,23 @@ export function ValidationPanel({ issues }: ValidationPanelProps) {
   };
 
   const fixIssue = (issue: ValidationIssue) => {
-    if (issue.field !== undefined && issue.suggestedValue !== undefined) {
+    // v3.58.0 \u2014 prefer the rich `fix.patch` (multi-field, programmatic) over
+    // the legacy `field`/`suggestedValue` pair. Either path will close the issue.
+    if (issue.fix?.patch) {
+      setConfig(issue.fix.patch);
+    } else if (issue.field !== undefined && issue.suggestedValue !== undefined) {
       const patch: Partial<CabinetConfig> = {};
       Object.assign(patch, { [issue.field]: issue.suggestedValue });
       setConfig(patch);
     }
     dismissIssue(issue.code);
   };
+
+  const hasFix = (issue: ValidationIssue): boolean =>
+    issue.fix?.patch !== undefined || (issue.field !== undefined && issue.suggestedValue !== undefined);
+
+  const fixLabel = (issue: ValidationIssue): string =>
+    issue.fix?.labelKey ? t(issue.fix.labelKey) : t('validation.fix');
 
   const dismissAll = () => {
     setDismissed(new Set(visible.map((i) => i.code)));
@@ -78,13 +88,13 @@ export function ValidationPanel({ issues }: ValidationPanelProps) {
   return (
     <section
       aria-label={t('validation.title')}
-      className="rounded-lg border border-wood-200 dark:border-wood-700 overflow-hidden"
+      className="border-wood-200 dark:border-wood-700 overflow-hidden rounded-lg border"
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-3 py-2 bg-wood-50 dark:bg-wood-800 border-b border-wood-200 dark:border-wood-700">
+      <div className="bg-wood-50 dark:bg-wood-800 border-wood-200 dark:border-wood-700 flex items-center justify-between border-b px-3 py-2">
         <button
           type="button"
-          className="flex items-center gap-2 text-sm font-semibold text-wood-700 dark:text-wood-200 hover:text-wood-900 dark:hover:text-wood-50 transition-colors"
+          className="text-wood-700 dark:text-wood-200 hover:text-wood-900 dark:hover:text-wood-50 flex items-center gap-2 text-sm font-semibold transition-colors"
           onClick={() => setCollapsed((c) => !c)}
           aria-expanded={!collapsed}
           aria-controls="validation-issue-list"
@@ -98,7 +108,7 @@ export function ValidationPanel({ issues }: ValidationPanelProps) {
           {/* Sprint 72 — colored severity count badges */}
           {errorCount > 0 && (
             <span
-              className="inline-flex items-center justify-center min-w-5 h-5 px-1 rounded-full text-xs font-bold bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300"
+              className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-red-100 px-1 text-xs font-bold text-red-700 dark:bg-red-900/50 dark:text-red-300"
               aria-label={t('validation.error', { count: errorCount, postProcess: 'interval' })}
             >
               {errorCount}
@@ -106,7 +116,7 @@ export function ValidationPanel({ issues }: ValidationPanelProps) {
           )}
           {warnCount > 0 && (
             <span
-              className="inline-flex items-center justify-center min-w-5 h-5 px-1 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300"
+              className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-amber-100 px-1 text-xs font-bold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300"
               aria-label={t('validation.warning', { count: warnCount, postProcess: 'interval' })}
             >
               {warnCount}
@@ -114,7 +124,7 @@ export function ValidationPanel({ issues }: ValidationPanelProps) {
           )}
           {infoCount > 0 && (
             <span
-              className="inline-flex items-center justify-center min-w-5 h-5 px-1 rounded-full text-xs font-bold bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300"
+              className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-blue-100 px-1 text-xs font-bold text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
               aria-label={t('validation.info', { count: infoCount, postProcess: 'interval' })}
             >
               {infoCount}
@@ -124,7 +134,7 @@ export function ValidationPanel({ issues }: ValidationPanelProps) {
 
         <button
           type="button"
-          className="text-xs text-wood-500 dark:text-wood-400 hover:text-wood-700 dark:hover:text-wood-200 underline transition-colors"
+          className="text-wood-500 dark:text-wood-400 hover:text-wood-700 dark:hover:text-wood-200 text-xs underline transition-colors"
           onClick={dismissAll}
           aria-label={t('validation.dismissAll')}
         >
@@ -136,36 +146,36 @@ export function ValidationPanel({ issues }: ValidationPanelProps) {
       {!collapsed && (
         <ul
           id="validation-issue-list"
-          className="divide-y divide-wood-100 dark:divide-wood-800"
+          className="divide-wood-100 dark:divide-wood-800 divide-y"
           aria-live="polite"
           aria-atomic="false"
         >
           {visible.map((issue) => (
             <li
               key={issue.code}
-              className={`flex items-start gap-2 px-3 py-2 text-sm border-s-2 ${SEVERITY_ROW_CLASS[issue.severity]}`}
+              className={`flex items-start gap-2 border-s-2 px-3 py-2 text-sm ${SEVERITY_ROW_CLASS[issue.severity]}`}
               title={issue.code}
             >
               <SeverityIcon severity={issue.severity} />
 
-              <div className="flex-1 min-w-0">
+              <div className="min-w-0 flex-1">
                 <p className={`leading-snug ${SEVERITY_TEXT_CLASS[issue.severity]}`}>{issue.message[lang]}</p>
                 {issue.suggestedValue !== undefined && (
-                  <p className="mt-0.5 text-xs text-wood-500 dark:text-wood-400">
+                  <p className="text-wood-500 dark:text-wood-400 mt-0.5 text-xs">
                     {t('validation.suggestedValue', { value: issue.suggestedValue })}
                   </p>
                 )}
               </div>
 
-              <div className="shrink-0 flex items-center gap-1">
-                {issue.field !== undefined && issue.suggestedValue !== undefined && (
+              <div className="flex shrink-0 items-center gap-1">
+                {hasFix(issue) && (
                   <button
                     type="button"
-                    className="text-xs px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800/60 transition-colors font-medium"
+                    className="rounded bg-blue-100 px-1.5 py-0.5 text-xs font-medium text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-800/60"
                     onClick={() => fixIssue(issue)}
-                    aria-label={t('validation.fix')}
+                    aria-label={fixLabel(issue)}
                   >
-                    {t('validation.fix')}
+                    {fixLabel(issue)}
                   </button>
                 )}
                 <button
@@ -195,7 +205,7 @@ export function ValidationBadge({ issues }: ValidationPanelProps) {
   if (errorCount > 0) {
     return (
       <span
-        className="ms-1.5 inline-flex items-center justify-center min-w-[1.1rem] h-4 rounded-full bg-red-600 text-white text-[10px] font-bold px-1"
+        className="ms-1.5 inline-flex h-4 min-w-[1.1rem] items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-bold text-white"
         aria-label={`${errorCount} error${errorCount > 1 ? 's' : ''}`}
       >
         {errorCount}
@@ -205,7 +215,7 @@ export function ValidationBadge({ issues }: ValidationPanelProps) {
 
   return (
     <span
-      className="ms-1.5 inline-flex items-center justify-center min-w-[1.1rem] h-4 rounded-full bg-amber-500 text-white text-[10px] font-bold px-1"
+      className="ms-1.5 inline-flex h-4 min-w-[1.1rem] items-center justify-center rounded-full bg-amber-500 px-1 text-[10px] font-bold text-white"
       aria-label={`${warnCount} warning${warnCount > 1 ? 's' : ''}`}
     >
       {warnCount}
@@ -217,7 +227,7 @@ export function ValidationBadge({ issues }: ValidationPanelProps) {
 export function ValidationAllClear() {
   const { t } = useTranslation();
   return (
-    <div className="flex items-center gap-2 text-xs text-green-700 dark:text-green-400 px-1 py-1">
+    <div className="flex items-center gap-2 px-1 py-1 text-xs text-green-700 dark:text-green-400">
       <IconCheck size={14} className="shrink-0" />
       {t('validation.noIssues')}
     </div>

@@ -5,3 +5,5 @@ test-results
 playwright-report
 package-lock.json
 *.svg
+# TypeDoc generated API docs — not source, should not be formatted
+docs/api/

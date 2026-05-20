@@ -47,29 +47,29 @@ export function OnboardingOverlay() {
       <button
         type="button"
         aria-label={t('onboarding.dismissBackdrop')}
-        className="absolute inset-0 w-full h-full cursor-default"
+        className="absolute inset-0 h-full w-full cursor-default"
         onClick={dismiss}
         tabIndex={-1}
       />
-      <div className="relative bg-white dark:bg-wood-800 rounded-xl shadow-2xl max-w-md w-full mx-4 p-6 space-y-5">
-        <h2 id="onboarding-title" className="text-lg font-bold text-wood-700 dark:text-wood-100 text-center">
+      <div className="dark:bg-wood-800 relative mx-4 w-full max-w-md space-y-5 rounded-xl bg-white p-6 shadow-2xl">
+        <h2 id="onboarding-title" className="text-wood-700 dark:text-wood-100 text-center text-lg font-bold">
           {t('onboarding.title')}
         </h2>
-        <p className="text-sm text-wood-600 dark:text-wood-300 text-center">{t('onboarding.subtitle')}</p>
+        <p className="text-wood-600 dark:text-wood-300 text-center text-sm">{t('onboarding.subtitle')}</p>
         <ol className="space-y-3">
           {STEPS.map((s, i) => (
             <li key={i} className="flex items-start gap-3">
               <span className="text-wood-600 dark:text-wood-300 mt-0.5 shrink-0">{s.icon}</span>
               <div>
-                <div className="text-sm font-semibold text-wood-700 dark:text-wood-200">{t(s.titleKey)}</div>
-                <div className="text-xs text-wood-600 dark:text-wood-300">{t(s.descKey)}</div>
+                <div className="text-wood-700 dark:text-wood-200 text-sm font-semibold">{t(s.titleKey)}</div>
+                <div className="text-wood-600 dark:text-wood-300 text-xs">{t(s.descKey)}</div>
               </div>
             </li>
           ))}
         </ol>
         <button
           onClick={dismiss}
-          className="w-full rounded bg-wood-600 px-4 py-2 text-sm font-medium text-white hover:bg-wood-700 transition-colors"
+          className="bg-wood-600 hover:bg-wood-700 w-full rounded px-4 py-2 text-sm font-medium text-white transition-colors"
         >
           {t('onboarding.getStarted')}
         </button>
@@ -91,7 +91,7 @@ export function HelpButton() {
   return (
     <button
       onClick={open}
-      className="text-wood-300 hover:text-white transition-colors flex items-center"
+      className="text-wood-300 flex items-center transition-colors hover:text-white"
       aria-label={t('onboarding.help')}
       title={t('onboarding.help')}
     >

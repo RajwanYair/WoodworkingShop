@@ -34,20 +34,20 @@ export function SubstitutionPanel() {
 
   return (
     <section
-      className="rounded-xl border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-900 overflow-hidden"
+      className="border-wood-200 dark:border-wood-700 dark:bg-wood-900 overflow-hidden rounded-xl border bg-white"
       aria-label={t('substitution.title')}
     >
       <button
         onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-wood-800 dark:text-wood-100 hover:bg-wood-50 dark:hover:bg-wood-800 transition-colors"
+        className="text-wood-800 dark:text-wood-100 hover:bg-wood-50 dark:hover:bg-wood-800 flex w-full items-center justify-between px-4 py-3 text-sm font-semibold transition-colors"
         aria-expanded={open}
       >
         <span>💡 {t('substitution.title')}</span>
-        <span className="text-[10px] font-normal text-wood-500 dark:text-wood-400">{visible.length}</span>
+        <span className="text-wood-500 dark:text-wood-400 text-[10px] font-normal">{visible.length}</span>
       </button>
 
       {open && (
-        <ul className="px-4 pb-4 space-y-3">
+        <ul className="space-y-3 px-4 pb-4">
           {visible.map((s) => {
             const key = `${s.currentKey}→${s.suggestedKey}`;
             let suggestedMat;
@@ -59,49 +59,49 @@ export function SubstitutionPanel() {
             const qr = s.quantitativeRationale;
 
             return (
-              <li key={key} className="rounded-lg border border-wood-100 dark:border-wood-700 p-3 space-y-2">
+              <li key={key} className="border-wood-100 dark:border-wood-700 space-y-2 rounded-lg border p-3">
                 {/* Benefit badge + suggested material name */}
-                <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex flex-wrap items-center gap-2">
                   <span
-                    className={`text-[10px] font-semibold px-1.5 py-0.5 rounded border ${BENEFIT_CLASSES[s.benefit]}`}
+                    className={`rounded border px-1.5 py-0.5 text-[10px] font-semibold ${BENEFIT_CLASSES[s.benefit]}`}
                   >
                     {t(`substitution.benefit.${s.benefit}`)}
                   </span>
-                  <span className="text-xs font-medium text-wood-700 dark:text-wood-200">
+                  <span className="text-wood-700 dark:text-wood-200 text-xs font-medium">
                     {suggestedMat.name[lang]}
                   </span>
                   {/* Quantitative rationale */}
                   {qr?.savedKgPerSheet !== undefined && (
-                    <span className="text-[10px] text-wood-500 dark:text-wood-400">
+                    <span className="text-wood-500 dark:text-wood-400 text-[10px]">
                       {t('substitution.quant.savedKgPerSheet', { value: qr.savedKgPerSheet })}
                     </span>
                   )}
                   {qr?.deflectionReductionPct !== undefined && (
-                    <span className="text-[10px] text-wood-500 dark:text-wood-400">
+                    <span className="text-wood-500 dark:text-wood-400 text-[10px]">
                       {t('substitution.quant.deflectionReductionPct', { value: qr.deflectionReductionPct })}
                     </span>
                   )}
                   {qr?.costDeltaPct !== undefined && (
-                    <span className="text-[10px] text-wood-500 dark:text-wood-400">
+                    <span className="text-wood-500 dark:text-wood-400 text-[10px]">
                       {t('substitution.quant.costDeltaPct', { value: qr.costDeltaPct })}
                     </span>
                   )}
                 </div>
 
                 {/* Reason text */}
-                <p className="text-[11px] text-wood-600 dark:text-wood-300">{s.reason[lang]}</p>
+                <p className="text-wood-600 dark:text-wood-300 text-[11px]">{s.reason[lang]}</p>
 
                 {/* Actions */}
                 <div className="flex gap-2">
                   <button
                     onClick={() => setConfig({ carcassMaterial: s.suggestedKey })}
-                    className="text-[10px] px-2 py-1 rounded bg-wood-700 dark:bg-wood-200 text-white dark:text-wood-800 hover:bg-wood-800 dark:hover:bg-wood-100 transition-colors font-medium"
+                    className="bg-wood-700 dark:bg-wood-200 dark:text-wood-800 hover:bg-wood-800 dark:hover:bg-wood-100 rounded px-2 py-1 text-[10px] font-medium text-white transition-colors"
                   >
                     {t('substitution.switchShort')}
                   </button>
                   <button
                     onClick={() => setDismissed((d) => new Set([...d, key]))}
-                    className="text-[10px] px-2 py-1 rounded border border-wood-200 dark:border-wood-700 text-wood-500 dark:text-wood-400 hover:bg-wood-50 dark:hover:bg-wood-800 transition-colors"
+                    className="border-wood-200 dark:border-wood-700 text-wood-500 dark:text-wood-400 hover:bg-wood-50 dark:hover:bg-wood-800 rounded border px-2 py-1 text-[10px] transition-colors"
                     aria-label={`Dismiss suggestion for ${suggestedMat.name[lang]}`}
                   >
                     ✕

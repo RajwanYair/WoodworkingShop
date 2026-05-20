@@ -48,21 +48,21 @@ export function ProjectSummaryPanel() {
 
   return (
     <section
-      className="border border-wood-200 dark:border-wood-700 rounded-lg p-4"
+      className="border-wood-200 dark:border-wood-700 rounded-lg border p-4"
       aria-label={t('summary.sectionLabel')}
     >
-      <h2 className="text-sm font-semibold text-wood-600 dark:text-wood-300 mb-3">
+      <h2 className="text-wood-600 dark:text-wood-300 mb-3 text-sm font-semibold">
         {t('summary.title')}
-        <span className="ms-2 text-xs font-normal text-wood-400 dark:text-wood-500">
+        <span className="text-wood-400 dark:text-wood-500 ms-2 text-xs font-normal">
           {cabinets.map((c) => c.name).join(' · ')}
         </span>
       </h2>
-      <dl className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+      <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
         {stats.map(({ label, value, warn }) => (
           <div key={label} className="bg-wood-50 dark:bg-wood-800 rounded-md px-3 py-2">
-            <dt className="text-xs text-wood-400 dark:text-wood-500 truncate">{label}</dt>
+            <dt className="text-wood-400 dark:text-wood-500 truncate text-xs">{label}</dt>
             <dd
-              className={`text-base font-semibold mt-0.5 ${
+              className={`mt-0.5 text-base font-semibold ${
                 warn ? 'text-amber-600 dark:text-amber-400' : 'text-wood-700 dark:text-wood-200'
               }`}
             >

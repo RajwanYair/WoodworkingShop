@@ -64,7 +64,15 @@ syncFile('docs/USER-GUIDE.md', /Version \d+\.\d+/, `Version ${majorMinor}`);
 syncFile('index.html', /Content Security Policy \(v\d+\.\d+\.\d+\)/, `Content Security Policy (v${version})`);
 
 // 5. .github/SECURITY.md — accessibility section header
-syncFile('.github/SECURITY.md', /Accessibility Security Stance — v\d+\.\d+\.\d+/, `Accessibility Security Stance — v${version}`);
+syncFile(
+  '.github/SECURITY.md',
+  /Accessibility Security Stance — v\d+\.\d+\.\d+/,
+  `Accessibility Security Stance — v${version}`,
+);
 
 // 6. docs/ARCHITECTURE.md — accessibility section header
-syncFile('docs/ARCHITECTURE.md', /Accessibility \(WCAG 2\.2 AA\) — v\d+\.\d+\.\d+/, `Accessibility (WCAG 2.2 AA) — v${version}`);
+syncFile(
+  'docs/ARCHITECTURE.md',
+  /Accessibility \(WCAG 2\.2 AA\) — v\d+\.\d+\.\d+/,
+  `Accessibility (WCAG 2.2 AA) — v${version}`,
+);

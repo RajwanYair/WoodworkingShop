@@ -10,8 +10,8 @@ export function DoorConfig() {
 
   return (
     <fieldset className="space-y-4">
-      <legend className="text-sm font-semibold text-wood-700 dark:text-wood-200 uppercase tracking-wide">
-        {t('config.doors')}
+      <legend className="text-wood-700 dark:text-wood-200 text-sm font-semibold tracking-wide uppercase">
+        🚪 {t('config.doors')}
       </legend>
 
       {/* Door count */}
@@ -33,11 +33,11 @@ export function DoorConfig() {
 
       {/* Door style */}
       <label className="block">
-        <span className="text-sm text-wood-600 dark:text-wood-300">{t('config.doorStyle')}</span>
+        <span className="text-wood-600 dark:text-wood-300 text-sm">{t('config.doorStyle')}</span>
         <select
           value={config.doorStyle}
           onChange={(e) => setConfig({ doorStyle: e.target.value as DoorStyle })}
-          className="mt-1 block w-full rounded border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-800 px-3 py-2 text-sm"
+          className="border-wood-200 dark:border-wood-700 dark:bg-wood-800 mt-1 block w-full rounded border bg-white px-3 py-2 text-sm"
         >
           <option value="flat">{t('config.flat')}</option>
           <option value="shaker">{t('config.shaker')}</option>
@@ -62,11 +62,11 @@ export function DoorConfig() {
 
       {/* Handle style */}
       <label className="block">
-        <span className="text-sm text-wood-600 dark:text-wood-300">{t('config.handles')}</span>
+        <span className="text-wood-600 dark:text-wood-300 text-sm">{t('config.handles')}</span>
         <select
           value={config.handleStyle}
           onChange={(e) => setConfig({ handleStyle: e.target.value as HandleStyle })}
-          className="mt-1 block w-full rounded border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-800 px-3 py-2 text-sm"
+          className="border-wood-200 dark:border-wood-700 dark:bg-wood-800 mt-1 block w-full rounded border bg-white px-3 py-2 text-sm"
         >
           <option value="bar">{t('config.bar')}</option>
           <option value="knob">{t('config.knob')}</option>
@@ -77,11 +77,11 @@ export function DoorConfig() {
 
       {/* Edge banding */}
       <label className="block">
-        <span className="text-sm text-wood-600 dark:text-wood-300">{t('config.edgeBanding')}</span>
+        <span className="text-wood-600 dark:text-wood-300 text-sm">{t('config.edgeBanding')}</span>
         <select
           value={config.edgeBanding}
           onChange={(e) => setConfig({ edgeBanding: e.target.value as EdgeBanding })}
-          className="mt-1 block w-full rounded border border-wood-200 dark:border-wood-700 bg-white dark:bg-wood-800 px-3 py-2 text-sm"
+          className="border-wood-200 dark:border-wood-700 dark:bg-wood-800 mt-1 block w-full rounded border bg-white px-3 py-2 text-sm"
         >
           <option value="all-visible">{t('config.allVisible')}</option>
           <option value="doors-only">{t('config.doorsOnly')}</option>

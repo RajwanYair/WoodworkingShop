@@ -38,16 +38,43 @@ interface MachinePreset extends Omit<GcodeOptions, 'cutDepth'> {
 }
 
 const MACHINE_PRESETS: MachinePreset[] = [
-  { id: 'shapeoko3',  feedRate: 2000, plungeRate: 500, safeZ: 5, passDepth: 2, toolDiameter: 6,     useArcs: false, emitToolChange: false },
-  { id: 'xcarve1000', feedRate: 1800, plungeRate: 500, safeZ: 5, passDepth: 2, toolDiameter: 6,     useArcs: false, emitToolChange: false },
-  { id: 'genmitsu',   feedRate: 800,  plungeRate: 300, safeZ: 5, passDepth: 1, toolDiameter: 3.175, useArcs: false, emitToolChange: false },
+  {
+    id: 'shapeoko3',
+    feedRate: 2000,
+    plungeRate: 500,
+    safeZ: 5,
+    passDepth: 2,
+    toolDiameter: 6,
+    useArcs: false,
+    emitToolChange: false,
+  },
+  {
+    id: 'xcarve1000',
+    feedRate: 1800,
+    plungeRate: 500,
+    safeZ: 5,
+    passDepth: 2,
+    toolDiameter: 6,
+    useArcs: false,
+    emitToolChange: false,
+  },
+  {
+    id: 'genmitsu',
+    feedRate: 800,
+    plungeRate: 300,
+    safeZ: 5,
+    passDepth: 1,
+    toolDiameter: 3.175,
+    useArcs: false,
+    emitToolChange: false,
+  },
 ];
 
 /** Translation-key suffix map for named presets */
 const PRESET_T_KEY: Record<string, string> = {
-  shapeoko3:  'gcode.presetShapeoko3',
+  shapeoko3: 'gcode.presetShapeoko3',
   xcarve1000: 'gcode.presetXcarve1000',
-  genmitsu:   'gcode.presetGenmitsu',
+  genmitsu: 'gcode.presetGenmitsu',
 };
 
 const PAD = 10; // SVG padding in user units
@@ -127,13 +154,11 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
   }
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
       {/* Invisible backdrop button — keyboard-accessible dismiss */}
       <button
         type="button"
-        className="absolute inset-0 w-full h-full cursor-default"
+        className="absolute inset-0 h-full w-full cursor-default"
         aria-label={t('gcodeValidator.dismiss')}
         tabIndex={-1}
         onClick={onClose}
@@ -143,12 +168,12 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
         role="dialog"
         aria-modal="true"
         aria-label={t('gcode.previewTitle')}
-        className="relative bg-white dark:bg-wood-900 rounded-xl shadow-2xl w-full max-w-2xl flex flex-col gap-0 overflow-hidden"
+        className="dark:bg-wood-900 relative flex w-full max-w-2xl flex-col gap-0 overflow-hidden rounded-xl bg-white shadow-2xl"
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-wood-200 dark:border-wood-700">
-          <h2 className="text-sm font-semibold text-wood-800 dark:text-wood-100">
-            {t('gcode.previewTitle')} — <span className="font-mono text-wood-500">{filename}</span>
+        <div className="border-wood-200 dark:border-wood-700 flex items-center justify-between border-b px-4 py-3">
+          <h2 className="text-wood-800 dark:text-wood-100 text-sm font-semibold">
+            {t('gcode.previewTitle')} — <span className="text-wood-500 font-mono">{filename}</span>
           </h2>
           <button
             onClick={onClose}
@@ -162,7 +187,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
         {/* Validation banner */}
         {(errorCount > 0 || warnCount > 0) && (
           <div
-            className={`px-4 py-2 text-xs flex gap-4 ${errorCount > 0 ? 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300' : 'bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300'}`}
+            className={`flex gap-4 px-4 py-2 text-xs ${errorCount > 0 ? 'bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-300' : 'bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'}`}
           >
             {errorCount > 0 && <span>⚠ {t('gcodeValidator.errors_other', { count: errorCount })}</span>}
             {warnCount > 0 && <span>⚠ {t('gcodeValidator.warnings_other', { count: warnCount })}</span>}
@@ -170,27 +195,27 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
         )}
 
         {/* CNC Options panel (collapsible) — Sprint 11 */}
-        <div className="border-b border-wood-100 dark:border-wood-800">
+        <div className="border-wood-100 dark:border-wood-800 border-b">
           <button
             type="button"
             onClick={() => setShowSettings((s) => !s)}
-            className="w-full flex items-center gap-2 px-4 py-2 text-xs font-medium text-wood-700 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-800 transition-colors"
+            className="text-wood-700 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-800 flex w-full items-center gap-2 px-4 py-2 text-xs font-medium transition-colors"
             aria-expanded={showSettings}
             aria-controls="gcode-settings-panel"
           >
             <span aria-hidden="true">{showSettings ? '▾' : '▸'}</span>
             {t('gcode.cncOptions')}
             {activePreset !== null && (
-              <span className="ms-auto text-wood-400 text-[10px]">
+              <span className="text-wood-400 ms-auto text-[10px]">
                 {t(PRESET_T_KEY[activePreset] ?? 'gcode.presetCustom')}
               </span>
             )}
           </button>
           {showSettings && (
-            <div id="gcode-settings-panel" className="px-4 pb-3 space-y-3 bg-wood-50 dark:bg-wood-800">
+            <div id="gcode-settings-panel" className="bg-wood-50 dark:bg-wood-800 space-y-3 px-4 pb-3">
               {/* Machine presets */}
               <div className="pt-2">
-                <p className="text-[10px] font-medium text-wood-500 dark:text-wood-400 mb-1.5">
+                <p className="text-wood-500 dark:text-wood-400 mb-1.5 text-[10px] font-medium">
                   {t('gcode.machinePreset')}
                 </p>
                 <div className="flex flex-wrap gap-1.5">
@@ -199,7 +224,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
                       key={preset.id}
                       type="button"
                       onClick={() => applyPreset(preset)}
-                      className={`px-2 py-0.5 text-[10px] rounded border transition-colors ${activePreset === preset.id ? 'bg-wood-700 text-white border-wood-700 dark:bg-wood-500 dark:border-wood-500' : 'border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-700'}`}
+                      className={`rounded border px-2 py-0.5 text-[10px] transition-colors ${activePreset === preset.id ? 'bg-wood-700 border-wood-700 dark:bg-wood-500 dark:border-wood-500 text-white' : 'border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-700'}`}
                     >
                       {t(PRESET_T_KEY[preset.id])}
                     </button>
@@ -219,21 +244,21 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
                   ] as { key: keyof Omit<GcodeOptions, 'useArcs' | 'cutDepth' | 'emitToolChange'>; label: string }[]
                 ).map(({ key, label }) => (
                   <label key={key} className="flex flex-col gap-0.5">
-                    <span className="text-[9px] text-wood-500 dark:text-wood-400">{label}</span>
+                    <span className="text-wood-500 dark:text-wood-400 text-[9px]">{label}</span>
                     <input
                       type="number"
                       value={options[key]}
                       min={0.1}
                       step={key === 'toolDiameter' ? 0.001 : 1}
                       onChange={(e) => setNum(key, e.target.value)}
-                      className="w-full px-1.5 py-0.5 text-xs rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-900 text-wood-700 dark:text-wood-200"
+                      className="border-wood-300 dark:border-wood-600 dark:bg-wood-900 text-wood-700 dark:text-wood-200 w-full rounded border bg-white px-1.5 py-0.5 text-xs"
                       aria-label={label}
                     />
                   </label>
                 ))}
                 {/* useArcs toggle */}
                 <label className="flex flex-col gap-0.5">
-                  <span className="text-[9px] text-wood-500 dark:text-wood-400">{t('gcode.useArcs')}</span>
+                  <span className="text-wood-500 dark:text-wood-400 text-[9px]">{t('gcode.useArcs')}</span>
                   <div className="flex items-center pt-1.5">
                     <input
                       type="checkbox"
@@ -242,14 +267,14 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
                         setActivePreset(null);
                         setOptions((prev) => ({ ...prev, useArcs: e.target.checked }));
                       }}
-                      className="h-3.5 w-3.5 rounded border-wood-300 dark:border-wood-600"
+                      className="border-wood-300 dark:border-wood-600 h-3.5 w-3.5 rounded"
                       aria-label={t('gcode.useArcs')}
                     />
                   </div>
                 </label>
                 {/* Sprint 17 — emitToolChange toggle */}
                 <label className="flex flex-col gap-0.5">
-                  <span className="text-[9px] text-wood-500 dark:text-wood-400">{t('gcode.emitToolChange')}</span>
+                  <span className="text-wood-500 dark:text-wood-400 text-[9px]">{t('gcode.emitToolChange')}</span>
                   <div className="flex items-center pt-1.5">
                     <input
                       type="checkbox"
@@ -258,7 +283,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
                         setActivePreset(null);
                         setOptions((prev) => ({ ...prev, emitToolChange: e.target.checked }));
                       }}
-                      className="h-3.5 w-3.5 rounded border-wood-300 dark:border-wood-600"
+                      className="border-wood-300 dark:border-wood-600 h-3.5 w-3.5 rounded"
                       aria-label={t('gcode.emitToolChange')}
                     />
                   </div>
@@ -269,12 +294,12 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
         </div>
 
         {/* SVG toolpath preview */}
-        <div className="bg-gray-50 dark:bg-wood-800 flex items-center justify-center p-2">
+        <div className="dark:bg-wood-800 flex items-center justify-center bg-gray-50 p-2">
           <svg
             viewBox={viewBox}
             width={SVG_SIZE}
             height={SVG_SIZE}
-            className="border border-wood-200 dark:border-wood-700 rounded bg-white dark:bg-wood-900"
+            className="border-wood-200 dark:border-wood-700 dark:bg-wood-900 rounded border bg-white"
             aria-label={t('gcode.previewTitle')}
             role="img"
           >
@@ -326,7 +351,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
         </div>
 
         {/* Legend */}
-        <div className="flex gap-4 px-4 py-2 text-xs text-wood-500 dark:text-wood-400 border-t border-wood-100 dark:border-wood-800">
+        <div className="text-wood-500 dark:text-wood-400 border-wood-100 dark:border-wood-800 flex gap-4 border-t px-4 py-2 text-xs">
           <span className="flex items-center gap-1">
             <span className="inline-block w-6 border-t-2 border-dashed border-red-400" />
             {t('gcode.previewRapid')}
@@ -339,16 +364,16 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
             <span className="inline-block w-6 border-t-2 border-green-500" />
             {t('gcode.previewArc')}
           </span>
-          <span className="ms-auto text-wood-400">
+          <span className="text-wood-400 ms-auto">
             {moves.length} {t('gcode.moveCount', { count: moves.length })}
           </span>
         </div>
 
         {/* Footer actions */}
-        <div className="flex justify-end gap-2 px-4 py-3 border-t border-wood-200 dark:border-wood-700">
+        <div className="border-wood-200 dark:border-wood-700 flex justify-end gap-2 border-t px-4 py-3">
           <button
             onClick={onClose}
-            className="px-3 py-1.5 text-xs rounded border border-wood-300 dark:border-wood-600 text-wood-700 dark:text-wood-200 hover:bg-wood-100 dark:hover:bg-wood-700 transition-colors"
+            className="border-wood-300 dark:border-wood-600 text-wood-700 dark:text-wood-200 hover:bg-wood-100 dark:hover:bg-wood-700 rounded border px-3 py-1.5 text-xs transition-colors"
           >
             {t('gcodeValidator.dismiss')}
           </button>
@@ -357,7 +382,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
               onDownload(gcodeText);
               onClose();
             }}
-            className="px-3 py-1.5 text-xs rounded bg-wood-700 dark:bg-wood-600 text-white hover:bg-wood-800 dark:hover:bg-wood-500 transition-colors"
+            className="bg-wood-700 dark:bg-wood-600 hover:bg-wood-800 dark:hover:bg-wood-500 rounded px-3 py-1.5 text-xs text-white transition-colors"
           >
             {t('gcode.downloadAnyway')}
           </button>

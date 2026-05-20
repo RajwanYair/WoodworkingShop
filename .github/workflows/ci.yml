@@ -44,6 +44,9 @@ jobs:
       - name: Format check
         run: npm run format:check
 
+      - name: i18n coverage
+        run: npm run i18n:coverage
+
       - name: Test
         run: npm test
 
@@ -87,7 +90,7 @@ jobs:
         run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
 
       - name: Cache Playwright browsers
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: pw-cache
         with:
           path: ~/.cache/ms-playwright

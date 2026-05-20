@@ -11,8 +11,8 @@
 | Build tool   | Vite 8 (Rolldown bundler)                                                     |
 | CSS          | Tailwind CSS v4 (`@import "tailwindcss"` syntax — no `@tailwind` directives)  |
 | State        | Zustand 5 — single store at `src/store/cabinet-store.ts` with undo/redo       |
-| i18n         | i18next 26 + react-i18next — bilingual EN + HE (RTL)                          |
-| Tests        | Vitest 4 (unit) + Playwright 1.60 (E2E) + axe-core (a11y)                     |
+| i18n         | i18next 26 + react-i18next — EN, HE (RTL), AR (RTL), DE, ES, FR               |
+| Tests        | Vitest 4 (unit + bench) + Playwright 1.60 (E2E) + axe-core (a11y)             |
 | PDF          | `@react-pdf/renderer` — PDFs rendered off the main thread                     |
 | Node         | ≥ 22; packages hoisted to parent `MyScripts/node_modules/` via npm workspaces |
 
@@ -21,21 +21,23 @@
 ```text
 src/
   engine/       Pure TypeScript (no React): dimensions → parts → cut-optimizer → assembly
-  store/        Zustand store — cabinet-store.ts, custom-materials-store.ts, toast-store.ts
+  store/        Zustand store — cabinet-store.ts, custom-materials-store.ts, room-store.ts, toast-store.ts
   components/   React components grouped by feature: configurator/ preview/ optimizer/ assembly/ pdf/ layout/
   utils/        Export helpers: bom-export, dxf-export, gcode-export, url-state, project-storage
-  i18n/         en.json + he.json — MUST update both for every new key
+  i18n/         en.json + he.json + ar.json + de.json + es.json + fr.json — MUST update en.json and he.json for every new key; other languages at minimum copy the en value
   workers/      Web Workers (?worker import suffix); bom-export.worker.ts, cut-optimizer.worker.ts
 tests/
   engine/       Unit tests for pure engine functions (80% coverage required)
   store/        Zustand store action tests
   utils/        Utility function tests
   e2e/          Playwright smoke + accessibility tests
+  bench/        Vitest benchmark tests (results gated by config/bench-budget.json)
 ```
 
 ## Coding Conventions
 
 - **Zero suppression rule**: no `eslint-disable`, no `@ts-ignore`, no `@ts-nocheck`, no `as any`
+- **TypeScript strictness**: `noImplicitOverride`, `allowUnreachableCode: false`, `allowUnusedLabels: false` are enforced — do not add unreachable branches or unused labels
 - **i18n parity**: every new `t('key')` call must have matching entries in both `en.json` and `he.json`
 - **Engine functions are pure**: `src/engine/` has no side effects, no React imports, fully tested
 - **ARIA via jsx-a11y**: `eslint-plugin-jsx-a11y` enforces correctness at lint time —
@@ -43,7 +45,7 @@ tests/
   do NOT attach `onKeyDown` to non-interactive `<div>` (use `useFocusTrap` or document-level listener)
 - **RTL-safe layout**: use Tailwind logical properties (`ms-*`, `me-*`, `start-*`, `end-*`) not `ml-*`/`mr-*`
 - **No hardcoded colours**: use `wood-*` design tokens or Tailwind semantic classes
-- **CSS via Stylelint**: `stylelint.config.js` + `browserslist` field drives compatibility.
+- **CSS via Stylelint**: `stylelint.config.js` + `.browserslistrc` (canonical) drives compatibility.
   Run `npm run lint:css` before commit; auto-fix with `npx stylelint --fix "src/**/*.css"`
 - **Tool configs stay at root**: do NOT move `vite.config.ts`, `vitest.config.ts`,
   `playwright.config.ts`, `eslint.config.js`, `stylelint.config.js`, `typedoc.json`,
@@ -103,6 +105,7 @@ The MaxRects BSSF cut-optimizer uses:
 - Add features not requested (no unsolicited refactors, no extra docstrings)
 - Hardcode pixel values — use Tailwind utility classes
 - Skip the `he.json` update when adding i18n keys
+- Use IE-only or deprecated browser APIs — the project targets modern evergreen browsers only (`not ie 11` in `.browserslistrc`)
 
 ## Intermediate Files & Caching
 

@@ -211,7 +211,7 @@ export function WebGLPreviewCanvas({ config, width = 320, height = 240, classNam
   if (tier === 'unavailable') {
     return (
       <div
-        className={`flex items-center justify-center rounded border border-wood-200 dark:border-wood-700 bg-wood-50 dark:bg-wood-800 text-wood-400 dark:text-wood-500 text-sm ${className ?? ''}`}
+        className={`border-wood-200 dark:border-wood-700 bg-wood-50 dark:bg-wood-800 text-wood-400 dark:text-wood-500 flex items-center justify-center rounded border text-sm ${className ?? ''}`}
         style={{ width, height }}
         aria-label="3D preview unavailable — WebGL not supported"
       >
@@ -225,7 +225,7 @@ export function WebGLPreviewCanvas({ config, width = 320, height = 240, classNam
       ref={canvasRef}
       width={width}
       height={height}
-      className={`rounded border border-wood-200 dark:border-wood-700 ${className ?? ''}`}
+      className={`border-wood-200 dark:border-wood-700 rounded border ${className ?? ''}`}
       aria-label={`3D cabinet preview — ${config.width}×${config.height}×${config.depth} mm`}
       data-testid="webgl-preview-canvas"
     />

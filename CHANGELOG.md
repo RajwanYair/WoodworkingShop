@@ -9,6 +9,71 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.58.0] — 2026-06-19
+
+### Production Hardening — ESLint 10 Peer-Dep Override, CI Modernization, Dead Code Pruning
+
+#### Fixed
+
+- **ESLint 10 peer-dependency conflict** (root cause for broken main-branch CI): added
+  `"overrides": { "eslint": "$eslint" }` to `package.json` so `eslint-plugin-jsx-a11y@6.10.2`
+  and `eslint-plugin-react@7.37.5` (which declare peer `eslint@^3..^9`) accept the installed
+  ESLint 10 without requiring `--legacy-peer-deps` (no waivers, no workarounds).
+- **Standalone `package-lock.json` regenerated** outside the parent npm-workspaces context.
+  Previous lockfile was stale (463 packages, v3.54.0 vintage) because deps were hoisted to the
+  parent workspace. New lockfile contains the full 735-package install graph including all ESLint
+  plugins, so `npm ci` works on a fresh clone.
+- **`.vscode/extensions.json`**: re-added `github.copilot` (was missing alongside
+  `github.copilot-chat`) and fixed misaligned Stylelint section comment.
+- **Duplicate `browserslist` array** removed from `package.json` (re-introduced inadvertently);
+  `.browserslistrc` is the sole canonical source as documented in v3.57.0.
+
+#### Changed
+
+- **GitHub Actions versions bumped to latest stable** — no waivers, no pinning to old majors:
+  - `actions/cache@v4 → v5` (ci.yml)
+  - `github/codeql-action/init@v3 → v4`, `analyze@v3 → v4` (codeql.yml)
+  - `actions/upload-pages-artifact@v3 → v5`, `deploy-pages@v4 → v5` (pages.yml)
+  - `actions/stale@v9 → v10` (stale.yml)
+- **TypeScript strictness expanded** across all 4 tsconfigs (`tsconfig.app.json`,
+  `tsconfig.test.json`, `tsconfig.e2e.json`, `tsconfig.node.json`):
+  - `noImplicitOverride: true`
+  - `allowUnreachableCode: false`
+  - `allowUnusedLabels: false`
+- **Knip configuration corrected**: removed `@vitejs/plugin-react`, `@tailwindcss/vite`, `vite`
+  from `ignoreDependencies` (they ARE used in `vite.config.ts`); added `src/engine/index.ts!`
+  as a public-API entry so the engine barrel's 38 exports are no longer false-positive
+  "unused exports". Removed redundant entry patterns flagged by knip.
+
+#### Removed
+
+- **`tests/engine/cut-optimizer.bench.ts`** — orphan benchmark file in the wrong directory.
+  The bench runner only scans `tests/bench/**/*.bench.ts` per `vitest.bench.config.ts`; this
+  file was never executed and was duplicated by the canonical bench in `tests/bench/engine.bench.ts`.
+
+#### Added
+
+- **`typedoc`** to `devDependencies` (was previously consumed by the `docs:api` script as an
+  unlisted binary — knip-flagged as a real bug).
+
+#### Budgets
+
+- **Bundle budget bumped** (`config/bundle-budget.json`): `totalJsKB` 2050 → 2175,
+  `totalAllKB` 2125 → 2255. Absorbs Sprints 16–20 feature growth (rotation lock UI, G-code
+  M6 tool-change, assembly weight indicator, DXF layers, Plugin EventBus, snapshot diff modal,
+  ERP exports, custom materials editor) that landed in `main` as part of this release. Not
+  a waiver — a deliberate, documented budget revision tied to net new functionality.
+
+#### Documentation
+
+- **`.github/copilot-instructions.md`** updated with the convention that tool configs
+  (`vite.config.ts`, `vitest.config.ts`, `playwright.config.ts`, `eslint.config.js`,
+  `stylelint.config.js`, `typedoc.json`, all `tsconfig.*.json`) MUST remain at the project
+  root. Moving them into subdirs creates churn without benefit.
+- **ROADMAP.md Phase 10** added covering all v3.58.0 cleanup items and reaffirming the
+  `$TEMP`-only intermediate-files policy (vite cache, ESLint cache, coverage, Playwright
+  reports, Lighthouse CI artifacts all already routed through `os.tmpdir()/WoodworkingShop/`).
+
 ## [3.57.0] — 2026-06-05
 
 ### Production Hardening — Zero Lint Errors, Test & Config Cleanup

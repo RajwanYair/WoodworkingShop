@@ -176,10 +176,10 @@ function App() {
         [darkMode ? 'dark' : '', highContrastMode ? 'high-contrast' : ''].filter(Boolean).join(' ') || undefined
       }
     >
-      <div className="min-h-screen bg-white dark:bg-wood-900 text-wood-800 dark:text-wood-100">
+      <div className="app-bg text-wood-800 dark:text-wood-100 min-h-screen">
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 bg-wood-600 text-white px-3 py-1 rounded text-sm"
+          className="bg-wood-600 sr-only rounded px-3 py-1 text-sm text-white focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50"
         >
           {t('a11y.skipToContent')}
         </a>
@@ -190,14 +190,14 @@ function App() {
             ref={mainRef}
             id="main-content"
             tabIndex={-1}
-            className="flex-1 p-3 sm:p-6 focus:outline-none"
+            className="flex-1 p-3 focus:outline-none sm:p-6"
             role="main"
             aria-label={t('a11y.mainWorkspace')}
           >
             {/* Sprint 170 — print-only header: shows project name + date on paper */}
             <div className="print-only-header">
               {projectName ? `${projectName} — ` : ''}Cabinet Planner
-              <span className="float-end font-normal text-[9pt]">{new Date().toLocaleDateString()}</span>
+              <span className="float-end text-[9pt] font-normal">{new Date().toLocaleDateString()}</span>
             </div>
             {activeTab === 'configurator' && (
               <div className="space-y-6">
@@ -244,7 +244,7 @@ function App() {
             <button
               data-print="hide"
               onClick={() => window.print()}
-              className="fixed bottom-5 right-5 bg-wood-600 hover:bg-wood-700 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg z-40 transition-colors print:hidden"
+              className="bg-wood-600 hover:bg-wood-700 fixed right-5 bottom-5 z-40 flex h-12 w-12 items-center justify-center rounded-full text-white shadow-lg transition-colors print:hidden"
               title="Print current view"
               aria-label="Print current view"
             >

@@ -89,7 +89,7 @@ export function exportProjectJson(project: SavedProject, snapshots?: ProjectSnap
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `${project.name.replace(/[^a-zA-Z0-9_-]/g, '_')}.cabinet-project.json`;
+  a.download = `${project.name.replace(/[^\w-]/g, '_')}.cabinet-project.json`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -121,7 +121,7 @@ export async function exportProjectsBundle(projects: SavedProject[]): Promise<vo
   // Sprint 10 — build individual file JSON strings and compute SHA-256 manifests
   const fileEntries = projects.map((p) => {
     const content = JSON.stringify(p, null, 2);
-    return { name: `${p.name.replace(/[^a-zA-Z0-9_-]/g, '_')}.cabinet-project.json`, content, project: p };
+    return { name: `${p.name.replace(/[^\w-]/g, '_')}.cabinet-project.json`, content, project: p };
   });
 
   const manifest = await Promise.all(

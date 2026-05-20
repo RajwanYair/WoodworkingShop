@@ -44,9 +44,13 @@ export function computeDimensions(cfg: CabinetConfig): DerivedDimensions {
   const hingePositions = computeHingePositions(doorHeight, hingesPerDoor);
 
   // Sprint 173 — per-shelf deflection ratings
+  // v3.58.0 — centre supports divide the shelf into smaller bays. The longest
+  // remaining bay is what governs deflection: effectiveSpan = shelfWidth / (n+1).
   const mat = getMaterial(cfg.carcassMaterial);
+  const centreSupports = Math.max(0, cfg.shelfCentreSupports ?? 0);
+  const effectiveShelfSpan = shelfWidth / (centreSupports + 1);
   const shelfDeflections = Array.from({ length: cfg.shelfCount }, () =>
-    computeShelfDeflection(shelfWidth, mat.thickness, shelfDepth, cfg.carcassMaterial),
+    computeShelfDeflection(effectiveShelfSpan, mat.thickness, shelfDepth, cfg.carcassMaterial),
   );
 
   return {
