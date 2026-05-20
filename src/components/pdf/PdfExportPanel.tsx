@@ -10,6 +10,8 @@ export function PdfExportPanel() {
   const store = useCabinetStore();
   const [generating, setGenerating] = useState(false);
   const [includeCover, setIncludeCover] = useState(true); // v3.19.0
+  const [pageSize, setPageSize] = useState<'A4' | 'LETTER'>('A4'); // Sprint 59
+  const [orientation, setOrientation] = useState<'portrait' | 'landscape'>('portrait'); // Sprint 59
 
   const handleGenerate = async () => {
     setGenerating(true);
@@ -27,6 +29,8 @@ export function PdfExportPanel() {
           projectName={store.projectName}
           includeCover={includeCover}
           cabinetCount={store.cabinets.length}
+          pageSize={pageSize}
+          orientation={orientation}
         />
       );
       const blob = await pdf(doc).toBlob();
@@ -66,6 +70,34 @@ export function PdfExportPanel() {
           />
           {t('pdf.includeCover', 'Include cover page')}
         </label>
+
+        {/* Sprint 59 — Page size and orientation selectors */}
+        <div className="flex flex-wrap justify-center gap-4">
+          <label className="flex items-center gap-2 text-sm text-wood-600 dark:text-wood-400">
+            <span>{t('pdf.pageSize')}</span>
+            <select
+              value={pageSize}
+              onChange={(e) => setPageSize(e.target.value as 'A4' | 'LETTER')}
+              aria-label={t('pdf.pageSize')}
+              className="rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 text-wood-700 dark:text-wood-200 px-2 py-1 text-xs"
+            >
+              <option value="A4">{t('pdf.pageSizeA4')}</option>
+              <option value="LETTER">{t('pdf.pageSizeLetter')}</option>
+            </select>
+          </label>
+          <label className="flex items-center gap-2 text-sm text-wood-600 dark:text-wood-400">
+            <span>{t('pdf.orientation')}</span>
+            <select
+              value={orientation}
+              onChange={(e) => setOrientation(e.target.value as 'portrait' | 'landscape')}
+              aria-label={t('pdf.orientation')}
+              className="rounded border border-wood-300 dark:border-wood-600 bg-white dark:bg-wood-800 text-wood-700 dark:text-wood-200 px-2 py-1 text-xs"
+            >
+              <option value="portrait">{t('pdf.orientationPortrait')}</option>
+              <option value="landscape">{t('pdf.orientationLandscape')}</option>
+            </select>
+          </label>
+        </div>
 
         <button
           onClick={handleGenerate}

@@ -581,6 +581,10 @@ export interface CabinetPdfProps {
   includeCover?: boolean;
   /** v3.39.0 — total number of cabinets in the project (shown on cover) */
   cabinetCount?: number;
+  /** Sprint 59 — page size for all PDF pages (default: 'A4') */
+  pageSize?: 'A4' | 'LETTER';
+  /** Sprint 59 — page orientation for non-cut-sheet pages (default: 'portrait') */
+  orientation?: 'portrait' | 'landscape';
 }
 
 // ─── Document ───
@@ -596,6 +600,8 @@ export function CabinetPdfDocument({
   projectName,
   includeCover = true,
   cabinetCount = 1,
+  pageSize = 'A4',
+  orientation = 'portrait',
 }: CabinetPdfProps) {
   const T = pdfI18n[lang as PdfLang] ?? pdfI18n.en;
   const isRTL = lang === 'he';
@@ -616,7 +622,7 @@ export function CabinetPdfDocument({
           PAGE 1  —  Cover (optional)
          ══════════════════════════════════════════════════════ */}
       {includeCover && (
-        <Page size="A4" style={s.coverPage}>
+        <Page size={pageSize} style={s.coverPage}>
           {/* Top dark band */}
           <View style={s.coverTopBand}>
             <Text style={s.coverBigEmoji}>🪚</Text>
@@ -683,7 +689,7 @@ export function CabinetPdfDocument({
       {/* ══════════════════════════════════════════════════════
           PAGE 2  —  Specifications
          ══════════════════════════════════════════════════════ */}
-      <Page size="A4" style={s.page}>
+      <Page size={pageSize} orientation={orientation} style={s.page}>
         <PageHeader section={`📐  ${T.specTitle}`} projectName={coverTitle} lang={lang} />
 
         <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>📐 {T.specTitle}</Text>
@@ -752,7 +758,7 @@ export function CabinetPdfDocument({
       {/* ══════════════════════════════════════════════════════
           PAGE 3  —  Parts List
          ══════════════════════════════════════════════════════ */}
-      <Page size="A4" style={s.page}>
+      <Page size={pageSize} orientation={orientation} style={s.page}>
         <PageHeader section={`🔲  ${T.partsListTitle}`} projectName={coverTitle} lang={lang} />
 
         <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>
@@ -791,7 +797,7 @@ export function CabinetPdfDocument({
       {/* ══════════════════════════════════════════════════════
           PAGE 4  —  Hardware List
          ══════════════════════════════════════════════════════ */}
-      <Page size="A4" style={s.page}>
+      <Page size={pageSize} orientation={orientation} style={s.page}>
         <PageHeader section={`🔩  ${T.hardwareListTitle}`} projectName={coverTitle} lang={lang} />
 
         <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>
@@ -830,7 +836,7 @@ export function CabinetPdfDocument({
         const scale = Math.min(maxLen / sheet.sheetLength, maxWid / sheet.sheetWidth);
 
         return (
-          <Page key={sheet.sheetIndex} size="A4" orientation={isLandscape ? 'landscape' : 'portrait'} style={s.page}>
+          <Page key={sheet.sheetIndex} size={pageSize} orientation={isLandscape ? 'landscape' : 'portrait'} style={s.page}>
             <PageHeader
               section={`✂️  ${T.cutSheetPage} ${sheet.sheetIndex + 1} / ${optimization.sheets.length}`}
               projectName={coverTitle}
@@ -952,7 +958,7 @@ export function CabinetPdfDocument({
       {/* ══════════════════════════════════════════════════════
           DRILLING & BORING GUIDE
          ══════════════════════════════════════════════════════ */}
-      <Page size="A4" style={s.page}>
+      <Page size={pageSize} orientation={orientation} style={s.page}>
         <PageHeader section={`🔧  ${T.drillingGuide}`} projectName={coverTitle} lang={lang} />
 
         <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>🔧 {T.drillingGuide}</Text>
@@ -1025,7 +1031,7 @@ export function CabinetPdfDocument({
       {/* ══════════════════════════════════════════════════════
           EXPLODED VIEW
          ══════════════════════════════════════════════════════ */}
-      <Page size="A4" style={s.page}>
+      <Page size={pageSize} orientation={orientation} style={s.page}>
         <PageHeader section={`🏗️  ${T.explodedView}`} projectName={coverTitle} lang={lang} />
 
         <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>🏗️ {T.explodedView}</Text>
@@ -1036,7 +1042,7 @@ export function CabinetPdfDocument({
       {/* ══════════════════════════════════════════════════════
           ASSEMBLY SEQUENCE
          ══════════════════════════════════════════════════════ */}
-      <Page size="A4" style={s.page}>
+      <Page size={pageSize} orientation={orientation} style={s.page}>
         <PageHeader section={`🔨  ${T.assemblySequence}`} projectName={coverTitle} lang={lang} />
 
         <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>🔨 {T.assemblySequence}</Text>
@@ -1061,7 +1067,7 @@ export function CabinetPdfDocument({
       {/* ══════════════════════════════════════════════════════
           SHOPPING LIST
          ══════════════════════════════════════════════════════ */}
-      <Page size="A4" style={s.page}>
+      <Page size={pageSize} orientation={orientation} style={s.page}>
         <PageHeader section={`🛒  ${T.shoppingList}`} projectName={coverTitle} lang={lang} />
 
         <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>🛒 {T.shoppingList}</Text>
@@ -1431,3 +1437,4 @@ function ExplodedView({
     </View>
   );
 }
+
