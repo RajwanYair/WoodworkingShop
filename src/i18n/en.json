@@ -299,7 +299,8 @@
     "title": "Room Layout",
     "sectionLabel": "Room floor plan",
     "empty": "No room layouts configured",
-    "cabinets": "cabinets"
+    "cabinets": "cabinets",
+    "utilized": "utilized"
   },
   "summary": {
     "title": "Project Summary",

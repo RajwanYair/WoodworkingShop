@@ -301,7 +301,8 @@
     "title": "פריסת חדר",
     "sectionLabel": "תוכנית רצפה של החדר",
     "empty": "לא הוגדרו פריסות חדר",
-    "cabinets": "ארונות"
+    "cabinets": "ארונות",
+    "utilized": "מנוצל"
   },
   "summary": {
     "title": "סיכום פרויקט",

@@ -153,7 +153,12 @@ export function RoomLayoutView() {
         </h3>
         <span className="text-xs text-wood-400 dark:text-wood-500">
           {layout.roomWidth} × {layout.roomDepth} mm ·{' '}
-          {layout.cabinets.length} {t('room.cabinets')}
+          {layout.cabinets.length} {t('room.cabinets')} ·{' '}
+          {(() => {
+            const roomArea = layout.roomWidth * layout.roomDepth;
+            const cabinetArea = layout.cabinets.reduce((sum, c) => sum + c.width * c.depth, 0);
+            return roomArea > 0 ? Math.round((cabinetArea / roomArea) * 100) : 0;
+          })()}% {t('room.utilized')}
         </span>
       </div>
       <FloorPlan layout={layout} />

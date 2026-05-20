@@ -100,4 +100,42 @@ describe('RoomLayoutView', () => {
     render(<RoomLayoutView />);
     expect(screen.queryByText(/\(1\)/)).not.toBeInTheDocument();
   });
+
+  // Sprint 74 — floor-area utilization %
+  it('Sprint 74: shows utilization % in header', () => {
+    // LAYOUT: roomWidth=4000, roomDepth=3000 → roomArea=12,000,000 mm²
+    // cab1: 600×580=348,000; cab2: 500×350=175,000 → total=523,000
+    // utilPct = round(523000/12000000*100) = round(4.36...) = 4
+    useRoomStore.setState({ layouts: [LAYOUT], activeLayoutId: 'l1' });
+    render(<RoomLayoutView />);
+    expect(screen.getByText(/4%\s+utilized/i)).toBeInTheDocument();
+  });
+
+  it('Sprint 74: shows 0% when there are no cabinets', () => {
+    const emptyLayout = { ...LAYOUT, cabinets: [] };
+    useRoomStore.setState({ layouts: [emptyLayout], activeLayoutId: 'l1' });
+    render(<RoomLayoutView />);
+    expect(screen.getByText(/0%\s+utilized/i)).toBeInTheDocument();
+  });
+
+  it('Sprint 74: shows 100% when cabinet fills entire room', () => {
+    const fullLayout = {
+      ...LAYOUT,
+      cabinets: [{ id: 'c1', name: 'Full', x: 0, y: 0, width: 4000, depth: 3000 }],
+    };
+    useRoomStore.setState({ layouts: [fullLayout], activeLayoutId: 'l1' });
+    render(<RoomLayoutView />);
+    expect(screen.getByText(/100%\s+utilized/i)).toBeInTheDocument();
+  });
+
+  it('Sprint 74: utilization rounds to nearest integer', () => {
+    // One cabinet: 1000×1000=1,000,000 / (4000×3000=12,000,000) = 8.33...% → 8
+    const partialLayout = {
+      ...LAYOUT,
+      cabinets: [{ id: 'c1', name: 'Small', x: 0, y: 0, width: 1000, depth: 1000 }],
+    };
+    useRoomStore.setState({ layouts: [partialLayout], activeLayoutId: 'l1' });
+    render(<RoomLayoutView />);
+    expect(screen.getByText(/8%\s+utilized/i)).toBeInTheDocument();
+  });
 });
