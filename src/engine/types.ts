@@ -1,5 +1,29 @@
 // ─── Core domain types for the cabinet planner engine ───
 
+// ─── Phase 11: Branded / nominal measurement types ────────────────────────────
+// Zero runtime cost — the brand field is `never` so it is never set at runtime.
+// These prevent accidental unit-mixing between mm, kg, and percent values in
+// engine function signatures. Plain `number` must be explicitly cast via the
+// `asMm` / `asKg` / `asPct` helpers to produce a branded value.
+declare const __mmTag: unique symbol;
+declare const __kgTag: unique symbol;
+declare const __pctTag: unique symbol;
+
+/** A `number` that represents millimetres. */
+export type Mm = number & { readonly [__mmTag]: true };
+/** A `number` that represents kilograms. */
+export type Kg = number & { readonly [__kgTag]: true };
+/** A `number` in the range 0–100 representing a percentage. */
+export type Percent = number & { readonly [__pctTag]: true };
+
+/** Cast helper — tag a plain `number` as millimetres. */
+export const asMm = (n: number): Mm => n as Mm;
+/** Cast helper — tag a plain `number` as kilograms. */
+export const asKg = (n: number): Kg => n as Kg;
+/** Cast helper — tag a plain `number` as a percentage (0–100). */
+export const asPct = (n: number): Percent => n as Percent;
+// ──────────────────────────────────────────────────────────────────────────────
+
 export type Lang = 'en' | 'he';
 
 export type MaterialCategory = 'panel' | 'back' | 'door';
@@ -130,25 +154,25 @@ export interface CabinetConfig {
 }
 
 export interface DerivedDimensions {
-  internalWidth: number;
-  internalHeight: number;
-  shelfDepth: number;
-  shelfWidth: number;
-  doorHeight: number;
-  doorWidth: number;
-  backPanelHeight: number;
-  backPanelWidth: number;
+  internalWidth: Mm;
+  internalHeight: Mm;
+  shelfDepth: Mm;
+  shelfWidth: Mm;
+  doorHeight: Mm;
+  doorWidth: Mm;
+  backPanelHeight: Mm;
+  backPanelWidth: Mm;
   hingesPerDoor: number;
-  hingePositions: number[]; // mm from top of door
+  hingePositions: Mm[]; // mm from top of door
   /** Per-shelf deflection results (one entry per shelf, Sprint 173). */
   shelfDeflections: Array<{
-    deflectionMm: number;
-    limitMm: number;
+    deflectionMm: Mm;
+    limitMm: Mm;
     overLimit: boolean;
     /** 'safe' ≤ L/360 · 'warning' L/360–L/240 · 'danger' > L/240 */
     deflectionRating: 'safe' | 'warning' | 'danger';
     /** Sprint 8 — maximum safe UDL load at L/360 limit (kg). */
-    maxLoadKg: number;
+    maxLoadKg: Kg;
   }>;
 }
 

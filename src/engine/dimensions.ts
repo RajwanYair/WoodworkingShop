@@ -1,4 +1,5 @@
 import type { CabinetConfig, DerivedDimensions } from './types';
+import { asMm, asKg } from './types';
 import { getMaterial } from './materials';
 
 /**
@@ -54,14 +55,14 @@ export function computeDimensions(cfg: CabinetConfig): DerivedDimensions {
   );
 
   return {
-    internalWidth,
-    internalHeight,
-    shelfDepth,
-    shelfWidth,
-    doorHeight,
-    doorWidth,
-    backPanelHeight,
-    backPanelWidth,
+    internalWidth: asMm(internalWidth),
+    internalHeight: asMm(internalHeight),
+    shelfDepth: asMm(shelfDepth),
+    shelfWidth: asMm(shelfWidth),
+    doorHeight: asMm(doorHeight),
+    doorWidth: asMm(doorWidth),
+    backPanelHeight: asMm(backPanelHeight),
+    backPanelWidth: asMm(backPanelWidth),
     hingesPerDoor,
     hingePositions,
     shelfDeflections,
@@ -78,17 +79,17 @@ export function computeHingesPerDoor(doorHeight: number): number {
 }
 
 /** Distribute hinge positions evenly along door height. */
-export function computeHingePositions(doorHeight: number, count: number): number[] {
+export function computeHingePositions(doorHeight: number, count: number): import('./types').Mm[] {
   if (count <= 0) return [];
-  if (count === 1) return [doorHeight / 2];
+  if (count === 1) return [asMm(doorHeight / 2)];
 
   const topOffset = Math.min(100, doorHeight * 0.05);
   const bottomOffset = topOffset;
   const span = doorHeight - topOffset - bottomOffset;
-  const positions: number[] = [];
+  const positions: import('./types').Mm[] = [];
 
   for (let i = 0; i < count; i++) {
-    positions.push(Math.round(topOffset + (span * i) / (count - 1)));
+    positions.push(asMm(Math.round(topOffset + (span * i) / (count - 1))));
   }
   return positions;
 }
@@ -117,9 +118,9 @@ export function computeEqualShelfPositions(internalHeight: number, shelfCount: n
  */
 export interface ShelfDeflectionResult {
   /** Mid-span deflection under design load (mm). */
-  deflectionMm: number;
+  deflectionMm: import('./types').Mm;
   /** Serviceability limit = span / 360 (mm). */
-  limitMm: number;
+  limitMm: import('./types').Mm;
   /** true when deflection > limit — show a warning. */
   overLimit: boolean;
   /**
@@ -134,7 +135,7 @@ export interface ShelfDeflectionResult {
    * before mid-span deflection reaches the L/360 serviceability limit (kg).
    * Derived by scaling the design load proportionally to the limit.
    */
-  maxLoadKg: number;
+  maxLoadKg: import('./types').Kg;
 }
 
 export function computeShelfDeflection(
@@ -159,10 +160,10 @@ export function computeShelfDeflection(
   // large safe value to avoid division by zero.
   const maxLoadKg = deflectionMm > 0 ? Math.round((0.05 * limitMm * L) / deflectionMm / 9.81) : 9999;
   return {
-    deflectionMm: Math.round(deflectionMm * 100) / 100,
-    limitMm: Math.round(limitMm * 100) / 100,
+    deflectionMm: asMm(Math.round(deflectionMm * 100) / 100),
+    limitMm: asMm(Math.round(limitMm * 100) / 100),
     overLimit: deflectionMm > limitMm,
     deflectionRating,
-    maxLoadKg,
+    maxLoadKg: asKg(maxLoadKg),
   };
 }
