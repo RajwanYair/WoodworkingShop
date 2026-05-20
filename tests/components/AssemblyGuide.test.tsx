@@ -9,7 +9,7 @@
  *  - "All steps complete" message appears when every step is checked.
  */
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { AssemblyGuide } from '../../src/components/assembly/AssemblyGuide';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
@@ -79,5 +79,54 @@ describe('AssemblyGuide — step checklist (Sprint 52)', () => {
     checkboxes.forEach((cb) => fireEvent.click(cb));
     expect(screen.getByRole('status')).toBeInTheDocument();
     expect(screen.getByText(/all steps complete/i)).toBeInTheDocument();
+  });
+});
+
+// ── Sprint 78 — Download checklist button ────────────────────────────────────
+describe('AssemblyGuide — download checklist (Sprint 78)', () => {
+  beforeEach(() => {
+    seedStore();
+  });
+
+  it('renders the "Download checklist" button', () => {
+    render(<AssemblyGuide />);
+    expect(screen.getByRole('button', { name: /download checklist/i })).toBeInTheDocument();
+  });
+
+  it('clicking Download checklist calls triggerDownload with .txt content', () => {
+    const mockAnchor = document.createElement('a');
+    vi.spyOn(mockAnchor, 'click').mockImplementation(() => {});
+    const origCreate = document.createElement.bind(document);
+    vi.spyOn(document, 'createElement').mockImplementation((tag: string) => {
+      if (tag === 'a') return mockAnchor;
+      return origCreate(tag as 'a');
+    });
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:test');
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+
+    render(<AssemblyGuide />);
+    fireEvent.click(screen.getByRole('button', { name: /download checklist/i }));
+
+    expect(mockAnchor.click).toHaveBeenCalled();
+    expect(mockAnchor.download).toMatch(/\.txt$/);
+    vi.restoreAllMocks();
+  });
+
+  it('download filename is assembly-checklist.txt', () => {
+    const mockAnchor = document.createElement('a');
+    vi.spyOn(mockAnchor, 'click').mockImplementation(() => {});
+    const origCreate2 = document.createElement.bind(document);
+    vi.spyOn(document, 'createElement').mockImplementation((tag: string) => {
+      if (tag === 'a') return mockAnchor;
+      return origCreate2(tag as 'a');
+    });
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:test');
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+
+    render(<AssemblyGuide />);
+    fireEvent.click(screen.getByRole('button', { name: /download checklist/i }));
+
+    expect(mockAnchor.download).toBe('assembly-checklist.txt');
+    vi.restoreAllMocks();
   });
 });

@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import type { AssemblyStep } from '../../engine/assembly';
 import type { Lang, Part, HardwareItem } from '../../engine/types';
-import { IconPrint, IconLightbulb } from '../layout/Icons';
+import { triggerDownload } from '../../utils/download';
+import { IconPrint, IconLightbulb, IconDownload } from '../layout/Icons';
 
 type ViewMode = 'paginated' | 'all';
 
@@ -30,6 +31,20 @@ export function AssemblyGuide() {
 
   const resetProgress = () => setCompletedSteps(new Set());
   const totalMinutes = steps.reduce((sum, s) => sum + s.estimatedMinutes, 0);
+
+  /** Sprint 78 — generate plain-text assembly checklist and trigger download. */
+  const downloadChecklist = () => {
+    const lines: string[] = [
+      `Assembly Checklist — ${new Date().toLocaleDateString()}`,
+      `Steps: ${steps.length}  |  Estimated time: ${totalMinutes} min`,
+      '',
+      ...steps.map(
+        (s, i) =>
+          `[ ] Step ${i + 1}: ${s.title[lang]}\n    ${s.description[lang]}${s.tip?.[lang] ? `\n    Tip: ${s.tip[lang]}` : ''}`,
+      ),
+    ];
+    triggerDownload(lines.join('\n'), 'text/plain;charset=utf-8', 'assembly-checklist.txt');
+  };
 
   return (
     <div className="space-y-6">
@@ -71,6 +86,16 @@ export function AssemblyGuide() {
             aria-label={t('assembly.print')}
           >
             <IconPrint size={13} /> {t('assembly.print')}
+          </button>
+          {/* Sprint 78 — download checklist as plain text */}
+          <button
+            type="button"
+            onClick={downloadChecklist}
+            className="px-3 py-1.5 text-xs rounded border border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 transition-colors print:hidden flex items-center gap-1.5"
+            title={t('assembly.downloadChecklist')}
+            aria-label={t('assembly.downloadChecklist')}
+          >
+            <IconDownload size={13} /> {t('assembly.downloadChecklist')}
           </button>
           {/* View mode toggle */}
           <div
