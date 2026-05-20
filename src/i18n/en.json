@@ -205,7 +205,9 @@
     "exportSvg": "Export SVG",
     "exportPng": "Export PNG (2×)",
     "dimensions": "Dimensions",
-    "dimensionSummary": "Cabinet dimensions W × H × D"
+    "dimensionSummary": "Cabinet dimensions W × H × D",
+    "doors": "doors",
+    "drawers": "drawers"
   },
   "pdf": {
     "title": "Export PDF",

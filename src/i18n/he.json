@@ -207,7 +207,9 @@
     "exportSvg": "ייצוא SVG",
     "exportPng": "ייצוא PNG (2×)",
     "dimensions": "מידות",
-    "dimensionSummary": "מידות הארון ר × ג × ע"
+    "dimensionSummary": "מידות הארון ר × ג × ע",
+    "doors": "דלתות",
+    "drawers": "מגירות"
   },
   "pdf": {
     "title": "ייצוא PDF",

@@ -48,7 +48,7 @@ describe('CabinetPreview — isometric 3D view', () => {
 describe('CabinetPreview — dimension label strip (Sprint 76)', () => {
   beforeEach(() => {
     useCabinetStore.setState({
-      config: { ...DEFAULT_CONFIG, width: 600, height: 720, depth: 580 },
+      config: { ...DEFAULT_CONFIG, width: 600, height: 720, depth: 580, doorCount: 0, drawerCount: 0 },
       darkMode: false,
       units: 'metric',
     });
@@ -84,5 +84,50 @@ describe('CabinetPreview — dimension label strip (Sprint 76)', () => {
     render(<CabinetPreview />);
     const label = screen.getByRole('paragraph');
     expect(label.textContent).toContain('580');
+  });
+});
+
+// ── Sprint 89 — door / drawer count indicator pills ─────────────────────────
+describe('CabinetPreview — door/drawer count pills (Sprint 89)', () => {
+  it('shows door count pill when doorCount > 0', () => {
+    useCabinetStore.setState({
+      config: { ...DEFAULT_CONFIG, doorCount: 2, drawerCount: 0, doorStyle: 'flat' },
+      darkMode: false,
+      units: 'metric',
+    });
+    render(<CabinetPreview />);
+    expect(screen.getByText(/2.*doors/i)).toBeInTheDocument();
+  });
+
+  it('shows drawer count pill when drawerCount > 0', () => {
+    useCabinetStore.setState({
+      config: { ...DEFAULT_CONFIG, doorCount: 0, drawerCount: 3 },
+      darkMode: false,
+      units: 'metric',
+    });
+    render(<CabinetPreview />);
+    expect(screen.getByText(/3.*drawers/i)).toBeInTheDocument();
+  });
+
+  it('shows both pills when both counts > 0', () => {
+    useCabinetStore.setState({
+      config: { ...DEFAULT_CONFIG, doorCount: 1, drawerCount: 2, doorStyle: 'flat' },
+      darkMode: false,
+      units: 'metric',
+    });
+    render(<CabinetPreview />);
+    expect(screen.getByText(/1.*doors/i)).toBeInTheDocument();
+    expect(screen.getByText(/2.*drawers/i)).toBeInTheDocument();
+  });
+
+  it('hides pills when both counts are 0', () => {
+    useCabinetStore.setState({
+      config: { ...DEFAULT_CONFIG, doorCount: 0, drawerCount: 0 },
+      darkMode: false,
+      units: 'metric',
+    });
+    render(<CabinetPreview />);
+    expect(screen.queryByText(/doors/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/drawers/i)).not.toBeInTheDocument();
   });
 });
