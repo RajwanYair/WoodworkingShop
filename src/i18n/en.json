@@ -393,7 +393,8 @@
   },
   "shortcuts": {
     "saveSnapshot": "Snapshot saved",
-    "exportBom": "BOM exported"
+    "exportBom": "BOM exported",
+    "resetConfig": "Config reset to defaults"
   },
   "skeleton": {
     "loading": "Loading panel…",

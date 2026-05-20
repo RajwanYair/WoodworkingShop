@@ -114,6 +114,13 @@ function App() {
         useToastStore.getState().addToast(t('shortcuts.exportBom'), 'success');
         return;
       }
+      // Reset config to defaults: Ctrl+R (Sprint 66)
+      if (ctrl && (e.key === 'r' || e.key === 'R')) {
+        e.preventDefault();
+        useCabinetStore.getState().resetConfig();
+        useToastStore.getState().addToast(t('shortcuts.resetConfig'), 'info');
+        return;
+      }
       // Tab switching: Alt+1-5; Dark mode: Alt+D (Sprint 168)
       if (e.altKey && !ctrl) {
         const tabMap: Record<string, CabinetState['activeTab']> = {

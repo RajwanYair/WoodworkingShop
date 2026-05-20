@@ -400,7 +400,8 @@
   },
   "shortcuts": {
     "saveSnapshot": "צילום מצב נשמר",
-    "exportBom": "BOM יוצא"
+    "exportBom": "BOM יוצא",
+    "resetConfig": "ההגדרות אופסו לברירת מחדל"
   },
   "onboarding": {
     "title": "ברוכים הבאים למתכנן הארונות!",
