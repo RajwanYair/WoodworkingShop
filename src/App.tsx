@@ -10,6 +10,7 @@ import { ConfiguratorPanel } from './components/configurator/ConfiguratorPanel';
 import { CabinetPreview } from './components/preview/CabinetPreview';
 import { SmartOptimizerPanel } from './components/optimizer/SmartOptimizerPanel';
 import { PartsTable, HardwareTable } from './components/optimizer/Tables';
+import { ProjectSummaryPanel } from './components/optimizer/ProjectSummaryPanel';
 import { ToastContainer } from './components/layout/ToastContainer';
 import { OnboardingManager } from './components/layout/OnboardingOverlay';
 import { TouchGestureTutorial } from './components/layout/TouchGestureTutorial';
@@ -166,6 +167,7 @@ function App() {
               <ErrorBoundary panelName="Optimizer">
                 <Suspense fallback={<SkeletonPane label={t('skeleton.loadingOptimizer')} cards={4} />}>
                   <div className="space-y-8">
+                    <ProjectSummaryPanel />
                     <SmartOptimizerPanel />
                     <PartsTable />
                     <HardwareTable />

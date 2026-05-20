@@ -16,12 +16,10 @@ import { DEFAULT_CONFIG } from '../../src/engine/materials';
 import { generateAssemblySteps } from '../../src/engine/assembly';
 import { generateParts } from '../../src/engine/parts';
 import { generateHardware } from '../../src/engine/hardware';
-import { computeDimensions } from '../../src/engine/dimensions';
 
 function seedStore() {
   const config = { ...DEFAULT_CONFIG };
-  const dims = computeDimensions(config);
-  const parts = generateParts(config, dims);
+  const parts = generateParts(config);
   const hardware = generateHardware(config);
   const assemblySteps = generateAssemblySteps(config);
   useCabinetStore.setState({

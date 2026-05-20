@@ -281,6 +281,16 @@
     "notes": "Notes",
     "notesPlaceholder": "Optional notes for this cabinet…"
   },
+  "summary": {
+    "title": "Project Summary",
+    "sectionLabel": "Multi-cabinet project summary",
+    "totalCabinets": "Cabinets",
+    "totalParts": "Total parts",
+    "totalSheets": "Sheets used",
+    "overallYield": "Overall yield",
+    "totalWaste": "Total waste",
+    "grainConflicts": "Grain conflicts"
+  },
   "cost": {
     "title": "Cost Estimate",
     "edgeBanding": "Edge banding",

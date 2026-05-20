@@ -283,6 +283,16 @@
     "notes": "הערות",
     "notesPlaceholder": "הערות אופציונליות לארון זה…"
   },
+  "summary": {
+    "title": "סיכום פרויקט",
+    "sectionLabel": "סיכום פרויקט רב-ארונות",
+    "totalCabinets": "ארונות",
+    "totalParts": "סך חלקים",
+    "totalSheets": "לוחות בשימוש",
+    "overallYield": "נצילות כללית",
+    "totalWaste": "סך פסולת",
+    "grainConflicts": "קונפליקטי סיבוב"
+  },
   "cost": {
     "title": "הערכת עלות",
     "edgeBanding": "פסי קצה",
