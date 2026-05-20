@@ -2,6 +2,21 @@ import type { CabinetConfig, ValidationIssue } from './types';
 import { getMaterial } from './materials';
 import { computeDimensions } from './dimensions';
 
+// ── Joinery constraint constants (Sprint 12) ─────────────────────────────────
+
+/** Pocket-screw pilots need a landing zone of at least 15 mm thick stock to hold properly. */
+const MIN_POCKET_SCREW_THICKNESS_MM = 15;
+
+/** Dado/housing grooves need at least 12 mm parent stock to achieve a structural cut depth. */
+const MIN_DADO_THICKNESS_MM = 12;
+
+/** Dowel joinery needs at least 12 mm to allow a 6 mm dowel diameter with adequate wall coverage. */
+const MIN_DOWEL_THICKNESS_MM = 12;
+
+/** Biscuit/plate joinery needs ≥ 12 mm stock and ≥ 50 mm face width for the smallest #0 biscuit slot. */
+const MIN_BISCUIT_THICKNESS_MM = 12;
+const MIN_BISCUIT_FACE_WIDTH_MM = 50;
+
 /**
  * Minimum door panel width to avoid warping or binding on hinges (mm).
  * Below this limit, door installation becomes unreliable.
@@ -747,6 +762,70 @@ export function validateConfig(
       },
       field: 'shelfCount',
       suggestedValue: 1,
+    });
+  }
+
+  // ── Sprint 12 — Joinery constraint checks ──
+
+  const joinery = config.joineryType ?? 'screw';
+
+  if (joinery === 'pocket-screw' && t < MIN_POCKET_SCREW_THICKNESS_MM) {
+    issues.push({
+      code: 'JOINERY_POCKET_SCREW_TOO_THIN',
+      severity: 'error',
+      message: {
+        en: `Pocket-screw joinery requires panel thickness ≥ ${MIN_POCKET_SCREW_THICKNESS_MM} mm (current: ${t} mm). Increase material thickness or switch joinery type.`,
+        he: `חיבור בברגי כיס דורש עובי לוח ≥ ${MIN_POCKET_SCREW_THICKNESS_MM} מ"מ (נוכחי: ${t} מ"מ). הגדל עובי חומר או שנה סוג חיבור.`,
+      },
+      field: 'carcassMaterial',
+    });
+  }
+
+  if (joinery === 'dado' && t < MIN_DADO_THICKNESS_MM) {
+    issues.push({
+      code: 'JOINERY_DADO_TOO_THIN',
+      severity: 'error',
+      message: {
+        en: `Dado-groove joinery requires panel thickness ≥ ${MIN_DADO_THICKNESS_MM} mm (current: ${t} mm). A shallow dado in thin stock pulls out under load.`,
+        he: `חיבור בחריץ דדו דורש עובי לוח ≥ ${MIN_DADO_THICKNESS_MM} מ"מ (נוכחי: ${t} מ"מ). חריץ רדוד בחומר דק נשלף בעומס.`,
+      },
+      field: 'carcassMaterial',
+    });
+  }
+
+  if (joinery === 'dowel' && t < MIN_DOWEL_THICKNESS_MM) {
+    issues.push({
+      code: 'JOINERY_DOWEL_TOO_THIN',
+      severity: 'warning',
+      message: {
+        en: `Dowel joinery is marginal at ${t} mm — minimum ${MIN_DOWEL_THICKNESS_MM} mm is needed for adequate wall coverage around a 6 mm dowel.`,
+        he: `חיבור בסיכות עץ בעובי ${t} מ"מ הוא גבולי — נדרשים לפחות ${MIN_DOWEL_THICKNESS_MM} מ"מ לכיסוי מספיק סביב סיכה 6 מ"מ.`,
+      },
+      field: 'carcassMaterial',
+    });
+  }
+
+  if (joinery === 'biscuit' && t < MIN_BISCUIT_THICKNESS_MM) {
+    issues.push({
+      code: 'JOINERY_BISCUIT_TOO_THIN',
+      severity: 'error',
+      message: {
+        en: `Biscuit joinery requires panel thickness ≥ ${MIN_BISCUIT_THICKNESS_MM} mm (current: ${t} mm). Even the smallest #0 biscuit slot will break through thin stock.`,
+        he: `חיבור בביסקוויטים דורש עובי לוח ≥ ${MIN_BISCUIT_THICKNESS_MM} מ"מ (נוכחי: ${t} מ"מ). חריץ ביסקוויט #0 יחדור דרך חומר דק.`,
+      },
+      field: 'carcassMaterial',
+    });
+  }
+
+  if (joinery === 'biscuit' && config.width > 0 && config.width < MIN_BISCUIT_FACE_WIDTH_MM) {
+    issues.push({
+      code: 'JOINERY_BISCUIT_FACE_TOO_NARROW',
+      severity: 'error',
+      message: {
+        en: `Biscuit joinery requires panel face width ≥ ${MIN_BISCUIT_FACE_WIDTH_MM} mm. Cabinet width (${config.width} mm) is too narrow for even a #0 biscuit slot.`,
+        he: `חיבור בביסקוויטים דורש רוחב פנים לוח ≥ ${MIN_BISCUIT_FACE_WIDTH_MM} מ"מ. רוחב הארון (${config.width} מ"מ) צר מדי.`,
+      },
+      field: 'width',
     });
   }
 

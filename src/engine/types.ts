@@ -21,6 +21,18 @@ export interface Material {
 
 export type DoorStyle = 'flat' | 'shaker' | 'glass' | 'none';
 export type EdgeBanding = 'all-visible' | 'doors-only' | 'none';
+
+/**
+ * Sprint 12 — Joinery type used to assemble the carcass.
+ * Controls which validation rules apply and influences assembly instructions.
+ *
+ * - `pocket-screw` : Kreg-style pocket screws — fast, needs ≥ 15 mm stock.
+ * - `dado`         : Dado/housing grooves — strong, needs ≥ 12 mm stock.
+ * - `dowel`        : Wooden dowels — clean, needs ≥ 12 mm stock.
+ * - `biscuit`      : Plate/biscuit joinery — medium strength, needs ≥ 12 mm and face ≥ 50 mm wide.
+ * - `screw`        : Standard through-screws — simplest, no thickness constraint.
+ */
+export type JoineryType = 'pocket-screw' | 'dado' | 'dowel' | 'biscuit' | 'screw';
 export type ShelfSpacing = 'equal' | 'custom';
 export type HandleStyle = 'bar' | 'knob' | 'cup' | 'none';
 export type FurnitureType = 'cabinet' | 'bookshelf' | 'desk' | 'wardrobe' | 'panel';
@@ -97,6 +109,10 @@ export interface CabinetConfig {
   hingeProfile?: string;
   /** Override calculated qty for specific hardware items by item id (e.g. { 'H15': 6 }). */
   hardwareOverrides?: Record<string, number>;
+
+  // Joinery
+  /** Sprint 12 — joinery method used to assemble the carcass panels. Defaults to 'screw'. */
+  joineryType?: JoineryType;
 
   // Edge banding
   edgeBanding: EdgeBanding;

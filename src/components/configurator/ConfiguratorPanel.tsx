@@ -14,7 +14,7 @@ import { DrawerConfig } from './DrawerConfig';
 import { CustomMaterialEditor } from './CustomMaterialEditor';
 import { PresetsPanel } from './PresetsPanel';
 import { SaveLoadPanel } from './SaveLoadPanel';
-import type { FurnitureType } from '../../engine/types';
+import type { FurnitureType, JoineryType } from '../../engine/types';
 
 export function ConfiguratorPanel() {
   const { t } = useTranslation();
@@ -101,6 +101,36 @@ export function ConfiguratorPanel() {
       <DimensionSliders />
       <MaterialSelector />
       <CustomMaterialEditor />
+
+      {/* Sprint 12 — Joinery type selector */}
+      <fieldset className="space-y-2">
+        <legend className="text-sm font-semibold text-wood-700 dark:text-wood-200 uppercase tracking-wide">
+          {t('config.joineryType')}
+        </legend>
+        <div className="flex flex-wrap gap-2">
+          {(['screw', 'pocket-screw', 'dado', 'dowel', 'biscuit'] as JoineryType[]).map((jt) => (
+            <label
+              key={jt}
+              className={`cursor-pointer rounded border px-3 py-1.5 text-xs font-medium transition-colors ${
+                (config.joineryType ?? 'screw') === jt
+                  ? 'bg-wood-600 text-white border-wood-500'
+                  : 'bg-wood-50 dark:bg-wood-800 text-wood-600 dark:text-wood-300 border-wood-200 dark:border-wood-700 hover:bg-wood-100 dark:hover:bg-wood-700'
+              }`}
+            >
+              <input
+                type="radio"
+                name="joineryType"
+                value={jt}
+                checked={(config.joineryType ?? 'screw') === jt}
+                onChange={() => setConfig({ joineryType: jt })}
+                className="sr-only"
+              />
+              {t(`config.joinery_${jt}`)}
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
       {config.furnitureType !== 'panel' && <ShelfConfig />}
       {(config.furnitureType === 'cabinet' || config.furnitureType === 'wardrobe') && <DoorConfig />}
       {(config.furnitureType === 'cabinet' || config.furnitureType === 'wardrobe') && <DrawerConfig />}
