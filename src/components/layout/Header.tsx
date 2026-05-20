@@ -6,6 +6,7 @@ import { configToUrl } from '../../utils/url-state';
 import { HelpButton } from './OnboardingOverlay';
 import { TemplatePicker } from '../configurator/TemplatePicker';
 import { ProjectManagerModal } from './ProjectManagerModal';
+import { SUPPORTED_LANGUAGES, RTL_LANGS, type SupportedLang } from '../../i18n';
 import {
   IconSun,
   IconMoon,
@@ -76,11 +77,12 @@ export function Header() {
     }
   };
 
-  const toggleLang = () => {
-    const next = lang === 'en' ? 'he' : 'en';
+  const changeLang = (next: SupportedLang) => {
     i18n.changeLanguage(next);
-    document.documentElement.dir = next === 'he' ? 'rtl' : 'ltr';
-    useCabinetStore.getState().setConfig({ lang: next as 'en' | 'he' });
+    document.documentElement.dir = RTL_LANGS.has(next) ? 'rtl' : 'ltr';
+    // Engine-facing lang stays 'en'|'he' — AR/ES/DE/FR fall back to EN for BOM column headers.
+    const engineLang: 'en' | 'he' = next === 'he' || next === 'ar' ? 'he' : 'en';
+    useCabinetStore.getState().setConfig({ lang: engineLang });
   };
 
   return (
@@ -126,13 +128,18 @@ export function Header() {
           >
             {darkMode ? <IconSun size={16} /> : <IconMoon size={16} />}
           </button>
-          <button
-            onClick={toggleLang}
-            className="text-wood-200 hover:text-white text-sm font-medium"
-            aria-label="Toggle language"
+          <select
+            value={lang}
+            onChange={(e) => changeLang(e.target.value as SupportedLang)}
+            className="bg-transparent text-wood-200 hover:text-white text-xs font-medium border-0 outline-none cursor-pointer"
+            aria-label={t('footer.language')}
           >
-            {lang === 'en' ? 'עב' : 'EN'}
-          </button>
+            {SUPPORTED_LANGUAGES.map((l) => (
+              <option key={l.code} value={l.code} className="bg-wood-800 text-white">
+                {l.nativeLabel}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -224,9 +231,18 @@ export function Header() {
         >
           {units === 'metric' ? 'mm' : 'in'}
         </button>
-        <button onClick={toggleLang} className="text-wood-200 hover:text-white text-sm font-medium">
-          {lang === 'en' ? 'עב' : 'EN'}
-        </button>
+        <select
+          value={lang}
+          onChange={(e) => changeLang(e.target.value as SupportedLang)}
+          className="bg-transparent text-wood-200 hover:text-white text-xs font-medium border-0 outline-none cursor-pointer"
+          aria-label={t('footer.language')}
+        >
+          {SUPPORTED_LANGUAGES.map((l) => (
+            <option key={l.code} value={l.code} className="bg-wood-800 text-white">
+              {l.nativeLabel}
+            </option>
+          ))}
+        </select>
         <button
           onClick={() => setShowTemplates(true)}
           className="text-wood-200 hover:text-white flex items-center"
