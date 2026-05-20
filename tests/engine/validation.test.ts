@@ -677,3 +677,36 @@ describe('validateConfig — DEPTH_TOO_SHALLOW_FOR_DOORS (Sprint 75)', () => {
     expect(issue.message.he).toContain('180');
   });
 });
+
+// ── Sprint 83 — PANEL_TOO_THIN_FOR_SHELF_PINS ────────────────────────────────
+// plywood-4 is a built-in 4 mm material (thickness < 12 mm), so computeDimensions
+// can resolve it without needing extraMaterials.
+describe('PANEL_TOO_THIN_FOR_SHELF_PINS', () => {
+  it('raises info when shelves > 0 and material thickness < 12mm', () => {
+    const issues = validateConfig(cfg({ shelfCount: 2, carcassMaterial: 'plywood-4' }));
+    expect(issues.some((i) => i.code === 'PANEL_TOO_THIN_FOR_SHELF_PINS')).toBe(true);
+  });
+
+  it('does not raise when no shelves', () => {
+    const issues = validateConfig(cfg({ shelfCount: 0, carcassMaterial: 'plywood-4' }));
+    expect(issues.some((i) => i.code === 'PANEL_TOO_THIN_FOR_SHELF_PINS')).toBe(false);
+  });
+
+  it('does not raise for standard 18mm panel', () => {
+    const issues = validateConfig(cfg({ shelfCount: 2, carcassMaterial: 'plywood-18' }));
+    expect(issues.some((i) => i.code === 'PANEL_TOO_THIN_FOR_SHELF_PINS')).toBe(false);
+  });
+
+  it('severity is info', () => {
+    const issues = validateConfig(cfg({ shelfCount: 1, carcassMaterial: 'plywood-4' }));
+    const issue = issues.find((i) => i.code === 'PANEL_TOO_THIN_FOR_SHELF_PINS')!;
+    expect(issue.severity).toBe('info');
+  });
+
+  it('message mentions the panel thickness', () => {
+    const issues = validateConfig(cfg({ shelfCount: 2, carcassMaterial: 'plywood-4' }));
+    const issue = issues.find((i) => i.code === 'PANEL_TOO_THIN_FOR_SHELF_PINS')!;
+    expect(issue.message.en).toContain('4');
+    expect(issue.message.he).toContain('4');
+  });
+});

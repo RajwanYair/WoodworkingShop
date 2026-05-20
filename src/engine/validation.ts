@@ -729,6 +729,25 @@ export function validateConfig(
     });
   }
 
+  // ── Panel too thin for shelf pins (Sprint 83) ──────────────────────────────
+  // Euro shelf pins (5 mm diameter) need to be bored into the carcass side.
+  // In panels thinner than 12 mm the bore is so close to the face that the
+  // laminate or veneer can split under load.  Flag it as info so the user
+  // knows to choose a thicker panel or fixed shelf dadoes instead.
+
+  const MIN_SHELF_PIN_THICKNESS_MM = 12;
+  if (config.shelfCount > 0 && t < MIN_SHELF_PIN_THICKNESS_MM) {
+    issues.push({
+      code: 'PANEL_TOO_THIN_FOR_SHELF_PINS',
+      severity: 'info',
+      message: {
+        en: `Panel thickness (${t} mm) is very thin for 5 mm shelf-pin bores — the hole is within 3–4 mm of the panel face, which can split veneered or laminated surfaces under load. Use panels ≥ ${MIN_SHELF_PIN_THICKNESS_MM} mm for pin-mounted shelves, or use fixed dado shelves instead.`,
+        he: `עובי הלוח (${t} מ"מ) דק מדי לקידוחי סיכות מדף 5 מ"מ — הקדח נמצא 3–4 מ"מ מפני הלוח בלבד, דבר העלול לגרום לסדיקה בקניר או בציפוי. השתמש בלוחות ≥ ${MIN_SHELF_PIN_THICKNESS_MM} מ"מ למדפים ניידים, או בחר מדפים קבועים בחריץ.`,
+      },
+      field: 'carcassMaterial',
+    });
+  }
+
   // Sort: errors → warnings → info
   const order: Record<string, number> = { error: 0, warning: 1, info: 2 };
   issues.sort((a, b) => order[a.severity] - order[b.severity]);
