@@ -96,3 +96,73 @@ describe('ProjectSummaryPanel (Sprint 53)', () => {
     expect(screen.getByText('7')).toBeInTheDocument();
   });
 });
+
+// ── Sprint 79 — avg sheet yield stat ─────────────────────────────────────────
+describe('ProjectSummaryPanel — avg sheet yield (Sprint 79)', () => {
+  it('shows avg sheet yield label', () => {
+    useCabinetStore.setState({
+      cabinets: [
+        { name: 'A', config: DEFAULT_CONFIG },
+        { name: 'B', config: DEFAULT_CONFIG },
+      ],
+      activeCabinetIndex: 0,
+      allParts: [],
+      combinedOptimization: {
+        sheets: [
+          { ...({} as never), yieldPercent: 80 },
+          { ...({} as never), yieldPercent: 60 },
+        ],
+        totalSheets: 2,
+        overallYield: 70,
+        totalWaste: 0,
+        grainConflictCount: 0,
+      } as OptimizationResult,
+    });
+    render(<ProjectSummaryPanel />);
+    expect(screen.getByText(/avg sheet yield/i)).toBeInTheDocument();
+  });
+
+  it('displays computed avg yield value', () => {
+    useCabinetStore.setState({
+      cabinets: [
+        { name: 'A', config: DEFAULT_CONFIG },
+        { name: 'B', config: DEFAULT_CONFIG },
+      ],
+      activeCabinetIndex: 0,
+      allParts: [],
+      combinedOptimization: {
+        sheets: [
+          { ...({} as never), yieldPercent: 80 },
+          { ...({} as never), yieldPercent: 60 },
+        ],
+        totalSheets: 2,
+        overallYield: 70,
+        totalWaste: 0,
+        grainConflictCount: 0,
+      } as OptimizationResult,
+    });
+    render(<ProjectSummaryPanel />);
+    // avg of 80 + 60 = 70 → "70 %"
+    expect(screen.getByText('70 %')).toBeInTheDocument();
+  });
+
+  it('shows 0 % avg yield when no sheets', () => {
+    useCabinetStore.setState({
+      cabinets: [
+        { name: 'A', config: DEFAULT_CONFIG },
+        { name: 'B', config: DEFAULT_CONFIG },
+      ],
+      activeCabinetIndex: 0,
+      allParts: [],
+      combinedOptimization: {
+        sheets: [],
+        totalSheets: 0,
+        overallYield: 0,
+        totalWaste: 0,
+        grainConflictCount: 0,
+      } as OptimizationResult,
+    });
+    render(<ProjectSummaryPanel />);
+    expect(screen.getByText('0 %')).toBeInTheDocument();
+  });
+});

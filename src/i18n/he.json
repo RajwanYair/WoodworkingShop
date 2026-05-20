@@ -312,6 +312,7 @@
     "totalParts": "סך חלקים",
     "totalSheets": "לוחות בשימוש",
     "overallYield": "נצילות כללית",
+    "avgSheetYield": "יבול ממוצע ללוח",
     "totalWaste": "סך פסולת",
     "grainConflicts": "קונפליקטי סיבוב",
     "totalWeight": "משקל כולל"

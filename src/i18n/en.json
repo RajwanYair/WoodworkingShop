@@ -310,6 +310,7 @@
     "totalParts": "Total parts",
     "totalSheets": "Sheets used",
     "overallYield": "Overall yield",
+    "avgSheetYield": "Avg sheet yield",
     "totalWaste": "Total waste",
     "grainConflicts": "Grain conflicts",
     "totalWeight": "Total weight"

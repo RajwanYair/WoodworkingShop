@@ -26,11 +26,17 @@ export function ProjectSummaryPanel() {
   const grainConflicts = combinedOptimization.grainConflictCount;
   const totalWeightKg = computePartsWeight(allParts);
 
+  // Sprint 79 — average yield per individual sheet
+  const sheets = combinedOptimization.sheets ?? [];
+  const avgSheetYield =
+    sheets.length > 0 ? Math.round(sheets.reduce((s, sh) => s + sh.yieldPercent, 0) / sheets.length) : 0;
+
   const stats: Array<{ label: string; value: string | number; warn?: boolean }> = [
     { label: t('summary.totalCabinets'), value: cabinets.length },
     { label: t('summary.totalParts'), value: allParts.length },
     { label: t('summary.totalSheets'), value: totalSheets },
     { label: t('summary.overallYield'), value: `${overallYield.toFixed(1)} %` },
+    { label: t('summary.avgSheetYield'), value: `${avgSheetYield} %` },
     { label: t('summary.totalWaste'), value: `${wasteM2} m²` },
     {
       label: t('summary.grainConflicts'),
@@ -51,7 +57,7 @@ export function ProjectSummaryPanel() {
           {cabinets.map((c) => c.name).join(' · ')}
         </span>
       </h2>
-      <dl className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+      <dl className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
         {stats.map(({ label, value, warn }) => (
           <div key={label} className="bg-wood-50 dark:bg-wood-800 rounded-md px-3 py-2">
             <dt className="text-xs text-wood-400 dark:text-wood-500 truncate">{label}</dt>
