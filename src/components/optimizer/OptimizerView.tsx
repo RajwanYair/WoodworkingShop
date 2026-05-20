@@ -62,6 +62,8 @@ export function OptimizerView() {
     projectName,
     sheetSizeOverrides,
     setSheetSizeOverride,
+    rotationLockedPartIds,
+    toggleRotationLock,
   } = useCabinetStore();
   const lang = i18n.language as Lang;
   const [hoveredPartId, setHoveredPartId] = useState<string | null>(null);
@@ -470,6 +472,8 @@ export function OptimizerView() {
               filePrefix={filePrefix}
               partFilter={partFilter}
               onGcodePreview={(filename, s) => setGcodePreview({ filename, sheet: s })}
+              rotationLockedPartIds={rotationLockedPartIds}
+              onToggleRotationLock={toggleRotationLock}
               t={t}
             />
           </VirtualSheetWrapper>
@@ -891,6 +895,8 @@ function SheetCard({
   filePrefix,
   partFilter,
   onGcodePreview,
+  rotationLockedPartIds,
+  onToggleRotationLock,
   t,
 }: {
   sheet: CutSheet;
@@ -902,6 +908,8 @@ function SheetCard({
   filePrefix: string;
   partFilter: string;
   onGcodePreview: (filename: string, sheet: CutSheet) => void;
+  rotationLockedPartIds: Record<string, boolean>;
+  onToggleRotationLock: (partId: string) => void;
   t: (key: string, opts?: Record<string, unknown>) => string;
 }) {
   const mat = getMaterial(sheet.material);
@@ -1098,28 +1106,42 @@ function SheetCard({
 
       {/* Part legend below the sheet */}
       <div className="mt-2 flex flex-wrap gap-x-4 gap-y-0.5">
-        {sheet.parts.map((p, i) => (
-          <span
-            key={i}
-            className={`text-[10px] cursor-default transition-opacity ${
-              (hoveredPartId && hoveredPartId !== p.partId) ||
-              (filterTerm &&
-                !p.partId.toLowerCase().includes(filterTerm) &&
-                !p.label.toLowerCase().includes(filterTerm))
-                ? 'opacity-30'
-                : ''
-            } ${hoveredPartId === p.partId || (filterTerm && (p.partId.toLowerCase().includes(filterTerm) || p.label.toLowerCase().includes(filterTerm))) ? 'font-bold text-wood-700 dark:text-wood-100' : 'text-wood-600 dark:text-wood-300'}`}
-            onMouseEnter={() => onHoverPart(p.partId)}
-            onMouseLeave={() => onHoverPart(null)}
-            title={
-              p.rationale
-                ? `${p.partId}: ${p.label}\n${p.rationale}${p.grainConflict ? '\n⚠ Grain direction compromised' : ''}`
-                : undefined
-            }
-          >
-            {p.partId}: {p.label} ({p.width}×{p.length}){p.grainConflict ? ' ⚠' : ''}
-          </span>
-        ))}
+        {sheet.parts.map((p, i) => {
+          const isLocked = rotationLockedPartIds[p.partId] === true;
+          return (
+            <span
+              key={i}
+              className={`text-[10px] cursor-default transition-opacity ${
+                (hoveredPartId && hoveredPartId !== p.partId) ||
+                (filterTerm &&
+                  !p.partId.toLowerCase().includes(filterTerm) &&
+                  !p.label.toLowerCase().includes(filterTerm))
+                  ? 'opacity-30'
+                  : ''
+              } ${hoveredPartId === p.partId || (filterTerm && (p.partId.toLowerCase().includes(filterTerm) || p.label.toLowerCase().includes(filterTerm))) ? 'font-bold text-wood-700 dark:text-wood-100' : 'text-wood-600 dark:text-wood-300'}`}
+              onMouseEnter={() => onHoverPart(p.partId)}
+              onMouseLeave={() => onHoverPart(null)}
+              title={
+                p.rationale
+                  ? `${p.partId}: ${p.label}\n${p.rationale}${p.grainConflict ? '\n⚠ Grain direction compromised' : ''}${isLocked ? '\n🔒 Rotation locked' : ''}`
+                  : undefined
+              }
+            >
+              {p.partId}: {p.label} ({p.width}×{p.length}){p.grainConflict ? ' ⚠' : ''}
+              {/* Sprint 16 — rotation lock toggle button */}
+              <button
+                type="button"
+                onClick={() => onToggleRotationLock(p.partId)}
+                className="ms-1 inline-flex items-center text-[10px] hover:text-wood-900 dark:hover:text-wood-50 focus:outline-none focus:ring-1 focus:ring-wood-500 rounded"
+                aria-label={isLocked ? t('optimizer.unlockRotation') : t('optimizer.lockRotation')}
+                title={isLocked ? t('optimizer.unlockRotation') : t('optimizer.lockRotation')}
+                aria-pressed={isLocked}
+              >
+                {isLocked ? '🔒' : '🔓'}
+              </button>
+            </span>
+          );
+        })}
       </div>
 
       {/* Sprint 131 — Grain direction legend: only shown for grain-locked materials */}

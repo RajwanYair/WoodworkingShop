@@ -36,6 +36,7 @@ export function optimizeCutSheets(
         length: p.length,
         width: p.width,
         edgeBanding: p.edgeBanding.en,
+        rotationLocked: p.rotationLocked === true,
       });
     }
     groups.set(p.material, group);
@@ -72,6 +73,7 @@ export function optimizeCutSheets(
           rotated: r.rotated,
           grainConflict: r.grainConflict,
           rationale: r.rationale,
+          rotationLocked: r.rotationLocked || undefined,
         })),
         yieldPercent: round2((usedArea / sheetArea) * 100),
       });
@@ -99,6 +101,8 @@ interface Rect {
   length: number; // along grain (y)
   width: number; // across grain (x)
   edgeBanding?: string;
+  /** Sprint 16 — when true this individual part must not be rotated 90° by the packer. */
+  rotationLocked?: boolean;
 }
 
 interface PlacedRect extends Rect {
@@ -150,6 +154,8 @@ function packMaxRects(
   const sheets: Sheet[] = [];
 
   for (const rect of queue) {
+    // Sprint 16 — per-part rotation lock overrides the material-level rotation gate.
+    const allowRotForRect = allowRotation && rect.rotationLocked !== true;
     let grainConflict = false;
     let best: {
       sheetIdx: number;
@@ -170,7 +176,7 @@ function packMaxRects(
     let bestEffective = Infinity;
 
     for (let si = 0; si < sheets.length; si++) {
-      const candidate = findBestPlacement(sheets[si].free, rect, kerf, allowRotation);
+      const candidate = findBestPlacement(sheets[si].free, rect, kerf, allowRotForRect);
       if (candidate) {
         const effective = candidate.score + si * SHEET_PREFERENCE_PENALTY;
         if (effective < bestEffective) {
@@ -180,8 +186,9 @@ function packMaxRects(
       }
     }
 
-    // Grain-conflict fallback: if no normal fit on existing sheets, try forced rotation.
-    if (!best && trackGrainConflicts) {
+    // Grain-conflict fallback: if no normal fit on existing sheets, try forced rotation
+    // (only when this part is NOT locked — Sprint 16: locked parts may never be rotated).
+    if (!best && trackGrainConflicts && rect.rotationLocked !== true) {
       let bestForcedEffective = Infinity;
       for (let si = 0; si < sheets.length; si++) {
         const candidate = findBestPlacement(sheets[si].free, rect, kerf, true);
@@ -203,9 +210,9 @@ function packMaxRects(
         free: [{ x: 0, y: 0, w: sheetWidth, h: sheetLength }],
       };
       sheets.push(sheet);
-      let candidate = findBestPlacement(sheet.free, rect, kerf, allowRotation);
-      if (!candidate && trackGrainConflicts) {
-        // Last-resort forced rotation for grain-constrained materials.
+      let candidate = findBestPlacement(sheet.free, rect, kerf, allowRotForRect);
+      if (!candidate && trackGrainConflicts && rect.rotationLocked !== true) {
+        // Last-resort forced rotation for grain-constrained materials (Sprint 16: locks override).
         candidate = findBestPlacement(sheet.free, rect, kerf, true);
         if (candidate) {
           grainConflict = true;

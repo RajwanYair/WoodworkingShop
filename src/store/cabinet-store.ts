@@ -87,6 +87,25 @@ function getAssemblyWorker(): Worker | null {
 }
 
 /**
+ * Sprint 16 — Module-level rotation-lock map keyed by part ID.
+ * Mutated by the `toggleRotationLock` store action; read by `applyLocks` below
+ * to decorate parts with `rotationLocked: true` before they reach the cut
+ * optimizer (engine or worker). Initialised from the persisted session.
+ */
+let _rotationLocks: Record<string, boolean> = {};
+function applyLocks(parts: Part[]): Part[] {
+  let touched = false;
+  const out = parts.map((p) => {
+    if (_rotationLocks[p.id]) {
+      touched = true;
+      return { ...p, rotationLocked: true };
+    }
+    return p;
+  });
+  return touched ? out : parts;
+}
+
+/**
  * Fire-and-forget: post a cut-optimization request to the worker.
  * Falls back to synchronous computation when Workers are unavailable (e.g. tests).
  */
@@ -96,13 +115,16 @@ function scheduleOptimization(
   sawKerfMm: number,
   sheetSizeOverrides: Record<string, { width: number; length: number }>,
 ): void {
+  // Sprint 16 — decorate with rotation locks before sending to optimizer.
+  const lockedActive = applyLocks(activeParts);
+  const lockedAll = applyLocks(allParts);
   const worker = getCutOptWorker();
   if (!worker) {
     // Synchronous fallback (tests / browsers without Worker support)
     if (_workerApplyFn) {
       _workerApplyFn({
-        optimization: optimizeCutSheets(activeParts, sawKerfMm, sheetSizeOverrides),
-        combinedOptimization: optimizeCutSheets(allParts, sawKerfMm, sheetSizeOverrides),
+        optimization: optimizeCutSheets(lockedActive, sawKerfMm, sheetSizeOverrides),
+        combinedOptimization: optimizeCutSheets(lockedAll, sawKerfMm, sheetSizeOverrides),
         optimizationPending: false,
       });
     }
@@ -110,8 +132,8 @@ function scheduleOptimization(
   }
   _currentReqId++;
   const payload: CutOptimizerWorkerInput = {
-    activeParts,
-    allParts,
+    activeParts: lockedActive,
+    allParts: lockedAll,
     sawKerfMm,
     sheetSizeOverrides,
     requestId: String(_currentReqId),
@@ -252,6 +274,8 @@ interface SessionSnapshot {
   labourRate: number;
   labourHours: number;
   finishCost: number;
+  /** Sprint 16 — per-part rotation lock map (partId → true). */
+  rotationLockedPartIds?: Record<string, boolean>;
 }
 function loadSession(): SessionSnapshot | null {
   if (typeof window === 'undefined') return null;
@@ -356,6 +380,8 @@ export interface CabinetState {
   labourRate: number; // v3.23.0: ₪ per hour, default 75
   labourHours: number; // v3.23.0: estimated labour hours (user-overrideable)
   finishCost: number; // v3.23.0: finish/paint cost in ₪
+  /** Sprint 16 — per-part rotation lock map (partId → true). */
+  rotationLockedPartIds: Record<string, boolean>;
 
   // Actions
   setConfig: (patch: Partial<CabinetConfig>) => void;
@@ -386,6 +412,8 @@ export interface CabinetState {
   setFinishCost: (cost: number) => void; // v3.23.0
   setProjectName: (name: string) => void;
   setProjectNotes: (notes: string) => void;
+  /** Sprint 16 — toggle the rotation-lock flag for a specific part ID. */
+  toggleRotationLock: (partId: string) => void;
   loadProject: (cabinets: CabinetEntry[]) => void;
   /** v3.18.0 — Replace every occurrence of fromKey with toKey across all cabinets (undoable). */
   bulkReplaceMaterial: (fromKey: string, toKey: string) => void;
@@ -405,7 +433,8 @@ function derive(
   const dimensions = computeDimensions(config);
   const parts = generateParts(config);
   const hardware = generateHardware(config);
-  const optimization = optimizeCutSheets(parts, sawKerfMm, sheetSizeOverrides);
+  // Sprint 16 — decorate with rotation locks before optimization.
+  const optimization = optimizeCutSheets(applyLocks(parts), sawKerfMm, sheetSizeOverrides);
   const edgeBandingTotal = computeEdgeBandingTotal(parts);
   return { dimensions, parts, hardware, optimization, edgeBandingTotal };
 }
@@ -425,7 +454,8 @@ function deriveProject(
       id: cabinets.length > 1 ? `C${ci + 1}-${p.id}` : p.id,
     })),
   );
-  const combinedOptimization = optimizeCutSheets(allParts, sawKerfMm, sheetSizeOverrides);
+  // Sprint 16 — apply rotation locks for combined optimization.
+  const combinedOptimization = optimizeCutSheets(applyLocks(allParts), sawKerfMm, sheetSizeOverrides);
   return { config: activeConfig, ...active, allParts, combinedOptimization };
 }
 
@@ -480,6 +510,8 @@ export const useCabinetStore = create<CabinetState>((set) => {
     const initialConfig = { ...DEFAULT_CONFIG, ...urlPatch };
     initialCabinets = [{ name: 'Cabinet 1', config: initialConfig }];
   }
+  // Sprint 16 — hydrate module-level lock map from session before deriving initial optimization.
+  _rotationLocks = session?.rotationLockedPartIds ?? {};
   const initial = deriveProjectMemo(initialCabinets, initialActiveIndex);
   const prefs = loadPrefs();
 
@@ -509,6 +541,7 @@ export const useCabinetStore = create<CabinetState>((set) => {
     labourRate: session?.labourRate ?? 75, // ₪/hr — v3.23.0
     labourHours: session?.labourHours ?? 0, // hours — v3.23.0 (0 = not set, user inputs manually)
     finishCost: session?.finishCost ?? 0, // ₪ — v3.23.0
+    rotationLockedPartIds: session?.rotationLockedPartIds ?? {}, // Sprint 16
     optimizationPending: false, // v3.21.0
     costPending: false,
     assemblyPending: false,
@@ -787,6 +820,21 @@ export const useCabinetStore = create<CabinetState>((set) => {
       pushProjectNameToUrl(name); // Sprint 157
     },
     setProjectNotes: (notes) => set({ projectNotes: notes }),
+    /** Sprint 16 — toggle per-part rotation lock and trigger re-optimization. */
+    toggleRotationLock: (partId) =>
+      set((state) => {
+        const next = { ...state.rotationLockedPartIds };
+        if (next[partId]) {
+          delete next[partId];
+        } else {
+          next[partId] = true;
+        }
+        // Update module-level map BEFORE scheduling so the optimizer sees fresh locks.
+        _rotationLocks = next;
+        const base = deriveBaseProject(state.cabinets, state.activeCabinetIndex);
+        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
+        return { rotationLockedPartIds: next, ...base, optimizationPending: true };
+      }),
     setSawKerf: (mm) =>
       set((state) => {
         const sawKerf = Math.max(0, Math.min(8, mm));
@@ -991,6 +1039,7 @@ useCabinetStore.subscribe((state) => {
       labourRate: state.labourRate,
       labourHours: state.labourHours,
       finishCost: state.finishCost,
+      rotationLockedPartIds: state.rotationLockedPartIds,
     });
   }, 500);
 });

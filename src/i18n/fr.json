@@ -154,6 +154,8 @@
     "sheetWasteCost": "Coût des chutes : ₪{{cost}}",
     "sheetWasteCostTitle": "Coût matière estimé perdu en chutes",
     "grainLegend": "Le sens du fil doit être vertical (pièces non pivotées à 90°)",
+    "lockRotation": "Verrouiller la rotation (empêcher la rotation à 90° par l'optimiseur)",
+    "unlockRotation": "Déverrouiller la rotation (autoriser la rotation de cette pièce)",
     "sawKerf": "Trait de scie",
     "exportHardware": "Exporter liste quincaillerie CSV",
     "labels": "Étiquettes",

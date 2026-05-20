@@ -153,6 +153,8 @@ export interface Part {
   length: number; // mm (grain direction)
   width: number; // mm
   edgeBanding: { en: string; he: string };
+  /** Sprint 16 — when true the cut-optimizer must not rotate this part 90°. */
+  rotationLocked?: boolean;
 }
 
 export interface HardwareItem {
@@ -184,6 +186,8 @@ export interface CutRect {
   /** Human-readable description of how the BSSF packer placed this part.
    *  Format: "BSSF(<orientation>[, grain-forced]): <short>mm × <long>mm margin" */
   rationale?: string;
+  /** Sprint 16 — true when this part has a user-applied rotation lock (rotation was disallowed during packing). */
+  rotationLocked?: boolean;
 }
 
 export interface CutSheet {

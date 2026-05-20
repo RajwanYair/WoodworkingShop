@@ -154,6 +154,8 @@
     "sheetWasteCost": "Costo de desperdicio: ₪{{cost}}",
     "sheetWasteCostTitle": "Costo estimado de material perdido en recortes",
     "grainLegend": "La dirección de la veta debe ir verticalmente (piezas no rotadas 90°)",
+    "lockRotation": "Bloquear rotación (impedir rotación 90° por el optimizador)",
+    "unlockRotation": "Desbloquear rotación (permitir rotación de esta pieza)",
     "sawKerf": "Margen de corte",
     "exportHardware": "Exportar lista de herrajes CSV",
     "labels": "Etiquetas",

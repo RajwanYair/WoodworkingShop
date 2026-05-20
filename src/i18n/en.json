@@ -154,6 +154,8 @@
     "sheetWasteCost": "Waste cost: ₪{{cost}}",
     "sheetWasteCostTitle": "Estimated material cost lost to offcuts",
     "grainLegend": "Grain direction must run vertically (parts were not rotated 90°)",
+    "lockRotation": "Lock rotation (prevent 90° rotation by optimizer)",
+    "unlockRotation": "Unlock rotation (allow optimizer to rotate this part)",
     "sawKerf": "Saw kerf",
     "exportHardware": "Export Hardware List CSV",
     "labels": "Labels",

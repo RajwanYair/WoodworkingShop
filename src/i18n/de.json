@@ -154,6 +154,8 @@
     "sheetWasteCost": "Verschnittkosten: ₪{{cost}}",
     "sheetWasteCostTitle": "Geschätzte Materialkosten durch Verschnitt",
     "grainLegend": "Faserrichtung muss vertikal verlaufen (Teile nicht um 90° gedreht)",
+    "lockRotation": "Drehung sperren (90°-Drehung durch Optimierer verhindern)",
+    "unlockRotation": "Drehung entsperren (Teil darf gedreht werden)",
     "sawKerf": "Sägeblattbreite",
     "exportHardware": "Beschlägeliste CSV exportieren",
     "labels": "Beschriftungen",
