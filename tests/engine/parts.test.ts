@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { generateParts, computeEdgeBandingTotal } from '../../src/engine/parts';
+import { generateParts, computeEdgeBandingTotal, computePartsWeight } from '../../src/engine/parts';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 import { expectBilingualNames } from '../assertions';
 
@@ -94,5 +94,37 @@ describe('computeEdgeBandingTotal', () => {
     const parts = generateParts(cfg);
     const total = computeEdgeBandingTotal(parts);
     expect(total).toBe(0);
+  });
+});
+
+describe('computePartsWeight — Sprint 62', () => {
+  it('returns a positive weight for the default cabinet', () => {
+    const parts = generateParts(DEFAULT_CONFIG);
+    const weight = computePartsWeight(parts);
+    expect(weight).toBeGreaterThan(0);
+  });
+
+  it('returns 0 for an empty parts list', () => {
+    expect(computePartsWeight([])).toBe(0);
+  });
+
+  it('larger cabinet weighs more than smaller cabinet', () => {
+    const small = generateParts({ ...DEFAULT_CONFIG, width: 400, height: 800, depth: 300 });
+    const large = generateParts({ ...DEFAULT_CONFIG, width: 1200, height: 2400, depth: 600 });
+    expect(computePartsWeight(large)).toBeGreaterThan(computePartsWeight(small));
+  });
+
+  it('skips parts with unknown material without throwing', () => {
+    const parts = generateParts(DEFAULT_CONFIG);
+    const modified = [{ ...parts[0], material: 'nonexistent-mat-xyz' }];
+    expect(() => computePartsWeight(modified)).not.toThrow();
+    expect(computePartsWeight(modified)).toBe(0);
+  });
+
+  it('weight scales with quantity', () => {
+    const parts = generateParts(DEFAULT_CONFIG);
+    const base = computePartsWeight(parts);
+    const doubled = parts.map((p) => ({ ...p, qty: p.qty * 2 }));
+    expect(computePartsWeight(doubled)).toBeCloseTo(base * 2, 5);
   });
 });

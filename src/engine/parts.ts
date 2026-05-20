@@ -1,5 +1,5 @@
 import type { CabinetConfig, Part } from './types';
-import { getMaterial } from './materials';
+import { getMaterial, computePartWeightKg } from './materials';
 import { computeDimensions } from './dimensions';
 import { createJsonMemo } from './memo';
 
@@ -337,4 +337,29 @@ export function computeEdgeBandingTotal(parts: Part[]): number {
     }
   }
   return total;
+}
+
+/**
+ * Sprint 62 — Compute total assembled weight (kg) for a list of parts.
+ * Each part's density is looked up from the materials table.
+ * Parts whose material cannot be resolved are silently skipped (weight = 0).
+ *
+ * @param parts - Cut-list parts from `generateParts()`
+ * @param extraMaterials - Optional custom materials to include in the lookup
+ * @returns Total weight in kilograms (0 when the list is empty)
+ */
+export function computePartsWeight(
+  parts: Part[],
+  extraMaterials?: Parameters<typeof getMaterial>[1],
+): number {
+  let totalKg = 0;
+  for (const p of parts) {
+    try {
+      const mat = getMaterial(p.material, extraMaterials);
+      totalKg += computePartWeightKg(p.length, p.width, p.thickness, p.qty, mat.densityKgM3);
+    } catch {
+      // Unknown material — skip
+    }
+  }
+  return totalKg;
 }

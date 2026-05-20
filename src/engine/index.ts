@@ -61,7 +61,7 @@ export {
   computeEqualShelfPositions,
 } from './dimensions';
 
-export { generateParts, computeEdgeBandingTotal } from './parts';
+export { generateParts, computeEdgeBandingTotal, computePartsWeight } from './parts';
 
 export { optimizeCutSheets } from './cut-optimizer';
 

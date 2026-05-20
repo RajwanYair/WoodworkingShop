@@ -309,7 +309,8 @@
     "totalSheets": "לוחות בשימוש",
     "overallYield": "נצילות כללית",
     "totalWaste": "סך פסולת",
-    "grainConflicts": "קונפליקטי סיבוב"
+    "grainConflicts": "קונפליקטי סיבוב",
+    "totalWeight": "משקל כולל"
   },
   "cost": {
     "title": "הערכת עלות",

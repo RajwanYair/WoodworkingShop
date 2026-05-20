@@ -307,7 +307,8 @@
     "totalSheets": "Sheets used",
     "overallYield": "Overall yield",
     "totalWaste": "Total waste",
-    "grainConflicts": "Grain conflicts"
+    "grainConflicts": "Grain conflicts",
+    "totalWeight": "Total weight"
   },
   "cost": {
     "title": "Cost Estimate",

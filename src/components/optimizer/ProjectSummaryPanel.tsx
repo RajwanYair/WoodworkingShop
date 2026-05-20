@@ -11,6 +11,7 @@
  */
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { computePartsWeight } from '../../engine';
 
 export function ProjectSummaryPanel() {
   const { t } = useTranslation();
@@ -23,6 +24,7 @@ export function ProjectSummaryPanel() {
   const overallYield = combinedOptimization.overallYield;
   const wasteM2 = (combinedOptimization.totalWaste / 1_000_000).toFixed(3);
   const grainConflicts = combinedOptimization.grainConflictCount;
+  const totalWeightKg = computePartsWeight(allParts);
 
   const stats: Array<{ label: string; value: string | number; warn?: boolean }> = [
     { label: t('summary.totalCabinets'), value: cabinets.length },
@@ -35,6 +37,7 @@ export function ProjectSummaryPanel() {
       value: grainConflicts,
       warn: grainConflicts > 0,
     },
+    { label: t('summary.totalWeight'), value: `${totalWeightKg.toFixed(1)} kg` },
   ];
 
   return (
@@ -48,7 +51,7 @@ export function ProjectSummaryPanel() {
           {cabinets.map((c) => c.name).join(' · ')}
         </span>
       </h2>
-      <dl className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+      <dl className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
         {stats.map(({ label, value, warn }) => (
           <div key={label} className="bg-wood-50 dark:bg-wood-800 rounded-md px-3 py-2">
             <dt className="text-xs text-wood-400 dark:text-wood-500 truncate">{label}</dt>
