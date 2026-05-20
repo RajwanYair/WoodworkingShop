@@ -1271,6 +1271,13 @@ function PartRect({
         {part.width}×{part.length}
       </text>
       <title>{`${part.partId}: ${part.label}\n${part.width} × ${part.length} mm\nGrain: ${part.grainVertical ? '↕ vertical' : '↔ horizontal'}${hasEB ? `\nEdge: ${part.edgeBanding}` : ''}${part.grainConflict ? '\n⚠ Grain direction compromised — rotated to fit' : ''}${part.rationale ? `\n${part.rationale}` : ''}`}</title>
+      {/* Sprint 9 — placement rationale ⓘ marker in top-left corner when rationale is available */}
+      {part.rationale && w > 10 && h > 10 && (
+        <g pointerEvents="none" opacity={isFaded ? 0.2 : 0.75} aria-hidden="true">
+          <circle cx={x + 4} cy={y + 4} r={3} fill="#3b82f6" />
+          <text x={x + 4} y={y + 4} textAnchor="middle" dominantBaseline="central" fontSize={3.5} fill="white" fontWeight="bold">i</text>
+        </g>
+      )}
     </g>
   );
 }
