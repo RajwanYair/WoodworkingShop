@@ -710,3 +710,33 @@ describe('PANEL_TOO_THIN_FOR_SHELF_PINS', () => {
     expect(issue.message.he).toContain('4');
   });
 });
+
+// ── Sprint 88 — SHELF_COUNT_WARDROBE_BARE ────────────────────────────────────
+describe('SHELF_COUNT_WARDROBE_BARE', () => {
+  it('raises info for wardrobe with no shelves or drawers', () => {
+    const issues = validateConfig(cfg({ furnitureType: 'wardrobe', shelfCount: 0, drawerCount: 0 }));
+    expect(issues.some((i) => i.code === 'SHELF_COUNT_WARDROBE_BARE')).toBe(true);
+  });
+
+  it('does not raise when wardrobe has at least one shelf', () => {
+    const issues = validateConfig(cfg({ furnitureType: 'wardrobe', shelfCount: 2, drawerCount: 0 }));
+    expect(issues.some((i) => i.code === 'SHELF_COUNT_WARDROBE_BARE')).toBe(false);
+  });
+
+  it('does not raise when wardrobe has at least one drawer', () => {
+    const issues = validateConfig(cfg({ furnitureType: 'wardrobe', shelfCount: 0, drawerCount: 1 }));
+    expect(issues.some((i) => i.code === 'SHELF_COUNT_WARDROBE_BARE')).toBe(false);
+  });
+
+  it('does not raise for non-wardrobe with no shelves', () => {
+    const issues = validateConfig(cfg({ furnitureType: 'cabinet', shelfCount: 0, drawerCount: 0 }));
+    expect(issues.some((i) => i.code === 'SHELF_COUNT_WARDROBE_BARE')).toBe(false);
+  });
+
+  it('severity is info and suggestedValue is 1', () => {
+    const issues = validateConfig(cfg({ furnitureType: 'wardrobe', shelfCount: 0, drawerCount: 0 }));
+    const issue = issues.find((i) => i.code === 'SHELF_COUNT_WARDROBE_BARE')!;
+    expect(issue.severity).toBe('info');
+    expect(issue.suggestedValue).toBe(1);
+  });
+});

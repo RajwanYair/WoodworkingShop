@@ -729,8 +729,7 @@ export function validateConfig(
     });
   }
 
-  // ── Panel too thin for shelf pins (Sprint 83) ──────────────────────────────
-  // Euro shelf pins (5 mm diameter) need to be bored into the carcass side.
+  // ── Panel too thin for shelf pins (Sprint 83) ──────────────────────────────  // Euro shelf pins (5 mm diameter) need to be bored into the carcass side.
   // In panels thinner than 12 mm the bore is so close to the face that the
   // laminate or veneer can split under load.  Flag it as info so the user
   // knows to choose a thicker panel or fixed shelf dadoes instead.
@@ -745,6 +744,20 @@ export function validateConfig(
         he: `עובי הלוח (${t} מ"מ) דק מדי לקידוחי סיכות מדף 5 מ"מ — הקדח נמצא 3–4 מ"מ מפני הלוח בלבד, דבר העלול לגרום לסדיקה בקניר או בציפוי. השתמש בלוחות ≥ ${MIN_SHELF_PIN_THICKNESS_MM} מ"מ למדפים ניידים, או בחר מדפים קבועים בחריץ.`,
       },
       field: 'carcassMaterial',
+    });
+  }
+
+  // ── Wardrobe with no shelves or drawers (Sprint 88) ─────────────────────────
+  if (config.furnitureType === 'wardrobe' && config.shelfCount === 0 && config.drawerCount === 0) {
+    issues.push({
+      code: 'SHELF_COUNT_WARDROBE_BARE',
+      severity: 'info',
+      message: {
+        en: 'Wardrobe with no shelves or drawers provides no organised storage. Add at least one shelf for usable interior space.',
+        he: 'ארון ללא מדפים או מגירות לא מספק אחסון מסודר. הוסף לפחות מדף אחד לשטח פנים שמיש.',
+      },
+      field: 'shelfCount',
+      suggestedValue: 1,
     });
   }
 
