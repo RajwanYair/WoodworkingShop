@@ -9,6 +9,50 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.53.90] — 2026-06-16
+
+### Sprints 71–80 — Share Link, Validation Badges, BOM #, Room Utilization, Door Depth Rule, Dimension Label, Sheet Badge, Checklist Download, Avg Yield
+
+Covers Sprints 71 through 80 (v3.53.81 → v3.53.90). All tests passing.
+
+### Shortcuts — Ctrl+L Copy Share Link (Sprint 71)
+
+- **Sprint 71** — **Ctrl+L** keyboard shortcut copies the current share URL to the clipboard and shows a toast confirming the action. `ShortcutsModal` lists the new shortcut. i18n keys: `shortcuts.copyLink`, `shortcuts.linkCopied`. 4 new tests in `tests/components/ctrl-l-copy-link.test.tsx`. (v3.53.81)
+
+### Configurator — ValidationPanel Severity Badges (Sprint 72)
+
+- **Sprint 72** — `ValidationPanel` header now shows colored pill badges with counts: red for errors, amber for warnings, blue for info. Badges carry `aria-label` attributes. 5 new tests in `tests/components/ValidationPanel-badges.test.tsx`. (v3.53.82)
+
+### Utils — BOM CSV Sequential Row Numbers (Sprint 73)
+
+- **Sprint 73** — Parts and hardware rows in the BOM CSV export now start with a sequential `#` column (1, 2, 3 …). Headers changed to `#,Cabinet,Part ID,…` and `#,Cabinet,Hardware ID,…`. 4 new tests in `tests/utils/bom-export.test.ts`. (v3.53.83)
+
+### Room Layout — Floor-Area Utilization % (Sprint 74)
+
+- **Sprint 74** — The `RoomLayoutView` stats bar now shows `· N% utilized` calculated as `Σ cabinet footprints / room area × 100`. i18n key: `room.utilized`. 4 new tests. (v3.53.84)
+
+### Validation — DEPTH_TOO_SHALLOW_FOR_DOORS (Sprint 75)
+
+- **Sprint 75** — New `warning`-severity validation rule: when one or more doors are configured and `depth < 250 mm`, raises `DEPTH_TOO_SHALLOW_FOR_DOORS` (`field: 'depth'`, `suggestedValue: 250`). `MIN_DEPTH_FOR_DOORS_MM = 250`. 5 new tests. (v3.53.85)
+
+### Preview — W×H×D Dimension Label (Sprint 76)
+
+- **Sprint 76** — `CabinetPreview` now displays a compact `W NNN × H NNN × D NNN` dimension strip below the 3-D preview, using formatted dimension values. `aria-label` matches i18n key `preview.dimensionSummary`. 4 new tests. (v3.53.86)
+
+### Optimizer — Part-Count Badge Per Cut Sheet (Sprint 77)
+
+- **Sprint 77** — Each `SheetCard` header in `OptimizerView` now includes a pill badge showing the number of parts placed on that sheet (e.g. `6`). Badge carries `aria-label="{n} parts"`. 4 new tests in `tests/components/OptimizerView-badges.test.tsx`. (v3.53.87)
+
+### Assembly — Download Checklist as Plain Text (Sprint 78)
+
+- **Sprint 78** — `AssemblyGuide` gains a **Download checklist** button next to **Print**. Clicking it triggers a `text/plain` download of `assembly-checklist.txt` containing all steps with tip annotations via `triggerDownload`. i18n key: `assembly.downloadChecklist`. 3 new tests. (v3.53.88)
+
+### Optimizer — Avg Sheet Yield in Project Summary (Sprint 79)
+
+- **Sprint 79** — `ProjectSummaryPanel` now shows an **Avg sheet yield** stat, computed as the arithmetic mean of `yieldPercent` across all sheets in `combinedOptimization.sheets`. Grid updated from `lg:grid-cols-7` → `lg:grid-cols-8`. i18n key: `summary.avgSheetYield`. 3 new tests. (v3.53.89)
+
+---
+
 ## [3.53.80] — 2026-06-11
 
 ### Sprints 61–70 — Cabinet Reorder, Weight, Validation Fixes, Assembly Time, Parts Filter, Shortcuts, Room Numbers, Validation Rules, DXF Layers
