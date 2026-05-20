@@ -9,6 +9,53 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.53.69] — 2026-06-09
+
+### Sprints 51–59 — Assembly Checklist, Project Summary, Error Boundary, Room Layout, Validation, Shortcuts, Optimizer & PDF
+
+Covers Sprints 51 through 59 (v3.53.61 → v3.53.69). All 821 tests passing across 53 test files.
+
+### Optimizer — Stale Badge Fix (Sprint 51)
+
+- **Sprint 51** — Fixed stale `optimizationPending` badge staying visible after second optimization run. ROADMAP quality gates added. (v3.53.61)
+
+### Assembly — Step Checklist (Sprint 52)
+
+- **Sprint 52** — `AssemblyGuide` step checklist with checkboxes, progress counter, reset button, and "all steps done" celebration state. Persisted in component state. i18n keys: `assembly.stepsCompleted`, `assembly.resetProgress`, `assembly.markStepDone`, `assembly.stepDone`, `assembly.allStepsDone`. 5 new tests. (v3.53.62)
+
+### Optimizer — Multi-Cabinet Project Summary (Sprint 53)
+
+- **Sprint 53** — `ProjectSummaryPanel` shows total cabinets, total parts, sheets used, overall yield, total waste, and grain conflicts across all cabinets. Returns `null` when fewer than 2 cabinets. Uses `combinedOptimization` from `useCabinetStore`. `<dl>` grid in `<section aria-label>`. i18n key: `summary.*`. 7 new tests. (v3.53.63)
+
+### Layout — ErrorBoundary Copy-to-Clipboard (Sprint 54)
+
+- **Sprint 54** — ErrorBoundary adds a "Copy error details" button that writes `error.stack` to the clipboard. Button label and `aria-label` toggle dynamically to "Copied!" for 2 seconds. `getDerivedStateFromError` now sets `copied: false`. i18n keys: `errors.copyDetails`, `errors.copied`. 5 new tests. (v3.53.64)
+
+### Layout — Room Floor-Plan View (Sprint 55)
+
+- **Sprint 55** — `RoomLayoutView` SVG floor-plan component (`src/components/layout/RoomLayoutView.tsx`). Reads the active layout from `useRoomStore`, scales the room outline and cabinet footprints to fit a 640×400 viewBox. Each `RoomCabinet` rendered as a labelled `<rect>`. Graceful empty state when no layouts configured. Wired into the Configurator tab below `ConfiguratorPanel`. `role="img"` on SVG with `aria-label`. i18n keys: `room.title`, `room.sectionLabel`, `room.empty`, `room.cabinets`. 7 new tests. (v3.53.65)
+
+### Engine — Two New Validation Rules (Sprint 56)
+
+- **Sprint 56** — Two new `validateConfig` rules in `src/engine/validation.ts`:
+  - **`DEPTH_EXCEEDS_WIDTH`** (warning) — cabinet depth greater than width is an unusual proportion indicating a possible measurement error and raised tip-over risk. `suggestedValue` set to cabinet width.
+  - **`EXCESSIVE_DRAWER_COUNT`** (error) — when drawer count × MIN_DRAWER_HEIGHT_MM exceeds internal height, standard side-mount hardware cannot be installed. `suggestedValue` is the computed maximum safe drawer count.
+  - 9 new tests. (v3.53.66)
+
+### Keyboard Shortcuts — BOM CSV Export (Sprint 57)
+
+- **Sprint 57** — `Ctrl+E` keyboard shortcut triggers synchronous BOM CSV export from anywhere in the app (App.tsx keyboard handler). Uses `generateParts` + `generateHardware` to build per-cabinet data then calls `downloadBomCsv`. Shows success toast via i18n key `shortcuts.exportBom`. `ShortcutsModal` updated with the new shortcut. (v3.53.67)
+
+### Smart Optimizer — Exhaustive Strategy (Sprint 58)
+
+- **Sprint 58** — Added `'exhaustive'` to the `SmartStrategy` union type. The `exhaustive` strategy aggregates candidates from all six individual strategies and applies standard deduplication and scoring. `stratLabels` and `STRATEGY_ICON` updated. 5 new tests. (v3.53.68)
+
+### PDF Export — Page Size & Orientation (Sprint 59)
+
+- **Sprint 59** — `CabinetPdfDocument` now accepts `pageSize?: 'A4' | 'LETTER'` and `orientation?: 'portrait' | 'landscape'` props. `PdfExportPanel` adds two `<select>` controls for user choice before PDF generation. i18n keys: `pdf.pageSize`, `pdf.pageSizeA4`, `pdf.pageSizeLetter`, `pdf.orientation`, `pdf.orientationPortrait`, `pdf.orientationLandscape`. (v3.53.69)
+
+---
+
 ## [3.53.58] — 2026-06-08
 
 ### Sprints 41–50 — Domain Intelligence, UX Polish & API Documentation
