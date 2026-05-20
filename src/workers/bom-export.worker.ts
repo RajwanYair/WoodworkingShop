@@ -14,6 +14,8 @@ import type { Part, HardwareItem, Lang } from '../engine/types';
 export interface BomWorkerInput {
   cabinets: { name: string; parts: Part[]; hardware: HardwareItem[]; notes?: string }[];
   lang: Lang;
+  /** Full i18next locale for column header translation (e.g. 'es', 'de', 'fr', 'ar'). */
+  locale?: string;
 }
 
 export interface BomWorkerOutput {
@@ -24,8 +26,8 @@ export interface BomWorkerOutput {
 
 self.onmessage = (e: MessageEvent<BomWorkerInput>) => {
   try {
-    const { cabinets, lang } = e.data;
-    const csv = generateBomCsv(cabinets, lang);
+    const { cabinets, lang, locale } = e.data;
+    const csv = generateBomCsv(cabinets, lang, locale);
     self.postMessage({ type: 'done', csv } satisfies BomWorkerOutput);
   } catch (err) {
     self.postMessage({

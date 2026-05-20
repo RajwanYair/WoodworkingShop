@@ -2,13 +2,100 @@ import type { Part, HardwareItem, Lang } from '../engine/types';
 import { getMaterial, computePartWeightKg } from '../engine/materials';
 import { triggerDownload } from './download';
 
+// ── Sprint 15 — Localized BOM column headers ──────────────────────────────────
+
+interface BomHeaders {
+  materialSummary: string;
+  matCol: string;
+  areaCol: string;
+  boardFeetCol: string;
+  weightCol: string;
+  partsHeader: string;
+  hwHeader: string;
+  grainAlong: string;
+}
+
+const BOM_HEADERS: Record<string, BomHeaders> = {
+  en: {
+    materialSummary: 'Material Summary',
+    matCol: 'Material',
+    areaCol: 'Total Area (m\u00b2)',
+    boardFeetCol: 'Board-Feet (nominal 1 inch)',
+    weightCol: 'Weight (kg)',
+    partsHeader: '#,Cabinet,Part ID,Part Name,Qty,Material,Thickness (mm),Length (mm),Width (mm),Area (m\u00b2),Edge Banding,Weight (kg),Grain Direction',
+    hwHeader: '#,Cabinet,Hardware ID,Hardware Name,Qty,Unit',
+    grainAlong: 'Along length',
+  },
+  he: {
+    materialSummary: '\u05e1\u05d9\u05db\u05d5\u05dd \u05d7\u05d5\u05de\u05e8\u05d9\u05dd',
+    matCol: '\u05d7\u05d5\u05de\u05e8',
+    areaCol: '\u05e9\u05d8\u05d7 \u05db\u05d5\u05dc\u05dc (m\u00b2)',
+    boardFeetCol: '\u05e8\u05d2\u05dc\u05d9 \u05dc\u05d5\u05d7',
+    weightCol: '\u05de\u05e9\u05e7\u05dc (kg)',
+    partsHeader: '#,\u05d0\u05e8\u05d5\u05df,\u05de\u05d6\u05d4\u05d4,\u05e9\u05dd \u05d7\u05dc\u05e7,\u05db\u05de\u05d5\u05ea,\u05d7\u05d5\u05de\u05e8,\u05e2\u05d5\u05d1\u05d9 (\u05de"\u05de),\u05d0\u05d5\u05e8\u05da (\u05de"\u05de),\u05e8\u05d5\u05d7\u05d1 (\u05de"\u05de),\u05e9\u05d8\u05d7 (m\u00b2),\u05d7\u05d9\u05d6\u05d5\u05e7 \u05e7\u05e6\u05d5\u05ea,\u05de\u05e9\u05e7\u05dc (kg),\u05db\u05d9\u05d5\u05d5\u05df \u05d2\u05d9\u05d3',
+    hwHeader: '#,\u05d0\u05e8\u05d5\u05df,\u05de\u05d6\u05d4\u05d4,\u05e9\u05dd \u05d7\u05d5\u05de\u05e8\u05d4,\u05db\u05de\u05d5\u05ea,\u05d9\u05d7\u05d9\u05d3\u05d4',
+    grainAlong: '\u05dc\u05d0\u05d5\u05e8\u05da \u05d4\u05d2\u05d9\u05d3',
+  },
+  es: {
+    materialSummary: 'Resumen de materiales',
+    matCol: 'Material',
+    areaCol: '\u00c1rea total (m\u00b2)',
+    boardFeetCol: 'Pies tabla (1 pulgada nominal)',
+    weightCol: 'Peso (kg)',
+    partsHeader: '#,Armario,ID Pieza,Nombre pieza,Cant.,Material,Espesor (mm),Largo (mm),Ancho (mm),\u00c1rea (m\u00b2),Canteado,Peso (kg),Direcci\u00f3n veta',
+    hwHeader: '#,Armario,ID Herraje,Nombre herraje,Cant.,Unidad',
+    grainAlong: 'A lo largo',
+  },
+  de: {
+    materialSummary: 'Materialzusammenfassung',
+    matCol: 'Material',
+    areaCol: 'Gesamtfl\u00e4che (m\u00b2)',
+    boardFeetCol: 'Brettfu\u00df (nominal 1 Zoll)',
+    weightCol: 'Gewicht (kg)',
+    partsHeader: '#,Korpus,Teile-ID,Teilename,Menge,Material,Dicke (mm),L\u00e4nge (mm),Breite (mm),Fl\u00e4che (m\u00b2),Kantenanleimer,Gewicht (kg),Faserrichtung',
+    hwHeader: '#,Korpus,Beschlag-ID,Beschlagname,Menge,Einheit',
+    grainAlong: 'L\u00e4ngs der Faser',
+  },
+  fr: {
+    materialSummary: 'R\u00e9sum\u00e9 mat\u00e9riaux',
+    matCol: 'Mat\u00e9riau',
+    areaCol: 'Surface totale (m\u00b2)',
+    boardFeetCol: 'Pieds-planche (nominal 1 pouce)',
+    weightCol: 'Poids (kg)',
+    partsHeader: '#,Meuble,ID Pi\u00e8ce,Nom pi\u00e8ce,Qte,Mat\u00e9riau,\u00c9paisseur (mm),Longueur (mm),Largeur (mm),Surface (m\u00b2),Chant,Poids (kg),Sens du fil',
+    hwHeader: '#,Meuble,ID Quincaillerie,Nom quincaillerie,Qte,Unit\u00e9',
+    grainAlong: 'Dans la longueur',
+  },
+  ar: {
+    materialSummary: '\u0645\u0644\u062e\u0635 \u0627\u0644\u0645\u0648\u0627\u062f',
+    matCol: '\u0627\u0644\u0645\u0627\u062f\u0629',
+    areaCol: '\u0627\u0644\u0645\u0633\u0627\u062d\u0629 \u0627\u0644\u0643\u0644\u064a\u0629 (m\u00b2)',
+    boardFeetCol: '\u0623\u0642\u062f\u0627\u0645 \u0644\u0648\u062d',
+    weightCol: '\u0627\u0644\u0648\u0632\u0646 (kg)',
+    partsHeader: '#,\u062e\u0632\u0627\u0646\u0629,\u0645\u0639\u0631\u0641 \u0627\u0644\u062c\u0632\u0621,\u0627\u0633\u0645 \u0627\u0644\u062c\u0632\u0621,\u0627\u0644\u0643\u0645\u064a\u0629,\u0627\u0644\u0645\u0627\u062f\u0629,\u0627\u0644\u0633\u0645\u0643 (mm),\u0627\u0644\u0637\u0648\u0644 (mm),\u0627\u0644\u0639\u0631\u0636 (mm),\u0627\u0644\u0645\u0633\u0627\u062d\u0629 (m\u00b2),\u062a\u0634\u0637\u064a\u0628 \u0627\u0644\u062d\u0648\u0627\u0641,\u0627\u0644\u0648\u0632\u0646 (kg),\u0627\u062a\u062c\u0627\u0647 \u0627\u0644\u062d\u0628\u0648\u0628',
+    hwHeader: '#,\u062e\u0632\u0627\u0646\u0629,\u0645\u0639\u0631\u0641 \u0627\u0644\u0639\u062a\u0627\u062f,\u0627\u0633\u0645 \u0627\u0644\u0639\u062a\u0627\u062f,\u0627\u0644\u0643\u0645\u064a\u0629,\u0627\u0644\u0648\u062d\u062f\u0629',
+    grainAlong: '\u0628\u0627\u062a\u062c\u0627\u0647 \u0627\u0644\u062d\u0628\u0648\u0628',
+  },
+};
+
+function getBomHeaders(locale: string): BomHeaders {
+  return BOM_HEADERS[locale] ?? BOM_HEADERS['en'];
+}
+
 /**
  * Generate a full Bill of Materials CSV for all cabinets in the project.
+ *
+ * @param cabinets  List of cabinet entries with parts and hardware.
+ * @param lang      Engine language for part/material names ('en' | 'he').
+ * @param locale    Full i18next locale code used for column header translation.
+ *                  Defaults to `lang`. Supports 'en', 'he', 'es', 'de', 'fr', 'ar'.
  */
 export function generateBomCsv(
   cabinets: { name: string; parts: Part[]; hardware: HardwareItem[]; notes?: string }[],
   lang: Lang,
+  locale?: string,
 ): string {
+  const h = getBomHeaders(locale ?? lang);
   const rows: string[] = [];
 
   // ── File metadata header ───────────────────────────────────────────────────
@@ -53,8 +140,8 @@ export function generateBomCsv(
       }
     }
   }
-  rows.push('Material Summary,,,,,,,,,,');
-  rows.push('Material,Total Area (m²),Board-Feet (nominal 1 inch),Weight (kg),,,,,,,');
+  rows.push(`${h.materialSummary},,,,,,,,,,`);
+  rows.push(`${h.matCol},${h.areaCol},${h.boardFeetCol},${h.weightCol},,,,,,,`);
   for (const [matKey, areaMm2] of areaMm2ByMat) {
     const matName = safeGetMaterialName(matKey, lang);
     const areaM2 = (areaMm2 / 1e6).toFixed(3);
@@ -64,10 +151,8 @@ export function generateBomCsv(
   }
   rows.push('');
 
-  // Header
-  rows.push(
-    '#,Cabinet,Part ID,Part Name,Qty,Material,Thickness (mm),Length (mm),Width (mm),Area (m²),Edge Banding,Weight (kg),Grain Direction',
-  );
+  // Parts header
+  rows.push(h.partsHeader);
 
   const isMultiCabinet = cabinets.length > 1;
   let partRowNum = 0;
@@ -88,10 +173,10 @@ export function generateBomCsv(
       } catch {
         /* skip */
       }
-      // Sprint 167 — grain direction: 'Along length' for grain materials, '—' otherwise
+      // Sprint 167 — grain direction
       let grainDir = '\u2014';
       try {
-        grainDir = getMaterial(p.material).hasGrain ? 'Along length' : '\u2014';
+        grainDir = getMaterial(p.material).hasGrain ? h.grainAlong : '\u2014';
       } catch {
         /* skip */
       }
@@ -122,7 +207,8 @@ export function generateBomCsv(
 
   // Blank separator + hardware section
   rows.push('');
-  rows.push('#,Cabinet,Hardware ID,Hardware Name,Qty,Unit,,,,,, ');
+  // Hardware header
+  rows.push(`${h.hwHeader},,,,, `);
   let hwRowNum = 0;
   for (const cab of cabinets) {
     for (const hw of cab.hardware) {
@@ -172,8 +258,9 @@ export function downloadBomCsv(
   cabinets: { name: string; parts: Part[]; hardware: HardwareItem[]; notes?: string }[],
   lang: Lang,
   filename = 'bill-of-materials.csv',
+  locale?: string,
 ) {
-  const csv = generateBomCsv(cabinets, lang);
+  const csv = generateBomCsv(cabinets, lang, locale);
   triggerDownload('\uFEFF' + csv, 'text/csv;charset=utf-8', filename);
 }
 

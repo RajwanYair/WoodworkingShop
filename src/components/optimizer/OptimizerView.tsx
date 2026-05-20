@@ -111,16 +111,16 @@ export function OptimizerView() {
       };
       worker.onerror = () => {
         // Fall back to synchronous export
-        const csv = generateBomCsv(bomData, lang);
+        const csv = generateBomCsv(bomData, lang, i18n.language);
         triggerDownload(csv, 'text/csv;charset=utf-8', filename);
         useToastStore.getState().addToast(t('toast.bomExported'), 'success');
         setBomExporting(false);
         workerRef.current = null;
       };
-      worker.postMessage({ cabinets: bomData, lang });
+      worker.postMessage({ cabinets: bomData, lang, locale: i18n.language });
     } else {
       // No Worker support — synchronous fallback
-      const csv = generateBomCsv(bomData, lang);
+      const csv = generateBomCsv(bomData, lang, i18n.language);
       triggerDownload(csv, 'text/csv;charset=utf-8', filename);
       useToastStore.getState().addToast(t('toast.bomExported'), 'success');
       setBomExporting(false);

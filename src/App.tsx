@@ -111,7 +111,7 @@ function App() {
           parts: generateParts(cab.config),
           hardware: generateHardware(cab.config),
         }));
-        downloadBomCsv(bomData, lang, `${filePrefix}-bom.csv`);
+        downloadBomCsv(bomData, lang, `${filePrefix}-bom.csv`, i18n.language);
         useToastStore.getState().addToast(t('shortcuts.exportBom'), 'success');
         return;
       }
