@@ -266,6 +266,21 @@ export function validateConfig(
     });
   }
 
+  // ── Wardrobe missing toe-kick (Sprint 68) ──
+
+  if (config.furnitureType === 'wardrobe' && config.kickHeight === 0) {
+    issues.push({
+      code: 'WARDROBE_MISSING_TOEKICK',
+      severity: 'info',
+      message: {
+        en: 'Wardrobes benefit from an 80–100 mm toe-kick for ergonomic access to the bottom shelf.',
+        he: 'לארון בגדים מומלץ פלינתה של 80–100 מ"מ לנוחות גישה למדף התחתון.',
+      },
+      field: 'kickHeight',
+      suggestedValue: 80,
+    });
+  }
+
   // ── Drawer vs cabinet height checks ──
 
   if (config.drawerCount > 0) {

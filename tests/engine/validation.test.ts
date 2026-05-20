@@ -576,3 +576,34 @@ describe('validateConfig — Sprint 56 new rules', () => {
     expect(issue.message.he).toBeTruthy();
   });
 });
+
+// ── Sprint 68 — WARDROBE_MISSING_TOEKICK ────────────────────────────────────
+describe('validateConfig — WARDROBE_MISSING_TOEKICK (Sprint 68)', () => {
+  it('raises WARDROBE_MISSING_TOEKICK for wardrobe with kickHeight 0', () => {
+    const issues = validateConfig(cfg({ furnitureType: 'wardrobe', kickHeight: 0 }));
+    expect(issues.some((i) => i.code === 'WARDROBE_MISSING_TOEKICK')).toBe(true);
+  });
+
+  it('WARDROBE_MISSING_TOEKICK has severity info', () => {
+    const issues = validateConfig(cfg({ furnitureType: 'wardrobe', kickHeight: 0 }));
+    const issue = issues.find((i) => i.code === 'WARDROBE_MISSING_TOEKICK')!;
+    expect(issue.severity).toBe('info');
+  });
+
+  it('WARDROBE_MISSING_TOEKICK suggestedValue is 80 and field is kickHeight', () => {
+    const issues = validateConfig(cfg({ furnitureType: 'wardrobe', kickHeight: 0 }));
+    const issue = issues.find((i) => i.code === 'WARDROBE_MISSING_TOEKICK')!;
+    expect(issue.suggestedValue).toBe(80);
+    expect(issue.field).toBe('kickHeight');
+  });
+
+  it('does NOT raise WARDROBE_MISSING_TOEKICK when wardrobe has kickHeight > 0', () => {
+    const issues = validateConfig(cfg({ furnitureType: 'wardrobe', kickHeight: 80 }));
+    expect(issues.some((i) => i.code === 'WARDROBE_MISSING_TOEKICK')).toBe(false);
+  });
+
+  it('does NOT raise WARDROBE_MISSING_TOEKICK for non-wardrobe with kickHeight 0', () => {
+    const issues = validateConfig(cfg({ furnitureType: 'cabinet', kickHeight: 0 }));
+    expect(issues.some((i) => i.code === 'WARDROBE_MISSING_TOEKICK')).toBe(false);
+  });
+});
