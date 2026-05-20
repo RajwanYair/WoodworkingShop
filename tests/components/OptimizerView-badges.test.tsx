@@ -120,3 +120,55 @@ describe('OptimizerView part-count badge per sheet — Sprint 77', () => {
     expect(screen.getByLabelText('2 parts')).toBeInTheDocument();
   });
 });
+
+// ── Sprint 81 — per-sheet waste area label ────────────────────────────────────
+describe('OptimizerView per-sheet waste label — Sprint 81', () => {
+  beforeEach(() => {
+    useCabinetStore.setState({
+      optimization: MOCK_OPTIMIZATION,
+      combinedOptimization: MOCK_OPTIMIZATION,
+      optimizationPending: false,
+      cabinets: [{ name: 'C1', config: useCabinetStore.getState().config }],
+      activeCabinetIndex: 0,
+      colorBlindMode: false,
+      sawKerf: 3,
+      materialPriceOverrides: {},
+      projectName: 'Test',
+      sheetSizeOverrides: {},
+    });
+  });
+
+  it('renders a "Waste:" label in the sheet header', () => {
+    render(<OptimizerView />);
+    // The waste label text should be present somewhere in the sheet header
+    expect(screen.getAllByText(/waste/i).length).toBeGreaterThan(0);
+  });
+
+  it('waste value is a number followed by m²', () => {
+    render(<OptimizerView />);
+    // Expect something like "Waste: 1.234 m²" — use getAllByText since the
+    // global waste stat also shows m²
+    expect(screen.getAllByText(/\d+\.\d+ m²/).length).toBeGreaterThan(0);
+  });
+
+  it('waste value reflects sheet area minus placed parts area', () => {
+    // Sheet: 1220 × 2440 = 2976800 mm²
+    // Each MOCK_PART: 580 × 720 = 417600 mm², 3 parts = 1252800 mm²
+    // waste = 2976800 - 1252800 = 1724000 mm² = 1.724000 m²
+    render(<OptimizerView />);
+    // span text is "· Waste: 1.724 m²"
+    const wasteSpans = screen.getAllByText(/1\.724 m²/);
+    expect(wasteSpans.length).toBeGreaterThan(0);
+  });
+
+  it('shows waste: 0.000 m² when sheet is fully packed', () => {
+    const fullPart = { ...MOCK_PART, width: 1220, length: 2440, x: 0, y: 0 };
+    const fullOpt: OptimizationResult = {
+      ...MOCK_OPTIMIZATION,
+      sheets: [{ ...MOCK_OPTIMIZATION.sheets[0], parts: [fullPart] }],
+    };
+    useCabinetStore.setState({ optimization: fullOpt, combinedOptimization: fullOpt });
+    render(<OptimizerView />);
+    expect(screen.getByText(/0\.000 m²/)).toBeInTheDocument();
+  });
+});

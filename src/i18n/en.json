@@ -162,6 +162,7 @@
     "sheetSize": "Sheet Size (mm)",
     "sheetSizeEdit": "Override sheet size",
     "sheetSizeReset": "Reset to default size",
+    "sheetWaste": "Waste",
     "shoppingList": "Shopping List",
     "shoppingListDesc": "Sheets required grouped by material — use for supplier orders",
     "print": "Print",

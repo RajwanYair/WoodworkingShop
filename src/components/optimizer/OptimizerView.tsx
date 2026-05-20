@@ -903,6 +903,10 @@ function SheetCard({
           >
             {sheet.parts.length}
           </span>
+          {/* Sprint 81 — per-sheet waste area label */}
+          <span className="ms-1.5 text-[10px] font-normal text-wood-400 dark:text-wood-500">
+            · {t('optimizer.sheetWaste')}: {((sheet.sheetWidth * sheet.sheetLength - sheet.parts.reduce((s, p) => s + p.width * p.length, 0)) / 1_000_000).toFixed(3)} m²
+          </span>
           {mat.hasGrain && (
             <span
               className="ml-1.5 text-[10px] font-normal text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/30 px-1 rounded inline-flex items-center gap-0.5"
