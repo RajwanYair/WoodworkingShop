@@ -1,43 +1,36 @@
 import { useEffect, useState } from 'react';
+import { registerSW } from 'virtual:pwa-register';
 
 /**
- * Detects when a new Service Worker is waiting to take over.
- * Returns `true` once a waiting SW is found, and exposes a `reload()` helper
- * that sends the SKIP_WAITING message to activate the new SW and reloads.
+ * Sprint 3 / Phase 11 — Uses the Workbox-generated SW via vite-plugin-pwa.
+ *
+ * Detects when a new Service Worker is ready and exposes a `reload()` helper.
+ * The `registerSW` call from `virtual:pwa-register` handles registration and
+ * fires the `onNeedRefresh` callback when an update is waiting.
  */
 export function useSwUpdate(): { updateAvailable: boolean; reload: () => void } {
   const [updateAvailable, setUpdateAvailable] = useState(false);
-  const [waitingWorker, setWaitingWorker] = useState<ServiceWorker | null>(null);
+  // updateSW is the function returned by registerSW — calling it triggers
+  // skipWaiting on the waiting worker then reloads the page.
+  const [updateSW, setUpdateSW] = useState<((reloadPage?: boolean) => Promise<void>) | null>(null);
 
   useEffect(() => {
-    if (!('serviceWorker' in navigator)) return;
-
-    const checkRegistration = (reg: ServiceWorkerRegistration) => {
-      if (reg.waiting) {
-        setWaitingWorker(reg.waiting);
+    const update = registerSW({
+      onNeedRefresh() {
         setUpdateAvailable(true);
-        return;
-      }
-      reg.addEventListener('updatefound', () => {
-        const installing = reg.installing;
-        if (!installing) return;
-        installing.addEventListener('statechange', () => {
-          if (installing.state === 'installed' && navigator.serviceWorker.controller) {
-            setWaitingWorker(installing);
-            setUpdateAvailable(true);
-          }
-        });
-      });
-    };
-
-    navigator.serviceWorker.ready.then(checkRegistration).catch(() => {
-      // SW not available — silently ignore
+        setUpdateSW(() => update);
+      },
+      onOfflineReady() {
+        // App is ready for offline use — no user action needed.
+      },
     });
+    return () => {
+      // registerSW doesn't expose a cleanup, but effect cleanup is required.
+    };
   }, []);
 
   const reload = () => {
-    waitingWorker?.postMessage({ type: 'SKIP_WAITING' });
-    window.location.reload();
+    void updateSW?.(true);
   };
 
   return { updateAvailable, reload };

@@ -52,11 +52,13 @@ describe('detectOsDarkModeUi', () => {
   });
 
   it('mirrors the matchMedia dark result when available', () => {
-    window.matchMedia = (() => ({ matches: true })) as typeof window.matchMedia;
+    // @ts-expect-error intentional minimal stub
+    window.matchMedia = () => ({ matches: true });
     expect(detectOsDarkModeUi()).toBe(true);
-    window.matchMedia = (() => ({ matches: false })) as typeof window.matchMedia;
+    // @ts-expect-error intentional minimal stub
+    window.matchMedia = () => ({ matches: false });
     expect(detectOsDarkModeUi()).toBe(false);
-    // Restore (matchMedia undefined by default in jsdom)
+    // Restore to undefined (jsdom default)
     // @ts-expect-error intentional stub
     window.matchMedia = undefined;
   });

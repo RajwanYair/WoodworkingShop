@@ -12,6 +12,13 @@ export default defineConfig({
   define: {
     __APP_VERSION__: JSON.stringify(version),
   },
+  resolve: {
+    alias: {
+      // Stub the vite-plugin-pwa virtual module so components importing it
+      // can be tested without the full Vite build pipeline.
+      'virtual:pwa-register': path.resolve(__dirname, 'tests/__mocks__/virtual-pwa-register.ts'),
+    },
+  },
   test: {
     globals: true,
     environment: 'jsdom',

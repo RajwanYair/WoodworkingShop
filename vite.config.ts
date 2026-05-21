@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
+import { VitePWA } from 'vite-plugin-pwa';
 import { resolve } from 'path';
 import { readFileSync } from 'fs';
 import os from 'os';
@@ -11,7 +12,39 @@ const { version } = JSON.parse(readFileSync('./package.json', 'utf-8')) as { ver
 export default defineConfig({
   cacheDir: resolve(os.tmpdir(), 'WoodworkingShop', '.vite_cache'),
   base: '/WoodworkingShop/',
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      strategies: 'generateSW',
+      base: '/WoodworkingShop/',
+      injectRegister: false, // handled manually in useSwUpdate / main.tsx
+      manifest: false,       // keep the existing public/manifest.json
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+        navigateFallback: '/WoodworkingShop/index.html',
+        navigateFallbackDenylist: [/^\/WoodworkingShop\/api\//],
+        runtimeCaching: [
+          {
+            // Cache Google Fonts stylesheets
+            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+            handler: 'StaleWhileRevalidate',
+            options: { cacheName: 'google-fonts-stylesheets' },
+          },
+          {
+            // Cache Google Fonts files
+            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'google-fonts-webfonts',
+              expiration: { maxAgeSeconds: 60 * 60 * 24 * 365 },
+            },
+          },
+        ],
+      },
+    }),
+  ],
   define: {
     __APP_VERSION__: JSON.stringify(version),
   },

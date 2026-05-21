@@ -1,53 +1,22 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { useSwUpdate } from '../../src/hooks/useSwUpdate';
+import { registerSW } from 'virtual:pwa-register';
 
-type SwStateChangeListener = (this: ServiceWorker) => void;
-
-function makeServiceWorker(state: ServiceWorkerState = 'installed'): ServiceWorker {
-  return {
-    state,
-    postMessage: vi.fn(),
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-    dispatchEvent: vi.fn(),
-    onerror: null,
-    onstatechange: null,
-    scriptURL: '',
-  } as unknown as ServiceWorker;
-}
-
-function makeRegistration(overrides: Partial<ServiceWorkerRegistration> = {}): ServiceWorkerRegistration {
-  return {
-    waiting: null,
-    installing: null,
-    active: null,
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-    dispatchEvent: vi.fn(),
-    ...overrides,
-  } as unknown as ServiceWorkerRegistration;
-}
+vi.mock('virtual:pwa-register', () => ({
+  registerSW: vi.fn(() => async () => undefined),
+}));
 
 describe('useSwUpdate (Sprint 44)', () => {
-  let originalSW: typeof navigator.serviceWorker | undefined;
-
   beforeEach(() => {
-    originalSW = Object.getOwnPropertyDescriptor(navigator, 'serviceWorker')?.value;
+    vi.mocked(registerSW).mockReturnValue(async () => undefined);
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
-    if (originalSW !== undefined) {
-      Object.defineProperty(navigator, 'serviceWorker', { value: originalSW, configurable: true });
-    }
   });
 
-  it('returns updateAvailable=false when serviceWorker.ready rejects', async () => {
-    Object.defineProperty(navigator, 'serviceWorker', {
-      value: { ready: Promise.reject(new Error('SW unavailable')), controller: null },
-      configurable: true,
-    });
+  it('returns updateAvailable=false by default when registerSW does not fire onNeedRefresh', async () => {
     const { result } = renderHook(() => useSwUpdate());
     await act(async () => {
       await Promise.resolve();
@@ -55,25 +24,10 @@ describe('useSwUpdate (Sprint 44)', () => {
     expect(result.current.updateAvailable).toBe(false);
   });
 
-  it('returns updateAvailable=false initially when no waiting SW', async () => {
-    const reg = makeRegistration({ waiting: null });
-    Object.defineProperty(navigator, 'serviceWorker', {
-      value: { ready: Promise.resolve(reg), controller: {} },
-      configurable: true,
-    });
-    const { result } = renderHook(() => useSwUpdate());
-    await act(async () => {
-      await Promise.resolve();
-    });
-    expect(result.current.updateAvailable).toBe(false);
-  });
-
-  it('sets updateAvailable=true when a waiting SW already exists', async () => {
-    const waiting = makeServiceWorker('installed');
-    const reg = makeRegistration({ waiting });
-    Object.defineProperty(navigator, 'serviceWorker', {
-      value: { ready: Promise.resolve(reg), controller: {} },
-      configurable: true,
+  it('sets updateAvailable=true when registerSW fires onNeedRefresh', async () => {
+    vi.mocked(registerSW).mockImplementation((opts) => {
+      opts?.onNeedRefresh?.();
+      return async () => undefined;
     });
     const { result } = renderHook(() => useSwUpdate());
     await act(async () => {
@@ -82,67 +36,36 @@ describe('useSwUpdate (Sprint 44)', () => {
     expect(result.current.updateAvailable).toBe(true);
   });
 
-  it('detects waiting SW via updatefound + statechange', async () => {
-    let updateFoundCb: (() => void) | null = null;
-    let stateChangeCb: SwStateChangeListener | null = null;
-    const installing = makeServiceWorker('installing');
-    (installing.addEventListener as ReturnType<typeof vi.fn>).mockImplementation(
-      (evt: string, cb: SwStateChangeListener) => {
-        if (evt === 'statechange') stateChangeCb = cb;
-      },
-    );
-
-    const reg = makeRegistration({
-      installing,
-      waiting: null,
-      addEventListener: vi.fn((evt: string, cb: () => void) => {
-        if (evt === 'updatefound') updateFoundCb = cb;
-      }) as unknown as ServiceWorkerRegistration['addEventListener'],
+  it('sets updateAvailable=true when onNeedRefresh fires after mount', async () => {
+    let capturedOpts: Parameters<typeof registerSW>[0] | undefined;
+    vi.mocked(registerSW).mockImplementation((opts) => {
+      capturedOpts = opts;
+      return async () => undefined;
     });
-
-    Object.defineProperty(navigator, 'serviceWorker', {
-      value: { ready: Promise.resolve(reg), controller: {} },
-      configurable: true,
-    });
-
     const { result } = renderHook(() => useSwUpdate());
     await act(async () => {
       await Promise.resolve();
     });
-
-    // Simulate updatefound → statechange to 'installed'
+    expect(result.current.updateAvailable).toBe(false);
     act(() => {
-      (installing as { state: ServiceWorkerState }).state = 'installed';
-      updateFoundCb?.();
-      stateChangeCb?.call(installing);
+      capturedOpts?.onNeedRefresh?.();
     });
-
     expect(result.current.updateAvailable).toBe(true);
   });
 
-  it('reload() calls postMessage(SKIP_WAITING) and reloads', async () => {
-    const waiting = makeServiceWorker('installed');
-    const reg = makeRegistration({ waiting });
-    const reloadSpy = vi.fn();
-    Object.defineProperty(window, 'location', {
-      value: { reload: reloadSpy },
-      configurable: true,
+  it('reload() invokes the updateSW function returned by registerSW', async () => {
+    const mockUpdateSW = vi.fn(async () => undefined);
+    vi.mocked(registerSW).mockImplementation((opts) => {
+      opts?.onNeedRefresh?.();
+      return mockUpdateSW;
     });
-    Object.defineProperty(navigator, 'serviceWorker', {
-      value: { ready: Promise.resolve(reg), controller: {} },
-      configurable: true,
-    });
-
     const { result } = renderHook(() => useSwUpdate());
     await act(async () => {
       await Promise.resolve();
     });
-
     act(() => {
       result.current.reload();
     });
-
-    expect(waiting.postMessage).toHaveBeenCalledWith({ type: 'SKIP_WAITING' });
-    expect(reloadSpy).toHaveBeenCalled();
+    expect(mockUpdateSW).toHaveBeenCalledWith(true);
   });
 });
