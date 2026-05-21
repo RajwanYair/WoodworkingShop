@@ -1,4 +1,4 @@
-import type { Part, CutSheet, OptimizationResult, Result } from './types';
+import type { Part, CutSheet, OptimizationResult, Result, OffcutEntry } from './types';
 import { ok, err } from './types';
 import { getMaterial, SAW_KERF } from './materials.ts';
 
@@ -31,9 +31,10 @@ export function optimizeCutSheetsResult(
   sawKerfMm = SAW_KERF,
   sheetSizeOverrides: Record<string, { width: number; length: number }> = {},
   cutMode: 'guillotine' | 'freeform' = 'freeform',
+  offcutCatalog: OffcutEntry[] = [],
 ): Result<OptimizationResult, string> {
   try {
-    return ok(optimizeCutSheets(parts, sawKerfMm, sheetSizeOverrides, cutMode));
+    return ok(optimizeCutSheets(parts, sawKerfMm, sheetSizeOverrides, cutMode, offcutCatalog));
   } catch (e) {
     return err(e instanceof Error ? e.message : String(e));
   }
@@ -46,6 +47,8 @@ export function optimizeCutSheets(
   sheetSizeOverrides: Record<string, { width: number; length: number }> = {},
   /** Phase 11 / Sprint 5 — packing algorithm. 'freeform' = MaxRects BSSF (default); 'guillotine' = strip-based. */
   cutMode: 'guillotine' | 'freeform' = 'freeform',
+  /** Phase 12 / Sprint 12 — catalog offcuts used as starting sheets before opening full sheets. */
+  offcutCatalog: OffcutEntry[] = [],
 ): OptimizationResult {
   // Group parts by material key (which implies thickness).
   const groups = new Map<string, { rects: Rect[]; materialKey: string }>();
@@ -72,10 +75,66 @@ export function optimizeCutSheets(
     const override = sheetSizeOverrides[group.materialKey];
     const sheetLength = override?.length ?? mat.sheetLength;
     const sheetWidth = override?.width ?? mat.sheetWidth;
+
+    // Phase 12 / Sprint 12 — Phase 1: pack on catalog offcuts first.
+    let remainingRects = [...group.rects];
+    const matchingOffcuts = offcutCatalog
+      .filter((o) => o.material === group.materialKey)
+      .sort((a, b) => b.width * b.length - a.width * a.length);
+
+    for (const offcut of matchingOffcuts) {
+      if (remainingRects.length === 0) break;
+      const trialPacked =
+        cutMode === 'guillotine'
+          ? packGuillotine(remainingRects, offcut.length, offcut.width, sawKerfMm, !mat.hasGrain, mat.hasGrain)
+          : packMaxRects(remainingRects, offcut.length, offcut.width, sawKerfMm, !mat.hasGrain, mat.hasGrain);
+      const firstSheet = trialPacked[0];
+      if (!firstSheet || firstSheet.length === 0) continue;
+      // Consume placed parts from remainingRects (count-aware for repeated partIds).
+      const consumed = new Map<string, number>();
+      for (const p of firstSheet) consumed.set(p.partId, (consumed.get(p.partId) ?? 0) + 1);
+      const newRemaining: Rect[] = [];
+      for (const r of remainingRects) {
+        const c = consumed.get(r.partId) ?? 0;
+        if (c > 0) {
+          consumed.set(r.partId, c - 1);
+        } else {
+          newRemaining.push(r);
+        }
+      }
+      remainingRects = newRemaining;
+      const offcutArea = offcut.length * offcut.width;
+      const usedOnOffcut = firstSheet.reduce((s, r) => s + r.length * r.width, 0);
+      allSheets.push({
+        sheetIndex: sheetIdx++,
+        material: group.materialKey,
+        thickness: mat.thickness,
+        sheetLength: offcut.length,
+        sheetWidth: offcut.width,
+        parts: firstSheet.map((r) => ({
+          partId: r.partId,
+          label: r.label,
+          length: r.length,
+          width: r.width,
+          x: r.x,
+          y: r.y,
+          edgeBanding: r.edgeBanding,
+          grainVertical: !r.rotated,
+          rotated: r.rotated,
+          grainConflict: r.grainConflict,
+          rationale: r.rationale,
+          rotationLocked: r.rotationLocked || undefined,
+        })),
+        yieldPercent: round2((usedOnOffcut / offcutArea) * 100),
+      });
+    }
+
+    // Phase 2: pack remaining parts on full-size sheets.
+    if (remainingRects.length === 0) continue;
     const packed =
       cutMode === 'guillotine'
-        ? packGuillotine(group.rects, sheetLength, sheetWidth, sawKerfMm, !mat.hasGrain, mat.hasGrain)
-        : packMaxRects(group.rects, sheetLength, sheetWidth, sawKerfMm, !mat.hasGrain, mat.hasGrain);
+        ? packGuillotine(remainingRects, sheetLength, sheetWidth, sawKerfMm, !mat.hasGrain, mat.hasGrain)
+        : packMaxRects(remainingRects, sheetLength, sheetWidth, sawKerfMm, !mat.hasGrain, mat.hasGrain);
 
     for (const sheet of packed) {
       const sheetArea = sheetLength * sheetWidth;

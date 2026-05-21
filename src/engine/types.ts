@@ -266,6 +266,23 @@ export interface OptimizationResult {
   grainConflictCount: number;
 }
 
+/** Phase 12 / Sprint 12 — a saved partial-sheet offcut available for reuse as a starting sheet. */
+export interface OffcutEntry {
+  /** Unique client-generated ID. */
+  id: string;
+  /** Material key matching MATERIALS[].key (e.g. 'plywood-17'). */
+  material: string;
+  thickness: number;
+  /** Width across grain (mm). */
+  width: number;
+  /** Length along grain (mm). */
+  length: number;
+  /** Unix timestamp (ms) when this entry was saved. */
+  addedAt: number;
+  /** Optional user-facing label. */
+  label?: string;
+}
+
 export type SmartStrategy =
   | 'reduce-depth'
   | 'co-nest-strips'

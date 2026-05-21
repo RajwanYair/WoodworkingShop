@@ -11,6 +11,7 @@
  */
 
 import { get, set, del, keys, createStore } from 'idb-keyval';
+import type { OffcutEntry } from '../engine/types';
 
 // One custom idb-keyval store per logical namespace so keys don't collide.
 // Each uses a distinct DB name so that idb-keyval's createStore can fire
@@ -122,6 +123,29 @@ export async function idbDel(key: string): Promise<void> {
 /** List all keys in the projects store (used for quota reporting). */
 export async function idbKeys(): Promise<IDBValidKey[]> {
   return keys(projectStore);
+}
+
+// ─── Offcut catalog ───────────────────────────────────────────────────────────────────────────────
+
+const offcutStore = createStore('cabinet-planner-offcuts', 'offcuts');
+const IDB_OFFCUTS_KEY = 'all-offcuts';
+
+/** Load all saved offcut catalog entries from IndexedDB. */
+export async function idbLoadOffcuts(): Promise<OffcutEntry[]> {
+  const data = await get<OffcutEntry[]>(IDB_OFFCUTS_KEY, offcutStore);
+  return Array.isArray(data) ? data : [];
+}
+
+/** Append a new offcut entry to the catalog. */
+export async function idbSaveOffcut(entry: OffcutEntry): Promise<void> {
+  const all = await idbLoadOffcuts();
+  await set(IDB_OFFCUTS_KEY, [...all, entry], offcutStore);
+}
+
+/** Remove an offcut catalog entry by id. */
+export async function idbDeleteOffcut(id: string): Promise<void> {
+  const all = await idbLoadOffcuts();
+  await set(IDB_OFFCUTS_KEY, all.filter((e) => e.id !== id), offcutStore);
 }
 
 // ─── Storage quota estimate ──────────────────────────────────────────────────

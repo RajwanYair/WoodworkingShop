@@ -15,7 +15,7 @@
  */
 
 import { optimizeCutSheetsResult } from '../engine/cut-optimizer';
-import type { Part, OptimizationResult } from '../engine/types';
+import type { Part, OptimizationResult, OffcutEntry } from '../engine/types';
 
 export interface CutOptimizerWorkerInput {
   activeParts: Part[];
@@ -24,6 +24,8 @@ export interface CutOptimizerWorkerInput {
   sheetSizeOverrides: Record<string, { width: number; length: number }>;
   /** Phase 11 / Sprint 5 — algorithm to use; defaults to 'freeform' (MaxRects). */
   cutMode?: 'guillotine' | 'freeform';
+  /** Phase 12 / Sprint 12 — catalog offcuts used as starting sheets. */
+  offcutCatalog?: OffcutEntry[];
   requestId: string;
 }
 
@@ -36,13 +38,13 @@ export interface CutOptimizerWorkerOutput {
 }
 
 self.onmessage = (e: MessageEvent<CutOptimizerWorkerInput>) => {
-  const { activeParts, allParts, sawKerfMm, sheetSizeOverrides, cutMode = 'freeform', requestId } = e.data;
-  const activeResult = optimizeCutSheetsResult(activeParts, sawKerfMm, sheetSizeOverrides, cutMode);
+  const { activeParts, allParts, sawKerfMm, sheetSizeOverrides, cutMode = 'freeform', offcutCatalog = [], requestId } = e.data;
+  const activeResult = optimizeCutSheetsResult(activeParts, sawKerfMm, sheetSizeOverrides, cutMode, offcutCatalog);
   if (!activeResult.ok) {
     self.postMessage({ type: 'error', errorMessage: activeResult.error, requestId } satisfies CutOptimizerWorkerOutput);
     return;
   }
-  const combinedResult = optimizeCutSheetsResult(allParts, sawKerfMm, sheetSizeOverrides, cutMode);
+  const combinedResult = optimizeCutSheetsResult(allParts, sawKerfMm, sheetSizeOverrides, cutMode, offcutCatalog);
   if (!combinedResult.ok) {
     self.postMessage({ type: 'error', errorMessage: combinedResult.error, requestId } satisfies CutOptimizerWorkerOutput);
     return;

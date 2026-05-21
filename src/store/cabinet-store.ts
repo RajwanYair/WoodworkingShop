@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { CabinetConfig, Part, HardwareItem, OptimizationResult, DerivedDimensions } from '../engine/types';
+import type { CabinetConfig, Part, HardwareItem, OptimizationResult, DerivedDimensions, OffcutEntry } from '../engine/types';
 import { DEFAULT_CONFIG } from '../engine/materials';
 import { computeDimensions } from '../engine/dimensions';
 import { generateParts, computeEdgeBandingTotal } from '../engine/parts';
@@ -76,6 +76,8 @@ let _rotationLocks: Record<string, boolean> = {};
  * current value without requiring call-site changes.
  */
 let _cutMode: 'guillotine' | 'freeform' = 'freeform';
+/** Phase 12 / Sprint 12 — catalog offcuts available to the optimizer; updated by setOffcutCatalog/addOffcutEntry/removeOffcutEntry. */
+let _offcutCatalog: OffcutEntry[] = [];
 function applyLocks(parts: Part[]): Part[] {
   let touched = false;
   const out = parts.map((p) => {
@@ -107,8 +109,8 @@ function scheduleOptimization(
     // Phase 11 — use Result-returning variant so material lookup errors surface
     // cleanly rather than throwing across the fallback boundary.
     if (_workerApplyFn) {
-      const activeRes = optimizeCutSheetsResult(lockedActive, sawKerfMm, sheetSizeOverrides, _cutMode);
-      const combinedRes = optimizeCutSheetsResult(lockedAll, sawKerfMm, sheetSizeOverrides, _cutMode);
+      const activeRes = optimizeCutSheetsResult(lockedActive, sawKerfMm, sheetSizeOverrides, _cutMode, _offcutCatalog);
+      const combinedRes = optimizeCutSheetsResult(lockedAll, sawKerfMm, sheetSizeOverrides, _cutMode, _offcutCatalog);
       if (activeRes.ok && combinedRes.ok) {
         _workerApplyFn({
           optimization: activeRes.value,
@@ -125,7 +127,7 @@ function scheduleOptimization(
   _latestCutReqId = reqId;
   void workerCall<CutOptimizerWorkerInput, CutOptimizerWorkerOutput>(
     worker,
-    { activeParts: lockedActive, allParts: lockedAll, sawKerfMm, sheetSizeOverrides, cutMode: _cutMode },
+    { activeParts: lockedActive, allParts: lockedAll, sawKerfMm, sheetSizeOverrides, cutMode: _cutMode, offcutCatalog: _offcutCatalog },
     reqId,
   )
     .then((msg) => {
@@ -338,6 +340,8 @@ export type CabinetState = {
   canUndo: boolean;
   canRedo: boolean;
   rotationLockedPartIds: Record<string, boolean>;
+  /** Phase 12 / Sprint 12 — saved partial-sheet offcuts available for reuse. */
+  offcutCatalog: OffcutEntry[];
 
   // ── Config actions ──
   setConfig: (patch: Partial<CabinetConfig>) => void;
@@ -354,6 +358,9 @@ export type CabinetState = {
   toggleRotationLock: (partId: string) => void;
   loadProject: (cabinets: CabinetEntry[]) => void;
   bulkReplaceMaterial: (fromKey: string, toKey: string) => void;
+  setOffcutCatalog: (catalog: OffcutEntry[]) => void;
+  addOffcutEntry: (entry: OffcutEntry) => void;
+  removeOffcutEntry: (id: string) => void;
 } & UiSlice &
   OptimizerSettingsSlice &
   SnapshotSlice;
@@ -525,6 +532,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
     canUndo: false,
     canRedo: false,
     rotationLockedPartIds: session?.rotationLockedPartIds ?? {},
+    offcutCatalog: [],
     optimizationPending: false,
     costPending: false,
     assemblyPending: false,
@@ -864,6 +872,19 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
           canRedo: false,
         };
       }),
+    // Phase 12 / Sprint 12 — offcut catalog actions
+    setOffcutCatalog: (catalog) => {
+      _offcutCatalog = catalog;
+      set({ offcutCatalog: catalog });
+    },
+    addOffcutEntry: (entry) => {
+      _offcutCatalog = [..._offcutCatalog, entry];
+      set((s) => ({ offcutCatalog: [...s.offcutCatalog, entry] }));
+    },
+    removeOffcutEntry: (id) => {
+      _offcutCatalog = _offcutCatalog.filter((e) => e.id !== id);
+      set((s) => ({ offcutCatalog: s.offcutCatalog.filter((e) => e.id !== id) }));
+    },
 
   };
 });

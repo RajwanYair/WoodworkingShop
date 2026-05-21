@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useToastStore } from '../../store/toast-store';
@@ -10,6 +10,7 @@ import { downloadAllSheetsGcode } from '../../utils/gcode-export';
 import { triggerDownload } from '../../utils/download';
 import { GcodePreviewModal } from './GcodePreviewModal';
 import { downloadHardwareCsv, generateBomCsv } from '../../utils/bom-export';
+import { idbLoadOffcuts, idbSaveOffcut, idbDeleteOffcut } from '../../utils/indexed-db-storage';
 
 import { OptimizationNotesPanel } from './OptimizationNotesPanel';
 import { VirtualSheetWrapper } from './VirtualSheetWrapper';
@@ -35,7 +36,7 @@ import {
   IconPrint,
   IconSwap,
 } from '../layout/Icons';
-import type { Lang, CutSheet, CutRect } from '../../engine/types';
+import type { Lang, CutSheet, CutRect, OffcutEntry } from '../../engine/types';
 
 /** Scale factor: mm → SVG px */
 const S = 0.12;
@@ -66,8 +67,16 @@ export function OptimizerView() {
     toggleRotationLock,
     config,
     setConfig,
+    offcutCatalog,
+    addOffcutEntry,
+    removeOffcutEntry,
   } = useCabinetStore();
   const lang = i18n.language as Lang;
+  // Phase 12 / Sprint 12 — load saved offcut catalog from IDB on first mount.
+  useEffect(() => {
+    const { setOffcutCatalog } = useCabinetStore.getState();
+    idbLoadOffcuts().then(setOffcutCatalog).catch(() => {});
+  }, []);
   const [hoveredPartId, setHoveredPartId] = useState<string | null>(null);
   const [partFilter, setPartFilter] = useState(''); // Sprint 46 — part search/highlight filter
   const [showPartNames, setShowPartNames] = useState(false); // Sprint 146 — part name labels
@@ -527,7 +536,19 @@ export function OptimizerView() {
       <ShoppingListPanel sheets={displayOpt.sheets} materialPriceOverrides={materialPriceOverrides} t={t} lang={lang} />
 
       {/* Sprint 147 — Usable Offcuts panel */}
-      <OffcutsPanel sheets={displayOpt.sheets} t={t} />
+      <OffcutsPanel
+        sheets={displayOpt.sheets}
+        offcutCatalog={offcutCatalog}
+        onSaveOffcut={(entry) => {
+          addOffcutEntry(entry);
+          idbSaveOffcut(entry).catch(() => {});
+        }}
+        onDeleteOffcut={(id) => {
+          removeOffcutEntry(id);
+          idbDeleteOffcut(id).catch(() => {});
+        }}
+        t={t}
+      />
 
       {/* Part legend */}
       {hoveredPartId && (
@@ -576,7 +597,19 @@ interface Offcut {
   area: number; // mm²
 }
 
-function OffcutsPanel({ sheets, t }: { sheets: CutSheet[]; t: (k: string) => string }) {
+function OffcutsPanel({
+  sheets,
+  offcutCatalog,
+  onSaveOffcut,
+  onDeleteOffcut,
+  t,
+}: {
+  sheets: CutSheet[];
+  offcutCatalog: OffcutEntry[];
+  onSaveOffcut: (entry: OffcutEntry) => void;
+  onDeleteOffcut: (id: string) => void;
+  t: (k: string) => string;
+}) {
   const [open, setOpen] = useState(true);
 
   const offcuts: Offcut[] = sheets
@@ -615,7 +648,7 @@ function OffcutsPanel({ sheets, t }: { sheets: CutSheet[]; t: (k: string) => str
             {offcuts.map((oc, i) => (
               <div
                 key={i}
-                className="bg-wood-50 dark:bg-wood-800 flex items-center justify-between rounded-lg px-3 py-2 text-xs"
+                className="bg-wood-50 dark:bg-wood-800 flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-xs"
               >
                 <span className="text-wood-700 dark:text-wood-300 font-medium">
                   {oc.material} {oc.thickness}mm
@@ -624,9 +657,55 @@ function OffcutsPanel({ sheets, t }: { sheets: CutSheet[]; t: (k: string) => str
                   {Math.round(oc.w)} × {Math.round(oc.h)} mm
                 </span>
                 <span className="text-wood-400 dark:text-wood-500">{(oc.area / 1_000_000).toFixed(3)} m²</span>
+                {/* Phase 12 / Sprint 12 — save to offcut catalog */}
+                <button
+                  onClick={() =>
+                    onSaveOffcut({
+                      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+                      material: oc.material,
+                      thickness: oc.thickness,
+                      width: Math.round(oc.w),
+                      length: Math.round(oc.h),
+                      addedAt: Date.now(),
+                    })
+                  }
+                  className="border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:bg-wood-100 dark:hover:bg-wood-700 rounded border px-1.5 py-0.5 transition-colors"
+                  title={t('optimizer.saveToOffcutCatalog')}
+                  aria-label={t('optimizer.saveToOffcutCatalog')}
+                >
+                  ＋
+                </button>
               </div>
             ))}
           </div>
+          {/* Phase 12 / Sprint 12 — saved offcut catalog */}
+          {offcutCatalog.length > 0 && (
+            <div className="mt-4">
+              <p className="text-wood-700 dark:text-wood-200 mb-2 text-xs font-semibold">
+                {t('optimizer.offcutCatalog')} ({offcutCatalog.length})
+              </p>
+              <div className="space-y-1">
+                {offcutCatalog.map((oc) => (
+                  <div
+                    key={oc.id}
+                    className="border-wood-200 dark:border-wood-700 flex items-center justify-between gap-2 rounded border px-3 py-1.5 text-xs"
+                  >
+                    <span className="text-wood-600 dark:text-wood-300">
+                      {oc.material} {oc.thickness}mm — {oc.width}×{oc.length} mm
+                    </span>
+                    <button
+                      onClick={() => onDeleteOffcut(oc.id)}
+                      className="text-red-500 hover:text-red-700 dark:text-red-400 rounded px-1 transition-colors"
+                      title={t('optimizer.deleteOffcut')}
+                      aria-label={t('optimizer.deleteOffcut')}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
