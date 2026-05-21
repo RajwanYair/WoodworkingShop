@@ -1,0 +1,35 @@
+# Phase 11 / Sprint 6 — Codecov configuration.
+# Enforces engine layer coverage floor; PRs that drop below threshold are blocked.
+# Docs: https://docs.codecov.com/docs/codecov-yaml
+
+coverage:
+  # Surface the delta status on every PR.
+  status:
+    project:
+      default:
+        target: auto        # compare against the base commit
+        threshold: 1%       # allow ±1% natural variation without failing
+    patch:
+      default:
+        target: 85%         # every PR must achieve ≥ 85% coverage on changed lines
+
+# Only report on the engine layer.  Store, hooks and utils are covered separately.
+flags:
+  unit:
+    paths:
+      - src/engine/
+      - src/utils/
+      - src/store/
+      - src/hooks/
+
+# Ignore generated or test-only files.
+ignore:
+  - src/engine/types.ts
+  - src/engine/index.ts
+  - "tests/**"
+  - "docs/**"
+
+comment:
+  layout: reach,diff,flags,files
+  behavior: default
+  require_changes: false

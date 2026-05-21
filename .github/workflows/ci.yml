@@ -54,6 +54,17 @@ jobs:
         if: matrix.node-version == 22
         run: npm run test:coverage
 
+      # Phase 11 / Sprint 6 — upload coverage to Codecov (Node 22 only).
+      # lcov.info is written to $TEMP/WoodworkingShop/coverage/ by Vitest.
+      # On ubuntu-latest, TMPDIR=/tmp, so the path is predictable.
+      - name: Upload coverage to Codecov
+        if: matrix.node-version == 22
+        uses: codecov/codecov-action@v5
+        with:
+          files: /tmp/WoodworkingShop/coverage/lcov.info
+          flags: unit
+          fail_ci_if_error: false
+
       - name: Build
         run: npm run build
 
