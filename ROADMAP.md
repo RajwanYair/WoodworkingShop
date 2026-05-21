@@ -191,8 +191,8 @@ Exit criteria: waste offcut catalog usable, Cloudflare Pages deployed, validatio
 - [ ] **Sheet defect avoidance** — add `defectZones: Rect[]` per material sheet. MaxRects treats defects as pre-placed parts that cannot overlap.
 - [ ] **WebGL isometric preview** — complete `WebGLPreviewCanvas.tsx` with Three.js r170+ (tree-shakeable). Per-material colour texture, isometric 3D. SVG fallback for non-WebGL. Feature-flagged via `VITE_ENABLE_WEBGL=true`.
 - [ ] **Grain direction hatching** — SVG hatch pattern overlay on each part in sheet layout. Colour-coded: green = grain aligned, amber = grain conflict.
-- [ ] **Cloudflare Pages migration** — move hosting from GitHub Pages. Update `pages.yml`. Configure `_redirects` for SPA fallback. Enable PR preview deployments.
-- [ ] **Privacy-first analytics** — add Cloudflare Web Analytics snippet (no cookies, no consent). Track page views + custom events (tab switches, export types). No PII.
+- [x] **Cloudflare Pages migration** — move hosting from GitHub Pages. Update `pages.yml`. Configure `_redirects` for SPA fallback. Enable PR preview deployments.
+- [x] **Privacy-first analytics** — add Cloudflare Web Analytics snippet (no cookies, no consent). Track page views + custom events (tab switches, export types). No PII.
 - [ ] **SBOM generation** — add `npm run sbom` using `@cyclonedx/cyclonedx-npm`. Emit `sbom.json` as a release artefact in `release.yml`.
 - [ ] **CSP `report-uri`** — add a free reporting endpoint (Sentry CSP, Report URI). Surfaces violations from real users; informs future CSP tightening.
 

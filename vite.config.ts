@@ -8,6 +8,23 @@ import os from 'os';
 
 const { version } = JSON.parse(readFileSync('./package.json', 'utf-8')) as { version: string };
 
+/**
+ * Phase 12 / Sprint 15 — Cloudflare Web Analytics beacon injection.
+ * When `VITE_CF_ANALYTICS_TOKEN` is set at build time, injects the
+ * privacy-first beacon script (no cookies, no PII) before </body>.
+ */
+function cloudflareAnalyticsPlugin() {
+  const token = process.env['VITE_CF_ANALYTICS_TOKEN'];
+  if (!token) return null;
+  return {
+    name: 'cf-analytics-inject',
+    transformIndexHtml(html: string) {
+      const snippet = `\n    <!-- Cloudflare Web Analytics (Phase 12 / Sprint 15) — no cookies, no PII -->\n    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"${token}"}'></script>`;
+      return html.replace('</body>', `${snippet}\n  </body>`);
+    },
+  };
+}
+
 // https://vite.dev/config/
 export default defineConfig({
   cacheDir: resolve(os.tmpdir(), 'WoodworkingShop', '.vite_cache'),
@@ -15,6 +32,7 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    cloudflareAnalyticsPlugin(),
     VitePWA({
       registerType: 'autoUpdate',
       strategies: 'generateSW',

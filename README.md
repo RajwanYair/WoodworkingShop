@@ -8,6 +8,7 @@
 
 [![CI](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/ci.yml/badge.svg)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/ci.yml)
 [![Deploy](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/pages.yml/badge.svg)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/pages.yml)
+[![Cloudflare Pages](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/cloudflare-pages.yml/badge.svg)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/cloudflare-pages.yml)
 [![CodeQL](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/codeql.yml/badge.svg)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/codeql.yml)
 [![codecov](https://codecov.io/gh/RajwanYair/WoodworkingShop/graph/badge.svg)](https://codecov.io/gh/RajwanYair/WoodworkingShop)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -137,7 +138,7 @@ npm run build
 | E2E tests     | 🎭 Playwright                         |
 | Lint / format | 🧹 ESLint 10 (flat config) + Prettier |
 | CI/CD         | 🤖 GitHub Actions                     |
-| Deploy        | 🚀 GitHub Pages                       |
+| Deploy        | 🚀 GitHub Pages + Cloudflare Pages (edge CDN, PR previews) |
 
 ---
 
@@ -260,6 +261,22 @@ Measured on a mid-range development machine (Intel i7 / 16 GB RAM, Chrome 125, p
 ## 🚢 Deployment
 
 The app auto-deploys to **GitHub Pages** on every push to `main` via [`.github/workflows/pages.yml`](.github/workflows/pages.yml).
+
+### Cloudflare Pages (Phase 12 / Sprint 15)
+
+A parallel Cloudflare Pages deployment is configured via [`.github/workflows/cloudflare-pages.yml`](.github/workflows/cloudflare-pages.yml).
+It provides edge CDN delivery at 250+ PoPs and automatic PR preview deployments.
+
+**Setup** (one-time, in the GitHub repository settings under _Secrets and variables → Actions_):
+
+| Secret / Variable          | Description                                                         |
+| -------------------------- | ------------------------------------------------------------------- |
+| `CLOUDFLARE_API_TOKEN`     | CF API token with **Cloudflare Pages: Edit** permission             |
+| `CLOUDFLARE_ACCOUNT_ID`    | Found in the Cloudflare dashboard URL                               |
+| `VITE_CF_ANALYTICS_TOKEN`  | _(Optional)_ Cloudflare Web Analytics beacon token — enables privacy-first page-view tracking (no cookies, no PII, no GDPR consent required) |
+
+The `_redirects` file in `public/` handles SPA fallback routing (`/* → /index.html 200`)
+so direct URL navigation and refreshes work correctly on Cloudflare Pages.
 
 For a tagged release:
 

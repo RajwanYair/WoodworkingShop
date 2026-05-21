@@ -9,7 +9,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import type { CabinetConfig } from '../../src/engine/types';
-import { DEFAULT_CONFIG } from '../../src/engine/dimensions';
+import { DEFAULT_CONFIG } from '../../src/engine/materials';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -18,7 +18,6 @@ const BASE_CONFIG: CabinetConfig = {
   width: 600,
   height: 720,
   depth: 560,
-  material: 'melamine-18',
 };
 
 /** Reset the module registry so import.meta.env changes take effect. */

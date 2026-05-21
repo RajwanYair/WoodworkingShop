@@ -13,7 +13,7 @@
  * and cap part dimensions to 1200 mm so every generated part is guaranteed to
  * fit onto a single sheet, keeping invariant 4 falsifiable.
  */
-import { describe, it, expect } from 'vitest';
+import { describe, it } from 'vitest';
 import * as fc from 'fast-check';
 import { optimizeCutSheets } from '../../src/engine/cut-optimizer';
 import type { Part } from '../../src/engine/types';

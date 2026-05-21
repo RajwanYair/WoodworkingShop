@@ -1,0 +1,4 @@
+# Cloudflare Pages — SPA fallback routing
+# All non-asset requests are served the index.html so the React Router
+# (and URL-state hash) can handle navigation client-side.
+/*    /index.html   200

@@ -229,7 +229,7 @@
     "dimensions": "Dimensiones",
     "dimensionSummary": "Dimensiones del armario A × Al × P",
     "doors": "puertas",
-    "drawers": "cajones"
+    "drawers": "cajones",
     "webglToggle": "Alternar vista WebGL / SVG",
     "webglAnimate": "Animar",
     "webglIsometric": "Isométrico"

@@ -229,7 +229,7 @@
     "dimensions": "Dimensions",
     "dimensionSummary": "Dimensions de l'armoire L × H × P",
     "doors": "portes",
-    "drawers": "tiroirs"
+    "drawers": "tiroirs",
     "webglToggle": "Basculer vue WebGL / SVG",
     "webglAnimate": "Animer",
     "webglIsometric": "Isométrique"

@@ -1,0 +1,64 @@
+# =============================================================================
+# Build Vite SPA & deploy to Cloudflare Pages
+# Phase 12 / Sprint 15 — parallel edge CDN deployment
+#
+# Prerequisites (add as GitHub repository secrets):
+#   CLOUDFLARE_API_TOKEN  — Cloudflare API token with "Cloudflare Pages: Edit" permission
+#   CLOUDFLARE_ACCOUNT_ID — Cloudflare account ID (found in the CF dashboard URL)
+#
+# PR preview deployments are automatically created by the CF Pages action
+# for every pull_request event.
+# =============================================================================
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: cloudflare-pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build & Deploy to CF Pages
+    runs-on: ubuntu-latest
+    # Skip silently when secrets are not configured (e.g. forks)
+    if: ${{ vars.CLOUDFLARE_ACCOUNT_ID != '' || secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
+    permissions:
+      contents: read
+      deployments: write
+      pull-requests: write   # allows the action to post a preview URL comment
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          # Pass the CF analytics token at build time (optional — omit to skip analytics)
+          VITE_CF_ANALYTICS_TOKEN: ${{ secrets.VITE_CF_ANALYTICS_TOKEN }}
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: cabinet-planner
+          directory: dist
+          # Wrangler version pinned for reproducible builds
+          wranglerVersion: '3'
+          # GitHubToken is required for PR preview deployment comments
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}

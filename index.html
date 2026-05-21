@@ -59,14 +59,15 @@
 
     <title>Cabinet Planner — Woodworking Design Tool</title>
 
-    <!-- Content Security Policy (v3.59.4)
+    <!-- Content Security Policy (v3.59.4 — updated Phase 12 / Sprint 15 for Cloudflare Analytics)
          script-src: 'wasm-unsafe-eval' required for WebAssembly (cut-optimizer).
+                     cloudflareinsights.com: Cloudflare Web Analytics beacon (privacy-first, no cookies).
          style-src 'unsafe-inline': Tailwind v4 injects critical CSS inline.
          worker-src blob: : Vite wraps workers in blob URLs in dev mode.
-         connect-src cdnjs: react-pdf may fetch Twemoji font at runtime. -->
+         connect-src cdnjs/cloudflareinsights: react-pdf Twemoji + CF beacon ping. -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; worker-src 'self' blob:; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' blob: https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self'"
+      content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; worker-src 'self' blob:; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' blob: https://cdnjs.cloudflare.com https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self'"
     />
   </head>
   <body>

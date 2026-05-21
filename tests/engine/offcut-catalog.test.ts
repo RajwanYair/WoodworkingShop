@@ -15,6 +15,7 @@ function makePart(id: string, width: number, length: number, material = 'melamin
     name: { en: id, he: id },
     width,
     length,
+    thickness: 18,
     qty: 1,
     material,
     edgeBanding: { en: 'None', he: 'ללא' },
