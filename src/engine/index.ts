@@ -42,12 +42,18 @@ export type {
   DrawerSlideType,
   PanelMaterialSource,
   QuantitativeRationale,
+  Result,
+  Ok,
+  Err,
 } from './types';
+
+export { ok, err } from './types';
 
 export {
   MATERIALS,
   SAW_KERF,
   getMaterial,
+  getMaterialResult,
   panelMaterials,
   backMaterials,
   DEFAULT_CONFIG,
@@ -63,7 +69,7 @@ export {
 
 export { generateParts, computeEdgeBandingTotal, computePartsWeight } from './parts';
 
-export { optimizeCutSheets } from './cut-optimizer';
+export { optimizeCutSheets, optimizeCutSheetsResult } from './cut-optimizer';
 
 export { findOptimizations } from './smart-optimizer';
 export type { SmartOptimizerOptions } from './smart-optimizer';

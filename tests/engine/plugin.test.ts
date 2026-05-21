@@ -44,10 +44,12 @@ describe('Plugin registry', () => {
     expect(getPlugins()[0].id).toBe('test.plugin');
   });
 
-  it('throws when registering duplicate id', () => {
+  it('returns an error result when registering duplicate id', () => {
     const plugin: CabinetPlannerPlugin = { id: 'dupe', name: 'Dupe', version: '1.0.0' };
     registerPlugin(plugin);
-    expect(() => registerPlugin({ ...plugin })).toThrow('already registered');
+    const result = registerPlugin({ ...plugin });
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.error).toMatch('already registered');
   });
 
   it('unregisters a plugin', () => {

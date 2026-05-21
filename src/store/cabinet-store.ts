@@ -5,7 +5,7 @@ import { DEFAULT_CONFIG } from '../engine/materials';
 import { computeDimensions } from '../engine/dimensions';
 import { generateParts, computeEdgeBandingTotal } from '../engine/parts';
 import { generateHardware } from '../engine/hardware';
-import { optimizeCutSheets } from '../engine/cut-optimizer';
+import { optimizeCutSheets, optimizeCutSheetsResult } from '../engine/cut-optimizer';
 import { estimateCost } from '../engine/cost-estimator';
 import { generateAssemblySteps, type AssemblyStep } from '../engine/assembly';
 import { createJsonMemo } from '../engine/memo';
@@ -93,13 +93,21 @@ function scheduleOptimization(
   const lockedAll = applyLocks(allParts);
   const worker = getCutOptWorker();
   if (!worker) {
-    // Synchronous fallback (tests / browsers without Worker support)
+    // Synchronous fallback (tests / browsers without Worker support).
+    // Phase 11 — use Result-returning variant so material lookup errors surface
+    // cleanly rather than throwing across the fallback boundary.
     if (_workerApplyFn) {
-      _workerApplyFn({
-        optimization: optimizeCutSheets(lockedActive, sawKerfMm, sheetSizeOverrides),
-        combinedOptimization: optimizeCutSheets(lockedAll, sawKerfMm, sheetSizeOverrides),
-        optimizationPending: false,
-      });
+      const activeRes = optimizeCutSheetsResult(lockedActive, sawKerfMm, sheetSizeOverrides);
+      const combinedRes = optimizeCutSheetsResult(lockedAll, sawKerfMm, sheetSizeOverrides);
+      if (activeRes.ok && combinedRes.ok) {
+        _workerApplyFn({
+          optimization: activeRes.value,
+          combinedOptimization: combinedRes.value,
+          optimizationPending: false,
+        });
+      } else {
+        _workerApplyFn({ optimizationPending: false });
+      }
     }
     return;
   }

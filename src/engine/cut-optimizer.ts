@@ -1,4 +1,5 @@
-import type { Part, CutSheet, OptimizationResult } from './types';
+import type { Part, CutSheet, OptimizationResult, Result } from './types';
+import { ok, err } from './types';
 import { getMaterial, SAW_KERF } from './materials';
 
 /**
@@ -19,6 +20,24 @@ import { getMaterial, SAW_KERF } from './materials';
  *
  * Axes: y is along the sheet length (grain direction), x is across.
  */
+/**
+ * Phase 11 — Same as `optimizeCutSheets` but wraps the result in a
+ * `Result<OptimizationResult, string>`. This is the boundary-safe form;
+ * callers (workers, store sync-fallback) should prefer it so that an
+ * unknown material key surfaces as a typed error rather than an exception.
+ */
+export function optimizeCutSheetsResult(
+  parts: Part[],
+  sawKerfMm = SAW_KERF,
+  sheetSizeOverrides: Record<string, { width: number; length: number }> = {},
+): Result<OptimizationResult, string> {
+  try {
+    return ok(optimizeCutSheets(parts, sawKerfMm, sheetSizeOverrides));
+  } catch (e) {
+    return err(e instanceof Error ? e.message : String(e));
+  }
+}
+
 export function optimizeCutSheets(
   parts: Part[],
   sawKerfMm = SAW_KERF,

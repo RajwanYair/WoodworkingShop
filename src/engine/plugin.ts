@@ -1,4 +1,5 @@
-import type { CabinetConfig, Part } from './types';
+import type { CabinetConfig, Part, Result } from './types';
+import { ok, err } from './types';
 
 // ─── Plugin Contract ─────────────────────────────────────────────────────────
 
@@ -116,11 +117,12 @@ export interface CabinetPlannerPlugin {
 const _plugins: CabinetPlannerPlugin[] = [];
 
 /** Register a plugin. Throws if a plugin with the same id is already registered. */
-export function registerPlugin(plugin: CabinetPlannerPlugin): void {
+export function registerPlugin(plugin: CabinetPlannerPlugin): Result<void, string> {
   if (_plugins.some((p) => p.id === plugin.id)) {
-    throw new Error(`Plugin "${plugin.id}" is already registered.`);
+    return err(`Plugin "${plugin.id}" is already registered.`);
   }
   _plugins.push(plugin);
+  return ok(undefined);
 }
 
 /** Unregister a previously registered plugin by id. No-op if not found. */

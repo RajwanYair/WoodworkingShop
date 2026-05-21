@@ -14,7 +14,7 @@
  * Request IDs let the store discard stale responses from superseded runs.
  */
 
-import { optimizeCutSheets } from '../engine/cut-optimizer';
+import { optimizeCutSheetsResult } from '../engine/cut-optimizer';
 import type { Part, OptimizationResult } from '../engine/types';
 
 export interface CutOptimizerWorkerInput {
@@ -35,15 +35,20 @@ export interface CutOptimizerWorkerOutput {
 
 self.onmessage = (e: MessageEvent<CutOptimizerWorkerInput>) => {
   const { activeParts, allParts, sawKerfMm, sheetSizeOverrides, requestId } = e.data;
-  try {
-    const activeResult = optimizeCutSheets(activeParts, sawKerfMm, sheetSizeOverrides);
-    const combinedResult = optimizeCutSheets(allParts, sawKerfMm, sheetSizeOverrides);
-    self.postMessage({ type: 'done', activeResult, combinedResult, requestId } satisfies CutOptimizerWorkerOutput);
-  } catch (err) {
-    self.postMessage({
-      type: 'error',
-      errorMessage: err instanceof Error ? err.message : String(err),
-      requestId,
-    } satisfies CutOptimizerWorkerOutput);
+  const activeResult = optimizeCutSheetsResult(activeParts, sawKerfMm, sheetSizeOverrides);
+  if (!activeResult.ok) {
+    self.postMessage({ type: 'error', errorMessage: activeResult.error, requestId } satisfies CutOptimizerWorkerOutput);
+    return;
   }
+  const combinedResult = optimizeCutSheetsResult(allParts, sawKerfMm, sheetSizeOverrides);
+  if (!combinedResult.ok) {
+    self.postMessage({ type: 'error', errorMessage: combinedResult.error, requestId } satisfies CutOptimizerWorkerOutput);
+    return;
+  }
+  self.postMessage({
+    type: 'done',
+    activeResult: activeResult.value,
+    combinedResult: combinedResult.value,
+    requestId,
+  } satisfies CutOptimizerWorkerOutput);
 };

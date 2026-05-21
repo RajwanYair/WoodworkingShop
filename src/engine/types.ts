@@ -24,6 +24,23 @@ export const asKg = (n: number): Kg => n as Kg;
 export const asPct = (n: number): Percent => n as Percent;
 // ──────────────────────────────────────────────────────────────────────────────
 
+// ─── Phase 11: Result<T,E> — explicit error returns ─────────────────────────
+// A minimal discriminated union for engine functions that can fail without
+// throwing.  Use `ok()` / `err()` constructors; narrow with `result.ok`.
+
+/** A successful result holding a value of type `T`. */
+export type Ok<T> = { readonly ok: true; readonly value: T };
+/** A failure result holding an error of type `E`. */
+export type Err<E> = { readonly ok: false; readonly error: E };
+/** Discriminated union of success and failure. */
+export type Result<T, E> = Ok<T> | Err<E>;
+
+/** Construct a successful `Result`. */
+export const ok = <T>(value: T): Ok<T> => ({ ok: true, value });
+/** Construct a failed `Result`. */
+export const err = <E>(error: E): Err<E> => ({ ok: false, error });
+// ──────────────────────────────────────────────────────────────────────────────
+
 export type Lang = 'en' | 'he';
 
 export type MaterialCategory = 'panel' | 'back' | 'door';
