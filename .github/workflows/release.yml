@@ -37,6 +37,11 @@ jobs:
       - name: Quality checks
         run: npm run ci
 
+      # Phase 12 / Sprint 7 — generate CycloneDX SBOM for the release.
+      # In CI, sbom.json is written to workspace root by scripts/sbom.js.
+      - name: Generate SBOM
+        run: npm run sbom
+
       - name: Create dist archive + checksums
         run: |
           cd dist || exit 1
@@ -51,6 +56,7 @@ jobs:
           path: |
             woodworkingshop-dist.tar.gz
             woodworkingshop-dist.tar.gz.sha256
+            sbom.json
 
   release:
     name: Create GitHub Release
@@ -101,6 +107,7 @@ jobs:
           files: |
             woodworkingshop-dist.tar.gz
             woodworkingshop-dist.tar.gz.sha256
+            sbom.json
           body: |
             ${{ steps.changelog.outputs.notes }}
 
@@ -108,6 +115,7 @@ jobs:
 
             ### Artifacts
             - **woodworkingshop-dist.tar.gz** — Production build of the SPA (deploy to any static host)
+            - **sbom.json** — CycloneDX Software Bill of Materials (supply-chain transparency)
 
             ### Run locally
             ```bash

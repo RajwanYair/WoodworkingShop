@@ -41,3 +41,5 @@ playwright/.cache
 
 # Lighthouse CI
 .lighthouseci
+# Phase 12 / Sprint 7 — generated locally; committed only as a CI release artefact
+sbom.json
