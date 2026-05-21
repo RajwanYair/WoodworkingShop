@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import type { CabinetConfig, Part, HardwareItem, OptimizationResult, DerivedDimensions } from '../engine/types';
-import type { UnitSystem } from '../utils/units';
 import { DEFAULT_CONFIG } from '../engine/materials';
 import { computeDimensions } from '../engine/dimensions';
 import { generateParts, computeEdgeBandingTotal } from '../engine/parts';
@@ -9,8 +8,8 @@ import { optimizeCutSheets, optimizeCutSheetsResult } from '../engine/cut-optimi
 import { estimateCost } from '../engine/cost-estimator';
 import { generateAssemblySteps, type AssemblyStep } from '../engine/assembly';
 import { createJsonMemo } from '../engine/memo';
-import { readConfigFromUrl, pushConfigToUrl, readProjectNameFromUrl, pushProjectNameToUrl } from '../utils/url-state';
-import { idbLoadSnapshots, idbSaveSnapshots } from '../utils/indexed-db-storage';
+import { readConfigFromUrl, pushConfigToUrl, readProjectNameFromUrl } from '../utils/url-state';
+import { idbLoadSnapshots } from '../utils/indexed-db-storage';
 import CutOptimizerWorker from '../workers/cut-optimizer.worker?worker';
 import type { CutOptimizerWorkerInput, CutOptimizerWorkerOutput } from '../workers/cut-optimizer.worker';
 import CostEstimatorWorker from '../workers/cost-estimator.worker?worker';
@@ -19,6 +18,10 @@ import AssemblyWorker from '../workers/assembly.worker?worker';
 import type { AssemblyWorkerInput, AssemblyWorkerOutput } from '../workers/assembly.worker';
 import { pluginEventBus } from '../engine/plugin';
 import { workerCall, nextRpcId } from '../workers/worker-rpc';
+// Phase 11 — Slice imports
+import { createUiSlice, loadUiPrefs, type UiSlice } from './slices/uiSlice';
+import { createSnapshotSlice, loadSnapshotsFromStorage, type SnapshotSlice, type ProjectSnapshot } from './slices/snapshotSlice';
+import { createOptimizerSettingsSlice, type OptimizerSettingsSlice } from './slices/optimizerSettingsSlice';
 
 // v3.21.0 — Module-level Web Worker singleton for cut optimization.
 // Kept outside Zustand state to avoid serialization. The worker result
@@ -249,41 +252,9 @@ function scheduleCostFromState(
 
 const MAX_HISTORY = 50;
 
-// Persisted user preferences (Sprint 112). Survives reload via localStorage.
-const PREFS_KEY = 'woodworkingshop:prefs';
-interface PersistedPrefs {
-  darkMode?: boolean;
-  colorBlindMode?: boolean;
-  highContrastMode?: boolean;
-  units?: UnitSystem;
-}
-function loadPrefs(): PersistedPrefs {
-  if (typeof window === 'undefined') return {};
-  try {
-    const raw = window.localStorage.getItem(PREFS_KEY);
-    return raw ? (JSON.parse(raw) as PersistedPrefs) : {};
-  } catch {
-    return {};
-  }
-}
-
-/**
- * Sprint 124 — Detect the OS dark-mode preference.
- * Returns `true` when `(prefers-color-scheme: dark)` matches.
- * Falls back to `false` in environments where matchMedia is unavailable.
- */
-export function detectOsDarkMode(): boolean {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false;
-  return window.matchMedia('(prefers-color-scheme: dark)').matches;
-}
-function savePrefs(prefs: PersistedPrefs): void {
-  if (typeof window === 'undefined') return;
-  try {
-    window.localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
-  } catch {
-    /* quota / disabled — ignore */
-  }
-}
+// Phase 11 — UI preferences now live in uiSlice.ts.  Re-export so tests and
+// any external consumers that imported from cabinet-store still work.
+export { detectOsDarkModeUi as detectOsDarkMode } from './slices/uiSlice';
 
 // v3.44.0 — Auto-save: snapshot of project state persisted across page refreshes.
 const SESSION_KEY = 'woodworkingshop:session';
@@ -329,129 +300,56 @@ export interface CabinetEntry {
   notes?: string;
 }
 
-// Sprint 10 — Project snapshot history
-export interface ProjectSnapshot {
-  id: string;
-  name: string;
-  cabinets: CabinetEntry[];
-  timestamp: string; // ISO 8601
-}
+// Phase 11 — ProjectSnapshot moved to snapshotSlice.ts; re-export for backward
+// compat (tests + utils import it from cabinet-store).
+export type { ProjectSnapshot } from './slices/snapshotSlice';
 
-const SNAPSHOTS_KEY = 'woodworkingshop:snapshots';
-function loadSnapshots(): ProjectSnapshot[] {
-  if (typeof window === 'undefined') return [];
-  try {
-    const raw = window.localStorage.getItem(SNAPSHOTS_KEY);
-    return raw ? (JSON.parse(raw) as ProjectSnapshot[]) : [];
-  } catch {
-    return [];
-  }
-}
-function saveSnapshots(snaps: ProjectSnapshot[]): void {
-  if (typeof window === 'undefined') return;
-  try {
-    // Persist synchronously to localStorage (immediate next-load availability)
-    window.localStorage.setItem(SNAPSHOTS_KEY, JSON.stringify(snaps));
-  } catch {
-    /* quota exceeded — ignore */
-  }
-  // Also persist asynchronously to IndexedDB (reliable long-term storage)
-  void idbSaveSnapshots<ProjectSnapshot>(snaps);
-}
-
-export interface CabinetState {
-  // Multi-cabinet project
+/**
+ * Phase 11: CabinetState is now composed of the Config slice (inline) +
+ * three extracted slices.  The external API is identical — components and
+ * tests continue to import everything from this file.
+ */
+export type CabinetState = {
+  // ── Config / multi-cabinet state ──
   cabinets: CabinetEntry[];
   activeCabinetIndex: number;
-
-  // Active cabinet config (convenience alias)
   config: CabinetConfig;
-
-  // Derived for active cabinet
   dimensions: DerivedDimensions;
   parts: Part[];
   hardware: HardwareItem[];
   optimization: OptimizationResult;
-  edgeBandingTotal: number; // mm
+  edgeBandingTotal: number;
   cost: ReturnType<typeof estimateCost>;
   assemblySteps: AssemblyStep[];
-
-  // Combined project-level optimization (all cabinets)
   allParts: Part[];
   combinedOptimization: OptimizationResult;
-  /** v3.21.0 — true while the cut-optimizer Web Worker is computing a fresh result */
   optimizationPending: boolean;
   costPending: boolean;
   assemblyPending: boolean;
-
-  // Undo / Redo
   _past: CabinetEntry[][];
   _future: CabinetEntry[][];
   canUndo: boolean;
   canRedo: boolean;
-
-  // UI state
-  activeTab: 'configurator' | 'preview' | 'optimizer' | 'assembly' | 'pdf';
-  projectName: string; // Sprint 152
-  /** Sprint 14 — project-level free-text notes shown in PDF/BOM exports. */
-  projectNotes: string;
-  darkMode: boolean;
-  colorBlindMode: boolean;
-  highContrastMode: boolean; // v3.12.0
-  units: UnitSystem;
-  sawKerf: number; // mm, default 4 (Sprint 136)
-  materialPriceOverrides: Record<string, number>; // Sprint 139: materialKey → ₪ per sheet
-  edgeBandingRate: number; // Sprint 141: ₪ per meter, default 3
-  hardwarePriceOverrides: Record<string, number>; // Sprint 148: hw.id → ₪ per unit
-  hardwareQtyOverrides: Record<string, number>; // v3.15.0: hw.id → user-overridden qty
-  sheetSizeOverrides: Record<string, { width: number; length: number }>; // Sprint 165: per-material sheet size overrides (mm)
-  labourRate: number; // v3.23.0: ₪ per hour, default 75
-  labourHours: number; // v3.23.0: estimated labour hours (user-overrideable)
-  finishCost: number; // v3.23.0: finish/paint cost in ₪
-  /** Sprint 16 — per-part rotation lock map (partId → true). */
   rotationLockedPartIds: Record<string, boolean>;
 
-  // Actions
+  // ── Config actions ──
   setConfig: (patch: Partial<CabinetConfig>) => void;
   resetConfig: () => void;
-  setActiveTab: (tab: CabinetState['activeTab']) => void;
-  toggleDarkMode: () => void;
-  toggleColorBlindMode: () => void;
-  toggleHighContrast: () => void; // v3.12.0
-  toggleUnits: () => void;
   undo: () => void;
   redo: () => void;
   addCabinet: () => void;
   removeCabinet: (index: number) => void;
   duplicateCabinet: (index: number) => void;
-  /** Sprint 61 — swap cabinet at `index` one position up or down in the project list. */
   moveCabinet: (index: number, direction: 'up' | 'down') => void;
   setActiveCabinet: (index: number) => void;
   renameCabinet: (index: number, name: string) => void;
   setNotes: (index: number, notes: string) => void;
-  setSawKerf: (mm: number) => void;
-  setMaterialPriceOverride: (materialKey: string, price: number | null) => void;
-  setEdgeBandingRate: (rate: number) => void;
-  setHardwarePriceOverride: (id: string, price: number | null) => void;
-  setHardwareQtyOverride: (id: string, qty: number | null) => void; // v3.15.0
-  setSheetSizeOverride: (materialKey: string, size: { width: number; length: number } | null) => void; // Sprint 165
-  setLabourRate: (rate: number) => void; // v3.23.0
-  setLabourHours: (hours: number) => void; // v3.23.0
-  setFinishCost: (cost: number) => void; // v3.23.0
-  setProjectName: (name: string) => void;
-  setProjectNotes: (notes: string) => void;
-  /** Sprint 16 — toggle the rotation-lock flag for a specific part ID. */
   toggleRotationLock: (partId: string) => void;
   loadProject: (cabinets: CabinetEntry[]) => void;
-  /** v3.18.0 — Replace every occurrence of fromKey with toKey across all cabinets (undoable). */
   bulkReplaceMaterial: (fromKey: string, toKey: string) => void;
-
-  // Sprint 10 — Snapshot history
-  snapshots: ProjectSnapshot[];
-  saveSnapshot: (name: string) => void;
-  restoreSnapshot: (id: string) => void;
-  deleteSnapshot: (id: string) => void;
-}
+} & UiSlice &
+  OptimizerSettingsSlice &
+  SnapshotSlice;
 
 function derive(
   config: CabinetConfig,
@@ -512,7 +410,7 @@ function deriveBaseProject(cabinets: CabinetEntry[], activeIndex: number) {
 // with identical arguments skip the MaxRects computation entirely.
 const deriveProjectMemo = createJsonMemo(deriveProject);
 
-export const useCabinetStore = create<CabinetState>((set) => {
+export const useCabinetStore = create<CabinetState>((set, get) => {
   // v3.21.0 — Capture `set` so the worker response callback can update state.
   _workerApplyFn = set as (partial: Partial<CabinetState>) => void;
 
@@ -541,10 +439,74 @@ export const useCabinetStore = create<CabinetState>((set) => {
   // Sprint 16 — hydrate module-level lock map from session before deriving initial optimization.
   _rotationLocks = session?.rotationLockedPartIds ?? {};
   const initial = deriveProjectMemo(initialCabinets, initialActiveIndex);
-  const prefs = loadPrefs();
+  const prefs = loadUiPrefs();
+  const initialProjectName = session?.projectName || readProjectNameFromUrl();
+  const initialProjectNotes = session?.projectNotes ?? '';
+  const initialSnapshots = loadSnapshotsFromStorage();
+
+  // ── Slice callbacks (close over `set` and `get`) ──────────────────────────
+  // Called by OptimizerSettingsSlice when kerf or sheet overrides change.
+  function handleRescheduleOpt(sawKerf: number, sheetSizeOverrides: Record<string, { width: number; length: number }>) {
+    const state = get();
+    const base = deriveBaseProject(state.cabinets, state.activeCabinetIndex);
+    scheduleOptimization(base.parts, base.allParts, sawKerf, sheetSizeOverrides);
+    scheduleAssembly(base.config);
+    set({ ...base, optimizationPending: true, costPending: true, assemblyPending: true } as Partial<CabinetState>);
+  }
+  // Called by OptimizerSettingsSlice when cost-only params change.
+  function handleRescheduleCost(overrides: Partial<OptimizerSettingsSlice>) {
+    scheduleCostFromState(get(), undefined, undefined, undefined, overrides as Partial<CabinetState>);
+    set({ costPending: true } as Partial<CabinetState>);
+  }
+  // Called by SnapshotSlice restoreSnapshot so the config slice handles undo history.
+  function handleRestoreSnapshot(cabinets: CabinetEntry[]) {
+    const state = get();
+    const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
+    const migrated = cabinets.map((c) => ({ ...c, config: { ...DEFAULT_CONFIG, ...c.config } }));
+    const base = deriveBaseProject(migrated, 0);
+    scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
+    scheduleAssembly(base.config);
+    set({
+      cabinets: migrated,
+      activeCabinetIndex: 0,
+      ...base,
+      optimizationPending: true,
+      costPending: true,
+      assemblyPending: true,
+      _past: past,
+      _future: [],
+      canUndo: true,
+      canRedo: false,
+    } as Partial<CabinetState>);
+  }
+
+  // Type-narrowing wrappers: each slice only sets its own state fields so the
+  // cast from Partial<SliceType> → Partial<CabinetState> is structurally safe.
+  type SliceSetFn<S> = (partial: Partial<S> | ((s: S) => Partial<S>)) => void;
+  const uiSet: SliceSetFn<UiSlice> = (partial) => {
+    if (typeof partial === 'function') {
+      set((s) => partial(s) as Partial<CabinetState>);
+    } else {
+      set(partial as Partial<CabinetState>);
+    }
+  };
+  const optSet: SliceSetFn<OptimizerSettingsSlice> = (partial) => {
+    if (typeof partial === 'function') {
+      set((s) => partial(s) as Partial<CabinetState>);
+    } else {
+      set(partial as Partial<CabinetState>);
+    }
+  };
+  const snapSet: SliceSetFn<SnapshotSlice> = (partial) => {
+    if (typeof partial === 'function') {
+      set((s) => partial(s) as Partial<CabinetState>);
+    } else {
+      set(partial as Partial<CabinetState>);
+    }
+  };
 
   return {
-    snapshots: loadSnapshots(),
+    // ── Config / multi-cabinet slice (inline) ─────────────────────────────
     cabinets: initialCabinets,
     activeCabinetIndex: initialActiveIndex,
     ...initial,
@@ -552,25 +514,8 @@ export const useCabinetStore = create<CabinetState>((set) => {
     _future: [],
     canUndo: false,
     canRedo: false,
-    activeTab: 'configurator',
-    projectName: session?.projectName || readProjectNameFromUrl(),
-    projectNotes: session?.projectNotes ?? '',
-    // Sprint 124 — fall back to OS preference when no saved pref exists
-    darkMode: prefs.darkMode ?? detectOsDarkMode(),
-    colorBlindMode: prefs.colorBlindMode ?? false,
-    highContrastMode: prefs.highContrastMode ?? false,
-    units: prefs.units ?? ('metric' as UnitSystem),
-    sawKerf: session?.sawKerf ?? 4, // mm — Sprint 136
-    materialPriceOverrides: session?.materialPriceOverrides ?? {}, // Sprint 139
-    edgeBandingRate: session?.edgeBandingRate ?? 3, // ₪/m — Sprint 141
-    hardwarePriceOverrides: session?.hardwarePriceOverrides ?? {}, // Sprint 148
-    hardwareQtyOverrides: session?.hardwareQtyOverrides ?? {}, // v3.15.0
-    sheetSizeOverrides: session?.sheetSizeOverrides ?? {}, // Sprint 165
-    labourRate: session?.labourRate ?? 75, // ₪/hr — v3.23.0
-    labourHours: session?.labourHours ?? 0, // hours — v3.23.0 (0 = not set, user inputs manually)
-    finishCost: session?.finishCost ?? 0, // ₪ — v3.23.0
-    rotationLockedPartIds: session?.rotationLockedPartIds ?? {}, // Sprint 16
-    optimizationPending: false, // v3.21.0
+    rotationLockedPartIds: session?.rotationLockedPartIds ?? {},
+    optimizationPending: false,
     costPending: false,
     assemblyPending: false,
     cost: estimateCost(
@@ -586,6 +531,28 @@ export const useCabinetStore = create<CabinetState>((set) => {
     ),
     assemblySteps: generateAssemblySteps(initial.config),
 
+    // ── UI slice ───────────────────────────────────────────────────────────
+    ...createUiSlice(uiSet, prefs, initialProjectName, initialProjectNotes),
+
+    // ── Optimizer settings slice ───────────────────────────────────────────
+    ...createOptimizerSettingsSlice(
+      optSet,
+      () => get() as OptimizerSettingsSlice,
+      session,
+      handleRescheduleOpt,
+      handleRescheduleCost,
+    ),
+
+    // ── Snapshot slice ─────────────────────────────────────────────────────
+    ...createSnapshotSlice(
+      snapSet,
+      () => get() as SnapshotSlice,
+      initialSnapshots,
+      () => get().cabinets,
+      handleRestoreSnapshot,
+    ),
+
+    // ── Config actions (inline) ────────────────────────────────────────────
     setConfig: (patch) =>
       set((state) => {
         const cabinets = state.cabinets.map((cab, i) =>
@@ -844,12 +811,6 @@ export const useCabinetStore = create<CabinetState>((set) => {
         };
       }),
 
-    setActiveTab: (tab) => set({ activeTab: tab }),
-    setProjectName: (name) => {
-      set({ projectName: name });
-      pushProjectNameToUrl(name); // Sprint 157
-    },
-    setProjectNotes: (notes) => set({ projectNotes: notes }),
     /** Sprint 16 — toggle per-part rotation lock and trigger re-optimization. */
     toggleRotationLock: (partId) =>
       set((state) => {
@@ -866,85 +827,6 @@ export const useCabinetStore = create<CabinetState>((set) => {
         const base = deriveBaseProject(state.cabinets, state.activeCabinetIndex);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         return { rotationLockedPartIds: next, ...base, optimizationPending: true };
-      }),
-    setSawKerf: (mm) =>
-      set((state) => {
-        const sawKerf = Math.max(0, Math.min(8, mm));
-        const base = deriveBaseProject(state.cabinets, state.activeCabinetIndex);
-        scheduleOptimization(base.parts, base.allParts, sawKerf, state.sheetSizeOverrides);
-        scheduleAssembly(base.config);
-        return { sawKerf, ...base, optimizationPending: true };
-      }),
-    setMaterialPriceOverride: (materialKey, price) =>
-      set((state) => {
-        const overrides = { ...state.materialPriceOverrides };
-        if (price === null) {
-          delete overrides[materialKey];
-        } else {
-          overrides[materialKey] = price;
-        }
-        scheduleCostFromState(state, undefined, undefined, undefined, { materialPriceOverrides: overrides });
-        return { materialPriceOverrides: overrides, costPending: true };
-      }),
-    setEdgeBandingRate: (rate) =>
-      set((state) => {
-        const r = Math.max(0, rate);
-        scheduleCostFromState(state, undefined, undefined, undefined, { edgeBandingRate: r });
-        return { edgeBandingRate: r, costPending: true };
-      }),
-    setLabourRate: (rate) =>
-      set((state) => {
-        const r = Math.max(0, rate);
-        scheduleCostFromState(state, undefined, undefined, undefined, { labourRate: r });
-        return { labourRate: r, costPending: true };
-      }),
-    setLabourHours: (hours) =>
-      set((state) => {
-        const h = Math.max(0, hours);
-        scheduleCostFromState(state, undefined, undefined, undefined, { labourHours: h });
-        return { labourHours: h, costPending: true };
-      }),
-    setFinishCost: (cost) =>
-      set((state) => {
-        const c = Math.max(0, cost);
-        scheduleCostFromState(state, undefined, undefined, undefined, { finishCost: c });
-        return { finishCost: c, costPending: true };
-      }),
-    setHardwarePriceOverride: (id, price) =>
-      set((state) => {
-        const overrides = { ...state.hardwarePriceOverrides };
-        if (price === null) {
-          delete overrides[id];
-        } else {
-          overrides[id] = Math.max(0, price);
-        }
-        scheduleCostFromState(state, undefined, undefined, undefined, { hardwarePriceOverrides: overrides });
-        return { hardwarePriceOverrides: overrides, costPending: true };
-      }),
-    setHardwareQtyOverride: (id, qty) =>
-      set((state) => {
-        const overrides = { ...state.hardwareQtyOverrides };
-        if (qty === null) {
-          delete overrides[id];
-        } else {
-          overrides[id] = Math.max(0, qty);
-        }
-        scheduleCostFromState(state, undefined, undefined, undefined, { hardwareQtyOverrides: overrides });
-        return { hardwareQtyOverrides: overrides, costPending: true };
-      }),
-    // Sprint 165 — per-material sheet size overrides
-    setSheetSizeOverride: (materialKey, size) =>
-      set((state) => {
-        const sheetSizeOverrides = { ...state.sheetSizeOverrides };
-        if (size === null) {
-          delete sheetSizeOverrides[materialKey];
-        } else {
-          sheetSizeOverrides[materialKey] = size;
-        }
-        const base = deriveBaseProject(state.cabinets, state.activeCabinetIndex);
-        scheduleOptimization(base.parts, base.allParts, state.sawKerf, sheetSizeOverrides);
-        scheduleAssembly(base.config);
-        return { sheetSizeOverrides, ...base, optimizationPending: true };
       }),
     // v3.18.0 — Bulk material replacement across all cabinets
     bulkReplaceMaterial: (fromKey, toKey) =>
@@ -973,81 +855,6 @@ export const useCabinetStore = create<CabinetState>((set) => {
         };
       }),
 
-    saveSnapshot: (name) =>
-      set((state) => {
-        const now = new Date();
-        const autoName = `Snapshot ${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-        const snap: ProjectSnapshot = {
-          id: `snap-${Date.now()}`,
-          name: name.trim() || autoName,
-          cabinets: state.cabinets,
-          timestamp: now.toISOString(),
-        };
-        const snapshots = [...state.snapshots, snap];
-        saveSnapshots(snapshots);
-        return { snapshots };
-      }),
-
-    restoreSnapshot: (id) =>
-      set((state) => {
-        const snap = state.snapshots.find((s) => s.id === id);
-        if (!snap) return state;
-        const cabinets = snap.cabinets;
-        const activeCabinetIndex = Math.min(state.activeCabinetIndex, cabinets.length - 1);
-        const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
-        const base = deriveBaseProject(cabinets, activeCabinetIndex);
-        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
-        scheduleAssembly(base.config);
-        return {
-          cabinets,
-          activeCabinetIndex,
-          ...base,
-          optimizationPending: true,
-          costPending: true,
-          assemblyPending: true,
-          _past: past,
-          _future: [],
-          canUndo: true,
-          canRedo: false,
-        };
-      }),
-
-    deleteSnapshot: (id) =>
-      set((state) => {
-        const snapshots = state.snapshots.filter((s) => s.id !== id);
-        saveSnapshots(snapshots);
-        return { snapshots };
-      }),
-
-    toggleDarkMode: () =>
-      set((s) => {
-        const darkMode = !s.darkMode;
-        savePrefs({ darkMode, colorBlindMode: s.colorBlindMode, highContrastMode: s.highContrastMode, units: s.units });
-        return { darkMode };
-      }),
-    toggleColorBlindMode: () =>
-      set((s) => {
-        const colorBlindMode = !s.colorBlindMode;
-        savePrefs({ darkMode: s.darkMode, colorBlindMode, highContrastMode: s.highContrastMode, units: s.units });
-        return { colorBlindMode };
-      }),
-    toggleHighContrast: () =>
-      set((s) => {
-        const highContrastMode = !s.highContrastMode;
-        savePrefs({ darkMode: s.darkMode, colorBlindMode: s.colorBlindMode, highContrastMode, units: s.units });
-        return { highContrastMode };
-      }),
-    toggleUnits: () =>
-      set((s) => {
-        const units: UnitSystem = s.units === 'metric' ? 'imperial' : 'metric';
-        savePrefs({
-          darkMode: s.darkMode,
-          colorBlindMode: s.colorBlindMode,
-          highContrastMode: s.highContrastMode,
-          units,
-        });
-        return { units };
-      }),
   };
 });
 
