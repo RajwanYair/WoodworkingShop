@@ -7,7 +7,7 @@
  * import { generateAssemblySteps, diffSnapshots } from '../engine/assembly';
  * ```
  */
-export { generateAssemblySteps } from '../assembly.ts';
+export { generateAssemblySteps, buildAssemblyDAG } from '../assembly.ts';
 export type { AssemblyStep } from '../assembly.ts';
 
 export { diffSnapshots } from '../snapshot-diff.ts';

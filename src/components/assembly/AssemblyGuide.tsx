@@ -10,6 +10,30 @@ import { IconPrint, IconLightbulb, IconDownload } from '../layout/Icons';
 
 type ViewMode = 'paginated' | 'all';
 
+/**
+ * Phase 12 / Sprint 10 — group consecutive parallel steps into sub-arrays.
+ * Steps with `parallel: true` that share identical dependencies are placed
+ * together; all other steps form singleton groups.
+ */
+function groupParallelSteps(steps: AssemblyStep[]): AssemblyStep[][] {
+  const groups: AssemblyStep[][] = [];
+  for (const step of steps) {
+    if (step.parallel) {
+      const depKey = (step.dependencies ?? []).slice().sort().join(',');
+      const last = groups.at(-1);
+      if (last && last[0].parallel) {
+        const lastDepKey = (last[0].dependencies ?? []).slice().sort().join(',');
+        if (lastDepKey === depKey) {
+          last.push(step);
+          continue;
+        }
+      }
+    }
+    groups.push([step]);
+  }
+  return groups;
+}
+
 export function AssemblyGuide() {
   const { t, i18n } = useTranslation();
   const { assemblySteps: steps, parts, hardware, cabinets, activeCabinetIndex } = useCabinetStore();
@@ -220,20 +244,52 @@ export function AssemblyGuide() {
         </>
       ) : (
         <div className="space-y-4">
-          {steps.map((s, i) => (
-            <StepCard
-              key={i}
-              step={s}
-              stepIndex={i}
-              stepCount={steps.length}
-              parts={parts}
-              lang={lang}
-              t={t}
-              completed={completedSteps.has(i)}
-              onToggleComplete={() => toggleStep(i)}
-              showTips={showTips}
-            />
-          ))}
+          {groupParallelSteps(steps).map((group, gi) =>
+            group.length > 1 ? (
+              <div
+                key={gi}
+                className="rounded-lg border border-blue-200 bg-blue-50/40 p-3 dark:border-blue-800 dark:bg-blue-900/10"
+              >
+                <p className="text-blue-600 dark:text-blue-400 mb-2 flex items-center gap-1.5 text-xs font-medium">
+                  ⇄ {t('assembly.parallelGroup')}
+                </p>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {group.map((s, i) => (
+                    <StepCard
+                      key={i}
+                      step={s}
+                      stepIndex={steps.indexOf(s)}
+                      stepCount={steps.length}
+                      parts={parts}
+                      lang={lang}
+                      t={t}
+                      completed={completedSteps.has(steps.indexOf(s))}
+                      onToggleComplete={() => toggleStep(steps.indexOf(s))}
+                      showTips={showTips}
+                    />
+                  ))}
+                </div>
+              </div>
+            ) : (
+              group.map((s) => {
+                const idx = steps.indexOf(s);
+                return (
+                  <StepCard
+                    key={idx}
+                    step={s}
+                    stepIndex={idx}
+                    stepCount={steps.length}
+                    parts={parts}
+                    lang={lang}
+                    t={t}
+                    completed={completedSteps.has(idx)}
+                    onToggleComplete={() => toggleStep(idx)}
+                    showTips={showTips}
+                  />
+                );
+              })
+            ),
+          )}
           {completedSteps.size === steps.length && steps.length > 0 && (
             <p className="py-2 text-center text-sm font-semibold text-green-600 dark:text-green-400" role="status">
               ✓ {t('assembly.allStepsDone')}

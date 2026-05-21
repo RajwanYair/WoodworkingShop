@@ -12,6 +12,79 @@ export interface AssemblyStep {
   estimatedMinutes: number;
   tip?: { en: string; he: string };
   videoKeyword?: string; // YouTube search keyword for tutorial lookup
+  /** Phase 12 / Sprint 10 — unique DAG node identifier, e.g. 'step-3'. */
+  id: string;
+  /** Phase 12 / Sprint 10 — IDs of steps that must complete before this one. */
+  dependencies?: readonly string[];
+  /** Phase 12 / Sprint 10 — true when this step is in a parallel-executable group. */
+  parallel?: boolean;
+}
+
+// Internal shape used inside generateAssemblySteps before DAG resolution
+type RawStep = Omit<AssemblyStep, 'id' | 'dependencies' | 'parallel'>;
+
+/**
+ * Compute dependency edges and parallel flags for a flat list of raw assembly
+ * steps (built inside generateAssemblySteps without id/dep/parallel fields).
+ *
+ * Algorithm:
+ *  1. Assign `id: 'step-N'` based on stepNumber.
+ *  2. Build a linear chain (each step depends on its predecessor).
+ *  3. Detect the "fitting phase" — steps between the carcass-closing step
+ *     (Install Back Panel / Square the Carcass) and the Wall Mounting step —
+ *     and mark independent fitting steps `parallel: true` with a shared
+ *     dependency on the closing step.
+ *  4. Restore sequential dependency within the door sub-chain so that
+ *     "Install Handles" always follows door-hinge mounting.
+ */
+export function buildAssemblyDAG(rawSteps: readonly RawStep[]): AssemblyStep[] {
+  if (rawSteps.length === 0) return [];
+
+  // Pass 1: assign IDs and build a linear chain
+  const steps: AssemblyStep[] = rawSteps.map((s, i) => ({
+    ...s,
+    id: `step-${s.stepNumber}`,
+    dependencies: i === 0 ? [] : [`step-${rawSteps[i - 1].stepNumber}`],
+    parallel: false,
+  }));
+
+  // Pass 2: identify the fitting phase
+  const closingIdx = steps.findIndex(
+    (s) => s.title.en.startsWith('Install Back') || s.title.en.startsWith('Square the Carcass'),
+  );
+  if (closingIdx < 0) return steps;
+
+  const wallIdx = steps.findIndex((s) => s.title.en.startsWith('Wall Mounting'));
+  const fitEnd = wallIdx < 0 ? steps.length : wallIdx;
+  // Require at least two fitting steps to form a parallel group
+  if (fitEnd - closingIdx <= 2) return steps;
+
+  const closingId = steps[closingIdx].id;
+
+  // All fitting-phase steps become parallel roots of the closing step
+  for (let i = closingIdx + 1; i < fitEnd; i++) {
+    steps[i] = { ...steps[i], dependencies: [closingId], parallel: true };
+  }
+
+  // Within the door sub-chain, "Install Handles" must follow hinge mounting
+  const hingesIdx = steps.findIndex(
+    (s, i) =>
+      i > closingIdx &&
+      i < fitEnd &&
+      (s.title.en.startsWith('Mount Hinges') || s.title.en.startsWith('Mount Glass')),
+  );
+  const handlesIdx = steps.findIndex(
+    (s, i) => i > closingIdx && i < fitEnd && s.title.en.startsWith('Install Handles'),
+  );
+  if (hingesIdx >= 0 && handlesIdx === hingesIdx + 1) {
+    steps[handlesIdx] = {
+      ...steps[handlesIdx],
+      dependencies: [steps[hingesIdx].id],
+      parallel: false,
+    };
+  }
+
+  return steps;
 }
 
 /**
@@ -19,9 +92,12 @@ export interface AssemblyStep {
  * Follows standard cabinet-making practice:
  *   1. Mark & drill → 2. Back assembly reference → 3. Carcass → 4. Fixed shelves
  *   → 5. Back panel → 6. Doors → 7. Hardware → 8. Shelf pins → 9. Wall mount
+ *
+ * Phase 12 / Sprint 10: steps are post-processed by buildAssemblyDAG to add
+ * `id`, `dependencies`, and `parallel` fields.
  */
 export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
-  const steps: AssemblyStep[] = [];
+  const steps: RawStep[] = [];
   const hasDoors = cfg.doorStyle !== 'none' && (cfg.furnitureType === 'cabinet' || cfg.furnitureType === 'wardrobe');
   const hasFixedShelf = cfg.height > 1200 && cfg.furnitureType !== 'desk';
   const isDesk = cfg.furnitureType === 'desk';
@@ -82,7 +158,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
       parts: ['P01'],
       icon: '✅',
     });
-    return steps;
+    return buildAssemblyDAG(steps);
   }
 
   // ── Desk-specific assembly ──
@@ -154,7 +230,7 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
         icon: '🪵',
       });
     }
-    return steps;
+    return buildAssemblyDAG(steps);
   }
 
   steps.push({
@@ -387,5 +463,5 @@ export function generateAssemblySteps(cfg: CabinetConfig): AssemblyStep[] {
     });
   }
 
-  return steps;
+  return buildAssemblyDAG(steps);
 }

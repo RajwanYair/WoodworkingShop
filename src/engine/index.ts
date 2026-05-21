@@ -101,3 +101,6 @@ export {
   PLUGIN_CONTRACT,
 } from './plugin.ts';
 export type { CabinetPlannerPlugin, PluginContract, PluginHookContract, PluginStability } from './plugin.ts';
+
+export { generateAssemblySteps, buildAssemblyDAG } from './assembly.ts';
+export type { AssemblyStep } from './assembly.ts';
