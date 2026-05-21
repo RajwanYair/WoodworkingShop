@@ -1,5 +1,5 @@
 import type { CabinetConfig, OptimizationResult, OptimizationSuggestion, SmartStrategy } from './types';
-import { MATERIALS, SAW_KERF, getMaterial, CONSTRAINTS } from './materials';
+import { MATERIALS, SAW_KERF, getMaterial, CONSTRAINTS } from './materials.ts';
 import { computeDimensions } from './dimensions';
 import { generateParts } from './parts';
 import { optimizeCutSheets } from './cut-optimizer';

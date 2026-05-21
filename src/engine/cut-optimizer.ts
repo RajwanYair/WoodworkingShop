@@ -1,6 +1,6 @@
 import type { Part, CutSheet, OptimizationResult, Result } from './types';
 import { ok, err } from './types';
-import { getMaterial, SAW_KERF } from './materials';
+import { getMaterial, SAW_KERF } from './materials.ts';
 
 /**
  * 2-D Maximal Rectangles bin-packing optimizer (Best Short Side Fit).

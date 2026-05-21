@@ -58,7 +58,7 @@ export {
   backMaterials,
   DEFAULT_CONFIG,
   CONSTRAINTS,
-} from './materials';
+} from './materials.ts';
 
 export {
   computeDimensions,
@@ -77,11 +77,11 @@ export type { SmartOptimizerOptions } from './smart-optimizer';
 export { estimateCost } from './cost-estimator';
 export type { CostBreakdown, SheetCost, HardwareCost } from './cost-estimator';
 
-export { validateConfig } from './validation';
+export { validateConfig } from './validation.ts';
 export { findSubstitutions } from './substitution';
 export type { ValidationIssue, ValidationSeverity, MaterialSubstitution, VendorHingeProfile } from './types';
 
-export { generateHardware, VENDOR_HINGE_PROFILES } from './hardware';
+export { generateHardware, VENDOR_HINGE_PROFILES } from './hardware.ts';
 
 export {
   registerPlugin,
@@ -91,5 +91,5 @@ export {
   applyConfigPlugins,
   getPluginContract,
   PLUGIN_CONTRACT,
-} from './plugin';
-export type { CabinetPlannerPlugin, PluginContract, PluginHookContract, PluginStability } from './plugin';
+} from './plugin.ts';
+export type { CabinetPlannerPlugin, PluginContract, PluginHookContract, PluginStability } from './plugin.ts';

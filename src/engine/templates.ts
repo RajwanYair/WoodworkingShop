@@ -6,7 +6,7 @@ import {
   DESK_DEFAULTS,
   WARDROBE_DEFAULTS,
   PANEL_DEFAULTS,
-} from './materials';
+} from './materials.ts';
 
 export interface CabinetTemplate {
   id: string;

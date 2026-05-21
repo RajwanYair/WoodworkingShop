@@ -1,6 +1,6 @@
 import type { CabinetConfig, DerivedDimensions } from './types';
 import { asMm, asKg } from './types';
-import { getMaterial } from './materials';
+import { getMaterial } from './materials.ts';
 
 /**
  * Elastic moduli (N/mm²) used for shelf deflection calculations.

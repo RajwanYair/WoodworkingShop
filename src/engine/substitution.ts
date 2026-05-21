@@ -1,5 +1,5 @@
 import type { CabinetConfig, Material, MaterialSubstitution } from './types';
-import { getMaterial, MATERIALS } from './materials';
+import { getMaterial, MATERIALS } from './materials.ts';
 
 /** Maximum shelf width (mm) considered safe for non-plywood panels. */
 const DEFLECTION_SPAN_THRESHOLD_MM = 900;

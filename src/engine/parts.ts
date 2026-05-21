@@ -1,5 +1,5 @@
 import type { CabinetConfig, Part } from './types';
-import { getMaterial, computePartWeightKg } from './materials';
+import { getMaterial, computePartWeightKg } from './materials.ts';
 import { computeDimensions } from './dimensions';
 import { createJsonMemo } from './memo';
 

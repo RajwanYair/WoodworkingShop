@@ -1,5 +1,5 @@
 import type { OptimizationResult } from './types';
-import { getMaterial } from './materials';
+import { getMaterial } from './materials.ts';
 
 export interface CostBreakdown {
   sheetCosts: SheetCost[];

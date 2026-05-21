@@ -1,5 +1,5 @@
 import type { CabinetConfig, ValidationIssue } from './types';
-import { getMaterial } from './materials';
+import { getMaterial } from './materials.ts';
 import { computeDimensions } from './dimensions';
 
 // ── Joinery constraint constants (Sprint 12) ─────────────────────────────────
