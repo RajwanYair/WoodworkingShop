@@ -159,6 +159,7 @@
     "lockRotation": "Verrouiller la rotation (empêcher la rotation à 90° par l'optimiseur)",
     "unlockRotation": "Déverrouiller la rotation (autoriser la rotation de cette pièce)",
     "sawKerf": "Trait de scie",
+    "guillotineMode": "Guillotine cuts (panel saw compatible)",
     "exportHardware": "Exporter liste quincaillerie CSV",
     "labels": "Étiquettes",
     "toggleLabels": "Afficher/masquer les étiquettes des pièces dans les rectangles",

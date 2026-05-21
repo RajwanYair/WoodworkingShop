@@ -53,8 +53,11 @@ function noOverlap(
 describe('cut-optimizer property tests', () => {
   it('P1 — no two placed parts on the same sheet overlap', () => {
     fc.assert(
-      fc.property(arbParts, (parts) => {
-        const result = optimizeCutSheets(parts);
+      fc.property(
+        arbParts,
+        fc.oneof(fc.constant<'freeform' | 'guillotine'>('freeform'), fc.constant<'freeform' | 'guillotine'>('guillotine')),
+        (parts, cutMode) => {
+          const result = optimizeCutSheets(parts, 3, {}, cutMode);
         for (const sheet of result.sheets) {
           for (let i = 0; i < sheet.parts.length; i++) {
             for (let j = i + 1; j < sheet.parts.length; j++) {

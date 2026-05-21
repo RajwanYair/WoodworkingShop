@@ -22,6 +22,8 @@ export interface CutOptimizerWorkerInput {
   allParts: Part[];
   sawKerfMm: number;
   sheetSizeOverrides: Record<string, { width: number; length: number }>;
+  /** Phase 11 / Sprint 5 — algorithm to use; defaults to 'freeform' (MaxRects). */
+  cutMode?: 'guillotine' | 'freeform';
   requestId: string;
 }
 
@@ -34,13 +36,13 @@ export interface CutOptimizerWorkerOutput {
 }
 
 self.onmessage = (e: MessageEvent<CutOptimizerWorkerInput>) => {
-  const { activeParts, allParts, sawKerfMm, sheetSizeOverrides, requestId } = e.data;
-  const activeResult = optimizeCutSheetsResult(activeParts, sawKerfMm, sheetSizeOverrides);
+  const { activeParts, allParts, sawKerfMm, sheetSizeOverrides, cutMode = 'freeform', requestId } = e.data;
+  const activeResult = optimizeCutSheetsResult(activeParts, sawKerfMm, sheetSizeOverrides, cutMode);
   if (!activeResult.ok) {
     self.postMessage({ type: 'error', errorMessage: activeResult.error, requestId } satisfies CutOptimizerWorkerOutput);
     return;
   }
-  const combinedResult = optimizeCutSheetsResult(allParts, sawKerfMm, sheetSizeOverrides);
+  const combinedResult = optimizeCutSheetsResult(allParts, sawKerfMm, sheetSizeOverrides, cutMode);
   if (!combinedResult.ok) {
     self.postMessage({ type: 'error', errorMessage: combinedResult.error, requestId } satisfies CutOptimizerWorkerOutput);
     return;

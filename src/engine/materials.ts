@@ -227,6 +227,7 @@ export const DEFAULT_CONFIG: CabinetConfig = {
   kickHeight: 100,
   handleStyle: 'bar',
   edgeBanding: 'all-visible',
+  cutMode: 'freeform',
   lang: 'en',
 };
 

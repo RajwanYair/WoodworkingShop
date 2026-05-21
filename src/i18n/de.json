@@ -159,6 +159,7 @@
     "lockRotation": "Drehung sperren (90°-Drehung durch Optimierer verhindern)",
     "unlockRotation": "Drehung entsperren (Teil darf gedreht werden)",
     "sawKerf": "Sägeblattbreite",
+    "guillotineMode": "Guillotine cuts (panel saw compatible)",
     "exportHardware": "Beschlägeliste CSV exportieren",
     "labels": "Beschriftungen",
     "toggleLabels": "Teilebeschriftungen in Zuschnittechtecken ein-/ausblenden",

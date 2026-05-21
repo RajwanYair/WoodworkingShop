@@ -166,6 +166,14 @@ export interface CabinetConfig {
   // Edge banding
   edgeBanding: EdgeBanding;
 
+  /**
+   * Phase 11 / Sprint 5 — Cut optimizer algorithm.
+   * - `'freeform'`   : MaxRects BSSF (default) — highest yield, arbitrary layouts.
+   * - `'guillotine'` : Strip-based guillotine packing — lower yield but every cut
+   *   runs edge-to-edge, compatible with standard panel saws.
+   */
+  cutMode?: 'guillotine' | 'freeform';
+
   // Language
   lang: Lang;
 }

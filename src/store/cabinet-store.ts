@@ -69,6 +69,13 @@ function getAssemblyWorker(): Worker | null {
  * optimizer (engine or worker). Initialised from the persisted session.
  */
 let _rotationLocks: Record<string, boolean> = {};
+/**
+ * Phase 11 / Sprint 5 — Active cut mode, mirroring the active cabinet's
+ * `config.cutMode`.  Updated in `deriveBaseProject` (called before every
+ * `scheduleOptimization`), so the worker and sync fallback always use the
+ * current value without requiring call-site changes.
+ */
+let _cutMode: 'guillotine' | 'freeform' = 'freeform';
 function applyLocks(parts: Part[]): Part[] {
   let touched = false;
   const out = parts.map((p) => {
@@ -100,8 +107,8 @@ function scheduleOptimization(
     // Phase 11 — use Result-returning variant so material lookup errors surface
     // cleanly rather than throwing across the fallback boundary.
     if (_workerApplyFn) {
-      const activeRes = optimizeCutSheetsResult(lockedActive, sawKerfMm, sheetSizeOverrides);
-      const combinedRes = optimizeCutSheetsResult(lockedAll, sawKerfMm, sheetSizeOverrides);
+      const activeRes = optimizeCutSheetsResult(lockedActive, sawKerfMm, sheetSizeOverrides, _cutMode);
+      const combinedRes = optimizeCutSheetsResult(lockedAll, sawKerfMm, sheetSizeOverrides, _cutMode);
       if (activeRes.ok && combinedRes.ok) {
         _workerApplyFn({
           optimization: activeRes.value,
@@ -118,7 +125,7 @@ function scheduleOptimization(
   _latestCutReqId = reqId;
   void workerCall<CutOptimizerWorkerInput, CutOptimizerWorkerOutput>(
     worker,
-    { activeParts: lockedActive, allParts: lockedAll, sawKerfMm, sheetSizeOverrides },
+    { activeParts: lockedActive, allParts: lockedAll, sawKerfMm, sheetSizeOverrides, cutMode: _cutMode },
     reqId,
   )
     .then((msg) => {
@@ -360,7 +367,7 @@ function derive(
   const parts = generateParts(config);
   const hardware = generateHardware(config);
   // Sprint 16 — decorate with rotation locks before optimization.
-  const optimization = optimizeCutSheets(applyLocks(parts), sawKerfMm, sheetSizeOverrides);
+  const optimization = optimizeCutSheets(applyLocks(parts), sawKerfMm, sheetSizeOverrides, config.cutMode ?? 'freeform');
   const edgeBandingTotal = computeEdgeBandingTotal(parts);
   return { dimensions, parts, hardware, optimization, edgeBandingTotal };
 }
@@ -381,7 +388,7 @@ function deriveProject(
     })),
   );
   // Sprint 16 — apply rotation locks for combined optimization.
-  const combinedOptimization = optimizeCutSheets(applyLocks(allParts), sawKerfMm, sheetSizeOverrides);
+  const combinedOptimization = optimizeCutSheets(applyLocks(allParts), sawKerfMm, sheetSizeOverrides, activeConfig.cutMode ?? 'freeform');
   return { config: activeConfig, ...active, allParts, combinedOptimization };
 }
 
@@ -392,6 +399,9 @@ function deriveProject(
 // allParts flatMap instead of calling generateParts twice for the same config.
 function deriveBaseProject(cabinets: CabinetEntry[], activeIndex: number) {
   const activeConfig = cabinets[activeIndex].config;
+  // Phase 11 / Sprint 5 — sync module-level cut mode from active config so
+  // scheduleOptimization always uses the latest value without extra params.
+  _cutMode = activeConfig.cutMode ?? 'freeform';
   const dimensions = computeDimensions(activeConfig);
   const parts = generateParts(activeConfig);
   const hardware = generateHardware(activeConfig);

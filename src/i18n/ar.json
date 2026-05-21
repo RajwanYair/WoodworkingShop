@@ -159,6 +159,7 @@
     "lockRotation": "قفل التدوير (منع تدوير 90° بواسطة المحسّن)",
     "unlockRotation": "إلغاء قفل التدوير (السماح بتدوير القطعة)",
     "sawKerf": "عرض شق المنشار",
+    "guillotineMode": "Guillotine cuts (panel saw compatible)",
     "exportHardware": "تصدير قائمة الأجهزة CSV",
     "labels": "التسميات",
     "toggleLabels": "تبديل تسميات القطع داخل المستطيلات",

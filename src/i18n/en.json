@@ -159,6 +159,7 @@
     "lockRotation": "Lock rotation (prevent 90° rotation by optimizer)",
     "unlockRotation": "Unlock rotation (allow optimizer to rotate this part)",
     "sawKerf": "Saw kerf",
+    "guillotineMode": "Guillotine cuts (panel saw compatible)",
     "exportHardware": "Export Hardware List CSV",
     "labels": "Labels",
     "toggleLabels": "Toggle part name labels inside cut sheet rects",

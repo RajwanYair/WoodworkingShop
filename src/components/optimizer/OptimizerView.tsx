@@ -64,6 +64,8 @@ export function OptimizerView() {
     setSheetSizeOverride,
     rotationLockedPartIds,
     toggleRotationLock,
+    config,
+    setConfig,
   } = useCabinetStore();
   const lang = i18n.language as Lang;
   const [hoveredPartId, setHoveredPartId] = useState<string | null>(null);
@@ -315,6 +317,17 @@ export function OptimizerView() {
             aria-label={t('optimizer.sawKerf')}
           />
           mm
+        </label>
+        {/* Phase 11 / Sprint 5 — guillotine cut mode toggle */}
+        <label className="text-wood-600 dark:text-wood-300 ms-4 flex cursor-pointer items-center gap-1.5 text-xs">
+          <input
+            type="checkbox"
+            checked={config.cutMode === 'guillotine'}
+            onChange={(e) => setConfig({ cutMode: e.target.checked ? 'guillotine' : 'freeform' })}
+            className="accent-wood-600 dark:accent-wood-400 h-3.5 w-3.5"
+            aria-label={t('optimizer.guillotineMode')}
+          />
+          {t('optimizer.guillotineMode')}
         </label>
         <div className="ms-2 flex gap-2">
           <button

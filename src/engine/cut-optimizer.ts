@@ -30,9 +30,10 @@ export function optimizeCutSheetsResult(
   parts: Part[],
   sawKerfMm = SAW_KERF,
   sheetSizeOverrides: Record<string, { width: number; length: number }> = {},
+  cutMode: 'guillotine' | 'freeform' = 'freeform',
 ): Result<OptimizationResult, string> {
   try {
-    return ok(optimizeCutSheets(parts, sawKerfMm, sheetSizeOverrides));
+    return ok(optimizeCutSheets(parts, sawKerfMm, sheetSizeOverrides, cutMode));
   } catch (e) {
     return err(e instanceof Error ? e.message : String(e));
   }
@@ -43,6 +44,8 @@ export function optimizeCutSheets(
   sawKerfMm = SAW_KERF,
   /** Sprint 165 — per-material sheet size overrides (mm). When present, overrides mat.sheetWidth / mat.sheetLength. */
   sheetSizeOverrides: Record<string, { width: number; length: number }> = {},
+  /** Phase 11 / Sprint 5 — packing algorithm. 'freeform' = MaxRects BSSF (default); 'guillotine' = strip-based. */
+  cutMode: 'guillotine' | 'freeform' = 'freeform',
 ): OptimizationResult {
   // Group parts by material key (which implies thickness).
   const groups = new Map<string, { rects: Rect[]; materialKey: string }>();
@@ -69,7 +72,10 @@ export function optimizeCutSheets(
     const override = sheetSizeOverrides[group.materialKey];
     const sheetLength = override?.length ?? mat.sheetLength;
     const sheetWidth = override?.width ?? mat.sheetWidth;
-    const packed = packMaxRects(group.rects, sheetLength, sheetWidth, sawKerfMm, !mat.hasGrain, mat.hasGrain);
+    const packed =
+      cutMode === 'guillotine'
+        ? packGuillotine(group.rects, sheetLength, sheetWidth, sawKerfMm, !mat.hasGrain, mat.hasGrain)
+        : packMaxRects(group.rects, sheetLength, sheetWidth, sawKerfMm, !mat.hasGrain, mat.hasGrain);
 
     for (const sheet of packed) {
       const sheetArea = sheetLength * sheetWidth;
@@ -145,6 +151,110 @@ interface FreeRect {
 interface Sheet {
   placed: PlacedRect[];
   free: FreeRect[];
+}
+
+/**
+ * Phase 11 / Sprint 5 — Guillotine strip-based packer.
+ *
+ * Produces cut layouts compatible with a panel saw: every cut runs from one
+ * edge of the sheet (or sub-strip) to the other, so no T-cuts or partial
+ * cross-cuts are needed.  Algorithm: sort parts by descending length, then
+ * pack each part horizontally in a strip.  When the current strip is full,
+ * a new horizontal strip is started below (one guillotine cross-cut).  When
+ * the sheet is exhausted a new sheet is opened.
+ *
+ * Trade-off vs MaxRects: yield is typically 5–15 % lower but every cut can
+ * be executed on a standard sliding-table saw without repositioning.
+ */
+function packGuillotine(
+  rects: Rect[],
+  sheetLength: number,
+  sheetWidth: number,
+  kerf: number,
+  allowRotation = true,
+  trackGrainConflicts = false,
+): PlacedRect[][] {
+  if (rects.length === 0) return [];
+
+  const queue = [...rects].sort((a, b) => {
+    if (b.length !== a.length) return b.length - a.length;
+    return b.length * b.width - a.length * a.width;
+  });
+
+  const finishedSheets: PlacedRect[][] = [];
+  let currentSheet: PlacedRect[] = [];
+  let stripY = 0;  // y-origin of the current horizontal strip
+  let stripH = 0;  // reserved height of the strip (max placed length + kerf)
+  let curX = 0;   // next available x within the strip
+
+  const openNewSheet = () => {
+    if (currentSheet.length > 0) finishedSheets.push(currentSheet);
+    currentSheet = [];
+    stripY = 0;
+    stripH = 0;
+    curX = 0;
+  };
+
+  for (const rect of queue) {
+    const canRotate = allowRotation && rect.rotationLocked !== true;
+    let w = rect.width;
+    let h = rect.length;
+    let rotated = false;
+    let grainConflict = false;
+
+    // Try rotation when the natural orientation doesn't fit the sheet.
+    if ((w > sheetWidth || h > sheetLength) && canRotate) {
+      if (rect.length <= sheetWidth && rect.width <= sheetLength) {
+        w = rect.length;
+        h = rect.width;
+        rotated = true;
+      }
+    }
+    // Grain-conflict forced rotation (grain material, not locked, still doesn't fit).
+    if ((w > sheetWidth || h > sheetLength) && trackGrainConflicts && rect.rotationLocked !== true) {
+      if (rect.length <= sheetWidth && rect.width <= sheetLength) {
+        w = rect.length;
+        h = rect.width;
+        rotated = true;
+        grainConflict = true;
+      }
+    }
+
+    if (w > sheetWidth || h > sheetLength) {
+      console.warn(`Guillotine: Part ${rect.label} (${rect.length}×${rect.width}) exceeds sheet — skipped`);
+      continue;
+    }
+
+    // Up to 3 placement attempts: current strip → new strip → new sheet.
+    for (let attempt = 0; attempt < 3; attempt++) {
+      if (curX + w <= sheetWidth && stripY + h <= sheetLength) {
+        currentSheet.push({
+          ...rect,
+          width: w,
+          length: h,
+          x: curX,
+          y: stripY,
+          rotated,
+          grainConflict: grainConflict || undefined,
+          rationale: `Guillotine(${rotated ? 'rotated' : 'normal'}${grainConflict ? ', grain-forced' : ''}): strip y=${stripY}`,
+        });
+        curX += w + kerf;
+        stripH = Math.max(stripH, h + kerf);
+        break;
+      } else if (curX > 0) {
+        // Move down to a new horizontal strip on the same sheet.
+        stripY += stripH;
+        stripH = 0;
+        curX = 0;
+      } else {
+        // Strip starts at x=0 and the part still doesn't fit — open a new sheet.
+        openNewSheet();
+      }
+    }
+  }
+
+  if (currentSheet.length > 0) finishedSheets.push(currentSheet);
+  return finishedSheets;
 }
 
 function packMaxRects(
