@@ -1,4 +1,4 @@
-import type { Part, CutSheet, OptimizationResult, Result, OffcutEntry } from './types';
+import type { Part, CutSheet, OptimizationResult, Result, OffcutEntry, DefectZone } from './types';
 import { ok, err } from './types';
 import { getMaterial, SAW_KERF } from './materials.ts';
 
@@ -32,9 +32,10 @@ export function optimizeCutSheetsResult(
   sheetSizeOverrides: Record<string, { width: number; length: number }> = {},
   cutMode: 'guillotine' | 'freeform' = 'freeform',
   offcutCatalog: OffcutEntry[] = [],
+  defectZones: Record<string, DefectZone[]> = {},
 ): Result<OptimizationResult, string> {
   try {
-    return ok(optimizeCutSheets(parts, sawKerfMm, sheetSizeOverrides, cutMode, offcutCatalog));
+    return ok(optimizeCutSheets(parts, sawKerfMm, sheetSizeOverrides, cutMode, offcutCatalog, defectZones));
   } catch (e) {
     return err(e instanceof Error ? e.message : String(e));
   }
@@ -49,6 +50,8 @@ export function optimizeCutSheets(
   cutMode: 'guillotine' | 'freeform' = 'freeform',
   /** Phase 12 / Sprint 12 — catalog offcuts used as starting sheets before opening full sheets. */
   offcutCatalog: OffcutEntry[] = [],
+  /** Phase 12 / Sprint 13 — per-material defect zones; MaxRects pre-blocks these regions on every new sheet. */
+  defectZones: Record<string, DefectZone[]> = {},
 ): OptimizationResult {
   // Group parts by material key (which implies thickness).
   const groups = new Map<string, { rects: Rect[]; materialKey: string }>();
@@ -131,10 +134,17 @@ export function optimizeCutSheets(
 
     // Phase 2: pack remaining parts on full-size sheets.
     if (remainingRects.length === 0) continue;
+    // Convert DefectZone[] (mm coords) to FreeRect[] for the MaxRects pre-blocking step.
+    const dzFR: FreeRect[] = (defectZones[group.materialKey] ?? []).map((dz) => ({
+      x: dz.x,
+      y: dz.y,
+      w: dz.width,
+      h: dz.length,
+    }));
     const packed =
       cutMode === 'guillotine'
         ? packGuillotine(remainingRects, sheetLength, sheetWidth, sawKerfMm, !mat.hasGrain, mat.hasGrain)
-        : packMaxRects(remainingRects, sheetLength, sheetWidth, sawKerfMm, !mat.hasGrain, mat.hasGrain);
+        : packMaxRects(remainingRects, sheetLength, sheetWidth, sawKerfMm, !mat.hasGrain, mat.hasGrain, dzFR);
 
     for (const sheet of packed) {
       const sheetArea = sheetLength * sheetWidth;
@@ -328,6 +338,12 @@ function packMaxRects(
    * marked `grainConflict: true`.
    */
   trackGrainConflicts = false,
+  /**
+   * Phase 12 / Sprint 13 — defect zones pre-blocked on every new sheet.
+   * Each zone is treated like an opaque pre-placed part: it splits the initial
+   * free-rect list so the packer never places parts on top of it.
+   */
+  initDefectZones: readonly FreeRect[] = [],
 ): PlacedRect[][] {
   if (rects.length === 0) return [];
 
@@ -392,10 +408,16 @@ function packMaxRects(
     }
 
     if (!best) {
-      // Open a new sheet.
+      // Open a new sheet. Pre-block any defect zones by splitting the initial
+      // free rect around them (Sprint 13 defect avoidance).
+      const initFree: FreeRect[] = [{ x: 0, y: 0, w: sheetWidth, h: sheetLength }];
+      for (const dz of initDefectZones) {
+        splitFreeRects(initFree, dz);
+      }
+      if (initDefectZones.length > 0) pruneContained(initFree);
       const sheet: Sheet = {
         placed: [],
-        free: [{ x: 0, y: 0, w: sheetWidth, h: sheetLength }],
+        free: initFree,
       };
       sheets.push(sheet);
       let candidate = findBestPlacement(sheet.free, rect, kerf, allowRotForRect);

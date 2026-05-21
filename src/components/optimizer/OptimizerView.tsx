@@ -36,7 +36,7 @@ import {
   IconPrint,
   IconSwap,
 } from '../layout/Icons';
-import type { Lang, CutSheet, CutRect, OffcutEntry } from '../../engine/types';
+import type { Lang, CutSheet, CutRect, OffcutEntry, DefectZone } from '../../engine/types';
 
 /** Scale factor: mm → SVG px */
 const S = 0.12;
@@ -70,6 +70,9 @@ export function OptimizerView() {
     offcutCatalog,
     addOffcutEntry,
     removeOffcutEntry,
+    defectZones,
+    addDefectZone,
+    removeDefectZone,
   } = useCabinetStore();
   const lang = i18n.language as Lang;
   // Phase 12 / Sprint 12 — load saved offcut catalog from IDB on first mount.
@@ -506,6 +509,7 @@ export function OptimizerView() {
               colorBlindMode={colorBlindMode}
               showPartNames={showPartNames}
               showGrainHatch={showGrainHatch}
+              defectZones={defectZones[sheet.material] ?? []}
               filePrefix={filePrefix}
               partFilter={partFilter}
               onGcodePreview={(filename, s) => setGcodePreview({ filename, sheet: s })}
@@ -547,6 +551,15 @@ export function OptimizerView() {
           removeOffcutEntry(id);
           idbDeleteOffcut(id).catch(() => {});
         }}
+        t={t}
+      />
+
+      {/* Phase 12 / Sprint 13 — Sheet defect zones panel */}
+      <DefectZonePanel
+        materials={[...new Set(displayOpt.sheets.map((s) => s.material))]}
+        defectZones={defectZones}
+        onAdd={addDefectZone}
+        onRemove={removeDefectZone}
         t={t}
       />
 
@@ -904,6 +917,120 @@ function MaterialSummaryPanel({
   );
 }
 
+/** Phase 12 / Sprint 13 — per-material defect zone manager panel. */
+function DefectZonePanel({
+  materials,
+  defectZones,
+  onAdd,
+  onRemove,
+  t,
+}: {
+  materials: string[];
+  defectZones: Record<string, DefectZone[]>;
+  onAdd: (materialKey: string, zone: DefectZone) => void;
+  onRemove: (materialKey: string, zoneIndex: number) => void;
+  t: (k: string) => string;
+}) {
+  const [open, setOpen] = useState(false);
+  const [editMat, setEditMat] = useState('');
+  const [form, setForm] = useState({ x: 0, y: 0, width: 100, length: 100 });
+
+  const allZones = materials.flatMap((m) =>
+    (defectZones[m] ?? []).map((z, i) => ({ ...z, material: m, idx: i })),
+  );
+
+  if (materials.length === 0) return null;
+
+  const handleAdd = () => {
+    if (!editMat || form.width <= 0 || form.length <= 0) return;
+    onAdd(editMat, { x: form.x, y: form.y, width: form.width, length: form.length });
+    setForm({ x: 0, y: 0, width: 100, length: 100 });
+  };
+
+  return (
+    <div className="border-wood-200 dark:border-wood-700 mt-4 rounded-lg border bg-white dark:bg-neutral-900">
+      <button
+        type="button"
+        className="text-wood-700 dark:text-wood-200 flex w-full items-center gap-2 px-4 py-2.5 text-sm font-medium"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+      >
+        <IconWarning size={14} />
+        {t('optimizer.defectZones')}
+        <span className="bg-wood-100 dark:bg-wood-800 text-wood-500 ms-1 rounded px-1.5 text-[10px]">
+          {allZones.length}
+        </span>
+        <span className="ms-auto">{open ? '▲' : '▼'}</span>
+      </button>
+      {open && (
+        <div className="border-wood-100 dark:border-wood-800 border-t px-4 pb-4 pt-3">
+          {/* Add zone form */}
+          <div className="mb-3 flex flex-wrap items-end gap-2 text-xs">
+            <label className="flex flex-col gap-0.5">
+              <span className="text-wood-500">{t('optimizer.defectMaterial')}</span>
+              <select
+                value={editMat}
+                onChange={(e) => setEditMat(e.target.value)}
+                className="border-wood-300 dark:border-wood-600 rounded border bg-white px-1.5 py-1 text-xs dark:bg-neutral-800"
+              >
+                <option value="">—</option>
+                {materials.map((m) => (
+                  <option key={m} value={m}>
+                    {m}
+                  </option>
+                ))}
+              </select>
+            </label>
+            {(['x', 'y', 'width', 'length'] as const).map((field) => (
+              <label key={field} className="flex flex-col gap-0.5">
+                <span className="text-wood-500">{field} (mm)</span>
+                <input
+                  type="number"
+                  min={field === 'width' || field === 'length' ? 1 : 0}
+                  value={form[field]}
+                  onChange={(e) => setForm((f) => ({ ...f, [field]: Number(e.target.value) }))}
+                  className="border-wood-300 dark:border-wood-600 w-16 rounded border bg-white px-1.5 py-1 text-xs dark:bg-neutral-800"
+                />
+              </label>
+            ))}
+            <button
+              type="button"
+              onClick={handleAdd}
+              disabled={!editMat || form.width <= 0 || form.length <= 0}
+              className="rounded bg-red-600 px-2.5 py-1 text-xs font-medium text-white hover:bg-red-700 disabled:opacity-40"
+            >
+              {t('optimizer.defectAdd')}
+            </button>
+          </div>
+          {/* Existing zones */}
+          {allZones.length === 0 ? (
+            <p className="text-wood-400 text-xs italic">{t('optimizer.defectNone')}</p>
+          ) : (
+            <ul className="space-y-1">
+              {allZones.map((z, i) => (
+                <li key={i} className="flex items-center gap-2 text-xs">
+                  <span className="text-wood-500 font-medium">{z.material}</span>
+                  <span className="text-wood-600 dark:text-wood-300">
+                    x={z.x} y={z.y} {z.width}×{z.length} mm
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => onRemove(z.material, z.idx)}
+                    className="text-red-400 hover:text-red-600 ms-auto text-[10px]"
+                    title={t('optimizer.defectRemove')}
+                  >
+                    ✕
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /** Sprint 150: Group sheets by material+thickness and show shopping list. */
 function ShoppingListPanel({
   sheets,
@@ -1000,6 +1127,7 @@ function SheetCard({
   colorBlindMode,
   showPartNames,
   showGrainHatch,
+  defectZones = [],
   filePrefix,
   partFilter,
   onGcodePreview,
@@ -1014,6 +1142,8 @@ function SheetCard({
   colorBlindMode: boolean;
   showPartNames: boolean;
   showGrainHatch: boolean;
+  /** Phase 12 / Sprint 13 — defect zones to render as red blocked areas on this sheet. */
+  defectZones?: DefectZone[];
   filePrefix: string;
   partFilter: string;
   onGcodePreview: (filename: string, sheet: CutSheet) => void;
@@ -1133,6 +1263,17 @@ function SheetCard({
           <pattern id={`grain-${sheet.sheetIndex}-h-conflict`} width="4" height="4" patternUnits="userSpaceOnUse">
             <line x1="0" y1="2" x2="4" y2="2" stroke="#d97706" strokeWidth="0.9" />
           </pattern>
+          {/* Phase 12 / Sprint 13 — defect zone cross-hatch pattern (red diagonal) */}
+          <pattern
+            id={`defect-${sheet.sheetIndex}`}
+            width="6"
+            height="6"
+            patternUnits="userSpaceOnUse"
+            patternTransform="rotate(45)"
+          >
+            <line x1="0" y1="0" x2="0" y2="6" stroke="#dc2626" strokeWidth="1.2" />
+            <line x1="3" y1="0" x2="3" y2="6" stroke="#dc2626" strokeWidth="0.5" />
+          </pattern>
           {/* Drop shadow filter for part rects */}
           <filter id={`shadow-${sheet.sheetIndex}`} x="-10%" y="-10%" width="120%" height="120%">
             <feDropShadow dx="0.5" dy="0.5" stdDeviation="0.8" floodColor="#0003" />
@@ -1214,6 +1355,30 @@ function SheetCard({
             showGrainHatch={showGrainHatch}
             grainHatchPatternIdBase={`grain-${sheet.sheetIndex}`}
           />
+        ))}
+
+        {/* Phase 12 / Sprint 13 — defect zones rendered as red cross-hatched overlays */}
+        {defectZones.map((dz, di) => (
+          <g key={`dz-${di}`}>
+            <rect
+              x={dz.x * S}
+              y={dz.y * S}
+              width={dz.width * S}
+              height={dz.length * S}
+              fill={`url(#defect-${sheet.sheetIndex})`}
+              opacity={0.75}
+            />
+            <rect
+              x={dz.x * S}
+              y={dz.y * S}
+              width={dz.width * S}
+              height={dz.length * S}
+              fill="none"
+              stroke="#dc2626"
+              strokeWidth={0.8}
+              strokeDasharray="2 1"
+            />
+          </g>
         ))}
 
         {/* ── Scale bar (Sprint 159): 100 mm reference at bottom-right ── */}

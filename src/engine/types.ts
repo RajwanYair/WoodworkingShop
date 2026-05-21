@@ -283,6 +283,18 @@ export interface OffcutEntry {
   label?: string;
 }
 
+/** Phase 12 / Sprint 13 — an area on a sheet to exclude from packing (knot, damage, etc.). */
+export interface DefectZone {
+  /** x offset from sheet left edge (mm). */
+  x: number;
+  /** y offset from sheet top edge (mm). */
+  y: number;
+  /** Width of the defect zone, across the grain axis (mm). */
+  width: number;
+  /** Length (height) of the defect zone, along the grain axis (mm). */
+  length: number;
+}
+
 export type SmartStrategy =
   | 'reduce-depth'
   | 'co-nest-strips'

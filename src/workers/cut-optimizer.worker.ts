@@ -15,7 +15,7 @@
  */
 
 import { optimizeCutSheetsResult } from '../engine/cut-optimizer';
-import type { Part, OptimizationResult, OffcutEntry } from '../engine/types';
+import type { Part, OptimizationResult, OffcutEntry, DefectZone } from '../engine/types';
 
 export interface CutOptimizerWorkerInput {
   activeParts: Part[];
@@ -26,6 +26,8 @@ export interface CutOptimizerWorkerInput {
   cutMode?: 'guillotine' | 'freeform';
   /** Phase 12 / Sprint 12 — catalog offcuts used as starting sheets. */
   offcutCatalog?: OffcutEntry[];
+  /** Phase 12 / Sprint 13 — per-material defect zones to pre-block on each new sheet. */
+  defectZones?: Record<string, DefectZone[]>;
   requestId: string;
 }
 
@@ -38,13 +40,13 @@ export interface CutOptimizerWorkerOutput {
 }
 
 self.onmessage = (e: MessageEvent<CutOptimizerWorkerInput>) => {
-  const { activeParts, allParts, sawKerfMm, sheetSizeOverrides, cutMode = 'freeform', offcutCatalog = [], requestId } = e.data;
-  const activeResult = optimizeCutSheetsResult(activeParts, sawKerfMm, sheetSizeOverrides, cutMode, offcutCatalog);
+  const { activeParts, allParts, sawKerfMm, sheetSizeOverrides, cutMode = 'freeform', offcutCatalog = [], defectZones = {}, requestId } = e.data;
+  const activeResult = optimizeCutSheetsResult(activeParts, sawKerfMm, sheetSizeOverrides, cutMode, offcutCatalog, defectZones);
   if (!activeResult.ok) {
     self.postMessage({ type: 'error', errorMessage: activeResult.error, requestId } satisfies CutOptimizerWorkerOutput);
     return;
   }
-  const combinedResult = optimizeCutSheetsResult(allParts, sawKerfMm, sheetSizeOverrides, cutMode, offcutCatalog);
+  const combinedResult = optimizeCutSheetsResult(allParts, sawKerfMm, sheetSizeOverrides, cutMode, offcutCatalog, defectZones);
   if (!combinedResult.ok) {
     self.postMessage({ type: 'error', errorMessage: combinedResult.error, requestId } satisfies CutOptimizerWorkerOutput);
     return;
