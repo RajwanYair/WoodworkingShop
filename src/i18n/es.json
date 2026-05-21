@@ -163,6 +163,7 @@
     "exportHardware": "Exportar lista de herrajes CSV",
     "labels": "Etiquetas",
     "toggleLabels": "Alternar etiquetas de nombre de pieza dentro de los rectángulos",
+    "grainHatch": "Grain hatch",
     "offcuts": "Recortes aprovechables",
     "offcutsDesc": "Tiras libres ≥100×100 mm en cada tablero — aptas para cortes futuros",
     "materialSummary": "Resumen de uso de material",

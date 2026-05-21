@@ -71,6 +71,7 @@ export function OptimizerView() {
   const [hoveredPartId, setHoveredPartId] = useState<string | null>(null);
   const [partFilter, setPartFilter] = useState(''); // Sprint 46 — part search/highlight filter
   const [showPartNames, setShowPartNames] = useState(false); // Sprint 146 — part name labels
+  const [showGrainHatch, setShowGrainHatch] = useState(false); // Phase 12 / Sprint 11 — grain direction hatching
   const [bomExporting, setBomExporting] = useState(false); // v3.17.0 worker state
   const [dxfExporting, setDxfExporting] = useState(false); // v3.22.0 DXF worker state
   const [showBulkReplace, setShowBulkReplace] = useState(false); // v3.18.0
@@ -415,6 +416,19 @@ export function OptimizerView() {
           >
             <IconTag size={14} /> {t('optimizer.labels')}
           </button>
+          {/* Phase 12 / Sprint 11 — grain direction hatch toggle */}
+          <button
+            onClick={() => setShowGrainHatch((v) => !v)}
+            className={`flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-medium transition-colors ${
+              showGrainHatch
+                ? 'bg-wood-200 dark:bg-wood-700 border-wood-400 text-wood-700 dark:text-wood-200'
+                : 'border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800'
+            }`}
+            title={t('optimizer.grainHatch')}
+            aria-pressed={showGrainHatch}
+          >
+            <IconGrainVertical size={14} /> {t('optimizer.grainHatch')}
+          </button>
           {/* Sprint 151 — print cut sheets */}
           <button
             onClick={() => window.print()}
@@ -482,6 +496,7 @@ export function OptimizerView() {
               onHoverPart={setHoveredPartId}
               colorBlindMode={colorBlindMode}
               showPartNames={showPartNames}
+              showGrainHatch={showGrainHatch}
               filePrefix={filePrefix}
               partFilter={partFilter}
               onGcodePreview={(filename, s) => setGcodePreview({ filename, sheet: s })}
@@ -905,6 +920,7 @@ function SheetCard({
   onHoverPart,
   colorBlindMode,
   showPartNames,
+  showGrainHatch,
   filePrefix,
   partFilter,
   onGcodePreview,
@@ -918,6 +934,7 @@ function SheetCard({
   onHoverPart: (id: string | null) => void;
   colorBlindMode: boolean;
   showPartNames: boolean;
+  showGrainHatch: boolean;
   filePrefix: string;
   partFilter: string;
   onGcodePreview: (filename: string, sheet: CutSheet) => void;
@@ -1024,6 +1041,19 @@ function SheetCard({
           >
             <line x1="0" y1="0" x2="0" y2="6" stroke="#C8B89A" strokeWidth="0.6" />
           </pattern>
+          {/* Phase 12 / Sprint 11 — grain direction hatch patterns (green = aligned, amber = conflict) */}
+          <pattern id={`grain-${sheet.sheetIndex}-v-ok`} width="4" height="4" patternUnits="userSpaceOnUse">
+            <line x1="2" y1="0" x2="2" y2="4" stroke="#16a34a" strokeWidth="0.9" />
+          </pattern>
+          <pattern id={`grain-${sheet.sheetIndex}-h-ok`} width="4" height="4" patternUnits="userSpaceOnUse">
+            <line x1="0" y1="2" x2="4" y2="2" stroke="#16a34a" strokeWidth="0.9" />
+          </pattern>
+          <pattern id={`grain-${sheet.sheetIndex}-v-conflict`} width="4" height="4" patternUnits="userSpaceOnUse">
+            <line x1="2" y1="0" x2="2" y2="4" stroke="#d97706" strokeWidth="0.9" />
+          </pattern>
+          <pattern id={`grain-${sheet.sheetIndex}-h-conflict`} width="4" height="4" patternUnits="userSpaceOnUse">
+            <line x1="0" y1="2" x2="4" y2="2" stroke="#d97706" strokeWidth="0.9" />
+          </pattern>
           {/* Drop shadow filter for part rects */}
           <filter id={`shadow-${sheet.sheetIndex}`} x="-10%" y="-10%" width="120%" height="120%">
             <feDropShadow dx="0.5" dy="0.5" stdDeviation="0.8" floodColor="#0003" />
@@ -1102,6 +1132,8 @@ function SheetCard({
             showLabel={showPartNames}
             shadowFilterId={`shadow-${sheet.sheetIndex}`}
             showGrain={mat.hasGrain}
+            showGrainHatch={showGrainHatch}
+            grainHatchPatternIdBase={`grain-${sheet.sheetIndex}`}
           />
         ))}
 
@@ -1179,6 +1211,8 @@ function PartRect({
   showLabel,
   shadowFilterId,
   showGrain,
+  showGrainHatch = false,
+  grainHatchPatternIdBase,
 }: {
   part: CutRect;
   scale: number;
@@ -1189,6 +1223,8 @@ function PartRect({
   showLabel: boolean;
   shadowFilterId?: string;
   showGrain: boolean;
+  showGrainHatch?: boolean;
+  grainHatchPatternIdBase?: string;
 }) {
   const x = part.x * scale;
   const y = part.y * scale;
@@ -1213,6 +1249,19 @@ function PartRect({
         filter={shadowFilterId ? `url(#${shadowFilterId})` : undefined}
         className="transition-all duration-150"
       />
+      {/* Phase 12 / Sprint 11 — grain direction hatch overlay */}
+      {showGrainHatch && showGrain && grainHatchPatternIdBase != null && (
+        <rect
+          x={x + 0.5}
+          y={y + 0.5}
+          width={w - 1}
+          height={h - 1}
+          fill={`url(#${grainHatchPatternIdBase}-${part.grainVertical ? 'v' : 'h'}-${part.grainConflict === true ? 'conflict' : 'ok'})`}
+          opacity={isFaded ? 0.3 : 0.65}
+          rx={0.5}
+          pointerEvents="none"
+        />
+      )}
       {/* Edge banding indicators — colored lines on banded edges */}
       {hasEB && (
         <>

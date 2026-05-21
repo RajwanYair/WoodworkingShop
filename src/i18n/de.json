@@ -163,6 +163,7 @@
     "exportHardware": "Beschlägeliste CSV exportieren",
     "labels": "Beschriftungen",
     "toggleLabels": "Teilebeschriftungen in Zuschnittechtecken ein-/ausblenden",
+    "grainHatch": "Faserrichtung",
     "offcuts": "Verwendbare Verschnittstücke",
     "offcutsDesc": "Freie Streifen ≥100×100 mm auf jeder Platte — für künftige Zuschnitte geeignet",
     "materialSummary": "Materialverbrauchsübersicht",

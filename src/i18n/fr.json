@@ -163,6 +163,7 @@
     "exportHardware": "Exporter liste quincaillerie CSV",
     "labels": "Étiquettes",
     "toggleLabels": "Afficher/masquer les étiquettes des pièces dans les rectangles",
+    "grainHatch": "Grain hatch",
     "offcuts": "Chutes utilisables",
     "offcutsDesc": "Bandes libres ≥100×100 mm sur chaque panneau — conviennent pour des découpes futures",
     "materialSummary": "Récapitulatif d'utilisation des matériaux",

@@ -163,6 +163,7 @@
     "exportHardware": "Export Hardware List CSV",
     "labels": "Labels",
     "toggleLabels": "Toggle part name labels inside cut sheet rects",
+    "grainHatch": "Grain hatch",
     "offcuts": "Usable Offcuts",
     "offcutsDesc": "Free strips ≥100×100 mm remaining on each sheet — suitable for future cuts",
     "materialSummary": "Material Usage Summary",

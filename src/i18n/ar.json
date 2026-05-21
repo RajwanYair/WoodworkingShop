@@ -163,6 +163,7 @@
     "exportHardware": "تصدير قائمة الأجهزة CSV",
     "labels": "التسميات",
     "toggleLabels": "تبديل تسميات القطع داخل المستطيلات",
+    "grainHatch": "Grain hatch",
     "offcuts": "القصاصات القابلة للاستخدام",
     "offcutsDesc": "شرائط حرة ≥100×100 مم على كل لوح — مناسبة للقطع المستقبلية",
     "materialSummary": "ملخص استخدام المواد",
