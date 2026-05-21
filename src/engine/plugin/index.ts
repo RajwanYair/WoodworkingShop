@@ -13,6 +13,7 @@ export {
   getPlugins,
   applyPartsPlugins,
   applyConfigPlugins,
+  applyValidationPlugins,
   getPluginContract,
   PLUGIN_CONTRACT,
   pluginEventBus,

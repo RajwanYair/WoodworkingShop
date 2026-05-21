@@ -1,4 +1,4 @@
-import type { CabinetConfig, Part, Result } from './types';
+import type { CabinetConfig, Part, ValidationIssue, Result } from './types';
 import { ok, err } from './types';
 
 // ─── Plugin Contract ─────────────────────────────────────────────────────────
@@ -68,6 +68,15 @@ export const PLUGIN_CONTRACT: PluginContract = {
         'Intercepts a config change before it is committed to the store. ' +
         'Return a modified CabinetConfig or the original object for no change.',
     },
+    {
+      hookName: 'onValidate',
+      stability: 'experimental',
+      introducedIn: '1.1.0',
+      description:
+        'Called after validateConfig() has run all built-in and custom rules. ' +
+        'The plugin may add, remove, or modify ValidationIssue objects. ' +
+        'Return the same array reference to signal no change.',
+    },
   ],
 } as const;
 
@@ -110,6 +119,13 @@ export interface CabinetPlannerPlugin {
    * May return a modified config; return the original object for no change.
    */
   onConfigChange?: (cfg: CabinetConfig) => CabinetConfig;
+
+  /**
+   * Phase 12 / Sprint 9 — Called after `validateConfig()` has run all
+   * built-in and custom rules. The plugin may add, remove, or modify
+   * validation issues. Return the same array reference to signal no change.
+   */
+  onValidate?: (issues: ValidationIssue[], cfg: CabinetConfig) => ValidationIssue[];
 }
 
 // ── Plugin registry ──────────────────────────────────────────────────────────
@@ -159,6 +175,23 @@ export function applyConfigPlugins(cfg: CabinetConfig): CabinetConfig {
   for (const plugin of _plugins) {
     if (plugin.onConfigChange) {
       result = plugin.onConfigChange(result);
+    }
+  }
+  return result;
+}
+
+/**
+ * Phase 12 / Sprint 9 — Run the `onValidate` hook for all registered plugins
+ * in registration order, passing the result of each plugin into the next.
+ *
+ * Call this after `validateConfig()` to allow plugins to augment, filter, or
+ * re-prioritise validation issues.
+ */
+export function applyValidationPlugins(issues: ValidationIssue[], cfg: CabinetConfig): ValidationIssue[] {
+  let result = issues;
+  for (const plugin of _plugins) {
+    if (plugin.onValidate) {
+      result = plugin.onValidate(result, cfg);
     }
   }
   return result;

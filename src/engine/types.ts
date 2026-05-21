@@ -317,6 +317,62 @@ export interface ValidationIssue {
   };
 }
 
+// ─── Validation rule registry types (Phase 12 / Sprint 9) ────────────────────
+
+/**
+ * Context object passed to each `ValidationRule.check()` invocation.
+ * Contains pre-computed dimensions and resolved materials so rules do not need
+ * to re-derive these expensive values themselves.
+ */
+export interface ValidationContext {
+  /** Pre-computed derived dimensions for the cabinet configuration. */
+  dims: DerivedDimensions;
+  /** Resolved carcass panel material, or `undefined` if the key is unknown. */
+  mat: Material | undefined;
+  /** Resolved back-panel material, or `undefined` if the key is unknown or `hasBack` is false. */
+  backMat: Material | undefined;
+}
+
+/**
+ * Phase 12 / Sprint 9 — A single pluggable validation rule.
+ *
+ * Implement this interface and call `registerRule()` to add custom structural
+ * or manufacturing constraints alongside the engine's built-in rules.
+ *
+ * @example
+ * ```ts
+ * import { registerRule } from '../engine/validation';
+ * registerRule({
+ *   id: 'MY_MIN_WIDTH',
+ *   severity: 'warning',
+ *   check(cfg, { mat }) {
+ *     const t = mat?.thickness ?? 18;
+ *     if (cfg.width < 300 + 2 * t) {
+ *       return [{ code: 'MY_MIN_WIDTH', severity: 'warning',
+ *                 message: { en: 'Too narrow', he: 'צר מדי' } }];
+ *     }
+ *     return [];
+ *   },
+ * });
+ * ```
+ */
+export interface ValidationRule {
+  /** Unique machine-readable identifier for this rule. */
+  id: string;
+  /** Default severity. Individual issues emitted by `check` may use a different severity. */
+  severity: ValidationSeverity;
+  /**
+   * If provided, the rule only runs when `config.furnitureType` is in this list.
+   * Omit (or pass `undefined`) to run for every furniture type.
+   */
+  furnitureTypes?: readonly FurnitureType[];
+  /**
+   * Pure check function. Returns zero or more `ValidationIssue` objects found
+   * in the given config. Must not mutate `cfg`, `ctx`, or any inputs.
+   */
+  check(cfg: CabinetConfig, ctx: ValidationContext): ValidationIssue[];
+}
+
 // ─── Material substitution types ───
 
 /** A recommended alternative material with rationale. */

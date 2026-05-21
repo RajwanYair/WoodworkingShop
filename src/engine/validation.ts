@@ -1,6 +1,35 @@
-import type { CabinetConfig, ValidationIssue } from './types';
+import type { CabinetConfig, ValidationIssue, ValidationRule, ValidationContext } from './types';
 import { getMaterial } from './materials.ts';
 import { computeDimensions } from './dimensions';
+
+// ── Phase 12 / Sprint 9 — Custom rule registry ───────────────────────────────
+
+const _customRules: ValidationRule[] = [];
+
+/**
+ * Register a custom validation rule. The rule will be invoked at the end of
+ * every `validateConfig()` call, after all built-in rules have run.
+ *
+ * Re-registering a rule with the same `id` is a no-op (idempotent).
+ */
+export function registerRule(rule: ValidationRule): void {
+  if (_customRules.some((r) => r.id === rule.id)) return;
+  _customRules.push(rule);
+}
+
+/**
+ * Remove a previously registered custom rule by `id`. No-op if not found.
+ * Useful for testing teardown and dynamic feature flags.
+ */
+export function unregisterRule(id: string): void {
+  const idx = _customRules.findIndex((r) => r.id === id);
+  if (idx >= 0) _customRules.splice(idx, 1);
+}
+
+/** Return a read-only snapshot of all currently registered custom rules. */
+export function getCustomRules(): readonly ValidationRule[] {
+  return _customRules;
+}
 
 // ── Joinery constraint constants (Sprint 12) ─────────────────────────────────
 
@@ -872,6 +901,15 @@ export function validateConfig(
       },
       field: 'width',
     });
+  }
+
+  // ── Phase 12 / Sprint 9 — Custom rules from the registry ────────────────
+  // Run after all built-in checks so built-in error codes are never shadowed.
+  const _backMat = safeGetMaterial(config.backPanelMaterial ?? '', extraMaterials);
+  const ctx: ValidationContext = { dims, mat: mat ?? undefined, backMat: _backMat ?? undefined };
+  for (const rule of _customRules) {
+    if (rule.furnitureTypes && !rule.furnitureTypes.includes(config.furnitureType)) continue;
+    issues.push(...rule.check(config, ctx));
   }
 
   // Sort: errors → warnings → info

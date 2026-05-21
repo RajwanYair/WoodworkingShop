@@ -77,9 +77,16 @@ export type { SmartOptimizerOptions } from './smart-optimizer';
 export { estimateCost } from './cost-estimator';
 export type { CostBreakdown, SheetCost, HardwareCost } from './cost-estimator';
 
-export { validateConfig } from './validation.ts';
+export { validateConfig, registerRule, unregisterRule, getCustomRules } from './validation.ts';
 export { findSubstitutions } from './substitution';
-export type { ValidationIssue, ValidationSeverity, MaterialSubstitution, VendorHingeProfile } from './types';
+export type {
+  ValidationIssue,
+  ValidationSeverity,
+  ValidationRule,
+  ValidationContext,
+  MaterialSubstitution,
+  VendorHingeProfile,
+} from './types';
 
 export { generateHardware, VENDOR_HINGE_PROFILES } from './hardware.ts';
 
@@ -89,6 +96,7 @@ export {
   getPlugins,
   applyPartsPlugins,
   applyConfigPlugins,
+  applyValidationPlugins,
   getPluginContract,
   PLUGIN_CONTRACT,
 } from './plugin.ts';
