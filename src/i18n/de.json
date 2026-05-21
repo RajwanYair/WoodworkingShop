@@ -230,6 +230,9 @@
     "dimensionSummary": "Schrankabmessungen B × H × T",
     "doors": "Türen",
     "drawers": "Schubladen"
+    "webglToggle": "WebGL/SVG-Ansicht umschalten",
+    "webglAnimate": "Animieren",
+    "webglIsometric": "Isometrisch"
   },
   "pdf": {
     "title": "PDF exportieren",

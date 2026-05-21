@@ -230,6 +230,9 @@
     "dimensionSummary": "Dimensions de l'armoire L × H × P",
     "doors": "portes",
     "drawers": "tiroirs"
+    "webglToggle": "Basculer vue WebGL / SVG",
+    "webglAnimate": "Animer",
+    "webglIsometric": "Isométrique"
   },
   "pdf": {
     "title": "Exporter PDF",

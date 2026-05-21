@@ -7,6 +7,7 @@ import { formatDim } from '../../utils/units';
 import type { UnitSystem } from '../../utils/units';
 import { useTouchGestures } from '../../hooks/useTouchGestures';
 import { IconDownload } from '../layout/Icons';
+import { WebGLPreviewCanvas } from './WebGLPreviewCanvas';
 
 /** Scale factor: mm → SVG px */
 const S = 0.2;
@@ -82,6 +83,8 @@ export const CabinetPreview = memo(function CabinetPreview() {
   const [tooltip, setTooltip] = useState<TooltipInfo | null>(null);
   const [zoomScale, setZoomScale] = useState(1);
   const svgRef = useRef<SVGSVGElement>(null);
+  /** Phase 12 / Sprint 14 — toggle isometric vs. animated WebGL view (only relevant when VITE_ENABLE_WEBGL=true). */
+  const [webglIsometric, setWebglIsometric] = useState(true);
 
   const thick = getMaterial(config.carcassMaterial).thickness;
   const bt = getMaterial(config.backPanelMaterial).thickness;
@@ -641,26 +644,47 @@ export const CabinetPreview = memo(function CabinetPreview() {
           </ViewBox>
         )}
         {activeView === '3d' && (
-          <IsometricView
-            w={config.width}
-            h={config.height}
-            d={config.depth}
-            thick={thick}
-            bt={bt}
-            color={color}
-            shelfPositions={shelfPositions}
-            hasDoors={config.doorStyle !== 'none'}
-            doorStyle={config.doorStyle}
-            doorCount={config.doorCount}
-            doorReveal={config.doorReveal}
-            doorWidth={d.doorWidth}
-            doorHeight={d.doorHeight}
-            drawerCount={config.drawerCount}
-            drawerHeights={config.drawerHeights ?? []}
-            kickHeight={config.kickHeight ?? 0}
-            showDims={showDims}
-            units={units}
-          />
+          <>
+            <IsometricView
+              w={config.width}
+              h={config.height}
+              d={config.depth}
+              thick={thick}
+              bt={bt}
+              color={color}
+              shelfPositions={shelfPositions}
+              hasDoors={config.doorStyle !== 'none'}
+              doorStyle={config.doorStyle}
+              doorCount={config.doorCount}
+              doorReveal={config.doorReveal}
+              doorWidth={d.doorWidth}
+              doorHeight={d.doorHeight}
+              drawerCount={config.drawerCount}
+              drawerHeights={config.drawerHeights ?? []}
+              kickHeight={config.kickHeight ?? 0}
+              showDims={showDims}
+              units={units}
+            />
+            {/* Phase 12 / Sprint 14 — WebGL canvas overlaid when VITE_ENABLE_WEBGL=true.
+                WebGLPreviewCanvas returns null when the flag is absent. */}
+            <WebGLPreviewCanvas
+              config={config}
+              materialColor={getMaterial(config.carcassMaterial).color}
+              isometric={webglIsometric}
+              className="absolute inset-0 h-full w-full"
+            />
+            {import.meta.env.VITE_ENABLE_WEBGL === 'true' && (
+              <button
+                type="button"
+                onClick={() => setWebglIsometric((v) => !v)}
+                className="absolute bottom-2 end-2 rounded bg-black/40 px-2 py-0.5 text-[10px] text-white hover:bg-black/60"
+                aria-pressed={webglIsometric}
+                title={t('preview.webglToggle')}
+              >
+                {webglIsometric ? t('preview.webglAnimate') : t('preview.webglIsometric')}
+              </button>
+            )}
+          </>
         )}
       </div>
       {/* Sprint 76 — W × H × D dimension summary label */}

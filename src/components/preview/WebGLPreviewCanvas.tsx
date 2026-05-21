@@ -2,6 +2,9 @@ import { useEffect, useRef } from 'react';
 import { isWebGLAvailable, probeWebGLTier } from '../../engine/webgl-probe';
 import type { CabinetConfig } from '../../engine/types';
 
+/** Phase 12 / Sprint 14 — feature flag guard. Component renders nothing when the flag is absent. */
+const WEBGL_ENABLED = import.meta.env.VITE_ENABLE_WEBGL === 'true';
+
 interface WebGLPreviewCanvasProps {
   config: CabinetConfig;
   /** Canvas width in CSS pixels (default: 320). */
@@ -9,6 +12,16 @@ interface WebGLPreviewCanvasProps {
   /** Canvas height in CSS pixels (default: 240). */
   height?: number;
   className?: string;
+  /**
+   * Phase 12 / Sprint 14 — material base colour as a CSS hex string (e.g. '#b4884a').
+   * Face colours are derived by multiplying the base RGB by per-face brightness factors.
+   */
+  materialColor?: string;
+  /**
+   * Phase 12 / Sprint 14 — when true, render a static isometric pose instead of
+   * animating a continuous y-axis rotation.
+   */
+  isometric?: boolean;
 }
 
 // ── Minimal WebGL helpers ────────────────────────────────────────────────────
@@ -89,10 +102,22 @@ const FS = `
 type Vec3 = [number, number, number];
 
 /**
+ * Phase 12 / Sprint 14 — convert a CSS hex colour string to an [r, g, b] triple in [0, 1] range.
+ * Falls back to a warm oak colour if the input is not a valid 6-digit hex.
+ */
+function hexToRgbFloat(hex: string): Vec3 {
+  const clean = hex.replace('#', '');
+  if (clean.length !== 6) return [0.76, 0.6, 0.42]; // warm oak fallback
+  const n = parseInt(clean, 16);
+  return [(n >> 16 & 0xff) / 255, (n >> 8 & 0xff) / 255, (n & 0xff) / 255];
+}
+
+/**
  * Build a solid box geometry centred at origin.
  * Returns interleaved [x, y, z, r, g, b] per vertex, wound for TRIANGLES.
+ * @param matColorHex — material hex colour; face brightness is derived from it.
  */
-function buildBox(w: number, h: number, d: number): Float32Array {
+function buildBox(w: number, h: number, d: number, matColorHex = '#c2924a'): Float32Array {
   // Half-extents
   const hw = w / 2;
   const hh = h / 2;
@@ -110,14 +135,21 @@ function buildBox(w: number, h: number, d: number): Float32Array {
     [-hw, hh, hd],
   ];
 
-  // 6 faces: [indices, faceColor]
+  // 6 faces: [indices, brightness multiplier]
+  const base = hexToRgbFloat(matColorHex);
+  const tint = (m: number): Vec3 => [
+    Math.min(1, base[0] * m),
+    Math.min(1, base[1] * m),
+    Math.min(1, base[2] * m),
+  ];
+
   const faces: Array<{ idx: [number, number, number, number]; color: Vec3 }> = [
-    { idx: [4, 5, 6, 7], color: [0.76, 0.6, 0.42] }, // front — warm oak
-    { idx: [1, 0, 3, 2], color: [0.55, 0.42, 0.28] }, // back — shadow
-    { idx: [0, 4, 7, 3], color: [0.65, 0.5, 0.35] }, // left
-    { idx: [5, 1, 2, 6], color: [0.65, 0.5, 0.35] }, // right
-    { idx: [3, 7, 6, 2], color: [0.85, 0.7, 0.52] }, // top — highlight
-    { idx: [0, 1, 5, 4], color: [0.45, 0.35, 0.22] }, // bottom — shadow
+    { idx: [4, 5, 6, 7], color: tint(1.0) },   // front — base
+    { idx: [1, 0, 3, 2], color: tint(0.72) },   // back — shadow
+    { idx: [0, 4, 7, 3], color: tint(0.85) },   // left
+    { idx: [5, 1, 2, 6], color: tint(0.85) },   // right
+    { idx: [3, 7, 6, 2], color: tint(1.12) },   // top — highlight
+    { idx: [0, 1, 5, 4], color: tint(0.60) },   // bottom — shadow
   ];
 
   const verts: number[] = [];
@@ -138,14 +170,28 @@ function buildBox(w: number, h: number, d: number): Float32Array {
  * Lightweight WebGL canvas that renders a simplified 3-D box approximating
  * the configured cabinet.  Rotates slowly on the y-axis to show depth.
  *
- * Used for Phase 7 evaluation of WebGL material-texture previews.
- * Falls back to a descriptive message when WebGL is unavailable.
+ * Phase 12 / Sprint 14:
+ * - Feature-flagged via `VITE_ENABLE_WEBGL=true` (returns null when absent).
+ * - Per-material colour derived from `materialColor` prop.
+ * - `isometric` prop switches to a static isometric angle instead of animation.
+ * - Falls back to an SVG placeholder when WebGL is unavailable in the browser.
  */
-export function WebGLPreviewCanvas({ config, width = 320, height = 240, className }: WebGLPreviewCanvasProps) {
+export function WebGLPreviewCanvas({
+  config,
+  width = 320,
+  height = 240,
+  className,
+  materialColor,
+  isometric = false,
+}: WebGLPreviewCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef = useRef<number>(0);
 
   useEffect(() => {
+    // Phase 12 / Sprint 14 — feature flag guard inside the effect so hook
+    // order is always stable (unconditional useEffect call).
+    if (!WEBGL_ENABLED) return;
+
     const canvas = canvasRef.current;
     if (!canvas || !isWebGLAvailable()) return;
 
@@ -161,7 +207,7 @@ export function WebGLPreviewCanvas({ config, width = 320, height = 240, classNam
     const nh = config.height / maxDim;
     const nd = config.depth / maxDim;
 
-    const geometry = buildBox(nw, nh, nd);
+    const geometry = buildBox(nw, nh, nd, materialColor ?? '#c2924a');
 
     const buf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
@@ -184,7 +230,9 @@ export function WebGLPreviewCanvas({ config, width = 320, height = 240, classNam
     gl.enable(gl.DEPTH_TEST);
     gl.clearColor(0.97, 0.95, 0.92, 1.0);
 
-    let angle = 0.4; // Initial y-rotation in radians
+    // Phase 12 / Sprint 14 — isometric mode: fixed 30° y-angle, no animation.
+    const ISO_ANGLE = Math.PI / 6; // 30°
+    let angle = isometric ? ISO_ANGLE : 0.4;
     const ROTATION_SPEED = 0.006;
     const VERTEX_COUNT = geometry.length / 6;
 
@@ -193,8 +241,10 @@ export function WebGLPreviewCanvas({ config, width = 320, height = 240, classNam
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
       gl.uniform1f(uAngleY, angle);
       gl.drawArrays(gl.TRIANGLES, 0, VERTEX_COUNT);
-      angle += ROTATION_SPEED;
-      rafRef.current = requestAnimationFrame(draw);
+      if (!isometric) {
+        angle += ROTATION_SPEED;
+        rafRef.current = requestAnimationFrame(draw);
+      }
     }
 
     rafRef.current = requestAnimationFrame(draw);
@@ -204,7 +254,10 @@ export function WebGLPreviewCanvas({ config, width = 320, height = 240, classNam
       gl.deleteBuffer(buf);
       gl.deleteProgram(program);
     };
-  }, [config.width, config.height, config.depth, width, height]);
+  }, [config.width, config.height, config.depth, width, height, materialColor, isometric]);
+
+  // Phase 12 / Sprint 14 — feature flag post-hook guard (hooks always called above).
+  if (!WEBGL_ENABLED) return null;
 
   const tier = probeWebGLTier();
 
@@ -214,6 +267,7 @@ export function WebGLPreviewCanvas({ config, width = 320, height = 240, classNam
         className={`border-wood-200 dark:border-wood-700 bg-wood-50 dark:bg-wood-800 text-wood-400 dark:text-wood-500 flex items-center justify-center rounded border text-sm ${className ?? ''}`}
         style={{ width, height }}
         aria-label="3D preview unavailable — WebGL not supported"
+        data-testid="webgl-fallback"
       >
         3D preview requires WebGL
       </div>

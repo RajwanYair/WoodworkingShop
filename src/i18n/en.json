@@ -229,7 +229,10 @@
     "dimensions": "Dimensions",
     "dimensionSummary": "Cabinet dimensions W × H × D",
     "doors": "doors",
-    "drawers": "drawers"
+    "drawers": "drawers",
+    "webglToggle": "Toggle WebGL / SVG view",
+    "webglAnimate": "Animate",
+    "webglIsometric": "Isometric"
   },
   "pdf": {
     "title": "Export PDF",

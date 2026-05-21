@@ -230,6 +230,9 @@
     "dimensionSummary": "Dimensiones del armario A × Al × P",
     "doors": "puertas",
     "drawers": "cajones"
+    "webglToggle": "Alternar vista WebGL / SVG",
+    "webglAnimate": "Animar",
+    "webglIsometric": "Isométrico"
   },
   "pdf": {
     "title": "Exportar PDF",

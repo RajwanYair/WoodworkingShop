@@ -228,7 +228,10 @@
     "dimensions": "מידות",
     "dimensionSummary": "מידות הארון ר × ג × ע",
     "doors": "דלתות",
-    "drawers": "מגירות"
+    "drawers": "מגירות",
+    "webglToggle": "החלף תצוגת WebGL / SVG",
+    "webglAnimate": "אנימציה",
+    "webglIsometric": "איזומטרי"
   },
   "pdf": {
     "title": "ייצוא PDF",

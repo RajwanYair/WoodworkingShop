@@ -230,6 +230,9 @@
     "dimensionSummary": "أبعاد الخزانة ع × ار × ع",
     "doors": "أبواب",
     "drawers": "أدراج"
+    "webglToggle": "تبديل عرض WebGL / SVG",
+    "webglAnimate": "تحريك",
+    "webglIsometric": "إيزومتري"
   },
   "pdf": {
     "title": "تصدير PDF",
