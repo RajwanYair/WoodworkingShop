@@ -7,21 +7,10 @@
   "files.eol": "\n",
 
   // ─── Terminal / Shell Integration ─────────────────────────────────────────
-  // PowerShell has first-class shell integration on Windows (CWD tracking,
-  // command decorations, exit-code detection). cmd.exe has no integration
-  // support, which is why VS Code shows the "enable shell integration" prompt.
-  //
-  // `defaultProfile` controls interactive terminals.
-  // `automationProfile` controls task / debug / process execution terminals —
-  // without it VS Code falls back to cmd.exe, triggering the prompt even when
-  // the interactive terminal is already set to PowerShell.
   "terminal.integrated.shellIntegration.enabled": true,
   "terminal.integrated.shellIntegration.decorationsEnabled": "both",
   "terminal.integrated.defaultProfile.windows": "PowerShell",
   "terminal.integrated.cwd": "${workspaceFolder}",
-
-  // Explicit PowerShell profile — -NoLogo suppresses the banner so VS Code's
-  // command-position markers are not confused by extra output lines.
   "terminal.integrated.profiles.windows": {
     "PowerShell": {
       "source": "PowerShell",
@@ -33,35 +22,31 @@
       "icon": "terminal-cmd"
     }
   },
-
-  // Automation profile used by tasks, the debugger, and the test runner.
-  // -NoLogo keeps output clean; -NonInteractive prevents prompt/STDIN hangs
-  // in headless task runs.
   "terminal.integrated.automationProfile.windows": {
     "name": "PowerShell",
     "source": "PowerShell",
     "args": ["-NoLogo", "-NonInteractive"]
   },
 
-  // Tailwind CSS v4 uses @theme, @custom-variant, and CSS custom properties
-  // that VS Code's built-in CSS validator doesn't understand. PostCSS + Vite
-  // handle all CSS processing; Stylelint (via the vscode-stylelint extension)
-  // is the sole CSS linter. Disable the built-in validator to avoid false
-  // positives on valid Tailwind v4 syntax.
+  // ─── Authoritative Linters ────────────────────────────────────────────────
+  // ESLint (jsx-a11y + react-hooks + regexp) and Stylelint are the sole
+  // linting authority. VS Code's built-in CSS/HTML validators produce false
+  // positives for Tailwind v4 syntax and JSX ARIA expressions.
   "css.validate": false,
-  // Stylelint extension: validate only CSS files (not TSX/JSX handled by ESLint).
+  "html.validate.styles": false,
+  "html.validate.scripts": false,
   "stylelint.validate": ["css"],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
     "source.fixAll.stylelint": "explicit"
   },
 
+  // ─── File Exclusions ──────────────────────────────────────────────────────
   "files.exclude": {
     "**/dist/**": true,
     "**/coverage/**": true,
     "**/playwright-report/**": true,
     "**/test-results/**": true,
-    // TypeDoc generates docs/api/ — exclude from VS Code to prevent false diagnostics on generated output.
     "**/docs/api/**": true
   },
   "search.exclude": {

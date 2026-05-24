@@ -9,6 +9,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.69.0] — 2026-06-26
+
+### Production Readiness
+
+#### Removed
+
+- **Dead barrel files** deleted: `src/engine/plugin/index.ts`,
+  `src/engine/validation/index.ts` (unused re-export barrels detected by knip)
+- **Disabled markdownlint rule** `MD060: false` removed — rule now active and passing
+
+#### Changed
+
+- `computeOffcuts` extracted from `SheetCard.tsx` → `compute-offcuts.ts` to satisfy
+  `react-refresh/only-export-components` (component files must only export components)
+- `SheetCard.tsx` internals (`S`, `cbColor`, `PartRect`) un-exported — module-private
+- `tests/engine/validation.test.ts` fixed `1 as 1` → `1 as const` (prefer-as-const)
+- **knip config** cleaned: removed `WebGLPreviewCanvas.tsx` from ignore list,
+  fixed redundant `src/main.tsx!` entry
+- **VS Code settings** updated: added `html.validate.styles/scripts: false` to suppress
+  false-positive browser-compat and ARIA-in-JSX warnings (ESLint + Stylelint are
+  the authoritative linters); trimmed verbose comments for token efficiency
+
 ## [3.68.1] — 2026-06-26
 
 ### Phase 16.5 — Code Quality & Housekeeping

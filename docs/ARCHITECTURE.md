@@ -499,7 +499,7 @@ graph LR
   class ci check
 ```
 
-## ♿ Accessibility (WCAG 2.2 AA) — v3.59.4
+## ♿ Accessibility (WCAG 2.2 AA) — v3.68.1
 
 Cabinet Planner targets **WCAG 2.2 Level AA** compliance. This section documents the patterns, CI gates, and runtime mechanisms in place.
 

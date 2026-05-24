@@ -38,7 +38,8 @@ import {
 } from '../layout/Icons';
 import type { Lang, CutSheet, OffcutEntry, DefectZone } from '../../engine/types';
 import { Stat } from './OptimizerStats';
-import { SheetCard, computeOffcuts } from './SheetCard';
+import { SheetCard } from './SheetCard';
+import { computeOffcuts } from './compute-offcuts';
 import { OptimizerExplainerPanel } from './OptimizerExplainerPanel';
 
 export function OptimizerView() {

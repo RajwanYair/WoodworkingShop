@@ -320,7 +320,7 @@ describe('validateConfig — SHELF_LOAD_CAPACITY_LOW (Sprint 30)', () => {
   });
 
   it.each([
-    ['normal door width', { width: 600, doorCount: 1 as 1, doorStyle: 'flat' as const }],
+    ['normal door width', { width: 600, doorCount: 1 as const, doorStyle: 'flat' as const }],
     ['doorStyle is none', { width: 100, doorStyle: 'none' as const }],
   ])('does not raise HINGE_CUP_EDGE_DISTANCE_UNSAFE when %s', (_, overrides) => {
     expect(hasCode(validateConfig(cfg(overrides)), 'HINGE_CUP_EDGE_DISTANCE_UNSAFE')).toBe(false);
@@ -567,7 +567,7 @@ describe('validateConfig — DEPTH_TOO_SHALLOW_FOR_DOORS (Sprint 75)', () => {
   });
 
   it.each([
-    ['depth >= 250', { depth: 250, doorCount: 1 as 1, doorStyle: 'flat' as const }],
+    ['depth >= 250', { depth: 250, doorCount: 1 as const, doorStyle: 'flat' as const }],
     ['doorCount is 0', { depth: 200, doorStyle: 'none' as const }],
   ])('does NOT raise DEPTH_TOO_SHALLOW_FOR_DOORS when %s', (_, overrides) => {
     expect(hasCode(validateConfig(cfg(overrides)), 'DEPTH_TOO_SHALLOW_FOR_DOORS')).toBe(false);

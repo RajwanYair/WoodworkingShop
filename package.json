@@ -1,6 +1,6 @@
 {
   "name": "woodworkingshop",
-  "version": "3.68.1",
+  "version": "3.69.0",
   "description": "Browser-based woodworking cabinet planner — parametric design, MaxRects cut-sheet optimizer, PDF/DXF/G-code export, 6-view SVG preview, bilingual EN+HE, PWA offline",
   "keywords": [
     "woodworking",
@@ -71,7 +71,7 @@
   },
   "knip": {
     "entry": [
-      "src/main.tsx!",
+      "src/main.tsx",
       "src/engine/index.ts!",
       "src/workers/**/*.worker.ts"
     ],
@@ -81,8 +81,7 @@
       "scripts/**/*.js"
     ],
     "ignore": [
-      "src/env.d.ts",
-      "src/components/preview/WebGLPreviewCanvas.tsx"
+      "src/env.d.ts"
     ]
   },
   "dependencies": {
