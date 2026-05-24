@@ -78,12 +78,24 @@ export default defineConfig({
     modulePreload: { polyfill: true },
     rollupOptions: {
       output: {
-        // Rollup 4+ requires manualChunks as a function (object form removed)
+        // Sprint 63 — consolidated chunk strategy:
+        //   pdf-renderer : lazily-imported 300 KB PDF engine — own chunk for deferred loading.
+        //   i18n-vendor  : i18next + react-i18next — stable, cached separately from app code.
+        //   vendor       : React + React-DOM + Zustand — small combined chunk; rarely changes
+        //                  together with app code, benefits from long-term browser caching.
+        //                  (react-vendor and state-vendor merged here — fewer chunk files.)
+        //
+        // Phase 18 prep: when Three.js is added, add:
+        //   if (id.includes('three')) return 'three-vendor';
         manualChunks: (id) => {
           if (id.includes('@react-pdf/renderer')) return 'pdf-renderer';
-          if (id.includes('/react-dom/') || id.includes('/node_modules/react/')) return 'react-vendor';
           if (id.includes('/i18next') || id.includes('/react-i18next')) return 'i18n-vendor';
-          if (id.includes('/zustand')) return 'state-vendor';
+          if (
+            id.includes('/react-dom/') ||
+            id.includes('/node_modules/react/') ||
+            id.includes('/zustand')
+          )
+            return 'vendor';
         },
       },
     },

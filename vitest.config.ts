@@ -22,8 +22,6 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    // Benchmark files run in Node (no DOM needed).
-    environmentMatchGlobs: [['tests/bench/**', 'node']],
     include: ['tests/**/*.test.ts', 'tests/**/*.test.tsx'],
     exclude: ['tests/e2e/**', 'node_modules/**', 'dist/**'],
     setupFiles: ['tests/setup.ts'],

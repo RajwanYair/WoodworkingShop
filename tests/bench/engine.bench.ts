@@ -1,3 +1,4 @@
+// @vitest-environment node
 /**
  * Engine benchmark suite — measures hot-path performance for every public
  * engine function and sets a regression gate via config/bench-budget.json.
