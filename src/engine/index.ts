@@ -120,3 +120,6 @@ export type { DrawerRunnerSpec, DrawerRunnerValidation, DrawerRunnerError } from
 
 export { assignPartLabels, buildPartLabelMap, formatPartLabelsAsCsv } from './part-labeling';
 export type { LabeledPart, LabelingOptions } from './part-labeling';
+
+export { generateCostVarianceReport, formatCostVarianceReportAsCsv } from './cost-variance';
+export type { MaterialCostEntry, CostVarianceLine, CostVarianceReport } from './cost-variance';
