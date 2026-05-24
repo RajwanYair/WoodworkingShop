@@ -182,3 +182,12 @@ export {
   MAX_SNAPSHOT_LABEL_LENGTH,
 } from './snapshot-tags';
 export type { SnapshotTag, SnapshotStore, SnapshotError } from './snapshot-tags';
+
+export {
+  EXPORT_FORMATS,
+  getFormatsByCategory,
+  getAvailableFormats,
+  getExportFormat,
+  describeFormat,
+} from './export-format';
+export type { ExportFormatId, ExportCategory, ExportFormat } from './export-format';
