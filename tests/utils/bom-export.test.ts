@@ -409,3 +409,59 @@ describe('BOM CSV — area (m²) column (Sprint 87)', () => {
     }
   });
 });
+
+// ── Phase 13 / Sprint 18 — BOM multi-currency ────────────────────────────────
+describe('generateBomCsv — multi-currency (Sprint 18)', () => {
+  it('material summary header contains Price/Sheet and Est. Material Cost columns', () => {
+    const csv = generateBomCsv(singleCabinet, 'en');
+    const lines = csv.split('\n');
+    const summaryIdx = lines.findIndex((l) => l.includes('Material Summary'));
+    const headerRow = lines[summaryIdx + 1];
+    expect(headerRow).toContain('Price/Sheet');
+    expect(headerRow).toContain('Est. Material Cost');
+  });
+
+  it('material summary row includes ILS-formatted price for melamine-18', () => {
+    // melamine-18 has pricePerSheet: 165, currencyCode: 'ILS'
+    const csv = generateBomCsv(singleCabinet, 'en', 'en');
+    const lines = csv.split('\n');
+    const summaryIdx = lines.findIndex((l) => l.includes('Material Summary'));
+    const dataRow = lines.slice(summaryIdx + 2).find((l) => l.includes('Melamine 18'));
+    expect(dataRow).toBeDefined();
+    // The formatted price must contain '165' somewhere (currency symbol varies by environment)
+    expect(dataRow).toContain('165');
+  });
+
+  it('material summary row shows \u2014 for material without a price', () => {
+    const freePart: Part = {
+      ...mockPart,
+      material: 'unicorn-free-99', // not in materials db
+    };
+    const csv = generateBomCsv([{ name: 'Test', parts: [freePart], hardware: [] }], 'en');
+    const lines = csv.split('\n');
+    const summaryIdx = lines.findIndex((l) => l.includes('Material Summary'));
+    const dataRow = lines.slice(summaryIdx + 2).find((l) => l.trim() !== '' && !l.includes('Price/Sheet'));
+    expect(dataRow).toContain('\u2014');
+  });
+
+  it('estimated cost is price \u00d7 sheets needed for the given area', () => {
+    // melamine-18: 1220\u00d72440 mm sheet (2,976,800 mm\u00b2), pricePerSheet: 165
+    // mockPart: 2\u00d72000\u00d7580 = 2,320,000 mm\u00b2 \u2192 needs 1 sheet
+    // estimated cost = 165 \u00d7 1 = 165
+    const csv = generateBomCsv(singleCabinet, 'en', 'en');
+    const lines = csv.split('\n');
+    const summaryIdx = lines.findIndex((l) => l.includes('Material Summary'));
+    const dataRow = lines.slice(summaryIdx + 2).find((l) => l.includes('Melamine 18'));
+    expect(dataRow).toBeDefined();
+    const matches = (dataRow ?? '').match(/165/g) ?? [];
+    expect(matches.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('he locale shows Hebrew column headers for price and cost', () => {
+    const csv = generateBomCsv(singleCabinet, 'he', 'he');
+    const lines = csv.split('\n');
+    const summaryIdx = lines.findIndex((l) => l.includes('\u05e1\u05d9\u05db\u05d5\u05dd \u05d7\u05d5\u05de\u05e8\u05d9\u05dd'));
+    const headerRow = lines[summaryIdx + 1];
+    expect(headerRow).toContain('\u05de\u05d7\u05d9\u05e8');
+  });
+});

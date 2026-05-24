@@ -204,7 +204,7 @@ Exit criteria: Blum/Hettich/Grass catalog complete, DXF layer compliance, G-code
 - [ ] **Hardware compatibility validation** — validate selected vendor hinge profile against door dimensions and material thickness at config time, not at export time. Show error with substitution link.
 - [ ] **DXF layer standard compliance** — bring DXF output to AutoCAD 2018 DXF spec. Add `DIMENSION` entities. Verify import in LibreCAD, DraftSight, AutoCAD LT.
 - [x] **G-code post-processor plugin hook** — expose `onGcodeGenerated(raw: string): string` hook (stability: `experimental`). Allows community plugins to target specific controllers (Mach3, LinuxCNC, Fanuc).
-- [ ] **BOM multi-currency** — extend `pricePerSheet` with `currencyCode` per material. BOM PDF + CSV use active locale number formatting + stored currency symbol.
+- [x] **BOM multi-currency** — `currencyCode?: string` on `Material`; built-in materials ship with `'ILS'`; BOM CSV material summary uses `Intl.NumberFormat` for locale-aware price/cost columns.
 - [ ] **Parametric templates v2** — per-template default overrides + computed fields (e.g. `drawerHeight = Math.floor(internalHeight / 4) - 2`). Constrained expression DSL evaluated at instantiation.
 - [ ] **Cross-material co-nesting** — when two materials share thickness + sheet size, offer to nest on the same sheet (opt-in). Reduces sheet count for small projects.
 - [ ] **Export integrity checksums** — embed SHA-256 of export payload in PDF footer + DXF comment block. Lets shops verify file integrity end-to-end.

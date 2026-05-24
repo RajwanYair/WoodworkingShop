@@ -1,4 +1,4 @@
-import type { Part, HardwareItem, Lang } from '../engine/types';
+import type { Part, HardwareItem, Lang, Material } from '../engine/types';
 import { getMaterial, computePartWeightKg } from '../engine/materials';
 import { triggerDownload } from './download';
 
@@ -10,6 +10,10 @@ interface BomHeaders {
   areaCol: string;
   boardFeetCol: string;
   weightCol: string;
+  /** Phase 13 / Sprint 18 — price per sheet column header */
+  pricePerSheetCol: string;
+  /** Phase 13 / Sprint 18 — estimated material cost column header */
+  estCostCol: string;
   partsHeader: string;
   hwHeader: string;
   grainAlong: string;
@@ -22,6 +26,8 @@ const BOM_HEADERS: Record<string, BomHeaders> = {
     areaCol: 'Total Area (m\u00b2)',
     boardFeetCol: 'Board-Feet (nominal 1 inch)',
     weightCol: 'Weight (kg)',
+    pricePerSheetCol: 'Price/Sheet',
+    estCostCol: 'Est. Material Cost',
     partsHeader:
       '#,Cabinet,Part ID,Part Name,Qty,Material,Thickness (mm),Length (mm),Width (mm),Area (m\u00b2),Edge Banding,Weight (kg),Grain Direction',
     hwHeader: '#,Cabinet,Hardware ID,Hardware Name,Qty,Unit',
@@ -33,6 +39,8 @@ const BOM_HEADERS: Record<string, BomHeaders> = {
     areaCol: '\u05e9\u05d8\u05d7 \u05db\u05d5\u05dc\u05dc (m\u00b2)',
     boardFeetCol: '\u05e8\u05d2\u05dc\u05d9 \u05dc\u05d5\u05d7',
     weightCol: '\u05de\u05e9\u05e7\u05dc (kg)',
+    pricePerSheetCol: '\u05de\u05d7\u05d9\u05e8/\u05d2\u05d9\u05dc\u05d9\u05d5\u05df',
+    estCostCol: '\u05e2\u05dc\u05d5\u05ea \u05d7\u05d5\u05de\u05e8\u05d9\u05dd \u05de\u05e9\u05d5\u05e2\u05e8\u05ea',
     partsHeader:
       '#,\u05d0\u05e8\u05d5\u05df,\u05de\u05d6\u05d4\u05d4,\u05e9\u05dd \u05d7\u05dc\u05e7,\u05db\u05de\u05d5\u05ea,\u05d7\u05d5\u05de\u05e8,\u05e2\u05d5\u05d1\u05d9 (\u05de"\u05de),\u05d0\u05d5\u05e8\u05da (\u05de"\u05de),\u05e8\u05d5\u05d7\u05d1 (\u05de"\u05de),\u05e9\u05d8\u05d7 (m\u00b2),\u05d7\u05d9\u05d6\u05d5\u05e7 \u05e7\u05e6\u05d5\u05ea,\u05de\u05e9\u05e7\u05dc (kg),\u05db\u05d9\u05d5\u05d5\u05df \u05d2\u05d9\u05d3',
     hwHeader:
@@ -45,6 +53,8 @@ const BOM_HEADERS: Record<string, BomHeaders> = {
     areaCol: '\u00c1rea total (m\u00b2)',
     boardFeetCol: 'Pies tabla (1 pulgada nominal)',
     weightCol: 'Peso (kg)',
+    pricePerSheetCol: 'Precio/Hoja',
+    estCostCol: 'Coste material est.',
     partsHeader:
       '#,Armario,ID Pieza,Nombre pieza,Cant.,Material,Espesor (mm),Largo (mm),Ancho (mm),\u00c1rea (m\u00b2),Canteado,Peso (kg),Direcci\u00f3n veta',
     hwHeader: '#,Armario,ID Herraje,Nombre herraje,Cant.,Unidad',
@@ -56,6 +66,8 @@ const BOM_HEADERS: Record<string, BomHeaders> = {
     areaCol: 'Gesamtfl\u00e4che (m\u00b2)',
     boardFeetCol: 'Brettfu\u00df (nominal 1 Zoll)',
     weightCol: 'Gewicht (kg)',
+    pricePerSheetCol: 'Preis/Platte',
+    estCostCol: 'Gesch\u00e4tzter Materialpreis',
     partsHeader:
       '#,Korpus,Teile-ID,Teilename,Menge,Material,Dicke (mm),L\u00e4nge (mm),Breite (mm),Fl\u00e4che (m\u00b2),Kantenanleimer,Gewicht (kg),Faserrichtung',
     hwHeader: '#,Korpus,Beschlag-ID,Beschlagname,Menge,Einheit',
@@ -67,6 +79,8 @@ const BOM_HEADERS: Record<string, BomHeaders> = {
     areaCol: 'Surface totale (m\u00b2)',
     boardFeetCol: 'Pieds-planche (nominal 1 pouce)',
     weightCol: 'Poids (kg)',
+    pricePerSheetCol: 'Prix/Feuille',
+    estCostCol: 'Co\u00fbt mat\u00e9riaux est.',
     partsHeader:
       '#,Meuble,ID Pi\u00e8ce,Nom pi\u00e8ce,Qte,Mat\u00e9riau,\u00c9paisseur (mm),Longueur (mm),Largeur (mm),Surface (m\u00b2),Chant,Poids (kg),Sens du fil',
     hwHeader: '#,Meuble,ID Quincaillerie,Nom quincaillerie,Qte,Unit\u00e9',
@@ -78,6 +92,8 @@ const BOM_HEADERS: Record<string, BomHeaders> = {
     areaCol: '\u0627\u0644\u0645\u0633\u0627\u062d\u0629 \u0627\u0644\u0643\u0644\u064a\u0629 (m\u00b2)',
     boardFeetCol: '\u0623\u0642\u062f\u0627\u0645 \u0644\u0648\u062d',
     weightCol: '\u0627\u0644\u0648\u0632\u0646 (kg)',
+    pricePerSheetCol: '\u0633\u0639\u0631/\u0644\u0648\u062d',
+    estCostCol: '\u062a\u0643\u0644\u0641\u0629 \u0627\u0644\u0645\u0648\u0627\u062f \u0627\u0644\u0645\u0642\u062f\u0631\u0629',
     partsHeader:
       '#,\u062e\u0632\u0627\u0646\u0629,\u0645\u0639\u0631\u0641 \u0627\u0644\u062c\u0632\u0621,\u0627\u0633\u0645 \u0627\u0644\u062c\u0632\u0621,\u0627\u0644\u0643\u0645\u064a\u0629,\u0627\u0644\u0645\u0627\u062f\u0629,\u0627\u0644\u0633\u0645\u0643 (mm),\u0627\u0644\u0637\u0648\u0644 (mm),\u0627\u0644\u0639\u0631\u0636 (mm),\u0627\u0644\u0645\u0633\u0627\u062d\u0629 (m\u00b2),\u062a\u0634\u0637\u064a\u0628 \u0627\u0644\u062d\u0648\u0627\u0641,\u0627\u0644\u0648\u0632\u0646 (kg),\u0627\u062a\u062c\u0627\u0647 \u0627\u0644\u062d\u0628\u0648\u0628',
     hwHeader:
@@ -88,6 +104,32 @@ const BOM_HEADERS: Record<string, BomHeaders> = {
 
 function getBomHeaders(locale: string): BomHeaders {
   return BOM_HEADERS[locale] ?? BOM_HEADERS['en'];
+}
+
+/** Phase 13 / Sprint 18 — safe material lookup; returns undefined instead of throwing. */
+function safeGetMaterialData(key: string): Material | undefined {
+  try {
+    return getMaterial(key);
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * Phase 13 / Sprint 18 — Format a monetary amount using the Intl API.
+ * Falls back to plain toFixed(2) if the currency code is invalid.
+ */
+function formatCurrency(amount: number, currencyCode: string, locale: string): string {
+  try {
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency: currencyCode,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
+  } catch {
+    return amount.toFixed(2);
+  }
 }
 
 /**
@@ -148,14 +190,27 @@ export function generateBomCsv(
       }
     }
   }
-  rows.push(`${h.materialSummary},,,,,,,,,,`);
-  rows.push(`${h.matCol},${h.areaCol},${h.boardFeetCol},${h.weightCol},,,,,,,`);
+  rows.push(`${h.materialSummary},,,,,,,,,,,,`);
+  rows.push(`${h.matCol},${h.areaCol},${h.boardFeetCol},${h.weightCol},${h.pricePerSheetCol},${h.estCostCol},,,,,`);
   for (const [matKey, areaMm2] of areaMm2ByMat) {
     const matName = safeGetMaterialName(matKey, lang);
     const areaM2 = (areaMm2 / 1e6).toFixed(3);
     const boardFeet = ((areaMm2 * 1.076391e-5) / 1).toFixed(2);
     const weightKg = (weightKgByMat.get(matKey) ?? 0).toFixed(2);
-    rows.push(csvRow([matName, areaM2, boardFeet, weightKg, '', '', '', '', '', '', '']));
+
+    // Phase 13 / Sprint 18 — currency-aware cost columns
+    let priceStr = '\u2014';
+    let estCostStr = '\u2014';
+    const matData = safeGetMaterialData(matKey);
+    if (matData?.pricePerSheet !== undefined && matData.currencyCode) {
+      const sheetAreaMm2 = matData.sheetWidth * matData.sheetLength;
+      const sheetsNeeded = Math.ceil(areaMm2 / sheetAreaMm2);
+      const resolvedLocale = locale ?? lang;
+      priceStr = formatCurrency(matData.pricePerSheet, matData.currencyCode, resolvedLocale);
+      estCostStr = formatCurrency(matData.pricePerSheet * sheetsNeeded, matData.currencyCode, resolvedLocale);
+    }
+
+    rows.push(csvRow([matName, areaM2, boardFeet, weightKg, priceStr, estCostStr, '', '', '', '', '']));
   }
   rows.push('');
 

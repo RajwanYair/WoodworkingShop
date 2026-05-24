@@ -52,6 +52,8 @@ export interface Material {
   sheetWidth: number; // mm (standard 1220)
   sheetLength: number; // mm (standard 2440)
   pricePerSheet?: number; // optional cost estimation
+  /** Phase 13 / Sprint 18 — ISO 4217 currency code for pricePerSheet (e.g. 'ILS', 'USD', 'EUR'). */
+  currencyCode?: string;
   category: MaterialCategory;
   color: string; // hex for preview rendering
   /** When true the cut optimizer will not rotate parts 90 ° (grain direction must be preserved). */
