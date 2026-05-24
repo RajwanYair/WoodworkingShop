@@ -21,6 +21,7 @@ const config = JSON.parse(readFileSync(configPath, 'utf-8'));
 config.ci.upload.outputDir = outputDir;
 
 const resolvedConfigPath = path.join(os.tmpdir(), 'WoodworkingShop', 'lighthouserc.resolved.json');
+mkdirSync(path.dirname(resolvedConfigPath), { recursive: true });
 writeFileSync(resolvedConfigPath, JSON.stringify(config, null, 2));
 
 try {

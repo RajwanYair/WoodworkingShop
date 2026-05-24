@@ -26,7 +26,7 @@ const NUM_RUNS = 200; // fast-check iterations per property
 // ─── arbitrary ───────────────────────────────────────────────────────────────
 /** One Part that is guaranteed to fit on a melamine-16 sheet in either orientation. */
 const arbPart: fc.Arbitrary<Part> = fc.record({
-  id: fc.string({ minLength: 1, maxLength: 8 }),
+  id: fc.stringMatching(/^[a-z][a-z0-9]{0,7}$/),
   name: fc.constant({ en: 'Part', he: 'פאנל' }),
   qty: fc.integer({ min: 1, max: 3 }),
   material: fc.constant(MATERIAL),
@@ -37,8 +37,10 @@ const arbPart: fc.Arbitrary<Part> = fc.record({
   rotationLocked: fc.oneof(fc.constant(undefined), fc.constant(true), fc.constant(false)),
 });
 
-/** A non-empty array of up to 8 parts — large enough to span multiple sheets. */
-const arbParts: fc.Arbitrary<Part[]> = fc.array(arbPart, { minLength: 1, maxLength: 8 });
+/** A non-empty array of up to 8 parts with unique IDs — large enough to span multiple sheets. */
+const arbParts: fc.Arbitrary<Part[]> = fc
+  .array(arbPart, { minLength: 1, maxLength: 8 })
+  .map((parts) => parts.map((p, i) => ({ ...p, id: `p${i}` })));
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
 /** Returns true when two axis-aligned rectangles do NOT share any interior area. */

@@ -73,7 +73,7 @@ export function CabinetSelector() {
                 {cab.name}
                 {/* Sprint 82 — part count badge */}
                 <span
-                  className="ms-1 text-[9px] font-normal opacity-70"
+                  className="ms-1 text-[9px] font-normal opacity-80"
                   aria-label={`${generateParts(cab.config).length} parts`}
                 >
                   ({generateParts(cab.config).length})

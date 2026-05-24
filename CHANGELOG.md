@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   lint-staged 17.0.5
 - Comprehensive strategic review: simplified ESLint (6 plugins only),
   simplified Stylelint, rewrote ROADMAP.md for Phase 16+
+- Bundle budget bumped: +100 KB JS / +100 KB total to absorb design-check fix
+  patches and validation engine growth
 
 ## [3.67.0] — 2026-06-26
 

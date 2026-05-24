@@ -72,17 +72,17 @@ export function SubstitutionPanel() {
                   </span>
                   {/* Quantitative rationale */}
                   {qr?.savedKgPerSheet !== undefined && (
-                    <span className="text-wood-500 dark:text-wood-400 text-[10px]">
+                    <span className="text-wood-600 dark:text-wood-400 text-[10px]">
                       {t('substitution.quant.savedKgPerSheet', { value: qr.savedKgPerSheet })}
                     </span>
                   )}
                   {qr?.deflectionReductionPct !== undefined && (
-                    <span className="text-wood-500 dark:text-wood-400 text-[10px]">
+                    <span className="text-wood-600 dark:text-wood-400 text-[10px]">
                       {t('substitution.quant.deflectionReductionPct', { value: qr.deflectionReductionPct })}
                     </span>
                   )}
                   {qr?.costDeltaPct !== undefined && (
-                    <span className="text-wood-500 dark:text-wood-400 text-[10px]">
+                    <span className="text-wood-600 dark:text-wood-400 text-[10px]">
                       {t('substitution.quant.costDeltaPct', { value: qr.costDeltaPct })}
                     </span>
                   )}
