@@ -238,7 +238,31 @@ comments in engine code (only block/function doc-comments).
 | A11    | VS Code workspace: pin recommended extensions, add `tasks.json` for one-shot CI    | DX       |
 | A12    | Version bump 3.68.1, CHANGELOG, GH release                                         | Release  |
 
-### Phase 17: DX & Bundle Optimization (v3.69.0)
+### Phase 16.6: Code Hygiene & CI Speed (v3.70.0) — **HIGH PRIORITY / IMMEDIATE**
+
+**Goal**: Measurably faster CI, shorter test files, smaller source modules, clean comments,
+and best-in-class VS Code / Copilot developer experience.
+
+**Exit criteria**: CI wall-clock ≥ 20% faster (composite action removes 4× repetition),
+all 10 longest test files shortened ≥ 20% via `it.each`, top 5 source files each ≤ 800 lines,
+zero line-level `// comment` on standalone lines in `src/engine/`, docs consolidated,
+`.vscode/` fully tuned, copilot-instructions.md reflects current production state.
+
+| Sprint | Deliverable                                                                               | Type     |
+| ------ | ----------------------------------------------------------------------------------------- | -------- |
+| B1     | CI composite action `.github/actions/setup-node` (removes 4× checkout+setup+ci boilerplate) | CI       |
+| B2     | Shorten top-3 test files: `validation.test.ts`, `cut-optimizer.test.ts`, `bom-export.test.ts` using `it.each` | Tests    |
+| B3     | Shorten `cabinet-store.test.ts` + `url-state.test.ts` with `describe.each` / shared factories | Tests    |
+| B4     | Split `CabinetPdfDocument.tsx` (1850 L) → `pdf/sections/` sub-components                 | Refactor |
+| B5     | Split `CabinetPreview.tsx` (1431 L) → `PreviewTabs`, `IsometricView`, `PreviewHUD`        | Refactor |
+| B6     | Split `validation.ts` (1026 L) by domain: `dimension-rules`, `door-rules`, `shelf-rules` | Refactor |
+| B7     | Convert all standalone line `// comments` in `src/engine/` to block/JSDoc doc-comments   | Docs     |
+| B8     | Consolidate overlapping content: `ARCHITECTURE.md` ↔ `ROADMAP.md` (strategy section)     | Docs     |
+| B9     | VS Code: add spell-check + import-cost extensions; update `tasks.json`                   | DX       |
+| B10    | Update `.github/copilot-instructions.md` (v3.69 state: 7 ESLint plugins, no sonarjs)     | DX       |
+| B11    | Version bump 3.70.0, CHANGELOG, GH release                                               | Release  |
+
+### Phase 17: DX & Bundle Optimization (v3.71.0)
 
 **Goal**: Bundle < 1.8 MB. Streamlined DX. Documented plugin API.
 
@@ -253,9 +277,9 @@ comments in engine code (only block/function doc-comments).
 | 64     | pnpm migration evaluation (install time, disk, CI comparison)    | Research |
 | 65     | Create `docs/PLUGIN-API.md` — hooks, stability, versions         | Docs     |
 | 66     | Merge vitest.bench.config into vitest.config (workspace pattern) | Config   |
-| 67     | Version bump 3.69.0, CHANGELOG, GH release                       | Release  |
+| 67     | Version bump 3.71.0, CHANGELOG, GH release                       | Release  |
 
-### Phase 18: Visual Fidelity & UX (v3.70.0)
+### Phase 18: Visual Fidelity & UX (v3.72.0)
 
 **Goal**: Photorealistic materials in 3D, placement animation, print polish.
 
@@ -266,7 +290,7 @@ comments in engine code (only block/function doc-comments).
 | 70     | Nesting placement animation (step-by-step sequence with timeline) | UI      |
 | 71     | Onboarding wizard redesign (3-step guided flow, skippable)        | UX      |
 | 72     | Print stylesheet optimization (A4/Letter margins, break control)  | CSS     |
-| 73     | Version bump 3.70.0, CHANGELOG, GH release                        | Release |
+| 73     | Version bump 3.72.0, CHANGELOG, GH release                        | Release |
 
 ### Phase 19: Machine Integration & Community (v4.0.0)
 

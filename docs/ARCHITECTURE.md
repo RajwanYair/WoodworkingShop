@@ -305,50 +305,10 @@ flowchart TD
   classDef output fill:#3a7a50,stroke:#1e4a30,color:#ffffff,font-weight:bold
 ```
 
-## 🗓 Sprint Release Timeline
+## 🗓 Release History
 
-Key milestones from v3.0.0 to the current release:
-
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0b040', 'primaryTextColor': '#1a0e06', 'primaryBorderColor': '#8b5022', 'lineColor': '#7a4010'}}}%%
-gantt
-  title Cabinet Planner Major Feature Timeline
-  dateFormat YYYY-MM-DD
-  axisFormat v%d
-  section v3.0 Foundation
-    Core engine - cabinet, bookshelf, desk, wardrobe  :done, e300, 2026-03-01, 3d
-    Cut optimizer - MaxRects BSSF                      :done, e301, after e300, 2d
-    SVG preview - 6-view renderer plus isometric 3D   :done, e302, after e301, 2d
-  section v3.1 Export
-    DXF export for CNC cutting                         :done, e310, after e302, 2d
-    G-code toolpaths, BOM CSV, URL state sharing       :done, e311, after e310, 2d
-  section v3.2 UX and i18n
-    Hebrew RTL, PWA offline, PDF export                :done, e320, after e311, 2d
-    Smart Optimizer - 5 strategies                     :done, e321, after e320, 2d
-  section v3.3 Precision
-    Colour-blind mode, grain direction, deflection     :done, e330, after e321, 2d
-    Assembly guide paginated plus show-all             :done, e331, after e330, 2d
-  section v3.4 Quality of Life
-    Dark-mode sync, cabinet duplication, print         :done, e340, after e331, 2d
-    BOM area summary, waste cost badge, kick presets   :done, e341, after e340, 2d
-  section v3.5 Materials
-    Custom material editor, price overrides            :done, e350, after e341, 2d
-    Saw kerf control, edge-banding rate                :done, e351, after e350, 2d
-  section v3.6 Visualisation
-    SVG icon library, enriched cut sheets              :done, e360, after e351, 2d
-    Offcuts panel, hardware prices, shopping list      :done, e361, after e360, 2d
-  section v3.7 Estimation
-    Drawer slide types, material density and weight    :done, e370, after e361, 2d
-    Scale bar, assembly checklist, material summary    :done, e371, after e370, 2d
-  section v3.8 UX Polish
-    Saw passes, sheet size overrides, PWA share        :done, e380, after e371, 2d
-    Grain in BOM, Alt+D shortcut, sortable table       :done, e381, after e380, 2d
-  section v3.9 Engineering
-    Shelf deflection ratings, isometric enhancements   :done, e390, after e381, 5d
-    Markdown polish, sw.js version sync                :done, e391, after e390, 2d
-  section v3.10 Production
-    MyScripts tooling, waiver removal, ROADMAP rewrite :active, e3100, after e391, 3d
-```
+Full sprint-by-sprint history and feature timeline is maintained in
+[SPRINT-HISTORY.md](SPRINT-HISTORY.md) and [../CHANGELOG.md](../CHANGELOG.md).
 
 ## 🚀 CI/CD Pipeline
 
@@ -363,7 +323,7 @@ graph TD
     tc --> lint["ESLint\n0 warnings"]
     lint --> mdlint["markdownlint"]
     mdlint --> fmt["format:check\nPrettier"]
-    fmt --> test["Vitest unit tests\n318 tests"]
+    fmt --> test["Vitest unit tests\n~1900+ tests"]
     test --> cov["Coverage report\nNode 22 only"]
     cov --> build["Vite build"]
     build --> bcheck["Bundle budget check\n2 MB gzip limit"]
@@ -499,7 +459,7 @@ graph LR
   class ci check
 ```
 
-## ♿ Accessibility (WCAG 2.2 AA) — v3.68.1
+## ♿ Accessibility (WCAG 2.2 AA) — v3.70+
 
 Cabinet Planner targets **WCAG 2.2 Level AA** compliance. This section documents the patterns, CI gates, and runtime mechanisms in place.
 

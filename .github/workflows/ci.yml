@@ -10,49 +10,23 @@ on:
 permissions:
   contents: read
 
-# Opt into Node 24 for action runner scripts before the forced migration
-# (GitHub deprecates Node 20 action runners on 2026-06-02).
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  # Static-analysis gates: typecheck / lint / format / i18n — Node 22 only.
-  # Running these on every matrix node is redundant; they are source-level checks.
   quality:
     name: Quality Gates (Node 22)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node
 
-      - name: Setup Node.js 22
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run lint:css
+      - run: npm run lint:md
+      - run: npm run format:check
+      - run: npm run i18n:coverage
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Typecheck
-        run: npm run typecheck
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Lint CSS
-        run: npm run lint:css
-
-      - name: Lint Markdown
-        run: npm run lint:md
-
-      - name: Format check
-        run: npm run format:check
-
-      - name: i18n coverage
-        run: npm run i18n:coverage
-
-  # Cross-version compatibility: test + build on Node 22/24/26.
-  # Quality gates above must pass first.
   build:
     name: Build & Test (Node ${{ matrix.node-version }})
     runs-on: ubuntu-latest
@@ -61,25 +35,17 @@ jobs:
       matrix:
         node-version: [22, 24, 26]
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - uses: ./.github/actions/setup-node
         with:
           node-version: ${{ matrix.node-version }}
-          cache: npm
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Test
-        run: npm test
+      - run: npm test
 
       - name: Test coverage
         if: matrix.node-version == 22
         run: npm run test:coverage
 
-      - name: Upload coverage to Codecov
+      - name: Upload coverage
         if: matrix.node-version == 22
         uses: codecov/codecov-action@v5
         with:
@@ -87,10 +53,9 @@ jobs:
           flags: unit
           fail_ci_if_error: false
 
-      - name: Build
-        run: npm run build
+      - run: npm run build
 
-      - name: Bundle size report and budget check
+      - name: Bundle budget check
         if: matrix.node-version == 22
         run: npm run bundle:check
 
@@ -107,16 +72,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
+      - uses: ./.github/actions/setup-node
 
       - name: Get Playwright version
         id: pw
@@ -133,14 +89,13 @@ jobs:
         if: steps.pw-cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps chromium firefox
 
-      - name: Download dist artifact
+      - name: Download dist
         uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist
 
-      - name: Run E2E tests
-        run: npx playwright test --ignore-snapshots
+      - run: npx playwright test --ignore-snapshots
 
       - name: Upload Playwright report
         if: always()
@@ -155,18 +110,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Download dist artifact
+      - name: Download dist
         uses: actions/download-artifact@v4
         with:
           name: dist
@@ -184,3 +130,4 @@ jobs:
           name: lighthouse-report
           path: .lighthouseci/
           retention-days: 7
+

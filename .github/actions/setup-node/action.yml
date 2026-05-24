@@ -1,0 +1,19 @@
+name: 'Setup Node & Install'
+description: 'Checkout repo, configure Node.js, and run npm ci — eliminates repetition across all CI jobs.'
+inputs:
+  node-version:
+    description: 'Node.js version to use'
+    required: false
+    default: '22'
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: npm
+
+    - run: npm ci
+      shell: bash

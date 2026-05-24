@@ -38,7 +38,6 @@ describe('generateBomCsv', () => {
   it('starts with a material summary section', () => {
     const csv = generateBomCsv(singleCabinet, 'en');
     const lines = csv.split('\n');
-    // Sprint 4 added 4 metadata comment rows before Material Summary
     const summaryIdx = lines.findIndex((l) => l.includes('Material Summary'));
     expect(summaryIdx).toBeGreaterThanOrEqual(0);
     expect(lines[summaryIdx + 1]).toContain('Total Area');
@@ -139,8 +138,7 @@ describe('generateBomCsv', () => {
     expect(csv).toContain('unicorn-wood-99');
   });
 
-  // ── Sprint 20: multi-cabinet Part ID prefix ────────────────────────────────
-
+  // multi-cabinet Part ID prefix
   it('does NOT prefix Part ID in single-cabinet export', () => {
     const csv = generateBomCsv(singleCabinet, 'en');
     // With one cabinet, P01 should appear as-is
@@ -212,35 +210,19 @@ describe('generateHardwareCsv', () => {
     vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor);
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:test');
     vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
-
     downloadHardwareCsv([{ name: 'Cabinet A', hardware: [mockHardware] }], 'en');
     expect(mockAnchor.click).toHaveBeenCalled();
     vi.restoreAllMocks();
   });
 });
 
-// Sprint 9 — machine-readable metadata in BOM header
-describe('generateBomCsv — Sprint 9 metadata', () => {
-  it('includes cabinet count in header', () => {
-    const cabs = [
-      { name: 'C1', parts: [mockPart], hardware: [] },
-      { name: 'C2', parts: [mockPart], hardware: [] },
-    ];
-    const csv = generateBomCsv(cabs, 'en');
-    expect(csv).toContain('Cabinets: 2');
-  });
-
-  it('includes total parts count (sum of qty) in header', () => {
-    // mockPart.qty = 2, so total parts = 2
-    const cabs = [{ name: 'C1', parts: [mockPart], hardware: [] }];
-    const csv = generateBomCsv(cabs, 'en');
+// BOM header metadata
+describe('generateBomCsv — header metadata', () => {
+  it('includes cabinet, parts, and hardware counts in header', () => {
+    const csv = generateBomCsv(singleCabinet, 'en');
+    // singleCabinet: 1 cabinet, mockPart.qty=2 parts, mockHardware.qty=4 hardware
+    expect(csv).toContain('Cabinets: 1');
     expect(csv).toContain('Parts: 2');
-  });
-
-  it('includes hardware count (sum of qty) in header', () => {
-    // mockHardware.qty = 4
-    const cabs = [{ name: 'C1', parts: [], hardware: [mockHardware] }];
-    const csv = generateBomCsv(cabs, 'en');
     expect(csv).toContain('Hardware: 4');
   });
 
@@ -248,9 +230,16 @@ describe('generateBomCsv — Sprint 9 metadata', () => {
     const csv = generateBomCsv([], 'en');
     expect(csv).toContain('Cabinets: 0');
   });
+
+  it('scales cabinet count for multi-cabinet export', () => {
+    const cabs = [
+      { name: 'C1', parts: [mockPart], hardware: [] },
+      { name: 'C2', parts: [mockPart], hardware: [] },
+    ];
+    expect(generateBomCsv(cabs, 'en')).toContain('Cabinets: 2');
+  });
 });
 
-// ── Sprint 23: ERP / MRP / CAM normalised export (Phase 6) ───────────────────
 describe('generateErpCsv', () => {
   it('contains the schema version comment header', () => {
     const csv = generateErpCsv(singleCabinet);
@@ -311,15 +300,14 @@ describe('generateErpCsv', () => {
     vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor);
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:test');
     vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
-
     downloadErpCsv(singleCabinet);
     expect(mockAnchor.click).toHaveBeenCalled();
     vi.restoreAllMocks();
   });
 });
 
-// ── Sprint 73: sequential # row-number column in parts + hardware ─────────────
-describe('generateBomCsv — Sprint 73 sequential row numbers', () => {
+// Sequential # row-number column in parts + hardware
+describe('generateBomCsv — sequential row numbers', () => {
   it('parts header starts with #', () => {
     const csv = generateBomCsv(singleCabinet, 'en');
     const lines = csv.split('\n');
@@ -363,8 +351,8 @@ describe('generateBomCsv — Sprint 73 sequential row numbers', () => {
   });
 });
 
-// ── Sprint 87 — area (m²) column in BOM CSV parts ────────────────────────────
-describe('BOM CSV — area (m²) column (Sprint 87)', () => {
+// Area (m²) column in BOM CSV parts
+describe('BOM CSV — area (m²) column', () => {
   it('parts header contains "Area (m²)" column', () => {
     const csv = generateBomCsv(singleCabinet, 'en');
     const partsHeader = csv.split('\n').find((l) => l.startsWith('#,Cabinet,Part ID'));
@@ -410,8 +398,8 @@ describe('BOM CSV — area (m²) column (Sprint 87)', () => {
   });
 });
 
-// ── Phase 13 / Sprint 18 — BOM multi-currency ────────────────────────────────
-describe('generateBomCsv — multi-currency (Sprint 18)', () => {
+// BOM multi-currency pricing
+describe('generateBomCsv — multi-currency', () => {
   it('material summary header contains Price/Sheet and Est. Material Cost columns', () => {
     const csv = generateBomCsv(singleCabinet, 'en');
     const lines = csv.split('\n');

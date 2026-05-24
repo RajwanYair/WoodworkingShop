@@ -1,49 +1,56 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
+import type { Part } from '../../src/engine/types';
 import { optimizeCutSheets, findCoNestCandidates, applyCoNesting } from '../../src/engine/cut-optimizer';
 import { generateParts } from '../../src/engine/parts';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 
+/** Factory for a grain-sensitive plywood-17 part used in narrow-sheet override tests. */
+const mkPlywoodPart = (id: string, width: number): Part => ({
+  id,
+  name: { en: id, he: id },
+  qty: 1,
+  material: 'plywood-17',
+  thickness: 17,
+  length: 400,
+  width,
+  edgeBanding: { en: '', he: '' },
+});
+
+/** Narrow sheet override that forces 400×700 parts to rotate (700 > 500 width). */
+const NARROW_SHEET = { 'plywood-17': { width: 500, length: 1000 } } as const;
+
 describe('optimizeCutSheets', () => {
+  let defaultParts: ReturnType<typeof generateParts>;
+  let defaultResult: ReturnType<typeof optimizeCutSheets>;
+
+  beforeAll(() => {
+    defaultParts = generateParts(DEFAULT_CONFIG);
+    defaultResult = optimizeCutSheets(defaultParts);
+  });
+
   it('produces at least 1 sheet for default config', () => {
-    const parts = generateParts(DEFAULT_CONFIG);
-    const result = optimizeCutSheets(parts);
-    expect(result.totalSheets).toBeGreaterThanOrEqual(1);
-    expect(result.sheets.length).toBe(result.totalSheets);
+    expect(defaultResult.totalSheets).toBeGreaterThanOrEqual(1);
+    expect(defaultResult.sheets.length).toBe(defaultResult.totalSheets);
   });
 
   it('yield is between 0 and 100', () => {
-    const parts = generateParts(DEFAULT_CONFIG);
-    const result = optimizeCutSheets(parts);
-    expect(result.overallYield).toBeGreaterThan(0);
-    expect(result.overallYield).toBeLessThanOrEqual(100);
+    expect(defaultResult.overallYield).toBeGreaterThan(0);
+    expect(defaultResult.overallYield).toBeLessThanOrEqual(100);
   });
 
   it('all parts are placed on sheets', () => {
-    const parts = generateParts(DEFAULT_CONFIG);
-    const result = optimizeCutSheets(parts);
-
-    // Count total placed parts across all sheets
-    const placedCount = result.sheets.reduce((sum, s) => sum + s.parts.length, 0);
-
-    // Count total individual parts (expand qty)
-    const expectedCount = parts.reduce((sum, p) => sum + p.qty, 0);
+    const placedCount = defaultResult.sheets.reduce((sum, s) => sum + s.parts.length, 0);
+    const expectedCount = defaultParts.reduce((sum, p) => sum + p.qty, 0);
     expect(placedCount).toBe(expectedCount);
   });
 
   it('groups parts by material', () => {
-    const parts = generateParts(DEFAULT_CONFIG);
-    const result = optimizeCutSheets(parts);
-
-    // Should have sheets for both panel and back material
-    const materials = new Set(result.sheets.map((s) => s.material));
+    const materials = new Set(defaultResult.sheets.map((s) => s.material));
     expect(materials.size).toBeGreaterThanOrEqual(1);
   });
 
   it('placed parts have valid coordinates', () => {
-    const parts = generateParts(DEFAULT_CONFIG);
-    const result = optimizeCutSheets(parts);
-
-    for (const sheet of result.sheets) {
+    for (const sheet of defaultResult.sheets) {
       for (const p of sheet.parts) {
         expect(p.x).toBeGreaterThanOrEqual(0);
         expect(p.y).toBeGreaterThanOrEqual(0);
@@ -62,15 +69,11 @@ describe('optimizeCutSheets', () => {
 
   it('small cabinet fits on fewer sheets', () => {
     const small = { ...DEFAULT_CONFIG, width: 400, height: 800, depth: 300, shelfCount: 1 };
-    const parts = generateParts(small);
-    const result = optimizeCutSheets(parts);
-    expect(result.totalSheets).toBeLessThanOrEqual(2);
+    expect(optimizeCutSheets(generateParts(small)).totalSheets).toBeLessThanOrEqual(2);
   });
 
-  it('tall narrow bookshelf with many shelves packs efficiently (Sprint A3)', () => {
-    // The bug-report case: 2400h × 800w × 100d, 12 shelves. Old strip packer
-    // wasted a second plywood-17 sheet at <10% yield. MaxRects should fit
-    // all carcass parts on one sheet.
+  it('tall 12-shelf bookshelf fits all carcass parts on 1 plywood sheet', () => {
+    // 2400h × 800w × 100d, 12 shelves — MaxRects must not waste a second sheet.
     const bookshelf = {
       ...DEFAULT_CONFIG,
       furnitureType: 'bookshelf' as const,
@@ -82,15 +85,12 @@ describe('optimizeCutSheets', () => {
       doorCount: 1 as const,
       drawerCount: 0,
     };
-    const parts = generateParts(bookshelf);
-    const result = optimizeCutSheets(parts);
+    const result = optimizeCutSheets(generateParts(bookshelf));
     const panelSheets = result.sheets.filter((s) => s.material === bookshelf.carcassMaterial);
     expect(panelSheets.length).toBeLessThanOrEqual(1);
   });
 
-  it('earliest-sheet preference: pieces that fit on sheet 0 stay on sheet 0', () => {
-    // Build a set of small identical parts that all fit on one sheet.
-    // The packer should NOT open a second sheet if they all fit on the first.
+  it('earliest-sheet preference: first sheet has highest yield', () => {
     const smallConfig = {
       ...DEFAULT_CONFIG,
       width: 300,
@@ -101,34 +101,26 @@ describe('optimizeCutSheets', () => {
       drawerCount: 0,
       hasBack: false,
     };
-    const parts = generateParts(smallConfig);
-    // All parts of the primary material should land on the fewest sheets possible.
-    const result = optimizeCutSheets(parts);
-    const mat = smallConfig.carcassMaterial;
-    const panelSheets = result.sheets.filter((s) => s.material === mat);
-    // Each sheet's yield should be non-trivially above 0 (i.e. we didn't
-    // spread pieces thinly across many near-empty sheets).
+    const result = optimizeCutSheets(generateParts(smallConfig));
+    const panelSheets = result.sheets.filter((s) => s.material === smallConfig.carcassMaterial);
     for (const sh of panelSheets) {
       expect(sh.yieldPercent).toBeGreaterThan(0);
     }
-    // The first sheet should be more utilised than any subsequent sheet.
     if (panelSheets.length >= 2) {
       expect(panelSheets[0].yieldPercent).toBeGreaterThanOrEqual(panelSheets[1].yieldPercent);
     }
   });
 
-  it('all placed CutRects have a grainVertical boolean field (Sprint 16)', () => {
-    const parts = generateParts(DEFAULT_CONFIG);
-    const result = optimizeCutSheets(parts);
-    for (const sheet of result.sheets) {
+  it('all placed CutRects have a grainVertical boolean', () => {
+    for (const sheet of defaultResult.sheets) {
       for (const p of sheet.parts) {
         expect(typeof p.grainVertical).toBe('boolean');
       }
     }
   });
 
-  it('grain-locked material parts are not rotated 90° (grainVertical preserved)', () => {
-    // plywood-17 has hasGrain=true — parts should keep grainVertical=true if length > width
+  it('grain-locked parts preserve grainVertical boolean across placements', () => {
+    // plywood-17 has hasGrain=true — grainVertical must remain a boolean after placement.
     const tallConfig = {
       ...DEFAULT_CONFIG,
       width: 800,
@@ -138,40 +130,21 @@ describe('optimizeCutSheets', () => {
       doorStyle: 'none' as const,
       drawerCount: 0,
     };
-    const parts = generateParts(tallConfig);
-    const result = optimizeCutSheets(parts);
-    // Side panels are tall (length > width) so grainVertical=true — must stay true after placement
+    const result = optimizeCutSheets(generateParts(tallConfig));
     for (const sheet of result.sheets) {
       for (const p of sheet.parts) {
-        // grainVertical must be a boolean (not undefined)
         expect(p.grainVertical === true || p.grainVertical === false).toBe(true);
       }
     }
   });
 
-  // ── Grain conflict detection (Sprint 8) ──────────────────────────────────
-
-  it('grainConflictCount is 0 for default config (no forced rotations)', () => {
-    const parts = generateParts(DEFAULT_CONFIG);
-    const result = optimizeCutSheets(parts);
-    expect(result.grainConflictCount).toBe(0);
+  it('grainConflictCount is 0 for default config', () => {
+    expect(defaultResult.grainConflictCount).toBe(0);
   });
 
   it('detects grain conflict when part can only fit via forced rotation', () => {
-    // plywood-17 has hasGrain=true; use a sheet override so the sheet is
-    // narrow (500 mm wide, 1000 mm long). A part with length=400, width=700
-    // cannot fit without rotation (700 > 500) but CAN fit rotated (700 ≤ 1000).
-    const grainPart: import('../../src/engine/types').Part = {
-      id: 'test-wide',
-      name: { en: 'Wide Panel', he: 'לוח רחב' },
-      qty: 1,
-      material: 'plywood-17',
-      thickness: 17,
-      length: 400,
-      width: 700,
-      edgeBanding: { en: '', he: '' },
-    };
-    const result = optimizeCutSheets([grainPart], 3, { 'plywood-17': { width: 500, length: 1000 } });
+    // 400×700 part cannot fit on 500-wide sheet (700 > 500) but CAN fit rotated (700 ≤ 1000).
+    const result = optimizeCutSheets([mkPlywoodPart('test-wide', 700)], 3, NARROW_SHEET);
     expect(result.grainConflictCount).toBe(1);
     const conflictedPart = result.sheets.flatMap((s) => s.parts).find((p) => p.grainConflict);
     expect(conflictedPart).toBeDefined();
@@ -179,26 +152,15 @@ describe('optimizeCutSheets', () => {
   });
 
   it('no grain conflict when part fits without rotation on narrow sheet', () => {
-    // length=400, width=300 → fits on 500×1000 sheet without rotation
-    const grainPart: import('../../src/engine/types').Part = {
-      id: 'test-narrow',
-      name: { en: 'Narrow Panel', he: 'לוח צר' },
-      qty: 1,
-      material: 'plywood-17',
-      thickness: 17,
-      length: 400,
-      width: 300,
-      edgeBanding: { en: '', he: '' },
-    };
-    const result = optimizeCutSheets([grainPart], 3, { 'plywood-17': { width: 500, length: 1000 } });
+    // 400×300 fits on 500-wide sheet without rotation.
+    const result = optimizeCutSheets([mkPlywoodPart('test-narrow', 300)], 3, NARROW_SHEET);
     expect(result.grainConflictCount).toBe(0);
-    const placed = result.sheets.flatMap((s) => s.parts)[0];
-    expect(placed?.grainConflict).toBeUndefined();
+    expect(result.sheets.flatMap((s) => s.parts)[0]?.grainConflict).toBeUndefined();
   });
 
   it('non-grain material parts never have grainConflict flag', () => {
-    // melamine-18 has hasGrain=false → rotation is fine, no conflict flag
-    const nonGrainPart: import('../../src/engine/types').Part = {
+    // melamine-18 has hasGrain=false → rotation is allowed, no conflict flag.
+    const part: Part = {
       id: 'test-mdf',
       name: { en: 'Back Panel', he: 'גב' },
       qty: 1,
@@ -208,41 +170,20 @@ describe('optimizeCutSheets', () => {
       width: 700,
       edgeBanding: { en: '', he: '' },
     };
-    const result = optimizeCutSheets([nonGrainPart], 3, {
-      'melamine-18': { width: 500, length: 1000 },
-    });
+    const result = optimizeCutSheets([part], 3, { 'melamine-18': { width: 500, length: 1000 } });
     expect(result.grainConflictCount).toBe(0);
     for (const sheet of result.sheets) {
-      for (const p of sheet.parts) {
-        expect(p.grainConflict).toBeUndefined();
-      }
+      for (const p of sheet.parts) expect(p.grainConflict).toBeUndefined();
     }
   });
 
   it('counts multiple grain conflicts across sheets', () => {
-    // Two parts that each need forced rotation on a narrow grain sheet
-    const mkPart = (id: string): import('../../src/engine/types').Part => ({
-      id,
-      name: { en: id, he: id },
-      qty: 1,
-      material: 'plywood-17',
-      thickness: 17,
-      length: 400,
-      width: 700,
-      edgeBanding: { en: '', he: '' },
-    });
-    const result = optimizeCutSheets([mkPart('a'), mkPart('b')], 3, {
-      'plywood-17': { width: 500, length: 1000 },
-    });
+    const result = optimizeCutSheets([mkPlywoodPart('a', 700), mkPlywoodPart('b', 700)], 3, NARROW_SHEET);
     expect(result.grainConflictCount).toBe(2);
   });
 
-  // ── Explainable per-part placement rationale (Sprint 10) ─────────────────
-
-  it('every placed part has a rationale string starting with "BSSF"', () => {
-    const parts = generateParts(DEFAULT_CONFIG);
-    const result = optimizeCutSheets(parts);
-    for (const sheet of result.sheets) {
+  it('every placed part has a rationale starting with "BSSF"', () => {
+    for (const sheet of defaultResult.sheets) {
       for (const p of sheet.parts) {
         expect(typeof p.rationale).toBe('string');
         expect(p.rationale).toMatch(/^BSSF\(/);
@@ -250,161 +191,44 @@ describe('optimizeCutSheets', () => {
     }
   });
 
-  it('rationale includes "normal" for non-rotated parts', () => {
-    // Tall grain-locked part must stay upright (not rotated)
-    const tallPart: import('../../src/engine/types').Part = {
-      id: 'tall',
-      name: { en: 'Tall Panel', he: 'לוח גבוה' },
-      qty: 1,
-      material: 'plywood-17',
-      thickness: 17,
-      length: 800,
-      width: 300,
-      edgeBanding: { en: '', he: '' },
-    };
-    const result = optimizeCutSheets([tallPart], 3, { 'plywood-17': { width: 500, length: 1000 } });
-    const placed = result.sheets.flatMap((s) => s.parts)[0];
-    expect(placed?.rationale).toMatch(/BSSF\(normal\)/);
+  it('rationale includes "normal" for non-rotated grain-locked parts', () => {
+    // 800×300 part fits on 500-wide sheet without rotation (300 ≤ 500).
+    const result = optimizeCutSheets([{ ...mkPlywoodPart('tall', 300), length: 800 }], 3, NARROW_SHEET);
+    expect(result.sheets.flatMap((s) => s.parts)[0]?.rationale).toMatch(/BSSF\(normal\)/);
   });
 
-  it('rationale includes "grain-forced" for grain-conflict parts', () => {
-    const widePart: import('../../src/engine/types').Part = {
-      id: 'wide',
-      name: { en: 'Wide Panel', he: 'לוח רחב' },
-      qty: 1,
-      material: 'plywood-17',
-      thickness: 17,
-      length: 400,
-      width: 700,
-      edgeBanding: { en: '', he: '' },
-    };
-    const result = optimizeCutSheets([widePart], 3, { 'plywood-17': { width: 500, length: 1000 } });
-    const placed = result.sheets.flatMap((s) => s.parts)[0];
-    expect(placed?.rationale).toMatch(/grain-forced/);
+  it('rationale includes "grain-forced" for rotated grain-conflict parts', () => {
+    const result = optimizeCutSheets([mkPlywoodPart('wide', 700)], 3, NARROW_SHEET);
+    expect(result.sheets.flatMap((s) => s.parts)[0]?.rationale).toMatch(/grain-forced/);
   });
 
   it('rationale includes mm margin values', () => {
-    const parts = generateParts(DEFAULT_CONFIG);
-    const result = optimizeCutSheets(parts);
-    for (const sheet of result.sheets) {
-      for (const p of sheet.parts) {
-        // Should contain "Nmm × Mmm margin" pattern
-        expect(p.rationale).toMatch(/\d+mm × \d+mm margin/);
-      }
+    for (const sheet of defaultResult.sheets) {
+      for (const p of sheet.parts) expect(p.rationale).toMatch(/\d+mm × \d+mm margin/);
     }
   });
 });
 
-describe('optimizeCutSheets — grainConflictCount (Sprint 41)', () => {
-  it('grainConflictCount is 0 for grain-free material', () => {
-    const parts = generateParts({ ...DEFAULT_CONFIG, carcassMaterial: 'melamine-18' });
-    const result = optimizeCutSheets(parts);
+describe('optimizeCutSheets — grain conflict aggregation', () => {
+  it('grainConflictCount is 0 and no flags set for grain-free material', () => {
+    const result = optimizeCutSheets(generateParts({ ...DEFAULT_CONFIG, carcassMaterial: 'melamine-18' }));
     expect(result.grainConflictCount).toBe(0);
+    expect(result.sheets.flatMap((s) => s.parts).every((p) => !p.grainConflict)).toBe(true);
   });
 
-  it('grainConflictCount is a non-negative integer', () => {
-    const parts = generateParts(DEFAULT_CONFIG);
-    const result = optimizeCutSheets(parts);
-    expect(result.grainConflictCount).toBeGreaterThanOrEqual(0);
-    expect(Number.isInteger(result.grainConflictCount)).toBe(true);
-  });
-
-  it('grainConflict flag matches grainConflictCount aggregate', () => {
-    const parts = generateParts(DEFAULT_CONFIG);
-    const result = optimizeCutSheets(parts);
-    const flaggedCount = result.sheets.flatMap((s) => s.parts).filter((p) => p.grainConflict === true).length;
-    expect(result.grainConflictCount).toBe(flaggedCount);
-  });
-
-  it('rationale is defined on every placed part', () => {
-    const parts = generateParts(DEFAULT_CONFIG);
-    const result = optimizeCutSheets(parts);
-    for (const sheet of result.sheets) {
-      for (const p of sheet.parts) {
-        expect(p.rationale).toBeDefined();
-        expect(typeof p.rationale).toBe('string');
-      }
-    }
-  });
-
-  it('grainConflict parts have "grain-forced" in their rationale', () => {
-    const parts = generateParts(DEFAULT_CONFIG);
-    const result = optimizeCutSheets(parts);
-    for (const sheet of result.sheets) {
-      for (const p of sheet.parts) {
-        if (p.grainConflict) {
-          expect(p.rationale).toMatch(/grain-forced/);
-        }
-      }
-    }
-  });
-});
-
-describe('optimizeCutSheets — grain conflict indicators (Sprint 42)', () => {
-  it('non-grain-conflict parts have grainConflict undefined or false', () => {
-    const parts = generateParts(DEFAULT_CONFIG);
-    const result = optimizeCutSheets(parts);
-    for (const sheet of result.sheets) {
-      for (const p of sheet.parts) {
-        if (!p.grainConflict) {
-          expect(p.grainConflict).toBeFalsy();
-        }
-      }
-    }
-  });
-
-  it('grainConflict is truthy only when hasGrain material and part was forced to rotate', () => {
-    const widePart: import('../../src/engine/types').Part = {
-      id: 'wide',
-      name: { en: 'Wide', he: 'רחב' },
-      qty: 1,
-      material: 'plywood-17',
-      thickness: 17,
-      length: 400,
-      width: 700,
-      edgeBanding: { en: '', he: '' },
-    };
-    const result = optimizeCutSheets([widePart], 3, { 'plywood-17': { width: 500, length: 1000 } });
-    const placed = result.sheets.flatMap((s) => s.parts);
-    // The 700mm-wide part must be rotated on a 500mm-wide sheet → grain conflict
-    expect(placed.some((p) => p.grainConflict === true)).toBe(true);
-  });
-
-  it('grainConflictCount in OptimizationResult matches per-part grainConflict flags', () => {
-    const widePart: import('../../src/engine/types').Part = {
-      id: 'wide2',
-      name: { en: 'Wide2', he: 'רחב2' },
-      qty: 1,
-      material: 'plywood-17',
-      thickness: 17,
-      length: 400,
-      width: 700,
-      edgeBanding: { en: '', he: '' },
-    };
-    const result = optimizeCutSheets([widePart], 3, { 'plywood-17': { width: 500, length: 1000 } });
-    const flagged = result.sheets.flatMap((s) => s.parts).filter((p) => p.grainConflict).length;
+  it('grainConflictCount matches per-part grainConflict flag count', () => {
+    const result = optimizeCutSheets(generateParts(DEFAULT_CONFIG));
+    const flagged = result.sheets.flatMap((s) => s.parts).filter((p) => p.grainConflict === true).length;
     expect(result.grainConflictCount).toBe(flagged);
   });
 
-  it('sheets with zero grain conflicts have no parts with grainConflict=true', () => {
-    const normalPart: import('../../src/engine/types').Part = {
-      id: 'n1',
-      name: { en: 'Normal', he: 'רגיל' },
-      qty: 1,
-      material: 'plywood-17',
-      thickness: 17,
-      length: 300,
-      width: 200,
-      edgeBanding: { en: '', he: '' },
-    };
-    const result = optimizeCutSheets([normalPart], 3);
-    const conflicted = result.sheets.flatMap((s) => s.parts).filter((p) => p.grainConflict);
-    expect(conflicted.length).toBe(0);
-    expect(result.grainConflictCount).toBe(0);
+  it('grainConflict is set only when hasGrain part is forced to rotate on narrow sheet', () => {
+    const result = optimizeCutSheets([mkPlywoodPart('wide', 700)], 3, NARROW_SHEET);
+    const placed = result.sheets.flatMap((s) => s.parts);
+    expect(placed.some((p) => p.grainConflict === true)).toBe(true);
+    expect(result.grainConflictCount).toBe(placed.filter((p) => p.grainConflict).length);
   });
 });
-
-// ── Phase 13 / Sprint 5 — Cross-material co-nesting ───────────────────────────
 
 describe('findCoNestCandidates', () => {
   it('returns empty array when all sheets have distinct geometry', () => {

@@ -13,10 +13,16 @@
 
     // ── Styling ───────────────────────────────────────────────────────────
     // Tailwind v4 IntelliSense — class autocomplete, hover docs, lint.
-    // Requires enabling the v4 compatibility mode in VS Code settings.
     "bradlc.vscode-tailwindcss",
     // Stylelint — enforces stylelint.config.js rules on src/index.css.
     "stylelint.vscode-stylelint",
+
+    // ── Code quality helpers ──────────────────────────────────────────────
+    // Spell checker — catches typos in code identifiers, comments, strings.
+    "streetsidesoftware.code-spell-checker",
+    // Import cost — shows inline bundle sizes of imported packages.
+    "wix.vscode-import-cost",
+
     // ── Testing ───────────────────────────────────────────────────────────
     // Vitest test runner — run/debug individual tests in the editor gutter.
     "vitest.explorer",
@@ -27,7 +33,7 @@
     "github.vscode-github-actions",
     "timonwong.shellcheck",
 
-    // ── GitHub Copilot ────────────────────────────────────────────────
+    // ── GitHub Copilot ────────────────────────────────────────────────────
     // Core Copilot extension — AI completions and inline suggestions.
     "github.copilot",
     // Copilot Chat panel — requires github.copilot to be installed.

@@ -2,6 +2,7 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
+> **Current release: v3.69.0**
 
 ## Tech Stack
 
@@ -24,8 +25,12 @@ src/
   store/        Zustand store — cabinet-store.ts, custom-materials-store.ts, room-store.ts, toast-store.ts
   components/   React components grouped by feature: configurator/ preview/ optimizer/ assembly/ pdf/ layout/
   utils/        Export helpers: bom-export, dxf-export, gcode-export, url-state, project-storage
-  i18n/         en.json + he.json + ar.json + de.json + es.json + fr.json — MUST update en.json and he.json for every new key; other languages at minimum copy the en value
+  i18n/         en.json + he.json + ar.json + de.json + es.json + fr.json
+                MUST update en.json AND he.json for every new key; other languages copy the en value at minimum
   workers/      Web Workers (?worker import suffix); bom-export.worker.ts, cut-optimizer.worker.ts
+.github/
+  actions/
+    setup-node/ composite action — checkout + setup-node + npm ci (used by ci.yml to avoid repetition)
 tests/
   engine/       Unit tests for pure engine functions (80% coverage required)
   store/        Zustand store action tests
@@ -38,13 +43,15 @@ tests/
 
 - **Zero suppression rule**: no `eslint-disable`, no `@ts-ignore`, no `@ts-nocheck`, no `as any`
 - **TypeScript strictness**: `noImplicitOverride`, `allowUnreachableCode: false`, `allowUnusedLabels: false` are enforced — do not add unreachable branches or unused labels
+- **`erasableSyntaxOnly: true`**: no `enum`, no `namespace`, no `const enum` — use `as const` objects or union types instead
 - **i18n parity**: every new `t('key')` call must have matching entries in both `en.json` and `he.json`
 - **Engine functions are pure**: `src/engine/` has no side effects, no React imports, fully tested
+- **react-refresh rule**: component files (`src/components/**/*.tsx`) must export **only** React components. Extract non-component exports (utilities, constants) to separate `.ts` files. Example: `compute-offcuts.ts` alongside `SheetCard.tsx`.
 - **ARIA via jsx-a11y**: `eslint-plugin-jsx-a11y` enforces correctness at lint time —
   do NOT add redundant `role="list"` / `role="listitem"` on semantic `<ul>` / `<li>`;
   do NOT attach `onKeyDown` to non-interactive `<div>` (use `useFocusTrap` or document-level listener)
-- **ESLint plugins (6 only)**: jsx-a11y, react-hooks, react-refresh, react, regexp, no-only-tests.
-  No sonarjs, no promise plugin. Keep the config minimal — tool defaults preferred.
+- **ESLint plugins (7 total)**: jsx-a11y, react-hooks, react-refresh, react, regexp, no-only-tests, testing-library.
+  No sonarjs, no promise plugin. `--max-warnings 0` is enforced in CI.
 - **RTL-safe layout**: use Tailwind logical properties (`ms-*`, `me-*`, `start-*`, `end-*`) not `ml-*`/`mr-*`
 - **No hardcoded colours**: use `wood-*` design tokens or Tailwind semantic classes
 - **CSS via Stylelint**: `stylelint.config.js` + `.browserslistrc` (canonical) drives compatibility.
@@ -53,6 +60,7 @@ tests/
   `playwright.config.ts`, `eslint.config.js`, `stylelint.config.js`, `typedoc.json`,
   or `tsconfig.*.json` into subdirs. These match Vite/React/ESLint defaults and moving
   them creates churn without benefit. Only docs and non-tool assets go in `docs/`
+- **Test style**: use `it.each` for parametrised negative/positive test pairs; group related assertions in one `it` rather than one `expect` per `it`
 
 ## Key Patterns
 
@@ -91,6 +99,23 @@ import CutOptimizerWorker from './workers/cut-optimizer.worker?worker';
 // Never import workers directly in unit tests — use sync fallback
 ```
 
+### Non-component exports from component directories
+
+When a component file needs a utility function that would violate `react-refresh/only-export-components`:
+
+```ts
+// ❌ Wrong — mixing component and non-component exports in the same file
+export function computeOffcuts(sheet: CutSheet) { ... }
+export function SheetCard(...) { ... }
+
+// ✅ Correct — extract to a sibling .ts file
+// src/components/optimizer/compute-offcuts.ts
+export function computeOffcuts(sheet: CutSheet) { ... }
+// src/components/optimizer/SheetCard.tsx
+import { computeOffcuts } from './compute-offcuts';
+export function SheetCard(...) { ... }
+```
+
 ## Cut Optimizer Coordinate System
 
 The MaxRects BSSF cut-optimizer uses:
@@ -108,6 +133,8 @@ The MaxRects BSSF cut-optimizer uses:
 - Hardcode pixel values — use Tailwind utility classes
 - Skip the `he.json` update when adding i18n keys
 - Use IE-only or deprecated browser APIs — the project targets modern evergreen browsers only (`not ie 11` in `.browserslistrc`)
+- Add `enum` or `namespace` — use `as const` objects or union types (TypeScript 6 `erasableSyntaxOnly`)
+- Add `sonarjs` or `promise` ESLint plugins — not in this project's config
 
 ## Intermediate Files & Caching
 

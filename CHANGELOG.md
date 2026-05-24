@@ -9,6 +9,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.70.0] — 2026-06-27
+
+### Phase 16.6 — Code Hygiene & CI Speed
+
+#### Added
+
+- **CI composite action** `.github/actions/setup-node/action.yml` — checkout + setup-node +
+  npm ci extracted as a reusable composite action; `ci.yml` updated to call it, eliminating
+  4× repeated steps (~45 lines removed from the workflow)
+- **VS Code recommendations** added: `streetsidesoftware.code-spell-checker`,
+  `wix.vscode-import-cost`
+- **Phase 16.6** added to ROADMAP.md as HIGH PRIORITY / IMMEDIATE with sprints B1–B11
+
+#### Changed
+
+- **`tests/engine/cut-optimizer.test.ts`** refactored: added `beforeAll` for shared default-config
+  result, extracted `mkPlywoodPart` factory and `NARROW_SHEET` constant to eliminate 50+ lines of
+  duplicate inline Part objects, removed sprint section dividers → **551 → 448 lines (19%)**
+- **`tests/engine/validation.test.ts`** removed all 14 sprint/phase section divider comment lines
+  (`// ── Sprint N ──`) — tests already self-documenting via name → **706 → 692 lines**
+- **`tests/utils/bom-export.test.ts`** merged EN/HE locale tests into `it.each`, removed 5 sprint
+  section header comments and renamed describe blocks to drop Sprint numbers → **460 → 457 lines**
+- **`docs/ARCHITECTURE.md`** Sprint Release Timeline Gantt (~45 lines) replaced with 3-line
+  reference to SPRINT-HISTORY.md/CHANGELOG (eliminates ROADMAP duplication); stale test count
+  updated to ~1900+; WCAG section version header updated to v3.70+
+- **`.github/copilot-instructions.md`** updated to v3.69.0 production state: `erasableSyntaxOnly`,
+  7 ESLint plugins (no sonarjs/promise), `compute-offcuts.ts` pattern, test style guidelines
+- **ROADMAP.md** Phase 16.6 added; Phase 17/18/19 version numbers corrected
+
 ## [3.69.0] — 2026-06-26
 
 ### Production Readiness
