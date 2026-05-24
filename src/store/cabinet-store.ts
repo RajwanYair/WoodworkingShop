@@ -506,17 +506,12 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
   // Type-narrowing wrappers: each slice only sets its own state fields so the
   // cast from Partial<SliceType> → Partial<CabinetState> is structurally safe.
   type SliceSetFn<S> = (partial: Partial<S> | ((s: S) => Partial<S>)) => void;
-  const makeSliceSet = <S,>(): SliceSetFn<S> =>
-    (partial) => {
-      if (typeof partial === 'function') {
-        set((s) => partial(s) as Partial<CabinetState>);
-      } else {
-        set(partial as Partial<CabinetState>);
-      }
-    };
-  const uiSet = makeSliceSet<UiSlice>();
-  const optSet = makeSliceSet<OptimizerSettingsSlice>();
-  const snapSet = makeSliceSet<SnapshotSlice>();
+  // Single shared dispatcher — CabinetState is structurally a supertype of every
+  // slice (it contains all slice fields), so the narrowed aliases are sound.
+  const sliceSetImpl: SliceSetFn<CabinetState> = (partial) => { set(partial); };
+  const uiSet = sliceSetImpl as SliceSetFn<UiSlice>;
+  const optSet = sliceSetImpl as SliceSetFn<OptimizerSettingsSlice>;
+  const snapSet = sliceSetImpl as SliceSetFn<SnapshotSlice>;
 
   return {
     // ── Config / multi-cabinet slice (inline) ─────────────────────────────
