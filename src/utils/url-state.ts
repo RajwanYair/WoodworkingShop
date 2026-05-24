@@ -216,3 +216,85 @@ export function decompressBase64ToConfig(compact: string): Partial<CabinetConfig
     return {};
   }
 }
+
+// ── Phase 13 / Sprint 6 — Offline-capable URL share ──────────────────────────
+// When the compact base64 config string exceeds URL_REF_THRESHOLD bytes, the
+// config is stored in IndexedDB under a short random key and the URL is
+// shortened to `?ref=<key>`.  On load, `readConfigFromUrlAsync` resolves the
+// ref back to a config.  If the ref is not found (different device / cleared
+// storage), the app falls back to an empty default config.
+
+import { storeUrlRef, loadUrlRef } from './indexed-db-storage';
+
+/** Maximum bytes for inline `?c=<base64>` before falling back to a short ref. */
+export const URL_REF_THRESHOLD = 2048;
+
+/** Length of generated short-ref keys (8 alphanumeric characters = 36^8 ≈ 2.8 trillion combinations). */
+export const REF_KEY_LENGTH = 8;
+
+/**
+ * Generate a cryptographically random URL-safe short-ref key.
+ * Uses `crypto.getRandomValues` — no external dependency, no Math.random().
+ */
+export function generateShareRefKey(): string {
+  const alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  const bytes = new Uint8Array(REF_KEY_LENGTH);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, (b) => alphabet[b % alphabet.length]).join('');
+}
+
+/**
+ * Push the config to the browser URL.  When the compact form exceeds
+ * `URL_REF_THRESHOLD` bytes it is stored in IndexedDB and a short `?ref=<key>`
+ * URL is used instead.  The `?pn=` project-name param is preserved.
+ *
+ * Prefer this over `pushConfigToUrl` when IndexedDB is available.
+ */
+export async function pushConfigToUrlOffline(cfg: CabinetConfig, projectName?: string): Promise<void> {
+  const compact = compressConfigToBase64(cfg);
+  const pn = projectName ?? new URLSearchParams(window.location.search).get('pn');
+  const params = new URLSearchParams();
+  if (pn) params.set('pn', pn);
+
+  if (compact.length <= URL_REF_THRESHOLD) {
+    params.set('c', compact);
+  } else {
+    const key = generateShareRefKey();
+    await storeUrlRef(key, compact);
+    params.set('ref', key);
+  }
+
+  const qs = params.toString();
+  window.history.replaceState(null, '', qs ? `${window.location.pathname}?${qs}` : window.location.pathname);
+}
+
+/**
+ * Resolve a `?ref=<key>` URL parameter to a CabinetConfig by looking it up
+ * in IndexedDB.  Returns `null` when the key is not found.
+ */
+export async function resolveUrlRef(key: string): Promise<Partial<CabinetConfig> | null> {
+  const compact = await loadUrlRef(key);
+  if (compact === undefined) return null;
+  return decompressBase64ToConfig(compact);
+}
+
+/**
+ * Async variant of `readConfigFromUrl` that additionally handles `?ref=<key>`.
+ * Order of precedence: `?ref=` → `?c=` → `?tpl=` → individual params.
+ * Returns an empty object (not null) when nothing is decoded.
+ */
+export async function readConfigFromUrlAsync(): Promise<Partial<CabinetConfig>> {
+  const params = new URLSearchParams(window.location.search);
+
+  const ref = params.get('ref');
+  if (ref) {
+    const resolved = await resolveUrlRef(ref);
+    if (resolved !== null) return resolved;
+    // Ref not found — fall through to other decode strategies
+  }
+
+  const compact = params.get('c');
+  if (compact) return decompressBase64ToConfig(compact);
+
+  return readConfigFromUrl();
+}
