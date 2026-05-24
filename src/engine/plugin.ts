@@ -49,7 +49,7 @@ export interface PluginContract {
  * Update this object whenever a hook is added, changed, or deprecated.
  */
 export const PLUGIN_CONTRACT: PluginContract = {
-  apiVersion: '1.0.0',
+  apiVersion: '1.2.0',
   stability: 'experimental',
   hooks: [
     {
@@ -76,6 +76,17 @@ export const PLUGIN_CONTRACT: PluginContract = {
         'Called after validateConfig() has run all built-in and custom rules. ' +
         'The plugin may add, remove, or modify ValidationIssue objects. ' +
         'Return the same array reference to signal no change.',
+    },
+    {
+      // Phase 13 / Sprint 17 — G-code post-processor hook
+      hookName: 'onGcodeGenerated',
+      stability: 'experimental',
+      introducedIn: '1.2.0',
+      description:
+        'Called after cutSheetToGcode() has produced the raw G-code string. ' +
+        'The plugin may rewrite, annotate, or transliterate the output for a ' +
+        'specific CNC controller dialect (Mach3, LinuxCNC, Fanuc, etc.). ' +
+        'Return the modified string; return the same string reference for no change.',
     },
   ],
 } as const;
@@ -126,6 +137,17 @@ export interface CabinetPlannerPlugin {
    * validation issues. Return the same array reference to signal no change.
    */
   onValidate?: (issues: ValidationIssue[], cfg: CabinetConfig) => ValidationIssue[];
+
+  /**
+   * Phase 13 / Sprint 17 — Called after `cutSheetToGcode()` has assembled
+   * the raw G-code string for a single sheet. The plugin may rewrite the
+   * output to target a specific CNC controller dialect (Mach3, LinuxCNC,
+   * Fanuc, etc.). Return the modified string; return the same reference to
+   * signal no change.
+   *
+   * Stability: `experimental` — signature may change in v2.
+   */
+  onGcodeGenerated?: (raw: string) => string;
 }
 
 // ── Plugin registry ──────────────────────────────────────────────────────────
@@ -175,6 +197,23 @@ export function applyConfigPlugins(cfg: CabinetConfig): CabinetConfig {
   for (const plugin of _plugins) {
     if (plugin.onConfigChange) {
       result = plugin.onConfigChange(result);
+    }
+  }
+  return result;
+}
+
+/**
+ * Phase 13 / Sprint 17 — Run the `onGcodeGenerated` hook for all registered
+ * plugins in registration order, piping the output of each into the next.
+ *
+ * Call this at the end of `cutSheetToGcode()` before returning the final
+ * string to allow plugins to target specific CNC controller dialects.
+ */
+export function applyGcodePlugins(raw: string): string {
+  let result = raw;
+  for (const plugin of _plugins) {
+    if (plugin.onGcodeGenerated) {
+      result = plugin.onGcodeGenerated(result);
     }
   }
   return result;

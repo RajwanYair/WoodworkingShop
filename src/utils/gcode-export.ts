@@ -1,6 +1,7 @@
 import type { CutSheet, CutRect } from '../engine/types';
 import { triggerDownload } from './download';
 import { validateGcode, type GcodeValidationResult } from '../engine/gcode-validator';
+import { applyGcodePlugins } from '../engine/plugin';
 
 /**
  * Generate basic G-code for a CNC router to cut parts from a sheet.
@@ -88,7 +89,8 @@ export function cutSheetToGcode(sheet: CutSheet, opts?: Partial<GcodeOptions>): 
   lines.push('G0 X0 Y0 ; return to origin');
   lines.push('M2 ; program end');
 
-  return lines.join('\n');
+  // Phase 13 / Sprint 17 — run any registered onGcodeGenerated plugin hooks
+  return applyGcodePlugins(lines.join('\n'));
 }
 
 function addPartProfile(lines: string[], part: CutRect, opts: GcodeOptions, offset: number) {

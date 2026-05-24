@@ -5,6 +5,7 @@ import {
   getPlugins,
   applyPartsPlugins,
   applyConfigPlugins,
+  applyGcodePlugins,
   getPluginContract,
   PLUGIN_CONTRACT,
   runWithSandbox,
@@ -274,5 +275,58 @@ describe('runWithSandbox — plugin sandbox', () => {
       throw new Error('fail');
     }, fallback);
     expect(result).toBe(fallback);
+  });
+});
+
+// ── Phase 13 / Sprint 17 ─────────────────────────────────────────────────────
+describe('applyGcodePlugins', () => {
+  const RAW_GCODE = 'G21\nG90\nM3 S18000\nM2';
+
+  it('returns raw G-code unchanged when no plugins are registered', () => {
+    expect(applyGcodePlugins(RAW_GCODE)).toBe(RAW_GCODE);
+  });
+
+  it('applies onGcodeGenerated hook to transform output', () => {
+    registerPlugin({
+      id: 'gcode.mach3',
+      name: 'Mach3 Post-Processor',
+      version: '1.0.0',
+      onGcodeGenerated: (raw) => raw.replace('M2', '%\nM30'),
+    });
+    const result = applyGcodePlugins(RAW_GCODE);
+    expect(result).toContain('M30');
+    expect(result).not.toContain('M2\n');
+  });
+
+  it('chains multiple onGcodeGenerated hooks in registration order', () => {
+    const log: string[] = [];
+    registerPlugin({
+      id: 'gcode.first',
+      name: 'First',
+      version: '1.0.0',
+      onGcodeGenerated: (raw) => { log.push('first'); return raw + '\n; first'; },
+    });
+    registerPlugin({
+      id: 'gcode.second',
+      name: 'Second',
+      version: '1.0.0',
+      onGcodeGenerated: (raw) => { log.push('second'); return raw + '\n; second'; },
+    });
+    const result = applyGcodePlugins(RAW_GCODE);
+    expect(log).toEqual(['first', 'second']);
+    expect(result).toContain('; first');
+    expect(result).toContain('; second');
+  });
+
+  it('skips plugins that do not implement onGcodeGenerated', () => {
+    registerPlugin({ id: 'gcode.noop', name: 'Noop', version: '1.0.0' });
+    expect(applyGcodePlugins(RAW_GCODE)).toBe(RAW_GCODE);
+  });
+
+  it('onGcodeGenerated is listed in PLUGIN_CONTRACT as experimental', () => {
+    const hook = PLUGIN_CONTRACT.hooks.find((h) => h.hookName === 'onGcodeGenerated');
+    expect(hook).toBeDefined();
+    expect(hook?.stability).toBe('experimental');
+    expect(hook?.introducedIn).toBe('1.2.0');
   });
 });
