@@ -9,6 +9,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.68.0] — 2026-06-26
+
+### Design-Check Actionable Fixes & Package Updates
+
+#### Added
+
+- **Actionable fix buttons for all design-check suggestions** — 7 validation
+  issues now have one-click fix patches: DOOR_ASPECT_RATIO (split to 2 doors),
+  HINGE_SHELF_INTERFERENCE (reduce shelves), JOINERY_POCKET_SCREW/DADO/DOWEL/
+  BISCUIT_TOO_THIN (switch to screw joinery), DADO_DEPTH_TOO_SHALLOW (use
+  plywood-18), VENDOR_HINGE_PROFILE_UNKNOWN (remove custom hinge profile)
+- 5 new i18n fix-label keys across all 6 locales
+- 8 missing fix-label keys synced to ar/de/es/fr locales
+
+#### Changed
+
+- Updated parent workspace packages: @commitlint/cli 21.0.1,
+  @commitlint/config-conventional 21.0.1, @supabase/supabase-js 2.106.1,
+  lint-staged 17.0.5
+- Comprehensive strategic review: simplified ESLint (6 plugins only),
+  simplified Stylelint, rewrote ROADMAP.md for Phase 16+
+
 ## [3.67.0] — 2026-06-26
 
 ### Phase 15: Manufacturing Intelligence Expansion — Engine Sprints 44–49
