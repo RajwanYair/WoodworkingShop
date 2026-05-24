@@ -123,3 +123,6 @@ export type { LabeledPart, LabelingOptions } from './part-labeling';
 
 export { generateCostVarianceReport, formatCostVarianceReportAsCsv } from './cost-variance';
 export type { MaterialCostEntry, CostVarianceLine, CostVarianceReport } from './cost-variance';
+
+export { calculateShelfSpacing, getShelfPresets, getShelfPreset, SHELF_PRESETS } from './shelf-spacing';
+export type { ShelfPresetId, ShelfPreset, ShelfSpacingResult } from './shelf-spacing';
