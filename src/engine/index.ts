@@ -145,3 +145,6 @@ export type { CabinetNote, NoteStore, NoteScope, NoteError } from './cabinet-not
 
 export { analyseWaste, formatWasteReport, DEFAULT_WASTE_THRESHOLDS } from './waste-alert';
 export type { SheetWasteInput, WasteThresholds, WasteAlert, WasteAnalysisReport, WasteAlertLevel } from './waste-alert';
+
+export { buildCutPlanSummary, formatCutPlanSummary } from './cut-plan-summary';
+export type { SheetPlanInput, MaterialSummary, CutPlanSummary } from './cut-plan-summary';
