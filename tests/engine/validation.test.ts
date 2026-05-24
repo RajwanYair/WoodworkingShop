@@ -742,3 +742,82 @@ describe('SHELF_COUNT_WARDROBE_BARE', () => {
     expect(issue.suggestedValue).toBe(1);
   });
 });
+
+// ── Phase 13 / Sprint 2 — Vendor hinge profile compatibility ────────────────
+describe('vendor hinge profile compatibility validation', () => {
+  const thinMat = {
+    key: 'test-thin-12',
+    name: { en: 'Test 12 mm', he: 'בדיקה 12 מ"מ' },
+    thickness: 12,
+    sheetWidth: 2440,
+    sheetLength: 1220,
+    category: 'panel' as const,
+    color: '#cccccc',
+    hasGrain: false,
+    densityKgM3: 700,
+  };
+
+  it('raises VENDOR_HINGE_PROFILE_UNKNOWN for an unrecognised profile id', () => {
+    const issues = validateConfig(
+      cfg({ doorStyle: 'flat', hingeProfile: 'no-such-hinge-zzz' }),
+    );
+    const issue = issues.find((i) => i.code === 'VENDOR_HINGE_PROFILE_UNKNOWN');
+    expect(issue).toBeDefined();
+    expect(issue?.severity).toBe('warning');
+    expect(issue?.field).toBe('hingeProfile');
+  });
+
+  it('does not raise VENDOR_HINGE_PROFILE_UNKNOWN when hingeProfile is absent', () => {
+    const issues = validateConfig(cfg({ doorStyle: 'flat', hingeProfile: undefined }));
+    expect(issues.some((i) => i.code === 'VENDOR_HINGE_PROFILE_UNKNOWN')).toBe(false);
+  });
+
+  it('raises VENDOR_HINGE_BORE_TOO_DEEP when panel is thinner than bore + 2 mm wall', () => {
+    // blum-clip-top-blumotion bore depth = 13.5 mm → requires 15.5 mm minimum
+    // 12 mm panel is too thin
+    const issues = validateConfig(
+      cfg({ doorStyle: 'flat', carcassMaterial: 'test-thin-12', hingeProfile: 'blum-clip-top-blumotion' }),
+      [thinMat],
+    );
+    const issue = issues.find((i) => i.code === 'VENDOR_HINGE_BORE_TOO_DEEP');
+    expect(issue).toBeDefined();
+    expect(issue?.severity).toBe('error');
+    expect(issue?.field).toBe('carcassMaterial');
+    expect(issue?.message.en).toContain('13.5');
+  });
+
+  it('does not raise VENDOR_HINGE_BORE_TOO_DEEP for a 18 mm panel', () => {
+    // 18 mm panel > 13.5 + 2 = 15.5 mm minimum
+    const issues = validateConfig(
+      cfg({ doorStyle: 'flat', carcassMaterial: 'melamine-18', hingeProfile: 'blum-clip-top-blumotion' }),
+    );
+    expect(issues.some((i) => i.code === 'VENDOR_HINGE_BORE_TOO_DEEP')).toBe(false);
+  });
+
+  it('raises VENDOR_HINGE_NOT_RATED_FOR_TALL_DOOR for a 110° hinge on a 2400 mm door', () => {
+    // height=2500 → door height > MAX_SINGLE_DOOR_HEIGHT_MM (2200)
+    // blum-clip-top-110 openingAngle = 110 < WIDE_ANGLE_THRESHOLD_DEG (155)
+    const issues = validateConfig(
+      cfg({ doorStyle: 'flat', height: 2500, hingeProfile: 'blum-clip-top-110' }),
+    );
+    const issue = issues.find((i) => i.code === 'VENDOR_HINGE_NOT_RATED_FOR_TALL_DOOR');
+    expect(issue).toBeDefined();
+    expect(issue?.severity).toBe('warning');
+    expect(issue?.message.en).toContain('110');
+  });
+
+  it('does not raise VENDOR_HINGE_NOT_RATED_FOR_TALL_DOOR for a 165° wide-angle hinge', () => {
+    // blum-clip-top-165 openingAngle = 165 >= 155 threshold
+    const issues = validateConfig(
+      cfg({ doorStyle: 'flat', height: 2500, hingeProfile: 'blum-clip-top-165' }),
+    );
+    expect(issues.some((i) => i.code === 'VENDOR_HINGE_NOT_RATED_FOR_TALL_DOOR')).toBe(false);
+  });
+
+  it('does not raise hinge compatibility issues when doorStyle is none', () => {
+    const issues = validateConfig(
+      cfg({ doorStyle: 'none', hingeProfile: 'blum-clip-top-blumotion' }),
+    );
+    expect(issues.some((i) => i.code.startsWith('VENDOR_HINGE'))).toBe(false);
+  });
+});

@@ -1,6 +1,7 @@
 import type { CabinetConfig, ValidationIssue, ValidationRule, ValidationContext } from './types';
 import { getMaterial } from './materials.ts';
 import { computeDimensions } from './dimensions';
+import { VENDOR_HINGE_PROFILES } from './hardware';
 
 // ── Phase 12 / Sprint 9 — Custom rule registry ───────────────────────────────
 
@@ -184,7 +185,7 @@ export function validateConfig(
 
   const mat = safeGetMaterial(config.carcassMaterial, extraMaterials);
   const t = mat?.thickness ?? 18;
-  const dims = computeDimensions(config);
+  const dims = computeDimensions(config, extraMaterials);
 
   // ── Dimension sanity checks ──
 
@@ -901,6 +902,63 @@ export function validateConfig(
       },
       field: 'width',
     });
+  }
+
+  // ── Phase 13 / Sprint 2 — Vendor hinge profile compatibility ───────────────
+  // Validate the selected vendor hinge profile against door material thickness
+  // and door height at config time so mismatches are caught before export.
+  // Shows error with the profile's supplier URL as a substitution link.
+  //
+  //  1. Unknown profile id → warning (catalog lookup fails).
+  //  2. Panel too thin for cup bore → error (would bore through the door face).
+  //  3. Very tall door + non-wide-angle profile → warning (standard 110° hinges
+  //     are not rated for doors taller than MAX_SINGLE_DOOR_HEIGHT_MM).
+  const MIN_WALL_BEHIND_CUP_MM = 2; // mm of material that must remain behind the bore
+  const WIDE_ANGLE_THRESHOLD_DEG = 155; // hinges rated ≥ this angle handle heavy tall doors
+
+  if (config.hingeProfile && config.doorStyle !== 'none') {
+    const hingeProf = VENDOR_HINGE_PROFILES.find((p) => p.id === config.hingeProfile);
+    if (!hingeProf) {
+      issues.push({
+        code: 'VENDOR_HINGE_PROFILE_UNKNOWN',
+        severity: 'warning',
+        message: {
+          en: `Hinge profile id "${config.hingeProfile}" is not in the hardware catalog. Remove the profile or select a supported one.`,
+          he: `מזהה פרופיל ציר "${config.hingeProfile}" אינו קיים בקטלוג החומרה. הסר את הפרופיל או בחר אחד נתמך.`,
+        },
+        field: 'hingeProfile',
+      });
+    } else {
+      // Check 1: door panel must be thick enough for the hinge cup bore.
+      // mountingDepth is the bore depth; at least MIN_WALL_BEHIND_CUP_MM must
+      // remain to avoid boring through the door face.
+      const requiredThickness = hingeProf.mountingDepth + MIN_WALL_BEHIND_CUP_MM;
+      if (t < requiredThickness) {
+        issues.push({
+          code: 'VENDOR_HINGE_BORE_TOO_DEEP',
+          severity: 'error',
+          message: {
+            en: `Hinge "${hingeProf.name.en}" needs a ${hingeProf.mountingDepth} mm cup bore, but the panel is only ${t} mm thick (minimum ${Math.ceil(requiredThickness)} mm). Use a thicker panel or a shallower hinge. Product: ${hingeProf.supplierUrl}`,
+            he: `ציר "${hingeProf.name.he}" דורש קידוח כוס בעומק ${hingeProf.mountingDepth} מ"מ, אך הלוח עובי ${t} מ"מ בלבד (נדרש לפחות ${Math.ceil(requiredThickness)} מ"מ). השתמש בלוח עבה יותר או בציר רדוד יותר. מוצר: ${hingeProf.supplierUrl}`,
+          },
+          field: 'carcassMaterial',
+        });
+      }
+
+      // Check 2: standard 110° hinges are not rated for doors taller than
+      // MAX_SINGLE_DOOR_HEIGHT_MM. Suggest a wide-angle (≥ 155°) or heavy-duty profile.
+      if (dims.doorHeight > MAX_SINGLE_DOOR_HEIGHT_MM && hingeProf.openingAngle < WIDE_ANGLE_THRESHOLD_DEG) {
+        issues.push({
+          code: 'VENDOR_HINGE_NOT_RATED_FOR_TALL_DOOR',
+          severity: 'warning',
+          message: {
+            en: `Hinge "${hingeProf.name.en}" (${hingeProf.openingAngle}°) is not rated for doors taller than ${MAX_SINGLE_DOOR_HEIGHT_MM} mm. Choose a wide-angle (≥ ${WIDE_ANGLE_THRESHOLD_DEG}°) heavy-duty hinge for reliable long-term operation. Product: ${hingeProf.supplierUrl}`,
+            he: `ציר "${hingeProf.name.he}" (${hingeProf.openingAngle}°) אינו מדורג לדלתות גבוהות מ-${MAX_SINGLE_DOOR_HEIGHT_MM} מ"מ. בחר ציר זווית רחבה (≥ ${WIDE_ANGLE_THRESHOLD_DEG}°) כבד-עומס לתפקוד אמין לאורך זמן. מוצר: ${hingeProf.supplierUrl}`,
+          },
+          field: 'hingeProfile',
+        });
+      }
+    }
   }
 
   // ── Phase 12 / Sprint 9 — Custom rules from the registry ────────────────

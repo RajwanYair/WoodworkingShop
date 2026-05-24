@@ -1,4 +1,4 @@
-import type { CabinetConfig, DerivedDimensions } from './types';
+import type { CabinetConfig, DerivedDimensions, Material } from './types';
 import { asMm, asKg } from './types';
 import { getMaterial } from './materials.ts';
 
@@ -25,8 +25,8 @@ const DEFAULT_MODULUS = 3000;
  * Compute all derived internal dimensions from the external config.
  * Formulas ported from the legacy Python generators (Plan A/B/C).
  */
-export function computeDimensions(cfg: CabinetConfig): DerivedDimensions {
-  const t = getMaterial(cfg.carcassMaterial).thickness;
+export function computeDimensions(cfg: CabinetConfig, extraMaterials?: Material[]): DerivedDimensions {
+  const t = getMaterial(cfg.carcassMaterial, extraMaterials).thickness;
   const r = cfg.doorReveal;
 
   const internalWidth = cfg.width - 2 * t;
@@ -47,7 +47,7 @@ export function computeDimensions(cfg: CabinetConfig): DerivedDimensions {
   // Sprint 173 — per-shelf deflection ratings
   // v3.58.0 — centre supports divide the shelf into smaller bays. The longest
   // remaining bay is what governs deflection: effectiveSpan = shelfWidth / (n+1).
-  const mat = getMaterial(cfg.carcassMaterial);
+  const mat = getMaterial(cfg.carcassMaterial, extraMaterials);
   const centreSupports = Math.max(0, cfg.shelfCentreSupports ?? 0);
   const effectiveShelfSpan = shelfWidth / (centreSupports + 1);
   const shelfDeflections = Array.from({ length: cfg.shelfCount }, () =>

@@ -184,7 +184,7 @@ Exit criteria: branded measurement types adopted in engine, Workbox SW, lazy i18
 
 Exit criteria: waste offcut catalog usable, Cloudflare Pages deployed, validation rule registry active, WebGL preview in beta, SBOM generated on release. **All exit criteria met.**
 
-- [ ] **Engine sub-module split** — reorganize `engine/` into `engine/geometry/`, `engine/optimizer/`, `engine/hardware/`, `engine/materials/`, `engine/validation/`, `engine/plugin/`. Each gets its own barrel. Public `engine/index.ts` unchanged. Enables per-feature tree-shaking.
+- [x] **Engine sub-module split** — reorganize `engine/` into `engine/geometry/`, `engine/optimizer/`, `engine/hardware/`, `engine/materials/`, `engine/validation/`, `engine/plugin/`. Each gets its own barrel. Public `engine/index.ts` unchanged. Enables per-feature tree-shaking.
 - [x] **Validation rule registry** — replace flat `validation.ts` with `type ValidationRule = { id; severity; furnitureTypes; check(cfg, dims) }`. Existing rules migrated. Plugin API adds `registerRule()`.
 - [x] **Assembly step DAG** — model `AssemblyStep` as DAG nodes with dependency edges. Independent steps flagged `parallel: true`. AssemblyGuide renders parallel steps visually grouped.
 - [x] **Waste offcut catalog** — add `OffcutEntry` to IndexedDB (partial sheet dims + material). Optimizer accepts offcuts as starting sheets before opening new ones. UI in the Materials panel.
