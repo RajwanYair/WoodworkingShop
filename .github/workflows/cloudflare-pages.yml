@@ -26,8 +26,9 @@ jobs:
   deploy:
     name: Build & Deploy to CF Pages
     runs-on: ubuntu-latest
-    # Skip silently when secrets are not configured (e.g. forks)
-    if: ${{ vars.CLOUDFLARE_ACCOUNT_ID != '' || secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
+    # Skip silently when the CF account variable is not configured (e.g. forks).
+    # Note: secrets cannot be compared in if: conditions — use vars instead.
+    if: ${{ vars.CLOUDFLARE_ACCOUNT_ID != '' }}
     permissions:
       contents: read
       deployments: write

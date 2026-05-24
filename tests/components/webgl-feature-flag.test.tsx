@@ -46,7 +46,7 @@ describe('WebGLPreviewCanvas — feature flag', () => {
     const { container } = render(
       <WebGLPreviewCanvas config={BASE_CONFIG} />,
     );
-    expect(container.firstChild).toBeNull();
+    expect(container).toBeEmptyDOMElement();
   });
 
   it('returns nothing when VITE_ENABLE_WEBGL is "false"', async () => {
@@ -54,7 +54,7 @@ describe('WebGLPreviewCanvas — feature flag', () => {
     const { container } = render(
       <WebGLPreviewCanvas config={BASE_CONFIG} />,
     );
-    expect(container.firstChild).toBeNull();
+    expect(container).toBeEmptyDOMElement();
   });
 
   it('renders a fallback div when flag is true but WebGL is unavailable', async () => {
@@ -64,7 +64,7 @@ describe('WebGLPreviewCanvas — feature flag', () => {
     );
     // jsdom returns null for webgl context → fallback or canvas element rendered.
     // Either way, container should not be empty.
-    expect(container.firstChild).not.toBeNull();
+    expect(container).not.toBeEmptyDOMElement();
   });
 
   it('accepts materialColor and isometric props without crashing', async () => {

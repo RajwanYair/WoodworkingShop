@@ -44,33 +44,28 @@ function syncFile(relPath, pattern, replacement) {
   console.log(`[sync-sw-version] ${relPath} updated to ${version}.`);
 }
 
-// 1. public/sw.js — APP_VERSION constant
-const swPath = resolve(root, 'public/sw.js');
-const swOriginal = readFileSync(swPath, 'utf8');
-const swRe = /const\s+APP_VERSION\s*=\s*['"]([^'"]+)['"]\s*;/;
-if (!swRe.test(swOriginal)) {
-  console.error(`[sync-sw-version] could not find APP_VERSION declaration in ${swPath}.`);
-  process.exit(1);
-}
-syncFile('public/sw.js', swRe, `const APP_VERSION = '${version}';`);
+// NOTE: public/sw.js was removed in v3.60.2 when Workbox/vite-plugin-pwa
+// took over service-worker generation. Version is now baked by Vite at
+// build time via the __APP_VERSION__ define in vite.config.ts — no manual
+// sync needed here.
 
-// 2. docs/banner.svg — version badge: >vX.Y.Z</text>
+// 1. docs/banner.svg — version badge: >vX.Y.Z</text>
 syncFile('docs/banner.svg', />v\d+\.\d+\.\d+<\/text>/, `>v${version}</text>`);
 
-// 3. docs/USER-GUIDE.md — "Version X.YY" header (major.minor only)
+// 2. docs/USER-GUIDE.md — "Version X.YY" header (major.minor only)
 syncFile('docs/USER-GUIDE.md', /Version \d+\.\d+/, `Version ${majorMinor}`);
 
-// 4. index.html — CSP comment version: "Content Security Policy (vX.Y.Z)"
+// 3. index.html — CSP comment version: "Content Security Policy (vX.Y.Z)"
 syncFile('index.html', /Content Security Policy \(v\d+\.\d+\.\d+\)/, `Content Security Policy (v${version})`);
 
-// 5. .github/SECURITY.md — accessibility section header
+// 4. .github/SECURITY.md — accessibility section header
 syncFile(
   '.github/SECURITY.md',
   /Accessibility Security Stance — v\d+\.\d+\.\d+/,
   `Accessibility Security Stance — v${version}`,
 );
 
-// 6. docs/ARCHITECTURE.md — accessibility section header
+// 5. docs/ARCHITECTURE.md — accessibility section header
 syncFile(
   'docs/ARCHITECTURE.md',
   /Accessibility \(WCAG 2\.2 AA\) — v\d+\.\d+\.\d+/,
