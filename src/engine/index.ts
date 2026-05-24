@@ -225,3 +225,6 @@ export {
   listTemplateIds,
 } from './template-library';
 export type { TemplateCategory, TemplateDimensions, CabinetTemplate, TemplateInstance } from './template-library';
+
+export { batchReplaceMaterial, listMaterials, countByMaterial } from './batch-replace';
+export type { BatchPart, BatchReplaceOptions, BatchReplaceResult } from './batch-replace';
