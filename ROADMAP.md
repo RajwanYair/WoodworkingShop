@@ -162,41 +162,41 @@ Full sprint-level history: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md).
 
 ## Active Program
 
-### Phase 11: Engine Quality & DX Hardening (v3.59.0 → v3.60.0)
+### Phase 11: Engine Quality & DX Hardening ✅ (v3.59.0 → v3.61.4)
 
-Exit criteria: branded measurement types adopted in engine, Workbox SW, lazy i18n, Lighthouse CI gate, Codecov wired, property-based optimizer tests passing, Guillotine cut mode usable.
+Exit criteria: branded measurement types adopted in engine, Workbox SW, lazy i18n, Lighthouse CI gate, Codecov wired, property-based optimizer tests passing, Guillotine cut mode usable. **All exit criteria met.**
 
-- [ ] **Branded measurement types** — introduce `Mm`, `Kg`, `Percent` nominal types in `engine/types.ts`. Migrate all engine signatures and `CabinetConfig` fields. Zero runtime cost.
-- [ ] **`Result<T, E>` pattern** — define a minimal `Result<T, E>` type (no external dep). Replace `throw` in engine functions with `Result` returns. Catches move to store + worker boundaries only.
-- [ ] **Zustand store slices** — split `cabinet-store.ts` into `configSlice`, `optimizerSlice`, `uiSlice`, `snapshotSlice`. Each slice has its own test file. Combined via `combine()`.
-- [ ] **Typed worker RPC** — replace manual `_currentReqId` stale-message guards with a `workerCall<I,O>(worker, msg): Promise<O>` utility that manages request IDs internally. Eliminates the fragile requestId handshake.
-- [ ] **Lazy i18n locale loading** — load only `en` at startup; lazy-load `he`, `ar`, `de`, `es`, `fr` on first language switch. Estimated saving: ~45 KB initial JS.
-- [ ] **`React.lazy` for heavy tabs** — wrap `AssemblyGuide`, `PdfExportPanel`, `OptimizerView`, `RoomLayoutView` in `React.lazy` + `Suspense` with skeleton fallbacks.
-- [ ] **Workbox SW migration** — replace `public/sw.js` with `vite-plugin-pwa` (Workbox `generateSW`). Fixes cache invalidation on version mismatch; SWR handled correctly.
-- [ ] **Lighthouse CI gate** — integrate `@lhci/cli` into `ci.yml`. Budgets: TBT < 300 ms, FCP < 1.5 s, a11y ≥ 95, best-practices ≥ 90. Block regressing PRs.
-- [ ] **Codecov integration** — wire coverage upload to Codecov in CI. README badge. Block PRs that drop engine layer below 85% statement coverage.
-- [ ] **Property-based optimizer tests** (`fast-check`) — fuzz `optimizeCutSheets` with random valid part lists. Assert: no overlaps, yield ≤ 100%, rotation-locked parts never rotated, all parts placed.
-- [ ] **Guillotine cut mode (engine)** — add `cutMode: 'guillotine' | 'freeform'` to `CabinetConfig`. When `guillotine`, the optimizer uses a strip-based algorithm. Toggle surfaced in the optimizer settings panel.
-- [ ] **Explainability tooltips** — surface the `rationale` string already on `CutRect` as hover tooltips in the sheet layout view.
-- [ ] **i18n parity for Phase 11** — `en.json` + `he.json` for all new UI strings; remaining 4 locales kept at 100% parity.
+- [x] **Branded measurement types** — introduce `Mm`, `Kg`, `Percent` nominal types in `engine/types.ts`. Migrate all engine signatures and `CabinetConfig` fields. Zero runtime cost.
+- [x] **`Result<T, E>` pattern** — define a minimal `Result<T, E>` type (no external dep). Replace `throw` in engine functions with `Result` returns. Catches move to store + worker boundaries only.
+- [x] **Zustand store slices** — split `cabinet-store.ts` into `configSlice`, `optimizerSlice`, `uiSlice`, `snapshotSlice`. Each slice has its own test file. Combined via `combine()`.
+- [x] **Typed worker RPC** — replace manual `_currentReqId` stale-message guards with a `workerCall<I,O>(worker, msg): Promise<O>` utility that manages request IDs internally. Eliminates the fragile requestId handshake.
+- [x] **Lazy i18n locale loading** — load only `en` at startup; lazy-load `he`, `ar`, `de`, `es`, `fr` on first language switch. Estimated saving: ~45 KB initial JS.
+- [x] **`React.lazy` for heavy tabs** — wrap `AssemblyGuide`, `PdfExportPanel`, `OptimizerView`, `RoomLayoutView` in `React.lazy` + `Suspense` with skeleton fallbacks.
+- [x] **Workbox SW migration** — replace `public/sw.js` with `vite-plugin-pwa` (Workbox `generateSW`). Fixes cache invalidation on version mismatch; SWR handled correctly.
+- [x] **Lighthouse CI gate** — integrate `@lhci/cli` into `ci.yml`. Budgets: TBT < 300 ms, FCP < 1.5 s, a11y ≥ 95, best-practices ≥ 90. Block regressing PRs.
+- [x] **Codecov integration** — wire coverage upload to Codecov in CI. README badge. Block PRs that drop engine layer below 85% statement coverage.
+- [x] **Property-based optimizer tests** (`fast-check`) — fuzz `optimizeCutSheets` with random valid part lists. Assert: no overlaps, yield ≤ 100%, rotation-locked parts never rotated, all parts placed.
+- [x] **Guillotine cut mode (engine)** — add `cutMode: 'guillotine' | 'freeform'` to `CabinetConfig`. When `guillotine`, the optimizer uses a strip-based algorithm. Toggle surfaced in the optimizer settings panel.
+- [x] **Explainability tooltips** — surface the `rationale` string already on `CutRect` as hover tooltips in the sheet layout view.
+- [x] **i18n parity for Phase 11** — `en.json` + `he.json` for all new UI strings; remaining 4 locales kept at 100% parity.
 
-### Phase 12: Optimizer Intelligence & Platform (v3.61.0 → v3.63.0)
+### Phase 12: Optimizer Intelligence & Platform ✅ (v3.61.0 → v3.62.0)
 
-Exit criteria: waste offcut catalog usable, Cloudflare Pages deployed, validation rule registry active, WebGL preview in beta, SBOM generated on release.
+Exit criteria: waste offcut catalog usable, Cloudflare Pages deployed, validation rule registry active, WebGL preview in beta, SBOM generated on release. **All exit criteria met.**
 
 - [ ] **Engine sub-module split** — reorganize `engine/` into `engine/geometry/`, `engine/optimizer/`, `engine/hardware/`, `engine/materials/`, `engine/validation/`, `engine/plugin/`. Each gets its own barrel. Public `engine/index.ts` unchanged. Enables per-feature tree-shaking.
-- [ ] **Validation rule registry** — replace flat `validation.ts` with `type ValidationRule = { id; severity; furnitureTypes; check(cfg, dims) }`. Existing rules migrated. Plugin API adds `registerRule()`.
-- [ ] **Assembly step DAG** — model `AssemblyStep` as DAG nodes with dependency edges. Independent steps flagged `parallel: true`. AssemblyGuide renders parallel steps visually grouped.
-- [ ] **Waste offcut catalog** — add `OffcutEntry` to IndexedDB (partial sheet dims + material). Optimizer accepts offcuts as starting sheets before opening new ones. UI in the Materials panel.
-- [ ] **Sheet defect avoidance** — add `defectZones: Rect[]` per material sheet. MaxRects treats defects as pre-placed parts that cannot overlap.
-- [ ] **WebGL isometric preview** — complete `WebGLPreviewCanvas.tsx` with Three.js r170+ (tree-shakeable). Per-material colour texture, isometric 3D. SVG fallback for non-WebGL. Feature-flagged via `VITE_ENABLE_WEBGL=true`.
-- [ ] **Grain direction hatching** — SVG hatch pattern overlay on each part in sheet layout. Colour-coded: green = grain aligned, amber = grain conflict.
+- [x] **Validation rule registry** — replace flat `validation.ts` with `type ValidationRule = { id; severity; furnitureTypes; check(cfg, dims) }`. Existing rules migrated. Plugin API adds `registerRule()`.
+- [x] **Assembly step DAG** — model `AssemblyStep` as DAG nodes with dependency edges. Independent steps flagged `parallel: true`. AssemblyGuide renders parallel steps visually grouped.
+- [x] **Waste offcut catalog** — add `OffcutEntry` to IndexedDB (partial sheet dims + material). Optimizer accepts offcuts as starting sheets before opening new ones. UI in the Materials panel.
+- [x] **Sheet defect avoidance** — add `defectZones: Rect[]` per material sheet. MaxRects treats defects as pre-placed parts that cannot overlap.
+- [x] **WebGL isometric preview** — complete `WebGLPreviewCanvas.tsx` with Three.js r170+ (tree-shakeable). Per-material colour texture, isometric 3D. SVG fallback for non-WebGL. Feature-flagged via `VITE_ENABLE_WEBGL=true`.
+- [x] **Grain direction hatching** — SVG hatch pattern overlay on each part in sheet layout. Colour-coded: green = grain aligned, amber = grain conflict.
 - [x] **Cloudflare Pages migration** — move hosting from GitHub Pages. Update `pages.yml`. Configure `_redirects` for SPA fallback. Enable PR preview deployments.
 - [x] **Privacy-first analytics** — add Cloudflare Web Analytics snippet (no cookies, no consent). Track page views + custom events (tab switches, export types). No PII.
-- [ ] **SBOM generation** — add `npm run sbom` using `@cyclonedx/cyclonedx-npm`. Emit `sbom.json` as a release artefact in `release.yml`.
-- [ ] **CSP `report-uri`** — add a free reporting endpoint (Sentry CSP, Report URI). Surfaces violations from real users; informs future CSP tightening.
+- [x] **SBOM generation** — add `npm run sbom` using `@cyclonedx/cyclonedx-npm`. Emit `sbom.json` as a release artefact in `release.yml`.
+- [x] **CSP `report-uri`** — `public/_headers` (Cloudflare Pages) adds `Report-To` group + `report-to`/`report-uri` directives pointing at `https://csp.cabinet-planner.workers.dev/report`. Replace URL with your own Sentry or Report URI endpoint.
 
-### Phase 13: Hardware Depth & Export Fidelity (v3.64.0 → v3.66.0)
+### Phase 13: Hardware Depth & Export Fidelity ⭐ (v3.62.1 → v3.64.0) — **ACTIVE**
 
 Exit criteria: Blum/Hettich/Grass catalog complete, DXF layer compliance, G-code post-processor hooks, BOM multi-currency.
 
