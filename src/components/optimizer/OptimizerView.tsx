@@ -1251,16 +1251,16 @@ function SheetCard({
             <line x1="0" y1="0" x2="0" y2="6" stroke="#C8B89A" strokeWidth="0.6" />
           </pattern>
           {/* Phase 12 / Sprint 11 — grain direction hatch patterns (green = aligned, amber = conflict) */}
-          <pattern id={`grain-${sheet.sheetIndex}-v-ok`} width="4" height="4" patternUnits="userSpaceOnUse">
+          <pattern id={`grain-${sheet.sheetIndex}-v-ok`} data-testid={`grain-pattern-${sheet.sheetIndex}-v-ok`} width="4" height="4" patternUnits="userSpaceOnUse">
             <line x1="2" y1="0" x2="2" y2="4" stroke="#16a34a" strokeWidth="0.9" />
           </pattern>
-          <pattern id={`grain-${sheet.sheetIndex}-h-ok`} width="4" height="4" patternUnits="userSpaceOnUse">
+          <pattern id={`grain-${sheet.sheetIndex}-h-ok`} data-testid={`grain-pattern-${sheet.sheetIndex}-h-ok`} width="4" height="4" patternUnits="userSpaceOnUse">
             <line x1="0" y1="2" x2="4" y2="2" stroke="#16a34a" strokeWidth="0.9" />
           </pattern>
-          <pattern id={`grain-${sheet.sheetIndex}-v-conflict`} width="4" height="4" patternUnits="userSpaceOnUse">
+          <pattern id={`grain-${sheet.sheetIndex}-v-conflict`} data-testid={`grain-pattern-${sheet.sheetIndex}-v-conflict`} width="4" height="4" patternUnits="userSpaceOnUse">
             <line x1="2" y1="0" x2="2" y2="4" stroke="#d97706" strokeWidth="0.9" />
           </pattern>
-          <pattern id={`grain-${sheet.sheetIndex}-h-conflict`} width="4" height="4" patternUnits="userSpaceOnUse">
+          <pattern id={`grain-${sheet.sheetIndex}-h-conflict`} data-testid={`grain-pattern-${sheet.sheetIndex}-h-conflict`} width="4" height="4" patternUnits="userSpaceOnUse">
             <line x1="0" y1="2" x2="4" y2="2" stroke="#d97706" strokeWidth="0.9" />
           </pattern>
           {/* Phase 12 / Sprint 13 — defect zone cross-hatch pattern (red diagonal) */}
@@ -1504,6 +1504,7 @@ function PartRect({
           opacity={isFaded ? 0.3 : 0.65}
           rx={0.5}
           pointerEvents="none"
+          data-testid={`grain-overlay-${part.grainConflict === true ? 'conflict' : 'ok'}`}
         />
       )}
       {/* Edge banding indicators — colored lines on banded edges */}

@@ -143,37 +143,32 @@ describe('OptimizerView grain direction hatching — Phase 12 / Sprint 11', () =
   it('grain hatch overlay rects appear after toggle on grain-sensitive material', () => {
     render(<OptimizerView />);
     // Before toggle: no grain hatch overlay rects
-    expect(document.querySelectorAll('rect[fill^="url(#grain-"]').length).toBe(0);
+    expect(screen.queryAllByTestId(/^grain-overlay-/).length).toBe(0);
     // Toggle on
     fireEvent.click(screen.getByTitle('Grain hatch'));
     // One overlay rect per part (2 parts on sheet 0)
-    const overlays = document.querySelectorAll('rect[fill^="url(#grain-"]');
-    expect(overlays.length).toBe(2);
+    expect(screen.getAllByTestId(/^grain-overlay-/).length).toBe(2);
   });
 
   it('aligned-grain part uses ok pattern', () => {
     render(<OptimizerView />);
     fireEvent.click(screen.getByTitle('Grain hatch'));
-    const overlays = Array.from(document.querySelectorAll('rect[fill^="url(#grain-"]'));
-    const okRects = overlays.filter((r) => r.getAttribute('fill')?.includes('-ok)'));
-    expect(okRects.length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByTestId('grain-overlay-ok').length).toBeGreaterThanOrEqual(1);
   });
 
   it('grain-conflict part uses conflict pattern', () => {
     render(<OptimizerView />);
     fireEvent.click(screen.getByTitle('Grain hatch'));
-    const overlays = Array.from(document.querySelectorAll('rect[fill^="url(#grain-"]'));
-    const conflictRects = overlays.filter((r) => r.getAttribute('fill')?.includes('-conflict)'));
-    expect(conflictRects.length).toBe(1);
+    expect(screen.getAllByTestId('grain-overlay-conflict').length).toBe(1);
   });
 
   it('grain hatch patterns are present in SVG defs', () => {
     render(<OptimizerView />);
     // Patterns always in defs regardless of toggle state
-    expect(document.querySelector('pattern[id^="grain-0-v-ok"]')).not.toBeNull();
-    expect(document.querySelector('pattern[id^="grain-0-h-ok"]')).not.toBeNull();
-    expect(document.querySelector('pattern[id^="grain-0-v-conflict"]')).not.toBeNull();
-    expect(document.querySelector('pattern[id^="grain-0-h-conflict"]')).not.toBeNull();
+    expect(screen.getByTestId('grain-pattern-0-v-ok')).toBeInTheDocument();
+    expect(screen.getByTestId('grain-pattern-0-h-ok')).toBeInTheDocument();
+    expect(screen.getByTestId('grain-pattern-0-v-conflict')).toBeInTheDocument();
+    expect(screen.getByTestId('grain-pattern-0-h-conflict')).toBeInTheDocument();
   });
 
   it('no grain hatch overlays on non-grain material even when toggled', () => {
@@ -181,6 +176,6 @@ describe('OptimizerView grain direction hatching — Phase 12 / Sprint 11', () =
     render(<OptimizerView />);
     fireEvent.click(screen.getByTitle('Grain hatch'));
     // melamine has hasGrain=false so no overlays rendered
-    expect(document.querySelectorAll('rect[fill^="url(#grain-"]').length).toBe(0);
+    expect(screen.queryAllByTestId(/^grain-overlay-/).length).toBe(0);
   });
 });
