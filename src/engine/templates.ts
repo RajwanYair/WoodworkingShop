@@ -14,6 +14,147 @@ export interface CabinetTemplate {
   description: { en: string; he: string };
   icon: string; // icon component name from Icons.tsx
   config: CabinetConfig;
+  /**
+   * Optional map of CabinetConfig field name → arithmetic expression string.
+   * Evaluated by `instantiateTemplate()` after size overrides are applied.
+   * Expressions may reference any numeric CabinetConfig field plus:
+   *   - `internalHeight` = height − kickHeight − 36  (approx top+bottom panels)
+   *   - `internalWidth`  = width  − 36               (approx left+right sides)
+   * Only arithmetic (+−×÷), parentheses, number literals, and
+   * Math.{floor|ceil|round|min|max|abs|trunc} are permitted.
+   * @example { shelfCount: "Math.floor(internalHeight / 350)" }
+   */
+  readonly computedFields?: Readonly<Record<string, string>>;
+}
+
+// ── Phase 13 / Sprint 4 — Parametric templates v2: DSL evaluator ─────────────
+// A hand-rolled recursive-descent parser.  Deliberately avoids eval() and
+// Function() to satisfy the OWASP injection constraint.
+
+type _DslToken =
+  | { k: 'num'; v: number }
+  | { k: 'id'; v: string }
+  | { k: 'op'; v: string }
+  | { k: 'lp' }
+  | { k: 'rp' }
+  | { k: 'comma' }
+  | { k: 'dot' };
+
+function _tokenize(expr: string): _DslToken[] {
+  const toks: _DslToken[] = [];
+  let i = 0;
+  while (i < expr.length) {
+    const ch = expr[i];
+    if (/\s/.test(ch)) { i++; continue; }
+    if (/\d/.test(ch)) {
+      let s = '';
+      while (i < expr.length && /[\d.]/.test(expr[i])) s += expr[i++];
+      toks.push({ k: 'num', v: parseFloat(s) });
+      continue;
+    }
+    if (/[a-zA-Z_]/.test(ch)) {
+      let s = '';
+      while (i < expr.length && /\w/.test(expr[i])) s += expr[i++];
+      toks.push({ k: 'id', v: s });
+      continue;
+    }
+    if ('+-*/'.includes(ch)) { toks.push({ k: 'op', v: ch }); i++; continue; }
+    if (ch === '(') { toks.push({ k: 'lp' }); i++; continue; }
+    if (ch === ')') { toks.push({ k: 'rp' }); i++; continue; }
+    if (ch === ',') { toks.push({ k: 'comma' }); i++; continue; }
+    if (ch === '.') { toks.push({ k: 'dot' }); i++; continue; }
+    throw new Error(`DSL: unexpected char '${ch}'`);
+  }
+  return toks;
+}
+
+const _MATH_FNS = new Set<string>(['floor', 'ceil', 'round', 'min', 'max', 'abs', 'trunc']);
+
+function _expr(toks: _DslToken[], p: number, ctx: Record<string, number>): [number, number] {
+  let [lhs, pos] = _term(toks, p, ctx);
+  while (pos < toks.length) {
+    const t = toks[pos];
+    if (t.k !== 'op' || (t.v !== '+' && t.v !== '-')) break;
+    const [rhs, pos2] = _term(toks, pos + 1, ctx);
+    lhs = t.v === '+' ? lhs + rhs : lhs - rhs;
+    pos = pos2;
+  }
+  return [lhs, pos];
+}
+
+function _term(toks: _DslToken[], p: number, ctx: Record<string, number>): [number, number] {
+  let [lhs, pos] = _unary(toks, p, ctx);
+  while (pos < toks.length) {
+    const t = toks[pos];
+    if (t.k !== 'op' || (t.v !== '*' && t.v !== '/')) break;
+    const [rhs, pos2] = _unary(toks, pos + 1, ctx);
+    lhs = t.v === '*' ? lhs * rhs : lhs / rhs;
+    pos = pos2;
+  }
+  return [lhs, pos];
+}
+
+function _unary(toks: _DslToken[], p: number, ctx: Record<string, number>): [number, number] {
+  const t = toks[p];
+  if (t?.k === 'op' && t.v === '-') {
+    const [v, pos] = _primary(toks, p + 1, ctx);
+    return [-v, pos];
+  }
+  return _primary(toks, p, ctx);
+}
+
+function _primary(toks: _DslToken[], p: number, ctx: Record<string, number>): [number, number] {
+  const t = toks[p];
+  if (!t) throw new Error('DSL: unexpected end of expression');
+  if (t.k === 'num') return [t.v, p + 1];
+  if (t.k === 'lp') {
+    const [v, pos] = _expr(toks, p + 1, ctx);
+    if (toks[pos]?.k !== 'rp') throw new Error('DSL: expected )');
+    return [v, pos + 1];
+  }
+  if (t.k === 'id') {
+    const name = t.v;
+    const t1 = toks[p + 1];
+    const t2 = toks[p + 2];
+    const t3 = toks[p + 3];
+    if (name === 'Math' && t1?.k === 'dot' && t2?.k === 'id') {
+      const fn = t2.v;
+      if (!_MATH_FNS.has(fn)) throw new Error(`DSL: Math.${fn} is not permitted`);
+      if (t3?.k !== 'lp') throw new Error(`DSL: expected ( after Math.${fn}`);
+      const args: number[] = [];
+      let pos = p + 4;
+      if (toks[pos]?.k !== 'rp') {
+        const [a1, pos1] = _expr(toks, pos, ctx);
+        args.push(a1);
+        pos = pos1;
+        while (toks[pos]?.k === 'comma') {
+          const [aN, posN] = _expr(toks, pos + 1, ctx);
+          args.push(aN);
+          pos = posN;
+        }
+      }
+      if (toks[pos]?.k !== 'rp') throw new Error(`DSL: expected ) after Math.${fn} args`);
+      type AllowedFn = 'floor' | 'ceil' | 'round' | 'min' | 'max' | 'abs' | 'trunc';
+      const mathFn = Math[fn as AllowedFn] as (...a: number[]) => number;
+      return [mathFn(...args), pos + 1];
+    }
+    if (!(name in ctx)) throw new Error(`DSL: unknown variable '${name}'`);
+    return [ctx[name], p + 1];
+  }
+  throw new Error(`DSL: unexpected token type '${t.k}'`);
+}
+
+/**
+ * Evaluate a constrained arithmetic expression against a numeric context.
+ * Safe alternative to eval() — only supports numbers, arithmetic, parentheses,
+ * and Math.{floor|ceil|round|min|max|abs|trunc}.
+ * @throws {Error} on disallowed constructs, unknown variables, or syntax errors.
+ */
+export function evaluateTemplateExpr(expr: string, ctx: Record<string, number>): number {
+  const toks = _tokenize(expr);
+  const [value, pos] = _expr(toks, 0, ctx);
+  if (pos !== toks.length) throw new Error('DSL: trailing tokens after expression');
+  return value;
 }
 
 function tpl(
@@ -401,10 +542,77 @@ export const TEMPLATES: CabinetTemplate[] = [
       edgeBanding: 'all-visible',
     },
   ),
+  // ── Phase 13 / Sprint 4 — Parametric template with computedFields ─────────
+  {
+    id: 'proportional-bookcase',
+    name: { en: 'Proportional Bookcase', he: 'כוננית פרופורציונלית' },
+    description: {
+      en: 'Bookcase where shelf count auto-scales with height (1 shelf per 350 mm of internal height)',
+      he: 'כוננית בה מספר המדפים מחושב אוטומטית לפי גובה (מדף אחד לכל 350 מ"מ)',
+    },
+    icon: 'IconBookshelf',
+    config: {
+      ...DEFAULT_CONFIG,
+      furnitureType: 'bookshelf',
+      width: 800,
+      height: 2100,
+      depth: 300,
+      shelfCount: 5,
+      doorStyle: 'none',
+      doorCount: 1,
+      handleStyle: 'none',
+      kickHeight: 0,
+      carcassMaterial: 'plywood-18',
+      backPanelMaterial: 'hdf-3',
+      edgeBanding: 'all-visible',
+    },
+    computedFields: {
+      // shelfCount = floor((height - 36) / 350) — one shelf per 350 mm of usable space
+      shelfCount: 'Math.floor(internalHeight / 350)',
+    },
+  } satisfies CabinetTemplate,
 ];
 
 export function getTemplate(id: string): CabinetTemplate | undefined {
   return TEMPLATES.find((t) => t.id === id);
+}
+
+/**
+ * Instantiate a CabinetTemplate into a concrete CabinetConfig.
+ * 1. Merges `sizeOverrides` on top of `tpl.config` (base).
+ * 2. Builds an evaluation context from all numeric fields in the merged config,
+ *    plus two helpers: `internalHeight` and `internalWidth`.
+ * 3. Evaluates each `computedFields` expression and patches the result.
+ *
+ * This allows templates to express proportional relationships such as:
+ *   `shelfCount = "Math.floor(internalHeight / 350)"`
+ *
+ * @example
+ *   const cfg = instantiateTemplate(getTemplate('proportional-bookcase')!, { height: 2400 });
+ *   // → cfg.shelfCount is automatically recalculated for the new height
+ */
+export function instantiateTemplate(
+  tpl: CabinetTemplate,
+  sizeOverrides?: Partial<CabinetConfig>,
+): CabinetConfig {
+  const base: CabinetConfig = { ...tpl.config, ...(sizeOverrides ?? {}) };
+  if (!tpl.computedFields) return base;
+
+  const ctx: Record<string, number> = {};
+  for (const [k, v] of Object.entries(base)) {
+    if (typeof v === 'number') ctx[k] = v;
+  }
+  // Derived helpers (approximate, 18 mm top+bottom panels = 36 mm combined)
+  ctx.internalHeight = base.height - (base.kickHeight ?? 0) - 36;
+  ctx.internalWidth = base.width - 36;
+
+  const patch: Partial<CabinetConfig> = {};
+  for (const [field, expr] of Object.entries(tpl.computedFields)) {
+    const value = evaluateTemplateExpr(expr, ctx);
+    // Only numeric config fields are settable via computed expressions
+    (patch as Record<string, number>)[field] = value;
+  }
+  return { ...base, ...patch };
 }
 
 /**

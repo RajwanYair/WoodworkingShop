@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { getTemplateDefaults, TEMPLATES, getTemplate } from '../../src/engine/templates';
+import {
+  getTemplateDefaults,
+  TEMPLATES,
+  getTemplate,
+  evaluateTemplateExpr,
+  instantiateTemplate,
+} from '../../src/engine/templates';
 import { generateParts } from '../../src/engine/parts';
 import type { FurnitureType } from '../../src/engine/types';
 
@@ -171,5 +177,126 @@ describe('TEMPLATES — Sprint 47 additions', () => {
 
   it('all templates now number at least 16', () => {
     expect(TEMPLATES.length).toBeGreaterThanOrEqual(16);
+  });
+});
+
+// ── Phase 13 / Sprint 4 — Parametric templates v2 tests ───────────────────────
+
+describe('evaluateTemplateExpr', () => {
+  it('evaluates simple addition', () => {
+    expect(evaluateTemplateExpr('2 + 3', {})).toBe(5);
+  });
+
+  it('evaluates subtraction', () => {
+    expect(evaluateTemplateExpr('10 - 4', {})).toBe(6);
+  });
+
+  it('evaluates multiplication', () => {
+    expect(evaluateTemplateExpr('3 * 4', {})).toBe(12);
+  });
+
+  it('evaluates division', () => {
+    expect(evaluateTemplateExpr('10 / 4', {})).toBe(2.5);
+  });
+
+  it('respects operator precedence (* before +)', () => {
+    expect(evaluateTemplateExpr('2 + 3 * 4', {})).toBe(14);
+  });
+
+  it('respects parentheses', () => {
+    expect(evaluateTemplateExpr('(2 + 3) * 4', {})).toBe(20);
+  });
+
+  it('supports unary minus', () => {
+    expect(evaluateTemplateExpr('-5', {})).toBe(-5);
+  });
+
+  it('resolves variables from context', () => {
+    expect(evaluateTemplateExpr('height - kickHeight', { height: 800, kickHeight: 100 })).toBe(700);
+  });
+
+  it('evaluates Math.floor', () => {
+    expect(evaluateTemplateExpr('Math.floor(internalHeight / 350)', { internalHeight: 1064 })).toBe(3);
+  });
+
+  it('evaluates Math.ceil', () => {
+    expect(evaluateTemplateExpr('Math.ceil(1.1)', {})).toBe(2);
+  });
+
+  it('evaluates Math.round', () => {
+    expect(evaluateTemplateExpr('Math.round(2.5)', {})).toBe(3);
+  });
+
+  it('evaluates Math.min with two args', () => {
+    expect(evaluateTemplateExpr('Math.min(10, 3)', {})).toBe(3);
+  });
+
+  it('evaluates Math.max with two args', () => {
+    expect(evaluateTemplateExpr('Math.max(10, 3)', {})).toBe(10);
+  });
+
+  it('evaluates Math.abs of negative', () => {
+    expect(evaluateTemplateExpr('Math.abs(-7)', {})).toBe(7);
+  });
+
+  it('evaluates Math.trunc', () => {
+    expect(evaluateTemplateExpr('Math.trunc(3.9)', {})).toBe(3);
+  });
+
+  it('handles complex nested expression', () => {
+    const ctx = { height: 2100, kickHeight: 100 };
+    // Math.floor((2100 - 100 - 36) / 350) = floor(1964 / 350) = floor(5.61) = 5
+    const result = evaluateTemplateExpr('Math.floor((height - kickHeight - 36) / 350)', ctx);
+    expect(result).toBe(5);
+  });
+
+  it('throws on unknown variable', () => {
+    expect(() => evaluateTemplateExpr('foo + 1', {})).toThrow(/unknown variable/i);
+  });
+
+  it('throws on disallowed Math function', () => {
+    expect(() => evaluateTemplateExpr('Math.random()', {})).toThrow(/not permitted/i);
+  });
+
+  it('throws on trailing tokens', () => {
+    expect(() => evaluateTemplateExpr('1 + 2 @', {})).toThrow();
+  });
+});
+
+describe('instantiateTemplate — proportional-bookcase', () => {
+  const tpl = getTemplate('proportional-bookcase')!;
+
+  it('exists in TEMPLATES', () => {
+    expect(tpl).toBeDefined();
+  });
+
+  it('has computedFields for shelfCount', () => {
+    expect(tpl.computedFields?.shelfCount).toBeTruthy();
+  });
+
+  it('default height produces shelfCount = floor(internalHeight / 350)', () => {
+    const cfg = instantiateTemplate(tpl);
+    const expectedInternalHeight = tpl.config.height - (tpl.config.kickHeight ?? 0) - 36;
+    const expectedShelfCount = Math.floor(expectedInternalHeight / 350);
+    expect(cfg.shelfCount).toBe(expectedShelfCount);
+  });
+
+  it('taller bookcase gets more shelves', () => {
+    const shortCfg = instantiateTemplate(tpl, { height: 1400 });
+    const tallCfg = instantiateTemplate(tpl, { height: 2800 });
+    expect(tallCfg.shelfCount).toBeGreaterThan(shortCfg.shelfCount);
+  });
+
+  it('applies sizeOverrides before computing fields', () => {
+    const cfg = instantiateTemplate(tpl, { height: 1050, kickHeight: 0 });
+    // internalHeight = 1050 - 0 - 36 = 1014; floor(1014/350) = 2
+    expect(cfg.shelfCount).toBe(2);
+    expect(cfg.height).toBe(1050);
+  });
+
+  it('templates without computedFields return base config unchanged', () => {
+    const plain = getTemplate('kitchen-base')!;
+    const cfg = instantiateTemplate(plain);
+    expect(cfg).toEqual(plain.config);
   });
 });
