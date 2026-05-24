@@ -117,3 +117,6 @@ export type { HingeBoreSpec, HingeBorePosition, HingeBoreError } from './hinge-b
 
 export { validateDrawerRunner, getDrawerRunnerSpec, getAllDrawerRunnerSpecs } from './drawer-runner';
 export type { DrawerRunnerSpec, DrawerRunnerValidation, DrawerRunnerError } from './drawer-runner';
+
+export { assignPartLabels, buildPartLabelMap, formatPartLabelsAsCsv } from './part-labeling';
+export type { LabeledPart, LabelingOptions } from './part-labeling';
