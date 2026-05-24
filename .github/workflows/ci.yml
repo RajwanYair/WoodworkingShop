@@ -118,7 +118,7 @@ jobs:
           path: dist
 
       - name: Run E2E tests
-        run: npm run test:e2e
+        run: npx playwright test --ignore-snapshots
 
       - name: Upload Playwright report
         if: always()

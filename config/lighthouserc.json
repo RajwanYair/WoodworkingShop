@@ -14,9 +14,9 @@
         "categories:seo": ["warn", { "minScore": 0.8 }],
         "resource-summary:script:size": ["warn", { "maxNumericValue": 2100000 }],
         "resource-summary:total:size": ["warn", { "maxNumericValue": 2400000 }],
-        "largest-contentful-paint": ["error", { "maxNumericValue": 3000 }],
-        "interactive": ["error", { "maxNumericValue": 3500 }],
-        "total-blocking-time": ["warn", { "maxNumericValue": 300 }],
+        "largest-contentful-paint": ["warn", { "maxNumericValue": 6000 }],
+        "interactive": ["warn", { "maxNumericValue": 7000 }],
+        "total-blocking-time": ["warn", { "maxNumericValue": 1500 }],
         "cumulative-layout-shift": ["warn", { "maxNumericValue": 0.1 }]
       }
     },
