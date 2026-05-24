@@ -170,3 +170,15 @@ export type { StockItem, StockStore, StockUnit, DemandEntry, AvailabilityResult,
 
 export { sortParts, sortPartsByPreset, invertSortCriteria, SORT_PRESETS } from './part-sort';
 export type { SortablePart, SortKey, SortDirection, SortCriterion, SortPreset } from './part-sort';
+
+export {
+  createSnapshotStore,
+  addSnapshot,
+  removeSnapshot,
+  renameSnapshot,
+  findSnapshotByLabel,
+  getSnapshotsSorted,
+  snapshotDiffSummary,
+  MAX_SNAPSHOT_LABEL_LENGTH,
+} from './snapshot-tags';
+export type { SnapshotTag, SnapshotStore, SnapshotError } from './snapshot-tags';
