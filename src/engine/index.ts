@@ -231,3 +231,6 @@ export type { BatchPart, BatchReplaceOptions, BatchReplaceResult } from './batch
 
 export { DEFAULT_PROJECT_SETTINGS, mergeSettings, validateSettings, describeSettings } from './project-settings';
 export type { LengthUnit, CurrencyCode, SheetSortPreference, ProjectSettings } from './project-settings';
+
+export { flattenLocale, auditLocale, auditAllLocales, formatAuditReport } from './i18n-audit';
+export type { LocaleTree, FlatLocale, LocaleAuditResult, AuditReport } from './i18n-audit';
