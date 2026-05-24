@@ -59,7 +59,7 @@ describe('PluginRegistryPanel', () => {
 
   it('shows the API version badge', () => {
     render(<PluginRegistryPanel />);
-    expect(screen.getByText(/API v1\.0\.0/)).toBeInTheDocument();
+    expect(screen.getByText(/API v1\.2\.0/)).toBeInTheDocument();
   });
 
   it('renders multiple plugins in a list', () => {
