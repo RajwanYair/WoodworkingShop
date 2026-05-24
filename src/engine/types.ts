@@ -84,6 +84,35 @@ export type DrawerSlideType = 'standard' | 'soft-close' | 'full-extension';
 export type PanelMaterialSource = 'carcass' | 'back';
 
 /**
+ * Phase 13 / Sprint 20 — Vendor hardware catalog entry.
+ * Covers hinges, drawer slides, handles, shelf pins, and cam locks.
+ */
+export interface HardwareCatalogEntry {
+  /** Stable unique identifier, e.g. 'blum-clip-top-blumotion'. */
+  id: string;
+  /** Hardware category. */
+  category: 'hinge' | 'drawer-slide' | 'handle' | 'shelf-pin' | 'cam-lock' | 'other';
+  /** Brand name, e.g. 'Blum'. */
+  brand: string;
+  /** Model name, e.g. 'CLIP top Blumotion 110°'. */
+  model: string;
+  /** Bilingual display name for UI. */
+  name: { en: string; he: string };
+  /** Key physical dimensions in mm (varies by category). */
+  dimensions?: { length?: number; width?: number; diameter?: number; depth?: number };
+  /** Panel bore requirements in mm. */
+  boreRequirements?: { diameter?: number; depth?: number; spacing?: number };
+  /** Hinge opening angle in degrees (hinges only). */
+  openingAngle?: number;
+  /** True when soft-close damper is integrated (hinges only). */
+  softCloseIntegrated?: boolean;
+  /** Minimum edge distance for cup bore (hinges only, mm). */
+  minEdgeDistance?: number;
+  /** Link to supplier product page. */
+  supplierUrl?: string;
+}
+
+/**
  * Sprint 10 — Vendor hinge profile descriptor.
  * Defines manufacturer-specific mounting rules and clearances for cup hinges.
  */

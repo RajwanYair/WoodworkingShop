@@ -200,7 +200,7 @@ Exit criteria: waste offcut catalog usable, Cloudflare Pages deployed, validatio
 
 Exit criteria: Blum/Hettich/Grass catalog complete, DXF layer compliance, G-code post-processor hooks, BOM multi-currency.
 
-- [ ] **Vendor hardware catalog (JSON)** — replace `VENDOR_HINGE_PROFILES` with a comprehensive `catalog/hardware.json`: hinges, drawer slides, handles, shelf pins, cam locks. Dimensions, bore requirements, supplier URLs. Shipped with app; updated quarterly via CI PR.
+- [x] **Vendor hardware catalog (JSON)** — `src/catalog/hardware.json` with 16 entries (hinges, drawer slides, handles, shelf pins, cam locks). `getHardwareCatalog()`, `getHardwareCatalogByCategory()`, `getHardwareCatalogEntry()` exported. `VENDOR_HINGE_PROFILES` derived from catalog (single source of truth).
 - [ ] **Hardware compatibility validation** — validate selected vendor hinge profile against door dimensions and material thickness at config time, not at export time. Show error with substitution link.
 - [ ] **DXF layer standard compliance** — bring DXF output to AutoCAD 2018 DXF spec. Add `DIMENSION` entities. Verify import in LibreCAD, DraftSight, AutoCAD LT.
 - [x] **G-code post-processor plugin hook** — expose `onGcodeGenerated(raw: string): string` hook (stability: `experimental`). Allows community plugins to target specific controllers (Mach3, LinuxCNC, Fanuc).

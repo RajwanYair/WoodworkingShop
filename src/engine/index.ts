@@ -45,6 +45,7 @@ export type {
   Result,
   Ok,
   Err,
+  HardwareCatalogEntry,
 } from './types';
 
 export { ok, err } from './types';
@@ -88,7 +89,7 @@ export type {
   VendorHingeProfile,
 } from './types';
 
-export { generateHardware, VENDOR_HINGE_PROFILES } from './hardware.ts';
+export { generateHardware, VENDOR_HINGE_PROFILES, getHardwareCatalog, getHardwareCatalogByCategory, getHardwareCatalogEntry } from './hardware.ts';
 
 export {
   registerPlugin,

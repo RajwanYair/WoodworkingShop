@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { generateHardware, VENDOR_HINGE_PROFILES } from '../../src/engine/hardware';
+import {
+  generateHardware,
+  VENDOR_HINGE_PROFILES,
+  getHardwareCatalog,
+  getHardwareCatalogByCategory,
+  getHardwareCatalogEntry,
+} from '../../src/engine/hardware';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 import { expectBilingualNames } from '../assertions';
 
@@ -153,8 +159,8 @@ describe('generateHardware — hardwareOverrides', () => {
 
 // Sprint 10 — Vendor hinge profiles
 describe('VENDOR_HINGE_PROFILES catalog', () => {
-  it('contains exactly 3 profiles (Blum, Hettich, Grass)', () => {
-    expect(VENDOR_HINGE_PROFILES).toHaveLength(3);
+  it('contains at least 3 profiles (Blum, Hettich, Grass)', () => {
+    expect(VENDOR_HINGE_PROFILES.length).toBeGreaterThanOrEqual(3);
   });
 
   it('all profiles have required fields', () => {
@@ -230,5 +236,100 @@ describe('generateHardware — hingeProfile selection', () => {
   it('includes H13 when no hingeProfile is set (generic behaviour)', () => {
     const hw = generateHardware(DEFAULT_CONFIG);
     expect(hw.some((h) => h.id === 'H13')).toBe(true);
+  });
+});
+
+// ── Phase 13 / Sprint 20 — Vendor hardware catalog JSON ──────────────────────
+describe('getHardwareCatalog', () => {
+  it('returns a non-empty array', () => {
+    const catalog = getHardwareCatalog();
+    expect(catalog.length).toBeGreaterThan(0);
+  });
+
+  it('every entry has id, category, brand, model, and bilingual name', () => {
+    for (const entry of getHardwareCatalog()) {
+      expect(typeof entry.id).toBe('string');
+      expect(entry.id.length).toBeGreaterThan(0);
+      expect(['hinge', 'drawer-slide', 'handle', 'shelf-pin', 'cam-lock', 'other']).toContain(entry.category);
+      expect(typeof entry.brand).toBe('string');
+      expect(typeof entry.model).toBe('string');
+      expect(typeof entry.name.en).toBe('string');
+      expect(typeof entry.name.he).toBe('string');
+    }
+  });
+
+  it('catalog contains known Blum CLIP top Blumotion entry', () => {
+    const catalog = getHardwareCatalog();
+    const entry = catalog.find((e) => e.id === 'blum-clip-top-blumotion');
+    expect(entry).toBeDefined();
+    expect(entry!.brand).toBe('Blum');
+    expect(entry!.softCloseIntegrated).toBe(true);
+  });
+
+  it('catalog contains both hinge and drawer-slide categories', () => {
+    const categories = new Set(getHardwareCatalog().map((e) => e.category));
+    expect(categories.has('hinge')).toBe(true);
+    expect(categories.has('drawer-slide')).toBe(true);
+  });
+
+  it('all ids are unique', () => {
+    const ids = getHardwareCatalog().map((e) => e.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+});
+
+describe('getHardwareCatalogByCategory', () => {
+  it('returns only hinge entries for category hinge', () => {
+    const hinges = getHardwareCatalogByCategory('hinge');
+    expect(hinges.length).toBeGreaterThan(0);
+    for (const h of hinges) {
+      expect(h.category).toBe('hinge');
+    }
+  });
+
+  it('returns only drawer-slide entries for category drawer-slide', () => {
+    const slides = getHardwareCatalogByCategory('drawer-slide');
+    expect(slides.length).toBeGreaterThan(0);
+    for (const s of slides) {
+      expect(s.category).toBe('drawer-slide');
+    }
+  });
+
+  it('returns empty array for unknown category', () => {
+    const result = getHardwareCatalogByCategory('other');
+    expect(Array.isArray(result)).toBe(true);
+  });
+});
+
+describe('getHardwareCatalogEntry', () => {
+  it('returns entry for known id', () => {
+    const entry = getHardwareCatalogEntry('grass-tiomos-110');
+    expect(entry).toBeDefined();
+    expect(entry!.brand).toBe('Grass');
+  });
+
+  it('returns undefined for unknown id', () => {
+    expect(getHardwareCatalogEntry('nonexistent-id-999')).toBeUndefined();
+  });
+});
+
+describe('VENDOR_HINGE_PROFILES derived from catalog', () => {
+  it('includes all three original hinge profiles', () => {
+    const ids = VENDOR_HINGE_PROFILES.map((p) => p.id);
+    expect(ids).toContain('blum-clip-top-blumotion');
+    expect(ids).toContain('hettich-intermat-9936');
+    expect(ids).toContain('grass-tiomos-110');
+  });
+
+  it('all profiles have required VendorHingeProfile fields', () => {
+    for (const p of VENDOR_HINGE_PROFILES) {
+      expect(typeof p.id).toBe('string');
+      expect(typeof p.cupDiameter).toBe('number');
+      expect(typeof p.openingAngle).toBe('number');
+      expect(typeof p.mountingDepth).toBe('number');
+      expect(typeof p.softCloseIntegrated).toBe('boolean');
+      expect(typeof p.minEdgeDistance).toBe('number');
+      expect(typeof p.supplierUrl).toBe('string');
+    }
   });
 });

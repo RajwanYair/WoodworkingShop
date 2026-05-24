@@ -1,58 +1,62 @@
-import type { CabinetConfig, HardwareItem, VendorHingeProfile } from './types';
+import type { CabinetConfig, HardwareItem, VendorHingeProfile, HardwareCatalogEntry } from './types';
 import { computeDimensions } from './dimensions';
+import catalogRaw from '../catalog/hardware.json';
+
+/**
+ * Phase 13 / Sprint 20 — Full vendor hardware catalog loaded from
+ * `src/catalog/hardware.json`.  Type-asserted once here; the JSON schema is
+ * maintained in sync with `HardwareCatalogEntry`.
+ */
+const HARDWARE_CATALOG = catalogRaw as HardwareCatalogEntry[];
+
+/** Return all entries in the vendor hardware catalog. */
+export function getHardwareCatalog(): HardwareCatalogEntry[] {
+  return HARDWARE_CATALOG;
+}
+
+/** Return all catalog entries for a given category. */
+export function getHardwareCatalogByCategory(
+  category: HardwareCatalogEntry['category'],
+): HardwareCatalogEntry[] {
+  return HARDWARE_CATALOG.filter((e) => e.category === category);
+}
+
+/** Return a single catalog entry by id, or undefined if not found. */
+export function getHardwareCatalogEntry(id: string): HardwareCatalogEntry | undefined {
+  return HARDWARE_CATALOG.find((e) => e.id === id);
+}
 
 /**
  * Sprint 10 — Catalog of vendor hinge profiles.
- * Three leading European manufacturers: Blum, Hettich, Grass.
- * All use the standard 35 mm Euro / clip-on cup bore.
+ * Derived from the comprehensive hardware catalog so there is a single
+ * source of truth. Only hinge-category entries that carry all
+ * VendorHingeProfile fields are included.
  */
-export const VENDOR_HINGE_PROFILES: VendorHingeProfile[] = [
-  {
-    id: 'blum-clip-top-blumotion',
-    brand: 'Blum',
-    model: 'CLIP top Blumotion 110°',
-    name: {
-      en: 'Blum CLIP top Blumotion 110° (35 mm)',
-      he: 'ציר בלום CLIP top Blumotion ‏110° (35 מ"מ)',
-    },
-    cupDiameter: 35,
-    openingAngle: 110,
-    mountingDepth: 13.5,
-    softCloseIntegrated: true,
-    minEdgeDistance: 19,
-    supplierUrl: 'https://www.blum.com/in/en/products/hinges/clip-top-blumotion/',
-  },
-  {
-    id: 'hettich-intermat-9936',
-    brand: 'Hettich',
-    model: 'Intermat 9936 110°',
-    name: {
-      en: 'Hettich Intermat 9936 110° (35 mm)',
-      he: 'ציר הטיך Intermat 9936 ‏110° (35 מ"מ)',
-    },
-    cupDiameter: 35,
-    openingAngle: 110,
-    mountingDepth: 12,
-    softCloseIntegrated: false,
-    minEdgeDistance: 18,
-    supplierUrl: 'https://www.hettich.com/en_EN/products/hinges/intermat.html',
-  },
-  {
-    id: 'grass-tiomos-110',
-    brand: 'Grass',
-    model: 'TIOMOS 110° Soft-close',
-    name: {
-      en: 'Grass TIOMOS 110° Soft-close (35 mm)',
-      he: 'ציר גראס TIOMOS ‏110° סגירה רכה (35 מ"מ)',
-    },
-    cupDiameter: 35,
-    openingAngle: 110,
-    mountingDepth: 13,
-    softCloseIntegrated: true,
-    minEdgeDistance: 19,
-    supplierUrl: 'https://www.grass.at/en/products/hinges/tiomos/',
-  },
-];
+export const VENDOR_HINGE_PROFILES: VendorHingeProfile[] = HARDWARE_CATALOG.filter(
+  (e): e is HardwareCatalogEntry & {
+    openingAngle: number;
+    softCloseIntegrated: boolean;
+    minEdgeDistance: number;
+    supplierUrl: string;
+  } =>
+    e.category === 'hinge' &&
+    e.openingAngle !== undefined &&
+    e.softCloseIntegrated !== undefined &&
+    e.minEdgeDistance !== undefined &&
+    e.supplierUrl !== undefined &&
+    e.boreRequirements?.depth !== undefined,
+).map((e) => ({
+  id: e.id,
+  brand: e.brand,
+  model: e.model,
+  name: e.name,
+  cupDiameter: e.boreRequirements!.diameter ?? 35,
+  openingAngle: e.openingAngle,
+  mountingDepth: e.boreRequirements!.depth!,
+  softCloseIntegrated: e.softCloseIntegrated,
+  minEdgeDistance: e.minEdgeDistance,
+  supplierUrl: e.supplierUrl,
+}));
 
 /**
  * Generate the full hardware (ironmongery) list for a cabinet config.

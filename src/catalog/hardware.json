@@ -1,0 +1,231 @@
+[
+  {
+    "id": "blum-clip-top-blumotion",
+    "category": "hinge",
+    "brand": "Blum",
+    "model": "CLIP top Blumotion 110°",
+    "name": {
+      "en": "Blum CLIP top Blumotion 110° (35 mm)",
+      "he": "ציר בלום CLIP top Blumotion ‏110° (35 מ\"מ)"
+    },
+    "dimensions": { "diameter": 35 },
+    "boreRequirements": { "diameter": 35, "depth": 13.5, "spacing": 0 },
+    "openingAngle": 110,
+    "softCloseIntegrated": true,
+    "minEdgeDistance": 19,
+    "supplierUrl": "https://www.blum.com/in/en/products/hinges/clip-top-blumotion/"
+  },
+  {
+    "id": "blum-clip-top-110",
+    "category": "hinge",
+    "brand": "Blum",
+    "model": "CLIP top 110°",
+    "name": {
+      "en": "Blum CLIP top 110° (35 mm)",
+      "he": "ציר בלום CLIP top ‏110° (35 מ\"מ)"
+    },
+    "dimensions": { "diameter": 35 },
+    "boreRequirements": { "diameter": 35, "depth": 13.5, "spacing": 0 },
+    "openingAngle": 110,
+    "softCloseIntegrated": false,
+    "minEdgeDistance": 19,
+    "supplierUrl": "https://www.blum.com/in/en/products/hinges/clip-top/"
+  },
+  {
+    "id": "blum-clip-top-165",
+    "category": "hinge",
+    "brand": "Blum",
+    "model": "CLIP top Wide Angle 165°",
+    "name": {
+      "en": "Blum CLIP top Wide Angle 165° (35 mm)",
+      "he": "ציר בלום CLIP top זווית רחבה ‏165° (35 מ\"מ)"
+    },
+    "dimensions": { "diameter": 35 },
+    "boreRequirements": { "diameter": 35, "depth": 13.5, "spacing": 0 },
+    "openingAngle": 165,
+    "softCloseIntegrated": false,
+    "minEdgeDistance": 19,
+    "supplierUrl": "https://www.blum.com/in/en/products/hinges/clip-top/"
+  },
+  {
+    "id": "hettich-intermat-9936",
+    "category": "hinge",
+    "brand": "Hettich",
+    "model": "Intermat 9936 110°",
+    "name": {
+      "en": "Hettich Intermat 9936 110° (35 mm)",
+      "he": "ציר הטיך Intermat 9936 ‏110° (35 מ\"מ)"
+    },
+    "dimensions": { "diameter": 35 },
+    "boreRequirements": { "diameter": 35, "depth": 12, "spacing": 0 },
+    "openingAngle": 110,
+    "softCloseIntegrated": false,
+    "minEdgeDistance": 18,
+    "supplierUrl": "https://www.hettich.com/en_EN/products/hinges/intermat.html"
+  },
+  {
+    "id": "hettich-sensys-8645",
+    "category": "hinge",
+    "brand": "Hettich",
+    "model": "Sensys 8645i 110° Soft-Close",
+    "name": {
+      "en": "Hettich Sensys 8645i 110° Soft-Close (35 mm)",
+      "he": "ציר הטיך Sensys 8645i ‏110° סגירה רכה (35 מ\"מ)"
+    },
+    "dimensions": { "diameter": 35 },
+    "boreRequirements": { "diameter": 35, "depth": 12, "spacing": 0 },
+    "openingAngle": 110,
+    "softCloseIntegrated": true,
+    "minEdgeDistance": 18,
+    "supplierUrl": "https://www.hettich.com/en_EN/products/hinges/sensys.html"
+  },
+  {
+    "id": "grass-tiomos-110",
+    "category": "hinge",
+    "brand": "Grass",
+    "model": "TIOMOS 110° Soft-close",
+    "name": {
+      "en": "Grass TIOMOS 110° Soft-close (35 mm)",
+      "he": "ציר גראס TIOMOS ‏110° סגירה רכה (35 מ\"מ)"
+    },
+    "dimensions": { "diameter": 35 },
+    "boreRequirements": { "diameter": 35, "depth": 13, "spacing": 0 },
+    "openingAngle": 110,
+    "softCloseIntegrated": true,
+    "minEdgeDistance": 19,
+    "supplierUrl": "https://www.grass.at/en/products/hinges/tiomos/"
+  },
+  {
+    "id": "grass-tiomos-155",
+    "category": "hinge",
+    "brand": "Grass",
+    "model": "TIOMOS 155° Wide Angle",
+    "name": {
+      "en": "Grass TIOMOS 155° Wide Angle (35 mm)",
+      "he": "ציר גראס TIOMOS ‏155° זווית רחבה (35 מ\"מ)"
+    },
+    "dimensions": { "diameter": 35 },
+    "boreRequirements": { "diameter": 35, "depth": 13, "spacing": 0 },
+    "openingAngle": 155,
+    "softCloseIntegrated": false,
+    "minEdgeDistance": 19,
+    "supplierUrl": "https://www.grass.at/en/products/hinges/tiomos/"
+  },
+  {
+    "id": "blum-tandem-500",
+    "category": "drawer-slide",
+    "brand": "Blum",
+    "model": "TANDEM 569H 500 mm",
+    "name": {
+      "en": "Blum TANDEM Full-Extension 500 mm",
+      "he": "מסילת בלום TANDEM הוצאה מלאה 500 מ\"מ"
+    },
+    "dimensions": { "length": 500 },
+    "boreRequirements": { "spacing": 37 },
+    "supplierUrl": "https://www.blum.com/in/en/products/drawer-systems/tandem/"
+  },
+  {
+    "id": "blum-tandem-400",
+    "category": "drawer-slide",
+    "brand": "Blum",
+    "model": "TANDEM 569H 400 mm",
+    "name": {
+      "en": "Blum TANDEM Full-Extension 400 mm",
+      "he": "מסילת בלום TANDEM הוצאה מלאה 400 מ\"מ"
+    },
+    "dimensions": { "length": 400 },
+    "boreRequirements": { "spacing": 37 },
+    "supplierUrl": "https://www.blum.com/in/en/products/drawer-systems/tandem/"
+  },
+  {
+    "id": "hettich-actro-500",
+    "category": "drawer-slide",
+    "brand": "Hettich",
+    "model": "Actro 5D 500 mm",
+    "name": {
+      "en": "Hettich Actro 5D Full-Extension 500 mm",
+      "he": "מסילת הטיך Actro 5D הוצאה מלאה 500 מ\"מ"
+    },
+    "dimensions": { "length": 500 },
+    "boreRequirements": { "spacing": 32 },
+    "supplierUrl": "https://www.hettich.com/en_EN/products/drawers-systems/actro.html"
+  },
+  {
+    "id": "grass-nova-pro-500",
+    "category": "drawer-slide",
+    "brand": "Grass",
+    "model": "NOVA PRO 500 mm",
+    "name": {
+      "en": "Grass NOVA PRO Soft-Close 500 mm",
+      "he": "מסילת גראס NOVA PRO סגירה רכה 500 מ\"מ"
+    },
+    "dimensions": { "length": 500 },
+    "boreRequirements": { "spacing": 32 },
+    "supplierUrl": "https://www.grass.at/en/products/drawer-systems/nova-pro/"
+  },
+  {
+    "id": "hafele-bar-handle-128",
+    "category": "handle",
+    "brand": "Häfele",
+    "model": "Bar Handle 128 mm",
+    "name": {
+      "en": "Häfele Bar Handle 128 mm c/c",
+      "he": "ידית מוט הפלה 128 מ\"מ"
+    },
+    "dimensions": { "length": 168, "width": 12 },
+    "boreRequirements": { "spacing": 128 },
+    "supplierUrl": "https://www.hafele.com/en/info/hafele-worldwide/hafele-companies/"
+  },
+  {
+    "id": "hafele-bar-handle-192",
+    "category": "handle",
+    "brand": "Häfele",
+    "model": "Bar Handle 192 mm",
+    "name": {
+      "en": "Häfele Bar Handle 192 mm c/c",
+      "he": "ידית מוט הפלה 192 מ\"מ"
+    },
+    "dimensions": { "length": 232, "width": 12 },
+    "boreRequirements": { "spacing": 192 },
+    "supplierUrl": "https://www.hafele.com/en/info/hafele-worldwide/hafele-companies/"
+  },
+  {
+    "id": "hafele-shelf-pin-5mm",
+    "category": "shelf-pin",
+    "brand": "Häfele",
+    "model": "Shelf Pin 5 mm",
+    "name": {
+      "en": "Häfele Shelf Support Pin 5 mm",
+      "he": "פין מדף הפלה 5 מ\"מ"
+    },
+    "dimensions": { "diameter": 5, "depth": 15 },
+    "boreRequirements": { "diameter": 5, "depth": 15 },
+    "supplierUrl": "https://www.hafele.com/en/info/hafele-worldwide/hafele-companies/"
+  },
+  {
+    "id": "rafix-20-cam-lock",
+    "category": "cam-lock",
+    "brand": "Hettich",
+    "model": "Rafix 20 System",
+    "name": {
+      "en": "Hettich Rafix 20 Cam Lock",
+      "he": "מהדק Rafix 20 הטיך"
+    },
+    "dimensions": { "diameter": 20 },
+    "boreRequirements": { "diameter": 20, "depth": 12.5 },
+    "supplierUrl": "https://www.hettich.com/en_EN/products/fittings/rafix.html"
+  },
+  {
+    "id": "minifix-15-cam-lock",
+    "category": "cam-lock",
+    "brand": "Häfele",
+    "model": "Minifix 15 System",
+    "name": {
+      "en": "Häfele Minifix 15 Cam Lock",
+      "he": "מהדק Minifix 15 הפלה"
+    },
+    "dimensions": { "diameter": 15 },
+    "boreRequirements": { "diameter": 15, "depth": 12 },
+    "supplierUrl": "https://www.hafele.com/en/info/hafele-worldwide/hafele-companies/"
+  }
+]
