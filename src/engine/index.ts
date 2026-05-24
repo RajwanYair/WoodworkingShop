@@ -216,3 +216,12 @@ export type {
   ZoneViolation,
   ZoneValidationResult,
 } from './zone-validator';
+
+export {
+  TEMPLATE_CATALOGUE,
+  getTemplatesByCategory,
+  getTemplate,
+  instantiateTemplate,
+  listTemplateIds,
+} from './template-library';
+export type { TemplateCategory, TemplateDimensions, CabinetTemplate, TemplateInstance } from './template-library';
