@@ -201,8 +201,8 @@ Exit criteria: waste offcut catalog usable, Cloudflare Pages deployed, validatio
 Exit criteria: Blum/Hettich/Grass catalog complete, DXF layer compliance, G-code post-processor hooks, BOM multi-currency.
 
 - [x] **Vendor hardware catalog (JSON)** — `src/catalog/hardware.json` with 16 entries (hinges, drawer slides, handles, shelf pins, cam locks). `getHardwareCatalog()`, `getHardwareCatalogByCategory()`, `getHardwareCatalogEntry()` exported. `VENDOR_HINGE_PROFILES` derived from catalog (single source of truth).
-- [ ] **Hardware compatibility validation** — validate selected vendor hinge profile against door dimensions and material thickness at config time, not at export time. Show error with substitution link.
-- [ ] **DXF layer standard compliance** — bring DXF output to AutoCAD 2018 DXF spec. Add `DIMENSION` entities. Verify import in LibreCAD, DraftSight, AutoCAD LT.
+- [x] **Hardware compatibility validation** — validate selected vendor hinge profile against door dimensions and material thickness at config time, not at export time. Show error with substitution link.
+- [x] **DXF layer standard compliance** — bring DXF output to AutoCAD 2018 DXF spec. Add `DIMENSION` entities. Verify import in LibreCAD, DraftSight, AutoCAD LT.
 - [x] **G-code post-processor plugin hook** — expose `onGcodeGenerated(raw: string): string` hook (stability: `experimental`). Allows community plugins to target specific controllers (Mach3, LinuxCNC, Fanuc).
 - [x] **BOM multi-currency** — `currencyCode?: string` on `Material`; built-in materials ship with `'ILS'`; BOM CSV material summary uses `Intl.NumberFormat` for locale-aware price/cost columns.
 - [ ] **Parametric templates v2** — per-template default overrides + computed fields (e.g. `drawerHeight = Math.floor(internalHeight / 4) - 2`). Constrained expression DSL evaluated at instantiation.

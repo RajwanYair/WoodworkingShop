@@ -52,7 +52,7 @@ describe('cutSheetToDxf', () => {
   it('includes version header comment', () => {
     const dxf = cutSheetToDxf(mockSheet);
     expect(dxf).toContain('Cabinet Planner DXF Export');
-    expect(dxf).toContain('Schema: dxf-r12-v1');
+    expect(dxf).toContain('Schema: dxf-ac1015-v2');
   });
 
   it('includes generatedAt ISO timestamp in header', () => {
@@ -199,9 +199,11 @@ describe('cutSheetToDxf — GRAIN_CONFLICT layer (Sprint 70)', () => {
     expect(matLayerIdx).toBeGreaterThan(entitiesStart);
   });
 
-  it('layer count in TABLES is 5 when GRAIN_CONFLICT added', () => {
+  it('layer count in TABLES is 8 (all standard layers always defined)', () => {
     const dxf = cutSheetToDxf(mockSheet);
-    // '70\n5' means 5 layers declared in the LAYER TABLE
-    expect(dxf).toContain('70\n5');
-  });
+    // '70\n8' means 8 layers declared in the LAYER TABLE
+    // AC1015 always pre-declares: SHEET, matLayer, LABELS, PARTS,
+    // GRAIN_CONFLICT, ROTATION_LOCKED, EDGE_BANDED, DIMENSIONS
+    expect(dxf).toContain('70\n8');
+  };);
 });

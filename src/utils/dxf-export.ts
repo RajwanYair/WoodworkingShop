@@ -13,52 +13,205 @@ export function materialLayerName(material: string): string {
   return `MAT_${material.toUpperCase().replace(/\s+/g, '_').slice(0, 248)}`;
 }
 
+// ── Phase 13 / Sprint 3 — DXF layer standard compliance ──────────────────────
+// Upgraded from DXF R12 to AC1015 (AutoCAD 2000), the minimum version that
+// LibreCAD, DraftSight, and AutoCAD LT fully support.  Changes:
+//   - $ACADVER = AC1015 in HEADER
+//   - Required CLASSES, BLOCKS, OBJECTS sections added
+//   - Full TABLES: VPORT, LTYPE, LAYER, STYLE, VIEW, UCS, APPID, DIMSTYLE, BLOCK_RECORD
+//   - DIMENSION entities for each part's width and height (layer: DIMENSIONS)
+
+/** Build the HEADER section for AC1015-compliant DXF. */
+function buildDxfHeader(extraVars: string[] = []): string[] {
+  return [
+    '0', 'SECTION', '2', 'HEADER',
+    '9', '$ACADVER', '1', 'AC1015',
+    '9', '$DWGCODEPAGE', '3', 'ANSI_1252',
+    '9', '$INSUNITS', '70', '4',   // 4 = millimetres
+    '9', '$MEASUREMENT', '70', '1', // 1 = metric
+    ...extraVars,
+    '0', 'ENDSEC',
+  ];
+}
+
+/** Build an empty CLASSES section (required for AC1015+). */
+function buildDxfClasses(): string[] {
+  return ['0', 'SECTION', '2', 'CLASSES', '0', 'ENDSEC'];
+}
+
+/** Build a full TABLES section with all required sub-tables. */
+function buildDxfTables(layerDefs: Array<[string, number]>): string[] {
+  const lines: string[] = ['0', 'SECTION', '2', 'TABLES'];
+
+  // VPORT — one active viewport (*Active)
+  lines.push('0', 'TABLE', '2', 'VPORT', '70', '1');
+  lines.push('0', 'VPORT', '2', '*Active', '70', '0');
+  lines.push('0', 'ENDTAB');
+
+  // LTYPE — CONTINUOUS line type
+  lines.push('0', 'TABLE', '2', 'LTYPE', '70', '1');
+  lines.push('0', 'LTYPE', '2', 'CONTINUOUS', '70', '0', '3', 'Solid line', '72', '65', '73', '0', '40', '0.0');
+  lines.push('0', 'ENDTAB');
+
+  // LAYER
+  lines.push('0', 'TABLE', '2', 'LAYER', '70', String(layerDefs.length));
+  for (const [name, color] of layerDefs) {
+    addLayer(lines, name, color);
+  }
+  lines.push('0', 'ENDTAB');
+
+  // STYLE — Standard text style
+  lines.push('0', 'TABLE', '2', 'STYLE', '70', '1');
+  lines.push('0', 'STYLE', '2', 'Standard', '70', '0', '40', '0.0', '41', '1.0', '50', '0.0', '71', '0', '42', '0.2', '3', 'arial.shx', '4', '');
+  lines.push('0', 'ENDTAB');
+
+  // VIEW — empty
+  lines.push('0', 'TABLE', '2', 'VIEW', '70', '0');
+  lines.push('0', 'ENDTAB');
+
+  // UCS — empty
+  lines.push('0', 'TABLE', '2', 'UCS', '70', '0');
+  lines.push('0', 'ENDTAB');
+
+  // APPID — ACAD application ID (required for R2000+)
+  lines.push('0', 'TABLE', '2', 'APPID', '70', '1');
+  lines.push('0', 'APPID', '2', 'ACAD', '70', '0');
+  lines.push('0', 'ENDTAB');
+
+  // DIMSTYLE — Standard dimension style
+  lines.push('0', 'TABLE', '2', 'DIMSTYLE', '70', '1');
+  lines.push('0', 'DIMSTYLE', '2', 'Standard', '70', '0', '3', '', '4', '',
+    '40', '1.0', '41', '3.0', '42', '1.0', '43', '9.0', '44', '1.0',
+    '140', '3.0', '147', '1.0', '73', '0', '74', '0', '77', '0', '78', '0',
+    '170', '0', '171', '2', '172', '0', '173', '0', '174', '0', '175', '0',
+    '176', '0', '177', '0', '178', '0',
+  );
+  lines.push('0', 'ENDTAB');
+
+  // BLOCK_RECORD — required for R2000+ (references MODEL_SPACE and PAPER_SPACE)
+  lines.push('0', 'TABLE', '2', 'BLOCK_RECORD', '70', '2');
+  lines.push('0', 'BLOCK_RECORD', '2', '*Model_Space');
+  lines.push('0', 'BLOCK_RECORD', '2', '*Paper_Space');
+  lines.push('0', 'ENDTAB');
+
+  lines.push('0', 'ENDSEC');
+  return lines;
+}
+
+/** Build a minimal BLOCKS section (MODEL_SPACE + PAPER_SPACE required in R2000+). */
+function buildDxfBlocks(): string[] {
+  return [
+    '0', 'SECTION', '2', 'BLOCKS',
+    '0', 'BLOCK', '8', '0', '2', '*Model_Space', '70', '0', '10', '0.0', '20', '0.0', '30', '0.0', '3', '*Model_Space', '1', '',
+    '0', 'ENDBLK',
+    '0', 'BLOCK', '8', '0', '2', '*Paper_Space', '70', '0', '10', '0.0', '20', '0.0', '30', '0.0', '3', '*Paper_Space', '1', '',
+    '0', 'ENDBLK',
+    '0', 'ENDSEC',
+  ];
+}
+
+/** Build a minimal OBJECTS section (required for AC1015+). */
+function buildDxfObjects(): string[] {
+  return [
+    '0', 'SECTION', '2', 'OBJECTS',
+    '0', 'DICTIONARY', '3', 'ACAD_GROUP', '350', '0',
+    '0', 'ENDSEC',
+  ];
+}
+
 /**
- * Generate a minimal DXF (AutoCAD R12) string for a cut sheet.
- * Each part is drawn as a LWPOLYLINE rectangle with a TEXT label.
- * Sheet outline is drawn on layer "SHEET", labels on "LABELS".
- * Parts are drawn on a per-material layer (e.g. "MAT_PLYWOOD-17") so CAM
- * software can assign separate toolpaths per material.
+ * Add linear DIMENSION entities for a part's width (horizontal) and height
+ * (vertical) on the DIMENSIONS layer. Uses AC1015 AcDbAlignedDimension.
+ *
+ * @param dimOffset  Extra offset (mm) for multi-sheet stacking (y-offset).
+ */
+function addPartDimensions(lines: string[], part: CutRect, dimOffset = 0): void {
+  const x = part.x;
+  const y = part.y + dimOffset;
+  const w = part.width;
+  const h = part.length;
+  const dimGap = 8; // mm between part edge and dimension line
+
+  // ── Horizontal dimension (width) — below the part ──
+  const hdY = y - dimGap; // dimension line y (below, since y grows upward in DXF)
+  lines.push(
+    '0', 'DIMENSION',
+    '8', 'DIMENSIONS',
+    '2', '*Model_Space',
+    '10', String(x + w), '20', String(hdY), '30', '0.0',  // def point (2nd ext)
+    '11', String(x + w / 2), '21', String(hdY - 3), '31', '0.0', // text midpoint
+    '70', '0',   // 0 = rotated (horizontal)
+    '1', '',     // empty = auto measurement
+    '3', 'Standard',
+    '100', 'AcDbAlignedDimension',
+    '13', String(x), '23', String(y), '33', '0.0',       // 1st ext line origin
+    '14', String(x + w), '24', String(y), '34', '0.0',  // 2nd ext line origin
+    '50', '0.0',  // rotation angle = 0° (horizontal)
+  );
+
+  // ── Vertical dimension (height) — to the right of the part ──
+  const vdX = x + w + dimGap;
+  lines.push(
+    '0', 'DIMENSION',
+    '8', 'DIMENSIONS',
+    '2', '*Model_Space',
+    '10', String(vdX), '20', String(y + h), '30', '0.0',  // def point (2nd ext)
+    '11', String(vdX + 3), '21', String(y + h / 2), '31', '0.0', // text midpoint
+    '70', '1',   // 1 = aligned
+    '1', '',     // empty = auto measurement
+    '3', 'Standard',
+    '100', 'AcDbAlignedDimension',
+    '13', String(x + w), '23', String(y), '33', '0.0',      // 1st ext line origin
+    '14', String(x + w), '24', String(y + h), '34', '0.0', // 2nd ext line origin
+    '50', '90.0',  // rotation angle = 90° (vertical)
+  );
+}
+
+/**
+ * Generate a DXF (AutoCAD 2000 / AC1015) string for a cut sheet.
+ * Each part is drawn as a LWPOLYLINE rectangle with TEXT label and
+ * linear DIMENSION entities for width and height.
+ * Sheet outline on layer "SHEET", labels on "LABELS", parts on a
+ * per-material layer (e.g. "MAT_PLYWOOD-17").
  * All units are millimeters.
  */
 export function cutSheetToDxf(sheet: CutSheet): string {
+  const generatedAt = new Date().toISOString();
+  const matLayer = materialLayerName(sheet.material);
+
+  const layerDefs: Array<[string, number]> = [
+    ['SHEET', 7], // white
+    [matLayer, 3], // green — per-material parts layer
+    ['LABELS', 5], // blue
+    ['PARTS', 3], // green — legacy fallback (kept for compatibility)
+    ['GRAIN_CONFLICT', 1], // red — grain-direction conflicts
+    ['ROTATION_LOCKED', 6], // magenta — rotation-locked parts
+    ['EDGE_BANDED', 4], // cyan — parts requiring edge banding
+    ['DIMENSIONS', 2], // yellow — dimension annotations
+  ];
+
   const lines: string[] = [];
 
-  // ── File metadata (comments before first SECTION) ──
-  const generatedAt = new Date().toISOString();
+  // ── Metadata comments (before first SECTION) ──
   lines.push(
-    `999`,
-    `Cabinet Planner DXF Export`,
-    `999`,
+    '999',
+    'Cabinet Planner DXF Export',
+    '999',
     `Version: ${__APP_VERSION__}`,
-    `999`,
-    `Schema: dxf-r12-v1`,
-    `999`,
+    '999',
+    'Schema: dxf-ac1015-v2',
+    '999',
     `Generated: ${generatedAt}`,
-    `999`,
+    '999',
     `Sheet: ${sheet.sheetIndex + 1}  Material: ${sheet.material}  Thickness: ${sheet.thickness}mm`,
-    `999`,
+    '999',
     `Parts: ${sheet.parts.length}`,
   );
 
-  // ── HEADER section ──
-  lines.push('0', 'SECTION', '2', 'HEADER');
-  lines.push('9', '$INSUNITS', '70', '4'); // 4 = millimeters
-  lines.push('0', 'ENDSEC');
-
-  // ── TABLES section (layers) ──
-  const matLayer = materialLayerName(sheet.material);
-  lines.push('0', 'SECTION', '2', 'TABLES');
-  lines.push('0', 'TABLE', '2', 'LAYER', '70', '5');
-  addLayer(lines, 'SHEET', 7); // white
-  addLayer(lines, matLayer, 3); // green — per-material parts layer
-  addLayer(lines, 'LABELS', 5); // blue
-  addLayer(lines, 'PARTS', 3); // green — legacy fallback layer (kept for compatibility)
-  addLayer(lines, 'GRAIN_CONFLICT', 1); // red — grain-direction conflicts (Sprint 70)
-  addLayer(lines, 'ROTATION_LOCKED', 6); // magenta — Sprint 19: visually flag rotation-locked parts
-  addLayer(lines, 'EDGE_BANDED', 4); // cyan — Sprint 19: parts requiring edge banding
-  lines.push('0', 'ENDTAB');
-  lines.push('0', 'ENDSEC');
+  lines.push(...buildDxfHeader());
+  lines.push(...buildDxfClasses());
+  lines.push(...buildDxfTables(layerDefs));
+  lines.push(...buildDxfBlocks());
 
   // ── ENTITIES section ──
   lines.push('0', 'SECTION', '2', 'ENTITIES');
@@ -66,10 +219,6 @@ export function cutSheetToDxf(sheet: CutSheet): string {
   // Sheet outline
   addRect(lines, 0, 0, sheet.sheetWidth, sheet.sheetLength, 'SHEET');
 
-  // Sprint 19 — choose layer per-part by precedence:
-  //   grainConflict > rotationLocked > matLayer.  Edge-banded parts also receive
-  //   a duplicate outline on the EDGE_BANDED layer so a CAM operator can quickly
-  //   isolate them.
   for (const part of sheet.parts) {
     let partLayer: string;
     if (part.grainConflict === true) {
@@ -84,9 +233,12 @@ export function cutSheetToDxf(sheet: CutSheet): string {
       addRect(lines, part.x, part.y, part.width, part.length, 'EDGE_BANDED');
     }
     addLabel(lines, part, 'LABELS');
+    addPartDimensions(lines, part);
   }
 
   lines.push('0', 'ENDSEC');
+
+  lines.push(...buildDxfObjects());
 
   // ── EOF ──
   lines.push('0', 'EOF');
@@ -166,7 +318,6 @@ export async function downloadDxfForSheet(sheet: CutSheet, filename: string): Pr
   triggerDownload(content, 'application/dxf', filename);
 }
 
-/** Download all sheets as a single combined DXF (sheets stacked vertically with spacing) */
 /** Download all sheets as a single combined DXF with embedded SHA-256 checksum. */
 export async function downloadAllSheetsDxf(sheets: CutSheet[], projectName: string): Promise<void> {
   const lines: string[] = [];
@@ -175,23 +326,18 @@ export async function downloadAllSheetsDxf(sheets: CutSheet[], projectName: stri
   // Collect unique material layer names
   const matLayers = [...new Set(sheets.map((s) => materialLayerName(s.material)))];
 
-  // HEADER
-  lines.push('0', 'SECTION', '2', 'HEADER');
-  lines.push('9', '$INSUNITS', '70', '4');
-  lines.push('0', 'ENDSEC');
+  const layerDefs: Array<[string, number]> = [
+    ['SHEET', 7],
+    ['LABELS', 5],
+    ['PARTS', 3],
+    ['DIMENSIONS', 2],
+    ...matLayers.map((ml): [string, number] => [ml, 3]),
+  ];
 
-  // TABLES — one layer per material + SHEET, LABELS, PARTS
-  const totalLayers = 3 + matLayers.length;
-  lines.push('0', 'SECTION', '2', 'TABLES');
-  lines.push('0', 'TABLE', '2', 'LAYER', '70', String(totalLayers));
-  addLayer(lines, 'SHEET', 7);
-  addLayer(lines, 'LABELS', 5);
-  addLayer(lines, 'PARTS', 3); // legacy fallback
-  for (const ml of matLayers) {
-    addLayer(lines, ml, 3);
-  }
-  lines.push('0', 'ENDTAB');
-  lines.push('0', 'ENDSEC');
+  lines.push(...buildDxfHeader());
+  lines.push(...buildDxfClasses());
+  lines.push(...buildDxfTables(layerDefs));
+  lines.push(...buildDxfBlocks());
 
   // ENTITIES
   lines.push('0', 'SECTION', '2', 'ENTITIES');
@@ -199,20 +345,22 @@ export async function downloadAllSheetsDxf(sheets: CutSheet[], projectName: stri
   let yOffset = 0;
   for (const sheet of sheets) {
     const matLayer = materialLayerName(sheet.material);
-    // Sheet outline
     addRect(lines, 0, yOffset, sheet.sheetWidth, sheet.sheetLength, 'SHEET');
 
-    // Parts on per-material layer, offset by current yOffset
     for (const part of sheet.parts) {
       const shifted: CutRect = { ...part, y: part.y + yOffset };
       addRect(lines, shifted.x, shifted.y, shifted.width, shifted.length, matLayer);
       addLabel(lines, shifted, 'LABELS');
+      addPartDimensions(lines, part, yOffset);
     }
 
     yOffset += sheet.sheetLength + spacing;
   }
 
   lines.push('0', 'ENDSEC');
+
+  lines.push(...buildDxfObjects());
+
   lines.push('0', 'EOF');
 
   const body = lines.join('\n');
