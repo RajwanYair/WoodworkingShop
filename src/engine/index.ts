@@ -111,3 +111,6 @@ export type { CabinetPlannerPlugin, PluginContract, PluginHookContract, PluginSt
 
 export { generateAssemblySteps, buildAssemblyDAG } from './assembly.ts';
 export type { AssemblyStep } from './assembly.ts';
+
+export { calculateHingeBoreSpec, hingeCount, formatHingeBoreSpecSummary } from './hinge-bore';
+export type { HingeBoreSpec, HingeBorePosition, HingeBoreError } from './hinge-bore';
