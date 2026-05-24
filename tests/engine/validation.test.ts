@@ -2,6 +2,13 @@ import { describe, it, expect } from 'vitest';
 import { validateConfig } from '../../src/engine/validation';
 import { cfg } from '../helpers';
 
+/** Returns true when at least one issue has the given code. */
+const hasCode = (issues: ReturnType<typeof validateConfig>, code: string): boolean =>
+  issues.some((i) => i.code === code);
+
+/** Returns the first issue matching the given code, or undefined. */
+const getIssue = (issues: ReturnType<typeof validateConfig>, code: string) => issues.find((i) => i.code === code);
+
 describe('validateConfig', () => {
   it('returns empty array for a valid default config', () => {
     const issues = validateConfig(cfg());
@@ -13,69 +20,63 @@ describe('validateConfig', () => {
   it('raises CARCASS_TOO_NARROW error when width < 2t + 100', () => {
     // plywood-17 thickness = 17 → minimum = 2*17+100 = 134
     const issues = validateConfig(cfg({ width: 100 }));
-    expect(issues.some((i) => i.code === 'CARCASS_TOO_NARROW')).toBe(true);
-    const issue = issues.find((i) => i.code === 'CARCASS_TOO_NARROW')!;
-    expect(issue.severity).toBe('error');
-    expect(issue.field).toBe('width');
-    expect(issue.suggestedValue).toBeTypeOf('number');
+    expect(hasCode(issues, 'CARCASS_TOO_NARROW')).toBe(true);
+    expect(getIssue(issues, 'CARCASS_TOO_NARROW')!.severity).toBe('error');
+    expect(getIssue(issues, 'CARCASS_TOO_NARROW')!.field).toBe('width');
+    expect(getIssue(issues, 'CARCASS_TOO_NARROW')!.suggestedValue).toBeTypeOf('number');
   });
 
   it('raises CARCASS_TOO_SHORT error when height is too small', () => {
-    const issues = validateConfig(cfg({ height: 100 }));
-    expect(issues.some((i) => i.code === 'CARCASS_TOO_SHORT')).toBe(true);
+    expect(hasCode(validateConfig(cfg({ height: 100 })), 'CARCASS_TOO_SHORT')).toBe(true);
   });
 
   it('raises DOOR_TOO_NARROW for a very narrow two-door cabinet', () => {
     // With doorCount=2 and width=350, each door ~170mm — below 200mm minimum
     const issues = validateConfig(cfg({ width: 350, doorCount: 2, doorStyle: 'flat' }));
-    expect(issues.some((i) => i.code === 'DOOR_TOO_NARROW')).toBe(true);
-    const issue = issues.find((i) => i.code === 'DOOR_TOO_NARROW')!;
-    expect(issue.severity).toBe('error');
+    expect(hasCode(issues, 'DOOR_TOO_NARROW')).toBe(true);
+    expect(getIssue(issues, 'DOOR_TOO_NARROW')!.severity).toBe('error');
   });
 
   it('does not raise DOOR_TOO_NARROW for doorStyle none', () => {
-    const issues = validateConfig(cfg({ width: 350, doorStyle: 'none' }));
-    expect(issues.some((i) => i.code === 'DOOR_TOO_NARROW')).toBe(false);
+    expect(hasCode(validateConfig(cfg({ width: 350, doorStyle: 'none' })), 'DOOR_TOO_NARROW')).toBe(false);
   });
 
   it('raises DOOR_ASPECT_RATIO warning for tall narrow door', () => {
     // A single door with width=300 height=2000 → ratio = (2000-6)/(300-6) ≈ 6.8 > 5
     const issues = validateConfig(cfg({ width: 300, height: 2000, doorCount: 1, doorStyle: 'flat' }));
-    expect(issues.some((i) => i.code === 'DOOR_ASPECT_RATIO')).toBe(true);
-    const issue = issues.find((i) => i.code === 'DOOR_ASPECT_RATIO')!;
-    expect(issue.severity).toBe('warning');
+    expect(hasCode(issues, 'DOOR_ASPECT_RATIO')).toBe(true);
+    expect(getIssue(issues, 'DOOR_ASPECT_RATIO')!.severity).toBe('warning');
   });
 
   it('raises KICK_TOO_TALL warning when kick > 50% of height', () => {
     const issues = validateConfig(cfg({ height: 600, kickHeight: 350 }));
-    expect(issues.some((i) => i.code === 'KICK_TOO_TALL')).toBe(true);
-    expect(issues.find((i) => i.code === 'KICK_TOO_TALL')!.severity).toBe('warning');
+    expect(hasCode(issues, 'KICK_TOO_TALL')).toBe(true);
+    expect(getIssue(issues, 'KICK_TOO_TALL')!.severity).toBe('warning');
   });
 
   it('raises SHELF_CLEARANCE_TOO_SMALL when too many shelves in short cabinet', () => {
     // height=600, plywood-17 → internalH = 566, 10 shelves → clearance = 566/11 ≈ 51 < 60
     const issues = validateConfig(cfg({ height: 600, shelfCount: 10 }));
-    expect(issues.some((i) => i.code === 'SHELF_CLEARANCE_TOO_SMALL')).toBe(true);
-    const issue = issues.find((i) => i.code === 'SHELF_CLEARANCE_TOO_SMALL')!;
-    expect(issue.severity).toBe('warning');
-    expect(issue.suggestedValue).toBeTypeOf('number');
+    expect(hasCode(issues, 'SHELF_CLEARANCE_TOO_SMALL')).toBe(true);
+    expect(getIssue(issues, 'SHELF_CLEARANCE_TOO_SMALL')!.severity).toBe('warning');
+    expect(getIssue(issues, 'SHELF_CLEARANCE_TOO_SMALL')!.suggestedValue).toBeTypeOf('number');
   });
 
   it('raises DRAWERS_TOO_MANY warning when drawers crowd shelves', () => {
     // height=500, shelfCount=2, drawerCount=3 → remainingH tiny
-    const issues = validateConfig(cfg({ height: 500, shelfCount: 2, drawerCount: 3 }));
-    expect(issues.some((i) => i.code === 'DRAWERS_TOO_MANY')).toBe(true);
+    expect(hasCode(validateConfig(cfg({ height: 500, shelfCount: 2, drawerCount: 3 })), 'DRAWERS_TOO_MANY')).toBe(true);
   });
 
   it('raises NO_BACK_TALL_CABINET warning for tall open-back cabinet', () => {
     const issues = validateConfig(cfg({ hasBack: false, height: 1800, furnitureType: 'cabinet' }));
-    expect(issues.some((i) => i.code === 'NO_BACK_TALL_CABINET')).toBe(true);
-    expect(issues.find((i) => i.code === 'NO_BACK_TALL_CABINET')!.severity).toBe('warning');
+    expect(hasCode(issues, 'NO_BACK_TALL_CABINET')).toBe(true);
+    expect(getIssue(issues, 'NO_BACK_TALL_CABINET')!.severity).toBe('warning');
   });
 
   it('does not raise NO_BACK_TALL_CABINET for panel type', () => {
-    const issues = validateConfig(cfg({ hasBack: false, height: 1800, furnitureType: 'panel' }));
-    expect(issues.some((i) => i.code === 'NO_BACK_TALL_CABINET')).toBe(false);
+    expect(
+      hasCode(validateConfig(cfg({ hasBack: false, height: 1800, furnitureType: 'panel' })), 'NO_BACK_TALL_CABINET'),
+    ).toBe(false);
   });
 
   it('sorts issues: errors before warnings before info', () => {
@@ -103,8 +104,12 @@ describe('validateConfig', () => {
 
   it('raises no deflection error for stiff plywood at moderate span', () => {
     // width=800, plywood-17 — should be fine
-    const issues = validateConfig(cfg({ width: 800, carcassMaterial: 'plywood-17', shelfCount: 2 }));
-    expect(issues.some((i) => i.code === 'SHELF_DEFLECTION_DANGER')).toBe(false);
+    expect(
+      hasCode(
+        validateConfig(cfg({ width: 800, carcassMaterial: 'plywood-17', shelfCount: 2 })),
+        'SHELF_DEFLECTION_DANGER',
+      ),
+    ).toBe(false);
   });
 
   it('every issue has both en and he messages', () => {
@@ -120,164 +125,145 @@ describe('validateConfig', () => {
   it('raises HINGE_CLEARANCE_INSUFFICIENT when door width < 300 mm', () => {
     // width=400, 2 doors → doorWidth ≈ (400-2*17)/2 ≈ 183 mm < 300
     const issues = validateConfig(cfg({ width: 400, doorCount: 2, doorStyle: 'flat' }));
-    expect(issues.some((i) => i.code === 'HINGE_CLEARANCE_INSUFFICIENT')).toBe(true);
-    const issue = issues.find((i) => i.code === 'HINGE_CLEARANCE_INSUFFICIENT')!;
-    expect(issue.severity).toBe('warning');
+    expect(hasCode(issues, 'HINGE_CLEARANCE_INSUFFICIENT')).toBe(true);
+    expect(getIssue(issues, 'HINGE_CLEARANCE_INSUFFICIENT')!.severity).toBe('warning');
   });
 
   it('does not raise HINGE_CLEARANCE_INSUFFICIENT for wide doors', () => {
     // width=700, 1 door → doorWidth ≈ 666 mm > 300
-    const issues = validateConfig(cfg({ width: 700, doorCount: 1, doorStyle: 'flat' }));
-    expect(issues.some((i) => i.code === 'HINGE_CLEARANCE_INSUFFICIENT')).toBe(false);
+    expect(
+      hasCode(validateConfig(cfg({ width: 700, doorCount: 1, doorStyle: 'flat' })), 'HINGE_CLEARANCE_INSUFFICIENT'),
+    ).toBe(false);
   });
 
   it('raises DOOR_EXCEEDS_STANDARD_HINGE_RATING for very tall door', () => {
     // height=2400 → doorHeight > 2200
     const issues = validateConfig(cfg({ height: 2400, doorStyle: 'flat', doorCount: 1 }));
-    expect(issues.some((i) => i.code === 'DOOR_EXCEEDS_STANDARD_HINGE_RATING')).toBe(true);
-    const issue = issues.find((i) => i.code === 'DOOR_EXCEEDS_STANDARD_HINGE_RATING')!;
-    expect(issue.severity).toBe('warning');
+    expect(hasCode(issues, 'DOOR_EXCEEDS_STANDARD_HINGE_RATING')).toBe(true);
+    expect(getIssue(issues, 'DOOR_EXCEEDS_STANDARD_HINGE_RATING')!.severity).toBe('warning');
   });
 
   it('does not raise DOOR_EXCEEDS_STANDARD_HINGE_RATING for standard door height', () => {
-    const issues = validateConfig(cfg({ height: 900, doorStyle: 'flat', doorCount: 1 }));
-    expect(issues.some((i) => i.code === 'DOOR_EXCEEDS_STANDARD_HINGE_RATING')).toBe(false);
+    expect(
+      hasCode(
+        validateConfig(cfg({ height: 900, doorStyle: 'flat', doorCount: 1 })),
+        'DOOR_EXCEEDS_STANDARD_HINGE_RATING',
+      ),
+    ).toBe(false);
   });
 
   it('raises WIDE_SINGLE_DOOR when single door exceeds 800 mm', () => {
     // width=900, 1 door → doorWidth ≈ 866 mm > 800
     const issues = validateConfig(cfg({ width: 900, doorCount: 1, doorStyle: 'flat' }));
-    expect(issues.some((i) => i.code === 'WIDE_SINGLE_DOOR')).toBe(true);
-    const issue = issues.find((i) => i.code === 'WIDE_SINGLE_DOOR')!;
-    expect(issue.severity).toBe('warning');
-    expect(issue.suggestedValue).toBe(2);
+    expect(hasCode(issues, 'WIDE_SINGLE_DOOR')).toBe(true);
+    expect(getIssue(issues, 'WIDE_SINGLE_DOOR')!.severity).toBe('warning');
+    expect(getIssue(issues, 'WIDE_SINGLE_DOOR')!.suggestedValue).toBe(2);
   });
 
   it('does not raise WIDE_SINGLE_DOOR for two-door cabinet over 800 mm wide', () => {
     // width=1000, 2 doors → each door ≈ 483 mm — not a single wide door
-    const issues = validateConfig(cfg({ width: 1000, doorCount: 2, doorStyle: 'flat' }));
-    expect(issues.some((i) => i.code === 'WIDE_SINGLE_DOOR')).toBe(false);
+    expect(hasCode(validateConfig(cfg({ width: 1000, doorCount: 2, doorStyle: 'flat' })), 'WIDE_SINGLE_DOOR')).toBe(
+      false,
+    );
   });
 
   it('hinge rules do not fire when doorStyle is none', () => {
     const issues = validateConfig(cfg({ width: 900, doorCount: 1, doorStyle: 'none' }));
-    expect(issues.some((i) => i.code === 'HINGE_CLEARANCE_INSUFFICIENT')).toBe(false);
-    expect(issues.some((i) => i.code === 'WIDE_SINGLE_DOOR')).toBe(false);
+    expect(hasCode(issues, 'HINGE_CLEARANCE_INSUFFICIENT')).toBe(false);
+    expect(hasCode(issues, 'WIDE_SINGLE_DOOR')).toBe(false);
   });
 
   // ── Drawer height rules (Sprint 13) ──
 
   it('raises DRAWER_HEIGHT_TOO_SMALL when drawerHeights contains a value < 100 mm', () => {
     const issues = validateConfig(cfg({ drawerCount: 2, drawerHeights: [150, 60] }));
-    expect(issues.some((i) => i.code === 'DRAWER_HEIGHT_TOO_SMALL')).toBe(true);
-    const issue = issues.find((i) => i.code === 'DRAWER_HEIGHT_TOO_SMALL')!;
-    expect(issue.severity).toBe('error');
-    expect(issue.suggestedValue).toBe(100);
+    expect(hasCode(issues, 'DRAWER_HEIGHT_TOO_SMALL')).toBe(true);
+    expect(getIssue(issues, 'DRAWER_HEIGHT_TOO_SMALL')!.severity).toBe('error');
+    expect(getIssue(issues, 'DRAWER_HEIGHT_TOO_SMALL')!.suggestedValue).toBe(100);
   });
 
   it('does not raise DRAWER_HEIGHT_TOO_SMALL for adequate drawer heights', () => {
-    const issues = validateConfig(cfg({ drawerCount: 3, drawerHeights: [150, 150, 120] }));
-    expect(issues.some((i) => i.code === 'DRAWER_HEIGHT_TOO_SMALL')).toBe(false);
+    expect(
+      hasCode(validateConfig(cfg({ drawerCount: 3, drawerHeights: [150, 150, 120] })), 'DRAWER_HEIGHT_TOO_SMALL'),
+    ).toBe(false);
   });
 
   it('raises DRAWER_STACK_OVERFLOW when total drawer stack exceeds interior height', () => {
     // height=600, plywood-17 → internalH ≈ 566, 3 drawers × 200mm + 2 gaps × 10 = 620mm > 566mm
     const issues = validateConfig(cfg({ height: 600, drawerCount: 3, drawerHeights: [200, 200, 200], shelfCount: 0 }));
-    expect(issues.some((i) => i.code === 'DRAWER_STACK_OVERFLOW')).toBe(true);
-    expect(issues.find((i) => i.code === 'DRAWER_STACK_OVERFLOW')!.severity).toBe('error');
+    expect(hasCode(issues, 'DRAWER_STACK_OVERFLOW')).toBe(true);
+    expect(getIssue(issues, 'DRAWER_STACK_OVERFLOW')!.severity).toBe('error');
   });
 
   it('does not raise DRAWER_STACK_OVERFLOW when stack fits', () => {
     // height=900, drawerCount=2 × 150mm + 10mm gap = 310mm, internalH ≈ 866mm — fine
-    const issues = validateConfig(cfg({ height: 900, drawerCount: 2 }));
-    expect(issues.some((i) => i.code === 'DRAWER_STACK_OVERFLOW')).toBe(false);
+    expect(hasCode(validateConfig(cfg({ height: 900, drawerCount: 2 })), 'DRAWER_STACK_OVERFLOW')).toBe(false);
   });
 
   // ── Sprint 17: Wide-span and tall-cabinet structural checks ──
 
   it('raises SPAN_TOO_WIDE warning when width > 1200 mm', () => {
     const issues = validateConfig(cfg({ width: 1400, furnitureType: 'cabinet' }));
-    expect(issues.some((i) => i.code === 'SPAN_TOO_WIDE')).toBe(true);
-    expect(issues.find((i) => i.code === 'SPAN_TOO_WIDE')!.severity).toBe('warning');
-    expect(issues.find((i) => i.code === 'SPAN_TOO_WIDE')!.field).toBe('width');
+    expect(hasCode(issues, 'SPAN_TOO_WIDE')).toBe(true);
+    expect(getIssue(issues, 'SPAN_TOO_WIDE')!.severity).toBe('warning');
+    expect(getIssue(issues, 'SPAN_TOO_WIDE')!.field).toBe('width');
   });
 
-  it('does not raise SPAN_TOO_WIDE when width <= 1200 mm', () => {
-    const issues = validateConfig(cfg({ width: 1200 }));
-    expect(issues.some((i) => i.code === 'SPAN_TOO_WIDE')).toBe(false);
-  });
-
-  it('does not raise SPAN_TOO_WIDE for panel furniture type', () => {
-    // Panel type is exempt from SPAN_TOO_WIDE (it IS a single panel)
-    const issues = validateConfig(
-      cfg({ width: 1800, furnitureType: 'panel', doorStyle: 'none', kickHeight: 0, depth: 18 }),
-    );
-    expect(issues.some((i) => i.code === 'SPAN_TOO_WIDE')).toBe(false);
+  it.each([
+    ['width is 1200 mm (boundary)', { width: 1200 }],
+    [
+      'furniture type is panel',
+      { width: 1800, furnitureType: 'panel' as const, doorStyle: 'none' as const, kickHeight: 0, depth: 18 },
+    ],
+  ])('does not raise SPAN_TOO_WIDE when %s', (_, overrides) => {
+    expect(hasCode(validateConfig(cfg(overrides)), 'SPAN_TOO_WIDE')).toBe(false);
   });
 
   it('raises CARCASS_HEIGHT_CRITICAL warning when height > 2400 mm', () => {
     const issues = validateConfig(cfg({ height: 2500, furnitureType: 'wardrobe' }));
-    expect(issues.some((i) => i.code === 'CARCASS_HEIGHT_CRITICAL')).toBe(true);
-    expect(issues.find((i) => i.code === 'CARCASS_HEIGHT_CRITICAL')!.severity).toBe('warning');
-    expect(issues.find((i) => i.code === 'CARCASS_HEIGHT_CRITICAL')!.field).toBe('height');
+    expect(hasCode(issues, 'CARCASS_HEIGHT_CRITICAL')).toBe(true);
+    expect(getIssue(issues, 'CARCASS_HEIGHT_CRITICAL')!.severity).toBe('warning');
+    expect(getIssue(issues, 'CARCASS_HEIGHT_CRITICAL')!.field).toBe('height');
   });
 
-  it('does not raise CARCASS_HEIGHT_CRITICAL when height <= 2400 mm', () => {
-    const issues = validateConfig(cfg({ height: 2400 }));
-    expect(issues.some((i) => i.code === 'CARCASS_HEIGHT_CRITICAL')).toBe(false);
-  });
-
-  it('does not raise CARCASS_HEIGHT_CRITICAL for panel furniture type', () => {
-    const issues = validateConfig(
-      cfg({ height: 2800, furnitureType: 'panel', doorStyle: 'none', kickHeight: 0, depth: 18 }),
-    );
-    expect(issues.some((i) => i.code === 'CARCASS_HEIGHT_CRITICAL')).toBe(false);
+  it.each([
+    ['height is exactly 2400 mm', { height: 2400 }],
+    [
+      'furniture type is panel',
+      { height: 2800, furnitureType: 'panel' as const, doorStyle: 'none' as const, kickHeight: 0, depth: 18 },
+    ],
+  ])('does not raise CARCASS_HEIGHT_CRITICAL when %s', (_, overrides) => {
+    expect(hasCode(validateConfig(cfg(overrides)), 'CARCASS_HEIGHT_CRITICAL')).toBe(false);
   });
 });
 
 describe('validateConfig — SHELF_LOAD_CAPACITY_LOW (Sprint 30)', () => {
   it('raises SHELF_LOAD_CAPACITY_LOW for a very wide span with chipboard', () => {
     // 1600 mm span with chipboard-18 has very low stiffness → < 15 kg safe load
-    const issues = validateConfig(
-      cfg({
-        width: 1700,
-        shelfCount: 2,
-        carcassMaterial: 'chipboard-18',
-        doorStyle: 'none',
-      }),
-    );
-    expect(issues.some((i) => i.code === 'SHELF_LOAD_CAPACITY_LOW')).toBe(true);
+    expect(
+      hasCode(
+        validateConfig(cfg({ width: 1700, shelfCount: 2, carcassMaterial: 'chipboard-18', doorStyle: 'none' })),
+        'SHELF_LOAD_CAPACITY_LOW',
+      ),
+    ).toBe(true);
   });
 
-  it('does not raise SHELF_LOAD_CAPACITY_LOW for a normal span with plywood', () => {
-    const issues = validateConfig(
-      cfg({
-        width: 800,
-        shelfCount: 2,
-        carcassMaterial: 'plywood-18',
-        doorStyle: 'none',
-      }),
-    );
-    expect(issues.some((i) => i.code === 'SHELF_LOAD_CAPACITY_LOW')).toBe(false);
-  });
-
-  it('does not raise SHELF_LOAD_CAPACITY_LOW when there are no shelves', () => {
-    const issues = validateConfig(cfg({ shelfCount: 0 }));
-    expect(issues.some((i) => i.code === 'SHELF_LOAD_CAPACITY_LOW')).toBe(false);
+  it.each([
+    [
+      'normal span with plywood',
+      { width: 800, shelfCount: 2, carcassMaterial: 'plywood-18' as const, doorStyle: 'none' as const },
+    ],
+    ['no shelves', { shelfCount: 0 }],
+  ])('does not raise SHELF_LOAD_CAPACITY_LOW when %s', (_, overrides) => {
+    expect(hasCode(validateConfig(cfg(overrides)), 'SHELF_LOAD_CAPACITY_LOW')).toBe(false);
   });
 
   it('SHELF_LOAD_CAPACITY_LOW points to shelfCount field', () => {
     const issues = validateConfig(
-      cfg({
-        width: 1700,
-        shelfCount: 1,
-        carcassMaterial: 'chipboard-18',
-        doorStyle: 'none',
-      }),
+      cfg({ width: 1700, shelfCount: 1, carcassMaterial: 'chipboard-18', doorStyle: 'none' }),
     );
-    const issue = issues.find((i) => i.code === 'SHELF_LOAD_CAPACITY_LOW');
-    expect(issue?.field).toBe('shelfCount');
-    expect(issue?.severity).toBe('warning');
+    expect(getIssue(issues, 'SHELF_LOAD_CAPACITY_LOW')?.field).toBe('shelfCount');
+    expect(getIssue(issues, 'SHELF_LOAD_CAPACITY_LOW')?.severity).toBe('warning');
   });
 
   // ── Phase 5 Sprint 7: Manufacturing constraint checks ──
@@ -285,77 +271,59 @@ describe('validateConfig — SHELF_LOAD_CAPACITY_LOW (Sprint 30)', () => {
   it('raises DADO_DEPTH_TOO_SHALLOW when panel is very thin with shelves', () => {
     // plywood-4 has t=4 mm; dado depth = 4×(1/3) = 1.33 mm < 5 mm threshold
     const issues = validateConfig(cfg({ shelfCount: 2, carcassMaterial: 'plywood-4' }));
-    expect(issues.some((i) => i.code === 'DADO_DEPTH_TOO_SHALLOW')).toBe(true);
-    const issue = issues.find((i) => i.code === 'DADO_DEPTH_TOO_SHALLOW')!;
-    expect(issue.severity).toBe('warning');
-    expect(issue.field).toBe('carcassMaterial');
+    expect(hasCode(issues, 'DADO_DEPTH_TOO_SHALLOW')).toBe(true);
+    expect(getIssue(issues, 'DADO_DEPTH_TOO_SHALLOW')!.severity).toBe('warning');
+    expect(getIssue(issues, 'DADO_DEPTH_TOO_SHALLOW')!.field).toBe('carcassMaterial');
   });
 
-  it('does not raise DADO_DEPTH_TOO_SHALLOW for a standard 18mm panel', () => {
-    const issues = validateConfig(cfg({ shelfCount: 3, carcassMaterial: 'plywood-18' }));
-    expect(issues.some((i) => i.code === 'DADO_DEPTH_TOO_SHALLOW')).toBe(false);
-  });
-
-  it('does not raise DADO_DEPTH_TOO_SHALLOW when there are no shelves', () => {
-    const issues = validateConfig(cfg({ shelfCount: 0 }));
-    expect(issues.some((i) => i.code === 'DADO_DEPTH_TOO_SHALLOW')).toBe(false);
+  it.each([
+    ['standard 18mm panel', { shelfCount: 3, carcassMaterial: 'plywood-18' as const }],
+    ['no shelves', { shelfCount: 0 }],
+  ])('does not raise DADO_DEPTH_TOO_SHALLOW when %s', (_, overrides) => {
+    expect(hasCode(validateConfig(cfg(overrides)), 'DADO_DEPTH_TOO_SHALLOW')).toBe(false);
   });
 
   it('raises DRAWER_RUNNER_CLEARANCE_INSUFFICIENT for very narrow cabinet with drawers', () => {
     // width=200, t≈17 → internalWidth=166, need 174 (24+150) → flag
     const issues = validateConfig(cfg({ width: 200, drawerCount: 1, doorStyle: 'none' }));
-    expect(issues.some((i) => i.code === 'DRAWER_RUNNER_CLEARANCE_INSUFFICIENT')).toBe(true);
-    const issue = issues.find((i) => i.code === 'DRAWER_RUNNER_CLEARANCE_INSUFFICIENT')!;
-    expect(issue.severity).toBe('warning');
-    expect(issue.field).toBe('width');
+    expect(hasCode(issues, 'DRAWER_RUNNER_CLEARANCE_INSUFFICIENT')).toBe(true);
+    expect(getIssue(issues, 'DRAWER_RUNNER_CLEARANCE_INSUFFICIENT')!.severity).toBe('warning');
+    expect(getIssue(issues, 'DRAWER_RUNNER_CLEARANCE_INSUFFICIENT')!.field).toBe('width');
   });
 
-  it('does not raise DRAWER_RUNNER_CLEARANCE_INSUFFICIENT for standard-width cabinet', () => {
-    // width=600, t≈17 → internalWidth=566 >> 174 — fine
-    const issues = validateConfig(cfg({ width: 600, drawerCount: 2, doorStyle: 'none' }));
-    expect(issues.some((i) => i.code === 'DRAWER_RUNNER_CLEARANCE_INSUFFICIENT')).toBe(false);
-  });
-
-  it('does not raise DRAWER_RUNNER_CLEARANCE_INSUFFICIENT when drawerCount is 0', () => {
-    const issues = validateConfig(cfg({ width: 200, drawerCount: 0, doorStyle: 'none' }));
-    expect(issues.some((i) => i.code === 'DRAWER_RUNNER_CLEARANCE_INSUFFICIENT')).toBe(false);
+  it.each([
+    ['standard-width cabinet', { width: 600, drawerCount: 2, doorStyle: 'none' as const }],
+    ['drawerCount is 0', { width: 200, drawerCount: 0, doorStyle: 'none' as const }],
+  ])('does not raise DRAWER_RUNNER_CLEARANCE_INSUFFICIENT when %s', (_, overrides) => {
+    expect(hasCode(validateConfig(cfg(overrides)), 'DRAWER_RUNNER_CLEARANCE_INSUFFICIENT')).toBe(false);
   });
 
   it('raises BACK_REBATE_TOO_SHALLOW for a very thin panel with back', () => {
     // plywood-4 has t=4 mm; 4/2 = 2 mm < 8 mm threshold
     const issues = validateConfig(cfg({ carcassMaterial: 'plywood-4', hasBack: true }));
-    expect(issues.some((i) => i.code === 'BACK_REBATE_TOO_SHALLOW')).toBe(true);
-    const issue = issues.find((i) => i.code === 'BACK_REBATE_TOO_SHALLOW')!;
-    expect(issue.severity).toBe('info');
+    expect(hasCode(issues, 'BACK_REBATE_TOO_SHALLOW')).toBe(true);
+    expect(getIssue(issues, 'BACK_REBATE_TOO_SHALLOW')!.severity).toBe('info');
   });
 
-  it('does not raise BACK_REBATE_TOO_SHALLOW for standard 18mm panel', () => {
-    const issues = validateConfig(cfg({ carcassMaterial: 'plywood-18', hasBack: true }));
-    expect(issues.some((i) => i.code === 'BACK_REBATE_TOO_SHALLOW')).toBe(false);
-  });
-
-  it('does not raise BACK_REBATE_TOO_SHALLOW when hasBack is false', () => {
-    // Even with thin material, no back → no rebate warning
-    const issues = validateConfig(cfg({ carcassMaterial: 'plywood-4', hasBack: false }));
-    expect(issues.some((i) => i.code === 'BACK_REBATE_TOO_SHALLOW')).toBe(false);
+  it.each([
+    ['standard 18mm panel', { carcassMaterial: 'plywood-18' as const, hasBack: true }],
+    ['hasBack is false (even thin material)', { carcassMaterial: 'plywood-4' as const, hasBack: false }],
+  ])('does not raise BACK_REBATE_TOO_SHALLOW when %s', (_, overrides) => {
+    expect(hasCode(validateConfig(cfg(overrides)), 'BACK_REBATE_TOO_SHALLOW')).toBe(false);
   });
 
   it('raises HINGE_CUP_EDGE_DISTANCE_UNSAFE for extremely narrow door cabinet', () => {
     // width=80, doorCount=2, doorReveal=3 → doorWidth=(80-6)/2=37mm < 44mm (2×22)
     const issues = validateConfig(cfg({ width: 80, doorCount: 2, doorStyle: 'flat' }));
-    expect(issues.some((i) => i.code === 'HINGE_CUP_EDGE_DISTANCE_UNSAFE')).toBe(true);
-    const issue = issues.find((i) => i.code === 'HINGE_CUP_EDGE_DISTANCE_UNSAFE')!;
-    expect(issue.severity).toBe('error');
+    expect(hasCode(issues, 'HINGE_CUP_EDGE_DISTANCE_UNSAFE')).toBe(true);
+    expect(getIssue(issues, 'HINGE_CUP_EDGE_DISTANCE_UNSAFE')!.severity).toBe('error');
   });
 
-  it('does not raise HINGE_CUP_EDGE_DISTANCE_UNSAFE for a normal door width', () => {
-    const issues = validateConfig(cfg({ width: 600, doorCount: 1, doorStyle: 'flat' }));
-    expect(issues.some((i) => i.code === 'HINGE_CUP_EDGE_DISTANCE_UNSAFE')).toBe(false);
-  });
-
-  it('does not raise HINGE_CUP_EDGE_DISTANCE_UNSAFE when doorStyle is none', () => {
-    const issues = validateConfig(cfg({ width: 100, doorStyle: 'none' }));
-    expect(issues.some((i) => i.code === 'HINGE_CUP_EDGE_DISTANCE_UNSAFE')).toBe(false);
+  it.each([
+    ['normal door width', { width: 600, doorCount: 1 as 1, doorStyle: 'flat' as const }],
+    ['doorStyle is none', { width: 100, doorStyle: 'none' as const }],
+  ])('does not raise HINGE_CUP_EDGE_DISTANCE_UNSAFE when %s', (_, overrides) => {
+    expect(hasCode(validateConfig(cfg(overrides)), 'HINGE_CUP_EDGE_DISTANCE_UNSAFE')).toBe(false);
   });
 
   // ── Assembly-risk: tall carcass without shelf (Sprint 7) ──
@@ -364,35 +332,25 @@ describe('validateConfig — SHELF_LOAD_CAPACITY_LOW (Sprint 30)', () => {
     const issues = validateConfig(
       cfg({ height: 1800, shelfCount: 0, drawerCount: 0, doorStyle: 'none', furnitureType: 'cabinet' }),
     );
-    expect(issues.some((i) => i.code === 'TALL_CARCASS_NO_SHELF')).toBe(true);
-    const issue = issues.find((i) => i.code === 'TALL_CARCASS_NO_SHELF')!;
-    expect(issue.severity).toBe('warning');
-    expect(issue.field).toBe('shelfCount');
-    expect(issue.suggestedValue).toBe(1);
+    expect(hasCode(issues, 'TALL_CARCASS_NO_SHELF')).toBe(true);
+    expect(getIssue(issues, 'TALL_CARCASS_NO_SHELF')!.severity).toBe('warning');
+    expect(getIssue(issues, 'TALL_CARCASS_NO_SHELF')!.field).toBe('shelfCount');
+    expect(getIssue(issues, 'TALL_CARCASS_NO_SHELF')!.suggestedValue).toBe(1);
   });
 
-  it('does not raise TALL_CARCASS_NO_SHELF when shelves are present', () => {
-    const issues = validateConfig(cfg({ height: 1800, shelfCount: 2, furnitureType: 'cabinet' }));
-    expect(issues.some((i) => i.code === 'TALL_CARCASS_NO_SHELF')).toBe(false);
-  });
-
-  it('does not raise TALL_CARCASS_NO_SHELF when drawers are present', () => {
-    const issues = validateConfig(
+  it.each([
+    ['shelves are present', cfg({ height: 1800, shelfCount: 2, furnitureType: 'cabinet' })],
+    [
+      'drawers are present',
       cfg({ height: 1800, shelfCount: 0, drawerCount: 3, doorStyle: 'none', furnitureType: 'cabinet' }),
-    );
-    expect(issues.some((i) => i.code === 'TALL_CARCASS_NO_SHELF')).toBe(false);
-  });
-
-  it('does not raise TALL_CARCASS_NO_SHELF for short cabinet without shelves', () => {
-    const issues = validateConfig(
+    ],
+    [
+      'cabinet is short',
       cfg({ height: 800, shelfCount: 0, drawerCount: 0, doorStyle: 'none', furnitureType: 'cabinet' }),
-    );
-    expect(issues.some((i) => i.code === 'TALL_CARCASS_NO_SHELF')).toBe(false);
-  });
-
-  it('does not raise TALL_CARCASS_NO_SHELF for panel type', () => {
-    const issues = validateConfig(cfg({ height: 1800, shelfCount: 0, drawerCount: 0, furnitureType: 'panel' }));
-    expect(issues.some((i) => i.code === 'TALL_CARCASS_NO_SHELF')).toBe(false);
+    ],
+    ['furniture type is panel', cfg({ height: 1800, shelfCount: 0, drawerCount: 0, furnitureType: 'panel' })],
+  ])('does not raise TALL_CARCASS_NO_SHELF when %s', (_, config) => {
+    expect(hasCode(validateConfig(config), 'TALL_CARCASS_NO_SHELF')).toBe(false);
   });
 
   // ── Hinge-shelf interference checks (Phase 5 assembly risk) ──
@@ -402,31 +360,24 @@ describe('validateConfig — SHELF_LOAD_CAPACITY_LOW (Sprint 30)', () => {
     // hingesPerDoor=3, middle hinge ~497 from door top → arm at ~483mm from interior bottom
     // 3 shelves equal → middle shelf also at ~483mm → gap 0 < 35mm
     const issues = validateConfig(cfg({ height: 1000, shelfCount: 3, doorStyle: 'flat' }));
-    expect(issues.some((i) => i.code === 'HINGE_SHELF_INTERFERENCE')).toBe(true);
-    const issue = issues.find((i) => i.code === 'HINGE_SHELF_INTERFERENCE')!;
-    expect(issue.severity).toBe('warning');
-    expect(issue.field).toBe('shelfCount');
+    expect(hasCode(issues, 'HINGE_SHELF_INTERFERENCE')).toBe(true);
+    expect(getIssue(issues, 'HINGE_SHELF_INTERFERENCE')!.severity).toBe('warning');
+    expect(getIssue(issues, 'HINGE_SHELF_INTERFERENCE')!.field).toBe('shelfCount');
   });
 
-  it('does not raise HINGE_SHELF_INTERFERENCE when doorStyle is none', () => {
-    const issues = validateConfig(cfg({ height: 1000, shelfCount: 3, doorStyle: 'none' }));
-    expect(issues.some((i) => i.code === 'HINGE_SHELF_INTERFERENCE')).toBe(false);
-  });
-
-  it('does not raise HINGE_SHELF_INTERFERENCE when shelfCount is 0', () => {
-    const issues = validateConfig(cfg({ height: 1000, shelfCount: 0, doorStyle: 'flat' }));
-    expect(issues.some((i) => i.code === 'HINGE_SHELF_INTERFERENCE')).toBe(false);
-  });
-
-  it('does not raise HINGE_SHELF_INTERFERENCE for the default 2000mm 4-shelf cabinet', () => {
-    // 5 hinges spread over 1994mm; 4 shelves at ~393, 786, 1180, 1573mm — all > 35mm from any hinge arm
-    const issues = validateConfig(cfg());
-    expect(issues.some((i) => i.code === 'HINGE_SHELF_INTERFERENCE')).toBe(false);
+  it.each([
+    ['doorStyle is none', cfg({ height: 1000, shelfCount: 3, doorStyle: 'none' })],
+    ['shelfCount is 0', cfg({ height: 1000, shelfCount: 0, doorStyle: 'flat' })],
+    ['default 2000mm 4-shelf cabinet (all hinges clear shelves)', cfg()],
+  ])('does not raise HINGE_SHELF_INTERFERENCE when %s', (_, config) => {
+    expect(hasCode(validateConfig(config), 'HINGE_SHELF_INTERFERENCE')).toBe(false);
   });
 
   it('HINGE_SHELF_INTERFERENCE message contains both en and he text', () => {
-    const issues = validateConfig(cfg({ height: 1000, shelfCount: 3, doorStyle: 'flat' }));
-    const issue = issues.find((i) => i.code === 'HINGE_SHELF_INTERFERENCE');
+    const issue = getIssue(
+      validateConfig(cfg({ height: 1000, shelfCount: 3, doorStyle: 'flat' })),
+      'HINGE_SHELF_INTERFERENCE',
+    );
     expect(issue).toBeDefined();
     expect(issue!.message.en).toContain('mm');
     expect(issue!.message.he).toContain('מ"מ');
@@ -436,37 +387,37 @@ describe('validateConfig — SHELF_LOAD_CAPACITY_LOW (Sprint 30)', () => {
 describe('validateConfig — NARROW_BACK_OMITTED (Sprint 34)', () => {
   it('raises NARROW_BACK_OMITTED warning for narrow open-back cabinet', () => {
     const issues = validateConfig(cfg({ hasBack: false, width: 350, furnitureType: 'cabinet' }));
-    expect(issues.some((i) => i.code === 'NARROW_BACK_OMITTED')).toBe(true);
-    const issue = issues.find((i) => i.code === 'NARROW_BACK_OMITTED')!;
-    expect(issue.severity).toBe('warning');
-    expect(issue.field).toBe('hasBack');
+    expect(hasCode(issues, 'NARROW_BACK_OMITTED')).toBe(true);
+    expect(getIssue(issues, 'NARROW_BACK_OMITTED')!.severity).toBe('warning');
+    expect(getIssue(issues, 'NARROW_BACK_OMITTED')!.field).toBe('hasBack');
   });
 
-  it('does not raise NARROW_BACK_OMITTED when cabinet has a back panel', () => {
-    const issues = validateConfig(cfg({ hasBack: true, width: 350, furnitureType: 'cabinet' }));
-    expect(issues.some((i) => i.code === 'NARROW_BACK_OMITTED')).toBe(false);
-  });
-
-  it('does not raise NARROW_BACK_OMITTED when width >= 400 mm', () => {
-    const issues = validateConfig(cfg({ hasBack: false, width: 450, furnitureType: 'cabinet' }));
-    expect(issues.some((i) => i.code === 'NARROW_BACK_OMITTED')).toBe(false);
-  });
-
-  it('does not raise NARROW_BACK_OMITTED for panel furniture type', () => {
-    const issues = validateConfig(
-      cfg({ hasBack: false, width: 300, furnitureType: 'panel', doorStyle: 'none', kickHeight: 0, depth: 18 }),
-    );
-    expect(issues.some((i) => i.code === 'NARROW_BACK_OMITTED')).toBe(false);
+  it.each([
+    ['cabinet has a back panel', { hasBack: true, width: 350, furnitureType: 'cabinet' as const }],
+    ['width >= 400 mm', { hasBack: false, width: 450, furnitureType: 'cabinet' as const }],
+    [
+      'furniture type is panel',
+      {
+        hasBack: false,
+        width: 300,
+        furnitureType: 'panel' as const,
+        doorStyle: 'none' as const,
+        kickHeight: 0,
+        depth: 18,
+      },
+    ],
+  ])('does not raise NARROW_BACK_OMITTED when %s', (_, overrides) => {
+    expect(hasCode(validateConfig(cfg(overrides)), 'NARROW_BACK_OMITTED')).toBe(false);
   });
 
   it('NARROW_BACK_OMITTED fires at exactly 399 mm (boundary)', () => {
-    const issues = validateConfig(cfg({ hasBack: false, width: 399, furnitureType: 'bookshelf' }));
-    expect(issues.some((i) => i.code === 'NARROW_BACK_OMITTED')).toBe(true);
+    expect(
+      hasCode(validateConfig(cfg({ hasBack: false, width: 399, furnitureType: 'bookshelf' })), 'NARROW_BACK_OMITTED'),
+    ).toBe(true);
   });
 
   it('NARROW_BACK_OMITTED message has both en and he text', () => {
-    const issues = validateConfig(cfg({ hasBack: false, width: 300 }));
-    const issue = issues.find((i) => i.code === 'NARROW_BACK_OMITTED')!;
+    const issue = getIssue(validateConfig(cfg({ hasBack: false, width: 300 })), 'NARROW_BACK_OMITTED')!;
     expect(issue.message.en).toBeTruthy();
     expect(issue.message.he).toBeTruthy();
   });
@@ -474,40 +425,37 @@ describe('validateConfig — NARROW_BACK_OMITTED (Sprint 34)', () => {
 
 describe('validateConfig — joinery rules (Sprint 45)', () => {
   it('JOINERY_MAX_SPAN fires for chipboard on span > 900 mm', () => {
-    const issues = validateConfig(cfg({ carcassMaterial: 'chipboard-18', width: 1000, shelfCount: 1 }));
-    expect(issues.some((i) => i.code === 'JOINERY_MAX_SPAN')).toBe(true);
+    expect(
+      hasCode(validateConfig(cfg({ carcassMaterial: 'chipboard-18', width: 1000, shelfCount: 1 })), 'JOINERY_MAX_SPAN'),
+    ).toBe(true);
   });
 
-  it('JOINERY_MAX_SPAN does not fire for plywood on span > 900 mm', () => {
-    const issues = validateConfig(cfg({ carcassMaterial: 'plywood-18', width: 1000, shelfCount: 1 }));
-    expect(issues.some((i) => i.code === 'JOINERY_MAX_SPAN')).toBe(false);
-  });
-
-  it('JOINERY_MAX_SPAN does not fire for chipboard when no shelves', () => {
-    const issues = validateConfig(cfg({ carcassMaterial: 'chipboard-18', width: 1000, shelfCount: 0 }));
-    expect(issues.some((i) => i.code === 'JOINERY_MAX_SPAN')).toBe(false);
+  it.each([
+    ['plywood on span > 900 mm', { carcassMaterial: 'plywood-18' as const, width: 1000, shelfCount: 1 }],
+    ['chipboard when no shelves', { carcassMaterial: 'chipboard-18' as const, width: 1000, shelfCount: 0 }],
+  ])('JOINERY_MAX_SPAN does not fire for %s', (_, overrides) => {
+    expect(hasCode(validateConfig(cfg(overrides)), 'JOINERY_MAX_SPAN')).toBe(false);
   });
 
   it('JOINERY_MIN_SHELF_GAP fires when many shelves crammed into a small cabinet', () => {
     // 500 mm tall cabinet with 5 shelves — gap ≈ 500/6 ≈ 83 mm (< 150 mm)
-    const issues = validateConfig(cfg({ height: 500, shelfCount: 5, doorStyle: 'none' }));
-    expect(issues.some((i) => i.code === 'JOINERY_MIN_SHELF_GAP')).toBe(true);
+    expect(
+      hasCode(validateConfig(cfg({ height: 500, shelfCount: 5, doorStyle: 'none' })), 'JOINERY_MIN_SHELF_GAP'),
+    ).toBe(true);
   });
 
-  it('JOINERY_MIN_SHELF_GAP does not fire for reasonable shelf spacing', () => {
-    // 2000 mm tall cabinet with 3 shelves — gap ≈ 2000/4 = 500 mm (> 150 mm)
-    const issues = validateConfig(cfg({ height: 2000, shelfCount: 3 }));
-    expect(issues.some((i) => i.code === 'JOINERY_MIN_SHELF_GAP')).toBe(false);
-  });
-
-  it('JOINERY_MIN_SHELF_GAP does not fire for single shelf', () => {
-    const issues = validateConfig(cfg({ height: 500, shelfCount: 1 }));
-    expect(issues.some((i) => i.code === 'JOINERY_MIN_SHELF_GAP')).toBe(false);
+  it.each([
+    ['reasonable shelf spacing (2000mm, 3 shelves)', { height: 2000, shelfCount: 3 }],
+    ['single shelf', { height: 500, shelfCount: 1 }],
+  ])('JOINERY_MIN_SHELF_GAP does not fire for %s', (_, overrides) => {
+    expect(hasCode(validateConfig(cfg(overrides)), 'JOINERY_MIN_SHELF_GAP')).toBe(false);
   });
 
   it('JOINERY_MAX_SPAN issue has both en and he message', () => {
-    const issues = validateConfig(cfg({ carcassMaterial: 'mdf-18', width: 1000, shelfCount: 1 }));
-    const issue = issues.find((i) => i.code === 'JOINERY_MAX_SPAN')!;
+    const issue = getIssue(
+      validateConfig(cfg({ carcassMaterial: 'mdf-18', width: 1000, shelfCount: 1 })),
+      'JOINERY_MAX_SPAN',
+    )!;
     expect(issue?.message.en).toBeTruthy();
     expect(issue?.message.he).toBeTruthy();
   });
@@ -518,31 +466,22 @@ describe('validateConfig — Sprint 56 new rules', () => {
 
   it('raises DEPTH_EXCEEDS_WIDTH warning when depth > width', () => {
     const issues = validateConfig(cfg({ width: 600, depth: 800 }));
-    expect(issues.some((i) => i.code === 'DEPTH_EXCEEDS_WIDTH')).toBe(true);
-    const issue = issues.find((i) => i.code === 'DEPTH_EXCEEDS_WIDTH')!;
-    expect(issue.severity).toBe('warning');
-    expect(issue.field).toBe('depth');
-    expect(issue.suggestedValue).toBe(600);
+    expect(hasCode(issues, 'DEPTH_EXCEEDS_WIDTH')).toBe(true);
+    expect(getIssue(issues, 'DEPTH_EXCEEDS_WIDTH')!.severity).toBe('warning');
+    expect(getIssue(issues, 'DEPTH_EXCEEDS_WIDTH')!.field).toBe('depth');
+    expect(getIssue(issues, 'DEPTH_EXCEEDS_WIDTH')!.suggestedValue).toBe(600);
   });
 
-  it('does not raise DEPTH_EXCEEDS_WIDTH when depth equals width', () => {
-    const issues = validateConfig(cfg({ width: 600, depth: 600 }));
-    expect(issues.some((i) => i.code === 'DEPTH_EXCEEDS_WIDTH')).toBe(false);
-  });
-
-  it('does not raise DEPTH_EXCEEDS_WIDTH when depth < width', () => {
-    const issues = validateConfig(cfg({ width: 1000, depth: 600 }));
-    expect(issues.some((i) => i.code === 'DEPTH_EXCEEDS_WIDTH')).toBe(false);
-  });
-
-  it('does not raise DEPTH_EXCEEDS_WIDTH for panel furniture type', () => {
-    const issues = validateConfig(cfg({ width: 300, depth: 600, furnitureType: 'panel' }));
-    expect(issues.some((i) => i.code === 'DEPTH_EXCEEDS_WIDTH')).toBe(false);
+  it.each([
+    ['depth equals width', { width: 600, depth: 600 }],
+    ['depth < width', { width: 1000, depth: 600 }],
+    ['panel furniture type', { width: 300, depth: 600, furnitureType: 'panel' as const }],
+  ])('does not raise DEPTH_EXCEEDS_WIDTH when %s', (_, overrides) => {
+    expect(hasCode(validateConfig(cfg(overrides)), 'DEPTH_EXCEEDS_WIDTH')).toBe(false);
   });
 
   it('DEPTH_EXCEEDS_WIDTH message has both en and he text', () => {
-    const issues = validateConfig(cfg({ width: 400, depth: 700 }));
-    const issue = issues.find((i) => i.code === 'DEPTH_EXCEEDS_WIDTH')!;
+    const issue = getIssue(validateConfig(cfg({ width: 400, depth: 700 })), 'DEPTH_EXCEEDS_WIDTH')!;
     expect(issue.message.en).toBeTruthy();
     expect(issue.message.he).toBeTruthy();
   });
@@ -553,27 +492,21 @@ describe('validateConfig — Sprint 56 new rules', () => {
     // default height 2000, kick 100, t≈17 → internalHeight ≈ 1866 mm
     // 20 drawers → 1866/20 = 93 mm each < 100 mm minimum
     const issues = validateConfig(cfg({ drawerCount: 20 }));
-    expect(issues.some((i) => i.code === 'EXCESSIVE_DRAWER_COUNT')).toBe(true);
-    const issue = issues.find((i) => i.code === 'EXCESSIVE_DRAWER_COUNT')!;
-    expect(issue.severity).toBe('error');
-    expect(issue.field).toBe('drawerCount');
-    expect(typeof issue.suggestedValue).toBe('number');
-    expect(issue.suggestedValue as number).toBeLessThan(20);
+    expect(hasCode(issues, 'EXCESSIVE_DRAWER_COUNT')).toBe(true);
+    expect(getIssue(issues, 'EXCESSIVE_DRAWER_COUNT')!.severity).toBe('error');
+    expect(getIssue(issues, 'EXCESSIVE_DRAWER_COUNT')!.field).toBe('drawerCount');
+    expect(getIssue(issues, 'EXCESSIVE_DRAWER_COUNT')!.suggestedValue as number).toBeLessThan(20);
   });
 
-  it('does not raise EXCESSIVE_DRAWER_COUNT for a sensible drawer count', () => {
-    const issues = validateConfig(cfg({ drawerCount: 3 }));
-    expect(issues.some((i) => i.code === 'EXCESSIVE_DRAWER_COUNT')).toBe(false);
-  });
-
-  it('does not raise EXCESSIVE_DRAWER_COUNT when drawerCount is 0', () => {
-    const issues = validateConfig(cfg({ drawerCount: 0 }));
-    expect(issues.some((i) => i.code === 'EXCESSIVE_DRAWER_COUNT')).toBe(false);
+  it.each([
+    ['sensible drawer count', { drawerCount: 3 }],
+    ['drawerCount is 0', { drawerCount: 0 }],
+  ])('does not raise EXCESSIVE_DRAWER_COUNT when %s', (_, overrides) => {
+    expect(hasCode(validateConfig(cfg(overrides)), 'EXCESSIVE_DRAWER_COUNT')).toBe(false);
   });
 
   it('EXCESSIVE_DRAWER_COUNT message has both en and he text', () => {
-    const issues = validateConfig(cfg({ drawerCount: 20 }));
-    const issue = issues.find((i) => i.code === 'EXCESSIVE_DRAWER_COUNT')!;
+    const issue = getIssue(validateConfig(cfg({ drawerCount: 20 })), 'EXCESSIVE_DRAWER_COUNT')!;
     expect(issue.message.en).toBeTruthy();
     expect(issue.message.he).toBeTruthy();
   });
@@ -583,30 +516,17 @@ describe('validateConfig — Sprint 56 new rules', () => {
 describe('validateConfig — WARDROBE_MISSING_TOEKICK (Sprint 68)', () => {
   it('raises WARDROBE_MISSING_TOEKICK for wardrobe with kickHeight 0', () => {
     const issues = validateConfig(cfg({ furnitureType: 'wardrobe', kickHeight: 0 }));
-    expect(issues.some((i) => i.code === 'WARDROBE_MISSING_TOEKICK')).toBe(true);
+    expect(hasCode(issues, 'WARDROBE_MISSING_TOEKICK')).toBe(true);
+    expect(getIssue(issues, 'WARDROBE_MISSING_TOEKICK')!.severity).toBe('info');
+    expect(getIssue(issues, 'WARDROBE_MISSING_TOEKICK')!.suggestedValue).toBe(80);
+    expect(getIssue(issues, 'WARDROBE_MISSING_TOEKICK')!.field).toBe('kickHeight');
   });
 
-  it('WARDROBE_MISSING_TOEKICK has severity info', () => {
-    const issues = validateConfig(cfg({ furnitureType: 'wardrobe', kickHeight: 0 }));
-    const issue = issues.find((i) => i.code === 'WARDROBE_MISSING_TOEKICK')!;
-    expect(issue.severity).toBe('info');
-  });
-
-  it('WARDROBE_MISSING_TOEKICK suggestedValue is 80 and field is kickHeight', () => {
-    const issues = validateConfig(cfg({ furnitureType: 'wardrobe', kickHeight: 0 }));
-    const issue = issues.find((i) => i.code === 'WARDROBE_MISSING_TOEKICK')!;
-    expect(issue.suggestedValue).toBe(80);
-    expect(issue.field).toBe('kickHeight');
-  });
-
-  it('does NOT raise WARDROBE_MISSING_TOEKICK when wardrobe has kickHeight > 0', () => {
-    const issues = validateConfig(cfg({ furnitureType: 'wardrobe', kickHeight: 80 }));
-    expect(issues.some((i) => i.code === 'WARDROBE_MISSING_TOEKICK')).toBe(false);
-  });
-
-  it('does NOT raise WARDROBE_MISSING_TOEKICK for non-wardrobe with kickHeight 0', () => {
-    const issues = validateConfig(cfg({ furnitureType: 'cabinet', kickHeight: 0 }));
-    expect(issues.some((i) => i.code === 'WARDROBE_MISSING_TOEKICK')).toBe(false);
+  it.each([
+    ['wardrobe has kickHeight > 0', { furnitureType: 'wardrobe' as const, kickHeight: 80 }],
+    ['non-wardrobe with kickHeight 0', { furnitureType: 'cabinet' as const, kickHeight: 0 }],
+  ])('does NOT raise WARDROBE_MISSING_TOEKICK when %s', (_, overrides) => {
+    expect(hasCode(validateConfig(cfg(overrides)), 'WARDROBE_MISSING_TOEKICK')).toBe(false);
   });
 });
 
@@ -614,29 +534,23 @@ describe('validateConfig — WARDROBE_MISSING_TOEKICK (Sprint 68)', () => {
 describe('validateConfig — BACK_PANEL_OVERSIZED (Sprint 69)', () => {
   it('raises BACK_PANEL_OVERSIZED when back panel material thickness > 9 mm', () => {
     const issues = validateConfig(cfg({ hasBack: true, backPanelMaterial: 'plywood-17' }));
-    expect(issues.some((i) => i.code === 'BACK_PANEL_OVERSIZED')).toBe(true);
+    expect(hasCode(issues, 'BACK_PANEL_OVERSIZED')).toBe(true);
+    expect(getIssue(issues, 'BACK_PANEL_OVERSIZED')!.severity).toBe('info');
+    expect(getIssue(issues, 'BACK_PANEL_OVERSIZED')!.field).toBe('backPanelMaterial');
   });
 
-  it('BACK_PANEL_OVERSIZED has severity info', () => {
-    const issues = validateConfig(cfg({ hasBack: true, backPanelMaterial: 'plywood-17' }));
-    const issue = issues.find((i) => i.code === 'BACK_PANEL_OVERSIZED')!;
-    expect(issue.severity).toBe('info');
-    expect(issue.field).toBe('backPanelMaterial');
-  });
-
-  it('does NOT raise BACK_PANEL_OVERSIZED for thin back panel (4 mm)', () => {
-    const issues = validateConfig(cfg({ hasBack: true, backPanelMaterial: 'plywood-4' }));
-    expect(issues.some((i) => i.code === 'BACK_PANEL_OVERSIZED')).toBe(false);
-  });
-
-  it('does NOT raise BACK_PANEL_OVERSIZED when hasBack is false', () => {
-    const issues = validateConfig(cfg({ hasBack: false, backPanelMaterial: 'plywood-17', height: 600 }));
-    expect(issues.some((i) => i.code === 'BACK_PANEL_OVERSIZED')).toBe(false);
+  it.each([
+    ['thin back panel (4 mm)', { hasBack: true, backPanelMaterial: 'plywood-4' as const }],
+    ['hasBack is false', { hasBack: false, backPanelMaterial: 'plywood-17' as const, height: 600 }],
+  ])('does NOT raise BACK_PANEL_OVERSIZED when %s', (_, overrides) => {
+    expect(hasCode(validateConfig(cfg(overrides)), 'BACK_PANEL_OVERSIZED')).toBe(false);
   });
 
   it('BACK_PANEL_OVERSIZED message contains both en and he text', () => {
-    const issues = validateConfig(cfg({ hasBack: true, backPanelMaterial: 'plywood-17' }));
-    const issue = issues.find((i) => i.code === 'BACK_PANEL_OVERSIZED')!;
+    const issue = getIssue(
+      validateConfig(cfg({ hasBack: true, backPanelMaterial: 'plywood-17' })),
+      'BACK_PANEL_OVERSIZED',
+    )!;
     expect(issue.message.en).toBeTruthy();
     expect(issue.message.he).toBeTruthy();
   });
@@ -646,35 +560,24 @@ describe('validateConfig — BACK_PANEL_OVERSIZED (Sprint 69)', () => {
 describe('validateConfig — DEPTH_TOO_SHALLOW_FOR_DOORS (Sprint 75)', () => {
   it('raises DEPTH_TOO_SHALLOW_FOR_DOORS when depth < 250 and doorCount > 0', () => {
     const issues = validateConfig(cfg({ depth: 200, doorCount: 1, doorStyle: 'flat' }));
-    expect(issues.some((i) => i.code === 'DEPTH_TOO_SHALLOW_FOR_DOORS')).toBe(true);
+    expect(hasCode(issues, 'DEPTH_TOO_SHALLOW_FOR_DOORS')).toBe(true);
+    expect(getIssue(issues, 'DEPTH_TOO_SHALLOW_FOR_DOORS')!.severity).toBe('warning');
+    expect(getIssue(issues, 'DEPTH_TOO_SHALLOW_FOR_DOORS')!.suggestedValue).toBe(250);
+    expect(getIssue(issues, 'DEPTH_TOO_SHALLOW_FOR_DOORS')!.field).toBe('depth');
   });
 
-  it('severity is warning', () => {
-    const issues = validateConfig(cfg({ depth: 200, doorCount: 1, doorStyle: 'flat' }));
-    const issue = issues.find((i) => i.code === 'DEPTH_TOO_SHALLOW_FOR_DOORS')!;
-    expect(issue.severity).toBe('warning');
-  });
-
-  it('suggestedValue is 250', () => {
-    const issues = validateConfig(cfg({ depth: 200, doorCount: 1, doorStyle: 'flat' }));
-    const issue = issues.find((i) => i.code === 'DEPTH_TOO_SHALLOW_FOR_DOORS')!;
-    expect(issue.suggestedValue).toBe(250);
-    expect(issue.field).toBe('depth');
-  });
-
-  it('does NOT raise when depth >= 250', () => {
-    const issues = validateConfig(cfg({ depth: 250, doorCount: 1, doorStyle: 'flat' }));
-    expect(issues.some((i) => i.code === 'DEPTH_TOO_SHALLOW_FOR_DOORS')).toBe(false);
-  });
-
-  it('does NOT raise when doorCount is 0', () => {
-    const issues = validateConfig(cfg({ depth: 200, doorStyle: 'none' }));
-    expect(issues.some((i) => i.code === 'DEPTH_TOO_SHALLOW_FOR_DOORS')).toBe(false);
+  it.each([
+    ['depth >= 250', { depth: 250, doorCount: 1 as 1, doorStyle: 'flat' as const }],
+    ['doorCount is 0', { depth: 200, doorStyle: 'none' as const }],
+  ])('does NOT raise DEPTH_TOO_SHALLOW_FOR_DOORS when %s', (_, overrides) => {
+    expect(hasCode(validateConfig(cfg(overrides)), 'DEPTH_TOO_SHALLOW_FOR_DOORS')).toBe(false);
   });
 
   it('message contains depth value in EN and HE', () => {
-    const issues = validateConfig(cfg({ depth: 180, doorCount: 2, doorStyle: 'flat' }));
-    const issue = issues.find((i) => i.code === 'DEPTH_TOO_SHALLOW_FOR_DOORS')!;
+    const issue = getIssue(
+      validateConfig(cfg({ depth: 180, doorCount: 2, doorStyle: 'flat' })),
+      'DEPTH_TOO_SHALLOW_FOR_DOORS',
+    )!;
     expect(issue.message.en).toContain('180');
     expect(issue.message.he).toContain('180');
   });
@@ -686,28 +589,22 @@ describe('validateConfig — DEPTH_TOO_SHALLOW_FOR_DOORS (Sprint 75)', () => {
 describe('PANEL_TOO_THIN_FOR_SHELF_PINS', () => {
   it('raises info when shelves > 0 and material thickness < 12mm', () => {
     const issues = validateConfig(cfg({ shelfCount: 2, carcassMaterial: 'plywood-4' }));
-    expect(issues.some((i) => i.code === 'PANEL_TOO_THIN_FOR_SHELF_PINS')).toBe(true);
+    expect(hasCode(issues, 'PANEL_TOO_THIN_FOR_SHELF_PINS')).toBe(true);
+    expect(getIssue(issues, 'PANEL_TOO_THIN_FOR_SHELF_PINS')!.severity).toBe('info');
   });
 
-  it('does not raise when no shelves', () => {
-    const issues = validateConfig(cfg({ shelfCount: 0, carcassMaterial: 'plywood-4' }));
-    expect(issues.some((i) => i.code === 'PANEL_TOO_THIN_FOR_SHELF_PINS')).toBe(false);
-  });
-
-  it('does not raise for standard 18mm panel', () => {
-    const issues = validateConfig(cfg({ shelfCount: 2, carcassMaterial: 'plywood-18' }));
-    expect(issues.some((i) => i.code === 'PANEL_TOO_THIN_FOR_SHELF_PINS')).toBe(false);
-  });
-
-  it('severity is info', () => {
-    const issues = validateConfig(cfg({ shelfCount: 1, carcassMaterial: 'plywood-4' }));
-    const issue = issues.find((i) => i.code === 'PANEL_TOO_THIN_FOR_SHELF_PINS')!;
-    expect(issue.severity).toBe('info');
+  it.each([
+    ['no shelves', { shelfCount: 0, carcassMaterial: 'plywood-4' as const }],
+    ['standard 18mm panel', { shelfCount: 2, carcassMaterial: 'plywood-18' as const }],
+  ])('does not raise PANEL_TOO_THIN_FOR_SHELF_PINS when %s', (_, overrides) => {
+    expect(hasCode(validateConfig(cfg(overrides)), 'PANEL_TOO_THIN_FOR_SHELF_PINS')).toBe(false);
   });
 
   it('message mentions the panel thickness', () => {
-    const issues = validateConfig(cfg({ shelfCount: 2, carcassMaterial: 'plywood-4' }));
-    const issue = issues.find((i) => i.code === 'PANEL_TOO_THIN_FOR_SHELF_PINS')!;
+    const issue = getIssue(
+      validateConfig(cfg({ shelfCount: 2, carcassMaterial: 'plywood-4' })),
+      'PANEL_TOO_THIN_FOR_SHELF_PINS',
+    )!;
     expect(issue.message.en).toContain('4');
     expect(issue.message.he).toContain('4');
   });
@@ -717,29 +614,17 @@ describe('PANEL_TOO_THIN_FOR_SHELF_PINS', () => {
 describe('SHELF_COUNT_WARDROBE_BARE', () => {
   it('raises info for wardrobe with no shelves or drawers', () => {
     const issues = validateConfig(cfg({ furnitureType: 'wardrobe', shelfCount: 0, drawerCount: 0 }));
-    expect(issues.some((i) => i.code === 'SHELF_COUNT_WARDROBE_BARE')).toBe(true);
+    expect(hasCode(issues, 'SHELF_COUNT_WARDROBE_BARE')).toBe(true);
+    expect(getIssue(issues, 'SHELF_COUNT_WARDROBE_BARE')!.severity).toBe('info');
+    expect(getIssue(issues, 'SHELF_COUNT_WARDROBE_BARE')!.suggestedValue).toBe(1);
   });
 
-  it('does not raise when wardrobe has at least one shelf', () => {
-    const issues = validateConfig(cfg({ furnitureType: 'wardrobe', shelfCount: 2, drawerCount: 0 }));
-    expect(issues.some((i) => i.code === 'SHELF_COUNT_WARDROBE_BARE')).toBe(false);
-  });
-
-  it('does not raise when wardrobe has at least one drawer', () => {
-    const issues = validateConfig(cfg({ furnitureType: 'wardrobe', shelfCount: 0, drawerCount: 1 }));
-    expect(issues.some((i) => i.code === 'SHELF_COUNT_WARDROBE_BARE')).toBe(false);
-  });
-
-  it('does not raise for non-wardrobe with no shelves', () => {
-    const issues = validateConfig(cfg({ furnitureType: 'cabinet', shelfCount: 0, drawerCount: 0 }));
-    expect(issues.some((i) => i.code === 'SHELF_COUNT_WARDROBE_BARE')).toBe(false);
-  });
-
-  it('severity is info and suggestedValue is 1', () => {
-    const issues = validateConfig(cfg({ furnitureType: 'wardrobe', shelfCount: 0, drawerCount: 0 }));
-    const issue = issues.find((i) => i.code === 'SHELF_COUNT_WARDROBE_BARE')!;
-    expect(issue.severity).toBe('info');
-    expect(issue.suggestedValue).toBe(1);
+  it.each([
+    ['wardrobe has at least one shelf', { furnitureType: 'wardrobe' as const, shelfCount: 2, drawerCount: 0 }],
+    ['wardrobe has at least one drawer', { furnitureType: 'wardrobe' as const, shelfCount: 0, drawerCount: 1 }],
+    ['non-wardrobe with no shelves', { furnitureType: 'cabinet' as const, shelfCount: 0, drawerCount: 0 }],
+  ])('does not raise SHELF_COUNT_WARDROBE_BARE when %s', (_, overrides) => {
+    expect(hasCode(validateConfig(cfg(overrides)), 'SHELF_COUNT_WARDROBE_BARE')).toBe(false);
   });
 });
 
@@ -759,15 +644,16 @@ describe('vendor hinge profile compatibility validation', () => {
 
   it('raises VENDOR_HINGE_PROFILE_UNKNOWN for an unrecognised profile id', () => {
     const issues = validateConfig(cfg({ doorStyle: 'flat', hingeProfile: 'no-such-hinge-zzz' }));
-    const issue = issues.find((i) => i.code === 'VENDOR_HINGE_PROFILE_UNKNOWN');
+    const issue = getIssue(issues, 'VENDOR_HINGE_PROFILE_UNKNOWN');
     expect(issue).toBeDefined();
     expect(issue?.severity).toBe('warning');
     expect(issue?.field).toBe('hingeProfile');
   });
 
   it('does not raise VENDOR_HINGE_PROFILE_UNKNOWN when hingeProfile is absent', () => {
-    const issues = validateConfig(cfg({ doorStyle: 'flat', hingeProfile: undefined }));
-    expect(issues.some((i) => i.code === 'VENDOR_HINGE_PROFILE_UNKNOWN')).toBe(false);
+    expect(
+      hasCode(validateConfig(cfg({ doorStyle: 'flat', hingeProfile: undefined })), 'VENDOR_HINGE_PROFILE_UNKNOWN'),
+    ).toBe(false);
   });
 
   it('raises VENDOR_HINGE_BORE_TOO_DEEP when panel is thinner than bore + 2 mm wall', () => {
@@ -786,30 +672,38 @@ describe('vendor hinge profile compatibility validation', () => {
 
   it('does not raise VENDOR_HINGE_BORE_TOO_DEEP for a 18 mm panel', () => {
     // 18 mm panel > 13.5 + 2 = 15.5 mm minimum
-    const issues = validateConfig(
-      cfg({ doorStyle: 'flat', carcassMaterial: 'melamine-18', hingeProfile: 'blum-clip-top-blumotion' }),
-    );
-    expect(issues.some((i) => i.code === 'VENDOR_HINGE_BORE_TOO_DEEP')).toBe(false);
+    expect(
+      hasCode(
+        validateConfig(
+          cfg({ doorStyle: 'flat', carcassMaterial: 'melamine-18', hingeProfile: 'blum-clip-top-blumotion' }),
+        ),
+        'VENDOR_HINGE_BORE_TOO_DEEP',
+      ),
+    ).toBe(false);
   });
 
   it('raises VENDOR_HINGE_NOT_RATED_FOR_TALL_DOOR for a 110° hinge on a 2400 mm door', () => {
     // height=2500 → door height > MAX_SINGLE_DOOR_HEIGHT_MM (2200)
     // blum-clip-top-110 openingAngle = 110 < WIDE_ANGLE_THRESHOLD_DEG (155)
     const issues = validateConfig(cfg({ doorStyle: 'flat', height: 2500, hingeProfile: 'blum-clip-top-110' }));
-    const issue = issues.find((i) => i.code === 'VENDOR_HINGE_NOT_RATED_FOR_TALL_DOOR');
+    const issue = getIssue(issues, 'VENDOR_HINGE_NOT_RATED_FOR_TALL_DOOR');
     expect(issue).toBeDefined();
     expect(issue?.severity).toBe('warning');
     expect(issue?.message.en).toContain('110');
   });
 
-  it('does not raise VENDOR_HINGE_NOT_RATED_FOR_TALL_DOOR for a 165° wide-angle hinge', () => {
-    // blum-clip-top-165 openingAngle = 165 >= 155 threshold
-    const issues = validateConfig(cfg({ doorStyle: 'flat', height: 2500, hingeProfile: 'blum-clip-top-165' }));
-    expect(issues.some((i) => i.code === 'VENDOR_HINGE_NOT_RATED_FOR_TALL_DOOR')).toBe(false);
-  });
+  it.each([['wide-angle hinge (165°)', cfg({ doorStyle: 'flat', height: 2500, hingeProfile: 'blum-clip-top-165' })]])(
+    'does not raise VENDOR_HINGE_NOT_RATED_FOR_TALL_DOOR when %s',
+    (_desc, config) => {
+      expect(hasCode(validateConfig(config), 'VENDOR_HINGE_NOT_RATED_FOR_TALL_DOOR')).toBe(false);
+    },
+  );
 
   it('does not raise hinge compatibility issues when doorStyle is none', () => {
-    const issues = validateConfig(cfg({ doorStyle: 'none', hingeProfile: 'blum-clip-top-blumotion' }));
-    expect(issues.some((i) => i.code.startsWith('VENDOR_HINGE'))).toBe(false);
+    expect(
+      validateConfig(cfg({ doorStyle: 'none', hingeProfile: 'blum-clip-top-blumotion' })).some((i) =>
+        i.code.startsWith('VENDOR_HINGE'),
+      ),
+    ).toBe(false);
   });
 });

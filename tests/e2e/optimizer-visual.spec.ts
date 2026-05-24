@@ -20,10 +20,16 @@ test('optimizer view exposes a yield meter for at least one sheet', async ({ pag
   await page.goto('/');
   await expect(page.getByRole('tablist')).toBeVisible();
   await page.keyboard.press('Alt+3');
-  // OptimizerView is lazy-loaded; wait for the chunk and the rendered meter.
+  // OptimizerView is lazy-loaded; wait for the Suspense boundary to resolve.
+  // The virtual-sheet-wrapper placeholder is rendered before real content.
+  const wrapper = page.locator('[data-testid="virtual-sheet-wrapper"]').first();
+  await expect(wrapper).toBeVisible({ timeout: 30_000 });
+  // Scroll the wrapper into view to trigger the IntersectionObserver so the
+  // real sheet card (including the YieldBar meter) replaces the placeholder.
+  await wrapper.scrollIntoViewIfNeeded();
   // Use attribute selector to avoid ARIA-role lookup quirks in headless browsers.
   const meter = page.locator('[role="meter"]').first();
-  await expect(meter).toBeVisible({ timeout: 45_000 });
+  await expect(meter).toBeVisible({ timeout: 20_000 });
 
   const valueNow = await meter.getAttribute('aria-valuenow');
   expect(valueNow).not.toBeNull();

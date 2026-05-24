@@ -1,6 +1,6 @@
 # Roadmap
 
-> **Last strategic review**: 2026-05-24 · **Current version**: 3.67.0
+> **Last strategic review**: 2026-05-24 · **Current version**: 3.68.0
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -211,6 +211,32 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 57     | Config panel UX: template presets dropdown, quick-start wizard   | UI      |
 | 58     | Create `docs/CONFIGURATION.md` — all settings documented         | Docs    |
 | 59     | Version bump 3.68.0, CHANGELOG, GH release                       | Release |
+
+### Phase 16.5: Code Quality & Housekeeping (v3.68.1) — **HIGH PRIORITY / IMMEDIATE**
+
+**Goal**: Eliminate technical debt that slows every future sprint: bloated test files,
+oversized source modules, redundant CI steps, stale doc comments, and outdated tooling.
+Delivers a leaner, faster, more maintainable codebase before new feature work in Phase 17.
+
+**Exit criteria**: All 10 longest test files shortened via `test.each`, all 5 largest source
+modules split into focused sub-modules, CI wall-clock time reduced ≥ 25%, GitHub Actions
+off Node 20 shim, copilot-instructions.md reflects ESLint simplification, no line-level
+comments in engine code (only block/function doc-comments).
+
+| Sprint | Deliverable                                                                        | Type     |
+| ------ | ---------------------------------------------------------------------------------- | -------- |
+| A1     | Parameterize top-10 test files with `test.each` / `describe.each` (lines ≥ 250)    | Tests    |
+| A2     | Split `CabinetPdfDocument.tsx` (1850 L) → `PdfSections/` sub-components            | Refactor |
+| A3     | Split `OptimizerView.tsx` (1741 L) → `OptimizerControls/`, `SheetCard`, `Toolbar`  | Refactor |
+| A4     | Split `CabinetPreview.tsx` (1431 L) → `WebGLRenderer`, `SVGFallback`, `PreviewHUD` | Refactor |
+| A5     | Split `validation.ts` (1026 L) + `validation.test.ts` (815 L) by domain rule group | Refactor |
+| A6     | CI workflow: run lint/typecheck/format on Node 22 only; update GitHub Actions → v5 | CI       |
+| A7     | Migrate all GH Actions to `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true`                | CI       |
+| A8     | Doc-comment sweep: convert all inline `// comment` to block JSDoc on functions     | Docs     |
+| A9     | Consolidate `docs/ARCHITECTURE.md` ↔ `ROADMAP.md` duplication (strategy section)   | Docs     |
+| A10    | Update `.github/copilot-instructions.md` (Phase 16 ESLint, Phase 16.5 conventions) | DX       |
+| A11    | VS Code workspace: pin recommended extensions, add `tasks.json` for one-shot CI    | DX       |
+| A12    | Version bump 3.68.1, CHANGELOG, GH release                                         | Release  |
 
 ### Phase 17: DX & Bundle Optimization (v3.69.0)
 
