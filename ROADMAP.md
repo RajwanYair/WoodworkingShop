@@ -218,7 +218,7 @@ Exit criteria: optional Supabase sync working self-hosted, BYO AI panel behind f
 - [ ] **Yjs CRDT sync layer** — replace snapshot model with Yjs documents. `CabinetConfig` maps to a `Y.Map`; changes merged CRDT-style. Two users editing the same project converge. Requires optional Supabase for WebSocket transport.
 - [ ] **Project branching** — fork a project to an independent branch (separate IDB entry / Supabase row). Merge branches with visual diff. Git mental model for non-technical users.
 - [x] **BYO AI design assistant** — optional panel activated by user-supplied API key (OpenAI, Anthropic, or local Ollama endpoint). Sends only current `CabinetConfig` JSON (no PII). Prompts: "suggest dimensions for a tall pantry", "what material substitution reduces cost 15%?". Zero telemetry; key in localStorage only.
-- [ ] **Voice annotation on assembly steps** — record short voice note per step (Web Audio API, Opus blob in IndexedDB). Plays on shop floor without a screen.
+- [x] **Voice annotation on assembly steps** — record short voice note per step (Web Audio API, Opus blob in IndexedDB). Plays on shop floor without a screen.
 - [x] **PWA file handlers** — register URL handlers for `.cabinetplan` files via Web Share Target API + File Handling API. OS file-manager double-click launches the app and loads the project.
 
 ---
