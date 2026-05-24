@@ -329,7 +329,7 @@ export type PluginEventHandler<E extends PluginEventName> = (payload: PluginEven
  * Keep handlers fast; for slow work, defer with `queueMicrotask` or
  * `setTimeout`.
  */
-export class PluginEventBus {
+class PluginEventBus {
   private readonly handlers: Map<PluginEventName, Set<(payload: unknown) => void>> = new Map();
 
   /** Register a handler for `event`. Returns an `off` function for convenience. */

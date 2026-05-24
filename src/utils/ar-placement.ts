@@ -73,7 +73,7 @@ interface XRSystem {
  * Internal accessor — allows tests to replace `navigator.xr`.
  * @internal
  */
-export function _getXR(): XRSystem | null {
+function _getXR(): XRSystem | null {
   if (typeof navigator === 'undefined') return null;
   return (navigator as Navigator & { xr?: XRSystem }).xr ?? null;
 }

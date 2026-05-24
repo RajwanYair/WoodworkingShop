@@ -323,9 +323,6 @@ export const generateParts: (cfg: CabinetConfig) => Part[] = createJsonMemo(func
   return parts;
 });
 
-/** Get the derived dimensions — convenience re-export. */
-export { computeDimensions } from './dimensions';
-
 // ─── Helpers ───
 
 type EdgeCode = 'none' | 'front' | '4-edges';

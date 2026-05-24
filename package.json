@@ -59,7 +59,7 @@
     "lint:md": "markdownlint-cli2 \"*.md\" \"docs/**/*.md\" \".github/**/*.md\"",
     "test:e2e": "playwright test",
     "test:e2e:install": "playwright install --with-deps chromium firefox",
-    "bench": "vitest bench --config vitest.bench.config.ts",
+    "bench": "vitest bench",
     "bench:check": "node scripts/bench-check.js",
     "bench:update": "node scripts/bench-check.js --update",
     "docs:api": "typedoc",
@@ -73,7 +73,14 @@
     "entry": [
       "src/main.tsx",
       "src/engine/index.ts!",
-      "src/workers/**/*.worker.ts"
+      "src/engine/assembly/index.ts!",
+      "src/engine/export/index.ts!",
+      "src/engine/geometry/index.ts!",
+      "src/engine/hardware/index.ts!",
+      "src/engine/materials/index.ts!",
+      "src/engine/optimizer/index.ts!",
+      "src/workers/**/*.worker.ts",
+      "tests/bench/**/*.bench.ts"
     ],
     "project": [
       "src/**/*.{ts,tsx}",
