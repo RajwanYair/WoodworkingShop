@@ -157,3 +157,13 @@ export type { GrainCheckPart, GrainConflict, GrainConflictCode, GrainConflictOpt
 
 export { estimateStepTime, estimateAssemblyTime, getActionRate } from './assembly-timer';
 export type { AssemblyActionType, TimerStep, TimedStep, AssemblyTimeEstimate } from './assembly-timer';
+
+export {
+  createStockStore,
+  addStockItem,
+  updateOnHand,
+  checkAvailability,
+  getShortfalls,
+  formatAvailabilityReport,
+} from './stock-tracker';
+export type { StockItem, StockStore, StockUnit, DemandEntry, AvailabilityResult, StockStatus } from './stock-tracker';
