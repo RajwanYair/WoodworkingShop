@@ -207,3 +207,12 @@ export {
   getKerfProfile,
 } from './kerf';
 export type { KerfProfile, KerfPart, KerfCompensatedPart } from './kerf';
+
+export { validateCabinetInZone, validateCabinetRowInZone, violationCodes } from './zone-validator';
+export type {
+  RoomZone as ZoneRoomZone,
+  CabinetDimensions as ZoneCabinetDimensions,
+  ZoneViolationCode,
+  ZoneViolation,
+  ZoneValidationResult,
+} from './zone-validator';
