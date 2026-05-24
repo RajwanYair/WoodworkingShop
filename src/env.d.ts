@@ -10,3 +10,28 @@ interface ImportMetaEnv {
   /** Phase 12 / Sprint 15 — Cloudflare Web Analytics beacon token (injected at build time). */
   readonly VITE_CF_ANALYTICS_TOKEN?: string;
 }
+
+// ── Phase 13 / Sprint 7 — File Handling API (not yet in TypeScript standard lib) ──
+
+/** A file handle provided to the app via the File Handling API's launchQueue. */
+interface FileSystemFileHandle {
+  getFile(): Promise<File>;
+}
+
+/** Incoming launch parameters from the File Handling API. */
+interface LaunchParams {
+  readonly files: FileSystemFileHandle[];
+  readonly targetURL?: string;
+}
+
+/** Callback for launchQueue.setConsumer. */
+type LaunchConsumer = (params: LaunchParams) => void | Promise<void>;
+
+/** The window.launchQueue object exposed by browsers that support the File Handling API. */
+interface LaunchQueue {
+  setConsumer(consumer: LaunchConsumer): void;
+}
+
+interface Window {
+  readonly launchQueue?: LaunchQueue;
+}
