@@ -276,6 +276,8 @@ export interface CutRect {
   rationale?: string;
   /** Sprint 16 — true when this part has a user-applied rotation lock (rotation was disallowed during packing). */
   rotationLocked?: boolean;
+  /** Phase 13 / Sprint 5 — set on co-nested sheets to identify original material when multiple materials share a sheet. */
+  partMaterial?: string;
 }
 
 export interface CutSheet {

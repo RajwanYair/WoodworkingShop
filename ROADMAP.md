@@ -206,7 +206,7 @@ Exit criteria: Blum/Hettich/Grass catalog complete, DXF layer compliance, G-code
 - [x] **G-code post-processor plugin hook** — expose `onGcodeGenerated(raw: string): string` hook (stability: `experimental`). Allows community plugins to target specific controllers (Mach3, LinuxCNC, Fanuc).
 - [x] **BOM multi-currency** — `currencyCode?: string` on `Material`; built-in materials ship with `'ILS'`; BOM CSV material summary uses `Intl.NumberFormat` for locale-aware price/cost columns.
 - [x] **Parametric templates v2** — per-template default overrides + computed fields (e.g. `drawerHeight = Math.floor(internalHeight / 4) - 2`). Constrained expression DSL evaluated at instantiation.
-- [ ] **Cross-material co-nesting** — when two materials share thickness + sheet size, offer to nest on the same sheet (opt-in). Reduces sheet count for small projects.
+- [x] **Cross-material co-nesting** — when two materials share thickness + sheet size, offer to nest on the same sheet (opt-in). Reduces sheet count for small projects.
 - [x] **Export integrity checksums** — `sha256Hex` / `appendChecksumToDxf` / `appendChecksumToGcode` in `src/utils/checksum.ts`; DXF embeds `999; SHA-256: <hash>` before `EOF`; G-code appends `; SHA-256: <hash>` footer; download functions are async.
 - [ ] **Offline-capable URL share** — when config exceeds ~2 KB URL limit, store in IndexedDB under a short random key, share `?ref=<key>`. Falls back to server decode if not present.
 

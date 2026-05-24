@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { optimizeCutSheets } from '../../src/engine/cut-optimizer';
+import {
+  optimizeCutSheets,
+  findCoNestCandidates,
+  applyCoNesting,
+} from '../../src/engine/cut-optimizer';
 import { generateParts } from '../../src/engine/parts';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 
@@ -401,5 +405,130 @@ describe('optimizeCutSheets — grain conflict indicators (Sprint 42)', () => {
     const conflicted = result.sheets.flatMap((s) => s.parts).filter((p) => p.grainConflict);
     expect(conflicted.length).toBe(0);
     expect(result.grainConflictCount).toBe(0);
+  });
+});
+
+// ── Phase 13 / Sprint 5 — Cross-material co-nesting ───────────────────────────
+
+describe('findCoNestCandidates', () => {
+  it('returns empty array when all sheets have distinct geometry', () => {
+    const result = optimizeCutSheets([
+      { id: 'A', name: { en: 'A', he: 'A' }, qty: 1, length: 400, width: 200, material: 'plywood-18', edgeBanding: { en: '', he: '' } },
+    ]);
+    expect(findCoNestCandidates(result)).toHaveLength(0);
+  });
+
+  it('detects candidates when two materials share thickness and sheet size', () => {
+    // Use two materials that both resolve to plywood-18 thickness and same sheet size
+    // We synthesise a fake result rather than running a full optimize to keep the test pure.
+    const fakeResult = {
+      sheets: [
+        { sheetIndex: 0, material: 'plywood-18', thickness: 18, sheetWidth: 1220, sheetLength: 2440, parts: [], yieldPercent: 50 },
+        { sheetIndex: 1, material: 'melamine-18', thickness: 18, sheetWidth: 1220, sheetLength: 2440, parts: [], yieldPercent: 50 },
+      ],
+      totalSheets: 2,
+      overallYield: 50,
+      totalWaste: 0,
+      grainConflictCount: 0,
+    };
+    const candidates = findCoNestCandidates(fakeResult);
+    expect(candidates).toHaveLength(1);
+    expect(candidates[0].materialKeys).toContain('plywood-18');
+    expect(candidates[0].materialKeys).toContain('melamine-18');
+    expect(candidates[0].thickness).toBe(18);
+  });
+
+  it('does not return groups with only one material', () => {
+    const fakeResult = {
+      sheets: [
+        { sheetIndex: 0, material: 'plywood-18', thickness: 18, sheetWidth: 1220, sheetLength: 2440, parts: [], yieldPercent: 50 },
+        { sheetIndex: 1, material: 'plywood-18', thickness: 18, sheetWidth: 1220, sheetLength: 2440, parts: [], yieldPercent: 50 },
+      ],
+      totalSheets: 2,
+      overallYield: 50,
+      totalWaste: 0,
+      grainConflictCount: 0,
+    };
+    expect(findCoNestCandidates(fakeResult)).toHaveLength(0);
+  });
+});
+
+describe('applyCoNesting', () => {
+  const makePart = (id: string, w: number, l: number) => ({
+    partId: id, label: id, x: 0, y: 0, width: w, length: l,
+    grainVertical: true, edgeBanding: '',
+  });
+
+  it('returns original result unchanged when coNestKeys is empty', () => {
+    const fakeResult = {
+      sheets: [
+        { sheetIndex: 0, material: 'plywood-18', thickness: 18, sheetWidth: 1220, sheetLength: 2440, parts: [makePart('P1', 200, 300)], yieldPercent: 5 },
+      ],
+      totalSheets: 1, overallYield: 5, totalWaste: 0, grainConflictCount: 0,
+    };
+    const out = applyCoNesting(fakeResult, new Set());
+    expect(out).toBe(fakeResult); // exact same reference
+  });
+
+  it('reduces total sheet count when parts from two materials are co-nested', () => {
+    // Synthetic result: two materials each with one half-full sheet of the same geometry
+    const sharedParts = (mat: string, idx: number) => ({
+      sheetIndex: idx,
+      material: mat,
+      thickness: 18,
+      sheetWidth: 1220,
+      sheetLength: 2440,
+      parts: [makePart(`${mat}-P1`, 400, 400), makePart(`${mat}-P2`, 400, 400)],
+      yieldPercent: 10,
+    });
+    const fakeResult = {
+      sheets: [sharedParts('plywood-18', 0), sharedParts('melamine-18', 1)],
+      totalSheets: 2, overallYield: 10, totalWaste: 0, grainConflictCount: 0,
+    };
+    const key = '18x1220x2440';
+    const out = applyCoNesting(fakeResult, new Set([key]));
+    // All 4 parts should fit on 1 shared sheet (400x400 × 4 = 640000mm² << 1220x2440 = 2976800mm²)
+    expect(out.totalSheets).toBeLessThan(fakeResult.totalSheets);
+    expect(out.sheets.every((s) => s.parts.every((p) => p.partMaterial !== undefined))).toBe(true);
+  });
+
+  it('sets partMaterial on co-nested parts', () => {
+    const fakeResult = {
+      sheets: [
+        {
+          sheetIndex: 0, material: 'plywood-18', thickness: 18,
+          sheetWidth: 1220, sheetLength: 2440,
+          parts: [makePart('P1', 200, 200)], yieldPercent: 3,
+        },
+        {
+          sheetIndex: 1, material: 'melamine-18', thickness: 18,
+          sheetWidth: 1220, sheetLength: 2440,
+          parts: [makePart('P2', 200, 200)], yieldPercent: 3,
+        },
+      ],
+      totalSheets: 2, overallYield: 3, totalWaste: 0, grainConflictCount: 0,
+    };
+    const out = applyCoNesting(fakeResult, new Set(['18x1220x2440']));
+    const allParts = out.sheets.flatMap((s) => s.parts);
+    const p1 = allParts.find((p) => p.partId === 'P1');
+    const p2 = allParts.find((p) => p.partId === 'P2');
+    expect(p1?.partMaterial).toBe('plywood-18');
+    expect(p2?.partMaterial).toBe('melamine-18');
+  });
+
+  it('leaves untouched sheets unchanged', () => {
+    const fakeResult = {
+      sheets: [
+        { sheetIndex: 0, material: 'hdf-3', thickness: 3, sheetWidth: 1220, sheetLength: 2440, parts: [makePart('BP1', 100, 100)], yieldPercent: 1 },
+        { sheetIndex: 1, material: 'plywood-18', thickness: 18, sheetWidth: 1220, sheetLength: 2440, parts: [makePart('P1', 200, 200)], yieldPercent: 3 },
+        { sheetIndex: 2, material: 'melamine-18', thickness: 18, sheetWidth: 1220, sheetLength: 2440, parts: [makePart('P2', 200, 200)], yieldPercent: 3 },
+      ],
+      totalSheets: 3, overallYield: 2, totalWaste: 0, grainConflictCount: 0,
+    };
+    const out = applyCoNesting(fakeResult, new Set(['18x1220x2440']));
+    // hdf-3 sheet should still be present unchanged
+    const hdfSheet = out.sheets.find((s) => s.material === 'hdf-3');
+    expect(hdfSheet).toBeDefined();
+    expect(hdfSheet?.parts[0].partId).toBe('BP1');
   });
 });

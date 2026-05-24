@@ -584,3 +584,185 @@ function contains(outer: FreeRect, inner: FreeRect): boolean {
 function round2(n: number): number {
   return Math.round(n * 100) / 100;
 }
+
+// ── Phase 13 / Sprint 5 — Cross-material co-nesting ──────────────────────────
+// When two or more materials share identical sheet dimensions (thickness +
+// sheetWidth + sheetLength), they can be packed together on the same physical
+// sheet.  This reduces the total sheet count for small projects.
+
+/** A group of materials eligible for co-nesting (same thickness + sheet size). */
+export interface CoNestCandidate {
+  /** Composite geometry key: `${thickness}x${sheetWidth}x${sheetLength}` */
+  key: string;
+  /** All distinct material keys on sheets with this geometry. */
+  materialKeys: string[];
+  thickness: number;
+  sheetWidth: number;
+  sheetLength: number;
+}
+
+/**
+ * Scan an OptimizationResult and return groups of materials that share
+ * identical sheet geometry (thickness + width + length). Only groups
+ * with ≥ 2 distinct materials are returned — those are eligible for co-nesting.
+ *
+ * Call this before `applyCoNesting` to let the user opt in per candidate.
+ */
+export function findCoNestCandidates(result: OptimizationResult): CoNestCandidate[] {
+  const byKey = new Map<
+    string,
+    { thickness: number; sheetWidth: number; sheetLength: number; mats: Set<string> }
+  >();
+  for (const sheet of result.sheets) {
+    const key = `${sheet.thickness}x${sheet.sheetWidth}x${sheet.sheetLength}`;
+    const e = byKey.get(key) ?? {
+      thickness: sheet.thickness,
+      sheetWidth: sheet.sheetWidth,
+      sheetLength: sheet.sheetLength,
+      mats: new Set<string>(),
+    };
+    e.mats.add(sheet.material);
+    byKey.set(key, e);
+  }
+  return [...byKey.entries()]
+    .filter(([, v]) => v.mats.size >= 2)
+    .map(([key, v]) => ({
+      key,
+      materialKeys: [...v.mats].sort(),
+      thickness: v.thickness,
+      sheetWidth: v.sheetWidth,
+      sheetLength: v.sheetLength,
+    }));
+}
+
+/** Internal rect with attached partMaterial for co-nesting. */
+interface CoRect extends Rect {
+  partMaterial: string;
+}
+
+/**
+ * Re-pack selected material groups onto shared sheets to reduce sheet count.
+ * Parts from different materials are placed side-by-side on the same physical
+ * sheet. Each resulting CutRect gets `partMaterial` set to its original
+ * material key so DXF/BOM export can still distinguish them.
+ *
+ * Grain constraints are honoured per-part via `rotationLocked` carried forward
+ * from the original placement.  Parts that were grain-locked in the original
+ * result remain locked in the co-nested result.
+ *
+ * @param result      Original OptimizationResult from optimizeCutSheets().
+ * @param coNestKeys  Set of geometry keys to co-nest (from findCoNestCandidates).
+ *                    Pass an empty set to return the result unchanged.
+ * @param sawKerfMm   Kerf used during re-packing (defaults to SAW_KERF).
+ */
+export function applyCoNesting(
+  result: OptimizationResult,
+  coNestKeys: ReadonlySet<string>,
+  sawKerfMm = SAW_KERF,
+): OptimizationResult {
+  if (coNestKeys.size === 0) return result;
+
+  type GroupEntry = {
+    thickness: number;
+    sheetWidth: number;
+    sheetLength: number;
+    rects: CoRect[];
+  };
+
+  const nestGroups = new Map<string, GroupEntry>();
+  const untouched: CutSheet[] = [];
+
+  for (const sheet of result.sheets) {
+    const key = `${sheet.thickness}x${sheet.sheetWidth}x${sheet.sheetLength}`;
+    if (!coNestKeys.has(key)) {
+      untouched.push(sheet);
+      continue;
+    }
+    const entry = nestGroups.get(key) ?? {
+      thickness: sheet.thickness,
+      sheetWidth: sheet.sheetWidth,
+      sheetLength: sheet.sheetLength,
+      rects: [],
+    };
+    for (const part of sheet.parts) {
+      entry.rects.push({
+        partId: part.partId,
+        label: part.label,
+        length: part.length,
+        width: part.width,
+        edgeBanding: part.edgeBanding ?? '',
+        // Preserve rotation lock — if grain was respected originally, honour it here.
+        rotationLocked: part.rotationLocked === true,
+        partMaterial: part.partMaterial ?? sheet.material,
+      });
+    }
+    nestGroups.set(key, entry);
+  }
+
+  let sheetIdx = untouched.reduce((max, s) => Math.max(max, s.sheetIndex + 1), 0);
+  const coNested: CutSheet[] = [];
+
+  for (const [, group] of nestGroups) {
+    // Preserve per-part rotation locks; packer runs in freeform mode.
+    const packed = packMaxRects(
+      group.rects,
+      group.sheetLength,
+      group.sheetWidth,
+      sawKerfMm,
+      /* allowRotation */ true,
+      /* trackGrainConflicts */ false,
+    );
+
+    const matSet = new Set<string>(group.rects.map((r) => r.partMaterial));
+    const combinedMaterial = [...matSet].sort().join('+');
+    const matByPartId = new Map<string, string>(group.rects.map((r) => [r.partId, r.partMaterial]));
+
+    for (const sheetParts of packed) {
+      if (sheetParts.length === 0) continue;
+      const usedArea = sheetParts.reduce((s, p) => s + p.length * p.width, 0);
+      const sheetArea = group.sheetWidth * group.sheetLength;
+      coNested.push({
+        sheetIndex: sheetIdx++,
+        material: combinedMaterial,
+        thickness: group.thickness,
+        sheetLength: group.sheetLength,
+        sheetWidth: group.sheetWidth,
+        yieldPercent: round2((usedArea / sheetArea) * 100),
+        parts: sheetParts.map((p) => ({
+          partId: p.partId,
+          label: p.label,
+          length: p.length,
+          width: p.width,
+          x: p.x,
+          y: p.y,
+          edgeBanding: p.edgeBanding,
+          grainVertical: !p.rotated,
+          rotated: p.rotated,
+          grainConflict: p.grainConflict,
+          rationale: p.rationale,
+          rotationLocked: p.rotationLocked || undefined,
+          partMaterial: matByPartId.get(p.partId) ?? combinedMaterial,
+        })),
+      });
+    }
+  }
+
+  const newSheets = [...untouched, ...coNested].sort((a, b) => a.sheetIndex - b.sheetIndex);
+  const totalArea = newSheets.reduce((s, sh) => s + sh.sheetWidth * sh.sheetLength, 0);
+  const usedArea = newSheets.reduce(
+    (s, sh) => s + sh.parts.reduce((ps, p) => ps + p.width * p.length, 0),
+    0,
+  );
+  const grainConflictCount = newSheets.reduce(
+    (s, sh) => s + sh.parts.filter((p) => p.grainConflict).length,
+    0,
+  );
+
+  return {
+    sheets: newSheets,
+    totalSheets: newSheets.length,
+    overallYield: totalArea > 0 ? round2((usedArea / totalArea) * 100) : 0,
+    totalWaste: totalArea - usedArea,
+    grainConflictCount,
+  };
+}
