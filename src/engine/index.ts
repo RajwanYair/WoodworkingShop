@@ -148,3 +148,6 @@ export type { SheetWasteInput, WasteThresholds, WasteAlert, WasteAnalysisReport,
 
 export { buildCutPlanSummary, formatCutPlanSummary } from './cut-plan-summary';
 export type { SheetPlanInput, MaterialSummary, CutPlanSummary } from './cut-plan-summary';
+
+export { filterBomParts, getBomMaterials, getBomPartTypes, getBomZones, totalPartCount } from './bom-filter';
+export type { BomFilterablePart, BomFilterCriteria } from './bom-filter';
