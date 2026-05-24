@@ -142,3 +142,6 @@ export {
   MAX_NOTE_LENGTH,
 } from './cabinet-notes';
 export type { CabinetNote, NoteStore, NoteScope, NoteError } from './cabinet-notes';
+
+export { analyseWaste, formatWasteReport, DEFAULT_WASTE_THRESHOLDS } from './waste-alert';
+export type { SheetWasteInput, WasteThresholds, WasteAlert, WasteAnalysisReport, WasteAlertLevel } from './waste-alert';
