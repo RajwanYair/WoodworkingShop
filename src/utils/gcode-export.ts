@@ -2,6 +2,7 @@ import type { CutSheet, CutRect } from '../engine/types';
 import { triggerDownload } from './download';
 import { validateGcode, type GcodeValidationResult } from '../engine/gcode-validator';
 import { applyGcodePlugins } from '../engine/plugin';
+import { appendChecksumToGcode } from './checksum';
 
 /**
  * Generate basic G-code for a CNC router to cut parts from a sheet.
@@ -135,13 +136,15 @@ export function downloadGcodeForSheet(
 }
 
 /** Download G-code for all sheets as separate files (zipped in a single combined file) */
-export function downloadAllSheetsGcode(sheets: CutSheet[], projectName: string, opts?: Partial<GcodeOptions>) {
+export async function downloadAllSheetsGcode(sheets: CutSheet[], projectName: string, opts?: Partial<GcodeOptions>): Promise<void> {
   const combined: string[] = [];
   for (const sheet of sheets) {
     combined.push(cutSheetToGcode(sheet, opts));
     combined.push(''); // blank line between sheets
   }
-  triggerDownload(combined.join('\n'), 'text/plain', `${projectName}-all-sheets.nc`);
+  const body = combined.join('\n');
+  const content = await appendChecksumToGcode(body);
+  triggerDownload(content, 'text/plain', `${projectName}-all-sheets.nc`);
 }
 
 /**

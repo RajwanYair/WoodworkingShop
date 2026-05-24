@@ -1,5 +1,6 @@
 import type { CutSheet, CutRect } from '../engine/types';
 import { triggerDownload } from './download';
+import { appendChecksumToDxf } from './checksum';
 
 /**
  * Convert a material key to a valid DXF layer name.
@@ -158,14 +159,16 @@ function addLabel(lines: string[], part: CutRect, layer: string) {
   );
 }
 
-/** Trigger DXF download for all sheets as individual files, or combine into one. */
-export function downloadDxfForSheet(sheet: CutSheet, filename: string) {
-  const content = cutSheetToDxf(sheet);
+/** Trigger DXF download for a single sheet, embedding a SHA-256 checksum comment. */
+export async function downloadDxfForSheet(sheet: CutSheet, filename: string): Promise<void> {
+  const body = cutSheetToDxf(sheet);
+  const content = await appendChecksumToDxf(body);
   triggerDownload(content, 'application/dxf', filename);
 }
 
 /** Download all sheets as a single combined DXF (sheets stacked vertically with spacing) */
-export function downloadAllSheetsDxf(sheets: CutSheet[], projectName: string) {
+/** Download all sheets as a single combined DXF with embedded SHA-256 checksum. */
+export async function downloadAllSheetsDxf(sheets: CutSheet[], projectName: string): Promise<void> {
   const lines: string[] = [];
   const spacing = 100; // mm gap between sheets
 
@@ -212,6 +215,7 @@ export function downloadAllSheetsDxf(sheets: CutSheet[], projectName: string) {
   lines.push('0', 'ENDSEC');
   lines.push('0', 'EOF');
 
-  const content = lines.join('\n');
+  const body = lines.join('\n');
+  const content = await appendChecksumToDxf(body);
   triggerDownload(content, 'application/dxf', `${projectName}-cut-sheets.dxf`);
 }

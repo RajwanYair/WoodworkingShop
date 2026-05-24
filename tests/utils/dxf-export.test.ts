@@ -67,13 +67,13 @@ describe('cutSheetToDxf', () => {
 });
 
 describe('downloadDxfForSheet', () => {
-  it('triggers download with correct filename', () => {
+  it('triggers download with correct filename', async () => {
     const mockAnchor = { href: '', download: '', click: vi.fn() };
     vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor as unknown as HTMLElement);
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:test');
     vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
 
-    downloadDxfForSheet(mockSheet, 'sheet-1.dxf');
+    await downloadDxfForSheet(mockSheet, 'sheet-1.dxf');
 
     expect(mockAnchor.download).toBe('sheet-1.dxf');
     expect(mockAnchor.href).toBe('blob:test');
@@ -84,14 +84,14 @@ describe('downloadDxfForSheet', () => {
 });
 
 describe('downloadAllSheetsDxf', () => {
-  it('combines multiple sheets into one DXF and triggers download', () => {
+  it('combines multiple sheets into one DXF and triggers download', async () => {
     const mockAnchor = { href: '', download: '', click: vi.fn() };
     vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor as unknown as HTMLElement);
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:combined');
     vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
 
     const sheet2: CutSheet = { ...mockSheet, sheetIndex: 1 };
-    downloadAllSheetsDxf([mockSheet, sheet2], 'MyProject');
+    await downloadAllSheetsDxf([mockSheet, sheet2], 'MyProject');
 
     expect(mockAnchor.download).toContain('MyProject-cut-sheets.dxf');
     expect(mockAnchor.click).toHaveBeenCalled();
@@ -99,14 +99,14 @@ describe('downloadAllSheetsDxf', () => {
     vi.restoreAllMocks();
   });
 
-  it('generates DXF containing content for all sheets (no throw)', () => {
+  it('generates DXF containing content for all sheets (no throw)', async () => {
     const mockAnchor = { href: '', download: '', click: vi.fn() };
     vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor as unknown as HTMLElement);
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:two');
     vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
 
     const sheet2: CutSheet = { ...mockSheet, sheetIndex: 1 };
-    expect(() => downloadAllSheetsDxf([mockSheet, sheet2], 'P')).not.toThrow();
+    await expect(downloadAllSheetsDxf([mockSheet, sheet2], 'P')).resolves.not.toThrow();
 
     vi.restoreAllMocks();
   });
@@ -151,7 +151,7 @@ describe('cutSheetToDxf — per-material layer (Sprint 37)', () => {
 });
 
 describe('downloadAllSheetsDxf — per-material layer (Sprint 37)', () => {
-  it('defines separate layers for two different materials', () => {
+  it('defines separate layers for two different materials', async () => {
     const mockAnchor = { href: '', download: '', click: vi.fn() };
     vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor as unknown as HTMLElement);
     const capturedContent = '';
@@ -164,8 +164,7 @@ describe('downloadAllSheetsDxf — per-material layer (Sprint 37)', () => {
     vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
 
     const sheet2: CutSheet = { ...mockSheet, sheetIndex: 1, material: 'melamine-18' };
-    // Should not throw when two different materials are present
-    expect(() => downloadAllSheetsDxf([mockSheet, sheet2], 'Multi')).not.toThrow();
+    await expect(downloadAllSheetsDxf([mockSheet, sheet2], 'Multi')).resolves.not.toThrow();
 
     vi.restoreAllMocks();
     void capturedContent; // suppress unused warning

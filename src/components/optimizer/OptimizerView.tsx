@@ -167,7 +167,7 @@ export function OptimizerView() {
       };
       worker.onerror = () => {
         // Fallback: synchronous export
-        downloadAllSheetsDxf(sheets, filePrefix);
+        void downloadAllSheetsDxf(sheets, filePrefix);
         useToastStore.getState().addToast(t('toast.dxfExported'), 'success');
         setDxfExporting(false);
         dxfWorkerRef.current = null;
@@ -175,7 +175,7 @@ export function OptimizerView() {
       worker.postMessage({ mode: 'all', sheets, projectName: filePrefix });
     } else {
       // No Worker support — synchronous fallback
-      downloadAllSheetsDxf(sheets, filePrefix);
+      void downloadAllSheetsDxf(sheets, filePrefix);
       useToastStore.getState().addToast(t('toast.dxfExported'), 'success');
       setDxfExporting(false);
     }
@@ -369,7 +369,7 @@ export function OptimizerView() {
           </button>
           <button
             onClick={() => {
-              downloadAllSheetsGcode(displayOpt.sheets, filePrefix);
+              void downloadAllSheetsGcode(displayOpt.sheets, filePrefix);
               useToastStore.getState().addToast(t('toast.gcodeExported'), 'success');
             }}
             className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-medium transition-colors"
@@ -1212,7 +1212,7 @@ function SheetCard({
         )}
         <button
           onClick={() => {
-            downloadDxfForSheet(sheet, `${filePrefix}-sheet-${sheet.sheetIndex + 1}.dxf`);
+            void downloadDxfForSheet(sheet, `${filePrefix}-sheet-${sheet.sheetIndex + 1}.dxf`);
             useToastStore.getState().addToast(t('toast.dxfExported'), 'success');
           }}
           className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1 rounded border px-2 py-0.5 text-[10px] transition-colors"
