@@ -9,6 +9,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.68.1] — 2026-06-26
+
+### Phase 16.5 — Code Quality & Housekeeping
+
+#### Added
+
+- **3 new sub-component files** extracted from `OptimizerView.tsx` (Sprint A3):
+  `OptimizerStats.tsx` (`Stat`, `YieldBar`), `OptimizerExplainerPanel.tsx`,
+  `SheetCard.tsx` (`SheetCard`, `PartRect`, `computeOffcuts`, `cbColor`, `S`)
+- **E2E smoke test** for the optimizer yield meter (`optimizer-visual.spec.ts`)
+  — scrolls `VirtualSheetWrapper` into view before checking `[role="meter"]`
+- **Phase 16.5 Code Quality & Housekeeping** added to `ROADMAP.md` (Sprints A1–A12)
+
+#### Changed
+
+- `OptimizerView.tsx` reduced from 1741 → 1082 lines by extracting sub-components
+- CI workflow restructured: new `quality` job (typecheck, lint, lint:css, lint:md,
+  format:check, i18n:coverage) runs on Node 22 only; `build` matrix reduced to
+  [22, 24, 26]; coverage/bundle-check/dist-upload pinned to Node 22
+- `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true` added to all 5 GitHub Actions workflows
+  to suppress Node.js deprecation warnings
+- `tests/engine/validation.test.ts` compressed from 815 → 705 lines using
+  `hasCode`/`getIssue` helpers and `it.each` tables for "does not raise" groups
+
 ## [3.68.0] — 2026-06-26
 
 ### Design-Check Actionable Fixes & Package Updates
