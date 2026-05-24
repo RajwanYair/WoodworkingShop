@@ -126,3 +126,6 @@ export type { MaterialCostEntry, CostVarianceLine, CostVarianceReport } from './
 
 export { calculateShelfSpacing, getShelfPresets, getShelfPreset, SHELF_PRESETS } from './shelf-spacing';
 export type { ShelfPresetId, ShelfPreset, ShelfSpacingResult } from './shelf-spacing';
+
+export { getJointSpec, validateJointCompatibility, getAllJointSpecs } from './joint-detail';
+export type { JointSpec, JointDimensions, JointConstraints } from './joint-detail';
