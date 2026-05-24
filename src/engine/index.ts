@@ -129,3 +129,16 @@ export type { ShelfPresetId, ShelfPreset, ShelfSpacingResult } from './shelf-spa
 
 export { getJointSpec, validateJointCompatibility, getAllJointSpecs } from './joint-detail';
 export type { JointSpec, JointDimensions, JointConstraints } from './joint-detail';
+
+export {
+  createNoteStore,
+  addNote,
+  updateNote,
+  deleteNote,
+  getNotesForCabinet,
+  getNotesForPart,
+  getProjectNotes,
+  formatNotesForExport,
+  MAX_NOTE_LENGTH,
+} from './cabinet-notes';
+export type { CabinetNote, NoteStore, NoteScope, NoteError } from './cabinet-notes';
