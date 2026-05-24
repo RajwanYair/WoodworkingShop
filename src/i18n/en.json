@@ -501,6 +501,11 @@
     "fixRemoveShelves": "Remove shelves",
     "fixRemoveDoors": "Remove doors",
     "fixMergeToOneDoor": "Merge to 1 door",
+    "fixSplitToDoors": "Split to 2 doors",
+    "fixReduceShelves": "Reduce shelves",
+    "fixSwitchJoinery": "Switch to screws",
+    "fixUsePlywood18": "Use plywood 18 mm",
+    "fixRemoveHingeProfile": "Remove hinge profile",
     "collapsed": "Show {{count}} issue(s)",
     "fieldHint": "Field: {{field}}",
     "suggestedValue": "Suggested: {{value}}"

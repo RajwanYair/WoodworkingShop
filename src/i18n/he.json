@@ -501,6 +501,11 @@
     "fixRemoveShelves": "הסר מדפים",
     "fixRemoveDoors": "הסר דלתות",
     "fixMergeToOneDoor": "מזג לדלת אחת",
+    "fixSplitToDoors": "פצל ל-2 דלתות",
+    "fixReduceShelves": "הפחת מדפים",
+    "fixSwitchJoinery": "עבור לברגים",
+    "fixUsePlywood18": "השתמש בדיקט 18 מ\"מ",
+    "fixRemoveHingeProfile": "הסר פרופיל ציר",
     "collapsed": "הצג {{count}} בעיה/ות",
     "fieldHint": "שדה: {{field}}",
     "suggestedValue": "מוצע: {{value}}"

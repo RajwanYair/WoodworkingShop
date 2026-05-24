@@ -205,6 +205,7 @@ function _checkDoors(config: CabinetConfig, dims: ReturnType<typeof computeDimen
           he: `יחס גובה-רוחב הדלת ${ratio.toFixed(1)}:1 חורג מ-${MAX_DOOR_ASPECT_RATIO}:1. דלתות גבוהות וצרות עלולות להתעוות — שקול הוספת פסת ביניים או חומר קשיח יותר.`,
         },
         field: 'doorCount',
+        fix: config.doorCount === 1 ? { patch: { doorCount: 2 }, labelKey: 'validation.fixSplitToDoors' } : undefined,
       });
     }
   }
@@ -313,6 +314,10 @@ function _checkHingeShelfInterference(
               he: `זרוע ציר (~${Math.round(hPos)} מ"מ מתחתית הפנים) נמצאת ב-${Math.round(gap)} מ"מ ממדף — פחות מ-${HINGE_ARM_CLEARANCE_MM} מ"מ הנדרש לקיבוע הזרוע ללא חיתוך המדף. התאם מספר מדפים או ריווחם.`,
             },
             field: 'shelfCount',
+            fix:
+              config.shelfCount > 1
+                ? { patch: { shelfCount: config.shelfCount - 1 }, labelKey: 'validation.fixReduceShelves' }
+                : undefined,
           },
         ];
       }
@@ -704,6 +709,7 @@ export function validateConfig(
         he: `עובי הלוח (${t} מ"מ) דק מדי לחריצי מדף יציבים. חריץ עומק 1/3 יהיה רק ${dadoDepth.toFixed(1)} מ"מ — לא מספיק לחוזק. השתמש בלוחות ≥ 15 מ"מ למדפים קבועים.`,
       },
       field: 'carcassMaterial',
+      fix: { patch: { carcassMaterial: 'plywood-18' }, labelKey: 'validation.fixUsePlywood18' },
     });
   }
 
@@ -880,6 +886,7 @@ export function validateConfig(
         he: `חיבור בברגי כיס דורש עובי לוח ≥ ${MIN_POCKET_SCREW_THICKNESS_MM} מ"מ (נוכחי: ${t} מ"מ). הגדל עובי חומר או שנה סוג חיבור.`,
       },
       field: 'carcassMaterial',
+      fix: { patch: { joineryType: 'screw' }, labelKey: 'validation.fixSwitchJoinery' },
     });
   }
 
@@ -892,6 +899,7 @@ export function validateConfig(
         he: `חיבור בחריץ דדו דורש עובי לוח ≥ ${MIN_DADO_THICKNESS_MM} מ"מ (נוכחי: ${t} מ"מ). חריץ רדוד בחומר דק נשלף בעומס.`,
       },
       field: 'carcassMaterial',
+      fix: { patch: { joineryType: 'screw' }, labelKey: 'validation.fixSwitchJoinery' },
     });
   }
 
@@ -904,6 +912,7 @@ export function validateConfig(
         he: `חיבור בסיכות עץ בעובי ${t} מ"מ הוא גבולי — נדרשים לפחות ${MIN_DOWEL_THICKNESS_MM} מ"מ לכיסוי מספיק סביב סיכה 6 מ"מ.`,
       },
       field: 'carcassMaterial',
+      fix: { patch: { joineryType: 'screw' }, labelKey: 'validation.fixSwitchJoinery' },
     });
   }
 
@@ -916,6 +925,7 @@ export function validateConfig(
         he: `חיבור בביסקוויטים דורש עובי לוח ≥ ${MIN_BISCUIT_THICKNESS_MM} מ"מ (נוכחי: ${t} מ"מ). חריץ ביסקוויט #0 יחדור דרך חומר דק.`,
       },
       field: 'carcassMaterial',
+      fix: { patch: { joineryType: 'screw' }, labelKey: 'validation.fixSwitchJoinery' },
     });
   }
 
@@ -928,6 +938,7 @@ export function validateConfig(
         he: `חיבור בביסקוויטים דורש רוחב פנים לוח ≥ ${MIN_BISCUIT_FACE_WIDTH_MM} מ"מ. רוחב הארון (${config.width} מ"מ) צר מדי.`,
       },
       field: 'width',
+      fix: { patch: { joineryType: 'screw' }, labelKey: 'validation.fixSwitchJoinery' },
     });
   }
 
@@ -954,6 +965,7 @@ export function validateConfig(
           he: `מזהה פרופיל ציר "${config.hingeProfile}" אינו קיים בקטלוג החומרה. הסר את הפרופיל או בחר אחד נתמך.`,
         },
         field: 'hingeProfile',
+        fix: { patch: { hingeProfile: undefined }, labelKey: 'validation.fixRemoveHingeProfile' },
       });
     } else {
       // Check 1: door panel must be thick enough for the hinge cup bore.
