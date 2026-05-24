@@ -1,7 +1,7 @@
 /**
  * AR placement helpers — Sprint 24 tests
  */
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import {
   isWebXRSupported,
   isImmersiveARSupported,

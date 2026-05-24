@@ -202,7 +202,7 @@ export async function mergeBranch(branchId: string, targetId: string): Promise<S
 // ── Internal helpers ──────────────────────────────────────────────────────────
 
 function _cabLabel(cab: CabinetEntry): string {
-  return cab.name || cab.config?.type || 'Cabinet';
+  return cab.name || cab.config?.furnitureType || 'Cabinet';
 }
 
 /** Return field paths that differ between two cabinet entries (shallow compare). */
@@ -212,8 +212,8 @@ function _diffCabinet(a: CabinetEntry, b: CabinetEntry): string[] {
   const configB = b.config ?? {};
   const allKeys = new Set([...Object.keys(configA), ...Object.keys(configB)]);
   for (const key of allKeys) {
-    const va = (configA as Record<string, unknown>)[key];
-    const vb = (configB as Record<string, unknown>)[key];
+    const va = (configA as unknown as Record<string, unknown>)[key];
+    const vb = (configB as unknown as Record<string, unknown>)[key];
     if (JSON.stringify(va) !== JSON.stringify(vb)) {
       changed.push(`config.${key}`);
     }

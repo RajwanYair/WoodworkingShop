@@ -160,7 +160,7 @@ export function exportToIfc(
     const w = cabinet.config.width;
     const h = cabinet.config.height;
     const d = cabinet.config.depth;
-    const label = _sanitise(cabinet.name || cabinet.config.type || 'Cabinet');
+    const label = _sanitise(cabinet.name || cabinet.config.furnitureType || 'Cabinet');
 
     // Local placement (position along X)
     const idOriginN = ids.next();

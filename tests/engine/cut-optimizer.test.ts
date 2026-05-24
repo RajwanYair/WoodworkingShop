@@ -413,7 +413,7 @@ describe('optimizeCutSheets — grain conflict indicators (Sprint 42)', () => {
 describe('findCoNestCandidates', () => {
   it('returns empty array when all sheets have distinct geometry', () => {
     const result = optimizeCutSheets([
-      { id: 'A', name: { en: 'A', he: 'A' }, qty: 1, length: 400, width: 200, material: 'plywood-18', edgeBanding: { en: '', he: '' } },
+      { id: 'A', name: { en: 'A', he: 'A' }, qty: 1, length: 400, width: 200, material: 'plywood-18', thickness: 18, edgeBanding: { en: '', he: '' } },
     ]);
     expect(findCoNestCandidates(result)).toHaveLength(0);
   });

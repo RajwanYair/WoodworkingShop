@@ -12,7 +12,6 @@
 import type { CabinetConfig } from '../engine/types';
 import { estimateCost, type CostBreakdown } from '../engine/cost-estimator';
 import { generateParts } from '../engine/parts';
-import { computeDimensions } from '../engine/dimensions';
 import { getMaterial, MATERIALS } from '../engine/materials';
 import { optimizeCutSheets } from '../engine/cut-optimizer';
 import { generateHardware } from '../engine/hardware';
@@ -74,8 +73,7 @@ export interface MaterialSwapReport {
  * Returns a `ScenarioCostResult` ready for comparison.
  */
 export function estimateScenario(label: string, config: CabinetConfig): ScenarioCostResult {
-  const dims = computeDimensions(config);
-  const parts = generateParts(config, dims);
+  const parts = generateParts(config);
   const optimization = optimizeCutSheets(parts);
   const hardware = generateHardware(config);
   const hwList = hardware.map((h) => ({ id: h.id, qty: h.qty, name: h.name }));
@@ -156,8 +154,7 @@ export function compareMaterialCosts(
     if (!mat || (mat.pricePerSheet ?? 0) <= 0) continue;
 
     const testConfig: CabinetConfig = { ...config, carcassMaterial: key };
-    const dims = computeDimensions(testConfig);
-    const parts = generateParts(testConfig, dims);
+    const parts = generateParts(testConfig);
     const optimization = optimizeCutSheets(parts);
     const hardware = generateHardware(testConfig);
     const hwList = hardware.map((h) => ({ id: h.id, qty: h.qty, name: h.name }));

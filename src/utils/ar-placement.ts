@@ -62,6 +62,14 @@ export interface WallSnapResult {
 // ── Feature detection ─────────────────────────────────────────────────────────
 
 /**
+ * Minimal WebXR Device API surface needed for feature detection.
+ * Declared locally to avoid requiring `@types/webxr` in every consumer.
+ */
+interface XRSystem {
+  isSessionSupported(mode: 'inline' | 'immersive-vr' | 'immersive-ar'): Promise<boolean>;
+}
+
+/**
  * Internal accessor — allows tests to replace `navigator.xr`.
  * @internal
  */
@@ -227,7 +235,7 @@ export function snapToWall(
  */
 export function suggestNextPosition(
   existingAABBs: CabinetAABB[],
-  dims: CabinetDimsMm,
+  _dims: CabinetDimsMm,
   startOrigin: Vec3,
   gapM = 0,
 ): ARPose {

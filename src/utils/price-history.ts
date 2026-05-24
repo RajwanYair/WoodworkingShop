@@ -10,7 +10,7 @@
  * Key schema: '<materialId>:<timestamp-ms>'
  */
 
-import { get, set, del, keys, createStore, entries } from 'idb-keyval';
+import { set, del, keys, createStore, entries } from 'idb-keyval';
 
 // ── IDB store ─────────────────────────────────────────────────────────────────
 const priceStore = createStore('cabinet-planner-price-history', 'price-history');

@@ -19,7 +19,6 @@ import {
 
 // Ensure a fresh IDB for every test
 beforeEach(async () => {
-  // @ts-expect-error — fake-indexeddb/auto replaces global
   globalThis.indexedDB = new IDBFactory();
   _resetSeq();
   await _clearAllAuditEntries();

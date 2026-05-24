@@ -17,7 +17,7 @@
  *   - Offline-first: no remote dependency.
  */
 
-import { get, set, del, entries, createStore } from 'idb-keyval';
+import { set, del, entries, createStore } from 'idb-keyval';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
