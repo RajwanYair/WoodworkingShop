@@ -114,3 +114,6 @@ export type { AssemblyStep } from './assembly.ts';
 
 export { calculateHingeBoreSpec, hingeCount, formatHingeBoreSpecSummary } from './hinge-bore';
 export type { HingeBoreSpec, HingeBorePosition, HingeBoreError } from './hinge-bore';
+
+export { validateDrawerRunner, getDrawerRunnerSpec, getAllDrawerRunnerSpecs } from './drawer-runner';
+export type { DrawerRunnerSpec, DrawerRunnerValidation, DrawerRunnerError } from './drawer-runner';
