@@ -167,3 +167,6 @@ export {
   formatAvailabilityReport,
 } from './stock-tracker';
 export type { StockItem, StockStore, StockUnit, DemandEntry, AvailabilityResult, StockStatus } from './stock-tracker';
+
+export { sortParts, sortPartsByPreset, invertSortCriteria, SORT_PRESETS } from './part-sort';
+export type { SortablePart, SortKey, SortDirection, SortCriterion, SortPreset } from './part-sort';
