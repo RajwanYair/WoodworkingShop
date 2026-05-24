@@ -191,3 +191,6 @@ export {
   describeFormat,
 } from './export-format';
 export type { ExportFormatId, ExportCategory, ExportFormat } from './export-format';
+
+export { HARDWARE_CATALOGUE, calculateHardwareBom, totalHardwarePieces } from './hardware-spec';
+export type { HardwareCatalogueItem, HardwareCategory, HardwareQuantityInput, HardwareBomLine } from './hardware-spec';
