@@ -52,13 +52,10 @@ jobs:
           VITE_CF_ANALYTICS_TOKEN: ${{ secrets.VITE_CF_ANALYTICS_TOKEN }}
 
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: cabinet-planner
-          directory: dist
-          # Wrangler version pinned for reproducible builds
-          wranglerVersion: '3'
-          # GitHubToken is required for PR preview deployment comments
+          command: pages deploy dist --project-name=cabinet-planner
+          # GitHubToken enables PR preview deployment comments
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
