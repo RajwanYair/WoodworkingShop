@@ -43,6 +43,8 @@ tests/
 - **ARIA via jsx-a11y**: `eslint-plugin-jsx-a11y` enforces correctness at lint time —
   do NOT add redundant `role="list"` / `role="listitem"` on semantic `<ul>` / `<li>`;
   do NOT attach `onKeyDown` to non-interactive `<div>` (use `useFocusTrap` or document-level listener)
+- **ESLint plugins (6 only)**: jsx-a11y, react-hooks, react-refresh, react, regexp, no-only-tests.
+  No sonarjs, no promise plugin. Keep the config minimal — tool defaults preferred.
 - **RTL-safe layout**: use Tailwind logical properties (`ms-*`, `me-*`, `start-*`, `end-*`) not `ml-*`/`mr-*`
 - **No hardcoded colours**: use `wood-*` design tokens or Tailwind semantic classes
 - **CSS via Stylelint**: `stylelint.config.js` + `.browserslistrc` (canonical) drives compatibility.
