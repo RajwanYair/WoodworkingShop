@@ -194,3 +194,6 @@ export type { ExportFormatId, ExportCategory, ExportFormat } from './export-form
 
 export { HARDWARE_CATALOGUE, calculateHardwareBom, totalHardwarePieces } from './hardware-spec';
 export type { HardwareCatalogueItem, HardwareCategory, HardwareQuantityInput, HardwareBomLine } from './hardware-spec';
+
+export { EDGE_PROFILE_SPECS, calculateEdgeBandBom, totalEdgeBandMetres, getEdgeProfileSpec } from './edge-profile';
+export type { EdgeProfile, EdgeProfileSpec, PanelEdges, EdgeBandPanel, EdgeBandBomLine } from './edge-profile';
