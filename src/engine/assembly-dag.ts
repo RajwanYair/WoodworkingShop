@@ -50,9 +50,7 @@ function buildSuccessors(steps: AssemblyStep[]): Map<string, Set<string>> {
 
 /** Build a map of in-degree counts: stepId → number of unresolved dependencies. */
 function buildInDegrees(steps: AssemblyStep[]): Map<string, number> {
-  return new Map(
-    steps.map((s) => [s.id, (s.dependencies ?? []).filter((d) => steps.some((x) => x.id === d)).length]),
-  );
+  return new Map(steps.map((s) => [s.id, (s.dependencies ?? []).filter((d) => steps.some((x) => x.id === d)).length]));
 }
 
 // ── Core API ──────────────────────────────────────────────────────────────────
@@ -90,8 +88,7 @@ export function validateDAG(steps: AssemblyStep[]): DAGValidationResult {
     }
   }
 
-  const cyclicIds =
-    visited < steps.length ? steps.filter((s) => (inDeg.get(s.id) ?? 0) > 0).map((s) => s.id) : [];
+  const cyclicIds = visited < steps.length ? steps.filter((s) => (inDeg.get(s.id) ?? 0) > 0).map((s) => s.id) : [];
 
   return { valid: cyclicIds.length === 0 && missingDeps.length === 0, cyclicIds, missingDeps };
 }
@@ -124,8 +121,9 @@ export function topologicalSort(steps: AssemblyStep[]): AssemblyStep[] {
     const step = byId.get(cur);
     if (step) result.push(step);
 
-    const nexts = [...(succ.get(cur) ?? [])]
-      .sort((a, b) => (byId.get(a)?.stepNumber ?? 0) - (byId.get(b)?.stepNumber ?? 0));
+    const nexts = [...(succ.get(cur) ?? [])].sort(
+      (a, b) => (byId.get(a)?.stepNumber ?? 0) - (byId.get(b)?.stepNumber ?? 0),
+    );
 
     for (const next of nexts) {
       const newDeg = (inDeg.get(next) ?? 0) - 1;
@@ -174,9 +172,7 @@ export function scheduleWaves(steps: AssemblyStep[]): ScheduleResult {
   }
 
   // Each wave's duration = max(estimatedMinutes) of its steps (parallel execution)
-  const waveDurations = waves.map((w) =>
-    w.reduce((m, s) => Math.max(m, s.estimatedMinutes), 0),
-  );
+  const waveDurations = waves.map((w) => w.reduce((m, s) => Math.max(m, s.estimatedMinutes), 0));
   const totalMinutes = waveDurations.reduce((s, d) => s + d, 0);
 
   // Critical path: longest path by accumulated time (DP)

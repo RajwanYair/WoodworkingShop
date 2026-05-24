@@ -42,7 +42,14 @@ export interface ExportOutput {
 
 /** Result for one export task in a batch. */
 export type ExportTaskResult =
-  | { id: string; label: string; format: BatchExportFormat; status: 'success'; output: ExportOutput; durationMs: number }
+  | {
+      id: string;
+      label: string;
+      format: BatchExportFormat;
+      status: 'success';
+      output: ExportOutput;
+      durationMs: number;
+    }
   | { id: string; label: string; format: BatchExportFormat; status: 'error'; error: string; durationMs: number };
 
 /** Summary of a completed batch export. */

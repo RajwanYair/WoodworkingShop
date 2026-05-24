@@ -109,7 +109,7 @@ function hexToRgbFloat(hex: string): Vec3 {
   const clean = hex.replace('#', '');
   if (clean.length !== 6) return [0.76, 0.6, 0.42]; // warm oak fallback
   const n = parseInt(clean, 16);
-  return [(n >> 16 & 0xff) / 255, (n >> 8 & 0xff) / 255, (n & 0xff) / 255];
+  return [((n >> 16) & 0xff) / 255, ((n >> 8) & 0xff) / 255, (n & 0xff) / 255];
 }
 
 /**
@@ -137,19 +137,15 @@ function buildBox(w: number, h: number, d: number, matColorHex = '#c2924a'): Flo
 
   // 6 faces: [indices, brightness multiplier]
   const base = hexToRgbFloat(matColorHex);
-  const tint = (m: number): Vec3 => [
-    Math.min(1, base[0] * m),
-    Math.min(1, base[1] * m),
-    Math.min(1, base[2] * m),
-  ];
+  const tint = (m: number): Vec3 => [Math.min(1, base[0] * m), Math.min(1, base[1] * m), Math.min(1, base[2] * m)];
 
   const faces: Array<{ idx: [number, number, number, number]; color: Vec3 }> = [
-    { idx: [4, 5, 6, 7], color: tint(1.0) },   // front — base
-    { idx: [1, 0, 3, 2], color: tint(0.72) },   // back — shadow
-    { idx: [0, 4, 7, 3], color: tint(0.85) },   // left
-    { idx: [5, 1, 2, 6], color: tint(0.85) },   // right
-    { idx: [3, 7, 6, 2], color: tint(1.12) },   // top — highlight
-    { idx: [0, 1, 5, 4], color: tint(0.60) },   // bottom — shadow
+    { idx: [4, 5, 6, 7], color: tint(1.0) }, // front — base
+    { idx: [1, 0, 3, 2], color: tint(0.72) }, // back — shadow
+    { idx: [0, 4, 7, 3], color: tint(0.85) }, // left
+    { idx: [5, 1, 2, 6], color: tint(0.85) }, // right
+    { idx: [3, 7, 6, 2], color: tint(1.12) }, // top — highlight
+    { idx: [0, 1, 5, 4], color: tint(0.6) }, // bottom — shadow
   ];
 
   const verts: number[] = [];

@@ -109,9 +109,7 @@ export function compareScenarios(scenarios: ConfigScenario[]): CostComparisonRep
     };
   }
 
-  const results: ScenarioCostResult[] = scenarios.map((s) =>
-    estimateScenario(s.label, s.config),
-  );
+  const results: ScenarioCostResult[] = scenarios.map((s) => estimateScenario(s.label, s.config));
 
   let cheapestIndex = 0;
   let mostExpensiveIndex = 0;
@@ -126,9 +124,7 @@ export function compareScenarios(scenarios: ConfigScenario[]): CostComparisonRep
 
   const currencies = new Set(results.map((r) => r.currencyCode));
   const sameCurrency = currencies.size === 1;
-  const costSpread =
-    results[mostExpensiveIndex]!.estimate.totalCost -
-    results[cheapestIndex]!.estimate.totalCost;
+  const costSpread = results[mostExpensiveIndex]!.estimate.totalCost - results[cheapestIndex]!.estimate.totalCost;
 
   return { scenarios: results, cheapestIndex, mostExpensiveIndex, costSpread, sameCurrency };
 }
@@ -140,10 +136,7 @@ export function compareScenarios(scenarios: ConfigScenario[]): CostComparisonRep
  *
  * Only materials with `pricePerSheet > 0` are included.
  */
-export function compareMaterialCosts(
-  config: CabinetConfig,
-  materialKeys?: string[],
-): MaterialSwapReport {
+export function compareMaterialCosts(config: CabinetConfig, materialKeys?: string[]): MaterialSwapReport {
   const keys = materialKeys ?? MATERIALS.map((m) => m.key);
   const baseMaterialKey = config.carcassMaterial;
 

@@ -24,13 +24,11 @@
 // ── Feature detection ─────────────────────────────────────────────────────────
 
 /** True when the Web Serial API is available in this browser context. */
-export const WEB_SERIAL_SUPPORTED: boolean =
-  typeof navigator !== 'undefined' && 'serial' in navigator;
+export const WEB_SERIAL_SUPPORTED: boolean = typeof navigator !== 'undefined' && 'serial' in navigator;
 
 /** Runtime check — re-evaluates on every call so stubs in tests are honoured. */
 function _serialSupported(): boolean {
-  return typeof navigator !== 'undefined' &&
-    (navigator as Navigator & { serial?: unknown }).serial != null;
+  return typeof navigator !== 'undefined' && (navigator as Navigator & { serial?: unknown }).serial != null;
 }
 
 // ── Error types ───────────────────────────────────────────────────────────────

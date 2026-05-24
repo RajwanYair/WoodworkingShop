@@ -89,7 +89,13 @@ export type {
   VendorHingeProfile,
 } from './types';
 
-export { generateHardware, VENDOR_HINGE_PROFILES, getHardwareCatalog, getHardwareCatalogByCategory, getHardwareCatalogEntry } from './hardware.ts';
+export {
+  generateHardware,
+  VENDOR_HINGE_PROFILES,
+  getHardwareCatalog,
+  getHardwareCatalogByCategory,
+  getHardwareCatalogEntry,
+} from './hardware.ts';
 
 export {
   registerPlugin,

@@ -162,7 +162,7 @@ describe('clearCommunityMaterialsCache', () => {
 
 describe('getCommunityMaterialsByRegion', () => {
   const mats: CommunityMaterial[] = [
-    makeMaterial('global'),        // no region
+    makeMaterial('global'), // no region
     makeMaterial('us-ply', 'us'),
     makeMaterial('de-ply', 'de'),
     makeMaterial('IL-ply', 'IL'), // mixed case

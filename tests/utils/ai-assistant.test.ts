@@ -18,10 +18,18 @@ import { DEFAULT_CONFIG } from '../../src/engine/materials';
 const localStorageStore = new Map<string, string>();
 const localStorageMock: Storage = {
   getItem: (k) => localStorageStore.get(k) ?? null,
-  setItem: (k, v) => { localStorageStore.set(k, String(v)); },
-  removeItem: (k) => { localStorageStore.delete(k); },
-  clear: () => { localStorageStore.clear(); },
-  get length() { return localStorageStore.size; },
+  setItem: (k, v) => {
+    localStorageStore.set(k, String(v));
+  },
+  removeItem: (k) => {
+    localStorageStore.delete(k);
+  },
+  clear: () => {
+    localStorageStore.clear();
+  },
+  get length() {
+    return localStorageStore.size;
+  },
   key: (i) => [...localStorageStore.keys()][i] ?? null,
 };
 
@@ -191,26 +199,22 @@ describe('callAiAssistant', () => {
 
   it('throws on non-ok response from openai', async () => {
     mockFetch({ error: { message: 'Invalid API key' } }, 401);
-    await expect(
-      callAiAssistant({ provider: 'openai', apiKey: 'bad' }, DEFAULT_CONFIG, 'Test'),
-    ).rejects.toThrow(/OpenAI error 401/);
+    await expect(callAiAssistant({ provider: 'openai', apiKey: 'bad' }, DEFAULT_CONFIG, 'Test')).rejects.toThrow(
+      /OpenAI error 401/,
+    );
   });
 
   it('throws on non-ok response from anthropic', async () => {
     mockFetch({ error: 'forbidden' }, 403);
-    await expect(
-      callAiAssistant({ provider: 'anthropic', apiKey: 'bad' }, DEFAULT_CONFIG, 'Test'),
-    ).rejects.toThrow(/Anthropic error 403/);
+    await expect(callAiAssistant({ provider: 'anthropic', apiKey: 'bad' }, DEFAULT_CONFIG, 'Test')).rejects.toThrow(
+      /Anthropic error 403/,
+    );
   });
 
   it('throws on non-ok response from ollama', async () => {
     mockFetch({ error: 'model not found' }, 404);
     await expect(
-      callAiAssistant(
-        { provider: 'ollama', apiKey: '', endpoint: 'http://localhost:11434' },
-        DEFAULT_CONFIG,
-        'Test',
-      ),
+      callAiAssistant({ provider: 'ollama', apiKey: '', endpoint: 'http://localhost:11434' }, DEFAULT_CONFIG, 'Test'),
     ).rejects.toThrow(/Ollama error 404/);
   });
 

@@ -69,9 +69,7 @@ export function buildAssemblyDAG(rawSteps: readonly RawStep[]): AssemblyStep[] {
   // Within the door sub-chain, "Install Handles" must follow hinge mounting
   const hingesIdx = steps.findIndex(
     (s, i) =>
-      i > closingIdx &&
-      i < fitEnd &&
-      (s.title.en.startsWith('Mount Hinges') || s.title.en.startsWith('Mount Glass')),
+      i > closingIdx && i < fitEnd && (s.title.en.startsWith('Mount Hinges') || s.title.en.startsWith('Mount Glass')),
   );
   const handlesIdx = steps.findIndex(
     (s, i) => i > closingIdx && i < fitEnd && s.title.en.startsWith('Install Handles'),

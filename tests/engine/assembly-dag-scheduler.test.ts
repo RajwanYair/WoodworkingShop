@@ -3,21 +3,11 @@
  */
 import { describe, it, expect } from 'vitest';
 import type { AssemblyStep } from '../../src/engine/assembly';
-import {
-  validateDAG,
-  topologicalSort,
-  scheduleWaves,
-  criticalPath,
-  dependents,
-} from '../../src/engine/assembly-dag';
+import { validateDAG, topologicalSort, scheduleWaves, criticalPath, dependents } from '../../src/engine/assembly-dag';
 
 // ── Test factory ──────────────────────────────────────────────────────────────
 
-function makeStep(
-  num: number,
-  deps: string[] = [],
-  mins = 10,
-): AssemblyStep {
+function makeStep(num: number, deps: string[] = [], mins = 10): AssemblyStep {
   return {
     stepNumber: num,
     id: `step-${num}`,
@@ -36,12 +26,7 @@ function makeStep(
 const chain = [makeStep(1), makeStep(2, ['step-1']), makeStep(3, ['step-2'])];
 
 // diamond: 1 → 2, 1 → 3, {2,3} → 4
-const diamond = [
-  makeStep(1),
-  makeStep(2, ['step-1']),
-  makeStep(3, ['step-1']),
-  makeStep(4, ['step-2', 'step-3']),
-];
+const diamond = [makeStep(1), makeStep(2, ['step-1']), makeStep(3, ['step-1']), makeStep(4, ['step-2', 'step-3'])];
 
 // ── validateDAG ───────────────────────────────────────────────────────────────
 
@@ -58,10 +43,7 @@ describe('validateDAG', () => {
   });
 
   it('detects a 2-node cycle', () => {
-    const cyclic = [
-      makeStep(1, ['step-2']),
-      makeStep(2, ['step-1']),
-    ];
+    const cyclic = [makeStep(1, ['step-2']), makeStep(2, ['step-1'])];
     const r = validateDAG(cyclic);
     expect(r.valid).toBe(false);
     expect(r.cyclicIds.length).toBeGreaterThan(0);
@@ -160,8 +142,8 @@ describe('scheduleWaves', () => {
   it('critical path for diamond follows the heavier branch', () => {
     const heavy = [
       makeStep(1, [], 5),
-      makeStep(2, ['step-1'], 1),   // light branch
-      makeStep(3, ['step-1'], 20),  // heavy branch
+      makeStep(2, ['step-1'], 1), // light branch
+      makeStep(3, ['step-1'], 20), // heavy branch
       makeStep(4, ['step-2', 'step-3'], 5),
     ];
     const r = scheduleWaves(heavy);
@@ -200,7 +182,9 @@ describe('dependents', () => {
   });
 
   it('diamond: dependents of step-1 includes 2, 3, 4', () => {
-    const ids = dependents(diamond, 'step-1').map((s) => s.id).sort();
+    const ids = dependents(diamond, 'step-1')
+      .map((s) => s.id)
+      .sort();
     expect(ids).toEqual(['step-2', 'step-3', 'step-4']);
   });
 });

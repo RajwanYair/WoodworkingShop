@@ -43,11 +43,7 @@ describe('buildGrainReport', () => {
   });
 
   it('groups parts by material', () => {
-    const parts = [
-      makePart('P01', 'plywood-18mm'),
-      makePart('P02', 'plywood-18mm'),
-      makePart('P03', 'mdf-18mm'),
-    ];
+    const parts = [makePart('P01', 'plywood-18mm'), makePart('P02', 'plywood-18mm'), makePart('P03', 'mdf-18mm')];
     const report = buildGrainReport(parts, TS);
     expect(report.groups).toHaveLength(2);
   });
@@ -60,19 +56,13 @@ describe('buildGrainReport', () => {
   });
 
   it('sums totalParts across all groups', () => {
-    const parts = [
-      makePart('P01', 'a', { qty: 2 }),
-      makePart('P02', 'b', { qty: 3 }),
-    ];
+    const parts = [makePart('P01', 'a', { qty: 2 }), makePart('P02', 'b', { qty: 3 })];
     const report = buildGrainReport(parts, TS);
     expect(report.totalParts).toBe(5);
   });
 
   it('correctly classifies rotationLocked parts', () => {
-    const parts = [
-      makePart('P01', 'mat', { rotationLocked: true }),
-      makePart('P02', 'mat', { rotationLocked: false }),
-    ];
+    const parts = [makePart('P01', 'mat', { rotationLocked: true }), makePart('P02', 'mat', { rotationLocked: false })];
     const report = buildGrainReport(parts, TS);
     const group = report.groups[0];
     expect(group.rotationLockedParts).toHaveLength(1);
@@ -113,10 +103,7 @@ describe('buildGrainReport', () => {
   });
 
   it('totalInstances matches sum of part qty in group', () => {
-    const parts = [
-      makePart('P01', 'mat', { qty: 2 }),
-      makePart('P02', 'mat', { qty: 3 }),
-    ];
+    const parts = [makePart('P01', 'mat', { qty: 2 }), makePart('P02', 'mat', { qty: 3 })];
     const report = buildGrainReport(parts, TS);
     expect(report.groups[0].totalInstances).toBe(5);
   });

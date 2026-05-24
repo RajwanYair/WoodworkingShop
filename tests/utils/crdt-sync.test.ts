@@ -209,9 +209,7 @@ describe('serializeOps / deserializeOps', () => {
   });
 
   it('throws on invalid op shape', () => {
-    expect(() => deserializeOps('[{"clientId":1,"clock":1,"path":"/x"}]')).toThrow(
-      TypeError,
-    );
+    expect(() => deserializeOps('[{"clientId":1,"clock":1,"path":"/x"}]')).toThrow(TypeError);
   });
 });
 

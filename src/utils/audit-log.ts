@@ -132,10 +132,7 @@ export async function getAuditLog(projectId: string): Promise<AuditEntry[]> {
 /**
  * Get the most recent N entries for a project (newest first).
  */
-export async function getRecentAuditEntries(
-  projectId: string,
-  limit = 50,
-): Promise<AuditEntry[]> {
+export async function getRecentAuditEntries(projectId: string, limit = 50): Promise<AuditEntry[]> {
   const all = await getAuditLog(projectId);
   return all.slice(-limit).reverse();
 }
@@ -186,17 +183,9 @@ export async function countAuditEntries(projectId: string): Promise<number> {
  * don't expose `crypto.subtle` (e.g. some older jsdom versions).
  */
 export async function sha256Hex(input: string): Promise<string> {
-  if (
-    typeof crypto !== 'undefined' &&
-    typeof crypto.subtle?.digest === 'function'
-  ) {
-    const buf = await crypto.subtle.digest(
-      'SHA-256',
-      new TextEncoder().encode(input),
-    );
-    return [...new Uint8Array(buf)]
-      .map((b) => b.toString(16).padStart(2, '0'))
-      .join('');
+  if (typeof crypto !== 'undefined' && typeof crypto.subtle?.digest === 'function') {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(input));
+    return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
   }
   // Fallback: deterministic but not cryptographic — test environments only
   let h = 0;

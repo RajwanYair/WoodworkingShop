@@ -1,9 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-  optimizeCutSheets,
-  findCoNestCandidates,
-  applyCoNesting,
-} from '../../src/engine/cut-optimizer';
+import { optimizeCutSheets, findCoNestCandidates, applyCoNesting } from '../../src/engine/cut-optimizer';
 import { generateParts } from '../../src/engine/parts';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 
@@ -413,7 +409,16 @@ describe('optimizeCutSheets — grain conflict indicators (Sprint 42)', () => {
 describe('findCoNestCandidates', () => {
   it('returns empty array when all sheets have distinct geometry', () => {
     const result = optimizeCutSheets([
-      { id: 'A', name: { en: 'A', he: 'A' }, qty: 1, length: 400, width: 200, material: 'plywood-18', thickness: 18, edgeBanding: { en: '', he: '' } },
+      {
+        id: 'A',
+        name: { en: 'A', he: 'A' },
+        qty: 1,
+        length: 400,
+        width: 200,
+        material: 'plywood-18',
+        thickness: 18,
+        edgeBanding: { en: '', he: '' },
+      },
     ]);
     expect(findCoNestCandidates(result)).toHaveLength(0);
   });
@@ -423,8 +428,24 @@ describe('findCoNestCandidates', () => {
     // We synthesise a fake result rather than running a full optimize to keep the test pure.
     const fakeResult = {
       sheets: [
-        { sheetIndex: 0, material: 'plywood-18', thickness: 18, sheetWidth: 1220, sheetLength: 2440, parts: [], yieldPercent: 50 },
-        { sheetIndex: 1, material: 'melamine-18', thickness: 18, sheetWidth: 1220, sheetLength: 2440, parts: [], yieldPercent: 50 },
+        {
+          sheetIndex: 0,
+          material: 'plywood-18',
+          thickness: 18,
+          sheetWidth: 1220,
+          sheetLength: 2440,
+          parts: [],
+          yieldPercent: 50,
+        },
+        {
+          sheetIndex: 1,
+          material: 'melamine-18',
+          thickness: 18,
+          sheetWidth: 1220,
+          sheetLength: 2440,
+          parts: [],
+          yieldPercent: 50,
+        },
       ],
       totalSheets: 2,
       overallYield: 50,
@@ -441,8 +462,24 @@ describe('findCoNestCandidates', () => {
   it('does not return groups with only one material', () => {
     const fakeResult = {
       sheets: [
-        { sheetIndex: 0, material: 'plywood-18', thickness: 18, sheetWidth: 1220, sheetLength: 2440, parts: [], yieldPercent: 50 },
-        { sheetIndex: 1, material: 'plywood-18', thickness: 18, sheetWidth: 1220, sheetLength: 2440, parts: [], yieldPercent: 50 },
+        {
+          sheetIndex: 0,
+          material: 'plywood-18',
+          thickness: 18,
+          sheetWidth: 1220,
+          sheetLength: 2440,
+          parts: [],
+          yieldPercent: 50,
+        },
+        {
+          sheetIndex: 1,
+          material: 'plywood-18',
+          thickness: 18,
+          sheetWidth: 1220,
+          sheetLength: 2440,
+          parts: [],
+          yieldPercent: 50,
+        },
       ],
       totalSheets: 2,
       overallYield: 50,
@@ -455,16 +492,33 @@ describe('findCoNestCandidates', () => {
 
 describe('applyCoNesting', () => {
   const makePart = (id: string, w: number, l: number) => ({
-    partId: id, label: id, x: 0, y: 0, width: w, length: l,
-    grainVertical: true, edgeBanding: '',
+    partId: id,
+    label: id,
+    x: 0,
+    y: 0,
+    width: w,
+    length: l,
+    grainVertical: true,
+    edgeBanding: '',
   });
 
   it('returns original result unchanged when coNestKeys is empty', () => {
     const fakeResult = {
       sheets: [
-        { sheetIndex: 0, material: 'plywood-18', thickness: 18, sheetWidth: 1220, sheetLength: 2440, parts: [makePart('P1', 200, 300)], yieldPercent: 5 },
+        {
+          sheetIndex: 0,
+          material: 'plywood-18',
+          thickness: 18,
+          sheetWidth: 1220,
+          sheetLength: 2440,
+          parts: [makePart('P1', 200, 300)],
+          yieldPercent: 5,
+        },
       ],
-      totalSheets: 1, overallYield: 5, totalWaste: 0, grainConflictCount: 0,
+      totalSheets: 1,
+      overallYield: 5,
+      totalWaste: 0,
+      grainConflictCount: 0,
     };
     const out = applyCoNesting(fakeResult, new Set());
     expect(out).toBe(fakeResult); // exact same reference
@@ -483,7 +537,10 @@ describe('applyCoNesting', () => {
     });
     const fakeResult = {
       sheets: [sharedParts('plywood-18', 0), sharedParts('melamine-18', 1)],
-      totalSheets: 2, overallYield: 10, totalWaste: 0, grainConflictCount: 0,
+      totalSheets: 2,
+      overallYield: 10,
+      totalWaste: 0,
+      grainConflictCount: 0,
     };
     const key = '18x1220x2440';
     const out = applyCoNesting(fakeResult, new Set([key]));
@@ -496,17 +553,28 @@ describe('applyCoNesting', () => {
     const fakeResult = {
       sheets: [
         {
-          sheetIndex: 0, material: 'plywood-18', thickness: 18,
-          sheetWidth: 1220, sheetLength: 2440,
-          parts: [makePart('P1', 200, 200)], yieldPercent: 3,
+          sheetIndex: 0,
+          material: 'plywood-18',
+          thickness: 18,
+          sheetWidth: 1220,
+          sheetLength: 2440,
+          parts: [makePart('P1', 200, 200)],
+          yieldPercent: 3,
         },
         {
-          sheetIndex: 1, material: 'melamine-18', thickness: 18,
-          sheetWidth: 1220, sheetLength: 2440,
-          parts: [makePart('P2', 200, 200)], yieldPercent: 3,
+          sheetIndex: 1,
+          material: 'melamine-18',
+          thickness: 18,
+          sheetWidth: 1220,
+          sheetLength: 2440,
+          parts: [makePart('P2', 200, 200)],
+          yieldPercent: 3,
         },
       ],
-      totalSheets: 2, overallYield: 3, totalWaste: 0, grainConflictCount: 0,
+      totalSheets: 2,
+      overallYield: 3,
+      totalWaste: 0,
+      grainConflictCount: 0,
     };
     const out = applyCoNesting(fakeResult, new Set(['18x1220x2440']));
     const allParts = out.sheets.flatMap((s) => s.parts);
@@ -519,11 +587,38 @@ describe('applyCoNesting', () => {
   it('leaves untouched sheets unchanged', () => {
     const fakeResult = {
       sheets: [
-        { sheetIndex: 0, material: 'hdf-3', thickness: 3, sheetWidth: 1220, sheetLength: 2440, parts: [makePart('BP1', 100, 100)], yieldPercent: 1 },
-        { sheetIndex: 1, material: 'plywood-18', thickness: 18, sheetWidth: 1220, sheetLength: 2440, parts: [makePart('P1', 200, 200)], yieldPercent: 3 },
-        { sheetIndex: 2, material: 'melamine-18', thickness: 18, sheetWidth: 1220, sheetLength: 2440, parts: [makePart('P2', 200, 200)], yieldPercent: 3 },
+        {
+          sheetIndex: 0,
+          material: 'hdf-3',
+          thickness: 3,
+          sheetWidth: 1220,
+          sheetLength: 2440,
+          parts: [makePart('BP1', 100, 100)],
+          yieldPercent: 1,
+        },
+        {
+          sheetIndex: 1,
+          material: 'plywood-18',
+          thickness: 18,
+          sheetWidth: 1220,
+          sheetLength: 2440,
+          parts: [makePart('P1', 200, 200)],
+          yieldPercent: 3,
+        },
+        {
+          sheetIndex: 2,
+          material: 'melamine-18',
+          thickness: 18,
+          sheetWidth: 1220,
+          sheetLength: 2440,
+          parts: [makePart('P2', 200, 200)],
+          yieldPercent: 3,
+        },
       ],
-      totalSheets: 3, overallYield: 2, totalWaste: 0, grainConflictCount: 0,
+      totalSheets: 3,
+      overallYield: 2,
+      totalWaste: 0,
+      grainConflictCount: 0,
     };
     const out = applyCoNesting(fakeResult, new Set(['18x1220x2440']));
     // hdf-3 sheet should still be present unchanged

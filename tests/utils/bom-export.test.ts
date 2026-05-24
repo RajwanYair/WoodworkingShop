@@ -460,7 +460,9 @@ describe('generateBomCsv — multi-currency (Sprint 18)', () => {
   it('he locale shows Hebrew column headers for price and cost', () => {
     const csv = generateBomCsv(singleCabinet, 'he', 'he');
     const lines = csv.split('\n');
-    const summaryIdx = lines.findIndex((l) => l.includes('\u05e1\u05d9\u05db\u05d5\u05dd \u05d7\u05d5\u05de\u05e8\u05d9\u05dd'));
+    const summaryIdx = lines.findIndex((l) =>
+      l.includes('\u05e1\u05d9\u05db\u05d5\u05dd \u05d7\u05d5\u05de\u05e8\u05d9\u05dd'),
+    );
     const headerRow = lines[summaryIdx + 1];
     expect(headerRow).toContain('\u05de\u05d7\u05d9\u05e8');
   });

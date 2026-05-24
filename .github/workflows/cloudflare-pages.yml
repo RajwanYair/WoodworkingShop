@@ -32,7 +32,7 @@ jobs:
     permissions:
       contents: read
       deployments: write
-      pull-requests: write   # allows the action to post a preview URL comment
+      pull-requests: write # allows the action to post a preview URL comment
 
     steps:
       - uses: actions/checkout@v4

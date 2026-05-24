@@ -145,7 +145,11 @@ export async function idbSaveOffcut(entry: OffcutEntry): Promise<void> {
 /** Remove an offcut catalog entry by id. */
 export async function idbDeleteOffcut(id: string): Promise<void> {
   const all = await idbLoadOffcuts();
-  await set(IDB_OFFCUTS_KEY, all.filter((e) => e.id !== id), offcutStore);
+  await set(
+    IDB_OFFCUTS_KEY,
+    all.filter((e) => e.id !== id),
+    offcutStore,
+  );
 }
 
 // ─── Storage quota estimate ──────────────────────────────────────────────────

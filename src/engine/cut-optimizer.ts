@@ -252,9 +252,9 @@ function packGuillotine(
 
   const finishedSheets: PlacedRect[][] = [];
   let currentSheet: PlacedRect[] = [];
-  let stripY = 0;  // y-origin of the current horizontal strip
-  let stripH = 0;  // reserved height of the strip (max placed length + kerf)
-  let curX = 0;   // next available x within the strip
+  let stripY = 0; // y-origin of the current horizontal strip
+  let stripH = 0; // reserved height of the strip (max placed length + kerf)
+  let curX = 0; // next available x within the strip
 
   const openNewSheet = () => {
     if (currentSheet.length > 0) finishedSheets.push(currentSheet);
@@ -609,10 +609,7 @@ export interface CoNestCandidate {
  * Call this before `applyCoNesting` to let the user opt in per candidate.
  */
 export function findCoNestCandidates(result: OptimizationResult): CoNestCandidate[] {
-  const byKey = new Map<
-    string,
-    { thickness: number; sheetWidth: number; sheetLength: number; mats: Set<string> }
-  >();
+  const byKey = new Map<string, { thickness: number; sheetWidth: number; sheetLength: number; mats: Set<string> }>();
   for (const sheet of result.sheets) {
     const key = `${sheet.thickness}x${sheet.sheetWidth}x${sheet.sheetLength}`;
     const e = byKey.get(key) ?? {
@@ -749,14 +746,8 @@ export function applyCoNesting(
 
   const newSheets = [...untouched, ...coNested].sort((a, b) => a.sheetIndex - b.sheetIndex);
   const totalArea = newSheets.reduce((s, sh) => s + sh.sheetWidth * sh.sheetLength, 0);
-  const usedArea = newSheets.reduce(
-    (s, sh) => s + sh.parts.reduce((ps, p) => ps + p.width * p.length, 0),
-    0,
-  );
-  const grainConflictCount = newSheets.reduce(
-    (s, sh) => s + sh.parts.filter((p) => p.grainConflict).length,
-    0,
-  );
+  const usedArea = newSheets.reduce((s, sh) => s + sh.parts.reduce((ps, p) => ps + p.width * p.length, 0), 0);
+  const grainConflictCount = newSheets.reduce((s, sh) => s + sh.parts.filter((p) => p.grainConflict).length, 0);
 
   return {
     sheets: newSheets,

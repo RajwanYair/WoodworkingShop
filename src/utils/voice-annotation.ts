@@ -63,11 +63,7 @@ export function generateAnnotationId(): string {
 
 // ── Codec detection ───────────────────────────────────────────────────────────
 
-const PREFERRED_MIME_TYPES = [
-  'audio/webm;codecs=opus',
-  'audio/ogg;codecs=opus',
-  'audio/mp4',
-] as const;
+const PREFERRED_MIME_TYPES = ['audio/webm;codecs=opus', 'audio/ogg;codecs=opus', 'audio/mp4'] as const;
 
 /**
  * Return the first MIME type supported by MediaRecorder in this browser.
@@ -146,9 +142,7 @@ export async function saveVoiceAnnotation(annotation: VoiceAnnotation, blob: Blo
 }
 
 /** Load metadata + blob for a single annotation.  Returns `null` when not found. */
-export async function loadVoiceAnnotation(
-  id: string,
-): Promise<{ annotation: VoiceAnnotation; blob: Blob } | null> {
+export async function loadVoiceAnnotation(id: string): Promise<{ annotation: VoiceAnnotation; blob: Blob } | null> {
   const all = await _loadAllMeta();
   const annotation = all.find((a) => a.id === id);
   if (!annotation) return null;

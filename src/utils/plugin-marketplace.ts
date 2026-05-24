@@ -66,8 +66,7 @@ export interface CatalogCacheMeta {
 }
 
 // ── Default catalog URL ───────────────────────────────────────────────────────
-export const DEFAULT_MARKETPLACE_URL =
-  'https://cdn.cabinet-planner.app/marketplace/catalog.json';
+export const DEFAULT_MARKETPLACE_URL = 'https://cdn.cabinet-planner.app/marketplace/catalog.json';
 
 // ── Catalog fetch & cache ─────────────────────────────────────────────────────
 
@@ -77,11 +76,7 @@ export const DEFAULT_MARKETPLACE_URL =
 export function validateCatalog(obj: unknown): obj is MarketplaceCatalog {
   if (typeof obj !== 'object' || obj === null) return false;
   const c = obj as Record<string, unknown>;
-  return (
-    typeof c['version'] === 'string' &&
-    typeof c['fetchedAt'] === 'string' &&
-    Array.isArray(c['plugins'])
-  );
+  return typeof c['version'] === 'string' && typeof c['fetchedAt'] === 'string' && Array.isArray(c['plugins']);
 }
 
 /**
@@ -89,9 +84,7 @@ export function validateCatalog(obj: unknown): obj is MarketplaceCatalog {
  * Returns the fetched catalog.
  * @throws On network error or invalid payload.
  */
-export async function fetchMarketplaceCatalog(
-  url: string = DEFAULT_MARKETPLACE_URL,
-): Promise<MarketplaceCatalog> {
+export async function fetchMarketplaceCatalog(url: string = DEFAULT_MARKETPLACE_URL): Promise<MarketplaceCatalog> {
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`Marketplace catalog fetch failed: HTTP ${response.status}`);

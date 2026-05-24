@@ -182,12 +182,13 @@ export function getMaterial(key: string, extraMaterials?: Material[]): Material 
  * a surrounding try/catch; use when the caller needs to propagate material
  * lookup failures via the `Result<T, E>` contract rather than exceptions.
  */
-export function getMaterialResult(key: string, extraMaterials?: Material[]): import('./types').Result<Material, string> {
+export function getMaterialResult(
+  key: string,
+  extraMaterials?: Material[],
+): import('./types').Result<Material, string> {
   const all = extraMaterials ? [...MATERIALS, ...extraMaterials] : MATERIALS;
   const m = all.find((mat) => mat.key === key);
-  return m
-    ? { ok: true, value: m }
-    : { ok: false, error: `Unknown material: ${key}` };
+  return m ? { ok: true, value: m } : { ok: false, error: `Unknown material: ${key}` };
 }
 
 export function panelMaterials(): Material[] {

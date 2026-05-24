@@ -23,10 +23,7 @@ function makePart(id: string, width: number, length: number, material = 'melamin
 }
 
 /** Check whether a placed part overlaps a defect zone (both in mm). */
-function partOverlapsZone(
-  p: { x: number; y: number; width: number; length: number },
-  dz: DefectZone,
-): boolean {
+function partOverlapsZone(p: { x: number; y: number; width: number; length: number }, dz: DefectZone): boolean {
   return p.x < dz.x + dz.width && p.x + p.width > dz.x && p.y < dz.y + dz.length && p.y + p.length > dz.y;
 }
 
@@ -65,11 +62,7 @@ describe('optimizeCutSheets defect zone avoidance — Phase 12 / Sprint 13', () 
     // Sheet 1220×2440 (melamine-18). Block from y=0 to y=2320 — only 120 mm height remaining at bottom.
     // Pack 3 parts of 400×400 — they can't fit in a 1220×120 strip, so extra sheets open.
     const dz: DefectZone = { x: 0, y: 0, width: 1220, length: 2320 };
-    const parts = [
-      makePart('P1', 400, 400),
-      makePart('P2', 400, 400),
-      makePart('P3', 400, 400),
-    ];
+    const parts = [makePart('P1', 400, 400), makePart('P2', 400, 400), makePart('P3', 400, 400)];
     const result = optimizeCutSheets(parts, 3, {}, 'freeform', [], { 'melamine-18': [dz] });
     // All sheets must have no part overlapping the defect zone
     for (const sheet of result.sheets) {
@@ -84,10 +77,7 @@ describe('optimizeCutSheets defect zone avoidance — Phase 12 / Sprint 13', () 
 
   it('applies defect zones only to the matching material', () => {
     // Two materials: melamine-18 and plywood-18. Defect zone only on plywood-18.
-    const parts = [
-      makePart('M1', 300, 300, 'melamine-18'),
-      makePart('W1', 300, 300, 'plywood-18'),
-    ];
+    const parts = [makePart('M1', 300, 300, 'melamine-18'), makePart('W1', 300, 300, 'plywood-18')];
     const dz: DefectZone = { x: 0, y: 0, width: 400, length: 400 };
     const result = optimizeCutSheets(parts, 3, {}, 'freeform', [], { 'plywood-18': [dz] });
 
@@ -106,8 +96,8 @@ describe('optimizeCutSheets defect zone avoidance — Phase 12 / Sprint 13', () 
 
   it('handles multiple defect zones on the same sheet', () => {
     // Block two corners with defect zones.
-    const dz1: DefectZone = { x: 0, y: 0, width: 300, length: 300 };       // top-left
-    const dz2: DefectZone = { x: 2140, y: 0, width: 300, length: 300 };    // top-right
+    const dz1: DefectZone = { x: 0, y: 0, width: 300, length: 300 }; // top-left
+    const dz2: DefectZone = { x: 2140, y: 0, width: 300, length: 300 }; // top-right
     const parts = [makePart('P1', 200, 200)];
     const result = optimizeCutSheets(parts, 3, {}, 'freeform', [], {
       'melamine-18': [dz1, dz2],

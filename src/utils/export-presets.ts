@@ -69,7 +69,15 @@ export const BUILTIN_PRESETS: readonly ExportPreset[] = [
     key: 'builtin:gcode-grbl',
     name: 'Grbl (115200, 3mm pass)',
     format: 'gcode',
-    settings: { feedRate: 1500, plungeRate: 600, safeZ: 5, passDepth: 3, toolDiameter: 6, useArcs: false, emitToolChange: false } satisfies GcodePresetSettings,
+    settings: {
+      feedRate: 1500,
+      plungeRate: 600,
+      safeZ: 5,
+      passDepth: 3,
+      toolDiameter: 6,
+      useArcs: false,
+      emitToolChange: false,
+    } satisfies GcodePresetSettings,
     savedAt: '2025-01-01T00:00:00Z',
     builtin: true,
   },
@@ -77,7 +85,15 @@ export const BUILTIN_PRESETS: readonly ExportPreset[] = [
     key: 'builtin:gcode-mach3',
     name: 'Mach3 (tool-change enabled)',
     format: 'gcode',
-    settings: { feedRate: 2000, plungeRate: 500, safeZ: 8, passDepth: 4, toolDiameter: 6, useArcs: true, emitToolChange: true } satisfies GcodePresetSettings,
+    settings: {
+      feedRate: 2000,
+      plungeRate: 500,
+      safeZ: 8,
+      passDepth: 4,
+      toolDiameter: 6,
+      useArcs: true,
+      emitToolChange: true,
+    } satisfies GcodePresetSettings,
     savedAt: '2025-01-01T00:00:00Z',
     builtin: true,
   },
@@ -85,7 +101,15 @@ export const BUILTIN_PRESETS: readonly ExportPreset[] = [
     key: 'builtin:gcode-linuxcnc',
     name: 'LinuxCNC (arcs, 2mm pass)',
     format: 'gcode',
-    settings: { feedRate: 1200, plungeRate: 400, safeZ: 5, passDepth: 2, toolDiameter: 6, useArcs: true, emitToolChange: false } satisfies GcodePresetSettings,
+    settings: {
+      feedRate: 1200,
+      plungeRate: 400,
+      safeZ: 5,
+      passDepth: 2,
+      toolDiameter: 6,
+      useArcs: true,
+      emitToolChange: false,
+    } satisfies GcodePresetSettings,
     savedAt: '2025-01-01T00:00:00Z',
     builtin: true,
   },
@@ -109,7 +133,12 @@ export const BUILTIN_PRESETS: readonly ExportPreset[] = [
     key: 'builtin:bom-usd',
     name: 'BOM (USD, all items)',
     format: 'bom',
-    settings: { currencyCode: 'USD', includeHardware: true, includeEdgeBanding: true, groupByMaterial: true } satisfies BomPresetSettings,
+    settings: {
+      currencyCode: 'USD',
+      includeHardware: true,
+      includeEdgeBanding: true,
+      groupByMaterial: true,
+    } satisfies BomPresetSettings,
     savedAt: '2025-01-01T00:00:00Z',
     builtin: true,
   },
@@ -120,7 +149,13 @@ export const BUILTIN_PRESETS: readonly ExportPreset[] = [
 const USER_PREFIX = 'user:';
 
 function _userKey(name: string): string {
-  return USER_PREFIX + name.toLowerCase().replace(/[^a-z0-9-_]/g, '-').replace(/-+/g, '-');
+  return (
+    USER_PREFIX +
+    name
+      .toLowerCase()
+      .replace(/[^a-z0-9-_]/g, '-')
+      .replace(/-+/g, '-')
+  );
 }
 
 // ── CRUD ──────────────────────────────────────────────────────────────────────
@@ -131,11 +166,7 @@ function _userKey(name: string): string {
  *
  * @throws When `name` is empty.
  */
-export async function savePreset(
-  name: string,
-  format: ExportFormat,
-  settings: PresetSettings,
-): Promise<ExportPreset> {
+export async function savePreset(name: string, format: ExportFormat, settings: PresetSettings): Promise<ExportPreset> {
   if (!name.trim()) throw new Error('Preset name must not be empty');
   const key = _userKey(name);
   const preset: ExportPreset = {
@@ -168,7 +199,11 @@ export async function deletePreset(key: string): Promise<void> {
 export async function listPresets(filter?: { format?: ExportFormat }): Promise<ExportPreset[]> {
   const allKeys = (await keys(presetStore)) as string[];
   const userPresets = (
-    await Promise.all(allKeys.filter((k) => typeof k === 'string' && k.startsWith(USER_PREFIX)).map((k) => get<ExportPreset>(k, presetStore)))
+    await Promise.all(
+      allKeys
+        .filter((k) => typeof k === 'string' && k.startsWith(USER_PREFIX))
+        .map((k) => get<ExportPreset>(k, presetStore)),
+    )
   ).filter((p): p is ExportPreset => p != null);
 
   const all: ExportPreset[] = [...BUILTIN_PRESETS, ...userPresets];
@@ -182,7 +217,9 @@ export async function listPresets(filter?: { format?: ExportFormat }): Promise<E
 export async function listUserPresets(): Promise<ExportPreset[]> {
   const allKeys = (await keys(presetStore)) as string[];
   const stored = await Promise.all(
-    allKeys.filter((k) => typeof k === 'string' && k.startsWith(USER_PREFIX)).map((k) => get<ExportPreset>(k, presetStore)),
+    allKeys
+      .filter((k) => typeof k === 'string' && k.startsWith(USER_PREFIX))
+      .map((k) => get<ExportPreset>(k, presetStore)),
   );
   return stored.filter((p): p is ExportPreset => p != null);
 }

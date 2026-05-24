@@ -7,11 +7,11 @@ coverage:
   status:
     project:
       default:
-        target: auto        # compare against the base commit
-        threshold: 1%       # allow ±1% natural variation without failing
+        target: auto # compare against the base commit
+        threshold: 1% # allow ±1% natural variation without failing
     patch:
       default:
-        target: 85%         # every PR must achieve ≥ 85% coverage on changed lines
+        target: 85% # every PR must achieve ≥ 85% coverage on changed lines
 
 # Only report on the engine layer.  Store, hooks and utils are covered separately.
 flags:
@@ -26,8 +26,8 @@ flags:
 ignore:
   - src/engine/types.ts
   - src/engine/index.ts
-  - "tests/**"
-  - "docs/**"
+  - 'tests/**'
+  - 'docs/**'
 
 comment:
   layout: reach,diff,flags,files

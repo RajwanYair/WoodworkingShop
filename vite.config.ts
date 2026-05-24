@@ -38,7 +38,7 @@ export default defineConfig({
       strategies: 'generateSW',
       base: '/WoodworkingShop/',
       injectRegister: false, // handled manually in useSwUpdate / main.tsx
-      manifest: false,       // keep the existing public/manifest.json
+      manifest: false, // keep the existing public/manifest.json
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
         navigateFallback: '/WoodworkingShop/index.html',

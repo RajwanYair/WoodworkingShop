@@ -174,10 +174,7 @@ const HINGE_ARM_CLEARANCE_MM = 35;
 // ── Private helpers extracted to keep validateConfig complexity ≤ 130 ─────────
 
 /** All door geometry and hinge checks (called only when doorStyle !== 'none'). */
-function _checkDoors(
-  config: CabinetConfig,
-  dims: ReturnType<typeof computeDimensions>,
-): ValidationIssue[] {
+function _checkDoors(config: CabinetConfig, dims: ReturnType<typeof computeDimensions>): ValidationIssue[] {
   const out: ValidationIssue[] = [];
   if (config.doorStyle === 'none') return out;
 

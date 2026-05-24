@@ -108,7 +108,7 @@ describe('getSupportedMimeType', () => {
     expect(getSupportedMimeType()).toBe('audio/ogg;codecs=opus');
   });
 
-  it("returns empty string when nothing preferred is supported", () => {
+  it('returns empty string when nothing preferred is supported', () => {
     const MockRecorder = { isTypeSupported: () => false };
     vi.stubGlobal('MediaRecorder', MockRecorder);
     expect(getSupportedMimeType()).toBe('');
@@ -116,15 +116,14 @@ describe('getSupportedMimeType', () => {
 });
 
 describe('VoiceAnnotation IDB CRUD', () => {
-  const makeAnnotation = (id = 'va-test0001', stepId = 'step-1'): ReturnType<typeof Object.assign> =>
-    ({
-      id,
-      stepId,
-      createdAt: Date.now(),
-      durationMs: 3000,
-      mimeType: 'audio/webm;codecs=opus',
-      sizeBytes: 256,
-    });
+  const makeAnnotation = (id = 'va-test0001', stepId = 'step-1'): ReturnType<typeof Object.assign> => ({
+    id,
+    stepId,
+    createdAt: Date.now(),
+    durationMs: 3000,
+    mimeType: 'audio/webm;codecs=opus',
+    sizeBytes: 256,
+  });
 
   const makeBlob = (content = 'audio') => new Blob([content], { type: 'audio/webm' });
 
@@ -276,4 +275,3 @@ describe('startRecording', () => {
     tracks.forEach((t) => expect(t.stop).toHaveBeenCalled());
   });
 });
-

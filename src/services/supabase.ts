@@ -20,8 +20,7 @@
 
 /** True when VITE_SUPABASE_URL is present and non-empty at build time. */
 export const SUPABASE_ENABLED: boolean =
-  typeof import.meta.env.VITE_SUPABASE_URL === 'string' &&
-  import.meta.env.VITE_SUPABASE_URL.length > 0;
+  typeof import.meta.env.VITE_SUPABASE_URL === 'string' && import.meta.env.VITE_SUPABASE_URL.length > 0;
 
 /** Supabase project URL (empty string when not configured). */
 export const SUPABASE_URL: string = (import.meta.env.VITE_SUPABASE_URL as string | undefined) ?? '';
@@ -34,7 +33,7 @@ export const SUPABASE_ANON_KEY: string = (import.meta.env.VITE_SUPABASE_ANON_KEY
 export interface SavedProjectRecord {
   id: string;
   name: string;
-  data: string;  // JSON payload
+  data: string; // JSON payload
   createdAt: string;
   updatedAt: string;
 }
@@ -87,9 +86,7 @@ export const localBackendService: BackendService = {
 
   async listProjects() {
     const all = (await entries<string, SavedProjectRecord>(projectStore)) as [string, SavedProjectRecord][];
-    return all
-      .map(([, v]) => v)
-      .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+    return all.map(([, v]) => v).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
   },
 
   async deleteProject(id) {

@@ -40,15 +40,42 @@ export interface CutOptimizerWorkerOutput {
 }
 
 self.onmessage = (e: MessageEvent<CutOptimizerWorkerInput>) => {
-  const { activeParts, allParts, sawKerfMm, sheetSizeOverrides, cutMode = 'freeform', offcutCatalog = [], defectZones = {}, requestId } = e.data;
-  const activeResult = optimizeCutSheetsResult(activeParts, sawKerfMm, sheetSizeOverrides, cutMode, offcutCatalog, defectZones);
+  const {
+    activeParts,
+    allParts,
+    sawKerfMm,
+    sheetSizeOverrides,
+    cutMode = 'freeform',
+    offcutCatalog = [],
+    defectZones = {},
+    requestId,
+  } = e.data;
+  const activeResult = optimizeCutSheetsResult(
+    activeParts,
+    sawKerfMm,
+    sheetSizeOverrides,
+    cutMode,
+    offcutCatalog,
+    defectZones,
+  );
   if (!activeResult.ok) {
     self.postMessage({ type: 'error', errorMessage: activeResult.error, requestId } satisfies CutOptimizerWorkerOutput);
     return;
   }
-  const combinedResult = optimizeCutSheetsResult(allParts, sawKerfMm, sheetSizeOverrides, cutMode, offcutCatalog, defectZones);
+  const combinedResult = optimizeCutSheetsResult(
+    allParts,
+    sawKerfMm,
+    sheetSizeOverrides,
+    cutMode,
+    offcutCatalog,
+    defectZones,
+  );
   if (!combinedResult.ok) {
-    self.postMessage({ type: 'error', errorMessage: combinedResult.error, requestId } satisfies CutOptimizerWorkerOutput);
+    self.postMessage({
+      type: 'error',
+      errorMessage: combinedResult.error,
+      requestId,
+    } satisfies CutOptimizerWorkerOutput);
     return;
   }
   self.postMessage({

@@ -48,7 +48,10 @@ function _tokenize(expr: string): _DslToken[] {
   let i = 0;
   while (i < expr.length) {
     const ch = expr[i];
-    if (/\s/.test(ch)) { i++; continue; }
+    if (/\s/.test(ch)) {
+      i++;
+      continue;
+    }
     if (/\d/.test(ch)) {
       let s = '';
       while (i < expr.length && /[\d.]/.test(expr[i])) s += expr[i++];
@@ -61,11 +64,31 @@ function _tokenize(expr: string): _DslToken[] {
       toks.push({ k: 'id', v: s });
       continue;
     }
-    if ('+-*/'.includes(ch)) { toks.push({ k: 'op', v: ch }); i++; continue; }
-    if (ch === '(') { toks.push({ k: 'lp' }); i++; continue; }
-    if (ch === ')') { toks.push({ k: 'rp' }); i++; continue; }
-    if (ch === ',') { toks.push({ k: 'comma' }); i++; continue; }
-    if (ch === '.') { toks.push({ k: 'dot' }); i++; continue; }
+    if ('+-*/'.includes(ch)) {
+      toks.push({ k: 'op', v: ch });
+      i++;
+      continue;
+    }
+    if (ch === '(') {
+      toks.push({ k: 'lp' });
+      i++;
+      continue;
+    }
+    if (ch === ')') {
+      toks.push({ k: 'rp' });
+      i++;
+      continue;
+    }
+    if (ch === ',') {
+      toks.push({ k: 'comma' });
+      i++;
+      continue;
+    }
+    if (ch === '.') {
+      toks.push({ k: 'dot' });
+      i++;
+      continue;
+    }
     throw new Error(`DSL: unexpected char '${ch}'`);
   }
   return toks;
@@ -594,10 +617,7 @@ export function getTemplate(id: string): CabinetTemplate | undefined {
  *   const cfg = instantiateTemplate(getTemplate('proportional-bookcase')!, { height: 2400 });
  *   // → cfg.shelfCount is automatically recalculated for the new height
  */
-export function instantiateTemplate(
-  tpl: CabinetTemplate,
-  sizeOverrides?: Partial<CabinetConfig>,
-): CabinetConfig {
+export function instantiateTemplate(tpl: CabinetTemplate, sizeOverrides?: Partial<CabinetConfig>): CabinetConfig {
   const base: CabinetConfig = { ...tpl.config, ...(sizeOverrides ?? {}) };
   if (!tpl.computedFields) return base;
 

@@ -250,7 +250,7 @@ export function AssemblyGuide() {
                 key={gi}
                 className="rounded-lg border border-blue-200 bg-blue-50/40 p-3 dark:border-blue-800 dark:bg-blue-900/10"
               >
-                <p className="text-blue-600 dark:text-blue-400 mb-2 flex items-center gap-1.5 text-xs font-medium">
+                <p className="mb-2 flex items-center gap-1.5 text-xs font-medium text-blue-600 dark:text-blue-400">
                   ⇄ {t('assembly.parallelGroup')}
                 </p>
                 <div className="grid gap-3 sm:grid-cols-2">

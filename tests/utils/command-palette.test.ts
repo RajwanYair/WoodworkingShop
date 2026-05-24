@@ -25,9 +25,15 @@ const localStorageMock = (() => {
   const store: Record<string, string> = {};
   return {
     getItem: (key: string) => store[key] ?? null,
-    setItem: (key: string, value: string) => { store[key] = value; },
-    removeItem: (key: string) => { delete store[key]; },
-    clear: () => { Object.keys(store).forEach((k) => delete store[k]); },
+    setItem: (key: string, value: string) => {
+      store[key] = value;
+    },
+    removeItem: (key: string) => {
+      delete store[key];
+    },
+    clear: () => {
+      Object.keys(store).forEach((k) => delete store[k]);
+    },
   };
 })();
 
@@ -166,7 +172,14 @@ describe('groupSearchResults', () => {
 describe('invokeCommand', () => {
   it('invokes the command action', async () => {
     let called = false;
-    registerCommands([{ ...makeCmd('invoke.me', 'Invoke'), action: () => { called = true; } }]);
+    registerCommands([
+      {
+        ...makeCmd('invoke.me', 'Invoke'),
+        action: () => {
+          called = true;
+        },
+      },
+    ]);
     await invokeCommand('invoke.me');
     expect(called).toBe(true);
   });
@@ -183,7 +196,15 @@ describe('invokeCommand', () => {
 
   it('supports async actions', async () => {
     let done = false;
-    registerCommands([{ ...makeCmd('async.cmd', 'Async'), action: async () => { await Promise.resolve(); done = true; } }]);
+    registerCommands([
+      {
+        ...makeCmd('async.cmd', 'Async'),
+        action: async () => {
+          await Promise.resolve();
+          done = true;
+        },
+      },
+    ]);
     await invokeCommand('async.cmd');
     expect(done).toBe(true);
   });

@@ -304,13 +304,19 @@ describe('applyGcodePlugins', () => {
       id: 'gcode.first',
       name: 'First',
       version: '1.0.0',
-      onGcodeGenerated: (raw) => { log.push('first'); return raw + '\n; first'; },
+      onGcodeGenerated: (raw) => {
+        log.push('first');
+        return raw + '\n; first';
+      },
     });
     registerPlugin({
       id: 'gcode.second',
       name: 'Second',
       version: '1.0.0',
-      onGcodeGenerated: (raw) => { log.push('second'); return raw + '\n; second'; },
+      onGcodeGenerated: (raw) => {
+        log.push('second');
+        return raw + '\n; second';
+      },
     });
     const result = applyGcodePlugins(RAW_GCODE);
     expect(log).toEqual(['first', 'second']);

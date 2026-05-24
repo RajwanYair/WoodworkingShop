@@ -55,10 +55,7 @@ export function usePwaFileHandlers(onImport: PwaFileImportCallback): void {
       try {
         const file = await fileHandle.getFile();
         // Validate MIME type / extension before reading
-        if (
-          file.type !== 'application/cabinet-plan' &&
-          !file.name.endsWith('.cabinetplan')
-        ) {
+        if (file.type !== 'application/cabinet-plan' && !file.name.endsWith('.cabinetplan')) {
           return;
         }
         const text = await file.text();

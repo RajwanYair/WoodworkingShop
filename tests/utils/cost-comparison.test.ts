@@ -109,9 +109,7 @@ describe('compareMaterialCosts', () => {
   it('variants are sorted cheapest first', () => {
     const report = compareMaterialCosts(cfg());
     for (let i = 0; i < report.variants.length - 1; i++) {
-      expect(report.variants[i]!.estimate.totalCost).toBeLessThanOrEqual(
-        report.variants[i + 1]!.estimate.totalCost,
-      );
+      expect(report.variants[i]!.estimate.totalCost).toBeLessThanOrEqual(report.variants[i + 1]!.estimate.totalCost);
     }
   });
 

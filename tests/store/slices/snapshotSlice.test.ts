@@ -16,9 +16,15 @@ import { DEFAULT_CONFIG } from '../../../src/engine/materials';
 const _lsData: Record<string, string> = {};
 const localStorageMock = {
   getItem: (k: string) => _lsData[k] ?? null,
-  setItem: (k: string, v: string) => { _lsData[k] = v; },
-  removeItem: (k: string) => { delete _lsData[k]; },
-  clear: () => { for (const k of Object.keys(_lsData)) delete _lsData[k]; },
+  setItem: (k: string, v: string) => {
+    _lsData[k] = v;
+  },
+  removeItem: (k: string) => {
+    delete _lsData[k];
+  },
+  clear: () => {
+    for (const k of Object.keys(_lsData)) delete _lsData[k];
+  },
 };
 vi.stubGlobal('localStorage', localStorageMock);
 Object.defineProperty(window, 'localStorage', { value: localStorageMock, writable: true, configurable: true });

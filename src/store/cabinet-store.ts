@@ -1,5 +1,13 @@
 import { create } from 'zustand';
-import type { CabinetConfig, Part, HardwareItem, OptimizationResult, DerivedDimensions, OffcutEntry, DefectZone } from '../engine/types';
+import type {
+  CabinetConfig,
+  Part,
+  HardwareItem,
+  OptimizationResult,
+  DerivedDimensions,
+  OffcutEntry,
+  DefectZone,
+} from '../engine/types';
 import { DEFAULT_CONFIG } from '../engine/materials';
 import { computeDimensions } from '../engine/dimensions';
 import { generateParts, computeEdgeBandingTotal } from '../engine/parts';
@@ -20,7 +28,12 @@ import { pluginEventBus } from '../engine/plugin';
 import { workerCall, nextRpcId } from '../workers/worker-rpc';
 // Phase 11 — Slice imports
 import { createUiSlice, loadUiPrefs, type UiSlice } from './slices/uiSlice';
-import { createSnapshotSlice, loadSnapshotsFromStorage, type SnapshotSlice, type ProjectSnapshot } from './slices/snapshotSlice';
+import {
+  createSnapshotSlice,
+  loadSnapshotsFromStorage,
+  type SnapshotSlice,
+  type ProjectSnapshot,
+} from './slices/snapshotSlice';
 import { createOptimizerSettingsSlice, type OptimizerSettingsSlice } from './slices/optimizerSettingsSlice';
 
 // v3.21.0 — Module-level Web Worker singleton for cut optimization.
@@ -111,8 +124,22 @@ function scheduleOptimization(
     // Phase 11 — use Result-returning variant so material lookup errors surface
     // cleanly rather than throwing across the fallback boundary.
     if (_workerApplyFn) {
-      const activeRes = optimizeCutSheetsResult(lockedActive, sawKerfMm, sheetSizeOverrides, _cutMode, _offcutCatalog, _defectZones);
-      const combinedRes = optimizeCutSheetsResult(lockedAll, sawKerfMm, sheetSizeOverrides, _cutMode, _offcutCatalog, _defectZones);
+      const activeRes = optimizeCutSheetsResult(
+        lockedActive,
+        sawKerfMm,
+        sheetSizeOverrides,
+        _cutMode,
+        _offcutCatalog,
+        _defectZones,
+      );
+      const combinedRes = optimizeCutSheetsResult(
+        lockedAll,
+        sawKerfMm,
+        sheetSizeOverrides,
+        _cutMode,
+        _offcutCatalog,
+        _defectZones,
+      );
       if (activeRes.ok && combinedRes.ok) {
         _workerApplyFn({
           optimization: activeRes.value,
@@ -129,7 +156,15 @@ function scheduleOptimization(
   _latestCutReqId = reqId;
   void workerCall<CutOptimizerWorkerInput, CutOptimizerWorkerOutput>(
     worker,
-    { activeParts: lockedActive, allParts: lockedAll, sawKerfMm, sheetSizeOverrides, cutMode: _cutMode, offcutCatalog: _offcutCatalog, defectZones: _defectZones },
+    {
+      activeParts: lockedActive,
+      allParts: lockedAll,
+      sawKerfMm,
+      sheetSizeOverrides,
+      cutMode: _cutMode,
+      offcutCatalog: _offcutCatalog,
+      defectZones: _defectZones,
+    },
     reqId,
   )
     .then((msg) => {
@@ -380,7 +415,12 @@ function derive(
   const parts = generateParts(config);
   const hardware = generateHardware(config);
   // Sprint 16 — decorate with rotation locks before optimization.
-  const optimization = optimizeCutSheets(applyLocks(parts), sawKerfMm, sheetSizeOverrides, config.cutMode ?? 'freeform');
+  const optimization = optimizeCutSheets(
+    applyLocks(parts),
+    sawKerfMm,
+    sheetSizeOverrides,
+    config.cutMode ?? 'freeform',
+  );
   const edgeBandingTotal = computeEdgeBandingTotal(parts);
   return { dimensions, parts, hardware, optimization, edgeBandingTotal };
 }
@@ -401,7 +441,12 @@ function deriveProject(
     })),
   );
   // Sprint 16 — apply rotation locks for combined optimization.
-  const combinedOptimization = optimizeCutSheets(applyLocks(allParts), sawKerfMm, sheetSizeOverrides, activeConfig.cutMode ?? 'freeform');
+  const combinedOptimization = optimizeCutSheets(
+    applyLocks(allParts),
+    sawKerfMm,
+    sheetSizeOverrides,
+    activeConfig.cutMode ?? 'freeform',
+  );
   return { config: activeConfig, ...active, allParts, combinedOptimization };
 }
 
@@ -508,7 +553,9 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
   type SliceSetFn<S> = (partial: Partial<S> | ((s: S) => Partial<S>)) => void;
   // Single shared dispatcher — CabinetState is structurally a supertype of every
   // slice (it contains all slice fields), so the narrowed aliases are sound.
-  const sliceSetImpl: SliceSetFn<CabinetState> = (partial) => { set(partial); };
+  const sliceSetImpl: SliceSetFn<CabinetState> = (partial) => {
+    set(partial);
+  };
   const uiSet = sliceSetImpl as SliceSetFn<UiSlice>;
   const optSet = sliceSetImpl as SliceSetFn<OptimizerSettingsSlice>;
   const snapSet = sliceSetImpl as SliceSetFn<SnapshotSlice>;
@@ -904,7 +951,6 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
       const base = deriveBaseProject(state.cabinets, state.activeCabinetIndex);
       scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
     },
-
   };
 });
 

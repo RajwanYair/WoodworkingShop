@@ -67,11 +67,7 @@ export function createCrdtDocument(clientId: string): CrdtDocument {
  * Set a field value, advancing the local clock.
  * Returns the generated `CrdtOp` for broadcasting to peers.
  */
-export function crdtSet(
-  doc: CrdtDocument,
-  path: string,
-  value: unknown,
-): CrdtOp {
+export function crdtSet(doc: CrdtDocument, path: string, value: unknown): CrdtOp {
   const clock = ++doc.clock;
   const op: CrdtOp = { clientId: doc.clientId, clock, path, value };
   doc._fields.set(path, {
@@ -150,8 +146,7 @@ export function applyOp(doc: CrdtDocument, op: CrdtOp): boolean {
   if (existing) {
     // Conflict resolution: higher clock wins
     if (op.clock < existing.clock) return false;
-    if (op.clock === existing.clock && op.clientId <= existing.clientId)
-      return false;
+    if (op.clock === existing.clock && op.clientId <= existing.clientId) return false;
   }
 
   doc._fields.set(op.path, {
@@ -244,4 +239,3 @@ export function importSnapshot(snapshot: CrdtSnapshot): CrdtDocument {
   }
   return doc;
 }
-

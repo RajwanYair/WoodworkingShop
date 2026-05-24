@@ -23,9 +23,15 @@ const localStorageMock = (() => {
   const store: Record<string, string> = {};
   return {
     getItem: (key: string) => store[key] ?? null,
-    setItem: (key: string, value: string) => { store[key] = value; },
-    removeItem: (key: string) => { delete store[key]; },
-    clear: () => { Object.keys(store).forEach((k) => delete store[k]); },
+    setItem: (key: string, value: string) => {
+      store[key] = value;
+    },
+    removeItem: (key: string) => {
+      delete store[key];
+    },
+    clear: () => {
+      Object.keys(store).forEach((k) => delete store[k]);
+    },
   };
 })();
 
@@ -82,14 +88,20 @@ describe('validateCatalog', () => {
 
 describe('fetchMarketplaceCatalog', () => {
   beforeEach(resetStore);
-  afterEach(() => { vi.unstubAllGlobals(); Object.defineProperty(window, 'localStorage', { value: localStorageMock, configurable: true }); });
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    Object.defineProperty(window, 'localStorage', { value: localStorageMock, configurable: true });
+  });
 
   it('fetches and caches catalog', async () => {
     const catalog = makeCatalog([makePlugin('p1')]);
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve(catalog),
-    }));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(catalog),
+      }),
+    );
     const result = await fetchMarketplaceCatalog('https://example.com/catalog.json');
     expect(result.plugins).toHaveLength(1);
   });
@@ -100,10 +112,13 @@ describe('fetchMarketplaceCatalog', () => {
   });
 
   it('throws on invalid payload', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve({ invalid: true }),
-    }));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve({ invalid: true }),
+      }),
+    );
     await expect(fetchMarketplaceCatalog('https://example.com/catalog.json')).rejects.toThrow('invalid format');
   });
 });
@@ -119,10 +134,13 @@ describe('loadCachedCatalog', () => {
 
   it('returns cached catalog after fetch', async () => {
     const catalog = makeCatalog([makePlugin('cached')]);
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve(catalog),
-    }));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(catalog),
+      }),
+    );
     await fetchMarketplaceCatalog('https://example.com/catalog.json');
     vi.unstubAllGlobals();
     Object.defineProperty(window, 'localStorage', { value: localStorageMock, configurable: true });

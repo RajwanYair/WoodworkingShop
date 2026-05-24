@@ -758,9 +758,7 @@ describe('vendor hinge profile compatibility validation', () => {
   };
 
   it('raises VENDOR_HINGE_PROFILE_UNKNOWN for an unrecognised profile id', () => {
-    const issues = validateConfig(
-      cfg({ doorStyle: 'flat', hingeProfile: 'no-such-hinge-zzz' }),
-    );
+    const issues = validateConfig(cfg({ doorStyle: 'flat', hingeProfile: 'no-such-hinge-zzz' }));
     const issue = issues.find((i) => i.code === 'VENDOR_HINGE_PROFILE_UNKNOWN');
     expect(issue).toBeDefined();
     expect(issue?.severity).toBe('warning');
@@ -797,9 +795,7 @@ describe('vendor hinge profile compatibility validation', () => {
   it('raises VENDOR_HINGE_NOT_RATED_FOR_TALL_DOOR for a 110° hinge on a 2400 mm door', () => {
     // height=2500 → door height > MAX_SINGLE_DOOR_HEIGHT_MM (2200)
     // blum-clip-top-110 openingAngle = 110 < WIDE_ANGLE_THRESHOLD_DEG (155)
-    const issues = validateConfig(
-      cfg({ doorStyle: 'flat', height: 2500, hingeProfile: 'blum-clip-top-110' }),
-    );
+    const issues = validateConfig(cfg({ doorStyle: 'flat', height: 2500, hingeProfile: 'blum-clip-top-110' }));
     const issue = issues.find((i) => i.code === 'VENDOR_HINGE_NOT_RATED_FOR_TALL_DOOR');
     expect(issue).toBeDefined();
     expect(issue?.severity).toBe('warning');
@@ -808,16 +804,12 @@ describe('vendor hinge profile compatibility validation', () => {
 
   it('does not raise VENDOR_HINGE_NOT_RATED_FOR_TALL_DOOR for a 165° wide-angle hinge', () => {
     // blum-clip-top-165 openingAngle = 165 >= 155 threshold
-    const issues = validateConfig(
-      cfg({ doorStyle: 'flat', height: 2500, hingeProfile: 'blum-clip-top-165' }),
-    );
+    const issues = validateConfig(cfg({ doorStyle: 'flat', height: 2500, hingeProfile: 'blum-clip-top-165' }));
     expect(issues.some((i) => i.code === 'VENDOR_HINGE_NOT_RATED_FOR_TALL_DOOR')).toBe(false);
   });
 
   it('does not raise hinge compatibility issues when doorStyle is none', () => {
-    const issues = validateConfig(
-      cfg({ doorStyle: 'none', hingeProfile: 'blum-clip-top-blumotion' }),
-    );
+    const issues = validateConfig(cfg({ doorStyle: 'none', hingeProfile: 'blum-clip-top-blumotion' }));
     expect(issues.some((i) => i.code.startsWith('VENDOR_HINGE'))).toBe(false);
   });
 });

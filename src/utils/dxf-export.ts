@@ -24,13 +24,29 @@ export function materialLayerName(material: string): string {
 /** Build the HEADER section for AC1015-compliant DXF. */
 function buildDxfHeader(extraVars: string[] = []): string[] {
   return [
-    '0', 'SECTION', '2', 'HEADER',
-    '9', '$ACADVER', '1', 'AC1015',
-    '9', '$DWGCODEPAGE', '3', 'ANSI_1252',
-    '9', '$INSUNITS', '70', '4',   // 4 = millimetres
-    '9', '$MEASUREMENT', '70', '1', // 1 = metric
+    '0',
+    'SECTION',
+    '2',
+    'HEADER',
+    '9',
+    '$ACADVER',
+    '1',
+    'AC1015',
+    '9',
+    '$DWGCODEPAGE',
+    '3',
+    'ANSI_1252',
+    '9',
+    '$INSUNITS',
+    '70',
+    '4', // 4 = millimetres
+    '9',
+    '$MEASUREMENT',
+    '70',
+    '1', // 1 = metric
     ...extraVars,
-    '0', 'ENDSEC',
+    '0',
+    'ENDSEC',
   ];
 }
 
@@ -62,7 +78,28 @@ function buildDxfTables(layerDefs: Array<[string, number]>): string[] {
 
   // STYLE — Standard text style
   lines.push('0', 'TABLE', '2', 'STYLE', '70', '1');
-  lines.push('0', 'STYLE', '2', 'Standard', '70', '0', '40', '0.0', '41', '1.0', '50', '0.0', '71', '0', '42', '0.2', '3', 'arial.shx', '4', '');
+  lines.push(
+    '0',
+    'STYLE',
+    '2',
+    'Standard',
+    '70',
+    '0',
+    '40',
+    '0.0',
+    '41',
+    '1.0',
+    '50',
+    '0.0',
+    '71',
+    '0',
+    '42',
+    '0.2',
+    '3',
+    'arial.shx',
+    '4',
+    '',
+  );
   lines.push('0', 'ENDTAB');
 
   // VIEW — empty
@@ -80,11 +117,57 @@ function buildDxfTables(layerDefs: Array<[string, number]>): string[] {
 
   // DIMSTYLE — Standard dimension style
   lines.push('0', 'TABLE', '2', 'DIMSTYLE', '70', '1');
-  lines.push('0', 'DIMSTYLE', '2', 'Standard', '70', '0', '3', '', '4', '',
-    '40', '1.0', '41', '3.0', '42', '1.0', '43', '9.0', '44', '1.0',
-    '140', '3.0', '147', '1.0', '73', '0', '74', '0', '77', '0', '78', '0',
-    '170', '0', '171', '2', '172', '0', '173', '0', '174', '0', '175', '0',
-    '176', '0', '177', '0', '178', '0',
+  lines.push(
+    '0',
+    'DIMSTYLE',
+    '2',
+    'Standard',
+    '70',
+    '0',
+    '3',
+    '',
+    '4',
+    '',
+    '40',
+    '1.0',
+    '41',
+    '3.0',
+    '42',
+    '1.0',
+    '43',
+    '9.0',
+    '44',
+    '1.0',
+    '140',
+    '3.0',
+    '147',
+    '1.0',
+    '73',
+    '0',
+    '74',
+    '0',
+    '77',
+    '0',
+    '78',
+    '0',
+    '170',
+    '0',
+    '171',
+    '2',
+    '172',
+    '0',
+    '173',
+    '0',
+    '174',
+    '0',
+    '175',
+    '0',
+    '176',
+    '0',
+    '177',
+    '0',
+    '178',
+    '0',
   );
   lines.push('0', 'ENDTAB');
 
@@ -101,22 +184,58 @@ function buildDxfTables(layerDefs: Array<[string, number]>): string[] {
 /** Build a minimal BLOCKS section (MODEL_SPACE + PAPER_SPACE required in R2000+). */
 function buildDxfBlocks(): string[] {
   return [
-    '0', 'SECTION', '2', 'BLOCKS',
-    '0', 'BLOCK', '8', '0', '2', '*Model_Space', '70', '0', '10', '0.0', '20', '0.0', '30', '0.0', '3', '*Model_Space', '1', '',
-    '0', 'ENDBLK',
-    '0', 'BLOCK', '8', '0', '2', '*Paper_Space', '70', '0', '10', '0.0', '20', '0.0', '30', '0.0', '3', '*Paper_Space', '1', '',
-    '0', 'ENDBLK',
-    '0', 'ENDSEC',
+    '0',
+    'SECTION',
+    '2',
+    'BLOCKS',
+    '0',
+    'BLOCK',
+    '8',
+    '0',
+    '2',
+    '*Model_Space',
+    '70',
+    '0',
+    '10',
+    '0.0',
+    '20',
+    '0.0',
+    '30',
+    '0.0',
+    '3',
+    '*Model_Space',
+    '1',
+    '',
+    '0',
+    'ENDBLK',
+    '0',
+    'BLOCK',
+    '8',
+    '0',
+    '2',
+    '*Paper_Space',
+    '70',
+    '0',
+    '10',
+    '0.0',
+    '20',
+    '0.0',
+    '30',
+    '0.0',
+    '3',
+    '*Paper_Space',
+    '1',
+    '',
+    '0',
+    'ENDBLK',
+    '0',
+    'ENDSEC',
   ];
 }
 
 /** Build a minimal OBJECTS section (required for AC1015+). */
 function buildDxfObjects(): string[] {
-  return [
-    '0', 'SECTION', '2', 'OBJECTS',
-    '0', 'DICTIONARY', '3', 'ACAD_GROUP', '350', '0',
-    '0', 'ENDSEC',
-  ];
+  return ['0', 'SECTION', '2', 'OBJECTS', '0', 'DICTIONARY', '3', 'ACAD_GROUP', '350', '0', '0', 'ENDSEC'];
 }
 
 /**
@@ -135,35 +254,91 @@ function addPartDimensions(lines: string[], part: CutRect, dimOffset = 0): void 
   // ── Horizontal dimension (width) — below the part ──
   const hdY = y - dimGap; // dimension line y (below, since y grows upward in DXF)
   lines.push(
-    '0', 'DIMENSION',
-    '8', 'DIMENSIONS',
-    '2', '*Model_Space',
-    '10', String(x + w), '20', String(hdY), '30', '0.0',  // def point (2nd ext)
-    '11', String(x + w / 2), '21', String(hdY - 3), '31', '0.0', // text midpoint
-    '70', '0',   // 0 = rotated (horizontal)
-    '1', '',     // empty = auto measurement
-    '3', 'Standard',
-    '100', 'AcDbAlignedDimension',
-    '13', String(x), '23', String(y), '33', '0.0',       // 1st ext line origin
-    '14', String(x + w), '24', String(y), '34', '0.0',  // 2nd ext line origin
-    '50', '0.0',  // rotation angle = 0° (horizontal)
+    '0',
+    'DIMENSION',
+    '8',
+    'DIMENSIONS',
+    '2',
+    '*Model_Space',
+    '10',
+    String(x + w),
+    '20',
+    String(hdY),
+    '30',
+    '0.0', // def point (2nd ext)
+    '11',
+    String(x + w / 2),
+    '21',
+    String(hdY - 3),
+    '31',
+    '0.0', // text midpoint
+    '70',
+    '0', // 0 = rotated (horizontal)
+    '1',
+    '', // empty = auto measurement
+    '3',
+    'Standard',
+    '100',
+    'AcDbAlignedDimension',
+    '13',
+    String(x),
+    '23',
+    String(y),
+    '33',
+    '0.0', // 1st ext line origin
+    '14',
+    String(x + w),
+    '24',
+    String(y),
+    '34',
+    '0.0', // 2nd ext line origin
+    '50',
+    '0.0', // rotation angle = 0° (horizontal)
   );
 
   // ── Vertical dimension (height) — to the right of the part ──
   const vdX = x + w + dimGap;
   lines.push(
-    '0', 'DIMENSION',
-    '8', 'DIMENSIONS',
-    '2', '*Model_Space',
-    '10', String(vdX), '20', String(y + h), '30', '0.0',  // def point (2nd ext)
-    '11', String(vdX + 3), '21', String(y + h / 2), '31', '0.0', // text midpoint
-    '70', '1',   // 1 = aligned
-    '1', '',     // empty = auto measurement
-    '3', 'Standard',
-    '100', 'AcDbAlignedDimension',
-    '13', String(x + w), '23', String(y), '33', '0.0',      // 1st ext line origin
-    '14', String(x + w), '24', String(y + h), '34', '0.0', // 2nd ext line origin
-    '50', '90.0',  // rotation angle = 90° (vertical)
+    '0',
+    'DIMENSION',
+    '8',
+    'DIMENSIONS',
+    '2',
+    '*Model_Space',
+    '10',
+    String(vdX),
+    '20',
+    String(y + h),
+    '30',
+    '0.0', // def point (2nd ext)
+    '11',
+    String(vdX + 3),
+    '21',
+    String(y + h / 2),
+    '31',
+    '0.0', // text midpoint
+    '70',
+    '1', // 1 = aligned
+    '1',
+    '', // empty = auto measurement
+    '3',
+    'Standard',
+    '100',
+    'AcDbAlignedDimension',
+    '13',
+    String(x + w),
+    '23',
+    String(y),
+    '33',
+    '0.0', // 1st ext line origin
+    '14',
+    String(x + w),
+    '24',
+    String(y + h),
+    '34',
+    '0.0', // 2nd ext line origin
+    '50',
+    '90.0', // rotation angle = 90° (vertical)
   );
 }
 

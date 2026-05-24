@@ -20,9 +20,9 @@ export interface Vec3 {
 
 /** Euler angles in radians (yaw, pitch, roll). */
 export interface Euler {
-  yaw: number;   // rotation around Y (up) axis
+  yaw: number; // rotation around Y (up) axis
   pitch: number; // rotation around X axis
-  roll: number;  // rotation around Z axis
+  roll: number; // rotation around Z axis
 }
 
 /**
@@ -209,7 +209,7 @@ export function snapToWall(
   const pose: ARPose = {
     position: {
       x: hitPosition.x + cos * depthM,
-      y: hitPosition.y,                   // floor height unchanged
+      y: hitPosition.y, // floor height unchanged
       z: hitPosition.z + sin * depthM,
     },
     rotation: { yaw: wallNormalYaw + Math.PI, pitch: 0, roll: 0 },

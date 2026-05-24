@@ -47,10 +47,7 @@ export interface IfcExportResult {
  * @param options   Optional export settings.
  * @returns {@link IfcExportResult} with the file content and entity count.
  */
-export function exportToIfc(
-  cabinets: readonly CabinetEntry[],
-  options: IfcExportOptions = {},
-): IfcExportResult {
+export function exportToIfc(cabinets: readonly CabinetEntry[], options: IfcExportOptions = {}): IfcExportResult {
   const author = options.author ?? 'Cabinet Planner';
   const appVersion = options.appVersion ?? '3.62';
   const startX = options.startX ?? 0;
@@ -98,9 +95,7 @@ export function exportToIfc(
   const idGeomCtx = ids.next();
   const idBodyCtx = ids.next();
 
-  lines.push(
-    `#${idGeomCtx}=IFCGEOMETRICREPRESENTATIONCONTEXT($,'Model',3,1.0E-5,#${idAxis3d},$);`,
-  );
+  lines.push(`#${idGeomCtx}=IFCGEOMETRICREPRESENTATIONCONTEXT($,'Model',3,1.0E-5,#${idAxis3d},$);`);
   lines.push(
     `#${idBodyCtx}=IFCGEOMETRICREPRESENTATIONSUBCONTEXT('Body','Model',*,*,*,*,#${idGeomCtx},$,.MODEL_VIEW.,$);`,
   );
@@ -129,21 +124,11 @@ export function exportToIfc(
     `#${idProject}=IFCPROJECT('${guid()}',#${idOwnerHistory},'Cabinet Planner Project',$,$,$,$,(#${idGeomCtx}),#${idUnitAssignment});`,
   );
   lines.push(`#${idSite}=IFCSITE('${guid()}',#${idOwnerHistory},'Site',$,$,$,$,$,.ELEMENT.,$,$,$,$,$);`);
-  lines.push(
-    `#${idBuilding}=IFCBUILDING('${guid()}',#${idOwnerHistory},'Building',$,$,$,$,$,.ELEMENT.,$,$,$);`,
-  );
-  lines.push(
-    `#${idStorey}=IFCBUILDINGSTOREY('${guid()}',#${idOwnerHistory},'Ground Floor',$,$,$,$,$,.ELEMENT.,0.);`,
-  );
-  lines.push(
-    `#${idRelProjSite}=IFCRELAGGREGATES('${guid()}',#${idOwnerHistory},$,$,#${idProject},(#${idSite}));`,
-  );
-  lines.push(
-    `#${idRelSiteBldg}=IFCRELAGGREGATES('${guid()}',#${idOwnerHistory},$,$,#${idSite},(#${idBuilding}));`,
-  );
-  lines.push(
-    `#${idRelBldgStorey}=IFCRELAGGREGATES('${guid()}',#${idOwnerHistory},$,$,#${idBuilding},(#${idStorey}));`,
-  );
+  lines.push(`#${idBuilding}=IFCBUILDING('${guid()}',#${idOwnerHistory},'Building',$,$,$,$,$,.ELEMENT.,$,$,$);`);
+  lines.push(`#${idStorey}=IFCBUILDINGSTOREY('${guid()}',#${idOwnerHistory},'Ground Floor',$,$,$,$,$,.ELEMENT.,0.);`);
+  lines.push(`#${idRelProjSite}=IFCRELAGGREGATES('${guid()}',#${idOwnerHistory},$,$,#${idProject},(#${idSite}));`);
+  lines.push(`#${idRelSiteBldg}=IFCRELAGGREGATES('${guid()}',#${idOwnerHistory},$,$,#${idSite},(#${idBuilding}));`);
+  lines.push(`#${idRelBldgStorey}=IFCRELAGGREGATES('${guid()}',#${idOwnerHistory},$,$,#${idBuilding},(#${idStorey}));`);
 
   // ── 2D placement origin for profile extrusion ─────────────────────────────
   const idOrigin2d = ids.next();
@@ -179,12 +164,8 @@ export function exportToIfc(
     const idFurnishing = ids.next();
 
     lines.push(`#${idProfile}=IFCRECTANGLEPROFILEDEF(.AREA.,$,#${idAxis2d},${fmt(w)},${fmt(d)});`);
-    lines.push(
-      `#${idSolid}=IFCEXTRUDEDAREASOLID(#${idProfile},#${idAxis3d},#${idDirZ},${fmt(h)});`,
-    );
-    lines.push(
-      `#${idShapeRep}=IFCSHAPEREPRESENTATION(#${idBodyCtx},'Body','SweptSolid',(#${idSolid}));`,
-    );
+    lines.push(`#${idSolid}=IFCEXTRUDEDAREASOLID(#${idProfile},#${idAxis3d},#${idDirZ},${fmt(h)});`);
+    lines.push(`#${idShapeRep}=IFCSHAPEREPRESENTATION(#${idBodyCtx},'Body','SweptSolid',(#${idSolid}));`);
     lines.push(`#${idProdShape}=IFCPRODUCTDEFINITIONSHAPE($,$,(#${idShapeRep}));`);
     lines.push(
       `#${idFurnishing}=IFCFURNISHINGELEMENT('${guid()}',#${idOwnerHistory},'${label}',$,$,#${idPlacement},#${idProdShape},$);`,

@@ -4,11 +4,7 @@
  * Tests for src/utils/batch-export.ts
  */
 import { describe, it, expect, vi } from 'vitest';
-import {
-  batchExport,
-  makeStringExportTask,
-  filterTasksByFormat,
-} from '../../src/utils/batch-export';
+import { batchExport, makeStringExportTask, filterTasksByFormat } from '../../src/utils/batch-export';
 import type { ExportTask, ExportTaskResult } from '../../src/utils/batch-export';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -30,7 +26,9 @@ function makeFailTask(id: string, message = 'Export failed'): ExportTask {
     id,
     label: `Label ${id}`,
     format: 'gcode',
-    run: async () => { throw new Error(message); },
+    run: async () => {
+      throw new Error(message);
+    },
   };
 }
 
@@ -50,7 +48,7 @@ describe('batchExport', () => {
     expect(result.failed).toHaveLength(0);
     const task = result.succeeded[0] as ExportTaskResult & { status: 'success' };
     expect(task.status).toBe('success');
-    expect((task.output.content as string)).toBe('output-t1');
+    expect(task.output.content as string).toBe('output-t1');
     expect(task.output.filename).toBe('t1.txt');
   });
 
@@ -63,11 +61,7 @@ describe('batchExport', () => {
   });
 
   it('continues other tasks when one fails', async () => {
-    const result = await batchExport([
-      makeSuccessTask('ok1'),
-      makeFailTask('bad'),
-      makeSuccessTask('ok2'),
-    ]);
+    const result = await batchExport([makeSuccessTask('ok1'), makeFailTask('bad'), makeSuccessTask('ok2')]);
     expect(result.succeeded).toHaveLength(2);
     expect(result.failed).toHaveLength(1);
   });
@@ -101,25 +95,28 @@ describe('batchExport', () => {
 
   it('invokes onProgress for each task', async () => {
     const progress: number[] = [];
-    await batchExport(
-      [makeSuccessTask('a'), makeSuccessTask('b'), makeSuccessTask('c')],
-      (_, completed, total) => { progress.push(completed / total); },
-    );
+    await batchExport([makeSuccessTask('a'), makeSuccessTask('b'), makeSuccessTask('c')], (_, completed, total) => {
+      progress.push(completed / total);
+    });
     expect(progress).toHaveLength(3);
     expect(progress[progress.length - 1]).toBe(1);
   });
 
   it('onProgress receives correct completedCount', async () => {
     const counts: number[] = [];
-    await batchExport(
-      [makeSuccessTask('a'), makeSuccessTask('b')],
-      (_, completed) => { counts.push(completed); },
-    );
+    await batchExport([makeSuccessTask('a'), makeSuccessTask('b')], (_, completed) => {
+      counts.push(completed);
+    });
     expect(counts.sort((a, b) => a - b)).toEqual([1, 2]);
   });
 
   it('preserves task id and label in result', async () => {
-    const task = { id: 'custom-id', label: 'My Label', format: 'dxf', run: async () => ({ content: '', filename: 'f.dxf', mimeType: 'application/dxf' }) };
+    const task = {
+      id: 'custom-id',
+      label: 'My Label',
+      format: 'dxf',
+      run: async () => ({ content: '', filename: 'f.dxf', mimeType: 'application/dxf' }),
+    };
     const result = await batchExport([task]);
     expect(result.results[0].id).toBe('custom-id');
     expect(result.results[0].label).toBe('My Label');
@@ -130,7 +127,9 @@ describe('batchExport', () => {
       id: 'str-throw',
       label: 'String throw',
       format: 'bom-csv',
-      run: async () => { throw 'raw string error'; },
+      run: async () => {
+        throw 'raw string error';
+      },
     };
     const result = await batchExport([task]);
     const failed = result.failed[0] as ExportTaskResult & { status: 'error' };

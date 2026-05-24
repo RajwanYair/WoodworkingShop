@@ -49,7 +49,9 @@ describe('createOptimizerSettingsSlice — initial state', () => {
   });
 
   it('hydrates materialPriceOverrides from session', () => {
-    expect(makeSlice({ materialPriceOverrides: { plywood: 120 } }).get().materialPriceOverrides).toEqual({ plywood: 120 });
+    expect(makeSlice({ materialPriceOverrides: { plywood: 120 } }).get().materialPriceOverrides).toEqual({
+      plywood: 120,
+    });
   });
 
   it('defaults edgeBandingRate to 3', () => {

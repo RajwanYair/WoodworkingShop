@@ -14,9 +14,7 @@ import path from 'node:path';
  */
 
 const isCI = process.env.CI === 'true';
-const outDir = isCI
-  ? path.resolve('.')
-  : path.join(os.tmpdir(), 'WoodworkingShop');
+const outDir = isCI ? path.resolve('.') : path.join(os.tmpdir(), 'WoodworkingShop');
 mkdirSync(outDir, { recursive: true });
 
 const outFile = path.join(outDir, 'sbom.json');

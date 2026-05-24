@@ -91,9 +91,7 @@ function _isValidMaterial(m: unknown): m is CommunityMaterial {
   if (m === null || typeof m !== 'object') return false;
   const mat = m as Record<string, unknown>;
   return (
-    typeof mat['key'] === 'string' &&
-    typeof mat['thickness'] === 'number' &&
-    typeof mat['pricePerSheet'] === 'number'
+    typeof mat['key'] === 'string' && typeof mat['thickness'] === 'number' && typeof mat['pricePerSheet'] === 'number'
   );
 }
 
@@ -115,7 +113,7 @@ export async function fetchCommunityMaterials(
   if (!response.ok) {
     throw new Error(`Community catalog fetch failed: HTTP ${response.status}`);
   }
-  const raw = await response.json() as unknown;
+  const raw = (await response.json()) as unknown;
   const catalog = validateCatalog(raw);
 
   // Persist to IDB

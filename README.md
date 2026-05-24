@@ -125,19 +125,19 @@ npm run build
 
 ## 🏗 Tech Stack
 
-| Layer         | Technology                            |
-| ------------- | ------------------------------------- |
-| Framework     | ⚛️ React 19                           |
-| Language      | 🔷 TypeScript 6 (strict mode)         |
-| Styling       | 🎨 Tailwind CSS 4                     |
-| State         | 🐻 Zustand 5                          |
-| PDF           | 📄 @react-pdf/renderer 4              |
-| i18n          | 🌐 i18next 26 + react-i18next         |
-| Build         | ⚡ Vite 8                             |
-| Unit tests    | 🧪 Vitest 4 + @testing-library/react  |
-| E2E tests     | 🎭 Playwright                         |
-| Lint / format | 🧹 ESLint 10 (flat config) + Prettier |
-| CI/CD         | 🤖 GitHub Actions                     |
+| Layer         | Technology                                                 |
+| ------------- | ---------------------------------------------------------- |
+| Framework     | ⚛️ React 19                                                |
+| Language      | 🔷 TypeScript 6 (strict mode)                              |
+| Styling       | 🎨 Tailwind CSS 4                                          |
+| State         | 🐻 Zustand 5                                               |
+| PDF           | 📄 @react-pdf/renderer 4                                   |
+| i18n          | 🌐 i18next 26 + react-i18next                              |
+| Build         | ⚡ Vite 8                                                  |
+| Unit tests    | 🧪 Vitest 4 + @testing-library/react                       |
+| E2E tests     | 🎭 Playwright                                              |
+| Lint / format | 🧹 ESLint 10 (flat config) + Prettier                      |
+| CI/CD         | 🤖 GitHub Actions                                          |
 | Deploy        | 🚀 GitHub Pages + Cloudflare Pages (edge CDN, PR previews) |
 
 ---
@@ -269,11 +269,11 @@ It provides edge CDN delivery at 250+ PoPs and automatic PR preview deployments.
 
 **Setup** (one-time, in the GitHub repository settings under _Secrets and variables → Actions_):
 
-| Secret / Variable          | Description                                                         |
-| -------------------------- | ------------------------------------------------------------------- |
-| `CLOUDFLARE_API_TOKEN`     | CF API token with **Cloudflare Pages: Edit** permission             |
-| `CLOUDFLARE_ACCOUNT_ID`    | Found in the Cloudflare dashboard URL                               |
-| `VITE_CF_ANALYTICS_TOKEN`  | _(Optional)_ Cloudflare Web Analytics beacon token — enables privacy-first page-view tracking (no cookies, no PII, no GDPR consent required) |
+| Secret / Variable         | Description                                                                                                                                  |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CLOUDFLARE_API_TOKEN`    | CF API token with **Cloudflare Pages: Edit** permission                                                                                      |
+| `CLOUDFLARE_ACCOUNT_ID`   | Found in the Cloudflare dashboard URL                                                                                                        |
+| `VITE_CF_ANALYTICS_TOKEN` | _(Optional)_ Cloudflare Web Analytics beacon token — enables privacy-first page-view tracking (no cookies, no PII, no GDPR consent required) |
 
 The `_redirects` file in `public/` handles SPA fallback routing (`/* → /index.html 200`)
 so direct URL navigation and refreshes work correctly on Cloudflare Pages.

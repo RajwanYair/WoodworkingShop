@@ -170,22 +170,12 @@ describe('localToWorld / worldToLocal round-trip', () => {
 
 describe('snapToWall', () => {
   it('returns a pose with rotation offset by π from wall normal', () => {
-    const result = snapToWall(
-      { x: 0, y: 0, z: 0 },
-      0,
-      DIMS,
-      { x: 3, y: 0, z: 3 },
-    );
+    const result = snapToWall({ x: 0, y: 0, z: 0 }, 0, DIMS, { x: 3, y: 0, z: 3 });
     expect(result.pose.rotation.yaw).toBeCloseTo(Math.PI);
   });
 
   it('distanceM is non-negative', () => {
-    const result = snapToWall(
-      { x: 1, y: 0, z: 1 },
-      0,
-      DIMS,
-      { x: 3, y: 0, z: 3 },
-    );
+    const result = snapToWall({ x: 1, y: 0, z: 1 }, 0, DIMS, { x: 3, y: 0, z: 3 });
     expect(result.distanceM).toBeGreaterThanOrEqual(0);
   });
 });

@@ -227,19 +227,19 @@ Exit criteria: optional Supabase sync working self-hosted, BYO AI panel behind f
 
 Exploratory candidates beyond Phase 14. Each requires its own discovery sprint.
 
-| Track               | Candidate                                                       | Why It Matters                                                                        |
-| ------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| Standards           | IFC / STEP export for BIM / CAD interoperability                | Opens enterprise + architectural integration; no current browser-only solution exists |
-| Mobile native       | Capacitor wrapper for iOS / Android shop-floor app              | React codebase reusable; native file access + camera for defect marking               |
-| Machine integration | Direct send-to-machine (WebSerial / WebUSB for CNC controllers) | Closes loop between design and cutting; eliminates file-transfer friction             |
-| Photorealistic      | WebGPU-based path-traced rendering for material previews        | WebGPU Compute Shaders make sub-second path tracing viable in browser ~2027           |
-| Community catalog   | Crowd-sourced material database with community pricing          | Self-updating price + availability per region; GrabCAD-style for sheet goods          |
+| Track               | Candidate                                                       | Why It Matters                                                                                                                      |
+| ------------------- | --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Standards           | IFC / STEP export for BIM / CAD interoperability                | Opens enterprise + architectural integration; no current browser-only solution exists                                               |
+| Mobile native       | Capacitor wrapper for iOS / Android shop-floor app              | React codebase reusable; native file access + camera for defect marking                                                             |
+| Machine integration | Direct send-to-machine (WebSerial / WebUSB for CNC controllers) | Closes loop between design and cutting; eliminates file-transfer friction                                                           |
+| Photorealistic      | WebGPU-based path-traced rendering for material previews        | WebGPU Compute Shaders make sub-second path tracing viable in browser ~2027                                                         |
+| Community catalog   | Crowd-sourced material database with community pricing          | Self-updating price + availability per region; GrabCAD-style for sheet goods                                                        |
 | ~~AR placement~~    | ~~WebXR room-scale AR to preview cabinet in actual room~~       | **Done in v3.65.0** — `src/utils/ar-placement.ts`: WebXR feature detection, AABB, world↔local transforms, wall-snap, overlap checks |
-| ~~Cost comparison~~ | ~~Multi-config cost what-if comparison engine~~                 | **Done in v3.65.0** — `src/utils/cost-comparison.ts`: `estimateScenario`, `compareScenarios`, `compareMaterialCosts` |
-| ~~Assembly DAG~~    | ~~Topological scheduling for assembly steps~~                   | **Done in v3.65.0** — `src/engine/assembly-dag.ts`: Kahn's sort, wave scheduler, critical path, `dependents` helper |
-| ~~Audit log~~       | ~~IDB-backed operation journal for undo/redo history~~          | **Done in v3.65.0** — `src/utils/audit-log.ts`: SHA-256 checksums, IDB persistence, project-scoped query |
-| ~~CRDT sync~~       | ~~Conflict-free replicated data type for multi-user editing~~   | **Done in v3.65.0** — `src/utils/crdt-sync.ts`: vector clocks, merge, snapshot import/export |
-| ~~Localization~~    | ~~Add ES / DE / FR / AR translations~~                          | **Done in v3.56.x** — EN, HE, AR, DE, ES, FR all ship at 100% key parity              |
+| ~~Cost comparison~~ | ~~Multi-config cost what-if comparison engine~~                 | **Done in v3.65.0** — `src/utils/cost-comparison.ts`: `estimateScenario`, `compareScenarios`, `compareMaterialCosts`                |
+| ~~Assembly DAG~~    | ~~Topological scheduling for assembly steps~~                   | **Done in v3.65.0** — `src/engine/assembly-dag.ts`: Kahn's sort, wave scheduler, critical path, `dependents` helper                 |
+| ~~Audit log~~       | ~~IDB-backed operation journal for undo/redo history~~          | **Done in v3.65.0** — `src/utils/audit-log.ts`: SHA-256 checksums, IDB persistence, project-scoped query                            |
+| ~~CRDT sync~~       | ~~Conflict-free replicated data type for multi-user editing~~   | **Done in v3.65.0** — `src/utils/crdt-sync.ts`: vector clocks, merge, snapshot import/export                                        |
+| ~~Localization~~    | ~~Add ES / DE / FR / AR translations~~                          | **Done in v3.56.x** — EN, HE, AR, DE, ES, FR all ship at 100% key parity                                                            |
 
 ---
 

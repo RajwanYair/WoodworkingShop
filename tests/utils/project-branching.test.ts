@@ -63,7 +63,7 @@ describe('forkProject', () => {
   });
 
   it('throws when parent project not found', async () => {
-    await expect(forkProject('proj-missing')).rejects.toThrow("not found");
+    await expect(forkProject('proj-missing')).rejects.toThrow('not found');
   });
 
   it('persists branch to IDB (listBranchesOf returns it)', async () => {
@@ -167,12 +167,12 @@ describe('diffProjects', () => {
 
   it('throws on unknown base ID', async () => {
     await seed(makeProject('pE', 'Exists'));
-    await expect(diffProjects('ghost', 'pE')).rejects.toThrow("not found");
+    await expect(diffProjects('ghost', 'pE')).rejects.toThrow('not found');
   });
 
   it('throws on unknown branch ID', async () => {
     await seed(makeProject('pF', 'Exists'));
-    await expect(diffProjects('pF', 'ghost')).rejects.toThrow("not found");
+    await expect(diffProjects('pF', 'ghost')).rejects.toThrow('not found');
   });
 });
 
@@ -203,12 +203,12 @@ describe('mergeBranch', () => {
 
   it('throws when branch not found', async () => {
     await seed(makeProject('target-01', 'Target'));
-    await expect(mergeBranch('ghost-branch', 'target-01')).rejects.toThrow("not found");
+    await expect(mergeBranch('ghost-branch', 'target-01')).rejects.toThrow('not found');
   });
 
   it('throws when target not found', async () => {
     await seed(makeProject('branch-src', 'BranchSrc'));
     const b = await forkProject('branch-src');
-    await expect(mergeBranch(b.id, 'ghost-target')).rejects.toThrow("not found");
+    await expect(mergeBranch(b.id, 'ghost-target')).rejects.toThrow('not found');
   });
 });

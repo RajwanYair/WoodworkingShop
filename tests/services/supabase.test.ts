@@ -134,4 +134,3 @@ describe('localBackendService.deleteProject', () => {
     await expect(localBackendService.deleteProject('ghost')).resolves.toBeUndefined();
   });
 });
-

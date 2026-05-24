@@ -15,9 +15,7 @@ export function getHardwareCatalog(): HardwareCatalogEntry[] {
 }
 
 /** Return all catalog entries for a given category. */
-export function getHardwareCatalogByCategory(
-  category: HardwareCatalogEntry['category'],
-): HardwareCatalogEntry[] {
+export function getHardwareCatalogByCategory(category: HardwareCatalogEntry['category']): HardwareCatalogEntry[] {
   return HARDWARE_CATALOG.filter((e) => e.category === category);
 }
 
@@ -33,7 +31,9 @@ export function getHardwareCatalogEntry(id: string): HardwareCatalogEntry | unde
  * VendorHingeProfile fields are included.
  */
 export const VENDOR_HINGE_PROFILES: VendorHingeProfile[] = HARDWARE_CATALOG.filter(
-  (e): e is HardwareCatalogEntry & {
+  (
+    e,
+  ): e is HardwareCatalogEntry & {
     openingAngle: number;
     softCloseIntegrated: boolean;
     minEdgeDistance: number;

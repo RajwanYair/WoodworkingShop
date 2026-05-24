@@ -136,7 +136,11 @@ export function downloadGcodeForSheet(
 }
 
 /** Download G-code for all sheets as separate files (zipped in a single combined file) */
-export async function downloadAllSheetsGcode(sheets: CutSheet[], projectName: string, opts?: Partial<GcodeOptions>): Promise<void> {
+export async function downloadAllSheetsGcode(
+  sheets: CutSheet[],
+  projectName: string,
+  opts?: Partial<GcodeOptions>,
+): Promise<void> {
   const combined: string[] = [];
   for (const sheet of sheets) {
     combined.push(cutSheetToGcode(sheet, opts));

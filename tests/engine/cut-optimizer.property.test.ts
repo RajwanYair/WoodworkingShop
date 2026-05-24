@@ -43,8 +43,14 @@ const arbParts: fc.Arbitrary<Part[]> = fc.array(arbPart, { minLength: 1, maxLeng
 // ─── helpers ─────────────────────────────────────────────────────────────────
 /** Returns true when two axis-aligned rectangles do NOT share any interior area. */
 function noOverlap(
-  ax: number, ay: number, aw: number, al: number,
-  bx: number, by: number, bw: number, bl: number,
+  ax: number,
+  ay: number,
+  aw: number,
+  al: number,
+  bx: number,
+  by: number,
+  bw: number,
+  bl: number,
 ): boolean {
   return ax + aw <= bx || bx + bw <= ax || ay + al <= by || by + bl <= ay;
 }
@@ -55,24 +61,26 @@ describe('cut-optimizer property tests', () => {
     fc.assert(
       fc.property(
         arbParts,
-        fc.oneof(fc.constant<'freeform' | 'guillotine'>('freeform'), fc.constant<'freeform' | 'guillotine'>('guillotine')),
+        fc.oneof(
+          fc.constant<'freeform' | 'guillotine'>('freeform'),
+          fc.constant<'freeform' | 'guillotine'>('guillotine'),
+        ),
         (parts, cutMode) => {
           const result = optimizeCutSheets(parts, 3, {}, cutMode);
-        for (const sheet of result.sheets) {
-          for (let i = 0; i < sheet.parts.length; i++) {
-            for (let j = i + 1; j < sheet.parts.length; j++) {
-              const a = sheet.parts[i];
-              const b = sheet.parts[j];
-              if (
-                !noOverlap(a.x, a.y, a.width, a.length, b.x, b.y, b.width, b.length)
-              ) {
-                return false;
+          for (const sheet of result.sheets) {
+            for (let i = 0; i < sheet.parts.length; i++) {
+              for (let j = i + 1; j < sheet.parts.length; j++) {
+                const a = sheet.parts[i];
+                const b = sheet.parts[j];
+                if (!noOverlap(a.x, a.y, a.width, a.length, b.x, b.y, b.width, b.length)) {
+                  return false;
+                }
               }
             }
           }
-        }
-        return true;
-      }),
+          return true;
+        },
+      ),
       { numRuns: NUM_RUNS },
     );
   });
@@ -81,9 +89,7 @@ describe('cut-optimizer property tests', () => {
     fc.assert(
       fc.property(arbParts, (parts) => {
         const result = optimizeCutSheets(parts);
-        return result.sheets.every(
-          (sheet) => sheet.yieldPercent >= 0 && sheet.yieldPercent <= 100,
-        );
+        return result.sheets.every((sheet) => sheet.yieldPercent >= 0 && sheet.yieldPercent <= 100);
       }),
       { numRuns: NUM_RUNS },
     );
@@ -92,9 +98,7 @@ describe('cut-optimizer property tests', () => {
   it('P3 — rotation-locked parts are never rotated in the output', () => {
     fc.assert(
       fc.property(arbParts, (parts) => {
-        const lockedIds = new Set(
-          parts.filter((p) => p.rotationLocked === true).map((p) => p.id),
-        );
+        const lockedIds = new Set(parts.filter((p) => p.rotationLocked === true).map((p) => p.id));
         if (lockedIds.size === 0) return true; // vacuously true
 
         const result = optimizeCutSheets(parts);
@@ -129,14 +133,8 @@ describe('cut-optimizer property tests', () => {
         const result = optimizeCutSheets(parts);
         if (result.sheets.length === 0) return true;
 
-        const totalSheetArea = result.sheets.reduce(
-          (sum, s) => sum + s.sheetWidth * s.sheetLength,
-          0,
-        );
-        const usedArea = result.sheets.reduce(
-          (sum, s) => sum + s.parts.reduce((a, p) => a + p.width * p.length, 0),
-          0,
-        );
+        const totalSheetArea = result.sheets.reduce((sum, s) => sum + s.sheetWidth * s.sheetLength, 0);
+        const usedArea = result.sheets.reduce((sum, s) => sum + s.parts.reduce((a, p) => a + p.width * p.length, 0), 0);
         const expected = Math.round((usedArea / totalSheetArea) * 100 * 100) / 100;
         return Math.abs(result.overallYield - expected) < 0.01;
       }),

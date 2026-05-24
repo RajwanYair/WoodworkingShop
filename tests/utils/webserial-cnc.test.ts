@@ -19,7 +19,9 @@ import {
 function makeWritableStream() {
   const written: Uint8Array[] = [];
   const writer = {
-    write: vi.fn(async (chunk: Uint8Array) => { written.push(chunk); }),
+    write: vi.fn(async (chunk: Uint8Array) => {
+      written.push(chunk);
+    }),
     releaseLock: vi.fn(),
   };
   return {
@@ -34,7 +36,7 @@ function makeSerialPort(writableStream = makeWritableStream()) {
     close: vi.fn(async () => {}),
     writable: writableStream,
     readable: {} as ReadableStream,
-    getInfo: vi.fn(() => ({ usbVendorId: 0x1234, usbProductId: 0xABCD })),
+    getInfo: vi.fn(() => ({ usbVendorId: 0x1234, usbProductId: 0xabcd })),
     _written: writableStream._written,
   };
 }

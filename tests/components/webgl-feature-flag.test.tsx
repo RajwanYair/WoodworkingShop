@@ -43,25 +43,19 @@ describe('WebGLPreviewCanvas — feature flag', () => {
 
   it('returns nothing when VITE_ENABLE_WEBGL is not set', async () => {
     const { WebGLPreviewCanvas } = await reimportCanvas(undefined);
-    const { container } = render(
-      <WebGLPreviewCanvas config={BASE_CONFIG} />,
-    );
+    const { container } = render(<WebGLPreviewCanvas config={BASE_CONFIG} />);
     expect(container).toBeEmptyDOMElement();
   });
 
   it('returns nothing when VITE_ENABLE_WEBGL is "false"', async () => {
     const { WebGLPreviewCanvas } = await reimportCanvas('false');
-    const { container } = render(
-      <WebGLPreviewCanvas config={BASE_CONFIG} />,
-    );
+    const { container } = render(<WebGLPreviewCanvas config={BASE_CONFIG} />);
     expect(container).toBeEmptyDOMElement();
   });
 
   it('renders a fallback div when flag is true but WebGL is unavailable', async () => {
     const { WebGLPreviewCanvas } = await reimportCanvas('true');
-    const { container } = render(
-      <WebGLPreviewCanvas config={BASE_CONFIG} />,
-    );
+    const { container } = render(<WebGLPreviewCanvas config={BASE_CONFIG} />);
     // jsdom returns null for webgl context → fallback or canvas element rendered.
     // Either way, container should not be empty.
     expect(container).not.toBeEmptyDOMElement();
@@ -70,26 +64,13 @@ describe('WebGLPreviewCanvas — feature flag', () => {
   it('accepts materialColor and isometric props without crashing', async () => {
     const { WebGLPreviewCanvas } = await reimportCanvas('true');
     expect(() =>
-      render(
-        <WebGLPreviewCanvas
-          config={BASE_CONFIG}
-          materialColor="#8B4513"
-          isometric={true}
-        />,
-      ),
+      render(<WebGLPreviewCanvas config={BASE_CONFIG} materialColor="#8B4513" isometric={true} />),
     ).not.toThrow();
   });
 
   it('accepts isometric=false without crashing', async () => {
     const { WebGLPreviewCanvas } = await reimportCanvas('true');
-    expect(() =>
-      render(
-        <WebGLPreviewCanvas
-          config={BASE_CONFIG}
-          isometric={false}
-        />,
-      ),
-    ).not.toThrow();
+    expect(() => render(<WebGLPreviewCanvas config={BASE_CONFIG} isometric={false} />)).not.toThrow();
   });
 
   it('renders fallback with data-testid="webgl-fallback" when WebGL unavailable', async () => {

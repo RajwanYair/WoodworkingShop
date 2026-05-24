@@ -78,7 +78,9 @@ export function OptimizerView() {
   // Phase 12 / Sprint 12 — load saved offcut catalog from IDB on first mount.
   useEffect(() => {
     const { setOffcutCatalog } = useCabinetStore.getState();
-    idbLoadOffcuts().then(setOffcutCatalog).catch(() => {});
+    idbLoadOffcuts()
+      .then(setOffcutCatalog)
+      .catch(() => {});
   }, []);
   const [hoveredPartId, setHoveredPartId] = useState<string | null>(null);
   const [partFilter, setPartFilter] = useState(''); // Sprint 46 — part search/highlight filter
@@ -708,7 +710,7 @@ function OffcutsPanel({
                     </span>
                     <button
                       onClick={() => onDeleteOffcut(oc.id)}
-                      className="text-red-500 hover:text-red-700 dark:text-red-400 rounded px-1 transition-colors"
+                      className="rounded px-1 text-red-500 transition-colors hover:text-red-700 dark:text-red-400"
                       title={t('optimizer.deleteOffcut')}
                       aria-label={t('optimizer.deleteOffcut')}
                     >
@@ -935,9 +937,7 @@ function DefectZonePanel({
   const [editMat, setEditMat] = useState('');
   const [form, setForm] = useState({ x: 0, y: 0, width: 100, length: 100 });
 
-  const allZones = materials.flatMap((m) =>
-    (defectZones[m] ?? []).map((z, i) => ({ ...z, material: m, idx: i })),
-  );
+  const allZones = materials.flatMap((m) => (defectZones[m] ?? []).map((z, i) => ({ ...z, material: m, idx: i })));
 
   if (materials.length === 0) return null;
 
@@ -963,7 +963,7 @@ function DefectZonePanel({
         <span className="ms-auto">{open ? '▲' : '▼'}</span>
       </button>
       {open && (
-        <div className="border-wood-100 dark:border-wood-800 border-t px-4 pb-4 pt-3">
+        <div className="border-wood-100 dark:border-wood-800 border-t px-4 pt-3 pb-4">
           {/* Add zone form */}
           <div className="mb-3 flex flex-wrap items-end gap-2 text-xs">
             <label className="flex flex-col gap-0.5">
@@ -1016,7 +1016,7 @@ function DefectZonePanel({
                   <button
                     type="button"
                     onClick={() => onRemove(z.material, z.idx)}
-                    className="text-red-400 hover:text-red-600 ms-auto text-[10px]"
+                    className="ms-auto text-[10px] text-red-400 hover:text-red-600"
                     title={t('optimizer.defectRemove')}
                   >
                     ✕
@@ -1251,16 +1251,40 @@ function SheetCard({
             <line x1="0" y1="0" x2="0" y2="6" stroke="#C8B89A" strokeWidth="0.6" />
           </pattern>
           {/* Phase 12 / Sprint 11 — grain direction hatch patterns (green = aligned, amber = conflict) */}
-          <pattern id={`grain-${sheet.sheetIndex}-v-ok`} data-testid={`grain-pattern-${sheet.sheetIndex}-v-ok`} width="4" height="4" patternUnits="userSpaceOnUse">
+          <pattern
+            id={`grain-${sheet.sheetIndex}-v-ok`}
+            data-testid={`grain-pattern-${sheet.sheetIndex}-v-ok`}
+            width="4"
+            height="4"
+            patternUnits="userSpaceOnUse"
+          >
             <line x1="2" y1="0" x2="2" y2="4" stroke="#16a34a" strokeWidth="0.9" />
           </pattern>
-          <pattern id={`grain-${sheet.sheetIndex}-h-ok`} data-testid={`grain-pattern-${sheet.sheetIndex}-h-ok`} width="4" height="4" patternUnits="userSpaceOnUse">
+          <pattern
+            id={`grain-${sheet.sheetIndex}-h-ok`}
+            data-testid={`grain-pattern-${sheet.sheetIndex}-h-ok`}
+            width="4"
+            height="4"
+            patternUnits="userSpaceOnUse"
+          >
             <line x1="0" y1="2" x2="4" y2="2" stroke="#16a34a" strokeWidth="0.9" />
           </pattern>
-          <pattern id={`grain-${sheet.sheetIndex}-v-conflict`} data-testid={`grain-pattern-${sheet.sheetIndex}-v-conflict`} width="4" height="4" patternUnits="userSpaceOnUse">
+          <pattern
+            id={`grain-${sheet.sheetIndex}-v-conflict`}
+            data-testid={`grain-pattern-${sheet.sheetIndex}-v-conflict`}
+            width="4"
+            height="4"
+            patternUnits="userSpaceOnUse"
+          >
             <line x1="2" y1="0" x2="2" y2="4" stroke="#d97706" strokeWidth="0.9" />
           </pattern>
-          <pattern id={`grain-${sheet.sheetIndex}-h-conflict`} data-testid={`grain-pattern-${sheet.sheetIndex}-h-conflict`} width="4" height="4" patternUnits="userSpaceOnUse">
+          <pattern
+            id={`grain-${sheet.sheetIndex}-h-conflict`}
+            data-testid={`grain-pattern-${sheet.sheetIndex}-h-conflict`}
+            width="4"
+            height="4"
+            patternUnits="userSpaceOnUse"
+          >
             <line x1="0" y1="2" x2="4" y2="2" stroke="#d97706" strokeWidth="0.9" />
           </pattern>
           {/* Phase 12 / Sprint 13 — defect zone cross-hatch pattern (red diagonal) */}
