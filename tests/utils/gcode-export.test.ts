@@ -102,10 +102,10 @@ describe('downloadGcodeForSheet + downloadAllSheetsGcode', () => {
     vi.restoreAllMocks();
   });
 
-  it('downloadAllSheetsGcode combines multiple sheets with blank separator', () => {
+  it('downloadAllSheetsGcode combines multiple sheets with blank separator', async () => {
     const anchor = stubDownload();
     const sheet2: CutSheet = { ...mockSheet, sheetIndex: 2 };
-    downloadAllSheetsGcode([mockSheet, sheet2], 'MyProject');
+    await downloadAllSheetsGcode([mockSheet, sheet2], 'MyProject');
     expect(anchor.click).toHaveBeenCalled();
     expect(anchor.download).toContain('MyProject');
     vi.restoreAllMocks();
