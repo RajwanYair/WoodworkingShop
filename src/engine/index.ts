@@ -151,3 +151,6 @@ export type { SheetPlanInput, MaterialSummary, CutPlanSummary } from './cut-plan
 
 export { filterBomParts, getBomMaterials, getBomPartTypes, getBomZones, totalPartCount } from './bom-filter';
 export type { BomFilterablePart, BomFilterCriteria } from './bom-filter';
+
+export { resolveGrainConflicts, hasGrainConflicts } from './grain-conflict';
+export type { GrainCheckPart, GrainConflict, GrainConflictCode, GrainConflictOptions } from './grain-conflict';
