@@ -221,6 +221,73 @@ the in-flight quality sprints (84-87) and run first.
 - [x] **Task 11**: Fix markdownlint config — disabled MD022/MD024 false positives
 - [x] **Task 12**: Version bump to 2.9.0 with CHANGELOG entry
 
+---
+
+## Phase 15: Manufacturing Intelligence Expansion — v3.67.0 (June 2026)
+
+### Sprint 44 — Cut Kerf Compensation Engine ✅
+
+- [x] `src/engine/kerf.ts` — `KERF_PROFILES` catalogue (panel-saw, circular-saw, cnc-router, band-saw, laser)
+- [x] `compensateDimension(mm, kerfMm)` — adds kerf, ceiling-rounds to nearest 0.5 mm
+- [x] `compensatePart` — expands both width and length; immutable; records `widthAddedMm` / `lengthAddedMm`
+- [x] `estimateKerfLoss(parts, kerfMm)` — total kerf area mm²
+- [x] `kerfLossPercent(lossMm2, sheetMm2)` — one decimal place; safe for zero sheet area
+- [x] `getKerfProfile(id)` — returns undefined for unknown ids
+- [x] 16 passing tests in `tests/engine/kerf.test.ts`
+
+### Sprint 45 — Cabinet Zone Validator Engine ✅
+
+- [x] `src/engine/zone-validator.ts` — `RoomZone` + `CabinetDimensions` types
+- [x] `validateCabinetInZone(cabinet, zone, clearanceMm)` — checks width, height, depth
+- [x] `validateCabinetRowInZone(cabinets, zone, clearanceMm)` — plus `TOTAL_WIDTH_OVERFLOW`
+- [x] `violationCodes(result)` — deduplicated code set helper
+- [x] Violation codes: `TOO_WIDE`, `TOO_TALL`, `TOO_DEEP`, `TOTAL_WIDTH_OVERFLOW`; each with `excessMm`
+- [x] 11 passing tests in `tests/engine/zone-validator.test.ts`
+
+### Sprint 46 — Template Library Engine ✅
+
+- [x] `src/engine/template-library.ts` — 8 pre-built templates across 5 categories
+- [x] Templates: `base-single-door`, `base-double-door`, `base-drawer-unit`, `wall-single-door`, `wall-double-door`, `tall-pantry`, `open-shelf-unit`, `corner-l-base`
+- [x] All templates bilingual (en + he) with default dimensions and material thickness
+- [x] `getTemplatesByCategory(category)`, `getTemplate(id)`, `instantiateTemplate(id, overrides?)`, `listTemplateIds()`
+- [x] 12 passing tests in `tests/engine/template-library.test.ts`
+
+### Sprint 47 — Batch Material Replace Engine ✅
+
+- [x] `src/engine/batch-replace.ts` — `BatchPart` minimal interface with `material`, optional `type`/`zone`
+- [x] `batchReplaceMaterial(parts, from, to, options)` — `filterType` + `filterZone` scoping
+- [x] Returns `{ parts, changedCount, affectedIds }` — original array never mutated
+- [x] `listMaterials(parts)` — sorted distinct materials
+- [x] `countByMaterial(parts)` — `Map<string, number>` with counts
+- [x] 11 passing tests in `tests/engine/batch-replace.test.ts`
+
+### Sprint 48 — Project Settings Engine ✅
+
+- [x] `src/engine/project-settings.ts` — `ProjectSettings` with 8 typed fields
+- [x] `DEFAULT_PROJECT_SETTINGS`: mm, USD, Melamine White 18 mm, $50/hr, grain on, waste-desc sort
+- [x] `mergeSettings(base, overrides)` — shallow immutable merge
+- [x] `validateSettings(settings)` — returns field-level error string array
+- [x] `describeSettings(settings)` — human-readable one-line summary
+- [x] 10 passing tests in `tests/engine/project-settings.test.ts`
+
+### Sprint 49 — i18n Key Audit Engine ✅
+
+- [x] `src/engine/i18n-audit.ts` — `LocaleTree` (nested) → `FlatLocale` (dot-notation)
+- [x] `flattenLocale(tree, prefix)` — recursive, handles arbitrary nesting depth
+- [x] `auditLocale(tag, flat, referenceFlat)` — missing keys, extra keys, empty/whitespace values
+- [x] `auditAllLocales(referenceLocale, locales)` — multi-locale sweep; excludes reference from results
+- [x] `formatAuditReport(report)` — indented plain-text with per-locale sections
+- [x] 14 passing tests in `tests/engine/i18n-audit.test.ts`
+
+### Sprint 50 — Docs, Version Bump, GH Release ✅
+
+- [x] CHANGELOG.md — v3.67.0 entry
+- [x] ROADMAP.md — Phase 15 completed, Completed Phases Summary table updated
+- [x] SPRINT-HISTORY.md — Phase 15 sprint records appended
+- [x] `package.json` — version bumped 3.66.1 → 3.67.0
+- [x] Full CI: 1915 tests passing, 118 files, zero TypeScript errors
+- [x] GitHub release v3.67.0 created with `--generate-notes`
+
 ## Sprint: v2.8.0 — Quality & Accessibility (April 2026) ♿
 
 ### Completed

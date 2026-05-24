@@ -9,6 +9,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.67.0] — 2026-06-26
+
+### Phase 15: Manufacturing Intelligence Expansion — Engine Sprints 44–49
+
+#### Added (Engine modules — pure TypeScript, no React, fully tested)
+
+- **`engine/kerf.ts`** (Sprint 44) — Cut kerf compensation engine. 5 saw-tool
+  profiles (panel-saw 3.2 mm, circular-saw 2.8 mm, CNC router 6.0 mm, band-saw
+  1.6 mm, laser 0.2 mm). `compensateDimension` rounds up to nearest 0.5 mm,
+  `compensatePart` expands both dimensions, `estimateKerfLoss`, `kerfLossPercent`.
+  16 tests.
+- **`engine/zone-validator.ts`** (Sprint 45) — Cabinet zone validator engine.
+  Checks single cabinet or full row against a `RoomZone` (width / height / depth)
+  with optional clearance. Reports `TOO_WIDE`, `TOO_TALL`, `TOO_DEEP`,
+  `TOTAL_WIDTH_OVERFLOW` violation codes with excess-mm detail. 11 tests.
+- **`engine/template-library.ts`** (Sprint 46) — Template library engine.
+  Catalogue of 8 pre-built cabinet configurations (`base-single-door`,
+  `base-double-door`, `base-drawer-unit`, `wall-single-door`, `wall-double-door`,
+  `tall-pantry`, `open-shelf-unit`, `corner-l-base`). `instantiateTemplate` with
+  dimension overrides, `getTemplatesByCategory`, bilingual names. 12 tests.
+- **`engine/batch-replace.ts`** (Sprint 47) — Batch material replace engine.
+  `batchReplaceMaterial` with `filterType` / `filterZone` scoping, `listMaterials`,
+  `countByMaterial`. Immutable — input parts never mutated. 11 tests.
+- **`engine/project-settings.ts`** (Sprint 48) — Project settings engine.
+  `ProjectSettings` with `lengthUnit`, `currency`, `defaultMaterial`,
+  `defaultEdgeMaterial`, `defaultThicknessMm`, `labourRatePerHour`,
+  `showGrainDirection`, `sheetSortPreference`. `mergeSettings` (shallow, immutable),
+  `validateSettings`, `describeSettings`. 10 tests.
+- **`engine/i18n-audit.ts`** (Sprint 49) — i18n key audit engine. `flattenLocale`
+  flattens nested JSON trees to dot-notation keys. `auditLocale` reports missing
+  keys, extra keys, and empty/whitespace values. `auditAllLocales` runs a
+  multi-locale audit against a reference. `formatAuditReport` plain-text formatter.
+  14 tests.
+
+#### Test suite growth
+
+- Total: **1915 passing tests** across 118 files (was 1781 / 112 at v3.66.1).
+
 ## [3.58.0] — 2026-06-19
 
 ### Production Hardening — ESLint 10 Peer-Dep Override, CI Modernization, Dead Code Pruning

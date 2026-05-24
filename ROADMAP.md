@@ -155,6 +155,7 @@ Each gap maps to a concrete harvested action.
 | 8     | v3.54.0 | Hardening Round 2            | jsx-a11y flat config, Stylelint + browserslist, root cleanup, label associations, extension recommendations                                      |
 | 9     | v3.57.0 | Advanced Export & EventBus   | Rotation lock, G-code M6 tool-change, assembly weight, DXF layers, Plugin EventBus, all 956 unit tests green                                     |
 | 10    | v3.58.0 | ESLint 10 + CI Modernization | ESLint 10 peer-dep override, lockfile regenerated, GH Actions updated, TS strictness expanded, knip fixed, dead bench removed, typedoc added     |
+| 15    | v3.67.0 | Manufacturing Intelligence   | Kerf compensation, zone validator, template library, batch material replace, project settings, i18n key audit — 6 pure engine modules, 74 tests  |
 
 Full sprint-level history: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md).
 
@@ -220,6 +221,17 @@ Exit criteria: optional Supabase sync working self-hosted, BYO AI panel behind f
 - [x] **BYO AI design assistant** — optional panel activated by user-supplied API key (OpenAI, Anthropic, or local Ollama endpoint). Sends only current `CabinetConfig` JSON (no PII). Prompts: "suggest dimensions for a tall pantry", "what material substitution reduces cost 15%?". Zero telemetry; key in localStorage only.
 - [x] **Voice annotation on assembly steps** — record short voice note per step (Web Audio API, Opus blob in IndexedDB). Plays on shop floor without a screen.
 - [x] **PWA file handlers** — register URL handlers for `.cabinetplan` files via Web Share Target API + File Handling API. OS file-manager double-click launches the app and loads the project.
+
+### Phase 15: Manufacturing Intelligence Expansion ✅ (v3.66.1 → v3.67.0)
+
+Exit criteria: 6 new pure-engine modules covering kerf, zone validation, templates, batch replace, project settings, and i18n auditing — all with full test coverage. **All exit criteria met.**
+
+- [x] **Kerf compensation** (`engine/kerf.ts`) — 5 named tool profiles; `compensateDimension` ceiling-rounds to 0.5 mm; `compensatePart` expands both axes; `estimateKerfLoss`; `kerfLossPercent`. 16 tests.
+- [x] **Cabinet zone validator** (`engine/zone-validator.ts`) — validates single cabinet or full row against a `RoomZone`; clearance parameter; violation codes with excess-mm detail. 11 tests.
+- [x] **Template library** (`engine/template-library.ts`) — 8 pre-built configurations (base, wall, tall, corner, open-shelf); `instantiateTemplate` with dimension overrides; bilingual names. 12 tests.
+- [x] **Batch material replace** (`engine/batch-replace.ts`) — `batchReplaceMaterial` with type/zone filters; `listMaterials`; `countByMaterial`; fully immutable. 11 tests.
+- [x] **Project settings** (`engine/project-settings.ts`) — `ProjectSettings` object with units, currency, material defaults, labour rate; `mergeSettings`; `validateSettings`; `describeSettings`. 10 tests.
+- [x] **i18n key audit** (`engine/i18n-audit.ts`) — `flattenLocale` (dot-notation); `auditLocale` (missing / extra / empty); `auditAllLocales`; `formatAuditReport`. 14 tests.
 
 ---
 
