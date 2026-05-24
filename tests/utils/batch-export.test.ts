@@ -19,7 +19,7 @@ function makeSuccessTask(id: string, format = 'gcode', delayMs = 0): ExportTask 
     label: `Label ${id}`,
     format,
     run: async () => {
-      if (delayMs > 0) await new Promise((r) => setTimeout(r, delayMs));
+      if (delayMs > 0) await new Promise((resolve) => setTimeout(resolve, delayMs));
       return { content: `output-${id}`, filename: `${id}.txt`, mimeType: 'text/plain' };
     },
   };

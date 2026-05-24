@@ -236,6 +236,7 @@
   "pdf": {
     "title": "ייצוא PDF",
     "generate": "צור PDF",
+    "generateCurrent": "ייצוא ארון נוכחי בלבד",
     "generateAll": "ייצוא פרויקט מלא ({{count}} ארונות)",
     "generatingAll": "בונה PDF לפרויקט…",
     "download": "הורד PDF",
@@ -496,6 +497,9 @@
     "fix": "תקן",
     "fixAddCentreSupport": "הוסף תמיכת אמצע",
     "fixEnableBack": "הוסף פנל גב",
+    "fixRemoveShelves": "הסר מדפים",
+    "fixRemoveDoors": "הסר דלתות",
+    "fixMergeToOneDoor": "מזג לדלת אחת",
     "collapsed": "הצג {{count}} בעיה/ות",
     "fieldHint": "שדה: {{field}}",
     "suggestedValue": "מוצע: {{value}}"

@@ -76,7 +76,7 @@ describe('localBackendService.saveProject', () => {
 
   it('preserves createdAt on update', async () => {
     const first = await localBackendService.saveProject('p3', 'Room', '{}');
-    await new Promise((r) => setTimeout(r, 5));
+    await new Promise((resolve) => setTimeout(resolve, 5));
     const second = await localBackendService.saveProject('p3', 'Room Updated', '{"v":2}');
     expect(second.createdAt).toBe(first.createdAt);
     expect(second.name).toBe('Room Updated');
@@ -111,7 +111,7 @@ describe('localBackendService.listProjects', () => {
 
   it('returns all projects sorted by updatedAt descending', async () => {
     await localBackendService.saveProject('old', 'Old', '{}');
-    await new Promise((r) => setTimeout(r, 5));
+    await new Promise((resolve) => setTimeout(resolve, 5));
     await localBackendService.saveProject('new', 'New', '{}');
     const list = await localBackendService.listProjects();
     expect(list[0].id).toBe('new');
@@ -134,3 +134,4 @@ describe('localBackendService.deleteProject', () => {
     await expect(localBackendService.deleteProject('ghost')).resolves.toBeUndefined();
   });
 });
+

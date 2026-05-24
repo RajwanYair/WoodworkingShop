@@ -237,6 +237,7 @@
   "pdf": {
     "title": "Export PDF",
     "generate": "Generate PDF",
+    "generateCurrent": "Export current cabinet only",
     "generateAll": "Export Full Project ({{count}} cabinets)",
     "generatingAll": "Building project PDF…",
     "download": "Download PDF",
@@ -497,6 +498,9 @@
     "fix": "Fix",
     "fixAddCentreSupport": "Add centre support",
     "fixEnableBack": "Add back panel",
+    "fixRemoveShelves": "Remove shelves",
+    "fixRemoveDoors": "Remove doors",
+    "fixMergeToOneDoor": "Merge to 1 door",
     "collapsed": "Show {{count}} issue(s)",
     "fieldHint": "Field: {{field}}",
     "suggestedValue": "Suggested: {{value}}"

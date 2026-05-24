@@ -21,15 +21,11 @@
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 /** Monotonically increasing logical clock per client. */
-export type Clock = number;
-
 /** Globally unique client identifier (e.g. crypto.randomUUID()). */
-export type ClientId = string;
-
 /** A single field-level operation. */
 export interface CrdtOp {
-  clientId: ClientId;
-  clock: Clock;
+  clientId: string;
+  clock: number;
   /** JSON pointer path, e.g. "/width" or "/doors/0/material" */
   path: string;
   /** Serialised field value.  `null` signals a tombstone (delete). */
@@ -39,17 +35,17 @@ export interface CrdtOp {
 /** Per-field metadata stored alongside the current value. */
 interface FieldEntry {
   value: unknown;
-  clientId: ClientId;
-  clock: Clock;
+  clientId: string;
+  clock: number;
   deleted: boolean;
 }
 
 /** An in-memory CRDT document (map of arbitrary JSON paths). */
 export interface CrdtDocument {
   /** Current logical clock for this client. */
-  clock: Clock;
+  clock: number;
   /** Stable client identifier. */
-  clientId: ClientId;
+  clientId: string;
   /** Internal field registry — do not modify directly. */
   readonly _fields: Map<string, FieldEntry>;
 }
@@ -57,7 +53,7 @@ export interface CrdtDocument {
 // ── Factory ───────────────────────────────────────────────────────────────────
 
 /** Create an empty CRDT document for the given client. */
-export function createCrdtDocument(clientId: ClientId): CrdtDocument {
+export function createCrdtDocument(clientId: string): CrdtDocument {
   return {
     clock: 0,
     clientId,
@@ -214,9 +210,9 @@ export function deserializeOps(json: string): CrdtOp[] {
 // ── Snapshot export for IDB persistence ───────────────────────────────────────
 
 export interface CrdtSnapshot {
-  clientId: ClientId;
-  clock: Clock;
-  fields: { path: string; value: unknown; clientId: ClientId; clock: Clock; deleted: boolean }[];
+  clientId: string;
+  clock: number;
+  fields: { path: string; value: unknown; clientId: string; clock: number; deleted: boolean }[];
 }
 
 /** Export the document to a plain object suitable for IDB storage. */
@@ -248,3 +244,4 @@ export function importSnapshot(snapshot: CrdtSnapshot): CrdtDocument {
   }
   return doc;
 }
+

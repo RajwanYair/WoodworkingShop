@@ -15,7 +15,6 @@ import {
   suggestNextPosition,
   aabbsOverlap,
   scalePose,
-  _getXR,
 } from '../../src/utils/ar-placement';
 
 // ── helpers ───────────────────────────────────────────────────────────────────

@@ -171,6 +171,159 @@ const MIN_HINGE_CUP_EDGE_DISTANCE_MM = 22;
  */
 const HINGE_ARM_CLEARANCE_MM = 35;
 
+// ── Private helpers extracted to keep validateConfig complexity ≤ 130 ─────────
+
+/** All door geometry and hinge checks (called only when doorStyle !== 'none'). */
+function _checkDoors(
+  config: CabinetConfig,
+  dims: ReturnType<typeof computeDimensions>,
+): ValidationIssue[] {
+  const out: ValidationIssue[] = [];
+  if (config.doorStyle === 'none') return out;
+
+  if (dims.doorWidth < MIN_DOOR_WIDTH_MM) {
+    out.push({
+      code: 'DOOR_TOO_NARROW',
+      severity: 'error',
+      message: {
+        en: `Calculated door width (${Math.round(dims.doorWidth)} mm) is below the minimum of ${MIN_DOOR_WIDTH_MM} mm. Increase cabinet width or reduce door reveal.`,
+        he: `רוחב הדלת המחושב (${Math.round(dims.doorWidth)} מ"מ) קטן מהמינימום (${MIN_DOOR_WIDTH_MM} מ"מ). הגדל את רוחב הארון או הפחת את הסף.`,
+      },
+      field: 'doorCount',
+      fix:
+        config.doorCount > 1
+          ? { patch: { doorCount: 1 }, labelKey: 'validation.fixMergeToOneDoor' }
+          : { patch: { doorStyle: 'none' }, labelKey: 'validation.fixRemoveDoors' },
+    });
+  }
+
+  if (dims.doorHeight > 0 && dims.doorWidth > 0) {
+    const ratio = dims.doorHeight / dims.doorWidth;
+    if (ratio > MAX_DOOR_ASPECT_RATIO) {
+      out.push({
+        code: 'DOOR_ASPECT_RATIO',
+        severity: 'warning',
+        message: {
+          en: `Door aspect ratio ${ratio.toFixed(1)}:1 (height:width) exceeds ${MAX_DOOR_ASPECT_RATIO}:1. Tall narrow doors are prone to warping — consider adding a centre rail or using a stiffer material.`,
+          he: `יחס גובה-רוחב הדלת ${ratio.toFixed(1)}:1 חורג מ-${MAX_DOOR_ASPECT_RATIO}:1. דלתות גבוהות וצרות עלולות להתעוות — שקול הוספת פסת ביניים או חומר קשיח יותר.`,
+        },
+        field: 'doorCount',
+      });
+    }
+  }
+
+  if (dims.doorWidth < MIN_HINGE_OVERLAY_WIDTH_MM) {
+    out.push({
+      code: 'HINGE_CLEARANCE_INSUFFICIENT',
+      severity: 'warning',
+      message: {
+        en: `Door width (${Math.round(dims.doorWidth)} mm) is below ${MIN_HINGE_OVERLAY_WIDTH_MM} mm. Standard 35 mm Euro-hinge cups require at least ${MIN_HINGE_OVERLAY_WIDTH_MM} mm for reliable boring without splitting the door panel.`,
+        he: `רוחב הדלת (${Math.round(dims.doorWidth)} מ"מ) קטן מ-${MIN_HINGE_OVERLAY_WIDTH_MM} מ"מ. צירי Euro בקוטר 35 מ"מ דורשים לפחות ${MIN_HINGE_OVERLAY_WIDTH_MM} מ"מ לקידוח בטוח ללא סיכון לפיצול.`,
+      },
+      field: 'doorCount',
+      fix:
+        config.doorCount > 1
+          ? { patch: { doorCount: 1 }, labelKey: 'validation.fixMergeToOneDoor' }
+          : { patch: { doorStyle: 'none' }, labelKey: 'validation.fixRemoveDoors' },
+    });
+  }
+
+  if (dims.doorHeight < MIN_PRACTICAL_DOOR_HEIGHT_MM) {
+    out.push({
+      code: 'DOOR_TOO_SHORT_FOR_HINGES',
+      severity: 'warning',
+      message: {
+        en: `Door height (${Math.round(dims.doorHeight)} mm) is below ${MIN_PRACTICAL_DOOR_HEIGHT_MM} mm. At this size, two-hinge spacing leaves insufficient clearance from the door edges.`,
+        he: `גובה הדלת (${Math.round(dims.doorHeight)} מ"מ) קטן מ-${MIN_PRACTICAL_DOOR_HEIGHT_MM} מ"מ. במידה זו, מרווח שני הצירים קצר מדי מקצות הדלת.`,
+      },
+      field: 'height',
+    });
+  }
+
+  if (dims.doorHeight > MAX_SINGLE_DOOR_HEIGHT_MM) {
+    out.push({
+      code: 'DOOR_EXCEEDS_STANDARD_HINGE_RATING',
+      severity: 'warning',
+      message: {
+        en: `Door height (${Math.round(dims.doorHeight)} mm) exceeds ${MAX_SINGLE_DOOR_HEIGHT_MM} mm. At this size the door panel is heavy enough to require heavy-duty hinges (e.g. Blum Clip Top 170°) rated for ≥ 25 kg per door.`,
+        he: `גובה הדלת (${Math.round(dims.doorHeight)} מ"מ) עולה על ${MAX_SINGLE_DOOR_HEIGHT_MM} מ"מ. במשקל זה נדרשים צירים כבדי עומס (לדוגמה Blum Clip Top 170°) לפחות 25 ק"ג לדלת.`,
+      },
+      field: 'height',
+    });
+  }
+
+  if (config.doorCount === 1 && dims.doorWidth > MAX_SINGLE_DOOR_WIDTH_MM) {
+    out.push({
+      code: 'WIDE_SINGLE_DOOR',
+      severity: 'warning',
+      message: {
+        en: `Single door width (${Math.round(dims.doorWidth)} mm) exceeds ${MAX_SINGLE_DOOR_WIDTH_MM} mm. Wide single-panel doors are prone to warping under humidity changes — consider two doors or a thicker door material.`,
+        he: `רוחב דלת בודדת (${Math.round(dims.doorWidth)} מ"מ) עולה על ${MAX_SINGLE_DOOR_WIDTH_MM} מ"מ. דלתות רחבות עלולות להתעוות עקב שינויי לחות — שקול שתי דלתות או חומר עבה יותר.`,
+      },
+      field: 'doorCount',
+      suggestedValue: 2,
+    });
+  }
+
+  // Hinge cup edge distance
+  if (dims.doorWidth < 2 * MIN_HINGE_CUP_EDGE_DISTANCE_MM) {
+    out.push({
+      code: 'HINGE_CUP_EDGE_DISTANCE_UNSAFE',
+      severity: 'error',
+      message: {
+        en: `Door width (${Math.round(dims.doorWidth)} mm) is too narrow to safely bore 35 mm hinge cups. The minimum edge-to-cup-centre distance is ${MIN_HINGE_CUP_EDGE_DISTANCE_MM} mm, requiring a door width of at least ${2 * MIN_HINGE_CUP_EDGE_DISTANCE_MM} mm.`,
+        he: `רוחב הדלת (${Math.round(dims.doorWidth)} מ"מ) צר מדי לקידוח ציר 35 מ"מ בבטחה. מרחק מינימלי מקצה לציר: ${MIN_HINGE_CUP_EDGE_DISTANCE_MM} מ"מ, דורש רוחב דלת ≥ ${2 * MIN_HINGE_CUP_EDGE_DISTANCE_MM} מ"מ.`,
+      },
+      field: 'doorCount',
+      fix:
+        config.doorCount > 1
+          ? { patch: { doorCount: 1 }, labelKey: 'validation.fixMergeToOneDoor' }
+          : { patch: { doorStyle: 'none' }, labelKey: 'validation.fixRemoveDoors' },
+    });
+  }
+
+  return out;
+}
+
+/** Hinge arm / shelf clearance check — extracted to avoid nested loop complexity. */
+function _checkHingeShelfInterference(
+  config: CabinetConfig,
+  dims: ReturnType<typeof computeDimensions>,
+  t: number,
+): ValidationIssue[] {
+  if (config.doorStyle === 'none' || config.shelfCount === 0 || dims.hingePositions.length === 0) {
+    return [];
+  }
+  const doorTopInsetMm = Math.max(0, t - config.doorReveal);
+  const hingeArmsFromBottom = dims.hingePositions.map((pos) => dims.internalHeight - (pos - doorTopInsetMm));
+  const shelfPositions: number[] =
+    config.shelfSpacing === 'custom' && config.customShelfPositions.length === config.shelfCount
+      ? config.customShelfPositions
+      : Array.from({ length: config.shelfCount }, (_, i) =>
+          Math.round((dims.internalHeight * (i + 1)) / (config.shelfCount + 1)),
+        );
+
+  for (const hPos of hingeArmsFromBottom) {
+    for (const sPos of shelfPositions) {
+      const gap = Math.abs(hPos - sPos);
+      if (gap < HINGE_ARM_CLEARANCE_MM) {
+        return [
+          {
+            code: 'HINGE_SHELF_INTERFERENCE',
+            severity: 'warning',
+            message: {
+              en: `A hinge arm (~${Math.round(hPos)} mm from interior bottom) is within ${Math.round(gap)} mm of a shelf — less than the ${HINGE_ARM_CLEARANCE_MM} mm clearance needed to mount the hinge arm without notching the shelf. Adjust shelf count or spacing.`,
+              he: `זרוע ציר (~${Math.round(hPos)} מ"מ מתחתית הפנים) נמצאת ב-${Math.round(gap)} מ"מ ממדף — פחות מ-${HINGE_ARM_CLEARANCE_MM} מ"מ הנדרש לקיבוע הזרוע ללא חיתוך המדף. התאם מספר מדפים או ריווחם.`,
+            },
+            field: 'shelfCount',
+          },
+        ];
+      }
+    }
+  }
+  return [];
+}
+
 /**
  * Run all manufacturing constraint checks on a cabinet configuration.
  *
@@ -216,86 +369,7 @@ export function validateConfig(
   }
 
   // ── Door checks ──
-
-  if (config.doorStyle !== 'none') {
-    if (dims.doorWidth < MIN_DOOR_WIDTH_MM) {
-      issues.push({
-        code: 'DOOR_TOO_NARROW',
-        severity: 'error',
-        message: {
-          en: `Calculated door width (${Math.round(dims.doorWidth)} mm) is below the minimum of ${MIN_DOOR_WIDTH_MM} mm. Increase cabinet width or reduce door reveal.`,
-          he: `רוחב הדלת המחושב (${Math.round(dims.doorWidth)} מ"מ) קטן מהמינימום (${MIN_DOOR_WIDTH_MM} מ"מ). הגדל את רוחב הארון או הפחת את הסף.`,
-        },
-        field: 'doorCount',
-      });
-    }
-
-    if (dims.doorHeight > 0 && dims.doorWidth > 0) {
-      const ratio = dims.doorHeight / dims.doorWidth;
-      if (ratio > MAX_DOOR_ASPECT_RATIO) {
-        issues.push({
-          code: 'DOOR_ASPECT_RATIO',
-          severity: 'warning',
-          message: {
-            en: `Door aspect ratio ${ratio.toFixed(1)}:1 (height:width) exceeds ${MAX_DOOR_ASPECT_RATIO}:1. Tall narrow doors are prone to warping — consider adding a centre rail or using a stiffer material.`,
-            he: `יחס גובה-רוחב הדלת ${ratio.toFixed(1)}:1 חורג מ-${MAX_DOOR_ASPECT_RATIO}:1. דלתות גבוהות וצרות עלולות להתעוות — שקול הוספת פסת ביניים או חומר קשיח יותר.`,
-          },
-          field: 'doorCount',
-        });
-      }
-    }
-
-    // ── Hinge clearance checks (Sprint 12) ──
-
-    if (dims.doorWidth < MIN_HINGE_OVERLAY_WIDTH_MM) {
-      issues.push({
-        code: 'HINGE_CLEARANCE_INSUFFICIENT',
-        severity: 'warning',
-        message: {
-          en: `Door width (${Math.round(dims.doorWidth)} mm) is below ${MIN_HINGE_OVERLAY_WIDTH_MM} mm. Standard 35 mm Euro-hinge cups require at least ${MIN_HINGE_OVERLAY_WIDTH_MM} mm for reliable boring without splitting the door panel.`,
-          he: `רוחב הדלת (${Math.round(dims.doorWidth)} מ"מ) קטן מ-${MIN_HINGE_OVERLAY_WIDTH_MM} מ"מ. צירי Euro בקוטר 35 מ"מ דורשים לפחות ${MIN_HINGE_OVERLAY_WIDTH_MM} מ"מ לקידוח בטוח ללא סיכון לפיצול.`,
-        },
-        field: 'doorCount',
-      });
-    }
-
-    if (dims.doorHeight < MIN_PRACTICAL_DOOR_HEIGHT_MM) {
-      issues.push({
-        code: 'DOOR_TOO_SHORT_FOR_HINGES',
-        severity: 'warning',
-        message: {
-          en: `Door height (${Math.round(dims.doorHeight)} mm) is below ${MIN_PRACTICAL_DOOR_HEIGHT_MM} mm. At this size, two-hinge spacing leaves insufficient clearance from the door edges.`,
-          he: `גובה הדלת (${Math.round(dims.doorHeight)} מ"מ) קטן מ-${MIN_PRACTICAL_DOOR_HEIGHT_MM} מ"מ. במידה זו, מרווח שני הצירים קצר מדי מקצות הדלת.`,
-        },
-        field: 'height',
-      });
-    }
-
-    if (dims.doorHeight > MAX_SINGLE_DOOR_HEIGHT_MM) {
-      issues.push({
-        code: 'DOOR_EXCEEDS_STANDARD_HINGE_RATING',
-        severity: 'warning',
-        message: {
-          en: `Door height (${Math.round(dims.doorHeight)} mm) exceeds ${MAX_SINGLE_DOOR_HEIGHT_MM} mm. At this size the door panel is heavy enough to require heavy-duty hinges (e.g. Blum Clip Top 170°) rated for ≥ 25 kg per door.`,
-          he: `גובה הדלת (${Math.round(dims.doorHeight)} מ"מ) עולה על ${MAX_SINGLE_DOOR_HEIGHT_MM} מ"מ. במשקל זה נדרשים צירים כבדי עומס (לדוגמה Blum Clip Top 170°) לפחות 25 ק"ג לדלת.`,
-        },
-        field: 'height',
-      });
-    }
-
-    if (config.doorCount === 1 && dims.doorWidth > MAX_SINGLE_DOOR_WIDTH_MM) {
-      issues.push({
-        code: 'WIDE_SINGLE_DOOR',
-        severity: 'warning',
-        message: {
-          en: `Single door width (${Math.round(dims.doorWidth)} mm) exceeds ${MAX_SINGLE_DOOR_WIDTH_MM} mm. Wide single-panel doors are prone to warping under humidity changes — consider two doors or a thicker door material.`,
-          he: `רוחב דלת בודדת (${Math.round(dims.doorWidth)} מ"מ) עולה על ${MAX_SINGLE_DOOR_WIDTH_MM} מ"מ. דלתות רחבות עלולות להתעוות עקב שינויי לחות — שקול שתי דלתות או חומר עבה יותר.`,
-        },
-        field: 'doorCount',
-        suggestedValue: 2,
-      });
-    }
-  }
+  issues.push(..._checkDoors(config, dims));
 
   // ── Toe-kick check ──
 
@@ -308,6 +382,7 @@ export function validateConfig(
         he: `גובה הפלינתה (${config.kickHeight} מ"מ) עולה על ${Math.round(MAX_KICK_FRACTION * 100)}% מגובה הארון. שקול הפחתה.`,
       },
       field: 'kickHeight',
+      suggestedValue: Math.round(config.height * MAX_KICK_FRACTION * 0.9),
     });
   }
 
@@ -342,6 +417,10 @@ export function validateConfig(
           he: `${config.drawerCount} מגירות משאירות רק ${Math.round(remainingH)} מ"מ גובה פנים לתכולה מעל המגירות. הפחת מגירות או הגדל גובה.`,
         },
         field: 'drawerCount',
+        fix: {
+          patch: { shelfCount: 0 },
+          labelKey: 'validation.fixRemoveShelves',
+        },
       });
     }
 
@@ -354,6 +433,7 @@ export function validateConfig(
           he: `צפיפות מגירות גבוהה: ${config.drawerCount} מגירות בארון של ${config.height} מ"מ. ודא שגובה הפתיחה של כל מגירה לפחות 150 מ"מ.`,
         },
         field: 'drawerCount',
+        suggestedValue: Math.max(1, Math.floor(dims.internalHeight / 200)),
       });
     }
 
@@ -386,6 +466,7 @@ export function validateConfig(
           he: `סך גובה המגירות (${Math.round(totalStackH)} מ"מ) חורג מגובה הפנים הזמין (${Math.round(dims.internalHeight)} מ"מ). הפחת גבהי מגירות או הגדל גובה הארון.`,
         },
         field: 'drawerCount',
+        suggestedValue: Math.max(1, Math.floor(dims.internalHeight / 160)),
       });
     }
   }
@@ -645,6 +726,7 @@ export function validateConfig(
           he: `הרוחב הפנימי (${Math.round(internalWidth)} מ"מ) עלול להיות צר מדי למנגנוני מגירה צדדיים הדורשים ${runnerClearanceNeeded} מ"מ פינוי. רוחב פנימי מינימלי: ${runnerClearanceNeeded + 150} מ"מ.`,
         },
         field: 'width',
+        suggestedValue: runnerClearanceNeeded + 150 + 2 * t,
       });
     }
   }
@@ -664,60 +746,8 @@ export function validateConfig(
     });
   }
 
-  // 4. Hinge cup edge distance: a 35mm Euro cup needs at least MIN_HINGE_CUP_EDGE_DISTANCE_MM
-  //    from the inner door edge to the cup centre. Flag if door width < 2 × that distance.
-  if (config.doorStyle !== 'none' && dims.doorWidth < 2 * MIN_HINGE_CUP_EDGE_DISTANCE_MM) {
-    issues.push({
-      code: 'HINGE_CUP_EDGE_DISTANCE_UNSAFE',
-      severity: 'error',
-      message: {
-        en: `Door width (${Math.round(dims.doorWidth)} mm) is too narrow to safely bore 35 mm hinge cups. The minimum edge-to-cup-centre distance is ${MIN_HINGE_CUP_EDGE_DISTANCE_MM} mm, requiring a door width of at least ${2 * MIN_HINGE_CUP_EDGE_DISTANCE_MM} mm.`,
-        he: `רוחב הדלת (${Math.round(dims.doorWidth)} מ"מ) צר מדי לקידוח ציר 35 מ"מ בבטחה. מרחק מינימלי מקצה לציר: ${MIN_HINGE_CUP_EDGE_DISTANCE_MM} מ"מ, דורש רוחב דלת ≥ ${2 * MIN_HINGE_CUP_EDGE_DISTANCE_MM} מ"מ.`,
-      },
-      field: 'doorCount',
-    });
-  }
-
-  // ── Hinge-shelf interference check (Phase 5 assembly risk) ───────────────
-  // When a door is fitted and shelves are present, verify that no shelf panel
-  // falls within HINGE_ARM_CLEARANCE_MM of any hinge-arm mounting position on
-  // the carcass side.  The arm mounting height (from interior bottom) is:
-  //   internalHeight − (hingePos − doorTopInset)
-  // where doorTopInset = max(0, t − doorReveal): how far below the interior
-  // top surface the top of the door sits (the door overlaps the exterior face
-  // of the top panel by doorReveal mm, so it is inset t − doorReveal below
-  // the interior ceiling).
-  if (config.doorStyle !== 'none' && config.shelfCount > 0 && dims.hingePositions.length > 0) {
-    const doorTopInsetMm = Math.max(0, t - config.doorReveal);
-    const hingeArmsFromBottom = dims.hingePositions.map((pos) => dims.internalHeight - (pos - doorTopInsetMm));
-    // Equal-spacing shelf positions (mm from interior bottom); respects custom positions too.
-    const shelfPositions: number[] =
-      config.shelfSpacing === 'custom' && config.customShelfPositions.length === config.shelfCount
-        ? config.customShelfPositions
-        : Array.from({ length: config.shelfCount }, (_, i) =>
-            Math.round((dims.internalHeight * (i + 1)) / (config.shelfCount + 1)),
-          );
-    let interferenceReported = false;
-    for (const hPos of hingeArmsFromBottom) {
-      if (interferenceReported) break;
-      for (const sPos of shelfPositions) {
-        const gap = Math.abs(hPos - sPos);
-        if (gap < HINGE_ARM_CLEARANCE_MM) {
-          issues.push({
-            code: 'HINGE_SHELF_INTERFERENCE',
-            severity: 'warning',
-            message: {
-              en: `A hinge arm (~${Math.round(hPos)} mm from interior bottom) is within ${Math.round(gap)} mm of a shelf — less than the ${HINGE_ARM_CLEARANCE_MM} mm clearance needed to mount the hinge arm without notching the shelf. Adjust shelf count or spacing.`,
-              he: `זרוע ציר (~${Math.round(hPos)} מ"מ מתחתית הפנים) נמצאת ב-${Math.round(gap)} מ"מ ממדף — פחות מ-${HINGE_ARM_CLEARANCE_MM} מ"מ הנדרש לקיבוע הזרוע ללא חיתוך המדף. התאם מספר מדפים או ריווחם.`,
-            },
-            field: 'shelfCount',
-          });
-          interferenceReported = true;
-          break;
-        }
-      }
-    }
-  }
+  // ── Hinge arm / shelf interference (Phase 5 assembly risk) ─────────────
+  issues.push(..._checkHingeShelfInterference(config, dims, t));
 
   // ── Narrow open-back cabinet (Phase 5, Sprint 34) ──
   // An open-back carcass narrower than 400 mm has very little racking

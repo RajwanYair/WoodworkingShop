@@ -27,6 +27,9 @@ export interface CabinetTemplate {
   readonly computedFields?: Readonly<Record<string, string>>;
 }
 
+/** Default edge-banding style applied to all built-in cabinet templates. */
+const DEFAULT_EDGE_BANDING = 'all-visible' as const;
+
 // ── Phase 13 / Sprint 4 — Parametric templates v2: DSL evaluator ─────────────
 // A hand-rolled recursive-descent parser.  Deliberately avoids eval() and
 // Function() to satisfy the OWASP injection constraint.
@@ -52,7 +55,7 @@ function _tokenize(expr: string): _DslToken[] {
       toks.push({ k: 'num', v: parseFloat(s) });
       continue;
     }
-    if (/[a-zA-Z_]/.test(ch)) {
+    if (/[a-z_]/i.test(ch)) {
       let s = '';
       while (i < expr.length && /\w/.test(expr[i])) s += expr[i++];
       toks.push({ k: 'id', v: s });
@@ -195,7 +198,7 @@ export const TEMPLATES: CabinetTemplate[] = [
       kickHeight: 100,
       carcassMaterial: 'melamine-16',
       backPanelMaterial: 'hdf-3',
-      edgeBanding: 'all-visible',
+      edgeBanding: DEFAULT_EDGE_BANDING,
     },
   ),
   tpl(
@@ -217,7 +220,7 @@ export const TEMPLATES: CabinetTemplate[] = [
       kickHeight: 0,
       carcassMaterial: 'melamine-16',
       backPanelMaterial: 'hdf-3',
-      edgeBanding: 'all-visible',
+      edgeBanding: DEFAULT_EDGE_BANDING,
     },
   ),
   tpl(
@@ -239,7 +242,7 @@ export const TEMPLATES: CabinetTemplate[] = [
       kickHeight: 100,
       carcassMaterial: 'melamine-18',
       backPanelMaterial: 'hdf-3',
-      edgeBanding: 'all-visible',
+      edgeBanding: DEFAULT_EDGE_BANDING,
     },
   ),
   tpl(
@@ -305,7 +308,7 @@ export const TEMPLATES: CabinetTemplate[] = [
       kickHeight: 0,
       carcassMaterial: 'plywood-18',
       backPanelMaterial: 'hdf-3',
-      edgeBanding: 'all-visible',
+      edgeBanding: DEFAULT_EDGE_BANDING,
     },
   ),
   tpl(
@@ -329,7 +332,7 @@ export const TEMPLATES: CabinetTemplate[] = [
       kickHeight: 0,
       carcassMaterial: 'plywood-18',
       backPanelMaterial: 'hdf-3',
-      edgeBanding: 'all-visible',
+      edgeBanding: DEFAULT_EDGE_BANDING,
     },
   ),
   tpl(
@@ -354,7 +357,7 @@ export const TEMPLATES: CabinetTemplate[] = [
       kickHeight: 80,
       carcassMaterial: 'melamine-16',
       backPanelMaterial: 'hdf-3',
-      edgeBanding: 'all-visible',
+      edgeBanding: DEFAULT_EDGE_BANDING,
     },
   ),
   tpl(
@@ -376,7 +379,7 @@ export const TEMPLATES: CabinetTemplate[] = [
       kickHeight: 0,
       carcassMaterial: 'melamine-16',
       backPanelMaterial: 'hdf-3',
-      edgeBanding: 'all-visible',
+      edgeBanding: DEFAULT_EDGE_BANDING,
     },
   ),
   tpl(
@@ -400,7 +403,7 @@ export const TEMPLATES: CabinetTemplate[] = [
       kickHeight: 0,
       carcassMaterial: 'plywood-17',
       backPanelMaterial: 'hdf-3',
-      edgeBanding: 'all-visible',
+      edgeBanding: DEFAULT_EDGE_BANDING,
     },
   ),
   tpl(
@@ -425,7 +428,7 @@ export const TEMPLATES: CabinetTemplate[] = [
       kickHeight: 100,
       carcassMaterial: 'plywood-18',
       backPanelMaterial: 'hdf-3',
-      edgeBanding: 'all-visible',
+      edgeBanding: DEFAULT_EDGE_BANDING,
     },
   ),
   tpl(
@@ -448,7 +451,7 @@ export const TEMPLATES: CabinetTemplate[] = [
       hasBack: false,
       carcassMaterial: 'plywood-18',
       backPanelMaterial: 'hdf-3',
-      edgeBanding: 'all-visible',
+      edgeBanding: DEFAULT_EDGE_BANDING,
     },
   ),
   // ── Sprint 176 additions ───────────────────────────────────────────────────
@@ -472,7 +475,7 @@ export const TEMPLATES: CabinetTemplate[] = [
       hasBack: false,
       carcassMaterial: 'plywood-18',
       backPanelMaterial: 'hdf-3',
-      edgeBanding: 'all-visible',
+      edgeBanding: DEFAULT_EDGE_BANDING,
     },
   ),
   tpl(
@@ -494,7 +497,7 @@ export const TEMPLATES: CabinetTemplate[] = [
       kickHeight: 100,
       carcassMaterial: 'melamine-18',
       backPanelMaterial: 'hdf-3',
-      edgeBanding: 'all-visible',
+      edgeBanding: DEFAULT_EDGE_BANDING,
     },
   ),
   tpl(
@@ -516,7 +519,7 @@ export const TEMPLATES: CabinetTemplate[] = [
       kickHeight: 0,
       carcassMaterial: 'melamine-16',
       backPanelMaterial: 'hdf-3',
-      edgeBanding: 'all-visible',
+      edgeBanding: DEFAULT_EDGE_BANDING,
     },
   ),
   // ── Sprint 47 additions ───────────────────────────────────────────────────
@@ -539,7 +542,7 @@ export const TEMPLATES: CabinetTemplate[] = [
       kickHeight: 100,
       carcassMaterial: 'melamine-18',
       backPanelMaterial: 'mdf-3',
-      edgeBanding: 'all-visible',
+      edgeBanding: DEFAULT_EDGE_BANDING,
     },
   ),
   // ── Phase 13 / Sprint 4 — Parametric template with computedFields ─────────
@@ -564,7 +567,7 @@ export const TEMPLATES: CabinetTemplate[] = [
       kickHeight: 0,
       carcassMaterial: 'plywood-18',
       backPanelMaterial: 'hdf-3',
-      edgeBanding: 'all-visible',
+      edgeBanding: DEFAULT_EDGE_BANDING,
     },
     computedFields: {
       // shelfCount = floor((height - 36) / 350) — one shelf per 350 mm of usable space

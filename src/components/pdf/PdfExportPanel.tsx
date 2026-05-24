@@ -185,22 +185,32 @@ export function PdfExportPanel() {
           </label>
         </div>
 
-        <button
-          onClick={handleGenerate}
-          disabled={generating || generatingAll}
-          className="bg-wood-600 hover:bg-wood-700 rounded-lg px-6 py-3 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {generating ? t('pdf.generating') : t('pdf.generate')}
-        </button>
-
-        {/* v3.58.0 — Export Full Project: all cabinets on shared sheets */}
-        {store.cabinets.length > 1 && (
+        {/* v3.65.1 — For multi-cabinet projects, "Export Full Project" is the primary action
+            so all cabinets share cut sheets. Single-cabinet export becomes secondary. */}
+        {store.cabinets.length > 1 ? (
+          <>
+            <button
+              onClick={handleGenerateAll}
+              disabled={generating || generatingAll}
+              className="bg-wood-600 hover:bg-wood-700 rounded-lg px-6 py-3 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {generatingAll ? t('pdf.generatingAll') : t('pdf.generateAll', { count: store.cabinets.length })}
+            </button>
+            <button
+              onClick={handleGenerate}
+              disabled={generating || generatingAll}
+              className="border-wood-300 dark:border-wood-600 text-wood-500 dark:text-wood-400 hover:text-wood-700 dark:hover:text-wood-200 rounded-lg border px-6 py-2 text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {generating ? t('pdf.generating') : t('pdf.generateCurrent')}
+            </button>
+          </>
+        ) : (
           <button
-            onClick={handleGenerateAll}
+            onClick={handleGenerate}
             disabled={generating || generatingAll}
-            className="rounded-lg border-2 border-amber-500 bg-amber-50 px-6 py-3 text-sm font-medium text-amber-800 transition-colors hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-amber-900/20 dark:text-amber-300 dark:hover:bg-amber-900/40"
+            className="bg-wood-600 hover:bg-wood-700 rounded-lg px-6 py-3 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {generatingAll ? t('pdf.generatingAll') : t('pdf.generateAll', { count: store.cabinets.length })}
+            {generating ? t('pdf.generating') : t('pdf.generate')}
           </button>
         )}
 

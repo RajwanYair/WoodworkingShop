@@ -1278,9 +1278,11 @@ export function CabinetPdfDocument({
                 borderColor: C.primary,
                 backgroundColor: mat.color ?? '#E8D5B0',
                 position: 'relative',
+                overflow: 'hidden',
+                alignSelf: 'center',
               }}
             >
-              {/* Grain direction lines (run perpendicular to grain in diagram) */}
+              {/* Grain direction lines — use explicit width to avoid react-pdf absolute-child overflow issues */}
               {Array.from({ length: Math.floor(diagH / 12) }).map((_, gi) => (
                 <View
                   key={gi}
@@ -1288,7 +1290,7 @@ export function CabinetPdfDocument({
                     position: 'absolute',
                     top: gi * 12,
                     left: 0,
-                    right: 0,
+                    width: diagW,
                     height: 0.3,
                     backgroundColor: 'rgba(0,0,0,0.06)',
                   }}

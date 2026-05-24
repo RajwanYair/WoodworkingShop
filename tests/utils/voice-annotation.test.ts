@@ -33,31 +33,30 @@ type MediaRecorderInstance = {
 };
 
 function makeMediaRecorderClass() {
-  let lastInstance: MediaRecorderInstance | null = null;
+  const instances: MediaRecorderInstance[] = [];
 
   function MockMediaRecorder(this: MediaRecorderInstance, _stream: MediaStream, _options?: MediaRecorderOptions) {
-    const self = this;
-    self.state = 'inactive';
-    self.ondataavailable = null;
-    self.onstop = null;
+    this.state = 'inactive';
+    this.ondataavailable = null;
+    this.onstop = null;
     const audioBlob = new Blob(['fake-audio-data'], { type: 'audio/webm;codecs=opus' });
 
-    self.start = vi.fn((_timeslice?: number) => {
-      self.state = 'recording';
+    this.start = vi.fn((_timeslice?: number) => {
+      this.state = 'recording';
       // Fire ondataavailable asynchronously
-      Promise.resolve().then(() => self.ondataavailable?.({ data: audioBlob }));
+      Promise.resolve().then(() => this.ondataavailable?.({ data: audioBlob }));
     });
 
-    self.stop = vi.fn(() => {
-      self.state = 'inactive';
+    this.stop = vi.fn(() => {
+      this.state = 'inactive';
       // Fire onstop asynchronously
-      Promise.resolve().then(() => self.onstop?.());
+      Promise.resolve().then(() => this.onstop?.());
     });
 
-    lastInstance = self;
+    instances.push(this);
   }
   MockMediaRecorder.isTypeSupported = vi.fn((mime: string) => mime === 'audio/webm;codecs=opus');
-  MockMediaRecorder._lastInstance = () => lastInstance;
+  MockMediaRecorder._lastInstance = () => instances.at(-1) ?? null;
 
   return MockMediaRecorder as unknown as typeof MediaRecorder & { _lastInstance: () => MediaRecorderInstance | null };
 }
@@ -259,7 +258,7 @@ describe('startRecording', () => {
     const session = await startRecording('step-11');
     session.cancel();
     // Give the recorder a tick to settle
-    await new Promise((r) => setTimeout(r, 10));
+    await new Promise((resolve) => setTimeout(resolve, 10));
     const countAfter = await _blobStoreKeyCount();
     expect(countAfter).toBe(countBefore);
   });
@@ -277,3 +276,4 @@ describe('startRecording', () => {
     tracks.forEach((t) => expect(t.stop).toHaveBeenCalled());
   });
 });
+
