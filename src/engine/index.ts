@@ -154,3 +154,6 @@ export type { BomFilterablePart, BomFilterCriteria } from './bom-filter';
 
 export { resolveGrainConflicts, hasGrainConflicts } from './grain-conflict';
 export type { GrainCheckPart, GrainConflict, GrainConflictCode, GrainConflictOptions } from './grain-conflict';
+
+export { estimateStepTime, estimateAssemblyTime, getActionRate } from './assembly-timer';
+export type { AssemblyActionType, TimerStep, TimedStep, AssemblyTimeEstimate } from './assembly-timer';
