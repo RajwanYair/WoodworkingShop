@@ -205,5 +205,5 @@ describe('cutSheetToDxf — GRAIN_CONFLICT layer (Sprint 70)', () => {
     // AC1015 always pre-declares: SHEET, matLayer, LABELS, PARTS,
     // GRAIN_CONFLICT, ROTATION_LOCKED, EDGE_BANDED, DIMENSIONS
     expect(dxf).toContain('70\n8');
-  };);
+  });
 });
