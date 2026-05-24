@@ -228,3 +228,6 @@ export type { TemplateCategory, TemplateDimensions, CabinetTemplate, TemplateIns
 
 export { batchReplaceMaterial, listMaterials, countByMaterial } from './batch-replace';
 export type { BatchPart, BatchReplaceOptions, BatchReplaceResult } from './batch-replace';
+
+export { DEFAULT_PROJECT_SETTINGS, mergeSettings, validateSettings, describeSettings } from './project-settings';
+export type { LengthUnit, CurrencyCode, SheetSortPreference, ProjectSettings } from './project-settings';
