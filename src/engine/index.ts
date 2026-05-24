@@ -197,3 +197,13 @@ export type { HardwareCatalogueItem, HardwareCategory, HardwareQuantityInput, Ha
 
 export { EDGE_PROFILE_SPECS, calculateEdgeBandBom, totalEdgeBandMetres, getEdgeProfileSpec } from './edge-profile';
 export type { EdgeProfile, EdgeProfileSpec, PanelEdges, EdgeBandPanel, EdgeBandBomLine } from './edge-profile';
+
+export {
+  KERF_PROFILES,
+  compensateDimension,
+  compensatePart,
+  estimateKerfLoss,
+  kerfLossPercent,
+  getKerfProfile,
+} from './kerf';
+export type { KerfProfile, KerfPart, KerfCompensatedPart } from './kerf';
