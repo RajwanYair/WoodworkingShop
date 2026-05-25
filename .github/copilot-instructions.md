@@ -150,6 +150,19 @@ The MaxRects BSSF cut-optimizer uses:
 - `jsdoc` — JSDoc block skeleton
 - `rfc` — React functional component with TypeScript props
 
+## Copilot Prompts
+
+`.github/prompts/` contains reusable agent prompts:
+
+- `split-component.prompt.md` — agent workflow for splitting large React component files into focused sub-components (≤ 600 L each)
+- `test-factory.prompt.md` — agent workflow for converting repetitive `it` blocks to `it.each` tables (target ≤ 400 L per file)
+
+## Workflows
+
+- **`npm run quality`** — typecheck + lint + lint:css + lint:md + format:check + i18n:coverage (no test)
+- **`npm run check`** — `quality` + `npm test` (full pre-commit gate)
+- **`npm run ci`** — `check` + build + bundle:check + bench:check (full CI gate)
+
 ## Intermediate Files & Caching
 
 - All intermediate build files, ESLint caches (`.eslintcache`), Vite caches (`.vite_cache`), Playwright test results, and test reports **MUST** be written to paths inside the OS `$TEMP` or `tempfile.gettempdir()` directory. We never pollute the root workspace or `node_modules/.cache` with intermediate build telemetry.
