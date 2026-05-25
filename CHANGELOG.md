@@ -9,6 +9,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.71.0] — 2026-06-28
+
+### Phase 17 — DX & Bundle Optimization
+
+#### Added
+
+- **Sprint 60 — Comlink worker RPC**: Replaced bespoke `workerCall`/`nextRpcId` envelope
+  protocol with [Comlink 4.4.2](https://github.com/GoogleChromeLabs/comlink) across all three
+  Web Workers (`cut-optimizer`, `assembly`, `cost-estimator`). Workers now expose typed
+  `Comlink.expose()` APIs; `cabinet-store.ts` uses `Comlink.wrap()` typed proxies. Latest-wins
+  logic simplified from string `requestId` counters to numeric `_cutCallId`/`_latestCutId`.
+  Comlink is the 8th production dependency (1.4 KB gzip).
+- **Sprint 62 — PDF renderer spike** (`docs/PDF-RENDERER-SPIKE.md`): Full analysis of
+  pdfme (~95 KB) vs `@react-pdf/renderer` (~285 KB). Decision: keep current renderer —
+  RTL (HE/AR) is a hard blocker for pdfme and the savings apply only to a lazy chunk.
+- **Sprint 64 — pnpm evaluation** (`docs/PNPM-EVALUATION.md`): Analysis of pnpm vs npm
+  in the current `MyScripts/` workspace topology. Decision: defer — parent workspace
+  re-rooting is out of scope; re-evaluation triggers documented.
+- **Phase 17.1 (D1–D12) JSDoc documentation phase** added to ROADMAP.md.
+
+#### Changed
+
+- **Sprint 61 — Tree-shake audit**: Knip dead-code scan cleaned. Deleted 3 dead files
+  (`worker-rpc.ts`, `pdf-i18n.ts`, `pdf-styles.ts`). Removed unused internal components
+  `ValidationBadge` and `ValidationAllClear`. Wired `usePwaFileHandlers` in `App.tsx`.
+  Un-exported internal symbols: `OnboardingOverlay`, `ScheduleWave`, `ActiveTab`.
+  Extended engine barrel (`index.ts`) with `GrainReportPart`, `GrainMaterialGroup`,
+  `grainReportToCsv`, `PluginEventMap`, `PluginEventName`, `PluginEventHandler`.
+- **Sprint 63 — Chunk strategy verified**: `vite.config.ts` `manualChunks` confirmed:
+  `pdf-renderer` (lazy @react-pdf/renderer), `i18n-vendor` (i18next + react-i18next),
+  `vendor` (React + React-DOM + Zustand merged). Three.js slot reserved for Phase 18.
+
 ## [3.70.0] — 2026-06-27
 
 ### Phase 16.6 — Code Hygiene & CI Speed

@@ -2,7 +2,7 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v3.69.0**
+> **Current release: v3.71.0**
 
 ## Tech Stack
 
