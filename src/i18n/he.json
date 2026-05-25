@@ -8,11 +8,11 @@
     "mainWorkspace": "סביבת העבודה של מתכנן הארון"
   },
   "tabs": {
-    "configurator": "⚙️ הגדרות",
-    "preview": "👁️ תצוגה מקדימה",
-    "optimizer": "✂️ גיליונות חיתוך",
-    "assembly": "🔨 הרכבה",
-    "pdf": "📄 ייצוא PDF"
+    "configurator": "הגדרות",
+    "preview": "תצוגה מקדימה",
+    "optimizer": "גיליונות חיתוך",
+    "assembly": "הרכבה",
+    "pdf": "ייצוא PDF"
   },
   "config": {
     "dimensions": "📐 מידות",

@@ -8,11 +8,11 @@
     "mainWorkspace": "Cabinet planner workspace"
   },
   "tabs": {
-    "configurator": "⚙️ Configure",
-    "preview": "👁️ Preview",
-    "optimizer": "✂️ Cut Sheets",
-    "assembly": "🔨 Assembly",
-    "pdf": "📄 Export PDF"
+    "configurator": "Configure",
+    "preview": "Preview",
+    "optimizer": "Cut Sheets",
+    "assembly": "Assembly",
+    "pdf": "Export PDF"
   },
   "config": {
     "dimensions": "📐 Dimensions",
