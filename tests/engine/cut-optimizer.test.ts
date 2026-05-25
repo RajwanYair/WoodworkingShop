@@ -59,25 +59,28 @@ describe('optimizeCutSheets', () => {
     expect(result.overallYield).toBe(0);
   });
 
-  it('small cabinet fits on fewer sheets', () => {
-    const small = { ...DEFAULT_CONFIG, width: 400, height: 800, depth: 300, shelfCount: 1 };
-    expect(optimizeCutSheets(generateParts(small)).totalSheets).toBeLessThanOrEqual(2);
+  it('small cabinet (400×800×300, 1 shelf) fits on ≤ 2 total sheets', () => {
+    expect(
+      optimizeCutSheets(generateParts({ ...DEFAULT_CONFIG, width: 400, height: 800, depth: 300, shelfCount: 1 }))
+        .totalSheets,
+    ).toBeLessThanOrEqual(2);
   });
 
   it('tall 12-shelf bookshelf fits all carcass parts on 1 plywood sheet', () => {
-    const bookshelf = {
-      ...DEFAULT_CONFIG,
-      furnitureType: 'bookshelf' as const,
-      width: 800,
-      height: 2400,
-      depth: 100,
-      shelfCount: 12,
-      doorStyle: 'none' as const,
-      doorCount: 1 as const,
-      drawerCount: 0,
-    };
-    const result = optimizeCutSheets(generateParts(bookshelf));
-    expect(result.sheets.filter((s) => s.material === bookshelf.carcassMaterial).length).toBeLessThanOrEqual(1);
+    const result = optimizeCutSheets(
+      generateParts({
+        ...DEFAULT_CONFIG,
+        furnitureType: 'bookshelf' as const,
+        width: 800,
+        height: 2400,
+        depth: 100,
+        shelfCount: 12,
+        doorStyle: 'none' as const,
+        doorCount: 1 as const,
+        drawerCount: 0,
+      }),
+    );
+    expect(result.sheets.filter((s) => s.material === DEFAULT_CONFIG.carcassMaterial).length).toBeLessThanOrEqual(1);
   });
 
   it('earliest-sheet preference: first sheet has highest yield', () => {
@@ -191,6 +194,34 @@ describe('optimizeCutSheets — grain conflict aggregation', () => {
   });
 });
 
+// ─── Co-nesting test helpers (shared by findCoNestCandidates + applyCoNesting) ───
+const makePt = (id: string, w: number, l: number) => ({
+  partId: id,
+  label: id,
+  x: 0,
+  y: 0,
+  width: w,
+  length: l,
+  grainVertical: true as const,
+  edgeBanding: '',
+});
+const fakeSht = (material: string, idx: number, parts: ReturnType<typeof makePt>[] = [], thickness = 18) => ({
+  sheetIndex: idx,
+  material,
+  thickness,
+  sheetWidth: 1220,
+  sheetLength: 2440,
+  parts,
+  yieldPercent: 5,
+});
+const fakeRes = (...sheets: ReturnType<typeof fakeSht>[]) => ({
+  sheets,
+  totalSheets: sheets.length,
+  overallYield: 5,
+  totalWaste: 0,
+  grainConflictCount: 0,
+});
+
 describe('findCoNestCandidates', () => {
   it('returns empty array when all sheets have distinct geometry', () => {
     const result = optimizeCutSheets([
@@ -209,33 +240,8 @@ describe('findCoNestCandidates', () => {
   });
 
   it('detects candidates when two materials share thickness and sheet size', () => {
-    const fakeResult = {
-      sheets: [
-        {
-          sheetIndex: 0,
-          material: 'plywood-18',
-          thickness: 18,
-          sheetWidth: 1220,
-          sheetLength: 2440,
-          parts: [],
-          yieldPercent: 50,
-        },
-        {
-          sheetIndex: 1,
-          material: 'melamine-18',
-          thickness: 18,
-          sheetWidth: 1220,
-          sheetLength: 2440,
-          parts: [],
-          yieldPercent: 50,
-        },
-      ],
-      totalSheets: 2,
-      overallYield: 50,
-      totalWaste: 0,
-      grainConflictCount: 0,
-    };
-    const candidates = findCoNestCandidates(fakeResult);
+    const r = fakeRes(fakeSht('plywood-18', 0), fakeSht('melamine-18', 1));
+    const candidates = findCoNestCandidates(r);
     expect(candidates).toHaveLength(1);
     expect(candidates[0].materialKeys).toContain('plywood-18');
     expect(candidates[0].materialKeys).toContain('melamine-18');
@@ -243,166 +249,36 @@ describe('findCoNestCandidates', () => {
   });
 
   it('does not return groups with only one material', () => {
-    const fakeResult = {
-      sheets: [
-        {
-          sheetIndex: 0,
-          material: 'plywood-18',
-          thickness: 18,
-          sheetWidth: 1220,
-          sheetLength: 2440,
-          parts: [],
-          yieldPercent: 50,
-        },
-        {
-          sheetIndex: 1,
-          material: 'plywood-18',
-          thickness: 18,
-          sheetWidth: 1220,
-          sheetLength: 2440,
-          parts: [],
-          yieldPercent: 50,
-        },
-      ],
-      totalSheets: 2,
-      overallYield: 50,
-      totalWaste: 0,
-      grainConflictCount: 0,
-    };
-    expect(findCoNestCandidates(fakeResult)).toHaveLength(0);
+    expect(findCoNestCandidates(fakeRes(fakeSht('plywood-18', 0), fakeSht('plywood-18', 1)))).toHaveLength(0);
   });
 });
 
 describe('applyCoNesting', () => {
-  const makePart = (id: string, w: number, l: number) => ({
-    partId: id,
-    label: id,
-    x: 0,
-    y: 0,
-    width: w,
-    length: l,
-    grainVertical: true,
-    edgeBanding: '',
-  });
-
   it('returns original result unchanged when coNestKeys is empty', () => {
-    const fakeResult = {
-      sheets: [
-        {
-          sheetIndex: 0,
-          material: 'plywood-18',
-          thickness: 18,
-          sheetWidth: 1220,
-          sheetLength: 2440,
-          parts: [makePart('P1', 200, 300)],
-          yieldPercent: 5,
-        },
-      ],
-      totalSheets: 1,
-      overallYield: 5,
-      totalWaste: 0,
-      grainConflictCount: 0,
-    };
-    const out = applyCoNesting(fakeResult, new Set());
-    expect(out).toBe(fakeResult);
+    const r = fakeRes(fakeSht('plywood-18', 0, [makePt('P1', 200, 300)]));
+    expect(applyCoNesting(r, new Set())).toBe(r);
   });
 
-  it('reduces total sheet count when parts from two materials are co-nested', () => {
-    // Synthetic result: two materials each with one half-full sheet of the same geometry
-    const sharedParts = (mat: string, idx: number) => ({
-      sheetIndex: idx,
-      material: mat,
-      thickness: 18,
-      sheetWidth: 1220,
-      sheetLength: 2440,
-      parts: [makePart(`${mat}-P1`, 400, 400), makePart(`${mat}-P2`, 400, 400)],
-      yieldPercent: 10,
-    });
-    const fakeResult = {
-      sheets: [sharedParts('plywood-18', 0), sharedParts('melamine-18', 1)],
-      totalSheets: 2,
-      overallYield: 10,
-      totalWaste: 0,
-      grainConflictCount: 0,
-    };
-    const key = '18x1220x2440';
-    const out = applyCoNesting(fakeResult, new Set([key]));
-    // All 4 parts should fit on 1 shared sheet (400x400 × 4 = 640000mm² << 1220x2440 = 2976800mm²)
-    expect(out.totalSheets).toBeLessThan(fakeResult.totalSheets);
+  it('reduces total sheet count and sets partMaterial when two materials are co-nested', () => {
+    const sharedParts = (mat: string, idx: number) =>
+      fakeSht(mat, idx, [makePt(`${mat}-P1`, 400, 400), makePt(`${mat}-P2`, 400, 400)]);
+    const r = fakeRes(sharedParts('plywood-18', 0), sharedParts('melamine-18', 1));
+    const out = applyCoNesting(r, new Set(['18x1220x2440']));
+    // All 4 parts fit on 1 shared sheet (640000mm² << 2976800mm²)
+    expect(out.totalSheets).toBeLessThan(r.totalSheets);
     expect(out.sheets.every((s) => s.parts.every((p) => p.partMaterial !== undefined))).toBe(true);
-  });
-
-  it('sets partMaterial on co-nested parts', () => {
-    const fakeResult = {
-      sheets: [
-        {
-          sheetIndex: 0,
-          material: 'plywood-18',
-          thickness: 18,
-          sheetWidth: 1220,
-          sheetLength: 2440,
-          parts: [makePart('P1', 200, 200)],
-          yieldPercent: 3,
-        },
-        {
-          sheetIndex: 1,
-          material: 'melamine-18',
-          thickness: 18,
-          sheetWidth: 1220,
-          sheetLength: 2440,
-          parts: [makePart('P2', 200, 200)],
-          yieldPercent: 3,
-        },
-      ],
-      totalSheets: 2,
-      overallYield: 3,
-      totalWaste: 0,
-      grainConflictCount: 0,
-    };
-    const out = applyCoNesting(fakeResult, new Set(['18x1220x2440']));
     const allParts = out.sheets.flatMap((s) => s.parts);
-    expect(allParts.find((p) => p.partId === 'P1')?.partMaterial).toBe('plywood-18');
-    expect(allParts.find((p) => p.partId === 'P2')?.partMaterial).toBe('melamine-18');
+    expect(allParts.find((p) => p.partId === 'plywood-18-P1')?.partMaterial).toBe('plywood-18');
+    expect(allParts.find((p) => p.partId === 'melamine-18-P1')?.partMaterial).toBe('melamine-18');
   });
 
   it('leaves untouched sheets unchanged', () => {
-    const fakeResult = {
-      sheets: [
-        {
-          sheetIndex: 0,
-          material: 'hdf-3',
-          thickness: 3,
-          sheetWidth: 1220,
-          sheetLength: 2440,
-          parts: [makePart('BP1', 100, 100)],
-          yieldPercent: 1,
-        },
-        {
-          sheetIndex: 1,
-          material: 'plywood-18',
-          thickness: 18,
-          sheetWidth: 1220,
-          sheetLength: 2440,
-          parts: [makePart('P1', 200, 200)],
-          yieldPercent: 3,
-        },
-        {
-          sheetIndex: 2,
-          material: 'melamine-18',
-          thickness: 18,
-          sheetWidth: 1220,
-          sheetLength: 2440,
-          parts: [makePart('P2', 200, 200)],
-          yieldPercent: 3,
-        },
-      ],
-      totalSheets: 3,
-      overallYield: 2,
-      totalWaste: 0,
-      grainConflictCount: 0,
-    };
-    const out = applyCoNesting(fakeResult, new Set(['18x1220x2440']));
-    const hdfSheet = out.sheets.find((s) => s.material === 'hdf-3');
+    const r = fakeRes(
+      fakeSht('hdf-3', 0, [makePt('BP1', 100, 100)], 3),
+      fakeSht('plywood-18', 1, [makePt('P1', 200, 200)]),
+      fakeSht('melamine-18', 2, [makePt('P2', 200, 200)]),
+    );
+    const hdfSheet = applyCoNesting(r, new Set(['18x1220x2440'])).sheets.find((s) => s.material === 'hdf-3');
     expect(hdfSheet).toBeDefined();
     expect(hdfSheet?.parts[0].partId).toBe('BP1');
   });

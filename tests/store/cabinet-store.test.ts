@@ -304,13 +304,9 @@ describe('cabinet-store', () => {
   });
 
   describe('setSheetSizeOverride (Sprint 165)', () => {
-    it('stores a sheet size override for a material key', () => {
+    it('stores and removes sheet size override', () => {
       useCabinetStore.getState().setSheetSizeOverride('mdf18', { width: 1220, length: 2440 });
       expect(useCabinetStore.getState().sheetSizeOverrides['mdf18']).toEqual({ width: 1220, length: 2440 });
-    });
-
-    it('removes the override when size is null', () => {
-      useCabinetStore.getState().setSheetSizeOverride('mdf18', { width: 1220, length: 2440 });
       useCabinetStore.getState().setSheetSizeOverride('mdf18', null);
       expect(useCabinetStore.getState().sheetSizeOverrides['mdf18']).toBeUndefined();
     });
