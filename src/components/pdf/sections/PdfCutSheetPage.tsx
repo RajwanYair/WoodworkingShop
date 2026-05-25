@@ -18,35 +18,36 @@ export function PdfCutSheetPage({ ctx, sheet, totalSheets, isMultiCabinet }: Pdf
   const mat = getMaterial(sheet.material);
   // ── Coordinate system note ──────────────────────────────────────────
   // The cut-optimizer uses: x → across sheetWidth, y → along sheetLength
-  // (grain direction).  A standard 4×8 sheet has sheetWidth=1220 mm and
-  // sheetLength=2440 mm, so isLandscape is almost always true.
+  // (grain direction).  Standard sheet: sheetWidth=1220 mm, sheetLength=2440 mm.
   //
-  // For LANDSCAPE sheets we rotate the diagram 90° so the long grain
-  // direction runs left→right (matching how a sheet sits on a table):
-  //   Diagram box : width = sheetLength * scale, height = sheetWidth * scale
-  //   Part mapping : left = p.y * scale, top = p.x * scale,
-  //                  rendered-width = p.length * scale, rendered-height = p.width * scale
+  // Cut-sheet pages are ALWAYS rendered in landscape so the long axis sits
+  // horizontally (matching how a sheet rests on a table saw).  We normalise
+  // by identifying which axis is longer:
   //
-  // For PORTRAIT sheets (rare — sheetWidth ≥ sheetLength) the natural
-  // orientation is already correct:
-  //   Diagram box : width = sheetWidth * scale, height = sheetLength * scale
-  //   Part mapping : left = p.x * scale, top = p.y * scale,
-  //                  rendered-width = p.width * scale, rendered-height = p.length * scale
-  const isLandscape = sheet.sheetLength > sheet.sheetWidth;
+  //   yIsHorizontal = true  (sheetLength ≥ sheetWidth — normal case):
+  //     Diagram : width = sheetLength * scale, height = sheetWidth * scale
+  //     left = p.y * scale, top = p.x * scale
+  //     rendered-w = p.length * scale, rendered-h = p.width * scale
+  //
+  //   yIsHorizontal = false (sheetWidth > sheetLength — custom-override case):
+  //     Diagram : width = sheetWidth * scale, height = sheetLength * scale
+  //     left = p.x * scale, top = p.y * scale
+  //     rendered-w = p.width * scale, rendered-h = p.length * scale
+  const longDim = Math.max(sheet.sheetLength, sheet.sheetWidth);
+  const shortDim = Math.min(sheet.sheetLength, sheet.sheetWidth);
+  const yIsHorizontal = sheet.sheetLength >= sheet.sheetWidth;
 
-  const maxHoriz = isLandscape ? 700 : 460;
-  const maxVert = isLandscape ? 380 : 600;
-  const diagHorizMm = isLandscape ? sheet.sheetLength : sheet.sheetWidth;
-  const diagVertMm = isLandscape ? sheet.sheetWidth : sheet.sheetLength;
-  const scale = Math.min(maxHoriz / diagHorizMm, maxVert / diagVertMm);
+  const maxHoriz = 740;
+  const maxVert = 390;
+  const scale = Math.min(maxHoriz / longDim, maxVert / shortDim);
 
-  const diagW = diagHorizMm * scale;
-  const diagH = diagVertMm * scale;
+  const diagW = longDim * scale;
+  const diagH = shortDim * scale;
 
   const sectionLabel = isMultiCabinet ? T.projectCutPlan : T.cutSheetPage;
 
   return (
-    <Page key={sheet.sheetIndex} size={pageSize} orientation={isLandscape ? 'landscape' : 'portrait'} style={s.page}>
+    <Page key={sheet.sheetIndex} size={pageSize} orientation="landscape" style={s.page}>
       <PageHeader
         section={`✂️  ${sectionLabel} ${sheet.sheetIndex + 1} / ${totalSheets}`}
         projectName={coverTitle}
@@ -125,10 +126,10 @@ export function PdfCutSheetPage({ ctx, sheet, totalSheets, isMultiCabinet }: Pdf
           />
         ))}
         {sheet.parts.map((p, i) => {
-          const pl = isLandscape ? p.y * scale : p.x * scale;
-          const pt = isLandscape ? p.x * scale : p.y * scale;
-          const pw = isLandscape ? p.length * scale : p.width * scale;
-          const ph = isLandscape ? p.width * scale : p.length * scale;
+          const pl = (yIsHorizontal ? p.y : p.x) * scale;
+          const pt = (yIsHorizontal ? p.x : p.y) * scale;
+          const pw = (yIsHorizontal ? p.length : p.width) * scale;
+          const ph = (yIsHorizontal ? p.width : p.length) * scale;
           return (
             <View
               key={i}

@@ -183,3 +183,64 @@ export async function importProjectsBundle(file: File): Promise<SavedProject[]> 
   await save(existing);
   return added;
 }
+
+// ── Project Settings export / import ─────────────────────────────────────────
+
+/** Optimizer and cost settings that can be saved/restored independently of cabinet geometries. */
+export interface ProjectSettings {
+  sawKerf: number;
+  materialPriceOverrides: Record<string, number>;
+  edgeBandingRate: number;
+  hardwarePriceOverrides: Record<string, number>;
+  hardwareQtyOverrides: Record<string, number>;
+  sheetSizeOverrides: Record<string, { width: number; length: number }>;
+  labourRate: number;
+  labourHours: number;
+  finishCost: number;
+}
+
+/** Trigger a browser download of the current settings as a `.cabinet-settings.json` file. */
+export function exportSettingsJson(settings: ProjectSettings, projectName: string): void {
+  const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${projectName.replace(/[^\w\u05D0-\u05EA.-]/g, '_')}.cabinet-settings.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/**
+ * Validate and extract a `ProjectSettings` object from an already-parsed JSON value.
+ * Missing or wrong-typed fields fall back to safe defaults.
+ * Throws if the payload is not a plain object.
+ */
+export function importSettingsJson(raw: unknown): ProjectSettings {
+  if (raw === null || typeof raw !== 'object' || Array.isArray(raw)) {
+    throw new Error('Settings file must be a JSON object');
+  }
+  const p = raw as Record<string, unknown>;
+  const isPlainObj = (v: unknown): v is Record<string, unknown> =>
+    v !== null && typeof v === 'object' && !Array.isArray(v);
+  return {
+    sawKerf: typeof p['sawKerf'] === 'number' ? p['sawKerf'] : 4,
+    materialPriceOverrides: isPlainObj(p['materialPriceOverrides'])
+      ? (p['materialPriceOverrides'] as Record<string, number>)
+      : {},
+    edgeBandingRate: typeof p['edgeBandingRate'] === 'number' ? p['edgeBandingRate'] : 3,
+    hardwarePriceOverrides: isPlainObj(p['hardwarePriceOverrides'])
+      ? (p['hardwarePriceOverrides'] as Record<string, number>)
+      : {},
+    hardwareQtyOverrides: isPlainObj(p['hardwareQtyOverrides'])
+      ? (p['hardwareQtyOverrides'] as Record<string, number>)
+      : {},
+    sheetSizeOverrides: isPlainObj(p['sheetSizeOverrides'])
+      ? (p['sheetSizeOverrides'] as Record<string, { width: number; length: number }>)
+      : {},
+    labourRate: typeof p['labourRate'] === 'number' ? p['labourRate'] : 75,
+    labourHours: typeof p['labourHours'] === 'number' ? p['labourHours'] : 0,
+    finishCost: typeof p['finishCost'] === 'number' ? p['finishCost'] : 0,
+  };
+}

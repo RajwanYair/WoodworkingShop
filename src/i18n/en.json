@@ -260,7 +260,14 @@
     "contentsPageNumbers": "Page numbers on every page",
     "exportErpJson": "Export ERP/MRP JSON",
     "erpExported": "ERP/MRP payload exported",
-    "error": "PDF generation failed — check your connection and try again"
+    "error": "PDF generation failed \u2014 check your connection and try again",
+    "projectSettings": "Project Settings",
+    "settingsDescription": "Save and restore saw kerf, sheet sizes, material prices and costs.",
+    "exportSettings": "Export Project Settings",
+    "importSettings": "Import Project Settings",
+    "settingsExported": "Project settings exported",
+    "settingsImported": "Project settings applied",
+    "settingsImportError": "Could not import settings \u2014 invalid file"
   },
   "footer": {
     "darkMode": "Dark Mode",

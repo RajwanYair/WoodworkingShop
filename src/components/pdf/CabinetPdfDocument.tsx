@@ -88,6 +88,9 @@ export function CabinetPdfDocument({
   const isMultiCabinet = Array.isArray(allCabinetsData) && allCabinetsData.length > 0;
   const effectiveOptimization = isMultiCabinet ? (combinedOptimization ?? optimization) : optimization;
   const effectiveHardware = isMultiCabinet ? (allHardware ?? hardware) : hardware;
+  const effectiveEdgeBandingTotal = isMultiCabinet
+    ? (allCabinetsData?.reduce((sum, c) => sum + c.edgeBandingTotal, 0) ?? edgeBandingTotal)
+    : edgeBandingTotal;
 
   const cMat = getMaterial(config.carcassMaterial);
   const bMat = getMaterial(config.backPanelMaterial);
@@ -117,8 +120,8 @@ export function CabinetPdfDocument({
           config={config}
           cMatName={cMat.name[lang]}
           cMatThickness={cMat.thickness}
-          optimization={optimization}
-          hardware={hardware}
+          optimization={effectiveOptimization}
+          hardware={effectiveHardware}
           cabinetCount={cabinetCount}
         />
       )}
@@ -159,7 +162,12 @@ export function CabinetPdfDocument({
       <PdfDrillingPage ctx={ctx} d={d} backPanelMaterial={config.backPanelMaterial} />
       <PdfExplodedPage ctx={ctx} config={config} d={d} cMatName={cMat.name[lang]} bMatName={bMat.name[lang]} />
       <PdfAssemblyPage ctx={ctx} config={config} d={d} cMatName={cMat.name[lang]} bMatName={bMat.name[lang]} />
-      <PdfShoppingPage ctx={ctx} optimization={optimization} hardware={hardware} edgeBandingTotal={edgeBandingTotal} />
+      <PdfShoppingPage
+        ctx={ctx}
+        optimization={effectiveOptimization}
+        hardware={effectiveHardware}
+        edgeBandingTotal={effectiveEdgeBandingTotal}
+      />
     </Document>
   );
 }

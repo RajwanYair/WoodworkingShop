@@ -31,6 +31,8 @@ export type OptimizerSettingsSlice = {
   setLabourRate: (rate: number) => void;
   setLabourHours: (hours: number) => void;
   setFinishCost: (cost: number) => void;
+  /** Apply a full settings snapshot atomically, triggering a single optimizer + cost re-run. */
+  loadSettings: (session: OptimizerSettingsSession) => void;
 };
 
 // ─── Slice-local session type (subset used in hydration) ─────────────────────
@@ -160,5 +162,31 @@ export function createOptimizerSettingsSlice(
         onRescheduleOpt(state.sawKerf, sheetSizeOverrides);
         return { sheetSizeOverrides };
       }),
+
+    loadSettings: (session) => {
+      const sawKerf = Math.max(0, Math.min(8, session.sawKerf ?? 4));
+      const sheetSizeOverrides = session.sheetSizeOverrides ?? {};
+      set({
+        sawKerf,
+        materialPriceOverrides: session.materialPriceOverrides ?? {},
+        edgeBandingRate: Math.max(0, session.edgeBandingRate ?? 3),
+        hardwarePriceOverrides: session.hardwarePriceOverrides ?? {},
+        hardwareQtyOverrides: session.hardwareQtyOverrides ?? {},
+        sheetSizeOverrides,
+        labourRate: Math.max(0, session.labourRate ?? 75),
+        labourHours: Math.max(0, session.labourHours ?? 0),
+        finishCost: Math.max(0, session.finishCost ?? 0),
+      });
+      onRescheduleOpt(sawKerf, sheetSizeOverrides);
+      onRescheduleCost({
+        materialPriceOverrides: session.materialPriceOverrides ?? {},
+        edgeBandingRate: session.edgeBandingRate ?? 3,
+        hardwarePriceOverrides: session.hardwarePriceOverrides ?? {},
+        hardwareQtyOverrides: session.hardwareQtyOverrides ?? {},
+        labourRate: session.labourRate ?? 75,
+        labourHours: session.labourHours ?? 0,
+        finishCost: session.finishCost ?? 0,
+      });
+    },
   };
 }

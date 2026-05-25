@@ -258,7 +258,14 @@
     "contentsSheets": "Diagramas de hojas de corte ({{count}} hojas)",
     "contentsPageNumbers": "Números de página en cada página",
     "exportErpJson": "Exportar JSON ERP/MRP",
-    "erpExported": "Fichero ERP/MRP exportado"
+    "erpExported": "Fichero ERP/MRP exportado",
+    "projectSettings": "Configuraci\u00f3n del proyecto",
+    "settingsDescription": "Guardar y restaurar el espesor de corte, tama\u00f1os de tablero, precios de materiales y costes.",
+    "exportSettings": "Exportar configuraci\u00f3n del proyecto",
+    "importSettings": "Importar configuraci\u00f3n del proyecto",
+    "settingsExported": "Configuraci\u00f3n del proyecto exportada",
+    "settingsImported": "Configuraci\u00f3n del proyecto aplicada",
+    "settingsImportError": "No se pudo importar la configuraci\u00f3n \u2014 archivo no v\u00e1lido"
   },
   "footer": {
     "darkMode": "Modo oscuro",

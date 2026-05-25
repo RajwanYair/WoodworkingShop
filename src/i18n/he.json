@@ -260,7 +260,14 @@
     "contentsPageNumbers": "מספרי עמודים בכל עמוד",
     "exportErpJson": "יצוא JSON ל-ERP/MRP",
     "erpExported": "קובץ ERP/MRP יוצא בהצלחה",
-    "error": "יצירת ה-PDF נכשלה — בדוק את החיבור לאינטרנט ונסה שוב"
+    "error": "יצירת ה-PDF נכשלה \u2014 בדוק את החיבור לאינטרנט ונסה שוב",
+    "projectSettings": "הגדרות פרויקט",
+    "settingsDescription": "שמור ושחזר מרווח מסור, גדלי גיליון, מחירי חומרים ועלויות.",
+    "exportSettings": "ייצוא הגדרות פרויקט",
+    "importSettings": "ייבוא הגדרות פרויקט",
+    "settingsExported": "הגדרות הפרויקט יוצאו",
+    "settingsImported": "הגדרות הפרויקט הוחלו",
+    "settingsImportError": "לא ניתן לייבא הגדרות \u2014 קובץ לא תקין"
   },
   "footer": {
     "darkMode": "מצב כהה",

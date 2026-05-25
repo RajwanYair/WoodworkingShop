@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { pdf } from '@react-pdf/renderer';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { CabinetPdfDocument } from './CabinetPdfDocument';
 import type { CabinetPdfEntry } from './CabinetPdfDocument';
 import { generateErpPayload, downloadErpJson } from '../../utils/erp-export';
+import { exportSettingsJson, importSettingsJson } from '../../utils/project-storage';
+import type { ProjectSettings } from '../../utils/project-storage';
 import { useToastStore } from '../../store/toast-store';
 import type { Lang } from '../../engine/types';
 import { generateParts, computeEdgeBandingTotal } from '../../engine/parts';
@@ -19,6 +21,7 @@ export function PdfExportPanel() {
   const [includeCover, setIncludeCover] = useState(true); // v3.19.0
   const [pageSize, setPageSize] = useState<'A4' | 'LETTER'>('A4'); // Sprint 59
   const [orientation, setOrientation] = useState<'portrait' | 'landscape'>('portrait'); // Sprint 59
+  const settingsFileRef = useRef<HTMLInputElement>(null);
 
   const handleGenerate = async () => {
     setGenerating(true);
@@ -140,6 +143,41 @@ export function PdfExportPanel() {
     }
   };
 
+  /** Export project settings (saw kerf, sheet sizes, prices, costs) as a JSON file. */
+  const handleExportSettings = () => {
+    const settings: ProjectSettings = {
+      sawKerf: store.sawKerf,
+      materialPriceOverrides: store.materialPriceOverrides,
+      edgeBandingRate: store.edgeBandingRate,
+      hardwarePriceOverrides: store.hardwarePriceOverrides,
+      hardwareQtyOverrides: store.hardwareQtyOverrides,
+      sheetSizeOverrides: store.sheetSizeOverrides,
+      labourRate: store.labourRate,
+      labourHours: store.labourHours,
+      finishCost: store.finishCost,
+    };
+    exportSettingsJson(settings, store.projectName || 'project');
+    useToastStore.getState().addToast(t('pdf.settingsExported'), 'success');
+  };
+
+  /** Import project settings from a `.cabinet-settings.json` file and apply to the store. */
+  const handleImportSettings = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    e.target.value = '';
+    void (async () => {
+      try {
+        const text = await file.text();
+        const raw = JSON.parse(text) as unknown;
+        const settings = importSettingsJson(raw);
+        store.loadSettings(settings);
+        useToastStore.getState().addToast(t('pdf.settingsImported'), 'success');
+      } catch {
+        useToastStore.getState().addToast(t('pdf.settingsImportError'), 'error');
+      }
+    })();
+  };
+
   return (
     <div className="space-y-6">
       <div className="space-y-4 py-8 text-center">
@@ -250,11 +288,46 @@ export function PdfExportPanel() {
             </li>
           )}
           <li>{t('pdf.contentsSpecs')}</li>
-          <li>{t('pdf.contentsParts', { count: store.parts.length })}</li>
+          <li>
+            {t('pdf.contentsParts', { count: store.cabinets.length > 1 ? store.allParts.length : store.parts.length })}
+          </li>
           <li>{t('pdf.contentsHardware', { count: store.hardware.length })}</li>
-          <li>{t('pdf.contentsSheets', { count: store.optimization.totalSheets })}</li>
+          <li>
+            {t('pdf.contentsSheets', {
+              count:
+                store.cabinets.length > 1 ? store.combinedOptimization.totalSheets : store.optimization.totalSheets,
+            })}
+          </li>
           <li>{t('pdf.contentsPageNumbers')}</li>
         </ul>
+      </div>
+
+      {/* Project settings export / import */}
+      <div className="border-wood-200 dark:border-wood-700 mx-auto max-w-md rounded-lg border p-4">
+        <h3 className="text-wood-600 dark:text-wood-300 mb-2 text-sm font-medium">{t('pdf.projectSettings')}</h3>
+        <p className="text-wood-400 dark:text-wood-500 mb-3 text-xs">{t('pdf.settingsDescription')}</p>
+        <div className="flex flex-wrap justify-center gap-3">
+          <button
+            onClick={handleExportSettings}
+            className="bg-wood-100 dark:bg-wood-800 text-wood-700 dark:text-wood-200 border-wood-300 dark:border-wood-600 hover:bg-wood-200 dark:hover:bg-wood-700 rounded-lg border px-4 py-2 text-xs font-medium transition-colors"
+          >
+            {t('pdf.exportSettings')}
+          </button>
+          <button
+            onClick={() => settingsFileRef.current?.click()}
+            className="bg-wood-100 dark:bg-wood-800 text-wood-700 dark:text-wood-200 border-wood-300 dark:border-wood-600 hover:bg-wood-200 dark:hover:bg-wood-700 rounded-lg border px-4 py-2 text-xs font-medium transition-colors"
+          >
+            {t('pdf.importSettings')}
+          </button>
+          <input
+            ref={settingsFileRef}
+            type="file"
+            accept=".json"
+            onChange={handleImportSettings}
+            className="hidden"
+            aria-hidden="true"
+          />
+        </div>
       </div>
     </div>
   );

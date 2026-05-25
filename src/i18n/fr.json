@@ -258,7 +258,14 @@
     "contentsSheets": "Plans de découpe ({{count}} feuilles)",
     "contentsPageNumbers": "Numéros de page sur chaque page",
     "exportErpJson": "Exporter JSON ERP/MRP",
-    "erpExported": "Fichier ERP/MRP exporté"
+    "erpExported": "Fichier ERP/MRP exporté",
+    "projectSettings": "Paramètres du projet",
+    "settingsDescription": "Enregistrez et restaurez le trait de scie, les dimensions des panneaux, les prix des matériaux et les coûts.",
+    "exportSettings": "Exporter les paramètres du projet",
+    "importSettings": "Importer les paramètres du projet",
+    "settingsExported": "Paramètres du projet exportés",
+    "settingsImported": "Paramètres du projet appliqués",
+    "settingsImportError": "Impossible d'importer les paramètres \u2014 fichier invalide"
   },
   "footer": {
     "darkMode": "Mode sombre",

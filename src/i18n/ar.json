@@ -258,7 +258,14 @@
     "contentsSheets": "مخططات خطط القطع ({{count}} ورقة)",
     "contentsPageNumbers": "أرقام الصفحات في كل صفحة",
     "exportErpJson": "تصدير JSON لل-ERP/MRP",
-    "erpExported": "تم تصدير بيانات ERP/MRP"
+    "erpExported": "تم تصدير بيانات ERP/MRP",
+    "projectSettings": "Project Settings",
+    "settingsDescription": "Save and restore saw kerf, sheet sizes, material prices and costs.",
+    "exportSettings": "Export Project Settings",
+    "importSettings": "Import Project Settings",
+    "settingsExported": "Project settings exported",
+    "settingsImported": "Project settings applied",
+    "settingsImportError": "Could not import settings \u2014 invalid file"
   },
   "footer": {
     "darkMode": "الوضع الداكن",

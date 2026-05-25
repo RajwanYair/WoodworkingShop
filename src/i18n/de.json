@@ -258,7 +258,14 @@
     "contentsSheets": "Zuschnittpläne ({{count}} Blätter)",
     "contentsPageNumbers": "Seitenzahlen auf jeder Seite",
     "exportErpJson": "ERP/MRP JSON exportieren",
-    "erpExported": "ERP/MRP-Datei exportiert"
+    "erpExported": "ERP/MRP-Datei exportiert",
+    "projectSettings": "Projekteinstellungen",
+    "settingsDescription": "S\u00e4geschnitt, Plattenma\u00dfe, Materialpreise und Kosten speichern und wiederherstellen.",
+    "exportSettings": "Projekteinstellungen exportieren",
+    "importSettings": "Projekteinstellungen importieren",
+    "settingsExported": "Projekteinstellungen exportiert",
+    "settingsImported": "Projekteinstellungen angewendet",
+    "settingsImportError": "Einstellungen konnten nicht importiert werden \u2014 ung\u00fcltige Datei"
   },
   "footer": {
     "darkMode": "Dunkelmodus",
