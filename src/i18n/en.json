@@ -754,5 +754,14 @@
     "noteVarnish": "Allow each varnish coat to cure fully before sanding back.",
     "noteOil": "Danish oil penetrates the grain; wipe off surplus after 20 min.",
     "noteLacquer": "Apply lacquer in thin, even passes in a dust-free environment."
+  },
+  "buildLog": {
+    "title": "Build Log",
+    "addPlaceholder": "Add a build note\u2026",
+    "hint": "Ctrl + Enter to save",
+    "add": "Add note",
+    "empty": "No notes yet. Log steps, adjustments, or observations.",
+    "delete": "Delete entry",
+    "clearAll": "Clear all entries"
   }
 }

@@ -9,6 +9,7 @@ import { triggerDownload } from '../../utils/download';
 import { IconPrint, IconLightbulb, IconDownload } from '../layout/Icons';
 import { WebSerialPanel } from './WebSerialPanel';
 import { CameraCapture } from './CameraCapture';
+import { BuildLogPanel } from './BuildLogPanel';
 
 type ViewMode = 'paginated' | 'all';
 
@@ -306,6 +307,8 @@ export function AssemblyGuide() {
       <WebSerialPanel />
       {/* Sprint 81 — room photo reference */}
       <CameraCapture />
+      {/* Sprint 89 — project build log */}
+      <BuildLogPanel />
     </div>
   );
 }

@@ -13,6 +13,15 @@ import { pushProjectNameToUrl } from '../../utils/url-state';
 // is independently testable without importing the full store module.
 
 export const UI_PREFS_KEY = 'woodworkingshop:prefs';
+export const BUILD_LOG_KEY = 'woodworkingshop:buildlog';
+
+/** A single entry in the project build log. */
+export interface BuildLogEntry {
+  id: string;
+  text: string;
+  /** ISO-8601 timestamp when the entry was created. */
+  createdAt: string;
+}
 
 export interface UiPersistedPrefs {
   darkMode?: boolean;
@@ -35,6 +44,27 @@ export function saveUiPrefs(prefs: UiPersistedPrefs): void {
   if (typeof window === 'undefined') return;
   try {
     window.localStorage.setItem(UI_PREFS_KEY, JSON.stringify(prefs));
+  } catch {
+    /* quota / disabled — ignore */
+  }
+}
+
+export function loadBuildLog(): BuildLogEntry[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = window.localStorage.getItem(BUILD_LOG_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as unknown;
+    return Array.isArray(parsed) ? (parsed as BuildLogEntry[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function saveBuildLog(log: BuildLogEntry[]): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(BUILD_LOG_KEY, JSON.stringify(log));
   } catch {
     /* quota / disabled — ignore */
   }
@@ -63,6 +93,9 @@ export type UiSlice = {
   highContrastMode: boolean;
   units: UnitSystem;
 
+  // Build log (Sprint 89)
+  buildLog: BuildLogEntry[];
+
   // Actions
   setActiveTab: (tab: ActiveTab) => void;
   setProjectName: (name: string) => void;
@@ -71,6 +104,11 @@ export type UiSlice = {
   toggleColorBlindMode: () => void;
   toggleHighContrast: () => void;
   toggleUnits: () => void;
+
+  // Build log actions (Sprint 89)
+  addBuildLogEntry: (text: string) => void;
+  deleteBuildLogEntry: (id: string) => void;
+  clearBuildLog: () => void;
 };
 
 // ─── Slice creator ────────────────────────────────────────────────────────────
@@ -88,6 +126,7 @@ export function createUiSlice(
   initialPrefs: UiPersistedPrefs,
   initialProjectName: string,
   initialProjectNotes: string,
+  initialBuildLog: BuildLogEntry[],
 ): UiSlice {
   return {
     // ── Initial state ──
@@ -98,6 +137,7 @@ export function createUiSlice(
     colorBlindMode: initialPrefs.colorBlindMode ?? false,
     highContrastMode: initialPrefs.highContrastMode ?? false,
     units: initialPrefs.units ?? ('metric' as UnitSystem),
+    buildLog: initialBuildLog,
 
     // ── Actions ──
     setActiveTab: (tab) => set({ activeTab: tab }),
@@ -145,6 +185,31 @@ export function createUiSlice(
           units,
         });
         return { units };
+      }),
+
+    addBuildLogEntry: (text) =>
+      set((s) => {
+        const entry: BuildLogEntry = {
+          id: crypto.randomUUID(),
+          text: text.trim(),
+          createdAt: new Date().toISOString(),
+        };
+        const buildLog = [entry, ...s.buildLog];
+        saveBuildLog(buildLog);
+        return { buildLog };
+      }),
+
+    deleteBuildLogEntry: (id) =>
+      set((s) => {
+        const buildLog = s.buildLog.filter((e) => e.id !== id);
+        saveBuildLog(buildLog);
+        return { buildLog };
+      }),
+
+    clearBuildLog: () =>
+      set(() => {
+        saveBuildLog([]);
+        return { buildLog: [] };
       }),
   };
 }

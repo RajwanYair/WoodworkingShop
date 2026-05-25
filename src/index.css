@@ -369,13 +369,15 @@
     break-after: page;
   }
 
-  /* Keep headings attached to the content that follows them */
+  /* Keep headings attached to the content that follows them.
+     Note: break-before:avoid used (not avoid-page) for Firefox compat — both
+     prevent a break before a heading; avoid-page is Chrome/Edge only. */
   h1,
   h2,
   h3,
   h4 {
     break-after: avoid;
-    break-before: avoid-page;
+    break-before: avoid;
   }
 
   /* Sprint 72 — prevent lone heading at bottom of page (widow heading) */
@@ -461,7 +463,9 @@
     page: landscape-cut;
   }
 
-  /* v3.28.0 — avoid orphaned single rows at bottom of page */
+  /* v3.28.0 — avoid orphaned single rows at bottom of page.
+     Note: orphans/widows are paged-media properties not supported in Firefox;
+     they apply in Chrome/Edge print and degrade gracefully in Firefox. */
   tr {
     orphans: 3;
     widows: 3;

@@ -42,7 +42,7 @@ function makeSlice(prefs: UiPersistedPrefs = {}, projectName = '', projectNotes 
     const patch = typeof partial === 'function' ? partial(state) : partial;
     state = { ...state, ...patch };
   };
-  state = createUiSlice(set as Parameters<typeof createUiSlice>[0], prefs, projectName, projectNotes);
+  state = createUiSlice(set as Parameters<typeof createUiSlice>[0], prefs, projectName, projectNotes, []);
   return { get: () => state, set };
 }
 
