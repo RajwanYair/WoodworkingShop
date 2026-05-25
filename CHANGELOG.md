@@ -9,6 +9,46 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.2.0] — 2026-06-07
+
+### Phase 21 — Plugin Marketplace, Finish Calculator, Build Log & Focus Mode (Sprints 87–90)
+
+#### Sprint 87 — Plugin Marketplace Panel
+
+- Added `src/components/layout/PluginMarketplacePanel.tsx`: browse, install, and rate community plugins; status badges (stable/experimental); search/filter by category; uses existing plugin registry
+- i18n: `marketplace.*` section (EN + HE parity)
+
+#### Sprint 88 — Finish/Paint Calculator
+
+- Added `src/engine/finish-calculator.ts`: pure-TS engine — `computeFinishAreaM2()`, `calculateFinish()`, `selectCanSizes()`, `FINISH_SPECS` (primer/stain/paint/varnish/oil/lacquer)
+- Added `FinishCalculatorPanel` component: finish type chips, coat range slider, area/litres/can-size summary, per-finish advisory note; mounted in `ConfiguratorPanel`
+- i18n: `finish.*` section (19 keys, EN + HE parity; 657 keys total)
+
+#### Sprint 89 — Project Build Log
+
+- Added `src/components/assembly/BuildLogPanel.tsx`: collapsible panel with timestamped notes; Ctrl+Enter shortcut to save; delete/clear actions; `<time>` element for semantic timestamps
+- Added `buildLog` Zustand slice in `uiSlice.ts`: `addBuildLogEntry` (crypto.randomUUID), `deleteBuildLogEntry`, `clearBuildLog` — persisted to `localStorage`
+- Mounted `BuildLogPanel` in `AssemblyGuide` after `CameraCapture`
+- Fixed `break-before: avoid-page` → `break-before: avoid` (Firefox compatibility)
+- i18n: `buildLog.*` section (7 keys, EN + HE parity; 664 keys total)
+
+#### Workspace & Copilot Integration
+
+- Reorganized `.vscode/settings.json` with sectioned layout; added bracket colorization, sticky scroll, linked editing, and format-on-save for all file types
+- Added tasks: `i18n Coverage`, `Bundle Check`, `Bench Check`, `CI (full)` to `.vscode/tasks.json`
+- Added MCP servers: filesystem, memory (alongside existing GitHub) in `.vscode/mcp.json`
+- Added new prompts: `new-feature.prompt.md`, `fix-tests.prompt.md`, `i18n-add-keys.prompt.md`
+- Updated `copilot-instructions.md` to v4.1.0/Phase 21; `AGENTS.md` to v4.1.0 with Copilot Prompts table
+- Updated `ROADMAP.md`: version 4.1.0, added Phase 21 sprint table
+
+#### Sprint 90 — Focus/Kiosk Mode
+
+- Added `focusMode: boolean` + `toggleFocusMode()` to `UiSlice`
+- `App.tsx`: `Header`, `Sidebar`, and `MobileTabBar` hidden when `focusMode` is active
+- Ctrl+Shift+K shortcut to toggle focus mode with toast notification
+- Added to `ShortcutsModal` SHORTCUTS array
+- i18n: `focusMode.enter` / `focusMode.exit` (EN + HE; 666 keys total)
+
 ## [4.1.0] — 2026-05-25
 
 ### Phase 20 — Mobile UX, glTF Export & Measurement Assistant (Sprints 81–82, 84–86)

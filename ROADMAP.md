@@ -1,6 +1,6 @@
 # Roadmap
 
-> **Last strategic review**: 2026-05-25 · **Current version**: 4.1.0
+> **Last strategic review**: 2026-05-25 · **Current version**: 4.2.0
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -80,13 +80,15 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 17    | v3.71.0         | DX & Bundle Optimization         | Comlink workers, tree-shake audit, PDF renderer spike, chunk strategy, pnpm eval, PLUGIN-API.md                |
 | 17.1  | v3.71.1         | JSDoc D1–D3 (optimizer layer)    | JSDoc: types.ts, parts/dimensions/materials, cut-optimizer/smart-optimizer; markdownlint CI fixes              |
 | 17.2  | v3.72.0         | Production Readiness & DX        | Partial: fix-buttons, i18n keys, VS Code snippets/tasks, Copilot prompts, dependabot, CODEOWNERS, SECURITY.md  |
+| 17.3  | v3.73.0         | Test Efficiency & DX Elevation   | it.each parameterization, source file splitting, CI slim, docs consolidation, CONTRIBUTING.md                  |
+| 18    | v3.75.0         | Visual Fidelity & UX             | Material texture atlas, SVG isometric render, nesting animation, onboarding wizard, print stylesheet          |
+| 19    | v4.0.0          | Machine Integration & Community  | WebSerial Grbl streaming, machine profile registry, community material catalog                                 |
+| 20    | v4.1.0          | Enterprise & Mobile              | IFC/STEP export, Capacitor iOS/Android, mobile touch UI, glTF 2.0, measurement assistant, ZIP bundle           |
+| 21    | v4.2.0          | Marketplace + Build UX           | Plugin marketplace, finish/paint calculator, project build log, focus/kiosk mode, workspace DX                |
 
 ---
 
 ## Active Roadmap
-
-> Phase 16–17.1 sprint tables: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
-> Phase 17.1 D4–D12 resumes after Phase 17.2 completes.
 
 ### Phase 17.3: Test Efficiency, Source Splitting & DX Elevation (v3.73.0) — **HIGH PRIORITY / NEXT**
 
@@ -165,7 +167,7 @@ state; GH release published.
 | 85     | Cabinet measurement assistant (ergonomic + best-practice hints) | DONE |
 | 86     | ZIP bundle export (PDF + DXF + BOM + glTF in one download)      | DONE |
 
-### Phase 21: Marketplace + Build UX (v4.2.0) — **ACTIVE**
+### Phase 21: Marketplace + Build UX (v4.2.0) — **DONE**
 
 **Goal**: Plugin marketplace panel, finish/paint calculator, build log, focus mode.
 
@@ -173,9 +175,9 @@ state; GH release published.
 | ------ | ------------------------------------------------------ | -------- | ------- |
 | 87     | Plugin Marketplace Panel (browse, install, rate)       | **DONE** | UI      |
 | 88     | Finish/Paint Calculator (coverage, coats, dry time)    | **DONE** | Engine  |
-| 89     | Project Build Log (timestamped notes per project)      | **WIP**  | UI      |
-| 90     | Focus/Kiosk Mode (hide chrome, Ctrl+Shift+K toggle)   | TODO     | UX      |
-| 91     | Version bump 4.2.0, CHANGELOG, GH release              | TODO     | Release |
+| 89     | Project Build Log (timestamped notes per project)      | **DONE** | UI      |
+| 90     | Focus/Kiosk Mode (hide chrome, Ctrl+Shift+K toggle)   | **DONE** | UX      |
+| 91     | Version bump 4.2.0, CHANGELOG, GH release              | **DONE** | Release |
 
 ### Phase 22+: Future Horizons (Unscoped)
 
