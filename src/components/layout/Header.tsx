@@ -6,6 +6,7 @@ import { configToUrl } from '../../utils/url-state';
 import { HelpButton } from './OnboardingOverlay';
 import { TemplatePicker } from '../configurator/TemplatePicker';
 import { ProjectManagerModal } from './ProjectManagerModal';
+import { MarketplacePanel } from './MarketplacePanel';
 import { SUPPORTED_LANGUAGES, RTL_LANGS, loadLocale, type SupportedLang } from '../../i18n';
 import {
   IconSun,
@@ -68,6 +69,7 @@ export function Header() {
   const lang = i18n.language;
   const [showTemplates, setShowTemplates] = useState(false);
   const [showProjects, setShowProjects] = useState(false);
+  const [showMarketplace, setShowMarketplace] = useState(false);
   const tabListRef = useRef<HTMLDivElement>(null);
 
   /** Arrow-key / Home / End navigation inside the tab list.
@@ -284,10 +286,19 @@ export function Header() {
         >
           <IconHelp size={16} />
         </button>
+        <button
+          onClick={() => setShowMarketplace(true)}
+          className="text-wood-200 flex items-center hover:text-white"
+          title={t('marketplace.title')}
+          aria-label={t('marketplace.title')}
+        >
+          🛒
+        </button>
         <HelpButton />
       </div>
       {showTemplates && <TemplatePicker onClose={() => setShowTemplates(false)} />}
       {showProjects && <ProjectManagerModal onClose={() => setShowProjects(false)} />}
+      {showMarketplace && <MarketplacePanel onClose={() => setShowMarketplace(false)} />}
     </header>
   );
 }

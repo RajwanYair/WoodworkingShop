@@ -713,5 +713,25 @@
     "deskDepth": "Min desk depth for a monitor setup is {{min}} mm (yours: {{current}} mm)",
     "reachZone": "Top of cabinet at {{current}} mm is above comfortable reach zone ({{max}} mm)",
     "sheetAlignment": "Width {{current}} mm does not align with standard sheet {{nearest}} mm — consider adjusting to minimise offcuts"
+  },
+  "marketplace": {
+    "title": "Plugin Marketplace",
+    "close": "Close marketplace",
+    "searchPlaceholder": "Search plugins…",
+    "filterLabel": "Filter by category",
+    "catAll": "All",
+    "catExport": "Export",
+    "catOptimizer": "Optimizer",
+    "catPreview": "Preview",
+    "catUtility": "Utility",
+    "catTheme": "Theme",
+    "noResults": "No plugins found",
+    "install": "Install",
+    "uninstall": "Uninstall",
+    "by": "by {{author}}",
+    "downloads": "{{count}} downloads",
+    "pluginCount": "{{count}} plugins",
+    "installedCount": "{{count}}",
+    "installed": "installed"
   }
 }

@@ -713,5 +713,25 @@
     "deskDepth": "עומק מינימלי לסביבת מסך הוא {{min}} מ״מ (שלך: {{current}} מ״מ)",
     "reachZone": "גג הארון ב-{{current}} מ״מ גבוה מטווח ההגעה הנוח ({{max}} מ״מ)",
     "sheetAlignment": "רוחב {{current}} מ״מ אינו מיושר עם גיליון סטנדרטי {{nearest}} מ״מ — שקול להתאים"
+  },
+  "marketplace": {
+    "title": "שוק תוספים",
+    "close": "סגור את השוק",
+    "searchPlaceholder": "חפש תוספים…",
+    "filterLabel": "סינון לפי קטגוריה",
+    "catAll": "הכל",
+    "catExport": "ייצוא",
+    "catOptimizer": "אופטימיזציה",
+    "catPreview": "תצוגה מקדימה",
+    "catUtility": "כלי עזר",
+    "catTheme": "ערכת נושא",
+    "noResults": "לא נמצאו תוספים",
+    "install": "התקן",
+    "uninstall": "הסר",
+    "by": "מאת {{author}}",
+    "downloads": "{{count}} הורדות",
+    "pluginCount": "{{count}} תוספים",
+    "installedCount": "{{count}}",
+    "installed": "מותקנים"
   }
 }
