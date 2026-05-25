@@ -1,0 +1,344 @@
+import type { CabinetConfig, DerivedDimensions, Lang, OptimizationResult, Part, HardwareItem } from '../../engine/types';
+
+// This dictionary provides all structural labels in both languages.
+export const pdfI18n = {
+  en: {
+    coverTitle: 'CABINET BUILD PLAN',
+    dimensions: 'Dimensions',
+    carcassMaterial: 'Carcass material',
+    doorsShelves: 'Doors / shelves',
+    cutSheets: 'Cut sheets',
+    hardwareItems: 'Hardware items',
+    cabinetsInProject: 'Cabinets in project',
+    generated: 'Generated',
+    brandFooter: 'Cabinet Planner — Interactive Woodworking Design Tool',
+    specTitle: 'Cabinet Specifications',
+    specDimensions: 'Dimensions',
+    specExternal: 'External (W × H × D)',
+    specInternalWidth: 'Internal width',
+    specInternalHeight: 'Internal height',
+    specShelfDepth: 'Shelf depth',
+    specShelfWidth: 'Shelf width',
+    specMaterials: 'Materials',
+    specCarcass: 'Carcass material',
+    specBackPanel: 'Back panel material',
+    specEdgeBanding: 'Edge banding',
+    specEdgeBandingTotal: 'Edge banding total',
+    specDoorsHardware: 'Doors & Hardware',
+    specDoorStyle: 'Door style',
+    specDoorCount: 'Door count',
+    specDoorDimensions: 'Door dimensions',
+    specDoorReveal: 'Door reveal',
+    specHingesPerDoor: 'Hinges per door',
+    specHandleStyle: 'Handle style',
+    specShelves: 'Shelves',
+    specShelfCount: 'Shelf count',
+    specShelfSpacing: 'Shelf spacing',
+    specBackPanelSize: 'Back panel',
+    cutSheetSummary: 'Cut Sheet Summary',
+    sheetsRequired: 'Sheets Required',
+    materialYield: 'Material Yield',
+    waste: 'Waste (m²)',
+    hardwareTypes: 'Hardware Types',
+    partsListTitle: 'Parts List',
+    partsTotal: 'parts total',
+    thId: 'ID',
+    thPartName: 'Part Name',
+    thQty: 'Qty',
+    thMaterial: 'Material',
+    thLength: 'Length',
+    thWidth: 'Width',
+    thThickness: 'Thick.',
+    thEdgeBand: 'Edge Band',
+    hardwareListTitle: 'Hardware List',
+    itemTypes: 'item types',
+    thItem: 'Item',
+    thUnit: 'Unit',
+    thNotes: 'Notes',
+    cutSheetPage: 'Cut Sheet',
+    yield: 'yield',
+    parts: 'parts',
+    cabinetOfPrefix: 'Cabinet',
+    cabinetOfMiddle: 'of',
+    projectCutPlan: 'Project Cut Plan — All Cabinets',
+    projectHardware: 'Project Hardware — All Cabinets',
+    drillingGuide: 'Drilling & Boring Guide',
+    hingeCupBoring: 'Hinge Cup Boring',
+    hingeCupDesc1: 'Bore 35 mm diameter cups, 12 mm deep on door inside face',
+    hingeCupDesc2: 'Hinge cup centre: 22.5 mm from door edge',
+    hingePositions: 'hinge(s) per door — positions from top:',
+    hingeFromTop: 'from top',
+    mountingPlates: 'Mounting Plates',
+    mountPlateDesc1: 'Fix mounting plates on side panels, aligned with hinge positions',
+    mountPlateDesc2: 'Plate centre: 37 mm from panel front edge',
+    mountPlateDesc3: 'Pre-drill 3 mm pilot holes for plate screws',
+    shelfPinHoles: 'Shelf Pin Holes (System 32)',
+    shelfPinDesc1: 'Drill 5 mm holes, 10 mm deep, on both side panels (inner face)',
+    shelfPinDesc2Front: 'Two columns per side: 37 mm and',
+    shelfPinDesc2Back: 'mm from front edge',
+    shelfPinDesc3: 'Spacing: 32 mm on-centre (System 32 line boring)',
+    shelfPinDesc4: 'First hole: 37 mm from bottom of internal space',
+    shelfPinDesc5: 'Total rows:',
+    shelfPinDesc5Suffix: 'per column',
+    confirmatScrews: 'Confirmat / Assembly Screws',
+    confirmatDesc1: 'Pre-drill 5 mm through-holes on outer face of top/bottom panels',
+    confirmatDesc2: 'Pilot drill 3.5 mm × 40 mm into end-grain of side panels',
+    confirmatDesc3: 'Spacing: ~150 mm apart along each joint',
+    confirmatDesc4: 'First/last confirmat: ~50 mm from panel edge',
+    backPanelSection: 'Back Panel',
+    backPanelFix: 'Fix into 10 ×',
+    backPanelMethod: 'mm rabbet, or staple/nail at ~150 mm intervals',
+    explodedView: 'Exploded Assembly View',
+    explodedNote: 'Parts shown separated for clarity — arrows indicate assembly direction.',
+    assemblySequence: 'Assembly Sequence',
+    shoppingList: 'Shopping List',
+    sheetGoods: 'Sheet Goods',
+    thSize: 'Size (mm)',
+    edgeBandingSection: 'Edge Banding',
+    edgeBandingRequired: 'Total edge banding required:',
+    metres: 'metres',
+    door: 'door',
+    doors: 'doors',
+    sheet: 'sheet',
+    sheets: 'sheets',
+    cabinets: 'cabinets',
+    itemType: 'item type',
+    itemTypePlural: 'item types',
+    page: 'Page',
+    sideL: 'Side L',
+    sideR: 'Side R',
+    topPanel: 'Top panel',
+    bottomPanel: 'Bottom panel',
+    shelf: 'Shelf',
+    back: 'Back',
+    doorLabel: 'Door',
+    stepPrepare: 'Prepare all panels',
+    stepPrepareDesc:
+      'Cut all parts per the cut list. Sand faces to 180 grit. Apply edge banding ({edgeBanding}) to all designated edges.',
+    stepDrillPins: 'Drill shelf pin holes',
+    stepDrillPinsDesc:
+      'Drill 5 mm × 10 mm holes on both side panels (inner face), 32 mm apart, two columns per side. Use a line-boring jig for precision.',
+    stepPreDrill: 'Pre-drill confirmat holes',
+    stepPreDrillDesc:
+      'Drill 5 mm through-holes on top and bottom panels. Drill 3.5 mm × 40 mm pilot holes into side panel end-grain. Mark positions ~50 mm from edges, ~150 mm apart.',
+    stepAssemble: 'Assemble the carcass box',
+    stepAssembleDesc:
+      'Join side panels to top and bottom with confirmat screws. Use {carcass} panels. Internal width: {internalWidth} mm. Verify square with diagonal measurements — both diagonals must match.',
+    stepCentreShelf: 'Install fixed centre shelf',
+    stepCentreShelfDesc:
+      'Install the fixed structural shelf at mid-height (required for cabinets > 1200 mm tall). Secure with confirmats through both side panels.',
+    stepBackPanel: 'Attach back panel',
+    stepBackPanelDesc:
+      'Fit the {back} back panel ({w} × {h} mm) into the rabbet or staple/nail at ~150 mm intervals. The back panel keeps the carcass square — check again before fastening.',
+    stepBoreHinges: 'Bore hinge cups on doors',
+    stepBoreHingesDesc:
+      'Bore 35 mm cups, 12 mm deep, centre 22.5 mm from door edge. {hinges} hinges per door at positions: {positions} mm from top.',
+    stepMountPlates: 'Mount hinge plates on carcass',
+    stepMountPlatesDesc:
+      'Screw mounting plates on side panels aligned with hinge positions. Plate centre: 37 mm from front edge. Pre-drill pilot holes.',
+    stepHangDoors: 'Hang doors and adjust',
+    stepHangDoorsDesc:
+      'Clip hinges into mounting plates. Adjust 3-way (in/out, up/down, lateral) until doors are flush with {reveal} mm reveal all around.',
+    stepShelves: 'Install shelf pins and shelves',
+    stepShelvesDesc: 'Insert shelf pins at desired heights. Place {count} adjustable shelf/shelves ({w} × {d} mm).',
+    stepHandles: 'Install handles',
+    stepHandlesDesc:
+      'Mount {style} handles on door(s). For bar handles use 128 mm or 160 mm centre-to-centre. Pre-drill before fastening to avoid tear-out.',
+    stepFinal: 'Final checks',
+    stepFinalDesc:
+      'Verify all doors open and close smoothly with consistent reveal. Check shelf levels with a spirit level. Tighten any loose confirmats. Clean all sawdust.',
+  },
+  he: {
+    coverTitle: 'תוכנית בנייה לארון',
+    dimensions: 'מידות',
+    carcassMaterial: 'חומר שלד',
+    doorsShelves: 'דלתות / מדפים',
+    cutSheets: 'גיליונות חיתוך',
+    hardwareItems: 'פריטי חומרה',
+    cabinetsInProject: 'ארונות בפרויקט',
+    generated: 'תאריך הפקה',
+    brandFooter: 'מתכנן ארונות — כלי עיצוב נגרות אינטראקטיבי',
+    specTitle: 'מפרט הארון',
+    specDimensions: 'מידות',
+    specExternal: 'חיצוני (ר × ג × ע)',
+    specInternalWidth: 'רוחב פנימי',
+    specInternalHeight: 'גובה פנימי',
+    specShelfDepth: 'עומק מדף',
+    specShelfWidth: 'רוחב מדף',
+    specMaterials: 'חומרים',
+    specCarcass: 'חומר שלד',
+    specBackPanel: 'חומר גב',
+    specEdgeBanding: 'קנט',
+    specEdgeBandingTotal: 'סה"כ קנט',
+    specDoorsHardware: 'דלתות וחומרה',
+    specDoorStyle: 'סגנון דלת',
+    specDoorCount: 'מספר דלתות',
+    specDoorDimensions: 'מידות דלת',
+    specDoorReveal: 'מרווח דלת',
+    specHingesPerDoor: 'צירים לדלת',
+    specHandleStyle: 'סגנון ידית',
+    specShelves: 'מדפים',
+    specShelfCount: 'מספר מדפים',
+    specShelfSpacing: 'מרווח מדפים',
+    specBackPanelSize: 'גב',
+    cutSheetSummary: 'סיכום גיליונות חיתוך',
+    sheetsRequired: 'גיליונות נדרשים',
+    materialYield: 'ניצולת חומר',
+    waste: 'פסולת (מ"ר)',
+    hardwareTypes: 'סוגי חומרה',
+    partsListTitle: 'רשימת חלקים',
+    partsTotal: 'חלקים סה"כ',
+    thId: 'מזהה',
+    thPartName: 'שם חלק',
+    thQty: 'כמות',
+    thMaterial: 'חומר',
+    thLength: 'אורך',
+    thWidth: 'רוחב',
+    thThickness: 'עובי',
+    thEdgeBand: 'קנט',
+    hardwareListTitle: 'רשימת חומרה',
+    itemTypes: 'סוגי פריטים',
+    thItem: 'פריט',
+    thUnit: 'יחידה',
+    thNotes: 'הערות',
+    cutSheetPage: 'גיליון חיתוך',
+    yield: 'ניצולת',
+    parts: 'חלקים',
+    cabinetOfPrefix: 'ארון',
+    cabinetOfMiddle: 'מתוך',
+    projectCutPlan: 'תוכנית חיתוך משולבת — כל הארונות',
+    projectHardware: 'חומרה לפרויקט — כל הארונות',
+    drillingGuide: 'מדריך קידוח',
+    hingeCupBoring: 'קידוח גביעי ציר',
+    hingeCupDesc1: 'קדח גביעים בקוטר 35 מ"מ, עומק 12 מ"מ בצד הפנימי של הדלת',
+    hingeCupDesc2: 'מרכז גביע: 22.5 מ"מ מקצה הדלת',
+    hingePositions: 'ציר(ים) לדלת — מיקומים מלמעלה:',
+    hingeFromTop: 'מלמעלה',
+    mountingPlates: 'פלטות הרכבה',
+    mountPlateDesc1: 'חבר פלטות הרכבה על פאנלים צדדיים, מיושרות עם מיקומי הצירים',
+    mountPlateDesc2: 'מרכז פלטה: 37 מ"מ מהקצה הקדמי',
+    mountPlateDesc3: 'קדח חורי טייס 3 מ"מ לברגי פלטה',
+    shelfPinHoles: 'חורי פיני מדף (מערכת 32)',
+    shelfPinDesc1: 'קדח חורים 5 מ"מ, עומק 10 מ"מ, בשני הפאנלים הצדדיים (צד פנימי)',
+    shelfPinDesc2Front: 'שני טורים בכל צד: 37 מ"מ ו-',
+    shelfPinDesc2Back: 'מ"מ מהקצה הקדמי',
+    shelfPinDesc3: 'מרווח: 32 מ"מ מרכז-למרכז (קידוח קו מערכת 32)',
+    shelfPinDesc4: 'חור ראשון: 37 מ"מ מתחתית החלל הפנימי',
+    shelfPinDesc5: 'סה"כ שורות:',
+    shelfPinDesc5Suffix: 'לטור',
+    confirmatScrews: 'ברגי קונפירמט / הרכבה',
+    confirmatDesc1: 'קדח חורים 5 מ"מ בצד החיצוני של פאנלים עליונים/תחתונים',
+    confirmatDesc2: 'קדח טייס 3.5 מ"מ × 40 מ"מ בסיבי הקצה של פאנלים צדדיים',
+    confirmatDesc3: 'מרווח: ~150 מ"מ בין כל חיבור',
+    confirmatDesc4: 'קונפירמט ראשון/אחרון: ~50 מ"מ מקצה הפאנל',
+    backPanelSection: 'פאנל גב',
+    backPanelFix: 'חבר לתוך חריץ 10 ×',
+    backPanelMethod: 'מ"מ, או סכך/מסמר כל ~150 מ"מ',
+    explodedView: 'תצוגת הרכבה מפורקת',
+    explodedNote: 'חלקים מוצגים בהפרדה לבהירות — חיצים מציינים כיוון הרכבה.',
+    assemblySequence: 'רצף הרכבה',
+    shoppingList: 'רשימת קניות',
+    sheetGoods: 'גיליונות חומר',
+    thSize: 'גודל (מ"מ)',
+    edgeBandingSection: 'קנט',
+    edgeBandingRequired: 'סה"כ קנט נדרש:',
+    metres: 'מטרים',
+    door: 'דלת',
+    doors: 'דלתות',
+    sheet: 'גיליון',
+    sheets: 'גיליונות',
+    cabinets: 'ארונות',
+    itemType: 'סוג פריט',
+    itemTypePlural: 'סוגי פריטים',
+    page: 'עמוד',
+    sideL: 'צד שמאל',
+    sideR: 'צד ימין',
+    topPanel: 'פאנל עליון',
+    bottomPanel: 'פאנל תחתון',
+    shelf: 'מדף',
+    back: 'גב',
+    doorLabel: 'דלת',
+    stepPrepare: 'הכנת כל הפאנלים',
+    stepPrepareDesc:
+      'חתוך את כל החלקים לפי רשימת החיתוך. לטש פנים ל-180 גריט. הדבק קנט ({edgeBanding}) על כל הקצוות המיועדים.',
+    stepDrillPins: 'קידוח חורי פיני מדף',
+    stepDrillPinsDesc:
+      'קדח חורים 5 מ"מ × 10 מ"מ בשני הפאנלים הצדדיים (צד פנימי), 32 מ"מ מרווח, שני טורים בכל צד. השתמש בג\'יג קידוח קו לדיוק.',
+    stepPreDrill: 'קידוח מוקדם לקונפירמט',
+    stepPreDrillDesc:
+      'קדח חורים 5 מ"מ בפאנלים עליונים ותחתונים. קדח טייס 3.5 מ"מ × 40 מ"מ בסיבי הקצה של הצדדיים. סמן מיקומים ~50 מ"מ מהקצוות, ~150 מ"מ מרווח.',
+    stepAssemble: 'הרכבת תיבת השלד',
+    stepAssembleDesc:
+      'חבר פאנלים צדדיים לעליון ותחתון עם ברגי קונפירמט. השתמש בפאנלים מ-{carcass}. רוחב פנימי: {internalWidth} מ"מ. וודא ריבוע עם מדידות אלכסוניות — שני האלכסונים חייבים להיות שווים.',
+    stepCentreShelf: 'התקנת מדף מרכזי קבוע',
+    stepCentreShelfDesc:
+      'התקן את המדף המבני הקבוע בגובה האמצע (נדרש לארונות מעל 1200 מ"מ). חזק עם קונפירמטים דרך שני הפאנלים הצדדיים.',
+    stepBackPanel: 'חיבור פאנל הגב',
+    stepBackPanelDesc:
+      'התקן את גב {back} ({w} × {h} מ"מ) בחריץ או סכך/מסמר כל ~150 מ"מ. פאנל הגב שומר על ריבוע השלד — בדוק שוב לפני החיזוק.',
+    stepBoreHinges: 'קידוח גביעי ציר בדלתות',
+    stepBoreHingesDesc:
+      'קדח גביעים 35 מ"מ, עומק 12 מ"מ, מרכז 22.5 מ"מ מקצה הדלת. {hinges} צירים לדלת במיקומים: {positions} מ"מ מלמעלה.',
+    stepMountPlates: 'הרכבת פלטות ציר על השלד',
+    stepMountPlatesDesc:
+      'הברג פלטות הרכבה על הפאנלים הצדדיים מיושרות עם מיקומי הצירים. מרכז פלטה: 37 מ"מ מהקצה הקדמי. קדח חורי טייס.',
+    stepHangDoors: 'תליית דלתות וכיוונון',
+    stepHangDoorsDesc:
+      'הכנס צירים לפלטות ההרכבה. כוונן ב-3 כיוונים (פנימה/החוצה, למעלה/למטה, צדדי) עד שהדלתות מיושרות עם מרווח {reveal} מ"מ מכל הצדדים.',
+    stepShelves: 'התקנת פיני מדף ומדפים',
+    stepShelvesDesc: 'הכנס פיני מדף בגבהים הרצויים. הנח {count} מדפים מתכווננים ({w} × {d} מ"מ).',
+    stepHandles: 'התקנת ידיות',
+    stepHandlesDesc:
+      'הרכב ידיות {style} על הדלת(ות). לידיות בר השתמש ב-128 מ"מ או 160 מ"מ מרכז-למרכז. קדח מראש למניעת קריעה.',
+    stepFinal: 'בדיקות סופיות',
+    stepFinalDesc:
+      'וודא שכל הדלתות נפתחות ונסגרות בצורה חלקה עם מרווח אחיד. בדוק פלס מדפים עם פלס מים. הדק קונפירמטים רופפים. נקה כל שבבי עץ.',
+  },
+} as const;
+
+// ─── Per-cabinet data for multi-cabinet project PDF ───
+
+/** One cabinet's computed data, passed to the project-PDF export. */
+export interface CabinetPdfEntry {
+  name: string;
+  config: CabinetConfig;
+  dimensions: DerivedDimensions;
+  parts: Part[];
+  hardware: HardwareItem[];
+  edgeBandingTotal: number;
+}
+
+// ─── Props ───
+
+export interface CabinetPdfProps {
+  config: CabinetConfig;
+  dimensions: DerivedDimensions;
+  parts: Part[];
+  hardware: HardwareItem[];
+  optimization: OptimizationResult;
+  edgeBandingTotal: number;
+  lang: Lang;
+  /** v3.19.0 — project name shown on cover page title */
+  projectName?: string;
+  /** v3.19.0 — whether to render the cover page (default: true) */
+  includeCover?: boolean;
+  /** v3.39.0 — total number of cabinets in the project (shown on cover) */
+  cabinetCount?: number;
+  /** Sprint 59 — page size for all PDF pages (default: 'A4') */
+  pageSize?: 'A4' | 'LETTER';
+  /** Sprint 59 — page orientation for non-cut-sheet pages (default: 'portrait') */
+  orientation?: 'portrait' | 'landscape';
+  /**
+   * v3.58.0 — Full project export: when provided, the PDF renders one
+   * specs + parts section per cabinet and uses `combinedOptimization`
+   * for the shared cut plan (parts from all cabinets placed on shared sheets).
+   */
+  allCabinetsData?: CabinetPdfEntry[];
+  /** Shared cut optimisation across all cabinets (used when allCabinetsData is set). */
+  combinedOptimization?: OptimizationResult;
+  /** Merged hardware list across all cabinets (used when allCabinetsData is set). */
+  allHardware?: HardwareItem[];
+}
+
+// ─── Document ───
+

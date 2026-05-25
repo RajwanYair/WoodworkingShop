@@ -18,14 +18,14 @@ import { generateAssemblySteps, type AssemblyStep } from '../engine/assembly';
 import { createJsonMemo } from '../engine/memo';
 import { readConfigFromUrl, pushConfigToUrl, readProjectNameFromUrl } from '../utils/url-state';
 import { idbLoadSnapshots } from '../utils/indexed-db-storage';
+import * as Comlink from 'comlink';
 import CutOptimizerWorker from '../workers/cut-optimizer.worker?worker';
-import type { CutOptimizerWorkerInput, CutOptimizerWorkerOutput } from '../workers/cut-optimizer.worker';
+import type { CutOptimizerWorkerApi, CutOptimizerInput } from '../workers/cut-optimizer.worker';
 import CostEstimatorWorker from '../workers/cost-estimator.worker?worker';
-import type { CostEstimatorWorkerInput, CostEstimatorWorkerOutput } from '../workers/cost-estimator.worker';
+import type { CostEstimatorWorkerApi, CostEstimatorInput } from '../workers/cost-estimator.worker';
 import AssemblyWorker from '../workers/assembly.worker?worker';
-import type { AssemblyWorkerInput, AssemblyWorkerOutput } from '../workers/assembly.worker';
+import type { AssemblyWorkerApi } from '../workers/assembly.worker';
 import { pluginEventBus } from '../engine/plugin';
-import { workerCall, nextRpcId } from '../workers/worker-rpc';
 // Phase 11 — Slice imports
 import { createUiSlice, loadUiPrefs, type UiSlice } from './slices/uiSlice';
 import {
@@ -36,43 +36,38 @@ import {
 } from './slices/snapshotSlice';
 import { createOptimizerSettingsSlice, type OptimizerSettingsSlice } from './slices/optimizerSettingsSlice';
 
-// v3.21.0 — Module-level Web Worker singleton for cut optimization.
-// Kept outside Zustand state to avoid serialization. The worker result
-// callback closes over `_workerApplyFn` which is set during store creation.
-let _cutOptWorker: Worker | null = null;
-let _costOptWorker: Worker | null = null;
-let _assemblyWorker: Worker | null = null;
+// Sprint 60 / Phase 17 — Comlink-based typed worker proxies.
+// Kept outside Zustand state to avoid serialization.
+// `_workerApplyFn` is set during store creation; all schedule* functions close over it.
+let _cutProxy: Comlink.Remote<CutOptimizerWorkerApi> | null = null;
+let _costProxy: Comlink.Remote<CostEstimatorWorkerApi> | null = null;
+let _assemblyProxy: Comlink.Remote<AssemblyWorkerApi> | null = null;
 let _workerApplyFn: ((partial: Partial<CabinetState>) => void) | null = null;
-// Phase 11 — "latest-wins" sentinels replace the old _currentReqId counters.
-// Each scheduling call sets its sentinel; after the Promise resolves the call
-// compares its id against the sentinel to discard stale results.
-let _latestCutReqId = '';
-let _latestCostReqId = '';
-let _latestAssemblyReqId = '';
+// Latest-wins counters: each scheduling call increments and captures its own id;
+// the promise handler discards the result if a newer call has already been issued.
+let _cutCallId = 0;
+let _latestCutId = 0;
+let _costCallId = 0;
+let _latestCostId = 0;
+let _assemblyCallId = 0;
+let _latestAssemblyId = 0;
 
-function getCutOptWorker(): Worker | null {
+function getCutProxy(): Comlink.Remote<CutOptimizerWorkerApi> | null {
   if (typeof Worker === 'undefined') return null;
-  if (!_cutOptWorker) {
-    _cutOptWorker = new CutOptimizerWorker();
-    // No onmessage handler — workerCall adds per-request listeners instead.
-  }
-  return _cutOptWorker;
+  if (!_cutProxy) _cutProxy = Comlink.wrap<CutOptimizerWorkerApi>(new CutOptimizerWorker());
+  return _cutProxy;
 }
 
-function getCostEstimatorWorker(): Worker | null {
+function getCostProxy(): Comlink.Remote<CostEstimatorWorkerApi> | null {
   if (typeof Worker === 'undefined') return null;
-  if (!_costOptWorker) {
-    _costOptWorker = new CostEstimatorWorker();
-  }
-  return _costOptWorker;
+  if (!_costProxy) _costProxy = Comlink.wrap<CostEstimatorWorkerApi>(new CostEstimatorWorker());
+  return _costProxy;
 }
 
-function getAssemblyWorker(): Worker | null {
+function getAssemblyProxy(): Comlink.Remote<AssemblyWorkerApi> | null {
   if (typeof Worker === 'undefined') return null;
-  if (!_assemblyWorker) {
-    _assemblyWorker = new AssemblyWorker();
-  }
-  return _assemblyWorker;
+  if (!_assemblyProxy) _assemblyProxy = Comlink.wrap<AssemblyWorkerApi>(new AssemblyWorker());
+  return _assemblyProxy;
 }
 
 /**
@@ -106,7 +101,7 @@ function applyLocks(parts: Part[]): Part[] {
 }
 
 /**
- * Fire-and-forget: post a cut-optimization request to the worker.
+ * Fire-and-forget: post a cut-optimization request to the worker via Comlink.
  * Falls back to synchronous computation when Workers are unavailable (e.g. tests).
  */
 function scheduleOptimization(
@@ -118,11 +113,9 @@ function scheduleOptimization(
   // Sprint 16 — decorate with rotation locks before sending to optimizer.
   const lockedActive = applyLocks(activeParts);
   const lockedAll = applyLocks(allParts);
-  const worker = getCutOptWorker();
-  if (!worker) {
+  const proxy = getCutProxy();
+  if (!proxy) {
     // Synchronous fallback (tests / browsers without Worker support).
-    // Phase 11 — use Result-returning variant so material lookup errors surface
-    // cleanly rather than throwing across the fallback boundary.
     if (_workerApplyFn) {
       const activeRes = optimizeCutSheetsResult(
         lockedActive,
@@ -152,39 +145,32 @@ function scheduleOptimization(
     }
     return;
   }
-  const reqId = nextRpcId();
-  _latestCutReqId = reqId;
-  void workerCall<CutOptimizerWorkerInput, CutOptimizerWorkerOutput>(
-    worker,
-    {
-      activeParts: lockedActive,
-      allParts: lockedAll,
-      sawKerfMm,
-      sheetSizeOverrides,
-      cutMode: _cutMode,
-      offcutCatalog: _offcutCatalog,
-      defectZones: _defectZones,
-    },
-    reqId,
-  )
-    .then((msg) => {
-      if (!_workerApplyFn || _latestCutReqId !== reqId) return; // stale
-      if (msg.type === 'done' && msg.activeResult && msg.combinedResult) {
-        _workerApplyFn({
-          optimization: msg.activeResult,
-          combinedOptimization: msg.combinedResult,
-          optimizationPending: false,
-          costPending: true,
-        });
-        // Sprint 20 — notify plugins that optimization completed.
-        pluginEventBus.emit('optimization:complete', {
-          sheetCount: msg.activeResult.sheets.length,
-          yieldPercent: msg.activeResult.overallYield,
-        });
-        scheduleCostFromState(useCabinetStore.getState(), msg.activeResult);
-      } else {
-        _workerApplyFn({ optimizationPending: false });
-      }
+  const callId = ++_cutCallId;
+  _latestCutId = callId;
+  const input: CutOptimizerInput = {
+    activeParts: lockedActive,
+    allParts: lockedAll,
+    sawKerfMm,
+    sheetSizeOverrides,
+    cutMode: _cutMode,
+    offcutCatalog: _offcutCatalog,
+    defectZones: _defectZones,
+  };
+  void proxy.run(input)
+    .then((result) => {
+      if (!_workerApplyFn || _latestCutId !== callId) return; // stale
+      _workerApplyFn({
+        optimization: result.activeResult,
+        combinedOptimization: result.combinedResult,
+        optimizationPending: false,
+        costPending: true,
+      });
+      // Sprint 20 — notify plugins that optimization completed.
+      pluginEventBus.emit('optimization:complete', {
+        sheetCount: result.activeResult.sheets.length,
+        yieldPercent: result.activeResult.overallYield,
+      });
+      scheduleCostFromState(useCabinetStore.getState(), result.activeResult);
     })
     .catch(() => {
       _workerApplyFn?.({ optimizationPending: false });
@@ -192,23 +178,19 @@ function scheduleOptimization(
 }
 
 function scheduleAssembly(config: CabinetConfig): void {
-  const worker = getAssemblyWorker();
-  if (!worker) {
+  const proxy = getAssemblyProxy();
+  if (!proxy) {
     if (_workerApplyFn) {
       _workerApplyFn({ assemblySteps: generateAssemblySteps(config), assemblyPending: false });
     }
     return;
   }
-  const reqId = nextRpcId();
-  _latestAssemblyReqId = reqId;
-  void workerCall<AssemblyWorkerInput, AssemblyWorkerOutput>(worker, { config }, reqId)
-    .then((msg) => {
-      if (!_workerApplyFn || _latestAssemblyReqId !== reqId) return; // stale
-      if (msg.type === 'done' && msg.steps) {
-        _workerApplyFn({ assemblySteps: msg.steps, assemblyPending: false });
-      } else {
-        _workerApplyFn({ assemblyPending: false });
-      }
+  const callId = ++_assemblyCallId;
+  _latestAssemblyId = callId;
+  void proxy.run({ config })
+    .then((result) => {
+      if (!_workerApplyFn || _latestAssemblyId !== callId) return; // stale
+      _workerApplyFn({ assemblySteps: result.steps, assemblyPending: false });
     })
     .catch(() => {
       _workerApplyFn?.({ assemblyPending: false });
@@ -226,8 +208,8 @@ function scheduleCost(
   labourHours: number,
   finishCost: number,
 ): void {
-  const worker = getCostEstimatorWorker();
-  if (!worker) {
+  const proxy = getCostProxy();
+  if (!proxy) {
     if (_workerApplyFn) {
       _workerApplyFn({
         cost: estimateCost(
@@ -246,30 +228,23 @@ function scheduleCost(
     }
     return;
   }
-  const reqId = nextRpcId();
-  _latestCostReqId = reqId;
-  void workerCall<CostEstimatorWorkerInput, CostEstimatorWorkerOutput>(
-    worker,
-    {
-      optimization,
-      hardware,
-      edgeBandingTotal,
-      materialPriceOverrides,
-      edgeBandingRate,
-      hardwarePriceOverrides,
-      labourRate,
-      labourHours,
-      finishCost,
-    },
-    reqId,
-  )
-    .then((msg) => {
-      if (!_workerApplyFn || _latestCostReqId !== reqId) return; // stale
-      if (msg.type === 'done' && msg.cost) {
-        _workerApplyFn({ cost: msg.cost, costPending: false });
-      } else {
-        _workerApplyFn({ costPending: false });
-      }
+  const callId = ++_costCallId;
+  _latestCostId = callId;
+  const input: CostEstimatorInput = {
+    optimization,
+    hardware,
+    edgeBandingTotal,
+    materialPriceOverrides,
+    edgeBandingRate,
+    hardwarePriceOverrides,
+    labourRate,
+    labourHours,
+    finishCost,
+  };
+  void proxy.run(input)
+    .then((result) => {
+      if (!_workerApplyFn || _latestCostId !== callId) return; // stale
+      _workerApplyFn({ cost: result.cost, costPending: false });
     })
     .catch(() => {
       _workerApplyFn?.({ costPending: false });

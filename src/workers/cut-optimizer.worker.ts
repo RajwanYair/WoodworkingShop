@@ -1,46 +1,43 @@
 /**
- * Cut-Optimizer Web Worker (v3.21.0)
+ * Cut-Optimizer Web Worker — Sprint 60 / Phase 17 Comlink RPC
  *
- * Accepts: CutOptimizerWorkerInput
- * Responds: CutOptimizerWorkerOutput
+ * Exposes a typed `run()` method via Comlink; the main thread uses
+ * `Comlink.wrap()` to call it as a transparent async function — no
+ * manual postMessage / requestId bookkeeping required.
  *
- * Running MaxRects bin-packing off the main thread keeps the configurator
- * responsive during large multi-cabinet projects (5+ sheets per material).
- *
- * The worker computes two OptimizationResults per request:
+ * The worker computes two OptimizationResults per call:
  *   - activeResult  – parts from the currently-selected cabinet only
  *   - combinedResult – parts from ALL cabinets (project-wide cut list)
- *
- * Request IDs let the store discard stale responses from superseded runs.
  */
 
+import * as Comlink from 'comlink';
 import { optimizeCutSheetsResult } from '../engine/cut-optimizer';
 import type { Part, OptimizationResult, OffcutEntry, DefectZone } from '../engine/types';
 
-export interface CutOptimizerWorkerInput {
+export interface CutOptimizerInput {
   activeParts: Part[];
   allParts: Part[];
   sawKerfMm: number;
   sheetSizeOverrides: Record<string, { width: number; length: number }>;
-  /** Phase 11 / Sprint 5 — algorithm to use; defaults to 'freeform' (MaxRects). */
+  /** Algorithm to use; defaults to 'freeform' (MaxRects). */
   cutMode?: 'guillotine' | 'freeform';
-  /** Phase 12 / Sprint 12 — catalog offcuts used as starting sheets. */
+  /** Catalog offcuts used as starting sheets. */
   offcutCatalog?: OffcutEntry[];
-  /** Phase 12 / Sprint 13 — per-material defect zones to pre-block on each new sheet. */
+  /** Per-material defect zones to pre-block on each new sheet. */
   defectZones?: Record<string, DefectZone[]>;
-  requestId: string;
 }
 
-export interface CutOptimizerWorkerOutput {
-  type: 'done' | 'error';
-  activeResult?: OptimizationResult;
-  combinedResult?: OptimizationResult;
-  errorMessage?: string;
-  requestId: string;
+export interface CutOptimizerResult {
+  activeResult: OptimizationResult;
+  combinedResult: OptimizationResult;
 }
 
-self.onmessage = (e: MessageEvent<CutOptimizerWorkerInput>) => {
-  const {
+export interface CutOptimizerWorkerApi {
+  run(input: CutOptimizerInput): CutOptimizerResult;
+}
+
+const api: CutOptimizerWorkerApi = {
+  run({
     activeParts,
     allParts,
     sawKerfMm,
@@ -48,40 +45,27 @@ self.onmessage = (e: MessageEvent<CutOptimizerWorkerInput>) => {
     cutMode = 'freeform',
     offcutCatalog = [],
     defectZones = {},
-    requestId,
-  } = e.data;
-  const activeResult = optimizeCutSheetsResult(
-    activeParts,
-    sawKerfMm,
-    sheetSizeOverrides,
-    cutMode,
-    offcutCatalog,
-    defectZones,
-  );
-  if (!activeResult.ok) {
-    self.postMessage({ type: 'error', errorMessage: activeResult.error, requestId } satisfies CutOptimizerWorkerOutput);
-    return;
-  }
-  const combinedResult = optimizeCutSheetsResult(
-    allParts,
-    sawKerfMm,
-    sheetSizeOverrides,
-    cutMode,
-    offcutCatalog,
-    defectZones,
-  );
-  if (!combinedResult.ok) {
-    self.postMessage({
-      type: 'error',
-      errorMessage: combinedResult.error,
-      requestId,
-    } satisfies CutOptimizerWorkerOutput);
-    return;
-  }
-  self.postMessage({
-    type: 'done',
-    activeResult: activeResult.value,
-    combinedResult: combinedResult.value,
-    requestId,
-  } satisfies CutOptimizerWorkerOutput);
+  }: CutOptimizerInput): CutOptimizerResult {
+    const activeRes = optimizeCutSheetsResult(
+      activeParts,
+      sawKerfMm,
+      sheetSizeOverrides,
+      cutMode,
+      offcutCatalog,
+      defectZones,
+    );
+    if (!activeRes.ok) throw new Error(activeRes.error);
+    const combinedRes = optimizeCutSheetsResult(
+      allParts,
+      sawKerfMm,
+      sheetSizeOverrides,
+      cutMode,
+      offcutCatalog,
+      defectZones,
+    );
+    if (!combinedRes.ok) throw new Error(combinedRes.error);
+    return { activeResult: activeRes.value, combinedResult: combinedRes.value };
+  },
 };
+
+Comlink.expose(api);

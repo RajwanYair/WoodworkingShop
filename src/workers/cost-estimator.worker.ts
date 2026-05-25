@@ -1,9 +1,10 @@
-// src/workers/cost-estimator.worker.ts
+// src/workers/cost-estimator.worker.ts — Sprint 60 / Phase 17 Comlink RPC
+import * as Comlink from 'comlink';
 import { estimateCost } from '../engine/cost-estimator';
+import type { CostBreakdown } from '../engine/cost-estimator';
 import type { OptimizationResult, HardwareItem } from '../engine/types';
 
-export interface CostEstimatorWorkerInput {
-  requestId: string;
+export interface CostEstimatorInput {
   optimization: OptimizationResult;
   hardware: HardwareItem[];
   edgeBandingTotal: number;
@@ -15,29 +16,40 @@ export interface CostEstimatorWorkerInput {
   finishCost: number;
 }
 
-export interface CostEstimatorWorkerOutput {
-  type: 'done' | 'error';
-  requestId: string;
-  cost?: ReturnType<typeof estimateCost>;
-  error?: string;
+export interface CostEstimatorResult {
+  cost: CostBreakdown;
 }
 
-self.onmessage = (e: MessageEvent<CostEstimatorWorkerInput>) => {
-  const data = e.data;
-  try {
-    const cost = estimateCost(
-      data.optimization,
-      data.hardware,
-      data.edgeBandingTotal,
-      data.materialPriceOverrides,
-      data.edgeBandingRate,
-      data.hardwarePriceOverrides,
-      data.labourRate,
-      data.labourHours,
-      data.finishCost,
-    );
-    self.postMessage({ type: 'done', requestId: data.requestId, cost });
-  } catch (error) {
-    self.postMessage({ type: 'error', requestId: data.requestId, error: String(error) });
-  }
+export interface CostEstimatorWorkerApi {
+  run(input: CostEstimatorInput): CostEstimatorResult;
+}
+
+const api: CostEstimatorWorkerApi = {
+  run({
+    optimization,
+    hardware,
+    edgeBandingTotal,
+    materialPriceOverrides,
+    edgeBandingRate,
+    hardwarePriceOverrides,
+    labourRate,
+    labourHours,
+    finishCost,
+  }: CostEstimatorInput): CostEstimatorResult {
+    return {
+      cost: estimateCost(
+        optimization,
+        hardware,
+        edgeBandingTotal,
+        materialPriceOverrides,
+        edgeBandingRate,
+        hardwarePriceOverrides,
+        labourRate,
+        labourHours,
+        finishCost,
+      ),
+    };
+  },
 };
+
+Comlink.expose(api);

@@ -279,6 +279,39 @@ zero line-level `// comment` on standalone lines in `src/engine/`, docs consolid
 | 66     | Merge vitest.bench.config into vitest.config (workspace pattern) | Config   |
 | 67     | Version bump 3.71.0, CHANGELOG, GH release                       | Release  |
 
+### Phase 17.1: Codebase-wide JSDoc Documentation (v3.71.1) — **MEDIUM PRIORITY**
+
+**Goal**: Every exported symbol across `src/` has a proper JSDoc block — `@param`,
+`@returns`, `@throws`, `@example` where applicable — replacing all standalone
+`// line comments` on functions, interfaces, and type aliases. TypeDoc generates
+a complete, warning-free API reference automatically from the source.
+
+**Why**: The engine and store layers now expose 200+ public symbols. Naked `// comments`
+are invisible to TypeDoc and IDE hover docs. Replacing them with `/** JSDoc */` blocks
+gives every caller instant, accurate documentation in their editor, improves Copilot
+suggestions, and enables `typedoc --failOnWarnings` in CI.
+
+**Exit criteria**: `npx typedoc --failOnWarnings` exits 0; all exported functions,
+interfaces, and type aliases in `src/engine/`, `src/store/`, `src/utils/`, `src/hooks/`,
+and `src/workers/` have `/** ... */` JSDoc blocks; zero naked `// comment` lines
+immediately preceding exported symbols; `@param`/`@returns` present on every
+non-trivial function signature.
+
+| Sprint | Deliverable                                                                                   | Type |
+| ------ | --------------------------------------------------------------------------------------------- | ---- |
+| D1     | `src/engine/types.ts` — JSDoc all interfaces, type aliases, and branded types (`Mm`, `Kg`)   | Docs |
+| D2     | `src/engine/parts.ts`, `dimensions.ts`, `materials.ts` — JSDoc all exported functions        | Docs |
+| D3     | `src/engine/cut-optimizer.ts`, `smart-optimizer.ts`, `kerf.ts` — optimizer layer JSDoc       | Docs |
+| D4     | `src/engine/validation.ts` + sub-modules — JSDoc all rule functions and `ValidationIssue`    | Docs |
+| D5     | `src/engine/hardware*.ts`, `hinge-bore.ts`, `drawer-runner.ts` — hardware layer JSDoc        | Docs |
+| D6     | `src/engine/assembly*.ts`, `assembly-dag.ts`, `assembly-timer.ts` — assembly layer JSDoc     | Docs |
+| D7     | `src/engine/export/`, `gcode-*.ts`, `dxf-*.ts`, `bom-filter.ts` — export layer JSDoc        | Docs |
+| D8     | `src/store/*.ts`, `src/store/slices/*.ts` — store actions, selectors, slice types            | Docs |
+| D9     | `src/utils/*.ts`, `src/hooks/*.ts` — utility functions and custom hooks                      | Docs |
+| D10    | `src/workers/*.ts` — Comlink API interfaces, `run()` methods, worker input/output types      | Docs |
+| D11    | Add `--failOnWarnings` to `typedoc.json`; CI `docs:api` step fails on missing docs           | CI   |
+| D12    | Version bump 3.71.1, CHANGELOG, GH release                                                   | Release |
+
 ### Phase 18: Visual Fidelity & UX (v3.72.0)
 
 **Goal**: Photorealistic materials in 3D, placement animation, print polish.

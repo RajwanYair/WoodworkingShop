@@ -1,25 +1,25 @@
-// src/workers/assembly.worker.ts
+// src/workers/assembly.worker.ts — Sprint 60 / Phase 17 Comlink RPC
+import * as Comlink from 'comlink';
 import { generateAssemblySteps } from '../engine/assembly';
+import type { AssemblyStep } from '../engine/assembly';
 import type { CabinetConfig } from '../engine/types';
 
-export interface AssemblyWorkerInput {
-  requestId: string;
+export interface AssemblyInput {
   config: CabinetConfig;
 }
 
-export interface AssemblyWorkerOutput {
-  type: 'done' | 'error';
-  requestId: string;
-  steps?: ReturnType<typeof generateAssemblySteps>;
-  error?: string;
+export interface AssemblyResult {
+  steps: AssemblyStep[];
 }
 
-self.onmessage = (e: MessageEvent<AssemblyWorkerInput>) => {
-  const data = e.data;
-  try {
-    const steps = generateAssemblySteps(data.config);
-    self.postMessage({ type: 'done', requestId: data.requestId, steps });
-  } catch (error) {
-    self.postMessage({ type: 'error', requestId: data.requestId, error: String(error) });
-  }
+export interface AssemblyWorkerApi {
+  run(input: AssemblyInput): AssemblyResult;
+}
+
+const api: AssemblyWorkerApi = {
+  run({ config }: AssemblyInput): AssemblyResult {
+    return { steps: generateAssemblySteps(config) };
+  },
 };
+
+Comlink.expose(api);

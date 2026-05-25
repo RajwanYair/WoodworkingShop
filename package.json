@@ -93,6 +93,7 @@
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.5.1",
+    "comlink": "4.4.2",
     "i18next": "^26.0.6",
     "idb-keyval": "6.2.4",
     "react": "^19.2.6",
