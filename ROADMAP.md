@@ -1,6 +1,6 @@
 # Roadmap
 
-> **Last strategic review**: 2026-06-04 · **Current version**: 3.72.0
+> **Last strategic review**: 2026-05-25 · **Current version**: 3.74.0
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -118,11 +118,11 @@ state; GH release published.
 | E2     | Shorten next-5 tests (plugin 338 L, hardware 335 L, templates 302 L, project-storage 280 L, voice-annotation 277 L)                                 | DONE     | Tests    |
 | E3     | ~~Split `CabinetPdfDocument.tsx`~~ — already 173 L (sections extracted in v3.71–v3.72)                                                              | **DONE** | Refactor |
 | E4     | Split `CabinetPreview.tsx` and `OptimizerView.tsx` if over 600 L (verify sizes)                                                                     | **DONE** | Refactor |
-| E5     | Split `validation.ts` (1033 L) by domain: dimension-rules, door-rules, shelf-rules; split `cabinet-store.ts` (968 L): extract PDF + room slices     | TODO     | Refactor |
-| E6     | Split `templates.ts` (660 L) into `engine/templates/`; split `dxf-export.ts` (544 L) into geometry + labeling layers                                | TODO     | Refactor |
+| E5     | Split `validation.ts` (1033 L) by domain: dimension-rules, door-rules, shelf-rules; split `cabinet-store.ts` (968 L): extract PDF + room slices     | **DONE** | Refactor |
+| E6     | Split `templates.ts` (660 L) into `engine/templates/`; split `dxf-export.ts` (544 L) into geometry + labeling layers                                | **DONE** | Refactor |
 | E7     | Slim `ci.yml` (90 L) + `release.yml` (85 L): consolidate steps; target < 80 L each                                                                  | **DONE** | CI       |
 | E8     | Consolidate docs: merge ARCHITECTURE.md strategy section into ROADMAP.md; retire duplication; trim to pure module reference                         | **DONE** | Docs     |
-| E9     | Convert all standalone `// comment` lines in `src/` to `/** JSDoc */` blocks or remove where trivial; update `copilot-instructions.md`              | TODO     | Docs     |
+| E9     | Convert all standalone `// comment` lines in `src/` to `/** JSDoc */` blocks or remove where trivial; update `copilot-instructions.md`              | **DONE** | Docs     |
 | E10    | VS Code: `snippets.code-snippets` (6 snippets, done), check task done, dead:check task done                                                         | **DONE** | DX       |
 | E11    | Copilot: `.github/prompts/` seeded (done), `dependabot.yml` (done), `CODEOWNERS` (done); add `CONTRIBUTING.md`                                      | **DONE** | DX       |
 | E12    | Version bump 3.73.0, CHANGELOG, GH release                                                                                                          | **DONE** | Release  |
@@ -131,14 +131,14 @@ state; GH release published.
 
 **Goal**: Photorealistic materials in 3D, placement animation, print polish.
 
-| Sprint | Deliverable                                                       | Type    |
-| ------ | ----------------------------------------------------------------- | ------- |
-| 68     | Material texture atlas (8 species + composites, 512×512 tiles)    | Assets  |
-| 69     | Three.js material-mapped cabinet render (replace flat colours)    | UI      |
-| 70     | Nesting placement animation (step-by-step sequence with timeline) | UI      |
-| 71     | Onboarding wizard redesign (3-step guided flow, skippable)        | UX      |
-| 72     | Print stylesheet optimization (A4/Letter margins, break control)  | CSS     |
-| 73     | Version bump 3.74.0, CHANGELOG, GH release                        | Release |
+| Sprint | Deliverable                                                       | Type     |
+| ------ | ----------------------------------------------------------------- | -------- | ------- |
+| 68     | Material texture atlas (8 species + composites, 512×512 tiles)    | Assets   |
+| 69     | Three.js material-mapped cabinet render (replace flat colours)    | UI       |
+| 70     | Nesting placement animation (step-by-step sequence with timeline) | UI       |
+| 71     | Onboarding wizard redesign (3-step guided flow, skippable)        | UX       |
+| 72     | Print stylesheet optimization (A4/Letter margins, break control)  | **DONE** | CSS     |
+| 73     | Version bump 3.74.0, CHANGELOG, GH release                        | **DONE** | Release |
 
 ### Phase 19: Machine Integration & Community (v4.0.0)
 

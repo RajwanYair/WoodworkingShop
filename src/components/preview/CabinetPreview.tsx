@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useMemo, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { getMaterial } from '../../engine/materials';
+import { getMaterialTextureId } from '../../engine/material-textures';
 import { computeEqualShelfPositions } from '../../engine/dimensions';
 import { formatDim } from '../../utils/units';
 import { useTouchGestures } from '../../hooks/useTouchGestures';
@@ -400,6 +401,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
               thick={thick}
               bt={bt}
               color={color}
+              materialId={getMaterialTextureId(config.carcassMaterial)}
               shelfPositions={shelfPositions}
               hasDoors={config.doorStyle !== 'none'}
               doorStyle={config.doorStyle}

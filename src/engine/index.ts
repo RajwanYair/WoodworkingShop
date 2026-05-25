@@ -239,3 +239,12 @@ export { buildGrainReport, grainReportToCsv } from './grain-report';
 export type { GrainReportPart, GrainMaterialGroup, GrainReport } from './grain-report';
 
 export type { PluginEventMap, PluginEventName, PluginEventHandler } from './plugin.ts';
+
+export {
+  MATERIAL_TEXTURES,
+  MATERIAL_TEXTURE_IDS,
+  getMaterialTexture,
+  getMaterialTextureId,
+  buildSvgPatternDefs,
+} from './material-textures';
+export type { MaterialTexture, MaterialTextureId, GrainLine } from './material-textures';

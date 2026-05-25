@@ -1,5 +1,6 @@
 import { formatDim } from '../../utils/units';
 import type { UnitSystem } from '../../utils/units';
+import { getMaterialTexture } from '../../engine/material-textures';
 
 // ─── Isometric 3D view ───
 
@@ -28,6 +29,7 @@ export function IsometricView({
   thick,
   bt,
   color,
+  materialId,
   shelfPositions,
   hasDoors,
   doorStyle,
@@ -47,6 +49,8 @@ export function IsometricView({
   thick: number;
   bt: number;
   color: string;
+  /** Sprint 69 — optional texture atlas ID; when set, SVG pattern fills replace flat colour. */
+  materialId?: string;
   shelfPositions: number[];
   hasDoors: boolean;
   doorStyle: string;
@@ -90,9 +94,12 @@ export function IsometricView({
   const ox = -minX + pad;
   const oy = -minY + pad;
 
-  const darkFill = adjustBrightness(color, -30);
-  const lightFill = adjustBrightness(color, 20);
-  const interiorFill = adjustBrightness(color, -50); // darker inner face
+  // Sprint 69 — material texture atlas: pattern fills fall back to brightness-adjusted colours
+  const tex = materialId ? getMaterialTexture(materialId) : undefined;
+  const topFill = tex ? 'url(#iso-tex-top)' : adjustBrightness(color, 20);
+  const sideFill = tex ? 'url(#iso-tex-side)' : adjustBrightness(color, -30);
+  const frontFill = tex ? 'url(#iso-tex-front)' : color;
+  const interiorFill = adjustBrightness(color, -50);
 
   // Derive drawer front height strips (distributed from bottom above kick)
   const bottomY = KH;
@@ -125,6 +132,56 @@ export function IsometricView({
       aria-label="3D isometric cabinet drawing"
       className="border-wood-200 dark:border-wood-700 dark:bg-wood-800 text-wood-600 dark:text-wood-200 max-h-125 w-full max-w-lg rounded border bg-white"
     >
+      {tex && (
+        <defs>
+          <pattern id="iso-tex-top" x="0" y="0" width="64" height="64" patternUnits="userSpaceOnUse">
+            <rect width="64" height="64" fill={tex.baseColor} />
+            {tex.grainLines.map((l, idx) => (
+              <line
+                key={idx}
+                x1={l.x1}
+                y1={l.y1}
+                x2={l.x2}
+                y2={l.y2}
+                stroke={tex.grainColor}
+                strokeWidth={l.width}
+                opacity={l.opacity}
+              />
+            ))}
+          </pattern>
+          <pattern id="iso-tex-side" x="0" y="0" width="64" height="64" patternUnits="userSpaceOnUse">
+            <rect width="64" height="64" fill={tex.sideColor ?? adjustBrightness(tex.baseColor, -30)} />
+            {tex.grainLines.map((l, idx) => (
+              <line
+                key={idx}
+                x1={l.y1}
+                y1={l.x1}
+                x2={l.y2}
+                y2={l.x2}
+                stroke={tex.grainColor}
+                strokeWidth={l.width}
+                opacity={l.opacity * 0.8}
+              />
+            ))}
+          </pattern>
+          <pattern id="iso-tex-front" x="0" y="0" width="64" height="64" patternUnits="userSpaceOnUse">
+            <rect width="64" height="64" fill={tex.baseColor} />
+            {tex.grainLines.map((l, idx) => (
+              <line
+                key={idx}
+                x1={l.x1}
+                y1={l.y1}
+                x2={l.x2}
+                y2={l.y2}
+                stroke={tex.grainColor}
+                strokeWidth={l.width}
+                opacity={l.opacity}
+              />
+            ))}
+            <rect width="64" height="64" fill="#000" opacity={0.06} />
+          </pattern>
+        </defs>
+      )}
       <g transform={`translate(${ox},${oy})`}>
         {/* Back panel */}
         <polygon
@@ -160,7 +217,7 @@ export function IsometricView({
         {/* Bottom panel – top face */}
         <polygon
           points={isoQuad([T, T, 0], [W - T, T, 0], [W - T, T, D - BT], [T, T, D - BT])}
-          fill={lightFill}
+          fill={topFill}
           stroke="#666"
           strokeWidth={0.5}
           opacity={0.85}
@@ -170,7 +227,7 @@ export function IsometricView({
         {/* Bottom panel – front face */}
         <polygon
           points={isoQuad([T, 0, 0], [W - T, 0, 0], [W - T, T, 0], [T, T, 0])}
-          fill={darkFill}
+          fill={sideFill}
           stroke="#666"
           strokeWidth={0.5}
           opacity={0.85}
@@ -180,7 +237,7 @@ export function IsometricView({
         {KH > 0 && (
           <polygon
             points={isoQuad([T + 4 * sc, 0, 0], [W - T - 4 * sc, 0, 0], [W - T - 4 * sc, KH, 0], [T + 4 * sc, KH, 0])}
-            fill={darkFill}
+            fill={sideFill}
             stroke="#555"
             strokeWidth={0.4}
             opacity={0.6}
@@ -199,7 +256,7 @@ export function IsometricView({
               {/* Shelf top face */}
               <polygon
                 points={isoQuad([T, sy + sT, 0], [W - T, sy + sT, 0], [W - T, sy + sT, D - BT], [T, sy + sT, D - BT])}
-                fill={lightFill}
+                fill={topFill}
                 stroke="#888"
                 strokeWidth={0.3}
                 opacity={0.7}
@@ -209,29 +266,30 @@ export function IsometricView({
               {/* Shelf front edge */}
               <polygon
                 points={isoQuad([T, sy, 0], [W - T, sy, 0], [W - T, sy + sT, 0], [T, sy + sT, 0])}
-                fill={darkFill}
+                fill={sideFill}
                 stroke="#888"
                 strokeWidth={0.3}
                 opacity={0.5}
               />
               {/* Grain lines on shelf top (run along depth direction) */}
-              {Array.from({ length: Math.floor((W - 2 * T) / shelfGrainStep) - 1 }, (_, j) => {
-                const gx = T + shelfGrainStep + j * shelfGrainStep;
-                const [ax, ay] = iso(gx, sy + sT, 0);
-                const [bx, by] = iso(gx, sy + sT, D - BT);
-                return (
-                  <line
-                    key={`sg-${i}-${j}`}
-                    x1={ax}
-                    y1={ay}
-                    x2={bx}
-                    y2={by}
-                    stroke="#cba"
-                    strokeWidth={0.25}
-                    opacity={0.4}
-                  />
-                );
-              })}
+              {!tex &&
+                Array.from({ length: Math.floor((W - 2 * T) / shelfGrainStep) - 1 }, (_, j) => {
+                  const gx = T + shelfGrainStep + j * shelfGrainStep;
+                  const [ax, ay] = iso(gx, sy + sT, 0);
+                  const [bx, by] = iso(gx, sy + sT, D - BT);
+                  return (
+                    <line
+                      key={`sg-${i}-${j}`}
+                      x1={ax}
+                      y1={ay}
+                      x2={bx}
+                      y2={by}
+                      stroke="#cba"
+                      strokeWidth={0.25}
+                      opacity={0.4}
+                    />
+                  );
+                })}
             </g>
           );
         })}
@@ -239,7 +297,7 @@ export function IsometricView({
         {/* Left side panel – outer face */}
         <polygon
           points={isoQuad([0, 0, 0], [0, 0, D], [0, H, D], [0, H, 0])}
-          fill={darkFill}
+          fill={sideFill}
           stroke="#666"
           strokeWidth={0.5}
           opacity={0.85}
@@ -247,19 +305,20 @@ export function IsometricView({
           <title>{`Side Panel\n${thick}×${h} mm`}</title>
         </polygon>
         {/* Grain lines on left side (horizontal, run along depth) */}
-        {Array.from({ length: Math.floor(H / Math.max(H / 6, 4)) - 1 }, (_, i) => {
-          const gy = Math.max(H / 6, 4) + i * Math.max(H / 6, 4);
-          const [ax, ay] = iso(0, gy, 0);
-          const [bx, by] = iso(0, gy, D);
-          return (
-            <line key={`lg-${i}`} x1={ax} y1={ay} x2={bx} y2={by} stroke="#cba" strokeWidth={0.25} opacity={0.35} />
-          );
-        })}
+        {!tex &&
+          Array.from({ length: Math.floor(H / Math.max(H / 6, 4)) - 1 }, (_, i) => {
+            const gy = Math.max(H / 6, 4) + i * Math.max(H / 6, 4);
+            const [ax, ay] = iso(0, gy, 0);
+            const [bx, by] = iso(0, gy, D);
+            return (
+              <line key={`lg-${i}`} x1={ax} y1={ay} x2={bx} y2={by} stroke="#cba" strokeWidth={0.25} opacity={0.35} />
+            );
+          })}
 
         {/* Right side panel – outer face */}
         <polygon
           points={isoQuad([W, 0, 0], [W, H, 0], [W, H, D], [W, 0, D])}
-          fill={color}
+          fill={frontFill}
           stroke="#666"
           strokeWidth={0.5}
           opacity={0.65}
@@ -270,7 +329,7 @@ export function IsometricView({
         {/* Top panel – top face with grain lines */}
         <polygon
           points={isoQuad([0, H, 0], [0, H, D], [W, H, D], [W, H, 0])}
-          fill={lightFill}
+          fill={topFill}
           stroke="#666"
           strokeWidth={0.5}
           opacity={0.85}
@@ -278,14 +337,15 @@ export function IsometricView({
           <title>{`Top Panel\n${Math.round(w - 2 * thick)}×${Math.round(d - bt)} mm`}</title>
         </polygon>
         {/* Grain lines on top face (run along depth/Z direction) */}
-        {Array.from({ length: Math.floor((W - 2 * T) / grainStep) - 1 }, (_, i) => {
-          const gx = T + grainStep + i * grainStep;
-          const [ax, ay] = iso(gx, H, 0);
-          const [bx, by] = iso(gx, H, D);
-          return (
-            <line key={`grain-${i}`} x1={ax} y1={ay} x2={bx} y2={by} stroke="#cba" strokeWidth={0.3} opacity={0.5} />
-          );
-        })}
+        {!tex &&
+          Array.from({ length: Math.floor((W - 2 * T) / grainStep) - 1 }, (_, i) => {
+            const gx = T + grainStep + i * grainStep;
+            const [ax, ay] = iso(gx, H, 0);
+            const [bx, by] = iso(gx, H, D);
+            return (
+              <line key={`grain-${i}`} x1={ax} y1={ay} x2={bx} y2={by} stroke="#cba" strokeWidth={0.3} opacity={0.5} />
+            );
+          })}
 
         {/* Drawer fronts (visible on the front face when no doors) */}
         {drawerFronts.map(({ y: dy, fh }, i) => {
@@ -308,7 +368,7 @@ export function IsometricView({
                   [fx + fw, boxTop, boxDepth],
                   [fx, boxTop, boxDepth],
                 )}
-                fill={lightFill}
+                fill={topFill}
                 stroke="#777"
                 strokeWidth={0.3}
                 opacity={0.55}
@@ -321,7 +381,7 @@ export function IsometricView({
                   [fx + fw, boxBot, boxDepth],
                   [fx + fw, boxTop, boxDepth],
                 )}
-                fill={darkFill}
+                fill={sideFill}
                 stroke="#777"
                 strokeWidth={0.3}
                 opacity={0.45}
@@ -334,7 +394,7 @@ export function IsometricView({
                   [fx + fw, dy + fh - reveal, 0],
                   [fx, dy + fh - reveal, 0],
                 )}
-                fill={color}
+                fill={frontFill}
                 stroke="#555"
                 strokeWidth={0.7}
                 opacity={0.88}
@@ -363,7 +423,7 @@ export function IsometricView({
             const dh = doorHeight * sc;
             const dx = dr + i * (dw + dr);
             const isGlass = doorStyle === 'glass';
-            const doorFill = isGlass ? '#b8d8f0' : color;
+            const doorFill = isGlass ? '#b8d8f0' : frontFill;
             const doorLabel = isGlass ? `Glass Door ${i + 1}` : `Door ${i + 1}`;
             return (
               <g key={`door-${i}`}>
