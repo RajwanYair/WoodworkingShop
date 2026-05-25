@@ -65,6 +65,9 @@
   "typescript.preferences.importModuleSpecifier": "shortest",
   "typescript.preferences.quoteStyle": "single",
   "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "github.copilot.chat.agentDebugLog.enabled": true,
+  "github.copilot.chat.agentDebugLog.fileLogging.enabled": true,
+  "github.copilot.chat.agentDebugLog.fileLogging.flushIntervalMs": 1000,
   "vitest.enable": true,
   "vitest.rootConfig": "${workspaceFolder}/vitest.config.ts",
   "cSpell.words": [
