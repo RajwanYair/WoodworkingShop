@@ -146,7 +146,7 @@ state; GH release published.
 
 | Sprint | Deliverable                                           | Type    |
 | ------ | ----------------------------------------------------- | ------- |
-| 74     | WebSerial API integration (Grbl G-code streaming)     | **DONE** | Feature |
+| 74     | WebSerial API integration (Grbl G-code streaming)     | DONE    |
 | 75     | Machine profile registry (Grbl, LinuxCNC, Mach3)      | Feature |
 | 76     | Community material catalog schema (JSON API contract) | Design  |
 | 77     | Material price import from community catalog          | Feature |

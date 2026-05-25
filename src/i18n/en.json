@@ -478,6 +478,18 @@
     "done": "Done — all {{total}} lines sent.",
     "error": "Connection error: {{message}}"
   },
+  "machine": {
+    "title": "Machine Profile",
+    "selectProfile": "Select machine profile",
+    "firmware": "Firmware",
+    "baudRate": "Baud rate",
+    "feedRate": "Feed rate (mm/min)",
+    "plungeRate": "Plunge rate (mm/min)",
+    "spindleRpm": "Spindle (RPM)",
+    "passDepth": "Pass depth (mm)",
+    "toolDiameter": "Tool diameter (mm)",
+    "workHolding": "Work-holding"
+  },
   "onboarding": {
     "title": "Welcome to Cabinet Planner!",
     "subtitle": "Design, optimize, and build your furniture in 3 easy steps.",

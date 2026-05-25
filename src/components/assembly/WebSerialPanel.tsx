@@ -10,11 +10,12 @@ import {
   connectToMachine,
   streamGcodeLines,
   disconnectFromMachine,
-  DEFAULT_SERIAL_PROFILE,
   type WebSerialState,
   type WebSerialProfile,
 } from '../../engine/webserial';
 import { cutSheetToGcode } from '../../utils/gcode-export';
+import { MachineProfileSelector } from './MachineProfileSelector';
+import { getDefaultMachineProfile, type MachineProfile } from '../../engine/machine-profiles';
 
 /** Internal serial port handle type (matches engine/webserial SerialPortHandle). */
 interface PortHandle {
@@ -31,6 +32,7 @@ export function WebSerialPanel() {
   const [state, setState] = useState<WebSerialState>('disconnected');
   const [progress, setProgress] = useState<{ current: number; total: number } | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [machineProfile, setMachineProfile] = useState<MachineProfile>(getDefaultMachineProfile);
   const portRef = useRef<PortHandle | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
@@ -53,7 +55,12 @@ export function WebSerialPanel() {
     setErrorMsg(null);
     setState('connecting');
     try {
-      const profile: WebSerialProfile = { ...DEFAULT_SERIAL_PROFILE };
+      const profile: WebSerialProfile = {
+        baudRate: machineProfile.baudRate,
+        dataBits: machineProfile.dataBits,
+        stopBits: machineProfile.stopBits,
+        parity: machineProfile.parity,
+      };
       const port = await connectToMachine(profile);
       portRef.current = port as unknown as PortHandle;
       const lines = buildGcodeLines();
@@ -78,7 +85,7 @@ export function WebSerialPanel() {
       setErrorMsg(msg);
       setState('error');
     }
-  }, [buildGcodeLines]);
+  }, [buildGcodeLines, machineProfile]);
 
   const handleDisconnect = useCallback(async () => {
     abortRef.current?.abort();
@@ -107,6 +114,13 @@ export function WebSerialPanel() {
   return (
     <div className="border-wood-200 dark:border-wood-700 rounded-lg border p-4">
       <h3 className="text-wood-700 dark:text-wood-200 mb-3 text-sm font-semibold">{t('webserial.title')}</h3>
+
+      {/* Sprint 75 — machine profile selector (hidden while connected) */}
+      {!isConnected && (
+        <div className="mb-4">
+          <MachineProfileSelector onSelect={setMachineProfile} />
+        </div>
+      )}
 
       {!hasSheets && !isConnected && (
         <p className="text-wood-400 dark:text-wood-500 mb-3 text-xs">{t('webserial.noSheets')}</p>

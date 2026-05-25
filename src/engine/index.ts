@@ -256,3 +256,5 @@ export {
   DEFAULT_SERIAL_PROFILE,
 } from './webserial';
 export type { WebSerialState, WebSerialProfile } from './webserial';
+export { MACHINE_PROFILES, MACHINE_PROFILE_IDS, getMachineProfile, getDefaultMachineProfile } from './machine-profiles';
+export type { MachineProfile, MachineProfileId, ControllerFirmware, SpindleHint } from './machine-profiles';
