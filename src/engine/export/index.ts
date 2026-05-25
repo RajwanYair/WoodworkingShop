@@ -18,3 +18,6 @@ export type { IfcResult } from './ifc-export';
 
 export { generateStepContent } from './step-export';
 export type { StepResult } from './step-export';
+
+export { generateGltfContent } from './gltf-export';
+export type { GltfResult } from './gltf-export';
