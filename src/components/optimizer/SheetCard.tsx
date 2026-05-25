@@ -1,4 +1,5 @@
 /** Sprint A3 (Phase 16.5) — extracted from OptimizerView.tsx */
+import { useState, useEffect } from 'react';
 import { getMaterial } from '../../engine/materials';
 import { downloadDxfForSheet } from '../../utils/dxf-export';
 import { useToastStore } from '../../store/toast-store';
@@ -29,6 +30,7 @@ function PartRect({
   showGrain,
   showGrainHatch = false,
   grainHatchPatternIdBase,
+  isHiddenByAnim = false,
 }: {
   part: CutRect;
   scale: number;
@@ -41,6 +43,8 @@ function PartRect({
   showGrain: boolean;
   showGrainHatch?: boolean;
   grainHatchPatternIdBase?: string;
+  /** Sprint 70 — when true, suppress opacity to 0 for step-by-step placement animation. */
+  isHiddenByAnim?: boolean;
 }) {
   const x = part.x * scale;
   const y = part.y * scale;
@@ -60,10 +64,10 @@ function PartRect({
         fill={isHovered ? '#FFD700' : color}
         stroke={isHovered ? '#B8860B' : '#555'}
         strokeWidth={isHovered ? 1.5 : 0.6}
-        opacity={isFaded ? 0.25 : 0.88}
+        opacity={isFaded ? 0.25 : isHiddenByAnim ? 0 : 0.88}
         rx={1}
         filter={shadowFilterId ? `url(#${shadowFilterId})` : undefined}
-        className="transition-all duration-150"
+        className="transition-all duration-300"
       />
       {/* Phase 12 / Sprint 11 — grain direction hatch overlay */}
       {showGrainHatch && showGrain && grainHatchPatternIdBase != null && (
@@ -230,6 +234,20 @@ export function SheetCard({
   const mat = getMaterial(sheet.material);
   const sw = sheet.sheetWidth * S;
   const sl = sheet.sheetLength * S;
+  /** Sprint 70 — step-by-step nesting placement animation */
+  const partCount = sheet.parts.length;
+  const [animPlaying, setAnimPlaying] = useState(false);
+  const [animStep, setAnimStep] = useState(0);
+  const isAnimMode = animPlaying || animStep > 0;
+  useEffect(() => {
+    if (!animPlaying) return;
+    if (animStep >= partCount) {
+      setAnimPlaying(false);
+      return;
+    }
+    const timer = setTimeout(() => setAnimStep((s) => s + 1), 350);
+    return () => clearTimeout(timer);
+  }, [animPlaying, animStep, partCount]);
   /** Sprint 46: lower-cased filter term for matching part IDs and labels */
   const filterTerm = partFilter.trim().toLowerCase();
 
@@ -307,6 +325,39 @@ export function SheetCard({
         >
           <IconGcode size={11} /> G-code
         </button>
+        {/* Sprint 70 — nesting placement animation controls */}
+        <button
+          type="button"
+          onClick={() => {
+            if (animStep >= partCount) setAnimStep(0);
+            setAnimPlaying((p) => !p);
+          }}
+          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1 rounded border px-2 py-0.5 text-[10px] transition-colors"
+          title={animPlaying ? t('optimizer.animatePause') : t('optimizer.animatePlay')}
+          aria-label={animPlaying ? t('optimizer.animatePause') : t('optimizer.animatePlay')}
+          aria-pressed={animPlaying}
+        >
+          {animPlaying ? '\u23f8' : '\u25b6'}
+        </button>
+        {isAnimMode && (
+          <>
+            <span className="text-wood-400 dark:text-wood-500 text-[10px] tabular-nums">
+              {t('optimizer.animateStep', { current: Math.min(animStep, partCount), total: partCount })}
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                setAnimStep(0);
+                setAnimPlaying(false);
+              }}
+              className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1 rounded border px-2 py-0.5 text-[10px] transition-colors"
+              aria-label={t('optimizer.animateReset')}
+              title={t('optimizer.animateReset')}
+            >
+              &#x21BA;
+            </button>
+          </>
+        )}
       </div>
       <svg
         viewBox={`-18 -18 ${sw + 36} ${sl + 36}`}
@@ -454,6 +505,7 @@ export function SheetCard({
             showGrain={mat.hasGrain}
             showGrainHatch={showGrainHatch}
             grainHatchPatternIdBase={`grain-${sheet.sheetIndex}`}
+            isHiddenByAnim={isAnimMode && i >= animStep}
           />
         ))}
 
