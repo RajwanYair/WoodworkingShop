@@ -2,6 +2,7 @@ import type { Material, CabinetConfig } from './types';
 
 // ─── Material database ───
 
+/** The built-in material catalogue. Use `getMaterial(key)` to look up by key. */
 export const MATERIALS: Material[] = [
   // 17–18 mm panels (carcass, doors, shelves)
   {
@@ -166,10 +167,19 @@ export const MATERIALS: Material[] = [
   },
 ];
 
+/** Standard saw kerf allowance added between parts by the cut optimizer (mm). */
 export const SAW_KERF = 4; // mm
 
 // ─── Lookup helpers ───
 
+/**
+ * Look up a material by key. Throws if the key is not found.
+ * For a non-throwing variant see {@link getMaterialResult}.
+ * @param key - Material key, e.g. `'plywood-18'`.
+ * @param extraMaterials - Optional custom materials appended to the built-in catalogue.
+ * @returns The matching {@link Material}.
+ * @throws `Error` when no material with the given key exists.
+ */
 export function getMaterial(key: string, extraMaterials?: Material[]): Material {
   const all = extraMaterials ? [...MATERIALS, ...extraMaterials] : MATERIALS;
   const m = all.find((mat) => mat.key === key);
@@ -191,10 +201,12 @@ export function getMaterialResult(
   return m ? { ok: true, value: m } : { ok: false, error: `Unknown material: ${key}` };
 }
 
+/** Return only panel-category materials (carcass, shelves, doors). */
 export function panelMaterials(): Material[] {
   return MATERIALS.filter((m) => m.category === 'panel');
 }
 
+/** Return only back-panel-category materials (thin plywood, HDF/MDF). */
 export function backMaterials(): Material[] {
   return MATERIALS.filter((m) => m.category === 'back');
 }

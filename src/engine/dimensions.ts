@@ -69,7 +69,11 @@ export function computeDimensions(cfg: CabinetConfig, extraMaterials?: Material[
   };
 }
 
-/** Auto-calculate number of hinges based on door height. */
+/**
+ * Auto-calculate number of hinges based on door height.
+ * @param doorHeight - Door height in mm.
+ * @returns Number of hinges required (2–6).
+ */
 export function computeHingesPerDoor(doorHeight: number): number {
   if (doorHeight <= 600) return 2;
   if (doorHeight <= 1200) return 3;
@@ -78,7 +82,12 @@ export function computeHingesPerDoor(doorHeight: number): number {
   return 6;
 }
 
-/** Distribute hinge positions evenly along door height. */
+/**
+ * Distribute hinge positions evenly along door height.
+ * @param doorHeight - Door height in mm.
+ * @param count - Number of hinges (from {@link computeHingesPerDoor}).
+ * @returns Array of hinge centre positions measured from the top of the door (mm).
+ */
 export function computeHingePositions(doorHeight: number, count: number): import('./types').Mm[] {
   if (count <= 0) return [];
   if (count === 1) return [asMm(doorHeight / 2)];
@@ -94,7 +103,12 @@ export function computeHingePositions(doorHeight: number, count: number): import
   return positions;
 }
 
-/** Compute equal shelf positions (mm from cabinet bottom, internal). */
+/**
+ * Compute equal shelf positions measured from the cabinet internal bottom.
+ * @param internalHeight - Interior cabinet height in mm.
+ * @param shelfCount - Number of shelves to distribute.
+ * @returns Array of shelf centre positions in mm (length equals `shelfCount`).
+ */
 export function computeEqualShelfPositions(internalHeight: number, shelfCount: number): number[] {
   if (shelfCount <= 0) return [];
   const spacing = internalHeight / (shelfCount + 1);
