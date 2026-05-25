@@ -27,27 +27,17 @@ jobs:
           failed=0
           for pid in $p1 $p2 $p3 $p4 $p5 $p6; do wait "$pid" || failed=1; done
           exit $failed
-
   test:
     runs-on: ubuntu-latest
     needs: quality
     steps:
       - uses: ./.github/actions/setup-node
-      - run: npm test
-      - run: npm run test:coverage
+      - run: npm test && npm run test:coverage
       - uses: codecov/codecov-action@v5
-        with:
-          files: /tmp/WoodworkingShop/coverage/lcov.info
-          flags: unit
-          fail_ci_if_error: false
-      - run: npm run bench:check
-      - run: npm run build && npm run bundle:check
+        with: { files: /tmp/WoodworkingShop/coverage/lcov.info, flags: unit, fail_ci_if_error: false }
+      - run: npm run bench:check && npm run build && npm run bundle:check
       - uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: dist
-          retention-days: 7
-
+        with: { name: dist, path: dist, retention-days: 7 }
   compat:
     runs-on: ubuntu-latest
     needs: quality
@@ -56,51 +46,31 @@ jobs:
       matrix: { node-version: [24, 26] }
     steps:
       - uses: ./.github/actions/setup-node
-        with:
-          node-version: ${{ matrix.node-version }}
+        with: { node-version: '${{ matrix.node-version }}' }
       - run: npm run build && npm run bundle:check
-
   e2e:
     runs-on: ubuntu-latest
     needs: test
     steps:
       - uses: ./.github/actions/setup-node
-      - id: pw
-        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
-      - id: pw-cache
-        uses: actions/cache@v5
-        with:
-          path: ~/.cache/ms-playwright
-          key: pw-${{ runner.os }}-${{ steps.pw.outputs.version }}
-      - if: steps.pw-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium firefox
+      - uses: actions/cache@v5
+        with: { path: ~/.cache/ms-playwright, key: "pw-${{ runner.os }}-${{ hashFiles('package-lock.json') }}" }
+      - run: npx playwright install --with-deps chromium firefox
       - uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist
+        with: { name: dist, path: dist }
       - run: npx playwright test --ignore-snapshots
       - if: always()
         uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 7
-
+        with: { name: playwright-report, path: playwright-report/, retention-days: 7 }
   lighthouse:
     runs-on: ubuntu-latest
     needs: test
     steps:
       - uses: ./.github/actions/setup-node
       - uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist
+        with: { name: dist, path: dist }
       - run: npm run lighthouse
-        env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+        env: { LHCI_GITHUB_APP_TOKEN: '${{ secrets.LHCI_GITHUB_APP_TOKEN }}' }
       - if: always()
         uses: actions/upload-artifact@v4
-        with:
-          name: lighthouse-report
-          path: .lighthouseci/
-          retention-days: 7
+        with: { name: lighthouse-report, path: .lighthouseci/, retention-days: 7 }

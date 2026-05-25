@@ -120,7 +120,7 @@ state; GH release published.
 | E4     | Split `CabinetPreview.tsx` and `OptimizerView.tsx` if over 600 L (verify sizes)                                                                     | TODO     | Refactor |
 | E5     | Split `validation.ts` (1033 L) by domain: dimension-rules, door-rules, shelf-rules; split `cabinet-store.ts` (968 L): extract PDF + room slices     | TODO     | Refactor |
 | E6     | Split `templates.ts` (660 L) into `engine/templates/`; split `dxf-export.ts` (544 L) into geometry + labeling layers                                | TODO     | Refactor |
-| E7     | Slim `ci.yml` (90 L) + `release.yml` (85 L): consolidate steps; target < 80 L each                                                                  | TODO     | CI       |
+| E7     | Slim `ci.yml` (90 L) + `release.yml` (85 L): consolidate steps; target < 80 L each                                                                  | **DONE** | CI       |
 | E8     | Consolidate docs: merge ARCHITECTURE.md strategy section into ROADMAP.md; retire duplication; trim to pure module reference                         | TODO     | Docs     |
 | E9     | Convert all standalone `// comment` lines in `src/` to `/** JSDoc */` blocks or remove where trivial; update `copilot-instructions.md`              | TODO     | Docs     |
 | E10    | VS Code: `snippets.code-snippets` (6 snippets, done), check task done, dead:check task done                                                         | **DONE** | DX       |
