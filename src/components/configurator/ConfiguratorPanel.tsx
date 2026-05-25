@@ -12,6 +12,7 @@ import { ShelfConfig } from './ShelfConfig';
 import { DoorConfig } from './DoorConfig';
 import { DrawerConfig } from './DrawerConfig';
 import { CustomMaterialEditor } from './CustomMaterialEditor';
+import { CatalogImportPanel } from './CatalogImportPanel';
 import { PresetsPanel } from './PresetsPanel';
 import { SaveLoadPanel } from './SaveLoadPanel';
 import type { FurnitureType, JoineryType } from '../../engine/types';
@@ -101,6 +102,7 @@ export function ConfiguratorPanel() {
       <DimensionSliders />
       <MaterialSelector />
       <CustomMaterialEditor />
+      <CatalogImportPanel />
 
       {/* Sprint 12 — Joinery type selector */}
       <fieldset className="space-y-2">

@@ -490,6 +490,21 @@
     "toolDiameter": "Tool diameter (mm)",
     "workHolding": "Work-holding"
   },
+  "catalogImport": {
+    "title": "Import Community Catalog",
+    "urlLabel": "Catalog URL",
+    "urlPlaceholder": "https://example.com/catalog.json",
+    "importButton": "Import",
+    "importing": "Importing\u2026",
+    "previewTitle": "{{count}} material found",
+    "previewTitle_other": "{{count}} materials found",
+    "addSelected": "Add selected to my materials",
+    "added": "{{count}} material added",
+    "added_other": "{{count}} materials added",
+    "alreadyExists": "Already in your library",
+    "errorFetch": "Failed to fetch catalog: {{message}}",
+    "noMaterials": "Catalog is empty."
+  },
   "onboarding": {
     "title": "Welcome to Cabinet Planner!",
     "subtitle": "Design, optimize, and build your furniture in 3 easy steps.",

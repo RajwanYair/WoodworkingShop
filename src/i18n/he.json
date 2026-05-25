@@ -483,6 +483,21 @@
     "toolDiameter": "קוטר כלי (מ\"מ)",
     "workHolding": "אחיזת עבודה"
   },
+  "catalogImport": {
+    "title": "ייבוא קטלוג קהילתי",
+    "urlLabel": "כתובת URL של הקטלוג",
+    "urlPlaceholder": "https://example.com/catalog.json",
+    "importButton": "ייבא",
+    "importing": "מייבא\u2026",
+    "previewTitle": "נמצא חומר {{count}}",
+    "previewTitle_other": "נמצאו {{count}} חומרים",
+    "addSelected": "הוסף נבחרים לחומרים שלי",
+    "added": "חומר {{count}} נוסף",
+    "added_other": "{{count}} חומרים נוספו",
+    "alreadyExists": "כבר קיים בספרייה",
+    "errorFetch": "טעינת הקטלוג נכשלה: {{message}}",
+    "noMaterials": "הקטלוג ריק."
+  },
   "shortcuts": {
     "saveSnapshot": "צילום מצב נשמר",
     "exportBom": "BOM יוצא",
