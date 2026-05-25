@@ -34,6 +34,15 @@
   },
   "type": "module",
   "private": true,
+  "browserslist": [
+    "last 2 Chrome versions",
+    "last 2 Firefox versions",
+    "last 2 Safari versions",
+    "last 2 Edge versions",
+    "not dead",
+    "not ie 11",
+    "not ie_mob 11"
+  ],
   "overrides": {
     "eslint": "$eslint",
     "eslint-plugin-react": {

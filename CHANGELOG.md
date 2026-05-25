@@ -9,6 +9,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] — Phase 17.3 — Test Efficiency & DX Elevation (in progress)
+
+### Fixed
+
+- **79 VS Code Problems-pane false positives eliminated** — VS Code 1.91+
+  CSS and TypeScript language services only read browser targets from
+  `package.json#browserslist`, not `.browserslistrc`. Without the field both
+  language services defaulted to an IE-inclusive target set, generating
+  spurious "not supported in IE" warnings for modern APIs (`URLSearchParams`,
+  `TextEncoder`, `IntersectionObserver`, `structuredClone`, `fetch`, CSS
+  logical properties, etc.). Restored `browserslist` array in `package.json`
+  with the same values as the former `.browserslistrc`, then deleted
+  `.browserslistrc` (browserslist ≥ 4 errors if both exist). All CLI linters
+  (`npm run lint`, `npm run lint:css`) already passed clean — this is a pure
+  DX fix with no runtime change. Added `stylelint.configOverrides` in
+  `.vscode/settings.json` as an additional safeguard against any bundled
+  browser-compat plugins in the Stylelint VS Code extension.
+
 ## [3.72.0] — 2026-05-25
 
 ### Phase 17.2 — Production Readiness, Design-Check Fixes & Package Updates

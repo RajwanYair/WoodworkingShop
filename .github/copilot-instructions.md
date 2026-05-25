@@ -54,7 +54,7 @@ tests/
   No sonarjs, no promise plugin. `--max-warnings 0` is enforced in CI.
 - **RTL-safe layout**: use Tailwind logical properties (`ms-*`, `me-*`, `start-*`, `end-*`) not `ml-*`/`mr-*`
 - **No hardcoded colours**: use `wood-*` design tokens or Tailwind semantic classes
-- **CSS via Stylelint**: `stylelint.config.js` + `.browserslistrc` (canonical) drives compatibility.
+- **CSS via Stylelint**: `stylelint.config.js` + `package.json#browserslist` (canonical — read by both Stylelint and VS Code language services) drives compatibility.
   Run `npm run lint:css` before commit; auto-fix with `npx stylelint --fix "src/**/*.css"`
 - **Tool configs stay at root**: do NOT move `vite.config.ts`, `vitest.config.ts`,
   `playwright.config.ts`, `eslint.config.js`, `stylelint.config.js`, `typedoc.json`,
@@ -132,7 +132,7 @@ The MaxRects BSSF cut-optimizer uses:
 - Add features not requested (no unsolicited refactors, no extra docstrings)
 - Hardcode pixel values — use Tailwind utility classes
 - Skip the `he.json` update when adding i18n keys
-- Use IE-only or deprecated browser APIs — the project targets modern evergreen browsers only (`not ie 11` in `.browserslistrc`)
+- Use IE-only or deprecated browser APIs — the project targets modern evergreen browsers only (`not ie 11` in `package.json#browserslist`)
 - Add `enum` or `namespace` — use `as const` objects or union types (TypeScript 6 `erasableSyntaxOnly`)
 - Add `sonarjs` or `promise` ESLint plugins — not in this project's config
 - Add JS-style `//` comments inside `.json` files — use `.jsonc` extension for comment-annotated JSON

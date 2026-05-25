@@ -29,6 +29,11 @@
   "html.validate.styles": false,
   "html.validate.scripts": false,
   "stylelint.validate": ["css"],
+  "stylelint.configOverrides": {
+    "rules": {
+      "plugin/no-unsupported-browser-features": null
+    }
+  },
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
     "source.fixAll.stylelint": "explicit"
