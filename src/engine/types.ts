@@ -41,10 +41,16 @@ export const ok = <T>(value: T): Ok<T> => ({ ok: true, value });
 export const err = <E>(error: E): Err<E> => ({ ok: false, error });
 // ──────────────────────────────────────────────────────────────────────────────
 
+/** Application UI language code. `'he'` enables right-to-left layout. */
 export type Lang = 'en' | 'he';
 
+/** Structural zone of the cabinet that uses this material. */
 export type MaterialCategory = 'panel' | 'back' | 'door';
 
+/**
+ * A sheet material available in the configurator.
+ * Drives thickness, sheet dimensions, cost, grain, and cut-optimizer behaviour.
+ */
 export interface Material {
   key: string;
   name: { en: string; he: string };
@@ -62,7 +68,9 @@ export interface Material {
   densityKgM3: number;
 }
 
+/** Cabinet door face style. `'none'` means open shelving with no doors. */
 export type DoorStyle = 'flat' | 'shaker' | 'glass' | 'none';
+/** Which visible edges receive banding treatment. */
 export type EdgeBanding = 'all-visible' | 'doors-only' | 'none';
 
 /**
@@ -76,9 +84,13 @@ export type EdgeBanding = 'all-visible' | 'doors-only' | 'none';
  * - `screw`        : Standard through-screws — simplest, no thickness constraint.
  */
 export type JoineryType = 'pocket-screw' | 'dado' | 'dowel' | 'biscuit' | 'screw';
+/** How shelf positions inside the cabinet are determined. */
 export type ShelfSpacing = 'equal' | 'custom';
+/** Cabinet handle / pull style. `'none'` omits hardware from the BOM. */
 export type HandleStyle = 'bar' | 'knob' | 'cup' | 'none';
+/** Top-level furniture category. Determines which parts, hardware, and validation rules apply. */
 export type FurnitureType = 'cabinet' | 'bookshelf' | 'desk' | 'wardrobe' | 'panel';
+/** Drawer slide hardware type, affects hardware BOM and assembly notes. */
 export type DrawerSlideType = 'standard' | 'soft-close' | 'full-extension';
 /** Which material's thickness governs a plain panel's depth. */
 export type PanelMaterialSource = 'carcass' | 'back';
@@ -139,6 +151,10 @@ export interface VendorHingeProfile {
   supplierUrl: string;
 }
 
+/**
+ * Complete configuration for a single cabinet or furniture piece.
+ * This is the primary input to every engine function.
+ */
 export interface CabinetConfig {
   // Furniture type
   furnitureType: FurnitureType;
@@ -209,6 +225,10 @@ export interface CabinetConfig {
   lang: Lang;
 }
 
+/**
+ * Computed panel dimensions derived from a {@link CabinetConfig}.
+ * Produced by `computeDimensions()` in `engine/dimensions.ts`.
+ */
 export interface DerivedDimensions {
   internalWidth: Mm;
   internalHeight: Mm;
@@ -232,6 +252,7 @@ export interface DerivedDimensions {
   }>;
 }
 
+/** A single cut part / panel in the bill of materials produced by `generateParts()`. */
 export interface Part {
   id: string;
   name: { en: string; he: string };
@@ -245,6 +266,7 @@ export interface Part {
   rotationLocked?: boolean;
 }
 
+/** A hardware line item in the bill of materials (hinges, screws, handles, etc.). */
 export interface HardwareItem {
   id: string;
   name: { en: string; he: string };
@@ -258,6 +280,7 @@ export interface HardwareItem {
   unitPrice?: number;
 }
 
+/** A cut part placed on a sheet, with its position and orientation from the cut optimizer. */
 export interface CutRect {
   partId: string;
   label: string;
@@ -280,6 +303,7 @@ export interface CutRect {
   partMaterial?: string;
 }
 
+/** A single sheet of material after the optimizer has placed all parts onto it. */
 export interface CutSheet {
   sheetIndex: number;
   material: string;
@@ -290,6 +314,7 @@ export interface CutSheet {
   yieldPercent: number;
 }
 
+/** Complete output from the cut optimizer: placed sheets, yield, and waste metrics. */
 export interface OptimizationResult {
   sheets: CutSheet[];
   totalSheets: number;
@@ -328,6 +353,7 @@ export interface DefectZone {
   length: number;
 }
 
+/** Optimization strategy applied by the smart optimizer to improve yield or reduce sheet count. */
 export type SmartStrategy =
   | 'reduce-depth'
   | 'co-nest-strips'
@@ -337,6 +363,10 @@ export type SmartStrategy =
   | 'shelf-count-reduce'
   | 'exhaustive';
 
+/**
+ * A suggested configuration change to improve cut-plan efficiency.
+ * Produced by `runSmartOptimizer()` in `engine/smart-optimizer.ts`.
+ */
 export interface OptimizationSuggestion {
   originalConfig: CabinetConfig;
   optimizedConfig: CabinetConfig;
@@ -354,6 +384,7 @@ export interface OptimizationSuggestion {
 
 // ─── Validation types ───
 
+/** Severity level of a validation issue raised by `validateConfig()`. */
 export type ValidationSeverity = 'error' | 'warning' | 'info';
 
 /** A configuration issue raised by `validateConfig()`. */
@@ -437,8 +468,7 @@ export interface ValidationRule {
 
 // ─── Material substitution types ───
 
-/** A recommended alternative material with rationale. */
-/** Quantitative metrics that back a MaterialSubstitution recommendation. */
+/** Quantitative metrics that back a {@link MaterialSubstitution} recommendation. */
 export interface QuantitativeRationale {
   /** Weight saved per standard sheet compared to the current material (kg). */
   savedKgPerSheet?: number;
@@ -448,6 +478,7 @@ export interface QuantitativeRationale {
   costDeltaPct?: number;
 }
 
+/** A recommended alternative material with rationale, produced by `suggestSubstitutions()`. */
 export interface MaterialSubstitution {
   /** Key of the current material. */
   currentKey: string;
