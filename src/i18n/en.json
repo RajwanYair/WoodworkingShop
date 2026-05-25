@@ -681,5 +681,16 @@
     "toolDiameter": "Tool \u00d8 (mm)",
     "useArcs": "Arc moves (G2/G3)",
     "emitToolChange": "Emit M6 tool-change between parts"
+  },
+  "camera": {
+    "title": "Room Photo Reference",
+    "start": "Open Camera",
+    "capture": "Take Photo",
+    "stop": "Stop Camera",
+    "retake": "Retake",
+    "capturedAlt": "Captured room photo",
+    "videoFeed": "Live camera feed",
+    "notSupported": "Camera not supported on this device",
+    "error": "Camera error"
   }
 }

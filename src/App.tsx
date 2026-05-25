@@ -21,6 +21,7 @@ import { useCabinetStore, type CabinetState } from './store/cabinet-store';
 import { useToastStore } from './store/toast-store';
 import { useSystemDarkMode } from './hooks/useSystemDarkMode';
 import { usePwaFileHandlers } from './hooks/usePwaFileHandlers';
+import { useHaptics } from './hooks/useHaptics';
 import { generateParts } from './engine/parts';
 import { generateHardware } from './engine/hardware';
 import { downloadBomCsv } from './utils/bom-export';
@@ -47,6 +48,7 @@ function App() {
   const { activeTab, darkMode, projectName } = useCabinetStore();
   const highContrastMode = useCabinetStore((s) => s.highContrastMode);
   const { t, i18n } = useTranslation();
+  const haptics = useHaptics();
   const [showShortcuts, setShowShortcuts] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
   // Track whether this is the initial render so we don't steal focus on load
@@ -147,6 +149,7 @@ function App() {
         e.preventDefault();
         useCabinetStore.getState().addCabinet();
         useToastStore.getState().addToast(t('shortcuts.addCabinet'), 'success');
+        haptics.notification('success');
         return;
       }
       // Tab switching: Alt+1-5; Dark mode: Alt+D (Sprint 168)
@@ -162,6 +165,7 @@ function App() {
         if (tab) {
           e.preventDefault();
           useCabinetStore.getState().setActiveTab(tab);
+          haptics.selectionChanged();
           return;
         }
         if (e.key === 'd' || e.key === 'D') {
@@ -177,7 +181,7 @@ function App() {
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [t, i18n.language]);
+  }, [t, i18n.language, haptics]);
 
   return (
     <div
