@@ -154,13 +154,16 @@ state; GH release published.
 
 ### Phase 20: Enterprise & Mobile (v4.1.0)
 
-| Sprint | Deliverable                                                    | Type     |
-| ------ | -------------------------------------------------------------- | -------- |
-| 79     | IFC export (Industry Foundation Classes for BIM)               | DONE     |
-| 80     | STEP export (AP214 furniture geometry profile)                 | DONE     |
-| 81     | Capacitor iOS/Android wrapper (camera, haptics)                | Platform |
-| 82     | Mobile-first touch UI (swipe tabs, pinch preview, thumb zones) | UI       |
-| 83     | Version bump 4.1.0, CHANGELOG, GH release                      | Release  |
+| Sprint | Deliverable                                                     | Type |
+| ------ | --------------------------------------------------------------- | ---- |
+| 79     | IFC export (Industry Foundation Classes for BIM)                | DONE |
+| 80     | STEP export (AP214 furniture geometry profile)                  | DONE |
+| 81     | Capacitor iOS/Android wrapper (camera, haptics)                 | DONE |
+| 82     | Mobile-first touch UI (swipe tabs, pinch preview, thumb zones)  | DONE |
+| 83     | Version bump 4.1.0, CHANGELOG, GH release                       | DONE |
+| 84     | glTF 2.0 export (AR/VR 3D model)                                | DONE |
+| 85     | Cabinet measurement assistant (ergonomic + best-practice hints) | DONE |
+| 86     | ZIP bundle export (PDF + DXF + BOM + glTF in one download)      | DONE |
 
 ### Phase 21+: Future Horizons (Unscoped)
 

@@ -9,7 +9,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.0.0] — 2026-05-25
+## [4.1.0] — 2026-05-25
+
+### Phase 20 — Mobile UX, glTF Export & Measurement Assistant (Sprints 81–82, 84–86)
+
+#### Sprint 81 — Mobile camera & haptics
+
+- Added `src/hooks/useCamera.ts`: `useCamera()` hook — Web `getUserMedia` + Capacitor Camera plugin detection (no new prod dep); exports `CameraStatus`, `UseCameraResult`
+- Added `src/hooks/useHaptics.ts`: `useHaptics()` hook — `navigator.vibrate` web fallback + Capacitor Haptics native detection; exports `ImpactStyle`, `NotificationType`
+- Added `CameraCapture` component mounted in `AssemblyGuide` for room photo reference
+- `App.tsx`: haptic feedback on `addCabinet` shortcut and Alt+1-5 tab switches
+- i18n: `camera.*` section (9 keys, EN + HE parity)
+
+#### Sprint 82 — Mobile-first touch UI
+
+- Added `src/hooks/useTouchGestures.ts`: `useTouchGestures()` hook with left/right swipe detection (50 px threshold)
+- Added `src/components/layout/MobileTabBar.tsx`: sticky bottom tab bar (hidden above `lg`); iOS safe-area inset; `haptics.selectionChanged()` on tab press; full ARIA tab semantics
+- `App.tsx`: swipe-left/right switches between non-preview tabs; `pb-20 sm:pb-6 lg:pb-6` for mobile tab bar clearance
+- i18n: `a11y.mobileTabNav` key added
+
+#### Sprint 84 — glTF 2.0 export (AR/VR)
+
+- Added `src/engine/export/gltf-export.ts`: pure-TS glTF 2.0 JSON generator; 6-face box geometry per part (24 verts, 36 indices, POSITION + NORMAL); self-contained base64 buffers; no new prod deps
+- Added `src/utils/gltf-download.ts`: browser download helper for `.gltf` files
+- "Export glTF 2.0 (AR/VR)" button added to `PdfExportPanel`
+- i18n: `pdf.exportGltf` + `pdf.gltfExported` (EN + HE)
+
+#### Sprint 85 — Cabinet measurement assistant
+
+- Added `src/engine/measurement-assistant.ts`: rule-based ergonomic + best-practice hints engine covering cabinet, bookshelf, wardrobe, desk types; ISO 9241-5 / BS 8300 / IKEA-planning constants; returns `MeasurementHint[]` (max 5, sorted by severity)
+- Added `MeasurementHintsPanel` component: level-coded colours (standard=blue, ergonomic=amber, tip=wood); `useMemo` on config; mounted in `ConfiguratorPanel` after `ValidationPanel`
+- i18n: `measurementAssistant.*` section (14 keys, EN + HE parity; 617 keys total)
+
+#### Sprint 86 — ZIP bundle export
+
+- Added `src/utils/zip-writer.ts`: self-contained PKZIP writer (STORED method, IEEE-802.3 CRC-32, UTF-8 filenames, no external dependencies) — `buildZip()` + `downloadZip()`
+- `PdfExportPanel`: "Export ZIP Bundle" button generates PDF + DXF per sheet + BOM CSV + glTF 2.0 + README.txt in one `<project>-bundle.zip` download
+- i18n: `pdf.exportZip` / `pdf.generatingZip` / `pdf.zipExported` (EN + HE; 620 keys total)
 
 ### Phase 19 — Machine Integration & Community (Sprints 75–77)
 
