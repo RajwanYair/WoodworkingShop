@@ -124,7 +124,7 @@ state; GH release published.
 | E8     | Consolidate docs: merge ARCHITECTURE.md strategy section into ROADMAP.md; retire duplication; trim to pure module reference                         | TODO     | Docs     |
 | E9     | Convert all standalone `// comment` lines in `src/` to `/** JSDoc */` blocks or remove where trivial; update `copilot-instructions.md`              | TODO     | Docs     |
 | E10    | VS Code: `snippets.code-snippets` (6 snippets, done), check task done, dead:check task done                                                         | **DONE** | DX       |
-| E11    | Copilot: `.github/prompts/` seeded (done), `dependabot.yml` (done), `CODEOWNERS` (done); add `CONTRIBUTING.md`                                      | Partial  | DX       |
+| E11    | Copilot: `.github/prompts/` seeded (done), `dependabot.yml` (done), `CODEOWNERS` (done); add `CONTRIBUTING.md`                                      | **DONE** | DX       |
 | E12    | Version bump 3.73.0, CHANGELOG, GH release                                                                                                          | TODO     | Release  |
 
 ### Phase 18: Visual Fidelity & UX (v3.74.0)
