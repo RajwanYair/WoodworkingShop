@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-05-25T00:00:00.000Z",
+  "materials": [
+    {
+      "id": "birch-ply-18mm-eu",
+      "name": "Birch Plywood 18 mm",
+      "supplier": "Baltic Birch Co.",
+      "pricePerSqM": 32.5,
+      "currency": "EUR",
+      "thickness": 18,
+      "color": "#d4a86c",
+      "hasGrain": true,
+      "url": "https://example.com/birch-ply-18mm",
+      "submittedAt": "2026-01-15T10:30:00.000Z",
+      "votes": 47
+    },
+    {
+      "id": "mdf-18mm-us",
+      "name": "MDF 18 mm",
+      "supplier": "Roseburg Forest Products",
+      "pricePerSqM": 18.0,
+      "currency": "USD",
+      "thickness": 18,
+      "color": "#b0977a",
+      "hasGrain": false,
+      "url": "https://example.com/mdf-18mm",
+      "submittedAt": "2026-02-03T08:00:00.000Z",
+      "votes": 31
+    },
+    {
+      "id": "oak-veneer-ply-12mm-uk",
+      "name": "Oak Veneer Plywood 12 mm",
+      "supplier": "Jewson",
+      "pricePerSqM": 55.0,
+      "currency": "GBP",
+      "thickness": 12,
+      "color": "#c8a96e",
+      "hasGrain": true,
+      "submittedAt": "2026-03-10T14:00:00.000Z",
+      "votes": 22
+    },
+    {
+      "id": "melamine-18mm-il",
+      "name": "White Melamine 18 mm",
+      "supplier": "Tafnit",
+      "pricePerSqM": 95.0,
+      "currency": "ILS",
+      "thickness": 18,
+      "color": "#f5f5f0",
+      "hasGrain": false,
+      "submittedAt": "2026-04-05T09:15:00.000Z",
+      "votes": 15
+    }
+  ]
+}
