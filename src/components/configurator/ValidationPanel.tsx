@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ValidationIssue, ValidationSeverity, CabinetConfig } from '../../engine/types';
-import { IconWarning, IconInfo, IconX, IconCheck } from '../layout/Icons';
+import { IconWarning, IconInfo, IconX } from '../layout/Icons';
 import { useCabinetStore } from '../../store/cabinet-store';
 
 interface ValidationPanelProps {
@@ -192,44 +192,5 @@ export function ValidationPanel({ issues }: ValidationPanelProps) {
         </ul>
       )}
     </section>
-  );
-}
-
-/** Compact badge showing error/warning counts for use in tab headers. */
-export function ValidationBadge({ issues }: ValidationPanelProps) {
-  const errorCount = issues.filter((i) => i.severity === 'error').length;
-  const warnCount = issues.filter((i) => i.severity === 'warning').length;
-
-  if (errorCount === 0 && warnCount === 0) return null;
-
-  if (errorCount > 0) {
-    return (
-      <span
-        className="ms-1.5 inline-flex h-4 min-w-[1.1rem] items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-bold text-white"
-        aria-label={`${errorCount} error${errorCount > 1 ? 's' : ''}`}
-      >
-        {errorCount}
-      </span>
-    );
-  }
-
-  return (
-    <span
-      className="ms-1.5 inline-flex h-4 min-w-[1.1rem] items-center justify-center rounded-full bg-amber-500 px-1 text-[10px] font-bold text-white"
-      aria-label={`${warnCount} warning${warnCount > 1 ? 's' : ''}`}
-    >
-      {warnCount}
-    </span>
-  );
-}
-
-/** Simple "all clear" confirmation shown when 0 issues. */
-export function ValidationAllClear() {
-  const { t } = useTranslation();
-  return (
-    <div className="flex items-center gap-2 px-1 py-1 text-xs text-green-700 dark:text-green-400">
-      <IconCheck size={14} className="shrink-0" />
-      {t('validation.noIssues')}
-    </div>
   );
 }

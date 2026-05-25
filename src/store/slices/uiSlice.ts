@@ -51,7 +51,7 @@ export function detectOsDarkModeUi(): boolean {
 
 // ─── Slice type ───────────────────────────────────────────────────────────────
 
-export type ActiveTab = 'configurator' | 'preview' | 'optimizer' | 'assembly' | 'pdf';
+type ActiveTab = 'configurator' | 'preview' | 'optimizer' | 'assembly' | 'pdf';
 
 export type UiSlice = {
   // State

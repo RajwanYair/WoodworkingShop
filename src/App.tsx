@@ -20,6 +20,7 @@ import { IconPrint } from './components/layout/Icons';
 import { useCabinetStore, type CabinetState } from './store/cabinet-store';
 import { useToastStore } from './store/toast-store';
 import { useSystemDarkMode } from './hooks/useSystemDarkMode';
+import { usePwaFileHandlers } from './hooks/usePwaFileHandlers';
 import { generateParts } from './engine/parts';
 import { generateHardware } from './engine/hardware';
 import { downloadBomCsv } from './utils/bom-export';
@@ -62,6 +63,11 @@ function App() {
 
   // Sprint 48 — follow OS (prefers-color-scheme) changes in real-time
   useSystemDarkMode();
+
+  // Phase 13 / Sprint 7 — PWA File Handling: open .cabinetplan files from OS
+  usePwaFileHandlers((project) => {
+    useCabinetStore.getState().loadProject(project.cabinets);
+  });
 
   // Focus restoration: move focus to the main landmark when the active tab changes
   // so keyboard users land at the start of new content (WCAG 2.2 success criterion 2.4.3)

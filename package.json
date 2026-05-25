@@ -79,8 +79,22 @@
       "src/engine/hardware/index.ts!",
       "src/engine/materials/index.ts!",
       "src/engine/optimizer/index.ts!",
+      "src/i18n/index.ts!",
       "src/workers/**/*.worker.ts",
-      "tests/bench/**/*.bench.ts"
+      "tests/bench/**/*.bench.ts",
+      "src/components/layout/Icons.tsx!",
+      "src/utils/audit-log.ts!",
+      "src/utils/indexed-db-storage.ts!",
+      "src/utils/plugin-marketplace.ts!",
+      "src/utils/project-branching.ts!",
+      "src/utils/ar-placement.ts!",
+      "src/utils/batch-export.ts!",
+      "src/utils/cost-comparison.ts!",
+      "src/utils/erp-export.ts!",
+      "src/utils/export-presets.ts!",
+      "src/utils/webserial-cnc.ts!",
+      "src/services/supabase.ts!",
+      "tests/helpers.ts!"
     ],
     "project": [
       "src/**/*.{ts,tsx}",

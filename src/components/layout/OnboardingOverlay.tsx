@@ -14,7 +14,7 @@ const STEPS: { icon: StepIcon; titleKey: string; descKey: string }[] = [
   { icon: <IconDocument size={22} />, titleKey: 'onboarding.stepPdf', descKey: 'onboarding.descPdf' },
 ];
 
-export function OnboardingOverlay() {
+function OnboardingOverlay() {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
 

@@ -234,3 +234,8 @@ export type { LengthUnit, CurrencyCode, SheetSortPreference, ProjectSettings } f
 
 export { flattenLocale, auditLocale, auditAllLocales, formatAuditReport } from './i18n-audit';
 export type { LocaleTree, FlatLocale, LocaleAuditResult, AuditReport } from './i18n-audit';
+
+export { buildGrainReport, grainReportToCsv } from './grain-report';
+export type { GrainReportPart, GrainMaterialGroup, GrainReport } from './grain-report';
+
+export type { PluginEventMap, PluginEventName, PluginEventHandler } from './plugin.ts';

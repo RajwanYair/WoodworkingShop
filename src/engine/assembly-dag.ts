@@ -16,7 +16,7 @@ import type { AssemblyStep } from './assembly';
  * A wave is a group of steps whose dependencies all belong to previous waves.
  * Every step within a wave can be executed in parallel.
  */
-export type ScheduleWave = AssemblyStep[];
+type ScheduleWave = AssemblyStep[];
 
 export interface ScheduleResult {
   /** Ordered waves — execute wave[0], then wave[1], etc. */
