@@ -40,6 +40,10 @@ export default defineConfig({
       injectRegister: false, // handled manually in useSwUpdate / main.tsx
       manifest: false, // keep the existing public/manifest.json
       workbox: {
+        // Explicit opt-outs — never auto-activate the new SW or claim clients
+        // without the user clicking "Update now" in the SwUpdateBanner.
+        skipWaiting: false,
+        clientsClaim: false,
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
         navigateFallback: '/WoodworkingShop/index.html',
         navigateFallbackDenylist: [/^\/WoodworkingShop\/api\//],

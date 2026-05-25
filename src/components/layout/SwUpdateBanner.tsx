@@ -7,15 +7,24 @@ import { IconDownload, IconX } from './Icons';
  * Dismissible bottom-corner card that appears when a new Service Worker is
  * waiting. The user chooses when to apply the update — clicking "Update now"
  * sends SKIP_WAITING and reloads the page; "Later" hides the card for the
- * rest of the current session (the SW stays waiting and will activate on the
- * next navigation).
+ * rest of the current browser-tab session (sessionStorage key persists
+ * across hard-reloads within the same tab so the user is not nagged, but
+ * is cleared automatically when the tab is closed).
  */
+
+const SESSION_DISMISS_KEY = 'swUpdate:dismissed';
+
 export function SwUpdateBanner() {
   const { t } = useTranslation();
   const { updateAvailable, reload } = useSwUpdate();
-  const [dismissed, setDismissed] = useState(false);
+  const [dismissed, setDismissed] = useState(() => sessionStorage.getItem(SESSION_DISMISS_KEY) === 'true');
 
   if (!updateAvailable || dismissed) return null;
+
+  const handleDismiss = () => {
+    sessionStorage.setItem(SESSION_DISMISS_KEY, 'true');
+    setDismissed(true);
+  };
 
   return (
     <div
@@ -32,7 +41,7 @@ export function SwUpdateBanner() {
           <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{t('swUpdate.description')}</p>
         </div>
         <button
-          onClick={() => setDismissed(true)}
+          onClick={handleDismiss}
           aria-label={t('swUpdate.dismiss')}
           className="shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
         >
@@ -47,7 +56,7 @@ export function SwUpdateBanner() {
           {t('swUpdate.reload')}
         </button>
         <button
-          onClick={() => setDismissed(true)}
+          onClick={handleDismiss}
           className="flex-1 rounded border border-gray-200 px-3 py-1.5 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
         >
           {t('swUpdate.later')}

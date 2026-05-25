@@ -54,7 +54,7 @@ describe('useSwUpdate (Sprint 44)', () => {
     expect(result.current.updateAvailable).toBe(true);
   });
 
-  it('reload() invokes the updateSW function returned by registerSW', async () => {
+  it('reload() invokes the updateSW function with reloadPage=false', async () => {
     const mockUpdateSW = vi.fn(async () => undefined);
     vi.mocked(registerSW).mockImplementation((opts) => {
       opts?.onNeedRefresh?.();
@@ -67,7 +67,9 @@ describe('useSwUpdate (Sprint 44)', () => {
     act(() => {
       result.current.reload();
     });
-    expect(mockUpdateSW).toHaveBeenCalledOnce();
+    // Must pass false so virtual:pwa-register does NOT call window.location.reload()
+    // internally — the sole reload path is onNeedReload + userTriggeredRef.
+    expect(mockUpdateSW).toHaveBeenCalledWith(false);
   });
 
   it.each<[boolean, number]>([
@@ -106,6 +108,7 @@ describe('useSwUpdate (Sprint 44)', () => {
 
 describe('SwUpdateBanner component', () => {
   beforeEach(() => {
+    sessionStorage.clear();
     vi.mocked(registerSW).mockImplementation((opts) => {
       opts?.onNeedRefresh?.();
       return async () => undefined;
@@ -114,6 +117,7 @@ describe('SwUpdateBanner component', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
+    sessionStorage.clear();
   });
 
   it('renders the update card when updateAvailable=true', () => {
@@ -121,16 +125,24 @@ describe('SwUpdateBanner component', () => {
     expect(screen.getByRole('alert')).toBeInTheDocument();
   });
 
-  it('hides the card when the Later button is clicked', () => {
+  it('hides the card and writes sessionStorage when the Later button is clicked', () => {
     render(<SwUpdateBanner />);
     expect(screen.getByRole('alert')).toBeInTheDocument();
     fireEvent.click(screen.getByText('Later'));
     expect(screen.queryByRole('alert')).toBeNull();
+    expect(sessionStorage.getItem('swUpdate:dismissed')).toBe('true');
   });
 
-  it('hides the card when the × dismiss button is clicked', () => {
+  it('hides the card and writes sessionStorage when the × dismiss button is clicked', () => {
     render(<SwUpdateBanner />);
     fireEvent.click(screen.getByRole('button', { name: 'Dismiss update notification' }));
+    expect(screen.queryByRole('alert')).toBeNull();
+    expect(sessionStorage.getItem('swUpdate:dismissed')).toBe('true');
+  });
+
+  it('does not render when sessionStorage flag is already set (same-tab reload scenario)', () => {
+    sessionStorage.setItem('swUpdate:dismissed', 'true');
+    render(<SwUpdateBanner />);
     expect(screen.queryByRole('alert')).toBeNull();
   });
 

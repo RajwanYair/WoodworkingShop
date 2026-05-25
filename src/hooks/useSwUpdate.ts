@@ -8,17 +8,22 @@ import { registerSW } from 'virtual:pwa-register';
  * The `registerSW` call from `virtual:pwa-register` handles registration and
  * fires the `onNeedRefresh` callback when an update is waiting.
  *
- * `onNeedReload` intercepts the `controlling` → reload path so the page only
- * reloads when the USER explicitly clicks Reload — never on background
- * activations triggered by another browser tab calling skipWaiting.
+ * `onNeedReload` is the SOLE reload trigger — it fires when the new SW takes
+ * control and is guarded by `userTriggeredRef` to prevent cross-tab or
+ * background SW activations from reloading this tab without user consent.
+ *
+ * `updateSW` is intentionally called with `reloadPage = false` so that
+ * `virtual:pwa-register`'s internal `window.location.reload()` path is
+ * suppressed. All reloads go through the `onNeedReload` guard below.
  */
 export function useSwUpdate(): { updateAvailable: boolean; reload: () => void } {
   const [updateAvailable, setUpdateAvailable] = useState(false);
   // updateSW is the function returned by registerSW — calling it sends
-  // SKIP_WAITING to the waiting worker. The actual page reload is handled
-  // by onNeedReload below, guarded by userTriggeredRef.
+  // SKIP_WAITING to the waiting worker. We pass reloadPage=false so the
+  // virtual module does NOT call window.location.reload() internally.
+  // The reload is handled exclusively by onNeedReload + userTriggeredRef.
   const [updateSW, setUpdateSW] = useState<((reloadPage?: boolean) => Promise<void>) | null>(null);
-  // Set to true only when the user explicitly clicks Reload.
+  // Set to true only when the user explicitly clicks Reload in this tab.
   // Prevents cross-tab or background SW activations from reloading this tab.
   const userTriggeredRef = useRef(false);
 
@@ -46,7 +51,10 @@ export function useSwUpdate(): { updateAvailable: boolean; reload: () => void } 
 
   const reload = () => {
     userTriggeredRef.current = true;
-    void updateSW?.();
+    // Pass false so virtual:pwa-register does NOT call window.location.reload()
+    // on its own. The reload fires exclusively via onNeedReload above once the
+    // new SW fires the `controlling` event.
+    void updateSW?.(false);
   };
 
   return { updateAvailable, reload };
