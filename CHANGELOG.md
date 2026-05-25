@@ -9,6 +9,55 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.75.0] — 2026-05-25
+
+### Phase 18 — Visual Fidelity & UX (Sprints 68–71, 74)
+
+#### Added
+
+- **Sprint 68 — Material texture atlas** (`src/engine/material-textures.ts`):
+  - Pure TypeScript engine module defining `MaterialTexture` records for 8 species
+    (oak, maple, walnut, pine, birch, cherry, mdf, plywood) with base colour, grain
+    colour, grain line coordinates, and side-face tints.
+  - `getMaterialTextureId(materialKey)` maps catalog keys (e.g. `plywood-17`) to atlas IDs.
+  - `buildSvgPatternDefs(textureId, patternId, tileScale?)` generates `<pattern>` SVG strings.
+  - All symbols exported from `engine/index.ts`.
+
+- **Sprint 69 — Material-mapped isometric SVG render** (`src/components/preview/IsometricView.tsx`):
+  - `materialId?: string` prop wires the texture atlas to the 3D cabinet preview.
+  - SVG `<pattern>` elements (`iso-tex-top`, `iso-tex-side`, `iso-tex-front`) replace
+    flat programmatic fills when a matching texture is found.
+  - Grain line overlays suppressed when an atlas texture is active (no visual duplication).
+  - `CabinetPreview.tsx` passes `getMaterialTextureId(config.carcassMaterial)` automatically.
+
+- **Sprint 70 — Nesting placement animation** (`src/components/optimizer/SheetCard.tsx`):
+  - Play/Pause button reveals cut parts one-by-one at 350 ms per part.
+  - `animStep` state drives sequential fade-in; `isHiddenByAnim` prop on `PartRect`
+    transitions opacity 0 → 0.88 via `transition-all duration-300`.
+  - Reset (↺) button and "Part X of Y" counter appear while animation is active.
+  - Animation auto-stops when the last part is placed.
+  - i18n: `optimizer.animatePlay`, `animatePause`, `animateReset`, `animateStep` (EN + HE).
+
+- **Sprint 71 — Onboarding wizard redesign** (`src/components/layout/OnboardingOverlay.tsx`):
+  - Replaced 5-item flat list with a 3-step paged wizard (Configure → Cut Sheets → Export).
+  - Progress dots indicator showing current step position.
+  - Back / Next navigation; Skip on step 1; Get Started on final step.
+  - All exports preserved: `OnboardingManager`, `HelpButton`, focus-trap, Escape dismiss.
+  - i18n: `onboarding.wizardStep{1,2,3}{Title,Desc}`, `stepOf`, `next`, `back`, `skip` (EN + HE).
+  - Removed obsolete keys: `stepConfigure`, `stepPreview`, `stepOptimize`, `stepAssembly`,
+    `stepPdf`, `descConfigure`, `descPreview`, `descOptimize`, `descAssembly`, `descPdf`.
+
+- **Sprint 74 — WebSerial API G-code streaming** (new files):
+  - `src/engine/webserial.ts`: pure TS engine module — `isWebSerialAvailable()`,
+    `connectToMachine(profile)`, `streamGcodeLines(port, lines, onProgress?, signal?)`,
+    `disconnectFromMachine(port)`, `DEFAULT_SERIAL_PROFILE`, `WebSerialState` union,
+    `WebSerialProfile` interface. Local `SerialPortHandle` shim avoids missing DOM types.
+  - `src/components/assembly/WebSerialPanel.tsx`: progressive-enhancement UI mounted at
+    the bottom of the Assembly tab — shows "not supported" on Firefox/Safari, port picker
+    on Connect, real-time "Sending line X of Y" progress, Disconnect / AbortController.
+    Reads `combinedOptimization.sheets` from store; generates G-code via `cutSheetToGcode`.
+  - i18n: `webserial.{title,connect,disconnect,notSupported,noSheets,streaming,done,error}` (EN + HE).
+
 ## [3.74.0] — 2026-05-25
 
 ### Phase 17.3 completion + Phase 18 Sprint 72 — Visual Fidelity & UX

@@ -1,6 +1,6 @@
 # Roadmap
 
-> **Last strategic review**: 2026-05-25 · **Current version**: 3.74.0
+> **Last strategic review**: 2026-05-25 · **Current version**: 3.75.0
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -127,16 +127,16 @@ state; GH release published.
 | E11    | Copilot: `.github/prompts/` seeded (done), `dependabot.yml` (done), `CODEOWNERS` (done); add `CONTRIBUTING.md`                                      | **DONE** | DX       |
 | E12    | Version bump 3.73.0, CHANGELOG, GH release                                                                                                          | **DONE** | Release  |
 
-### Phase 18: Visual Fidelity & UX (v3.74.0)
+### Phase 18: Visual Fidelity & UX (v3.75.0)
 
 **Goal**: Photorealistic materials in 3D, placement animation, print polish.
 
 | Sprint | Deliverable                                                       | Type     |
 | ------ | ----------------------------------------------------------------- | -------- | ------- |
-| 68     | Material texture atlas (8 species + composites, 512×512 tiles)    | Assets   |
-| 69     | Three.js material-mapped cabinet render (replace flat colours)    | UI       |
-| 70     | Nesting placement animation (step-by-step sequence with timeline) | UI       |
-| 71     | Onboarding wizard redesign (3-step guided flow, skippable)        | UX       |
+| 68     | Material texture atlas (8 species + composites, 512×512 tiles)    | **DONE** | Assets  |
+| 69     | SVG pattern-mapped isometric cabinet render (no Three.js)         | **DONE** | UI      |
+| 70     | Nesting placement animation (step-by-step sequence with timeline) | **DONE** | UI      |
+| 71     | Onboarding wizard redesign (3-step guided flow, skippable)        | **DONE** | UX      |
 | 72     | Print stylesheet optimization (A4/Letter margins, break control)  | **DONE** | CSS     |
 | 73     | Version bump 3.74.0, CHANGELOG, GH release                        | **DONE** | Release |
 
@@ -146,8 +146,8 @@ state; GH release published.
 
 | Sprint | Deliverable                                           | Type    |
 | ------ | ----------------------------------------------------- | ------- |
-| 74     | WebSerial API integration (Grbl G-code streaming)     | Feature |
-| 75     | Machine profile registry (Grbl, LinuxCNC, Mach3)      | Engine  |
+| 74     | WebSerial API integration (Grbl G-code streaming)     | **DONE** | Feature |
+| 75     | Machine profile registry (Grbl, LinuxCNC, Mach3)      | Feature |
 | 76     | Community material catalog schema (JSON API contract) | Design  |
 | 77     | Material price import from community catalog          | Feature |
 | 78     | Version bump 4.0.0, CHANGELOG, GH release             | Release |
