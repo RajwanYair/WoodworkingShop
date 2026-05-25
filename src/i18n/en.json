@@ -264,6 +264,8 @@
     "contentsPageNumbers": "Page numbers on every page",
     "exportErpJson": "Export ERP/MRP JSON",
     "erpExported": "ERP/MRP payload exported",
+    "exportIfc": "Export IFC (BIM)",
+    "ifcExported": "IFC file exported",
     "error": "PDF generation failed \u2014 check your connection and try again",
     "projectSettings": "Project Settings",
     "settingsDescription": "Save and restore saw kerf, sheet sizes, material prices and costs.",

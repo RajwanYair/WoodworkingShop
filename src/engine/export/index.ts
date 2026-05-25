@@ -12,3 +12,6 @@ export type { MoveKind, ToolMove, ToolpathBounds, ParsedToolpath } from '../gcod
 
 export { validateGcode } from '../gcode-validator.ts';
 export type { GcodeSeverity, GcodeIssue, GcodeValidationResult } from '../gcode-validator.ts';
+
+export { generateIfcContent } from './ifc-export';
+export type { IfcResult } from './ifc-export';
