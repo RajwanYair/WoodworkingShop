@@ -5,7 +5,8 @@
   },
   "a11y": {
     "skipToContent": "Skip to content",
-    "mainWorkspace": "Cabinet planner workspace"
+    "mainWorkspace": "Cabinet planner workspace",
+    "mobileTabNav": "Tab navigation"
   },
   "tabs": {
     "configurator": "Configure",

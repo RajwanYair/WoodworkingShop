@@ -5,7 +5,8 @@
   },
   "a11y": {
     "skipToContent": "דלג לתוכן",
-    "mainWorkspace": "סביבת העבודה של מתכנן הארון"
+    "mainWorkspace": "סביבת העבודה של מתכנן הארון",
+    "mobileTabNav": "ניווט לשוניות"
   },
   "tabs": {
     "configurator": "הגדרות",

@@ -14,6 +14,7 @@ import { ProjectSummaryPanel } from './components/optimizer/ProjectSummaryPanel'
 import { ToastContainer } from './components/layout/ToastContainer';
 import { OnboardingManager } from './components/layout/OnboardingOverlay';
 import { TouchGestureTutorial } from './components/layout/TouchGestureTutorial';
+import { MobileTabBar } from './components/layout/MobileTabBar';
 import { ShortcutsModal } from './components/layout/ShortcutsModal';
 import { SwUpdateBanner } from './components/layout/SwUpdateBanner';
 import { IconPrint } from './components/layout/Icons';
@@ -22,6 +23,7 @@ import { useToastStore } from './store/toast-store';
 import { useSystemDarkMode } from './hooks/useSystemDarkMode';
 import { usePwaFileHandlers } from './hooks/usePwaFileHandlers';
 import { useHaptics } from './hooks/useHaptics';
+import { useTouchGestures } from './hooks/useTouchGestures';
 import { generateParts } from './engine/parts';
 import { generateHardware } from './engine/hardware';
 import { downloadBomCsv } from './utils/bom-export';
@@ -53,6 +55,30 @@ function App() {
   const mainRef = useRef<HTMLElement>(null);
   // Track whether this is the initial render so we don't steal focus on load
   const isFirstRender = useRef(true);
+
+  // Ordered app tabs — used for swipe-based navigation
+  const APP_TABS: CabinetState['activeTab'][] = ['configurator', 'preview', 'optimizer', 'assembly', 'pdf'];
+
+  // Sprint 82 — swipe left/right on the main content area to switch app tabs
+  // (skipped on 'preview' tab which has its own swipe gesture for SVG views)
+  const appSwipe = useTouchGestures({
+    onSwipeLeft: () => {
+      if (activeTab === 'preview') return;
+      const idx = APP_TABS.indexOf(activeTab);
+      if (idx < APP_TABS.length - 1) {
+        useCabinetStore.getState().setActiveTab(APP_TABS[idx + 1]);
+        haptics.selectionChanged();
+      }
+    },
+    onSwipeRight: () => {
+      if (activeTab === 'preview') return;
+      const idx = APP_TABS.indexOf(activeTab);
+      if (idx > 0) {
+        useCabinetStore.getState().setActiveTab(APP_TABS[idx - 1]);
+        haptics.selectionChanged();
+      }
+    },
+  });
 
   // Sync dark mode to <html> so browser-level UI (scrollbar, form controls,
   // color-scheme) follows. The Tailwind `dark:` variant is class-based via
@@ -203,9 +229,12 @@ function App() {
             ref={mainRef}
             id="main-content"
             tabIndex={-1}
-            className="flex-1 p-3 focus:outline-none sm:p-6"
+            className="flex-1 p-3 pb-20 focus:outline-none sm:p-6 sm:pb-6 lg:pb-6"
             role="main"
             aria-label={t('a11y.mainWorkspace')}
+            onTouchStart={appSwipe.onTouchStart}
+            onTouchMove={appSwipe.onTouchMove}
+            onTouchEnd={appSwipe.onTouchEnd}
           >
             {/* Sprint 170 — print-only header: shows project name + date on paper */}
             <div className="print-only-header">
@@ -268,6 +297,7 @@ function App() {
           </main>
         </div>
         <ToastContainer />
+        <MobileTabBar />
         <OnboardingManager />
         <TouchGestureTutorial />
         <SwUpdateBanner />
