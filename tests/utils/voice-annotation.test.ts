@@ -1,9 +1,6 @@
 /**
- * Voice Annotation — Phase 14 / Sprint 9
- *
- * Tests for src/utils/voice-annotation.ts
- * Uses fake-indexeddb (already in setup.ts) for IDB operations.
- * MediaRecorder and getUserMedia are stubbed via vi.stubGlobal.
+ * Tests for src/utils/voice-annotation.ts — Phase 14 / Sprint 9.
+ * IDB: fake-indexeddb (setup.ts). MediaRecorder + getUserMedia: vi.stubGlobal.
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
@@ -72,46 +69,27 @@ function makeGetUserMediaStub(): typeof navigator.mediaDevices.getUserMedia {
 // ── Tests ─────────────────────────────────────────────────────────────────────
 
 describe('generateAnnotationId', () => {
-  it('has correct va- prefix', () => {
+  it('generates unique va-prefixed IDs', () => {
     expect(generateAnnotationId()).toMatch(/^va-[0-9a-f]{8}$/);
-  });
-
-  it('generates unique IDs', () => {
-    const ids = new Set(Array.from({ length: 200 }, generateAnnotationId));
-    expect(ids.size).toBe(200);
+    expect(new Set(Array.from({ length: 200 }, generateAnnotationId)).size).toBe(200);
   });
 });
 
 describe('getSupportedMimeType', () => {
-  afterEach(() => {
-    vi.unstubAllGlobals();
-  });
+  afterEach(() => vi.unstubAllGlobals());
 
   it('returns null when MediaRecorder is not available', () => {
     vi.stubGlobal('MediaRecorder', undefined);
     expect(getSupportedMimeType()).toBeNull();
   });
 
-  it('returns preferred mime when supported', () => {
-    const MockRecorder = {
-      isTypeSupported: (mime: string) => mime === 'audio/webm;codecs=opus',
-    };
-    vi.stubGlobal('MediaRecorder', MockRecorder);
-    expect(getSupportedMimeType()).toBe('audio/webm;codecs=opus');
-  });
-
-  it('falls through to ogg when webm not supported', () => {
-    const MockRecorder = {
-      isTypeSupported: (mime: string) => mime === 'audio/ogg;codecs=opus',
-    };
-    vi.stubGlobal('MediaRecorder', MockRecorder);
-    expect(getSupportedMimeType()).toBe('audio/ogg;codecs=opus');
-  });
-
-  it('returns empty string when nothing preferred is supported', () => {
-    const MockRecorder = { isTypeSupported: () => false };
-    vi.stubGlobal('MediaRecorder', MockRecorder);
-    expect(getSupportedMimeType()).toBe('');
+  it.each<[string, (mime: string) => boolean]>([
+    ['audio/webm;codecs=opus', (m) => m === 'audio/webm;codecs=opus'],
+    ['audio/ogg;codecs=opus', (m) => m === 'audio/ogg;codecs=opus'],
+    ['', () => false],
+  ])('returns %s based on isTypeSupported', (expected, isTypeSupported) => {
+    vi.stubGlobal('MediaRecorder', { isTypeSupported });
+    expect(getSupportedMimeType()).toBe(expected);
   });
 });
 
@@ -127,52 +105,37 @@ describe('VoiceAnnotation IDB CRUD', () => {
 
   const makeBlob = (content = 'audio') => new Blob([content], { type: 'audio/webm' });
 
-  it('saves and loads an annotation', async () => {
-    const ann = makeAnnotation('va-save0001', 'step-1');
-    const blob = makeBlob('data1');
-    await saveVoiceAnnotation(ann, blob);
+  it('saves, loads and returns null for unknown id', async () => {
+    await saveVoiceAnnotation(makeAnnotation('va-save0001', 'step-1'), makeBlob('data1'));
     const result = await loadVoiceAnnotation('va-save0001');
-    expect(result).not.toBeNull();
     expect(result!.annotation.stepId).toBe('step-1');
-    expect(result!.blob).toBeTruthy(); // fake-indexeddb serialises Blobs as opaque objects
-  });
-
-  it('returns null for unknown id', async () => {
+    expect(result!.blob).toBeTruthy();
     expect(await loadVoiceAnnotation('va-unknown')).toBeNull();
   });
 
   it('lists annotations for a step', async () => {
-    const ann1 = makeAnnotation('va-list0001', 'step-2');
-    const ann2 = makeAnnotation('va-list0002', 'step-2');
-    const ann3 = makeAnnotation('va-list0003', 'step-3');
-    await saveVoiceAnnotation(ann1, makeBlob('a'));
-    await saveVoiceAnnotation(ann2, makeBlob('b'));
-    await saveVoiceAnnotation(ann3, makeBlob('c'));
-    const forStep2 = await listAnnotationsForStep('step-2');
-    expect(forStep2.map((a) => a.id).sort()).toEqual(['va-list0001', 'va-list0002'].sort());
+    await saveVoiceAnnotation(makeAnnotation('va-list0001', 'step-2'), makeBlob('a'));
+    await saveVoiceAnnotation(makeAnnotation('va-list0002', 'step-2'), makeBlob('b'));
+    await saveVoiceAnnotation(makeAnnotation('va-list0003', 'step-3'), makeBlob('c'));
+    expect((await listAnnotationsForStep('step-2')).map((a) => a.id).sort()).toEqual(
+      ['va-list0001', 'va-list0002'].sort(),
+    );
     expect(await listAnnotationsForStep('step-99')).toHaveLength(0);
   });
 
   it('getAllVoiceAnnotations returns all sorted by createdAt desc', async () => {
     const base = Date.now();
-    const old = { ...makeAnnotation('va-order0001', 'step-1'), createdAt: base - 1000 };
-    const recent = { ...makeAnnotation('va-order0002', 'step-1'), createdAt: base };
-    await saveVoiceAnnotation(old, makeBlob('old'));
-    await saveVoiceAnnotation(recent, makeBlob('new'));
-    const all = await getAllVoiceAnnotations();
-    const ids = all.map((a) => a.id);
+    await saveVoiceAnnotation({ ...makeAnnotation('va-order0001', 'step-1'), createdAt: base - 1000 }, makeBlob('old'));
+    await saveVoiceAnnotation({ ...makeAnnotation('va-order0002', 'step-1'), createdAt: base }, makeBlob('new'));
+    const ids = (await getAllVoiceAnnotations()).map((a) => a.id);
     expect(ids.indexOf('va-order0002')).toBeLessThan(ids.indexOf('va-order0001'));
   });
 
-  it('deleteVoiceAnnotation removes metadata and blob', async () => {
-    const ann = makeAnnotation('va-del0001', 'step-4');
-    await saveVoiceAnnotation(ann, makeBlob('delete-me'));
+  it('deleteVoiceAnnotation removes and is idempotent', async () => {
+    await saveVoiceAnnotation(makeAnnotation('va-del0001', 'step-4'), makeBlob('delete-me'));
     await deleteVoiceAnnotation('va-del0001');
     expect(await loadVoiceAnnotation('va-del0001')).toBeNull();
     expect(await listAnnotationsForStep('step-4')).toHaveLength(0);
-  });
-
-  it('deleteVoiceAnnotation is idempotent for unknown ID', async () => {
     await expect(deleteVoiceAnnotation('va-ghost')).resolves.toBeUndefined();
   });
 
@@ -195,27 +158,17 @@ describe('VoiceAnnotation IDB CRUD', () => {
   it('overwriting an annotation replaces metadata but keeps step list correct', async () => {
     const ann = makeAnnotation('va-overwrite01', 'step-8');
     await saveVoiceAnnotation(ann, makeBlob('v1'));
-    const updated = { ...ann, durationMs: 9999 };
-    await saveVoiceAnnotation(updated, makeBlob('v2'));
-    const list = await listAnnotationsForStep('step-8');
-    const ids = list.map((a) => a.id);
+    await saveVoiceAnnotation({ ...ann, durationMs: 9999 }, makeBlob('v2'));
+    const ids = (await listAnnotationsForStep('step-8')).map((a) => a.id);
     expect(ids.filter((id) => id === 'va-overwrite01')).toHaveLength(1);
-    const loaded = await loadVoiceAnnotation('va-overwrite01');
-    expect(loaded!.annotation.durationMs).toBe(9999);
+    expect((await loadVoiceAnnotation('va-overwrite01'))!.annotation.durationMs).toBe(9999);
   });
 });
 
 describe('createAnnotationUrl / revokeAnnotationUrl', () => {
-  it('createAnnotationUrl returns a blob: URL', () => {
-    const blob = new Blob(['test'], { type: 'audio/webm' });
-    const url = createAnnotationUrl(blob);
+  it('createAnnotationUrl returns a blob: URL and revokeAnnotationUrl does not throw', () => {
+    const url = createAnnotationUrl(new Blob(['test'], { type: 'audio/webm' }));
     expect(url).toMatch(/^blob:/);
-    revokeAnnotationUrl(url);
-  });
-
-  it('revokeAnnotationUrl does not throw on valid URL', () => {
-    const blob = new Blob(['x']);
-    const url = createAnnotationUrl(blob);
     expect(() => revokeAnnotationUrl(url)).not.toThrow();
   });
 });
@@ -236,42 +189,31 @@ describe('startRecording', () => {
     vi.unstubAllGlobals();
   });
 
-  it('stop() returns a VoiceAnnotation with correct stepId', async () => {
-    const session = await startRecording('step-9');
-    const annotation = await session.stop();
-    expect(annotation.stepId).toBe('step-9');
-    expect(annotation.id).toMatch(/^va-[0-9a-f]{8}$/);
-    expect(annotation.durationMs).toBeGreaterThanOrEqual(0);
-  });
-
-  it('stop() persists the annotation to IDB', async () => {
-    const session = await startRecording('step-10');
-    const annotation = await session.stop();
-    const loaded = await loadVoiceAnnotation(annotation.id);
-    expect(loaded).not.toBeNull();
-    expect(loaded!.annotation.stepId).toBe('step-10');
+  it('stop() returns and persists a VoiceAnnotation', async () => {
+    const ann = await (await startRecording('step-9')).stop();
+    expect(ann.stepId).toBe('step-9');
+    expect(ann.id).toMatch(/^va-[0-9a-f]{8}$/);
+    expect(ann.durationMs).toBeGreaterThanOrEqual(0);
+    const loaded = await loadVoiceAnnotation(ann.id);
+    expect(loaded!.annotation.stepId).toBe('step-9');
   });
 
   it('cancel() does not persist any annotation', async () => {
     const countBefore = await _blobStoreKeyCount();
     const session = await startRecording('step-11');
     session.cancel();
-    // Give the recorder a tick to settle
     await new Promise((resolve) => setTimeout(resolve, 10));
-    const countAfter = await _blobStoreKeyCount();
-    expect(countAfter).toBe(countBefore);
+    expect(await _blobStoreKeyCount()).toBe(countBefore);
   });
 
   it('stop() releases microphone tracks', async () => {
-    const getUserMedia = makeGetUserMediaStub();
-    const stream = await getUserMedia({ audio: true, video: false });
-    const tracks = stream.getTracks();
+    const fakeTrack = { stop: vi.fn() } as unknown as MediaStreamTrack;
+    const fakeStream = { getTracks: () => [fakeTrack] } as unknown as MediaStream;
     Object.defineProperty(navigator, 'mediaDevices', {
-      value: { getUserMedia: vi.fn().mockResolvedValue(stream) },
+      value: { getUserMedia: vi.fn().mockResolvedValue(fakeStream) },
       configurable: true,
     });
-    const session = await startRecording('step-12');
-    await session.stop();
-    tracks.forEach((t) => expect(t.stop).toHaveBeenCalled());
+    await (await startRecording('step-12')).stop();
+    expect(fakeTrack.stop).toHaveBeenCalled();
   });
 });

@@ -43,18 +43,8 @@ vi.mock('../../src/utils/indexed-db-storage', () => ({
 const sampleCabinets = [{ id: 'cab-1', name: 'Test Cabinet', config: DEFAULT_CONFIG, notes: '' }];
 
 const sampleSnapshots: ProjectSnapshot[] = [
-  {
-    id: 'snap-1',
-    name: 'Before changes',
-    cabinets: sampleCabinets,
-    timestamp: '2025-01-01T00:00:00.000Z',
-  },
-  {
-    id: 'snap-2',
-    name: 'After shelf update',
-    cabinets: sampleCabinets,
-    timestamp: '2025-01-02T00:00:00.000Z',
-  },
+  { id: 'snap-1', name: 'Before changes', cabinets: sampleCabinets, timestamp: '2025-01-01T00:00:00.000Z' },
+  { id: 'snap-2', name: 'After shelf update', cabinets: sampleCabinets, timestamp: '2025-01-02T00:00:00.000Z' },
 ];
 
 describe('project-storage', () => {
@@ -63,30 +53,11 @@ describe('project-storage', () => {
     memSnapshots.length = 0;
   });
 
-  it('saveProject persists to IndexedDB', async () => {
-    await saveProject('My Cabinet', sampleCabinets);
-    const projects = await listProjects();
-    expect(projects).toHaveLength(1);
-    expect(projects[0].name).toBe('My Cabinet');
-  });
-
-  it('deleteProject removes the project', async () => {
-    const p = await saveProject('Delete Me', sampleCabinets);
-    expect(await listProjects()).toHaveLength(1);
+  it('saveProject persists and deleteProject removes', async () => {
+    const p = await saveProject('My Cabinet', sampleCabinets);
+    expect((await listProjects())[0].name).toBe('My Cabinet');
     await deleteProject(p.id);
     expect(await listProjects()).toHaveLength(0);
-  });
-
-  it('SavedProject can include snapshots field', () => {
-    const project: SavedProject = {
-      id: 'test-id',
-      name: 'With Snapshots',
-      savedAt: new Date().toISOString(),
-      cabinets: sampleCabinets,
-      snapshots: sampleSnapshots,
-    };
-    expect(project.snapshots).toHaveLength(2);
-    expect(project.snapshots?.[0].id).toBe('snap-1');
   });
 
   it('snapshot round-trip: importProjectJson restores snapshots to IndexedDB', async () => {
@@ -208,31 +179,6 @@ describe('project-storage', () => {
     expect(added).toHaveLength(1);
     expect(added[0].name).toBe('Valid');
   });
-
-  it('exportProjectJson accepts optional snapshots without mutating original project', () => {
-    const project: SavedProject = {
-      id: 'export-test',
-      name: 'Export Test',
-      savedAt: new Date().toISOString(),
-      cabinets: sampleCabinets,
-    };
-    expect(project.snapshots).toBeUndefined();
-    const withSnaps: SavedProject = { ...project, snapshots: sampleSnapshots };
-    expect(withSnaps.snapshots).toHaveLength(2);
-  });
-
-  it('SavedProject type allows schemaVersion and generatedAt fields', () => {
-    const project: SavedProject = {
-      id: 'schema-test',
-      name: 'Schema Test',
-      savedAt: new Date().toISOString(),
-      schemaVersion: '1.0',
-      generatedAt: new Date().toISOString(),
-      cabinets: sampleCabinets,
-    };
-    expect(project.schemaVersion).toBe('1.0');
-    expect(typeof project.generatedAt).toBe('string');
-  });
 });
 
 describe('migrateProject', () => {
@@ -249,11 +195,8 @@ describe('migrateProject', () => {
     expect(result.cabinets).toHaveLength(1);
   });
 
-  it('throws when cabinets array is missing', () => {
+  it('throws on missing cabinets and non-object inputs', () => {
     expect(() => migrateProject({ id: 'x', name: 'Bad', savedAt: '' })).toThrow(/cabinets/i);
-  });
-
-  it('throws for non-object input', () => {
     expect(() => migrateProject(null)).toThrow();
     expect(() => migrateProject('string')).toThrow();
     expect(() => migrateProject(42)).toThrow();

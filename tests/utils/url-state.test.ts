@@ -16,7 +16,6 @@ import { DEFAULT_CONFIG } from '../../src/engine/materials';
 import { cfg } from '../helpers';
 import * as idbStorage from '../../src/utils/indexed-db-storage';
 
-// Mock the IDB helpers used by Sprint 6 offline URL share
 vi.mock('../../src/utils/indexed-db-storage', () => ({
   storeUrlRef: vi.fn().mockResolvedValue(undefined),
   loadUrlRef: vi.fn().mockResolvedValue(undefined),
@@ -39,17 +38,14 @@ describe('url-state', () => {
       expect(configToParams(cfg(overrides as Parameters<typeof cfg>[0])).get(param as string)).toBe(value);
     });
 
-    it('encodes door config', () => {
-      const params = configToParams(cfg({ doorCount: 1, doorStyle: 'none', doorReveal: 5 }));
-      expect(params.get('dc')).toBe('1');
-      expect(params.get('ds')).toBe('none');
-      expect(params.get('dr')).toBe('5');
-    });
-
-    it('encodes custom shelf positions', () => {
-      const params = configToParams(cfg({ shelfSpacing: 'custom', customShelfPositions: [200, 400, 600] }));
-      expect(params.get('ss')).toBe('custom');
-      expect(params.get('csp')).toBe('200,400,600');
+    it('encodes door and shelf config', () => {
+      const door = configToParams(cfg({ doorCount: 1, doorStyle: 'none', doorReveal: 5 }));
+      expect(door.get('dc')).toBe('1');
+      expect(door.get('ds')).toBe('none');
+      expect(door.get('dr')).toBe('5');
+      const shelf = configToParams(cfg({ shelfSpacing: 'custom', customShelfPositions: [200, 400, 600] }));
+      expect(shelf.get('ss')).toBe('custom');
+      expect(shelf.get('csp')).toBe('200,400,600');
     });
 
     it('only encodes non-default values (delta encoding)', () => {
@@ -82,61 +78,52 @@ describe('url-state', () => {
       expect(result.customShelfPositions).toEqual([200, 400]);
     });
 
-    it('validates doorCount values', () => {
-      expect(paramsToConfig(new URLSearchParams('dc=1')).doorCount).toBe(1);
-      expect(paramsToConfig(new URLSearchParams('dc=2')).doorCount).toBe(2);
-      expect(paramsToConfig(new URLSearchParams('dc=3')).doorCount).toBeUndefined();
+    it.each<[string, string, unknown]>([
+      ['dc=1', 'doorCount', 1],
+      ['dc=2', 'doorCount', 2],
+      ['ds=flat', 'doorStyle', 'flat'],
+      ['ds=none', 'doorStyle', 'none'],
+      ['ds=shaker', 'doorStyle', 'shaker'],
+      ['ds=glass', 'doorStyle', 'glass'],
+      ['ft=cabinet', 'furnitureType', 'cabinet'],
+      ['ft=desk', 'furnitureType', 'desk'],
+      ['ft=wardrobe', 'furnitureType', 'wardrobe'],
+      ['ft=bookshelf', 'furnitureType', 'bookshelf'],
+      ['hs=bar', 'handleStyle', 'bar'],
+      ['hs=knob', 'handleStyle', 'knob'],
+      ['lang=en', 'lang', 'en'],
+      ['lang=he', 'lang', 'he'],
+    ])('parses valid param %s', (qs, key, expected) => {
+      expect((paramsToConfig(new URLSearchParams(qs)) as Record<string, unknown>)[key]).toBe(expected);
     });
 
-    it('validates doorStyle values', () => {
-      expect(paramsToConfig(new URLSearchParams('ds=flat')).doorStyle).toBe('flat');
-      expect(paramsToConfig(new URLSearchParams('ds=none')).doorStyle).toBe('none');
-      expect(paramsToConfig(new URLSearchParams('ds=shaker')).doorStyle).toBe('shaker');
-      expect(paramsToConfig(new URLSearchParams('ds=glass')).doorStyle).toBe('glass');
-      expect(paramsToConfig(new URLSearchParams('ds=invalid')).doorStyle).toBeUndefined();
-    });
-
-    it('validates furnitureType values', () => {
-      expect(paramsToConfig(new URLSearchParams('ft=cabinet')).furnitureType).toBe('cabinet');
-      expect(paramsToConfig(new URLSearchParams('ft=desk')).furnitureType).toBe('desk');
-      expect(paramsToConfig(new URLSearchParams('ft=wardrobe')).furnitureType).toBe('wardrobe');
-      expect(paramsToConfig(new URLSearchParams('ft=bookshelf')).furnitureType).toBe('bookshelf');
-      expect(paramsToConfig(new URLSearchParams('ft=invalid')).furnitureType).toBeUndefined();
-    });
-
-    it('validates handleStyle values', () => {
-      expect(paramsToConfig(new URLSearchParams('hs=bar')).handleStyle).toBe('bar');
-      expect(paramsToConfig(new URLSearchParams('hs=knob')).handleStyle).toBe('knob');
-      expect(paramsToConfig(new URLSearchParams('hs=invalid')).handleStyle).toBeUndefined();
-    });
-
-    it('validates language', () => {
-      expect(paramsToConfig(new URLSearchParams('lang=en')).lang).toBe('en');
-      expect(paramsToConfig(new URLSearchParams('lang=he')).lang).toBe('he');
-      expect(paramsToConfig(new URLSearchParams('lang=fr')).lang).toBeUndefined();
+    it.each<[string, string]>([
+      ['dc=3', 'doorCount'],
+      ['ds=invalid', 'doorStyle'],
+      ['ft=invalid', 'furnitureType'],
+      ['hs=invalid', 'handleStyle'],
+      ['lang=fr', 'lang'],
+    ])('rejects invalid param %s → undefined', (qs, key) => {
+      expect((paramsToConfig(new URLSearchParams(qs)) as Record<string, unknown>)[key]).toBeUndefined();
     });
   });
 
   describe('round-trip', () => {
     it('encode → decode preserves all custom values', () => {
-      const decoded = paramsToConfig(
-        configToParams(
-          cfg({
-            width: 800,
-            height: 1800,
-            depth: 500,
-            furnitureType: 'wardrobe',
-            shelfCount: 6,
-            doorCount: 1,
-            doorStyle: 'shaker',
-            handleStyle: 'knob',
-            drawerCount: 3,
-            edgeBanding: 'none',
-            lang: 'he',
-          }),
-        ),
-      );
-      expect(decoded).toMatchObject({
+      const c = cfg({
+        width: 800,
+        height: 1800,
+        depth: 500,
+        furnitureType: 'wardrobe',
+        shelfCount: 6,
+        doorCount: 1,
+        doorStyle: 'shaker',
+        handleStyle: 'knob',
+        drawerCount: 3,
+        edgeBanding: 'none',
+        lang: 'he',
+      });
+      expect(paramsToConfig(configToParams(c))).toMatchObject({
         width: 800,
         height: 1800,
         depth: 500,
@@ -160,52 +147,26 @@ describe('url-state', () => {
 
   describe('readConfigFromUrl — tpl= deep-link', () => {
     function withSearch(qs: string, fn: () => void) {
-      const original = window.location.search;
-      Object.defineProperty(window, 'location', {
-        writable: true,
-        value: { ...window.location, search: qs },
-      });
+      const orig = window.location.search;
+      Object.defineProperty(window, 'location', { writable: true, value: { ...window.location, search: qs } });
       try {
         fn();
       } finally {
-        Object.defineProperty(window, 'location', {
-          writable: true,
-          value: { ...window.location, search: original },
-        });
+        Object.defineProperty(window, 'location', { writable: true, value: { ...window.location, search: orig } });
       }
     }
 
-    it('returns empty patch when no params present', () => {
-      withSearch('', () => {
-        const result = readConfigFromUrl();
-        expect(Object.keys(result).length).toBe(0);
-      });
-    });
-
-    it('returns template config for known tpl= id', () => {
+    it('returns empty patch when no params; merges template + URL overrides; falls back on unknown tpl', () => {
+      withSearch('', () => expect(Object.keys(readConfigFromUrl()).length).toBe(0));
       withSearch('?tpl=kitchen-base', () => {
-        const result = readConfigFromUrl();
-        // kitchen-base template exists; must return a full config object
-        expect(typeof result.width).toBe('number');
-        expect(typeof result.height).toBe('number');
-        expect(result.furnitureType).toBe('cabinet');
+        const r = readConfigFromUrl();
+        expect(typeof r.width).toBe('number');
+        expect(r.furnitureType).toBe('cabinet');
       });
-    });
-
-    it('merges URL overrides on top of the template config', () => {
-      withSearch('?tpl=kitchen-base&w=1200', () => {
-        const result = readConfigFromUrl();
-        expect(result.width).toBe(1200);
-      });
-    });
-
-    it('falls back to raw URL params for unknown tpl= id', () => {
+      withSearch('?tpl=kitchen-base&w=1200', () => expect(readConfigFromUrl().width).toBe(1200));
       withSearch('?tpl=nonexistent-template-xyz&w=600', () => {
-        const result = readConfigFromUrl();
-        // Template not found → parse URL params directly
-        expect(result.width).toBe(600);
-        // furnitureType should not be set (no template applied)
-        expect(result.furnitureType).toBeUndefined();
+        expect(readConfigFromUrl().width).toBe(600);
+        expect(readConfigFromUrl().furnitureType).toBeUndefined();
       });
     });
   });
@@ -218,7 +179,7 @@ describe('url-state — compact base64 serialisation (Sprint 35)', () => {
   });
 
   it('round-trip: compress then decompress recovers all field types', () => {
-    const original = cfg({
+    const c = cfg({
       width: 750,
       height: 2100,
       carcassMaterial: 'melamine-18',
@@ -227,13 +188,15 @@ describe('url-state — compact base64 serialisation (Sprint 35)', () => {
       shelfSpacing: 'custom',
       customShelfPositions: [200, 450, 700],
     });
-    const recovered = decompressBase64ToConfig(compressConfigToBase64(original));
-    expect(recovered.width).toBe(750);
-    expect(recovered.height).toBe(2100);
-    expect(recovered.carcassMaterial).toBe('melamine-18');
-    expect(recovered.doorCount).toBe(1);
-    expect(recovered.doorStyle).toBe('shaker');
-    expect(recovered.customShelfPositions).toEqual([200, 450, 700]);
+    const r = decompressBase64ToConfig(compressConfigToBase64(c));
+    expect(r).toMatchObject({
+      width: 750,
+      height: 2100,
+      carcassMaterial: 'melamine-18',
+      doorCount: 1,
+      doorStyle: 'shaker',
+      customShelfPositions: [200, 450, 700],
+    });
   });
 
   it('decompressBase64ToConfig returns empty object for malformed input', () => {
@@ -247,8 +210,6 @@ describe('url-state — compact base64 serialisation (Sprint 35)', () => {
     expect(b64).not.toContain('=');
   });
 });
-
-// ── Phase 13 / Sprint 6 — Offline-capable URL share ───────────────────────────
 
 describe('generateShareRefKey', () => {
   it('generates distinct lowercase-alphanumeric keys of correct length', () => {
@@ -301,12 +262,7 @@ describe('pushConfigToUrlOffline', () => {
     expect(storeUrlRef).not.toHaveBeenCalled();
   });
 
-  it('uses ?ref= and calls storeUrlRef when compact config exceeds threshold', async () => {
-    // Force a long compact string by stubbing compressConfigToBase64 indirectly
-    // Create a config that generates a compact > URL_REF_THRESHOLD bytes
-    // We can't easily make a truly large one, so we patch compressConfigToBase64 via
-    // a spy on the module. Instead, we test via URL_REF_THRESHOLD constant.
-    // Verify the threshold value is sane
+  it('URL_REF_THRESHOLD constant is within expected range', () => {
     expect(URL_REF_THRESHOLD).toBeGreaterThan(256);
     expect(URL_REF_THRESHOLD).toBeLessThanOrEqual(4096);
   });

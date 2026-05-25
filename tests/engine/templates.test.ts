@@ -12,10 +12,11 @@ import type { FurnitureType } from '../../src/engine/types';
 describe('getTemplateDefaults', () => {
   const allTypes: FurnitureType[] = ['cabinet', 'bookshelf', 'desk', 'wardrobe', 'panel'];
 
-  it('returns an object with furnitureType matching the requested type', () => {
+  it('each type returns matching furnitureType and no carcassMaterial', () => {
     for (const type of allTypes) {
-      const defaults = getTemplateDefaults(type);
-      expect(defaults.furnitureType).toBe(type);
+      const d = getTemplateDefaults(type);
+      expect(d.furnitureType).toBe(type);
+      expect(d.carcassMaterial).toBeUndefined();
     }
   });
 
@@ -61,44 +62,22 @@ describe('getTemplateDefaults', () => {
     const b = getTemplateDefaults('cabinet');
     expect(a).not.toBe(b);
   });
-
-  it('does not include carcassMaterial (material selection is independent)', () => {
-    for (const type of allTypes) {
-      const d = getTemplateDefaults(type);
-      // Material keys should not be forced by type defaults
-      expect(d.carcassMaterial).toBeUndefined();
-    }
-  });
 });
 
 describe('TEMPLATES', () => {
-  it('has at least 8 templates', () => {
-    expect(TEMPLATES.length).toBeGreaterThanOrEqual(8);
-  });
-
-  it('all templates have bilingual name and description', () => {
+  it('has at least 16 templates with unique ids and bilingual names', () => {
+    expect(TEMPLATES.length).toBeGreaterThanOrEqual(16);
+    const ids = TEMPLATES.map((t) => t.id);
+    expect(new Set(ids).size).toBe(ids.length);
     for (const tpl of TEMPLATES) {
-      expect(typeof tpl.name.en).toBe('string');
       expect(tpl.name.en.length).toBeGreaterThan(0);
-      expect(typeof tpl.name.he).toBe('string');
       expect(tpl.name.he.length).toBeGreaterThan(0);
-      expect(typeof tpl.description.en).toBe('string');
-      expect(typeof tpl.description.he).toBe('string');
     }
   });
 
-  it('all template ids are unique', () => {
-    const ids = TEMPLATES.map((t) => t.id);
-    expect(new Set(ids).size).toBe(ids.length);
-  });
-
-  it('getTemplate returns undefined for unknown id', () => {
+  it('getTemplate: returns undefined for unknown id and finds kitchen-base by id', () => {
     expect(getTemplate('nonexistent-id-xyz')).toBeUndefined();
-  });
-
-  it('getTemplate finds a known template by id', () => {
     const t = getTemplate('kitchen-base');
-    expect(t).toBeDefined();
     expect(t?.name.en).toBe('Kitchen Base Unit');
   });
 
@@ -134,19 +113,15 @@ describe('TEMPLATES', () => {
 });
 
 describe('TEMPLATES — Sprint 47 additions', () => {
-  it('has a pantry template', () => {
-    const t = getTemplate('pantry');
-    expect(t).toBeDefined();
-    expect(t?.config.furnitureType).toBe('cabinet');
-    expect(t?.config.shelfCount).toBeGreaterThanOrEqual(5);
-    expect(t?.config.height).toBeGreaterThanOrEqual(1800);
-  });
-
-  it('pantry template generates non-zero parts', () => {
+  it('pantry template: valid config, generates parts, bilingual', () => {
     const t = getTemplate('pantry')!;
-    // Override the back panel to a valid test material
-    const parts = generateParts({ ...t.config, backPanelMaterial: 'mdf-3' });
-    expect(parts.length).toBeGreaterThan(0);
+    expect(t.config.furnitureType).toBe('cabinet');
+    expect(t.config.shelfCount).toBeGreaterThanOrEqual(5);
+    expect(t.config.height).toBeGreaterThanOrEqual(1800);
+    expect(generateParts({ ...t.config, backPanelMaterial: 'mdf-3' }).length).toBeGreaterThan(0);
+    expect(t.name.en).toBeTruthy();
+    expect(t.name.he).toBeTruthy();
+    expect(t.description.en).toMatch(/\d+×\d+/);
   });
 
   it('bathroom-vanity template config is valid', () => {
@@ -163,114 +138,52 @@ describe('TEMPLATES — Sprint 47 additions', () => {
     expect(t?.config.height).toBeLessThanOrEqual(600);
     expect(t?.config.doorStyle).toBe('glass');
   });
-
-  it('pantry name is bilingual', () => {
-    const t = getTemplate('pantry')!;
-    expect(t.name.en).toBeTruthy();
-    expect(t.name.he).toBeTruthy();
-  });
-
-  it('pantry description has mm dimensions', () => {
-    const t = getTemplate('pantry')!;
-    expect(t.description.en).toMatch(/\d+×\d+/);
-  });
-
-  it('all templates now number at least 16', () => {
-    expect(TEMPLATES.length).toBeGreaterThanOrEqual(16);
-  });
 });
 
 // ── Phase 13 / Sprint 4 — Parametric templates v2 tests ───────────────────────
 
 describe('evaluateTemplateExpr', () => {
-  it('evaluates simple addition', () => {
-    expect(evaluateTemplateExpr('2 + 3', {})).toBe(5);
-  });
-
-  it('evaluates subtraction', () => {
-    expect(evaluateTemplateExpr('10 - 4', {})).toBe(6);
-  });
-
-  it('evaluates multiplication', () => {
-    expect(evaluateTemplateExpr('3 * 4', {})).toBe(12);
-  });
-
-  it('evaluates division', () => {
-    expect(evaluateTemplateExpr('10 / 4', {})).toBe(2.5);
-  });
-
-  it('respects operator precedence (* before +)', () => {
-    expect(evaluateTemplateExpr('2 + 3 * 4', {})).toBe(14);
-  });
-
-  it('respects parentheses', () => {
-    expect(evaluateTemplateExpr('(2 + 3) * 4', {})).toBe(20);
-  });
-
-  it('supports unary minus', () => {
-    expect(evaluateTemplateExpr('-5', {})).toBe(-5);
-  });
-
-  it('resolves variables from context', () => {
-    expect(evaluateTemplateExpr('height - kickHeight', { height: 800, kickHeight: 100 })).toBe(700);
-  });
-
-  it('evaluates Math.floor', () => {
-    expect(evaluateTemplateExpr('Math.floor(internalHeight / 350)', { internalHeight: 1064 })).toBe(3);
-  });
-
-  it('evaluates Math.ceil', () => {
-    expect(evaluateTemplateExpr('Math.ceil(1.1)', {})).toBe(2);
-  });
-
-  it('evaluates Math.round', () => {
-    expect(evaluateTemplateExpr('Math.round(2.5)', {})).toBe(3);
-  });
-
-  it('evaluates Math.min with two args', () => {
-    expect(evaluateTemplateExpr('Math.min(10, 3)', {})).toBe(3);
-  });
-
-  it('evaluates Math.max with two args', () => {
-    expect(evaluateTemplateExpr('Math.max(10, 3)', {})).toBe(10);
-  });
-
-  it('evaluates Math.abs of negative', () => {
-    expect(evaluateTemplateExpr('Math.abs(-7)', {})).toBe(7);
-  });
-
-  it('evaluates Math.trunc', () => {
-    expect(evaluateTemplateExpr('Math.trunc(3.9)', {})).toBe(3);
+  it.each<[string, Record<string, number>, number]>([
+    ['2 + 3', {}, 5],
+    ['10 - 4', {}, 6],
+    ['3 * 4', {}, 12],
+    ['10 / 4', {}, 2.5],
+    ['2 + 3 * 4', {}, 14],
+    ['(2 + 3) * 4', {}, 20],
+    ['-5', {}, -5],
+    ['height - kickHeight', { height: 800, kickHeight: 100 }, 700],
+    ['Math.floor(internalHeight / 350)', { internalHeight: 1064 }, 3],
+    ['Math.ceil(1.1)', {}, 2],
+    ['Math.round(2.5)', {}, 3],
+    ['Math.min(10, 3)', {}, 3],
+    ['Math.max(10, 3)', {}, 10],
+    ['Math.abs(-7)', {}, 7],
+    ['Math.trunc(3.9)', {}, 3],
+  ])('evaluates %s', (expr, ctx, expected) => {
+    expect(evaluateTemplateExpr(expr, ctx)).toBe(expected);
   });
 
   it('handles complex nested expression', () => {
-    const ctx = { height: 2100, kickHeight: 100 };
-    // Math.floor((2100 - 100 - 36) / 350) = floor(1964 / 350) = floor(5.61) = 5
-    const result = evaluateTemplateExpr('Math.floor((height - kickHeight - 36) / 350)', ctx);
-    expect(result).toBe(5);
+    // floor((2100 - 100 - 36) / 350) = floor(5.61) = 5
+    expect(
+      evaluateTemplateExpr('Math.floor((height - kickHeight - 36) / 350)', { height: 2100, kickHeight: 100 }),
+    ).toBe(5);
   });
 
-  it('throws on unknown variable', () => {
-    expect(() => evaluateTemplateExpr('foo + 1', {})).toThrow(/unknown variable/i);
-  });
-
-  it('throws on disallowed Math function', () => {
-    expect(() => evaluateTemplateExpr('Math.random()', {})).toThrow(/not permitted/i);
-  });
-
-  it('throws on trailing tokens', () => {
-    expect(() => evaluateTemplateExpr('1 + 2 @', {})).toThrow();
+  it.each<[string, Record<string, number>, RegExp | undefined]>([
+    ['foo + 1', {}, /unknown variable/i],
+    ['Math.random()', {}, /not permitted/i],
+    ['1 + 2 @', {}, undefined],
+  ])('throws on invalid: %s', (expr, ctx, pattern) => {
+    expect(() => evaluateTemplateExpr(expr, ctx)).toThrow(pattern);
   });
 });
 
 describe('instantiateTemplate — proportional-bookcase', () => {
   const tpl = getTemplate('proportional-bookcase')!;
 
-  it('exists in TEMPLATES', () => {
+  it('exists in TEMPLATES and has computedFields for shelfCount', () => {
     expect(tpl).toBeDefined();
-  });
-
-  it('has computedFields for shelfCount', () => {
     expect(tpl.computedFields?.shelfCount).toBeTruthy();
   });
 
