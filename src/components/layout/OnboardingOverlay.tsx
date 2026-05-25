@@ -1,22 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
-import { IconSettings, IconEye, IconRuler, IconHammer, IconDocument, IconHelp } from './Icons';
+import { IconSettings, IconRuler, IconDocument, IconHelp } from './Icons';
 
 const SEEN_KEY = 'onboarding-seen';
+const TOTAL_STEPS = 3;
 
-type StepIcon = React.ReactElement;
-const STEPS: { icon: StepIcon; titleKey: string; descKey: string }[] = [
-  { icon: <IconSettings size={22} />, titleKey: 'onboarding.stepConfigure', descKey: 'onboarding.descConfigure' },
-  { icon: <IconEye size={22} />, titleKey: 'onboarding.stepPreview', descKey: 'onboarding.descPreview' },
-  { icon: <IconRuler size={22} />, titleKey: 'onboarding.stepOptimize', descKey: 'onboarding.descOptimize' },
-  { icon: <IconHammer size={22} />, titleKey: 'onboarding.stepAssembly', descKey: 'onboarding.descAssembly' },
-  { icon: <IconDocument size={22} />, titleKey: 'onboarding.stepPdf', descKey: 'onboarding.descPdf' },
+const WIZARD_STEPS: { icon: React.ReactElement; titleKey: string; descKey: string }[] = [
+  { icon: <IconSettings size={32} />, titleKey: 'onboarding.wizardStep1Title', descKey: 'onboarding.wizardStep1Desc' },
+  { icon: <IconRuler size={32} />, titleKey: 'onboarding.wizardStep2Title', descKey: 'onboarding.wizardStep2Desc' },
+  { icon: <IconDocument size={32} />, titleKey: 'onboarding.wizardStep3Title', descKey: 'onboarding.wizardStep3Desc' },
 ];
 
 function OnboardingOverlay() {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
+  const [step, setStep] = useState(0);
 
   useEffect(() => {
     if (!localStorage.getItem(SEEN_KEY)) {
@@ -36,6 +35,9 @@ function OnboardingOverlay() {
 
   if (!visible) return null;
 
+  const current = WIZARD_STEPS[step];
+  const isLast = step === TOTAL_STEPS - 1;
+
   return (
     <div
       ref={dialogRef}
@@ -51,28 +53,67 @@ function OnboardingOverlay() {
         onClick={dismiss}
         tabIndex={-1}
       />
-      <div className="dark:bg-wood-800 relative mx-4 w-full max-w-md space-y-5 rounded-xl bg-white p-6 shadow-2xl">
-        <h2 id="onboarding-title" className="text-wood-700 dark:text-wood-100 text-center text-lg font-bold">
-          {t('onboarding.title')}
-        </h2>
-        <p className="text-wood-600 dark:text-wood-300 text-center text-sm">{t('onboarding.subtitle')}</p>
-        <ol className="space-y-3">
-          {STEPS.map((s, i) => (
-            <li key={i} className="flex items-start gap-3">
-              <span className="text-wood-600 dark:text-wood-300 mt-0.5 shrink-0">{s.icon}</span>
-              <div>
-                <div className="text-wood-700 dark:text-wood-200 text-sm font-semibold">{t(s.titleKey)}</div>
-                <div className="text-wood-600 dark:text-wood-300 text-xs">{t(s.descKey)}</div>
-              </div>
-            </li>
-          ))}
-        </ol>
-        <button
-          onClick={dismiss}
-          className="bg-wood-600 hover:bg-wood-700 w-full rounded px-4 py-2 text-sm font-medium text-white transition-colors"
+      <div className="dark:bg-wood-800 relative mx-4 w-full max-w-sm rounded-xl bg-white p-6 shadow-2xl">
+        {/* Progress dots */}
+        <div
+          className="mb-5 flex justify-center gap-2"
+          aria-label={t('onboarding.stepOf', { step: step + 1, total: TOTAL_STEPS })}
         >
-          {t('onboarding.getStarted')}
-        </button>
+          {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
+            <span
+              key={i}
+              className={`block h-2 w-2 rounded-full transition-colors ${i === step ? 'bg-wood-600 dark:bg-wood-300' : 'bg-wood-200 dark:bg-wood-600'}`}
+            />
+          ))}
+        </div>
+
+        {/* Step content */}
+        <div className="flex flex-col items-center gap-3 text-center">
+          <span className="text-wood-600 dark:text-wood-300">{current.icon}</span>
+          <h2 id="onboarding-title" className="text-wood-700 dark:text-wood-100 text-base font-bold">
+            {t(current.titleKey)}
+          </h2>
+          <p className="text-wood-600 dark:text-wood-300 text-sm">{t(current.descKey)}</p>
+        </div>
+
+        {/* Navigation */}
+        <div className="mt-6 flex items-center justify-between gap-2">
+          {step > 0 ? (
+            <button
+              type="button"
+              onClick={() => setStep((s) => s - 1)}
+              className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 rounded border px-3 py-1.5 text-sm transition-colors"
+            >
+              {t('onboarding.back')}
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={dismiss}
+              className="text-wood-400 hover:text-wood-600 dark:text-wood-500 dark:hover:text-wood-300 rounded px-3 py-1.5 text-sm transition-colors"
+            >
+              {t('onboarding.skip')}
+            </button>
+          )}
+
+          {isLast ? (
+            <button
+              type="button"
+              onClick={dismiss}
+              className="bg-wood-600 hover:bg-wood-700 rounded px-4 py-1.5 text-sm font-medium text-white transition-colors"
+            >
+              {t('onboarding.getStarted')}
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setStep((s) => s + 1)}
+              className="bg-wood-600 hover:bg-wood-700 rounded px-4 py-1.5 text-sm font-medium text-white transition-colors"
+            >
+              {t('onboarding.next')}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
