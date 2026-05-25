@@ -10,14 +10,7 @@
  * cabinet-store.ts has no direct reference to the module-level vars here.
  */
 import * as Comlink from 'comlink';
-import type {
-  CabinetConfig,
-  Part,
-  HardwareItem,
-  OptimizationResult,
-  OffcutEntry,
-  DefectZone,
-} from '../engine/types';
+import type { CabinetConfig, Part, HardwareItem, OptimizationResult, OffcutEntry, DefectZone } from '../engine/types';
 import { optimizeCutSheetsResult } from '../engine/cut-optimizer';
 import { estimateCost } from '../engine/cost-estimator';
 import { generateAssemblySteps } from '../engine/assembly';

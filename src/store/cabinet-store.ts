@@ -30,7 +30,6 @@ import {
   applyLocks,
   scheduleOptimization,
   scheduleAssembly,
-  scheduleCost,
   scheduleCostFromState,
 } from './worker-schedule';
 // Phase 11 — Slice imports

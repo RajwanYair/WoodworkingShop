@@ -1,7 +1,12 @@
 import type { CabinetConfig, ValidationIssue, ValidationRule, ValidationContext } from './types';
 import { getMaterial } from './materials.ts';
 import { computeDimensions } from './dimensions';
-import { checkDoors, checkHingeShelfInterference, checkDoorDepth, checkVendorHingeProfile } from './validation/door-rules';
+import {
+  checkDoors,
+  checkHingeShelfInterference,
+  checkDoorDepth,
+  checkVendorHingeProfile,
+} from './validation/door-rules';
 import { checkDimensionRules } from './validation/dimension-rules';
 import { checkShelfRules, checkJoineryConstraints } from './validation/shelf-rules';
 

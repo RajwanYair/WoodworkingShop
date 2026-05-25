@@ -68,10 +68,7 @@ const WIDE_ANGLE_THRESHOLD_DEG = 155;
 // ── Door check functions ─────────────────────────────────────────────────────
 
 /** All door geometry and hinge checks (skips early when doorStyle === 'none'). */
-export function checkDoors(
-  config: CabinetConfig,
-  dims: ReturnType<typeof computeDimensions>,
-): ValidationIssue[] {
+export function checkDoors(config: CabinetConfig, dims: ReturnType<typeof computeDimensions>): ValidationIssue[] {
   const out: ValidationIssue[] = [];
   if (config.doorStyle === 'none') return out;
 

@@ -202,7 +202,7 @@ export function checkDimensionRules(
     try {
       backMat = getMaterial(config.backPanelMaterial ?? '', extraMaterials);
     } catch {
-      backMat = null;
+      // backMat stays null — material not found
     }
     if (backMat && backMat.thickness > 9) {
       issues.push({
