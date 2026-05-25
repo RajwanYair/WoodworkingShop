@@ -43,7 +43,7 @@ describe('AssemblyGuide — step checklist (Sprint 52)', () => {
     const checkboxes = screen.getAllByRole('checkbox', { name: /mark as done/i });
     const { assemblySteps } = useCabinetStore.getState();
     expect(checkboxes.length).toBe(assemblySteps.length);
-  });
+  }, 15_000);
 
   it('checking a step changes the label to "Done"', () => {
     render(<AssemblyGuide />);

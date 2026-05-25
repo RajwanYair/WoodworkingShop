@@ -15,9 +15,11 @@ describe('ConfiguratorPanel', () => {
 
   it('renders dimension sliders', () => {
     render(<ConfiguratorPanel />);
-    expect(screen.getByText(/width/i)).toBeInTheDocument();
+    // MeasurementAssistantPanel may also render hint text containing these words,
+    // so use getAllByText to handle multiple matches (same pattern used for height).
+    expect(screen.getAllByText(/width/i).length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText(/height/i).length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByText(/depth/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/depth/i).length).toBeGreaterThanOrEqual(1);
   });
 
   it('renders material selectors', () => {

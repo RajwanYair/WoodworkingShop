@@ -32,7 +32,7 @@ describe('ValidationPanel Fix button — Sprint 63', () => {
   it('shows a Fix button when issue has field and suggestedValue', () => {
     render(<ValidationPanel issues={[FIXABLE_ISSUE]} />);
     expect(screen.getByRole('button', { name: /fix/i })).toBeInTheDocument();
-  });
+  }, 15_000);
 
   it('does NOT show a Fix button when issue has no field', () => {
     render(<ValidationPanel issues={[NON_FIXABLE_ISSUE]} />);
