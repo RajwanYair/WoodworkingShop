@@ -274,10 +274,19 @@
 
 /* ─── Print-friendly styles ─── */
 @media print {
-  /* Set page margins and size (Sprint 111) */
+  /* Sprint 72 — A4/Letter-compatible margins.
+     `size: auto` defers to the user's printer paper selection (A4 or Letter),
+     avoiding forced A4 for users with North-American Letter-size printers.
+     Top/bottom margins are slightly wider than sides to leave room for
+     browser-injected running headers/footers on both paper formats. */
   @page {
-    size: a4;
-    margin: 12mm;
+    size: auto;
+    margin: 15mm 12mm;
+  }
+
+  /* Named page — portrait (default; explicit to allow contrast with landscape-cut) */
+  @page :first {
+    margin-top: 10mm; /* less on first page (browser URL bar is already a header) */
   }
 
   /* Force light theme on paper even if user has dark mode on (Sprint 111) */
@@ -355,15 +364,26 @@
     break-inside: avoid;
   }
 
-  /* Page-break helpers (Sprint 111) */
+  /* Sprint 72 — page-break helpers */
   .print-page-break {
     break-after: page;
   }
 
+  /* Keep headings attached to the content that follows them */
   h1,
   h2,
-  h3 {
+  h3,
+  h4 {
     break-after: avoid;
+    break-before: avoid-page;
+  }
+
+  /* Sprint 72 — prevent lone heading at bottom of page (widow heading) */
+  h1 + *,
+  h2 + *,
+  h3 + *,
+  h4 + * {
+    break-before: avoid;
   }
 
   img,
