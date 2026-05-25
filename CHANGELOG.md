@@ -9,6 +9,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.71.1] — 2026-07-06
+
+### Phase 17.1 — Engine JSDoc (D1–D3) + CI Fixes
+
+#### Added
+
+- **D1 — JSDoc `engine/types.ts`**: Full JSDoc on all 10 union types (`Lang`,
+  `MaterialCategory`, `DoorStyle`, `EdgeBanding`, `ShelfSpacing`, `HandleStyle`,
+  `FurnitureType`, `DrawerSlideType`, `ValidationSeverity`, `SmartStrategy`) and all
+  10 interfaces (`Material`, `CabinetConfig`, `DerivedDimensions`, `Part`, `HardwareItem`,
+  `CutRect`, `CutSheet`, `OptimizationResult`, `OptimizationSuggestion`,
+  `MaterialSubstitution`). Orphan comment removed.
+- **D2 — JSDoc `engine/dimensions.ts` and `engine/materials.ts`**: Expanded `@param` /
+  `@returns` blocks on `computeHingesPerDoor`, `computeHingePositions`,
+  `computeEqualShelfPositions`, `getMaterial`, `panelMaterials`, `backMaterials`,
+  `MATERIALS`, and `SAW_KERF`.
+- **D3 — JSDoc `engine/cut-optimizer.ts` and `engine/smart-optimizer.ts`**: Full JSDoc
+  on `optimizeCutSheets` (all six `@param` + `@returns`); expanded `SmartOptimizerOptions`
+  with `@example` and field-level docs; expanded `findOptimizations` with `@param` /
+  `@returns`.
+
+#### Changed
+
+- **Sprint 65 — `docs/PLUGIN-API.md`**: Comprehensive Plugin API reference (sandbox
+  execution, hook contract, stability matrix). All 7 tables now use aligned style.
+- **Sprint 66 — config minimalism**: `config/lighthouserc.json` deleted; config inlined
+  into `scripts/lighthouse.js`. `readFileSync` import removed.
+
+#### Fixed
+
+- **CI markdown lint**: Resolved all 54 `markdownlint-cli2` errors across four files:
+  - `ROADMAP.md` — Phase 16.6 and Phase 17.1 table alignment (MD060).
+  - `docs/PDF-RENDERER-SPIKE.md` — compact table separators; unnamed code fence (MD040).
+  - `docs/PNPM-EVALUATION.md` — compact table separators; unnamed code fence; missing
+    blank lines around fenced block inside list item (MD031).
+  - `docs/PLUGIN-API.md` — all 7 tables reformatted with proper `\|` escape-aware width
+    accounting (MD060).
+- Prettier formatting applied to `ci.yml`, `lighthouse.js`, `cabinet-store.ts`,
+  `vite.config.ts`.
+
+---
+
 ## [3.71.0] — 2026-06-28
 
 ### Phase 17 — DX & Bundle Optimization
