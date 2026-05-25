@@ -44,6 +44,38 @@
       "problemMatcher": ["$tsc", "$eslint-stylish"]
     },
     {
+      "label": "Quality (no tests)",
+      "type": "npm",
+      "script": "quality",
+      "group": "build",
+      "problemMatcher": ["$tsc", "$eslint-stylish"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Format",
+      "type": "npm",
+      "script": "format",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Release Build",
+      "type": "npm",
+      "script": "release:build",
+      "group": "build",
+      "problemMatcher": ["$tsc"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
       "label": "Dead code",
       "type": "npm",
       "script": "dead:check",

@@ -26,6 +26,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   DX fix with no runtime change. Added `stylelint.configOverrides` in
   `.vscode/settings.json` as an additional safeguard against any bundled
   browser-compat plugins in the Stylelint VS Code extension.
+- **PWA update no longer reloads mid-editing** — triple root cause fixed:
+  (1) `updateSW()` was called without `reloadPage=false`, allowing
+  `virtual:pwa-register` to attach its own `controlling` listener and call
+  `window.location.reload()` independently of app logic; (2) Workbox was
+  missing explicit `skipWaiting: false` / `clientsClaim: false` options so
+  version defaults could vary; (3) the "Later" dismissal was React state only
+  and reset on every page reload. All three fixed: `updateSW(false)` + explicit
+  Workbox options in `vite.config.ts` + `sessionStorage` persistence for the
+  dismissed state so it survives within-tab navigation.
+
+### Performance
+
+- **CI wall-time ~3× faster** — quality checks now run in parallel (bash
+  background processes + `wait` loop, ~20 s vs ~60 s serial); test matrix split
+  into a `test` job (Node 22 only, full suite) and a `compat` job (Nodes 24/26,
+  build-only); E2E and Lighthouse unblocked from the fast `test` job instead of
+  the full matrix. Release workflow reduced from ~10 min to ~3 min by skipping
+  redundant test run (CI already validated the commit).
+
+### Chore
+
+- **VS Code workspace DX enhanced** — Copilot instruction-file opt-in, inlay
+  hints, Vitest extension config, ruler at 100, spell-checker word list, GitLens
+  and GitHub PR extension recommendations, `Quality`, `Format`, and
+  `Release Build` tasks, additional Vitest/Playwright debug launch configs, and
+  new `eng`/`slice`/`wrkr` code snippets.
+- **GitHub Copilot chat integration improved** — three new agent prompts
+  (`roadmap-sprint`, `release`, `fix-quality`), enhanced PR template with i18n
+  parity and dead-code checklists, structured `performance_issue.yml` template,
+  AGENTS.md and copilot-instructions.md updated to Phase 17.3.
+- **MCP server config** added at `.vscode/mcp.json` — enables GitHub MCP tools
+  in Copilot chat (reads `GITHUB_TOKEN` from environment, nothing hardcoded).
 
 ## [3.72.0] — 2026-05-25
 

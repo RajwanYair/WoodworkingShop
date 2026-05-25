@@ -56,5 +56,36 @@
   },
   "[ts]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "editor.rulers": [100],
+  "typescript.inlayHints.parameterNames.enabled": "literals",
+  "typescript.inlayHints.propertyDeclarationTypes.enabled": false,
+  "typescript.inlayHints.variableTypes.enabled": false,
+  "typescript.inlayHints.returnTypes.enabled": false,
+  "typescript.preferences.importModuleSpecifier": "shortest",
+  "typescript.preferences.quoteStyle": "single",
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "vitest.enable": true,
+  "vitest.rootConfig": "${workspaceFolder}/vitest.config.ts",
+  "cSpell.words": [
+    "bssf",
+    "carcass",
+    "comlink",
+    "erasable",
+    "gcode",
+    "hinge",
+    "i18next",
+    "kerf",
+    "maxrects",
+    "melamine",
+    "noImplicitOverride",
+    "offcuts",
+    "rajwan",
+    "rajwanyair",
+    "tailwindcss",
+    "vitest",
+    "webgl",
+    "woodworking",
+    "zustand"
+  ]
 }

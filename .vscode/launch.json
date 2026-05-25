@@ -26,6 +26,29 @@
       "env": {
         "NODE_OPTIONS": "--experimental-vm-modules"
       }
+    },
+    {
+      "name": "Debug Vitest (all tests)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/../node_modules/vitest/vitest.mjs",
+      "args": ["run", "--reporter=verbose"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "smartStep": true,
+      "sourceMaps": true,
+      "env": {
+        "NODE_OPTIONS": "--experimental-vm-modules"
+      }
+    },
+    {
+      "name": "Debug Playwright (current file)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/../node_modules/.bin/playwright",
+      "args": ["test", "${relativeFile}", "--debug"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
     }
   ]
 }

@@ -1,7 +1,7 @@
 # Cabinet Planner — AI Agent Context
 
 > Browser-based woodworking design tool · React 19 + TypeScript 6 + Vite 8
-> **v3.73.0** · MIT · Node ≥ 22 · [Live demo](https://rajwanyair.github.io/WoodworkingShop/)
+> **v3.72.0** · MIT · Node ≥ 22 · [Live demo](https://rajwanyair.github.io/WoodworkingShop/)
 
 ## What It Does
 
@@ -36,10 +36,11 @@ tests/         Vitest unit tests mirroring src/
 ## Key Commands
 
 ```bash
-npm run quality   # typecheck + lint + lint:css + lint:md + format:check + i18n:coverage
-npm run check     # quality + npm test  (pre-commit gate)
-npm run ci        # check + build + bundle:check + bench:check  (full CI gate)
-npx vitest run    # run unit tests directly
+npm run quality       # typecheck + lint + lint:css + lint:md + format:check + i18n:coverage
+npm run check         # quality + npm test  (pre-commit gate)
+npm run ci            # check + build + bundle:check + bench:check  (full CI gate)
+npm run release:build # build + bundle:check + sbom (no tests; run after check)
+npx vitest run        # run unit tests directly
 ```
 
 ## Non-Negotiable Rules
@@ -55,6 +56,7 @@ npx vitest run    # run unit tests directly
 | **7 ESLint plugins**      | jsx-a11y, react-hooks, react-refresh, react, regexp, no-only-tests, testing-library |
 | **Intermediates → $TEMP** | No build artifacts/caches in workspace root                                         |
 | **≤ 7 prod deps**         | No additions without removing one or proving > 50 KB savings                        |
+| **browserslist**          | Canonical source: `package.json#browserslist` only — no `.browserslistrc`           |
 
 ## Key Patterns
 
@@ -87,6 +89,6 @@ import { cfg } from '../helpers'; // builds CabinetConfig from DEFAULT_CONFIG + 
 ## Docs
 
 - Architecture decisions & diagrams → [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
-- Active roadmap → [ROADMAP.md](ROADMAP.md) (Phase 17.2 — active)
+- Active roadmap → [ROADMAP.md](ROADMAP.md) (Phase 17.3 — active)
 - Sprint history → [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 - Plugin API → [docs/PLUGIN-API.md](docs/PLUGIN-API.md)

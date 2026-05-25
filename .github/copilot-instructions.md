@@ -4,6 +4,23 @@
 > conventions, and constraints so suggestions stay consistent with the codebase.
 > **Current release: v3.72.0** · **Next target: v3.73.0** (Phase 17.3 — test efficiency & DX elevation)
 
+## Active Sprint — Phase 17.3
+
+> **Status**: In progress · **Goal**: test file shortening, engine splits, DX tooling
+
+| ID  | Task                                        | Status |
+| --- | ------------------------------------------- | ------ |
+| E1  | Shorten large test files with `it.each`     | TODO   |
+| E2  | Split engine/utils files > 300 L            | TODO   |
+| E4  | Trim component files to ≤ 600 L             | TODO   |
+| E5  | Split `validation.ts` + `cabinet-store.ts`  | TODO   |
+| E6  | Split `templates.ts` + `dxf-export.ts`      | TODO   |
+| E7  | CI slim (ci.yml ≤ 80 L, release.yml ≤ 80 L) | DONE   |
+| E8  | Docs consolidation                          | TODO   |
+| E9  | JSDoc → TypeDoc conversion for `engine/`    | TODO   |
+| E11 | CONTRIBUTING.md                             | DONE   |
+| E12 | Release v3.73.0 + CHANGELOG + GH tag        | TODO   |
+
 ## Tech Stack
 
 | Layer        | Technology                                                                    |
@@ -149,13 +166,19 @@ The MaxRects BSSF cut-optimizer uses:
 - `t18` — i18n `t()` call with parity reminder
 - `jsdoc` — JSDoc block skeleton
 - `rfc` — React functional component with TypeScript props
+- `eng` — pure engine function template (no React, no DOM)
+- `slice` — Zustand store slice with getter/setter
+- `wrkr` — Comlink Web Worker expose pattern
 
 ## Copilot Prompts
 
 `.github/prompts/` contains reusable agent prompts:
 
-- `split-component.prompt.md` — agent workflow for splitting large React component files into focused sub-components (≤ 600 L each)
-- `test-factory.prompt.md` — agent workflow for converting repetitive `it` blocks to `it.each` tables (target ≤ 400 L per file)
+- `split-component.prompt.md` — split large React component files into sub-components (≤ 600 L each)
+- `test-factory.prompt.md` — convert repetitive `it` blocks to `it.each` tables (≤ 400 L per file)
+- `roadmap-sprint.prompt.md` — execute a Phase 17.3 sprint item end-to-end
+- `release.prompt.md` — full release workflow: version bump → CHANGELOG → tag → GitHub Release
+- `fix-quality.prompt.md` — diagnose and fix every quality gate failure (typecheck, lint, i18n, format)
 
 ## Workflows
 

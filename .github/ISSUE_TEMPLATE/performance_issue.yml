@@ -1,0 +1,68 @@
+name: ⚡ Performance Issue
+description: Report a performance regression or slow operation
+title: '[Perf] '
+labels: ['performance']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a performance issue!
+        Check [Lighthouse CI results](https://github.com/RajwanYair/WoodworkingShop/actions) and the [Changelog](https://github.com/RajwanYair/WoodworkingShop/blob/main/CHANGELOG.md) first — the regression may already be fixed.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: '🗂 Affected area'
+      description: Which part of the app is slow?
+      options:
+        - Initial load / FCP
+        - Config → Preview (SVG update latency)
+        - Cut-sheet Optimizer (computation time)
+        - PDF generation
+        - DXF / G-code export
+        - Assembly Guide rendering
+        - PWA / offline startup
+        - Bundle size (install prompt)
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: observed
+    attributes:
+      label: '🐢 Observed performance'
+      description: What did you measure? Include timings.
+      placeholder: |
+        - Operation: opening cut sheet with 80 parts
+        - Time: ~4 seconds
+        - Expected: < 500 ms
+    validations:
+      required: true
+
+  - type: textarea
+    id: devtools
+    attributes:
+      label: '📊 Browser DevTools data'
+      description: Performance timeline, flame graph, console output (optional but very helpful).
+      render: text
+
+  - type: dropdown
+    id: browser
+    attributes:
+      label: '🌐 Browser'
+      options:
+        - Chrome (latest)
+        - Firefox (latest)
+        - Safari (latest)
+        - Edge (latest)
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: '💻 OS / Device'
+      placeholder: 'e.g., Windows 11 / M3 MacBook / Android 14'
+    validations:
+      required: true
