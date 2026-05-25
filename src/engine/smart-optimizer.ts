@@ -4,10 +4,25 @@ import { computeDimensions } from './dimensions';
 import { generateParts } from './parts';
 import { optimizeCutSheets } from './cut-optimizer';
 
+/**
+ * Configuration for {@link findOptimizations}.
+ *
+ * @example
+ * ```ts
+ * const opts: SmartOptimizerOptions = {
+ *   strategies: ['reduce-depth', 'material-swap'],
+ *   tolerance: 10,
+ *   maxResults: 3,
+ * };
+ * ```
+ */
 export interface SmartOptimizerOptions {
+  /** Ordered list of optimisation strategies to attempt. */
   strategies: SmartStrategy[];
-  tolerance: number; // max mm deviation from original dimension
-  maxResults?: number; // top N suggestions (default 5)
+  /** Maximum allowable deviation from the original dimension in millimetres. */
+  tolerance: number;
+  /** Maximum number of ranked suggestions to return (default 5). */
+  maxResults?: number;
 }
 
 const DEFAULT_OPTIONS: SmartOptimizerOptions = {
@@ -24,8 +39,18 @@ const DEFAULT_OPTIONS: SmartOptimizerOptions = {
 };
 
 /**
- * Run all enabled optimization strategies on a cabinet config.
- * Returns ranked suggestions sorted by score (lower = better).
+ * Run all enabled optimisation strategies on a cabinet config and return
+ * ranked improvement suggestions.
+ *
+ * Each strategy generates candidate configs by varying one dimension or
+ * material at a time within the given tolerance. Candidates that produce
+ * fewer sheets or a higher yield than the baseline are kept. Duplicates
+ * (same config fingerprint) are merged, retaining the best score.
+ *
+ * @param config  - The current cabinet configuration to optimise.
+ * @param options - Partial override of {@link SmartOptimizerOptions}.
+ * @returns Suggestions sorted ascending by score (lower = better),
+ *          capped at `options.maxResults` entries.
  */
 export function findOptimizations(
   config: CabinetConfig,

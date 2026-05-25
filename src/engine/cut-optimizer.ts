@@ -41,16 +41,38 @@ export function optimizeCutSheetsResult(
   }
 }
 
+/**
+ * Pack all cabinet parts onto the minimum number of material sheets using the
+ * MaxRects BSSF (Best Short Side Fit) bin-packing algorithm.
+ *
+ * Parts are grouped by material key. Within each group the algorithm maintains
+ * a list of maximal free rectangles per sheet; for every piece it selects the
+ * placement that minimises the shorter leftover side, trying both orientations
+ * (unless `rotationLocked` is set). Before opening a new sheet it re-tries the
+ * piece against all existing sheets to exploit leftover gaps.
+ *
+ * @param parts               - Flat list of cabinet parts to pack. `qty` is
+ *                              expanded into individual rects.
+ * @param sawKerfMm           - Saw kerf allowance in mm added between cuts
+ *                              (default {@link SAW_KERF}).
+ * @param sheetSizeOverrides  - Per-material sheet dimension overrides in mm.
+ *                              When present, replaces `mat.sheetWidth` /
+ *                              `mat.sheetLength` for that material key.
+ * @param cutMode             - Packing algorithm: `'freeform'` = MaxRects BSSF
+ *                              (default); `'guillotine'` = strip-based FFD.
+ * @param offcutCatalog       - Catalog offcuts used as pre-populated starting
+ *                              sheets before opening full sheets.
+ * @param defectZones         - Per-material defect zones; MaxRects pre-blocks
+ *                              these regions on every new sheet.
+ * @returns Full optimisation result including all sheets, placed rects, yield
+ *          percentage, and waste area per sheet.
+ */
 export function optimizeCutSheets(
   parts: Part[],
   sawKerfMm = SAW_KERF,
-  /** Sprint 165 — per-material sheet size overrides (mm). When present, overrides mat.sheetWidth / mat.sheetLength. */
   sheetSizeOverrides: Record<string, { width: number; length: number }> = {},
-  /** Phase 11 / Sprint 5 — packing algorithm. 'freeform' = MaxRects BSSF (default); 'guillotine' = strip-based. */
   cutMode: 'guillotine' | 'freeform' = 'freeform',
-  /** Phase 12 / Sprint 12 — catalog offcuts used as starting sheets before opening full sheets. */
   offcutCatalog: OffcutEntry[] = [],
-  /** Phase 12 / Sprint 13 — per-material defect zones; MaxRects pre-blocks these regions on every new sheet. */
   defectZones: Record<string, DefectZone[]> = {},
 ): OptimizationResult {
   // Group parts by material key (which implies thickness).
