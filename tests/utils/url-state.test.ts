@@ -30,24 +30,13 @@ describe('url-state', () => {
       expect(params.toString()).toBe('');
     });
 
-    it('encodes width change', () => {
-      const params = configToParams(cfg({ width: 800 }));
-      expect(params.get('w')).toBe('800');
-    });
-
-    it('encodes height change', () => {
-      const params = configToParams(cfg({ height: 1800 }));
-      expect(params.get('h')).toBe('1800');
-    });
-
-    it('encodes depth change', () => {
-      const params = configToParams(cfg({ depth: 400 }));
-      expect(params.get('d')).toBe('400');
-    });
-
-    it('encodes material changes', () => {
-      const params = configToParams(cfg({ carcassMaterial: 'melamine-18' }));
-      expect(params.get('cm')).toBe('melamine-18');
+    it.each([
+      [{ width: 800 }, 'w', '800'],
+      [{ height: 1800 }, 'h', '1800'],
+      [{ depth: 400 }, 'd', '400'],
+      [{ carcassMaterial: 'melamine-18' as const }, 'cm', 'melamine-18'],
+    ])('encodes single-field delta: %j', (overrides, param, value) => {
+      expect(configToParams(cfg(overrides as Parameters<typeof cfg>[0])).get(param as string)).toBe(value);
     });
 
     it('encodes door config', () => {
@@ -58,12 +47,7 @@ describe('url-state', () => {
     });
 
     it('encodes custom shelf positions', () => {
-      const params = configToParams(
-        cfg({
-          shelfSpacing: 'custom',
-          customShelfPositions: [200, 400, 600],
-        }),
-      );
+      const params = configToParams(cfg({ shelfSpacing: 'custom', customShelfPositions: [200, 400, 600] }));
       expect(params.get('ss')).toBe('custom');
       expect(params.get('csp')).toBe('200,400,600');
     });
@@ -83,14 +67,13 @@ describe('url-state', () => {
       expect(Object.keys(result).length).toBe(0);
     });
 
-    it('parses width', () => {
-      const result = paramsToConfig(new URLSearchParams('w=800'));
-      expect(result.width).toBe(800);
-    });
-
-    it('parses height', () => {
-      const result = paramsToConfig(new URLSearchParams('h=1800'));
-      expect(result.height).toBe(1800);
+    it.each([
+      ['w=800', 'width', 800],
+      ['h=1800', 'height', 1800],
+      ['drc=2', 'drawerCount', 2],
+    ])('parses %s correctly', (qs, key, expected) => {
+      const r = paramsToConfig(new URLSearchParams(qs)) as Record<string, unknown>;
+      expect(r[key]).toBe(expected);
     });
 
     it('parses shelf spacing', () => {
@@ -121,10 +104,6 @@ describe('url-state', () => {
       expect(paramsToConfig(new URLSearchParams('ft=invalid')).furnitureType).toBeUndefined();
     });
 
-    it('parses drawerCount', () => {
-      expect(paramsToConfig(new URLSearchParams('drc=2')).drawerCount).toBe(2);
-    });
-
     it('validates handleStyle values', () => {
       expect(paramsToConfig(new URLSearchParams('hs=bar')).handleStyle).toBe('bar');
       expect(paramsToConfig(new URLSearchParams('hs=knob')).handleStyle).toBe('knob');
@@ -140,7 +119,24 @@ describe('url-state', () => {
 
   describe('round-trip', () => {
     it('encode → decode preserves all custom values', () => {
-      const custom = cfg({
+      const decoded = paramsToConfig(
+        configToParams(
+          cfg({
+            width: 800,
+            height: 1800,
+            depth: 500,
+            furnitureType: 'wardrobe',
+            shelfCount: 6,
+            doorCount: 1,
+            doorStyle: 'shaker',
+            handleStyle: 'knob',
+            drawerCount: 3,
+            edgeBanding: 'none',
+            lang: 'he',
+          }),
+        ),
+      );
+      expect(decoded).toMatchObject({
         width: 800,
         height: 1800,
         depth: 500,
@@ -153,19 +149,6 @@ describe('url-state', () => {
         edgeBanding: 'none',
         lang: 'he',
       });
-      const params = configToParams(custom);
-      const decoded = paramsToConfig(params);
-      expect(decoded.width).toBe(800);
-      expect(decoded.height).toBe(1800);
-      expect(decoded.depth).toBe(500);
-      expect(decoded.furnitureType).toBe('wardrobe');
-      expect(decoded.shelfCount).toBe(6);
-      expect(decoded.doorCount).toBe(1);
-      expect(decoded.doorStyle).toBe('shaker');
-      expect(decoded.handleStyle).toBe('knob');
-      expect(decoded.drawerCount).toBe(3);
-      expect(decoded.edgeBanding).toBe('none');
-      expect(decoded.lang).toBe('he');
     });
 
     it('encode → decode for default config returns empty patch', () => {
@@ -229,39 +212,27 @@ describe('url-state', () => {
 });
 
 describe('url-state — compact base64 serialisation (Sprint 35)', () => {
-  it('compressConfigToBase64 returns a non-empty string for changed config', () => {
-    const b64 = compressConfigToBase64(cfg({ width: 800, height: 1800 }));
-    expect(b64).toBeTruthy();
-    expect(typeof b64).toBe('string');
+  it('compressConfigToBase64 returns a string for any config', () => {
+    expect(compressConfigToBase64(cfg({ width: 800, height: 1800 }))).toBeTruthy();
+    expect(compressConfigToBase64(cfg())).toBeTruthy();
   });
 
-  it('compressConfigToBase64 returns an empty-diff string for default config', () => {
-    // Default config → empty diff → JSON {} → base64 of "{}"
-    const b64 = compressConfigToBase64(cfg());
-    expect(b64).toBeTruthy();
-  });
-
-  it('round-trip: compress then decompress recovers width and height', () => {
-    const original = cfg({ width: 750, height: 2100 });
-    const b64 = compressConfigToBase64(original);
-    const recovered = decompressBase64ToConfig(b64);
+  it('round-trip: compress then decompress recovers all field types', () => {
+    const original = cfg({
+      width: 750,
+      height: 2100,
+      carcassMaterial: 'melamine-18',
+      doorCount: 1,
+      doorStyle: 'shaker',
+      shelfSpacing: 'custom',
+      customShelfPositions: [200, 450, 700],
+    });
+    const recovered = decompressBase64ToConfig(compressConfigToBase64(original));
     expect(recovered.width).toBe(750);
     expect(recovered.height).toBe(2100);
-  });
-
-  it('round-trip: recovers material and door settings', () => {
-    const original = cfg({ carcassMaterial: 'melamine-18', doorCount: 1, doorStyle: 'shaker' });
-    const b64 = compressConfigToBase64(original);
-    const recovered = decompressBase64ToConfig(b64);
     expect(recovered.carcassMaterial).toBe('melamine-18');
     expect(recovered.doorCount).toBe(1);
     expect(recovered.doorStyle).toBe('shaker');
-  });
-
-  it('round-trip: recovers custom shelf positions', () => {
-    const original = cfg({ shelfSpacing: 'custom', customShelfPositions: [200, 450, 700] });
-    const b64 = compressConfigToBase64(original);
-    const recovered = decompressBase64ToConfig(b64);
     expect(recovered.customShelfPositions).toEqual([200, 450, 700]);
   });
 
@@ -280,19 +251,11 @@ describe('url-state — compact base64 serialisation (Sprint 35)', () => {
 // ── Phase 13 / Sprint 6 — Offline-capable URL share ───────────────────────────
 
 describe('generateShareRefKey', () => {
-  it('produces a string of exactly REF_KEY_LENGTH characters', () => {
-    expect(generateShareRefKey()).toHaveLength(REF_KEY_LENGTH);
-  });
-
-  it('only contains lowercase letters and digits', () => {
-    const key = generateShareRefKey();
-    expect(key).toMatch(/^[a-z0-9]+$/);
-  });
-
-  it('generates distinct keys on consecutive calls', () => {
+  it('generates distinct lowercase-alphanumeric keys of correct length', () => {
     const keys = Array.from({ length: 10 }, generateShareRefKey);
-    const unique = new Set(keys);
-    expect(unique.size).toBe(10);
+    expect(keys[0]).toHaveLength(REF_KEY_LENGTH);
+    expect(keys[0]).toMatch(/^[a-z0-9]+$/);
+    expect(new Set(keys).size).toBe(10);
   });
 });
 
@@ -303,15 +266,11 @@ describe('resolveUrlRef', () => {
     vi.mocked(loadUrlRef).mockReset();
   });
 
-  it('returns null when key is not found in IndexedDB', async () => {
-    vi.mocked(loadUrlRef).mockResolvedValue(undefined);
-    const result = await resolveUrlRef('unknownkey');
-    expect(result).toBeNull();
-  });
+  it('returns null for unknown key; decodes stored config correctly', async () => {
+    vi.mocked(loadUrlRef).mockResolvedValueOnce(undefined);
+    expect(await resolveUrlRef('unknownkey')).toBeNull();
 
-  it('decodes a stored compact config correctly', async () => {
-    const original = cfg({ width: 900, height: 1800 });
-    const compact = compressConfigToBase64(original);
+    const compact = compressConfigToBase64(cfg({ width: 900, height: 1800 }));
     vi.mocked(loadUrlRef).mockResolvedValue(compact);
     const result = await resolveUrlRef('somekey');
     expect(result?.width).toBe(900);
@@ -360,41 +319,27 @@ describe('readConfigFromUrlAsync', () => {
     vi.mocked(loadUrlRef).mockReset();
   });
 
-  it('resolves ?ref= param from IndexedDB', async () => {
-    const original = cfg({ width: 750 });
-    const compact = compressConfigToBase64(original);
-    vi.mocked(loadUrlRef).mockResolvedValue(compact);
-
+  it('resolves ?ref= from IDB, falls through to ?c=, falls through to inline params', async () => {
+    const compact750 = compressConfigToBase64(cfg({ width: 750 }));
+    vi.mocked(loadUrlRef).mockResolvedValueOnce(compact750);
     Object.defineProperty(window, 'location', {
       value: { pathname: '/', search: '?ref=abc12345', origin: 'http://localhost' },
       writable: true,
     });
+    expect((await readConfigFromUrlAsync()).width).toBe(750);
 
-    const result = await readConfigFromUrlAsync();
-    expect(result.width).toBe(750);
-  });
-
-  it('falls through to ?c= when ref is not found', async () => {
-    vi.mocked(loadUrlRef).mockResolvedValue(undefined);
-    const original = cfg({ width: 850 });
-    const compact = compressConfigToBase64(original);
-
+    vi.mocked(loadUrlRef).mockResolvedValueOnce(undefined);
+    const compact850 = compressConfigToBase64(cfg({ width: 850 }));
     Object.defineProperty(window, 'location', {
-      value: { pathname: '/', search: `?ref=missing&c=${compact}`, origin: 'http://localhost' },
+      value: { pathname: '/', search: `?ref=missing&c=${compact850}`, origin: 'http://localhost' },
       writable: true,
     });
+    expect((await readConfigFromUrlAsync()).width).toBe(850);
 
-    const result = await readConfigFromUrlAsync();
-    expect(result.width).toBe(850);
-  });
-
-  it('falls through to inline params when both ref and c are absent', async () => {
     Object.defineProperty(window, 'location', {
       value: { pathname: '/', search: '?w=700', origin: 'http://localhost' },
       writable: true,
     });
-
-    const result = await readConfigFromUrlAsync();
-    expect(result.width).toBe(700);
+    expect((await readConfigFromUrlAsync()).width).toBe(700);
   });
 });

@@ -89,9 +89,7 @@ describe('generateBomCsv', () => {
   });
 
   it('material summary row has correct area for a single material', () => {
-    // mockPart: qty=2, length=2000, width=580 → area = 2*2000*580 = 2,320,000 mm² = 2.320 m²
-    const csv = generateBomCsv(singleCabinet, 'en');
-    expect(csv).toContain('2.320');
+    expect(generateBomCsv(singleCabinet, 'en')).toContain('2.320');
   });
 
   it('aggregates area for same material across multiple cabinets', () => {
@@ -99,7 +97,6 @@ describe('generateBomCsv', () => {
       { name: 'Upper', parts: [mockPart], hardware: [] },
       { name: 'Lower', parts: [mockPart], hardware: [] },
     ];
-    // total area = 2 × 2,320,000 mm² = 4,640,000 mm² = 4.640 m²
     const csv = generateBomCsv(cabs, 'en');
     expect(csv).toContain('4.640');
   });
@@ -111,31 +108,14 @@ describe('generateBomCsv', () => {
     expect(lines.length).toBeGreaterThanOrEqual(3);
   });
 
-  it('escapes fields containing commas', () => {
-    const partWithComma: Part = {
-      ...mockPart,
-      name: { en: 'Panel, Large', he: 'לוח, גדול' },
-    };
-    const csv = generateBomCsv([{ name: 'Test', parts: [partWithComma], hardware: [] }], 'en');
-    expect(csv).toContain('"Panel, Large"');
-  });
-
-  it('escapes fields containing double quotes', () => {
-    const partWithQuote: Part = {
-      ...mockPart,
-      name: { en: 'Panel 18"', he: 'לוח 18"' },
-    };
-    const csv = generateBomCsv([{ name: 'Test', parts: [partWithQuote], hardware: [] }], 'en');
-    expect(csv).toContain('"Panel 18""');
-  });
-
-  it('falls back to material key for unknown materials', () => {
-    const unknownPart: Part = {
-      ...mockPart,
-      material: 'unicorn-wood-99',
-    };
-    const csv = generateBomCsv([{ name: 'X', parts: [unknownPart], hardware: [] }], 'en');
-    expect(csv).toContain('unicorn-wood-99');
+  it.each([
+    ['comma in name', { name: { en: 'Panel, Large', he: 'לוח, גדול' } }, '"Panel, Large"'],
+    ['double-quote in name', { name: { en: 'Panel 18"', he: 'לוח 18"' } }, '"Panel 18""'],
+    ['unknown material key', { material: 'unicorn-wood-99' }, 'unicorn-wood-99'],
+  ])('CSV escaping: %s', (_, partOverrides, expected) => {
+    const part: Part = { ...mockPart, ...partOverrides };
+    const csv = generateBomCsv([{ name: 'Test', parts: [part], hardware: [] }], 'en');
+    expect(csv).toContain(expected);
   });
 
   // multi-cabinet Part ID prefix
@@ -146,28 +126,17 @@ describe('generateBomCsv', () => {
     expect(csv).not.toContain('C1-P01');
   });
 
-  it('prefixes Part ID with cabinet index in multi-cabinet export', () => {
-    const cabs = [
-      { name: 'Upper', parts: [{ ...mockPart, id: 'P01' }], hardware: [] },
-      { name: 'Lower', parts: [{ ...mockPart, id: 'P01' }], hardware: [] },
-    ];
-    const csv = generateBomCsv(cabs, 'en');
-    expect(csv).toContain('C1-P01');
-    expect(csv).toContain('C2-P01');
-    // Original bare P01 should not appear in multi-cabinet mode
-    expect(csv).not.toMatch(/,P01,/);
-  });
-
-  it('multi-cabinet prefix increments correctly for 3 cabinets', () => {
-    const cabs = [
+  it('prefixes Part ID with cabinet index in multi-cabinet export (2 or 3 cabs)', () => {
+    const cabs3 = [
       { name: 'A', parts: [{ ...mockPart, id: 'P01' }], hardware: [] },
       { name: 'B', parts: [{ ...mockPart, id: 'P01' }], hardware: [] },
       { name: 'C', parts: [{ ...mockPart, id: 'P01' }], hardware: [] },
     ];
-    const csv = generateBomCsv(cabs, 'en');
+    const csv = generateBomCsv(cabs3, 'en');
     expect(csv).toContain('C1-P01');
     expect(csv).toContain('C2-P01');
     expect(csv).toContain('C3-P01');
+    expect(csv).not.toMatch(/,P01,/);
   });
 
   it('includes version header line', () => {
@@ -216,27 +185,22 @@ describe('generateHardwareCsv', () => {
   });
 });
 
-// BOM header metadata
 describe('generateBomCsv — header metadata', () => {
-  it('includes cabinet, parts, and hardware counts in header', () => {
+  it('includes cabinet/parts/hardware counts for single, empty, and multi-cabinet', () => {
     const csv = generateBomCsv(singleCabinet, 'en');
-    // singleCabinet: 1 cabinet, mockPart.qty=2 parts, mockHardware.qty=4 hardware
     expect(csv).toContain('Cabinets: 1');
     expect(csv).toContain('Parts: 2');
     expect(csv).toContain('Hardware: 4');
-  });
-
-  it('shows Cabinets: 0 for empty list', () => {
-    const csv = generateBomCsv([], 'en');
-    expect(csv).toContain('Cabinets: 0');
-  });
-
-  it('scales cabinet count for multi-cabinet export', () => {
-    const cabs = [
-      { name: 'C1', parts: [mockPart], hardware: [] },
-      { name: 'C2', parts: [mockPart], hardware: [] },
-    ];
-    expect(generateBomCsv(cabs, 'en')).toContain('Cabinets: 2');
+    expect(generateBomCsv([], 'en')).toContain('Cabinets: 0');
+    expect(
+      generateBomCsv(
+        [
+          { name: 'C1', parts: [mockPart], hardware: [] },
+          { name: 'C2', parts: [mockPart], hardware: [] },
+        ],
+        'en',
+      ),
+    ).toContain('Cabinets: 2');
   });
 });
 
@@ -265,7 +229,6 @@ describe('generateErpCsv', () => {
   });
 
   it('computes area_m2 correctly (qty × length × width / 1e6)', () => {
-    // mockPart: qty=2, length=2000, width=580 → total area = 2*2000*580/1e6 = 2.3200 m²
     const csv = generateErpCsv(singleCabinet);
     expect(csv).toContain('2.3200');
   });
@@ -308,29 +271,25 @@ describe('generateErpCsv', () => {
 
 // Sequential # row-number column in parts + hardware
 describe('generateBomCsv — sequential row numbers', () => {
-  it('parts header starts with #', () => {
+  it('parts header starts with # and first data row starts with 1', () => {
     const csv = generateBomCsv(singleCabinet, 'en');
     const lines = csv.split('\n');
     const partsHeaderIdx = lines.findIndex((l) => l.startsWith('#,Cabinet,Part ID'));
     expect(partsHeaderIdx).toBeGreaterThanOrEqual(0);
-  });
-
-  it('first part data row starts with 1', () => {
-    const csv = generateBomCsv(singleCabinet, 'en');
-    const lines = csv.split('\n');
-    const partsHeaderIdx = lines.findIndex((l) => l.startsWith('#,Cabinet,Part ID'));
-    // Skip cabinet-notes comment row if present; find first data row
     const dataRow = lines.slice(partsHeaderIdx + 1).find((l) => l.trim() !== '' && !l.startsWith('#'));
     expect(dataRow).toMatch(/^1,/);
+    expect(lines.findIndex((l) => l.startsWith('#,Cabinet,Hardware ID'))).toBeGreaterThanOrEqual(0);
   });
 
   it('row numbers are sequential across multiple cabinets', () => {
     const part2: Part = { ...mockPart, id: 'P02', name: { en: 'Back Panel', he: 'לוח אחורי' } };
-    const cabs = [
-      { name: 'Upper', parts: [mockPart], hardware: [] },
-      { name: 'Lower', parts: [part2], hardware: [] },
-    ];
-    const csv = generateBomCsv(cabs, 'en');
+    const csv = generateBomCsv(
+      [
+        { name: 'Upper', parts: [mockPart], hardware: [] },
+        { name: 'Lower', parts: [part2], hardware: [] },
+      ],
+      'en',
+    );
     const lines = csv.split('\n');
     const partsHeaderIdx = lines.findIndex((l) => l.startsWith('#,Cabinet,Part ID'));
     const dataRows = lines
@@ -342,59 +301,35 @@ describe('generateBomCsv — sequential row numbers', () => {
     expect(dataRows[0]).toMatch(/^1,/);
     expect(dataRows[1]).toMatch(/^2,/);
   });
-
-  it('hardware section header starts with #', () => {
-    const csv = generateBomCsv(singleCabinet, 'en');
-    const lines = csv.split('\n');
-    const hwHeaderIdx = lines.findIndex((l) => l.startsWith('#,Cabinet,Hardware ID'));
-    expect(hwHeaderIdx).toBeGreaterThanOrEqual(0);
-  });
 });
 
 // Area (m²) column in BOM CSV parts
 describe('BOM CSV — area (m²) column', () => {
-  it('parts header contains "Area (m²)" column', () => {
-    const csv = generateBomCsv(singleCabinet, 'en');
-    const partsHeader = csv.split('\n').find((l) => l.startsWith('#,Cabinet,Part ID'));
-    expect(partsHeader).toContain('Area');
-  });
-
-  it('area value is a numeric string with 6 decimal places', () => {
+  it('area column header, value format, and computed value are correct', () => {
     const csv = generateBomCsv(singleCabinet, 'en');
     const lines = csv.split('\n').filter(Boolean);
     const headerIdx = lines.findIndex((l) => l.startsWith('#,Cabinet,Part ID'));
+    expect(lines[headerIdx]).toContain('Area');
     const firstDataRow = lines.slice(headerIdx + 1).find((l) => l.trim() !== '' && !l.startsWith('#'))!;
     const cols = firstDataRow.split(',');
-    // Area (m²) is column index 9
     expect(cols[9]).toMatch(/^\d+\.\d{6}$/);
-    expect(isNaN(parseFloat(cols[9]))).toBe(false);
+    expect(cols[9]).toBe(((mockPart.length * mockPart.width * mockPart.qty) / 1_000_000).toFixed(6));
   });
 
-  it('area value matches length * width * qty / 1_000_000', () => {
-    const csv = generateBomCsv(singleCabinet, 'en');
-    const lines = csv.split('\n').filter(Boolean);
-    const headerIdx = lines.findIndex((l) => l.startsWith('#,Cabinet,Part ID'));
-    const firstDataRow = lines.slice(headerIdx + 1).find((l) => l.trim() !== '' && !l.startsWith('#'))!;
-    const cols = firstDataRow.split(',');
-    const expected = ((mockPart.length * mockPart.width * mockPart.qty) / 1_000_000).toFixed(6);
-    expect(cols[9]).toBe(expected);
-  });
-
-  it('area column is present in multi-cabinet BOM for each part row', () => {
+  it('area column is numeric in every part row for multi-cabinet BOM', () => {
     const part2: Part = { ...mockPart, id: 'P02', name: { en: 'Back Panel', he: 'לוח אחורי' } };
-    const multiCabs = [
-      { name: 'Upper', parts: [mockPart], hardware: [] },
-      { name: 'Lower', parts: [part2], hardware: [] },
-    ];
-    const csv = generateBomCsv(multiCabs, 'en');
+    const csv = generateBomCsv(
+      [
+        { name: 'Upper', parts: [mockPart], hardware: [] },
+        { name: 'Lower', parts: [part2], hardware: [] },
+      ],
+      'en',
+    );
     const lines = csv.split('\n').filter(Boolean);
     const headerIdx = lines.findIndex((l) => l.startsWith('#,Cabinet,Part ID'));
     const hwHeaderIdx = lines.findIndex((l) => l.startsWith('#,Cabinet,Hardware ID'));
     const dataRows = lines.slice(headerIdx + 1, hwHeaderIdx).filter((l) => !l.startsWith('#') && l.trim().length > 0);
-    for (const row of dataRows) {
-      const cols = row.split(',');
-      expect(isNaN(parseFloat(cols[9]))).toBe(false);
-    }
+    for (const row of dataRows) expect(isNaN(parseFloat(row.split(',')[9]))).toBe(false);
   });
 });
 

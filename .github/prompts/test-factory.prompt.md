@@ -3,6 +3,8 @@ mode: agent
 description: Convert repetitive Vitest tests in a file to it.each / describe.each parameterised form.
 ---
 
+# Test Factory
+
 You are improving test maintainability in the WoodworkingShop Cabinet Planner project.
 
 ## Task

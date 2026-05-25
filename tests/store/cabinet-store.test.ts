@@ -4,7 +4,6 @@ import { DEFAULT_CONFIG } from '../../src/engine/materials';
 
 describe('cabinet-store', () => {
   beforeEach(() => {
-    // Reset store to defaults
     useCabinetStore.setState({
       cabinets: [{ name: 'Cabinet 1', config: { ...DEFAULT_CONFIG } }],
       activeCabinetIndex: 0,
@@ -16,9 +15,7 @@ describe('cabinet-store', () => {
       darkMode: false,
       colorBlindMode: false,
     });
-    // Also re-derive
     useCabinetStore.getState().setConfig({});
-    // Clear undo history from the setConfig call
     useCabinetStore.setState({ _past: [], canUndo: false });
   });
 
@@ -39,31 +36,18 @@ describe('cabinet-store', () => {
     expect(useCabinetStore.getState().parts.length).toBeGreaterThan(0);
   });
 
-  // Undo/Redo
-  it('supports undo after config change', () => {
+  it('supports undo/redo and clears redo stack on new change', () => {
     const originalWidth = useCabinetStore.getState().config.width;
     useCabinetStore.getState().setConfig({ width: 999 });
-    expect(useCabinetStore.getState().config.width).toBe(999);
     expect(useCabinetStore.getState().canUndo).toBe(true);
-
     useCabinetStore.getState().undo();
     expect(useCabinetStore.getState().config.width).toBe(originalWidth);
-  });
-
-  it('supports redo after undo', () => {
     useCabinetStore.getState().setConfig({ width: 888 });
+    expect(useCabinetStore.getState().canRedo).toBe(false);
     useCabinetStore.getState().undo();
     expect(useCabinetStore.getState().canRedo).toBe(true);
-
     useCabinetStore.getState().redo();
     expect(useCabinetStore.getState().config.width).toBe(888);
-  });
-
-  it('clears redo stack on new change', () => {
-    useCabinetStore.getState().setConfig({ width: 888 });
-    useCabinetStore.getState().undo();
-    useCabinetStore.getState().setConfig({ width: 777 });
-    expect(useCabinetStore.getState().canRedo).toBe(false);
   });
 
   // Multi-cabinet
@@ -95,20 +79,15 @@ describe('cabinet-store', () => {
     expect(useCabinetStore.getState().cabinets[0].name).toBe('Kitchen Pantry');
   });
 
-  // Sprint 135 — cabinet notes
   it('setNotes stores notes on a cabinet', () => {
     useCabinetStore.getState().setNotes(0, 'Measure twice, cut once.');
     expect(useCabinetStore.getState().cabinets[0].notes).toBe('Measure twice, cut once.');
   });
 
-  it('setNotes does not affect other cabinets', () => {
+  it('setNotes does not affect other cabinets and can clear with empty string', () => {
     useCabinetStore.getState().addCabinet();
     useCabinetStore.getState().setNotes(0, 'Cabinet A notes');
     expect(useCabinetStore.getState().cabinets[1].notes).toBeUndefined();
-  });
-
-  it('setNotes can clear notes with empty string', () => {
-    useCabinetStore.getState().setNotes(0, 'some note');
     useCabinetStore.getState().setNotes(0, '');
     expect(useCabinetStore.getState().cabinets[0].notes).toBe('');
   });
@@ -181,212 +160,144 @@ describe('cabinet-store', () => {
     });
   });
 
-  // Sprint 124 — OS dark-mode detection
   describe('detectOsDarkMode', () => {
-    it('returns false when matchMedia is unavailable', () => {
+    it.each([
+      [undefined as unknown as { matches: boolean } | undefined, false],
+      [{ matches: true }, true],
+      [{ matches: false }, false],
+    ] as [{ matches: boolean } | undefined, boolean][])('returns %j → %s', (mockReturn, expected) => {
       const orig = window.matchMedia;
-      // @ts-expect-error — deliberately remove matchMedia
-      window.matchMedia = undefined;
-      expect(detectOsDarkMode()).toBe(false);
-      window.matchMedia = orig;
-    });
-
-    it('returns true when prefers-color-scheme: dark matches', () => {
-      const orig = window.matchMedia;
-      window.matchMedia = vi.fn().mockReturnValue({ matches: true });
-      expect(detectOsDarkMode()).toBe(true);
-      window.matchMedia = orig;
-    });
-
-    it('returns false when prefers-color-scheme: dark does not match', () => {
-      const orig = window.matchMedia;
-      window.matchMedia = vi.fn().mockReturnValue({ matches: false });
-      expect(detectOsDarkMode()).toBe(false);
+      window.matchMedia =
+        mockReturn === undefined
+          ? (undefined as unknown as typeof window.matchMedia)
+          : vi.fn().mockReturnValue(mockReturn);
+      expect(detectOsDarkMode()).toBe(expected);
       window.matchMedia = orig;
     });
   });
 
-  // v3.23.0 — Labour rate, hours, finish cost
   describe('cost extras (v3.23.0)', () => {
     it('has default labourRate of 75', () => {
       useCabinetStore.setState({ labourRate: 75, labourHours: 0, finishCost: 0 });
       expect(useCabinetStore.getState().labourRate).toBe(75);
     });
 
-    it('setLabourRate clamps to 0', () => {
-      useCabinetStore.getState().setLabourRate(100);
-      expect(useCabinetStore.getState().labourRate).toBe(100);
-      useCabinetStore.getState().setLabourRate(-50);
-      expect(useCabinetStore.getState().labourRate).toBe(0);
-    });
-
-    it('setLabourHours clamps to 0', () => {
-      useCabinetStore.getState().setLabourHours(4.5);
-      expect(useCabinetStore.getState().labourHours).toBe(4.5);
-      useCabinetStore.getState().setLabourHours(-1);
-      expect(useCabinetStore.getState().labourHours).toBe(0);
-    });
-
-    it('setFinishCost clamps to 0', () => {
-      useCabinetStore.getState().setFinishCost(350);
-      expect(useCabinetStore.getState().finishCost).toBe(350);
-      useCabinetStore.getState().setFinishCost(-100);
-      expect(useCabinetStore.getState().finishCost).toBe(0);
+    it('setLabourRate/Hours/FinishCost clamp to ≥0', () => {
+      const s = () => useCabinetStore.getState();
+      s().setLabourRate(100);
+      expect(s().labourRate).toBe(100);
+      s().setLabourRate(-50);
+      expect(s().labourRate).toBe(0);
+      s().setLabourHours(4.5);
+      expect(s().labourHours).toBe(4.5);
+      s().setLabourHours(-1);
+      expect(s().labourHours).toBe(0);
+      s().setFinishCost(350);
+      expect(s().finishCost).toBe(350);
+      s().setFinishCost(-100);
+      expect(s().finishCost).toBe(0);
     });
   });
 
-  // v3.21.0 — optimizationPending flag
   describe('optimizationPending (v3.21.0)', () => {
-    it('initialises as false', () => {
+    it('initialises false, can toggle via setState', () => {
       useCabinetStore.setState({ optimizationPending: false });
       expect(useCabinetStore.getState().optimizationPending).toBe(false);
-    });
-
-    it('can be set to true and back to false via setState', () => {
       useCabinetStore.setState({ optimizationPending: true });
       expect(useCabinetStore.getState().optimizationPending).toBe(true);
-      useCabinetStore.setState({ optimizationPending: false });
-      expect(useCabinetStore.getState().optimizationPending).toBe(false);
     });
   });
 
-  // v3.22.0 / v3.23.0 — edge banding rate
   describe('setEdgeBandingRate', () => {
-    it('updates edge banding rate', () => {
+    it('updates rate and clamps negative to 0', () => {
       useCabinetStore.getState().setEdgeBandingRate(5);
       expect(useCabinetStore.getState().edgeBandingRate).toBe(5);
-    });
-
-    it('clamps negative values to 0', () => {
       useCabinetStore.getState().setEdgeBandingRate(-2);
       expect(useCabinetStore.getState().edgeBandingRate).toBe(0);
     });
   });
 
-  // Sprint 19 — Snapshot auto-naming with timestamp
   describe('saveSnapshot auto-naming (Sprint 19)', () => {
     beforeEach(() => {
       useCabinetStore.setState({ snapshots: [] });
     });
 
-    it('uses provided name when non-empty', () => {
-      useCabinetStore.getState().saveSnapshot('My custom name');
-      const { snapshots } = useCabinetStore.getState();
-      expect(snapshots[0].name).toBe('My custom name');
+    it.each([
+      ['My custom name', true],
+      ['', false],
+      ['   ', false],
+    ] as const)('names snapshot for input %j', (input, isExact) => {
+      useCabinetStore.getState().saveSnapshot(input);
+      const snap = useCabinetStore.getState().snapshots[0];
+      if (isExact) expect(snap.name).toBe('My custom name');
+      else expect(snap.name).toMatch(/^Snapshot \d{4}-\d{2}-\d{2} \d{2}:\d{2}$/);
     });
 
-    it('auto-names with "Snapshot YYYY-MM-DD HH:mm" format when name is empty', () => {
-      useCabinetStore.getState().saveSnapshot('');
-      const { snapshots } = useCabinetStore.getState();
-      // Matches "Snapshot 2025-01-15 14:30" style
-      expect(snapshots[0].name).toMatch(/^Snapshot \d{4}-\d{2}-\d{2} \d{2}:\d{2}$/);
-    });
-
-    it('auto-names with whitespace-only input', () => {
-      useCabinetStore.getState().saveSnapshot('   ');
-      const { snapshots } = useCabinetStore.getState();
-      expect(snapshots[0].name).toMatch(/^Snapshot \d{4}-\d{2}-\d{2} \d{2}:\d{2}$/);
-    });
-
-    it('snapshot has valid ISO timestamp', () => {
+    it('snapshot has valid ISO timestamp and id starts with "snap-"', () => {
       useCabinetStore.getState().saveSnapshot('test');
-      const { snapshots } = useCabinetStore.getState();
-      expect(() => new Date(snapshots[0].timestamp).toISOString()).not.toThrow();
-    });
-
-    it('snapshot id starts with "snap-"', () => {
-      useCabinetStore.getState().saveSnapshot('test');
-      const { snapshots } = useCabinetStore.getState();
-      expect(snapshots[0].id).toMatch(/^snap-\d+$/);
+      const snap = useCabinetStore.getState().snapshots[0];
+      expect(() => new Date(snap.timestamp).toISOString()).not.toThrow();
+      expect(snap.id).toMatch(/^snap-\d+$/);
     });
   });
 
-  // Sprint 16 coverage boost — previously uncovered store actions
-
   describe('toggleHighContrast (v3.12.0)', () => {
-    it('flips highContrastMode from false to true', () => {
-      useCabinetStore.setState({ highContrastMode: false });
+    it.each([
+      [false, true],
+      [true, false],
+    ] as const)('flips highContrastMode from %s to %s', (init, expected) => {
+      useCabinetStore.setState({ highContrastMode: init });
       useCabinetStore.getState().toggleHighContrast();
-      expect(useCabinetStore.getState().highContrastMode).toBe(true);
-    });
-
-    it('flips highContrastMode from true to false', () => {
-      useCabinetStore.setState({ highContrastMode: true });
-      useCabinetStore.getState().toggleHighContrast();
-      expect(useCabinetStore.getState().highContrastMode).toBe(false);
+      expect(useCabinetStore.getState().highContrastMode).toBe(expected);
     });
   });
 
   describe('toggleUnits', () => {
-    it('switches from metric to imperial', () => {
-      useCabinetStore.setState({ units: 'metric' });
+    it.each([
+      ['metric', 'imperial'],
+      ['imperial', 'metric'],
+    ] as const)('switches %s → %s', (init, expected) => {
+      useCabinetStore.setState({ units: init });
       useCabinetStore.getState().toggleUnits();
-      expect(useCabinetStore.getState().units).toBe('imperial');
-    });
-
-    it('switches from imperial back to metric', () => {
-      useCabinetStore.setState({ units: 'imperial' });
-      useCabinetStore.getState().toggleUnits();
-      expect(useCabinetStore.getState().units).toBe('metric');
+      expect(useCabinetStore.getState().units).toBe(expected);
     });
   });
 
   describe('setSawKerf', () => {
-    it('stores a valid saw kerf', () => {
-      useCabinetStore.getState().setSawKerf(3.2);
-      expect(useCabinetStore.getState().sawKerf).toBe(3.2);
-    });
-
-    it('clamps saw kerf to 0 when negative', () => {
-      useCabinetStore.getState().setSawKerf(-1);
-      expect(useCabinetStore.getState().sawKerf).toBe(0);
-    });
-
-    it('clamps saw kerf to 8 when too large', () => {
-      useCabinetStore.getState().setSawKerf(20);
-      expect(useCabinetStore.getState().sawKerf).toBe(8);
+    it.each<[number, number]>([
+      [3.2, 3.2],
+      [-1, 0],
+      [20, 8],
+    ])('setSawKerf(%s) → %s', (input, expected) => {
+      useCabinetStore.getState().setSawKerf(input);
+      expect(useCabinetStore.getState().sawKerf).toBe(expected);
     });
   });
 
   describe('setMaterialPriceOverride', () => {
-    it('stores a price override for a material key', () => {
+    it('stores and removes price override', () => {
       useCabinetStore.getState().setMaterialPriceOverride('mdf18', 42.5);
       expect(useCabinetStore.getState().materialPriceOverrides['mdf18']).toBe(42.5);
-    });
-
-    it('removes the override when price is null', () => {
-      useCabinetStore.getState().setMaterialPriceOverride('mdf18', 42.5);
       useCabinetStore.getState().setMaterialPriceOverride('mdf18', null);
       expect(useCabinetStore.getState().materialPriceOverrides['mdf18']).toBeUndefined();
     });
   });
 
   describe('setHardwarePriceOverride', () => {
-    it('stores a price override for a hardware id', () => {
+    it('stores, removes, and clamps negative hardware price override', () => {
       useCabinetStore.getState().setHardwarePriceOverride('hinge-soft', 3.99);
       expect(useCabinetStore.getState().hardwarePriceOverrides['hinge-soft']).toBe(3.99);
-    });
-
-    it('removes the override when price is null', () => {
-      useCabinetStore.getState().setHardwarePriceOverride('hinge-soft', 3.99);
       useCabinetStore.getState().setHardwarePriceOverride('hinge-soft', null);
       expect(useCabinetStore.getState().hardwarePriceOverrides['hinge-soft']).toBeUndefined();
-    });
-
-    it('clamps negative price to 0', () => {
       useCabinetStore.getState().setHardwarePriceOverride('hinge-soft', -5);
       expect(useCabinetStore.getState().hardwarePriceOverrides['hinge-soft']).toBe(0);
     });
   });
 
   describe('setHardwareQtyOverride', () => {
-    it('stores a quantity override for a hardware id', () => {
+    it('stores and removes quantity override', () => {
       useCabinetStore.getState().setHardwareQtyOverride('drawer-slide', 4);
       expect(useCabinetStore.getState().hardwareQtyOverrides['drawer-slide']).toBe(4);
-    });
-
-    it('removes the override when qty is null', () => {
-      useCabinetStore.getState().setHardwareQtyOverride('drawer-slide', 4);
       useCabinetStore.getState().setHardwareQtyOverride('drawer-slide', null);
       expect(useCabinetStore.getState().hardwareQtyOverrides['drawer-slide']).toBeUndefined();
     });
@@ -407,7 +318,6 @@ describe('cabinet-store', () => {
 
   describe('moveCabinet — Sprint 61', () => {
     beforeEach(() => {
-      // Set up 3 cabinets: A, B, C
       useCabinetStore.getState().addCabinet();
       useCabinetStore.getState().renameCabinet(1, 'Cabinet B');
       useCabinetStore.getState().addCabinet();
@@ -416,15 +326,11 @@ describe('cabinet-store', () => {
       useCabinetStore.getState().renameCabinet(0, 'Cabinet A');
     });
 
-    it('moves cabinet down: swaps index 0 and index 1', () => {
-      useCabinetStore.getState().moveCabinet(0, 'down');
-      const names = useCabinetStore.getState().cabinets.map((c) => c.name);
-      expect(names[0]).toBe('Cabinet B');
-      expect(names[1]).toBe('Cabinet A');
-    });
-
-    it('moves cabinet up: swaps index 1 and index 0', () => {
-      useCabinetStore.getState().moveCabinet(1, 'up');
+    it.each<['down' | 'up', number]>([
+      ['down', 0],
+      ['up', 1],
+    ])('moves cabinet %s (idx=%i): swaps to B,A order', (dir, idx) => {
+      useCabinetStore.getState().moveCabinet(idx, dir);
       const names = useCabinetStore.getState().cabinets.map((c) => c.name);
       expect(names[0]).toBe('Cabinet B');
       expect(names[1]).toBe('Cabinet A');
@@ -436,15 +342,11 @@ describe('cabinet-store', () => {
       expect(useCabinetStore.getState().activeCabinetIndex).toBe(1);
     });
 
-    it('ignores move up on first cabinet', () => {
+    it('ignores move up on first cabinet and down on last cabinet', () => {
       const before = useCabinetStore.getState().cabinets.map((c) => c.name);
       useCabinetStore.getState().moveCabinet(0, 'up');
       expect(useCabinetStore.getState().cabinets.map((c) => c.name)).toEqual(before);
-    });
-
-    it('ignores move down on last cabinet', () => {
       const count = useCabinetStore.getState().cabinets.length;
-      const before = useCabinetStore.getState().cabinets.map((c) => c.name);
       useCabinetStore.getState().moveCabinet(count - 1, 'down');
       expect(useCabinetStore.getState().cabinets.map((c) => c.name)).toEqual(before);
     });

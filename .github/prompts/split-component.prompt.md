@@ -3,6 +3,8 @@ mode: agent
 description: Split a large React component file into focused sub-components following project conventions.
 ---
 
+# Split Component
+
 You are refactoring a large React component in the WoodworkingShop Cabinet Planner project.
 
 ## Task
@@ -31,7 +33,7 @@ Split the component at `${file}` (currently ${lineCount} lines) into focused sub
 
 ## Target directory layout (example — adapt to the actual component)
 
-```
+```text
 src/components/<feature>/
   index.tsx           ← thin orchestrator (≤ 80 lines)
   <Feature>Header.tsx
