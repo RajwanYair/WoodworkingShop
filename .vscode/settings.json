@@ -1,10 +1,68 @@
 {
+  // ─── Editor ─────────────────────────────────────────────────────────────────
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
+  "editor.rulers": [100],
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": true,
+  "editor.stickyScroll.enabled": true,
+  "editor.linkedEditing": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit",
+    "source.organizeImports": "never"
+  },
+
+  // ─── Files ──────────────────────────────────────────────────────────────────
+  "files.eol": "\n",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.exclude": {
+    "**/dist/**": true,
+    "**/coverage/**": true,
+    "**/playwright-report/**": true,
+    "**/test-results/**": true,
+    "**/docs/api/**": true
+  },
+  "files.associations": {
+    "*.jsonc": "jsonc"
+  },
+
+  // ─── TypeScript ─────────────────────────────────────────────────────────────
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.inlayHints.parameterNames.enabled": "literals",
+  "typescript.inlayHints.propertyDeclarationTypes.enabled": false,
+  "typescript.inlayHints.variableTypes.enabled": false,
+  "typescript.inlayHints.returnTypes.enabled": false,
+  "typescript.preferences.importModuleSpecifier": "shortest",
+  "typescript.preferences.quoteStyle": "single",
+  "typescript.suggest.autoImports": true,
+  "[tsx]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[ts]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[jsonc]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[markdown]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+
+  // ─── ESLint ─────────────────────────────────────────────────────────────────
   "eslint.useFlatConfig": true,
-  "files.eol": "\n",
+  "eslint.run": "onType",
+  "eslint.problems.shortenToSingleLine": true,
+
+  // ─── CSS / Stylelint ────────────────────────────────────────────────────────
+  "css.validate": false,
+  "scss.validate": false,
+  "less.validate": false,
+  "css.lint.compatibleVendorPrefixes": "ignore",
+  "css.lint.unknownVendorSpecificProperties": "ignore",
+  "html.validate.styles": false,
+  "html.validate.scripts": false,
+  "stylelint.validate": ["css"],
+  "stylelint.configOverrides": {
+    "rules": { "plugin/no-unsupported-browser-features": null }
+  },
+
+  // ─── Terminal ───────────────────────────────────────────────────────────────
   "terminal.integrated.shellIntegration.enabled": true,
   "terminal.integrated.shellIntegration.decorationsEnabled": "both",
   "terminal.integrated.defaultProfile.windows": "PowerShell",
@@ -25,51 +83,27 @@
     "source": "PowerShell",
     "args": ["-NoLogo", "-NonInteractive"]
   },
-  "css.validate": false,
-  "html.validate.styles": false,
-  "html.validate.scripts": false,
-  "stylelint.validate": ["css"],
-  "stylelint.configOverrides": {
-    "rules": {
-      "plugin/no-unsupported-browser-features": null
-    }
-  },
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
-    "source.fixAll.stylelint": "explicit"
-  },
-  "files.exclude": {
-    "**/dist/**": true,
-    "**/coverage/**": true,
-    "**/playwright-report/**": true,
-    "**/test-results/**": true,
-    "**/docs/api/**": true
-  },
+
+  // ─── Search ─────────────────────────────────────────────────────────────────
   "search.exclude": {
     "**/dist": true,
     "**/node_modules": true,
     "**/coverage": true,
-    "**/docs/api": true
+    "**/docs/api": true,
+    "**/.vite_cache": true
   },
-  "[tsx]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[ts]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "editor.rulers": [100],
-  "typescript.inlayHints.parameterNames.enabled": "literals",
-  "typescript.inlayHints.propertyDeclarationTypes.enabled": false,
-  "typescript.inlayHints.variableTypes.enabled": false,
-  "typescript.inlayHints.returnTypes.enabled": false,
-  "typescript.preferences.importModuleSpecifier": "shortest",
-  "typescript.preferences.quoteStyle": "single",
+
+  // ─── GitHub Copilot ─────────────────────────────────────────────────────────
   "github.copilot.chat.codeGeneration.useInstructionFiles": true,
   "github.copilot.chat.agentDebugLog.enabled": true,
   "github.copilot.chat.agentDebugLog.fileLogging.enabled": true,
   "github.copilot.chat.agentDebugLog.fileLogging.flushIntervalMs": 1000,
+
+  // ─── Testing ────────────────────────────────────────────────────────────────
   "vitest.enable": true,
   "vitest.rootConfig": "${workspaceFolder}/vitest.config.ts",
+
+  // ─── Spelling ───────────────────────────────────────────────────────────────
   "cSpell.words": [
     "bssf",
     "carcass",
@@ -89,6 +123,9 @@
     "vitest",
     "webgl",
     "woodworking",
-    "zustand"
+    "zustand",
+    "buildlog",
+    "crdt",
+    "gltf"
   ]
 }

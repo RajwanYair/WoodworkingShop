@@ -1,28 +1,25 @@
 ---
 mode: agent
-description: Execute a Phase 17.3 roadmap sprint item — reduce file sizes, improve test coverage, or tighten CI.
+description: Execute a roadmap sprint item end-to-end — implement feature, pass quality gates, commit.
 ---
 
 # Roadmap Sprint
 
-You are executing a **Phase 17.3 (Test Efficiency & DX Elevation)** sprint item in the Cabinet Planner project.
+You are executing a sprint item in the Cabinet Planner project (currently Phase 21).
 
-## Phase 17.3 Sprint Items
+## Current Phase — Phase 21: Marketplace + Build UX (v4.2.0)
 
-| ID  | Task                                         | Status |
-| --- | -------------------------------------------- | ------ |
-| E1  | Shorten large test files with `it.each`      | TODO   |
-| E2  | Split engine/utils files > 300 L             | TODO   |
-| E4  | Trim component files to ≤ 600 L              | TODO   |
-| E5  | Split `validation.ts` + `cabinet-store.ts`   | TODO   |
-| E6  | Split `templates.ts` + `dxf-export.ts`       | TODO   |
-| E8  | Docs consolidation                           | TODO   |
-| E9  | JSDoc → TypeDoc conversion for engine/       | TODO   |
-| E12 | Version bump 3.73.0 + CHANGELOG + GH release | TODO   |
+| Sprint | Feature                  | Status |
+| ------ | ------------------------ | ------ |
+| 87     | Plugin Marketplace Panel | DONE   |
+| 88     | Finish/Paint Calculator  | DONE   |
+| 89     | Project Build Log        | WIP    |
+| 90     | Focus/Kiosk Mode         | TODO   |
+| 91     | Release v4.2.0           | TODO   |
 
 ## Task
 
-Execute sprint item **${sprintId}** — `${description}`.
+Execute sprint **${sprintId}** — `${description}`.
 
 ## Mandatory constraints
 

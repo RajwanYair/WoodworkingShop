@@ -82,6 +82,37 @@
       "group": "build"
     },
     {
+      "label": "i18n Coverage",
+      "type": "npm",
+      "script": "i18n:coverage",
+      "problemMatcher": []
+    },
+    {
+      "label": "Bundle Check",
+      "type": "npm",
+      "script": "bundle:check",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Bench Check",
+      "type": "npm",
+      "script": "bench:check",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "CI (full)",
+      "type": "npm",
+      "script": "ci",
+      "group": "build",
+      "problemMatcher": ["$tsc", "$eslint-stylish"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
       "label": "Dev Server",
       "type": "npm",
       "script": "dev",

@@ -1,7 +1,7 @@
 # Cabinet Planner — AI Agent Context
 
 > Browser-based woodworking design tool · React 19 + TypeScript 6 + Vite 8
-> **v3.72.0** · MIT · Node ≥ 22 · [Live demo](https://rajwanyair.github.io/WoodworkingShop/)
+> **v4.1.0** · MIT · Node ≥ 22 · [Live demo](https://rajwanyair.github.io/WoodworkingShop/)
 
 ## What It Does
 
@@ -89,6 +89,21 @@ import { cfg } from '../helpers'; // builds CabinetConfig from DEFAULT_CONFIG + 
 ## Docs
 
 - Architecture decisions & diagrams → [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
-- Active roadmap → [ROADMAP.md](ROADMAP.md) (Phase 17.3 — active)
+- Active roadmap → [ROADMAP.md](ROADMAP.md) (Phase 21 — active)
 - Sprint history → [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 - Plugin API → [docs/PLUGIN-API.md](docs/PLUGIN-API.md)
+
+## Copilot Prompts
+
+`.github/prompts/` contains reusable agent prompts:
+
+| Prompt                       | Purpose                                                      |
+| ---------------------------- | ------------------------------------------------------------ |
+| `new-feature.prompt.md`      | Add a full feature panel (engine → store → UI → i18n → mount) |
+| `fix-quality.prompt.md`      | Diagnose and fix all quality gate failures                   |
+| `fix-tests.prompt.md`        | Diagnose and fix all failing unit tests                      |
+| `i18n-add-keys.prompt.md`    | Add i18n keys with en/he parity validation                   |
+| `roadmap-sprint.prompt.md`   | Execute the current roadmap sprint item end-to-end           |
+| `release.prompt.md`          | Full release workflow: bump → CHANGELOG → tag → GH release  |
+| `split-component.prompt.md`  | Split large React components (≤ 600 L target)                |
+| `test-factory.prompt.md`     | Convert repetitive tests to `it.each` tables                 |

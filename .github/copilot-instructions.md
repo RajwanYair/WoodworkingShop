@@ -2,24 +2,19 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v3.73.0** · **Next target: v3.74.0** (Phase 18 — Visual Fidelity & UX)
+> **Current release: v4.1.0** · **Next target: v4.2.0** (Phase 21 — Marketplace + Build UX)
 
-## Active Sprint — Phase 17.3
+## Active Sprint — Phase 21 (Sprints 87–91)
 
-> **Status**: In progress · **Goal**: test file shortening, engine splits, DX tooling
+> **Status**: In progress · **Goal**: Plugin Marketplace, Finish Calculator, Build Log, Focus Mode
 
-| ID  | Task                                        | Status |
-| --- | ------------------------------------------- | ------ |
-| E1  | Shorten large test files with `it.each`     | DONE   |
-| E2  | Split engine/utils files > 300 L            | DONE   |
-| E4  | Trim component files to ≤ 600 L             | DONE   |
-| E5  | Split `validation.ts` + `cabinet-store.ts`  | TODO   |
-| E6  | Split `templates.ts` + `dxf-export.ts`      | TODO   |
-| E7  | CI slim (ci.yml ≤ 80 L, release.yml ≤ 80 L) | DONE   |
-| E8  | Docs consolidation                          | DONE   |
-| E9  | JSDoc → TypeDoc conversion for `engine/`    | TODO   |
-| E11 | CONTRIBUTING.md                             | DONE   |
-| E12 | Release v3.73.0 + CHANGELOG + GH tag        | DONE   |
+| Sprint | Feature                    | Status |
+| ------ | -------------------------- | ------ |
+| 87     | Plugin Marketplace Panel   | DONE   |
+| 88     | Finish/Paint Calculator    | DONE   |
+| 89     | Project Build Log          | WIP    |
+| 90     | Focus/Kiosk Mode           | TODO   |
+| 91     | Release v4.2.0             | TODO   |
 
 ## Tech Stack
 

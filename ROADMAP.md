@@ -1,6 +1,6 @@
 # Roadmap
 
-> **Last strategic review**: 2026-05-25 · **Current version**: 4.0.0
+> **Last strategic review**: 2026-05-25 · **Current version**: 4.1.0
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -165,7 +165,19 @@ state; GH release published.
 | 85     | Cabinet measurement assistant (ergonomic + best-practice hints) | DONE |
 | 86     | ZIP bundle export (PDF + DXF + BOM + glTF in one download)      | DONE |
 
-### Phase 21+: Future Horizons (Unscoped)
+### Phase 21: Marketplace + Build UX (v4.2.0) — **ACTIVE**
+
+**Goal**: Plugin marketplace panel, finish/paint calculator, build log, focus mode.
+
+| Sprint | Deliverable                                            | Status   | Type    |
+| ------ | ------------------------------------------------------ | -------- | ------- |
+| 87     | Plugin Marketplace Panel (browse, install, rate)       | **DONE** | UI      |
+| 88     | Finish/Paint Calculator (coverage, coats, dry time)    | **DONE** | Engine  |
+| 89     | Project Build Log (timestamped notes per project)      | **WIP**  | UI      |
+| 90     | Focus/Kiosk Mode (hide chrome, Ctrl+Shift+K toggle)   | TODO     | UX      |
+| 91     | Version bump 4.2.0, CHANGELOG, GH release              | TODO     | Release |
+
+### Phase 22+: Future Horizons (Unscoped)
 
 | Track         | Candidate                                           | Trigger                              |
 | ------------- | --------------------------------------------------- | ------------------------------------ |
