@@ -733,5 +733,26 @@
     "pluginCount": "{{count}} plugins",
     "installedCount": "{{count}}",
     "installed": "installed"
+  },
+  "finish": {
+    "title": "Finish Calculator",
+    "typeLabel": "Finish type",
+    "primer": "Primer",
+    "stain": "Stain",
+    "paint": "Paint",
+    "varnish": "Varnish",
+    "oil": "Oil",
+    "lacquer": "Lacquer",
+    "coats": "Coats",
+    "surfaceArea": "Total surface area",
+    "litresNeeded": "Finish needed",
+    "recommendedCans": "Suggested can sizes",
+    "totalCans": "total {{litres}} L",
+    "notePrimer": "Apply primer before top coats for better adhesion.",
+    "noteStain": "Sand lightly between stain coats. Wipe excess immediately.",
+    "notePaint": "Use a foam roller for panels; brush for edges and details.",
+    "noteVarnish": "Allow each varnish coat to cure fully before sanding back.",
+    "noteOil": "Danish oil penetrates the grain; wipe off surplus after 20 min.",
+    "noteLacquer": "Apply lacquer in thin, even passes in a dust-free environment."
   }
 }
