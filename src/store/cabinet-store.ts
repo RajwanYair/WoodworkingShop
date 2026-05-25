@@ -156,7 +156,8 @@ function scheduleOptimization(
     offcutCatalog: _offcutCatalog,
     defectZones: _defectZones,
   };
-  void proxy.run(input)
+  void proxy
+    .run(input)
     .then((result) => {
       if (!_workerApplyFn || _latestCutId !== callId) return; // stale
       _workerApplyFn({
@@ -187,7 +188,8 @@ function scheduleAssembly(config: CabinetConfig): void {
   }
   const callId = ++_assemblyCallId;
   _latestAssemblyId = callId;
-  void proxy.run({ config })
+  void proxy
+    .run({ config })
     .then((result) => {
       if (!_workerApplyFn || _latestAssemblyId !== callId) return; // stale
       _workerApplyFn({ assemblySteps: result.steps, assemblyPending: false });
@@ -241,7 +243,8 @@ function scheduleCost(
     labourHours,
     finishCost,
   };
-  void proxy.run(input)
+  void proxy
+    .run(input)
     .then((result) => {
       if (!_workerApplyFn || _latestCostId !== callId) return; // stale
       _workerApplyFn({ cost: result.cost, costPending: false });

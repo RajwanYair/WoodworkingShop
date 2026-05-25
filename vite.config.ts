@@ -90,11 +90,7 @@ export default defineConfig({
         manualChunks: (id) => {
           if (id.includes('@react-pdf/renderer')) return 'pdf-renderer';
           if (id.includes('/i18next') || id.includes('/react-i18next')) return 'i18n-vendor';
-          if (
-            id.includes('/react-dom/') ||
-            id.includes('/node_modules/react/') ||
-            id.includes('/zustand')
-          )
+          if (id.includes('/react-dom/') || id.includes('/node_modules/react/') || id.includes('/zustand'))
             return 'vendor';
         },
       },

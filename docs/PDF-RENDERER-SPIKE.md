@@ -18,7 +18,7 @@ bundle size and developer experience without regressing PDF quality.
 ## 2. Candidates
 
 | Criterion | @react-pdf/renderer v4.5.1 | pdfme v4.x |
-|-----------|---------------------------|-----------|
+| | | |
 | Bundle size (minified+gzip) | ~285 KB (lazy chunk) | ~95 KB |
 | API style | JSX components (`<Document>`, `<Page>`, `<View>`) | JSON template + `generate(inputs)` |
 | Font embedding | Built-in (`Font.register`) | Built-in (`fonts` in template schema) |
@@ -48,7 +48,7 @@ bundle size and developer experience without regressing PDF quality.
 ### Estimate
 
 | Phase | pdfme migration effort |
-|-------|----------------------|
+| | |
 | Template authoring (replace JSX) | 3–4 days |
 | RTL / bidi shaping (HE + AR) | 2–3 days |
 | i18n wiring (no React context) | 1 day |
@@ -64,7 +64,7 @@ The `@react-pdf/renderer` chunk is **already isolated** in a dedicated Vite
 split (`pdf-renderer` manualChunk added in Sprint 63). It is never included in
 the initial JS payload — it loads only when the user opens the PDF export panel.
 
-```
+```text
 Initial bundle (excl. pdf-renderer chunk): ~220 KB gzip
 pdf-renderer lazy chunk:                   ~285 KB gzip   ← loads on demand
 pdfme equivalent (hypothetical):           ~95 KB gzip

@@ -18,7 +18,7 @@ topology.
 ## 2. pnpm vs npm Comparison
 
 | Criterion | npm (current) | pnpm |
-|-----------|--------------|------|
+| | | |
 | Install strategy | Flat hoisting to parent workspace | Content-addressable store + symlinked `node_modules` |
 | Disk usage | ~400 MB (estimated, hoisted) | ~140–180 MB (shared store, ~55–60% saving) |
 | `npm ci` time (cold) | ~35–45 s (measured in CI) | ~10–18 s (store hit on warm cache) |
@@ -34,7 +34,7 @@ topology.
 
 ## 3. Current Workspace Layout
 
-```
+```text
 MyScripts/               ← npm workspace root
   package.json           ← defines workspaces: ["WoodworkingShop"]
   node_modules/          ← ALL packages hoisted here (npm behaviour)
@@ -75,7 +75,7 @@ hoisting. In a parent-workspace layout:
 ## 5. Risks and Blockers
 
 | Risk | Severity | Notes |
-|------|----------|-------|
+| | | |
 | Parent workspace re-rooting | **High** | pnpm workspaces would need `MyScripts/pnpm-workspace.yaml`; existing `package.json` workspace field would be ignored |
 | Symlink depth issues on Windows | **Medium** | pnpm uses junctions on Windows; Vite 8 + Rolldown is compatible but requires testing |
 | `.npmrc` conflicts | **Medium** | Current `.npmrc` uses npm-only flags; would need conversion |
@@ -88,10 +88,12 @@ hoisting. In a parent-workspace layout:
 
 1. `corepack enable pnpm` on all developer machines + CI
 2. Create `MyScripts/pnpm-workspace.yaml`:
+
    ```yaml
    packages:
      - 'WoodworkingShop'
    ```
+
 3. Delete `MyScripts/node_modules/` and `WoodworkingShop/node_modules/`
 4. `pnpm import` — converts `package-lock.json` → `pnpm-lock.yaml`
 5. `pnpm install` — verify all packages resolve

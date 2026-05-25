@@ -248,19 +248,19 @@ all 10 longest test files shortened ≥ 20% via `it.each`, top 5 source files ea
 zero line-level `// comment` on standalone lines in `src/engine/`, docs consolidated,
 `.vscode/` fully tuned, copilot-instructions.md reflects current production state.
 
-| Sprint | Deliverable                                                                               | Type     |
-| ------ | ----------------------------------------------------------------------------------------- | -------- |
-| B1     | CI composite action `.github/actions/setup-node` (removes 4× checkout+setup+ci boilerplate) | CI       |
+| Sprint | Deliverable                                                                                                   | Type     |
+| ------ | ------------------------------------------------------------------------------------------------------------- | -------- |
+| B1     | CI composite action `.github/actions/setup-node` (removes 4× checkout+setup+ci boilerplate)                   | CI       |
 | B2     | Shorten top-3 test files: `validation.test.ts`, `cut-optimizer.test.ts`, `bom-export.test.ts` using `it.each` | Tests    |
-| B3     | Shorten `cabinet-store.test.ts` + `url-state.test.ts` with `describe.each` / shared factories | Tests    |
-| B4     | Split `CabinetPdfDocument.tsx` (1850 L) → `pdf/sections/` sub-components                 | Refactor |
-| B5     | Split `CabinetPreview.tsx` (1431 L) → `PreviewTabs`, `IsometricView`, `PreviewHUD`        | Refactor |
-| B6     | Split `validation.ts` (1026 L) by domain: `dimension-rules`, `door-rules`, `shelf-rules` | Refactor |
-| B7     | Convert all standalone line `// comments` in `src/engine/` to block/JSDoc doc-comments   | Docs     |
-| B8     | Consolidate overlapping content: `ARCHITECTURE.md` ↔ `ROADMAP.md` (strategy section)     | Docs     |
-| B9     | VS Code: add spell-check + import-cost extensions; update `tasks.json`                   | DX       |
-| B10    | Update `.github/copilot-instructions.md` (v3.69 state: 7 ESLint plugins, no sonarjs)     | DX       |
-| B11    | Version bump 3.70.0, CHANGELOG, GH release                                               | Release  |
+| B3     | Shorten `cabinet-store.test.ts` + `url-state.test.ts` with `describe.each` / shared factories                 | Tests    |
+| B4     | Split `CabinetPdfDocument.tsx` (1850 L) → `pdf/sections/` sub-components                                      | Refactor |
+| B5     | Split `CabinetPreview.tsx` (1431 L) → `PreviewTabs`, `IsometricView`, `PreviewHUD`                            | Refactor |
+| B6     | Split `validation.ts` (1026 L) by domain: `dimension-rules`, `door-rules`, `shelf-rules`                      | Refactor |
+| B7     | Convert all standalone line `// comments` in `src/engine/` to block/JSDoc doc-comments                        | Docs     |
+| B8     | Consolidate overlapping content: `ARCHITECTURE.md` ↔ `ROADMAP.md` (strategy section)                          | Docs     |
+| B9     | VS Code: add spell-check + import-cost extensions; update `tasks.json`                                        | DX       |
+| B10    | Update `.github/copilot-instructions.md` (v3.69 state: 7 ESLint plugins, no sonarjs)                          | DX       |
+| B11    | Version bump 3.70.0, CHANGELOG, GH release                                                                    | Release  |
 
 ### Phase 17: DX & Bundle Optimization (v3.71.0)
 
@@ -297,20 +297,20 @@ and `src/workers/` have `/** ... */` JSDoc blocks; zero naked `// comment` lines
 immediately preceding exported symbols; `@param`/`@returns` present on every
 non-trivial function signature.
 
-| Sprint | Deliverable                                                                                   | Type |
-| ------ | --------------------------------------------------------------------------------------------- | ---- |
-| D1     | `src/engine/types.ts` — JSDoc all interfaces, type aliases, and branded types (`Mm`, `Kg`)   | Docs |
-| D2     | `src/engine/parts.ts`, `dimensions.ts`, `materials.ts` — JSDoc all exported functions        | Docs |
-| D3     | `src/engine/cut-optimizer.ts`, `smart-optimizer.ts`, `kerf.ts` — optimizer layer JSDoc       | Docs |
-| D4     | `src/engine/validation.ts` + sub-modules — JSDoc all rule functions and `ValidationIssue`    | Docs |
-| D5     | `src/engine/hardware*.ts`, `hinge-bore.ts`, `drawer-runner.ts` — hardware layer JSDoc        | Docs |
-| D6     | `src/engine/assembly*.ts`, `assembly-dag.ts`, `assembly-timer.ts` — assembly layer JSDoc     | Docs |
-| D7     | `src/engine/export/`, `gcode-*.ts`, `dxf-*.ts`, `bom-filter.ts` — export layer JSDoc        | Docs |
-| D8     | `src/store/*.ts`, `src/store/slices/*.ts` — store actions, selectors, slice types            | Docs |
-| D9     | `src/utils/*.ts`, `src/hooks/*.ts` — utility functions and custom hooks                      | Docs |
-| D10    | `src/workers/*.ts` — Comlink API interfaces, `run()` methods, worker input/output types      | Docs |
-| D11    | Add `--failOnWarnings` to `typedoc.json`; CI `docs:api` step fails on missing docs           | CI   |
-| D12    | Version bump 3.71.1, CHANGELOG, GH release                                                   | Release |
+| Sprint | Deliverable                                                                                | Type    |
+| ------ | ------------------------------------------------------------------------------------------ | ------- |
+| D1     | `src/engine/types.ts` — JSDoc all interfaces, type aliases, and branded types (`Mm`, `Kg`) | Docs    |
+| D2     | `src/engine/parts.ts`, `dimensions.ts`, `materials.ts` — JSDoc all exported functions      | Docs    |
+| D3     | `src/engine/cut-optimizer.ts`, `smart-optimizer.ts`, `kerf.ts` — optimizer layer JSDoc     | Docs    |
+| D4     | `src/engine/validation.ts` + sub-modules — JSDoc all rule functions and `ValidationIssue`  | Docs    |
+| D5     | `src/engine/hardware*.ts`, `hinge-bore.ts`, `drawer-runner.ts` — hardware layer JSDoc      | Docs    |
+| D6     | `src/engine/assembly*.ts`, `assembly-dag.ts`, `assembly-timer.ts` — assembly layer JSDoc   | Docs    |
+| D7     | `src/engine/export/`, `gcode-*.ts`, `dxf-*.ts`, `bom-filter.ts` — export layer JSDoc       | Docs    |
+| D8     | `src/store/*.ts`, `src/store/slices/*.ts` — store actions, selectors, slice types          | Docs    |
+| D9     | `src/utils/*.ts`, `src/hooks/*.ts` — utility functions and custom hooks                    | Docs    |
+| D10    | `src/workers/*.ts` — Comlink API interfaces, `run()` methods, worker input/output types    | Docs    |
+| D11    | Add `--failOnWarnings` to `typedoc.json`; CI `docs:api` step fails on missing docs         | CI      |
+| D12    | Version bump 3.71.1, CHANGELOG, GH release                                                 | Release |
 
 ### Phase 18: Visual Fidelity & UX (v3.72.0)
 
