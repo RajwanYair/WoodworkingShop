@@ -9,6 +9,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.74.0] — 2026-05-25
+
+### Phase 17.3 completion + Phase 18 Sprint 72 — Visual Fidelity & UX
+
+#### Changed
+
+- **E5 — cabinet-store.ts split**: extracted `src/store/worker-schedule.ts` (332 L) housing
+  all Comlink worker proxies, call-ID counters, and schedule functions; cabinet-store.ts
+  reduced from 968 L → 743 L. Circular-import avoided via `initWorkerSchedule(set, get)` DI
+  and `import type { CabinetState }` type-only import.
+- **E6 — templates.ts split**: 660 L → 90 L thin coordinator + `template-dsl.ts` (~160 L,
+  hand-rolled recursive-descent DSL parser, no `eval()`) + `template-data.ts` (~428 L,
+  all 17 TEMPLATES definitions).
+- **E6 — dxf-export.ts split**: 544 L → 143 L entry point + `dxf-builders.ts` (402 L,
+  all DXF geometry builders and layer/rect/label helpers).
+- **E9 — JSDoc/TypeDoc coverage for `engine/`**: added `/** */` blocks to all previously
+  undocumented exported functions and constants across 12 engine files, including
+  `DEFAULT_CONFIG`, furniture-type override defaults, `EXPORT_FORMATS`, `TEMPLATE_CATALOGUE`,
+  `KERF_PROFILES`, `SHELF_PRESETS`, `SORT_PRESETS`, `EDGE_PROFILE_SPECS`,
+  `DEFAULT_WASTE_THRESHOLDS`, `HARDWARE_CATALOGUE`, and DXF builder helpers.
+- **Sprint 72 — Print stylesheet A4/Letter optimisation**:
+  - `@page { size: auto }` replaces hardcoded `size: a4`, enabling Letter-size printers.
+  - Margin changed to `15mm 12mm` (wider top/bottom for browser running headers).
+  - `@page :first { margin-top: 10mm }` reduces top margin on first page.
+  - `h4` added to heading break rules; `h1+*/h2+*/h3+*/h4+*` get `break-before: avoid`
+    to prevent orphaned headings at page bottoms.
+
+#### Fixed
+
+- `src/engine/validation/dimension-rules.ts`: `no-useless-assignment` lint error
+  in `backMat` catch block (was `backMat = null`; initialisation already sets null).
+- `src/store/cabinet-store.ts`: removed unused `scheduleCost` import.
+
 ## [3.73.0] — 2026-05-25
 
 ### Phase 17.3 — Test Efficiency & DX Elevation
