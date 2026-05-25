@@ -695,5 +695,20 @@
     "videoFeed": "הזנת מצלמה חיה",
     "notSupported": "מצלמה אינה נתמכת במכשיר זה",
     "error": "שגיאת מצלמה"
+  },
+  "measurementAssistant": {
+    "title": "רמזי מידות",
+    "kitchenBaseHeight": "גובה ארון מטבח תחתון סטנדרטי הוא {{standard}} מ״מ (שלך: {{current}} מ״מ)",
+    "kitchenBaseDepth": "עומק ארון מטבח סטנדרטי הוא {{standard}} מ״מ (שלך: {{current}} מ״מ)",
+    "overheadGap": "יש להשאיר פער של {{gap}} מ״מ בין משטח העבודה ליחידה תלויה",
+    "bookshelfDepthShallow": "עומק מינימלי לספרים בפורמט A4 הוא {{min}} מ״מ (שלך: {{current}} מ״מ)",
+    "bookshelfDepthDeep": "עומק מדף מעל {{recommended}} מ״מ בזבז חומר (שלך: {{current}} מ״מ)",
+    "bookshelfSpan": "מוט מדף {{current}} מ״מ עולה על המגבלה הבטוחה {{maxSpan}} מ״מ — מומלץ תמיכה מרכזית",
+    "wardrobeDepthShallow": "עומק ארון {{current}} מ״מ קטן מהמינימום המומלץ {{min}} מ״מ לתלייה",
+    "tallCabinet": "גובה ארון {{current}} מ״מ חורג מטווח ההגעה הנוחה ({{max}} מ״מ)",
+    "deskHeight": "גובה שולחן ארגונומי הוא {{min}}–{{max}} מ״מ (שלך: {{current}} מ״מ)",
+    "deskDepth": "עומק מינימלי לסביבת מסך הוא {{min}} מ״מ (שלך: {{current}} מ״מ)",
+    "reachZone": "גג הארון ב-{{current}} מ״מ גבוה מטווח ההגעה הנוח ({{max}} מ״מ)",
+    "sheetAlignment": "רוחב {{current}} מ״מ אינו מיושר עם גיליון סטנדרטי {{nearest}} מ״מ — שקול להתאים"
   }
 }

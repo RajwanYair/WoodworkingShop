@@ -695,5 +695,20 @@
     "videoFeed": "Live camera feed",
     "notSupported": "Camera not supported on this device",
     "error": "Camera error"
+  },
+  "measurementAssistant": {
+    "title": "Measurement Hints",
+    "kitchenBaseHeight": "Standard kitchen base height is {{standard}} mm (yours: {{current}} mm)",
+    "kitchenBaseDepth": "Standard kitchen base depth is {{standard}} mm (yours: {{current}} mm)",
+    "overheadGap": "Leave {{gap}} mm gap between worktop and overhead unit for comfortable access",
+    "bookshelfDepthShallow": "Min bookshelf depth for A4 books is {{min}} mm (yours: {{current}} mm)",
+    "bookshelfDepthDeep": "Bookshelf depth over {{recommended}} mm wastes material (yours: {{current}} mm)",
+    "bookshelfSpan": "Shelf span {{current}} mm exceeds {{maxSpan}} mm safe limit for 18 mm board — consider a centre support",
+    "wardrobeDepthShallow": "Wardrobe depth {{current}} mm is less than the recommended {{min}} mm for hanging clothes",
+    "tallCabinet": "Cabinet height {{current}} mm exceeds comfortable standing reach ({{max}} mm)",
+    "deskHeight": "Ergonomic desk height is {{min}}–{{max}} mm (yours: {{current}} mm)",
+    "deskDepth": "Min desk depth for a monitor setup is {{min}} mm (yours: {{current}} mm)",
+    "reachZone": "Top of cabinet at {{current}} mm is above comfortable reach zone ({{max}} mm)",
+    "sheetAlignment": "Width {{current}} mm does not align with standard sheet {{nearest}} mm — consider adjusting to minimise offcuts"
   }
 }

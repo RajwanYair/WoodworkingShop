@@ -13,6 +13,7 @@ import { DoorConfig } from './DoorConfig';
 import { DrawerConfig } from './DrawerConfig';
 import { CustomMaterialEditor } from './CustomMaterialEditor';
 import { CatalogImportPanel } from './CatalogImportPanel';
+import { MeasurementHintsPanel } from './MeasurementHintsPanel';
 import { PresetsPanel } from './PresetsPanel';
 import { SaveLoadPanel } from './SaveLoadPanel';
 import type { FurnitureType, JoineryType } from '../../engine/types';
@@ -35,6 +36,9 @@ export function ConfiguratorPanel() {
 
       {/* Manufacturing constraint validation — shown when config has issues */}
       {validationIssues.length > 0 && <ValidationPanel issues={validationIssues} />}
+
+      {/* Sprint 85 — ergonomic + best-practice measurement hints */}
+      <MeasurementHintsPanel />
 
       {/* Material substitution suggestions from engine (Sprint 43) */}
       <SubstitutionPanel />
