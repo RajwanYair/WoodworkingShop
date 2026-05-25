@@ -1,6 +1,6 @@
 # Roadmap
 
-> **Last strategic review**: 2026-05-25 · **Current version**: 3.71.1
+> **Last strategic review**: 2026-06-04 · **Current version**: 3.72.0
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -79,6 +79,7 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 16.6  | v3.70.0         | Code Hygiene & CI Speed          | CI composite action, test file shortening, doc consolidation, VS Code tuning                                   |
 | 17    | v3.71.0         | DX & Bundle Optimization         | Comlink workers, tree-shake audit, PDF renderer spike, chunk strategy, pnpm eval, PLUGIN-API.md                |
 | 17.1  | v3.71.1         | JSDoc D1–D3 (optimizer layer)    | JSDoc: types.ts, parts/dimensions/materials, cut-optimizer/smart-optimizer; markdownlint CI fixes              |
+| 17.2  | v3.72.0         | Production Readiness & DX        | Partial: fix-buttons, i18n keys, VS Code snippets/tasks, Copilot prompts, dependabot, CODEOWNERS, SECURITY.md  |
 
 ---
 
@@ -87,47 +88,46 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 > Phase 16–17.1 sprint tables: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 > Phase 17.1 D4–D12 resumes after Phase 17.2 completes.
 
-### Phase 17.2: Codebase Slimming, Test Efficiency & DX Elevation (v3.72.0) — **HIGH PRIORITY / NEXT**
+### Phase 17.3: Test Efficiency, Source Splitting & DX Elevation (v3.73.0) — **HIGH PRIORITY / NEXT**
 
 **Goal**: Measurably shorter tests, split oversized source files, slimmer CI
 workflows, consolidated docs, clean comment style, and best-in-class Copilot /
 VS Code integration. Delivers a leaner, faster-to-navigate codebase before
 resuming the Phase 17.1 JSDoc D-series.
 
-**Data-driven baselines** (measured 2026-05-25):
+**Data-driven baselines** (measured 2026-06-04, after v3.72.0):
 
-| Metric                   | Current                          | Target      |
-| ------------------------ | -------------------------------- | ----------- |
-| Longest test file        | validation.test.ts 684 L         | ≤ 400 L     |
-| 10th-longest test file   | voice-annotation.test.ts 277 L   | ≤ 200 L     |
-| Longest source file      | CabinetPdfDocument.tsx 1850 L    | ≤ 600 L     |
-| 10th-longest source file | types.ts 533 L                   | ≤ 400 L     |
-| Longest GH workflow      | ci.yml 132 L / release.yml 129 L | ≤ 90 L each |
+| Metric                   | Current                        | Target      |
+| ------------------------ | ------------------------------ | ----------- |
+| Longest test file        | validation.test.ts 609 L       | ≤ 400 L     |
+| 10th-longest test file   | voice-annotation.test.ts 277 L | ≤ 200 L     |
+| Longest source file      | validation.ts 1033 L           | ≤ 600 L     |
+| 10th-longest source file | types.ts 533 L                 | ≤ 400 L     |
+| Longest GH workflow      | ci.yml 90 L / release.yml 85 L | ≤ 80 L each |
 
 **Exit criteria**: Top-10 longest test files each shortened ≥ 20%; top-10
-longest source files each ≤ 600 lines; `ci.yml` and `release.yml` each < 90
+longest source files each ≤ 600 lines; `ci.yml` and `release.yml` each < 80
 lines; ARCHITECTURE.md strategy section merged with zero duplication; all
 standalone `// comment` lines in `src/` converted to `/** JSDoc */` or
-removed; `.vscode/snippets.code-snippets` added; `.github/prompts/` seeded;
-`dependabot.yml`, `CODEOWNERS`, and `CONTRIBUTING.md` added;
-`copilot-instructions.md` reflects v3.72.0 state; GH release published.
+removed; `CONTRIBUTING.md` added; `copilot-instructions.md` reflects v3.73.0
+state; GH release published.
 
-| Sprint | Deliverable                                                                                                                                                        | Type     |
-| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- |
-| E1     | Shorten top-5 tests (validation 684 L, bom-export 457 L, cut-optimizer 453 L, cabinet-store 452 L, url-state 400 L) via `it.each` + shared fixtures                | Tests    |
-| E2     | Shorten next-5 tests (plugin 338 L, hardware 335 L, templates 302 L, project-storage 280 L, voice-annotation 277 L)                                                | Tests    |
-| E3     | Split `CabinetPdfDocument.tsx` (1850 L) into `pdf/sections/`: CoverPage, PartsTable, CutSheetsSection, HardwareBOM, SpecPage                                       | Refactor |
-| E4     | Split `CabinetPreview.tsx` (1431 L) into IsometricView, SVGFallback, PreviewHUD, PreviewTabs; split `OptimizerView.tsx` (1085 L) into OptimizerControls, SheetGrid | Refactor |
-| E5     | Split `validation.ts` (1026 L) by domain: dimension-rules, door-rules, shelf-rules; split `cabinet-store.ts` (968 L): extract PDF + room slices                    | Refactor |
-| E6     | Split `templates.ts` (660 L) into `engine/templates/`; split `dxf-export.ts` (544 L) into geometry + labeling layers                                               | Refactor |
-| E7     | Slim `ci.yml` (132 L) + `release.yml` (129 L): extract quality-gate steps into reusable workflow; target < 90 L each                                               | CI       |
-| E8     | Consolidate docs: merge ARCHITECTURE.md strategy section into ROADMAP.md; retire duplication; trim to pure module reference                                        | Docs     |
-| E9     | Convert all standalone `// comment` lines in `src/` to `/** JSDoc */` blocks or remove where trivial; update `copilot-instructions.md`                             | Docs     |
-| E10    | VS Code: add `snippets.code-snippets` (it.each, Zustand selector, i18n key, JSDoc block patterns); add check task; audit extensions                                | DX       |
-| E11    | Copilot: seed `.github/prompts/` with split-component + test-factory prompts; add `dependabot.yml`, `CODEOWNERS`, `CONTRIBUTING.md`                                | DX       |
-| E12    | Version bump 3.72.0, CHANGELOG, GH release                                                                                                                         | Release  |
+| Sprint | Deliverable                                                                                                                                         | Status   | Type     |
+| ------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- |
+| E1     | Shorten top-5 tests (validation 609 L, cut-optimizer 409 L, bom-export 392 L, url-state 345 L, cabinet-store 354 L) via `it.each` + shared fixtures | TODO     | Tests    |
+| E2     | Shorten next-5 tests (plugin 338 L, hardware 335 L, templates 302 L, project-storage 280 L, voice-annotation 277 L)                                 | TODO     | Tests    |
+| E3     | ~~Split `CabinetPdfDocument.tsx`~~ — already 173 L (sections extracted in v3.71–v3.72)                                                              | **DONE** | Refactor |
+| E4     | Split `CabinetPreview.tsx` and `OptimizerView.tsx` if over 600 L (verify sizes)                                                                     | TODO     | Refactor |
+| E5     | Split `validation.ts` (1033 L) by domain: dimension-rules, door-rules, shelf-rules; split `cabinet-store.ts` (968 L): extract PDF + room slices     | TODO     | Refactor |
+| E6     | Split `templates.ts` (660 L) into `engine/templates/`; split `dxf-export.ts` (544 L) into geometry + labeling layers                                | TODO     | Refactor |
+| E7     | Slim `ci.yml` (90 L) + `release.yml` (85 L): consolidate steps; target < 80 L each                                                                  | TODO     | CI       |
+| E8     | Consolidate docs: merge ARCHITECTURE.md strategy section into ROADMAP.md; retire duplication; trim to pure module reference                         | TODO     | Docs     |
+| E9     | Convert all standalone `// comment` lines in `src/` to `/** JSDoc */` blocks or remove where trivial; update `copilot-instructions.md`              | TODO     | Docs     |
+| E10    | VS Code: `snippets.code-snippets` (6 snippets, done), check task done, dead:check task done                                                         | **DONE** | DX       |
+| E11    | Copilot: `.github/prompts/` seeded (done), `dependabot.yml` (done), `CODEOWNERS` (done); add `CONTRIBUTING.md`                                      | Partial  | DX       |
+| E12    | Version bump 3.73.0, CHANGELOG, GH release                                                                                                          | TODO     | Release  |
 
-### Phase 18: Visual Fidelity & UX (v3.73.0)
+### Phase 18: Visual Fidelity & UX (v3.74.0)
 
 **Goal**: Photorealistic materials in 3D, placement animation, print polish.
 
@@ -138,7 +138,7 @@ removed; `.vscode/snippets.code-snippets` added; `.github/prompts/` seeded;
 | 70     | Nesting placement animation (step-by-step sequence with timeline) | UI      |
 | 71     | Onboarding wizard redesign (3-step guided flow, skippable)        | UX      |
 | 72     | Print stylesheet optimization (A4/Letter margins, break control)  | CSS     |
-| 73     | Version bump 3.72.0, CHANGELOG, GH release                        | Release |
+| 73     | Version bump 3.74.0, CHANGELOG, GH release                        | Release |
 
 ### Phase 19: Machine Integration & Community (v4.0.0)
 
