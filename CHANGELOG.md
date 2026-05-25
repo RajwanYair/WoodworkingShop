@@ -9,6 +9,53 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.0] — 2026-05-25
+
+### Phase 19 — Machine Integration & Community (Sprints 75–77)
+
+#### Sprint 75 — Machine profile registry
+
+- Added `src/engine/machine-profiles.ts`: 10 CNC machine profiles as const registry (Grbl generic, Shapeoko 3, X-Carve 1000, Genmitsu 3018-Pro, LongMill 30x30, LinuxCNC generic, Mach3 generic, Smoothieboard, TinyG, Marlin CNC)
+- `MachineProfile`, `MachineProfileId`, `ControllerFirmware`, `SpindleHint` types exported from engine index
+- `MachineProfileSelector` component: drop-down with spec card, profile persisted in `localStorage`
+- `WebSerialPanel` now uses the selected profile's `baudRate`, `dataBits`, `stopBits`, `parity` for the serial connection
+- i18n: `machine.*` section (10 keys, EN + HE parity)
+
+#### Sprint 76 — Community material catalog schema
+
+- Added `src/engine/community-catalog.ts`: `CommunityMaterial` + `CommunityCatalog` interfaces, `CATALOG_SCHEMA_VERSION = '1.0'`, `parseCommunityMaterial()`, `validateCommunityCatalog()` runtime validators
+- Added `src/catalog/community-catalog.example.json`: 4 sample materials (EUR / USD / GBP / ILS)
+- Schema API exported from `engine/index.ts`
+
+#### Sprint 77 — Material price import from community catalog
+
+- Added `src/utils/catalog-import.ts`: `fetchCommunityCatalog()`, `communityMaterialToMaterial()`, `mergeCatalogIntoCustomMaterials()`
+- Added `CatalogImportPanel` component (URL input, preview list with checkboxes, add-to-library action)
+- Mounted in `ConfiguratorPanel` after `CustomMaterialEditor`
+- i18n: `catalogImport.*` section (13 keys, EN + HE parity)
+
+### Phase 20 — IFC / STEP Export (Sprints 79–80)
+
+#### Sprint 79 — IFC export (Industry Foundation Classes, BIM)
+
+- Added `src/engine/export/ifc-export.ts`: minimal IFC 2x3 SPF generator
+  - Hierarchy: `IFCPROJECT` → `IFCSITE` → `IFCBUILDING` → `IFCBUILDINGSTOREY` → `IFCFURNISHINGELEMENT`
+  - Each part × qty as `IFCMEMBER` with `IFCBOUNDINGBOX` geometry
+- Added `src/utils/ifc-download.ts`: `downloadIfcFile()` browser download
+- "Export IFC (BIM)" button added to `PdfExportPanel`
+- i18n: `pdf.exportIfc` + `pdf.ifcExported` (EN + HE)
+
+#### Sprint 80 — STEP export (ISO 10303-21 AP214)
+
+- Added `src/engine/export/step-export.ts`: STEP Part 21 generator
+  - Each part × qty as `MANIFOLD_SOLID_BREP` cuboid using `ADVANCED_FACE` / `CLOSED_SHELL`
+  - Compatible with FreeCAD, SOLIDWORKS, Fusion 360, CATIA
+- Added `src/utils/step-download.ts`: `downloadStepFile()` browser download
+- "Export STEP (AP214)" button added to `PdfExportPanel` beside IFC button
+- i18n: `pdf.exportStep` + `pdf.stepExported` (EN + HE)
+
+---
+
 ## [3.75.0] — 2026-05-25
 
 ### Phase 18 — Visual Fidelity & UX (Sprints 68–71, 74)

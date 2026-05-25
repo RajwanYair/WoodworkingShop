@@ -1,6 +1,6 @@
 # Roadmap
 
-> **Last strategic review**: 2026-05-25 · **Current version**: 3.75.0
+> **Last strategic review**: 2026-05-25 · **Current version**: 4.0.0
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -144,20 +144,20 @@ state; GH release published.
 
 **Goal**: Design-to-fabrication bridge. Community material data.
 
-| Sprint | Deliverable                                           | Type    |
-| ------ | ----------------------------------------------------- | ------- |
-| 74     | WebSerial API integration (Grbl G-code streaming)     | DONE    |
-| 75     | Machine profile registry (Grbl, LinuxCNC, Mach3)      | Feature |
-| 76     | Community material catalog schema (JSON API contract) | Design  |
-| 77     | Material price import from community catalog          | Feature |
-| 78     | Version bump 4.0.0, CHANGELOG, GH release             | Release |
+| Sprint | Deliverable                                           | Type |
+| ------ | ----------------------------------------------------- | ---- |
+| 74     | WebSerial API integration (Grbl G-code streaming)     | DONE |
+| 75     | Machine profile registry (Grbl, LinuxCNC, Mach3)      | DONE |
+| 76     | Community material catalog schema (JSON API contract) | DONE |
+| 77     | Material price import from community catalog          | DONE |
+| 78     | Version bump 4.0.0, CHANGELOG, GH release             | DONE |
 
 ### Phase 20: Enterprise & Mobile (v4.1.0)
 
 | Sprint | Deliverable                                                    | Type     |
 | ------ | -------------------------------------------------------------- | -------- |
-| 79     | IFC export (Industry Foundation Classes for BIM)               | Engine   |
-| 80     | STEP export (AP214 furniture geometry profile)                 | Engine   |
+| 79     | IFC export (Industry Foundation Classes for BIM)               | DONE     |
+| 80     | STEP export (AP214 furniture geometry profile)                 | DONE     |
 | 81     | Capacitor iOS/Android wrapper (camera, haptics)                | Platform |
 | 82     | Mobile-first touch UI (swipe tabs, pinch preview, thumb zones) | UI       |
 | 83     | Version bump 4.1.0, CHANGELOG, GH release                      | Release  |
