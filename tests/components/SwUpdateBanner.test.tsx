@@ -67,8 +67,41 @@ describe('useSwUpdate (Sprint 44)', () => {
     act(() => {
       result.current.reload();
     });
-    expect(mockUpdateSW).toHaveBeenCalledWith(true);
+    expect(mockUpdateSW).toHaveBeenCalledOnce();
   });
+
+  it.each<[boolean, number]>([
+    [false, 0],
+    [true, 1],
+  ])(
+    'onNeedReload: user triggered reload first=%s → window.location.reload called %i time(s)',
+    async (userTriggeredFirst, expectedCalls) => {
+      const reloadMock = vi.fn();
+      vi.stubGlobal('location', { reload: reloadMock });
+
+      let capturedOpts: Parameters<typeof registerSW>[0] | undefined;
+      const mockUpdateSW = vi.fn(async () => undefined);
+      vi.mocked(registerSW).mockImplementation((opts) => {
+        capturedOpts = opts;
+        opts?.onNeedRefresh?.();
+        return mockUpdateSW;
+      });
+      const { result } = renderHook(() => useSwUpdate());
+      await act(async () => {
+        await Promise.resolve();
+      });
+      if (userTriggeredFirst) {
+        act(() => {
+          result.current.reload();
+        });
+      }
+      act(() => {
+        capturedOpts?.onNeedReload?.();
+      });
+      expect(reloadMock).toHaveBeenCalledTimes(expectedCalls);
+      vi.unstubAllGlobals();
+    },
+  );
 });
 
 describe('SwUpdateBanner component', () => {
