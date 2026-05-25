@@ -12,7 +12,7 @@
 | --- | ------------------------------------------- | ------ |
 | E1  | Shorten large test files with `it.each`     | TODO   |
 | E2  | Split engine/utils files > 300 L            | TODO   |
-| E4  | Trim component files to ≤ 600 L             | TODO   |
+| E4  | Trim component files to ≤ 600 L             | DONE   |
 | E5  | Split `validation.ts` + `cabinet-store.ts`  | TODO   |
 | E6  | Split `templates.ts` + `dxf-export.ts`      | TODO   |
 | E7  | CI slim (ci.yml ≤ 80 L, release.yml ≤ 80 L) | DONE   |
