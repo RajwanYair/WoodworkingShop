@@ -49,6 +49,7 @@ const RoomLayoutViewLazy = lazy(() =>
 function App() {
   const { activeTab, darkMode, projectName } = useCabinetStore();
   const highContrastMode = useCabinetStore((s) => s.highContrastMode);
+  const focusMode = useCabinetStore((s) => s.focusMode);
   const { t, i18n } = useTranslation();
   const haptics = useHaptics();
   const [showShortcuts, setShowShortcuts] = useState(false);
@@ -178,6 +179,14 @@ function App() {
         haptics.notification('success');
         return;
       }
+      // Focus/Kiosk mode: Ctrl+Shift+K (Sprint 90)
+      if (ctrl && e.shiftKey && (e.key === 'k' || e.key === 'K')) {
+        e.preventDefault();
+        useCabinetStore.getState().toggleFocusMode();
+        const entering = useCabinetStore.getState().focusMode;
+        useToastStore.getState().addToast(t(entering ? 'focusMode.enter' : 'focusMode.exit'), 'info');
+        return;
+      }
       // Tab switching: Alt+1-5; Dark mode: Alt+D (Sprint 168)
       if (e.altKey && !ctrl) {
         const tabMap: Record<string, CabinetState['activeTab']> = {
@@ -222,9 +231,9 @@ function App() {
         >
           {t('a11y.skipToContent')}
         </a>
-        <Header />
+        {!focusMode && <Header />}
         <div className="flex">
-          <Sidebar />
+          {!focusMode && <Sidebar />}
           <main
             ref={mainRef}
             id="main-content"
@@ -297,7 +306,7 @@ function App() {
           </main>
         </div>
         <ToastContainer />
-        <MobileTabBar />
+        {!focusMode && <MobileTabBar />}
         <OnboardingManager />
         <TouchGestureTutorial />
         <SwUpdateBanner />

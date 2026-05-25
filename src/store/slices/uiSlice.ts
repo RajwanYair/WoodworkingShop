@@ -96,6 +96,9 @@ export type UiSlice = {
   // Build log (Sprint 89)
   buildLog: BuildLogEntry[];
 
+  // Focus mode (Sprint 90)
+  focusMode: boolean;
+
   // Actions
   setActiveTab: (tab: ActiveTab) => void;
   setProjectName: (name: string) => void;
@@ -109,6 +112,9 @@ export type UiSlice = {
   addBuildLogEntry: (text: string) => void;
   deleteBuildLogEntry: (id: string) => void;
   clearBuildLog: () => void;
+
+  // Focus mode actions (Sprint 90)
+  toggleFocusMode: () => void;
 };
 
 // ─── Slice creator ────────────────────────────────────────────────────────────
@@ -138,6 +144,7 @@ export function createUiSlice(
     highContrastMode: initialPrefs.highContrastMode ?? false,
     units: initialPrefs.units ?? ('metric' as UnitSystem),
     buildLog: initialBuildLog,
+    focusMode: false,
 
     // ── Actions ──
     setActiveTab: (tab) => set({ activeTab: tab }),
@@ -211,5 +218,7 @@ export function createUiSlice(
         saveBuildLog([]);
         return { buildLog: [] };
       }),
+
+    toggleFocusMode: () => set((s) => ({ focusMode: !s.focusMode })),
   };
 }

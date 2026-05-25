@@ -763,5 +763,9 @@
     "empty": "No notes yet. Log steps, adjustments, or observations.",
     "delete": "Delete entry",
     "clearAll": "Clear all entries"
+  },
+  "focusMode": {
+    "enter": "Focus mode enabled",
+    "exit": "Focus mode disabled"
   }
 }

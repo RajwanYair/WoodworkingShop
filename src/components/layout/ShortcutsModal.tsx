@@ -20,6 +20,7 @@ const SHORTCUTS = [
   { key: 'Ctrl + E', descEn: 'Export BOM CSV', descHe: 'ייצוא BOM CSV' },
   { key: 'Ctrl + L', descEn: 'Copy share link', descHe: 'העתק קישור שיתוף' },
   { key: 'Ctrl + Shift + N', descEn: 'Add cabinet', descHe: 'הוסף ארון' },
+  { key: 'Ctrl + Shift + K', descEn: 'Toggle focus mode', descHe: 'מצב מיקוד' },
   { key: 'Ctrl + R', descEn: 'Reset cabinet to defaults', descHe: 'איפוס ארון לברירת מחדל' },
   { key: '?', descEn: 'Show / hide this panel', descHe: 'הצג / הסתר לוח זה' },
   { key: 'Escape', descEn: 'Close this panel', descHe: 'סגור לוח זה' },
