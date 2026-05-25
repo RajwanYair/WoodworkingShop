@@ -10,6 +10,7 @@ You are publishing a new Cabinet Planner release.
 ## Pre-flight checklist (verify before any changes)
 
 1. `npm run check` — must pass with 0 errors / 0 warnings
+   > `check` runs quality checks in parallel (`quality:fast`) then tests — use `npm run quality` if you need sequential output for debugging
 2. `npm run dead:check` — no orphaned exports
 3. `git status` — working tree is clean (all changes committed)
 4. `CHANGELOG.md [Unreleased]` section is populated

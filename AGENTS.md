@@ -97,13 +97,13 @@ import { cfg } from '../helpers'; // builds CabinetConfig from DEFAULT_CONFIG + 
 
 `.github/prompts/` contains reusable agent prompts:
 
-| Prompt                       | Purpose                                                      |
-| ---------------------------- | ------------------------------------------------------------ |
-| `new-feature.prompt.md`      | Add a full feature panel (engine → store → UI → i18n → mount) |
-| `fix-quality.prompt.md`      | Diagnose and fix all quality gate failures                   |
-| `fix-tests.prompt.md`        | Diagnose and fix all failing unit tests                      |
-| `i18n-add-keys.prompt.md`    | Add i18n keys with en/he parity validation                   |
-| `roadmap-sprint.prompt.md`   | Execute the current roadmap sprint item end-to-end           |
-| `release.prompt.md`          | Full release workflow: bump → CHANGELOG → tag → GH release  |
-| `split-component.prompt.md`  | Split large React components (≤ 600 L target)                |
-| `test-factory.prompt.md`     | Convert repetitive tests to `it.each` tables                 |
+| Prompt                      | Purpose                                                       |
+| --------------------------- | ------------------------------------------------------------- |
+| `new-feature.prompt.md`     | Add a full feature panel (engine → store → UI → i18n → mount) |
+| `fix-quality.prompt.md`     | Diagnose and fix all quality gate failures                    |
+| `fix-tests.prompt.md`       | Diagnose and fix all failing unit tests                       |
+| `i18n-add-keys.prompt.md`   | Add i18n keys with en/he parity validation                    |
+| `roadmap-sprint.prompt.md`  | Execute the current roadmap sprint item end-to-end            |
+| `release.prompt.md`         | Full release workflow: bump → CHANGELOG → tag → GH release    |
+| `split-component.prompt.md` | Split large React components (≤ 600 L target)                 |
+| `test-factory.prompt.md`    | Convert repetitive tests to `it.each` tables                  |

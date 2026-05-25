@@ -19,7 +19,7 @@ You are adding localization keys to the Cabinet Planner project.
 
 Add these keys:
 
-```
+```json
 ${keys}
 ```
 

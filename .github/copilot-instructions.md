@@ -8,13 +8,13 @@
 
 > **Status**: In progress · **Goal**: Plugin Marketplace, Finish Calculator, Build Log, Focus Mode
 
-| Sprint | Feature                    | Status |
-| ------ | -------------------------- | ------ |
-| 87     | Plugin Marketplace Panel   | DONE   |
-| 88     | Finish/Paint Calculator    | DONE   |
-| 89     | Project Build Log          | WIP    |
-| 90     | Focus/Kiosk Mode           | TODO   |
-| 91     | Release v4.2.0             | TODO   |
+| Sprint | Feature                  | Status |
+| ------ | ------------------------ | ------ |
+| 87     | Plugin Marketplace Panel | DONE   |
+| 88     | Finish/Paint Calculator  | DONE   |
+| 89     | Project Build Log        | WIP    |
+| 90     | Focus/Kiosk Mode         | TODO   |
+| 91     | Release v4.2.0           | TODO   |
 
 ## Tech Stack
 
@@ -177,8 +177,9 @@ The MaxRects BSSF cut-optimizer uses:
 
 ## Workflows
 
-- **`npm run quality`** — typecheck + lint + lint:css + lint:md + format:check + i18n:coverage (no test)
-- **`npm run check`** — `quality` + `npm test` (full pre-commit gate)
+- **`npm run quality`** — typecheck + lint + lint:css + lint:md + format:check + i18n:coverage (sequential; good for debugging)
+- **`npm run quality:fast`** — same checks run in parallel via `scripts/parallel-quality.js` (mirrors CI; use for release gate)
+- **`npm run check`** — `quality:fast` + `npm test` (full pre-commit gate — runs quality in parallel)
 - **`npm run ci`** — `check` + build + bundle:check + bench:check (full CI gate)
 - **`npm run release:build`** — build + bundle:check + sbom (no tests; run after `npm run check`)
 

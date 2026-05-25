@@ -81,10 +81,10 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 17.1  | v3.71.1         | JSDoc D1–D3 (optimizer layer)    | JSDoc: types.ts, parts/dimensions/materials, cut-optimizer/smart-optimizer; markdownlint CI fixes              |
 | 17.2  | v3.72.0         | Production Readiness & DX        | Partial: fix-buttons, i18n keys, VS Code snippets/tasks, Copilot prompts, dependabot, CODEOWNERS, SECURITY.md  |
 | 17.3  | v3.73.0         | Test Efficiency & DX Elevation   | it.each parameterization, source file splitting, CI slim, docs consolidation, CONTRIBUTING.md                  |
-| 18    | v3.75.0         | Visual Fidelity & UX             | Material texture atlas, SVG isometric render, nesting animation, onboarding wizard, print stylesheet          |
+| 18    | v3.75.0         | Visual Fidelity & UX             | Material texture atlas, SVG isometric render, nesting animation, onboarding wizard, print stylesheet           |
 | 19    | v4.0.0          | Machine Integration & Community  | WebSerial Grbl streaming, machine profile registry, community material catalog                                 |
 | 20    | v4.1.0          | Enterprise & Mobile              | IFC/STEP export, Capacitor iOS/Android, mobile touch UI, glTF 2.0, measurement assistant, ZIP bundle           |
-| 21    | v4.2.0          | Marketplace + Build UX           | Plugin marketplace, finish/paint calculator, project build log, focus/kiosk mode, workspace DX                |
+| 21    | v4.2.0          | Marketplace + Build UX           | Plugin marketplace, finish/paint calculator, project build log, focus/kiosk mode, workspace DX                 |
 
 ---
 
@@ -171,13 +171,13 @@ state; GH release published.
 
 **Goal**: Plugin marketplace panel, finish/paint calculator, build log, focus mode.
 
-| Sprint | Deliverable                                            | Status   | Type    |
-| ------ | ------------------------------------------------------ | -------- | ------- |
-| 87     | Plugin Marketplace Panel (browse, install, rate)       | **DONE** | UI      |
-| 88     | Finish/Paint Calculator (coverage, coats, dry time)    | **DONE** | Engine  |
-| 89     | Project Build Log (timestamped notes per project)      | **DONE** | UI      |
-| 90     | Focus/Kiosk Mode (hide chrome, Ctrl+Shift+K toggle)   | **DONE** | UX      |
-| 91     | Version bump 4.2.0, CHANGELOG, GH release              | **DONE** | Release |
+| Sprint | Deliverable                                         | Status   | Type    |
+| ------ | --------------------------------------------------- | -------- | ------- |
+| 87     | Plugin Marketplace Panel (browse, install, rate)    | **DONE** | UI      |
+| 88     | Finish/Paint Calculator (coverage, coats, dry time) | **DONE** | Engine  |
+| 89     | Project Build Log (timestamped notes per project)   | **DONE** | UI      |
+| 90     | Focus/Kiosk Mode (hide chrome, Ctrl+Shift+K toggle) | **DONE** | UX      |
+| 91     | Version bump 4.2.0, CHANGELOG, GH release           | **DONE** | Release |
 
 ### Phase 22+: Future Horizons (Unscoped)
 

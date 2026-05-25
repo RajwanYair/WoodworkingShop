@@ -36,7 +36,7 @@ Every new feature follows this layered pattern:
 
 1. Create the engine file (pure computation, fully typed, exported functions).
 2. Add store state/actions if the feature requires persistence.
-3. Create the panel component (named export, Tailwind classes, wood-* tokens).
+3. Create the panel component (named export, Tailwind classes, wood-\* tokens).
 4. Add i18n keys to both `en.json` and `he.json`.
 5. Mount the panel in the appropriate parent component.
 6. Run `npm run quality` — zero errors, zero warnings.

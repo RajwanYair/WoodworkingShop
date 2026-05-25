@@ -11,6 +11,11 @@ on:
         required: true
         type: string
 
+# One release at a time — cancel any duplicate run for the same tag
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -23,10 +28,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: ./.github/actions/setup-node
-      # Quality gate only (tests already passed in CI on this commit)
-      - run: npm run quality
-      # Build, bundle-size check, SBOM
-      - run: npm run release:build
+
+      # Vite pre-bundle cache — key tracks only config + lockfile (source changes don't affect it)
+      - uses: actions/cache@v5
+        with:
+          path: /tmp/WoodworkingShop/.vite_cache
+          key: vite-${{ runner.os }}-${{ hashFiles('vite.config.ts', 'package-lock.json') }}
+          restore-keys: vite-${{ runner.os }}-
+
+      # Quality already passed in CI on this SHA — skip redundant re-run.
+      # sbom reads only package files (no dist needed) — start it in the background
+      # so it runs concurrently with the tsc+vite build for free.
+      - name: Build + SBOM (parallel) + bundle check
+        run: |
+          npm run sbom &
+          SBOM_PID=$!
+          npm run build
+          npm run bundle:check
+          wait $SBOM_PID
+
       # Archive + sha256
       - name: Archive + checksums
         run: |
