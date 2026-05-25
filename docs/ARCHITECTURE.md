@@ -9,7 +9,6 @@ Cabinet Planner is a client-side React SPA (no backend). All computation — dim
 ## ⚡ High-Level Data Flow
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0b040', 'primaryTextColor': '#1a0e06', 'primaryBorderColor': '#8b5022', 'lineColor': '#7a4010', 'edgeLabelBackground': '#fef7ed'}}}%%
 graph LR
   UI["Configurator UI"]:::ui -->|"patch config"| Store[("Zustand Store")]:::store
   Store -->|config| Engine["Engine Module\npure TypeScript"]:::engine
@@ -50,14 +49,23 @@ src/
 │   ├── preview/             # SVG cabinet views (6 views + isometric 3D)
 │   ├── optimizer/           # Cut sheet visualization, smart optimizer, comparison
 │   ├── assembly/            # Step-by-step assembly guide
-│   ├── pdf/                 # @react-pdf/renderer document + export panel
+│   ├── pdf/
+│   │   ├── CabinetPdfDocument.tsx  # Thin orchestrator (imports sections/)
+│   │   ├── pdf-tokens.ts    # Font.register, StyleSheet, design tokens
+│   │   ├── pdf-i18n.ts      # EN+HE dictionary for PDF rendering
+│   │   ├── pdf-helpers.ts   # Pure helpers (assemblyStepsI18n, sheetSummary)
+│   │   ├── PdfExportPanel.tsx
+│   │   └── sections/        # 15 focused page/section components
 │   └── layout/              # Header, sidebar, toast, onboarding overlay
 ├── store/
 │   ├── cabinet-store.ts     # Main Zustand store: config, derived state, undo/redo
 │   ├── custom-materials-store.ts  # User-defined materials
+│   ├── room-store.ts        # Room layout state
 │   └── toast-store.ts       # Notification queue
 ├── hooks/
-│   └── useTouchGestures.ts  # Pinch-zoom and swipe gestures
+│   ├── useFocusTrap.ts      # Accessible modal focus management
+│   ├── useIntersectionVisible.ts
+│   └── usePwaFileHandlers.ts
 ├── i18n/
 │   ├── index.ts             # i18next setup
 │   ├── en.json              # English translations
@@ -192,7 +200,6 @@ A lightweight WebGL renderer is available for evaluating material-texture previe
 ## 🧩 Component Tree
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0b040', 'primaryTextColor': '#1a0e06', 'primaryBorderColor': '#8b5022', 'lineColor': '#7a4010'}}}%%
 graph TD
   App["App.tsx"]:::root
 
@@ -254,7 +261,6 @@ graph TD
 ## 🔄 State Flow
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0b040', 'primaryBorderColor': '#8b5022', 'actorBkg': '#fae7c0', 'actorBorder': '#8b5022', 'activationBkgColor': '#f0b040', 'activationBorderColor': '#8b5022', 'sequenceNumberColor': '#1a0e06', 'signalColor': '#7a4010', 'signalTextColor': '#1a0e06'}}}%%
 sequenceDiagram
   autonumber
   participant U as User
@@ -285,7 +291,6 @@ max-side order, then each part probes every free rectangle on every open
 sheet in both orientations before opening a new sheet.
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0b040', 'primaryTextColor': '#1a0e06', 'primaryBorderColor': '#8b5022', 'lineColor': '#7a4010', 'edgeLabelBackground': '#fef7ed'}}}%%
 flowchart TD
   parts["Part list from generateParts"]:::input --> group{"Group by material"}:::decision
   group --> queue["Sort: max-side desc, area desc"]:::process
@@ -305,15 +310,9 @@ flowchart TD
   classDef output fill:#3a7a50,stroke:#1e4a30,color:#ffffff,font-weight:bold
 ```
 
-## 🗓 Release History
-
-Full sprint-by-sprint history and feature timeline is maintained in
-[SPRINT-HISTORY.md](SPRINT-HISTORY.md) and [../CHANGELOG.md](../CHANGELOG.md).
-
 ## 🚀 CI/CD Pipeline
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0b040', 'primaryTextColor': '#1a0e06', 'primaryBorderColor': '#8b5022', 'lineColor': '#7a4010', 'edgeLabelBackground': '#fef7ed'}}}%%
 graph TD
   push["Push or PR to main"] --> ci["CI workflow\nci.yml"]
   push --> pages["Pages workflow\npages.yml"]
@@ -354,7 +353,6 @@ graph TD
 ## 📤 Export Pipeline
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0b040', 'primaryTextColor': '#1a0e06', 'primaryBorderColor': '#8b5022', 'lineColor': '#7a4010', 'edgeLabelBackground': '#fef7ed'}}}%%
 graph LR
   config["CabinetConfig\nZustand store"] --> engine["Engine\ngenerateParts\ngenerateHardware"]
   engine --> parts["Part[]"]
@@ -395,7 +393,6 @@ graph LR
 ## 📱 PWA Architecture
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0b040', 'primaryTextColor': '#1a0e06', 'primaryBorderColor': '#8b5022', 'lineColor': '#7a4010', 'edgeLabelBackground': '#fef7ed'}}}%%
 graph TD
   browser["Browser / Install prompt"]
 
@@ -430,7 +427,6 @@ graph TD
 ## 🌐 i18n Architecture
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0b040', 'primaryTextColor': '#1a0e06', 'primaryBorderColor': '#8b5022', 'lineColor': '#7a4010'}}}%%
 graph LR
   init["src/i18n/index.ts\ni18next.init()"]
   en["en.json\nEnglish LTR"]
