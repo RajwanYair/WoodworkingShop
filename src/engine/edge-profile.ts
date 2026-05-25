@@ -60,6 +60,7 @@ export interface EdgeProfileSpec {
   requiresPowerTool: boolean;
 }
 
+/** Specification lookup for every {@link EdgeProfile} variant. */
 export const EDGE_PROFILE_SPECS: Record<EdgeProfile, EdgeProfileSpec> = {
   none: {
     profile: 'none',

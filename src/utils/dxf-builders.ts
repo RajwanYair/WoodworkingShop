@@ -5,6 +5,7 @@
  */
 import type { CutRect } from '../engine/types';
 
+/** Build the DXF HEADER section. Appends optional extra `$VAR/value` pairs. */
 export function buildDxfHeader(extraVars: string[] = []): string[] {
   return [
     '0',
@@ -334,10 +335,12 @@ export function addPartDimensions(lines: string[], part: CutRect, dimOffset = 0)
  * All units are millimeters.
  */
 
+/** Append a LAYER table entry to `lines`. Color is an AutoCAD colour index (1–255). */
 export function addLayer(lines: string[], name: string, color: number) {
   lines.push('0', 'LAYER', '2', name, '70', '0', '62', String(color), '6', 'CONTINUOUS');
 }
 
+/** Append a closed LWPOLYLINE rectangle to `lines` on the given layer. */
 export function addRect(lines: string[], x: number, y: number, w: number, h: number, layer: string) {
   lines.push(
     '0',
@@ -367,6 +370,7 @@ export function addRect(lines: string[], x: number, y: number, w: number, h: num
   );
 }
 
+/** Append a TEXT label for a cut part (label text = part label or index). */
 export function addLabel(lines: string[], part: CutRect, layer: string) {
   const cx = part.x + part.width / 2;
   const cy = part.y + part.length / 2;

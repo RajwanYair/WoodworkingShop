@@ -46,8 +46,7 @@ function generateId(): string {
 }
 
 // ─── Core ─────────────────────────────────────────────────────────────────────
-
-export function createSnapshotStore(): SnapshotStore {
+/** Create an empty, immutable-style snapshot store. */ export function createSnapshotStore(): SnapshotStore {
   return { tags: [] };
 }
 

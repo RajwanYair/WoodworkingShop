@@ -46,6 +46,7 @@ export interface ExportFormat {
 
 // ─── Registry ─────────────────────────────────────────────────────────────────
 
+/** Registry of all supported export formats, keyed by {@link ExportFormatId}. */
 export const EXPORT_FORMATS: Record<ExportFormatId, ExportFormat> = {
   'csv-bom': {
     id: 'csv-bom',

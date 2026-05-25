@@ -47,6 +47,7 @@ export interface ShelfPreset {
   note: { en: string; he: string };
 }
 
+/** Built-in shelf-spacing presets, ordered from tightest to widest nominal pitch. */
 export const SHELF_PRESETS: Readonly<ShelfPreset[]> = [
   {
     id: 'books-standard',

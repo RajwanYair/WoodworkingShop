@@ -34,6 +34,7 @@ export interface WasteThresholds {
   projectWastePercent: number;
 }
 
+/** Default waste-ratio thresholds; override via project settings. */
 export const DEFAULT_WASTE_THRESHOLDS: WasteThresholds = {
   sheetWastePercent: 30,
   groupWastePercent: 25,

@@ -63,6 +63,7 @@ export interface HardwareBomLine {
 
 // ─── Catalogue ────────────────────────────────────────────────────────────────
 
+/** Hardware catalogue keyed by item identifier string. */
 export const HARDWARE_CATALOGUE: Record<string, HardwareCatalogueItem> = {
   'hinge-blum-110': {
     id: 'hinge-blum-110',

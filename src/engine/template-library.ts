@@ -48,6 +48,7 @@ export interface TemplateInstance {
 
 // ─── Catalogue ────────────────────────────────────────────────────────────────
 
+/** Full catalogue of built-in cabinet templates, keyed by template ID. */
 export const TEMPLATE_CATALOGUE: Record<string, CabinetTemplate> = {
   'base-single-door': {
     id: 'base-single-door',

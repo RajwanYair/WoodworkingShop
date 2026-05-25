@@ -232,6 +232,7 @@ export function computePartWeightKg(
 
 // ─── Default config ───
 
+/** Factory-default configuration used when creating a new cabinet project. */
 export const DEFAULT_CONFIG: CabinetConfig = {
   furnitureType: 'cabinet',
   width: 1000,
@@ -256,6 +257,7 @@ export const DEFAULT_CONFIG: CabinetConfig = {
   lang: 'en',
 };
 
+/** Partial overrides applied when the furniture type is set to `'bookshelf'`. */
 export const BOOKSHELF_DEFAULTS: Partial<CabinetConfig> = {
   furnitureType: 'bookshelf',
   width: 800,
@@ -270,6 +272,7 @@ export const BOOKSHELF_DEFAULTS: Partial<CabinetConfig> = {
   edgeBanding: 'all-visible',
 };
 
+/** Partial overrides applied when the furniture type is set to `'desk'`. */
 export const DESK_DEFAULTS: Partial<CabinetConfig> = {
   furnitureType: 'desk',
   width: 1200,
@@ -284,6 +287,7 @@ export const DESK_DEFAULTS: Partial<CabinetConfig> = {
   edgeBanding: 'all-visible',
 };
 
+/** Partial overrides applied when the furniture type is set to `'wardrobe'`. */
 export const WARDROBE_DEFAULTS: Partial<CabinetConfig> = {
   furnitureType: 'wardrobe',
   width: 1000,
@@ -298,6 +302,7 @@ export const WARDROBE_DEFAULTS: Partial<CabinetConfig> = {
   edgeBanding: 'all-visible',
 };
 
+/** Partial overrides applied when the furniture type is set to `'panel'` (single-sheet cut). */
 export const PANEL_DEFAULTS: Partial<CabinetConfig> = {
   furnitureType: 'panel',
   width: 600,
@@ -313,6 +318,7 @@ export const PANEL_DEFAULTS: Partial<CabinetConfig> = {
   panelMaterialSource: 'carcass',
 };
 
+/** Partial overrides applied when the furniture type is set to `'cabinet'`. */
 export const CABINET_DEFAULTS: Partial<CabinetConfig> = {
   furnitureType: 'cabinet',
   width: 600,

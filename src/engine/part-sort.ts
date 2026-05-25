@@ -48,6 +48,7 @@ export type SortPreset =
   | 'thickness-desc-then-length-desc'
   | 'name-asc';
 
+/** Named sort-criterion bundles keyed by {@link SortPreset} identifier. */
 export const SORT_PRESETS: Record<SortPreset, SortCriterion[]> = {
   'material-then-length-desc': [
     { key: 'material', dir: 'asc' },

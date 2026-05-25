@@ -50,11 +50,11 @@ export interface AvailabilityResult {
 }
 
 // ─── Core ─────────────────────────────────────────────────────────────────────
-
-export function createStockStore(): StockStore {
+/** Create an empty, immutable-style stock store. */ export function createStockStore(): StockStore {
   return { items: [] };
 }
 
+/** Add or replace a stock item by `materialKey`. Returns a new store (immutable). */
 export function addStockItem(store: StockStore, item: StockItem): StockStore {
   const idx = store.items.findIndex((i) => i.materialKey === item.materialKey);
   if (idx !== -1) {
@@ -65,6 +65,7 @@ export function addStockItem(store: StockStore, item: StockItem): StockStore {
   return { items: [...store.items, item] };
 }
 
+/** Update the `onHandQty` for a material. Returns the store unchanged if the key is not found. */
 export function updateOnHand(store: StockStore, materialKey: string, qty: number): StockStore {
   const idx = store.items.findIndex((i) => i.materialKey === materialKey);
   if (idx === -1) return store;

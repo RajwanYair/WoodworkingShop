@@ -52,6 +52,7 @@ export interface KerfCompensatedPart extends KerfPart {
 
 // ─── Kerf catalogue ───────────────────────────────────────────────────────────
 
+/** Built-in saw-kerf profiles keyed by tool/process identifier. */
 export const KERF_PROFILES: Record<string, KerfProfile> = {
   'panel-saw': {
     id: 'panel-saw',

@@ -29,6 +29,7 @@ function tpl(
   };
 }
 
+/** All built-in cabinet templates. Extend the list to add custom types. */
 export const TEMPLATES: CabinetTemplate[] = [
   tpl(
     'kitchen-base',
