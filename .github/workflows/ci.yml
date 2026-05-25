@@ -1,10 +1,8 @@
 name: CI
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  push: { branches: [main] }
+  pull_request: { branches: [main] }
   workflow_dispatch:
 
 permissions:
@@ -15,52 +13,31 @@ env:
 
 jobs:
   quality:
-    name: Quality Gates (Node 22)
     runs-on: ubuntu-latest
     steps:
       - uses: ./.github/actions/setup-node
-
-      - run: npm run typecheck
-      - run: npm run lint
-      - run: npm run lint:css
-      - run: npm run lint:md
-      - run: npm run format:check
-      - run: npm run i18n:coverage
+      - run: npm run quality
 
   build:
-    name: Build & Test (Node ${{ matrix.node-version }})
     runs-on: ubuntu-latest
     needs: quality
     strategy:
-      matrix:
-        node-version: [22, 24, 26]
+      matrix: { node-version: [22, 24, 26] }
     steps:
       - uses: ./.github/actions/setup-node
         with:
           node-version: ${{ matrix.node-version }}
-
       - run: npm test
-
-      - name: Test coverage
-        if: matrix.node-version == 22
+      - if: matrix.node-version == 22
         run: npm run test:coverage
-
-      - name: Upload coverage
-        if: matrix.node-version == 22
+      - if: matrix.node-version == 22
         uses: codecov/codecov-action@v5
         with:
           files: /tmp/WoodworkingShop/coverage/lcov.info
           flags: unit
           fail_ci_if_error: false
-
-      - run: npm run build
-
-      - name: Bundle budget check
-        if: matrix.node-version == 22
-        run: npm run bundle:check
-
-      - name: Upload dist
-        if: matrix.node-version == 22
+      - run: npm run build && npm run bundle:check
+      - if: matrix.node-version == 22
         uses: actions/upload-artifact@v4
         with:
           name: dist
@@ -68,37 +45,25 @@ jobs:
           retention-days: 7
 
   e2e:
-    name: E2E (Playwright)
     runs-on: ubuntu-latest
     needs: build
     steps:
       - uses: ./.github/actions/setup-node
-
-      - name: Get Playwright version
-        id: pw
+      - id: pw
         run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
-
-      - name: Cache Playwright browsers
+      - id: pw-cache
         uses: actions/cache@v5
-        id: pw-cache
         with:
           path: ~/.cache/ms-playwright
           key: pw-${{ runner.os }}-${{ steps.pw.outputs.version }}
-
-      - name: Install Playwright browsers
-        if: steps.pw-cache.outputs.cache-hit != 'true'
+      - if: steps.pw-cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps chromium firefox
-
-      - name: Download dist
-        uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist
-
       - run: npx playwright test --ignore-snapshots
-
-      - name: Upload Playwright report
-        if: always()
+      - if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
@@ -106,25 +71,18 @@ jobs:
           retention-days: 7
 
   lighthouse:
-    name: Lighthouse CI
     runs-on: ubuntu-latest
     needs: build
     steps:
       - uses: ./.github/actions/setup-node
-
-      - name: Download dist
-        uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist
-
-      - name: Run Lighthouse CI
-        run: npm run lighthouse
+      - run: npm run lighthouse
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-
-      - name: Upload Lighthouse report
-        if: always()
+      - if: always()
         uses: actions/upload-artifact@v4
         with:
           name: lighthouse-report
