@@ -6,6 +6,8 @@
 
 Cabinet Planner is a client-side React SPA (no backend). All computation — dimensions, parts, hardware, cut-sheet optimization, cost estimation — runs in the browser.
 
+> **Module reference** — For competitive positioning, product strategy, and sprint planning see [ROADMAP.md](../ROADMAP.md). For user-facing feature descriptions see [USER-GUIDE.md](USER-GUIDE.md).
+
 ## ⚡ High-Level Data Flow
 
 ```mermaid
@@ -164,7 +166,7 @@ Cross-Origin-Embedder-Policy: require-corp
 
 ## 🎮 WebGL 3-D Preview (Phase 7 Evaluation)
 
-A lightweight WebGL renderer is available for evaluating material-texture previews in a future v4.0 release.
+A lightweight WebGL probe is included for future material-texture previews (v4.0+).
 
 **Feature probe** — `src/engine/webgl-probe.ts`:
 
@@ -179,23 +181,8 @@ A lightweight WebGL renderer is available for evaluating material-texture previe
 - Renders a simplified 3-D box approximating the configured cabinet dimensions.
 - Uses raw WebGL (no external library) to keep bundle impact near zero.
 - Falls back gracefully to a descriptive message if WebGL is unsupported.
-- Slow y-axis rotation demonstrates per-face shading with a warm-oak colour palette.
 
-**Evaluation status (Sprint 32)**:
-
-- ✅ WebGL 1/2 detection works in all tested browsers.
-- ✅ Basic box geometry renders with face shading.
-- ⏳ Material texture mapping deferred to v4.0 (requires UV coords + texture atlas).
-- ⏳ GLTF cabinet models deferred to v4.0 (requires model pipeline and compression).
-
-## 🪑 Supported Furniture Types
-
-| Type        | Parts                                                  | Features                     |
-| ----------- | ------------------------------------------------------ | ---------------------------- |
-| `cabinet`   | Top, bottom, sides, shelves, back, doors, kick plate   | Doors, drawers (0–4), hinges |
-| `bookshelf` | Top, bottom, sides, shelves, back, kick plate          | Open front (no doors)        |
-| `desk`      | Desktop, legs, back panel, modesty panel, shelf        | Adjustable height            |
-| `wardrobe`  | Top, bottom, sides, shelves, back, doors, hanging rail | Rail + shelf combo           |
+> Evaluation status and roadmap items for full material-texture + GLTF support: [ROADMAP.md](../ROADMAP.md).
 
 ## 🧩 Component Tree
 
