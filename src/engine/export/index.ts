@@ -15,3 +15,6 @@ export type { GcodeSeverity, GcodeIssue, GcodeValidationResult } from '../gcode-
 
 export { generateIfcContent } from './ifc-export';
 export type { IfcResult } from './ifc-export';
+
+export { generateStepContent } from './step-export';
+export type { StepResult } from './step-export';

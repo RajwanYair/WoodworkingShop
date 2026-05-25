@@ -6,6 +6,7 @@ import { CabinetPdfDocument } from './CabinetPdfDocument';
 import type { CabinetPdfEntry } from './CabinetPdfDocument';
 import { generateErpPayload, downloadErpJson } from '../../utils/erp-export';
 import { downloadIfcFile } from '../../utils/ifc-download';
+import { downloadStepFile } from '../../utils/step-download';
 import { exportSettingsJson, importSettingsJson } from '../../utils/project-storage';
 import type { ProjectSettings } from '../../utils/project-storage';
 import { useToastStore } from '../../store/toast-store';
@@ -290,6 +291,22 @@ export function PdfExportPanel() {
           className="bg-wood-100 dark:bg-wood-800 text-wood-700 dark:text-wood-200 border-wood-300 dark:border-wood-600 hover:bg-wood-200 dark:hover:bg-wood-700 rounded-lg border px-6 py-3 text-sm font-medium transition-colors"
         >
           {t('pdf.exportIfc')}
+        </button>
+
+        {/* Sprint 80 — STEP export */}
+        <button
+          onClick={() => {
+            const safeName =
+              (store.projectName.trim() || 'cabinet-plan')
+                .replace(/[^\w\u05D0-\u05EA.-]/g, '-')
+                .replace(/-+/g, '-')
+                .replace(/^-|-$/g, '') || 'cabinet-plan';
+            downloadStepFile(store.config, store.parts, safeName);
+            useToastStore.getState().addToast(t('pdf.stepExported'), 'success');
+          }}
+          className="bg-wood-100 dark:bg-wood-800 text-wood-700 dark:text-wood-200 border-wood-300 dark:border-wood-600 hover:bg-wood-200 dark:hover:bg-wood-700 rounded-lg border px-6 py-3 text-sm font-medium transition-colors"
+        >
+          {t('pdf.exportStep')}
         </button>
       </div>
 

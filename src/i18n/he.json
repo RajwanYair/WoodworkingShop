@@ -266,6 +266,8 @@
     "erpExported": "קובץ ERP/MRP יוצא בהצלחה",
     "exportIfc": "ייצוא IFC (BIM)",
     "ifcExported": "קובץ IFC יויא",
+    "exportStep": "ייצוא STEP (AP214)",
+    "stepExported": "קובץ STEP יויא",
     "error": "יצירת ה-PDF נכשלה \u2014 בדוק את החיבור לאינטרנט ונסה שוב",
     "projectSettings": "הגדרות פרויקט",
     "settingsDescription": "שמור ושחזר מרווח מסור, גדלי גיליון, מחירי חומרים ועלויות.",
