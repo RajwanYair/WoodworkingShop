@@ -1,7 +1,7 @@
 # Cabinet Planner Plugin API
 
-> **API version**: 1.2.0 · **Stability**: experimental  
-> **Source**: [`src/engine/plugin.ts`](../src/engine/plugin.ts)  
+> **API version**: 1.2.0 · **App version**: ≥ 3.62.0 · **Stability**: `experimental`
+> **Source**: [`src/engine/plugin.ts`](../src/engine/plugin.ts)
 > **Import from**: `src/engine/index.ts` (barrel) — never import directly from individual engine files.
 
 ---
@@ -279,15 +279,113 @@ A hook that throws will:
 Plugin event bus handlers also run inside individual try/catch blocks — a faulty
 handler cannot abort sibling handlers or the emitting code.
 
+### `runWithSandbox` — _experimental_ (since 1.1.0)
+
+For integrating untrusted or community plugins, wrap hook calls in `runWithSandbox`
+to catch exceptions and enforce a wall-clock time budget:
+
+```ts
+import { runWithSandbox, SandboxTimeoutError } from '../src/engine';
+
+const safeParts = runWithSandbox(
+  () => plugin.onPartsGenerated!(parts, cfg),
+  parts, // fallback returned if the hook throws
+  {
+    timeoutMs: 30,
+    onError(err) {
+      if (err instanceof SandboxTimeoutError) {
+        console.warn(`Hook too slow: ${err.elapsedMs} ms > ${err.limitMs} ms`);
+      } else {
+        console.error('[plugin sandbox] hook threw:', err);
+      }
+    },
+  }
+);
+```
+
+**`SandboxOptions`**
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `timeoutMs` | `number` | `50` | Soft wall-clock limit in ms. Exceeded → calls `onError` with `SandboxTimeoutError`. Return value is still used. |
+| `onError` | `(error: unknown) => void` | `undefined` | Called when the function throws or exceeds `timeoutMs`. |
+
+**`SandboxTimeoutError`** extends `Error` with two readonly properties:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `elapsedMs` | `number` | Actual elapsed time in ms |
+| `limitMs` | `number` | Configured `timeoutMs` limit |
+
 ---
 
 ## Versioning & Compatibility
 
-| API version | App version | Notes                                               |
-| ----------- | ----------- | --------------------------------------------------- |
-| 1.0.0       | v3.49.2+    | `onPartsGenerated`, `onConfigChange`                |
-| 1.1.0       | v3.54.0+    | `onValidate` (experimental)                         |
-| 1.2.0       | v3.55.0+    | `onGcodeGenerated` (experimental), Plugin Event Bus |
+| API version | App version | Key additions |
+| ----------- | ----------- | ------------- |
+| 1.0.0 | ≥ 3.55.0 | `onPartsGenerated`, `onConfigChange`, registry, `PLUGIN_CONTRACT` |
+| 1.1.0 | ≥ 3.57.0 | `onValidate`, Plugin Event Bus, `runWithSandbox` |
+| 1.2.0 | ≥ 3.62.0 | `onGcodeGenerated` |
+
+Check at runtime — no version-string hardcoding needed:
+
+```ts
+import { getPluginContract } from '../src/engine';
+const { apiVersion } = getPluginContract(); // '1.2.0'
+```
+
+### `PluginHookContract` and `PluginContract`
+
+The `PLUGIN_CONTRACT` constant (also returned by `getPluginContract()`) exposes
+the full stability contract as a typed object:
+
+```ts
+import { PLUGIN_CONTRACT } from '../src/engine';
+// PLUGIN_CONTRACT.apiVersion  → '1.2.0'
+// PLUGIN_CONTRACT.stability   → 'experimental'
+// PLUGIN_CONTRACT.hooks       → readonly PluginHookContract[]
+
+for (const hook of PLUGIN_CONTRACT.hooks) {
+  console.log(hook.hookName, hook.stability, hook.introducedIn);
+}
+```
+
+**`PluginHookContract` fields**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `hookName` | `keyof CabinetPlannerPlugin` (excluding `id`/`name`/`version`) | Name of the hook |
+| `stability` | `'stable' \| 'experimental' \| 'deprecated'` | Stability tier |
+| `introducedIn` | `string` | API semver when the hook was introduced |
+| `deprecatedIn` | `string \| undefined` | API semver when deprecated (if applicable) |
+| `description` | `string` | Short description of the hook's purpose |
+
+---
+
+## Stability Matrix
+
+| Symbol | Category | Stability | Since |
+|--------|----------|-----------|-------|
+| `CabinetPlannerPlugin` | Interface | `stable` | 1.0.0 |
+| `onPartsGenerated` | Hook | `stable` | 1.0.0 |
+| `onConfigChange` | Hook | `stable` | 1.0.0 |
+| `onValidate` | Hook | `experimental` | 1.1.0 |
+| `onGcodeGenerated` | Hook | `experimental` | 1.2.0 |
+| `registerPlugin` | Function | `stable` | 1.0.0 |
+| `unregisterPlugin` | Function | `stable` | 1.0.0 |
+| `getPlugins` | Function | `stable` | 1.0.0 |
+| `getPluginContract` | Function | `stable` | 1.0.0 |
+| `PLUGIN_CONTRACT` | Constant | `stable` | 1.0.0 |
+| `PluginContract` | Type | `stable` | 1.0.0 |
+| `PluginHookContract` | Type | `stable` | 1.0.0 |
+| `PluginStability` | Type | `stable` | 1.0.0 |
+| `pluginEventBus` | Singleton | `experimental` | 1.1.0 |
+| `PluginEventMap` | Type | `experimental` | 1.1.0 |
+| `PluginEventName` | Type | `experimental` | 1.1.0 |
+| `PluginEventHandler` | Type | `experimental` | 1.1.0 |
+| `runWithSandbox` | Function | `experimental` | 1.1.0 |
+| `SandboxOptions` | Interface | `experimental` | 1.1.0 |
+| `SandboxTimeoutError` | Class | `experimental` | 1.1.0 |
 
 Use `getPluginContract()` at runtime to discover hook availability and stability
 without hardcoding version numbers.
