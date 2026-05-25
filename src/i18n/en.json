@@ -590,7 +590,10 @@
   },
   "swUpdate": {
     "available": "A new version is available!",
-    "reload": "Reload"
+    "description": "Reload to get the latest features and fixes.",
+    "reload": "Reload",
+    "later": "Later",
+    "dismiss": "Dismiss update notification"
   },
   "gcodeValidator": {
     "title": "G-code Validation",

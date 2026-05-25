@@ -34,7 +34,7 @@ export default defineConfig({
     tailwindcss(),
     cloudflareAnalyticsPlugin(),
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
       strategies: 'generateSW',
       base: '/WoodworkingShop/',
       injectRegister: false, // handled manually in useSwUpdate / main.tsx

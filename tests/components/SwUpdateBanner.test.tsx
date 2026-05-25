@@ -1,6 +1,7 @@
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { useSwUpdate } from '../../src/hooks/useSwUpdate';
+import { SwUpdateBanner } from '../../src/components/layout/SwUpdateBanner';
 import { registerSW } from 'virtual:pwa-register';
 
 vi.mock('virtual:pwa-register', () => ({
@@ -67,5 +68,42 @@ describe('useSwUpdate (Sprint 44)', () => {
       result.current.reload();
     });
     expect(mockUpdateSW).toHaveBeenCalledWith(true);
+  });
+});
+
+describe('SwUpdateBanner component', () => {
+  beforeEach(() => {
+    vi.mocked(registerSW).mockImplementation((opts) => {
+      opts?.onNeedRefresh?.();
+      return async () => undefined;
+    });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('renders the update card when updateAvailable=true', () => {
+    render(<SwUpdateBanner />);
+    expect(screen.getByRole('alert')).toBeInTheDocument();
+  });
+
+  it('hides the card when the Later button is clicked', () => {
+    render(<SwUpdateBanner />);
+    expect(screen.getByRole('alert')).toBeInTheDocument();
+    fireEvent.click(screen.getByText('Later'));
+    expect(screen.queryByRole('alert')).toBeNull();
+  });
+
+  it('hides the card when the × dismiss button is clicked', () => {
+    render(<SwUpdateBanner />);
+    fireEvent.click(screen.getByRole('button', { name: 'Dismiss update notification' }));
+    expect(screen.queryByRole('alert')).toBeNull();
+  });
+
+  it('renders nothing when no update is available', () => {
+    vi.mocked(registerSW).mockReturnValue(async () => undefined);
+    render(<SwUpdateBanner />);
+    expect(screen.queryByRole('alert')).toBeNull();
   });
 });

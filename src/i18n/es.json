@@ -586,7 +586,10 @@
   },
   "swUpdate": {
     "available": "¡Hay una nueva versión disponible!",
-    "reload": "Recargar"
+    "description": "Recarga para obtener las últimas funciones y correcciones.",
+    "reload": "Recargar",
+    "later": "Después",
+    "dismiss": "Cerrar notificación de actualización"
   },
   "gcodeValidator": {
     "title": "Validación de G-code",

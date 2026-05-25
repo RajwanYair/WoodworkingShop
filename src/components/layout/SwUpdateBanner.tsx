@@ -1,30 +1,58 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSwUpdate } from '../../hooks/useSwUpdate';
+import { IconDownload, IconX } from './Icons';
 
 /**
- * Sticky top banner that appears when a new Service Worker is waiting.
- * Clicking "Reload" sends SKIP_WAITING and reloads the page to activate the
- * new version.
+ * Dismissible bottom-corner card that appears when a new Service Worker is
+ * waiting. The user chooses when to apply the update — clicking "Update now"
+ * sends SKIP_WAITING and reloads the page; "Later" hides the card for the
+ * rest of the current session (the SW stays waiting and will activate on the
+ * next navigation).
  */
 export function SwUpdateBanner() {
   const { t } = useTranslation();
   const { updateAvailable, reload } = useSwUpdate();
+  const [dismissed, setDismissed] = useState(false);
 
-  if (!updateAvailable) return null;
+  if (!updateAvailable || dismissed) return null;
 
   return (
     <div
       role="alert"
       aria-live="polite"
-      className="bg-wood-600 fixed start-0 end-0 top-0 z-50 flex items-center justify-center gap-3 px-4 py-2 text-sm text-white shadow-md"
+      className="fixed end-4 bottom-4 z-50 w-72 rounded-lg border border-gray-200 bg-white shadow-xl dark:border-gray-600 dark:bg-gray-800"
     >
-      <span>{t('swUpdate.available')}</span>
-      <button
-        onClick={reload}
-        className="text-wood-700 hover:bg-wood-100 rounded bg-white px-3 py-1 text-xs font-semibold transition-colors"
-      >
-        {t('swUpdate.reload')}
-      </button>
+      <div className="flex items-start gap-3 p-4">
+        <span className="text-wood-600 dark:text-wood-400 mt-0.5 shrink-0">
+          <IconDownload size={20} />
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-semibold text-gray-900 dark:text-white">{t('swUpdate.available')}</p>
+          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{t('swUpdate.description')}</p>
+        </div>
+        <button
+          onClick={() => setDismissed(true)}
+          aria-label={t('swUpdate.dismiss')}
+          className="shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+        >
+          <IconX size={14} />
+        </button>
+      </div>
+      <div className="flex gap-2 border-t border-gray-100 px-4 py-3 dark:border-gray-700">
+        <button
+          onClick={reload}
+          className="bg-wood-600 hover:bg-wood-700 flex-1 rounded px-3 py-1.5 text-xs font-semibold text-white transition-colors"
+        >
+          {t('swUpdate.reload')}
+        </button>
+        <button
+          onClick={() => setDismissed(true)}
+          className="flex-1 rounded border border-gray-200 px-3 py-1.5 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+        >
+          {t('swUpdate.later')}
+        </button>
+      </div>
     </div>
   );
 }
