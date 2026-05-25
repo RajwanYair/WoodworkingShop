@@ -12,20 +12,27 @@ import { DEFAULT_CONFIG } from '../engine/materials';
 import { computeDimensions } from '../engine/dimensions';
 import { generateParts, computeEdgeBandingTotal } from '../engine/parts';
 import { generateHardware } from '../engine/hardware';
-import { optimizeCutSheets, optimizeCutSheetsResult } from '../engine/cut-optimizer';
+import { optimizeCutSheets } from '../engine/cut-optimizer';
 import { estimateCost } from '../engine/cost-estimator';
 import { generateAssemblySteps, type AssemblyStep } from '../engine/assembly';
 import { createJsonMemo } from '../engine/memo';
 import { readConfigFromUrl, pushConfigToUrl, readProjectNameFromUrl } from '../utils/url-state';
 import { idbLoadSnapshots } from '../utils/indexed-db-storage';
-import * as Comlink from 'comlink';
-import CutOptimizerWorker from '../workers/cut-optimizer.worker?worker';
-import type { CutOptimizerWorkerApi, CutOptimizerInput } from '../workers/cut-optimizer.worker';
-import CostEstimatorWorker from '../workers/cost-estimator.worker?worker';
-import type { CostEstimatorWorkerApi, CostEstimatorInput } from '../workers/cost-estimator.worker';
-import AssemblyWorker from '../workers/assembly.worker?worker';
-import type { AssemblyWorkerApi } from '../workers/assembly.worker';
 import { pluginEventBus } from '../engine/plugin';
+import {
+  initWorkerSchedule,
+  setRotationLocks,
+  setCutModeWorker,
+  setOffcutCatalog,
+  getOffcutCatalog,
+  setDefectZones,
+  getDefectZones,
+  applyLocks,
+  scheduleOptimization,
+  scheduleAssembly,
+  scheduleCost,
+  scheduleCostFromState,
+} from './worker-schedule';
 // Phase 11 — Slice imports
 import { createUiSlice, loadUiPrefs, type UiSlice } from './slices/uiSlice';
 import {
@@ -36,243 +43,10 @@ import {
 } from './slices/snapshotSlice';
 import { createOptimizerSettingsSlice, type OptimizerSettingsSlice } from './slices/optimizerSettingsSlice';
 
-// Sprint 60 / Phase 17 — Comlink-based typed worker proxies.
-// Kept outside Zustand state to avoid serialization.
-// `_workerApplyFn` is set during store creation; all schedule* functions close over it.
-let _cutProxy: Comlink.Remote<CutOptimizerWorkerApi> | null = null;
-let _costProxy: Comlink.Remote<CostEstimatorWorkerApi> | null = null;
-let _assemblyProxy: Comlink.Remote<AssemblyWorkerApi> | null = null;
-let _workerApplyFn: ((partial: Partial<CabinetState>) => void) | null = null;
-// Latest-wins counters: each scheduling call increments and captures its own id;
-// the promise handler discards the result if a newer call has already been issued.
-let _cutCallId = 0;
-let _latestCutId = 0;
-let _costCallId = 0;
-let _latestCostId = 0;
-let _assemblyCallId = 0;
-let _latestAssemblyId = 0;
-
-function getCutProxy(): Comlink.Remote<CutOptimizerWorkerApi> | null {
-  if (typeof Worker === 'undefined') return null;
-  if (!_cutProxy) _cutProxy = Comlink.wrap<CutOptimizerWorkerApi>(new CutOptimizerWorker());
-  return _cutProxy;
-}
-
-function getCostProxy(): Comlink.Remote<CostEstimatorWorkerApi> | null {
-  if (typeof Worker === 'undefined') return null;
-  if (!_costProxy) _costProxy = Comlink.wrap<CostEstimatorWorkerApi>(new CostEstimatorWorker());
-  return _costProxy;
-}
-
-function getAssemblyProxy(): Comlink.Remote<AssemblyWorkerApi> | null {
-  if (typeof Worker === 'undefined') return null;
-  if (!_assemblyProxy) _assemblyProxy = Comlink.wrap<AssemblyWorkerApi>(new AssemblyWorker());
-  return _assemblyProxy;
-}
-
-/**
- * Sprint 16 — Module-level rotation-lock map keyed by part ID.
- * Mutated by the `toggleRotationLock` store action; read by `applyLocks` below
- * to decorate parts with `rotationLocked: true` before they reach the cut
- * optimizer (engine or worker). Initialised from the persisted session.
- */
-let _rotationLocks: Record<string, boolean> = {};
-/**
- * Phase 11 / Sprint 5 — Active cut mode, mirroring the active cabinet's
- * `config.cutMode`.  Updated in `deriveBaseProject` (called before every
- * `scheduleOptimization`), so the worker and sync fallback always use the
- * current value without requiring call-site changes.
- */
-let _cutMode: 'guillotine' | 'freeform' = 'freeform';
-/** Phase 12 / Sprint 12 — catalog offcuts available to the optimizer; updated by setOffcutCatalog/addOffcutEntry/removeOffcutEntry. */
-let _offcutCatalog: OffcutEntry[] = [];
-/** Phase 12 / Sprint 13 — defect zones per material, pre-blocked in MaxRects packing. */
-let _defectZones: Record<string, DefectZone[]> = {};
-function applyLocks(parts: Part[]): Part[] {
-  let touched = false;
-  const out = parts.map((p) => {
-    if (_rotationLocks[p.id]) {
-      touched = true;
-      return { ...p, rotationLocked: true };
-    }
-    return p;
-  });
-  return touched ? out : parts;
-}
-
 /**
  * Fire-and-forget: post a cut-optimization request to the worker via Comlink.
  * Falls back to synchronous computation when Workers are unavailable (e.g. tests).
  */
-function scheduleOptimization(
-  activeParts: Part[],
-  allParts: Part[],
-  sawKerfMm: number,
-  sheetSizeOverrides: Record<string, { width: number; length: number }>,
-): void {
-  // Sprint 16 — decorate with rotation locks before sending to optimizer.
-  const lockedActive = applyLocks(activeParts);
-  const lockedAll = applyLocks(allParts);
-  const proxy = getCutProxy();
-  if (!proxy) {
-    // Synchronous fallback (tests / browsers without Worker support).
-    if (_workerApplyFn) {
-      const activeRes = optimizeCutSheetsResult(
-        lockedActive,
-        sawKerfMm,
-        sheetSizeOverrides,
-        _cutMode,
-        _offcutCatalog,
-        _defectZones,
-      );
-      const combinedRes = optimizeCutSheetsResult(
-        lockedAll,
-        sawKerfMm,
-        sheetSizeOverrides,
-        _cutMode,
-        _offcutCatalog,
-        _defectZones,
-      );
-      if (activeRes.ok && combinedRes.ok) {
-        _workerApplyFn({
-          optimization: activeRes.value,
-          combinedOptimization: combinedRes.value,
-          optimizationPending: false,
-        });
-      } else {
-        _workerApplyFn({ optimizationPending: false });
-      }
-    }
-    return;
-  }
-  const callId = ++_cutCallId;
-  _latestCutId = callId;
-  const input: CutOptimizerInput = {
-    activeParts: lockedActive,
-    allParts: lockedAll,
-    sawKerfMm,
-    sheetSizeOverrides,
-    cutMode: _cutMode,
-    offcutCatalog: _offcutCatalog,
-    defectZones: _defectZones,
-  };
-  void proxy
-    .run(input)
-    .then((result) => {
-      if (!_workerApplyFn || _latestCutId !== callId) return; // stale
-      _workerApplyFn({
-        optimization: result.activeResult,
-        combinedOptimization: result.combinedResult,
-        optimizationPending: false,
-        costPending: true,
-      });
-      // Sprint 20 — notify plugins that optimization completed.
-      pluginEventBus.emit('optimization:complete', {
-        sheetCount: result.activeResult.sheets.length,
-        yieldPercent: result.activeResult.overallYield,
-      });
-      scheduleCostFromState(useCabinetStore.getState(), result.activeResult);
-    })
-    .catch(() => {
-      _workerApplyFn?.({ optimizationPending: false });
-    });
-}
-
-function scheduleAssembly(config: CabinetConfig): void {
-  const proxy = getAssemblyProxy();
-  if (!proxy) {
-    if (_workerApplyFn) {
-      _workerApplyFn({ assemblySteps: generateAssemblySteps(config), assemblyPending: false });
-    }
-    return;
-  }
-  const callId = ++_assemblyCallId;
-  _latestAssemblyId = callId;
-  void proxy
-    .run({ config })
-    .then((result) => {
-      if (!_workerApplyFn || _latestAssemblyId !== callId) return; // stale
-      _workerApplyFn({ assemblySteps: result.steps, assemblyPending: false });
-    })
-    .catch(() => {
-      _workerApplyFn?.({ assemblyPending: false });
-    });
-}
-
-function scheduleCost(
-  optimization: OptimizationResult,
-  hardware: HardwareItem[],
-  edgeBandingTotal: number,
-  materialPriceOverrides: Record<string, number>,
-  edgeBandingRate: number,
-  hardwarePriceOverrides: Record<string, number>,
-  labourRate: number,
-  labourHours: number,
-  finishCost: number,
-): void {
-  const proxy = getCostProxy();
-  if (!proxy) {
-    if (_workerApplyFn) {
-      _workerApplyFn({
-        cost: estimateCost(
-          optimization,
-          hardware,
-          edgeBandingTotal,
-          materialPriceOverrides,
-          edgeBandingRate,
-          hardwarePriceOverrides,
-          labourRate,
-          labourHours,
-          finishCost,
-        ),
-        costPending: false,
-      });
-    }
-    return;
-  }
-  const callId = ++_costCallId;
-  _latestCostId = callId;
-  const input: CostEstimatorInput = {
-    optimization,
-    hardware,
-    edgeBandingTotal,
-    materialPriceOverrides,
-    edgeBandingRate,
-    hardwarePriceOverrides,
-    labourRate,
-    labourHours,
-    finishCost,
-  };
-  void proxy
-    .run(input)
-    .then((result) => {
-      if (!_workerApplyFn || _latestCostId !== callId) return; // stale
-      _workerApplyFn({ cost: result.cost, costPending: false });
-    })
-    .catch(() => {
-      _workerApplyFn?.({ costPending: false });
-    });
-}
-
-function scheduleCostFromState(
-  state: CabinetState,
-  optimizationOverride?: OptimizationResult,
-  hardwareOverride?: HardwareItem[],
-  edgeBandingTotalOverride?: number,
-  partialOverrides?: Partial<CabinetState>,
-) {
-  scheduleCost(
-    optimizationOverride || state.optimization,
-    hardwareOverride || state.hardware,
-    edgeBandingTotalOverride ?? state.edgeBandingTotal,
-    partialOverrides?.materialPriceOverrides ?? state.materialPriceOverrides,
-    partialOverrides?.edgeBandingRate ?? state.edgeBandingRate,
-    partialOverrides?.hardwarePriceOverrides ?? state.hardwarePriceOverrides,
-    partialOverrides?.labourRate ?? state.labourRate,
-    partialOverrides?.labourHours ?? state.labourHours,
-    partialOverrides?.finishCost ?? state.finishCost,
-  );
-}
 
 const MAX_HISTORY = 50;
 
@@ -437,7 +211,7 @@ function deriveBaseProject(cabinets: CabinetEntry[], activeIndex: number) {
   const activeConfig = cabinets[activeIndex].config;
   // Phase 11 / Sprint 5 — sync module-level cut mode from active config so
   // scheduleOptimization always uses the latest value without extra params.
-  _cutMode = activeConfig.cutMode ?? 'freeform';
+  setCutModeWorker(activeConfig.cutMode ?? 'freeform');
   const dimensions = computeDimensions(activeConfig);
   const parts = generateParts(activeConfig);
   const hardware = generateHardware(activeConfig);
@@ -457,8 +231,8 @@ function deriveBaseProject(cabinets: CabinetEntry[], activeIndex: number) {
 const deriveProjectMemo = createJsonMemo(deriveProject);
 
 export const useCabinetStore = create<CabinetState>((set, get) => {
-  // v3.21.0 — Capture `set` so the worker response callback can update state.
-  _workerApplyFn = set as (partial: Partial<CabinetState>) => void;
+  // v3.21.0 — Inject `set` and `get` so worker-schedule callbacks can update state.
+  initWorkerSchedule(set as (partial: Partial<CabinetState>) => void, () => get());
 
   const urlPatch = readConfigFromUrl();
   // v3.44.0 — Restore session from localStorage when present.
@@ -483,7 +257,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
     initialCabinets = [{ name: 'Cabinet 1', config: initialConfig }];
   }
   // Sprint 16 — hydrate module-level lock map from session before deriving initial optimization.
-  _rotationLocks = session?.rotationLockedPartIds ?? {};
+  setRotationLocks(session?.rotationLockedPartIds ?? {});
   const initial = deriveProjectMemo(initialCabinets, initialActiveIndex);
   const prefs = loadUiPrefs();
   const initialProjectName = session?.projectName || readProjectNameFromUrl();
@@ -856,7 +630,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
           next[partId] = true;
         }
         // Update module-level map BEFORE scheduling so the optimizer sees fresh locks.
-        _rotationLocks = next;
+        setRotationLocks(next);
         // Sprint 20 — notify plugins.
         pluginEventBus.emit('part:rotation-lock', { partId, locked: next[partId] === true });
         const base = deriveBaseProject(state.cabinets, state.activeCabinetIndex);
@@ -891,20 +665,21 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
       }),
     // Phase 12 / Sprint 12 — offcut catalog actions
     setOffcutCatalog: (catalog) => {
-      _offcutCatalog = catalog;
+      setOffcutCatalog(catalog);
       set({ offcutCatalog: catalog });
     },
     addOffcutEntry: (entry) => {
-      _offcutCatalog = [..._offcutCatalog, entry];
+      setOffcutCatalog([...getOffcutCatalog(), entry]);
       set((s) => ({ offcutCatalog: [...s.offcutCatalog, entry] }));
     },
     removeOffcutEntry: (id) => {
-      _offcutCatalog = _offcutCatalog.filter((e) => e.id !== id);
+      setOffcutCatalog(getOffcutCatalog().filter((e) => e.id !== id));
       set((s) => ({ offcutCatalog: s.offcutCatalog.filter((e) => e.id !== id) }));
     },
     addDefectZone: (materialKey, zone) => {
-      const updated = { ..._defectZones, [materialKey]: [...(_defectZones[materialKey] ?? []), zone] };
-      _defectZones = updated;
+      const dz = getDefectZones();
+      const updated = { ...dz, [materialKey]: [...(dz[materialKey] ?? []), zone] };
+      setDefectZones(updated);
       set((s) => {
         const newDz = { ...s.defectZones, [materialKey]: [...(s.defectZones[materialKey] ?? []), zone] };
         return { defectZones: newDz };
@@ -915,10 +690,10 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
       scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
     },
     removeDefectZone: (materialKey, zoneIndex) => {
-      const existing = _defectZones[materialKey] ?? [];
+      const existing = getDefectZones()[materialKey] ?? [];
       const filtered = existing.filter((_, i) => i !== zoneIndex);
-      const updated = { ..._defectZones, [materialKey]: filtered };
-      _defectZones = updated;
+      const updated = { ...getDefectZones(), [materialKey]: filtered };
+      setDefectZones(updated);
       set((s) => {
         const ex = s.defectZones[materialKey] ?? [];
         const newList = ex.filter((_, i) => i !== zoneIndex);

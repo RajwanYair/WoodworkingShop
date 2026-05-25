@@ -11,7 +11,7 @@
 | ID  | Task                                        | Status |
 | --- | ------------------------------------------- | ------ |
 | E1  | Shorten large test files with `it.each`     | DONE   |
-| E2  | Split engine/utils files > 300 L            | TODO   |
+| E2  | Split engine/utils files > 300 L            | DONE   |
 | E4  | Trim component files to ≤ 600 L             | DONE   |
 | E5  | Split `validation.ts` + `cabinet-store.ts`  | TODO   |
 | E6  | Split `templates.ts` + `dxf-export.ts`      | TODO   |
@@ -19,7 +19,7 @@
 | E8  | Docs consolidation                          | DONE   |
 | E9  | JSDoc → TypeDoc conversion for `engine/`    | TODO   |
 | E11 | CONTRIBUTING.md                             | DONE   |
-| E12 | Release v3.73.0 + CHANGELOG + GH tag        | TODO   |
+| E12 | Release v3.73.0 + CHANGELOG + GH tag        | DONE   |
 
 ## Tech Stack
 

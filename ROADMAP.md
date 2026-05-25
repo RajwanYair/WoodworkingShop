@@ -115,7 +115,7 @@ state; GH release published.
 | Sprint | Deliverable                                                                                                                                         | Status   | Type     |
 | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- |
 | E1     | Shorten top-5 tests (validation 609 L, cut-optimizer 409 L, bom-export 392 L, url-state 345 L, cabinet-store 354 L) via `it.each` + shared fixtures | **DONE** | Tests    |
-| E2     | Shorten next-5 tests (plugin 338 L, hardware 335 L, templates 302 L, project-storage 280 L, voice-annotation 277 L)                                 | TODO     | Tests    |
+| E2     | Shorten next-5 tests (plugin 338 L, hardware 335 L, templates 302 L, project-storage 280 L, voice-annotation 277 L)                                 | DONE     | Tests    |
 | E3     | ~~Split `CabinetPdfDocument.tsx`~~ — already 173 L (sections extracted in v3.71–v3.72)                                                              | **DONE** | Refactor |
 | E4     | Split `CabinetPreview.tsx` and `OptimizerView.tsx` if over 600 L (verify sizes)                                                                     | **DONE** | Refactor |
 | E5     | Split `validation.ts` (1033 L) by domain: dimension-rules, door-rules, shelf-rules; split `cabinet-store.ts` (968 L): extract PDF + room slices     | TODO     | Refactor |
