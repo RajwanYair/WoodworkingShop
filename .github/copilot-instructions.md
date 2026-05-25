@@ -162,6 +162,7 @@ The MaxRects BSSF cut-optimizer uses:
 - **`npm run quality`** — typecheck + lint + lint:css + lint:md + format:check + i18n:coverage (no test)
 - **`npm run check`** — `quality` + `npm test` (full pre-commit gate)
 - **`npm run ci`** — `check` + build + bundle:check + bench:check (full CI gate)
+- **`npm run release:build`** — build + bundle:check + sbom (no tests; run after `npm run check`)
 
 ## Intermediate Files & Caching
 

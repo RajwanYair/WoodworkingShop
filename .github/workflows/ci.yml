@@ -16,37 +16,53 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: ./.github/actions/setup-node
-      - run: npm run quality
+      - name: Quality checks (parallel)
+        run: |
+          npm run typecheck & p1=$!
+          npm run lint & p2=$!
+          npm run lint:css & p3=$!
+          npm run lint:md & p4=$!
+          npm run format:check & p5=$!
+          npm run i18n:coverage & p6=$!
+          failed=0
+          for pid in $p1 $p2 $p3 $p4 $p5 $p6; do wait "$pid" || failed=1; done
+          exit $failed
 
-  build:
+  test:
     runs-on: ubuntu-latest
     needs: quality
-    strategy:
-      matrix: { node-version: [22, 24, 26] }
     steps:
       - uses: ./.github/actions/setup-node
-        with:
-          node-version: ${{ matrix.node-version }}
       - run: npm test
-      - if: matrix.node-version == 22
-        run: npm run test:coverage
-      - if: matrix.node-version == 22
-        uses: codecov/codecov-action@v5
+      - run: npm run test:coverage
+      - uses: codecov/codecov-action@v5
         with:
           files: /tmp/WoodworkingShop/coverage/lcov.info
           flags: unit
           fail_ci_if_error: false
+      - run: npm run bench:check
       - run: npm run build && npm run bundle:check
-      - if: matrix.node-version == 22
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist
           retention-days: 7
 
+  compat:
+    runs-on: ubuntu-latest
+    needs: quality
+    strategy:
+      fail-fast: false
+      matrix: { node-version: [24, 26] }
+    steps:
+      - uses: ./.github/actions/setup-node
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm run build && npm run bundle:check
+
   e2e:
     runs-on: ubuntu-latest
-    needs: build
+    needs: test
     steps:
       - uses: ./.github/actions/setup-node
       - id: pw
@@ -72,7 +88,7 @@ jobs:
 
   lighthouse:
     runs-on: ubuntu-latest
-    needs: build
+    needs: test
     steps:
       - uses: ./.github/actions/setup-node
       - uses: actions/download-artifact@v4

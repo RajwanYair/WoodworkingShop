@@ -15,5 +15,5 @@ runs:
         node-version: ${{ inputs.node-version }}
         cache: npm
 
-    - run: npm ci
+    - run: npm ci --prefer-offline --no-fund --no-audit
       shell: bash
