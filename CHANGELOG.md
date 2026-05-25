@@ -9,7 +9,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] — Phase 17.3 — Test Efficiency & DX Elevation (in progress)
+## [3.73.0] — 2026-05-25
+
+### Phase 17.3 — Test Efficiency & DX Elevation
 
 ### Fixed
 
@@ -58,6 +60,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   AGENTS.md and copilot-instructions.md updated to Phase 17.3.
 - **MCP server config** added at `.vscode/mcp.json` — enables GitHub MCP tools
   in Copilot chat (reads `GITHUB_TOKEN` from environment, nothing hardcoded).
+- **(E4) CabinetPreview.tsx split** — 770 L file split into `CabinetPreview.tsx`
+  (main orchestrator) + `CabinetPreviewControls.tsx` + `CabinetPreviewCanvas.tsx`
+  (each ≤ 300 L). No behaviour change.
+- **(E4) OptimizerView.tsx split** — 650 L file split into `OptimizerView.tsx`,
+  `OptimizerViewHeader.tsx`, and `OptimizerViewSheets.tsx` (each ≤ 300 L).
+- **(E7) CI workflow slimmed** — `ci.yml` refactored to ≤ 80 L using a reusable
+  `setup-node` composite action; `release.yml` refactored to ≤ 80 L with same
+  composite; parallel quality job cuts CI wall-time ~3×.
+- **(E8) ARCHITECTURE.md trimmed to pure module reference** — removed duplicated
+  Supported Furniture Types table (now only in USER-GUIDE.md), removed WebGL
+  Phase-7 evaluation-status bullets (future roadmap items), added cross-reference
+  callout pointing readers to ROADMAP.md for strategy and USER-GUIDE.md for
+  feature descriptions.
+- **(E10) VS Code snippets** — `iteach`, `deach`, `zsel`, `t18`, `jsdoc`, `rfc`,
+  `eng`, `slice`, `wrkr` in `.vscode/snippets.code-snippets`.
+- **(E11) CONTRIBUTING.md** added — coding conventions, PR checklist, i18n
+  parity requirements, zero-suppression rule, and quality gate instructions.
+
+### Tests
+
+- **(E1) Top-3 test files shortened with `it.each`** — `cut-optimizer.test.ts`
+  409 → 266 L (−35 %); `bom-export.test.ts` 392 → 312 L (−20 %);
+  `cabinet-store.test.ts` 354 → 350 L; parametrised factory helpers
+  (`makePt`/`fakeSht`/`fakeRes`) replace repeated inline object literals;
+  related single-assertion `it` blocks merged into grouped assertions.
 
 ## [3.72.0] — 2026-05-25
 

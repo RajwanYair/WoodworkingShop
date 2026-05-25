@@ -2,7 +2,7 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v3.72.0** · **Next target: v3.73.0** (Phase 17.3 — test efficiency & DX elevation)
+> **Current release: v3.73.0** · **Next target: v3.74.0** (Phase 18 — Visual Fidelity & UX)
 
 ## Active Sprint — Phase 17.3
 
