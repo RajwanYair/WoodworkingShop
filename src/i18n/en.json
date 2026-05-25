@@ -468,6 +468,16 @@
     "loadingAssembly": "Loading assembly guide…",
     "loadingPdf": "Loading PDF export tools…"
   },
+  "webserial": {
+    "title": "Send G-code via USB / Serial",
+    "connect": "Connect to machine",
+    "disconnect": "Disconnect",
+    "notSupported": "Web Serial is not supported in this browser. Use Chrome 89+ or Edge 89+.",
+    "noSheets": "Run the cut optimizer first to generate G-code.",
+    "streaming": "Sending line {{current}} of {{total}}…",
+    "done": "Done — all {{total}} lines sent.",
+    "error": "Connection error: {{message}}"
+  },
   "onboarding": {
     "title": "Welcome to Cabinet Planner!",
     "subtitle": "Design, optimize, and build your furniture in 3 easy steps.",

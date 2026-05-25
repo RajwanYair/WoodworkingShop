@@ -248,3 +248,11 @@ export {
   buildSvgPatternDefs,
 } from './material-textures';
 export type { MaterialTexture, MaterialTextureId, GrainLine } from './material-textures';
+export {
+  isWebSerialAvailable,
+  connectToMachine,
+  streamGcodeLines,
+  disconnectFromMachine,
+  DEFAULT_SERIAL_PROFILE,
+} from './webserial';
+export type { WebSerialState, WebSerialProfile } from './webserial';

@@ -461,6 +461,16 @@
     "loadingAssembly": "טוען מדריך הרכבה…",
     "loadingPdf": "טוען כלי ייצוא PDF…"
   },
+  "webserial": {
+    "title": "שלח G-code דרך USB / סריאלי",
+    "connect": "התחבר למכונה",
+    "disconnect": "התנתק",
+    "notSupported": "Web Serial אינו נתמך בדפדפן זה. השתמש ב-Chrome 89+ או Edge 89+.",
+    "noSheets": "הפעל את ממטב החיתוך תחילה ליצירת G-code.",
+    "streaming": "שולח שורה {{current}} מתוך {{total}}…",
+    "done": "הסתיים — כל {{total}} השורות נשלחו.",
+    "error": "שגיאת חיבור: {{message}}"
+  },
   "shortcuts": {
     "saveSnapshot": "צילום מצב נשמר",
     "exportBom": "BOM יוצא",

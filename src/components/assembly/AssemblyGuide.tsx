@@ -7,6 +7,7 @@ import type { AssemblyStep } from '../../engine/assembly';
 import type { Lang, Part, HardwareItem } from '../../engine/types';
 import { triggerDownload } from '../../utils/download';
 import { IconPrint, IconLightbulb, IconDownload } from '../layout/Icons';
+import { WebSerialPanel } from './WebSerialPanel';
 
 type ViewMode = 'paginated' | 'all';
 
@@ -300,6 +301,8 @@ export function AssemblyGuide() {
 
       {/* ── Hardware Checklist (Sprint 158) ── */}
       {hardware.length > 0 && <HardwareChecklist hardware={hardware} lang={lang} t={t} />}
+      {/* Sprint 74 — WebSerial CNC sender panel */}
+      <WebSerialPanel />
     </div>
   );
 }
