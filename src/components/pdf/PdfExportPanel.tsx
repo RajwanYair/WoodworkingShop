@@ -15,12 +15,17 @@ import type { Lang } from '../../engine/types';
 import { generateParts, computeEdgeBandingTotal } from '../../engine/parts';
 import { generateHardware } from '../../engine/hardware';
 import { computeDimensions } from '../../engine/dimensions';
+import { generateBomCsv } from '../../utils/bom-export';
+import { cutSheetToDxf } from '../../utils/dxf-export';
+import { generateGltfContent } from '../../engine/export/gltf-export';
+import { buildZip, downloadZip } from '../../utils/zip-writer';
 
 export function PdfExportPanel() {
   const { t, i18n } = useTranslation();
   const store = useCabinetStore();
   const [generating, setGenerating] = useState(false);
   const [generatingAll, setGeneratingAll] = useState(false);
+  const [generatingZip, setGeneratingZip] = useState(false);
   const [includeCover, setIncludeCover] = useState(true); // v3.19.0
   const [pageSize, setPageSize] = useState<'A4' | 'LETTER'>('A4'); // Sprint 59
   const [orientation, setOrientation] = useState<'portrait' | 'landscape'>('portrait'); // Sprint 59
@@ -181,6 +186,90 @@ export function PdfExportPanel() {
     })();
   };
 
+  /** Sprint 86 — Export a ZIP bundle: PDF + DXF sheets + BOM CSV + glTF. */
+  const handleExportZip = () => {
+    setGeneratingZip(true);
+    const lang = i18n.language as Lang;
+    const safeName =
+      (store.projectName.trim() || 'cabinet-plan')
+        .replace(/[^\w\u05D0-\u05EA.-]/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '') || 'cabinet-plan';
+
+    void (async () => {
+      try {
+        const te = new TextEncoder();
+        const entries: import('../../utils/zip-writer').ZipEntry[] = [];
+
+        // 1) PDF
+        const doc = (
+          <CabinetPdfDocument
+            config={store.config}
+            dimensions={store.dimensions}
+            parts={store.parts}
+            hardware={store.hardware}
+            optimization={store.optimization}
+            edgeBandingTotal={store.edgeBandingTotal}
+            lang={lang}
+            projectName={store.projectName}
+            includeCover={includeCover}
+            cabinetCount={store.cabinets.length}
+            pageSize={pageSize}
+            orientation={orientation}
+          />
+        );
+        const pdfBlob = await pdf(doc).toBlob();
+        const pdfBytes = new Uint8Array(await pdfBlob.arrayBuffer());
+        entries.push({ name: `${safeName}.pdf`, data: pdfBytes });
+
+        // 2) DXF — one file per cut sheet
+        for (let i = 0; i < store.optimization.sheets.length; i++) {
+          const sheet = store.optimization.sheets[i]!;
+          const dxfText = cutSheetToDxf(sheet);
+          entries.push({ name: `sheets/sheet-${i + 1}-${sheet.material}.dxf`, data: te.encode(dxfText) });
+        }
+
+        // 3) BOM CSV
+        const bomCsv = generateBomCsv(
+          store.cabinets.map((c) => ({
+            name: c.name,
+            parts: generateParts(c.config),
+            hardware: generateHardware(c.config),
+          })),
+          lang,
+        );
+        entries.push({ name: `${safeName}-bom.csv`, data: te.encode(bomCsv) });
+
+        // 4) glTF
+        const { content: gltfJson } = generateGltfContent(store.config, store.parts);
+        entries.push({ name: `${safeName}.gltf`, data: te.encode(gltfJson) });
+
+        // 5) README
+        const readme = [
+          `Cabinet Planner — Export Bundle`,
+          `Project: ${store.projectName || safeName}`,
+          `Generated: ${new Date().toISOString()}`,
+          ``,
+          `Contents:`,
+          `  ${safeName}.pdf         — Build plan (PDF)`,
+          `  sheets/sheet-N-*.dxf   — Cut-sheet layouts (DXF, one per sheet)`,
+          `  ${safeName}-bom.csv     — Bill of materials (CSV)`,
+          `  ${safeName}.gltf        — 3-D model for AR/VR (glTF 2.0)`,
+        ].join('\n');
+        entries.push({ name: 'README.txt', data: te.encode(readme) });
+
+        const zipBytes = buildZip(entries);
+        downloadZip(zipBytes, `${safeName}-bundle.zip`);
+        useToastStore.getState().addToast(t('pdf.zipExported'), 'success');
+      } catch (err) {
+        console.error('[PdfExportPanel] ZIP export failed:', err);
+        useToastStore.getState().addToast(t('pdf.error'), 'error');
+      } finally {
+        setGeneratingZip(false);
+      }
+    })();
+  };
+
   return (
     <div className="space-y-6">
       <div className="space-y-4 py-8 text-center">
@@ -324,6 +413,15 @@ export function PdfExportPanel() {
           className="bg-wood-100 dark:bg-wood-800 text-wood-700 dark:text-wood-200 border-wood-300 dark:border-wood-600 hover:bg-wood-200 dark:hover:bg-wood-700 rounded-lg border px-6 py-3 text-sm font-medium transition-colors"
         >
           {t('pdf.exportGltf')}
+        </button>
+
+        {/* Sprint 86 — ZIP bundle export */}
+        <button
+          onClick={handleExportZip}
+          disabled={generating || generatingAll || generatingZip}
+          className="bg-wood-100 dark:bg-wood-800 text-wood-700 dark:text-wood-200 border-wood-300 dark:border-wood-600 hover:bg-wood-200 dark:hover:bg-wood-700 rounded-lg border px-6 py-3 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {generatingZip ? t('pdf.generatingZip') : t('pdf.exportZip')}
         </button>
       </div>
 
