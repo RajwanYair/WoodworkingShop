@@ -2,7 +2,7 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v3.71.1**
+> **Current release: v3.72.0** · **Next target: v3.73.0** (Phase 17.3 — test efficiency & DX elevation)
 
 ## Tech Stack
 
@@ -135,7 +135,22 @@ The MaxRects BSSF cut-optimizer uses:
 - Use IE-only or deprecated browser APIs — the project targets modern evergreen browsers only (`not ie 11` in `.browserslistrc`)
 - Add `enum` or `namespace` — use `as const` objects or union types (TypeScript 6 `erasableSyntaxOnly`)
 - Add `sonarjs` or `promise` ESLint plugins — not in this project's config
+- Add JS-style `//` comments inside `.json` files — use `.jsonc` extension for comment-annotated JSON
+- Leave disabled/suppressed config options without a JSDoc-style justification comment
+- Introduce dead code, dead imports, or dead config entries (run `npm run dead:check` to verify)
+
+## VS Code Snippets
+
+`.vscode/snippets.code-snippets` provides:
+
+- `iteach` — `it.each` parametrised test
+- `deach` — `describe.each` parametrised suite
+- `zsel` — Zustand store selector
+- `t18` — i18n `t()` call with parity reminder
+- `jsdoc` — JSDoc block skeleton
+- `rfc` — React functional component with TypeScript props
 
 ## Intermediate Files & Caching
 
 - All intermediate build files, ESLint caches (`.eslintcache`), Vite caches (`.vite_cache`), Playwright test results, and test reports **MUST** be written to paths inside the OS `$TEMP` or `tempfile.gettempdir()` directory. We never pollute the root workspace or `node_modules/.cache` with intermediate build telemetry.
+- `skipLibCheck: true` is set in all tsconfigs due to `@react-pdf/types` shipping `const enum` in `.d.ts` files (TS18055 under `verbatimModuleSyntax`). Remove once upstream fixes `primitive.d.ts`.

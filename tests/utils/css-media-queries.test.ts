@@ -55,7 +55,7 @@ describe('index.css — WCAG AA high-contrast class (beyond forced-colors)', () 
 
 describe('index.css — tablet portrait responsive layout', () => {
   it('contains orientation portrait media query for tablet', () => {
-    expect(css).toContain('@media (orientation: portrait) and (min-width: 640px) and (max-width: 1023px)');
+    expect(css).toContain('@media (orientation: portrait) and (640px <= width <= 1023px)');
   });
 
   it('applies inline padding to main-content in tablet portrait', () => {

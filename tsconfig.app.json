@@ -5,6 +5,8 @@
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "module": "esnext",
     "types": ["vite/client"],
+    /* skipLibCheck: @react-pdf/types ships const-enum in .d.ts (TS18055 under verbatimModuleSyntax).
+       Remove once upstream fixes primitive.d.ts. */
     "skipLibCheck": true,
 
     /* Strict type checking */

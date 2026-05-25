@@ -235,6 +235,7 @@ function _checkDoors(config: CabinetConfig, dims: ReturnType<typeof computeDimen
         he: `גובה הדלת (${Math.round(dims.doorHeight)} מ"מ) קטן מ-${MIN_PRACTICAL_DOOR_HEIGHT_MM} מ"מ. במידה זו, מרווח שני הצירים קצר מדי מקצות הדלת.`,
       },
       field: 'height',
+      suggestedValue: MIN_PRACTICAL_DOOR_HEIGHT_MM,
     });
   }
 
@@ -247,6 +248,7 @@ function _checkDoors(config: CabinetConfig, dims: ReturnType<typeof computeDimen
         he: `גובה הדלת (${Math.round(dims.doorHeight)} מ"מ) עולה על ${MAX_SINGLE_DOOR_HEIGHT_MM} מ"מ. במשקל זה נדרשים צירים כבדי עומס (לדוגמה Blum Clip Top 170°) לפחות 25 ק"ג לדלת.`,
       },
       field: 'height',
+      fix: { patch: { hingeProfile: 'blum-clip-top-165' }, labelKey: 'validation.fixSwitchWideAngleHinge' },
     });
   }
 
@@ -317,7 +319,7 @@ function _checkHingeShelfInterference(
             fix:
               config.shelfCount > 1
                 ? { patch: { shelfCount: config.shelfCount - 1 }, labelKey: 'validation.fixReduceShelves' }
-                : undefined,
+                : { patch: { shelfCount: 0 }, labelKey: 'validation.fixRemoveShelves' },
           },
         ];
       }
@@ -634,6 +636,7 @@ export function validateConfig(
         he: `גובה הארון (${config.height} מ"מ) עולה על ${CRITICAL_HEIGHT_MM} מ"מ. יחידה עצמאית בגובה זה מסוכנת להתהפכות — נדרש עוגן קיר או פס קיבוע רצפה-תקרה.`,
       },
       field: 'height',
+      suggestedValue: CRITICAL_HEIGHT_MM,
     });
   }
 
@@ -746,6 +749,7 @@ export function validateConfig(
         he: `עובי הלוח (${t} מ"מ) גורם לחריץ גב בעומק חצי להיות רק ${(t / 2).toFixed(1)} מ"מ — מתחת למינימום המומלץ ${MIN_BACK_REBATE_DEPTH_MM} מ"מ. שקול הגדלת עובי או שיטת חיבור אחרת לגב.`,
       },
       field: 'carcassMaterial',
+      fix: { patch: { carcassMaterial: 'plywood-18' }, labelKey: 'validation.fixUsePlywood18' },
     });
   }
 
@@ -856,6 +860,7 @@ export function validateConfig(
         he: `עובי הלוח (${t} מ"מ) דק מדי לקידוחי סיכות מדף 5 מ"מ — הקדח נמצא 3–4 מ"מ מפני הלוח בלבד, דבר העלול לגרום לסדיקה בקניר או בציפוי. השתמש בלוחות ≥ ${MIN_SHELF_PIN_THICKNESS_MM} מ"מ למדפים ניידים, או בחר מדפים קבועים בחריץ.`,
       },
       field: 'carcassMaterial',
+      fix: { patch: { carcassMaterial: 'plywood-18' }, labelKey: 'validation.fixUsePlywood18' },
     });
   }
 
@@ -981,6 +986,7 @@ export function validateConfig(
             he: `ציר "${hingeProf.name.he}" דורש קידוח כוס בעומק ${hingeProf.mountingDepth} מ"מ, אך הלוח עובי ${t} מ"מ בלבד (נדרש לפחות ${Math.ceil(requiredThickness)} מ"מ). השתמש בלוח עבה יותר או בציר רדוד יותר. מוצר: ${hingeProf.supplierUrl}`,
           },
           field: 'carcassMaterial',
+          fix: { patch: { carcassMaterial: 'plywood-18' }, labelKey: 'validation.fixUsePlywood18' },
         });
       }
 
@@ -995,6 +1001,7 @@ export function validateConfig(
             he: `ציר "${hingeProf.name.he}" (${hingeProf.openingAngle}°) אינו מדורג לדלתות גבוהות מ-${MAX_SINGLE_DOOR_HEIGHT_MM} מ"מ. בחר ציר זווית רחבה (≥ ${WIDE_ANGLE_THRESHOLD_DEG}°) כבד-עומס לתפקוד אמין לאורך זמן. מוצר: ${hingeProf.supplierUrl}`,
           },
           field: 'hingeProfile',
+          fix: { patch: { hingeProfile: 'blum-clip-top-165' }, labelKey: 'validation.fixSwitchWideAngleHinge' },
         });
       }
     }

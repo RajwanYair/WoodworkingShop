@@ -49,6 +49,12 @@
 - Review security advisories before merging dependency updates
 - Run `npm audit` to check for known vulnerabilities
 
+### Known Accepted Risk (Tooling Only)
+
+| Package       | Advisory                                                                                                 | Severity | Status                                                                                                                                                                                                |
+| ------------- | -------------------------------------------------------------------------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tmp ≤ 0.2.3` | [GHSA-52f5-9888-hmc6](https://github.com/advisories/GHSA-52f5-9888-hmc6) — symlink write via `dir` param | Low      | **Dev-tool only** via `@lhci/cli`. No safe `tmp` release exists. WoodworkingShop production build: `npm audit` reports **0 vulnerabilities**. Tracked: awaiting `@lhci/cli` to drop `tmp` dependency. |
+
 ## ✅ Security Checklist for PRs
 
 - [ ] No hardcoded credentials or tokens in code
@@ -57,7 +63,7 @@
 - [ ] `npm audit` reports no new high/critical issues
 - [ ] Dependencies added are necessary and from trusted sources
 
-## ♿ Accessibility Security Stance — v3.68.1
+## ♿ Accessibility Security Stance — v3.72.0
 
 Accessibility violations are treated as **quality-blocking issues** in this project. The following measures ensure WCAG 2.2 AA compliance is maintained:
 

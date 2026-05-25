@@ -506,6 +506,8 @@
     "fixSwitchJoinery": "Switch to screws",
     "fixUsePlywood18": "Use plywood 18 mm",
     "fixRemoveHingeProfile": "Remove hinge profile",
+    "fixUseThinBack": "Use thin back (plywood 4 mm)",
+    "fixSwitchWideAngleHinge": "Use wide-angle hinge",
     "collapsed": "Show {{count}} issue(s)",
     "fieldHint": "Field: {{field}}",
     "suggestedValue": "Suggested: {{value}}"

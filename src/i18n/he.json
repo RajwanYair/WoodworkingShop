@@ -506,6 +506,8 @@
     "fixSwitchJoinery": "עבור לברגים",
     "fixUsePlywood18": "השתמש בדיקט 18 מ\"מ",
     "fixRemoveHingeProfile": "הסר פרופיל ציר",
+    "fixUseThinBack": "גב דק (דיקט 4 מ\"מ)",
+    "fixSwitchWideAngleHinge": "ציר זווית רחבה",
     "collapsed": "הצג {{count}} בעיה/ות",
     "fieldHint": "שדה: {{field}}",
     "suggestedValue": "מוצע: {{value}}"

@@ -1,0 +1,48 @@
+{
+  "Vitest it.each table": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "iteach",
+    "body": ["it.each([", "  [$1, $2],", "])('$3 %s', ($4, $5) => {", "  $0", "});"],
+    "description": "Parametrised Vitest test with it.each",
+  },
+  "Vitest describe.each": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "deach",
+    "body": ["describe.each([", "  { $1: $2 },", "])('$3', ({ $4 }) => {", "  $0", "});"],
+    "description": "Parametrised Vitest describe with describe.each",
+  },
+  "Zustand selector hook": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "zsel",
+    "body": ["const $1 = useCabinetStore((s) => s.$1);"],
+    "description": "Zustand store selector",
+  },
+  "i18n key usage": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "t18",
+    "body": ["const { t } = useTranslation();", "// TODO: add '${1:key}' to en.json and he.json", "t('${1:key}')"],
+    "description": "i18next translation call with i18n-parity reminder",
+  },
+  "JSDoc block": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "jsdoc",
+    "body": ["/**", " * $1", " * @param $2 - $3", " * @returns $4", " */"],
+    "description": "JSDoc comment block",
+  },
+  "React functional component": {
+    "scope": "typescriptreact",
+    "prefix": "rfc",
+    "body": [
+      "interface ${1:Name}Props {",
+      "  $2",
+      "}",
+      "",
+      "export function ${1:Name}({ $3 }: ${1:Name}Props) {",
+      "  return (",
+      "    <div>$0</div>",
+      "  );",
+      "}",
+    ],
+    "description": "React functional component with TypeScript props",
+  },
+}

@@ -37,12 +37,23 @@
       "problemMatcher": ["$tsc"]
     },
     {
+      "label": "Check (full quality gate)",
+      "type": "npm",
+      "script": "check",
+      "group": "build",
+      "problemMatcher": ["$tsc", "$eslint-stylish"]
+    },
+    {
+      "label": "Dead code",
+      "type": "npm",
+      "script": "dead:check",
+      "group": "build"
+    },
+    {
       "label": "Dev Server",
       "type": "npm",
       "script": "dev",
       "isBackground": true,
-      // Tell VS Code when the Vite dev server is "ready" so that
-      // the Chrome debug launch (preLaunchTask) waits correctly.
       "problemMatcher": [
         {
           "owner": "vite",

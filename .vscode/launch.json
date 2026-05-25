@@ -8,22 +8,15 @@
       "url": "http://localhost:5173/WoodworkingShop/",
       "webRoot": "${workspaceFolder}/src",
       "preLaunchTask": "Dev Server",
-      // Map Vite's /@fs/ and /src/ URLs back to workspace source files so
-      // breakpoints resolve correctly in *.tsx / *.ts files.
       "sourceMapPathOverrides": {
         "/@fs/*": "${workspaceFolder}/*",
         "/src/*": "${workspaceFolder}/src/*"
       }
     },
     {
-      // Debug individual Vitest unit tests with the Node debugger.
-      // Set a breakpoint, then run "Debug Vitest (current file)" from the
-      // Run & Debug panel — the test file open in the editor will be executed.
       "name": "Debug Vitest (current file)",
       "type": "node",
       "request": "launch",
-      // Packages are hoisted to the parent workspace (MyScripts/node_modules).
-      // Use ../ so the path resolves in both the local workspace and npm ci installs.
       "program": "${workspaceFolder}/../node_modules/vitest/vitest.mjs",
       "args": ["run", "${relativeFile}", "--reporter=verbose"],
       "cwd": "${workspaceFolder}",

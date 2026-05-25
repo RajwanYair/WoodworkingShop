@@ -9,6 +9,75 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.72.0] — 2026-05-25
+
+### Phase 17.2 — Production Readiness, Design-Check Fixes & Package Updates
+
+#### Added
+
+- **All Design Check issues now have actionable one-click Fix buttons** — every
+  `ValidationIssue` in the Design Checks panel now exposes a `fix.patch` or
+  `suggestedValue` so a "Fix" button always appears:
+  - `DOOR_TOO_SHORT_FOR_HINGES` → suggests minimum door height (200 mm)
+  - `DOOR_EXCEEDS_STANDARD_HINGE_RATING` → switches to Blum CLIP top Wide
+    Angle 165° (`fixSwitchWideAngleHinge`)
+  - `CARCASS_HEIGHT_CRITICAL` → suggests reducing height to the 2400 mm limit
+  - `BACK_PANEL_OVERSIZED` → switches back panel to plywood-4 (`fixUseThinBack`)
+  - `BACK_REBATE_TOO_SHALLOW` → switches carcass to plywood-18
+  - `PANEL_TOO_THIN_FOR_SHELF_PINS` → switches carcass to plywood-18
+  - `HINGE_SHELF_INTERFERENCE` (1-shelf case) → removes last shelf
+    (`fixRemoveShelves`); previously had no fix
+  - `VENDOR_HINGE_BORE_TOO_DEEP` → switches carcass to plywood-18
+  - `VENDOR_HINGE_NOT_RATED_FOR_TALL_DOOR` → switches to wide-angle hinge
+- **2 new i18n fix-label keys** — `fixUseThinBack` and `fixSwitchWideAngleHinge`
+  added to all 6 locales (EN, HE, AR, DE, ES, FR)
+- **Full translation** of 8 previously untranslated English-fallback fix labels
+  in AR, DE, ES, FR (fixRemoveShelves, fixRemoveDoors, fixMergeToOneDoor,
+  fixSplitToDoors, fixReduceShelves, fixSwitchJoinery, fixUsePlywood18,
+  fixRemoveHingeProfile)
+- **`.vscode/snippets.code-snippets`** — 6 code snippets: `iteach`, `deach`,
+  `zsel`, `t18`, `jsdoc`, `rfc`
+- **VS Code tasks** — "Check (full quality gate)" and "Dead code" tasks added to
+  `.vscode/tasks.json`
+
+#### Changed
+
+- **CSS media query modernised**: `src/index.css` tablet portrait query updated
+  from legacy `min-width`/`max-width` to modern range syntax
+  `(640px <= width <= 1023px)`. `stylelint media-feature-range-notation: 'context'`
+  now enforced (was `null`)
+- **`skipLibCheck` documented** in all 4 tsconfigs with JSDoc-style justification
+  comment explaining upstream `@react-pdf/types` const-enum defect (TS18055)
+- **`eslint-plugin-react` peer dep** fixed via `package.json` `overrides`
+  instead of global `legacy-peer-deps`
+- **Stylelint null rules** all documented with JSDoc comments explaining why each
+  `null` suppression is necessary; no rules removed without justification
+- **`.vscode` JSON files** cleaned — removed invalid JS `//` comments from
+  `extensions.json`, `settings.json`, `tasks.json`, `launch.json` (pure JSON)
+- **`MyScripts/package.json`** — `uuid >=11.1.1` override added (fixes moderate
+  severity CVE in `@lhci/cli` dep chain)
+- **Package updates**: `@testing-library/dom ^10.4.1`, `@types/react ^19.2.15`,
+  `@types/node ^25.9.1`, `@vitest/coverage-v8 ^4.1.7`, `i18next ^26.2.0`,
+  `jsdom ^29.1.1`, `markdownlint-cli2 ^0.22.1`, `react-i18next ^17.0.8`,
+  `stylelint ^17.12.0`, `stylelint-config-tailwindcss ^1.0.1`,
+  `typedoc ^0.28.19`, `typescript-eslint ^8.59.4`, `vite ^8.0.14`,
+  `vitest ^4.1.7`; `react ^19.2.6`, `zustand ^5.0.13` in MyScripts workspace
+
+#### Removed
+
+- **`src/components/pdf/pdf-i18n.ts`** — dead file (never imported); deleted
+- **`WoodworkingShop/.npmrc`** — dead workspace member config (silently ignored
+  by npm workspaces; parent `MyScripts/.npmrc` applies)
+
+#### Security
+
+- **Production build: 0 vulnerabilities** (`npm audit` clean)
+- **`.github/SECURITY.md`** updated with "Known Accepted Risk" table documenting
+  `tmp ≤ 0.2.3` low-severity dev-tool-only finding (no safe version exists;
+  tracked pending upstream fix)
+
+---
+
 ## [3.71.1] — 2026-07-06
 
 ### Phase 17.1 — Engine JSDoc (D1–D3) + CI Fixes

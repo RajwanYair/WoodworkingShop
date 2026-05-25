@@ -5,8 +5,6 @@
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "eslint.useFlatConfig": true,
   "files.eol": "\n",
-
-  // ─── Terminal / Shell Integration ─────────────────────────────────────────
   "terminal.integrated.shellIntegration.enabled": true,
   "terminal.integrated.shellIntegration.decorationsEnabled": "both",
   "terminal.integrated.defaultProfile.windows": "PowerShell",
@@ -27,11 +25,6 @@
     "source": "PowerShell",
     "args": ["-NoLogo", "-NonInteractive"]
   },
-
-  // ─── Authoritative Linters ────────────────────────────────────────────────
-  // ESLint (jsx-a11y + react-hooks + regexp) and Stylelint are the sole
-  // linting authority. VS Code's built-in CSS/HTML validators produce false
-  // positives for Tailwind v4 syntax and JSX ARIA expressions.
   "css.validate": false,
   "html.validate.styles": false,
   "html.validate.scripts": false,
@@ -40,8 +33,6 @@
     "source.fixAll.eslint": "explicit",
     "source.fixAll.stylelint": "explicit"
   },
-
-  // ─── File Exclusions ──────────────────────────────────────────────────────
   "files.exclude": {
     "**/dist/**": true,
     "**/coverage/**": true,
@@ -55,7 +46,6 @@
     "**/coverage": true,
     "**/docs/api": true
   },
-
   "[tsx]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },

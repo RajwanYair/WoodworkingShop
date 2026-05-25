@@ -1,6 +1,6 @@
 {
   "name": "woodworkingshop",
-  "version": "3.71.1",
+  "version": "3.72.0",
   "description": "Browser-based woodworking cabinet planner — parametric design, MaxRects cut-sheet optimizer, PDF/DXF/G-code export, 6-view SVG preview, bilingual EN+HE, PWA offline",
   "keywords": [
     "woodworking",
@@ -35,7 +35,10 @@
   "type": "module",
   "private": true,
   "overrides": {
-    "eslint": "$eslint"
+    "eslint": "$eslint",
+    "eslint-plugin-react": {
+      "eslint": "*"
+    }
   },
   "scripts": {
     "dev": "vite",
@@ -71,7 +74,6 @@
   },
   "knip": {
     "entry": [
-      "src/main.tsx",
       "src/engine/index.ts!",
       "src/engine/assembly/index.ts!",
       "src/engine/export/index.ts!",
@@ -108,11 +110,11 @@
   "dependencies": {
     "@react-pdf/renderer": "^4.5.1",
     "comlink": "4.4.2",
-    "i18next": "^26.0.6",
+    "i18next": "^26.2.0",
     "idb-keyval": "6.2.4",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "react-i18next": "^17.0.4",
+    "react-i18next": "^17.0.8",
     "zustand": "^5.0.13"
   },
   "devDependencies": {
@@ -120,14 +122,14 @@
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.60.0",
     "@tailwindcss/vite": "^4.3.0",
-    "@testing-library/dom": "^10.4.0",
+    "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
-    "@types/node": "^25.0.0",
-    "@types/react": "^19.2.14",
+    "@types/node": "^25.9.1",
+    "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.2",
-    "@vitest/coverage-v8": "^4.1.6",
+    "@vitest/coverage-v8": "^4.1.7",
     "eslint": "^10.4.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jsx-a11y": "^6.10.2",
@@ -139,21 +141,21 @@
     "eslint-plugin-testing-library": "7.16.2",
     "fake-indexeddb": "6.2.5",
     "fast-check": "4.8.0",
-    "jsdom": "^29.0.2",
+    "jsdom": "^29.1.1",
     "knip": "6.14.2",
-    "markdownlint-cli2": "^0.22.0",
+    "markdownlint-cli2": "^0.22.1",
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "0.8.0",
     "rimraf": "^6.1.3",
-    "stylelint": "^17.11.1",
+    "stylelint": "^17.12.0",
     "stylelint-config-standard": "^40.0.0",
-    "stylelint-config-tailwindcss": "^1.0.0",
+    "stylelint-config-tailwindcss": "^1.0.1",
     "tailwindcss": "^4.3.0",
-    "typedoc": "^0.28.0",
+    "typedoc": "^0.28.19",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.59.3",
-    "vite": "^8.0.13",
+    "typescript-eslint": "^8.59.4",
+    "vite": "^8.0.14",
     "vite-plugin-pwa": "1.3.0",
-    "vitest": "^4.1.6"
+    "vitest": "^4.1.7"
   }
 }
