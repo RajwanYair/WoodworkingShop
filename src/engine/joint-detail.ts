@@ -189,6 +189,63 @@ export function getJointSpec(type: JoineryType, materialThicknessMm: number): Jo
       };
     }
 
+    case 'mortise-tenon': {
+      // Tenon thickness: 1/3 of panel thickness; tenon length: 2/3 panel thickness
+      const tenonThickness = Math.round((materialThicknessMm / 3) * 2) / 2;
+      const tenonLength = Math.round((materialThicknessMm * 2) / 3);
+      const mortiseDepth = tenonLength + 2; // 2 mm clearance
+      return {
+        type,
+        name: { en: 'Mortise & Tenon', he: 'חריץ ובליטה' },
+        description: {
+          en: `Mortise ${mortiseDepth} mm deep × ${tenonThickness} mm wide; tenon ${tenonLength} mm long × ${tenonThickness} mm thick. Strongest frame joint.`,
+          he: `חריץ ${mortiseDepth} מ"מ עומק × ${tenonThickness} מ"מ רוחב; בליטה ${tenonLength} מ"מ אורך × ${tenonThickness} מ"מ עובי. החיבור החזק ביותר למסגרות.`,
+        },
+        dimensions: {
+          grooveDepthMm: mortiseDepth,
+          grooveWidthMm: tenonThickness,
+          pocketOffsetMm: 0,
+          dowelDiameterMm: 0,
+          dowelDepthMm: 0,
+        },
+        constraints: {
+          minThicknessMm: 18,
+          minFaceWidthMm: 40,
+          rigidAgainstRacking: true,
+          requiresPowerTool: true,
+        },
+        dxfMarkup: `; MORTISE-TENON ${mortiseDepth} × ${tenonThickness} mm, tenon ${tenonLength} mm\n`,
+      };
+    }
+
+    case 'dovetail': {
+      // Tail angle: 1:8 for hardwood, pin width = 1/2 thickness
+      const tailLength = Math.round(materialThicknessMm * 0.8);
+      const pinWidth = Math.round(materialThicknessMm / 2);
+      return {
+        type,
+        name: { en: 'Dovetail', he: 'זנב סנונית' },
+        description: {
+          en: `Through dovetail — tail length ${tailLength} mm, pin width ${pinWidth} mm, 1:8 angle ratio. Exceptional mechanical lock for drawer boxes.`,
+          he: `זנב סנונית חוצה — אורך זנב ${tailLength} מ"מ, רוחב סיכה ${pinWidth} מ"מ, יחס זווית 1:8. נעילה מכנית מצוינת לתיבות מגירות.`,
+        },
+        dimensions: {
+          grooveDepthMm: tailLength,
+          grooveWidthMm: pinWidth,
+          pocketOffsetMm: 0,
+          dowelDiameterMm: 0,
+          dowelDepthMm: 0,
+        },
+        constraints: {
+          minThicknessMm: 12,
+          minFaceWidthMm: 30,
+          rigidAgainstRacking: true,
+          requiresPowerTool: true,
+        },
+        dxfMarkup: `; DOVETAIL through, tail ${tailLength} mm, pin ${pinWidth} mm, 1:8\n`,
+      };
+    }
+
     default: {
       // Exhaustive check — TypeScript will error if JoineryType gains a new variant
       const _exhaustive: never = type;
@@ -224,6 +281,6 @@ export function validateJointCompatibility(
 
 /** Return all joinery types with their specs for the given material thickness. */
 export function getAllJointSpecs(materialThicknessMm: number): JointSpec[] {
-  const types: JoineryType[] = ['screw', 'pocket-screw', 'dado', 'dowel', 'biscuit'];
+  const types: JoineryType[] = ['screw', 'pocket-screw', 'dado', 'dowel', 'biscuit', 'mortise-tenon', 'dovetail'];
   return types.map((t) => getJointSpec(t, materialThicknessMm));
 }

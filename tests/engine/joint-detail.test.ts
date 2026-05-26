@@ -101,16 +101,76 @@ describe('validateJointCompatibility', () => {
   });
 });
 
+describe('getJointSpec — mortise-tenon (Sprint 108)', () => {
+  it('tenon thickness is 1/3 of material thickness', () => {
+    const spec = getJointSpec('mortise-tenon', 18);
+    expect(spec.dimensions.grooveWidthMm).toBe(6); // 18/3 = 6
+  });
+
+  it('mortise depth = tenon length + 2 mm clearance', () => {
+    const spec = getJointSpec('mortise-tenon', 18);
+    const tenonLength = Math.round((18 * 2) / 3); // 12
+    expect(spec.dimensions.grooveDepthMm).toBe(tenonLength + 2);
+  });
+
+  it('requires minimum 18 mm thickness', () => {
+    const spec = getJointSpec('mortise-tenon', 18);
+    expect(spec.constraints.minThicknessMm).toBe(18);
+  });
+
+  it('is rigid against racking', () => {
+    const spec = getJointSpec('mortise-tenon', 18);
+    expect(spec.constraints.rigidAgainstRacking).toBe(true);
+  });
+
+  it('fails validation for 12 mm panel', () => {
+    const result = validateJointCompatibility('mortise-tenon', 12, 100);
+    expect(result).not.toBeNull();
+    expect(result?.en).toContain('18 mm');
+  });
+});
+
+describe('getJointSpec — dovetail (Sprint 108)', () => {
+  it('tail length is 80% of material thickness', () => {
+    const spec = getJointSpec('dovetail', 18);
+    expect(spec.dimensions.grooveDepthMm).toBe(Math.round(18 * 0.8));
+  });
+
+  it('pin width is half material thickness', () => {
+    const spec = getJointSpec('dovetail', 18);
+    expect(spec.dimensions.grooveWidthMm).toBe(Math.round(18 / 2));
+  });
+
+  it('requires minimum 12 mm thickness and 30 mm face width', () => {
+    const spec = getJointSpec('dovetail', 18);
+    expect(spec.constraints.minThicknessMm).toBe(12);
+    expect(spec.constraints.minFaceWidthMm).toBe(30);
+  });
+
+  it('is rigid against racking', () => {
+    const spec = getJointSpec('dovetail', 18);
+    expect(spec.constraints.rigidAgainstRacking).toBe(true);
+  });
+
+  it('fails validation when face width too narrow', () => {
+    const result = validateJointCompatibility('dovetail', 18, 20);
+    expect(result).not.toBeNull();
+    expect(result?.en).toContain('30 mm');
+  });
+});
+
 describe('getAllJointSpecs', () => {
-  it('returns specs for all 5 joint types', () => {
+  it('returns specs for all 7 joint types', () => {
     const specs = getAllJointSpecs(18);
-    expect(specs).toHaveLength(5);
+    expect(specs).toHaveLength(7);
     const types = specs.map((s) => s.type);
     expect(types).toContain('screw');
     expect(types).toContain('pocket-screw');
     expect(types).toContain('dado');
     expect(types).toContain('dowel');
     expect(types).toContain('biscuit');
+    expect(types).toContain('mortise-tenon');
+    expect(types).toContain('dovetail');
   });
 
   it('all specs have bilingual names', () => {

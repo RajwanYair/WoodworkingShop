@@ -77,6 +77,8 @@
     "joinery_dado": "Ranura de alojamiento",
     "joinery_dowel": "Espárragos",
     "joinery_biscuit": "Galleta (biscuit)",
+    "joinery_mortise-tenon": "Mortise & Tenon",
+    "joinery_dovetail": "Dovetail",
     "customMaterials": "Materiales personalizados",
     "addCustomMaterial": "Añadir material personalizado",
     "materialName": "Nombre",

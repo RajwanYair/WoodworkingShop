@@ -78,6 +78,8 @@
     "joinery_dado": "Dado Groove",
     "joinery_dowel": "Dowel",
     "joinery_biscuit": "Biscuit",
+    "joinery_mortise-tenon": "Mortise & Tenon",
+    "joinery_dovetail": "Dovetail",
     "customMaterials": "🧪 Custom Materials",
     "addCustomMaterial": "Add custom material",
     "materialName": "Name",

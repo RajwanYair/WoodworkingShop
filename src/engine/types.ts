@@ -77,13 +77,15 @@ export type EdgeBanding = 'all-visible' | 'doors-only' | 'none';
  * Sprint 12 — Joinery type used to assemble the carcass.
  * Controls which validation rules apply and influences assembly instructions.
  *
- * - `pocket-screw` : Kreg-style pocket screws — fast, needs ≥ 15 mm stock.
- * - `dado`         : Dado/housing grooves — strong, needs ≥ 12 mm stock.
- * - `dowel`        : Wooden dowels — clean, needs ≥ 12 mm stock.
- * - `biscuit`      : Plate/biscuit joinery — medium strength, needs ≥ 12 mm and face ≥ 50 mm wide.
- * - `screw`        : Standard through-screws — simplest, no thickness constraint.
+ * - `pocket-screw`  : Kreg-style pocket screws — fast, needs ≥ 15 mm stock.
+ * - `dado`          : Dado/housing grooves — strong, needs ≥ 12 mm stock.
+ * - `dowel`         : Wooden dowels — clean, needs ≥ 12 mm stock.
+ * - `biscuit`       : Plate/biscuit joinery — medium strength, needs ≥ 12 mm and face ≥ 50 mm wide.
+ * - `screw`         : Standard through-screws — simplest, no thickness constraint.
+ * - `mortise-tenon` : Traditional mortise-and-tenon — very strong, needs ≥ 18 mm stock.
+ * - `dovetail`      : Dovetail joint — very strong drawer joint, needs ≥ 12 mm stock.
  */
-export type JoineryType = 'pocket-screw' | 'dado' | 'dowel' | 'biscuit' | 'screw';
+export type JoineryType = 'pocket-screw' | 'dado' | 'dowel' | 'biscuit' | 'screw' | 'mortise-tenon' | 'dovetail';
 /** How shelf positions inside the cabinet are determined. */
 export type ShelfSpacing = 'equal' | 'custom';
 /** Cabinet handle / pull style. `'none'` omits hardware from the BOM. */

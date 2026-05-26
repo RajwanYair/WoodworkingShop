@@ -77,6 +77,8 @@
     "joinery_dado": "Nutverbindung",
     "joinery_dowel": "Dübel",
     "joinery_biscuit": "Flachdübel (Lamello)",
+    "joinery_mortise-tenon": "Mortise & Tenon",
+    "joinery_dovetail": "Dovetail",
     "customMaterials": "Benutzerdefinierte Materialien",
     "addCustomMaterial": "Benutzerdefiniertes Material hinzufügen",
     "materialName": "Name",

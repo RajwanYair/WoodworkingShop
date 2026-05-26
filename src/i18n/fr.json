@@ -77,6 +77,8 @@
     "joinery_dado": "Rainure (dado)",
     "joinery_dowel": "Goujon",
     "joinery_biscuit": "Biscuit (lamello)",
+    "joinery_mortise-tenon": "Mortise & Tenon",
+    "joinery_dovetail": "Dovetail",
     "customMaterials": "Matériaux personnalisés",
     "addCustomMaterial": "Ajouter un matériau personnalisé",
     "materialName": "Nom",

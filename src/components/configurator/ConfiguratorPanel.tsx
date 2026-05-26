@@ -118,26 +118,28 @@ export function ConfiguratorPanel() {
           {t('config.joineryType')}
         </legend>
         <div className="flex flex-wrap gap-2">
-          {(['screw', 'pocket-screw', 'dado', 'dowel', 'biscuit'] as JoineryType[]).map((jt) => (
-            <label
-              key={jt}
-              className={`cursor-pointer rounded border px-3 py-1.5 text-xs font-medium transition-colors ${
-                (config.joineryType ?? 'screw') === jt
-                  ? 'bg-wood-600 border-wood-500 text-white'
-                  : 'bg-wood-50 dark:bg-wood-800 text-wood-600 dark:text-wood-300 border-wood-200 dark:border-wood-700 hover:bg-wood-100 dark:hover:bg-wood-700'
-              }`}
-            >
-              <input
-                type="radio"
-                name="joineryType"
-                value={jt}
-                checked={(config.joineryType ?? 'screw') === jt}
-                onChange={() => setConfig({ joineryType: jt })}
-                className="sr-only"
-              />
-              {t(`config.joinery_${jt}`)}
-            </label>
-          ))}
+          {(['screw', 'pocket-screw', 'dado', 'dowel', 'biscuit', 'mortise-tenon', 'dovetail'] as JoineryType[]).map(
+            (jt) => (
+              <label
+                key={jt}
+                className={`cursor-pointer rounded border px-3 py-1.5 text-xs font-medium transition-colors ${
+                  (config.joineryType ?? 'screw') === jt
+                    ? 'bg-wood-600 border-wood-500 text-white'
+                    : 'bg-wood-50 dark:bg-wood-800 text-wood-600 dark:text-wood-300 border-wood-200 dark:border-wood-700 hover:bg-wood-100 dark:hover:bg-wood-700'
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="joineryType"
+                  value={jt}
+                  checked={(config.joineryType ?? 'screw') === jt}
+                  onChange={() => setConfig({ joineryType: jt })}
+                  className="sr-only"
+                />
+                {t(`config.joinery_${jt}`)}
+              </label>
+            ),
+          )}
         </div>
       </fieldset>
 

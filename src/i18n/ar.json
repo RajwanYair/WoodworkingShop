@@ -77,6 +77,8 @@
     "joinery_dado": "خد إدخالي",
     "joinery_dowel": "دوبارا خشبية",
     "joinery_biscuit": "لوحة (Biscuit)",
+    "joinery_mortise-tenon": "Mortise & Tenon",
+    "joinery_dovetail": "Dovetail",
     "customMaterials": "مواد مخصصة",
     "addCustomMaterial": "إضافة مادة مخصصة",
     "materialName": "الاسم",
