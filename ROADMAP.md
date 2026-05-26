@@ -1,7 +1,7 @@
 # Roadmap
 
-> **Last strategic review**: 2026-06-09 · **Current version**: 5.4.0
-> **Next target**: v5.5.0 (Phase 29 — Plugin Marketplace & Mobile Native)
+> **Last strategic review**: 2026-06-09 · **Current version**: 5.5.0
+> **Next target**: v5.6.0 (Phase 30 — AI Assistant & Advanced Export)
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -170,7 +170,7 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 
 ### Phase 29 — Plugin Marketplace & Mobile Native · v5.5.0
 
-> **Status**: PLANNED · **Goal**: Plugin marketplace, native mobile app, advanced analytics
+> **Status**: ✅ COMPLETE · **Released**: 2026-06-09
 
 | Sprint | Deliverable                                                       | Track   |
 | ------ | ----------------------------------------------------------------- | ------- |
@@ -179,6 +179,18 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 129    | Advanced analytics dashboard (usage, material, cost trends)       | Feature |
 | 130    | Bundle performance (code-splitting, lazy chunks, < 1.4 MB target) | Perf    |
 | 131    | Release v5.5.0                                                    | Release |
+
+### Phase 30 — AI Assistant & Advanced Export · v5.6.0
+
+> **Status**: PLANNED · **Goal**: AI design assistant, advanced 3D export, WebSerial CNC streaming improvements
+
+| Sprint | Deliverable                                                                   | Track   |
+| ------ | ----------------------------------------------------------------------------- | ------- |
+| 132    | AI design assistant engine (constraint-based layout suggestions)              | AI      |
+| 133    | glTF 2.0 / IFC 4.3 export (standards-grade 3D output)                         | Export  |
+| 134    | WebSerial CNC streaming v2 (real-time progress, pause/resume, error recovery) | CNC     |
+| 135    | Advanced stock management (purchase orders, reorder alerts, waste tracking)   | Feature |
+| 136    | Release v5.6.0                                                                | Release |
 
 ### Future Horizons (Unscoped)
 

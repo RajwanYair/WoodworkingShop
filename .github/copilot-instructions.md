@@ -2,19 +2,19 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.4.0** · **Next target: v5.5.0** (Phase 29 — Plugin Marketplace & Mobile Native)
+> **Current release: v5.5.0** · **Next target: v5.6.0** (Phase 30 — AI Assistant & Advanced Export)
 
-## Active Sprint — Phase 29 (Sprints 127–131)
+## Active Sprint — Phase 30 (Sprints 132–136)
 
-> **Status**: PLANNED · **Goal**: Plugin marketplace, native mobile app, advanced analytics
+> **Status**: PLANNED · **Goal**: AI design assistant, glTF/IFC export, WebSerial CNC v2, stock management
 
-| Sprint | Feature                                                           | Status |
-| ------ | ----------------------------------------------------------------- | ------ |
-| 127    | Plugin marketplace foundation (registry, install, enable/disable) | TODO   |
-| 128    | Native mobile app (Capacitor iOS/Android + offline-first sync)    | TODO   |
-| 129    | Advanced analytics dashboard (usage, material, cost trends)       | TODO   |
-| 130    | Bundle performance (code-splitting, lazy chunks, < 1.4 MB target) | TODO   |
-| 131    | Release v5.5.0                                                    | TODO   |
+| Sprint | Feature                                                                       | Status |
+| ------ | ----------------------------------------------------------------------------- | ------ |
+| 132    | AI design assistant engine (constraint-based layout suggestions)              | TODO   |
+| 133    | glTF 2.0 / IFC 4.3 export (standards-grade 3D output)                         | TODO   |
+| 134    | WebSerial CNC streaming v2 (real-time progress, pause/resume, error recovery) | TODO   |
+| 135    | Advanced stock management (purchase orders, reorder alerts, waste tracking)   | TODO   |
+| 136    | Release v5.6.0                                                                | TODO   |
 
 ## Tech Stack
 

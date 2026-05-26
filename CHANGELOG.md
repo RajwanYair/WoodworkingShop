@@ -9,6 +9,51 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.5.0] — 2026-06-09
+
+### Phase 29 — Plugin Marketplace & Mobile Native (Sprints 127–131)
+
+#### Sprint 127 — Plugin marketplace foundation
+
+- New `src/engine/plugin-marketplace.ts`: full plugin lifecycle registry
+  - `createRegistry()`, `registerPlugin()`, `installPlugin()`, `uninstallPlugin()`
+  - `enablePlugin()`, `disablePlugin()`, `markPluginError()`
+  - `searchPlugins()` (scored: id×3 / name×2 / desc×1 / author×1)
+  - `getInstalledPlugins()`, `getEnabledPlugins()`, `filterByCategory()`, `getTopPlugins()`
+  - `MarketplacePluginState`, `PluginSource`, `PluginCategory` (8 values), `MarketplaceEntry`, `InstalledPlugin`, `PluginRegistry` types
+- i18n: `marketplace.*` keys (`enable`, `disable`, `enabled`, `search`, `installCount`) in all 6 locales
+- 27 engine unit tests passing
+
+#### Sprint 128 — Mobile offline-first sync engine
+
+- New `src/engine/mobile-sync.ts`: offline queue + conflict resolution for iOS/Android/PWA
+  - `createMobileSyncState()`, `enqueuePendingChange()`, `dequeueChanges()`, `markSynced()`
+  - `detectConflicts()`, `resolveConflict()`, `applyConflictResolution()`, `addConflicts()`
+  - `getMobileSyncSummary()`, `serializeSnapshot()`, `deserializeSnapshot()`, `setOnlineStatus()`
+  - `MobilePlatform`, `SyncConflictStrategy`, `OfflineQueueEntry`, `SyncConflict`, `MobileSyncState` types
+- i18n: `mobileSync.*` section (11 keys) in all 6 locales (EN+HE parity)
+- 27 engine unit tests passing
+
+#### Sprint 129 — Advanced analytics dashboard engine
+
+- New `src/engine/analytics.ts`: usage event tracking and trend computation
+  - `createSession()`, `recordUsageEvent()`, `closeSession()`, `summarizeSession()`
+  - `computeMaterialTrends()`, `getTopMaterials()`, `computeCostTrends()`, `exportAnalytics()`
+  - `UsageEventKind` (8 values), `UsageEvent`, `AnalyticsSession`, `MaterialTrend`, `CostTrend`, `UsageSummary` types
+- i18n: `analytics.*` section (10 keys) in all 6 locales (EN+HE parity)
+- 28 engine unit tests passing
+
+#### Sprint 130 — Bundle performance: lazy feature registry
+
+- New `src/engine/lazy-features.ts`: feature-flag / lazy-chunk registry for bundle optimization
+  - `createFeatureRegistry()`, `registerFeature()`, `isFeatureEnabled()`, `setFeatureEnabled()`
+  - `getFeatureChunks()`, `resolveLoadOrder()` (priority: critical→high→normal→low, then bytes asc)
+  - `estimateBundleImpact()`, `getFeaturesByPriority()`
+  - `FeatureFlag` (8 values), `FeaturePriority`, `LazyFeature`, `LazyFeatureRegistry` types
+- i18n: `features.*` section (8 keys) in all 6 locales (EN+HE parity)
+- 18 engine unit tests passing
+- 911 i18n keys, EN/HE 100% parity, 6 locales
+
 ## [5.4.0] — 2026-06-09
 
 ### Phase 28 — Performance & Plugin Ecosystem (Sprints 122–125)
