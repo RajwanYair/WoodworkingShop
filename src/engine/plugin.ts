@@ -313,6 +313,16 @@ export interface PluginEventMap {
   'project:save': { projectName: string };
   /** A part's rotation lock was toggled (Sprint 16 + 20). */
   'part:rotation-lock': { partId: string; locked: boolean };
+  /** A v2 plugin was installed. */
+  'plugin:install': { pluginId: string };
+  /** A v2 plugin was uninstalled. */
+  'plugin:uninstall': { pluginId: string };
+  /** A v2 plugin became active. */
+  'plugin:activate': { pluginId: string };
+  /** A v2 plugin was deactivated. */
+  'plugin:deactivate': { pluginId: string };
+  /** A v2 plugin lifecycle hook threw an error. */
+  'plugin:error': { pluginId: string; message: string };
 }
 
 export type PluginEventName = keyof PluginEventMap;
@@ -368,6 +378,24 @@ class PluginEventBus {
   /** Remove all handlers (testing utility). */
   clear(): void {
     this.handlers.clear();
+  }
+
+  /**
+   * Register a one-shot handler: fires exactly once then unregisters itself.
+   * Returns an `off` function that cancels the subscription before it fires.
+   */
+  once<E extends PluginEventName>(event: E, handler: PluginEventHandler<E>): () => void {
+    const wrapper: PluginEventHandler<E> = (payload) => {
+      remove();
+      handler(payload);
+    };
+    const remove = this.on(event, wrapper);
+    return remove;
+  }
+
+  /** Return the number of active handlers registered for `event`. */
+  listenerCount(event: PluginEventName): number {
+    return this.handlers.get(event)?.size ?? 0;
   }
 }
 

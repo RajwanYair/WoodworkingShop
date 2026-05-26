@@ -241,6 +241,28 @@ export type { GrainReportPart, GrainMaterialGroup, GrainReport } from './grain-r
 export type { PluginEventMap, PluginEventName, PluginEventHandler } from './plugin.ts';
 
 export {
+  PLUGIN_API_V2_VERSION,
+  PLUGIN_LIFECYCLE_STATES,
+  createPluginContext,
+  isPluginV2,
+  registerPluginV2,
+  deactivatePlugin,
+  activatePlugin,
+  unregisterPluginV2,
+  getRegistryEntries,
+  getRegistryEntry,
+  getActivePlugins,
+  clearRegistryV2,
+} from './plugin-v2';
+export type {
+  PluginLifecycleState,
+  PluginContext,
+  CabinetPlannerPluginV2,
+  PluginRegistryEntry,
+  RegistryResult,
+} from './plugin-v2';
+
+export {
   MATERIAL_TEXTURES,
   MATERIAL_TEXTURE_IDS,
   getMaterialTexture,
