@@ -223,6 +223,14 @@ export interface CabinetConfig {
 
   // Language
   lang: Lang;
+
+  /**
+   * Sprint 93 — When true, this cabinet is the mirrored twin of another cabinet
+   * in the project (doors/drawers open on the opposite side).
+   * The physical parts are identical; this flag is used for labelling and
+   * assembly instructions only.
+   */
+  isMirrored?: boolean;
 }
 
 /**

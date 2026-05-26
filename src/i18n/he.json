@@ -1,4 +1,4 @@
-{
+﻿{
   "app": {
     "title": "מתכנן ארון",
     "subtitle": "כלי עיצוב נגרות אינטראקטיבי"
@@ -351,6 +351,8 @@
     "add": "הוסף ארון",
     "remove": "הסר",
     "duplicate": "\u05e9\u05db\u05e4\u05dc \u05d0\u05e8\u05d5\u05df",
+    "mirror": "\u05e9\u05d9\u05e7\u05d5\u05e3 \u05d0\u05e8\u05d5\u05df (\u05ea\u05d0\u05d5\u05dd \u05e1\u05d9\u05de\u05d8\u05e8\u05d9)",
+    "mirrorBadge": "\u05de\u05e9\u05d5\u05e7\u05e3",
     "moveUp": "\u05d4\u05d6\u05d6 \u05d0\u05e8\u05d5\u05df \u05dc\u05de\u05e2\u05dc\u05d4",
     "moveDown": "\u05d4\u05d6\u05d6 \u05d0\u05e8\u05d5\u05df \u05dc\u05de\u05d8\u05d4",
     "hint": "ארונות מרובים חולקים אופטימיזציה של גיליונות חיתוך. לחיצה כפולה לשינוי שם.",

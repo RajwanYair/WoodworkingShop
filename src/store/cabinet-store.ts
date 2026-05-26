@@ -19,6 +19,7 @@ import { createJsonMemo } from '../engine/memo';
 import { readConfigFromUrl, pushConfigToUrl, readProjectNameFromUrl } from '../utils/url-state';
 import { idbLoadSnapshots } from '../utils/indexed-db-storage';
 import { pluginEventBus } from '../engine/plugin';
+import { mirrorConfig, mirrorName } from '../engine/mirror-cabinet';
 import {
   initWorkerSchedule,
   setRotationLocks,
@@ -141,6 +142,7 @@ export type CabinetState = {
   addCabinet: () => void;
   removeCabinet: (index: number) => void;
   duplicateCabinet: (index: number) => void;
+  mirrorCabinet: (index: number) => void;
   moveCabinet: (index: number, direction: 'up' | 'down') => void;
   setActiveCabinet: (index: number) => void;
   renameCabinet: (index: number, name: string) => void;
@@ -514,6 +516,36 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
         const copies = state.cabinets.filter((c) => c.name.startsWith(baseName + ' (copy')).length;
         const newName = copies === 0 ? `${baseName} (copy)` : `${baseName} (copy ${copies + 1})`;
         const newEntry: CabinetEntry = { name: newName, config: { ...src.config } };
+        const cabinets = [...state.cabinets.slice(0, index + 1), newEntry, ...state.cabinets.slice(index + 1)];
+        const newIndex = index + 1;
+        const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
+        pushConfigToUrl(cabinets[newIndex].config);
+        const base = deriveBaseProject(cabinets, newIndex);
+        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
+        scheduleAssembly(base.config);
+        return {
+          cabinets,
+          activeCabinetIndex: newIndex,
+          ...base,
+          optimizationPending: true,
+          costPending: true,
+          assemblyPending: true,
+          _past: past,
+          _future: [],
+          canUndo: true,
+          canRedo: false,
+        };
+      }),
+
+    // Sprint 93 — create a mirrored twin of an existing cabinet
+    mirrorCabinet: (index) =>
+      set((state) => {
+        if (index < 0 || index >= state.cabinets.length) return state;
+        const src = state.cabinets[index];
+        const newEntry: CabinetEntry = {
+          name: mirrorName(src.name),
+          config: mirrorConfig(src.config),
+        };
         const cabinets = [...state.cabinets.slice(0, index + 1), newEntry, ...state.cabinets.slice(index + 1)];
         const newIndex = index + 1;
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);

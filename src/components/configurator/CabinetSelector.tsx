@@ -11,6 +11,7 @@ export function CabinetSelector() {
     addCabinet,
     removeCabinet,
     duplicateCabinet,
+    mirrorCabinet,
     moveCabinet,
     setActiveCabinet,
     renameCabinet,
@@ -78,6 +79,12 @@ export function CabinetSelector() {
                 >
                   ({generateParts(cab.config).length})
                 </span>
+                {/* Sprint 93 — mirrored badge */}
+                {cab.config.isMirrored && (
+                  <span className="ms-1 rounded bg-purple-100 px-0.5 text-[9px] font-normal text-purple-700 dark:bg-purple-900/40 dark:text-purple-300">
+                    {t('project.mirrorBadge')}
+                  </span>
+                )}
               </button>
             )}
             {cabinets.length > 1 && (
@@ -97,8 +104,15 @@ export function CabinetSelector() {
               aria-label={`Duplicate ${cab.name}`}
             >
               ⧉
-            </button>
-            {/* Sprint 61 — move up / move down */}
+            </button>            {/* Sprint 93 — mirror button */}
+            <button
+              onClick={() => mirrorCabinet(i)}
+              className="text-wood-400 hover:text-purple-600 dark:hover:text-purple-300 text-xs leading-none"
+              title={t('project.mirror')}
+              aria-label={`Mirror ${cab.name}`}
+            >
+              ⇆
+            </button>            {/* Sprint 61 — move up / move down */}
             {cabinets.length > 1 && i > 0 && (
               <button
                 onClick={() => moveCabinet(i, 'up')}
