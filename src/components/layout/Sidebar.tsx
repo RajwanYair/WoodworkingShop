@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { CostEstimatePanel } from '../configurator/CostEstimatePanel';
+import { CostSummaryPanel } from '../configurator/CostSummaryPanel';
 import { SnapshotPanel } from './SnapshotPanel';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { IconBarChart, IconX } from './Icons';
@@ -38,6 +39,8 @@ export function Sidebar() {
       </dl>
 
       <CostEstimatePanel />
+      {/* Sprint 95 — exportable cost breakdown */}
+      <CostSummaryPanel />
       <SnapshotPanel />
     </>
   );

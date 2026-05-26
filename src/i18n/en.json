@@ -778,13 +778,20 @@
     "clearAll": "Reset checklist",
     "empty": "No parts to cut yet — configure a cabinet first."
   },
-  "cutChecklist": {
-    "title": "Part Cutting Checklist",
-    "progress": "{{checked}} of {{total}} parts cut",
-    "progressAriaLabel": "{{percent}}% of parts cut",
-    "complete": "All cut!",
-    "clearAll": "Reset checklist",
-    "empty": "No parts to cut yet — configure a cabinet first."
+  "costSummary": {
+    "title": "Cost Summary",
+    "category": "Category",
+    "amount": "Amount",
+    "share": "Share",
+    "total": "Total",
+    "materials": "Materials",
+    "edgeBanding": "Edge Banding",
+    "hardware": "Hardware",
+    "waste": "Waste Allowance",
+    "finish": "Finish / Paint",
+    "labour": "Labour",
+    "exportCsv": "Export CSV",
+    "tableAriaLabel": "Cost breakdown table"
   },
   "wasteAnalytics": {
     "title": "Waste Analytics",
