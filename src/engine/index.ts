@@ -410,3 +410,27 @@ export {
   diffConfigs,
 } from './audit-trail';
 export type { AuditEventKind, AuditEvent, AuditTrail, DiffEntry, ConfigDiff } from './audit-trail';
+
+// Sprint 127 — Plugin marketplace foundation (Phase 29)
+export {
+  createRegistry,
+  registerPlugin as registerMarketplacePlugin,
+  installPlugin,
+  uninstallPlugin,
+  enablePlugin as enableMarketplacePlugin,
+  disablePlugin as disableMarketplacePlugin,
+  markPluginError,
+  searchPlugins,
+  getInstalledPlugins,
+  getEnabledPlugins,
+  filterByCategory,
+  getTopPlugins,
+} from './plugin-marketplace';
+export type {
+  MarketplacePluginState,
+  PluginSource,
+  PluginCategory,
+  MarketplaceEntry,
+  InstalledPlugin,
+  PluginRegistry,
+} from './plugin-marketplace';
