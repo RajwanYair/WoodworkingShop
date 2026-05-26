@@ -260,3 +260,12 @@ export { MACHINE_PROFILES, MACHINE_PROFILE_IDS, getMachineProfile, getDefaultMac
 export type { MachineProfile, MachineProfileId, ControllerFirmware, SpindleHint } from './machine-profiles';
 export { CATALOG_SCHEMA_VERSION, parseCommunityMaterial, validateCommunityCatalog } from './community-catalog';
 export type { CommunityMaterial, CommunityCatalog, CatalogCurrencyCode } from './community-catalog';
+
+export {
+  validateConstraints,
+  applyConstraints,
+  clampDimension,
+  getDimensionRange,
+  getDefaultConstraints,
+} from './constraint-solver';
+export type { DimensionField, ConstraintOp, DimensionConstraint, ConstraintViolation } from './constraint-solver';
