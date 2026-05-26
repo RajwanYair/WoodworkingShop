@@ -384,3 +384,18 @@ export {
   ISO7171_MAX_WIDTH_HEIGHT_RATIO,
 } from './iso7171';
 export type { Iso7171RuleId, Iso7171ComplianceLevel, Iso7171Violation, Iso7171Report } from './iso7171';
+
+// Sprint 124 — Multi-project workspace (Phase 28)
+export {
+  createWorkspace,
+  addProject,
+  removeProject,
+  activateTab,
+  getActiveProject,
+  shareWorkspaceMaterial,
+  resolveSharedMaterials,
+  exportWorkspace,
+  importWorkspace,
+  updateProjectConfig,
+} from './workspace';
+export type { WorkspaceProject, WorkspaceTab, SharedMaterial, Workspace } from './workspace';

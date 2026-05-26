@@ -298,6 +298,18 @@
     "wideSpanRisk": "רוחב {{widthMm}} ממ — מומלץ תמיכה מרכזית להפחת כיפוף",
     "costMaterialAlternative": "לוח מלמין הוא חלופה חסכונית לפליווד בגימורים צבועים"
   },
+  "workspace": {
+    "title": "סביבת עבודה רב-פרויקטית",
+    "newProject": "פרויקט חדש",
+    "rename": "שינוי שם",
+    "remove": "הסר פרויקט",
+    "addTab": "הוסף לשונית",
+    "noProjects": "אין פרויקטים בסביבת עבודה זו",
+    "sharedMaterial": "חומר משותף",
+    "importWorkspace": "ייבוא סביבת עבודה",
+    "exportWorkspace": "ייצוא סביבת עבודה",
+    "activeProject": "פרויקט פעיל"
+  },
   "iso7171": {
     "title": "תאימות ISO 7171",
     "compliant": "עומד בתקן",
