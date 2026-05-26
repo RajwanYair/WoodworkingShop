@@ -364,3 +364,23 @@ export {
   ERP_SCHEMA_VERSION,
 } from './erp-export';
 export type { ErpSystem, ErpFindingSeverity, ErpLineItem, ErpHeader, ErpExportResult, ErpFinding } from './erp-export';
+
+// Sprint 123 — ISO 7171 compliance validation (Phase 28)
+export {
+  validateIso7171,
+  formatIso7171Report,
+  filterViolations,
+  ISO7171_MODULE_WIDTHS,
+  ISO7171_MODULE_TOLERANCE,
+  ISO7171_BASE_HEIGHT,
+  ISO7171_WALL_HEIGHT,
+  ISO7171_BASE_DEPTH,
+  ISO7171_WALL_DEPTH,
+  ISO7171_TOE_KICK,
+  ISO7171_MIN_SHELF_GAP,
+  ISO7171_MAX_SHELVES_TALL,
+  ISO7171_MAX_SHELVES_BASE,
+  ISO7171_DRAWER_HEIGHT,
+  ISO7171_MAX_WIDTH_HEIGHT_RATIO,
+} from './iso7171';
+export type { Iso7171RuleId, Iso7171ComplianceLevel, Iso7171Violation, Iso7171Report } from './iso7171';

@@ -293,6 +293,17 @@
     "wideSpanRisk": "Wide span {{widthMm}} mm — consider a centre support to reduce shelf deflection",
     "costMaterialAlternative": "Melamine board is a cost-effective alternative to plywood for painted finishes"
   },
+  "iso7171": {
+    "title": "Conformité ISO 7171",
+    "compliant": "Conforme",
+    "nonCompliant": "Non conforme",
+    "failCount": "{{count}} échec",
+    "failCount_other": "{{count}} échecs",
+    "advisoryCount": "{{count}} avis",
+    "advisoryCount_other": "{{count}} avis",
+    "validate": "Valider",
+    "noViolations": "Aucune infraction"
+  },
   "erp": {
     "title": "Export ERP / MRP",
     "system": "Système cible",
