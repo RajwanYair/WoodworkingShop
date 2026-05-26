@@ -117,8 +117,8 @@ function cabinetAabb(x: number, z: number, footprint: CabinetFootprint): AabbMet
 
 /**
  * Enumerate grid-aligned AR placement candidates on a floor surface.
- * Positions are spaced {@link GRID_STEP_M} metres apart and pruned to those
- * that fit within the surface bounds (less a {@link WALL_MARGIN_M} margin).
+ * Positions are spaced 0.1 m apart and pruned to those
+ * that fit within the surface bounds (less a 0.05 m wall margin).
  *
  * @param surface - Floor surface on which to place the cabinet.
  * @param footprint - Cabinet footprint dimensions in mm.
@@ -225,7 +225,7 @@ export function validatePlacement(
  * @param rawX - Raw hit-test X (metres).
  * @param rawZ - Raw hit-test Z (metres).
  * @param surface - The floor surface.
- * @returns Snapped `{ x, z }` position aligned to {@link GRID_STEP_M} grid.
+ * @returns Snapped `{ x, z }` position aligned to the 0.1 m placement grid.
  */
 export function snapToGrid(rawX: number, rawZ: number, surface: RoomSurface): { x: number; z: number } {
   const step = GRID_STEP_M;

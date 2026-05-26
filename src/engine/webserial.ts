@@ -10,7 +10,8 @@
 
 // ── Minimal Web Serial API typings (not in every @types/lib version) ──────────
 
-interface SerialPortHandle {
+/** Minimal Web Serial API port handle (browser DOM shim). */
+export interface SerialPortHandle {
   open(options: {
     baudRate: number;
     dataBits?: number;

@@ -46,6 +46,12 @@ export type {
   Ok,
   Err,
   HardwareCatalogEntry,
+  Mm,
+  Kg,
+  Percent,
+  JoineryType,
+  OffcutEntry,
+  DefectZone,
 } from './types';
 
 export { ok, err } from './types';
@@ -110,7 +116,7 @@ export {
 export type { CabinetPlannerPlugin, PluginContract, PluginHookContract, PluginStability } from './plugin.ts';
 
 export { generateAssemblySteps, buildAssemblyDAG } from './assembly.ts';
-export type { AssemblyStep } from './assembly.ts';
+export type { AssemblyStep, RawStep } from './assembly.ts';
 
 export { calculateHingeBoreSpec, hingeCount, formatHingeBoreSpecSummary } from './hinge-bore';
 export type { HingeBoreSpec, HingeBorePosition, HingeBoreError } from './hinge-bore';
@@ -238,6 +244,7 @@ export type { LocaleTree, FlatLocale, LocaleAuditResult, AuditReport } from './i
 export { buildGrainReport, grainReportToCsv } from './grain-report';
 export type { GrainReportPart, GrainMaterialGroup, GrainReport } from './grain-report';
 
+export { pluginEventBus, PluginEventBus } from './plugin.ts';
 export type { PluginEventMap, PluginEventName, PluginEventHandler } from './plugin.ts';
 
 export {
@@ -277,7 +284,7 @@ export {
   disconnectFromMachine,
   DEFAULT_SERIAL_PROFILE,
 } from './webserial';
-export type { WebSerialState, WebSerialProfile } from './webserial';
+export type { WebSerialState, WebSerialProfile, SerialPortHandle } from './webserial';
 export { MACHINE_PROFILES, MACHINE_PROFILE_IDS, getMachineProfile, getDefaultMachineProfile } from './machine-profiles';
 export type { MachineProfile, MachineProfileId, ControllerFirmware, SpindleHint } from './machine-profiles';
 export { CATALOG_SCHEMA_VERSION, parseCommunityMaterial, validateCommunityCatalog } from './community-catalog';

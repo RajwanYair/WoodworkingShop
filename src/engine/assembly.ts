@@ -20,8 +20,8 @@ export interface AssemblyStep {
   parallel?: boolean;
 }
 
-// Internal shape used inside generateAssemblySteps before DAG resolution
-type RawStep = Omit<AssemblyStep, 'id' | 'dependencies' | 'parallel'>;
+/** Input shape passed to {@link buildAssemblyDAG} before id/dep/parallel are resolved. */
+export type RawStep = Omit<AssemblyStep, 'id' | 'dependencies' | 'parallel'>;
 
 /**
  * Compute dependency edges and parallel flags for a flat list of raw assembly
