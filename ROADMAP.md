@@ -191,7 +191,19 @@ state; GH release published.
 | 95     | Project Cost Summary Export (breakdown, CSV)          | **DONE** | UX      |
 | 96     | Version bump 4.3.0, CHANGELOG, GH release             | **DONE** | Release |
 
-### Phase 22+: Future Horizons (Unscoped)
+### Phase 23 — Precision Workflows · v4.4.0 · **DONE**
+
+> **Status**: Released · **Version**: 4.4.0 · **Goal**: Shop-floor precision — stock tracking, grain validation, cost auditing, part labelling
+
+| Sprint | Feature                                               | Status   | Track   |
+| ------ | ----------------------------------------------------- | -------- | ------- |
+| 97     | Stock Tracker Dashboard (availability, shortfalls)    | **DONE** | UX      |
+| 98     | Grain Direction Report Panel (per-material, bars)     | **DONE** | UX      |
+| 99     | Cost Variance Tracker (estimated vs actual, CSV)      | **DONE** | UX      |
+| 100    | Part Label Sheet (sequential IDs, print window)       | **DONE** | UX      |
+| 101    | Version bump 4.4.0, CHANGELOG, GH release             | **DONE** | Release |
+
+### Phase 23+: Future Horizons (Unscoped)
 
 | Track         | Candidate                                           | Trigger                              |
 | ------------- | --------------------------------------------------- | ------------------------------------ |

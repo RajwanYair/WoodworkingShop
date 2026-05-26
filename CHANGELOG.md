@@ -9,6 +9,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.4.0] — 2026-05-26
+
+### Phase 23 — Precision Workflows (Sprints 97–100)
+
+#### Sprint 97 — Stock Tracker Dashboard
+
+- Added `src/store/stock-tracker-store.ts`: standalone Zustand `persist` store wrapping `stock-tracker.ts` engine functions — `addOrUpdateItem`, `setOnHand`, `removeItem`, `clearAll`
+- Added `src/components/optimizer/StockTrackerPanel.tsx`: collapsible panel showing per-material availability (on-hand vs required sheets), color-coded status badges (ok/low/shortfall/unknown), inline on-hand editing, add-stock-item form with material key, quantity, and reorder level
+- Mounted in `OptimizerView` after `CutChecklistPanel`
+- i18n: `stockTracker.*` section (16 keys, EN + HE parity)
+- Engine tests: 12 unit tests for `checkAvailability`, `getShortfalls`, `addStockItem`, `updateOnHand` (pre-existing)
+
+#### Sprint 98 — Grain Direction Report Panel
+
+- Added `src/components/optimizer/GrainReportPanel.tsx`: collapsible per-material grain report; expandable material groups with grain-constraint progress bars, per-part grain badges, grain-locked count chips
+- Mounted in `OptimizerView` after `StockTrackerPanel`
+- i18n: `grainReport.*` section (6 keys, EN + HE parity)
+- Engine tests: 16 unit tests for `buildGrainReport` (pre-existing)
+
+#### Sprint 99 — Cost Variance Tracker
+
+- Added `src/store/cost-variance-store.ts`: standalone Zustand `persist` store for user-entered actual material costs — `setActualCost`, `removeActualCost`, `clearAll`
+- Added `src/components/configurator/CostVariancePanel.tsx`: collapsible table comparing estimated vs actual material costs, inline editing of actual prices, variance % column with green/red colouring, total footer, savings line
+- Mounted in `Sidebar` after `CostSummaryPanel`
+- i18n: `costVariance.*` section (10 keys, EN + HE parity)
+- Engine tests: 14 unit tests for `generateCostVarianceReport` (pre-existing)
+
+#### Sprint 100 — Part Label Sheet
+
+- Added `src/components/optimizer/PartLabelSheet.tsx`: collapsible grid of printable part label cards — sequential labels (P-001, P-002…), optional `expandMultiQty` mode (one label per physical piece), print-window button generating a clean CSS-print label sheet
+- Mounted in `OptimizerView` after `GrainReportPanel`
+- i18n: `partLabels.*` section (6 keys, EN + HE parity)
+- Engine tests: 14 unit tests for `assignPartLabels` (pre-existing)
+
 ## [4.3.0] — 2026-05-26
 
 ### Phase 22 — Workshop Intelligence (Sprints 92–95)

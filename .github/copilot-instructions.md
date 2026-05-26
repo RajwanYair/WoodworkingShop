@@ -2,19 +2,19 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v4.3.0** · **Next target: v4.4.0** (Phase 23 — TBD)
+> **Current release: v4.4.0** · **Next target: v4.5.0** (Phase 24 — TBD)
 
-## Active Sprint — Phase 22 (Sprints 92–96)
+## Active Sprint — Phase 23 (Sprints 97–101)
 
-> **Status**: DONE · **Goal**: Workshop Intelligence — Waste Analytics, Mirror & Clone, Cut Checklist, Cost Export
+> **Status**: DONE · **Goal**: Precision Workflows — Stock Tracker, Grain Report, Cost Variance, Part Labels
 
 | Sprint | Feature                  | Status |
 | ------ | ------------------------ | ------ |
-| 92     | Smart Waste Analytics    | DONE   |
-| 93     | Cabinet Mirror & Clone   | DONE   |
-| 94     | Part Cutting Checklist   | DONE   |
-| 95     | Project Cost Summary Export | DONE |
-| 96     | Release v4.3.0           | DONE   |
+| 97     | Stock Tracker Dashboard  | DONE   |
+| 98     | Grain Direction Report   | DONE   |
+| 99     | Cost Variance Tracker    | DONE   |
+| 100    | Part Label Sheet         | DONE   |
+| 101    | Release v4.4.0           | DONE   |
 
 ## Tech Stack
 
