@@ -9,6 +9,71 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.7.0] — 2026-06-11
+
+### Phase 31 — UI Polish & Accessibility (Sprints 137–141)
+
+#### Sprint 137 — WCAG 2.2 AA audit engine
+
+- New `src/engine/a11y-audit.ts`: WCAG 2.2 AA criterion registry and audit helpers
+  - `WCAG_22_CRITERIA`: 55 criteria (A + AA) with `isNewIn22` flag
+  - `AUDIT_RULES`: 16 built-in rules with criterion, severity, description, helpUrl
+  - `relativeLuminance` / `contrastRatio`: WCAG relative luminance algorithm
+  - `meetsContrastRequirement`: AA/AAA text contrast check (4.5:1 / 3:1 / 7:1)
+  - `meetsTargetSize`: WCAG 2.5.8 minimum 24×24 px target size check
+  - `createAuditResult` / `addViolation` / `addPass` / `addIncomplete`: immutable builders
+  - `buildA11yReport` / `formatA11yReport`: aggregate and format audit results
+  - `getCriterion` / `getNewIn22Criteria` / `getRulesByCategory` / `getCriticalAndSeriousRules`
+  - `MIN_TARGET_SIZE_PX` constant
+- i18n: `a11yAudit.*` section (10 keys) in all 6 locales (EN+HE parity, 963 keys)
+- 51 unit tests
+
+#### Sprint 138 — Dark mode design token engine
+
+- New `src/engine/dark-mode-tokens.ts`: 4-mode theme token system with WCAG contrast validation
+  - `LIGHT_THEME`, `DARK_THEME`, `HIGH_CONTRAST_THEME`, `HIGH_CONTRAST_DARK_THEME`
+  - `ALL_THEMES`: `ReadonlyMap<ThemeMode, ThemeDefinition>` (18 tokens per theme)
+  - `resolveTheme` / `getToken` / `getTokenRgb`: safe token resolution
+  - `generateThemeCss`: CSS custom property block generator (`:root` / `.dark` / etc.)
+  - `tokenToCssProperty`: single-token CSS declaration
+  - `computeThemeClassDiff`: class add/remove diff for `<html>` element switching
+  - `isDarkMode` / `colorSchemeValue` / `systemPreferenceToMode`: theme metadata helpers
+  - `checkContrastPair` / `validateThemeContrast` / `getContrastFailures`: WCAG AA validation
+  - `buildThemeSummary`: per-theme summary with contrast failure count
+  - `STANDARD_CONTRAST_PAIRS`: 5 standard text/background pairs validated per theme
+  - High-contrast themes validated to have 0 WCAG AA contrast failures
+- i18n: `darkMode.*` section (9 keys) in all 6 locales (EN+HE parity, 972 keys)
+- 49 unit tests
+
+#### Sprint 139 — Large component splitting
+
+- Extract `OptimizerToolbar` from `OptimizerView` (react-refresh compliance)
+  - New `src/components/optimizer/OptimizerToolbar.tsx` (299 lines)
+    - `OptimizerToolbarProps` interface — 16 props + store reads for owned state
+    - Stats grid (sheets, yield, waste, parts, cuts, grain conflicts)
+    - Part filter input + clear button, saw kerf input, cut mode + auto co-nest toggles
+    - Export buttons: DXF (worker), G-code, BOM (worker), hardware CSV
+    - Toggle buttons: color-blind, part labels, grain hatch, print, bulk replace
+  - `OptimizerView.tsx`: 610 → 389 lines (well under 600-line target)
+  - No behaviour change — pure structural refactor
+
+#### Sprint 140 — Bundle optimisation strategy engine
+
+- New `src/engine/bundle-strategy.ts`: pure TS chunk strategy and budget validation
+  - `CHUNK_NAMES`: `pdf-renderer`, `i18n-vendor`, `vendor`, `engine-optimizer` (`as const`)
+  - `MODULE_CHUNK_DESCRIPTORS`: 4 descriptors with `modulePatterns`, `description`, `gzipHintKB`
+  - `BUNDLE_BUDGET`: mirrors `config/bundle-budget.json` constants
+  - `resolveChunkName(id)`: centralized Vite `manualChunks` pattern matching
+  - `exceedsPerFileBudget` / `exceedsTotalJsBudget`: budget gate helpers
+  - `getMissingChunks(outputChunkNames)`: build-output gap analysis
+  - `ChunkName`, `ModuleChunkDescriptor`, `BundleBudget` types
+- `vite.config.ts`: add `engine-optimizer` manual chunk
+  - Groups `cut-optimizer`, `smart-optimizer`, `assembly-dag` into deferred chunk
+  - Reduces initial parse cost (chunk loaded only when `OptimizerView` is activated)
+- 35 unit tests
+
+---
+
 ## [5.6.0] — 2026-06-10
 
 ### Phase 30 — AI Assistant & Advanced Export (Sprints 132–136)

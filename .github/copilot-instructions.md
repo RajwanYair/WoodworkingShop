@@ -2,19 +2,19 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.6.0** · **Next target: v5.7.0** (Phase 31 — UI Polish & Accessibility)
+> **Current release: v5.7.0** · **Next target: v5.8.0** (Phase 32 — Developer Experience & Plugin Ecosystem)
 
-## Active Sprint — Phase 31 (Sprints 137–141)
+## Active Sprint — Phase 32 (Sprints 142–146)
 
-> **Status**: PLANNED · **Goal**: WCAG 2.2 AA remediation, dark mode, component splitting, bundle optimisation
+> **Status**: PLANNED · **Goal**: Plugin API v2, TypeDoc docs, test coverage uplift, DX tooling
 
-| Sprint | Feature                                                                | Status |
-| ------ | ---------------------------------------------------------------------- | ------ |
-| 137    | WCAG 2.2 AA full audit & remediation (axe-core zero violations)        | TODO   |
-| 138    | Dark mode (design tokens + Tailwind CSS v4 theme switching)            | TODO   |
-| 139    | Large component splitting (≤ 600 lines each, react-refresh compliance) | TODO   |
-| 140    | Bundle optimisation (lazy chunks, tree-shaking, < 400 KB gzipped)      | TODO   |
-| 141    | Release v5.7.0                                                         | TODO   |
+| Sprint | Feature                                                             | Status |
+| ------ | ------------------------------------------------------------------- | ------ |
+| 142    | Plugin API v2 (typed event bus, lifecycle hooks, sandboxed context) | TODO   |
+| 143    | TypeDoc API documentation site (auto-generated from engine JSDoc)   | TODO   |
+| 144    | Test coverage uplift to 85% (engine + store combined)               | TODO   |
+| 145    | DX tooling (custom Vitest reporters, structured lint summaries)     | TODO   |
+| 146    | Release v5.8.0                                                      | TODO   |
 
 ## Tech Stack
 

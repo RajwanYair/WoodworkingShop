@@ -1,7 +1,7 @@
 # Roadmap
 
 > **Last strategic review**: 2026-06-10 · **Current version**: 5.6.0
-> **Next target**: v5.7.0 (Phase 31 — UI Polish & Accessibility)
+> **Next target**: v5.8.0 (Phase 32 — Developer Experience & Plugin Ecosystem)
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -192,9 +192,9 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 135    | Advanced stock management (purchase orders, reorder alerts, waste tracking)   | Feature |
 | 136    | Release v5.6.0                                                                | Release |
 
-### Phase 31 — UI Polish & Accessibility · v5.7.0
+### Phase 31 — UI Polish & Accessibility · v5.7.0 ✅ COMPLETE
 
-> **Status**: PLANNED · **Goal**: WCAG 2.2 AA audit remediation, dark mode, component splitting, performance
+> **Status**: COMPLETE · **Goal**: WCAG 2.2 AA audit remediation, dark mode, component splitting, performance
 
 | Sprint | Deliverable                                                            | Track       |
 | ------ | ---------------------------------------------------------------------- | ----------- |
@@ -203,6 +203,18 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 139    | Large component splitting (≤ 600 lines each, react-refresh compliance) | Refactor    |
 | 140    | Bundle optimisation (lazy chunks, tree-shaking, < 400 KB gzipped)      | Performance |
 | 141    | Release v5.7.0                                                         | Release     |
+
+### Phase 32 — Developer Experience & Plugin Ecosystem · v5.8.0
+
+> **Status**: PLANNED · **Goal**: Plugin API surface, TypeDoc API docs, test coverage uplift, DX tooling
+
+| Sprint | Deliverable                                                         | Track   |
+| ------ | ------------------------------------------------------------------- | ------- |
+| 142    | Plugin API v2 (typed event bus, lifecycle hooks, sandboxed context) | DX      |
+| 143    | TypeDoc API documentation site (auto-generated from engine JSDoc)   | Docs    |
+| 144    | Test coverage uplift to 85% (engine + store combined)               | Quality |
+| 145    | DX tooling (custom Vitest reporters, structured lint summaries)     | DX      |
+| 146    | Release v5.8.0                                                      | Release |
 
 ### Future Horizons (Unscoped)
 
