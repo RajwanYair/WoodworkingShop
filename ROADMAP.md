@@ -1,7 +1,7 @@
 # Roadmap
 
 > **Last strategic review**: 2026-05-26 · **Current version**: 5.1.0
-> **Next target**: v5.2.0 (Phase 26 — Visual Engine Upgrade)
+> **Next target**: v5.3.0 (Phase 27 — Collaboration & Intelligence)
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -117,18 +117,17 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 
 ## Active Roadmap
 
-### Phase 26 — Visual Engine Upgrade · v5.2.0
+### Phase 26 — Visual Engine Upgrade · v5.2.0 ✓ COMPLETE
 
-> **Status**: ACTIVE · **Goal**: WebGPU-powered 3D rendering with PBR materials,
-> replacing SVG isometric for the main preview while keeping SVG as print fallback.
+> **Status**: COMPLETE · **Released**: 2026-05-26
 
 | Sprint | Deliverable                                                     | Status | Track   |
 | ------ | --------------------------------------------------------------- | ------ | ------- |
-| 112    | WebGPU renderer scaffolding (fallback to WebGL2)                | TODO   | Engine  |
-| 113    | PBR material system (wood grain, edge banding, hardware chrome) | TODO   | Assets  |
-| 114    | Interactive 3D cabinet preview (orbit, pan, zoom, explode view) | TODO   | UI      |
-| 115    | AR placement via WebXR (scan room → place cabinet)              | TODO   | Feature |
-| 116    | Version bump 5.2.0, CHANGELOG, GH release                       | TODO   | Release |
+| 112    | WebGPU renderer scaffolding (fallback to WebGL2)                | ✓ Done | Engine  |
+| 113    | PBR material system (wood grain, edge banding, hardware chrome) | ✓ Done | Assets  |
+| 114    | Interactive 3D cabinet preview (orbit, pan, zoom, explode view) | ✓ Done | UI      |
+| 115    | AR placement via WebXR (scan room → place cabinet)              | ✓ Done | Feature |
+| 116    | Version bump 5.2.0, CHANGELOG, GH release                       | ✓ Done | Release |
 
 ### Phase 25 — Optimizer Intelligence v2 · v5.1.0 ✓ COMPLETE
 

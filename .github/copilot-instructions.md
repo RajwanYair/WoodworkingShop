@@ -2,19 +2,19 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.1.0** · **Next target: v5.2.0** (Phase 26 — Visual Engine Upgrade)
+> **Current release: v5.2.0** · **Next target: v5.3.0** (Phase 27 — Collaboration & Intelligence)
 
-## Active Sprint — Phase 26 (Sprints 112–116)
+## Active Sprint — Phase 27 (Sprints 117–121)
 
-> **Status**: ACTIVE · **Goal**: WebGPU-powered 3D rendering with PBR materials, interactive 3D preview, and AR placement
+> **Status**: PLANNED · **Goal**: Real-time collaboration, cloud sync, AI-powered layout suggestions
 
-| Sprint | Feature                                          | Status |
-| ------ | ------------------------------------------------ | ------ |
-| 112    | WebGPU renderer scaffolding (fallback to WebGL2) | TODO   |
-| 113    | PBR material system (wood grain, edge banding)   | TODO   |
-| 114    | Interactive 3D cabinet preview                   | TODO   |
-| 115    | AR placement via WebXR                           | TODO   |
-| 116    | Release v5.2.0                                   | TODO   |
+| Sprint | Feature                                     | Status |
+| ------ | ------------------------------------------- | ------ |
+| 117    | Collaboration presence layer (CRDT cursors) | TODO   |
+| 118    | Cloud project sync (IndexedDB → remote)     | TODO   |
+| 119    | AI layout suggestions (heuristic engine)    | TODO   |
+| 120    | Shared project library & catalog            | TODO   |
+| 121    | Release v5.3.0                              | TODO   |
 
 ## Tech Stack
 

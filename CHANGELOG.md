@@ -9,6 +9,54 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.2.0] — 2026-05-26
+
+### Phase 26 — Visual Engine Upgrade (Sprints 112–116)
+
+#### Sprint 112 — WebGPU renderer scaffolding
+
+- New `src/engine/webgpu-renderer.ts`: pure-TS scene graph utilities
+  - `buildBoxMesh()`: 24-vertex interleaved geometry (pos + normal + UV), 36 indices
+  - `buildCabinetScene()`: converts parts array into `CabinetScene` mesh list
+  - `getMeshBounds()` / `getSceneBounds()`: AABB helpers
+  - `centerScene()`: translate scene so bounding box is centred at origin
+  - `applyExplodeFactor(factor)`: scale part offsets by [0, 1] factor
+  - `RendererTier` union: `'webgpu' | 'webgl2' | 'none'`
+  - `FALLBACK_CAPABILITIES`, `DEFAULT_LIGHT`, `DEFAULT_RENDER_OPTIONS` constants
+- 27 engine unit tests passing
+
+#### Sprint 113 — PBR material system
+
+- New `src/engine/pbr-materials.ts`: pure-TS physically-based rendering materials
+  - 10 wood/panel materials: oak, maple, walnut, pine, birch, cherry, mdf, plywood, melamine, solid-wood
+  - 4 hardware finishes: chrome, brushed-steel, brass, black-matte (all metalness = 1)
+  - `getPbrMaterial()`: prefix matching (e.g. `'plywood-18'` → `'plywood'`)
+  - `hexToLinearRgb()`, `lerpColor()`, `blendPbrMaterials()`: colour utilities
+  - `EDGE_BANDING_MATERIAL`, `FALLBACK_PBR_MATERIAL` constants
+- 41 engine unit tests passing
+
+#### Sprint 114 — Interactive 3D preview panel
+
+- New `src/components/preview/Preview3DPanel.tsx`: canvas-based orthographic preview
+  - `useRendererCapabilities()` hook: probes `navigator.gpu` → WebGL2 → `'none'`
+  - Explode-view slider (0–1), wireframe + edge-banding toggles, zoom controls
+  - Renderer-tier badge (emerald = WebGPU, blue = WebGL2, wood-500 = none)
+  - Draws parts using PBR baseColor with canvas 2D API
+- i18n: `preview3d.*` section — 10 keys across all 6 locales (EN + HE parity)
+- 13 component tests passing
+
+#### Sprint 115 — AR placement via WebXR
+
+- New `src/engine/webxr-placement.ts`: pure-TS AR placement utilities
+  - `computeArPlacements()`: grid-based candidate positions on floor surface
+  - `validatePlacement()`: single-position collision + boundary check
+  - `snapToGrid()`: 0.1 m grid snapping with surface clamping
+  - Types: `AabbMetres`, `RoomSurface`, `CabinetFootprint`, `PlacementCandidate`,
+    `ArPlacementResult`, `PlacementObstacle`
+- New `src/hooks/useWebXR.ts`: probes `navigator.xr` `immersive-ar` support
+- i18n: `ar.*` section — 4 keys across all 6 locales (EN + HE parity)
+- 20 engine unit tests passing
+
 ## [5.1.0] — 2026-05-26
 
 ### Phase 25 — Optimizer Intelligence v2 (Sprints 107–111)
