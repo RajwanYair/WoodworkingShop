@@ -306,6 +306,16 @@
     "installCount": "{{count}} install",
     "installCount_other": "{{count}} installs"
   },
+  "features": {
+    "title": "Feature Flags",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "priority": "Priority",
+    "bundleSize": "Bundle size",
+    "chunks": "Chunks",
+    "loadOrder": "Load order",
+    "totalImpact": "Total bundle impact"
+  },
   "analytics": {
     "title": "Analytics Dashboard",
     "sessions": "Sessions",

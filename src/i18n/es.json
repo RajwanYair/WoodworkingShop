@@ -306,6 +306,16 @@
     "installCount": "{{count}} instalación",
     "installCount_other": "{{count}} instalaciones"
   },
+  "features": {
+    "title": "Indicadores de funciones",
+    "enabled": "Activado",
+    "disabled": "Desactivado",
+    "priority": "Prioridad",
+    "bundleSize": "Tamaño del paquete",
+    "chunks": "Fragmentos",
+    "loadOrder": "Orden de carga",
+    "totalImpact": "Impacto total del paquete"
+  },
   "analytics": {
     "title": "Panel de análisis",
     "sessions": "Sesiones",

@@ -472,3 +472,16 @@ export {
   exportAnalytics,
 } from './analytics';
 export type { UsageEventKind, UsageEvent, AnalyticsSession, MaterialTrend, CostTrend, UsageSummary } from './analytics';
+
+// Sprint 130 — Bundle performance: lazy feature registry (Phase 29)
+export {
+  createFeatureRegistry,
+  registerFeature as registerLazyFeature,
+  isFeatureEnabled,
+  setFeatureEnabled,
+  getFeatureChunks,
+  resolveLoadOrder,
+  estimateBundleImpact,
+  getFeaturesByPriority,
+} from './lazy-features';
+export type { FeatureFlag, FeaturePriority, LazyFeature, LazyFeatureRegistry } from './lazy-features';

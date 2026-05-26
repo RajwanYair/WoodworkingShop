@@ -298,6 +298,16 @@
     "wideSpanRisk": "רוחב {{widthMm}} ממ — מומלץ תמיכה מרכזית להפחת כיפוף",
     "costMaterialAlternative": "לוח מלמין הוא חלופה חסכונית לפליווד בגימורים צבועים"
   },
+  "features": {
+    "title": "דגלי תכונות",
+    "enabled": "מופעל",
+    "disabled": "מושבת",
+    "priority": "עדיפות",
+    "bundleSize": "גודל חבילה",
+    "chunks": "קטעים",
+    "loadOrder": "סדר טעינה",
+    "totalImpact": "השפעת חבילה כוללת"
+  },
   "analytics": {
     "title": "לוח נתונים",
     "sessions": "סשנים",

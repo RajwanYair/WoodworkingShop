@@ -306,6 +306,16 @@
     "installCount": "{{count}} installation",
     "installCount_other": "{{count}} installations"
   },
+  "features": {
+    "title": "Indicateurs de fonctionnalités",
+    "enabled": "Activé",
+    "disabled": "Désactivé",
+    "priority": "Priorité",
+    "bundleSize": "Taille du bundle",
+    "chunks": "Fragments",
+    "loadOrder": "Ordre de chargement",
+    "totalImpact": "Impact total du bundle"
+  },
   "analytics": {
     "title": "Tableau de bord analytique",
     "sessions": "Sessions",
