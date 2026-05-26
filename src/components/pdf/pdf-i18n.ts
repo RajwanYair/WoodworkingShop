@@ -299,7 +299,7 @@ export const pdfI18n = {
 } as const;
 
 export type PdfLang = keyof typeof pdfI18n;
-export type PdfTranslations = (typeof pdfI18n)[PdfLang];
+type PdfTranslations = (typeof pdfI18n)[PdfLang];
 
 /** Shared render context passed to every PDF page-section component. */
 export interface PdfCtx {

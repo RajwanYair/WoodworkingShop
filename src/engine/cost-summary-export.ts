@@ -11,7 +11,7 @@ import type { CostBreakdown } from './cost-estimator';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-export interface CostSummaryLine {
+interface CostSummaryLine {
   labelKey: string;
   labelFallback: string;
   amount: number;
@@ -103,9 +103,7 @@ export function buildCostSummary(breakdown: CostBreakdown, currency = '₪'): Co
 export function costSummaryToCsv(summary: CostSummary): string {
   const rows: string[] = [
     `Category,Amount (${summary.currency}),Share (%)`,
-    ...summary.lines.map(
-      (l) => `${csvEscape(l.labelFallback)},${l.amount.toFixed(2)},${l.pct.toFixed(2)}`,
-    ),
+    ...summary.lines.map((l) => `${csvEscape(l.labelFallback)},${l.amount.toFixed(2)},${l.pct.toFixed(2)}`),
     `Total,${summary.totalCost.toFixed(2)},100.00`,
   ];
   return rows.join('\r\n');

@@ -21,11 +21,9 @@ export const useStockTrackerStore = create<StockTrackerState>()(
     (set) => ({
       stockStore: createStockStore(),
 
-      addOrUpdateItem: (item) =>
-        set((s) => ({ stockStore: engineAddStockItem(s.stockStore, item) })),
+      addOrUpdateItem: (item) => set((s) => ({ stockStore: engineAddStockItem(s.stockStore, item) })),
 
-      setOnHand: (materialKey, qty) =>
-        set((s) => ({ stockStore: engineUpdateOnHand(s.stockStore, materialKey, qty) })),
+      setOnHand: (materialKey, qty) => set((s) => ({ stockStore: engineUpdateOnHand(s.stockStore, materialKey, qty) })),
 
       removeItem: (materialKey) =>
         set((s) => ({

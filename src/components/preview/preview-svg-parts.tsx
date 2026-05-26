@@ -43,7 +43,7 @@ export function ViewBox({
  * Picks a "nice" length (100/200/500/1000 mm) that fits in ~20% of the
  * view width, draws a labelled bracket in the bottom-left.
  */
-export function ScaleBar({ viewW, viewH }: { viewW: number; viewH: number }) {
+function ScaleBar({ viewW, viewH }: { viewW: number; viewH: number }) {
   const mmPerPx = 1 / 0.2; // matches the S constant in preview-constants.ts
   const targetPx = viewW * 0.2;
   const targetMm = targetPx * mmPerPx;

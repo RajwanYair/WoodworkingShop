@@ -36,18 +36,15 @@ export function CutPlanSummaryPanel() {
   const { optimization } = useCabinetStore();
   const [open, setOpen] = useState(false);
 
-  const summary = useMemo(
-    () => buildCutPlanSummary(groupSheets(optimization.sheets)),
-    [optimization.sheets],
-  );
+  const summary = useMemo(() => buildCutPlanSummary(groupSheets(optimization.sheets)), [optimization.sheets]);
 
   if (optimization.sheets.length === 0) return null;
 
   return (
-    <section className="mb-3 rounded-lg border border-wood-200 bg-wood-50 dark:border-wood-700 dark:bg-wood-900">
+    <section className="border-wood-200 bg-wood-50 dark:border-wood-700 dark:bg-wood-900 mb-3 rounded-lg border">
       <button
         type="button"
-        className="flex w-full items-center justify-between px-3 py-2 text-sm font-semibold text-wood-700 dark:text-wood-200"
+        className="text-wood-700 dark:text-wood-200 flex w-full items-center justify-between px-3 py-2 text-sm font-semibold"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
       >
@@ -56,12 +53,12 @@ export function CutPlanSummaryPanel() {
       </button>
 
       {open && (
-        <div className="px-3 pb-3 space-y-3">
+        <div className="space-y-3 px-3 pb-3">
           {/* Per-material table */}
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
               <thead>
-                <tr className="border-b border-wood-200 dark:border-wood-600 text-wood-500 dark:text-wood-400">
+                <tr className="border-wood-200 dark:border-wood-600 text-wood-500 dark:text-wood-400 border-b">
                   <th className="pb-1 text-start font-medium">{t('cutPlanSummary.material')}</th>
                   <th className="pb-1 text-end font-medium">{t('cutPlanSummary.sheets')}</th>
                   <th className="pb-1 text-end font-medium">{t('cutPlanSummary.usedM2')}</th>
@@ -70,17 +67,14 @@ export function CutPlanSummaryPanel() {
               </thead>
               <tbody>
                 {summary.materials.map((mat) => (
-                  <tr
-                    key={mat.material}
-                    className="border-b border-wood-100 dark:border-wood-700 last:border-0"
-                  >
-                    <td className="py-1 text-wood-700 dark:text-wood-200 font-medium truncate max-w-[100px]">
+                  <tr key={mat.material} className="border-wood-100 dark:border-wood-700 border-b last:border-0">
+                    <td className="text-wood-700 dark:text-wood-200 max-w-[100px] truncate py-1 font-medium">
                       {mat.material}
                     </td>
                     <td className="py-1 text-end tabular-nums">{mat.sheetCount}</td>
                     <td className="py-1 text-end tabular-nums">{mm2ToM2(mat.usedAreaMm2)}</td>
                     <td
-                      className={`py-1 text-end tabular-nums font-medium ${
+                      className={`py-1 text-end font-medium tabular-nums ${
                         mat.wastePercent > 30
                           ? 'text-red-600 dark:text-red-400'
                           : mat.wastePercent > 15
@@ -97,14 +91,14 @@ export function CutPlanSummaryPanel() {
           </div>
 
           {/* Totals footer */}
-          <dl className="grid grid-cols-2 gap-x-2 gap-y-1 text-sm border-t border-wood-200 dark:border-wood-600 pt-2">
+          <dl className="border-wood-200 dark:border-wood-600 grid grid-cols-2 gap-x-2 gap-y-1 border-t pt-2 text-sm">
             <dt className="text-wood-600 dark:text-wood-300">{t('cutPlanSummary.totalSheets')}</dt>
-            <dd className="font-medium tabular-nums text-end">{summary.totalSheets}</dd>
+            <dd className="text-end font-medium tabular-nums">{summary.totalSheets}</dd>
             <dt className="text-wood-600 dark:text-wood-300">{t('cutPlanSummary.totalUsedM2')}</dt>
-            <dd className="font-medium tabular-nums text-end">{mm2ToM2(summary.totalUsedMm2)}</dd>
+            <dd className="text-end font-medium tabular-nums">{mm2ToM2(summary.totalUsedMm2)}</dd>
             <dt className="text-wood-600 dark:text-wood-300">{t('cutPlanSummary.overallWaste')}</dt>
             <dd
-              className={`font-semibold tabular-nums text-end ${
+              className={`text-end font-semibold tabular-nums ${
                 summary.overallWastePercent > 30
                   ? 'text-red-600 dark:text-red-400'
                   : summary.overallWastePercent > 15

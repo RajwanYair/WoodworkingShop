@@ -2,19 +2,19 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v4.4.0** · **Next target: v4.5.0** (Phase 24 — TBD)
+> **Current release: v5.0.0** · **Next target: v5.1.0** (Phase 25 — User Experience Polish)
 
-## Active Sprint — Phase 23 (Sprints 97–101)
+## Active Sprint — Phase 24 (Sprints 102–106)
 
-> **Status**: DONE · **Goal**: Precision Workflows — Stock Tracker, Grain Report, Cost Variance, Part Labels
+> **Status**: ACTIVE · **Goal**: Production Hardening & Architecture Reset — zero errors, zero dead code, zero workarounds
 
-| Sprint | Feature                  | Status |
-| ------ | ------------------------ | ------ |
-| 97     | Stock Tracker Dashboard  | DONE   |
-| 98     | Grain Direction Report   | DONE   |
-| 99     | Cost Variance Tracker    | DONE   |
-| 100    | Part Label Sheet         | DONE   |
-| 101    | Release v4.4.0           | DONE   |
+| Sprint | Feature                        | Status |
+| ------ | ------------------------------ | ------ |
+| 102    | Fix all errors without waivers | WIP    |
+| 103    | Remove dead code/docs/config   | TODO   |
+| 104    | Reorganize workspace           | TODO   |
+| 105    | Update all tooling to latest   | TODO   |
+| 106    | Release v5.0.0                 | TODO   |
 
 ## Tech Stack
 

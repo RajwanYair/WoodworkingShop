@@ -8,11 +8,7 @@ const SHEET_W = 1220;
 const SHEET_L = 2440;
 const SHEET_AREA = SHEET_W * SHEET_L; // 2_976_800 mm²
 
-function makeSheet(
-  material: string,
-  sheetIndex: number,
-  usedFraction: number,
-): CutSheet {
+function makeSheet(material: string, sheetIndex: number, usedFraction: number): CutSheet {
   return {
     sheetIndex,
     material,

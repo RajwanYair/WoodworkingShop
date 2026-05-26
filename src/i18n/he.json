@@ -1,4 +1,4 @@
-﻿{
+{
   "app": {
     "title": "מתכנן ארון",
     "subtitle": "כלי עיצוב נגרות אינטראקטיבי"
@@ -701,7 +701,15 @@
     "notSupported": "מצלמה אינה נתמכת במכשיר זה",
     "error": "שגיאת מצלמה"
   },
-      "cutPlanSummary": {
+  "assemblyTimer": {
+    "title": "\u05d0\u05d9\u05de\u05d5\u05df \u05d6\u05de\u05df \u05d4\u05e8\u05db\u05d1\u05d4",
+    "step": "\u05e9\u05dc\u05d1",
+    "count": "\u05e4\u05e2\u05d5\u05dc\u05d5\u05ea",
+    "time": "\u05d6\u05de\u05df \u05de\u05e9\u05d5\u05e2\u05e8",
+    "totalTime": "\u05e1\u05da \u05d4\u05db\u05dc \u05d6\u05de\u05df \u05de\u05e9\u05d5\u05e2\u05e8",
+    "noSteps": "\u05d0\u05d9\u05df \u05e9\u05dc\u05d1\u05d9 \u05d4\u05e8\u05db\u05d1\u05d4 \u05dc\u05ea\u05e6\u05d5\u05e8\u05d4 \u05d4\u05e0\u05d5\u05db\u05d7\u05d9\u05ea"
+  },
+  "cutPlanSummary": {
     "title": "\u05e1\u05d9\u05db\u05d5\u05dd \u05ea\u05d5\u05db\u05e0\u05d9\u05ea \u05d7\u05d9\u05ea\u05d5\u05da",
     "material": "\u05d7\u05d5\u05de\u05e8",
     "sheets": "\u05d3\u05e4\u05d9\u05dd",

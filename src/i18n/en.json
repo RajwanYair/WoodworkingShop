@@ -701,6 +701,14 @@
     "notSupported": "Camera not supported on this device",
     "error": "Camera error"
   },
+  "assemblyTimer": {
+    "title": "Assembly Time Estimate",
+    "step": "Step",
+    "count": "Ops",
+    "time": "Est. time",
+    "totalTime": "Total estimated time",
+    "noSteps": "No assembly steps for current configuration"
+  },
   "cutPlanSummary": {
     "title": "Cut Plan Summary",
     "material": "Material",

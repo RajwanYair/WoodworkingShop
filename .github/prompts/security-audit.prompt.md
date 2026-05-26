@@ -11,13 +11,13 @@ You are performing a security audit of the Cabinet Planner project against the O
 
 This is a pure client-side SPA — no server, no database, no authentication. Relevant OWASP categories:
 
-| Category | Relevant risks for this app |
-| -------- | --------------------------- |
-| A03 Injection | XSS via `dangerouslySetInnerHTML`, user-supplied SVG, plugin eval |
-| A05 Misconfiguration | CSP headers, CORS, exposed secrets in env vars |
-| A06 Vulnerable Components | Outdated deps with known CVEs |
-| A08 Integrity Failures | Build artifact tampering, unsigned releases |
-| A09 Logging | Console leaking sensitive data in production |
+| Category                  | Relevant risks for this app                                       |
+| ------------------------- | ----------------------------------------------------------------- |
+| A03 Injection             | XSS via `dangerouslySetInnerHTML`, user-supplied SVG, plugin eval |
+| A05 Misconfiguration      | CSP headers, CORS, exposed secrets in env vars                    |
+| A06 Vulnerable Components | Outdated deps with known CVEs                                     |
+| A08 Integrity Failures    | Build artifact tampering, unsigned releases                       |
+| A09 Logging               | Console leaking sensitive data in production                      |
 
 ## Step 1 — Dependency audit
 
@@ -35,6 +35,7 @@ cat public/_headers             # verify CSP headers are present
 ```
 
 Check for:
+
 - `dangerouslySetInnerHTML` usage → must sanitize with DOMPurify if unavoidable
 - `eval()`, `new Function()`, `setTimeout(string)` → forbidden
 - `localStorage` storing sensitive data → flag for review
@@ -43,6 +44,7 @@ Check for:
 ## Step 3 — Plugin security
 
 The plugin system (`src/engine/plugin.ts`) accepts user-supplied code/config:
+
 - Verify plugin execution is sandboxed (no direct `eval`)
 - Verify plugin manifest schema is validated before execution
 - Verify plugin API surface is documented and limited
@@ -55,12 +57,14 @@ The plugin system (`src/engine/plugin.ts`) accepts user-supplied code/config:
 ## Step 5 — Fix and document
 
 For each finding:
+
 1. Fix the root cause (never suppress lint rules to hide it)
 2. Add a comment explaining the mitigation if the fix is non-obvious
 
 ## Output
 
 Report findings with:
+
 - Severity: Critical / High / Medium / Low / Info
 - Location: file + line
 - Description: what the vulnerability is

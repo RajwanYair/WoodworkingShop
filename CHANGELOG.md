@@ -9,6 +9,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.0.0] — 2026-05-26
+
+### Phase 24 — Production Hardening & Architecture Reset (Sprint 102)
+
+#### Breaking
+
+- Minimum Node.js version requirement raised to ≥22 (was ≥20)
+
+#### Fixed
+
+- Removed UTF-8 BOM from `he.json` that caused i18n-coverage parse failures
+- Fixed WCAG AA color contrast on `FinishCalculatorPanel` (text-wood-500 → text-wood-600)
+- Fixed E2E test reliability: TouchGestureTutorial overlay no longer blocks Playwright selectors
+- Updated bundle budget to 2400 KB (justified by pdf-renderer growth in v4.x)
+- Fixed `@cyclonedx/cyclonedx-npm` version (v2 never existed, bumped to ^4.2.1)
+
+#### Removed
+
+- Deleted dead code: `AssemblyTimerPanel.tsx`, `assembly-timer-steps.ts`
+- Removed 17 unused exports and 10 unused exported types across engine/store/utils
+- Removed all suspended/disabled configuration options
+- Removed IE-targeted CSS and deprecated browser workarounds from `index.css`
+
+#### Changed
+
+- Rewrote `ROADMAP.md` as single source of truth with competitor comparison table, ADR log, and Phases 24–28
+- Updated all copilot instructions, agent definitions, and prompt files to Phase 24 / v5.0.0
+- Updated `.tools/Install-DevTools.ps1` to target Node 26 (was 22)
+- Updated `tsconfig.json`: added `node:` prefix for bare Node imports, removed deprecated options
+- Updated `playwright.config.ts`: E2E tests set preview-toured localStorage key
+- Updated VS Code workspace settings and recommended extensions
+- Updated CI workflow (`ci.yml`) for current toolchain
+- Updated `config/bundle-budget.json` with v5.0.0 justified limits
+
 ## [4.4.0] — 2026-05-26
 
 ### Phase 23 — Precision Workflows (Sprints 97–100)

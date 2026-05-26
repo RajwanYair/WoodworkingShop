@@ -14,7 +14,7 @@ import type { Part } from './types';
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 /** A single row in the cut checklist. */
-export interface CutChecklistItem {
+interface CutChecklistItem {
   /** Stable identifier — the `Part.id` value from the engine. */
   partId: string;
   /** Human-readable label (English). */
@@ -29,7 +29,7 @@ export interface CutChecklistItem {
 }
 
 /** Parts grouped by material key for display. */
-export interface CutChecklistGroup {
+interface CutChecklistGroup {
   material: string;
   items: CutChecklistItem[];
   /** Number of checked items in this group. */

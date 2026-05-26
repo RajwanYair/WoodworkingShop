@@ -12,10 +12,11 @@
 import { test, expect } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
-  // Dismiss onboarding overlay so screenshots are deterministic.
+  // Dismiss overlays so screenshots are deterministic.
   await page.addInitScript(() => {
     try {
       localStorage.setItem('onboarding-seen', '1');
+      localStorage.setItem('woodworkingshop:preview-toured', '1');
     } catch {
       /* storage may be unavailable */
     }

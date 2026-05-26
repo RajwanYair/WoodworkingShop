@@ -68,15 +68,3 @@ export function communityMaterialToMaterial(cm: CommunityMaterial): Material {
     densityKgM3: 700, // sensible default; catalog doesn't carry density
   };
 }
-
-/**
- * Merge catalog materials into the existing custom materials list.
- * Catalog entries already present (by key) are skipped to avoid duplicates.
- */
-export function mergeCatalogIntoCustomMaterials(catalog: CommunityCatalog, existing: Material[]): Material[] {
-  const existingKeys = new Set(existing.map((m) => m.key));
-  const newMaterials = catalog.materials
-    .filter((cm) => !existingKeys.has(`cat-${cm.id}`))
-    .map(communityMaterialToMaterial);
-  return [...existing, ...newMaterials];
-}

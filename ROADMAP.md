@@ -1,6 +1,7 @@
 # Roadmap
 
-> **Last strategic review**: 2026-05-26 · **Current version**: 4.3.0
+> **Last strategic review**: 2026-05-26 · **Current version**: 4.4.0
+> **Next target**: v5.0.0 (Phase 24 — Production Hardening & Architecture Reset)
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -24,13 +25,40 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | **Portable**   | Local-first, zero-backend for all core workflows; PWA offline-capable   |
 | **Extensible** | Versioned plugin API with stability tiers (`stable` / `experimental`)   |
 | **Open**       | MIT license; no proprietary cloud APIs in the critical path             |
-| **Minimal**    | < 7 production dependencies; < 1.8 MB bundle; < 22 config files at root |
+| **Minimal**    | ≤ 8 production dependencies; < 1.5 MB bundle; ≤ 18 config files at root |
 
 ---
 
-> Architecture decisions and ADRs: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
-
 ## Industry Competitor Benchmark
+
+### Comparison Table
+
+| Feature / Capability            | Cabinet Planner (this) | CutList Optimizer | SketchList 3D | Polyboard    | CutList Plus fx | Cabinet Vision | Fusion 360  |
+| ------------------------------- | ---------------------- | ----------------- | ------------- | ------------ | --------------- | -------------- | ----------- |
+| **Price**                       | Free / MIT OSS         | Free (basic)      | $167–$497/yr  | €330 one-off | $79–$159        | Enterprise $   | $545/yr     |
+| **Platform**                    | Browser (PWA)          | Browser           | Windows only  | Windows only | Windows only    | Windows only   | Cloud + Win |
+| **Cut optimization**            | MaxRects BSSF multi    | Simple 2D         | Basic         | Guillotine   | Advanced        | Proprietary    | None        |
+| **G-code export**               | Yes (G2/G3 arcs, M6)   | No                | No            | WoodWOP only | No              | WoodWOP/Grbl   | Yes         |
+| **DXF export**                  | Yes (layers, colors)   | No                | Basic         | Yes          | No              | Yes            | Yes         |
+| **PDF build plans**             | Yes (off-thread)       | No                | Yes           | Yes          | Yes             | Yes            | Yes         |
+| **3D preview**                  | SVG isometric          | No                | Full 3D       | 3D           | No              | Full 3D        | Full 3D     |
+| **Assembly guide**              | Yes (DAG + timer)      | No                | No            | No           | No              | Yes            | No          |
+| **Hardware BOM**                | Yes (vendor catalog)   | No                | Basic         | Yes          | No              | Yes            | No          |
+| **Grain direction**             | Yes (report + lock)    | Yes               | No            | Yes          | Yes             | Yes            | No          |
+| **WCAG 2.2 AA accessible**      | Yes                    | No                | No            | No           | No              | No             | Partial     |
+| **RTL support (Hebrew/Arabic)** | Yes (6 locales)        | No                | No            | No           | No              | No             | UI only     |
+| **Offline capable (PWA)**       | Yes                    | No                | N/A (desktop) | N/A          | N/A             | N/A            | No          |
+| **Plugin API**                  | Yes (versioned)        | No                | No            | No           | No              | Proprietary    | Yes         |
+| **Open source**                 | MIT                    | No                | No            | No           | No              | No             | No          |
+| **Community material catalog**  | Yes                    | No                | No            | Limited      | No              | No             | Yes         |
+| **IFC/STEP/glTF export**        | Yes                    | No                | No            | No           | No              | No             | Yes         |
+| **WebSerial CNC streaming**     | Yes                    | No                | No            | No           | No              | No             | CAM only    |
+| **Cost estimation**             | Yes (variance tracker) | No                | Manual        | Yes          | Manual          | Yes            | No          |
+| **Stock management**            | Yes                    | No                | No            | Yes          | No              | Yes            | No          |
+| **Mobile support**              | PWA + Capacitor        | Responsive        | No            | No           | No              | No             | iOS app     |
+| **Production dependencies**     | 8                      | Unknown           | 50+           | Desktop      | Desktop         | Desktop        | Cloud       |
+| **Bundle size (JS)**            | < 1.8 MB               | ~500 KB           | Desktop       | Desktop      | Desktop         | Desktop        | Cloud       |
+| **Zero-install / zero-signup**  | Yes                    | Signup required   | Download      | Download     | Download        | Download       | Signup      |
 
 ### Competitive Advantages (Unique to This Project)
 
@@ -39,233 +67,158 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 3. **Only OSS app with a formal versioned plugin API** with stability contracts
 4. **Only app combining cut optimization + assembly guide + hardware BOM** in browser
 5. **Only RTL-first (Hebrew + Arabic) woodworking planner** in existence
-6. **Only app with CRDT collaboration** in the cut-list space (without enterprise pricing)
-7. **Smallest dependency footprint**: 7 production deps vs. 50+ in comparable tools
+6. **Smallest dependency footprint**: 8 production deps vs. 50+ in comparable tools
+7. **Only zero-install, zero-signup** professional-grade cabinet planner
+
+### Methods Harvested from Competitors
+
+| From              | Method / Pattern                             | Adoption Plan                               |
+| ----------------- | -------------------------------------------- | ------------------------------------------- |
+| SketchList 3D     | Parametric constraint engine (min/max/ratio) | Phase 25 Sprint 109                         |
+| SketchList 3D     | Reusable design template library             | Phase 27 Sprint 120                         |
+| Polyboard         | Guillotine-first then MaxRects fallback      | Evaluate for Phase 25 co-nesting            |
+| Cabinet Vision    | Joint library with automatic selection       | Phase 25 Sprint 108                         |
+| CutList Plus fx   | Multi-material co-nesting on shared sheets   | Phase 25 Sprint 107                         |
+| Fusion 360        | WebGPU PBR material rendering                | Phase 26 Sprint 113                         |
+| Fusion 360        | Generative design suggestions                | Phase 27 Sprint 119                         |
+| Figma             | CRDT multiplayer with conflict-free cursors  | Phase 27 Sprint 117–118                     |
+| CutList Optimizer | Instant optimization preview (< 50 ms)       | Already achieved — maintain via bench gates |
 
 ### Gaps to Close (Priority-Ordered)
 
-| #   | Gap                                         | Competitor Has It          | Target Phase | Impact   |
-| --- | ------------------------------------------- | -------------------------- | ------------ | -------- |
-| 1   | Multi-start optimizer (yield optimization)  | CutList Plus fx, Polyboard | Phase 16     | Critical |
-| 2   | Parametric constraints (min/max validation) | Fusion 360, Cabinet Vision | Phase 16     | High     |
-| 3   | Material texture atlas (photorealistic)     | Pro100, Cabinet Vision     | Phase 18     | Medium   |
-| 4   | Direct CNC machine communication            | WoodWOP, Cabinet Vision    | Phase 19     | Medium   |
-| 5   | IFC/STEP export (BIM interop)               | Fusion 360, Onshape        | Phase 20     | Low      |
-| 6   | Mobile native app                           | Fusion 360                 | Phase 20     | Low      |
+| #   | Gap                                    | Best-in-Class Reference    | Target Phase | Impact   |
+| --- | -------------------------------------- | -------------------------- | ------------ | -------- |
+| 1   | Full parametric 3D (WebGPU)            | Fusion 360, SketchList 3D  | Phase 26     | Critical |
+| 2   | Constraint-based parametric joints     | Cabinet Vision, SolidWorks | Phase 25     | High     |
+| 3   | Multi-material nesting co-optimization | CutList Plus fx, Polyboard | Phase 25     | High     |
+| 4   | Real-time collaboration (multiplayer)  | Figma, Onshape             | Phase 27     | Medium   |
+| 5   | AI-powered design suggestions          | Fusion 360 Generative      | Phase 27     | Medium   |
+| 6   | Native mobile app (full offline)       | Fusion 360 iOS             | Phase 26     | Low      |
 
 ---
 
 ## Completed Phases Summary
 
-| Phase | Version         | Title                            | Key Deliverables                                                                                               |
-| ----- | --------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| 1     | v3.50.0         | Production Hardening             | Zero warnings, zero waivers, all CI gates green                                                                |
-| 2     | v3.51.0         | Performance & Determinism        | Web Workers, bench CI, SharedArrayBuffer probe, memoization                                                    |
-| 3     | v3.52.0         | Persistence & Versioning         | IndexedDB, snapshot timeline, diff view, JSON import/export                                                    |
-| 4     | v3.53.0         | Test Hardening & a11y            | 85%+ coverage, visual regression, keyboard-only, high-contrast, RTL                                            |
-| 5     | v3.54.0         | Domain Intelligence              | Manufacturing constraints, deflection, substitution, grain conflict                                            |
-| 6     | v3.55.0         | Interop & Plugin API             | ERP/MRP schemas, plugin stability contract, sandbox, vendor hinge profiles                                     |
-| 7     | v3.56.0         | Advanced Features                | Room layout, G-code G2/G3, CSP hardening, WebGL exploration                                                    |
-| 8     | v3.54.0         | Hardening Round 2                | jsx-a11y flat config, Stylelint + browserslist, label associations                                             |
-| 9     | v3.57.0         | Advanced Export & EventBus       | Rotation lock, G-code M6, DXF layers, Plugin EventBus                                                          |
-| 10    | v3.58.0         | ESLint 10 + CI Modernization     | ESLint 10 peer-dep fix, lockfile, TS strictness, knip, typedoc                                                 |
-| 11    | v3.59.0–v3.61.4 | Engine Quality & DX Hardening    | Branded types, Result<T,E>, slices, typed RPC, lazy i18n, Workbox, Lighthouse, Codecov, fast-check, Guillotine |
-| 12    | v3.61.0–v3.62.0 | Optimizer Intelligence           | Offcut catalog, Cloudflare Pages, validation registry, WebGL, grain hatching, SBOM, DAG                        |
-| 13    | v3.62.1–v3.64.0 | Hardware Depth & Export Fidelity | Vendor catalog, DXF compliance, G-code hooks, multi-currency, co-nesting, checksums                            |
-| 14    | v3.64.1–v3.66.0 | Collaboration & AI               | Supabase (BYO), CRDT, branching, BYO AI, voice annotation, PWA file handlers                                   |
-| 15    | v3.66.1–v3.67.0 | Manufacturing Intelligence       | Kerf, zone validator, templates, batch replace, project settings, i18n audit — 74 tests                        |
-| 16    | v3.68.0         | Optimizer Mastery & Config Min.  | Multi-start MaxRects, parametric constraints, ESLint simplification (drop sonarjs/promise), Lighthouse targets |
-| 16.5  | v3.68.1         | Code Quality & Housekeeping      | it.each parameterization, CI composite action, Phase-16 doc-comment sweep, copilot-instructions update         |
-| 16.6  | v3.70.0         | Code Hygiene & CI Speed          | CI composite action, test file shortening, doc consolidation, VS Code tuning                                   |
-| 17    | v3.71.0         | DX & Bundle Optimization         | Comlink workers, tree-shake audit, PDF renderer spike, chunk strategy, pnpm eval, PLUGIN-API.md                |
-| 17.1  | v3.71.1         | JSDoc D1–D3 (optimizer layer)    | JSDoc: types.ts, parts/dimensions/materials, cut-optimizer/smart-optimizer; markdownlint CI fixes              |
-| 17.2  | v3.72.0         | Production Readiness & DX        | Partial: fix-buttons, i18n keys, VS Code snippets/tasks, Copilot prompts, dependabot, CODEOWNERS, SECURITY.md  |
-| 17.3  | v3.73.0         | Test Efficiency & DX Elevation   | it.each parameterization, source file splitting, CI slim, docs consolidation, CONTRIBUTING.md                  |
-| 18    | v3.75.0         | Visual Fidelity & UX             | Material texture atlas, SVG isometric render, nesting animation, onboarding wizard, print stylesheet           |
-| 19    | v4.0.0          | Machine Integration & Community  | WebSerial Grbl streaming, machine profile registry, community material catalog                                 |
-| 20    | v4.1.0          | Enterprise & Mobile              | IFC/STEP export, Capacitor iOS/Android, mobile touch UI, glTF 2.0, measurement assistant, ZIP bundle           |
-| 21    | v4.2.0          | Marketplace + Build UX           | Plugin marketplace, finish/paint calculator, project build log, focus/kiosk mode, workspace DX                 |
+| Phase | Version     | Title                           | Key Deliverables                                                       |
+| ----- | ----------- | ------------------------------- | ---------------------------------------------------------------------- |
+| 1–11  | v3.50–v3.61 | Foundation → Quality → DX       | Zero warnings, workers, IndexedDB, a11y, plugins, G-code, ESLint 10    |
+| 12–14 | v3.61–v3.66 | Optimizer → Hardware → Collab   | Offcuts, DXF, vendor catalog, CRDT, SBOM, multi-currency               |
+| 15–17 | v3.66–v3.73 | Manufacturing → DX → Efficiency | Kerf, templates, batch replace, Comlink, it.each, docs consolidation   |
+| 18    | v3.75.0     | Visual Fidelity & UX            | Material textures, isometric SVG, nesting animation, onboarding, print |
+| 19    | v4.0.0      | Machine Integration & Community | WebSerial Grbl, machine profiles, community material catalog           |
+| 20    | v4.1.0      | Enterprise & Mobile             | IFC/STEP/glTF export, Capacitor, mobile touch UI, ZIP bundle           |
+| 21    | v4.2.0      | Marketplace + Build UX          | Plugin marketplace, finish calculator, build log, focus mode           |
+| 22    | v4.3.0      | Workshop Intelligence           | Waste analytics, mirror/clone, cut checklist, cost summary export      |
+| 23    | v4.4.0      | Precision Workflows             | Stock tracker, grain report, cost variance, part labels                |
 
 ---
 
 ## Active Roadmap
 
-### Phase 17.3: Test Efficiency, Source Splitting & DX Elevation (v3.73.0) — **HIGH PRIORITY / NEXT**
+### Phase 24 — Production Hardening & Architecture Reset · v5.0.0
 
-**Goal**: Measurably shorter tests, split oversized source files, slimmer CI
-workflows, consolidated docs, clean comment style, and best-in-class Copilot /
-VS Code integration. Delivers a leaner, faster-to-navigate codebase before
-resuming the Phase 17.1 JSDoc D-series.
+> **Status**: ACTIVE · **Goal**: Zero errors, zero warnings, zero dead code,
+> zero workarounds. Every config option justified. Every file in its correct
+> location. Production-grade from code to CI to deployment.
 
-**Data-driven baselines** (measured 2026-06-04, after v3.72.0):
+| Sprint | Deliverable                                                        | Status | Track   |
+| ------ | ------------------------------------------------------------------ | ------ | ------- |
+| 102    | Fix all lint/type/CSS/config errors without waivers                | WIP    | Quality |
+| 103    | Remove all dead code, dead docs, dead config (knip + manual audit) | TODO   | Quality |
+| 104    | Reorganize workspace — non-essential files to correct sub-dirs     | TODO   | DX      |
+| 105    | Update all tooling to latest stable (Node 22 LTS, npm 11, TS 6.x)  | TODO   | DX      |
+| 106    | Version bump 5.0.0, CHANGELOG, full CI pass, GH release            | TODO   | Release |
 
-| Metric                   | Current                        | Target      |
-| ------------------------ | ------------------------------ | ----------- |
-| Longest test file        | validation.test.ts 609 L       | ≤ 400 L     |
-| 10th-longest test file   | voice-annotation.test.ts 277 L | ≤ 200 L     |
-| Longest source file      | validation.ts 1033 L           | ≤ 600 L     |
-| 10th-longest source file | types.ts 533 L                 | ≤ 400 L     |
-| Longest GH workflow      | ci.yml 90 L / release.yml 85 L | ≤ 80 L each |
+**Exit criteria**: `npm run ci` passes with zero warnings. `npm run dead:check`
+reports zero dead exports. All VS Code extension diagnostics resolved. No
+suppressed config options anywhere.
 
-**Exit criteria**: Top-10 longest test files each shortened ≥ 20%; top-10
-longest source files each ≤ 600 lines; `ci.yml` and `release.yml` each < 80
-lines; ARCHITECTURE.md strategy section merged with zero duplication; all
-standalone `// comment` lines in `src/` converted to `/** JSDoc */` or
-removed; `CONTRIBUTING.md` added; `copilot-instructions.md` reflects v3.73.0
-state; GH release published.
+### Phase 25 — Optimizer Intelligence v2 · v5.1.0
 
-| Sprint | Deliverable                                                                                                                                         | Status   | Type     |
-| ------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- |
-| E1     | Shorten top-5 tests (validation 609 L, cut-optimizer 409 L, bom-export 392 L, url-state 345 L, cabinet-store 354 L) via `it.each` + shared fixtures | **DONE** | Tests    |
-| E2     | Shorten next-5 tests (plugin 338 L, hardware 335 L, templates 302 L, project-storage 280 L, voice-annotation 277 L)                                 | DONE     | Tests    |
-| E3     | ~~Split `CabinetPdfDocument.tsx`~~ — already 173 L (sections extracted in v3.71–v3.72)                                                              | **DONE** | Refactor |
-| E4     | Split `CabinetPreview.tsx` and `OptimizerView.tsx` if over 600 L (verify sizes)                                                                     | **DONE** | Refactor |
-| E5     | Split `validation.ts` (1033 L) by domain: dimension-rules, door-rules, shelf-rules; split `cabinet-store.ts` (968 L): extract PDF + room slices     | **DONE** | Refactor |
-| E6     | Split `templates.ts` (660 L) into `engine/templates/`; split `dxf-export.ts` (544 L) into geometry + labeling layers                                | **DONE** | Refactor |
-| E7     | Slim `ci.yml` (90 L) + `release.yml` (85 L): consolidate steps; target < 80 L each                                                                  | **DONE** | CI       |
-| E8     | Consolidate docs: merge ARCHITECTURE.md strategy section into ROADMAP.md; retire duplication; trim to pure module reference                         | **DONE** | Docs     |
-| E9     | Convert all standalone `// comment` lines in `src/` to `/** JSDoc */` blocks or remove where trivial; update `copilot-instructions.md`              | **DONE** | Docs     |
-| E10    | VS Code: `snippets.code-snippets` (6 snippets, done), check task done, dead:check task done                                                         | **DONE** | DX       |
-| E11    | Copilot: `.github/prompts/` seeded (done), `dependabot.yml` (done), `CODEOWNERS` (done); add `CONTRIBUTING.md`                                      | **DONE** | DX       |
-| E12    | Version bump 3.73.0, CHANGELOG, GH release                                                                                                          | **DONE** | Release  |
+> **Goal**: Multi-material co-nesting, constraint-based parametric joints,
+> and intelligent optimization suggestions.
 
-### Phase 18: Visual Fidelity & UX (v3.75.0)
+| Sprint | Deliverable                                                          | Track   |
+| ------ | -------------------------------------------------------------------- | ------- |
+| 107    | Multi-material co-nesting optimizer (shared sheets across materials) | Engine  |
+| 108    | Parametric joint library (mortise-tenon, dovetail, pocket-hole)      | Engine  |
+| 109    | Constraint solver (min/max/ratio rules for dimensions)               | Engine  |
+| 110    | Optimization suggestions panel (AI-free heuristic recommendations)   | UI      |
+| 111    | Version bump 5.1.0, CHANGELOG, GH release                            | Release |
 
-**Goal**: Photorealistic materials in 3D, placement animation, print polish.
+### Phase 26 — Visual Engine Upgrade · v5.2.0
 
-| Sprint | Deliverable                                                       | Type     |
-| ------ | ----------------------------------------------------------------- | -------- | ------- |
-| 68     | Material texture atlas (8 species + composites, 512×512 tiles)    | **DONE** | Assets  |
-| 69     | SVG pattern-mapped isometric cabinet render (no Three.js)         | **DONE** | UI      |
-| 70     | Nesting placement animation (step-by-step sequence with timeline) | **DONE** | UI      |
-| 71     | Onboarding wizard redesign (3-step guided flow, skippable)        | **DONE** | UX      |
-| 72     | Print stylesheet optimization (A4/Letter margins, break control)  | **DONE** | CSS     |
-| 73     | Version bump 3.74.0, CHANGELOG, GH release                        | **DONE** | Release |
+> **Goal**: WebGPU-powered 3D rendering with PBR materials, replacing SVG
+> isometric for the main preview while keeping SVG as print fallback.
 
-### Phase 19: Machine Integration & Community (v4.0.0)
+| Sprint | Deliverable                                                     | Track   |
+| ------ | --------------------------------------------------------------- | ------- |
+| 112    | WebGPU renderer scaffolding (fallback to WebGL2)                | Engine  |
+| 113    | PBR material system (wood grain, edge banding, hardware chrome) | Assets  |
+| 114    | Interactive 3D cabinet preview (orbit, pan, zoom, explode view) | UI      |
+| 115    | AR placement via WebXR (scan room → place cabinet)              | Feature |
+| 116    | Version bump 5.2.0, CHANGELOG, GH release                       | Release |
 
-**Goal**: Design-to-fabrication bridge. Community material data.
+### Phase 27 — Collaboration & Intelligence · v5.3.0
 
-| Sprint | Deliverable                                           | Type |
-| ------ | ----------------------------------------------------- | ---- |
-| 74     | WebSerial API integration (Grbl G-code streaming)     | DONE |
-| 75     | Machine profile registry (Grbl, LinuxCNC, Mach3)      | DONE |
-| 76     | Community material catalog schema (JSON API contract) | DONE |
-| 77     | Material price import from community catalog          | DONE |
-| 78     | Version bump 4.0.0, CHANGELOG, GH release             | DONE |
+> **Goal**: Real-time multiplayer editing and AI-powered design assistance.
 
-### Phase 20: Enterprise & Mobile (v4.1.0)
+| Sprint | Deliverable                                                     | Track   |
+| ------ | --------------------------------------------------------------- | ------- |
+| 117    | CRDT-based real-time sync (Yjs over WebRTC, no server required) | Engine  |
+| 118    | Multiplayer cursors and conflict resolution UI                  | UI      |
+| 119    | On-device LLM suggestions (WebLLM/WASM, fully offline)          | AI      |
+| 120    | Design templates marketplace (community-contributed)            | Feature |
+| 121    | Version bump 5.3.0, CHANGELOG, GH release                       | Release |
 
-| Sprint | Deliverable                                                     | Type |
-| ------ | --------------------------------------------------------------- | ---- |
-| 79     | IFC export (Industry Foundation Classes for BIM)                | DONE |
-| 80     | STEP export (AP214 furniture geometry profile)                  | DONE |
-| 81     | Capacitor iOS/Android wrapper (camera, haptics)                 | DONE |
-| 82     | Mobile-first touch UI (swipe tabs, pinch preview, thumb zones)  | DONE |
-| 83     | Version bump 4.1.0, CHANGELOG, GH release                       | DONE |
-| 84     | glTF 2.0 export (AR/VR 3D model)                                | DONE |
-| 85     | Cabinet measurement assistant (ergonomic + best-practice hints) | DONE |
-| 86     | ZIP bundle export (PDF + DXF + BOM + glTF in one download)      | DONE |
+### Phase 28 — Enterprise & Standards · v5.4.0
 
-### Phase 21: Marketplace + Build UX (v4.2.0) — **DONE**
+> **Goal**: Enterprise integration, compliance, and industry standards.
 
-**Goal**: Plugin marketplace panel, finish/paint calculator, build log, focus mode.
+| Sprint | Deliverable                                                    | Track   |
+| ------ | -------------------------------------------------------------- | ------- |
+| 122    | ERP/MRP export format (SAP, Oracle, custom webhook)            | Export  |
+| 123    | ISO 7171 compliance validation (furniture dimension standards) | Engine  |
+| 124    | Multi-project workspace (tabs, cross-project material sharing) | UI      |
+| 125    | Audit trail and version diffing (full project history)         | Feature |
+| 126    | Version bump 5.4.0, CHANGELOG, GH release                      | Release |
 
-| Sprint | Deliverable                                         | Status   | Type    |
-| ------ | --------------------------------------------------- | -------- | ------- |
-| 87     | Plugin Marketplace Panel (browse, install, rate)    | **DONE** | UI      |
-| 88     | Finish/Paint Calculator (coverage, coats, dry time) | **DONE** | Engine  |
-| 89     | Project Build Log (timestamped notes per project)   | **DONE** | UI      |
-| 90     | Focus/Kiosk Mode (hide chrome, Ctrl+Shift+K toggle) | **DONE** | UX      |
-| 91     | Version bump 4.2.0, CHANGELOG, GH release           | **DONE** | Release |
+### Future Horizons (Unscoped)
 
-### Phase 22 — Workshop Intelligence · v4.3.0 · **DONE**
-
-> **Status**: Released · **Version**: 4.3.0 · **Goal**: Analytics, mirroring, checklists, cost export
-
-| Sprint | Feature                                               | Status   | Track   |
-| ------ | ----------------------------------------------------- | -------- | ------- |
-| 92     | Smart Waste Analytics Panel (efficiency, offcuts)     | **DONE** | Engine  |
-| 93     | Cabinet Mirror & Clone (isMirrored, suffix series)    | **DONE** | Engine  |
-| 94     | Part Cutting Checklist (progress, groups, persist)    | **DONE** | UX      |
-| 95     | Project Cost Summary Export (breakdown, CSV)          | **DONE** | UX      |
-| 96     | Version bump 4.3.0, CHANGELOG, GH release             | **DONE** | Release |
-
-### Phase 23 — Precision Workflows · v4.4.0 · **DONE**
-
-> **Status**: Released · **Version**: 4.4.0 · **Goal**: Shop-floor precision — stock tracking, grain validation, cost auditing, part labelling
-
-| Sprint | Feature                                               | Status   | Track   |
-| ------ | ----------------------------------------------------- | -------- | ------- |
-| 97     | Stock Tracker Dashboard (availability, shortfalls)    | **DONE** | UX      |
-| 98     | Grain Direction Report Panel (per-material, bars)     | **DONE** | UX      |
-| 99     | Cost Variance Tracker (estimated vs actual, CSV)      | **DONE** | UX      |
-| 100    | Part Label Sheet (sequential IDs, print window)       | **DONE** | UX      |
-| 101    | Version bump 4.4.0, CHANGELOG, GH release             | **DONE** | Release |
-
-### Phase 23+: Future Horizons (Unscoped)
-
-| Track         | Candidate                                           | Trigger                              |
-| ------------- | --------------------------------------------------- | ------------------------------------ |
-| Rendering     | WebGPU path-traced material preview                 | WebGPU > 85% browser support         |
-| Collaboration | Figma-style multiplayer cursors                     | User base demands real-time editing  |
-| AI            | On-device LLM (WebLLM/WASM) for offline suggestions | Model quality adequate for furniture |
-| Standards     | glTF 2.0 export for AR/VR placement                 | WebXR API stabilizes                 |
-| Marketplace   | Plugin marketplace with community contributions     | Plugin count > 10                    |
-| Embedded      | Raspberry Pi shop-floor kiosk mode                  | Community request                    |
+| Track         | Candidate                                        | Trigger                           |
+| ------------- | ------------------------------------------------ | --------------------------------- |
+| Rendering     | Ray-traced preview (WebGPU compute shaders)      | WebGPU > 90% browser support      |
+| Collaboration | Cloud sync with E2E encryption                   | User base > 10K MAU               |
+| AI            | Generative design (auto-layout from constraints) | On-device models reach 7B quality |
+| Standards     | IFC 4.3 compliance certification                 | Industry demand                   |
+| Platform      | Raspberry Pi shop-floor kiosk (Electron-lite)    | Community request + sponsorship   |
+| Marketplace   | Paid plugin monetization (Stripe Connect)        | Plugin count > 20                 |
 
 ---
 
 ## Dependency Budget
 
-### Production (max 7)
+### Production (max 8)
 
-| #   | Package             | Bundle KB | Justification                              |
-| --- | ------------------- | --------- | ------------------------------------------ |
-| 1   | react               | 7         | UI framework                               |
-| 2   | react-dom           | 130       | DOM renderer                               |
-| 3   | zustand             | 1.1       | State management                           |
-| 4   | i18next             | 16        | i18n core                                  |
-| 5   | react-i18next       | 8         | React bindings for i18n                    |
-| 6   | @react-pdf/renderer | 300       | PDF generation (evaluate replacement Ph17) |
-| 7   | idb-keyval          | 1         | IndexedDB wrapper                          |
+| #   | Package             | Bundle KB | Justification                            |
+| --- | ------------------- | --------- | ---------------------------------------- |
+| 1   | react               | 7         | UI framework                             |
+| 2   | react-dom           | 130       | DOM renderer                             |
+| 3   | zustand             | 1.1       | State management (smallest option)       |
+| 4   | i18next             | 16        | i18n core                                |
+| 5   | react-i18next       | 8         | React bindings for i18n                  |
+| 6   | @react-pdf/renderer | 300       | PDF generation (evaluate jsPDF Phase 25) |
+| 7   | idb-keyval          | 1         | IndexedDB wrapper                        |
+| 8   | comlink             | 2         | Worker RPC (typed, minimal)              |
 
-**Rule**: No new production dependency without removing an existing one OR proving > 50 KB savings elsewhere.
-
-### DevDependencies Target (Phase 16–17)
-
-Remove 4 packages:
-
-- `eslint-plugin-sonarjs` — redundant with TS strict + regexp
-- `eslint-plugin-promise` — all rules disabled
-- `eslint-plugin-testing-library` — move to test-only override (already barely used)
-- `globals` — ESLint 10 provides `browser` globals natively
-
----
-
-## Release Quality Gates
-
-| #   | Command                 | Check                                      | Target        |
-| --- | ----------------------- | ------------------------------------------ | ------------- |
-| 1   | `npm run typecheck`     | Zero TS errors (4 tsconfigs)               | 0 errors      |
-| 2   | `npm run lint`          | Zero ESLint warnings                       | 0 warnings    |
-| 3   | `npm run lint:css`      | Zero Stylelint warnings                    | 0 warnings    |
-| 4   | `npm run lint:md`       | Zero markdownlint issues                   | 0 issues      |
-| 5   | `npm run format:check`  | Zero Prettier drift                        | 0 drift       |
-| 6   | `npm run i18n:coverage` | 100% key parity (6 locales)                | 100%          |
-| 7   | `npm test`              | All unit tests pass                        | 1915+ pass    |
-| 8   | `npm run build`         | Clean production build                     | 0 warnings    |
-| 9   | `npm run bundle:check`  | JS ≤ budget (target < 1800 KB by Phase 17) | ≤ budget      |
-| 10  | `npm run bench:check`   | Benchmarks within 5× baseline              | < 5× baseline |
-| 11  | `npm run test:e2e`      | All E2E + a11y pass                        | 100% pass     |
-| 12  | `npm run dead:check`    | No dead files/exports                      | 0 dead        |
-| 13  | Lighthouse CI           | TBT < 200 ms, FCP < 1.2 s, a11y ≥ 95       | All pass      |
+**Rule**: No new production dependency without removing an existing one OR
+proving > 50 KB savings elsewhere.
 
 ---
 
 ## Architecture Decisions — Closed (ADR Log)
 
-| Decision                       | Why Closed                                                                                             |
+| Decision                       | Rationale                                                                                              |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------ |
 | React over Solid/Svelte        | PDF renderer + i18next deep integration. Rewrite cost > benefit. React Compiler closes reactivity gap. |
 | Zustand over Redux Toolkit     | RTK = +15 KB + 40% more boilerplate for identical semantics. Slice pattern achieves same modularity.   |
@@ -277,25 +230,8 @@ Remove 4 packages:
 | Tool configs at root           | Vite/ESLint/TS expect root. Subdirs = churn without benefit.                                           |
 | Intermediates in OS $TEMP      | Workspace must be commit-clean after any build. Zero cache/coverage/report artifacts in repo.          |
 | Zero `eslint-disable`/`as any` | Every suppression hides a real issue. Fix root cause or redesign the type.                             |
-
----
-
-## Continuous Enhancement Rules
-
-1. **No suppression-first fixes** — fix root cause. Never disable a check to silence it.
-2. **No dead code** — unused exports, unreachable branches, orphaned files removed same PR.
-3. **No dead docs** — stale sections updated or deleted same commit as code change.
-4. **No dead config** — commented-out settings, disabled rules, empty overrides deleted.
-5. **No hardcoded measurements** — all dimensions in mm via `Mm` branded type.
-6. **No hardcoded colours** — `wood-*` tokens only. No inline hex in TSX.
-7. **RTL-first layout** — logical properties (`ms-*`, `me-*`, `start-*`, `end-*`) everywhere.
-8. **i18n parity every PR** — every `t('key')` → `en.json` + `he.json` in same commit.
-9. **Engine stays pure** — `src/engine/` has no React, no side effects, no DOM.
-10. **Intermediates to $TEMP** — no build artifacts in workspace.
-11. **≤ 7 production deps** — no additions without removal or exceptional justification.
-12. **Config minimalism** — prefer tool defaults; only configure what diverges.
-13. **Commit after each sprint** — atomic, bisectable history.
-14. **GH release every 5 sprints** — semver minor bump, `--generate-notes`.
+| `skipLibCheck: true`           | Required: @react-pdf/types ships `const enum` in .d.ts (TS18055). Remove once upstream fixes.          |
+| 8 prod deps (not 7)            | comlink added Phase 17 for typed worker RPC. Justified by DX + type safety gain.                       |
 
 ---
 
@@ -308,7 +244,7 @@ Remove 4 packages:
 | TypeScript | 6.x     | Compiler (`erasableSyntaxOnly`) | tsconfig\*.json           |
 | Vite       | 8.x     | Build + dev server (Rolldown)   | vite.config.ts            |
 | ESLint     | 10.x    | Linting (flat config)           | eslint.config.js          |
-| Prettier   | 3.x     | Formatting                      | defaults (no .prettierrc) |
+| Prettier   | 3.x     | Formatting                      | .prettierrc.json          |
 | Stylelint  | 17.x    | CSS lint                        | stylelint.config.js       |
 | Vitest     | 4.x     | Unit + bench tests              | vitest.config.ts          |
 | Playwright | 1.60.x  | E2E + a11y (axe-core)           | playwright.config.ts      |
@@ -328,3 +264,43 @@ Remove 4 packages:
 | Playwright report  | `$TEMP/WoodworkingShop/playwright-report`  |
 | Lighthouse output  | `$TEMP/WoodworkingShop/.lighthouseci`      |
 | TypeDoc output     | `docs/api/` (committed on release only)    |
+
+---
+
+## Release Quality Gates
+
+| #   | Command                 | Check                                | Target        |
+| --- | ----------------------- | ------------------------------------ | ------------- |
+| 1   | `npm run typecheck`     | Zero TS errors (4 tsconfigs)         | 0 errors      |
+| 2   | `npm run lint`          | Zero ESLint warnings                 | 0 warnings    |
+| 3   | `npm run lint:css`      | Zero Stylelint warnings              | 0 warnings    |
+| 4   | `npm run lint:md`       | Zero markdownlint issues             | 0 issues      |
+| 5   | `npm run format:check`  | Zero Prettier drift                  | 0 drift       |
+| 6   | `npm run i18n:coverage` | 100% key parity (6 locales)          | 100%          |
+| 7   | `npm test`              | All unit tests pass                  | 100% pass     |
+| 8   | `npm run build`         | Clean production build               | 0 warnings    |
+| 9   | `npm run bundle:check`  | JS ≤ budget (< 1500 KB target)       | ≤ budget      |
+| 10  | `npm run bench:check`   | Benchmarks within 5× baseline        | < 5× baseline |
+| 11  | `npm run test:e2e`      | All E2E + a11y pass                  | 100% pass     |
+| 12  | `npm run dead:check`    | No dead files/exports                | 0 dead        |
+| 13  | Lighthouse CI           | TBT < 200 ms, FCP < 1.2 s, a11y ≥ 95 | All pass      |
+
+---
+
+## Continuous Enhancement Rules
+
+1. **No suppression-first fixes** — fix root cause. Never disable a check to silence it.
+2. **No dead code** — unused exports, unreachable branches, orphaned files removed same PR.
+3. **No dead docs** — stale sections updated or deleted same commit as code change.
+4. **No dead config** — commented-out settings, disabled rules, empty overrides deleted.
+5. **No hardcoded measurements** — all dimensions in mm via `Mm` branded type.
+6. **No hardcoded colours** — `wood-*` tokens only. No inline hex in TSX.
+7. **RTL-first layout** — logical properties (`ms-*`, `me-*`, `start-*`, `end-*`) everywhere.
+8. **i18n parity every PR** — every `t('key')` → all 6 locale files in same commit.
+9. **Engine stays pure** — `src/engine/` has no React, no side effects, no DOM.
+10. **Intermediates to $TEMP** — no build artifacts in workspace.
+11. **≤ 8 production deps** — no additions without removal or exceptional justification.
+12. **Config minimalism** — prefer tool defaults; only configure what diverges.
+13. **Commit after each sprint** — atomic, bisectable history.
+14. **GH release every 5 sprints** — semver minor bump, `--generate-notes`.
+15. **Progressive enhancement** — CSS features that lack universal support use `@supports`.

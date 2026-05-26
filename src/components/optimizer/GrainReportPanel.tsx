@@ -8,14 +8,11 @@ function GrainBar({ constrained, total }: { constrained: number; total: number }
   const pct = total > 0 ? Math.round((constrained / total) * 100) : 0;
   return (
     <div
-      className="flex h-2 w-full overflow-hidden rounded-full bg-wood-100 dark:bg-wood-800"
+      className="bg-wood-100 dark:bg-wood-800 flex h-2 w-full overflow-hidden rounded-full"
       role="img"
       aria-label={`${pct}%`}
     >
-      <div
-        className="h-full rounded-full bg-amber-500 transition-all duration-300"
-        style={{ width: `${pct}%` }}
-      />
+      <div className="h-full rounded-full bg-amber-500 transition-all duration-300" style={{ width: `${pct}%` }} />
     </div>
   );
 }
@@ -25,7 +22,7 @@ function MaterialGroupRow({ group }: { group: GrainMaterialGroup }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <li className="border-b border-wood-100 pb-2 last:border-0 dark:border-wood-800">
+    <li className="border-wood-100 dark:border-wood-800 border-b pb-2 last:border-0">
       <button
         type="button"
         aria-expanded={expanded}
@@ -33,20 +30,14 @@ function MaterialGroupRow({ group }: { group: GrainMaterialGroup }) {
         className="flex w-full items-center justify-between py-1 text-start text-sm"
       >
         <span className="flex items-center gap-2">
-          <span
-            aria-hidden="true"
-            className={group.hasGrain ? 'text-amber-500' : 'text-wood-300 dark:text-wood-600'}
-          >
+          <span aria-hidden="true" className={group.hasGrain ? 'text-amber-500' : 'text-wood-300 dark:text-wood-600'}>
             {group.hasGrain ? '⟵' : '○'}
           </span>
-          <span className="font-medium text-wood-800 dark:text-wood-100">
-            {group.materialName}
-          </span>
+          <span className="text-wood-800 dark:text-wood-100 font-medium">{group.materialName}</span>
         </span>
-        <span className="flex items-center gap-3 text-xs text-wood-500">
+        <span className="text-wood-500 flex items-center gap-3 text-xs">
           <span>
-            {group.constrainedInstances}/{group.totalInstances}{' '}
-            {t('grainReport.constrained')}
+            {group.constrainedInstances}/{group.totalInstances} {t('grainReport.constrained')}
           </span>
           <span aria-hidden="true">{expanded ? '▲' : '▼'}</span>
         </span>
@@ -60,11 +51,9 @@ function MaterialGroupRow({ group }: { group: GrainMaterialGroup }) {
             <li key={p.partId} className="flex items-center justify-between text-xs">
               <span className="text-wood-600 dark:text-wood-400">
                 {p.name.en}
-                {p.qty > 1 && (
-                  <span className="ms-1 text-wood-400 dark:text-wood-500">×{p.qty}</span>
-                )}
+                {p.qty > 1 && <span className="text-wood-400 dark:text-wood-500 ms-1">×{p.qty}</span>}
               </span>
-              <span className="flex items-center gap-1 text-wood-400 dark:text-wood-500">
+              <span className="text-wood-400 dark:text-wood-500 flex items-center gap-1">
                 {p.length}×{p.width}
                 {p.hasGrain && (
                   <span
@@ -91,14 +80,14 @@ export function GrainReportPanel() {
   const report = buildGrainReport(allParts);
 
   return (
-    <section className="rounded-lg border border-wood-200 bg-wood-50 dark:border-wood-700 dark:bg-wood-900/30">
+    <section className="border-wood-200 bg-wood-50 dark:border-wood-700 dark:bg-wood-900/30 rounded-lg border">
       <button
         type="button"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
         className="flex w-full items-center justify-between px-4 py-3 text-start"
       >
-        <span className="flex items-center gap-2 font-semibold text-wood-800 dark:text-wood-100">
+        <span className="text-wood-800 dark:text-wood-100 flex items-center gap-2 font-semibold">
           <span aria-hidden="true">⟵</span>
           {t('grainReport.title')}
           {report.hasAnyGrainConstraint && (
@@ -113,12 +102,12 @@ export function GrainReportPanel() {
       </button>
 
       {open && (
-        <div className="border-t border-wood-200 px-4 pb-4 pt-3 dark:border-wood-700">
+        <div className="border-wood-200 dark:border-wood-700 border-t px-4 pt-3 pb-4">
           {report.groups.length === 0 ? (
-            <p className="text-xs text-wood-400 dark:text-wood-500">{t('grainReport.noParts')}</p>
+            <p className="text-wood-400 dark:text-wood-500 text-xs">{t('grainReport.noParts')}</p>
           ) : (
             <>
-              <p className="mb-3 text-xs text-wood-500 dark:text-wood-400">
+              <p className="text-wood-500 dark:text-wood-400 mb-3 text-xs">
                 {t('grainReport.summary', {
                   constrained: report.totalConstrained,
                   total: report.totalParts,

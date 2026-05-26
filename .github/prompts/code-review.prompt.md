@@ -60,7 +60,7 @@ Review **`${target}`** (PR number, branch name, or file path).
 
 For each issue found:
 
-```
+```text
 FILE: src/components/foo/Bar.tsx
 LINE: 42
 RULE: react-refresh/only-export-components

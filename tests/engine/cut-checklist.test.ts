@@ -31,11 +31,7 @@ describe('buildCutChecklist — empty input', () => {
 });
 
 describe('buildCutChecklist — basic checks', () => {
-  const parts = [
-    makePart('P1', 'MDF-18'),
-    makePart('P2', 'MDF-18'),
-    makePart('P3', 'Ply-12'),
-  ];
+  const parts = [makePart('P1', 'MDF-18'), makePart('P2', 'MDF-18'), makePart('P3', 'Ply-12')];
 
   it('reflects unchecked state when checkedIds is empty', () => {
     const result = buildCutChecklist(parts, new Set());

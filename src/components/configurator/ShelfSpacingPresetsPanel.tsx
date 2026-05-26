@@ -2,10 +2,7 @@ import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { getMaterial } from '../../engine/materials';
-import {
-  calculateShelfSpacing,
-  getShelfPresets,
-} from '../../engine/shelf-spacing';
+import { calculateShelfSpacing, getShelfPresets } from '../../engine/shelf-spacing';
 import type { ShelfPresetId } from '../../engine/shelf-spacing';
 
 /** Collapsible panel — shelf spacing presets (Sprint 102). */
@@ -39,10 +36,10 @@ export function ShelfSpacingPresetsPanel() {
   const selectedPreset = presets.find((p) => p.id === selected);
 
   return (
-    <section className="mb-3 rounded-lg border border-wood-200 bg-wood-50 dark:border-wood-700 dark:bg-wood-900">
+    <section className="border-wood-200 bg-wood-50 dark:border-wood-700 dark:bg-wood-900 mb-3 rounded-lg border">
       <button
         type="button"
-        className="flex w-full items-center justify-between px-3 py-2 text-sm font-semibold text-wood-700 dark:text-wood-200"
+        className="text-wood-700 dark:text-wood-200 flex w-full items-center justify-between px-3 py-2 text-sm font-semibold"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
       >
@@ -51,18 +48,18 @@ export function ShelfSpacingPresetsPanel() {
       </button>
 
       {open && (
-        <div className="px-3 pb-3 space-y-3">
+        <div className="space-y-3 px-3 pb-3">
           {/* Preset selector */}
           <div>
             <label
               htmlFor="shelf-preset-select"
-              className="mb-1 block text-xs font-medium text-wood-600 dark:text-wood-300"
+              className="text-wood-600 dark:text-wood-300 mb-1 block text-xs font-medium"
             >
               {t('shelfSpacingPanel.preset')}
             </label>
             <select
               id="shelf-preset-select"
-              className="w-full rounded border border-wood-300 bg-white px-2 py-1 text-sm dark:border-wood-600 dark:bg-wood-800 dark:text-wood-100"
+              className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 dark:text-wood-100 w-full rounded border bg-white px-2 py-1 text-sm"
               value={selected}
               onChange={(e) => setSelected(e.target.value as ShelfPresetId)}
             >
@@ -80,7 +77,7 @@ export function ShelfSpacingPresetsPanel() {
             <div>
               <label
                 htmlFor="shelf-custom-clearance"
-                className="mb-1 block text-xs font-medium text-wood-600 dark:text-wood-300"
+                className="text-wood-600 dark:text-wood-300 mb-1 block text-xs font-medium"
               >
                 {t('shelfSpacingPanel.customClearance')}
               </label>
@@ -92,21 +89,17 @@ export function ShelfSpacingPresetsPanel() {
                   max={2000}
                   step={10}
                   value={customClearance}
-                  onChange={(e) =>
-                    setCustomClearance(Math.max(50, Number(e.target.value)))
-                  }
-                  className="w-24 rounded border border-wood-300 bg-white px-2 py-1 text-sm dark:border-wood-600 dark:bg-wood-800 dark:text-wood-100"
+                  onChange={(e) => setCustomClearance(Math.max(50, Number(e.target.value)))}
+                  className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 dark:text-wood-100 w-24 rounded border bg-white px-2 py-1 text-sm"
                 />
-                <span className="text-xs text-wood-500">{t('shelfSpacingPanel.mm')}</span>
+                <span className="text-wood-500 text-xs">{t('shelfSpacingPanel.mm')}</span>
               </div>
             </div>
           )}
 
           {/* Preset note */}
           {selectedPreset && selected !== 'custom' && (
-            <p className="text-xs text-wood-500 dark:text-wood-400 italic">
-              {selectedPreset.note[lang]}
-            </p>
+            <p className="text-wood-500 dark:text-wood-400 text-xs italic">{selectedPreset.note[lang]}</p>
           )}
 
           {/* Result summary */}
@@ -129,14 +122,14 @@ export function ShelfSpacingPresetsPanel() {
           {/* Positions list */}
           {result.fitsAtLeastOne && (
             <div>
-              <p className="mb-1 text-xs font-medium text-wood-600 dark:text-wood-300">
+              <p className="text-wood-600 dark:text-wood-300 mb-1 text-xs font-medium">
                 {t('shelfSpacingPanel.positions')}
               </p>
               <ul className="flex flex-wrap gap-1">
                 {result.positions.map((pos, i) => (
                   <li
                     key={i}
-                    className="rounded bg-wood-100 px-1.5 py-0.5 font-mono text-xs text-wood-700 dark:bg-wood-700 dark:text-wood-200"
+                    className="bg-wood-100 text-wood-700 dark:bg-wood-700 dark:text-wood-200 rounded px-1.5 py-0.5 font-mono text-xs"
                   >
                     {pos} {t('shelfSpacingPanel.mm')}
                   </li>

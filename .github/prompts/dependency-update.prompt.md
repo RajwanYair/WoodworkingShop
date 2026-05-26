@@ -14,15 +14,16 @@ You are reviewing and applying dependency updates for the Cabinet Planner projec
 ## Step 1 — Fetch PR details
 
 For each Dependabot PR:
+
 1. Read the PR diff to understand what changed
 2. Check the CHANGELOG / release notes of the updated package
 3. Classify the update:
 
-| Update type | Action |
-| ----------- | ------ |
-| Patch (x.y.Z) | Merge after tests pass |
+| Update type   | Action                                                 |
+| ------------- | ------------------------------------------------------ |
+| Patch (x.y.Z) | Merge after tests pass                                 |
 | Minor (x.Y.z) | Merge after tests pass + verify no breaking API change |
-| Major (X.y.z) | Manual review required — check migration guide |
+| Major (X.y.z) | Manual review required — check migration guide         |
 
 ## Step 2 — Run quality gates locally
 
@@ -34,6 +35,7 @@ npm run build && npm run bundle:check   # build still fits budget
 ```
 
 If any gate fails:
+
 - For a **type error**: update the type annotation to match the new API
 - For a **lint error**: update the import path or usage per new API
 - For a **test failure**: update test fixtures to match new behaviour (verify new behaviour is correct first)
@@ -53,7 +55,8 @@ For major version bumps, add an entry to `CHANGELOG.md [Unreleased]`:
 
 ```markdown
 ### Chore
-- Upgraded `<package>` from vX to vY — see [migration guide](<url>)
+
+- Upgraded `<package>` from vX to vY — see [migration guide](url)
 ```
 
 ## Constraints

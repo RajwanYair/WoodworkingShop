@@ -1,21 +1,21 @@
 # Cabinet Planner — AI Agent Context
 
 > Browser-based woodworking design tool · React 19 + TypeScript 6 + Vite 8
-> **v4.2.0** · MIT · Node ≥ 22 · [Live demo](https://rajwanyair.github.io/WoodworkingShop/)
+> **v5.0.0** · MIT · Node ≥ 22 · [Live demo](https://rajwanyair.github.io/WoodworkingShop/)
 
 ## What It Does
 
 Configure any cabinet/furniture piece → live 6-view SVG preview → MaxRects cut-sheet optimizer → export PDF build plan, DXF, G-code, or BOM. **No server, no account.** Full RTL support (Hebrew/Arabic).
 
-## Active Sprint — Phase 21
+## Active Sprint — Phase 24
 
-| Sprint | Feature                  | Status |
-| ------ | ------------------------ | ------ |
-| 87     | Plugin Marketplace Panel | DONE   |
-| 88     | Finish/Paint Calculator  | DONE   |
-| 89     | Project Build Log        | WIP    |
-| 90     | Focus/Kiosk Mode         | TODO   |
-| 91     | Release v4.2.0           | TODO   |
+| Sprint | Feature                        | Status |
+| ------ | ------------------------------ | ------ |
+| 102    | Fix all errors without waivers | WIP    |
+| 103    | Remove dead code/docs/config   | TODO   |
+| 104    | Reorganize workspace           | TODO   |
+| 105    | Update all tooling             | TODO   |
+| 106    | Release v5.0.0                 | TODO   |
 
 ## Tech Stack
 
@@ -65,7 +65,7 @@ npx vitest run        # run unit tests directly
 | **RTL layout**            | Tailwind logical props (`ms-*`, `me-*`, `start-*`, `end-*`), never `ml-*`/`mr-*`    |
 | **7 ESLint plugins**      | jsx-a11y, react-hooks, react-refresh, react, regexp, no-only-tests, testing-library |
 | **Intermediates → $TEMP** | No build artifacts/caches in workspace root                                         |
-| **≤ 7 prod deps**         | No additions without removing one or proving > 50 KB savings                        |
+| **≤ 8 prod deps**         | No additions without removing one or proving > 50 KB savings                        |
 | **browserslist**          | Canonical source: `package.json#browserslist` only — no `.browserslistrc`           |
 
 ## Key Patterns
@@ -99,7 +99,7 @@ import { cfg } from '../helpers'; // builds CabinetConfig from DEFAULT_CONFIG + 
 ## Docs
 
 - Architecture decisions & diagrams → [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
-- Active roadmap → [ROADMAP.md](ROADMAP.md) (Phase 21 — active)
+- Active roadmap → [ROADMAP.md](ROADMAP.md) (Phase 24 — active)
 - Sprint history → [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 - Plugin API → [docs/PLUGIN-API.md](docs/PLUGIN-API.md)
 
@@ -125,6 +125,9 @@ import { cfg } from '../helpers'; // builds CabinetConfig from DEFAULT_CONFIG + 
 
 `.github/agents/` contains pre-configured agent mode definitions:
 
-- `sprint.agent.md` — execute the current WIP sprint item end-to-end (Sprint 89)
+- `sprint.agent.md` — execute the current WIP sprint item end-to-end
 - `release.agent.md` — full automated release workflow
 - `feature.agent.md` — scaffold a complete new feature (engine + store + UI + i18n)
+- `debug.agent.md` — diagnose and fix test/build/type failures without suppression
+- `a11y.agent.md` — WCAG 2.2 AA accessibility audit and remediation
+- `i18n.agent.md` — i18n key management with full 6-locale parity

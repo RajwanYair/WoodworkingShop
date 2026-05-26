@@ -13,8 +13,8 @@ import { pushProjectNameToUrl } from '../../utils/url-state';
 // is independently testable without importing the full store module.
 
 export const UI_PREFS_KEY = 'woodworkingshop:prefs';
-export const BUILD_LOG_KEY = 'woodworkingshop:buildlog';
-export const CUT_CHECKLIST_KEY = 'woodworkingshop:cutchecklist';
+const BUILD_LOG_KEY = 'woodworkingshop:buildlog';
+const CUT_CHECKLIST_KEY = 'woodworkingshop:cutchecklist';
 
 /** A single entry in the project build log. */
 export interface BuildLogEntry {
@@ -62,7 +62,7 @@ export function loadBuildLog(): BuildLogEntry[] {
   }
 }
 
-export function saveBuildLog(log: BuildLogEntry[]): void {
+function saveBuildLog(log: BuildLogEntry[]): void {
   if (typeof window === 'undefined') return;
   try {
     window.localStorage.setItem(BUILD_LOG_KEY, JSON.stringify(log));
@@ -83,7 +83,7 @@ export function loadCutChecklist(): string[] {
   }
 }
 
-export function saveCutChecklist(ids: string[]): void {
+function saveCutChecklist(ids: string[]): void {
   if (typeof window === 'undefined') return;
   try {
     window.localStorage.setItem(CUT_CHECKLIST_KEY, JSON.stringify(ids));

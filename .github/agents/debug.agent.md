@@ -45,15 +45,15 @@ npm run build 2>&1
 
 ### Step 2 — Classify
 
-| Symptom | Likely cause | First action |
-| ------- | ------------ | ------------ |
-| `TS2322` / `TS2339` | Wrong type annotation or missing field | Read the type definition |
-| `TS6133` unused | Dead import or unreachable branch | Remove the dead code |
-| `react-refresh/only-export-components` | Non-component export in `.tsx` | Extract to sibling `.ts` |
-| `jsx-a11y/*` | Missing label, wrong role, or `div` with click | Fix HTML semantics |
-| `no-unused-vars` | Dead import | Remove it |
-| Test `AssertionError` | Wrong expected value or stale fixture | Re-read the engine function contract |
-| Test `ReferenceError` | Missing mock or import | Add `vi.mock` or direct import |
+| Symptom                                | Likely cause                                   | First action                         |
+| -------------------------------------- | ---------------------------------------------- | ------------------------------------ |
+| `TS2322` / `TS2339`                    | Wrong type annotation or missing field         | Read the type definition             |
+| `TS6133` unused                        | Dead import or unreachable branch              | Remove the dead code                 |
+| `react-refresh/only-export-components` | Non-component export in `.tsx`                 | Extract to sibling `.ts`             |
+| `jsx-a11y/*`                           | Missing label, wrong role, or `div` with click | Fix HTML semantics                   |
+| `no-unused-vars`                       | Dead import                                    | Remove it                            |
+| Test `AssertionError`                  | Wrong expected value or stale fixture          | Re-read the engine function contract |
+| Test `ReferenceError`                  | Missing mock or import                         | Add `vi.mock` or direct import       |
 
 ### Step 3 — Fix
 

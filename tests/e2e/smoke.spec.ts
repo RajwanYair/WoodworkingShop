@@ -8,10 +8,11 @@ test.beforeEach(async ({ page }) => {
     if (msg.type() === 'error') consoleErrors.push(msg.text());
   });
   page.on('pageerror', (err) => consoleErrors.push(err.message));
-  // Pre-dismiss the onboarding overlay before any app code runs.
+  // Pre-dismiss overlays before any app code runs.
   await page.addInitScript(() => {
     try {
       localStorage.setItem('onboarding-seen', '1');
+      localStorage.setItem('woodworkingshop:preview-toured', '1');
     } catch {
       /* storage may be unavailable on about:blank */
     }

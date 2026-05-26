@@ -2,9 +2,9 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
-import { resolve } from 'path';
-import { readFileSync } from 'fs';
-import os from 'os';
+import { resolve } from 'node:path';
+import { readFileSync } from 'node:fs';
+import os from 'node:os';
 
 const { version } = JSON.parse(readFileSync('./package.json', 'utf-8')) as { version: string };
 

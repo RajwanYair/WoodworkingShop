@@ -1,5 +1,5 @@
 ---
-applyTo: "src/store/**"
+applyTo: 'src/store/**'
 ---
 
 # Store (Zustand) Instructions

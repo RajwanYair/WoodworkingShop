@@ -20,19 +20,21 @@ export function WasteAnalyticsPanel({ result }: Props) {
   const analytics = analyzeWaste(result);
 
   return (
-    <section className="rounded-lg border border-wood-200 bg-wood-50 dark:border-wood-700 dark:bg-wood-900/30">
+    <section className="border-wood-200 bg-wood-50 dark:border-wood-700 dark:bg-wood-900/30 rounded-lg border">
       <button
         type="button"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
         className="flex w-full items-center justify-between px-4 py-3 text-start"
       >
-        <span className="flex items-center gap-2 font-semibold text-wood-800 dark:text-wood-100">
+        <span className="text-wood-800 dark:text-wood-100 flex items-center gap-2 font-semibold">
           <span aria-hidden="true">📊</span>
           {t('wasteAnalytics.title')}
         </span>
         <span className="flex items-center gap-2">
-          <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${RATING_CLASSES[analytics.efficiencyRating]}`}>
+          <span
+            className={`rounded-full px-2 py-0.5 text-xs font-medium ${RATING_CLASSES[analytics.efficiencyRating]}`}
+          >
             {t(`wasteAnalytics.rating.${analytics.efficiencyRating}`)}
             {' · '}
             {analytics.overallWastePercent.toFixed(1)}%
@@ -44,42 +46,40 @@ export function WasteAnalyticsPanel({ result }: Props) {
       </button>
 
       {open && (
-        <div className="space-y-4 border-t border-wood-200 px-4 pb-4 pt-3 dark:border-wood-700">
+        <div className="border-wood-200 dark:border-wood-700 space-y-4 border-t px-4 pt-3 pb-4">
           {/* Summary stats row */}
           <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <StatItem label={t('wasteAnalytics.totalSheets')} value={String(analytics.totalSheets)} />
             <StatItem label={t('wasteAnalytics.totalWaste')} value={formatAreaM2(analytics.totalWasteMm2)} />
             <StatItem label={t('wasteAnalytics.offcutCandidates')} value={String(analytics.offcutCandidateCount)} />
-            <StatItem label={t('wasteAnalytics.recoverableArea')} value={formatAreaM2(analytics.offcutCandidateAreaMm2)} />
+            <StatItem
+              label={t('wasteAnalytics.recoverableArea')}
+              value={formatAreaM2(analytics.offcutCandidateAreaMm2)}
+            />
           </dl>
 
           {/* Per-material table */}
           {analytics.byMaterial.length > 0 && (
             <div>
-              <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-wood-600 dark:text-wood-400">
+              <h3 className="text-wood-600 dark:text-wood-400 mb-2 text-xs font-semibold tracking-wide uppercase">
                 {t('wasteAnalytics.byMaterial')}
               </h3>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-wood-200 text-start text-xs text-wood-500 dark:border-wood-700 dark:text-wood-400">
-                      <th className="pb-1 pe-3 text-start font-medium">{t('wasteAnalytics.material')}</th>
-                      <th className="pb-1 pe-3 text-end font-medium">{t('wasteAnalytics.sheets')}</th>
-                      <th className="pb-1 pe-3 text-end font-medium">{t('wasteAnalytics.used')}</th>
+                    <tr className="border-wood-200 text-wood-500 dark:border-wood-700 dark:text-wood-400 border-b text-start text-xs">
+                      <th className="pe-3 pb-1 text-start font-medium">{t('wasteAnalytics.material')}</th>
+                      <th className="pe-3 pb-1 text-end font-medium">{t('wasteAnalytics.sheets')}</th>
+                      <th className="pe-3 pb-1 text-end font-medium">{t('wasteAnalytics.used')}</th>
                       <th className="pb-1 text-end font-medium">{t('wasteAnalytics.waste')}</th>
                     </tr>
                   </thead>
                   <tbody>
                     {analytics.byMaterial.map((m) => (
-                      <tr
-                        key={m.material}
-                        className="border-b border-wood-100 dark:border-wood-800"
-                      >
-                        <td className="py-1 pe-3 font-mono text-xs text-wood-700 dark:text-wood-300">
-                          {m.material}
-                        </td>
-                        <td className="py-1 pe-3 text-end text-wood-600 dark:text-wood-400">{m.sheetCount}</td>
-                        <td className="py-1 pe-3 text-end tabular-nums text-wood-600 dark:text-wood-400">
+                      <tr key={m.material} className="border-wood-100 dark:border-wood-800 border-b">
+                        <td className="text-wood-700 dark:text-wood-300 py-1 pe-3 font-mono text-xs">{m.material}</td>
+                        <td className="text-wood-600 dark:text-wood-400 py-1 pe-3 text-end">{m.sheetCount}</td>
+                        <td className="text-wood-600 dark:text-wood-400 py-1 pe-3 text-end tabular-nums">
                           {formatAreaM2(m.usedAreaMm2)}
                         </td>
                         <td className="py-1 text-end">
@@ -96,14 +96,14 @@ export function WasteAnalyticsPanel({ result }: Props) {
           {/* Worst sheets */}
           {analytics.worstSheets.length > 0 && (
             <div>
-              <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-wood-600 dark:text-wood-400">
+              <h3 className="text-wood-600 dark:text-wood-400 mb-2 text-xs font-semibold tracking-wide uppercase">
                 {t('wasteAnalytics.worstSheets')}
               </h3>
               <ul className="space-y-1">
                 {analytics.worstSheets.map((s) => (
                   <li
                     key={`${s.material}-${s.sheetIndex}`}
-                    className="flex items-center justify-between rounded bg-wood-100 px-3 py-1.5 text-xs dark:bg-wood-800/50"
+                    className="bg-wood-100 dark:bg-wood-800/50 flex items-center justify-between rounded px-3 py-1.5 text-xs"
                   >
                     <span className="text-wood-700 dark:text-wood-300">
                       {s.material} #{s.sheetIndex + 1}
@@ -141,9 +141,9 @@ interface StatItemProps {
 
 function StatItem({ label, value }: StatItemProps) {
   return (
-    <div className="rounded bg-white px-3 py-2 shadow-sm dark:bg-wood-800/50">
-      <dt className="text-xs text-wood-500 dark:text-wood-400">{label}</dt>
-      <dd className="mt-0.5 text-sm font-semibold tabular-nums text-wood-800 dark:text-wood-100">{value}</dd>
+    <div className="dark:bg-wood-800/50 rounded bg-white px-3 py-2 shadow-sm">
+      <dt className="text-wood-500 dark:text-wood-400 text-xs">{label}</dt>
+      <dd className="text-wood-800 dark:text-wood-100 mt-0.5 text-sm font-semibold tabular-nums">{value}</dd>
     </div>
   );
 }
@@ -160,9 +160,5 @@ function WasteBadge({ percent }: WasteBadgeProps) {
         ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
         : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
 
-  return (
-    <span className={`rounded px-1.5 py-0.5 text-xs font-medium tabular-nums ${cls}`}>
-      {percent.toFixed(1)}%
-    </span>
-  );
+  return <span className={`rounded px-1.5 py-0.5 text-xs font-medium tabular-nums ${cls}`}>{percent.toFixed(1)}%</span>;
 }

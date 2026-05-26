@@ -1,5 +1,5 @@
 ---
-applyTo: "src/engine/**"
+applyTo: 'src/engine/**'
 ---
 
 # Engine Layer Instructions

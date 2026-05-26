@@ -12,10 +12,11 @@ import AxeBuilder from '@axe-core/playwright';
 test.describe.configure({ mode: 'serial' });
 
 test.beforeEach(async ({ page }) => {
-  // Dismiss onboarding overlay so axe scans the full app UI.
+  // Dismiss overlays so axe scans the full app UI.
   await page.addInitScript(() => {
     try {
       localStorage.setItem('onboarding-seen', '1');
+      localStorage.setItem('woodworkingshop:preview-toured', '1');
     } catch {
       /* storage may be unavailable */
     }

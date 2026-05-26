@@ -12,9 +12,7 @@ const STATUS_STYLES = {
   unknown: 'bg-wood-100 text-wood-500 dark:bg-wood-800 dark:text-wood-400',
 } as const;
 
-function buildDemandFromSheets(
-  sheetCosts: { material: string; qty: number }[],
-): DemandEntry[] {
+function buildDemandFromSheets(sheetCosts: { material: string; qty: number }[]): DemandEntry[] {
   const map = new Map<string, number>();
   for (const s of sheetCosts) {
     map.set(s.material, (map.get(s.material) ?? 0) + s.qty);
@@ -36,14 +34,8 @@ export function StockTrackerPanel() {
   const [newQty, setNewQty] = useState('');
   const [newReorder, setNewReorder] = useState('');
 
-  const demand = useMemo(
-    () => buildDemandFromSheets(cost.sheetCosts),
-    [cost.sheetCosts],
-  );
-  const results = useMemo(
-    () => checkAvailability(stockStore, demand),
-    [stockStore, demand],
-  );
+  const demand = useMemo(() => buildDemandFromSheets(cost.sheetCosts), [cost.sheetCosts]);
+  const results = useMemo(() => checkAvailability(stockStore, demand), [stockStore, demand]);
 
   const shortfalls = results.filter((r) => r.status === 'shortfall' || r.status === 'unknown');
 
@@ -71,14 +63,14 @@ export function StockTrackerPanel() {
   }
 
   return (
-    <section className="rounded-lg border border-wood-200 bg-wood-50 dark:border-wood-700 dark:bg-wood-900/30">
+    <section className="border-wood-200 bg-wood-50 dark:border-wood-700 dark:bg-wood-900/30 rounded-lg border">
       <button
         type="button"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
         className="flex w-full items-center justify-between px-4 py-3 text-start"
       >
-        <span className="flex items-center gap-2 font-semibold text-wood-800 dark:text-wood-100">
+        <span className="text-wood-800 dark:text-wood-100 flex items-center gap-2 font-semibold">
           <span aria-hidden="true">📦</span>
           {t('stockTracker.title')}
           {shortfalls.length > 0 && (
@@ -93,12 +85,12 @@ export function StockTrackerPanel() {
       </button>
 
       {open && (
-        <div className="space-y-3 border-t border-wood-200 px-4 pb-4 pt-3 dark:border-wood-700">
+        <div className="border-wood-200 dark:border-wood-700 space-y-3 border-t px-4 pt-3 pb-4">
           {/* Availability table */}
           {results.length > 0 ? (
             <table className="w-full text-sm" aria-label={t('stockTracker.tableAriaLabel')}>
               <thead>
-                <tr className="text-xs font-semibold uppercase tracking-wide text-wood-500 dark:text-wood-400">
+                <tr className="text-wood-500 dark:text-wood-400 text-xs font-semibold tracking-wide uppercase">
                   <th className="pb-1 text-start font-semibold">{t('stockTracker.material')}</th>
                   <th className="pb-1 text-end font-semibold">{t('stockTracker.required')}</th>
                   <th className="pb-1 text-end font-semibold">{t('stockTracker.onHand')}</th>
@@ -107,13 +99,9 @@ export function StockTrackerPanel() {
               </thead>
               <tbody>
                 {results.map((r) => (
-                  <tr key={r.materialKey} className="border-t border-wood-100 dark:border-wood-800">
-                    <td className="py-1 font-mono text-xs text-wood-700 dark:text-wood-300">
-                      {r.materialKey}
-                    </td>
-                    <td className="py-1 text-end tabular-nums text-wood-600 dark:text-wood-400">
-                      {r.required}
-                    </td>
+                  <tr key={r.materialKey} className="border-wood-100 dark:border-wood-800 border-t">
+                    <td className="text-wood-700 dark:text-wood-300 py-1 font-mono text-xs">{r.materialKey}</td>
+                    <td className="text-wood-600 dark:text-wood-400 py-1 text-end tabular-nums">{r.required}</td>
                     <td className="py-1 text-end tabular-nums">
                       {editKey === r.materialKey ? (
                         <input
@@ -124,13 +112,16 @@ export function StockTrackerPanel() {
                           onChange={(e) => setEditQty(e.target.value)}
                           onBlur={() => commitEdit(r.materialKey)}
                           onKeyDown={(e) => e.key === 'Enter' && commitEdit(r.materialKey)}
-                          className="w-16 rounded border border-wood-300 px-1 text-end text-sm dark:border-wood-600 dark:bg-wood-800"
+                          className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 w-16 rounded border px-1 text-end text-sm"
                           aria-label={t('stockTracker.editQtyAriaLabel', { key: r.materialKey })}
                         />
                       ) : (
                         <button
                           type="button"
-                          onClick={() => { setEditKey(r.materialKey); setEditQty(String(r.onHand)); }}
+                          onClick={() => {
+                            setEditKey(r.materialKey);
+                            setEditQty(String(r.onHand));
+                          }}
                           className="tabular-nums underline-offset-2 hover:underline"
                           aria-label={t('stockTracker.editQtyAriaLabel', { key: r.materialKey })}
                         >
@@ -148,16 +139,18 @@ export function StockTrackerPanel() {
               </tbody>
             </table>
           ) : (
-            <p className="text-xs text-wood-400 dark:text-wood-500">{t('stockTracker.noDemand')}</p>
+            <p className="text-wood-400 dark:text-wood-500 text-xs">{t('stockTracker.noDemand')}</p>
           )}
 
           {/* Existing stock items not in demand */}
           {stockStore.items
             .filter((item) => !demand.find((d) => d.materialKey === item.materialKey))
             .map((item) => (
-              <div key={item.materialKey} className="flex items-center justify-between text-xs text-wood-500">
+              <div key={item.materialKey} className="text-wood-500 flex items-center justify-between text-xs">
                 <span className="font-mono">{item.materialKey}</span>
-                <span className="tabular-nums">{item.onHandQty} {item.unit}</span>
+                <span className="tabular-nums">
+                  {item.onHandQty} {item.unit}
+                </span>
                 <button
                   type="button"
                   onClick={() => removeItem(item.materialKey)}
@@ -171,46 +164,46 @@ export function StockTrackerPanel() {
 
           {/* Add new stock item */}
           <details className="pt-1">
-            <summary className="cursor-pointer text-xs text-wood-500 hover:text-wood-700 dark:hover:text-wood-300">
+            <summary className="text-wood-500 hover:text-wood-700 dark:hover:text-wood-300 cursor-pointer text-xs">
               {t('stockTracker.addItem')}
             </summary>
             <div className="mt-2 flex flex-wrap items-end gap-2">
               <div className="flex flex-col gap-0.5">
-                <label className="text-xs text-wood-500">{t('stockTracker.materialKey')}</label>
+                <label className="text-wood-500 text-xs">{t('stockTracker.materialKey')}</label>
                 <input
                   type="text"
                   value={newKey}
                   onChange={(e) => setNewKey(e.target.value)}
                   placeholder="plywood-18"
-                  className="w-32 rounded border border-wood-300 px-2 py-1 text-xs dark:border-wood-600 dark:bg-wood-800"
+                  className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 w-32 rounded border px-2 py-1 text-xs"
                 />
               </div>
               <div className="flex flex-col gap-0.5">
-                <label className="text-xs text-wood-500">{t('stockTracker.onHand')}</label>
+                <label className="text-wood-500 text-xs">{t('stockTracker.onHand')}</label>
                 <input
                   type="number"
                   min={0}
                   value={newQty}
                   onChange={(e) => setNewQty(e.target.value)}
                   placeholder="0"
-                  className="w-16 rounded border border-wood-300 px-2 py-1 text-xs dark:border-wood-600 dark:bg-wood-800"
+                  className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 w-16 rounded border px-2 py-1 text-xs"
                 />
               </div>
               <div className="flex flex-col gap-0.5">
-                <label className="text-xs text-wood-500">{t('stockTracker.reorderAt')}</label>
+                <label className="text-wood-500 text-xs">{t('stockTracker.reorderAt')}</label>
                 <input
                   type="number"
                   min={0}
                   value={newReorder}
                   onChange={(e) => setNewReorder(e.target.value)}
                   placeholder="—"
-                  className="w-16 rounded border border-wood-300 px-2 py-1 text-xs dark:border-wood-600 dark:bg-wood-800"
+                  className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 w-16 rounded border px-2 py-1 text-xs"
                 />
               </div>
               <button
                 type="button"
                 onClick={handleAdd}
-                className="rounded-md bg-wood-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-wood-700"
+                className="bg-wood-600 hover:bg-wood-700 rounded-md px-3 py-1.5 text-xs font-medium text-white"
               >
                 {t('stockTracker.add')}
               </button>

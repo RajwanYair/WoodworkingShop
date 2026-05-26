@@ -336,7 +336,7 @@ export function addPartDimensions(lines: string[], part: CutRect, dimOffset = 0)
  */
 
 /** Append a LAYER table entry to `lines`. Color is an AutoCAD colour index (1–255). */
-export function addLayer(lines: string[], name: string, color: number) {
+function addLayer(lines: string[], name: string, color: number) {
   lines.push('0', 'LAYER', '2', name, '70', '0', '62', String(color), '6', 'CONTINUOUS');
 }
 

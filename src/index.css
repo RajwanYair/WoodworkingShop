@@ -218,18 +218,14 @@
   display: none;
 }
 
-/* Hide scrollbar for tab overflow */
-/* stylelint-disable-next-line property-no-unknown */
+/* Hide scrollbar for tab overflow — dual approach for cross-browser support */
 .scrollbar-none {
-  /* Modern browsers (Chrome 121+, Firefox 64+, Edge 79+) */
+  /* Firefox 64+, Chrome 121+ */
   scrollbar-width: none;
-
-  /* IE / old Edge */
-  -ms-overflow-style: none;
 }
 
 .scrollbar-none::-webkit-scrollbar {
-  /* WebKit / Chromium < 121, Safari */
+  /* Safari, older Chromium (< 121) */
   display: none;
 }
 

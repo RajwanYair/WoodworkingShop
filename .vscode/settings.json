@@ -50,41 +50,18 @@
   "eslint.problems.shortenToSingleLine": true,
 
   // ─── CSS / Stylelint ────────────────────────────────────────────────────────
+  // Built-in VS Code CSS validation is disabled in favor of Stylelint which
+  // understands Tailwind v4 @theme, @custom-variant, and design token patterns.
   "css.validate": false,
   "scss.validate": false,
   "less.validate": false,
-  "css.lint.compatibleVendorPrefixes": "ignore",
-  "css.lint.unknownVendorSpecificProperties": "ignore",
-  "html.validate.styles": false,
-  "html.validate.scripts": false,
   "stylelint.validate": ["css"],
-  "stylelint.configOverrides": {
-    "rules": { "plugin/no-unsupported-browser-features": null }
-  },
 
   // ─── Browser Compatibility Checker ──────────────────────────────────────────
-  "browser-compatibility-checker.browserList": [
-    "chrome",
-    "edge",
-    "firefox",
-    "opera",
-    "safari",
-    "chrome_android",
-    "firefox_android",
-    "opera_android",
-    "safari_ios",
-    "samsunginternet_android",
-    "webview_android"
-  ],
-  "browser-compatibility-checker.warnForOtherBrowsers": false,
-  "browser-compatibility-checker.foldersToIgnore": [
-    "**/node_modules/**",
-    "**/dist/**",
-    "**/coverage/**",
-    "**/docs/**",
-    "**/scripts/**",
-    "**/.**/**"
-  ],
+  // Progressive enhancement features (forced-color-adjust, scrollbar-width,
+  // orphans/widows in print, theme-color meta) are intentionally used with
+  // graceful degradation. Disable extension to avoid false positives.
+  "browser-compatibility-checker.enabled": false,
 
   // ─── Terminal ───────────────────────────────────────────────────────────────
   "terminal.integrated.shellIntegration.enabled": true,
@@ -161,8 +138,12 @@
     "scminput": false
   },
   "chat.agent.enabled": true,
-  "chat.mcp.enabled": true,
-  "chat.mcp.discovery.enabled": true,
+  "chat.mcp.discovery.enabled": {
+    "claude-desktop": true,
+    "windsurf": true,
+    "cursor-global": true,
+    "cursor-workspace": true
+  },
 
   // ─── Testing ────────────────────────────────────────────────────────────────
   "vitest.enable": true,
@@ -287,5 +268,6 @@
 
   // ─── Playwright ─────────────────────────────────────────────────────────────
   "playwright.reuseBrowser": false,
-  "playwright.showTrace": false
+  "playwright.showTrace": false,
+  "chat.mcp.access": "all"
 }

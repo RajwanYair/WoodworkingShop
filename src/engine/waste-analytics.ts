@@ -13,7 +13,7 @@ import type { OptimizationResult, CutSheet } from './types';
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 /** Waste metrics for a single cut sheet. */
-export interface SheetWasteInfo {
+interface SheetWasteInfo {
   sheetIndex: number;
   material: string;
   /** Total sheet area in mm² (sheetWidth × sheetLength). */
@@ -32,7 +32,7 @@ export interface SheetWasteInfo {
 }
 
 /** Aggregated waste metrics for one material across all its sheets. */
-export interface WasteMaterialSummary {
+interface WasteMaterialSummary {
   material: string;
   sheetCount: number;
   /** Total sheet area for this material (mm²). */

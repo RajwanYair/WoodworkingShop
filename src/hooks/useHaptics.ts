@@ -17,8 +17,8 @@ interface CapWindow {
   };
 }
 
-export type ImpactStyle = 'light' | 'medium' | 'heavy';
-export type NotificationType = 'success' | 'warning' | 'error';
+type ImpactStyle = 'light' | 'medium' | 'heavy';
+type NotificationType = 'success' | 'warning' | 'error';
 
 export interface UseHapticsResult {
   /** Short tap feedback — use on button press, drag start. */

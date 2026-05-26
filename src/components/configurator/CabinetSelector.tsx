@@ -104,15 +104,17 @@ export function CabinetSelector() {
               aria-label={`Duplicate ${cab.name}`}
             >
               ⧉
-            </button>            {/* Sprint 93 — mirror button */}
+            </button>{' '}
+            {/* Sprint 93 — mirror button */}
             <button
               onClick={() => mirrorCabinet(i)}
-              className="text-wood-400 hover:text-purple-600 dark:hover:text-purple-300 text-xs leading-none"
+              className="text-wood-400 text-xs leading-none hover:text-purple-600 dark:hover:text-purple-300"
               title={t('project.mirror')}
               aria-label={`Mirror ${cab.name}`}
             >
               ⇆
-            </button>            {/* Sprint 61 — move up / move down */}
+            </button>{' '}
+            {/* Sprint 61 — move up / move down */}
             {cabinets.length > 1 && i > 0 && (
               <button
                 onClick={() => moveCabinet(i, 'up')}

@@ -13,8 +13,7 @@ export const useCostVarianceStore = create<CostVarianceState>()(
   persist(
     (set) => ({
       actualCosts: {},
-      setActualCost: (materialKey, cost) =>
-        set((s) => ({ actualCosts: { ...s.actualCosts, [materialKey]: cost } })),
+      setActualCost: (materialKey, cost) => set((s) => ({ actualCosts: { ...s.actualCosts, [materialKey]: cost } })),
       removeActualCost: (materialKey) =>
         set((s) => {
           const next = { ...s.actualCosts };

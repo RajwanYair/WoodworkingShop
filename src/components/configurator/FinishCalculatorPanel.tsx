@@ -79,7 +79,7 @@ export function FinishCalculatorPanel() {
         </div>
         {/* Can sizes */}
         <div className="border-wood-200 dark:border-wood-700 border-t pt-1.5">
-          <p className="text-wood-500 dark:text-wood-400 mb-1 text-xs">{t('finish.recommendedCans')}</p>
+          <p className="text-wood-600 dark:text-wood-400 mb-1 text-xs">{t('finish.recommendedCans')}</p>
           <div className="flex flex-wrap gap-2">
             {estimate.canSizes.map(({ size, count }) => (
               <span
@@ -89,13 +89,13 @@ export function FinishCalculatorPanel() {
                 {count}×{size}L
               </span>
             ))}
-            <span className="text-wood-400 dark:text-wood-500 text-xs">
+            <span className="text-wood-600 dark:text-wood-500 text-xs">
               ({t('finish.totalCans', { litres: estimate.totalCanLitres.toFixed(2) })})
             </span>
           </div>
         </div>
         {/* Advisory note */}
-        <p className="text-wood-400 dark:text-wood-500 text-xs italic">{t(FINISH_SPECS[finishType].noteKey)}</p>
+        <p className="text-wood-600 dark:text-wood-500 text-xs italic">{t(FINISH_SPECS[finishType].noteKey)}</p>
       </div>
     </section>
   );

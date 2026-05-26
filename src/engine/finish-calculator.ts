@@ -35,7 +35,7 @@ export interface FinishEstimate {
   totalCanLitres: number;
 }
 
-export interface CanSelection {
+interface CanSelection {
   /** Can volume in litres (e.g. 0.75, 1, 2.5, 5). */
   size: number;
   count: number;
@@ -97,7 +97,7 @@ const CAN_SIZES: readonly number[] = [5, 2.5, 1, 0.75, 0.5, 0.25];
  *
  * Uses a greedy algorithm descending through can sizes.
  */
-export function selectCanSizes(litresNeeded: number): CanSelection[] {
+function selectCanSizes(litresNeeded: number): CanSelection[] {
   const result: CanSelection[] = [];
   let remaining = litresNeeded;
   for (const size of CAN_SIZES) {

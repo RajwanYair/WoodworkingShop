@@ -1,6 +1,6 @@
 # Cabinet Planner — User Guide
 
-> Version 4.2 · React 19 + TypeScript 6 · Progressive Web App
+> Version 5.0 · React 19 + TypeScript 6 · Progressive Web App
 
 ---
 

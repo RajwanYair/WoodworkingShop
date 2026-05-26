@@ -17,7 +17,7 @@ interface CapWindow {
   };
 }
 
-export type CameraStatus = 'idle' | 'active' | 'captured' | 'error';
+type CameraStatus = 'idle' | 'active' | 'captured' | 'error';
 
 export interface UseCameraResult {
   status: CameraStatus;

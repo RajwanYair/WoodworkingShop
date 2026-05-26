@@ -249,7 +249,7 @@ export function scheduleAssembly(config: CabinetConfig): void {
     });
 }
 
-export function scheduleCost(
+function scheduleCost(
   optimization: OptimizationResult,
   hardware: HardwareItem[],
   edgeBandingTotal: number,

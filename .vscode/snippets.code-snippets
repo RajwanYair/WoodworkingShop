@@ -95,62 +95,37 @@
   "Result type ok/err": {
     "scope": "typescript,typescriptreact",
     "prefix": "result",
-    "body": [
-      "type ${1:Name}Result =",
-      "  | { ok: true; value: $2 }",
-      "  | { ok: false; error: string };",
-    ],
+    "body": ["type ${1:Name}Result =", "  | { ok: true; value: $2 }", "  | { ok: false; error: string };"],
     "description": "Discriminated union Result<T,E> without throwing",
   },
   "Vitest mock module": {
     "scope": "typescript,typescriptreact",
     "prefix": "vmock",
-    "body": [
-      "vi.mock('$1', () => ({",
-      "  ${2:functionName}: vi.fn($3),",
-      "}));",
-    ],
+    "body": ["vi.mock('$1', () => ({", "  ${2:functionName}: vi.fn($3),", "}));"],
     "description": "Vitest module mock with vi.mock",
   },
   "useEffect cleanup": {
     "scope": "typescriptreact",
     "prefix": "uefx",
-    "body": [
-      "useEffect(() => {",
-      "  $1",
-      "  return () => {",
-      "    $0",
-      "  };",
-      "}, [$2]);",
-    ],
+    "body": ["useEffect(() => {", "  $1", "  return () => {", "    $0", "  };", "}, [$2]);"],
     "description": "useEffect with cleanup function",
   },
   "useMemo memoised value": {
     "scope": "typescriptreact",
     "prefix": "umemo",
-    "body": [
-      "const $1 = useMemo(() => {",
-      "  return $2;",
-      "}, [$3]);",
-    ],
+    "body": ["const $1 = useMemo(() => {", "  return $2;", "}, [$3]);"],
     "description": "useMemo with typed return value",
   },
   "useCallback stable ref": {
     "scope": "typescriptreact",
     "prefix": "ucb",
-    "body": [
-      "const $1 = useCallback(($2) => {",
-      "  $0",
-      "}, [$3]);",
-    ],
+    "body": ["const $1 = useCallback(($2) => {", "  $0", "}, [$3]);"],
     "description": "useCallback for stable function reference",
   },
   "Zustand multi-selector": {
     "scope": "typescript,typescriptreact",
     "prefix": "zmsel",
-    "body": [
-      "const { $1, $2 } = useCabinetStore((s) => ({ $1: s.$1, $2: s.$2 }), shallow);",
-    ],
+    "body": ["const { $1, $2 } = useCabinetStore((s) => ({ $1: s.$1, $2: s.$2 }), shallow);"],
     "description": "Zustand store multi-field shallow selector (import shallow from zustand/shallow)",
   },
   "i18n namespace translation": {
@@ -165,21 +140,13 @@
   "Aria live region": {
     "scope": "typescriptreact",
     "prefix": "arlive",
-    "body": [
-      "<div aria-live=\"${1|polite,assertive|}\" aria-atomic=\"true\">",
-      "  $0",
-      "</div>",
-    ],
+    "body": ["<div aria-live=\"${1|polite,assertive|}\" aria-atomic=\"true\">", "  $0", "</div>"],
     "description": "ARIA live region for dynamic content announcements",
   },
   "Custom hook template": {
     "scope": "typescript,typescriptreact",
     "prefix": "hook",
-    "body": [
-      "export function use${1:Name}($2): $3 {",
-      "  $0",
-      "}",
-    ],
+    "body": ["export function use${1:Name}($2): $3 {", "  $0", "}"],
     "description": "Custom React hook with TypeScript return type",
   },
   "it.each object table": {
@@ -198,11 +165,7 @@
   "Engine error guard": {
     "scope": "typescript",
     "prefix": "engguard",
-    "body": [
-      "if ($1 <= 0) {",
-      "  throw new RangeError(`$2: expected positive number, got \\${$1}`);",
-      "}",
-    ],
+    "body": ["if ($1 <= 0) {", "  throw new RangeError(`$2: expected positive number, got \\${$1}`);", "}"],
     "description": "Engine boundary guard — throws RangeError with context",
   },
   "Vitest spy on method": {
@@ -230,9 +193,7 @@
   "Tailwind RTL class pair": {
     "scope": "typescriptreact",
     "prefix": "tw-rtl",
-    "body": [
-      "className=\"${1:ms}-${2:4} ${3:pe}-${4:2}\"",
-    ],
+    "body": ["className=\"${1:ms}-${2:4} ${3:pe}-${4:2}\""],
     "description": "Tailwind logical-property class pair (RTL-safe ms-/pe- etc.)",
   },
 }

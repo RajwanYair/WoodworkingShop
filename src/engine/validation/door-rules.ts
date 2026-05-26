@@ -8,38 +8,38 @@ import { VENDOR_HINGE_PROFILES } from '../hardware';
  * Minimum door panel width to avoid warping or binding on hinges (mm).
  * Below this limit, door installation becomes unreliable.
  */
-export const MIN_DOOR_WIDTH_MM = 200;
+const MIN_DOOR_WIDTH_MM = 200;
 
 /**
  * Maximum door height-to-width aspect ratio before warp risk becomes significant
  * (taller-than-wide is fine; > 4:1 becomes problematic in solid-wood panels).
  */
-export const MAX_DOOR_ASPECT_RATIO = 5;
+const MAX_DOOR_ASPECT_RATIO = 5;
 
 /**
  * Minimum door width for reliable Euro-style hinge cup mounting.
  * A 35 mm hinge cup needs ~32 mm from the edge; less than this makes
  * boring too close to the edge and risks splitting the door panel.
  */
-export const MIN_HINGE_OVERLAY_WIDTH_MM = 300;
+const MIN_HINGE_OVERLAY_WIDTH_MM = 300;
 
 /**
  * Maximum practical height for a single door leaf without heavy-duty hinges.
  * Above this threshold, door mass and leverage cause rapid wear on standard hinges.
  */
-export const MAX_SINGLE_DOOR_HEIGHT_MM = 2200;
+const MAX_SINGLE_DOOR_HEIGHT_MM = 2200;
 
 /**
  * Maximum width for a single-door cabinet before warping/sagging risk becomes
  * significant. Wide doors need a thicker panel or an intermediate rail.
  */
-export const MAX_SINGLE_DOOR_WIDTH_MM = 800;
+const MAX_SINGLE_DOOR_WIDTH_MM = 800;
 
 /**
  * Minimum door height for a sensible two-hinge layout.
  * Below this, hinge spacing becomes impractical (<50 mm from each end).
  */
-export const MIN_PRACTICAL_DOOR_HEIGHT_MM = 200;
+const MIN_PRACTICAL_DOOR_HEIGHT_MM = 200;
 
 /**
  * Euro-style hinge cups require a minimum boring distance from the inner edge
@@ -47,14 +47,14 @@ export const MIN_PRACTICAL_DOOR_HEIGHT_MM = 200;
  * If the door panel is too narrow for even one cup plus this clearance on each
  * side the cup boring is structurally unsafe.
  */
-export const MIN_HINGE_CUP_EDGE_DISTANCE_MM = 22;
+const MIN_HINGE_CUP_EDGE_DISTANCE_MM = 22;
 
 /**
  * Minimum clearance (mm) between a hinge arm mounting point and the nearest
  * shelf panel.  The hinge arm projects ~30 mm into the carcass; a shelf within
  * this radius obstructs the arm and must be notched or repositioned.
  */
-export const HINGE_ARM_CLEARANCE_MM = 35;
+const HINGE_ARM_CLEARANCE_MM = 35;
 
 /** Minimum cabinet depth for a door-hung carcass (Sprint 75). */
 const MIN_DEPTH_FOR_DOORS_MM = 250;
