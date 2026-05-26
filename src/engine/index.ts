@@ -339,3 +339,6 @@ export {
   mergeSyncQueues,
 } from './project-sync';
 export type { SyncStatus, SyncMeta, SyncEntry, SyncQueue, SyncDelta } from './project-sync';
+
+export { generateSuggestions, scoreSuggestion, filterSuggestions, SUGGESTION_CATEGORIES } from './layout-suggestions';
+export type { SuggestionCategory, LayoutSuggestion, SuggestionContext } from './layout-suggestions';

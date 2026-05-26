@@ -281,6 +281,23 @@
     "lastSync": "סונכרן לאחרונה {{time}}",
     "retry": "נסה שוב"
   },
+  "suggestions": {
+    "title": "הצעות פריסה",
+    "noSuggestions": "אין הצעות — התצורה נראית מעוליין!",
+    "apply": "החל",
+    "dismiss": "דחה",
+    "shelfTooClose": "מדפים צפופים ({{avgGapMm}} ממ בין מדפים במוצע — מומלץ לפחות {{minMm}} ממ)",
+    "shelfTooFar": "שקול להוסיף מדף ({{avgGapMm}} ממ בין מדפים — מקסימום מומלץ {{maxMm}} ממ)",
+    "tooManyDrawers": "{{drawerCount}} מגירות עלול להיות יותר מדי בגובה {{heightMm}} ממ (מקסימום מוישם: {{maxUseful}})",
+    "addDrawers": "מגירה תחתונה משפרת נגישות בארונות בגובה {{heightMm}} ממ",
+    "kitchenBaseHeight": "גובה {{current}} ממ סוטה מגובה סטנדרטי {{standard}} ממ לארון בסיס",
+    "kitchenBaseDepth": "עומק {{current}} ממ סוטה מעומק סטנדרטי {{standard}} ממ",
+    "reachZone": "ראש הארון בגובה {{current}} ממ עולה על רדיוס היד הנוח {{max}} ממ",
+    "lowClearance": "{{clearanceMm}} ממ בלבד לתקרה — יש לאפשר לפחות 50 ממ",
+    "exceedsCeiling": "הארון חורג מגובה החדר בעוד {{overMm}} ממ",
+    "wideSpanRisk": "רוחב {{widthMm}} ממ — מומלץ תמיכה מרכזית להפחת כיפוף",
+    "costMaterialAlternative": "לוח מלמין הוא חלופה חסכונית לפליווד בגימורים צבועים"
+  },
   "pdf": {
     "title": "ייצוא PDF",
     "generate": "צור PDF",

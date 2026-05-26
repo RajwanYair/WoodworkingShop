@@ -276,6 +276,23 @@
     "lastSync": "Last synced {{time}}",
     "retry": "Retry sync"
   },
+  "suggestions": {
+    "title": "Layout Suggestions",
+    "noSuggestions": "No suggestions — configuration looks great!",
+    "apply": "Apply",
+    "dismiss": "Dismiss",
+    "shelfTooClose": "Shelves are crowded (avg {{avgGapMm}} mm gap — min {{minMm}} mm recommended)",
+    "shelfTooFar": "Consider adding a shelf (avg {{avgGapMm}} mm gap — max {{maxMm}} mm for utility)",
+    "tooManyDrawers": "{{drawerCount}} drawers may not fit comfortably in {{heightMm}} mm height (max useful: {{maxUseful}})",
+    "addDrawers": "A lower drawer improves accessibility in {{heightMm}} mm tall cabinets",
+    "kitchenBaseHeight": "Cabinet height {{current}} mm deviates from standard kitchen base height {{standard}} mm",
+    "kitchenBaseDepth": "Cabinet depth {{current}} mm deviates from standard kitchen base depth {{standard}} mm",
+    "reachZone": "Cabinet top at {{current}} mm exceeds comfortable reach height {{max}} mm",
+    "lowClearance": "Only {{clearanceMm}} mm ceiling clearance — allow at least 50 mm for installation",
+    "exceedsCeiling": "Cabinet exceeds room height by {{overMm}} mm",
+    "wideSpanRisk": "Wide span {{widthMm}} mm — consider a centre support to reduce shelf deflection",
+    "costMaterialAlternative": "Melamine board is a cost-effective alternative to plywood for painted finishes"
+  },
   "pdf": {
     "generate": "PDF generieren",
     "generateAll": "Gesamtes Projekt exportieren ({{count}} Schränke)",
