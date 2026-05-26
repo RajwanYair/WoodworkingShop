@@ -292,3 +292,17 @@ export type {
   CabinetScene,
   RenderOptions,
 } from './webgpu-renderer';
+
+// Sprint 113 — PBR material system (Phase 26)
+export {
+  hexToLinearRgb,
+  lerpColor,
+  blendPbrMaterials,
+  getPbrMaterial,
+  getAllPbrMaterials,
+  getHardwarePbrMaterial,
+  getAllHardwareFinishes,
+  EDGE_BANDING_MATERIAL,
+  FALLBACK_PBR_MATERIAL,
+} from './pbr-materials';
+export type { PbrColor, HardwareFinish, PbrMaterial } from './pbr-materials';
