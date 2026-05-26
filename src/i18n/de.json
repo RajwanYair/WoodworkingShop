@@ -306,6 +306,18 @@
     "installCount": "{{count}} Installation",
     "installCount_other": "{{count}} Installationen"
   },
+  "analytics": {
+    "title": "Analyse-Dashboard",
+    "sessions": "Sitzungen",
+    "totalEvents": "Ereignisse gesamt",
+    "topMaterials": "Beliebte Materialien",
+    "costTrends": "Kostentrends",
+    "noData": "Keine Analysedaten verfügbar",
+    "exportData": "Analysen exportieren",
+    "selectionCount": "{{count}} Auswahl",
+    "selectionCount_other": "{{count}} Auswahlen",
+    "averageCost": "Durchschnittskosten"
+  },
   "mobileSync": {
     "title": "Mobile-Synchronisation",
     "online": "Online",

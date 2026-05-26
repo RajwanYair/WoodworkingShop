@@ -298,6 +298,18 @@
     "wideSpanRisk": "רוחב {{widthMm}} ממ — מומלץ תמיכה מרכזית להפחת כיפוף",
     "costMaterialAlternative": "לוח מלמין הוא חלופה חסכונית לפליווד בגימורים צבועים"
   },
+  "analytics": {
+    "title": "לוח נתונים",
+    "sessions": "סשנים",
+    "totalEvents": "סך אירועים",
+    "topMaterials": "חומרים נפוצים",
+    "costTrends": "מגמות עלויות",
+    "noData": "אין נתוני ניתוח",
+    "exportData": "ייצוא נתונים",
+    "selectionCount": "בחירה {{count}}",
+    "selectionCount_other": "{{count}} בחירות",
+    "averageCost": "עלות אמצעית"
+  },
   "mobileSync": {
     "title": "סנכרון נייד",
     "online": "מחובר",

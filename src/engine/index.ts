@@ -459,3 +459,16 @@ export type {
   MobileSyncState,
   MobileSyncSummary,
 } from './mobile-sync';
+
+// Sprint 129 — Advanced analytics dashboard engine (Phase 29)
+export {
+  createSession,
+  recordUsageEvent,
+  closeSession,
+  summarizeSession,
+  computeMaterialTrends,
+  getTopMaterials,
+  computeCostTrends,
+  exportAnalytics,
+} from './analytics';
+export type { UsageEventKind, UsageEvent, AnalyticsSession, MaterialTrend, CostTrend, UsageSummary } from './analytics';

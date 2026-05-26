@@ -306,6 +306,18 @@
     "installCount": "{{count}} install",
     "installCount_other": "{{count}} installs"
   },
+  "analytics": {
+    "title": "Analytics Dashboard",
+    "sessions": "Sessions",
+    "totalEvents": "Total events",
+    "topMaterials": "Top materials",
+    "costTrends": "Cost trends",
+    "noData": "No analytics data available",
+    "exportData": "Export analytics",
+    "selectionCount": "{{count}} selection",
+    "selectionCount_other": "{{count}} selections",
+    "averageCost": "Avg. cost"
+  },
   "mobileSync": {
     "title": "Mobile Sync",
     "online": "Online",
