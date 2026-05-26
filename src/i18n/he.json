@@ -1053,6 +1053,17 @@
       "poor": "גרוע"
     }
   },
+  "gltf": {
+    "title": "ייצוא תלת-ממד",
+    "exportGltf": "ייצוא glTF 2.0",
+    "exportIfc": "ייצוא IFC 4.3",
+    "meshCount": "רשתות",
+    "nodeCount": "צמתים",
+    "entityCount": "ישויות",
+    "schemaVersion": "גרסת סכמה",
+    "noData": "אין חלקים לייצוא.",
+    "exportSize": "גודל ייצוא משוער"
+  },
   "aiAssistant": {
     "title": "עוזר עיצוב AI",
     "brief": "תיאור עיצוב",

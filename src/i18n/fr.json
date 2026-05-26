@@ -811,6 +811,17 @@
     "fixField": "Fix {{field}}",
     "fixAll": "Fix All"
   },
+  "gltf": {
+    "title": "3D Export",
+    "exportGltf": "Export glTF 2.0",
+    "exportIfc": "Export IFC 4.3",
+    "meshCount": "Meshes",
+    "nodeCount": "Nodes",
+    "entityCount": "Entities",
+    "schemaVersion": "Schema Version",
+    "noData": "No parts to export.",
+    "exportSize": "Estimated Export Size"
+  },
   "aiAssistant": {
     "title": "AI Design Assistant",
     "brief": "Design Brief",

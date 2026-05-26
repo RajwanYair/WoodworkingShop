@@ -507,3 +507,29 @@ export type {
   ConstraintCheckResult,
   DesignBrief,
 } from './ai-assistant';
+
+// Sprint 133 — glTF 2.0 / IFC 4.3 export
+export {
+  buildGltfScene,
+  serializeGltf,
+  estimateGltfSize,
+  buildIfcScene,
+  serializeIfc,
+  GLTF_SCHEMA_VERSION,
+  IFC_SCHEMA_VERSION,
+  GLTF_GENERATOR,
+} from './gltf-export';
+export type {
+  GltfComponentType,
+  GltfAccessorType,
+  GltfVec3,
+  GltfPbrMaterial,
+  GltfBoxMesh,
+  GltfNode,
+  GltfScene,
+  GltfExportResult,
+  IfcEntity,
+  IfcRelationship,
+  IfcScene,
+  IfcExportResult,
+} from './gltf-export';
