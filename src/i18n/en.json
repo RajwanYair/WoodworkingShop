@@ -770,6 +770,22 @@
     "enter": "Focus mode enabled",
     "exit": "Focus mode disabled"
   },
+  "cutChecklist": {
+    "title": "Part Cutting Checklist",
+    "progress": "{{checked}} of {{total}} parts cut",
+    "progressAriaLabel": "{{percent}}% of parts cut",
+    "complete": "All cut!",
+    "clearAll": "Reset checklist",
+    "empty": "No parts to cut yet — configure a cabinet first."
+  },
+  "cutChecklist": {
+    "title": "Part Cutting Checklist",
+    "progress": "{{checked}} of {{total}} parts cut",
+    "progressAriaLabel": "{{percent}}% of parts cut",
+    "complete": "All cut!",
+    "clearAll": "Reset checklist",
+    "empty": "No parts to cut yet — configure a cabinet first."
+  },
   "wasteAnalytics": {
     "title": "Waste Analytics",
     "totalSheets": "Total Sheets",

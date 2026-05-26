@@ -34,7 +34,7 @@ import {
   scheduleCostFromState,
 } from './worker-schedule';
 // Phase 11 — Slice imports
-import { createUiSlice, loadUiPrefs, loadBuildLog, type UiSlice } from './slices/uiSlice';
+import { createUiSlice, loadUiPrefs, loadBuildLog, loadCutChecklist, type UiSlice } from './slices/uiSlice';
 import {
   createSnapshotSlice,
   loadSnapshotsFromStorage,
@@ -342,7 +342,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
     assemblySteps: generateAssemblySteps(initial.config),
 
     // ── UI slice ───────────────────────────────────────────────────────────
-    ...createUiSlice(uiSet, prefs, initialProjectName, initialProjectNotes, loadBuildLog()),
+    ...createUiSlice(uiSet, prefs, initialProjectName, initialProjectNotes, loadBuildLog(), loadCutChecklist()),
 
     // ── Optimizer settings slice ───────────────────────────────────────────
     ...createOptimizerSettingsSlice(

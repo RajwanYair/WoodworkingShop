@@ -14,6 +14,7 @@ import { pushProjectNameToUrl } from '../../utils/url-state';
 
 export const UI_PREFS_KEY = 'woodworkingshop:prefs';
 export const BUILD_LOG_KEY = 'woodworkingshop:buildlog';
+export const CUT_CHECKLIST_KEY = 'woodworkingshop:cutchecklist';
 
 /** A single entry in the project build log. */
 export interface BuildLogEntry {
@@ -70,6 +71,27 @@ export function saveBuildLog(log: BuildLogEntry[]): void {
   }
 }
 
+export function loadCutChecklist(): string[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = window.localStorage.getItem(CUT_CHECKLIST_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as unknown;
+    return Array.isArray(parsed) ? (parsed as string[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function saveCutChecklist(ids: string[]): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(CUT_CHECKLIST_KEY, JSON.stringify(ids));
+  } catch {
+    /* quota / disabled — ignore */
+  }
+}
+
 /**
  * Detect the OS dark-mode preference.
  * Returns `true` when `(prefers-color-scheme: dark)` matches.
@@ -99,6 +121,9 @@ export type UiSlice = {
   // Focus mode (Sprint 90)
   focusMode: boolean;
 
+  // Cut checklist (Sprint 94)
+  checkedPartIds: string[];
+
   // Actions
   setActiveTab: (tab: ActiveTab) => void;
   setProjectName: (name: string) => void;
@@ -115,6 +140,10 @@ export type UiSlice = {
 
   // Focus mode actions (Sprint 90)
   toggleFocusMode: () => void;
+
+  // Cut checklist actions (Sprint 94)
+  toggleCutPart: (partId: string) => void;
+  clearCutChecklist: () => void;
 };
 
 // ─── Slice creator ────────────────────────────────────────────────────────────
@@ -133,6 +162,7 @@ export function createUiSlice(
   initialProjectName: string,
   initialProjectNotes: string,
   initialBuildLog: BuildLogEntry[],
+  initialCheckedPartIds: string[],
 ): UiSlice {
   return {
     // ── Initial state ──
@@ -145,6 +175,7 @@ export function createUiSlice(
     units: initialPrefs.units ?? ('metric' as UnitSystem),
     buildLog: initialBuildLog,
     focusMode: false,
+    checkedPartIds: initialCheckedPartIds,
 
     // ── Actions ──
     setActiveTab: (tab) => set({ activeTab: tab }),
@@ -220,5 +251,24 @@ export function createUiSlice(
       }),
 
     toggleFocusMode: () => set((s) => ({ focusMode: !s.focusMode })),
+
+    toggleCutPart: (partId) =>
+      set((s) => {
+        const current = new Set(s.checkedPartIds);
+        if (current.has(partId)) {
+          current.delete(partId);
+        } else {
+          current.add(partId);
+        }
+        const checkedPartIds = Array.from(current);
+        saveCutChecklist(checkedPartIds);
+        return { checkedPartIds };
+      }),
+
+    clearCutChecklist: () =>
+      set(() => {
+        saveCutChecklist([]);
+        return { checkedPartIds: [] };
+      }),
   };
 }

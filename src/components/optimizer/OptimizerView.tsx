@@ -14,6 +14,7 @@ import { idbLoadOffcuts, idbSaveOffcut, idbDeleteOffcut } from '../../utils/inde
 
 import { OptimizationNotesPanel } from './OptimizationNotesPanel';
 import { WasteAnalyticsPanel } from './WasteAnalyticsPanel';
+import { CutChecklistPanel } from './CutChecklistPanel';
 import { VirtualSheetWrapper } from './VirtualSheetWrapper';
 import BomWorker from '../../workers/bom-export.worker?worker';
 import type { BomWorkerOutput } from '../../workers/bom-export.worker';
@@ -487,6 +488,9 @@ export function OptimizerView() {
 
       {/* Sprint 92 — Smart waste analytics */}
       <WasteAnalyticsPanel result={displayOpt} />
+
+      {/* Sprint 94 — Part cutting checklist */}
+      <CutChecklistPanel />
 
       {/* Sprint 7 — Layout explainer: placement stats */}
       <OptimizerExplainerPanel sheets={displayOpt.sheets} t={t} />
