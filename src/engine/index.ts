@@ -306,3 +306,13 @@ export {
   FALLBACK_PBR_MATERIAL,
 } from './pbr-materials';
 export type { PbrColor, HardwareFinish, PbrMaterial } from './pbr-materials';
+
+export { computeArPlacements, validatePlacement, snapToGrid } from './webxr-placement';
+export type {
+  AabbMetres,
+  RoomSurface,
+  CabinetFootprint,
+  PlacementCandidate,
+  ArPlacementResult,
+  PlacementObstacle,
+} from './webxr-placement';

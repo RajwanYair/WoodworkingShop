@@ -251,6 +251,12 @@
     "meshCount": "{{count}} part",
     "meshCount_other": "{{count}} parts"
   },
+  "ar": {
+    "title": "AR Placement",
+    "startSession": "Start AR session",
+    "placeHere": "Place here",
+    "notSupported": "WebXR AR not supported on this device"
+  },
   "pdf": {
     "title": "PDF exportieren",
     "generate": "PDF generieren",

@@ -256,6 +256,12 @@
     "meshCount": "{{count}} חלק",
     "meshCount_other": "{{count}} חלקים"
   },
+  "ar": {
+    "title": "מיקום במציאות רבודה",
+    "startSession": "התחל סשן AR",
+    "placeHere": "מקם כאן",
+    "notSupported": "WebXR AR אינו נתמך במכשיר זה"
+  },
   "pdf": {
     "title": "ייצוא PDF",
     "generate": "צור PDF",
