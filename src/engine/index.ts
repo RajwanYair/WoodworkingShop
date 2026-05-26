@@ -269,3 +269,26 @@ export {
   getDefaultConstraints,
 } from './constraint-solver';
 export type { DimensionField, ConstraintOp, DimensionConstraint, ConstraintViolation } from './constraint-solver';
+
+// Sprint 112 — WebGPU renderer scaffold (Phase 26)
+export {
+  FALLBACK_CAPABILITIES,
+  DEFAULT_LIGHT,
+  DEFAULT_RENDER_OPTIONS,
+  buildBoxMesh,
+  buildCabinetScene,
+  getMeshBounds,
+  getSceneBounds,
+  centerScene,
+  applyExplodeFactor,
+} from './webgpu-renderer';
+export type {
+  RendererTier,
+  RendererCapabilities,
+  Vec3,
+  Bounds3,
+  CabinetMesh,
+  SceneLight,
+  CabinetScene,
+  RenderOptions,
+} from './webgpu-renderer';
