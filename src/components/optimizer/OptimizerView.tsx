@@ -6,11 +6,10 @@ import { getMaterial } from '../../engine/materials';
 import { generateParts } from '../../engine/parts';
 import { generateHardware } from '../../engine/hardware';
 import { downloadAllSheetsDxf } from '../../utils/dxf-export';
-import { downloadAllSheetsGcode } from '../../utils/gcode-export';
 import { triggerDownload } from '../../utils/download';
 import { GcodePreviewModal } from './GcodePreviewModal';
-import { downloadHardwareCsv, generateBomCsv } from '../../utils/bom-export';
-import { idbLoadOffcuts, idbSaveOffcut, idbDeleteOffcut } from '../../utils/indexed-db-storage';
+import { generateBomCsv } from '../../utils/bom-export';
+import { IconWarning, IconLightbulb } from '../layout/Icons';
 
 import { OptimizationNotesPanel } from './OptimizationNotesPanel';
 import { WasteAnalyticsPanel } from './WasteAnalyticsPanel';
@@ -25,28 +24,15 @@ import type { BomWorkerOutput } from '../../workers/bom-export.worker';
 import DxfWorker from '../../workers/dxf-export.worker?worker';
 import type { DxfWorkerOutput } from '../../workers/dxf-export.worker';
 import { BulkReplaceModal } from './BulkReplaceModal';
-import {
-  IconList,
-  IconWrench,
-  IconEye,
-  IconTag,
-  IconWarning,
-  IconSawKerf,
-  IconPrint,
-  IconSwap,
-  IconLightbulb,
-  IconDxf,
-  IconGcode,
-  IconGrainVertical,
-} from '../layout/Icons';
+import { idbLoadOffcuts, idbSaveOffcut, idbDeleteOffcut } from '../../utils/indexed-db-storage';
 import type { Lang, CutSheet } from '../../engine/types';
-import { Stat } from './OptimizerStats';
 import { SheetCard } from './SheetCard';
 import { OptimizerExplainerPanel } from './OptimizerExplainerPanel';
 import { OffcutsPanel } from './optimizer-offcuts-panel';
 import { MaterialSummaryPanel } from './optimizer-material-summary-panel';
 import { DefectZonePanel } from './optimizer-defect-zone-panel';
 import { ShoppingListPanel } from './optimizer-shopping-list-panel';
+import { OptimizerToolbar } from './OptimizerToolbar';
 
 export function OptimizerView() {
   const { t, i18n } = useTranslation();
@@ -56,25 +42,18 @@ export function OptimizerView() {
     optimizationPending,
     cabinets,
     colorBlindMode,
-    toggleColorBlindMode,
-    sawKerf,
-    setSawKerf,
     materialPriceOverrides,
     projectName,
     sheetSizeOverrides,
     setSheetSizeOverride,
     rotationLockedPartIds,
     toggleRotationLock,
-    config,
-    setConfig,
     offcutCatalog,
     addOffcutEntry,
     removeOffcutEntry,
     defectZones,
     addDefectZone,
     removeDefectZone,
-    autoCoNest,
-    setAutoCoNest,
   } = useCabinetStore();
   const lang = i18n.language as Lang;
   // Phase 12 / Sprint 12 — load saved offcut catalog from IDB on first mount.
@@ -257,228 +236,28 @@ export function OptimizerView() {
         </div>
       )}
 
-      {/* Summary stats + color-blind toggle */}
-      <div className="flex items-center justify-between">
-        <div className={`grid flex-1 gap-4 ${displayOpt.grainConflictCount > 0 ? 'grid-cols-6' : 'grid-cols-5'}`}>
-          <Stat label={t('optimizer.sheets')} value={String(displayOpt.totalSheets)} />
-          <Stat label={t('optimizer.yield')} value={`${displayOpt.overallYield}%`} />
-          <Stat label={t('optimizer.waste')} value={`${(displayOpt.totalWaste / 1_000_000).toFixed(2)} m²`} />
-          <Stat
-            label={t('optimizer.totalParts')}
-            value={String(displayOpt.sheets.reduce((s, sh) => s + sh.parts.length, 0))}
-          />
-          <Stat
-            label={t('optimizer.cuts')}
-            value={String(
-              /* Sprint 164 — count unique cut lines per sheet (excluding sheet boundary) */
-              displayOpt.sheets.reduce((acc, sh) => {
-                const xs = new Set<number>();
-                const ys = new Set<number>();
-                for (const p of sh.parts) {
-                  if (p.x > 0) xs.add(p.x);
-                  const x2 = p.x + p.width;
-                  if (x2 < sh.sheetWidth) xs.add(x2);
-                  if (p.y > 0) ys.add(p.y);
-                  const y2 = p.y + p.length;
-                  if (y2 < sh.sheetLength) ys.add(y2);
-                }
-                return acc + xs.size + ys.size;
-              }, 0),
-            )}
-          />
-          {/* Sprint 41 — grain conflict count stat, only shown when > 0 */}
-          {displayOpt.grainConflictCount > 0 && (
-            <div
-              className="rounded border border-amber-300 bg-amber-50 p-3 text-center dark:border-amber-700 dark:bg-amber-900/20"
-              title={t('optimizer.grainConflictsTitle', { count: displayOpt.grainConflictCount })}
-            >
-              <div className="text-lg font-bold text-amber-700 dark:text-amber-300">
-                {displayOpt.grainConflictCount}
-              </div>
-              <div className="text-xs text-amber-600 dark:text-amber-400">{t('optimizer.grainConflicts')}</div>
-            </div>
-          )}
-        </div>
-        {/* Sprint 46 — part search/highlight filter */}
-        <label className="text-wood-600 dark:text-wood-300 ms-4 flex items-center gap-1.5 text-xs">
-          <input
-            type="search"
-            value={partFilter}
-            onChange={(e) => setPartFilter(e.target.value)}
-            placeholder={t('optimizer.filterPartsPlaceholder')}
-            aria-label={t('optimizer.filterParts')}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-32 rounded border bg-white px-2 py-0.5 text-xs focus:ring-1 focus:outline-none"
-          />
-          {partFilter && (
-            <button
-              onClick={() => setPartFilter('')}
-              aria-label="Clear filter"
-              className="text-wood-400 hover:text-wood-600 dark:hover:text-wood-200 transition-colors"
-            >
-              ×
-            </button>
-          )}
-        </label>
-        {/* Sprint 136 — saw kerf input */}
-        <label className="text-wood-600 dark:text-wood-300 ms-4 flex items-center gap-1.5 text-xs">
-          <IconSawKerf size={14} className="shrink-0" />
-          {t('optimizer.sawKerf')}
-          <input
-            type="number"
-            min={0}
-            max={8}
-            step={0.5}
-            value={sawKerf}
-            onChange={(e) => setSawKerf(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-14 rounded border bg-white px-1 py-0.5 text-center text-xs focus:ring-1 focus:outline-none"
-            aria-label={t('optimizer.sawKerf')}
-          />
-          mm
-        </label>
-        {/* Phase 11 / Sprint 5 — guillotine cut mode toggle */}
-        <label className="text-wood-600 dark:text-wood-300 ms-4 flex cursor-pointer items-center gap-1.5 text-xs">
-          <input
-            type="checkbox"
-            checked={config.cutMode === 'guillotine'}
-            onChange={(e) => setConfig({ cutMode: e.target.checked ? 'guillotine' : 'freeform' })}
-            className="accent-wood-600 dark:accent-wood-400 h-3.5 w-3.5"
-            aria-label={t('optimizer.guillotineMode')}
-          />
-          {t('optimizer.guillotineMode')}
-        </label>
-        {/* Sprint 107 — auto co-nesting toggle */}
-        <label
-          className="text-wood-600 dark:text-wood-300 ms-4 flex cursor-pointer items-center gap-1.5 text-xs"
-          title={t('optimizer.autoCoNestDesc')}
-        >
-          <input
-            type="checkbox"
-            checked={autoCoNest}
-            onChange={(e) => setAutoCoNest(e.target.checked)}
-            className="accent-wood-600 dark:accent-wood-400 h-3.5 w-3.5"
-            aria-label={t('optimizer.autoCoNest')}
-          />
-          {t('optimizer.autoCoNest')}
-        </label>
-        <div className="ms-2 flex gap-2">
-          <button
-            onClick={handleDxfExportWorker}
-            disabled={dxfExporting}
-            className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50"
-            title={t('optimizer.exportDxf')}
-            aria-busy={dxfExporting}
-          >
-            {dxfExporting ? (
-              <svg
-                className="h-3 w-3 animate-spin"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                aria-hidden="true"
-              >
-                <circle cx="12" cy="12" r="10" strokeOpacity={0.25} />
-                <path d="M12 2a10 10 0 0 1 10 10" />
-              </svg>
-            ) : (
-              <IconDxf size={14} />
-            )}
-            DXF
-          </button>
-          <button
-            onClick={() => {
-              void downloadAllSheetsGcode(displayOpt.sheets, filePrefix);
-              useToastStore.getState().addToast(t('toast.gcodeExported'), 'success');
-            }}
-            className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-medium transition-colors"
-            title={t('optimizer.exportGcode')}
-            aria-label={t('optimizer.exportGcode')}
-          >
-            <IconGcode size={14} /> G-code
-          </button>
-          <button
-            onClick={handleBomExportWorker}
-            disabled={bomExporting}
-            className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-medium transition-colors disabled:cursor-wait disabled:opacity-50"
-            title={t('optimizer.exportBom')}
-            aria-label={t('optimizer.exportBom')}
-          >
-            <IconList size={14} /> {bomExporting ? '…' : 'BOM'}
-          </button>
-          {/* Sprint 137 — hardware CSV */}
-          <button
-            onClick={() => {
-              const hwData = cabinets.map((c) => ({
-                name: c.name,
-                hardware: generateHardware(c.config),
-              }));
-              downloadHardwareCsv(hwData, lang, `${filePrefix}-hardware-list.csv`);
-              useToastStore.getState().addToast(t('toast.hardwareExported'), 'success');
-            }}
-            className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-medium transition-colors"
-            title={t('optimizer.exportHardware')}
-            aria-label={t('optimizer.exportHardware')}
-          >
-            <IconWrench size={14} /> HW
-          </button>
-          <button
-            onClick={toggleColorBlindMode}
-            className={`flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-medium transition-colors ${
-              colorBlindMode
-                ? 'border-blue-400 bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200'
-                : 'border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800'
-            }`}
-            title="Toggle color-blind safe palette"
-            aria-pressed={colorBlindMode}
-          >
-            <IconEye size={14} /> CB
-          </button>
-          {/* Sprint 146 — toggle part name labels inside SVG rects */}
-          <button
-            onClick={() => setShowPartNames((v) => !v)}
-            className={`flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-medium transition-colors ${
-              showPartNames
-                ? 'bg-wood-200 dark:bg-wood-700 border-wood-400 text-wood-700 dark:text-wood-200'
-                : 'border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800'
-            }`}
-            title={t('optimizer.toggleLabels')}
-            aria-pressed={showPartNames}
-          >
-            <IconTag size={14} /> {t('optimizer.labels')}
-          </button>
-          {/* Phase 12 / Sprint 11 — grain direction hatch toggle */}
-          <button
-            onClick={() => setShowGrainHatch((v) => !v)}
-            className={`flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-medium transition-colors ${
-              showGrainHatch
-                ? 'bg-wood-200 dark:bg-wood-700 border-wood-400 text-wood-700 dark:text-wood-200'
-                : 'border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800'
-            }`}
-            title={t('optimizer.grainHatch')}
-            aria-pressed={showGrainHatch}
-          >
-            <IconGrainVertical size={14} /> {t('optimizer.grainHatch')}
-          </button>
-          {/* Sprint 151 — print cut sheets */}
-          <button
-            onClick={() => window.print()}
-            className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-medium transition-colors"
-            title={t('optimizer.printSheets')}
-            aria-label={t('optimizer.printSheets')}
-          >
-            <IconPrint size={14} /> {t('optimizer.print')}
-          </button>
-          {/* v3.18.0 — bulk material replacement */}
-          <button
-            onClick={() => setShowBulkReplace(true)}
-            className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-medium transition-colors"
-            title={t('bulkReplace.title', 'Bulk Material Replace')}
-            aria-label={t('bulkReplace.title', 'Bulk Material Replace')}
-          >
-            <IconSwap size={14} /> {t('bulkReplace.short', 'Replace')}
-          </button>
-        </div>
-      </div>
+      {/* Summary stats + export/toggle toolbar */}
+      <OptimizerToolbar
+        sheets={[...displayOpt.sheets]}
+        totalSheets={displayOpt.totalSheets}
+        overallYield={displayOpt.overallYield}
+        totalWaste={displayOpt.totalWaste}
+        grainConflictCount={displayOpt.grainConflictCount}
+        partFilter={partFilter}
+        setPartFilter={setPartFilter}
+        showPartNames={showPartNames}
+        setShowPartNames={setShowPartNames}
+        showGrainHatch={showGrainHatch}
+        setShowGrainHatch={setShowGrainHatch}
+        bomExporting={bomExporting}
+        dxfExporting={dxfExporting}
+        handleBomExportWorker={handleBomExportWorker}
+        handleDxfExportWorker={handleDxfExportWorker}
+        filePrefix={filePrefix}
+        lang={lang}
+        setShowBulkReplace={setShowBulkReplace}
+        t={t}
+      />
 
       {/* v3.18.0 — Bulk material replacement modal */}
       {showBulkReplace && <BulkReplaceModal onClose={() => setShowBulkReplace(false)} />}
