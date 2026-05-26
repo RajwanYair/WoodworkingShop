@@ -306,6 +306,19 @@
     "installCount": "{{count}} installation",
     "installCount_other": "{{count}} installations"
   },
+  "mobileSync": {
+    "title": "Synchronisation mobile",
+    "online": "En ligne",
+    "offline": "Hors ligne",
+    "syncing": "Synchronisation…",
+    "pendingChanges": "{{count}} modification en attente",
+    "pendingChanges_other": "{{count}} modifications en attente",
+    "conflicts": "{{count}} conflit",
+    "conflicts_other": "{{count}} conflits",
+    "lastSynced": "Dernière synchronisation : {{time}}",
+    "neverSynced": "Jamais synchronisé",
+    "resolveConflict": "Résoudre le conflit"
+  },
   "audit": {
     "title": "Journal d'audit",
     "noEvents": "Aucun événement d'audit enregistré",

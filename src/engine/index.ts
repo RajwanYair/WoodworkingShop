@@ -434,3 +434,28 @@ export type {
   InstalledPlugin,
   PluginRegistry,
 } from './plugin-marketplace';
+
+// Sprint 128 — Mobile offline sync engine (Phase 29)
+export {
+  createMobileSyncState,
+  enqueuePendingChange,
+  dequeueChanges,
+  markSynced,
+  detectConflicts,
+  resolveConflict,
+  applyConflictResolution,
+  addConflicts,
+  getMobileSyncSummary,
+  serializeSnapshot,
+  deserializeSnapshot,
+  setOnlineStatus,
+} from './mobile-sync';
+export type {
+  MobilePlatform,
+  SyncConflictStrategy,
+  ProjectSnapshot,
+  OfflineQueueEntry,
+  SyncConflict,
+  MobileSyncState,
+  MobileSyncSummary,
+} from './mobile-sync';

@@ -298,18 +298,18 @@
     "wideSpanRisk": "Wide span {{widthMm}} mm — consider a centre support to reduce shelf deflection",
     "costMaterialAlternative": "Melamine board is a cost-effective alternative to plywood for painted finishes"
   },
-  "marketplace": {
-    "title": "Plugin Marketplace",
-    "search": "Search plugins…",
-    "install": "Install",
-    "uninstall": "Uninstall",
-    "enable": "Enable",
-    "disable": "Disable",
-    "installed": "Installed",
-    "enabled": "Enabled",
-    "noResults": "No plugins found",
-    "installCount": "{{count}} install",
-    "installCount_other": "{{count}} installs"
+  "mobileSync": {
+    "title": "Mobile Sync",
+    "online": "Online",
+    "offline": "Offline",
+    "syncing": "Syncing…",
+    "pendingChanges": "{{count}} pending change",
+    "pendingChanges_other": "{{count}} pending changes",
+    "conflicts": "{{count}} conflict",
+    "conflicts_other": "{{count}} conflicts",
+    "lastSynced": "Last synced: {{time}}",
+    "neverSynced": "Never synced",
+    "resolveConflict": "Resolve conflict"
   },
   "audit": {
     "title": "Audit Trail",
@@ -898,7 +898,13 @@
     "downloads": "{{count}} downloads",
     "pluginCount": "{{count}} plugins",
     "installedCount": "{{count}}",
-    "installed": "installed"
+    "installed": "installed",
+    "enable": "Enable",
+    "disable": "Disable",
+    "enabled": "Enabled",
+    "search": "Search plugins…",
+    "installCount": "{{count}} install",
+    "installCount_other": "{{count}} installs"
   },
   "finish": {
     "title": "Finish Calculator",

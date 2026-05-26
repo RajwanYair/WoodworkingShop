@@ -298,18 +298,18 @@
     "wideSpanRisk": "רוחב {{widthMm}} ממ — מומלץ תמיכה מרכזית להפחת כיפוף",
     "costMaterialAlternative": "לוח מלמין הוא חלופה חסכונית לפליווד בגימורים צבועים"
   },
-  "marketplace": {
-    "title": "שוק תוספים",
-    "search": "חיפוש תוספים…",
-    "install": "התקנה",
-    "uninstall": "הסרה",
-    "enable": "הפעלה",
-    "disable": "השבתה",
-    "installed": "מותקן",
-    "enabled": "פעיל",
-    "noResults": "לא נמצאו תוספים",
-    "installCount": "{{count}} התקנה",
-    "installCount_other": "{{count}} התקנות"
+  "mobileSync": {
+    "title": "סנכרון נייד",
+    "online": "מחובר",
+    "offline": "לא מחובר",
+    "syncing": "מסנכר…",
+    "pendingChanges": "שינוי {{count}} בהמתנה",
+    "pendingChanges_other": "{{count}} שינויים בהמתנה",
+    "conflicts": "התנגשות {{count}}",
+    "conflicts_other": "{{count}} התנגשויות",
+    "lastSynced": "סנכרון אחרון: {{time}}",
+    "neverSynced": "לא סונכר מעולם",
+    "resolveConflict": "פתר התנגשות"
   },
   "audit": {
     "title": "יומן ביקורת",
@@ -898,7 +898,13 @@
     "downloads": "{{count}} הורדות",
     "pluginCount": "{{count}} תוספים",
     "installedCount": "{{count}}",
-    "installed": "מותקנים"
+    "installed": "מותקנים",
+    "enable": "הפעלה",
+    "disable": "השבתה",
+    "enabled": "פעיל",
+    "search": "חיפוש תוספים…",
+    "installCount": "{{count}} התקנה",
+    "installCount_other": "{{count}} התקנות"
   },
   "finish": {
     "title": "מחשבון צבע / גימור שטח",

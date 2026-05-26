@@ -306,20 +306,20 @@
     "installCount": "{{count}} install",
     "installCount_other": "{{count}} installs"
   },
-  "audit": {
-    "title": "Audit Trail",
-    "noEvents": "No audit events recorded",
-    "eventCount": "{{count}} event",
-    "eventCount_other": "{{count}} events",
-    "configChange": "Config changed",
-    "export": "Exported",
-    "history": "History",
-    "diffTitle": "Version Diff",
-    "noDiff": "Configurations are identical",
-    "changeCount": "{{count}} field changed",
-    "changeCount_other": "{{count}} fields changed"
+  "mobileSync": {
+    "title": "Mobile Sync",
+    "online": "Online",
+    "offline": "Offline",
+    "syncing": "Syncing…",
+    "pendingChanges": "{{count}} pending change",
+    "pendingChanges_other": "{{count}} pending changes",
+    "conflicts": "{{count}} conflict",
+    "conflicts_other": "{{count}} conflicts",
+    "lastSynced": "Last synced: {{time}}",
+    "neverSynced": "Never synced",
+    "resolveConflict": "Resolve conflict"
   },
-  "workspace": {
+  "audit": {
     "title": "Multi-Project Workspace",
     "newProject": "New Project",
     "rename": "Rename",
