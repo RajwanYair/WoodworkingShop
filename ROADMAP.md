@@ -1,6 +1,6 @@
 # Roadmap
 
-> **Last strategic review**: 2026-05-25 · **Current version**: 4.2.0
+> **Last strategic review**: 2026-05-26 · **Current version**: 4.3.0
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -178,6 +178,18 @@ state; GH release published.
 | 89     | Project Build Log (timestamped notes per project)   | **DONE** | UI      |
 | 90     | Focus/Kiosk Mode (hide chrome, Ctrl+Shift+K toggle) | **DONE** | UX      |
 | 91     | Version bump 4.2.0, CHANGELOG, GH release           | **DONE** | Release |
+
+### Phase 22 — Workshop Intelligence · v4.3.0 · **DONE**
+
+> **Status**: Released · **Version**: 4.3.0 · **Goal**: Analytics, mirroring, checklists, cost export
+
+| Sprint | Feature                                               | Status   | Track   |
+| ------ | ----------------------------------------------------- | -------- | ------- |
+| 92     | Smart Waste Analytics Panel (efficiency, offcuts)     | **DONE** | Engine  |
+| 93     | Cabinet Mirror & Clone (isMirrored, suffix series)    | **DONE** | Engine  |
+| 94     | Part Cutting Checklist (progress, groups, persist)    | **DONE** | UX      |
+| 95     | Project Cost Summary Export (breakdown, CSV)          | **DONE** | UX      |
+| 96     | Version bump 4.3.0, CHANGELOG, GH release             | **DONE** | Release |
 
 ### Phase 22+: Future Horizons (Unscoped)
 

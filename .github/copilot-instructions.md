@@ -2,19 +2,19 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v4.2.0** · **Next target: v4.2.0 final** (Phase 21 — Marketplace + Build UX)
+> **Current release: v4.3.0** · **Next target: v4.4.0** (Phase 23 — TBD)
 
-## Active Sprint — Phase 21 (Sprints 87–91)
+## Active Sprint — Phase 22 (Sprints 92–96)
 
-> **Status**: In progress · **Goal**: Plugin Marketplace, Finish Calculator, Build Log, Focus Mode
+> **Status**: DONE · **Goal**: Workshop Intelligence — Waste Analytics, Mirror & Clone, Cut Checklist, Cost Export
 
 | Sprint | Feature                  | Status |
 | ------ | ------------------------ | ------ |
-| 87     | Plugin Marketplace Panel | DONE   |
-| 88     | Finish/Paint Calculator  | DONE   |
-| 89     | Project Build Log        | WIP    |
-| 90     | Focus/Kiosk Mode         | TODO   |
-| 91     | Release v4.2.0           | TODO   |
+| 92     | Smart Waste Analytics    | DONE   |
+| 93     | Cabinet Mirror & Clone   | DONE   |
+| 94     | Part Cutting Checklist   | DONE   |
+| 95     | Project Cost Summary Export | DONE |
+| 96     | Release v4.3.0           | DONE   |
 
 ## Tech Stack
 

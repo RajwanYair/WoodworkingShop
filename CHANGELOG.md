@@ -9,6 +9,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.3.0] — 2026-05-26
+
+### Phase 22 — Workshop Intelligence (Sprints 92–95)
+
+#### Sprint 92 — Smart Waste Analytics Panel
+
+- Added `src/engine/waste-analytics.ts`: pure-TS `analyzeWaste()` — per-sheet efficiency, per-material totals, worst-sheet ranking, offcut candidate detection (≥15% waste threshold), `formatAreaM2()` helper
+- Added `src/components/optimizer/WasteAnalyticsPanel.tsx`: collapsible panel with efficiency badge (excellent/good/fair/poor), per-material table, worst-3-sheets list, offcut recovery hint
+- Mounted in `OptimizerView` after `OptimizationNotesPanel`
+- i18n: `wasteAnalytics.*` section (18 keys, EN + HE parity)
+- Tests: 15 unit tests covering empty result, efficiency ratings, material grouping, offcut candidates, `formatAreaM2`
+
+#### Sprint 93 — Cabinet Mirror & Clone
+
+- Added `src/engine/mirror-cabinet.ts`: `mirrorConfig()` toggles `isMirrored` flag; `mirrorName()` handles `(mirror)` → `(mirror 2)` → `(mirror N)` suffix series
+- Added `isMirrored?: boolean` to `CabinetConfig` (optional, backward-compatible)
+- Added `mirrorCabinet(index)` action to `cabinet-store.ts`
+- Updated `CabinetSelector.tsx`: ↔ mirror button + purple `(mirror)` badge
+- i18n: `project.mirror` + `project.mirrorBadge` in EN + HE
+- Tests: 12 unit tests (mirrorConfig, mirrorName suffix series)
+
+#### Sprint 94 — Part Cutting Checklist
+
+- Added `src/engine/cut-checklist.ts`: pure-TS `buildCutChecklist()` — groups parts by material into `CutChecklistGroup[]`, returns progress %, `isComplete` flag, bilingual labels
+- Added `checkedPartIds: string[]` state + `toggleCutPart` + `clearCutChecklist` to `uiSlice.ts` with `localStorage` persistence
+- Added `src/components/optimizer/CutChecklistPanel.tsx`: collapsible panel with progress bar, grouped part checkboxes, per-group counts, Reset button
+- Mounted in `OptimizerView` after `WasteAnalyticsPanel`
+- i18n: `cutChecklist.*` section (6 keys, EN + HE parity)
+- Tests: 12 unit tests (empty, progress, grouping, isComplete, language labels)
+
+#### Sprint 95 — Project Cost Summary Export
+
+- Added `src/engine/cost-summary-export.ts`: `buildCostSummary()` aggregates `CostBreakdown` into percentage-share lines; `costSummaryToCsv()` serialises to RFC 4180 CSV
+- Added `src/components/configurator/CostSummaryPanel.tsx`: collapsible breakdown table with category/amount/share columns + "Export CSV" button (client-side Blob download)
+- Mounted in `Sidebar` after `CostEstimatePanel`
+- i18n: `costSummary.*` section (13 keys, EN + HE parity)
+- Tests: 11 unit tests (zero totals, single/multi line items, % rounding, currency, CSV format)
+
 ## [4.2.0] — 2026-06-07
 
 ### Phase 21 — Plugin Marketplace, Finish Calculator, Build Log & Focus Mode (Sprints 87–90)
