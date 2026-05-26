@@ -18,6 +18,7 @@ import { CutChecklistPanel } from './CutChecklistPanel';
 import { StockTrackerPanel } from './StockTrackerPanel';
 import { GrainReportPanel } from './GrainReportPanel';
 import { PartLabelSheet } from './PartLabelSheet';
+import { CutPlanSummaryPanel } from './CutPlanSummaryPanel';
 import { VirtualSheetWrapper } from './VirtualSheetWrapper';
 import BomWorker from '../../workers/bom-export.worker?worker';
 import type { BomWorkerOutput } from '../../workers/bom-export.worker';
@@ -503,6 +504,9 @@ export function OptimizerView() {
 
       {/* Sprint 100 — Part label sheet */}
       <PartLabelSheet />
+
+      {/* Sprint 103 — Cut plan summary */}
+      <CutPlanSummaryPanel />
 
       {/* Sprint 7 — Layout explainer: placement stats */}
       <OptimizerExplainerPanel sheets={displayOpt.sheets} t={t} />
