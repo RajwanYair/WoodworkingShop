@@ -262,6 +262,15 @@
     "placeHere": "מקם כאן",
     "notSupported": "WebXR AR אינו נתמך במכשיר זה"
   },
+  "collab": {
+    "title": "שיתוף פעולה",
+    "connected": "מחובר",
+    "offline": "לא מקוון",
+    "peers": "{{count}} עמית",
+    "peers_other": "{{count}} עמיתים",
+    "you": "אתה",
+    "conflict": "קונפליקט נפתר"
+  },
   "pdf": {
     "title": "ייצוא PDF",
     "generate": "צור PDF",

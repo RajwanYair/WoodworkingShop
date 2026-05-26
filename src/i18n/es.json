@@ -257,8 +257,16 @@
     "placeHere": "Place here",
     "notSupported": "WebXR AR not supported on this device"
   },
+  "collab": {
+    "title": "Collaboration",
+    "connected": "Connected",
+    "offline": "Offline",
+    "peers": "{{count}} peer",
+    "peers_other": "{{count}} peers",
+    "you": "You",
+    "conflict": "Conflict resolved"
+  },
   "pdf": {
-    "title": "Exportar PDF",
     "generate": "Generar PDF",
     "generateAll": "Exportar proyecto completo ({{count}} armarios)",
     "generatingAll": "Creando PDF del proyecto…",

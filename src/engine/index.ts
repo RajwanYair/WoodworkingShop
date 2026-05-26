@@ -316,3 +316,14 @@ export type {
   ArPlacementResult,
   PlacementObstacle,
 } from './webxr-placement';
+
+export {
+  createCollabState,
+  incrementClock,
+  createOperation,
+  applyOperation,
+  mergeStates,
+  readValues,
+  evictStalePeers,
+} from './crdt-sync';
+export type { LamportStamp, CrdtOperation, LwwRegister, CrdtState, PresencePeer, CollabState } from './crdt-sync';
