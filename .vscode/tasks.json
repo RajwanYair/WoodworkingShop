@@ -1,116 +1,22 @@
 {
   "version": "2.0.0",
   "tasks": [
+    // ─── Build ────────────────────────────────────────────────────────────────
     {
       "label": "Typecheck",
       "type": "npm",
       "script": "typecheck",
       "group": "build",
-      "problemMatcher": ["$tsc"]
-    },
-    {
-      "label": "Lint",
-      "type": "npm",
-      "script": "lint",
-      "problemMatcher": ["$eslint-stylish"]
-    },
-    {
-      "label": "Test",
-      "type": "npm",
-      "script": "test",
-      "group": "test"
-    },
-    {
-      "label": "Test Coverage",
-      "type": "npm",
-      "script": "test:coverage",
-      "group": "test"
+      "problemMatcher": ["$tsc"],
+      "presentation": { "reveal": "silent", "panel": "shared" }
     },
     {
       "label": "Build",
       "type": "npm",
       "script": "build",
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "problemMatcher": ["$tsc"]
-    },
-    {
-      "label": "Check (full quality gate)",
-      "type": "npm",
-      "script": "check",
-      "group": "build",
-      "problemMatcher": ["$tsc", "$eslint-stylish"]
-    },
-    {
-      "label": "Quality (no tests)",
-      "type": "npm",
-      "script": "quality",
-      "group": "build",
-      "problemMatcher": ["$tsc", "$eslint-stylish"],
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "Format",
-      "type": "npm",
-      "script": "format",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "silent",
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "Release Build",
-      "type": "npm",
-      "script": "release:build",
-      "group": "build",
+      "group": { "kind": "build", "isDefault": true },
       "problemMatcher": ["$tsc"],
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "Dead code",
-      "type": "npm",
-      "script": "dead:check",
-      "group": "build"
-    },
-    {
-      "label": "i18n Coverage",
-      "type": "npm",
-      "script": "i18n:coverage",
-      "problemMatcher": []
-    },
-    {
-      "label": "Bundle Check",
-      "type": "npm",
-      "script": "bundle:check",
-      "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "Bench Check",
-      "type": "npm",
-      "script": "bench:check",
-      "group": "test",
-      "problemMatcher": []
-    },
-    {
-      "label": "CI (full)",
-      "type": "npm",
-      "script": "ci",
-      "group": "build",
-      "problemMatcher": ["$tsc", "$eslint-stylish"],
-      "presentation": {
-        "reveal": "always",
-        "panel": "dedicated"
-      }
+      "presentation": { "reveal": "always", "panel": "shared" }
     },
     {
       "label": "Dev Server",
@@ -120,10 +26,7 @@
       "problemMatcher": [
         {
           "owner": "vite",
-          "pattern": {
-            "regexp": "^(NOMATCH)$",
-            "message": 1
-          },
+          "pattern": { "regexp": "^(NOMATCH)$", "message": 1 },
           "background": {
             "activeOnStart": true,
             "beginsPattern": "^.*vite.*",
@@ -131,6 +34,159 @@
           }
         }
       ]
+    },
+
+    // ─── Quality ──────────────────────────────────────────────────────────────
+    {
+      "label": "Lint",
+      "type": "npm",
+      "script": "lint",
+      "problemMatcher": ["$eslint-stylish"],
+      "presentation": { "reveal": "silent", "panel": "shared" }
+    },
+    {
+      "label": "Lint CSS",
+      "type": "npm",
+      "script": "lint:css",
+      "problemMatcher": [],
+      "presentation": { "reveal": "silent", "panel": "shared" }
+    },
+    {
+      "label": "Lint Markdown",
+      "type": "npm",
+      "script": "lint:md",
+      "problemMatcher": [],
+      "presentation": { "reveal": "silent", "panel": "shared" }
+    },
+    {
+      "label": "Format",
+      "type": "npm",
+      "script": "format",
+      "problemMatcher": [],
+      "presentation": { "reveal": "silent", "panel": "shared" }
+    },
+    {
+      "label": "Format Check",
+      "type": "npm",
+      "script": "format:check",
+      "problemMatcher": [],
+      "presentation": { "reveal": "silent", "panel": "shared" }
+    },
+    {
+      "label": "Quality (no tests)",
+      "type": "npm",
+      "script": "quality",
+      "group": "build",
+      "problemMatcher": ["$tsc", "$eslint-stylish"],
+      "presentation": { "reveal": "always", "panel": "shared" }
+    },
+
+    // ─── Tests ────────────────────────────────────────────────────────────────
+    {
+      "label": "Test",
+      "type": "npm",
+      "script": "test",
+      "group": { "kind": "test", "isDefault": true },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "shared" }
+    },
+    {
+      "label": "Test Coverage",
+      "type": "npm",
+      "script": "test:coverage",
+      "group": "test",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "shared" }
+    },
+    {
+      "label": "Test Watch",
+      "type": "npm",
+      "script": "test:watch",
+      "group": "test",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "Test E2E",
+      "type": "npm",
+      "script": "test:e2e",
+      "group": "test",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "Bench Check",
+      "type": "npm",
+      "script": "bench:check",
+      "group": "test",
+      "problemMatcher": [],
+      "presentation": { "reveal": "silent", "panel": "shared" }
+    },
+
+    // ─── Gates ────────────────────────────────────────────────────────────────
+    {
+      "label": "Check (full quality gate)",
+      "type": "npm",
+      "script": "check",
+      "group": "build",
+      "problemMatcher": ["$tsc", "$eslint-stylish"],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "CI (full)",
+      "type": "npm",
+      "script": "ci",
+      "group": "build",
+      "problemMatcher": ["$tsc", "$eslint-stylish"],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "Release Build",
+      "type": "npm",
+      "script": "release:build",
+      "group": "build",
+      "problemMatcher": ["$tsc"],
+      "presentation": { "reveal": "always", "panel": "shared" }
+    },
+
+    // ─── Audit & Analysis ─────────────────────────────────────────────────────
+    {
+      "label": "i18n Coverage",
+      "type": "npm",
+      "script": "i18n:coverage",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "shared" }
+    },
+    {
+      "label": "Bundle Check",
+      "type": "npm",
+      "script": "bundle:check",
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "shared" }
+    },
+    {
+      "label": "Dead code",
+      "type": "npm",
+      "script": "dead:check",
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "shared" }
+    },
+    {
+      "label": "Docs API",
+      "type": "npm",
+      "script": "docs:api",
+      "problemMatcher": [],
+      "presentation": { "reveal": "silent", "panel": "shared" }
+    },
+    {
+      "label": "SBOM",
+      "type": "npm",
+      "script": "sbom",
+      "problemMatcher": [],
+      "presentation": { "reveal": "silent", "panel": "shared" }
     }
   ]
 }

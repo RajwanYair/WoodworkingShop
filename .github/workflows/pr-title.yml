@@ -1,0 +1,42 @@
+name: PR Title Lint
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  pull-requests: read
+
+jobs:
+  pr-title:
+    name: Validate PR title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check conventional commit format
+        uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            chore
+            refactor
+            test
+            docs
+            ci
+            perf
+            style
+            revert
+          # Allow scopes like (engine), (store), (i18n), (ci), (deps)
+          requireScope: false
+          # Subject line must not end with a period
+          subjectPattern: ^(?![A-Z]).+[^.]$
+          subjectPatternError: >
+            The subject must start with a lowercase letter and must not end with a period.
+            Example: "feat(engine): add multi-start optimizer"
+          # Ignore merge/revert/renovate bot commits
+          ignoreLabels: |
+            dependencies
+            ci
+          disallowScopes: []

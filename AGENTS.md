@@ -1,11 +1,21 @@
 # Cabinet Planner — AI Agent Context
 
 > Browser-based woodworking design tool · React 19 + TypeScript 6 + Vite 8
-> **v4.1.0** · MIT · Node ≥ 22 · [Live demo](https://rajwanyair.github.io/WoodworkingShop/)
+> **v4.2.0** · MIT · Node ≥ 22 · [Live demo](https://rajwanyair.github.io/WoodworkingShop/)
 
 ## What It Does
 
 Configure any cabinet/furniture piece → live 6-view SVG preview → MaxRects cut-sheet optimizer → export PDF build plan, DXF, G-code, or BOM. **No server, no account.** Full RTL support (Hebrew/Arabic).
+
+## Active Sprint — Phase 21
+
+| Sprint | Feature                  | Status |
+| ------ | ------------------------ | ------ |
+| 87     | Plugin Marketplace Panel | DONE   |
+| 88     | Finish/Paint Calculator  | DONE   |
+| 89     | Project Build Log        | WIP    |
+| 90     | Focus/Kiosk Mode         | TODO   |
+| 91     | Release v4.2.0           | TODO   |
 
 ## Tech Stack
 
@@ -107,3 +117,14 @@ import { cfg } from '../helpers'; // builds CabinetConfig from DEFAULT_CONFIG + 
 | `release.prompt.md`         | Full release workflow: bump → CHANGELOG → tag → GH release    |
 | `split-component.prompt.md` | Split large React components (≤ 600 L target)                 |
 | `test-factory.prompt.md`    | Convert repetitive tests to `it.each` tables                  |
+| `bundle-optimize.prompt.md` | Bundle size analysis and chunk optimization                   |
+| `a11y-audit.prompt.md`      | WCAG 2.2 AA accessibility audit and remediation               |
+| `perf-debug.prompt.md`      | Lighthouse / runtime performance diagnosis                    |
+
+## Copilot Agents
+
+`.github/agents/` contains pre-configured agent mode definitions:
+
+- `sprint.agent.md` — execute the current WIP sprint item end-to-end (Sprint 89)
+- `release.agent.md` — full automated release workflow
+- `feature.agent.md` — scaffold a complete new feature (engine + store + UI + i18n)

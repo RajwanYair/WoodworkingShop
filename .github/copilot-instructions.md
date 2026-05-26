@@ -2,7 +2,7 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v4.1.0** · **Next target: v4.2.0** (Phase 21 — Marketplace + Build UX)
+> **Current release: v4.2.0** · **Next target: v4.2.0 final** (Phase 21 — Marketplace + Build UX)
 
 ## Active Sprint — Phase 21 (Sprints 87–91)
 
@@ -43,6 +43,7 @@ src/
 .github/
   actions/
     setup-node/ composite action — checkout + setup-node + npm ci (used by ci.yml to avoid repetition)
+  instructions/ scoped Copilot instruction files (engine, components, store, tests, i18n)
 tests/
   engine/       Unit tests for pure engine functions (80% coverage required)
   store/        Zustand store action tests
@@ -156,24 +157,68 @@ The MaxRects BSSF cut-optimizer uses:
 `.vscode/snippets.code-snippets` provides:
 
 - `iteach` — `it.each` parametrised test
+- `iteachobj` — `it.each` with object table rows
 - `deach` — `describe.each` parametrised suite
 - `zsel` — Zustand store selector
+- `zmsel` — Zustand multi-field shallow selector
 - `t18` — i18n `t()` call with parity reminder
+- `t18ns` — i18n namespaced translation hook
 - `jsdoc` — JSDoc block skeleton
 - `rfc` — React functional component with TypeScript props
+- `hook` — custom React hook template
 - `eng` — pure engine function template (no React, no DOM)
+- `engguard` — engine boundary guard with RangeError
 - `slice` — Zustand store slice with getter/setter
+- `storetest` — Zustand store action test
 - `wrkr` — Comlink Web Worker expose pattern
+- `vmock` — Vitest module mock
+- `vspy` — Vitest spy with auto-restore
+- `uefx` — useEffect with cleanup
+- `umemo` — useMemo memoised value
+- `ucb` — useCallback stable ref
+- `arlive` — ARIA live region
+- `tw-rtl` — Tailwind logical property class pair
+- `result` — discriminated union Result type
+
+## Copilot Instructions (scoped)
+
+`.github/instructions/` contains `applyTo`-scoped instruction files auto-injected by Copilot:
+
+- `engine.instructions.md` — applied to `src/engine/**` (pure TS rules, coordinate system)
+- `components.instructions.md` — applied to `src/components/**/*.tsx` (RTL, ARIA, i18n, size)
+- `store.instructions.md` — applied to `src/store/**` (slice pattern, selectors, no side effects)
+- `tests.instructions.md` — applied to `tests/**` (it.each, helpers, coverage targets)
+- `i18n.instructions.md` — applied to `src/i18n/**` and all source files (parity, key naming)
 
 ## Copilot Prompts
 
 `.github/prompts/` contains reusable agent prompts:
 
+- `new-feature.prompt.md` — add a full feature panel (engine → store → UI → i18n → mount)
 - `split-component.prompt.md` — split large React component files into sub-components (≤ 600 L each)
 - `test-factory.prompt.md` — convert repetitive `it` blocks to `it.each` tables (≤ 400 L per file)
-- `roadmap-sprint.prompt.md` — execute a Phase 17.3 sprint item end-to-end
+- `roadmap-sprint.prompt.md` — execute a Phase 21 sprint item end-to-end
 - `release.prompt.md` — full release workflow: version bump → CHANGELOG → tag → GitHub Release
 - `fix-quality.prompt.md` — diagnose and fix every quality gate failure (typecheck, lint, i18n, format)
+- `fix-tests.prompt.md` — diagnose and fix all failing unit tests
+- `i18n-add-keys.prompt.md` — add i18n keys with en/he parity validation
+- `bundle-optimize.prompt.md` — bundle size analysis and chunk optimization
+- `a11y-audit.prompt.md` — WCAG 2.2 AA accessibility audit and remediation
+- `perf-debug.prompt.md` — Lighthouse / runtime performance diagnosis
+- `security-audit.prompt.md` — OWASP Top 10 security audit for client-side SPA
+- `dependency-update.prompt.md` — review and apply Dependabot dependency updates
+- `code-review.prompt.md` — structured code review against all project conventions
+
+## Copilot Agents
+
+`.github/agents/` contains pre-configured agent mode definitions:
+
+- `sprint.agent.md` — execute the current WIP sprint item end-to-end
+- `release.agent.md` — full automated release workflow
+- `feature.agent.md` — scaffold a complete new feature (engine + store + UI + i18n)
+- `debug.agent.md` — diagnose and fix test/build/type failures without suppression
+- `a11y.agent.md` — WCAG 2.2 AA accessibility audit and remediation
+- `i18n.agent.md` — i18n key management with full 6-locale parity
 
 ## Workflows
 
@@ -186,4 +231,5 @@ The MaxRects BSSF cut-optimizer uses:
 ## Intermediate Files & Caching
 
 - All intermediate build files, ESLint caches (`.eslintcache`), Vite caches (`.vite_cache`), Playwright test results, and test reports **MUST** be written to paths inside the OS `$TEMP` or `tempfile.gettempdir()` directory. We never pollute the root workspace or `node_modules/.cache` with intermediate build telemetry.
+- Coverage output goes to `/tmp/WoodworkingShop/coverage/` (Linux/CI) or `%TEMP%\WoodworkingShop\coverage\` (Windows dev).
 - `skipLibCheck: true` is set in all tsconfigs due to `@react-pdf/types` shipping `const enum` in `.d.ts` files (TS18055 under `verbatimModuleSyntax`). Remove once upstream fixes `primitive.d.ts`.

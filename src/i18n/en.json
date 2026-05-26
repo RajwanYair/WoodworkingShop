@@ -767,5 +767,26 @@
   "focusMode": {
     "enter": "Focus mode enabled",
     "exit": "Focus mode disabled"
+  },
+  "wasteAnalytics": {
+    "title": "Waste Analytics",
+    "totalSheets": "Total Sheets",
+    "totalWaste": "Total Waste",
+    "offcutCandidates": "Offcut Candidates",
+    "recoverableArea": "Recoverable Area",
+    "byMaterial": "By Material",
+    "material": "Material",
+    "sheets": "Sheets",
+    "used": "Used Area",
+    "waste": "Waste",
+    "worstSheets": "Worst Performing Sheets",
+    "offcutTag": "offcut",
+    "offcutHint": "{{count}} sheet(s) have enough remaining area to be saved as offcuts for smaller parts.",
+    "rating": {
+      "excellent": "Excellent",
+      "good": "Good",
+      "fair": "Fair",
+      "poor": "Poor"
+    }
   }
 }

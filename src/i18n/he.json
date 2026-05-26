@@ -767,5 +767,26 @@
   "focusMode": {
     "enter": "מצב מיקוד הופעל",
     "exit": "מצב מיקוד כובה"
+  },
+  "wasteAnalytics": {
+    "title": "ניתוח פסולת",
+    "totalSheets": "סה\"כ גיליונות",
+    "totalWaste": "סה\"כ פסולת",
+    "offcutCandidates": "מועמדים לשיירים",
+    "recoverableArea": "שטח בר שימוש",
+    "byMaterial": "לפי חומר",
+    "material": "חומר",
+    "sheets": "גיליונות",
+    "used": "שטח בשימוש",
+    "waste": "פסולת",
+    "worstSheets": "גיליונות בעייתיות",
+    "offcutTag": "שייר",
+    "offcutHint": "ל-{{count}} גיליון/ות יש שטח נותר מספיק לשמירתם כשיירים לחלקים קטנים.",
+    "rating": {
+      "excellent": "מצוין",
+      "good": "טוב",
+      "fair": "בינוני",
+      "poor": "גרוע"
+    }
   }
 }

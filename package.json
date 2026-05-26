@@ -53,6 +53,8 @@
     "dev": "vite",
     "prebuild": "node scripts/sync-sw-version.js",
     "build": "tsc -b && vite build",
+    "prebuild:nocheck": "node scripts/sync-sw-version.js",
+    "build:nocheck": "vite build",
     "preview": "vite preview",
     "clean": "rimraf dist tsconfig.tsbuildinfo",
     "test": "vitest run",

@@ -1,0 +1,63 @@
+{
+  "servers": {
+    // ─── GitHub — official Copilot-native MCP (PRs, issues, workflows, code search) ─
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "description": "Official GitHub MCP — pull requests, issues, Actions workflows, and code search in Copilot chat."
+    },
+
+    // ─── Filesystem — scoped workspace access (heavy dirs excluded) ────────
+    "filesystem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "${workspaceFolder}",
+        "--exclude",
+        "node_modules,.git,dist,coverage,playwright-report,test-results,docs/api,.vite_cache"
+      ],
+      "description": "Scoped read/write access to the workspace. Heavy directories excluded for performance."
+    },
+
+    // ─── Fetch — retrieve web content and documentation in chat ──────────
+    "fetch": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"],
+      "description": "Fetch and parse web content, test API endpoints, and retrieve documentation directly in chat."
+    },
+
+    // ─── Playwright — browser automation for E2E debugging in chat ────────
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@microsoft/mcp-server-playwright"],
+      "description": "Browser automation, visual debugging, and E2E interaction directly in chat."
+    },
+
+    // ─── GitKraken — git ops, PR workflow, Launchpad issue tracking ───────
+    "gitkraken": {
+      "type": "http",
+      "url": "https://mcp.gitkraken.com/mcp",
+      "description": "GitKraken MCP — git blame, log, diff, branch ops, pull request workflow, and issue tracking."
+    },
+
+    // ─── Memory — persistent agent notes across sessions ──────────────────
+    "memory": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "description": "Persistent key-value memory for agent context across sessions."
+    },
+
+    // ─── Sequential Thinking — multi-step problem decomposition ──────────
+    "sequentialthinking": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "description": "Structured multi-step reasoning for complex problem decomposition."
+    }
+  }
+}

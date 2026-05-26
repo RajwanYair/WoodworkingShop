@@ -4,11 +4,17 @@ inputs:
   node-version:
     description: 'Node.js version to use'
     required: false
-    default: '22'
+    default: '24'
+  fetch-depth:
+    description: 'Number of commits to fetch. 0 fetches all history. Default 1 for fast shallow clone.'
+    required: false
+    default: '1'
 runs:
   using: composite
   steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: ${{ inputs.fetch-depth }}
 
     - uses: actions/setup-node@v4
       with:

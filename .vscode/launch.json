@@ -1,6 +1,7 @@
 {
   "version": "0.2.0",
   "configurations": [
+    // ─── Browser ──────────────────────────────────────────────────────────────
     {
       "name": "Launch Chrome (Dev)",
       "type": "chrome",
@@ -8,11 +9,29 @@
       "url": "http://localhost:5173/WoodworkingShop/",
       "webRoot": "${workspaceFolder}/src",
       "preLaunchTask": "Dev Server",
+      "stopOnEntry": false,
+      "sourceMaps": true,
       "sourceMapPathOverrides": {
         "/@fs/*": "${workspaceFolder}/*",
         "/src/*": "${workspaceFolder}/src/*"
       }
     },
+    {
+      "name": "Launch Edge (Dev)",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://localhost:5173/WoodworkingShop/",
+      "webRoot": "${workspaceFolder}/src",
+      "preLaunchTask": "Dev Server",
+      "stopOnEntry": false,
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "/@fs/*": "${workspaceFolder}/*",
+        "/src/*": "${workspaceFolder}/src/*"
+      }
+    },
+
+    // ─── Unit Tests ───────────────────────────────────────────────────────────
     {
       "name": "Debug Vitest (current file)",
       "type": "node",
@@ -21,11 +40,11 @@
       "args": ["run", "${relativeFile}", "--reporter=verbose"],
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "stopOnEntry": false,
       "smartStep": true,
       "sourceMaps": true,
-      "env": {
-        "NODE_OPTIONS": "--experimental-vm-modules"
-      }
+      "env": { "NODE_OPTIONS": "--experimental-vm-modules" }
     },
     {
       "name": "Debug Vitest (all tests)",
@@ -35,12 +54,28 @@
       "args": ["run", "--reporter=verbose"],
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "stopOnEntry": false,
       "smartStep": true,
       "sourceMaps": true,
-      "env": {
-        "NODE_OPTIONS": "--experimental-vm-modules"
-      }
+      "env": { "NODE_OPTIONS": "--experimental-vm-modules" }
     },
+    {
+      "name": "Debug Vitest (watch)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/../node_modules/vitest/vitest.mjs",
+      "args": ["--watch", "${relativeFile}", "--reporter=verbose"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "stopOnEntry": false,
+      "smartStep": true,
+      "sourceMaps": true,
+      "env": { "NODE_OPTIONS": "--experimental-vm-modules" }
+    },
+
+    // ─── E2E Tests ────────────────────────────────────────────────────────────
     {
       "name": "Debug Playwright (current file)",
       "type": "node",
@@ -48,7 +83,15 @@
       "program": "${workspaceFolder}/../node_modules/.bin/playwright",
       "args": ["test", "${relativeFile}", "--debug"],
       "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Chrome + Vitest Watch",
+      "configurations": ["Launch Chrome (Dev)", "Debug Vitest (watch)"],
+      "stopAll": true
     }
   ]
 }

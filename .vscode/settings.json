@@ -62,6 +62,30 @@
     "rules": { "plugin/no-unsupported-browser-features": null }
   },
 
+  // ─── Browser Compatibility Checker ──────────────────────────────────────────
+  "browser-compatibility-checker.browserList": [
+    "chrome",
+    "edge",
+    "firefox",
+    "opera",
+    "safari",
+    "chrome_android",
+    "firefox_android",
+    "opera_android",
+    "safari_ios",
+    "samsunginternet_android",
+    "webview_android"
+  ],
+  "browser-compatibility-checker.warnForOtherBrowsers": false,
+  "browser-compatibility-checker.foldersToIgnore": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/coverage/**",
+    "**/docs/**",
+    "**/scripts/**",
+    "**/.**/**"
+  ],
+
   // ─── Terminal ───────────────────────────────────────────────────────────────
   "terminal.integrated.shellIntegration.enabled": true,
   "terminal.integrated.shellIntegration.decorationsEnabled": "both",
@@ -98,18 +122,123 @@
   "github.copilot.chat.agentDebugLog.enabled": true,
   "github.copilot.chat.agentDebugLog.fileLogging.enabled": true,
   "github.copilot.chat.agentDebugLog.fileLogging.flushIntervalMs": 1000,
+  "github.copilot.chat.reviewSelection.enabled": true,
+  "github.copilot.chat.generateTests.codeLensTitle": "Generate Tests",
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "github.copilot.chat.editor.temporalContext.enabled": true,
+  "github.copilot.chat.codesearch.enabled": true,
+  "github.copilot.chat.search.semanticTextResults": true,
+  "github.copilot.chat.scopeSelection": true,
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "text": "Use conventional commits: feat|fix|chore|refactor|test|docs|ci|perf. Max 72 chars subject. No period at end."
+    }
+  ],
+  "github.copilot.chat.codeGeneration.instructions": [
+    {
+      "file": ".github/copilot-instructions.md"
+    }
+  ],
+  "github.copilot.chat.reviewSelection.instructions": [
+    {
+      "text": "Flag any eslint-disable, @ts-ignore, as any, enum, namespace, ml-* / mr-* Tailwind classes, or hardcoded pixel values. Also check i18n parity: every t('key') must exist in both en.json and he.json."
+    }
+  ],
+  "github.copilot.chat.pullRequestDescriptionGeneration.instructions": [
+    {
+      "text": "Summarise what changed and why. List affected engine/store/component/i18n layers. Note any quality gate outcomes (typecheck, lint, tests). Keep under 400 words. Use conventional commit prefixes in the title."
+    }
+  ],
+  "github.copilot.chat.testGeneration.instructions": [
+    {
+      "text": "Use Vitest. Import engine functions directly — no React, no store. Use it.each for parametrised positive/negative pairs. Use cfg() helper from tests/helpers.ts for CabinetConfig fixtures. Group related assertions in one it(). Target ≥ 10 cases."
+    }
+  ],
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": false,
+    "markdown": true,
+    "scminput": false
+  },
+  "chat.agent.enabled": true,
+  "chat.mcp.enabled": true,
+  "chat.mcp.discovery.enabled": true,
 
   // ─── Testing ────────────────────────────────────────────────────────────────
   "vitest.enable": true,
   "vitest.rootConfig": "${workspaceFolder}/vitest.config.ts",
+  "testing.automaticallyOpenTestResults": "openOnFailure",
+  "testing.showCoverageInEditor": true,
+  "testing.coverageToolbarEnabled": true,
+  // ─── Todo Tree ──────────────────────────────────────────────────────────────
+  "todo-tree.general.tags": ["TODO", "FIXME", "HACK", "NOTE", "PERF", "SECURITY"],
+  "todo-tree.highlights.defaultHighlight": {
+    "icon": "alert",
+    "type": "text"
+  },
+  "todo-tree.highlights.customHighlight": {
+    "TODO": {
+      "icon": "check",
+      "foreground": "#fff",
+      "background": "#f59e0b",
+      "iconColour": "#f59e0b"
+    },
+    "FIXME": {
+      "icon": "tools",
+      "foreground": "#fff",
+      "background": "#ef4444",
+      "iconColour": "#ef4444"
+    },
+    "HACK": {
+      "icon": "zap",
+      "foreground": "#fff",
+      "background": "#8b5cf6",
+      "iconColour": "#8b5cf6"
+    },
+    "NOTE": {
+      "icon": "info",
+      "foreground": "#fff",
+      "background": "#3b82f6",
+      "iconColour": "#3b82f6"
+    },
+    "PERF": {
+      "icon": "graph",
+      "foreground": "#fff",
+      "background": "#10b981",
+      "iconColour": "#10b981"
+    },
+    "SECURITY": {
+      "icon": "shield",
+      "foreground": "#fff",
+      "background": "#dc2626",
+      "iconColour": "#dc2626"
+    }
+  },
+  "todo-tree.filtering.excludeGlobs": ["**/node_modules/**", "**/dist/**", "**/coverage/**"],
+  // ─── Coverage Gutters ───────────────────────────────────────────────────────
+  "coverage-gutters.coverageFileNames": ["lcov.info", "cov.xml", "coverage.xml"],
+  "coverage-gutters.showLineCoverage": true,
+  "coverage-gutters.showRulerCoverage": true,
+  // ─── i18n Ally ──────────────────────────────────────────────────────────────
+  "i18n-ally.localesPaths": ["src/i18n"],
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.sourceLanguage": "en",
+  "i18n-ally.displayLanguage": "en",
+  "i18n-ally.enabledFrameworks": ["react", "i18next"],
+  "i18n-ally.parserOptions": {
+    "trailingComma": "all"
+  },
 
   // ─── Spelling ───────────────────────────────────────────────────────────────
   "cSpell.words": [
     "bssf",
+    "buildlog",
     "carcass",
     "comlink",
+    "crdt",
     "erasable",
     "gcode",
+    "gltf",
     "hinge",
     "i18next",
     "kerf",
@@ -123,9 +252,40 @@
     "vitest",
     "webgl",
     "woodworking",
-    "zustand",
-    "buildlog",
-    "crdt",
-    "gltf"
-  ]
+    "zustand"
+  ],
+  // ─── Workbench ──────────────────────────────────────────────────────────────
+  "workbench.editor.splitInGroupLayout": "vertical",
+  "workbench.tree.indent": 14,
+  "workbench.tree.renderIndentGuides": "always",
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": false,
+  "explorer.fileNesting.patterns": {
+    "tsconfig.json": "tsconfig.*.json",
+    "vite.config.ts": "vitest.config.ts, playwright.config.ts",
+    "package.json": "package-lock.json, .nvmrc, .node-version",
+    "eslint.config.js": "stylelint.config.js, .prettierrc.json, .prettierignore, .editorconfig",
+    "*.tsx": "${capture}.ts",
+    "index.ts": "*.ts"
+  },
+
+  // ─── GitLens ────────────────────────────────────────────────────────────────
+  "gitlens.codeLens.enabled": true,
+  "gitlens.currentLine.enabled": true,
+  "gitlens.hovers.currentLine.over": "line",
+  "gitlens.blame.format": "${author|15} ${agoOrDate|14-}",
+  "gitlens.statusBar.enabled": true,
+
+  // ─── Diff & Merge ────────────────────────────────────────────────────────────
+  "git.mergeEditor": true,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "diffEditor.renderSideBySide": true,
+
+  // ─── Import Cost ────────────────────────────────────────────────────────────
+  "importCost.bundleSizeDecoration": "both",
+  "importCost.showCalculatingDecoration": true,
+
+  // ─── Playwright ─────────────────────────────────────────────────────────────
+  "playwright.reuseBrowser": false,
+  "playwright.showTrace": false
 }

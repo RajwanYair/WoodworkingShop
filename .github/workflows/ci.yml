@@ -47,6 +47,11 @@ jobs:
     steps:
       - uses: ./.github/actions/setup-node
         with: { node-version: '${{ matrix.node-version }}' }
+      - uses: actions/cache@v5
+        with:
+          path: /tmp/WoodworkingShop/.vite_cache
+          key: "vite-${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('vite.config.ts', 'package-lock.json') }}"
+          restore-keys: "vite-${{ runner.os }}-node${{ matrix.node-version }}-"
       - run: npm run build && npm run bundle:check
   e2e:
     runs-on: ubuntu-latest

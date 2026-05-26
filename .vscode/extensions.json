@@ -1,20 +1,60 @@
 {
   "recommendations": [
+    // ─── Core Formatting & Linting ─────────────────────────────────────────
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
+    "stylelint.vscode-stylelint",
     "usernamehw.errorlens",
+
+    // ─── TypeScript & React ────────────────────────────────────────────────
     "ms-vscode.vscode-typescript-next",
     "bradlc.vscode-tailwindcss",
-    "stylelint.vscode-stylelint",
-    "streetsidesoftware.code-spell-checker",
-    "wix.vscode-import-cost",
+    "formulahendry.auto-rename-tag",
+    "christian-kohler.path-intellisense",
+
+    // ─── Testing ──────────────────────────────────────────────────────────
     "vitest.explorer",
     "ms-playwright.playwright",
+    "ryanluker.vscode-coverage-gutters",
+
+    // ─── i18n ─────────────────────────────────────────────────────────────
+    "lokalise.i18n-ally",
+
+    // ─── Spelling & Docs ──────────────────────────────────────────────────
+    "streetsidesoftware.code-spell-checker",
+    "yzhang.markdown-all-in-one",
+    "davidanson.vscode-markdownlint",
+
+    // ─── Code Intelligence ────────────────────────────────────────────────
+    "wix.vscode-import-cost",
+    "gruntfuggly.todo-tree",
+    "naumovs.color-highlight",
+
+    // ─── GitHub / CI ──────────────────────────────────────────────────────
     "github.vscode-github-actions",
-    "timonwong.shellcheck",
     "github.copilot",
     "github.copilot-chat",
     "github.vscode-pull-request-github",
-    "eamodio.gitlens"
+    "eamodio.gitlens",
+
+    // ─── Shell ────────────────────────────────────────────────────────────
+    "timonwong.shellcheck",
+
+    // ─── Workbench ────────────────────────────────────────────────────────
+    "pkief.material-icon-theme",
+    "bierner.markdown-preview-github-styles",
+    "ms-vscode.live-server",
+    "editorconfig.editorconfig",
+
+    // ─── Accessibility ────────────────────────────────────────────────────
+    "deque-systems.vscode-axe-linter",
+
+    // ─── Diff & Merge ─────────────────────────────────────────────────────
+    "mhutchie.git-graph"
+  ],
+  "unwantedRecommendations": [
+    "hookyqr.beautify",
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    "ms-vscode.vscode-js-profile-flame"
   ]
 }

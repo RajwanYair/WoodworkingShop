@@ -1,0 +1,69 @@
+name: 🗂️ Sprint Task
+description: Track a Phase 21 sprint deliverable
+title: '[Sprint ${sprintId}] '
+labels: ['sprint', 'roadmap']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template to track a single Phase 21 sprint item end-to-end.
+        Link it to the relevant section in [ROADMAP.md](../blob/main/ROADMAP.md).
+
+  - type: input
+    id: sprint
+    attributes:
+      label: '🏃 Sprint number'
+      placeholder: 'e.g. 89'
+    validations:
+      required: true
+
+  - type: input
+    id: phase
+    attributes:
+      label: '🗺️ Phase'
+      placeholder: 'e.g. Phase 21'
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: '📝 Deliverable description'
+      description: One sentence describing what will be built or changed.
+      placeholder: 'Implement the Project Build Log panel (engine + store + UI + i18n + tests)'
+    validations:
+      required: true
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: '🔖 Deliverable type'
+      options:
+        - Feature (engine + store + UI)
+        - Tests
+        - Refactor
+        - CI / Workflow
+        - Docs
+        - Release
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: '✅ Acceptance criteria'
+      description: List the checkboxes that must be ticked for this item to be DONE.
+      value: |
+        - [ ] `npm run quality` → 0 errors, 0 warnings
+        - [ ] `npm test` → all pass
+        - [ ] `npm run dead:check` → no orphaned exports
+        - [ ] `ROADMAP.md` sprint item marked DONE
+        - [ ] `CHANGELOG.md [Unreleased]` entry added
+    validations:
+      required: true
+
+  - type: input
+    id: roadmap_link
+    attributes:
+      label: '🔗 ROADMAP.md section'
+      placeholder: 'Phase 21 · Sprint 89'

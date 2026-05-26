@@ -20,6 +20,7 @@ coverage
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/snippets.code-snippets
+!.vscode/mcp.json
 .idea
 .DS_Store
 *.suo
