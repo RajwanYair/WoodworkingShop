@@ -17,6 +17,7 @@ import { WasteAnalyticsPanel } from './WasteAnalyticsPanel';
 import { CutChecklistPanel } from './CutChecklistPanel';
 import { StockTrackerPanel } from './StockTrackerPanel';
 import { GrainReportPanel } from './GrainReportPanel';
+import { PartLabelSheet } from './PartLabelSheet';
 import { VirtualSheetWrapper } from './VirtualSheetWrapper';
 import BomWorker from '../../workers/bom-export.worker?worker';
 import type { BomWorkerOutput } from '../../workers/bom-export.worker';
@@ -499,6 +500,9 @@ export function OptimizerView() {
 
       {/* Sprint 98 — Grain direction report */}
       <GrainReportPanel />
+
+      {/* Sprint 100 — Part label sheet */}
+      <PartLabelSheet />
 
       {/* Sprint 7 — Layout explainer: placement stats */}
       <OptimizerExplainerPanel sheets={displayOpt.sheets} t={t} />

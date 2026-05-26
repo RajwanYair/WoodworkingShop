@@ -832,6 +832,14 @@
     "tableAriaLabel": "Cost variance breakdown table",
     "editActualAriaLabel": "Enter actual cost for {{key}}"
   },
+  "partLabels": {
+    "title": "Part Label Sheet",
+    "noParts": "No parts — configure a cabinet first.",
+    "expandQty": "Expand multi-qty parts (one label per piece)",
+    "print": "Print Labels",
+    "printTitle": "Part Labels",
+    "gridAriaLabel": "Part label cards"
+  },
   "wasteAnalytics": {
     "title": "Waste Analytics",
     "totalSheets": "Total Sheets",
