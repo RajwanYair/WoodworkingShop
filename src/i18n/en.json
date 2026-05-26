@@ -793,6 +793,25 @@
     "exportCsv": "Export CSV",
     "tableAriaLabel": "Cost breakdown table"
   },
+  "stockTracker": {
+    "title": "Stock Tracker",
+    "material": "Material",
+    "required": "Required",
+    "onHand": "On Hand",
+    "reorderAt": "Reorder at",
+    "status": "Status",
+    "status_ok": "OK",
+    "status_low": "Low",
+    "status_shortfall": "Shortfall",
+    "status_unknown": "Unknown",
+    "noDemand": "No sheets required yet — configure a cabinet first.",
+    "addItem": "+ Add stock item",
+    "materialKey": "Material key",
+    "add": "Add",
+    "tableAriaLabel": "Material stock availability table",
+    "editQtyAriaLabel": "Edit on-hand quantity for {{key}}",
+    "removeAriaLabel": "Remove {{key}} from stock"
+  },
   "wasteAnalytics": {
     "title": "Waste Analytics",
     "totalSheets": "Total Sheets",
