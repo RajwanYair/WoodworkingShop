@@ -327,3 +327,15 @@ export {
   evictStalePeers,
 } from './crdt-sync';
 export type { LamportStamp, CrdtOperation, LwwRegister, CrdtState, PresencePeer, CollabState } from './crdt-sync';
+
+export {
+  createSyncEntry,
+  createSyncQueue,
+  enqueueSyncEntry,
+  dequeueSyncEntry,
+  markSyncError,
+  getSyncStatus,
+  computeSyncDelta,
+  mergeSyncQueues,
+} from './project-sync';
+export type { SyncStatus, SyncMeta, SyncEntry, SyncQueue, SyncDelta } from './project-sync';

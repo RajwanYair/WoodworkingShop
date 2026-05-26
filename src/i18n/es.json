@@ -266,6 +266,16 @@
     "you": "You",
     "conflict": "Conflict resolved"
   },
+  "sync": {
+    "title": "Cloud Sync",
+    "status": "Sync status",
+    "pending": "{{count}} change pending",
+    "pending_other": "{{count}} changes pending",
+    "synced": "All changes saved",
+    "error": "Sync error — tap to retry",
+    "lastSync": "Last synced {{time}}",
+    "retry": "Retry sync"
+  },
   "pdf": {
     "generate": "Generar PDF",
     "generateAll": "Exportar proyecto completo ({{count}} armarios)",
