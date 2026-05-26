@@ -812,6 +812,14 @@
     "editQtyAriaLabel": "Edit on-hand quantity for {{key}}",
     "removeAriaLabel": "Remove {{key}} from stock"
   },
+  "grainReport": {
+    "title": "Grain Direction Report",
+    "constrained": "grain-locked",
+    "grainSensitive": "Grain-sensitive part",
+    "grainBadge": "grain",
+    "noParts": "No parts — configure a cabinet first.",
+    "summary": "{{constrained}} of {{total}} part instances have grain direction constraints."
+  },
   "wasteAnalytics": {
     "title": "Waste Analytics",
     "totalSheets": "Total Sheets",
