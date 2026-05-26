@@ -533,3 +533,29 @@ export type {
   IfcScene,
   IfcExportResult,
 } from './gltf-export';
+
+// Sprint 134 — WebSerial CNC streaming v2
+export {
+  createStreamSession,
+  startSession,
+  pauseSession,
+  resumeSession,
+  cancelSession,
+  markLinesSent,
+  acknowledgeLines,
+  markLineError,
+  retryLine,
+  getStreamProgress,
+  getErrorLines,
+  formatStreamReport,
+  DEFAULT_MAX_RETRIES,
+  SESSION_ID_PREFIX,
+} from './webserial-v2';
+export type {
+  StreamLineState,
+  StreamLine,
+  StreamSessionState,
+  StreamSession,
+  StreamProgress,
+  StreamError,
+} from './webserial-v2';

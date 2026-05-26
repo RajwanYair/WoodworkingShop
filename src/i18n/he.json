@@ -1053,6 +1053,20 @@
       "poor": "גרוע"
     }
   },
+  "cncStream": {
+    "title": "סטרימינג CNC v2",
+    "startStream": "התחל סטרימינג",
+    "pauseStream": "השהה",
+    "resumeStream": "המשך",
+    "cancelStream": "בטל",
+    "retryLine": "נסה שורה שוב",
+    "progress": "התקדמות",
+    "linesRemaining": "שורות שנותרו",
+    "estimatedTime": "זמן משוער",
+    "sessionState": "מצב הפעלה",
+    "errorLines": "שורות שגויות",
+    "noErrors": "אין שגיאות."
+  },
   "gltf": {
     "title": "ייצוא תלת-ממד",
     "exportGltf": "ייצוא glTF 2.0",

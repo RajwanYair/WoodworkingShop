@@ -1063,6 +1063,20 @@
     "fixField": "Fix {{field}}",
     "fixAll": "Fix All"
   },
+  "cncStream": {
+    "title": "CNC Streaming v2",
+    "startStream": "Start Stream",
+    "pauseStream": "Pause",
+    "resumeStream": "Resume",
+    "cancelStream": "Cancel",
+    "retryLine": "Retry Line",
+    "progress": "Progress",
+    "linesRemaining": "Lines Remaining",
+    "estimatedTime": "Estimated Time",
+    "sessionState": "Session State",
+    "errorLines": "Error Lines",
+    "noErrors": "No errors."
+  },
   "gltf": {
     "title": "3D Export",
     "exportGltf": "Export glTF 2.0",
