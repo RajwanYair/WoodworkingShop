@@ -3,6 +3,7 @@ import { useCabinetStore } from '../../store/cabinet-store';
 import { CostEstimatePanel } from '../configurator/CostEstimatePanel';
 import { CostSummaryPanel } from '../configurator/CostSummaryPanel';
 import { CostVariancePanel } from '../configurator/CostVariancePanel';
+import { ShelfSpacingPresetsPanel } from '../configurator/ShelfSpacingPresetsPanel';
 import { SnapshotPanel } from './SnapshotPanel';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { IconBarChart, IconX } from './Icons';
@@ -44,6 +45,8 @@ export function Sidebar() {
       <CostSummaryPanel />
       {/* Sprint 99 — cost variance tracker */}
       <CostVariancePanel />
+      {/* Sprint 102 — shelf spacing presets */}
+      <ShelfSpacingPresetsPanel />
       <SnapshotPanel />
     </>
   );
