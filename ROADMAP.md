@@ -1,7 +1,7 @@
 # Roadmap
 
-> **Last strategic review**: 2026-05-26 · **Current version**: 4.4.0
-> **Next target**: v5.0.0 (Phase 24 — Production Hardening & Architecture Reset)
+> **Last strategic review**: 2026-05-26 · **Current version**: 5.1.0
+> **Next target**: v5.2.0 (Phase 26 — Visual Engine Upgrade)
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -99,65 +99,48 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 
 ## Completed Phases Summary
 
-| Phase | Version     | Title                           | Key Deliverables                                                       |
-| ----- | ----------- | ------------------------------- | ---------------------------------------------------------------------- |
-| 1–11  | v3.50–v3.61 | Foundation → Quality → DX       | Zero warnings, workers, IndexedDB, a11y, plugins, G-code, ESLint 10    |
-| 12–14 | v3.61–v3.66 | Optimizer → Hardware → Collab   | Offcuts, DXF, vendor catalog, CRDT, SBOM, multi-currency               |
-| 15–17 | v3.66–v3.73 | Manufacturing → DX → Efficiency | Kerf, templates, batch replace, Comlink, it.each, docs consolidation   |
-| 18    | v3.75.0     | Visual Fidelity & UX            | Material textures, isometric SVG, nesting animation, onboarding, print |
-| 19    | v4.0.0      | Machine Integration & Community | WebSerial Grbl, machine profiles, community material catalog           |
-| 20    | v4.1.0      | Enterprise & Mobile             | IFC/STEP/glTF export, Capacitor, mobile touch UI, ZIP bundle           |
-| 21    | v4.2.0      | Marketplace + Build UX          | Plugin marketplace, finish calculator, build log, focus mode           |
-| 22    | v4.3.0      | Workshop Intelligence           | Waste analytics, mirror/clone, cut checklist, cost summary export      |
-| 23    | v4.4.0      | Precision Workflows             | Stock tracker, grain report, cost variance, part labels                |
+| Phase | Version     | Title                           | Key Deliverables                                                               |
+| ----- | ----------- | ------------------------------- | ------------------------------------------------------------------------------ |
+| 1–11  | v3.50–v3.61 | Foundation → Quality → DX       | Zero warnings, workers, IndexedDB, a11y, plugins, G-code, ESLint 10            |
+| 12–14 | v3.61–v3.66 | Optimizer → Hardware → Collab   | Offcuts, DXF, vendor catalog, CRDT, SBOM, multi-currency                       |
+| 15–17 | v3.66–v3.73 | Manufacturing → DX → Efficiency | Kerf, templates, batch replace, Comlink, it.each, docs consolidation           |
+| 18    | v3.75.0     | Visual Fidelity & UX            | Material textures, isometric SVG, nesting animation, onboarding, print         |
+| 19    | v4.0.0      | Machine Integration & Community | WebSerial Grbl, machine profiles, community material catalog                   |
+| 20    | v4.1.0      | Enterprise & Mobile             | IFC/STEP/glTF export, Capacitor, mobile touch UI, ZIP bundle                   |
+| 21    | v4.2.0      | Marketplace + Build UX          | Plugin marketplace, finish calculator, build log, focus mode                   |
+| 22    | v4.3.0      | Workshop Intelligence           | Waste analytics, mirror/clone, cut checklist, cost summary export              |
+| 23    | v4.4.0      | Precision Workflows             | Stock tracker, grain report, cost variance, part labels                        |
+| 24    | v5.0.0      | Production Hardening & Reset    | Zero errors/warnings/dead code, full CI pass, architecture reset               |
+| 25    | v5.1.0      | Optimizer Intelligence v2       | Multi-material co-nesting, joint library, constraint solver, suggestions panel |
 
 ---
 
 ## Active Roadmap
 
-### Phase 24 — Production Hardening & Architecture Reset · v5.0.0
-
-> **Status**: ACTIVE · **Goal**: Zero errors, zero warnings, zero dead code,
-> zero workarounds. Every config option justified. Every file in its correct
-> location. Production-grade from code to CI to deployment.
-
-| Sprint | Deliverable                                                        | Status | Track   |
-| ------ | ------------------------------------------------------------------ | ------ | ------- |
-| 102    | Fix all lint/type/CSS/config errors without waivers                | WIP    | Quality |
-| 103    | Remove all dead code, dead docs, dead config (knip + manual audit) | TODO   | Quality |
-| 104    | Reorganize workspace — non-essential files to correct sub-dirs     | TODO   | DX      |
-| 105    | Update all tooling to latest stable (Node 22 LTS, npm 11, TS 6.x)  | TODO   | DX      |
-| 106    | Version bump 5.0.0, CHANGELOG, full CI pass, GH release            | TODO   | Release |
-
-**Exit criteria**: `npm run ci` passes with zero warnings. `npm run dead:check`
-reports zero dead exports. All VS Code extension diagnostics resolved. No
-suppressed config options anywhere.
-
-### Phase 25 — Optimizer Intelligence v2 · v5.1.0
-
-> **Goal**: Multi-material co-nesting, constraint-based parametric joints,
-> and intelligent optimization suggestions.
-
-| Sprint | Deliverable                                                          | Track   |
-| ------ | -------------------------------------------------------------------- | ------- |
-| 107    | Multi-material co-nesting optimizer (shared sheets across materials) | Engine  |
-| 108    | Parametric joint library (mortise-tenon, dovetail, pocket-hole)      | Engine  |
-| 109    | Constraint solver (min/max/ratio rules for dimensions)               | Engine  |
-| 110    | Optimization suggestions panel (AI-free heuristic recommendations)   | UI      |
-| 111    | Version bump 5.1.0, CHANGELOG, GH release                            | Release |
-
 ### Phase 26 — Visual Engine Upgrade · v5.2.0
 
-> **Goal**: WebGPU-powered 3D rendering with PBR materials, replacing SVG
-> isometric for the main preview while keeping SVG as print fallback.
+> **Status**: ACTIVE · **Goal**: WebGPU-powered 3D rendering with PBR materials,
+> replacing SVG isometric for the main preview while keeping SVG as print fallback.
 
-| Sprint | Deliverable                                                     | Track   |
-| ------ | --------------------------------------------------------------- | ------- |
-| 112    | WebGPU renderer scaffolding (fallback to WebGL2)                | Engine  |
-| 113    | PBR material system (wood grain, edge banding, hardware chrome) | Assets  |
-| 114    | Interactive 3D cabinet preview (orbit, pan, zoom, explode view) | UI      |
-| 115    | AR placement via WebXR (scan room → place cabinet)              | Feature |
-| 116    | Version bump 5.2.0, CHANGELOG, GH release                       | Release |
+| Sprint | Deliverable                                                     | Status | Track   |
+| ------ | --------------------------------------------------------------- | ------ | ------- |
+| 112    | WebGPU renderer scaffolding (fallback to WebGL2)                | TODO   | Engine  |
+| 113    | PBR material system (wood grain, edge banding, hardware chrome) | TODO   | Assets  |
+| 114    | Interactive 3D cabinet preview (orbit, pan, zoom, explode view) | TODO   | UI      |
+| 115    | AR placement via WebXR (scan room → place cabinet)              | TODO   | Feature |
+| 116    | Version bump 5.2.0, CHANGELOG, GH release                       | TODO   | Release |
+
+### Phase 25 — Optimizer Intelligence v2 · v5.1.0 ✓ COMPLETE
+
+> **Status**: COMPLETE · **Released**: 2026-05-26
+
+| Sprint | Deliverable                                                          | Status | Track   |
+| ------ | -------------------------------------------------------------------- | ------ | ------- |
+| 107    | Multi-material co-nesting optimizer (shared sheets across materials) | ✓ Done | Engine  |
+| 108    | Parametric joint library (mortise-tenon, dovetail, pocket-hole)      | ✓ Done | Engine  |
+| 109    | Constraint solver (min/max/ratio rules for dimensions)               | ✓ Done | Engine  |
+| 110    | Optimization suggestions panel (AI-free heuristic recommendations)   | ✓ Done | UI      |
+| 111    | Version bump 5.1.0, CHANGELOG, GH release                            | ✓ Done | Release |
 
 ### Phase 27 — Collaboration & Intelligence · v5.3.0
 

@@ -9,6 +9,49 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.1.0] — 2026-05-26
+
+### Phase 25 — Optimizer Intelligence v2 (Sprints 107–111)
+
+#### Sprint 107 — Multi-material co-nesting optimizer
+
+- Engine: auto multi-material co-nesting across shared sheets — parts from
+  materials with identical thickness are grouped onto the same sheets to
+  maximise yield when thickness permits
+
+#### Sprint 108 — Parametric joint library
+
+- Added `mortise-tenon` and `dovetail` to `JoineryType` union in `types.ts`
+- `getJointSpec()` cases for both new types with precise manufacturing
+  dimensions (1/3-rule tenon thickness; 1:8 dovetail angle ratio)
+- `getAllJointSpecs()` now enumerates 7 joint types
+- ConfiguratorPanel joinery selector updated with the two new types
+- i18n: `joinery_mortise-tenon` + `joinery_dovetail` keys (EN + HE parity)
+- 28 unit tests for `joint-detail.test.ts`
+
+#### Sprint 109 — Constraint solver
+
+- New `src/engine/constraint-solver.ts`: pure-TS constraint engine covering
+  `width`, `height`, `depth`, `shelfCount`, `drawerCount`, `kickHeight`,
+  `doorReveal` with `min`, `max`, `step`, and `ratio` operators
+- `getDefaultConstraints()`: 22 manufacturing rules including EN 14749
+  tip-over safety ratio (depth ≤ 80 % of height)
+- `validateConstraints()`: returns all violations with `correctedValue`
+- `applyConstraints()`: non-mutating auto-correction of all violations
+- `clampDimension()`: single-field live clamping for UI input handlers
+- `getDimensionRange()`: `{min, max, step}` for slider bounds
+- Exported from `engine/index.ts` (stable API tier)
+- 29 unit tests, all passing
+
+#### Sprint 110 — Constraint suggestions panel
+
+- New `ConstraintSuggestionsPanel` in `src/components/configurator/`
+  — real-time violation list with per-violation **Fix** and **Fix All** buttons
+  — dimension range progress bars (width / height / depth) with `role="meter"`
+  — amber highlight when violations present; green check when all valid
+- Mounted in `ConfiguratorPanel` after `FinishCalculatorPanel`
+- i18n: 8 new `constraints.*` keys in all 6 locales (EN + HE parity)
+
 ## [5.0.0] — 2026-05-26
 
 ### Phase 24 — Production Hardening & Architecture Reset (Sprint 102)

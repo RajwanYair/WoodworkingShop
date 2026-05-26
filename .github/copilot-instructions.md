@@ -2,19 +2,19 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.0.0** · **Next target: v5.1.0** (Phase 25 — User Experience Polish)
+> **Current release: v5.1.0** · **Next target: v5.2.0** (Phase 26 — Visual Engine Upgrade)
 
-## Active Sprint — Phase 24 (Sprints 102–106)
+## Active Sprint — Phase 26 (Sprints 112–116)
 
-> **Status**: ACTIVE · **Goal**: Production Hardening & Architecture Reset — zero errors, zero dead code, zero workarounds
+> **Status**: ACTIVE · **Goal**: WebGPU-powered 3D rendering with PBR materials, interactive 3D preview, and AR placement
 
-| Sprint | Feature                        | Status |
-| ------ | ------------------------------ | ------ |
-| 102    | Fix all errors without waivers | WIP    |
-| 103    | Remove dead code/docs/config   | TODO   |
-| 104    | Reorganize workspace           | TODO   |
-| 105    | Update all tooling to latest   | TODO   |
-| 106    | Release v5.0.0                 | TODO   |
+| Sprint | Feature                                          | Status |
+| ------ | ------------------------------------------------ | ------ |
+| 112    | WebGPU renderer scaffolding (fallback to WebGL2) | TODO   |
+| 113    | PBR material system (wood grain, edge banding)   | TODO   |
+| 114    | Interactive 3D cabinet preview                   | TODO   |
+| 115    | AR placement via WebXR                           | TODO   |
+| 116    | Release v5.2.0                                   | TODO   |
 
 ## Tech Stack
 
