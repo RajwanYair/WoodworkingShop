@@ -820,6 +820,18 @@
     "noParts": "No parts — configure a cabinet first.",
     "summary": "{{constrained}} of {{total}} part instances have grain direction constraints."
   },
+  "costVariance": {
+    "title": "Cost Variance",
+    "material": "Material",
+    "estimated": "Estimated",
+    "actual": "Actual",
+    "variance": "Variance",
+    "total": "Total",
+    "noData": "No sheet cost data yet — configure a cabinet first.",
+    "savings": "Savings from offcuts & nesting: {{amount}}",
+    "tableAriaLabel": "Cost variance breakdown table",
+    "editActualAriaLabel": "Enter actual cost for {{key}}"
+  },
   "wasteAnalytics": {
     "title": "Waste Analytics",
     "totalSheets": "Total Sheets",
