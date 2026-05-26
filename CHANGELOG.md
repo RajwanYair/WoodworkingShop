@@ -9,6 +9,64 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.4.0] — 2026-06-09
+
+### Phase 28 — Performance & Plugin Ecosystem (Sprints 122–125)
+
+#### Sprint 122 — ERP/MRP export format
+
+- New `src/engine/erp-export.ts`: enterprise ERP/MRP export engine
+  - `buildErpLineItems(config, parts)`: generate typed line items from a cabinet config
+  - `formatAsSap(header, items)`: SAP IDOC-style flat CSV with HDR/ITM/FTR segments
+  - `formatAsOracle(header, items)`: Oracle SCM Cloud JSON envelope
+  - `formatAsWebhook(header, items)`: generic snake_case JSON with `bom_items`
+  - `validateErpPayload(header, items)`: structural validation with severity levels
+  - `exportErp(system, config, parts)`: top-level dispatcher for all three systems
+  - `ERP_SCHEMA_VERSION` constant; `ErpSystem`, `ErpLineItem`, `ErpHeader`, `ErpExportResult`, `ErpFinding` types
+- i18n: `erp.*` section (11 keys) in all 6 locales (EN+HE parity)
+- 34 engine unit tests passing
+
+#### Sprint 123 — ISO 7171 compliance validation
+
+- New `src/engine/iso7171.ts`: furniture dimensional standards validator
+  - `validateIso7171(config)`: runs 11 rule checks, returns structured report
+  - `formatIso7171Report(report)`: multi-line text for UI and PDF display
+  - `filterViolations(report, level)`: filter by compliance level
+  - Rules: module-width, base-height, wall-height, base-depth, wall-depth, toe-kick-height,
+    shelf-spacing-min, shelf-count-tall, shelf-count-base, drawer-clearance, width-height-ratio
+  - Constants: `ISO7171_MODULE_WIDTHS`, `ISO7171_BASE_HEIGHT`, `ISO7171_TOE_KICK`, etc.
+  - Types: `Iso7171RuleId`, `Iso7171ComplianceLevel`, `Iso7171Violation`, `Iso7171Report`
+- i18n: `iso7171.*` section (9 keys) in all 6 locales (EN+HE parity)
+- 34 engine unit tests passing
+
+#### Sprint 124 — Multi-project workspace
+
+- New `src/engine/workspace.ts`: multi-project workspace manager
+  - `createWorkspace(id, name)`: create an empty workspace
+  - `addProject / removeProject`: manage projects with tab bookkeeping
+  - `activateTab / getActiveProject`: tab navigation
+  - `shareWorkspaceMaterial(materialKey, projectIds)`: cross-project material sharing with merge
+  - `resolveSharedMaterials`: effective material per project (shared vs own config)
+  - `exportWorkspace / importWorkspace`: JSON round-trip with field validation
+  - `updateProjectConfig`: in-place config update with timestamp bump
+  - Types: `WorkspaceProject`, `WorkspaceTab`, `SharedMaterial`, `Workspace`
+- i18n: `workspace.*` section (10 keys) in all 6 locales (EN+HE parity)
+- 31 engine unit tests passing
+
+#### Sprint 125 — Audit trail and version diffing
+
+- New `src/engine/audit-trail.ts`: project mutation history and config diffing
+  - `createAuditTrail(projectId)`: create empty trail
+  - `recordEvent(trail, kind, description, options)`: immutable append with auto sequence numbers
+  - `getAuditHistory(trail, limit?)`: newest-first ordering with optional limit
+  - `formatAuditEntry(event)`: single-line formatted audit entry
+  - `summarizeAudit(trail)`: human-readable trail summary
+  - `diffConfigs(before, after)`: field-by-field diff with JSON value comparison
+  - `AuditEventKind` union: config-change, project-created/renamed/deleted, material-changed, export, note-added
+  - Types: `AuditEvent`, `AuditTrail`, `DiffEntry`, `ConfigDiff`
+- i18n: `audit.*` section (11 keys) in all 6 locales (EN+HE parity)
+- 23 engine unit tests passing (876 total EN/HE keys)
+
 ## [5.3.0] — 2026-06-02
 
 ### Phase 27 — Collaboration & Intelligence (Sprints 117–121)

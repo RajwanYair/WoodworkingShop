@@ -1,7 +1,7 @@
 # Roadmap
 
-> **Last strategic review**: 2026-06-02 · **Current version**: 5.3.0
-> **Next target**: v5.4.0 (Phase 28 — Performance & Plugin Ecosystem)
+> **Last strategic review**: 2026-06-09 · **Current version**: 5.4.0
+> **Next target**: v5.5.0 (Phase 29 — Plugin Marketplace & Mobile Native)
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -112,6 +112,9 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 23    | v4.4.0      | Precision Workflows             | Stock tracker, grain report, cost variance, part labels                        |
 | 24    | v5.0.0      | Production Hardening & Reset    | Zero errors/warnings/dead code, full CI pass, architecture reset               |
 | 25    | v5.1.0      | Optimizer Intelligence v2       | Multi-material co-nesting, joint library, constraint solver, suggestions panel |
+| 26    | v5.2.0      | Visual Engine Upgrade           | WebGPU renderer, PBR materials, 3D preview, WebXR AR placement                 |
+| 27    | v5.3.0      | Collaboration & Intelligence    | CRDT sync, cloud queue, AI layout suggestions, shared project library          |
+| 28    | v5.4.0      | Performance & Plugin Ecosystem  | ERP/MRP export, ISO 7171 compliance, multi-project workspace, audit trail      |
 
 ---
 
@@ -153,7 +156,7 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 120    | Shared project library & catalog (search / filter / sort / export/import)  | Feature |
 | 121    | Version bump 5.3.0, CHANGELOG, GH release                                  | Release |
 
-### Phase 28 — Performance & Plugin Ecosystem · v5.4.0
+### Phase 28 — Performance & Plugin Ecosystem · v5.4.0 ✅ COMPLETE
 
 > **Goal**: Bundle performance, plugin marketplace foundation, and enterprise export standards.
 
@@ -164,6 +167,18 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 124    | Multi-project workspace (tabs, cross-project material sharing) | UI      |
 | 125    | Audit trail and version diffing (full project history)         | Feature |
 | 126    | Version bump 5.4.0, CHANGELOG, GH release                      | Release |
+
+### Phase 29 — Plugin Marketplace & Mobile Native · v5.5.0
+
+> **Status**: PLANNED · **Goal**: Plugin marketplace, native mobile app, advanced analytics
+
+| Sprint | Deliverable                                                       | Track   |
+| ------ | ----------------------------------------------------------------- | ------- |
+| 127    | Plugin marketplace foundation (registry, install, enable/disable) | Feature |
+| 128    | Native mobile app (Capacitor iOS/Android + offline-first sync)    | Mobile  |
+| 129    | Advanced analytics dashboard (usage, material, cost trends)       | Feature |
+| 130    | Bundle performance (code-splitting, lazy chunks, < 1.4 MB target) | Perf    |
+| 131    | Release v5.5.0                                                    | Release |
 
 ### Future Horizons (Unscoped)
 

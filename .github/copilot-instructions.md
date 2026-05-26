@@ -2,19 +2,19 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.3.0** · **Next target: v5.4.0** (Phase 28 — Performance & Plugin Ecosystem)
+> **Current release: v5.4.0** · **Next target: v5.5.0** (Phase 29 — Plugin Marketplace & Mobile Native)
 
-## Active Sprint — Phase 28 (Sprints 122–126)
+## Active Sprint — Phase 29 (Sprints 127–131)
 
-> **Status**: PLANNED · **Goal**: Bundle performance, plugin marketplace foundation, enterprise export
+> **Status**: PLANNED · **Goal**: Plugin marketplace, native mobile app, advanced analytics
 
-| Sprint | Feature                                        | Status |
-| ------ | ---------------------------------------------- | ------ |
-| 122    | ERP/MRP export format (SAP, Oracle, webhook)   | TODO   |
-| 123    | ISO 7171 compliance validation                 | TODO   |
-| 124    | Multi-project workspace (tabs + cross-project) | TODO   |
-| 125    | Audit trail and version diffing                | TODO   |
-| 126    | Release v5.4.0                                 | TODO   |
+| Sprint | Feature                                                           | Status |
+| ------ | ----------------------------------------------------------------- | ------ |
+| 127    | Plugin marketplace foundation (registry, install, enable/disable) | TODO   |
+| 128    | Native mobile app (Capacitor iOS/Android + offline-first sync)    | TODO   |
+| 129    | Advanced analytics dashboard (usage, material, cost trends)       | TODO   |
+| 130    | Bundle performance (code-splitting, lazy chunks, < 1.4 MB target) | TODO   |
+| 131    | Release v5.5.0                                                    | TODO   |
 
 ## Tech Stack
 
