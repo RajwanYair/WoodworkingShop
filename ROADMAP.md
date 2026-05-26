@@ -1,7 +1,7 @@
 # Roadmap
 
-> **Last strategic review**: 2026-05-26 · **Current version**: 5.1.0
-> **Next target**: v5.3.0 (Phase 27 — Collaboration & Intelligence)
+> **Last strategic review**: 2026-06-02 · **Current version**: 5.3.0
+> **Next target**: v5.4.0 (Phase 28 — Performance & Plugin Ecosystem)
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -141,21 +141,21 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 110    | Optimization suggestions panel (AI-free heuristic recommendations)   | ✓ Done | UI      |
 | 111    | Version bump 5.1.0, CHANGELOG, GH release                            | ✓ Done | Release |
 
-### Phase 27 — Collaboration & Intelligence · v5.3.0
+### Phase 27 — Collaboration & Intelligence · v5.3.0 ✅ COMPLETE
 
 > **Goal**: Real-time multiplayer editing and AI-powered design assistance.
 
-| Sprint | Deliverable                                                     | Track   |
-| ------ | --------------------------------------------------------------- | ------- |
-| 117    | CRDT-based real-time sync (Yjs over WebRTC, no server required) | Engine  |
-| 118    | Multiplayer cursors and conflict resolution UI                  | UI      |
-| 119    | On-device LLM suggestions (WebLLM/WASM, fully offline)          | AI      |
-| 120    | Design templates marketplace (community-contributed)            | Feature |
-| 121    | Version bump 5.3.0, CHANGELOG, GH release                       | Release |
+| Sprint | Deliverable                                                                | Track   |
+| ------ | -------------------------------------------------------------------------- | ------- |
+| 117    | CRDT collaboration presence layer (LWW-Register + Lamport timestamps)      | Engine  |
+| 118    | Cloud project sync engine (IndexedDB-to-remote queue with delta/merge)     | Engine  |
+| 119    | AI layout suggestions heuristic engine (7 rule-based heuristics + scoring) | AI      |
+| 120    | Shared project library & catalog (search / filter / sort / export/import)  | Feature |
+| 121    | Version bump 5.3.0, CHANGELOG, GH release                                  | Release |
 
-### Phase 28 — Enterprise & Standards · v5.4.0
+### Phase 28 — Performance & Plugin Ecosystem · v5.4.0
 
-> **Goal**: Enterprise integration, compliance, and industry standards.
+> **Goal**: Bundle performance, plugin marketplace foundation, and enterprise export standards.
 
 | Sprint | Deliverable                                                    | Track   |
 | ------ | -------------------------------------------------------------- | ------- |

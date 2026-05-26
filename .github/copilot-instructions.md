@@ -2,19 +2,19 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.2.0** · **Next target: v5.3.0** (Phase 27 — Collaboration & Intelligence)
+> **Current release: v5.3.0** · **Next target: v5.4.0** (Phase 28 — Performance & Plugin Ecosystem)
 
-## Active Sprint — Phase 27 (Sprints 117–121)
+## Active Sprint — Phase 28 (Sprints 122–126)
 
-> **Status**: PLANNED · **Goal**: Real-time collaboration, cloud sync, AI-powered layout suggestions
+> **Status**: PLANNED · **Goal**: Bundle performance, plugin marketplace foundation, enterprise export
 
-| Sprint | Feature                                     | Status |
-| ------ | ------------------------------------------- | ------ |
-| 117    | Collaboration presence layer (CRDT cursors) | TODO   |
-| 118    | Cloud project sync (IndexedDB → remote)     | TODO   |
-| 119    | AI layout suggestions (heuristic engine)    | TODO   |
-| 120    | Shared project library & catalog            | TODO   |
-| 121    | Release v5.3.0                              | TODO   |
+| Sprint | Feature                                        | Status |
+| ------ | ---------------------------------------------- | ------ |
+| 122    | ERP/MRP export format (SAP, Oracle, webhook)   | TODO   |
+| 123    | ISO 7171 compliance validation                 | TODO   |
+| 124    | Multi-project workspace (tabs + cross-project) | TODO   |
+| 125    | Audit trail and version diffing                | TODO   |
+| 126    | Release v5.4.0                                 | TODO   |
 
 ## Tech Stack
 

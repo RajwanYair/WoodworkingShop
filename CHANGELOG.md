@@ -9,6 +9,64 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.3.0] — 2026-06-02
+
+### Phase 27 — Collaboration & Intelligence (Sprints 117–121)
+
+#### Sprint 117 — CRDT collaboration presence layer
+
+- New `src/engine/crdt-sync.ts`: LWW-Register CRDT with Lamport timestamps
+  - `createCollabState(peerId, displayName)`: initial collaboration state
+  - `incrementClock(state)`: advance local Lamport counter
+  - `createOperation(state, field, value)`: stamped CRDT operation
+  - `applyOperation(state, op)`: LWW merge + Lamport clock advance
+  - `mergeStates(a, b)`: field-level LWW winner selection
+  - `readValues(state)`: hydrate store from CRDT snapshot
+  - `evictStalePeers(state, timeoutMs)`: remove inactive presence entries
+- i18n: `collab.*` section (7 keys) in all 6 locales (EN+HE parity)
+- 25 engine unit tests passing
+
+#### Sprint 118 — Cloud project sync engine
+
+- New `src/engine/project-sync.ts`: IndexedDB-to-remote sync queue
+  - `createSyncEntry` / `createSyncQueue`
+  - `enqueueSyncEntry` / `dequeueSyncEntry` / `markSyncError`
+  - `getSyncStatus`: `SyncStatus` lifecycle (`idle | pending | syncing | error`)
+  - `computeSyncDelta`: push/pull diff between local and remote queues
+  - `mergeSyncQueues`: LWW union by `createdAt` timestamp
+- i18n: `sync.*` section (8 keys) in all 6 locales (EN+HE parity)
+- 27 engine unit tests passing
+
+#### Sprint 119 — AI layout suggestions (heuristic engine)
+
+- New `src/engine/layout-suggestions.ts`: heuristic suggestion engine
+  - `generateSuggestions(config, context)`: 7 rule-based heuristics
+    - Shelf spacing: too crowded / too sparse
+    - Drawer count vs cabinet height ratio
+    - Kitchen base standard dimensions (870 mm height, 580 mm depth)
+    - Ergonomic reach zone (> 1900 mm)
+    - Ceiling clearance / exceeds-ceiling
+    - Wide span deflection risk (> 900 mm with shelves)
+    - Cost material alternative suggestion
+  - `scoreSuggestion`: numeric score accessor
+  - `filterSuggestions(suggestions, minScore)`: threshold filter + descending sort
+  - `SUGGESTION_CATEGORIES` as-const object
+- i18n: `suggestions.*` section (15 keys) in all 6 locales (EN+HE parity)
+- 23 engine unit tests passing
+
+#### Sprint 120 — Shared project library & catalog
+
+- New `src/engine/project-library.ts`: typed library management engine
+  - `createLibraryEntry(id, name, config, options)`: id + name + config + tags + metadata
+  - `searchLibrary(entries, query)`: relevance-ranked free-text search (name/desc/metadata)
+  - `filterByTags(entries, tags)`: require-all tag intersection filter
+  - `sortLibrary(entries, key)`: name / createdAt / updatedAt / width / height
+  - `exportLibraryEntry(entry)`: JSON-safe serialisation
+  - `importLibraryEntry(raw)`: validated deserialisation with `RangeError` guards
+  - `LibraryTag` union: kitchen / bedroom / bathroom / office / livingroom / custom / template
+- i18n: `library.*` section (11 keys) in all 6 locales (EN+HE parity)
+- 29 engine unit tests passing
+
 ## [5.2.0] — 2026-05-26
 
 ### Phase 26 — Visual Engine Upgrade (Sprints 112–116)
