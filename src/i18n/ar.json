@@ -160,6 +160,8 @@
     "unlockRotation": "إلغاء قفل التدوير (السماح بتدوير القطعة)",
     "sawKerf": "عرض شق المنشار",
     "guillotineMode": "Guillotine cuts (panel saw compatible)",
+    "autoCoNest": "Auto co-nest materials",
+    "autoCoNestDesc": "Automatically combine compatible materials (same sheet size) onto shared sheets to reduce total sheet count",
     "exportHardware": "تصدير قائمة الأجهزة CSV",
     "labels": "التسميات",
     "toggleLabels": "تبديل تسميات القطع داخل المستطيلات",

@@ -165,6 +165,8 @@
     "animateStep": "Part {{current}} of {{total}}",
     "sawKerf": "Saw kerf",
     "guillotineMode": "Guillotine cuts (panel saw compatible)",
+    "autoCoNest": "Auto co-nest materials",
+    "autoCoNestDesc": "Automatically combine compatible materials (same sheet size) onto shared sheets to reduce total sheet count",
     "exportHardware": "Export Hardware List CSV",
     "labels": "Labels",
     "toggleLabels": "Toggle part name labels inside cut sheet rects",

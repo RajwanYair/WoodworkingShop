@@ -160,6 +160,8 @@
     "unlockRotation": "Déverrouiller la rotation (autoriser la rotation de cette pièce)",
     "sawKerf": "Trait de scie",
     "guillotineMode": "Guillotine cuts (panel saw compatible)",
+    "autoCoNest": "Auto co-nest materials",
+    "autoCoNestDesc": "Automatically combine compatible materials (same sheet size) onto shared sheets to reduce total sheet count",
     "exportHardware": "Exporter liste quincaillerie CSV",
     "labels": "Étiquettes",
     "toggleLabels": "Afficher/masquer les étiquettes des pièces dans les rectangles",

@@ -73,6 +73,8 @@ export function OptimizerView() {
     defectZones,
     addDefectZone,
     removeDefectZone,
+    autoCoNest,
+    setAutoCoNest,
   } = useCabinetStore();
   const lang = i18n.language as Lang;
   // Phase 12 / Sprint 12 — load saved offcut catalog from IDB on first mount.
@@ -343,6 +345,20 @@ export function OptimizerView() {
             aria-label={t('optimizer.guillotineMode')}
           />
           {t('optimizer.guillotineMode')}
+        </label>
+        {/* Sprint 107 — auto co-nesting toggle */}
+        <label
+          className="text-wood-600 dark:text-wood-300 ms-4 flex cursor-pointer items-center gap-1.5 text-xs"
+          title={t('optimizer.autoCoNestDesc')}
+        >
+          <input
+            type="checkbox"
+            checked={autoCoNest}
+            onChange={(e) => setAutoCoNest(e.target.checked)}
+            className="accent-wood-600 dark:accent-wood-400 h-3.5 w-3.5"
+            aria-label={t('optimizer.autoCoNest')}
+          />
+          {t('optimizer.autoCoNest')}
         </label>
         <div className="ms-2 flex gap-2">
           <button

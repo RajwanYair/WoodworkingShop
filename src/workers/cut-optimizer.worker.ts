@@ -11,7 +11,7 @@
  */
 
 import * as Comlink from 'comlink';
-import { optimizeCutSheetsResult } from '../engine/cut-optimizer';
+import { optimizeCutSheetsResult, findCoNestCandidates, applyCoNesting } from '../engine/cut-optimizer';
 import type { Part, OptimizationResult, OffcutEntry, DefectZone } from '../engine/types';
 
 export interface CutOptimizerInput {
@@ -25,6 +25,8 @@ export interface CutOptimizerInput {
   offcutCatalog?: OffcutEntry[];
   /** Per-material defect zones to pre-block on each new sheet. */
   defectZones?: Record<string, DefectZone[]>;
+  /** Sprint 107 — automatically apply multi-material co-nesting. */
+  autoCoNest?: boolean;
 }
 
 export interface CutOptimizerResult {
@@ -45,6 +47,7 @@ const api: CutOptimizerWorkerApi = {
     cutMode = 'freeform',
     offcutCatalog = [],
     defectZones = {},
+    autoCoNest = false,
   }: CutOptimizerInput): CutOptimizerResult {
     const activeRes = optimizeCutSheetsResult(
       activeParts,
@@ -64,7 +67,24 @@ const api: CutOptimizerWorkerApi = {
       defectZones,
     );
     if (!combinedRes.ok) throw new Error(combinedRes.error);
-    return { activeResult: activeRes.value, combinedResult: combinedRes.value };
+
+    let activeResult: OptimizationResult = activeRes.value;
+    let combinedResult: OptimizationResult = combinedRes.value;
+
+    if (autoCoNest) {
+      const activeCandidates = findCoNestCandidates(activeResult);
+      if (activeCandidates.length > 0) {
+        const keys = new Set(activeCandidates.map((c) => c.key));
+        activeResult = applyCoNesting(activeResult, keys, sawKerfMm);
+      }
+      const combinedCandidates = findCoNestCandidates(combinedResult);
+      if (combinedCandidates.length > 0) {
+        const keys = new Set(combinedCandidates.map((c) => c.key));
+        combinedResult = applyCoNesting(combinedResult, keys, sawKerfMm);
+      }
+    }
+
+    return { activeResult, combinedResult };
   },
 };
 

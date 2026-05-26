@@ -28,6 +28,7 @@ import {
   getOffcutCatalog,
   setDefectZones,
   getDefectZones,
+  setAutoCoNest,
   applyLocks,
   scheduleOptimization,
   scheduleAssembly,
@@ -269,6 +270,8 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
   // Called by OptimizerSettingsSlice when kerf or sheet overrides change.
   function handleRescheduleOpt(sawKerf: number, sheetSizeOverrides: Record<string, { width: number; length: number }>) {
     const state = get();
+    // Sprint 107 — sync the co-nesting flag before scheduling.
+    setAutoCoNest(state.autoCoNest);
     const base = deriveBaseProject(state.cabinets, state.activeCabinetIndex);
     scheduleOptimization(base.parts, base.allParts, sawKerf, sheetSizeOverrides);
     scheduleAssembly(base.config);

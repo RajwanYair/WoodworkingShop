@@ -20,6 +20,8 @@ export type OptimizerSettingsSlice = {
   labourRate: number; // ₪ per hour, default 75
   labourHours: number; // estimated labour hours (user-overrideable)
   finishCost: number; // finish/paint cost in ₪
+  /** Sprint 107 — auto-apply co-nesting across compatible materials. */
+  autoCoNest: boolean;
 
   // Actions
   setSawKerf: (mm: number) => void;
@@ -31,6 +33,8 @@ export type OptimizerSettingsSlice = {
   setLabourRate: (rate: number) => void;
   setLabourHours: (hours: number) => void;
   setFinishCost: (cost: number) => void;
+  /** Sprint 107 — toggle automatic multi-material co-nesting. */
+  setAutoCoNest: (enabled: boolean) => void;
   /** Apply a full settings snapshot atomically, triggering a single optimizer + cost re-run. */
   loadSettings: (session: OptimizerSettingsSession) => void;
 };
@@ -47,6 +51,7 @@ export interface OptimizerSettingsSession {
   labourRate?: number;
   labourHours?: number;
   finishCost?: number;
+  autoCoNest?: boolean;
 }
 
 // ─── Slice creator ────────────────────────────────────────────────────────────
@@ -83,6 +88,7 @@ export function createOptimizerSettingsSlice(
     labourRate: initialSession?.labourRate ?? 75,
     labourHours: initialSession?.labourHours ?? 0,
     finishCost: initialSession?.finishCost ?? 0,
+    autoCoNest: initialSession?.autoCoNest ?? false,
 
     // ── Actions ──
     setSawKerf: (mm) => {
@@ -125,6 +131,11 @@ export function createOptimizerSettingsSlice(
       const c = Math.max(0, cost);
       set({ finishCost: c });
       onRescheduleCost({ finishCost: c });
+    },
+
+    setAutoCoNest: (enabled) => {
+      set({ autoCoNest: enabled });
+      onRescheduleOpt(get().sawKerf, get().sheetSizeOverrides);
     },
 
     setHardwarePriceOverride: (id, price) =>
@@ -176,6 +187,7 @@ export function createOptimizerSettingsSlice(
         labourRate: Math.max(0, session.labourRate ?? 75),
         labourHours: Math.max(0, session.labourHours ?? 0),
         finishCost: Math.max(0, session.finishCost ?? 0),
+        autoCoNest: session.autoCoNest ?? false,
       });
       onRescheduleOpt(sawKerf, sheetSizeOverrides);
       onRescheduleCost({

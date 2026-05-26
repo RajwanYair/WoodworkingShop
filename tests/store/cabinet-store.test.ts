@@ -347,4 +347,17 @@ describe('cabinet-store', () => {
       expect(useCabinetStore.getState().cabinets.map((c) => c.name)).toEqual(before);
     });
   });
+
+  describe('setAutoCoNest (Sprint 107)', () => {
+    it('defaults to false', () => {
+      expect(useCabinetStore.getState().autoCoNest).toBe(false);
+    });
+
+    it('toggles autoCoNest on and off', () => {
+      useCabinetStore.getState().setAutoCoNest(true);
+      expect(useCabinetStore.getState().autoCoNest).toBe(true);
+      useCabinetStore.getState().setAutoCoNest(false);
+      expect(useCabinetStore.getState().autoCoNest).toBe(false);
+    });
+  });
 });

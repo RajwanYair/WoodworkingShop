@@ -160,6 +160,8 @@
     "unlockRotation": "Desbloquear rotación (permitir rotación de esta pieza)",
     "sawKerf": "Margen de corte",
     "guillotineMode": "Guillotine cuts (panel saw compatible)",
+    "autoCoNest": "Auto co-nest materials",
+    "autoCoNestDesc": "Automatically combine compatible materials (same sheet size) onto shared sheets to reduce total sheet count",
     "exportHardware": "Exportar lista de herrajes CSV",
     "labels": "Etiquetas",
     "toggleLabels": "Alternar etiquetas de nombre de pieza dentro de los rectángulos",

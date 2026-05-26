@@ -11,7 +11,7 @@
  */
 import * as Comlink from 'comlink';
 import type { CabinetConfig, Part, HardwareItem, OptimizationResult, OffcutEntry, DefectZone } from '../engine/types';
-import { optimizeCutSheetsResult } from '../engine/cut-optimizer';
+import { optimizeCutSheetsResult, findCoNestCandidates, applyCoNesting } from '../engine/cut-optimizer';
 import { estimateCost } from '../engine/cost-estimator';
 import { generateAssemblySteps } from '../engine/assembly';
 import { pluginEventBus } from '../engine/plugin';
@@ -70,6 +70,9 @@ let _offcutCatalog: OffcutEntry[] = [];
 /** Phase 12 / Sprint 13 — defect zones per material, pre-blocked in MaxRects packing. */
 let _defectZones: Record<string, DefectZone[]> = {};
 
+/** Sprint 107 — auto co-nesting toggle mirrored from optimizer settings. */
+let _autoCoNest = false;
+
 // ── Initialisers / setters ────────────────────────────────────────────────────
 
 /**
@@ -107,6 +110,10 @@ export function setDefectZones(zones: Record<string, DefectZone[]>): void {
 
 export function getDefectZones(): Record<string, DefectZone[]> {
   return _defectZones;
+}
+
+export function setAutoCoNest(enabled: boolean): void {
+  _autoCoNest = enabled;
 }
 
 // ── Proxy getters ─────────────────────────────────────────────────────────────
@@ -184,9 +191,18 @@ export function scheduleOptimization(
         _defectZones,
       );
       if (activeRes.ok && combinedRes.ok) {
+        let activeOpt = activeRes.value;
+        let combinedOpt = combinedRes.value;
+        if (_autoCoNest) {
+          const aCands = findCoNestCandidates(activeOpt);
+          if (aCands.length > 0) activeOpt = applyCoNesting(activeOpt, new Set(aCands.map((c) => c.key)), sawKerfMm);
+          const cCands = findCoNestCandidates(combinedOpt);
+          if (cCands.length > 0)
+            combinedOpt = applyCoNesting(combinedOpt, new Set(cCands.map((c) => c.key)), sawKerfMm);
+        }
         _workerApplyFn({
-          optimization: activeRes.value,
-          combinedOptimization: combinedRes.value,
+          optimization: activeOpt,
+          combinedOptimization: combinedOpt,
           optimizationPending: false,
         });
       } else {
@@ -205,6 +221,7 @@ export function scheduleOptimization(
     cutMode: _cutMode,
     offcutCatalog: _offcutCatalog,
     defectZones: _defectZones,
+    autoCoNest: _autoCoNest,
   };
   void proxy
     .run(input)
