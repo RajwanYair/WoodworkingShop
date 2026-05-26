@@ -298,6 +298,19 @@
     "wideSpanRisk": "רוחב {{widthMm}} ממ — מומלץ תמיכה מרכזית להפחת כיפוף",
     "costMaterialAlternative": "לוח מלמין הוא חלופה חסכונית לפליווד בגימורים צבועים"
   },
+  "erp": {
+    "title": "ייצוא ERP / MRP",
+    "system": "מערכת יעד",
+    "sap": "SAP (IDOC CSV)",
+    "oracle": "Oracle SCM",
+    "webhook": "Webhook גנרי",
+    "export": "ייצוא ל-ERP",
+    "projectName": "שם הפרויקט",
+    "schemaVersion": "גרסת סכמה",
+    "lineCount": "פריטי שורה",
+    "totalCost": "עלות סך הכול",
+    "noItems": "אין פריטים לייצוא"
+  },
   "library": {
     "title": "ספריית פרויקטים",
     "search": "חיפוש בספרייה…",

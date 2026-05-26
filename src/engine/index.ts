@@ -352,3 +352,15 @@ export {
   importLibraryEntry,
 } from './project-library';
 export type { LibraryTag, LibrarySortKey, LibraryEntry, LibrarySearchResult } from './project-library';
+
+// Sprint 122 — ERP/MRP export engine (Phase 28)
+export {
+  buildErpLineItems,
+  formatAsSap,
+  formatAsOracle,
+  formatAsWebhook,
+  validateErpPayload,
+  exportErp,
+  ERP_SCHEMA_VERSION,
+} from './erp-export';
+export type { ErpSystem, ErpFindingSeverity, ErpLineItem, ErpHeader, ErpExportResult, ErpFinding } from './erp-export';
