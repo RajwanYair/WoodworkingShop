@@ -342,3 +342,13 @@ export type { SyncStatus, SyncMeta, SyncEntry, SyncQueue, SyncDelta } from './pr
 
 export { generateSuggestions, scoreSuggestion, filterSuggestions, SUGGESTION_CATEGORIES } from './layout-suggestions';
 export type { SuggestionCategory, LayoutSuggestion, SuggestionContext } from './layout-suggestions';
+
+export {
+  createLibraryEntry,
+  searchLibrary,
+  filterByTags,
+  sortLibrary,
+  exportLibraryEntry,
+  importLibraryEntry,
+} from './project-library';
+export type { LibraryTag, LibrarySortKey, LibraryEntry, LibrarySearchResult } from './project-library';
