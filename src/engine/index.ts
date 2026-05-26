@@ -485,3 +485,25 @@ export {
   getFeaturesByPriority,
 } from './lazy-features';
 export type { FeatureFlag, FeaturePriority, LazyFeature, LazyFeatureRegistry } from './lazy-features';
+
+// Sprint 132 — AI design assistant engine (Phase 30)
+export {
+  validateLayoutConstraints,
+  suggestLayouts,
+  rankSuggestions,
+  applyLayoutSuggestion,
+  createDesignBrief,
+  formatConstraintReport,
+  DEFAULT_SUGGESTION_WEIGHTS,
+} from './ai-assistant';
+export type {
+  ConstraintKind,
+  ConstraintPriority,
+  LayoutConstraint,
+  SuggestionKind,
+  AiLayoutSuggestion,
+  SuggestionWeights,
+  RankedSuggestion,
+  ConstraintCheckResult,
+  DesignBrief,
+} from './ai-assistant';

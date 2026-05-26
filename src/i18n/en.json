@@ -1062,5 +1062,17 @@
     "fix": "Fix",
     "fixField": "Fix {{field}}",
     "fixAll": "Fix All"
+  },
+  "aiAssistant": {
+    "title": "AI Design Assistant",
+    "brief": "Design Brief",
+    "suggestions": "Layout Suggestions",
+    "noSuggestions": "No suggestions — all constraints satisfied.",
+    "constraintsSatisfied": "Constraints satisfied",
+    "constraintsViolated": "Constraints violated",
+    "overallScore": "Overall Score",
+    "applyAll": "Apply All",
+    "applySuggestion": "Apply",
+    "validateConstraints": "Validate Constraints"
   }
 }

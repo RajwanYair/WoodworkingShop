@@ -1053,6 +1053,18 @@
       "poor": "גרוע"
     }
   },
+  "aiAssistant": {
+    "title": "עוזר עיצוב AI",
+    "brief": "תיאור עיצוב",
+    "suggestions": "הצעות פריסה",
+    "noSuggestions": "אין הצעות — כל האילוצים מתקיימים.",
+    "constraintsSatisfied": "אילוצים שהתקיימו",
+    "constraintsViolated": "אילוצים שהופרו",
+    "overallScore": "ציון כולל",
+    "applyAll": "החל הכל",
+    "applySuggestion": "החל",
+    "validateConstraints": "אמת אילוצים"
+  },
   "constraints": {
     "title": "📐 בדיקת אילוצים",
     "panelLabel": "לוח הצעות אילוצי מימד",
