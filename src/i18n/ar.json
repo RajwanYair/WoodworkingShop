@@ -799,6 +799,17 @@
     "fixField": "Fix {{field}}",
     "fixAll": "Fix All"
   },
+  "darkMode": {
+    "title": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "highContrast": "High Contrast",
+    "highContrastDark": "High Contrast Dark",
+    "systemPreference": "Use System Preference",
+    "toggle": "Toggle Theme",
+    "colorScheme": "Colour Scheme",
+    "contrastFailures": "Contrast Failures"
+  },
   "a11yAudit": {
     "title": "Accessibility Audit",
     "runAudit": "Run Audit",

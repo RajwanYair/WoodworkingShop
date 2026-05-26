@@ -1053,6 +1053,17 @@
       "poor": "גרוע"
     }
   },
+  "darkMode": {
+    "title": "עיצוב",
+    "light": "בהיר",
+    "dark": "כהה",
+    "highContrast": "קונטרסט גבוה",
+    "highContrastDark": "קונטרסט גבוה כהה",
+    "systemPreference": "עצור לפי הגדרת המערכת",
+    "toggle": "החלף עיצוב",
+    "colorScheme": "סכימת צבעים",
+    "contrastFailures": "כשלונות קונטרסט"
+  },
   "a11yAudit": {
     "title": "ביקורת נגישות",
     "runAudit": "הפעל ביקורת",

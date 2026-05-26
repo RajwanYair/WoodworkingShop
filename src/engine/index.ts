@@ -619,3 +619,38 @@ export type {
   AuditReport as A11yAuditReport,
   WcagCriterion,
 } from './a11y-audit';
+
+// Sprint 138 — Dark mode design tokens
+export {
+  resolveTheme,
+  getToken,
+  getTokenRgb,
+  generateThemeCss,
+  tokenToCssProperty,
+  computeThemeClassDiff,
+  isDarkMode,
+  colorSchemeValue,
+  systemPreferenceToMode,
+  checkContrastPair,
+  validateThemeContrast,
+  getContrastFailures,
+  buildThemeSummary,
+  LIGHT_THEME,
+  DARK_THEME,
+  HIGH_CONTRAST_THEME,
+  HIGH_CONTRAST_DARK_THEME,
+  ALL_THEMES,
+  THEME_MODES,
+  STANDARD_CONTRAST_PAIRS,
+} from './dark-mode-tokens';
+export type {
+  ThemeMode,
+  TokenName,
+  RgbTuple,
+  DesignToken,
+  ThemeDefinition,
+  ContrastPair,
+  ContrastCheckResult,
+  ThemeClassDiff,
+  ThemeSummary,
+} from './dark-mode-tokens';
