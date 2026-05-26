@@ -1,7 +1,7 @@
 # Roadmap
 
-> **Last strategic review**: 2026-06-09 · **Current version**: 5.5.0
-> **Next target**: v5.6.0 (Phase 30 — AI Assistant & Advanced Export)
+> **Last strategic review**: 2026-06-10 · **Current version**: 5.6.0
+> **Next target**: v5.7.0 (Phase 31 — UI Polish & Accessibility)
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -182,7 +182,7 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 
 ### Phase 30 — AI Assistant & Advanced Export · v5.6.0
 
-> **Status**: PLANNED · **Goal**: AI design assistant, advanced 3D export, WebSerial CNC streaming improvements
+> **Status**: ✅ COMPLETE · **Released**: 2026-06-10
 
 | Sprint | Deliverable                                                                   | Track   |
 | ------ | ----------------------------------------------------------------------------- | ------- |
@@ -191,6 +191,18 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 134    | WebSerial CNC streaming v2 (real-time progress, pause/resume, error recovery) | CNC     |
 | 135    | Advanced stock management (purchase orders, reorder alerts, waste tracking)   | Feature |
 | 136    | Release v5.6.0                                                                | Release |
+
+### Phase 31 — UI Polish & Accessibility · v5.7.0
+
+> **Status**: PLANNED · **Goal**: WCAG 2.2 AA audit remediation, dark mode, component splitting, performance
+
+| Sprint | Deliverable                                                            | Track       |
+| ------ | ---------------------------------------------------------------------- | ----------- |
+| 137    | WCAG 2.2 AA full audit & remediation (axe-core zero violations)        | A11y        |
+| 138    | Dark mode (design tokens + Tailwind CSS v4 theme switching)            | UI          |
+| 139    | Large component splitting (≤ 600 lines each, react-refresh compliance) | Refactor    |
+| 140    | Bundle optimisation (lazy chunks, tree-shaking, < 400 KB gzipped)      | Performance |
+| 141    | Release v5.7.0                                                         | Release     |
 
 ### Future Horizons (Unscoped)
 

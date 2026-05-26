@@ -2,19 +2,19 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.5.0** · **Next target: v5.6.0** (Phase 30 — AI Assistant & Advanced Export)
+> **Current release: v5.6.0** · **Next target: v5.7.0** (Phase 31 — UI Polish & Accessibility)
 
-## Active Sprint — Phase 30 (Sprints 132–136)
+## Active Sprint — Phase 31 (Sprints 137–141)
 
-> **Status**: PLANNED · **Goal**: AI design assistant, glTF/IFC export, WebSerial CNC v2, stock management
+> **Status**: PLANNED · **Goal**: WCAG 2.2 AA remediation, dark mode, component splitting, bundle optimisation
 
-| Sprint | Feature                                                                       | Status |
-| ------ | ----------------------------------------------------------------------------- | ------ |
-| 132    | AI design assistant engine (constraint-based layout suggestions)              | TODO   |
-| 133    | glTF 2.0 / IFC 4.3 export (standards-grade 3D output)                         | TODO   |
-| 134    | WebSerial CNC streaming v2 (real-time progress, pause/resume, error recovery) | TODO   |
-| 135    | Advanced stock management (purchase orders, reorder alerts, waste tracking)   | TODO   |
-| 136    | Release v5.6.0                                                                | TODO   |
+| Sprint | Feature                                                                | Status |
+| ------ | ---------------------------------------------------------------------- | ------ |
+| 137    | WCAG 2.2 AA full audit & remediation (axe-core zero violations)        | TODO   |
+| 138    | Dark mode (design tokens + Tailwind CSS v4 theme switching)            | TODO   |
+| 139    | Large component splitting (≤ 600 lines each, react-refresh compliance) | TODO   |
+| 140    | Bundle optimisation (lazy chunks, tree-shaking, < 400 KB gzipped)      | TODO   |
+| 141    | Release v5.7.0                                                         | TODO   |
 
 ## Tech Stack
 

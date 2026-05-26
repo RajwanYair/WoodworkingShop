@@ -9,6 +9,53 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.6.0] — 2026-06-10
+
+### Phase 30 — AI Assistant & Advanced Export (Sprints 132–136)
+
+#### Sprint 132 — AI design assistant engine
+
+- New `src/engine/ai-assistant.ts`: constraint-based layout suggestion engine
+  - `validateLayoutConstraints`, `suggestLayouts`, `rankSuggestions`, `applyLayoutSuggestion`
+  - `createDesignBrief`, `formatConstraintReport`
+  - 12 `ConstraintKind` values, 9 `SuggestionKind` values, `SuggestionWeights`, `RankedSuggestion`
+  - `DEFAULT_SUGGESTION_WEIGHTS` constant
+- i18n: `aiAssistant.*` + `constraints.*` sections (21 keys) in all 6 locales (953 → 932 prior)
+- 32 unit tests
+
+#### Sprint 133 — glTF 2.0 / IFC 4.3 export
+
+- New `src/engine/gltf-export.ts`: standards-grade 3D output from cabinet parts
+  - `buildGltfScene`, `serializeGltf`, `estimateGltfSize` — glTF 2.0 JSON with PBR materials
+  - `buildIfcScene`, `serializeIfc` — IFC4X3 STEP-format output
+  - `GLTF_SCHEMA_VERSION`, `IFC_SCHEMA_VERSION`, `GLTF_GENERATOR` constants
+- i18n: `gltf.*` section (9 keys) in all 6 locales
+- 27 unit tests
+
+#### Sprint 134 — WebSerial CNC streaming v2
+
+- New `src/engine/webserial-v2.ts`: real-time G-code streaming state machine
+  - `createStreamSession`, `startSession`, `pauseSession`, `resumeSession`, `cancelSession`
+  - `markLinesSent`, `acknowledgeLines`, `markLineError`, `retryLine`
+  - `getStreamProgress`, `getErrorLines`, `formatStreamReport`
+  - `DEFAULT_MAX_RETRIES`, `SESSION_ID_PREFIX` constants
+- i18n: `cncStream.*` section (12 keys) in all 6 locales (942 total)
+- 37 unit tests
+
+#### Sprint 135 — Advanced stock management
+
+- New `src/engine/stock-management.ts`: purchase orders, reorder alerts, waste tracking
+  - `createStockLedger`, `addMaterial`, `createPurchaseOrder`, `submitPurchaseOrder`
+  - `receivePurchaseOrder`, `cancelPurchaseOrder`, `computeReorderAlerts`
+  - `recordWaste`, `getStockSummary`, `formatStockReport`
+  - `DEFAULT_REORDER_MULTIPLIER` constant
+  - `PurchaseOrderStatus`, `PurchaseOrder`, `AlertSeverity`, `ReorderAlert`,
+    `WasteEntry`, `StockRecord`, `StockLedger`, `StockSummary` types
+- i18n: `stockMgmt.*` section (11 keys) in all 6 locales (EN+HE parity, 953 keys total)
+- 34 unit tests
+
+---
+
 ## [5.5.0] — 2026-06-09
 
 ### Phase 29 — Plugin Marketplace & Mobile Native (Sprints 127–131)
