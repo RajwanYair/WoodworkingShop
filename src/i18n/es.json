@@ -238,6 +238,19 @@
     "webglAnimate": "Animar",
     "webglIsometric": "Isométrico"
   },
+  "preview3d": {
+    "title": "Interactive 3D Preview",
+    "resetCamera": "Reset camera",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "explode": "Explode view",
+    "wireframe": "Wireframe",
+    "edgeBanding": "Edge banding",
+    "rendererTier": "Renderer: {{tier}}",
+    "noGpu": "WebGPU not available — scene graph ready",
+    "meshCount": "{{count}} part",
+    "meshCount_other": "{{count}} parts"
+  },
   "pdf": {
     "title": "Exportar PDF",
     "generate": "Generar PDF",

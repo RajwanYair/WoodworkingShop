@@ -243,6 +243,19 @@
     "webglAnimate": "אנימציה",
     "webglIsometric": "איזומטרי"
   },
+  "preview3d": {
+    "title": "תצוגה תלת-ממדית אינטראקטיבית",
+    "resetCamera": "אפס מצלמה",
+    "zoomIn": "הגדל",
+    "zoomOut": "הקטן",
+    "explode": "תצוגת פיצוץ",
+    "wireframe": "מסגרת תיל",
+    "edgeBanding": "פסי קצה",
+    "rendererTier": "מנוע: {{tier}}",
+    "noGpu": "WebGPU אינו זמין — גרף הסצנה מוכן",
+    "meshCount": "{{count}} חלק",
+    "meshCount_other": "{{count}} חלקים"
+  },
   "pdf": {
     "title": "ייצוא PDF",
     "generate": "צור PDF",
