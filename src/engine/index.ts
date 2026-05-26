@@ -585,3 +585,37 @@ export type {
   StockLedger,
   StockSummary,
 } from './stock-management';
+
+// Sprint 137 — WCAG 2.2 AA accessibility audit engine
+export {
+  relativeLuminance,
+  contrastRatio,
+  meetsContrastRequirement,
+  meetsTargetSize,
+  createAuditResult,
+  addViolation,
+  addPass,
+  addIncomplete,
+  buildAuditReport as buildA11yReport,
+  formatAuditReport as formatA11yReport,
+  getCriterion,
+  getNewIn22Criteria,
+  getRulesByCategory,
+  getCriticalAndSeriousRules,
+  WCAG_22_CRITERIA,
+  AUDIT_RULES,
+  MIN_TARGET_SIZE_PX,
+} from './a11y-audit';
+export type {
+  WcagLevel,
+  WcagCriterionId,
+  AuditCategory,
+  ViolationSeverity,
+  AuditRule,
+  AuditViolation,
+  AuditPass,
+  AuditIncomplete,
+  AuditResult,
+  AuditReport as A11yAuditReport,
+  WcagCriterion,
+} from './a11y-audit';

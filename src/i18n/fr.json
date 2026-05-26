@@ -811,6 +811,18 @@
     "fixField": "Fix {{field}}",
     "fixAll": "Fix All"
   },
+  "a11yAudit": {
+    "title": "Accessibility Audit",
+    "runAudit": "Run Audit",
+    "compliant": "Compliant",
+    "nonCompliant": "Non-Compliant",
+    "violations": "Violations",
+    "passes": "Passes",
+    "incomplete": "Incomplete",
+    "severity": "Severity",
+    "criterion": "Criterion",
+    "suggestion": "Suggestion"
+  },
   "stockMgmt": {
     "title": "Stock Management",
     "addMaterial": "Add Material",
