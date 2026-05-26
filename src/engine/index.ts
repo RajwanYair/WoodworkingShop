@@ -654,3 +654,15 @@ export type {
   ThemeClassDiff,
   ThemeSummary,
 } from './dark-mode-tokens';
+
+// Sprint 140 — Bundle chunk strategy descriptors and validation helpers
+export {
+  resolveChunkName,
+  exceedsPerFileBudget,
+  exceedsTotalJsBudget,
+  getMissingChunks,
+  CHUNK_NAMES,
+  MODULE_CHUNK_DESCRIPTORS,
+  BUNDLE_BUDGET,
+} from './bundle-strategy';
+export type { ChunkName, ModuleChunkDescriptor, BundleBudget } from './bundle-strategy';

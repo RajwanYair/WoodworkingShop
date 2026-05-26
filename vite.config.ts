@@ -96,6 +96,9 @@ export default defineConfig({
           if (id.includes('/i18next') || id.includes('/react-i18next')) return 'i18n-vendor';
           if (id.includes('/react-dom/') || id.includes('/node_modules/react/') || id.includes('/zustand'))
             return 'vendor';
+          // Sprint 140 — defer parse cost of heavy optimizer engine to OptimizerView lazy chunk
+          if (id.includes('/cut-optimizer') || id.includes('/smart-optimizer') || id.includes('/assembly-dag'))
+            return 'engine-optimizer';
         },
       },
     },
