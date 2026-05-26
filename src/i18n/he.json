@@ -298,6 +298,19 @@
     "wideSpanRisk": "רוחב {{widthMm}} ממ — מומלץ תמיכה מרכזית להפחת כיפוף",
     "costMaterialAlternative": "לוח מלמין הוא חלופה חסכונית לפליווד בגימורים צבועים"
   },
+  "audit": {
+    "title": "יומן ביקורת",
+    "noEvents": "לא נרשמו אירועי ביקור",
+    "eventCount": "אירוע {{count}}",
+    "eventCount_other": "{{count}} אירועים",
+    "configChange": "תצורה שונתה",
+    "export": "יוייצא",
+    "history": "היסטוריה",
+    "diffTitle": "השוואת גרסאות",
+    "noDiff": "התצורות זהות",
+    "changeCount": "שדה 1 שונה",
+    "changeCount_other": "{{count}} שדות שונו"
+  },
   "workspace": {
     "title": "סביבת עבודה רב-פרויקטית",
     "newProject": "פרויקט חדש",

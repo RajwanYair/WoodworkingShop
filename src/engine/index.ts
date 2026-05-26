@@ -399,3 +399,14 @@ export {
   updateProjectConfig,
 } from './workspace';
 export type { WorkspaceProject, WorkspaceTab, SharedMaterial, Workspace } from './workspace';
+
+// Sprint 125 — Audit trail and version diffing (Phase 28)
+export {
+  createAuditTrail,
+  recordEvent,
+  getAuditHistory,
+  formatAuditEntry,
+  summarizeAudit,
+  diffConfigs,
+} from './audit-trail';
+export type { AuditEventKind, AuditEvent, AuditTrail, DiffEntry, ConfigDiff } from './audit-trail';
