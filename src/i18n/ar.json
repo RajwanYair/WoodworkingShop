@@ -636,5 +636,15 @@
     "toolDiameter": "\u0642\u0637\u0631 الأداة (مم)",
     "useArcs": "حركات القوس (G2/G3)",
     "emitToolChange": "إصدار تغيير أداة M6 بين الأجزاء"
+  },
+  "constraints": {
+    "title": "📐 Constraint Check",
+    "panelLabel": "Dimension constraint suggestions panel",
+    "violations": "Constraint violations",
+    "allValid": "All dimensions are within manufacturing limits.",
+    "rangeHints": "Dimension range overview",
+    "fix": "Fix",
+    "fixField": "Fix {{field}}",
+    "fixAll": "Fix All"
   }
 }

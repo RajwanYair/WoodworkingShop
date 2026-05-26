@@ -894,5 +894,15 @@
       "fair": "Fair",
       "poor": "Poor"
     }
+  },
+  "constraints": {
+    "title": "📐 Constraint Check",
+    "panelLabel": "Dimension constraint suggestions panel",
+    "violations": "Constraint violations",
+    "allValid": "All dimensions are within manufacturing limits.",
+    "rangeHints": "Dimension range overview",
+    "fix": "Fix",
+    "fixField": "Fix {{field}}",
+    "fixAll": "Fix All"
   }
 }

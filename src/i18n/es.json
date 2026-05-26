@@ -636,5 +636,15 @@
     "toolDiameter": "\u00d8 herramienta (mm)",
     "useArcs": "Movimientos de arco (G2/G3)",
     "emitToolChange": "Emitir cambio de herramienta M6 entre piezas"
+  },
+  "constraints": {
+    "title": "📐 Constraint Check",
+    "panelLabel": "Dimension constraint suggestions panel",
+    "violations": "Constraint violations",
+    "allValid": "All dimensions are within manufacturing limits.",
+    "rangeHints": "Dimension range overview",
+    "fix": "Fix",
+    "fixField": "Fix {{field}}",
+    "fixAll": "Fix All"
   }
 }

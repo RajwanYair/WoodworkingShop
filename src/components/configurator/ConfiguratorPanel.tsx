@@ -17,6 +17,7 @@ import { MeasurementHintsPanel } from './MeasurementHintsPanel';
 import { FinishCalculatorPanel } from './FinishCalculatorPanel';
 import { PresetsPanel } from './PresetsPanel';
 import { SaveLoadPanel } from './SaveLoadPanel';
+import { ConstraintSuggestionsPanel } from './ConstraintSuggestionsPanel';
 import type { FurnitureType, JoineryType } from '../../engine/types';
 
 export function ConfiguratorPanel() {
@@ -43,6 +44,9 @@ export function ConfiguratorPanel() {
 
       {/* Sprint 88 — finish/paint calculator */}
       <FinishCalculatorPanel />
+
+      {/* Sprint 110 — real-time constraint violations and dimension range hints */}
+      <ConstraintSuggestionsPanel />
 
       {/* Material substitution suggestions from engine (Sprint 43) */}
       <SubstitutionPanel />
