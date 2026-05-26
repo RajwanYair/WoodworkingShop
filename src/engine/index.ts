@@ -559,3 +559,29 @@ export type {
   StreamProgress,
   StreamError,
 } from './webserial-v2';
+
+// Sprint 135 — Advanced stock management
+export {
+  createStockLedger,
+  addMaterial,
+  createPurchaseOrder,
+  submitPurchaseOrder,
+  receivePurchaseOrder,
+  cancelPurchaseOrder,
+  computeReorderAlerts,
+  recordWaste,
+  getStockSummary,
+  formatStockReport,
+  DEFAULT_REORDER_MULTIPLIER,
+} from './stock-management';
+export type {
+  PurchaseOrderStatus,
+  PurchaseOrderLine,
+  PurchaseOrder,
+  AlertSeverity,
+  ReorderAlert,
+  WasteEntry,
+  StockRecord,
+  StockLedger,
+  StockSummary,
+} from './stock-management';

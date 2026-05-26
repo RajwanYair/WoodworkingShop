@@ -799,6 +799,19 @@
     "fixField": "Fix {{field}}",
     "fixAll": "Fix All"
   },
+  "stockMgmt": {
+    "title": "Stock Management",
+    "addMaterial": "Add Material",
+    "createOrder": "Create Order",
+    "submitOrder": "Submit Order",
+    "receiveOrder": "Receive Goods",
+    "cancelOrder": "Cancel Order",
+    "recordWaste": "Record Waste",
+    "reorderAlerts": "Reorder Alerts",
+    "totalValue": "Total Inventory Value",
+    "pendingOrders": "Pending Orders",
+    "wasteLog": "Waste Log"
+  },
   "cncStream": {
     "title": "CNC Streaming v2",
     "startStream": "Start Stream",
