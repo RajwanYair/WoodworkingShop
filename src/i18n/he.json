@@ -1204,5 +1204,30 @@
     "jobValid": "עבודה תקינה — מוכנה לשליחה.",
     "jobErrors": "לעבודה {{count}} שגיאות.",
     "noMachine": "לא נבחר פרופיל מכונה."
+  },
+  "jobQueue": {
+    "title": "תור עבודות",
+    "enqueue": "הוסף לתור",
+    "cancel": "בטל עבודה",
+    "promote": "התחל הבא",
+    "complete": "סמן כהושלם",
+    "fail": "סמן ככשל",
+    "reprioritise": "שנה עדיפות",
+    "purge": "נקה הושלמו",
+    "stats": "סטטיסטיקת תור",
+    "total": "סה\"כ עבודות",
+    "queued": "בתור",
+    "running": "רץ",
+    "completed": "הושלם",
+    "failed": "נכשל",
+    "cancelled": "בוטל",
+    "estimatedTime": "זמן משוער שנותר",
+    "utilisation": "ניצולת",
+    "queueFull": "התור מלא.",
+    "priorityUrgent": "דחוף",
+    "priorityNormal": "רגיל",
+    "priorityLow": "נמוך",
+    "position": "מיקום",
+    "targetMachine": "מכונת יעד"
   }
 }

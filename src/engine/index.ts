@@ -738,3 +738,19 @@ export {
   BUNDLE_BUDGET,
 } from './bundle-strategy';
 export type { ChunkName, ModuleChunkDescriptor, BundleBudget } from './bundle-strategy';
+
+// Sprint 157 — CNC job queue (Phase 35)
+export {
+  createJobQueue,
+  enqueueJob,
+  cancelJob,
+  promoteNextJobs,
+  completeJob,
+  failJob,
+  reprioritiseJob,
+  getQueueStats,
+  getJobsByMachine,
+  purgeFinishedJobs,
+  DEFAULT_QUEUE_CONFIG,
+} from './cnc-job-queue';
+export type { JobPriority, JobState, QueuedJob, QueueStats, QueueConfig, EnqueueResult } from './cnc-job-queue';

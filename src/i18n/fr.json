@@ -952,5 +952,30 @@
     "jobValid": "Job validated \u2014 ready to send.",
     "jobErrors": "Job has {{count}} error(s).",
     "noMachine": "No machine profile selected."
+  },
+  "jobQueue": {
+    "title": "Job Queue",
+    "enqueue": "Add to Queue",
+    "cancel": "Cancel Job",
+    "promote": "Start Next",
+    "complete": "Mark Complete",
+    "fail": "Mark Failed",
+    "reprioritise": "Change Priority",
+    "purge": "Clear Finished",
+    "stats": "Queue Statistics",
+    "total": "Total Jobs",
+    "queued": "Queued",
+    "running": "Running",
+    "completed": "Completed",
+    "failed": "Failed",
+    "cancelled": "Cancelled",
+    "estimatedTime": "Est. Remaining Time",
+    "utilisation": "Utilisation",
+    "queueFull": "Queue is full.",
+    "priorityUrgent": "Urgent",
+    "priorityNormal": "Normal",
+    "priorityLow": "Low",
+    "position": "Position",
+    "targetMachine": "Target Machine"
   }
 }
