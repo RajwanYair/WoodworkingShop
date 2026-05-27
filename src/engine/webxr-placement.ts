@@ -3,7 +3,6 @@
  *
  * Pure-TypeScript AR placement utilities for the WebXR AR flow.
  * No DOM APIs, no React imports, no side effects.
- * The actual WebXR session lifecycle lives in src/hooks/useWebXR.ts.
  */
 
 // ---------------------------------------------------------------------------

@@ -1,0 +1,69 @@
+name: Bundle Size Report
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'vite.config.ts'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  size:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/setup-node
+      - run: npm run build
+      - name: Measure bundle
+        id: bundle
+        run: |
+          JS_SIZE=$(find dist -name '*.js' -exec wc -c {} + | tail -1 | awk '{print $1}')
+          CSS_SIZE=$(find dist -name '*.css' -exec wc -c {} + | tail -1 | awk '{print $1}')
+          JS_KB=$((JS_SIZE / 1024))
+          CSS_KB=$((CSS_SIZE / 1024))
+          echo "js_kb=$JS_KB" >> "$GITHUB_OUTPUT"
+          echo "css_kb=$CSS_KB" >> "$GITHUB_OUTPUT"
+          echo "total_kb=$(( JS_KB + CSS_KB ))" >> "$GITHUB_OUTPUT"
+      - name: Comment PR with bundle size
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = `## 📦 Bundle Size Report
+
+            | Asset | Size |
+            |-------|------|
+            | JavaScript | ${{ steps.bundle.outputs.js_kb }} KB |
+            | CSS | ${{ steps.bundle.outputs.css_kb }} KB |
+            | **Total** | **${{ steps.bundle.outputs.total_kb }} KB** |
+
+            Budget: ≤ 1500 KB JS`;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const existing = comments.find(c => c.body?.includes('Bundle Size Report'));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }

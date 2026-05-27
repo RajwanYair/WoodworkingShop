@@ -189,6 +189,9 @@ The MaxRects BSSF cut-optimizer uses:
 - `store.instructions.md` — applied to `src/store/**` (slice pattern, selectors, no side effects)
 - `tests.instructions.md` — applied to `tests/**` (it.each, helpers, coverage targets)
 - `i18n.instructions.md` — applied to `src/i18n/**` and all source files (parity, key naming)
+- `workers.instructions.md` — applied to `src/workers/**` (Comlink, no DOM, no React, no eval)
+- `utils.instructions.md` — applied to `src/utils/**` (pure functions, input validation, testing)
+- `security.instructions.md` — applied to `src/**` and `public/**` (OWASP A01–A10 rules)
 
 ## Copilot Prompts
 
@@ -208,6 +211,9 @@ The MaxRects BSSF cut-optimizer uses:
 - `security-audit.prompt.md` — OWASP Top 10 security audit for client-side SPA
 - `dependency-update.prompt.md` — review and apply Dependabot dependency updates
 - `code-review.prompt.md` — structured code review against all project conventions
+- `lighthouse-ci.prompt.md` — set up Lighthouse CI GitHub Actions gates (Sprint 147)
+- `csp-hardening.prompt.md` — Content Security Policy header hardening (Sprint 148)
+- `pwa-audit.prompt.md` — PWA manifest, service worker, and install-prompt audit (Sprint 149)
 
 ## Copilot Agents
 
@@ -219,6 +225,8 @@ The MaxRects BSSF cut-optimizer uses:
 - `debug.agent.md` — diagnose and fix test/build/type failures without suppression
 - `a11y.agent.md` — WCAG 2.2 AA accessibility audit and remediation
 - `i18n.agent.md` — i18n key management with full 6-locale parity
+- `security.agent.md` — OWASP Top 10 security audit and CSP hardening
+- `perf.agent.md` — Lighthouse CI setup, Core Web Vitals diagnosis and tuning
 
 ## Workflows
 

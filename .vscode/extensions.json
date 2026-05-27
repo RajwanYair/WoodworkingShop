@@ -32,6 +32,7 @@
 
     // ─── GitHub / CI ──────────────────────────────────────────────────────
     "github.vscode-github-actions",
+    "github.copilot",
     "github.copilot-chat",
     "github.vscode-pull-request-github",
     "eamodio.gitlens",
@@ -47,6 +48,10 @@
 
     // ─── Accessibility ────────────────────────────────────────────────────
     "deque-systems.vscode-axe-linter",
+
+    // ─── Performance & Bundle ─────────────────────────────────────────────
+    "ms-vscode.vscode-github-issue-notebooks",
+    "antfu.goto-alias",
 
     // ─── Diff & Merge ─────────────────────────────────────────────────────
     "mhutchie.git-graph"

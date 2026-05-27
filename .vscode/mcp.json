@@ -58,6 +58,22 @@
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
       "description": "Structured multi-step reasoning for complex problem decomposition."
+    },
+
+    // ─── Context7 — up-to-date library docs (React, Vite, Tailwind, etc.) ─
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "description": "Retrieves current, version-accurate documentation for npm packages — prevents hallucinated APIs."
+    },
+
+    // ─── Cloudflare — Workers, Pages, D1, KV, R2 management ──────────────
+    "cloudflare": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@cloudflare/mcp-server-cloudflare"],
+      "description": "Manage Cloudflare Pages deployments, Workers, KV, D1, and R2 directly in chat."
     }
   }
 }
