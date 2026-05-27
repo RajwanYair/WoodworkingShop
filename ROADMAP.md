@@ -1,7 +1,7 @@
 # Roadmap
 
-> **Last strategic review**: 2025-07-15 · **Current version**: 5.15.0
-> **Next target**: v5.16.0 (Phase 40 — TBD)
+> **Last strategic review**: 2025-07-15 · **Current version**: 5.16.0
+> **Next target**: v5.17.0 (Phase 41 — TBD)
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -243,6 +243,18 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 149    | PWA v2 (enhanced offline caching, install prompt refinement)             | ✓ Done |
 | 150    | Error monitoring — privacy-first telemetry (Cloudflare Analytics/Sentry) | ✓ Done |
 | 151    | Release v5.9.0                                                           | ✓ Done |
+
+### Phase 40 — Material Management & Templates · v5.16.0 ✅ COMPLETE
+
+> **Status**: COMPLETE · **Released**: 2025-07-15 · **Goal**: Material cost tracking, inventory management, template library, edge banding
+
+| Sprint | Deliverable                                                                | Track  |
+| ------ | -------------------------------------------------------------------------- | ------ |
+| 182    | Material cost tracker (historical prices, trends, budget alerts)           | ✓ Done |
+| 183    | Shop inventory manager (stock levels, reorder lists, fulfilment check)     | ✓ Done |
+| 184    | Cabinet template library (6 built-in parametric templates)                 | ✓ Done |
+| 185    | Edge banding calculator (exposure detection, grouping, wastage)            | ✓ Done |
+| 186    | Release v5.16.0                                                            | ✓ Done |
 
 ### Phase 38 — Shop Floor Intelligence & Workflow Automation · v5.14.0 ✅ COMPLETE
 

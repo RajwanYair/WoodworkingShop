@@ -9,6 +9,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.16.0] — 2025-07-15
+
+### Phase 40 — Material Management & Templates (Sprints 182–186)
+
+#### Sprint 182 — Material Cost Tracker
+
+- New engine module `material-cost-tracker.ts` for real-time cost tracking
+- Historical price recording with date-stamped entries
+- Price trend analysis (rising/falling/stable) with percentage change
+- Per-project cost breakdown aggregated by material
+- Budget threshold alerts with configurable limits
+- 15 unit tests
+
+#### Sprint 183 — Shop Inventory Manager
+
+- New engine module `shop-inventory.ts` for stock level management
+- Stock status determination (in-stock, low, out-of-stock)
+- Project usage projection against current inventory levels
+- Reorder list generation based on configurable thresholds
+- Full inventory analysis with fulfilment feasibility
+- 14 unit tests
+
+#### Sprint 184 — Cabinet Template Library
+
+- New engine module `cabinet-templates.ts` with pre-built parametric templates
+- 6 built-in templates: base, wall, tall, drawer-bank, bookcase, vanity
+- Dimension constraints with min/max validation
+- Template instantiation with override parameter merging
+- Category-based filtering and template lookup
+- 14 unit tests
+
+#### Sprint 185 — Edge Banding Calculator
+
+- New engine module `edge-banding-calc.ts` for edge treatment planning
+- Exposed edge detection (all, front-only, custom per-edge)
+- Grouping by banding material/color with cost calculation
+- Configurable wastage allowance (default 10%)
+- Sorted groups by total length descending
+- 14 unit tests
+
+---
+
 ## [5.15.0] — 2025-07-15
 
 ### Phase 39 — Workshop Productivity & Estimation (Sprints 177–181)
