@@ -1438,5 +1438,22 @@
     "structuralScore": "ציון מבני",
     "radarChart": "מציין רדאר",
     "summary": "סיכום השוואה"
+  },
+  "dustCollection": {
+    "title": "איסוף אבק",
+    "estimator": "אומדן מערכת",
+    "machine": "מכונה",
+    "addMachine": "הוסף מכונה",
+    "portDiameter": "קוטר פתח",
+    "ductRun": "אורך צנרת",
+    "elbows": "מרפקים",
+    "cfmRequired": "CFM נדרש",
+    "staticPressure": "לחץ סטטי",
+    "trunkDiameter": "קוטר צנרת ראשית",
+    "recommendedHp": "כוח סוס מומלץ",
+    "adequate": "מערכת מתאימה",
+    "inadequate": "מערכת קטנה מדי",
+    "warnings": "אזהרות",
+    "noMachines": "לא נוספו מכונות."
   }
 }

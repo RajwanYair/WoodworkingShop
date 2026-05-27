@@ -1020,3 +1020,23 @@ export type {
   NormalizedScore,
   ComparisonResult,
 } from './design-comparison';
+
+// Sprint 172 — Dust collection estimator
+export {
+  machineCfm,
+  machineStaticPressure,
+  recommendTrunkDiameter,
+  recommendHp,
+  calculateSystem,
+  validateCollector,
+  BASE_CFM,
+} from './dust-collection';
+export type {
+  MachineType,
+  DuctShape,
+  DustMachine,
+  DuctSegment,
+  DustCollectionResult,
+  MachineAirflow,
+  CollectorSpec,
+} from './dust-collection';
