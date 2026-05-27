@@ -1315,3 +1315,13 @@ export type {
   RouterPass,
   RouterDepthResult,
 } from './router-depth';
+
+// Sprint 208 — Biscuit Joinery Calculator
+export { calculateBiscuitLayout, recommendBiscuitSize } from './biscuit-joint';
+export type {
+  BiscuitSize,
+  BiscuitJointType,
+  BiscuitJointInput,
+  BiscuitPosition,
+  BiscuitJointResult,
+} from './biscuit-joint';

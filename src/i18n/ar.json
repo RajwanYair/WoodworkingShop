@@ -1847,5 +1847,21 @@
     "plywood": "Plywood",
     "mdf": "MDF",
     "hardPlastic": "Hard Plastic"
+  },
+  "biscuitJoint": {
+    "title": "Biscuit Joinery Calculator",
+    "description": "Calculate biscuit size, slot depth, and layout positions",
+    "jointLength": "Joint Length",
+    "boardThickness": "Board Thickness",
+    "jointType": "Joint Type",
+    "biscuitSize": "Biscuit Size",
+    "slotDepth": "Slot Depth",
+    "count": "Biscuit Count",
+    "spacing": "Spacing",
+    "edgeMargin": "Edge Margin",
+    "edge": "Edge",
+    "butt": "Butt",
+    "miter": "Miter",
+    "auto": "Auto"
   }
 }

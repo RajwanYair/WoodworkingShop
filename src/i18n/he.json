@@ -2006,5 +2006,21 @@
     "plywood": "דיקט",
     "mdf": "MDF",
     "hardPlastic": "פלסטיק קשיח"
+  },
+  "biscuitJoint": {
+    "title": "מחשבון חיבור ביסקוויט",
+    "description": "חישוב גודל ביסקוויט, עומק חריץ ומיקומי פריסה",
+    "jointLength": "אורך חיבור",
+    "boardThickness": "עובי לוח",
+    "jointType": "סוג חיבור",
+    "biscuitSize": "גודל ביסקוויט",
+    "slotDepth": "עומק חריץ",
+    "count": "כמות ביסקוויטים",
+    "spacing": "מרווח",
+    "edgeMargin": "שול קצה",
+    "edge": "קצה",
+    "butt": "קצה מול קצה",
+    "miter": "מיטר",
+    "auto": "אוטומטי"
   }
 }
