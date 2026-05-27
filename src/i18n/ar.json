@@ -1470,5 +1470,21 @@
     "mostWasteful": "Most Wasteful",
     "mostExpensive": "Most Expensive",
     "noMaterials": "No materials in report."
+  },
+  "hardwareCatalog": {
+    "title": "Hardware Catalog",
+    "filter": "Filter",
+    "search": "Search hardware...",
+    "category": "Category",
+    "manufacturer": "Manufacturer",
+    "price": "Price",
+    "packSize": "Pack Size",
+    "sku": "SKU",
+    "quantity": "Quantity",
+    "totalCost": "Total Cost",
+    "packsNeeded": "Packs Needed",
+    "noItems": "No hardware items found.",
+    "addItem": "Add Item",
+    "editItem": "Edit Item"
   }
 }

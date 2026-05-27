@@ -1158,3 +1158,23 @@ export {
 } from './material-usage-report';
 
 export type { UsagePart, SheetStock, MaterialUsage, UsageReport } from './material-usage-report';
+
+export {
+  filterHardware,
+  sortHardware,
+  calculateHardwareCost,
+  getManufacturers,
+  getCategories,
+  validateHardwareItem,
+} from './hardware-catalog';
+
+export type {
+  HardwareCategory,
+  HardwareItem,
+  HardwareAssignment,
+  HardwareFilter,
+  HardwareSortField,
+  SortDirection,
+  HardwareCostLine,
+  HardwareCostSummary,
+} from './hardware-catalog';

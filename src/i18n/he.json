@@ -1629,5 +1629,21 @@
     "mostWasteful": "הכי בזבזני",
     "mostExpensive": "הכי יקר",
     "noMaterials": "אין חומרים בדוח."
+  },
+  "hardwareCatalog": {
+    "title": "קטלוג חומרה",
+    "filter": "סינון",
+    "search": "חיפוש חומרה...",
+    "category": "קטגוריה",
+    "manufacturer": "יצרן",
+    "price": "מחיר",
+    "packSize": "גודל אריזה",
+    "sku": "מק״ט",
+    "quantity": "כמות",
+    "totalCost": "עלות כוללת",
+    "packsNeeded": "אריזות נדרשות",
+    "noItems": "לא נמצאו פריטי חומרה.",
+    "addItem": "הוסף פריט",
+    "editItem": "ערוך פריט"
   }
 }
