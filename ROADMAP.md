@@ -1,7 +1,7 @@
 # Roadmap
 
-> **Last strategic review**: 2026-06-10 · **Current version**: 5.10.0
-> **Next target**: v5.11.0 (Phase 35 — TBD)
+> **Last strategic review**: 2026-06-10 · **Current version**: 5.11.0
+> **Next target**: v5.12.0 (Phase 36 — TBD)
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -126,6 +126,9 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 30    | v5.6.0      | AI Assistant & Advanced Export  | AI design assistant, glTF/IFC 4.3, WebSerial v2, stock management              |
 | 31    | v5.7.0      | UI Polish & Accessibility       | WCAG 2.2 AA audit, dark mode, component splitting, bundle < 400 KB gzipped     |
 | 32    | v5.8.0      | Developer Experience & Plugins  | Plugin API v2, TypeDoc site, 88% test coverage, Vitest reporter, lint summary  |
+| 33    | v5.9.0      | Production Infrastructure       | Lighthouse CI, CSP hardening, PWA v2, error monitoring                         |
+| 34    | v5.10.0     | Room Planner v2 & Community     | Room layout v2, manufacturer catalog, appliance clearance, machining link      |
+| 35    | v5.11.0     | CNC Workflow & Cloud Sync       | CNC job queue, E2E cloud sync, multi-machine distribution, project sharing     |
 
 ---
 
@@ -231,13 +234,25 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 
 > **Status**: ✓ DONE · **Goal**: Lighthouse CI gates, security hardening, PWA v2, error monitoring
 
-| Sprint | Deliverable                                                              | Track    |
-| ------ | ------------------------------------------------------------------------ | -------- |
-| 147    | Lighthouse CI automation (GH Actions gates: TBT < 200 ms, FCP < 1.2 s)   | ✓ Done   |
-| 148    | Security hardening (CSP headers, Subresource Integrity, OWASP audit)     | ✓ Done   |
-| 149    | PWA v2 (enhanced offline caching, install prompt refinement)             | ✓ Done   |
-| 150    | Error monitoring — privacy-first telemetry (Cloudflare Analytics/Sentry) | ✓ Done   |
-| 151    | Release v5.9.0                                                           | ✓ Done   |
+| Sprint | Deliverable                                                              | Track  |
+| ------ | ------------------------------------------------------------------------ | ------ |
+| 147    | Lighthouse CI automation (GH Actions gates: TBT < 200 ms, FCP < 1.2 s)   | ✓ Done |
+| 148    | Security hardening (CSP headers, Subresource Integrity, OWASP audit)     | ✓ Done |
+| 149    | PWA v2 (enhanced offline caching, install prompt refinement)             | ✓ Done |
+| 150    | Error monitoring — privacy-first telemetry (Cloudflare Analytics/Sentry) | ✓ Done |
+| 151    | Release v5.9.0                                                           | ✓ Done |
+
+### Phase 35 — CNC Workflow & Cloud Sync · v5.11.0 ✅ COMPLETE
+
+> **Status**: COMPLETE · **Released**: 2026-06-10 · **Goal**: CNC job scheduling, encrypted cloud sync, multi-machine distribution, project sharing
+
+| Sprint | Deliverable                                                            | Track  |
+| ------ | ---------------------------------------------------------------------- | ------ |
+| 157    | CNC job queue with priority scheduling (critical/high/normal/low)      | ✓ Done |
+| 158    | Cloud sync engine with E2E encryption (AES-256-GCM, PBKDF2)            | ✓ Done |
+| 159    | Multi-machine workflow distribution (capability-match, load balancing) | ✓ Done |
+| 160    | Project sharing links with expiration (token-based, permissions)       | ✓ Done |
+| 161    | Release v5.11.0                                                        | ✓ Done |
 
 ### Future Horizons (Unscoped)
 

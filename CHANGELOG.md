@@ -9,6 +9,47 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.11.0] — 2026-06-10
+
+### Phase 35 — CNC Workflow & Cloud Sync (Sprints 157–161)
+
+#### Sprint 157 — CNC Job Queue with Priority Scheduling
+
+- New engine module `cnc-job-queue.ts` for priority-based CNC job scheduling
+- Priority levels (critical/high/normal/low) with FIFO ordering within tier
+- Job lifecycle management (pending → running → completed/failed/cancelled)
+- Queue statistics, batch operations, and time estimation
+- Configurable max concurrent jobs and retry policies
+
+#### Sprint 158 — Cloud Sync Engine with E2E Encryption
+
+- New engine module `cloud-sync.ts` with end-to-end encryption
+- AES-256-GCM symmetric encryption with PBKDF2 key derivation
+- Vector clock-based conflict resolution (last-writer-wins semantics)
+- Injectable `CryptoPort` interface for environment portability
+- Sync queue management with pending/synced/conflict/failed states
+
+#### Sprint 159 — Multi-Machine Workflow Distribution
+
+- New engine module `multi-machine.ts` for CNC job distribution
+- Machine capability matching (axes, max dimensions, tool types, materials)
+- Distribution strategies: round-robin, least-loaded, capability-match
+- Load balancing with real-time utilisation tracking
+- Workshop-wide job assignment with unassignable job detection
+
+#### Sprint 160 — Project Sharing Links with Expiration
+
+- New engine module `project-sharing.ts` for token-based share links
+- Permission levels: view-only, view+export, full access
+- Configurable expiration (hours/days/never) with automatic expiry detection
+- Access tracking (view count, last accessed timestamp)
+- Link revocation and renewal capabilities
+
+#### Sprint 161 — Release v5.11.0
+
+- Version bump to 5.11.0
+- CHANGELOG, ROADMAP, and copilot-instructions updates
+
 ## [5.10.0] — 2026-06-10
 
 ### Phase 34 — Room Planner v2 & Community Catalog (Sprints 152–156)
