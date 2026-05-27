@@ -1918,5 +1918,23 @@
     "hardwood": "Hardwood",
     "plywood": "Plywood",
     "mdf": "MDF"
+  },
+  "glueUpTime": {
+    "title": "Glue-Up Time Calculator",
+    "glueType": "Glue Type",
+    "temperature": "Temperature",
+    "humidity": "Humidity",
+    "jointArea": "Joint Area",
+    "jointCount": "Joint Count",
+    "openTime": "Open Time",
+    "clampTime": "Clamp Time",
+    "cureTime": "Full Cure Time",
+    "recommendedPsi": "Recommended Pressure",
+    "clampsNeeded": "Clamps Needed",
+    "pva": "PVA (Yellow/White)",
+    "polyurethane": "Polyurethane",
+    "epoxy": "Epoxy",
+    "hideGlue": "Hide Glue",
+    "caGlue": "CA (Super Glue)"
   }
 }

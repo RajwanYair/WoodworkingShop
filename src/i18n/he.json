@@ -2065,5 +2065,23 @@
     "hardwood": "עץ קשה",
     "plywood": "סנדוויץ׳",
     "mdf": "MDF"
+  },
+  "glueUpTime": {
+    "title": "מחשבון זמן הדבקה",
+    "glueType": "סוג דבק",
+    "temperature": "טמפרטורה",
+    "humidity": "לחות",
+    "jointArea": "שטח חיבור",
+    "jointCount": "מספר חיבורים",
+    "openTime": "זמן פתוח",
+    "clampTime": "זמן לחיצה",
+    "cureTime": "זמן ריפוי מלא",
+    "recommendedPsi": "לחץ מומלץ",
+    "clampsNeeded": "מספר מלחציים",
+    "pva": "PVA (צהוב/לבן)",
+    "polyurethane": "פוליאורתן",
+    "epoxy": "אפוקסי",
+    "hideGlue": "דבק עור",
+    "caGlue": "CA (דבק מהיר)"
   }
 }

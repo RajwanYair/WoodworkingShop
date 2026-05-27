@@ -1342,3 +1342,7 @@ export type { FingerJointInput, FingerPosition, FingerJointResult } from './fing
 // Sprint 211 — Wood Screw Pilot Hole Calculator
 export { calculatePilotHole } from './pilot-hole';
 export type { WoodHardness, ScrewGauge, PilotHoleInput, PilotHoleResult } from './pilot-hole';
+
+// Sprint 212 — Glue-up Time Calculator
+export { calculateGlueUpTime } from './glue-up-time';
+export type { GlueType, GlueUpInput, GlueUpResult } from './glue-up-time';
