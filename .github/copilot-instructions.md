@@ -2,15 +2,25 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.17.0** · **Next target: v5.18.0** (Phase 42 — TBD)
+> **Current release: v5.18.0** · **Next target: v5.19.0** (Phase 43 — TBD)
 
-## Active Sprint — Phase 42 (Sprints 195+)
+## Active Sprint — Phase 43 (Sprints 200+)
 
 > **Status**: PLANNED · **Goal**: TBD
 
 | Sprint | Feature                                                                  | Status |
 | ------ | ------------------------------------------------------------------------ | ------ |
-| 195    | TBD                                                                      | TODO   |
+| 200    | TBD                                                                      | TODO   |
+
+## Completed — Phase 42 (Sprints 195–199)
+
+| Sprint | Feature                                                                  | Status |
+| ------ | ------------------------------------------------------------------------ | ------ |
+| 195    | Pocket hole joinery calculator                                           | DONE   |
+| 196    | Veneer calculator                                                        | DONE   |
+| 197    | Clamp pressure calculator                                                | DONE   |
+| 198    | Drill press speed calculator                                             | DONE   |
+| 199    | Board-feet calculator                                                    | DONE   |
 
 ## Completed — Phase 41 (Sprints 190–194)
 

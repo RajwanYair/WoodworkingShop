@@ -9,6 +9,56 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.18.0] — 2025-07-18
+
+### Phase 42 — Advanced Joinery & Workshop Tools (Sprints 195–199)
+
+#### Sprint 195 — Pocket Hole Joinery Calculator
+
+- New engine module `pocket-hole.ts` for Kreg-style pocket hole joints
+- `calculatePocketHole`: screw length, spacing, drill settings
+- `selectScrewLength`: auto-select from 6 standard sizes
+- `selectThreadType`: coarse/fine/washer-head by material hardness
+- Butt, mitre, and edge joint support
+- 21 unit tests
+
+#### Sprint 196 — Veneer Calculator
+
+- New engine module `veneer-calc.ts` for veneer sheet planning
+- `calculateVeneer`: sheet count, strip layout, adhesive volume
+- `bestSheetForPanel`: optimal standard sheet size selection
+- Book-match, slip-match, and random pattern support
+- Adhesive spread rate calculation (150 g/m²)
+- 17 unit tests
+
+#### Sprint 197 — Clamp Pressure Calculator
+
+- New engine module `clamp-pressure.ts` for glue-up clamping
+- `calculateClampPressure`: clamp count, spacing, force for joints
+- `isPressureAdequate`: validate pressure within glue requirements
+- 5 glue types (PVA, polyurethane, epoxy, hide, contact)
+- 6 clamp types with rated forces
+- 20 unit tests
+
+#### Sprint 198 — Drill Press Speed Calculator
+
+- New engine module `drill-speed.ts` for optimal drill RPM
+- `calculateDrillSpeed`: RPM from SFM, bit type, diameter, material
+- `maxBitDiameter`: reverse calculation for fixed-speed presses
+- 6 bit types, 6 materials with SFM lookup tables
+- Feed rate and drill time estimation
+- 20 unit tests
+
+#### Sprint 199 — Board-Feet Calculator
+
+- New engine module `board-feet.ts` for lumber volume calculations
+- `calculateBoardFeet`: BF from thickness × width × length
+- `linearFeetToBoardFeet`: convert linear feet to board feet
+- Nominal-to-actual dimension conversion (8 standard sizes)
+- Cost estimation for 10 wood species
+- Weight estimation at 3.5 lbs/BF average
+- 25 unit tests
+
 ## [5.17.0] — 2025-07-18
 
 ### Phase 41 — Workshop Calculations & CNC Tools (Sprints 190–194)
