@@ -1257,3 +1257,14 @@ export type { DrillBitType, DrillMaterial, DrillSpeedInput, DrillSpeedResult } f
 // Sprint 199 — Board-Feet Calculator
 export { calculateBoardFeet, linearFeetToBoardFeet, NOMINAL_TO_ACTUAL, SPECIES_COST_PER_BF } from './board-feet';
 export type { BoardFeetInput, BoardFeetResult } from './board-feet';
+
+// Sprint 200 — Miter & Compound Angle Calculator
+export { calculatePolygonMiter, calculateCompoundMiter, calculateCrownMolding } from './miter-angle';
+export type {
+  PolygonMiterInput,
+  PolygonMiterResult,
+  CompoundMiterInput,
+  CompoundMiterResult,
+  CrownMoldingInput,
+  CrownMoldingResult,
+} from './miter-angle';

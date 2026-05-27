@@ -1684,5 +1684,21 @@
     "weight": "Estimated Weight",
     "linearFeet": "Linear Feet",
     "nominalToActual": "Nominal → Actual"
+  },
+  "miterAngle": {
+    "title": "Miter Angle Calculator",
+    "polygonSides": "Number of Sides",
+    "miterAngle": "Miter Angle",
+    "interiorAngle": "Interior Angle",
+    "bevelAngle": "Bevel Angle",
+    "tiltAngle": "Tilt Angle",
+    "cornerAngle": "Corner Angle",
+    "springAngle": "Spring Angle",
+    "wallAngle": "Wall Angle",
+    "insideCorner": "Inside Corner",
+    "outsideCorner": "Outside Corner",
+    "compound": "Compound Miter",
+    "crownMolding": "Crown Molding",
+    "polygon": "Polygon Joint"
   }
 }

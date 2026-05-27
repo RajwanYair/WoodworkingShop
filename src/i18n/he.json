@@ -1843,5 +1843,21 @@
     "weight": "משקל משוער",
     "linearFeet": "רגל ליניארי",
     "nominalToActual": "נומינלי → בפועל"
+  },
+  "miterAngle": {
+    "title": "מחשבון זווית גוניה",
+    "polygonSides": "מספר צלעות",
+    "miterAngle": "זווית גוניה",
+    "interiorAngle": "זווית פנימית",
+    "bevelAngle": "זווית שיפוע",
+    "tiltAngle": "זווית הטיה",
+    "cornerAngle": "זווית פינה",
+    "springAngle": "זווית קפיץ",
+    "wallAngle": "זווית קיר",
+    "insideCorner": "פינה פנימית",
+    "outsideCorner": "פינה חיצונית",
+    "compound": "גוניה מורכבת",
+    "crownMolding": "פרופיל כתר",
+    "polygon": "חיבור מצולע"
   }
 }
