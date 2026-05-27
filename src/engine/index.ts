@@ -950,3 +950,28 @@ export type {
   ScheduleMetrics,
   IdGenerator,
 } from './production-schedule';
+
+// Sprint 168 — Nesting pattern library (Phase 37)
+export {
+  createLibrary,
+  createPattern,
+  addPattern,
+  removePattern,
+  findBySheet,
+  findByCategory,
+  findByTag,
+  scorePatterns,
+  getCategories,
+  getTags,
+  getLibraryStats,
+  MAX_PATTERNS,
+  MAX_PLACEMENTS,
+  LIBRARY_VERSION,
+} from './nesting-patterns';
+export type {
+  PatternPlacement,
+  NestingPattern,
+  DemandItem,
+  PatternMatchScore,
+  PatternLibrary,
+} from './nesting-patterns';

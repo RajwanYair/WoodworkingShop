@@ -1385,5 +1385,23 @@
     "crash": "Compress Task",
     "noTasks": "No tasks scheduled yet.",
     "scheduleReady": "Schedule computed successfully."
+  },
+  "nestingPatterns": {
+    "title": "Nesting Pattern Library",
+    "pattern": "Pattern",
+    "patterns": "Patterns",
+    "category": "Category",
+    "tags": "Tags",
+    "fillRate": "Fill Rate",
+    "placements": "Placements",
+    "sheetSize": "Sheet Size",
+    "addPattern": "Save Pattern",
+    "removePattern": "Remove Pattern",
+    "findBySheet": "Find by Sheet",
+    "score": "Match Score",
+    "waste": "Waste",
+    "noPatterns": "No patterns saved yet.",
+    "patternSaved": "Pattern saved to library.",
+    "bestMatch": "Best Match"
   }
 }

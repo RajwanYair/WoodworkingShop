@@ -1385,5 +1385,23 @@
     "crash": "דחס משימה",
     "noTasks": "אין עדיין משימות מתוזמנות.",
     "scheduleReady": "לוח הזמנים חושב בהצלחה."
+  },
+  "nestingPatterns": {
+    "title": "ספריית תבניות קינון",
+    "pattern": "תבנית",
+    "patterns": "תבניות",
+    "category": "קטגוריה",
+    "tags": "תגיות",
+    "fillRate": "אחוז מילוי",
+    "placements": "מיקומים",
+    "sheetSize": "גודל לוח",
+    "addPattern": "שמור תבנית",
+    "removePattern": "הסר תבנית",
+    "findBySheet": "חפש לפי לוח",
+    "score": "ציון התאמה",
+    "waste": "פחת",
+    "noPatterns": "אין עדיין תבניות שמורות.",
+    "patternSaved": "התבנית נשמרה בספרייה.",
+    "bestMatch": "התאמה טובה ביותר"
   }
 }
