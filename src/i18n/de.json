@@ -1589,5 +1589,23 @@
     "boardThickness": "Board Thickness",
     "edgeClearance": "Edge Clearance",
     "dowelLength": "Dowel Length"
+  },
+  "panelLabel": {
+    "title": "Panel Labels",
+    "partId": "Part ID",
+    "dimensions": "Dimensions",
+    "material": "Material",
+    "grain": "Grain Direction",
+    "grainHorizontal": "Horizontal",
+    "grainVertical": "Vertical",
+    "grainNone": "None",
+    "cabinet": "Cabinet",
+    "position": "Position",
+    "edgeBanding": "Edge Banding",
+    "quantity": "Quantity",
+    "notes": "Notes",
+    "totalPieces": "Total Pieces",
+    "uniqueParts": "Unique Parts",
+    "materials": "Materials Used"
   }
 }

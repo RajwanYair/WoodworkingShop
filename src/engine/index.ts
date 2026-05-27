@@ -1233,3 +1233,7 @@ export type {
 // Sprint 193 — Dowel Joint Calculator
 export { calculateDowelJoint, selectDowelDiameter, minDowelsForLoad, STANDARD_DOWEL_DIAMETERS } from './dowel-joint';
 export type { DowelDiameter, JointOrientation, DowelJointInput, DowelPosition, DowelJointResult } from './dowel-joint';
+
+// Sprint 194 — Panel Layout Label Generator
+export { generatePanelLabel, generateLabelBatch, formatLabelText } from './panel-label';
+export type { BandedEdge, PanelLabelInput, PanelLabel, PanelLabelBatch } from './panel-label';

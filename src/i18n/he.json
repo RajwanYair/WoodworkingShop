@@ -1736,5 +1736,23 @@
     "boardThickness": "עובי הלוח",
     "edgeClearance": "מרחק מקצה",
     "dowelLength": "אורך דיבל"
+  },
+  "panelLabel": {
+    "title": "תוויות לוחות",
+    "partId": "מזהה חלק",
+    "dimensions": "מימדים",
+    "material": "חומר",
+    "grain": "כיוון סיבים",
+    "grainHorizontal": "אופקי",
+    "grainVertical": "אנכי",
+    "grainNone": "ללא",
+    "cabinet": "ארון",
+    "position": "מיקום",
+    "edgeBanding": "פס קצה",
+    "quantity": "כמות",
+    "notes": "הערות",
+    "totalPieces": "סה״כ חלקים",
+    "uniqueParts": "חלקים ייחודיים",
+    "materials": "חומרים בשימוש"
   }
 }
