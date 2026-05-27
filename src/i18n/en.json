@@ -1774,5 +1774,22 @@
     "buttJoint": "Butt Joint",
     "mitreJoint": "Mitre Joint",
     "edgeJoint": "Edge Joint"
+  },
+  "veneer": {
+    "title": "Veneer Calculator",
+    "sheetsRequired": "Sheets Required",
+    "stripsPerPanel": "Strips per Panel",
+    "stripWidth": "Strip Width",
+    "totalArea": "Total Area",
+    "waste": "Waste",
+    "adhesiveArea": "Adhesive Area",
+    "adhesiveVolume": "Adhesive Volume",
+    "pressTime": "Press Time",
+    "matchPattern": "Match Pattern",
+    "bookMatch": "Book Match",
+    "slipMatch": "Slip Match",
+    "random": "Random",
+    "bothFaces": "Both Faces",
+    "trimAllowance": "Trim Allowance"
   }
 }

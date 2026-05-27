@@ -1241,3 +1241,7 @@ export type { BandedEdge, PanelLabelInput, PanelLabel, PanelLabelBatch } from '.
 // Sprint 195 — Pocket Hole Joinery Calculator
 export { calculatePocketHole, selectScrewLength, selectThreadType, POCKET_SCREW_LENGTHS } from './pocket-hole';
 export type { ScrewHeadType, JointType, PocketHoleInput, PocketHoleResult } from './pocket-hole';
+
+// Sprint 196 — Veneer Calculator
+export { calculateVeneer, bestSheetForPanel, VENEER_THICKNESSES, STANDARD_VENEER_SHEETS } from './veneer-calc';
+export type { VeneerMatchPattern, VeneerSheetSize, VeneerInput, VeneerResult } from './veneer-calc';

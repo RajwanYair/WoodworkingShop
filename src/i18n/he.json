@@ -1774,5 +1774,22 @@
     "buttJoint": "חיבור צדי",
     "mitreJoint": "חיבור גרונג",
     "edgeJoint": "חיבור קצה"
+  },
+  "veneer": {
+    "title": "מחשבון פורניר",
+    "sheetsRequired": "גיליונות נדרשים",
+    "stripsPerPanel": "רצועות ללוח",
+    "stripWidth": "רוחב רצועה",
+    "totalArea": "שטח כולל",
+    "waste": "פחת",
+    "adhesiveArea": "שטח דבק",
+    "adhesiveVolume": "נפח דבק",
+    "pressTime": "זמן לחיצה",
+    "matchPattern": "דפוס התאמה",
+    "bookMatch": "התאמת ספר",
+    "slipMatch": "התאמת החלקה",
+    "random": "אקראי",
+    "bothFaces": "שני צדדים",
+    "trimAllowance": "תוספת חיתוך"
   }
 }
