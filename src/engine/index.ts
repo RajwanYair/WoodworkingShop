@@ -304,6 +304,17 @@ export {
 export type { WebSerialState, WebSerialProfile, SerialPortHandle } from './webserial';
 export { MACHINE_PROFILES, MACHINE_PROFILE_IDS, getMachineProfile, getDefaultMachineProfile } from './machine-profiles';
 export type { MachineProfile, MachineProfileId, ControllerFirmware, SpindleHint } from './machine-profiles';
+export { extractToolSetup, generateMachiningJob, validateMachiningJob, resetIdCounter } from './machining-job';
+export type {
+  OperationType,
+  MachiningOperation,
+  ToolSetup,
+  MachinablePart,
+  DadoSpec,
+  DrillHoleSpec,
+  MachiningJob,
+  JobOptions,
+} from './machining-job';
 export { CATALOG_SCHEMA_VERSION, parseCommunityMaterial, validateCommunityCatalog } from './community-catalog';
 export type { CommunityMaterial, CommunityCatalog, CatalogCurrencyCode } from './community-catalog';
 export {

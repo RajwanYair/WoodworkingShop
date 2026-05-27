@@ -1183,5 +1183,26 @@
     "violation": "Clearance violation: {{side}} of {{appliance}} — {{shortfall}} mm short",
     "allClear": "All appliance clearances satisfied.",
     "checkClearances": "Check Clearances"
+  },
+  "machining": {
+    "title": "Machining Job",
+    "generateJob": "Generate Machining Job",
+    "sendToMachine": "Send to Machine",
+    "profileCut": "Profile Cut",
+    "dado": "Dado",
+    "rabbet": "Rabbet",
+    "drill": "Drill",
+    "pocket": "Pocket",
+    "totalTime": "Estimated Time",
+    "totalPasses": "Total Passes",
+    "operations": "Operations",
+    "toolSetup": "Tool Setup",
+    "toolDiameter": "Tool Diameter",
+    "passDepth": "Pass Depth",
+    "feedRate": "Feed Rate",
+    "spindleRpm": "Spindle RPM",
+    "jobValid": "Job validated — ready to send.",
+    "jobErrors": "Job has {{count}} error(s).",
+    "noMachine": "No machine profile selected."
   }
 }

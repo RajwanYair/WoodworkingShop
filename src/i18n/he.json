@@ -1183,5 +1183,26 @@
     "violation": "הפרת מרווח: {{side}} של {{appliance}} — חסרים {{shortfall}} מ\"מ",
     "allClear": "כל מרווחי המכשירים תקינים.",
     "checkClearances": "בדוק מרווחים"
+  },
+  "machining": {
+    "title": "עבודת עיבוד שבבית",
+    "generateJob": "צור עבודת עיבוד",
+    "sendToMachine": "שלח למכונה",
+    "profileCut": "חיתוך מתאר",
+    "dado": "חריץ",
+    "rabbet": "שפה",
+    "drill": "קדיחה",
+    "pocket": "כיס",
+    "totalTime": "זמן משוער",
+    "totalPasses": "סה\"כ מעברים",
+    "operations": "פעולות",
+    "toolSetup": "הגדרת כלי",
+    "toolDiameter": "קוטר כלי",
+    "passDepth": "עומק מעבר",
+    "feedRate": "מהירות הזנה",
+    "spindleRpm": "סל\"ד ציר",
+    "jobValid": "עבודה תקינה — מוכנה לשליחה.",
+    "jobErrors": "לעבודה {{count}} שגיאות.",
+    "noMachine": "לא נבחר פרופיל מכונה."
   }
 }
