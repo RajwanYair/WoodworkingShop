@@ -1178,3 +1178,13 @@ export type {
   HardwareCostLine,
   HardwareCostSummary,
 } from './hardware-catalog';
+
+export { compareProjects, bestForCriterion, percentDifference, DEFAULT_WEIGHTS } from './project-comparison';
+
+export type {
+  ProjectMetrics,
+  ComparisonWeights,
+  NormalisedScores,
+  ProjectScore,
+  ComparisonResult,
+} from './project-comparison';

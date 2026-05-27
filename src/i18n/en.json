@@ -1645,5 +1645,20 @@
     "noItems": "No hardware items found.",
     "addItem": "Add Item",
     "editItem": "Edit Item"
+  },
+  "projectComparison": {
+    "title": "Project Comparison",
+    "score": "Score",
+    "rank": "Rank",
+    "best": "Best",
+    "worst": "Worst",
+    "cost": "Cost",
+    "waste": "Waste",
+    "buildTime": "Build Time",
+    "materials": "Materials",
+    "parts": "Parts",
+    "sheets": "Sheets",
+    "weights": "Weights",
+    "noProjects": "Add at least 2 projects to compare."
   }
 }
