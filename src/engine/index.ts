@@ -1111,3 +1111,13 @@ export type {
   PriceTrend,
   ProjectCostResult,
 } from './material-cost-tracker';
+
+export { checkStock, analyzeInventory, projectUsage, generateReorderList } from './shop-inventory';
+export type {
+  InventoryItem,
+  StockStatus,
+  StockCheck,
+  ProjectUsage,
+  UsageProjection,
+  InventoryAnalysisResult,
+} from './shop-inventory';

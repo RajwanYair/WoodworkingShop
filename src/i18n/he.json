@@ -1586,5 +1586,19 @@
     "noPrice": "אין נתוני מחיר.",
     "currency": "מטבע",
     "perUnit": "ליחידה"
+  },
+  "shopInventory": {
+    "title": "מלאי סדנה",
+    "stock": "מלאי",
+    "inStock": "במלאי",
+    "lowStock": "מלאי נמוך",
+    "outOfStock": "אזל",
+    "reorderLevel": "רמת הזמנה",
+    "reorderList": "רשימת הזמנות",
+    "quantity": "כמות",
+    "available": "זמין",
+    "needed": "נדרש",
+    "canFulfil": "ניתן למלא",
+    "noItems": "אין פריטי מלאי."
   }
 }

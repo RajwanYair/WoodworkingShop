@@ -1413,5 +1413,33 @@
     "noPrice": "No price data available.",
     "currency": "Currency",
     "perUnit": "per unit"
+  },
+  "shopInventory": {
+    "title": "Shop Inventory",
+    "stock": "Stock",
+    "inStock": "In Stock",
+    "lowStock": "Low Stock",
+    "outOfStock": "Out of Stock",
+    "reorderLevel": "Reorder Level",
+    "reorderList": "Reorder List",
+    "quantity": "Quantity",
+    "available": "Available",
+    "needed": "Needed",
+    "canFulfil": "Can Fulfil",
+    "noItems": "No inventory items."
+  },
+  "shopInventory": {
+    "title": "Shop Inventory",
+    "stock": "Stock",
+    "inStock": "In Stock",
+    "lowStock": "Low Stock",
+    "outOfStock": "Out of Stock",
+    "reorderLevel": "Reorder Level",
+    "reorderList": "Reorder List",
+    "quantity": "Quantity",
+    "available": "Available",
+    "needed": "Needed",
+    "canFulfil": "Can Fulfil",
+    "noItems": "No inventory items."
   }
 }
