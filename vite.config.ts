@@ -5,6 +5,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import { resolve } from 'node:path';
 import { readFileSync } from 'node:fs';
 import os from 'node:os';
+import { sriPlugin } from './scripts/vite-plugin-sri';
 
 const { version } = JSON.parse(readFileSync('./package.json', 'utf-8')) as { version: string };
 
@@ -33,6 +34,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     cloudflareAnalyticsPlugin(),
+    sriPlugin(),
     VitePWA({
       registerType: 'prompt',
       strategies: 'generateSW',

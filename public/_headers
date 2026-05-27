@@ -16,7 +16,10 @@
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
+  X-XSS-Protection: 0
   Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), serial=(), hid=()
   Report-To: {"group":"csp-violations","max_age":86400,"endpoints":[{"url":"https://csp.cabinet-planner.workers.dev/report"}]}
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; worker-src 'self' blob:; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' blob: https://cdnjs.cloudflare.com https://cloudflareinsights.com https://csp.cabinet-planner.workers.dev; object-src 'none'; base-uri 'self'; form-action 'self'; report-to csp-violations; report-uri https://csp.cabinet-planner.workers.dev/report
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; worker-src 'self' blob:; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' blob: https://cdnjs.cloudflare.com https://cloudflareinsights.com https://csp.cabinet-planner.workers.dev; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests; report-to csp-violations; report-uri https://csp.cabinet-planner.workers.dev/report
