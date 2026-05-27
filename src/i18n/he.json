@@ -1521,5 +1521,24 @@
     "averageWaste": "פחת ממוצע",
     "recommendation": "המלצה",
     "noSheets": "לא הוגדרו גדלי לוח."
+  },
+  "maintenanceScheduler": {
+    "title": "תזמון תחזוקה",
+    "schedule": "לוח זמנים",
+    "overdue": "באיחור",
+    "due": "הגיע הזמן",
+    "upcoming": "קרוב",
+    "completed": "הושלם",
+    "healthScore": "ציון בריאות",
+    "interval": "מרווח",
+    "hours": "שעות",
+    "days": "ימים",
+    "cuts": "חיתוכים",
+    "priority": "עדיפות",
+    "critical": "קריטי",
+    "high": "גבוהה",
+    "normal": "רגילה",
+    "low": "נמוכה",
+    "noRules": "לא הוגדרו כללי תחזוקה."
   }
 }

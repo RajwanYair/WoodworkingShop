@@ -1078,3 +1078,14 @@ export type {
   SheetPrediction,
   WastePredictionResult,
 } from './waste-predictor';
+
+export { generateMaintenanceSchedule, computeHealthScore, getMostUrgentPerTool } from './maintenance-scheduler';
+export type {
+  IntervalUnit,
+  MaintenancePriority,
+  MaintenanceStatus,
+  MaintenanceRule,
+  ToolUsageState,
+  MaintenanceEvent,
+  MaintenanceScheduleResult,
+} from './maintenance-scheduler';

@@ -1521,5 +1521,24 @@
     "averageWaste": "Average Waste",
     "recommendation": "Recommendation",
     "noSheets": "No sheet sizes configured."
+  },
+  "maintenanceScheduler": {
+    "title": "Maintenance Scheduler",
+    "schedule": "Schedule",
+    "overdue": "Overdue",
+    "due": "Due",
+    "upcoming": "Upcoming",
+    "completed": "Completed",
+    "healthScore": "Health Score",
+    "interval": "Interval",
+    "hours": "Hours",
+    "days": "Days",
+    "cuts": "Cuts",
+    "priority": "Priority",
+    "critical": "Critical",
+    "high": "High",
+    "normal": "Normal",
+    "low": "Low",
+    "noRules": "No maintenance rules configured."
   }
 }
