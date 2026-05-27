@@ -1455,5 +1455,20 @@
     "inadequate": "מערכת קטנה מדי",
     "warnings": "אזהרות",
     "noMachines": "לא נוספו מכונות."
+  },
+  "cutListGrouping": {
+    "title": "קיבוץ רשימת חיתוך",
+    "group": "קבוצה",
+    "groups": "קבוצות",
+    "criteria": "קריטריוני קיבוץ",
+    "material": "חומר",
+    "thickness": "עובי",
+    "grain": "כיוון סיב",
+    "cabinet": "ארון",
+    "totalCuts": "סה״כ חיתוכים",
+    "totalArea": "שטח כולל",
+    "toolChanges": "החלפות כלי",
+    "mergeFlexible": "מזג גמישי סיב",
+    "noGroups": "לא נוצרו קבוצות."
   }
 }

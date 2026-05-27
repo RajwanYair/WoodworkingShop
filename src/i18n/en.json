@@ -1455,5 +1455,20 @@
     "inadequate": "System Undersized",
     "warnings": "Warnings",
     "noMachines": "No machines added."
+  },
+  "cutListGrouping": {
+    "title": "Cut-List Grouping",
+    "group": "Group",
+    "groups": "Groups",
+    "criteria": "Grouping Criteria",
+    "material": "Material",
+    "thickness": "Thickness",
+    "grain": "Grain Direction",
+    "cabinet": "Cabinet",
+    "totalCuts": "Total Cuts",
+    "totalArea": "Total Area",
+    "toolChanges": "Tool Changes",
+    "mergeFlexible": "Merge Grain-Flexible",
+    "noGroups": "No groups generated."
   }
 }

@@ -1040,3 +1040,13 @@ export type {
   MachineAirflow,
   CollectorSpec,
 } from './dust-collection';
+
+// Sprint 173 — Cut-list grouping engine
+export {
+  buildGroupKey,
+  buildGroupLabel,
+  groupParts,
+  mergeGrainFlexible,
+  estimateToolChanges,
+} from './cut-list-grouping';
+export type { GrainDirection, CutPart, GroupingCriterion, CutGroup, GroupingResult } from './cut-list-grouping';
