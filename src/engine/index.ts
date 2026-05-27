@@ -1098,3 +1098,6 @@ export {
   analyzeLayout,
 } from './layout-optimizer';
 export type { ToolPosition, WorkflowStep, SwapSuggestion, LayoutAnalysisResult } from './layout-optimizer';
+
+export { getSkillMultiplier, getBaseMinutes, estimateTaskTime, estimateProjectTime } from './time-estimator';
+export type { SkillLevel, OperationType, ProjectTask, TaskEstimate, TimeEstimationResult } from './time-estimator';

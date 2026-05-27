@@ -1551,5 +1551,26 @@
     "improvement": "שיפור",
     "noSuggestions": "הפריסה כבר אופטימלית.",
     "metres": "מ'"
+  },
+  "timeEstimator": {
+    "title": "אומדן זמן",
+    "totalTime": "זמן כולל",
+    "criticalPath": "נתיב קריטי",
+    "hours": "שעות",
+    "minutes": "דקות",
+    "skillLevel": "רמת מיומנות",
+    "beginner": "מתחיל",
+    "intermediate": "בינוני",
+    "expert": "מומחה",
+    "cutting": "חיתוך",
+    "edgeBanding": "פס קצה",
+    "drilling": "קדיחה",
+    "assembly": "הרכבה",
+    "sanding": "ליטוש",
+    "finishing": "גימור",
+    "hardware": "התקנת פרזול",
+    "parallel": "משימות מקבילות",
+    "sequential": "משימות סדרתיות",
+    "noTasks": "לא הוגדרו משימות פרויקט."
   }
 }
