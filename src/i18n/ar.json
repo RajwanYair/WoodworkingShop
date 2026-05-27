@@ -1022,5 +1022,28 @@
     "revoked": "Revoked",
     "active": "Active",
     "noLinks": "No share links yet."
+  },
+  "parametricTemplate": {
+    "title": "Parametric Templates",
+    "create": "Create Template",
+    "edit": "Edit Template",
+    "instantiate": "Generate from Template",
+    "parameters": "Parameters",
+    "constraints": "Constraints",
+    "rules": "Rules",
+    "computed": "Computed Fields",
+    "preview": "Preview",
+    "min": "Minimum",
+    "max": "Maximum",
+    "step": "Step",
+    "default": "Default",
+    "unit": "Unit",
+    "condition": "Condition",
+    "expression": "Expression",
+    "validate": "Validate",
+    "valid": "Template is valid.",
+    "invalid": "Template has errors.",
+    "category": "Category",
+    "version": "Version"
   }
 }

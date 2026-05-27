@@ -831,3 +831,32 @@ export type {
   ShareSummary,
   TokenGenerator,
 } from './project-sharing';
+
+// Sprint 162 — Parametric Template Engine (Phase 36)
+export {
+  validateTemplate,
+  instantiateTemplate,
+  getDefaultValues,
+  getParamDependencies,
+  evaluateExpression,
+  MAX_PARAMS,
+  MAX_RULES,
+  MAX_COMPUTED,
+  MAX_EXPRESSION_LENGTH,
+} from './parametric-template';
+export type {
+  ParamType,
+  NumberConstraint,
+  ParamDefBase,
+  NumberParamDef,
+  BooleanParamDef,
+  ChoiceParamDef,
+  ParamDef,
+  ConditionalRule,
+  ComputedField,
+  ParametricTemplate,
+  ParamValues,
+  TemplateInstance,
+  TemplateValidationError,
+  TemplateValidationResult,
+} from './parametric-template';

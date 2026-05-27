@@ -1286,5 +1286,28 @@
     "revoked": "בוטל",
     "active": "פעיל",
     "noLinks": "אין קישורי שיתוף עדיין."
+  },
+  "parametricTemplate": {
+    "title": "תבניות פרמטריות",
+    "create": "צור תבנית",
+    "edit": "ערוך תבנית",
+    "instantiate": "צור מתבנית",
+    "parameters": "פרמטרים",
+    "constraints": "אילוצים",
+    "rules": "כללים",
+    "computed": "שדות מחושבים",
+    "preview": "תצוגה מקדימה",
+    "min": "מינימום",
+    "max": "מקסימום",
+    "step": "צעד",
+    "default": "ברירת מחדל",
+    "unit": "יחידה",
+    "condition": "תנאי",
+    "expression": "ביטוי",
+    "validate": "אימות",
+    "valid": "התבנית תקינה.",
+    "invalid": "התבנית מכילה שגיאות.",
+    "category": "קטגוריה",
+    "version": "גרסה"
   }
 }
