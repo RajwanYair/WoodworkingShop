@@ -1,7 +1,7 @@
 # Roadmap
 
-> **Last strategic review**: 2026-06-10 · **Current version**: 5.9.0
-> **Next target**: v5.10.0 (Phase 34 — Room Planner v2 & Community Catalog)
+> **Last strategic review**: 2026-06-10 · **Current version**: 5.10.0
+> **Next target**: v5.11.0 (Phase 35 — TBD)
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's

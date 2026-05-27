@@ -9,6 +9,49 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.10.0] — 2026-06-10
+
+### Phase 34 — Room Planner v2 & Community Catalog (Sprints 152–156)
+
+#### Sprint 152 — Room Planner v2
+
+- New engine module `room-planner.ts` with pure functions for full-room layout
+- Wall segments: generate, add, remove, update with opening support
+- Snap-to-wall with configurable proximity threshold (50 mm default)
+- Collision detection (AABB overlap) for cabinet footprints
+- Wall occupancy and floor utilisation calculations
+- Enhanced `room-store.ts` with wall CRUD and snap actions
+
+#### Sprint 153 — Manufacturer Embedding API
+
+- New engine module `manufacturer-catalog.ts` with typed v2.0 schema
+- Validate manufacturer info, material entries, and full catalog submissions
+- Material filtering by region, category, thickness, and availability
+- Catalog merging with namespaced SKU prefixes (manufacturer/sku)
+- HTTPS-only validation for logo and product URLs
+
+#### Sprint 154 — Appliance Clearance Zone Validation
+
+- New engine module `appliance-clearance.ts` for safety clearance checks
+- Standard clearances for 5 appliance types (oven, dishwasher, refrigerator, cooktop, microwave)
+- 6-directional gap validation (top, bottom, left, right, rear, front/door-swing)
+- Custom clearance overrides per appliance instance
+- Aggregate validation across all appliances in a layout
+
+#### Sprint 155 — Cabinet-to-Machining Center Direct Link
+
+- New engine module `machining-job.ts` bridging cut optimizer → CNC controller
+- Generate complete machining jobs from placed parts
+- Operation types: profile-cut, dado, rabbet, drill, pocket
+- Time estimation per operation (accounts for multiple passes, plunge, retract)
+- Job validation (bounds, tool diameter vs dado width)
+- Integrates with existing `machine-profiles.ts` via `extractToolSetup()`
+
+#### Sprint 156 — Release v5.10.0
+
+- Version bump to 5.10.0
+- CHANGELOG, ROADMAP, and copilot-instructions updates
+
 ## [5.9.0] — 2026-06-10
 
 ### Phase 33 — Production Infrastructure & Observability (Sprints 147–151)
