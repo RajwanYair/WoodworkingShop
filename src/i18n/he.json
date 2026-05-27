@@ -2083,5 +2083,23 @@
     "epoxy": "אפוקסי",
     "hideGlue": "דבק עור",
     "caGlue": "CA (דבק מהיר)"
+  },
+  "bandsawSpeed": {
+    "title": "מחשבון מהירות משור סרט",
+    "wheelDiameter": "קוטר גלגל",
+    "wheelRpm": "סל״ד גלגל",
+    "material": "חומר",
+    "cutThickness": "עובי חיתוך",
+    "bladeWidth": "רוחב להב",
+    "toothType": "סוג שן",
+    "bladeSfpm": "מהירות להב (SFPM)",
+    "bladeMetersPerMin": "מהירות להב (מ׳/דקה)",
+    "recommendedRange": "טווח מומלץ",
+    "isOptimal": "מהירות אופטימלית",
+    "recommendedTpi": "TPI מומלץ",
+    "feedRate": "קצב הזנה",
+    "regular": "רגיל",
+    "skip": "דילוג",
+    "hook": "וו"
   }
 }

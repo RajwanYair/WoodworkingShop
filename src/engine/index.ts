@@ -1346,3 +1346,7 @@ export type { WoodHardness, ScrewGauge, PilotHoleInput, PilotHoleResult } from '
 // Sprint 212 — Glue-up Time Calculator
 export { calculateGlueUpTime } from './glue-up-time';
 export type { GlueType, GlueUpInput, GlueUpResult } from './glue-up-time';
+
+// Sprint 213 — Bandsaw Blade Speed Calculator
+export { calculateBandsawSpeed } from './bandsaw-speed';
+export type { BandsawMaterial, BladeToothType, BandsawSpeedInput, BandsawSpeedResult } from './bandsaw-speed';

@@ -1924,5 +1924,23 @@
     "epoxy": "Epoxy",
     "hideGlue": "Hide Glue",
     "caGlue": "CA (Super Glue)"
+  },
+  "bandsawSpeed": {
+    "title": "Bandsaw Blade Speed Calculator",
+    "wheelDiameter": "Wheel Diameter",
+    "wheelRpm": "Wheel RPM",
+    "material": "Material",
+    "cutThickness": "Cut Thickness",
+    "bladeWidth": "Blade Width",
+    "toothType": "Tooth Type",
+    "bladeSfpm": "Blade Speed (SFPM)",
+    "bladeMetersPerMin": "Blade Speed (m/min)",
+    "recommendedRange": "Recommended Range",
+    "isOptimal": "Speed Optimal",
+    "recommendedTpi": "Recommended TPI",
+    "feedRate": "Feed Rate",
+    "regular": "Regular",
+    "skip": "Skip",
+    "hook": "Hook"
   }
 }
