@@ -1245,3 +1245,7 @@ export type { ScrewHeadType, JointType, PocketHoleInput, PocketHoleResult } from
 // Sprint 196 — Veneer Calculator
 export { calculateVeneer, bestSheetForPanel, VENEER_THICKNESSES, STANDARD_VENEER_SHEETS } from './veneer-calc';
 export type { VeneerMatchPattern, VeneerSheetSize, VeneerInput, VeneerResult } from './veneer-calc';
+
+// Sprint 197 — Clamp Pressure Calculator
+export { calculateClampPressure, isPressureAdequate, GLUE_PRESSURE_PSI, CLAMP_FORCE_LBS } from './clamp-pressure';
+export type { GlueType, ClampType, ClampPressureInput, ClampPressureResult } from './clamp-pressure';

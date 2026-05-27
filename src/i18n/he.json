@@ -1791,5 +1791,22 @@
     "random": "אקראי",
     "bothFaces": "שני צדדים",
     "trimAllowance": "תוספת חיתוך"
+  },
+  "clampPressure": {
+    "title": "מחשבון לחץ הידוק",
+    "clampCount": "מלחצים נדרשים",
+    "totalForce": "כוח כולל",
+    "achievedPressure": "לחץ מושג",
+    "targetPressure": "לחץ יעד",
+    "spacing": "מרווח מלחצים",
+    "openTime": "זמן פתוח",
+    "clampTime": "זמן הידוק",
+    "glueType": "סוג דבק",
+    "clampType": "סוג מלחץ",
+    "pva": "דבק עץ (PVA)",
+    "polyurethane": "פוליאוריתן",
+    "epoxy": "אפוקסי",
+    "hide": "דבק עור",
+    "contact": "דבק מגע"
   }
 }

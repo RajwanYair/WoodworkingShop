@@ -1791,5 +1791,22 @@
     "random": "Random",
     "bothFaces": "Both Faces",
     "trimAllowance": "Trim Allowance"
+  },
+  "clampPressure": {
+    "title": "Clamp Pressure Calculator",
+    "clampCount": "Clamps Required",
+    "totalForce": "Total Force",
+    "achievedPressure": "Achieved Pressure",
+    "targetPressure": "Target Pressure",
+    "spacing": "Clamp Spacing",
+    "openTime": "Open Time",
+    "clampTime": "Clamp Time",
+    "glueType": "Glue Type",
+    "clampType": "Clamp Type",
+    "pva": "PVA (Wood Glue)",
+    "polyurethane": "Polyurethane",
+    "epoxy": "Epoxy",
+    "hide": "Hide Glue",
+    "contact": "Contact Cement"
   }
 }
