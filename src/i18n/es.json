@@ -1679,5 +1679,22 @@
     "spade": "Spade Bit",
     "holeSaw": "Hole Saw",
     "countersink": "Countersink"
+  },
+  "boardFeet": {
+    "title": "Board-Feet Calculator",
+    "boardFeet": "Board Feet",
+    "totalBoardFeet": "Total Board Feet",
+    "thickness": "Thickness",
+    "width": "Width",
+    "length": "Length",
+    "quantity": "Quantity",
+    "useNominal": "Use Nominal Dimensions",
+    "species": "Wood Species",
+    "costPerBf": "Cost per BF",
+    "estimatedCost": "Estimated Cost",
+    "volume": "Volume",
+    "weight": "Estimated Weight",
+    "linearFeet": "Linear Feet",
+    "nominalToActual": "Nominal → Actual"
   }
 }

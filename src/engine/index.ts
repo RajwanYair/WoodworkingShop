@@ -1253,3 +1253,7 @@ export type { GlueType, ClampType, ClampPressureInput, ClampPressureResult } fro
 // Sprint 198 — Drill Press Speed Calculator
 export { calculateDrillSpeed, maxBitDiameter, MATERIAL_SFM, BIT_TYPE_FACTOR } from './drill-speed';
 export type { DrillBitType, DrillMaterial, DrillSpeedInput, DrillSpeedResult } from './drill-speed';
+
+// Sprint 199 — Board-Feet Calculator
+export { calculateBoardFeet, linearFeetToBoardFeet, NOMINAL_TO_ACTUAL, SPECIES_COST_PER_BF } from './board-feet';
+export type { BoardFeetInput, BoardFeetResult } from './board-feet';

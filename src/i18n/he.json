@@ -1826,5 +1826,22 @@
     "spade": "מקדח שטוח",
     "holeSaw": "מסור כוס",
     "countersink": "משקע"
+  },
+  "boardFeet": {
+    "title": "מחשבון רגל-לוח",
+    "boardFeet": "רגל לוח",
+    "totalBoardFeet": "סה״כ רגל לוח",
+    "thickness": "עובי",
+    "width": "רוחב",
+    "length": "אורך",
+    "quantity": "כמות",
+    "useNominal": "השתמש במידות נומינליות",
+    "species": "סוג עץ",
+    "costPerBf": "עלות לרגל לוח",
+    "estimatedCost": "עלות משוערת",
+    "volume": "נפח",
+    "weight": "משקל משוער",
+    "linearFeet": "רגל ליניארי",
+    "nominalToActual": "נומינלי → בפועל"
   }
 }
