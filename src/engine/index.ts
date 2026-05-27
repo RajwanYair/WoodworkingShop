@@ -1121,3 +1121,14 @@ export type {
   UsageProjection,
   InventoryAnalysisResult,
 } from './shop-inventory';
+
+export { getTemplate, getTemplatesByCategory, instantiateTemplate, BUILT_IN_TEMPLATES } from './cabinet-templates';
+
+export type {
+  CabinetCategory,
+  DimensionConstraint,
+  CabinetTemplate,
+  ValidationError,
+  TemplateParams,
+  TemplateInstance,
+} from './cabinet-templates';
