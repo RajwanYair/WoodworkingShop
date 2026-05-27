@@ -1874,5 +1874,25 @@
     "doubleRow": "שורה כפולה",
     "totalPins": "סה״כ פינים נדרשים",
     "pinsPerShelf": "פינים למדף"
+  },
+  "drawerSlide": {
+    "title": "מחשבון מגלש מגירה",
+    "boxWidth": "רוחב תיבת מגירה",
+    "boxHeight": "גובה תיבת מגירה",
+    "boxDepth": "עומק תיבת מגירה",
+    "openingWidth": "רוחב פתח",
+    "openingHeight": "גובה פתח",
+    "cabinetDepth": "עומק ארון",
+    "mountStyle": "סגנון הרכבה",
+    "sideMount": "הרכבה צדית",
+    "underMount": "הרכבה תחתונה",
+    "centerMount": "הרכבה מרכזית",
+    "extension": "סוג הארכה",
+    "fullExtension": "הארכה מלאה",
+    "threeQuarter": "שלושה רבעים",
+    "overTravel": "הארכה יתרה",
+    "clearance": "מרווח לצד",
+    "slideLength": "אורך מגלש מומלץ",
+    "totalGap": "מרווח אופקי כולל"
   }
 }

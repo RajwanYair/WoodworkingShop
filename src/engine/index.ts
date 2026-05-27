@@ -1272,3 +1272,13 @@ export type {
 // Sprint 201 — Shelf Pin Spacing Calculator
 export { calculateShelfPins, totalPinsNeeded, SHELF_PIN_DIAMETERS } from './shelf-pin';
 export type { ShelfPinDiameter, PinPatternStyle, ShelfPinInput, PinHole, ShelfPinResult } from './shelf-pin';
+
+// Sprint 202 — Drawer Slide Calculator
+export { calculateDrawerSlide, findRecommendedSlideLength, STANDARD_SLIDE_LENGTHS } from './drawer-slide';
+export type {
+  SlideMountStyle,
+  SlideExtension,
+  SlideLengthMm,
+  DrawerSlideInput,
+  DrawerSlideResult,
+} from './drawer-slide';

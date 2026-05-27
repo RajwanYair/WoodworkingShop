@@ -1727,5 +1727,25 @@
     "doubleRow": "Double Row",
     "totalPins": "Total Pins Needed",
     "pinsPerShelf": "Pins per Shelf"
+  },
+  "drawerSlide": {
+    "title": "Drawer Slide Calculator",
+    "boxWidth": "Drawer Box Width",
+    "boxHeight": "Drawer Box Height",
+    "boxDepth": "Drawer Box Depth",
+    "openingWidth": "Opening Width",
+    "openingHeight": "Opening Height",
+    "cabinetDepth": "Cabinet Depth",
+    "mountStyle": "Mount Style",
+    "sideMount": "Side Mount",
+    "underMount": "Under Mount",
+    "centerMount": "Center Mount",
+    "extension": "Extension Type",
+    "fullExtension": "Full Extension",
+    "threeQuarter": "Three-Quarter",
+    "overTravel": "Over Travel",
+    "clearance": "Clearance per Side",
+    "slideLength": "Recommended Slide Length",
+    "totalGap": "Total Horizontal Gap"
   }
 }
