@@ -2022,5 +2022,20 @@
     "butt": "קצה מול קצה",
     "miter": "מיטר",
     "auto": "אוטומטי"
+  },
+  "sandingProgression": {
+    "title": "מתכנן התקדמות שיוף",
+    "description": "תכנון רצף גריטים ואומדן מאמץ שיוף",
+    "startGrit": "גריט התחלה",
+    "targetGrit": "גריט יעד",
+    "area": "שטח",
+    "material": "חומר",
+    "finishTarget": "יעד גימור",
+    "gritSequence": "רצף גריטים",
+    "estimatedMinutes": "דקות משוערות",
+    "estimatedSheets": "כמות דפים משוערת",
+    "paint": "צבע",
+    "stain": "בייץ",
+    "clear": "שקוף"
   }
 }

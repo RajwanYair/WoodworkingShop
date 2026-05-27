@@ -1325,3 +1325,12 @@ export type {
   BiscuitPosition,
   BiscuitJointResult,
 } from './biscuit-joint';
+
+// Sprint 209 — Sanding Progression Planner
+export { planSandingProgression, SANDING_GRITS } from './sanding-progression';
+export type {
+  SandingMaterial,
+  FinishTarget,
+  SandingProgressionInput,
+  SandingProgressionResult,
+} from './sanding-progression';

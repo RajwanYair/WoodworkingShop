@@ -1863,5 +1863,20 @@
     "butt": "Butt",
     "miter": "Miter",
     "auto": "Auto"
+  },
+  "sandingProgression": {
+    "title": "Sanding Progression Planner",
+    "description": "Plan grit sequence and estimate sanding effort",
+    "startGrit": "Start Grit",
+    "targetGrit": "Target Grit",
+    "area": "Area",
+    "material": "Material",
+    "finishTarget": "Finish Target",
+    "gritSequence": "Grit Sequence",
+    "estimatedMinutes": "Estimated Minutes",
+    "estimatedSheets": "Estimated Sheets",
+    "paint": "Paint",
+    "stain": "Stain",
+    "clear": "Clear"
   }
 }
