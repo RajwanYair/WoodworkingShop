@@ -1309,5 +1309,26 @@
     "invalid": "התבנית מכילה שגיאות.",
     "category": "קטגוריה",
     "version": "גרסה"
+  },
+  "batchExport": {
+    "title": "ייצוא אצוותי",
+    "create": "צור אצווה",
+    "start": "התחל ייצוא",
+    "cancel": "בטל אצווה",
+    "progress": "התקדמות",
+    "completed": "הושלם",
+    "failed": "נכשל",
+    "pending": "ממתין",
+    "cancelled": "בוטל",
+    "format": "פורמט",
+    "priority": "עדיפות",
+    "high": "גבוהה",
+    "normal": "רגילה",
+    "low": "נמוכה",
+    "manifest": "מניפסט ייצוא",
+    "totalSize": "גודל כולל",
+    "duration": "משך",
+    "noItems": "לא נוספו פריטי ייצוא.",
+    "batchComplete": "הייצוא האצוותי הושלם."
   }
 }

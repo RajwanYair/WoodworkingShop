@@ -860,3 +860,31 @@ export type {
   TemplateValidationError,
   TemplateValidationResult,
 } from './parametric-template';
+
+// Sprint 163 — Batch Export Pipeline (Phase 36)
+export {
+  createBatchJob,
+  startNextItem,
+  recordSuccess,
+  recordFailure,
+  cancelBatch,
+  getBatchProgress,
+  generateManifest,
+  getItemsByFormat,
+  generateFileName,
+  MAX_BATCH_ITEMS,
+  MAX_CONCURRENT,
+} from './batch-export';
+export type {
+  ExportFormat,
+  ExportPriority,
+  ExportItemStatus,
+  BatchStatus,
+  ExportItemConfig,
+  ExportOptions,
+  ExportItemResult,
+  BatchExportJob,
+  BatchProgress,
+  ExportManifest,
+  IdGenerator,
+} from './batch-export';
