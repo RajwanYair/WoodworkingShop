@@ -2,6 +2,10 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import { useCabinetStore } from './store/cabinet-store.ts';
+import { initErrorReporter } from './services/error-reporter.ts';
+
+// Sprint 150 — wire global error/rejection handlers for privacy-first monitoring.
+initErrorReporter();
 
 // Sprint 124 — sync live OS dark-mode changes to the store when the user
 // has NOT explicitly saved a preference (savedPref === null means "use OS").

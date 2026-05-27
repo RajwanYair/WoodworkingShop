@@ -9,6 +9,8 @@ interface ImportMetaEnv {
   readonly VITE_ENABLE_WEBGL?: string;
   /** Phase 12 / Sprint 15 — Cloudflare Web Analytics beacon token (injected at build time). */
   readonly VITE_CF_ANALYTICS_TOKEN?: string;
+  /** Sprint 150 — Cloudflare Worker endpoint for privacy-first error reports. */
+  readonly VITE_ERROR_ENDPOINT?: string;
 }
 
 // ── Phase 13 / Sprint 7 — File Handling API (not yet in TypeScript standard lib) ──
