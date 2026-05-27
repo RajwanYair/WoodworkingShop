@@ -754,3 +754,31 @@ export {
   DEFAULT_QUEUE_CONFIG,
 } from './cnc-job-queue';
 export type { JobPriority, JobState, QueuedJob, QueueStats, QueueConfig, EnqueueResult } from './cnc-job-queue';
+
+// Sprint 158 — Cloud sync with E2E encryption (Phase 35)
+export {
+  createVectorClock,
+  incrementClock as incrementSyncClock,
+  mergeClocks,
+  compareClocks,
+  createEnvelope,
+  decryptEnvelope,
+  detectConflict,
+  validateEnvelope,
+  shouldAcceptRemote,
+  ENVELOPE_VERSION,
+  DEFAULT_CLOUD_SYNC_CONFIG,
+  MIN_KDF_ITERATIONS,
+  IV_LENGTH_BYTES,
+  SALT_LENGTH_BYTES,
+} from './cloud-sync';
+export type {
+  EncryptionAlgorithm,
+  KeyDerivationParams,
+  SyncEnvelope,
+  ClockComparison,
+  SyncConflict as CloudSyncConflict,
+  EnvelopeValidation,
+  CloudSyncConfig,
+  CryptoPort,
+} from './cloud-sync';

@@ -965,5 +965,21 @@
     "priorityLow": "Low",
     "position": "Position",
     "targetMachine": "Target Machine"
+  },
+  "cloudSync": {
+    "title": "Cloud Sync",
+    "encrypt": "Encrypt",
+    "decrypt": "Decrypt",
+    "passphrase": "Passphrase",
+    "passphraseHint": "At least 8 characters",
+    "syncing": "Syncing…",
+    "synced": "Synced",
+    "conflict": "Sync Conflict",
+    "conflictDesc": "Concurrent edits detected — please resolve.",
+    "acceptRemote": "Accept Remote",
+    "keepLocal": "Keep Local",
+    "lastSynced": "Last Synced",
+    "envelopeInvalid": "Invalid sync envelope.",
+    "noPassphrase": "Passphrase required for sync."
   }
 }

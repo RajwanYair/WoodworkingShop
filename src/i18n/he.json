@@ -1229,5 +1229,21 @@
     "priorityLow": "נמוך",
     "position": "מיקום",
     "targetMachine": "מכונת יעד"
+  },
+  "cloudSync": {
+    "title": "סנכרון ענן",
+    "encrypt": "הצפן",
+    "decrypt": "פענח",
+    "passphrase": "סיסמת הצפנה",
+    "passphraseHint": "לפחות 8 תווים",
+    "syncing": "מסנכרן…",
+    "synced": "מסונכרן",
+    "conflict": "התנגשות סנכרון",
+    "conflictDesc": "זוהו עריכות מקבילות — נא לפתור.",
+    "acceptRemote": "קבל מרוחק",
+    "keepLocal": "שמור מקומי",
+    "lastSynced": "סונכרן לאחרונה",
+    "envelopeInvalid": "מעטפת סנכרון לא תקינה.",
+    "noPassphrase": "נדרשת סיסמת הצפנה לסנכרון."
   }
 }
