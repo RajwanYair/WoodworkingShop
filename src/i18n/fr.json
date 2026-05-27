@@ -1467,5 +1467,20 @@
     "noEdges": "No exposed edges found.",
     "allExposed": "All Edges Exposed",
     "frontOnly": "Front Edges Only"
+  },
+  "materialUsage": {
+    "title": "Material Usage Report",
+    "totalArea": "Total Part Area",
+    "sheetArea": "Total Sheet Area",
+    "wasteArea": "Waste Area",
+    "wastePercent": "Waste %",
+    "sheetsRequired": "Sheets Required",
+    "costPerSheet": "Cost / Sheet",
+    "totalCost": "Total Cost",
+    "partCount": "Part Count",
+    "volume": "Volume",
+    "mostWasteful": "Most Wasteful",
+    "mostExpensive": "Most Expensive",
+    "noMaterials": "No materials in report."
   }
 }

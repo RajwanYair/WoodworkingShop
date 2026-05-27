@@ -1614,5 +1614,20 @@
     "noEdges": "לא נמצאו קצוות חשופים.",
     "allExposed": "כל הקצוות חשופים",
     "frontOnly": "קצוות קדמיים בלבד"
+  },
+  "materialUsage": {
+    "title": "דוח שימוש בחומרים",
+    "totalArea": "שטח חלקים כולל",
+    "sheetArea": "שטח לוחות כולל",
+    "wasteArea": "שטח פחת",
+    "wastePercent": "אחוז פחת",
+    "sheetsRequired": "לוחות נדרשים",
+    "costPerSheet": "עלות / לוח",
+    "totalCost": "עלות כוללת",
+    "partCount": "מספר חלקים",
+    "volume": "נפח",
+    "mostWasteful": "הכי בזבזני",
+    "mostExpensive": "הכי יקר",
+    "noMaterials": "אין חומרים בדוח."
   }
 }

@@ -1149,3 +1149,12 @@ export type {
   BandingGroup,
   EdgeBandingResult,
 } from './edge-banding-calc';
+
+export {
+  generateUsageReport,
+  costPerSquareMetre,
+  mostWastefulMaterial,
+  mostExpensiveMaterial,
+} from './material-usage-report';
+
+export type { UsagePart, SheetStock, MaterialUsage, UsageReport } from './material-usage-report';
