@@ -1305,3 +1305,13 @@ export type { MortiseTenonType, MortiseTenonInput, MortiseTenonResult } from './
 // Sprint 206 — Shelf Deflection Calculator
 export { calculateDeflection, getModulus } from './shelf-deflection';
 export type { LoadType, ShelfMaterial, DeflectionInput, DeflectionResult } from './shelf-deflection';
+
+// Sprint 207 — Router Bit Depth-of-Cut Calculator
+export { calculateRouterDepth, getRecommendedRpm } from './router-depth';
+export type {
+  RouterOperation,
+  MaterialHardness,
+  RouterDepthInput,
+  RouterPass,
+  RouterDepthResult,
+} from './router-depth';

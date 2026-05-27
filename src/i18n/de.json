@@ -1833,5 +1833,31 @@
     "exceedsLimit": "Exceeds Limit",
     "recommendedMaxSpan": "Recommended Max Span",
     "deflectionRatio": "Deflection Ratio"
+  },
+  "routerDepth": {
+    "title": "Router Depth-of-Cut Calculator",
+    "description": "Calculate safe router pass depth and pass schedule",
+    "bitDiameter": "Bit Diameter",
+    "targetDepth": "Target Depth",
+    "material": "Material",
+    "routerPower": "Router Power",
+    "operation": "Operation",
+    "maxDepthPerPass": "Max Depth per Pass",
+    "totalPasses": "Total Passes",
+    "recommendedRpm": "Recommended RPM",
+    "chipLoad": "Chip Load",
+    "chipLoadSafe": "Chip Load Safe",
+    "dado": "Dado",
+    "rabbet": "Rabbet",
+    "groove": "Groove",
+    "profile": "Profile",
+    "mortise": "Mortise",
+    "template": "Template",
+    "freehand": "Freehand",
+    "softwood": "Softwood",
+    "hardwood": "Hardwood",
+    "plywood": "Plywood",
+    "mdf": "MDF",
+    "hardPlastic": "Hard Plastic"
   }
 }

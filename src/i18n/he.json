@@ -1980,5 +1980,31 @@
     "exceedsLimit": "חריגה מהמגבלה",
     "recommendedMaxSpan": "טווח מרבי מומלץ",
     "deflectionRatio": "יחס שקיעה"
+  },
+  "routerDepth": {
+    "title": "מחשבון עומק כרסום לראוטר",
+    "description": "חישוב עומק בטוח לכל מעבר ותוכנית מעברים",
+    "bitDiameter": "קוטר ביט",
+    "targetDepth": "עומק יעד",
+    "material": "חומר",
+    "routerPower": "הספק ראוטר",
+    "operation": "פעולה",
+    "maxDepthPerPass": "עומק מרבי למעבר",
+    "totalPasses": "סה\"כ מעברים",
+    "recommendedRpm": "סל\"ד מומלץ",
+    "chipLoad": "עומס שבב",
+    "chipLoadSafe": "עומס שבב בטוח",
+    "dado": "דאדו",
+    "rabbet": "רבט",
+    "groove": "חריץ",
+    "profile": "פרופיל",
+    "mortise": "מגרעת",
+    "template": "שבלונה",
+    "freehand": "יד חופשית",
+    "softwood": "עץ רך",
+    "hardwood": "עץ קשה",
+    "plywood": "דיקט",
+    "mdf": "MDF",
+    "hardPlastic": "פלסטיק קשיח"
   }
 }
