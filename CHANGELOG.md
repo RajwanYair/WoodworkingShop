@@ -9,6 +9,54 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.14.0] — 2025-07-15
+
+### Phase 38 — Shop Floor Intelligence & Workflow Automation (Sprints 172–176)
+
+#### Sprint 172 — Dust Collection Estimator
+
+- New engine module `dust-collection.ts` for workshop airflow sizing
+- Machine CFM lookup (10 tool types with static-pressure ratings)
+- Duct segment modeling with friction-loss calculation
+- Trunk diameter recommendation based on total CFM demand
+- Horsepower recommendation (1–5 HP collectors)
+- Full system validation against collector specs
+- 29 unit tests
+
+#### Sprint 173 — Cut-List Grouping Engine
+
+- New engine module `cut-list-grouping.ts` for batch cutting optimization
+- Multi-criteria grouping (material, thickness, grain direction, cabinet)
+- Area-descending sort within groups (largest parts first)
+- Grain-flexible part merging (grain=none joins compatible groups)
+- Tool-change estimation for sequential group processing
+- Group key and label generation with total cuts/area statistics
+- 21 unit tests
+
+#### Sprint 174 — Assembly Dependency Resolver
+
+- New engine module `assembly-dependency.ts` for assembly step scheduling
+- Kahn's algorithm topological sort with cycle detection
+- Parallel wave grouping (which steps can run concurrently)
+- Forward/backward pass CPM scheduling (earliest/latest start/finish)
+- Critical path identification and slack calculation
+- Duplicate ID and missing reference validation
+- `maxParallelism` and `hasCycle` utility functions
+- 18 unit tests
+
+#### Sprint 175 — Workshop Safety Checker
+
+- New engine module `workshop-safety.ts` for layout safety validation
+- Clearance zone validation per tool type (OSHA-inspired minimums)
+- Overlapping footprint detection (critical violation)
+- Cumulative noise hazard warnings (3+ tools ≥ 95 dB)
+- PPE recommendations per tool type (8 categories)
+- Safety score computation (0–100, 70+ threshold to pass)
+- Tool distance calculation (axis-aligned bounding boxes)
+- 22 unit tests
+
+---
+
 ## [5.13.0] — 2026-07-01
 
 ### Phase 37 — Advanced Manufacturing Tools (Sprints 167–171)

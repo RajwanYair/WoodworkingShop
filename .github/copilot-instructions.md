@@ -2,25 +2,25 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.13.0** · **Next target: v5.14.0** (Phase 38 — TBD)
+> **Current release: v5.14.0** · **Next target: v5.15.0** (Phase 39 — TBD)
 
-## Active Sprint — Phase 38 (Sprints 172+)
+## Active Sprint — Phase 39 (Sprints 177+)
 
 > **Status**: PLANNED · **Goal**: TBD
 
 | Sprint | Feature                                                                  | Status |
 | ------ | ------------------------------------------------------------------------ | ------ |
-| 172    | TBD                                                                      | TODO   |
+| 177    | TBD                                                                      | TODO   |
 
-## Completed — Phase 37 (Sprints 167–171)
+## Completed — Phase 38 (Sprints 172–176)
 
 | Sprint | Feature                                                                  | Status |
 | ------ | ------------------------------------------------------------------------ | ------ |
-| 167    | Production schedule planner                                              | DONE   |
-| 168    | Nesting pattern library                                                  | DONE   |
-| 169    | Tool wear tracker                                                        | DONE   |
-| 170    | Design comparison engine                                                 | DONE   |
-| 171    | Release v5.13.0                                                          | DONE   |
+| 172    | Dust collection estimator                                                | DONE   |
+| 173    | Cut-list grouping engine                                                 | DONE   |
+| 174    | Assembly dependency resolver                                             | DONE   |
+| 175    | Workshop safety checker                                                  | DONE   |
+| 176    | Release v5.14.0                                                          | DONE   |
 
 ## Tech Stack
 

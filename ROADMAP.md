@@ -1,7 +1,7 @@
 # Roadmap
 
-> **Last strategic review**: 2026-07-01 · **Current version**: 5.13.0
-> **Next target**: v5.14.0 (Phase 38 — TBD)
+> **Last strategic review**: 2025-07-15 · **Current version**: 5.14.0
+> **Next target**: v5.15.0 (Phase 39 — TBD)
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -243,6 +243,18 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 149    | PWA v2 (enhanced offline caching, install prompt refinement)             | ✓ Done |
 | 150    | Error monitoring — privacy-first telemetry (Cloudflare Analytics/Sentry) | ✓ Done |
 | 151    | Release v5.9.0                                                           | ✓ Done |
+
+### Phase 38 — Shop Floor Intelligence & Workflow Automation · v5.14.0 ✅ COMPLETE
+
+> **Status**: COMPLETE · **Released**: 2025-07-15 · **Goal**: Dust collection sizing, cut-list grouping, assembly scheduling, workshop safety
+
+| Sprint | Deliverable                                                                | Track  |
+| ------ | -------------------------------------------------------------------------- | ------ |
+| 172    | Dust collection estimator (CFM sizing, duct loss, HP recommendation)       | ✓ Done |
+| 173    | Cut-list grouping engine (multi-criteria batching, grain merge)            | ✓ Done |
+| 174    | Assembly dependency resolver (topo-sort, CPM, parallel waves)              | ✓ Done |
+| 175    | Workshop safety checker (clearance zones, PPE, noise, safety score)        | ✓ Done |
+| 176    | Release v5.14.0                                                            | ✓ Done |
 
 ### Phase 37 — Advanced Manufacturing Tools · v5.13.0 ✅ COMPLETE
 
