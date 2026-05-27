@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [5.16.0] — 2025-07-15
 
-### Phase 40 — Material Management & Templates (Sprints 182–186)
+### Phase 40 — Material Management & Templates (Sprints 182–189)
 
 #### Sprint 182 — Material Cost Tracker
 
@@ -48,6 +48,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Configurable wastage allowance (default 10%)
 - Sorted groups by total length descending
 - 14 unit tests
+
+#### Sprint 187 — Material Usage Report
+
+- New engine module `material-usage-report.ts` for per-material analytics
+- Aggregation of area/length/cost/waste by material across all parts
+- Efficiency percentage and waste-rate ranking
+- Top-N wasteful materials identification
+- Summary totals with overall efficiency metric
+- 16 unit tests
+
+#### Sprint 188 — Custom Hardware Catalog
+
+- New engine module `hardware-catalog.ts` for user-defined hardware items
+- CRUD operations: add, update, remove, lookup by ID
+- Multi-field sorting (name, category, manufacturer, price)
+- Category and manufacturer filtering
+- Pack-size cost calculation and quantity-based totals
+- 18 unit tests
+
+#### Sprint 189 — Project Comparison Dashboard
+
+- New engine module `project-comparison.ts` for multi-project scoring
+- Compare designs across 6 criteria (cost, waste, time, materials, parts, sheets)
+- Normalised 0–100 scoring with configurable weights
+- Automatic ranking with best/worst identification
+- Best-for-criterion finder and percent difference utility
+- 20 unit tests
 
 ---
 
