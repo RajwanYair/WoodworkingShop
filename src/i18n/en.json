@@ -1166,5 +1166,22 @@
     "outOfStock": "Out of Stock",
     "importCatalog": "Import Catalog",
     "invalidCatalog": "Invalid catalog format."
+  },
+  "appliance": {
+    "title": "Appliance Clearance",
+    "oven": "Oven",
+    "dishwasher": "Dishwasher",
+    "refrigerator": "Refrigerator",
+    "cooktop": "Cooktop",
+    "microwave": "Microwave",
+    "clearanceTop": "Top Clearance",
+    "clearanceBottom": "Bottom Clearance",
+    "clearanceLeft": "Left Clearance",
+    "clearanceRight": "Right Clearance",
+    "clearanceRear": "Rear Clearance",
+    "clearanceFront": "Front Clearance (Door Swing)",
+    "violation": "Clearance violation: {{side}} of {{appliance}} — {{shortfall}} mm short",
+    "allClear": "All appliance clearances satisfied.",
+    "checkClearances": "Check Clearances"
   }
 }

@@ -1166,5 +1166,22 @@
     "outOfStock": "אזל מהמלאי",
     "importCatalog": "ייבא קטלוג",
     "invalidCatalog": "פורמט קטלוג לא תקין."
+  },
+  "appliance": {
+    "title": "מרווחי מכשירי חשמל",
+    "oven": "תנור",
+    "dishwasher": "מדיח כלים",
+    "refrigerator": "מקרר",
+    "cooktop": "כיריים",
+    "microwave": "מיקרוגל",
+    "clearanceTop": "מרווח עליון",
+    "clearanceBottom": "מרווח תחתון",
+    "clearanceLeft": "מרווח שמאלי",
+    "clearanceRight": "מרווח ימני",
+    "clearanceRear": "מרווח אחורי",
+    "clearanceFront": "מרווח קדמי (פתיחת דלת)",
+    "violation": "הפרת מרווח: {{side}} של {{appliance}} — חסרים {{shortfall}} מ\"מ",
+    "allClear": "כל מרווחי המכשירים תקינים.",
+    "checkClearances": "בדוק מרווחים"
   }
 }

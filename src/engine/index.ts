@@ -224,6 +224,23 @@ export type {
 } from './zone-validator';
 
 export {
+  STANDARD_CLEARANCES,
+  getEffectiveClearance,
+  validateApplianceClearance,
+  validateAllApplianceClearances,
+  getClearanceSummary,
+} from './appliance-clearance';
+export type {
+  ApplianceType,
+  ClearanceSpec,
+  AppliancePlacement,
+  Obstacle,
+  ClearanceSide,
+  ClearanceViolation,
+  ClearanceValidationResult,
+} from './appliance-clearance';
+
+export {
   TEMPLATE_CATALOGUE,
   getTemplatesByCategory,
   getTemplate,
