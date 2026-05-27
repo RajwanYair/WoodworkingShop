@@ -1,7 +1,7 @@
 # Roadmap
 
-> **Last strategic review**: 2025-07-18 · **Current version**: 5.19.0
-> **Next target**: v5.20.0 (Phase 44 — TBD)
+> **Last strategic review**: 2026-05-27 · **Current version**: 5.20.0
+> **Next target**: v5.21.0 (Phase 45 — TBD)
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -243,6 +243,16 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 149    | PWA v2 (enhanced offline caching, install prompt refinement)             | ✓ Done |
 | 150    | Error monitoring — privacy-first telemetry (Cloudflare Analytics/Sentry) | ✓ Done |
 | 151    | Release v5.9.0                                                           | ✓ Done |
+
+### Phase 44 — Advanced Joinery Planning Tools · v5.20.0 ✅ COMPLETE
+
+> **Status**: COMPLETE · **Released**: 2026-05-27 · **Goal**: Mortise-tenon sizing, shelf deflection, router pass depth, biscuit layout, sanding progression
+
+- Sprint 205: Mortise & tenon calculator (joint sizing, glue area, chisel recommendation) — ✓ Done
+- Sprint 206: Shelf deflection calculator (sag estimate, ratio checks, modulus lookup) — ✓ Done
+- Sprint 207: Router depth-of-cut calculator (pass schedule, chip load, RPM guidance) — ✓ Done
+- Sprint 208: Biscuit joinery calculator (size selection, slot depth, layout positions) — ✓ Done
+- Sprint 209: Sanding progression planner (grit sequence, effort and sheet estimates) — ✓ Done
 
 ### Phase 43 — Precision Workshop Calculators · v5.19.0 ✅ COMPLETE
 

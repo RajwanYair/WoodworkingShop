@@ -2,15 +2,25 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.19.0** · **Next target: v5.20.0** (Phase 44 — TBD)
+> **Current release: v5.20.0** · **Next target: v5.21.0** (Phase 45 — TBD)
 
-## Active Sprint — Phase 44 (Sprints 205+)
+## Active Sprint — Phase 45 (Sprints 210+)
 
 > **Status**: PLANNED · **Goal**: TBD
 
 | Sprint | Feature                                                                  | Status |
 | ------ | ------------------------------------------------------------------------ | ------ |
-| 205    | TBD                                                                      | TODO   |
+| 210    | TBD                                                                      | TODO   |
+
+## Completed — Phase 44 (Sprints 205–209)
+
+| Sprint | Feature                                                                  | Status |
+| ------ | ------------------------------------------------------------------------ | ------ |
+| 205    | Mortise & tenon calculator                                               | DONE   |
+| 206    | Shelf deflection calculator                                              | DONE   |
+| 207    | Router bit depth-of-cut calculator                                       | DONE   |
+| 208    | Biscuit joinery calculator                                               | DONE   |
+| 209    | Sanding progression planner                                              | DONE   |
 
 ## Completed — Phase 43 (Sprints 200–204)
 

@@ -9,6 +9,50 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.20.0] — 2026-05-27
+
+### Phase 44 — Advanced Joinery Planning Tools (Sprints 205–209)
+
+#### Sprint 205 — Mortise & Tenon Calculator
+
+- New engine module `mortise-tenon.ts` for mortise and tenon dimension planning
+- `calculateMortiseTenon`: tenon/mortise dimensions, shoulder setback, glue area
+- `findNearestChisel`: recommended chisel selection for mortise width
+- Supports through, blind, wedged, and stub tenon variants
+- Unit tests included
+
+#### Sprint 206 — Shelf Deflection Calculator
+
+- New engine module `shelf-deflection.ts` for shelf sag prediction under load
+- `calculateDeflection`: estimated sag, ratio, and compliance check
+- `getModulus`: material modulus lookup helper for deflection model
+- Supports multiple materials and loading patterns
+- Unit tests included
+
+#### Sprint 207 — Router Bit Depth-of-Cut Calculator
+
+- New engine module `router-depth.ts` for safe pass depth planning
+- `calculateRouterDepth`: max depth/pass, pass schedule, chip-load checks
+- `getRecommendedRpm`: RPM recommendation by bit diameter range
+- Covers common router operation types and material hardness classes
+- 11 unit tests
+
+#### Sprint 208 — Biscuit Joinery Calculator
+
+- New engine module `biscuit-joint.ts` for biscuit layout planning
+- `calculateBiscuitLayout`: biscuit count, center positions, slot depth
+- `recommendBiscuitSize`: automatic #0/#10/#20 selection by stock thickness
+- Edge, butt, and miter joint support with configurable spacing and margins
+- 13 unit tests
+
+#### Sprint 209 — Sanding Progression Planner
+
+- New engine module `sanding-progression.ts` for grit sequence planning
+- `planSandingProgression`: grit progression, time estimate, sheet estimate
+- `SANDING_GRITS`: shared supported grit set for deterministic workflows
+- Finish-target-aware endpoint capping (paint/stain/clear)
+- 9 unit tests
+
 ## [5.19.0] — 2025-07-18
 
 ### Phase 43 — Precision Workshop Calculators (Sprints 200–204)
