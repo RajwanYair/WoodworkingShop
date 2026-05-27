@@ -1954,5 +1954,31 @@
     "recommendedChisel": "אזמל מומלץ",
     "glueSurfaceArea": "שטח הדבקה",
     "thicknessRatio": "יחס עובי"
+  },
+  "shelfDeflection": {
+    "title": "מחשבון שקיעת מדף",
+    "description": "חישוב שקיעת מדף תחת עומס",
+    "span": "טווח מדף",
+    "width": "עומק מדף",
+    "thickness": "עובי מדף",
+    "material": "חומר",
+    "solidWood": "עץ מלא",
+    "plywood": "דיקט",
+    "mdf": "MDF",
+    "particleboard": "שבבית",
+    "melamine": "מלמין",
+    "custom": "מותאם",
+    "loadType": "סוג עומס",
+    "uniform": "אחיד",
+    "center": "נקודתי במרכז",
+    "combined": "משולב",
+    "load": "עומס כולל",
+    "support": "סוג תמיכה",
+    "simple": "פשוטה (מונחת)",
+    "fixed": "קבועה (מובנית)",
+    "maxDeflection": "שקיעה מרבית",
+    "exceedsLimit": "חריגה מהמגבלה",
+    "recommendedMaxSpan": "טווח מרבי מומלץ",
+    "deflectionRatio": "יחס שקיעה"
   }
 }

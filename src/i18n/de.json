@@ -1807,5 +1807,31 @@
     "recommendedChisel": "Recommended Chisel",
     "glueSurfaceArea": "Glue Surface Area",
     "thicknessRatio": "Thickness Ratio"
+  },
+  "shelfDeflection": {
+    "title": "Shelf Sag Calculator",
+    "description": "Calculate shelf deflection under load",
+    "span": "Shelf Span",
+    "width": "Shelf Depth",
+    "thickness": "Shelf Thickness",
+    "material": "Material",
+    "solidWood": "Solid Wood",
+    "plywood": "Plywood",
+    "mdf": "MDF",
+    "particleboard": "Particleboard",
+    "melamine": "Melamine",
+    "custom": "Custom",
+    "loadType": "Load Type",
+    "uniform": "Uniform",
+    "center": "Center Point",
+    "combined": "Combined",
+    "load": "Total Load",
+    "support": "Support Type",
+    "simple": "Simple (resting)",
+    "fixed": "Fixed (built-in)",
+    "maxDeflection": "Maximum Deflection",
+    "exceedsLimit": "Exceeds Limit",
+    "recommendedMaxSpan": "Recommended Max Span",
+    "deflectionRatio": "Deflection Ratio"
   }
 }

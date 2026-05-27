@@ -1301,3 +1301,7 @@ export type {
 // Sprint 205 — Mortise & Tenon Calculator
 export { calculateMortiseTenon, findNearestChisel } from './mortise-tenon';
 export type { MortiseTenonType, MortiseTenonInput, MortiseTenonResult } from './mortise-tenon';
+
+// Sprint 206 — Shelf Deflection Calculator
+export { calculateDeflection, getModulus } from './shelf-deflection';
+export type { LoadType, ShelfMaterial, DeflectionInput, DeflectionResult } from './shelf-deflection';
