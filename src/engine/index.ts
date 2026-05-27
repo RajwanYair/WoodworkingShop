@@ -1282,3 +1282,7 @@ export type {
   DrawerSlideInput,
   DrawerSlideResult,
 } from './drawer-slide';
+
+// Sprint 203 — Wood Drying Time Estimator
+export { estimateWoodDryingTime, calculateEMC } from './wood-drying';
+export type { DryingMethod, SpeciesDensityClass, WoodDryingInput, WoodDryingResult } from './wood-drying';

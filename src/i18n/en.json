@@ -1894,5 +1894,23 @@
     "clearance": "Clearance per Side",
     "slideLength": "Recommended Slide Length",
     "totalGap": "Total Horizontal Gap"
+  },
+  "woodDrying": {
+    "title": "Wood Drying Time Estimator",
+    "thickness": "Board Thickness",
+    "speciesClass": "Species Density Class",
+    "softwood": "Softwood",
+    "mediumHardwood": "Medium Hardwood",
+    "denseHardwood": "Dense Hardwood",
+    "initialMoisture": "Initial Moisture Content",
+    "targetMoisture": "Target Moisture Content",
+    "method": "Drying Method",
+    "airDry": "Air Dry",
+    "kilnDry": "Kiln Dry",
+    "estimatedDays": "Estimated Days",
+    "estimatedWeeks": "Estimated Weeks",
+    "defectRisk": "Defect Risk",
+    "equalization": "Equalization Days",
+    "emc": "Equilibrium Moisture Content"
   }
 }

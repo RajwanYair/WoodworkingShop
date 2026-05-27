@@ -1894,5 +1894,23 @@
     "clearance": "מרווח לצד",
     "slideLength": "אורך מגלש מומלץ",
     "totalGap": "מרווח אופקי כולל"
+  },
+  "woodDrying": {
+    "title": "אומדן זמן ייבוש עץ",
+    "thickness": "עובי לוח",
+    "speciesClass": "סיוג צפיפות מין",
+    "softwood": "עץ רך",
+    "mediumHardwood": "עץ קשה בינוני",
+    "denseHardwood": "עץ קשה צפוף",
+    "initialMoisture": "תכולת לחות התחלתית",
+    "targetMoisture": "תכולת לחות יעד",
+    "method": "שיטת ייבוש",
+    "airDry": "ייבוש באוויר",
+    "kilnDry": "ייבוש בתנור",
+    "estimatedDays": "ימים משוערים",
+    "estimatedWeeks": "שבועות משוערים",
+    "defectRisk": "סיכון פגמים",
+    "equalization": "ימי השוואה",
+    "emc": "תכולת לחות שיווי משקל"
   }
 }
