@@ -1931,5 +1931,28 @@
     "socketDepth": "עומק שקע",
     "pinToTailRatio": "יחס פין לזנב",
     "halfPin": "חצי פין"
+  },
+  "mortiseTenon": {
+    "title": "מחשבון חיבור טפר ושקע",
+    "description": "חישוב מידות חיבור טפר ושקע מגודל החומר",
+    "stockThickness": "עובי החומר",
+    "stockWidth": "רוחב החומר",
+    "jointType": "סוג חיבור",
+    "through": "עובר",
+    "blind": "עיוור",
+    "wedged": "מטריז",
+    "stub": "קצר",
+    "tenonThickness": "עובי הטפר",
+    "tenonWidth": "רוחב הטפר",
+    "tenonLength": "אורך הטפר",
+    "mortiseWidth": "רוחב השקע",
+    "mortiseHeight": "גובה השקע",
+    "mortiseDepth": "עומק השקע",
+    "mortiseOffset": "היסט השקע",
+    "haunchDepth": "עומק כתף",
+    "shoulderSetback": "נסיגת כתף",
+    "recommendedChisel": "אזמל מומלץ",
+    "glueSurfaceArea": "שטח הדבקה",
+    "thicknessRatio": "יחס עובי"
   }
 }

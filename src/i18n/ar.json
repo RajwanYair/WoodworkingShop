@@ -1772,5 +1772,28 @@
     "socketDepth": "Socket Depth",
     "pinToTailRatio": "Pin-to-Tail Ratio",
     "halfPin": "Half Pin"
+  },
+  "mortiseTenon": {
+    "title": "Mortise & Tenon Calculator",
+    "description": "Calculate mortise and tenon joint dimensions from stock size",
+    "stockThickness": "Stock Thickness",
+    "stockWidth": "Stock Width",
+    "jointType": "Joint Type",
+    "through": "Through",
+    "blind": "Blind",
+    "wedged": "Wedged",
+    "stub": "Stub",
+    "tenonThickness": "Tenon Thickness",
+    "tenonWidth": "Tenon Width",
+    "tenonLength": "Tenon Length",
+    "mortiseWidth": "Mortise Width",
+    "mortiseHeight": "Mortise Height",
+    "mortiseDepth": "Mortise Depth",
+    "mortiseOffset": "Mortise Offset",
+    "haunchDepth": "Haunch Depth",
+    "shoulderSetback": "Shoulder Setback",
+    "recommendedChisel": "Recommended Chisel",
+    "glueSurfaceArea": "Glue Surface Area",
+    "thicknessRatio": "Thickness Ratio"
   }
 }

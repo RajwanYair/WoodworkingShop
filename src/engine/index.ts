@@ -1297,3 +1297,7 @@ export type {
   DovetailPin,
   DovetailResult,
 } from './dovetail-layout';
+
+// Sprint 205 — Mortise & Tenon Calculator
+export { calculateMortiseTenon, findNearestChisel } from './mortise-tenon';
+export type { MortiseTenonType, MortiseTenonInput, MortiseTenonResult } from './mortise-tenon';
