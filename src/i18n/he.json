@@ -1912,5 +1912,24 @@
     "defectRisk": "סיכון פגמים",
     "equalization": "ימי השוואה",
     "emc": "תכולת לחות שיווי משקל"
+  },
+  "dovetailLayout": {
+    "title": "מחשבון פריסת סנונית יונה",
+    "boardWidth": "רוחב לוח",
+    "boardThickness": "עובי לוח",
+    "tailCount": "מספר זנבות",
+    "angle": "זווית סנונית יונה",
+    "slopeRatio": "יחס שיפוע",
+    "jointType": "סוג חיבור",
+    "through": "סנונית יונה חוצה",
+    "halfBlind": "סנונית יונה חצי עיוורת",
+    "style": "סגנון חיתוך",
+    "handCut": "חיתוך ידני",
+    "machineCut": "חיתוך מכונה",
+    "pinWidth": "רוחב פין",
+    "tailWidth": "רוחב זנב",
+    "socketDepth": "עומק שקע",
+    "pinToTailRatio": "יחס פין לזנב",
+    "halfPin": "חצי פין"
   }
 }

@@ -1286,3 +1286,14 @@ export type {
 // Sprint 203 — Wood Drying Time Estimator
 export { estimateWoodDryingTime, calculateEMC } from './wood-drying';
 export type { DryingMethod, SpeciesDensityClass, WoodDryingInput, WoodDryingResult } from './wood-drying';
+
+// Sprint 204 — Dovetail Layout Calculator
+export { calculateDovetailLayout, recommendedDovetailAngle } from './dovetail-layout';
+export type {
+  DovetailType,
+  DovetailStyle,
+  DovetailInput,
+  DovetailTail,
+  DovetailPin,
+  DovetailResult,
+} from './dovetail-layout';

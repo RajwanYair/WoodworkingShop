@@ -1753,5 +1753,24 @@
     "defectRisk": "Defect Risk",
     "equalization": "Equalization Days",
     "emc": "Equilibrium Moisture Content"
+  },
+  "dovetailLayout": {
+    "title": "Dovetail Layout Calculator",
+    "boardWidth": "Board Width",
+    "boardThickness": "Board Thickness",
+    "tailCount": "Number of Tails",
+    "angle": "Dovetail Angle",
+    "slopeRatio": "Slope Ratio",
+    "jointType": "Joint Type",
+    "through": "Through Dovetail",
+    "halfBlind": "Half-Blind Dovetail",
+    "style": "Cut Style",
+    "handCut": "Hand Cut",
+    "machineCut": "Machine Cut",
+    "pinWidth": "Pin Width",
+    "tailWidth": "Tail Width",
+    "socketDepth": "Socket Depth",
+    "pinToTailRatio": "Pin-to-Tail Ratio",
+    "halfPin": "Half Pin"
   }
 }
