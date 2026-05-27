@@ -782,3 +782,26 @@ export type {
   CloudSyncConfig,
   CryptoPort,
 } from './cloud-sync';
+
+// Sprint 159 — Multi-machine workflow (Phase 35)
+export {
+  isCapable,
+  findCapableMachines,
+  selectMachine,
+  distributeJobs,
+  markDispatched,
+  markComplete as markWorkflowComplete,
+  markFailed as markWorkflowFailed,
+  getWorkflowProgress,
+  computeMachineLoads,
+  DEFAULT_WORKFLOW_CONFIG,
+} from './multi-machine';
+export type {
+  MachineCapabilities,
+  WorkshopMachine,
+  JobAssignment,
+  WorkflowDistribution,
+  MachineLoad,
+  DistributionStrategy,
+  WorkflowConfig,
+} from './multi-machine';

@@ -1245,5 +1245,23 @@
     "lastSynced": "סונכרן לאחרונה",
     "envelopeInvalid": "מעטפת סנכרון לא תקינה.",
     "noPassphrase": "נדרשת סיסמת הצפנה לסנכרון."
+  },
+  "multiMachine": {
+    "title": "זרימת עבודה רב-מכונתית",
+    "distribute": "חלק עבודות",
+    "strategy": "אסטרטגיה",
+    "leastLoaded": "פחות עמוסה",
+    "fastestFirst": "מהירה ראשונה",
+    "roundRobin": "סבב",
+    "assigned": "שויך",
+    "unassigned": "לא שויך",
+    "dispatched": "נשלח",
+    "complete": "הושלם",
+    "failed": "נכשל",
+    "progress": "התקדמות",
+    "estimatedTime": "זמן כולל משוער",
+    "machineLoad": "עומס מכונה",
+    "noCapable": "אין מכונה מסוגלת זמינה.",
+    "includeOffline": "כלול מכונות לא מקוונות"
   }
 }
