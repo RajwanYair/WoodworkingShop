@@ -1321,5 +1321,27 @@
     "normal": "Normal",
     "low": "Low",
     "noRules": "No maintenance rules configured."
+  },
+  "layoutOptimizer": {
+    "title": "Layout Optimizer",
+    "totalDistance": "Total Walking Distance",
+    "efficiencyScore": "Efficiency Score",
+    "suggestions": "Swap Suggestions",
+    "swap": "Swap",
+    "saved": "Saved",
+    "improvement": "Improvement",
+    "noSuggestions": "Layout is already optimal.",
+    "metres": "m"
+  },
+  "layoutOptimizer": {
+    "title": "Layout Optimizer",
+    "totalDistance": "Total Walking Distance",
+    "efficiencyScore": "Efficiency Score",
+    "suggestions": "Swap Suggestions",
+    "swap": "Swap",
+    "saved": "Saved",
+    "improvement": "Improvement",
+    "noSuggestions": "Layout is already optimal.",
+    "metres": "m"
   }
 }

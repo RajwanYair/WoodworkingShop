@@ -1089,3 +1089,12 @@ export type {
   MaintenanceEvent,
   MaintenanceScheduleResult,
 } from './maintenance-scheduler';
+
+export {
+  buildDistanceMatrix,
+  computeTotalDistance,
+  suggestSwaps,
+  computeEfficiencyScore,
+  analyzeLayout,
+} from './layout-optimizer';
+export type { ToolPosition, WorkflowStep, SwapSuggestion, LayoutAnalysisResult } from './layout-optimizer';
