@@ -289,6 +289,21 @@ export { MACHINE_PROFILES, MACHINE_PROFILE_IDS, getMachineProfile, getDefaultMac
 export type { MachineProfile, MachineProfileId, ControllerFirmware, SpindleHint } from './machine-profiles';
 export { CATALOG_SCHEMA_VERSION, parseCommunityMaterial, validateCommunityCatalog } from './community-catalog';
 export type { CommunityMaterial, CommunityCatalog, CatalogCurrencyCode } from './community-catalog';
+export {
+  MANUFACTURER_API_VERSION,
+  validateManufacturerInfo,
+  validateManufacturerMaterial,
+  validateManufacturerCatalog,
+  filterMaterials,
+  mergeCatalogs,
+} from './manufacturer-catalog';
+export type {
+  ManufacturerInfo,
+  MaterialCategory,
+  ManufacturerMaterial,
+  ManufacturerCatalog,
+  MaterialFilter,
+} from './manufacturer-catalog';
 
 export {
   validateConstraints,

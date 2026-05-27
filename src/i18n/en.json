@@ -1146,5 +1146,25 @@
     "applyAll": "Apply All",
     "applySuggestion": "Apply",
     "validateConstraints": "Validate Constraints"
+  },
+  "catalog": {
+    "title": "Material Catalog",
+    "manufacturer": "Manufacturer",
+    "manufacturers": "Manufacturers",
+    "filterByRegion": "Filter by Region",
+    "filterByCategory": "Filter by Category",
+    "filterByThickness": "Filter by Thickness",
+    "availableOnly": "Available Only",
+    "noResults": "No materials match the current filters.",
+    "mergeCatalogs": "Merge Catalogs",
+    "sku": "SKU",
+    "category": "Category",
+    "thickness": "Thickness",
+    "price": "Price / m²",
+    "regions": "Regions",
+    "inStock": "In Stock",
+    "outOfStock": "Out of Stock",
+    "importCatalog": "Import Catalog",
+    "invalidCatalog": "Invalid catalog format."
   }
 }

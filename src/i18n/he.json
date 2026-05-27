@@ -1146,5 +1146,25 @@
     "fix": "תקן",
     "fixField": "תקן {{field}}",
     "fixAll": "תקן הכל"
+  },
+  "catalog": {
+    "title": "קטלוג חומרים",
+    "manufacturer": "יצרן",
+    "manufacturers": "יצרנים",
+    "filterByRegion": "סנן לפי אזור",
+    "filterByCategory": "סנן לפי קטגוריה",
+    "filterByThickness": "סנן לפי עובי",
+    "availableOnly": "זמין בלבד",
+    "noResults": "אין חומרים התואמים למסננים הנוכחיים.",
+    "mergeCatalogs": "מזג קטלוגים",
+    "sku": "מק\"ט",
+    "category": "קטגוריה",
+    "thickness": "עובי",
+    "price": "מחיר / מ\"ר",
+    "regions": "אזורים",
+    "inStock": "במלאי",
+    "outOfStock": "אזל מהמלאי",
+    "importCatalog": "ייבא קטלוג",
+    "invalidCatalog": "פורמט קטלוג לא תקין."
   }
 }
