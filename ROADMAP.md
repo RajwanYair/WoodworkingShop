@@ -1,7 +1,7 @@
 # Roadmap
 
-> **Last strategic review**: 2025-07-15 · **Current version**: 5.14.0
-> **Next target**: v5.15.0 (Phase 39 — TBD)
+> **Last strategic review**: 2025-07-15 · **Current version**: 5.15.0
+> **Next target**: v5.16.0 (Phase 40 — TBD)
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's

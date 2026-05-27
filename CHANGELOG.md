@@ -9,6 +9,53 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.15.0] — 2025-07-15
+
+### Phase 39 — Workshop Productivity & Estimation (Sprints 177–181)
+
+#### Sprint 177 — Material Waste Predictor
+
+- New engine module `waste-predictor.ts` for pre-cut waste estimation
+- Strip-packing heuristic fill ratio per sheet size
+- Multi-sheet analysis with per-sheet and aggregate waste percentages
+- Confidence level (high/medium/low) based on part count and fill ratios
+- Parts-per-sheet estimation for planning
+- RangeError guards on empty inputs and non-positive dimensions
+- 16 unit tests
+
+#### Sprint 178 — Tool Maintenance Scheduler
+
+- New engine module `maintenance-scheduler.ts` for periodic tool maintenance
+- Rule-based scheduling with hours, days, or cuts interval units
+- Status determination: upcoming (<90%), due (90–100%), overdue (>100%)
+- Priority-weighted health score (critical=30, high=20, normal=10, low=5)
+- Multi-tool event aggregation sorted by urgency (overdue → due → upcoming)
+- Most-urgent-per-tool extraction for dashboard display
+- Fallback to total usage when maintenance history is missing
+- 15 unit tests
+
+#### Sprint 179 — Workshop Layout Optimizer
+
+- New engine module `layout-optimizer.ts` for workflow efficiency scoring
+- Euclidean distance matrix between all tool positions
+- Total walking distance computation with step frequency weighting
+- Pairwise swap suggestions sorted by distance saved
+- Efficiency score (0–100) relative to worst-case layout
+- Full `analyzeLayout()` combining all metrics
+- 17 unit tests
+
+#### Sprint 180 — Project Time Estimator
+
+- New engine module `time-estimator.ts` for build-time estimation
+- 7 operation types with calibrated base times (cutting, edge-banding, drilling, assembly, sanding, finishing, hardware)
+- 3 skill-level multipliers (beginner 1.8×, intermediate 1.0×, expert 0.7×)
+- Critical path computation via topological longest-path through dependency graph
+- Parallel vs sequential task detection
+- Per-task and aggregate time breakdown with hours/minutes output
+- 20 unit tests
+
+---
+
 ## [5.14.0] — 2025-07-15
 
 ### Phase 38 — Shop Floor Intelligence & Workflow Automation (Sprints 172–176)
