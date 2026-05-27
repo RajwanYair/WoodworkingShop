@@ -1199,3 +1199,21 @@ export {
 } from './wood-movement';
 
 export type { WoodSpecies, WoodMovementInput, WoodMovementResult, SeasonalPreset } from './wood-movement';
+
+// Sprint 191 — Toolpath Feed Rate Calculator
+export {
+  calculateFeedRate,
+  recommendDepthPerPass,
+  recommendStepover,
+  MATERIAL_HARDNESS,
+  CUTTER_TYPES,
+} from './feed-rate';
+
+export type {
+  MaterialHardness,
+  CutterType,
+  FeedRateInput,
+  FeedRateResult,
+  DepthRecommendationInput,
+  DepthRecommendation,
+} from './feed-rate';

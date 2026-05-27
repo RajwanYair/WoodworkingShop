@@ -1681,5 +1681,25 @@
     "outdoorCovered": "Outdoor Covered",
     "panelMovement": "Panel Movement",
     "customCoefficient": "Custom Coefficient"
+  },
+  "feedRate": {
+    "title": "Feed Rate Calculator",
+    "cutterDiameter": "Cutter Diameter (mm)",
+    "flutes": "Flutes",
+    "material": "Material",
+    "cutterType": "Cutter Type",
+    "depthOfCut": "Depth of Cut (mm)",
+    "stepover": "Stepover (mm)",
+    "maxRpm": "Max Spindle RPM",
+    "spindleRpm": "Spindle Speed (RPM)",
+    "feedRateMmMin": "Feed Rate (mm/min)",
+    "chipLoad": "Chip Load (mm)",
+    "plungeRate": "Plunge Rate (mm/min)",
+    "mrr": "Material Removal Rate",
+    "rpmClamped": "RPM Clamped",
+    "depthPerPass": "Depth Per Pass",
+    "numberOfPasses": "Number of Passes",
+    "roughing": "Roughing",
+    "finishing": "Finishing"
   }
 }

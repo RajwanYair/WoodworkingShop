@@ -1681,5 +1681,25 @@
     "outdoorCovered": "חוץ מקורה",
     "panelMovement": "תנועת פנל",
     "customCoefficient": "מקדם מותאם"
+  },
+  "feedRate": {
+    "title": "מחשבון קצב הזנה",
+    "cutterDiameter": "קוטר סכין (מ״מ)",
+    "flutes": "להבים",
+    "material": "חומר",
+    "cutterType": "סוג סכין",
+    "depthOfCut": "עומק חיתוך (מ״מ)",
+    "stepover": "צעד צד (מ״מ)",
+    "maxRpm": "סל״ד מקסימלי",
+    "spindleRpm": "מהירות ציר (סל״ד)",
+    "feedRateMmMin": "קצב הזנה (מ״מ/דקה)",
+    "chipLoad": "עומס שבב (מ״מ)",
+    "plungeRate": "קצב צלילה (מ״מ/דקה)",
+    "mrr": "קצב הסרת חומר",
+    "rpmClamped": "סל״ד מוגבל",
+    "depthPerPass": "עומק למעבר",
+    "numberOfPasses": "מספר מעברים",
+    "roughing": "גסיסה",
+    "finishing": "גימור"
   }
 }
