@@ -79,6 +79,8 @@
     "bench": "vitest bench",
     "bench:check": "node scripts/bench-check.js",
     "bench:update": "node scripts/bench-check.js --update",
+    "test:summary": "node scripts/vitest-reporter.js",
+    "lint:summary": "node scripts/lint-summary.js",
     "docs:api": "typedoc",
     "dead:check": "knip",
     "sbom": "node scripts/sbom.js"
