@@ -3,10 +3,13 @@ mode: agent
 tools:
   - read_file
   - replace_string_in_file
+  - multi_replace_string_in_file
   - run_in_terminal
   - get_errors
   - grep_search
+  - file_search
   - semantic_search
+  - list_dir
   - manage_todo_list
 description: >
   Lighthouse CI setup, Lighthouse performance diagnosis, TBT/FCP/CLS gate

@@ -26,13 +26,13 @@ Rules enforced for every source and public file.
 
 - `public/_headers` must include:
 
-  ```text
-  Content-Security-Policy: default-src 'self'; script-src 'self'; ...
-  X-Frame-Options: DENY
-  X-Content-Type-Options: nosniff
-  Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: geolocation=(), camera=(), microphone=()
-  ```
+```text
+Content-Security-Policy: default-src 'self'; script-src 'self'; ...
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+Permissions-Policy: geolocation=(), camera=(), microphone=()
+```
 
 - No `unsafe-eval` or `unsafe-inline` in CSP script-src unless justified with
   an inline JSDoc comment referencing the specific Vite/React requirement.

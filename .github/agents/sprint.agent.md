@@ -11,6 +11,7 @@ tools:
   - file_search
   - semantic_search
   - manage_todo_list
+  - list_dir
 description: >
   Execute the current WIP sprint item end-to-end — implement the feature,
   pass all quality gates, update roadmap and changelog, then commit.
@@ -37,6 +38,7 @@ table) from first line of code to a passing CI gate.
 3. **Component** (`src/components/<area>/<Feature>.tsx`) — ≤ 600 lines, named
    export only; utilities in sibling `.ts` file
 4. **i18n** — keys under `<feature>.*` in `src/i18n/en.json` AND `he.json`
+   (and all 4 other locales with at least the English value)
 5. **Mount** — add to parent component
 6. **Tests** — `tests/engine/<feature>.test.ts` (≥ 10 cases, `it.each`)
 
@@ -49,7 +51,7 @@ table) from first line of code to a passing CI gate.
 - `CHANGELOG.md` `[Unreleased]` entry added
 - `git commit -m "feat(<scope>): Sprint NNN — <summary> (Phase NN)"`
 
-## Non-negotiable rules
+## Rules
 
 - No `eslint-disable`, `@ts-ignore`, `@ts-nocheck`, `as any`
 - No `enum` or `namespace` — use `as const` / union types
@@ -58,3 +60,4 @@ table) from first line of code to a passing CI gate.
 - Tailwind logical props (`ms-*`, `me-*`, `start-*`, `end-*`) — never `ml-*`/`mr-*`
 - ARIA correctness: no `role="list"` on `<ul>`; use `<button>` not `<div onClick>`
 - Run `npx prettier --write <files>` before `npm run quality`
+- All intermediate/generated files → `$TEMP` (never in workspace root)

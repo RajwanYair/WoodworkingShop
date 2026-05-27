@@ -9,6 +9,9 @@ tools:
   - get_errors
   - grep_search
   - semantic_search
+  - file_search
+  - list_dir
+  - manage_todo_list
 description: >
   Scaffold a complete new feature — engine module, store slice, React panel,
   i18n keys, unit tests, and mounting in the parent component.

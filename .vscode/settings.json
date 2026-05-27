@@ -135,13 +135,14 @@
     "*": true,
     "plaintext": false,
     "markdown": true,
-    "scminput": false
+    "scminput": true
   },
   "chat.agent.enabled": true,
   "chat.agent.maxRequests": 999,
   "github.copilot.chat.followUps": "always",
   "github.copilot.chat.useProjectTemplates": true,
   "github.copilot.chat.agent.autoFix": true,
+  "github.copilot.chat.agent.thinkingTool": true,
   "chat.instructionsFilesLocations": {
     ".github/instructions": true
   },
@@ -279,5 +280,27 @@
   // ─── Playwright ─────────────────────────────────────────────────────────────
   "playwright.reuseBrowser": false,
   "playwright.showTrace": false,
-  "chat.mcp.access": "all"
+
+  // ─── MCP ────────────────────────────────────────────────────────────────────
+  "chat.mcp.access": "all",
+
+  // ─── YAML (redhat extension) ────────────────────────────────────────────────
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml",
+    "https://json.schemastore.org/github-action.json": ".github/actions/*/action.yml",
+    "https://json.schemastore.org/dependabot-2.0.json": ".github/dependabot.yml"
+  },
+
+  // ─── Markdown ───────────────────────────────────────────────────────────────
+  "markdownlint.config": {
+    "MD033": false,
+    "MD013": false
+  },
+
+  // ─── Error Lens ─────────────────────────────────────────────────────────────
+  "errorLens.enabledDiagnosticLevels": ["error", "warning"],
+  "errorLens.excludeBySource": ["css(compatibilityIE)"],
+
+  // ─── Output / Debug ─────────────────────────────────────────────────────────
+  "output.smartScroll.enabled": true
 }

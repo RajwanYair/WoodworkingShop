@@ -16,9 +16,9 @@ expose({ run });
 
 - Import workers in app code with the `?worker` Vite suffix:
 
-  ```ts
-  import MyWorker from '../workers/my.worker?worker';
-  ```
+```ts
+import MyWorker from '../workers/my.worker?worker';
+```
 
 - Never import worker files directly in unit tests — use the sync engine
   function fallback.
@@ -37,10 +37,10 @@ expose({ run });
 - Use `postMessage` only via Comlink's `expose()`; never raw `self.postMessage`.
 - Handle errors explicitly and re-throw structured objects:
 
-  ```ts
-  try { ... }
-  catch (err) { throw new Error(`CutOptimizer: ${String(err)}`); }
-  ```
+```ts
+try { ... }
+catch (err) { throw new Error(`CutOptimizer: ${String(err)}`); }
+```
 
 ## TypeScript
 

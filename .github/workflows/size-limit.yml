@@ -44,7 +44,7 @@ jobs:
             | CSS | ${{ steps.bundle.outputs.css_kb }} KB |
             | **Total** | **${{ steps.bundle.outputs.total_kb }} KB** |
 
-            Budget: ≤ 1500 KB JS`;
+            Budget: ≤ 2500 KB JS · ≤ 100 KB CSS (see config/bundle-budget.json)`;
 
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,

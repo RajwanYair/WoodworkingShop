@@ -1,21 +1,21 @@
 # Cabinet Planner — AI Agent Context
 
 > Browser-based woodworking design tool · React 19 + TypeScript 6 + Vite 8
-> **v5.0.0** · MIT · Node ≥ 22 · [Live demo](https://rajwanyair.github.io/WoodworkingShop/)
+> **v5.8.0** · MIT · Node ≥ 22 · [Live demo](https://rajwanyair.github.io/WoodworkingShop/)
 
 ## What It Does
 
 Configure any cabinet/furniture piece → live 6-view SVG preview → MaxRects cut-sheet optimizer → export PDF build plan, DXF, G-code, or BOM. **No server, no account.** Full RTL support (Hebrew/Arabic).
 
-## Active Sprint — Phase 24
+## Active Sprint — Phase 33 (Sprints 147–151)
 
-| Sprint | Feature                        | Status |
-| ------ | ------------------------------ | ------ |
-| 102    | Fix all errors without waivers | WIP    |
-| 103    | Remove dead code/docs/config   | TODO   |
-| 104    | Reorganize workspace           | TODO   |
-| 105    | Update all tooling             | TODO   |
-| 106    | Release v5.0.0                 | TODO   |
+| Sprint | Feature                                                                | Status |
+| ------ | ---------------------------------------------------------------------- | ------ |
+| 147    | Lighthouse CI automation (GH Actions gates: TBT < 200 ms, FCP < 1.2 s) | TODO   |
+| 148    | Security hardening (CSP headers, Subresource Integrity, OWASP audit)   | TODO   |
+| 149    | PWA v2 (enhanced offline caching, install prompt refinement)           | TODO   |
+| 150    | Error monitoring — privacy-first telemetry                             | TODO   |
+| 151    | Release v5.9.0                                                         | TODO   |
 
 ## Tech Stack
 
@@ -37,19 +37,20 @@ src/
   store/       Zustand — cabinet-store.ts + slices + custom-materials + toast
   components/  React UI — configurator/ preview/ optimizer/ assembly/ pdf/sections/ layout/
   utils/       Export helpers — bom, dxf, gcode, url-state, project-storage
-  i18n/        en.json + he.json (ALWAYS update BOTH for any new key)
+  i18n/        en.json + he.json + ar.json + de.json + es.json + fr.json
   workers/     Web Workers (?worker import suffix)
 tests/         Vitest unit tests mirroring src/
-.github/       CI workflows, prompts/, actions/setup-node/
+.github/       CI workflows, prompts/, agents/, instructions/, actions/
 ```
 
 ## Key Commands
 
 ```bash
 npm run quality       # typecheck + lint + lint:css + lint:md + format:check + i18n:coverage
-npm run check         # quality + npm test  (pre-commit gate)
+npm run check         # quality:fast + npm test  (pre-commit gate)
 npm run ci            # check + build + bundle:check + bench:check  (full CI gate)
 npm run release:build # build + bundle:check + sbom (no tests; run after check)
+npm run dead:check    # knip — find unused exports/files
 npx vitest run        # run unit tests directly
 ```
 
@@ -99,7 +100,7 @@ import { cfg } from '../helpers'; // builds CabinetConfig from DEFAULT_CONFIG + 
 ## Docs
 
 - Architecture decisions & diagrams → [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
-- Active roadmap → [ROADMAP.md](ROADMAP.md) (Phase 24 — active)
+- Active roadmap → [ROADMAP.md](ROADMAP.md) (Phase 33 — active)
 - Sprint history → [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 - Plugin API → [docs/PLUGIN-API.md](docs/PLUGIN-API.md)
 
@@ -107,27 +108,57 @@ import { cfg } from '../helpers'; // builds CabinetConfig from DEFAULT_CONFIG + 
 
 `.github/prompts/` contains reusable agent prompts:
 
-| Prompt                      | Purpose                                                       |
-| --------------------------- | ------------------------------------------------------------- |
-| `new-feature.prompt.md`     | Add a full feature panel (engine → store → UI → i18n → mount) |
-| `fix-quality.prompt.md`     | Diagnose and fix all quality gate failures                    |
-| `fix-tests.prompt.md`       | Diagnose and fix all failing unit tests                       |
-| `i18n-add-keys.prompt.md`   | Add i18n keys with en/he parity validation                    |
-| `roadmap-sprint.prompt.md`  | Execute the current roadmap sprint item end-to-end            |
-| `release.prompt.md`         | Full release workflow: bump → CHANGELOG → tag → GH release    |
-| `split-component.prompt.md` | Split large React components (≤ 600 L target)                 |
-| `test-factory.prompt.md`    | Convert repetitive tests to `it.each` tables                  |
-| `bundle-optimize.prompt.md` | Bundle size analysis and chunk optimization                   |
-| `a11y-audit.prompt.md`      | WCAG 2.2 AA accessibility audit and remediation               |
-| `perf-debug.prompt.md`      | Lighthouse / runtime performance diagnosis                    |
+| Prompt                        | Purpose                                                       |
+| ----------------------------- | ------------------------------------------------------------- |
+| `new-feature.prompt.md`       | Add a full feature panel (engine → store → UI → i18n → mount) |
+| `fix-quality.prompt.md`       | Diagnose and fix all quality gate failures                    |
+| `fix-tests.prompt.md`         | Diagnose and fix all failing unit tests                       |
+| `i18n-add-keys.prompt.md`     | Add i18n keys with en/he parity validation                    |
+| `roadmap-sprint.prompt.md`    | Execute the current roadmap sprint item end-to-end            |
+| `roadmap-tracking.prompt.md`  | Track and update ROADMAP.md sprint progress                   |
+| `release.prompt.md`           | Full release workflow: bump → CHANGELOG → tag → GH release    |
+| `split-component.prompt.md`   | Split large React components (≤ 600 L target)                 |
+| `test-factory.prompt.md`      | Convert repetitive tests to `it.each` tables                  |
+| `bundle-optimize.prompt.md`   | Bundle size analysis and chunk optimization                   |
+| `a11y-audit.prompt.md`        | WCAG 2.2 AA accessibility audit and remediation               |
+| `perf-debug.prompt.md`        | Lighthouse / runtime performance diagnosis                    |
+| `security-audit.prompt.md`    | OWASP Top 10 security audit for client-side SPA               |
+| `dead-code.prompt.md`         | Find and remove unused exports/files via Knip                 |
+| `dependency-audit.prompt.md`  | Security + outdated + license audit of all deps               |
+| `clean-generated.prompt.md`   | Verify generated files go to $TEMP, clean leaks               |
+| `lighthouse-ci.prompt.md`     | Set up Lighthouse CI GitHub Actions gates                     |
+| `csp-hardening.prompt.md`     | Content Security Policy header hardening                      |
+| `pwa-audit.prompt.md`         | PWA manifest, service worker, and install-prompt audit        |
+| `code-review.prompt.md`       | Structured code review against all project conventions        |
+| `dependency-update.prompt.md` | Review and apply Dependabot dependency updates                |
 
 ## Copilot Agents
 
 `.github/agents/` contains pre-configured agent mode definitions:
 
-- `sprint.agent.md` — execute the current WIP sprint item end-to-end
-- `release.agent.md` — full automated release workflow
-- `feature.agent.md` — scaffold a complete new feature (engine + store + UI + i18n)
-- `debug.agent.md` — diagnose and fix test/build/type failures without suppression
-- `a11y.agent.md` — WCAG 2.2 AA accessibility audit and remediation
-- `i18n.agent.md` — i18n key management with full 6-locale parity
+| Agent      | Purpose                                                       |
+| ---------- | ------------------------------------------------------------- |
+| `sprint`   | Execute the current WIP sprint item end-to-end                |
+| `release`  | Full automated release workflow                               |
+| `feature`  | Scaffold a complete new feature (engine + store + UI + i18n)  |
+| `debug`    | Diagnose and fix test/build/type failures without suppression |
+| `a11y`     | WCAG 2.2 AA accessibility audit and remediation               |
+| `i18n`     | i18n key management with full 6-locale parity                 |
+| `security` | OWASP Top 10 security audit and CSP hardening                 |
+| `perf`     | Lighthouse CI setup and Core Web Vitals tuning                |
+| `cleanup`  | Production cleanup — dead code, lint, $TEMP enforcement       |
+
+## MCP Servers (`.vscode/mcp.json`)
+
+| Server               | Purpose                                                 |
+| -------------------- | ------------------------------------------------------- |
+| `github`             | Official GitHub MCP — PRs, issues, Actions, code search |
+| `filesystem`         | Scoped workspace file access                            |
+| `fetch`              | Retrieve web content and API responses                  |
+| `playwright`         | Browser automation for E2E debugging                    |
+| `gitkraken`          | Git ops, blame, diff, PR workflow                       |
+| `memory`             | Persistent agent notes across sessions                  |
+| `sequentialthinking` | Multi-step problem decomposition                        |
+| `context7`           | Up-to-date library documentation (React, Vite, etc.)    |
+| `cloudflare`         | Cloudflare Pages/Workers management                     |
+| `brave-search`       | Web search fallback for docs not in Context7            |

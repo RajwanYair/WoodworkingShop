@@ -54,11 +54,22 @@
     "antfu.goto-alias",
 
     // ─── Diff & Merge ─────────────────────────────────────────────────────
-    "mhutchie.git-graph"
+    "mhutchie.git-graph",
+
+    // ─── Security ─────────────────────────────────────────────────────────
+    "github.vscode-codeql",
+
+    // ─── JSON/YAML ────────────────────────────────────────────────────────
+    "redhat.vscode-yaml",
+
+    // ─── Copilot Ecosystem ────────────────────────────────────────────────
+    "ms-vscode.vscode-chat-customizations-evaluations"
   ],
   "unwantedRecommendations": [
     "hookyqr.beautify",
     "ms-vscode.vscode-typescript-tslint-plugin",
-    "ms-vscode.vscode-js-profile-flame"
+    "ms-vscode.vscode-js-profile-flame",
+    "ms-vscode.vscode-ampl",
+    "ms-toolsai.jupyter"
   ]
 }

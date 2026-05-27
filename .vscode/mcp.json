@@ -74,6 +74,17 @@
       "command": "npx",
       "args": ["-y", "@cloudflare/mcp-server-cloudflare"],
       "description": "Manage Cloudflare Pages deployments, Workers, KV, D1, and R2 directly in chat."
+    },
+
+    // ─── Brave Search — web search fallback for docs not in Context7 ─────
+    "brave-search": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@nicepkg/mcp-server-brave-search"],
+      "env": {
+        "BRAVE_API_KEY": "${env:BRAVE_API_KEY}"
+      },
+      "description": "Web search for finding docs, blog posts, and StackOverflow solutions not covered by Context7."
     }
   }
 }
