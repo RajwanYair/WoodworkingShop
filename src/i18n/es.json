@@ -1890,5 +1890,18 @@
     "paint": "Paint",
     "stain": "Stain",
     "clear": "Clear"
+  },
+  "fingerJoint": {
+    "title": "Finger Joint Calculator",
+    "boardWidth": "Board Width",
+    "boardThickness": "Board Thickness",
+    "fingerWidth": "Finger Width",
+    "fingerCount": "Finger Count",
+    "socketDepth": "Socket Depth",
+    "glueAllowance": "Glue Allowance",
+    "glueSurface": "Glue Surface Area",
+    "layoutA": "Board A Layout",
+    "layoutB": "Board B Layout",
+    "auto": "Auto"
   }
 }

@@ -1334,3 +1334,7 @@ export type {
   SandingProgressionInput,
   SandingProgressionResult,
 } from './sanding-progression';
+
+// Sprint 210 — Finger Joint Calculator
+export { calculateFingerJoint } from './finger-joint';
+export type { FingerJointInput, FingerPosition, FingerJointResult } from './finger-joint';

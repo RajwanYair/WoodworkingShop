@@ -2037,5 +2037,18 @@
     "paint": "צבע",
     "stain": "בייץ",
     "clear": "שקוף"
+  },
+  "fingerJoint": {
+    "title": "מחשבון חיבור אצבעות",
+    "boardWidth": "רוחב הלוח",
+    "boardThickness": "עובי הלוח",
+    "fingerWidth": "רוחב אצבע",
+    "fingerCount": "מספר אצבעות",
+    "socketDepth": "עומק שקע",
+    "glueAllowance": "תוספת דבק",
+    "glueSurface": "שטח הדבקה",
+    "layoutA": "פריסת לוח א׳",
+    "layoutB": "פריסת לוח ב׳",
+    "auto": "אוטומטי"
   }
 }
