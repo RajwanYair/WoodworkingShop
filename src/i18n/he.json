@@ -1754,5 +1754,25 @@
     "totalPieces": "סה״כ חלקים",
     "uniqueParts": "חלקים ייחודיים",
     "materials": "חומרים בשימוש"
+  },
+  "pocketHole": {
+    "title": "מחשבון חור כיס",
+    "screwLength": "אורך בורג",
+    "drillAngle": "זווית קדיחה",
+    "threadType": "סוג הברגה",
+    "screwCount": "מספר ברגים",
+    "spacing": "מרווח",
+    "pocketBore": "קוטר כיס",
+    "pilotHole": "חור מקדים",
+    "collarDepth": "עומק טבעת",
+    "clampTime": "זמן הידוק",
+    "workpieceThickness": "עובי חלק עבודה",
+    "matingThickness": "עובי חלק מתחבר",
+    "coarse": "הברגה גסה",
+    "fine": "הברגה עדינה",
+    "washerHead": "ראש אומגה",
+    "buttJoint": "חיבור צדי",
+    "mitreJoint": "חיבור גרונג",
+    "edgeJoint": "חיבור קצה"
   }
 }

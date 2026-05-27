@@ -1237,3 +1237,7 @@ export type { DowelDiameter, JointOrientation, DowelJointInput, DowelPosition, D
 // Sprint 194 — Panel Layout Label Generator
 export { generatePanelLabel, generateLabelBatch, formatLabelText } from './panel-label';
 export type { BandedEdge, PanelLabelInput, PanelLabel, PanelLabelBatch } from './panel-label';
+
+// Sprint 195 — Pocket Hole Joinery Calculator
+export { calculatePocketHole, selectScrewLength, selectThreadType, POCKET_SCREW_LENGTHS } from './pocket-hole';
+export type { ScrewHeadType, JointType, PocketHoleInput, PocketHoleResult } from './pocket-hole';

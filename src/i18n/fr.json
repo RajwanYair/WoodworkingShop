@@ -1607,5 +1607,25 @@
     "totalPieces": "Total Pieces",
     "uniqueParts": "Unique Parts",
     "materials": "Materials Used"
+  },
+  "pocketHole": {
+    "title": "Pocket Hole Calculator",
+    "screwLength": "Screw Length",
+    "drillAngle": "Drill Angle",
+    "threadType": "Thread Type",
+    "screwCount": "Number of Screws",
+    "spacing": "Spacing",
+    "pocketBore": "Pocket Bore",
+    "pilotHole": "Pilot Hole",
+    "collarDepth": "Collar Depth",
+    "clampTime": "Clamp Time",
+    "workpieceThickness": "Workpiece Thickness",
+    "matingThickness": "Mating Piece Thickness",
+    "coarse": "Coarse Thread",
+    "fine": "Fine Thread",
+    "washerHead": "Washer Head",
+    "buttJoint": "Butt Joint",
+    "mitreJoint": "Mitre Joint",
+    "edgeJoint": "Edge Joint"
   }
 }
