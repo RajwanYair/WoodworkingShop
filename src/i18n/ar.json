@@ -1084,5 +1084,22 @@
     "grainLocked": "Grain Locked",
     "noOffCuts": "No off-cuts available for reuse.",
     "optimizationComplete": "Yield optimization complete."
+  },
+  "versionHistory": {
+    "title": "Version History",
+    "commit": "Commit",
+    "branch": "Branch",
+    "branches": "Branches",
+    "createBranch": "Create Branch",
+    "switchBranch": "Switch Branch",
+    "merge": "Merge",
+    "diff": "Compare Versions",
+    "tag": "Tag",
+    "log": "History Log",
+    "message": "Commit Message",
+    "noHistory": "No version history yet.",
+    "mergeSuccess": "Merge completed successfully.",
+    "mergeConflict": "Merge has conflicts that need resolution.",
+    "branchCreated": "Branch created."
   }
 }

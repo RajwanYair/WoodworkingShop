@@ -1348,5 +1348,22 @@
     "grainLocked": "כיוון סיב נעול",
     "noOffCuts": "אין שאריות זמינות לשימוש חוזר.",
     "optimizationComplete": "מיטוב תפוקה הושלם."
+  },
+  "versionHistory": {
+    "title": "היסטוריית גרסאות",
+    "commit": "שמירה",
+    "branch": "ענף",
+    "branches": "ענפים",
+    "createBranch": "צור ענף",
+    "switchBranch": "החלף ענף",
+    "merge": "מיזוג",
+    "diff": "השווה גרסאות",
+    "tag": "תגית",
+    "log": "יומן היסטוריה",
+    "message": "הודעת שמירה",
+    "noHistory": "אין עדיין היסטוריית גרסאות.",
+    "mergeSuccess": "המיזוג הושלם בהצלחה.",
+    "mergeConflict": "יש קונפליקטים במיזוג שדורשים פתרון.",
+    "branchCreated": "הענף נוצר."
   }
 }

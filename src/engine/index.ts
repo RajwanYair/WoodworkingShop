@@ -901,3 +901,28 @@ export {
   DEFAULT_YIELD_CONFIG,
 } from './material-yield';
 export type { MaterialDemand, OffCut, YieldAllocation, YieldMetrics, YieldResult, YieldConfig } from './material-yield';
+
+// Sprint 165 — Version History & Branching (Phase 36)
+export {
+  createHistory,
+  commit,
+  createBranch,
+  switchBranch,
+  getLog,
+  tagVersion,
+  diffVersions,
+  mergeBranches,
+  listBranches,
+  DEFAULT_BRANCH_NAME,
+  MAX_BRANCHES,
+  MAX_VERSIONS,
+} from './version-history';
+export type {
+  VersionSnapshot,
+  VersionBranch,
+  VersionHistory,
+  VersionDiff,
+  DiffEntry,
+  MergeResult,
+  MergeConflict,
+} from './version-history';
