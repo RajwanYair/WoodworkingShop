@@ -1,7 +1,7 @@
 # Roadmap
 
-> **Last strategic review**: 2025-07-18 · **Current version**: 5.18.0
-> **Next target**: v5.19.0 (Phase 43 — TBD)
+> **Last strategic review**: 2025-07-18 · **Current version**: 5.19.0
+> **Next target**: v5.20.0 (Phase 44 — TBD)
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -243,6 +243,42 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 149    | PWA v2 (enhanced offline caching, install prompt refinement)             | ✓ Done |
 | 150    | Error monitoring — privacy-first telemetry (Cloudflare Analytics/Sentry) | ✓ Done |
 | 151    | Release v5.9.0                                                           | ✓ Done |
+
+### Phase 43 — Precision Workshop Calculators · v5.19.0 ✅ COMPLETE
+
+> **Status**: COMPLETE · **Released**: 2025-07-18 · **Goal**: Precision calculators for angles, shelf pins, drawer slides, drying, dovetails
+
+| Sprint | Deliverable                                                                | Track  |
+| ------ | -------------------------------------------------------------------------- | ------ |
+| 200    | Miter & compound angle calculator (polygon, compound, crown molding)       | ✓ Done |
+| 201    | Shelf pin spacing calculator (single/double/euro 32, drill depth)          | ✓ Done |
+| 202    | Drawer slide calculator (side/under/center mount, box dimensions)          | ✓ Done |
+| 203    | Wood drying time estimator (air/kiln, species, defect risk)                | ✓ Done |
+| 204    | Dovetail layout calculator (through/half-blind, pin/tail spacing)          | ✓ Done |
+
+### Phase 42 — Advanced Joinery & Workshop Tools · v5.18.0 ✅ COMPLETE
+
+> **Status**: COMPLETE · **Released**: 2025-07-18 · **Goal**: Pocket hole, veneer, clamp pressure, drill press, board-feet
+
+| Sprint | Deliverable                                                                | Track  |
+| ------ | -------------------------------------------------------------------------- | ------ |
+| 195    | Pocket hole joinery calculator (screw length, drill angle, spacing)        | ✓ Done |
+| 196    | Veneer calculator (sheet count, strip layout, adhesive volume)             | ✓ Done |
+| 197    | Clamp pressure calculator (force distribution, spacing, clamping time)     | ✓ Done |
+| 198    | Drill press speed calculator (RPM by bit type, material, diameter)         | ✓ Done |
+| 199    | Board-feet calculator (nominal-to-actual, species cost, linear conversion) | ✓ Done |
+
+### Phase 41 — Measurement & Estimation Tools · v5.17.0 ✅ COMPLETE
+
+> **Status**: COMPLETE · **Released**: 2025-07-18 · **Goal**: Wood movement, feed rate, weight estimation, dowel joints, panel labels
+
+| Sprint | Deliverable                                                               | Track  |
+| ------ | ------------------------------------------------------------------------- | ------ |
+| 190    | Wood movement calculator (seasonal expansion/contraction by species)      | ✓ Done |
+| 191    | Toolpath feed rate calculator (chip load, spindle speed, feed rate)       | ✓ Done |
+| 192    | Cabinet weight estimator (panel weights, hardware, total assembly)        | ✓ Done |
+| 193    | Dowel joint calculator (diameter, depth, spacing, pull-out strength)      | ✓ Done |
+| 194    | Panel layout label generator (QR codes, part IDs, grain arrows)           | ✓ Done |
 
 ### Phase 40 — Material Management & Templates · v5.16.0 ✅ COMPLETE
 

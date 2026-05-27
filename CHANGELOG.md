@@ -9,6 +9,50 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.19.0] — 2025-07-18
+
+### Phase 43 — Precision Workshop Calculators (Sprints 200–204)
+
+#### Sprint 200 — Miter & Compound Angle Calculator
+
+- New engine module `miter-angle.ts` for miter and compound angles
+- `calculatePolygonMiter`: miter angle for regular polygons (3–36 sides)
+- `calculateCompoundMiter`: blade miter + bevel for tilted workpieces
+- `calculateCrownMolding`: miter/bevel for crown at inside/outside corners
+- 25 unit tests
+
+#### Sprint 201 — Shelf Pin Spacing Calculator
+
+- New engine module `shelf-pin.ts` for adjustable shelving hole layout
+- `calculateShelfPins`: hole positions, spacing, drill depth
+- `totalPinsNeeded`: project-wide pin count with spare percentage
+- Supports single_row, double_row, and euro_32 pattern styles
+- 21 unit tests
+
+#### Sprint 202 — Drawer Slide Calculator
+
+- New engine module `drawer-slide.ts` for drawer box dimensioning
+- `calculateDrawerSlide`: box dimensions from opening + slide type
+- `findRecommendedSlideLength`: best standard slide for cabinet depth
+- Side-mount, under-mount, center-mount clearance calculations
+- 18 unit tests
+
+#### Sprint 203 — Wood Drying Time Estimator
+
+- New engine module `wood-drying.ts` for lumber drying estimation
+- `estimateWoodDryingTime`: air-dry and kiln-dry time calculation
+- `calculateEMC`: equilibrium moisture content for given conditions
+- Species density classes, temperature adjustment, defect risk assessment
+- 23 unit tests
+
+#### Sprint 204 — Dovetail Layout Calculator
+
+- New engine module `dovetail-layout.ts` for dovetail joint planning
+- `calculateDovetailLayout`: pin/tail spacing, angles, socket dimensions
+- `recommendedDovetailAngle`: species-appropriate angle selection
+- Through and half-blind types, hand-cut and machine-cut styles
+- 19 unit tests
+
 ## [5.18.0] — 2025-07-18
 
 ### Phase 42 — Advanced Joinery & Workshop Tools (Sprints 195–199)

@@ -2,15 +2,25 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.18.0** · **Next target: v5.19.0** (Phase 43 — TBD)
+> **Current release: v5.19.0** · **Next target: v5.20.0** (Phase 44 — TBD)
 
-## Active Sprint — Phase 43 (Sprints 200+)
+## Active Sprint — Phase 44 (Sprints 205+)
 
 > **Status**: PLANNED · **Goal**: TBD
 
 | Sprint | Feature                                                                  | Status |
 | ------ | ------------------------------------------------------------------------ | ------ |
-| 200    | TBD                                                                      | TODO   |
+| 205    | TBD                                                                      | TODO   |
+
+## Completed — Phase 43 (Sprints 200–204)
+
+| Sprint | Feature                                                                  | Status |
+| ------ | ------------------------------------------------------------------------ | ------ |
+| 200    | Miter & compound angle calculator                                        | DONE   |
+| 201    | Shelf pin spacing calculator                                             | DONE   |
+| 202    | Drawer slide calculator                                                  | DONE   |
+| 203    | Wood drying time estimator                                               | DONE   |
+| 204    | Dovetail layout calculator                                               | DONE   |
 
 ## Completed — Phase 42 (Sprints 195–199)
 
