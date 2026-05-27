@@ -1011,5 +1011,28 @@
     "machineLoad": "Machine Load",
     "noCapable": "No capable machine available.",
     "includeOffline": "Include Offline Machines"
+  },
+  "sharing": {
+    "title": "Project Sharing",
+    "createLink": "Create Share Link",
+    "label": "Link Label",
+    "permission": "Permission",
+    "viewOnly": "View Only",
+    "viewExport": "View & Export",
+    "full": "Full Access",
+    "expiration": "Expiration",
+    "hours": "Hours",
+    "days": "Days",
+    "never": "Never",
+    "revoke": "Revoke",
+    "renew": "Renew",
+    "copyLink": "Copy Link",
+    "linkCopied": "Link copied to clipboard.",
+    "viewCount": "Views",
+    "lastAccessed": "Last Accessed",
+    "expired": "Expired",
+    "revoked": "Revoked",
+    "active": "Active",
+    "noLinks": "No share links yet."
   }
 }

@@ -805,3 +805,29 @@ export type {
   DistributionStrategy,
   WorkflowConfig,
 } from './multi-machine';
+
+// Sprint 160 — Project sharing links (Phase 35)
+export {
+  createShareLink,
+  validateAccess,
+  recordAccess,
+  revokeLink,
+  renewLink,
+  getLinksByProject,
+  expireLinks,
+  getShareSummary,
+  defaultTokenGenerator,
+  DEFAULT_TOKEN_LENGTH,
+  MAX_LABEL_LENGTH,
+  DEFAULT_EXPIRATION,
+} from './project-sharing';
+export type {
+  SharePermission,
+  ShareState,
+  ExpirationPolicy,
+  ShareLink,
+  CreateShareOptions,
+  AccessValidation,
+  ShareSummary,
+  TokenGenerator,
+} from './project-sharing';
