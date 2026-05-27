@@ -9,6 +9,54 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.12.0] — 2026-06-29
+
+### Phase 36 — Advanced Workflows & Design Exploration (Sprints 162–166)
+
+#### Sprint 162 — Parametric Template Engine
+
+- New engine module `parametric-template.ts` for reusable cabinet templates
+- Parameter definitions with types, constraints, and defaults
+- Expression-based derived parameters (formulas referencing other params)
+- Template validation with error reporting
+- Instantiation: apply parameter values to produce CabinetConfig overrides
+- Template serialization/deserialization for sharing
+
+#### Sprint 163 — Batch Export Pipeline
+
+- New engine module `batch-export.ts` for multi-project batch export
+- Multi-format support (PDF, DXF, G-code, BOM-CSV, BOM-JSON)
+- Priority-based ordering (high > normal > low)
+- Per-item error isolation (one failure doesn't abort batch)
+- Progress tracking with estimated remaining time
+- Batch cancellation with proper status management
+- Export manifest generation and file name sanitization
+
+#### Sprint 164 — Material Yield Optimizer
+
+- New engine module `material-yield.ts` for cross-project material allocation
+- First-fit decreasing (FFD) algorithm for off-cut reuse
+- Material/thickness compatibility matching
+- Grain-direction-aware rotation with lock support
+- Saw kerf deduction on each allocation
+- Yield metrics with cost savings estimate
+- Group-by-material reporting utilities
+
+#### Sprint 165 — Version History & Branching
+
+- New engine module `version-history.ts` for design exploration
+- Immutable version snapshots with metadata and tags
+- Branch creation from any version with fork-point tracking
+- Linear history traversal (parent chain)
+- Three-way merge with automatic conflict detection
+- JSON diff between any two version snapshots
+- Branch listing, switching, and active branch indicator
+
+#### Sprint 166 — Release v5.12.0
+
+- Version bump to 5.12.0
+- CHANGELOG, ROADMAP, and copilot-instructions updates
+
 ## [5.11.0] — 2026-06-10
 
 ### Phase 35 — CNC Workflow & Cloud Sync (Sprints 157–161)
