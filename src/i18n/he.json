@@ -1808,5 +1808,23 @@
     "epoxy": "אפוקסי",
     "hide": "דבק עור",
     "contact": "דבק מגע"
+  },
+  "drillSpeed": {
+    "title": "מחשבון מהירות מקדחה",
+    "rpm": "סל״ד",
+    "sfm": "מהירות פני שטח",
+    "feedRate": "קצב הזנה",
+    "drillTime": "זמן קדיחה",
+    "speedSetting": "הגדרת מהירות",
+    "bitDiameter": "קוטר מקדח",
+    "bitType": "סוג מקדח",
+    "material": "חומר",
+    "depth": "עומק קדיחה",
+    "twist": "מקדח ספירלי",
+    "bradPoint": "מקדח חוד",
+    "forstner": "מקדח פורסטנר",
+    "spade": "מקדח שטוח",
+    "holeSaw": "מסור כוס",
+    "countersink": "משקע"
   }
 }

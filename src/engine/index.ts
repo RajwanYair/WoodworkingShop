@@ -1249,3 +1249,7 @@ export type { VeneerMatchPattern, VeneerSheetSize, VeneerInput, VeneerResult } f
 // Sprint 197 — Clamp Pressure Calculator
 export { calculateClampPressure, isPressureAdequate, GLUE_PRESSURE_PSI, CLAMP_FORCE_LBS } from './clamp-pressure';
 export type { GlueType, ClampType, ClampPressureInput, ClampPressureResult } from './clamp-pressure';
+
+// Sprint 198 — Drill Press Speed Calculator
+export { calculateDrillSpeed, maxBitDiameter, MATERIAL_SFM, BIT_TYPE_FACTOR } from './drill-speed';
+export type { DrillBitType, DrillMaterial, DrillSpeedInput, DrillSpeedResult } from './drill-speed';

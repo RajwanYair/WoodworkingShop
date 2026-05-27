@@ -1661,5 +1661,23 @@
     "epoxy": "Epoxy",
     "hide": "Hide Glue",
     "contact": "Contact Cement"
+  },
+  "drillSpeed": {
+    "title": "Drill Press Speed Calculator",
+    "rpm": "RPM",
+    "sfm": "Surface Speed (SFM)",
+    "feedRate": "Feed Rate",
+    "drillTime": "Drill Time",
+    "speedSetting": "Speed Setting",
+    "bitDiameter": "Bit Diameter",
+    "bitType": "Bit Type",
+    "material": "Material",
+    "depth": "Drill Depth",
+    "twist": "Twist Bit",
+    "bradPoint": "Brad Point",
+    "forstner": "Forstner Bit",
+    "spade": "Spade Bit",
+    "holeSaw": "Hole Saw",
+    "countersink": "Countersink"
   }
 }
