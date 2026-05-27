@@ -49,6 +49,8 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
         navigateFallback: '/WoodworkingShop/index.html',
         navigateFallbackDenylist: [/^\/WoodworkingShop\/api\//],
+        // Sprint 149 — offline fallback for navigation requests when cache is empty
+        offlineGoogleAnalytics: false,
         runtimeCaching: [
           {
             // Cache Google Fonts stylesheets
@@ -63,6 +65,35 @@ export default defineConfig({
             options: {
               cacheName: 'google-fonts-webfonts',
               expiration: { maxAgeSeconds: 60 * 60 * 24 * 365 },
+            },
+          },
+          {
+            // Sprint 149 — cache CDN assets (cdnjs) with SWR for offline resilience
+            urlPattern: /^https:\/\/cdnjs\.cloudflare\.com\/.*/i,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'cdn-assets',
+              expiration: { maxEntries: 30, maxAgeSeconds: 60 * 60 * 24 * 30 },
+            },
+          },
+          {
+            // Sprint 149 — cache locale JSON files for offline i18n
+            urlPattern: ({ url }: { url: URL }) =>
+              url.pathname.startsWith('/WoodworkingShop/') && url.pathname.endsWith('.json'),
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'app-json-data',
+              expiration: { maxEntries: 20, maxAgeSeconds: 60 * 60 * 24 * 7 },
+            },
+          },
+          {
+            // Sprint 149 — cache app images/SVGs for offline use
+            urlPattern: ({ url }: { url: URL }) =>
+              url.pathname.startsWith('/WoodworkingShop/') && /\.(?:png|jpg|svg|webp)$/i.test(url.pathname),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'app-images',
+              expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 * 30 },
             },
           },
         ],
