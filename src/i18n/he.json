@@ -1701,5 +1701,22 @@
     "numberOfPasses": "מספר מעברים",
     "roughing": "גסיסה",
     "finishing": "גימור"
+  },
+  "cabinetWeight": {
+    "title": "הערכת משקל ארון",
+    "panelWeight": "משקל לוחות",
+    "hardwareWeight": "משקל חומרה",
+    "totalEmpty": "משקל ריק",
+    "totalLoaded": "משקל עמוס",
+    "contents": "משקל תכולה (ק״ג)",
+    "fastenerCategory": "סוג מחברים",
+    "reinforcement": "נדרש חיזוק",
+    "light": "עומס קל",
+    "medium": "עומס בינוני",
+    "heavy": "עומס כבד",
+    "structural": "מבני",
+    "maxShelfLoad": "עומס מדף מרבי",
+    "perPanel": "לכל לוח",
+    "density": "צפיפות (ק״ג/מ³)"
   }
 }

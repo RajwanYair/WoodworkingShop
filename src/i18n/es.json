@@ -1554,5 +1554,22 @@
     "numberOfPasses": "Number of Passes",
     "roughing": "Roughing",
     "finishing": "Finishing"
+  },
+  "cabinetWeight": {
+    "title": "Cabinet Weight Estimator",
+    "panelWeight": "Panel Weight",
+    "hardwareWeight": "Hardware Weight",
+    "totalEmpty": "Empty Weight",
+    "totalLoaded": "Loaded Weight",
+    "contents": "Contents Weight (kg)",
+    "fastenerCategory": "Fastener Category",
+    "reinforcement": "Reinforcement Needed",
+    "light": "Light Duty",
+    "medium": "Medium Duty",
+    "heavy": "Heavy Duty",
+    "structural": "Structural",
+    "maxShelfLoad": "Max Shelf Load",
+    "perPanel": "Per Panel",
+    "density": "Density (kg/m³)"
   }
 }

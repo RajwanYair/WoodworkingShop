@@ -1217,3 +1217,15 @@ export type {
   DepthRecommendationInput,
   DepthRecommendation,
 } from './feed-rate';
+
+// Sprint 192 — Cabinet Weight Estimator
+export { estimateCabinetWeight, categorizeFastener, maxShelfLoad, MATERIAL_DENSITIES } from './cabinet-weight';
+
+export type {
+  PanelMaterial,
+  WeightPanel,
+  WeightHardware,
+  WeightEstimate,
+  PanelWeight,
+  FastenerCategory,
+} from './cabinet-weight';
