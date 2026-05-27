@@ -1660,5 +1660,26 @@
     "sheets": "לוחות",
     "weights": "משקלות",
     "noProjects": "הוסף לפחות 2 פרויקטים להשוואה."
+  },
+  "woodMovement": {
+    "title": "מחשבון תנועת עץ",
+    "width": "רוחב הלוח (מ״מ)",
+    "species": "סוג עץ",
+    "mcStart": "לחות התחלתית (%)",
+    "mcEnd": "לחות סופית (%)",
+    "change": "שינוי מימד",
+    "finalWidth": "רוחב סופי",
+    "direction": "כיוון",
+    "expansion": "התפשטות",
+    "contraction": "התכווצות",
+    "none": "ללא תנועה",
+    "gapPerSide": "מרווח לצד",
+    "preset": "תרחיש עונתי",
+    "temperateIndoor": "פנים ממוזג",
+    "controlledIndoor": "פנים מבוקר",
+    "unheatedWorkshop": "סדנה לא מחוממת",
+    "outdoorCovered": "חוץ מקורה",
+    "panelMovement": "תנועת פנל",
+    "customCoefficient": "מקדם מותאם"
   }
 }

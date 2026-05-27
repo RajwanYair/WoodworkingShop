@@ -1513,5 +1513,26 @@
     "sheets": "Sheets",
     "weights": "Weights",
     "noProjects": "Add at least 2 projects to compare."
+  },
+  "woodMovement": {
+    "title": "Wood Movement Calculator",
+    "width": "Board Width (mm)",
+    "species": "Wood Species",
+    "mcStart": "Initial MC (%)",
+    "mcEnd": "Final MC (%)",
+    "change": "Dimensional Change",
+    "finalWidth": "Final Width",
+    "direction": "Direction",
+    "expansion": "Expansion",
+    "contraction": "Contraction",
+    "none": "No Movement",
+    "gapPerSide": "Gap Per Side",
+    "preset": "Seasonal Preset",
+    "temperateIndoor": "Temperate Indoor",
+    "controlledIndoor": "Controlled Indoor",
+    "unheatedWorkshop": "Unheated Workshop",
+    "outdoorCovered": "Outdoor Covered",
+    "panelMovement": "Panel Movement",
+    "customCoefficient": "Custom Coefficient"
   }
 }

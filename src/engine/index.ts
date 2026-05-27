@@ -1188,3 +1188,14 @@ export type {
   ProjectScore,
   ComparisonResult,
 } from './project-comparison';
+
+// Sprint 190 — Wood Movement Calculator
+export {
+  calculateWoodMovement,
+  calculatePanelMovement,
+  seasonalMovement,
+  SPECIES_COEFFICIENTS,
+  SEASONAL_PRESETS,
+} from './wood-movement';
+
+export type { WoodSpecies, WoodMovementInput, WoodMovementResult, SeasonalPreset } from './wood-movement';
