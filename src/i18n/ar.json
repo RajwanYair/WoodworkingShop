@@ -1066,5 +1066,23 @@
     "duration": "Duration",
     "noItems": "No export items added.",
     "batchComplete": "Batch export complete."
+  },
+  "materialYield": {
+    "title": "Material Yield Optimizer",
+    "optimize": "Optimize Yield",
+    "demands": "Material Demands",
+    "offCuts": "Available Off-Cuts",
+    "allocations": "Allocations",
+    "metrics": "Yield Metrics",
+    "totalArea": "Total Area Demanded",
+    "areaSaved": "Area Saved",
+    "yieldPercentage": "Yield Percentage",
+    "costSavings": "Estimated Savings",
+    "fromOffCuts": "From Off-Cuts",
+    "fromNewSheets": "From New Sheets",
+    "rotated": "Rotated",
+    "grainLocked": "Grain Locked",
+    "noOffCuts": "No off-cuts available for reuse.",
+    "optimizationComplete": "Yield optimization complete."
   }
 }

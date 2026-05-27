@@ -888,3 +888,16 @@ export type {
   ExportManifest,
   IdGenerator,
 } from './batch-export';
+
+// Sprint 164 — Material Yield Optimizer (Phase 36)
+export {
+  optimizeYield,
+  groupByMaterial,
+  calculateTotalArea,
+  findCompatibleOffCuts,
+  formatSavings,
+  MAX_DEMANDS,
+  MAX_OFFCUTS,
+  DEFAULT_YIELD_CONFIG,
+} from './material-yield';
+export type { MaterialDemand, OffCut, YieldAllocation, YieldMetrics, YieldResult, YieldConfig } from './material-yield';

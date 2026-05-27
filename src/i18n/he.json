@@ -1330,5 +1330,23 @@
     "duration": "משך",
     "noItems": "לא נוספו פריטי ייצוא.",
     "batchComplete": "הייצוא האצוותי הושלם."
+  },
+  "materialYield": {
+    "title": "מיטוב תפוקת חומרים",
+    "optimize": "מטב תפוקה",
+    "demands": "דרישות חומרים",
+    "offCuts": "שאריות זמינות",
+    "allocations": "הקצאות",
+    "metrics": "מדדי תפוקה",
+    "totalArea": "שטח כולל נדרש",
+    "areaSaved": "שטח שנחסך",
+    "yieldPercentage": "אחוז תפוקה",
+    "costSavings": "חיסכון משוער",
+    "fromOffCuts": "משאריות",
+    "fromNewSheets": "מלוחות חדשים",
+    "rotated": "מסובב",
+    "grainLocked": "כיוון סיב נעול",
+    "noOffCuts": "אין שאריות זמינות לשימוש חוזר.",
+    "optimizationComplete": "מיטוב תפוקה הושלם."
   }
 }
