@@ -1069,3 +1069,12 @@ export type {
   PpeRecommendation,
   SafetyResult,
 } from './workshop-safety';
+
+export { predictWaste, computeTotalDemand, estimatePartsPerSheet } from './waste-predictor';
+export type {
+  PredictorPart,
+  SheetSize,
+  ConfidenceLevel,
+  SheetPrediction,
+  WastePredictionResult,
+} from './waste-predictor';

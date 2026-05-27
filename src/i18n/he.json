@@ -1506,5 +1506,20 @@
     "faceShield": "מגן פנים",
     "pushStick": "מוט דחיפה",
     "noViolations": "לא זוהו הפרות בטיחות."
+  },
+  "wastePredictor": {
+    "title": "חיזוי פחת",
+    "predictedWaste": "פחת משוער",
+    "bestSheet": "גודל לוח מומלץ",
+    "sheetsNeeded": "לוחות נדרשים",
+    "wastePercent": "% פחת",
+    "totalDemand": "ביקוש כולל",
+    "confidence": "רמת ביטחון",
+    "high": "גבוהה",
+    "medium": "בינונית",
+    "low": "נמוכה",
+    "averageWaste": "פחת ממוצע",
+    "recommendation": "המלצה",
+    "noSheets": "לא הוגדרו גדלי לוח."
   }
 }
