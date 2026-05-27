@@ -9,6 +9,55 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.17.0] — 2025-07-18
+
+### Phase 41 — Workshop Calculations & CNC Tools (Sprints 190–194)
+
+#### Sprint 190 — Wood Movement Calculator
+
+- New engine module `wood-movement.ts` for seasonal expansion/contraction
+- 14 species with radial/tangential coefficients
+- `calculateWoodMovement`: dimensional change for moisture delta
+- `calculatePanelMovement`: total movement across panel width
+- `seasonalMovement`: 4 seasonal presets (winter-dry to summer-humid)
+- Gap recommendation for panel installations
+- 37 unit tests
+
+#### Sprint 191 — Toolpath Feed Rate Calculator
+
+- New engine module `feed-rate.ts` for CNC router feed/speed
+- 7 material hardness profiles, 6 cutter types
+- `calculateFeedRate`: chip load × flutes × RPM with MRR
+- `recommendDepthPerPass`: safe DOC based on cutter diameter
+- `recommendStepover`: optimal stepover for finish/roughing
+- 36 unit tests
+
+#### Sprint 192 — Cabinet Weight Estimator
+
+- New engine module `cabinet-weight.ts` for total assembly weight
+- 13 material densities (plywood, MDF, melamine, hardwoods, etc.)
+- `estimateCabinetWeight`: sum of panel + hardware weights
+- `categorizeFastener`: wall mounting requirements by weight class
+- `maxShelfLoad`: deflection-based max load per shelf span
+- 40 unit tests
+
+#### Sprint 193 — Dowel Joint Calculator
+
+- New engine module `dowel-joint.ts` for dowel joinery layout
+- `calculateDowelJoint`: spacing, drill depth, positions for 3 orientations
+- `selectDowelDiameter`: auto-select diameter ≤ ½ board thickness
+- `minDowelsForLoad`: minimum dowels for shear capacity
+- Edge-to-face, edge-to-edge, and mitre joint support
+- 32 unit tests
+
+#### Sprint 194 — Panel Layout Label Generator
+
+- New engine module `panel-label.ts` for printable cut-panel labels
+- `generatePanelLabel`: dimensions, grain, edge banding, cabinet position
+- `generateLabelBatch`: sorted batch with summary statistics
+- `formatLabelText`: single-line plain-text output for workshop printing
+- 24 unit tests
+
 ## [5.16.0] — 2025-07-15
 
 ### Phase 40 — Material Management & Templates (Sprints 182–189)

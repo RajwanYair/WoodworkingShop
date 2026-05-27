@@ -2,15 +2,25 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.16.0** · **Next target: v5.17.0** (Phase 41 — TBD)
+> **Current release: v5.17.0** · **Next target: v5.18.0** (Phase 42 — TBD)
 
-## Active Sprint — Phase 41 (Sprints 187+)
+## Active Sprint — Phase 42 (Sprints 195+)
 
 > **Status**: PLANNED · **Goal**: TBD
 
 | Sprint | Feature                                                                  | Status |
 | ------ | ------------------------------------------------------------------------ | ------ |
-| 187    | TBD                                                                      | TODO   |
+| 195    | TBD                                                                      | TODO   |
+
+## Completed — Phase 41 (Sprints 190–194)
+
+| Sprint | Feature                                                                  | Status |
+| ------ | ------------------------------------------------------------------------ | ------ |
+| 190    | Wood movement calculator                                                 | DONE   |
+| 191    | Toolpath feed rate calculator                                            | DONE   |
+| 192    | Cabinet weight estimator                                                 | DONE   |
+| 193    | Dowel joint calculator                                                   | DONE   |
+| 194    | Panel layout label generator                                             | DONE   |
 
 ## Completed — Phase 40 (Sprints 182–186)
 
