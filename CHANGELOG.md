@@ -9,6 +9,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.21.0] — 2026-05-27
+
+### Phase 45 — Power Tool Setup Calculators (Sprints 210–214)
+
+#### Sprint 210 — Finger Joint Calculator
+
+- New engine module `finger-joint.ts` for box/finger joint layout
+- `calculateFingerJoint`: finger width, count, socket depth, glue surface
+- Layout arrays for both mating boards (A/B inverse pattern)
+
+#### Sprint 211 — Wood Screw Pilot Hole Calculator
+
+- New engine module `pilot-hole.ts` for screw sizing
+- `calculatePilotHole`: pilot diameter, clearance hole, countersink dims
+- Supports gauges 2–14 across softwood, hardwood, plywood, MDF
+
+#### Sprint 212 — Glue-Up Time Calculator
+
+- New engine module `glue-up-time.ts` for adhesive timing
+- `calculateGlueUpTime`: open time, clamp time, cure time, clamp count
+- Temperature and humidity correction factors for 5 glue types
+
+#### Sprint 213 — Bandsaw Blade Speed Calculator
+
+- New engine module `bandsaw-speed.ts` for blade velocity
+- `calculateBandsawSpeed`: SFPM, m/min, TPI recommendation, feed rate
+- Optimal speed range validation by material type
+
+#### Sprint 214 — Tablesaw Blade Height Calculator
+
+- New engine module `tablesaw-blade.ts` for blade setup
+- `calculateTablesawBladeHeight`: height, max depth, exposure, feasibility
+- Supports through, dado, rabbet, and groove cut types
+
 ## [5.20.0] — 2026-05-27
 
 ### Phase 44 — Advanced Joinery Planning Tools (Sprints 205–209)

@@ -2,15 +2,23 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.20.0** · **Next target: v5.21.0** (Phase 45 — TBD)
+> **Current release: v5.21.0** · **Next target: v5.22.0** (Phase 46 — TBD)
 
-## Active Sprint — Phase 45 (Sprints 210+)
+## Active Sprint — Phase 46 (Sprints 215+)
 
 > **Status**: PLANNED · **Goal**: TBD
 
 | Sprint | Feature                                                                  | Status |
 | ------ | ------------------------------------------------------------------------ | ------ |
-| 210    | TBD                                                                      | TODO   |
+| 215    | TBD                                                                      | TODO   |
+
+## Completed — Phase 45 (Sprints 210–214)
+
+- Sprint 210: Finger joint calculator — DONE
+- Sprint 211: Wood screw pilot hole calculator — DONE
+- Sprint 212: Glue-up time calculator — DONE
+- Sprint 213: Bandsaw blade speed calculator — DONE
+- Sprint 214: Tablesaw blade height calculator — DONE
 
 ## Completed — Phase 44 (Sprints 205–209)
 

@@ -1,7 +1,7 @@
 # Roadmap
 
-> **Last strategic review**: 2026-05-27 · **Current version**: 5.20.0
-> **Next target**: v5.21.0 (Phase 45 — TBD)
+> **Last strategic review**: 2026-05-27 · **Current version**: 5.21.0
+> **Next target**: v5.22.0 (Phase 46 — TBD)
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -243,6 +243,16 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 149    | PWA v2 (enhanced offline caching, install prompt refinement)             | ✓ Done |
 | 150    | Error monitoring — privacy-first telemetry (Cloudflare Analytics/Sentry) | ✓ Done |
 | 151    | Release v5.9.0                                                           | ✓ Done |
+
+### Phase 45 — Power Tool Setup Calculators · v5.21.0 ✅ COMPLETE
+
+> **Status**: COMPLETE · **Released**: 2026-05-27 · **Goal**: Finger joints, pilot holes, glue timing, bandsaw speed, tablesaw blade height
+
+- Sprint 210: Finger joint calculator (box joint layout, finger/socket positions, glue area) — ✓ Done
+- Sprint 211: Wood screw pilot hole calculator (gauge lookup, clearance hole, countersink) — ✓ Done
+- Sprint 212: Glue-up time calculator (open/clamp/cure time, clamp count, env factors) — ✓ Done
+- Sprint 213: Bandsaw blade speed calculator (SFPM, TPI selection, feed rate) — ✓ Done
+- Sprint 214: Tablesaw blade height calculator (blade exposure, dado depth, feasibility) — ✓ Done
 
 ### Phase 44 — Advanced Joinery Planning Tools · v5.20.0 ✅ COMPLETE
 
