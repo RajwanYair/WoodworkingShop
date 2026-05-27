@@ -1441,5 +1441,19 @@
     "needed": "Needed",
     "canFulfil": "Can Fulfil",
     "noItems": "No inventory items."
+  },
+  "edgeBanding": {
+    "title": "Edge Banding",
+    "totalLength": "Total Length",
+    "totalCost": "Total Cost",
+    "wastage": "Wastage",
+    "group": "Banding Group",
+    "edgeCount": "Edge Count",
+    "lengthWithWaste": "Length (incl. waste)",
+    "costWithWaste": "Cost (incl. waste)",
+    "color": "Color",
+    "noEdges": "No exposed edges found.",
+    "allExposed": "All Edges Exposed",
+    "frontOnly": "Front Edges Only"
   }
 }

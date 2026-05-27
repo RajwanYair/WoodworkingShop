@@ -1122,13 +1122,30 @@ export type {
   InventoryAnalysisResult,
 } from './shop-inventory';
 
-export { getTemplate, getTemplatesByCategory, instantiateTemplate, BUILT_IN_TEMPLATES } from './cabinet-templates';
+export {
+  getTemplate as getCabinetTemplate,
+  getTemplatesByCategory as getCabinetTemplatesByCategory,
+  instantiateTemplate as instantiateCabinetTemplate,
+  BUILT_IN_TEMPLATES,
+} from './cabinet-templates';
 
 export type {
   CabinetCategory,
-  DimensionConstraint,
-  CabinetTemplate,
-  ValidationError,
+  DimensionConstraint as CabinetDimensionConstraint,
+  CabinetTemplate as BuiltInCabinetTemplate,
+  ValidationError as CabinetValidationError,
   TemplateParams,
-  TemplateInstance,
+  TemplateInstance as CabinetTemplateInstance,
 } from './cabinet-templates';
+
+export { calculateEdgeBanding, detectExposedEdges, allEdgesExposed, frontEdgesOnly } from './edge-banding-calc';
+
+export type {
+  EdgePosition,
+  EdgeExposure,
+  BandingSpec,
+  BandingPart,
+  EdgeBandingLine,
+  BandingGroup,
+  EdgeBandingResult,
+} from './edge-banding-calc';

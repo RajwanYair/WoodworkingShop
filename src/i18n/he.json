@@ -1600,5 +1600,19 @@
     "needed": "נדרש",
     "canFulfil": "ניתן למלא",
     "noItems": "אין פריטי מלאי."
+  },
+  "edgeBanding": {
+    "title": "פסי קצה",
+    "totalLength": "אורך כולל",
+    "totalCost": "עלות כוללת",
+    "wastage": "פחת",
+    "group": "קבוצת פס",
+    "edgeCount": "מספר קצוות",
+    "lengthWithWaste": "אורך (כולל פחת)",
+    "costWithWaste": "עלות (כולל פחת)",
+    "color": "צבע",
+    "noEdges": "לא נמצאו קצוות חשופים.",
+    "allExposed": "כל הקצוות חשופים",
+    "frontOnly": "קצוות קדמיים בלבד"
   }
 }
