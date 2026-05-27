@@ -1470,5 +1470,21 @@
     "toolChanges": "החלפות כלי",
     "mergeFlexible": "מזג גמישי סיב",
     "noGroups": "לא נוצרו קבוצות."
+  },
+  "assemblyDependency": {
+    "title": "תלויות הרכבה",
+    "step": "שלב",
+    "steps": "שלבים",
+    "dependsOn": "תלוי ב",
+    "duration": "משך",
+    "totalDuration": "משך כולל",
+    "criticalPath": "נתיב קריטי",
+    "parallelWaves": "גלי ביצוע מקבילים",
+    "maxParallelism": "מקביליות מרבית",
+    "slack": "רפיון",
+    "noCycles": "אין תלויות מעגליות.",
+    "cycleDetected": "זוהתה תלות מעגלית!",
+    "earliestStart": "התחלה מוקדמת",
+    "latestFinish": "סיום מאוחר"
   }
 }

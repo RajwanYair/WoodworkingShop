@@ -1212,5 +1212,21 @@
     "toolChanges": "Tool Changes",
     "mergeFlexible": "Merge Grain-Flexible",
     "noGroups": "No groups generated."
+  },
+  "assemblyDependency": {
+    "title": "Assembly Dependencies",
+    "step": "Step",
+    "steps": "Steps",
+    "dependsOn": "Depends On",
+    "duration": "Duration",
+    "totalDuration": "Total Duration",
+    "criticalPath": "Critical Path",
+    "parallelWaves": "Parallel Waves",
+    "maxParallelism": "Max Parallelism",
+    "slack": "Slack",
+    "noCycles": "No circular dependencies.",
+    "cycleDetected": "Circular dependency detected!",
+    "earliestStart": "Earliest Start",
+    "latestFinish": "Latest Finish"
   }
 }

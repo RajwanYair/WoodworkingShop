@@ -1050,3 +1050,6 @@ export {
   estimateToolChanges,
 } from './cut-list-grouping';
 export type { GrainDirection, CutPart, GroupingCriterion, CutGroup, GroupingResult } from './cut-list-grouping';
+
+export { resolveAssemblyDeps, hasCycle, maxParallelism } from './assembly-dependency';
+export type { StepId, AssemblyStep, ScheduledStep, DependencyResult } from './assembly-dependency';
