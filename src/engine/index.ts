@@ -1350,3 +1350,7 @@ export type { GlueType, GlueUpInput, GlueUpResult } from './glue-up-time';
 // Sprint 213 — Bandsaw Blade Speed Calculator
 export { calculateBandsawSpeed } from './bandsaw-speed';
 export type { BandsawMaterial, BladeToothType, BandsawSpeedInput, BandsawSpeedResult } from './bandsaw-speed';
+
+// Sprint 214 — Tablesaw Blade Height Calculator
+export { calculateTablesawBladeHeight } from './tablesaw-blade';
+export type { TablesawCutType, TablesawBladeInput, TablesawBladeResult } from './tablesaw-blade';

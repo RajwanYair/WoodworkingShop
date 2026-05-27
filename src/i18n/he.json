@@ -2101,5 +2101,23 @@
     "regular": "רגיל",
     "skip": "דילוג",
     "hook": "וו"
+  },
+  "tablesawBlade": {
+    "title": "מחשבון גובה להב מסור שולחן",
+    "bladeDiameter": "קוטר להב",
+    "kerf": "רוחב חיתוך",
+    "workpieceThickness": "עובי חומר עבודה",
+    "cutType": "סוג חיתוך",
+    "dadoDepth": "עומק חריץ",
+    "bladeHeight": "גובה להב",
+    "maxCutDepth": "עומק חיתוך מקסימלי",
+    "bladeExposure": "חשיפת להב",
+    "kerfWaste": "בזבוז חיתוך",
+    "isFeasible": "חיתוך אפשרי",
+    "safetyMargin": "מרווח בטיחות",
+    "through": "חיתוך עובר",
+    "dado": "חריץ",
+    "rabbet": "שפה",
+    "groove": "תעלה"
   }
 }

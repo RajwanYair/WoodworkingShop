@@ -1954,5 +1954,23 @@
     "regular": "Regular",
     "skip": "Skip",
     "hook": "Hook"
+  },
+  "tablesawBlade": {
+    "title": "Tablesaw Blade Height Calculator",
+    "bladeDiameter": "Blade Diameter",
+    "kerf": "Kerf Width",
+    "workpieceThickness": "Workpiece Thickness",
+    "cutType": "Cut Type",
+    "dadoDepth": "Dado Depth",
+    "bladeHeight": "Blade Height",
+    "maxCutDepth": "Max Cut Depth",
+    "bladeExposure": "Blade Exposure",
+    "kerfWaste": "Kerf Waste",
+    "isFeasible": "Cut Feasible",
+    "safetyMargin": "Safety Margin",
+    "through": "Through Cut",
+    "dado": "Dado",
+    "rabbet": "Rabbet",
+    "groove": "Groove"
   }
 }
