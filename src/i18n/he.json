@@ -1365,5 +1365,25 @@
     "mergeSuccess": "המיזוג הושלם בהצלחה.",
     "mergeConflict": "יש קונפליקטים במיזוג שדורשים פתרון.",
     "branchCreated": "הענף נוצר."
+  },
+  "productionSchedule": {
+    "title": "לוח זמנים לייצור",
+    "task": "משימה",
+    "tasks": "משימות",
+    "resource": "משאב",
+    "resources": "משאבים",
+    "duration": "משך",
+    "dependencies": "תלויות",
+    "milestone": "אבן דרך",
+    "criticalPath": "נתיב קריטי",
+    "conflict": "קונפליקט משאבים",
+    "conflicts": "קונפליקטי משאבים",
+    "utilization": "ניצולת",
+    "spanDays": "טווח לוח הזמנים (ימים)",
+    "addTask": "הוסף משימה",
+    "compute": "חשב לוח זמנים",
+    "crash": "דחס משימה",
+    "noTasks": "אין עדיין משימות מתוזמנות.",
+    "scheduleReady": "לוח הזמנים חושב בהצלחה."
   }
 }

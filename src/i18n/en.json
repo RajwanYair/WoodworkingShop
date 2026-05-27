@@ -1365,5 +1365,25 @@
     "mergeSuccess": "Merge completed successfully.",
     "mergeConflict": "Merge has conflicts that need resolution.",
     "branchCreated": "Branch created."
+  },
+  "productionSchedule": {
+    "title": "Production Schedule",
+    "task": "Task",
+    "tasks": "Tasks",
+    "resource": "Resource",
+    "resources": "Resources",
+    "duration": "Duration",
+    "dependencies": "Dependencies",
+    "milestone": "Milestone",
+    "criticalPath": "Critical Path",
+    "conflict": "Resource Conflict",
+    "conflicts": "Resource Conflicts",
+    "utilization": "Utilization",
+    "spanDays": "Schedule Span (days)",
+    "addTask": "Add Task",
+    "compute": "Compute Schedule",
+    "crash": "Compress Task",
+    "noTasks": "No tasks scheduled yet.",
+    "scheduleReady": "Schedule computed successfully."
   }
 }

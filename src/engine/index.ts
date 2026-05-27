@@ -926,3 +926,27 @@ export type {
   MergeResult,
   MergeConflict,
 } from './version-history';
+
+// Sprint 167 — Production schedule planner (Phase 37)
+export {
+  createSchedule,
+  addTask,
+  computeSchedule,
+  detectConflicts,
+  getScheduleMetrics,
+  crashTask,
+  MAX_TASKS,
+  MAX_RESOURCES,
+  DEFAULT_HOURS_PER_DAY,
+} from './production-schedule';
+export type {
+  TaskStatus,
+  ResourceKind,
+  WorkshopResource,
+  ScheduleTask,
+  ScheduledSlot,
+  ProductionSchedule,
+  ResourceConflict,
+  ScheduleMetrics,
+  IdGenerator,
+} from './production-schedule';
