@@ -1418,5 +1418,25 @@
     "replacement": "דורש החלפה",
     "noTools": "אין כלים במלאי.",
     "noAlerts": "כל הכלים במצב תקין."
+  },
+  "designComparison": {
+    "title": "השוואת עיצובים",
+    "compare": "השווה עיצובים",
+    "designA": "עיצוב א",
+    "designB": "עיצוב ב",
+    "winner": "מנצח",
+    "tie": "תיקו",
+    "criteria": "קריטריונים",
+    "score": "ציון",
+    "delta": "הפרש",
+    "materialCost": "עלות חומר",
+    "materialArea": "שטח חומר",
+    "partCount": "מספר חלקים",
+    "cutComplexity": "מורכבות חיתוך",
+    "wastePercent": "אחוז פסולת",
+    "assemblySteps": "שלבי הרכבה",
+    "structuralScore": "ציון מבני",
+    "radarChart": "מציין רדאר",
+    "summary": "סיכום השוואה"
   }
 }

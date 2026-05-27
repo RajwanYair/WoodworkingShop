@@ -1001,3 +1001,22 @@ export type {
   MaintenanceAlert,
   ToolInventory,
 } from './tool-wear';
+
+// Sprint 170 — Design comparison engine (Phase 37)
+export {
+  createSnapshot,
+  compareDesigns,
+  validateWeights,
+  getCommonCriteria,
+  DEFAULT_WEIGHTS,
+  CRITERION_META,
+} from './design-comparison';
+export type {
+  CriterionName,
+  CriterionValue,
+  DesignSnapshot,
+  CriterionWeight,
+  CriterionComparison,
+  NormalizedScore,
+  ComparisonResult,
+} from './design-comparison';

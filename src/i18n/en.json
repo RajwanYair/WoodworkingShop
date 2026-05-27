@@ -1418,5 +1418,25 @@
     "replacement": "Needs Replacement",
     "noTools": "No tools in inventory.",
     "noAlerts": "All tools in good condition."
+  },
+  "designComparison": {
+    "title": "Design Comparison",
+    "compare": "Compare Designs",
+    "designA": "Design A",
+    "designB": "Design B",
+    "winner": "Winner",
+    "tie": "Tie",
+    "criteria": "Criteria",
+    "score": "Score",
+    "delta": "Delta",
+    "materialCost": "Material Cost",
+    "materialArea": "Material Area",
+    "partCount": "Part Count",
+    "cutComplexity": "Cut Complexity",
+    "wastePercent": "Waste Percent",
+    "assemblySteps": "Assembly Steps",
+    "structuralScore": "Structural Score",
+    "radarChart": "Score Radar",
+    "summary": "Comparison Summary"
   }
 }
