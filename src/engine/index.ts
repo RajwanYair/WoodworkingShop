@@ -975,3 +975,29 @@ export type {
   PatternMatchScore,
   PatternLibrary,
 } from './nesting-patterns';
+
+// Sprint 169 — Tool wear tracker (Phase 37)
+export {
+  createInventory,
+  addTool,
+  removeTool,
+  logUsage,
+  getToolStatus,
+  getAllToolStatuses,
+  getMaintenanceAlerts,
+  estimateRemainingForMaterial,
+  MAX_TOOLS,
+  MAX_USAGE_ENTRIES,
+  CONDITION_THRESHOLDS,
+  HARDNESS_FACTORS,
+} from './tool-wear';
+export type {
+  ToolType,
+  WearModel,
+  ToolCondition,
+  Tool,
+  UsageEntry,
+  ToolStatus,
+  MaintenanceAlert,
+  ToolInventory,
+} from './tool-wear';
