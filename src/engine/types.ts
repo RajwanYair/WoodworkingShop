@@ -527,6 +527,34 @@ export interface RoomCabinet {
 }
 
 /**
+ * Wall orientation within a room.
+ * - 'north' = back wall (y = 0 edge)
+ * - 'south' = front wall (y = roomDepth edge)
+ * - 'east' = right wall (x = roomWidth edge)
+ * - 'west' = left wall (x = 0 edge)
+ */
+export type WallSide = 'north' | 'south' | 'east' | 'west';
+
+/**
+ * A wall segment within a room layout.
+ * Walls define where cabinets can be placed (snap targets).
+ */
+export interface RoomWall {
+  /** Unique identifier. */
+  id: string;
+  /** Which side of the room this wall is on. */
+  side: WallSide;
+  /** Start offset along the wall in mm (from room corner). */
+  startOffset: number;
+  /** End offset along the wall in mm (from room corner). */
+  endOffset: number;
+  /** Whether this wall has a window/door (blocks cabinet placement). */
+  hasOpening: boolean;
+  /** Optional label for the wall segment (e.g. 'Window wall'). */
+  label?: string;
+}
+
+/**
  * A complete room layout composed of zero or more cabinet instances.
  */
 export interface RoomLayout {
@@ -538,6 +566,10 @@ export interface RoomLayout {
   roomWidth: number;
   /** Room depth in mm (front-to-back wall). */
   roomDepth: number;
+  /** Room height in mm (floor to ceiling). Defaults to 2400 mm. */
+  roomHeight?: number;
+  /** Wall segments (default: 4 full walls generated from room dimensions). */
+  walls?: RoomWall[];
   /** Cabinet instances placed in this room. */
   cabinets: RoomCabinet[];
 }

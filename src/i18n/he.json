@@ -524,7 +524,18 @@
     "sectionLabel": "תוכנית רצפה של החדר",
     "empty": "לא הוגדרו פריסות חדר",
     "cabinets": "ארונות",
-    "utilized": "מנוצל"
+    "utilized": "מנוצל",
+    "walls": "קירות",
+    "wallNorth": "קיר אחורי",
+    "wallSouth": "קיר קדמי",
+    "wallEast": "קיר ימני",
+    "wallWest": "קיר שמאלי",
+    "hasOpening": "יש פתח",
+    "snapToWall": "הצמד לקיר",
+    "collision": "זוהתה חפיפה בין ארונות",
+    "roomHeight": "גובה חדר",
+    "floorPlan": "תוכנית רצפה",
+    "wallOccupancy": "תפוסת קיר"
   },
   "summary": {
     "title": "סיכום פרויקט",

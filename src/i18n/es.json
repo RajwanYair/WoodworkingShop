@@ -518,7 +518,18 @@
     "sectionLabel": "Plano de planta de la habitación",
     "empty": "No hay distribuciones de habitación configuradas",
     "cabinets": "armarios",
-    "utilized": "utilizado"
+    "utilized": "utilizado",
+    "walls": "Walls",
+    "wallNorth": "Back wall",
+    "wallSouth": "Front wall",
+    "wallEast": "Right wall",
+    "wallWest": "Left wall",
+    "hasOpening": "Has opening",
+    "snapToWall": "Snap to wall",
+    "collision": "Cabinet overlap detected",
+    "roomHeight": "Room height",
+    "floorPlan": "Floor plan",
+    "wallOccupancy": "Wall occupancy"
   },
   "summary": {
     "title": "Resumen del proyecto",

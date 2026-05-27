@@ -524,7 +524,18 @@
     "sectionLabel": "Room floor plan",
     "empty": "No room layouts configured",
     "cabinets": "cabinets",
-    "utilized": "utilized"
+    "utilized": "utilized",
+    "walls": "Walls",
+    "wallNorth": "Back wall",
+    "wallSouth": "Front wall",
+    "wallEast": "Right wall",
+    "wallWest": "Left wall",
+    "hasOpening": "Has opening",
+    "snapToWall": "Snap to wall",
+    "collision": "Cabinet overlap detected",
+    "roomHeight": "Room height",
+    "floorPlan": "Floor plan",
+    "wallOccupancy": "Wall occupancy"
   },
   "summary": {
     "title": "Project Summary",

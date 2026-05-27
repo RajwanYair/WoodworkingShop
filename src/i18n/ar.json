@@ -506,7 +506,18 @@
     "sectionLabel": "مخطط أرضية الغرفة",
     "empty": "لا توجد تخطيطات غرفة مُهيَّأة",
     "cabinets": "خزائن",
-    "utilized": "مستخدم"
+    "utilized": "مستخدم",
+    "walls": "Walls",
+    "wallNorth": "Back wall",
+    "wallSouth": "Front wall",
+    "wallEast": "Right wall",
+    "wallWest": "Left wall",
+    "hasOpening": "Has opening",
+    "snapToWall": "Snap to wall",
+    "collision": "Cabinet overlap detected",
+    "roomHeight": "Room height",
+    "floorPlan": "Floor plan",
+    "wallOccupancy": "Wall occupancy"
   },
   "summary": {
     "title": "ملخص المشروع",
