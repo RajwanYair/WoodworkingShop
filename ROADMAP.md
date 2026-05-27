@@ -1,7 +1,7 @@
 # Roadmap
 
-> **Last strategic review**: 2026-06-29 · **Current version**: 5.12.0
-> **Next target**: v5.13.0 (Phase 37 — TBD)
+> **Last strategic review**: 2026-07-01 · **Current version**: 5.13.0
+> **Next target**: v5.14.0 (Phase 38 — TBD)
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -129,6 +129,8 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 33    | v5.9.0      | Production Infrastructure       | Lighthouse CI, CSP hardening, PWA v2, error monitoring                         |
 | 34    | v5.10.0     | Room Planner v2 & Community     | Room layout v2, manufacturer catalog, appliance clearance, machining link      |
 | 35    | v5.11.0     | CNC Workflow & Cloud Sync       | CNC job queue, E2E cloud sync, multi-machine distribution, project sharing     |
+| 36    | v5.12.0     | Advanced Workflows & Design     | Parametric templates, batch export, material yield optimizer, version history  |
+| 37    | v5.13.0     | Advanced Manufacturing Tools    | Production schedule, nesting patterns, tool wear tracker, design comparison    |
 
 ---
 
@@ -241,6 +243,30 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 149    | PWA v2 (enhanced offline caching, install prompt refinement)             | ✓ Done |
 | 150    | Error monitoring — privacy-first telemetry (Cloudflare Analytics/Sentry) | ✓ Done |
 | 151    | Release v5.9.0                                                           | ✓ Done |
+
+### Phase 37 — Advanced Manufacturing Tools · v5.13.0 ✅ COMPLETE
+
+> **Status**: COMPLETE · **Released**: 2026-07-01 · **Goal**: Production scheduling, nesting pattern library, tool wear tracking, design comparison
+
+| Sprint | Deliverable                                                                | Track  |
+| ------ | -------------------------------------------------------------------------- | ------ |
+| 167    | Production schedule planner (jobs, priorities, conflict detection)         | ✓ Done |
+| 168    | Nesting pattern library (save/recall/score cut-sheet patterns)             | ✓ Done |
+| 169    | Tool wear tracker (inventory, usage log, maintenance alerts)               | ✓ Done |
+| 170    | Design comparison engine (7-criterion weighted scoring, radar chart data)  | ✓ Done |
+| 171    | Release v5.13.0                                                            | ✓ Done |
+
+### Phase 36 — Advanced Workflows & Design Exploration · v5.12.0 ✅ COMPLETE
+
+> **Status**: COMPLETE · **Released**: 2026-06-29 · **Goal**: Parametric templates, batch export, material yield optimization, version history
+
+| Sprint | Deliverable                                                                | Track  |
+| ------ | -------------------------------------------------------------------------- | ------ |
+| 162    | Parametric template engine (reusable templates, expressions, validation)   | ✓ Done |
+| 163    | Batch export pipeline (multi-format, multi-cabinet, progress tracking)     | ✓ Done |
+| 164    | Material yield optimizer (multi-sheet scheduling, waste minimization)      | ✓ Done |
+| 165    | Version history & branching (timeline, diff, branch/merge)                 | ✓ Done |
+| 166    | Release v5.12.0                                                            | ✓ Done |
 
 ### Phase 35 — CNC Workflow & Cloud Sync · v5.11.0 ✅ COMPLETE
 

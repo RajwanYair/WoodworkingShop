@@ -9,6 +9,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.13.0] — 2026-07-01
+
+### Phase 37 — Advanced Manufacturing Tools (Sprints 167–171)
+
+#### Sprint 167 — Production Schedule Planner
+
+- New engine module `production-schedule.ts` for multi-job shop scheduling
+- Job model: start/end dates, duration, priority (critical/high/normal/low), worker, status
+- Schedule validation: overlap detection, date ordering, conflict identification
+- Priority-sorted job queue for shop floor planning
+- Status lifecycle: scheduled → in-progress → complete
+
+#### Sprint 168 — Nesting Pattern Library
+
+- New engine module `nesting-patterns.ts` for reusable cut-sheet patterns
+- Pattern storage: named patterns with demand vectors per part type
+- Match scoring: similarity between current demand and saved patterns
+- Top-N pattern ranking for rapid cut-sheet setup
+- Pattern lifecycle: save, recall, score, delete
+
+#### Sprint 169 — Tool Wear Tracker
+
+- New engine module `tool-wear.ts` for shop tool inventory and condition tracking
+- Tool model: type, current condition (good/fair/replace), cost-per-meter
+- Usage logging with cut length and material type
+- Automated condition assessment from cumulative usage
+- Maintenance alert generation for tools requiring replacement
+- Cost-per-meter analytics for tool lifecycle budgeting
+
+#### Sprint 170 — Design Comparison Engine
+
+- New engine module `design-comparison.ts` for multi-criteria design evaluation
+- 7 comparison criteria: material cost, material area, part count, cut complexity, waste percent, assembly steps, structural score
+- Weighted scoring system (fully customizable `CriterionWeight[]`)
+- Per-criterion winner detection (lower-is-better and higher-is-better aware)
+- Absolute and percentage delta calculations for each criterion
+- Normalized 0–1 scores for radar chart visualization
+- Overall winner determination with tie detection
+- Human-readable comparison summary generation
+
+---
+
 ## [5.12.0] — 2026-06-29
 
 ### Phase 36 — Advanced Workflows & Design Exploration (Sprints 162–166)

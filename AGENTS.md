@@ -1,21 +1,17 @@
 # Cabinet Planner — AI Agent Context
 
 > Browser-based woodworking design tool · React 19 + TypeScript 6 + Vite 8
-> **v5.8.0** · MIT · Node ≥ 22 · [Live demo](https://rajwanyair.github.io/WoodworkingShop/)
+> **v5.13.0** · MIT · Node ≥ 22 · [Live demo](https://rajwanyair.github.io/WoodworkingShop/)
 
 ## What It Does
 
 Configure any cabinet/furniture piece → live 6-view SVG preview → MaxRects cut-sheet optimizer → export PDF build plan, DXF, G-code, or BOM. **No server, no account.** Full RTL support (Hebrew/Arabic).
 
-## Active Sprint — Phase 33 (Sprints 147–151)
+## Active Sprint — Phase 38 (Sprints 172+)
 
 | Sprint | Feature                                                                | Status |
 | ------ | ---------------------------------------------------------------------- | ------ |
-| 147    | Lighthouse CI automation (GH Actions gates: TBT < 200 ms, FCP < 1.2 s) | TODO   |
-| 148    | Security hardening (CSP headers, Subresource Integrity, OWASP audit)   | TODO   |
-| 149    | PWA v2 (enhanced offline caching, install prompt refinement)           | TODO   |
-| 150    | Error monitoring — privacy-first telemetry                             | TODO   |
-| 151    | Release v5.9.0                                                         | TODO   |
+| 172    | TBD                                                                    | TODO   |
 
 ## Tech Stack
 
