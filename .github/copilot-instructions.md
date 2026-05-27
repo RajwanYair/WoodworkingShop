@@ -2,19 +2,19 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.8.0** · **Next target: v5.9.0** (Phase 33 — Production Infrastructure & Observability)
+> **Current release: v5.9.0** · **Next target: v5.10.0** (Phase 34 — Room Planner v2 & Community Catalog)
 
-## Active Sprint — Phase 33 (Sprints 147–151)
+## Active Sprint — Phase 34 (Sprints 152+)
 
-> **Status**: PLANNED · **Goal**: Lighthouse CI gates, security hardening, PWA v2, error monitoring
+> **Status**: PLANNED · **Goal**: Room Planner v2, Community Catalog, manufacturer integration
 
 | Sprint | Feature                                                                  | Status |
 | ------ | ------------------------------------------------------------------------ | ------ |
-| 147    | Lighthouse CI automation (GH Actions gates: TBT < 200 ms, FCP < 1.2 s)   | TODO   |
-| 148    | Security hardening (CSP headers, Subresource Integrity, OWASP audit)     | TODO   |
-| 149    | PWA v2 (enhanced offline caching, install prompt refinement)             | TODO   |
-| 150    | Error monitoring — privacy-first telemetry (Cloudflare Analytics/Sentry) | TODO   |
-| 151    | Release v5.9.0                                                           | TODO   |
+| 152    | Room Planner v2 — full-room layout with wall/floor placement             | TODO   |
+| 153    | Community material catalog v2 — manufacturer embedding API               | TODO   |
+| 154    | Appliance clearance zone validation                                      | TODO   |
+| 155    | Cabinet-to-machining center direct link prototype                        | TODO   |
+| 156    | Release v5.10.0                                                          | TODO   |
 
 ## Tech Stack
 

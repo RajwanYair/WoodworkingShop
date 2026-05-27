@@ -9,6 +9,49 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.9.0] — 2026-06-10
+
+### Phase 33 — Production Infrastructure & Observability (Sprints 147–151)
+
+#### Sprint 147 — Lighthouse CI automation
+
+- Tighten Lighthouse assertions from advisory `warn` to hard `error` gates
+- Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 90
+- FCP ≤ 1200 ms, LCP ≤ 2500 ms, TBT ≤ 200 ms, CLS ≤ 0.1
+- Use `numberOfRuns: 3` in CI for median-run statistical stability
+- Add dedicated `lighthouse.yml` workflow with PR comment reporting
+
+#### Sprint 148 — Security hardening
+
+- Add `Cross-Origin-Opener-Policy: same-origin` (clickjacking/Spectre defense)
+- Add `Cross-Origin-Resource-Policy: same-origin`
+- Extend `Permissions-Policy` with usb, bluetooth, serial, hid
+- Add `frame-ancestors 'none'` + `upgrade-insecure-requests` to CSP
+- Implement Subresource Integrity (SRI) via custom Vite plugin (`scripts/vite-plugin-sri.ts`)
+- sha384 hashes on all local script/link tags in production HTML
+
+#### Sprint 149 — PWA v2
+
+- Add runtime caching for CDN assets (StaleWhileRevalidate, 30-day TTL)
+- Add runtime caching for app JSON/locale files (SWR, 7-day TTL)
+- Add runtime caching for app images/SVGs (CacheFirst, 30-day TTL)
+- Create `public/offline.html` fallback page for uncached navigation
+- Create `useInstallPrompt` hook: defers `beforeinstallprompt`, detects standalone mode
+
+#### Sprint 150 — Error monitoring
+
+- Create `src/services/error-reporter.ts`: privacy-first, no PII, no cookies
+- Sanitize stack traces (strip paths, limit 10 frames) and messages (redact emails)
+- Rate-limit: max 5 reports per session; gated by `VITE_ERROR_ENDPOINT` env var
+- Wire `initErrorReporter()` in `main.tsx` for global error/rejection handlers
+- Wire `reportError()` in `ErrorBoundary.componentDidCatch`
+
+#### Sprint 151 — Release v5.9.0
+
+- Bump version to 5.9.0
+- Update ROADMAP Phase 33 sprint statuses to ✓ Done
+- Full quality gate pass + GitHub release
+
 ## [5.8.0] — 2026-06-10
 
 ### Phase 32 — Developer Experience & Plugin Ecosystem (Sprints 142–146)

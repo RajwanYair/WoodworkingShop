@@ -1,7 +1,7 @@
 # Roadmap
 
-> **Last strategic review**: 2026-06-10 · **Current version**: 5.8.0
-> **Next target**: v5.9.0 (Phase 33 — Production Infrastructure & Observability)
+> **Last strategic review**: 2026-06-10 · **Current version**: 5.9.0
+> **Next target**: v5.10.0 (Phase 34 — Room Planner v2 & Community Catalog)
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -229,15 +229,15 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 
 ### Phase 33 — Production Infrastructure & Observability · v5.9.0
 
-> **Status**: PLANNED · **Goal**: Lighthouse CI gates, security hardening, PWA v2, error monitoring
+> **Status**: ✓ DONE · **Goal**: Lighthouse CI gates, security hardening, PWA v2, error monitoring
 
 | Sprint | Deliverable                                                              | Track    |
 | ------ | ------------------------------------------------------------------------ | -------- |
-| 147    | Lighthouse CI automation (GH Actions gates: TBT < 200 ms, FCP < 1.2 s)   | Perf     |
-| 148    | Security hardening (CSP headers, Subresource Integrity, OWASP audit)     | Security |
-| 149    | PWA v2 (enhanced offline caching, install prompt refinement)             | PWA      |
-| 150    | Error monitoring — privacy-first telemetry (Cloudflare Analytics/Sentry) | Observ.  |
-| 151    | Release v5.9.0                                                           | Release  |
+| 147    | Lighthouse CI automation (GH Actions gates: TBT < 200 ms, FCP < 1.2 s)   | ✓ Done   |
+| 148    | Security hardening (CSP headers, Subresource Integrity, OWASP audit)     | ✓ Done   |
+| 149    | PWA v2 (enhanced offline caching, install prompt refinement)             | ✓ Done   |
+| 150    | Error monitoring — privacy-first telemetry (Cloudflare Analytics/Sentry) | ✓ Done   |
+| 151    | Release v5.9.0                                                           | ✓ Done   |
 
 ### Future Horizons (Unscoped)
 
