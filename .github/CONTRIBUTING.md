@@ -66,8 +66,9 @@ npm run check   # typecheck + lint + format:check + test
 
 ### 🌐 i18n
 
-All UI strings must exist in **both** `src/i18n/en.json` **and** `src/i18n/he.json`.  
-Run `npm run i18n:coverage` to verify parity.
+All UI strings must exist in **all 6 locale files**: `src/i18n/{en,he,ar,de,es,fr}.json`.
+At minimum, `en.json` and `he.json` must have proper translations; others copy the EN value.
+Run `npm run i18n:coverage` to verify parity across all locales.
 
 ### ⚙️ Engine vs UI
 
@@ -100,7 +101,7 @@ Before opening a PR:
 - [ ] `npm run check` passes (typecheck + lint + format + tests)
 - [ ] `npm run build` produces 0 warnings
 - [ ] New logic is covered by unit tests in `tests/`
-- [ ] i18n: keys added to **both** `en.json` and `he.json`
+- [ ] i18n: keys added to **all 6 locale files** (en + he proper, ar/de/es/fr at minimum)
 - [ ] No hardcoded absolute paths, no `console.log` left in
 - [ ] CHANGELOG.md updated if the change is user-visible
 
@@ -114,6 +115,6 @@ See [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md) for the full module map, dat
 src/engine/     ← pure TypeScript; no React; all computation
 src/components/ ← React UI components
 src/store/      ← Zustand state stores
-src/i18n/       ← EN + HE translation files
+src/i18n/       ← 6 locale files (EN, HE, AR, DE, ES, FR)
 tests/          ← Vitest unit tests (mirrors src/ layout)
 ```

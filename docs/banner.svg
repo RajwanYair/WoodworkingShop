@@ -161,13 +161,13 @@
   <rect x="1080" y="58" width="96" height="26" rx="13" fill="#7a4010" stroke="#c08030" stroke-width="1" opacity="0.95"/>
   <text x="1128" y="75"
     font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="700"
-    fill="#f0c060" text-anchor="middle">v5.8.0</text>
+    fill="#f0c060" text-anchor="middle">v5.15.0</text>
 
   <!-- Tagline -->
   <text x="242" y="124"
     font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif"
     font-size="15" fill="#c09060" letter-spacing="0.3">
-    Browser-based woodworking design  ·  No install  ·  Free &amp; open-source
+    Free cabinet design &amp; cut-list optimizer  ·  No install  ·  100% browser-based  ·  Open-source
   </text>
 
   <!-- ── Feature pills — row 1 ── -->
@@ -184,10 +184,10 @@
   <text x="598" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">PWA Offline</text>
 
   <rect x="646" y="144" width="85" height="23" rx="11.5" fill="url(#pillBg)" stroke="#7a4010" stroke-width="1"/>
-  <text x="688" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">EN + HE (RTL)</text>
+  <text x="688" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">6 Languages</text>
 
   <rect x="738" y="144" width="80" height="23" rx="11.5" fill="url(#pillBg)" stroke="#7a4010" stroke-width="1"/>
-  <text x="778" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">318 Tests</text>
+  <text x="778" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">950+ Tests</text>
 
   <!-- ── Tech stack row (shifted right to clear feature pills & tagline) ── -->
   <text x="1080" y="100"
@@ -199,7 +199,7 @@
   <text x="1053" y="121" font-family="monospace,'Courier New'" font-size="10" fill="#61dafb" text-anchor="middle">React 19</text>
   <!-- TypeScript -->
   <rect x="1090" y="107" width="66" height="21" rx="5" fill="#3178c6" opacity="0.9"/>
-  <text x="1123" y="121" font-family="monospace,'Courier New'" font-size="10" fill="#fff" text-anchor="middle">TypeScript 5</text>
+  <text x="1123" y="121" font-family="monospace,'Courier New'" font-size="10" fill="#fff" text-anchor="middle">TypeScript 6</text>
   <!-- Vite -->
   <rect x="1024" y="133" width="58" height="21" rx="5" fill="#1a1a2e" opacity="0.9"/>
   <text x="1053" y="147" font-family="monospace,'Courier New'" font-size="10" fill="#646cff" text-anchor="middle">Vite 8</text>
@@ -211,7 +211,7 @@
   <text x="1053" y="173" font-family="monospace,'Courier New'" font-size="10" fill="#f59e0b" text-anchor="middle">Zustand 5</text>
   <!-- Vitest -->
   <rect x="1090" y="159" width="66" height="21" rx="5" fill="#0d0d0d" opacity="0.9"/>
-  <text x="1123" y="173" font-family="monospace,'Courier New'" font-size="10" fill="#acd268" text-anchor="middle">Vitest 3</text>
+  <text x="1123" y="173" font-family="monospace,'Courier New'" font-size="10" fill="#acd268" text-anchor="middle">Vitest 4</text>
 
   <!-- ── Bottom stats bar ── -->
   <rect x="7" y="202" width="1186" height="50" rx="0" fill="#0e0804" opacity="0.55"/>
@@ -225,7 +225,7 @@
 
   <!-- Stat 2: Tests -->
   <text x="400" y="222" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#906040" text-anchor="middle">UNIT TESTS</text>
-  <text x="400" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="600" fill="#f0c060" text-anchor="middle">288 passing</text>
+  <text x="400" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="600" fill="#f0c060" text-anchor="middle">950+ passing</text>
 
   <!-- Divider -->
   <line x1="472" y1="208" x2="472" y2="246" stroke="#5a3010" stroke-width="1" opacity="0.6"/>
@@ -246,7 +246,7 @@
 
   <!-- Stat 5: Languages -->
   <text x="840" y="222" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#906040" text-anchor="middle">LANGUAGES</text>
-  <text x="840" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="600" fill="#f0c060" text-anchor="middle">EN + עברית (RTL)</text>
+  <text x="840" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="600" fill="#f0c060" text-anchor="middle">EN · HE · AR · DE · ES · FR</text>
 
   <!-- Divider -->
   <line x1="910" y1="208" x2="910" y2="246" stroke="#5a3010" stroke-width="1" opacity="0.6"/>
@@ -254,6 +254,26 @@
   <!-- Stat 6: License -->
   <text x="980" y="222" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#906040" text-anchor="middle">LICENSE</text>
   <text x="980" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="600" fill="#f0c060" text-anchor="middle">MIT — Free forever</text>
+
+  <!-- Decorative sawblade watermark (subtle, top-right) -->
+  <g transform="translate(1140, 22)" opacity="0.08">
+    <circle cx="0" cy="0" r="28" fill="none" stroke="#f0c060" stroke-width="2"/>
+    <circle cx="0" cy="0" r="5" fill="#f0c060"/>
+    <path d="M0,-28 L3,-20 L-3,-20 Z" fill="#f0c060"/>
+    <path d="M0,28 L3,20 L-3,20 Z" fill="#f0c060"/>
+    <path d="M28,0 L20,3 L20,-3 Z" fill="#f0c060"/>
+    <path d="M-28,0 L-20,3 L-20,-3 Z" fill="#f0c060"/>
+    <path d="M20,-20 L15,-14 L14,-15 Z" fill="#f0c060"/>
+    <path d="M-20,20 L-15,14 L-14,15 Z" fill="#f0c060"/>
+    <path d="M20,20 L14,15 L15,14 Z" fill="#f0c060"/>
+    <path d="M-20,-20 L-14,-15 L-15,-14 Z" fill="#f0c060"/>
+  </g>
+
+  <!-- Open Source heart badge (bottom-right corner) -->
+  <g transform="translate(1110, 195)">
+    <rect x="0" y="0" width="76" height="20" rx="10" fill="#1a3a1a" stroke="#4a9a4a" stroke-width="0.8" opacity="0.9"/>
+    <text x="38" y="14" font-family="'Segoe UI',Arial,sans-serif" font-size="9" font-weight="600" fill="#7ada7a" text-anchor="middle">♥ Open Source</text>
+  </g>
 
   <!-- Top accent line -->
   <rect x="7" y="0" width="1186" height="4" fill="url(#amber)" rx="2" opacity="0.5"/>

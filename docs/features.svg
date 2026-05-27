@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 320" width="1000" height="320">
+  <defs>
+    <linearGradient id="fbg" x1="0" y1="0" x2="1000" y2="320" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0f0a06"/>
+      <stop offset="100%" stop-color="#1a1008"/>
+    </linearGradient>
+    <linearGradient id="fcard" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2a1a0a"/>
+      <stop offset="100%" stop-color="#1a0e04"/>
+    </linearGradient>
+    <linearGradient id="faccent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#c08030"/>
+      <stop offset="100%" stop-color="#f0c060"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="320" fill="url(#fbg)" rx="12"/>
+
+  <!-- Title -->
+  <text x="500" y="38" font-family="'Segoe UI',Arial,sans-serif" font-size="22" font-weight="700"
+    fill="#f0c060" text-anchor="middle" letter-spacing="0.5">Feature Overview — Cabinet Planner</text>
+  <rect x="300" y="44" width="400" height="2" fill="url(#faccent)" rx="1" opacity="0.6"/>
+
+  <!-- Row 1: Design | Optimize | Export -->
+  <!-- Card 1: Design -->
+  <rect x="30" y="64" width="300" height="110" rx="10" fill="url(#fcard)" stroke="#5a3010" stroke-width="1"/>
+  <text x="50" y="90" font-family="'Segoe UI',Arial,sans-serif" font-size="14" font-weight="700" fill="#f0b040">🎛 Design</text>
+  <text x="50" y="112" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• 6 furniture types (cabinet, desk, wardrobe…)</text>
+  <text x="50" y="128" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Parametric dimensions with live preview</text>
+  <text x="50" y="144" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Materials, doors, drawers, shelves, grain</text>
+  <text x="50" y="160" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Shareable URLs &amp; JSON config save/load</text>
+
+  <!-- Card 2: Optimize -->
+  <rect x="350" y="64" width="300" height="110" rx="10" fill="url(#fcard)" stroke="#5a3010" stroke-width="1"/>
+  <text x="370" y="90" font-family="'Segoe UI',Arial,sans-serif" font-size="14" font-weight="700" fill="#f0b040">📐 Optimize</text>
+  <text x="370" y="112" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• MaxRects 2D bin-packing (web worker)</text>
+  <text x="370" y="128" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Grain-aware — never rotates grain parts</text>
+  <text x="370" y="144" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• 5 smart optimization strategies</text>
+  <text x="370" y="160" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Interactive sheets with hover highlight</text>
+
+  <!-- Card 3: Export -->
+  <rect x="670" y="64" width="300" height="110" rx="10" fill="url(#fcard)" stroke="#5a3010" stroke-width="1"/>
+  <text x="690" y="90" font-family="'Segoe UI',Arial,sans-serif" font-size="14" font-weight="700" fill="#f0b040">📤 Export</text>
+  <text x="690" y="112" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• PDF build plan (cover, specs, assembly)</text>
+  <text x="690" y="128" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• DXF for CNC routers / laser cutters</text>
+  <text x="690" y="144" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• G-code toolpath for CNC machines</text>
+  <text x="690" y="160" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• CSV BOM, SVG/PNG preview panels</text>
+
+  <!-- Row 2: Preview | Assembly | Platform -->
+  <!-- Card 4: Preview -->
+  <rect x="30" y="190" width="300" height="110" rx="10" fill="url(#fcard)" stroke="#5a3010" stroke-width="1"/>
+  <text x="50" y="216" font-family="'Segoe UI',Arial,sans-serif" font-size="14" font-weight="700" fill="#f0b040">🖼 Preview</text>
+  <text x="50" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• 6 views: front, side, top, back, iso-3D</text>
+  <text x="50" y="254" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Dimension annotations with arrowheads</text>
+  <text x="50" y="270" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Grain arrows, dark mode, touch zoom</text>
+  <text x="50" y="286" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• SVG + PNG download of any view</text>
+
+  <!-- Card 5: Assembly -->
+  <rect x="350" y="190" width="300" height="110" rx="10" fill="url(#fcard)" stroke="#5a3010" stroke-width="1"/>
+  <text x="370" y="216" font-family="'Segoe UI',Arial,sans-serif" font-size="14" font-weight="700" fill="#f0b040">🏗 Assembly &amp; Cost</text>
+  <text x="370" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Step-by-step assembly guide with tips</text>
+  <text x="370" y="254" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Live cost estimator per material</text>
+  <text x="370" y="270" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Hardware BOM with quantities</text>
+  <text x="370" y="286" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Undo/Redo, keyboard shortcuts</text>
+
+  <!-- Card 6: Platform -->
+  <rect x="670" y="190" width="300" height="110" rx="10" fill="url(#fcard)" stroke="#5a3010" stroke-width="1"/>
+  <text x="690" y="216" font-family="'Segoe UI',Arial,sans-serif" font-size="14" font-weight="700" fill="#f0b040">🌐 Platform</text>
+  <text x="690" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• PWA — installable, works offline</text>
+  <text x="690" y="254" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• 6 languages with RTL support</text>
+  <text x="690" y="270" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• WCAG 2.2 AA accessible</text>
+  <text x="690" y="286" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Lighthouse score 97+ / a11y 100</text>
+
+  <!-- Bottom bar -->
+  <rect x="30" y="310" width="940" height="3" fill="url(#faccent)" rx="1.5" opacity="0.4"/>
+</svg>

@@ -1,4 +1,4 @@
-# WoodworkingShop
+# WoodworkingShop — Free Cabinet Planner & Cut-List Optimizer
 
 <div align="center">
   <img src="docs/banner.svg" alt="Cabinet Planner — Interactive Woodworking Design Tool" width="100%"/>
@@ -17,8 +17,10 @@
 [![Vite](https://img.shields.io/badge/Vite-8-646cff?logo=vite&logoColor=white)](vite.config.ts)
 [![Tailwind](https://img.shields.io/badge/Tailwind-4-38bdf8?logo=tailwindcss&logoColor=white)](src/index.css)
 [![PWA](https://img.shields.io/badge/PWA-offline--ready-5a0fc8?logo=pwa&logoColor=white)](public/manifest.json)
-[![i18n](https://img.shields.io/badge/i18n-EN%20%2B%20HE%20RTL-orange?logo=googletranslate&logoColor=white)](src/i18n)
-[![Tests](https://img.shields.io/badge/tests-944%2B-brightgreen?logo=vitest&logoColor=white)](tests/)
+[![i18n](https://img.shields.io/badge/i18n-6%20languages%20%28EN%20HE%20AR%20DE%20ES%20FR%29-orange?logo=googletranslate&logoColor=white)](src/i18n)
+[![Tests](https://img.shields.io/badge/tests-950%2B-brightgreen?logo=vitest&logoColor=white)](tests/)
+[![Bundle](https://img.shields.io/badge/bundle-<200KB%20gzip-blue?logo=webpack&logoColor=white)](config/bundle-budget.json)
+[![a11y](https://img.shields.io/badge/a11y-WCAG%202.2%20AA-green?logo=accessibility&logoColor=white)](tests/e2e)
 [![Last Commit](https://img.shields.io/github/last-commit/RajwanYair/WoodworkingShop?logo=github)](https://github.com/RajwanYair/WoodworkingShop/commits/main)
 [![GitHub Stars](https://img.shields.io/github/stars/RajwanYair/WoodworkingShop?style=social)](https://github.com/RajwanYair/WoodworkingShop/stargazers)
 
@@ -28,7 +30,15 @@
 
 ---
 
-> **Cabinet Planner** is a browser-based woodworking design tool: configure any cabinet or furniture piece, see a live 6-view 3D preview, optimize your cut sheets, and export a complete PDF build plan, DXF, G-code, or BOM — all without a server or an account.
+> **Cabinet Planner** is a free, open-source, browser-based woodworking design tool
+> and cut-list optimizer: configure any cabinet or furniture piece, see a live
+> 6-view 3D preview, optimize your cut sheets with MaxRects bin-packing, and export
+> a complete PDF build plan, DXF, G-code, or BOM — all without a server, account,
+> or installation. Supports 6 languages including RTL (Hebrew, Arabic).
+
+<div align="center">
+  <img src="docs/features.svg" alt="Cabinet Planner features — Design, Optimize, Export, Preview, Assembly, Platform" width="100%"/>
+</div>
 
 ---
 
@@ -93,7 +103,7 @@
 - ↩ **Undo / Redo** — full change history (`Ctrl+Z` / `Ctrl+Y`)
 - ⌨ **Keyboard shortcuts** — `Alt+1-5` tabs, `Ctrl+Z/Y`, `Ctrl+P`, `?` for help modal
 - 📱 **PWA / Offline** — service worker; installable as a desktop or mobile app
-- 🌐 **Bilingual** — English + Hebrew (RTL layout) via i18next
+- 🌐 **Multilingual** — 6 languages: EN, HE, AR, DE, ES, FR (with full RTL support)
 - ♿ **Accessible** — ARIA landmarks, keyboard nav, skip-to-content, screen-reader labels
 - 🖨 **Print-friendly** — `@media print` hides UI chrome; optimises tables and SVGs for paper
 
@@ -112,7 +122,7 @@ npm ci
 # 3 — dev server  →  http://localhost:5173/WoodworkingShop/
 npm run dev
 
-# 4 — run 318 unit tests
+# 4 — run 950+ unit tests
 npm test
 
 # 5 — production build  →  dist/
@@ -124,6 +134,10 @@ npm run build
 ---
 
 ## 🏗 Tech Stack
+
+<div align="center">
+  <img src="docs/tech-stack.svg" alt="Tech stack: React 19, TypeScript 6, Vite 8, Tailwind 4, Zustand 5, Vitest 4, i18next 26" width="100%"/>
+</div>
 
 | Layer         | Technology                                                 |
 | ------------- | ---------------------------------------------------------- |
@@ -226,9 +240,10 @@ npm run test:e2e        # Playwright end-to-end tests
 
 ## 🌐 Internationalization
 
-The app ships with full **English** and **Hebrew** (RTL) translations.  
-All UI strings live in `src/i18n/en.json` and `src/i18n/he.json`.  
-Run `npm run i18n:coverage` to verify both files are in sync.
+The app ships with **6 languages**: English, Hebrew (RTL), Arabic (RTL),
+German, Spanish, and French.
+All UI strings live in `src/i18n/{en,he,ar,de,es,fr}.json`.
+Run `npm run i18n:coverage` to verify all locale files are in sync.
 
 ---
 
@@ -315,7 +330,7 @@ Quick checklist before opening a PR:
 1. `npm run check` passes (typecheck + lint + format + tests)
 2. `npm run build` succeeds with 0 warnings
 3. New features include unit tests
-4. i18n keys added to **both** `en.json` and `he.json`
+4. i18n keys added to **all 6 locale files** (en + he proper, ar/de/es/fr at minimum)
 
 ---
 
@@ -325,10 +340,33 @@ Quick checklist before opening a PR:
      woodworking  cabinet-design  cut-optimizer  furniture-planner  woodworking-tools
      cabinet-maker  bin-packing  maxrects  pdf-export  dxf-export  gcode  bom
      react  typescript  vite  tailwindcss  zustand  pwa  offline-app  web-app
-     bilingual  hebrew  rtl  open-source  mit-license  browser-based  no-backend
+     multilingual  hebrew  rtl  arabic  open-source  mit-license  browser-based  no-backend
+     cnc  nesting  sheet-goods  parametric-design  furniture-design  cut-list
 -->
 
-**Keywords:** cabinet planner, woodworking design tool, cut list optimizer, furniture layout, sheet goods optimizer, MaxRects bin packing, CNC export DXF G-code, cabinet maker software, free woodworking app, browser-based cabinet design, parametric furniture, bilingual RTL, PWA offline, React TypeScript woodworking, cut sheet optimizer free, cabinet layout generator
+**Keywords:** cabinet planner, woodworking design tool, cut list optimizer,
+furniture layout planner, sheet goods optimizer, MaxRects bin packing algorithm,
+CNC export DXF G-code, cabinet maker software free, free woodworking app,
+browser-based cabinet design, parametric furniture designer,
+multilingual RTL Hebrew Arabic, PWA offline woodworking,
+React TypeScript woodworking app, cut sheet optimizer free online,
+cabinet layout generator, kitchen cabinet planner, wardrobe designer,
+bookcase builder, furniture cut list software, nesting software free,
+panel optimization, 2D bin packing, wood cutting calculator,
+material waste reduction, edge banding calculator, hardware BOM generator,
+assembly instructions generator, woodworking project planner
+
+### Why Cabinet Planner?
+
+| Need | Solution |
+| --- | --- |
+| **Design cabinets quickly** | Parametric configurator with live 6-view preview |
+| **Minimize material waste** | MaxRects bin-packing optimizer reduces sheet waste to <5% |
+| **Export for CNC machines** | DXF and G-code output for router/laser cutters |
+| **Generate cut lists** | Automatic BOM with CSV/PDF export |
+| **Work offline** | PWA — install on any device, no internet needed |
+| **Multi-language** | EN, HE, AR (RTL), DE, ES, FR |
+| **Free forever** | MIT license, no account, no backend, no tracking |
 
 ---
 

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 80" width="800" height="80">
+  <defs>
+    <linearGradient id="tbg" x1="0" y1="0" x2="800" y2="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0c0804"/>
+      <stop offset="100%" stop-color="#140e08"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="80" fill="url(#tbg)" rx="10"/>
+
+  <!-- React -->
+  <rect x="20" y="20" width="90" height="40" rx="8" fill="#20232a" stroke="#61dafb" stroke-width="1.2"/>
+  <text x="65" y="45" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="600" fill="#61dafb" text-anchor="middle">React 19</text>
+
+  <!-- TypeScript -->
+  <rect x="125" y="20" width="110" height="40" rx="8" fill="#1a2a4a" stroke="#3178c6" stroke-width="1.2"/>
+  <text x="180" y="45" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="600" fill="#6ab0f3" text-anchor="middle">TypeScript 6</text>
+
+  <!-- Vite -->
+  <rect x="250" y="20" width="80" height="40" rx="8" fill="#1a1a2e" stroke="#646cff" stroke-width="1.2"/>
+  <text x="290" y="45" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="600" fill="#a78bfa" text-anchor="middle">Vite 8</text>
+
+  <!-- Tailwind -->
+  <rect x="345" y="20" width="100" height="40" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1.2"/>
+  <text x="395" y="45" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="600" fill="#38bdf8" text-anchor="middle">Tailwind 4</text>
+
+  <!-- Zustand -->
+  <rect x="460" y="20" width="95" height="40" rx="8" fill="#1c1917" stroke="#f59e0b" stroke-width="1.2"/>
+  <text x="507" y="45" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="600" fill="#f59e0b" text-anchor="middle">Zustand 5</text>
+
+  <!-- Vitest -->
+  <rect x="570" y="20" width="85" height="40" rx="8" fill="#0d1a0d" stroke="#acd268" stroke-width="1.2"/>
+  <text x="612" y="45" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="600" fill="#acd268" text-anchor="middle">Vitest 4</text>
+
+  <!-- i18next -->
+  <rect x="670" y="20" width="110" height="40" rx="8" fill="#1a0e1a" stroke="#d97706" stroke-width="1.2"/>
+  <text x="725" y="45" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="600" fill="#fbbf24" text-anchor="middle">i18next 26</text>
+</svg>
