@@ -1718,5 +1718,23 @@
     "maxShelfLoad": "Max Shelf Load",
     "perPanel": "Per Panel",
     "density": "Density (kg/m³)"
+  },
+  "dowelJoint": {
+    "title": "Dowel Joint Calculator",
+    "diameter": "Dowel Diameter",
+    "spacing": "Spacing",
+    "depth": "Drill Depth",
+    "drillBit": "Drill Bit",
+    "count": "Number of Dowels",
+    "clampTime": "Clamp Time",
+    "orientation": "Joint Orientation",
+    "edgeToFace": "Edge to Face",
+    "edgeToEdge": "Edge to Edge",
+    "mitre": "Mitre",
+    "positions": "Dowel Positions",
+    "jointLength": "Joint Length",
+    "boardThickness": "Board Thickness",
+    "edgeClearance": "Edge Clearance",
+    "dowelLength": "Dowel Length"
   }
 }

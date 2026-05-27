@@ -1229,3 +1229,7 @@ export type {
   PanelWeight,
   FastenerCategory,
 } from './cabinet-weight';
+
+// Sprint 193 — Dowel Joint Calculator
+export { calculateDowelJoint, selectDowelDiameter, minDowelsForLoad, STANDARD_DOWEL_DIAMETERS } from './dowel-joint';
+export type { DowelDiameter, JointOrientation, DowelJointInput, DowelPosition, DowelJointResult } from './dowel-joint';

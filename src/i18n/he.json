@@ -1718,5 +1718,23 @@
     "maxShelfLoad": "עומס מדף מרבי",
     "perPanel": "לכל לוח",
     "density": "צפיפות (ק״ג/מ³)"
+  },
+  "dowelJoint": {
+    "title": "מחשבון חיבור דיבלים",
+    "diameter": "קוטר דיבל",
+    "spacing": "מרווח",
+    "depth": "עומק קדיחה",
+    "drillBit": "מקדח",
+    "count": "מספר דיבלים",
+    "clampTime": "זמן הידוק",
+    "orientation": "כיוון החיבור",
+    "edgeToFace": "קצה לפנים",
+    "edgeToEdge": "קצה לקצה",
+    "mitre": "גרונג",
+    "positions": "מיקומי דיבלים",
+    "jointLength": "אורך החיבור",
+    "boardThickness": "עובי הלוח",
+    "edgeClearance": "מרחק מקצה",
+    "dowelLength": "אורך דיבל"
   }
 }
