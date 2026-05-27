@@ -1486,5 +1486,25 @@
     "cycleDetected": "Circular dependency detected!",
     "earliestStart": "Earliest Start",
     "latestFinish": "Latest Finish"
+  },
+  "workshopSafety": {
+    "title": "Workshop Safety",
+    "score": "Safety Score",
+    "passes": "Passes",
+    "fails": "Fails",
+    "violations": "Violations",
+    "critical": "Critical",
+    "warning": "Warning",
+    "clearanceZone": "Clearance Zone",
+    "overlap": "Overlap",
+    "noise": "Noise Level",
+    "ppe": "PPE Required",
+    "safetyGlasses": "Safety Glasses",
+    "hearingProtection": "Hearing Protection",
+    "dustMask": "Dust Mask",
+    "respirator": "Respirator",
+    "faceShield": "Face Shield",
+    "pushStick": "Push Stick",
+    "noViolations": "No safety violations detected."
   }
 }

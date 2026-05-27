@@ -1486,5 +1486,25 @@
     "cycleDetected": "זוהתה תלות מעגלית!",
     "earliestStart": "התחלה מוקדמת",
     "latestFinish": "סיום מאוחר"
+  },
+  "workshopSafety": {
+    "title": "בטיחות סדנה",
+    "score": "ציון בטיחות",
+    "passes": "עובר",
+    "fails": "נכשל",
+    "violations": "הפרות",
+    "critical": "קריטי",
+    "warning": "אזהרה",
+    "clearanceZone": "אזור פינוי",
+    "overlap": "חפיפה",
+    "noise": "רמת רעש",
+    "ppe": "ציוד מגן נדרש",
+    "safetyGlasses": "משקפי מגן",
+    "hearingProtection": "הגנת שמיעה",
+    "dustMask": "מסכת אבק",
+    "respirator": "מסנן",
+    "faceShield": "מגן פנים",
+    "pushStick": "מוט דחיפה",
+    "noViolations": "לא זוהו הפרות בטיחות."
   }
 }

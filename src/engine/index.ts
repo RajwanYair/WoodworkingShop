@@ -1053,3 +1053,19 @@ export type { GrainDirection, CutPart, GroupingCriterion, CutGroup, GroupingResu
 
 export { resolveAssemblyDeps, hasCycle, maxParallelism } from './assembly-dependency';
 export type { StepId, AssemblyStep, ScheduledStep, DependencyResult } from './assembly-dependency';
+
+export {
+  checkWorkshopSafety,
+  getToolClearance,
+  getNoiseLevel,
+  recommendPpe,
+  computeSafetyScore,
+} from './workshop-safety';
+export type {
+  ToolType,
+  PpeCategory,
+  WorkshopTool,
+  SafetyViolation,
+  PpeRecommendation,
+  SafetyResult,
+} from './workshop-safety';
