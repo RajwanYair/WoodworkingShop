@@ -1859,5 +1859,20 @@
     "compound": "גוניה מורכבת",
     "crownMolding": "פרופיל כתר",
     "polygon": "חיבור מצולע"
+  },
+  "shelfPin": {
+    "title": "מחשבון ריווח פיני מדף",
+    "spacing": "ריווח חורים",
+    "positions": "מצבים מתכווננים",
+    "holeCount": "סה״כ חורים",
+    "drillDepth": "עומק קדיחה",
+    "edgeClearance": "מרחק מקצה",
+    "pinDiameter": "קוטר פין",
+    "adjustmentRange": "טווח כוונון",
+    "euro32": "מערכת אירו 32 מ״מ",
+    "singleRow": "שורה אחת",
+    "doubleRow": "שורה כפולה",
+    "totalPins": "סה״כ פינים נדרשים",
+    "pinsPerShelf": "פינים למדף"
   }
 }

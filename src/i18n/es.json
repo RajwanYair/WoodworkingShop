@@ -1712,5 +1712,20 @@
     "compound": "Compound Miter",
     "crownMolding": "Crown Molding",
     "polygon": "Polygon Joint"
+  },
+  "shelfPin": {
+    "title": "Shelf Pin Spacing Calculator",
+    "spacing": "Hole Spacing",
+    "positions": "Adjustable Positions",
+    "holeCount": "Total Holes",
+    "drillDepth": "Drill Depth",
+    "edgeClearance": "Edge Clearance",
+    "pinDiameter": "Pin Diameter",
+    "adjustmentRange": "Adjustment Range",
+    "euro32": "Euro 32mm System",
+    "singleRow": "Single Row",
+    "doubleRow": "Double Row",
+    "totalPins": "Total Pins Needed",
+    "pinsPerShelf": "Pins per Shelf"
   }
 }

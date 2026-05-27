@@ -1268,3 +1268,7 @@ export type {
   CrownMoldingInput,
   CrownMoldingResult,
 } from './miter-angle';
+
+// Sprint 201 — Shelf Pin Spacing Calculator
+export { calculateShelfPins, totalPinsNeeded, SHELF_PIN_DIAMETERS } from './shelf-pin';
+export type { ShelfPinDiameter, PinPatternStyle, ShelfPinInput, PinHole, ShelfPinResult } from './shelf-pin';
