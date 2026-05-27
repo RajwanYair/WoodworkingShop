@@ -1338,3 +1338,7 @@ export type {
 // Sprint 210 — Finger Joint Calculator
 export { calculateFingerJoint } from './finger-joint';
 export type { FingerJointInput, FingerPosition, FingerJointResult } from './finger-joint';
+
+// Sprint 211 — Wood Screw Pilot Hole Calculator
+export { calculatePilotHole } from './pilot-hole';
+export type { WoodHardness, ScrewGauge, PilotHoleInput, PilotHoleResult } from './pilot-hole';

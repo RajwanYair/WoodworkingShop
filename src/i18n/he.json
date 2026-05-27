@@ -2050,5 +2050,20 @@
     "layoutA": "פריסת לוח א׳",
     "layoutB": "פריסת לוח ב׳",
     "auto": "אוטומטי"
+  },
+  "pilotHole": {
+    "title": "מחשבון חור טייס",
+    "screwGauge": "מידת בורג",
+    "screwLength": "אורך בורג",
+    "woodHardness": "קשיות עץ",
+    "pilotHoleDiameter": "קוטר חור טייס",
+    "clearanceHole": "קוטר חור פינוי",
+    "countersinkDiameter": "קוטר הטמעה",
+    "countersinkDepth": "עומק הטמעה",
+    "pilotDepth": "עומק חור טייס",
+    "softwood": "עץ רך",
+    "hardwood": "עץ קשה",
+    "plywood": "סנדוויץ׳",
+    "mdf": "MDF"
   }
 }
