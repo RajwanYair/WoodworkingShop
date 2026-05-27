@@ -9,6 +9,50 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.8.0] — 2026-06-10
+
+### Phase 32 — Developer Experience & Plugin Ecosystem (Sprints 142–146)
+
+#### Sprint 142 — Plugin API v2
+
+- New typed event bus with `on`/`off`/`emit` generics and `PluginEventMap` extension point
+- Lifecycle hooks: `onMount`, `onUnmount`, `onConfigChange`, `onPartsChange`
+- Sandboxed plugin context: read-only engine access, no store write-through
+- Stability tiers: `stable` / `experimental` contracts in `src/engine/plugin.ts`
+
+#### Sprint 143 — TypeDoc API documentation site
+
+- Auto-generated API docs from engine JSDoc (`npm run docs:api`)
+- TypeDoc 0.28 config at `typedoc.json`; output committed to `docs/api/` on release
+- Covers all public engine exports: functions, types, interfaces, variables
+
+#### Sprint 144 — Test coverage uplift to 85%+
+
+- **Achieved: 88.65% statements / 89.08% lines** (target was 85%)
+- New test files: `tests/engine/community-catalog.test.ts` (31 tests)
+- `tests/engine/gcode-toolpath.test.ts` (15 tests)
+- `tests/engine/export-ifc-step.test.ts` (21 tests)
+- `tests/engine/material-textures.test.ts` (32 tests)
+- `tests/utils/erp-export.test.ts` (24 tests)
+- `tests/engine/barrel-smoke.test.ts` (5 smoke tests for barrel re-exports)
+- Fixed `it.each` object-style for `community-catalog.test.ts` (TS2345 resolved)
+
+#### Sprint 145 — DX tooling
+
+- `scripts/vitest-reporter.js`: structured Markdown test summary → `$TEMP/WoodworkingShop/test-summary.md`
+- `scripts/lint-summary.js`: structured Markdown lint summary → `$TEMP/WoodworkingShop/lint-summary.md`
+- `package.json`: `test:summary` and `lint:summary` scripts
+- Fixed `vitest.config.ts`: `poolOptions.forks` → `forks` (Vitest 4 migration)
+- Fixed `vitest.config.ts`: Node 22+ `ExperimentalWarning: localStorage` suppressed via `forks.execArgv`
+
+#### Sprint 146 — Release v5.8.0
+
+- Moved `.gitleaks.toml` → `.github/.gitleaks.toml`; updated `secret-scan.yml` path
+- Removed duplicate root `CONTRIBUTING.md` (canonical at `.github/CONTRIBUTING.md`)
+- `ROADMAP.md`: comprehensive update — Phase 32 marked COMPLETE, Phase 33 (Production Infrastructure) added, competitor table expanded to include Mozaik, Roomle, KitchenDraw, Methods Harvested updated, Gaps to Close revised
+
+---
+
 ## [5.7.0] — 2026-06-11
 
 ### Phase 31 — UI Polish & Accessibility (Sprints 137–141)

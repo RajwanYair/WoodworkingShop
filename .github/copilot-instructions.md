@@ -2,19 +2,19 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.7.0** · **Next target: v5.8.0** (Phase 32 — Developer Experience & Plugin Ecosystem)
+> **Current release: v5.8.0** · **Next target: v5.9.0** (Phase 33 — Production Infrastructure & Observability)
 
-## Active Sprint — Phase 32 (Sprints 142–146)
+## Active Sprint — Phase 33 (Sprints 147–151)
 
-> **Status**: PLANNED · **Goal**: Plugin API v2, TypeDoc docs, test coverage uplift, DX tooling
+> **Status**: PLANNED · **Goal**: Lighthouse CI gates, security hardening, PWA v2, error monitoring
 
-| Sprint | Feature                                                             | Status |
-| ------ | ------------------------------------------------------------------- | ------ |
-| 142    | Plugin API v2 (typed event bus, lifecycle hooks, sandboxed context) | TODO   |
-| 143    | TypeDoc API documentation site (auto-generated from engine JSDoc)   | TODO   |
-| 144    | Test coverage uplift to 85% (engine + store combined)               | TODO   |
-| 145    | DX tooling (custom Vitest reporters, structured lint summaries)     | TODO   |
-| 146    | Release v5.8.0                                                      | TODO   |
+| Sprint | Feature                                                                  | Status |
+| ------ | ------------------------------------------------------------------------ | ------ |
+| 147    | Lighthouse CI automation (GH Actions gates: TBT < 200 ms, FCP < 1.2 s)   | TODO   |
+| 148    | Security hardening (CSP headers, Subresource Integrity, OWASP audit)     | TODO   |
+| 149    | PWA v2 (enhanced offline caching, install prompt refinement)             | TODO   |
+| 150    | Error monitoring — privacy-first telemetry (Cloudflare Analytics/Sentry) | TODO   |
+| 151    | Release v5.9.0                                                           | TODO   |
 
 ## Tech Stack
 

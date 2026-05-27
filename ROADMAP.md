@@ -1,7 +1,7 @@
 # Roadmap
 
-> **Last strategic review**: 2026-06-10 · **Current version**: 5.6.0
-> **Next target**: v5.8.0 (Phase 32 — Developer Experience & Plugin Ecosystem)
+> **Last strategic review**: 2026-06-10 · **Current version**: 5.8.0
+> **Next target**: v5.9.0 (Phase 33 — Production Infrastructure & Observability)
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -33,32 +33,32 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 
 ### Comparison Table
 
-| Feature / Capability            | Cabinet Planner (this) | CutList Optimizer | SketchList 3D | Polyboard    | CutList Plus fx | Cabinet Vision | Fusion 360  |
-| ------------------------------- | ---------------------- | ----------------- | ------------- | ------------ | --------------- | -------------- | ----------- |
-| **Price**                       | Free / MIT OSS         | Free (basic)      | $167–$497/yr  | €330 one-off | $79–$159        | Enterprise $   | $545/yr     |
-| **Platform**                    | Browser (PWA)          | Browser           | Windows only  | Windows only | Windows only    | Windows only   | Cloud + Win |
-| **Cut optimization**            | MaxRects BSSF multi    | Simple 2D         | Basic         | Guillotine   | Advanced        | Proprietary    | None        |
-| **G-code export**               | Yes (G2/G3 arcs, M6)   | No                | No            | WoodWOP only | No              | WoodWOP/Grbl   | Yes         |
-| **DXF export**                  | Yes (layers, colors)   | No                | Basic         | Yes          | No              | Yes            | Yes         |
-| **PDF build plans**             | Yes (off-thread)       | No                | Yes           | Yes          | Yes             | Yes            | Yes         |
-| **3D preview**                  | SVG isometric          | No                | Full 3D       | 3D           | No              | Full 3D        | Full 3D     |
-| **Assembly guide**              | Yes (DAG + timer)      | No                | No            | No           | No              | Yes            | No          |
-| **Hardware BOM**                | Yes (vendor catalog)   | No                | Basic         | Yes          | No              | Yes            | No          |
-| **Grain direction**             | Yes (report + lock)    | Yes               | No            | Yes          | Yes             | Yes            | No          |
-| **WCAG 2.2 AA accessible**      | Yes                    | No                | No            | No           | No              | No             | Partial     |
-| **RTL support (Hebrew/Arabic)** | Yes (6 locales)        | No                | No            | No           | No              | No             | UI only     |
-| **Offline capable (PWA)**       | Yes                    | No                | N/A (desktop) | N/A          | N/A             | N/A            | No          |
-| **Plugin API**                  | Yes (versioned)        | No                | No            | No           | No              | Proprietary    | Yes         |
-| **Open source**                 | MIT                    | No                | No            | No           | No              | No             | No          |
-| **Community material catalog**  | Yes                    | No                | No            | Limited      | No              | No             | Yes         |
-| **IFC/STEP/glTF export**        | Yes                    | No                | No            | No           | No              | No             | Yes         |
-| **WebSerial CNC streaming**     | Yes                    | No                | No            | No           | No              | No             | CAM only    |
-| **Cost estimation**             | Yes (variance tracker) | No                | Manual        | Yes          | Manual          | Yes            | No          |
-| **Stock management**            | Yes                    | No                | No            | Yes          | No              | Yes            | No          |
-| **Mobile support**              | PWA + Capacitor        | Responsive        | No            | No           | No              | No             | iOS app     |
-| **Production dependencies**     | 8                      | Unknown           | 50+           | Desktop      | Desktop         | Desktop        | Cloud       |
-| **Bundle size (JS)**            | < 1.8 MB               | ~500 KB           | Desktop       | Desktop      | Desktop         | Desktop        | Cloud       |
-| **Zero-install / zero-signup**  | Yes                    | Signup required   | Download      | Download     | Download        | Download       | Signup      |
+| Feature / Capability            | Cabinet Planner (this) | CutList Optimizer | SketchList 3D | Polyboard    | CutList Plus fx | Cabinet Vision | Fusion 360  | Mozaik       | Roomle         | KitchenDraw   |
+| ------------------------------- | ---------------------- | ----------------- | ------------- | ------------ | --------------- | -------------- | ----------- | ------------ | -------------- | ------------- |
+| **Price**                       | Free / MIT OSS         | Free (basic)      | $167–$497/yr  | €330 one-off | $79–$159        | Enterprise $   | $545/yr     | $99–$499/yr  | Free (B2B lic) | €1,500–€4,000 |
+| **Platform**                    | Browser (PWA)          | Browser           | Windows only  | Windows only | Windows only    | Windows only   | Cloud + Win | Windows only | Browser        | Windows only  |
+| **Cut optimization**            | MaxRects BSSF multi    | Simple 2D         | Basic         | Guillotine   | Advanced        | Proprietary    | None        | Basic 2D     | None           | None          |
+| **G-code export**               | Yes (G2/G3 arcs, M6)   | No                | No            | WoodWOP only | No              | WoodWOP/Grbl   | Yes         | Yes (CNC)    | No             | DXF only      |
+| **DXF export**                  | Yes (layers, colors)   | No                | Basic         | Yes          | No              | Yes            | Yes         | Yes          | Limited        | Yes           |
+| **PDF build plans**             | Yes (off-thread)       | No                | Yes           | Yes          | Yes             | Yes            | Yes         | Yes          | Yes            | Yes           |
+| **3D preview**                  | SVG isometric + WebGPU | No                | Full 3D       | 3D           | No              | Full 3D        | Full 3D     | Full 3D      | Full 3D WebGL  | Full 3D       |
+| **Assembly guide**              | Yes (DAG + timer)      | No                | No            | No           | No              | Yes            | No          | Yes          | Basic          | No            |
+| **Hardware BOM**                | Yes (vendor catalog)   | No                | Basic         | Yes          | No              | Yes            | No          | Yes          | Yes            | Yes           |
+| **Grain direction**             | Yes (report + lock)    | Yes               | No            | Yes          | Yes             | Yes            | No          | Yes          | No             | Yes           |
+| **WCAG 2.2 AA accessible**      | Yes                    | No                | No            | No           | No              | No             | Partial     | No           | Partial        | No            |
+| **RTL support (Hebrew/Arabic)** | Yes (6 locales)        | No                | No            | No           | No              | No             | UI only     | No           | No             | No            |
+| **Offline capable (PWA)**       | Yes                    | No                | N/A (desktop) | N/A          | N/A             | N/A            | No          | N/A          | No             | N/A           |
+| **Plugin API**                  | Yes (versioned)        | No                | No            | No           | No              | Proprietary    | Yes         | No           | Embed API      | No            |
+| **Open source**                 | MIT                    | No                | No            | No           | No              | No             | No          | No           | No             | No            |
+| **Community material catalog**  | Yes                    | No                | No            | Limited      | No              | No             | Yes         | Yes          | Manufacturer   | No            |
+| **IFC/STEP/glTF export**        | Yes                    | No                | No            | No           | No              | No             | Yes         | No           | STEP           | No            |
+| **WebSerial CNC streaming**     | Yes                    | No                | No            | No           | No              | No             | CAM only    | No           | No             | No            |
+| **Cost estimation**             | Yes (variance tracker) | No                | Manual        | Yes          | Manual          | Yes            | No          | Yes          | Yes            | Yes           |
+| **Stock management**            | Yes                    | No                | No            | Yes          | No              | Yes            | No          | Yes          | No             | No            |
+| **Mobile support**              | PWA + Capacitor        | Responsive        | No            | No           | No              | No             | iOS app     | No           | Responsive     | No            |
+| **Production dependencies**     | 8                      | Unknown           | 50+           | Desktop      | Desktop         | Desktop        | Cloud       | Desktop      | ~80+           | Desktop       |
+| **Bundle size (JS)**            | < 1.8 MB               | ~500 KB           | Desktop       | Desktop      | Desktop         | Desktop        | Cloud       | Desktop      | ~3 MB          | Desktop       |
+| **Zero-install / zero-signup**  | Yes                    | Signup required   | Download      | Download     | Download        | Download       | Signup      | Download     | Signup         | Download      |
 
 ### Competitive Advantages (Unique to This Project)
 
@@ -72,28 +72,35 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 
 ### Methods Harvested from Competitors
 
-| From              | Method / Pattern                             | Adoption Plan                               |
-| ----------------- | -------------------------------------------- | ------------------------------------------- |
-| SketchList 3D     | Parametric constraint engine (min/max/ratio) | Phase 25 Sprint 109                         |
-| SketchList 3D     | Reusable design template library             | Phase 27 Sprint 120                         |
-| Polyboard         | Guillotine-first then MaxRects fallback      | Evaluate for Phase 25 co-nesting            |
-| Cabinet Vision    | Joint library with automatic selection       | Phase 25 Sprint 108                         |
-| CutList Plus fx   | Multi-material co-nesting on shared sheets   | Phase 25 Sprint 107                         |
-| Fusion 360        | WebGPU PBR material rendering                | Phase 26 Sprint 113                         |
-| Fusion 360        | Generative design suggestions                | Phase 27 Sprint 119                         |
-| Figma             | CRDT multiplayer with conflict-free cursors  | Phase 27 Sprint 117–118                     |
-| CutList Optimizer | Instant optimization preview (< 50 ms)       | Already achieved — maintain via bench gates |
+| From              | Method / Pattern                             | Adoption Status                          |
+| ----------------- | -------------------------------------------- | ---------------------------------------- |
+| SketchList 3D     | Parametric constraint engine (min/max/ratio) | ✅ Done — Phase 25 Sprint 109            |
+| SketchList 3D     | Reusable design template library             | ✅ Done — Phase 27 Sprint 120            |
+| Polyboard         | Guillotine-first then MaxRects fallback      | ✅ Done — Phase 25 co-nesting            |
+| Cabinet Vision    | Joint library with automatic selection       | ✅ Done — Phase 25 Sprint 108            |
+| CutList Plus fx   | Multi-material co-nesting on shared sheets   | ✅ Done — Phase 25 Sprint 107            |
+| Fusion 360        | WebGPU PBR material rendering                | ✅ Done — Phase 26 Sprint 113            |
+| Fusion 360        | Generative design suggestions                | ✅ Done — Phase 27 Sprint 119            |
+| Figma             | CRDT multiplayer with conflict-free cursors  | ✅ Done — Phase 27 Sprint 117–118        |
+| CutList Optimizer | Instant optimization preview (< 50 ms)       | ✅ Achieved — maintained via bench gates |
+| Mozaik            | Full-room layout with wall/floor placement   | Phase 34 — Room Planner v2               |
+| Mozaik            | Cabinet-to-machining center direct link      | Phase 35 — CNC integration               |
+| Roomle            | Manufacturer catalog embedding API           | Phase 34 — Community Catalog v2          |
+| Roomle            | AR walkthrough / first-person view           | Phase 35 — WebXR immersive               |
+| KitchenDraw       | Appliance clearance zone validation          | Phase 34 — Room Planner v2               |
 
 ### Gaps to Close (Priority-Ordered)
 
-| #   | Gap                                    | Best-in-Class Reference    | Target Phase | Impact   |
-| --- | -------------------------------------- | -------------------------- | ------------ | -------- |
-| 1   | Full parametric 3D (WebGPU)            | Fusion 360, SketchList 3D  | Phase 26     | Critical |
-| 2   | Constraint-based parametric joints     | Cabinet Vision, SolidWorks | Phase 25     | High     |
-| 3   | Multi-material nesting co-optimization | CutList Plus fx, Polyboard | Phase 25     | High     |
-| 4   | Real-time collaboration (multiplayer)  | Figma, Onshape             | Phase 27     | Medium   |
-| 5   | AI-powered design suggestions          | Fusion 360 Generative      | Phase 27     | Medium   |
-| 6   | Native mobile app (full offline)       | Fusion 360 iOS             | Phase 26     | Low      |
+| #   | Gap                                        | Best-in-Class Reference      | Target Phase | Impact   |
+| --- | ------------------------------------------ | ---------------------------- | ------------ | -------- |
+| 1   | Automated Lighthouse CI gates (GH Actions) | vercel/next.js, Astro        | Phase 33     | Critical |
+| 2   | CSP headers + Subresource Integrity        | Security-hardened SPAs       | Phase 33     | Critical |
+| 3   | Error monitoring (privacy-first)           | Sentry, Cloudflare Analytics | Phase 33     | High     |
+| 4   | Full-room layout (appliance clearances)    | Mozaik, KitchenDraw, Roomle  | Phase 34     | High     |
+| 5   | Manufacturer catalog embedding             | Roomle, IKEA Planner         | Phase 34     | High     |
+| 6   | Cloud sync with E2E encryption             | Figma, Onshape               | Phase 35     | Medium   |
+| 7   | AR walkthrough / first-person view         | Roomle, Matterport           | Phase 35     | Medium   |
+| 8   | Native mobile app (full offline)           | Fusion 360 iOS, Mozaik       | Phase 35     | Low      |
 
 ---
 
@@ -115,6 +122,10 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 26    | v5.2.0      | Visual Engine Upgrade           | WebGPU renderer, PBR materials, 3D preview, WebXR AR placement                 |
 | 27    | v5.3.0      | Collaboration & Intelligence    | CRDT sync, cloud queue, AI layout suggestions, shared project library          |
 | 28    | v5.4.0      | Performance & Plugin Ecosystem  | ERP/MRP export, ISO 7171 compliance, multi-project workspace, audit trail      |
+| 29    | v5.5.0      | Plugin Marketplace & Mobile     | Plugin registry, Capacitor native, analytics dashboard, bundle < 1.4 MB        |
+| 30    | v5.6.0      | AI Assistant & Advanced Export  | AI design assistant, glTF/IFC 4.3, WebSerial v2, stock management              |
+| 31    | v5.7.0      | UI Polish & Accessibility       | WCAG 2.2 AA audit, dark mode, component splitting, bundle < 400 KB gzipped     |
+| 32    | v5.8.0      | Developer Experience & Plugins  | Plugin API v2, TypeDoc site, 88% test coverage, Vitest reporter, lint summary  |
 
 ---
 
@@ -204,17 +215,29 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 140    | Bundle optimisation (lazy chunks, tree-shaking, < 400 KB gzipped)      | Performance |
 | 141    | Release v5.7.0                                                         | Release     |
 
-### Phase 32 — Developer Experience & Plugin Ecosystem · v5.8.0
+### Phase 32 — Developer Experience & Plugin Ecosystem · v5.8.0 ✅ COMPLETE
 
-> **Status**: PLANNED · **Goal**: Plugin API surface, TypeDoc API docs, test coverage uplift, DX tooling
+> **Status**: COMPLETE · **Released**: 2026-06-10 · **Coverage achieved**: 88.65% statements / 89.08% lines
 
 | Sprint | Deliverable                                                         | Track   |
 | ------ | ------------------------------------------------------------------- | ------- |
 | 142    | Plugin API v2 (typed event bus, lifecycle hooks, sandboxed context) | DX      |
 | 143    | TypeDoc API documentation site (auto-generated from engine JSDoc)   | Docs    |
-| 144    | Test coverage uplift to 85% (engine + store combined)               | Quality |
-| 145    | DX tooling (custom Vitest reporters, structured lint summaries)     | DX      |
+| 144    | Test coverage uplift to 85% — 88.65% stmts / 89.08% lines achieved  | Quality |
+| 145    | DX tooling (Vitest reporter, structured lint summary, Vitest 4 fix) | DX      |
 | 146    | Release v5.8.0                                                      | Release |
+
+### Phase 33 — Production Infrastructure & Observability · v5.9.0
+
+> **Status**: PLANNED · **Goal**: Lighthouse CI gates, security hardening, PWA v2, error monitoring
+
+| Sprint | Deliverable                                                              | Track    |
+| ------ | ------------------------------------------------------------------------ | -------- |
+| 147    | Lighthouse CI automation (GH Actions gates: TBT < 200 ms, FCP < 1.2 s)   | Perf     |
+| 148    | Security hardening (CSP headers, Subresource Integrity, OWASP audit)     | Security |
+| 149    | PWA v2 (enhanced offline caching, install prompt refinement)             | PWA      |
+| 150    | Error monitoring — privacy-first telemetry (Cloudflare Analytics/Sentry) | Observ.  |
+| 151    | Release v5.9.0                                                           | Release  |
 
 ### Future Horizons (Unscoped)
 
@@ -226,6 +249,10 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | Standards     | IFC 4.3 compliance certification                 | Industry demand                   |
 | Platform      | Raspberry Pi shop-floor kiosk (Electron-lite)    | Community request + sponsorship   |
 | Marketplace   | Paid plugin monetization (Stripe Connect)        | Plugin count > 20                 |
+| Room Planner  | Full-room layout v2 (appliance + clearances)     | Phase 34                          |
+| Community     | Manufacturer catalog embedding API               | Phase 34                          |
+| CNC           | Cabinet-to-machine-center direct link            | Phase 35                          |
+| XR            | AR walkthrough / first-person room view          | Phase 35 + WebXR Device API GA    |
 
 ---
 
