@@ -1,0 +1,87 @@
+name: Lighthouse CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  lighthouse:
+    name: Lighthouse Performance Gates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/setup-node
+
+      - run: npm run build
+
+      - run: npm run lighthouse
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+      - name: Comment PR with Lighthouse scores
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const dir = '.lighthouseci';
+            if (!fs.existsSync(dir)) return;
+
+            const files = fs.readdirSync(dir).filter(f => f.endsWith('.json') && f.startsWith('lhr-'));
+            if (files.length === 0) return;
+
+            const lhr = JSON.parse(fs.readFileSync(path.join(dir, files[files.length - 1]), 'utf8'));
+            const cats = lhr.categories;
+            const score = (c) => Math.round((cats[c]?.score ?? 0) * 100);
+            const metric = (key) => Math.round(lhr.audits[key]?.numericValue ?? 0);
+
+            const body = `## ⚡ Lighthouse Report
+
+            | Category | Score |
+            |----------|-------|
+            | Performance | ${score('performance')} |
+            | Accessibility | ${score('accessibility')} |
+            | Best Practices | ${score('best-practices')} |
+            | SEO | ${score('seo')} |
+
+            | Metric | Value | Budget |
+            |--------|-------|--------|
+            | FCP | ${metric('first-contentful-paint')} ms | ≤ 1200 ms |
+            | LCP | ${metric('largest-contentful-paint')} ms | ≤ 2500 ms |
+            | TBT | ${metric('total-blocking-time')} ms | ≤ 200 ms |
+            | CLS | ${(lhr.audits['cumulative-layout-shift']?.numericValue ?? 0).toFixed(3)} | ≤ 0.1 |`;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const existing = comments.find(c => c.body?.includes('Lighthouse Report'));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: .lighthouseci/
+          retention-days: 14

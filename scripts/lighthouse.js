@@ -14,27 +14,36 @@ const outputDir = process.env.CI
   : path.join(os.tmpdir(), 'WoodworkingShop', '.lighthouseci');
 mkdirSync(outputDir, { recursive: true });
 
-// Inlined from config/lighthouserc.json (Sprint 66 — removed external config file)
+/**
+ * Sprint 147 — Production Lighthouse CI gates.
+ * Targets: TBT < 200 ms, FCP < 1.2 s, LCP < 2.5 s, CLS < 0.1
+ * Category scores: performance ≥ 0.9, accessibility ≥ 0.95
+ *
+ * 'error' = hard gate (blocks merge), 'warn' = advisory (reported but non-blocking).
+ * numberOfRuns: 3 for statistical stability in CI.
+ */
 const config = {
   ci: {
     collect: {
       startServerCommand: 'npm run preview -- --port 4173 --strictPort',
       url: ['http://localhost:4173/WoodworkingShop/'],
       startServerReadyPattern: 'Local:',
-      numberOfRuns: 1,
+      numberOfRuns: process.env.CI ? 3 : 1,
     },
     assert: {
+      preset: 'lighthouse:no-pwa',
       assertions: {
-        'categories:performance': ['warn', { minScore: 0.6 }],
-        'categories:accessibility': ['error', { minScore: 0.9 }],
-        'categories:best-practices': ['warn', { minScore: 0.85 }],
-        'categories:seo': ['warn', { minScore: 0.8 }],
-        'resource-summary:script:size': ['warn', { maxNumericValue: 2100000 }],
-        'resource-summary:total:size': ['warn', { maxNumericValue: 2400000 }],
-        'largest-contentful-paint': ['warn', { maxNumericValue: 6000 }],
-        interactive: ['warn', { maxNumericValue: 7000 }],
-        'total-blocking-time': ['warn', { maxNumericValue: 1500 }],
-        'cumulative-layout-shift': ['warn', { maxNumericValue: 0.1 }],
+        'categories:performance': ['error', { minScore: 0.9, aggregationMethod: 'median-run' }],
+        'categories:accessibility': ['error', { minScore: 0.95, aggregationMethod: 'pessimistic' }],
+        'categories:best-practices': ['error', { minScore: 0.9, aggregationMethod: 'median-run' }],
+        'categories:seo': ['warn', { minScore: 0.9 }],
+        'first-contentful-paint': ['error', { maxNumericValue: 1200, aggregationMethod: 'median-run' }],
+        'largest-contentful-paint': ['error', { maxNumericValue: 2500, aggregationMethod: 'median-run' }],
+        'total-blocking-time': ['error', { maxNumericValue: 200, aggregationMethod: 'median-run' }],
+        'cumulative-layout-shift': ['error', { maxNumericValue: 0.1, aggregationMethod: 'median-run' }],
+        interactive: ['warn', { maxNumericValue: 3500 }],
+        'resource-summary:script:size': ['warn', { maxNumericValue: 2600000 }],
+        'resource-summary:total:size': ['warn', { maxNumericValue: 2800000 }],
       },
     },
     upload: {
