@@ -1101,3 +1101,13 @@ export type { ToolPosition, WorkflowStep, SwapSuggestion, LayoutAnalysisResult }
 
 export { getSkillMultiplier, getBaseMinutes, estimateTaskTime, estimateProjectTime } from './time-estimator';
 export type { SkillLevel, OperationType, ProjectTask, TaskEstimate, TimeEstimationResult } from './time-estimator';
+
+export { findBestPrice, computePriceTrend, estimateProjectCost, detectPriceAnomalies } from './material-cost-tracker';
+export type {
+  PriceEntry,
+  MaterialDemand,
+  MaterialCostLine,
+  TrendDirection,
+  PriceTrend,
+  ProjectCostResult,
+} from './material-cost-tracker';

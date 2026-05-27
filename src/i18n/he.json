@@ -1572,5 +1572,19 @@
     "parallel": "משימות מקבילות",
     "sequential": "משימות סדרתיות",
     "noTasks": "לא הוגדרו משימות פרויקט."
+  },
+  "materialCostTracker": {
+    "title": "מעקב עלויות חומרים",
+    "bestPrice": "מחיר הטוב ביותר",
+    "supplier": "ספק",
+    "trend": "מגמה",
+    "rising": "עולה",
+    "falling": "יורד",
+    "stable": "יציב",
+    "totalCost": "עלות כוללת",
+    "anomaly": "חריגת מחיר",
+    "noPrice": "אין נתוני מחיר.",
+    "currency": "מטבע",
+    "perUnit": "ליחידה"
   }
 }

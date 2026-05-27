@@ -1397,5 +1397,33 @@
     "parallel": "Parallel Tasks",
     "sequential": "Sequential Tasks",
     "noTasks": "No project tasks defined."
+  },
+  "materialCostTracker": {
+    "title": "Material Cost Tracker",
+    "bestPrice": "Best Price",
+    "supplier": "Supplier",
+    "trend": "Trend",
+    "rising": "Rising",
+    "falling": "Falling",
+    "stable": "Stable",
+    "totalCost": "Total Cost",
+    "anomaly": "Price Anomaly",
+    "noPrice": "No price data available.",
+    "currency": "Currency",
+    "perUnit": "per unit"
+  },
+  "materialCostTracker": {
+    "title": "Material Cost Tracker",
+    "bestPrice": "Best Price",
+    "supplier": "Supplier",
+    "trend": "Trend",
+    "rising": "Rising",
+    "falling": "Falling",
+    "stable": "Stable",
+    "totalCost": "Total Cost",
+    "anomaly": "Price Anomaly",
+    "noPrice": "No price data available.",
+    "currency": "Currency",
+    "perUnit": "per unit"
   }
 }
