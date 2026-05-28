@@ -16,6 +16,7 @@ import { CatalogImportPanel } from './CatalogImportPanel';
 import { MeasurementHintsPanel } from './MeasurementHintsPanel';
 import { FinishCalculatorPanel } from './FinishCalculatorPanel';
 import { FaceFramePanel } from './FaceFramePanel';
+import { CabinetDoorPanel } from './CabinetDoorPanel';
 import { PresetsPanel } from './PresetsPanel';
 import { SaveLoadPanel } from './SaveLoadPanel';
 import { ConstraintSuggestionsPanel } from './ConstraintSuggestionsPanel';
@@ -48,6 +49,9 @@ export function ConfiguratorPanel() {
 
       {/* Sprint 221 — face frame cut list calculator */}
       <FaceFramePanel />
+
+      {/* Sprint 222 — cabinet door sizing calculator */}
+      <CabinetDoorPanel />
 
       {/* Sprint 110 — real-time constraint violations and dimension range hints */}
       <ConstraintSuggestionsPanel />
