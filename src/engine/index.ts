@@ -1383,3 +1383,7 @@ export type { DoorOverlay, CabinetDoorInput, DoorLeafResult, CabinetDoorResult }
 // Sprint 221 — Face Frame Calculator
 export { calculateFaceFrame } from './face-frame';
 export type { FaceFrameInput, FaceFramePart, FaceFrameResult } from './face-frame';
+
+// Sprint 223 — Drawer Box Sizing Calculator
+export { calculateDrawerBox } from './drawer-box';
+export type { DrawerSlideType, DrawerBoxInput, DrawerBoxResult } from './drawer-box';

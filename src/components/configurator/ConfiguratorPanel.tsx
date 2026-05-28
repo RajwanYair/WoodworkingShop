@@ -17,6 +17,7 @@ import { MeasurementHintsPanel } from './MeasurementHintsPanel';
 import { FinishCalculatorPanel } from './FinishCalculatorPanel';
 import { FaceFramePanel } from './FaceFramePanel';
 import { CabinetDoorPanel } from './CabinetDoorPanel';
+import { DrawerBoxPanel } from './DrawerBoxPanel';
 import { PresetsPanel } from './PresetsPanel';
 import { SaveLoadPanel } from './SaveLoadPanel';
 import { ConstraintSuggestionsPanel } from './ConstraintSuggestionsPanel';
@@ -52,6 +53,9 @@ export function ConfiguratorPanel() {
 
       {/* Sprint 222 — cabinet door sizing calculator */}
       <CabinetDoorPanel />
+
+      {/* Sprint 223 — drawer box sizing calculator */}
+      <DrawerBoxPanel />
 
       {/* Sprint 110 — real-time constraint violations and dimension range hints */}
       <ConstraintSuggestionsPanel />
