@@ -19,6 +19,11 @@ import { FaceFramePanel } from './FaceFramePanel';
 import { CabinetDoorPanel } from './CabinetDoorPanel';
 import { DrawerBoxPanel } from './DrawerBoxPanel';
 import { ScrewPulloutPanel } from './ScrewPulloutPanel';
+import { KerfBendingPanel } from './KerfBendingPanel';
+import { DadoRabbetPanel } from './DadoRabbetPanel';
+import { FinishingCoatPanel } from './FinishingCoatPanel';
+import { WoodTurningPanel } from './WoodTurningPanel';
+import { FramePanelCalcPanel } from './FramePanelCalcPanel';
 import { PresetsPanel } from './PresetsPanel';
 import { SaveLoadPanel } from './SaveLoadPanel';
 import { ConstraintSuggestionsPanel } from './ConstraintSuggestionsPanel';
@@ -60,6 +65,21 @@ export function ConfiguratorPanel() {
 
       {/* Sprint 224 — screw pull-out strength estimator */}
       <ScrewPulloutPanel />
+
+      {/* Sprint 225 — kerf bending calculator */}
+      <KerfBendingPanel />
+
+      {/* Sprint 226 — dado / rabbet joint calculator */}
+      <DadoRabbetPanel />
+
+      {/* Sprint 227 — finishing coat calculator */}
+      <FinishingCoatPanel />
+
+      {/* Sprint 228 — wood turning speed calculator */}
+      <WoodTurningPanel />
+
+      {/* Sprint 229 — frame and panel calculator */}
+      <FramePanelCalcPanel />
 
       {/* Sprint 110 — real-time constraint violations and dimension range hints */}
       <ConstraintSuggestionsPanel />

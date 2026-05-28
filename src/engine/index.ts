@@ -1391,3 +1391,23 @@ export type { DrawerBoxInput, DrawerBoxResult } from './drawer-box';
 // Sprint 224 — Screw Pull-Out Strength Estimator
 export { calculateScrewPullout } from './screw-pullout';
 export type { WoodDensityClass, SafetyRating, ScrewPulloutInput, ScrewPulloutResult } from './screw-pullout';
+
+// Sprint 225 — Kerf Bending Calculator
+export { calculateKerfBending } from './kerf-bending';
+export type { KerfMaterial, KerfBendingInput, KerfBendingResult } from './kerf-bending';
+
+// Sprint 226 — Dado / Rabbet Joint Calculator
+export { calculateDadoRabbet } from './dado-rabbet';
+export type { DadoRabbetJointType, DadoRabbetInput, DadoRabbetResult } from './dado-rabbet';
+
+// Sprint 227 — Finishing Coat Calculator
+export { calculateFinishingCoat } from './finishing-coat';
+export type { FinishType, FinishingCoatInput, FinishingCoatResult } from './finishing-coat';
+
+// Sprint 228 — Wood Turning Speed Calculator
+export { calculateWoodTurning } from './wood-turning';
+export type { TurningOperation, WoodTurningInput, WoodTurningResult } from './wood-turning';
+
+// Sprint 229 — Frame and Panel Calculator
+export { calculateFramePanel } from './frame-panel';
+export type { FramePanelInput, FramePanelResult } from './frame-panel';
