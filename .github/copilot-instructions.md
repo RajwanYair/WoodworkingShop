@@ -2,19 +2,39 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.21.0** · **Next target: v5.22.0** (Phase 46 — Workspace & Tooling)
+> **Current release: v5.23.0** · **Next target: v5.24.0** (Phase 48)
 
-## Active Sprint — Phase 46 (Sprints 215–219)
+## Active Sprint — Phase 48 (Sprints 225–229)
 
-> **Status**: IN PROGRESS · **Goal**: VS Code / Copilot integration, tooling improvements, and new calculator features
+> **Status**: PLANNING · **Goal**: TBD
+
+| Sprint | Feature         | Status |
+| ------ | --------------- | ------ |
+| 225    | TBD             | TODO   |
+| 226    | TBD             | TODO   |
+| 227    | TBD             | TODO   |
+| 228    | TBD             | TODO   |
+| 229    | Release v5.24.0 | TODO   |
+
+## Completed — Phase 47 (Sprints 220–224)
+
+| Sprint | Feature                                                  | Status |
+| ------ | -------------------------------------------------------- | ------ |
+| 220    | Cabinet door sizing calculator — engine                  | DONE   |
+| 221    | Face frame calculator — engine + UI panel + tests        | DONE   |
+| 222    | Cabinet door sizing calculator — UI panel                | DONE   |
+| 223    | Drawer box sizing calculator — engine + UI panel + tests | DONE   |
+| 224    | Screw pull-out strength estimator — engine + UI + tests  | DONE   |
+
+## Completed — Phase 46 (Sprints 215–219)
 
 | Sprint | Feature                                                  | Status |
 | ------ | -------------------------------------------------------- | ------ |
 | 215    | SVG quality improvements + VS Code / Copilot integration | DONE   |
-| 216    | TBD                                                      | TODO   |
-| 217    | TBD                                                      | TODO   |
-| 218    | TBD                                                      | TODO   |
-| 219    | Release v5.22.0                                          | TODO   |
+| 216    | TBD                                                      | DONE   |
+| 217    | TBD                                                      | DONE   |
+| 218    | TBD                                                      | DONE   |
+| 219    | Release v5.22.0                                          | DONE   |
 
 ## Completed — Phase 45 (Sprints 210–214)
 

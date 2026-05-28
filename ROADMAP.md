@@ -243,6 +243,32 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 150    | Error monitoring — privacy-first telemetry (Cloudflare Analytics/Sentry) | ✓ Done |
 | 151    | Release v5.9.0                                                           | ✓ Done |
 
+### Phase 48 — Workshop Geometry & Finishing Calculators · v5.24.0 🔄 IN PROGRESS
+
+> **Status**: IN PROGRESS · **Goal**: Kerf bending, dado/rabbet joints, finishing coats, wood turning speeds, frame and panel construction
+
+| Sprint | Deliverable                                                                      | Track   |
+| ------ | -------------------------------------------------------------------------------- | ------- |
+| 225    | Kerf bending calculator (kerf spacing, depth, bend radius for panels)            | ⬜ TODO |
+| 226    | Dado/rabbet joint calculator (width, depth, blade/bit recommendation)            | ⬜ TODO |
+| 227    | Finishing coat calculator (coverage, coats, dry time, product volume)            | ⬜ TODO |
+| 228    | Wood turning speed calculator (safe RPM by blank diameter and species)           | ⬜ TODO |
+| 229    | Frame and panel calculator (panel float, groove dimensions, expansion allowance) | ⬜ TODO |
+| 230    | Release v5.24.0                                                                  | ⬜ TODO |
+
+### Phase 47 — Cabinet Hardware Sizing Calculators · v5.23.0 ✅ COMPLETE
+
+> **Status**: COMPLETE · **Released**: 2026-05-28 · **Goal**: Cabinet door sizing, face frame, drawer box, screw pull-out estimation
+
+| Sprint | Deliverable                                                               | Track  |
+| ------ | ------------------------------------------------------------------------- | ------ |
+| 220    | Cabinet door sizing calculator — engine (overlay, leaf size, hinge count) | ✓ Done |
+| 221    | Face frame calculator — engine + UI panel + 11 tests                      | ✓ Done |
+| 222    | Cabinet door sizing calculator — UI panel (overlay selector, door toggle) | ✓ Done |
+| 223    | Drawer box sizing calculator — engine + UI panel + tests                  | ✓ Done |
+| 224    | Screw pull-out strength estimator — NDS formula, 4 density classes, UI    | ✓ Done |
+| 225    | Release v5.23.0                                                           | ✓ Done |
+
 ### Phase 46 — Workspace & Tooling · v5.22.0 ✅ COMPLETE
 
 > **Status**: COMPLETE · **Released**: 2026-05-27 · **Goal**: VS Code / Copilot integration, strategic review, all TypeScript errors resolved, production readiness

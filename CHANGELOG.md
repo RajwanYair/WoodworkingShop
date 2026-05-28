@@ -9,6 +9,57 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.23.0] — 2026-05-28
+
+### Phase 46–47 — Workspace & Tooling + Calculator UI Panels (Sprints 215–224)
+
+#### Sprint 215 — SVG Quality + VS Code / Copilot Integration
+
+- SVG banner and preview quality improvements
+- Scoped Copilot instruction files (`svg.instructions.md`, `workers.instructions.md`,
+  `utils.instructions.md`, `security.instructions.md`)
+- Reusable prompt files for workspace maintenance, code review, security audit, and more
+- Composite GitHub Actions `setup-node` action to reduce CI duplication
+
+#### Sprint 220 — Cabinet Door Sizing Calculator (engine)
+
+- New engine module `cabinet-door.ts`
+- `calculateCabinetDoor`: leaf dimensions, hinge count, door overlay (full/half/inset)
+- `recommendDoorCount`: automatic 1-vs-2 door recommendation by opening width
+- Full export from `engine/index.ts`
+
+#### Sprint 221 — Face Frame Calculator
+
+- New engine module `face-frame.ts`
+- `calculateFaceFrame`: stile/rail lengths, opening dimensions, glue surface area
+- `FaceFramePanel` component with 2-column inputs and live results
+- Mounted in ConfiguratorPanel below FinishCalculatorPanel
+- 11 unit tests (single/multi-opening, glue surface, error guards)
+
+#### Sprint 222 — Cabinet Door Sizing Calculator UI Panel
+
+- `CabinetDoorPanel` component with overlay selector and door-count toggle
+- Live results: leaf dimensions, hinge count, amber advisory notes
+- Mounted in ConfiguratorPanel
+
+#### Sprint 223 — Drawer Box Sizing Calculator
+
+- New engine module `drawer-box.ts`
+- `calculateDrawerBox`: box dimensions, false front size, depth adequacy flag
+- Supports side-mount, bottom-mount, and center-mount slides
+- `DrawerBoxPanel` component with slide-type button group and live results
+- 9 unit tests covering all slide types, false front, and error guards
+
+#### Sprint 224 — Screw Pull-Out Strength Estimator
+
+- New engine module `screw-pullout.ts`
+- `calculateScrewPullout`: pull-out force (N + lbf), withdrawal resistance (MPa),
+  safety rating (adequate / marginal / insufficient)
+- NDS-based formula: W = 1800 × G² × D^0.6 × L
+- Supports 4 density classes (low / medium / high / sheet goods)
+- `ScrewPulloutPanel` component with density class selector and live results
+- 9 unit tests covering force ranges, rating thresholds, and error guards
+
 ## [5.21.0] — 2026-05-27
 
 ### Phase 45 — Power Tool Setup Calculators (Sprints 210–214)

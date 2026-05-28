@@ -1386,7 +1386,7 @@ export type { FaceFrameInput, FaceFramePart, FaceFrameResult } from './face-fram
 
 // Sprint 223 — Drawer Box Sizing Calculator
 export { calculateDrawerBox } from './drawer-box';
-export type { DrawerSlideType, DrawerBoxInput, DrawerBoxResult } from './drawer-box';
+export type { DrawerBoxInput, DrawerBoxResult } from './drawer-box';
 
 // Sprint 224 — Screw Pull-Out Strength Estimator
 export { calculateScrewPullout } from './screw-pullout';
