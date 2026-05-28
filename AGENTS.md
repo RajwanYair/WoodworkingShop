@@ -9,9 +9,9 @@ Configure any cabinet/furniture piece → live 6-view SVG preview → MaxRects c
 
 ## Active Sprint — Phase 38 (Sprints 172+)
 
-| Sprint | Feature                                                                | Status |
-| ------ | ---------------------------------------------------------------------- | ------ |
-| 172    | TBD                                                                    | TODO   |
+| Sprint | Feature | Status |
+| ------ | ------- | ------ |
+| 172    | TBD     | TODO   |
 
 ## Tech Stack
 

@@ -118,7 +118,7 @@ describe('linearFeetToBoardFeet', () => {
     { desc: 'widthIn = -1', args: [1, -1, 8] as const },
     { desc: 'linearFeet = -5', args: [1, 6, -5] as const },
   ])('throws RangeError for $desc', ({ args }) => {
-    expect(() => linearFeetToBoardFeet(...args)).toThrow(RangeError);
+    expect(() => linearFeetToBoardFeet(...(args as Parameters<typeof linearFeetToBoardFeet>))).toThrow(RangeError);
   });
 });
 

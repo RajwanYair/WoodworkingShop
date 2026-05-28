@@ -177,7 +177,16 @@ export const CabinetPreview = memo(function CabinetPreview() {
         {activeView === 'front' && (
           <ViewBox w={W + dimPad * 2} h={H + dimPad * 2}>
             <g transform={`translate(${dimPad},${dimPad})`}>
-              <rect x={0} y={0} width={W} height={H} fill="none" stroke="#444" strokeWidth={1.5} />
+              <rect
+                x={0}
+                y={0}
+                width={W}
+                height={H}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.5}
+                strokeOpacity={0.6}
+              />
               <PartRect
                 x={0}
                 y={0}
@@ -270,7 +279,16 @@ export const CabinetPreview = memo(function CabinetPreview() {
         {activeView === 'side' && (
           <ViewBox w={D + dimPad * 2} h={H + dimPad * 2}>
             <g transform={`translate(${dimPad},${dimPad})`}>
-              <rect x={0} y={0} width={D} height={H} fill="none" stroke="#444" strokeWidth={1.5} />
+              <rect
+                x={0}
+                y={0}
+                width={D}
+                height={H}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.5}
+                strokeOpacity={0.6}
+              />
               <rect x={0} y={0} width={D} height={H} fill={color} opacity={0.3} />
               <PartRect
                 x={D - bt * S}
@@ -311,7 +329,16 @@ export const CabinetPreview = memo(function CabinetPreview() {
         {activeView === 'top' && (
           <ViewBox w={W + dimPad * 2} h={D + dimPad * 2}>
             <g transform={`translate(${dimPad},${dimPad})`}>
-              <rect x={0} y={0} width={W} height={D} fill="none" stroke="#444" strokeWidth={1.5} />
+              <rect
+                x={0}
+                y={0}
+                width={W}
+                height={D}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.5}
+                strokeOpacity={0.6}
+              />
               <PartRect
                 x={0}
                 y={0}
@@ -380,7 +407,15 @@ export const CabinetPreview = memo(function CabinetPreview() {
                 material={backMatName}
                 {...tp}
               />
-              <text x={W / 2} y={H / 2} textAnchor="middle" dominantBaseline="middle" fontSize={11} fill="#666">
+              <text
+                x={W / 2}
+                y={H / 2}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fontSize={11}
+                fill="currentColor"
+                opacity={0.55}
+              >
                 {Math.round(d.backPanelWidth)} × {Math.round(d.backPanelHeight)}
               </text>
               {showDims && (

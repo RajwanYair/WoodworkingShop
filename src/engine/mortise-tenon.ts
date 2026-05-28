@@ -150,7 +150,7 @@ export function findNearestChisel(targetMm: number): number {
   if (targetMm <= 0) {
     throw new RangeError(`findNearestChisel: targetMm must be > 0, got ${targetMm}`);
   }
-  let best = STANDARD_CHISELS[0];
+  let best: number = STANDARD_CHISELS[0];
   for (const w of STANDARD_CHISELS) {
     if (w <= targetMm) {
       best = w;

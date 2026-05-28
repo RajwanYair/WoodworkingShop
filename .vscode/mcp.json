@@ -7,41 +7,18 @@
       "description": "Official GitHub MCP — pull requests, issues, Actions workflows, and code search in Copilot chat."
     },
 
-    // ─── Filesystem — scoped workspace access (heavy dirs excluded) ────────
+    // ─── Filesystem — scoped workspace access ─────────────────────────────
     "filesystem": {
       "type": "stdio",
       "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "${workspaceFolder}",
-        "--exclude",
-        "node_modules,.git,dist,coverage,playwright-report,test-results,docs/api,.vite_cache"
-      ],
-      "description": "Scoped read/write access to the workspace. Heavy directories excluded for performance."
-    },
-
-    // ─── Fetch — retrieve web content and documentation in chat ──────────
-    "fetch": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-fetch"],
-      "description": "Fetch and parse web content, test API endpoints, and retrieve documentation directly in chat."
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "${workspaceFolder}"]
     },
 
     // ─── Playwright — browser automation for E2E debugging in chat ────────
     "playwright": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@microsoft/mcp-server-playwright"],
-      "description": "Browser automation, visual debugging, and E2E interaction directly in chat."
-    },
-
-    // ─── GitKraken — git ops, PR workflow, Launchpad issue tracking ───────
-    "gitkraken": {
-      "type": "http",
-      "url": "https://mcp.gitkraken.com/mcp",
-      "description": "GitKraken MCP — git blame, log, diff, branch ops, pull request workflow, and issue tracking."
+      "args": ["-y", "@playwright/mcp@latest"]
     },
 
     // ─── Memory — persistent agent notes across sessions ──────────────────
@@ -70,21 +47,18 @@
 
     // ─── Cloudflare — Workers, Pages, D1, KV, R2 management ──────────────
     "cloudflare": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@cloudflare/mcp-server-cloudflare"],
-      "description": "Manage Cloudflare Pages deployments, Workers, KV, D1, and R2 directly in chat."
+      "type": "http",
+      "url": "https://mcp.cloudflare.com/mcp"
     },
 
     // ─── Brave Search — web search fallback for docs not in Context7 ─────
     "brave-search": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@nicepkg/mcp-server-brave-search"],
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
       "env": {
         "BRAVE_API_KEY": "${env:BRAVE_API_KEY}"
-      },
-      "description": "Web search for finding docs, blog posts, and StackOverflow solutions not covered by Context7."
+      }
     }
   }
 }

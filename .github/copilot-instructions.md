@@ -2,15 +2,19 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.21.0** · **Next target: v5.22.0** (Phase 46 — TBD)
+> **Current release: v5.21.0** · **Next target: v5.22.0** (Phase 46 — Workspace & Tooling)
 
-## Active Sprint — Phase 46 (Sprints 215+)
+## Active Sprint — Phase 46 (Sprints 215–219)
 
-> **Status**: PLANNED · **Goal**: TBD
+> **Status**: IN PROGRESS · **Goal**: VS Code / Copilot integration, tooling improvements, and new calculator features
 
-| Sprint | Feature                                                                  | Status |
-| ------ | ------------------------------------------------------------------------ | ------ |
-| 215    | TBD                                                                      | TODO   |
+| Sprint | Feature                                                  | Status |
+| ------ | -------------------------------------------------------- | ------ |
+| 215    | SVG quality improvements + VS Code / Copilot integration | DONE   |
+| 216    | TBD                                                      | TODO   |
+| 217    | TBD                                                      | TODO   |
+| 218    | TBD                                                      | TODO   |
+| 219    | Release v5.22.0                                          | TODO   |
 
 ## Completed — Phase 45 (Sprints 210–214)
 
@@ -22,53 +26,53 @@
 
 ## Completed — Phase 44 (Sprints 205–209)
 
-| Sprint | Feature                                                                  | Status |
-| ------ | ------------------------------------------------------------------------ | ------ |
-| 205    | Mortise & tenon calculator                                               | DONE   |
-| 206    | Shelf deflection calculator                                              | DONE   |
-| 207    | Router bit depth-of-cut calculator                                       | DONE   |
-| 208    | Biscuit joinery calculator                                               | DONE   |
-| 209    | Sanding progression planner                                              | DONE   |
+| Sprint | Feature                            | Status |
+| ------ | ---------------------------------- | ------ |
+| 205    | Mortise & tenon calculator         | DONE   |
+| 206    | Shelf deflection calculator        | DONE   |
+| 207    | Router bit depth-of-cut calculator | DONE   |
+| 208    | Biscuit joinery calculator         | DONE   |
+| 209    | Sanding progression planner        | DONE   |
 
 ## Completed — Phase 43 (Sprints 200–204)
 
-| Sprint | Feature                                                                  | Status |
-| ------ | ------------------------------------------------------------------------ | ------ |
-| 200    | Miter & compound angle calculator                                        | DONE   |
-| 201    | Shelf pin spacing calculator                                             | DONE   |
-| 202    | Drawer slide calculator                                                  | DONE   |
-| 203    | Wood drying time estimator                                               | DONE   |
-| 204    | Dovetail layout calculator                                               | DONE   |
+| Sprint | Feature                           | Status |
+| ------ | --------------------------------- | ------ |
+| 200    | Miter & compound angle calculator | DONE   |
+| 201    | Shelf pin spacing calculator      | DONE   |
+| 202    | Drawer slide calculator           | DONE   |
+| 203    | Wood drying time estimator        | DONE   |
+| 204    | Dovetail layout calculator        | DONE   |
 
 ## Completed — Phase 42 (Sprints 195–199)
 
-| Sprint | Feature                                                                  | Status |
-| ------ | ------------------------------------------------------------------------ | ------ |
-| 195    | Pocket hole joinery calculator                                           | DONE   |
-| 196    | Veneer calculator                                                        | DONE   |
-| 197    | Clamp pressure calculator                                                | DONE   |
-| 198    | Drill press speed calculator                                             | DONE   |
-| 199    | Board-feet calculator                                                    | DONE   |
+| Sprint | Feature                        | Status |
+| ------ | ------------------------------ | ------ |
+| 195    | Pocket hole joinery calculator | DONE   |
+| 196    | Veneer calculator              | DONE   |
+| 197    | Clamp pressure calculator      | DONE   |
+| 198    | Drill press speed calculator   | DONE   |
+| 199    | Board-feet calculator          | DONE   |
 
 ## Completed — Phase 41 (Sprints 190–194)
 
-| Sprint | Feature                                                                  | Status |
-| ------ | ------------------------------------------------------------------------ | ------ |
-| 190    | Wood movement calculator                                                 | DONE   |
-| 191    | Toolpath feed rate calculator                                            | DONE   |
-| 192    | Cabinet weight estimator                                                 | DONE   |
-| 193    | Dowel joint calculator                                                   | DONE   |
-| 194    | Panel layout label generator                                             | DONE   |
+| Sprint | Feature                       | Status |
+| ------ | ----------------------------- | ------ |
+| 190    | Wood movement calculator      | DONE   |
+| 191    | Toolpath feed rate calculator | DONE   |
+| 192    | Cabinet weight estimator      | DONE   |
+| 193    | Dowel joint calculator        | DONE   |
+| 194    | Panel layout label generator  | DONE   |
 
 ## Completed — Phase 40 (Sprints 182–186)
 
-| Sprint | Feature                                                                  | Status |
-| ------ | ------------------------------------------------------------------------ | ------ |
-| 182    | Material cost tracker                                                    | DONE   |
-| 183    | Shop inventory manager                                                   | DONE   |
-| 184    | Cabinet template library                                                 | DONE   |
-| 185    | Edge banding calculator                                                  | DONE   |
-| 186    | Release v5.16.0                                                          | DONE   |
+| Sprint | Feature                  | Status |
+| ------ | ------------------------ | ------ |
+| 182    | Material cost tracker    | DONE   |
+| 183    | Shop inventory manager   | DONE   |
+| 184    | Cabinet template library | DONE   |
+| 185    | Edge banding calculator  | DONE   |
+| 186    | Release v5.16.0          | DONE   |
 
 ## Tech Stack
 
@@ -246,6 +250,7 @@ The MaxRects BSSF cut-optimizer uses:
 - `workers.instructions.md` — applied to `src/workers/**` (Comlink, no DOM, no React, no eval)
 - `utils.instructions.md` — applied to `src/utils/**` (pure functions, input validation, testing)
 - `security.instructions.md` — applied to `src/**` and `public/**` (OWASP A01–A10 rules)
+- `svg.instructions.md` — applied to `src/components/**/*.tsx` and `docs/*.svg` (visual quality, filter IDs, hardware colors)
 
 ## Copilot Prompts
 
@@ -254,7 +259,8 @@ The MaxRects BSSF cut-optimizer uses:
 - `new-feature.prompt.md` — add a full feature panel (engine → store → UI → i18n → mount)
 - `split-component.prompt.md` — split large React component files into sub-components (≤ 600 L each)
 - `test-factory.prompt.md` — convert repetitive `it` blocks to `it.each` tables (≤ 400 L per file)
-- `roadmap-sprint.prompt.md` — execute a Phase 21 sprint item end-to-end
+- `roadmap-sprint.prompt.md` — execute a sprint item end-to-end
+- `roadmap-tracking.prompt.md` — sync ROADMAP.md and copilot-instructions.md sprint statuses
 - `release.prompt.md` — full release workflow: version bump → CHANGELOG → tag → GitHub Release
 - `fix-quality.prompt.md` — diagnose and fix every quality gate failure (typecheck, lint, i18n, format)
 - `fix-tests.prompt.md` — diagnose and fix all failing unit tests
@@ -265,9 +271,10 @@ The MaxRects BSSF cut-optimizer uses:
 - `security-audit.prompt.md` — OWASP Top 10 security audit for client-side SPA
 - `dependency-update.prompt.md` — review and apply Dependabot dependency updates
 - `code-review.prompt.md` — structured code review against all project conventions
-- `lighthouse-ci.prompt.md` — set up Lighthouse CI GitHub Actions gates (Sprint 147)
-- `csp-hardening.prompt.md` — Content Security Policy header hardening (Sprint 148)
-- `pwa-audit.prompt.md` — PWA manifest, service worker, and install-prompt audit (Sprint 149)
+- `lighthouse-ci.prompt.md` — set up Lighthouse CI GitHub Actions gates
+- `csp-hardening.prompt.md` — Content Security Policy header hardening
+- `pwa-audit.prompt.md` — PWA manifest, service worker, and install-prompt audit
+- `workspace-maintenance.prompt.md` — comprehensive workspace health check (clean, lint, test, bundle, deps)
 
 ## Copilot Agents
 
@@ -279,6 +286,9 @@ The MaxRects BSSF cut-optimizer uses:
 - `debug.agent.md` — diagnose and fix test/build/type failures without suppression
 - `a11y.agent.md` — WCAG 2.2 AA accessibility audit and remediation
 - `i18n.agent.md` — i18n key management with full 6-locale parity
+- `cleanup.agent.md` — dead code removal, lint fixes, $TEMP enforcement, production readiness
+- `security.agent.md` — OWASP Top 10 security audit and CSP hardening
+- `perf.agent.md` — Lighthouse CI setup, Core Web Vitals diagnosis and tuning
 - `security.agent.md` — OWASP Top 10 security audit and CSP hardening
 - `perf.agent.md` — Lighthouse CI setup, Core Web Vitals diagnosis and tuning
 

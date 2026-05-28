@@ -123,7 +123,7 @@ describe('nesting-patterns', () => {
   });
 
   describe('findBySheet', () => {
-    it('finds patterns matching sheet dimensions', () => {
+    it('finds patterns matching sheet dimensions', async () => {
       let lib = createLibrary();
       lib = addPattern(lib, createPattern('A', 'shelf', 2440, 1220, [], {}, testIdGen));
       lib = addPattern(lib, createPattern('B', 'door', 2440, 1220, [], {}, testIdGen));
@@ -135,7 +135,7 @@ describe('nesting-patterns', () => {
   });
 
   describe('findByCategory', () => {
-    it('filters by category', () => {
+    it('filters by category', async () => {
       let lib = createLibrary();
       lib = addPattern(lib, createPattern('A', 'shelf', 2440, 1220, [], {}, testIdGen));
       lib = addPattern(lib, createPattern('B', 'door', 2440, 1220, [], {}, testIdGen));
@@ -147,7 +147,7 @@ describe('nesting-patterns', () => {
   });
 
   describe('findByTag', () => {
-    it('finds patterns by tag (case-insensitive)', () => {
+    it('finds patterns by tag (case-insensitive)', async () => {
       let lib = createLibrary();
       lib = addPattern(lib, createPattern('A', 'shelf', 2440, 1220, [], { tags: ['kitchen', 'plywood'] }, testIdGen));
       lib = addPattern(lib, createPattern('B', 'door', 2440, 1220, [], { tags: ['Kitchen', 'MDF'] }, testIdGen));

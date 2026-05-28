@@ -85,7 +85,7 @@ describe('totalPinsNeeded', () => {
     { desc: 'sparePercent = -1', args: [3, 4, -1] as const },
     { desc: 'sparePercent = 101', args: [3, 4, 101] as const },
   ])('throws RangeError for $desc', ({ args }) => {
-    expect(() => totalPinsNeeded(...args)).toThrow(RangeError);
+    expect(() => totalPinsNeeded(...(args as unknown as Parameters<typeof totalPinsNeeded>))).toThrow(RangeError);
   });
 });
 

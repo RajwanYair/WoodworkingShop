@@ -105,9 +105,6 @@ export interface ToolInventory {
   usageLog: UsageEntry[];
 }
 
-/** ID generator type. */
-export type IdGenerator = () => string;
-
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 /** Maximum tools in inventory. */

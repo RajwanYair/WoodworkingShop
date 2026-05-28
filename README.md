@@ -358,15 +358,15 @@ assembly instructions generator, woodworking project planner
 
 ### Why Cabinet Planner?
 
-| Need | Solution |
-| --- | --- |
-| **Design cabinets quickly** | Parametric configurator with live 6-view preview |
+| Need                        | Solution                                                  |
+| --------------------------- | --------------------------------------------------------- |
+| **Design cabinets quickly** | Parametric configurator with live 6-view preview          |
 | **Minimize material waste** | MaxRects bin-packing optimizer reduces sheet waste to <5% |
-| **Export for CNC machines** | DXF and G-code output for router/laser cutters |
-| **Generate cut lists** | Automatic BOM with CSV/PDF export |
-| **Work offline** | PWA — install on any device, no internet needed |
-| **Multi-language** | EN, HE, AR (RTL), DE, ES, FR |
-| **Free forever** | MIT license, no account, no backend, no tracking |
+| **Export for CNC machines** | DXF and G-code output for router/laser cutters            |
+| **Generate cut lists**      | Automatic BOM with CSV/PDF export                         |
+| **Work offline**            | PWA — install on any device, no internet needed           |
+| **Multi-language**          | EN, HE, AR (RTL), DE, ES, FR                              |
+| **Free forever**            | MIT license, no account, no backend, no tracking          |
 
 ---
 

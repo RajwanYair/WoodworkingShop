@@ -103,6 +103,6 @@ describe('calculateEMC', () => {
     { desc: 'humidity < 0', args: [20, -1] as const },
     { desc: 'humidity > 100', args: [20, 101] as const },
   ])('throws RangeError for $desc', ({ args }) => {
-    expect(() => calculateEMC(...args)).toThrow(RangeError);
+    expect(() => calculateEMC(...(args as Parameters<typeof calculateEMC>))).toThrow(RangeError);
   });
 });

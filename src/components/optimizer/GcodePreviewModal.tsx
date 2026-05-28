@@ -303,6 +303,19 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
             aria-label={t('gcode.previewTitle')}
             role="img"
           >
+            <defs>
+              <pattern id="gcode-grid" x="0" y="0" width={vbW / 10} height={vbH / 10} patternUnits="userSpaceOnUse">
+                <path
+                  d={`M ${vbW / 10} 0 L 0 0 0 ${vbH / 10}`}
+                  fill="none"
+                  stroke="#555"
+                  strokeWidth={vbW / 600}
+                  opacity="0.25"
+                />
+              </pattern>
+            </defs>
+            {/* Background graph-paper grid */}
+            {moves.length > 0 && <rect x={vbX} y={vbY} width={vbW} height={vbH} fill="url(#gcode-grid)" />}
             {moves.map((move, idx) => {
               if (move.kind === 'rapid') {
                 return (
@@ -315,7 +328,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
                     stroke="#ef4444"
                     strokeWidth={vbW / 200}
                     strokeDasharray={`${vbW / 60} ${vbW / 80}`}
-                    opacity={0.7}
+                    opacity={0.65}
                   />
                 );
               }
@@ -329,7 +342,8 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
                     y2={move.y2}
                     stroke="#3b82f6"
                     strokeWidth={vbW / 150}
-                    opacity={0.9}
+                    opacity={0.92}
+                    strokeLinecap="round"
                   />
                 );
               }
@@ -341,12 +355,29 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
                   fill="none"
                   stroke="#22c55e"
                   strokeWidth={vbW / 150}
-                  opacity={0.9}
+                  opacity={0.92}
+                  strokeLinecap="round"
                 />
               );
             })}
-            {/* Start marker */}
-            {moves.length > 0 && <circle cx={moves[0].x1} cy={moves[0].y1} r={vbW / 60} fill="#22c55e" opacity={0.8} />}
+            {/* Start marker — pulsing green dot */}
+            {moves.length > 0 && (
+              <>
+                <circle cx={moves[0].x1} cy={moves[0].y1} r={vbW / 45} fill="#22c55e" opacity={0.2} />
+                <circle cx={moves[0].x1} cy={moves[0].y1} r={vbW / 80} fill="#22c55e" opacity={0.9} />
+              </>
+            )}
+            {/* End marker — red square */}
+            {moves.length > 0 && (
+              <rect
+                x={moves[moves.length - 1].x2 - vbW / 80}
+                y={moves[moves.length - 1].y2 - vbW / 80}
+                width={vbW / 40}
+                height={vbW / 40}
+                fill="#ef4444"
+                opacity={0.8}
+              />
+            )}
           </svg>
         </div>
 

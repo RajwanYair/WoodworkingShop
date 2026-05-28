@@ -29,7 +29,8 @@
     "wix.vscode-import-cost",
     "gruntfuggly.todo-tree",
     "naumovs.color-highlight",
-
+    "yoavbls.pretty-ts-errors",
+    "pflannery.vscode-versionlens",
     // ─── GitHub / CI ──────────────────────────────────────────────────────
     "github.vscode-github-actions",
     "github.copilot",
@@ -63,7 +64,8 @@
     "redhat.vscode-yaml",
 
     // ─── Copilot Ecosystem ────────────────────────────────────────────────
-    "ms-vscode.vscode-chat-customizations-evaluations"
+    "ms-vscode.vscode-chat-customizations-evaluations",
+    "github.copilot-workspace"
   ],
   "unwantedRecommendations": [
     "hookyqr.beautify",

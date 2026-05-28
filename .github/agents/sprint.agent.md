@@ -10,8 +10,11 @@ tools:
   - grep_search
   - file_search
   - semantic_search
+  - explore_subagent
+  - vscode_listCodeUsages
   - manage_todo_list
   - list_dir
+  - view_image
 description: >
   Execute the current WIP sprint item end-to-end — implement the feature,
   pass all quality gates, update roadmap and changelog, then commit.

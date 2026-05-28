@@ -217,25 +217,25 @@ describe('cloud-sync', () => {
 
   describe('shouldAcceptRemote', () => {
     it('accepts remote when no local state', () => {
-      const remote = { vectorClock: { a: 1 } } as SyncEnvelope;
+      const remote = { vectorClock: { a: 1 } } as unknown as SyncEnvelope;
       expect(shouldAcceptRemote(null, remote)).toBe(true);
     });
 
     it('accepts remote when local is behind', () => {
-      const local = { vectorClock: { a: 1 } } as SyncEnvelope;
-      const remote = { vectorClock: { a: 2 } } as SyncEnvelope;
+      const local = { vectorClock: { a: 1 } } as unknown as SyncEnvelope;
+      const remote = { vectorClock: { a: 2 } } as unknown as SyncEnvelope;
       expect(shouldAcceptRemote(local, remote)).toBe(true);
     });
 
     it('rejects remote when local is ahead', () => {
-      const local = { vectorClock: { a: 2 } } as SyncEnvelope;
-      const remote = { vectorClock: { a: 1 } } as SyncEnvelope;
+      const local = { vectorClock: { a: 2 } } as unknown as SyncEnvelope;
+      const remote = { vectorClock: { a: 1 } } as unknown as SyncEnvelope;
       expect(shouldAcceptRemote(local, remote)).toBe(false);
     });
 
     it('rejects remote when clocks are concurrent', () => {
-      const local = { vectorClock: { a: 2, b: 1 } } as SyncEnvelope;
-      const remote = { vectorClock: { a: 1, b: 2 } } as SyncEnvelope;
+      const local = { vectorClock: { a: 2, b: 1 } } as unknown as SyncEnvelope;
+      const remote = { vectorClock: { a: 1, b: 2 } } as unknown as SyncEnvelope;
       expect(shouldAcceptRemote(local, remote)).toBe(false);
     });
   });

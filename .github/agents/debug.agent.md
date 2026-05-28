@@ -10,6 +10,8 @@ tools:
   - grep_search
   - file_search
   - semantic_search
+  - explore_subagent
+  - vscode_listCodeUsages
   - list_dir
   - manage_todo_list
 description: >

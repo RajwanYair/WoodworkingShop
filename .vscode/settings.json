@@ -135,8 +135,10 @@
     "*": true,
     "plaintext": false,
     "markdown": true,
-    "scminput": true
+    "scminput": true,
+    "svg": true
   },
+  "editor.suggest.preview": true,
   "chat.agent.enabled": true,
   "chat.agent.maxRequests": 999,
   "github.copilot.chat.followUps": "always",
@@ -149,6 +151,10 @@
   "chat.promptFilesLocations": {
     ".github/prompts": true
   },
+  "chat.agentsFilesLocations": {
+    ".github/agents": true
+  },
+  "github.copilot.chat.agent.runTasks": true,
   "chat.mcp.discovery.enabled": {
     "claude-desktop": true,
     "windsurf": true,
@@ -207,8 +213,17 @@
     }
   },
   "todo-tree.filtering.excludeGlobs": ["**/node_modules/**", "**/dist/**", "**/coverage/**"],
+  // ─── Vitest Explorer ────────────────────────────────────────────────────────
+  "vitest.rootConfig": "vitest.config.ts",
+  "vitest.filesWatcherEnable": true,
+
   // ─── Coverage Gutters ───────────────────────────────────────────────────────
   "coverage-gutters.coverageFileNames": ["lcov.info", "cov.xml", "coverage.xml"],
+  // Dual-path covers both Windows dev ($TEMP) and Linux CI (/tmp)
+  "coverage-gutters.coverageFilePaths": [
+    "${env:TEMP}\\WoodworkingShop\\coverage\\lcov.info",
+    "/tmp/WoodworkingShop/coverage/lcov.info"
+  ],
   "coverage-gutters.showLineCoverage": true,
   "coverage-gutters.showRulerCoverage": true,
   // ─── i18n Ally ──────────────────────────────────────────────────────────────
@@ -254,9 +269,10 @@
   "explorer.fileNesting.expand": false,
   "explorer.fileNesting.patterns": {
     "tsconfig.json": "tsconfig.*.json",
-    "vite.config.ts": "vitest.config.ts, playwright.config.ts",
-    "package.json": "package-lock.json, .nvmrc, .node-version",
+    "vite.config.ts": "vitest.config.ts, playwright.config.ts, typedoc.json",
+    "package.json": "package-lock.json, .nvmrc, .node-version, .npmrc",
     "eslint.config.js": "stylelint.config.js, .prettierrc.json, .prettierignore, .editorconfig",
+    "copilot-instructions.md": "AGENTS.md, CONTRIBUTING.md, SECURITY.md, CODEOWNERS",
     "*.tsx": "${capture}.ts",
     "index.ts": "*.ts"
   },
@@ -271,7 +287,7 @@
   // ─── Diff & Merge ────────────────────────────────────────────────────────────
   "git.mergeEditor": true,
   "diffEditor.ignoreTrimWhitespace": false,
-  "diffEditor.renderSideBySide": true,
+  "diffEditor.renderSideBySide": false,
 
   // ─── Import Cost ────────────────────────────────────────────────────────────
   "importCost.bundleSizeDecoration": "both",

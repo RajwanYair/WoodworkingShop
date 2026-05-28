@@ -77,7 +77,7 @@ export function selectScrewLength(workpieceThicknessMm: number, matingThicknessM
   const targetMm = workpieceThicknessMm * 0.5 + matingThicknessMm * 0.6;
   const targetInches = targetMm / INCHES_TO_MM;
 
-  let selected = POCKET_SCREW_LENGTHS[0];
+  let selected: number = POCKET_SCREW_LENGTHS[0];
   for (const len of POCKET_SCREW_LENGTHS) {
     if (len <= targetInches) {
       selected = len;

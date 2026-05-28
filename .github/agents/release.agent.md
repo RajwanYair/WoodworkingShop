@@ -10,6 +10,7 @@ tools:
   - file_search
   - list_dir
   - manage_todo_list
+  - vscode_renameSymbol
 description: >
   Full automated release workflow: pre-flight checks → version bump →
   CHANGELOG → version references → build → commit → tag → GitHub Release.

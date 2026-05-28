@@ -7,6 +7,7 @@
       "type": "npm",
       "script": "typecheck",
       "group": "build",
+      "detail": "Run tsc --noEmit to type-check without emitting files",
       "problemMatcher": ["$tsc"],
       "presentation": { "reveal": "silent", "panel": "shared" }
     },
@@ -15,6 +16,7 @@
       "type": "npm",
       "script": "build",
       "group": { "kind": "build", "isDefault": true },
+      "detail": "Production build via Vite/Rolldown → dist/",
       "problemMatcher": ["$tsc"],
       "presentation": { "reveal": "always", "panel": "shared" }
     },
@@ -41,6 +43,7 @@
       "label": "Lint",
       "type": "npm",
       "script": "lint",
+      "detail": "ESLint flat config — 7 plugins, --max-warnings 0",
       "problemMatcher": ["$eslint-stylish"],
       "presentation": { "reveal": "silent", "panel": "shared" }
     },
@@ -48,6 +51,7 @@
       "label": "Lint CSS",
       "type": "npm",
       "script": "lint:css",
+      "detail": "Stylelint — validates Tailwind v4 CSS patterns",
       "problemMatcher": [],
       "presentation": { "reveal": "silent", "panel": "shared" }
     },
@@ -55,6 +59,7 @@
       "label": "Lint Markdown",
       "type": "npm",
       "script": "lint:md",
+      "detail": "markdownlint-cli2 on all .md files",
       "problemMatcher": [],
       "presentation": { "reveal": "silent", "panel": "shared" }
     },
@@ -77,6 +82,7 @@
       "type": "npm",
       "script": "quality",
       "group": "build",
+      "detail": "typecheck + lint + lint:css + lint:md + format:check + i18n:coverage (parallel)",
       "problemMatcher": ["$tsc", "$eslint-stylish"],
       "presentation": { "reveal": "always", "panel": "shared" }
     },
@@ -87,6 +93,7 @@
       "type": "npm",
       "script": "test",
       "group": { "kind": "test", "isDefault": true },
+      "detail": "Vitest unit tests (engine + store + utils + hooks)",
       "problemMatcher": [],
       "presentation": { "reveal": "always", "panel": "shared" }
     },
@@ -95,6 +102,7 @@
       "type": "npm",
       "script": "test:coverage",
       "group": "test",
+      "detail": "Vitest with lcov coverage → $TEMP/WoodworkingShop/coverage/",
       "problemMatcher": [],
       "presentation": { "reveal": "always", "panel": "shared" }
     },
@@ -130,6 +138,7 @@
       "type": "npm",
       "script": "check",
       "group": "build",
+      "detail": "quality:fast + npm test — full pre-commit gate",
       "problemMatcher": ["$tsc", "$eslint-stylish"],
       "presentation": { "reveal": "always", "panel": "dedicated" }
     },
@@ -138,6 +147,7 @@
       "type": "npm",
       "script": "ci",
       "group": "build",
+      "detail": "check + build + bundle:check + bench:check — mirrors GitHub Actions",
       "problemMatcher": ["$tsc", "$eslint-stylish"],
       "presentation": { "reveal": "always", "panel": "dedicated" }
     },
@@ -146,6 +156,7 @@
       "type": "npm",
       "script": "release:build",
       "group": "build",
+      "detail": "build + bundle:check + sbom (run after npm run check)",
       "problemMatcher": ["$tsc"],
       "presentation": { "reveal": "always", "panel": "shared" }
     },
@@ -171,6 +182,7 @@
       "type": "npm",
       "script": "dead:check",
       "group": "build",
+      "detail": "Knip — find unused exports, files, and dependencies",
       "problemMatcher": [],
       "presentation": { "reveal": "always", "panel": "shared" }
     },
@@ -178,6 +190,7 @@
       "label": "Docs API",
       "type": "npm",
       "script": "docs:api",
+      "detail": "TypeDoc — generate API docs to docs/api/",
       "problemMatcher": [],
       "presentation": { "reveal": "silent", "panel": "shared" }
     },
@@ -185,6 +198,18 @@
       "label": "SBOM",
       "type": "npm",
       "script": "sbom",
+      "detail": "CycloneDX SBOM — software bill of materials",
+      "problemMatcher": [],
+      "presentation": { "reveal": "silent", "panel": "shared" }
+    },
+
+    // ─── Maintenance ───────────────────────────────────────────────────────
+    {
+      "label": "Clean TEMP",
+      "type": "shell",
+      "command": "Remove-Item -Recurse -Force -ErrorAction SilentlyContinue \"$env:TEMP\\WoodworkingShop\"; Write-Host 'TEMP cleaned.'",
+      "options": { "shell": { "executable": "pwsh", "args": ["-NoLogo", "-NonInteractive", "-Command"] } },
+      "detail": "Remove $TEMP\\WoodworkingShop — coverage, vite cache, build logs",
       "problemMatcher": [],
       "presentation": { "reveal": "silent", "panel": "shared" }
     }

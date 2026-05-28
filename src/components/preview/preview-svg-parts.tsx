@@ -32,6 +32,18 @@ export function ViewBox({
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
     >
+      <defs>
+        <filter id="part-shadow" x="-8%" y="-8%" width="116%" height="116%">
+          <feDropShadow dx="0" dy="1" stdDeviation="1.2" floodColor="#000" floodOpacity="0.18" />
+        </filter>
+        <filter id="part-hover-glow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="0" stdDeviation="2.5" floodColor="#FFD700" floodOpacity="0.5" />
+        </filter>
+        <pattern id="svg-grid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+          <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" strokeWidth="0.25" opacity="0.12" />
+        </pattern>
+      </defs>
+      <rect x={0} y={0} width={w} height={h} fill="url(#svg-grid)" pointerEvents="none" />
       {children}
       <ScaleBar viewW={w} viewH={h} />
     </svg>
@@ -54,14 +66,27 @@ function ScaleBar({ viewW, viewH }: { viewW: number; viewH: number }) {
   const padX = 8;
   const padY = 8;
   const y = viewH - padY;
+  const scaleLabel = niceMm >= 1000 ? `${niceMm / 1000} m` : `${niceMm} mm`;
   return (
-    <g aria-hidden="true" pointerEvents="none" fill="currentColor" stroke="currentColor">
-      <line x1={padX} y1={y} x2={padX + barPx} y2={y} strokeWidth={1.2} />
-      <line x1={padX} y1={y - 3} x2={padX} y2={y + 3} strokeWidth={1.2} />
-      <line x1={padX + barPx} y1={y - 3} x2={padX + barPx} y2={y + 3} strokeWidth={1.2} />
-      <text x={padX + barPx / 2} y={y - 4} fontSize={7} textAnchor="middle" stroke="none">
-        {niceMm >= 1000 ? `${niceMm / 1000} m` : `${niceMm} mm`}
-      </text>
+    <g aria-hidden="true" pointerEvents="none">
+      <rect
+        x={padX - 4}
+        y={y - 13}
+        width={barPx + 8}
+        height={17}
+        rx={3}
+        fill="white"
+        fillOpacity={0.65}
+        stroke="none"
+      />
+      <g fill="currentColor" stroke="currentColor">
+        <line x1={padX} y1={y} x2={padX + barPx} y2={y} strokeWidth={1.4} />
+        <line x1={padX} y1={y - 4} x2={padX} y2={y + 1} strokeWidth={1.4} />
+        <line x1={padX + barPx} y1={y - 4} x2={padX + barPx} y2={y + 1} strokeWidth={1.4} />
+        <text x={padX + barPx / 2} y={y - 5} fontSize={7} textAnchor="middle" stroke="none" fontWeight="600">
+          {scaleLabel}
+        </text>
+      </g>
     </g>
   );
 }
@@ -102,11 +127,12 @@ export function PartRect({
       width={w}
       height={h}
       fill={fill}
-      stroke={hovered ? '#FFD700' : '#666'}
-      strokeWidth={hovered ? 2 : 0.5}
+      stroke={hovered ? '#FFD700' : '#555'}
+      strokeWidth={hovered ? 1.8 : 0.5}
       strokeDasharray={dashed ? '3,2' : undefined}
-      opacity={hovered ? 1 : 0.85}
-      className="cursor-pointer [transition:stroke_0.15s,stroke-width_0.15s,opacity_0.15s]"
+      opacity={hovered ? 1 : 0.88}
+      filter={hovered ? 'url(#part-hover-glow)' : 'url(#part-shadow)'}
+      className="cursor-pointer [transition:stroke_0.12s,stroke-width_0.12s,opacity_0.12s,filter_0.12s]"
       onMouseEnter={(e) => {
         setHovered(true);
         onHover?.(e, label, dim, material);
@@ -169,6 +195,16 @@ export function DimLine({
           <polygon points={`${x2},${y2} ${x2 - AH},${y2 - AL} ${x2 + AH},${y2 - AL}`} stroke="none" />
         </>
       )}
+      <rect
+        x={isHorizontal ? mid.x - label.length * 2.6 : mid.x - 4}
+        y={isHorizontal ? mid.y - 5 : mid.y - label.length * 2.6}
+        width={isHorizontal ? label.length * 5.2 : 8}
+        height={isHorizontal ? 10 : label.length * 5.2}
+        rx={2}
+        fill="white"
+        fillOpacity={0.7}
+        stroke="none"
+      />
       <text
         x={mid.x}
         y={mid.y}
@@ -221,18 +257,28 @@ export function DoorsOverlay({ config, d, scale, color, material, tp }: DoorsOve
       />,
     );
     if (isGlass) {
-      // Glass shine effect
+      // Glass shine — two highlight lines for depth
       doors.push(
-        <line
-          key={`glass-shine-${i}`}
-          x1={x + dw * 0.2}
-          y1={r + dh * 0.1}
-          x2={x + dw * 0.35}
-          y2={r + dh * 0.9}
-          stroke="#ffffff80"
-          strokeWidth={2}
-          strokeLinecap="round"
-        />,
+        <g key={`glass-shine-${i}`}>
+          <line
+            x1={x + dw * 0.2}
+            y1={r + dh * 0.08}
+            x2={x + dw * 0.32}
+            y2={r + dh * 0.85}
+            stroke="#ffffff90"
+            strokeWidth={2}
+            strokeLinecap="round"
+          />
+          <line
+            x1={x + dw * 0.38}
+            y1={r + dh * 0.08}
+            x2={x + dw * 0.44}
+            y2={r + dh * 0.45}
+            stroke="#ffffff50"
+            strokeWidth={1}
+            strokeLinecap="round"
+          />
+        </g>,
       );
     }
     if (config.doorStyle === 'shaker' && dw > shakerInset * 2.5 && dh > shakerInset * 2.5) {
@@ -247,6 +293,27 @@ export function DoorsOverlay({ config, d, scale, color, material, tp }: DoorsOve
           stroke="#00000030"
           strokeWidth={1.5}
           rx={1}
+        />,
+      );
+    }
+    // Door handle on the inner edge of each door
+    {
+      const isLastDoor = i === config.doorCount - 1;
+      const handleX = isLastDoor && config.doorCount > 1 ? x + 2 : x + dw - 5;
+      const handleColor = isGlass ? '#aaa' : '#c8a84e';
+      const handleStroke = isGlass ? '#888' : '#a07820';
+      doors.push(
+        <rect
+          key={`handle-${i}`}
+          x={handleX}
+          y={r + dh * 0.43}
+          width={3}
+          height={dh * 0.14}
+          rx={1.5}
+          fill={handleColor}
+          stroke={handleStroke}
+          strokeWidth={0.5}
+          pointerEvents="none"
         />,
       );
     }

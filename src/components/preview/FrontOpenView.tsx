@@ -87,7 +87,16 @@ export function FrontOpenView({
       onPointerUp={dragIdx !== null ? handleShelfDragEnd : undefined}
     >
       <g transform={`translate(${dimPad},${dimPad})`}>
-        <rect x={0} y={0} width={W} height={H} fill="none" stroke="#444" strokeWidth={1.5} />
+        <rect
+          x={0}
+          y={0}
+          width={W}
+          height={H}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.5}
+          strokeOpacity={0.6}
+        />
         <PartRect
           x={0}
           y={0}
@@ -156,10 +165,36 @@ export function FrontOpenView({
               >
                 <title>{`Shelf ${i + 1}\n${d.shelfWidth}×${d.shelfDepth} mm\n↕ Drag to reposition`}</title>
               </rect>
-              {/* Drag grip indicator */}
-              <text x={T + 6} y={sy + T * 0.3 + 1} fontSize={4} fill="#999" pointerEvents="none">
-                ⇕
-              </text>
+              {/* Drag grip indicator — three horizontal grip lines */}
+              <g pointerEvents="none" opacity={0.55}>
+                <line
+                  x1={T + 3}
+                  y1={sy + T * 0.12}
+                  x2={T + 9}
+                  y2={sy + T * 0.12}
+                  stroke="#777"
+                  strokeWidth={0.7}
+                  strokeLinecap="round"
+                />
+                <line
+                  x1={T + 3}
+                  y1={sy + T * 0.27}
+                  x2={T + 9}
+                  y2={sy + T * 0.27}
+                  stroke="#777"
+                  strokeWidth={0.7}
+                  strokeLinecap="round"
+                />
+                <line
+                  x1={T + 3}
+                  y1={sy + T * 0.42}
+                  x2={T + 9}
+                  y2={sy + T * 0.42}
+                  stroke="#777"
+                  strokeWidth={0.7}
+                  strokeLinecap="round"
+                />
+              </g>
               {/* Position label during drag */}
               {dragIdx === i && (
                 <g pointerEvents="none">
@@ -209,10 +244,10 @@ export function FrontOpenView({
                   y={dy + drawerH / 2 - 1.5}
                   width={24}
                   height={3}
-                  rx={1}
-                  fill="#888"
-                  stroke="#666"
-                  strokeWidth={0.4}
+                  rx={1.5}
+                  fill="#c8a84e"
+                  stroke="#a07820"
+                  strokeWidth={0.5}
                 />
               </g>
             );

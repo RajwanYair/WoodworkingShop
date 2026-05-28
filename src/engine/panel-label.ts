@@ -8,7 +8,7 @@
  */
 
 /** Grain direction for label display. */
-export type GrainDirection = 'horizontal' | 'vertical' | 'none';
+type GrainDirection = 'horizontal' | 'vertical' | 'none';
 
 /** Edge that has banding applied. */
 export type BandedEdge = 'top' | 'bottom' | 'left' | 'right';

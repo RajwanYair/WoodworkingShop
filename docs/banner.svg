@@ -161,7 +161,7 @@
   <rect x="1080" y="58" width="96" height="26" rx="13" fill="#7a4010" stroke="#c08030" stroke-width="1" opacity="0.95"/>
   <text x="1128" y="75"
     font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="700"
-    fill="#f0c060" text-anchor="middle">v5.15.0</text>
+    fill="#f0c060" text-anchor="middle">v5.21.0</text>
 
   <!-- Tagline -->
   <text x="242" y="124"
@@ -187,7 +187,7 @@
   <text x="688" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">6 Languages</text>
 
   <rect x="738" y="144" width="80" height="23" rx="11.5" fill="url(#pillBg)" stroke="#7a4010" stroke-width="1"/>
-  <text x="778" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">950+ Tests</text>
+  <text x="778" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">1000+ Tests</text>
 
   <!-- ── Tech stack row (shifted right to clear feature pills & tagline) ── -->
   <text x="1080" y="100"
@@ -225,7 +225,7 @@
 
   <!-- Stat 2: Tests -->
   <text x="400" y="222" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#906040" text-anchor="middle">UNIT TESTS</text>
-  <text x="400" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="600" fill="#f0c060" text-anchor="middle">950+ passing</text>
+  <text x="400" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="600" fill="#f0c060" text-anchor="middle">1000+ passing</text>
 
   <!-- Divider -->
   <line x1="472" y1="208" x2="472" y2="246" stroke="#5a3010" stroke-width="1" opacity="0.6"/>

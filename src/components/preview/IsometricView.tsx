@@ -132,56 +132,66 @@ export function IsometricView({
       aria-label="3D isometric cabinet drawing"
       className="border-wood-200 dark:border-wood-700 dark:bg-wood-800 text-wood-600 dark:text-wood-200 max-h-125 w-full max-w-lg rounded border bg-white"
     >
-      {tex && (
-        <defs>
-          <pattern id="iso-tex-top" x="0" y="0" width="64" height="64" patternUnits="userSpaceOnUse">
-            <rect width="64" height="64" fill={tex.baseColor} />
-            {tex.grainLines.map((l, idx) => (
-              <line
-                key={idx}
-                x1={l.x1}
-                y1={l.y1}
-                x2={l.x2}
-                y2={l.y2}
-                stroke={tex.grainColor}
-                strokeWidth={l.width}
-                opacity={l.opacity}
-              />
-            ))}
-          </pattern>
-          <pattern id="iso-tex-side" x="0" y="0" width="64" height="64" patternUnits="userSpaceOnUse">
-            <rect width="64" height="64" fill={tex.sideColor ?? adjustBrightness(tex.baseColor, -30)} />
-            {tex.grainLines.map((l, idx) => (
-              <line
-                key={idx}
-                x1={l.y1}
-                y1={l.x1}
-                x2={l.y2}
-                y2={l.x2}
-                stroke={tex.grainColor}
-                strokeWidth={l.width}
-                opacity={l.opacity * 0.8}
-              />
-            ))}
-          </pattern>
-          <pattern id="iso-tex-front" x="0" y="0" width="64" height="64" patternUnits="userSpaceOnUse">
-            <rect width="64" height="64" fill={tex.baseColor} />
-            {tex.grainLines.map((l, idx) => (
-              <line
-                key={idx}
-                x1={l.x1}
-                y1={l.y1}
-                x2={l.x2}
-                y2={l.y2}
-                stroke={tex.grainColor}
-                strokeWidth={l.width}
-                opacity={l.opacity}
-              />
-            ))}
-            <rect width="64" height="64" fill="#000" opacity={0.06} />
-          </pattern>
-        </defs>
-      )}
+      <defs>
+        <filter id="iso-shadow" x="-8%" y="-5%" width="120%" height="120%">
+          <feDropShadow dx="3" dy="5" stdDeviation="5" floodColor="#000" floodOpacity="0.28" />
+        </filter>
+        <linearGradient id="iso-handle-grad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#e8c060" />
+          <stop offset="50%" stopColor="#c8a040" />
+          <stop offset="100%" stopColor="#a07820" />
+        </linearGradient>
+        {tex && (
+          <>
+            <pattern id="iso-tex-top" x="0" y="0" width="64" height="64" patternUnits="userSpaceOnUse">
+              <rect width="64" height="64" fill={tex.baseColor} />
+              {tex.grainLines.map((l, idx) => (
+                <line
+                  key={idx}
+                  x1={l.x1}
+                  y1={l.y1}
+                  x2={l.x2}
+                  y2={l.y2}
+                  stroke={tex.grainColor}
+                  strokeWidth={l.width}
+                  opacity={l.opacity}
+                />
+              ))}
+            </pattern>
+            <pattern id="iso-tex-side" x="0" y="0" width="64" height="64" patternUnits="userSpaceOnUse">
+              <rect width="64" height="64" fill={tex.sideColor ?? adjustBrightness(tex.baseColor, -30)} />
+              {tex.grainLines.map((l, idx) => (
+                <line
+                  key={idx}
+                  x1={l.y1}
+                  y1={l.x1}
+                  x2={l.y2}
+                  y2={l.x2}
+                  stroke={tex.grainColor}
+                  strokeWidth={l.width}
+                  opacity={l.opacity * 0.8}
+                />
+              ))}
+            </pattern>
+            <pattern id="iso-tex-front" x="0" y="0" width="64" height="64" patternUnits="userSpaceOnUse">
+              <rect width="64" height="64" fill={tex.baseColor} />
+              {tex.grainLines.map((l, idx) => (
+                <line
+                  key={idx}
+                  x1={l.x1}
+                  y1={l.y1}
+                  x2={l.x2}
+                  y2={l.y2}
+                  stroke={tex.grainColor}
+                  strokeWidth={l.width}
+                  opacity={l.opacity}
+                />
+              ))}
+              <rect width="64" height="64" fill="#000" opacity={0.06} />
+            </pattern>
+          </>
+        )}
+      </defs>
       <g transform={`translate(${ox},${oy})`}>
         {/* Back panel */}
         <polygon
@@ -315,6 +325,13 @@ export function IsometricView({
             );
           })}
 
+        {/* Ambient occlusion — bottom edge of left face */}
+        <polygon
+          points={isoQuad([0, 0, 0], [0, 0, D], [0, T * 0.45, D], [0, T * 0.45, 0])}
+          fill="#000"
+          opacity={0.18}
+          pointerEvents="none"
+        />
         {/* Right side panel – outer face */}
         <polygon
           points={isoQuad([W, 0, 0], [W, H, 0], [W, H, D], [W, 0, D])}
@@ -325,6 +342,13 @@ export function IsometricView({
         >
           <title>{`Side Panel\n${thick}×${h} mm`}</title>
         </polygon>
+        {/* Ambient occlusion — bottom edge of right face */}
+        <polygon
+          points={isoQuad([W, 0, 0], [W, 0, D], [W, T * 0.45, D], [W, T * 0.45, 0])}
+          fill="#000"
+          opacity={0.12}
+          pointerEvents="none"
+        />
 
         {/* Top panel – top face with grain lines */}
         <polygon
@@ -409,9 +433,9 @@ export function IsometricView({
                   [handleX + 12 * sc, handleY + 1 * sc, -0.5 * sc],
                   [handleX, handleY + 1 * sc, -0.5 * sc],
                 )}
-                fill="#888"
-                stroke="#666"
-                strokeWidth={0.3}
+                fill="url(#iso-handle-grad)"
+                stroke="#a07820"
+                strokeWidth={0.4}
               />
             </g>
           );
@@ -468,9 +492,9 @@ export function IsometricView({
                     [dx + dw - 6 * sc, dr + dh * 0.55, -0.5 * sc],
                     [dx + dw - 8 * sc, dr + dh * 0.55, -0.5 * sc],
                   )}
-                  fill="#888"
-                  stroke="#666"
-                  strokeWidth={0.3}
+                  fill="url(#iso-handle-grad)"
+                  stroke="#a07820"
+                  strokeWidth={0.4}
                 />
               </g>
             );

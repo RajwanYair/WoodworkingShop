@@ -150,7 +150,7 @@ export function findRecommendedSlideLength(maxLengthMm: number): number {
     throw new RangeError(`findRecommendedSlideLength: maxLengthMm must be > 0, got ${maxLengthMm}`);
   }
 
-  let best = STANDARD_SLIDE_LENGTHS[0];
+  let best: number = STANDARD_SLIDE_LENGTHS[0];
   for (const len of STANDARD_SLIDE_LENGTHS) {
     if (len <= maxLengthMm) {
       best = len;

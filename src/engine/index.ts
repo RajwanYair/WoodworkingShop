@@ -1379,3 +1379,7 @@ export type { TablesawCutType, TablesawBladeInput, TablesawBladeResult } from '.
 // Sprint 220 — Cabinet Door Sizing Calculator
 export { calculateCabinetDoor, recommendDoorCount } from './cabinet-door';
 export type { DoorOverlay, CabinetDoorInput, DoorLeafResult, CabinetDoorResult } from './cabinet-door';
+
+// Sprint 221 — Face Frame Calculator
+export { calculateFaceFrame } from './face-frame';
+export type { FaceFrameInput, FaceFramePart, FaceFrameResult } from './face-frame';
