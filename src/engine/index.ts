@@ -244,10 +244,15 @@ export {
   TEMPLATE_CATALOGUE,
   getTemplatesByCategory,
   getTemplate,
-  instantiateTemplate,
+  instantiateTemplate as instantiateLibraryTemplate,
   listTemplateIds,
 } from './template-library';
-export type { TemplateCategory, TemplateDimensions, CabinetTemplate, TemplateInstance } from './template-library';
+export type {
+  TemplateCategory,
+  TemplateDimensions,
+  CabinetTemplate,
+  TemplateInstance as LibraryTemplateInstance,
+} from './template-library';
 
 export { batchReplaceMaterial, listMaterials, countByMaterial } from './batch-replace';
 export type { BatchPart, BatchReplaceOptions, BatchReplaceResult } from './batch-replace';
@@ -327,7 +332,7 @@ export {
 } from './manufacturer-catalog';
 export type {
   ManufacturerInfo,
-  MaterialCategory,
+  MaterialCategory as ManufacturerMaterialCategory,
   ManufacturerMaterial,
   ManufacturerCatalog,
   MaterialFilter,
@@ -835,7 +840,7 @@ export type {
 // Sprint 162 — Parametric Template Engine (Phase 36)
 export {
   validateTemplate,
-  instantiateTemplate,
+  instantiateTemplate as instantiateParametricTemplate,
   getDefaultValues,
   getParamDependencies,
   evaluateExpression,
@@ -856,7 +861,7 @@ export type {
   ComputedField,
   ParametricTemplate,
   ParamValues,
-  TemplateInstance,
+  TemplateInstance as ParametricTemplateInstance,
   TemplateValidationError,
   TemplateValidationResult,
 } from './parametric-template';
@@ -876,7 +881,7 @@ export {
   MAX_CONCURRENT,
 } from './batch-export';
 export type {
-  ExportFormat,
+  ExportFormat as BatchExportFormat,
   ExportPriority,
   ExportItemStatus,
   BatchStatus,
@@ -886,7 +891,7 @@ export type {
   BatchExportJob,
   BatchProgress,
   ExportManifest,
-  IdGenerator,
+  IdGenerator as BatchIdGenerator,
 } from './batch-export';
 
 // Sprint 164 — Material Yield Optimizer (Phase 36)
@@ -922,7 +927,7 @@ export type {
   VersionBranch,
   VersionHistory,
   VersionDiff,
-  DiffEntry,
+  DiffEntry as VersionDiffEntry,
   MergeResult,
   MergeConflict,
 } from './version-history';
@@ -932,7 +937,7 @@ export {
   createSchedule,
   addTask,
   computeSchedule,
-  detectConflicts,
+  detectConflicts as detectScheduleConflicts,
   getScheduleMetrics,
   crashTask,
   MAX_TASKS,
@@ -948,7 +953,7 @@ export type {
   ProductionSchedule,
   ResourceConflict,
   ScheduleMetrics,
-  IdGenerator,
+  IdGenerator as ScheduleIdGenerator,
 } from './production-schedule';
 
 // Sprint 168 — Nesting pattern library (Phase 37)
@@ -1052,7 +1057,12 @@ export {
 export type { GrainDirection, CutPart, GroupingCriterion, CutGroup, GroupingResult } from './cut-list-grouping';
 
 export { resolveAssemblyDeps, hasCycle, maxParallelism } from './assembly-dependency';
-export type { StepId, AssemblyStep, ScheduledStep, DependencyResult } from './assembly-dependency';
+export type {
+  StepId,
+  AssemblyStep as DependencyAssemblyStep,
+  ScheduledStep,
+  DependencyResult,
+} from './assembly-dependency';
 
 export {
   checkWorkshopSafety,
@@ -1062,7 +1072,7 @@ export {
   computeSafetyScore,
 } from './workshop-safety';
 export type {
-  ToolType,
+  ToolType as WorkshopSafetyToolType,
   PpeCategory,
   WorkshopTool,
   SafetyViolation,
@@ -1100,12 +1110,18 @@ export {
 export type { ToolPosition, WorkflowStep, SwapSuggestion, LayoutAnalysisResult } from './layout-optimizer';
 
 export { getSkillMultiplier, getBaseMinutes, estimateTaskTime, estimateProjectTime } from './time-estimator';
-export type { SkillLevel, OperationType, ProjectTask, TaskEstimate, TimeEstimationResult } from './time-estimator';
+export type {
+  SkillLevel,
+  OperationType as TimeEstimationOperationType,
+  ProjectTask,
+  TaskEstimate,
+  TimeEstimationResult,
+} from './time-estimator';
 
 export { findBestPrice, computePriceTrend, estimateProjectCost, detectPriceAnomalies } from './material-cost-tracker';
 export type {
   PriceEntry,
-  MaterialDemand,
+  MaterialDemand as CostTrackerMaterialDemand,
   MaterialCostLine,
   TrendDirection,
   PriceTrend,
@@ -1115,7 +1131,7 @@ export type {
 export { checkStock, analyzeInventory, projectUsage, generateReorderList } from './shop-inventory';
 export type {
   InventoryItem,
-  StockStatus,
+  StockStatus as InventoryStockStatus,
   StockCheck,
   ProjectUsage,
   UsageProjection,
@@ -1164,29 +1180,34 @@ export {
   sortHardware,
   calculateHardwareCost,
   getManufacturers,
-  getCategories,
+  getCategories as getHardwareCategories,
   validateHardwareItem,
 } from './hardware-catalog';
 
 export type {
-  HardwareCategory,
-  HardwareItem,
+  HardwareCategory as HardwareCatalogCategory,
+  HardwareItem as HardwareCatalogItem,
   HardwareAssignment,
   HardwareFilter,
   HardwareSortField,
-  SortDirection,
+  SortDirection as HardwareCatalogSortDirection,
   HardwareCostLine,
   HardwareCostSummary,
 } from './hardware-catalog';
 
-export { compareProjects, bestForCriterion, percentDifference, DEFAULT_WEIGHTS } from './project-comparison';
+export {
+  compareProjects,
+  bestForCriterion,
+  percentDifference,
+  DEFAULT_WEIGHTS as DEFAULT_PROJECT_COMPARISON_WEIGHTS,
+} from './project-comparison';
 
 export type {
   ProjectMetrics,
   ComparisonWeights,
   NormalisedScores,
   ProjectScore,
-  ComparisonResult,
+  ComparisonResult as ProjectComparisonResult,
 } from './project-comparison';
 
 // Sprint 190 — Wood Movement Calculator
@@ -1310,7 +1331,7 @@ export type { LoadType, ShelfMaterial, DeflectionInput, DeflectionResult } from 
 export { calculateRouterDepth, getRecommendedRpm } from './router-depth';
 export type {
   RouterOperation,
-  MaterialHardness,
+  MaterialHardness as RouterMaterialHardness,
   RouterDepthInput,
   RouterPass,
   RouterDepthResult,
@@ -1345,7 +1366,7 @@ export type { WoodHardness, ScrewGauge, PilotHoleInput, PilotHoleResult } from '
 
 // Sprint 212 — Glue-up Time Calculator
 export { calculateGlueUpTime } from './glue-up-time';
-export type { GlueType, GlueUpInput, GlueUpResult } from './glue-up-time';
+export type { GlueType as GlueUpGlueType, GlueUpInput, GlueUpResult } from './glue-up-time';
 
 // Sprint 213 — Bandsaw Blade Speed Calculator
 export { calculateBandsawSpeed } from './bandsaw-speed';
@@ -1354,3 +1375,7 @@ export type { BandsawMaterial, BladeToothType, BandsawSpeedInput, BandsawSpeedRe
 // Sprint 214 — Tablesaw Blade Height Calculator
 export { calculateTablesawBladeHeight } from './tablesaw-blade';
 export type { TablesawCutType, TablesawBladeInput, TablesawBladeResult } from './tablesaw-blade';
+
+// Sprint 220 — Cabinet Door Sizing Calculator
+export { calculateCabinetDoor, recommendDoorCount } from './cabinet-door';
+export type { DoorOverlay, CabinetDoorInput, DoorLeafResult, CabinetDoorResult } from './cabinet-door';
