@@ -1,4 +1,5 @@
 import type { CabinetEntry, ProjectSnapshot } from '../store/cabinet-store';
+import { utf8ArrayBuffer, utf8Encode } from './browser-compat';
 import { idbLoadProjects, idbSaveProjects, idbLoadSnapshots, idbSaveSnapshots } from './indexed-db-storage';
 
 /** Current schema version written on every export. */
@@ -126,8 +127,8 @@ export async function exportProjectsBundle(projects: SavedProject[]): Promise<vo
 
   const manifest = await Promise.all(
     fileEntries.map(async (f) => {
-      const encoded = new TextEncoder().encode(f.content);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', encoded);
+      const encoded = utf8Encode(f.content);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', utf8ArrayBuffer(f.content));
       const hashHex = Array.from(new Uint8Array(hashBuffer))
         .map((b) => b.toString(16).padStart(2, '0'))
         .join('');

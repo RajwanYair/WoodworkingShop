@@ -8,6 +8,8 @@
  * Use `isWebSerialAvailable()` for progressive-enhancement guards.
  */
 
+import { utf8Encode } from '../utils/browser-compat';
+
 // ── Minimal Web Serial API typings (not in every @types/lib version) ──────────
 
 /** Minimal Web Serial API port handle (browser DOM shim). */
@@ -102,14 +104,13 @@ export async function streamGcodeLines(
     throw new Error('Serial port is not writable. Is it still open?');
   }
   const writer = port.writable.getWriter();
-  const encoder = new TextEncoder();
   try {
     for (let i = 0; i < lines.length; i++) {
       if (signal?.aborted) break;
-      await writer.write(encoder.encode(lines[i] + '\n'));
+      await writer.write(utf8Encode(lines[i] + '\n'));
       onProgress?.(i + 1, lines.length);
       // Yield to the event loop so React can re-render progress
-      await new Promise<void>((resolve) => queueMicrotask(resolve));
+      await new Promise<void>((resolve) => setTimeout(resolve, 0));
     }
   } finally {
     writer.releaseLock();

@@ -16,6 +16,7 @@
  */
 
 import type { CabinetConfig } from '../engine/types';
+import { getFetch } from './browser-compat';
 
 /** Supported AI provider identifiers. */
 export type AiProvider = 'openai' | 'anthropic' | 'ollama';
@@ -142,7 +143,9 @@ async function callOpenAi(
 ): Promise<AiResponse> {
   const base = aiConfig.endpoint?.replace(/\/+$/u, '') ?? 'https://api.openai.com';
   const url = `${base}/v1/chat/completions`;
-  const res = await fetch(url, {
+  const fetchFn = getFetch();
+  if (!fetchFn) throw new Error('Fetch API is not available in this browser.');
+  const res = await fetchFn(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -174,7 +177,9 @@ async function callAnthropic(
 ): Promise<AiResponse> {
   const base = aiConfig.endpoint?.replace(/\/+$/u, '') ?? 'https://api.anthropic.com';
   const url = `${base}/v1/messages`;
-  const res = await fetch(url, {
+  const fetchFn = getFetch();
+  if (!fetchFn) throw new Error('Fetch API is not available in this browser.');
+  const res = await fetchFn(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -206,7 +211,9 @@ async function callOllama(
 ): Promise<AiResponse> {
   const base = (aiConfig.endpoint ?? 'http://localhost:11434').replace(/\/+$/u, '');
   const url = `${base}/api/chat`;
-  const res = await fetch(url, {
+  const fetchFn = getFetch();
+  if (!fetchFn) throw new Error('Fetch API is not available in this browser.');
+  const res = await fetchFn(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

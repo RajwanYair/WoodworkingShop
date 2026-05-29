@@ -13,6 +13,7 @@
  */
 
 import type { CabinetEntry } from '../store/cabinet-store';
+import { cloneJson } from './browser-compat';
 import { listProjects } from './project-storage';
 import { idbLoadProjects, idbSaveProjects } from './indexed-db-storage';
 import type { SavedProject } from './project-storage';
@@ -79,7 +80,7 @@ export async function forkProject(parentId: string, branchName?: string): Promis
   if (!parent) throw new Error(`Project '${parentId}' not found`);
 
   const branch: BranchedProject = {
-    ...structuredClone(parent),
+    ...cloneJson(parent),
     id: newId('branch'),
     parentId,
     branchName: branchName?.trim() || `Branch of ${parent.name}`,
@@ -190,7 +191,7 @@ export async function mergeBranch(branchId: string, targetId: string): Promise<S
 
   const updated: SavedProject = {
     ...all[targetIdx],
-    cabinets: structuredClone(branch.cabinets),
+    cabinets: cloneJson(branch.cabinets),
     savedAt: new Date().toISOString(),
   };
   const newAll = [...all];

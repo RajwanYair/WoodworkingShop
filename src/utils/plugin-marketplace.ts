@@ -11,6 +11,7 @@
  */
 
 import { get, set, del, createStore } from 'idb-keyval';
+import { getFetch } from './browser-compat';
 
 // ── IDB store ─────────────────────────────────────────────────────────────────
 const marketplaceStore = createStore('cabinet-planner-marketplace', 'marketplace');
@@ -85,7 +86,11 @@ export function validateCatalog(obj: unknown): obj is MarketplaceCatalog {
  * @throws On network error or invalid payload.
  */
 export async function fetchMarketplaceCatalog(url: string = DEFAULT_MARKETPLACE_URL): Promise<MarketplaceCatalog> {
-  const response = await fetch(url);
+  const fetchFn = getFetch();
+  if (!fetchFn) {
+    throw new Error('Fetch API is not available in this browser.');
+  }
+  const response = await fetchFn(url);
   if (!response.ok) {
     throw new Error(`Marketplace catalog fetch failed: HTTP ${response.status}`);
   }

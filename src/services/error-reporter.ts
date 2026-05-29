@@ -13,8 +13,10 @@
  * Usage:
  *   import { initErrorReporter, reportError } from '@/services/error-reporter';
  *   initErrorReporter();  // in main.tsx — wires global handlers
- *   reportError(error);   // manual report from ErrorBoundary
+ *   sendErrorReport(error);   // manual report from ErrorBoundary
  */
+
+import { getFetch } from '../utils/browser-compat';
 
 const ENDPOINT = import.meta.env['VITE_ERROR_ENDPOINT'] as string | undefined;
 const MAX_REPORTS_PER_SESSION = 5;
@@ -67,15 +69,17 @@ function buildReport(error: Error): ErrorReport {
  * - Rate limit (5/session) is exceeded
  * - The network request fails (fire-and-forget)
  */
-export function reportError(error: Error): void {
+export function sendErrorReport(error: Error): void {
   if (!ENDPOINT) return;
   if (reportCount >= MAX_REPORTS_PER_SESSION) return;
   reportCount++;
 
   const report = buildReport(error);
+  const fetchFn = getFetch();
+  if (!fetchFn) return;
 
   // Fire-and-forget — never block UI or throw on report failure
-  fetch(ENDPOINT, {
+  fetchFn(ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(report),
@@ -96,16 +100,16 @@ export function initErrorReporter(): void {
 
   window.addEventListener('error', (event) => {
     if (event.error instanceof Error) {
-      reportError(event.error);
+      sendErrorReport(event.error);
     }
   });
 
   window.addEventListener('unhandledrejection', (event) => {
     const reason = event.reason;
     if (reason instanceof Error) {
-      reportError(reason);
+      sendErrorReport(reason);
     } else if (typeof reason === 'string') {
-      reportError(new Error(reason));
+      sendErrorReport(new Error(reason));
     }
   });
 }

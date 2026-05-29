@@ -462,7 +462,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
               <button
                 type="button"
                 onClick={() => setWebglIsometric((v) => !v)}
-                className="absolute end-2 bottom-2 rounded bg-black/40 px-2 py-0.5 text-[10px] text-white hover:bg-black/60"
+                className="absolute inset-e-2 bottom-2 rounded bg-black/40 px-2 py-0.5 text-[10px] text-white hover:bg-black/60"
                 aria-pressed={webglIsometric}
                 title={t('preview.webglToggle')}
               >

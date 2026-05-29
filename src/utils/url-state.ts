@@ -1,41 +1,42 @@
 import type { CabinetConfig, DrawerSlideType } from '../engine/types';
 import { DEFAULT_CONFIG, CONSTRAINTS } from '../engine/materials';
 import { getTemplate } from '../engine/templates';
+import { getQueryValue, parseQueryString, serializeQueryRecord, type QueryRecord } from './browser-compat';
 
 /**
  * Encode a CabinetConfig into URL search params.
  * Only encodes values that differ from DEFAULT_CONFIG to keep URLs short.
  */
-export function configToParams(cfg: CabinetConfig): URLSearchParams {
-  const params = new URLSearchParams();
+export function configToParams(cfg: CabinetConfig): QueryRecord {
+  const params: QueryRecord = {};
   const def = DEFAULT_CONFIG;
 
-  if (cfg.width !== def.width) params.set('w', String(cfg.width));
-  if (cfg.height !== def.height) params.set('h', String(cfg.height));
-  if (cfg.depth !== def.depth) params.set('d', String(cfg.depth));
-  if (cfg.furnitureType !== def.furnitureType) params.set('ft', cfg.furnitureType);
-  if (cfg.shelfCount !== def.shelfCount) params.set('sc', String(cfg.shelfCount));
-  if (cfg.shelfSpacing !== def.shelfSpacing) params.set('ss', cfg.shelfSpacing);
+  if (cfg.width !== def.width) params.w = String(cfg.width);
+  if (cfg.height !== def.height) params.h = String(cfg.height);
+  if (cfg.depth !== def.depth) params.d = String(cfg.depth);
+  if (cfg.furnitureType !== def.furnitureType) params.ft = cfg.furnitureType;
+  if (cfg.shelfCount !== def.shelfCount) params.sc = String(cfg.shelfCount);
+  if (cfg.shelfSpacing !== def.shelfSpacing) params.ss = cfg.shelfSpacing;
   if (cfg.shelfSpacing === 'custom' && cfg.customShelfPositions.length > 0) {
-    params.set('csp', cfg.customShelfPositions.join(','));
+    params.csp = cfg.customShelfPositions.join(',');
   }
   if ((cfg.shelfCentreSupports ?? 0) !== (def.shelfCentreSupports ?? 0))
-    params.set('scs', String(cfg.shelfCentreSupports ?? 0));
-  if (cfg.carcassMaterial !== def.carcassMaterial) params.set('cm', cfg.carcassMaterial);
-  if (cfg.backPanelMaterial !== def.backPanelMaterial) params.set('bm', cfg.backPanelMaterial);
-  if ((cfg.hasBack ?? true) !== (def.hasBack ?? true)) params.set('hb', cfg.hasBack === false ? '0' : '1');
-  if (cfg.doorCount !== def.doorCount) params.set('dc', String(cfg.doorCount));
-  if (cfg.doorStyle !== def.doorStyle) params.set('ds', cfg.doorStyle);
-  if (cfg.doorReveal !== def.doorReveal) params.set('dr', String(cfg.doorReveal));
-  if (cfg.handleStyle !== def.handleStyle) params.set('hs', cfg.handleStyle);
-  if (cfg.drawerCount !== def.drawerCount) params.set('drc', String(cfg.drawerCount));
-  if (cfg.drawerHeights && cfg.drawerHeights.length > 0) params.set('dh', cfg.drawerHeights.join(','));
-  if ((cfg.kickHeight ?? 0) !== (def.kickHeight ?? 0)) params.set('kh', String(cfg.kickHeight ?? 0));
+    params.scs = String(cfg.shelfCentreSupports ?? 0);
+  if (cfg.carcassMaterial !== def.carcassMaterial) params.cm = cfg.carcassMaterial;
+  if (cfg.backPanelMaterial !== def.backPanelMaterial) params.bm = cfg.backPanelMaterial;
+  if ((cfg.hasBack ?? true) !== (def.hasBack ?? true)) params.hb = cfg.hasBack === false ? '0' : '1';
+  if (cfg.doorCount !== def.doorCount) params.dc = String(cfg.doorCount);
+  if (cfg.doorStyle !== def.doorStyle) params.ds = cfg.doorStyle;
+  if (cfg.doorReveal !== def.doorReveal) params.dr = String(cfg.doorReveal);
+  if (cfg.handleStyle !== def.handleStyle) params.hs = cfg.handleStyle;
+  if (cfg.drawerCount !== def.drawerCount) params.drc = String(cfg.drawerCount);
+  if (cfg.drawerHeights && cfg.drawerHeights.length > 0) params.dh = cfg.drawerHeights.join(',');
+  if ((cfg.kickHeight ?? 0) !== (def.kickHeight ?? 0)) params.kh = String(cfg.kickHeight ?? 0);
   if ((cfg.drawerSlideType ?? 'standard') !== (def.drawerSlideType ?? 'standard'))
-    params.set('dst', cfg.drawerSlideType ?? 'standard');
-  if (cfg.edgeBanding !== def.edgeBanding) params.set('eb', cfg.edgeBanding);
-  if (cfg.lang !== def.lang) params.set('lang', cfg.lang);
-  if ((cfg.panelMaterialSource ?? 'carcass') !== 'carcass') params.set('pms', cfg.panelMaterialSource!);
+    params.dst = cfg.drawerSlideType ?? 'standard';
+  if (cfg.edgeBanding !== def.edgeBanding) params.eb = cfg.edgeBanding;
+  if (cfg.lang !== def.lang) params.lang = cfg.lang;
+  if ((cfg.panelMaterialSource ?? 'carcass') !== 'carcass') params.pms = cfg.panelMaterialSource!;
 
   return params;
 }
@@ -45,62 +46,62 @@ export function configToParams(cfg: CabinetConfig): URLSearchParams {
  * Returns only the fields present in the URL; merge with DEFAULT_CONFIG.
  * v3.29.0: numeric params are clamped to CONSTRAINTS to prevent invalid configs from URLs.
  */
-export function paramsToConfig(params: URLSearchParams): Partial<CabinetConfig> {
+export function paramsToConfig(params: QueryRecord): Partial<CabinetConfig> {
   const patch: Partial<CabinetConfig> = {};
 
-  const w = params.get('w');
+  const w = params.w;
   if (w) patch.width = Math.max(CONSTRAINTS.minWidth, Math.min(CONSTRAINTS.maxWidth, Number(w)));
-  const h = params.get('h');
+  const h = params.h;
   if (h) patch.height = Math.max(CONSTRAINTS.minHeight, Math.min(CONSTRAINTS.maxHeight, Number(h)));
-  const d = params.get('d');
+  const d = params.d;
   if (d) patch.depth = Math.max(CONSTRAINTS.minDepth, Math.min(CONSTRAINTS.maxDepth, Number(d)));
-  const ft = params.get('ft');
+  const ft = params.ft;
   if (ft === 'cabinet' || ft === 'bookshelf' || ft === 'desk' || ft === 'wardrobe' || ft === 'panel')
     patch.furnitureType = ft;
-  const sc = params.get('sc');
+  const sc = params.sc;
   if (sc) patch.shelfCount = Math.max(0, Math.min(12, Number(sc)));
-  const ss = params.get('ss');
+  const ss = params.ss;
   if (ss === 'equal' || ss === 'custom') patch.shelfSpacing = ss;
-  const csp = params.get('csp');
+  const csp = params.csp;
   if (csp)
     patch.customShelfPositions = csp
       .split(',')
       .map(Number)
       .filter((n) => !isNaN(n));
-  const scs = params.get('scs');
+  const scs = params.scs;
   if (scs !== null) patch.shelfCentreSupports = Math.max(0, Math.min(5, Number(scs) || 0));
-  const cm = params.get('cm');
+  const cm = params.cm;
   if (cm) patch.carcassMaterial = cm;
-  const bm = params.get('bm');
+  const bm = params.bm;
   if (bm) patch.backPanelMaterial = bm;
-  const hb = params.get('hb');
+  const hb = params.hb;
   if (hb === '0' || hb === '1') patch.hasBack = hb === '1';
-  const dc = params.get('dc');
+  const dc = params.dc;
   if (dc === '1' || dc === '2') patch.doorCount = Number(dc) as 1 | 2;
-  const ds = params.get('ds');
+  const ds = params.ds;
   if (ds === 'flat' || ds === 'none' || ds === 'shaker' || ds === 'glass') patch.doorStyle = ds;
-  const dr = params.get('dr');
+  const dr = params.dr;
   if (dr) patch.doorReveal = Math.max(0, Math.min(20, Number(dr)));
-  const hs = params.get('hs');
+  const hs = params.hs;
   if (hs === 'bar' || hs === 'knob' || hs === 'cup' || hs === 'none') patch.handleStyle = hs;
-  const drc = params.get('drc');
+  const drc = params.drc;
   if (drc) patch.drawerCount = Math.max(0, Math.min(6, Number(drc)));
-  const dh = params.get('dh');
+  const dh = params.dh;
   if (dh)
     patch.drawerHeights = dh
       .split(',')
       .map(Number)
       .filter((n) => !isNaN(n) && n > 0);
-  const kh = params.get('kh');
+  const kh = params.kh;
   if (kh !== null) patch.kickHeight = Math.max(0, Math.min(200, Number(kh)));
-  const dst = params.get('dst');
+  const dst = params.dst;
   if (dst === 'standard' || dst === 'soft-close' || dst === 'full-extension')
     patch.drawerSlideType = dst as DrawerSlideType;
-  const eb = params.get('eb');
+  const eb = params.eb;
   if (eb === 'all-visible' || eb === 'doors-only' || eb === 'none') patch.edgeBanding = eb;
-  const lang = params.get('lang');
+  const lang = params.lang;
   if (lang === 'en' || lang === 'he') patch.lang = lang;
-  const pms = params.get('pms');
+  const pms = params.pms;
   if (pms === 'carcass' || pms === 'back') patch.panelMaterialSource = pms;
 
   return patch;
@@ -110,9 +111,9 @@ export function paramsToConfig(params: URLSearchParams): Partial<CabinetConfig> 
 export function configToUrl(cfg: CabinetConfig, projectName?: string): string {
   const params = configToParams(cfg);
   // v3.29.0: preserve project name in shareable link
-  const pn = projectName ?? new URLSearchParams(window.location.search).get('pn');
-  if (pn) params.set('pn', pn);
-  const qs = params.toString();
+  const pn = projectName ?? getQueryValue(window.location.search, 'pn');
+  if (pn) params.pn = pn;
+  const qs = serializeQueryRecord(params);
   return qs
     ? `${window.location.origin}${window.location.pathname}?${qs}`
     : window.location.origin + window.location.pathname;
@@ -120,8 +121,8 @@ export function configToUrl(cfg: CabinetConfig, projectName?: string): string {
 
 /** Read config from current URL, merging ?tpl= template if present */
 export function readConfigFromUrl(): Partial<CabinetConfig> {
-  const params = new URLSearchParams(window.location.search);
-  const tplId = params.get('tpl');
+  const params = parseQueryString(window.location.search);
+  const tplId = params.tpl;
   if (tplId) {
     const tpl = getTemplate(tplId);
     if (tpl) {
@@ -137,16 +138,16 @@ export function readConfigFromUrl(): Partial<CabinetConfig> {
 export function pushConfigToUrl(cfg: CabinetConfig): void {
   const params = configToParams(cfg);
   // Preserve projectName param so it survives config changes (Sprint 157)
-  const currentPn = new URLSearchParams(window.location.search).get('pn');
-  if (currentPn) params.set('pn', currentPn);
-  const qs = params.toString();
+  const currentPn = getQueryValue(window.location.search, 'pn');
+  if (currentPn) params.pn = currentPn;
+  const qs = serializeQueryRecord(params);
   const url = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
   window.history.replaceState(null, '', url);
 }
 
 /** Read project name from current URL (Sprint 157) */
 export function readProjectNameFromUrl(): string {
-  return new URLSearchParams(window.location.search).get('pn') ?? '';
+  return getQueryValue(window.location.search, 'pn') ?? '';
 }
 
 /**
@@ -154,14 +155,14 @@ export function readProjectNameFromUrl(): string {
  * Truncated to 60 characters. Removes the param when name is empty.
  */
 export function pushProjectNameToUrl(name: string): void {
-  const params = new URLSearchParams(window.location.search);
+  const params = parseQueryString(window.location.search);
   const trimmed = name.trim().slice(0, 60);
   if (trimmed) {
-    params.set('pn', trimmed);
+    params.pn = trimmed;
   } else {
-    params.delete('pn');
+    delete params.pn;
   }
-  const qs = params.toString();
+  const qs = serializeQueryRecord(params);
   const url = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
   window.history.replaceState(null, '', url);
 }
@@ -187,10 +188,7 @@ export function compressConfigToBase64(config: CabinetConfig): string {
   // Build the diff object manually from configToParams so we reuse the
   // existing diff logic without duplicating it.
   const params = configToParams(config);
-  const diff: Record<string, string> = {};
-  for (const [k, v] of params.entries()) {
-    diff[k] = v;
-  }
+  const diff: Record<string, string> = { ...params };
   const json = JSON.stringify(diff);
   // btoa operates on Latin-1; encode UTF-8 first via encodeURIComponent
   const b64 = btoa(encodeURIComponent(json));
@@ -209,9 +207,8 @@ export function decompressBase64ToConfig(compact: string): Partial<CabinetConfig
     // Restore standard base64 from base64url
     const b64 = compact.replace(/-/g, '+').replace(/_/g, '/');
     const json = decodeURIComponent(atob(b64));
-    const diff = JSON.parse(json) as Record<string, string>;
-    const params = new URLSearchParams(diff);
-    return paramsToConfig(params);
+    const diff = JSON.parse(json) as QueryRecord;
+    return paramsToConfig(diff);
   } catch {
     return {};
   }
@@ -252,19 +249,19 @@ export function generateShareRefKey(): string {
  */
 export async function pushConfigToUrlOffline(cfg: CabinetConfig, projectName?: string): Promise<void> {
   const compact = compressConfigToBase64(cfg);
-  const pn = projectName ?? new URLSearchParams(window.location.search).get('pn');
-  const params = new URLSearchParams();
-  if (pn) params.set('pn', pn);
+  const pn = projectName ?? getQueryValue(window.location.search, 'pn');
+  const params: QueryRecord = {};
+  if (pn) params.pn = pn;
 
   if (compact.length <= URL_REF_THRESHOLD) {
-    params.set('c', compact);
+    params.c = compact;
   } else {
     const key = generateShareRefKey();
     await storeUrlRef(key, compact);
-    params.set('ref', key);
+    params.ref = key;
   }
 
-  const qs = params.toString();
+  const qs = serializeQueryRecord(params);
   window.history.replaceState(null, '', qs ? `${window.location.pathname}?${qs}` : window.location.pathname);
 }
 
@@ -284,16 +281,16 @@ export async function resolveUrlRef(key: string): Promise<Partial<CabinetConfig>
  * Returns an empty object (not null) when nothing is decoded.
  */
 export async function readConfigFromUrlAsync(): Promise<Partial<CabinetConfig>> {
-  const params = new URLSearchParams(window.location.search);
+  const params = parseQueryString(window.location.search);
 
-  const ref = params.get('ref');
+  const ref = params.ref;
   if (ref) {
     const resolved = await resolveUrlRef(ref);
     if (resolved !== null) return resolved;
     // Ref not found — fall through to other decode strategies
   }
 
-  const compact = params.get('c');
+  const compact = params.c;
   if (compact) return decompressBase64ToConfig(compact);
 
   return readConfigFromUrl();

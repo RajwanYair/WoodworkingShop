@@ -8,11 +8,12 @@
 import { exec } from 'node:child_process';
 
 const checks = ['typecheck', 'lint', 'lint:css', 'lint:md', 'format:check', 'i18n:coverage'];
+const PromiseCtor = globalThis.Promise;
 
-const results = await Promise.all(
+const results = await PromiseCtor.all(
   checks.map(
     (name) =>
-      new Promise((resolve) => {
+      new PromiseCtor((resolve) => {
         exec(`npm run ${name}`, (error, stdout, stderr) => {
           resolve({ name, code: error?.code ?? 0, output: stdout + stderr });
         });

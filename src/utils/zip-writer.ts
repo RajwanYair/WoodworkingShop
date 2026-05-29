@@ -1,3 +1,5 @@
+import { utf8Encode } from './browser-compat';
+
 /**
  * Sprint 86 — Minimal PKZIP (no-compression / stored) writer.
  *
@@ -34,10 +36,8 @@ function crc32(data: Uint8Array): number {
 
 // ─── Encoding helpers ─────────────────────────────────────────────────────────
 
-const TEXT_ENCODER = new TextEncoder();
-
 function encodeStr(s: string): Uint8Array {
-  return TEXT_ENCODER.encode(s);
+  return utf8Encode(s);
 }
 
 /** Write a little-endian uint16 at `offset` into `view`. */

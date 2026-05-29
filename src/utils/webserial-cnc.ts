@@ -21,6 +21,8 @@
  * every function throws a `WebSerialUnsupportedError`.
  */
 
+import { utf8Encode } from './browser-compat';
+
 // ── Feature detection ─────────────────────────────────────────────────────────
 
 /** True when the Web Serial API is available in this browser context. */
@@ -126,7 +128,6 @@ export async function openSerialPort(options: SerialOptions = {}): Promise<CncSe
 
     async send(gcode: string, onProgress?: (p: SendProgress) => void): Promise<void> {
       if (!_open) throw new SerialPortClosedError();
-      const encoder = new TextEncoder();
       const lines = gcode
         .split('\n')
         .map((l) => l.trim())
@@ -135,7 +136,7 @@ export async function openSerialPort(options: SerialOptions = {}): Promise<CncSe
 
       for (let i = 0; i < lines.length; i++) {
         const lineStr = lines[i] + lineEnding;
-        await writer.write(encoder.encode(lineStr));
+        await writer.write(utf8Encode(lineStr));
         onProgress?.({ total, sent: i + 1, percent: Math.round(((i + 1) / total) * 100) });
       }
     },

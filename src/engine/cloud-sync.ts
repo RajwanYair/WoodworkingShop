@@ -17,6 +17,8 @@
  * interface so the engine remains testable without browser APIs.
  */
 
+import { utf8ByteLength } from '../utils/browser-compat';
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 /** Supported encryption algorithms. */
@@ -233,7 +235,7 @@ export async function createEnvelope(
     ciphertext,
     vectorClock: incrementClock(vectorClock, config.peerId),
     encryptedAt: new Date().toISOString(),
-    plaintextSize: new TextEncoder().encode(plaintext).length,
+    plaintextSize: utf8ByteLength(plaintext),
   };
 }
 

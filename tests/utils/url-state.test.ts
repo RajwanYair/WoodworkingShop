@@ -16,6 +16,10 @@ import { DEFAULT_CONFIG } from '../../src/engine/materials';
 import { cfg } from '../helpers';
 import * as idbStorage from '../../src/utils/indexed-db-storage';
 
+function toRecord(qs: string): Record<string, string> {
+  return Object.fromEntries(new URLSearchParams(qs).entries());
+}
+
 vi.mock('../../src/utils/indexed-db-storage', () => ({
   storeUrlRef: vi.fn().mockResolvedValue(undefined),
   loadUrlRef: vi.fn().mockResolvedValue(undefined),
@@ -26,7 +30,7 @@ describe('url-state', () => {
   describe('configToParams', () => {
     it('returns empty params for default config', () => {
       const params = configToParams(DEFAULT_CONFIG);
-      expect(params.toString()).toBe('');
+      expect(Object.keys(params).length).toBe(0);
     });
 
     it.each([
@@ -35,31 +39,31 @@ describe('url-state', () => {
       [{ depth: 400 }, 'd', '400'],
       [{ carcassMaterial: 'melamine-18' as const }, 'cm', 'melamine-18'],
     ])('encodes single-field delta: %j', (overrides, param, value) => {
-      expect(configToParams(cfg(overrides as Parameters<typeof cfg>[0])).get(param as string)).toBe(value);
+      expect(configToParams(cfg(overrides as Parameters<typeof cfg>[0]))[param as string]).toBe(value);
     });
 
     it('encodes door and shelf config', () => {
       const door = configToParams(cfg({ doorCount: 1, doorStyle: 'none', doorReveal: 5 }));
-      expect(door.get('dc')).toBe('1');
-      expect(door.get('ds')).toBe('none');
-      expect(door.get('dr')).toBe('5');
+      expect(door.dc).toBe('1');
+      expect(door.ds).toBe('none');
+      expect(door.dr).toBe('5');
       const shelf = configToParams(cfg({ shelfSpacing: 'custom', customShelfPositions: [200, 400, 600] }));
-      expect(shelf.get('ss')).toBe('custom');
-      expect(shelf.get('csp')).toBe('200,400,600');
+      expect(shelf.ss).toBe('custom');
+      expect(shelf.csp).toBe('200,400,600');
     });
 
     it('only encodes non-default values (delta encoding)', () => {
       const params = configToParams(cfg({ width: 800 }));
       // Should have width but NOT height, depth, etc.
-      expect(params.has('w')).toBe(true);
-      expect(params.has('h')).toBe(false);
-      expect(params.has('d')).toBe(false);
+      expect('w' in params).toBe(true);
+      expect('h' in params).toBe(false);
+      expect('d' in params).toBe(false);
     });
   });
 
   describe('paramsToConfig', () => {
     it('returns empty object for empty params', () => {
-      const result = paramsToConfig(new URLSearchParams(''));
+      const result = paramsToConfig({});
       expect(Object.keys(result).length).toBe(0);
     });
 
@@ -68,12 +72,12 @@ describe('url-state', () => {
       ['h=1800', 'height', 1800],
       ['drc=2', 'drawerCount', 2],
     ])('parses %s correctly', (qs, key, expected) => {
-      const r = paramsToConfig(new URLSearchParams(qs)) as Record<string, unknown>;
+      const r = paramsToConfig(toRecord(qs)) as Record<string, unknown>;
       expect(r[key]).toBe(expected);
     });
 
     it('parses shelf spacing', () => {
-      const result = paramsToConfig(new URLSearchParams('ss=custom&csp=200,400'));
+      const result = paramsToConfig(toRecord('ss=custom&csp=200,400'));
       expect(result.shelfSpacing).toBe('custom');
       expect(result.customShelfPositions).toEqual([200, 400]);
     });
@@ -94,7 +98,7 @@ describe('url-state', () => {
       ['lang=en', 'lang', 'en'],
       ['lang=he', 'lang', 'he'],
     ])('parses valid param %s', (qs, key, expected) => {
-      expect((paramsToConfig(new URLSearchParams(qs)) as Record<string, unknown>)[key]).toBe(expected);
+      expect((paramsToConfig(toRecord(qs)) as Record<string, unknown>)[key]).toBe(expected);
     });
 
     it.each<[string, string]>([
@@ -104,7 +108,7 @@ describe('url-state', () => {
       ['hs=invalid', 'handleStyle'],
       ['lang=fr', 'lang'],
     ])('rejects invalid param %s → undefined', (qs, key) => {
-      expect((paramsToConfig(new URLSearchParams(qs)) as Record<string, unknown>)[key]).toBeUndefined();
+      expect((paramsToConfig(toRecord(qs)) as Record<string, unknown>)[key]).toBeUndefined();
     });
   });
 

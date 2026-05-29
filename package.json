@@ -84,6 +84,7 @@
     "docs:api": "typedoc",
     "dead:check": "knip",
     "sbom": "node scripts/sbom.js",
+    "validate:commitmsg": "node scripts/validate-commit-msg.js",
     "prepare": "npx simple-git-hooks"
   },
   "engines": {
@@ -125,7 +126,8 @@
     ]
   },
   "simple-git-hooks": {
-    "pre-commit": "npx lint-staged"
+    "pre-commit": "npx lint-staged",
+    "commit-msg": "npm run validate:commitmsg --"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

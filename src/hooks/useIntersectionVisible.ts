@@ -26,14 +26,15 @@ export function useIntersectionVisible<T extends HTMLElement = HTMLDivElement>(
   const { rootMargin = '200px 0px', keepMounted = true } = options;
   const ref = useRef<T>(null);
   // Default to true if IntersectionObserver is unavailable (prevents blank content in tests/SSR)
-  const hasIO = typeof IntersectionObserver !== 'undefined';
+  const observerCtor = (globalThis as Record<string, unknown>)['IntersectionObserver'];
+  const hasIO = typeof observerCtor === 'function';
   const [isVisible, setIsVisible] = useState(!hasIO);
 
   useEffect(() => {
     const el = ref.current;
     if (!el || !hasIO) return;
 
-    const observer = new IntersectionObserver(
+    const observer = new (observerCtor as typeof IntersectionObserver)(
       (entries) => {
         const entry = entries[0];
         if (entry.isIntersecting) {
@@ -51,7 +52,7 @@ export function useIntersectionVisible<T extends HTMLElement = HTMLDivElement>(
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, [rootMargin, keepMounted, hasIO]);
+  }, [rootMargin, keepMounted, hasIO, observerCtor]);
 
   return { ref, isVisible };
 }

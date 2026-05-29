@@ -15,6 +15,7 @@
  */
 
 import { get, set, del, keys, createStore } from 'idb-keyval';
+import { getMediaRecorderConstructor } from './browser-compat';
 
 // ── IDB stores ────────────────────────────────────────────────────────────────
 // Metadata and binary blobs live in separate stores so metadata queries
@@ -71,9 +72,10 @@ const PREFERRED_MIME_TYPES = ['audio/webm;codecs=opus', 'audio/ogg;codecs=opus',
  * private browsing without mic permission).
  */
 export function getSupportedMimeType(): string | null {
-  if (typeof MediaRecorder === 'undefined') return null;
+  const mediaRecorder = getMediaRecorderConstructor();
+  if (!mediaRecorder) return null;
   for (const mime of PREFERRED_MIME_TYPES) {
-    if (MediaRecorder.isTypeSupported(mime)) return mime;
+    if (mediaRecorder.isTypeSupported(mime)) return mime;
   }
   // Browser supports MediaRecorder but none of the preferred types.
   return '';
@@ -92,7 +94,12 @@ export async function startRecording(stepId: string): Promise<RecordingSession> 
   const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
   const mimeType = getSupportedMimeType() ?? '';
   const recorderOptions: MediaRecorderOptions = mimeType ? { mimeType } : {};
-  const recorder = new MediaRecorder(stream, recorderOptions);
+  const mediaRecorder = getMediaRecorderConstructor();
+  if (!mediaRecorder) {
+    stream.getTracks().forEach((track) => track.stop());
+    throw new Error('MediaRecorder API is not available in this browser.');
+  }
+  const recorder = new mediaRecorder(stream, recorderOptions);
   const chunks: Blob[] = [];
   const startMs = Date.now();
 

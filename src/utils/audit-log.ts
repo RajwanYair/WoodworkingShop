@@ -18,6 +18,7 @@
  */
 
 import { set, del, entries, createStore } from 'idb-keyval';
+import { utf8ArrayBuffer } from './browser-compat';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -184,7 +185,7 @@ export async function countAuditEntries(projectId: string): Promise<number> {
  */
 export async function sha256Hex(input: string): Promise<string> {
   if (typeof crypto !== 'undefined' && typeof crypto.subtle?.digest === 'function') {
-    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(input));
+    const buf = await crypto.subtle.digest('SHA-256', utf8ArrayBuffer(input));
     return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
   }
   // Fallback: deterministic but not cryptographic — test environments only

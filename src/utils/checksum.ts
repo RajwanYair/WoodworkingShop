@@ -1,3 +1,5 @@
+import { utf8ArrayBuffer } from './browser-compat';
+
 /**
  * Phase 13 / Sprint 19 — Export integrity checksums.
  * SHA-256 via Web Crypto API (available in modern browsers and Vitest / Node ≥ 16).
@@ -8,7 +10,7 @@
  * Returns the hex string (64 lowercase characters).
  */
 export async function sha256Hex(content: string): Promise<string> {
-  const encoded = new TextEncoder().encode(content);
+  const encoded = utf8ArrayBuffer(content);
   const buffer = await crypto.subtle.digest('SHA-256', encoded);
   return Array.from(new Uint8Array(buffer))
     .map((b) => b.toString(16).padStart(2, '0'))

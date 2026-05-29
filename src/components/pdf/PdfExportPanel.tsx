@@ -19,6 +19,7 @@ import { generateBomCsv } from '../../utils/bom-export';
 import { cutSheetToDxf } from '../../utils/dxf-export';
 import { generateGltfContent } from '../../engine/export/gltf-export';
 import { buildZip, downloadZip } from '../../utils/zip-writer';
+import { utf8Encode } from '../../utils/browser-compat';
 
 export function PdfExportPanel() {
   const { t, i18n } = useTranslation();
@@ -198,7 +199,6 @@ export function PdfExportPanel() {
 
     void (async () => {
       try {
-        const te = new TextEncoder();
         const entries: import('../../utils/zip-writer').ZipEntry[] = [];
 
         // 1) PDF
@@ -226,7 +226,7 @@ export function PdfExportPanel() {
         for (let i = 0; i < store.optimization.sheets.length; i++) {
           const sheet = store.optimization.sheets[i]!;
           const dxfText = cutSheetToDxf(sheet);
-          entries.push({ name: `sheets/sheet-${i + 1}-${sheet.material}.dxf`, data: te.encode(dxfText) });
+          entries.push({ name: `sheets/sheet-${i + 1}-${sheet.material}.dxf`, data: utf8Encode(dxfText) });
         }
 
         // 3) BOM CSV
@@ -238,11 +238,11 @@ export function PdfExportPanel() {
           })),
           lang,
         );
-        entries.push({ name: `${safeName}-bom.csv`, data: te.encode(bomCsv) });
+        entries.push({ name: `${safeName}-bom.csv`, data: utf8Encode(bomCsv) });
 
         // 4) glTF
         const { content: gltfJson } = generateGltfContent(store.config, store.parts);
-        entries.push({ name: `${safeName}.gltf`, data: te.encode(gltfJson) });
+        entries.push({ name: `${safeName}.gltf`, data: utf8Encode(gltfJson) });
 
         // 5) README
         const readme = [
@@ -256,7 +256,7 @@ export function PdfExportPanel() {
           `  ${safeName}-bom.csv     — Bill of materials (CSV)`,
           `  ${safeName}.gltf        — 3-D model for AR/VR (glTF 2.0)`,
         ].join('\n');
-        entries.push({ name: 'README.txt', data: te.encode(readme) });
+        entries.push({ name: 'README.txt', data: utf8Encode(readme) });
 
         const zipBytes = buildZip(entries);
         downloadZip(zipBytes, `${safeName}-bundle.zip`);

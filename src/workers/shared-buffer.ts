@@ -35,17 +35,18 @@
  *
  * @param size  Requested byte length (must be ≥ 0)
  */
-export function trySharedArrayBuffer(size: number): SharedArrayBuffer | null {
+export function trySharedArrayBuffer(size: number): SharedArrayBuffer | ArrayBuffer | null {
   if (size < 0) return null;
 
+  const sharedBufferCtor = (globalThis as Record<string, unknown>)['SharedArrayBuffer'];
   // Feature detection — older browsers and non-isolated contexts may lack this.
-  if (typeof SharedArrayBuffer === 'undefined') return null;
+  if (typeof sharedBufferCtor !== 'function') return new ArrayBuffer(size);
 
   // The crossOriginIsolated global is `false` when COOP/COEP headers are absent.
   if (typeof crossOriginIsolated !== 'undefined' && !crossOriginIsolated) return null;
 
   try {
-    return new SharedArrayBuffer(size);
+    return new (sharedBufferCtor as typeof SharedArrayBuffer)(size);
   } catch {
     return null;
   }
@@ -57,7 +58,7 @@ export function trySharedArrayBuffer(size: number): SharedArrayBuffer | null {
  */
 export function isSharedArrayBufferAvailable(): boolean {
   return (
-    typeof SharedArrayBuffer !== 'undefined' &&
+    typeof (globalThis as Record<string, unknown>)['SharedArrayBuffer'] === 'function' &&
     (typeof crossOriginIsolated === 'undefined' || crossOriginIsolated === true)
   );
 }

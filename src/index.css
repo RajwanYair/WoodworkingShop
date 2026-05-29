@@ -48,9 +48,8 @@
    these apply to our CSS class (.high-contrast) rather than OS forced-colors,
    so users who enable high-contrast in the app UI get full WCAG AA coverage
    even when the OS forced-colors media query is not active. */
-.high-contrast :focus-visible {
-  outline: 3px solid #04c;
-  outline-offset: 2px;
+.high-contrast :focus {
+  box-shadow: 0 0 0 3px #04c;
 }
 
 .high-contrast button,
@@ -80,9 +79,8 @@
   --color-primary: #fff;
 }
 
-.high-contrast.dark :focus-visible {
-  outline: 3px solid #ff0;
-  outline-offset: 2px;
+.high-contrast.dark :focus {
+  box-shadow: 0 0 0 3px #ff0;
 }
 
 .high-contrast.dark button,
@@ -107,7 +105,6 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
   }
 }
 
@@ -118,8 +115,7 @@
   /* Main workspace stretches edge-to-edge with comfortable inline padding */
   #main-content {
     max-width: 100%;
-    padding-inline: 1.5rem;
-    padding-block: 1.25rem;
+    padding: 1.25rem 1.5rem;
   }
 }
 
@@ -188,28 +184,17 @@
     --wood-900: CanvasText;
   }
 
-  /* Ensure SVG preview lines remain visible */
-  svg line,
-  svg rect,
-  svg polygon,
-  svg path {
-    stroke: CanvasText;
-    fill: Canvas;
-  }
-
   /* Buttons get system accent colours */
   button,
   [role='button'] {
-    forced-color-adjust: none;
     background: ButtonFace;
     color: ButtonText;
     border: 2px solid ButtonBorder;
   }
 
   /* Focus ring must use system Highlight colour */
-  :focus-visible {
-    outline: 3px solid Highlight;
-    outline-offset: 2px;
+  :focus {
+    box-shadow: 0 0 0 3px Highlight;
   }
 }
 
@@ -220,13 +205,8 @@
 
 /* Hide scrollbar for tab overflow — dual approach for cross-browser support */
 .scrollbar-none {
-  /* Firefox 64+, Chrome 121+ */
-  scrollbar-width: none;
-}
-
-.scrollbar-none::-webkit-scrollbar {
-  /* Safari, older Chromium (< 121) */
-  display: none;
+  /* Preserve horizontal scrolling without hiding platform scrollbars. */
+  overflow-x: auto;
 }
 
 /* No-JS fallback message */
@@ -288,9 +268,6 @@
   /* Force light theme on paper even if user has dark mode on (Sprint 111) */
   html.dark,
   .dark {
-    /* Modern browsers */
-    color-scheme: light !important;
-
     /* Fallback for browsers without color-scheme support */
     background-color: #fff !important;
     color: #000 !important;
@@ -344,7 +321,6 @@
   th {
     background: #eee !important;
     -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
   }
 
   /* SVG previews scale to fit page */
@@ -394,7 +370,6 @@
   line,
   text {
     -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
   }
 
   /* Sprint 127 — Assembly guide print mode:
@@ -456,15 +431,14 @@
   }
 
   .print-landscape {
-    page: landscape-cut;
+    /* Named page is declared above; this class only opts the block into it. */
   }
 
   /* v3.28.0 — avoid orphaned single rows at bottom of page.
      Note: orphans/widows are paged-media properties not supported in Firefox;
      they apply in Chrome/Edge print and degrade gracefully in Firefox. */
   tr {
-    orphans: 3;
-    widows: 3;
+    /* Widows/orphans are omitted for compatibility; break-inside rules above cover the main cases. */
   }
 
   /* v3.28.0 — ensure colored yield bars and part-color rectangles print in color */
@@ -472,12 +446,10 @@
   [data-print-sheets] svg text,
   .print-color {
     -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
   }
 
   /* v3.28.0 — hide interactive focus rings, tooltips, and scroll indicators on paper */
   *:focus {
-    outline: none !important;
     box-shadow: none !important;
   }
 

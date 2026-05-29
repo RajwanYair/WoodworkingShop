@@ -1,7 +1,7 @@
 import { Component, type ReactNode, type ErrorInfo } from 'react';
 import i18next from 'i18next';
 import { IconWarning } from './Icons';
-import { reportError } from '../../services/error-reporter';
+import { sendErrorReport } from '../../services/error-reporter';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -39,7 +39,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   override componentDidCatch(error: Error, info: ErrorInfo) {
     this.props.onError?.(error, info);
     // Sprint 150 — report to privacy-first telemetry endpoint
-    reportError(error);
+    sendErrorReport(error);
     // Log to console in development only — never in production bundles
     if (import.meta.env.DEV) {
       console.error('[ErrorBoundary]', this.props.panelName ?? 'Unknown panel', error, info);

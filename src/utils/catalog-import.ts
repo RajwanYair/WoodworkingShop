@@ -7,6 +7,7 @@
 
 import { validateCommunityCatalog, type CommunityCatalog, type CommunityMaterial } from '../engine/community-catalog';
 import type { Material } from '../engine/types';
+import { getFetch } from './browser-compat';
 
 /** Standard sheet dimensions used when catalog entry lacks explicit size. */
 const DEFAULT_SHEET_WIDTH = 1220;
@@ -19,7 +20,9 @@ const DEFAULT_SHEET_LENGTH = 2440;
 export async function fetchCommunityCatalog(url: string): Promise<CommunityCatalog> {
   let response: Response;
   try {
-    response = await fetch(url);
+    const fetchFn = getFetch();
+    if (!fetchFn) throw new Error('Fetch API is not available in this browser.');
+    response = await fetchFn(url);
   } catch (err) {
     throw new Error(`Network error fetching catalog: ${err instanceof Error ? err.message : String(err)}`, {
       cause: err,

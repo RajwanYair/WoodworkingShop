@@ -1,73 +1,77 @@
 {
   "recommendations": [
-    // ─── Core Formatting & Linting ─────────────────────────────────────────
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
     "stylelint.vscode-stylelint",
     "usernamehw.errorlens",
-
-    // ─── TypeScript & React ────────────────────────────────────────────────
     "ms-vscode.vscode-typescript-next",
     "bradlc.vscode-tailwindcss",
-    "formulahendry.auto-rename-tag",
     "christian-kohler.path-intellisense",
-
-    // ─── Testing ──────────────────────────────────────────────────────────
+    "formulahendry.auto-rename-tag",
     "vitest.explorer",
     "ms-playwright.playwright",
     "ryanluker.vscode-coverage-gutters",
-
-    // ─── i18n ─────────────────────────────────────────────────────────────
     "lokalise.i18n-ally",
-
-    // ─── Spelling & Docs ──────────────────────────────────────────────────
-    "streetsidesoftware.code-spell-checker",
-    "yzhang.markdown-all-in-one",
     "davidanson.vscode-markdownlint",
-
-    // ─── Code Intelligence ────────────────────────────────────────────────
+    "yzhang.markdown-all-in-one",
+    "streetsidesoftware.code-spell-checker",
     "wix.vscode-import-cost",
     "gruntfuggly.todo-tree",
-    "naumovs.color-highlight",
     "yoavbls.pretty-ts-errors",
-    "pflannery.vscode-versionlens",
-    // ─── GitHub / CI ──────────────────────────────────────────────────────
-    "github.vscode-github-actions",
     "github.copilot",
     "github.copilot-chat",
     "github.vscode-pull-request-github",
+    "github.vscode-github-actions",
     "eamodio.gitlens",
-
-    // ─── Shell ────────────────────────────────────────────────────────────
-    "timonwong.shellcheck",
-
-    // ─── Workbench ────────────────────────────────────────────────────────
-    "pkief.material-icon-theme",
-    "bierner.markdown-preview-github-styles",
-    "ms-vscode.live-server",
     "editorconfig.editorconfig",
-
-    // ─── Accessibility ────────────────────────────────────────────────────
-    "deque-systems.vscode-axe-linter",
-
-    // ─── Performance & Bundle ─────────────────────────────────────────────
-    "ms-vscode.vscode-github-issue-notebooks",
-    "antfu.goto-alias",
-
-    // ─── Diff & Merge ─────────────────────────────────────────────────────
-    "mhutchie.git-graph",
-
-    // ─── Security ─────────────────────────────────────────────────────────
-    "github.vscode-codeql",
-
-    // ─── JSON/YAML ────────────────────────────────────────────────────────
     "redhat.vscode-yaml",
-
-    // ─── Copilot Ecosystem ────────────────────────────────────────────────
-    "ms-vscode.vscode-chat-customizations-evaluations",
-    "github.copilot-workspace"
+    "deque-systems.vscode-axe-linter"
   ],
   "unwantedRecommendations": [
+    "dart-code.dart-code",
+    "dart-code.flutter",
+    "localizely.flutter-intl",
+    "robert-brunhage.flutter-riverpod-snippets",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-python.black-formatter",
+    "ms-python.flake8",
+    "ms-python.isort",
+    "ms-python.mypy-type-checker",
+    "ms-python.pylint",
+    "ms-python.vscode-python-envs",
+    "donjayamanne.python-environment-manager",
+    "donjayamanne.python-extension-pack",
+    "littlefoxteam.vscode-python-test-adapter",
+    "kevinrose.vsc-python-indent",
+    "njpwerner.autodocstring",
+    "ms-vscode.cpptools",
+    "ms-vscode.cpptools-extension-pack",
+    "ms-vscode.cpptools-themes",
+    "ms-vscode.cpp-devtools",
+    "ms-vscode.cmake-tools",
+    "ms-vscode.makefile-tools",
+    "twxs.cmake",
+    "xaver.clang-format",
+    "vadimcn.vscode-lldb",
+    "fwcd.kotlin",
+    "mathiasfrohlich.kotlin",
+    "ionide.ionide-fsharp",
+    "bscan.perlnavigator",
+    "richterger.perl",
+    "sleutho.tcl",
+    "bmalehorn.vscode-fish",
+    "mads-hartmann.bash-ide-vscode",
+    "donjayamanne.git-extension-pack",
+    "vinirossa.vscode-gitandgithub-pack",
+    "walkme.html5-extension-pack",
+    "sidthesloth.html5-boilerplate",
+    "ms-vscode.live-server",
+    "ms-vsliveshare.vsliveshare",
+    "github.codespaces",
+    "github.remotehub",
+    "ms-vscode.remote-repositories",
+    "ms-vscode.remote-explorer",
     "hookyqr.beautify",
     "ms-vscode.vscode-typescript-tslint-plugin",
     "ms-vscode.vscode-js-profile-flame",

@@ -57,13 +57,12 @@
         background: #3d2e0a;
       }
       button:focus-visible {
-        outline: 2px solid #5a4218;
-        outline-offset: 2px;
+        box-shadow: 0 0 0 2px #5a4218;
       }
     </style>
   </head>
   <body>
-    <main class="container" role="main">
+    <div class="container" role="main">
       <div class="icon" aria-hidden="true">📡</div>
       <h1>You're offline</h1>
       <p>
@@ -71,6 +70,6 @@
         offline.
       </p>
       <button type="button" onclick="window.location.reload()">Try again</button>
-    </main>
+    </div>
   </body>
 </html>
