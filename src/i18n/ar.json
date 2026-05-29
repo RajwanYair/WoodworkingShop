@@ -2103,5 +2103,19 @@
     "panelHeight": "Panel Height",
     "expansionAllowance": "Expansion Allowance",
     "grooveWidth": "Groove Width"
+  },
+  "taperJig": {
+    "title": "Taper Jig Calculator",
+    "workpieceLength": "Workpiece Length",
+    "startWidth": "Start Width (wide end)",
+    "endWidth": "End Width (narrow end)",
+    "taperedFaces": "Tapered Faces",
+    "oneFace": "1 face",
+    "twoFaces": "2 faces (symmetric)",
+    "taperAngle": "Taper Angle",
+    "jigOffset": "Jig Offset",
+    "materialRemoved": "Material Removed / Face",
+    "taperPerFoot": "Taper per Foot",
+    "note": "Flip workpiece after first pass for symmetric taper"
   }
 }

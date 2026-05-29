@@ -2262,5 +2262,19 @@
     "panelHeight": "גובה לוח",
     "expansionAllowance": "מרווח התפשטות",
     "grooveWidth": "רוחב חריץ"
+  },
+  "taperJig": {
+    "title": "מחשבון יציב גיזוז",
+    "workpieceLength": "אורך חתיכת העבודה",
+    "startWidth": "רוחב התחלתי (קצה רחב)",
+    "endWidth": "רוחב סיום (קצה צר)",
+    "taperedFaces": "פנים מחודדות",
+    "oneFace": "פן אחד",
+    "twoFaces": "2 פנים (סימטרי)",
+    "taperAngle": "זווית הגיזוז",
+    "jigOffset": "היסט היציב",
+    "materialRemoved": "חומר שהוסר / פן",
+    "taperPerFoot": "גיזוז לרגל",
+    "note": "הפוך את חתיכת העבודה לאחר המעבר הראשון לגיזוז סימטרי"
   }
 }

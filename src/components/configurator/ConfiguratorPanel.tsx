@@ -24,6 +24,7 @@ import { DadoRabbetPanel } from './DadoRabbetPanel';
 import { FinishingCoatPanel } from './FinishingCoatPanel';
 import { WoodTurningPanel } from './WoodTurningPanel';
 import { FramePanelCalcPanel } from './FramePanelCalcPanel';
+import { TaperJigPanel } from './TaperJigPanel';
 import { PresetsPanel } from './PresetsPanel';
 import { SaveLoadPanel } from './SaveLoadPanel';
 import { ConstraintSuggestionsPanel } from './ConstraintSuggestionsPanel';
@@ -80,6 +81,9 @@ export function ConfiguratorPanel() {
 
       {/* Sprint 229 — frame and panel calculator */}
       <FramePanelCalcPanel />
+
+      {/* Sprint 230 — taper jig calculator */}
+      <TaperJigPanel />
 
       {/* Sprint 110 — real-time constraint violations and dimension range hints */}
       <ConstraintSuggestionsPanel />

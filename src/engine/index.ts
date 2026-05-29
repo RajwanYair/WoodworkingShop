@@ -1411,3 +1411,7 @@ export type { TurningOperation, WoodTurningInput, WoodTurningResult } from './wo
 // Sprint 229 — Frame and Panel Calculator
 export { calculateFramePanel } from './frame-panel';
 export type { FramePanelInput, FramePanelResult } from './frame-panel';
+
+// Sprint 230 — Taper Jig Calculator
+export { calculateTaperJig } from './taper-jig';
+export type { TaperJigInput, TaperJigResult } from './taper-jig';
