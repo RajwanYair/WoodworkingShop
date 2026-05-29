@@ -26,6 +26,7 @@ import { WoodTurningPanel } from './WoodTurningPanel';
 import { FramePanelCalcPanel } from './FramePanelCalcPanel';
 import { TaperJigPanel } from './TaperJigPanel';
 import { StairStringerPanel } from './StairStringerPanel';
+import { BoxJointPanel } from './BoxJointPanel';
 import { PresetsPanel } from './PresetsPanel';
 import { SaveLoadPanel } from './SaveLoadPanel';
 import { ConstraintSuggestionsPanel } from './ConstraintSuggestionsPanel';
@@ -88,6 +89,9 @@ export function ConfiguratorPanel() {
 
       {/* Sprint 231 — stair stringer calculator */}
       <StairStringerPanel />
+
+      {/* Sprint 232 — box joint calculator */}
+      <BoxJointPanel />
 
       {/* Sprint 110 — real-time constraint violations and dimension range hints */}
       <ConstraintSuggestionsPanel />

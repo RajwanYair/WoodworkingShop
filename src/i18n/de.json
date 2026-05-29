@@ -2145,5 +2145,16 @@
     "riserTooShort": "Riser height below IRC minimum 4\" (101.6 mm)",
     "riserTooTall": "Riser height exceeds IRC maximum 7\u00be\" (196.85 mm)",
     "treadTooShallow": "Tread depth below IRC minimum 10\" (254 mm)"
+  },
+  "boxJoint": {
+    "title": "Box Joint Calculator",
+    "boardWidth": "Board Width",
+    "fingerWidth": "Desired Finger Width",
+    "depth": "Joint Depth (board thickness)",
+    "fingerCount": "Finger Count",
+    "actualFingerWidth": "Actual Finger Width",
+    "socketCount": "Socket Count (mating board)",
+    "glueSurface": "Glue Surface Area",
+    "edgeWaste": "Edge Waste (each side)"
   }
 }

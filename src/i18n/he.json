@@ -2292,5 +2292,16 @@
     "riserTooShort": "גובה פסיעה מתחת מינימום IRC",
     "riserTooTall": "גובה פסיעה מעל מקסימום IRC",
     "treadTooShallow": "עומק שלב הדריכה מתחת מינימום IRC"
+  },
+  "boxJoint": {
+    "title": "מחשבון נדיר קופסאות",
+    "boardWidth": "רוחב הלוח",
+    "fingerWidth": "רוחב נדיר רצוי",
+    "depth": "עומק חיבור (עובי הלוח)",
+    "fingerCount": "מספר נדירים",
+    "actualFingerWidth": "רוחב נדיר בפועל",
+    "socketCount": "מספר שקעים (לוח מזווג)",
+    "glueSurface": "שטח דבקה",
+    "edgeWaste": "פסולת קצה (כל צד)"
   }
 }

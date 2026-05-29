@@ -1419,3 +1419,7 @@ export type { TaperJigInput, TaperJigResult } from './taper-jig';
 // Sprint 231 — Stair Stringer Calculator
 export { calculateStairStringer } from './stair-stringer';
 export type { StairStringerInput, StairStringerResult } from './stair-stringer';
+
+// Sprint 232 — Box Joint Calculator
+export { calculateBoxJoint } from './box-joint';
+export type { BoxJointInput, BoxJointResult } from './box-joint';
