@@ -36,6 +36,7 @@ import { CoveCutPanel } from './CoveCutPanel';
 import { MoistureShrinkagePanel } from './MoistureShrinkagePanel';
 import { RafterLengthPanel } from './RafterLengthPanel';
 import { RouterTemplatePanel } from './RouterTemplatePanel';
+import { HalfLapPanel } from './HalfLapPanel';
 import { PresetsPanel } from './PresetsPanel';
 import { SaveLoadPanel } from './SaveLoadPanel';
 import { ConstraintSuggestionsPanel } from './ConstraintSuggestionsPanel';
@@ -128,6 +129,9 @@ export function ConfiguratorPanel() {
 
       {/* Sprint 243 — router template offset calculator */}
       <RouterTemplatePanel />
+
+      {/* Sprint 245 — half-lap joint calculator */}
+      <HalfLapPanel />
 
       {/* Sprint 110 — real-time constraint violations and dimension range hints */}
       <ConstraintSuggestionsPanel />

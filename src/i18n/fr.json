@@ -2175,5 +2175,24 @@
       "inside": "Inside (pocket/recess)",
       "outside": "Outside (island/boss)"
     }
+  },
+  "halfLap": {
+    "title": "Half-Lap Joint",
+    "lapType": "Lap Type",
+    "board1Thickness": "Board 1 Thickness",
+    "board1Width": "Board 1 Width",
+    "board2Thickness": "Board 2 Thickness",
+    "board2Width": "Board 2 Width",
+    "board1NotchDepth": "Board 1 Notch Depth",
+    "board1NotchWidth": "Board 1 Notch Width",
+    "board2NotchDepth": "Board 2 Notch Depth",
+    "board2NotchWidth": "Board 2 Notch Width",
+    "totalGlueArea": "Total Glue Area",
+    "finishedThickness": "Finished Thickness",
+    "lapTypes": {
+      "end_lap": "End Lap",
+      "t_lap": "T-Lap",
+      "cross_lap": "Cross Lap"
+    }
   }
 }

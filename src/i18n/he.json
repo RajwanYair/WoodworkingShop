@@ -2437,5 +2437,24 @@
       "inside": "פנים (כיס/שקע)",
       "outside": "חוץ (אי/בליטה)"
     }
+  },
+  "halfLap": {
+    "title": "חיבור חפיפה חצי",
+    "lapType": "סוג חפיפה",
+    "board1Thickness": "עובי לוח 1",
+    "board1Width": "רוחב לוח 1",
+    "board2Thickness": "עובי לוח 2",
+    "board2Width": "רוחב לוח 2",
+    "board1NotchDepth": "עומק חריץ לוח 1",
+    "board1NotchWidth": "רוחב חריץ לוח 1",
+    "board2NotchDepth": "עומק חריץ לוח 2",
+    "board2NotchWidth": "רוחב חריץ לוח 2",
+    "totalGlueArea": "שטח הדבקה כולל",
+    "finishedThickness": "עובי מוגמר",
+    "lapTypes": {
+      "end_lap": "חפיפת קצה",
+      "t_lap": "חפיפת T",
+      "cross_lap": "חפיפת צלב"
+    }
   }
 }

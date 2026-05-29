@@ -1464,3 +1464,7 @@ export type { RafterLengthInput, RafterLengthResult } from './rafter-length';
 // Sprint 243 — Router Template Offset Calculator
 export { calculateRouterTemplate } from './router-template';
 export type { RouterTemplateCutType, RouterTemplateInput, RouterTemplateResult } from './router-template';
+
+// Sprint 245 — Half-Lap Joint Calculator
+export { calculateHalfLap } from './half-lap';
+export type { HalfLapType, HalfLapInput, HalfLapResult } from './half-lap';
