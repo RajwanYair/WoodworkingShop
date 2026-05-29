@@ -1439,3 +1439,7 @@ export type { HoningGuideInput, HoningGuideResult } from './honing-guide';
 // Sprint 237 — Crown Moulding Cut Calculator
 export { calculateCrownMoulding } from './crown-moulding';
 export type { CrownCutMethod, CrownMouldingInput, CrownMouldingResult } from './crown-moulding';
+
+// Sprint 238 — Router Circle Jig Calculator
+export { calculateRouterCircle } from './router-circle';
+export type { CircleCutMode, RouterCircleInput, RouterCircleResult } from './router-circle';

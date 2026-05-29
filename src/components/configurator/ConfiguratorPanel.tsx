@@ -31,6 +31,7 @@ import { GlueCoveragePanel } from './GlueCoveragePanel';
 import { PlanerPassesPanel } from './PlanerPassesPanel';
 import { HoningGuidePanel } from './HoningGuidePanel';
 import { CrownMouldingPanel } from './CrownMouldingPanel';
+import { RouterCirclePanel } from './RouterCirclePanel';
 import { PresetsPanel } from './PresetsPanel';
 import { SaveLoadPanel } from './SaveLoadPanel';
 import { ConstraintSuggestionsPanel } from './ConstraintSuggestionsPanel';
@@ -108,6 +109,9 @@ export function ConfiguratorPanel() {
 
       {/* Sprint 237 — crown moulding cut calculator */}
       <CrownMouldingPanel />
+
+      {/* Sprint 238 — router circle jig calculator */}
+      <RouterCirclePanel />
 
       {/* Sprint 110 — real-time constraint violations and dimension range hints */}
       <ConstraintSuggestionsPanel />

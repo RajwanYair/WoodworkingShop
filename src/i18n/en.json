@@ -2355,5 +2355,20 @@
     "cuttingMethod": "Cutting Method",
     "miterAngle": "Miter Angle",
     "note38deg": "Common setup tip: most crown moulding profiles use a 38° spring angle."
+  },
+  "routerCircle": {
+    "title": "Router Circle Jig Calculator",
+    "targetDiameter": "Target Diameter",
+    "bitDiameter": "Bit Diameter",
+    "pivotHoleDiameter": "Pivot Hole Diameter",
+    "cutMode": "Cut Mode",
+    "armLength": "Arm Length (Pivot to Bit Center)",
+    "circumference": "Circumference",
+    "area": "Area",
+    "pivotOffset": "Pivot Offset",
+    "modes": {
+      "disc": "Disc (outside cut)",
+      "hole": "Hole (inside cut)"
+    }
   }
 }
