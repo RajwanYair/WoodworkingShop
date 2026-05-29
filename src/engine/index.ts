@@ -1460,3 +1460,7 @@ export type {
 // Sprint 242 — Rafter Length & Birdsmouth Calculator
 export { calculateRafterLength } from './rafter-length';
 export type { RafterLengthInput, RafterLengthResult } from './rafter-length';
+
+// Sprint 243 — Router Template Offset Calculator
+export { calculateRouterTemplate } from './router-template';
+export type { RouterTemplateCutType, RouterTemplateInput, RouterTemplateResult } from './router-template';

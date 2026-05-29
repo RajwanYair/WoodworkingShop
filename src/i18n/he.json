@@ -2421,5 +2421,21 @@
     "plateWidth": "רוחב לוח הקיר",
     "plumbCut": "זווית חיתוך אנכי",
     "shedRoof": "גג חד-שיפועי"
+  },
+  "routerTemplate": {
+    "title": "היסט תבנית נתב",
+    "bushingOD": "קוטר חיצוני של מוביל",
+    "bitDiameter": "קוטר מחרטת",
+    "cutType": "סוג חיתוך",
+    "nominalDimension": "מידה נומינלית של הפרט",
+    "optional": "אופציונלי",
+    "offset": "היסט המוביל",
+    "adjustmentPerSide": "תיקון תבנית (לכל צד)",
+    "totalAdjustment": "סה״כ תיקון תבנית",
+    "adjustedDimension": "מידת תבנית מתוקנת",
+    "cutTypes": {
+      "inside": "פנים (כיס/שקע)",
+      "outside": "חוץ (אי/בליטה)"
+    }
   }
 }

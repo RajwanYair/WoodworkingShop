@@ -2147,5 +2147,21 @@
     "plateWidth": "Wall Plate Width",
     "plumbCut": "Plumb-Cut Angle",
     "shedRoof": "Shed roof (single slope)"
+  },
+  "routerTemplate": {
+    "title": "Router Template Offset",
+    "bushingOD": "Bushing OD",
+    "bitDiameter": "Bit Diameter",
+    "cutType": "Cut Type",
+    "nominalDimension": "Nominal Feature Dimension",
+    "optional": "optional",
+    "offset": "Bushing Offset",
+    "adjustmentPerSide": "Template Adjust (per side)",
+    "totalAdjustment": "Total Template Adjustment",
+    "adjustedDimension": "Adjusted Template Dimension",
+    "cutTypes": {
+      "inside": "Inside (pocket/recess)",
+      "outside": "Outside (island/boss)"
+    }
   }
 }
