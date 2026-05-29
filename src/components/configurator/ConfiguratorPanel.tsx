@@ -32,6 +32,7 @@ import { PlanerPassesPanel } from './PlanerPassesPanel';
 import { HoningGuidePanel } from './HoningGuidePanel';
 import { CrownMouldingPanel } from './CrownMouldingPanel';
 import { RouterCirclePanel } from './RouterCirclePanel';
+import { CoveCutPanel } from './CoveCutPanel';
 import { PresetsPanel } from './PresetsPanel';
 import { SaveLoadPanel } from './SaveLoadPanel';
 import { ConstraintSuggestionsPanel } from './ConstraintSuggestionsPanel';
@@ -112,6 +113,9 @@ export function ConfiguratorPanel() {
 
       {/* Sprint 238 — router circle jig calculator */}
       <RouterCirclePanel />
+
+      {/* Sprint 240 — table-saw cove cut calculator */}
+      <CoveCutPanel />
 
       {/* Sprint 110 — real-time constraint violations and dimension range hints */}
       <ConstraintSuggestionsPanel />

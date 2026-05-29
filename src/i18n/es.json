@@ -2108,5 +2108,16 @@
       "disc": "Disc (outside cut)",
       "hole": "Hole (inside cut)"
     }
+  },
+  "coveCut": {
+    "copeDepth": "Cove Depth",
+    "bladeDiameter": "Blade Diameter",
+    "copeWidth": "Cove Width",
+    "fenceAngle": "Fence Angle",
+    "maxPassDepth": "Max Depth per Pass",
+    "title": "Cove Cut (Table Saw)",
+    "passCount": "Pass Count",
+    "depthPerPass": "Depth per Pass",
+    "bladeHeight": "Final Blade Height"
   }
 }

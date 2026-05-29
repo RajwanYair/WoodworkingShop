@@ -1443,3 +1443,7 @@ export type { CrownCutMethod, CrownMouldingInput, CrownMouldingResult } from './
 // Sprint 238 — Router Circle Jig Calculator
 export { calculateRouterCircle } from './router-circle';
 export type { CircleCutMode, RouterCircleInput, RouterCircleResult } from './router-circle';
+
+// Sprint 240 — Cove Cut Calculator
+export { calculateCoveCut } from './cove-cut';
+export type { CoveCutInput, CoveCutResult } from './cove-cut';
