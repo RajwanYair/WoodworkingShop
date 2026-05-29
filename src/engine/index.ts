@@ -1468,3 +1468,7 @@ export type { RouterTemplateCutType, RouterTemplateInput, RouterTemplateResult }
 // Sprint 245 — Half-Lap Joint Calculator
 export { calculateHalfLap } from './half-lap';
 export type { HalfLapType, HalfLapInput, HalfLapResult } from './half-lap';
+
+// Sprint 246 — Spline Joint Calculator
+export { calculateSplineJoint } from './spline-joint';
+export type { SplineJointInput, SplineJointResult } from './spline-joint';
