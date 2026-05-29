@@ -2381,5 +2381,30 @@
     "passCount": "מספר מעברים",
     "depthPerPass": "עומק למעבר",
     "bladeHeight": "גובה להב סופי"
+  },
+  "moistureShrinkage": {
+    "species_cherry": "דובדבן",
+    "dimension": "מידת הלוח",
+    "coefficient": "מקדם כיווץ",
+    "species_oak": "אלון",
+    "species_cedar": "ארז",
+    "species_pine": "אורן",
+    "grain": "כיוון הסיב",
+    "species_maple": "מייפל",
+    "initialMC": "לחות התחלתית",
+    "changeAmount": "שינוי מידה",
+    "species_douglas_fir": "פיר דאגלס",
+    "species_generic_hardwood": "עץ קשה כללי",
+    "grains": {
+      "tangential": "משיקי",
+      "radial": "רדיאלי"
+    },
+    "species": "מין עץ",
+    "finalDimension": "מידה סופית",
+    "effectiveMCChange": "שינוי לחות אפקטיבי",
+    "title": "תכולת לחות וכיווץ",
+    "targetMC": "לחות יעד",
+    "species_generic_softwood": "עץ רך כללי",
+    "species_walnut": "אגוז"
   }
 }

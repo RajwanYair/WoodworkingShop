@@ -2381,5 +2381,30 @@
     "passCount": "Pass Count",
     "depthPerPass": "Depth per Pass",
     "bladeHeight": "Final Blade Height"
+  },
+  "moistureShrinkage": {
+    "species_cherry": "Cherry",
+    "dimension": "Board Dimension",
+    "coefficient": "Shrinkage Coefficient",
+    "species_oak": "Oak",
+    "species_cedar": "Cedar",
+    "species_pine": "Pine",
+    "grain": "Grain Direction",
+    "species_maple": "Maple",
+    "initialMC": "Initial MC",
+    "changeAmount": "Dimensional Change",
+    "species_douglas_fir": "Douglas Fir",
+    "species_generic_hardwood": "Generic Hardwood",
+    "grains": {
+      "tangential": "Tangential",
+      "radial": "Radial"
+    },
+    "species": "Species",
+    "finalDimension": "Final Dimension",
+    "effectiveMCChange": "Effective MC Change",
+    "title": "Moisture Content & Shrinkage",
+    "targetMC": "Target MC",
+    "species_generic_softwood": "Generic Softwood",
+    "species_walnut": "Walnut"
   }
 }

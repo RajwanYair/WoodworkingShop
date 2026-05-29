@@ -1447,3 +1447,12 @@ export type { CircleCutMode, RouterCircleInput, RouterCircleResult } from './rou
 // Sprint 240 — Cove Cut Calculator
 export { calculateCoveCut } from './cove-cut';
 export type { CoveCutInput, CoveCutResult } from './cove-cut';
+
+// Sprint 241 — Moisture Content & Shrinkage Calculator
+export { calculateMoistureShrinkage } from './moisture-shrinkage';
+export type {
+  MoistureShrinkageSpecies,
+  WoodGrainDirection,
+  MoistureShrinkageInput,
+  MoistureShrinkageResult,
+} from './moisture-shrinkage';
