@@ -2342,5 +2342,18 @@
     "bevelAngle": "זווית מדרון",
     "projection": "בליטת הלהב",
     "microbevel": "זווית מיקרו-מדרון"
+  },
+  "crownMoulding": {
+    "springAngle": "זווית קפיץ",
+    "title": "מחשבון חיתוך עיטורי כתר",
+    "methods": {
+      "flat": "שטוח (על שולחן המסור)",
+      "in_position": "במקום (מול הגדר)"
+    },
+    "cornerAngle": "זווית פינה",
+    "bevelAngle": "זווית הטיה",
+    "cuttingMethod": "שיטת חיתוך",
+    "miterAngle": "זווית מיטר",
+    "note38deg": "טיפ נפוץ: רוב עיטורי הכתר משתמשים בזווית קפיץ 38°."
   }
 }

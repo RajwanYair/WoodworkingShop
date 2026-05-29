@@ -2342,5 +2342,18 @@
     "bevelAngle": "Bevel Angle",
     "projection": "Blade Projection",
     "microbevel": "Micro-Bevel Angle"
+  },
+  "crownMoulding": {
+    "springAngle": "Spring Angle",
+    "title": "Crown Moulding Cut Calculator",
+    "methods": {
+      "flat": "Flat (lying on table)",
+      "in_position": "In Position (against fence)"
+    },
+    "cornerAngle": "Corner Angle",
+    "bevelAngle": "Bevel Angle",
+    "cuttingMethod": "Cutting Method",
+    "miterAngle": "Miter Angle",
+    "note38deg": "Common setup tip: most crown moulding profiles use a 38° spring angle."
   }
 }

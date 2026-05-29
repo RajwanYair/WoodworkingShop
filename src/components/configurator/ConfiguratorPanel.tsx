@@ -30,6 +30,7 @@ import { BoxJointPanel } from './BoxJointPanel';
 import { GlueCoveragePanel } from './GlueCoveragePanel';
 import { PlanerPassesPanel } from './PlanerPassesPanel';
 import { HoningGuidePanel } from './HoningGuidePanel';
+import { CrownMouldingPanel } from './CrownMouldingPanel';
 import { PresetsPanel } from './PresetsPanel';
 import { SaveLoadPanel } from './SaveLoadPanel';
 import { ConstraintSuggestionsPanel } from './ConstraintSuggestionsPanel';
@@ -104,6 +105,9 @@ export function ConfiguratorPanel() {
 
       {/* Sprint 236 — honing guide calculator */}
       <HoningGuidePanel />
+
+      {/* Sprint 237 — crown moulding cut calculator */}
+      <CrownMouldingPanel />
 
       {/* Sprint 110 — real-time constraint violations and dimension range hints */}
       <ConstraintSuggestionsPanel />

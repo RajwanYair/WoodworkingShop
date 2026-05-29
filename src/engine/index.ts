@@ -1435,3 +1435,7 @@ export type { PlanerPassesInput, PlanerPassesResult } from './planer-passes';
 // Sprint 236 — Honing Guide Calculator
 export { calculateHoningGuide } from './honing-guide';
 export type { HoningGuideInput, HoningGuideResult } from './honing-guide';
+
+// Sprint 237 — Crown Moulding Cut Calculator
+export { calculateCrownMoulding } from './crown-moulding';
+export type { CrownCutMethod, CrownMouldingInput, CrownMouldingResult } from './crown-moulding';
