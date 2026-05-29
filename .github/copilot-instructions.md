@@ -2,19 +2,29 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.24.0** · **Next target: v5.25.0** (Phase 49)
+> **Current release: v5.25.0** · **Next target: v5.26.0** (Phase 50)
 
-## Active Sprint — Phase 49 (Sprints 230–234)
+## Active Sprint — Phase 50 (Sprints 235–239)
 
 > **Status**: PLANNING · **Goal**: TBD
 
 | Sprint | Feature         | Status |
 | ------ | --------------- | ------ |
-| 230    | TBD             | TODO   |
-| 231    | TBD             | TODO   |
-| 232    | TBD             | TODO   |
-| 233    | TBD             | TODO   |
-| 234    | Release v5.25.0 | TODO   |
+| 235    | TBD             | TODO   |
+| 236    | TBD             | TODO   |
+| 237    | TBD             | TODO   |
+| 238    | TBD             | TODO   |
+| 239    | Release v5.26.0 | TODO   |
+
+## Completed — Phase 49 (Sprints 230–234)
+
+| Sprint | Feature                                                   | Status |
+| ------ | --------------------------------------------------------- | ------ |
+| 230    | Taper jig calculator — engine + UI panel + tests          | DONE   |
+| 231    | Stair stringer calculator — engine + UI panel + tests     | DONE   |
+| 232    | Box joint calculator — engine + UI panel + tests          | DONE   |
+| 233    | Wood glue coverage calculator — engine + UI panel + tests | DONE   |
+| 234    | Release v5.25.0                                           | DONE   |
 
 ## Completed — Phase 48 (Sprints 225–229)
 

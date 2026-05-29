@@ -243,17 +243,29 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 150    | Error monitoring — privacy-first telemetry (Cloudflare Analytics/Sentry) | ✓ Done |
 | 151    | Release v5.9.0                                                           | ✓ Done |
 
-### Phase 49 — TBD · v5.25.0 🔄 PLANNING
+### Phase 49 — Woodworking Geometry & Setup Calculators · v5.25.0 ✅ COMPLETE
+
+> **Status**: COMPLETE · **Released**: 2026-05-29 · **Goal**: Taper jig, stair stringer, box joint, and wood glue coverage calculators
+
+| Sprint | Deliverable                                                                           | Track  |
+| ------ | ------------------------------------------------------------------------------------- | ------ |
+| 230    | Taper jig calculator (jig offset, taper angle, taper-per-foot for 1- or 2-face taper) | ✓ Done |
+| 231    | Stair stringer calculator (riser count, tread count, stringer length, IRC validation) | ✓ Done |
+| 232    | Box joint calculator (odd finger count, socket count, glue surface area, edge waste)  | ✓ Done |
+| 233    | Wood glue coverage calculator (net + recommended volume, 5 glue types, timing)        | ✓ Done |
+| 234    | Release v5.25.0                                                                       | ✓ Done |
+
+### Phase 50 — TBD · v5.26.0 🔄 PLANNING
 
 > **Status**: PLANNING · **Goal**: TBD
 
 | Sprint | Deliverable     | Track   |
 | ------ | --------------- | ------- |
-| 230    | TBD             | ⬜ TODO |
-| 231    | TBD             | ⬜ TODO |
-| 232    | TBD             | ⬜ TODO |
-| 233    | TBD             | ⬜ TODO |
-| 234    | Release v5.25.0 | ⬜ TODO |
+| 235    | TBD             | ⬜ TODO |
+| 236    | TBD             | ⬜ TODO |
+| 237    | TBD             | ⬜ TODO |
+| 238    | TBD             | ⬜ TODO |
+| 239    | Release v5.26.0 | ⬜ TODO |
 
 ### Phase 48 — Workshop Geometry & Finishing Calculators · v5.24.0 ✅ COMPLETE
 

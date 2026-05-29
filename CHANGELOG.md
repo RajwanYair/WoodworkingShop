@@ -9,6 +9,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.25.0] — 2026-05-29
+
+### Phase 49 — Woodworking Geometry & Setup Calculators (Sprints 230–233)
+
+#### Sprint 230 — Taper Jig Calculator
+
+- `calculateTaperJig()` — jig offset, taper angle, taper-per-foot for 1- or 2-face tapers
+- `TaperJigPanel` UI; 11 unit tests
+
+#### Sprint 231 — Stair Stringer Calculator
+
+- `calculateStairStringer()` — riser count, actual riser, tread count, total run, stringer length/angle
+- IRC 2021 validation (riser 101.6–196.85 mm, tread ≥ 254 mm) with warning keys
+- `StairStringerPanel` UI; 14 unit tests
+
+#### Sprint 232 — Box Joint Calculator
+
+- `calculateBoxJoint()` — odd finger count, actual finger width, socket count, glue surface area, edge waste
+- `BoxJointPanel` UI; 12 unit tests
+
+#### Sprint 233 — Wood Glue Coverage Calculator
+
+- `calculateGlueCoverage()` — net and recommended (+15% waste) volume for 5 glue types (PVA, polyurethane, epoxy, hide, CA)
+- Coverage rates, open time, clamping time, full cure time per glue type
+- `GlueCoveragePanel` UI; 11 unit tests
+
 ## [5.24.0] — 2026-05-29
 
 ### Phase 48 — Workshop Geometry & Finishing Calculators (Sprints 225–229)

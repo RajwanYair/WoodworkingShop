@@ -4,15 +4,15 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { calculateGlueCoverage } from '../../engine/glue-coverage';
-import type { GlueType } from '../../engine/glue-coverage';
+import type { WoodGlueType } from '../../engine/glue-coverage';
 
-const GLUE_TYPES: GlueType[] = ['pva', 'polyurethane', 'epoxy', 'hide', 'ca'];
+const GLUE_TYPES: WoodGlueType[] = ['pva', 'polyurethane', 'epoxy', 'hide', 'ca'];
 
 export function GlueCoveragePanel() {
   const { t } = useTranslation();
 
   const [surfaceAreaMm2, setSurfaceAreaMm2] = useState(50000);
-  const [glueType, setGlueType] = useState<GlueType>('pva');
+  const [glueType, setGlueType] = useState<WoodGlueType>('pva');
   const [jointCount, setJointCount] = useState(1);
 
   const result = useMemo(() => {
@@ -63,7 +63,7 @@ export function GlueCoveragePanel() {
           <span>{t('glueCoverage.glueType')}</span>
           <select
             value={glueType}
-            onChange={(e) => setGlueType(e.target.value as GlueType)}
+            onChange={(e) => setGlueType(e.target.value as WoodGlueType)}
             className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 text-sm focus:ring-2 focus:outline-none"
           >
             {GLUE_TYPES.map((gt) => (

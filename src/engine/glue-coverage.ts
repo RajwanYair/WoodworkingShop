@@ -19,13 +19,13 @@
  * Add 15% waste allowance.
  */
 
-export type GlueType = 'pva' | 'polyurethane' | 'epoxy' | 'hide' | 'ca';
+export type WoodGlueType = 'pva' | 'polyurethane' | 'epoxy' | 'hide' | 'ca';
 
 export interface GlueCoverageInput {
   /** Total glue surface area in mm² */
   surfaceAreaMm2: number;
   /** Glue type */
-  glueType: GlueType;
+  glueType: WoodGlueType;
   /** Number of joints (panels / boards being glued) — default 1 */
   jointCount?: number;
 }
@@ -44,7 +44,7 @@ export interface GlueCoverageResult {
   /** Spread rate used in m²/L */
   spreadRateM2PerL: number;
   /** Glue type echoed back */
-  glueType: GlueType;
+  glueType: WoodGlueType;
 }
 
 interface GlueSpec {
@@ -54,7 +54,7 @@ interface GlueSpec {
   cureTimeHours: number;
 }
 
-const GLUE_SPECS: Record<GlueType, GlueSpec> = {
+const GLUE_SPECS: Record<WoodGlueType, GlueSpec> = {
   pva: { spreadRateM2PerL: 180, openTimeMin: 10, clampingTimeMin: 30, cureTimeHours: 24 },
   polyurethane: { spreadRateM2PerL: 250, openTimeMin: 15, clampingTimeMin: 60, cureTimeHours: 4 },
   epoxy: { spreadRateM2PerL: 120, openTimeMin: 20, clampingTimeMin: 60, cureTimeHours: 8 },

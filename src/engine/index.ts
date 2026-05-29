@@ -1426,4 +1426,4 @@ export type { BoxJointInput, BoxJointResult } from './box-joint';
 
 // Sprint 233 — Wood Glue Coverage Calculator
 export { calculateGlueCoverage } from './glue-coverage';
-export type { GlueType, GlueCoverageInput, GlueCoverageResult } from './glue-coverage';
+export type { WoodGlueType, GlueCoverageInput, GlueCoverageResult } from './glue-coverage';
