@@ -2406,5 +2406,20 @@
     "targetMC": "לחות יעד",
     "species_generic_softwood": "עץ רך כללי",
     "species_walnut": "אגוז"
+  },
+  "rafterLength": {
+    "pitchRatio": "יחס שיפוע",
+    "title": "חישוב אורך קורת גג ונקרת ציפור",
+    "totalLength": "אורך כולל (עם תוספת)",
+    "rafterLength": "אורך הקורה (עד העקב)",
+    "seatCut": "זווית חיתוך ישב",
+    "overhang": "תוספת מרפסת",
+    "birdsmouthDepth": "עומק נקרת הציפור",
+    "rise": "גובה אנכי",
+    "run": "מרחק אופקי",
+    "totalSpan": "רוחב מבנה כולל",
+    "plateWidth": "רוחב לוח הקיר",
+    "plumbCut": "זווית חיתוך אנכי",
+    "shedRoof": "גג חד-שיפועי"
   }
 }

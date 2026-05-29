@@ -1456,3 +1456,7 @@ export type {
   MoistureShrinkageInput,
   MoistureShrinkageResult,
 } from './moisture-shrinkage';
+
+// Sprint 242 — Rafter Length & Birdsmouth Calculator
+export { calculateRafterLength } from './rafter-length';
+export type { RafterLengthInput, RafterLengthResult } from './rafter-length';
