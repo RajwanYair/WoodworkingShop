@@ -2129,5 +2129,21 @@
     "materialRemoved": "Material Removed / Face",
     "taperPerFoot": "Taper per Foot",
     "note": "Flip workpiece after first pass for symmetric taper"
+  },
+  "stairStringer": {
+    "title": "Stair Stringer Calculator",
+    "totalRise": "Total Rise",
+    "treadDepth": "Tread Depth",
+    "idealRiser": "Ideal Riser Height",
+    "riserCount": "Riser Count",
+    "actualRiser": "Actual Riser Height",
+    "treadCount": "Tread Count",
+    "totalRun": "Total Run",
+    "stringerLength": "Stringer Length",
+    "stringerAngle": "Stringer Angle",
+    "ircPass": "Passes IRC 2021 riser and tread limits",
+    "riserTooShort": "Riser height below IRC minimum 4\" (101.6 mm)",
+    "riserTooTall": "Riser height exceeds IRC maximum 7\u00be\" (196.85 mm)",
+    "treadTooShallow": "Tread depth below IRC minimum 10\" (254 mm)"
   }
 }

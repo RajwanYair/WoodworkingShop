@@ -1415,3 +1415,7 @@ export type { FramePanelInput, FramePanelResult } from './frame-panel';
 // Sprint 230 — Taper Jig Calculator
 export { calculateTaperJig } from './taper-jig';
 export type { TaperJigInput, TaperJigResult } from './taper-jig';
+
+// Sprint 231 — Stair Stringer Calculator
+export { calculateStairStringer } from './stair-stringer';
+export type { StairStringerInput, StairStringerResult } from './stair-stringer';

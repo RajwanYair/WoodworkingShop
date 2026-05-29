@@ -2276,5 +2276,21 @@
     "materialRemoved": "חומר שהוסר / פן",
     "taperPerFoot": "גיזוז לרגל",
     "note": "הפוך את חתיכת העבודה לאחר המעבר הראשון לגיזוז סימטרי"
+  },
+  "stairStringer": {
+    "title": "מחשבון קרשי מדרגות",
+    "totalRise": "עלייה כוללת",
+    "treadDepth": "עומק שלב הדרגה",
+    "idealRiser": "גובה פסיעה אידאלי",
+    "riserCount": "מספר פסיעות",
+    "actualRiser": "גובה פסיעה בפועל",
+    "treadCount": "מספר שלבי דריכה",
+    "totalRun": "נידה כוללת",
+    "stringerLength": "אורך קרש",
+    "stringerAngle": "זווית קרש",
+    "ircPass": "עומד בדרישות IRC 2021",
+    "riserTooShort": "גובה פסיעה מתחת מינימום IRC",
+    "riserTooTall": "גובה פסיעה מעל מקסימום IRC",
+    "treadTooShallow": "עומק שלב הדריכה מתחת מינימום IRC"
   }
 }
