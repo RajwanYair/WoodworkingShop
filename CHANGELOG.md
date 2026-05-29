@@ -9,6 +9,47 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.24.0] — 2026-05-29
+
+### Phase 48 — Workshop Geometry & Finishing Calculators (Sprints 225–229)
+
+#### Sprint 225 — Kerf Bending Calculator
+
+- `calculateKerfBending()` engine function (Hoadley spacing formula)
+- Supports plywood, MDF, softwood, hardwood with per-material minimum wall thickness
+- `KerfBendingPanel` UI with thickness / radius / kerf width / material inputs
+- Infeasibility detection with `tooFewKerfs` warning
+- 15 unit tests
+
+#### Sprint 226 — Dado / Rabbet Joint Calculator
+
+- `calculateDadoRabbet()` engine with cut width (mating + 0.5 mm clearance), depth (1/3 rule)
+- Supports dado, rabbet, through dado joint types
+- Router bit / dado blade recommendation by cut width
+- Pass count calculation for standard 12.7 mm bits
+- `DadoRabbetPanel` UI; 11 unit tests
+
+#### Sprint 227 — Finishing Coat Calculator
+
+- `calculateFinishingCoat()` engine with 5 finish types and per-product coverage rates
+- Volume estimate with 10% waste allowance; recoat and full cure dry times
+- `FinishingCoatPanel` UI; 13 unit tests
+
+#### Sprint 228 — Wood Turning Speed Calculator
+
+- `calculateWoodTurning()` engine using Woodturners Association 6000/D formula
+- Safe RPM range (min/max) plus recommended RPM per operation (roughing/finishing/sanding)
+- Surface speed output in m/min; capped at practical lathe limits
+- `WoodTurningPanel` UI; 9 unit tests
+
+#### Sprint 229 — Frame and Panel Calculator
+
+- `calculateFramePanel()` engine computing panel width/height from frame, stile, rail, groove, float
+- Seasonal expansion allowance output
+- `FramePanelCalcPanel` UI; 11 unit tests
+
+---
+
 ## [5.23.0] — 2026-05-28
 
 ### Phase 46–47 — Workspace & Tooling + Calculator UI Panels (Sprints 215–224)

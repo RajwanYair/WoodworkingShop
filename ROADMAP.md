@@ -1,6 +1,6 @@
 # Roadmap
 
-> **Last strategic review**: 2026-05-27 · **Current version**: 5.22.0
+> **Last strategic review**: 2026-05-29 · **Current version**: 5.24.0
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -243,18 +243,30 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 150    | Error monitoring — privacy-first telemetry (Cloudflare Analytics/Sentry) | ✓ Done |
 | 151    | Release v5.9.0                                                           | ✓ Done |
 
-### Phase 48 — Workshop Geometry & Finishing Calculators · v5.24.0 🔄 IN PROGRESS
+### Phase 49 — TBD · v5.25.0 🔄 PLANNING
 
-> **Status**: IN PROGRESS · **Goal**: Kerf bending, dado/rabbet joints, finishing coats, wood turning speeds, frame and panel construction
+> **Status**: PLANNING · **Goal**: TBD
 
-| Sprint | Deliverable                                                                      | Track   |
-| ------ | -------------------------------------------------------------------------------- | ------- |
-| 225    | Kerf bending calculator (kerf spacing, depth, bend radius for panels)            | ⬜ TODO |
-| 226    | Dado/rabbet joint calculator (width, depth, blade/bit recommendation)            | ⬜ TODO |
-| 227    | Finishing coat calculator (coverage, coats, dry time, product volume)            | ⬜ TODO |
-| 228    | Wood turning speed calculator (safe RPM by blank diameter and species)           | ⬜ TODO |
-| 229    | Frame and panel calculator (panel float, groove dimensions, expansion allowance) | ⬜ TODO |
-| 230    | Release v5.24.0                                                                  | ⬜ TODO |
+| Sprint | Deliverable     | Track   |
+| ------ | --------------- | ------- |
+| 230    | TBD             | ⬜ TODO |
+| 231    | TBD             | ⬜ TODO |
+| 232    | TBD             | ⬜ TODO |
+| 233    | TBD             | ⬜ TODO |
+| 234    | Release v5.25.0 | ⬜ TODO |
+
+### Phase 48 — Workshop Geometry & Finishing Calculators · v5.24.0 ✅ COMPLETE
+
+> **Status**: COMPLETE · **Released**: 2026-05-29 · **Goal**: Kerf bending, dado/rabbet joints, finishing coats, wood turning speeds, frame and panel construction
+
+| Sprint | Deliverable                                                                      | Track  |
+| ------ | -------------------------------------------------------------------------------- | ------ |
+| 225    | Kerf bending calculator (kerf spacing, depth, bend radius for panels)            | ✓ Done |
+| 226    | Dado/rabbet joint calculator (width, depth, blade/bit recommendation)            | ✓ Done |
+| 227    | Finishing coat calculator (coverage, coats, dry time, product volume)            | ✓ Done |
+| 228    | Wood turning speed calculator (safe RPM by blank diameter and species)           | ✓ Done |
+| 229    | Frame and panel calculator (panel float, groove dimensions, expansion allowance) | ✓ Done |
+| 230    | Release v5.24.0                                                                  | ✓ Done |
 
 ### Phase 47 — Cabinet Hardware Sizing Calculators · v5.23.0 ✅ COMPLETE
 

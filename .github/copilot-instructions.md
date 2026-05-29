@@ -2,19 +2,29 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.23.0** · **Next target: v5.24.0** (Phase 48)
+> **Current release: v5.24.0** · **Next target: v5.25.0** (Phase 49)
 
-## Active Sprint — Phase 48 (Sprints 225–229)
+## Active Sprint — Phase 49 (Sprints 230–234)
 
 > **Status**: PLANNING · **Goal**: TBD
 
 | Sprint | Feature         | Status |
 | ------ | --------------- | ------ |
-| 225    | TBD             | TODO   |
-| 226    | TBD             | TODO   |
-| 227    | TBD             | TODO   |
-| 228    | TBD             | TODO   |
-| 229    | Release v5.24.0 | TODO   |
+| 230    | TBD             | TODO   |
+| 231    | TBD             | TODO   |
+| 232    | TBD             | TODO   |
+| 233    | TBD             | TODO   |
+| 234    | Release v5.25.0 | TODO   |
+
+## Completed — Phase 48 (Sprints 225–229)
+
+| Sprint | Feature                                                   | Status |
+| ------ | --------------------------------------------------------- | ------ |
+| 225    | Kerf bending calculator — engine + UI panel + tests       | DONE   |
+| 226    | Dado/rabbet joint calculator — engine + UI panel + tests  | DONE   |
+| 227    | Finishing coat calculator — engine + UI panel + tests     | DONE   |
+| 228    | Wood turning speed calculator — engine + UI panel + tests | DONE   |
+| 229    | Frame and panel calculator — engine + UI panel + tests    | DONE   |
 
 ## Completed — Phase 47 (Sprints 220–224)
 
