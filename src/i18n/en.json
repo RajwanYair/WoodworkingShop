@@ -220,8 +220,8 @@
     "grainConflictsTitle": "{{count}} part(s) had grain direction compromised — material requires grain but part was rotated to fit",
     "filterParts": "Filter parts",
     "filterPartsPlaceholder": "Search parts…",
-    "statusPending": "Computing cut sheets\u2026",
-    "statusComplete": "Optimization complete \u2014 {{count}} sheet(s) required",
+    "statusPending": "Computing cut sheets…",
+    "statusComplete": "Optimization complete — {{count}} sheet(s) required",
     "filterByMaterial": "Filter by material",
     "allMaterials": "All materials"
   },
@@ -430,14 +430,14 @@
     "exportZip": "Export ZIP Bundle (PDF + DXF + BOM + glTF)",
     "generatingZip": "Building ZIP…",
     "zipExported": "ZIP bundle exported",
-    "error": "PDF generation failed \u2014 check your connection and try again",
+    "error": "PDF generation failed — check your connection and try again",
     "projectSettings": "Project Settings",
     "settingsDescription": "Save and restore saw kerf, sheet sizes, material prices and costs.",
     "exportSettings": "Export Project Settings",
     "importSettings": "Import Project Settings",
     "settingsExported": "Project settings exported",
     "settingsImported": "Project settings applied",
-    "settingsImportError": "Could not import settings \u2014 invalid file"
+    "settingsImportError": "Could not import settings — invalid file"
   },
   "footer": {
     "darkMode": "Dark Mode",
@@ -630,7 +630,6 @@
     "gcodeExported": "G-code file downloaded",
     "bomExported": "BOM CSV downloaded",
     "hardwareExported": "Hardware CSV downloaded",
-    "hardwareExported": "Hardware CSV downloaded",
     "linkCopied": "Shareable link copied to clipboard",
     "linkCopyFailed": "Could not copy link — please copy the URL from the address bar"
   },
@@ -674,7 +673,7 @@
     "urlLabel": "Catalog URL",
     "urlPlaceholder": "https://example.com/catalog.json",
     "importButton": "Import",
-    "importing": "Importing\u2026",
+    "importing": "Importing…",
     "previewTitle": "{{count}} material found",
     "previewTitle_other": "{{count}} materials found",
     "addSelected": "Add selected to my materials",
@@ -767,7 +766,7 @@
   "snapshot": {
     "title": "Project Snapshots",
     "save": "Save Snapshot",
-    "namePlaceholder": "Snapshot name\u2026",
+    "namePlaceholder": "Snapshot name…",
     "restore": "Restore",
     "delete": "Delete snapshot",
     "empty": "No snapshots saved yet.",
@@ -781,7 +780,7 @@
       "after": "After",
       "close": "Close",
       "selectTwo": "Select two different snapshots to compare.",
-      "identical": "These snapshots are identical \u2014 no changes detected.",
+      "identical": "These snapshots are identical — no changes detected.",
       "cabinetsAdded": "{{count}} cabinet added",
       "cabinetsAdded_other": "{{count}} cabinets added",
       "cabinetsRemoved": "{{count}} cabinet removed",
@@ -853,7 +852,7 @@
     "plungeRate": "Plunge (mm/min)",
     "safeZ": "Safe Z (mm)",
     "passDepth": "Pass depth (mm)",
-    "toolDiameter": "Tool \u00d8 (mm)",
+    "toolDiameter": "Tool Ø (mm)",
     "useArcs": "Arc moves (G2/G3)",
     "emitToolChange": "Emit M6 tool-change between parts"
   },
@@ -962,7 +961,7 @@
   },
   "buildLog": {
     "title": "Build Log",
-    "addPlaceholder": "Add a build note\u2026",
+    "addPlaceholder": "Add a build note…",
     "hint": "Ctrl + Enter to save",
     "add": "Add note",
     "empty": "No notes yet. Log steps, adjustments, or observations.",
@@ -2290,7 +2289,7 @@
     "stringerAngle": "Stringer Angle",
     "ircPass": "Passes IRC 2021 riser and tread limits",
     "riserTooShort": "Riser height below IRC minimum 4\" (101.6 mm)",
-    "riserTooTall": "Riser height exceeds IRC maximum 7\u00be\" (196.85 mm)",
+    "riserTooTall": "Riser height exceeds IRC maximum 7¾\" (196.85 mm)",
     "treadTooShallow": "Tread depth below IRC minimum 10\" (254 mm)"
   },
   "boxJoint": {
@@ -2335,5 +2334,13 @@
     "totalRemoval": "Total Removal",
     "snipeAllowance": "Snipe Allowance (both ends)",
     "effectiveLength": "Effective Usable Length"
+  },
+  "honingGuide": {
+    "title": "Honing Guide Calculator",
+    "microbevelProjection": "Micro-Bevel Projection",
+    "guideHeight": "Guide Height",
+    "bevelAngle": "Bevel Angle",
+    "projection": "Blade Projection",
+    "microbevel": "Micro-Bevel Angle"
   }
 }

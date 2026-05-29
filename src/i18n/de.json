@@ -428,12 +428,12 @@
     "exportErpJson": "ERP/MRP JSON exportieren",
     "erpExported": "ERP/MRP-Datei exportiert",
     "projectSettings": "Projekteinstellungen",
-    "settingsDescription": "S\u00e4geschnitt, Plattenma\u00dfe, Materialpreise und Kosten speichern und wiederherstellen.",
+    "settingsDescription": "Sägeschnitt, Plattenmaße, Materialpreise und Kosten speichern und wiederherstellen.",
     "exportSettings": "Projekteinstellungen exportieren",
     "importSettings": "Projekteinstellungen importieren",
     "settingsExported": "Projekteinstellungen exportiert",
     "settingsImported": "Projekteinstellungen angewendet",
-    "settingsImportError": "Einstellungen konnten nicht importiert werden \u2014 ung\u00fcltige Datei"
+    "settingsImportError": "Einstellungen konnten nicht importiert werden — ungültige Datei"
   },
   "footer": {
     "darkMode": "Dunkelmodus",
@@ -808,7 +808,7 @@
     "plungeRate": "Eintauchrate (mm/min)",
     "safeZ": "Sicherer Z-Wert (mm)",
     "passDepth": "Zustelltiefe (mm)",
-    "toolDiameter": "Werkzeug-\u00d8 (mm)",
+    "toolDiameter": "Werkzeug-Ø (mm)",
     "useArcs": "Bogenbewegungen (G2/G3)",
     "emitToolChange": "M6-Werkzeugwechsel zwischen Teilen ausgeben"
   },
@@ -908,7 +908,7 @@
     "sku": "SKU",
     "category": "Category",
     "thickness": "Thickness",
-    "price": "Price / m\u00b2",
+    "price": "Price / m²",
     "regions": "Regions",
     "inStock": "In Stock",
     "outOfStock": "Out of Stock",
@@ -928,7 +928,7 @@
     "clearanceRight": "Right Clearance",
     "clearanceRear": "Rear Clearance",
     "clearanceFront": "Front Clearance (Door Swing)",
-    "violation": "Clearance violation: {{side}} of {{appliance}} \u2014 {{shortfall}} mm short",
+    "violation": "Clearance violation: {{side}} of {{appliance}} — {{shortfall}} mm short",
     "allClear": "All appliance clearances satisfied.",
     "checkClearances": "Check Clearances"
   },
@@ -949,7 +949,7 @@
     "passDepth": "Pass Depth",
     "feedRate": "Feed Rate",
     "spindleRpm": "Spindle RPM",
-    "jobValid": "Job validated \u2014 ready to send.",
+    "jobValid": "Job validated — ready to send.",
     "jobErrors": "Job has {{count}} error(s).",
     "noMachine": "No machine profile selected."
   },
@@ -1193,23 +1193,6 @@
     "warnings": "Warnings",
     "noMachines": "No machines added."
   },
-  "dustCollection": {
-    "title": "Dust Collection",
-    "estimator": "System Estimator",
-    "machine": "Machine",
-    "addMachine": "Add Machine",
-    "portDiameter": "Port Diameter",
-    "ductRun": "Duct Run",
-    "elbows": "Elbows",
-    "cfmRequired": "CFM Required",
-    "staticPressure": "Static Pressure",
-    "trunkDiameter": "Trunk Diameter",
-    "recommendedHp": "Recommended HP",
-    "adequate": "System Adequate",
-    "inadequate": "System Undersized",
-    "warnings": "Warnings",
-    "noMachines": "No machines added."
-  },
   "cutListGrouping": {
     "title": "Cut-List Grouping",
     "group": "Group",
@@ -1240,26 +1223,6 @@
     "cycleDetected": "Circular dependency detected!",
     "earliestStart": "Earliest Start",
     "latestFinish": "Latest Finish"
-  },
-  "workshopSafety": {
-    "title": "Workshop Safety",
-    "score": "Safety Score",
-    "passes": "Passes",
-    "fails": "Fails",
-    "violations": "Violations",
-    "critical": "Critical",
-    "warning": "Warning",
-    "clearanceZone": "Clearance Zone",
-    "overlap": "Overlap",
-    "noise": "Noise Level",
-    "ppe": "PPE Required",
-    "safetyGlasses": "Safety Glasses",
-    "hearingProtection": "Hearing Protection",
-    "dustMask": "Dust Mask",
-    "respirator": "Respirator",
-    "faceShield": "Face Shield",
-    "pushStick": "Push Stick",
-    "noViolations": "No safety violations detected."
   },
   "workshopSafety": {
     "title": "Workshop Safety",
@@ -1315,25 +1278,6 @@
     "low": "Low",
     "noRules": "No maintenance rules configured."
   },
-  "maintenanceScheduler": {
-    "title": "Maintenance Scheduler",
-    "schedule": "Schedule",
-    "overdue": "Overdue",
-    "due": "Due",
-    "upcoming": "Upcoming",
-    "completed": "Completed",
-    "healthScore": "Health Score",
-    "interval": "Interval",
-    "hours": "Hours",
-    "days": "Days",
-    "cuts": "Cuts",
-    "priority": "Priority",
-    "critical": "Critical",
-    "high": "High",
-    "normal": "Normal",
-    "low": "Low",
-    "noRules": "No maintenance rules configured."
-  },
   "layoutOptimizer": {
     "title": "Layout Optimizer",
     "totalDistance": "Total Walking Distance",
@@ -1344,38 +1288,6 @@
     "improvement": "Improvement",
     "noSuggestions": "Layout is already optimal.",
     "metres": "m"
-  },
-  "layoutOptimizer": {
-    "title": "Layout Optimizer",
-    "totalDistance": "Total Walking Distance",
-    "efficiencyScore": "Efficiency Score",
-    "suggestions": "Swap Suggestions",
-    "swap": "Swap",
-    "saved": "Saved",
-    "improvement": "Improvement",
-    "noSuggestions": "Layout is already optimal.",
-    "metres": "m"
-  },
-  "timeEstimator": {
-    "title": "Time Estimator",
-    "totalTime": "Total Time",
-    "criticalPath": "Critical Path",
-    "hours": "hours",
-    "minutes": "minutes",
-    "skillLevel": "Skill Level",
-    "beginner": "Beginner",
-    "intermediate": "Intermediate",
-    "expert": "Expert",
-    "cutting": "Cutting",
-    "edgeBanding": "Edge Banding",
-    "drilling": "Drilling",
-    "assembly": "Assembly",
-    "sanding": "Sanding",
-    "finishing": "Finishing",
-    "hardware": "Hardware Installation",
-    "parallel": "Parallel Tasks",
-    "sequential": "Sequential Tasks",
-    "noTasks": "No project tasks defined."
   },
   "timeEstimator": {
     "title": "Time Estimator",
@@ -1411,34 +1323,6 @@
     "noPrice": "No price data available.",
     "currency": "Currency",
     "perUnit": "per unit"
-  },
-  "materialCostTracker": {
-    "title": "Material Cost Tracker",
-    "bestPrice": "Best Price",
-    "supplier": "Supplier",
-    "trend": "Trend",
-    "rising": "Rising",
-    "falling": "Falling",
-    "stable": "Stable",
-    "totalCost": "Total Cost",
-    "anomaly": "Price Anomaly",
-    "noPrice": "No price data available.",
-    "currency": "Currency",
-    "perUnit": "per unit"
-  },
-  "shopInventory": {
-    "title": "Shop Inventory",
-    "stock": "Stock",
-    "inStock": "In Stock",
-    "lowStock": "Low Stock",
-    "outOfStock": "Out of Stock",
-    "reorderLevel": "Reorder Level",
-    "reorderList": "Reorder List",
-    "quantity": "Quantity",
-    "available": "Available",
-    "needed": "Needed",
-    "canFulfil": "Can Fulfil",
-    "noItems": "No inventory items."
   },
   "shopInventory": {
     "title": "Shop Inventory",
@@ -2143,7 +2027,7 @@
     "stringerAngle": "Stringer Angle",
     "ircPass": "Passes IRC 2021 riser and tread limits",
     "riserTooShort": "Riser height below IRC minimum 4\" (101.6 mm)",
-    "riserTooTall": "Riser height exceeds IRC maximum 7\u00be\" (196.85 mm)",
+    "riserTooTall": "Riser height exceeds IRC maximum 7¾\" (196.85 mm)",
     "treadTooShallow": "Tread depth below IRC minimum 10\" (254 mm)"
   },
   "boxJoint": {
@@ -2188,5 +2072,13 @@
     "totalRemoval": "Total Removal",
     "snipeAllowance": "Snipe Allowance (both ends)",
     "effectiveLength": "Effective Usable Length"
+  },
+  "honingGuide": {
+    "title": "Honing Guide Calculator",
+    "microbevelProjection": "Micro-Bevel Projection",
+    "guideHeight": "Guide Height",
+    "bevelAngle": "Bevel Angle",
+    "projection": "Blade Projection",
+    "microbevel": "Micro-Bevel Angle"
   }
 }

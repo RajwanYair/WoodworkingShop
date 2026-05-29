@@ -1431,3 +1431,7 @@ export type { WoodGlueType, GlueCoverageInput, GlueCoverageResult } from './glue
 // Sprint 235 — Lumber Planer Pass Calculator
 export { calculatePlanerPasses } from './planer-passes';
 export type { PlanerPassesInput, PlanerPassesResult } from './planer-passes';
+
+// Sprint 236 — Honing Guide Calculator
+export { calculateHoningGuide } from './honing-guide';
+export type { HoningGuideInput, HoningGuideResult } from './honing-guide';
