@@ -267,17 +267,31 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 238    | Router circle jig calculator (arm length, area, circumference, pivot offset)                    | Engine  |
 | 239    | Release v5.26.0                                                                                 | Release |
 
-### Phase 51 — TBD · v5.27.0 🔄 PLANNING
+### Phase 51 — Shop Math & Geometry Calculators · v5.27.0 ✅ COMPLETE
+
+> **Status**: COMPLETE · **Released**: 2026-05-30 · **Goal**: Table-saw cove cut, moisture shrinkage, rafter length, router template offset
+
+| Sprint | Deliverable                                                           | Track  |
+| ------ | --------------------------------------------------------------------- | ------ |
+| 240    | Table-saw cove cut calculator (fence angle, pass count, blade height) | ✓ Done |
+| 241    | Moisture content & shrinkage calculator (FSP, species coefficients)   | ✓ Done |
+| 242    | Rafter length & birdsmouth calculator (plumb/seat cuts, 1/3 rule)     | ✓ Done |
+| 243    | Router template offset calculator (bushing offset, inside/outside)    | ✓ Done |
+| 244    | Release v5.27.0                                                       | ✓ Done |
+
+---
+
+### Phase 52 — TBD · v5.28.0 🔄 PLANNING
 
 > **Status**: PLANNING · **Goal**: TBD
 
 | Sprint | Deliverable     | Track   |
 | ------ | --------------- | ------- |
-| 240    | TBD             | ⬜ TODO |
-| 241    | TBD             | ⬜ TODO |
-| 242    | TBD             | ⬜ TODO |
-| 243    | TBD             | ⬜ TODO |
-| 244    | Release v5.27.0 | ⬜ TODO |
+| 245    | TBD             | ⬜ TODO |
+| 246    | TBD             | ⬜ TODO |
+| 247    | TBD             | ⬜ TODO |
+| 248    | TBD             | ⬜ TODO |
+| 249    | Release v5.28.0 | ⬜ TODO |
 
 ### Phase 48 — Workshop Geometry & Finishing Calculators · v5.24.0 ✅ COMPLETE
 

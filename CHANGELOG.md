@@ -9,6 +9,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.27.0] — 2026-05-30
+
+### Phase 51 — Shop Math & Geometry Calculators (Sprints 240–243)
+
+#### Sprint 240 — Table-Saw Cove Cut Calculator
+
+- `calculateCoveCut()` — auxiliary fence angle (sin α = W/D), pass count, depth per pass
+- `CoveCutPanel` UI with blade diameter, cove dimensions, max pass depth inputs
+- 12 unit tests covering formula accuracy, defaults, and RangeError guards
+
+#### Sprint 241 — Moisture Content & Shrinkage Calculator
+
+- `calculateMoistureShrinkage()` — dimensional change below FSP using USDA Wood Handbook species coefficients for 9 species
+- `MoistureShrinkagePanel` UI with species selector, grain direction, MC range, and dimension inputs
+- 8 unit tests covering FSP capping, swelling (negative MC delta), and RangeError guards
+
+#### Sprint 242 — Rafter Length & Birdsmouth Calculator
+
+- `calculateRafterLength()` — Pythagorean rafter length, plumb/seat cut angles, birdsmouth depth (1/3 rule)
+- `RafterLengthPanel` UI with span, pitch, plate width, overhang, and shed-roof toggle
+- 13 unit tests covering symmetric/shed modes, 45° identity, and RangeError guards
+
+#### Sprint 243 — Router Template Offset Calculator
+
+- `calculateRouterTemplate()` — bushing offset = (OD − bit) / 2; inside/outside template adjustment per side and total
+- `RouterTemplatePanel` UI with bushing OD, bit diameter, cut type, optional nominal dimension
+- 11 unit tests covering inside/outside adjustment sign, null handling, and RangeError guards
+
 ## [5.26.0] — 2026-05-29
 
 ### Phase 50 — Precision Joinery & Layout Calculators (Sprints 235–238)
