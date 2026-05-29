@@ -1,6 +1,6 @@
 # Roadmap
 
-> **Last strategic review**: 2026-05-29 · **Current version**: 5.24.0
+> **Last strategic review**: 2026-05-29 · **Current version**: 5.26.0
 > **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 This document is the single source of truth for the Cabinet Planner project's
@@ -255,17 +255,29 @@ professional and advanced-DIY workflows. Every decision serves these pillars:
 | 233    | Wood glue coverage calculator (net + recommended volume, 5 glue types, timing)        | ✓ Done |
 | 234    | Release v5.25.0                                                                       | ✓ Done |
 
-### Phase 50 — TBD · v5.26.0 🔄 PLANNING
+### Phase 50 — Precision Joinery & Layout Calculators · v5.26.0 ✅ COMPLETE
+
+> **Status**: COMPLETE · **Released**: 2026-05-29 · **Goal**: Planer passes, honing guide, crown moulding, and router circle jig calculators
+
+| Sprint | Deliverable                                                                                     | Track   |
+| ------ | ----------------------------------------------------------------------------------------------- | ------- |
+| 235    | Lumber planer pass calculator (passes, per-pass depth, snipe allowance, effective board length) | Engine  |
+| 236    | Honing guide calculator (projection for bevel + optional micro-bevel)                           | Engine  |
+| 237    | Crown moulding cut calculator (flat compound vs in-position miter settings)                     | Engine  |
+| 238    | Router circle jig calculator (arm length, area, circumference, pivot offset)                    | Engine  |
+| 239    | Release v5.26.0                                                                                 | Release |
+
+### Phase 51 — TBD · v5.27.0 🔄 PLANNING
 
 > **Status**: PLANNING · **Goal**: TBD
 
 | Sprint | Deliverable     | Track   |
 | ------ | --------------- | ------- |
-| 235    | TBD             | ⬜ TODO |
-| 236    | TBD             | ⬜ TODO |
-| 237    | TBD             | ⬜ TODO |
-| 238    | TBD             | ⬜ TODO |
-| 239    | Release v5.26.0 | ⬜ TODO |
+| 240    | TBD             | ⬜ TODO |
+| 241    | TBD             | ⬜ TODO |
+| 242    | TBD             | ⬜ TODO |
+| 243    | TBD             | ⬜ TODO |
+| 244    | Release v5.27.0 | ⬜ TODO |
 
 ### Phase 48 — Workshop Geometry & Finishing Calculators · v5.24.0 ✅ COMPLETE
 

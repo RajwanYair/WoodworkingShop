@@ -9,6 +9,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.26.0] — 2026-05-29
+
+### Phase 50 — Precision Joinery & Layout Calculators (Sprints 235–238)
+
+#### Sprint 235 — Lumber Planer Pass Calculator
+
+- `calculatePlanerPasses()` — pass count, depth-per-pass, snipe allowance, effective usable board length
+- `PlanerPassesPanel` UI with live planer settings and output metrics
+- 12 unit tests (formula checks, defaults, and RangeError guards)
+
+#### Sprint 236 — Honing Guide Calculator
+
+- `calculateHoningGuide()` — blade projection by bevel angle and guide height, optional micro-bevel projection
+- `HoningGuidePanel` UI for primary bevel + micro-bevel setups
+- 14 unit tests (projection math, micro-bevel behavior, and RangeError guards)
+
+#### Sprint 237 — Crown Moulding Cut Calculator
+
+- `calculateCrownMoulding()` — flat-cut compound miter/bevel or in-position miter calculation
+- `CrownMouldingPanel` UI with cutting method selector and spring-angle guidance note
+- 10 unit tests (flat/in-position formulas and input guards)
+
+#### Sprint 238 — Router Circle Jig Calculator
+
+- `calculateRouterCircle()` — arm length, circumference, area, and pivot offset for disc/hole cuts
+- `RouterCirclePanel` UI with cut mode and jig geometry inputs
+- 10 unit tests (disc/hole formulas, defaults, and RangeError guards)
+
 ## [5.25.0] — 2026-05-29
 
 ### Phase 49 — Woodworking Geometry & Setup Calculators (Sprints 230–233)

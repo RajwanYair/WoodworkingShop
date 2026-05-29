@@ -2,19 +2,29 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.25.0** · **Next target: v5.26.0** (Phase 50)
+> **Current release: v5.26.0** · **Next target: v5.27.0** (Phase 51)
 
-## Active Sprint — Phase 50 (Sprints 235–239)
+## Active Sprint — Phase 51 (Sprints 240–244)
 
 > **Status**: PLANNING · **Goal**: TBD
 
 | Sprint | Feature         | Status |
 | ------ | --------------- | ------ |
-| 235    | TBD             | TODO   |
-| 236    | TBD             | TODO   |
-| 237    | TBD             | TODO   |
-| 238    | TBD             | TODO   |
-| 239    | Release v5.26.0 | TODO   |
+| 240    | TBD             | TODO   |
+| 241    | TBD             | TODO   |
+| 242    | TBD             | TODO   |
+| 243    | TBD             | TODO   |
+| 244    | Release v5.27.0 | TODO   |
+
+## Completed — Phase 50 (Sprints 235–239)
+
+| Sprint | Feature                                                   | Status |
+| ------ | --------------------------------------------------------- | ------ |
+| 235    | Lumber planer pass calculator — engine + UI panel + tests | DONE   |
+| 236    | Honing guide calculator — engine + UI panel + tests       | DONE   |
+| 237    | Crown moulding cut calculator — engine + UI panel + tests | DONE   |
+| 238    | Router circle jig calculator — engine + UI panel + tests  | DONE   |
+| 239    | Release v5.26.0                                           | DONE   |
 
 ## Completed — Phase 49 (Sprints 230–234)
 
