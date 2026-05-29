@@ -2322,5 +2322,18 @@
       "hide": "דבק עור",
       "ca": "דבק CA (ציאנואקרילאט)"
     }
+  },
+  "planerPasses": {
+    "title": "מחשבון מעברי רנדה",
+    "initialThickness": "עובי ראשוני",
+    "targetThickness": "עובי יעד",
+    "maxPassDepth": "עומק מעבר מרבי",
+    "snipeLength": "אורך סנייפ (כל קצה)",
+    "boardLength": "אורך הלוח",
+    "passCount": "מספר מעברים",
+    "depthPerPass": "עומק למעבר",
+    "totalRemoval": "סה״כ הסרה",
+    "snipeAllowance": "קצבת סנייפ (שני קצוות)",
+    "effectiveLength": "אורך שמיש אפקטיבי"
   }
 }

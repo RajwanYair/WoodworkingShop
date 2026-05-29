@@ -28,6 +28,7 @@ import { TaperJigPanel } from './TaperJigPanel';
 import { StairStringerPanel } from './StairStringerPanel';
 import { BoxJointPanel } from './BoxJointPanel';
 import { GlueCoveragePanel } from './GlueCoveragePanel';
+import { PlanerPassesPanel } from './PlanerPassesPanel';
 import { PresetsPanel } from './PresetsPanel';
 import { SaveLoadPanel } from './SaveLoadPanel';
 import { ConstraintSuggestionsPanel } from './ConstraintSuggestionsPanel';
@@ -96,6 +97,9 @@ export function ConfiguratorPanel() {
 
       {/* Sprint 233 — wood glue coverage calculator */}
       <GlueCoveragePanel />
+
+      {/* Sprint 235 — lumber planer pass calculator */}
+      <PlanerPassesPanel />
 
       {/* Sprint 110 — real-time constraint violations and dimension range hints */}
       <ConstraintSuggestionsPanel />

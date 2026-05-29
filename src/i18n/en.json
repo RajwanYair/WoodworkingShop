@@ -2322,5 +2322,18 @@
       "hide": "Hide Glue",
       "ca": "CA (cyanoacrylate)"
     }
+  },
+  "planerPasses": {
+    "title": "Lumber Planer Pass Calculator",
+    "initialThickness": "Initial Thickness",
+    "targetThickness": "Target Thickness",
+    "maxPassDepth": "Max Pass Depth",
+    "snipeLength": "Snipe Length (each end)",
+    "boardLength": "Board Length",
+    "passCount": "Number of Passes",
+    "depthPerPass": "Depth per Pass",
+    "totalRemoval": "Total Removal",
+    "snipeAllowance": "Snipe Allowance (both ends)",
+    "effectiveLength": "Effective Usable Length"
   }
 }
