@@ -6,15 +6,15 @@
 
 ## Active Sprint — Phase 52 (Sprints 245–249)
 
-> **Status**: PLANNING · **Goal**: TBD
+> **Status**: IN PROGRESS · **Goal**: Production Hardening
 
-| Sprint | Feature         | Status |
-| ------ | --------------- | ------ |
-| 245    | TBD             | TODO   |
-| 246    | TBD             | TODO   |
-| 247    | TBD             | TODO   |
-| 248    | TBD             | TODO   |
-| 249    | Release v5.28.0 | TODO   |
+| Sprint | Feature                                                           | Status |
+| ------ | ----------------------------------------------------------------- | ------ |
+| 245    | Truth Alignment & Governance — claim audit + GOVERNANCE-POLICY.md | DONE   |
+| 246    | Code & Config Hardening                                           | TODO   |
+| 247    | Structural Cleanup & Dead Asset Elimination                       | TODO   |
+| 248    | Production Verification Matrix                                    | TODO   |
+| 249    | Release v5.28.0                                                   | TODO   |
 
 ## Completed — Phase 51 (Sprints 240–244)
 

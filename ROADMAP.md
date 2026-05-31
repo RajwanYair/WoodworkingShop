@@ -1,451 +1,186 @@
 # Roadmap
 
-> **Last strategic review**: 2026-05-29 · **Current version**: 5.26.0
-> **Sprint history archive**: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
-
-This document is the single source of truth for the Cabinet Planner project's
-technical strategy, architecture decisions, competitive positioning, and
-forward-looking roadmap. Every decision below has been re-examined from first
-principles as of the date above.
-
----
-
-## North Star
-
-Build the **best-in-class browser-based cabinet planning application** for
-professional and advanced-DIY workflows. Every decision serves these pillars:
-
-| Pillar         | Target Metric                                                           |
-| -------------- | ----------------------------------------------------------------------- |
-| **Fast**       | Lighthouse TBT < 200 ms, FCP < 1.2 s, sub-100 ms config → preview       |
-| **Accurate**   | Manufacturing-grade DXF/G-code that goes to the CNC unchanged           |
-| **Accessible** | WCAG 2.2 AA, ARIA-complete; EN + HE RTL primary; 6 locales total        |
-| **Reliable**   | Zero waivers, zero `eslint-disable`, zero `@ts-ignore`, 90%+ engine cov |
-| **Portable**   | Local-first, zero-backend for all core workflows; PWA offline-capable   |
-| **Extensible** | Versioned plugin API with stability tiers (`stable` / `experimental`)   |
-| **Open**       | MIT license; no proprietary cloud APIs in the critical path             |
-| **Minimal**    | ≤ 8 production dependencies; < 1.5 MB bundle; ≤ 18 config files at root |
-
----
-
-## Industry Competitor Benchmark
-
-### Comparison Table
-
-| Feature / Capability            | Cabinet Planner (this) | CutList Optimizer | SketchList 3D | Polyboard    | CutList Plus fx | Cabinet Vision | Fusion 360  | Mozaik       | Roomle         | KitchenDraw   |
-| ------------------------------- | ---------------------- | ----------------- | ------------- | ------------ | --------------- | -------------- | ----------- | ------------ | -------------- | ------------- |
-| **Price**                       | Free / MIT OSS         | Free (basic)      | $167–$497/yr  | €330 one-off | $79–$159        | Enterprise $   | $545/yr     | $99–$499/yr  | Free (B2B lic) | €1,500–€4,000 |
-| **Platform**                    | Browser (PWA)          | Browser           | Windows only  | Windows only | Windows only    | Windows only   | Cloud + Win | Windows only | Browser        | Windows only  |
-| **Cut optimization**            | MaxRects BSSF multi    | Simple 2D         | Basic         | Guillotine   | Advanced        | Proprietary    | None        | Basic 2D     | None           | None          |
-| **G-code export**               | Yes (G2/G3 arcs, M6)   | No                | No            | WoodWOP only | No              | WoodWOP/Grbl   | Yes         | Yes (CNC)    | No             | DXF only      |
-| **DXF export**                  | Yes (layers, colors)   | No                | Basic         | Yes          | No              | Yes            | Yes         | Yes          | Limited        | Yes           |
-| **PDF build plans**             | Yes (off-thread)       | No                | Yes           | Yes          | Yes             | Yes            | Yes         | Yes          | Yes            | Yes           |
-| **3D preview**                  | SVG isometric + WebGPU | No                | Full 3D       | 3D           | No              | Full 3D        | Full 3D     | Full 3D      | Full 3D WebGL  | Full 3D       |
-| **Assembly guide**              | Yes (DAG + timer)      | No                | No            | No           | No              | Yes            | No          | Yes          | Basic          | No            |
-| **Hardware BOM**                | Yes (vendor catalog)   | No                | Basic         | Yes          | No              | Yes            | No          | Yes          | Yes            | Yes           |
-| **Grain direction**             | Yes (report + lock)    | Yes               | No            | Yes          | Yes             | Yes            | No          | Yes          | No             | Yes           |
-| **WCAG 2.2 AA accessible**      | Yes                    | No                | No            | No           | No              | No             | Partial     | No           | Partial        | No            |
-| **RTL support (Hebrew/Arabic)** | Yes (6 locales)        | No                | No            | No           | No              | No             | UI only     | No           | No             | No            |
-| **Offline capable (PWA)**       | Yes                    | No                | N/A (desktop) | N/A          | N/A             | N/A            | No          | N/A          | No             | N/A           |
-| **Plugin API**                  | Yes (versioned)        | No                | No            | No           | No              | Proprietary    | Yes         | No           | Embed API      | No            |
-| **Open source**                 | MIT                    | No                | No            | No           | No              | No             | No          | No           | No             | No            |
-| **Community material catalog**  | Yes                    | No                | No            | Limited      | No              | No             | Yes         | Yes          | Manufacturer   | No            |
-| **IFC/STEP/glTF export**        | Yes                    | No                | No            | No           | No              | No             | Yes         | No           | STEP           | No            |
-| **WebSerial CNC streaming**     | Yes                    | No                | No            | No           | No              | No             | CAM only    | No           | No             | No            |
-| **Cost estimation**             | Yes (variance tracker) | No                | Manual        | Yes          | Manual          | Yes            | No          | Yes          | Yes            | Yes           |
-| **Stock management**            | Yes                    | No                | No            | Yes          | No              | Yes            | No          | Yes          | No             | No            |
-| **Mobile support**              | PWA + Capacitor        | Responsive        | No            | No           | No              | No             | iOS app     | No           | Responsive     | No            |
-| **Production dependencies**     | 8                      | Unknown           | 50+           | Desktop      | Desktop         | Desktop        | Cloud       | Desktop      | ~80+           | Desktop       |
-| **Bundle size (JS)**            | < 1.8 MB               | ~500 KB           | Desktop       | Desktop      | Desktop         | Desktop        | Cloud       | Desktop      | ~3 MB          | Desktop       |
-| **Zero-install / zero-signup**  | Yes                    | Signup required   | Download      | Download     | Download        | Download       | Signup      | Download     | Signup         | Download      |
-
-### Competitive Advantages (Unique to This Project)
-
-1. **Only fully-accessible (WCAG AA) cut optimizer** in the market
-2. **Only browser-based app with G-code export** (G2/G3 arcs, tool change M6)
-3. **Only OSS app with a formal versioned plugin API** with stability contracts
-4. **Only app combining cut optimization + assembly guide + hardware BOM** in browser
-5. **Only RTL-first (Hebrew + Arabic) woodworking planner** in existence
-6. **Smallest dependency footprint**: 8 production deps vs. 50+ in comparable tools
-7. **Only zero-install, zero-signup** professional-grade cabinet planner
-
-### Methods Harvested from Competitors
-
-| From              | Method / Pattern                             | Adoption Status                          |
-| ----------------- | -------------------------------------------- | ---------------------------------------- |
-| SketchList 3D     | Parametric constraint engine (min/max/ratio) | ✅ Done — Phase 25 Sprint 109            |
-| SketchList 3D     | Reusable design template library             | ✅ Done — Phase 27 Sprint 120            |
-| Polyboard         | Guillotine-first then MaxRects fallback      | ✅ Done — Phase 25 co-nesting            |
-| Cabinet Vision    | Joint library with automatic selection       | ✅ Done — Phase 25 Sprint 108            |
-| CutList Plus fx   | Multi-material co-nesting on shared sheets   | ✅ Done — Phase 25 Sprint 107            |
-| Fusion 360        | WebGPU PBR material rendering                | ✅ Done — Phase 26 Sprint 113            |
-| Fusion 360        | Generative design suggestions                | ✅ Done — Phase 27 Sprint 119            |
-| Figma             | CRDT multiplayer with conflict-free cursors  | ✅ Done — Phase 27 Sprint 117–118        |
-| CutList Optimizer | Instant optimization preview (< 50 ms)       | ✅ Achieved — maintained via bench gates |
-| Mozaik            | Full-room layout with wall/floor placement   | Phase 34 — Room Planner v2               |
-| Mozaik            | Cabinet-to-machining center direct link      | Phase 35 — CNC integration               |
-| Roomle            | Manufacturer catalog embedding API           | Phase 34 — Community Catalog v2          |
-| Roomle            | AR walkthrough / first-person view           | Phase 35 — WebXR immersive               |
-| KitchenDraw       | Appliance clearance zone validation          | Phase 34 — Room Planner v2               |
-
-### Gaps to Close (Priority-Ordered)
-
-| #   | Gap                                        | Best-in-Class Reference      | Target Phase | Impact   |
-| --- | ------------------------------------------ | ---------------------------- | ------------ | -------- |
-| 1   | Automated Lighthouse CI gates (GH Actions) | vercel/next.js, Astro        | Phase 33     | Critical |
-| 2   | CSP headers + Subresource Integrity        | Security-hardened SPAs       | Phase 33     | Critical |
-| 3   | Error monitoring (privacy-first)           | Sentry, Cloudflare Analytics | Phase 33     | High     |
-| 4   | Full-room layout (appliance clearances)    | Mozaik, KitchenDraw, Roomle  | Phase 34     | High     |
-| 5   | Manufacturer catalog embedding             | Roomle, IKEA Planner         | Phase 34     | High     |
-| 6   | Cloud sync with E2E encryption             | Figma, Onshape               | Phase 35     | Medium   |
-| 7   | AR walkthrough / first-person view         | Roomle, Matterport           | Phase 35     | Medium   |
-| 8   | Native mobile app (full offline)           | Fusion 360 iOS, Mozaik       | Phase 35     | Low      |
-
----
-
-## Completed Phases Summary
-
-| Phase | Version     | Title                           | Key Deliverables                                                               |
-| ----- | ----------- | ------------------------------- | ------------------------------------------------------------------------------ |
-| 1–11  | v3.50–v3.61 | Foundation → Quality → DX       | Zero warnings, workers, IndexedDB, a11y, plugins, G-code, ESLint 10            |
-| 12–14 | v3.61–v3.66 | Optimizer → Hardware → Collab   | Offcuts, DXF, vendor catalog, CRDT, SBOM, multi-currency                       |
-| 15–17 | v3.66–v3.73 | Manufacturing → DX → Efficiency | Kerf, templates, batch replace, Comlink, it.each, docs consolidation           |
-| 18    | v3.75.0     | Visual Fidelity & UX            | Material textures, isometric SVG, nesting animation, onboarding, print         |
-| 19    | v4.0.0      | Machine Integration & Community | WebSerial Grbl, machine profiles, community material catalog                   |
-| 20    | v4.1.0      | Enterprise & Mobile             | IFC/STEP/glTF export, Capacitor, mobile touch UI, ZIP bundle                   |
-| 21    | v4.2.0      | Marketplace + Build UX          | Plugin marketplace, finish calculator, build log, focus mode                   |
-| 22    | v4.3.0      | Workshop Intelligence           | Waste analytics, mirror/clone, cut checklist, cost summary export              |
-| 23    | v4.4.0      | Precision Workflows             | Stock tracker, grain report, cost variance, part labels                        |
-| 24    | v5.0.0      | Production Hardening & Reset    | Zero errors/warnings/dead code, full CI pass, architecture reset               |
-| 25    | v5.1.0      | Optimizer Intelligence v2       | Multi-material co-nesting, joint library, constraint solver, suggestions panel |
-| 26    | v5.2.0      | Visual Engine Upgrade           | WebGPU renderer, PBR materials, 3D preview, WebXR AR placement                 |
-| 27    | v5.3.0      | Collaboration & Intelligence    | CRDT sync, cloud queue, AI layout suggestions, shared project library          |
-| 28    | v5.4.0      | Performance & Plugin Ecosystem  | ERP/MRP export, ISO 7171 compliance, multi-project workspace, audit trail      |
-| 29    | v5.5.0      | Plugin Marketplace & Mobile     | Plugin registry, Capacitor native, analytics dashboard, bundle < 1.4 MB        |
-| 30    | v5.6.0      | AI Assistant & Advanced Export  | AI design assistant, glTF/IFC 4.3, WebSerial v2, stock management              |
-| 31    | v5.7.0      | UI Polish & Accessibility       | WCAG 2.2 AA audit, dark mode, component splitting, bundle < 400 KB gzipped     |
-| 32    | v5.8.0      | Developer Experience & Plugins  | Plugin API v2, TypeDoc site, 88% test coverage, Vitest reporter, lint summary  |
-| 33    | v5.9.0      | Production Infrastructure       | Lighthouse CI, CSP hardening, PWA v2, error monitoring                         |
-| 34    | v5.10.0     | Room Planner v2 & Community     | Room layout v2, manufacturer catalog, appliance clearance, machining link      |
-| 35    | v5.11.0     | CNC Workflow & Cloud Sync       | CNC job queue, E2E cloud sync, multi-machine distribution, project sharing     |
-| 36    | v5.12.0     | Advanced Workflows & Design     | Parametric templates, batch export, material yield optimizer, version history  |
-| 37    | v5.13.0     | Advanced Manufacturing Tools    | Production schedule, nesting patterns, tool wear tracker, design comparison    |
-
----
-
-## Active Roadmap
-
-### Phase 26 — Visual Engine Upgrade · v5.2.0 ✓ COMPLETE
-
-> **Status**: COMPLETE · **Released**: 2026-05-26
-
-| Sprint | Deliverable                                                     | Status | Track   |
-| ------ | --------------------------------------------------------------- | ------ | ------- |
-| 112    | WebGPU renderer scaffolding (fallback to WebGL2)                | ✓ Done | Engine  |
-| 113    | PBR material system (wood grain, edge banding, hardware chrome) | ✓ Done | Assets  |
-| 114    | Interactive 3D cabinet preview (orbit, pan, zoom, explode view) | ✓ Done | UI      |
-| 115    | AR placement via WebXR (scan room → place cabinet)              | ✓ Done | Feature |
-| 116    | Version bump 5.2.0, CHANGELOG, GH release                       | ✓ Done | Release |
-
-### Phase 25 — Optimizer Intelligence v2 · v5.1.0 ✓ COMPLETE
-
-> **Status**: COMPLETE · **Released**: 2026-05-26
-
-| Sprint | Deliverable                                                          | Status | Track   |
-| ------ | -------------------------------------------------------------------- | ------ | ------- |
-| 107    | Multi-material co-nesting optimizer (shared sheets across materials) | ✓ Done | Engine  |
-| 108    | Parametric joint library (mortise-tenon, dovetail, pocket-hole)      | ✓ Done | Engine  |
-| 109    | Constraint solver (min/max/ratio rules for dimensions)               | ✓ Done | Engine  |
-| 110    | Optimization suggestions panel (AI-free heuristic recommendations)   | ✓ Done | UI      |
-| 111    | Version bump 5.1.0, CHANGELOG, GH release                            | ✓ Done | Release |
-
-### Phase 27 — Collaboration & Intelligence · v5.3.0 ✅ COMPLETE
-
-> **Goal**: Real-time multiplayer editing and AI-powered design assistance.
-
-| Sprint | Deliverable                                                                | Track   |
-| ------ | -------------------------------------------------------------------------- | ------- |
-| 117    | CRDT collaboration presence layer (LWW-Register + Lamport timestamps)      | Engine  |
-| 118    | Cloud project sync engine (IndexedDB-to-remote queue with delta/merge)     | Engine  |
-| 119    | AI layout suggestions heuristic engine (7 rule-based heuristics + scoring) | AI      |
-| 120    | Shared project library & catalog (search / filter / sort / export/import)  | Feature |
-| 121    | Version bump 5.3.0, CHANGELOG, GH release                                  | Release |
-
-### Phase 28 — Performance & Plugin Ecosystem · v5.4.0 ✅ COMPLETE
-
-> **Goal**: Bundle performance, plugin marketplace foundation, and enterprise export standards.
-
-| Sprint | Deliverable                                                    | Track   |
-| ------ | -------------------------------------------------------------- | ------- |
-| 122    | ERP/MRP export format (SAP, Oracle, custom webhook)            | Export  |
-| 123    | ISO 7171 compliance validation (furniture dimension standards) | Engine  |
-| 124    | Multi-project workspace (tabs, cross-project material sharing) | UI      |
-| 125    | Audit trail and version diffing (full project history)         | Feature |
-| 126    | Version bump 5.4.0, CHANGELOG, GH release                      | Release |
-
-### Phase 29 — Plugin Marketplace & Mobile Native · v5.5.0
-
-> **Status**: ✅ COMPLETE · **Released**: 2026-06-09
-
-| Sprint | Deliverable                                                       | Track   |
-| ------ | ----------------------------------------------------------------- | ------- |
-| 127    | Plugin marketplace foundation (registry, install, enable/disable) | Feature |
-| 128    | Native mobile app (Capacitor iOS/Android + offline-first sync)    | Mobile  |
-| 129    | Advanced analytics dashboard (usage, material, cost trends)       | Feature |
-| 130    | Bundle performance (code-splitting, lazy chunks, < 1.4 MB target) | Perf    |
-| 131    | Release v5.5.0                                                    | Release |
-
-### Phase 30 — AI Assistant & Advanced Export · v5.6.0
-
-> **Status**: ✅ COMPLETE · **Released**: 2026-06-10
-
-| Sprint | Deliverable                                                                   | Track   |
-| ------ | ----------------------------------------------------------------------------- | ------- |
-| 132    | AI design assistant engine (constraint-based layout suggestions)              | AI      |
-| 133    | glTF 2.0 / IFC 4.3 export (standards-grade 3D output)                         | Export  |
-| 134    | WebSerial CNC streaming v2 (real-time progress, pause/resume, error recovery) | CNC     |
-| 135    | Advanced stock management (purchase orders, reorder alerts, waste tracking)   | Feature |
-| 136    | Release v5.6.0                                                                | Release |
-
-### Phase 31 — UI Polish & Accessibility · v5.7.0 ✅ COMPLETE
-
-> **Status**: COMPLETE · **Goal**: WCAG 2.2 AA audit remediation, dark mode, component splitting, performance
-
-| Sprint | Deliverable                                                            | Track       |
-| ------ | ---------------------------------------------------------------------- | ----------- |
-| 137    | WCAG 2.2 AA full audit & remediation (axe-core zero violations)        | A11y        |
-| 138    | Dark mode (design tokens + Tailwind CSS v4 theme switching)            | UI          |
-| 139    | Large component splitting (≤ 600 lines each, react-refresh compliance) | Refactor    |
-| 140    | Bundle optimisation (lazy chunks, tree-shaking, < 400 KB gzipped)      | Performance |
-| 141    | Release v5.7.0                                                         | Release     |
-
-### Phase 32 — Developer Experience & Plugin Ecosystem · v5.8.0 ✅ COMPLETE
-
-> **Status**: COMPLETE · **Released**: 2026-06-10 · **Coverage achieved**: 88.65% statements / 89.08% lines
-
-| Sprint | Deliverable                                                         | Track   |
-| ------ | ------------------------------------------------------------------- | ------- |
-| 142    | Plugin API v2 (typed event bus, lifecycle hooks, sandboxed context) | DX      |
-| 143    | TypeDoc API documentation site (auto-generated from engine JSDoc)   | Docs    |
-| 144    | Test coverage uplift to 85% — 88.65% stmts / 89.08% lines achieved  | Quality |
-| 145    | DX tooling (Vitest reporter, structured lint summary, Vitest 4 fix) | DX      |
-| 146    | Release v5.8.0                                                      | Release |
-
-### Phase 33 — Production Infrastructure & Observability · v5.9.0
-
-> **Status**: ✓ DONE · **Goal**: Lighthouse CI gates, security hardening, PWA v2, error monitoring
-
-| Sprint | Deliverable                                                              | Track  |
-| ------ | ------------------------------------------------------------------------ | ------ |
-| 147    | Lighthouse CI automation (GH Actions gates: TBT < 200 ms, FCP < 1.2 s)   | ✓ Done |
-| 148    | Security hardening (CSP headers, Subresource Integrity, OWASP audit)     | ✓ Done |
-| 149    | PWA v2 (enhanced offline caching, install prompt refinement)             | ✓ Done |
-| 150    | Error monitoring — privacy-first telemetry (Cloudflare Analytics/Sentry) | ✓ Done |
-| 151    | Release v5.9.0                                                           | ✓ Done |
-
-### Phase 49 — Woodworking Geometry & Setup Calculators · v5.25.0 ✅ COMPLETE
-
-> **Status**: COMPLETE · **Released**: 2026-05-29 · **Goal**: Taper jig, stair stringer, box joint, and wood glue coverage calculators
-
-| Sprint | Deliverable                                                                           | Track  |
-| ------ | ------------------------------------------------------------------------------------- | ------ |
-| 230    | Taper jig calculator (jig offset, taper angle, taper-per-foot for 1- or 2-face taper) | ✓ Done |
-| 231    | Stair stringer calculator (riser count, tread count, stringer length, IRC validation) | ✓ Done |
-| 232    | Box joint calculator (odd finger count, socket count, glue surface area, edge waste)  | ✓ Done |
-| 233    | Wood glue coverage calculator (net + recommended volume, 5 glue types, timing)        | ✓ Done |
-| 234    | Release v5.25.0                                                                       | ✓ Done |
-
-### Phase 50 — Precision Joinery & Layout Calculators · v5.26.0 ✅ COMPLETE
-
-> **Status**: COMPLETE · **Released**: 2026-05-29 · **Goal**: Planer passes, honing guide, crown moulding, and router circle jig calculators
-
-| Sprint | Deliverable                                                                                     | Track   |
-| ------ | ----------------------------------------------------------------------------------------------- | ------- |
-| 235    | Lumber planer pass calculator (passes, per-pass depth, snipe allowance, effective board length) | Engine  |
-| 236    | Honing guide calculator (projection for bevel + optional micro-bevel)                           | Engine  |
-| 237    | Crown moulding cut calculator (flat compound vs in-position miter settings)                     | Engine  |
-| 238    | Router circle jig calculator (arm length, area, circumference, pivot offset)                    | Engine  |
-| 239    | Release v5.26.0                                                                                 | Release |
-
-### Phase 51 — Shop Math & Geometry Calculators · v5.27.0 ✅ COMPLETE
-
-> **Status**: COMPLETE · **Released**: 2026-05-30 · **Goal**: Table-saw cove cut, moisture shrinkage, rafter length, router template offset
-
-| Sprint | Deliverable                                                           | Track  |
-| ------ | --------------------------------------------------------------------- | ------ |
-| 240    | Table-saw cove cut calculator (fence angle, pass count, blade height) | ✓ Done |
-| 241    | Moisture content & shrinkage calculator (FSP, species coefficients)   | ✓ Done |
-| 242    | Rafter length & birdsmouth calculator (plumb/seat cuts, 1/3 rule)     | ✓ Done |
-| 243    | Router template offset calculator (bushing offset, inside/outside)    | ✓ Done |
-| 244    | Release v5.27.0                                                       | ✓ Done |
-
----
-
-### Phase 52 — TBD · v5.28.0 🔄 PLANNING
-
-> **Status**: PLANNING · **Goal**: TBD
-
-| Sprint | Deliverable     | Track   |
-| ------ | --------------- | ------- |
-| 245    | TBD             | ⬜ TODO |
-| 246    | TBD             | ⬜ TODO |
-| 247    | TBD             | ⬜ TODO |
-| 248    | TBD             | ⬜ TODO |
-| 249    | Release v5.28.0 | ⬜ TODO |
-
-### Phase 48 — Workshop Geometry & Finishing Calculators · v5.24.0 ✅ COMPLETE
-
-> **Status**: COMPLETE · **Released**: 2026-05-29 · **Goal**: Kerf bending, dado/rabbet joints, finishing coats, wood turning speeds, frame and panel construction
-
-| Sprint | Deliverable                                                                      | Track  |
-| ------ | -------------------------------------------------------------------------------- | ------ |
-| 225    | Kerf bending calculator (kerf spacing, depth, bend radius for panels)            | ✓ Done |
-| 226    | Dado/rabbet joint calculator (width, depth, blade/bit recommendation)            | ✓ Done |
-| 227    | Finishing coat calculator (coverage, coats, dry time, product volume)            | ✓ Done |
-| 228    | Wood turning speed calculator (safe RPM by blank diameter and species)           | ✓ Done |
-| 229    | Frame and panel calculator (panel float, groove dimensions, expansion allowance) | ✓ Done |
-| 230    | Release v5.24.0                                                                  | ✓ Done |
-
-### Phase 47 — Cabinet Hardware Sizing Calculators · v5.23.0 ✅ COMPLETE
-
-> **Status**: COMPLETE · **Released**: 2026-05-28 · **Goal**: Cabinet door sizing, face frame, drawer box, screw pull-out estimation
-
-| Sprint | Deliverable                                                               | Track  |
-| ------ | ------------------------------------------------------------------------- | ------ |
-| 220    | Cabinet door sizing calculator — engine (overlay, leaf size, hinge count) | ✓ Done |
-| 221    | Face frame calculator — engine + UI panel + 11 tests                      | ✓ Done |
-| 222    | Cabinet door sizing calculator — UI panel (overlay selector, door toggle) | ✓ Done |
-| 223    | Drawer box sizing calculator — engine + UI panel + tests                  | ✓ Done |
-| 224    | Screw pull-out strength estimator — NDS formula, 4 density classes, UI    | ✓ Done |
-| 225    | Release v5.23.0                                                           | ✓ Done |
-
-### Phase 46 — Workspace & Tooling · v5.22.0 ✅ COMPLETE
-
-> **Status**: COMPLETE · **Released**: 2026-05-27 · **Goal**: VS Code / Copilot integration, strategic review, all TypeScript errors resolved, production readiness
-
-| Sprint | Deliverable                                                                               | Track  |
-| ------ | ----------------------------------------------------------------------------------------- | ------ |
-| 215    | SVG quality improvements + VS Code / Copilot workspace integration                        | ✓ Done |
-| 216    | Strategic ROADMAP review — competitor table, gap analysis, enhanced Copilot instructions  | ✓ Done |
-| 217    | Production readiness — 26 TypeScript errors resolved, dead code removed, quality gates    | ✓ Done |
-| 218    | Engine barrel fix — 13 duplicate-export aliases, type narrowing fixes in 5 engine modules | ✓ Done |
-| 219    | Release v5.22.0                                                                           | ✓ Done |
-
-### Phase 45 — Power Tool Setup Calculators · v5.21.0 ✅ COMPLETE
-
-> **Status**: COMPLETE · **Released**: 2026-05-27 · **Goal**: Finger joints, pilot holes, glue timing, bandsaw speed, tablesaw blade height
-
-- Sprint 210: Finger joint calculator (box joint layout, finger/socket positions, glue area) — ✓ Done
-- Sprint 211: Wood screw pilot hole calculator (gauge lookup, clearance hole, countersink) — ✓ Done
-- Sprint 212: Glue-up time calculator (open/clamp/cure time, clamp count, env factors) — ✓ Done
-- Sprint 213: Bandsaw blade speed calculator (SFPM, TPI selection, feed rate) — ✓ Done
-- Sprint 214: Tablesaw blade height calculator (blade exposure, dado depth, feasibility) — ✓ Done
-
-### Phase 44 — Advanced Joinery Planning Tools · v5.20.0 ✅ COMPLETE
-
-> **Status**: COMPLETE · **Released**: 2026-05-27 · **Goal**: Mortise-tenon sizing, shelf deflection, router pass depth, biscuit layout, sanding progression
-
-- Sprint 205: Mortise & tenon calculator (joint sizing, glue area, chisel recommendation) — ✓ Done
-- Sprint 206: Shelf deflection calculator (sag estimate, ratio checks, modulus lookup) — ✓ Done
-- Sprint 207: Router depth-of-cut calculator (pass schedule, chip load, RPM guidance) — ✓ Done
-- Sprint 208: Biscuit joinery calculator (size selection, slot depth, layout positions) — ✓ Done
-- Sprint 209: Sanding progression planner (grit sequence, effort and sheet estimates) — ✓ Done
-
-### Phase 43 — Precision Workshop Calculators · v5.19.0 ✅ COMPLETE
-
-> **Status**: COMPLETE · **Released**: 2025-07-18 · **Goal**: Precision calculators for angles, shelf pins, drawer slides, drying, dovetails
-
-| Sprint | Deliverable                                                          | Track  |
-| ------ | -------------------------------------------------------------------- | ------ |
-| 200    | Miter & compound angle calculator (polygon, compound, crown molding) | ✓ Done |
-| 201    | Shelf pin spacing calculator (single/double/euro 32, drill depth)    | ✓ Done |
-| 202    | Drawer slide calculator (side/under/center mount, box dimensions)    | ✓ Done |
-| 203    | Wood drying time estimator (air/kiln, species, defect risk)          | ✓ Done |
-| 204    | Dovetail layout calculator (through/half-blind, pin/tail spacing)    | ✓ Done |
-
-### Phase 42 — Advanced Joinery & Workshop Tools · v5.18.0 ✅ COMPLETE
-
-> **Status**: COMPLETE · **Released**: 2025-07-18 · **Goal**: Pocket hole, veneer, clamp pressure, drill press, board-feet
-
-| Sprint | Deliverable                                                                | Track  |
-| ------ | -------------------------------------------------------------------------- | ------ |
-| 195    | Pocket hole joinery calculator (screw length, drill angle, spacing)        | ✓ Done |
-| 196    | Veneer calculator (sheet count, strip layout, adhesive volume)             | ✓ Done |
-| 197    | Clamp pressure calculator (force distribution, spacing, clamping time)     | ✓ Done |
-| 198    | Drill press speed calculator (RPM by bit type, material, diameter)         | ✓ Done |
-| 199    | Board-feet calculator (nominal-to-actual, species cost, linear conversion) | ✓ Done |
-
-### Phase 41 — Measurement & Estimation Tools · v5.17.0 ✅ COMPLETE
-
-> **Status**: COMPLETE · **Released**: 2025-07-18 · **Goal**: Wood movement, feed rate, weight estimation, dowel joints, panel labels
-
-| Sprint | Deliverable                                                          | Track  |
-| ------ | -------------------------------------------------------------------- | ------ |
-| 190    | Wood movement calculator (seasonal expansion/contraction by species) | ✓ Done |
-| 191    | Toolpath feed rate calculator (chip load, spindle speed, feed rate)  | ✓ Done |
-| 192    | Cabinet weight estimator (panel weights, hardware, total assembly)   | ✓ Done |
-| 193    | Dowel joint calculator (diameter, depth, spacing, pull-out strength) | ✓ Done |
-| 194    | Panel layout label generator (QR codes, part IDs, grain arrows)      | ✓ Done |
-
-### Phase 40 — Material Management & Templates · v5.16.0 ✅ COMPLETE
-
-> **Status**: COMPLETE · **Released**: 2025-07-15 · **Goal**: Material cost tracking, inventory management, template library, edge banding
-
-| Sprint | Deliverable                                                            | Track  |
-| ------ | ---------------------------------------------------------------------- | ------ |
-| 182    | Material cost tracker (historical prices, trends, budget alerts)       | ✓ Done |
-| 183    | Shop inventory manager (stock levels, reorder lists, fulfilment check) | ✓ Done |
-| 184    | Cabinet template library (6 built-in parametric templates)             | ✓ Done |
-| 185    | Edge banding calculator (exposure detection, grouping, wastage)        | ✓ Done |
-| 186    | Release v5.16.0                                                        | ✓ Done |
-
-### Phase 38 — Shop Floor Intelligence & Workflow Automation · v5.14.0 ✅ COMPLETE
-
-> **Status**: COMPLETE · **Released**: 2025-07-15 · **Goal**: Dust collection sizing, cut-list grouping, assembly scheduling, workshop safety
-
-| Sprint | Deliverable                                                          | Track  |
-| ------ | -------------------------------------------------------------------- | ------ |
-| 172    | Dust collection estimator (CFM sizing, duct loss, HP recommendation) | ✓ Done |
-| 173    | Cut-list grouping engine (multi-criteria batching, grain merge)      | ✓ Done |
-| 174    | Assembly dependency resolver (topo-sort, CPM, parallel waves)        | ✓ Done |
-| 175    | Workshop safety checker (clearance zones, PPE, noise, safety score)  | ✓ Done |
-| 176    | Release v5.14.0                                                      | ✓ Done |
-
-### Phase 37 — Advanced Manufacturing Tools · v5.13.0 ✅ COMPLETE
-
-> **Status**: COMPLETE · **Released**: 2026-07-01 · **Goal**: Production scheduling, nesting pattern library, tool wear tracking, design comparison
-
-| Sprint | Deliverable                                                               | Track  |
-| ------ | ------------------------------------------------------------------------- | ------ |
-| 167    | Production schedule planner (jobs, priorities, conflict detection)        | ✓ Done |
-| 168    | Nesting pattern library (save/recall/score cut-sheet patterns)            | ✓ Done |
-| 169    | Tool wear tracker (inventory, usage log, maintenance alerts)              | ✓ Done |
-| 170    | Design comparison engine (7-criterion weighted scoring, radar chart data) | ✓ Done |
-| 171    | Release v5.13.0                                                           | ✓ Done |
-
-### Phase 36 — Advanced Workflows & Design Exploration · v5.12.0 ✅ COMPLETE
-
-> **Status**: COMPLETE · **Released**: 2026-06-29 · **Goal**: Parametric templates, batch export, material yield optimization, version history
-
-| Sprint | Deliverable                                                              | Track  |
-| ------ | ------------------------------------------------------------------------ | ------ |
-| 162    | Parametric template engine (reusable templates, expressions, validation) | ✓ Done |
-| 163    | Batch export pipeline (multi-format, multi-cabinet, progress tracking)   | ✓ Done |
-| 164    | Material yield optimizer (multi-sheet scheduling, waste minimization)    | ✓ Done |
-| 165    | Version history & branching (timeline, diff, branch/merge)               | ✓ Done |
-| 166    | Release v5.12.0                                                          | ✓ Done |
-
-### Phase 35 — CNC Workflow & Cloud Sync · v5.11.0 ✅ COMPLETE
-
-> **Status**: COMPLETE · **Released**: 2026-06-10 · **Goal**: CNC job scheduling, encrypted cloud sync, multi-machine distribution, project sharing
-
-| Sprint | Deliverable                                                            | Track  |
-| ------ | ---------------------------------------------------------------------- | ------ |
-| 157    | CNC job queue with priority scheduling (critical/high/normal/low)      | ✓ Done |
-| 158    | Cloud sync engine with E2E encryption (AES-256-GCM, PBKDF2)            | ✓ Done |
-| 159    | Multi-machine workflow distribution (capability-match, load balancing) | ✓ Done |
-| 160    | Project sharing links with expiration (token-based, permissions)       | ✓ Done |
-| 161    | Release v5.11.0                                                        | ✓ Done |
+> Last strategic reset: 2026-05-30
+> Current release line: 5.27.x
+
+This roadmap is intentionally rewritten from first principles and constrained to verifiable repository reality. Historical sprint detail remains in [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md) and release detail remains in [CHANGELOG.md](CHANGELOG.md).
+
+## Product Direction
+
+Build a best-in-class, local-first woodworking planner that is trusted for production output and safe for long-term maintenance.
+
+### North Star KPIs
+
+| Area          | KPI                                                                                 | Gate                      |
+| ------------- | ----------------------------------------------------------------------------------- | ------------------------- |
+| Reliability   | Typecheck, lint, tests, build, bundle, bench all pass                               | Required on every release |
+| Correctness   | No suppressed diagnostics in source (`eslint-disable`, `@ts-ignore`, `@ts-nocheck`) | Required                  |
+| Performance   | Lighthouse budgets pass and bundle budget pass                                      | Required                  |
+| Accessibility | WCAG 2.2 AA in automated and manual audits                                          | Required                  |
+| Security      | No high/critical findings in dependency and code scanning                           | Required                  |
+| i18n quality  | EN and HE parity plus full-locale coverage                                          | Required                  |
+
+## Decision Reset
+
+### Frontend
+
+| Topic         | Current Decision                                   | Rethink Outcome                                                                  |
+| ------------- | -------------------------------------------------- | -------------------------------------------------------------------------------- |
+| UI platform   | React + TypeScript + Vite                          | Keep; optimize architecture boundaries                                           |
+| State         | Zustand single-store plus slices                   | Keep; enforce selector hygiene and action contracts                              |
+| Styling       | Tailwind v4 tokenized approach                     | Keep; expand token governance and visual regression tests                        |
+| Rendering     | SVG-first preview with optional advanced rendering | Keep SVG as canonical manufacturing view, isolate advanced rendering experiments |
+| Accessibility | Lint + Playwright axe coverage                     | Expand with keyboard-path regression matrix                                      |
+
+### Backend and Data
+
+| Topic                | Current Decision                 | Rethink Outcome                                                  |
+| -------------------- | -------------------------------- | ---------------------------------------------------------------- |
+| Runtime architecture | Local-first, no required backend | Keep as default product architecture                             |
+| Persistence          | Browser storage and file exports | Keep; define migration/versioning policy for stored project data |
+| Cloud integration    | Optional/future                  | Keep optional; no cloud dependency for core workflows            |
+| Database             | No central DB in critical path   | Keep; if introduced later, require offline-first sync model      |
+
+### Language, Methods, and Architecture
+
+| Topic            | Current Decision                     | Rethink Outcome                                            |
+| ---------------- | ------------------------------------ | ---------------------------------------------------------- |
+| Language         | Strict TypeScript 6                  | Keep and tighten invariant checks                          |
+| Engine design    | Pure compute modules in `src/engine` | Keep; enforce purity and deterministic tests               |
+| Component design | Feature-grouped components           | Keep; split overgrown files and remove cross-layer leakage |
+| Testing method   | Unit + bench + e2e                   | Keep; add mutation-risk suites for core formulas           |
+
+### Configuration and Toolchain
+
+| Topic                 | Current Decision                         | Rethink Outcome                                        |
+| --------------------- | ---------------------------------------- | ------------------------------------------------------ |
+| Quality orchestration | Parallel scripts + CI pipelines          | Keep; remove any hidden non-blocking behavior          |
+| Release flow          | Tag-driven GitHub Actions                | Keep; add mandatory check gate inside release workflow |
+| Editor config         | Some validators disabled to reduce noise | Shift to stricter defaults for production mode         |
+| Intermediate outputs  | Temp-first policy                        | Keep and verify in scripts/workflows                   |
+
+## External Sources and API Strategy
+
+| Source Type         | Policy                                                           |
+| ------------------- | ---------------------------------------------------------------- |
+| NPM dependencies    | Pin by semver ranges with regular audit and update cadences      |
+| Browser APIs        | Prefer stable evergreen APIs; guard optional capabilities        |
+| External cloud APIs | Non-critical path only; app remains functional without them      |
+| CI services         | GitHub Actions as source of truth, local parity via `npm run ci` |
+
+## Benchmark Comparison and Method Harvest
+
+The table below focuses on methods worth adopting, not unverifiable marketing claims.
+
+| Reference Class                 | Mature Practice                                           | Gap in This Project                       | Adoption Plan                                              |
+| ------------------------------- | --------------------------------------------------------- | ----------------------------------------- | ---------------------------------------------------------- |
+| Figma-class web app quality     | Schema-versioned local document model + robust migrations | Partial migration discipline only         | Add explicit schema registry and migration tests           |
+| Next.js/Astro quality pipelines | Hard quality gates in all pipelines, no soft-fail checks  | Spell check currently soft-fails in CI    | Make spelling gate blocking and fix violations             |
+| Fusion 360 export discipline    | Golden-file verification for export formats               | Limited golden regression for exports     | Add DXF/G-code golden snapshots per release                |
+| Sentry-class observability      | Structured client errors and release health dashboards    | Incomplete release health contract        | Define production telemetry contract with privacy controls |
+| VS Code / JetBrains mature DX   | Zero-warning workspace defaults for core validators       | Disabled validators in workspace settings | Remove disabled options or justify in policy doc           |
+| Enterprise release rigor        | Release pipeline reruns core checks before publish        | Release workflow skips quality rerun      | Add `npm run check` in release workflow                    |
+
+## Best-in-Class Competitor Comparison
+
+Direct feature comparison against the leading tools in the cabinet/woodworking
+planning space. Goal: identify the strongest method in each capability and adopt
+it where it fits a local-first, zero-install web product.
+
+| Capability           | This Project          | SketchUp + OpenCutList | Fusion 360        | Cabinet Vision / PolyBoard | CutList Optimizer | Best Method to Harvest                                     |
+| -------------------- | --------------------- | ---------------------- | ----------------- | -------------------------- | ----------------- | ---------------------------------------------------------- |
+| Install / onboarding | Zero-install web/PWA  | Desktop install        | Desktop + account | Heavy desktop license      | Web               | Keep our zero-install edge; add guided first-run tour      |
+| Parametric modeling  | Config-driven engine  | Plugin/manual          | Full parametric   | Full parametric            | None              | Adopt named parameter expressions with dependency graph    |
+| Cut optimization     | MaxRects BSSF         | Guillotine + grain     | Add-in            | Industry nesting           | Strong 2D nesting | Add kerf-aware grain-locked nesting + multi-stock strategy |
+| Manufacturing export | PDF/DXF/G-code        | DXF/PDF                | Full CAM          | CNC post-processors        | PDF/CSV           | Golden-file contract tests per export format               |
+| Offline capability   | Full offline-first    | Partial                | No                | No                         | Partial           | Keep; document storage schema + migration policy           |
+| i18n / RTL           | 6 locales incl. RTL   | Limited                | Multi-locale      | Multi-locale               | Limited           | Keep; lock parity gate at 100% across all locales          |
+| Accessibility (WCAG) | 2.2 AA audited        | Not a focus            | Partial           | Not a focus                | Minimal           | Keep as differentiator; add keyboard-path regression       |
+| Pricing              | Free/open             | Freemium               | Subscription      | Enterprise license         | Freemium          | Keep open; optional plugin marketplace later               |
+| Extensibility        | Plugin API (internal) | Ruby plugins           | Add-in SDK        | Vendor macros              | None              | Version the plugin API independently from app version      |
+| Collaboration        | Local + share links   | Cloud (Trimble)        | Cloud (Autodesk)  | File-share                 | None              | Optional E2E-encrypted sync, never on critical path        |
+| Observability        | Privacy-first opt-in  | Vendor telemetry       | Vendor telemetry  | Limited                    | None              | Structured client errors + release health, opt-in only     |
+
+### Harvested Improvements (Backlog Seeds)
+
+| Idea                                          | Source Class                | Target Phase |
+| --------------------------------------------- | --------------------------- | ------------ |
+| Named parameter expressions + dependency DAG  | Fusion 360 / Cabinet Vision | 53           |
+| Kerf-aware, grain-locked multi-stock nesting  | CutList Optimizer           | 53           |
+| Golden-file export contract tests (DXF/Gcode) | Fusion 360                  | 52           |
+| Schema registry + storage migration tests     | Figma-class document model  | 52           |
+| Independent plugin-API semver line            | VS Code extension model     | 54           |
+| Guided first-run product tour                 | Onboarding best practice    | 54           |
+
+## Consolidated Legacy Roadmap
+
+Historical phases and sprint narratives are preserved but no longer duplicated in this file:
+
+| Legacy Content           | Canonical Location                               |
+| ------------------------ | ------------------------------------------------ |
+| Sprint-by-sprint archive | [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md) |
+| Version release notes    | [CHANGELOG.md](CHANGELOG.md)                     |
+| Architecture detail      | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)     |
+
+This roadmap now tracks forward execution only.
+
+## Phase 52: Production Hardening Program (v5.28.0)
+
+### Sprint 245: Truth Alignment and Governance ✅ DONE
+
+| Deliverable          | Acceptance Criteria                                                                        | Status                                           |
+| -------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------ |
+| Strategic doc reset  | Roadmap reflects verifiable repo state only                                                | ✅ Done — ROADMAP.md reset 2026-05-30            |
+| Claim audit baseline | README, architecture, and roadmap high-risk claims reviewed and tagged verified/unverified | ✅ Done — `docs/CLAIM-AUDIT.md` created          |
+| Governance policy    | One-page policy for when claims may be marked "done"                                       | ✅ Done — `.github/GOVERNANCE-POLICY.md` created |
+
+### Sprint 246: Code and Config Hardening
+
+| Deliverable                | Acceptance Criteria                                                  |
+| -------------------------- | -------------------------------------------------------------------- |
+| Remove soft-fail checks    | CI has no `\|\| true` on quality/security checks                     |
+| Strict editor profile      | Workspace settings avoid disabled validators unless policy-justified |
+| Quality runner reliability | Parallel quality script has no buffering deadlock risk               |
+
+### Sprint 247: Structural Cleanup and Dead Asset Elimination
+
+| Deliverable              | Acceptance Criteria                                                     |
+| ------------------------ | ----------------------------------------------------------------------- |
+| Dead code removal        | `npm run dead:check` clean                                              |
+| Dead docs/config cleanup | Every root/config/doc file has an owner and purpose                     |
+| Root layout policy       | Non-essential files moved only when not violating tool-root constraints |
+
+### Sprint 248: Production Verification Matrix
+
+| Deliverable                   | Acceptance Criteria                                            |
+| ----------------------------- | -------------------------------------------------------------- |
+| Full local gates              | `npm run ci` pass on clean tree                                |
+| Security and dependency audit | No high/critical unresolved findings                           |
+| Release rehearsal             | Tag candidate built and validated without publish side effects |
+
+### Sprint 249: Release v5.28.0
+
+| Deliverable               | Acceptance Criteria                             |
+| ------------------------- | ----------------------------------------------- |
+| Version and changelog     | Semver bump, changelog finalized                |
+| GitHub release            | Release workflow passes and publishes artifacts |
+| Post-release verification | Smoke tests and docs links validated            |
+
+## Open Architecture Questions
+
+1. Should cloud sync remain feature-flagged or become a first-class optional module with a formal API boundary?
+2. Should plugin API stability be versioned independently from app versioning?
+3. Should export engines (PDF/DXF/G-code) move to contract-tested packages under `src/engine/export` to reduce cross-layer coupling?
+
+## Production Readiness Checklist
+
+| Checklist Item                        | Status Tracking                       |
+| ------------------------------------- | ------------------------------------- |
+| Zero suppressed diagnostics in source | Automated via grep + lint             |
+| No non-blocking quality checks in CI  | Workflow review + CI run              |
+| No dead code/docs/config              | `npm run dead:check` + docs owner map |
+| All intermediate artifacts in temp    | Script/workflow audit                 |
+| Release path reproducible locally     | `npm run ci` + release rehearsal      |
 
 ### Future Horizons (Unscoped)
 

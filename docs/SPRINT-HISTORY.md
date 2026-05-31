@@ -337,3 +337,121 @@ the in-flight quality sprints (84-87) and run first.
 - [x] **Task 18**: Merge redundant configs — verified no redundancy, all configs serve distinct roles
 - [x] **Task 19**: Consolidate docs — removed `release-notes.md` (superseded by CHANGELOG)
 - [x] **Task 20**: Final consolidation — footprint reduction, dead asset removal
+
+---
+
+## Phases 35–47 Archive (Calculator & Manufacturing Tooling Era)
+
+> Migrated from `ROADMAP.md` on 2026-05-31 to keep the live roadmap forward-only.
+> Phases 48–51 are summarised in `.github/copilot-instructions.md`; `CHANGELOG.md`
+> remains the source of truth for shipped versions.
+
+### Phase 47 — Cabinet Hardware Sizing Calculators · v5.23.0 ✅ COMPLETE
+
+| Sprint | Deliverable                                                               | Track  |
+| ------ | ------------------------------------------------------------------------- | ------ |
+| 220    | Cabinet door sizing calculator — engine (overlay, leaf size, hinge count) | ✓ Done |
+| 221    | Face frame calculator — engine + UI panel + 11 tests                      | ✓ Done |
+| 222    | Cabinet door sizing calculator — UI panel (overlay selector, door toggle) | ✓ Done |
+| 223    | Drawer box sizing calculator — engine + UI panel + tests                  | ✓ Done |
+| 224    | Screw pull-out strength estimator — NDS formula, 4 density classes, UI    | ✓ Done |
+
+### Phase 46 — Workspace & Tooling · v5.22.0 ✅ COMPLETE
+
+| Sprint | Deliverable                                                                               | Track  |
+| ------ | ----------------------------------------------------------------------------------------- | ------ |
+| 215    | SVG quality improvements + VS Code / Copilot workspace integration                        | ✓ Done |
+| 216    | Strategic ROADMAP review — competitor table, gap analysis, enhanced Copilot instructions  | ✓ Done |
+| 217    | Production readiness — 26 TypeScript errors resolved, dead code removed, quality gates    | ✓ Done |
+| 218    | Engine barrel fix — 13 duplicate-export aliases, type narrowing fixes in 5 engine modules | ✓ Done |
+
+### Phase 45 — Power Tool Setup Calculators · v5.21.0 ✅ COMPLETE
+
+- Sprint 210: Finger joint calculator (box joint layout, finger/socket positions, glue area)
+- Sprint 211: Wood screw pilot hole calculator (gauge lookup, clearance hole, countersink)
+- Sprint 212: Glue-up time calculator (open/clamp/cure time, clamp count, env factors)
+- Sprint 213: Bandsaw blade speed calculator (SFPM, TPI selection, feed rate)
+- Sprint 214: Tablesaw blade height calculator (blade exposure, dado depth, feasibility)
+
+### Phase 44 — Advanced Joinery Planning Tools · v5.20.0 ✅ COMPLETE
+
+- Sprint 205: Mortise & tenon calculator (joint sizing, glue area, chisel recommendation)
+- Sprint 206: Shelf deflection calculator (sag estimate, ratio checks, modulus lookup)
+- Sprint 207: Router depth-of-cut calculator (pass schedule, chip load, RPM guidance)
+- Sprint 208: Biscuit joinery calculator (size selection, slot depth, layout positions)
+- Sprint 209: Sanding progression planner (grit sequence, effort and sheet estimates)
+
+### Phase 43 — Precision Workshop Calculators · v5.19.0 ✅ COMPLETE
+
+| Sprint | Deliverable                                                          | Track  |
+| ------ | -------------------------------------------------------------------- | ------ |
+| 200    | Miter & compound angle calculator (polygon, compound, crown molding) | ✓ Done |
+| 201    | Shelf pin spacing calculator (single/double/euro 32, drill depth)    | ✓ Done |
+| 202    | Drawer slide calculator (side/under/center mount, box dimensions)    | ✓ Done |
+| 203    | Wood drying time estimator (air/kiln, species, defect risk)          | ✓ Done |
+| 204    | Dovetail layout calculator (through/half-blind, pin/tail spacing)    | ✓ Done |
+
+### Phase 42 — Advanced Joinery & Workshop Tools · v5.18.0 ✅ COMPLETE
+
+| Sprint | Deliverable                                                                | Track  |
+| ------ | -------------------------------------------------------------------------- | ------ |
+| 195    | Pocket hole joinery calculator (screw length, drill angle, spacing)        | ✓ Done |
+| 196    | Veneer calculator (sheet count, strip layout, adhesive volume)             | ✓ Done |
+| 197    | Clamp pressure calculator (force distribution, spacing, clamping time)     | ✓ Done |
+| 198    | Drill press speed calculator (RPM by bit type, material, diameter)         | ✓ Done |
+| 199    | Board-feet calculator (nominal-to-actual, species cost, linear conversion) | ✓ Done |
+
+### Phase 41 — Measurement & Estimation Tools · v5.17.0 ✅ COMPLETE
+
+| Sprint | Deliverable                                                          | Track  |
+| ------ | -------------------------------------------------------------------- | ------ |
+| 190    | Wood movement calculator (seasonal expansion/contraction by species) | ✓ Done |
+| 191    | Toolpath feed rate calculator (chip load, spindle speed, feed rate)  | ✓ Done |
+| 192    | Cabinet weight estimator (panel weights, hardware, total assembly)   | ✓ Done |
+| 193    | Dowel joint calculator (diameter, depth, spacing, pull-out strength) | ✓ Done |
+| 194    | Panel layout label generator (cut labels, IDs, batch printing)       | ✓ Done |
+
+### Phase 40 — Material Management & Templates · v5.16.0 ✅ COMPLETE
+
+| Sprint | Deliverable                                                            | Track  |
+| ------ | ---------------------------------------------------------------------- | ------ |
+| 182    | Material cost tracker (historical prices, trends, budget alerts)       | ✓ Done |
+| 183    | Shop inventory manager (stock levels, reorder lists, fulfilment check) | ✓ Done |
+| 184    | Cabinet template library (6 built-in parametric templates)             | ✓ Done |
+| 185    | Edge banding calculator (exposure detection, grouping, wastage)        | ✓ Done |
+
+### Phase 38 — Shop Floor Intelligence & Workflow Automation · v5.14.0 ✅ COMPLETE
+
+| Sprint | Deliverable                                                          | Track  |
+| ------ | -------------------------------------------------------------------- | ------ |
+| 172    | Dust collection estimator (CFM sizing, duct loss, HP recommendation) | ✓ Done |
+| 173    | Cut-list grouping engine (multi-criteria batching, grain merge)      | ✓ Done |
+| 174    | Assembly dependency resolver (topo-sort, CPM, parallel waves)        | ✓ Done |
+| 175    | Workshop safety checker (clearance zones, PPE, noise, safety score)  | ✓ Done |
+
+### Phase 37 — Advanced Manufacturing Tools · v5.13.0 ✅ COMPLETE
+
+| Sprint | Deliverable                                                               | Track  |
+| ------ | ------------------------------------------------------------------------- | ------ |
+| 167    | Production schedule planner (jobs, priorities, conflict detection)        | ✓ Done |
+| 168    | Nesting pattern library (save/recall/score cut-sheet patterns)            | ✓ Done |
+| 169    | Tool wear tracker (inventory, usage log, maintenance alerts)              | ✓ Done |
+| 170    | Design comparison engine (7-criterion weighted scoring, radar chart data) | ✓ Done |
+
+### Phase 36 — Advanced Workflows & Design Exploration · v5.12.0 ✅ COMPLETE
+
+| Sprint | Deliverable                                                              | Track  |
+| ------ | ------------------------------------------------------------------------ | ------ |
+| 162    | Parametric template engine (reusable templates, expressions, validation) | ✓ Done |
+| 163    | Batch export pipeline (multi-format, multi-cabinet, progress tracking)   | ✓ Done |
+| 164    | Material yield optimizer (multi-sheet scheduling, waste minimization)    | ✓ Done |
+| 165    | Version history & branching (timeline, diff, branch/merge)               | ✓ Done |
+
+### Phase 35 — CNC Workflow & Cloud Sync · v5.11.0 ✅ COMPLETE
+
+| Sprint | Deliverable                                                            | Track  |
+| ------ | ---------------------------------------------------------------------- | ------ |
+| 157    | CNC job queue with priority scheduling (critical/high/normal/low)      | ✓ Done |
+| 158    | Cloud sync engine with E2E encryption (AES-256-GCM, PBKDF2)            | ✓ Done |
+| 159    | Multi-machine workflow distribution (capability-match, load balancing) | ✓ Done |
+| 160    | Project sharing links with expiration (token-based, permissions)       | ✓ Done |
