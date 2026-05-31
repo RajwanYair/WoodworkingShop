@@ -36,7 +36,12 @@ jobs:
           key: vite-${{ runner.os }}-${{ hashFiles('vite.config.ts', 'package-lock.json') }}
           restore-keys: vite-${{ runner.os }}-
 
-      # Quality already passed in CI on this SHA — skip redundant re-run.
+      - name: Full quality gate
+        run: npm run check
+        # Explicitly gate release on pre-flight checks: typecheck, lint, test, coverage.
+        # This ensures no soft-fail checks or suppressed diagnostics slip into releases.
+        # See .github/GOVERNANCE-POLICY.md for claim verification rules.
+
       # sbom reads only package files (no dist needed) — start it in the background
       # so it runs concurrently with the tsc+vite build for free.
       - name: Build + SBOM (parallel) + bundle check

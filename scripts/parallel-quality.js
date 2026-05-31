@@ -1,32 +1,42 @@
 /**
- * Runs all quality checks concurrently — mirrors what CI does with bash `&`.
- * Each check's output is buffered and printed only on failure, giving clean
- * signal-to-noise compared to interleaved sequential output.
+ * Runs all quality checks concurrently with streaming output.
+ * Uses spawn instead of exec to avoid output buffer limits that can stall jobs.
  *
  * Usage: npm run quality:fast
  */
-import { exec } from 'node:child_process';
+import { spawn } from 'node:child_process';
 
 const checks = ['typecheck', 'lint', 'lint:css', 'lint:md', 'format:check', 'i18n:coverage'];
 const PromiseCtor = globalThis.Promise;
 
-const results = await PromiseCtor.all(
-  checks.map(
-    (name) =>
-      new PromiseCtor((resolve) => {
-        exec(`npm run ${name}`, (error, stdout, stderr) => {
-          resolve({ name, code: error?.code ?? 0, output: stdout + stderr });
-        });
-      }),
-  ),
-);
+function runCheck(name) {
+  return new PromiseCtor((resolve) => {
+    const child =
+      process.platform === 'win32'
+        ? spawn('cmd.exe', ['/d', '/s', '/c', `npm run ${name}`], {
+            stdio: 'inherit',
+          })
+        : spawn('npm', ['run', name], {
+            stdio: 'inherit',
+          });
 
-const failed = results.filter((r) => r.code !== 0);
+    child.on('close', (code) => {
+      resolve({ name, code: code ?? 1 });
+    });
+
+    child.on('error', () => {
+      resolve({ name, code: 1 });
+    });
+  });
+}
+
+const results = await PromiseCtor.all(checks.map((name) => runCheck(name)));
+const failed = results.filter((result) => result.code !== 0);
+
 if (failed.length > 0) {
-  for (const { name, output } of failed) {
-    process.stderr.write(`\n${'─'.repeat(60)}\n❌  ${name} FAILED\n${'─'.repeat(60)}\n`);
-    process.stderr.write(output);
-  }
+  const names = failed.map((result) => result.name).join(', ');
+  console.error(`Quality checks failed: ${names}`);
   process.exit(1);
 }
-console.log('✓  All quality checks passed');
+
+console.log('All quality checks passed');

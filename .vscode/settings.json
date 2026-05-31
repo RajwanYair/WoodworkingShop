@@ -50,18 +50,13 @@
   "eslint.problems.shortenToSingleLine": true,
 
   // ─── CSS / Stylelint ────────────────────────────────────────────────────────
-  // Built-in VS Code CSS validation is disabled in favor of Stylelint which
-  // understands Tailwind v4 @theme, @custom-variant, and design token patterns.
-  "css.validate": false,
-  "scss.validate": false,
-  "less.validate": false,
+  "css.validate": true,
+  "scss.validate": true,
+  "less.validate": true,
   "stylelint.validate": ["css"],
 
   // ─── Browser Compatibility Checker ──────────────────────────────────────────
-  // Progressive enhancement features (forced-color-adjust, scrollbar-width,
-  // orphans/widows in print, theme-color meta) are intentionally used with
-  // graceful degradation. Disable extension to avoid false positives.
-  "browser-compatibility-checker.enabled": false,
+  "browser-compatibility-checker.enabled": true,
 
   // ─── Terminal ───────────────────────────────────────────────────────────────
   "terminal.integrated.shellIntegration.enabled": true,
@@ -141,6 +136,8 @@
   "editor.suggest.preview": true,
   "chat.agent.enabled": true,
   "chat.agent.maxRequests": 999,
+  "chat.mcp.autoStart": true,
+  "chat.mcp.gallery.enabled": true,
   "github.copilot.chat.followUps": "always",
   "github.copilot.chat.useProjectTemplates": true,
   "github.copilot.chat.agent.autoFix": true,
@@ -155,6 +152,7 @@
     ".github/agents": true
   },
   "github.copilot.chat.agent.runTasks": true,
+  "github.copilot.chat.agent.autoApprove": false,
   "chat.mcp.discovery.enabled": {
     "claude-desktop": true,
     "windsurf": true,
@@ -283,15 +281,27 @@
   "gitlens.hovers.currentLine.over": "line",
   "gitlens.blame.format": "${author|15} ${agoOrDate|14-}",
   "gitlens.statusBar.enabled": true,
+  "github-actions.workflows.pinned.enabled": true,
 
   // ─── Diff & Merge ────────────────────────────────────────────────────────────
   "git.mergeEditor": true,
   "diffEditor.ignoreTrimWhitespace": false,
   "diffEditor.renderSideBySide": false,
 
-  // ─── Import Cost ────────────────────────────────────────────────────────────
-  "importCost.bundleSizeDecoration": "both",
-  "importCost.showCalculatingDecoration": true,
+  // ─── Git Graph ──────────────────────────────────────────────────────────────
+  "git-graph.repository.fetchAndPrune": true,
+  "git-graph.repository.sign.commits": false,
+
+  // ─── Indent Rainbow ─────────────────────────────────────────────────────────
+  "indentRainbow.colors": [
+    "rgba(16, 185, 129, 0.15)",
+    "rgba(59, 130, 246, 0.15)",
+    "rgba(245, 158, 11, 0.15)",
+    "rgba(239, 68, 68, 0.15)"
+  ],
+
+  // ─── SVG Preview ────────────────────────────────────────────────────────────
+  "svg.preview.background": "editor",
 
   // ─── Playwright ─────────────────────────────────────────────────────────────
   "playwright.reuseBrowser": false,
@@ -308,10 +318,7 @@
   },
 
   // ─── Markdown ───────────────────────────────────────────────────────────────
-  "markdownlint.config": {
-    "MD033": false,
-    "MD013": false
-  },
+  "markdownlint.config": {},
 
   // ─── Error Lens ─────────────────────────────────────────────────────────────
   "errorLens.enabledDiagnosticLevels": ["error", "warning"],

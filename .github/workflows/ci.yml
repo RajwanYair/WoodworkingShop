@@ -22,24 +22,17 @@ jobs:
     steps:
       - uses: ./.github/actions/setup-node
       - name: Quality checks (parallel)
-        run: |
-          npm run typecheck & p1=$!
-          npm run lint & p2=$!
-          npm run lint:css & p3=$!
-          npm run lint:md & p4=$!
-          npm run format:check & p5=$!
-          npm run i18n:coverage & p6=$!
-          failed=0
-          for pid in $p1 $p2 $p3 $p4 $p5 $p6; do wait "$pid" || failed=1; done
-          exit $failed
+        run: npm run quality:fast
       - name: Spell check
-        run: npx --yes cspell lint --no-progress --show-suggestions --gitignore "**/*.{ts,tsx,md}" 2>&1 || true
+        run: npx --yes cspell lint --no-progress --show-suggestions --gitignore "**/*.{ts,tsx,md}"
   test:
     runs-on: ubuntu-latest
     needs: quality
     steps:
       - uses: ./.github/actions/setup-node
       - run: npm test && npm run test:coverage
+      # Coverage upload is best-effort; CI should not fail if Codecov is unavailable (network, quota, etc.)
+      # Test execution itself is blocking (npm test must pass before reaching this step)
       - uses: codecov/codecov-action@v5
         with: { files: /tmp/WoodworkingShop/coverage/lcov.info, flags: unit, fail_ci_if_error: false }
       - run: npm run bench:check && npm run build && npm run bundle:check

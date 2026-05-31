@@ -11,7 +11,21 @@
     "filesystem": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "${workspaceFolder}"]
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "${workspaceFolder}",
+        "--exclude",
+        "node_modules,.git,dist,coverage,playwright-report,test-results"
+      ]
+    },
+
+    // ─── Fetch — retrieve web docs/APIs directly in chat ─────────────────────
+    "fetch": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"],
+      "description": "Fetch web pages and API payloads for fact-grounded debugging and research."
     },
 
     // ─── Playwright — browser automation for E2E debugging in chat ────────
@@ -43,6 +57,13 @@
       "command": "npx",
       "args": ["-y", "@upstash/context7-mcp"],
       "description": "Retrieves current, version-accurate documentation for npm packages — prevents hallucinated APIs."
+    },
+
+    // ─── GitKraken — advanced git/PR workflow operations ─────────────────────
+    "gitkraken": {
+      "type": "http",
+      "url": "https://mcp.gitkraken.com/mcp",
+      "description": "Git operations, commit history analysis, and pull request workflow support."
     },
 
     // ─── Cloudflare — Workers, Pages, D1, KV, R2 management ──────────────

@@ -2,15 +2,16 @@
 mode: agent
 tools:
   - read_file
-  - replace_string_in_file
-  - multi_replace_string_in_file
+  - apply_patch
   - create_file
+  - runTests
+  - run_task
   - run_in_terminal
   - get_errors
   - grep_search
   - file_search
   - semantic_search
-  - explore_subagent
+  - runSubagent
   - vscode_listCodeUsages
   - list_dir
   - manage_todo_list
@@ -70,8 +71,8 @@ Apply the minimal change that fixes the root cause:
 ### Step 4 — Verify
 
 ```bash
-npm run quality   # 0 errors, 0 warnings
-npm test          # all pass
+npm run quality:fast   # 0 errors, 0 warnings
+npm run test           # all pass
 ```
 
 If the fix introduced any new quality gate failures, fix those too before reporting done.

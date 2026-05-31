@@ -5,6 +5,14 @@ inputs:
     description: 'Node.js version to use'
     required: false
     default: '24'
+  npm-cache-dir:
+    description: 'Absolute npm cache directory used during npm ci'
+    required: false
+    default: '/tmp/WoodworkingShop/npm-cache'
+  npm-ci-args:
+    description: 'Additional npm ci flags'
+    required: false
+    default: '--prefer-offline --no-fund --no-audit'
   fetch-depth:
     description: 'Number of commits to fetch. 0 fetches all history. Default 1 for fast shallow clone.'
     required: false
@@ -21,5 +29,10 @@ runs:
         node-version: ${{ inputs.node-version }}
         cache: npm
 
-    - run: npm ci --prefer-offline --no-fund --no-audit
+    - run: mkdir -p "${{ inputs.npm-cache-dir }}"
       shell: bash
+
+    - run: npm ci ${{ inputs.npm-ci-args }}
+      shell: bash
+      env:
+        NPM_CONFIG_CACHE: ${{ inputs.npm-cache-dir }}
