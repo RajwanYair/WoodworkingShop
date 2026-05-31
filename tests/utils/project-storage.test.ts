@@ -7,6 +7,7 @@ import {
   exportProjectJson,
   importProjectsBundle,
   CURRENT_SCHEMA_VERSION,
+  PROJECT_SCHEMA_REGISTRY,
   type SavedProject,
 } from '../../src/utils/project-storage';
 import type { ProjectSnapshot } from '../../src/store/cabinet-store';
@@ -219,5 +220,53 @@ describe('migrateProject', () => {
     const result = migrateProject(raw);
     expect(result.generatedAt).toBe('2025-06-01T00:00:00.000Z');
     expect(result.snapshots).toHaveLength(2);
+  });
+
+  it('migrates legacy 0.9 payload using projectName → name mapping', () => {
+    const raw = {
+      schemaVersion: '0.9',
+      projectName: 'Legacy Project',
+      savedAt: '2025-01-01T00:00:00.000Z',
+      cabinets: sampleCabinets,
+    };
+    const result = migrateProject(raw);
+    expect(result.name).toBe('Legacy Project');
+    expect(result.schemaVersion).toBe(CURRENT_SCHEMA_VERSION);
+  });
+
+  it.each([
+    { schemaVersion: '9.9', expected: /unsupported project schema version/i },
+    { schemaVersion: '2.0', expected: /unsupported project schema version/i },
+  ])('rejects unsupported schema versions ($schemaVersion)', ({ schemaVersion, expected }) => {
+    const raw = { schemaVersion, cabinets: sampleCabinets };
+    expect(() => migrateProject(raw)).toThrow(expected);
+  });
+
+  it('exposes registry metadata for supported versions and migrations', () => {
+    expect(PROJECT_SCHEMA_REGISTRY.latest).toBe(CURRENT_SCHEMA_VERSION);
+    expect(PROJECT_SCHEMA_REGISTRY.supportedImportVersions).toContain('0.9');
+    expect(PROJECT_SCHEMA_REGISTRY.migrations).toContainEqual({ from: '0.9', to: '1.0' });
+  });
+});
+
+describe('importProjectsBundle schema versioning', () => {
+  it('accepts missing bundle version as current version', async () => {
+    const bundle = {
+      projects: [{ id: 'ok', name: 'No Version', savedAt: new Date().toISOString(), cabinets: sampleCabinets }],
+    };
+    const file = new File([JSON.stringify(bundle)], 'bundle.json', { type: 'application/json' });
+    await expect(importProjectsBundle(file)).resolves.toHaveLength(1);
+  });
+
+  it.each([
+    { version: 2, expected: /unsupported bundle version/i },
+    { version: 0, expected: /version must be a positive integer/i },
+  ])('rejects unsupported/invalid bundle version $version', async ({ version, expected }) => {
+    const bundle = {
+      version,
+      projects: [{ id: 'x', name: 'X', savedAt: new Date().toISOString(), cabinets: sampleCabinets }],
+    };
+    const file = new File([JSON.stringify(bundle)], 'bundle.json', { type: 'application/json' });
+    await expect(importProjectsBundle(file)).rejects.toThrow(expected);
   });
 });

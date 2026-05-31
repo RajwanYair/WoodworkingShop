@@ -4,6 +4,14 @@ import { idbLoadProjects, idbSaveProjects, idbLoadSnapshots, idbSaveSnapshots } 
 
 /** Current schema version written on every export. */
 export const CURRENT_SCHEMA_VERSION = '1.0' as const;
+const LEGACY_SCHEMA_VERSION = '0.9' as const;
+const CURRENT_BUNDLE_SCHEMA_VERSION = 1 as const;
+
+export const PROJECT_SCHEMA_REGISTRY = {
+  latest: CURRENT_SCHEMA_VERSION,
+  supportedImportVersions: [LEGACY_SCHEMA_VERSION, CURRENT_SCHEMA_VERSION],
+  migrations: [{ from: LEGACY_SCHEMA_VERSION, to: CURRENT_SCHEMA_VERSION }],
+} as const;
 
 export interface SavedProject {
   id: string;
@@ -17,16 +25,71 @@ export interface SavedProject {
   snapshots?: ProjectSnapshot[]; // snapshot history round-trip
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+function isSupportedSchemaVersion(version: string): boolean {
+  return PROJECT_SCHEMA_REGISTRY.supportedImportVersions.includes(
+    version as (typeof PROJECT_SCHEMA_REGISTRY.supportedImportVersions)[number],
+  );
+}
+
+function detectProjectSchemaVersion(raw: Record<string, unknown>): string {
+  if (typeof raw['schemaVersion'] === 'string' && raw['schemaVersion'].trim()) {
+    return raw['schemaVersion'];
+  }
+  if (typeof raw['projectName'] === 'string' && !('name' in raw)) {
+    return LEGACY_SCHEMA_VERSION;
+  }
+  return CURRENT_SCHEMA_VERSION;
+}
+
+function migrateLegacyProjectV09(raw: Record<string, unknown>): Record<string, unknown> {
+  return {
+    ...raw,
+    name:
+      typeof raw['name'] === 'string'
+        ? raw['name']
+        : typeof raw['projectName'] === 'string'
+          ? raw['projectName']
+          : 'Untitled',
+    schemaVersion: CURRENT_SCHEMA_VERSION,
+  };
+}
+
+function normaliseProjectRecord(raw: Record<string, unknown>): Record<string, unknown> {
+  const version = detectProjectSchemaVersion(raw);
+  if (!isSupportedSchemaVersion(version)) {
+    throw new Error(`Unsupported project schema version: ${version}`);
+  }
+  if (version === LEGACY_SCHEMA_VERSION) {
+    return migrateLegacyProjectV09(raw);
+  }
+  return { ...raw, schemaVersion: CURRENT_SCHEMA_VERSION };
+}
+
+function parseBundleSchemaVersion(raw: Record<string, unknown>): number {
+  const version = raw['version'];
+  if (version === undefined) {
+    return CURRENT_BUNDLE_SCHEMA_VERSION;
+  }
+  if (typeof version !== 'number' || !Number.isInteger(version) || version < 1) {
+    throw new Error('Invalid bundle: version must be a positive integer');
+  }
+  return version;
+}
+
 /**
  * Migrate an unknown imported payload to a valid SavedProject.
  * Throws a descriptive Error if the payload is structurally invalid.
  * Future schema versions add migration steps before the final return.
  */
 export function migrateProject(raw: unknown): SavedProject {
-  if (raw === null || typeof raw !== 'object') {
+  if (!isRecord(raw)) {
     throw new Error('Project file must be a JSON object');
   }
-  const p = raw as Record<string, unknown>;
+  const p = normaliseProjectRecord(raw);
   if (!Array.isArray(p['cabinets'])) {
     throw new Error('Invalid project file: missing cabinets array');
   }
@@ -156,7 +219,14 @@ export async function exportProjectsBundle(projects: SavedProject[]): Promise<vo
 /** Import a `.cabinet-projects.json` bundle, merging all contained projects */
 export async function importProjectsBundle(file: File): Promise<SavedProject[]> {
   const text = await file.text();
-  const parsed = JSON.parse(text) as { version?: number; projects?: unknown[] };
+  const parsed = JSON.parse(text) as unknown;
+  if (!isRecord(parsed)) {
+    throw new Error('Invalid bundle: root must be an object');
+  }
+  const bundleVersion = parseBundleSchemaVersion(parsed);
+  if (bundleVersion > CURRENT_BUNDLE_SCHEMA_VERSION) {
+    throw new Error(`Unsupported bundle version: ${bundleVersion}`);
+  }
   const incoming = parsed.projects;
   if (!Array.isArray(incoming)) {
     throw new Error('Invalid bundle: missing projects array');
