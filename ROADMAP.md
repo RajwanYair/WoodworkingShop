@@ -1,309 +1,279 @@
 # Roadmap
 
-> Last strategic reset: 2026-05-30
-> Current release line: 5.27.x
+> Strategic reset: 2026-05-31
+> Current release: v5.29.1
+> Target release line: v5.29.x
 
-This roadmap is intentionally rewritten from first principles and constrained to verifiable repository reality. Historical sprint detail remains in [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md) and release detail remains in [CHANGELOG.md](CHANGELOG.md).
+This roadmap is rewritten from first principles and now serves as the single forward strategy document. Historical details are consolidated and preserved in:
 
-## Product Direction
+- [CHANGELOG.md](CHANGELOG.md)
+- [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 
-Build a best-in-class, local-first woodworking planner that is trusted for production output and safe for long-term maintenance.
+## Product Mission
 
-### North Star KPIs
+Deliver a best-in-class, local-first woodworking planning application that is:
 
-| Area          | KPI                                                                                 | Gate                      |
-| ------------- | ----------------------------------------------------------------------------------- | ------------------------- |
-| Reliability   | Typecheck, lint, tests, build, bundle, bench all pass                               | Required on every release |
-| Correctness   | No suppressed diagnostics in source (`eslint-disable`, `@ts-ignore`, `@ts-nocheck`) | Required                  |
-| Performance   | Lighthouse budgets pass and bundle budget pass                                      | Required                  |
-| Accessibility | WCAG 2.2 AA in automated and manual audits                                          | Required                  |
-| Security      | No high/critical findings in dependency and code scanning                           | Required                  |
-| i18n quality  | EN and HE parity plus full-locale coverage                                          | Required                  |
+- Accurate enough for real shop-floor output
+- Fast and stable on commodity hardware
+- Accessible and multilingual by default
+- Secure and privacy-preserving without server lock-in
+- Maintainable under strict no-suppression engineering rules
 
-## Decision Reset
+## Non-Negotiable Product Gates
+
+| Dimension     | Gate                                           | Enforcement                 |
+| ------------- | ---------------------------------------------- | --------------------------- |
+| Correctness   | No lint/type/test suppressions in product code | CI + code review            |
+| Reliability   | `npm run ci` must pass before release          | required status checks      |
+| Accessibility | WCAG 2.2 AA automated + manual keyboard paths  | e2e + QA checklist          |
+| Security      | No unresolved high/critical findings           | dependency + workflow scans |
+| i18n          | Full EN/HE parity, all locales complete        | i18n coverage scripts       |
+| Performance   | Bundle + Lighthouse budgets pass               | CI budgets                  |
+| Cleanliness   | No dead code/docs/config                       | knip + docs ownership       |
+
+## Strategic Re-Decisions (Full Stack)
 
 ### Frontend
 
-| Topic         | Current Decision                                   | Rethink Outcome                                                                  |
-| ------------- | -------------------------------------------------- | -------------------------------------------------------------------------------- |
-| UI platform   | React + TypeScript + Vite                          | Keep; optimize architecture boundaries                                           |
-| State         | Zustand single-store plus slices                   | Keep; enforce selector hygiene and action contracts                              |
-| Styling       | Tailwind v4 tokenized approach                     | Keep; expand token governance and visual regression tests                        |
-| Rendering     | SVG-first preview with optional advanced rendering | Keep SVG as canonical manufacturing view, isolate advanced rendering experiments |
-| Accessibility | Lint + Playwright axe coverage                     | Expand with keyboard-path regression matrix                                      |
+| Topic      | Decision                                        | Rationale                                               | Improvement Actions                                           |
+| ---------- | ----------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------- |
+| UI runtime | Keep React 19 + TS 6 + Vite 8                   | Strong ecosystem, mature build speed                    | Add stricter component boundary linting and file size budgets |
+| Styling    | Keep Tailwind v4 tokenized model                | Predictable output, excellent DX                        | Add visual regression snapshots for key flows                 |
+| Rendering  | Keep SVG-first preview                          | Deterministic for manufacturing dimensions              | Add golden screenshot + dimension annotation checks           |
+| State      | Keep Zustand single store with slices           | Low overhead and explicit action contracts              | Add selector performance profiling and stale selector checks  |
+| UX quality | Move from ad-hoc checks to tested user journeys | Production confidence requires journey-level validation | Add first-run wizard, recovery UX, error boundaries coverage  |
 
-### Backend and Data
+### Backend, Data, and Infrastructure
 
-| Topic                | Current Decision                 | Rethink Outcome                                                  |
-| -------------------- | -------------------------------- | ---------------------------------------------------------------- |
-| Runtime architecture | Local-first, no required backend | Keep as default product architecture                             |
-| Persistence          | Browser storage and file exports | Keep; define migration/versioning policy for stored project data |
-| Cloud integration    | Optional/future                  | Keep optional; no cloud dependency for core workflows            |
-| Database             | No central DB in critical path   | Keep; if introduced later, require offline-first sync model      |
+| Topic             | Decision                                        | Rationale                          | Improvement Actions                                     |
+| ----------------- | ----------------------------------------------- | ---------------------------------- | ------------------------------------------------------- |
+| Core architecture | Keep local-first SPA without mandatory backend  | Preserves zero-install and privacy | Formalize optional cloud boundary as adapter layer      |
+| Persistence       | Keep IndexedDB/file exports as critical path    | Offline-first is core value        | Add schema registry + migration test matrix             |
+| API integrations  | Keep external APIs optional and feature-flagged | App must run without network       | Introduce capability contract docs per API              |
+| Database          | No central DB in critical path                  | Avoid coupling and lock-in         | Evaluate optional sync DB only behind adapter interface |
+| Infra             | Keep static hosting and GH Actions CI/CD        | Simple, robust deployment          | Add release provenance and signed artifact verification |
 
-### Language, Methods, and Architecture
+### Language, Architecture, and Methods
 
-| Topic            | Current Decision                     | Rethink Outcome                                            |
-| ---------------- | ------------------------------------ | ---------------------------------------------------------- |
-| Language         | Strict TypeScript 6                  | Keep and tighten invariant checks                          |
-| Engine design    | Pure compute modules in `src/engine` | Keep; enforce purity and deterministic tests               |
-| Component design | Feature-grouped components           | Keep; split overgrown files and remove cross-layer leakage |
-| Testing method   | Unit + bench + e2e                   | Keep; add mutation-risk suites for core formulas           |
+| Topic                  | Decision                                        | Rationale                               | Improvement Actions                                                |
+| ---------------------- | ----------------------------------------------- | --------------------------------------- | ------------------------------------------------------------------ |
+| Language               | Keep strict TypeScript 6 (`erasableSyntaxOnly`) | Compile-time safety, modern TS pipeline | Add invariant assertion utilities for domain-critical calculations |
+| Engine architecture    | Keep pure `src/engine` modules                  | Deterministic and testable core         | Expand property-based tests for geometry/math domains              |
+| Component architecture | Keep feature directories                        | Current mental model is good            | Split oversized files and eliminate cross-layer imports            |
+| Testing strategy       | Keep unit + bench + e2e + a11y                  | Balanced confidence surface             | Add export contract golden files and mutation-risk suites          |
+| Docs strategy          | Keep docs close to code + generated API docs    | Strong maintainability                  | Add docs freshness checks and ownership map                        |
 
-### Configuration and Toolchain
+## Best-in-Class Comparison (Method Harvest)
 
-| Topic                 | Current Decision                         | Rethink Outcome                                        |
-| --------------------- | ---------------------------------------- | ------------------------------------------------------ |
-| Quality orchestration | Parallel scripts + CI pipelines          | Keep; remove any hidden non-blocking behavior          |
-| Release flow          | Tag-driven GitHub Actions                | Keep; add mandatory check gate inside release workflow |
-| Editor config         | Some validators disabled to reduce noise | Shift to stricter defaults for production mode         |
-| Intermediate outputs  | Temp-first policy                        | Keep and verify in scripts/workflows                   |
+Comparison is capability-focused and used to harvest proven engineering methods.
 
-## External Sources and API Strategy
+| Capability           | WoodworkingShop                  | SketchUp + OpenCutList  | Fusion 360                 | Cabinet Vision / PolyBoard | CutList Optimizer | Method to Harvest                                            |
+| -------------------- | -------------------------------- | ----------------------- | -------------------------- | -------------------------- | ----------------- | ------------------------------------------------------------ |
+| Onboarding           | Zero-install web/PWA             | Desktop + plugin setup  | Desktop + account flow     | Heavy desktop install      | Web               | Add guided first project flow with sane defaults             |
+| Parametric modeling  | Config-driven rules              | Partial plugin-driven   | Advanced constraints graph | Advanced constraints graph | Minimal           | Introduce named expressions + dependency DAG inspection      |
+| Optimization         | MaxRects BSSF                    | Good sheet optimization | Add-on dependent           | Industry-grade nesting     | Strong 2D nesting | Add kerf-aware, grain-locked, multi-stock optimization mode  |
+| Manufacturing export | PDF/DXF/G-code                   | DXF/PDF                 | Full CAM ecosystem         | CNC-centric                | PDF/CSV           | Add golden-file contract tests and schema-versioned exports  |
+| Offline resilience   | Strong local-first               | Medium                  | Weak                       | Weak                       | Medium            | Keep local-first and add storage migration guarantees        |
+| Accessibility        | WCAG effort already present      | Limited                 | Partial                    | Limited                    | Limited           | Add keyboard path regression matrix + focus-order tests      |
+| i18n + RTL           | Strong multilingual support      | Limited                 | Medium                     | Medium                     | Limited           | Keep as differentiator and enforce 100% locale parity        |
+| Observability        | Privacy-first, currently partial | Vendor-centric          | Vendor-centric             | Vendor-centric             | Minimal           | Add opt-in structured telemetry with strict privacy controls |
+| Extensibility        | Internal plugin API              | Ruby plugin model       | SDK model                  | Macro model                | None              | Version plugin API separately with compatibility promises    |
 
-| Source Type         | Policy                                                           |
-| ------------------- | ---------------------------------------------------------------- |
-| NPM dependencies    | Pin by semver ranges with regular audit and update cadences      |
-| Browser APIs        | Prefer stable evergreen APIs; guard optional capabilities        |
-| External cloud APIs | Non-critical path only; app remains functional without them      |
-| CI services         | GitHub Actions as source of truth, local parity via `npm run ci` |
+### Harvested Backlog (Prioritized)
 
-## Benchmark Comparison and Method Harvest
+| Priority | Work Item                                        | Source Inspiration                | Target   |
+| -------- | ------------------------------------------------ | --------------------------------- | -------- |
+| P0       | Storage schema registry + migration tests        | Figma-like document evolution     | Phase 53 |
+| P0       | Export golden-file contracts (PDF/DXF/G-code)    | CAM-grade release discipline      | Phase 53 |
+| P0       | Keyboard journey regression suite                | Enterprise a11y QA practices      | Phase 53 |
+| P1       | Named parameter expression engine + graph viewer | Fusion/Cabinet Vision parametrics | Phase 54 |
+| P1       | Multi-stock kerf-aware optimizer mode            | Cut optimization specialists      | Phase 54 |
+| P1       | Plugin API independent semver                    | VS Code extension ecosystem model | Phase 54 |
 
-The table below focuses on methods worth adopting, not unverifiable marketing claims.
+## Consolidated Legacy Content
 
-| Reference Class                 | Mature Practice                                           | Gap in This Project                       | Adoption Plan                                              |
-| ------------------------------- | --------------------------------------------------------- | ----------------------------------------- | ---------------------------------------------------------- |
-| Figma-class web app quality     | Schema-versioned local document model + robust migrations | Partial migration discipline only         | Add explicit schema registry and migration tests           |
-| Next.js/Astro quality pipelines | Hard quality gates in all pipelines, no soft-fail checks  | Spell check currently soft-fails in CI    | Make spelling gate blocking and fix violations             |
-| Fusion 360 export discipline    | Golden-file verification for export formats               | Limited golden regression for exports     | Add DXF/G-code golden snapshots per release                |
-| Sentry-class observability      | Structured client errors and release health dashboards    | Incomplete release health contract        | Define production telemetry contract with privacy controls |
-| VS Code / JetBrains mature DX   | Zero-warning workspace defaults for core validators       | Disabled validators in workspace settings | Remove disabled options or justify in policy doc           |
-| Enterprise release rigor        | Release pipeline reruns core checks before publish        | Release workflow skips quality rerun      | Add `npm run check` in release workflow                    |
+This file no longer duplicates completed sprint narratives. Legacy and archival sources:
 
-## Best-in-Class Competitor Comparison
+| Legacy Scope                     | Canonical File                                   |
+| -------------------------------- | ------------------------------------------------ |
+| Completed sprint stories         | [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md) |
+| Versioned release notes          | [CHANGELOG.md](CHANGELOG.md)                     |
+| Long-form architecture narrative | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)     |
+| Claim verification baseline      | [docs/CLAIM-AUDIT.md](docs/CLAIM-AUDIT.md)       |
 
-Direct feature comparison against the leading tools in the cabinet/woodworking
-planning space. Goal: identify the strongest method in each capability and adopt
-it where it fits a local-first, zero-install web product.
+## Program Plan: Phase 53 (Best-in-Class Upgrade)
 
-| Capability           | This Project          | SketchUp + OpenCutList | Fusion 360        | Cabinet Vision / PolyBoard | CutList Optimizer | Best Method to Harvest                                     |
-| -------------------- | --------------------- | ---------------------- | ----------------- | -------------------------- | ----------------- | ---------------------------------------------------------- |
-| Install / onboarding | Zero-install web/PWA  | Desktop install        | Desktop + account | Heavy desktop license      | Web               | Keep our zero-install edge; add guided first-run tour      |
-| Parametric modeling  | Config-driven engine  | Plugin/manual          | Full parametric   | Full parametric            | None              | Adopt named parameter expressions with dependency graph    |
-| Cut optimization     | MaxRects BSSF         | Guillotine + grain     | Add-in            | Industry nesting           | Strong 2D nesting | Add kerf-aware grain-locked nesting + multi-stock strategy |
-| Manufacturing export | PDF/DXF/G-code        | DXF/PDF                | Full CAM          | CNC post-processors        | PDF/CSV           | Golden-file contract tests per export format               |
-| Offline capability   | Full offline-first    | Partial                | No                | No                         | Partial           | Keep; document storage schema + migration policy           |
-| i18n / RTL           | 6 locales incl. RTL   | Limited                | Multi-locale      | Multi-locale               | Limited           | Keep; lock parity gate at 100% across all locales          |
-| Accessibility (WCAG) | 2.2 AA audited        | Not a focus            | Partial           | Not a focus                | Minimal           | Keep as differentiator; add keyboard-path regression       |
-| Pricing              | Free/open             | Freemium               | Subscription      | Enterprise license         | Freemium          | Keep open; optional plugin marketplace later               |
-| Extensibility        | Plugin API (internal) | Ruby plugins           | Add-in SDK        | Vendor macros              | None              | Version the plugin API independently from app version      |
-| Collaboration        | Local + share links   | Cloud (Trimble)        | Cloud (Autodesk)  | File-share                 | None              | Optional E2E-encrypted sync, never on critical path        |
-| Observability        | Privacy-first opt-in  | Vendor telemetry       | Vendor telemetry  | Limited                    | None              | Structured client errors + release health, opt-in only     |
+### Sprint 250: Architecture and Data Contracts
 
-### Harvested Improvements (Backlog Seeds)
+| Deliverable             | Acceptance Criteria                                            |
+| ----------------------- | -------------------------------------------------------------- |
+| Storage schema registry | Every persisted artifact has explicit schema version           |
+| Migration suite         | Backward migration tests pass for all supported versions       |
+| API boundary docs       | Optional cloud/API integration points documented and versioned |
 
-| Idea                                          | Source Class                | Target Phase |
-| --------------------------------------------- | --------------------------- | ------------ |
-| Named parameter expressions + dependency DAG  | Fusion 360 / Cabinet Vision | 53           |
-| Kerf-aware, grain-locked multi-stock nesting  | CutList Optimizer           | 53           |
-| Golden-file export contract tests (DXF/Gcode) | Fusion 360                  | 52           |
-| Schema registry + storage migration tests     | Figma-class document model  | 52           |
-| Independent plugin-API semver line            | VS Code extension model     | 54           |
-| Guided first-run product tour                 | Onboarding best practice    | 54           |
+### Sprint 251: Export and Manufacturing Correctness
 
-## Consolidated Legacy Roadmap
+| Deliverable                | Acceptance Criteria                               |
+| -------------------------- | ------------------------------------------------- |
+| Golden export fixtures     | PDF/DXF/G-code fixtures checked in and stable     |
+| Export contract tests      | CI validates no breaking export drift             |
+| Production checksum policy | Release artifacts include deterministic checksums |
 
-Historical phases and sprint narratives are preserved but no longer duplicated in this file:
+### Sprint 252: Frontend Reliability and Accessibility
 
-| Legacy Content           | Canonical Location                               |
-| ------------------------ | ------------------------------------------------ |
-| Sprint-by-sprint archive | [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md) |
-| Version release notes    | [CHANGELOG.md](CHANGELOG.md)                     |
-| Architecture detail      | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)     |
+| Deliverable                     | Acceptance Criteria                                |
+| ------------------------------- | -------------------------------------------------- |
+| Keyboard journey matrix         | Core user journeys covered by keyboard-first tests |
+| Focus and live-region hardening | No a11y regressions in automated scans             |
+| Error-recovery UX               | User-facing fallback and recovery flows tested     |
 
-This roadmap now tracks forward execution only.
+### Sprint 253: Developer Experience and VS Code/GitHub Integration
 
-## Phase 52: Production Hardening Program (v5.28.0)
+| Deliverable               | Acceptance Criteria                                             |
+| ------------------------- | --------------------------------------------------------------- |
+| Extension profile cleanup | Workspace extension set is value-focused and documented         |
+| Prompt/agent refresh      | `.github/agents` and `.github/prompts` aligned with phase goals |
+| MCP governance            | `.vscode/mcp.json` audited and each server has purpose + owner  |
+| Workflow hardening        | CI/release/workflow checks are non-optional and reproducible    |
 
-### Sprint 245: Truth Alignment and Governance ✅ DONE
+### Sprint 254: Release v5.29.0
 
-| Deliverable          | Acceptance Criteria                                                                        | Status                                           |
-| -------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------ |
-| Strategic doc reset  | Roadmap reflects verifiable repo state only                                                | ✅ Done — ROADMAP.md reset 2026-05-30            |
-| Claim audit baseline | README, architecture, and roadmap high-risk claims reviewed and tagged verified/unverified | ✅ Done — `docs/CLAIM-AUDIT.md` created          |
-| Governance policy    | One-page policy for when claims may be marked "done"                                       | ✅ Done — `.github/GOVERNANCE-POLICY.md` created |
+| Deliverable               | Acceptance Criteria                                       |
+| ------------------------- | --------------------------------------------------------- |
+| Pre-release gate          | `npm run ci` and required security checks pass            |
+| Release artifacts         | Dist archive, checksum, SBOM, and release notes generated |
+| Post-release verification | Smoke tests + docs link verification complete             |
 
-### Sprint 246: Code and Config Hardening ✅ DONE
+## Program Plan: Phase 54 (Priority Execution Window)
 
-| Deliverable                | Acceptance Criteria                                                  | Status                                                   |
-| -------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------- |
-| Remove soft-fail checks    | CI has no `\|\| true` on quality/security checks                     | ✅ Done — cspell `\|\| true` removed; release gate added |
-| Strict editor profile      | Workspace settings avoid disabled validators unless policy-justified | ✅ Done — css.validate re-enabled with policy comment    |
-| Quality runner reliability | Parallel quality script has no buffering deadlock risk               | ✅ Done — exec→spawn with stdio:inherit                  |
+### Sprint 255: Roadmap Consolidation and Governance
 
-### Sprint 247: Structural Cleanup and Dead Asset Elimination ✅ DONE
+| Deliverable                    | Acceptance Criteria                                                |
+| ------------------------------ | ------------------------------------------------------------------ |
+| Roadmap refresh                | Priorities reflect implemented state and next 5 sprint commitments |
+| Governance carry-over cleanup  | Security/user guide version references aligned with release line   |
+| Execution checklist alignment  | Sprint-level tasks map to reproducible commands and owners         |
 
-| Deliverable            | Acceptance Criteria                                                | Status                                                                  |
-| ---------------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------- |
-| Dead code removal      | `npm run dead:check` clean                                         | ✅ Done — dead barrel exports removed; Knip reports 0 issues            |
-| i18n parity            | All 6 locales have splineJoint keys                                | ✅ Done — de/es/fr locales updated                                      |
-| Code correctness fixes | Null-check bugs, :focus→:focus-visible, voice-annotation detection | ✅ Done — url-state, index.css, voice-annotation, shared-buffer patched |
+### Sprint 256: VS Code Extension Policy Hardening
 
-### Sprint 248: Production Verification Matrix ✅ DONE
+| Deliverable                    | Acceptance Criteria                                                        |
+| ------------------------------ | -------------------------------------------------------------------------- |
+| Recommendation set cleanup     | Required extension list removes low-value/noise extensions                 |
+| Unwanted profile expansion     | Unrelated language stacks moved to `unwantedRecommendations`               |
+| Workspace validator stability  | Non-applicable language servers disabled for this TypeScript-only project |
 
-| Deliverable                   | Acceptance Criteria                                            | Status                                                             |
-| ----------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------ |
-| Full local gates              | `npm run ci` pass on clean tree                                | ✅ Done — 4244 tests pass, build clean, bundle budgets updated     |
-| Security and dependency audit | No high/critical unresolved findings                           | ✅ Done — `npm audit --audit-level=high` reports 0 vulnerabilities |
-| Release rehearsal             | Tag candidate built and validated without publish side effects | ✅ Done — build + bundle:check pass after budget bump to v5.28.0   |
+### Sprint 257: MCP and GitHub Integration Governance
 
-### Sprint 249: Release v5.28.0
+| Deliverable                    | Acceptance Criteria                                                      |
+| ------------------------------ | ------------------------------------------------------------------------ |
+| MCP server governance matrix   | Each server has purpose, tier (core/optional), and owner                 |
+| GitHub release flow validation | Tag/release flow documented and tested against current branch protection |
+| Secret handling policy         | External MCP keys handled only via VS Code secret inputs                 |
 
-| Deliverable               | Acceptance Criteria                             | Status                                                     |
-| ------------------------- | ----------------------------------------------- | ---------------------------------------------------------- |
-| Version and changelog     | Semver bump, changelog finalized                | ✅ Done — package.json 5.28.0, CHANGELOG updated           |
-| GitHub release            | Release workflow passes and publishes artifacts | ✅ Done — v5.28.0 tag + GitHub Release created             |
-| Post-release verification | Smoke tests and docs links validated            | ✅ Done — quality gates pass, copilot-instructions updated |
+### Sprint 258: Plugin API SemVer Decoupling
 
-## Open Architecture Questions
+| Deliverable                    | Acceptance Criteria                                                   |
+| ------------------------------ | --------------------------------------------------------------------- |
+| Dedicated plugin API version   | Plugin API semver is explicit and independent from app package semver |
+| Compatibility helpers          | Runtime helpers expose compatibility decisions for plugin marketplace |
+| Regression tests               | Unit coverage verifies version comparisons and compatibility checks   |
 
-1. Should cloud sync remain feature-flagged or become a first-class optional module with a formal API boundary?
-2. Should plugin API stability be versioned independently from app versioning?
-3. Should export engines (PDF/DXF/G-code) move to contract-tested packages under `src/engine/export` to reduce cross-layer coupling?
+### Sprint 259: Release v5.29.2
 
-## Production Readiness Checklist
+| Deliverable                    | Acceptance Criteria                                       |
+| ------------------------------ | --------------------------------------------------------- |
+| Full quality gate              | `npm run check` passes on clean tree                      |
+| Release metadata               | Changelog and package versions updated for v5.29.2        |
+| Published release              | Git tag + GitHub Release created from final sprint commit |
 
-| Checklist Item                        | Status Tracking                       |
-| ------------------------------------- | ------------------------------------- |
-| Zero suppressed diagnostics in source | Automated via grep + lint             |
-| No non-blocking quality checks in CI  | Workflow review + CI run              |
-| No dead code/docs/config              | `npm run dead:check` + docs owner map |
-| All intermediate artifacts in temp    | Script/workflow audit                 |
-| Release path reproducible locally     | `npm run ci` + release rehearsal      |
+## VS Code and GitHub Integration Enhancement Plan
 
-### Future Horizons (Unscoped)
+### VS Code Extensions Policy
 
-| Track         | Candidate                                        | Trigger                           |
-| ------------- | ------------------------------------------------ | --------------------------------- |
-| Rendering     | Ray-traced preview (WebGPU compute shaders)      | WebGPU > 90% browser support      |
-| Collaboration | Cloud sync with E2E encryption                   | User base > 10K MAU               |
-| AI            | Generative design (auto-layout from constraints) | On-device models reach 7B quality |
-| Standards     | IFC 4.3 compliance certification                 | Industry demand                   |
-| Platform      | Raspberry Pi shop-floor kiosk (Electron-lite)    | Community request + sponsorship   |
-| Marketplace   | Paid plugin monetization (Stripe Connect)        | Plugin count > 20                 |
-| Room Planner  | Full-room layout v2 (appliance + clearances)     | Phase 34                          |
-| Community     | Manufacturer catalog embedding API               | Phase 34                          |
-| CNC           | Cabinet-to-machine-center direct link            | Phase 35                          |
-| XR            | AR walkthrough / first-person room view          | Phase 35 + WebXR Device API GA    |
+| Category  | Rule                                                                            |
+| --------- | ------------------------------------------------------------------------------- |
+| Required  | Keep only extensions that enforce quality or accelerate core TS/React workflow  |
+| Optional  | Visual-only extensions must justify measurable value                            |
+| Unwanted  | Language stacks unrelated to this repo should stay in `unwantedRecommendations` |
+| Stability | Disable language servers irrelevant to this workspace (e.g. Ruff/Python here)   |
 
----
+### Copilot, Agents, Prompts, Instructions, Skills
 
-## Dependency Budget
+| Area           | Improvement                                                                   |
+| -------------- | ----------------------------------------------------------------------------- |
+| Agents         | Add explicit “definition of done” checklists per agent mode                   |
+| Prompts        | Add output contracts (files changed, tests run, acceptance list)              |
+| Instructions   | Remove duplication and conflicting rules; keep one source of truth per domain |
+| Skills         | Ensure every reusable skill references current tooling versions               |
+| Copilot config | Prefer strict, deterministic defaults over convenience-only toggles           |
 
-### Production (max 8)
+### GitHub Actions and Hooks
 
-| #   | Package             | Bundle KB | Justification                            |
-| --- | ------------------- | --------- | ---------------------------------------- |
-| 1   | react               | 7         | UI framework                             |
-| 2   | react-dom           | 130       | DOM renderer                             |
-| 3   | zustand             | 1.1       | State management (smallest option)       |
-| 4   | i18next             | 16        | i18n core                                |
-| 5   | react-i18next       | 8         | React bindings for i18n                  |
-| 6   | @react-pdf/renderer | 300       | PDF generation (evaluate jsPDF Phase 25) |
-| 7   | idb-keyval          | 1         | IndexedDB wrapper                        |
-| 8   | comlink             | 2         | Worker RPC (typed, minimal)              |
+| Area     | Improvement                                                                |
+| -------- | -------------------------------------------------------------------------- |
+| CI       | Keep full quality gate blocking and visible in PR checks                   |
+| Release  | Keep preflight check before publish; add provenance evidence               |
+| Security | Maintain codeql/dependency/secret scanning as required checks              |
+| Hooks    | Ensure local hooks mirror CI gate logic and stay fast enough for daily use |
 
-**Rule**: No new production dependency without removing an existing one OR
-proving > 50 KB savings elsewhere.
+### MCP Strategy
 
----
+| Server Type      | Policy                                                                     |
+| ---------------- | -------------------------------------------------------------------------- |
+| Core servers     | GitHub, filesystem, fetch, context7, playwright, memory                    |
+| Optional servers | Cloudflare, GitKraken, Brave Search only when actively used                |
+| Security         | API keys via secret storage only, never plain text                         |
+| Performance      | Remove or disable servers with no demonstrated value in this project cycle |
 
-## Architecture Decisions — Closed (ADR Log)
+## Root Structure and Cleanup Policy
 
-| Decision                       | Rationale                                                                                              |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------ |
-| React over Solid/Svelte        | PDF renderer + i18next deep integration. Rewrite cost > benefit. React Compiler closes reactivity gap. |
-| Zustand over Redux Toolkit     | RTK = +15 KB + 40% more boilerplate for identical semantics. Slice pattern achieves same modularity.   |
-| Tailwind over CSS-in-JS        | Runtime CSS-in-JS = +10 KB, breaks SSR, prevents static extraction. Tailwind v4 JIT strictly superior. |
-| No server on critical path     | Core value: zero-install, zero-signup. Server dependency would destroy this. Optional Supabase only.   |
-| Engine as pure TypeScript      | Must work in CLI, CI, workers, WASM targets without React or DOM.                                      |
-| Vite over Next.js/CRA          | CRA deprecated. Next.js SSR = no value for client-side SPA. Vite Rolldown = fastest.                   |
-| `erasableSyntaxOnly`           | Aligns with TC39 type-stripping. Compatible with esbuild/oxc-transform/Node `--strip-types`.           |
-| Tool configs at root           | Vite/ESLint/TS expect root. Subdirs = churn without benefit.                                           |
-| Intermediates in OS $TEMP      | Workspace must be commit-clean after any build. Zero cache/coverage/report artifacts in repo.          |
-| Zero `eslint-disable`/`as any` | Every suppression hides a real issue. Fix root cause or redesign the type.                             |
-| `skipLibCheck: true`           | Required: @react-pdf/types ships `const enum` in .d.ts (TS18055). Remove once upstream fixes.          |
-| 8 prod deps (not 7)            | comlink added Phase 17 for typed worker RPC. Justified by DX + type safety gain.                       |
+Tool configuration files that are expected at root by ecosystem tooling stay at root (`vite.config.ts`, `vitest.config.ts`, `playwright.config.ts`, `eslint.config.js`, `stylelint.config.js`, `typedoc.json`, `tsconfig*.json`).
 
----
+Everything else follows these rules:
 
-## Toolchain & Environment
+1. Docs in `docs/`
+2. Scripts in `scripts/`
+3. Static assets in `public/`
+4. Feature code under `src/` by layer
+5. No dead file survives past the PR that made it dead
 
-| Tool       | Version | Purpose                         | Config Location           |
-| ---------- | ------- | ------------------------------- | ------------------------- |
-| Node.js    | ≥ 22    | Runtime                         | `engines` in package.json |
-| npm        | 11.x    | Package management + workspaces | package.json              |
-| TypeScript | 6.x     | Compiler (`erasableSyntaxOnly`) | tsconfig\*.json           |
-| Vite       | 8.x     | Build + dev server (Rolldown)   | vite.config.ts            |
-| ESLint     | 10.x    | Linting (flat config)           | eslint.config.js          |
-| Prettier   | 3.x     | Formatting                      | .prettierrc.json          |
-| Stylelint  | 17.x    | CSS lint                        | stylelint.config.js       |
-| Vitest     | 4.x     | Unit + bench tests              | vitest.config.ts          |
-| Playwright | 1.60.x  | E2E + a11y (axe-core)           | playwright.config.ts      |
-| Knip       | 6.x     | Dead code detection             | `"knip"` in package.json  |
-| TypeDoc    | 0.28.x  | API documentation               | typedoc.json              |
-| gh CLI     | 2.60+   | Release automation              | System install            |
+## Parent Workspace (`MyScripts`) Alignment Plan
 
-### Intermediate Artifact Policy
+This repository can be used as the hardened reference template for sibling projects in `MyScripts` via a controlled sync process:
 
-| Artifact           | Path                                       |
-| ------------------ | ------------------------------------------ |
-| Vite cache         | `$TEMP/WoodworkingShop/.vite_cache`        |
-| ESLint cache       | `$TEMP/WoodworkingShop/.eslintcache`       |
-| Vitest coverage    | `$TEMP/WoodworkingShop/coverage`           |
-| Bench results      | `$TEMP/WoodworkingShop/bench-results.json` |
-| Playwright results | `$TEMP/WoodworkingShop/test-results`       |
-| Playwright report  | `$TEMP/WoodworkingShop/playwright-report`  |
-| Lighthouse output  | `$TEMP/WoodworkingShop/.lighthouseci`      |
-| TypeDoc output     | `docs/api/` (committed on release only)    |
+| Sync Asset                  | Source in This Repo                                                    | Parent Target Pattern                                     |
+| --------------------------- | ---------------------------------------------------------------------- | --------------------------------------------------------- |
+| CI quality workflow pattern | `.github/workflows/ci.yml`                                             | `MyScripts/templates/<template>/.github/workflows/ci.yml` |
+| Release gate pattern        | `.github/workflows/release.yml`                                        | same as above                                             |
+| VS Code baseline            | `.vscode/settings.json`, `.vscode/extensions.json`, `.vscode/mcp.json` | `MyScripts/templates/<template>/.vscode/*`                |
+| Agent/prompt baseline       | `.github/agents/*`, `.github/prompts/*`, `.github/instructions/*`      | template folders                                          |
 
----
+Sync is done only by explicit template version bumps and validation runs, never by ad-hoc copy/paste.
 
-## Release Quality Gates
+## Production Readiness Checklist (Must Pass)
 
-| #   | Command                 | Check                                | Target        |
-| --- | ----------------------- | ------------------------------------ | ------------- |
-| 1   | `npm run typecheck`     | Zero TS errors (4 tsconfigs)         | 0 errors      |
-| 2   | `npm run lint`          | Zero ESLint warnings                 | 0 warnings    |
-| 3   | `npm run lint:css`      | Zero Stylelint warnings              | 0 warnings    |
-| 4   | `npm run lint:md`       | Zero markdownlint issues             | 0 issues      |
-| 5   | `npm run format:check`  | Zero Prettier drift                  | 0 drift       |
-| 6   | `npm run i18n:coverage` | 100% key parity (6 locales)          | 100%          |
-| 7   | `npm test`              | All unit tests pass                  | 100% pass     |
-| 8   | `npm run build`         | Clean production build               | 0 warnings    |
-| 9   | `npm run bundle:check`  | JS ≤ budget (< 1500 KB target)       | ≤ budget      |
-| 10  | `npm run bench:check`   | Benchmarks within 5× baseline        | < 5× baseline |
-| 11  | `npm run test:e2e`      | All E2E + a11y pass                  | 100% pass     |
-| 12  | `npm run dead:check`    | No dead files/exports                | 0 dead        |
-| 13  | Lighthouse CI           | TBT < 200 ms, FCP < 1.2 s, a11y ≥ 95 | All pass      |
+| Check           | Command / Method                  | Target                     |
+| --------------- | --------------------------------- | -------------------------- |
+| Type and lint   | `npm run quality`                 | pass                       |
+| Full gate       | `npm run ci`                      | pass                       |
+| Dead code       | `npm run dead:check`              | 0 issues                   |
+| i18n            | `npm run i18n:coverage`           | 100%                       |
+| Security        | dependency + workflow scans       | 0 unresolved high/critical |
+| Build artifacts | temp policy and checksums         | compliant                  |
+| Release         | tag workflow and artifact publish | reproducible               |
 
----
+## Continuous Improvement Rules
 
-## Continuous Enhancement Rules
+1. No suppression-based fixes. Resolve root causes.
+2. No stale docs, dead config, or dead code in main.
+3. No intermediate artifacts outside `$TEMP`.
+4. No architecture drift without an ADR update.
+5. No non-blocking quality checks in release path.
+6. No extension/tool addition without measurable workflow value.
 
-1. **No suppression-first fixes** — fix root cause. Never disable a check to silence it.
-2. **No dead code** — unused exports, unreachable branches, orphaned files removed same PR.
-3. **No dead docs** — stale sections updated or deleted same commit as code change.
-4. **No dead config** — commented-out settings, disabled rules, empty overrides deleted.
-5. **No hardcoded measurements** — all dimensions in mm via `Mm` branded type.
-6. **No hardcoded colours** — `wood-*` tokens only. No inline hex in TSX.
-7. **RTL-first layout** — logical properties (`ms-*`, `me-*`, `start-*`, `end-*`) everywhere.
-8. **i18n parity every PR** — every `t('key')` → all 6 locale files in same commit.
-9. **Engine stays pure** — `src/engine/` has no React, no side effects, no DOM.
-10. **Intermediates to $TEMP** — no build artifacts in workspace.
-11. **≤ 8 production deps** — no additions without removal or exceptional justification.
-12. **Config minimalism** — prefer tool defaults; only configure what diverges.
-13. **Commit after each sprint** — atomic, bisectable history.
-14. **GH release every 5 sprints** — semver minor bump, `--generate-notes`.
-15. **Progressive enhancement** — CSS features that lack universal support use `@supports`.
+## Open Questions Requiring Explicit Decision
+
+1. Should optional cloud sync stay experimental or graduate to supported module in v5.30?
+2. Should plugin API semver be decoupled from app semver starting phase 54?
+3. Should export logic move into isolated packages under `src/engine/export` after contract tests land?
