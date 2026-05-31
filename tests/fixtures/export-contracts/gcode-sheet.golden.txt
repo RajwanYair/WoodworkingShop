@@ -1,0 +1,51 @@
+; Cabinet Planner G-code Export
+; Version: <APP_VERSION>  Schema: gcode-v1
+; Generated: <ISO_TIMESTAMP>
+; G-code for sheet 1 - melamine-18 18mm
+; Sheet size: 2440 x 1220 mm
+; Tool diameter: 6 mm, Feed: 1500 mm/min
+; Parts: 1
+
+G21 ; mm mode
+G90 ; absolute positioning
+G0 Z5.0 ; retract to safe height
+M3 S18000 ; spindle on
+
+; --- Cut: P01 Side Panel (300x600) ---
+G0 X7.00 Y7.00
+G1 Z-3.00 F600
+G1 X313.00 Y7.00 F1500
+G1 X313.00 Y613.00
+G1 X7.00 Y613.00
+G1 X7.00 Y7.00
+G1 Z-6.00 F600
+G1 X313.00 Y7.00 F1500
+G1 X313.00 Y613.00
+G1 X7.00 Y613.00
+G1 X7.00 Y7.00
+G1 Z-9.00 F600
+G1 X313.00 Y7.00 F1500
+G1 X313.00 Y613.00
+G1 X7.00 Y613.00
+G1 X7.00 Y7.00
+G1 Z-12.00 F600
+G1 X313.00 Y7.00 F1500
+G1 X313.00 Y613.00
+G1 X7.00 Y613.00
+G1 X7.00 Y7.00
+G1 Z-15.00 F600
+G1 X313.00 Y7.00 F1500
+G1 X313.00 Y613.00
+G1 X7.00 Y613.00
+G1 X7.00 Y7.00
+G1 Z-18.00 F600
+G1 X313.00 Y7.00 F1500
+G1 X313.00 Y613.00
+G1 X7.00 Y613.00
+G1 X7.00 Y7.00
+G0 Z5.0
+
+G0 Z5.0 ; retract
+M5 ; spindle off
+G0 X0 Y0 ; return to origin
+M2 ; program end

@@ -1,0 +1,14 @@
+# Cabinet Planner BOM Export,,,,,,,,,,
+# Version: <APP_VERSION>  Schema: bom-csv-v1
+# Generated: <ISO_TIMESTAMP>
+# Cabinets: 1  Parts: 2  Hardware: 4,,,,,,,,,,
+
+Material Summary,,,,,,,,,,,,
+Material,Total Area (m²),Board-Feet (nominal 1 inch),Weight (kg),Price/Sheet,Est. Material Cost,,,,,
+Melamine 18 mm,2.320,24.97,29.23,₪165.00,₪165.00,,,,,
+
+#,Cabinet,Part ID,Part Name,Qty,Material,Thickness (mm),Length (mm),Width (mm),Area (m²),Edge Banding,Weight (kg),Grain Direction
+1,Cabinet A,P01,Side Panel,2,Melamine 18 mm,18,2000,580,2.320000,Front edge,29.232,—
+
+#,Cabinet,Hardware ID,Hardware Name,Qty,Unit,,,,, 
+1,Cabinet A,hinge,Hinge 35mm,4,pcs,,,,,,
