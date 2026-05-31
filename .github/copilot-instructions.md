@@ -2,19 +2,19 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.27.0** · **Next target: v5.28.0** (Phase 52)
+> **Current release: v5.28.0** · **Next target: v5.29.0** (Phase 53)
 
 ## Active Sprint — Phase 52 (Sprints 245–249)
 
-> **Status**: IN PROGRESS · **Goal**: Production Hardening
+> **Status**: DONE · **Goal**: Production Hardening
 
 | Sprint | Feature                                                           | Status |
 | ------ | ----------------------------------------------------------------- | ------ |
 | 245    | Truth Alignment & Governance — claim audit + GOVERNANCE-POLICY.md | DONE   |
-| 246    | Code & Config Hardening                                           | TODO   |
-| 247    | Structural Cleanup & Dead Asset Elimination                       | TODO   |
-| 248    | Production Verification Matrix                                    | TODO   |
-| 249    | Release v5.28.0                                                   | TODO   |
+| 246    | Code & Config Hardening                                           | DONE   |
+| 247    | Structural Cleanup & Dead Asset Elimination                       | DONE   |
+| 248    | Production Verification Matrix                                    | DONE   |
+| 249    | Release v5.28.0                                                   | DONE   |
 
 ## Completed — Phase 51 (Sprints 240–244)
 

@@ -160,11 +160,11 @@ This roadmap now tracks forward execution only.
 
 ### Sprint 249: Release v5.28.0
 
-| Deliverable               | Acceptance Criteria                             |
-| ------------------------- | ----------------------------------------------- |
-| Version and changelog     | Semver bump, changelog finalized                |
-| GitHub release            | Release workflow passes and publishes artifacts |
-| Post-release verification | Smoke tests and docs links validated            |
+| Deliverable               | Acceptance Criteria                             | Status                                                     |
+| ------------------------- | ----------------------------------------------- | ---------------------------------------------------------- |
+| Version and changelog     | Semver bump, changelog finalized                | ✅ Done — package.json 5.28.0, CHANGELOG updated           |
+| GitHub release            | Release workflow passes and publishes artifacts | ✅ Done — v5.28.0 tag + GitHub Release created             |
+| Post-release verification | Smoke tests and docs links validated            | ✅ Done — quality gates pass, copilot-instructions updated |
 
 ## Open Architecture Questions
 

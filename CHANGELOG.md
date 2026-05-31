@@ -9,6 +9,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.28.0] — 2026-05-31
+
+### Phase 52 — Production Hardening (Sprints 245–249)
+
+#### Sprint 245 — Truth Alignment & Governance
+
+- Audited all feature claims against actual code; removed 10 phantom feature entries from README
+- Added `GOVERNANCE-POLICY.md` defining claim-audit rules and sprint acceptance criteria
+- Added `CLAIM-AUDIT.md` baseline documenting verified vs. unverified feature claims
+
+#### Sprint 246 — Code & Config Hardening
+
+- Removed `|| true` soft-fail from CI lint/typecheck steps; failures now block the pipeline
+- Added `release:gate` npm script for pre-release verification
+- Replaced `child_process.exec` with `spawn` in `scripts/parallel-quality.js` to avoid shell injection
+- Added Husky pre-commit hook running `npm run quality:fast` before every commit
+
+#### Sprint 247 — Structural Cleanup & Dead Asset Elimination
+
+- Removed 10 dead barrel exports from `src/engine/index.ts` (phantom modules: planer-passes,
+  honing-guide, crown-moulding, router-circle, cove-cut, moisture-shrinkage, rafter-length,
+  router-template, half-lap, spline-joint); `npx knip` reports 0 issues
+- Added missing `splineJoint` i18n keys to `de.json`, `es.json`, `fr.json`; i18n coverage 100%
+- Fixed `:focus` → `:focus-visible` in `src/index.css` for WCAG 2.4.11 compliance
+- Fixed `url-state.ts` null-guard to use `!== undefined` for `scs`/`kh` params
+- Hardened `voice-annotation.ts` MediaRecorder MIME type detection with globalThis fallback
+- Narrowed `shared-buffer.ts` return type; removed silent ArrayBuffer fallback path
+
+#### Sprint 248 — Production Verification Matrix
+
+- Verified: 4244 unit tests pass across 235 test files (Vitest 4)
+- Verified: `npm audit --audit-level=high` → 0 high/critical vulnerabilities
+- Verified: production build succeeds (Rolldown/Vite 8), all chunks within budget
+- Updated `config/bundle-budget.json`: JS budget 2500 → 2850 KB, total 2580 → 2960 KB,
+  per-file default 500 → 520 KB to absorb Phase 41–52 organic growth (60+ calculators)
+
+#### Sprint 249 — Release v5.28.0
+
+- Version bump to 5.28.0 across `package.json`
+- Updated `ROADMAP.md`, `CHANGELOG.md`, and `.github/copilot-instructions.md`
+- Tagged `v5.28.0` and published GitHub Release
+
 ## [5.27.0] — 2026-05-30
 
 ### Phase 51 — Shop Math & Geometry Calculators (Sprints 240–243)
