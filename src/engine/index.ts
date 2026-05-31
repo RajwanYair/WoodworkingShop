@@ -258,6 +258,14 @@ export { batchReplaceMaterial, listMaterials, countByMaterial } from './batch-re
 export type { BatchPart, BatchReplaceOptions, BatchReplaceResult } from './batch-replace';
 
 export { DEFAULT_PROJECT_SETTINGS, mergeSettings, validateSettings, describeSettings } from './project-settings';
+
+export {
+  extractExpressionDependencies,
+  buildParameterDependencyGraph,
+  parameterDependencyGraphToMermaid,
+  evaluateNamedParameters,
+} from './parameter-expressions';
+export type { ParameterDependencyGraph, ParameterGraphEdge, ParameterEvaluationResult } from './parameter-expressions';
 export type { LengthUnit, CurrencyCode, SheetSortPreference, ProjectSettings } from './project-settings';
 
 export { flattenLocale, auditLocale, auditAllLocales, formatAuditReport } from './i18n-audit';
