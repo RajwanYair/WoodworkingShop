@@ -150,13 +150,13 @@ This roadmap now tracks forward execution only.
 | i18n parity            | All 6 locales have splineJoint keys                                | ✅ Done — de/es/fr locales updated                                      |
 | Code correctness fixes | Null-check bugs, :focus→:focus-visible, voice-annotation detection | ✅ Done — url-state, index.css, voice-annotation, shared-buffer patched |
 
-### Sprint 248: Production Verification Matrix
+### Sprint 248: Production Verification Matrix ✅ DONE
 
-| Deliverable                   | Acceptance Criteria                                            |
-| ----------------------------- | -------------------------------------------------------------- |
-| Full local gates              | `npm run ci` pass on clean tree                                |
-| Security and dependency audit | No high/critical unresolved findings                           |
-| Release rehearsal             | Tag candidate built and validated without publish side effects |
+| Deliverable                   | Acceptance Criteria                                            | Status                                                             |
+| ----------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------ |
+| Full local gates              | `npm run ci` pass on clean tree                                | ✅ Done — 4244 tests pass, build clean, bundle budgets updated     |
+| Security and dependency audit | No high/critical unresolved findings                           | ✅ Done — `npm audit --audit-level=high` reports 0 vulnerabilities |
+| Release rehearsal             | Tag candidate built and validated without publish side effects | ✅ Done — build + bundle:check pass after budget bump to v5.28.0   |
 
 ### Sprint 249: Release v5.28.0
 
