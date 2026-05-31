@@ -58,7 +58,7 @@ export interface PluginApiCompatibility {
 function parseSemver(version: string, label: string): readonly [number, number, number] {
   const match = /^(\d+)\.(\d+)\.(\d+)$/.exec(version.trim());
   if (!match) {
-    throw new RangeError(`comparePluginApiVersions: invalid ${label} semver \"${version}\"`);
+    throw new RangeError(`comparePluginApiVersions: invalid ${label} semver "${version}"`);
   }
   return [Number(match[1]), Number(match[2]), Number(match[3])];
 }

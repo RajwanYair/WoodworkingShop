@@ -9,6 +9,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.29.2] — 2026-05-31
+
+### Phase 54 — Priority Execution Window (Sprints 255–259)
+
+#### Sprint 255 — Roadmap Consolidation and Governance
+
+- Rebased roadmap status around the post-v5.29.1 baseline and added the next execution window (Sprints 255–259)
+- Aligned governance references and release-line framing for current planning docs
+
+#### Sprint 256 — VS Code Extension Policy Hardening
+
+- Pruned low-value workspace extension recommendations and kept a quality-focused core set
+- Added Ruff to `unwantedRecommendations` and disabled Ruff in workspace settings for TS-only scope
+- Removed duplicate Vitest root-config setting from workspace settings
+
+#### Sprint 257 — MCP and GitHub Integration Governance
+
+- Added `docs/MCP-GITHUB-GOVERNANCE.md` with per-server tier/owner/purpose matrix
+- Added explicit release-flow validation checklist and secret-handling policy for MCP inputs
+
+#### Sprint 258 — Plugin API SemVer Decoupling
+
+- Added independent plugin API version constant and semver comparison helpers in the engine plugin contract
+- Added structured compatibility decisions for required plugin API versions
+- Added marketplace compatibility helpers to evaluate and partition plugin catalogs by API support
+- Added unit tests for semver comparisons and marketplace compatibility behavior
+
+#### Sprint 259 — Release v5.29.2
+
+- Ran full quality gate (`npm run check`) with passing status before release
+- Bumped project version metadata to `5.29.2`
+
 ## [5.29.1] — 2026-05-31
 
 ### Phase 53 — Best-in-Class Upgrade (Sprints 250–254)

@@ -149,19 +149,19 @@ This file no longer duplicates completed sprint narratives. Legacy and archival 
 
 ### Sprint 255: Roadmap Consolidation and Governance
 
-| Deliverable                    | Acceptance Criteria                                                |
-| ------------------------------ | ------------------------------------------------------------------ |
-| Roadmap refresh                | Priorities reflect implemented state and next 5 sprint commitments |
-| Governance carry-over cleanup  | Security/user guide version references aligned with release line   |
-| Execution checklist alignment  | Sprint-level tasks map to reproducible commands and owners         |
+| Deliverable                   | Acceptance Criteria                                                |
+| ----------------------------- | ------------------------------------------------------------------ |
+| Roadmap refresh               | Priorities reflect implemented state and next 5 sprint commitments |
+| Governance carry-over cleanup | Security/user guide version references aligned with release line   |
+| Execution checklist alignment | Sprint-level tasks map to reproducible commands and owners         |
 
 ### Sprint 256: VS Code Extension Policy Hardening
 
-| Deliverable                    | Acceptance Criteria                                                        |
-| ------------------------------ | -------------------------------------------------------------------------- |
-| Recommendation set cleanup     | Required extension list removes low-value/noise extensions                 |
-| Unwanted profile expansion     | Unrelated language stacks moved to `unwantedRecommendations`               |
-| Workspace validator stability  | Non-applicable language servers disabled for this TypeScript-only project |
+| Deliverable                   | Acceptance Criteria                                                       |
+| ----------------------------- | ------------------------------------------------------------------------- |
+| Recommendation set cleanup    | Required extension list removes low-value/noise extensions                |
+| Unwanted profile expansion    | Unrelated language stacks moved to `unwantedRecommendations`              |
+| Workspace validator stability | Non-applicable language servers disabled for this TypeScript-only project |
 
 ### Sprint 257: MCP and GitHub Integration Governance
 
@@ -173,19 +173,19 @@ This file no longer duplicates completed sprint narratives. Legacy and archival 
 
 ### Sprint 258: Plugin API SemVer Decoupling
 
-| Deliverable                    | Acceptance Criteria                                                   |
-| ------------------------------ | --------------------------------------------------------------------- |
-| Dedicated plugin API version   | Plugin API semver is explicit and independent from app package semver |
-| Compatibility helpers          | Runtime helpers expose compatibility decisions for plugin marketplace |
-| Regression tests               | Unit coverage verifies version comparisons and compatibility checks   |
+| Deliverable                  | Acceptance Criteria                                                   |
+| ---------------------------- | --------------------------------------------------------------------- |
+| Dedicated plugin API version | Plugin API semver is explicit and independent from app package semver |
+| Compatibility helpers        | Runtime helpers expose compatibility decisions for plugin marketplace |
+| Regression tests             | Unit coverage verifies version comparisons and compatibility checks   |
 
 ### Sprint 259: Release v5.29.2
 
-| Deliverable                    | Acceptance Criteria                                       |
-| ------------------------------ | --------------------------------------------------------- |
-| Full quality gate              | `npm run check` passes on clean tree                      |
-| Release metadata               | Changelog and package versions updated for v5.29.2        |
-| Published release              | Git tag + GitHub Release created from final sprint commit |
+| Deliverable       | Acceptance Criteria                                       |
+| ----------------- | --------------------------------------------------------- |
+| Full quality gate | `npm run check` passes on clean tree                      |
+| Release metadata  | Changelog and package versions updated for v5.29.2        |
+| Published release | Git tag + GitHub Release created from final sprint commit |
 
 ## VS Code and GitHub Integration Enhancement Plan
 

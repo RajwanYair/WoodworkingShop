@@ -164,10 +164,7 @@ export function getMarketplacePluginCompatibility(
 /**
  * Return `true` if a marketplace plugin can run on the current plugin API version.
  */
-export function isMarketplacePluginCompatible(
-  plugin: MarketplacePlugin,
-  currentApiVersion?: string,
-): boolean {
+export function isMarketplacePluginCompatible(plugin: MarketplacePlugin, currentApiVersion?: string): boolean {
   return getMarketplacePluginCompatibility(plugin, currentApiVersion).compatible;
 }
 
