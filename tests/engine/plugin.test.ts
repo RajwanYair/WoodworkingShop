@@ -6,6 +6,9 @@ import {
   applyPartsPlugins,
   applyConfigPlugins,
   getPluginContract,
+  comparePluginApiVersions,
+  getPluginApiCompatibility,
+  PLUGIN_API_VERSION,
   PLUGIN_CONTRACT,
   type CabinetPlannerPlugin,
 } from '../../src/engine/plugin';
@@ -151,6 +154,11 @@ describe('applyConfigPlugins', () => {
 });
 
 describe('PluginContract', () => {
+  it('PLUGIN_API_VERSION is independent semver', () => {
+    expect(PLUGIN_API_VERSION).toMatch(/^\d+\.\d+\.\d+$/);
+    expect(PLUGIN_CONTRACT.apiVersion).toBe(PLUGIN_API_VERSION);
+  });
+
   it('PLUGIN_CONTRACT has apiVersion string', () => {
     expect(typeof PLUGIN_CONTRACT.apiVersion).toBe('string');
     expect(PLUGIN_CONTRACT.apiVersion).toMatch(/^\d+\.\d+\.\d+$/);
@@ -190,4 +198,34 @@ describe('PluginContract', () => {
     expect(hook).toBeDefined();
     expect(hook?.stability).toBe('stable');
   });
+});
+
+describe('plugin API semver helpers', () => {
+  it.each([
+    ['1.0.0', '1.0.0', 0],
+    ['1.2.0', '1.1.9', 1],
+    ['1.1.9', '1.2.0', -1],
+    ['2.0.0', '1.9.9', 1],
+  ] as const)('comparePluginApiVersions(%s, %s) -> %s', (left, right, expected) => {
+    const result = comparePluginApiVersions(left, right);
+    expect(Math.sign(result)).toBe(Math.sign(expected));
+  });
+
+  it('comparePluginApiVersions throws RangeError for invalid semver', () => {
+    expect(() => comparePluginApiVersions('1.0', '1.0.0')).toThrow(RangeError);
+  });
+
+  it.each([
+    ['1.0.0', '1.2.0', true, 'satisfied'],
+    ['1.2.0', '1.2.0', true, 'satisfied'],
+    ['1.2.1', '1.2.0', false, 'requires-newer-api'],
+    ['1.x.0', '1.2.0', false, 'invalid-version'],
+  ] as const)(
+    'getPluginApiCompatibility(%s, %s) -> compatible=%s, reason=%s',
+    (requiredVersion, currentVersion, compatible, reason) => {
+      const result = getPluginApiCompatibility(requiredVersion, currentVersion);
+      expect(result.compatible).toBe(compatible);
+      expect(result.reason).toBe(reason);
+    },
+  );
 });

@@ -11,6 +11,7 @@
  */
 
 import { get, set, del, createStore } from 'idb-keyval';
+import { getPluginApiCompatibility, type PluginApiCompatibility } from '../engine/plugin';
 import { getFetch } from './browser-compat';
 
 // ── IDB store ─────────────────────────────────────────────────────────────────
@@ -64,6 +65,11 @@ export interface CatalogCacheMeta {
   version: string;
   fetchedAt: string;
   pluginCount: number;
+}
+
+export interface CompatibilityPartition {
+  compatible: MarketplacePlugin[];
+  incompatible: MarketplacePlugin[];
 }
 
 // ── Default catalog URL ───────────────────────────────────────────────────────
@@ -143,6 +149,46 @@ export function searchPlugins(
       (p.tags ?? []).some((t) => t.toLowerCase().includes(q))
     );
   });
+}
+
+/**
+ * Compute plugin API compatibility for a marketplace plugin entry.
+ */
+export function getMarketplacePluginCompatibility(
+  plugin: MarketplacePlugin,
+  currentApiVersion?: string,
+): PluginApiCompatibility {
+  return getPluginApiCompatibility(plugin.minApiVersion, currentApiVersion);
+}
+
+/**
+ * Return `true` if a marketplace plugin can run on the current plugin API version.
+ */
+export function isMarketplacePluginCompatible(
+  plugin: MarketplacePlugin,
+  currentApiVersion?: string,
+): boolean {
+  return getMarketplacePluginCompatibility(plugin, currentApiVersion).compatible;
+}
+
+/**
+ * Split a catalog into compatible and incompatible plugins for the current API version.
+ */
+export function splitPluginsByCompatibility(
+  catalog: MarketplaceCatalog,
+  currentApiVersion?: string,
+): CompatibilityPartition {
+  return catalog.plugins.reduce<CompatibilityPartition>(
+    (acc, plugin) => {
+      if (isMarketplacePluginCompatible(plugin, currentApiVersion)) {
+        acc.compatible.push(plugin);
+      } else {
+        acc.incompatible.push(plugin);
+      }
+      return acc;
+    },
+    { compatible: [], incompatible: [] },
+  );
 }
 
 // ── Install / uninstall ───────────────────────────────────────────────────────

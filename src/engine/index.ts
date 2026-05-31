@@ -111,9 +111,18 @@ export {
   applyConfigPlugins,
   applyValidationPlugins,
   getPluginContract,
+  comparePluginApiVersions,
+  getPluginApiCompatibility,
+  PLUGIN_API_VERSION,
   PLUGIN_CONTRACT,
 } from './plugin.ts';
-export type { CabinetPlannerPlugin, PluginContract, PluginHookContract, PluginStability } from './plugin.ts';
+export type {
+  CabinetPlannerPlugin,
+  PluginContract,
+  PluginHookContract,
+  PluginStability,
+  PluginApiCompatibility,
+} from './plugin.ts';
 
 export { generateAssemblySteps, buildAssemblyDAG } from './assembly.ts';
 export type { AssemblyStep, RawStep } from './assembly.ts';

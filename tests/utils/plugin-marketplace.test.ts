@@ -10,6 +10,9 @@ import {
   loadCachedCatalog,
   clearCatalogCache,
   searchPlugins,
+  getMarketplacePluginCompatibility,
+  isMarketplacePluginCompatible,
+  splitPluginsByCompatibility,
   getInstalledPluginIds,
   isPluginInstalled,
   installPlugin,
@@ -202,6 +205,42 @@ describe('searchPlugins', () => {
     expect(results[0].id).toBe('export-svg');
     // same query, wrong category → no results
     expect(searchPlugins(catalog, 'svg', 'theme')).toHaveLength(0);
+  });
+});
+
+// ── compatibility helpers ───────────────────────────────────────────────────
+
+describe('marketplace plugin API compatibility', () => {
+  const plugin = makePlugin('compat-check');
+
+  it.each([
+    ['1.0.0', '1.2.0', true, 'satisfied'],
+    ['1.2.0', '1.2.0', true, 'satisfied'],
+    ['1.2.1', '1.2.0', false, 'requires-newer-api'],
+    ['bad-semver', '1.2.0', false, 'invalid-version'],
+  ] as const)(
+    'getMarketplacePluginCompatibility(min=%s, current=%s) -> compatible=%s',
+    (minApiVersion, currentApiVersion, compatible, reason) => {
+      const result = getMarketplacePluginCompatibility({ ...plugin, minApiVersion }, currentApiVersion);
+      expect(result.compatible).toBe(compatible);
+      expect(result.reason).toBe(reason);
+    },
+  );
+
+  it('isMarketplacePluginCompatible returns true only for compatible plugin versions', () => {
+    expect(isMarketplacePluginCompatible({ ...plugin, minApiVersion: '1.1.0' }, '1.2.0')).toBe(true);
+    expect(isMarketplacePluginCompatible({ ...plugin, minApiVersion: '1.3.0' }, '1.2.0')).toBe(false);
+  });
+
+  it('splitPluginsByCompatibility partitions catalog into compatible and incompatible entries', () => {
+    const catalog = makeCatalog([
+      makePlugin('p-1', { minApiVersion: '1.0.0' }),
+      makePlugin('p-2', { minApiVersion: '1.2.0' }),
+      makePlugin('p-3', { minApiVersion: '1.2.1' }),
+    ]);
+    const result = splitPluginsByCompatibility(catalog, '1.2.0');
+    expect(result.compatible.map((p) => p.id)).toEqual(['p-1', 'p-2']);
+    expect(result.incompatible.map((p) => p.id)).toEqual(['p-3']);
   });
 });
 

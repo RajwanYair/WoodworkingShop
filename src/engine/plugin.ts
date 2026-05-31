@@ -44,12 +44,76 @@ export interface PluginContract {
   hooks: readonly PluginHookContract[];
 }
 
+/** Version of the v1 plugin API contract, independent from app package version. */
+export const PLUGIN_API_VERSION = '1.2.0' as const;
+
+/** Compatibility check result for a plugin's minimum required API version. */
+export interface PluginApiCompatibility {
+  requiredVersion: string;
+  currentVersion: string;
+  compatible: boolean;
+  reason: 'satisfied' | 'requires-newer-api' | 'invalid-version';
+}
+
+function parseSemver(version: string, label: string): readonly [number, number, number] {
+  const match = /^(\d+)\.(\d+)\.(\d+)$/.exec(version.trim());
+  if (!match) {
+    throw new RangeError(`comparePluginApiVersions: invalid ${label} semver \"${version}\"`);
+  }
+  return [Number(match[1]), Number(match[2]), Number(match[3])];
+}
+
+/**
+ * Compare two plugin API semver versions.
+ *
+ * @param left First semver value in `major.minor.patch` format.
+ * @param right Second semver value in `major.minor.patch` format.
+ * @returns Negative when `left < right`, positive when `left > right`, and `0` when equal.
+ * @throws RangeError When either input is not valid semver.
+ */
+export function comparePluginApiVersions(left: string, right: string): number {
+  const a = parseSemver(left, 'left');
+  const b = parseSemver(right, 'right');
+  if (a[0] !== b[0]) return a[0] - b[0];
+  if (a[1] !== b[1]) return a[1] - b[1];
+  return a[2] - b[2];
+}
+
+/**
+ * Compute compatibility between a required plugin API version and the current API version.
+ *
+ * @param requiredVersion Minimum plugin API semver required by a plugin.
+ * @param currentVersion Currently supported plugin API semver.
+ * @returns A structured compatibility decision with reason.
+ */
+export function getPluginApiCompatibility(
+  requiredVersion: string,
+  currentVersion: string = PLUGIN_API_VERSION,
+): PluginApiCompatibility {
+  try {
+    const cmp = comparePluginApiVersions(requiredVersion, currentVersion);
+    return {
+      requiredVersion,
+      currentVersion,
+      compatible: cmp <= 0,
+      reason: cmp <= 0 ? 'satisfied' : 'requires-newer-api',
+    };
+  } catch {
+    return {
+      requiredVersion,
+      currentVersion,
+      compatible: false,
+      reason: 'invalid-version',
+    };
+  }
+}
+
 /**
  * The published stability contract for the Cabinet Planner Plugin API v1.
  * Update this object whenever a hook is added, changed, or deprecated.
  */
 export const PLUGIN_CONTRACT: PluginContract = {
-  apiVersion: '1.2.0',
+  apiVersion: PLUGIN_API_VERSION,
   stability: 'experimental',
   hooks: [
     {
