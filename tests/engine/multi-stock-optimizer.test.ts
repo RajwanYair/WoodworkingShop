@@ -62,8 +62,8 @@ describe('optimizeWithMultiStock', () => {
     { width: 0, length: 1220 },
     { width: 1220, length: -1 },
   ])('throws RangeError for invalid candidate dimensions', ({ width, length }) => {
-    expect(() =>
-      optimizeWithMultiStock([part()], [{ material: 'melamine-18', width, length }]),
-    ).toThrow(/candidate dimensions must be > 0/i);
+    expect(() => optimizeWithMultiStock([part()], [{ material: 'melamine-18', width, length }])).toThrow(
+      /candidate dimensions must be > 0/i,
+    );
   });
 });

@@ -131,7 +131,8 @@ export function optimizeWithMultiStock(
       mergedSheets.push(reindexed);
       totalArea += sheet.sheetLength * sheet.sheetWidth;
       usedArea += sheet.parts.reduce((sum, part) => sum + part.length * part.width, 0);
-      totalWaste += sheet.sheetLength * sheet.sheetWidth - sheet.parts.reduce((sum, part) => sum + part.length * part.width, 0);
+      totalWaste +=
+        sheet.sheetLength * sheet.sheetWidth - sheet.parts.reduce((sum, part) => sum + part.length * part.width, 0);
       grainConflictCount += sheet.parts.filter((part) => part.grainConflict).length;
     }
   }

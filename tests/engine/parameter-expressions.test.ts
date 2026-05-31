@@ -65,7 +65,11 @@ describe('evaluateNamedParameters', () => {
     });
   });
 
-  it.each([
+  it.each<{
+    definitions: Record<string, string>;
+    values: Record<string, number>;
+    expected: RegExp;
+  }>([
     {
       definitions: { a: 'b + 1', b: 'a + 1' },
       values: {},
