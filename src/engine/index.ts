@@ -266,6 +266,8 @@ export {
   evaluateNamedParameters,
 } from './parameter-expressions';
 export type { ParameterDependencyGraph, ParameterGraphEdge, ParameterEvaluationResult } from './parameter-expressions';
+export { optimizeWithMultiStock } from './multi-stock-optimizer';
+export type { MultiStockOptimizationResult, MaterialStockSelection, StockCandidate } from './multi-stock-optimizer';
 export type { LengthUnit, CurrencyCode, SheetSortPreference, ProjectSettings } from './project-settings';
 
 export { flattenLocale, auditLocale, auditAllLocales, formatAuditReport } from './i18n-audit';
