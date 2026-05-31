@@ -1,4 +1,14 @@
 {
+  // Secret inputs are prompted once and stored in VS Code secret storage —
+  // never committed to disk. Referenced below via ${input:<id>}.
+  "inputs": [
+    {
+      "id": "brave-api-key",
+      "type": "promptString",
+      "description": "Brave Search API key (https://brave.com/search/api/)",
+      "password": true
+    }
+  ],
   "servers": {
     // ─── GitHub — official Copilot-native MCP (PRs, issues, workflows, code search) ─
     "github": {
@@ -78,7 +88,7 @@
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-brave-search"],
       "env": {
-        "BRAVE_API_KEY": "${env:BRAVE_API_KEY}"
+        "BRAVE_API_KEY": "${input:brave-api-key}"
       }
     }
   }

@@ -160,6 +160,57 @@
     "cursor-workspace": true
   },
 
+  // ─── Copilot Chat — latest agent features ───────────────────────────────────
+  // AGENTS.md support — root AGENTS.md + nested per-directory variants are read as context
+  "chat.useAgentsMdFile": true,
+  "chat.useNestedAgentsMdFiles": true,
+  // Checkpoints — restore the workspace to any prior point in an agent session
+  "chat.checkpoints.enabled": true,
+  "chat.checkpoints.showFileChanges": true,
+  // Todo list tool — surfaces the agent's manage_todo_list plan as a UI widget
+  "chat.tools.todos.showWidget": true,
+  // KaTeX math rendering in chat responses — useful for the calculator formulae
+  "chat.math.enabled": true,
+  // Send selected Simple Browser DOM elements straight into chat as context
+  "chat.sendElementsToChat.attachImages": true,
+  // Summarise long agent histories instead of truncating — preserves task context
+  "github.copilot.chat.summarizeAgentConversationHistory.enabled": true,
+  // Edit-request controls in the chat editing flow
+  "chat.editing.confirmEditRequestRemoval": true,
+  "chat.editing.confirmEditRequestRetry": true,
+  "chat.editing.autoAcceptDelay": 0,
+  // Virtual tool grouping kicks in once many MCP tools are active (this repo has 10 servers)
+  "github.copilot.chat.virtualTools.threshold": 128,
+  // TypeScript language-context provider — richer, faster type-aware chat answers & fixes
+  "github.copilot.chat.languageContext.typescript.enabled": true,
+  "github.copilot.chat.languageContext.fix.typescript.enabled": true,
+  "github.copilot.chat.languageContext.inline.typescript.enabled": true,
+  // Notebook cell-execution following (kept on for any future .ipynb exploration)
+  "github.copilot.chat.notebook.followCellExecution.enabled": true,
+  // New-workspace scaffolding from chat
+  "github.copilot.chat.newWorkspaceCreation.enabled": true,
+
+  // ─── Copilot Chat — terminal auto-approval policy ───────────────────────────
+  // Allow safe, read-only / idempotent project commands to run without a prompt;
+  // deny destructive or history-rewriting commands so they always require review.
+  "chat.tools.terminal.enableAutoApprove": true,
+  "chat.tools.terminal.autoApprove": {
+    "/^npm run (typecheck|lint|lint:css|lint:md|format:check|test|i18n:coverage|dead:check|bundle:check|quality)\\b/": true,
+    "/^npx (vitest run|tsc|eslint|stylelint|prettier|markdownlint-cli2|knip)\\b/": true,
+    "git status": true,
+    "git diff": true,
+    "git log": true,
+    "git branch": true,
+    "git show": true,
+    "git fetch": true,
+    "/^(ls|dir|pwd|cat|echo|where|Get-ChildItem|Get-Content|Get-Location|Select-String|Test-Path|Measure-Object)\\b/": true,
+    "/^git (push|reset|clean|checkout|rebase|cherry-pick|filter-branch|update-ref)\\b/": false,
+    "/\\brm\\b|Remove-Item|rmdir|del\\b/": false,
+    "/--force|--hard|-f\\b/": false,
+    "/\\b(npm publish|gh release|gh repo delete)\\b/": false,
+    "/\\b(curl|wget|iwr|Invoke-WebRequest|Invoke-Expression|iex)\\b/": false
+  },
+
   // ─── Testing ────────────────────────────────────────────────────────────────
   "vitest.enable": true,
   "vitest.rootConfig": "${workspaceFolder}/vitest.config.ts",
