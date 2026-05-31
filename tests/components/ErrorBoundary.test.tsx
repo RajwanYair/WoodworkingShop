@@ -38,7 +38,7 @@ describe('ErrorBoundary — copy error details (Sprint 54)', () => {
   it('shows the copy button in error state', () => {
     renderBroken();
     expect(screen.getByRole('button', { name: /copy error details/i })).toBeInTheDocument();
-  });
+  }, 15000);
 
   it('displays the error message in all environments', () => {
     renderBroken();

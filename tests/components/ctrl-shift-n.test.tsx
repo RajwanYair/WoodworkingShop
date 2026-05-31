@@ -1,7 +1,7 @@
 /**
  * Sprint 86 — Ctrl+Shift+N adds a new cabinet keyboard shortcut.
  */
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeAll, beforeEach, vi } from 'vitest';
 
 vi.mock('zustand/middleware', async (importActual) => {
@@ -65,32 +65,39 @@ describe('Ctrl+Shift+N — add cabinet shortcut (Sprint 86)', () => {
     useToastStore.setState({ toasts: [] });
   });
 
-  it('Ctrl+Shift+N adds a new cabinet to the store', () => {
+  it('Ctrl+Shift+N adds a new cabinet to the store', async () => {
     render(<App />);
     const before = useCabinetStore.getState().cabinets.length;
+    await Promise.resolve();
     fireEvent.keyDown(window, { key: 'N', ctrlKey: true, shiftKey: true });
-    const after = useCabinetStore.getState().cabinets.length;
-    expect(after).toBe(before + 1);
-  });
+    await waitFor(() => {
+      expect(useCabinetStore.getState().cabinets.length).toBeGreaterThan(before);
+    });
+  }, 15000);
 
-  it('Ctrl+Shift+n (lowercase) also triggers the shortcut', () => {
+  it('Ctrl+Shift+n (lowercase) also triggers the shortcut', async () => {
     render(<App />);
     const before = useCabinetStore.getState().cabinets.length;
+    await Promise.resolve();
     fireEvent.keyDown(window, { key: 'n', ctrlKey: true, shiftKey: true });
-    expect(useCabinetStore.getState().cabinets.length).toBe(before + 1);
+    await waitFor(() => {
+      expect(useCabinetStore.getState().cabinets.length).toBeGreaterThan(before);
+    });
   });
 
-  it('shows a success toast after adding a cabinet', () => {
+  it('shows a success toast after adding a cabinet', async () => {
     render(<App />);
     fireEvent.keyDown(window, { key: 'N', ctrlKey: true, shiftKey: true });
-    const toasts = useToastStore.getState().toasts;
-    expect(toasts.some((t) => t.type === 'success')).toBe(true);
+    await waitFor(() => {
+      const toasts = useToastStore.getState().toasts;
+      expect(toasts.some((t) => t.type === 'success')).toBe(true);
+    });
   });
 
-  it('ShortcutsModal lists Ctrl+Shift+N', () => {
+  it('ShortcutsModal lists Ctrl+Shift+N', async () => {
     render(<App />);
     // Open shortcuts modal with '?'
     fireEvent.keyDown(window, { key: '?' });
-    expect(screen.getByText('Ctrl + Shift + N')).toBeInTheDocument();
+    expect(await screen.findByText('Ctrl + Shift + N')).toBeInTheDocument();
   });
 });

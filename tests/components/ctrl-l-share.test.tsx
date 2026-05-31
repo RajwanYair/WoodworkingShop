@@ -3,6 +3,7 @@
  */
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeAll, beforeEach, vi } from 'vitest';
+import { act } from 'react';
 import App from '../../src/App';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 
@@ -42,6 +43,9 @@ describe('Ctrl+L share link shortcut — Sprint 71', () => {
 
     render(<App />);
     fireEvent.keyDown(window, { key: 'l', ctrlKey: true });
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    });
     expect(writeText).toHaveBeenCalledTimes(1);
   });
 
@@ -60,9 +64,12 @@ describe('Ctrl+L share link shortcut — Sprint 71', () => {
     expect(arg.length).toBeGreaterThan(0);
   });
 
-  it('Ctrl+L entry appears in ShortcutsModal', () => {
+  it('Ctrl+L entry appears in ShortcutsModal', async () => {
     render(<App />);
     fireEvent.keyDown(window, { key: '?' });
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    });
     expect(screen.getByText('Ctrl + L')).toBeInTheDocument();
   });
 

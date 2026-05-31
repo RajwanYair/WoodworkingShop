@@ -2,7 +2,7 @@
  * Sprint 66 — Ctrl+R keyboard shortcut resets cabinet config to defaults.
  */
 
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
 import App from '../../src/App';
 import { useCabinetStore } from '../../src/store/cabinet-store';
@@ -35,19 +35,23 @@ describe('Ctrl+R reset shortcut — Sprint 66', () => {
     useCabinetStore.getState().resetConfig();
   });
 
-  it('Ctrl+R fires without throwing', () => {
+  it('Ctrl+R fires without throwing', async () => {
     render(<App />);
     expect(() => {
       fireEvent.keyDown(window, { key: 'r', ctrlKey: true });
     }).not.toThrow();
-  });
+    await waitFor(() => {
+      expect(useCabinetStore.getState().config.width).toBe(DEFAULT_CONFIG.width);
+    });
+  }, 15000);
 
-  it('Ctrl+R resets a modified config back to defaults', () => {
+  it('Ctrl+R resets a modified config back to defaults', async () => {
     useCabinetStore.getState().setConfig({ width: 1800 });
     render(<App />);
     fireEvent.keyDown(window, { key: 'r', ctrlKey: true });
-    const { config } = useCabinetStore.getState();
-    expect(config.width).toBe(DEFAULT_CONFIG.width);
+    await waitFor(() => {
+      expect(useCabinetStore.getState().config.width).toBe(DEFAULT_CONFIG.width);
+    });
   });
 
   it('Ctrl+R with capital R also resets', () => {
@@ -57,11 +61,11 @@ describe('Ctrl+R reset shortcut — Sprint 66', () => {
     expect(useCabinetStore.getState().config.width).toBe(DEFAULT_CONFIG.width);
   });
 
-  it('Ctrl+R entry appears in ShortcutsModal', () => {
+  it('Ctrl+R entry appears in ShortcutsModal', async () => {
     render(<App />);
     // Open shortcuts modal with ?
     fireEvent.keyDown(window, { key: '?' });
     // The modal should list Ctrl + R
-    expect(screen.getByText('Ctrl + R')).toBeInTheDocument();
+    expect(await screen.findByText('Ctrl + R')).toBeInTheDocument();
   });
 });

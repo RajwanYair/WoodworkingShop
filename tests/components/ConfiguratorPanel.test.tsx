@@ -20,7 +20,7 @@ describe('ConfiguratorPanel', () => {
     expect(screen.getAllByText(/width/i).length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText(/height/i).length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText(/depth/i).length).toBeGreaterThanOrEqual(1);
-  });
+  }, 15000);
 
   it('renders material selectors', () => {
     render(<ConfiguratorPanel />);

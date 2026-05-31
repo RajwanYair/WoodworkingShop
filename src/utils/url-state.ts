@@ -69,7 +69,7 @@ export function paramsToConfig(params: QueryRecord): Partial<CabinetConfig> {
       .map(Number)
       .filter((n) => !isNaN(n));
   const scs = params.scs;
-  if (scs !== null) patch.shelfCentreSupports = Math.max(0, Math.min(5, Number(scs) || 0));
+  if (scs !== undefined) patch.shelfCentreSupports = Math.max(0, Math.min(5, Number(scs) || 0));
   const cm = params.cm;
   if (cm) patch.carcassMaterial = cm;
   const bm = params.bm;
@@ -93,7 +93,7 @@ export function paramsToConfig(params: QueryRecord): Partial<CabinetConfig> {
       .map(Number)
       .filter((n) => !isNaN(n) && n > 0);
   const kh = params.kh;
-  if (kh !== null) patch.kickHeight = Math.max(0, Math.min(200, Number(kh)));
+  if (kh !== undefined) patch.kickHeight = Math.max(0, Math.min(200, Number(kh)));
   const dst = params.dst;
   if (dst === 'standard' || dst === 'soft-close' || dst === 'full-extension')
     patch.drawerSlideType = dst as DrawerSlideType;

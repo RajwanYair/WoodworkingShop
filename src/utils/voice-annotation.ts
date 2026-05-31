@@ -72,10 +72,17 @@ const PREFERRED_MIME_TYPES = ['audio/webm;codecs=opus', 'audio/ogg;codecs=opus',
  * private browsing without mic permission).
  */
 export function getSupportedMimeType(): string | null {
-  const mediaRecorder = getMediaRecorderConstructor();
-  if (!mediaRecorder) return null;
+  const mediaRecorderCtor = getMediaRecorderConstructor();
+  const mediaRecorderGlobal = (globalThis as Record<string, unknown>)['MediaRecorder'] as
+    | {
+        isTypeSupported?: (mimeType: string) => boolean;
+      }
+    | undefined;
+  const isTypeSupported = mediaRecorderCtor?.isTypeSupported ?? mediaRecorderGlobal?.isTypeSupported;
+  if (typeof isTypeSupported !== 'function') return null;
+
   for (const mime of PREFERRED_MIME_TYPES) {
-    if (mediaRecorder.isTypeSupported(mime)) return mime;
+    if (isTypeSupported(mime)) return mime;
   }
   // Browser supports MediaRecorder but none of the preferred types.
   return '';

@@ -35,12 +35,12 @@
  *
  * @param size  Requested byte length (must be ≥ 0)
  */
-export function trySharedArrayBuffer(size: number): SharedArrayBuffer | ArrayBuffer | null {
+export function trySharedArrayBuffer(size: number): SharedArrayBuffer | null {
   if (size < 0) return null;
 
   const sharedBufferCtor = (globalThis as Record<string, unknown>)['SharedArrayBuffer'];
   // Feature detection — older browsers and non-isolated contexts may lack this.
-  if (typeof sharedBufferCtor !== 'function') return new ArrayBuffer(size);
+  if (typeof sharedBufferCtor !== 'function') return null;
 
   // The crossOriginIsolated global is `false` when COOP/COEP headers are absent.
   if (typeof crossOriginIsolated !== 'undefined' && !crossOriginIsolated) return null;

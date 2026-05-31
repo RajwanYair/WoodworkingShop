@@ -2194,5 +2194,19 @@
       "t_lap": "T-Lap",
       "cross_lap": "Cross Lap"
     }
+  },
+  "splineJoint": {
+    "title": "Spline Joint",
+    "boardThickness": "Board Thickness",
+    "splineThickness": "Spline Thickness",
+    "slotDepthPerBoard": "Slot Depth per Board",
+    "jointLength": "Joint Length",
+    "splineCount": "Number of Splines",
+    "recommendedSlotWidth": "Recommended Slot Width",
+    "totalInsertionDepth": "Total Insertion Depth",
+    "remainingWallThickness": "Remaining Wall Thickness",
+    "totalSplineLength": "Total Spline Length",
+    "glueAreaPerSpline": "Glue Area per Spline",
+    "totalGlueArea": "Total Glue Area"
   }
 }

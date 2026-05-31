@@ -2456,5 +2456,19 @@
       "t_lap": "חפיפת T",
       "cross_lap": "חפיפת צלב"
     }
+  },
+  "splineJoint": {
+    "title": "חיבור שפיץ",
+    "boardThickness": "עובי לוח",
+    "splineThickness": "עובי שפיץ",
+    "slotDepthPerBoard": "עומק חריץ בכל לוח",
+    "jointLength": "אורך החיבור",
+    "splineCount": "מספר שפיצים",
+    "recommendedSlotWidth": "רוחב חריץ מומלץ",
+    "totalInsertionDepth": "עומק הכנסה כולל",
+    "remainingWallThickness": "עובי דופן נותר",
+    "totalSplineLength": "אורך שפיץ כולל",
+    "glueAreaPerSpline": "שטח הדבקה לשפיץ",
+    "totalGlueArea": "שטח הדבקה כולל"
   }
 }

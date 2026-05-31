@@ -36,25 +36,25 @@ describe('PluginRegistryPanel', () => {
   it('shows "Enabled" button when plugin is active', () => {
     registerPlugin(mockPlugin);
     render(<PluginRegistryPanel />);
-    expect(screen.getByRole('button', { pressed: true })).toBeInTheDocument();
+    const btn = screen.getByRole('button', { name: /disable plugin/i });
+    expect(btn).toHaveAttribute('aria-pressed', 'true');
   });
 
   it('toggles plugin to disabled on button click', () => {
     registerPlugin(mockPlugin);
     render(<PluginRegistryPanel />);
-    const btn = screen.getByRole('button', { pressed: true });
-    fireEvent.click(btn);
-    // After clicking, aria-pressed should be false
-    expect(screen.getByRole('button', { pressed: false })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /disable plugin/i }));
+    const btn = screen.getByRole('button', { name: /enable plugin/i });
+    expect(btn).toHaveAttribute('aria-pressed', 'false');
   });
 
   it('toggles plugin back to enabled on second click', () => {
     registerPlugin(mockPlugin);
     render(<PluginRegistryPanel />);
-    const btn = screen.getByRole('button', { pressed: true });
-    fireEvent.click(btn);
-    fireEvent.click(screen.getByRole('button', { pressed: false }));
-    expect(screen.getByRole('button', { pressed: true })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /disable plugin/i }));
+    fireEvent.click(screen.getByRole('button', { name: /enable plugin/i }));
+    const btn = screen.getByRole('button', { name: /disable plugin/i });
+    expect(btn).toHaveAttribute('aria-pressed', 'true');
   });
 
   it('shows the API version badge', () => {
