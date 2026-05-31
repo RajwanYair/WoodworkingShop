@@ -55,6 +55,9 @@
   "less.validate": true,
   "stylelint.validate": ["css"],
 
+  // ─── Python / Ruff (disabled for this TS-only workspace) ───────────────────
+  "ruff.enable": false,
+
   // ─── Browser Compatibility Checker ──────────────────────────────────────────
   "browser-compatibility-checker.enabled": true,
 
@@ -263,7 +266,6 @@
   },
   "todo-tree.filtering.excludeGlobs": ["**/node_modules/**", "**/dist/**", "**/coverage/**"],
   // ─── Vitest Explorer ────────────────────────────────────────────────────────
-  "vitest.rootConfig": "vitest.config.ts",
   "vitest.filesWatcherEnable": true,
 
   // ─── Coverage Gutters ───────────────────────────────────────────────────────
