@@ -33,7 +33,7 @@ jobs:
       - run: npm test && npm run test:coverage
       # Coverage upload is best-effort; CI should not fail if Codecov is unavailable (network, quota, etc.)
       # Test execution itself is blocking (npm test must pass before reaching this step)
-      - uses: codecov/codecov-action@v5
+      - uses: codecov/codecov-action@v6
         with: { files: /tmp/WoodworkingShop/coverage/lcov.info, flags: unit, fail_ci_if_error: false }
       - run: npm run bench:check && npm run build && npm run bundle:check
       - uses: actions/upload-artifact@v4
