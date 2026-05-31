@@ -9,6 +9,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.29.0] — 2026-05-31
+
+### Phase 53 — Best-in-Class Upgrade (Sprints 250–254)
+
+#### Sprint 250 — Architecture and Data Contracts
+
+- Added project storage schema registry metadata and migration path for legacy `0.9` payloads
+- Hardened import validation for unsupported project schema versions and invalid bundle versions
+- Extended `project-storage` tests to cover backward compatibility and forward-version rejection
+
+#### Sprint 251 — Export and Manufacturing Correctness
+
+- Added file-backed golden contract tests for DXF, G-code, and BOM exports
+- Added stable normalization for timestamp/version lines in golden fixtures
+- Committed baseline fixtures under `tests/fixtures/export-contracts/`
+
+#### Sprint 252 — Frontend Reliability and Accessibility
+
+- Added keyboard journey regression suite for `Alt+1..5` tab switching, `Alt+D` dark-mode toggle, and `?` shortcut modal lifecycle
+- Added `@testing-library/user-event` for interaction-faithful keyboard testing
+
+#### Sprint 253 — Named Parameter Expressions + Dependency Graph
+
+- Added engine module for named parameter expressions, dependency extraction, cycle detection, and deterministic evaluation
+- Added Mermaid graph output helper for graph-viewer integration
+- Added comprehensive engine tests for positive and negative evaluation paths
+
+#### Sprint 254 — Multi-Stock Kerf-Aware Optimizer
+
+- Added multi-stock optimizer that evaluates candidate sheet sizes per material and selects by kerf-aware waste score
+- Added merged optimization output and per-material selection metadata
+- Added engine tests for candidate selection, mixed-material behavior, fallback defaults, and dimension guards
+
 ## [5.28.0] — 2026-05-31
 
 ### Phase 52 — Production Hardening (Sprints 245–249)
