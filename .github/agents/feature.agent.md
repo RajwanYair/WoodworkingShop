@@ -94,3 +94,13 @@ npm run dead:check # no orphaned exports
 - Every `t('key')` → entry in both `en.json` AND `he.json`
 - `.tsx` files export only React components
 - No new prod deps without justification
+
+## Definition of done (must be explicit in final response)
+
+The final report must include:
+
+1. Files created/updated by layer (engine, store, component, i18n, mount, tests)
+2. Verification commands executed
+3. Acceptance checklist with pass/fail for each architecture layer
+4. i18n parity result
+5. Quality/test gate status

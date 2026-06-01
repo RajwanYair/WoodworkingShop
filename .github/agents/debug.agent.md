@@ -83,3 +83,13 @@ If the fix introduced any new quality gate failures, fix those too before report
 - No `enum` or `namespace`
 - i18n parity must be preserved — if you add a `t('key')`, add it to both `en.json` and `he.json`
 - Engine functions remain pure — no React imports, no DOM
+
+## Definition of done (must be explicit in final response)
+
+The final report must include:
+
+1. Root cause statement linked to failing command
+2. Files changed and why
+3. Verification commands run after fixes
+4. Gate status for `npm run quality:fast` and `npm run test`
+5. Residual risk notes (if any)

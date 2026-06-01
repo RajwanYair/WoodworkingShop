@@ -53,3 +53,19 @@ Run `npm run quality` and fix **every** reported error or warning until the gate
 - **erasableSyntaxOnly**: no `enum` or `namespace` — use `as const` / union types
 - **i18n parity**: if you add a `t('key')` call, add the key to BOTH `en.json` AND `he.json`
 - **Do not move config files** to subdirs (they must stay at workspace root)
+
+## Output contract
+
+Your final response must include, in this order:
+
+1. Root-cause summary grouped by failing gate
+2. Files changed
+3. Commands run to verify fixes
+4. Final gate status table for:
+   - typecheck
+   - lint
+   - lint:css
+   - lint:md
+   - format:check
+   - i18n:coverage
+   - tests

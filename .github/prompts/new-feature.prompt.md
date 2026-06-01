@@ -47,3 +47,15 @@ Every new feature follows this layered pattern:
 - `npm run quality` → 0 errors
 - `npx vitest run` → all pass
 - i18n coverage: 100% parity
+
+## Output contract
+
+Your final response must include, in this order:
+
+1. Files changed (engine/store/component/i18n/tests/mount path)
+2. Commands executed for verification
+3. Acceptance checklist with explicit pass/fail for:
+   - Architecture layers completed
+   - i18n parity
+   - Quality and test gates
+4. Any known follow-up risks or non-blocking observations
