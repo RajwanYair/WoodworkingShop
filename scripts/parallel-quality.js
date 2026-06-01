@@ -23,6 +23,7 @@ const checks = [
   'hooks:validate',
   'template:sync:validate',
   'pdf:budget',
+  'components:budget',
 ];
 const PromiseCtor = globalThis.Promise;
 

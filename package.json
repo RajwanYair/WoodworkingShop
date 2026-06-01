@@ -65,7 +65,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc -b --noEmit",
-    "quality": "npm run typecheck && npm run lint && npm run lint:css && npm run lint:md && npm run format:check && npm run i18n:coverage && npm run agents:validate && npm run prompts:validate && npm run instructions:validate && npm run vscode:extensions:validate && npm run mcp:metadata:validate && npm run ai:context:validate && npm run workflows:validate && npm run hooks:validate && npm run template:sync:validate && npm run pdf:budget",
+    "quality": "npm run typecheck && npm run lint && npm run lint:css && npm run lint:md && npm run format:check && npm run i18n:coverage && npm run agents:validate && npm run prompts:validate && npm run instructions:validate && npm run vscode:extensions:validate && npm run mcp:metadata:validate && npm run ai:context:validate && npm run workflows:validate && npm run hooks:validate && npm run template:sync:validate && npm run pdf:budget && npm run components:budget",
     "quality:fast": "node scripts/parallel-quality.js",
     "check": "npm run quality:fast && npm run test",
     "ci": "npm run check && npm run build && npm run bundle:check && npm run bench:check",

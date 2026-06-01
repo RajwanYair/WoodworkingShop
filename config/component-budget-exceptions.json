@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "maxLinesDefault": 600,
+  "exceptions": [
+    {
+      "filePath": "src/components/preview/CabinetPreview.tsx",
+      "maxLines": 650,
+      "reason": "Legacy preview orchestration component pending split; tracked for decomposition in next preview hardening cycle.",
+      "owner": "preview",
+      "expiresOn": "2026-09-30"
+    }
+  ]
+}
