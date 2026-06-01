@@ -9,6 +9,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.29.9] — 2026-06-01
+
+### Phase 61 — Pipeline and Template Governance (Sprints 290–294)
+
+#### Sprint 290 — Phase 61 Planning Baseline
+
+- Added the next priority execution window to roadmap planning with explicit Sprint 290–294 acceptance scope
+
+#### Sprint 291 — GitHub Workflow Governance Validation
+
+- Added `scripts/validate-workflow-governance.js` to enforce required workflow file presence and governance contract tokens
+- Added policy checks for CI, release, CodeQL, dependency-review, and secret-scan workflows
+- Integrated workflow governance validation into quality workflows
+
+#### Sprint 292 — Local Hook Governance Validation
+
+- Added `scripts/validate-hook-governance.js` to enforce required `simple-git-hooks` and `lint-staged` contracts in `package.json`
+- Added hook and lint-staged policy integrity checks for required commands and key mappings
+- Integrated hook governance validation into quality workflows
+
+#### Sprint 293 — Template Sync Manifest Governance
+
+- Added `config/template-sync-manifest.json` as a machine-readable parent-template sync contract
+- Added `scripts/validate-template-sync-manifest.js` to enforce source path existence and manifest integrity checks
+- Integrated template sync manifest validation into quality workflows
+
+#### Sprint 294 — Release v5.29.9
+
+- Ran full quality gate (`npm run check`) before release and confirmed passing status
+- Bumped project version metadata to `5.29.9`
+
 ## [5.29.8] — 2026-06-01
 
 ### Phase 60 — Workspace Policy Enforcement (Sprints 285–289)

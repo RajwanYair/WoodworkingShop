@@ -2,7 +2,7 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.29.8** · **Next target: v5.30.0** (Phase 60)
+> **Current release: v5.29.9** · **Next target: v5.30.0** (Phase 61)
 
 ## Active Sprint — Phase 52 (Sprints 245–249)
 
