@@ -439,6 +439,48 @@ This file no longer duplicates completed sprint narratives. Legacy and archival 
 | Release metadata  | Changelog and package versions updated for v5.29.8                |
 | Published release | Tag `v5.29.8` and GitHub release created from final sprint commit |
 
+## Program Plan: Phase 61 (Pipeline and Template Governance)
+
+### Sprint 290: Phase 61 Planning Baseline
+
+| Deliverable               | Acceptance Criteria                                               |
+| ------------------------- | ----------------------------------------------------------------- |
+| Priority continuation map | Next 5 sprint steps are defined in-order with measurable outcomes |
+| Governance hardening      | Scope targets CI, hook policy, and template alignment checks      |
+| Release continuity        | Final sprint ends with version bump + tag + GitHub release        |
+
+### Sprint 291: GitHub Workflow Governance Validation
+
+| Deliverable                | Acceptance Criteria                                                                        |
+| -------------------------- | ------------------------------------------------------------------------------------------ |
+| Workflow policy validator  | Script validates required workflow files and critical governance steps                     |
+| Security and release gates | Validation fails if dependency-review, secret scan, CodeQL, CI, or release contracts drift |
+| Quality integration        | Validator is wired into quality checks and fails on workflow policy drift                  |
+
+### Sprint 292: Local Hook Governance Validation
+
+| Deliverable             | Acceptance Criteria                                                                      |
+| ----------------------- | ---------------------------------------------------------------------------------------- |
+| Hook policy validator   | Script validates `simple-git-hooks` and `lint-staged` required entries in `package.json` |
+| Policy integrity checks | Validation fails on missing required hooks or formatter/lint command contracts           |
+| Quality integration     | Validator is wired into quality checks and fails on hook policy drift                    |
+
+### Sprint 293: Template Sync Manifest Governance
+
+| Deliverable         | Acceptance Criteria                                                                 |
+| ------------------- | ----------------------------------------------------------------------------------- |
+| Sync manifest       | Add machine-readable manifest for parent workspace sync assets and ownership intent |
+| Manifest validator  | Script validates sync-manifest path existence and duplicate entry drift             |
+| Quality integration | Validator is wired into quality checks and fails on sync manifest drift             |
+
+### Sprint 294: Release v5.29.9
+
+| Deliverable       | Acceptance Criteria                                               |
+| ----------------- | ----------------------------------------------------------------- |
+| Full quality gate | `npm run check` passes on clean tree                              |
+| Release metadata  | Changelog and package versions updated for v5.29.9                |
+| Published release | Tag `v5.29.9` and GitHub release created from final sprint commit |
+
 ## VS Code and GitHub Integration Enhancement Plan
 
 ### VS Code Extensions Policy
