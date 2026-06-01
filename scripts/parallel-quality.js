@@ -21,6 +21,7 @@ const checks = [
   'ai:context:validate',
   'workflows:validate',
   'hooks:validate',
+  'template:sync:validate',
 ];
 const PromiseCtor = globalThis.Promise;
 

@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "templateName": "woodworking-shop-governance",
+  "assets": [
+    {
+      "id": "ci-quality-workflow",
+      "sourcePath": ".github/workflows/ci.yml",
+      "targetPattern": "MyScripts/templates/<template>/.github/workflows/ci.yml",
+      "owner": "ci"
+    },
+    {
+      "id": "release-workflow",
+      "sourcePath": ".github/workflows/release.yml",
+      "targetPattern": "MyScripts/templates/<template>/.github/workflows/release.yml",
+      "owner": "release"
+    },
+    {
+      "id": "vscode-settings",
+      "sourcePath": ".vscode/settings.json",
+      "targetPattern": "MyScripts/templates/<template>/.vscode/settings.json",
+      "owner": "dx"
+    },
+    {
+      "id": "vscode-extensions",
+      "sourcePath": ".vscode/extensions.json",
+      "targetPattern": "MyScripts/templates/<template>/.vscode/extensions.json",
+      "owner": "dx"
+    },
+    {
+      "id": "vscode-mcp",
+      "sourcePath": ".vscode/mcp.json",
+      "targetPattern": "MyScripts/templates/<template>/.vscode/mcp.json",
+      "owner": "dx"
+    },
+    {
+      "id": "agent-definitions",
+      "sourcePath": ".github/agents",
+      "targetPattern": "MyScripts/templates/<template>/.github/agents",
+      "owner": "copilot"
+    },
+    {
+      "id": "prompt-templates",
+      "sourcePath": ".github/prompts",
+      "targetPattern": "MyScripts/templates/<template>/.github/prompts",
+      "owner": "copilot"
+    },
+    {
+      "id": "instruction-files",
+      "sourcePath": ".github/instructions",
+      "targetPattern": "MyScripts/templates/<template>/.github/instructions",
+      "owner": "copilot"
+    }
+  ]
+}
