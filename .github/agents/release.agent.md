@@ -99,3 +99,11 @@ Attach `dist/sbom.json` if present.
 - Never force-push after tagging
 - Commit message must be exactly: `chore: release vX.Y.Z`
 - Do not bump the version if `npm run check` fails
+
+## Definition of done
+
+1. Pre-flight checks pass on a clean working tree.
+2. Version and release metadata are updated consistently.
+3. Release build artifacts are generated successfully.
+4. Commit, tag, and push are completed without history rewrites.
+5. GitHub release is created and its URL is reported.

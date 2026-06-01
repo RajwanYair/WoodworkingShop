@@ -61,3 +61,11 @@ app meets and maintains its Lighthouse / Core Web Vitals targets.
 - No `as any`, no `eslint-disable`, no `@ts-ignore`.
 - All perf fixes must pass `npm run quality && npm test`.
 - Update `CHANGELOG.md [Unreleased]` with performance delta.
+
+## Definition of done
+
+1. Lighthouse and bundle diagnostics are captured and summarized.
+2. High-impact performance bottlenecks are fixed or explicitly justified.
+3. Performance budgets are re-validated after changes.
+4. Quality and test gates pass with no suppressions.
+5. Final response includes measurable before/after impact where available.

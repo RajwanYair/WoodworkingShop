@@ -86,3 +86,11 @@ suppression, and leave the project more secure than you found it.
 6. Apply fixes — no suppressions.
 7. Run `npm run quality && npm test`.
 8. Document findings in `CHANGELOG.md [Unreleased]`.
+
+## Definition of done
+
+1. OWASP checklist findings are documented with severity and file scope.
+2. Security fixes are applied without introducing suppression comments.
+3. Audit/scan commands are executed and results summarized.
+4. Quality and test gates pass after hardening changes.
+5. Final response includes unresolved risks and mitigation plan.
