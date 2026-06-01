@@ -6,7 +6,7 @@
  */
 import { spawn } from 'node:child_process';
 
-const checks = ['typecheck', 'lint', 'lint:css', 'lint:md', 'format:check', 'i18n:coverage', 'agents:validate', 'prompts:validate'];
+const checks = ['typecheck', 'lint', 'lint:css', 'lint:md', 'format:check', 'i18n:coverage', 'agents:validate', 'prompts:validate', 'instructions:validate'];
 const PromiseCtor = globalThis.Promise;
 
 function runCheck(name) {
