@@ -271,6 +271,48 @@ This file no longer duplicates completed sprint narratives. Legacy and archival 
 | Release metadata  | Changelog and package versions updated for v5.29.4                |
 | Published release | Tag `v5.29.4` and GitHub release created from final sprint commit |
 
+## Program Plan: Phase 57 (Engine Correctness Hardening)
+
+### Sprint 270: Phase 57 Planning Baseline
+
+| Deliverable               | Acceptance Criteria                                               |
+| ------------------------- | ----------------------------------------------------------------- |
+| Priority continuation map | Next 5 sprint steps are defined in-order with measurable outcomes |
+| Engine-focused scope lock | Every sprint targets deterministic engine correctness hardening   |
+| Release continuity        | Final sprint ends with version bump + tag + GitHub release        |
+
+### Sprint 271: Engine Invariant Utility Foundation
+
+| Deliverable                | Acceptance Criteria                                                  |
+| -------------------------- | -------------------------------------------------------------------- |
+| Shared invariant helpers   | `src/engine` includes reusable typed numeric/shape invariant helpers |
+| Error contract consistency | Invariant failures throw descriptive `RangeError` messages           |
+| Unit validation coverage   | Helper tests cover valid pass-through and invalid-failure conditions |
+
+### Sprint 272: Engine Invariant Adoption (Geometry Calculators)
+
+| Deliverable              | Acceptance Criteria                                                |
+| ------------------------ | ------------------------------------------------------------------ |
+| Targeted module adoption | Existing geometry calculators adopt shared invariant helpers       |
+| Behavioral compatibility | Existing calculator outputs remain stable for valid input ranges   |
+| Regression coverage      | Existing tests remain green with no suppression or type relaxation |
+
+### Sprint 273: Property-Based Geometry Regression Expansion
+
+| Deliverable              | Acceptance Criteria                                                         |
+| ------------------------ | --------------------------------------------------------------------------- |
+| Property test suite      | Add fast-check property tests for selected geometry calculators             |
+| Invariant assertions     | Tests prove bounded outputs and angle-consistency invariants over many runs |
+| Quality gate integration | Added tests run under existing `npm run test` with no extra manual steps    |
+
+### Sprint 274: Release v5.29.5
+
+| Deliverable       | Acceptance Criteria                                               |
+| ----------------- | ----------------------------------------------------------------- |
+| Full quality gate | `npm run check` passes on clean tree                              |
+| Release metadata  | Changelog and package versions updated for v5.29.5                |
+| Published release | Tag `v5.29.5` and GitHub release created from final sprint commit |
+
 ## VS Code and GitHub Integration Enhancement Plan
 
 ### VS Code Extensions Policy
