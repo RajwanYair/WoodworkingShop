@@ -9,6 +9,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.29.7] — 2026-06-01
+
+### Phase 59 — AI Governance Enforcement (Sprints 280–284)
+
+#### Sprint 280 — Phase 59 Planning Baseline
+
+- Added the next priority execution window to roadmap planning with explicit Sprint 280–284 acceptance scope
+
+#### Sprint 281 — Agent Definition-of-Done Governance
+
+- Added `scripts/validate-agent-contracts.js` to validate Definition-of-Done coverage across all `.github/agents/*.agent.md` files
+- Backfilled missing Definition-of-Done checklist sections for governance parity in agent definitions
+- Integrated agent contract validation into quality workflows
+
+#### Sprint 282 — Prompt Output-Contract Governance
+
+- Added `scripts/validate-prompt-contracts.js` to enforce Output Contract coverage across `.github/prompts/*.prompt.md` files
+- Backfilled missing Output Contract checklist sections for prompt parity
+- Integrated prompt contract validation into quality workflows
+
+#### Sprint 283 — Instruction Frontmatter Governance
+
+- Added `scripts/validate-instruction-frontmatter.js` to enforce non-empty `applyTo` YAML frontmatter across `.github/instructions/*.instructions.md`
+- Integrated instruction scope validation into quality workflows
+
+#### Sprint 284 — Release v5.29.7
+
+- Ran full quality gate (`npm run check`) before release and confirmed passing status
+- Bumped project version metadata to `5.29.7`
+
 ## [5.29.6] — 2026-06-01
 
 ### Phase 58 — Invariant Convergence (Sprints 275–279)
