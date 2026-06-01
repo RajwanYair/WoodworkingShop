@@ -15,6 +15,8 @@
  *   taperPerFoot       = (jigOffset / workpieceLength) × 304.8
  */
 
+import { assertGreaterThan, assertLessThan } from './invariant';
+
 export interface TaperJigInput {
   /** Total length of the workpiece to be tapered in mm */
   workpieceLengthMm: number;
@@ -40,12 +42,13 @@ export interface TaperJigResult {
 }
 
 export function calculateTaperJig(input: TaperJigInput): TaperJigResult {
+  const fn = 'calculateTaperJig';
   const { workpieceLengthMm, startWidthMm, endWidthMm, taperedFaces = 1 } = input;
 
-  if (workpieceLengthMm <= 0) throw new RangeError('workpieceLengthMm must be positive');
-  if (startWidthMm <= 0) throw new RangeError('startWidthMm must be positive');
-  if (endWidthMm <= 0) throw new RangeError('endWidthMm must be positive');
-  if (endWidthMm >= startWidthMm) throw new RangeError('endWidthMm must be less than startWidthMm');
+  assertGreaterThan(fn, 'workpieceLengthMm', workpieceLengthMm, 0);
+  assertGreaterThan(fn, 'startWidthMm', startWidthMm, 0);
+  assertGreaterThan(fn, 'endWidthMm', endWidthMm, 0);
+  assertLessThan(fn, 'endWidthMm', endWidthMm, startWidthMm);
 
   const totalRemovalMm = startWidthMm - endWidthMm;
   const materialRemovedPerFaceMm = taperedFaces === 2 ? totalRemovalMm / 2 : totalRemovalMm;

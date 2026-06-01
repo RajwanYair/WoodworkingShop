@@ -16,6 +16,8 @@
  *   headroom     : ≥ 80″ (2032 mm) — caller-supplied, validated only
  */
 
+import { assertGreaterThan } from './invariant';
+
 export interface StairStringerInput {
   /** Total vertical rise from floor to upper level in mm */
   totalRiseMm: number;
@@ -53,12 +55,13 @@ const IRC_RISER_MAX_MM = 196.85; // 7¾″
 const IRC_TREAD_MIN_MM = 254; // 10″
 
 export function calculateStairStringer(input: StairStringerInput): StairStringerResult {
+  const fn = 'calculateStairStringer';
   const { totalRiseMm, treadDepthMm, idealRiserMm = 175, headroomMm = 2032 } = input;
 
-  if (totalRiseMm <= 0) throw new RangeError('totalRiseMm must be positive');
-  if (treadDepthMm <= 0) throw new RangeError('treadDepthMm must be positive');
-  if (idealRiserMm <= 0) throw new RangeError('idealRiserMm must be positive');
-  if (headroomMm <= 0) throw new RangeError('headroomMm must be positive');
+  assertGreaterThan(fn, 'totalRiseMm', totalRiseMm, 0);
+  assertGreaterThan(fn, 'treadDepthMm', treadDepthMm, 0);
+  assertGreaterThan(fn, 'idealRiserMm', idealRiserMm, 0);
+  assertGreaterThan(fn, 'headroomMm', headroomMm, 0);
 
   const riserCount = Math.min(20, Math.max(3, Math.round(totalRiseMm / idealRiserMm)));
   const actualRiserMm = Math.round((totalRiseMm / riserCount) * 10) / 10;
