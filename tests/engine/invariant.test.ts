@@ -5,6 +5,8 @@ import {
   assertBetweenInclusive,
   assertFiniteNumber,
   assertGreaterThan,
+  assertIntegerAtLeast,
+  assertLessThan,
 } from '../../src/engine/invariant';
 
 describe('engine invariants', () => {
@@ -83,5 +85,33 @@ describe('engine invariants', () => {
     { value: 11, minInclusive: 0, maxInclusive: 10 },
   ])('assertBetweenInclusive throws outside range value=$value', ({ value, minInclusive, maxInclusive }) => {
     expect(() => assertBetweenInclusive('fn', 'field', value, minInclusive, maxInclusive)).toThrow(RangeError);
+  });
+
+  it.each([
+    { value: 0, minInclusive: 0 },
+    { value: 5, minInclusive: 1 },
+  ])('assertIntegerAtLeast validates integer minimum value=$value min=$minInclusive', ({ value, minInclusive }) => {
+    expect(assertIntegerAtLeast('fn', 'field', value, minInclusive)).toBe(value);
+  });
+
+  it.each([
+    { value: 1.5, minInclusive: 0 },
+    { value: -1, minInclusive: 0 },
+  ])('assertIntegerAtLeast throws for invalid integer lower bound value=$value', ({ value, minInclusive }) => {
+    expect(() => assertIntegerAtLeast('fn', 'field', value, minInclusive)).toThrow(RangeError);
+  });
+
+  it.each([
+    { value: 0, maxExclusive: 1 },
+    { value: -2, maxExclusive: 0 },
+  ])('assertLessThan validates strict upper bound value=$value max=$maxExclusive', ({ value, maxExclusive }) => {
+    expect(assertLessThan('fn', 'field', value, maxExclusive)).toBe(value);
+  });
+
+  it.each([
+    { value: 1, maxExclusive: 1 },
+    { value: 2, maxExclusive: 1 },
+  ])('assertLessThan throws at or above upper bound value=$value max=$maxExclusive', ({ value, maxExclusive }) => {
+    expect(() => assertLessThan('fn', 'field', value, maxExclusive)).toThrow(RangeError);
   });
 });

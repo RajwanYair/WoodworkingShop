@@ -112,3 +112,47 @@ export function assertBetweenInclusive(
   }
   return value;
 }
+
+/**
+ * Assert that a value is an integer greater than or equal to a minimum.
+ *
+ * @param functionName - Calling function name for error context
+ * @param fieldName - Input field name for error context
+ * @param value - Value to validate
+ * @param minInclusive - Inclusive minimum bound
+ * @returns The validated integer
+ * @throws RangeError when value is not an integer or below minInclusive
+ */
+export function assertIntegerAtLeast(
+  functionName: string,
+  fieldName: string,
+  value: number,
+  minInclusive: number,
+): number {
+  assertFiniteNumber(functionName, fieldName, value);
+  if (!Number.isInteger(value)) {
+    throw new RangeError(`${functionName}: ${fieldName} must be an integer, got ${value}`);
+  }
+  if (value < minInclusive) {
+    throw new RangeError(`${functionName}: ${fieldName} must be >= ${minInclusive}, got ${value}`);
+  }
+  return value;
+}
+
+/**
+ * Assert that a value is strictly less than a maximum.
+ *
+ * @param functionName - Calling function name for error context
+ * @param fieldName - Input field name for error context
+ * @param value - Value to validate
+ * @param maxExclusive - Exclusive upper bound
+ * @returns The validated number
+ * @throws RangeError when value is not less than maxExclusive
+ */
+export function assertLessThan(functionName: string, fieldName: string, value: number, maxExclusive: number): number {
+  assertFiniteNumber(functionName, fieldName, value);
+  if (!(value < maxExclusive)) {
+    throw new RangeError(`${functionName}: ${fieldName} must be < ${maxExclusive}, got ${value}`);
+  }
+  return value;
+}
