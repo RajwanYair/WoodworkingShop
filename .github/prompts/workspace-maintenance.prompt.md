@@ -135,3 +135,10 @@ After completion, summarise:
 2. Any remaining known issues with mitigation plan
 3. Packages updated
 4. Current test/coverage numbers
+
+## Output contract
+
+1. List all files changed.
+2. List verification commands executed.
+3. Report acceptance criteria as pass/fail.
+4. Report unresolved risks or follow-up items.

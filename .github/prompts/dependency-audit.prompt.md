@@ -51,3 +51,10 @@ npm run build && npm run bundle:check
 - Do not add new dependencies without removing one or proving > 50 KB savings.
 - Keep ≤ 8 production dependencies.
 - Update `package-lock.json` — never delete it.
+
+## Output contract
+
+1. List all files changed.
+2. List verification commands executed.
+3. Report acceptance criteria as pass/fail.
+4. Report unresolved risks or follow-up items.

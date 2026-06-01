@@ -30,3 +30,10 @@ Run `npx vitest run` and fix all failing tests until the suite passes green.
 - **Never use `as any`** in test files — properly type test data.
 - **Use `cfg()` helper** from `tests/helpers.ts` to build CabinetConfig fixtures.
 - **Use `it.each`** when fixing multiple related assertions.
+
+## Output contract
+
+1. List all files changed.
+2. List verification commands executed.
+3. Report acceptance criteria as pass/fail.
+4. Report unresolved risks or follow-up items.

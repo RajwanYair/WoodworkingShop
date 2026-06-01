@@ -46,3 +46,10 @@ git status --short  # Should show no untracked generated files
 npm run build       # Build still works with new paths
 npm test            # Tests still pass
 ```
+
+## Output contract
+
+1. List all files changed.
+2. List verification commands executed.
+3. Report acceptance criteria as pass/fail.
+4. Report unresolved risks or follow-up items.

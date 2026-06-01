@@ -69,3 +69,10 @@ FIX: Extract `computeBar` to `src/components/foo/compute-bar.ts`
 ```
 
 Rate severity: **Blocker** (must fix before merge) | **Warning** (should fix) | **Suggestion** (optional improvement)
+
+## Output contract
+
+1. List all files changed.
+2. List verification commands executed.
+3. Report acceptance criteria as pass/fail.
+4. Report unresolved risks or follow-up items.

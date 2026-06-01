@@ -45,3 +45,10 @@ Ensure `package.json` version aligns with the release sprint:
 - Never skip sprint numbers.
 - Each phase has exactly 5 sprints.
 - Sprint commit format: `feat(<scope>): Sprint NNN — <summary> (Phase NN)`
+
+## Output contract
+
+1. List all files changed.
+2. List verification commands executed.
+3. Report acceptance criteria as pass/fail.
+4. Report unresolved risks or follow-up items.

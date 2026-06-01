@@ -69,3 +69,10 @@ Report findings with:
 - Location: file + line
 - Description: what the vulnerability is
 - Fix applied: what was changed
+
+## Output contract
+
+1. List all files changed.
+2. List verification commands executed.
+3. Report acceptance criteria as pass/fail.
+4. Report unresolved risks or follow-up items.

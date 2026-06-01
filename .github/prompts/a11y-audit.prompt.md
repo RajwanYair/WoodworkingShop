@@ -57,3 +57,10 @@ For each panel, verify:
 npm run quality    # jsx-a11y lint must be 0 warnings
 npm run test:e2e   # axe violations must be 0
 ```
+
+## Output contract
+
+1. List all files changed.
+2. List verification commands executed.
+3. Report acceptance criteria as pass/fail.
+4. Report unresolved risks or follow-up items.

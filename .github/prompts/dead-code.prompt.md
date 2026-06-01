@@ -22,3 +22,10 @@ Run Knip to detect dead code, then remove it without breaking anything.
 - Never suppress Knip warnings without justification.
 - Do not delete test files or benchmark files.
 - If a utility is planned for future use, add it to `knip.entry` with a `!` suffix.
+
+## Output contract
+
+1. List all files changed.
+2. List verification commands executed.
+3. Report acceptance criteria as pass/fail.
+4. Report unresolved risks or follow-up items.

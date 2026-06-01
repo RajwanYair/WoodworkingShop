@@ -31,3 +31,10 @@ ${keys}
 4. Validate both files: `node -e "JSON.parse(require('fs').readFileSync('src/i18n/en.json','utf8'))"` (repeat for he.json).
 5. Run `npm run i18n:coverage` → must show 100% parity.
 6. Run `npx prettier --write src/i18n/en.json src/i18n/he.json`.
+
+## Output contract
+
+1. List all files changed.
+2. List verification commands executed.
+3. Report acceptance criteria as pass/fail.
+4. Report unresolved risks or follow-up items.

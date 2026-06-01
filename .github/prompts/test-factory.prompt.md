@@ -49,3 +49,10 @@ it.each([
 4. Extract any repeated fixture objects into a `const` near the top of the file.
 5. Run `npm test -- --reporter=verbose ${testFile}` — all tests must still pass with the same count.
 6. Confirm the line count dropped by ≥ 20 %.
+
+## Output contract
+
+1. List all files changed.
+2. List verification commands executed.
+3. Report acceptance criteria as pass/fail.
+4. Report unresolved risks or follow-up items.

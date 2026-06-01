@@ -58,3 +58,10 @@ a reliable offline experience.
 4. Fix each failing checklist item.
 5. Run `npm run quality && npm test`.
 6. Update `CHANGELOG.md [Unreleased]` with PWA delta.
+
+## Output contract
+
+1. List all files changed.
+2. List verification commands executed.
+3. Report acceptance criteria as pass/fail.
+4. Report unresolved risks or follow-up items.

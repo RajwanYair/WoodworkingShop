@@ -69,3 +69,10 @@ npm run bench:check   # all benchmarks within budget
 npm run lighthouse    # TBT < 200 ms, FCP < 1.2 s
 npm run bundle:check  # total bundle within 1.8 MB
 ```
+
+## Output contract
+
+1. List all files changed.
+2. List verification commands executed.
+3. Report acceptance criteria as pass/fail.
+4. Report unresolved risks or follow-up items.

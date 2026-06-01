@@ -64,3 +64,10 @@ For major version bumps, add an entry to `CHANGELOG.md [Unreleased]`:
 - Never force-merge a failing PR
 - Never downgrade a dependency to avoid fixing the code
 - Verify `≤ 7 prod deps` rule is not violated (check `package.json` `dependencies`)
+
+## Output contract
+
+1. List all files changed.
+2. List verification commands executed.
+3. Report acceptance criteria as pass/fail.
+4. Report unresolved risks or follow-up items.

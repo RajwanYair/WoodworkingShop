@@ -78,3 +78,10 @@ Attach the generated SBOM from `dist/` if present.
 - Never force-push after tagging
 - Keep release commit message format: `chore: release vX.Y.Z`
 - SBOM file from `dist/sbom.json` should be attached to the GitHub Release
+
+## Output contract
+
+1. List all files changed.
+2. List verification commands executed.
+3. Report acceptance criteria as pass/fail.
+4. Report unresolved risks or follow-up items.

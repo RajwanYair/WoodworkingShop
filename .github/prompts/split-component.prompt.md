@@ -43,3 +43,10 @@ src/components/<feature>/
 ```
 
 Do not create files for sections that are fewer than 30 lines — keep those inline.
+
+## Output contract
+
+1. List all files changed.
+2. List verification commands executed.
+3. Report acceptance criteria as pass/fail.
+4. Report unresolved risks or follow-up items.
