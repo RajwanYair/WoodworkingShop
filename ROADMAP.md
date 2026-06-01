@@ -5,193 +5,361 @@
 > Next release target: v5.31.0
 > Strategy: best-in-class, local-first, production-grade woodworking planning platform
 
-## 1. Why This Reset Exists
+---
 
-This roadmap is a full re-decision document, not a sprint log.
-It consolidates previous direction, keeps what is strong, and re-opens every major engineering decision for improvement across:
+## 1. Purpose of This Document
 
-- Frontend architecture and UX quality
-- Core engine correctness and export contracts
-- Backend/data/infrastructure and deployment workflows
-- Toolchain versions and dev experience
-- VS Code, Copilot, MCP, GitHub integration governance
+This is a **living decision ledger** — not a sprint backlog.
+Every major engineering, product, and tooling decision is re-opened, evaluated, and either confirmed with rationale or upgraded with a clear migration path.
 
-Historical execution details remain in:
+Historical artifacts:
 
-- [CHANGELOG.md](CHANGELOG.md)
-- [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
-- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- Sprint execution history → [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
+- Release changelog → [CHANGELOG.md](CHANGELOG.md)
+- Architecture deep-dive → [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- User guide → [docs/USER-GUIDE.md](docs/USER-GUIDE.md)
+
+---
 
 ## 2. Product North Star
 
-Build the most reliable local-first cabinet/furniture planning app for real workshop execution:
+**Build the most reliable local-first cabinet and furniture planning application that a real woodworker can trust in the workshop.**
 
-- Deterministic geometry and cut planning
-- Trustworthy manufacturing outputs (PDF/DXF/G-code)
-- Fast authoring and iteration for multi-cabinet projects
-- Strong accessibility, i18n, and RTL support
-- Zero-suppression production discipline
+### Core Pillars
+
+| Pillar                       | Meaning                                                                             |
+| ---------------------------- | ----------------------------------------------------------------------------------- |
+| **Deterministic geometry**   | Same inputs always produce same cuts, same part lists, same assembly sequence       |
+| **Manufacturing confidence** | Export outputs (PDF, DXF, G-code) are contract-tested and match physical materials  |
+| **Instant authoring**        | Multi-cabinet projects configure in seconds with live visual feedback               |
+| **Universal access**         | WCAG 2.2 AA, full RTL (Hebrew, Arabic), 6 locales, keyboard-first, mobile-ready     |
+| **Zero-compromise quality**  | No lint suppressions, no type hacks, no dead code — production discipline at scale  |
+| **Offline-first**            | No server required. All computation client-side. Optional cloud is strictly adapter |
+
+### Non-Goals (Intentional Exclusions)
+
+- 3D solid modeling (leave to Fusion 360 / FreeCAD)
+- CNC post-processor library (we generate safe G-code, not machine-specific posts)
+- Cloud-mandatory workflows (everything works offline; cloud is opt-in sync only)
+- Payment/subscription infrastructure (MIT open-source, no monetization layer)
 
 ## 3. Decision Ledger (Rethink + Final Direction)
 
-### 3.1 Frontend
+### 3.1 Language and Framework
 
-| Area              | Current                | Decision | Upgrade Direction                                                  |
-| ----------------- | ---------------------- | -------- | ------------------------------------------------------------------ |
-| UI framework      | React 19 + TS 6        | Keep     | Add stricter component boundaries and route-level error resilience |
-| Styling           | Tailwind v4 + tokens   | Keep     | Add visual regression snapshots and token audit pipeline           |
-| State             | Zustand slices         | Keep     | Add selector stability profiling and stale-update detection        |
-| Preview rendering | SVG + WebGL hybrid     | Keep     | Expand camera/input contract tests, remove pseudo-3D fallbacks     |
-| UX quality        | Mixed journey coverage | Improve  | Add explicit journey matrix with blocking e2e checks               |
+| Decision     | Current               | Alternatives Considered                 | Verdict              | Rationale                                                                                                          |
+| ------------ | --------------------- | --------------------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Language     | TypeScript 6 (strict) | Rust+WASM, Dart/Flutter, plain JS       | **Keep TS 6**        | Best DX for browser-first apps; `erasableSyntaxOnly` eliminates enum/namespace footguns; ecosystem depth unmatched |
+| UI framework | React 19              | Svelte 5, SolidJS, Vue 3.5              | **Keep React 19**    | Largest ecosystem, best Copilot/tooling support, concurrent rendering for heavy previews                           |
+| Styling      | Tailwind CSS v4       | CSS Modules, Vanilla Extract, Panda CSS | **Keep Tailwind v4** | Zero-runtime, design token system via CSS vars, logical properties for RTL                                         |
+| State        | Zustand 5 (slices)    | Jotai, Redux Toolkit, Signals           | **Keep Zustand**     | Minimal API, no boilerplate, excellent TS inference, undo/redo via middleware                                      |
+| Build        | Vite 8 (Rolldown)     | Turbopack, Rspack, esbuild-only         | **Keep Vite 8**      | Fastest HMR, native Rolldown perf, worker import syntax, proven plugin ecosystem                                   |
+| Testing      | Vitest 4 + Playwright | Jest, Cypress, Testing Library only     | **Keep Vitest + PW** | Same config as Vite, bench support, component + E2E in one stack                                                   |
 
-### 3.2 Backend/Data/API
+### 3.2 Frontend Architecture
 
-| Area          | Current                        | Decision | Upgrade Direction                                           |
-| ------------- | ------------------------------ | -------- | ----------------------------------------------------------- |
-| App topology  | Local-first SPA                | Keep     | Treat optional cloud as strict adapter interface            |
-| Persistence   | IndexedDB + JSON export/import | Keep     | Harden schema registry and migration matrix                 |
-| API usage     | Optional integrations          | Keep     | Add capability contracts and explicit offline behavior docs |
-| Database      | No mandatory central DB        | Keep     | Evaluate optional sync backend behind feature flags only    |
-| Privacy model | Client-first                   | Keep     | Add governance for any telemetry with default-off posture   |
+| Area                 | Current                             | Decision    | Next Action                                                 |
+| -------------------- | ----------------------------------- | ----------- | ----------------------------------------------------------- |
+| Component boundaries | ≤600 lines enforced with exceptions | **Keep**    | Add visual regression via Playwright screenshots            |
+| Error resilience     | Ad-hoc try/catch                    | **Improve** | Add React Error Boundaries per route/panel with recovery UI |
+| Preview rendering    | SVG 6-view + WebGL orbit            | **Keep**    | Remove pseudo-3D SVG fallback; commit to WebGL for 3D       |
+| PDF rendering        | @react-pdf off main thread          | **Keep**    | Contract-test output size/page count per scenario           |
+| Worker architecture  | Comlink + ?worker suffix            | **Keep**    | Add worker health check and timeout recovery                |
+| Routing              | Single-page, tab-based              | **Keep**    | Add URL-driven tab state for deep-linking                   |
 
-### 3.3 Architecture/Methods
+### 3.3 Backend, Data, and API
 
-| Area              | Current                         | Decision | Upgrade Direction                                          |
-| ----------------- | ------------------------------- | -------- | ---------------------------------------------------------- |
-| Engine purity     | Strong                          | Keep     | Increase property-based tests and invariant guards         |
-| Testing           | Unit + e2e + bench + a11y       | Keep     | Add golden export fixtures and contract drift checks       |
-| Docs              | Strong volume, uneven freshness | Improve  | Add ownership/freshness contracts and validation           |
-| Config governance | Good, growing complexity        | Improve  | Remove drift, enforce no disabled/suspended options policy |
+| Area              | Current                    | Alternatives Considered              | Verdict              | Rationale                                                                  |
+| ----------------- | -------------------------- | ------------------------------------ | -------------------- | -------------------------------------------------------------------------- |
+| Topology          | Local-first SPA, no server | Supabase, Firebase, Convex           | **Keep local-first** | Privacy, offline, no vendor lock-in; sync is adapter layer                 |
+| Persistence       | IndexedDB + JSON export    | SQLite/WASM, OPFS                    | **Evaluate OPFS**    | Origin Private File System gives file-like access without IndexedDB quirks |
+| Schema versioning | Implicit in JSON structure | Protobuf, JSON Schema, Zod           | **Add JSON Schema**  | Validate imports without runtime deps; schema lives in `config/schemas/`   |
+| Cloud sync        | Not implemented            | CRDTs (Yjs), Cloudflare D1           | **Defer**            | No user demand; CRDT engine exists but has no production backend           |
+| External APIs     | None required              | Lumber price APIs, hardware catalogs | **Keep zero-API**    | All data is user-owned; optional catalog import via JSON                   |
+| Analytics         | None                       | Plausible, PostHog                   | **Keep none**        | Privacy-first; if added, must be default-off with consent UI               |
 
-### 3.4 Tooling/Infra
+### 3.4 Documentation Strategy
 
-| Area              | Current                    | Decision | Upgrade Direction                                          |
-| ----------------- | -------------------------- | -------- | ---------------------------------------------------------- |
-| Build             | Vite 8 + TS 6              | Keep     | Add deterministic release reproducibility checks           |
-| CI/CD             | GitHub Actions             | Keep     | Harden workflow supply chain, provenance, and permissions  |
-| SBOM              | Present                    | Keep     | Add release-level attestation and verification checklist   |
-| Workspace tooling | Rich VS Code/Copilot stack | Keep     | Reduce no-value extension noise and enforce profile policy |
+| Area           | Current State                                       | Decision        | Standard                                       |
+| -------------- | --------------------------------------------------- | --------------- | ---------------------------------------------- |
+| Amount         | 12 docs in `docs/`, plus README, ROADMAP, CHANGELOG | **Right-sized** | No doc without an owner and freshness date     |
+| API docs       | TypeDoc auto-generated                              | **Keep**        | Generated on `npm run docs:api`, not committed |
+| User guide     | `docs/USER-GUIDE.md`                                | **Keep**        | Update per feature release                     |
+| Architecture   | `docs/ARCHITECTURE.md`                              | **Keep**        | Decision records with dates                    |
+| Sprint history | `docs/SPRINT-HISTORY.md`                            | **Keep**        | Append-only log                                |
+| Dead docs      | None detected                                       | **Enforce**     | `npm run dead:check` catches unused            |
+
+### 3.5 Configuration and Governance
+
+| Area             | Current                                 | Decision  | Next Action                                          |
+| ---------------- | --------------------------------------- | --------- | ---------------------------------------------------- |
+| Tool configs     | All at workspace root (Vite convention) | **Keep**  | Never move; documented in copilot-instructions       |
+| Budget configs   | `config/` directory                     | **Keep**  | Add JSON Schema validation for budget files          |
+| VS Code settings | Comprehensive, well-sectioned           | **Clean** | Remove disabled/suspended entries (ruff, scss, less) |
+| Extensions       | 22 recommended, 60+ unwanted            | **Keep**  | Periodic review; document keep/remove rationale      |
+| MCP servers      | 10 servers with clear ownership         | **Keep**  | Add health-check ping in CI                          |
+| Copilot assets   | 9 agents, 22 prompts, 9 instructions    | **Keep**  | Version-align with release; test for parse errors    |
+
+### 3.6 Infrastructure and Deployment
+
+| Area            | Current                        | Decision | Next Action                                             |
+| --------------- | ------------------------------ | -------- | ------------------------------------------------------- |
+| Hosting         | GitHub Pages (static)          | **Keep** | Free, fast, immutable deploys per release               |
+| Preview deploys | Cloudflare Pages PR previews   | **Keep** | Validate preview URLs in PR checks                      |
+| CI              | GitHub Actions (14 workflows)  | **Keep** | Harden with `permissions: read-all`, pin actions by SHA |
+| SBOM            | CycloneDX generation           | **Keep** | Attach to GitHub releases as artifact                   |
+| Supply chain    | Dependabot + dependency-review | **Keep** | Add Scorecard badge                                     |
+| Secrets         | Zero secrets in codebase       | **Keep** | Secret scan workflow blocks PRs                         |
+
+---
 
 ## 4. Best-in-Class Benchmark Comparison
 
-The table below compares workflow quality against top-class adjacent applications and extracts concrete methods to adopt.
+| Capability                | WoodworkingShop              | Fusion 360           | SketchUp + OpenCutList | Cabinet Vision / PolyBoard | Shapr3D     | CutList Optimizer | Method To Harvest                        |
+| ------------------------- | ---------------------------- | -------------------- | ---------------------- | -------------------------- | ----------- | ----------------- | ---------------------------------------- |
+| Parametric control        | Strong config model          | Excellent (timeline) | Medium                 | Excellent (rules)          | Medium      | Low               | Named expressions + dependency graph     |
+| Cut optimization          | MaxRects BSSF, multi-sheet   | Basic nesting        | Good (bin-pack)        | Excellent (proprietary)    | None        | Excellent         | Multi-stock/kerf/grain matrix            |
+| Manufacturing output      | PDF + DXF + G-code           | DXF/STEP/CAM         | DXF/SVG                | DXF/CNC post               | STEP/DXF    | PDF labels        | Golden fixture contracts per format      |
+| Multi-project             | JSON project files           | Cloud project hub    | .skp files             | Project database           | Cloud       | Single session    | Project template library + batch export  |
+| Accessibility             | WCAG 2.2 AA, RTL, 6 locales  | Medium               | Low                    | Low                        | Medium      | Low               | **Our differentiator** — keep leading    |
+| Offline capability        | Full (PWA)                   | Limited              | Desktop only           | Desktop only               | Limited     | Online only       | Harden with OPFS migration path          |
+| Open source               | MIT, full codebase           | Proprietary          | Proprietary + plugin   | Proprietary                | Proprietary | Proprietary       | **Our differentiator** — community trust |
+| Price                     | Free                         | $70/mo               | $120/yr + free plugin  | $3000+ license             | $25/mo      | $50 one-time      | **Our differentiator** — zero cost       |
+| Extensibility             | Plugin API (internal)        | SDK                  | Ruby API               | Macros                     | None        | None              | Publish plugin API with versioned schema |
+| Code quality / governance | Zero-suppression, 4360 tests | Unknown              | Community              | Enterprise                 | Unknown     | Unknown           | Keep leadership in automated gates       |
 
-| Capability               | WoodworkingShop (today)                          | Fusion 360       | SketchUp + OpenCutList | Cabinet Vision / PolyBoard | Shapr3D    | Method To Harvest                                          |
-| ------------------------ | ------------------------------------------------ | ---------------- | ---------------------- | -------------------------- | ---------- | ---------------------------------------------------------- |
-| Parametric control       | Strong config model, limited expression graphing | Excellent        | Medium                 | Excellent                  | Medium     | Add named expressions + dependency graph inspector         |
-| Manufacturing confidence | Good exports, improving contracts                | Excellent        | Good                   | Excellent                  | Medium     | Golden export fixtures + strict schema versioning          |
-| Multi-project workflow   | Good local model                                 | Good cloud model | Medium                 | Good                       | Medium     | Add first-class project templates and batch verification   |
-| Optimization             | Strong MaxRects                                  | Medium           | Good                   | Excellent                  | Medium     | Multi-stock/kerf/grain strategy matrix with explainability |
-| Accessibility + RTL      | Excellent differentiator                         | Medium           | Low                    | Low                        | Medium     | Keep leadership; enforce keyboard journey blocking tests   |
-| Offline resilience       | Excellent                                        | Limited          | Medium                 | Low                        | Medium     | Keep local-first edge and harden migration guarantees      |
-| Extensibility            | Internal plugin/API foundations                  | SDK-level        | Plugin ecosystem       | Macro ecosystem            | Limited    | Versioned plugin API with compatibility checker            |
-| Team governance          | Strong scripts, still maturing                   | Enterprise       | Community              | Enterprise                 | Enterprise | Add policy-as-code for prompts/agents/workflows/extensions |
+### Key Takeaways From Comparison
+
+1. **Parametric expressions**: Fusion 360 and PolyBoard allow formula-based dimensions. We should add a named-expression system for power users.
+2. **Optimization depth**: Cabinet Vision supports grain direction, edge banding, and multi-stock. Our MaxRects can add grain-aware rotation and multi-material strategies.
+3. **Output contracts**: We already lead in contract testing but should add per-format schema versioning headers.
+4. **Our unique edge**: Accessibility + RTL + offline + free + open-source. No competitor matches all four.
+
+---
 
 ## 5. Consolidated Legacy Plan
 
-Legacy roadmap material is considered superseded by this execution model.
-Consolidation status:
+All prior roadmap phases (1–52) are fully executed. Their output lives in:
 
-- Completed sprint narrative moved to [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
-- Release narrative remains in [CHANGELOG.md](CHANGELOG.md)
-- Architecture deep-dive remains in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
-- This roadmap remains the only forward strategy source
+- Sprint history: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md) (Sprints 1–249)
+- 50+ calculator engines, full cut optimizer, PDF/DXF/G-code export
+- Complete i18n (6 locales), WCAG 2.2 AA, RTL support
+- 249 test files, 4360 tests, 80%+ engine coverage
 
 ## 6. Production Readiness Gates (Blocking)
 
-All release candidates must pass every gate:
+All release candidates must pass every gate before tagging:
 
-1. Correctness: typecheck/lint/tests pass with zero suppressions
-2. Security: dependency review + secret scan + workflow governance pass
-3. Exports: golden contract tests for PDF/DXF/G-code pass
-4. Accessibility: WCAG automation + keyboard journey matrix pass
-5. i18n: EN/HE parity and locale coverage pass
-6. Performance: bundle and benchmark budgets pass
-7. Governance: prompts/agents/instructions/mcp/extensions/template sync validations pass
-8. Reproducibility: release artifacts include checksum + SBOM + provenance
+| Gate             | Command                                   | Threshold                          |
+| ---------------- | ----------------------------------------- | ---------------------------------- |
+| TypeScript       | `npm run typecheck`                       | Zero errors                        |
+| ESLint           | `npm run lint`                            | Zero warnings (`--max-warnings 0`) |
+| Stylelint        | `npm run lint:css`                        | Zero warnings                      |
+| Markdownlint     | `npm run lint:md`                         | Zero warnings                      |
+| Prettier         | `npm run format:check`                    | All files formatted                |
+| i18n coverage    | `npm run i18n:coverage`                   | 100% EN/HE parity                  |
+| Unit tests       | `npm test`                                | All 4360+ tests pass               |
+| Golden exports   | `npm run exports:golden:check`            | BOM/DXF/G-code match fixtures      |
+| PDF budget       | `npm run pdf:budget`                      | Size within bounds, zero errors    |
+| Component budget | `npm run components:budget`               | ≤600 lines or explicit exception   |
+| Bundle size      | `npm run bundle:check`                    | Within `config/bundle-budget.json` |
+| Benchmarks       | `npm run bench:check`                     | Within `config/bench-budget.json`  |
+| Dead code        | `npm run dead:check`                      | Zero unused exports/files          |
+| Security         | Dependency review + secret scan workflows | No high/critical CVEs              |
+| Template sync    | `npm run template:sync:validate`          | All 11 assets verified             |
 
-## 7. Program Plan (v5.30.0)
+Combined: `npm run ci` runs all of the above in CI.
 
-### Phase A: Governance and Template Convergence
+---
 
-1. Normalize governance assets and sync them to parent MyScripts template catalog
-2. Enforce extension policy with no-value recommendations removed
-3. Finalize MCP server governance matrix and ownership
-4. Validate all AI assets: agents/prompts/instructions/hooks/workflows
+## 7. Forward Program Plan (v5.31.0+)
 
-### Phase B: Domain Correctness and Export Contracts
+### Phase A: Engine Excellence
 
-1. Add deterministic multi-cabinet export/import contract suite
-2. Add golden fixtures for PDF/DXF/G-code outputs
-3. Expand engine invariants and property-based coverage for geometry domains
-4. Verify all critical calculators against boundary matrices
+| Item                     | Description                                                             | Priority |
+| ------------------------ | ----------------------------------------------------------------------- | -------- |
+| Named expressions        | User-defined formulas for parametric dimensions (`width = depth * 0.6`) | High     |
+| Grain-aware optimization | MaxRects respects grain direction constraint per part                   | High     |
+| Multi-material strategy  | Optimizer handles mixed stock (plywood + solid + MDF in one project)    | Medium   |
+| Schema versioning        | Export headers include schema version for forward compatibility         | Medium   |
+| Property-based tests     | fast-check / hypothesis-style fuzz for geometry invariants              | Medium   |
 
-### Phase C: UX and Reliability Hardening
+### Phase B: UX and Reliability
 
-1. Keyboard-first journey tests for all primary tabs
-2. Error boundary and recovery flow for every export and project load path
-3. 3D preview interaction parity checks (drag/orbit/zoom/reset)
-4. Cut-sheet and summary layouts stress-tested for long text + RTL
+| Item                    | Description                                           | Priority |
+| ----------------------- | ----------------------------------------------------- | -------- |
+| Error boundaries        | React Error Boundary per panel with graceful recovery | High     |
+| Visual regression       | Playwright screenshot comparison for preview SVGs     | Medium   |
+| Keyboard journey matrix | Blocking E2E tests for all primary workflows          | High     |
+| Deep-linking            | URL encodes active tab + cabinet index for sharing    | Medium   |
+| Mobile gesture parity   | Pinch-zoom and swipe navigation in preview            | Low      |
 
-### Phase D: Release and Verification
+### Phase C: Data and Persistence
 
-1. Run full local quality gates and full CI pipeline
-2. Generate release artifacts, checksums, SBOM, attestation
-3. Publish release with immutable notes and verification summary
-4. Post-release audit: docs freshness + template sync + extension policy compliance
+| Item              | Description                                                        | Priority |
+| ----------------- | ------------------------------------------------------------------ | -------- |
+| OPFS migration    | Move project storage from IndexedDB to Origin Private File System  | Medium   |
+| Import validation | JSON Schema validation on project import with clear error messages | High     |
+| Project templates | Built-in starter templates (kitchen, bathroom, closet, workshop)   | Medium   |
+| Batch export      | Export all cabinets in one ZIP (PDF + DXF + G-code per cabinet)    | Medium   |
 
-## 8. VS Code, Copilot, MCP, and GitHub Integration Plan
+### Phase D: Governance and DevEx
 
-### VS Code Extensions
+| Item                     | Description                                                    | Priority |
+| ------------------------ | -------------------------------------------------------------- | -------- |
+| Release readiness report | Script generates pre-release checklist with pass/fail per gate | High     |
+| Docs ownership file      | Each doc has owner + last-verified date, validated in CI       | Medium   |
+| Extension review log     | Quarterly review with keep/remove/add rationale                | Low      |
+| MCP ownership table      | Document purpose, owner, secret requirements per server        | Medium   |
+| OpenSSF Scorecard        | Achieve and badge ≥7.0 score                                   | Medium   |
 
-- Keep only value-positive recommendations for this TS-first stack
-- Keep non-relevant language stacks in unwantedRecommendations
-- Add periodic extension drift review in quality cycle
+---
 
-### Copilot Assets
+## 8. VS Code, Copilot, MCP, and GitHub Integration
 
-- Keep AGENTS.md + .github/agents + .github/prompts + .github/instructions aligned by contract
-- Require acceptance checklists in prompt/agent templates
-- Keep version references aligned with current release
+### VS Code Extensions (22 Recommended)
 
-### MCP
+All recommended extensions provide direct value for this TypeScript/React/Tailwind stack:
 
-- Keep every server documented with explicit purpose and owner
-- Keep secret-bearing servers using prompt-backed secret inputs only
-- Validate metadata and governance in CI
+| Extension                       | Purpose                |
+| ------------------------------- | ---------------------- |
+| prettier-vscode                 | Format on save         |
+| vscode-eslint                   | Inline lint errors     |
+| vscode-stylelint                | CSS lint               |
+| errorlens                       | Inline error display   |
+| vscode-typescript-next          | Latest TS features     |
+| vscode-tailwindcss              | Tailwind IntelliSense  |
+| vitest.explorer                 | Test runner UI         |
+| ms-playwright.playwright        | E2E test runner        |
+| vscode-coverage-gutters         | Coverage overlay       |
+| i18n-ally                       | Translation management |
+| vscode-markdownlint             | Markdown lint          |
+| code-spell-checker              | Typo detection         |
+| jock.svg                        | SVG preview            |
+| github.copilot                  | AI completions         |
+| github.copilot-chat             | AI chat + agents       |
+| vscode-pull-request-github      | PR workflow            |
+| vscode-github-actions           | Workflow status        |
+| ms-vscode.powershell            | Terminal               |
+| eamodio.gitlens                 | Git blame/history      |
+| editorconfig.editorconfig       | Editor consistency     |
+| redhat.vscode-yaml              | YAML schema validation |
+| deque-systems.vscode-axe-linter | Accessibility lint     |
 
-### GitHub Actions
+### Copilot Agents (9)
 
-- Keep supply chain hardened with minimal permissions and provenance
-- Keep policy validations blocking in CI
-- Keep release workflow deterministic and reproducible
+| Agent    | Scope                                         |
+| -------- | --------------------------------------------- |
+| sprint   | Execute current roadmap sprint item           |
+| release  | Full automated release workflow               |
+| feature  | Scaffold engine + store + UI + i18n + tests   |
+| debug    | Diagnose and fix failures without suppression |
+| a11y     | WCAG 2.2 AA audit and fix                     |
+| i18n     | Key management with 6-locale parity           |
+| cleanup  | Dead code, lint, $TEMP enforcement            |
+| security | OWASP Top 10 audit and CSP hardening          |
+| perf     | Lighthouse CI and Core Web Vitals             |
 
-## 9. Root Hygiene and Repository Structure Policy
+### MCP Servers (10)
 
-- Root should contain only top-level project essentials
-- New operational artifacts belong under docs, scripts, config, or .github, not root
-- Dead code/docs/config are blocked by dead-check and governance scripts
-- Intermediate outputs must stay in TEMP locations
+| Server             | Type  | Purpose                           |
+| ------------------ | ----- | --------------------------------- |
+| github             | HTTP  | PRs, issues, Actions, code search |
+| filesystem         | stdio | Scoped workspace file access      |
+| fetch              | stdio | Web page/API retrieval            |
+| playwright         | stdio | Browser automation for E2E debug  |
+| memory             | stdio | Persistent agent notes            |
+| sequentialthinking | stdio | Multi-step reasoning              |
+| context7           | stdio | Up-to-date library docs           |
+| gitkraken          | HTTP  | Git ops, blame, diff              |
+| cloudflare         | HTTP  | Pages/Workers management          |
+| brave-search       | stdio | Web search fallback               |
 
-## 10. Immediate Execution Backlog (Next 10 Items)
+### GitHub Actions (14 Workflows)
 
-1. ~~Complete template sync rollout to MyScripts parent templates~~ — DONE (v5.30.0)
-2. ~~Add script to diff template assets against source for drift reporting~~ — DONE (v5.30.0)
-3. ~~Add export golden fixture baseline command~~ — DONE (v5.30.0)
-4. ~~Add PDF warning budget and rendering regression check~~ — DONE (v5.30.0)
-5. ~~Add component boundary budget exceptions list (minimal and explicit)~~ — DONE (v5.30.0)
-6. Add docs ownership file and freshness date policy
-7. Add MCP ownership table in docs
-8. Add extension review log with keep/remove rationale
-9. Add release readiness report generator command
-10. Cut v5.30.0 only after all gates and audits pass — DONE
+| Workflow                  | Trigger     | Purpose                   |
+| ------------------------- | ----------- | ------------------------- |
+| ci.yml                    | push/PR     | Full quality gate         |
+| release.yml               | tag push    | Build + GH release        |
+| pages.yml                 | main push   | Deploy to GitHub Pages    |
+| codeql.yml                | schedule/PR | Security analysis         |
+| dependency-review.yml     | PR          | Dep vulnerability check   |
+| secret-scan.yml           | push/PR     | Secret leak prevention    |
+| lighthouse.yml            | PR          | Performance budget        |
+| size-limit.yml            | PR          | Bundle size gate          |
+| labeler.yml               | PR          | Auto-label by path        |
+| stale.yml                 | schedule    | Close stale issues        |
+| pr-title.yml              | PR          | Conventional commit title |
+| dependabot-auto-merge.yml | PR          | Auto-merge patch deps     |
+| preview-deploy.yml        | PR          | Cloudflare preview URL    |
+| cloudflare-pages.yml      | main push   | Production deploy         |
 
-## 11. Definition of Done For Best-in-Class Claim
+---
 
-The project can claim best-in-class when:
+## 9. Repository Structure Policy
 
-- Domain correctness is demonstrably stable via invariant and property tests
-- Export outputs are contract-tested and reproducible across environments
-- Accessibility and multilingual workflows are continuously enforced
-- Governance automation prevents silent drift across code, docs, workflows, and AI assets
-- Parent MyScripts template receives and validates this governance baseline
+```text
+/ (root)
+├── Tool configs only: vite.config.ts, eslint.config.js, tsconfig*.json, etc.
+├── Project essentials: package.json, index.html, README.md, ROADMAP.md, CHANGELOG.md
+├── config/         Budget files, schema definitions, sync manifests
+├── docs/           Architecture, user guide, sprint history, API docs
+├── public/         Static assets served as-is (manifest, fonts, SVGs)
+├── scripts/        Build/CI helper scripts (Node.js)
+├── src/            Application source code
+├── tests/          All test files mirroring src/
+└── .github/        CI, agents, prompts, instructions, actions
+```
+
+Rules:
+
+- No intermediate/generated files in workspace — all go to `$TEMP/WoodworkingShop/`
+- No new root files without explicit justification in this document
+- Dead files caught by `npm run dead:check` (Knip)
+- Template assets synced to parent `MyScripts/templates/` via `npm run template:sync`
+
+---
+
+## 10. Execution Backlog
+
+### Completed (v5.30.0)
+
+1. ~~Template sync rollout to MyScripts parent~~ — DONE
+2. ~~Template drift diff reporting script~~ — DONE
+3. ~~Export golden fixture baseline~~ — DONE
+4. ~~PDF warning budget gate~~ — DONE
+5. ~~Component budget exceptions policy~~ — DONE
+
+### Next (v5.31.0)
+
+1. Add docs ownership file and freshness validation
+2. Add release readiness report generator
+3. Add React Error Boundaries per panel
+4. Add import validation with JSON Schema
+5. Grain-aware cut optimization (rotation constraint)
+
+### Future (v5.32.0+)
+
+1. Named parametric expressions system
+2. OPFS persistence migration
+3. Visual regression testing pipeline
+4. Project template library (kitchen, bathroom, closet)
+5. Batch ZIP export (all cabinets, all formats)
+6. OpenSSF Scorecard badge (≥7.0)
+7. Plugin API public documentation
+8. Multi-material optimizer strategy
+
+---
+
+## 11. Definition of Done
+
+The project achieves best-in-class status when:
+
+- All production readiness gates pass on every commit (CI enforced)
+- Export outputs are contract-tested with golden fixtures across all formats
+- Accessibility and 6-locale i18n are continuously validated
+- Governance automation prevents silent drift in code, docs, AI assets, and workflows
+- Parent MyScripts template receives validated governance baseline
+- Zero suppression policy has zero exceptions (no eslint-disable, no ts-ignore, no as any)
+- OpenSSF Scorecard ≥ 7.0
+- All comparison-table gaps from Section 4 are addressed or explicitly deferred with rationale

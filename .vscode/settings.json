@@ -29,15 +29,15 @@
   },
 
   // ─── TypeScript ─────────────────────────────────────────────────────────────
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true,
-  "typescript.inlayHints.parameterNames.enabled": "literals",
-  "typescript.inlayHints.propertyDeclarationTypes.enabled": false,
-  "typescript.inlayHints.variableTypes.enabled": false,
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true,
+  "js/ts.inlayHints.parameterNames.enabled": "literals",
+  "js/ts.inlayHints.propertyDeclarationTypes.enabled": false,
+  "js/ts.inlayHints.variableTypes.enabled": false,
   "typescript.inlayHints.returnTypes.enabled": false,
-  "typescript.preferences.importModuleSpecifier": "shortest",
-  "typescript.preferences.quoteStyle": "single",
-  "typescript.suggest.autoImports": true,
+  "js/ts.preferences.importModuleSpecifier": "shortest",
+  "js/ts.preferences.quoteStyle": "single",
+  "js/ts.suggest.autoImports": true,
   "[tsx]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[ts]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
@@ -51,12 +51,7 @@
 
   // ─── CSS / Stylelint ────────────────────────────────────────────────────────
   "css.validate": true,
-  "scss.validate": true,
-  "less.validate": true,
   "stylelint.validate": ["css"],
-
-  // ─── Python / Ruff (disabled for this TS-only workspace) ───────────────────
-  "ruff.enable": false,
 
   // ─── Terminal ───────────────────────────────────────────────────────────────
   "terminal.integrated.shellIntegration.enabled": true,
@@ -75,8 +70,7 @@
     }
   },
   "terminal.integrated.automationProfile.windows": {
-    "name": "PowerShell",
-    "source": "PowerShell",
+    "path": "pwsh",
     "args": ["-NoLogo", "-NonInteractive"]
   },
 
@@ -91,9 +85,8 @@
 
   // ─── GitHub Copilot ─────────────────────────────────────────────────────────
   "github.copilot.chat.codeGeneration.useInstructionFiles": true,
-  "github.copilot.chat.agentDebugLog.enabled": true,
   "github.copilot.chat.agentDebugLog.fileLogging.enabled": true,
-  "github.copilot.chat.agentDebugLog.fileLogging.flushIntervalMs": 1000,
+  "github.copilot.chat.agentDebugLog.fileLogging.flushIntervalMs": 2000,
   "github.copilot.chat.reviewSelection.enabled": true,
   "github.copilot.chat.generateTests.codeLensTitle": "Generate Tests",
   "github.copilot.nextEditSuggestions.enabled": true,
@@ -106,11 +99,7 @@
       "text": "Use conventional commits: feat|fix|chore|refactor|test|docs|ci|perf. Max 72 chars subject. No period at end."
     }
   ],
-  "github.copilot.chat.codeGeneration.instructions": [
-    {
-      "file": ".github/copilot-instructions.md"
-    }
-  ],
+
   "github.copilot.chat.reviewSelection.instructions": [
     {
       "text": "Flag any eslint-disable, @ts-ignore, as any, enum, namespace, ml-* / mr-* Tailwind classes, or hardcoded pixel values. Also check i18n parity: every t('key') must exist in both en.json and he.json."
@@ -121,11 +110,7 @@
       "text": "Summarise what changed and why. List affected engine/store/component/i18n layers. Note any quality gate outcomes (typecheck, lint, tests). Keep under 400 words. Use conventional commit prefixes in the title."
     }
   ],
-  "github.copilot.chat.testGeneration.instructions": [
-    {
-      "text": "Use Vitest. Import engine functions directly — no React, no store. Use it.each for parametrised positive/negative pairs. Use cfg() helper from tests/helpers.ts for CabinetConfig fixtures. Group related assertions in one it(). Target ≥ 10 cases."
-    }
-  ],
+
   "github.copilot.enable": {
     "*": true,
     "plaintext": false,
@@ -214,7 +199,7 @@
   // ─── Testing ────────────────────────────────────────────────────────────────
   "vitest.enable": true,
   "vitest.rootConfig": "${workspaceFolder}/vitest.config.ts",
-  "testing.automaticallyOpenTestResults": "openOnFailure",
+  "testing.automaticallyOpenTestResults": "openOnTestFailure",
   "testing.showCoverageInEditor": true,
   "testing.coverageToolbarEnabled": true,
   // ─── Vitest Explorer ────────────────────────────────────────────────────────
@@ -295,7 +280,6 @@
 
   // ─── Git Graph ──────────────────────────────────────────────────────────────
   "git-graph.repository.fetchAndPrune": true,
-  "git-graph.repository.sign.commits": false,
 
   // ─── Indent Rainbow ─────────────────────────────────────────────────────────
   "indentRainbow.colors": [
