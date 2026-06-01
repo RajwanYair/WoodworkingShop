@@ -355,6 +355,48 @@ This file no longer duplicates completed sprint narratives. Legacy and archival 
 | Release metadata  | Changelog and package versions updated for v5.29.6                |
 | Published release | Tag `v5.29.6` and GitHub release created from final sprint commit |
 
+## Program Plan: Phase 59 (AI Governance Enforcement)
+
+### Sprint 280: Phase 59 Planning Baseline
+
+| Deliverable               | Acceptance Criteria                                               |
+| ------------------------- | ----------------------------------------------------------------- |
+| Priority continuation map | Next 5 sprint steps are defined in-order with measurable outcomes |
+| AI governance hardening   | Scope targets agents, prompts, and instruction policy checks      |
+| Release continuity        | Final sprint ends with version bump + tag + GitHub release        |
+
+### Sprint 281: Agent Definition-of-Done Governance
+
+| Deliverable              | Acceptance Criteria                                                                     |
+| ------------------------ | --------------------------------------------------------------------------------------- |
+| Agent contract validator | Script validates each `.github/agents/*.agent.md` contains a Definition-of-Done section |
+| Agent contract parity    | Missing Definition-of-Done sections are added for all agent files                       |
+| Quality integration      | Validator is wired into quality checks and fails on contract drift                      |
+
+### Sprint 282: Prompt Output-Contract Governance
+
+| Deliverable               | Acceptance Criteria                                                                     |
+| ------------------------- | --------------------------------------------------------------------------------------- |
+| Prompt contract validator | Script validates each `.github/prompts/*.prompt.md` includes an Output Contract section |
+| Prompt contract parity    | Missing Output Contract sections are added for all prompt files                         |
+| Quality integration       | Validator is wired into quality checks and fails on contract drift                      |
+
+### Sprint 283: Instruction Frontmatter Governance
+
+| Deliverable            | Acceptance Criteria                                                                      |
+| ---------------------- | ---------------------------------------------------------------------------------------- |
+| Instruction validator  | Script validates each `.github/instructions/*.instructions.md` has `applyTo` frontmatter |
+| Scope integrity checks | Validation fails if instruction files have missing or empty `applyTo` scopes             |
+| Quality integration    | Validator is wired into quality checks and fails on governance drift                     |
+
+### Sprint 284: Release v5.29.7
+
+| Deliverable       | Acceptance Criteria                                               |
+| ----------------- | ----------------------------------------------------------------- |
+| Full quality gate | `npm run check` passes on clean tree                              |
+| Release metadata  | Changelog and package versions updated for v5.29.7                |
+| Published release | Tag `v5.29.7` and GitHub release created from final sprint commit |
+
 ## VS Code and GitHub Integration Enhancement Plan
 
 ### VS Code Extensions Policy
