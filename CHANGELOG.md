@@ -9,6 +9,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.29.4] — 2026-06-01
+
+### Phase 56 — Execution Hardening (Sprints 265–269)
+
+#### Sprint 265 — Phase 56 Planning Baseline
+
+- Added the next priority window to roadmap planning with explicit Sprint 265–269 acceptance scope
+
+#### Sprint 266 — Documentation Ownership and Freshness Governance
+
+- Added `docs/OWNERSHIP.md` with ownership and review-freshness mapping for core documents
+- Added `scripts/check-docs-freshness.js` and `npm run docs:freshness` to enforce docs freshness automatically
+
+#### Sprint 267 — Component Boundary Budget Enforcement
+
+- Added `scripts/check-component-budgets.js` and `npm run components:budget` to enforce TSX size limits
+- Integrated component budget enforcement into CI as a blocking quality step
+
+#### Sprint 268 — API Capability Boundary Contracts
+
+- Added typed capability contracts in `src/services/capability-contracts.ts` as the service boundary source-of-truth
+- Added validation and lookup helpers plus service-level contract tests in `tests/services/capability-contracts.test.ts`
+- Added `docs/API-BOUNDARIES.md` to document runtime rules and contract matrix
+
+#### Sprint 269 — Release v5.29.4
+
+- Ran full quality gate (`npm run check`) before release and confirmed passing status
+- Bumped project version metadata to `5.29.4`
+
 ## [5.29.3] — 2026-06-01
 
 ### Phase 55 — Execution Continuation (Sprints 260–264)

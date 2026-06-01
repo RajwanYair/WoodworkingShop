@@ -13,7 +13,7 @@ Source of truth: src/services/capability-contracts.ts
 
 ## Capability Matrix
 
-| Capability ID | Name | Status | Requires Network | Critical Path | Feature Flag |
-| --- | --- | --- | --- | --- | --- |
-| error-reporter | Client Error Reporter | active | no | no | - |
-| supabase-sync | Supabase Sync Adapter | experimental | yes | no | SUPABASE_SYNC |
+| Capability ID  | Name                  | Status       | Requires Network | Critical Path | Feature Flag  |
+| -------------- | --------------------- | ------------ | ---------------- | ------------- | ------------- |
+| error-reporter | Client Error Reporter | active       | no               | no            | -             |
+| supabase-sync  | Supabase Sync Adapter | experimental | yes              | no            | SUPABASE_SYNC |
