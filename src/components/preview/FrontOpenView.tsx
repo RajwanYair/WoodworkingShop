@@ -14,6 +14,7 @@ interface FrontOpenViewProps {
   d: DerivedDimensions;
   config: CabinetConfig;
   shelfPositions: number[];
+  centreSupportXs: number[];
   showDims: boolean;
   dimPad: number;
   fd: (mm: number) => string;
@@ -31,6 +32,7 @@ export function FrontOpenView({
   d,
   config,
   shelfPositions,
+  centreSupportXs,
   showDims,
   dimPad,
   fd,
@@ -141,6 +143,21 @@ export function FrontOpenView({
           material={carcassMatName}
           {...tp}
         />
+        {centreSupportXs.map((sx, i) => (
+          <PartRect
+            key={`centre-support-open-${i}`}
+            x={sx - Math.max(T * 0.25, 1)}
+            y={T}
+            w={Math.max(T * 0.5, 2)}
+            h={H - 2 * T}
+            fill={color}
+            dashed
+            label={`Centre Support ${i + 1}`}
+            dim={`${thick}×${d.internalHeight}`}
+            material={carcassMatName}
+            {...tp}
+          />
+        ))}
         {shelfPositions.map((pos, i) => {
           const sy = H - T - pos * S;
           return (

@@ -8,11 +8,13 @@
     "mainWorkspace": "Área de trabajo del planificador"
   },
   "tabs": {
+    "workspace": "Espacio de trabajo",
     "configurator": "Configurar",
     "preview": "Vista previa",
     "optimizer": "Hojas de corte",
     "assembly": "Montaje",
-    "pdf": "Exportar PDF"
+    "pdf": "Exportar PDF",
+    "calculators": "Calculadoras"
   },
   "config": {
     "dimensions": "Dimensiones",
@@ -234,6 +236,7 @@
     "dimensionSummary": "Dimensiones del armario A × Al × P",
     "doors": "puertas",
     "drawers": "cajones",
+    "dragToRotate": "Arrastra para rotar",
     "webglToggle": "Alternar vista WebGL / SVG",
     "webglAnimate": "Animar",
     "webglIsometric": "Isométrico"
@@ -487,9 +490,13 @@
     "placeholder": "Nombre del armario…",
     "empty": "No hay configuraciones guardadas",
     "export": "Exportar JSON",
+    "exportCabinet": "Exportar armario",
+    "exportProject": "Exportar proyecto ({{count}} armarios)",
     "import": "Importar JSON",
     "share": "Compartir enlace",
     "exportAll": "Exportar todos los proyectos",
+    "exportBundle": "Exportar paquete de proyectos guardados",
+    "exportBundleTip": "Descargar todos los proyectos guardados del almacenamiento como un único archivo de paquete",
     "exportAllTip": "Descargar todos los proyectos guardados en un único archivo",
     "importBundle": "Importar paquete",
     "importBundleTip": "Importar múltiples proyectos desde un archivo de paquete",

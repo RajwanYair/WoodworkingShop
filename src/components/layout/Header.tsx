@@ -18,34 +18,67 @@ import {
   IconContrast,
   IconLayers,
   IconFolder,
+  IconSettings,
+  IconEye,
+  IconScissors,
+  IconHammer,
+  IconDocument,
+  IconRuler,
 } from './Icons';
 
-const tabs = ['configurator', 'preview', 'optimizer', 'assembly', 'pdf'] as const;
+const tabs = ['workspace', 'configurator', 'preview', 'optimizer', 'assembly', 'pdf', 'calculators'] as const;
+
+const TAB_SHORTCUTS: Record<(typeof tabs)[number], string> = {
+  workspace: '',
+  configurator: 'Alt+1',
+  preview: 'Alt+2',
+  optimizer: 'Alt+3',
+  assembly: 'Alt+4',
+  pdf: 'Alt+5',
+  calculators: 'Alt+6',
+};
 
 const TAB_ICONS = {
+  workspace: (
+    <span aria-hidden="true" className="flex shrink-0 items-center gap-1 text-sm">
+      <span>🏷️</span>
+      <span>🪵</span>
+    </span>
+  ),
   configurator: (
-    <span aria-hidden="true" className="shrink-0 text-sm">
-      ⚙️
+    <span aria-hidden="true" className="flex shrink-0 items-center gap-1 text-sm">
+      <IconSettings size={13} />
+      <span>⚙️</span>
     </span>
   ),
   preview: (
-    <span aria-hidden="true" className="shrink-0 text-sm">
-      👁️
+    <span aria-hidden="true" className="flex shrink-0 items-center gap-1 text-sm">
+      <IconEye size={13} />
+      <span>👁️</span>
     </span>
   ),
   optimizer: (
-    <span aria-hidden="true" className="shrink-0 text-sm">
-      ✂️
+    <span aria-hidden="true" className="flex shrink-0 items-center gap-1 text-sm">
+      <IconScissors size={13} />
+      <span>✂️</span>
     </span>
   ),
   assembly: (
-    <span aria-hidden="true" className="shrink-0 text-sm">
-      🔨
+    <span aria-hidden="true" className="flex shrink-0 items-center gap-1 text-sm">
+      <IconHammer size={13} />
+      <span>🔨</span>
     </span>
   ),
   pdf: (
-    <span aria-hidden="true" className="shrink-0 text-sm">
-      📄
+    <span aria-hidden="true" className="flex shrink-0 items-center gap-1 text-sm">
+      <IconDocument size={13} />
+      <span>📄</span>
+    </span>
+  ),
+  calculators: (
+    <span aria-hidden="true" className="flex shrink-0 items-center gap-1 text-sm">
+      <IconRuler size={13} />
+      <span>🧮</span>
     </span>
   ),
 } as const;
@@ -111,6 +144,10 @@ export function Header() {
     >
       <div className="flex items-center justify-between">
         <div className="min-w-0">
+          <div className="mb-1 flex items-center gap-2">
+            <img src="/shop-badge.svg" alt="" aria-hidden="true" className="h-6 w-6 rounded-full" loading="lazy" />
+            <img src="/woodgrain-spark.svg" alt="" aria-hidden="true" className="h-6 w-20 opacity-80" loading="lazy" />
+          </div>
           <div className="flex items-baseline gap-2">
             <h1 className="truncate text-lg font-bold sm:text-xl">🪵 {t('app.title')}</h1>
             <span
@@ -121,6 +158,9 @@ export function Header() {
             </span>
           </div>
           <p className="text-wood-200 hidden text-xs sm:block sm:text-sm">{t('app.subtitle')}</p>
+          <p className="text-wood-200 mt-1 hidden text-xs tracking-wide sm:block" aria-hidden="true">
+            ✨ 🛠️ 📐 🧰 🎯
+          </p>
         </div>
         {/* Mobile-only controls row */}
         <div className="flex items-center gap-2 sm:hidden">
@@ -179,7 +219,7 @@ export function Header() {
             aria-selected={activeTab === tab}
             aria-current={activeTab === tab ? 'page' : undefined}
             aria-controls="main-content"
-            title={`${t(`tabs.${tab}`)} (Alt+${i + 1})`}
+            title={TAB_SHORTCUTS[tab] ? `${t(`tabs.${tab}`)} (${TAB_SHORTCUTS[tab]})` : t(`tabs.${tab}`)}
             className={`flex items-center gap-1.5 rounded px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-colors ${
               activeTab === tab ? 'bg-wood-600 text-white' : 'text-wood-200 hover:bg-wood-600'
             }`}
@@ -288,10 +328,11 @@ export function Header() {
         </button>
         <button
           onClick={() => setShowMarketplace(true)}
-          className="text-wood-200 flex items-center hover:text-white"
+          className="text-wood-200 flex items-center gap-1 hover:text-white"
           title={t('marketplace.title')}
           aria-label={t('marketplace.title')}
         >
+          <img src="/shop-badge.svg" alt="" aria-hidden="true" className="h-4 w-4" loading="lazy" />
           🛒
         </button>
         <HelpButton />

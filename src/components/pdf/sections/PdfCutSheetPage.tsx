@@ -47,7 +47,7 @@ export function PdfCutSheetPage({ ctx, sheet, totalSheets, isMultiCabinet }: Pdf
   const sectionLabel = isMultiCabinet ? T.projectCutPlan : T.cutSheetPage;
 
   return (
-    <Page key={sheet.sheetIndex} size={pageSize} orientation="landscape" style={s.page}>
+    <Page key={sheet.sheetIndex} size={pageSize} orientation="landscape" style={[s.page, { fontFamily }]}>
       <PageHeader
         section={`✂️  ${sectionLabel} ${sheet.sheetIndex + 1} / ${totalSheets}`}
         projectName={coverTitle}
@@ -150,7 +150,7 @@ export function PdfCutSheetPage({ ctx, sheet, totalSheets, isMultiCabinet }: Pdf
               <Text
                 style={{
                   fontSize: Math.min(7, Math.min(pw, ph) * 0.2),
-                  fontFamily: 'Helvetica-Bold',
+                  fontFamily: fontFamilyBold,
                   color: C.primary,
                 }}
               >
@@ -168,7 +168,7 @@ export function PdfCutSheetPage({ ctx, sheet, totalSheets, isMultiCabinet }: Pdf
       <View style={{ marginTop: 10, flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
         {sheet.parts.map((p, i) => (
           <View key={i} style={{ flexDirection: 'row', gap: 3, marginRight: 10 }}>
-            <Text style={{ fontSize: 7, fontFamily: 'Helvetica-Bold', color: C.accent }}>{p.partId}</Text>
+            <Text style={{ fontSize: 7, fontFamily: fontFamilyBold, color: C.accent }}>{p.partId}</Text>
             <Text style={{ fontSize: 7, color: C.muted }}>
               {p.label} — {p.width}×{p.length} mm
             </Text>

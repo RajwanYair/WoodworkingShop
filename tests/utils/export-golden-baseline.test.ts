@@ -36,7 +36,7 @@ function buildGoldenArtifacts() {
       carcassMaterial: 'plywood-17',
       backPanelMaterial: 'plywood-4',
       hasBack: true,
-      doorStyle: 'slab',
+      doorStyle: 'flat',
       doorCount: 2,
       drawerCount: 1,
     }),

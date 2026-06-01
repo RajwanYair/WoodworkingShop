@@ -8,11 +8,13 @@
     "mainWorkspace": "Schrankplaner-Arbeitsbereich"
   },
   "tabs": {
+    "workspace": "Arbeitsbereich",
     "configurator": "Konfigurieren",
     "preview": "Vorschau",
     "optimizer": "Zuschnittplan",
     "assembly": "Montage",
-    "pdf": "PDF exportieren"
+    "pdf": "PDF exportieren",
+    "calculators": "Rechner"
   },
   "config": {
     "dimensions": "Abmessungen",
@@ -234,6 +236,7 @@
     "dimensionSummary": "Schrankabmessungen B × H × T",
     "doors": "Türen",
     "drawers": "Schubladen",
+    "dragToRotate": "Ziehen zum Drehen",
     "webglToggle": "WebGL/SVG-Ansicht umschalten",
     "webglAnimate": "Animieren",
     "webglIsometric": "Isometrisch"
@@ -487,9 +490,13 @@
     "placeholder": "Schrankname…",
     "empty": "Keine gespeicherten Konfigurationen",
     "export": "JSON exportieren",
+    "exportCabinet": "Schrank exportieren",
+    "exportProject": "Projekt exportieren ({{count}} Schränke)",
     "import": "JSON importieren",
     "share": "Link teilen",
     "exportAll": "Alle Projekte exportieren",
+    "exportBundle": "Gespeicherte Projekte als Bundle exportieren",
+    "exportBundleTip": "Alle gespeicherten Projekte aus dem Speicher als eine Bundledatei herunterladen",
     "exportAllTip": "Alle gespeicherten Projekte als einzelne Bundledatei herunterladen",
     "importBundle": "Bundle importieren",
     "importBundleTip": "Mehrere Projekte aus einer Bundledatei importieren",

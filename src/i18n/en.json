@@ -9,11 +9,13 @@
     "mobileTabNav": "Tab navigation"
   },
   "tabs": {
+    "workspace": "Workspace",
     "configurator": "Configure",
     "preview": "Preview",
     "optimizer": "Cut Sheets",
     "assembly": "Assembly",
-    "pdf": "Export PDF"
+    "pdf": "Export PDF",
+    "calculators": "Calculators"
   },
   "config": {
     "dimensions": "📐 Dimensions",
@@ -239,6 +241,7 @@
     "dimensionSummary": "Cabinet dimensions W × H × D",
     "doors": "doors",
     "drawers": "drawers",
+    "dragToRotate": "Drag to rotate",
     "webglToggle": "Toggle WebGL / SVG view",
     "webglAnimate": "Animate",
     "webglIsometric": "Isometric"
@@ -491,9 +494,13 @@
     "placeholder": "Cabinet name…",
     "empty": "No saved configurations",
     "export": "Export JSON",
+    "exportCabinet": "Export Cabinet",
+    "exportProject": "Export Project ({{count}} cabinets)",
     "import": "Import JSON",
     "share": "Share Link",
     "exportAll": "Export All Projects",
+    "exportBundle": "Export Saved Projects Bundle",
+    "exportBundleTip": "Download all saved projects from storage as a single bundle file",
     "exportAllTip": "Download all saved projects as a single bundle file",
     "importBundle": "Import Bundle",
     "importBundleTip": "Import multiple projects from a bundle file",

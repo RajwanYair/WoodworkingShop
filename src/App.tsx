@@ -2,6 +2,7 @@ import './i18n';
 import './index.css';
 import { useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
+import workspaceBanner from '../docs/banner.svg';
 import { Header } from './components/layout/Header';
 import { SkeletonPane } from './components/layout/SkeletonPane';
 import { Sidebar } from './components/layout/Sidebar';
@@ -15,6 +16,7 @@ import { ToastContainer } from './components/layout/ToastContainer';
 import { OnboardingManager } from './components/layout/OnboardingOverlay';
 import { TouchGestureTutorial } from './components/layout/TouchGestureTutorial';
 import { MobileTabBar } from './components/layout/MobileTabBar';
+import { ActiveCabinetSwitcher } from './components/layout/ActiveCabinetSwitcher';
 import { ShortcutsModal } from './components/layout/ShortcutsModal';
 import { SwUpdateBanner } from './components/layout/SwUpdateBanner';
 import { IconPrint } from './components/layout/Icons';
@@ -45,6 +47,9 @@ const AssemblyGuide = lazy(() =>
 const RoomLayoutViewLazy = lazy(() =>
   import('./components/layout/RoomLayoutView').then((m) => ({ default: m.RoomLayoutView })),
 );
+const CalculatorsPanel = lazy(() =>
+  import('./components/configurator/CalculatorsPanel').then((m) => ({ default: m.CalculatorsPanel })),
+);
 
 function App() {
   const { activeTab, darkMode, projectName } = useCabinetStore();
@@ -58,7 +63,15 @@ function App() {
   const isFirstRender = useRef(true);
 
   // Ordered app tabs — used for swipe-based navigation
-  const APP_TABS: CabinetState['activeTab'][] = ['configurator', 'preview', 'optimizer', 'assembly', 'pdf'];
+  const APP_TABS: CabinetState['activeTab'][] = [
+    'workspace',
+    'configurator',
+    'preview',
+    'optimizer',
+    'assembly',
+    'pdf',
+    'calculators',
+  ];
 
   // Sprint 82 — swipe left/right on the main content area to switch app tabs
   // (skipped on 'preview' tab which has its own swipe gesture for SVG views)
@@ -187,7 +200,7 @@ function App() {
         useToastStore.getState().addToast(t(entering ? 'focusMode.enter' : 'focusMode.exit'), 'info');
         return;
       }
-      // Tab switching: Alt+1-5; Dark mode: Alt+D (Sprint 168)
+      // Tab switching: Alt+1-6; Dark mode: Alt+D (Sprint 168)
       if (e.altKey && !ctrl) {
         const tabMap: Record<string, CabinetState['activeTab']> = {
           '1': 'configurator',
@@ -195,6 +208,7 @@ function App() {
           '3': 'optimizer',
           '4': 'assembly',
           '5': 'pdf',
+          '6': 'calculators',
         };
         const tab = tabMap[e.key];
         if (tab) {
@@ -250,6 +264,33 @@ function App() {
               {projectName ? `${projectName} — ` : ''}Cabinet Planner
               <span className="float-end text-[9pt] font-normal">{new Date().toLocaleDateString()}</span>
             </div>
+            {['preview', 'optimizer', 'assembly', 'pdf', 'calculators'].includes(activeTab) && (
+              <ActiveCabinetSwitcher />
+            )}
+
+            {activeTab === 'workspace' && (
+              <section
+                aria-label={t('tabs.workspace')}
+                className="mx-auto flex max-w-6xl flex-col items-center gap-6 text-center"
+              >
+                <img
+                  src={workspaceBanner}
+                  alt={t('tabs.workspace')}
+                  className="border-wood-200 dark:border-wood-700 w-full rounded-xl border shadow-xl"
+                  loading="eager"
+                />
+                <div className="space-y-2">
+                  <h2 className="text-wood-800 dark:text-wood-100 text-2xl font-bold">{t('app.title')}</h2>
+                  <p className="text-wood-600 dark:text-wood-300 text-sm">{t('app.subtitle')}</p>
+                </div>
+                <button
+                  onClick={() => useCabinetStore.getState().setActiveTab('configurator')}
+                  className="bg-wood-600 hover:bg-wood-700 rounded-md px-5 py-2 text-sm font-medium text-white transition-colors"
+                >
+                  {t('tabs.configurator')}
+                </button>
+              </section>
+            )}
             {activeTab === 'configurator' && (
               <div className="space-y-6">
                 <ErrorBoundary panelName="Configurator">
@@ -289,6 +330,13 @@ function App() {
               <ErrorBoundary panelName="PDF Export">
                 <Suspense fallback={<SkeletonPane label={t('skeleton.loadingPdf')} cards={2} />}>
                   <PdfExportPanel />
+                </Suspense>
+              </ErrorBoundary>
+            )}
+            {activeTab === 'calculators' && (
+              <ErrorBoundary panelName="Calculators">
+                <Suspense fallback={<SkeletonPane label={t('skeleton.loading')} cards={6} />}>
+                  <CalculatorsPanel />
                 </Suspense>
               </ErrorBoundary>
             )}

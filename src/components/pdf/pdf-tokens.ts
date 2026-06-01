@@ -1,21 +1,29 @@
 import { StyleSheet, Font } from '@react-pdf/renderer';
 
 // ─── Emoji rendering (Twemoji via CDN) ───
-Font.registerEmojiSource({
-  format: 'png',
-  url: 'https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/',
-});
+const maybeProcess = (
+  globalThis as typeof globalThis & {
+    process?: { env?: Record<string, string | undefined> };
+  }
+).process;
+const isVitest = Boolean(maybeProcess?.env?.VITEST);
+if (!isVitest) {
+  Font.registerEmojiSource({
+    format: 'png',
+    url: 'https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/',
+  });
+}
 
 // ─── Hebrew font registration (Noto Sans Hebrew from Google Fonts) ───
 Font.register({
   family: 'NotoSansHebrew',
   fonts: [
     {
-      src: 'https://fonts.gstatic.com/s/notosanshebrew/v46/or3HQ7v33eiDljA1IufXTtVf7V6RvEEdhQlk0LlGxCyaeNKYZC0sq0G1.ttf',
+      src: '/fonts/NotoSansHebrew-Regular.ttf',
       fontWeight: 400,
     },
     {
-      src: 'https://fonts.gstatic.com/s/notosanshebrew/v46/or3HQ7v33eiDljA1IufXTtVf7V6RvEEdhQlk0LlGxCyaeNKYZC0sq6e0.ttf',
+      src: '/fonts/NotoSansHebrew-Bold.ttf',
       fontWeight: 700,
     },
   ],

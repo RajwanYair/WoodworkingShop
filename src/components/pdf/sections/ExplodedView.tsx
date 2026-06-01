@@ -20,6 +20,7 @@ export function ExplodedView({
 }) {
   const T = pdfI18n[lang as PdfLang] ?? pdfI18n.en;
   const ff = lang === 'he' ? 'NotoSansHebrew' : 'Helvetica';
+  const ffBold = lang === 'he' ? 'NotoSansHebrew' : 'Helvetica-Bold';
   const maxW = 400;
   const maxH = 480;
   const sc = Math.min(maxW / config.width, maxH / config.height) * 0.65;
@@ -109,7 +110,25 @@ export function ExplodedView({
       {config.shelfCount > 0 &&
         Array.from({ length: Math.min(config.shelfCount, 5) }).map((_, i) => {
           const sy = baseY + (H / (config.shelfCount + 1)) * (i + 1);
-          return partBox(sy - t / 2, baseX + t + 2, W - 2 * t - 4, t, '#F5DEB3', `${T.shelf} ${i + 1}`);
+          return (
+            <View
+              key={`exploded-shelf-${i + 1}`}
+              style={{
+                position: 'absolute',
+                top: sy - t / 2,
+                left: baseX + t + 2,
+                width: W - 2 * t - 4,
+                height: t,
+                backgroundColor: '#F5DEB3',
+                borderWidth: 0.75,
+                borderColor: '#8B7355',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Text style={{ fontSize: 5.5, color: C.text, textAlign: 'center' }}>{`${T.shelf} ${i + 1}`}</Text>
+            </View>
+          );
         })}
 
       {/* ⑤ Back panel */}
@@ -121,7 +140,25 @@ export function ExplodedView({
         Array.from({ length: config.doorCount }).map((_, i) => {
           const dw = (W / config.doorCount) * 0.88;
           const dx = baseX + (W / config.doorCount) * i + (W / config.doorCount) * 0.06;
-          return partBox(baseY + H + gap * 2.8, dx, dw, H * 0.14, '#E8D5B7', `${T.doorLabel} ${i + 1}`);
+          return (
+            <View
+              key={`exploded-door-${i + 1}`}
+              style={{
+                position: 'absolute',
+                top: baseY + H + gap * 2.8,
+                left: dx,
+                width: dw,
+                height: H * 0.14,
+                backgroundColor: '#E8D5B7',
+                borderWidth: 0.75,
+                borderColor: '#8B7355',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Text style={{ fontSize: 5.5, color: C.text, textAlign: 'center' }}>{`${T.doorLabel} ${i + 1}`}</Text>
+            </View>
+          );
         })}
       {config.doorStyle !== 'none' && lbl(`⑥ ${T.doorLabel}(s)`, baseY + H + gap * 2.8 - 11, baseX)}
 
@@ -133,7 +170,7 @@ export function ExplodedView({
           left: baseX,
           fontSize: 7.5,
           color: C.secondary,
-          fontFamily: 'Helvetica-Bold',
+          fontFamily: ffBold,
         }}
       >
         {config.width} mm × {config.height} mm × {config.depth} mm

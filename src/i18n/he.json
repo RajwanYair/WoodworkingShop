@@ -9,11 +9,13 @@
     "mobileTabNav": "ניווט לשוניות"
   },
   "tabs": {
+    "workspace": "חלל העבודה",
     "configurator": "הגדרות",
     "preview": "תצוגה מקדימה",
     "optimizer": "גיליונות חיתוך",
     "assembly": "הרכבה",
-    "pdf": "ייצוא PDF"
+    "pdf": "ייצוא PDF",
+    "calculators": "מחשבונים"
   },
   "config": {
     "dimensions": "📐 מידות",
@@ -239,6 +241,7 @@
     "dimensionSummary": "מידות הארון ר × ג × ע",
     "doors": "דלתות",
     "drawers": "מגירות",
+    "dragToRotate": "גרור כדי לסובב",
     "webglToggle": "החלף תצוגת WebGL / SVG",
     "webglAnimate": "אנימציה",
     "webglIsometric": "איזומטרי"
@@ -491,9 +494,13 @@
     "placeholder": "שם הארון…",
     "empty": "אין הגדרות שמורות",
     "export": "ייצוא JSON",
+    "exportCabinet": "ייצוא ארון",
+    "exportProject": "ייצוא פרויקט ({{count}} ארונות)",
     "import": "ייבוא JSON",
     "share": "שתף קישור",
     "exportAll": "ייצוא כל הפרוייקטים",
+    "exportBundle": "ייצוא חבילת פרויקטים שמורים",
+    "exportBundleTip": "הורדת כל הפרויקטים השמורים מהאחסון כקובץ חבילה אחד",
     "exportAllTip": "הורדת כל הפרוייקטים השמורים כקובץ חבילה אחד",
     "importBundle": "ייבוא חבילה",
     "importBundleTip": "ייבוא פרוייקטים מרובים מקובץ חבילה",

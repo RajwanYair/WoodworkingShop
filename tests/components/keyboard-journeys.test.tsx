@@ -41,6 +41,7 @@ describe('keyboard journeys — sprint 252', () => {
     { key: '3', tab: 'optimizer' },
     { key: '4', tab: 'assembly' },
     { key: '5', tab: 'pdf' },
+    { key: '6', tab: 'calculators' },
   ] as const)('switches to $tab using Alt+$key', async ({ key, tab }) => {
     const user = userEvent.setup();
     render(<App />);

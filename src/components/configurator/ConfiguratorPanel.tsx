@@ -14,30 +14,6 @@ import { DrawerConfig } from './DrawerConfig';
 import { CustomMaterialEditor } from './CustomMaterialEditor';
 import { CatalogImportPanel } from './CatalogImportPanel';
 import { MeasurementHintsPanel } from './MeasurementHintsPanel';
-import { FinishCalculatorPanel } from './FinishCalculatorPanel';
-import { FaceFramePanel } from './FaceFramePanel';
-import { CabinetDoorPanel } from './CabinetDoorPanel';
-import { DrawerBoxPanel } from './DrawerBoxPanel';
-import { ScrewPulloutPanel } from './ScrewPulloutPanel';
-import { KerfBendingPanel } from './KerfBendingPanel';
-import { DadoRabbetPanel } from './DadoRabbetPanel';
-import { FinishingCoatPanel } from './FinishingCoatPanel';
-import { WoodTurningPanel } from './WoodTurningPanel';
-import { FramePanelCalcPanel } from './FramePanelCalcPanel';
-import { TaperJigPanel } from './TaperJigPanel';
-import { StairStringerPanel } from './StairStringerPanel';
-import { BoxJointPanel } from './BoxJointPanel';
-import { GlueCoveragePanel } from './GlueCoveragePanel';
-import { PlanerPassesPanel } from './PlanerPassesPanel';
-import { HoningGuidePanel } from './HoningGuidePanel';
-import { CrownMouldingPanel } from './CrownMouldingPanel';
-import { RouterCirclePanel } from './RouterCirclePanel';
-import { CoveCutPanel } from './CoveCutPanel';
-import { MoistureShrinkagePanel } from './MoistureShrinkagePanel';
-import { RafterLengthPanel } from './RafterLengthPanel';
-import { RouterTemplatePanel } from './RouterTemplatePanel';
-import { HalfLapPanel } from './HalfLapPanel';
-import { SplineJointPanel } from './SplineJointPanel';
 import { PresetsPanel } from './PresetsPanel';
 import { SaveLoadPanel } from './SaveLoadPanel';
 import { ConstraintSuggestionsPanel } from './ConstraintSuggestionsPanel';
@@ -64,78 +40,6 @@ export function ConfiguratorPanel() {
 
       {/* Sprint 85 — ergonomic + best-practice measurement hints */}
       <MeasurementHintsPanel />
-
-      {/* Sprint 88 — finish/paint calculator */}
-      <FinishCalculatorPanel />
-
-      {/* Sprint 221 — face frame cut list calculator */}
-      <FaceFramePanel />
-
-      {/* Sprint 222 — cabinet door sizing calculator */}
-      <CabinetDoorPanel />
-
-      {/* Sprint 223 — drawer box sizing calculator */}
-      <DrawerBoxPanel />
-
-      {/* Sprint 224 — screw pull-out strength estimator */}
-      <ScrewPulloutPanel />
-
-      {/* Sprint 225 — kerf bending calculator */}
-      <KerfBendingPanel />
-
-      {/* Sprint 226 — dado / rabbet joint calculator */}
-      <DadoRabbetPanel />
-
-      {/* Sprint 227 — finishing coat calculator */}
-      <FinishingCoatPanel />
-
-      {/* Sprint 228 — wood turning speed calculator */}
-      <WoodTurningPanel />
-
-      {/* Sprint 229 — frame and panel calculator */}
-      <FramePanelCalcPanel />
-
-      {/* Sprint 230 — taper jig calculator */}
-      <TaperJigPanel />
-
-      {/* Sprint 231 — stair stringer calculator */}
-      <StairStringerPanel />
-
-      {/* Sprint 232 — box joint calculator */}
-      <BoxJointPanel />
-
-      {/* Sprint 233 — wood glue coverage calculator */}
-      <GlueCoveragePanel />
-
-      {/* Sprint 235 — lumber planer pass calculator */}
-      <PlanerPassesPanel />
-
-      {/* Sprint 236 — honing guide calculator */}
-      <HoningGuidePanel />
-
-      {/* Sprint 237 — crown moulding cut calculator */}
-      <CrownMouldingPanel />
-
-      {/* Sprint 238 — router circle jig calculator */}
-      <RouterCirclePanel />
-
-      {/* Sprint 240 — table-saw cove cut calculator */}
-      <CoveCutPanel />
-
-      {/* Sprint 241 — moisture content & shrinkage calculator */}
-      <MoistureShrinkagePanel />
-
-      {/* Sprint 242 — rafter length & birdsmouth calculator */}
-      <RafterLengthPanel />
-
-      {/* Sprint 243 — router template offset calculator */}
-      <RouterTemplatePanel />
-
-      {/* Sprint 245 — half-lap joint calculator */}
-      <HalfLapPanel />
-
-      {/* Sprint 246 — spline joint calculator */}
-      <SplineJointPanel />
 
       {/* Sprint 110 — real-time constraint violations and dimension range hints */}
       <ConstraintSuggestionsPanel />

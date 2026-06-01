@@ -43,12 +43,12 @@ const workflowPolicies = [
   {
     name: 'Dependency review workflow',
     path: '.github/workflows/dependency-review.yml',
-    requiredTokens: ['name: Dependency Review', 'actions/dependency-review-action@v4', 'fail-on-severity: moderate'],
+    requiredTokens: ['name: Dependency Review', 'actions/dependency-review-action@v5', 'fail-on-severity: moderate'],
   },
   {
     name: 'Secret scan workflow',
     path: '.github/workflows/secret-scan.yml',
-    requiredTokens: ['name: Secret Scan', 'gitleaks/gitleaks-action@v2', 'GITLEAKS_CONFIG: .github/.gitleaks.toml'],
+    requiredTokens: ['name: Secret Scan', 'gitleaks/gitleaks-action@v3', 'GITLEAKS_CONFIG: .github/.gitleaks.toml'],
   },
 ];
 

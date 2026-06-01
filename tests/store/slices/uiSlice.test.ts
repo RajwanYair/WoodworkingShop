@@ -94,8 +94,8 @@ describe('loadUiPrefs / saveUiPrefs', () => {
 // ── createUiSlice — initial state ────────────────────────────────────────────
 
 describe('createUiSlice — initial state', () => {
-  it('defaults to configurator tab', () => {
-    expect(makeSlice().get().activeTab).toBe('configurator');
+  it('defaults to workspace tab', () => {
+    expect(makeSlice().get().activeTab).toBe('workspace');
   });
 
   it('applies saved darkMode preference', () => {

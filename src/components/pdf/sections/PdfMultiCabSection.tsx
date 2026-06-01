@@ -21,7 +21,7 @@ export function PdfMultiCabSection({ ctx, allCabinetsData }: PdfMultiCabSectionP
         const cabLabel = `${T.cabinetOfPrefix} ${ci + 1} ${T.cabinetOfMiddle} ${allCabinetsData.length}`;
         const cabTitle = cab.name.trim() || cabLabel;
         return (
-          <Page key={`cab-${ci}`} size={pageSize} orientation={orientation} style={s.page}>
+          <Page key={`cab-${ci}`} size={pageSize} orientation={orientation} style={[s.page, { fontFamily }]}>
             <PageHeader section={`🗄️  ${cabTitle}`} projectName={coverTitle} lang={lang} />
 
             {/* Cabinet section header */}
@@ -139,7 +139,7 @@ interface PdfMultiCabHardwarePageProps {
 export function PdfMultiCabHardwarePage({ ctx, hardware }: PdfMultiCabHardwarePageProps) {
   const { T, fontFamily, fontFamilyBold, textAlign, lang, date, coverTitle, pageSize, orientation } = ctx;
   return (
-    <Page size={pageSize} orientation={orientation} style={s.page}>
+    <Page size={pageSize} orientation={orientation} style={[s.page, { fontFamily }]}>
       <PageHeader section={`🔩  ${T.projectHardware}`} projectName={coverTitle} lang={lang} />
       <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>
         🔩 {T.projectHardware}{' '}

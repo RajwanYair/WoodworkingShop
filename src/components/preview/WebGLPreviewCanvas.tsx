@@ -22,6 +22,12 @@ interface WebGLPreviewCanvasProps {
    * animating a continuous y-axis rotation.
    */
   isometric?: boolean;
+  /** Interactive orbit yaw in degrees (used for real 3D drag rotation). */
+  orbitYawDeg?: number;
+  /** Interactive orbit pitch in degrees (used for real 3D drag rotation). */
+  orbitPitchDeg?: number;
+  /** Camera zoom multiplier for interactive preview. */
+  zoom?: number;
 }
 
 // ── Minimal WebGL helpers ────────────────────────────────────────────────────
@@ -67,6 +73,8 @@ const VS = `
 
   uniform float uAspect;
   uniform float uAngleY;
+  uniform float uAngleX;
+  uniform float uZoom;
 
   void main() {
     float cy = cos(uAngleY);
@@ -74,15 +82,14 @@ const VS = `
     float x = aPos.x * cy - aPos.z * sy;
     float z = aPos.x * sy + aPos.z * cy;
 
-    // Slight tilt around x axis for pseudo-isometric look
-    float angleX = 0.35;
-    float cx = cos(angleX);
-    float sx = sin(angleX);
+    // Pitch around x axis
+    float cx = cos(uAngleX);
+    float sx = sin(uAngleX);
     float y = aPos.y * cx - z * sx;
     float zz = aPos.y * sx + z * cx;
 
     // Perspective divide
-    float fov = 1.8;
+    float fov = 1.8 * uZoom;
     float depth = zz + 3.5;
     gl_Position = vec4(x * fov / (depth * uAspect), y * fov / depth, 0.0, 1.0);
     vColor = aColor;
@@ -179,6 +186,9 @@ export function WebGLPreviewCanvas({
   className,
   materialColor,
   isometric = false,
+  orbitYawDeg,
+  orbitPitchDeg,
+  zoom = 1,
 }: WebGLPreviewCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef = useRef<number>(0);
@@ -214,6 +224,8 @@ export function WebGLPreviewCanvas({
     const aColor = gl.getAttribLocation(program, 'aColor');
     const uAspect = gl.getUniformLocation(program, 'uAspect');
     const uAngleY = gl.getUniformLocation(program, 'uAngleY');
+    const uAngleX = gl.getUniformLocation(program, 'uAngleX');
+    const uZoom = gl.getUniformLocation(program, 'uZoom');
 
     gl.enableVertexAttribArray(aPos);
     gl.vertexAttribPointer(aPos, 3, gl.FLOAT, false, stride, 0);
@@ -222,23 +234,32 @@ export function WebGLPreviewCanvas({
 
     gl.useProgram(program);
     gl.uniform1f(uAspect, width / height);
+    gl.uniform1f(uZoom, Math.max(0.4, Math.min(2.5, zoom)));
 
     gl.enable(gl.DEPTH_TEST);
     gl.clearColor(0.97, 0.95, 0.92, 1.0);
 
     // Phase 12 / Sprint 14 — isometric mode: fixed 30° y-angle, no animation.
-    const ISO_ANGLE = Math.PI / 6; // 30°
-    let angle = isometric ? ISO_ANGLE : 0.4;
+    const ISO_ANGLE_Y = Math.PI / 6; // 30°
+    const ISO_ANGLE_X = 0.35; // ~20° tilt
+    const hasControlledOrbit = orbitYawDeg !== undefined || orbitPitchDeg !== undefined;
+    let angleY = isometric ? ISO_ANGLE_Y : 0.4;
+    let angleX = isometric ? ISO_ANGLE_X : 0.35;
+    if (hasControlledOrbit) {
+      angleY = ((orbitYawDeg ?? 0) * Math.PI) / 180;
+      angleX = ((orbitPitchDeg ?? 0) * Math.PI) / 180;
+    }
     const ROTATION_SPEED = 0.006;
     const VERTEX_COUNT = geometry.length / 6;
 
     function draw() {
       if (!gl) return;
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-      gl.uniform1f(uAngleY, angle);
+      gl.uniform1f(uAngleY, angleY);
+      gl.uniform1f(uAngleX, angleX);
       gl.drawArrays(gl.TRIANGLES, 0, VERTEX_COUNT);
-      if (!isometric) {
-        angle += ROTATION_SPEED;
+      if (!isometric && !hasControlledOrbit) {
+        angleY += ROTATION_SPEED;
         rafRef.current = requestAnimationFrame(draw);
       }
     }
@@ -250,7 +271,18 @@ export function WebGLPreviewCanvas({
       gl.deleteBuffer(buf);
       gl.deleteProgram(program);
     };
-  }, [config.width, config.height, config.depth, width, height, materialColor, isometric]);
+  }, [
+    config.width,
+    config.height,
+    config.depth,
+    width,
+    height,
+    materialColor,
+    isometric,
+    orbitYawDeg,
+    orbitPitchDeg,
+    zoom,
+  ]);
 
   // Phase 12 / Sprint 14 — feature flag post-hook guard (hooks always called above).
   if (!WEBGL_ENABLED) return null;
@@ -275,7 +307,7 @@ export function WebGLPreviewCanvas({
       ref={canvasRef}
       width={width}
       height={height}
-      className={`border-wood-200 dark:border-wood-700 rounded border ${className ?? ''}`}
+      className={`border-wood-200 dark:border-wood-700 touch-none rounded border ${className ?? ''}`}
       aria-label={`3D cabinet preview — ${config.width}×${config.height}×${config.depth} mm`}
       data-testid="webgl-preview-canvas"
     />

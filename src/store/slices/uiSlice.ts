@@ -103,7 +103,7 @@ export function detectOsDarkModeUi(): boolean {
 
 // ─── Slice type ───────────────────────────────────────────────────────────────
 
-type ActiveTab = 'configurator' | 'preview' | 'optimizer' | 'assembly' | 'pdf';
+type ActiveTab = 'workspace' | 'configurator' | 'preview' | 'optimizer' | 'assembly' | 'pdf' | 'calculators';
 
 export type UiSlice = {
   // State
@@ -166,7 +166,7 @@ export function createUiSlice(
 ): UiSlice {
   return {
     // ── Initial state ──
-    activeTab: 'configurator',
+    activeTab: 'workspace',
     projectName: initialProjectName,
     projectNotes: initialProjectNotes,
     darkMode: initialPrefs.darkMode ?? detectOsDarkModeUi(),

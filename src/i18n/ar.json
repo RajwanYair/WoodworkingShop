@@ -8,11 +8,13 @@
     "mainWorkspace": "مساحة عمل مخطط الخزائن"
   },
   "tabs": {
+    "workspace": "مساحة العمل",
     "configurator": "تهيئة",
     "preview": "معاينة",
     "optimizer": "خطط القطع",
     "assembly": "التركيب",
-    "pdf": "تصدير PDF"
+    "pdf": "تصدير PDF",
+    "calculators": "الحاسبات"
   },
   "config": {
     "dimensions": "الأبعاد",
@@ -234,6 +236,7 @@
     "dimensionSummary": "أبعاد الخزانة ع × ار × ع",
     "doors": "أبواب",
     "drawers": "أدراج",
+    "dragToRotate": "اسحب للتدوير",
     "webglToggle": "تبديل عرض WebGL / SVG",
     "webglAnimate": "تحريك",
     "webglIsometric": "إيزومتري"
@@ -475,9 +478,13 @@
     "placeholder": "اسم الخزانة…",
     "empty": "لا توجد تهيئات محفوظة",
     "export": "تصدير JSON",
+    "exportCabinet": "تصدير خزانة",
+    "exportProject": "تصدير المشروع ({{count}} خزائن)",
     "import": "استيراد JSON",
     "share": "مشاركة الرابط",
     "exportAll": "تصدير جميع المشاريع",
+    "exportBundle": "تصدير حزمة المشاريع المحفوظة",
+    "exportBundleTip": "تنزيل جميع المشاريع المحفوظة من التخزين كملف حزمة واحد",
     "exportAllTip": "تنزيل جميع المشاريع المحفوظة في ملف واحد",
     "importBundle": "استيراد حزمة",
     "importBundleTip": "استيراد مشاريع متعددة من ملف حزمة",

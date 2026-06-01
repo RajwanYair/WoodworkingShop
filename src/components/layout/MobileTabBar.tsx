@@ -5,11 +5,13 @@ import { useHaptics } from '../../hooks/useHaptics';
 type Tab = CabinetState['activeTab'];
 
 const TABS: { id: Tab; icon: string; labelKey: string }[] = [
-  { id: 'configurator', icon: '⚙️', labelKey: 'tabs.configurator' },
-  { id: 'preview', icon: '👁️', labelKey: 'tabs.preview' },
-  { id: 'optimizer', icon: '✂️', labelKey: 'tabs.optimizer' },
-  { id: 'assembly', icon: '🔨', labelKey: 'tabs.assembly' },
-  { id: 'pdf', icon: '📄', labelKey: 'tabs.pdf' },
+  { id: 'workspace', icon: '🏷️🪵', labelKey: 'tabs.workspace' },
+  { id: 'configurator', icon: '⚙️🪚', labelKey: 'tabs.configurator' },
+  { id: 'preview', icon: '👁️✨', labelKey: 'tabs.preview' },
+  { id: 'optimizer', icon: '✂️📐', labelKey: 'tabs.optimizer' },
+  { id: 'assembly', icon: '🔨🧰', labelKey: 'tabs.assembly' },
+  { id: 'pdf', icon: '📄🗂️', labelKey: 'tabs.pdf' },
+  { id: 'calculators', icon: '🧮📏', labelKey: 'tabs.calculators' },
 ];
 
 /**
@@ -45,6 +47,9 @@ export function MobileTabBar() {
               isActive ? 'text-wood-700 dark:text-wood-100 font-semibold' : 'text-wood-400 dark:text-wood-500',
             ].join(' ')}
           >
+            {isActive ? (
+              <img src="/tab-sparkle.svg" alt="" aria-hidden="true" className="h-3 w-8 opacity-90" loading="lazy" />
+            ) : null}
             <span aria-hidden="true" className="text-lg leading-none">
               {tab.icon}
             </span>

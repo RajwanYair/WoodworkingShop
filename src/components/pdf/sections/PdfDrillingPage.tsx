@@ -15,7 +15,7 @@ export function PdfDrillingPage({ ctx, d, backPanelMaterial }: PdfDrillingPagePr
   const { T, fontFamily, fontFamilyBold, textAlign, isRTL, lang, date, coverTitle, pageSize, orientation } = ctx;
   const bMat = getMaterial(backPanelMaterial);
   return (
-    <Page size={pageSize} orientation={orientation} style={s.page}>
+    <Page size={pageSize} orientation={orientation} style={[s.page, { fontFamily }]}>
       <PageHeader section={`🔧  ${T.drillingGuide}`} projectName={coverTitle} lang={lang} />
 
       <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>🔧 {T.drillingGuide}</Text>

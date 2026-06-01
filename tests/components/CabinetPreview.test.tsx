@@ -44,6 +44,31 @@ describe('CabinetPreview — isometric 3D view', () => {
   });
 });
 
+describe('CabinetPreview — project cabinet switching and centre supports', () => {
+  beforeEach(() => {
+    useCabinetStore.setState({
+      cabinets: [
+        { name: 'Cabinet 1', config: { ...DEFAULT_CONFIG, width: 600, shelfCentreSupports: 0 } },
+        { name: 'Cabinet 2', config: { ...DEFAULT_CONFIG, width: 900, shelfCentreSupports: 2 } },
+      ],
+      activeCabinetIndex: 0,
+      config: { ...DEFAULT_CONFIG, width: 600, shelfCentreSupports: 0 },
+      darkMode: false,
+      units: 'metric',
+    });
+  });
+
+  it('renders centre support overlays when configured', () => {
+    useCabinetStore.setState({
+      config: { ...DEFAULT_CONFIG, shelfCentreSupports: 2 },
+    });
+    render(<CabinetPreview />);
+    const svg = screen.getByLabelText('Cabinet drawing');
+    const dashedCount = (svg.innerHTML.match(/stroke-dasharray/g) ?? []).length;
+    expect(dashedCount).toBeGreaterThanOrEqual(2);
+  });
+});
+
 // ── Sprint 76 — W×H×D dimension label strip ────────────────────────────────
 describe('CabinetPreview — dimension label strip (Sprint 76)', () => {
   beforeEach(() => {

@@ -31,6 +31,7 @@ export function IsometricView({
   color,
   materialId,
   shelfPositions,
+  centreSupportCount,
   hasDoors,
   doorStyle,
   doorCount,
@@ -52,6 +53,7 @@ export function IsometricView({
   /** Sprint 69 — optional texture atlas ID; when set, SVG pattern fills replace flat colour. */
   materialId?: string;
   shelfPositions: number[];
+  centreSupportCount: number;
   hasDoors: boolean;
   doorStyle: string;
   doorCount: number;
@@ -301,6 +303,29 @@ export function IsometricView({
                   );
                 })}
             </g>
+          );
+        })}
+
+        {/* Centre supports (full-height dividers that split shelf bays). */}
+        {Array.from({ length: centreSupportCount }).map((_, i) => {
+          const sx = T + ((W - 2 * T) * (i + 1)) / (centreSupportCount + 1);
+          const st = Math.max(T * 0.45, 1.2 * sc);
+          return (
+            <polygon
+              key={`centre-support-iso-${i}`}
+              points={isoQuad(
+                [sx - st / 2, T, 0],
+                [sx + st / 2, T, 0],
+                [sx + st / 2, H - T, D - BT],
+                [sx - st / 2, H - T, D - BT],
+              )}
+              fill={sideFill}
+              stroke="#666"
+              strokeWidth={0.35}
+              opacity={0.52}
+            >
+              <title>{`Centre Support ${i + 1}\n${Math.round(thick)}×${Math.round(h - 2 * thick)} mm`}</title>
+            </polygon>
           );
         })}
 

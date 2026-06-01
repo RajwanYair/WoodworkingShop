@@ -58,9 +58,6 @@
   // ─── Python / Ruff (disabled for this TS-only workspace) ───────────────────
   "ruff.enable": false,
 
-  // ─── Browser Compatibility Checker ──────────────────────────────────────────
-  "browser-compatibility-checker.enabled": true,
-
   // ─── Terminal ───────────────────────────────────────────────────────────────
   "terminal.integrated.shellIntegration.enabled": true,
   "terminal.integrated.shellIntegration.decorationsEnabled": "both",
@@ -220,51 +217,6 @@
   "testing.automaticallyOpenTestResults": "openOnFailure",
   "testing.showCoverageInEditor": true,
   "testing.coverageToolbarEnabled": true,
-  // ─── Todo Tree ──────────────────────────────────────────────────────────────
-  "todo-tree.general.tags": ["TODO", "FIXME", "HACK", "NOTE", "PERF", "SECURITY"],
-  "todo-tree.highlights.defaultHighlight": {
-    "icon": "alert",
-    "type": "text"
-  },
-  "todo-tree.highlights.customHighlight": {
-    "TODO": {
-      "icon": "check",
-      "foreground": "#fff",
-      "background": "#f59e0b",
-      "iconColour": "#f59e0b"
-    },
-    "FIXME": {
-      "icon": "tools",
-      "foreground": "#fff",
-      "background": "#ef4444",
-      "iconColour": "#ef4444"
-    },
-    "HACK": {
-      "icon": "zap",
-      "foreground": "#fff",
-      "background": "#8b5cf6",
-      "iconColour": "#8b5cf6"
-    },
-    "NOTE": {
-      "icon": "info",
-      "foreground": "#fff",
-      "background": "#3b82f6",
-      "iconColour": "#3b82f6"
-    },
-    "PERF": {
-      "icon": "graph",
-      "foreground": "#fff",
-      "background": "#10b981",
-      "iconColour": "#10b981"
-    },
-    "SECURITY": {
-      "icon": "shield",
-      "foreground": "#fff",
-      "background": "#dc2626",
-      "iconColour": "#dc2626"
-    }
-  },
-  "todo-tree.filtering.excludeGlobs": ["**/node_modules/**", "**/dist/**", "**/coverage/**"],
   // ─── Vitest Explorer ────────────────────────────────────────────────────────
   "vitest.filesWatcherEnable": true,
 

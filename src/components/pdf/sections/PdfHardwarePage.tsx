@@ -12,7 +12,7 @@ interface PdfHardwarePageProps {
 export function PdfHardwarePage({ ctx, hardware }: PdfHardwarePageProps) {
   const { T, fontFamily, fontFamilyBold, textAlign, lang, date, coverTitle, pageSize, orientation } = ctx;
   return (
-    <Page size={pageSize} orientation={orientation} style={s.page}>
+    <Page size={pageSize} orientation={orientation} style={[s.page, { fontFamily }]}>
       <PageHeader section={`🔩  ${T.hardwareListTitle}`} projectName={coverTitle} lang={lang} />
 
       <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>

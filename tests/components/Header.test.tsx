@@ -68,33 +68,31 @@ describe('Header', () => {
 
   it('ArrowRight moves focus to the next tab', () => {
     render(<Header />);
-    // Start on configurator (index 0). ArrowRight should move to preview (index 1).
-    const tabButtons = screen.getAllByRole('tab');
-    fireEvent.keyDown(tabButtons[0], { key: 'ArrowRight' });
+    const configuratorTab = screen.getAllByRole('tab').find((b) => b.textContent?.includes('Configure'))!;
+    fireEvent.keyDown(configuratorTab, { key: 'ArrowRight' });
     expect(useCabinetStore.getState().activeTab).toBe('preview');
   });
 
   it('ArrowLeft wraps from first tab to last tab', () => {
     render(<Header />);
     const tabButtons = screen.getAllByRole('tab');
-    // configurator is first; ArrowLeft should wrap to pdf (last)
+    // configurator is first; ArrowLeft should wrap to calculators (last)
     fireEvent.keyDown(tabButtons[0], { key: 'ArrowLeft' });
-    expect(useCabinetStore.getState().activeTab).toBe('pdf');
+    expect(useCabinetStore.getState().activeTab).toBe('calculators');
   });
 
   it('Home key navigates to the first tab', () => {
     useCabinetStore.setState({ activeTab: 'assembly' });
     render(<Header />);
-    const tabButtons = screen.getAllByRole('tab');
-    const assemblyTab = tabButtons.find((b) => b.getAttribute('aria-selected') === 'true')!;
+    const assemblyTab = screen.getAllByRole('tab').find((b) => b.getAttribute('aria-selected') === 'true')!;
     fireEvent.keyDown(assemblyTab, { key: 'Home' });
-    expect(useCabinetStore.getState().activeTab).toBe('configurator');
+    expect(useCabinetStore.getState().activeTab).toBe('workspace');
   });
 
   it('End key navigates to the last tab', () => {
     render(<Header />);
     const tabButtons = screen.getAllByRole('tab');
     fireEvent.keyDown(tabButtons[0], { key: 'End' });
-    expect(useCabinetStore.getState().activeTab).toBe('pdf');
+    expect(useCabinetStore.getState().activeTab).toBe('calculators');
   });
 });

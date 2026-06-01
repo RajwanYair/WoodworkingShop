@@ -16,7 +16,7 @@ export function PdfShoppingPage({ ctx, optimization, hardware, edgeBandingTotal 
   const { T, fontFamily, fontFamilyBold, textAlign, lang, date, coverTitle, pageSize, orientation } = ctx;
   const rows = sheetSummary(optimization, lang);
   return (
-    <Page size={pageSize} orientation={orientation} style={s.page}>
+    <Page size={pageSize} orientation={orientation} style={[s.page, { fontFamily }]}>
       <PageHeader section={`🛒  ${T.shoppingList}`} projectName={coverTitle} lang={lang} />
 
       <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>🛒 {T.shoppingList}</Text>

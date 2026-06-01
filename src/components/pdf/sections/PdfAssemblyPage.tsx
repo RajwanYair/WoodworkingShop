@@ -17,7 +17,7 @@ interface PdfAssemblyPageProps {
 export function PdfExplodedPage({ ctx, config, d, cMatName, bMatName }: PdfAssemblyPageProps) {
   const { T, fontFamily: _ff, fontFamilyBold, textAlign, lang, date, coverTitle, pageSize, orientation } = ctx;
   return (
-    <Page size={pageSize} orientation={orientation} style={s.page}>
+    <Page size={pageSize} orientation={orientation} style={[s.page, { fontFamily: _ff }]}>
       <PageHeader section={`🏗️  ${T.explodedView}`} projectName={coverTitle} lang={lang} />
       <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>🏗️ {T.explodedView}</Text>
       <ExplodedView config={config} dimensions={d} cMat={cMatName} bMat={bMatName} lang={lang} />
@@ -30,7 +30,7 @@ export function PdfAssemblyPage({ ctx, config, d, cMatName, bMatName }: PdfAssem
   const { T, fontFamily, fontFamilyBold, textAlign, isRTL, lang, date, coverTitle, pageSize, orientation } = ctx;
   const steps = assemblyStepsI18n(config, d, cMatName, bMatName, lang);
   return (
-    <Page size={pageSize} orientation={orientation} style={s.page}>
+    <Page size={pageSize} orientation={orientation} style={[s.page, { fontFamily }]}>
       <PageHeader section={`🔨  ${T.assemblySequence}`} projectName={coverTitle} lang={lang} />
       <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>🔨 {T.assemblySequence}</Text>
       {steps.map((step, i) => (

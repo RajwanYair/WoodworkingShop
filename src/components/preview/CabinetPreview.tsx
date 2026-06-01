@@ -35,6 +35,11 @@ export const CabinetPreview = memo(function CabinetPreview() {
   const [showDims, setShowDims] = useState(true);
   const [tooltip, setTooltip] = useState<TooltipInfo | null>(null);
   const [zoomScale, setZoomScale] = useState(1);
+  const [orbitYaw, setOrbitYaw] = useState(0);
+  const [orbitPitch, setOrbitPitch] = useState(0);
+  const [orbitZoom, setOrbitZoom] = useState(1);
+  const [draggingOrbit, setDraggingOrbit] = useState(false);
+  const orbitStartRef = useRef<{ x: number; y: number; yaw: number; pitch: number } | null>(null);
   /** Phase 12 / Sprint 14 — toggle isometric vs. animated WebGL view (only relevant when VITE_ENABLE_WEBGL=true). */
   const [webglIsometric, setWebglIsometric] = useState(true);
 
@@ -51,6 +56,11 @@ export const CabinetPreview = memo(function CabinetPreview() {
   const H = config.height * S;
   const D = config.depth * S;
   const T = thick * S;
+  const centreSupportCount = Math.max(0, config.shelfCentreSupports ?? 0);
+  const centreSupportXs = Array.from(
+    { length: centreSupportCount },
+    (_, i) => T + ((W - 2 * T) * (i + 1)) / (centreSupportCount + 1),
+  );
   const dimPad = showDims ? 45 : 30; // extra space for dimension lines
 
   const carcassMatName = getMaterial(config.carcassMaterial).name[config.lang];
@@ -98,6 +108,39 @@ export const CabinetPreview = memo(function CabinetPreview() {
       }
     },
   });
+
+  const handleOrbitStart = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      setWebglIsometric(false);
+      orbitStartRef.current = { x: e.clientX, y: e.clientY, yaw: orbitYaw, pitch: orbitPitch };
+      setDraggingOrbit(true);
+      e.currentTarget.setPointerCapture(e.pointerId);
+    },
+    [orbitPitch, orbitYaw],
+  );
+
+  const handleOrbitMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    const start = orbitStartRef.current;
+    if (!start) return;
+    const dx = e.clientX - start.x;
+    const dy = e.clientY - start.y;
+    setOrbitYaw(start.yaw + dx * 0.25);
+    setOrbitPitch(Math.max(-60, Math.min(60, start.pitch - dy * 0.2)));
+  }, []);
+
+  const handleOrbitEnd = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    orbitStartRef.current = null;
+    setDraggingOrbit(false);
+    e.currentTarget.releasePointerCapture(e.pointerId);
+  }, []);
+
+  const handleOrbitWheel = useCallback((e: React.WheelEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setOrbitZoom((z) => Math.max(0.6, Math.min(2.4, z - e.deltaY * 0.0015)));
+  }, []);
+
+  const webglEnabled = import.meta.env.VITE_ENABLE_WEBGL === 'true';
 
   return (
     <div className="space-y-4">
@@ -159,9 +202,15 @@ export const CabinetPreview = memo(function CabinetPreview() {
       <div
         ref={previewRef}
         className="relative touch-none overflow-auto"
-        onTouchStart={touchGestures.onTouchStart}
-        onTouchMove={touchGestures.onTouchMove}
-        onTouchEnd={touchGestures.onTouchEnd}
+        onTouchStart={(e) => {
+          if (activeView !== '3d') touchGestures.onTouchStart(e);
+        }}
+        onTouchMove={(e) => {
+          if (activeView !== '3d') touchGestures.onTouchMove(e);
+        }}
+        onTouchEnd={(e) => {
+          if (activeView !== '3d') touchGestures.onTouchEnd(e);
+        }}
         style={{ transform: `scale(${zoomScale})`, transformOrigin: 'top left' }}
       >
         {tooltip && (
@@ -231,6 +280,21 @@ export const CabinetPreview = memo(function CabinetPreview() {
                 material={carcassMatName}
                 {...tp}
               />
+              {centreSupportXs.map((sx, i) => (
+                <PartRect
+                  key={`centre-support-front-${i}`}
+                  x={sx - Math.max(T * 0.25, 1)}
+                  y={T}
+                  w={Math.max(T * 0.5, 2)}
+                  h={H - 2 * T}
+                  fill={color}
+                  dashed
+                  label={`Centre Support ${i + 1}`}
+                  dim={`${thick}×${d.internalHeight}`}
+                  material={carcassMatName}
+                  {...tp}
+                />
+              ))}
               {config.doorStyle !== 'none' && (
                 <DoorsOverlay config={config} d={d} scale={S} color={color} material={carcassMatName} tp={tp} />
               )}
@@ -268,6 +332,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
             d={d}
             config={config}
             shelfPositions={shelfPositions}
+            centreSupportXs={centreSupportXs}
             showDims={showDims}
             dimPad={dimPad}
             fd={fd}
@@ -383,6 +448,21 @@ export const CabinetPreview = memo(function CabinetPreview() {
                 material={backMatName}
                 {...tp}
               />
+              {centreSupportXs.map((sx, i) => (
+                <PartRect
+                  key={`centre-support-top-${i}`}
+                  x={sx - Math.max(T * 0.2, 1)}
+                  y={0}
+                  w={Math.max(T * 0.4, 2)}
+                  h={D - bt * S}
+                  fill={color}
+                  dashed
+                  label={`Centre Support ${i + 1}`}
+                  dim={`${thick}×${config.depth}`}
+                  material={carcassMatName}
+                  {...tp}
+                />
+              ))}
               {showDims && (
                 <>
                   <DimLine x1={0} y1={-8} x2={W} y2={-8} label={fd(config.width)} pos="above" />
@@ -428,7 +508,26 @@ export const CabinetPreview = memo(function CabinetPreview() {
           </ViewBox>
         )}
         {activeView === '3d' && (
-          <>
+          <div
+            className={`relative transform-gpu ${draggingOrbit ? 'cursor-grabbing' : 'cursor-grab'}`}
+            style={{
+              transform: webglEnabled
+                ? undefined
+                : `perspective(1400px) rotateX(${orbitPitch}deg) rotateY(${orbitYaw}deg)`,
+              transformStyle: 'preserve-3d',
+              transition: webglEnabled ? undefined : draggingOrbit ? 'none' : 'transform 120ms linear',
+            }}
+            onPointerDown={handleOrbitStart}
+            onPointerMove={handleOrbitMove}
+            onPointerUp={handleOrbitEnd}
+            onPointerCancel={handleOrbitEnd}
+            onWheel={handleOrbitWheel}
+            onDoubleClick={() => {
+              setOrbitYaw(0);
+              setOrbitPitch(0);
+              setOrbitZoom(1);
+            }}
+          >
             <IsometricView
               w={config.width}
               h={config.height}
@@ -438,6 +537,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
               color={color}
               materialId={getMaterialTextureId(config.carcassMaterial)}
               shelfPositions={shelfPositions}
+              centreSupportCount={centreSupportCount}
               hasDoors={config.doorStyle !== 'none'}
               doorStyle={config.doorStyle}
               doorCount={config.doorCount}
@@ -456,8 +556,27 @@ export const CabinetPreview = memo(function CabinetPreview() {
               config={config}
               materialColor={getMaterial(config.carcassMaterial).color}
               isometric={webglIsometric}
+              orbitYawDeg={orbitYaw}
+              orbitPitchDeg={orbitPitch}
+              zoom={orbitZoom}
               className="absolute inset-0 h-full w-full"
             />
+            <div className="absolute inset-s-2 bottom-2 rounded bg-black/45 px-2 py-0.5 text-[10px] text-white">
+              {t('preview.dragToRotate')} • {Math.round(orbitZoom * 100)}%
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setOrbitYaw(0);
+                setOrbitPitch(0);
+                setOrbitZoom(1);
+                setWebglIsometric(true);
+              }}
+              className="absolute inset-e-2 top-2 rounded bg-black/40 px-2 py-0.5 text-[10px] text-white hover:bg-black/60"
+              title={t('preview3d.resetCamera')}
+            >
+              {t('preview3d.resetCamera')}
+            </button>
             {import.meta.env.VITE_ENABLE_WEBGL === 'true' && (
               <button
                 type="button"
@@ -469,7 +588,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
                 {webglIsometric ? t('preview.webglAnimate') : t('preview.webglIsometric')}
               </button>
             )}
-          </>
+          </div>
         )}
       </div>
       {/* Sprint 76 — W × H × D dimension summary label */}

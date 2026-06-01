@@ -25,7 +25,7 @@ export function PdfCoverPage({
   const { T, fontFamily, fontFamilyBold, textAlign, isRTL, date, coverTitle, pageSize } = ctx;
   const rowDir = isRTL ? ({ flexDirection: 'row-reverse' } as const) : {};
   return (
-    <Page size={pageSize} style={s.coverPage}>
+    <Page size={pageSize} style={[s.coverPage, { fontFamily }]}>
       {/* Top dark band */}
       <View style={s.coverTopBand}>
         <Text style={s.coverBigEmoji}>🪚</Text>

@@ -37,7 +37,7 @@ export function PdfSpecPage({
   const rowDir = isRTL ? ({ flexDirection: 'row-reverse' } as const) : {};
   const specRowProps = { isRTL, fontFamily, fontFamilyBold };
   return (
-    <Page size={pageSize} orientation={orientation} style={s.page}>
+    <Page size={pageSize} orientation={orientation} style={[s.page, { fontFamily }]}>
       <PageHeader section={`📐  ${T.specTitle}`} projectName={coverTitle} lang={lang} />
 
       <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>📐 {T.specTitle}</Text>

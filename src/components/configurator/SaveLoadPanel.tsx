@@ -4,18 +4,20 @@ import { useCabinetStore } from '../../store/cabinet-store';
 import { useToastStore } from '../../store/toast-store';
 import { loadSavedConfigs, saveConfig, deleteSavedConfig, type SavedConfig } from '../../utils/local-storage';
 import { listProjects, exportProjectsBundle, importProjectsBundle } from '../../utils/project-storage';
-import type { CabinetConfig } from '../../engine/types';
-import type { CabinetEntry } from '../../store/cabinet-store';
-
-interface ProjectExport {
-  version: 1;
-  cabinets: CabinetEntry[];
-}
+import {
+  buildCabinetExport,
+  buildProjectExport,
+  isCabinetExport,
+  isProjectExport,
+  isValidConfig,
+  triggerJsonDownload,
+} from './save-load-json';
 
 export function SaveLoadPanel() {
   const { t } = useTranslation();
   const { config, setConfig, projectName, setProjectName, projectNotes, setProjectNotes } = useCabinetStore();
   const loadProject = useCabinetStore((s) => s.loadProject);
+  const cabinets = useCabinetStore((s) => s.cabinets);
   const addToast = useToastStore((s) => s.addToast);
   const [configs, setConfigs] = useState<SavedConfig[]>([]);
   const [saveName, setSaveName] = useState('');
@@ -53,7 +55,7 @@ export function SaveLoadPanel() {
     addToast(t('toast.deleted'), 'info');
   };
 
-  const handleExportAll = () => {
+  const handleExportSavedBundle = () => {
     void listProjects().then((projects) => {
       if (projects.length === 0) {
         addToast(t('saves.noProjectsToExport'), 'info');
@@ -101,20 +103,25 @@ export function SaveLoadPanel() {
       addToast(t('toast.invalidFile'), 'error');
     }
   };
-  const handleExport = () => {
+  const handleExportCabinet = () => {
     const state = useCabinetStore.getState();
-    const payload: ProjectExport = {
-      version: 1,
-      cabinets: state.cabinets,
-    };
-    const json = JSON.stringify(payload, null, 2);
-    const blob = new Blob([json], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${projectName || `project-${config.width}x${config.height}x${config.depth}`}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    const selected = state.cabinets[state.activeCabinetIndex] ?? { name: 'Cabinet', config: state.config };
+    const payload = buildCabinetExport(selected);
+    const safeName =
+      selected.name.trim() || `cabinet-${selected.config.width}x${selected.config.height}x${selected.config.depth}`;
+    triggerJsonDownload(payload, `${safeName}.cabinet.json`);
+    addToast(t('toast.exported'), 'success');
+  };
+
+  const handleExportProject = () => {
+    const state = useCabinetStore.getState();
+    if (state.cabinets.length === 0) {
+      addToast(t('toast.invalidFile'), 'error');
+      return;
+    }
+    const payload = buildProjectExport(state.cabinets, state.projectName, state.projectNotes);
+    const fileName = `${projectName || `project-${config.width}x${config.height}x${config.depth}`}.project.json`;
+    triggerJsonDownload(payload, fileName);
     addToast(t('toast.exported'), 'success');
   };
 
@@ -132,6 +139,11 @@ export function SaveLoadPanel() {
         // Project format (multi-cabinet)
         if (isProjectExport(parsed)) {
           loadProject(parsed.cabinets);
+          if (typeof parsed.projectName === 'string') setProjectName(parsed.projectName);
+          if (typeof parsed.projectNotes === 'string') setProjectNotes(parsed.projectNotes);
+          addToast(t('toast.imported'), 'success');
+        } else if (isCabinetExport(parsed)) {
+          setConfig(parsed.cabinet.config);
           addToast(t('toast.imported'), 'success');
           // Legacy single-config format
         } else if (isValidConfig(parsed)) {
@@ -251,10 +263,16 @@ export function SaveLoadPanel() {
       {/* Export / Import */}
       <div className="border-wood-100 dark:border-wood-800 flex gap-2 border-t pt-1">
         <button
-          onClick={handleExport}
+          onClick={handleExportCabinet}
           className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 flex-1 rounded border px-2 py-1.5 text-xs font-medium transition-colors"
         >
-          ↓ {t('saves.export')}
+          ↓ {t('saves.exportCabinet')}
+        </button>
+        <button
+          onClick={handleExportProject}
+          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 flex-1 rounded border px-2 py-1.5 text-xs font-medium transition-colors"
+        >
+          ↓ {t('saves.exportProject', { count: cabinets.length })}
         </button>
         <button
           onClick={handleImport}
@@ -284,11 +302,11 @@ export function SaveLoadPanel() {
       {/* Export All / Import Bundle */}
       <div className="flex gap-2">
         <button
-          onClick={handleExportAll}
+          onClick={handleExportSavedBundle}
           className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 flex-1 rounded border px-2 py-1.5 text-xs font-medium transition-colors"
-          title={t('saves.exportAllTip')}
+          title={t('saves.exportBundleTip')}
         >
-          ⬇ {t('saves.exportAll')}
+          ⬇ {t('saves.exportBundle')}
         </button>
         <button
           onClick={handleImportBundle}
@@ -309,35 +327,4 @@ export function SaveLoadPanel() {
       </div>
     </div>
   );
-}
-
-/** Minimal validation — checks that required numeric fields exist and are in range */
-function isValidConfig(obj: unknown): obj is CabinetConfig {
-  if (typeof obj !== 'object' || obj === null) return false;
-  const c = obj as Record<string, unknown>;
-  return (
-    typeof c.width === 'number' &&
-    c.width >= 300 &&
-    c.width <= 1200 &&
-    typeof c.height === 'number' &&
-    c.height >= 300 &&
-    c.height <= 2400 &&
-    typeof c.depth === 'number' &&
-    c.depth >= 200 &&
-    c.depth <= 800 &&
-    typeof c.shelfCount === 'number' &&
-    typeof c.carcassMaterial === 'string' &&
-    typeof c.backPanelMaterial === 'string'
-  );
-}
-
-function isProjectExport(obj: unknown): obj is ProjectExport {
-  if (typeof obj !== 'object' || obj === null) return false;
-  const p = obj as Record<string, unknown>;
-  if (p.version !== 1 || !Array.isArray(p.cabinets) || p.cabinets.length === 0) return false;
-  return p.cabinets.every((c: unknown) => {
-    if (typeof c !== 'object' || c === null) return false;
-    const cab = c as Record<string, unknown>;
-    return typeof cab.name === 'string' && isValidConfig(cab.config);
-  });
 }
