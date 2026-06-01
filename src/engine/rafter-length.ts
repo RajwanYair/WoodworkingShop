@@ -18,6 +18,8 @@
  *   The "1/3 rule" avoids weakening the rafter beyond IBC limits.
  */
 
+import { assertAtLeast, assertGreaterThan } from './invariant';
+
 export interface RafterLengthInput {
   /** Full building span from outer wall to outer wall (mm) */
   totalSpanMm: number;
@@ -49,20 +51,13 @@ export interface RafterLengthResult {
 }
 
 export function calculateRafterLength(input: RafterLengthInput): RafterLengthResult {
+  const fn = 'calculateRafterLength';
   const { totalSpanMm, pitchRatio, plateWidthMm, overhangMm = 0, shedRoof = false } = input;
 
-  if (totalSpanMm <= 0) {
-    throw new RangeError('totalSpanMm must be greater than 0');
-  }
-  if (pitchRatio <= 0) {
-    throw new RangeError('pitchRatio must be greater than 0');
-  }
-  if (plateWidthMm <= 0) {
-    throw new RangeError('plateWidthMm must be greater than 0');
-  }
-  if (overhangMm < 0) {
-    throw new RangeError('overhangMm must be >= 0');
-  }
+  assertGreaterThan(fn, 'totalSpanMm', totalSpanMm, 0);
+  assertGreaterThan(fn, 'pitchRatio', pitchRatio, 0);
+  assertGreaterThan(fn, 'plateWidthMm', plateWidthMm, 0);
+  assertAtLeast(fn, 'overhangMm', overhangMm, 0);
 
   const runMm = shedRoof ? totalSpanMm : totalSpanMm / 2;
   const riseMm = Math.round(runMm * pitchRatio * 100) / 100;

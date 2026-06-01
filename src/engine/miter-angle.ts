@@ -5,6 +5,8 @@
  * (tilt + rotation), and crown molding angles.
  */
 
+import { assertBetweenExclusive, assertBetweenInclusive } from './invariant';
+
 /** Input for polygon miter calculation. */
 export interface PolygonMiterInput {
   /** Number of sides in the polygon (3–36). */
@@ -65,10 +67,12 @@ export interface CrownMoldingResult {
  * @throws RangeError for invalid number of sides
  */
 export function calculatePolygonMiter(input: PolygonMiterInput): PolygonMiterResult {
+  const fn = 'calculatePolygonMiter';
   const { sides } = input;
 
-  if (!Number.isInteger(sides) || sides < 3 || sides > 36) {
-    throw new RangeError(`calculatePolygonMiter: sides must be an integer between 3 and 36, got ${sides}`);
+  assertBetweenInclusive(fn, 'sides', sides, 3, 36);
+  if (!Number.isInteger(sides)) {
+    throw new RangeError(`${fn}: sides must be an integer between 3 and 36, got ${sides}`);
   }
 
   const miterAngle = Math.round((180 / sides) * 1000) / 1000;
@@ -88,14 +92,14 @@ export function calculatePolygonMiter(input: PolygonMiterInput): PolygonMiterRes
  * @throws RangeError for invalid angles
  */
 export function calculateCompoundMiter(input: CompoundMiterInput): CompoundMiterResult {
+  const fn = 'calculateCompoundMiter';
   const { tiltDeg, cornerDeg } = input;
 
-  if (tiltDeg < 0 || tiltDeg >= 90) {
-    throw new RangeError(`calculateCompoundMiter: tiltDeg must be >= 0 and < 90, got ${tiltDeg}`);
+  assertBetweenInclusive(fn, 'tiltDeg', tiltDeg, 0, 90);
+  if (tiltDeg >= 90) {
+    throw new RangeError(`${fn}: tiltDeg must be >= 0 and < 90, got ${tiltDeg}`);
   }
-  if (cornerDeg <= 0 || cornerDeg >= 180) {
-    throw new RangeError(`calculateCompoundMiter: cornerDeg must be > 0 and < 180, got ${cornerDeg}`);
-  }
+  assertBetweenExclusive(fn, 'cornerDeg', cornerDeg, 0, 180);
 
   const tiltRad = (tiltDeg * Math.PI) / 180;
   const halfCornerRad = ((cornerDeg / 2) * Math.PI) / 180;
@@ -120,14 +124,11 @@ export function calculateCompoundMiter(input: CompoundMiterInput): CompoundMiter
  * @throws RangeError for invalid angles
  */
 export function calculateCrownMolding(input: CrownMoldingInput): CrownMoldingResult {
+  const fn = 'calculateCrownMolding';
   const { springAngle, wallAngle } = input;
 
-  if (springAngle <= 0 || springAngle >= 90) {
-    throw new RangeError(`calculateCrownMolding: springAngle must be > 0 and < 90, got ${springAngle}`);
-  }
-  if (wallAngle <= 0 || wallAngle >= 360) {
-    throw new RangeError(`calculateCrownMolding: wallAngle must be > 0 and < 360, got ${wallAngle}`);
-  }
+  assertBetweenExclusive(fn, 'springAngle', springAngle, 0, 90);
+  assertBetweenExclusive(fn, 'wallAngle', wallAngle, 0, 360);
 
   const cornerType: 'inside' | 'outside' = wallAngle <= 180 ? 'inside' : 'outside';
 
