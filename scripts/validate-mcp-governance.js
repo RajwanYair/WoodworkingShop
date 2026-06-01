@@ -7,15 +7,7 @@ import ts from 'typescript';
 const repoRoot = process.cwd();
 const mcpPath = path.join(repoRoot, '.vscode', 'mcp.json');
 
-const requiredCoreServers = [
-  'github',
-  'filesystem',
-  'fetch',
-  'playwright',
-  'memory',
-  'sequentialthinking',
-  'context7',
-];
+const requiredCoreServers = ['github', 'filesystem', 'fetch', 'playwright', 'memory', 'sequentialthinking', 'context7'];
 
 /**
  * Parse JSONC with TypeScript's config parser so comments/trailing commas are supported.

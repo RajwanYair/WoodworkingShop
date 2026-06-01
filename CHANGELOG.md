@@ -9,6 +9,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.29.3] — 2026-06-01
+
+### Phase 55 — Execution Continuation (Sprints 260–264)
+
+#### Sprint 260 — Phase 55 Planning Baseline
+
+- Updated roadmap release baseline and added explicit Phase 55 sprint sequencing (260–264)
+- Formalized execution continuity criteria so each sprint maps to implementation + verification
+
+#### Sprint 261 — Prompt and Agent Output Contracts
+
+- Added deterministic output-contract sections to core prompt templates
+- Added explicit definition-of-done checklists to core `feature` and `debug` agent specs
+
+#### Sprint 262 — MCP Governance Automation
+
+- Added `scripts/validate-mcp-governance.js` to enforce required core MCP server declarations
+- Added `npm run mcp:validate` and integrated it as a blocking CI quality step
+- Added missing descriptions for required core MCP servers in `.vscode/mcp.json`
+
+#### Sprint 263 — Release Workflow Provenance Hardening
+
+- Added build provenance attestation for release artifacts in `.github/workflows/release.yml`
+- Expanded release workflow permissions for attestation + OIDC while preserving existing packaging flow
+
+#### Sprint 264 — Release v5.29.3
+
+- Ran full quality gate (`npm run check`) prior to release
+- Bumped project version metadata to `5.29.3`
+
 ## [5.29.2] — 2026-05-31
 
 ### Phase 54 — Priority Execution Window (Sprints 255–259)
