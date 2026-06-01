@@ -76,6 +76,7 @@
     "mcp:validate": "node scripts/validate-mcp-governance.js",
     "docs:freshness": "node scripts/check-docs-freshness.js",
     "lint:md": "markdownlint-cli2 \"*.md\" \"docs/**/*.md\" \".github/**/*.md\"",
+    "components:budget": "node scripts/check-component-budgets.js",
     "test:e2e": "playwright test",
     "test:e2e:install": "playwright install --with-deps chromium firefox",
     "bench": "vitest bench",
