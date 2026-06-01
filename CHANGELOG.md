@@ -9,6 +9,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.29.8] — 2026-06-01
+
+### Phase 60 — Workspace Policy Enforcement (Sprints 285–289)
+
+#### Sprint 285 — Phase 60 Planning Baseline
+
+- Added the next priority execution window to roadmap planning with explicit Sprint 285–289 acceptance scope
+
+#### Sprint 286 — VS Code Extension Policy Governance
+
+- Added `scripts/validate-vscode-extensions-policy.js` to enforce extension recommendation/unwanted policy checks in `.vscode/extensions.json`
+- Added overlap detection between `recommendations` and `unwantedRecommendations` and required extension policy assertions
+- Integrated VS Code extension policy validation into quality workflows
+
+#### Sprint 287 — MCP Metadata Governance Hardening
+
+- Added `scripts/validate-mcp-metadata.js` to enforce MCP server metadata quality, HTTPS endpoint checks, and placeholder secret env rules
+- Added missing MCP server descriptions in `.vscode/mcp.json` for metadata completeness
+- Integrated MCP metadata validation into quality workflows
+
+#### Sprint 288 — AI Context Version Synchronization
+
+- Added `scripts/validate-ai-context-versions.js` to enforce release/version parity between `package.json`, `.github/copilot-instructions.md`, and `AGENTS.md`
+- Added toolchain token checks for React, TypeScript, Vite, Vitest, Playwright, i18next, Zustand, and Tailwind versions in AI context docs
+- Integrated AI context version validation into quality workflows
+
+#### Sprint 289 — Release v5.29.8
+
+- Ran full quality gate (`npm run check`) before release and confirmed passing status
+- Bumped project version metadata to `5.29.8`
+
 ## [5.29.7] — 2026-06-01
 
 ### Phase 59 — AI Governance Enforcement (Sprints 280–284)
