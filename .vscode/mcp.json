@@ -27,7 +27,8 @@
         "${workspaceFolder}",
         "--exclude",
         "node_modules,.git,dist,coverage,playwright-report,test-results"
-      ]
+      ],
+      "description": "Scoped workspace file system access for reading and editing project files."
     },
 
     // ─── Fetch — retrieve web docs/APIs directly in chat ─────────────────────
@@ -42,7 +43,8 @@
     "playwright": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest"]
+      "args": ["-y", "@playwright/mcp@latest"],
+      "description": "Browser automation for E2E debugging and accessibility verification in chat workflows."
     },
 
     // ─── Memory — persistent agent notes across sessions ──────────────────

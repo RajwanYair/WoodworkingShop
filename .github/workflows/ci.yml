@@ -23,6 +23,8 @@ jobs:
       - uses: ./.github/actions/setup-node
       - name: Quality checks (parallel)
         run: npm run quality:fast
+      - name: MCP governance validation
+        run: npm run mcp:validate
       - name: Spell check
         run: npx --yes cspell lint --no-progress --show-suggestions --gitignore "**/*.{ts,tsx,md}"
   test:
