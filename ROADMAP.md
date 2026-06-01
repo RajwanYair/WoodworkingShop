@@ -313,6 +313,48 @@ This file no longer duplicates completed sprint narratives. Legacy and archival 
 | Release metadata  | Changelog and package versions updated for v5.29.5                |
 | Published release | Tag `v5.29.5` and GitHub release created from final sprint commit |
 
+## Program Plan: Phase 58 (Invariant Convergence)
+
+### Sprint 275: Phase 58 Planning Baseline
+
+| Deliverable               | Acceptance Criteria                                               |
+| ------------------------- | ----------------------------------------------------------------- |
+| Priority continuation map | Next 5 sprint steps are defined in-order with measurable outcomes |
+| Invariant convergence     | Scope targets shared validation convergence in engine modules     |
+| Release continuity        | Final sprint ends with version bump + tag + GitHub release        |
+
+### Sprint 276: Invariant Helper Primitive Expansion
+
+| Deliverable              | Acceptance Criteria                                                     |
+| ------------------------ | ----------------------------------------------------------------------- |
+| New invariant primitives | Shared engine invariants support integer and comparative bound checks   |
+| Helper test parity       | Invariant unit tests cover new helper success/failure behavior          |
+| Contract consistency     | New helper errors follow existing function-prefixed `RangeError` format |
+
+### Sprint 277: Invariant Adoption (Stair and Taper Calculators)
+
+| Deliverable                     | Acceptance Criteria                                                    |
+| ------------------------------- | ---------------------------------------------------------------------- |
+| Module adoption                 | Stair stringer and taper jig calculators adopt shared invariants       |
+| Backward behavior compatibility | Existing deterministic output expectations remain valid for good input |
+| Guard consistency               | Input validation contracts are centralized and explicit                |
+
+### Sprint 278: Property-Based Stair/Taper Regression Expansion
+
+| Deliverable            | Acceptance Criteria                                                          |
+| ---------------------- | ---------------------------------------------------------------------------- |
+| Property test coverage | Add fast-check properties for stair-stringer and taper-jig calculations      |
+| Invariant assertions   | Tests verify geometric relationships and bounded outputs across random input |
+| Suite integration      | Property tests run under existing `npm run test` without additional workflow |
+
+### Sprint 279: Release v5.29.6
+
+| Deliverable       | Acceptance Criteria                                               |
+| ----------------- | ----------------------------------------------------------------- |
+| Full quality gate | `npm run check` passes on clean tree                              |
+| Release metadata  | Changelog and package versions updated for v5.29.6                |
+| Published release | Tag `v5.29.6` and GitHub release created from final sprint commit |
+
 ## VS Code and GitHub Integration Enhancement Plan
 
 ### VS Code Extensions Policy
