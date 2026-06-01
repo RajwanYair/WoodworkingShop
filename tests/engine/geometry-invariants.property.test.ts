@@ -23,8 +23,8 @@ describe('geometry property invariants', () => {
   });
 
   it('compound miter returns bounded finite angles for valid inputs', () => {
-    const tiltArb = fc.float({ min: 0, max: 89.9, noNaN: true, noDefaultInfinity: true });
-    const cornerArb = fc.float({ min: 0.1, max: 179.9, noNaN: true, noDefaultInfinity: true });
+    const tiltArb = fc.double({ min: 0, max: 89.9, noNaN: true, noDefaultInfinity: true });
+    const cornerArb = fc.double({ min: 0.1, max: 179.9, noNaN: true, noDefaultInfinity: true });
 
     fc.assert(
       fc.property(tiltArb, cornerArb, (tiltDeg, cornerDeg) => {
@@ -43,10 +43,10 @@ describe('geometry property invariants', () => {
   });
 
   it('rafter calculator preserves run/rise/angle consistency', () => {
-    const spanArb = fc.float({ min: 500, max: 15000, noNaN: true, noDefaultInfinity: true });
-    const pitchArb = fc.float({ min: 0.1, max: 2.5, noNaN: true, noDefaultInfinity: true });
-    const plateArb = fc.float({ min: 38, max: 140, noNaN: true, noDefaultInfinity: true });
-    const overhangArb = fc.float({ min: 0, max: 1200, noNaN: true, noDefaultInfinity: true });
+    const spanArb = fc.double({ min: 500, max: 15000, noNaN: true, noDefaultInfinity: true });
+    const pitchArb = fc.double({ min: 0.1, max: 2.5, noNaN: true, noDefaultInfinity: true });
+    const plateArb = fc.double({ min: 38, max: 140, noNaN: true, noDefaultInfinity: true });
+    const overhangArb = fc.double({ min: 0, max: 1200, noNaN: true, noDefaultInfinity: true });
 
     fc.assert(
       fc.property(spanArb, pitchArb, plateArb, overhangArb, fc.boolean(), (span, pitch, plate, overhang, shedRoof) => {
