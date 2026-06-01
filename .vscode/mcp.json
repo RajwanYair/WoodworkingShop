@@ -81,7 +81,8 @@
     // ─── Cloudflare — Workers, Pages, D1, KV, R2 management ──────────────
     "cloudflare": {
       "type": "http",
-      "url": "https://mcp.cloudflare.com/mcp"
+      "url": "https://mcp.cloudflare.com/mcp",
+      "description": "Cloudflare Pages/Workers infrastructure management for deployment and runtime diagnostics."
     },
 
     // ─── Brave Search — web search fallback for docs not in Context7 ─────
@@ -91,7 +92,8 @@
       "args": ["-y", "@modelcontextprotocol/server-brave-search"],
       "env": {
         "BRAVE_API_KEY": "${input:brave-api-key}"
-      }
+      },
+      "description": "Web search fallback for documentation and references when package docs are not available in Context7."
     }
   }
 }
