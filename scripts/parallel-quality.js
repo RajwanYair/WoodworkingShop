@@ -20,6 +20,7 @@ const checks = [
   'mcp:metadata:validate',
   'ai:context:validate',
   'workflows:validate',
+  'hooks:validate',
 ];
 const PromiseCtor = globalThis.Promise;
 
