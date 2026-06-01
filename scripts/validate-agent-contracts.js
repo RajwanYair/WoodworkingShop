@@ -11,9 +11,16 @@ function hasDefinitionOfDoneHeading(content) {
 }
 
 function hasChecklistAfterDefinition(content) {
-  const sectionMatch = content.match(/^##\s+Definition of done\b[\s\S]*?(?=^##\s+|$)/im);
-  const fallbackMatch = content.match(/^##\s+Definition of Done\b[\s\S]*?(?=^##\s+|$)/im);
-  const section = sectionMatch?.[0] ?? fallbackMatch?.[0] ?? '';
+  const headingMatch = content.match(/^##\s+Definition of done\b/im) ?? content.match(/^##\s+Definition of Done\b/im);
+  if (!headingMatch || headingMatch.index === undefined) {
+    return false;
+  }
+
+  const startIndex = headingMatch.index;
+  const afterHeading = content.slice(startIndex);
+  const nextHeadingIndex = afterHeading.slice(1).search(/\n##\s+/m);
+  const section = nextHeadingIndex === -1 ? afterHeading : afterHeading.slice(0, nextHeadingIndex + 1);
+
   if (!section) {
     return false;
   }
