@@ -9,6 +9,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.29.6] — 2026-06-01
+
+### Phase 58 — Invariant Convergence (Sprints 275–279)
+
+#### Sprint 275 — Phase 58 Planning Baseline
+
+- Added the next priority execution window to roadmap planning with explicit Sprint 275–279 acceptance scope
+
+#### Sprint 276 — Invariant Helper Primitive Expansion
+
+- Expanded shared invariant primitives with integer and strict upper-bound helpers in `src/engine/invariant.ts`
+- Added unit coverage for new invariant primitive success/failure behavior in `tests/engine/invariant.test.ts`
+
+#### Sprint 277 — Invariant Adoption (Stair and Taper Calculators)
+
+- Adopted shared invariant validation in `src/engine/stair-stringer.ts` and `src/engine/taper-jig.ts`
+- Preserved deterministic calculator behavior for valid input ranges while centralizing guard contracts
+
+#### Sprint 278 — Property-Based Stair/Taper Regression Expansion
+
+- Added fast-check property regression coverage for stair-stringer and taper-jig in `tests/engine/stair-taper-invariants.property.test.ts`
+- Verified geometric and bounded-output invariants across randomized valid input ranges
+
+#### Sprint 279 — Release v5.29.6
+
+- Ran full quality gate (`npm run check`) before release and confirmed passing status
+- Bumped project version metadata to `5.29.6`
+
 ## [5.29.5] — 2026-06-01
 
 ### Phase 57 — Engine Correctness Hardening (Sprints 270–274)

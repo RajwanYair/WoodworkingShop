@@ -18,7 +18,9 @@ describe('stair and taper property invariants', () => {
         const result = calculateStairStringer({ totalRiseMm, treadDepthMm, idealRiserMm });
 
         const runIdentity = Math.abs(result.totalRunMm - result.treadCount * result.treadDepthMm) < LENGTH_TOLERANCE_MM;
-        const angleIdentity = Math.abs(result.stringerAngleDeg - (Math.atan(totalRiseMm / result.totalRunMm) * 180) / Math.PI);
+        const angleIdentity = Math.abs(
+          result.stringerAngleDeg - (Math.atan(totalRiseMm / result.totalRunMm) * 180) / Math.PI,
+        );
         const landingIdentity = result.treadCount === result.riserCount - 1;
 
         return (
@@ -37,28 +39,34 @@ describe('stair and taper property invariants', () => {
     const lengthArb = fc.double({ min: 200, max: 2000, noNaN: true, noDefaultInfinity: true });
 
     fc.assert(
-      fc.property(lengthArb, fc.boolean(), fc.integer({ min: 15, max: 120 }), fc.integer({ min: 1, max: 60 }), (length, twoFace, endBase, delta) => {
-        const startWidthMm = endBase + delta;
-        const endWidthMm = endBase;
-        const taperedFaces = twoFace ? 2 : (1 as const);
+      fc.property(
+        lengthArb,
+        fc.boolean(),
+        fc.integer({ min: 15, max: 120 }),
+        fc.integer({ min: 1, max: 60 }),
+        (length, twoFace, endBase, delta) => {
+          const startWidthMm = endBase + delta;
+          const endWidthMm = endBase;
+          const taperedFaces = twoFace ? 2 : (1 as const);
 
-        const result = calculateTaperJig({
-          workpieceLengthMm: length,
-          startWidthMm,
-          endWidthMm,
-          taperedFaces,
-        });
+          const result = calculateTaperJig({
+            workpieceLengthMm: length,
+            startWidthMm,
+            endWidthMm,
+            taperedFaces,
+          });
 
-        const totalRemoval = startWidthMm - endWidthMm;
-        const expectedPerFace = taperedFaces === 2 ? totalRemoval / 2 : totalRemoval;
-        const expectedAngle = (Math.atan(expectedPerFace / length) * 180) / Math.PI;
+          const totalRemoval = startWidthMm - endWidthMm;
+          const expectedPerFace = taperedFaces === 2 ? totalRemoval / 2 : totalRemoval;
+          const expectedAngle = (Math.atan(expectedPerFace / length) * 180) / Math.PI;
 
-        return (
-          Math.abs(result.materialRemovedPerFaceMm - expectedPerFace) < LENGTH_TOLERANCE_MM &&
-          Math.abs(result.jigOffsetMm - expectedPerFace) < LENGTH_TOLERANCE_MM &&
-          Math.abs(result.taperAngleDeg - expectedAngle) < ANGLE_TOLERANCE_DEG
-        );
-      }),
+          return (
+            Math.abs(result.materialRemovedPerFaceMm - expectedPerFace) < LENGTH_TOLERANCE_MM &&
+            Math.abs(result.jigOffsetMm - expectedPerFace) < LENGTH_TOLERANCE_MM &&
+            Math.abs(result.taperAngleDeg - expectedAngle) < ANGLE_TOLERANCE_DEG
+          );
+        },
+      ),
       { numRuns: NUM_RUNS },
     );
   });
