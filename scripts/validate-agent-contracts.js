@@ -11,8 +11,8 @@ function hasDefinitionOfDoneHeading(content) {
 }
 
 function hasChecklistAfterDefinition(content) {
-  const sectionMatch = content.match(/^##\s+Definition of done\b[\s\S]*?(?=^##\s+|\Z)/im);
-  const fallbackMatch = content.match(/^##\s+Definition of Done\b[\s\S]*?(?=^##\s+|\Z)/im);
+  const sectionMatch = content.match(/^##\s+Definition of done\b[\s\S]*?(?=^##\s+|$)/im);
+  const fallbackMatch = content.match(/^##\s+Definition of Done\b[\s\S]*?(?=^##\s+|$)/im);
   const section = sectionMatch?.[0] ?? fallbackMatch?.[0] ?? '';
   if (!section) {
     return false;
