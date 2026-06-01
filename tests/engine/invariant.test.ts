@@ -8,21 +8,19 @@ import {
 } from '../../src/engine/invariant';
 
 describe('engine invariants', () => {
-  it.each([
-    { value: 0 },
-    { value: 1.25 },
-    { value: -10 },
-  ])('assertFiniteNumber returns value for finite input: $value', ({ value }) => {
-    expect(assertFiniteNumber('fn', 'field', value)).toBe(value);
-  });
+  it.each([{ value: 0 }, { value: 1.25 }, { value: -10 }])(
+    'assertFiniteNumber returns value for finite input: $value',
+    ({ value }) => {
+      expect(assertFiniteNumber('fn', 'field', value)).toBe(value);
+    },
+  );
 
-  it.each([
-    { value: Number.NaN },
-    { value: Number.POSITIVE_INFINITY },
-    { value: Number.NEGATIVE_INFINITY },
-  ])('assertFiniteNumber throws RangeError for non-finite input: $value', ({ value }) => {
-    expect(() => assertFiniteNumber('fn', 'field', value)).toThrow(RangeError);
-  });
+  it.each([{ value: Number.NaN }, { value: Number.POSITIVE_INFINITY }, { value: Number.NEGATIVE_INFINITY }])(
+    'assertFiniteNumber throws RangeError for non-finite input: $value',
+    ({ value }) => {
+      expect(() => assertFiniteNumber('fn', 'field', value)).toThrow(RangeError);
+    },
+  );
 
   it.each([
     { value: 1, minExclusive: 0 },

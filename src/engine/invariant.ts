@@ -30,7 +30,12 @@ export function assertFiniteNumber(functionName: string, fieldName: string, valu
  * @returns The validated number
  * @throws RangeError when value is not greater than minExclusive
  */
-export function assertGreaterThan(functionName: string, fieldName: string, value: number, minExclusive: number): number {
+export function assertGreaterThan(
+  functionName: string,
+  fieldName: string,
+  value: number,
+  minExclusive: number,
+): number {
   assertFiniteNumber(functionName, fieldName, value);
   if (!(value > minExclusive)) {
     throw new RangeError(`${functionName}: ${fieldName} must be > ${minExclusive}, got ${value}`);
@@ -101,7 +106,9 @@ export function assertBetweenInclusive(
 ): number {
   assertFiniteNumber(functionName, fieldName, value);
   if (value < minInclusive || value > maxInclusive) {
-    throw new RangeError(`${functionName}: ${fieldName} must be >= ${minInclusive} and <= ${maxInclusive}, got ${value}`);
+    throw new RangeError(
+      `${functionName}: ${fieldName} must be >= ${minInclusive} and <= ${maxInclusive}, got ${value}`,
+    );
   }
   return value;
 }
