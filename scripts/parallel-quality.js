@@ -16,6 +16,7 @@ const checks = [
   'agents:validate',
   'prompts:validate',
   'instructions:validate',
+  'vscode:extensions:validate',
 ];
 const PromiseCtor = globalThis.Promise;
 
