@@ -22,6 +22,7 @@ const checks = [
   'workflows:validate',
   'hooks:validate',
   'template:sync:validate',
+  'pdf:budget',
 ];
 const PromiseCtor = globalThis.Promise;
 

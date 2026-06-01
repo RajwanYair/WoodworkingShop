@@ -1,0 +1,8 @@
+{
+  "fullProject": {
+    "minPdfBlobBytes": 1024,
+    "maxPdfBlobBytes": 8000000,
+    "maxConsoleWarnings": 0,
+    "maxConsoleErrors": 0
+  }
+}
