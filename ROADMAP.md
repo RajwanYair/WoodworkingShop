@@ -397,6 +397,48 @@ This file no longer duplicates completed sprint narratives. Legacy and archival 
 | Release metadata  | Changelog and package versions updated for v5.29.7                |
 | Published release | Tag `v5.29.7` and GitHub release created from final sprint commit |
 
+## Program Plan: Phase 60 (Workspace Policy Enforcement)
+
+### Sprint 285: Phase 60 Planning Baseline
+
+| Deliverable               | Acceptance Criteria                                               |
+| ------------------------- | ----------------------------------------------------------------- |
+| Priority continuation map | Next 5 sprint steps are defined in-order with measurable outcomes |
+| Workspace policy scope    | Scope targets VS Code extension, MCP, and AI context governance   |
+| Release continuity        | Final sprint ends with version bump + tag + GitHub release        |
+
+### Sprint 286: VS Code Extension Policy Governance
+
+| Deliverable                | Acceptance Criteria                                                                 |
+| -------------------------- | ----------------------------------------------------------------------------------- |
+| Extension policy validator | Script validates `.vscode/extensions.json` required recommendations and deny rules  |
+| Recommendation integrity   | Validation fails on overlap between `recommendations` and `unwantedRecommendations` |
+| Quality integration        | Validator is wired into quality checks and fails on policy drift                    |
+
+### Sprint 287: MCP Metadata Governance Hardening
+
+| Deliverable             | Acceptance Criteria                                                                  |
+| ----------------------- | ------------------------------------------------------------------------------------ |
+| MCP metadata validator  | Script validates all servers in `.vscode/mcp.json` have non-empty descriptions       |
+| Secret/transport checks | Validation fails on non-HTTPS MCP HTTP endpoints or plaintext secret env assignments |
+| Quality integration     | Validator is wired into quality checks and fails on governance drift                 |
+
+### Sprint 288: AI Context Version Synchronization
+
+| Deliverable                  | Acceptance Criteria                                                                       |
+| ---------------------------- | ----------------------------------------------------------------------------------------- |
+| AI context version validator | Script validates release/version lines in agent context docs match `package.json` version |
+| Tooling version parity       | Validation checks current toolchain versions in AI context docs for React/TS/Vite/Vitest  |
+| Quality integration          | Validator is wired into quality checks and fails on version drift                         |
+
+### Sprint 289: Release v5.29.8
+
+| Deliverable       | Acceptance Criteria                                               |
+| ----------------- | ----------------------------------------------------------------- |
+| Full quality gate | `npm run check` passes on clean tree                              |
+| Release metadata  | Changelog and package versions updated for v5.29.8                |
+| Published release | Tag `v5.29.8` and GitHub release created from final sprint commit |
+
 ## VS Code and GitHub Integration Enhancement Plan
 
 ### VS Code Extensions Policy
