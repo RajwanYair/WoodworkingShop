@@ -3,51 +3,69 @@
   "templateName": "woodworking-shop-governance",
   "assets": [
     {
+      "id": "dependency-review-workflow",
+      "sourcePath": ".github/workflows/dependency-review.yml",
+      "targetPattern": "templates/<template>/.github/workflows/dependency-review.yml",
+      "owner": "security"
+    },
+    {
+      "id": "secret-scan-workflow",
+      "sourcePath": ".github/workflows/secret-scan.yml",
+      "targetPattern": "templates/<template>/.github/workflows/secret-scan.yml",
+      "owner": "security"
+    },
+    {
+      "id": "security-policy",
+      "sourcePath": ".github/SECURITY.md",
+      "targetPattern": "templates/<template>/.github/SECURITY.md",
+      "owner": "security"
+    },
+    {
       "id": "ci-quality-workflow",
       "sourcePath": ".github/workflows/ci.yml",
-      "targetPattern": "MyScripts/templates/<template>/.github/workflows/ci.yml",
+      "targetPattern": "templates/<template>/.github/workflows/ci.yml",
       "owner": "ci"
     },
     {
       "id": "release-workflow",
       "sourcePath": ".github/workflows/release.yml",
-      "targetPattern": "MyScripts/templates/<template>/.github/workflows/release.yml",
+      "targetPattern": "templates/<template>/.github/workflows/release.yml",
       "owner": "release"
     },
     {
       "id": "vscode-settings",
       "sourcePath": ".vscode/settings.json",
-      "targetPattern": "MyScripts/templates/<template>/.vscode/settings.json",
+      "targetPattern": "templates/<template>/.vscode/settings.json",
       "owner": "dx"
     },
     {
       "id": "vscode-extensions",
       "sourcePath": ".vscode/extensions.json",
-      "targetPattern": "MyScripts/templates/<template>/.vscode/extensions.json",
+      "targetPattern": "templates/<template>/.vscode/extensions.json",
       "owner": "dx"
     },
     {
       "id": "vscode-mcp",
       "sourcePath": ".vscode/mcp.json",
-      "targetPattern": "MyScripts/templates/<template>/.vscode/mcp.json",
+      "targetPattern": "templates/<template>/.vscode/mcp.json",
       "owner": "dx"
     },
     {
       "id": "agent-definitions",
       "sourcePath": ".github/agents",
-      "targetPattern": "MyScripts/templates/<template>/.github/agents",
+      "targetPattern": "templates/<template>/.github/agents",
       "owner": "copilot"
     },
     {
       "id": "prompt-templates",
       "sourcePath": ".github/prompts",
-      "targetPattern": "MyScripts/templates/<template>/.github/prompts",
+      "targetPattern": "templates/<template>/.github/prompts",
       "owner": "copilot"
     },
     {
       "id": "instruction-files",
       "sourcePath": ".github/instructions",
-      "targetPattern": "MyScripts/templates/<template>/.github/instructions",
+      "targetPattern": "templates/<template>/.github/instructions",
       "owner": "copilot"
     }
   ]
