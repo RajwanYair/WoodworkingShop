@@ -17,7 +17,9 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
+  attestations: write
   contents: write
+  id-token: write
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -57,6 +59,15 @@ jobs:
         run: |
           cd dist && tar -czf ../woodworkingshop-dist.tar.gz .
           cd .. && sha256sum woodworkingshop-dist.tar.gz > woodworkingshop-dist.tar.gz.sha256
+
+      - name: Generate build provenance attestation
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            woodworkingshop-dist.tar.gz
+            woodworkingshop-dist.tar.gz.sha256
+            sbom.json
+
       - id: version
         run: |
           if [ -n "${{ github.event.inputs.version }}" ]; then
