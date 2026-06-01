@@ -1,7 +1,7 @@
 # Roadmap
 
 > Strategic reset: 2026-05-31
-> Current release: v5.29.1
+> Current release: v5.29.2
 > Target release line: v5.29.x
 
 This roadmap is rewritten from first principles and now serves as the single forward strategy document. Historical details are consolidated and preserved in:
@@ -186,6 +186,48 @@ This file no longer duplicates completed sprint narratives. Legacy and archival 
 | Full quality gate | `npm run check` passes on clean tree                      |
 | Release metadata  | Changelog and package versions updated for v5.29.2        |
 | Published release | Git tag + GitHub Release created from final sprint commit |
+
+## Program Plan: Phase 55 (Execution Continuation)
+
+### Sprint 260: Phase 55 Planning Baseline
+
+| Deliverable                   | Acceptance Criteria                                                  |
+| ----------------------------- | -------------------------------------------------------------------- |
+| Release baseline alignment    | Roadmap `Current release` reflects latest published version          |
+| Priority sprint sequencing    | Next 5 sprints are listed with explicit deliverables                 |
+| Execution continuity contract | Every sprint maps to a concrete implementation and verification step |
+
+### Sprint 261: Prompt and Agent Output Contracts
+
+| Deliverable             | Acceptance Criteria                                                       |
+| ----------------------- | ------------------------------------------------------------------------- |
+| Prompt output contracts | Core prompt templates define files changed, tests run, and done checklist |
+| Agent done-checklists   | Core agents define deterministic completion checklist before handoff      |
+| Contract consistency    | Prompt/agent contracts use shared language and acceptance framing         |
+
+### Sprint 262: MCP Governance Automation
+
+| Deliverable                  | Acceptance Criteria                                                       |
+| ---------------------------- | ------------------------------------------------------------------------- |
+| Governance validation script | Workspace includes script that validates required MCP server declarations |
+| Package script integration   | Validation command is exposed via npm scripts for local and CI use        |
+| CI enforcement               | CI quality job runs governance validation as a blocking check             |
+
+### Sprint 263: Release Workflow Provenance Hardening
+
+| Deliverable                 | Acceptance Criteria                                                               |
+| --------------------------- | --------------------------------------------------------------------------------- |
+| Artifact provenance         | Release workflow emits supply-chain provenance for shipped release artifacts      |
+| Workflow permission updates | Workflow declares only required permissions for provenance and release publishing |
+| Reproducibility alignment   | Existing checksum and release packaging flow remains intact                       |
+
+### Sprint 264: Release v5.29.3
+
+| Deliverable       | Acceptance Criteria                                        |
+| ----------------- | ---------------------------------------------------------- |
+| Full quality gate | `npm run check` passes on clean tree                       |
+| Release metadata  | Changelog and package versions updated for v5.29.3         |
+| Published release | Tag `v5.29.3` and GitHub Release created from final commit |
 
 ## VS Code and GitHub Integration Enhancement Plan
 
