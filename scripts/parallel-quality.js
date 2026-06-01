@@ -19,6 +19,7 @@ const checks = [
   'vscode:extensions:validate',
   'mcp:metadata:validate',
   'ai:context:validate',
+  'workflows:validate',
 ];
 const PromiseCtor = globalThis.Promise;
 
