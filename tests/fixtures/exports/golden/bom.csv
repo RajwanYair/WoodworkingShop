@@ -1,0 +1,48 @@
+# Cabinet Planner BOM Export,,,,,,,,,,
+# Version: 5.29.9  Schema: bom-csv-v1,,,,,,,,,,
+# Generated: <normalized>
+# Cabinets: 1  Parts: 18  Hardware: 208,,,,,,,,,,
+
+Material Summary,,,,,,,,,,,,
+Material,Total Area (m²),Board-Feet (nominal 1 inch),Weight (kg),Price/Sheet,Est. Material Cost,,,,,
+Sandwich Plywood 17 mm,4.093,44.05,43.14,₪180.00,₪360.00,,,,,
+Plywood 4 mm (back),1.017,10.95,2.44,₪65.00,₪65.00,,,,,
+
+#,Cabinet,Part ID,Part Name,Qty,Material,Thickness (mm),Length (mm),Width (mm),Area (m²),Edge Banding,Weight (kg),Grain Direction
+1,golden-baseline-project,P01,Side Panel,2,Sandwich Plywood 17 mm,17,720,560,0.806400,Front edge,8.499,Along length
+2,golden-baseline-project,P02,Top Panel,1,Sandwich Plywood 17 mm,17,866,560,0.484960,Front edge,5.111,Along length
+3,golden-baseline-project,P03,Bottom Panel,1,Sandwich Plywood 17 mm,17,866,560,0.484960,Front edge,5.111,Along length
+4,golden-baseline-project,P04,Adjustable Shelf,2,Sandwich Plywood 17 mm,17,864,540,0.933120,Front edge,9.835,Along length
+5,golden-baseline-project,P05,Door,2,Sandwich Plywood 17 mm,17,714,446,0.636888,All 4 edges,6.713,Along length
+6,golden-baseline-project,P06,Drawer 1 Front,1,Sandwich Plywood 17 mm,17,180,866,0.155880,All 4 edges,1.643,Along length
+7,golden-baseline-project,P07,Drawer 1 Box Side,2,Sandwich Plywood 17 mm,17,500,150,0.150000,None,1.581,Along length
+8,golden-baseline-project,P08,Drawer 1 Box End,2,Sandwich Plywood 17 mm,17,806,150,0.241800,None,2.549,Along length
+9,golden-baseline-project,P09,Drawer 1 Bottom,1,Plywood 4 mm (back),4,498,806,0.401388,None,0.963,Along length
+10,golden-baseline-project,P10,Back Panel,1,Plywood 4 mm (back),4,700,880,0.616000,None,1.478,Along length
+11,golden-baseline-project,P11,Toe Kick (Front),1,Sandwich Plywood 17 mm,17,900,100,0.090000,Front edge,0.949,Along length
+12,golden-baseline-project,P12,Toe Kick (Side),2,Sandwich Plywood 17 mm,17,543,100,0.108600,None,1.145,Along length
+
+#,Cabinet,Hardware ID,Hardware Name,Qty,Unit,,,,, 
+1,golden-baseline-project,H01,Euro Hinge 35 mm (110°),6,pcs,,,,,,
+2,golden-baseline-project,H02,Hinge Mounting Plate,6,pcs,,,,,,
+3,golden-baseline-project,H03,Shelf Pin 5 mm,8,pcs,,,,,,
+4,golden-baseline-project,H04,Confirmat Screw 7×50 mm,8,pcs,,,,,,
+5,golden-baseline-project,H05,Confirmat Cover Cap,8,pcs,,,,,,
+6,golden-baseline-project,H06,Back Panel Nail 25 mm,22,pcs,,,,,,
+7,golden-baseline-project,H07,L-Bracket (wall mount),4,pcs,,,,,,
+8,golden-baseline-project,H08,Wall Screw + Dowel 8×60 mm,8,pcs,,,,,,
+9,golden-baseline-project,H09,Bar Handle 160 mm,2,pcs,,,,,,
+10,golden-baseline-project,H10,Wood Glue (PVA),1,bottle,,,,,,
+11,golden-baseline-project,H11,Drawer Slide Pair 500 mm,1,pairs,,,,,,
+12,golden-baseline-project,H12,Bar Handle 160 mm,1,pcs,,,,,,
+13,golden-baseline-project,H13,Soft-Close Hinge Damper,6,pcs,,,,,,
+14,golden-baseline-project,H14,Door Bumper Pad (silicone),4,pcs,,,,,,
+15,golden-baseline-project,H15,Cabinet Leveller Foot,4,pcs,,,,,,
+16,golden-baseline-project,H16,Edge Banding Roll (50 m),1,rolls,,,,,,
+17,golden-baseline-project,H18,Cam Lock Set (bolt + cam),24,sets,,,,,,
+18,golden-baseline-project,H19,Shelf Support Stud 5 mm,8,pcs,,,,,,
+19,golden-baseline-project,H20,Corner Brace (metal),4,pcs,,,,,,
+20,golden-baseline-project,H21,Plastic Corner Protector,8,pcs,,,,,,
+21,golden-baseline-project,H22,Wood Screw 3.5×35 mm,72,pcs,,,,,,
+22,golden-baseline-project,H23,Sanding Pad Assorted Pack,1,pack,,,,,,
+23,golden-baseline-project,H24,Edge Banding Iron Trimmer,1,pcs,,,,,,

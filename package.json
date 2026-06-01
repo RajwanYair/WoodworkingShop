@@ -81,6 +81,8 @@
     "template:sync:validate": "node scripts/validate-template-sync-manifest.js",
     "template:sync": "node scripts/sync-template-assets.js",
     "template:sync:diff": "node scripts/diff-template-assets.js",
+    "exports:golden:update": "node scripts/update-export-golden-baseline.js",
+    "exports:golden:check": "vitest run tests/utils/export-golden-baseline.test.ts",
     "i18n:coverage": "node scripts/i18n-coverage.js",
     "bundle:check": "node scripts/bundle-report.js",
     "lighthouse": "node scripts/lighthouse.js",
