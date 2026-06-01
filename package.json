@@ -79,6 +79,8 @@
     "workflows:validate": "node scripts/validate-workflow-governance.js",
     "hooks:validate": "node scripts/validate-hook-governance.js",
     "template:sync:validate": "node scripts/validate-template-sync-manifest.js",
+    "template:sync": "node scripts/sync-template-assets.js",
+    "template:sync:diff": "node scripts/diff-template-assets.js",
     "i18n:coverage": "node scripts/i18n-coverage.js",
     "bundle:check": "node scripts/bundle-report.js",
     "lighthouse": "node scripts/lighthouse.js",
