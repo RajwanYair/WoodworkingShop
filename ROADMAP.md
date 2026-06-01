@@ -1,7 +1,7 @@
 # Roadmap
 
 > Strategic reset: 2026-05-31
-> Current release: v5.29.4
+> Current release: v5.29.5
 > Target release line: v5.29.x
 
 This roadmap is rewritten from first principles and now serves as the single forward strategy document. Historical details are consolidated and preserved in:

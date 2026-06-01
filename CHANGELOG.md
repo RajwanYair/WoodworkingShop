@@ -9,6 +9,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.29.5] — 2026-06-01
+
+### Phase 57 — Engine Correctness Hardening (Sprints 270–274)
+
+#### Sprint 270 — Phase 57 Planning Baseline
+
+- Added the next priority execution window to roadmap planning with explicit Sprint 270–274 acceptance scope
+
+#### Sprint 271 — Engine Invariant Utility Foundation
+
+- Added shared typed invariant utilities in `src/engine/invariant.ts`
+- Added invariant validation coverage in `tests/engine/invariant.test.ts`
+
+#### Sprint 272 — Engine Invariant Adoption (Geometry Calculators)
+
+- Adopted shared invariant helpers in `src/engine/miter-angle.ts` and `src/engine/rafter-length.ts`
+- Preserved geometry calculator behavior for valid input ranges while standardizing validation contracts
+
+#### Sprint 273 — Property-Based Geometry Regression Expansion
+
+- Added fast-check property-based geometry regression coverage in `tests/engine/geometry-invariants.property.test.ts`
+- Added follow-up generator hardening to ensure stable property runs across decimal input ranges
+
+#### Sprint 274 — Release v5.29.5
+
+- Ran full quality gate (`npm run check`) before release and confirmed passing status
+- Bumped project version metadata to `5.29.5`
+
 ## [5.29.4] — 2026-06-01
 
 ### Phase 56 — Execution Hardening (Sprints 265–269)
