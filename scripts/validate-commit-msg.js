@@ -15,12 +15,14 @@ if (ignorePrefixes.some((prefix) => message.startsWith(prefix))) {
 
 // Conventional commit with optional scope and optional breaking marker.
 const conventionalCommitPattern =
-  /^(feat|fix|chore|refactor|test|docs|ci|perf|style|revert)(\([a-z0-9\-/]+\))?!?: [^\s].{0,70}$/;
+  /^(feat|fix|chore|refactor|test|docs|ci|perf|style|revert|release|sprint)(\([a-z0-9\-/.]+\))?!?: [^\s].{0,70}$/;
 
 if (!conventionalCommitPattern.test(message)) {
   console.error('Invalid commit message. Expected conventional commit format.');
   console.error('Example: feat(engine): add spline joint calculator');
-  console.error('Allowed types: feat|fix|chore|refactor|test|docs|ci|perf|style|revert');
+  console.error(
+    'Allowed types: feat|fix|chore|refactor|test|docs|ci|perf|style|revert|release|sprint',
+  );
   process.exit(1);
 }
 
