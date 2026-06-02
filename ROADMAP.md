@@ -1,6 +1,6 @@
 # Roadmap
 
-> Last updated: 2026-06-01
+> Last updated: 2026-06-02
 > Current app version: v5.30.0
 > Next release target: v5.31.0
 > Strategy: best-in-class, local-first, production-grade woodworking planning platform
@@ -43,62 +43,72 @@ Historical artifacts:
 - Cloud-mandatory workflows (everything works offline; cloud is opt-in sync only)
 - Payment/subscription infrastructure (MIT open-source, no monetization layer)
 
-## 3. Decision Ledger (Rethink + Final Direction)
+---
+
+## 3. Decision Ledger (Full Strategic Review)
 
 ### 3.1 Language and Framework
 
-| Decision     | Current               | Alternatives Considered                 | Verdict              | Rationale                                                                                                          |
-| ------------ | --------------------- | --------------------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| Language     | TypeScript 6 (strict) | Rust+WASM, Dart/Flutter, plain JS       | **Keep TS 6**        | Best DX for browser-first apps; `erasableSyntaxOnly` eliminates enum/namespace footguns; ecosystem depth unmatched |
-| UI framework | React 19              | Svelte 5, SolidJS, Vue 3.5              | **Keep React 19**    | Largest ecosystem, best Copilot/tooling support, concurrent rendering for heavy previews                           |
-| Styling      | Tailwind CSS v4       | CSS Modules, Vanilla Extract, Panda CSS | **Keep Tailwind v4** | Zero-runtime, design token system via CSS vars, logical properties for RTL                                         |
-| State        | Zustand 5 (slices)    | Jotai, Redux Toolkit, Signals           | **Keep Zustand**     | Minimal API, no boilerplate, excellent TS inference, undo/redo via middleware                                      |
-| Build        | Vite 8 (Rolldown)     | Turbopack, Rspack, esbuild-only         | **Keep Vite 8**      | Fastest HMR, native Rolldown perf, worker import syntax, proven plugin ecosystem                                   |
-| Testing      | Vitest 4 + Playwright | Jest, Cypress, Testing Library only     | **Keep Vitest + PW** | Same config as Vite, bench support, component + E2E in one stack                                                   |
+| Decision     | Current               | Alternatives Considered                   | Verdict              | Rationale                                                                                                          |
+| ------------ | --------------------- | ----------------------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Language     | TypeScript 6 (strict) | Rust+WASM, Dart/Flutter, plain JS, Go     | **Keep TS 6**        | Best DX for browser-first apps; `erasableSyntaxOnly` eliminates enum/namespace footguns; ecosystem depth unmatched |
+| UI framework | React 19              | Svelte 5, SolidJS, Vue 3.5, Qwik          | **Keep React 19**    | Largest ecosystem, best Copilot/tooling support, concurrent rendering for heavy previews                           |
+| Styling      | Tailwind CSS v4       | CSS Modules, Vanilla Extract, Panda CSS   | **Keep Tailwind v4** | Zero-runtime, design token system via CSS vars, logical properties for RTL                                         |
+| State        | Zustand 5 (slices)    | Jotai, Redux Toolkit, Signals, Nanostores | **Keep Zustand**     | Minimal API, no boilerplate, excellent TS inference, undo/redo via middleware                                      |
+| Build        | Vite 8 (Rolldown)     | Turbopack, Rspack, esbuild-only, Farm     | **Keep Vite 8**      | Fastest HMR, native Rolldown perf, worker import syntax, proven plugin ecosystem                                   |
+| Testing      | Vitest 4 + Playwright | Jest, Cypress, Testing Library only       | **Keep Vitest + PW** | Same config as Vite, bench support, component + E2E in one stack                                                   |
+| i18n         | i18next 26            | Paraglide, LinguiJS, FormatJS             | **Keep i18next**     | Mature, massive plugin ecosystem, works with react-i18next, i18n-ally extension                                    |
+| PDF          | @react-pdf/renderer   | pdfkit, jsPDF, Puppeteer PDF              | **Keep @react-pdf**  | React component model for layouts, off-main-thread support, no headless browser needed                             |
 
 ### 3.2 Frontend Architecture
 
-| Area                 | Current                             | Decision    | Next Action                                                 |
-| -------------------- | ----------------------------------- | ----------- | ----------------------------------------------------------- |
-| Component boundaries | ≤600 lines enforced with exceptions | **Keep**    | Add visual regression via Playwright screenshots            |
-| Error resilience     | Ad-hoc try/catch                    | **Improve** | Add React Error Boundaries per route/panel with recovery UI |
-| Preview rendering    | SVG 6-view + WebGL orbit            | **Keep**    | Remove pseudo-3D SVG fallback; commit to WebGL for 3D       |
-| PDF rendering        | @react-pdf off main thread          | **Keep**    | Contract-test output size/page count per scenario           |
-| Worker architecture  | Comlink + ?worker suffix            | **Keep**    | Add worker health check and timeout recovery                |
-| Routing              | Single-page, tab-based              | **Keep**    | Add URL-driven tab state for deep-linking                   |
+| Area                 | Current                             | Decision    | Next Action                                                  |
+| -------------------- | ----------------------------------- | ----------- | ------------------------------------------------------------ |
+| Component boundaries | ≤600 lines enforced with exceptions | **Keep**    | Add visual regression via Playwright screenshots             |
+| Error resilience     | Ad-hoc try/catch                    | **Improve** | Add React Error Boundaries per route/panel with recovery UI  |
+| Preview rendering    | SVG 6-view + WebGL orbit            | **Keep**    | Remove pseudo-3D SVG fallback; commit to WebGL for 3D        |
+| PDF rendering        | @react-pdf off main thread          | **Keep**    | Contract-test output size/page count per scenario            |
+| Worker architecture  | Comlink + ?worker suffix            | **Keep**    | Add worker health check and timeout recovery                 |
+| Routing              | Single-page, tab-based              | **Keep**    | Add URL-driven tab state for deep-linking                    |
+| Design tokens        | wood-\* CSS vars via Tailwind v4    | **Keep**    | Document token catalog in docs/DESIGN-TOKENS.md              |
+| Form validation      | Inline engine guards (RangeError)   | **Keep**    | Surface validation in UI with field-level error messaging    |
+| Code splitting       | Route-based lazy() + Suspense       | **Enhance** | Add granular chunk splitting for heavy panels (PDF, preview) |
 
 ### 3.3 Backend, Data, and API
 
 | Area              | Current                    | Alternatives Considered              | Verdict              | Rationale                                                                  |
 | ----------------- | -------------------------- | ------------------------------------ | -------------------- | -------------------------------------------------------------------------- |
 | Topology          | Local-first SPA, no server | Supabase, Firebase, Convex           | **Keep local-first** | Privacy, offline, no vendor lock-in; sync is adapter layer                 |
-| Persistence       | IndexedDB + JSON export    | SQLite/WASM, OPFS                    | **Evaluate OPFS**    | Origin Private File System gives file-like access without IndexedDB quirks |
+| Persistence       | IndexedDB + JSON export    | SQLite/WASM, OPFS, Dexie.js          | **Evaluate OPFS**    | Origin Private File System gives file-like access without IndexedDB quirks |
 | Schema versioning | Implicit in JSON structure | Protobuf, JSON Schema, Zod           | **Add JSON Schema**  | Validate imports without runtime deps; schema lives in `config/schemas/`   |
-| Cloud sync        | Not implemented            | CRDTs (Yjs), Cloudflare D1           | **Defer**            | No user demand; CRDT engine exists but has no production backend           |
+| Cloud sync        | Not implemented            | CRDTs (Yjs), Cloudflare D1, PGlite   | **Defer**            | No user demand; CRDT engine exists but has no production backend           |
 | External APIs     | None required              | Lumber price APIs, hardware catalogs | **Keep zero-API**    | All data is user-owned; optional catalog import via JSON                   |
-| Analytics         | None                       | Plausible, PostHog                   | **Keep none**        | Privacy-first; if added, must be default-off with consent UI               |
+| Analytics         | None                       | Plausible, PostHog, Umami            | **Keep none**        | Privacy-first; if added, must be default-off with consent UI               |
+| Database          | idb-keyval (thin wrapper)  | Dexie.js, OPFS SQLite                | **Keep idb-keyval**  | Minimal footprint; migrate to OPFS when browser support is ≥95%            |
+| Infrastructure    | GitHub Pages (static CDN)  | Cloudflare Pages, Vercel, Netlify    | **Keep GH Pages**    | Free, immutable, CI-integrated; CF Pages for PR previews only              |
 
 ### 3.4 Documentation Strategy
 
-| Area           | Current State                                       | Decision        | Standard                                       |
-| -------------- | --------------------------------------------------- | --------------- | ---------------------------------------------- |
-| Amount         | 12 docs in `docs/`, plus README, ROADMAP, CHANGELOG | **Right-sized** | No doc without an owner and freshness date     |
-| API docs       | TypeDoc auto-generated                              | **Keep**        | Generated on `npm run docs:api`, not committed |
-| User guide     | `docs/USER-GUIDE.md`                                | **Keep**        | Update per feature release                     |
-| Architecture   | `docs/ARCHITECTURE.md`                              | **Keep**        | Decision records with dates                    |
-| Sprint history | `docs/SPRINT-HISTORY.md`                            | **Keep**        | Append-only log                                |
-| Dead docs      | None detected                                       | **Enforce**     | `npm run dead:check` catches unused            |
+| Area           | Current State                                       | Decision        | Standard                                         |
+| -------------- | --------------------------------------------------- | --------------- | ------------------------------------------------ |
+| Amount         | 12 docs in `docs/`, plus README, ROADMAP, CHANGELOG | **Right-sized** | No doc without an owner and freshness date       |
+| API docs       | TypeDoc auto-generated                              | **Keep**        | Generated on `npm run docs:api`, not committed   |
+| User guide     | `docs/USER-GUIDE.md`                                | **Keep**        | Update per feature release                       |
+| Architecture   | `docs/ARCHITECTURE.md`                              | **Keep**        | Decision records with dates                      |
+| Sprint history | `docs/SPRINT-HISTORY.md`                            | **Keep**        | Append-only log                                  |
+| Dead docs      | None detected                                       | **Enforce**     | `npm run dead:check` catches unused              |
+| Code methods   | Engine functions are pure, fully tested             | **Keep**        | Boundary guards with RangeError, no side-effects |
 
 ### 3.5 Configuration and Governance
 
-| Area             | Current                                 | Decision  | Next Action                                          |
-| ---------------- | --------------------------------------- | --------- | ---------------------------------------------------- |
-| Tool configs     | All at workspace root (Vite convention) | **Keep**  | Never move; documented in copilot-instructions       |
-| Budget configs   | `config/` directory                     | **Keep**  | Add JSON Schema validation for budget files          |
-| VS Code settings | Comprehensive, well-sectioned           | **Clean** | Remove disabled/suspended entries (ruff, scss, less) |
-| Extensions       | 22 recommended, 60+ unwanted            | **Keep**  | Periodic review; document keep/remove rationale      |
-| MCP servers      | 10 servers with clear ownership         | **Keep**  | Add health-check ping in CI                          |
-| Copilot assets   | 9 agents, 22 prompts, 9 instructions    | **Keep**  | Version-align with release; test for parse errors    |
+| Area             | Current                                 | Decision  | Next Action                                       |
+| ---------------- | --------------------------------------- | --------- | ------------------------------------------------- |
+| Tool configs     | All at workspace root (Vite convention) | **Keep**  | Never move; documented in copilot-instructions    |
+| Budget configs   | `config/` directory                     | **Keep**  | Add JSON Schema validation for budget files       |
+| VS Code settings | Comprehensive, well-sectioned           | **Clean** | Remove disabled/suspended entries                 |
+| Extensions       | 22 recommended, 60+ unwanted            | **Keep**  | Periodic review; document keep/remove rationale   |
+| MCP servers      | 10 servers with clear ownership         | **Keep**  | Add health-check ping in CI                       |
+| Copilot assets   | 9 agents, 22 prompts, 9 instructions    | **Keep**  | Version-align with release; test for parse errors |
 
 ### 3.6 Infrastructure and Deployment
 
@@ -111,22 +121,45 @@ Historical artifacts:
 | Supply chain    | Dependabot + dependency-review | **Keep** | Add Scorecard badge                                     |
 | Secrets         | Zero secrets in codebase       | **Keep** | Secret scan workflow blocks PRs                         |
 
+### 3.7 Tooling Versions (Pinned)
+
+| Tool         | Version | Update Policy                       |
+| ------------ | ------- | ----------------------------------- |
+| Node.js      | 26 LTS  | Follow LTS schedule                 |
+| npm          | 11.x    | Latest stable                       |
+| TypeScript   | 6.0.x   | Pin major; update patch promptly    |
+| React        | 19.x    | Pin major; follow canary for 20     |
+| Vite         | 8.x     | Pin major; Rolldown is default      |
+| Vitest       | 4.x     | Pin major; align with Vite          |
+| Playwright   | 1.60+   | Latest stable; browsers auto-update |
+| Tailwind CSS | 4.x     | Pin major; v4 syntax only           |
+| ESLint       | 10.x    | Flat config only                    |
+| Prettier     | 3.x     | Latest stable                       |
+| Stylelint    | 17.x    | Latest stable                       |
+| ripgrep      | 15.x    | System install via scoop/brew       |
+| GitHub CLI   | Latest  | System install via winget/brew      |
+
 ---
 
 ## 4. Best-in-Class Benchmark Comparison
 
-| Capability                | WoodworkingShop              | Fusion 360           | SketchUp + OpenCutList | Cabinet Vision / PolyBoard | Shapr3D     | CutList Optimizer | Method To Harvest                        |
-| ------------------------- | ---------------------------- | -------------------- | ---------------------- | -------------------------- | ----------- | ----------------- | ---------------------------------------- |
-| Parametric control        | Strong config model          | Excellent (timeline) | Medium                 | Excellent (rules)          | Medium      | Low               | Named expressions + dependency graph     |
-| Cut optimization          | MaxRects BSSF, multi-sheet   | Basic nesting        | Good (bin-pack)        | Excellent (proprietary)    | None        | Excellent         | Multi-stock/kerf/grain matrix            |
-| Manufacturing output      | PDF + DXF + G-code           | DXF/STEP/CAM         | DXF/SVG                | DXF/CNC post               | STEP/DXF    | PDF labels        | Golden fixture contracts per format      |
-| Multi-project             | JSON project files           | Cloud project hub    | .skp files             | Project database           | Cloud       | Single session    | Project template library + batch export  |
-| Accessibility             | WCAG 2.2 AA, RTL, 6 locales  | Medium               | Low                    | Low                        | Medium      | Low               | **Our differentiator** — keep leading    |
-| Offline capability        | Full (PWA)                   | Limited              | Desktop only           | Desktop only               | Limited     | Online only       | Harden with OPFS migration path          |
-| Open source               | MIT, full codebase           | Proprietary          | Proprietary + plugin   | Proprietary                | Proprietary | Proprietary       | **Our differentiator** — community trust |
-| Price                     | Free                         | $70/mo               | $120/yr + free plugin  | $3000+ license             | $25/mo      | $50 one-time      | **Our differentiator** — zero cost       |
-| Extensibility             | Plugin API (internal)        | SDK                  | Ruby API               | Macros                     | None        | None              | Publish plugin API with versioned schema |
-| Code quality / governance | Zero-suppression, 4360 tests | Unknown              | Community              | Enterprise                 | Unknown     | Unknown           | Keep leadership in automated gates       |
+| Capability                | WoodworkingShop              | Fusion 360              | SketchUp + OpenCutList | Cabinet Vision / PolyBoard | Shapr3D         | CutList Optimizer | Method To Harvest                        |
+| ------------------------- | ---------------------------- | ----------------------- | ---------------------- | -------------------------- | --------------- | ----------------- | ---------------------------------------- |
+| Parametric control        | Strong config model          | Excellent (timeline)    | Medium                 | Excellent (rules)          | Medium          | Low               | Named expressions + dependency graph     |
+| Cut optimization          | MaxRects BSSF, multi-sheet   | Basic nesting           | Good (bin-pack)        | Excellent (proprietary)    | None            | Excellent         | Multi-stock/kerf/grain matrix            |
+| Manufacturing output      | PDF + DXF + G-code           | DXF/STEP/CAM            | DXF/SVG                | DXF/CNC post               | STEP/DXF        | PDF labels        | Golden fixture contracts per format      |
+| Multi-project             | JSON project files           | Cloud project hub       | .skp files             | Project database           | Cloud           | Single session    | Project template library + batch export  |
+| Accessibility             | WCAG 2.2 AA, RTL, 6 locales  | Medium                  | Low                    | Low                        | Medium          | Low               | **Our differentiator** — keep leading    |
+| Offline capability        | Full (PWA)                   | Limited                 | Desktop only           | Desktop only               | Limited         | Online only       | Harden with OPFS migration path          |
+| Open source               | MIT, full codebase           | Proprietary             | Proprietary + plugin   | Proprietary                | Proprietary     | Proprietary       | **Our differentiator** — community trust |
+| Price                     | Free                         | $70/mo                  | $120/yr + free plugin  | $3000+ license             | $25/mo          | $50 one-time      | **Our differentiator** — zero cost       |
+| Extensibility             | Plugin API (internal)        | SDK                     | Ruby API               | Macros                     | None            | None              | Publish plugin API with versioned schema |
+| Code quality / governance | Zero-suppression, 4360 tests | Unknown                 | Community              | Enterprise                 | Unknown         | Unknown           | Keep leadership in automated gates       |
+| Assembly instructions     | Step-by-step PDF             | Timeline animation      | None                   | CNC program                | None            | None              | Add animated SVG assembly sequence       |
+| Material database         | User-managed JSON catalog    | Built-in + Fusion store | Plugin-provided        | Extensive built-in         | None            | Manual entry      | Community catalog import/export          |
+| Hardware catalog          | JSON hardware definitions    | McMaster integration    | Plugin-provided        | Built-in library           | None            | None              | Standardized hardware schema             |
+| Version control           | Git-based (JSON export)      | Cloud versioning        | Manual save            | Database revisions         | Cloud auto-save | None              | Diff-friendly JSON + schema versioning   |
+| Collaboration             | Git + PR workflow            | Cloud sharing           | Trimble Connect        | Network license            | Cloud sharing   | None              | CRDT-based real-time (future)            |
 
 ### Key Takeaways From Comparison
 
@@ -134,6 +167,8 @@ Historical artifacts:
 2. **Optimization depth**: Cabinet Vision supports grain direction, edge banding, and multi-stock. Our MaxRects can add grain-aware rotation and multi-material strategies.
 3. **Output contracts**: We already lead in contract testing but should add per-format schema versioning headers.
 4. **Our unique edge**: Accessibility + RTL + offline + free + open-source. No competitor matches all four.
+5. **Assembly animations**: Fusion 360's timeline is the gold standard — we can approximate with step-by-step SVG sequences.
+6. **Community data**: OpenCutList's plugin model for materials is worth emulating with importable JSON catalogs.
 
 ---
 
@@ -144,29 +179,33 @@ All prior roadmap phases (1–52) are fully executed. Their output lives in:
 - Sprint history: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md) (Sprints 1–249)
 - 50+ calculator engines, full cut optimizer, PDF/DXF/G-code export
 - Complete i18n (6 locales), WCAG 2.2 AA, RTL support
-- 249 test files, 4360 tests, 80%+ engine coverage
+- 249 test files, 4360+ tests, 80%+ engine coverage
+
+---
 
 ## 6. Production Readiness Gates (Blocking)
 
 All release candidates must pass every gate before tagging:
 
-| Gate             | Command                                   | Threshold                          |
-| ---------------- | ----------------------------------------- | ---------------------------------- |
-| TypeScript       | `npm run typecheck`                       | Zero errors                        |
-| ESLint           | `npm run lint`                            | Zero warnings (`--max-warnings 0`) |
-| Stylelint        | `npm run lint:css`                        | Zero warnings                      |
-| Markdownlint     | `npm run lint:md`                         | Zero warnings                      |
-| Prettier         | `npm run format:check`                    | All files formatted                |
-| i18n coverage    | `npm run i18n:coverage`                   | 100% EN/HE parity                  |
-| Unit tests       | `npm test`                                | All 4360+ tests pass               |
-| Golden exports   | `npm run exports:golden:check`            | BOM/DXF/G-code match fixtures      |
-| PDF budget       | `npm run pdf:budget`                      | Size within bounds, zero errors    |
-| Component budget | `npm run components:budget`               | ≤600 lines or explicit exception   |
-| Bundle size      | `npm run bundle:check`                    | Within `config/bundle-budget.json` |
-| Benchmarks       | `npm run bench:check`                     | Within `config/bench-budget.json`  |
-| Dead code        | `npm run dead:check`                      | Zero unused exports/files          |
-| Security         | Dependency review + secret scan workflows | No high/critical CVEs              |
-| Template sync    | `npm run template:sync:validate`          | All 11 assets verified             |
+| Gate             | Command                          | Threshold                          |
+| ---------------- | -------------------------------- | ---------------------------------- |
+| TypeScript       | `npm run typecheck`              | Zero errors                        |
+| ESLint           | `npm run lint`                   | Zero warnings (`--max-warnings 0`) |
+| Stylelint        | `npm run lint:css`               | Zero warnings                      |
+| Markdownlint     | `npm run lint:md`                | Zero warnings                      |
+| Prettier         | `npm run format:check`           | All files formatted                |
+| i18n coverage    | `npm run i18n:coverage`          | 100% EN/HE parity                  |
+| Unit tests       | `npm test`                       | All 4360+ tests pass               |
+| Golden exports   | `npm run exports:golden:check`   | BOM/DXF/G-code match fixtures      |
+| PDF budget       | `npm run pdf:budget`             | Size within bounds, zero errors    |
+| Component budget | `npm run components:budget`      | ≤600 lines or explicit exception   |
+| Bundle size      | `npm run bundle:check`           | Within `config/bundle-budget.json` |
+| Benchmarks       | `npm run bench:check`            | Within `config/bench-budget.json`  |
+| Dead code        | `npm run dead:check`             | Zero unused exports/files          |
+| Security         | Dependency review + secret scan  | No high/critical CVEs              |
+| Template sync    | `npm run template:sync:validate` | All 11 assets verified             |
+| Agent contracts  | `npm run agents:validate`        | All 9 agents parse correctly       |
+| Prompt contracts | `npm run prompts:validate`       | All 22 prompts parse correctly     |
 
 Combined: `npm run ci` runs all of the above in CI.
 
@@ -174,7 +213,7 @@ Combined: `npm run ci` runs all of the above in CI.
 
 ## 7. Forward Program Plan (v5.31.0+)
 
-### Phase A: Engine Excellence
+### Phase A: Engine Excellence (v5.31.0–v5.32.0)
 
 | Item                     | Description                                                             | Priority |
 | ------------------------ | ----------------------------------------------------------------------- | -------- |
@@ -184,7 +223,7 @@ Combined: `npm run ci` runs all of the above in CI.
 | Schema versioning        | Export headers include schema version for forward compatibility         | Medium   |
 | Property-based tests     | fast-check / hypothesis-style fuzz for geometry invariants              | Medium   |
 
-### Phase B: UX and Reliability
+### Phase B: UX and Reliability (v5.32.0–v5.33.0)
 
 | Item                    | Description                                           | Priority |
 | ----------------------- | ----------------------------------------------------- | -------- |
@@ -194,7 +233,7 @@ Combined: `npm run ci` runs all of the above in CI.
 | Deep-linking            | URL encodes active tab + cabinet index for sharing    | Medium   |
 | Mobile gesture parity   | Pinch-zoom and swipe navigation in preview            | Low      |
 
-### Phase C: Data and Persistence
+### Phase C: Data and Persistence (v5.33.0–v5.34.0)
 
 | Item              | Description                                                        | Priority |
 | ----------------- | ------------------------------------------------------------------ | -------- |
@@ -203,7 +242,7 @@ Combined: `npm run ci` runs all of the above in CI.
 | Project templates | Built-in starter templates (kitchen, bathroom, closet, workshop)   | Medium   |
 | Batch export      | Export all cabinets in one ZIP (PDF + DXF + G-code per cabinet)    | Medium   |
 
-### Phase D: Governance and DevEx
+### Phase D: Governance and DevEx (v5.34.0+)
 
 | Item                     | Description                                                    | Priority |
 | ------------------------ | -------------------------------------------------------------- | -------- |
