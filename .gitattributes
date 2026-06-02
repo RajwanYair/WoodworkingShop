@@ -18,6 +18,8 @@
 *.txt text eol=lf
 *.sh text eol=lf
 *.svg text eol=lf
+*.dxf text eol=lf
+*.nc text eol=lf
 
 # Windows script files — CRLF
 *.ps1 text eol=crlf
