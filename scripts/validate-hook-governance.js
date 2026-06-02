@@ -8,7 +8,7 @@ const packagePath = path.join(repoRoot, 'package.json');
 
 const expectedHooks = {
   'pre-commit': 'npx lint-staged',
-  'commit-msg': 'npm run validate:commitmsg --',
+  'commit-msg': 'node scripts/validate-commit-msg.js $1',
 };
 
 const requiredLintStagedKeys = ['*.{ts,tsx}', '*.{json,yaml,yml}', '*.md', '*.css'];

@@ -21,7 +21,7 @@ const outFile = path.join(outDir, 'sbom.json');
 
 try {
   execSync(
-    `npx --yes @cyclonedx/cyclonedx-npm@latest --output-format json --output-file "${outFile}" --package-lock-only`,
+    `npx --yes @cyclonedx/cyclonedx-npm@latest --output-format json --output-file "${outFile}" --package-lock-only --ignore-npm-errors`,
     { stdio: 'inherit' },
   );
   console.log(`SBOM written to: ${outFile}`);
