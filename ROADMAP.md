@@ -186,13 +186,13 @@ All prior roadmap phases (1–61) are fully executed. Their output lives in:
 
 > **Goal**: Named-Expression UI, Per-Part Grain Constraints, URL Deep-Linking, Export Schema Versioning · Target **v5.32.0**
 
-| Sprint | Feature                                                | Status |
-| ------ | ------------------------------------------------------ | ------ |
-| 295    | Phase 62 Planning Baseline                             | DONE   |
-| 296    | Named Expressions UI Panel (configurator integration)  | DONE   |
-| 297    | Per-Part Grain Direction Constraint                    | DONE   |
-| 298    | URL Tab Deep-Linking (`?tab=`)                         | DONE   |
-| 299    | Export Schema Versioning + Release v5.32.0             | DONE   |
+| Sprint | Feature                                               | Status |
+| ------ | ----------------------------------------------------- | ------ |
+| 295    | Phase 62 Planning Baseline                            | DONE   |
+| 296    | Named Expressions UI Panel (configurator integration) | DONE   |
+| 297    | Per-Part Grain Direction Constraint                   | DONE   |
+| 298    | URL Tab Deep-Linking (`?tab=`)                        | DONE   |
+| 299    | Export Schema Versioning + Release v5.32.0            | DONE   |
 
 ---
 

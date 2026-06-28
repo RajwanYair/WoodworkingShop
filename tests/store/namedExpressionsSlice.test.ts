@@ -2,8 +2,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   createNamedExpressionsSlice,
   loadNamedExpressionsFromStorage,
-} from '../../../src/store/slices/namedExpressionsSlice';
-import type { NamedExpressionsSlice, NamedExpression } from '../../../src/store/slices/namedExpressionsSlice';
+} from '../../src/store/slices/namedExpressionsSlice';
+import type { NamedExpressionsSlice, NamedExpression } from '../../src/store/slices/namedExpressionsSlice';
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 

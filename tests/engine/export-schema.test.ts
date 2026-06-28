@@ -6,7 +6,7 @@ import {
   BOM_CSV_SCHEMA_VERSION,
   PDF_SCHEMA_VERSION,
   PROJECT_JSON_SCHEMA_VERSION,
-} from '../../../src/engine/export-schema';
+} from '../../src/engine/export-schema';
 
 describe('getExportSchemaVersion', () => {
   it.each([

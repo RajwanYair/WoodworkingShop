@@ -4,7 +4,7 @@ import { useCabinetStore } from '../../store/cabinet-store';
 import { evaluateNamedParameters } from '../../engine/parameter-expressions';
 import type { NamedExpression } from '../../store/slices/namedExpressionsSlice';
 
-const NAME_PATTERN = /^[A-Za-z_]\w*$/;
+const NAME_PATTERN = /^[a-z_]\w*$/i;
 const MAX_NAME_LENGTH = 32;
 const MAX_EXPR_LENGTH = 256;
 

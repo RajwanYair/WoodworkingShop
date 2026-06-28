@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { readTabFromUrl, pushTabToUrl } from '../../../src/utils/url-state';
+import { readTabFromUrl, pushTabToUrl } from '../../src/utils/url-state';
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 

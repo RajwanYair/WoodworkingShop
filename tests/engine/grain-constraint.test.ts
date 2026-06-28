@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { applyGrainConstraints, validateGrainConstraint } from '../../../src/engine/grain-constraint';
-import type { Part } from '../../../src/engine/types';
+import { applyGrainConstraints, validateGrainConstraint } from '../../src/engine/grain-constraint';
+import type { Part } from '../../src/engine/types';
 
 // ── Fixture ────────────────────────────────────────────────────────────────────
 
