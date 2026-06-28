@@ -43,10 +43,7 @@ export interface GrainConflictOptions {
 // ─── Output ───────────────────────────────────────────────────────────────────
 
 export type GrainConflictCode =
-  | 'DOOR_GRAIN_HORIZONTAL'
-  | 'SHELF_GRAIN_WRONG'
-  | 'CARCASS_GRAIN_WRONG'
-  | 'CROSS_GRAIN_TOO_WIDE';
+  'DOOR_GRAIN_HORIZONTAL' | 'SHELF_GRAIN_WRONG' | 'CARCASS_GRAIN_WRONG' | 'CROSS_GRAIN_TOO_WIDE';
 
 export interface GrainConflict {
   partId: string;

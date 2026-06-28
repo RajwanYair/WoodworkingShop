@@ -43,10 +43,7 @@ export interface SortCriterion {
 
 /** Pre-defined common sort presets. */
 export type SortPreset =
-  | 'material-then-length-desc'
-  | 'type-then-length-desc'
-  | 'thickness-desc-then-length-desc'
-  | 'name-asc';
+  'material-then-length-desc' | 'type-then-length-desc' | 'thickness-desc-then-length-desc' | 'name-asc';
 
 /** Named sort-criterion bundles keyed by {@link SortPreset} identifier. */
 export const SORT_PRESETS: Record<SortPreset, SortCriterion[]> = {

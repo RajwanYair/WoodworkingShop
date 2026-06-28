@@ -14,15 +14,7 @@
  */
 
 export type MoistureShrinkageSpecies =
-  | 'oak'
-  | 'maple'
-  | 'cherry'
-  | 'walnut'
-  | 'pine'
-  | 'douglas_fir'
-  | 'cedar'
-  | 'generic_hardwood'
-  | 'generic_softwood';
+  'oak' | 'maple' | 'cherry' | 'walnut' | 'pine' | 'douglas_fir' | 'cedar' | 'generic_hardwood' | 'generic_softwood';
 
 export type WoodGrainDirection = 'tangential' | 'radial';
 

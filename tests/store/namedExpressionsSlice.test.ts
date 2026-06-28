@@ -144,10 +144,7 @@ describe('loadNamedExpressionsFromStorage', () => {
 
   it('returns stored entries when present', () => {
     if (globalThis.window === undefined) return;
-    globalThis.localStorage.setItem(
-      'woodworkingshop:namedExpressions',
-      JSON.stringify([ENTRY_A, ENTRY_B]),
-    );
+    globalThis.localStorage.setItem('woodworkingshop:namedExpressions', JSON.stringify([ENTRY_A, ENTRY_B]));
     const result = loadNamedExpressionsFromStorage();
     expect(result).toEqual([ENTRY_A, ENTRY_B]);
   });

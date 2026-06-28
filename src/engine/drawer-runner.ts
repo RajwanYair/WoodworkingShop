@@ -53,8 +53,7 @@ export interface DrawerRunnerValidation {
 }
 
 export type DrawerRunnerError =
-  | { code: 'UNKNOWN_SLIDE_TYPE'; message: string }
-  | { code: 'ZERO_DEPTH'; message: string };
+  { code: 'UNKNOWN_SLIDE_TYPE'; message: string } | { code: 'ZERO_DEPTH'; message: string };
 
 // ─── Spec catalogue ──────────────────────────────────────────────────────────
 

@@ -45,9 +45,7 @@ export function applyGrainConstraints(parts: Part[]): Part[] {
  * @returns The validated constraint or `undefined` if the value is absent.
  * @throws RangeError When `value` is a non-empty string that is not a valid variant.
  */
-export function validateGrainConstraint(
-  value: unknown,
-): 'along-length' | 'along-width' | undefined {
+export function validateGrainConstraint(value: unknown): 'along-length' | 'along-width' | undefined {
   if (value === undefined || value === null) return undefined;
   if (value === 'along-length' || value === 'along-width') return value;
   const safe = typeof value === 'string' ? value : '[non-string]';

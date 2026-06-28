@@ -16,13 +16,7 @@
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type HardwareCategory =
-  | 'hinge'
-  | 'drawer-runner'
-  | 'handle'
-  | 'shelf-pin'
-  | 'cam-lock'
-  | 'back-panel-clip'
-  | 'leg-adjuster';
+  'hinge' | 'drawer-runner' | 'handle' | 'shelf-pin' | 'cam-lock' | 'back-panel-clip' | 'leg-adjuster';
 
 export interface HardwareCatalogueItem {
   id: string;

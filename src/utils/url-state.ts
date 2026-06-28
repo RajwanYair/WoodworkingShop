@@ -155,7 +155,8 @@ export function readProjectNameFromUrl(): string {
  * Returns `null` when the parameter is absent or invalid.
  * Sprint 298 — URL tab deep-linking.
  */
-export function readTabFromUrl(): 'workspace' | 'configurator' | 'preview' | 'optimizer' | 'assembly' | 'pdf' | 'calculators' | null {
+export function readTabFromUrl():
+  'workspace' | 'configurator' | 'preview' | 'optimizer' | 'assembly' | 'pdf' | 'calculators' | null {
   const raw = getQueryValue(globalThis.location.search, 'tab');
   const VALID_TABS = new Set(['workspace', 'configurator', 'preview', 'optimizer', 'assembly', 'pdf', 'calculators']);
   if (raw && VALID_TABS.has(raw)) {

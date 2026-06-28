@@ -12,16 +12,7 @@
 
 /** Machine types commonly found in woodworking shops. */
 export type MachineType =
-  | 'tablesaw'
-  | 'bandsaw'
-  | 'planer'
-  | 'jointer'
-  | 'router'
-  | 'sander'
-  | 'miter-saw'
-  | 'drill-press'
-  | 'cnc'
-  | 'lathe';
+  'tablesaw' | 'bandsaw' | 'planer' | 'jointer' | 'router' | 'sander' | 'miter-saw' | 'drill-press' | 'cnc' | 'lathe';
 
 /** Duct shape used in the collection system. */
 export type DuctShape = 'round' | 'rectangular';

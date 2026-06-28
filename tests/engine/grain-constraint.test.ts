@@ -87,10 +87,7 @@ describe('validateGrainConstraint', () => {
     expect(validateGrainConstraint(value)).toBe(expected);
   });
 
-  it.each(['horizontal', 'vertical', '', 0, false])(
-    'throws RangeError for invalid value %s',
-    (value) => {
-      expect(() => validateGrainConstraint(value)).toThrow(RangeError);
-    },
-  );
+  it.each(['horizontal', 'vertical', '', 0, false])('throws RangeError for invalid value %s', (value) => {
+    expect(() => validateGrainConstraint(value)).toThrow(RangeError);
+  });
 });

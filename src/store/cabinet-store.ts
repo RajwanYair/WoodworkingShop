@@ -43,10 +43,7 @@ import {
   type ProjectSnapshot,
 } from './slices/snapshotSlice';
 import { createOptimizerSettingsSlice, type OptimizerSettingsSlice } from './slices/optimizerSettingsSlice';
-import {
-  createNamedExpressionsSlice,
-  type NamedExpressionsSlice,
-} from './slices/namedExpressionsSlice';
+import { createNamedExpressionsSlice, type NamedExpressionsSlice } from './slices/namedExpressionsSlice';
 
 /**
  * Fire-and-forget: post a cut-optimization request to the worker via Comlink.

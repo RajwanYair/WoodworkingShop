@@ -7,16 +7,7 @@
 
 /** Hardware category classification. */
 export type HardwareCategory =
-  | 'hinge'
-  | 'handle'
-  | 'knob'
-  | 'slide'
-  | 'screw'
-  | 'cam-lock'
-  | 'shelf-pin'
-  | 'bracket'
-  | 'catch'
-  | 'other';
+  'hinge' | 'handle' | 'knob' | 'slide' | 'screw' | 'cam-lock' | 'shelf-pin' | 'bracket' | 'catch' | 'other';
 
 /** A hardware item in the catalog. */
 export interface HardwareItem {

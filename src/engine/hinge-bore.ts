@@ -56,8 +56,7 @@ export interface HingeBoreSpec {
 
 /** Reason for a bore spec failure. */
 export type HingeBoreError =
-  | { code: 'DOOR_TOO_SMALL'; message: string }
-  | { code: 'INVALID_MATERIAL'; message: string };
+  { code: 'DOOR_TOO_SMALL'; message: string } | { code: 'INVALID_MATERIAL'; message: string };
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 

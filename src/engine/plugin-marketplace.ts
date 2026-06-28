@@ -16,14 +16,7 @@ export type PluginSource = 'official' | 'community' | 'local';
 
 /** Category tag used for marketplace browsing. */
 export type PluginCategory =
-  | 'export'
-  | 'optimization'
-  | 'visualization'
-  | 'hardware'
-  | 'materials'
-  | 'assembly'
-  | 'pricing'
-  | 'other';
+  'export' | 'optimization' | 'visualization' | 'hardware' | 'materials' | 'assembly' | 'pricing' | 'other';
 
 /** A single plugin entry in the marketplace registry. */
 export interface MarketplaceEntry {

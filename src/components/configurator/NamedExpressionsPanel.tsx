@@ -40,9 +40,7 @@ export function NamedExpressionsPanel() {
     kickHeight: config.kickHeight ?? 0,
   };
 
-  const definitions: Record<string, string> = Object.fromEntries(
-    namedExpressions.map((e) => [e.name, e.expression]),
-  );
+  const definitions: Record<string, string> = Object.fromEntries(namedExpressions.map((e) => [e.name, e.expression]));
 
   let resolvedValues: Record<string, number> = {};
   let evalError = '';
@@ -87,8 +85,8 @@ export function NamedExpressionsPanel() {
 
   return (
     <section aria-label={t('namedExpressions.panelLabel')} className="space-y-4">
-      <h3 className="text-sm font-semibold text-wood-700 dark:text-wood-300">{t('namedExpressions.title')}</h3>
-      <p className="text-xs text-wood-500 dark:text-wood-400">{t('namedExpressions.description')}</p>
+      <h3 className="text-wood-700 dark:text-wood-300 text-sm font-semibold">{t('namedExpressions.title')}</h3>
+      <p className="text-wood-500 dark:text-wood-400 text-xs">{t('namedExpressions.description')}</p>
 
       {/* Existing expressions list */}
       {namedExpressions.length > 0 && (
@@ -99,14 +97,12 @@ export function NamedExpressionsPanel() {
             return (
               <li
                 key={expr.name}
-                className="flex items-start gap-2 rounded-md border border-wood-200 bg-wood-50 px-3 py-2 dark:border-wood-700 dark:bg-wood-900"
+                className="border-wood-200 bg-wood-50 dark:border-wood-700 dark:bg-wood-900 flex items-start gap-2 rounded-md border px-3 py-2"
               >
                 <div className="min-w-0 flex-1">
-                  <span className="font-mono text-xs font-semibold text-wood-800 dark:text-wood-200">
-                    {expr.name}
-                  </span>
-                  <span className="mx-1 text-xs text-wood-400">=</span>
-                  <span className="font-mono text-xs text-wood-600 dark:text-wood-400">{expr.expression}</span>
+                  <span className="text-wood-800 dark:text-wood-200 font-mono text-xs font-semibold">{expr.name}</span>
+                  <span className="text-wood-400 mx-1 text-xs">=</span>
+                  <span className="text-wood-600 dark:text-wood-400 font-mono text-xs">{expr.expression}</span>
                   {value !== undefined && !error && (
                     <span
                       className="ms-2 font-mono text-xs font-medium text-green-700 dark:text-green-400"
@@ -124,7 +120,7 @@ export function NamedExpressionsPanel() {
                 <button
                   type="button"
                   onClick={() => removeNamedExpression(expr.name)}
-                  className="shrink-0 rounded p-1 text-wood-400 hover:text-red-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                  className="text-wood-400 shrink-0 rounded p-1 hover:text-red-500 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none"
                   aria-label={t('namedExpressions.remove', { name: expr.name })}
                 >
                   ×
@@ -135,16 +131,14 @@ export function NamedExpressionsPanel() {
         </ul>
       )}
 
-      {namedExpressions.length === 0 && (
-        <p className="text-xs italic text-wood-400">{t('namedExpressions.empty')}</p>
-      )}
+      {namedExpressions.length === 0 && <p className="text-wood-400 text-xs italic">{t('namedExpressions.empty')}</p>}
 
       {/* Add new expression */}
-      <div className="space-y-2 rounded-md border border-dashed border-wood-300 p-3 dark:border-wood-600">
-        <p className="text-xs font-medium text-wood-600 dark:text-wood-300">{t('namedExpressions.addTitle')}</p>
+      <div className="border-wood-300 dark:border-wood-600 space-y-2 rounded-md border border-dashed p-3">
+        <p className="text-wood-600 dark:text-wood-300 text-xs font-medium">{t('namedExpressions.addTitle')}</p>
         <div className="flex gap-2">
           <div className="flex-1">
-            <label htmlFor={nameInputId} className="mb-1 block text-xs text-wood-500">
+            <label htmlFor={nameInputId} className="text-wood-500 mb-1 block text-xs">
               {t('namedExpressions.nameLabel')}
             </label>
             <input
@@ -157,13 +151,13 @@ export function NamedExpressionsPanel() {
               }}
               onKeyDown={handleKeyDown}
               placeholder={t('namedExpressions.namePlaceholder')}
-              className="w-full rounded border border-wood-300 bg-white px-2 py-1 font-mono text-xs text-wood-800 focus:border-wood-500 focus:outline-none focus:ring-1 focus:ring-wood-500 dark:border-wood-600 dark:bg-wood-900 dark:text-wood-200"
+              className="border-wood-300 text-wood-800 focus:border-wood-500 focus:ring-wood-500 dark:border-wood-600 dark:bg-wood-900 dark:text-wood-200 w-full rounded border bg-white px-2 py-1 font-mono text-xs focus:ring-1 focus:outline-none"
               aria-describedby={addError ? `${nameInputId}-error` : undefined}
               maxLength={MAX_NAME_LENGTH}
             />
           </div>
           <div className="flex-2">
-            <label htmlFor={exprInputId} className="mb-1 block text-xs text-wood-500">
+            <label htmlFor={exprInputId} className="text-wood-500 mb-1 block text-xs">
               {t('namedExpressions.exprLabel')}
             </label>
             <input
@@ -176,7 +170,7 @@ export function NamedExpressionsPanel() {
               }}
               onKeyDown={handleKeyDown}
               placeholder={t('namedExpressions.exprPlaceholder')}
-              className="w-full rounded border border-wood-300 bg-white px-2 py-1 font-mono text-xs text-wood-800 focus:border-wood-500 focus:outline-none focus:ring-1 focus:ring-wood-500 dark:border-wood-600 dark:bg-wood-900 dark:text-wood-200"
+              className="border-wood-300 text-wood-800 focus:border-wood-500 focus:ring-wood-500 dark:border-wood-600 dark:bg-wood-900 dark:text-wood-200 w-full rounded border bg-white px-2 py-1 font-mono text-xs focus:ring-1 focus:outline-none"
               aria-describedby={addError ? `${nameInputId}-error` : undefined}
               maxLength={MAX_EXPR_LENGTH}
             />
@@ -185,7 +179,7 @@ export function NamedExpressionsPanel() {
             <button
               type="button"
               onClick={handleAdd}
-              className="rounded bg-wood-600 px-3 py-1 text-xs font-medium text-white hover:bg-wood-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-wood-500 disabled:opacity-50"
+              className="bg-wood-600 hover:bg-wood-700 focus-visible:ring-wood-500 rounded px-3 py-1 text-xs font-medium text-white focus-visible:ring-2 focus-visible:outline-none disabled:opacity-50"
             >
               {t('namedExpressions.add')}
             </button>
@@ -196,9 +190,7 @@ export function NamedExpressionsPanel() {
             {addError}
           </p>
         )}
-        <p className="text-xs text-wood-400 dark:text-wood-500">
-          {t('namedExpressions.hint')}
-        </p>
+        <p className="text-wood-400 dark:text-wood-500 text-xs">{t('namedExpressions.hint')}</p>
       </div>
     </section>
   );

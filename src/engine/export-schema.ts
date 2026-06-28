@@ -41,12 +41,19 @@ export type ExportSchemaVersion =
  * @returns The schema version string for that format.
  * @throws RangeError When the format is not recognised.
  */
-export function getExportSchemaVersion(format: 'dxf' | 'gcode' | 'bom-csv' | 'pdf' | 'project-json'): ExportSchemaVersion {
+export function getExportSchemaVersion(
+  format: 'dxf' | 'gcode' | 'bom-csv' | 'pdf' | 'project-json',
+): ExportSchemaVersion {
   switch (format) {
-    case 'dxf':          return DXF_SCHEMA_VERSION;
-    case 'gcode':        return GCODE_SCHEMA_VERSION;
-    case 'bom-csv':      return BOM_CSV_SCHEMA_VERSION;
-    case 'pdf':          return PDF_SCHEMA_VERSION;
-    case 'project-json': return PROJECT_JSON_SCHEMA_VERSION;
+    case 'dxf':
+      return DXF_SCHEMA_VERSION;
+    case 'gcode':
+      return GCODE_SCHEMA_VERSION;
+    case 'bom-csv':
+      return BOM_CSV_SCHEMA_VERSION;
+    case 'pdf':
+      return PDF_SCHEMA_VERSION;
+    case 'project-json':
+      return PROJECT_JSON_SCHEMA_VERSION;
   }
 }
