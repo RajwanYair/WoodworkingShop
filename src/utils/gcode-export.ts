@@ -3,6 +3,7 @@ import { triggerDownload } from './download';
 import { validateGcode, type GcodeValidationResult } from '../engine/gcode-validator';
 import { applyGcodePlugins } from '../engine/plugin';
 import { appendChecksumToGcode } from './checksum';
+import { GCODE_SCHEMA_VERSION } from '../engine/export-schema';
 
 /**
  * Generate basic G-code for a CNC router to cut parts from a sheet.
@@ -55,7 +56,7 @@ export function cutSheetToGcode(sheet: CutSheet, opts?: Partial<GcodeOptions>): 
   // Header
   const generatedAt = new Date().toISOString();
   lines.push(`; Cabinet Planner G-code Export`);
-  lines.push(`; Version: ${__APP_VERSION__}  Schema: gcode-v1`);
+  lines.push(`; Version: ${__APP_VERSION__}  Schema: ${GCODE_SCHEMA_VERSION}`);
   lines.push(`; Generated: ${generatedAt}`);
   lines.push(`; G-code for sheet ${sheet.sheetIndex + 1} - ${sheet.material} ${sheet.thickness}mm`);
   lines.push(`; Sheet size: ${sheet.sheetWidth} x ${sheet.sheetLength} mm`);

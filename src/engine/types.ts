@@ -274,6 +274,13 @@ export interface Part {
   edgeBanding: { en: string; he: string };
   /** Sprint 16 — when true the cut-optimizer must not rotate this part 90°. */
   rotationLocked?: boolean;
+  /**
+   * Sprint 297 — Per-part grain direction constraint.
+   * - `'along-length'` : grain must run along the part's length dimension (default for grained materials).
+   * - `'along-width'`  : grain must run along the part's width dimension (part is pre-rotated 90°).
+   * - `undefined`      : defer to material `hasGrain` flag (existing behaviour).
+   */
+  grainConstraint?: 'along-length' | 'along-width';
 }
 
 /** A hardware line item in the bill of materials (hinges, screws, handles, etc.). */

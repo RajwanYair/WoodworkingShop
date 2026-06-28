@@ -2477,5 +2477,26 @@
     "totalSplineLength": "אורך שפיץ כולל",
     "glueAreaPerSpline": "שטח הדבקה לשפיץ",
     "totalGlueArea": "שטח הדבקה כולל"
+  },
+  "namedExpressions": {
+    "title": "🧮 ביטויים מוגדרי שם",
+    "panelLabel": "לוח ביטויים פרמטריים מוגדרי שם",
+    "description": "הגדר נוסחאות לשימוש חוזר עם משתני המידות של הארון (למשל shelf_gap = height / (shelfCount + 1)).",
+    "listLabel": "רשימת ביטויים מוגדרי שם",
+    "addTitle": "הוסף ביטוי",
+    "nameLabel": "שם",
+    "namePlaceholder": "למשל shelf_gap",
+    "exprLabel": "נוסחה",
+    "exprPlaceholder": "למשל height / (shelfCount + 1)",
+    "add": "הוסף",
+    "empty": "לא הוגדרו ביטויים עדיין.",
+    "remove": "הסר {{name}}",
+    "resolvedValue": "{{name}} = {{value}}",
+    "hint": "משתנים זמינים: width, height, depth, shelfCount, doorCount, drawerCount, kickHeight. תומך ב: +, -, *, /, (), Math.*",
+    "errorNameRequired": "שם הוא שדה חובה",
+    "errorNameInvalid": "השם חייב להתחיל באות או _ ולהכיל רק אותיות, ספרות ו-_",
+    "errorNameTooLong": "השם חייב להכיל לכל היותר 32 תווים",
+    "errorExprRequired": "נוסחה היא שדה חובה",
+    "errorExprTooLong": "הנוסחה חייבת להכיל לכל היותר 256 תווים"
   }
 }

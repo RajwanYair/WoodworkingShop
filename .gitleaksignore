@@ -1,0 +1,25 @@
+# .gitleaksignore — confirmed false positives for WoodworkingShop
+#
+# Format: <commit>:<file>:<rule-id>:<line>
+# All entries below are high-entropy strings in engine validation code
+# (validation rule keys, dimension thresholds, joinery identifiers) that
+# triggered the generic-api-key rule but contain zero credential material.
+# Verified against the source at each commit — none are real secrets.
+
+# validation/dimension-rules.ts — rule key constants (commit f88f6c49)
+f88f6c49ee48078d5bcf3c928f48ba3325a43ccc:src/engine/validation/dimension-rules.ts:generic-api-key:134
+f88f6c49ee48078d5bcf3c928f48ba3325a43ccc:src/engine/validation/dimension-rules.ts:generic-api-key:164
+
+# validation/door-rules.ts — rule key constant (commit f88f6c49)
+f88f6c49ee48078d5bcf3c928f48ba3325a43ccc:src/engine/validation/door-rules.ts:generic-api-key:281
+
+# validation/shelf-rules.ts — rule key constant (commit f88f6c49)
+f88f6c49ee48078d5bcf3c928f48ba3325a43ccc:src/engine/validation/shelf-rules.ts:generic-api-key:203
+
+# validation.ts — large monolithic version before submodule split (commit 9873ea7c)
+9873ea7cc2223d4ce3c9f390840dd033e3df4139:src/engine/validation.ts:generic-api-key:752
+9873ea7cc2223d4ce3c9f390840dd033e3df4139:src/engine/validation.ts:generic-api-key:863
+9873ea7cc2223d4ce3c9f390840dd033e3df4139:src/engine/validation.ts:generic-api-key:989
+
+# validation.ts — rule key in earlier monolith (commit d8321f4f)
+d8321f4f7d4890c3d49d9e75f97fb32a4cd1d287:src/engine/validation.ts:generic-api-key:712

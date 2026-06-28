@@ -1,8 +1,8 @@
 # Roadmap
 
-> Last updated: 2026-06-02
-> Current app version: v5.30.0
-> Next release target: v5.31.0
+> Last updated: 2026-06-28
+> Current app version: v5.32.0
+> Next release target: v5.33.0
 > Strategy: best-in-class, local-first, production-grade woodworking planning platform
 
 ---
@@ -131,7 +131,7 @@ Historical artifacts:
 | React        | 19.x    | Pin major; follow canary for 20     |
 | Vite         | 8.x     | Pin major; Rolldown is default      |
 | Vitest       | 4.x     | Pin major; align with Vite          |
-| Playwright   | 1.60+   | Latest stable; browsers auto-update |
+| Playwright   | 1.61+   | Latest stable; browsers auto-update |
 | Tailwind CSS | 4.x     | Pin major; v4 syntax only           |
 | ESLint       | 10.x    | Flat config only                    |
 | Prettier     | 3.x     | Latest stable                       |
@@ -174,12 +174,25 @@ Historical artifacts:
 
 ## 5. Consolidated Legacy Plan
 
-All prior roadmap phases (1–52) are fully executed. Their output lives in:
+All prior roadmap phases (1–61) are fully executed. Their output lives in:
 
-- Sprint history: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md) (Sprints 1–249)
+- Sprint history: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md) (Sprints 1–294)
 - 50+ calculator engines, full cut optimizer, PDF/DXF/G-code export
 - Complete i18n (6 locales), WCAG 2.2 AA, RTL support
-- 249 test files, 4360+ tests, 80%+ engine coverage
+- 4360+ tests, 80%+ engine coverage, zero-suppression codebase
+- Governance: workflow, hook, template-sync, MCP, AI-context, extension-policy validators
+
+## 5.1 Active Phase — Phase 62 (Sprints 295–299)
+
+> **Goal**: Named-Expression UI, Per-Part Grain Constraints, URL Deep-Linking, Export Schema Versioning · Target **v5.32.0**
+
+| Sprint | Feature                                                | Status |
+| ------ | ------------------------------------------------------ | ------ |
+| 295    | Phase 62 Planning Baseline                             | DONE   |
+| 296    | Named Expressions UI Panel (configurator integration)  | DONE   |
+| 297    | Per-Part Grain Direction Constraint                    | DONE   |
+| 298    | URL Tab Deep-Linking (`?tab=`)                         | DONE   |
+| 299    | Export Schema Versioning + Release v5.32.0             | DONE   |
 
 ---
 
@@ -213,15 +226,15 @@ Combined: `npm run ci` runs all of the above in CI.
 
 ## 7. Forward Program Plan (v5.31.0+)
 
-### Phase A: Engine Excellence (v5.31.0–v5.32.0)
+### Phase A: Engine Excellence — DONE (v5.31.0–v5.32.0)
 
-| Item                     | Description                                                             | Priority |
-| ------------------------ | ----------------------------------------------------------------------- | -------- |
-| Named expressions        | User-defined formulas for parametric dimensions (`width = depth * 0.6`) | High     |
-| Grain-aware optimization | MaxRects respects grain direction constraint per part                   | High     |
-| Multi-material strategy  | Optimizer handles mixed stock (plywood + solid + MDF in one project)    | Medium   |
-| Schema versioning        | Export headers include schema version for forward compatibility         | Medium   |
-| Property-based tests     | fast-check / hypothesis-style fuzz for geometry invariants              | Medium   |
+| Item                      | Description                                                             | Status |
+| ------------------------- | ----------------------------------------------------------------------- | ------ |
+| Named expressions         | User-defined formulas for parametric dimensions (`width = depth * 0.6`) | DONE   |
+| Per-part grain constraint | Optimizer respects per-part grain direction override                    | DONE   |
+| Multi-material strategy   | Optimizer handles mixed stock (plywood + solid + MDF in one project)    | DONE   |
+| Export schema versioning  | Export headers include schema version for forward compatibility         | DONE   |
+| Property-based tests      | fast-check / hypothesis-style fuzz for geometry invariants              | DONE   |
 
 ### Phase B: UX and Reliability (v5.32.0–v5.33.0)
 

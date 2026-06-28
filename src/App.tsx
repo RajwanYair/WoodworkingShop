@@ -29,7 +29,7 @@ import { useTouchGestures } from './hooks/useTouchGestures';
 import { generateParts } from './engine/parts';
 import { generateHardware } from './engine/hardware';
 import { downloadBomCsv } from './utils/bom-export';
-import { configToUrl } from './utils/url-state';
+import { configToUrl, readTabFromUrl, pushTabToUrl } from './utils/url-state';
 import type { Lang } from './engine/types';
 
 // Lazy-load heavy / route-isolated panels so the initial bundle stays lean
@@ -102,6 +102,22 @@ function App() {
     root.classList.toggle('dark', darkMode);
     root.style.colorScheme = darkMode ? 'dark' : 'light';
   }, [darkMode]);
+
+  // Sprint 298 — URL tab deep-linking: read ?tab= on first mount.
+  const tabInitialisedRef = useRef(false);
+  useEffect(() => {
+    if (tabInitialisedRef.current) return;
+    tabInitialisedRef.current = true;
+    const tab = readTabFromUrl();
+    if (tab) {
+      useCabinetStore.getState().setActiveTab(tab);
+    }
+  });
+
+  // Sprint 298 — push tab into URL whenever it changes.
+  useEffect(() => {
+    pushTabToUrl(activeTab);
+  }, [activeTab]);
 
   // Sprint 48 — follow OS (prefers-color-scheme) changes in real-time
   useSystemDarkMode();

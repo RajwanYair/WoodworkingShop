@@ -1,6 +1,7 @@
 ﻿import type { CutSheet, CutRect } from '../engine/types';
 import { triggerDownload } from './download';
 import { appendChecksumToDxf } from './checksum';
+import { DXF_SCHEMA_VERSION } from '../engine/export-schema';
 import {
   buildDxfHeader,
   buildDxfClasses,
@@ -47,7 +48,7 @@ export function cutSheetToDxf(sheet: CutSheet): string {
     '999',
     `Version: ${__APP_VERSION__}`,
     '999',
-    'Schema: dxf-ac1015-v2',
+    `Schema: ${DXF_SCHEMA_VERSION}`,
     '999',
     `Generated: ${generatedAt}`,
     '999',

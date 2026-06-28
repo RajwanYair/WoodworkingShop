@@ -1,17 +1,21 @@
 # Cabinet Planner — AI Agent Context
 
 > Browser-based woodworking design tool · React 19 + TypeScript 6 + Vite 8
-> **v5.31.0** · MIT · Node ≥ 22 · [Live demo](https://rajwanyair.github.io/WoodworkingShop/)
+> **v5.32.0** · MIT · Node ≥ 22 · [Live demo](https://rajwanyair.github.io/WoodworkingShop/)
 
 ## What It Does
 
 Configure any cabinet/furniture piece → live 6-view SVG preview → MaxRects cut-sheet optimizer → export PDF build plan, DXF, G-code, or BOM. **No server, no account.** Full RTL support (Hebrew/Arabic).
 
-## Active Sprint — Phase 60 (Sprints 285+)
+## Active Sprint — Phase 62 (Sprints 295–299)
 
-| Sprint | Feature | Status |
-| ------ | ------- | ------ |
-| 172    | TBD     | TODO   |
+| Sprint | Feature                                               | Status |
+| ------ | ----------------------------------------------------- | ------ |
+| 295    | Phase 62 Planning Baseline                            | DONE   |
+| 296    | Named Expressions UI Panel (configurator integration) | DONE   |
+| 297    | Per-Part Grain Direction Constraint                   | DONE   |
+| 298    | URL Tab Deep-Linking (`?tab=`)                        | DONE   |
+| 299    | Export Schema Versioning + Release v5.32.0            | DONE   |
 
 ## Tech Stack
 
@@ -21,7 +25,7 @@ Configure any cabinet/furniture piece → live 6-view SVG preview → MaxRects c
 | State | Zustand 5 — single store with undo/redo + slices                        |
 | i18n  | i18next 26 — EN, HE (RTL), AR (RTL), DE, ES, FR                         |
 | Build | Vite 8 (Rolldown bundler)                                               |
-| Tests | Vitest 4 (unit + bench) · Playwright 1.60 (E2E + axe-core a11y)         |
+| Tests | Vitest 4 (unit + bench) · Playwright 1.61 (E2E + axe-core a11y)         |
 | PDF   | `@react-pdf/renderer` off main thread                                   |
 | Lint  | ESLint 10 flat config · Prettier 3 · Stylelint 17 · `--max-warnings 0`  |
 

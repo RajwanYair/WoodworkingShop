@@ -9,6 +9,63 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.32.0] — 2026-06-28
+
+### Dependency Upgrades — 2026-06-28
+
+- `i18next` `^26.3.1` → `^26.3.3`
+- `@axe-core/playwright` `^4.11.3` → `^4.12.1`
+- `@playwright/test` `^1.61.0` → `^1.61.1`
+- `@types/node` `^25.9.3` → `^26.0.1`
+- `@vitejs/plugin-react` `^6.0.2` → `^6.0.3`
+- `eslint` `^10.5.0` → `^10.6.0`
+- `eslint-plugin-regexp` `3.1.0` → `3.1.1`
+- `knip` `6.17.1` → `6.22.0`
+- `lint-staged` `^16.1.0` → `^17.0.8`
+- `prettier` `^3.8.4` → `^3.9.1`
+- `simple-git-hooks` `^2.13.0` → `^2.13.1`
+- `stylelint` `^17.12.0` → `^17.14.0`
+- `tailwindcss` `^4.3.0` → `^4.3.1`
+- `typescript-eslint` `^8.61.0` → `^8.62.0`
+- `vite` `^8.0.16` → `^8.1.0`
+- `vitest` `^4.1.7` → `^4.1.9`
+- Updated `Playwright 1.61` token in `AGENTS.md`, `copilot-instructions.md`, `ROADMAP.md`
+
+### Phase 62 — Named Expressions, Grain Constraints, URL Deep-Linking, Export Schema Versioning (Sprints 295–299)
+
+#### Sprint 295 — Phase 62 Planning Baseline
+
+- Added Phase 62 (Sprints 295–299) scope to `ROADMAP.md` section 5.1 with explicit acceptance criteria
+- Updated `AGENTS.md` Active Sprint table to Phase 62
+
+#### Sprint 296 — Named Expressions UI Panel (Configurator Integration)
+
+- Added `src/store/slices/namedExpressionsSlice.ts`: Zustand slice for user-defined formula expressions (name → expression string), persisted to `localStorage:woodworkingshop:namedExpressions`; actions: `setNamedExpression`, `removeNamedExpression`, `loadNamedExpressions`, `setExpressionError`, `clearExpressionErrors`
+- Wired `NamedExpressionsSlice` into `CabinetState` via `createNamedExpressionsSlice` spread in `useCabinetStore`
+- Added `src/components/configurator/NamedExpressionsPanel.tsx`: live formula editor showing computed values using `evaluateNamedParameters` from the existing engine; base variables exposed: `width`, `height`, `depth`, `shelfCount`, `doorCount`, `drawerCount`, `kickHeight`
+- Added `namedExpressions.*` i18n keys to all 6 locales (en + he with full translations; ar, de, es, fr with EN fallback)
+- Added `tests/store/namedExpressionsSlice.test.ts`: 17 unit tests covering add/overwrite/remove/load/error actions and `loadNamedExpressionsFromStorage`
+
+#### Sprint 297 — Per-Part Grain Direction Constraint
+
+- Added `grainConstraint?: 'along-length' | 'along-width'` field to the `Part` interface in `src/engine/types.ts`; `undefined` defers to material-level `hasGrain` (no breaking change for existing parts)
+- Added `src/engine/grain-constraint.ts`: pure functions `applyGrainConstraints(parts)` (maps `grainConstraint` to `rotationLocked` and swaps length/width for `'along-width'` parts) and `validateGrainConstraint(value)` (boundary guard for JSON import)
+- Added `tests/engine/grain-constraint.test.ts`: 12 unit tests covering both constraint variants, no-mutation guarantee, mixed lists, and `validateGrainConstraint` error cases
+
+#### Sprint 298 — URL Tab Deep-Linking (`?tab=`)
+
+- Added `readTabFromUrl()` and `pushTabToUrl(tab)` to `src/utils/url-state.ts`; `readTabFromUrl` validates against the 7 known tab names and returns `null` for unknown/absent values
+- Updated `src/App.tsx` to read `?tab=` on mount (using a `useRef` guard to run once) and push the active tab into the URL on every tab change
+- Added `tests/utils/url-tab-deep-linking.test.ts`: 8 unit tests covering all valid tab names, absent/invalid param handling, and `pushTabToUrl` param preservation
+
+#### Sprint 299 — Export Schema Versioning + Release v5.32.0
+
+- Added `src/engine/export-schema.ts`: central registry of schema version constants (`DXF_SCHEMA_VERSION`, `GCODE_SCHEMA_VERSION`, `BOM_CSV_SCHEMA_VERSION`, `PDF_SCHEMA_VERSION`, `PROJECT_JSON_SCHEMA_VERSION`) and `getExportSchemaVersion(format)` engine function
+- Updated `src/utils/dxf-export.ts` to use `DXF_SCHEMA_VERSION` constant instead of hardcoded `'dxf-ac1015-v2'`
+- Updated `src/utils/gcode-export.ts` to use `GCODE_SCHEMA_VERSION` constant instead of hardcoded `'gcode-v1'`
+- Added `tests/engine/export-schema.test.ts`: 3 unit tests verifying schema constant values, naming convention, and `getExportSchemaVersion` dispatch
+- Bumped version to `5.32.0`
+
 ## [5.29.9] — 2026-06-01
 
 ### Phase 61 — Pipeline and Template Governance (Sprints 290–294)

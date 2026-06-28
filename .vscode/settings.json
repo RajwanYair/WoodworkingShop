@@ -24,6 +24,17 @@
     "**/test-results/**": true,
     "**/docs/api/**": true
   },
+  // Watcher exclusions reduce FS event noise — improves extension startup and
+  // background indexing performance for large generated directories.
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/.vite_cache/**": true,
+    "**/playwright-report/**": true,
+    "**/test-results/**": true,
+    "**/docs/api/**": true,
+    "**/.eslintcache": true
+  },
   "files.associations": {
     "*.jsonc": "jsonc"
   },
@@ -46,7 +57,7 @@
 
   // ─── ESLint ─────────────────────────────────────────────────────────────────
   "eslint.useFlatConfig": true,
-  "eslint.run": "onType",
+  "eslint.run": "onSave",
   "eslint.problems.shortenToSingleLine": true,
 
   // ─── CSS / Stylelint ────────────────────────────────────────────────────────
@@ -85,8 +96,7 @@
 
   // ─── GitHub Copilot ─────────────────────────────────────────────────────────
   "github.copilot.chat.codeGeneration.useInstructionFiles": true,
-  "github.copilot.chat.agentDebugLog.fileLogging.enabled": true,
-  "github.copilot.chat.agentDebugLog.fileLogging.flushIntervalMs": 2000,
+  "github.copilot.chat.agentDebugLog.fileLogging.enabled": false,
   "github.copilot.chat.reviewSelection.enabled": true,
   "github.copilot.chat.generateTests.codeLensTitle": "Generate Tests",
   "github.copilot.nextEditSuggestions.enabled": true,
@@ -139,10 +149,10 @@
   "github.copilot.chat.agent.runTasks": true,
   "github.copilot.chat.agent.autoApprove": false,
   "chat.mcp.discovery.enabled": {
-    "claude-desktop": true,
-    "windsurf": true,
-    "cursor-global": true,
-    "cursor-workspace": true
+    "claude-desktop": false,
+    "windsurf": false,
+    "cursor-global": false,
+    "cursor-workspace": false
   },
 
   // ─── Copilot Chat — latest agent features ───────────────────────────────────
@@ -174,6 +184,16 @@
   "github.copilot.chat.notebook.followCellExecution.enabled": true,
   // New-workspace scaffolding from chat
   "github.copilot.chat.newWorkspaceCreation.enabled": true,
+
+  // ─── Copilot inline completion — token & latency limits ─────────────────────
+  // Cap inline suggestion length and candidate count to reduce per-keystroke
+  // token usage and improve first-token latency.
+  "github.copilot.advanced": {
+    "length": 500,
+    "inlineSuggestCount": 3,
+    "listCount": 5,
+    "stops": ["\n\n\n"]
+  },
 
   // ─── Copilot Chat — terminal auto-approval policy ───────────────────────────
   // Allow safe, read-only / idempotent project commands to run without a prompt;

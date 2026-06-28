@@ -2203,5 +2203,26 @@
     "totalSplineLength": "Total Spline Length",
     "glueAreaPerSpline": "Glue Area per Spline",
     "totalGlueArea": "Total Glue Area"
+  },
+  "namedExpressions": {
+    "title": "🧮 Named Expressions",
+    "panelLabel": "Named parametric expressions panel",
+    "description": "Define reusable formulas using cabinet dimensions as variables (e.g. shelf_gap = height / (shelfCount + 1)).",
+    "listLabel": "Named expression list",
+    "addTitle": "Add expression",
+    "nameLabel": "Name",
+    "namePlaceholder": "e.g. shelf_gap",
+    "exprLabel": "Formula",
+    "exprPlaceholder": "e.g. height / (shelfCount + 1)",
+    "add": "Add",
+    "empty": "No expressions defined yet.",
+    "remove": "Remove {{name}}",
+    "resolvedValue": "{{name}} = {{value}}",
+    "hint": "Available variables: width, height, depth, shelfCount, doorCount, drawerCount, kickHeight. Supports +, -, *, /, (), Math.*",
+    "errorNameRequired": "Name is required",
+    "errorNameInvalid": "Name must start with a letter or _ and contain only letters, digits and _",
+    "errorNameTooLong": "Name must be 32 characters or fewer",
+    "errorExprRequired": "Formula is required",
+    "errorExprTooLong": "Formula must be 256 characters or fewer"
   }
 }

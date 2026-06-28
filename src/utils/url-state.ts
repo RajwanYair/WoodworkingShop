@@ -151,6 +151,32 @@ export function readProjectNameFromUrl(): string {
 }
 
 /**
+ * Read the active tab from the current URL (`?tab=`).
+ * Returns `null` when the parameter is absent or invalid.
+ * Sprint 298 — URL tab deep-linking.
+ */
+export function readTabFromUrl(): 'workspace' | 'configurator' | 'preview' | 'optimizer' | 'assembly' | 'pdf' | 'calculators' | null {
+  const raw = getQueryValue(globalThis.location.search, 'tab');
+  const VALID_TABS = new Set(['workspace', 'configurator', 'preview', 'optimizer', 'assembly', 'pdf', 'calculators']);
+  if (raw && VALID_TABS.has(raw)) {
+    return raw as 'workspace' | 'configurator' | 'preview' | 'optimizer' | 'assembly' | 'pdf' | 'calculators';
+  }
+  return null;
+}
+
+/**
+ * Write the active tab into the current URL without discarding other params.
+ * Sprint 298 — URL tab deep-linking.
+ */
+export function pushTabToUrl(tab: string): void {
+  const params = parseQueryString(globalThis.location.search);
+  params.tab = tab;
+  const qs = serializeQueryRecord(params);
+  const url = qs ? `${globalThis.location.pathname}?${qs}` : globalThis.location.pathname;
+  globalThis.history.replaceState(null, '', url);
+}
+
+/**
  * Write project name into the current URL without discarding other params (Sprint 157).
  * Truncated to 60 characters. Removes the param when name is empty.
  */

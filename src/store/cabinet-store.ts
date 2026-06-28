@@ -43,6 +43,10 @@ import {
   type ProjectSnapshot,
 } from './slices/snapshotSlice';
 import { createOptimizerSettingsSlice, type OptimizerSettingsSlice } from './slices/optimizerSettingsSlice';
+import {
+  createNamedExpressionsSlice,
+  type NamedExpressionsSlice,
+} from './slices/namedExpressionsSlice';
 
 /**
  * Fire-and-forget: post a cut-optimization request to the worker via Comlink.
@@ -158,7 +162,8 @@ export type CabinetState = {
   removeDefectZone: (materialKey: string, zoneIndex: number) => void;
 } & UiSlice &
   OptimizerSettingsSlice &
-  SnapshotSlice;
+  SnapshotSlice &
+  NamedExpressionsSlice;
 
 function derive(
   config: CabinetConfig,
@@ -364,6 +369,9 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
       () => get().cabinets,
       handleRestoreSnapshot,
     ),
+
+    // ── Named expressions slice ────────────────────────────────────────────
+    ...createNamedExpressionsSlice(sliceSetImpl as SliceSetFn<NamedExpressionsSlice>),
 
     // ── Config actions (inline) ────────────────────────────────────────────
     setConfig: (patch) =>
