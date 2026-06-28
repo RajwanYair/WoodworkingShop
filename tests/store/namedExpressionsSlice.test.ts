@@ -1,9 +1,38 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   createNamedExpressionsSlice,
   loadNamedExpressionsFromStorage,
 } from '../../src/store/slices/namedExpressionsSlice';
 import type { NamedExpressionsSlice, NamedExpression } from '../../src/store/slices/namedExpressionsSlice';
+
+// ── localStorage mock ──────────────────────────────────────────────────────
+
+beforeAll(() => {
+  // Mock localStorage for jsdom test environment
+  const store: Record<string, string> = {};
+  const mockLocalStorage = {
+    getItem: (key: string) => store[key] ?? null,
+    setItem: (key: string, value: string) => {
+      store[key] = value;
+    },
+    removeItem: (key: string) => {
+      delete store[key];
+    },
+    clear: () => {
+      Object.keys(store).forEach((key) => {
+        delete store[key];
+      });
+    },
+    key: (index: number) => Object.keys(store)[index] ?? null,
+    get length() {
+      return Object.keys(store).length;
+    },
+  };
+  Object.defineProperty(globalThis, 'localStorage', {
+    value: mockLocalStorage,
+    writable: true,
+  });
+});
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -27,9 +56,7 @@ const ENTRY_B: NamedExpression = { name: 'panel_area', expression: 'width * heig
 describe('createNamedExpressionsSlice', () => {
   beforeEach(() => {
     // Clear localStorage so tests start clean
-    if (globalThis.localStorage !== undefined) {
-      globalThis.localStorage.clear();
-    }
+    globalThis.localStorage.clear();
   });
 
   afterEach(() => {
@@ -37,77 +64,77 @@ describe('createNamedExpressionsSlice', () => {
   });
 
   it('initialises with empty namedExpressions and no errors', () => {
-    const { state } = makeSlice();
-    expect(state.namedExpressions).toEqual([]);
-    expect(state.expressionErrors).toEqual({});
+    const sliceContainer = makeSlice();
+    expect(sliceContainer.state.namedExpressions).toEqual([]);
+    expect(sliceContainer.state.expressionErrors).toEqual({});
   });
 
   describe('setNamedExpression', () => {
     it('adds a new expression to the list', () => {
-      const { state } = makeSlice();
-      state.setNamedExpression(ENTRY_A);
-      expect(state.namedExpressions).toHaveLength(1);
-      expect(state.namedExpressions[0]).toEqual(ENTRY_A);
+      const sliceContainer = makeSlice();
+      sliceContainer.state.setNamedExpression(ENTRY_A);
+      expect(sliceContainer.state.namedExpressions).toHaveLength(1);
+      expect(sliceContainer.state.namedExpressions[0]).toEqual(ENTRY_A);
     });
 
     it('overwrites an existing expression with the same name', () => {
-      const { state } = makeSlice();
-      state.setNamedExpression(ENTRY_A);
+      const sliceContainer = makeSlice();
+      sliceContainer.state.setNamedExpression(ENTRY_A);
       const updated: NamedExpression = { name: 'shelf_gap', expression: 'height / 4' };
-      state.setNamedExpression(updated);
-      expect(state.namedExpressions).toHaveLength(1);
-      expect(state.namedExpressions[0].expression).toBe('height / 4');
+      sliceContainer.state.setNamedExpression(updated);
+      expect(sliceContainer.state.namedExpressions).toHaveLength(1);
+      expect(sliceContainer.state.namedExpressions[0].expression).toBe('height / 4');
     });
 
     it('appends a second distinct entry', () => {
-      const { state } = makeSlice();
-      state.setNamedExpression(ENTRY_A);
-      state.setNamedExpression(ENTRY_B);
-      expect(state.namedExpressions).toHaveLength(2);
+      const sliceContainer = makeSlice();
+      sliceContainer.state.setNamedExpression(ENTRY_A);
+      sliceContainer.state.setNamedExpression(ENTRY_B);
+      expect(sliceContainer.state.namedExpressions).toHaveLength(2);
     });
   });
 
   describe('removeNamedExpression', () => {
     it('removes the entry by name', () => {
-      const { state } = makeSlice();
-      state.setNamedExpression(ENTRY_A);
-      state.setNamedExpression(ENTRY_B);
-      state.removeNamedExpression('shelf_gap');
-      expect(state.namedExpressions).toHaveLength(1);
-      expect(state.namedExpressions[0].name).toBe('panel_area');
+      const sliceContainer = makeSlice();
+      sliceContainer.state.setNamedExpression(ENTRY_A);
+      sliceContainer.state.setNamedExpression(ENTRY_B);
+      sliceContainer.state.removeNamedExpression('shelf_gap');
+      expect(sliceContainer.state.namedExpressions).toHaveLength(1);
+      expect(sliceContainer.state.namedExpressions[0].name).toBe('panel_area');
     });
 
     it('also removes any error for that name', () => {
-      const { state } = makeSlice();
-      state.setNamedExpression(ENTRY_A);
-      state.setExpressionError('shelf_gap', 'some error');
-      state.removeNamedExpression('shelf_gap');
-      expect(state.expressionErrors).not.toHaveProperty('shelf_gap');
+      const sliceContainer = makeSlice();
+      sliceContainer.state.setNamedExpression(ENTRY_A);
+      sliceContainer.state.setExpressionError('shelf_gap', 'some error');
+      sliceContainer.state.removeNamedExpression('shelf_gap');
+      expect(sliceContainer.state.expressionErrors).not.toHaveProperty('shelf_gap');
     });
 
     it('is a no-op when the name does not exist', () => {
-      const { state } = makeSlice();
-      state.setNamedExpression(ENTRY_A);
-      state.removeNamedExpression('non_existent');
-      expect(state.namedExpressions).toHaveLength(1);
+      const sliceContainer = makeSlice();
+      sliceContainer.state.setNamedExpression(ENTRY_A);
+      sliceContainer.state.removeNamedExpression('nonexistent');
+      expect(sliceContainer.state.namedExpressions).toHaveLength(1);
     });
   });
 
   describe('loadNamedExpressions', () => {
     it('replaces all entries and clears errors', () => {
-      const { state } = makeSlice();
-      state.setNamedExpression(ENTRY_A);
-      state.setExpressionError('shelf_gap', 'old error');
-      state.loadNamedExpressions([ENTRY_B]);
-      expect(state.namedExpressions).toEqual([ENTRY_B]);
-      expect(state.expressionErrors).toEqual({});
+      const sliceContainer = makeSlice();
+      sliceContainer.state.setNamedExpression(ENTRY_A);
+      sliceContainer.state.setExpressionError('shelf_gap', 'old error');
+      sliceContainer.state.loadNamedExpressions([ENTRY_B]);
+      expect(sliceContainer.state.namedExpressions).toEqual([ENTRY_B]);
+      expect(sliceContainer.state.expressionErrors).toEqual({});
     });
 
     it('accepts an empty array to clear all expressions', () => {
-      const { state } = makeSlice();
-      state.setNamedExpression(ENTRY_A);
-      state.loadNamedExpressions([]);
-      expect(state.namedExpressions).toHaveLength(0);
+      const sliceContainer = makeSlice();
+      sliceContainer.state.setNamedExpression(ENTRY_A);
+      sliceContainer.state.loadNamedExpressions([]);
+      expect(sliceContainer.state.namedExpressions).toEqual([]);
     });
   });
 
@@ -116,26 +143,24 @@ describe('createNamedExpressionsSlice', () => {
       { name: 'shelf_gap', error: 'cyclic dependency' },
       { name: 'panel_area', error: 'unknown variable' },
     ])('records error "$error" for "$name"', ({ name, error }) => {
-      const { state } = makeSlice();
-      state.setExpressionError(name, error);
-      expect(state.expressionErrors[name]).toBe(error);
+      const sliceContainer = makeSlice();
+      sliceContainer.state.setExpressionError(name, error);
+      expect(sliceContainer.state.expressionErrors[name]).toBe(error);
     });
 
     it('clearExpressionErrors removes all recorded errors', () => {
-      const { state } = makeSlice();
-      state.setExpressionError('a', 'err1');
-      state.setExpressionError('b', 'err2');
-      state.clearExpressionErrors();
-      expect(state.expressionErrors).toEqual({});
+      const sliceContainer = makeSlice();
+      sliceContainer.state.setExpressionError('a', 'err1');
+      sliceContainer.state.setExpressionError('b', 'err2');
+      sliceContainer.state.clearExpressionErrors();
+      expect(sliceContainer.state.expressionErrors).toEqual({});
     });
   });
 });
 
 describe('loadNamedExpressionsFromStorage', () => {
   beforeEach(() => {
-    if (globalThis.localStorage !== undefined) {
-      globalThis.localStorage.clear();
-    }
+    globalThis.localStorage.clear();
   });
 
   it('returns empty array when nothing is stored', () => {
