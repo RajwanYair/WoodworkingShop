@@ -92,9 +92,12 @@ export function PdfMultiCabSection({ ctx, allCabinetsData }: PdfMultiCabSectionP
             </View>
 
             {/* Parts list for this cabinet */}
-            <Text style={[s.sectionSubtitle, { fontFamily: fontFamilyBold, textAlign }]}>
-              🔲 {T.partsListTitle} — {cab.parts.length} {T.partsTotal}
-            </Text>
+            <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', gap: 4 }]}>
+              <Text style={[s.sectionSubtitle, { fontFamily: 'Helvetica', flex: 0 }]}>🔲</Text>
+              <Text style={[s.sectionSubtitle, { fontFamily: fontFamilyBold, textAlign }]}>
+                {T.partsListTitle} — {cab.parts.length} {T.partsTotal}
+              </Text>
+            </View>
             <View style={s.tableHeader}>
               {[T.thId, T.thPartName, T.thQty, T.thMaterial, T.thLength, T.thWidth, T.thThickness, T.thEdgeBand].map(
                 (h, i) => (

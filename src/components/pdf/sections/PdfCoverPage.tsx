@@ -38,46 +38,67 @@ export function PdfCoverPage({
       <View style={s.coverMidBody}>
         <View style={s.coverInfoBox}>
           <View style={[s.coverInfoRow, rowDir]}>
-            <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>📐 {T.dimensions}</Text>
+            <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }]}>
+              <Text style={[s.coverInfoLabel, { fontFamily: 'Helvetica', flex: 0 }]}>📐</Text>
+              <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>{T.dimensions}</Text>
+            </View>
             <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>
               {config.width} × {config.height} × {config.depth} mm
             </Text>
           </View>
           <View style={[s.coverInfoRow, rowDir]}>
-            <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>🪵 {T.carcassMaterial}</Text>
+            <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }]}>
+              <Text style={[s.coverInfoLabel, { fontFamily: 'Helvetica', flex: 0 }]}>🪵</Text>
+              <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>{T.carcassMaterial}</Text>
+            </View>
             <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>
               {cMatName} ({cMatThickness} mm)
             </Text>
           </View>
           <View style={[s.coverInfoRow, rowDir]}>
-            <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>🚪 {T.doorsShelves}</Text>
+            <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }]}>
+              <Text style={[s.coverInfoLabel, { fontFamily: 'Helvetica', flex: 0 }]}>🚪</Text>
+              <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>{T.doorsShelves}</Text>
+            </View>
             <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>
               {config.doorCount} {config.doorCount > 1 ? T.doors : T.door} · {config.shelfCount} {T.specShelves}
             </Text>
           </View>
           <View style={[s.coverInfoRow, rowDir]}>
-            <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>✂️ {T.cutSheets}</Text>
+            <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }]}>
+              <Text style={[s.coverInfoLabel, { fontFamily: 'Helvetica', flex: 0 }]}>✂️</Text>
+              <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>{T.cutSheets}</Text>
+            </View>
             <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>
               {optimization.totalSheets} {optimization.totalSheets !== 1 ? T.sheets : T.sheet} ·{' '}
               {optimization.overallYield}% {T.yield}
             </Text>
           </View>
           <View style={[s.coverInfoRow, rowDir]}>
-            <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>🔩 {T.hardwareItems}</Text>
+            <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }]}>
+              <Text style={[s.coverInfoLabel, { fontFamily: 'Helvetica', flex: 0 }]}>🔩</Text>
+              <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>{T.hardwareItems}</Text>
+            </View>
             <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>
               {hardware.length} {hardware.length !== 1 ? T.itemTypePlural : T.itemType}
             </Text>
           </View>
           {cabinetCount > 1 && (
             <View style={[s.coverInfoRow, rowDir]}>
-              <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>🗄️ {T.cabinetsInProject}</Text>
+              <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }]}>
+                <Text style={[s.coverInfoLabel, { fontFamily: 'Helvetica', flex: 0 }]}>🗄️</Text>
+                <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>{T.cabinetsInProject}</Text>
+              </View>
               <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>
                 {cabinetCount} {T.cabinets}
               </Text>
             </View>
           )}
           <View style={[s.coverInfoRowLast, rowDir]}>
-            <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>📅 {T.generated}</Text>
+            <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }]}>
+              <Text style={[s.coverInfoLabel, { fontFamily: 'Helvetica', flex: 0 }]}>📅</Text>
+              <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>{T.generated}</Text>
+            </View>
             <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>{date}</Text>
           </View>
         </View>
@@ -85,7 +106,10 @@ export function PdfCoverPage({
 
       {/* Bottom dark strip */}
       <View style={[s.coverBottomStrip, rowDir]}>
-        <Text style={[s.coverBottomText, { fontFamily }]}>🪵 {T.brandFooter}</Text>
+        <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }]}>
+          <Text style={[s.coverBottomText, { fontFamily: 'Helvetica', flex: 0 }]}>🪵</Text>
+          <Text style={[s.coverBottomText, { fontFamily }]}>{T.brandFooter}</Text>
+        </View>
         <Text style={[s.coverBottomDate, { fontFamily: fontFamilyBold }]}>{date}</Text>
       </View>
     </Page>

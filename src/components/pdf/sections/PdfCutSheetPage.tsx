@@ -91,9 +91,12 @@ export function PdfCutSheetPage({ ctx, sheet, totalSheets, isMultiCabinet }: Pdf
               paddingVertical: 3,
             }}
           >
-            <Text style={{ fontSize: 8, color: C.muted, fontFamily }}>
-              🔲 {sheet.parts.length} {T.parts}
-            </Text>
+            <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', gap: 4 }]}>
+              <Text style={{ fontSize: 8, color: C.muted, fontFamily: 'Helvetica', flex: 0 }}>🔲</Text>
+              <Text style={{ fontSize: 8, color: C.muted, fontFamily }}>
+                {sheet.parts.length} {T.parts}
+              </Text>
+            </View>
           </View>
         </View>
       </View>
