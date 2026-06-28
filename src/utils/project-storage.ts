@@ -4,6 +4,19 @@ import { idbLoadProjects, idbSaveProjects, idbLoadSnapshots, idbSaveSnapshots } 
 
 /** Current schema version written on every export. */
 export const CURRENT_SCHEMA_VERSION = '1.0' as const;
+
+/**
+ * Convert an object to JSON string with only ASCII characters (non-ASCII escaped as \uXXXX).
+ * This ensures exported files are compatible across all systems and encodings.
+ */
+function toAsciiJson(value: unknown, indent?: number | string): string {
+  const jsonStr = JSON.stringify(value, null, indent);
+  return jsonStr.replace(/[\u007F-\uFFFF]/g, (char) => {
+    const code = char.codePointAt(0) ?? 0;
+    const hex = code.toString(16).padStart(4, '0');
+    return ['\\', 'u', ...hex].join('');
+  });
+}
 const LEGACY_SCHEMA_VERSION = '0.9' as const;
 const CURRENT_BUNDLE_SCHEMA_VERSION = 1 as const;
 
@@ -46,14 +59,15 @@ function detectProjectSchemaVersion(raw: Record<string, unknown>): string {
 }
 
 function migrateLegacyProjectV09(raw: Record<string, unknown>): Record<string, unknown> {
+  const nameValue =
+    typeof raw['name'] === 'string'
+      ? raw['name']
+      : typeof raw['projectName'] === 'string'
+        ? raw['projectName']
+        : 'Untitled';
   return {
     ...raw,
-    name:
-      typeof raw['name'] === 'string'
-        ? raw['name']
-        : typeof raw['projectName'] === 'string'
-          ? raw['projectName']
-          : 'Untitled',
+    name: nameValue,
     schemaVersion: CURRENT_SCHEMA_VERSION,
   };
 }
@@ -91,7 +105,7 @@ export function migrateProject(raw: unknown): SavedProject {
   }
   const p = normaliseProjectRecord(raw);
   if (!Array.isArray(p['cabinets'])) {
-    throw new Error('Invalid project file: missing cabinets array');
+    throw new TypeError('Invalid project file: missing cabinets array');
   }
   // v1.0 — no structural migration needed; ensure required fields have defaults
   const migrated: SavedProject = {
@@ -149,14 +163,14 @@ export function exportProjectJson(project: SavedProject, snapshots?: ProjectSnap
     schemaVersion: CURRENT_SCHEMA_VERSION,
     generatedAt: new Date().toISOString(),
   };
-  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const blob = new Blob([toAsciiJson(payload, 2)], { type: 'application/json;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
   a.download = `${project.name.replace(/[^\w-]/g, '_')}.cabinet-project.json`;
   document.body.appendChild(a);
   a.click();
-  document.body.removeChild(a);
+  a.remove();
   URL.revokeObjectURL(url);
 }
 
@@ -184,7 +198,7 @@ export async function importProjectJson(file: File): Promise<SavedProject> {
 export async function exportProjectsBundle(projects: SavedProject[]): Promise<void> {
   // Sprint 10 — build individual file JSON strings and compute SHA-256 manifests
   const fileEntries = projects.map((p) => {
-    const content = JSON.stringify(p, null, 2);
+    const content = toAsciiJson(p, 2);
     return { name: `${p.name.replace(/[^\w-]/g, '_')}.cabinet-project.json`, content, project: p };
   });
 
@@ -205,14 +219,14 @@ export async function exportProjectsBundle(projects: SavedProject[]): Promise<vo
     manifest,
     projects,
   };
-  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const blob = new Blob([toAsciiJson(payload, 2)], { type: 'application/json;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
   a.download = `cabinet-projects-bundle-${new Date().toISOString().slice(0, 10)}.cabinet-projects.json`;
   document.body.appendChild(a);
   a.click();
-  document.body.removeChild(a);
+  a.remove();
   URL.revokeObjectURL(url);
 }
 
@@ -229,7 +243,7 @@ export async function importProjectsBundle(file: File): Promise<SavedProject[]> 
   }
   const incoming = parsed.projects;
   if (!Array.isArray(incoming)) {
-    throw new Error('Invalid bundle: missing projects array');
+    throw new TypeError('Invalid bundle: missing projects array');
   }
   const existing = await load();
   const existingNames = new Set(existing.map((p) => p.name.toLowerCase()));
@@ -272,14 +286,14 @@ export interface ProjectSettings {
 
 /** Trigger a browser download of the current settings as a `.cabinet-settings.json` file. */
 export function exportSettingsJson(settings: ProjectSettings, projectName: string): void {
-  const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
+  const blob = new Blob([toAsciiJson(settings, 2)], { type: 'application/json;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
   a.download = `${projectName.replace(/[^\w\u05D0-\u05EA.-]/g, '_')}.cabinet-settings.json`;
   document.body.appendChild(a);
   a.click();
-  document.body.removeChild(a);
+  a.remove();
   URL.revokeObjectURL(url);
 }
 
