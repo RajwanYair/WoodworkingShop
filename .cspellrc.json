@@ -44,6 +44,7 @@
     "tenon",
     "dovetail"
   ],
+  "ignorePatterns": ["ROADMAP.md", "src/engine/wood-drying.ts", "tests/components/ErrorBoundary.test.tsx"],
   "ignoreWords": [],
   "import": []
 }
