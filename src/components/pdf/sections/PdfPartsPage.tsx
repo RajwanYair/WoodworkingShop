@@ -16,15 +16,12 @@ export function PdfPartsPage({ ctx, parts }: PdfPartsPageProps) {
     <Page size={pageSize} orientation={orientation} style={[s.page, { fontFamily }]}>
       <PageHeader section={`🔲  ${T.partsListTitle}`} projectName={coverTitle} lang={lang} />
 
-      <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', gap: 4 }]}>
-        <Text style={[s.sectionTitle, { fontFamily: 'Helvetica', flex: 0 }]}>🔲</Text>
-        <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>
-          {T.partsListTitle}{' '}
-          <Text style={{ fontSize: 9, fontFamily, color: C.muted }}>
-            — {parts.length} {T.partsTotal}
-          </Text>
+      <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>
+        {T.partsListTitle}{' '}
+        <Text style={{ fontSize: 9, fontFamily, color: C.muted }}>
+          — {parts.length} {T.partsTotal}
         </Text>
-      </View>
+      </Text>
 
       <View style={s.tableHeader}>
         {[T.thId, T.thPartName, T.thQty, T.thMaterial, T.thLength, T.thWidth, T.thThickness, T.thEdgeBand].map(

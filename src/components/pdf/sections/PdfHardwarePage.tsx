@@ -16,7 +16,7 @@ export function PdfHardwarePage({ ctx, hardware }: PdfHardwarePageProps) {
       <PageHeader section={`🔩  ${T.hardwareListTitle}`} projectName={coverTitle} lang={lang} />
 
       <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>
-        🔩 {T.hardwareListTitle}{' '}
+        {T.hardwareListTitle}{' '}
         <Text style={{ fontSize: 9, fontFamily, color: C.muted }}>
           — {hardware.length} {T.itemTypes}
         </Text>
