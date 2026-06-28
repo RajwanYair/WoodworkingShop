@@ -77,9 +77,12 @@ export function PdfCutSheetPage({ ctx, sheet, totalSheets, isMultiCabinet }: Pdf
               paddingVertical: 3,
             }}
           >
-            <Text style={{ fontSize: 8, fontFamily: fontFamilyBold, color: C.primary }}>
-              📊 {sheet.yieldPercent}% {T.yield}
-            </Text>
+            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+              <Text style={{ fontSize: 8, fontFamily: 'Helvetica', flex: 0, color: C.primary }}>📊</Text>
+              <Text style={{ fontSize: 8, fontFamily: fontFamilyBold, color: C.primary }}>
+                {sheet.yieldPercent}% {T.yield}
+              </Text>
+            </View>
           </View>
           <View
             style={{

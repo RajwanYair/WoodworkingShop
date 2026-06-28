@@ -1,4 +1,4 @@
-import { Page, Text } from '@react-pdf/renderer';
+import { Page, Text, View } from '@react-pdf/renderer';
 import type { DerivedDimensions } from '../../../engine/types';
 import { getMaterial } from '../../../engine/materials';
 import { s } from '../pdf-tokens';
@@ -18,9 +18,15 @@ export function PdfDrillingPage({ ctx, d, backPanelMaterial }: PdfDrillingPagePr
     <Page size={pageSize} orientation={orientation} style={[s.page, { fontFamily }]}>
       <PageHeader section={`🔧  ${T.drillingGuide}`} projectName={coverTitle} lang={lang} />
 
-      <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>🔧 {T.drillingGuide}</Text>
+      <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }]}>
+        <Text style={[s.sectionTitle, { fontFamily: 'Helvetica', flex: 0 }]}>🔧</Text>
+        <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>{T.drillingGuide}</Text>
+      </View>
 
-      <Text style={[s.sectionSubtitle, { fontFamily: fontFamilyBold, textAlign }]}>🪛 {T.hingeCupBoring}</Text>
+      <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }]}>
+        <Text style={[s.sectionSubtitle, { fontFamily: 'Helvetica', flex: 0 }]}>🪛</Text>
+        <Text style={[s.sectionSubtitle, { fontFamily: fontFamilyBold, textAlign }]}>{T.hingeCupBoring}</Text>
+      </View>
       <Text style={[s.guideText, { fontFamily, textAlign }]}>• {T.hingeCupDesc1}</Text>
       <Text style={[s.guideText, { fontFamily, textAlign }]}>• {T.hingeCupDesc2}</Text>
       <Text style={[s.guideText, { fontFamily, textAlign }]}>

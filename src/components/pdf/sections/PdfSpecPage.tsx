@@ -40,9 +40,15 @@ export function PdfSpecPage({
     <Page size={pageSize} orientation={orientation} style={[s.page, { fontFamily }]}>
       <PageHeader section={`📐  ${T.specTitle}`} projectName={coverTitle} lang={lang} />
 
-      <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>📐 {T.specTitle}</Text>
+      <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }]}>
+        <Text style={[s.sectionTitle, { fontFamily: 'Helvetica', flex: 0 }]}>📐</Text>
+        <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>{T.specTitle}</Text>
+      </View>
 
-      <Text style={[s.specGroupTitle, { fontFamily: fontFamilyBold, textAlign }]}>📏 {T.specDimensions}</Text>
+      <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }]}>
+        <Text style={[s.specGroupTitle, { fontFamily: 'Helvetica', flex: 0 }]}>📏</Text>
+        <Text style={[s.specGroupTitle, { fontFamily: fontFamilyBold, textAlign }]}>{T.specDimensions}</Text>
+      </View>
       <View style={s.specGroup}>
         <SpecRow
           {...specRowProps}
@@ -88,9 +94,10 @@ export function PdfSpecPage({
         />
       </View>
 
-      <Text style={[s.sectionTitle, { marginTop: 14, fontFamily: fontFamilyBold, textAlign }]}>
-        📊 {T.cutSheetSummary}
-      </Text>
+      <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2, marginTop: 14 }]}>
+        <Text style={[s.sectionTitle, { fontFamily: 'Helvetica', flex: 0 }]}>📊</Text>
+        <Text style={[s.sectionTitle, { fontFamily: fontFamilyBold, textAlign }]}>{T.cutSheetSummary}</Text>
+      </View>
       <View style={[s.statRow, rowDir]}>
         <View style={s.statBox}>
           <Text style={s.statEmoji}>📋</Text>

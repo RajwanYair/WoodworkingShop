@@ -7,13 +7,23 @@ export function PageHeader({
   projectName,
   lang = 'en',
 }: {
-  section: string;
-  projectName: string;
-  lang?: Lang;
+  readonly section: string;
+  readonly projectName: string;
+  readonly lang?: Lang;
 }) {
   const isRTL = lang === 'he';
   const ff = isRTL ? 'NotoSansHebrew' : 'Helvetica';
   const ffBold = isRTL ? 'NotoSansHebrew' : 'Helvetica-Bold';
+
+  // Extract emoji from section text to avoid RTL bidi issues
+  let emojiEnd = 0;
+  for (; emojiEnd < section.length; emojiEnd++) {
+    const code = section.codePointAt(emojiEnd) ?? 0;
+    if (code < 128 && section[emojiEnd] !== ' ') break;
+  }
+  const sectionEmoji = section.slice(0, emojiEnd).trim();
+  const sectionText = section.slice(emojiEnd).trim();
+
   return (
     <View style={[s.pageHeader, isRTL ? { flexDirection: 'row-reverse' } : {}]} fixed>
       {/* Separate emoji from text to avoid bidi algorithm conflicts with RTL */}
@@ -21,13 +31,19 @@ export function PageHeader({
         <Text style={[s.pageHeaderBrand, { fontFamily: 'Helvetica', flex: 0 }]}>🪵</Text>
         <Text style={[s.pageHeaderBrand, { fontFamily: ffBold }]}>{isRTL ? 'מתכנן ארונות' : 'Cabinet Planner'}</Text>
       </View>
-      <Text style={[s.pageHeaderSection, { fontFamily: ff }]}>{section}</Text>
+      {/* Separate emoji and text */}
+      <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 3 }]}>
+        {sectionEmoji && (
+          <Text style={[s.pageHeaderSection, { fontFamily: 'Helvetica', flex: 0 }]}>{sectionEmoji}</Text>
+        )}
+        <Text style={[s.pageHeaderSection, { fontFamily: ff }]}>{sectionText}</Text>
+      </View>
       <Text style={[s.pageHeaderRight, { fontFamily: ffBold }]}>{projectName}</Text>
     </View>
   );
 }
 
-export function PageFooter({ date, lang = 'en' }: { date: string; lang?: Lang }) {
+export function PageFooter({ date, lang = 'en' }: { readonly date: string; readonly lang?: Lang }) {
   const isRTL = lang === 'he';
   const ff = isRTL ? 'NotoSansHebrew' : 'Helvetica';
   const ffBold = isRTL ? 'NotoSansHebrew' : 'Helvetica-Bold';
