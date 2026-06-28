@@ -1,5 +1,5 @@
 name: 'Setup Node & Install'
-description: 'Checkout repo, configure Node.js, and run npm ci — eliminates repetition across all CI jobs.'
+description: 'Configure Node.js and run npm ci — checkout must be done by the calling workflow before invoking this action.'
 inputs:
   node-version:
     description: 'Node.js version to use'
@@ -13,18 +13,10 @@ inputs:
     description: 'Additional npm ci flags'
     required: false
     default: '--prefer-offline --no-fund --no-audit'
-  fetch-depth:
-    description: 'Number of commits to fetch. 0 fetches all history. Default 1 for fast shallow clone.'
-    required: false
-    default: '1'
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: ${{ inputs.fetch-depth }}
-
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v5
       with:
         node-version: ${{ inputs.node-version }}
         cache: npm
