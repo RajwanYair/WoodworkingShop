@@ -27,7 +27,7 @@ const ENTRY_B: NamedExpression = { name: 'panel_area', expression: 'width * heig
 describe('createNamedExpressionsSlice', () => {
   beforeEach(() => {
     // Clear localStorage so tests start clean
-    if (globalThis.window !== undefined) {
+    if (globalThis.localStorage !== undefined) {
       globalThis.localStorage.clear();
     }
   });
@@ -133,7 +133,7 @@ describe('createNamedExpressionsSlice', () => {
 
 describe('loadNamedExpressionsFromStorage', () => {
   beforeEach(() => {
-    if (globalThis.window !== undefined) {
+    if (globalThis.localStorage !== undefined) {
       globalThis.localStorage.clear();
     }
   });
