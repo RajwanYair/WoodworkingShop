@@ -159,7 +159,7 @@
     "@react-pdf/renderer": "^4.5.1",
     "comlink": "4.4.2",
     "i18next": "^26.3.6",
-    "idb-keyval": "6.2.6",
+    "idb-keyval": "6.3.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-i18next": "^17.0.10",
