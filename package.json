@@ -160,8 +160,8 @@
     "comlink": "4.4.2",
     "i18next": "^26.3.6",
     "idb-keyval": "6.3.0",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "react-i18next": "^17.0.10",
     "zustand": "^5.0.14"
   },
