@@ -156,7 +156,7 @@
     "*.css": "stylelint --fix"
   },
   "dependencies": {
-    "@react-pdf/renderer": "^4.5.1",
+    "@react-pdf/renderer": "^4.6.1",
     "comlink": "4.4.2",
     "i18next": "^26.3.6",
     "idb-keyval": "6.3.0",
