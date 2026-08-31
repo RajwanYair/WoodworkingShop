@@ -35,7 +35,7 @@ jobs:
       pull-requests: write # allows the action to post a preview URL comment
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
