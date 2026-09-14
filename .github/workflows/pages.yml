@@ -27,7 +27,7 @@ jobs:
     # GitHub auto-creates it when Pages is configured to deploy from Actions.
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup-node
 
       - name: Build
