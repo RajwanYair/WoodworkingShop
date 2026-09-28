@@ -2,7 +2,7 @@
  * Integration tests for idb-keyval CRUD helpers in indexed-db-storage.ts.
  * Uses fake-indexeddb (imported globally via tests/setup.ts) — no mocking of idb-keyval.
  */
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
   idbLoadProjects,
   idbSaveProjects,
@@ -46,6 +46,20 @@ describe('idbLoadProjects / idbSaveProjects', () => {
       }
     },
   );
+
+  it('rejects unavailable localStorage without initializing the IndexedDB key', async () => {
+    await idbDel('all-projects');
+    const getItemSpy = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new DOMException('Storage access is blocked', 'SecurityError');
+    });
+
+    try {
+      await expect(idbLoadProjects()).rejects.toThrow(/unable to migrate legacy project data/i);
+      expect(await idbGet('all-projects')).toBeUndefined();
+    } finally {
+      getItemSpy.mockRestore();
+    }
+  });
 
   it('rejects a non-array IndexedDB value without replacing the corrupt record', async () => {
     const corruptRecord = { projects: 'not-an-array' };

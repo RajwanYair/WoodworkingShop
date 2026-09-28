@@ -493,7 +493,8 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
 
     removeCabinet: (index) =>
       set((state) => {
-        if (state.cabinets.length <= 1) return state;
+        if (state.cabinets.length <= 1 || !Number.isInteger(index) || index < 0 || index >= state.cabinets.length)
+          return state;
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         const cabinets = state.cabinets.filter((_, i) => i !== index);
         const idx = Math.min(state.activeCabinetIndex, cabinets.length - 1);
@@ -518,7 +519,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
     // Sprint 125 — duplicate an existing cabinet with an incremented name
     duplicateCabinet: (index) =>
       set((state) => {
-        if (index < 0 || index >= state.cabinets.length) return state;
+        if (!Number.isInteger(index) || index < 0 || index >= state.cabinets.length) return state;
         const src = state.cabinets[index];
         const baseName = src.name.replace(/\s*\(copy(?:\s+\d+)?\)\s*$/, '');
         const copies = state.cabinets.filter((c) => c.name.startsWith(baseName + ' (copy')).length;
@@ -548,7 +549,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
     // Sprint 93 — create a mirrored twin of an existing cabinet
     mirrorCabinet: (index) =>
       set((state) => {
-        if (index < 0 || index >= state.cabinets.length) return state;
+        if (!Number.isInteger(index) || index < 0 || index >= state.cabinets.length) return state;
         const src = state.cabinets[index];
         const newEntry: CabinetEntry = {
           name: mirrorName(src.name),
@@ -578,6 +579,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
     // Sprint 61 — reorder cabinets within the project list
     moveCabinet: (index, direction) =>
       set((state) => {
+        if (!Number.isInteger(index) || index < 0 || index >= state.cabinets.length) return state;
         const targetIndex = direction === 'up' ? index - 1 : index + 1;
         if (targetIndex < 0 || targetIndex >= state.cabinets.length) return state;
         const cabinets = [...state.cabinets];
@@ -609,7 +611,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
 
     setActiveCabinet: (index) =>
       set((state) => {
-        if (index < 0 || index >= state.cabinets.length) return state;
+        if (!Number.isInteger(index) || index < 0 || index >= state.cabinets.length) return state;
         pushConfigToUrl(state.cabinets[index].config);
         const base = deriveBaseProject(state.cabinets, index);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
@@ -625,18 +627,21 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
 
     renameCabinet: (index, name) =>
       set((state) => {
+        if (!Number.isInteger(index) || index < 0 || index >= state.cabinets.length) return state;
         const cabinets = state.cabinets.map((cab, i) => (i === index ? { ...cab, name } : cab));
         return { cabinets };
       }),
 
     setNotes: (index, notes) =>
       set((state) => {
+        if (!Number.isInteger(index) || index < 0 || index >= state.cabinets.length) return state;
         const cabinets = state.cabinets.map((cab, i) => (i === index ? { ...cab, notes } : cab));
         return { cabinets };
       }),
 
     loadProject: (cabinets) =>
       set((state) => {
+        if (cabinets.length === 0) return state;
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         const migrated = cabinets.map((c) => ({
           ...c,

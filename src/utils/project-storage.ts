@@ -239,10 +239,22 @@ export function deleteProject(id: string): Promise<void> {
   });
 }
 
+function createProjectExportRecord(project: SavedProject, snapshots = project.snapshots): SavedProject {
+  const record: SavedProject = {
+    id: project.id,
+    name: project.name,
+    savedAt: project.savedAt,
+    schemaVersion: CURRENT_SCHEMA_VERSION,
+    cabinets: project.cabinets,
+  };
+  if (project.generatedAt !== undefined) record.generatedAt = project.generatedAt;
+  if (snapshots !== undefined) record.snapshots = snapshots;
+  return record;
+}
+
 export function exportProjectJson(project: SavedProject, snapshots?: ProjectSnapshot[]): void {
   const payload: SavedProject = {
-    ...(snapshots ? { ...project, snapshots } : project),
-    schemaVersion: CURRENT_SCHEMA_VERSION,
+    ...createProjectExportRecord(project, snapshots),
     generatedAt: new Date().toISOString(),
   };
   const blob = new Blob([toAsciiJson(payload, 2)], { type: 'application/json;charset=utf-8' });
@@ -304,8 +316,9 @@ export function importProjectJson(file: File): Promise<SavedProject> {
 export async function exportProjectsBundle(projects: SavedProject[]): Promise<void> {
   // Sprint 10 — build individual file JSON strings and compute SHA-256 manifests
   const fileEntries = projects.map((p) => {
-    const content = toAsciiJson(p, 2);
-    return { name: `${p.name.replace(/[^\w-]/g, '_')}.cabinet-project.json`, content, project: p };
+    const project = createProjectExportRecord(p);
+    const content = toAsciiJson(project, 2);
+    return { name: `${project.name.replace(/[^\w-]/g, '_')}.cabinet-project.json`, content, project };
   });
 
   const manifest = await Promise.all(
@@ -323,7 +336,7 @@ export async function exportProjectsBundle(projects: SavedProject[]): Promise<vo
     version: 1,
     exportedAt: new Date().toISOString(),
     manifest,
-    projects,
+    projects: fileEntries.map((entry) => entry.project),
   };
   const blob = new Blob([toAsciiJson(payload, 2)], { type: 'application/json;charset=utf-8' });
   const url = URL.createObjectURL(blob);

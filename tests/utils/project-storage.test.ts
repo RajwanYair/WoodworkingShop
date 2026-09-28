@@ -5,6 +5,7 @@ import {
   deleteProject,
   migrateProject,
   exportProjectJson,
+  exportProjectsBundle,
   importProjectJson,
   importProjectsBundle,
   CURRENT_SCHEMA_VERSION,
@@ -88,8 +89,10 @@ describe('project-storage', () => {
     expect((await listProjects()).map((project) => project.name)).toEqual(['Existing project', 'New project']);
   });
 
-  it('rejects corrupt persisted projects without overwriting stored data', async () => {
-    const corruptRecord = { id: 'broken', name: 'Broken', cabinets: [null] };
+  it.each([
+    { id: 'broken', name: 'Broken', cabinets: [null] },
+    { id: 'future', name: 'Future schema', schemaVersion: '99.0', cabinets: sampleCabinets },
+  ])('rejects corrupt persisted projects without overwriting stored data', async (corruptRecord) => {
     memProjects.push(corruptRecord);
 
     await expect(listProjects()).rejects.toThrow(/saved project storage/i);
@@ -234,26 +237,88 @@ describe('project-storage', () => {
     ]);
   });
 
-  it('exportProjectJson calls triggerDownload with serialised project', () => {
+  it('round-trips semantic project data through single-project export and import', async () => {
     const mockAnchor = document.createElement('a');
     const clickSpy = vi.spyOn(mockAnchor, 'click').mockImplementation(() => {});
     vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor);
-    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:export-test');
+    let exportedBlob: Blob | undefined;
+    vi.spyOn(URL, 'createObjectURL').mockImplementation((value) => {
+      if (value instanceof Blob) exportedBlob = value;
+      return 'blob:export-test';
+    });
     vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
 
-    const project: SavedProject = {
+    const project: SavedProject & { activeTab: string } = {
       id: 'export-id',
-      name: 'Export Test',
+      name: 'מטבח 東京',
       savedAt: new Date().toISOString(),
       cabinets: sampleCabinets,
+      snapshots: sampleSnapshots,
+      activeTab: 'optimizer',
     };
 
-    exportProjectJson(project);
+    try {
+      exportProjectJson(project);
 
-    expect(clickSpy).toHaveBeenCalled();
-    expect(mockAnchor.download).toContain('Export_Test');
+      expect(clickSpy).toHaveBeenCalled();
+      expect(mockAnchor.download).toContain('cabinet-project.json');
+      expect(exportedBlob).toBeInstanceOf(Blob);
+      if (!exportedBlob) throw new Error('Project export did not create a Blob');
 
-    vi.restoreAllMocks();
+      const projectText = await exportedBlob.text();
+      expect(projectText).not.toContain('"activeTab"');
+      const file = new File([projectText], 'round-trip.cabinet-project.json', { type: 'application/json' });
+      const imported = await importProjectJson(file);
+
+      expect(imported).toMatchObject({ name: project.name, cabinets: project.cabinets, snapshots: project.snapshots });
+      expect(imported.id).not.toBe(project.id);
+    } finally {
+      vi.restoreAllMocks();
+    }
+  });
+
+  it.each([
+    { name: 'Empty project', cabinets: [] },
+    {
+      name: 'Large project',
+      cabinets: Array.from({ length: 250 }, (_, index) => ({
+        id: `cab-${index + 1}`,
+        name: `Cabinet ${index + 1}`,
+        config: DEFAULT_CONFIG,
+        notes: `Notes for cabinet ${index + 1}`,
+      })),
+    },
+  ])('round-trips an $name through single-project export and import', async ({ name, cabinets }) => {
+    const anchor = document.createElement('a');
+    vi.spyOn(document, 'createElement').mockReturnValue(anchor);
+    vi.spyOn(anchor, 'click').mockImplementation(() => {});
+    let exportedBlob: Blob | undefined;
+    vi.spyOn(URL, 'createObjectURL').mockImplementation((value) => {
+      if (value instanceof Blob) exportedBlob = value;
+      return 'blob:boundary-round-trip';
+    });
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+    const project: SavedProject = {
+      id: 'boundary-round-trip',
+      name,
+      savedAt: '2025-01-01T00:00:00.000Z',
+      cabinets,
+    };
+
+    try {
+      exportProjectJson(project);
+      if (!exportedBlob) throw new Error('Project export did not create a Blob');
+      const file = new File([await exportedBlob.text()], 'boundary-round-trip.cabinet-project.json', {
+        type: 'application/json',
+      });
+      const imported = await importProjectJson(file);
+
+      expect(imported.name).toBe(name);
+      expect(imported.cabinets).toEqual(cabinets);
+      expect(imported.id).not.toBe(project.id);
+    } finally {
+      vi.restoreAllMocks();
+    }
   });
 
   it('importProjectsBundle merges new projects from a bundle file', async () => {
@@ -271,6 +336,132 @@ describe('project-storage', () => {
     expect(added[0].name).toBe('Bundled A');
     expect(added[1].name).toBe('Bundled B');
     expect(new Set(added.map((project) => project.id)).size).toBe(2);
+  });
+
+  it('retries bundle IDs that collide with stored and earlier imported projects', async () => {
+    const firstUuid = '00000000-0000-4000-8000-000000000001';
+    const secondUuid = '00000000-0000-4000-8000-000000000002';
+    const thirdUuid = '00000000-0000-4000-8000-000000000003';
+    memProjects.push({
+      id: `proj-${firstUuid}`,
+      name: 'Existing project',
+      savedAt: '2025-01-01T00:00:00.000Z',
+      cabinets: sampleCabinets,
+    });
+    const candidates: ReturnType<typeof crypto.randomUUID>[] = [firstUuid, secondUuid, secondUuid, thirdUuid];
+    const randomUUID = vi
+      .spyOn(crypto, 'randomUUID')
+      .mockImplementation(() => candidates.shift() ?? '00000000-0000-4000-8000-000000000004');
+    const bundle = {
+      version: 1,
+      projects: [
+        { id: 'duplicate-input', name: 'Bundled A', savedAt: '2025-01-01T00:00:00.000Z', cabinets: sampleCabinets },
+        { id: 'duplicate-input', name: 'Bundled B', savedAt: '2025-01-01T00:00:00.000Z', cabinets: sampleCabinets },
+      ],
+    };
+    const file = new File([JSON.stringify(bundle)], 'duplicate-ids.cabinet-projects.json', {
+      type: 'application/json',
+    });
+
+    try {
+      const added = await importProjectsBundle(file);
+
+      expect(added.map((project) => project.id)).toEqual([`proj-${secondUuid}`, `proj-${thirdUuid}`]);
+      expect(new Set((await listProjects()).map((project) => project.id))).toEqual(
+        new Set([`proj-${firstUuid}`, `proj-${secondUuid}`, `proj-${thirdUuid}`]),
+      );
+      expect(randomUUID).toHaveBeenCalledTimes(4);
+    } finally {
+      randomUUID.mockRestore();
+    }
+  });
+
+  it('round-trips semantic project data through bundle export and import', async () => {
+    const project: SavedProject & { activeTab: string } = {
+      id: 'bundle-round-trip',
+      name: 'خزانة عربية',
+      savedAt: '2025-01-01T00:00:00.000Z',
+      cabinets: sampleCabinets,
+      snapshots: sampleSnapshots,
+      activeTab: 'optimizer',
+    };
+    let exportedBlob: Blob | undefined;
+    const anchor = document.createElement('a');
+    vi.spyOn(document, 'createElement').mockReturnValue(anchor);
+    vi.spyOn(anchor, 'click').mockImplementation(() => {});
+    vi.spyOn(URL, 'createObjectURL').mockImplementation((value) => {
+      if (value instanceof Blob) exportedBlob = value;
+      return 'blob:bundle-round-trip';
+    });
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+
+    try {
+      await exportProjectsBundle([project]);
+      expect(exportedBlob).toBeInstanceOf(Blob);
+      if (!exportedBlob) throw new Error('Bundle export did not create a Blob');
+
+      const bundleText = await exportedBlob.text();
+      expect(bundleText).not.toContain('"activeTab"');
+      const file = new File([bundleText], 'round-trip.cabinet-projects.json', {
+        type: 'application/json',
+      });
+      const [imported] = await importProjectsBundle(file);
+
+      expect(imported).toMatchObject({ name: project.name, cabinets: project.cabinets, snapshots: project.snapshots });
+      expect(imported.id).not.toBe(project.id);
+      expect('activeTab' in imported).toBe(false);
+    } finally {
+      vi.restoreAllMocks();
+    }
+  });
+
+  it('round-trips empty and large projects through bundle export and import', async () => {
+    const projects: SavedProject[] = [
+      {
+        id: 'empty-bundle-project',
+        name: 'Empty project',
+        savedAt: '2025-01-01T00:00:00.000Z',
+        cabinets: [],
+      },
+      {
+        id: 'large-bundle-project',
+        name: 'Large project',
+        savedAt: '2025-01-01T00:00:00.000Z',
+        cabinets: Array.from({ length: 250 }, (_, index) => ({
+          id: `cab-${index + 1}`,
+          name: `Cabinet ${index + 1}`,
+          config: DEFAULT_CONFIG,
+          notes: `Notes for cabinet ${index + 1}`,
+        })),
+      },
+    ];
+    const anchor = document.createElement('a');
+    vi.spyOn(document, 'createElement').mockReturnValue(anchor);
+    vi.spyOn(anchor, 'click').mockImplementation(() => {});
+    let exportedBlob: Blob | undefined;
+    vi.spyOn(URL, 'createObjectURL').mockImplementation((value) => {
+      if (value instanceof Blob) exportedBlob = value;
+      return 'blob:bundle-boundary-round-trip';
+    });
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+
+    try {
+      await exportProjectsBundle(projects);
+      if (!exportedBlob) throw new Error('Bundle export did not create a Blob');
+      const file = new File([await exportedBlob.text()], 'boundary-round-trip.cabinet-projects.json', {
+        type: 'application/json',
+      });
+      const imported = await importProjectsBundle(file);
+
+      expect(imported.map(({ name, cabinets }) => ({ name, cabinetCount: cabinets.length }))).toEqual([
+        { name: 'Empty project', cabinetCount: 0 },
+        { name: 'Large project', cabinetCount: 250 },
+      ]);
+      expect(new Set(imported.map(({ id }) => id)).size).toBe(2);
+      expect(imported.every(({ id }) => !projects.some((project) => project.id === id))).toBe(true);
+    } finally {
+      vi.restoreAllMocks();
+    }
   });
 
   it('importProjectsBundle renames duplicates with (imported) suffix', async () => {

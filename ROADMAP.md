@@ -413,25 +413,27 @@ The function CSV maps literal direct test titles to 612 exports, including `it.e
 
 `getMaterialResult` has direct success, custom-material, and error-result tests; `getMachineProfile` has cases for all registered IDs and an unknown ID; `defaultTokenGenerator` has length and URL-safe alphabet checks; `applyValidationPlugins` has empty-registry, transformation, and registration-order checks; and the Web Serial adapter has availability, connection, streaming, abort, and disconnect tests.
 
-Latest verification: `npm run check` passes with 4,528 tests across 283 files and all configured quality gates.
+Latest verification: `npm run ci` passes with 4,584 tests across 283 files, all configured quality gates, the production build, bundle budgets, and all 16 benchmarks within budget.
 
 **Sprint 304 — Store, persistence, import/export contract matrix** — P0 · L · S301.
 
 - T1: Exercise every exported store action: initial state, valid transition, invalid/no-op input, undo/redo, reset, persistence, reload and cross-slice effects. IN PROGRESS.
 - T2: Test IDB/localStorage unavailable, corrupted record, stale schema, quota, partial write, duplicate project id, concurrent save, deletion and migration recovery. IN PROGRESS.
-- T3: Verify each import/export round trip preserves semantically relevant state and intentionally omits ephemeral UI state.
+- T3: Verify each import/export round trip preserves semantically relevant state and intentionally omits ephemeral UI state. DONE.
 - Tests: fake-indexeddb transaction failures; legacy fixtures; unknown and future schema versions; Unicode/RTL names; empty and very large projects.
 - Accept: corrupted input never mutates live state; recoverable errors are actionable; round-trip comparison uses canonical normalized project snapshots.
 
 Progress (2026-09-28): `migrateProject` rejects malformed cabinet entries and incomplete cabinet configs before import persistence; regression tests cover null entries, missing names/configs, and invalid config objects.
 
-Persisted project reads validate every record through the same migration boundary. Corrupt IndexedDB data produces an actionable error and is not overwritten by a later save; regression tests cover corrupt reads and write preservation.
+Persisted project reads validate every record through the same migration boundary. Corrupt IndexedDB data and unsupported future schema versions produce an actionable error and are not overwritten by a later save; regression tests cover corrupt reads and write preservation.
 
 Imported snapshot history validates each snapshot record and its nested cabinets before either project or snapshot storage is changed. Regression cases cover null records, missing fields, and malformed nested cabinets while preserving valid snapshot round-trips.
 
 Project imports compensate for cross-store partial writes: if project persistence fails after snapshot history is saved, the prior snapshot list is restored. Tests cover successful rollback and report both errors if rollback itself fails.
 
 Legacy localStorage migration now rejects malformed JSON and non-array payloads instead of silently caching an empty list; migration writes occur only after the legacy value passes the array-shape check. Projects, saved configs, and snapshots also reject corrupt non-array IndexedDB values rather than treating them as empty storage.
+
+Unavailable localStorage during first-run migration produces an actionable failure and leaves the IndexedDB key unset; a regression simulates browser `SecurityError` behavior.
 
 New project IDs use `crypto.randomUUID()` and are checked against existing IDs for saves, single-project imports, and bundle imports. A fixed-clock regression covers same-millisecond saves; the PWA parser test verifies the generated UUID format.
 
@@ -441,7 +443,19 @@ Deletion failure coverage verifies the storage error is propagated, raw project 
 
 Quota failure coverage verifies the error propagates, existing project data remains intact, and a later save succeeds. The same regression exercises recovery of the serialized mutation queue after the failed write.
 
-Full `npm run ci` passed with 4,546 tests across 283 files, production build and bundle budgets passing, and all 16 benchmarks within budget. Remaining store-action, IndexedDB failure, and round-trip matrix tasks are still open.
+Single-project and bundle export/import round-trip coverage verifies cabinets and snapshot history survive, project IDs are regenerated, and ephemeral UI-only fields are omitted from the exported JSON. Both exporters serialize an explicit `SavedProject` field allowlist so runtime-only properties cannot leak into downloads. Hebrew, Arabic and Japanese names, empty projects, and 250-cabinet projects are covered across the export/import paths.
+
+Cabinet-store action coverage verifies `resetConfig` resets only the active cabinet, recomputes derived dimensions, and restores the prior config through undo/redo.
+
+Store-level integration tests also verify mirror creation, project loading with undo, empty-project load as a no-op, bulk material replacement across cabinets with undo and same-key no-op behavior, and invalid-index no-ops for remove, rename, notes, duplicate, mirror, select, and move actions. These guards run before history, URL, or derived state is updated.
+
+Sprint 304 verification: `npm run ci` passes with 4,584 tests across 283 files; production build, bundle budgets, and all 16 benchmarks pass. T3 is complete with single-project and bundle round-trips covering snapshots, omitted ephemeral state, Unicode/RTL names, empty projects, and 250-cabinet projects. T1 and T2 remain IN PROGRESS while the full exported-action and persistence-failure matrices are completed.
+
+Session persistence coverage verifies the cabinet store's debounced autosave writes the latest active configuration after 500 ms and a fresh store initialization after simulated reload restores cabinet config, project name and notes from localStorage.
+
+Worker-backed store action tests cover rotation-lock toggling, offcut catalog set/add/remove, and material-scoped defect-zone add/remove behavior.
+
+Full `npm run ci` passed with 4,583 tests across 283 files, production build and bundle budgets passing, and all 16 benchmarks within budget. Remaining store-action, IndexedDB failure, and round-trip matrix tasks are still open.
 
 **Sprint 305 — Component behavior foundation** — P1 · L · S302.
 

@@ -1,6 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { useCabinetStore, detectOsDarkMode } from '../../src/store/cabinet-store';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import { computeDimensions } from '../../src/engine/dimensions';
+import type { DefectZone, OffcutEntry } from '../../src/engine/types';
+import { setDefectZones } from '../../src/store/worker-schedule';
 
 describe('cabinet-store', () => {
   beforeEach(() => {
@@ -25,9 +28,77 @@ describe('cabinet-store', () => {
     expect(config.height).toBe(DEFAULT_CONFIG.height);
   });
 
+  it('persists the latest cabinet session after the autosave debounce', () => {
+    vi.useFakeTimers();
+    window.localStorage.clear();
+
+    useCabinetStore.getState().setConfig({ width: 812 });
+    vi.advanceTimersByTime(500);
+
+    const savedSession = window.localStorage.getItem('woodworkingshop:session');
+    expect(savedSession).not.toBeNull();
+    expect(JSON.parse(savedSession ?? '{}')).toMatchObject({
+      activeCabinetIndex: 0,
+      cabinets: [{ name: 'Cabinet 1', config: { width: 812 } }],
+    });
+  });
+
+  it('restores a persisted cabinet session when the store initializes after reload', async () => {
+    window.localStorage.setItem(
+      'woodworkingshop:session',
+      JSON.stringify({
+        cabinets: [{ name: 'Saved cabinet', config: { ...DEFAULT_CONFIG, width: 812 } }],
+        activeCabinetIndex: 0,
+        projectName: 'Saved project',
+        projectNotes: 'Resume here',
+        sawKerf: 4,
+        materialPriceOverrides: {},
+        edgeBandingRate: 3,
+        hardwarePriceOverrides: {},
+        hardwareQtyOverrides: {},
+        sheetSizeOverrides: {},
+        labourRate: 75,
+        labourHours: 0,
+        finishCost: 0,
+        rotationLockedPartIds: {},
+      }),
+    );
+
+    vi.resetModules();
+    const { useCabinetStore: restoredStore } = await import('../../src/store/cabinet-store');
+
+    expect(restoredStore.getState()).toMatchObject({
+      cabinets: [{ name: 'Saved cabinet', config: { width: 812 } }],
+      config: { width: 812 },
+      projectName: 'Saved project',
+      projectNotes: 'Resume here',
+    });
+  });
+
   it('updates config via setConfig', () => {
     useCabinetStore.getState().setConfig({ width: 800 });
     expect(useCabinetStore.getState().config.width).toBe(800);
+  });
+
+  it('resets only the active cabinet and supports undo/redo', () => {
+    useCabinetStore.getState().setConfig({ width: 800 });
+    useCabinetStore.getState().addCabinet();
+    useCabinetStore.getState().setConfig({ width: 555 });
+
+    useCabinetStore.getState().resetConfig();
+
+    const resetState = useCabinetStore.getState();
+    expect(resetState.cabinets[0].config.width).toBe(800);
+    expect(resetState.cabinets[1].config).toEqual(DEFAULT_CONFIG);
+    expect(resetState.dimensions).toEqual(computeDimensions(DEFAULT_CONFIG));
+    expect(resetState.canUndo).toBe(true);
+
+    resetState.undo();
+    expect(useCabinetStore.getState().cabinets[1].config.width).toBe(555);
+    expect(useCabinetStore.getState().dimensions).toEqual(computeDimensions({ ...DEFAULT_CONFIG, width: 555 }));
+
+    useCabinetStore.getState().redo();
+    expect(useCabinetStore.getState().cabinets[1].config).toEqual(DEFAULT_CONFIG);
   });
 
   it('recomputes derived state on config change', () => {
@@ -68,15 +139,34 @@ describe('cabinet-store', () => {
     expect(useCabinetStore.getState().cabinets.length).toBe(1);
   });
 
+  it.each([-1, 2, 0.5])('does not change state when removing invalid cabinet index %i', (index) => {
+    useCabinetStore.getState().addCabinet();
+    const before = useCabinetStore.getState();
+    useCabinetStore.getState().removeCabinet(index);
+    expect(useCabinetStore.getState()).toBe(before);
+  });
+
   it('switches active cabinet', () => {
     useCabinetStore.getState().addCabinet();
     useCabinetStore.getState().setActiveCabinet(0);
     expect(useCabinetStore.getState().activeCabinetIndex).toBe(0);
   });
 
+  it.each([-1, 1, 0.5])('does not change state when selecting invalid cabinet index %i', (index) => {
+    const before = useCabinetStore.getState();
+    useCabinetStore.getState().setActiveCabinet(index);
+    expect(useCabinetStore.getState()).toBe(before);
+  });
+
   it('renames a cabinet', () => {
     useCabinetStore.getState().renameCabinet(0, 'Kitchen Pantry');
     expect(useCabinetStore.getState().cabinets[0].name).toBe('Kitchen Pantry');
+  });
+
+  it.each([-1, 1, 0.5])('does not change state when renaming invalid cabinet index %i', (index) => {
+    const before = useCabinetStore.getState();
+    useCabinetStore.getState().renameCabinet(index, 'Invalid rename');
+    expect(useCabinetStore.getState()).toBe(before);
   });
 
   it('setNotes stores notes on a cabinet', () => {
@@ -90,6 +180,12 @@ describe('cabinet-store', () => {
     expect(useCabinetStore.getState().cabinets[1].notes).toBeUndefined();
     useCabinetStore.getState().setNotes(0, '');
     expect(useCabinetStore.getState().cabinets[0].notes).toBe('');
+  });
+
+  it.each([-1, 1, 0.5])('does not change state when updating notes for invalid cabinet index %i', (index) => {
+    const before = useCabinetStore.getState();
+    useCabinetStore.getState().setNotes(index, 'Invalid notes');
+    expect(useCabinetStore.getState()).toBe(before);
   });
 
   it('edits only the active cabinet config', () => {
@@ -153,10 +249,146 @@ describe('cabinet-store', () => {
       expect(names).toContain('Cabinet 1 (copy 2)');
     });
 
-    it('is a no-op for out-of-range index', () => {
-      const before = useCabinetStore.getState().cabinets.length;
-      useCabinetStore.getState().duplicateCabinet(99);
-      expect(useCabinetStore.getState().cabinets).toHaveLength(before);
+    it.each([-1, 1, 0.5])('is a no-op for invalid index %i', (index) => {
+      const before = useCabinetStore.getState();
+      useCabinetStore.getState().duplicateCabinet(index);
+      expect(useCabinetStore.getState()).toBe(before);
+    });
+  });
+
+  describe('mirrorCabinet', () => {
+    it('inserts a mirrored copy after the source without changing the source', () => {
+      useCabinetStore.getState().setConfig({ width: 800, isMirrored: false });
+      useCabinetStore.getState().mirrorCabinet(0);
+
+      const { cabinets, activeCabinetIndex } = useCabinetStore.getState();
+      expect(cabinets).toHaveLength(2);
+      expect(cabinets[0].name).toBe('Cabinet 1');
+      expect(cabinets[0].config.isMirrored).toBe(false);
+      expect(cabinets[1]).toMatchObject({ name: 'Cabinet 1 (mirror)', config: { width: 800, isMirrored: true } });
+      expect(activeCabinetIndex).toBe(1);
+    });
+
+    it.each([-1, 1, 0.5])('is a no-op for invalid index %i', (index) => {
+      const before = useCabinetStore.getState();
+      useCabinetStore.getState().mirrorCabinet(index);
+      expect(useCabinetStore.getState()).toBe(before);
+    });
+  });
+
+  describe('loadProject', () => {
+    it('preserves the current project when the replacement has no cabinets', () => {
+      const before = useCabinetStore.getState();
+
+      expect(() => useCabinetStore.getState().loadProject([])).not.toThrow();
+      expect(useCabinetStore.getState()).toBe(before);
+    });
+
+    it('loads the project as active and can undo the replacement', () => {
+      useCabinetStore.getState().setConfig({ width: 800 });
+      useCabinetStore.getState().loadProject([{ name: 'Imported cabinet', config: { ...DEFAULT_CONFIG, width: 777 } }]);
+
+      expect(useCabinetStore.getState().cabinets).toEqual([
+        { name: 'Imported cabinet', config: { ...DEFAULT_CONFIG, width: 777 } },
+      ]);
+      expect(useCabinetStore.getState().config.width).toBe(777);
+      expect(useCabinetStore.getState().canUndo).toBe(true);
+
+      useCabinetStore.getState().undo();
+      expect(useCabinetStore.getState().cabinets[0].config.width).toBe(800);
+    });
+  });
+
+  describe('bulkReplaceMaterial', () => {
+    it('replaces matching materials across cabinets and supports undo', () => {
+      useCabinetStore.getState().setConfig({ carcassMaterial: 'plywood-17', backPanelMaterial: 'plywood-17' });
+      useCabinetStore.getState().addCabinet();
+      useCabinetStore.getState().setConfig({ carcassMaterial: 'mdf-18', backPanelMaterial: 'plywood-17' });
+
+      useCabinetStore.getState().bulkReplaceMaterial('plywood-17', 'melamine-18');
+
+      expect(
+        useCabinetStore.getState().cabinets.map(({ config }) => [config.carcassMaterial, config.backPanelMaterial]),
+      ).toEqual([
+        ['melamine-18', 'melamine-18'],
+        ['mdf-18', 'melamine-18'],
+      ]);
+
+      useCabinetStore.getState().undo();
+      expect(
+        useCabinetStore.getState().cabinets.map(({ config }) => [config.carcassMaterial, config.backPanelMaterial]),
+      ).toEqual([
+        ['plywood-17', 'plywood-17'],
+        ['mdf-18', 'plywood-17'],
+      ]);
+    });
+
+    it('is a no-op when source and destination match', () => {
+      const before = useCabinetStore.getState();
+      useCabinetStore.getState().bulkReplaceMaterial('mdf-18', 'mdf-18');
+      expect(useCabinetStore.getState()).toBe(before);
+    });
+  });
+
+  describe('worker-backed config actions', () => {
+    it('toggles a part rotation lock on and off', () => {
+      useCabinetStore.setState({ rotationLockedPartIds: {} });
+
+      useCabinetStore.getState().toggleRotationLock('part-1');
+      expect(useCabinetStore.getState().rotationLockedPartIds).toEqual({ 'part-1': true });
+
+      useCabinetStore.getState().toggleRotationLock('part-1');
+      expect(useCabinetStore.getState().rotationLockedPartIds).toEqual({});
+    });
+
+    it('sets, adds, and removes entries from the offcut catalog', () => {
+      const first: OffcutEntry = {
+        id: 'offcut-1',
+        material: 'plywood-17',
+        thickness: 17,
+        width: 300,
+        length: 600,
+        addedAt: 1,
+      };
+      const second: OffcutEntry = { ...first, id: 'offcut-2', label: 'Shelf remnant' };
+      const store = useCabinetStore.getState();
+
+      store.setOffcutCatalog([first]);
+      store.addOffcutEntry(second);
+      expect(useCabinetStore.getState().offcutCatalog).toEqual([first, second]);
+
+      useCabinetStore.getState().removeOffcutEntry(first.id);
+      expect(useCabinetStore.getState().offcutCatalog).toEqual([second]);
+      useCabinetStore.getState().removeOffcutEntry(second.id);
+      expect(useCabinetStore.getState().offcutCatalog).toEqual([]);
+    });
+
+    it('adds and removes defect zones for the requested material only', () => {
+      const first: DefectZone = { x: 10, y: 20, width: 30, length: 40 };
+      const second: DefectZone = { x: 50, y: 60, width: 70, length: 80 };
+      const otherMaterialZone: DefectZone = { x: 1, y: 2, width: 3, length: 4 };
+      setDefectZones({});
+      useCabinetStore.setState({ defectZones: {} });
+
+      useCabinetStore.getState().addDefectZone('plywood-17', first);
+      useCabinetStore.getState().addDefectZone('plywood-17', second);
+      useCabinetStore.getState().addDefectZone('mdf-18', otherMaterialZone);
+      expect(useCabinetStore.getState().defectZones).toEqual({
+        'plywood-17': [first, second],
+        'mdf-18': [otherMaterialZone],
+      });
+
+      useCabinetStore.getState().removeDefectZone('plywood-17', 0);
+      expect(useCabinetStore.getState().defectZones).toEqual({
+        'plywood-17': [second],
+        'mdf-18': [otherMaterialZone],
+      });
+      useCabinetStore.getState().removeDefectZone('plywood-17', 0);
+      expect(useCabinetStore.getState().defectZones).toEqual({
+        'plywood-17': [],
+        'mdf-18': [otherMaterialZone],
+      });
+      setDefectZones({});
     });
   });
 
@@ -345,6 +577,13 @@ describe('cabinet-store', () => {
       const count = useCabinetStore.getState().cabinets.length;
       useCabinetStore.getState().moveCabinet(count - 1, 'down');
       expect(useCabinetStore.getState().cabinets.map((c) => c.name)).toEqual(before);
+    });
+
+    it.each([-1, 4, 0.5])('does not change state when moving invalid cabinet index %i', (index) => {
+      useCabinetStore.getState().addCabinet();
+      const before = useCabinetStore.getState();
+      useCabinetStore.getState().moveCabinet(index, 'down');
+      expect(useCabinetStore.getState()).toBe(before);
     });
   });
 
