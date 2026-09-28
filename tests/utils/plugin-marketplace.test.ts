@@ -3,7 +3,7 @@
  *
  * Tests for src/utils/plugin-marketplace.ts
  */
-import { describe, it, expect, beforeAll, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
   validateCatalog,
   fetchMarketplaceCatalog,
@@ -38,9 +38,10 @@ const localStorageMock = (() => {
   };
 })();
 
-beforeAll(() => {
+beforeEach(() => {
   vi.stubGlobal('localStorage', localStorageMock);
   Object.defineProperty(window, 'localStorage', { value: localStorageMock, configurable: true });
+  localStorageMock.clear();
 });
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -91,10 +92,6 @@ describe('validateCatalog', () => {
 
 describe('fetchMarketplaceCatalog', () => {
   beforeEach(resetStore);
-  afterEach(() => {
-    vi.unstubAllGlobals();
-    Object.defineProperty(window, 'localStorage', { value: localStorageMock, configurable: true });
-  });
 
   it('fetches and caches catalog', async () => {
     const catalog = makeCatalog([makePlugin('p1')]);
@@ -146,6 +143,7 @@ describe('loadCachedCatalog', () => {
     );
     await fetchMarketplaceCatalog('https://example.com/catalog.json');
     vi.unstubAllGlobals();
+    vi.stubGlobal('localStorage', localStorageMock);
     Object.defineProperty(window, 'localStorage', { value: localStorageMock, configurable: true });
     const cached = await loadCachedCatalog();
     expect(cached).not.toBeNull();

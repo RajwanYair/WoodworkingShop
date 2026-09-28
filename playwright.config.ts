@@ -29,7 +29,7 @@ export default defineConfig({
   use: {
     // In CI: preview server serves the pre-built dist on port 4173.
     // Locally: dev server on port 5173.
-    baseURL: process.env.CI ? 'http://localhost:4173/WoodworkingShop/' : 'http://localhost:5173/WoodworkingShop/',
+    baseURL: 'http://localhost:4173/WoodworkingShop/',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
@@ -39,10 +39,9 @@ export default defineConfig({
     { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
   ],
   webServer: {
-    // CI: serve the pre-built dist artifact via `vite preview` (no rebuild needed).
-    // Local: use the hot-reload dev server.
-    command: process.env.CI ? 'npm run preview -- --port 4173 --strictPort' : 'npm run dev',
-    url: process.env.CI ? 'http://localhost:4173/WoodworkingShop/' : 'http://localhost:5173/WoodworkingShop/',
+    // Match the deployed base path and exercise the production service worker locally.
+    command: 'npm run preview -- --port 4173 --strictPort',
+    url: 'http://localhost:4173/WoodworkingShop/',
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,
     stdout: 'ignore',

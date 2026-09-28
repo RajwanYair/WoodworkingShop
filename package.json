@@ -1,6 +1,6 @@
 {
   "name": "woodworkingshop",
-  "version": "5.32.0",
+  "version": "5.33.0",
   "description": "Browser-based woodworking cabinet planner — parametric design, MaxRects cut-sheet optimizer, PDF/DXF/G-code export, 6-view SVG preview, bilingual EN+HE, PWA offline",
   "keywords": [
     "woodworking",
@@ -45,6 +45,15 @@
   ],
   "overrides": {
     "eslint": "$eslint",
+    "table": {
+      "ajv": "^8.18.0"
+    },
+    "workbox-build": {
+      "ajv": "^8.18.0"
+    },
+    "markdownlint-cli2": {
+      "smol-toml": "^1.8.0"
+    },
     "eslint-plugin-react": {
       "eslint": "*"
     }
@@ -60,6 +69,10 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "test:coverage:components": "vitest run --config vitest.components.config.ts --coverage",
+    "test:coverage:map": "npm run test:coverage && npm run test:coverage:components && node scripts/test-coverage-map.js",
+    "test:coverage:ratchet": "npm run test:coverage && npm run test:coverage:components && node scripts/coverage-ratchet.js",
+    "test:coverage:ratchet:update": "npm run test:coverage && npm run test:coverage:components && node scripts/coverage-ratchet.js --update",
     "lint": "node scripts/lint.js",
     "lint:css": "node scripts/lint-css.js",
     "format": "prettier --write .",
@@ -148,7 +161,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "eslint --max-warnings 0 --fix",
+      "eslint --max-warnings 0 --no-warn-ignored --fix",
       "prettier --write"
     ],
     "*.{json,yaml,yml}": "prettier --write",

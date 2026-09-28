@@ -21,10 +21,10 @@ const localStorageMock = (() => {
     },
   };
 })();
-vi.stubGlobal('localStorage', localStorageMock);
 
 describe('TouchGestureTutorial', () => {
   beforeEach(() => {
+    vi.stubGlobal('localStorage', localStorageMock);
     localStorageMock.clear();
     // Simulate a touch device
     Object.defineProperty(navigator, 'maxTouchPoints', { value: 1, configurable: true });

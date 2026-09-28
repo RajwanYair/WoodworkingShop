@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import * as fc from 'fast-check';
 import {
   computeDimensions,
   computeHingesPerDoor,
@@ -239,5 +240,48 @@ describe('computeShelfDeflection — maxLoadKg', () => {
     const r = computeShelfDeflection(600, 18, 300, 'plywood-18');
     const expectedMin = Math.floor((0.05 * 600) / 9.81); // ~ 3 kg (conservative floor)
     expect(r.maxLoadKg).toBeGreaterThanOrEqual(expectedMin);
+  });
+});
+
+describe('computeShelfDeflection — generated invariants', () => {
+  it('does not reduce deflection or increase safe load when span increases', () => {
+    fc.assert(
+      fc.property(
+        fc.double({ min: 300, max: 1500, noNaN: true, noDefaultInfinity: true }),
+        fc.double({ min: 1.01, max: 2, noNaN: true, noDefaultInfinity: true }),
+        fc.integer({ min: 12, max: 30 }),
+        fc.integer({ min: 200, max: 600 }),
+        (spanMm, spanMultiplier, thicknessMm, shelfDepthMm) => {
+          const shortSpan = computeShelfDeflection(spanMm, thicknessMm, shelfDepthMm, 'plywood-18');
+          const longSpan = computeShelfDeflection(spanMm * spanMultiplier, thicknessMm, shelfDepthMm, 'plywood-18');
+
+          expect(longSpan.deflectionMm).toBeGreaterThanOrEqual(shortSpan.deflectionMm);
+          expect(longSpan.maxLoadKg).toBeLessThanOrEqual(shortSpan.maxLoadKg);
+        },
+      ),
+      { numRuns: 200 },
+    );
+  });
+});
+
+describe('computeHingePositions — generated invariants', () => {
+  it('keeps generated hinge positions ordered, in bounds, and symmetrically inset', () => {
+    fc.assert(
+      fc.property(fc.integer({ min: 100, max: 5000 }), fc.integer({ min: 2, max: 6 }), (doorHeight, count) => {
+        const positions = computeHingePositions(doorHeight, count);
+        const inset = Math.min(100, doorHeight * 0.05);
+
+        expect(positions).toHaveLength(count);
+        expect(positions[0]).toBe(Math.round(inset));
+        expect(positions.at(-1)).toBe(Math.round(doorHeight - inset));
+        expect(
+          positions.every(
+            (position, index) =>
+              position >= 0 && position <= doorHeight && (index === 0 || position > positions[index - 1]!),
+          ),
+        ).toBe(true);
+      }),
+      { numRuns: 200 },
+    );
   });
 });

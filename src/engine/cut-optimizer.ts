@@ -402,7 +402,7 @@ function packMaxRects(
     let bestEffective = Infinity;
 
     for (let si = 0; si < sheets.length; si++) {
-      const candidate = findBestPlacement(sheets[si].free, rect, kerf, allowRotForRect);
+      const candidate = findBestPlacement(sheets[si].free, rect, kerf, allowRotForRect, sheets[si].placed);
       if (candidate) {
         const effective = candidate.score + si * SHEET_PREFERENCE_PENALTY;
         if (effective < bestEffective) {
@@ -417,7 +417,7 @@ function packMaxRects(
     if (!best && trackGrainConflicts && rect.rotationLocked !== true) {
       let bestForcedEffective = Infinity;
       for (let si = 0; si < sheets.length; si++) {
-        const candidate = findBestPlacement(sheets[si].free, rect, kerf, true);
+        const candidate = findBestPlacement(sheets[si].free, rect, kerf, true, sheets[si].placed);
         if (candidate) {
           const effective = candidate.score + si * SHEET_PREFERENCE_PENALTY;
           if (effective < bestForcedEffective) {
@@ -442,10 +442,10 @@ function packMaxRects(
         free: initFree,
       };
       sheets.push(sheet);
-      let candidate = findBestPlacement(sheet.free, rect, kerf, allowRotForRect);
+      let candidate = findBestPlacement(sheet.free, rect, kerf, allowRotForRect, sheet.placed);
       if (!candidate && trackGrainConflicts && rect.rotationLocked !== true) {
         // Last-resort forced rotation for grain-constrained materials (Sprint 16: locks override).
-        candidate = findBestPlacement(sheet.free, rect, kerf, true);
+        candidate = findBestPlacement(sheet.free, rect, kerf, true, sheet.placed);
         if (candidate) {
           grainConflict = true;
         }
@@ -494,6 +494,7 @@ function findBestPlacement(
   rect: Rect,
   kerf: number,
   allowRotation = true,
+  placed: readonly PlacedRect[] = [],
 ): {
   freeIdx: number;
   x: number;
@@ -521,6 +522,7 @@ function findBestPlacement(
       const needW = o.w;
       const needH = o.h;
       if (needW > f.w || needH > f.h) continue;
+      if (!preservesKerfClearance(f.x, f.y, needW, needH, placed, kerf)) continue;
       const leftoverX = f.w - needW;
       const leftoverY = f.h - needH;
       const leftoverMin = Math.min(leftoverX, leftoverY);
@@ -543,6 +545,21 @@ function findBestPlacement(
     void kerf; // kerf used downstream when splitting
   }
   return best;
+}
+
+function preservesKerfClearance(
+  x: number,
+  y: number,
+  width: number,
+  length: number,
+  placed: readonly PlacedRect[],
+  kerf: number,
+): boolean {
+  return placed.every((existing) => {
+    const horizontalGap = Math.max(x - (existing.x + existing.width), existing.x - (x + width));
+    const verticalGap = Math.max(y - (existing.y + existing.length), existing.y - (y + length));
+    return horizontalGap >= kerf || verticalGap >= kerf;
+  });
 }
 
 /**

@@ -18,7 +18,6 @@
 [![Tailwind](https://img.shields.io/badge/Tailwind-4-38bdf8?logo=tailwindcss&logoColor=white)](src/index.css)
 [![PWA](https://img.shields.io/badge/PWA-offline--ready-5a0fc8?logo=pwa&logoColor=white)](public/manifest.json)
 [![i18n](https://img.shields.io/badge/i18n-6%20languages%20%28EN%20HE%20AR%20DE%20ES%20FR%29-orange?logo=googletranslate&logoColor=white)](src/i18n)
-[![Tests](https://img.shields.io/badge/tests-950%2B-brightgreen?logo=vitest&logoColor=white)](tests/)
 [![Bundle](https://img.shields.io/badge/bundle-<200KB%20gzip-blue?logo=webpack&logoColor=white)](config/bundle-budget.json)
 [![a11y](https://img.shields.io/badge/a11y-WCAG%202.2%20AA-green?logo=accessibility&logoColor=white)](tests/e2e)
 [![Last Commit](https://img.shields.io/github/last-commit/RajwanYair/WoodworkingShop?logo=github)](https://github.com/RajwanYair/WoodworkingShop/commits/main)

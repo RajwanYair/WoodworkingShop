@@ -35,8 +35,7 @@ export function MobileTabBar() {
         return (
           <button
             key={tab.id}
-            role="tab"
-            aria-selected={isActive}
+            aria-current={isActive ? 'page' : undefined}
             aria-label={t(tab.labelKey)}
             onClick={() => {
               setActiveTab(tab.id);
@@ -44,11 +43,17 @@ export function MobileTabBar() {
             }}
             className={[
               'flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-xs transition-colors',
-              isActive ? 'text-wood-700 dark:text-wood-100 font-semibold' : 'text-wood-400 dark:text-wood-500',
+              isActive ? 'text-wood-700 dark:text-wood-100 font-semibold' : 'text-wood-600 dark:text-wood-300',
             ].join(' ')}
           >
             {isActive ? (
-              <img src="/tab-sparkle.svg" alt="" aria-hidden="true" className="h-3 w-8 opacity-90" loading="lazy" />
+              <img
+                src={`${import.meta.env.BASE_URL}tab-sparkle.svg`}
+                alt=""
+                aria-hidden="true"
+                className="h-3 w-8 opacity-90"
+                loading="lazy"
+              />
             ) : null}
             <span aria-hidden="true" className="text-lg leading-none">
               {tab.icon}

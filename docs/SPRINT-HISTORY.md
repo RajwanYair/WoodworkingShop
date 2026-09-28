@@ -455,3 +455,28 @@ the in-flight quality sprints (84-87) and run first.
 | 158    | Cloud sync engine with E2E encryption (AES-256-GCM, PBKDF2)            | ✓ Done |
 | 159    | Multi-machine workflow distribution (capability-match, load balancing) | ✓ Done |
 | 160    | Project sharing links with expiration (token-based, permissions)       | ✓ Done |
+
+## Phase 63 — Trustworthy Test Foundation
+
+### Sprint 300 — Evidence baseline and roadmap correction — 2026-09-27
+
+- [x] Verified clean `npm ci` install and project-local Vitest execution.
+- [x] Fixed `scripts/vitest-reporter.js` to invoke local Vitest and parse JSON assertion results; added regression tests for counts and invalid reports.
+- [x] Recorded 4,415 passing tests across 254 files; 0 failures and 0 skips.
+- [x] Recorded coverage: 91.64% statements, 84.91% branches, 92.83% functions, 92.18% lines.
+- [x] Verified quality gate, production build, and all 5 Chromium smoke tests; updated roadmap and agent context. Sprint 301 is next.
+
+### Sprint 301 — Coverage map and ownership — 2026-09-28
+
+- [x] Added `scripts/test-coverage-map.js` to classify all 351 production modules as direct, indirect integration-only, uncovered, or not measured; final inventory: 257 direct, 71 indirect, 23 uncovered, 0 not measured.
+- [x] Added coverage floors for engine, utils, store, hooks, and components; `npm run test:coverage:ratchet` passes with only engine type declarations and the public API barrel excluded.
+- [x] Added direct boundary/interaction coverage for the named store and hook targets, plus export and calculator-panel behavior; verified 4,465 tests across 278 files and `npm run quality:fast`.
+- [x] Recorded remaining uncovered modules in the generated inventory for prioritization in Sprint 305. Sprint 302 is next.
+
+### Sprint 302 — Test fixtures, accessibility queries, and deterministic reset — 2026-09-28
+
+- [x] Added a shared deterministic Playwright app fixture with isolated browser storage, fixed time, dismissed onboarding/tutorial overlays, and a named default-cabinet assertion.
+- [x] Added typed independent builders for projects, materials, hardware, optimizer results, cut sheets, and downloadable outputs; froze the legacy shared sheet fixture.
+- [x] Added an isolated RTL render helper; migrated E2E tests to semantic locators and removed serial execution and style-based assertions.
+- [x] Added per-test cleanup for mocks/stubs, fake timers, storage, URL, document direction, and rendered trees; fixed the AI assistant storage mock leak revealed by shuffle.
+- [x] Verified 4,470 tests across 280 files in normal and seeded-shuffle runs, 26 Chromium/Firefox E2E tests, and full `npm run ci` including 16 benchmark budgets. Sprint 303 is next.

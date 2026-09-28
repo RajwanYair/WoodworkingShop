@@ -1,0 +1,96 @@
+{
+  "_comment": "Per-area coverage floor measured from core and dedicated component reports. Update only after intentional improvement.",
+  "_updated": "2026-09-27",
+  "directories": {
+    "engine": {
+      "statements": {
+        "covered": 7942,
+        "total": 8286
+      },
+      "branches": {
+        "covered": 4506,
+        "total": 5065
+      },
+      "functions": {
+        "covered": 1407,
+        "total": 1432
+      },
+      "lines": {
+        "covered": 7071,
+        "total": 7356
+      }
+    },
+    "utils": {
+      "statements": {
+        "covered": 1611,
+        "total": 1895
+      },
+      "branches": {
+        "covered": 655,
+        "total": 846
+      },
+      "functions": {
+        "covered": 355,
+        "total": 389
+      },
+      "lines": {
+        "covered": 1435,
+        "total": 1680
+      }
+    },
+    "store": {
+      "statements": {
+        "covered": 490,
+        "total": 699
+      },
+      "branches": {
+        "covered": 190,
+        "total": 341
+      },
+      "functions": {
+        "covered": 184,
+        "total": 255
+      },
+      "lines": {
+        "covered": 439,
+        "total": 598
+      }
+    },
+    "hooks": {
+      "statements": {
+        "covered": 137,
+        "total": 170
+      },
+      "branches": {
+        "covered": 76,
+        "total": 105
+      },
+      "functions": {
+        "covered": 32,
+        "total": 34
+      },
+      "lines": {
+        "covered": 125,
+        "total": 155
+      }
+    },
+    "components": {
+      "statements": {
+        "covered": 1432,
+        "total": 3464
+      },
+      "branches": {
+        "covered": 889,
+        "total": 2467
+      },
+      "functions": {
+        "covered": 387,
+        "total": 1195
+      },
+      "lines": {
+        "covered": 1310,
+        "total": 3146
+      }
+    }
+  }
+}

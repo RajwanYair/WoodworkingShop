@@ -13,7 +13,7 @@
  * and cap part dimensions to 1200 mm so every generated part is guaranteed to
  * fit onto a single sheet, keeping invariant 4 falsifiable.
  */
-import { describe, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import * as fc from 'fast-check';
 import { optimizeCutSheets } from '../../src/engine/cut-optimizer';
 import type { Part } from '../../src/engine/types';
@@ -57,8 +57,62 @@ function noOverlap(
   return ax + aw <= bx || bx + bw <= ax || ay + al <= by || by + bl <= ay;
 }
 
+function hasKerfClearance(
+  placements: Array<{ x: number; y: number; width: number; length: number }>,
+  kerf: number,
+): boolean {
+  for (let i = 0; i < placements.length; i++) {
+    for (let j = i + 1; j < placements.length; j++) {
+      const first = placements[i];
+      const second = placements[j];
+      const horizontalGap = Math.max(second.x - (first.x + first.width), first.x - (second.x + second.width));
+      const verticalGap = Math.max(second.y - (first.y + first.length), first.y - (second.y + second.length));
+
+      if (horizontalGap < kerf && verticalGap < kerf) return false;
+    }
+  }
+  return true;
+}
+
 // ─── properties ──────────────────────────────────────────────────────────────
 describe('cut-optimizer property tests', () => {
+  it('P8 — preserves kerf clearance for diagonal placements near a corner', () => {
+    const parts: Part[] = [
+      {
+        id: 'p0',
+        name: { en: 'Part', he: 'Panel' },
+        qty: 1,
+        material: MATERIAL,
+        thickness: 16,
+        length: 433,
+        width: 50,
+        edgeBanding: { en: 'none', he: 'none' },
+      },
+      {
+        id: 'p1',
+        name: { en: 'Part', he: 'Panel' },
+        qty: 1,
+        material: MATERIAL,
+        thickness: 16,
+        length: 50,
+        width: 50,
+        edgeBanding: { en: 'none', he: 'none' },
+      },
+      {
+        id: 'p2',
+        name: { en: 'Part', he: 'Panel' },
+        qty: 2,
+        material: MATERIAL,
+        thickness: 16,
+        length: 383,
+        width: 51,
+        edgeBanding: { en: 'none', he: 'none' },
+      },
+    ];
+    const result = optimizeCutSheets(parts, 11, {}, 'freeform');
+    expect(result.sheets.every((sheet) => hasKerfClearance(sheet.parts, 11))).toBe(true);
+  });
+
   it('P1 — no two placed parts on the same sheet overlap', () => {
     fc.assert(
       fc.property(
@@ -93,6 +147,39 @@ describe('cut-optimizer property tests', () => {
         const result = optimizeCutSheets(parts);
         return result.sheets.every((sheet) => sheet.yieldPercent >= 0 && sheet.yieldPercent <= 100);
       }),
+      { numRuns: NUM_RUNS },
+    );
+  });
+
+  it('P6 — every placed rectangle stays within its sheet bounds', () => {
+    fc.assert(
+      fc.property(arbParts, (parts) => {
+        const result = optimizeCutSheets(parts);
+        return result.sheets.every((sheet) =>
+          sheet.parts.every(
+            (placed) =>
+              placed.x >= 0 &&
+              placed.y >= 0 &&
+              placed.x + placed.width <= sheet.sheetWidth &&
+              placed.y + placed.length <= sheet.sheetLength,
+          ),
+        );
+      }),
+      { numRuns: NUM_RUNS },
+    );
+  });
+
+  it('P7 — placements preserve the generated kerf clearance in both cut modes', () => {
+    fc.assert(
+      fc.property(
+        arbParts,
+        fc.integer({ min: 0, max: 12 }),
+        fc.constantFrom<'freeform' | 'guillotine'>('freeform', 'guillotine'),
+        (parts, sawKerfMm, cutMode) => {
+          const result = optimizeCutSheets(parts, sawKerfMm, {}, cutMode);
+          return result.sheets.every((sheet) => hasKerfClearance(sheet.parts, sawKerfMm));
+        },
+      ),
       { numRuns: NUM_RUNS },
     );
   });

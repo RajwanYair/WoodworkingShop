@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   createShareLink,
+  defaultTokenGenerator,
   validateAccess,
   recordAccess,
   revokeLink,
@@ -33,6 +34,19 @@ function makeOptions(overrides: Partial<CreateShareOptions> = {}): CreateShareOp
 }
 
 describe('project-sharing', () => {
+  describe('defaultTokenGenerator', () => {
+    it('returns an empty token for a zero length', () => {
+      expect(defaultTokenGenerator(0)).toBe('');
+    });
+
+    it.each([1, 16, DEFAULT_TOKEN_LENGTH])('returns %i URL-safe characters', (length) => {
+      const token = defaultTokenGenerator(length);
+
+      expect(token).toHaveLength(length);
+      expect(token).toMatch(/^[\w-]+$/);
+    });
+  });
+
   describe('createShareLink', () => {
     it('creates a valid share link with correct defaults', () => {
       const link = createShareLink(makeOptions(), testTokenGenerator);

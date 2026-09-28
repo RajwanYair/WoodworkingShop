@@ -5,7 +5,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import { resolve } from 'node:path';
 import { readFileSync } from 'node:fs';
 import os from 'node:os';
-import { sriPlugin } from './scripts/vite-plugin-sri';
+import { sriPlugin } from './scripts/vite-plugin-sri.ts';
 
 const { version } = JSON.parse(readFileSync('./package.json', 'utf-8')) as { version: string };
 
@@ -105,7 +105,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src'),
+      '@': resolve(import.meta.dirname, 'src'),
     },
   },
   build: {

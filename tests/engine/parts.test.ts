@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import * as fc from 'fast-check';
 import { generateParts, computeEdgeBandingTotal, computePartsWeight } from '../../src/engine/parts';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 import { expectBilingualNames } from '../assertions';
@@ -79,6 +80,42 @@ describe('generateParts', () => {
 
   it('all parts have bilingual names', () => {
     expectBilingualNames(parts);
+  });
+
+  it('generates uniquely identified parts with finite positive dimensions for valid cabinet configurations', () => {
+    fc.assert(
+      fc.property(
+        fc.record({
+          width: fc.integer({ min: 700, max: 1800 }),
+          height: fc.integer({ min: 1000, max: 2500 }),
+          depth: fc.integer({ min: 400, max: 900 }),
+          shelfCount: fc.integer({ min: 0, max: 8 }),
+          drawerCount: fc.integer({ min: 0, max: 3 }),
+          doorCount: fc.constantFrom(1, 2),
+        }),
+        (overrides) => {
+          const generated = generateParts({ ...DEFAULT_CONFIG, ...overrides });
+          const identifiers = generated.map((part) => part.id);
+
+          expect(generated.length).toBeGreaterThan(0);
+          expect(new Set(identifiers).size).toBe(identifiers.length);
+          expect(
+            generated.every(
+              (part) =>
+                Number.isFinite(part.length) &&
+                part.length > 0 &&
+                Number.isFinite(part.width) &&
+                part.width > 0 &&
+                Number.isFinite(part.thickness) &&
+                part.thickness > 0 &&
+                Number.isInteger(part.qty) &&
+                part.qty > 0,
+            ),
+          ).toBe(true);
+        },
+      ),
+      { numRuns: 200 },
+    );
   });
 });
 

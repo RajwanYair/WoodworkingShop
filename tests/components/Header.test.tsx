@@ -21,12 +21,9 @@ describe('Header', () => {
     expect(screen.getAllByText(/export pdf/i).length).toBeGreaterThanOrEqual(1);
   });
 
-  it('highlights the active tab', () => {
+  it('exposes the active tab as selected', () => {
     render(<Header />);
-    const configureButtons = screen.getAllByText(/configure/i);
-    // At least one button should have the active class
-    const hasActive = configureButtons.some((btn) => btn.className.includes('bg-wood-600'));
-    expect(hasActive).toBe(true);
+    expect(screen.getByRole('tab', { name: 'Configure' })).toHaveAttribute('aria-selected', 'true');
   });
 
   it('switches tab on click', () => {

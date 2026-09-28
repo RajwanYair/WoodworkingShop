@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import * as fc from 'fast-check';
 import {
   optimizeYield,
   groupByMaterial,
@@ -123,6 +124,51 @@ describe('material-yield', () => {
       const result = optimizeYield(demands, offCuts, config);
 
       expect(result.metrics.costSavingsEstimate).toBe(50); // 1m² * $50
+    });
+
+    it('preserves demand count and bounds saved-area metrics across generated inputs', () => {
+      fc.assert(
+        fc.property(
+          fc.array(
+            fc.record({
+              width: fc.integer({ min: 50, max: 700 }),
+              length: fc.integer({ min: 50, max: 900 }),
+              quantity: fc.integer({ min: 1, max: 4 }),
+            }),
+            { minLength: 1, maxLength: 4 },
+          ),
+          fc.array(
+            fc.record({
+              width: fc.integer({ min: 100, max: 1200 }),
+              length: fc.integer({ min: 100, max: 1600 }),
+            }),
+            { maxLength: 4 },
+          ),
+          (demandSpecs, offCutSpecs) => {
+            const demands = demandSpecs.map((spec, index) =>
+              makeDemand({ id: `demand-${index}`, ...spec, grainLocked: false }),
+            );
+            const offCuts = offCutSpecs.map((spec, index) => makeOffCut({ id: `offcut-${index}`, ...spec }));
+            const expectedDemandCount = demands.reduce((sum, demand) => sum + demand.quantity, 0);
+            const expectedTotalArea = demands.reduce(
+              (sum, demand) => sum + demand.width * demand.length * demand.quantity,
+              0,
+            );
+            const result = optimizeYield(demands, offCuts);
+
+            expect(result.allocations).toHaveLength(expectedDemandCount);
+            expect(result.metrics.totalDemands).toBe(expectedDemandCount);
+            expect(result.metrics.fromOffCuts + result.metrics.fromNewSheets).toBe(expectedDemandCount);
+            expect(result.metrics.totalAreaDemanded).toBe(expectedTotalArea);
+            expect(result.metrics.areaSaved).toBeGreaterThanOrEqual(0);
+            expect(result.metrics.areaSaved).toBeLessThanOrEqual(expectedTotalArea);
+            expect(result.metrics.yieldPercentage).toBe(
+              Math.round((result.metrics.areaSaved / expectedTotalArea) * 100),
+            );
+          },
+        ),
+        { numRuns: 200 },
+      );
     });
   });
 

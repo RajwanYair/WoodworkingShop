@@ -16,7 +16,7 @@ export default defineConfig({
     alias: {
       // Stub the vite-plugin-pwa virtual module so components importing it
       // can be tested without the full Vite build pipeline.
-      'virtual:pwa-register': path.resolve(__dirname, 'tests/__mocks__/virtual-pwa-register.ts'),
+      'virtual:pwa-register': path.resolve(import.meta.dirname, 'tests/__mocks__/virtual-pwa-register.ts'),
     },
   },
   test: {
@@ -33,10 +33,10 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       // Phase 11 / Sprint 6 — lcov for Codecov upload; text for terminal summary.
-      reporter: ['text', 'lcov'],
+      reporter: ['text', 'lcov', 'json-summary'],
       reportsDirectory: path.join(tmpDir, 'coverage'),
       include: ['src/engine/**', 'src/utils/**', 'src/store/**', 'src/hooks/**'],
-      exclude: ['src/engine/types.ts', 'src/engine/index.ts', 'src/utils/download.ts', 'src/hooks/useTouchGestures.ts'],
+      exclude: ['src/engine/types.ts', 'src/engine/index.ts'],
       thresholds: {
         statements: 85,
         branches: 78,

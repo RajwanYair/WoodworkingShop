@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import * as fc from 'fast-check';
 import { estimateCost } from '../../src/engine/cost-estimator';
 import type { OptimizationResult } from '../../src/engine/types';
 import { mockSheet } from '../helpers';
@@ -138,6 +139,68 @@ describe('estimateCost', () => {
       const materialOnlyResult = estimateCost(mockOptimization(), [], 0);
       const withLabour = estimateCost(mockOptimization(), [], 0, {}, 3, {}, 75, 4, 200);
       expect(withLabour.totalCost).toBe(materialOnlyResult.totalCost + 300 + 200); // 4h × 75 = 300
+    });
+
+    it('reconciles generated cost breakdowns against independent arithmetic', () => {
+      fc.assert(
+        fc.property(
+          fc.record({
+            sheetCount: fc.integer({ min: 0, max: 6 }),
+            yieldPercent: fc.integer({ min: 0, max: 100 }),
+            sheetPrice: fc.integer({ min: 0, max: 500 }),
+            edgeBandingMm: fc.integer({ min: 0, max: 30000 }),
+            edgeBandingRate: fc.integer({ min: 0, max: 10 }),
+            labourRate: fc.integer({ min: 0, max: 200 }),
+            labourHours: fc.integer({ min: 0, max: 30 }),
+            finishCost: fc.integer({ min: 0, max: 1000 }),
+            hardware: fc.array(
+              fc.record({ qty: fc.integer({ min: 0, max: 10 }), unitPrice: fc.integer({ min: 0, max: 100 }) }),
+              { maxLength: 4 },
+            ),
+          }),
+          (input) => {
+            const sheets = Array.from({ length: input.sheetCount }, (_, sheetIndex) => ({
+              ...mockSheet,
+              sheetIndex,
+            }));
+            const hardware = input.hardware.map(({ qty }, index) => ({ id: `custom-${index}`, qty }));
+            const hardwarePriceOverrides = Object.fromEntries(
+              input.hardware.map(({ unitPrice }, index) => [`custom-${index}`, unitPrice]),
+            );
+            const totalMaterialCost = input.sheetCount * input.sheetPrice;
+            const edgeBandingCost = Math.round((input.edgeBandingMm / 1000) * input.edgeBandingRate);
+            const hardwareCost =
+              Math.round(input.hardware.reduce((sum, item) => sum + item.qty * item.unitPrice, 0) * 10) / 10;
+            const wasteCost = Math.round(
+              totalMaterialCost * (sheets.length > 0 ? (100 - input.yieldPercent) / 100 : 0),
+            );
+            const labourCost = Math.round(input.labourHours * input.labourRate);
+            const roundedFinishCost = Math.round(input.finishCost);
+            const result = estimateCost(
+              mockOptimization({ sheets, totalSheets: sheets.length, overallYield: input.yieldPercent }),
+              hardware,
+              input.edgeBandingMm,
+              { 'melamine-18': input.sheetPrice },
+              input.edgeBandingRate,
+              hardwarePriceOverrides,
+              input.labourRate,
+              input.labourHours,
+              input.finishCost,
+            );
+
+            expect(result.totalMaterialCost).toBe(totalMaterialCost);
+            expect(result.edgeBandingCost).toBe(edgeBandingCost);
+            expect(result.hardwareCost).toBe(hardwareCost);
+            expect(result.wasteCost).toBe(wasteCost);
+            expect(result.labourCost).toBe(labourCost);
+            expect(result.finishCost).toBe(roundedFinishCost);
+            expect(result.totalCost).toBe(
+              totalMaterialCost + edgeBandingCost + hardwareCost + labourCost + roundedFinishCost,
+            );
+          },
+        ),
+        { numRuns: 200 },
+      );
     });
   });
 });

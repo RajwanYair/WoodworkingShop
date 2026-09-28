@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import * as fc from 'fast-check';
 import { calculateBoxJoint } from '../../src/engine/box-joint';
 
 describe('calculateBoxJoint', () => {
@@ -46,6 +47,38 @@ describe('calculateBoxJoint', () => {
     // 90 / 9 = 10 fingers but 9 is odd so actualFingerWidth = 90/9 = 10
     const r = calculateBoxJoint({ boardWidthMm: 90, fingerWidthMm: 10, depthMm: 18 });
     expect(r.edgeWasteMm).toBeCloseTo(0, 2);
+  });
+
+  it('preserves generated finger-count and board-width geometry invariants', () => {
+    fc.assert(
+      fc.property(
+        fc.integer({ min: 100, max: 5000 }).chain((boardWidthMm) =>
+          fc.record({
+            boardWidthMm: fc.constant(boardWidthMm),
+            fingerWidthMm: fc.integer({ min: 1, max: boardWidthMm - 1 }),
+            depthMm: fc.integer({ min: 1, max: 100 }),
+          }),
+        ),
+        (input) => {
+          const result = calculateBoxJoint(input);
+          const coveredBoardWidthMm = result.fingerCount * result.actualFingerWidthMm;
+
+          expect(result.fingerCount).toBeGreaterThanOrEqual(3);
+          expect(result.fingerCount % 2).toBe(1);
+          expect(result.socketCount).toBe(Math.floor(result.fingerCount / 2));
+          expect(Math.abs(coveredBoardWidthMm - input.boardWidthMm)).toBeLessThanOrEqual(
+            result.fingerCount * 0.005 + 0.000001,
+          );
+          expect(Math.abs(2 * result.edgeWasteMm - (coveredBoardWidthMm - input.boardWidthMm))).toBeLessThanOrEqual(
+            0.010001,
+          );
+          expect(Math.abs(result.glueSurfaceMm2 - coveredBoardWidthMm * input.depthMm * 2)).toBeLessThanOrEqual(
+            0.050001,
+          );
+        },
+      ),
+      { numRuns: 200 },
+    );
   });
 
   describe('error guards', () => {

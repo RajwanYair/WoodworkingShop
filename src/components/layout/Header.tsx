@@ -145,8 +145,20 @@ export function Header() {
       <div className="flex items-center justify-between">
         <div className="min-w-0">
           <div className="mb-1 flex items-center gap-2">
-            <img src="/shop-badge.svg" alt="" aria-hidden="true" className="h-6 w-6 rounded-full" loading="lazy" />
-            <img src="/woodgrain-spark.svg" alt="" aria-hidden="true" className="h-6 w-20 opacity-80" loading="lazy" />
+            <img
+              src={`${import.meta.env.BASE_URL}shop-badge.svg`}
+              alt=""
+              aria-hidden="true"
+              className="h-6 w-6 rounded-full"
+              loading="lazy"
+            />
+            <img
+              src={`${import.meta.env.BASE_URL}woodgrain-spark.svg`}
+              alt=""
+              aria-hidden="true"
+              className="h-6 w-20 opacity-80"
+              loading="lazy"
+            />
           </div>
           <div className="flex items-baseline gap-2">
             <h1 className="truncate text-lg font-bold sm:text-xl">🪵 {t('app.title')}</h1>
@@ -332,7 +344,13 @@ export function Header() {
           title={t('marketplace.title')}
           aria-label={t('marketplace.title')}
         >
-          <img src="/shop-badge.svg" alt="" aria-hidden="true" className="h-4 w-4" loading="lazy" />
+          <img
+            src={`${import.meta.env.BASE_URL}shop-badge.svg`}
+            alt=""
+            aria-hidden="true"
+            className="h-4 w-4"
+            loading="lazy"
+          />
           🛒
         </button>
         <HelpButton />

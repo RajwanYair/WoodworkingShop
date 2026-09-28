@@ -18,7 +18,13 @@ export function Sidebar() {
   const content = (
     <>
       <div className="mb-2 flex items-center justify-between">
-        <img src="/woodgrain-spark.svg" alt="" aria-hidden="true" className="h-4 w-24 opacity-80" loading="lazy" />
+        <img
+          src={`${import.meta.env.BASE_URL}woodgrain-spark.svg`}
+          alt=""
+          aria-hidden="true"
+          className="h-4 w-24 opacity-80"
+          loading="lazy"
+        />
         <span className="text-xs" aria-hidden="true">
           ✨🪵✨
         </span>

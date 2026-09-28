@@ -3,7 +3,7 @@
  * Covers pure functions: getAiConfig, setAiConfig, clearAiConfig, buildConfigContext.
  * callAiAssistant tests use fetch mocks to avoid real network calls.
  */
-import { describe, it, expect, vi, beforeEach, afterEach, beforeAll } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
   getAiConfig,
   setAiConfig,
@@ -33,9 +33,18 @@ const localStorageMock: Storage = {
   key: (i) => [...localStorageStore.keys()][i] ?? null,
 };
 
-beforeAll(() => {
+const originalWindowLocalStorage = Object.getOwnPropertyDescriptor(window, 'localStorage');
+
+beforeEach(() => {
+  localStorageMock.clear();
   vi.stubGlobal('localStorage', localStorageMock);
   Object.defineProperty(window, 'localStorage', { value: localStorageMock, writable: true, configurable: true });
+});
+
+afterEach(() => {
+  localStorageMock.clear();
+  vi.unstubAllGlobals();
+  if (originalWindowLocalStorage) Object.defineProperty(window, 'localStorage', originalWindowLocalStorage);
 });
 
 // ── localStorage helpers ──────────────────────────────────────────────────────

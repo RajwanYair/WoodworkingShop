@@ -30,9 +30,6 @@ const localStorageMock = {
     for (const k of Object.keys(_lsData)) delete _lsData[k];
   },
 };
-vi.stubGlobal('localStorage', localStorageMock);
-Object.defineProperty(window, 'localStorage', { value: localStorageMock, writable: true, configurable: true });
-
 // ── helpers ───────────────────────────────────────────────────────────────────
 
 /** Build a UiSlice by wiring a simple patch-based set fn. */
@@ -73,7 +70,10 @@ describe('detectOsDarkModeUi', () => {
 // ── localStorage helpers ──────────────────────────────────────────────────────
 
 describe('loadUiPrefs / saveUiPrefs', () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => {
+    vi.stubGlobal('localStorage', localStorageMock);
+    localStorage.clear();
+  });
 
   it('returns empty object when nothing is stored', () => {
     expect(loadUiPrefs()).toEqual({});
@@ -160,7 +160,10 @@ describe('createUiSlice — setProjectName / setProjectNotes', () => {
 });
 
 describe('createUiSlice — toggleDarkMode', () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => {
+    vi.stubGlobal('localStorage', localStorageMock);
+    localStorage.clear();
+  });
 
   it('toggles false → true', () => {
     const { get } = makeSlice({ darkMode: false });
@@ -182,7 +185,10 @@ describe('createUiSlice — toggleDarkMode', () => {
 });
 
 describe('createUiSlice — toggleColorBlindMode', () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => {
+    vi.stubGlobal('localStorage', localStorageMock);
+    localStorage.clear();
+  });
 
   it('toggles false → true', () => {
     const { get } = makeSlice();
@@ -198,7 +204,10 @@ describe('createUiSlice — toggleColorBlindMode', () => {
 });
 
 describe('createUiSlice — toggleHighContrast', () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => {
+    vi.stubGlobal('localStorage', localStorageMock);
+    localStorage.clear();
+  });
 
   it('toggles false → true', () => {
     const { get } = makeSlice();
@@ -214,7 +223,10 @@ describe('createUiSlice — toggleHighContrast', () => {
 });
 
 describe('createUiSlice — toggleUnits', () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => {
+    vi.stubGlobal('localStorage', localStorageMock);
+    localStorage.clear();
+  });
 
   it('toggles metric → imperial', () => {
     const { get } = makeSlice({ units: 'metric' });

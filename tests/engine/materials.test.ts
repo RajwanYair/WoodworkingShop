@@ -1,13 +1,55 @@
 import { describe, it, expect } from 'vitest';
+import * as fc from 'fast-check';
+import BIRCH_PANEL_WEIGHT_ORACLE from '../fixtures/oracles/birch-panel-weight.json';
 import {
   MATERIALS,
   SAW_KERF,
   getMaterial,
+  getMaterialResult,
+  computePartWeightKg,
   panelMaterials,
   backMaterials,
   DEFAULT_CONFIG,
   CONSTRAINTS,
 } from '../../src/engine/materials';
+
+describe('computePartWeightKg', () => {
+  it.each(BIRCH_PANEL_WEIGHT_ORACLE.densityCases)(
+    'matches the sourced 18 mm birch panel weight at $densityKgM3 kg/m³',
+    ({ densityKgM3, expectedWeightKg }) => {
+      const { lengthMm, widthMm, thicknessMm, quantity } = BIRCH_PANEL_WEIGHT_ORACLE.panel;
+
+      expect(computePartWeightKg(lengthMm, widthMm, thicknessMm, quantity, densityKgM3)).toBe(expectedWeightKg);
+    },
+  );
+
+  it('matches an independently converted SI volume-density reference', () => {
+    const expectedKg = 0.6 * 0.3 * 0.018 * 2 * 640;
+
+    expect(computePartWeightKg(600, 300, 18, 2, 640)).toBeCloseTo(expectedKg, 10);
+  });
+
+  it('matches converted cubic-meter volume across generated positive dimensions', () => {
+    fc.assert(
+      fc.property(
+        fc.integer({ min: 1, max: 3000 }),
+        fc.integer({ min: 1, max: 2000 }),
+        fc.integer({ min: 1, max: 100 }),
+        fc.integer({ min: 1, max: 20 }),
+        fc.integer({ min: 100, max: 2500 }),
+        (lengthMm, widthMm, thicknessMm, quantity, densityKgM3) => {
+          const expectedKg = (lengthMm / 1000) * (widthMm / 1000) * (thicknessMm / 1000) * quantity * densityKgM3;
+
+          expect(computePartWeightKg(lengthMm, widthMm, thicknessMm, quantity, densityKgM3)).toBeCloseTo(
+            expectedKg,
+            10,
+          );
+        },
+      ),
+      { numRuns: 200 },
+    );
+  });
+});
 
 describe('materials', () => {
   it('has 12 materials total', () => {
@@ -34,6 +76,29 @@ describe('materials', () => {
 
     it('throws for unknown key', () => {
       expect(() => getMaterial('nonexistent')).toThrow('Unknown material');
+    });
+  });
+
+  describe('getMaterialResult', () => {
+    it('returns a successful result for a built-in material', () => {
+      const material = MATERIALS.find((candidate) => candidate.key === 'plywood-17');
+      const result = getMaterialResult('plywood-17');
+
+      expect(material).toBeDefined();
+      expect(result).toEqual({ ok: true, value: material });
+    });
+
+    it('looks up custom materials appended to the built-in catalogue', () => {
+      const customMaterial = { ...MATERIALS[0], key: 'custom-panel' };
+
+      expect(getMaterialResult(customMaterial.key, [customMaterial])).toEqual({ ok: true, value: customMaterial });
+    });
+
+    it('returns an explicit error result for an unknown key', () => {
+      expect(getMaterialResult('missing-material')).toEqual({
+        ok: false,
+        error: 'Unknown material: missing-material',
+      });
     });
   });
 

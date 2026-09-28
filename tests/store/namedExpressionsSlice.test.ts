@@ -1,38 +1,9 @@
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   createNamedExpressionsSlice,
   loadNamedExpressionsFromStorage,
 } from '../../src/store/slices/namedExpressionsSlice';
 import type { NamedExpressionsSlice, NamedExpression } from '../../src/store/slices/namedExpressionsSlice';
-
-// ── localStorage mock ──────────────────────────────────────────────────────
-
-beforeAll(() => {
-  // Mock localStorage for jsdom test environment
-  const store: Record<string, string> = {};
-  const mockLocalStorage = {
-    getItem: (key: string) => store[key] ?? null,
-    setItem: (key: string, value: string) => {
-      store[key] = value;
-    },
-    removeItem: (key: string) => {
-      delete store[key];
-    },
-    clear: () => {
-      Object.keys(store).forEach((key) => {
-        delete store[key];
-      });
-    },
-    key: (index: number) => Object.keys(store)[index] ?? null,
-    get length() {
-      return Object.keys(store).length;
-    },
-  };
-  Object.defineProperty(globalThis, 'localStorage', {
-    value: mockLocalStorage,
-    writable: true,
-  });
-});
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -55,6 +26,7 @@ const ENTRY_B: NamedExpression = { name: 'panel_area', expression: 'width * heig
 
 describe('createNamedExpressionsSlice', () => {
   beforeEach(() => {
+    vi.stubGlobal('localStorage', window.localStorage);
     // Clear localStorage so tests start clean
     globalThis.localStorage.clear();
   });

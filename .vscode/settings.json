@@ -166,8 +166,6 @@
   "chat.tools.todos.showWidget": true,
   // KaTeX math rendering in chat responses — useful for the calculator formulae
   "chat.math.enabled": true,
-  // Send selected Simple Browser DOM elements straight into chat as context
-  "chat.sendElementsToChat.attachImages": true,
   // Summarise long agent histories instead of truncating — preserves task context
   "github.copilot.chat.summarizeAgentConversationHistory.enabled": true,
   // Edit-request controls in the chat editing flow
@@ -334,5 +332,6 @@
   "errorLens.excludeBySource": ["css(compatibilityIE)"],
 
   // ─── Output / Debug ─────────────────────────────────────────────────────────
-  "output.smartScroll.enabled": true
+  "output.smartScroll.enabled": true,
+  "workbench.browser.sendElementsToChat.attachImages": true
 }

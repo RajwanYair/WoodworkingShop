@@ -57,6 +57,8 @@ function OnboardingOverlay() {
         {/* Progress dots */}
         <div
           className="mb-5 flex justify-center gap-2"
+          role="status"
+          aria-live="polite"
           aria-label={t('onboarding.stepOf', { step: step + 1, total: TOTAL_STEPS })}
         >
           {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
@@ -90,7 +92,7 @@ function OnboardingOverlay() {
             <button
               type="button"
               onClick={dismiss}
-              className="text-wood-400 hover:text-wood-600 dark:text-wood-500 dark:hover:text-wood-300 rounded px-3 py-1.5 text-sm transition-colors"
+              className="text-wood-700 hover:text-wood-800 dark:text-wood-300 dark:hover:text-wood-100 rounded px-3 py-1.5 text-sm transition-colors"
             >
               {t('onboarding.skip')}
             </button>

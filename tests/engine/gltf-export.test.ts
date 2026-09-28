@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { generateGltfContent as generateBinaryGltfContent } from '../../src/engine/export/gltf-export';
 import {
   buildGltfScene,
   serializeGltf,
@@ -29,6 +30,41 @@ function makePart(overrides: Partial<Part> = {}): Part {
     ...overrides,
   };
 }
+
+describe('generateGltfContent', () => {
+  it('creates one mesh per part and stacked nodes for each quantity', () => {
+    const { content, partCount } = generateBinaryGltfContent(baseConfig, [makePart({ qty: 2 })]);
+    const gltf = JSON.parse(content) as {
+      buffers: { byteLength: number; uri: string }[];
+      meshes: { name: string }[];
+      nodes: { mesh: number; name: string; translation: number[] }[];
+      scenes: { nodes: number[] }[];
+    };
+
+    expect(partCount).toBe(2);
+    expect(gltf.meshes).toHaveLength(1);
+    expect(gltf.meshes[0]?.name).toBe('Side Panel');
+    expect(gltf.nodes.map(({ name, mesh }) => ({ name, mesh }))).toEqual([
+      { name: 'Side Panel_1', mesh: 0 },
+      { name: 'Side Panel_2', mesh: 0 },
+    ]);
+    expect(gltf.nodes[0]?.translation).toEqual([0, 0, 0]);
+    expect(gltf.nodes[1]?.translation[1]).toBeCloseTo(0.028);
+    expect(gltf.scenes[0]?.nodes).toEqual([0, 1]);
+    expect(gltf.buffers[0]?.byteLength).toBeGreaterThan(0);
+    expect(gltf.buffers[0]?.uri).toMatch(/^data:application\/octet-stream;base64,/);
+  });
+
+  it('serializes an empty parts list as a valid zero-part glTF document', () => {
+    const { content, partCount } = generateBinaryGltfContent(baseConfig, []);
+    const gltf = JSON.parse(content) as { asset: { version: string }; nodes: unknown[]; meshes: unknown[] };
+
+    expect(partCount).toBe(0);
+    expect(gltf.asset.version).toBe('2.0');
+    expect(gltf.nodes).toEqual([]);
+    expect(gltf.meshes).toEqual([]);
+  });
+});
 
 const sampleParts: Part[] = [
   makePart({ id: 'P1', name: { en: 'Side Panel', he: 'לוח צד' } }),

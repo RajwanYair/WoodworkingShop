@@ -9,6 +9,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Test Infrastructure
+
+- Added source-to-test ownership inventory and per-area coverage ratchet; directly covered the Sprint 301 store, hook, export, and calculator-panel gaps, and removed avoidable coverage exclusions.
+- Verified 4,465 tests across 278 files; coverage inventory maps all 351 production modules, with 0 unmeasured and 23 explicitly uncovered modules remaining.
+- Added deterministic Playwright and typed test fixtures, RTL render support, accessible E2E queries, and per-test environment cleanup; fixed a localStorage mock leak exposed by shuffled test execution.
+- Verified 4,470 tests across 280 files in normal and seeded-shuffle runs, all 26 Chromium/Firefox E2E tests, and the complete `npm run ci` gate including build, bundle, and benchmark budgets.
+
+## [5.33.0] — 2026-09-27
+
+### Test Infrastructure and Browser Reliability
+
+- Fixed Vite configuration compatibility warnings by using `import.meta.dirname` and an explicit local module extension.
+- Made the WebGL probe unit tests deterministic in jsdom without unimplemented canvas warnings.
+- Fixed public SVG asset URLs to honor the `/WoodworkingShop/` deployment base path.
+- Updated Playwright tests to use the production preview, configured base path, current Workspace-to-Configure workflow, and current visual baselines for Chromium and Firefox.
+- Expanded `ROADMAP.md` with an evidence-based plan-vs-implementation review, sprint contracts, and a detailed unit and browser test matrix.
+- Fixed `scripts/vitest-reporter.js` to invoke the installed Vitest CLI and summarize its JSON assertion results; added regression tests for pass/fail/skip counts and invalid reports.
+- Verified 4,415 unit tests across 254 files, with 0 failures and 0 skips; measured 91.64% statements, 84.91% branches, 92.83% functions, and 92.18% lines.
+- Playwright discovered 26 Chromium/Firefox tests; all 5 Chromium smoke tests passed after a clean `npm ci` install. `npm run quality:fast` and the production build passed.
+
 ## [5.32.0] — 2026-06-28
 
 ### Dependency Upgrades — 2026-06-28

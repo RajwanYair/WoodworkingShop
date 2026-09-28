@@ -6,26 +6,11 @@
  * accessibility regressions that must be fixed before merging.
  */
 
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures/app';
 import AxeBuilder from '@axe-core/playwright';
 
-test.describe.configure({ mode: 'serial' });
-
-test.beforeEach(async ({ page }) => {
-  // Dismiss overlays so axe scans the full app UI.
-  await page.addInitScript(() => {
-    try {
-      localStorage.setItem('onboarding-seen', '1');
-      localStorage.setItem('woodworkingshop:preview-toured', '1');
-    } catch {
-      /* storage may be unavailable */
-    }
-  });
-});
-
-test('homepage passes axe WCAG 2.1 AA checks', async ({ page }) => {
+test('homepage passes axe WCAG 2.1 AA checks', async ({ appPage: page }) => {
   test.setTimeout(60_000);
-  await page.goto('/');
   // Wait for the app to fully render (header must be present).
   await expect(page.getByRole('banner')).toBeVisible();
 
@@ -48,17 +33,35 @@ test('homepage passes axe WCAG 2.1 AA checks', async ({ page }) => {
   expect(violations, `Found ${violations.length} accessibility violation(s)`).toHaveLength(0);
 });
 
-test('configurator tab passes axe WCAG 2.1 AA checks', async ({ page }) => {
+test('configurator tab passes axe WCAG 2.1 AA checks', async ({ appPage: page }) => {
   test.setTimeout(60_000);
-  await page.goto('/');
   await expect(page.getByRole('tablist')).toBeVisible();
 
-  // Navigate to the configurator tab (first tab)
-  await page.getByRole('tab').first().click();
+  await page.getByRole('tab', { name: 'Configure' }).click();
 
   const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
 
   const violations = results.violations;
 
   expect(violations, `Found ${violations.length} accessibility violation(s) in configurator`).toHaveLength(0);
+});
+
+test('first-visit mobile navigation and onboarding pass axe WCAG 2.1 AA checks', async ({ page }) => {
+  test.setTimeout(60_000);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(() => {
+    localStorage.clear();
+    sessionStorage.clear();
+    localStorage.setItem('woodworkingshop:preview-toured', '1');
+    localStorage.removeItem('onboarding-seen');
+  });
+  await page.goto('./');
+  await expect(page.getByRole('dialog')).toBeVisible();
+
+  const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+
+  expect(
+    results.violations,
+    `Found ${results.violations.length} first-visit mobile accessibility violation(s)`,
+  ).toHaveLength(0);
 });

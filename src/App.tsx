@@ -293,6 +293,8 @@ function App() {
                   src={workspaceBanner}
                   alt={t('tabs.workspace')}
                   className="border-wood-200 dark:border-wood-700 w-full rounded-xl border shadow-xl"
+                  width={1200}
+                  height={260}
                   loading="eager"
                 />
                 <div className="space-y-2">
