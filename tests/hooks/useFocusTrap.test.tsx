@@ -45,6 +45,39 @@ describe('useFocusTrap', () => {
     expect(screen.getByRole('button', { name: 'First' })).toHaveFocus();
   });
 
+  it('restores focus to the previously active element when deactivated', () => {
+    const { rerender } = render(
+      <>
+        <button>Open dialog</button>
+        <Trap active={false}>
+          <button>Dialog action</button>
+        </Trap>
+      </>,
+    );
+    const opener = screen.getByRole('button', { name: 'Open dialog' });
+    opener.focus();
+
+    rerender(
+      <>
+        <button>Open dialog</button>
+        <Trap active>
+          <button>Dialog action</button>
+        </Trap>
+      </>,
+    );
+    expect(screen.getByRole('button', { name: 'Dialog action' })).toHaveFocus();
+
+    rerender(
+      <>
+        <button>Open dialog</button>
+        <Trap active={false}>
+          <button>Dialog action</button>
+        </Trap>
+      </>,
+    );
+    expect(opener).toHaveFocus();
+  });
+
   it('calls onEscape when Escape key is pressed', () => {
     const onEscape = vi.fn();
     render(

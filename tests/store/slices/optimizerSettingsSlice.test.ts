@@ -236,3 +236,51 @@ describe('createOptimizerSettingsSlice — setHardwareQtyOverride', () => {
     expect(get().hardwareQtyOverrides['hinge']).toBeUndefined();
   });
 });
+
+describe('createOptimizerSettingsSlice — loadSettings', () => {
+  it('clamps restored numeric values and reschedules with the normalized settings once', () => {
+    const { get, onRescheduleOpt, onRescheduleCost } = makeSlice();
+    const sheetSizeOverrides = { plywood18: { width: 1220, length: 2440 } };
+    const materialPriceOverrides = { plywood18: 100 };
+    const hardwarePriceOverrides = { hinge: 3 };
+    const hardwareQtyOverrides = { hinge: 2 };
+
+    get().loadSettings({
+      sawKerf: 10,
+      materialPriceOverrides,
+      edgeBandingRate: -2,
+      hardwarePriceOverrides,
+      hardwareQtyOverrides,
+      sheetSizeOverrides,
+      labourRate: -5,
+      labourHours: -1,
+      finishCost: -10,
+      autoCoNest: true,
+    });
+
+    expect(get()).toMatchObject({
+      sawKerf: 8,
+      materialPriceOverrides,
+      edgeBandingRate: 0,
+      hardwarePriceOverrides,
+      hardwareQtyOverrides,
+      sheetSizeOverrides,
+      labourRate: 0,
+      labourHours: 0,
+      finishCost: 0,
+      autoCoNest: true,
+    });
+    expect(onRescheduleOpt).toHaveBeenCalledOnce();
+    expect(onRescheduleOpt).toHaveBeenCalledWith(8, sheetSizeOverrides);
+    expect(onRescheduleCost).toHaveBeenCalledOnce();
+    expect(onRescheduleCost).toHaveBeenCalledWith({
+      materialPriceOverrides,
+      edgeBandingRate: 0,
+      hardwarePriceOverrides,
+      hardwareQtyOverrides,
+      labourRate: 0,
+      labourHours: 0,
+      finishCost: 0,
+    });
+  });
+});

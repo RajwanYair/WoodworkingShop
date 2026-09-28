@@ -64,6 +64,7 @@
     "doorsOnly": "דלתות בלבד",
     "noBanding": "ללא",
     "reset": "איפוס לברירת מחדל",
+    "resetConfirm": "לאפס את הארון הזה לתצורת ברירת המחדל? לא ניתן לבטל פעולה זו.",
     "furnitureType": "🪑 סוג רהיט",
     "ft_cabinet": "ארון",
     "ft_bookshelf": "כוננייה",
@@ -225,7 +226,9 @@
     "statusPending": "מחשב גיליונות חיתוך…",
     "statusComplete": "אופטימיזציה הסתיימה — {{count}} גיליונות נדרשים",
     "filterByMaterial": "סנן לפי חומר",
-    "allMaterials": "כל החומרים"
+    "allMaterials": "כל החומרים",
+    "partsTableSearch": "חיפוש חלקים",
+    "hardwareTableSearch": "חיפוש פרזול"
   },
   "preview": {
     "title": "תצוגה מקדימה",
@@ -1650,7 +1653,19 @@
     "packsNeeded": "אריזות נדרשות",
     "noItems": "לא נמצאו פריטי חומרה.",
     "addItem": "הוסף פריט",
-    "editItem": "ערוך פריט"
+    "editItem": "ערוך פריט",
+    "importTitle": "ייבוא קטלוג חומרה",
+    "importFile": "קובץ קטלוג JSON",
+    "importPreview": "{{count}} פריטי חומרה אומתו.",
+    "importMode": "אופן הייבוא",
+    "importMerge": "מיזוג: עדכון מזהים תואמים ושמירת פריטים אחרים",
+    "importReplace": "החלפת כל פריטי החומרה המותאמים אישית",
+    "importExisting": "{{count}} פריטי חומרה מותאמים אישית קיימים.",
+    "importButton": "ייבוא קטלוג",
+    "importSuccess": "יובאו {{count}} פריטי חומרה.",
+    "importError": "ייבוא קטלוג החומרה נכשל: {{message}}",
+    "importStored": "חומרה מותאמת אישית ({{count}})",
+    "importEmpty": "לא יובאה חומרה מותאמת אישית."
   },
   "projectComparison": {
     "title": "השוואת פרויקטים",
@@ -2484,19 +2499,28 @@
     "description": "הגדר נוסחאות לשימוש חוזר עם משתני המידות של הארון (למשל shelf_gap = height / (shelfCount + 1)).",
     "listLabel": "רשימת ביטויים מוגדרי שם",
     "addTitle": "הוסף ביטוי",
+    "editTitle": "ערוך ביטוי",
     "nameLabel": "שם",
     "namePlaceholder": "למשל shelf_gap",
     "exprLabel": "נוסחה",
     "exprPlaceholder": "למשל height / (shelfCount + 1)",
     "add": "הוסף",
+    "editButton": "עריכה",
+    "edit": "ערוך את {{name}}",
+    "save": "שמירה",
+    "cancel": "ביטול",
+    "applyButton": "החל",
+    "apply": "החל את {{name}}",
+    "applyTarget": "מידה לעדכון באמצעות {{name}}",
     "empty": "לא הוגדרו ביטויים עדיין.",
     "remove": "הסר {{name}}",
     "resolvedValue": "{{name}} = {{value}}",
-    "hint": "משתנים זמינים: width, height, depth, shelfCount, doorCount, drawerCount, kickHeight. תומך ב: +, -, *, /, (), Math.*",
+    "hint": "משתנים זמינים: width, height, depth, shelfCount, doorCount, drawerCount, kickHeight. תומך ב: +, -, *, /, (), Math.floor, ceil, round, min, max, abs, trunc.",
     "errorNameRequired": "שם הוא שדה חובה",
     "errorNameInvalid": "השם חייב להתחיל באות או _ ולהכיל רק אותיות, ספרות ו-_",
     "errorNameTooLong": "השם חייב להכיל לכל היותר 32 תווים",
     "errorExprRequired": "נוסחה היא שדה חובה",
-    "errorExprTooLong": "הנוסחה חייבת להכיל לכל היותר 256 תווים"
+    "errorExprTooLong": "הנוסחה חייבת להכיל לכל היותר 256 תווים",
+    "errorDimensionBounds": "ערך {{dimension}} {{value}} חייב להיות בין {{min}} ל-{{max}} מ״מ."
   }
 }

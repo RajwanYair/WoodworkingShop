@@ -208,7 +208,6 @@ function DimensionRow({ spec, value, step, unitLabel, metric, label, displayValu
             onBlur={commitText}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                commitText();
                 (e.target as HTMLInputElement).blur();
               }
             }}

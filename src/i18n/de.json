@@ -63,6 +63,7 @@
     "doorsOnly": "Nur Türen",
     "noBanding": "Keine",
     "reset": "Auf Standardwerte zurücksetzen",
+    "resetConfirm": "Diesen Schrank auf die Standardkonfiguration zurücksetzen? Dieser Vorgang kann nicht rückgängig gemacht werden.",
     "furnitureType": "Möbeltyp",
     "ft_cabinet": "Schrank",
     "ft_bookshelf": "Bücherregal",
@@ -220,7 +221,9 @@
     "statusPending": "Zuschnittpläne werden berechnet…",
     "statusComplete": "Optimierung abgeschlossen — {{count}} Platte(n) erforderlich",
     "filterByMaterial": "Nach Material filtern",
-    "allMaterials": "Alle Materialien"
+    "allMaterials": "Alle Materialien",
+    "partsTableSearch": "Teile suchen",
+    "hardwareTableSearch": "Beschläge suchen"
   },
   "preview": {
     "title": "Schrankvorschau",
@@ -1388,7 +1391,19 @@
     "packsNeeded": "Packs Needed",
     "noItems": "No hardware items found.",
     "addItem": "Add Item",
-    "editItem": "Edit Item"
+    "editItem": "Edit Item",
+    "importTitle": "Hardwarekatalog importieren",
+    "importFile": "Katalog-JSON-Datei",
+    "importPreview": "{{count}} Hardwareartikel validiert.",
+    "importMode": "Importverhalten",
+    "importMerge": "Zusammenführen: passende IDs aktualisieren, übrige behalten",
+    "importReplace": "Alle benutzerdefinierten Hardwareartikel ersetzen",
+    "importExisting": "{{count}} vorhandene benutzerdefinierte Hardwareartikel.",
+    "importButton": "Katalog importieren",
+    "importSuccess": "{{count}} Hardwareartikel importiert.",
+    "importError": "Hardwarekatalog-Import fehlgeschlagen: {{message}}",
+    "importStored": "Benutzerdefinierte Hardware ({{count}})",
+    "importEmpty": "Keine benutzerdefinierte Hardware importiert."
   },
   "projectComparison": {
     "title": "Project Comparison",
@@ -2222,19 +2237,28 @@
     "description": "Define reusable formulas using cabinet dimensions as variables (e.g. shelf_gap = height / (shelfCount + 1)).",
     "listLabel": "Named expression list",
     "addTitle": "Add expression",
+    "editTitle": "Edit expression",
     "nameLabel": "Name",
     "namePlaceholder": "e.g. shelf_gap",
     "exprLabel": "Formula",
     "exprPlaceholder": "e.g. height / (shelfCount + 1)",
     "add": "Add",
+    "editButton": "Edit",
+    "edit": "Edit {{name}}",
+    "save": "Save",
+    "cancel": "Cancel",
+    "applyButton": "Apply",
+    "apply": "Apply {{name}}",
+    "applyTarget": "Dimension to update with {{name}}",
     "empty": "No expressions defined yet.",
     "remove": "Remove {{name}}",
     "resolvedValue": "{{name}} = {{value}}",
-    "hint": "Available variables: width, height, depth, shelfCount, doorCount, drawerCount, kickHeight. Supports +, -, *, /, (), Math.*",
+    "hint": "Available variables: width, height, depth, shelfCount, doorCount, drawerCount, kickHeight. Supports +, -, *, /, (), Math.floor, ceil, round, min, max, abs, trunc.",
     "errorNameRequired": "Name is required",
     "errorNameInvalid": "Name must start with a letter or _ and contain only letters, digits and _",
     "errorNameTooLong": "Name must be 32 characters or fewer",
     "errorExprRequired": "Formula is required",
-    "errorExprTooLong": "Formula must be 256 characters or fewer"
+    "errorExprTooLong": "Formula must be 256 characters or fewer",
+    "errorDimensionBounds": "{{dimension}} value {{value}} must be between {{min}} and {{max}} mm."
   }
 }

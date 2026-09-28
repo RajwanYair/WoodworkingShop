@@ -53,6 +53,7 @@ export function OptimizerView() {
     removeOffcutEntry,
     defectZones,
     addDefectZone,
+    updateDefectZone,
     removeDefectZone,
   } = useCabinetStore();
   const lang = i18n.language as Lang;
@@ -374,6 +375,7 @@ export function OptimizerView() {
         materials={[...new Set(displayOpt.sheets.map((s) => s.material))]}
         defectZones={defectZones}
         onAdd={addDefectZone}
+        onUpdate={updateDefectZone}
         onRemove={removeDefectZone}
         t={t}
       />

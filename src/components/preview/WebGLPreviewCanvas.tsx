@@ -201,7 +201,7 @@ export function WebGLPreviewCanvas({
     const canvas = canvasRef.current;
     if (!canvas || !isWebGLAvailable()) return;
 
-    const gl = canvas.getContext('webgl') as WebGLRenderingContext | null;
+    const gl = canvas.getContext('webgl', { preserveDrawingBuffer: true }) as WebGLRenderingContext | null;
     if (!gl) return;
 
     const program = createProgram(gl, VS, FS);

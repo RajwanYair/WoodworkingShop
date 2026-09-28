@@ -37,6 +37,17 @@ describe('generateParts', () => {
     expect(doors!.qty).toBe(2);
   });
 
+  it.each([
+    ['all-visible', 'Front edge', 'All 4 edges'],
+    ['doors-only', 'None', 'All 4 edges'],
+    ['none', 'None', 'None'],
+  ] as const)('applies %s edge banding to carcass and doors', (mode, carcassEdge, doorEdge) => {
+    const generated = generateParts({ ...DEFAULT_CONFIG, edgeBanding: mode });
+
+    expect(generated.find((part) => part.name.en === 'Top Panel')?.edgeBanding.en).toBe(carcassEdge);
+    expect(generated.find((part) => part.name.en === 'Door')?.edgeBanding.en).toBe(doorEdge);
+  });
+
   it('has a back panel with thin material', () => {
     const back = parts.find((p) => p.name.en === 'Back Panel');
     expect(back).toBeDefined();

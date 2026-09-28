@@ -79,7 +79,11 @@ export function validateCatalog(raw: unknown): CommunityCatalog {
   const obj = raw as Record<string, unknown>;
   if (typeof obj['version'] !== 'string') throw new Error('Catalog missing version field');
   if (!Array.isArray(obj['materials'])) throw new Error('Catalog missing materials array');
-  const materials = (obj['materials'] as unknown[]).filter(_isValidMaterial);
+  const materials: CommunityMaterial[] = [];
+  for (const [index, material] of (obj['materials'] as unknown[]).entries()) {
+    if (!_isValidMaterial(material)) throw new Error(`Invalid community material at index ${index}`);
+    materials.push(material);
+  }
   return {
     version: obj['version'],
     updatedAt: typeof obj['updatedAt'] === 'string' ? obj['updatedAt'] : new Date().toISOString(),

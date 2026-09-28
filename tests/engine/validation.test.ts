@@ -24,6 +24,13 @@ describe('validateConfig', () => {
     expect(issue.suggestedValue).toBeTypeOf('number');
   });
 
+  it('clears the wide-span warning after applying its centre-support repair', () => {
+    const issue = getIssue(validateConfig(cfg({ width: 1300 })), 'SPAN_TOO_WIDE');
+    const shelfCentreSupports = issue?.fix?.patch?.shelfCentreSupports;
+    expect(shelfCentreSupports).toBe(1);
+    expect(hasCode(validateConfig(cfg({ width: 1300, shelfCentreSupports })), 'SPAN_TOO_WIDE')).toBe(false);
+  });
+
   it('raises CARCASS_TOO_SHORT error when height is too small', () => {
     expect(hasCode(validateConfig(cfg({ height: 100 })), 'CARCASS_TOO_SHORT')).toBe(true);
   });

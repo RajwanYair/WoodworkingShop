@@ -66,6 +66,11 @@ describe('evaluateNamedParameters', () => {
     });
   });
 
+  it('evaluates supported Math functions through the safe arithmetic parser', () => {
+    const result = evaluateNamedParameters({ width: 'Math.max(base, 640)' }, { base: 600 });
+    expect(result.values.width).toBe(640);
+  });
+
   it('evaluates generated acyclic chains independently of definition insertion order', () => {
     fc.assert(
       fc.property(
@@ -112,6 +117,16 @@ describe('evaluateNamedParameters', () => {
       definitions: { dangerous: 'globalThis.alert(1)' },
       values: {},
       expected: /unknown dependency globalThis/i,
+    },
+    {
+      definitions: { invalidMath: '1 / 0' },
+      values: {},
+      expected: /non-finite result/i,
+    },
+    {
+      definitions: { invalidMath: 'Math.sqrt(9)' },
+      values: {},
+      expected: /Math.sqrt is not permitted/i,
     },
   ])('throws on invalid definitions', ({ definitions, values, expected }) => {
     expect(() => evaluateNamedParameters(definitions, values)).toThrow(expected);

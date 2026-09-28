@@ -413,12 +413,12 @@ The function CSV maps literal direct test titles to 612 exports, including `it.e
 
 `getMaterialResult` has direct success, custom-material, and error-result tests; `getMachineProfile` has cases for all registered IDs and an unknown ID; `defaultTokenGenerator` has length and URL-safe alphabet checks; `applyValidationPlugins` has empty-registry, transformation, and registration-order checks; and the Web Serial adapter has availability, connection, streaming, abort, and disconnect tests.
 
-Latest verification: `npm run ci` passes with 4,584 tests across 283 files, all configured quality gates, the production build, bundle budgets, and all 16 benchmarks within budget.
+Latest verification: `npm run ci` passes with 4,593 tests across 283 files, all configured quality gates, the production build, bundle budgets, and all 16 benchmarks within budget.
 
 **Sprint 304 — Store, persistence, import/export contract matrix** — P0 · L · S301.
 
-- T1: Exercise every exported store action: initial state, valid transition, invalid/no-op input, undo/redo, reset, persistence, reload and cross-slice effects. IN PROGRESS.
-- T2: Test IDB/localStorage unavailable, corrupted record, stale schema, quota, partial write, duplicate project id, concurrent save, deletion and migration recovery. IN PROGRESS.
+- T1: Exercise every exported store action: initial state, valid transition, invalid/no-op input, undo/redo, reset, persistence, reload and cross-slice effects. DONE.
+- T2: Test IDB/localStorage unavailable, corrupted record, stale schema, quota, partial write, duplicate project id, concurrent save, deletion and migration recovery. DONE.
 - T3: Verify each import/export round trip preserves semantically relevant state and intentionally omits ephemeral UI state. DONE.
 - Tests: fake-indexeddb transaction failures; legacy fixtures; unknown and future schema versions; Unicode/RTL names; empty and very large projects.
 - Accept: corrupted input never mutates live state; recoverable errors are actionable; round-trip comparison uses canonical normalized project snapshots.
@@ -435,6 +435,10 @@ Legacy localStorage migration now rejects malformed JSON and non-array payloads 
 
 Unavailable localStorage during first-run migration produces an actionable failure and leaves the IndexedDB key unset; a regression simulates browser `SecurityError` behavior.
 
+Persistence operations now fail with an explicit `IndexedDB is unavailable` error when the browser API is absent, before attempting legacy localStorage migration. A regression verifies the failure is surfaced and no legacy-storage read occurs.
+
+T2 is complete: regressions cover unavailable IndexedDB and localStorage, corrupt and unsupported-schema data, quota failures, snapshot rollback after partial writes, project-ID collisions, concurrent saves, deletion failure/retry, and legacy migration recovery.
+
 New project IDs use `crypto.randomUUID()` and are checked against existing IDs for saves, single-project imports, and bundle imports. A fixed-clock regression covers same-millisecond saves; the PWA parser test verifies the generated UUID format.
 
 Project-list mutations are serialized across saves, deletes, single-project imports, and bundle imports. A concurrent-save regression first reproduced a lost project, then verified both writes survive through the mutation queue.
@@ -447,9 +451,15 @@ Single-project and bundle export/import round-trip coverage verifies cabinets an
 
 Cabinet-store action coverage verifies `resetConfig` resets only the active cabinet, recomputes derived dimensions, and restores the prior config through undo/redo.
 
-Store-level integration tests also verify mirror creation, project loading with undo, empty-project load as a no-op, bulk material replacement across cabinets with undo and same-key no-op behavior, and invalid-index no-ops for remove, rename, notes, duplicate, mirror, select, and move actions. These guards run before history, URL, or derived state is updated.
+Store-level integration tests also verify mirror creation, project loading with undo, empty-project load as a no-op, bulk material replacement across cabinets with undo and same-key no-op behavior, and invalid-index no-ops for remove, rename, notes, duplicate, mirror, select, move, and defect-zone removal actions. Selecting different cabinets verifies the active config and derived dimensions update together. Invalid defect-zone indices return before shared catalog mutation or optimizer scheduling.
 
-Sprint 304 verification: `npm run ci` passes with 4,584 tests across 283 files; production build, bundle budgets, and all 16 benchmarks pass. T3 is complete with single-project and bundle round-trips covering snapshots, omitted ephemeral state, Unicode/RTL names, empty projects, and 250-cabinet projects. T1 and T2 remain IN PROGRESS while the full exported-action and persistence-failure matrices are completed.
+Optimizer `loadSettings` coverage verifies full-state hydration, numeric clamping, and exactly-once rescheduling. The regression caught raw negative cost values reaching the cost callback despite normalized store values; both now use the same normalized settings snapshot.
+
+UI-slice action tests now cover trimmed build-log insertion, deletion and clear persistence, focus-mode toggling, and cut-checklist completion, unchecking, and clearing with persistence.
+
+T1 is complete: exported actions across the cabinet, UI, optimizer-settings, snapshot, and named-expression slices have action-level coverage for state transitions, applicable invalid/no-op cases, undo/redo, persistence/reload, and cross-slice derived-state or rescheduling effects.
+
+Sprint 304 verification: `npm run ci` passes with 4,592 tests across 283 files; production build, bundle budgets, and all 16 benchmarks pass. T1, T2, and T3 are complete. T3 covers single-project and bundle round-trips with snapshots, omitted ephemeral state, Unicode/RTL names, empty projects, and 250-cabinet projects.
 
 Session persistence coverage verifies the cabinet store's debounced autosave writes the latest active configuration after 500 ms and a fresh store initialization after simulated reload restores cabinet config, project name and notes from localStorage.
 
@@ -486,6 +496,14 @@ Full `npm run ci` passed with 4,583 tests across 283 files, production build and
 - Tests: desktop keyboard journey matrix, role/name assertions, keyboard-only flow, browser history.
 - Accept: every global header control has a browser test proving its visible state/result; shortcuts do not trigger while typing in editable controls.
 
+Progress (2026-09-28): Sprint 307 T1–T4 are DONE. The 32-test smoke spec passes in Chromium and Firefox. T1 covers click and Alt+1…6 navigation across six panels, direct URLs for all seven tabs, Back/Forward panel restoration, shortcut suppression while editing, and invalid-tab fallback.
+
+T2 is DONE: header Undo and keyboard Ctrl+Z/Ctrl+Y/Ctrl+Shift+Z restore both the dimension value and generated Top Panel length. Fixed Enter followed by blur committing the same dimension twice. Full CI passes: 4,593 tests across 283 files, all quality/build/bundle gates, and 16 benchmarks within budget.
+
+T3 is DONE: browser journeys cover dark mode by button and Alt+D, metric/imperial conversion, all six locale labels and RTL/LTR direction, focus mode, onboarding and keyboard-shortcuts dialogs, Escape dismissal, and focus restoration. The shared focus trap restores focus to its opener.
+
+T4 is DONE: reset requires localized confirmation, and cabinet add/switch/rename/reload/shortcut journeys verify URL index, project state, and toast. The browser test proves a valid `?cab=` index takes precedence over conflicting persisted session state. Full CI passes with 4,603 tests across 283 files, all quality/build/bundle gates, and all 16 benchmarks within budget; all 32 smoke tests pass in Chromium and Firefox.
+
 **Sprint 308 — Configurator and validation journeys** — P0 · L · S305, S307.
 
 - T1: Test every dimension slider and adjacent numeric text entry both directions; assert normalized value, part dimensions and preview update; include bounds, invalid text and reset.
@@ -493,6 +511,21 @@ Full `npm run ci` passed with 4,583 tests across 283 files, production build and
 - T3: Exercise validation warnings and each repair/fix action; verify selected value, message removal, focus and screen-reader relation.
 - T4: Test cabinet selector add/remove/rename/duplicate/mirror/reorder and active cabinet switch; verify multi-cabinet optimizer/assembly/PDF reflect intended cabinet.
 - Accept: all rendered controls in `ConfiguratorPanel` and children are enumerated and covered; each option has an asserted state or output delta, not just “click succeeded”.
+
+Progress (2026-09-28): Sprint 308 T1 is DONE. Browser coverage verifies width, height, and depth slider/text synchronization in both directions, an exact 20 mm Top Panel cut-list delta, updated preview part titles, recommended-range clamping, hard-limit rejection and recovery, and reset to the initial configuration. All 34 smoke tests pass in Chromium and Firefox; `npm run ci` passes with 4,603 tests across 283 files, all quality/build/bundle gates, and all 16 benchmarks within budget.
+
+T2 is DONE: browser journeys cover all furniture types, joinery selections, carcass/back materials, back-panel inclusion, panel thickness source, shelf count/spacing/support, door count/style/handles, and drawer count/slides. Each option has a resulting part or hardware assertion. Fixed `doors-only` edge banding so non-door parts remain unbanded.
+
+All 56 E2E tests pass in Chromium and Firefox. `npm run ci` passes with 4,606 tests across 283 files, all quality/build/bundle gates, and all 16 benchmarks within budget.
+
+T3 is DONE: component coverage exercises all 11 distinct repair actions against production-generated validation issues,
+asserting the resulting configuration, issue removal, keyboard focus continuity, and the live issue-list relationship.
+Browser coverage verifies centre-support and back-panel repairs update their controls, clear warnings, preserve focus, and
+retain the polite live region. Fixed the wide-span warning so adding the recommended centre support resolves the
+condition. All 58 E2E tests pass in Chromium and Firefox; `npm run ci` passes with 4,620 tests across 283 files, all
+quality/build/bundle gates, and all 16 benchmarks within budget.
+
+T4 is DONE: browser journeys cover cabinet add/remove/rename/duplicate/mirror/reorder and active-cabinet switching, including accessible cabinet-specific remove names. Assertions verify the optimizer's multi-cabinet summary and active parts, assembly updates, and current-cabinet/full-project PDF download names. All 62 E2E tests pass in Chromium and Firefox; `npm run ci` passes with 4,620 tests across 283 files, all quality/build/bundle gates, and all 16 benchmarks within budget.
 
 **Sprint 309 — Save/load, templates, catalogs, expressions and project management** — P1 · L · S304, S307.
 
@@ -502,17 +535,41 @@ Full `npm run ci` passed with 4,583 tests across 283 files, production build and
 - T4: Add/edit/evaluate/remove named expressions; test dependency order, cycles, unknown names, invalid math, dimension bounds and resulting preview/cut-list change.
 - Accept: each SaveLoadPanel/ProjectManagerModal action completes its intended persistence/download/URL behavior with a browser-observable assertion.
 
+T1 is DONE: browser journeys verify project save/load, same-name replacement, JSON export/import, canceled save,
+malformed and structurally invalid imports, native-share cancellation with clipboard fallback, and snapshot
+save/restore/delete/diff. Fixed snapshot ID collisions when multiple saves occur in the same millisecond. Branch/fork
+and project diff remain utility-level operations, covered by `tests/utils/project-branching.test.ts`. All 66 E2E tests
+pass in Chromium and Firefox; `npm run ci` passes with 4,620 tests across 283 files, all quality/build/bundle gates,
+and all 16 benchmarks within budget.
+
+T2 is DONE: browser coverage applies all six built-in presets and asserts their dimensions, furniture type, and
+representative generated cut-list parts. A named saved configuration survives page reload, restores its dimensions,
+and regenerates the expected cut-list output. All 68 E2E tests pass in Chromium and Firefox; `npm run ci` passes
+with 4,620 tests across 283 files, all quality/build/bundle gates, and all 16 benchmarks within budget.
+
+T3 is DONE: browser journeys cover custom-material add/edit/delete, valid/invalid community URL catalog imports, and
+custom-hardware JSON import with schema validation, duplicate-ID rejection, merge/replace selection, and failure
+atomicity. Invalid community catalog rows are rejected before cached materials or metadata are written. `npm run ci`
+passes with 4,632 tests across 284 files; all 74 Chromium/Firefox E2E tests pass with two workers.
+
+T4 is DONE: mounted the named-expression panel and added edit, remove, live evaluation, and applying expressions to
+width/height/depth with hard dimension bounds. The evaluator now uses the existing allowlisted arithmetic parser,
+avoiding CSP-blocked dynamic code execution; errors for cycles, unknown variables, unsupported math, and non-finite
+results are surfaced. Component and browser tests verify out-of-range non-mutation and a valid width expression
+changes generated Top Panel geometry. `npm run ci` passes with 4,638 tests across 284 files; all 76 Chromium/Firefox
+E2E tests pass with two workers.
+
 **Sprint 310 — Preview, gestures, canvas and 3D** — P1 · L · S307.
 
-- T1: Click all six preview views; assert correct SVG viewBox/geometry, selected control and dimensions visibility toggle.
-- T2: Capture Download SVG and PNG; parse SVG geometry and PNG signature/dimensions; test sanitized names and no stale-view export.
-- T3: Browser mouse wheel/drag zoom and pan, touch swipe left/right and pinch; assert view/scale state changes, boundaries, pointer cancel and multi-touch cleanup.
-- T4: Toggle WebGL flag/capability fallback, wireframe, edge banding and explode; assert canvas rendered/nonblank where supported and fallback accessible where unsupported.
-- Accept: Chromium + WebKit desktop and mobile emulation; deterministic 2D visual baselines for all six views in representative cabinet types and light/dark/RTL states.
+- T1: DONE — Browser coverage clicks all six views and asserts active selection, 2D viewBox geometry, non-empty drawing geometry, and dimension-toggle visibility/resizing.
+- T2: DONE — Browser coverage parses the exported SVG and validates its selected-view geometry; checks the PNG signature, IHDR dimensions at 2×, sanitized filenames, and current-view exports after switching views. All 80 Chromium/Firefox E2E tests pass.
+- T3: DONE — Added touch-cancel lifecycle handling and synchronized pinch zoom state on successful view swipes. Hook tests cover pinch/swipe cleanup and thresholds; browser checks cover wheel zoom bounds, orbit dragging and pointer cancellation, swipe boundaries, pinch scale, and touch cancellation. All 82 Chromium/Firefox E2E tests pass.
+- T4: DONE — Mounted the existing interactive 3D panel in Preview, verified explode/wireframe/edge-band/zoom controls, feature-disabled behavior, capability fallback, and nonblank WebGL canvas with a flag-enabled production build. Static WebGL rendering preserves its drawing buffer for visible output. Full `npm run ci` passes with 4,641 tests across 284 files; all 86 Chromium/Firefox E2E tests pass.
+- Accept: DONE — Chromium, Firefox, WebKit desktop, and iPhone WebKit render all six views without document overflow; 24 canonical Chromium baselines cover cabinet/bookshelf, light/dark, and LTR/RTL combinations. The screenshot assertion is intentionally Chromium-only; responsive/view behavior runs in all four projects.
 
 **Sprint 311 — Optimizer controls and table journeys** — P0 · L · S305, S307.
 
-- T1: Change kerf, sheet dimensions, prices, labor, finish, edge-band rate, rotation/grain lock, auto-co-nest, color-blind mode, grain hatch and part-name labels; assert result layout/stats/cost/cut instructions change as expected.
+- T1: DONE — E2E verifies kerf changes part placement; sheet-size overrides update SVG dimensions; material, edge-band, labour and finish edits increase visible costs; guillotine mode updates cut rationale; rotation lock, auto co-nest, color-blind mode, grain hatch and labels update accessible or rendered output. Six optimizer E2E tests pass in Chromium and Firefox.
 - T2: Search/filter/sort parts and hardware tables; bulk replace material; add/remove stock and offcuts; create/edit defect zones; verify constraints and persistent settings.
 - T3: Exercise SmartOptimizer strategies, compare runs, cut checklist and sheet virtualization; assert source candidate/config and selected parts correspond to rendered sheet.
 - T4: Assert yield meter range and accessible value, waste analytics, grain conflicts, material summary and shopping list against engine oracles.

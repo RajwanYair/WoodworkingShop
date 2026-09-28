@@ -55,7 +55,13 @@ export function checkDimensionRules(
 
   // ── Wide-span and tall-cabinet structural checks (Sprint 17) ──
 
-  if (config.width > WIDE_SPAN_CARCASS_MM && config.furnitureType !== 'panel') {
+  const currentCentreSupports = Math.max(0, config.shelfCentreSupports ?? 0);
+  const centreSupportsNeeded = Math.ceil(config.width / WIDE_SPAN_CARCASS_MM) - 1;
+  if (
+    config.width > WIDE_SPAN_CARCASS_MM &&
+    currentCentreSupports < centreSupportsNeeded &&
+    config.furnitureType !== 'panel'
+  ) {
     issues.push({
       code: 'SPAN_TOO_WIDE',
       severity: 'warning',
@@ -66,10 +72,7 @@ export function checkDimensionRules(
       field: 'width',
       fix: {
         patch: {
-          shelfCentreSupports: Math.min(
-            5,
-            Math.max((config.shelfCentreSupports ?? 0) + 1, Math.ceil(config.width / WIDE_SPAN_CARCASS_MM) - 1),
-          ),
+          shelfCentreSupports: Math.min(5, Math.max(currentCentreSupports + 1, centreSupportsNeeded)),
         },
         labelKey: 'validation.fixAddCentreSupport',
       },

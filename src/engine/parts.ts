@@ -17,6 +17,7 @@ export const generateParts: (cfg: CabinetConfig) => Part[] = createJsonMemo(func
   const bm = getMaterial(cfg.backPanelMaterial);
   const t = cm.thickness;
   const eb = cfg.edgeBanding;
+  const allVisibleEdges = eb === 'all-visible';
 
   const parts: Part[] = [];
   let idx = 1;
@@ -35,7 +36,7 @@ export const generateParts: (cfg: CabinetConfig) => Part[] = createJsonMemo(func
       thickness: mat.thickness,
       length: cfg.width,
       width: cfg.height,
-      edgeBanding: edgeLabel(eb !== 'none' ? '4-edges' : 'none'),
+      edgeBanding: edgeLabel(allVisibleEdges ? '4-edges' : 'none'),
     });
     return parts;
   }
@@ -51,7 +52,7 @@ export const generateParts: (cfg: CabinetConfig) => Part[] = createJsonMemo(func
       thickness: t,
       length: cfg.width,
       width: cfg.depth,
-      edgeBanding: edgeLabel(eb !== 'none' ? '4-edges' : 'none'),
+      edgeBanding: edgeLabel(allVisibleEdges ? '4-edges' : 'none'),
     });
 
     // Side panels (legs)
@@ -63,7 +64,7 @@ export const generateParts: (cfg: CabinetConfig) => Part[] = createJsonMemo(func
       thickness: t,
       length: cfg.height - t,
       width: cfg.depth,
-      edgeBanding: edgeLabel(eb !== 'none' ? 'front' : 'none'),
+      edgeBanding: edgeLabel(allVisibleEdges ? 'front' : 'none'),
     });
 
     // Modesty panel (back kick board)
@@ -103,7 +104,7 @@ export const generateParts: (cfg: CabinetConfig) => Part[] = createJsonMemo(func
         thickness: t,
         length: d.shelfWidth,
         width: d.shelfDepth,
-        edgeBanding: edgeLabel(eb !== 'none' ? 'front' : 'none'),
+        edgeBanding: edgeLabel(allVisibleEdges ? 'front' : 'none'),
       });
     }
 
@@ -121,7 +122,7 @@ export const generateParts: (cfg: CabinetConfig) => Part[] = createJsonMemo(func
     thickness: t,
     length: cfg.height,
     width: cfg.depth,
-    edgeBanding: edgeLabel(eb !== 'none' ? 'front' : 'none'),
+    edgeBanding: edgeLabel(allVisibleEdges ? 'front' : 'none'),
   });
 
   // ── Top + bottom panels ──
@@ -134,7 +135,7 @@ export const generateParts: (cfg: CabinetConfig) => Part[] = createJsonMemo(func
     thickness: t,
     length: tbWidth,
     width: cfg.depth,
-    edgeBanding: edgeLabel(eb !== 'none' ? 'front' : 'none'),
+    edgeBanding: edgeLabel(allVisibleEdges ? 'front' : 'none'),
   });
   parts.push({
     id: id(),
@@ -144,7 +145,7 @@ export const generateParts: (cfg: CabinetConfig) => Part[] = createJsonMemo(func
     thickness: t,
     length: tbWidth,
     width: cfg.depth,
-    edgeBanding: edgeLabel(eb !== 'none' ? 'front' : 'none'),
+    edgeBanding: edgeLabel(allVisibleEdges ? 'front' : 'none'),
   });
 
   // ── Fixed shelf (middle) — only if height > 1200 ──
@@ -157,7 +158,7 @@ export const generateParts: (cfg: CabinetConfig) => Part[] = createJsonMemo(func
       thickness: t,
       length: d.internalWidth,
       width: d.shelfDepth,
-      edgeBanding: edgeLabel(eb !== 'none' ? 'front' : 'none'),
+      edgeBanding: edgeLabel(allVisibleEdges ? 'front' : 'none'),
     });
   }
 
@@ -171,7 +172,7 @@ export const generateParts: (cfg: CabinetConfig) => Part[] = createJsonMemo(func
       thickness: t,
       length: d.shelfWidth,
       width: d.shelfDepth,
-      edgeBanding: edgeLabel(eb !== 'none' ? 'front' : 'none'),
+      edgeBanding: edgeLabel(allVisibleEdges ? 'front' : 'none'),
     });
   }
 
@@ -188,7 +189,7 @@ export const generateParts: (cfg: CabinetConfig) => Part[] = createJsonMemo(func
       thickness: t,
       length: d.internalHeight,
       width: d.shelfDepth,
-      edgeBanding: edgeLabel(eb !== 'none' ? 'front' : 'none'),
+      edgeBanding: edgeLabel(allVisibleEdges ? 'front' : 'none'),
     });
   }
 
@@ -224,7 +225,7 @@ export const generateParts: (cfg: CabinetConfig) => Part[] = createJsonMemo(func
         thickness: t,
         length: drawerHeight + 30,
         width: drawerWidth + 26, // overlay front
-        edgeBanding: edgeLabel(eb !== 'none' ? '4-edges' : 'none'),
+        edgeBanding: edgeLabel(allVisibleEdges ? '4-edges' : 'none'),
       });
 
       // Drawer box sides (2 per drawer)
@@ -291,7 +292,7 @@ export const generateParts: (cfg: CabinetConfig) => Part[] = createJsonMemo(func
       thickness: t,
       length: cfg.width,
       width: kh,
-      edgeBanding: edgeLabel(eb !== 'none' ? 'front' : 'none'),
+      edgeBanding: edgeLabel(allVisibleEdges ? 'front' : 'none'),
     });
     // Side kick boards
     parts.push({

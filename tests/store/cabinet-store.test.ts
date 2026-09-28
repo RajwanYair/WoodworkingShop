@@ -146,10 +146,22 @@ describe('cabinet-store', () => {
     expect(useCabinetStore.getState()).toBe(before);
   });
 
-  it('switches active cabinet', () => {
+  it('switches active cabinet and refreshes its derived state', () => {
     useCabinetStore.getState().addCabinet();
+    useCabinetStore.getState().setConfig({ width: 777 });
     useCabinetStore.getState().setActiveCabinet(0);
-    expect(useCabinetStore.getState().activeCabinetIndex).toBe(0);
+    expect(useCabinetStore.getState()).toMatchObject({
+      activeCabinetIndex: 0,
+      config: DEFAULT_CONFIG,
+      dimensions: computeDimensions(DEFAULT_CONFIG),
+    });
+
+    useCabinetStore.getState().setActiveCabinet(1);
+    expect(useCabinetStore.getState()).toMatchObject({
+      activeCabinetIndex: 1,
+      config: { ...DEFAULT_CONFIG, width: 777 },
+      dimensions: computeDimensions({ ...DEFAULT_CONFIG, width: 777 }),
+    });
   });
 
   it.each([-1, 1, 0.5])('does not change state when selecting invalid cabinet index %i', (index) => {
@@ -389,6 +401,20 @@ describe('cabinet-store', () => {
         'mdf-18': [otherMaterialZone],
       });
       setDefectZones({});
+    });
+
+    it.each([-1, 1, 0.5])('does not change state when removing defect zone at invalid index %i', (index) => {
+      const zone: DefectZone = { x: 10, y: 20, width: 30, length: 40 };
+      setDefectZones({ 'plywood-17': [zone] });
+      useCabinetStore.setState({ defectZones: { 'plywood-17': [zone] } });
+      const before = useCabinetStore.getState();
+
+      try {
+        before.removeDefectZone('plywood-17', index);
+        expect(useCabinetStore.getState()).toBe(before);
+      } finally {
+        setDefectZones({});
+      }
     });
   });
 

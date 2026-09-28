@@ -92,6 +92,7 @@ export function CabinetSelector() {
                 onClick={() => removeCabinet(i)}
                 className="text-wood-400 text-xs leading-none hover:text-red-500"
                 title={t('project.remove')}
+                aria-label={`${t('project.remove')} ${cab.name}`}
               >
                 ×
               </button>

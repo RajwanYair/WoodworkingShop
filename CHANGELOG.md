@@ -18,6 +18,65 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added deterministic Playwright and typed test fixtures, RTL render support, accessible E2E queries, and per-test environment cleanup; fixed a localStorage mock leak exposed by shuffled test execution.
 - Verified 4,470 tests across 280 files in normal and seeded-shuffle runs, all 26 Chromium/Firefox E2E tests, and the complete `npm run ci` gate including build, bundle, and benchmark budgets.
 
+### Validation and Repair Journeys
+
+- Fixed the wide-span warning so the recommended centre-support repair clears it, and restored keyboard focus after a repair removes its issue row or validation panel.
+- Covered all 11 distinct validation repair actions against production-generated issues; browser tests verify repaired values, warning removal, focus, and live-region relationships.
+- Verified 4,620 unit tests across 283 files, all 58 Chromium/Firefox E2E tests, and the complete `npm run ci` gate including build, bundle, and benchmark budgets.
+
+### Cabinet Configuration Journeys
+
+- Added accessible cabinet-specific remove names and browser coverage for cabinet add/remove/rename/duplicate/mirror/reorder, active-cabinet switching, and optimizer, assembly, and PDF outputs.
+- Verified all 62 Chromium/Firefox E2E tests and the complete `npm run ci` gate: 4,620 unit tests across 283 files, production build, bundle budgets, and all 16 benchmarks.
+
+### Save, Share, and Snapshot Journeys
+
+- Added browser coverage for project save/load, same-name replacement, JSON export/import, canceled saves, invalid/corrupt imports, share cancellation with clipboard fallback, and snapshot save/restore/delete/diff.
+- Fixed snapshot ID collisions for saves in the same millisecond; added a unit regression test. Project branching and comparison remain utility-level and covered by their unit tests.
+- Verified all 66 Chromium/Firefox E2E tests and the complete `npm run ci` gate: 4,620 unit tests across 283 files, production build, bundle budgets, and all 16 benchmarks.
+
+### Preset Journeys
+
+- Added browser coverage for all six built-in cabinet presets, asserting configuration and generated cut-list output; verified named saved configurations survive reload and restore their expected dimensions and parts.
+- Verified all 68 Chromium/Firefox E2E tests and the complete `npm run ci` gate: 4,620 unit tests across 283 files, production build, bundle budgets, and all 16 benchmarks.
+
+### Catalog Import Journeys
+
+- Added browser coverage for custom-material add/edit/delete and valid/invalid community catalog imports.
+- Cached community catalog imports now reject malformed entries before writing, preserving the previously cached materials and metadata on failure.
+- Added a versioned custom-hardware JSON import with strict row and duplicate-ID validation, persisted merge/replace behavior, and no state change when any row fails validation.
+- Verified all 74 Chromium/Firefox E2E tests and the complete `npm run ci` gate: 4,632 unit tests across 284 files, production build, bundle budgets, and all 16 benchmarks.
+
+### Named Expression Journeys
+
+- Mounted the named-expression panel in the configurator and added editing plus application of evaluated values to cabinet dimensions with hard-bound checks.
+- Replaced CSP-blocked dynamic function construction with the existing allowlisted arithmetic parser; added visible feedback for cycles, unsupported functions, and out-of-range values.
+- Verified all 76 Chromium/Firefox E2E tests and the complete `npm run ci` gate: 4,638 unit tests across 284 files, production build, bundle budgets, and all 16 benchmarks.
+
+### Preview View and Export Coverage
+
+- Added six-view browser checks for selection state, expected SVG viewBox geometry, non-empty drawings, and dimension visibility.
+- Added SVG parsing and PNG signature/IHDR checks, including view-specific and sanitized download names after changing views.
+- Verified the two new journeys in Chromium and Firefox; 80 E2E tests pass across both browsers.
+
+### Preview Gesture Coverage
+
+- Added touch-cancel cleanup, prevented stale swipe detection after multi-touch, and synchronized pinch scale when a swipe changes views.
+- Added browser coverage for 3D wheel zoom bounds and orbit drag cancellation, plus touch swipe boundaries, pinch scaling, and cancellation.
+- Verified all 82 Chromium/Firefox E2E tests pass; all 8 touch-gesture hook tests pass.
+
+### Interactive 3D Preview
+
+- Mounted the existing interactive 3D scene panel in Preview; verified explode, wireframe, edge-band, zoom, and reset controls.
+- Preserved static WebGL drawing-buffer contents and tested feature-disabled, capability-fallback, and WebGL-enabled nonblank rendering paths.
+- Verified full `npm run ci`: 4,641 tests across 284 files, production build, bundle budgets, and all 16 benchmarks; all 86 Chromium/Firefox E2E tests pass.
+
+### Preview Acceptance Matrix
+
+- Added WebKit desktop and iPhone WebKit browser projects scoped to tagged acceptance coverage.
+- Verified all six preview views fit without document overflow in Chromium, Firefox, WebKit desktop, and iPhone WebKit.
+- Added 24 Chromium visual baselines for cabinet/bookshelf configurations in light/dark and LTR/RTL states; all compare cleanly.
+
 ## [5.33.0] — 2026-09-27
 
 ### Test Infrastructure and Browser Reliability

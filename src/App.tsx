@@ -9,6 +9,7 @@ import { Sidebar } from './components/layout/Sidebar';
 import { ErrorBoundary } from './components/layout/ErrorBoundary';
 import { ConfiguratorPanel } from './components/configurator/ConfiguratorPanel';
 import { CabinetPreview } from './components/preview/CabinetPreview';
+import { Preview3DPanel } from './components/preview/Preview3DPanel';
 import { SmartOptimizerPanel } from './components/optimizer/SmartOptimizerPanel';
 import { PartsTable, HardwareTable } from './components/optimizer/Tables';
 import { ProjectSummaryPanel } from './components/optimizer/ProjectSummaryPanel';
@@ -103,20 +104,39 @@ function App() {
     root.style.colorScheme = darkMode ? 'dark' : 'light';
   }, [darkMode]);
 
-  // Sprint 298 — URL tab deep-linking: read ?tab= on first mount.
-  const tabInitialisedRef = useRef(false);
+  // Sprint 298 — URL tab deep-linking and browser history synchronization.
+  const initialTabFromUrlRef = useRef(readTabFromUrl());
+  const tabUrlInitialisedRef = useRef(false);
+  const popStateTabRef = useRef<CabinetState['activeTab'] | null>(null);
   useEffect(() => {
-    if (tabInitialisedRef.current) return;
-    tabInitialisedRef.current = true;
-    const tab = readTabFromUrl();
+    const tab = initialTabFromUrlRef.current;
     if (tab) {
       useCabinetStore.getState().setActiveTab(tab);
     }
-  });
+  }, []);
 
-  // Sprint 298 — push tab into URL whenever it changes.
   useEffect(() => {
-    pushTabToUrl(activeTab);
+    const handlePopState = () => {
+      const tab = readTabFromUrl() ?? 'workspace';
+      if (tab === useCabinetStore.getState().activeTab) return;
+      popStateTabRef.current = tab;
+      useCabinetStore.getState().setActiveTab(tab);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  useEffect(() => {
+    if (!tabUrlInitialisedRef.current) {
+      tabUrlInitialisedRef.current = true;
+      if (initialTabFromUrlRef.current === null) pushTabToUrl(activeTab, true);
+      return;
+    }
+    if (popStateTabRef.current === activeTab) {
+      popStateTabRef.current = null;
+      return;
+    }
+    if (activeTab !== initialTabFromUrlRef.current) pushTabToUrl(activeTab);
   }, [activeTab]);
 
   // Sprint 48 — follow OS (prefers-color-scheme) changes in real-time
@@ -140,6 +160,14 @@ function App() {
   // Keyboard shortcuts
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
+      const target = e.target;
+      if (
+        target instanceof HTMLElement &&
+        (target.isContentEditable || target.closest('input, textarea, select, [contenteditable="true"]'))
+      ) {
+        return;
+      }
+
       const ctrl = e.ctrlKey || e.metaKey;
 
       // Undo: Ctrl+Z
@@ -320,9 +348,14 @@ function App() {
               </div>
             )}
             {activeTab === 'preview' && (
-              <ErrorBoundary panelName="Preview">
-                <CabinetPreview />
-              </ErrorBoundary>
+              <div className="space-y-6">
+                <ErrorBoundary panelName="Preview">
+                  <CabinetPreview />
+                </ErrorBoundary>
+                <ErrorBoundary panelName="Interactive 3D preview">
+                  <Preview3DPanel />
+                </ErrorBoundary>
+              </div>
             )}
             {activeTab === 'optimizer' && (
               <ErrorBoundary panelName="Optimizer">

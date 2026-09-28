@@ -63,6 +63,7 @@
     "doorsOnly": "الأبواب فقط",
     "noBanding": "لا شيء",
     "reset": "إعادة تعيين الإعدادات الافتراضية",
+    "resetConfirm": "هل تريد إعادة هذه الخزانة إلى إعداداتها الافتراضية؟ لا يمكن التراجع عن ذلك.",
     "furnitureType": "نوع الأثاث",
     "ft_cabinet": "خزانة",
     "ft_bookshelf": "رف كتب",
@@ -220,7 +221,9 @@
     "statusPending": "جارٍ حساب خطط القطع…",
     "statusComplete": "اكتمل التحسين — {{count}} لوح مطلوب",
     "filterByMaterial": "تصفية حسب المادة",
-    "allMaterials": "جميع المواد"
+    "allMaterials": "جميع المواد",
+    "partsTableSearch": "البحث في القطع",
+    "hardwareTableSearch": "البحث في الملحقات"
   },
   "preview": {
     "title": "معاينة الخزانة",
@@ -1376,7 +1379,19 @@
     "packsNeeded": "Packs Needed",
     "noItems": "No hardware items found.",
     "addItem": "Add Item",
-    "editItem": "Edit Item"
+    "editItem": "Edit Item",
+    "importTitle": "Import Hardware Catalog",
+    "importFile": "Catalog JSON file",
+    "importPreview": "{{count}} hardware items validated.",
+    "importMode": "Import behavior",
+    "importMerge": "Merge: update matching IDs and keep other items",
+    "importReplace": "Replace all custom hardware",
+    "importExisting": "{{count}} existing custom hardware items.",
+    "importButton": "Import catalog",
+    "importSuccess": "{{count}} hardware items imported.",
+    "importError": "Hardware catalog import failed: {{message}}",
+    "importStored": "Custom hardware ({{count}})",
+    "importEmpty": "No custom hardware imported."
   },
   "projectComparison": {
     "title": "Project Comparison",
@@ -2210,19 +2225,28 @@
     "description": "Define reusable formulas using cabinet dimensions as variables (e.g. shelf_gap = height / (shelfCount + 1)).",
     "listLabel": "Named expression list",
     "addTitle": "Add expression",
+    "editTitle": "Edit expression",
     "nameLabel": "Name",
     "namePlaceholder": "e.g. shelf_gap",
     "exprLabel": "Formula",
     "exprPlaceholder": "e.g. height / (shelfCount + 1)",
     "add": "Add",
+    "editButton": "Edit",
+    "edit": "Edit {{name}}",
+    "save": "Save",
+    "cancel": "Cancel",
+    "applyButton": "Apply",
+    "apply": "Apply {{name}}",
+    "applyTarget": "Dimension to update with {{name}}",
     "empty": "No expressions defined yet.",
     "remove": "Remove {{name}}",
     "resolvedValue": "{{name}} = {{value}}",
-    "hint": "Available variables: width, height, depth, shelfCount, doorCount, drawerCount, kickHeight. Supports +, -, *, /, (), Math.*",
+    "hint": "Available variables: width, height, depth, shelfCount, doorCount, drawerCount, kickHeight. Supports +, -, *, /, (), Math.floor, ceil, round, min, max, abs, trunc.",
     "errorNameRequired": "Name is required",
     "errorNameInvalid": "Name must start with a letter or _ and contain only letters, digits and _",
     "errorNameTooLong": "Name must be 32 characters or fewer",
     "errorExprRequired": "Formula is required",
-    "errorExprTooLong": "Formula must be 256 characters or fewer"
+    "errorExprTooLong": "Formula must be 256 characters or fewer",
+    "errorDimensionBounds": "{{dimension}} value {{value}} must be between {{min}} and {{max}} mm."
   }
 }

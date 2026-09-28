@@ -132,7 +132,9 @@ export const CabinetPreview = memo(function CabinetPreview() {
   const handleOrbitEnd = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     orbitStartRef.current = null;
     setDraggingOrbit(false);
-    e.currentTarget.releasePointerCapture(e.pointerId);
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
   }, []);
 
   const handleOrbitWheel = useCallback((e: React.WheelEvent<HTMLDivElement>) => {
@@ -210,6 +212,9 @@ export const CabinetPreview = memo(function CabinetPreview() {
         }}
         onTouchEnd={(e) => {
           if (activeView !== '3d') touchGestures.onTouchEnd(e);
+        }}
+        onTouchCancel={() => {
+          if (activeView !== '3d') touchGestures.onTouchCancel();
         }}
         style={{ transform: `scale(${zoomScale})`, transformOrigin: 'top left' }}
       >

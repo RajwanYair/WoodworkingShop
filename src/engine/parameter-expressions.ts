@@ -1,7 +1,8 @@
 const IDENTIFIER_PATTERN = /\b[A-Z_]\w*\b/gi;
-const SAFE_EXPRESSION_PATTERN = /^[\w+\-*/().\s]+$/;
+const SAFE_EXPRESSION_PATTERN = /^[\w+\-*/().,\s]+$/;
 
 const RESERVED_IDENTIFIERS = new Set(['Math']);
+import { evaluateTemplateExpr } from './template-dsl';
 
 export interface ParameterGraphEdge {
   from: string;
@@ -152,10 +153,15 @@ export function evaluateNamedParameters(
       throw new RangeError(`evaluateNamedParameters: unknown dependency ${dep} for ${name}`);
     }
 
-    const argNames = [...deps, 'Math'];
-    const argValues: Array<number | Math> = [...deps.map((dep) => values[dep] as number), Math];
-    const fn = new Function(...argNames, `return (${expression});`) as (...args: Array<number | Math>) => unknown;
-    const computed = fn(...argValues);
+    let computed: number;
+    try {
+      computed = evaluateTemplateExpr(expression, values);
+    } catch (err) {
+      throw new RangeError(
+        `evaluateNamedParameters: invalid expression for ${name}: ${err instanceof Error ? err.message : String(err)}`,
+        { cause: err },
+      );
+    }
     if (typeof computed !== 'number' || !Number.isFinite(computed)) {
       throw new RangeError(`evaluateNamedParameters: non-finite result for ${name}`);
     }

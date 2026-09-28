@@ -177,27 +177,34 @@ export function createOptimizerSettingsSlice(
     loadSettings: (session) => {
       const sawKerf = Math.max(0, Math.min(8, session.sawKerf ?? 4));
       const sheetSizeOverrides = session.sheetSizeOverrides ?? {};
+      const materialPriceOverrides = session.materialPriceOverrides ?? {};
+      const edgeBandingRate = Math.max(0, session.edgeBandingRate ?? 3);
+      const hardwarePriceOverrides = session.hardwarePriceOverrides ?? {};
+      const hardwareQtyOverrides = session.hardwareQtyOverrides ?? {};
+      const labourRate = Math.max(0, session.labourRate ?? 75);
+      const labourHours = Math.max(0, session.labourHours ?? 0);
+      const finishCost = Math.max(0, session.finishCost ?? 0);
       set({
         sawKerf,
-        materialPriceOverrides: session.materialPriceOverrides ?? {},
-        edgeBandingRate: Math.max(0, session.edgeBandingRate ?? 3),
-        hardwarePriceOverrides: session.hardwarePriceOverrides ?? {},
-        hardwareQtyOverrides: session.hardwareQtyOverrides ?? {},
+        materialPriceOverrides,
+        edgeBandingRate,
+        hardwarePriceOverrides,
+        hardwareQtyOverrides,
         sheetSizeOverrides,
-        labourRate: Math.max(0, session.labourRate ?? 75),
-        labourHours: Math.max(0, session.labourHours ?? 0),
-        finishCost: Math.max(0, session.finishCost ?? 0),
+        labourRate,
+        labourHours,
+        finishCost,
         autoCoNest: session.autoCoNest ?? false,
       });
       onRescheduleOpt(sawKerf, sheetSizeOverrides);
       onRescheduleCost({
-        materialPriceOverrides: session.materialPriceOverrides ?? {},
-        edgeBandingRate: session.edgeBandingRate ?? 3,
-        hardwarePriceOverrides: session.hardwarePriceOverrides ?? {},
-        hardwareQtyOverrides: session.hardwareQtyOverrides ?? {},
-        labourRate: session.labourRate ?? 75,
-        labourHours: session.labourHours ?? 0,
-        finishCost: session.finishCost ?? 0,
+        materialPriceOverrides,
+        edgeBandingRate,
+        hardwarePriceOverrides,
+        hardwareQtyOverrides,
+        labourRate,
+        labourHours,
+        finishCost,
       });
     },
   };

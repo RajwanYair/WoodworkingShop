@@ -37,6 +37,16 @@ export default defineConfig({
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
     { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
+    {
+      name: 'webkit-desktop',
+      use: { ...devices['Desktop Safari'] },
+      grep: /@preview-acceptance/,
+    },
+    {
+      name: 'webkit-mobile',
+      use: { ...devices['iPhone 13'] },
+      grep: /@preview-acceptance/,
+    },
   ],
   webServer: {
     // Match the deployed base path and exercise the production service worker locally.

@@ -13,6 +13,8 @@ import { DoorConfig } from './DoorConfig';
 import { DrawerConfig } from './DrawerConfig';
 import { CustomMaterialEditor } from './CustomMaterialEditor';
 import { CatalogImportPanel } from './CatalogImportPanel';
+import { HardwareCatalogImportPanel } from './HardwareCatalogImportPanel';
+import { NamedExpressionsPanel } from './NamedExpressionsPanel';
 import { MeasurementHintsPanel } from './MeasurementHintsPanel';
 import { PresetsPanel } from './PresetsPanel';
 import { SaveLoadPanel } from './SaveLoadPanel';
@@ -27,6 +29,10 @@ export function ConfiguratorPanel() {
 
   const handleFurnitureChange = (type: FurnitureType) => {
     setConfig({ ...getTemplateDefaults(type) });
+  };
+
+  const handleResetConfig = () => {
+    if (window.confirm(t('config.resetConfirm'))) resetConfig();
   };
 
   return (
@@ -108,9 +114,11 @@ export function ConfiguratorPanel() {
       )}
 
       <DimensionSliders />
+      <NamedExpressionsPanel />
       <MaterialSelector />
       <CustomMaterialEditor />
       <CatalogImportPanel />
+      <HardwareCatalogImportPanel />
 
       {/* Sprint 12 — Joinery type selector */}
       <fieldset className="space-y-2">
@@ -148,7 +156,7 @@ export function ConfiguratorPanel() {
       {(config.furnitureType === 'cabinet' || config.furnitureType === 'wardrobe') && <DrawerConfig />}
 
       <button
-        onClick={resetConfig}
+        onClick={handleResetConfig}
         className="bg-wood-200 dark:bg-wood-700 text-wood-700 dark:text-wood-200 hover:bg-wood-300 dark:hover:bg-wood-600 w-full rounded px-4 py-2 text-sm font-medium transition-colors"
       >
         {t('config.reset')}
