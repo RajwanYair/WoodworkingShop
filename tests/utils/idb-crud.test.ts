@@ -29,6 +29,32 @@ describe('idbLoadProjects / idbSaveProjects', () => {
     expect(result).toEqual([]);
   });
 
+  it.each(['{not-json', '{}', 'null'])(
+    'preserves malformed legacy data and leaves the IndexedDB key unset',
+    async (legacyData) => {
+      const legacyKey = 'cabinet-planner-projects-v1';
+      const previousValue = localStorage.getItem(legacyKey);
+      await idbDel('all-projects');
+      localStorage.setItem(legacyKey, legacyData);
+
+      try {
+        await expect(idbLoadProjects()).rejects.toThrow(/migrate legacy project data/i);
+        expect(await idbGet('all-projects')).toBeUndefined();
+      } finally {
+        if (previousValue === null) localStorage.removeItem(legacyKey);
+        else localStorage.setItem(legacyKey, previousValue);
+      }
+    },
+  );
+
+  it('rejects a non-array IndexedDB value without replacing the corrupt record', async () => {
+    const corruptRecord = { projects: 'not-an-array' };
+    await idbSet('all-projects', corruptRecord);
+
+    await expect(idbLoadProjects()).rejects.toThrow(/invalid saved project storage/i);
+    expect(await idbGet('all-projects')).toEqual(corruptRecord);
+  });
+
   it('round-trips an array of projects', async () => {
     const projects = [
       { id: 'p1', name: 'Alpha' },

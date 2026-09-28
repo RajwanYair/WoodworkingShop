@@ -417,11 +417,31 @@ Latest verification: `npm run check` passes with 4,528 tests across 283 files an
 
 **Sprint 304 — Store, persistence, import/export contract matrix** — P0 · L · S301.
 
-- T1: Exercise every exported store action: initial state, valid transition, invalid/no-op input, undo/redo, reset, persistence, reload and cross-slice effects.
-- T2: Test IDB/localStorage unavailable, corrupted record, stale schema, quota, partial write, duplicate project id, concurrent save, deletion and migration recovery.
+- T1: Exercise every exported store action: initial state, valid transition, invalid/no-op input, undo/redo, reset, persistence, reload and cross-slice effects. IN PROGRESS.
+- T2: Test IDB/localStorage unavailable, corrupted record, stale schema, quota, partial write, duplicate project id, concurrent save, deletion and migration recovery. IN PROGRESS.
 - T3: Verify each import/export round trip preserves semantically relevant state and intentionally omits ephemeral UI state.
 - Tests: fake-indexeddb transaction failures; legacy fixtures; unknown and future schema versions; Unicode/RTL names; empty and very large projects.
 - Accept: corrupted input never mutates live state; recoverable errors are actionable; round-trip comparison uses canonical normalized project snapshots.
+
+Progress (2026-09-28): `migrateProject` rejects malformed cabinet entries and incomplete cabinet configs before import persistence; regression tests cover null entries, missing names/configs, and invalid config objects.
+
+Persisted project reads validate every record through the same migration boundary. Corrupt IndexedDB data produces an actionable error and is not overwritten by a later save; regression tests cover corrupt reads and write preservation.
+
+Imported snapshot history validates each snapshot record and its nested cabinets before either project or snapshot storage is changed. Regression cases cover null records, missing fields, and malformed nested cabinets while preserving valid snapshot round-trips.
+
+Project imports compensate for cross-store partial writes: if project persistence fails after snapshot history is saved, the prior snapshot list is restored. Tests cover successful rollback and report both errors if rollback itself fails.
+
+Legacy localStorage migration now rejects malformed JSON and non-array payloads instead of silently caching an empty list; migration writes occur only after the legacy value passes the array-shape check. Projects, saved configs, and snapshots also reject corrupt non-array IndexedDB values rather than treating them as empty storage.
+
+New project IDs use `crypto.randomUUID()` and are checked against existing IDs for saves, single-project imports, and bundle imports. A fixed-clock regression covers same-millisecond saves; the PWA parser test verifies the generated UUID format.
+
+Project-list mutations are serialized across saves, deletes, single-project imports, and bundle imports. A concurrent-save regression first reproduced a lost project, then verified both writes survive through the mutation queue.
+
+Deletion failure coverage verifies the storage error is propagated, raw project data remains unchanged, and a subsequent retry succeeds without poisoning the mutation queue.
+
+Quota failure coverage verifies the error propagates, existing project data remains intact, and a later save succeeds. The same regression exercises recovery of the serialized mutation queue after the failed write.
+
+Full `npm run ci` passed with 4,546 tests across 283 files, production build and bundle budgets passing, and all 16 benchmarks within budget. Remaining store-action, IndexedDB failure, and round-trip matrix tasks are still open.
 
 **Sprint 305 — Component behavior foundation** — P1 · L · S302.
 

@@ -50,7 +50,7 @@ describe('parseCabinetPlanFile — Phase 13 Sprint 7', () => {
   it('auto-assigns an id when missing from payload', () => {
     const noId = JSON.stringify({ name: 'NoID', savedAt: '2025-01-01T00:00:00Z', cabinets: [] });
     const result = parseCabinetPlanFile(noId);
-    expect(result?.id).toMatch(/^proj-\d+$/);
+    expect(result?.id).toMatch(/^proj-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
   });
 
   it('defaults name to Untitled when missing or empty', () => {

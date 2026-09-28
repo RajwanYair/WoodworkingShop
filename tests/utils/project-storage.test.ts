@@ -5,6 +5,7 @@ import {
   deleteProject,
   migrateProject,
   exportProjectJson,
+  importProjectJson,
   importProjectsBundle,
   CURRENT_SCHEMA_VERSION,
   PROJECT_SCHEMA_REGISTRY,
@@ -12,14 +13,15 @@ import {
 } from '../../src/utils/project-storage';
 import type { ProjectSnapshot } from '../../src/store/cabinet-store';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import { idbSaveProjects, idbSaveSnapshots } from '../../src/utils/indexed-db-storage';
 
 // In-memory IndexedDB mock — keeps projects and snapshots separately
-const memProjects: SavedProject[] = [];
+const memProjects: unknown[] = [];
 const memSnapshots: ProjectSnapshot[] = [];
 
 vi.mock('../../src/utils/indexed-db-storage', () => ({
   idbLoadProjects: vi.fn(async () => [...memProjects]),
-  idbSaveProjects: vi.fn(async (data: SavedProject[]) => {
+  idbSaveProjects: vi.fn(async (data: unknown[]) => {
     memProjects.length = 0;
     memProjects.push(...data);
   }),
@@ -61,6 +63,40 @@ describe('project-storage', () => {
     expect(await listProjects()).toHaveLength(0);
   });
 
+  it('preserves the project and recovers when deletion persistence fails', async () => {
+    const project = await saveProject('Retry deletion', sampleCabinets);
+    vi.mocked(idbSaveProjects).mockRejectedValueOnce(new Error('Project store unavailable'));
+
+    await expect(deleteProject(project.id)).rejects.toThrow(/project store unavailable/i);
+    expect(memProjects).toEqual([project]);
+    expect(await listProjects()).toMatchObject([{ id: project.id, name: project.name }]);
+
+    await expect(deleteProject(project.id)).resolves.toBeUndefined();
+    expect(await listProjects()).toEqual([]);
+  });
+
+  it('preserves saved projects and recovers when storage quota is exceeded', async () => {
+    const existing = await saveProject('Existing project', sampleCabinets);
+    vi.mocked(idbSaveProjects).mockRejectedValueOnce(
+      new DOMException('The storage quota has been exceeded', 'QuotaExceededError'),
+    );
+
+    await expect(saveProject('New project', sampleCabinets)).rejects.toThrow(/quota has been exceeded/i);
+    expect(memProjects).toEqual([existing]);
+
+    await expect(saveProject('New project', sampleCabinets)).resolves.toMatchObject({ name: 'New project' });
+    expect((await listProjects()).map((project) => project.name)).toEqual(['Existing project', 'New project']);
+  });
+
+  it('rejects corrupt persisted projects without overwriting stored data', async () => {
+    const corruptRecord = { id: 'broken', name: 'Broken', cabinets: [null] };
+    memProjects.push(corruptRecord);
+
+    await expect(listProjects()).rejects.toThrow(/saved project storage/i);
+    await expect(saveProject('Replacement', sampleCabinets)).rejects.toThrow(/saved project storage/i);
+    expect(memProjects).toEqual([corruptRecord]);
+  });
+
   it('snapshot round-trip: importProjectJson restores snapshots to IndexedDB', async () => {
     const project: SavedProject = {
       id: 'round-trip-id',
@@ -71,7 +107,6 @@ describe('project-storage', () => {
     };
     const file = new File([JSON.stringify(project)], 'project.cabinet-project.json', { type: 'application/json' });
 
-    const { importProjectJson } = await import('../../src/utils/project-storage');
     const imported = await importProjectJson(file);
 
     expect(imported.cabinets).toHaveLength(1);
@@ -93,13 +128,76 @@ describe('project-storage', () => {
     };
     const file = new File([JSON.stringify(project)], 'test.json', { type: 'application/json' });
 
-    const { importProjectJson } = await import('../../src/utils/project-storage');
     await importProjectJson(file);
 
     // snap-1 should appear exactly once
     expect(memSnapshots.filter((s) => s.id === 'snap-1')).toHaveLength(1);
     expect(memSnapshots.some((s) => s.id === 'snap-2')).toBe(true);
   });
+
+  it('restores imported snapshots when project persistence fails', async () => {
+    await saveProject('Existing project', sampleCabinets);
+    const projectsBeforeImport = [...memProjects];
+    vi.mocked(idbSaveProjects).mockRejectedValueOnce(new Error('Project store unavailable'));
+    const project: SavedProject = {
+      id: 'partial-import',
+      name: 'Partial import',
+      savedAt: new Date().toISOString(),
+      cabinets: sampleCabinets,
+      snapshots: sampleSnapshots,
+    };
+    const file = new File([JSON.stringify(project)], 'partial-import.json', { type: 'application/json' });
+
+    await expect(importProjectJson(file)).rejects.toThrow(/snapshot history was restored/i);
+    expect(memProjects).toEqual(projectsBeforeImport);
+    expect(memSnapshots).toEqual([]);
+  });
+
+  it('reports both failures when snapshot rollback also fails', async () => {
+    vi.mocked(idbSaveSnapshots)
+      .mockImplementationOnce(async () => {})
+      .mockRejectedValueOnce(new Error('Snapshot rollback unavailable'));
+    vi.mocked(idbSaveProjects).mockRejectedValueOnce(new Error('Project store unavailable'));
+    const project: SavedProject = {
+      id: 'failed-rollback',
+      name: 'Failed rollback',
+      savedAt: new Date().toISOString(),
+      cabinets: sampleCabinets,
+      snapshots: sampleSnapshots,
+    };
+    const file = new File([JSON.stringify(project)], 'failed-rollback.json', { type: 'application/json' });
+
+    await expect(importProjectJson(file)).rejects.toThrow(/snapshot history rollback also failed/i);
+  });
+
+  it.each([null, {}, { id: 'bad', name: 'Bad', cabinets: [null], timestamp: '2025-01-01T00:00:00.000Z' }])(
+    'rejects malformed snapshot records without persisting the import',
+    async (snapshot) => {
+      const file = new File(
+        [JSON.stringify({ name: 'Corrupt snapshots', cabinets: sampleCabinets, snapshots: [snapshot] })],
+        'corrupt-snapshots.cabinet-project.json',
+        { type: 'application/json' },
+      );
+
+      await expect(importProjectJson(file)).rejects.toThrow(/snapshot/i);
+      expect(memSnapshots).toEqual([]);
+      expect(memProjects).toEqual([]);
+    },
+  );
+
+  it.each([null, {}, { name: 'Missing config' }, { name: 'Malformed config', config: {} }])(
+    'rejects malformed cabinet entries without persisting a project',
+    async (cabinet) => {
+      const file = new File(
+        [JSON.stringify({ name: 'Corrupt import', cabinets: [cabinet] })],
+        'corrupt.cabinet-project.json',
+        { type: 'application/json' },
+      );
+
+      await expect(importProjectJson(file)).rejects.toThrow(/cabinet/i);
+      expect(memProjects).toEqual([]);
+    },
+  );
 
   it('saveProject replaces a project with the same name, preserving its id', async () => {
     const first = await saveProject('Same Name', sampleCabinets);
@@ -109,6 +207,31 @@ describe('project-storage', () => {
     // id is preserved from the first save
     expect(projects[0].id).toBe(first.id);
     expect(second.name).toBe('Same Name');
+  });
+
+  it('generates unique ids for distinct projects saved in the same millisecond', async () => {
+    const clock = vi.spyOn(Date, 'now').mockReturnValue(1_700_000_000_000);
+    try {
+      const first = await saveProject('First Project', sampleCabinets);
+      const second = await saveProject('Second Project', sampleCabinets);
+
+      expect(second.id).not.toBe(first.id);
+      expect(new Set((await listProjects()).map((project) => project.id)).size).toBe(2);
+    } finally {
+      clock.mockRestore();
+    }
+  });
+
+  it('preserves distinct projects saved concurrently', async () => {
+    await Promise.all([
+      saveProject('Concurrent Project A', sampleCabinets),
+      saveProject('Concurrent Project B', sampleCabinets),
+    ]);
+
+    expect((await listProjects()).map((project) => project.name).sort()).toEqual([
+      'Concurrent Project A',
+      'Concurrent Project B',
+    ]);
   });
 
   it('exportProjectJson calls triggerDownload with serialised project', () => {
@@ -147,6 +270,7 @@ describe('project-storage', () => {
     expect(added).toHaveLength(2);
     expect(added[0].name).toBe('Bundled A');
     expect(added[1].name).toBe('Bundled B');
+    expect(new Set(added.map((project) => project.id)).size).toBe(2);
   });
 
   it('importProjectsBundle renames duplicates with (imported) suffix', async () => {

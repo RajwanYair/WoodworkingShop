@@ -12,7 +12,7 @@ const expectedHooks = {
 };
 
 const requiredLintStagedKeys = ['*.{ts,tsx}', '*.{json,yaml,yml}', '*.md', '*.css'];
-const requiredTsLintCommands = ['eslint --max-warnings 0 --fix', 'prettier --write'];
+const requiredTsLintCommands = ['eslint --max-warnings 0 --no-warn-ignored --fix', 'prettier --write'];
 
 function main() {
   if (!fs.existsSync(packagePath)) {

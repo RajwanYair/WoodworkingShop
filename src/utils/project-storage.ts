@@ -38,8 +38,60 @@ export interface SavedProject {
   snapshots?: ProjectSnapshot[]; // snapshot history round-trip
 }
 
+function createProjectId(existingIds: ReadonlySet<string> = new Set()): string {
+  let id: string;
+  do {
+    id = `proj-${crypto.randomUUID()}`;
+  } while (existingIds.has(id));
+  return id;
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+function isOneOf<T extends string>(value: unknown, values: readonly T[]): value is T {
+  return values.some((candidate) => candidate === value);
+}
+
+function isFiniteNumber(value: unknown): value is number {
+  return typeof value === 'number' && Number.isFinite(value);
+}
+
+function isCabinetEntry(value: unknown): value is CabinetEntry {
+  if (!isRecord(value) || typeof value['name'] !== 'string') return false;
+  if (value['notes'] !== undefined && typeof value['notes'] !== 'string') return false;
+
+  const config = value['config'];
+  if (!isRecord(config)) return false;
+
+  return (
+    isOneOf(config['furnitureType'], ['cabinet', 'bookshelf', 'desk', 'wardrobe', 'panel']) &&
+    ['width', 'height', 'depth', 'shelfCount', 'doorReveal', 'drawerCount', 'kickHeight'].every((key) =>
+      isFiniteNumber(config[key]),
+    ) &&
+    isOneOf(config['shelfSpacing'], ['equal', 'custom']) &&
+    Array.isArray(config['customShelfPositions']) &&
+    config['customShelfPositions'].every(isFiniteNumber) &&
+    typeof config['carcassMaterial'] === 'string' &&
+    typeof config['backPanelMaterial'] === 'string' &&
+    (config['doorCount'] === 1 || config['doorCount'] === 2) &&
+    isOneOf(config['doorStyle'], ['flat', 'shaker', 'glass', 'none']) &&
+    isOneOf(config['handleStyle'], ['bar', 'knob', 'cup', 'none']) &&
+    isOneOf(config['edgeBanding'], ['all-visible', 'doors-only', 'none']) &&
+    isOneOf(config['lang'], ['en', 'he'])
+  );
+}
+
+function isProjectSnapshot(value: unknown): value is ProjectSnapshot {
+  return (
+    isRecord(value) &&
+    typeof value['id'] === 'string' &&
+    typeof value['name'] === 'string' &&
+    typeof value['timestamp'] === 'string' &&
+    Array.isArray(value['cabinets']) &&
+    value['cabinets'].every(isCabinetEntry)
+  );
 }
 
 function isSupportedSchemaVersion(version: string): boolean {
@@ -107,9 +159,18 @@ export function migrateProject(raw: unknown): SavedProject {
   if (!Array.isArray(p['cabinets'])) {
     throw new TypeError('Invalid project file: missing cabinets array');
   }
+  if (!p['cabinets'].every(isCabinetEntry)) {
+    throw new TypeError('Invalid project file: cabinets must contain valid cabinet entries');
+  }
+  if (p['snapshots'] !== undefined && !Array.isArray(p['snapshots'])) {
+    throw new TypeError('Invalid project file: snapshots must be an array');
+  }
+  if (Array.isArray(p['snapshots']) && !p['snapshots'].every(isProjectSnapshot)) {
+    throw new TypeError('Invalid project file: snapshots must contain valid snapshot records');
+  }
   // v1.0 — no structural migration needed; ensure required fields have defaults
   const migrated: SavedProject = {
-    id: typeof p['id'] === 'string' ? p['id'] : `proj-${Date.now()}`,
+    id: typeof p['id'] === 'string' ? p['id'] : createProjectId(),
     name: typeof p['name'] === 'string' && p['name'].trim() ? p['name'].trim() : 'Untitled',
     savedAt: typeof p['savedAt'] === 'string' ? p['savedAt'] : new Date().toISOString(),
     schemaVersion: CURRENT_SCHEMA_VERSION,
@@ -121,40 +182,61 @@ export function migrateProject(raw: unknown): SavedProject {
 }
 
 async function load(): Promise<SavedProject[]> {
-  return idbLoadProjects<SavedProject>();
+  const records = await idbLoadProjects<unknown>();
+  try {
+    return records.map(migrateProject);
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : String(error);
+    throw new Error(`Invalid saved project storage: ${detail}`, { cause: error });
+  }
 }
 
 async function save(projects: SavedProject[]): Promise<void> {
   await idbSaveProjects(projects);
 }
 
+let projectWriteQueue: Promise<void> = Promise.resolve();
+
+function withProjectWriteLock<T>(operation: () => Promise<T>): Promise<T> {
+  const result = projectWriteQueue.then(operation);
+  projectWriteQueue = result.then(
+    () => undefined,
+    () => undefined,
+  );
+  return result;
+}
+
 export async function listProjects(): Promise<SavedProject[]> {
   return load();
 }
 
-export async function saveProject(name: string, cabinets: CabinetEntry[]): Promise<SavedProject> {
-  const projects = await load();
-  const id = `proj-${Date.now()}`;
-  const project: SavedProject = {
-    id,
-    name: name.trim() || 'Untitled',
-    savedAt: new Date().toISOString(),
-    cabinets,
-  };
-  // Replace existing project with the same name, or push new
-  const idx = projects.findIndex((p) => p.name.toLowerCase() === project.name.toLowerCase());
-  if (idx >= 0) {
-    projects[idx] = { ...project, id: projects[idx].id };
-  } else {
-    projects.push(project);
-  }
-  await save(projects);
-  return project;
+export function saveProject(name: string, cabinets: CabinetEntry[]): Promise<SavedProject> {
+  return withProjectWriteLock(async () => {
+    const projects = await load();
+    const id = createProjectId(new Set(projects.map((project) => project.id)));
+    const project: SavedProject = {
+      id,
+      name: name.trim() || 'Untitled',
+      savedAt: new Date().toISOString(),
+      cabinets,
+    };
+    // Replace existing project with the same name, or push new
+    const idx = projects.findIndex((p) => p.name.toLowerCase() === project.name.toLowerCase());
+    if (idx >= 0) {
+      projects[idx] = { ...project, id: projects[idx].id };
+    } else {
+      projects.push(project);
+    }
+    await save(projects);
+    return project;
+  });
 }
 
-export async function deleteProject(id: string): Promise<void> {
-  const projects = (await load()).filter((p) => p.id !== id);
-  await save(projects);
+export function deleteProject(id: string): Promise<void> {
+  return withProjectWriteLock(async () => {
+    const projects = (await load()).filter((p) => p.id !== id);
+    await save(projects);
+  });
 }
 
 export function exportProjectJson(project: SavedProject, snapshots?: ProjectSnapshot[]): void {
@@ -174,24 +256,48 @@ export function exportProjectJson(project: SavedProject, snapshots?: ProjectSnap
   URL.revokeObjectURL(url);
 }
 
-export async function importProjectJson(file: File): Promise<SavedProject> {
-  const text = await file.text();
-  const raw = JSON.parse(text) as unknown;
-  const project = migrateProject(raw);
-  // Restore snapshot history, merging by id to avoid duplicates
-  if (Array.isArray(project.snapshots) && project.snapshots.length > 0) {
-    const existing = await idbLoadSnapshots<ProjectSnapshot>();
-    const existingIds = new Set(existing.map((s) => s.id));
-    const merged = [...existing, ...project.snapshots.filter((s) => !existingIds.has(s.id))];
-    await idbSaveSnapshots(merged);
-  }
-  // Re-save with a fresh id to avoid conflicts
-  const projects = await load();
-  project.id = `proj-${Date.now()}`;
-  project.savedAt = new Date().toISOString();
-  projects.push(project);
-  await save(projects);
-  return project;
+export function importProjectJson(file: File): Promise<SavedProject> {
+  return withProjectWriteLock(async () => {
+    const text = await file.text();
+    const raw = JSON.parse(text) as unknown;
+    const project = migrateProject(raw);
+    const projects = await load();
+    const snapshots = project.snapshots ?? [];
+    const existingSnapshots = snapshots.length > 0 ? await idbLoadSnapshots<ProjectSnapshot>() : [];
+    if (!existingSnapshots.every(isProjectSnapshot)) {
+      throw new Error('Invalid saved snapshot storage: snapshots must contain valid snapshot records');
+    }
+
+    // Re-save with a fresh id to avoid conflicts
+    project.id = createProjectId(new Set(projects.map((existingProject) => existingProject.id)));
+    project.savedAt = new Date().toISOString();
+    projects.push(project);
+
+    if (snapshots.length > 0) {
+      const existingIds = new Set(existingSnapshots.map((snapshot) => snapshot.id));
+      const mergedSnapshots = [...existingSnapshots, ...snapshots.filter((snapshot) => !existingIds.has(snapshot.id))];
+      await idbSaveSnapshots(mergedSnapshots);
+      try {
+        await save(projects);
+      } catch (error) {
+        try {
+          await idbSaveSnapshots(existingSnapshots);
+        } catch (rollbackError) {
+          throw new AggregateError(
+            [error, rollbackError],
+            'Project import failed and snapshot history rollback also failed',
+            { cause: rollbackError },
+          );
+        }
+        throw new Error('Project import failed: saved projects could not be updated; snapshot history was restored', {
+          cause: error,
+        });
+      }
+    } else {
+      await save(projects);
+    }
+    return project;
+  });
 }
 
 /** Export multiple projects as a single `.cabinet-projects.json` bundle */
@@ -231,42 +337,46 @@ export async function exportProjectsBundle(projects: SavedProject[]): Promise<vo
 }
 
 /** Import a `.cabinet-projects.json` bundle, merging all contained projects */
-export async function importProjectsBundle(file: File): Promise<SavedProject[]> {
-  const text = await file.text();
-  const parsed = JSON.parse(text) as unknown;
-  if (!isRecord(parsed)) {
-    throw new Error('Invalid bundle: root must be an object');
-  }
-  const bundleVersion = parseBundleSchemaVersion(parsed);
-  if (bundleVersion > CURRENT_BUNDLE_SCHEMA_VERSION) {
-    throw new Error(`Unsupported bundle version: ${bundleVersion}`);
-  }
-  const incoming = parsed.projects;
-  if (!Array.isArray(incoming)) {
-    throw new TypeError('Invalid bundle: missing projects array');
-  }
-  const existing = await load();
-  const existingNames = new Set(existing.map((p) => p.name.toLowerCase()));
-  const added: SavedProject[] = [];
-  for (const raw of incoming) {
-    let proj: SavedProject;
-    try {
-      proj = migrateProject(raw);
-    } catch {
-      continue; // skip malformed entries
+export function importProjectsBundle(file: File): Promise<SavedProject[]> {
+  return withProjectWriteLock(async () => {
+    const text = await file.text();
+    const parsed = JSON.parse(text) as unknown;
+    if (!isRecord(parsed)) {
+      throw new Error('Invalid bundle: root must be an object');
     }
-    const merged: SavedProject = {
-      ...proj,
-      id: `proj-${Date.now()}-${Math.random().toString(36).slice(2)}`,
-      savedAt: new Date().toISOString(),
-      name: existingNames.has(proj.name.toLowerCase()) ? `${proj.name} (imported)` : proj.name,
-    };
-    existing.push(merged);
-    existingNames.add(merged.name.toLowerCase());
-    added.push(merged);
-  }
-  await save(existing);
-  return added;
+    const bundleVersion = parseBundleSchemaVersion(parsed);
+    if (bundleVersion > CURRENT_BUNDLE_SCHEMA_VERSION) {
+      throw new Error(`Unsupported bundle version: ${bundleVersion}`);
+    }
+    const incoming = parsed.projects;
+    if (!Array.isArray(incoming)) {
+      throw new TypeError('Invalid bundle: missing projects array');
+    }
+    const existing = await load();
+    const existingNames = new Set(existing.map((p) => p.name.toLowerCase()));
+    const existingIds = new Set(existing.map((p) => p.id));
+    const added: SavedProject[] = [];
+    for (const raw of incoming) {
+      let proj: SavedProject;
+      try {
+        proj = migrateProject(raw);
+      } catch {
+        continue; // skip malformed entries
+      }
+      const merged: SavedProject = {
+        ...proj,
+        id: createProjectId(existingIds),
+        savedAt: new Date().toISOString(),
+        name: existingNames.has(proj.name.toLowerCase()) ? `${proj.name} (imported)` : proj.name,
+      };
+      existing.push(merged);
+      existingNames.add(merged.name.toLowerCase());
+      existingIds.add(merged.id);
+      added.push(merged);
+    }
+    await save(existing);
+    return added;
+  });
 }
 
 // ── Project Settings export / import ─────────────────────────────────────────
