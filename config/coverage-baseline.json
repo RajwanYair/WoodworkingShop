@@ -4,11 +4,11 @@
   "directories": {
     "engine": {
       "statements": {
-        "covered": 8092,
+        "covered": 8093,
         "total": 8324
       },
       "branches": {
-        "covered": 4597,
+        "covered": 4598,
         "total": 5108
       },
       "functions": {
@@ -16,7 +16,7 @@
         "total": 1440
       },
       "lines": {
-        "covered": 7207,
+        "covered": 7208,
         "total": 7388
       }
     },
@@ -76,19 +76,19 @@
     },
     "components": {
       "statements": {
-        "covered": 2292,
+        "covered": 2358,
         "total": 3578
       },
       "branches": {
-        "covered": 1463,
+        "covered": 1512,
         "total": 2561
       },
       "functions": {
-        "covered": 724,
+        "covered": 751,
         "total": 1225
       },
       "lines": {
-        "covered": 2107,
+        "covered": 2173,
         "total": 3250
       }
     }

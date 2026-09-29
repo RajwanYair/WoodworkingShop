@@ -49,6 +49,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added component journeys for build-log keyboard save/focus/clear, grain-report grouping, quantity-expanded part labels and print output, G-code preset regeneration/download, and optimizer explanation statistics.
 - Added cabinet-store initialization tests for missing/malformed/unavailable persistence and shared-link overrides; measured component coverage is now 64.05% statements, 57.12% branches, 59.10% functions, and 64.83% lines, with the coverage ratchet passing across 328 component tests.
 - Verified full `npm run ci`: 4,703 tests across 323 files, production build and bundle budgets passed (2,791.4 KB / 2,960 KB), and all 16 benchmarks stayed within budget.
+- Added calculator interaction coverage for cabinet-door sizing, drawer slide clearances, kerf-bend feasibility, screw pull-out density/rating changes, and wood-turning operation/diameter speeds.
+- Raised measured component coverage to 65.90% statements, 59.03% branches, 61.30% functions, and 66.86% lines; the coverage ratchet passed with 333 component tests and no area floor lowered.
+- Verified full `npm run ci`: 4,708 tests across 328 files, production build and bundle budgets passed (2,791.4 KB / 2,960 KB), and all 16 benchmarks stayed within budget.
 
 ### Validation and Repair Journeys
 
