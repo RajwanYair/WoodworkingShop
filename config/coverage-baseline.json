@@ -8,7 +8,7 @@
         "total": 8324
       },
       "branches": {
-        "covered": 4596,
+        "covered": 4597,
         "total": 5108
       },
       "functions": {
@@ -40,19 +40,19 @@
     },
     "store": {
       "statements": {
-        "covered": 730,
+        "covered": 732,
         "total": 824
       },
       "branches": {
-        "covered": 297,
+        "covered": 298,
         "total": 401
       },
       "functions": {
-        "covered": 246,
+        "covered": 247,
         "total": 278
       },
       "lines": {
-        "covered": 654,
+        "covered": 656,
         "total": 704
       }
     },
@@ -76,19 +76,19 @@
     },
     "components": {
       "statements": {
-        "covered": 2219,
+        "covered": 2292,
         "total": 3578
       },
       "branches": {
-        "covered": 1401,
+        "covered": 1463,
         "total": 2561
       },
       "functions": {
-        "covered": 688,
+        "covered": 724,
         "total": 1225
       },
       "lines": {
-        "covered": 2045,
+        "covered": 2107,
         "total": 3250
       }
     }

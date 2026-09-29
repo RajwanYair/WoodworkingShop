@@ -46,6 +46,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added optimizer interaction coverage for cut-plan summary, cut checklist, stock tracker, offcut catalog, and waste analytics; associated visible stock-add labels with their inputs.
 - Raised measured component coverage to 62.01% statements, 54.70% branches, 56.16% functions, and 62.92% lines; the coverage ratchet passed with 322 component tests without lowering any area floor.
 - Verified full `npm run ci`: 4,693 unit tests across 318 files, production build and bundle budgets passed (2,791.4 KB / 2,960 KB), and all 16 benchmarks stayed within budget.
+- Added component journeys for build-log keyboard save/focus/clear, grain-report grouping, quantity-expanded part labels and print output, G-code preset regeneration/download, and optimizer explanation statistics.
+- Added cabinet-store initialization tests for missing/malformed/unavailable persistence and shared-link overrides; measured component coverage is now 64.05% statements, 57.12% branches, 59.10% functions, and 64.83% lines, with the coverage ratchet passing across 328 component tests.
+- Verified full `npm run ci`: 4,703 tests across 323 files, production build and bundle budgets passed (2,791.4 KB / 2,960 KB), and all 16 benchmarks stayed within budget.
 
 ### Validation and Repair Journeys
 

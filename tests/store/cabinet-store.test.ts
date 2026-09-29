@@ -75,6 +75,64 @@ describe('cabinet-store', () => {
     });
   });
 
+  it('applies shared-link config over the restored cabinet session', async () => {
+    window.localStorage.setItem(
+      'woodworkingshop:session',
+      JSON.stringify({
+        cabinets: [{ name: 'Saved cabinet', config: { ...DEFAULT_CONFIG, width: 812 } }],
+        activeCabinetIndex: 0,
+      }),
+    );
+    window.history.replaceState(null, '', '/?w=900');
+
+    vi.resetModules();
+    const { useCabinetStore: restoredStore } = await import('../../src/store/cabinet-store');
+
+    expect(restoredStore.getState()).toMatchObject({
+      cabinets: [{ name: 'Saved cabinet', config: { width: 900 } }],
+      config: { width: 900 },
+    });
+  });
+
+  it('falls back to the default cabinet when the persisted session is malformed', async () => {
+    window.localStorage.setItem('woodworkingshop:session', '{bad json');
+
+    vi.resetModules();
+    const { useCabinetStore: restoredStore } = await import('../../src/store/cabinet-store');
+
+    expect(restoredStore.getState()).toMatchObject({
+      cabinets: [{ name: 'Cabinet 1', config: DEFAULT_CONFIG }],
+      config: DEFAULT_CONFIG,
+    });
+  });
+
+  it('initializes the default cabinet when no persisted session exists', async () => {
+    window.localStorage.removeItem('woodworkingshop:session');
+
+    vi.resetModules();
+    const { useCabinetStore: restoredStore } = await import('../../src/store/cabinet-store');
+
+    expect(restoredStore.getState()).toMatchObject({
+      cabinets: [{ name: 'Cabinet 1', config: DEFAULT_CONFIG }],
+      config: DEFAULT_CONFIG,
+    });
+  });
+
+  it('initializes the default cabinet when session storage cannot be read', async () => {
+    vi.spyOn(window.localStorage, 'getItem').mockImplementation((key) => {
+      if (key === 'woodworkingshop:session') throw new Error('storage unavailable');
+      return null;
+    });
+
+    vi.resetModules();
+    const { useCabinetStore: restoredStore } = await import('../../src/store/cabinet-store');
+
+    expect(restoredStore.getState()).toMatchObject({
+      cabinets: [{ name: 'Cabinet 1', config: DEFAULT_CONFIG }],
+      config: DEFAULT_CONFIG,
+    });
+  });
+
   it('updates config via setConfig', () => {
     useCabinetStore.getState().setConfig({ width: 800 });
     expect(useCabinetStore.getState().config.width).toBe(800);
