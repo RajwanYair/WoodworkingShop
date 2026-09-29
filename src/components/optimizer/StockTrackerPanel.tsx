@@ -169,8 +169,11 @@ export function StockTrackerPanel() {
             </summary>
             <div className="mt-2 flex flex-wrap items-end gap-2">
               <div className="flex flex-col gap-0.5">
-                <label className="text-wood-500 text-xs">{t('stockTracker.materialKey')}</label>
+                <label htmlFor="stock-material-key" className="text-wood-500 text-xs">
+                  {t('stockTracker.materialKey')}
+                </label>
                 <input
+                  id="stock-material-key"
                   type="text"
                   value={newKey}
                   onChange={(e) => setNewKey(e.target.value)}
@@ -179,8 +182,11 @@ export function StockTrackerPanel() {
                 />
               </div>
               <div className="flex flex-col gap-0.5">
-                <label className="text-wood-500 text-xs">{t('stockTracker.onHand')}</label>
+                <label htmlFor="stock-on-hand" className="text-wood-500 text-xs">
+                  {t('stockTracker.onHand')}
+                </label>
                 <input
+                  id="stock-on-hand"
                   type="number"
                   min={0}
                   value={newQty}
@@ -190,8 +196,11 @@ export function StockTrackerPanel() {
                 />
               </div>
               <div className="flex flex-col gap-0.5">
-                <label className="text-wood-500 text-xs">{t('stockTracker.reorderAt')}</label>
+                <label htmlFor="stock-reorder-at" className="text-wood-500 text-xs">
+                  {t('stockTracker.reorderAt')}
+                </label>
                 <input
+                  id="stock-reorder-at"
                   type="number"
                   min={0}
                   value={newReorder}

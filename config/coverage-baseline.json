@@ -40,11 +40,11 @@
     },
     "store": {
       "statements": {
-        "covered": 729,
+        "covered": 730,
         "total": 824
       },
       "branches": {
-        "covered": 296,
+        "covered": 297,
         "total": 401
       },
       "functions": {
@@ -52,7 +52,7 @@
         "total": 278
       },
       "lines": {
-        "covered": 653,
+        "covered": 654,
         "total": 704
       }
     },
@@ -76,19 +76,19 @@
     },
     "components": {
       "statements": {
-        "covered": 2184,
+        "covered": 2219,
         "total": 3578
       },
       "branches": {
-        "covered": 1368,
+        "covered": 1401,
         "total": 2561
       },
       "functions": {
-        "covered": 660,
+        "covered": 688,
         "total": 1225
       },
       "lines": {
-        "covered": 2015,
+        "covered": 2045,
         "total": 3250
       }
     }

@@ -43,6 +43,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Raised measured component coverage to 61.03% statements, 53.41% branches, 53.87% functions, and 62.00% lines; the ratchet passed with 4,687 unit tests and 317 component tests without lowering any area floor.
 - Added an engine regression guard verifying every built-in template uses registered carcass and back-panel materials.
 - Verified full `npm run ci`: 4,688 unit tests across 313 files, production build and bundle budgets passed, and all 16 benchmarks stayed within budget.
+- Added optimizer interaction coverage for cut-plan summary, cut checklist, stock tracker, offcut catalog, and waste analytics; associated visible stock-add labels with their inputs.
+- Raised measured component coverage to 62.01% statements, 54.70% branches, 56.16% functions, and 62.92% lines; the coverage ratchet passed with 322 component tests without lowering any area floor.
+- Verified full `npm run ci`: 4,693 unit tests across 318 files, production build and bundle budgets passed (2,791.4 KB / 2,960 KB), and all 16 benchmarks stayed within budget.
 
 ### Validation and Repair Journeys
 
