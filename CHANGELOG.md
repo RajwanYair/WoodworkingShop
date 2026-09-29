@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added deterministic Playwright and typed test fixtures, RTL render support, accessible E2E queries, and per-test environment cleanup; fixed a localStorage mock leak exposed by shuffled test execution.
 - Verified 4,470 tests across 280 files in normal and seeded-shuffle runs, all 26 Chromium/Firefox E2E tests, and the complete `npm run ci` gate including build, bundle, and benchmark budgets.
 
+### Component Behavior Foundation
+
+- Replaced conditional optimizer-table checks with accessible interaction tests for material filtering, search, sorting, and hardware quantity override/reset behavior.
+- Verified full `npm run ci`: 4,641 tests across 284 files, production build, bundle budgets, and all 16 benchmarks.
+
 ### Validation and Repair Journeys
 
 - Fixed the wide-span warning so the recommended centre-support repair clears it, and restored keyboard focus after a repair removes its issue row or validation panel.
