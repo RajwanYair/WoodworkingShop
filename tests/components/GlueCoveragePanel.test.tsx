@@ -1,0 +1,25 @@
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it } from 'vitest';
+import { GlueCoveragePanel } from '../../src/components/configurator/GlueCoveragePanel';
+
+describe('GlueCoveragePanel', () => {
+  it('recalculates volume for multiple joints and selected glue type', async () => {
+    const user = userEvent.setup();
+    render(<GlueCoveragePanel />);
+
+    const panel = screen.getByRole('region', { name: /wood glue coverage calculator/i });
+    expect(panel).toHaveTextContent('0.28 mL');
+    expect(panel).toHaveTextContent('10 min');
+
+    const jointCount = screen.getByRole('spinbutton', { name: /number of joints/i });
+    await user.clear(jointCount);
+    await user.type(jointCount, '2');
+    await user.selectOptions(screen.getByRole('combobox', { name: /glue type/i }), 'polyurethane');
+
+    expect(panel).toHaveTextContent('0.4 mL');
+    expect(panel).toHaveTextContent('0.46 mL');
+    expect(panel).toHaveTextContent('15 min');
+    expect(panel).toHaveTextContent('60 min');
+  });
+});

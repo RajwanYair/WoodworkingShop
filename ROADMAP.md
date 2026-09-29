@@ -484,6 +484,13 @@ The coverage report now measures 48.4% component statements (up from 41.3% in th
 `npm run test:coverage:ratchet:update` passed without lowering any area floor. Full `npm run ci`
 passes with 4,648 tests across 284 files, production build, bundle budgets, and all 16 benchmarks.
 
+Follow-up (2026-09-29): Added user-level calculator journeys for dado/rabbet validation and
+conditional inputs, stair-stringer IRC warnings, symmetric taper settings, finish-dependent volume
+and drying time, and glue volume across joint count and glue type. Component coverage increased to
+49.95% statements (1,787/3,577); the coverage ratchet update passed without lowering any area floor.
+Full `npm run ci` passed with 4,653 tests across 289 files, production build, bundle budgets, and
+all 16 benchmarks. The broader component inventory and remaining high-use panel coverage are still open.
+
 **Sprint 306 — Mutation testing and quality evidence** — P1 · M · S303–S305.
 
 - T1: Evaluate Stryker on a bounded set of critical pure-engine modules (`dimensions`, `parts`, `cut-optimizer`, `validation`, export serializers); record runtime and mutant categories.
