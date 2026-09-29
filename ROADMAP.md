@@ -518,6 +518,13 @@ lowered area floor. Full `npm run ci` passed with 4,677 tests across 303 files, 
 bundle budgets passing, and all 16 benchmarks within budget. Sprint 305's broader component inventory
 remains open.
 
+Follow-up (2026-09-30): Added interaction coverage for cost summary export, actual-cost variance editing,
+optimizer suggestion apply/restore, material sheet-size overrides, and shopping-list grouping/collapse.
+Added translated accessible names for the material summary's icon-only size controls. The coverage
+ratchet passed with 4,682 unit tests and 312 component tests; component coverage now measures 57.40%
+statements, 50.87% branches, 51.02% functions, and 58.24% lines without lowering an area floor.
+Sprint 305's broader component inventory remains open.
+
 **Sprint 306 — Mutation testing and quality evidence** — P1 · M · S303–S305.
 
 - T1: Evaluate Stryker on a bounded set of critical pure-engine modules (`dimensions`, `parts`, `cut-optimizer`, `validation`, export serializers); record runtime and mutant categories.

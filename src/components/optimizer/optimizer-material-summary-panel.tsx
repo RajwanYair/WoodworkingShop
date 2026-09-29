@@ -141,6 +141,7 @@ export function MaterialSummaryPanel({
                             onClick={() => commitEdit(row.materialKey)}
                             className="px-1 text-xs text-green-600 hover:underline dark:text-green-400"
                             title="Apply"
+                            aria-label={t('optimizer.apply')}
                           >
                             ✓
                           </button>
@@ -149,6 +150,7 @@ export function MaterialSummaryPanel({
                             onClick={() => setEditingKey(null)}
                             className="text-wood-400 hover:text-wood-600 px-1 text-xs"
                             title="Cancel"
+                            aria-label={t('common.cancel')}
                           >
                             ✗
                           </button>
@@ -167,6 +169,7 @@ export function MaterialSummaryPanel({
                             onClick={() => startEdit(row.materialKey, row.defaultW, row.defaultL)}
                             className="text-wood-400 hover:text-wood-600 dark:hover:text-wood-300 text-xs"
                             title={t('optimizer.sheetSizeEdit')}
+                            aria-label={t('optimizer.sheetSizeEdit')}
                           >
                             ✎
                           </button>
@@ -176,6 +179,7 @@ export function MaterialSummaryPanel({
                               onClick={() => setSheetSizeOverride(row.materialKey, null)}
                               className="text-xs text-red-400 hover:text-red-600"
                               title={t('optimizer.sheetSizeReset')}
+                              aria-label={t('optimizer.sheetSizeReset')}
                             >
                               ↺
                             </button>

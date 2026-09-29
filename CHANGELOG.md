@@ -37,6 +37,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added component interaction coverage for quick presets, saved configurations, constraint repairs, cost editing, and custom shelf spacing. Fixed custom-clearance replacement typing and added an accessible name to the finish-cost edit control.
 - Raised measured component coverage to 55.72% statements, 49.19% branches, 48.48% functions, and 56.70% lines; the coverage ratchet passed with 4,677 unit tests and 307 component tests and no lowered area floor.
 - Verified full `npm run ci`: 4,677 tests across 303 files, production build and bundle budgets passed, and all 16 benchmarks stayed within budget.
+- Added component interaction coverage for cost summary export, actual-cost variance editing, optimizer suggestion apply/restore, material sheet-size overrides, and shopping-list grouping/collapse. Added translated accessible names to the material summary's icon-only size controls.
+- Raised measured component coverage to 57.40% statements, 50.87% branches, 51.02% functions, and 58.24% lines; the ratchet passed with 4,682 unit tests and 312 component tests without lowering any area floor.
 
 ### Validation and Repair Journeys
 
