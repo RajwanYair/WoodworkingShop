@@ -399,6 +399,7 @@ export function CostEstimatePanel() {
               }}
               className="text-wood-700 dark:text-wood-200 shrink-0 font-medium hover:underline"
               title={t('cost.editFinish', 'Click to set finish/paint cost')}
+              aria-label={t('cost.editFinish', 'Click to set finish/paint cost')}
             >
               {finishCost > 0 ? `₪${finishCost}` : t('cost.notSet', '—')}
             </button>

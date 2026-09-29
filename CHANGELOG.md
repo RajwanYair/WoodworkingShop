@@ -34,6 +34,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed invalid nested buttons in the snapshot panel by separating compare and expand controls.
 - Raised measured component coverage to 54.54% statements, 47.95% branches, 46.24% functions, and 55.55% lines; 4,666 unit tests and 296 component tests passed without lowering any floor.
 - Verified full `npm run ci`: 4,666 tests across 298 files, production build and bundle budgets passed, and all 16 benchmarks stayed within budget.
+- Added component interaction coverage for quick presets, saved configurations, constraint repairs, cost editing, and custom shelf spacing. Fixed custom-clearance replacement typing and added an accessible name to the finish-cost edit control.
+- Raised measured component coverage to 55.72% statements, 49.19% branches, 48.48% functions, and 56.70% lines; the coverage ratchet passed with 4,677 unit tests and 307 component tests and no lowered area floor.
+- Verified full `npm run ci`: 4,677 tests across 303 files, production build and bundle budgets passed, and all 16 benchmarks stayed within budget.
 
 ### Validation and Repair Journeys
 

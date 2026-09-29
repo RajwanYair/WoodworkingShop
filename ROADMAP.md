@@ -509,6 +509,15 @@ area floor. The coverage run passed 4,666 unit tests and 296 component tests acr
 16 benchmarks stayed within budget. Sprint 305's broader component inventory and remaining high-use
 panel coverage are still open.
 
+Follow-up (2026-09-29): Added interaction coverage for quick presets, saved configurations,
+constraint repairs, cost editing, and custom shelf spacing. Fixed custom clearance entry so replacing
+the value does not clamp each intermediate keystroke, and labeled the finish-cost edit button for
+assistive technology. Component coverage now measures 55.72% statements, 49.19% branches, 48.48%
+functions, and 56.70% lines; the ratchet passed with 4,677 unit tests and 307 component tests and no
+lowered area floor. Full `npm run ci` passed with 4,677 tests across 303 files, production build and
+bundle budgets passing, and all 16 benchmarks within budget. Sprint 305's broader component inventory
+remains open.
+
 **Sprint 306 — Mutation testing and quality evidence** — P1 · M · S303–S305.
 
 - T1: Evaluate Stryker on a bounded set of critical pure-engine modules (`dimensions`, `parts`, `cut-optimizer`, `validation`, export serializers); record runtime and mutant categories.

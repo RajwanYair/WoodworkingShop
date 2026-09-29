@@ -28,7 +28,7 @@ export function ShelfSpacingPresetsPanel() {
         selected,
         internalHeightMm,
         matThickness,
-        selected === 'custom' ? customClearance : undefined,
+        selected === 'custom' ? Math.max(50, customClearance) : undefined,
       ),
     [selected, internalHeightMm, matThickness, customClearance],
   );
@@ -89,7 +89,8 @@ export function ShelfSpacingPresetsPanel() {
                   max={2000}
                   step={10}
                   value={customClearance}
-                  onChange={(e) => setCustomClearance(Math.max(50, Number(e.target.value)))}
+                  onChange={(e) => setCustomClearance(Number(e.target.value))}
+                  onBlur={() => setCustomClearance(Math.max(50, customClearance))}
                   className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 dark:text-wood-100 w-24 rounded border bg-white px-2 py-1 text-sm"
                 />
                 <span className="text-wood-500 text-xs">{t('shelfSpacingPanel.mm')}</span>
