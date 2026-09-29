@@ -31,14 +31,20 @@ export function SnapshotPanel() {
 
   return (
     <div className="border-wood-200 dark:border-wood-700 mt-4 border-t pt-3">
-      <button
-        type="button"
-        className="text-wood-700 dark:text-wood-200 hover:text-wood-900 dark:hover:text-wood-50 flex w-full items-center gap-1.5 text-start text-sm font-semibold tracking-wide uppercase transition-colors"
-        aria-expanded={open}
-        onClick={() => setOpen((v) => !v)}
-      >
-        <IconFolder size={14} />
-        <span className="grow">{t('snapshot.title')}</span>
+      <div className="flex items-center gap-1.5">
+        <button
+          type="button"
+          className="text-wood-700 dark:text-wood-200 hover:text-wood-900 dark:hover:text-wood-50 flex grow items-center gap-1.5 text-start text-sm font-semibold tracking-wide uppercase transition-colors"
+          aria-expanded={open}
+          onClick={() => setOpen((v) => !v)}
+        >
+          <IconFolder size={14} />
+          <span className="grow">{t('snapshot.title')}</span>
+          {snapshots.length > 0 && (
+            <span className="text-wood-400 dark:text-wood-500 me-1 text-xs font-normal">({snapshots.length})</span>
+          )}
+          {open ? <IconChevronDown size={14} /> : <IconChevronRight size={14} />}
+        </button>
         {snapshots.length >= 2 && (
           <button
             type="button"
@@ -53,11 +59,7 @@ export function SnapshotPanel() {
             {t('snapshot.compare')}
           </button>
         )}
-        {snapshots.length > 0 && (
-          <span className="text-wood-400 dark:text-wood-500 me-1 text-xs font-normal">({snapshots.length})</span>
-        )}
-        {open ? <IconChevronDown size={14} /> : <IconChevronRight size={14} />}
-      </button>
+      </div>
 
       {open && (
         <div className="mt-2 space-y-2">

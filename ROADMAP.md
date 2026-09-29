@@ -499,6 +499,16 @@ was lowered. The coverage run passed 4,658 unit tests and 288 component tests ac
 Full `npm run ci` passed with 4,658 tests across 293 files, production build, bundle budgets, and all
 16 benchmarks.
 
+Follow-up (2026-09-29): Added project-manager save/load/search interactions, snapshot comparison and
+close behavior, community-material preview/add and fetch-error preservation, custom-material add/edit/remove,
+and hardware-catalog replace/invalid-file preservation. Corrected invalid nested buttons in the snapshot
+panel by making compare and expand actions siblings. Component coverage now measures 54.54% statements
+(1,951/3,577), 47.95% branches, 46.24% functions, and 55.55% lines; the ratchet passed with no lowered
+area floor. The coverage run passed 4,666 unit tests and 296 component tests across 58 files. Full
+`npm run ci` passed: 4,666 tests across 298 files, production build and bundle budgets passed, and all
+16 benchmarks stayed within budget. Sprint 305's broader component inventory and remaining high-use
+panel coverage are still open.
+
 **Sprint 306 — Mutation testing and quality evidence** — P1 · M · S303–S305.
 
 - T1: Evaluate Stryker on a bounded set of critical pure-engine modules (`dimensions`, `parts`, `cut-optimizer`, `validation`, export serializers); record runtime and mutant categories.

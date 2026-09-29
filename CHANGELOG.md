@@ -30,6 +30,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Configure control journeys for cabinet management, dimension units and invalid rollback, back-panel material state, door/hardware changes, and drawer slides/heights/count.
 - Raised measured component coverage to 50.62% statements, 45.29% branches, 41.83% functions, and 51.58% lines; 4,658 unit tests and 288 component tests passed with no lowered area floor.
 - Verified full `npm run ci`: 4,658 tests across 293 files, production build, bundle budgets, and all 16 benchmarks.
+- Added project save/load/search, snapshot compare, community-material import, custom-material lifecycle, and hardware-catalog import interaction tests, including invalid-input preservation.
+- Fixed invalid nested buttons in the snapshot panel by separating compare and expand controls.
+- Raised measured component coverage to 54.54% statements, 47.95% branches, 46.24% functions, and 55.55% lines; 4,666 unit tests and 296 component tests passed without lowering any floor.
+- Verified full `npm run ci`: 4,666 tests across 298 files, production build and bundle budgets passed, and all 16 benchmarks stayed within budget.
 
 ### Validation and Repair Journeys
 
