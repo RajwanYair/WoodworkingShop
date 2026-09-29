@@ -27,6 +27,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added user-level calculator journeys for dado/rabbet validation, stair IRC warnings, symmetric taper settings, finish volume/drying changes, and glue volume across joint count and glue type.
 - Raised measured component statement coverage to 49.95% (1,787/3,577); the coverage ratchet update passed without lowering any area floor.
 - Verified full `npm run ci`: 4,653 tests across 289 files, production build, bundle budgets, and all 16 benchmarks.
+- Added Configure control journeys for cabinet management, dimension units and invalid rollback, back-panel material state, door/hardware changes, and drawer slides/heights/count.
+- Raised measured component coverage to 50.62% statements, 45.29% branches, 41.83% functions, and 51.58% lines; 4,658 unit tests and 288 component tests passed with no lowered area floor.
+- Verified full `npm run ci`: 4,658 tests across 293 files, production build, bundle budgets, and all 16 benchmarks.
 
 ### Validation and Repair Journeys
 

@@ -491,6 +491,14 @@ and drying time, and glue volume across joint count and glue type. Component cov
 Full `npm run ci` passed with 4,653 tests across 289 files, production build, bundle budgets, and
 all 16 benchmarks. The broader component inventory and remaining high-use panel coverage are still open.
 
+Follow-up (2026-09-29): Added user-level Configure journeys for cabinet add/rename/remove, dimension
+unit conversion and hard-limit rollback, back-panel/material conditional state, door style and
+hardware changes, and drawer slide/height/count behavior. The component coverage ratchet now measures
+50.62% statements (1,811/3,577), 45.29% branches, 41.83% functions, and 51.58% lines; no area floor
+was lowered. The coverage run passed 4,658 unit tests and 288 component tests across 53 files.
+Full `npm run ci` passed with 4,658 tests across 293 files, production build, bundle budgets, and all
+16 benchmarks.
+
 **Sprint 306 — Mutation testing and quality evidence** — P1 · M · S303–S305.
 
 - T1: Evaluate Stryker on a bounded set of critical pure-engine modules (`dimensions`, `parts`, `cut-optimizer`, `validation`, export serializers); record runtime and mutant categories.

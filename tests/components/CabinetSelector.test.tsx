@@ -5,6 +5,7 @@
  * number of generated parts for that cabinet's config.
  */
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { CabinetSelector } from '../../src/components/configurator/CabinetSelector';
 import { useCabinetStore } from '../../src/store/cabinet-store';
@@ -76,5 +77,26 @@ describe('CabinetSelector — part count badge (Sprint 82)', () => {
     render(<CabinetSelector />);
     const expectedCount = generateParts(cfgWithShelves).length;
     expect(screen.getByLabelText(`${expectedCount} parts`)).toBeInTheDocument();
+  });
+
+  it('adds, renames by keyboard, and removes a cabinet through its controls', async () => {
+    const user = userEvent.setup();
+    seedSingle();
+    render(<CabinetSelector />);
+
+    await user.click(screen.getByRole('button', { name: /add/i }));
+    expect(useCabinetStore.getState().cabinets).toHaveLength(2);
+
+    const addedName = useCabinetStore.getState().cabinets[1].name;
+    const partCount = generateParts(DEFAULT_CONFIG).length;
+    await user.dblClick(screen.getByRole('button', { name: `${addedName}${partCount} parts` }));
+    const nameInput = screen.getByRole('textbox', { name: 'Cabinet name' });
+    await user.clear(nameInput);
+    await user.type(nameInput, 'Workshop Base');
+    await user.keyboard('{Enter}');
+    expect(useCabinetStore.getState().cabinets[1].name).toBe('Workshop Base');
+
+    await user.click(screen.getByRole('button', { name: /remove workshop base/i }));
+    expect(useCabinetStore.getState().cabinets).toHaveLength(1);
   });
 });
