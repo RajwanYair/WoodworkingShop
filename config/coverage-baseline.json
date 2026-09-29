@@ -1,95 +1,95 @@
 {
-  "_comment": "Per-area coverage floor measured from core and dedicated component reports. Update only after intentional improvement.",
-  "_updated": "2026-09-27",
+  "_comment": "Per-area coverage floor. Update only after intentional improvement; components are excluded from Vitest coverage until their measured baseline is established.",
+  "_updated": "2026-09-29",
   "directories": {
     "engine": {
       "statements": {
-        "covered": 7942,
-        "total": 8286
+        "covered": 8090,
+        "total": 8324
       },
       "branches": {
-        "covered": 4506,
-        "total": 5065
+        "covered": 4594,
+        "total": 5108
       },
       "functions": {
-        "covered": 1407,
-        "total": 1432
+        "covered": 1428,
+        "total": 1440
       },
       "lines": {
-        "covered": 7071,
-        "total": 7356
+        "covered": 7205,
+        "total": 7388
       }
     },
     "utils": {
       "statements": {
-        "covered": 1611,
-        "total": 1895
+        "covered": 1879,
+        "total": 2006
       },
       "branches": {
-        "covered": 655,
-        "total": 846
+        "covered": 750,
+        "total": 925
       },
       "functions": {
-        "covered": 355,
-        "total": 389
+        "covered": 395,
+        "total": 413
       },
       "lines": {
-        "covered": 1435,
-        "total": 1680
+        "covered": 1680,
+        "total": 1772
       }
     },
     "store": {
       "statements": {
-        "covered": 490,
-        "total": 699
+        "covered": 729,
+        "total": 824
       },
       "branches": {
-        "covered": 190,
-        "total": 341
+        "covered": 295,
+        "total": 401
       },
       "functions": {
-        "covered": 184,
-        "total": 255
+        "covered": 246,
+        "total": 278
       },
       "lines": {
-        "covered": 439,
-        "total": 598
+        "covered": 653,
+        "total": 704
       }
     },
     "hooks": {
       "statements": {
-        "covered": 137,
-        "total": 170
+        "covered": 192,
+        "total": 225
       },
       "branches": {
-        "covered": 76,
-        "total": 105
+        "covered": 102,
+        "total": 135
       },
       "functions": {
-        "covered": 32,
-        "total": 34
+        "covered": 39,
+        "total": 41
       },
       "lines": {
-        "covered": 125,
-        "total": 155
+        "covered": 179,
+        "total": 209
       }
     },
     "components": {
       "statements": {
-        "covered": 1432,
-        "total": 3464
+        "covered": 1731,
+        "total": 3577
       },
       "branches": {
-        "covered": 889,
-        "total": 2467
+        "covered": 1098,
+        "total": 2561
       },
       "functions": {
-        "covered": 387,
-        "total": 1195
+        "covered": 475,
+        "total": 1224
       },
       "lines": {
-        "covered": 1310,
-        "total": 3146
+        "covered": 1598,
+        "total": 3249
       }
     }
   }

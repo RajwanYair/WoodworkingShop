@@ -21,7 +21,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Component Behavior Foundation
 
 - Replaced conditional optimizer-table checks with accessible interaction tests for material filtering, search, sorting, and hardware quantity override/reset behavior.
-- Verified full `npm run ci`: 4,641 tests across 284 files, production build, bundle budgets, and all 16 benchmarks.
+- Added configurator journeys for furniture type and conditional controls, generated panel parts, joinery, shelf positions, door and hinge behavior, drawer slides, and reset confirmation.
+- Raised measured component statement coverage from 41.3% to 48.4%; the coverage ratchet update passed without lowering any area floor.
+- Verified full `npm run ci`: 4,648 tests across 284 files, production build, bundle budgets, and all 16 benchmarks.
 
 ### Validation and Repair Journeys
 

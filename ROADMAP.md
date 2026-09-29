@@ -477,6 +477,13 @@ Full `npm run ci` passed with 4,583 tests across 283 files, production build and
 
 Progress (2026-09-29): Optimizer table tests now exercise material filtering and reset, part search and bidirectional dimension sorting, hardware search by supplier, and quantity override/reset/sorting through accessible controls. The broader component inventory and remaining high-use panel coverage are still open. Full `npm run ci` passed with 4,641 tests across 284 files, production build, bundle budgets, and all 16 benchmarks.
 
+Follow-up (2026-09-29): Added `userEvent` journeys for furniture-type conditional controls and generated
+panel parts, joinery selection, custom shelf-position editing/reset, door count/style effects on
+generated parts and hinges, drawer-count-dependent slide selection, and reset confirmation/cancellation.
+The coverage report now measures 48.4% component statements (up from 41.3% in the prior baseline);
+`npm run test:coverage:ratchet:update` passed without lowering any area floor. Full `npm run ci`
+passes with 4,648 tests across 284 files, production build, bundle budgets, and all 16 benchmarks.
+
 **Sprint 306 — Mutation testing and quality evidence** — P1 · M · S303–S305.
 
 - T1: Evaluate Stryker on a bounded set of critical pure-engine modules (`dimensions`, `parts`, `cut-optimizer`, `validation`, export serializers); record runtime and mutant categories.
