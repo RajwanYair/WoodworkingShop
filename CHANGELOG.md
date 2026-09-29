@@ -39,6 +39,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Verified full `npm run ci`: 4,677 tests across 303 files, production build and bundle budgets passed, and all 16 benchmarks stayed within budget.
 - Added component interaction coverage for cost summary export, actual-cost variance editing, optimizer suggestion apply/restore, material sheet-size overrides, and shopping-list grouping/collapse. Added translated accessible names to the material summary's icon-only size controls.
 - Raised measured component coverage to 57.40% statements, 50.87% branches, 51.02% functions, and 58.24% lines; the ratchet passed with 4,682 unit tests and 312 component tests without lowering any area floor.
+- Added interaction coverage for project-wide material replacement, optimizer comparison metrics, template application, persisted CNC profile selection, and PDF page options/download. Corrected 16 built-in templates that referenced nonexistent `hdf-3` instead of registered `mdf-3`.
+- Raised measured component coverage to 61.03% statements, 53.41% branches, 53.87% functions, and 62.00% lines; the ratchet passed with 4,687 unit tests and 317 component tests without lowering any area floor.
+- Added an engine regression guard verifying every built-in template uses registered carcass and back-panel materials.
+- Verified full `npm run ci`: 4,688 unit tests across 313 files, production build and bundle budgets passed, and all 16 benchmarks stayed within budget.
 
 ### Validation and Repair Journeys
 

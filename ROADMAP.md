@@ -525,6 +525,16 @@ ratchet passed with 4,682 unit tests and 312 component tests; component coverage
 statements, 50.87% branches, 51.02% functions, and 58.24% lines without lowering an area floor.
 Sprint 305's broader component inventory remains open.
 
+Follow-up (2026-09-30): Added interaction coverage for project-wide material replacement, optimized-vs-original
+comparison metrics, template application, persisted CNC machine-profile selection, and PDF page settings/download.
+The template journey exposed 16 built-in templates referencing the nonexistent `hdf-3` key; these now use the
+registered `mdf-3` material. The coverage ratchet passed with 4,687 unit tests and 317 component tests;
+component coverage now measures 61.03% statements, 53.41% branches, 53.87% functions, and 62.00% lines,
+without lowering an area floor. Added an engine regression guard requiring every built-in template's carcass
+and back-panel materials to exist in the material registry. Full `npm run ci` passed with 4,688 unit tests
+across 313 files, production build and bundle budgets passing, and all 16 benchmarks within budget.
+Sprint 305's broader component inventory remains open.
+
 **Sprint 306 — Mutation testing and quality evidence** — P1 · M · S303–S305.
 
 - T1: Evaluate Stryker on a bounded set of critical pure-engine modules (`dimensions`, `parts`, `cut-optimizer`, `validation`, export serializers); record runtime and mutant categories.

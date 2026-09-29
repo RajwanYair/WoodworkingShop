@@ -7,6 +7,7 @@ import {
   instantiateTemplate,
 } from '../../src/engine/templates';
 import { generateParts } from '../../src/engine/parts';
+import { MATERIALS } from '../../src/engine/materials';
 import type { FurnitureType } from '../../src/engine/types';
 
 describe('getTemplateDefaults', () => {
@@ -72,6 +73,14 @@ describe('TEMPLATES', () => {
     for (const tpl of TEMPLATES) {
       expect(tpl.name.en.length).toBeGreaterThan(0);
       expect(tpl.name.he.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('uses registered carcass and back-panel materials in every template', () => {
+    const materialKeys = new Set(MATERIALS.map((material) => material.key));
+    for (const template of TEMPLATES) {
+      expect(materialKeys.has(template.config.carcassMaterial)).toBe(true);
+      expect(materialKeys.has(template.config.backPanelMaterial)).toBe(true);
     }
   });
 
