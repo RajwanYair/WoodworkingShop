@@ -30,4 +30,14 @@ describe('MarketplacePanel', () => {
     expect(isPluginInstalled('com.cabinet-planner.gcode-post-fanuc')).toBe(true);
     expect(within(pluginList).getByRole('button', { name: 'Uninstall' })).toBeInTheDocument();
   });
+
+  it('replaces the plugin list with an empty state when search has no matches', async () => {
+    const user = userEvent.setup();
+    render(<MarketplacePanel onClose={() => {}} />);
+
+    await user.type(screen.getByRole('searchbox', { name: 'Search plugins…' }), 'unlisted plugin');
+
+    expect(screen.getByText('No plugins found')).toBeInTheDocument();
+    expect(screen.queryByRole('list')).not.toBeInTheDocument();
+  });
 });

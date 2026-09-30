@@ -1,6 +1,8 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import * as projectStorage from '../../src/utils/project-storage';
+import { useCabinetStore } from '../../src/store/cabinet-store';
 import { useToastStore } from '../../src/store/toast-store';
 
 const { pdfMock } = vi.hoisted(() => ({
@@ -63,5 +65,32 @@ describe('PdfExportPanel', () => {
       );
     });
     expect(await screen.findByRole('button', { name: 'Generate PDF' })).toBeEnabled();
+  });
+
+  it('exports the current project settings and reports success', async () => {
+    const user = userEvent.setup();
+    const settings = {
+      sawKerf: 3,
+      materialPriceOverrides: { 'melamine-18': 210 },
+      edgeBandingRate: 5,
+      hardwarePriceOverrides: { H01: 8 },
+      hardwareQtyOverrides: { H01: 4 },
+      sheetSizeOverrides: { 'melamine-18': { width: 1200, length: 2400 } },
+      labourRate: 90,
+      labourHours: 2.5,
+      finishCost: 35,
+    };
+    useCabinetStore.setState({ ...settings, projectName: 'Workshop plan' });
+    useToastStore.setState({ toasts: [] });
+    const exportSpy = vi.spyOn(projectStorage, 'exportSettingsJson').mockImplementation(() => {});
+    render(<PdfExportPanel />);
+
+    await user.click(screen.getByRole('button', { name: 'Export Project Settings' }));
+
+    expect(exportSpy).toHaveBeenCalledWith(settings, 'Workshop plan');
+    expect(useToastStore.getState().toasts).toEqual(
+      expect.arrayContaining([expect.objectContaining({ message: 'Project settings exported', type: 'success' })]),
+    );
+    exportSpy.mockRestore();
   });
 });

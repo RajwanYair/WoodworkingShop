@@ -63,4 +63,15 @@ describe('SnapshotPanel', () => {
       'Current layout',
     ]);
   });
+
+  it('shows the empty state and hides comparison when no snapshots exist', async () => {
+    useCabinetStore.setState({ snapshots: [] });
+    const user = userEvent.setup();
+    render(<SnapshotPanel />);
+
+    await user.click(screen.getByRole('button', { name: 'Project Snapshots' }));
+
+    expect(screen.getByText('No snapshots saved yet.')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Compare Snapshots' })).not.toBeInTheDocument();
+  });
 });

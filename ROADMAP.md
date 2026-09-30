@@ -1,6 +1,6 @@
 # Roadmap
 
-> Last updated: 2026-09-28 (Sprint 301 coverage ownership verified)
+> Last updated: 2026-09-30 (Sprint 305 component coverage increased)
 > Current app version: v5.33.0
 > Next release target: v5.34.0 (Phase 64 — Real User Journeys and Browser Confidence)
 > Program horizon: Phases 63–72 · Sprints 300–370 · v5.33.0 → v6.0.0
@@ -571,6 +571,14 @@ coverage ratchet passed with 4,720 unit tests and 345 component tests; component
 statements, 61.53% branches, 64.73% functions, and 68.83% lines without lowering an area floor. `npm test` passed
 with 4,720 tests across 335 files. The production build, bundle check (2,791.4 KB / 2,960 KB), and all 16
 benchmarks passed. Full `npm run ci` remains blocked by the pre-existing expired component-budget exception for
+`src/components/preview/CabinetPreview.tsx`; Sprint 305 remains open.
+
+Follow-up (2026-09-30): Added component behavior coverage for Marketplace no-results search, live mobile Sidebar
+summary totals, empty snapshot history, PDF project-settings export, and optimizer low-yield/material-consolidation
+recommendations. The coverage ratchet passed with 4,725 unit tests and 350 component tests; component coverage now
+measures 68.13% statements, 62.04% branches, 64.97% functions, and 69.01% lines without lowering an area floor.
+`npm test` passed across 335 files. Production build, bundle check (2,791.4 KB / 2,960 KB), and all 16 benchmarks
+passed. Full quality/CI remains blocked by the pre-existing expired component-budget exception for
 `src/components/preview/CabinetPreview.tsx`; Sprint 305 remains open.
 
 **Sprint 306 — Mutation testing and quality evidence** — P1 · M · S303–S305.

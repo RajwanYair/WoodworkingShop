@@ -171,4 +171,29 @@ describe('OptimizerView per-sheet waste label — Sprint 81', () => {
     render(<OptimizerView />);
     expect(screen.getByText(/0\.000 m²/)).toBeInTheDocument();
   });
+
+  it('shows low-yield and same-thickness material recommendations', () => {
+    const recommendationOpt: OptimizationResult = {
+      ...MOCK_OPTIMIZATION,
+      sheets: [
+        { ...MOCK_OPTIMIZATION.sheets[0], yieldPercent: 15 },
+        {
+          ...MOCK_OPTIMIZATION.sheets[0],
+          sheetIndex: 1,
+          material: 'plywood-18',
+          parts: [MOCK_PART],
+          yieldPercent: 30,
+        },
+      ],
+      totalSheets: 2,
+    };
+    useCabinetStore.setState({ optimization: recommendationOpt, combinedOptimization: recommendationOpt });
+
+    render(<OptimizerView />);
+
+    expect(screen.getByText(/Sheet #1 is only 15% used/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Materials Melamine 18 mm and Birch Plywood 18 mm share thickness 18 mm/),
+    ).toBeInTheDocument();
+  });
 });
