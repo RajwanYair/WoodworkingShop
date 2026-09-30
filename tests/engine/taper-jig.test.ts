@@ -35,6 +35,21 @@ describe('calculateTaperJig', () => {
     expect(r.taperPerFootMm).toBeCloseTo(expected, 1);
   });
 
+  it.each([
+    { taperedFaces: 1 as const, angleDeg: 2.45, offsetMm: 30, perFootMm: 13.1 },
+    { taperedFaces: 2 as const, angleDeg: 1.23, offsetMm: 15, perFootMm: 6.5 },
+  ])(
+    'matches the dimensional oracle for $taperedFaces tapered face(s)',
+    ({ taperedFaces, angleDeg, offsetMm, perFootMm }) => {
+      const result = calculateTaperJig({ ...BASE, taperedFaces });
+
+      expect(result.taperAngleDeg).toBe(angleDeg);
+      expect(result.jigOffsetMm).toBe(offsetMm);
+      expect(result.materialRemovedPerFaceMm).toBe(offsetMm);
+      expect(result.taperPerFootMm).toBe(perFootMm);
+    },
+  );
+
   it('defaults to 1 tapered face when taperedFaces is omitted', () => {
     const r = calculateTaperJig({
       workpieceLengthMm: 500,
@@ -62,6 +77,9 @@ describe('calculateTaperJig', () => {
       ['zero endWidth', { ...BASE, endWidthMm: 0 }],
       ['endWidth equal to startWidth', { ...BASE, endWidthMm: 70 }],
       ['endWidth greater than startWidth', { ...BASE, endWidthMm: 80 }],
+      ['NaN workpieceLength', { ...BASE, workpieceLengthMm: Number.NaN }],
+      ['infinite startWidth', { ...BASE, startWidthMm: Number.POSITIVE_INFINITY }],
+      ['NaN endWidth', { ...BASE, endWidthMm: Number.NaN }],
     ])('throws RangeError for %s', (_, input) => {
       expect(() => calculateTaperJig(input)).toThrow(RangeError);
     });

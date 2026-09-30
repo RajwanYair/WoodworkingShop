@@ -41,6 +41,12 @@ export interface TaperJigResult {
   taperedFaces: 1 | 2;
 }
 
+/**
+ * Calculate jig offset, taper angle, and material removal per face.
+ * @param input Workpiece dimensions in millimetres and number of tapered faces.
+ * @returns Rounded taper setup measurements in millimetres and degrees.
+ * @throws {RangeError} When dimensions are non-finite, non-positive, or the end is not narrower than the start.
+ */
 export function calculateTaperJig(input: TaperJigInput): TaperJigResult {
   const fn = 'calculateTaperJig';
   const { workpieceLengthMm, startWidthMm, endWidthMm, taperedFaces = 1 } = input;

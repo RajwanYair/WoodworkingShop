@@ -54,6 +54,12 @@ const IRC_RISER_MIN_MM = 101.6; // 4″
 const IRC_RISER_MAX_MM = 196.85; // 7¾″
 const IRC_TREAD_MIN_MM = 254; // 10″
 
+/**
+ * Calculate stair risers, treads, stringer geometry, and IRC warnings.
+ * @param input Total rise, tread depth, and optional target dimensions in millimetres.
+ * @returns Stair counts and dimensions in millimetres, angle in degrees, and compliance status.
+ * @throws {RangeError} When any supplied dimension is not positive and finite.
+ */
 export function calculateStairStringer(input: StairStringerInput): StairStringerResult {
   const fn = 'calculateStairStringer';
   const { totalRiseMm, treadDepthMm, idealRiserMm = 175, headroomMm = 2032 } = input;
@@ -64,15 +70,16 @@ export function calculateStairStringer(input: StairStringerInput): StairStringer
   assertGreaterThan(fn, 'headroomMm', headroomMm, 0);
 
   const riserCount = Math.min(20, Math.max(3, Math.round(totalRiseMm / idealRiserMm)));
-  const actualRiserMm = Math.round((totalRiseMm / riserCount) * 10) / 10;
+  const unroundedRiserMm = totalRiseMm / riserCount;
+  const actualRiserMm = Math.round(unroundedRiserMm * 10) / 10;
   const treadCount = riserCount - 1;
   const totalRunMm = Math.round(treadCount * treadDepthMm * 10) / 10;
   const stringerLengthMm = Math.round(Math.sqrt(totalRunMm ** 2 + totalRiseMm ** 2) * 10) / 10;
   const stringerAngleDeg = Math.round(Math.atan(totalRiseMm / totalRunMm) * (180 / Math.PI) * 100) / 100;
 
   let warningKey: StairStringerResult['warningKey'] = null;
-  if (actualRiserMm < IRC_RISER_MIN_MM) warningKey = 'riserTooShort';
-  else if (actualRiserMm > IRC_RISER_MAX_MM) warningKey = 'riserTooTall';
+  if (unroundedRiserMm < IRC_RISER_MIN_MM) warningKey = 'riserTooShort';
+  else if (unroundedRiserMm > IRC_RISER_MAX_MM) warningKey = 'riserTooTall';
   else if (treadDepthMm < IRC_TREAD_MIN_MM) warningKey = 'treadTooShallow';
 
   return {

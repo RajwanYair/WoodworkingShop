@@ -37,6 +37,16 @@ describe('calculateStairStringer', () => {
     expect(r.stringerAngleDeg).toBeCloseTo(expected, 1);
   });
 
+  it('matches the nominal run, length, and angle oracle in millimetres and degrees', () => {
+    const result = calculateStairStringer(BASE);
+
+    expect(result.riserCount).toBe(16);
+    expect(result.actualRiserMm).toBe(175);
+    expect(result.totalRunMm).toBe(4200);
+    expect(result.stringerLengthMm).toBe(5047.8);
+    expect(result.stringerAngleDeg).toBe(33.69);
+  });
+
   it('passesIrc true when riser in 101.6–196.85 mm and tread ≥ 254 mm', () => {
     const r = calculateStairStringer(BASE);
     expect(r.passesIrc).toBe(true);
@@ -62,9 +72,39 @@ describe('calculateStairStringer', () => {
     expect(r.passesIrc).toBe(false);
   });
 
+  it.each([
+    { totalRiseMm: 304.7, expectedWarning: 'riserTooShort' as const },
+    { totalRiseMm: 304.8, expectedWarning: null },
+    { totalRiseMm: 590.55, expectedWarning: null },
+    { totalRiseMm: 590.7, expectedWarning: 'riserTooTall' as const },
+  ])('checks IRC riser limits before display rounding at $totalRiseMm mm rise', ({ totalRiseMm, expectedWarning }) => {
+    const result = calculateStairStringer({ totalRiseMm, treadDepthMm: 280, idealRiserMm: 1000 });
+
+    expect(result.riserCount).toBe(3);
+    expect(result.warningKey).toBe(expectedWarning);
+    expect(result.passesIrc).toBe(expectedWarning === null);
+  });
+
+  it.each([
+    { treadDepthMm: 253.9, expectedWarning: 'treadTooShallow' as const },
+    { treadDepthMm: 254, expectedWarning: null },
+  ])('checks the 254 mm tread boundary at $treadDepthMm mm', ({ treadDepthMm, expectedWarning }) => {
+    const result = calculateStairStringer({ ...BASE, treadDepthMm });
+
+    expect(result.warningKey).toBe(expectedWarning);
+    expect(result.passesIrc).toBe(expectedWarning === null);
+  });
+
   it('clamps riserCount to minimum 3', () => {
     const r = calculateStairStringer({ totalRiseMm: 100, treadDepthMm: 280 });
     expect(r.riserCount).toBeGreaterThanOrEqual(3);
+  });
+
+  it('clamps riserCount to maximum 20', () => {
+    const result = calculateStairStringer({ totalRiseMm: 4000, treadDepthMm: 280, idealRiserMm: 100 });
+
+    expect(result.riserCount).toBe(20);
+    expect(result.treadCount).toBe(19);
   });
 
   it('defaults idealRiserMm to 175 when omitted', () => {
@@ -77,6 +117,10 @@ describe('calculateStairStringer', () => {
       ['zero totalRise', { totalRiseMm: 0, treadDepthMm: 280 }],
       ['negative totalRise', { totalRiseMm: -500, treadDepthMm: 280 }],
       ['zero treadDepth', { totalRiseMm: 2800, treadDepthMm: 0 }],
+      ['NaN rise', { totalRiseMm: Number.NaN, treadDepthMm: 280 }],
+      ['infinite treadDepth', { totalRiseMm: 2800, treadDepthMm: Number.POSITIVE_INFINITY }],
+      ['NaN ideal riser', { totalRiseMm: 2800, treadDepthMm: 280, idealRiserMm: Number.NaN }],
+      ['infinite headroom', { totalRiseMm: 2800, treadDepthMm: 280, headroomMm: Number.POSITIVE_INFINITY }],
     ])('throws RangeError for %s', (_, input) => {
       expect(() => calculateStairStringer(input)).toThrow(RangeError);
     });
