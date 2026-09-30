@@ -50,6 +50,12 @@ export interface RafterLengthResult {
   birdsmouthDepthMm: number;
 }
 
+/**
+ * Calculate rafter lengths, cut angles, and birdsmouth depth for a simple roof.
+ * @param input Building span, roof pitch, plate width, optional overhang, and roof type.
+ * @returns Rafter geometry in millimetres and cut angles in degrees.
+ * @throws {RangeError} When dimensions are invalid or calculated geometry overflows.
+ */
 export function calculateRafterLength(input: RafterLengthInput): RafterLengthResult {
   const fn = 'calculateRafterLength';
   const { totalSpanMm, pitchRatio, plateWidthMm, overhangMm = 0, shedRoof = false } = input;
@@ -74,6 +80,13 @@ export function calculateRafterLength(input: RafterLengthInput): RafterLengthRes
 
   // Birdsmouth depth capped at 1/3 of plate width (IBC 1/3 rule)
   const birdsmouthDepthMm = Math.round((plateWidthMm / 3) * 100) / 100;
+  assertGreaterThan(fn, 'runMm', runMm, 0);
+  assertAtLeast(fn, 'riseMm', riseMm, 0);
+  assertGreaterThan(fn, 'rafterLengthMm', rafterLengthMm, 0);
+  assertGreaterThan(fn, 'totalLengthMm', totalLengthMm, 0);
+  assertAtLeast(fn, 'plumbCutAngleDeg', plumbCutAngleDeg, 0);
+  assertAtLeast(fn, 'seatCutAngleDeg', seatCutAngleDeg, 0);
+  assertGreaterThan(fn, 'birdsmouthDepthMm', birdsmouthDepthMm, 0);
 
   return {
     runMm,
