@@ -602,6 +602,14 @@ fallback. Clipboard failures now show the dedicated translated recovery message.
 bundle budget (2,791.7 KB / 2,960 KB), and all 16 benchmarks passed. Quality remains blocked only by the
 pre-existing expired component-budget exception for `src/components/preview/CabinetPreview.tsx`; Sprint 305 remains open.
 
+Follow-up (2026-09-30): Added 25 MaterialSelector behaviors for carcass/back choices, custom-material presentation,
+back-panel inclusion, material substitution recommendations, and multi-cabinet replacement. The coverage ratchet
+passed with 4,825 unit tests and 450 component tests; component coverage now measures 74.03% statements, 67.34%
+branches, 70.93% functions, and 74.70% lines without lowering an area floor. Production build, bundle budget
+(2,791.7 KB / 2,960 KB), and all 16 benchmarks passed. Quality remains blocked by the pre-existing expired
+`src/components/preview/CabinetPreview.tsx` budget exception. This batch exposed that selecting a custom material
+throws during cabinet derivation because custom definitions are not propagated to the engine; Sprint 305 remains open.
+
 **Sprint 306 — Mutation testing and quality evidence** — P1 · M · S303–S305.
 
 - T1: Evaluate Stryker on a bounded set of critical pure-engine modules (`dimensions`, `parts`, `cut-optimizer`, `validation`, export serializers); record runtime and mutant categories.
