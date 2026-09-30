@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { getMaterial } from '../../engine/materials';
+import { resolveEngineLang } from './resolve-engine-lang';
 import type { Lang, Part } from '../../engine/types';
 
 type SortKey = 'id' | 'name' | 'qty' | 'material' | 'length' | 'width' | 'thickness';
@@ -40,7 +41,7 @@ function sortParts(parts: Part[], key: SortKey, dir: SortDir, lang: Lang): Part[
 export function PartsTable() {
   const { t, i18n } = useTranslation();
   const { parts } = useCabinetStore();
-  const lang = i18n.language as Lang;
+  const lang = resolveEngineLang(i18n.language);
   /** Sprint 171 — sortable column headers */
   const [sortKey, setSortKey] = useState<SortKey>('id');
   const [sortDir, setSortDir] = useState<SortDir>('asc');
@@ -173,7 +174,7 @@ export function PartsTable() {
 export function HardwareTable() {
   const { t, i18n } = useTranslation();
   const { hardware, hardwareQtyOverrides, setHardwareQtyOverride } = useCabinetStore();
-  const lang = i18n.language as Lang;
+  const lang = resolveEngineLang(i18n.language);
   const [search, setSearch] = useState('');
   const [sortKey, setSortKey] = useState<'name' | 'qty' | 'unit' | 'supplier'>('name');
   const [sortDir, setSortDir] = useState<SortDir>('asc');

@@ -727,7 +727,7 @@ E2E tests pass with two workers.
 
 **Sprint 312 — Export downloads as real artifacts** — P0 · L · S304, S311.
 
-- T1: Trigger BOM CSV and hardware CSV; assert filename, UTF-8/BOM policy, delimiter, headers, row count, quantities, locale, escaping and no formula injection.
+- T1: DONE — Added 25 real-download BOM and hardware CSV behaviors; Chromium and Firefox both pass all 25. Assertions cover filenames, UTF-8 BOM, schema/headers, row counts and quantities, EN/HE/ES/DE/FR locale output, escaping, and formula-injection neutralization. Fixed optimizer engine-language resolution for UI locales not directly represented by engine data.
 - T2: DONE — Trigger DXF and G-code; parse entities/commands, units, extents, kerf, tool settings, safe retract, bounds, part labels and schema header against golden/oracle fixtures.
 - T3: Generate part labels and print sheets; assert QR payload resolves to part, SVG/print page size, clipping and repeated labels.
 - T4: Generate PDF; assert `%PDF-`, page count, text extraction for critical headings/dimensions, options and multi-cabinet inclusion, no overflow/warnings beyond budget.
@@ -748,8 +748,8 @@ Browser artifact follow-up (2026-09-30): Completed Sprint 312 T2 with 25 real-do
 G-code; all 25 passed in both Chromium and Firefox. The tests parse DXF group-code entities, layers, profile
 extents, labels, dimensions and SHA-256 checksum, and validate G-code schema, units, part labels, motion bounds,
 safe retract, multi-pass depth, kerf-driven coordinate changes, tool compensation, machine presets, feed rates
-and tool-change commands. DXF sheet extents are cross-checked against the G-code artifact. Sprint 312 T1, T3,
-T4 and T5 remain open. The 4,900-test unit suite, production build, bundle budget and all 16 benchmarks pass.
+and tool-change commands. DXF sheet extents are cross-checked against the G-code artifact. Sprint 312 T1 is
+complete; T3, T4 and T5 remain open. The 4,900-test unit suite, production build, bundle budget and all 16 benchmarks pass.
 The coverage ratchet remains blocked by component coverage below its recorded floors; quality remains blocked
 by the pre-existing expired `CabinetPreview.tsx` component-budget exception.
 

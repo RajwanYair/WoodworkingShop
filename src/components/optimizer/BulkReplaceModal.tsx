@@ -8,10 +8,10 @@
 import { useState, useRef } from 'react';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { useTranslation } from 'react-i18next';
+import { resolveEngineLang } from './resolve-engine-lang';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { MATERIALS } from '../../engine/materials';
-import type { Lang } from '../../engine/types';
 
 interface Props {
   onClose: () => void;
@@ -19,7 +19,7 @@ interface Props {
 
 export function BulkReplaceModal({ onClose }: Props) {
   const { t, i18n } = useTranslation();
-  const lang = i18n.language as Lang;
+  const lang = resolveEngineLang(i18n.language);
   const { cabinets, bulkReplaceMaterial } = useCabinetStore();
   const customMaterials = useCustomMaterialsStore((s) => s.materials);
 

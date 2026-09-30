@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { findOptimizations, type SmartOptimizerOptions } from '../../engine/smart-optimizer';
 import { ComparisonView } from './ComparisonView';
-import type { OptimizationSuggestion, SmartStrategy, Lang } from '../../engine/types';
+import { resolveEngineLang } from './resolve-engine-lang';
+import type { OptimizationSuggestion, SmartStrategy } from '../../engine/types';
 
 const ALL_STRATEGIES: SmartStrategy[] = [
   'reduce-depth',
@@ -16,7 +17,7 @@ const ALL_STRATEGIES: SmartStrategy[] = [
 export function SmartOptimizerPanel() {
   const { t, i18n } = useTranslation();
   const { config, setConfig } = useCabinetStore();
-  const lang = i18n.language as Lang;
+  const lang = resolveEngineLang(i18n.language);
 
   const [strategies, setStrategies] = useState<SmartStrategy[]>([...ALL_STRATEGIES]);
   const [tolerance, setTolerance] = useState(20);

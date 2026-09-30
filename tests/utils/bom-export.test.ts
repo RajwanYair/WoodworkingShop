@@ -154,6 +154,22 @@ describe('generateHardwareCsv', () => {
     expect(mockAnchor.click).toHaveBeenCalled();
     vi.restoreAllMocks();
   });
+
+  it.each(['=1+1', '+1+1', '-1+1', '@SUM(A1:A2)', '\t=1+1', '\r=1+1'])(
+    'neutralizes spreadsheet formula prefix %j',
+    (cabinetName) => {
+      const csv = generateHardwareCsv([{ name: cabinetName, hardware: [mockHardware] }], 'en');
+      expect(csv).toContain(`'${cabinetName}`);
+    },
+  );
+
+  it('preserves numeric negative values and quotes carriage returns', () => {
+    const numeric = generateHardwareCsv([{ name: '-12', hardware: [mockHardware] }], 'en');
+    expect(numeric.split('\n')[1]).toBe('hinge,Hinge 35mm,-12,4,pcs');
+
+    const multiline = generateHardwareCsv([{ name: 'Top\r\nBottom', hardware: [mockHardware] }], 'en');
+    expect(multiline).toContain('"Top\r\nBottom"');
+  });
 });
 
 describe('generateBomCsv — header metadata', () => {

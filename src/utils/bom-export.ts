@@ -310,10 +310,12 @@ function safeGetMaterialName(key: string, lang: Lang): string {
 function csvRow(fields: string[]): string {
   return fields
     .map((f) => {
-      if (f.includes(',') || f.includes('"') || f.includes('\n')) {
-        return `"${f.replace(/"/g, '""')}"`;
+      const isNumeric = /^-?(?:\d+(?:\.\d*)?|\.\d+)$/.test(f);
+      const safeField = !isNumeric && /^[\t\r\n ]*[=+\-@]/.test(f) ? `'${f}` : f;
+      if (/[,"\r\n]/.test(safeField)) {
+        return `"${safeField.replace(/"/g, '""')}"`;
       }
-      return f;
+      return safeField;
     })
     .join(',');
 }

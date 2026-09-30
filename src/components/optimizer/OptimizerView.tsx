@@ -25,11 +25,12 @@ import DxfWorker from '../../workers/dxf-export.worker?worker';
 import type { DxfWorkerOutput } from '../../workers/dxf-export.worker';
 import { BulkReplaceModal } from './BulkReplaceModal';
 import { idbLoadOffcuts, idbSaveOffcut, idbDeleteOffcut } from '../../utils/indexed-db-storage';
-import type { Lang, CutSheet } from '../../engine/types';
+import type { CutSheet } from '../../engine/types';
 import { SheetCard } from './SheetCard';
 import { OptimizerExplainerPanel } from './OptimizerExplainerPanel';
 import { OffcutsPanel } from './optimizer-offcuts-panel';
 import { MaterialSummaryPanel } from './optimizer-material-summary-panel';
+import { resolveEngineLang } from './resolve-engine-lang';
 import { DefectZonePanel } from './optimizer-defect-zone-panel';
 import { ShoppingListPanel } from './optimizer-shopping-list-panel';
 import { OptimizerToolbar } from './OptimizerToolbar';
@@ -56,7 +57,7 @@ export function OptimizerView() {
     updateDefectZone,
     removeDefectZone,
   } = useCabinetStore();
-  const lang = i18n.language as Lang;
+  const lang = resolveEngineLang(i18n.language);
   // Phase 12 / Sprint 12 — load saved offcut catalog from IDB on first mount.
   useEffect(() => {
     const { setOffcutCatalog } = useCabinetStore.getState();
@@ -101,7 +102,7 @@ export function OptimizerView() {
       workerRef.current = worker;
       worker.onmessage = (e: MessageEvent<BomWorkerOutput>) => {
         if (e.data.type === 'done' && e.data.csv) {
-          triggerDownload(e.data.csv, 'text/csv;charset=utf-8', filename);
+          triggerDownload('\uFEFF' + e.data.csv, 'text/csv;charset=utf-8', filename);
           useToastStore.getState().addToast(t('toast.bomExported'), 'success');
         } else {
           useToastStore.getState().addToast(t('toast.bomExportError', 'BOM export failed'), 'error');
@@ -113,7 +114,7 @@ export function OptimizerView() {
       worker.onerror = () => {
         // Fall back to synchronous export
         const csv = generateBomCsv(bomData, lang, i18n.language);
-        triggerDownload(csv, 'text/csv;charset=utf-8', filename);
+        triggerDownload('\uFEFF' + csv, 'text/csv;charset=utf-8', filename);
         useToastStore.getState().addToast(t('toast.bomExported'), 'success');
         setBomExporting(false);
         workerRef.current = null;
@@ -122,7 +123,7 @@ export function OptimizerView() {
     } else {
       // No Worker support — synchronous fallback
       const csv = generateBomCsv(bomData, lang, i18n.language);
-      triggerDownload(csv, 'text/csv;charset=utf-8', filename);
+      triggerDownload('\uFEFF' + csv, 'text/csv;charset=utf-8', filename);
       useToastStore.getState().addToast(t('toast.bomExported'), 'success');
       setBomExporting(false);
     }

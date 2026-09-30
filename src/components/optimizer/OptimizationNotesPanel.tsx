@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { resolveEngineLang } from './resolve-engine-lang';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { findOptimizations } from '../../engine/smart-optimizer';
-import type { Lang, OptimizationSuggestion, SmartStrategy } from '../../engine/types';
+import type { OptimizationSuggestion, SmartStrategy } from '../../engine/types';
 import {
   IconLightbulb,
   IconRefresh,
@@ -31,7 +32,7 @@ function suggestionKey(s: OptimizationSuggestion): string {
 export function OptimizationNotesPanel() {
   const { t, i18n } = useTranslation();
   const { config, setConfig } = useCabinetStore();
-  const lang = i18n.language as Lang;
+  const lang = resolveEngineLang(i18n.language);
 
   const [tolerance, setTolerance] = useState(20);
   const [suggestions, setSuggestions] = useState<OptimizationSuggestion[]>([]);
