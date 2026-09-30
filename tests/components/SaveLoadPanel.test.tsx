@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SaveLoadPanel } from '../../src/components/configurator/SaveLoadPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
-import { loadSavedConfigs, saveConfig, type SavedConfig } from '../../src/utils/local-storage';
+import { deleteSavedConfig, loadSavedConfigs, saveConfig, type SavedConfig } from '../../src/utils/local-storage';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 
 vi.mock('../../src/utils/local-storage', () => ({
@@ -52,5 +52,19 @@ describe('SaveLoadPanel', () => {
 
     const defaultName = `${DEFAULT_CONFIG.width}×${DEFAULT_CONFIG.height}×${DEFAULT_CONFIG.depth}`;
     await waitFor(() => expect(saveConfig).toHaveBeenCalledWith(defaultName, expect.any(Object)));
+  });
+
+  it('deletes a saved configuration and refreshes the expanded list', async () => {
+    vi.mocked(loadSavedConfigs).mockResolvedValueOnce([savedConfig]).mockResolvedValueOnce([]);
+    vi.mocked(deleteSavedConfig).mockResolvedValue(undefined);
+    const user = userEvent.setup();
+    render(<SaveLoadPanel />);
+
+    await user.click(screen.getByRole('button', { name: 'My Saved Cabinets' }));
+    await screen.findByText('Tall Cabinet');
+    await user.click(screen.getByTitle('Delete'));
+
+    expect(deleteSavedConfig).toHaveBeenCalledWith('saved-config');
+    expect(await screen.findByText('No saved configurations')).toBeInTheDocument();
   });
 });

@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Component Behavior Foundation
 
+- Added component interaction coverage for defect-zone validation, camera support and retake states, Web Serial support and empty-sheet guards, Smart Optimizer strategy selection/results, and saved-configuration deletion.
+- Raised measured component coverage to 66.76% statements, 60.56% branches, 62.77% functions, and 67.69% lines; the coverage ratchet passed with 340 component tests and no area floor lowered.
+- Verified full `npm run ci`: 4,715 unit tests across 332 files, production build and bundle budgets passed (2,791.4 KB / 2,960 KB), and all 16 benchmarks stayed within budget.
+
 - Replaced conditional optimizer-table checks with accessible interaction tests for material filtering, search, sorting, and hardware quantity override/reset behavior.
 - Added configurator journeys for furniture type and conditional controls, generated panel parts, joinery, shelf positions, door and hinge behavior, drawer slides, and reset confirmation.
 - Raised measured component statement coverage from 41.3% to 48.4%; the coverage ratchet update passed without lowering any area floor.

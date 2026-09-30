@@ -558,6 +558,13 @@ The coverage ratchet passed with 4,708 unit tests and 333 component tests; compo
 Full `npm run ci` passed with 4,708 tests across 328 files, a 2,791.4 KB bundle under the 2,960 KB budget,
 and all 16 benchmarks within budget. Sprint 305's broader component inventory remains open.
 
+Follow-up (2026-09-30): Added component interaction coverage for defect-zone validation, camera support and retake
+states, Web Serial support and empty-sheet guards, Smart Optimizer strategy selection/results, and saved-configuration
+deletion. The coverage ratchet passed with 4,715 unit tests and 340 component tests; component coverage now measures
+66.76% statements, 60.56% branches, 62.77% functions, and 67.69% lines without lowering an area floor. Full
+`npm run ci` passed with 4,715 tests across 332 files, a 2,791.4 KB bundle under the 2,960 KB budget, and all 16
+benchmarks within budget. Sprint 305's broader component inventory remains open.
+
 **Sprint 306 — Mutation testing and quality evidence** — P1 · M · S303–S305.
 
 - T1: Evaluate Stryker on a bounded set of critical pure-engine modules (`dimensions`, `parts`, `cut-optimizer`, `validation`, export serializers); record runtime and mutant categories.

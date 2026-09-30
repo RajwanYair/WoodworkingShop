@@ -76,19 +76,19 @@
     },
     "components": {
       "statements": {
-        "covered": 2358,
+        "covered": 2389,
         "total": 3578
       },
       "branches": {
-        "covered": 1512,
+        "covered": 1551,
         "total": 2561
       },
       "functions": {
-        "covered": 751,
+        "covered": 769,
         "total": 1225
       },
       "lines": {
-        "covered": 2173,
+        "covered": 2200,
         "total": 3250
       }
     }
