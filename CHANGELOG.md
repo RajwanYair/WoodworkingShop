@@ -36,6 +36,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the existing eight-package production dependency cap. The aggregate quality gate remains blocked
   by the pre-existing expired `CabinetPreview.tsx` component-budget exception; Sprint 312 T4 and T5
   remain open.
+- Sprint 312 T4: Added 27 real-PDF browser behaviors; all 27 pass in both Chromium and Firefox.
+  Tests parse downloaded artifacts to verify signatures, page geometry, extracted headings and
+  dimensions, export options, multi-cabinet content, printable text bounds, and zero browser
+  warnings/errors. Raised the shared footer within the page margin to prevent text clipping and
+  permitted the renderer's embedded WASM resource in `connect-src` without broadening `script-src`.
+  All 4,915 unit tests, the production build, bundle budget (2,793.1 KB / 2,960 KB), and 16
+  benchmarks pass. The aggregate quality gate remains blocked by the pre-existing expired
+  `CabinetPreview.tsx` component-budget exception; Sprint 312 T5 remains open.
 
 ### Component Behavior Foundation
 
