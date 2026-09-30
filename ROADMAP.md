@@ -565,6 +565,14 @@ deletion. The coverage ratchet passed with 4,715 unit tests and 340 component te
 `npm run ci` passed with 4,715 tests across 332 files, a 2,791.4 KB bundle under the 2,960 KB budget, and all 16
 benchmarks within budget. Sprint 305's broader component inventory remains open.
 
+Follow-up (2026-09-30): Added component interaction coverage for Marketplace filtering/install persistence, mobile
+Sidebar Escape-close, snapshot save/restore/delete, PDF render-error recovery, and optimizer cutting controls. The
+coverage ratchet passed with 4,720 unit tests and 345 component tests; component coverage now measures 67.94%
+statements, 61.53% branches, 64.73% functions, and 68.83% lines without lowering an area floor. `npm test` passed
+with 4,720 tests across 335 files. The production build, bundle check (2,791.4 KB / 2,960 KB), and all 16
+benchmarks passed. Full `npm run ci` remains blocked by the pre-existing expired component-budget exception for
+`src/components/preview/CabinetPreview.tsx`; Sprint 305 remains open.
+
 **Sprint 306 — Mutation testing and quality evidence** — P1 · M · S303–S305.
 
 - T1: Evaluate Stryker on a bounded set of critical pure-engine modules (`dimensions`, `parts`, `cut-optimizer`, `validation`, export serializers); record runtime and mutant categories.

@@ -1,6 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { useToastStore } from '../../src/store/toast-store';
 
 const { pdfMock } = vi.hoisted(() => ({
   pdfMock: vi.fn(() => ({ toBlob: vi.fn().mockResolvedValue(new Blob(['pdf'])) })),
@@ -40,5 +41,27 @@ describe('PdfExportPanel', () => {
     );
     expect(downloadedFileName).toMatch(/\.pdf$/);
     expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:pdf-export');
+  });
+
+  it('reports a render failure and re-enables PDF generation', async () => {
+    const user = userEvent.setup();
+    pdfMock.mockReturnValueOnce({ toBlob: vi.fn().mockRejectedValue(new Error('render failed')) });
+    useToastStore.setState({ toasts: [] });
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    render(<PdfExportPanel />);
+
+    await user.click(screen.getByRole('button', { name: 'Generate PDF' }));
+
+    await waitFor(() => {
+      expect(useToastStore.getState().toasts).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            message: 'PDF generation failed — check your connection and try again',
+            type: 'error',
+          }),
+        ]),
+      );
+    });
+    expect(await screen.findByRole('button', { name: 'Generate PDF' })).toBeEnabled();
   });
 });

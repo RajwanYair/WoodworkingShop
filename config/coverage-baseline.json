@@ -1,6 +1,6 @@
 {
   "_comment": "Per-area coverage floor. Update only after intentional improvement; components are excluded from Vitest coverage until their measured baseline is established.",
-  "_updated": "2026-09-29",
+  "_updated": "2026-09-30",
   "directories": {
     "engine": {
       "statements": {
@@ -40,7 +40,7 @@
     },
     "store": {
       "statements": {
-        "covered": 732,
+        "covered": 741,
         "total": 824
       },
       "branches": {
@@ -48,11 +48,11 @@
         "total": 401
       },
       "functions": {
-        "covered": 247,
+        "covered": 250,
         "total": 278
       },
       "lines": {
-        "covered": 656,
+        "covered": 664,
         "total": 704
       }
     },
@@ -76,19 +76,19 @@
     },
     "components": {
       "statements": {
-        "covered": 2389,
+        "covered": 2431,
         "total": 3578
       },
       "branches": {
-        "covered": 1551,
+        "covered": 1576,
         "total": 2561
       },
       "functions": {
-        "covered": 769,
+        "covered": 793,
         "total": 1225
       },
       "lines": {
-        "covered": 2200,
+        "covered": 2237,
         "total": 3250
       }
     }

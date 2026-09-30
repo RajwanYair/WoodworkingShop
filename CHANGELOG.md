@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Component Behavior Foundation
 
+- Added component interaction coverage for Marketplace filtering/install persistence, mobile Sidebar Escape-close, snapshot save/restore/delete, PDF render-error recovery, and optimizer cutting controls.
+- Raised measured component coverage to 67.94% statements, 61.53% branches, 64.73% functions, and 68.83% lines; the coverage ratchet passed with 345 component tests and no area floor lowered.
+- Verified `npm test`: 4,720 tests across 335 files. Production build, bundle budgets (2,791.4 KB / 2,960 KB), and all 16 benchmarks passed. `npm run ci` remains blocked by the pre-existing expired `CabinetPreview.tsx` component-budget exception.
+
 - Added component interaction coverage for defect-zone validation, camera support and retake states, Web Serial support and empty-sheet guards, Smart Optimizer strategy selection/results, and saved-configuration deletion.
 - Raised measured component coverage to 66.76% statements, 60.56% branches, 62.77% functions, and 67.69% lines; the coverage ratchet passed with 340 component tests and no area floor lowered.
 - Verified full `npm run ci`: 4,715 unit tests across 332 files, production build and bundle budgets passed (2,791.4 KB / 2,960 KB), and all 16 benchmarks stayed within budget.

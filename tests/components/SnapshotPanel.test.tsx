@@ -42,4 +42,25 @@ describe('SnapshotPanel', () => {
     await user.click(within(dialog).getAllByRole('button', { name: 'Close' })[0]);
     expect(screen.queryByRole('dialog', { name: 'Compare Snapshots' })).not.toBeInTheDocument();
   });
+
+  it('saves a named snapshot, restores its configuration, and deletes a snapshot', async () => {
+    const user = userEvent.setup();
+    render(<SnapshotPanel />);
+
+    await user.click(screen.getByRole('button', { name: /Project Snapshots/ }));
+    await user.type(screen.getByRole('textbox', { name: 'Snapshot name…' }), 'Current layout');
+    await user.click(screen.getByRole('button', { name: 'Save Snapshot' }));
+
+    expect(useCabinetStore.getState().snapshots).toHaveLength(3);
+    expect(screen.getByText('Current layout')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Restore: Before dimensions' }));
+    expect(useCabinetStore.getState().config.width).toBe(777);
+
+    await user.click(screen.getByRole('button', { name: 'Delete snapshot: After dimensions' }));
+    expect(useCabinetStore.getState().snapshots.map((snapshot) => snapshot.name)).toEqual([
+      'Before dimensions',
+      'Current layout',
+    ]);
+  });
 });
