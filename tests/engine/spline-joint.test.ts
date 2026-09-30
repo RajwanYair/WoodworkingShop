@@ -41,6 +41,25 @@ describe('calculateSplineJoint', () => {
     expect(result.totalGlueAreaMm2).toBe(10800);
   });
 
+  it('matches the three-spline dimensional and glue-area oracle', () => {
+    expect(
+      calculateSplineJoint({
+        boardThicknessMm: 20,
+        splineThicknessMm: 4,
+        slotDepthPerBoardMm: 6,
+        jointLengthMm: 150,
+        splineCount: 3,
+      }),
+    ).toEqual({
+      recommendedSlotWidthMm: 4.1,
+      totalInsertionDepthMm: 12,
+      remainingWallThicknessMm: 14,
+      totalSplineLengthMm: 450,
+      glueAreaPerSplineMm2: 3600,
+      totalGlueAreaMm2: 10800,
+    });
+  });
+
   it.each([
     [
       'board thickness <= 0',
@@ -110,6 +129,50 @@ describe('calculateSplineJoint', () => {
         slotDepthPerBoardMm: 19,
         jointLengthMm: 100,
         splineCount: 1,
+      },
+    ],
+    [
+      'NaN board thickness',
+      {
+        boardThicknessMm: Number.NaN,
+        splineThicknessMm: 3,
+        slotDepthPerBoardMm: 6,
+        jointLengthMm: 100,
+        splineCount: 1,
+      },
+    ],
+    [
+      'infinite spline thickness',
+      {
+        boardThicknessMm: 19,
+        splineThicknessMm: Number.POSITIVE_INFINITY,
+        slotDepthPerBoardMm: 6,
+        jointLengthMm: 100,
+        splineCount: 1,
+      },
+    ],
+    [
+      'NaN joint length',
+      { boardThicknessMm: 19, splineThicknessMm: 3, slotDepthPerBoardMm: 6, jointLengthMm: Number.NaN, splineCount: 1 },
+    ],
+    [
+      'overflowing total spline length',
+      {
+        boardThicknessMm: 19,
+        splineThicknessMm: 3,
+        slotDepthPerBoardMm: 6,
+        jointLengthMm: Number.MAX_VALUE,
+        splineCount: 2,
+      },
+    ],
+    [
+      'unsafe spline count',
+      {
+        boardThicknessMm: 19,
+        splineThicknessMm: 3,
+        slotDepthPerBoardMm: 6,
+        jointLengthMm: 100,
+        splineCount: Number.MAX_SAFE_INTEGER + 1,
       },
     ],
   ])('throws RangeError when %s', (_label, input) => {

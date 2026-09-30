@@ -48,6 +48,27 @@ describe('calculateHalfLap', () => {
     expect(r.finishedThicknessMm).toBe(25);
   });
 
+  it('matches the asymmetric half-lap cut and glue-area oracle', () => {
+    expect(
+      calculateHalfLap({
+        board1ThicknessMm: 19,
+        board1WidthMm: 90,
+        board2ThicknessMm: 18,
+        board2WidthMm: 60,
+        lapType: 'cross_lap',
+      }),
+    ).toEqual({
+      board1NotchDepthMm: 9.5,
+      board1NotchWidthMm: 60,
+      board2NotchDepthMm: 9,
+      board2NotchWidthMm: 90,
+      board1GlueAreaMm2: 570,
+      board2GlueAreaMm2: 810,
+      totalGlueAreaMm2: 1380,
+      finishedThicknessMm: 19,
+    });
+  });
+
   it.each([
     [
       'board1ThicknessMm = 0',
@@ -86,6 +107,36 @@ describe('calculateHalfLap', () => {
         board1WidthMm: 90,
         board2ThicknessMm: 19,
         board2WidthMm: 0,
+        lapType: 'end_lap' as const,
+      },
+    ],
+    [
+      'NaN board1ThicknessMm',
+      {
+        board1ThicknessMm: Number.NaN,
+        board1WidthMm: 90,
+        board2ThicknessMm: 19,
+        board2WidthMm: 90,
+        lapType: 'end_lap' as const,
+      },
+    ],
+    [
+      'infinite board2WidthMm',
+      {
+        board1ThicknessMm: 19,
+        board1WidthMm: 90,
+        board2ThicknessMm: 19,
+        board2WidthMm: Number.POSITIVE_INFINITY,
+        lapType: 'end_lap' as const,
+      },
+    ],
+    [
+      'overflowing glue area',
+      {
+        board1ThicknessMm: Number.MAX_VALUE,
+        board1WidthMm: 90,
+        board2ThicknessMm: 19,
+        board2WidthMm: 90,
         lapType: 'end_lap' as const,
       },
     ],
