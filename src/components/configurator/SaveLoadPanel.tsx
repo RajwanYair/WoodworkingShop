@@ -100,7 +100,7 @@ export function SaveLoadPanel() {
       await navigator.clipboard.writeText(url);
       addToast(t('toast.linkCopied'), 'success');
     } catch {
-      addToast(t('toast.invalidFile'), 'error');
+      addToast(t('toast.linkCopyFailed'), 'error');
     }
   };
   const handleExportCabinet = () => {

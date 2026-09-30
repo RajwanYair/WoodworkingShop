@@ -20,6 +20,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Component Behavior Foundation
 
+- Added 25 SaveLoadPanel journeys for save/list feedback, project metadata, cabinet/project export, validated JSON
+  import variants, bundle import/export, share-sheet/clipboard fallback, and import error recovery. Clipboard failure
+  now uses the dedicated translated share-failure message.
+- Raised measured component coverage to 73.36% statements, 67.06% branches, 69.87% functions, and 74.15% lines;
+  the coverage ratchet passed with 425 component tests and no area floor lowered.
+- Verified `npm test`: 4,800 tests across 335 files. Production build, bundle budget (2,791.7 KB / 2,960 KB), and
+  all 16 benchmarks passed. The aggregate quality gate remains blocked by the pre-existing expired
+  `CabinetPreview.tsx` component-budget exception.
+
 - Added 25 cost-estimate behaviors covering sheet/hardware price overrides, labour, finish and edge-banding edits,
   keyboard commit/cancel, invalid and zero values, reset actions, and multi-cabinet/zero-total summaries. Reset
   controls now expose translated accessible names and avoid committing stale drafts when activated.

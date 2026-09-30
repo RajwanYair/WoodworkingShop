@@ -594,6 +594,14 @@ have translated accessible names and do not commit stale input drafts when activ
 with 4,775 unit tests and 400 component tests; component coverage now measures 71.71% statements, 65.78% branches,
 68.81% functions, and 72.43% lines without lowering an area floor. Sprint 305 remains open.
 
+Follow-up (2026-09-30): Added 25 SaveLoadPanel journeys for saved-configuration state, project metadata/title,
+cabinet/project export, valid and invalid JSON import variants, bundle import/export, and share-sheet/clipboard
+fallback. Clipboard failures now show the dedicated translated recovery message. The coverage ratchet passed with
+425 component tests; component coverage now measures 73.36% statements, 67.06% branches, 69.87% functions, and
+74.15% lines without lowering an area floor. Full unit tests passed with 4,800 tests across 335 files; build,
+bundle budget (2,791.7 KB / 2,960 KB), and all 16 benchmarks passed. Quality remains blocked only by the
+pre-existing expired component-budget exception for `src/components/preview/CabinetPreview.tsx`; Sprint 305 remains open.
+
 **Sprint 306 — Mutation testing and quality evidence** — P1 · M · S303–S305.
 
 - T1: Evaluate Stryker on a bounded set of critical pure-engine modules (`dimensions`, `parts`, `cut-optimizer`, `validation`, export serializers); record runtime and mutant categories.
