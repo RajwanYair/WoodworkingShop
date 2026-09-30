@@ -20,6 +20,20 @@ describe('calculateFramePanel', () => {
     expect(result.panelHeightMm).toBeCloseTo(expectedHeight, 1);
   });
 
+  it('rounds independently calculated panel dimensions to a tenth of a millimetre', () => {
+    const result = calculateFramePanel({
+      frameWidthMm: 500.06,
+      frameHeightMm: 700.04,
+      stileWidthMm: 50,
+      railWidthMm: 60,
+      grooveDepthMm: 9.5,
+      panelFloatMm: 3,
+    });
+
+    expect(result.panelWidthMm).toBe(413.1);
+    expect(result.panelHeightMm).toBe(593);
+  });
+
   it('total width float = 2 × panelFloat', () => {
     const result = calculateFramePanel(BASE);
     expect(result.widthFloatMm).toBe(6);
@@ -54,6 +68,15 @@ describe('calculateFramePanel', () => {
       ['stiles wider than frame', { ...BASE, stileWidthMm: 350 }],
       ['rails taller than frame', { ...BASE, railWidthMm: 500 }],
       ['negative panelFloat', { ...BASE, panelFloatMm: -1 }],
+      ['NaN frame width', { ...BASE, frameWidthMm: Number.NaN }],
+      ['infinite frame height', { ...BASE, frameHeightMm: Number.POSITIVE_INFINITY }],
+      ['infinite stile width', { ...BASE, stileWidthMm: Number.POSITIVE_INFINITY }],
+      ['NaN rail width', { ...BASE, railWidthMm: Number.NaN }],
+      ['NaN groove depth', { ...BASE, grooveDepthMm: Number.NaN }],
+      ['infinite panel float', { ...BASE, panelFloatMm: Number.POSITIVE_INFINITY }],
+      ['zero groove width', { ...BASE, grooveWidthMm: 0 }],
+      ['NaN groove width', { ...BASE, grooveWidthMm: Number.NaN }],
+      ['float leaves no panel', { ...BASE, panelFloatMm: 500 }],
     ])('throws for %s', (_label, input) => {
       expect(() => calculateFramePanel(input)).toThrow(RangeError);
     });

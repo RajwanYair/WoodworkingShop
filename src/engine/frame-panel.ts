@@ -42,6 +42,12 @@ export interface FramePanelResult {
   grooveDepthMm: number;
 }
 
+/**
+ * Calculate floating-panel dimensions and expansion clearance.
+ * @param input Frame dimensions, member widths, and groove settings in millimetres.
+ * @returns Rounded panel dimensions and groove/float measurements in millimetres.
+ * @throws {RangeError} When inputs are invalid or the panel dimensions are non-positive/non-finite.
+ */
 export function calculateFramePanel(input: FramePanelInput): FramePanelResult {
   const {
     frameWidthMm,
@@ -53,12 +59,24 @@ export function calculateFramePanel(input: FramePanelInput): FramePanelResult {
     grooveWidthMm = 6.35,
   } = input;
 
-  if (frameWidthMm <= 0) throw new RangeError('frameWidthMm must be positive');
-  if (frameHeightMm <= 0) throw new RangeError('frameHeightMm must be positive');
-  if (stileWidthMm <= 0) throw new RangeError('stileWidthMm must be positive');
-  if (railWidthMm <= 0) throw new RangeError('railWidthMm must be positive');
-  if (grooveDepthMm <= 0) throw new RangeError('grooveDepthMm must be positive');
-  if (panelFloatMm < 0) throw new RangeError('panelFloatMm must be non-negative');
+  if (!Number.isFinite(frameWidthMm) || frameWidthMm <= 0)
+    throw new RangeError('frameWidthMm must be positive and finite');
+  if (!Number.isFinite(frameHeightMm) || frameHeightMm <= 0) {
+    throw new RangeError('frameHeightMm must be positive and finite');
+  }
+  if (!Number.isFinite(stileWidthMm) || stileWidthMm <= 0)
+    throw new RangeError('stileWidthMm must be positive and finite');
+  if (!Number.isFinite(railWidthMm) || railWidthMm <= 0)
+    throw new RangeError('railWidthMm must be positive and finite');
+  if (!Number.isFinite(grooveDepthMm) || grooveDepthMm <= 0) {
+    throw new RangeError('grooveDepthMm must be positive and finite');
+  }
+  if (!Number.isFinite(panelFloatMm) || panelFloatMm < 0) {
+    throw new RangeError('panelFloatMm must be non-negative and finite');
+  }
+  if (!Number.isFinite(grooveWidthMm) || grooveWidthMm <= 0) {
+    throw new RangeError('grooveWidthMm must be positive and finite');
+  }
 
   // Opening between the inner edges of the stiles / rails
   const openingWidthMm = frameWidthMm - 2 * stileWidthMm;
@@ -70,6 +88,11 @@ export function calculateFramePanel(input: FramePanelInput): FramePanelResult {
   // Panel spans opening + 2 × groove depth, then subtract float on both sides
   const panelWidthMm = openingWidthMm + 2 * grooveDepthMm - 2 * panelFloatMm;
   const panelHeightMm = openingHeightMm + 2 * grooveDepthMm - 2 * panelFloatMm;
+  if (!Number.isFinite(panelWidthMm) || panelWidthMm <= 0)
+    throw new RangeError('panel width must be positive and finite');
+  if (!Number.isFinite(panelHeightMm) || panelHeightMm <= 0) {
+    throw new RangeError('panel height must be positive and finite');
+  }
 
   return {
     panelWidthMm: Math.round(panelWidthMm * 10) / 10,

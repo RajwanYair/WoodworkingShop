@@ -40,10 +40,18 @@ const OPERATION_FACTOR: Record<TurningOperation, number> = {
   sanding: 0.9,
 };
 
+/**
+ * Calculate safe and recommended lathe speeds for a blank.
+ * @param input Blank diameter in millimetres and turning operation.
+ * @returns Clamped RPM range, operation speed, and surface speed.
+ * @throws {RangeError} When blank diameter is not positive and finite.
+ */
 export function calculateWoodTurning(input: WoodTurningInput): WoodTurningResult {
   const { blankDiameterMm, operation } = input;
 
-  if (blankDiameterMm <= 0) throw new RangeError('blankDiameterMm must be positive');
+  if (!Number.isFinite(blankDiameterMm) || blankDiameterMm <= 0) {
+    throw new RangeError('blankDiameterMm must be positive and finite');
+  }
 
   const diameterIn = blankDiameterMm * MM_TO_IN;
 
@@ -56,10 +64,13 @@ export function calculateWoodTurning(input: WoodTurningInput): WoodTurningResult
   // Surface speed = π × D × N / 1000 (m/min, D in mm)
   const surfaceSpeedMPerMin = Math.round(((Math.PI * blankDiameterMm * recommendedRpm) / 1000) * 10) / 10;
 
+  const safeMaxRpm = Math.min(maxRpm, 4000);
+  const safeMinRpm = Math.min(Math.max(minRpm, 250), safeMaxRpm);
+
   return {
-    minRpm: Math.max(minRpm, 250),
-    maxRpm: Math.min(maxRpm, 4000),
-    recommendedRpm: Math.max(Math.min(recommendedRpm, 4000), 250),
+    minRpm: safeMinRpm,
+    maxRpm: safeMaxRpm,
+    recommendedRpm: Math.min(Math.max(recommendedRpm, safeMinRpm), safeMaxRpm),
     surfaceSpeedMPerMin,
     safetyNoteKey: 'safetyNote',
   };
