@@ -31,6 +31,18 @@ describe('calculateBoxJoint', () => {
     expect(r.glueSurfaceMm2).toBeCloseTo(expected, 0);
   });
 
+  it('matches the dimensional oracle after adjusting to an odd finger count', () => {
+    const result = calculateBoxJoint({ boardWidthMm: 160, fingerWidthMm: 25, depthMm: 19 });
+
+    expect(result).toEqual({
+      fingerCount: 5,
+      actualFingerWidthMm: 32,
+      socketCount: 2,
+      glueSurfaceMm2: 6080,
+      edgeWasteMm: 0,
+    });
+  });
+
   it('forces fingerCount to 3 minimum for very wide requested finger', () => {
     // boardWidth=150, fingerWidth=60 → floor(150/60)=2 → force to 3
     const r = calculateBoxJoint({ boardWidthMm: 150, fingerWidthMm: 60, depthMm: 18 });
@@ -87,6 +99,10 @@ describe('calculateBoxJoint', () => {
       ['zero fingerWidth', { boardWidthMm: 150, fingerWidthMm: 0, depthMm: 18 }],
       ['zero depth', { boardWidthMm: 150, fingerWidthMm: 15, depthMm: 0 }],
       ['fingerWidth ≥ boardWidth', { boardWidthMm: 50, fingerWidthMm: 60, depthMm: 18 }],
+      ['NaN boardWidth', { boardWidthMm: Number.NaN, fingerWidthMm: 15, depthMm: 18 }],
+      ['infinite fingerWidth', { boardWidthMm: 150, fingerWidthMm: Number.POSITIVE_INFINITY, depthMm: 18 }],
+      ['NaN depth', { boardWidthMm: 150, fingerWidthMm: 15, depthMm: Number.NaN }],
+      ['overflowing glue surface', { boardWidthMm: 150, fingerWidthMm: 15, depthMm: Number.MAX_VALUE }],
     ])('throws RangeError for %s', (_, input) => {
       expect(() => calculateBoxJoint(input)).toThrow(RangeError);
     });

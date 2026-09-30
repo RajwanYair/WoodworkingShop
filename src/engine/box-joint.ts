@@ -13,6 +13,8 @@
  * Finger depth is commonly set equal to board thickness (depthMm = boardThicknessMm).
  */
 
+import { assertFiniteNumber } from './invariant';
+
 export interface BoxJointInput {
   /** Width of the board at the joint in mm */
   boardWidthMm: number;
@@ -35,9 +37,19 @@ export interface BoxJointResult {
   edgeWasteMm: number;
 }
 
+/**
+ * Calculate a box-joint finger layout and its combined glue surface area.
+ * @param input Board width, desired finger width, and joint depth in millimetres.
+ * @returns Odd finger count, adjusted dimensions, socket count, glue area, and edge waste.
+ * @throws {RangeError} When dimensions are non-positive/non-finite or calculated geometry exceeds numeric precision.
+ */
 export function calculateBoxJoint(input: BoxJointInput): BoxJointResult {
+  const fn = 'calculateBoxJoint';
   const { boardWidthMm, fingerWidthMm, depthMm } = input;
 
+  assertFiniteNumber(fn, 'boardWidthMm', boardWidthMm);
+  assertFiniteNumber(fn, 'fingerWidthMm', fingerWidthMm);
+  assertFiniteNumber(fn, 'depthMm', depthMm);
   if (boardWidthMm <= 0) throw new RangeError('boardWidthMm must be positive');
   if (fingerWidthMm <= 0) throw new RangeError('fingerWidthMm must be positive');
   if (depthMm <= 0) throw new RangeError('depthMm must be positive');
@@ -45,6 +57,7 @@ export function calculateBoxJoint(input: BoxJointInput): BoxJointResult {
 
   // Start with floor count, force odd, minimum 3
   let fingerCount = Math.floor(boardWidthMm / fingerWidthMm);
+  assertFiniteNumber(fn, 'fingerCount', fingerCount);
   if (fingerCount < 3) fingerCount = 3;
   if (fingerCount % 2 === 0) fingerCount -= 1;
   if (fingerCount < 3) fingerCount = 3;
@@ -54,6 +67,8 @@ export function calculateBoxJoint(input: BoxJointInput): BoxJointResult {
   // Each finger has 2 glue faces (flanks); both boards contribute equally → × 2 boards
   const glueSurfaceMm2 = Math.round(fingerCount * actualFingerWidthMm * depthMm * 2 * 10) / 10;
   const edgeWasteMm = Math.round(((fingerCount * actualFingerWidthMm - boardWidthMm) / 2) * 100) / 100;
+  assertFiniteNumber(fn, 'glueSurfaceMm2', glueSurfaceMm2);
+  assertFiniteNumber(fn, 'edgeWasteMm', edgeWasteMm);
 
   return {
     fingerCount,

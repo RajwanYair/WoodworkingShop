@@ -19,6 +19,57 @@ describe('calculateGlueCoverage', () => {
     expect(r.recommendedVolumeMl).toBeCloseTo(r.netVolumeMl * 1.15, 1);
   });
 
+  it.each([
+    {
+      glueType: 'pva' as const,
+      netVolumeMl: 20,
+      recommendedVolumeMl: 23,
+      openTimeMin: 10,
+      clampingTimeMin: 30,
+      cureTimeHours: 24,
+    },
+    {
+      glueType: 'polyurethane' as const,
+      netVolumeMl: 14.4,
+      recommendedVolumeMl: 16.56,
+      openTimeMin: 15,
+      clampingTimeMin: 60,
+      cureTimeHours: 4,
+    },
+    {
+      glueType: 'epoxy' as const,
+      netVolumeMl: 30,
+      recommendedVolumeMl: 34.5,
+      openTimeMin: 20,
+      clampingTimeMin: 60,
+      cureTimeHours: 8,
+    },
+    {
+      glueType: 'hide' as const,
+      netVolumeMl: 22.5,
+      recommendedVolumeMl: 25.88,
+      openTimeMin: 5,
+      clampingTimeMin: 45,
+      cureTimeHours: 12,
+    },
+    {
+      glueType: 'ca' as const,
+      netVolumeMl: 9,
+      recommendedVolumeMl: 10.35,
+      openTimeMin: 1,
+      clampingTimeMin: 5,
+      cureTimeHours: 1,
+    },
+  ])('matches the 3.6 m² glue oracle for $glueType', (expected) => {
+    const result = calculateGlueCoverage({ surfaceAreaMm2: 3_600_000, glueType: expected.glueType });
+
+    expect(result).toEqual({
+      ...expected,
+      spreadRateM2PerL: { pva: 180, polyurethane: 250, epoxy: 120, hide: 160, ca: 400 }[expected.glueType],
+      glueType: expected.glueType,
+    });
+  });
+
   it('scales linearly with jointCount', () => {
     const r1 = calculateGlueCoverage({ ...BASE, jointCount: 1 });
     const r3 = calculateGlueCoverage({ ...BASE, jointCount: 3 });
@@ -59,6 +110,14 @@ describe('calculateGlueCoverage', () => {
       ['zero surfaceArea', { surfaceAreaMm2: 0, glueType: 'pva' as WoodGlueType }],
       ['negative surfaceArea', { surfaceAreaMm2: -500, glueType: 'pva' as WoodGlueType }],
       ['zero jointCount', { ...BASE, jointCount: 0 }],
+      ['NaN surfaceArea', { surfaceAreaMm2: Number.NaN, glueType: 'pva' as WoodGlueType }],
+      ['infinite surfaceArea', { surfaceAreaMm2: Number.POSITIVE_INFINITY, glueType: 'pva' as WoodGlueType }],
+      ['NaN jointCount', { ...BASE, jointCount: Number.NaN }],
+      ['infinite jointCount', { ...BASE, jointCount: Number.POSITIVE_INFINITY }],
+      [
+        'overflowing combined area',
+        { surfaceAreaMm2: Number.MAX_VALUE, glueType: 'pva' as WoodGlueType, jointCount: 2 },
+      ],
     ])('throws RangeError for %s', (_, input) => {
       expect(() => calculateGlueCoverage(input)).toThrow(RangeError);
     });

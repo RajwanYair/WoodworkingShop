@@ -19,6 +19,8 @@
  * Add 15% waste allowance.
  */
 
+import { assertFiniteNumber } from './invariant';
+
 export type WoodGlueType = 'pva' | 'polyurethane' | 'epoxy' | 'hide' | 'ca';
 
 export interface GlueCoverageInput {
@@ -62,19 +64,29 @@ const GLUE_SPECS: Record<WoodGlueType, GlueSpec> = {
   ca: { spreadRateM2PerL: 400, openTimeMin: 1, clampingTimeMin: 5, cureTimeHours: 1 },
 };
 
-const WASTE_FACTOR = 1.15;
-
+/**
+ * Estimate glue volume and working/cure times for a joint surface.
+ * @param input Surface area in square millimetres, glue type, and optional joint count.
+ * @returns Net/recommended volume in millilitres and glue timing/coverage specifications.
+ * @throws {RangeError} When area/count are non-positive or non-finite, or calculations overflow.
+ */
 export function calculateGlueCoverage(input: GlueCoverageInput): GlueCoverageResult {
+  const fn = 'calculateGlueCoverage';
   const { surfaceAreaMm2, glueType, jointCount = 1 } = input;
 
+  assertFiniteNumber(fn, 'surfaceAreaMm2', surfaceAreaMm2);
+  assertFiniteNumber(fn, 'jointCount', jointCount);
   if (surfaceAreaMm2 <= 0) throw new RangeError('surfaceAreaMm2 must be positive');
   if (jointCount <= 0) throw new RangeError('jointCount must be positive');
 
   const spec = GLUE_SPECS[glueType];
   const totalAreaMm2 = surfaceAreaMm2 * jointCount;
+  assertFiniteNumber(fn, 'totalAreaMm2', totalAreaMm2);
   // Convert mm² → m²: divide by 1_000_000; spreadRate in m²/L → mL = (area_m² / rate_m²perL) * 1000
   const netVolumeMl = Math.round((totalAreaMm2 / 1_000_000 / spec.spreadRateM2PerL) * 1000 * 100) / 100;
-  const recommendedVolumeMl = Math.round(netVolumeMl * WASTE_FACTOR * 100) / 100;
+  const recommendedVolumeMl = Math.round(netVolumeMl * 115) / 100;
+  assertFiniteNumber(fn, 'netVolumeMl', netVolumeMl);
+  assertFiniteNumber(fn, 'recommendedVolumeMl', recommendedVolumeMl);
 
   return {
     netVolumeMl,
