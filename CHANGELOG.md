@@ -29,6 +29,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `CabinetPreview.tsx` component-budget exception; Sprint 312 T3–T5 remain open.
 - Completed Sprint 312 T2 with 25 real-download DXF and G-code browser behaviors; all 25 passed in Chromium and Firefox. Tests parse DXF group-code entities, layers, profile bounds, labels, dimensions and checksum, and validate G-code schema, units, labels, motion bounds, kerf changes, tool compensation, safe retract, pass depths, presets, feed rates and tool-change commands. DXF extents are checked against the G-code artifact.
   The 4,900-test unit suite, production build, bundle budget (2,791.9 KB / 2,960 KB), and all 16 benchmarks pass. The coverage ratchet remains below its component floors (74.61% statements, 68.61% branches, 71.85% functions, 75.08% lines); quality remains blocked by the pre-existing expired `CabinetPreview.tsx` component-budget exception. Sprint 312 T1, T3, T4 and T5 remain open.
+- Sprint 312 T3: Added grouped and quantity-expanded part labels with a print sheet that escapes
+  dynamic text and specifies UTF-8, A4 portrait, 8 mm margins, a three-column grid, and page-break
+  protection. All 25 browser behaviors pass in Chromium and Firefox; 4,915 unit tests pass. QR
+  generation and payload resolution remain open because no encoder dependency is available within
+  the existing eight-package production dependency cap. The aggregate quality gate remains blocked
+  by the pre-existing expired `CabinetPreview.tsx` component-budget exception; Sprint 312 T4 and T5
+  remain open.
 
 ### Component Behavior Foundation
 

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { PartLabelSheet } from '../../src/components/optimizer/PartLabelSheet';
@@ -46,6 +46,6 @@ describe('PartLabelSheet', () => {
 
     await user.click(screen.getByRole('button', { name: 'Print Labels' }));
     expect(write).toHaveBeenCalledWith(expect.stringContaining('P-001a'));
-    expect(print).toHaveBeenCalledOnce();
+    await waitFor(() => expect(print).toHaveBeenCalledOnce());
   });
 });
