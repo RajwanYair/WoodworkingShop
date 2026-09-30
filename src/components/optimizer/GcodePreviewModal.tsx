@@ -77,6 +77,8 @@ const PRESET_T_KEY: Record<string, string> = {
   genmitsu: 'gcode.presetGenmitsu',
 };
 
+type NumericOption = keyof Omit<GcodeOptions, 'useArcs' | 'cutDepth' | 'emitToolChange'>;
+
 const PAD = 10; // SVG padding in user units
 const SVG_SIZE = 400; // rendered SVG square pixels
 
@@ -105,6 +107,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
   useFocusTrap(trapRef, true, onClose);
   const [showSettings, setShowSettings] = useState(false);
   const [activePreset, setActivePreset] = useState<string | null>(null);
+  const [numericDrafts, setNumericDrafts] = useState<Partial<Record<NumericOption, string>>>({});
   const [options, setOptions] = useState<GcodeOptions>({
     feedRate: 1500,
     plungeRate: 600,
@@ -134,6 +137,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
 
   function applyPreset(preset: MachinePreset) {
     setActivePreset(preset.id);
+    setNumericDrafts({});
     setOptions((prev) => ({
       ...prev,
       feedRate: preset.feedRate,
@@ -145,11 +149,13 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
     }));
   }
 
-  function setNum(key: keyof Omit<GcodeOptions, 'useArcs'>, raw: string) {
-    const n = parseFloat(raw);
-    if (!isNaN(n) && n > 0) {
-      setActivePreset(null); // no longer a named preset
+  function setNum(key: NumericOption, raw: string) {
+    setNumericDrafts((prev) => ({ ...prev, [key]: raw }));
+    const n = Number(raw);
+    if (raw.trim().length > 0 && Number.isFinite(n) && n >= 0.1) {
+      setActivePreset('custom');
       setOptions((prev) => ({ ...prev, [key]: n }));
+      setNumericDrafts((prev) => ({ ...prev, [key]: undefined }));
     }
   }
 
@@ -247,10 +253,11 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
                     <span className="text-wood-500 dark:text-wood-400 text-[9px]">{label}</span>
                     <input
                       type="number"
-                      value={options[key]}
+                      value={numericDrafts[key] ?? options[key]}
                       min={0.1}
                       step={key === 'toolDiameter' ? 0.001 : 1}
                       onChange={(e) => setNum(key, e.target.value)}
+                      onBlur={() => setNumericDrafts((prev) => ({ ...prev, [key]: undefined }))}
                       className="border-wood-300 dark:border-wood-600 dark:bg-wood-900 text-wood-700 dark:text-wood-200 w-full rounded border bg-white px-1.5 py-0.5 text-xs"
                       aria-label={label}
                     />
@@ -264,7 +271,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
                       type="checkbox"
                       checked={options.useArcs}
                       onChange={(e) => {
-                        setActivePreset(null);
+                        setActivePreset('custom');
                         setOptions((prev) => ({ ...prev, useArcs: e.target.checked }));
                       }}
                       className="border-wood-300 dark:border-wood-600 h-3.5 w-3.5 rounded"
@@ -280,7 +287,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
                       type="checkbox"
                       checked={options.emitToolChange}
                       onChange={(e) => {
-                        setActivePreset(null);
+                        setActivePreset('custom');
                         setOptions((prev) => ({ ...prev, emitToolChange: e.target.checked }));
                       }}
                       className="border-wood-300 dark:border-wood-600 h-3.5 w-3.5 rounded"

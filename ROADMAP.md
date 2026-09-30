@@ -734,6 +734,16 @@ E2E tests pass with two workers.
 - T5: Generate ZIP and inspect every entry, manifest, path safety, checksums and file contents once batch UI exists; until then cover existing writer/engine at unit level.
 - Accept: tests listen for actual browser download events, read bytes and validate content; a visible button alone never counts as export coverage.
 
+Component follow-up (2026-09-30): Added 25 GcodePreviewModal behaviors covering all three machine presets,
+numeric setting edits and invalid-value rollback, disclosure state, custom settings, tool-change/arc options,
+and download/dismiss callbacks. Fixed numeric fields so users can replace values without appending to the old
+value; invalid drafts revert on blur and manual changes are labeled Custom. The coverage ratchet passed with
+4,900 unit tests and 525 component tests; component coverage measures 75.02% statements, 68.76% branches,
+72.41% functions, and 75.47% lines without lowering any area floor. Build, bundle budget (2,791.9 KB / 2,960 KB),
+and all 16 benchmarks passed. This is component-level generated-content coverage only; real browser download
+bytes and parser/oracle checks remain open for T2 acceptance. The quality gate remains blocked only by the
+pre-existing expired `CabinetPreview.tsx` component-budget exception.
+
 **Sprint 313 — Assembly, build log, camera and machine flows** — P1 · L · S305, S307.
 
 - T1: Next/previous step, all-steps mode, tips toggle, mark/unmark/reset completion; assert dependency gating and progress/time counters.

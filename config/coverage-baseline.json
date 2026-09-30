@@ -22,11 +22,11 @@
     },
     "utils": {
       "statements": {
-        "covered": 1900,
+        "covered": 1906,
         "total": 2006
       },
       "branches": {
-        "covered": 775,
+        "covered": 776,
         "total": 925
       },
       "functions": {
@@ -34,7 +34,7 @@
         "total": 413
       },
       "lines": {
-        "covered": 1700,
+        "covered": 1706,
         "total": 1772
       }
     },
@@ -76,20 +76,20 @@
     },
     "components": {
       "statements": {
-        "covered": 2658,
-        "total": 3584
+        "covered": 2695,
+        "total": 3592
       },
       "branches": {
-        "covered": 1757,
-        "total": 2571
+        "covered": 1770,
+        "total": 2574
       },
       "functions": {
-        "covered": 870,
-        "total": 1225
+        "covered": 890,
+        "total": 1229
       },
       "lines": {
-        "covered": 2435,
-        "total": 3257
+        "covered": 2462,
+        "total": 3262
       }
     }
   }

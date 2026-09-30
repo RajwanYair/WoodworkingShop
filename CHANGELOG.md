@@ -20,6 +20,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Component Behavior Foundation
 
+- Added 25 GcodePreviewModal behaviors for machine presets, numeric edits and rejection, option disclosure,
+  custom settings, tool-change/arc toggles, and download/dismiss behavior. Fixed numeric fields so values can
+  be replaced instead of appended, invalid drafts revert on blur, and manual changes show the Custom preset.
+  The coverage ratchet passed with 4,900 unit tests and 525 component tests; component coverage measures
+  75.02% statements, 68.76% branches, 72.41% functions, and 75.47% lines without lowering any area floor.
+  Build, bundle budget (2,791.9 KB / 2,960 KB), and all 16 benchmarks passed. Quality remains blocked only
+  by the pre-existing expired `CabinetPreview.tsx` budget exception.
 - Added 25 OptimizerView behaviors for live status announcements, single/multi-cabinet result selection,
   low-yield and material-consolidation recommendations, and part-label visibility. The coverage ratchet
   passed with 4,875 unit tests and 500 component tests; component coverage now measures 74.16% statements,
