@@ -55,6 +55,28 @@ describe('calculateFaceFrame', () => {
     });
   });
 
+  describe('boundary dimensions and opening counts', () => {
+    it.each([
+      {
+        desc: 'minimum positive dimensions with minimum member widths',
+        input: { cabinetWidthMm: 100, cabinetHeightMm: 100, stileWidthMm: 19, railWidthMm: 19 },
+        expected: { stileLengthMm: 100, railLengthMm: 62, openingWidthMm: 62, openingHeightMm: 62 },
+      },
+      {
+        desc: 'four openings with fractional millimetre height',
+        input: { cabinetWidthMm: 2400, cabinetHeightMm: 1000, stileWidthMm: 100, railWidthMm: 50, openingCount: 4 },
+        expected: { stileLengthMm: 1000, railLengthMm: 2200, openingWidthMm: 2200, openingHeightMm: 187.5 },
+      },
+    ])('calculates $desc in millimetres', ({ input, expected }) => {
+      const result = calculateFaceFrame(input);
+
+      expect(result.stileLengthMm).toBe(expected.stileLengthMm);
+      expect(result.railLengthMm).toBe(expected.railLengthMm);
+      expect(result.openingWidthMm).toBe(expected.openingWidthMm);
+      expect(result.openingHeightMm).toBe(expected.openingHeightMm);
+    });
+  });
+
   describe('glue surface', () => {
     it('computes correctly for 1 opening', () => {
       const r = calculateFaceFrame({ cabinetWidthMm: 600, cabinetHeightMm: 720, stileWidthMm: 38, railWidthMm: 38 });
@@ -67,7 +89,11 @@ describe('calculateFaceFrame', () => {
     it.each([
       { desc: 'zero width', input: { cabinetWidthMm: 0, cabinetHeightMm: 720 } },
       { desc: 'negative height', input: { cabinetWidthMm: 600, cabinetHeightMm: -1 } },
+      { desc: 'zero stile width', input: { cabinetWidthMm: 600, cabinetHeightMm: 720, stileWidthMm: 0 } },
+      { desc: 'negative rail width', input: { cabinetWidthMm: 600, cabinetHeightMm: 720, railWidthMm: -1 } },
       { desc: 'stiles wider than cabinet', input: { cabinetWidthMm: 100, cabinetHeightMm: 720, stileWidthMm: 60 } },
+      { desc: 'rails leave no room for an opening', input: { cabinetWidthMm: 600, cabinetHeightMm: 76 } },
+      { desc: 'fractional opening count', input: { cabinetWidthMm: 600, cabinetHeightMm: 720, openingCount: 1.5 } },
       { desc: 'opening count 0', input: { cabinetWidthMm: 600, cabinetHeightMm: 720, openingCount: 0 } },
       { desc: 'opening count 5', input: { cabinetWidthMm: 600, cabinetHeightMm: 720, openingCount: 5 } },
     ])('throws for $desc', ({ input }) => {
