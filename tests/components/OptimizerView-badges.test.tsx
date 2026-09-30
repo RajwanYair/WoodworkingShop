@@ -5,7 +5,9 @@
  * pre-built OptimizationResult containing a sheet with known parts.
  */
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import i18n from '../../src/i18n';
 
 // Mock the Vite ?worker imports before any other imports
 vi.mock('../../src/workers/bom-export.worker?worker', () => ({
@@ -59,6 +61,28 @@ const MOCK_OPTIMIZATION: OptimizationResult = {
   totalWaste: 500000,
   grainConflictCount: 0,
 };
+
+function setOptimizerResults(
+  optimization: OptimizationResult,
+  combinedOptimization: OptimizationResult = optimization,
+  cabinetCount = 1,
+) {
+  useCabinetStore.setState({
+    optimization,
+    combinedOptimization,
+    optimizationPending: false,
+    cabinets: Array.from({ length: cabinetCount }, (_, index) => ({
+      name: `C${index + 1}`,
+      config: useCabinetStore.getState().config,
+    })),
+    activeCabinetIndex: 0,
+    colorBlindMode: false,
+    sawKerf: 3,
+    materialPriceOverrides: {},
+    projectName: 'Test',
+    sheetSizeOverrides: {},
+  });
+}
 
 describe('OptimizerView part-count badge per sheet — Sprint 77', () => {
   beforeEach(() => {
@@ -195,5 +219,245 @@ describe('OptimizerView per-sheet waste label — Sprint 81', () => {
     expect(
       screen.getByText(/Materials Melamine 18 mm and Birch Plywood 18 mm share thickness 18 mm/),
     ).toBeInTheDocument();
+  });
+});
+
+describe('OptimizerView parent behavior', () => {
+  beforeEach(() => {
+    setOptimizerResults(MOCK_OPTIMIZATION);
+  });
+
+  it.each([
+    {
+      pending: true,
+      result: MOCK_OPTIMIZATION,
+      expected: 'Computing cut sheets…',
+    },
+    {
+      pending: false,
+      result: MOCK_OPTIMIZATION,
+      expected: 'Optimization complete — 1 sheet(s) required',
+    },
+    {
+      pending: false,
+      result: { ...MOCK_OPTIMIZATION, sheets: [] },
+      expected: '',
+    },
+    {
+      pending: false,
+      result: {
+        ...MOCK_OPTIMIZATION,
+        sheets: [MOCK_OPTIMIZATION.sheets[0], { ...MOCK_OPTIMIZATION.sheets[0], sheetIndex: 1 }],
+      },
+      expected: 'Optimization complete — 2 sheet(s) required',
+    },
+  ])('announces "$expected" for the current optimizer state', ({ pending, result, expected }) => {
+    useCabinetStore.setState({ optimizationPending: pending, optimization: result, combinedOptimization: result });
+
+    render(<OptimizerView />);
+
+    expect(screen.getByRole('status')).toHaveTextContent(expected);
+  });
+
+  it.each([
+    { cabinetCount: 1, selectedPart: 'LOCAL', hiddenPart: 'COMBINED' },
+    { cabinetCount: 2, selectedPart: 'COMBINED', hiddenPart: 'LOCAL' },
+    { cabinetCount: 3, selectedPart: 'COMBINED', hiddenPart: 'LOCAL' },
+  ])('uses the $cabinetCount-cabinet result when rendering sheets', ({ cabinetCount, selectedPart, hiddenPart }) => {
+    const localResult: OptimizationResult = {
+      ...MOCK_OPTIMIZATION,
+      sheets: [{ ...MOCK_OPTIMIZATION.sheets[0], parts: [{ ...MOCK_PART, partId: 'LOCAL' }] }],
+    };
+    const combinedResult: OptimizationResult = {
+      ...MOCK_OPTIMIZATION,
+      sheets: [{ ...MOCK_OPTIMIZATION.sheets[0], parts: [{ ...MOCK_PART, partId: 'COMBINED' }] }],
+    };
+    setOptimizerResults(localResult, combinedResult, cabinetCount);
+
+    render(<OptimizerView />);
+
+    expect(screen.getByText(selectedPart, { selector: 'text' })).toBeInTheDocument();
+    expect(screen.queryByText(hiddenPart, { selector: 'text' })).not.toBeInTheDocument();
+  });
+
+  it.each([
+    {
+      name: 'ignores a sheet at the 25% threshold',
+      yields: [25],
+      expected: null,
+    },
+    {
+      name: 'ignores a zero-yield sheet',
+      yields: [0],
+      expected: null,
+    },
+    {
+      name: 'reports the first positive low-yield sheet',
+      yields: [0, 15, 5],
+      expected: /Sheet #2 is only 15% used/,
+    },
+    {
+      name: 'reports the displayed one-based sheet number',
+      yields: [10],
+      sheetIndex: 4,
+      expected: /Sheet #5 is only 10% used/,
+    },
+  ])('$name', ({ yields, sheetIndex = 0, expected }) => {
+    const sheets = yields.map((yieldPercent, index) => ({
+      ...MOCK_OPTIMIZATION.sheets[0],
+      sheetIndex: index === 0 ? sheetIndex : index,
+      yieldPercent,
+    }));
+    const result = { ...MOCK_OPTIMIZATION, sheets };
+    setOptimizerResults(result);
+
+    render(<OptimizerView />);
+
+    if (expected) {
+      expect(screen.getByText(expected)).toBeInTheDocument();
+    } else {
+      expect(screen.queryByText(/Sheet #\d+ is only/)).not.toBeInTheDocument();
+    }
+  });
+
+  it.each([
+    {
+      name: 'recommends materials with matching thickness',
+      sheets: [
+        { material: 'melamine-18', thickness: 18 },
+        { material: 'plywood-18', thickness: 18 },
+      ],
+      expected: /Materials Melamine 18 mm and Birch Plywood 18 mm share thickness 18 mm/,
+    },
+    {
+      name: 'does not recommend materials with different thicknesses',
+      sheets: [
+        { material: 'melamine-18', thickness: 18 },
+        { material: 'plywood-17', thickness: 17 },
+      ],
+      expected: null,
+    },
+    {
+      name: 'does not recommend duplicate material keys',
+      sheets: [
+        { material: 'melamine-18', thickness: 18 },
+        { material: 'melamine-18', thickness: 18 },
+      ],
+      expected: null,
+    },
+    {
+      name: 'uses the first two distinct materials at a shared thickness',
+      sheets: [
+        { material: 'plywood-18', thickness: 18 },
+        { material: 'melamine-18', thickness: 18 },
+        { material: 'plywood-18', thickness: 18 },
+      ],
+      expected: /Materials Birch Plywood 18 mm and Melamine 18 mm share thickness 18 mm/,
+    },
+    {
+      name: 'does not recommend consolidation for a single sheet',
+      sheets: [{ material: 'melamine-18', thickness: 18 }],
+      expected: null,
+    },
+    {
+      name: 'finds a matching pair after an unrelated thickness group',
+      sheets: [
+        { material: 'plywood-17', thickness: 17 },
+        { material: 'melamine-18', thickness: 18 },
+        { material: 'plywood-18', thickness: 18 },
+      ],
+      expected: /Materials Melamine 18 mm and Birch Plywood 18 mm share thickness 18 mm/,
+    },
+    {
+      name: 'uses the first shared thickness encountered',
+      sheets: [
+        { material: 'plywood-17', thickness: 17 },
+        { material: 'melamine-18', thickness: 17 },
+        { material: 'plywood-18', thickness: 18 },
+        { material: 'melamine-18', thickness: 18 },
+      ],
+      expected: /Materials Sandwich Plywood 17 mm and Melamine 18 mm share thickness 17 mm/,
+    },
+    {
+      name: 'does not combine materials from separate thickness groups',
+      sheets: [
+        { material: 'melamine-18', thickness: 18 },
+        { material: 'plywood-17', thickness: 17 },
+      ],
+      expected: null,
+    },
+    {
+      name: 'does not show a hint when all sheets have the same material',
+      sheets: [
+        { material: 'plywood-18', thickness: 18 },
+        { material: 'plywood-18', thickness: 18 },
+        { material: 'plywood-18', thickness: 18 },
+      ],
+      expected: null,
+    },
+  ])('$name', ({ sheets: sheetInputs, expected }) => {
+    const sheets = sheetInputs.map(({ material, thickness }, sheetIndex) => ({
+      ...MOCK_OPTIMIZATION.sheets[0],
+      material,
+      thickness,
+      sheetIndex,
+      yieldPercent: 50,
+    }));
+    const result = { ...MOCK_OPTIMIZATION, sheets };
+    setOptimizerResults(result);
+
+    render(<OptimizerView />);
+
+    if (expected) {
+      expect(screen.getByText(expected)).toBeInTheDocument();
+    } else {
+      expect(screen.queryByText(/share thickness/)).not.toBeInTheDocument();
+    }
+  });
+
+  it.each([
+    { name: 'starts with part labels hidden', partLabels: [], show: false, clicks: 0 },
+    {
+      name: 'shows the selected part label after activation',
+      partLabels: ['Side Panel'],
+      show: true,
+      clicks: 1,
+      singlePart: true,
+    },
+    { name: 'shows every eligible part label', partLabels: ['Side Panel', 'Top Rail'], show: true, clicks: 1 },
+    { name: 'hides labels after toggling off again', partLabels: [], show: false, clicks: 2 },
+    {
+      name: 'keeps labels hidden for parts too small to label',
+      partLabels: [],
+      show: true,
+      clicks: 1,
+      smallPart: true,
+    },
+  ])('$name', async ({ partLabels, show, clicks, smallPart = false, singlePart = false }) => {
+    const user = userEvent.setup();
+    const firstPart = {
+      ...MOCK_PART,
+      partId: 'P01',
+      label: 'Side Panel',
+      width: smallPart ? 10 : MOCK_PART.width,
+      length: smallPart ? 10 : MOCK_PART.length,
+    };
+    const parts =
+      smallPart || singlePart ? [firstPart] : [firstPart, { ...MOCK_PART, partId: 'P02', label: 'Top Rail', x: 600 }];
+    const result = {
+      ...MOCK_OPTIMIZATION,
+      sheets: [{ ...MOCK_OPTIMIZATION.sheets[0], parts }],
+    };
+    setOptimizerResults(result);
+    render(<OptimizerView />);
+
+    const labelsToggle = screen.getByRole('button', { name: new RegExp(i18n.t('optimizer.labels')) });
+    for (let index = 0; index < clicks; index += 1) await user.click(labelsToggle);
+
+    expect(labelsToggle).toHaveAttribute('aria-pressed', String(show));
+    for (const partLabel of partLabels) {
+      expect(screen.getByText(partLabel, { selector: 'text' })).toBeInTheDocument();
+    }
+    expect(screen.queryAllByText(/Side Panel|Top Rail/, { selector: 'text' })).toHaveLength(partLabels.length);
   });
 });

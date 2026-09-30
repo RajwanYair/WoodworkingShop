@@ -20,6 +20,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Component Behavior Foundation
 
+- Added 25 OptimizerView behaviors for live status announcements, single/multi-cabinet result selection,
+  low-yield and material-consolidation recommendations, and part-label visibility. The coverage ratchet
+  passed with 4,875 unit tests and 500 component tests; component coverage now measures 74.16% statements,
+  68.18% branches, 71.02% functions, and 74.76% lines without lowering any area floor. Production build,
+  bundle budget (2,791.7 KB / 2,960 KB), and all 16 benchmarks passed. Quality remains blocked only by the
+  pre-existing expired `CabinetPreview.tsx` component-budget exception.
 - Added 25 MaterialSummaryPanel behaviors covering area aggregation, per-material pricing, locale labels, sheet-size
   display/edit/reset, and range boundaries. Fixed grouped area totals for differently sized sheets and enforced the
   input controls' 100–5000 mm bounds. The coverage ratchet passed with 4,850 unit tests and 475 component tests;

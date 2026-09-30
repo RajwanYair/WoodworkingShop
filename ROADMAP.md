@@ -1,6 +1,6 @@
 # Roadmap
 
-> Last updated: 2026-09-30 (Sprint 305 component coverage increased)
+> Last updated: 2026-09-30 (Sprint 305 OptimizerView behavior coverage increased)
 > Current app version: v5.33.0
 > Next release target: v5.34.0 (Phase 64 — Real User Journeys and Browser Confidence)
 > Program horizon: Phases 63–72 · Sprints 300–370 · v5.33.0 → v6.0.0
@@ -476,6 +476,13 @@ Full `npm run ci` passed with 4,583 tests across 283 files, production build and
 - Accept: all controls touched in this sprint have positive and negative behavior assertions; no suppression, brittle shallow rendering, or class-based selector.
 
 Progress (2026-09-29): Optimizer table tests now exercise material filtering and reset, part search and bidirectional dimension sorting, hardware search by supplier, and quantity override/reset/sorting through accessible controls. The broader component inventory and remaining high-use panel coverage are still open. Full `npm run ci` passed with 4,641 tests across 284 files, production build, bundle budgets, and all 16 benchmarks.
+
+Follow-up (2026-09-30): Added 25 OptimizerView behaviors for live status announcements, single/multi-cabinet
+result selection, low-yield and material-consolidation recommendations, and part-label visibility. The
+coverage ratchet passed with 4,875 unit tests and 500 component tests; component coverage measures 74.16%
+statements, 68.18% branches, 71.02% functions, and 74.76% lines with no area floor lowered. Production
+build, bundle budget (2,791.7 KB / 2,960 KB), and all 16 benchmarks passed. The quality gate remains blocked
+only by the pre-existing expired `CabinetPreview.tsx` component-budget exception. Sprint 305 remains open.
 
 Follow-up (2026-09-29): Added `userEvent` journeys for furniture-type conditional controls and generated
 panel parts, joinery selection, custom shelf-position editing/reset, door count/style effects on
