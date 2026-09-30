@@ -119,7 +119,12 @@ export function CostEstimatePanel() {
                     step={5}
                     value={priceInput}
                     onChange={(e) => setPriceInput(e.target.value)}
-                    onBlur={() => {
+                    onBlur={(e) => {
+                      if (
+                        e.relatedTarget instanceof HTMLButtonElement &&
+                        e.relatedTarget.getAttribute('aria-label') === t('cost.resetPrice')
+                      )
+                        return;
                       const val = Number(priceInput);
                       setMaterialPriceOverride(sc.material, isNaN(val) || val <= 0 ? null : val);
                       setEditingPrice(null);
@@ -140,6 +145,7 @@ export function CostEstimatePanel() {
                       }}
                       className="text-wood-400 text-[10px] hover:text-red-500"
                       title={t('cost.resetPrice')}
+                      aria-label={t('cost.resetPrice')}
                     >
                       ↺
                     </button>
@@ -224,7 +230,12 @@ export function CostEstimatePanel() {
                       step={0.5}
                       value={hwPriceInput}
                       onChange={(e) => setHwPriceInput(e.target.value)}
-                      onBlur={() => {
+                      onBlur={(e) => {
+                        if (
+                          e.relatedTarget instanceof HTMLButtonElement &&
+                          e.relatedTarget.getAttribute('aria-label') === t('cost.resetPrice')
+                        )
+                          return;
                         const val = Number(hwPriceInput);
                         setHardwarePriceOverride(hw.id, isNaN(val) || val < 0 ? null : val);
                         setEditingHw(null);
@@ -245,6 +256,7 @@ export function CostEstimatePanel() {
                         }}
                         className="text-wood-400 text-[10px] hover:text-red-500"
                         title={t('cost.resetPrice')}
+                        aria-label={t('cost.resetPrice')}
                       >
                         ↺
                       </button>

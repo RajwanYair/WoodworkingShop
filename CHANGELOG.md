@@ -20,6 +20,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Component Behavior Foundation
 
+- Added 25 cost-estimate behaviors covering sheet/hardware price overrides, labour, finish and edge-banding edits,
+  keyboard commit/cancel, invalid and zero values, reset actions, and multi-cabinet/zero-total summaries. Reset
+  controls now expose translated accessible names and avoid committing stale drafts when activated.
+- Raised measured component coverage to 71.71% statements, 65.78% branches, 68.81% functions, and 72.43% lines;
+  the coverage ratchet passed with 400 component tests and no area floor lowered.
+- Verified 4,775 unit tests across 335 files. Full quality/build/bundle/benchmark verification is pending.
+
 - Added 25 component behavior tests across material-usage grouping/pricing/size editing, optimizer toolbar filtering
   and toggles, Marketplace search/install lifecycle, PDF settings import and full-project export, and saved-project
   save/export/bundle feedback.

@@ -588,6 +588,12 @@ PDF import/full-project export, and saved-project workflows. The coverage ratche
 2,960 KB), and all 16 benchmarks passed. Quality remains blocked only by the pre-existing expired component-budget
 exception for `src/components/preview/CabinetPreview.tsx`; Sprint 305 remains open.
 
+Follow-up (2026-09-30): Added 25 cost-estimate behaviors for price overrides, labour/finish/edge-banding edits,
+keyboard commit/cancel, invalid and zero values, reset actions, and conditional project totals. Reset controls now
+have translated accessible names and do not commit stale input drafts when activated. The coverage ratchet passed
+with 4,775 unit tests and 400 component tests; component coverage now measures 71.71% statements, 65.78% branches,
+68.81% functions, and 72.43% lines without lowering an area floor. Sprint 305 remains open.
+
 **Sprint 306 — Mutation testing and quality evidence** — P1 · M · S303–S305.
 
 - T1: Evaluate Stryker on a bounded set of critical pure-engine modules (`dimensions`, `parts`, `cut-optimizer`, `validation`, export serializers); record runtime and mutant categories.
