@@ -203,6 +203,7 @@
     "eslint-plugin-testing-library": "7.16.2",
     "fake-indexeddb": "6.2.5",
     "fast-check": "4.10.2",
+    "fflate": "0.8.2",
     "jsdom": "^29.1.1",
     "knip": "6.38.0",
     "lint-staged": "^17.5.1",

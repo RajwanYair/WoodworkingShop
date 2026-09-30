@@ -34,6 +34,29 @@ function crc32(data: Uint8Array): number {
   return (crc ^ 0xffffffff) >>> 0;
 }
 
+function validateEntryNames(entries: ZipEntry[]): void {
+  const names = new Set<string>();
+  for (const { name } of entries) {
+    const segments = name.split('/');
+    if (
+      !name ||
+      name.startsWith('/') ||
+      /^[a-z]:/i.test(name) ||
+      name.includes('\\') ||
+      [...name].some((character) => {
+        const code = character.charCodeAt(0);
+        return code <= 0x1f || code === 0x7f;
+      }) ||
+      segments.some((segment) => !segment || segment === '.' || segment === '..') ||
+      encodeStr(name).length > 0xffff
+    ) {
+      throw new RangeError(`Unsafe ZIP entry path: ${JSON.stringify(name)}`);
+    }
+    if (names.has(name)) throw new RangeError(`Duplicate ZIP entry path: ${JSON.stringify(name)}`);
+    names.add(name);
+  }
+}
+
 // ─── Encoding helpers ─────────────────────────────────────────────────────────
 
 function encodeStr(s: string): Uint8Array {
@@ -71,12 +94,40 @@ export interface ZipEntry {
   data: Uint8Array;
 }
 
+/** Create a deterministic SHA-256 manifest for payload entries, excluding itself. */
+export async function createZipManifest(entries: ZipEntry[]): Promise<ZipEntry> {
+  validateEntryNames(entries);
+  if (entries.some(({ name }) => name === 'manifest.json')) {
+    throw new RangeError('ZIP entry path is reserved for the integrity manifest');
+  }
+
+  const files = await Promise.all(
+    entries.map(async ({ name, data }) => {
+      const digest = await crypto.subtle.digest('SHA-256', new Uint8Array(data).buffer);
+      const sha256 = Array.from(new Uint8Array(digest))
+        .map((byte) => byte.toString(16).padStart(2, '0'))
+        .join('');
+      return { path: name, sizeBytes: data.byteLength, sha256 };
+    }),
+  );
+  files.sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0));
+
+  const manifest = {
+    format: 'cabinet-planner-export-bundle',
+    version: 1,
+    checksumAlgorithm: 'SHA-256',
+    files,
+  };
+  return { name: 'manifest.json', data: encodeStr(JSON.stringify(manifest, null, 2)) };
+}
+
 /**
  * Build a ZIP archive from an array of file entries.
  *
  * @returns A `Uint8Array` containing the complete ZIP file.
  */
 export function buildZip(entries: ZipEntry[]): Uint8Array {
+  validateEntryNames(entries);
   const localHeaders: Uint8Array[] = [];
   const centralHeaders: Uint8Array[] = [];
   const offsets: number[] = [];

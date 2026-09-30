@@ -18,7 +18,7 @@ import { computeDimensions } from '../../engine/dimensions';
 import { generateBomCsv } from '../../utils/bom-export';
 import { cutSheetToDxf } from '../../utils/dxf-export';
 import { generateGltfContent } from '../../engine/export/gltf-export';
-import { buildZip, downloadZip } from '../../utils/zip-writer';
+import { buildZip, createZipManifest, downloadZip } from '../../utils/zip-writer';
 import { utf8Encode } from '../../utils/browser-compat';
 
 export function PdfExportPanel() {
@@ -255,9 +255,11 @@ export function PdfExportPanel() {
           `  sheets/sheet-N-*.dxf   — Cut-sheet layouts (DXF, one per sheet)`,
           `  ${safeName}-bom.csv     — Bill of materials (CSV)`,
           `  ${safeName}.gltf        — 3-D model for AR/VR (glTF 2.0)`,
+          `  manifest.json          — SHA-256 integrity manifest`,
         ].join('\n');
         entries.push({ name: 'README.txt', data: utf8Encode(readme) });
 
+        entries.push(await createZipManifest(entries));
         const zipBytes = buildZip(entries);
         downloadZip(zipBytes, `${safeName}-bundle.zip`);
         useToastStore.getState().addToast(t('pdf.zipExported'), 'success');

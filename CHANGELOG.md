@@ -44,6 +44,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   All 4,915 unit tests, the production build, bundle budget (2,793.1 KB / 2,960 KB), and 16
   benchmarks pass. The aggregate quality gate remains blocked by the pre-existing expired
   `CabinetPreview.tsx` component-budget exception; Sprint 312 T5 remains open.
+- Sprint 312 T5: Added 29 real ZIP-download behaviors; all pass in Chromium and Firefox. ZIP entries
+  now reject unsafe, duplicate, and unrepresentable paths, and each bundle includes a sorted
+  SHA-256 manifest. Tests parse the central directory and extracted files, verifying CRC-32,
+  manifest coverage and checksums, and PDF, DXF, BOM, glTF, README, and multi-cabinet contents.
+  The ZIP parser is dev-only. All 4,929 unit tests, the production build, bundle budget
+  (2,795.5 KB / 2,960 KB), and 16 benchmarks pass. The aggregate quality gate remains blocked by
+  the expired `CabinetPreview.tsx` component-budget exception. QR encoding remains deferred under
+  the existing production dependency cap; Sprint 312 T5 is complete.
 
 ### Component Behavior Foundation
 
