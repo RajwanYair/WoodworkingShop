@@ -728,7 +728,7 @@ E2E tests pass with two workers.
 **Sprint 312 — Export downloads as real artifacts** — P0 · L · S304, S311.
 
 - T1: Trigger BOM CSV and hardware CSV; assert filename, UTF-8/BOM policy, delimiter, headers, row count, quantities, locale, escaping and no formula injection.
-- T2: Trigger DXF and G-code; parse entities/commands, units, extents, kerf, tool settings, safe retract, bounds, part labels and schema header against golden/oracle fixtures.
+- T2: DONE — Trigger DXF and G-code; parse entities/commands, units, extents, kerf, tool settings, safe retract, bounds, part labels and schema header against golden/oracle fixtures.
 - T3: Generate part labels and print sheets; assert QR payload resolves to part, SVG/print page size, clipping and repeated labels.
 - T4: Generate PDF; assert `%PDF-`, page count, text extraction for critical headings/dimensions, options and multi-cabinet inclusion, no overflow/warnings beyond budget.
 - T5: Generate ZIP and inspect every entry, manifest, path safety, checksums and file contents once batch UI exists; until then cover existing writer/engine at unit level.
@@ -741,8 +741,17 @@ value; invalid drafts revert on blur and manual changes are labeled Custom. The 
 4,900 unit tests and 525 component tests; component coverage measures 75.02% statements, 68.76% branches,
 72.41% functions, and 75.47% lines without lowering any area floor. Build, bundle budget (2,791.9 KB / 2,960 KB),
 and all 16 benchmarks passed. This is component-level generated-content coverage only; real browser download
-bytes and parser/oracle checks remain open for T2 acceptance. The quality gate remains blocked only by the
+bytes and parser/oracle checks were still open at that checkpoint. The quality gate remains blocked only by the
 pre-existing expired `CabinetPreview.tsx` component-budget exception.
+
+Browser artifact follow-up (2026-09-30): Completed Sprint 312 T2 with 25 real-download behaviors for DXF and
+G-code; all 25 passed in both Chromium and Firefox. The tests parse DXF group-code entities, layers, profile
+extents, labels, dimensions and SHA-256 checksum, and validate G-code schema, units, part labels, motion bounds,
+safe retract, multi-pass depth, kerf-driven coordinate changes, tool compensation, machine presets, feed rates
+and tool-change commands. DXF sheet extents are cross-checked against the G-code artifact. Sprint 312 T1, T3,
+T4 and T5 remain open. The 4,900-test unit suite, production build, bundle budget and all 16 benchmarks pass.
+The coverage ratchet remains blocked by component coverage below its recorded floors; quality remains blocked
+by the pre-existing expired `CabinetPreview.tsx` component-budget exception.
 
 **Sprint 313 — Assembly, build log, camera and machine flows** — P1 · L · S305, S307.
 
