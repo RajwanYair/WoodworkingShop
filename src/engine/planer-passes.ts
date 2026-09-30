@@ -14,6 +14,8 @@
  *   effectiveLength = boardLengthMm - 2 × snipeLengthMm
  */
 
+import { assertFiniteNumber } from './invariant';
+
 export interface PlanerPassesInput {
   /** Current board thickness in mm */
   initialThicknessMm: number;
@@ -40,8 +42,21 @@ export interface PlanerPassesResult {
   snipeAllowanceMm: number;
 }
 
+/**
+ * Calculate evenly distributed planer passes and usable length after trimming snipe.
+ * @param input Board thicknesses, length, pass depth, and snipe allowance in millimetres.
+ * @returns Pass count, removal depths, and usable-length measurements in millimetres.
+ * @throws {RangeError} When dimensions are non-finite/out of range or calculations overflow.
+ */
 export function calculatePlanerPasses(input: PlanerPassesInput): PlanerPassesResult {
   const { initialThicknessMm, targetThicknessMm, maxPassDepthMm = 1.5, boardLengthMm, snipeLengthMm = 50 } = input;
+
+  const fn = 'calculatePlanerPasses';
+  assertFiniteNumber(fn, 'initialThicknessMm', initialThicknessMm);
+  assertFiniteNumber(fn, 'targetThicknessMm', targetThicknessMm);
+  assertFiniteNumber(fn, 'maxPassDepthMm', maxPassDepthMm);
+  assertFiniteNumber(fn, 'boardLengthMm', boardLengthMm);
+  assertFiniteNumber(fn, 'snipeLengthMm', snipeLengthMm);
 
   if (initialThicknessMm <= 0) throw new RangeError('initialThicknessMm must be positive');
   if (targetThicknessMm <= 0) throw new RangeError('targetThicknessMm must be positive');
@@ -56,6 +71,11 @@ export function calculatePlanerPasses(input: PlanerPassesInput): PlanerPassesRes
   const depthPerPassMm = Math.round((totalRemovalMm / passCount) * 100) / 100;
   const snipeAllowanceMm = snipeLengthMm * 2;
   const effectiveLengthMm = Math.max(0, boardLengthMm - snipeAllowanceMm);
+  assertFiniteNumber(fn, 'passCount', passCount);
+  assertFiniteNumber(fn, 'depthPerPassMm', depthPerPassMm);
+  assertFiniteNumber(fn, 'totalRemovalMm', totalRemovalMm);
+  assertFiniteNumber(fn, 'snipeAllowanceMm', snipeAllowanceMm);
+  assertFiniteNumber(fn, 'effectiveLengthMm', effectiveLengthMm);
 
   return {
     passCount,

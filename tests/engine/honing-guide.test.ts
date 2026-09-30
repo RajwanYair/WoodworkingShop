@@ -4,15 +4,13 @@ import { calculateHoningGuide } from '../../src/engine/honing-guide';
 describe('calculateHoningGuide', () => {
   it('calculates projection for 25° bevel at 25 mm guide height', () => {
     const result = calculateHoningGuide({ bevelAngleDeg: 25, guideHeightMm: 25 });
-    const expected = Math.round((25 / Math.tan((25 * Math.PI) / 180)) * 10) / 10;
-    expect(result.projectionMm).toBe(expected);
+    expect(result.projectionMm).toBe(53.6);
     expect(result.actualBevelAngleDeg).toBe(25);
   });
 
   it('calculates projection for 30° bevel at 20 mm guide height', () => {
     const result = calculateHoningGuide({ bevelAngleDeg: 30, guideHeightMm: 20 });
-    const expected = Math.round((20 / Math.tan((30 * Math.PI) / 180)) * 10) / 10;
-    expect(result.projectionMm).toBe(expected);
+    expect(result.projectionMm).toBe(34.6);
   });
 
   it('returns null microbevelProjectionMm when microbevelDeg is 0 (default)', () => {
@@ -34,8 +32,7 @@ describe('calculateHoningGuide', () => {
 
   it('microbevel projection formula: guideHeight / tan(bevel + micro)', () => {
     const result = calculateHoningGuide({ bevelAngleDeg: 20, guideHeightMm: 30, microbevelDeg: 5 });
-    const expected = Math.round((30 / Math.tan((25 * Math.PI) / 180)) * 10) / 10;
-    expect(result.microbevelProjectionMm).toBe(expected);
+    expect(result.microbevelProjectionMm).toBe(64.3);
   });
 
   it('echoes actualBevelAngleDeg', () => {
@@ -53,5 +50,14 @@ describe('calculateHoningGuide', () => {
     ['microbevelDeg >= 90 - bevel', { bevelAngleDeg: 25, guideHeightMm: 25, microbevelDeg: 65 }],
   ])('throws RangeError for invalid input: %s', (_label, input) => {
     expect(() => calculateHoningGuide(input as Parameters<typeof calculateHoningGuide>[0])).toThrow(RangeError);
+  });
+
+  it.each([
+    ['NaN bevelAngleDeg', { bevelAngleDeg: Number.NaN, guideHeightMm: 25 }],
+    ['infinite guideHeightMm', { bevelAngleDeg: 25, guideHeightMm: Number.POSITIVE_INFINITY }],
+    ['NaN microbevelDeg', { bevelAngleDeg: 25, guideHeightMm: 25, microbevelDeg: Number.NaN }],
+    ['overflowing projection', { bevelAngleDeg: 0.000001, guideHeightMm: Number.MAX_VALUE }],
+  ])('throws RangeError for non-finite input: %s', (_label, input) => {
+    expect(() => calculateHoningGuide(input)).toThrow(RangeError);
   });
 });

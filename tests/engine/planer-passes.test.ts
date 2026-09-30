@@ -25,6 +25,32 @@ describe('calculatePlanerPasses', () => {
     expect(r.effectiveLengthMm).toBe(900); // 1000 - 100
   });
 
+  it('matches the nominal dimensional oracle in millimetres', () => {
+    expect(calculatePlanerPasses(BASE)).toEqual({
+      passCount: 4,
+      depthPerPassMm: 1.25,
+      totalRemovalMm: 5,
+      effectiveLengthMm: 900,
+      snipeAllowanceMm: 100,
+    });
+  });
+
+  it.each([
+    { removalMm: 3, maxPassDepthMm: 1.5, expectedPasses: 2 },
+    { removalMm: 3.01, maxPassDepthMm: 1.5, expectedPasses: 3 },
+    { removalMm: 4.5, maxPassDepthMm: 1.5, expectedPasses: 3 },
+  ])('uses the minimum safe pass count for $removalMm mm removal', ({ removalMm, maxPassDepthMm, expectedPasses }) => {
+    const result = calculatePlanerPasses({
+      initialThicknessMm: 50,
+      targetThicknessMm: 50 - removalMm,
+      maxPassDepthMm,
+      boardLengthMm: 1000,
+    });
+
+    expect(result.passCount).toBe(expectedPasses);
+    expect(result.depthPerPassMm).toBeLessThanOrEqual(maxPassDepthMm);
+  });
+
   it('uses custom maxPassDepthMm', () => {
     const r = calculatePlanerPasses({ ...BASE, maxPassDepthMm: 1 });
     expect(r.passCount).toBe(5); // ceil(5 / 1) = 5
@@ -54,6 +80,13 @@ describe('calculatePlanerPasses', () => {
       ['target >= initial', { ...BASE, targetThicknessMm: 50 }],
       ['zero boardLength', { ...BASE, boardLengthMm: 0 }],
       ['negative snipeLength', { ...BASE, snipeLengthMm: -1 }],
+      ['NaN initialThickness', { ...BASE, initialThicknessMm: Number.NaN }],
+      ['infinite targetThickness', { ...BASE, targetThicknessMm: Number.POSITIVE_INFINITY }],
+      ['NaN maxPassDepth', { ...BASE, maxPassDepthMm: Number.NaN }],
+      ['infinite boardLength', { ...BASE, boardLengthMm: Number.POSITIVE_INFINITY }],
+      ['NaN snipeLength', { ...BASE, snipeLengthMm: Number.NaN }],
+      ['overflowing pass count', { ...BASE, maxPassDepthMm: Number.MIN_VALUE }],
+      ['overflowing snipe allowance', { ...BASE, snipeLengthMm: Number.MAX_VALUE }],
     ])('throws RangeError for %s', (_, input) => {
       expect(() => calculatePlanerPasses(input)).toThrow(RangeError);
     });
