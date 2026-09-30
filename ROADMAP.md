@@ -581,6 +581,13 @@ measures 68.13% statements, 62.04% branches, 64.97% functions, and 69.01% lines 
 passed. Full quality/CI remains blocked by the pre-existing expired component-budget exception for
 `src/components/preview/CabinetPreview.tsx`; Sprint 305 remains open.
 
+Follow-up (2026-09-30): Added 25 component behavior tests across material usage, optimizer controls, Marketplace,
+PDF import/full-project export, and saved-project workflows. The coverage ratchet passed with 4,750 unit tests and
+375 component tests; component coverage now measures 69.98% statements, 63.37% branches, 66.61% functions, and
+70.89% lines without lowering an area floor. The full unit suite, production build, bundle check (2,791.4 KB /
+2,960 KB), and all 16 benchmarks passed. Quality remains blocked only by the pre-existing expired component-budget
+exception for `src/components/preview/CabinetPreview.tsx`; Sprint 305 remains open.
+
 **Sprint 306 — Mutation testing and quality evidence** — P1 · M · S303–S305.
 
 - T1: Evaluate Stryker on a bounded set of critical pure-engine modules (`dimensions`, `parts`, `cut-optimizer`, `validation`, export serializers); record runtime and mutant categories.

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -32,6 +33,23 @@ function createToolbarProps(): OptimizerToolbarProps {
   };
 }
 
+function StatefulToolbar({ initialPartFilter = '' }: { initialPartFilter?: string } = {}) {
+  const [partFilter, setPartFilter] = useState(initialPartFilter);
+  const [showPartNames, setShowPartNames] = useState(false);
+  const [showGrainHatch, setShowGrainHatch] = useState(false);
+  return (
+    <OptimizerToolbar
+      {...createToolbarProps()}
+      partFilter={partFilter}
+      setPartFilter={setPartFilter}
+      showPartNames={showPartNames}
+      setShowPartNames={setShowPartNames}
+      showGrainHatch={showGrainHatch}
+      setShowGrainHatch={setShowGrainHatch}
+    />
+  );
+}
+
 describe('OptimizerToolbar', () => {
   it('clamps saw kerf and updates cutting settings from accessible controls', async () => {
     const user = userEvent.setup();
@@ -52,5 +70,72 @@ describe('OptimizerToolbar', () => {
 
     expect(useCabinetStore.getState().config.cutMode).toBe('guillotine');
     expect(useCabinetStore.getState().autoCoNest).toBe(true);
+  });
+
+  it('sends typed part-filter text to its parent', async () => {
+    const user = userEvent.setup();
+    render(<StatefulToolbar />);
+
+    const filter = screen.getByRole('searchbox', { name: i18n.t('optimizer.filterParts') });
+    await user.type(filter, 'shelf');
+
+    expect(filter).toHaveValue('shelf');
+  });
+
+  it('clears the active part filter from the clear control', async () => {
+    const user = userEvent.setup();
+    render(<StatefulToolbar initialPartFilter="shelf" />);
+
+    await user.click(screen.getByRole('button', { name: 'Clear filter' }));
+
+    expect(screen.getByRole('searchbox', { name: i18n.t('optimizer.filterParts') })).toHaveValue('');
+    expect(screen.queryByRole('button', { name: 'Clear filter' })).not.toBeInTheDocument();
+  });
+
+  it('toggles part labels and grain hatching through their pressed states', async () => {
+    const user = userEvent.setup();
+    render(<StatefulToolbar />);
+    const labels = screen.getByRole('button', { name: new RegExp(i18n.t('optimizer.labels')) });
+    const grain = screen.getByRole('button', { name: new RegExp(i18n.t('optimizer.grainHatch')) });
+
+    expect(labels).toHaveAttribute('aria-pressed', 'false');
+    expect(grain).toHaveAttribute('aria-pressed', 'false');
+    await user.click(labels);
+    await user.click(grain);
+    expect(labels).toHaveAttribute('aria-pressed', 'true');
+    expect(grain).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  it('toggles the color-blind safe palette in the cabinet store', async () => {
+    const user = userEvent.setup();
+    useCabinetStore.setState({ colorBlindMode: false });
+    render(<OptimizerToolbar {...createToolbarProps()} />);
+    const toggle = screen.getByRole('button', { name: 'CB' });
+
+    await user.click(toggle);
+    expect(useCabinetStore.getState().colorBlindMode).toBe(true);
+    await user.click(toggle);
+    expect(useCabinetStore.getState().colorBlindMode).toBe(false);
+  });
+
+  it('invokes both worker export actions when their controls are activated', async () => {
+    const user = userEvent.setup();
+    const props = createToolbarProps();
+    render(<OptimizerToolbar {...props} />);
+
+    await user.click(screen.getByRole('button', { name: 'DXF' }));
+    await user.click(screen.getByRole('button', { name: i18n.t('optimizer.exportBom') }));
+
+    expect(props.handleDxfExportWorker).toHaveBeenCalledOnce();
+    expect(props.handleBomExportWorker).toHaveBeenCalledOnce();
+  });
+
+  it('disables the worker export controls and announces their busy state', () => {
+    render(<OptimizerToolbar {...createToolbarProps()} bomExporting dxfExporting />);
+
+    const dxfButton = screen.getByRole('button', { name: 'DXF' });
+    expect(dxfButton).toBeDisabled();
+    expect(dxfButton).toHaveAttribute('aria-busy', 'true');
+    expect(screen.getByRole('button', { name: i18n.t('optimizer.exportBom') })).toBeDisabled();
   });
 });

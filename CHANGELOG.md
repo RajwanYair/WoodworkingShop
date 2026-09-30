@@ -20,6 +20,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Component Behavior Foundation
 
+- Added 25 component behavior tests across material-usage grouping/pricing/size editing, optimizer toolbar filtering
+  and toggles, Marketplace search/install lifecycle, PDF settings import and full-project export, and saved-project
+  save/export/bundle feedback.
+- Raised measured component coverage to 69.98% statements, 63.37% branches, 66.61% functions, and 70.89% lines;
+  the coverage ratchet passed with 375 component tests and no area floor lowered.
+- Verified `npm test`: 4,750 tests across 335 files. Production build, bundle budgets (2,791.4 KB / 2,960 KB),
+  and all 16 benchmarks passed. The aggregate quality/CI gate remains blocked by the existing expired
+  `CabinetPreview.tsx` component-budget exception.
+
 - Added component behavior coverage for Marketplace no-results search, live mobile Sidebar summary totals, empty
   snapshot history, PDF project-settings export, and optimizer low-yield/material-consolidation recommendations.
 - Raised measured component coverage to 68.13% statements, 62.04% branches, 64.97% functions, and 69.01% lines;
