@@ -20,6 +20,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Component Behavior Foundation
 
+- Added 25 MaterialSummaryPanel behaviors covering area aggregation, per-material pricing, locale labels, sheet-size
+  display/edit/reset, and range boundaries. Fixed grouped area totals for differently sized sheets and enforced the
+  input controls' 100–5000 mm bounds. The coverage ratchet passed with 4,850 unit tests and 475 component tests;
+  component coverage now measures 74.07% statements, 67.36% branches, 71.02% functions, and 74.76% lines without
+  lowering an area floor. Build, bundle budget (2,791.7 KB / 2,960 KB), and all 16 benchmarks passed. Quality remains
+  blocked by the pre-existing expired `CabinetPreview.tsx` budget exception.
 - Added 25 MaterialSelector behaviors for carcass/back material choices, custom-material presentation, back-panel
   inclusion, deflection/weight/cost substitutions, and multi-cabinet replacement. The coverage ratchet passed with
   4,825 unit tests and 450 component tests; component coverage now measures 74.03% statements, 67.34% branches,

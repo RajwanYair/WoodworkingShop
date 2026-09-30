@@ -610,6 +610,14 @@ branches, 70.93% functions, and 74.70% lines without lowering an area floor. Pro
 `src/components/preview/CabinetPreview.tsx` budget exception. This batch exposed that selecting a custom material
 throws during cabinet derivation because custom definitions are not propagated to the engine; Sprint 305 remains open.
 
+Follow-up (2026-09-30): Added 25 MaterialSummaryPanel behaviors for area aggregation, per-material pricing, locale
+labels, sheet-size display/edit/reset, and supported-range boundaries. Fixed grouped area totals for differently
+sized sheets and enforced the controls' 100–5000 mm bounds. The coverage ratchet passed with 4,850 unit tests and
+475 component tests; component coverage now measures 74.07% statements, 67.36% branches, 71.02% functions, and
+74.76% lines without lowering an area floor. Production build, bundle budget (2,791.7 KB / 2,960 KB), and all 16
+benchmarks passed. Quality remains blocked by the pre-existing expired
+`src/components/preview/CabinetPreview.tsx` budget exception; Sprint 305 remains open.
+
 **Sprint 306 — Mutation testing and quality evidence** — P1 · M · S303–S305.
 
 - T1: Evaluate Stryker on a bounded set of critical pure-engine modules (`dimensions`, `parts`, `cut-optimizer`, `validation`, export serializers); record runtime and mutant categories.

@@ -31,7 +31,7 @@ export function MaterialSummaryPanel({
       materialKey: string;
       name: { en: string; he: string };
       thickness: number;
-      sheetArea: number;
+      totalArea: number;
       qty: number;
       pricePerSheet: number;
       defaultW: number;
@@ -47,14 +47,16 @@ export function MaterialSummaryPanel({
         materialKey: sheet.material,
         name: mat.name,
         thickness: sheet.thickness,
-        sheetArea: (sheet.sheetWidth * sheet.sheetLength) / 1e6, // m²
+        totalArea: 0,
         qty: 0,
         pricePerSheet,
         defaultW: mat.sheetWidth,
         defaultL: mat.sheetLength,
       });
     }
-    groups.get(key)!.qty += 1;
+    const group = groups.get(key)!;
+    group.qty += 1;
+    group.totalArea += (sheet.sheetWidth * sheet.sheetLength) / 1e6;
   }
 
   const rows = [...groups.values()];
@@ -69,7 +71,9 @@ export function MaterialSummaryPanel({
   const commitEdit = (key: string) => {
     const w = parseFloat(editW);
     const l = parseFloat(editL);
-    if (w > 0 && l > 0) setSheetSizeOverride(key, { width: w, length: l });
+    if (w >= 100 && w <= 5000 && l >= 100 && l <= 5000) {
+      setSheetSizeOverride(key, { width: w, length: l });
+    }
     setEditingKey(null);
   };
 
@@ -97,7 +101,7 @@ export function MaterialSummaryPanel({
             </thead>
             <tbody>
               {rows.map((row, i) => {
-                const totalArea = (row.sheetArea * row.qty).toFixed(2);
+                const totalArea = row.totalArea.toFixed(2);
                 const totalCost = row.pricePerSheet > 0 ? (row.pricePerSheet * row.qty).toFixed(0) : null;
                 const hasOverride = !!sheetSizeOverrides[row.materialKey];
                 const isEditing = editingKey === row.materialKey;
