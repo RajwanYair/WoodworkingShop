@@ -50,9 +50,9 @@ const MIN_WALL_MM: Record<KerfMaterial, number> = {
 export function calculateKerfBending(input: KerfBendingInput): KerfBendingResult {
   const { thicknessMm, bendRadiusMm, kerfWidthMm = 3.2, material = 'plywood' } = input;
 
-  if (thicknessMm <= 0) throw new RangeError('thicknessMm must be positive');
-  if (bendRadiusMm <= 0) throw new RangeError('bendRadiusMm must be positive');
-  if (kerfWidthMm <= 0) throw new RangeError('kerfWidthMm must be positive');
+  if (!Number.isFinite(thicknessMm) || thicknessMm <= 0) throw new RangeError('thicknessMm must be positive');
+  if (!Number.isFinite(bendRadiusMm) || bendRadiusMm <= 0) throw new RangeError('bendRadiusMm must be positive');
+  if (!Number.isFinite(kerfWidthMm) || kerfWidthMm <= 0) throw new RangeError('kerfWidthMm must be positive');
 
   const minWall = MIN_WALL_MM[material];
   const kerfDepthMm = thicknessMm - minWall;

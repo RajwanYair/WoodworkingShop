@@ -48,8 +48,9 @@ const LBF_TO_N = 4.448_221_6;
 export function calculateScrewPullout(input: ScrewPulloutInput): ScrewPulloutResult {
   const { screwDiameterMm, threadLengthMm, densityClass } = input;
 
-  if (screwDiameterMm <= 0) throw new RangeError('screwDiameterMm must be positive');
-  if (threadLengthMm <= 0) throw new RangeError('threadLengthMm must be positive');
+  if (!Number.isFinite(screwDiameterMm) || screwDiameterMm <= 0)
+    throw new RangeError('screwDiameterMm must be positive');
+  if (!Number.isFinite(threadLengthMm) || threadLengthMm <= 0) throw new RangeError('threadLengthMm must be positive');
 
   const G = SPECIFIC_GRAVITY[densityClass];
   const D = screwDiameterMm * MM_TO_IN; // inches
