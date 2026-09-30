@@ -15,7 +15,7 @@ describe('FinishingCoatPanel', () => {
 
     await user.click(screen.getByRole('button', { name: 'Lacquer' }));
 
-    expect(panel).toHaveTextContent('0.56 L');
+    expect(panel).toHaveTextContent('0.55 L');
     expect(panel).toHaveTextContent('30 min');
     expect(panel).toHaveTextContent('25 h');
   });

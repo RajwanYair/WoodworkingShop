@@ -37,13 +37,26 @@ export interface DadoRabbetResult {
   remainingThicknessMm: number;
 }
 
+/**
+ * Calculate cut dimensions, tooling recommendation, and pass count for a joint.
+ * @param input Joint type and board dimensions in millimetres.
+ * @returns Recommended cut dimensions and tooling data in millimetres.
+ * @throws {RangeError} When dimensions are non-finite/out of range or a rabbet offset is invalid.
+ */
 export function calculateDadoRabbet(input: DadoRabbetInput): DadoRabbetResult {
   const { jointType, matingThicknessMm, boardThicknessMm, offsetFromEdgeMm = 0 } = input;
 
-  if (matingThicknessMm <= 0) throw new RangeError('matingThicknessMm must be positive');
-  if (boardThicknessMm <= 0) throw new RangeError('boardThicknessMm must be positive');
+  if (!Number.isFinite(matingThicknessMm) || matingThicknessMm <= 0) {
+    throw new RangeError('matingThicknessMm must be positive and finite');
+  }
+  if (!Number.isFinite(boardThicknessMm) || boardThicknessMm <= 0) {
+    throw new RangeError('boardThicknessMm must be positive and finite');
+  }
   if (matingThicknessMm >= boardThicknessMm) {
     throw new RangeError('matingThicknessMm must be less than boardThicknessMm');
+  }
+  if (jointType === 'rabbet' && (!Number.isFinite(offsetFromEdgeMm) || offsetFromEdgeMm < 0)) {
+    throw new RangeError('offsetFromEdgeMm must be non-negative and finite');
   }
 
   // Cut width = mating thickness + 0.5 mm clearance for fit

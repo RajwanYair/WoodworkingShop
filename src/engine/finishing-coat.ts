@@ -48,19 +48,33 @@ const FINISH_SPECS: Record<FinishType, FinishSpec> = {
 
 const WASTE_FACTOR = 1.1; // 10% overage
 
+/**
+ * Estimate the required finish volume and drying schedule.
+ * @param input Surface area, whole coat count, and finish type.
+ * @returns Finish volume in litres and drying durations in minutes/hours.
+ * @throws {RangeError} When area/coats are invalid or the resulting volume/schedule is non-finite.
+ */
 export function calculateFinishingCoat(input: FinishingCoatInput): FinishingCoatResult {
   const { surfaceAreaM2, coatCount, finishType } = input;
 
-  if (surfaceAreaM2 <= 0) throw new RangeError('surfaceAreaM2 must be positive');
-  if (coatCount < 1) throw new RangeError('coatCount must be at least 1');
+  if (!Number.isFinite(surfaceAreaM2) || surfaceAreaM2 <= 0) {
+    throw new RangeError('surfaceAreaM2 must be positive and finite');
+  }
+  if (!Number.isInteger(coatCount) || coatCount < 1) {
+    throw new RangeError('coatCount must be a positive integer');
+  }
 
   const spec = FINISH_SPECS[finishType];
 
-  const volumeLitres = Math.ceil(((surfaceAreaM2 * coatCount * WASTE_FACTOR) / spec.coverageM2PerL) * 100) / 100;
+  const rawVolumeLitres = (surfaceAreaM2 * coatCount * WASTE_FACTOR) / spec.coverageM2PerL;
+  const hundredths = rawVolumeLitres * 100;
+  const totalDryTimeHours = ((coatCount - 1) * spec.recoatMin) / 60 + spec.cureHours;
+  if (!Number.isFinite(hundredths) || !Number.isFinite(totalDryTimeHours)) {
+    throw new RangeError('calculateFinishingCoat: inputs produce a non-finite result');
+  }
+  const volumeLitres = Math.ceil(hundredths - Number.EPSILON * Math.abs(hundredths) * 2) / 100;
 
   // Total dry time: (coatCount - 1) recoat gaps + final cure
-  const totalDryTimeHours = ((coatCount - 1) * spec.recoatMin) / 60 + spec.cureHours;
-
   return {
     volumeLitres,
     dryTimeBetweenCoatsMin: spec.recoatMin,
