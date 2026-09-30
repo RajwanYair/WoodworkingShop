@@ -13,6 +13,8 @@
  * Wood Handbook (Table 4-3).
  */
 
+import { assertFiniteNumber } from './invariant';
+
 export type MoistureShrinkageSpecies =
   'oak' | 'maple' | 'cherry' | 'walnut' | 'pine' | 'douglas_fir' | 'cedar' | 'generic_hardwood' | 'generic_softwood';
 
@@ -58,8 +60,19 @@ export interface MoistureShrinkageResult {
   shrinkageCoefficient: number;
 }
 
+/**
+ * Estimate dimensional shrinkage or swelling from moisture-content change.
+ * @param input Initial/target moisture percentages, species, dimension in millimetres, and grain direction.
+ * @returns Effective MC change, dimensional change/final size in millimetres, and the coefficient used.
+ * @throws {RangeError} When numeric inputs are non-finite/out of range or the calculation overflows.
+ */
 export function calculateMoistureShrinkage(input: MoistureShrinkageInput): MoistureShrinkageResult {
   const { initialMCPct, targetMCPct, species, dimensionMm, grain } = input;
+
+  const fn = 'calculateMoistureShrinkage';
+  assertFiniteNumber(fn, 'initialMCPct', initialMCPct);
+  assertFiniteNumber(fn, 'targetMCPct', targetMCPct);
+  assertFiniteNumber(fn, 'dimensionMm', dimensionMm);
 
   if (initialMCPct < 0) {
     throw new RangeError('initialMCPct must be >= 0');
@@ -79,6 +92,9 @@ export function calculateMoistureShrinkage(input: MoistureShrinkageInput): Moist
   const shrinkageCoefficient = SHRINKAGE_COEFF[species][grain];
   const changeAmountMm = Math.round(dimensionMm * effectiveMCChangePct * shrinkageCoefficient * 100) / 100;
   const finalDimensionMm = Math.round((dimensionMm - changeAmountMm) * 100) / 100;
+  assertFiniteNumber(fn, 'effectiveMCChangePct', effectiveMCChangePct);
+  assertFiniteNumber(fn, 'changeAmountMm', changeAmountMm);
+  assertFiniteNumber(fn, 'finalDimensionMm', finalDimensionMm);
 
   return {
     effectiveMCChangePct,

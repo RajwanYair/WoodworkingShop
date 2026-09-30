@@ -16,6 +16,38 @@ describe('calculateMoistureShrinkage', () => {
     expect(result.finalDimensionMm).toBeCloseTo(200 - 16.24, 1);
   });
 
+  it.each([
+    {
+      species: 'oak' as const,
+      grain: 'tangential' as const,
+      coefficient: 0.00369,
+      changeAmountMm: 16.24,
+      finalDimensionMm: 183.76,
+    },
+    {
+      species: 'oak' as const,
+      grain: 'radial' as const,
+      coefficient: 0.00183,
+      changeAmountMm: 8.05,
+      finalDimensionMm: 191.95,
+    },
+  ])('matches the 200 mm oak $grain shrinkage oracle', (expected) => {
+    expect(
+      calculateMoistureShrinkage({
+        initialMCPct: 30,
+        targetMCPct: 8,
+        species: expected.species,
+        dimensionMm: 200,
+        grain: expected.grain,
+      }),
+    ).toEqual({
+      effectiveMCChangePct: 22,
+      changeAmountMm: expected.changeAmountMm,
+      finalDimensionMm: expected.finalDimensionMm,
+      shrinkageCoefficient: expected.coefficient,
+    });
+  });
+
   it('caps effective MC at FSP (30%) when initial MC > 30', () => {
     const above = calculateMoistureShrinkage({
       initialMCPct: 80,
@@ -83,6 +115,46 @@ describe('calculateMoistureShrinkage', () => {
     [
       'dimensionMm = 0',
       { initialMCPct: 30, targetMCPct: 8, species: 'oak' as const, dimensionMm: 0, grain: 'tangential' as const },
+    ],
+    [
+      'NaN initialMCPct',
+      {
+        initialMCPct: Number.NaN,
+        targetMCPct: 8,
+        species: 'oak' as const,
+        dimensionMm: 100,
+        grain: 'tangential' as const,
+      },
+    ],
+    [
+      'infinite targetMCPct',
+      {
+        initialMCPct: 30,
+        targetMCPct: Number.POSITIVE_INFINITY,
+        species: 'oak' as const,
+        dimensionMm: 100,
+        grain: 'tangential' as const,
+      },
+    ],
+    [
+      'NaN dimensionMm',
+      {
+        initialMCPct: 30,
+        targetMCPct: 8,
+        species: 'oak' as const,
+        dimensionMm: Number.NaN,
+        grain: 'tangential' as const,
+      },
+    ],
+    [
+      'overflowing change',
+      {
+        initialMCPct: 30,
+        targetMCPct: 8,
+        species: 'oak' as const,
+        dimensionMm: Number.MAX_VALUE,
+        grain: 'tangential' as const,
+      },
     ],
   ])('throws RangeError for invalid input: %s', (_label, input) => {
     expect(() => calculateMoistureShrinkage(input)).toThrow(RangeError);

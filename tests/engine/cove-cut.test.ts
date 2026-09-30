@@ -14,6 +14,22 @@ describe('calculateCoveCut', () => {
     expect(result.fenceAngleDeg).toBe(30);
   });
 
+  it('matches the 125 mm by 20 mm cove dimensional oracle', () => {
+    expect(calculateCoveCut({ copeWidthMm: 125, copeDepthMm: 20 })).toEqual({
+      fenceAngleDeg: 30,
+      passCount: 14,
+      depthPerPassMm: 1.43,
+      bladeHeightMm: 20,
+    });
+  });
+
+  it.each([
+    { copeDepthMm: 3, maxPassDepthMm: 1.5, passCount: 2 },
+    { copeDepthMm: 3.01, maxPassDepthMm: 1.5, passCount: 3 },
+  ])('uses sufficient passes for $copeDepthMm mm depth', ({ copeDepthMm, maxPassDepthMm, passCount }) => {
+    expect(calculateCoveCut({ copeWidthMm: 100, copeDepthMm, maxPassDepthMm }).passCount).toBe(passCount);
+  });
+
   it('calculates pass count as ceil(depth / maxPassDepth)', () => {
     const result = calculateCoveCut({ copeWidthMm: 100, copeDepthMm: 10, maxPassDepthMm: 3 });
     expect(result.passCount).toBe(4);
@@ -46,6 +62,11 @@ describe('calculateCoveCut', () => {
     ['bladeDiameterMm = 0', { copeWidthMm: 50, copeDepthMm: 10, bladeDiameterMm: 0 }],
     ['maxPassDepthMm = 0', { copeWidthMm: 50, copeDepthMm: 10, maxPassDepthMm: 0 }],
     ['copeWidthMm >= bladeDiameterMm', { copeWidthMm: 250, copeDepthMm: 10, bladeDiameterMm: 250 }],
+    ['NaN copeWidthMm', { copeWidthMm: Number.NaN, copeDepthMm: 10 }],
+    ['infinite copeDepthMm', { copeWidthMm: 50, copeDepthMm: Number.POSITIVE_INFINITY }],
+    ['NaN bladeDiameterMm', { copeWidthMm: 50, copeDepthMm: 10, bladeDiameterMm: Number.NaN }],
+    ['infinite maxPassDepthMm', { copeWidthMm: 50, copeDepthMm: 10, maxPassDepthMm: Number.POSITIVE_INFINITY }],
+    ['overflowing pass count', { copeWidthMm: 50, copeDepthMm: 10, maxPassDepthMm: Number.MIN_VALUE }],
   ])('throws RangeError for invalid input: %s', (_label, input) => {
     expect(() => calculateCoveCut(input as Parameters<typeof calculateCoveCut>[0])).toThrow(RangeError);
   });
