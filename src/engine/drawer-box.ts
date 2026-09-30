@@ -83,11 +83,13 @@ export function calculateDrawerBox(input: DrawerBoxInput): DrawerBoxResult {
     falseFrontThicknessMm = DEFAULT_FALSE_FRONT_THICKNESS_MM,
   } = input;
 
-  if (openingWidthMm <= 0) throw new RangeError('openingWidthMm must be > 0');
-  if (openingHeightMm <= 0) throw new RangeError('openingHeightMm must be > 0');
-  if (openingDepthMm <= 0) throw new RangeError('openingDepthMm must be > 0');
-  if (sideThicknessMm <= 0) throw new RangeError('sideThicknessMm must be > 0');
-  if (falseFrontThicknessMm <= 0) throw new RangeError('falseFrontThicknessMm must be > 0');
+  if (!Number.isFinite(openingWidthMm) || openingWidthMm <= 0) throw new RangeError('openingWidthMm must be > 0');
+  if (!Number.isFinite(openingHeightMm) || openingHeightMm <= 0) throw new RangeError('openingHeightMm must be > 0');
+  if (!Number.isFinite(openingDepthMm) || openingDepthMm <= 0) throw new RangeError('openingDepthMm must be > 0');
+  if (!Number.isFinite(sideThicknessMm) || sideThicknessMm <= 0) throw new RangeError('sideThicknessMm must be > 0');
+  if (!Number.isFinite(falseFrontThicknessMm) || falseFrontThicknessMm <= 0) {
+    throw new RangeError('falseFrontThicknessMm must be > 0');
+  }
 
   // Width deduction depends on slide type
   const widthClearance =

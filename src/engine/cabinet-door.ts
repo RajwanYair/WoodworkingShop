@@ -81,13 +81,13 @@ const THREE_HINGE_HEIGHT_MM = 900;
 export function calculateCabinetDoor(input: CabinetDoorInput): CabinetDoorResult {
   const { openingWidthMm, openingHeightMm, doorCount, overlay, stileWidthMm = 38 } = input;
 
-  if (openingWidthMm <= 0) {
+  if (!Number.isFinite(openingWidthMm) || openingWidthMm <= 0) {
     throw new RangeError(`calculateCabinetDoor: openingWidthMm must be > 0, got ${openingWidthMm}`);
   }
-  if (openingHeightMm <= 0) {
+  if (!Number.isFinite(openingHeightMm) || openingHeightMm <= 0) {
     throw new RangeError(`calculateCabinetDoor: openingHeightMm must be > 0, got ${openingHeightMm}`);
   }
-  if (stileWidthMm <= 0) {
+  if (!Number.isFinite(stileWidthMm) || stileWidthMm <= 0) {
     throw new RangeError(`calculateCabinetDoor: stileWidthMm must be > 0, got ${stileWidthMm}`);
   }
 
@@ -107,10 +107,10 @@ export function calculateCabinetDoor(input: CabinetDoorInput): CabinetDoorResult
     resolvedGap = input.gapMm ?? 1.5;
   }
 
-  if (resolvedOverlay < 0) {
+  if (!Number.isFinite(resolvedOverlay) || resolvedOverlay < 0) {
     throw new RangeError(`calculateCabinetDoor: overlayMm must be ≥ 0, got ${resolvedOverlay}`);
   }
-  if (resolvedGap < 0) {
+  if (!Number.isFinite(resolvedGap) || resolvedGap < 0) {
     throw new RangeError(`calculateCabinetDoor: gapMm must be ≥ 0, got ${resolvedGap}`);
   }
 

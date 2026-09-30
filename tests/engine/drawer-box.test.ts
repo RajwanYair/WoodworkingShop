@@ -48,11 +48,81 @@ describe('calculateDrawerBox', () => {
     });
   });
 
+  describe('depth threshold and width boundary', () => {
+    it.each([
+      { openingDepthMm: 318.9, expectedDepthMm: 299.9, adequate: false },
+      { openingDepthMm: 319, expectedDepthMm: 300, adequate: true },
+    ])('classifies a $expectedDepthMm mm box depth correctly', ({ openingDepthMm, expectedDepthMm, adequate }) => {
+      const result = calculateDrawerBox({ openingWidthMm: 500, openingHeightMm: 150, openingDepthMm });
+
+      expect(result.boxDepthMm).toBeCloseTo(expectedDepthMm, 5);
+      expect(result.isDepthAdequate).toBe(adequate);
+    });
+
+    it('throws when side-slide clearance consumes the full opening width', () => {
+      expect(() =>
+        calculateDrawerBox({ openingWidthMm: 25.4, openingHeightMm: 150, openingDepthMm: 550, slideType: 'side' }),
+      ).toThrow(RangeError);
+    });
+
+    it.each([
+      { slideType: 'side' as const, clearanceMm: 25.4 },
+      { slideType: 'bottom' as const, clearanceMm: 2 },
+      { slideType: 'center' as const, clearanceMm: 6 },
+    ])('rejects an opening equal to the $slideType slide clearance', ({ slideType, clearanceMm }) => {
+      expect(() =>
+        calculateDrawerBox({ openingWidthMm: clearanceMm, openingHeightMm: 150, openingDepthMm: 550, slideType }),
+      ).toThrow(RangeError);
+    });
+
+    it.each([
+      { openingHeightMm: 6, expectedError: true },
+      { openingHeightMm: 6.1, expectedError: false },
+    ])('validates the six-millimetre height clearance at $openingHeightMm mm', ({ openingHeightMm, expectedError }) => {
+      const calculate = () => calculateDrawerBox({ openingWidthMm: 100, openingHeightMm, openingDepthMm: 550 });
+
+      if (expectedError) {
+        expect(calculate).toThrow(RangeError);
+      } else {
+        expect(calculate().boxHeightMm).toBeCloseTo(0.1, 5);
+      }
+    });
+
+    it.each([
+      { openingDepthMm: 19, expectedError: true },
+      { openingDepthMm: 19.1, expectedError: false },
+    ])('validates false-front depth clearance at $openingDepthMm mm', ({ openingDepthMm, expectedError }) => {
+      const calculate = () =>
+        calculateDrawerBox({ openingWidthMm: 100, openingHeightMm: 100, openingDepthMm, falseFrontThicknessMm: 19 });
+
+      if (expectedError) {
+        expect(calculate).toThrow(RangeError);
+      } else {
+        expect(calculate().boxDepthMm).toBeCloseTo(0.1, 5);
+      }
+    });
+  });
+
   describe('throws on invalid input', () => {
     it.each([
       { desc: 'zero width', input: { openingWidthMm: 0, openingHeightMm: 150, openingDepthMm: 550 } },
       { desc: 'negative height', input: { openingWidthMm: 500, openingHeightMm: -1, openingDepthMm: 550 } },
       { desc: 'zero depth', input: { openingWidthMm: 500, openingHeightMm: 150, openingDepthMm: 0 } },
+      { desc: 'NaN opening width', input: { openingWidthMm: Number.NaN, openingHeightMm: 150, openingDepthMm: 550 } },
+      {
+        desc: 'infinite opening height',
+        input: { openingWidthMm: 500, openingHeightMm: Number.POSITIVE_INFINITY, openingDepthMm: 550 },
+      },
+      { desc: 'NaN opening depth', input: { openingWidthMm: 500, openingHeightMm: 150, openingDepthMm: Number.NaN } },
+      {
+        desc: 'infinite side thickness',
+        input: {
+          openingWidthMm: 500,
+          openingHeightMm: 150,
+          openingDepthMm: 550,
+          sideThicknessMm: Number.POSITIVE_INFINITY,
+        },
+      },
     ])('throws for $desc', ({ input }) => {
       expect(() => calculateDrawerBox(input)).toThrow(RangeError);
     });

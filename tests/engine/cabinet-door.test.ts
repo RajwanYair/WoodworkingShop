@@ -56,6 +56,38 @@ describe('calculateCabinetDoor', () => {
     });
   });
 
+  describe('hinge thresholds and rounding', () => {
+    it.each([
+      { openingHeightMm: 884, expectedLeafHeightMm: 899, expectedHinges: 2 },
+      { openingHeightMm: 885, expectedLeafHeightMm: 900, expectedHinges: 3 },
+      { openingHeightMm: 1385, expectedLeafHeightMm: 1400, expectedHinges: 4 },
+    ])(
+      'uses $expectedHinges hinges at a $expectedLeafHeightMm mm leaf height',
+      ({ openingHeightMm, expectedLeafHeightMm, expectedHinges }) => {
+        const result = calculateCabinetDoor({
+          openingWidthMm: 500,
+          openingHeightMm,
+          doorCount: 1,
+          overlay: 'full',
+        });
+
+        expect(result.doorLeaf.heightMm).toBe(expectedLeafHeightMm);
+        expect(result.hingeCount).toBe(expectedHinges);
+      },
+    );
+
+    it('rounds each calculated door leaf to one decimal millimetre', () => {
+      const result = calculateCabinetDoor({
+        openingWidthMm: 500.06,
+        openingHeightMm: 700,
+        doorCount: 1,
+        overlay: 'full',
+      });
+
+      expect(result.doorLeaf.widthMm).toBe(515.1);
+    });
+  });
+
   describe('inset doors', () => {
     it('inset door fits inside opening minus gap', () => {
       const result = calculateCabinetDoor({
@@ -107,6 +139,45 @@ describe('calculateCabinetDoor', () => {
       });
       expect(result.notes).toContain('wideLeaf');
     });
+
+    it.each([
+      { openingWidthMm: 286.9, hasNarrowNote: true },
+      { openingWidthMm: 287, hasNarrowNote: false },
+    ])(
+      'applies the narrow double-door note at opening width $openingWidthMm mm',
+      ({ openingWidthMm, hasNarrowNote }) => {
+        const result = calculateCabinetDoor({ openingWidthMm, openingHeightMm: 700, doorCount: 2, overlay: 'full' });
+
+        expect(result.notes.includes('narrowLeaf')).toBe(hasNarrowNote);
+      },
+    );
+
+    it.each([
+      { openingWidthMm: 585, hasWideNote: false },
+      { openingWidthMm: 585.1, hasWideNote: true },
+    ])('applies the wide single-door note at opening width $openingWidthMm mm', ({ openingWidthMm, hasWideNote }) => {
+      const result = calculateCabinetDoor({ openingWidthMm, openingHeightMm: 700, doorCount: 1, overlay: 'full' });
+
+      expect(result.notes.includes('wideLeaf')).toBe(hasWideNote);
+    });
+
+    it.each([
+      { openingWidthMm: 199, hasSmallInsetNote: true },
+      { openingWidthMm: 200, hasSmallInsetNote: false },
+    ])('applies the inset-size note at opening width $openingWidthMm mm', ({ openingWidthMm, hasSmallInsetNote }) => {
+      const result = calculateCabinetDoor({ openingWidthMm, openingHeightMm: 300, doorCount: 1, overlay: 'inset' });
+
+      expect(result.notes.includes('smallInset')).toBe(hasSmallInsetNote);
+    });
+
+    it.each([
+      { openingHeightMm: 1785, hasTallNote: false },
+      { openingHeightMm: 1785.1, hasTallNote: true },
+    ])('applies the tall-door note at opening height $openingHeightMm mm', ({ openingHeightMm, hasTallNote }) => {
+      const result = calculateCabinetDoor({ openingWidthMm: 500, openingHeightMm, doorCount: 1, overlay: 'full' });
+
+      expect(result.notes.includes('tallDoor')).toBe(hasTallNote);
+    });
   });
 
   describe('invalid inputs', () => {
@@ -127,6 +198,39 @@ describe('calculateCabinetDoor', () => {
           doorCount: 1 as const,
           overlay: 'full' as const,
           overlayMm: -1,
+        },
+      },
+      {
+        desc: 'NaN opening width',
+        input: { openingWidthMm: Number.NaN, openingHeightMm: 700, doorCount: 1 as const, overlay: 'full' as const },
+      },
+      {
+        desc: 'infinite opening height',
+        input: {
+          openingWidthMm: 500,
+          openingHeightMm: Number.POSITIVE_INFINITY,
+          doorCount: 1 as const,
+          overlay: 'full' as const,
+        },
+      },
+      {
+        desc: 'NaN overlay',
+        input: {
+          openingWidthMm: 500,
+          openingHeightMm: 700,
+          doorCount: 1 as const,
+          overlay: 'full' as const,
+          overlayMm: Number.NaN,
+        },
+      },
+      {
+        desc: 'infinite gap',
+        input: {
+          openingWidthMm: 500,
+          openingHeightMm: 700,
+          doorCount: 1 as const,
+          overlay: 'full' as const,
+          gapMm: Number.POSITIVE_INFINITY,
         },
       },
     ])('throws RangeError for $desc', ({ input }) => {
