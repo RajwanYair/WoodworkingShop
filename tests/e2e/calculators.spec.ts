@@ -366,11 +366,14 @@ test('every cabinet door count and overlay combination reconciles with the engin
   }
 });
 
-test('wood turning operation and diameter reconcile safe speed with the engine', async ({ appPage: page }) => {
+test('wood turning operation and diameter reconcile advisory RPM with the engine', async ({ appPage: page }) => {
   const finishing = calculateWoodTurning({ blankDiameterMm: 100, operation: 'finishing' });
   const roughing = calculateWoodTurning({ blankDiameterMm: 100, operation: 'roughing' });
   const largeRoughing = calculateWoodTurning({ blankDiameterMm: 200, operation: 'roughing' });
   const calculator = await openCalculator(page, 'Wood Turning Speed Calculator');
+  await expect(calculator.getByText('Min RPM (advisory)')).toBeVisible();
+  await expect(calculator.getByText('Max RPM (advisory)')).toBeVisible();
+  await expect(calculator).toContainText('Follow your lathe manual');
   await expect(calculator.getByText(`${finishing.recommendedRpm.toLocaleString('en-US')} RPM`)).toBeVisible();
   await calculator.getByRole('button', { name: 'Roughing' }).click();
   await expect(calculator.getByText(`${roughing.recommendedRpm.toLocaleString('en-US')} RPM`)).toBeVisible();

@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import WOOD_MAGAZINE_HALF_LAP_ORACLE from '../fixtures/oracles/wood-magazine-half-lap-depth.json';
 import { calculateHalfLap } from '../../src/engine/half-lap';
 
 describe('calculateHalfLap', () => {
@@ -12,6 +13,19 @@ describe('calculateHalfLap', () => {
     });
     expect(r.board1NotchDepthMm).toBe(9.5);
     expect(r.board2NotchDepthMm).toBe(9.5);
+  });
+
+  it('matches WOOD Magazine half-lap cut-depth guidance', () => {
+    const result = calculateHalfLap({
+      board1ThicknessMm: WOOD_MAGAZINE_HALF_LAP_ORACLE.boardThicknessMm,
+      board1WidthMm: 90,
+      board2ThicknessMm: WOOD_MAGAZINE_HALF_LAP_ORACLE.boardThicknessMm,
+      board2WidthMm: 90,
+      lapType: 'cross_lap',
+    });
+
+    expect(result.board1NotchDepthMm).toBe(WOOD_MAGAZINE_HALF_LAP_ORACLE.notchDepthMm);
+    expect(result.board2NotchDepthMm).toBe(WOOD_MAGAZINE_HALF_LAP_ORACLE.notchDepthMm);
   });
 
   it('notch width of each board equals the width of the mating board', () => {

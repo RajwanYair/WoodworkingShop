@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import WOOD_MAGAZINE_CROWN_MOULDING_ORACLE from '../fixtures/oracles/wood-magazine-crown-moulding.json';
 import { calculateCrownMoulding } from '../../src/engine/crown-moulding';
 
 describe('calculateCrownMoulding', () => {
@@ -33,14 +34,24 @@ describe('calculateCrownMoulding', () => {
     it('returns compound angles for 90° corner with 38° spring (flat)', () => {
       const result = calculateCrownMoulding({ cornerAngleDeg: 90, springAngleDeg: 38, cuttingMethod: 'flat' });
       expect(result.cuttingMethod).toBe('flat');
-      expect(result.miterAngleDeg).toBe(38.2);
-      expect(result.bevelAngleDeg).toBe(25.8);
+      expect(result.miterAngleDeg).toBe(31.6);
+      expect(result.bevelAngleDeg).toBe(33.9);
+    });
+
+    it('matches the WOOD Magazine 38° crown flat-cut settings', () => {
+      const result = calculateCrownMoulding({
+        ...WOOD_MAGAZINE_CROWN_MOULDING_ORACLE.input,
+        cuttingMethod: 'flat',
+      });
+
+      expect(result.miterAngleDeg).toBe(WOOD_MAGAZINE_CROWN_MOULDING_ORACLE.expected.miterAngleDeg);
+      expect(result.bevelAngleDeg).toBe(WOOD_MAGAZINE_CROWN_MOULDING_ORACLE.expected.bevelAngleDeg);
     });
 
     it('matches the compound-angle oracle for a 135° corner and 38° spring', () => {
       expect(calculateCrownMoulding({ cornerAngleDeg: 135, springAngleDeg: 38, cuttingMethod: 'flat' })).toEqual({
-        miterAngleDeg: 62.3,
-        bevelAngleDeg: 34.7,
+        miterAngleDeg: 56.1,
+        bevelAngleDeg: 46.7,
         cuttingMethod: 'flat',
       });
     });
@@ -51,9 +62,9 @@ describe('calculateCrownMoulding', () => {
       expect(result.bevelAngleDeg).toBeGreaterThan(0);
     });
 
-    it('flat method bevel is less than miter angle for common angles', () => {
+    it('flat method bevel exceeds miter for the standard 38° spring angle', () => {
       const result = calculateCrownMoulding({ cornerAngleDeg: 90, springAngleDeg: 38, cuttingMethod: 'flat' });
-      expect(result.bevelAngleDeg).toBeLessThan(result.miterAngleDeg);
+      expect(result.bevelAngleDeg).toBeGreaterThan(result.miterAngleDeg);
     });
 
     it('echoes cuttingMethod', () => {

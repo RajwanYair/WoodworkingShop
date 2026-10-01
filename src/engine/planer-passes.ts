@@ -68,7 +68,7 @@ export function calculatePlanerPasses(input: PlanerPassesInput): PlanerPassesRes
 
   const totalRemovalMm = Math.round((initialThicknessMm - targetThicknessMm) * 100) / 100;
   const passCount = Math.ceil(totalRemovalMm / maxPassDepthMm);
-  const depthPerPassMm = Math.round((totalRemovalMm / passCount) * 100) / 100;
+  const depthPerPassMm = Math.min(Math.round((totalRemovalMm / passCount) * 100) / 100, maxPassDepthMm);
   const snipeAllowanceMm = snipeLengthMm * 2;
   const effectiveLengthMm = Math.max(0, boardLengthMm - snipeAllowanceMm);
   assertFiniteNumber(fn, 'passCount', passCount);

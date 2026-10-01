@@ -1,0 +1,18 @@
+{
+  "source": "Woodgears, Cove cutting table calculator",
+  "url": "https://woodgears.ca/cove/calculate.html",
+  "retrievedOn": "2026-10-01",
+  "sourceValues": {
+    "bladeDiameterMm": 254,
+    "bladeKerfMm": 2.5,
+    "copeWidthMm": 40,
+    "copeDepthMm": 20,
+    "fenceLengthMm": 700
+  },
+  "derivedValues": {
+    "bladeChordMm": 136.82105101189657,
+    "fenceAngleDeg": 15.9,
+    "fenceDistanceMm": 200
+  },
+  "tolerance": "Calculator rounds fence distance to the nearest millimeter; angle is rounded to 0.1 degree from the published JavaScript geometry formula."
+}

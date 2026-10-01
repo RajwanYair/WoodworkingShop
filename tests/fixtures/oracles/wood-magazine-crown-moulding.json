@@ -1,0 +1,22 @@
+{
+  "source": "WOOD Magazine, Crown Molding Miters; spring-angle convention corroborated by Master Miter-cuts on Crown Molding",
+  "url": "https://www.woodmagazine.com/woodworking-tips/techniques/intermediate/crown-molding-miters",
+  "corroboratingSourceUrl": "https://www.woodmagazine.com/woodworking-how-to/joinery/master-miter-cuts-on-crown-molding",
+  "retrievedOn": "2026-10-01",
+  "input": {
+    "cornerAngleDeg": 90,
+    "springAngleDeg": 38,
+    "cuttingMethod": "flat"
+  },
+  "expected": {
+    "miterAngleDeg": 31.6,
+    "bevelAngleDeg": 33.9
+  },
+  "sourceValuesDeg": {
+    "miterAngleDeg": 31.62,
+    "bevelAngleDeg": 33.86
+  },
+  "units": "degrees",
+  "tolerance": "0.1 degree, matching the engine's one-decimal output precision and the source's 31.62° miter / 33.86° bevel settings.",
+  "scope": "Validates the flat-cut settings for a 38° spring-angle crown at a 90° corner. Excludes in-position cuts and non-square corners."
+}

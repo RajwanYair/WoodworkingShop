@@ -1,0 +1,17 @@
+{
+  "source": "WOOD Magazine, 3 Plenty-strong plywood joints, Splined butt",
+  "url": "https://www.woodmagazine.com/woodworking-tips/techniques/joinery/plywood",
+  "retrievedOn": "2026-10-01",
+  "sourceValues": {
+    "stockThickness": "3/4 in plywood",
+    "slotWidthRatio": "1/3 of plywood thickness",
+    "slotDepthRatio": "1/2 of plywood thickness"
+  },
+  "boardThicknessMm": 19.05,
+  "slotWidthMm": 6.35,
+  "slotDepthPerBoardMm": 9.525,
+  "totalInsertionDepthMm": 19.05,
+  "remainingWallThicknessMm": 9.525,
+  "tolerance": "Exact to 0.001 mm after converting 3/4 in at 25.4 mm per inch.",
+  "scope": "Checks the source's slot-width and slot-depth proportions for 3/4 in plywood. The calculator's 0.1 mm glue clearance is an application assumption; the source does not verify glue-area estimates."
+}

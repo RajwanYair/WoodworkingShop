@@ -11,18 +11,19 @@ export function CoveCutPanel() {
   const [copeWidthMm, setCopeWidthMm] = useState(100);
   const [copeDepthMm, setCopeDepthMm] = useState(15);
   const [bladeDiameterMm, setBladeDiameterMm] = useState(250);
+  const [bladeKerfMm, setBladeKerfMm] = useState(2.5);
   const [maxPassDepthMm, setMaxPassDepthMm] = useState(1.5);
 
   const result = useMemo(() => {
     try {
       return {
-        data: calculateCoveCut({ copeWidthMm, copeDepthMm, bladeDiameterMm, maxPassDepthMm }),
+        data: calculateCoveCut({ copeWidthMm, copeDepthMm, bladeDiameterMm, bladeKerfMm, maxPassDepthMm }),
         error: null,
       };
     } catch (e) {
       return { data: null, error: e instanceof Error ? e.message : String(e) };
     }
-  }, [copeWidthMm, copeDepthMm, bladeDiameterMm, maxPassDepthMm]);
+  }, [copeWidthMm, copeDepthMm, bladeDiameterMm, bladeKerfMm, maxPassDepthMm]);
 
   return (
     <section aria-label={t('coveCut.title')} className="space-y-3">
@@ -66,6 +67,19 @@ export function CoveCutPanel() {
             step={1}
             value={bladeDiameterMm}
             onChange={(e) => setBladeDiameterMm(Number(e.target.value))}
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+          />
+        </label>
+
+        <label className="text-wood-600 dark:text-wood-300 flex flex-col gap-1 text-sm">
+          <span>{t('coveCut.bladeKerf')} (mm)</span>
+          <input
+            type="number"
+            min={1}
+            max={5}
+            step={0.1}
+            value={bladeKerfMm}
+            onChange={(e) => setBladeKerfMm(Number(e.target.value))}
             className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>

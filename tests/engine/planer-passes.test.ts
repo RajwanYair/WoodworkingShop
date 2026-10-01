@@ -1,7 +1,17 @@
 import { describe, it, expect } from 'vitest';
+import DEWALT_DW735_PLANER_PASSES_ORACLE from '../fixtures/oracles/dewalt-dw735-planer-passes.json';
 import { calculatePlanerPasses } from '../../src/engine/planer-passes';
 
 describe('calculatePlanerPasses', () => {
+  it('matches the DW735 manual maximum-cut-depth example for pass count', () => {
+    const result = calculatePlanerPasses(DEWALT_DW735_PLANER_PASSES_ORACLE.engineInput);
+
+    expect(result.totalRemovalMm).toBe(DEWALT_DW735_PLANER_PASSES_ORACLE.expected.totalRemovalMm);
+    expect(result.passCount).toBe(DEWALT_DW735_PLANER_PASSES_ORACLE.expected.passCount);
+    expect(result.depthPerPassMm).toBe(DEWALT_DW735_PLANER_PASSES_ORACLE.engineInput.maxPassDepthMm);
+    expect(result.depthPerPassMm).toBeLessThanOrEqual(DEWALT_DW735_PLANER_PASSES_ORACLE.engineInput.maxPassDepthMm);
+  });
+
   const BASE = {
     initialThicknessMm: 50,
     targetThicknessMm: 45,

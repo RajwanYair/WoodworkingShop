@@ -490,10 +490,11 @@ the in-flight quality sprints (84-87) and run first.
 
 ### Sprint 303 — Pure-engine invariant matrix I (progress log, archived 2026-09-30)
 
-- Generated properties added for shelf deflection, hinge positions, panel weight, part generation, optimizer bounds and kerf clearance, material-yield conservation, cost arithmetic, box-joint geometry and named-parameter dependency order.
+- Generated properties added for shelf deflection, hinge positions, panel weight, part generation, optimizer bounds and kerf clearance, material-yield conservation, cost arithmetic, box-joint geometry, named-parameter dependency order, and honing-guide projection scaling, angle monotonicity and microbevel behavior.
 - Dated birch-weight oracle (Engineering ToolBox, 510–770 kg/m³). The optimizer property exposed a diagonal placement with insufficient kerf; candidate-level clearance checks and a named regression fixed it.
 - Static inventory: 632 exported engine functions — 614 with a direct test call and body-line hits, 13 with line hits only, 0 uncovered, 5 declarations not measured; literal test titles map to 612 exports. These are traceability indicators, not behavioral guarantees.
 - Direct tests added for `getMaterialResult`, `getMachineProfile`, `defaultTokenGenerator`, `applyValidationPlugins` and the Web Serial adapter. `npm run ci` passed with 4,593 tests across 283 files.
+- 2026-10-01 trace audit: tracked engine tests, this history, and engine-test commit history contain no additional persisted original shrink paths beyond those recorded in the roadmap. External CI artifacts were not reviewed, so original traces remain unresolved rather than presumed absent.
 
 ### Sprint 305 — Component behavior foundation (progress log, archived 2026-09-30)
 
@@ -540,13 +541,13 @@ the in-flight quality sprints (84-87) and run first.
 
 - [x] T1: 25 BOM/hardware CSV download behaviors (UTF-8 BOM, headers, quantities, five locales, escaping, formula-injection neutralization); fixed engine-language resolution for UI-only locales.
 - [x] T2: 25 DXF/G-code download behaviors parsing entities, layers, extents, labels, checksum, units, bounds, safe retract, multi-pass depth, kerf, tool compensation, presets and tool changes; DXF extents cross-checked against G-code.
-- [ ] T3: grouped and quantity-expanded labels plus an escaped UTF-8 A4 print sheet (25 behaviors). QR deferred: no encoder and production dependencies at the 8-package cap.
+- [x] T3: grouped and quantity-expanded labels plus an escaped UTF-8 A4 print sheet (26 behaviors), including a browser assertion that each printed label identifier stays paired with its part text. QR deferred to S388: no encoder and production dependencies at the 8-package cap.
 - [x] T4: 27 real-PDF behaviors (page count/geometry, headings, options, multi-cabinet, size budget, text bounds, zero warnings); footer placement fixed; renderer WASM data resource allowed in `connect-src` only.
 - [x] T5: SHA-256 integrity manifest and ZIP entry-path validation; 29 behaviors parse the central directory and every payload.
 - Component follow-up: 25 GcodePreviewModal behaviors; numeric fields replace rather than append, invalid drafts revert on blur.
 
-### Sprint 314 — Calculator panels and numeric oracles (progress log, archived 2026-09-30)
+### Sprint 314 — Calculator panels and numeric oracles (progress log, archived 2026-10-01)
 
 - [x] T1/T2: 27 production-browser journeys (Chromium + Firefox) expand all 24 mounted calculators and compare every finite option against the pure engine.
 - [x] T4: typed entry, ArrowUp/ArrowDown recomputation and clear-to-zero validation without NaN/Infinity.
-- [ ] T3: screw pull-out now follows USDA FPL-GTR-282 Eq. 8-10a with an independent #8 × 1 in oracle; white-oak shrinkage cites FPL-GTR-282 Table 4-3; glue and moisture bounds are shared between UI and engine; board-foot inputs reject non-finite values. Glue spread rates have no verifiable manufacturer source and are not claimed as oracles. Remaining calculators still need reference oracles.
+- [ ] T3: screw pull-out now follows USDA FPL-GTR-282 Eq. 8-10a with an independent #8 × 1 in oracle; white-oak shrinkage cites FPL-GTR-282 Table 4-3; finish coverage/recoat compatibility has product-scoped manufacturer range oracles; glue and moisture bounds are shared between UI and engine; board-foot inputs reject non-finite values. Finish cure/volume and category-wide assumptions remain unverified. Glue spread rates remain unclaimed; two calculator oracle gaps remain.

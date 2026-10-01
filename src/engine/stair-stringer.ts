@@ -10,8 +10,8 @@
  *   stringerLen  = √(totalRun² + totalRiseMm²)
  *   stringerAngle= atan(totalRiseMm / totalRun) × (180 / π)
  *
- * IRC 2021 guidelines:
- *   riser height : 4″ (101.6 mm) – 7¾″ (196.85 mm)
+ * IRC 2021 limits checked here:
+ *   riser height : ≤ 7¾″ (196.85 mm)
  *   tread depth  : ≥ 10″ (254 mm)
  *   headroom     : ≥ 80″ (2032 mm) — caller-supplied, validated only
  */
@@ -44,13 +44,12 @@ export interface StairStringerResult {
   stringerAngleDeg: number;
   /** Tread depth as supplied in mm */
   treadDepthMm: number;
-  /** Whether the layout passes IRC 2021 riser-height limits */
+  /** Whether the layout passes the checked IRC 2021 riser and tread limits */
   passesIrc: boolean;
   /** i18n warning key when IRC limits are exceeded, otherwise null */
-  warningKey: 'riserTooShort' | 'riserTooTall' | 'treadTooShallow' | null;
+  warningKey: 'riserTooTall' | 'treadTooShallow' | null;
 }
 
-const IRC_RISER_MIN_MM = 101.6; // 4″
 const IRC_RISER_MAX_MM = 196.85; // 7¾″
 const IRC_TREAD_MIN_MM = 254; // 10″
 
@@ -78,8 +77,7 @@ export function calculateStairStringer(input: StairStringerInput): StairStringer
   const stringerAngleDeg = Math.round(Math.atan(totalRiseMm / totalRunMm) * (180 / Math.PI) * 100) / 100;
 
   let warningKey: StairStringerResult['warningKey'] = null;
-  if (unroundedRiserMm < IRC_RISER_MIN_MM) warningKey = 'riserTooShort';
-  else if (unroundedRiserMm > IRC_RISER_MAX_MM) warningKey = 'riserTooTall';
+  if (unroundedRiserMm > IRC_RISER_MAX_MM) warningKey = 'riserTooTall';
   else if (treadDepthMm < IRC_TREAD_MIN_MM) warningKey = 'treadTooShallow';
 
   return {

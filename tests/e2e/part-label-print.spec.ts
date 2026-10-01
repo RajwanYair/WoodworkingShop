@@ -155,6 +155,15 @@ test('print popup preserves label identifiers and ordering', async ({ appPage: p
   expect(printedLabels.map((text) => text.match(/P-\d{3}/)?.[0])).toEqual(visibleLabels);
 });
 
+test('print popup keeps each label identifier paired with its part text', async ({ appPage: page }) => {
+  const { list, popup } = await printLabels(page);
+  const normalize = (text: string) => text.replace(/\s+/g, '').trim();
+  const previewCards = (await list.getByRole('listitem').allTextContents()).map(normalize);
+  const printedCards = (await popup.locator('.label').allTextContents()).map(normalize);
+
+  expect(printedCards).toEqual(previewCards);
+});
+
 test('print popup contains each preview part name', async ({ appPage: page }) => {
   const { list, popup } = await printLabels(page);
   const names = await list.locator('li > span:nth-child(2)').allTextContents();

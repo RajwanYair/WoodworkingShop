@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import WOODWORKCALC_TAPER_ORACLE from '../fixtures/oracles/woodworkcalc-taper-angle.json';
 import { calculateTaperJig } from '../../src/engine/taper-jig';
 
 describe('calculateTaperJig', () => {
@@ -49,6 +50,18 @@ describe('calculateTaperJig', () => {
       expect(result.taperPerFootMm).toBe(perFootMm);
     },
   );
+
+  it('matches the published WoodWorkCalc one-sided taper example', () => {
+    const result = calculateTaperJig({
+      workpieceLengthMm: WOODWORKCALC_TAPER_ORACLE.example.workpieceLengthMm,
+      startWidthMm: WOODWORKCALC_TAPER_ORACLE.example.startWidthMm,
+      endWidthMm: WOODWORKCALC_TAPER_ORACLE.example.endWidthMm,
+      taperedFaces: 1,
+    });
+
+    expect(result.jigOffsetMm).toBe(WOODWORKCALC_TAPER_ORACLE.jigOffsetMm);
+    expect(result.taperAngleDeg).toBe(WOODWORKCALC_TAPER_ORACLE.roundedTaperAngleDeg);
+  });
 
   it('defaults to 1 tapered face when taperedFaces is omitted', () => {
     const r = calculateTaperJig({

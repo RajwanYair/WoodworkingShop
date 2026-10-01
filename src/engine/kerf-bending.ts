@@ -4,9 +4,7 @@
  * Calculates kerf spacing, depth, and count needed to bend a panel to a
  * target radius using repeated saw cuts on the back face.
  *
- * Formula (Hoadley): kerfSpacing ≈ kerfWidth × (t - kerfDepth) / (t - kerfDepth - 1)
- * Practical approximation: spacing = kerfWidth × R / (t - wallThickness)
- * where wallThickness = t - kerfDepth (minimum ~3 mm for structural integrity).
+ * Idealized geometry: spacing = kerfWidth × outsideRadius / kerfDepth.
  */
 
 export type KerfMaterial = 'plywood' | 'mdf' | 'softwood' | 'hardwood';
@@ -20,6 +18,8 @@ export interface KerfBendingInput {
   kerfWidthMm?: number;
   /** Material type — affects minimum wall thickness recommendation */
   material?: KerfMaterial;
+  /** Explicit remaining web thickness in mm; defaults to the material recommendation. */
+  remainingThicknessMm?: number;
 }
 
 export interface KerfBendingResult {
@@ -47,15 +47,29 @@ const MIN_WALL_MM: Record<KerfMaterial, number> = {
   hardwood: 4,
 };
 
+/**
+ * Calculate kerf spacing and count for a quarter-circle bend.
+ * @param input Stock dimensions, inside radius, kerf width, and optional remaining web thickness.
+ * @returns Rounded spacing, depth, outside arc length, and feasibility data.
+ * @throws RangeError when a required dimension or supplied remaining thickness is not positive and finite.
+ */
 export function calculateKerfBending(input: KerfBendingInput): KerfBendingResult {
-  const { thicknessMm, bendRadiusMm, kerfWidthMm = 3.2, material = 'plywood' } = input;
+  const {
+    thicknessMm,
+    bendRadiusMm,
+    kerfWidthMm = 3.2,
+    material = 'plywood',
+    remainingThicknessMm = MIN_WALL_MM[material],
+  } = input;
 
   if (!Number.isFinite(thicknessMm) || thicknessMm <= 0) throw new RangeError('thicknessMm must be positive');
   if (!Number.isFinite(bendRadiusMm) || bendRadiusMm <= 0) throw new RangeError('bendRadiusMm must be positive');
   if (!Number.isFinite(kerfWidthMm) || kerfWidthMm <= 0) throw new RangeError('kerfWidthMm must be positive');
+  if (!Number.isFinite(remainingThicknessMm) || remainingThicknessMm <= 0) {
+    throw new RangeError('remainingThicknessMm must be positive');
+  }
 
-  const minWall = MIN_WALL_MM[material];
-  const kerfDepthMm = thicknessMm - minWall;
+  const kerfDepthMm = thicknessMm - remainingThicknessMm;
 
   if (kerfDepthMm <= 0) {
     // Panel too thin to kerf-bend — return infeasible result
@@ -70,11 +84,11 @@ export function calculateKerfBending(input: KerfBendingInput): KerfBendingResult
     };
   }
 
-  // Kerf spacing: spacing = kerfWidth × bendRadius / kerfDepth
-  const kerfSpacingMm = (kerfWidthMm * bendRadiusMm) / kerfDepthMm;
+  const outsideRadiusMm = bendRadiusMm + thicknessMm;
+  const kerfSpacingMm = (kerfWidthMm * outsideRadiusMm) / kerfDepthMm;
 
   // Full 90° arc (quarter circle) — common use case for curved panels
-  const arcLengthMm = (Math.PI / 2) * bendRadiusMm;
+  const arcLengthMm = (Math.PI / 2) * outsideRadiusMm;
   const kerfCount = Math.ceil(arcLengthMm / kerfSpacingMm);
 
   const isFeasible = kerfCount >= 2 && kerfCount <= 200;
@@ -82,7 +96,7 @@ export function calculateKerfBending(input: KerfBendingInput): KerfBendingResult
   return {
     kerfSpacingMm: Math.round(kerfSpacingMm * 10) / 10,
     kerfDepthMm: Math.round(kerfDepthMm * 10) / 10,
-    remainingThicknessMm: minWall,
+    remainingThicknessMm: Math.round(remainingThicknessMm * 10) / 10,
     kerfCount,
     arcLengthMm: Math.round(arcLengthMm * 10) / 10,
     isFeasible,

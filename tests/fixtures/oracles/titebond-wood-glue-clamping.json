@@ -1,0 +1,19 @@
+{
+  "source": "Franklin International, Titebond Wood Glues FAQ, clamping and drying time",
+  "url": "https://www.titebond.com/resources/use/glues/faqs",
+  "retrievedOn": "2026-10-01",
+  "sourceGuidance": {
+    "unstressedJointClampTimeMin": 30,
+    "unstressedJointClampTimeMax": 60,
+    "appliesTo": "Most Titebond wood glues"
+  },
+  "input": {
+    "surfaceAreaMm2": 100000,
+    "glueType": "pva"
+  },
+  "expected": {
+    "clampingTimeMin": 30
+  },
+  "tolerance": "Exact at the engine's whole-minute precision; the value is the lower bound of the source's 30-60 minute recommendation.",
+  "scope": "Checks only that the generic PVA timing recommendation matches the lower bound of Titebond's guidance for unstressed wood-glue joints. It does not verify generic PVA spread rate, open time, full cure time, other glue categories, or stressed joints."
+}

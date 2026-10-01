@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import RAFTER_LENGTH_ORACLE from '../fixtures/oracles/rafter-length-calculator-academy.json';
 import { calculateRafterLength } from '../../src/engine/rafter-length';
 
 describe('calculateRafterLength', () => {
@@ -53,6 +54,14 @@ describe('calculateRafterLength', () => {
       seatCutAngleDeg: 63.43,
       birdsmouthDepthMm: 29.67,
     });
+  });
+
+  it('matches the published 24-foot span, 8-in-12 pitch example', () => {
+    const { input, expected } = RAFTER_LENGTH_ORACLE;
+    const result = calculateRafterLength(input);
+
+    expect(result.runMm / 304.8).toBe(expected.runFt);
+    expect(Math.abs(result.rafterLengthMm / 304.8 - expected.rafterLengthFt)).toBeLessThanOrEqual(0.01);
   });
 
   it('45° pitch (1:1) gives plumb angle of 45°', () => {

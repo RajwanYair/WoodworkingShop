@@ -1,12 +1,8 @@
 /**
  * Wood Turning Speed Calculator — Sprint 228
  *
- * Calculates safe lathe RPM ranges from blank diameter.
- * Based on the Woodturners Association formula:
- *   maxRPM = 6000 / diameterInches  (safe guideline)
- *   minRPM = 2000 / diameterInches  (roughing minimum)
- *
- * Surface speed target: 600–900 m/min for finishing passes.
+ * Calculates advisory lathe RPM estimates from blank diameter.
+ * The model's diameter formulas are estimates, not verified safety limits.
  */
 
 export type TurningOperation = 'roughing' | 'finishing' | 'sanding';
@@ -19,9 +15,9 @@ export interface WoodTurningInput {
 }
 
 export interface WoodTurningResult {
-  /** Minimum safe RPM for this diameter */
+  /** Model minimum RPM estimate for this diameter */
   minRpm: number;
-  /** Maximum safe RPM for this diameter */
+  /** Model maximum RPM estimate for this diameter */
   maxRpm: number;
   /** Recommended RPM for the operation */
   recommendedRpm: number;
@@ -33,7 +29,7 @@ export interface WoodTurningResult {
 
 const MM_TO_IN = 1 / 25.4;
 
-/** RPM multipliers per operation (fraction of max safe RPM) */
+/** RPM multipliers per operation (fraction of the model range) */
 const OPERATION_FACTOR: Record<TurningOperation, number> = {
   roughing: 0.4,
   finishing: 0.75,
@@ -41,7 +37,7 @@ const OPERATION_FACTOR: Record<TurningOperation, number> = {
 };
 
 /**
- * Calculate safe and recommended lathe speeds for a blank.
+ * Calculate advisory and recommended lathe speeds for a blank.
  * @param input Blank diameter in millimetres and turning operation.
  * @returns Clamped RPM range, operation speed, and surface speed.
  * @throws {RangeError} When blank diameter is not positive and finite.
@@ -55,22 +51,20 @@ export function calculateWoodTurning(input: WoodTurningInput): WoodTurningResult
 
   const diameterIn = blankDiameterMm * MM_TO_IN;
 
-  // Woodturners Association safe speed formula
   const maxRpm = Math.floor(6000 / diameterIn);
   const minRpm = Math.floor(2000 / diameterIn);
 
   const recommendedRpm = Math.round(minRpm + (maxRpm - minRpm) * OPERATION_FACTOR[operation]);
 
-  // Surface speed = π × D × N / 1000 (m/min, D in mm)
-  const surfaceSpeedMPerMin = Math.round(((Math.PI * blankDiameterMm * recommendedRpm) / 1000) * 10) / 10;
-
-  const safeMaxRpm = Math.min(maxRpm, 4000);
-  const safeMinRpm = Math.min(Math.max(minRpm, 250), safeMaxRpm);
+  const boundedMaxRpm = Math.min(maxRpm, 4000);
+  const boundedMinRpm = Math.min(Math.max(minRpm, 250), boundedMaxRpm);
+  const boundedRecommendedRpm = Math.min(Math.max(recommendedRpm, boundedMinRpm), boundedMaxRpm);
+  const surfaceSpeedMPerMin = Math.round(((Math.PI * blankDiameterMm * boundedRecommendedRpm) / 1000) * 10) / 10;
 
   return {
-    minRpm: safeMinRpm,
-    maxRpm: safeMaxRpm,
-    recommendedRpm: Math.min(Math.max(recommendedRpm, safeMinRpm), safeMaxRpm),
+    minRpm: boundedMinRpm,
+    maxRpm: boundedMaxRpm,
+    recommendedRpm: boundedRecommendedRpm,
     surfaceSpeedMPerMin,
     safetyNoteKey: 'safetyNote',
   };

@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { calculateDadoRabbet } from '../../src/engine/dado-rabbet';
 import type { DadoRabbetJointType } from '../../src/engine/dado-rabbet';
+import WOOD_MAGAZINE_GROOVE_DEPTH_ORACLE from '../fixtures/oracles/wood-magazine-groove-depth.json';
 
 describe('calculateDadoRabbet', () => {
   describe('cut width = mating thickness + 0.5 mm clearance', () => {
@@ -25,6 +26,19 @@ describe('calculateDadoRabbet', () => {
       boardThicknessMm: 19,
     });
     expect(result.cutDepthMm).toBeCloseTo(19 / 3, 0);
+  });
+
+  it('keeps the rounded cut depth within WOOD Magazine maximum', () => {
+    const { sourceValues, derivedValues } = WOOD_MAGAZINE_GROOVE_DEPTH_ORACLE;
+    const result = calculateDadoRabbet({
+      jointType: 'dado',
+      matingThicknessMm: 12,
+      boardThicknessMm: sourceValues.stockThicknessMm,
+    });
+
+    expect(result.cutDepthMm).toBe(derivedValues.cutDepthMm);
+    expect(result.cutDepthMm).toBeLessThanOrEqual(derivedValues.maximumDepthMm);
+    expect(result.remainingThicknessMm).toBe(derivedValues.remainingThicknessMm);
   });
 
   it('remaining thickness = boardThickness - cutDepth', () => {

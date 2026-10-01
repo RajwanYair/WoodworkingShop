@@ -1,7 +1,20 @@
 import { describe, it, expect } from 'vitest';
+import WOOD_MAGAZINE_DRAWER_WIDTH_ORACLE from '../fixtures/oracles/wood-magazine-drawer-width-full-extension.json';
 import { calculateDrawerBox } from '../../src/engine/drawer-box';
+import type { DrawerSlideType } from '../../src/engine/drawer-box';
 
 describe('calculateDrawerBox', () => {
+  it('matches WOOD Magazine full-extension drawer-box width guidance', () => {
+    const result = calculateDrawerBox({
+      openingWidthMm: WOOD_MAGAZINE_DRAWER_WIDTH_ORACLE.input.openingWidthMm,
+      openingHeightMm: 150,
+      openingDepthMm: 550,
+      slideType: WOOD_MAGAZINE_DRAWER_WIDTH_ORACLE.input.slideType as DrawerSlideType,
+    });
+
+    expect(result.boxWidthMm).toBeCloseTo(WOOD_MAGAZINE_DRAWER_WIDTH_ORACLE.expected.boxWidthMm, 2);
+  });
+
   describe('side-mount (default)', () => {
     it.each([
       {

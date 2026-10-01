@@ -1,7 +1,14 @@
 import { describe, it, expect } from 'vitest';
+import INCHCALCULATOR_FRAME_PANEL_ORACLE from '../fixtures/oracles/inchcalculator-frame-panel.json';
 import { calculateFramePanel } from '../../src/engine/frame-panel';
 
 describe('calculateFramePanel', () => {
+  it('matches the published cabinet-door panel-width example', () => {
+    const result = calculateFramePanel(INCHCALCULATOR_FRAME_PANEL_ORACLE.engineInput);
+
+    expect(result.panelWidthMm).toBe(INCHCALCULATOR_FRAME_PANEL_ORACLE.expected.panelWidthMm);
+  });
+
   const BASE = {
     frameWidthMm: 600,
     frameHeightMm: 900,

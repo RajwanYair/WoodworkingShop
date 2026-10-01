@@ -1,7 +1,19 @@
 import { describe, it, expect } from 'vitest';
+import WOOD_MAGAZINE_OVERLAY_DOOR_ORACLE from '../fixtures/oracles/wood-magazine-overlay-door.json';
 import { calculateCabinetDoor, recommendDoorCount } from '../../src/engine/cabinet-door';
 
 describe('calculateCabinetDoor', () => {
+  it('matches the published 1/2-inch overlay door sizing example', () => {
+    const result = calculateCabinetDoor({
+      ...WOOD_MAGAZINE_OVERLAY_DOOR_ORACLE.input,
+      doorCount: 1,
+      overlay: 'full',
+    });
+
+    expect(result.doorLeaf.widthMm).toBe(WOOD_MAGAZINE_OVERLAY_DOOR_ORACLE.expected.doorWidthMm);
+    expect(result.doorLeaf.heightMm).toBe(WOOD_MAGAZINE_OVERLAY_DOOR_ORACLE.expected.doorHeightMm);
+  });
+
   describe('full overlay — single door', () => {
     it.each([
       {

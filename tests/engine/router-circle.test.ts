@@ -1,30 +1,31 @@
 import { describe, it, expect } from 'vitest';
+import FESTOOL_ROUTER_CIRCLE_ORACLE from '../fixtures/oracles/festool-router-circle.json';
 import { calculateRouterCircle } from '../../src/engine/router-circle';
 
 describe('calculateRouterCircle', () => {
-  it('calculates disc mode arm length as radius + bit/2', () => {
+  it('calculates disc mode arm length as radius - bit/2', () => {
     const result = calculateRouterCircle({
       targetDiameterMm: 300,
       bitDiameterMm: 12,
       cutMode: 'disc',
     });
 
-    expect(result.armLengthMm).toBe(156);
+    expect(result.armLengthMm).toBe(144);
   });
 
-  it('calculates hole mode arm length as radius - bit/2', () => {
+  it('calculates hole mode arm length as radius + bit/2', () => {
     const result = calculateRouterCircle({
       targetDiameterMm: 300,
       bitDiameterMm: 12,
       cutMode: 'hole',
     });
 
-    expect(result.armLengthMm).toBe(144);
+    expect(result.armLengthMm).toBe(156);
   });
 
   it.each([
-    { cutMode: 'disc' as const, armLengthMm: 105 },
-    { cutMode: 'hole' as const, armLengthMm: 95 },
+    { cutMode: 'disc' as const, armLengthMm: 95 },
+    { cutMode: 'hole' as const, armLengthMm: 105 },
   ])('matches the 200 mm diameter $cutMode oracle', ({ cutMode, armLengthMm }) => {
     expect(calculateRouterCircle({ targetDiameterMm: 200, bitDiameterMm: 10, cutMode })).toEqual({
       armLengthMm,
@@ -33,6 +34,22 @@ describe('calculateRouterCircle', () => {
       pivotOffsetMm: 3,
     });
   });
+
+  it.each(FESTOOL_ROUTER_CIRCLE_ORACLE.cases)(
+    'matches Festool 200 mm radius / 14 mm cutter setting for $cutMode',
+    ({ cutMode, armLengthMm }) => {
+      if (cutMode !== 'disc' && cutMode !== 'hole') {
+        throw new Error(`Unexpected Festool oracle cut mode: ${cutMode}`);
+      }
+
+      expect(
+        calculateRouterCircle({
+          ...FESTOOL_ROUTER_CIRCLE_ORACLE.input,
+          cutMode,
+        }).armLengthMm,
+      ).toBe(armLengthMm);
+    },
+  );
 
   it('calculates circumference as pi × diameter', () => {
     const result = calculateRouterCircle({

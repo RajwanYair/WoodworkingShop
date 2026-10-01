@@ -1,6 +1,6 @@
 # Roadmap
 
-> Last updated: 2026-09-30 (cross-platform benchmark review; expansion Phases 73–80 added; completed sprint detail archived)
+> Last updated: 2026-10-01 (Arm-R-Seal coverage oracle)
 > Current app version: v5.33.0
 > Next release target: v5.34.0 (Phase 63 close-out + Phase 64 — Real User Journeys and Browser Confidence)
 > Program horizon: Phases 63–80 · Sprints 300–419 · v5.33.0 → v6.0.0 (execution order: §7.2 release train)
@@ -210,42 +210,42 @@ All eight stale claims found on 2026-09-27 (hard-coded test counts, README badge
 
 ### 4.2 Roadmap Item Status (34 items, evidence-based; refreshed 2026-09-30)
 
-| #   | Item                                    | Status  | Evidence                                                                                                                                                      | Follow-up                          |
-| --- | --------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| 1   | React Error Boundaries per panel        | DONE    | `src/components/layout/ErrorBoundary.tsx`; wraps all panels in `App.tsx`                                                                                      | Recovery UX → S317                 |
-| 2   | Visual regression (Playwright)          | PARTIAL | 24 Chromium baselines (S310); per-state matrix pending                                                                                                        | S316                               |
-| 3   | Keyboard journey matrix                 | PARTIAL | Browser header/tab/dialog journeys DONE (S307); full keyboard-only matrix pending                                                                             | S316                               |
-| 4   | URL deep-linking `?tab=`                | DONE    | `url-state.ts`; browser Back/Forward and invalid-tab journeys (S307)                                                                                          | —                                  |
-| 5   | Mobile gestures (pinch / swipe)         | DONE    | `useTouchGestures.ts`; real-browser pinch/swipe/cancel journeys (S310)                                                                                        | —                                  |
-| 6   | OPFS persistence                        | MISSING | No `navigator.storage.getDirectory` anywhere; `idb-keyval` only                                                                                               | S322–S323                          |
-| 7   | JSON Schema import validation           | PARTIAL | `schemaVersion` fields exist; no schema file, no structural validator with paths                                                                              | S319–S320                          |
-| 8   | Project templates (kitchen/bath/closet) | PARTIAL | `cabinet-templates.ts`, `template-data.ts` (single cabinets incl. blind corner); no room-level kits                                                           | S325                               |
-| 9   | Batch ZIP export                        | PARTIAL | SHA-256 manifest + entry-path validation + parsed-download E2E (S312 T5); multi-select UX missing                                                             | S326                               |
-| 10  | Release readiness report                | MISSING | No `scripts/release-readiness*`                                                                                                                               | S360                               |
-| 11  | Docs ownership / freshness              | DONE    | `scripts/check-docs-freshness.js`, `docs/OWNERSHIP.md`                                                                                                        | CI gate → S363                     |
-| 12  | OpenSSF Scorecard                       | MISSING | No workflow, no badge                                                                                                                                         | S361                               |
-| 13  | Named expressions                       | DONE    | Panel mounted; CSP-safe allowlisted parser; browser journeys (S309)                                                                                           | Graph view → S348                  |
-| 14  | Per-part grain constraint               | DONE    | `grain-constraint.ts`, `Part.grainConstraint`                                                                                                                 | —                                  |
-| 15  | Multi-material optimizer                | PARTIAL | `multi-stock-optimizer.ts`, `material-yield.ts`; one material per sheet by design (correct for wood)                                                          | Strategy search → S328             |
-| 16  | Property-based tests                    | DONE    | `fast-check` 4.x; expanded across geometry, optimizer, yield, cost and joinery (S303)                                                                         | Extend → S303, S329                |
-| 17  | Export schema versioning                | DONE    | `export-schema.ts` (DXF / G-code / BOM CSV versions)                                                                                                          | Doc → S341                         |
-| 18  | Worker health check / timeout           | MISSING | No timeout or supervisor in `src/workers/`, `src/store/worker-schedule.ts`                                                                                    | S317                               |
-| 19  | WebGL / 3D orbit preview                | DONE    | 3D panel mounted; non-blank canvas and fallback verified in browser (S310)                                                                                    | —                                  |
-| 20  | Field-level validation messaging        | DONE    | `aria-invalid` + `aria-describedby`; all 11 repair actions verified (S308)                                                                                    | —                                  |
-| 21  | Animated SVG assembly sequence          | MISSING | `AssemblyGuide.tsx` has CSS transitions only                                                                                                                  | S353                               |
-| 22  | Plugin API                              | DONE    | `plugin.ts` v1.2, `plugin-v2.ts` v2.0, `plugin-marketplace.ts`, `docs/PLUGIN-API.md`                                                                          | Merge v1/v2 → S372; publish → S364 |
-| 23  | CRDT engine                             | DONE    | `crdt-sync.ts` (LWW); no backend by decision                                                                                                                  | Deferred                           |
-| 24  | Design tokens doc                       | MISSING | No `docs/DESIGN-TOKENS.md`                                                                                                                                    | S362                               |
-| 25  | Community catalog import                | DONE    | `CatalogImportPanel.tsx`, `community-catalog.ts`, `catalog-import.ts`                                                                                         | v2 schema → S350                   |
-| 26  | Analytics engine (local)                | PARTIAL | `analytics.ts` exists but is not imported outside the engine                                                                                                  | Surface/retire → S371              |
-| 27  | AI design assistant (rule-based)        | PARTIAL | Engine and utils copies of `ai-assistant.ts`; engine copy unwired                                                                                             | Merge → S372                       |
-| 28  | Undo / redo                             | DONE    | `cabinet-store.ts` past/present/future, 50 states; browser journeys (S307)                                                                                    | —                                  |
-| 29  | PWA / service worker / file handlers    | DONE    | `vite-plugin-pwa`, `manifest.json` file handlers, `usePwaFileHandlers.ts`                                                                                     | Offline E2E → S315                 |
-| 30  | Hardware catalog                        | PARTIAL | `catalog/hardware.json` 20+ items, bilingual; **no drilling patterns / SKUs**                                                                                 | S338, S351, S402                   |
-| 31  | QR part labels                          | BLOCKED | No encoder; production dependencies at the 8/8 cap                                                                                                            | In-house encoder → S388            |
-| 32  | Custom material in cabinet derivation   | DEFECT  | Selecting a custom material throws during derivation (found in S305); definitions not propagated                                                              | S305 close-out (P0)                |
-| 33  | Locale translation completeness         | PARTIAL | HE complete; AR/DE/ES/FR ≈ 60 % English fallback, 224–234 keys missing                                                                                        | S375                               |
-| 34  | Component budget gate                   | PARTIAL | Working tree (uncommitted, 2026-09-30): `CabinetPreview.tsx` 543 lines, exception list empty — clears the S305 blocker once committed and `npm run ci` passes | Commit + verify (S305)             |
+| #   | Item                                    | Status  | Evidence                                                                                                       | Follow-up                          |
+| --- | --------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| 1   | React Error Boundaries per panel        | DONE    | `src/components/layout/ErrorBoundary.tsx`; wraps all panels in `App.tsx`                                       | Recovery UX → S317                 |
+| 2   | Visual regression (Playwright)          | PARTIAL | 24 Chromium baselines (S310); per-state matrix pending                                                         | S316                               |
+| 3   | Keyboard journey matrix                 | PARTIAL | Browser header/tab/dialog journeys DONE (S307); full keyboard-only matrix pending                              | S316                               |
+| 4   | URL deep-linking `?tab=`                | DONE    | `url-state.ts`; browser Back/Forward and invalid-tab journeys (S307)                                           | —                                  |
+| 5   | Mobile gestures (pinch / swipe)         | DONE    | `useTouchGestures.ts`; real-browser pinch/swipe/cancel journeys (S310)                                         | —                                  |
+| 6   | OPFS persistence                        | MISSING | No `navigator.storage.getDirectory` anywhere; `idb-keyval` only                                                | S322–S323                          |
+| 7   | JSON Schema import validation           | PARTIAL | `schemaVersion` fields exist; no schema file, no structural validator with paths                               | S319–S320                          |
+| 8   | Project templates (kitchen/bath/closet) | PARTIAL | `cabinet-templates.ts`, `template-data.ts` (single cabinets incl. blind corner); no room-level kits            | S325                               |
+| 9   | Batch ZIP export                        | PARTIAL | SHA-256 manifest + entry-path validation + parsed-download E2E (S312 T5); multi-select UX missing              | S326                               |
+| 10  | Release readiness report                | MISSING | No `scripts/release-readiness*`                                                                                | S360                               |
+| 11  | Docs ownership / freshness              | DONE    | `scripts/check-docs-freshness.js`, `docs/OWNERSHIP.md`                                                         | CI gate → S363                     |
+| 12  | OpenSSF Scorecard                       | MISSING | No workflow, no badge                                                                                          | S361                               |
+| 13  | Named expressions                       | DONE    | Panel mounted; CSP-safe allowlisted parser; browser journeys (S309)                                            | Graph view → S348                  |
+| 14  | Per-part grain constraint               | DONE    | `grain-constraint.ts`, `Part.grainConstraint`                                                                  | —                                  |
+| 15  | Multi-material optimizer                | PARTIAL | `multi-stock-optimizer.ts`, `material-yield.ts`; one material per sheet by design (correct for wood)           | Strategy search → S328             |
+| 16  | Property-based tests                    | DONE    | `fast-check` 4.x; expanded across geometry, optimizer, yield, cost and joinery (S303)                          | Extend → S303, S329                |
+| 17  | Export schema versioning                | DONE    | `export-schema.ts` (DXF / G-code / BOM CSV versions)                                                           | Doc → S341                         |
+| 18  | Worker health check / timeout           | MISSING | No timeout or supervisor in `src/workers/`, `src/store/worker-schedule.ts`                                     | S317                               |
+| 19  | WebGL / 3D orbit preview                | DONE    | 3D panel mounted; non-blank canvas and fallback verified in browser (S310)                                     | —                                  |
+| 20  | Field-level validation messaging        | DONE    | `aria-invalid` + `aria-describedby`; all 11 repair actions verified (S308)                                     | —                                  |
+| 21  | Animated SVG assembly sequence          | MISSING | `AssemblyGuide.tsx` has CSS transitions only                                                                   | S353                               |
+| 22  | Plugin API                              | DONE    | `plugin.ts` v1.2, `plugin-v2.ts` v2.0, `plugin-marketplace.ts`, `docs/PLUGIN-API.md`                           | Merge v1/v2 → S372; publish → S364 |
+| 23  | CRDT engine                             | DONE    | `crdt-sync.ts` (LWW); no backend by decision                                                                   | Deferred                           |
+| 24  | Design tokens doc                       | MISSING | No `docs/DESIGN-TOKENS.md`                                                                                     | S362                               |
+| 25  | Community catalog import                | DONE    | `CatalogImportPanel.tsx`, `community-catalog.ts`, `catalog-import.ts`                                          | v2 schema → S350                   |
+| 26  | Analytics engine (local)                | PARTIAL | `analytics.ts` exists but is not imported outside the engine                                                   | Surface/retire → S371              |
+| 27  | AI design assistant (rule-based)        | PARTIAL | Engine and utils copies of `ai-assistant.ts`; engine copy unwired                                              | Merge → S372                       |
+| 28  | Undo / redo                             | DONE    | `cabinet-store.ts` past/present/future, 50 states; browser journeys (S307)                                     | —                                  |
+| 29  | PWA / service worker / file handlers    | DONE    | `vite-plugin-pwa`, `manifest.json` file handlers, `usePwaFileHandlers.ts`                                      | Offline E2E → S315                 |
+| 30  | Hardware catalog                        | PARTIAL | `catalog/hardware.json` 20+ items, bilingual; **no drilling patterns / SKUs**                                  | S338, S351, S402                   |
+| 31  | QR part labels                          | BLOCKED | No encoder; production dependencies at the 8/8 cap                                                             | In-house encoder → S388            |
+| 32  | Custom material in cabinet derivation   | DONE    | Custom material selection propagates to parts, cut sheets and costs (114 focused store/component tests passed) | S305                               |
+| 33  | Locale translation completeness         | PARTIAL | HE complete; AR/DE/ES/FR ≈ 60 % English fallback, 224–234 keys missing                                         | S375                               |
+| 34  | Component budget gate                   | DONE    | `CabinetPreview.tsx` is 543 lines with no exceptions; `npm run ci` passed on commit `312f38c`                  | S305                               |
 
 ### 4.3 Test-Suite Baseline (latest recorded evidence)
 
@@ -473,9 +473,28 @@ Completed (evidence archived in [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 - Tests: finite-number constraints; min/max and just-outside values; zero/negative/NaN/infinity; mm/inches conversion; reproducibility under fixed seeds; multi-cabinet composition.
 - Accept: engine inventory has an explicit status per exported function; high-risk geometry/optimizer modules have independent invariants and oracle tests; every regression is a named example plus generated property.
 
-Status (2026-10-01): a generated per-function artifact now maps 634 engine exports (623 `covered`, 11 `indirect`, 0 `waived`); runtime helpers in `types.ts` are measured and directly tested. Ten fast-check suites use stable per-file seeds. A dated Kreg lower-cabinet oracle checks derived dimensions, side-panel parts and half-sheet optimizer composition alongside the birch-weight oracle. Detail: SPRINT-HISTORY.
+Status (2026-10-01): a generated per-function artifact now maps 634 engine exports (623 `covered`,
+11 `indirect`, 0 `waived`); runtime helpers in `types.ts` are measured and directly tested. Fourteen
+fast-check suites use stable per-file seeds, including cove pass-depth, stair-stringer geometry,
+optimizer grain-rotation and kerf-clearance, and honing-guide projection and microbevel invariants.
+Dated Kreg and Ana White cabinet-plan oracles
+independently check published side-panel dimensions; the Kreg case also checks derived dimensions
+and half-sheet optimizer composition. The birch panel-weight oracle is sourced from Engineering
+ToolBox density data and exercised by `tests/engine/materials.test.ts`. Detail: SPRINT-HISTORY.
 
-Remaining to accept: (a) capture and persist exact shrunk seed/path reproductions for property failures; the historical kerf defect is a named regression, but its original fast-check path was not recorded; (b) add independent oracle coverage for any remaining high-risk dimensions/parts/optimizer behavior beyond the Kreg case (calculator oracles continue in S314 T3).
+The optimizer's diagonal kerf violation has a reconstructed fast-check replay in
+`tests/engine/cut-optimizer.property.test.ts` (seed `303003`); it was regenerated against
+the pre-fix engine, and is not the original historical trace. The committed history contains
+the named diagonal regression but no original shrink path. The kerf finite-guard invariant has a deterministic fast-check replay in
+`tests/engine/kerf-bending.test.ts` (seed `303011`, path `21`); it reproduces the
+invariant but not the original historical failure path. The cove pass-depth
+rounding defect now has a named regression and its exact minimized seed/path
+recorded in `tests/engine/cove-cut.test.ts`. A bounded 2026-10-01 audit of tracked
+engine tests, this sprint history, and engine-test commit history found no other
+persisted original shrink paths. External CI artifacts were not available for
+review, so Sprint 303 remains open until any retained artifacts are checked; do
+not report a regenerated path as historical. Calculator oracle coverage
+continues in S314 T3.
 
 **Sprint 305 — Component behavior foundation** — P1 · L · S302 · IN PROGRESS.
 
@@ -485,14 +504,18 @@ Remaining to accept: (a) capture and persist exact shrunk seed/path reproduction
 - Tests: accessible labels, keyboard input, validation, disabled states, async completion/error, focus restore, RTL direction, locale formatting.
 - Accept: all controls touched in this sprint have positive and negative behavior assertions; no suppression, brittle shallow rendering, or class-based selector.
 
-Status (2026-09-30): user-level journeys now cover every configurator, optimizer, cost, materials, project/snapshot, PDF, assembly-log, Marketplace and calculator panel listed in the SPRINT-HISTORY progress log; component coverage rose from 41.3 % to 75.02 % statements (525 component tests) without lowering any ratchet floor, and eight product defects were fixed along the way.
-The `CabinetPreview.tsx` split (543 lines, no exceptions) exists in the working tree and clears the budget blocker once committed and verified by `npm run ci`.
+Status (2026-10-01): user-level journeys now cover every configurator, optimizer, cost, materials,
+project/snapshot, PDF, assembly-log, Marketplace and calculator panel listed in the SPRINT-HISTORY
+progress log. Component coverage rose from 41.3 % to 75.02 % statements (525 component tests)
+without lowering any ratchet floor, and eight product defects were fixed along the way. The
+custom-material derivation defect is fixed: selecting a custom carcass material now derives its
+parts, cut sheets and costs; 114 focused store/component tests pass.
+The `CabinetPreview.tsx` split (543 lines, no exceptions) is committed; `npm run ci` passed on commit `312f38c`.
 
 Remaining to accept (priority order):
 
-1. **P0 defect:** selecting a custom material throws during cabinet derivation because custom definitions are not propagated to the engine — fix with a store → engine material-registry bridge, add a component journey and a browser journey.
-2. Generate the component control inventory (T1) as an artifact (per panel: control, accessible name, positive test, negative test) and list uncovered controls.
-3. Cover remaining uncovered controls from that inventory or waive with reason; raise component floors to the new measured baseline.
+1. Generate the component control inventory (T1) as an artifact (per panel: control, accessible name, positive test, negative test) and list uncovered controls.
+2. Cover remaining uncovered controls from that inventory or waive with reason; raise component floors to the new measured baseline.
 
 **Sprint 306 — Mutation testing and quality evidence** — P1 · M · S303–S305.
 
@@ -520,7 +543,7 @@ Completed (evidence archived in [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 - T1: DONE — 25 real-download BOM/hardware CSV behaviors (encoding, locales, escaping, formula-injection).
 - T2: DONE — 25 DXF/G-code behaviors parse entities, extents, units, kerf, retract, tools; DXF extents cross-checked against G-code.
-- T3: IN PROGRESS — grouped/expanded labels and an escaped A4 print sheet pass 25 behaviors. **QR moved to S388** (in-house encoder; dependency cap). Close T3 without QR once payload-to-part text references are asserted.
+- T3: DONE — grouped/expanded labels and an escaped A4 print sheet pass 26 behaviors, including a browser assertion that every printed label identifier stays paired with its part text. **QR moved to S388** (in-house encoder; dependency cap).
 - T4: DONE — 27 real-PDF behaviors (pages, geometry, headings, options, size budget, zero warnings).
 - T5: DONE — SHA-256 ZIP manifest, entry-path validation; 29 behaviors parse every payload.
 - Accept: tests listen for actual browser download events, read bytes and validate content; a visible button alone never counts as export coverage.
@@ -543,10 +566,12 @@ Detail and the GcodePreviewModal component follow-up are archived in SPRINT-HIST
 - T4: DONE — Browser coverage verifies typed numeric entry, ArrowUp/ArrowDown recomputation, clear-to-zero validation and no NaN/Infinity output.
 - Accept: zero mounted calculator is untested; each visible option causes a checked output change; independent test fixtures state expected units and precision.
 
-Status (2026-09-30): 27 production-browser journeys (Chromium + Firefox) compare every mounted calculator option with the pure engine; T4 passes. T3 has sourced oracles for screw pull-out (USDA FPL-GTR-282 Eq. 8-10a) and white-oak shrinkage (FPL-GTR-282 Table 4-3), shared UI/engine bounds for glue, moisture and screw inputs, and non-finite rejection in board feet.
+Status (2026-10-01): 27 production-browser journeys (Chromium + Firefox) compare every mounted calculator option with the pure engine; T4 passes. `tests/fixtures/oracles/INDEX.json` maps all 24 mounted calculators to their engine, test and oracle status.
+Sourced fixtures cover Arm-R-Seal coverage compatibility (General Finishes; product-specific range only), water-based polyurethane coverage/recoat compatibility (Rust-Oleum; cure and volume excluded), screw pull-out and white-oak shrinkage (USDA FPL-GTR-282), planer-pass depth (DEWALT DW735 manual), crown-moulding flat-cut angles and half-lap depth (WOOD Magazine), router-template offset (Wealden Tool), IRC stair riser/tread limits, and Calculator Academy rafter-length and cabinet-door examples.
+Other verified references include kerf-bending spacing (CalcGallery), Festool router-circle settings, Inch Calculator frame-panel width, overlay-door dimensions, WOOD Magazine box-joint, splined-joint, full-extension drawer and groove-depth references, WoodWorkCalc face-frame and one-sided taper geometry, and Woodgears cove-cut fence geometry; 2 entries remain explicitly marked as lacking a verifiable source.
 Later commits harden boundary/oracle tests for box joint, glue, planer, honing, crown, router, cove, moisture, rafter, taper, stair, turning, frame-panel, half-lap and spline calculators.
 
-Remaining to accept T3: publish a per-calculator oracle matrix (`tests/fixtures/oracles/INDEX.json`: calculator → fixture → source/date → tolerance, or `no verifiable source` with reason) and close gaps for the calculators without a sourced case. Glue spread rates stay unclaimed until a verifiable data sheet exists.
+Remaining to accept T3: obtain and verify published/reference cases for the 2 calculators currently marked `no-verifiable-source`, then record fixture dates and tolerances in the matrix. Finish oracles cover only named-product coverage/recoat compatibility; generic finish schedules, cure/volume estimates and glue spread rates stay unclaimed until verifiable manufacturer data supports them.
 
 **Sprint 315 — PWA, offline, updates and storage pressure** — P1 · M · S307.
 

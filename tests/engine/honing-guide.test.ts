@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest';
+import * as fc from 'fast-check';
 import { calculateHoningGuide } from '../../src/engine/honing-guide';
+import { propertyRunOptions } from '../property-seeds';
+
+const NUM_RUNS = 200;
 
 describe('calculateHoningGuide', () => {
   it('calculates projection for 25° bevel at 25 mm guide height', () => {
@@ -59,5 +63,42 @@ describe('calculateHoningGuide', () => {
     ['overflowing projection', { bevelAngleDeg: 0.000001, guideHeightMm: Number.MAX_VALUE }],
   ])('throws RangeError for non-finite input: %s', (_label, input) => {
     expect(() => calculateHoningGuide(input)).toThrow(RangeError);
+  });
+
+  it('preserves projection scaling and angle monotonicity across valid geometry', () => {
+    const heightArb = fc.integer({ min: 10, max: 100 });
+    const angleArb = fc.integer({ min: 5, max: 80 });
+
+    fc.assert(
+      fc.property(heightArb, angleArb, fc.integer({ min: 2, max: 5 }), (height, angle, scale) => {
+        const projection = calculateHoningGuide({ bevelAngleDeg: angle, guideHeightMm: height }).projectionMm;
+        const scaledProjection = calculateHoningGuide({
+          bevelAngleDeg: angle,
+          guideHeightMm: height * scale,
+        }).projectionMm;
+        const steeperProjection = calculateHoningGuide({
+          bevelAngleDeg: angle + 1,
+          guideHeightMm: height,
+        }).projectionMm;
+
+        return Math.abs(scaledProjection - projection * scale) <= 0.3 && steeperProjection <= projection;
+      }),
+      propertyRunOptions('tests/engine/honing-guide.test.ts', NUM_RUNS),
+    );
+  });
+
+  it('keeps microbevel projection below the primary bevel across valid geometry', () => {
+    fc.assert(
+      fc.property(
+        fc.integer({ min: 5, max: 60 }),
+        fc.integer({ min: 1, max: 20 }),
+        fc.integer({ min: 10, max: 100 }),
+        (bevelAngleDeg, microbevelDeg, guideHeightMm) => {
+          const result = calculateHoningGuide({ bevelAngleDeg, microbevelDeg, guideHeightMm });
+          return result.microbevelProjectionMm !== null && result.microbevelProjectionMm < result.projectionMm;
+        },
+      ),
+      propertyRunOptions('tests/engine/honing-guide.test.ts', NUM_RUNS),
+    );
   });
 });

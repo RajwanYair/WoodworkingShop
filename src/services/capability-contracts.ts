@@ -1,4 +1,4 @@
-export type CapabilityStatus = 'active' | 'experimental' | 'disabled';
+type CapabilityStatus = 'active' | 'experimental' | 'disabled';
 
 export interface CapabilityContract {
   id: string;
@@ -39,10 +39,6 @@ export const CAPABILITY_CONTRACTS: readonly CapabilityContract[] = [
       'Optional cloud-sync boundary adapter. Core workflows must remain fully functional when this capability is unavailable.',
   },
 ] as const;
-
-export function getCapabilityContracts(): readonly CapabilityContract[] {
-  return CAPABILITY_CONTRACTS;
-}
 
 export function getCapabilityContract(id: string): CapabilityContract | undefined {
   return CAPABILITY_CONTRACTS.find((contract) => contract.id === id);

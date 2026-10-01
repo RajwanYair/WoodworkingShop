@@ -1,0 +1,26 @@
+{
+  "source": "CalcGallery, Kerf Bending Calculator, 12 in inside-radius quick reference and calculation method",
+  "url": "https://calcgallery.com/lumber-carpentry/kerf-bending-calculator/",
+  "retrievedOn": "2026-10-01",
+  "input": {
+    "thicknessMm": 19.05,
+    "bendRadiusMm": 304.8,
+    "kerfWidthMm": 3.175,
+    "remainingThicknessMm": 3.175
+  },
+  "expected": {
+    "kerfSpacingMm": 64.8,
+    "kerfCount": 8,
+    "arcLengthMm": 508.7
+  },
+  "sourceValues": {
+    "spacingIn": "2 9/16",
+    "spacingMm": 65.0875,
+    "radiusIn": 12,
+    "bendAngleDeg": 90
+  },
+  "toleranceMm": 0.32,
+  "conversion": "1 in = 25.4 mm; source radius is to the inside face, so outside radius is inside radius plus 3/4 in stock thickness. Spacing = outside radius × kerf width ÷ cut depth; cut depth = stock thickness − uncut web. Outside arc length = outside radius × π/2.",
+  "tolerance": "0.32 mm for spacing, reflecting the source's 1/16 in display precision; 0.1 mm for outside arc length at engine precision; exact kerf count.",
+  "scope": "Validates quarter-circle spacing, outside arc length, and kerf count for the source's 3/4 in stock, 1/8 in kerf, 1/8 in uncut web, and 12 in inside radius. Material-specific default web recommendations and non-quarter-circle sweeps are excluded."
+}

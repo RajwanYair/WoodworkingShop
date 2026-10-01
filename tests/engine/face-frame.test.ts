@@ -1,7 +1,16 @@
 import { describe, it, expect } from 'vitest';
+import WOODWORKCALC_FACE_FRAME_ORACLE from '../fixtures/oracles/woodworkcalc-face-frame.json';
 import { calculateFaceFrame } from '../../src/engine/face-frame';
 
 describe('calculateFaceFrame', () => {
+  it('matches shared frame dimensions from the published WoodWorkCalc example', () => {
+    const { engineInput, expected } = WOODWORKCALC_FACE_FRAME_ORACLE;
+    const result = calculateFaceFrame(engineInput);
+
+    expect(result.railLengthMm).toBe(expected.railLengthMm);
+    expect(result.stileLengthMm).toBe(expected.stileLengthMm);
+  });
+
   describe('single opening', () => {
     it.each([
       {

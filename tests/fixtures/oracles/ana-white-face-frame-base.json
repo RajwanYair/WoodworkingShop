@@ -1,0 +1,21 @@
+{
+  "source": "Face Frame Base Kitchen Cabinet Carcass",
+  "url": "https://www.ana-white.com/woodworking-projects/face-frame-base-kitchen-cabinet-carcass",
+  "author": "Ana White",
+  "retrievedOn": "2026-10-01",
+  "publishedPlan": {
+    "sidePanels": {
+      "quantity": 2,
+      "lengthInches": 34.5,
+      "widthInches": 22.5,
+      "thicknessInches": 0.75
+    },
+    "dimensionEvidence": "The plan instructs builders to rip 3/4-inch cabinet plywood into 22 1/2-inch strips and crosscut two sides to 34 1/2 inches."
+  },
+  "convertedMm": {
+    "sidePanelLength": 876.3,
+    "sidePanelWidth": 571.5,
+    "panelThickness": 19.05
+  },
+  "conversion": "1 inch = 25.4 mm."
+}

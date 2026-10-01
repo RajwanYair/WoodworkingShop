@@ -1,15 +1,27 @@
 import { describe, it, expect } from 'vitest';
+import RUSTOLEUM_WATERBASED_POLYURETHANE_ORACLE from '../fixtures/oracles/rustoleum-ultimate-waterbased-polyurethane.json';
 import { calculateFinishingCoat } from '../../src/engine/finishing-coat';
 import type { FinishType } from '../../src/engine/finishing-coat';
 
 describe('calculateFinishingCoat', () => {
+  it('matches the Rust-Oleum Ultimate Polyurethane coverage range and recoat interval', () => {
+    const oracle = RUSTOLEUM_WATERBASED_POLYURETHANE_ORACLE;
+    expect(oracle.engineInput.finishType).toBe('waterbased');
+    const result = calculateFinishingCoat({ ...oracle.engineInput, finishType: 'waterbased' });
+
+    expect(result.coveragePerLitreM2).toBe(oracle.expected.coveragePerLitreM2);
+    expect(result.coveragePerLitreM2).toBeGreaterThanOrEqual(oracle.expected.coverageRangeM2PerLitre.minimum);
+    expect(result.coveragePerLitreM2).toBeLessThanOrEqual(oracle.expected.coverageRangeM2PerLitre.maximum);
+    expect(result.dryTimeBetweenCoatsMin).toBe(oracle.expected.dryTimeBetweenCoatsMin);
+  });
+
   it.each([
     { finish: 'polyurethane' as const, coverage: 10, recoat: 240, cure: 72 },
     { finish: 'lacquer' as const, coverage: 12, recoat: 30, cure: 24 },
     { finish: 'shellac' as const, coverage: 14, recoat: 45, cure: 12 },
     { finish: 'waterbased' as const, coverage: 11, recoat: 120, cure: 48 },
     { finish: 'oil' as const, coverage: 8, recoat: 480, cure: 168 },
-  ])('returns published coverage and schedule for $finish', ({ finish, coverage, recoat, cure }) => {
+  ])('returns configured coverage and schedule for $finish', ({ finish, coverage, recoat, cure }) => {
     const result = calculateFinishingCoat({ surfaceAreaM2: coverage, coatCount: 1, finishType: finish });
 
     expect(result.volumeLitres).toBe(1.1);

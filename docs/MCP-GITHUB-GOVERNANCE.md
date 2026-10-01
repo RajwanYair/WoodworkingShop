@@ -45,3 +45,24 @@ The release flow is considered valid only when all checks below pass:
 - `.vscode/mcp.json` is the source of truth for active MCP servers.
 - Server descriptions in `.vscode/mcp.json` must stay aligned with this document.
 - If a server is temporarily disabled, record the reason in the sprint commit message.
+
+## First-Run Setup
+
+No administrator privileges or machine-wide installation are required. Local
+servers use `npx`; VS Code may ask to trust each configured server before its
+first launch. Confirm only after reviewing the server entry in `.vscode/mcp.json`.
+
+| Integration     | One-time user action                                                                                                                                     | When to enable                                          |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| GitHub MCP      | Sign in to GitHub in VS Code and approve the GitHub MCP authorization prompt.                                                                            | Core PR, issue, and Actions workflows                   |
+| Brave Search    | Create a Brave Search API key, then enter it in the masked `brave-api-key` prompt when VS Code requests it. VS Code stores this input in secret storage. | Optional open-web research beyond package documentation |
+| GitKraken       | Complete the GitKraken MCP provider's browser sign-in when prompted.                                                                                     | Optional advanced Git and PR workflows                  |
+| Cloudflare      | Complete the Cloudflare provider sign-in and select an account when prompted.                                                                            | Only for Pages/Workers deployment work                  |
+| Chrome DevTools | Install Chrome if it is not already available, then start the server from VS Code.                                                                       | Optional browser performance traces and diagnostics     |
+
+For daily use, open **Chat: Open Customizations** to review project agents and
+skills, or type `/` in chat to invoke a skill such as `/browser-qa`,
+`/docs-sync-audit`, or `/test-gap-audit`. Run **MCP: List Servers** to start,
+authorize, inspect logs, or disable integrations. Authentication is deliberately
+completed through VS Code or each provider; do not copy credentials into shell
+history, workspace settings, or committed files.

@@ -1,0 +1,26 @@
+{
+  "source": "Inch Calculator, Cabinet Door Calculator, Find the Dimensions of the Panel",
+  "url": "https://www.inchcalculator.com/cabinet-door-calculator/",
+  "retrievedOn": "2026-10-01",
+  "publishedExample": {
+    "doorWidthIn": 18,
+    "stileWidthIn": 2.25,
+    "grooveDepthIn": 0.375,
+    "expansionSpacePerSideIn": 0.0625,
+    "panelWidthIn": 14.125
+  },
+  "engineInput": {
+    "frameWidthMm": 457.2,
+    "frameHeightMm": 457.2,
+    "stileWidthMm": 57.15,
+    "railWidthMm": 57.15,
+    "grooveDepthMm": 9.525,
+    "panelFloatMm": 1.5875
+  },
+  "expected": {
+    "panelWidthMm": 358.8
+  },
+  "conversion": "1 in = 25.4 mm; source output 14.125 in converts to 358.775 mm and rounds to the engine's 0.1 mm precision.",
+  "tolerance": "Exact to 0.1 mm, matching engine output precision.",
+  "scope": "Validates only panel width from the published example: door width minus two stiles plus two groove depths minus 1/16 in expansion space at each groove. Does not verify panel height, seasonal-movement recommendations, or other joinery assumptions."
+}

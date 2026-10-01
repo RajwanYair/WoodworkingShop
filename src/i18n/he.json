@@ -2267,11 +2267,11 @@
     "roughing": "גסה",
     "finishing": "גמר",
     "sanding": "שיוף",
-    "minRpm": "מינ׳ סל״ד בטוח",
-    "maxRpm": "מקס׳ סל״ד בטוח",
+    "minRpm": "מינימום סל״ד (המלצה)",
+    "maxRpm": "מקסימום סל״ד (המלצה)",
     "recommendedRpm": "סל״ד מומלץ",
     "surfaceSpeed": "מהירות פני שטח (מ/דקה)",
-    "safetyNote": "תמיד התחל במהירות נמוכה והגבר בהדרגה"
+    "safetyNote": "יש לפעול לפי הוראות המחרטה. התחילו במהירות הנמוכה ביותר והפחיתו מהירות אם חומר הגלם רועד."
   },
   "framePanel": {
     "title": "מחשבון מסגרת ולוח",
@@ -2312,7 +2312,6 @@
     "stringerLength": "אורך קרש",
     "stringerAngle": "זווית קרש",
     "ircPass": "עומד בדרישות IRC 2021",
-    "riserTooShort": "גובה פסיעה מתחת מינימום IRC",
     "riserTooTall": "גובה פסיעה מעל מקסימום IRC",
     "treadTooShallow": "עומק שלב הדריכה מתחת מינימום IRC"
   },
@@ -2398,6 +2397,7 @@
   "coveCut": {
     "copeDepth": "עומק הקערה",
     "bladeDiameter": "קוטר הלהב",
+    "bladeKerf": "רוחב חיתוך הלהב",
     "copeWidth": "רוחב הקערה",
     "fenceAngle": "זווית המחסום",
     "maxPassDepth": "עומק מקסימלי למעבר",

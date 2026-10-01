@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest';
+import * as fc from 'fast-check';
+import IRC_2021_STAIR_LIMITS_ORACLE from '../fixtures/oracles/irc-2021-stair-limits.json';
 import { calculateStairStringer } from '../../src/engine/stair-stringer';
+import { propertyRunOptions } from '../property-seeds';
 
 describe('calculateStairStringer', () => {
   const BASE = {
@@ -47,17 +50,52 @@ describe('calculateStairStringer', () => {
     expect(result.stringerAngleDeg).toBe(33.69);
   });
 
-  it('passesIrc true when riser in 101.6–196.85 mm and tread ≥ 254 mm', () => {
+  it('matches IRC 2021 maximum-riser and minimum-tread limits', () => {
+    const { input, expected } = IRC_2021_STAIR_LIMITS_ORACLE;
+    const result = calculateStairStringer(input);
+
+    expect(result.passesIrc).toBe(expected.passesIrc);
+    expect(result.warningKey).toBeNull();
+  });
+
+  it('preserves stair geometry across generated valid dimensions', () => {
+    fc.assert(
+      fc.property(
+        fc.integer({ min: 250, max: 5000 }),
+        fc.integer({ min: 254, max: 400 }),
+        fc.integer({ min: 100, max: 250 }),
+        (totalRiseMm, treadDepthMm, idealRiserMm) => {
+          const result = calculateStairStringer({ totalRiseMm, treadDepthMm, idealRiserMm });
+          const expectedStringerLengthMm = Math.hypot(result.totalRunMm, totalRiseMm);
+          const expectedStringerAngleDeg = Math.atan(totalRiseMm / result.totalRunMm) * (180 / Math.PI);
+
+          return (
+            result.riserCount >= 3 &&
+            result.riserCount <= 20 &&
+            result.treadCount === result.riserCount - 1 &&
+            Math.abs(result.actualRiserMm - totalRiseMm / result.riserCount) <= 0.051 &&
+            Math.abs(result.totalRunMm - result.treadCount * treadDepthMm) <= 0.05 &&
+            Math.abs(result.stringerLengthMm - expectedStringerLengthMm) <= 0.05 &&
+            Math.abs(result.stringerAngleDeg - expectedStringerAngleDeg) <= 0.005
+          );
+        },
+      ),
+      propertyRunOptions('tests/engine/stair-stringer.test.ts', 200),
+    );
+  });
+
+  it('passesIrc true when riser is at most 196.85 mm and tread is at least 254 mm', () => {
     const r = calculateStairStringer(BASE);
     expect(r.passesIrc).toBe(true);
     expect(r.warningKey).toBeNull();
   });
 
-  it('warns riserTooShort when actual riser < 101.6 mm', () => {
-    // 1 riser clamped to 3 → actualRiser = 300/3 = 100 mm
+  it('does not impose a minimum riser height from IRC 2021 R311.7.5.1', () => {
     const r = calculateStairStringer({ totalRiseMm: 300, treadDepthMm: 280, idealRiserMm: 100 });
-    expect(r.warningKey).toBe('riserTooShort');
-    expect(r.passesIrc).toBe(false);
+
+    expect(r.actualRiserMm).toBe(100);
+    expect(r.warningKey).toBeNull();
+    expect(r.passesIrc).toBe(true);
   });
 
   it('warns riserTooTall when actual riser > 196.85 mm', () => {
@@ -73,8 +111,6 @@ describe('calculateStairStringer', () => {
   });
 
   it.each([
-    { totalRiseMm: 304.7, expectedWarning: 'riserTooShort' as const },
-    { totalRiseMm: 304.8, expectedWarning: null },
     { totalRiseMm: 590.55, expectedWarning: null },
     { totalRiseMm: 590.7, expectedWarning: 'riserTooTall' as const },
   ])('checks IRC riser limits before display rounding at $totalRiseMm mm rise', ({ totalRiseMm, expectedWarning }) => {

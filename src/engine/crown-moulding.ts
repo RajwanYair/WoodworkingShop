@@ -47,8 +47,8 @@ export function calculateCrownMoulding(input: CrownMouldingInput): CrownMoulding
   const halfCornerRad = ((cornerAngleDeg / 2) * Math.PI) / 180;
   const springRad = (springAngleDeg * Math.PI) / 180;
 
-  const miterRad = Math.atan(Math.cos(springRad) * Math.tan(halfCornerRad));
-  const sinBevel = Math.sin(springRad) * Math.sin(halfCornerRad);
+  const miterRad = Math.atan(Math.sin(springRad) * Math.tan(halfCornerRad));
+  const sinBevel = Math.cos(springRad) * Math.sin(halfCornerRad);
 
   if (Math.abs(sinBevel) > 1) {
     throw new RangeError('Invalid combination of cornerAngleDeg and springAngleDeg');

@@ -4,12 +4,14 @@ import { describe, expect, it } from 'vitest';
 import { WoodTurningPanel } from '../../src/components/configurator/WoodTurningPanel';
 
 describe('WoodTurningPanel', () => {
-  it('recalculates safe speed by operation and blank diameter', async () => {
+  it('recalculates advisory RPM by operation and blank diameter', async () => {
     const user = userEvent.setup();
     render(<WoodTurningPanel />);
 
     expect(screen.getByText(/^1,270\s*RPM$/)).toBeInTheDocument();
-    expect(screen.getByText(/Always start at lowest speed/)).toBeInTheDocument();
+    expect(screen.getByText('Min RPM (advisory)')).toBeInTheDocument();
+    expect(screen.getByText('Max RPM (advisory)')).toBeInTheDocument();
+    expect(screen.getByText(/Follow your lathe manual/)).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Roughing' }));
     expect(screen.getByText(/^914\s*RPM$/)).toBeInTheDocument();
 

@@ -1,0 +1,15 @@
+{
+  "source": "Calculator Academy, Rafter Length Calculator, Example 1",
+  "url": "https://calculator.academy/rafter-length-calculator/",
+  "retrievedOn": "2026-10-01",
+  "condition": "A 24-foot gable span with an 8-in-12 pitch has a 12-foot run and 14.42-foot rafter length before the ridge-board deduction; the source rounds the result to two decimal places.",
+  "input": {
+    "totalSpanMm": 7315.2,
+    "pitchRatio": 0.6666666666666666,
+    "plateWidthMm": 89
+  },
+  "expected": {
+    "runFt": 12,
+    "rafterLengthFt": 14.42
+  }
+}

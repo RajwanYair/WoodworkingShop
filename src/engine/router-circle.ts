@@ -46,7 +46,7 @@ export function calculateRouterCircle(input: RouterCircleInput): RouterCircleRes
   const radiusMm = targetDiameterMm / 2;
   const halfBitMm = bitDiameterMm / 2;
 
-  const armLengthMm = cutMode === 'disc' ? radiusMm + halfBitMm : radiusMm - halfBitMm;
+  const armLengthMm = cutMode === 'disc' ? radiusMm - halfBitMm : radiusMm + halfBitMm;
 
   if (cutMode === 'hole' && armLengthMm <= 0) {
     throw new RangeError('hole mode requires a positive arm length');

@@ -1,7 +1,14 @@
 import { describe, it, expect } from 'vitest';
+import ROUTER_TEMPLATE_WEALDEN_ORACLE from '../fixtures/oracles/router-template-wealden.json';
 import { calculateRouterTemplate } from '../../src/engine/router-template';
 
 describe('calculateRouterTemplate', () => {
+  it('matches the published Wealden guide-bush offset example', () => {
+    const { input, expected } = ROUTER_TEMPLATE_WEALDEN_ORACLE;
+
+    expect(calculateRouterTemplate({ ...input, cutType: 'inside' }).offsetMm).toBe(expected.offsetMm);
+  });
+
   it('computes offset as (bushingOD - bitDiameter) / 2', () => {
     const result = calculateRouterTemplate({ bushingODMm: 20, bitDiameterMm: 12, cutType: 'inside' });
     expect(result.offsetMm).toBe(4);

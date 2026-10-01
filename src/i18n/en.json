@@ -2267,11 +2267,11 @@
     "roughing": "Roughing",
     "finishing": "Finishing",
     "sanding": "Sanding",
-    "minRpm": "Min Safe RPM",
-    "maxRpm": "Max Safe RPM",
+    "minRpm": "Min RPM (advisory)",
+    "maxRpm": "Max RPM (advisory)",
     "recommendedRpm": "Recommended RPM",
     "surfaceSpeed": "Surface Speed (m/min)",
-    "safetyNote": "Always start at lowest speed and increase gradually"
+    "safetyNote": "Follow your lathe manual. Start at the lowest speed and reduce speed if the blank vibrates."
   },
   "framePanel": {
     "title": "Frame and Panel Calculator",
@@ -2312,7 +2312,6 @@
     "stringerLength": "Stringer Length",
     "stringerAngle": "Stringer Angle",
     "ircPass": "Passes IRC 2021 riser and tread limits",
-    "riserTooShort": "Riser height below IRC minimum 4\" (101.6 mm)",
     "riserTooTall": "Riser height exceeds IRC maximum 7¾\" (196.85 mm)",
     "treadTooShallow": "Tread depth below IRC minimum 10\" (254 mm)"
   },
@@ -2398,6 +2397,7 @@
   "coveCut": {
     "copeDepth": "Cove Depth",
     "bladeDiameter": "Blade Diameter",
+    "bladeKerf": "Blade Kerf",
     "copeWidth": "Cove Width",
     "fenceAngle": "Fence Angle",
     "maxPassDepth": "Max Depth per Pass",

@@ -67,6 +67,7 @@ describe('calculateWoodTurning', () => {
     expect(result.minRpm).toBe(152);
     expect(result.maxRpm).toBe(152);
     expect(result.recommendedRpm).toBe(152);
+    expect(result.surfaceSpeedMPerMin).toBe(477.5);
     expect(result.minRpm).toBeLessThanOrEqual(result.maxRpm);
     expect(result.recommendedRpm).toBeGreaterThanOrEqual(result.minRpm);
     expect(result.recommendedRpm).toBeLessThanOrEqual(result.maxRpm);

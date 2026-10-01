@@ -104,11 +104,11 @@
     "brave-search": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+      "args": ["-y", "@brave/brave-search-mcp-server"],
       "env": {
         "BRAVE_API_KEY": "${input:brave-api-key}"
       },
-      "description": "Web search fallback for documentation and references when package docs are not available in Context7."
+      "description": "Maintained Brave Search server for current web research when Context7 does not cover the source."
     }
   }
 }

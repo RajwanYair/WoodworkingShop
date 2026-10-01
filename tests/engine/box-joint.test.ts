@@ -1,10 +1,19 @@
 import { describe, it, expect } from 'vitest';
 import * as fc from 'fast-check';
+import WOOD_MAGAZINE_BOX_JOINT_ORACLE from '../fixtures/oracles/wood-magazine-box-joint-quarter-inch.json';
 import { calculateBoxJoint } from '../../src/engine/box-joint';
 import { propertyRunOptions } from '../property-seeds';
 
 describe('calculateBoxJoint', () => {
   const BASE = { boardWidthMm: 150, fingerWidthMm: 15, depthMm: 18 };
+
+  it('matches WOOD Magazine quarter-inch box-joint dimensions', () => {
+    const result = calculateBoxJoint(WOOD_MAGAZINE_BOX_JOINT_ORACLE.input);
+
+    expect(result.fingerCount).toBe(WOOD_MAGAZINE_BOX_JOINT_ORACLE.expected.fingerCount);
+    expect(result.actualFingerWidthMm).toBe(WOOD_MAGAZINE_BOX_JOINT_ORACLE.expected.actualFingerWidthMm);
+    expect(result.edgeWasteMm).toBe(WOOD_MAGAZINE_BOX_JOINT_ORACLE.expected.edgeWasteMm);
+  });
 
   it('returns an odd fingerCount', () => {
     const r = calculateBoxJoint(BASE);

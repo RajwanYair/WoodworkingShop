@@ -62,8 +62,8 @@ export function calculateDadoRabbet(input: DadoRabbetInput): DadoRabbetResult {
   // Cut width = mating thickness + 0.5 mm clearance for fit
   const cutWidthMm = matingThicknessMm + 0.5;
 
-  // Cut depth: 1/3 of board thickness (standard joinery rule)
-  const cutDepthMm = Math.round((boardThicknessMm / 3) * 10) / 10;
+  // Round down so the cut never exceeds one-third of the receiving board.
+  const cutDepthMm = Math.floor((boardThicknessMm / 3) * 10) / 10;
 
   const remainingThicknessMm = boardThicknessMm - cutDepthMm;
 

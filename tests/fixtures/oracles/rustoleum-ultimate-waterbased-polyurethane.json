@@ -1,0 +1,28 @@
+{
+  "source": "Rust-Oleum, Ultimate Polyurethane Technical Data Sheet ROC-23, revision 021315.",
+  "url": "https://www.rustoleum.com/~/media/DigitalEncyclopedia/Documents/RustoleumUSA/TDS/English/CBG/Wood%20Care/ROC-23_Rust_Oleum_Ultimate_Polyurethane_TDS.ashx",
+  "retrievedOn": "2026-10-01",
+  "product": "Rust-Oleum Ultimate Polyurethane",
+  "publishedPracticalCoverageSqFtPerUSGallon": {
+    "minimum": 400,
+    "maximum": 500
+  },
+  "publishedRecoatHours": 2,
+  "publishedRecommendedCoats": 3,
+  "engineInput": {
+    "surfaceAreaM2": 1,
+    "coatCount": 3,
+    "finishType": "waterbased"
+  },
+  "expected": {
+    "coveragePerLitreM2": 11,
+    "coverageRangeM2PerLitre": {
+      "minimum": 9.8169,
+      "maximum": 12.2712
+    },
+    "dryTimeBetweenCoatsMin": 120
+  },
+  "conversion": "1 US gal = 3.785411784 L; 1 sq ft = 0.09290304 m².",
+  "tolerance": "The engine's 11 m²/L coverage estimate falls within the converted 9.8169–12.2712 m²/L practical range; the 120-minute recoat interval matches the TDS exactly.",
+  "scope": "Validates coverage compatibility and recoat interval only for this named product. The TDS specifies 7 days to full cure while the engine estimates 48 hours; cure and volume (including differing waste assumptions) are explicitly excluded."
+}

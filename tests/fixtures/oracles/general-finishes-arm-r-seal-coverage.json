@@ -1,0 +1,29 @@
+{
+  "source": "General Finishes, Arm-R-Seal Urethane Wipe-On Topcoat specifications.",
+  "url": "https://generalfinishes.com/wood-finishes-retail/oil-based-topcoats/arm-r-seal-oil-based-topcoat",
+  "retrievedOn": "2026-10-01",
+  "product": "Arm-R-Seal Urethane Wipe-On Topcoat",
+  "publishedCoverageSqFtPerUSGallon": {
+    "minimum": 400,
+    "maximum": 500
+  },
+  "engineInput": {
+    "totalAreaM2": 12,
+    "finishType": "oil",
+    "coats": 1
+  },
+  "expected": {
+    "litresNeeded": 1,
+    "coverageRangeM2PerLitre": {
+      "minimum": 9.8169,
+      "maximum": 12.2712
+    },
+    "volumeRangeLitres": {
+      "minimum": 0.9779,
+      "maximum": 1.2224
+    }
+  },
+  "conversion": "1 US gal = 3.785411784 L; 1 sq ft = 0.09290304 m².",
+  "tolerance": "The 1.0 L engine estimate for 12 m² per coat must fall within the converted 0.9779–1.2224 L range.",
+  "scope": "Validates coverage compatibility only for this named product. The one-coat input isolates the coverage calculation and is not application guidance; excludes default coat count, drying/recoat schedule, cure time, and can selection."
+}

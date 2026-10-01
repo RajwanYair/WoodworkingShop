@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import ARM_R_SEAL_COVERAGE_ORACLE from '../fixtures/oracles/general-finishes-arm-r-seal-coverage.json';
 import {
   calculateFinish,
   computeFinishAreaM2,
@@ -7,6 +8,16 @@ import {
 } from '../../src/engine/finish-calculator';
 
 describe('calculateFinish', () => {
+  it('falls within the General Finishes Arm-R-Seal published coverage range', () => {
+    const oracle = ARM_R_SEAL_COVERAGE_ORACLE;
+    const estimate = calculateFinish(oracle.engineInput.totalAreaM2, 'oil', oracle.engineInput.coats);
+
+    expect(oracle.engineInput.finishType).toBe('oil');
+    expect(estimate.litresNeeded).toBe(oracle.expected.litresNeeded);
+    expect(estimate.litresNeeded).toBeGreaterThanOrEqual(oracle.expected.volumeRangeLitres.minimum);
+    expect(estimate.litresNeeded).toBeLessThanOrEqual(oracle.expected.volumeRangeLitres.maximum);
+  });
+
   it.each([
     {
       desc: 'returns no cans for zero surface area',

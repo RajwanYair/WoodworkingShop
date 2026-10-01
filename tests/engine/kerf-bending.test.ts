@@ -1,14 +1,17 @@
 import { describe, it, expect } from 'vitest';
+import * as fc from 'fast-check';
 import { calculateKerfBending } from '../../src/engine/kerf-bending';
 import type { KerfMaterial } from '../../src/engine/kerf-bending';
+import CALCGALLERY_KERF_BENDING_ORACLE from '../fixtures/oracles/calcgallery-kerf-bending.json';
+import { propertyRunOptions } from '../property-seeds';
 
 describe('calculateKerfBending', () => {
   describe('basic spacing formula', () => {
     it.each([
       // [desc, thickness, radius, kerfWidth, material, expectedSpacing approx]
-      ['plywood 18mm R150', 18, 150, 3.2, 'plywood' as KerfMaterial, (3.2 * 150) / (18 - 3)],
-      ['mdf 18mm R200', 18, 200, 3.2, 'mdf' as KerfMaterial, (3.2 * 200) / (18 - 2.5)],
-      ['hardwood 25mm R300', 25, 300, 4, 'hardwood' as KerfMaterial, (4 * 300) / (25 - 4)],
+      ['plywood 18mm R150', 18, 150, 3.2, 'plywood' as KerfMaterial, (3.2 * (150 + 18)) / (18 - 3)],
+      ['mdf 18mm R200', 18, 200, 3.2, 'mdf' as KerfMaterial, (3.2 * (200 + 18)) / (18 - 2.5)],
+      ['hardwood 25mm R300', 25, 300, 4, 'hardwood' as KerfMaterial, (4 * (300 + 25)) / (25 - 4)],
     ])('%s: spacing matches formula', (_desc, t, r, kw, mat, expectedSpacing) => {
       const result = calculateKerfBending({
         thicknessMm: t,
@@ -21,6 +24,18 @@ describe('calculateKerfBending', () => {
     });
   });
 
+  it('matches CalcGallery kerf spacing for its published inside-radius example', () => {
+    const { input, expected } = CALCGALLERY_KERF_BENDING_ORACLE;
+    const result = calculateKerfBending(input);
+
+    expect(result.kerfSpacingMm).toBeCloseTo(expected.kerfSpacingMm, 1);
+    expect(Math.abs(result.kerfSpacingMm - CALCGALLERY_KERF_BENDING_ORACLE.sourceValues.spacingMm)).toBeLessThanOrEqual(
+      CALCGALLERY_KERF_BENDING_ORACLE.toleranceMm,
+    );
+    expect(result.kerfCount).toBe(expected.kerfCount);
+    expect(result.arcLengthMm).toBeCloseTo(expected.arcLengthMm, 1);
+  });
+
   it('computes kerfCount as ceil(arcLength / spacing)', () => {
     const result = calculateKerfBending({
       thicknessMm: 18,
@@ -28,8 +43,8 @@ describe('calculateKerfBending', () => {
       kerfWidthMm: 3.2,
       material: 'plywood',
     });
-    const spacing = (3.2 * 150) / 15;
-    const arc = (Math.PI / 2) * 150;
+    const spacing = (3.2 * (150 + 18)) / 15;
+    const arc = (Math.PI / 2) * (150 + 18);
     expect(result.kerfCount).toBe(Math.ceil(arc / spacing));
   });
 
@@ -79,20 +94,20 @@ describe('calculateKerfBending', () => {
     expect(result.isFeasible).toBe(feasible);
   });
 
-  it('scales arc length and kerf spacing proportionally with bend radius', () => {
+  it('scales outside arc length and kerf spacing with the converted outside radius', () => {
     const baseline = calculateKerfBending({ thicknessMm: 18, bendRadiusMm: 100 });
     const doubledRadius = calculateKerfBending({ thicknessMm: 18, bendRadiusMm: 200 });
 
-    expect(doubledRadius.arcLengthMm).toBeCloseTo(baseline.arcLengthMm * 2, 1);
-    expect(doubledRadius.kerfSpacingMm).toBeCloseTo(baseline.kerfSpacingMm * 2, 0);
+    expect(doubledRadius.arcLengthMm).toBeCloseTo((Math.PI / 2) * 218, 1);
+    expect(doubledRadius.kerfSpacingMm).toBe(46.5);
     expect(doubledRadius.kerfCount).toBe(baseline.kerfCount);
   });
 
   it('rounds spacing and arc length to one decimal millimetre', () => {
     const result = calculateKerfBending({ thicknessMm: 18, bendRadiusMm: 151, kerfWidthMm: 3.2 });
 
-    expect(result.kerfSpacingMm).toBe(32.2);
-    expect(result.arcLengthMm).toBe(237.2);
+    expect(result.kerfSpacingMm).toBe(36.1);
+    expect(result.arcLengthMm).toBe(265.5);
   });
 
   it('defaults kerfWidth to 3.2 mm', () => {
@@ -119,5 +134,23 @@ describe('calculateKerfBending', () => {
     expect(result.isFeasible).toBe(false);
     expect(result.warningKey).toBe('tooFewKerfs');
     expect(result.kerfCount).toBe(0);
+  });
+
+  it('replays non-finite thickness rejection at seed 303011, path 21', () => {
+    const thicknessArbitrary = fc.double({ noNaN: false, noDefaultInfinity: false });
+
+    fc.assert(
+      fc.property(thicknessArbitrary, (thicknessMm) => {
+        const shouldReject = !Number.isFinite(thicknessMm) || thicknessMm <= 0;
+
+        try {
+          calculateKerfBending({ thicknessMm, bendRadiusMm: 150 });
+          return !shouldReject;
+        } catch (error) {
+          return shouldReject && error instanceof RangeError;
+        }
+      }),
+      { ...propertyRunOptions('tests/engine/kerf-bending.test.ts', 1), path: '21' },
+    );
   });
 });

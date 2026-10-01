@@ -9,10 +9,10 @@ describe('RouterCirclePanel', () => {
     render(<RouterCirclePanel />);
 
     const panel = screen.getByRole('region', { name: /router circle/i });
-    expect(panel).toHaveTextContent('156.0 mm');
+    expect(panel).toHaveTextContent('144.0 mm');
 
     await user.selectOptions(screen.getByLabelText(/cut mode/i), 'hole');
-    expect(panel).toHaveTextContent('144.0 mm');
+    expect(panel).toHaveTextContent('156.0 mm');
 
     const bitDiameter = screen.getByLabelText(/bit diameter/i);
     await user.clear(bitDiameter);

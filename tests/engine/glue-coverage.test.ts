@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import TITEBOND_WOOD_GLUE_CLAMPING_ORACLE from '../fixtures/oracles/titebond-wood-glue-clamping.json';
 import { calculateGlueCoverage } from '../../src/engine/glue-coverage';
 import { GLUE_COVERAGE_LIMITS } from '../../src/engine/glue-coverage';
 import type { WoodGlueType } from '../../src/engine/glue-coverage';
@@ -82,6 +83,15 @@ describe('calculateGlueCoverage', () => {
     expect(r.openTimeMin).toBe(15);
     expect(r.clampingTimeMin).toBe(60);
     expect(r.cureTimeHours).toBe(4);
+  });
+
+  it('matches Titebond unstressed-joint minimum clamping time for PVA', () => {
+    const result = calculateGlueCoverage({
+      surfaceAreaMm2: TITEBOND_WOOD_GLUE_CLAMPING_ORACLE.input.surfaceAreaMm2,
+      glueType: TITEBOND_WOOD_GLUE_CLAMPING_ORACLE.input.glueType as WoodGlueType,
+    });
+
+    expect(result.clampingTimeMin).toBe(TITEBOND_WOOD_GLUE_CLAMPING_ORACLE.expected.clampingTimeMin);
   });
 
   it('returns correct spread rate for epoxy', () => {

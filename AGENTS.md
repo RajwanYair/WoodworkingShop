@@ -39,7 +39,7 @@ src/
   i18n/        en.json + he.json + ar.json + de.json + es.json + fr.json
   workers/     Web Workers (?worker import suffix)
 tests/         Vitest unit tests mirroring src/
-.github/       CI workflows, prompts/, agents/, instructions/, actions/
+.github/       CI workflows, prompts/, agents/, skills/, instructions/, actions/
 ```
 
 ## Key Commands
@@ -146,6 +146,19 @@ import { cfg } from '../helpers'; // builds CabinetConfig from DEFAULT_CONFIG + 
 | `security` | OWASP Top 10 security audit and CSP hardening                 |
 | `perf`     | Lighthouse CI setup and Core Web Vitals tuning                |
 | `cleanup`  | Production cleanup — dead code, lint, $TEMP enforcement       |
+
+## Copilot Skills
+
+Project skills are available in chat by their slash-command name:
+
+| Skill             | Purpose                                                                   |
+| ----------------- | ------------------------------------------------------------------------- |
+| `browser-qa`      | Explore the running app and verify browser, responsive, and RTL behavior  |
+| `docs-sync-audit` | Compare project docs and setup guidance against source/configuration      |
+| `test-gap-audit`  | Identify missing or weak behavior-level tests before implementing changes |
+
+MCP authentication and first-run setup are documented in
+[docs/MCP-GITHUB-GOVERNANCE.md](docs/MCP-GITHUB-GOVERNANCE.md#first-run-setup).
 
 ## MCP Servers (`.vscode/mcp.json`)
 
