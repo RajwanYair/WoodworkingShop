@@ -12,8 +12,11 @@ test('preview stays within the viewport and renders all views @preview-acceptanc
     const viewTab = viewTabs.nth(index);
     await viewTab.click();
     await expect(viewTab).toHaveAttribute('aria-selected', 'true');
-    const drawingName = label === '3D' ? '3D isometric cabinet drawing' : 'Cabinet drawing';
-    await expect(page.getByRole('img', { name: drawingName })).toBeVisible();
+    const drawing =
+      label === '3D'
+        ? page.getByRole('img', { name: '3D isometric cabinet drawing' })
+        : page.getByRole('group', { name: 'Cabinet drawing' });
+    await expect(drawing).toBeVisible();
 
     const dimensions = await page.evaluate(() => ({
       viewportWidth: document.documentElement.clientWidth,
@@ -72,8 +75,10 @@ test('six preview views match canonical cabinet and bookshelf theme/RTL baseline
 
     for (const [index, view] of views.entries()) {
       await tabList.getByRole('tab').nth(index).click();
-      const drawingName = view === '3D' ? '3D isometric cabinet drawing' : 'Cabinet drawing';
-      const drawing = page.getByRole('img', { name: drawingName });
+      const drawing =
+        view === '3D'
+          ? page.getByRole('img', { name: '3D isometric cabinet drawing' })
+          : page.getByRole('group', { name: 'Cabinet drawing' });
       await expect(drawing).toBeVisible();
       await expect(drawing).toHaveScreenshot(`preview-${scenario.name}-${index}.png`, {
         animations: 'disabled',

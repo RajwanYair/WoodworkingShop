@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 260" width="1200" height="260">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 260" width="1200" height="260" role="img" aria-labelledby="banner-title banner-description">
+  <title id="banner-title">Cabinet Planner</title>
+  <desc id="banner-description">Browser-based cabinet design and cut-list optimizer with a cabinet illustration, feature highlights, technology stack, and project details.</desc>
   <defs>
     <!-- Rich dark wood background -->
     <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="260" gradientUnits="userSpaceOnUse">

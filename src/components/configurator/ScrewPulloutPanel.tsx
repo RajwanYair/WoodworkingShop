@@ -6,7 +6,7 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { calculateScrewPullout, type WoodDensityClass } from '../../engine/screw-pullout';
+import { calculateScrewPullout, SCREW_PULLOUT_LIMITS, type WoodDensityClass } from '../../engine/screw-pullout';
 
 const DENSITY_CLASSES: WoodDensityClass[] = ['low', 'medium', 'high', 'sheet'];
 
@@ -47,8 +47,8 @@ export function ScrewPulloutPanel() {
           <span>{t('screwPullout.screwDiameter')} (mm)</span>
           <input
             type="number"
-            min={1}
-            max={12}
+            min={SCREW_PULLOUT_LIMITS.screwDiameterMm.min}
+            max={SCREW_PULLOUT_LIMITS.screwDiameterMm.max}
             step={0.5}
             value={screwDiameterMm}
             onChange={(e) => setScrewDiameterMm(Number(e.target.value))}
@@ -61,8 +61,8 @@ export function ScrewPulloutPanel() {
           <span>{t('screwPullout.threadLength')} (mm)</span>
           <input
             type="number"
-            min={5}
-            max={100}
+            min={SCREW_PULLOUT_LIMITS.threadLengthMm.min}
+            max={SCREW_PULLOUT_LIMITS.threadLengthMm.max}
             value={threadLengthMm}
             onChange={(e) => setThreadLengthMm(Number(e.target.value))}
             className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
@@ -123,6 +123,7 @@ export function ScrewPulloutPanel() {
           <dd className={`font-semibold ${ratingColor}`}>{t(`screwPullout.${result.data.safetyRating}`)}</dd>
         </dl>
       )}
+      <p className="text-wood-500 dark:text-wood-400 text-xs">{t('screwPullout.modelNote')}</p>
     </section>
   );
 }

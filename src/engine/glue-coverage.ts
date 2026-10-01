@@ -19,9 +19,14 @@
  * Add 15% waste allowance.
  */
 
-import { assertFiniteNumber } from './invariant';
+import { assertBetweenInclusive, assertFiniteNumber } from './invariant';
 
 export type WoodGlueType = 'pva' | 'polyurethane' | 'epoxy' | 'hide' | 'ca';
+
+export const GLUE_COVERAGE_LIMITS = {
+  surfaceAreaMm2: { min: 100, max: 10_000_000 },
+  jointCount: { min: 1, max: 100 },
+} as const;
 
 export interface GlueCoverageInput {
   /** Total glue surface area in mm² */
@@ -68,16 +73,29 @@ const GLUE_SPECS: Record<WoodGlueType, GlueSpec> = {
  * Estimate glue volume and working/cure times for a joint surface.
  * @param input Surface area in square millimetres, glue type, and optional joint count.
  * @returns Net/recommended volume in millilitres and glue timing/coverage specifications.
- * @throws {RangeError} When area/count are non-positive or non-finite, or calculations overflow.
+ * @throws {RangeError} When inputs are outside the declared calculator limits or calculations overflow.
  */
 export function calculateGlueCoverage(input: GlueCoverageInput): GlueCoverageResult {
   const fn = 'calculateGlueCoverage';
   const { surfaceAreaMm2, glueType, jointCount = 1 } = input;
 
-  assertFiniteNumber(fn, 'surfaceAreaMm2', surfaceAreaMm2);
-  assertFiniteNumber(fn, 'jointCount', jointCount);
-  if (surfaceAreaMm2 <= 0) throw new RangeError('surfaceAreaMm2 must be positive');
-  if (jointCount <= 0) throw new RangeError('jointCount must be positive');
+  assertBetweenInclusive(
+    fn,
+    'surfaceAreaMm2',
+    surfaceAreaMm2,
+    GLUE_COVERAGE_LIMITS.surfaceAreaMm2.min,
+    GLUE_COVERAGE_LIMITS.surfaceAreaMm2.max,
+  );
+  if (!Number.isInteger(jointCount)) {
+    throw new RangeError(`${fn}: jointCount must be an integer, got ${jointCount}`);
+  }
+  assertBetweenInclusive(
+    fn,
+    'jointCount',
+    jointCount,
+    GLUE_COVERAGE_LIMITS.jointCount.min,
+    GLUE_COVERAGE_LIMITS.jointCount.max,
+  );
 
   const spec = GLUE_SPECS[glueType];
   const totalAreaMm2 = surfaceAreaMm2 * jointCount;

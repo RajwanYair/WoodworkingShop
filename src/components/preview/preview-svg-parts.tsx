@@ -1,8 +1,25 @@
-import { useState } from 'react';
+import { createContext, useContext, useId, useState } from 'react';
 import type { CabinetConfig } from '../../engine/types';
 
+interface PreviewSvgResourceIds {
+  shadow: string;
+  hoverGlow: string;
+  grid: string;
+}
+
+const PreviewSvgResourcesContext = createContext<PreviewSvgResourceIds>({
+  shadow: 'part-shadow',
+  hoverGlow: 'part-hover-glow',
+  grid: 'svg-grid',
+});
+
 export interface TooltipHandlers {
-  onHover: (e: React.MouseEvent, label: string, dim: string, material?: string) => void;
+  onHover: (
+    position: Pick<React.MouseEvent, 'clientX' | 'clientY'>,
+    label: string,
+    dim: string,
+    material?: string,
+  ) => void;
   onLeave: () => void;
   onMove: (e: React.MouseEvent) => void;
 }
@@ -22,30 +39,39 @@ export function ViewBox({
   onPointerMove?: (e: React.PointerEvent) => void;
   onPointerUp?: (e: React.PointerEvent) => void;
 }) {
+  const resourcePrefix = useId().replaceAll(':', '');
+  const resourceIds = {
+    shadow: `${resourcePrefix}-part-shadow`,
+    hoverGlow: `${resourcePrefix}-part-hover-glow`,
+    grid: `${resourcePrefix}-svg-grid`,
+  };
+
   return (
     <svg
       ref={svgRef}
       viewBox={`0 0 ${w} ${h}`}
-      role="img"
+      role="group"
       aria-label="Cabinet drawing"
       className="border-wood-200 dark:border-wood-700 dark:bg-wood-800 text-wood-600 dark:text-wood-200 max-h-125 w-full max-w-lg touch-none rounded border bg-white"
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
     >
       <defs>
-        <filter id="part-shadow" x="-8%" y="-8%" width="116%" height="116%">
+        <filter id={resourceIds.shadow} x="-8%" y="-8%" width="116%" height="116%">
           <feDropShadow dx="0" dy="1" stdDeviation="1.2" floodColor="#000" floodOpacity="0.18" />
         </filter>
-        <filter id="part-hover-glow" x="-20%" y="-20%" width="140%" height="140%">
+        <filter id={resourceIds.hoverGlow} x="-20%" y="-20%" width="140%" height="140%">
           <feDropShadow dx="0" dy="0" stdDeviation="2.5" floodColor="#FFD700" floodOpacity="0.5" />
         </filter>
-        <pattern id="svg-grid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+        <pattern id={resourceIds.grid} x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
           <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" strokeWidth="0.25" opacity="0.12" />
         </pattern>
       </defs>
-      <rect x={0} y={0} width={w} height={h} fill="url(#svg-grid)" pointerEvents="none" />
-      {children}
-      <ScaleBar viewW={w} viewH={h} />
+      <PreviewSvgResourcesContext.Provider value={resourceIds}>
+        <rect x={0} y={0} width={w} height={h} fill={`url(#${resourceIds.grid})`} pointerEvents="none" />
+        {children}
+        <ScaleBar viewW={w} viewH={h} />
+      </PreviewSvgResourcesContext.Provider>
     </svg>
   );
 }
@@ -115,23 +141,35 @@ export function PartRect({
   dim: string;
   dashed?: boolean;
   material?: string;
-  onHover?: (e: React.MouseEvent, label: string, dim: string, material?: string) => void;
+  onHover?: (
+    position: Pick<React.MouseEvent, 'clientX' | 'clientY'>,
+    label: string,
+    dim: string,
+    material?: string,
+  ) => void;
   onLeave?: () => void;
   onMove?: (e: React.MouseEvent) => void;
 }) {
   const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const resourceIds = useContext(PreviewSvgResourcesContext);
+  const active = hovered || focused;
+
   return (
     <rect
       x={x}
       y={y}
       width={w}
       height={h}
+      tabIndex={0}
+      role="img"
+      aria-label={`${label}, ${dim} mm${material ? `, ${material}` : ''}`}
       fill={fill}
-      stroke={hovered ? '#FFD700' : '#555'}
-      strokeWidth={hovered ? 1.8 : 0.5}
+      stroke={active ? '#FFD700' : '#555'}
+      strokeWidth={active ? 1.8 : 0.5}
       strokeDasharray={dashed ? '3,2' : undefined}
-      opacity={hovered ? 1 : 0.88}
-      filter={hovered ? 'url(#part-hover-glow)' : 'url(#part-shadow)'}
+      opacity={active ? 1 : 0.88}
+      filter={`url(#${active ? resourceIds.hoverGlow : resourceIds.shadow})`}
       className="cursor-pointer [transition:stroke_0.12s,stroke-width_0.12s,opacity_0.12s,filter_0.12s]"
       onMouseEnter={(e) => {
         setHovered(true);
@@ -140,7 +178,16 @@ export function PartRect({
       onMouseMove={onMove}
       onMouseLeave={() => {
         setHovered(false);
-        onLeave?.();
+        if (!focused) onLeave?.();
+      }}
+      onFocus={(e) => {
+        setFocused(true);
+        const bounds = e.currentTarget.getBoundingClientRect();
+        onHover?.({ clientX: bounds.left + bounds.width / 2, clientY: bounds.top }, label, dim, material);
+      }}
+      onBlur={() => {
+        setFocused(false);
+        if (!hovered) onLeave?.();
       }}
     >
       <title>{`${label}\n${dim} mm${material ? `\n${material}` : ''}`}</title>

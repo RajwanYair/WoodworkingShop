@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { generateParts } from '../../engine';
+import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 
 export function CabinetSelector() {
   const { t } = useTranslation();
@@ -20,6 +21,7 @@ export function CabinetSelector() {
   const [editingIdx, setEditingIdx] = useState<number | null>(null);
   const [editName, setEditName] = useState('');
   const [notesOpen, setNotesOpen] = useState(false);
+  const customMaterials = useCustomMaterialsStore((state) => state.materials);
 
   const startRename = (i: number) => {
     setEditingIdx(i);
@@ -75,9 +77,9 @@ export function CabinetSelector() {
                 {/* Sprint 82 — part count badge */}
                 <span
                   className="ms-1 text-[9px] font-normal opacity-80"
-                  aria-label={`${generateParts(cab.config).length} parts`}
+                  aria-label={`${generateParts(cab.config, customMaterials).length} parts`}
                 >
-                  ({generateParts(cab.config).length})
+                  ({generateParts(cab.config, customMaterials).length})
                 </span>
                 {/* Sprint 93 — mirrored badge */}
                 {cab.config.isMirrored && (

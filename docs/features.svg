@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 320" width="1000" height="320">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 320" width="1000" height="320" role="img" aria-labelledby="features-title features-description">
+  <title id="features-title">Cabinet Planner features</title>
+  <desc id="features-description">An overview of design, optimization, export, preview, assembly, cost, and platform capabilities.</desc>
   <defs>
     <linearGradient id="fbg" x1="0" y1="0" x2="1000" y2="320" gradientUnits="userSpaceOnUse">
       <stop offset="0%" stop-color="#0f0a06"/>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { CutSheet, Lang } from '../../engine/types';
 import { getMaterial } from '../../engine/materials';
+import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 
 /** Sprint 160: Material usage summary — area, sheets, cost per material. */
 export function MaterialSummaryPanel({
@@ -23,6 +24,7 @@ export function MaterialSummaryPanel({
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const [editW, setEditW] = useState('');
   const [editL, setEditL] = useState('');
+  const customMaterials = useCustomMaterialsStore((state) => state.materials);
 
   // Group by material + thickness — Sprint 165: include materialKey in row data
   const groups = new Map<
@@ -39,7 +41,7 @@ export function MaterialSummaryPanel({
     }
   >();
   for (const sheet of sheets) {
-    const mat = getMaterial(sheet.material);
+    const mat = getMaterial(sheet.material, customMaterials);
     const key = `${sheet.material}-${sheet.thickness}`;
     if (!groups.has(key)) {
       const pricePerSheet = materialPriceOverrides[sheet.material] ?? mat.pricePerSheet ?? 0;

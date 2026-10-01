@@ -97,7 +97,8 @@ describe('HardwareTable', () => {
 
     await user.clear(search);
     await user.type(search, 'no matching hardware');
-    expect(within(table).getAllByRole('row')).toHaveLength(1);
+    expect(within(table).getAllByRole('row')).toHaveLength(2);
+    expect(within(table).getByText('No matching rows')).toBeInTheDocument();
   });
 
   it('updates and clears a quantity override through the accessible quantity input', async () => {

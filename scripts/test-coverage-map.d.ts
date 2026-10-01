@@ -18,3 +18,9 @@ export function classifyFunctionCoverage(
   | 'not measured'
   | 'body lines hit; no direct-call match'
   | 'uncovered';
+export function getFunctionCoverageStatus(
+  directTestFiles: readonly string[],
+  lineHits: Map<number, number> | undefined,
+  bodyRange: { startLine: number | null; endLine: number | null },
+  waiverReason: string | undefined,
+): 'covered' | 'indirect' | 'waived';

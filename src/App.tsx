@@ -7,12 +7,6 @@ import { Header } from './components/layout/Header';
 import { SkeletonPane } from './components/layout/SkeletonPane';
 import { Sidebar } from './components/layout/Sidebar';
 import { ErrorBoundary } from './components/layout/ErrorBoundary';
-import { ConfiguratorPanel } from './components/configurator/ConfiguratorPanel';
-import { CabinetPreview } from './components/preview/CabinetPreview';
-import { Preview3DPanel } from './components/preview/Preview3DPanel';
-import { SmartOptimizerPanel } from './components/optimizer/SmartOptimizerPanel';
-import { PartsTable, HardwareTable } from './components/optimizer/Tables';
-import { ProjectSummaryPanel } from './components/optimizer/ProjectSummaryPanel';
 import { ToastContainer } from './components/layout/ToastContainer';
 import { OnboardingManager } from './components/layout/OnboardingOverlay';
 import { TouchGestureTutorial } from './components/layout/TouchGestureTutorial';
@@ -29,6 +23,7 @@ import { useHaptics } from './hooks/useHaptics';
 import { useTouchGestures } from './hooks/useTouchGestures';
 import { generateParts } from './engine/parts';
 import { generateHardware } from './engine/hardware';
+import { getCustomMaterials } from './store/custom-materials-store';
 import { downloadBomCsv } from './utils/bom-export';
 import { configToUrl, readTabFromUrl, pushTabToUrl } from './utils/url-state';
 import type { Lang } from './engine/types';
@@ -50,6 +45,23 @@ const RoomLayoutViewLazy = lazy(() =>
 );
 const CalculatorsPanel = lazy(() =>
   import('./components/configurator/CalculatorsPanel').then((m) => ({ default: m.CalculatorsPanel })),
+);
+const Preview3DPanel = lazy(() =>
+  import('./components/preview/Preview3DPanel').then((m) => ({ default: m.Preview3DPanel })),
+);
+const ConfiguratorPanel = lazy(() =>
+  import('./components/configurator/ConfiguratorPanel').then((m) => ({ default: m.ConfiguratorPanel })),
+);
+const CabinetPreview = lazy(() =>
+  import('./components/preview/CabinetPreview').then((m) => ({ default: m.CabinetPreview })),
+);
+const SmartOptimizerPanel = lazy(() =>
+  import('./components/optimizer/SmartOptimizerPanel').then((m) => ({ default: m.SmartOptimizerPanel })),
+);
+const PartsTable = lazy(() => import('./components/optimizer/Tables').then((m) => ({ default: m.PartsTable })));
+const HardwareTable = lazy(() => import('./components/optimizer/Tables').then((m) => ({ default: m.HardwareTable })));
+const ProjectSummaryPanel = lazy(() =>
+  import('./components/optimizer/ProjectSummaryPanel').then((m) => ({ default: m.ProjectSummaryPanel })),
 );
 
 function App() {
@@ -203,8 +215,8 @@ function App() {
         const filePrefix = (pName.trim() || 'cabinet').replace(/[^\w\u05D0-\u05EA.-]/g, '-').replace(/-+/g, '-');
         const bomData = (cabinets.length > 0 ? cabinets : [{ name: 'Cabinet', config }]).map((cab) => ({
           name: cab.name,
-          parts: generateParts(cab.config),
-          hardware: generateHardware(cab.config),
+          parts: generateParts(cab.config, getCustomMaterials()),
+          hardware: generateHardware(cab.config, getCustomMaterials()),
         }));
         downloadBomCsv(bomData, lang, `${filePrefix}-bom.csv`, i18n.language);
         useToastStore.getState().addToast(t('shortcuts.exportBom'), 'success');
@@ -296,7 +308,7 @@ function App() {
             ref={mainRef}
             id="main-content"
             tabIndex={-1}
-            className="flex-1 p-3 pb-20 focus:outline-none sm:p-6 sm:pb-6 lg:pb-6"
+            className="min-w-0 flex-1 p-3 pb-20 focus:outline-none sm:p-6 sm:pb-6 lg:pb-6"
             role="main"
             aria-label={t('a11y.mainWorkspace')}
             onTouchStart={appSwipe.onTouchStart}
@@ -324,6 +336,7 @@ function App() {
                   width={1200}
                   height={260}
                   loading="eager"
+                  fetchPriority="high"
                 />
                 <div className="space-y-2">
                   <h2 className="text-wood-800 dark:text-wood-100 text-2xl font-bold">{t('app.title')}</h2>
@@ -340,7 +353,9 @@ function App() {
             {activeTab === 'configurator' && (
               <div className="space-y-6">
                 <ErrorBoundary panelName="Configurator">
-                  <ConfiguratorPanel />
+                  <Suspense fallback={<SkeletonPane label={t('skeleton.loading')} />}>
+                    <ConfiguratorPanel />
+                  </Suspense>
                 </ErrorBoundary>
                 <Suspense fallback={<SkeletonPane label={t('skeleton.loading')} />}>
                   <RoomLayoutViewLazy />
@@ -350,10 +365,14 @@ function App() {
             {activeTab === 'preview' && (
               <div className="space-y-6">
                 <ErrorBoundary panelName="Preview">
-                  <CabinetPreview />
+                  <Suspense fallback={<SkeletonPane label={t('skeleton.loading')} />}>
+                    <CabinetPreview />
+                  </Suspense>
                 </ErrorBoundary>
                 <ErrorBoundary panelName="Interactive 3D preview">
-                  <Preview3DPanel />
+                  <Suspense fallback={<SkeletonPane label={t('skeleton.loading')} />}>
+                    <Preview3DPanel />
+                  </Suspense>
                 </ErrorBoundary>
               </div>
             )}

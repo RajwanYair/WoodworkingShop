@@ -1,10 +1,19 @@
 import { describe, it, expect } from 'vitest';
 import { findOptimizations } from '../../src/engine/smart-optimizer';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import { DEFAULT_CONFIG, MATERIALS } from '../../src/engine/materials';
 import { cfg } from '../helpers';
 
 describe('smart-optimizer', () => {
   describe('findOptimizations', () => {
+    it('supports custom materials when evaluating candidates', () => {
+      const customMaterial = { ...MATERIALS[0], key: 'custom-birch' };
+      const config = cfg({ carcassMaterial: customMaterial.key });
+
+      expect(() =>
+        findOptimizations(config, { strategies: ['reduce-depth'], tolerance: 20 }, [customMaterial]),
+      ).not.toThrow();
+    });
+
     it('returns an array (possibly empty)', () => {
       const results = findOptimizations(cfg());
       expect(Array.isArray(results)).toBe(true);

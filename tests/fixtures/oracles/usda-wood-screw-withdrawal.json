@@ -1,0 +1,16 @@
+{
+  "source": "Wood handbook: Wood as an engineering material",
+  "citation": "Rammer, D.R. 2021. Chapter 8: Fastenings. FPL-GTR-282.",
+  "url": "https://research.fs.usda.gov/treesearch/62253",
+  "retrievedOn": "2026-09-30",
+  "sourcePages": "8-10 to 8-11 (Equation 8-10 and Table 8-8)",
+  "condition": "Seasoned wood, side-grain withdrawal, ultimate load reached in 5-10 minutes; #8, 1-inch wood screw; G = 0.63. Equation applicability and lead-hole conditions are as stated in the cited chapter.",
+  "input": {
+    "screwDiameterMm": 4.166,
+    "threadLengthMm": 25.4
+  },
+  "expected": {
+    "pulloutForceN": 4546.3,
+    "pulloutForceLbf": 1022.1
+  }
+}

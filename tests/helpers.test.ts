@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { PROPERTY_SEEDS, propertyRunOptions } from './property-seeds';
 import {
   makeCabinetEntry,
   makeCutSheet,
@@ -11,6 +12,14 @@ import {
 } from './helpers';
 
 describe('test fixture builders', () => {
+  it('keeps a stable fast-check seed for every property suite', () => {
+    const seedEntries = Object.entries(PROPERTY_SEEDS);
+
+    expect(seedEntries).toHaveLength(10);
+    expect(seedEntries.every(([, seed]) => Number.isSafeInteger(seed))).toBe(true);
+    expect(propertyRunOptions('tests/engine/box-joint.test.ts', 200)).toEqual({ numRuns: 200, seed: 303001 });
+  });
+
   it('returns independent nested data for each fixture', () => {
     const firstCabinet = makeCabinetEntry();
     const secondCabinet = makeCabinetEntry();

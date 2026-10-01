@@ -11,12 +11,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Calculator Accuracy
+
+- Corrected screw-pullout estimates to use USDA Wood Handbook FPL-GTR-282 Equation 8-10a
+  and added a sourced #8, 1-inch side-grain reference case. The panel now states the equation's
+  short-term ultimate-load scope, sheet-goods exclusion, and heuristic rating limitation.
+  Engine validation now shares the panel's diameter and engagement limits.
+- Hardened board-foot and linear-foot conversions against non-finite dimensions, prices,
+  and calculated outputs, including arithmetic overflow.
+
 ### Test Infrastructure
 
 - Added source-to-test ownership inventory and per-area coverage ratchet; directly covered the Sprint 301 store, hook, export, and calculator-panel gaps, and removed avoidable coverage exclusions.
 - Verified 4,465 tests across 278 files; coverage inventory maps all 351 production modules, with 0 unmeasured and 23 explicitly uncovered modules remaining.
 - Added deterministic Playwright and typed test fixtures, RTL render support, accessible E2E queries, and per-test environment cleanup; fixed a localStorage mock leak exposed by shuffled test execution.
 - Verified 4,470 tests across 280 files in normal and seeded-shuffle runs, all 26 Chromium/Firefox E2E tests, and the complete `npm run ci` gate including build, bundle, and benchmark budgets.
+
+### Optimizer Workflow Confidence
+
+- Completed Sprint 311 T2 with eight user-visible optimizer journeys passing in Chromium and Firefox. Coverage verifies table search/filter and real sort order, bulk material replacement, stock create/edit/remove and reload persistence, offcut catalog save/remove, defect-zone create/edit/remove and sheet overlays, and persistent optimizer settings. Fixed stock quantity Enter handling to avoid committing twice and persisted the auto-co-nesting setting with the project session.
+  All 5,169 unit tests pass across 338 files. The aggregate quality gate remains blocked only by the pre-existing expired `CabinetPreview.tsx` component-budget exception.
+- Completed Sprint 311 T3 with a SmartOptimizer browser journey passing in Chromium and Firefox. It verifies strategy filtering, original-versus-candidate comparison, applying the candidate to cabinet configuration, matching Side Panel dimensions in the parts table and rendered sheet, cut-checklist progress, and virtualized sheet rendering.
+- Completed Sprint 311 T4 with engine-oracle browser checks for accessible yield values, waste totals and material breakdowns, grain constraints, material usage, and shopping-list quantities and costs. The complete optimizer suite passes all 18 Chromium and Firefox runs.
 
 ### Export Artifact Confidence
 

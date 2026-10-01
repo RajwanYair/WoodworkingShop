@@ -164,7 +164,7 @@ test('dimension controls synchronize values, generated parts, preview, limits, a
   ] as const;
 
   await previewTab.click();
-  const drawing = page.getByRole('main').getByRole('img', { name: 'Cabinet drawing' });
+  const drawing = page.getByRole('main').getByRole('group', { name: 'Cabinet drawing' });
   const initialPreviewTitles = await drawing.locator('title').allTextContents();
   await optimizerTab.click();
   const topPanelLength = page.getByRole('row').filter({ hasText: 'Top Panel' }).getByRole('cell').nth(4);

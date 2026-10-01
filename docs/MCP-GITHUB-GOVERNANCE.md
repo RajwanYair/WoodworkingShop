@@ -13,6 +13,7 @@
 | `memory`             | Core     | Repo Maintainer | Persistent agent memory and session context               | None                                                  |
 | `sequentialthinking` | Core     | Repo Maintainer | Structured multi-step reasoning for complex tasks         | None                                                  |
 | `context7`           | Core     | Repo Maintainer | Current package and framework documentation lookup        | None                                                  |
+| `chrome-devtools`    | Optional | QA/Performance  | Chrome performance traces and browser diagnostics         | None                                                  |
 | `gitkraken`          | Optional | Repo Maintainer | Advanced git/PR workflow support                          | GitKraken-managed auth                                |
 | `cloudflare`         | Optional | Platform Owner  | Cloudflare Pages/Workers operations when needed           | Cloudflare auth via MCP provider                      |
 | `brave-search`       | Optional | Repo Maintainer | Web search fallback when docs are unavailable in Context7 | VS Code secret input `brave-api-key`                  |
@@ -24,6 +25,8 @@
 3. Secrets must come from VS Code secret inputs or provider auth flows only.
 4. Plain-text tokens in workspace files are prohibited.
 5. Any MCP server addition must include owner, purpose, and decommission criteria.
+
+`chrome-devtools` is intended for interactive trace-based performance diagnosis when Lighthouse findings need browser-level investigation. Decommission it if that performance workflow is no longer used or the server stops providing capability beyond Playwright. It runs headless with a temporary isolated profile; Google usage statistics and CrUX URL submissions are disabled.
 
 ## GitHub Integration Validation
 

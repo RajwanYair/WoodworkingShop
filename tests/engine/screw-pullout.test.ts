@@ -1,12 +1,13 @@
 import { describe, it, expect } from 'vitest';
-import { calculateScrewPullout } from '../../src/engine/screw-pullout';
+import { calculateScrewPullout, SCREW_PULLOUT_LIMITS } from '../../src/engine/screw-pullout';
+import USDA_WOOD_SCREW_WITHDRAWAL_ORACLE from '../fixtures/oracles/usda-wood-screw-withdrawal.json';
 
 describe('calculateScrewPullout', () => {
   it.each([
-    { densityClass: 'low' as const, forceN: 450.5, forceLbf: 101.3, resistanceMPa: 1.195 },
-    { densityClass: 'medium' as const, forceN: 1238.1, forceLbf: 278.3, resistanceMPa: 3.284 },
-    { densityClass: 'high' as const, forceN: 1801.8, forceLbf: 405.1, resistanceMPa: 4.779 },
-    { densityClass: 'sheet' as const, forceN: 943.6, forceLbf: 212.1, resistanceMPa: 2.503 },
+    { densityClass: 'low' as const, forceN: 1875.8, forceLbf: 421.7, resistanceMPa: 4.976 },
+    { densityClass: 'medium' as const, forceN: 5155.7, forceLbf: 1159.1, resistanceMPa: 13.676 },
+    { densityClass: 'high' as const, forceN: 7503, forceLbf: 1686.7, resistanceMPa: 19.902 },
+    { densityClass: 'sheet' as const, forceN: 3929.5, forceLbf: 883.4, resistanceMPa: 10.423 },
   ])(
     'matches the documented withdrawal formula and units for $densityClass',
     ({ densityClass, forceN, forceLbf, resistanceMPa }) => {
@@ -30,12 +31,35 @@ describe('calculateScrewPullout', () => {
     expect(scaled.withdrawalResistanceMPa).toBe(baseline.withdrawalResistanceMPa);
   });
 
+  it('matches the published USDA side-grain screw-withdrawal case', () => {
+    const result = calculateScrewPullout({
+      ...USDA_WOOD_SCREW_WITHDRAWAL_ORACLE.input,
+      densityClass: 'medium',
+    });
+
+    expect(result.pulloutForceN).toBe(USDA_WOOD_SCREW_WITHDRAWAL_ORACLE.expected.pulloutForceN);
+    expect(result.pulloutForceLbf).toBe(USDA_WOOD_SCREW_WITHDRAWAL_ORACLE.expected.pulloutForceLbf);
+  });
+
+  it.each([
+    {
+      screwDiameterMm: SCREW_PULLOUT_LIMITS.screwDiameterMm.min,
+      threadLengthMm: SCREW_PULLOUT_LIMITS.threadLengthMm.min,
+    },
+    {
+      screwDiameterMm: SCREW_PULLOUT_LIMITS.screwDiameterMm.max,
+      threadLengthMm: SCREW_PULLOUT_LIMITS.threadLengthMm.max,
+    },
+  ])('accepts declared inclusive limits: $screwDiameterMm mm diameter and $threadLengthMm mm engagement', (input) => {
+    expect(() => calculateScrewPullout({ ...input, densityClass: 'medium' })).not.toThrow();
+  });
+
   describe('force calculation', () => {
     it.each([
-      { densityClass: 'low' as const, minN: 200, maxN: 700 },
-      { densityClass: 'medium' as const, minN: 800, maxN: 2000 },
-      { densityClass: 'high' as const, minN: 1200, maxN: 3000 },
-      { densityClass: 'sheet' as const, minN: 600, maxN: 1500 },
+      { densityClass: 'low' as const, minN: 1000, maxN: 2500 },
+      { densityClass: 'medium' as const, minN: 4000, maxN: 6000 },
+      { densityClass: 'high' as const, minN: 6000, maxN: 8500 },
+      { densityClass: 'sheet' as const, minN: 3000, maxN: 5000 },
     ])('$densityClass density produces force in expected range', ({ densityClass, minN, maxN }) => {
       const r = calculateScrewPullout({ screwDiameterMm: 4, threadLengthMm: 30, densityClass });
       expect(r.pulloutForceN).toBeGreaterThan(minN);
@@ -51,17 +75,17 @@ describe('calculateScrewPullout', () => {
     });
 
     it('rates insufficient for very weak joint', () => {
-      const r = calculateScrewPullout({ screwDiameterMm: 1.5, threadLengthMm: 5, densityClass: 'low' });
+      const r = calculateScrewPullout({ screwDiameterMm: 1, threadLengthMm: 5, densityClass: 'low' });
       expect(r.safetyRating).toBe('insufficient');
     });
 
     it.each([
-      { threadLengthMm: 2.4215713972, expectedForceN: 99.9, rating: 'insufficient' as const },
-      { threadLengthMm: 2.4244790275, expectedForceN: 100.1, rating: 'marginal' as const },
-      { threadLengthMm: 7.267621822, expectedForceN: 299.9, rating: 'marginal' as const },
-      { threadLengthMm: 7.2705294522, expectedForceN: 300.1, rating: 'adequate' as const },
+      { threadLengthMm: 6.3910231396, expectedForceN: 99.9, rating: 'insufficient' as const },
+      { threadLengthMm: 6.4038179806, expectedForceN: 100.1, rating: 'marginal' as const },
+      { threadLengthMm: 19.1858642595, expectedForceN: 299.9, rating: 'marginal' as const },
+      { threadLengthMm: 19.1986591007, expectedForceN: 300.1, rating: 'adequate' as const },
     ])('classifies rounded force $expectedForceN N as $rating', ({ threadLengthMm, expectedForceN, rating }) => {
-      const result = calculateScrewPullout({ screwDiameterMm: 4, threadLengthMm, densityClass: 'medium' });
+      const result = calculateScrewPullout({ screwDiameterMm: 1, threadLengthMm, densityClass: 'low' });
 
       expect(result.pulloutForceN).toBe(expectedForceN);
       expect(result.safetyRating).toBe(rating);
@@ -77,7 +101,22 @@ describe('calculateScrewPullout', () => {
 
   describe('throws on invalid input', () => {
     it.each([
-      { desc: 'zero diameter', input: { screwDiameterMm: 0, threadLengthMm: 30, densityClass: 'medium' as const } },
+      {
+        desc: 'diameter below minimum',
+        input: { screwDiameterMm: 0.5, threadLengthMm: 30, densityClass: 'medium' as const },
+      },
+      {
+        desc: 'diameter above maximum',
+        input: { screwDiameterMm: 12.5, threadLengthMm: 30, densityClass: 'medium' as const },
+      },
+      {
+        desc: 'thread length below minimum',
+        input: { screwDiameterMm: 4, threadLengthMm: 4, densityClass: 'medium' as const },
+      },
+      {
+        desc: 'thread length above maximum',
+        input: { screwDiameterMm: 4, threadLengthMm: 101, densityClass: 'medium' as const },
+      },
       {
         desc: 'negative thread length',
         input: { screwDiameterMm: 4, threadLengthMm: -5, densityClass: 'medium' as const },

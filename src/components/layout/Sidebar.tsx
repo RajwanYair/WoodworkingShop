@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { CostEstimatePanel } from '../configurator/CostEstimatePanel';
 import { CostSummaryPanel } from '../configurator/CostSummaryPanel';
@@ -11,9 +11,18 @@ import { IconBarChart, IconX } from './Icons';
 export function Sidebar() {
   const { parts, hardware, optimization } = useCabinetStore();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(() => window.matchMedia?.('(min-width: 1024px)').matches ?? true);
   const mobileDialogRef = useRef<HTMLElement>(null);
 
   useFocusTrap(mobileDialogRef, mobileOpen, () => setMobileOpen(false));
+
+  useEffect(() => {
+    if (typeof window.matchMedia !== 'function') return;
+    const desktopQuery = window.matchMedia('(min-width: 1024px)');
+    const handleChange = () => setIsDesktop(desktopQuery.matches);
+    desktopQuery.addEventListener('change', handleChange);
+    return () => desktopQuery.removeEventListener('change', handleChange);
+  }, []);
 
   const content = (
     <>
@@ -119,7 +128,7 @@ export function Sidebar() {
         aria-label="Cabinet summary"
         data-print="hide"
       >
-        {content}
+        {isDesktop && content}
       </aside>
     </>
   );

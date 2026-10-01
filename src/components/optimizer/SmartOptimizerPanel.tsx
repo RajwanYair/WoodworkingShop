@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { findOptimizations, type SmartOptimizerOptions } from '../../engine/smart-optimizer';
 import { ComparisonView } from './ComparisonView';
 import { resolveEngineLang } from './resolve-engine-lang';
@@ -17,6 +18,7 @@ const ALL_STRATEGIES: SmartStrategy[] = [
 export function SmartOptimizerPanel() {
   const { t, i18n } = useTranslation();
   const { config, setConfig } = useCabinetStore();
+  const customMaterials = useCustomMaterialsStore((state) => state.materials);
   const lang = resolveEngineLang(i18n.language);
 
   const [strategies, setStrategies] = useState<SmartStrategy[]>([...ALL_STRATEGIES]);
@@ -34,7 +36,7 @@ export function SmartOptimizerPanel() {
     // Use setTimeout to let the UI update before heavy computation
     setTimeout(() => {
       const opts: Partial<SmartOptimizerOptions> = { strategies, tolerance };
-      const suggestions = findOptimizations(config, opts);
+      const suggestions = findOptimizations(config, opts, customMaterials);
       setResults(suggestions);
       setRunning(false);
     }, 10);

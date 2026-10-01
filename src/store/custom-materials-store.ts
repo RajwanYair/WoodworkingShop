@@ -28,6 +28,10 @@ export function getCustomPanelMaterials(): Material[] {
   return useCustomMaterialsStore.getState().materials.filter((m) => m.category === 'panel');
 }
 
+export function getCustomMaterials(): Material[] {
+  return useCustomMaterialsStore.getState().materials;
+}
+
 export function getCustomBackMaterials(): Material[] {
   return useCustomMaterialsStore.getState().materials.filter((m) => m.category === 'back');
 }

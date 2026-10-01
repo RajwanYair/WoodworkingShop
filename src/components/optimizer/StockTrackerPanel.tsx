@@ -111,7 +111,7 @@ export function StockTrackerPanel() {
                           value={editQty}
                           onChange={(e) => setEditQty(e.target.value)}
                           onBlur={() => commitEdit(r.materialKey)}
-                          onKeyDown={(e) => e.key === 'Enter' && commitEdit(r.materialKey)}
+                          onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
                           className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 w-16 rounded border px-1 text-end text-sm"
                           aria-label={t('stockTracker.editQtyAriaLabel', { key: r.materialKey })}
                         />

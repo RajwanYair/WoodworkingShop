@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import * as fc from 'fast-check';
+import { propertyRunOptions } from '../property-seeds';
 import BIRCH_PANEL_WEIGHT_ORACLE from '../fixtures/oracles/birch-panel-weight.json';
 import {
   MATERIALS,
@@ -46,7 +47,7 @@ describe('computePartWeightKg', () => {
           );
         },
       ),
-      { numRuns: 200 },
+      propertyRunOptions('tests/engine/materials.test.ts', 200),
     );
   });
 });

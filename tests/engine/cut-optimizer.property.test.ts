@@ -17,6 +17,7 @@ import { describe, expect, it } from 'vitest';
 import * as fc from 'fast-check';
 import { optimizeCutSheets } from '../../src/engine/cut-optimizer';
 import type { Part } from '../../src/engine/types';
+import { propertyRunOptions } from '../property-seeds';
 
 // ─── constants ───────────────────────────────────────────────────────────────
 const MATERIAL = 'melamine-16'; // no grain, 1220 × 2440 mm
@@ -137,7 +138,7 @@ describe('cut-optimizer property tests', () => {
           return true;
         },
       ),
-      { numRuns: NUM_RUNS },
+      propertyRunOptions('tests/engine/cut-optimizer.property.test.ts', NUM_RUNS),
     );
   });
 
@@ -147,7 +148,7 @@ describe('cut-optimizer property tests', () => {
         const result = optimizeCutSheets(parts);
         return result.sheets.every((sheet) => sheet.yieldPercent >= 0 && sheet.yieldPercent <= 100);
       }),
-      { numRuns: NUM_RUNS },
+      propertyRunOptions('tests/engine/cut-optimizer.property.test.ts', NUM_RUNS),
     );
   });
 
@@ -165,7 +166,7 @@ describe('cut-optimizer property tests', () => {
           ),
         );
       }),
-      { numRuns: NUM_RUNS },
+      propertyRunOptions('tests/engine/cut-optimizer.property.test.ts', NUM_RUNS),
     );
   });
 
@@ -180,7 +181,7 @@ describe('cut-optimizer property tests', () => {
           return result.sheets.every((sheet) => hasKerfClearance(sheet.parts, sawKerfMm));
         },
       ),
-      { numRuns: NUM_RUNS },
+      propertyRunOptions('tests/engine/cut-optimizer.property.test.ts', NUM_RUNS),
     );
   });
 
@@ -200,7 +201,7 @@ describe('cut-optimizer property tests', () => {
           }),
         );
       }),
-      { numRuns: NUM_RUNS },
+      propertyRunOptions('tests/engine/cut-optimizer.property.test.ts', NUM_RUNS),
     );
   });
 
@@ -212,7 +213,7 @@ describe('cut-optimizer property tests', () => {
         const placedCount = result.sheets.reduce((sum, sheet) => sum + sheet.parts.length, 0);
         return placedCount === totalInstances;
       }),
-      { numRuns: NUM_RUNS },
+      propertyRunOptions('tests/engine/cut-optimizer.property.test.ts', NUM_RUNS),
     );
   });
 
@@ -227,7 +228,7 @@ describe('cut-optimizer property tests', () => {
         const expected = Math.round((usedArea / totalSheetArea) * 100 * 100) / 100;
         return Math.abs(result.overallYield - expected) < 0.01;
       }),
-      { numRuns: NUM_RUNS },
+      propertyRunOptions('tests/engine/cut-optimizer.property.test.ts', NUM_RUNS),
     );
   });
 });

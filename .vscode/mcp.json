@@ -71,6 +71,21 @@
       "description": "Retrieves current, version-accurate documentation for npm packages — prevents hallucinated APIs."
     },
 
+    // ─── Chrome DevTools — interactive performance traces and diagnostics ─
+    "chrome-devtools": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@1.10.1",
+        "--headless",
+        "--isolated",
+        "--no-usage-statistics",
+        "--performance-crux=false"
+      ],
+      "description": "Optional isolated Chrome diagnostics and performance traces; complements Playwright MCP. Usage statistics and CrUX URL submissions are disabled."
+    },
+
     // ─── GitKraken — advanced git/PR workflow operations ─────────────────────
     "gitkraken": {
       "type": "http",

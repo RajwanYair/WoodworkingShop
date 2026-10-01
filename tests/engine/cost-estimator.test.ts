@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import * as fc from 'fast-check';
+import { propertyRunOptions } from '../property-seeds';
 import { estimateCost } from '../../src/engine/cost-estimator';
 import type { OptimizationResult } from '../../src/engine/types';
 import { mockSheet } from '../helpers';
@@ -199,7 +200,7 @@ describe('estimateCost', () => {
             );
           },
         ),
-        { numRuns: 200 },
+        propertyRunOptions('tests/engine/cost-estimator.test.ts', 200),
       );
     });
   });

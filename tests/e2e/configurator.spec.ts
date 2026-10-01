@@ -89,7 +89,7 @@ test('preview views render expected geometry and dimension visibility', async ({
 
     const drawing = view.isometric
       ? page.getByRole('img', { name: '3D isometric cabinet drawing' })
-      : page.getByRole('img', { name: 'Cabinet drawing' });
+      : page.getByRole('group', { name: 'Cabinet drawing' });
     await expect(drawing).toBeVisible();
     const initialViewBox = await drawing.getAttribute('viewBox');
     const initialTextCount = await drawing.locator('text').count();
@@ -184,7 +184,7 @@ test('preview 3D orbit and touch gestures respect zoom bounds and cancellation',
 
   await page.getByRole('tab', { name: 'Front (Closed)', exact: true }).click();
   const frontTab = page.getByRole('tab', { name: 'Front (Closed)', exact: true });
-  const frontDrawing = page.getByRole('img', { name: 'Cabinet drawing' });
+  const frontDrawing = page.getByRole('group', { name: 'Cabinet drawing' });
   await dispatchTouch(frontDrawing, 'touchstart', [{ x: 250, y: 250 }]);
   await dispatchTouch(frontDrawing, 'touchend', [], [{ x: 350, y: 250 }]);
   await expect(frontTab).toHaveAttribute('aria-selected', 'true');
@@ -194,7 +194,7 @@ test('preview 3D orbit and touch gestures respect zoom bounds and cancellation',
   const frontOpenTab = page.getByRole('tab', { name: 'Front (Open)', exact: true });
   await expect(frontOpenTab).toHaveAttribute('aria-selected', 'true');
 
-  const openDrawing = page.getByRole('img', { name: 'Cabinet drawing' });
+  const openDrawing = page.getByRole('group', { name: 'Cabinet drawing' });
   const zoomContainer = openDrawing.locator('xpath=..');
   await dispatchTouch(openDrawing, 'touchstart', [
     { x: 100, y: 100 },
@@ -389,11 +389,22 @@ test('custom materials can be added, edited, and deleted', async ({ appPage: pag
 
   const material = editor.getByRole('listitem').filter({ hasText: 'Test Birch' });
   await expect(material).toBeVisible();
+  const carcassMaterial = page.getByRole('combobox', { name: 'Carcass Material' });
+  await carcassMaterial.selectOption({ label: 'Test Birch (18 mm)' });
+  const customKey = await carcassMaterial.locator('option').filter({ hasText: 'Test Birch' }).getAttribute('value');
+  expect(customKey).toBeTruthy();
+  await expect(carcassMaterial).toHaveValue(customKey ?? '');
+  await showParts(page);
+  await expect(partRow(page, 'Top Panel').getByRole('cell').nth(3)).toHaveText('Test Birch');
+  await expect(partRow(page, 'Top Panel').getByRole('cell').nth(6)).toHaveText('18');
+
+  await page.getByRole('tab', { name: 'Configure' }).click();
   await material.getByRole('button', { name: 'Edit Test Birch' }).click();
   await editor.getByRole('textbox', { name: 'Name' }).first().fill('Test Oak');
   await editor.getByRole('button', { name: 'Save' }).click();
   await expect(editor.getByText('Test Oak (18 mm, ₪100)')).toBeVisible();
 
+  await carcassMaterial.selectOption({ index: 0 });
   await editor.getByRole('listitem').filter({ hasText: 'Test Oak' }).getByRole('button', { name: 'Remove' }).click();
   await expect(editor.getByText('Test Oak (18 mm, ₪100)')).toHaveCount(0);
 });

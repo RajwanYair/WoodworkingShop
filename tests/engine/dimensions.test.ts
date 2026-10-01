@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import * as fc from 'fast-check';
+import { propertyRunOptions } from '../property-seeds';
 import {
   computeDimensions,
   computeHingesPerDoor,
@@ -259,7 +260,7 @@ describe('computeShelfDeflection — generated invariants', () => {
           expect(longSpan.maxLoadKg).toBeLessThanOrEqual(shortSpan.maxLoadKg);
         },
       ),
-      { numRuns: 200 },
+      propertyRunOptions('tests/engine/dimensions.test.ts', 200),
     );
   });
 });
@@ -281,7 +282,7 @@ describe('computeHingePositions — generated invariants', () => {
           ),
         ).toBe(true);
       }),
-      { numRuns: 200 },
+      propertyRunOptions('tests/engine/dimensions.test.ts', 200),
     );
   });
 });

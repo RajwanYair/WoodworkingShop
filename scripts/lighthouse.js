@@ -27,7 +27,8 @@ const config = {
     collect: {
       startServerCommand: 'npm run preview -- --port 4173 --strictPort',
       url: ['http://localhost:4173/WoodworkingShop/'],
-      startServerReadyPattern: 'Local:',
+      startServerReadyPattern: 'localhost:4173',
+      startServerReadyTimeout: 60000,
       numberOfRuns: process.env.CI ? 3 : 1,
     },
     assert: {
@@ -58,7 +59,7 @@ mkdirSync(path.dirname(resolvedConfigPath), { recursive: true });
 writeFileSync(resolvedConfigPath, JSON.stringify(config, null, 2));
 
 try {
-  execSync(`npx --yes @lhci/cli@0.14.x autorun --config=${resolvedConfigPath}`, { stdio: 'inherit' });
+  execSync(`npx --yes @lhci/cli@0.15.1 autorun --config=${resolvedConfigPath}`, { stdio: 'inherit' });
 } catch {
   process.exit(1);
 }

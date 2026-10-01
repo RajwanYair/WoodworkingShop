@@ -1,4 +1,4 @@
-import type { CabinetConfig, OptimizationResult, OptimizationSuggestion, SmartStrategy } from './types';
+import type { CabinetConfig, Material, OptimizationResult, OptimizationSuggestion, SmartStrategy } from './types';
 import { MATERIALS, SAW_KERF, getMaterial, CONSTRAINTS } from './materials.ts';
 import { computeDimensions } from './dimensions';
 import { generateParts } from './parts';
@@ -49,22 +49,24 @@ const DEFAULT_OPTIONS: SmartOptimizerOptions = {
  *
  * @param config  - The current cabinet configuration to optimise.
  * @param options - Partial override of {@link SmartOptimizerOptions}.
+ * @param extraMaterials - User-defined materials available to the cabinet.
  * @returns Suggestions sorted ascending by score (lower = better),
  *          capped at `options.maxResults` entries.
  */
 export function findOptimizations(
   config: CabinetConfig,
   options: Partial<SmartOptimizerOptions> = {},
+  extraMaterials: Material[] = [],
 ): OptimizationSuggestion[] {
   const opts = { ...DEFAULT_OPTIONS, ...options };
-  const baseResult = evaluate(config);
+  const baseResult = evaluate(config, extraMaterials);
   const suggestions: OptimizationSuggestion[] = [];
 
   for (const strategy of opts.strategies) {
-    const candidates = generateCandidates(config, strategy, opts.tolerance);
+    const candidates = generateCandidates(config, strategy, opts.tolerance, extraMaterials);
     for (const candidate of candidates) {
       if (!isValid(candidate)) continue;
-      const result = evaluate(candidate);
+      const result = evaluate(candidate, extraMaterials);
       if (result.totalSheets > baseResult.totalSheets) continue; // worse
       if (result.totalSheets === baseResult.totalSheets && result.overallYield <= baseResult.overallYield) continue;
 
@@ -80,7 +82,7 @@ export function findOptimizations(
           wasteReduced: baseResult.totalWaste - result.totalWaste,
         },
         strategy,
-        explanation: buildExplanation(config, candidate, strategy),
+        explanation: buildExplanation(config, candidate, strategy, extraMaterials),
         score,
       });
     }
@@ -101,18 +103,23 @@ export function findOptimizations(
 
 // ─── Candidate generators per strategy ───
 
-function generateCandidates(cfg: CabinetConfig, strategy: SmartStrategy, tolerance: number): CabinetConfig[] {
+function generateCandidates(
+  cfg: CabinetConfig,
+  strategy: SmartStrategy,
+  tolerance: number,
+  extraMaterials: Material[],
+): CabinetConfig[] {
   switch (strategy) {
     case 'reduce-depth':
-      return tryDepthVariations(cfg, tolerance);
+      return tryDepthVariations(cfg, tolerance, extraMaterials);
     case 'co-nest-strips':
-      return tryCoNestStrips(cfg, tolerance);
+      return tryCoNestStrips(cfg, tolerance, extraMaterials);
     case 'adjust-width':
-      return tryDimensionVariations(cfg, 'width', tolerance);
+      return tryDimensionVariations(cfg, 'width', tolerance, extraMaterials);
     case 'adjust-height':
-      return tryDimensionVariations(cfg, 'height', tolerance);
+      return tryDimensionVariations(cfg, 'height', tolerance, extraMaterials);
     case 'material-swap':
-      return tryMaterialSwaps(cfg);
+      return tryMaterialSwaps(cfg, extraMaterials);
     case 'shelf-count-reduce':
       return tryShelfCountReduce(cfg);
     case 'exhaustive': {
@@ -125,7 +132,7 @@ function generateCandidates(cfg: CabinetConfig, strategy: SmartStrategy, toleran
         'material-swap',
         'shelf-count-reduce',
       ];
-      return individual.flatMap((s) => generateCandidates(cfg, s, tolerance));
+      return individual.flatMap((s) => generateCandidates(cfg, s, tolerance, extraMaterials));
     }
     default:
       return [];
@@ -137,8 +144,8 @@ function generateCandidates(cfg: CabinetConfig, strategy: SmartStrategy, toleran
  * Find depths where n × depth + (n-1) × kerf ≈ sheetWidth
  * This means depth strips pack perfectly across the sheet width.
  */
-function tryDepthVariations(cfg: CabinetConfig, tolerance: number): CabinetConfig[] {
-  const mat = getMaterial(cfg.carcassMaterial);
+function tryDepthVariations(cfg: CabinetConfig, tolerance: number, extraMaterials: Material[]): CabinetConfig[] {
+  const mat = getMaterial(cfg.carcassMaterial, extraMaterials);
   const sheetW = mat.sheetWidth;
   const candidates: CabinetConfig[] = [];
 
@@ -172,14 +179,14 @@ function tryDepthVariations(cfg: CabinetConfig, tolerance: number): CabinetConfi
  * Try: doorWidth + kerf + sideDepth + kerf + shelfDepth ≈ sheetWidth
  * Nudge depth to make strips co-nest on a single sheet.
  */
-function tryCoNestStrips(cfg: CabinetConfig, tolerance: number): CabinetConfig[] {
+function tryCoNestStrips(cfg: CabinetConfig, tolerance: number, extraMaterials: Material[]): CabinetConfig[] {
   if (cfg.doorStyle === 'none') return [];
-  const mat = getMaterial(cfg.carcassMaterial);
+  const mat = getMaterial(cfg.carcassMaterial, extraMaterials);
   const sheetW = mat.sheetWidth;
   const candidates: CabinetConfig[] = [];
 
   // Current derived dims
-  const d = computeDimensions(cfg);
+  const d = computeDimensions(cfg, extraMaterials);
   // target: doorWidth + kerf + depth + kerf + shelfDepth = sheetWidth
   // depth = (sheetWidth - doorWidth - shelfDepth - 2*kerf) ... but shelfDepth depends on depth
   // shelfDepth = depth - 20, so:
@@ -215,8 +222,13 @@ function tryCoNestStrips(cfg: CabinetConfig, tolerance: number): CabinetConfig[]
  * Strategy: adjust-width / adjust-height
  * Try ±1..tolerance mm variations for better nesting.
  */
-function tryDimensionVariations(cfg: CabinetConfig, dim: 'width' | 'height', tolerance: number): CabinetConfig[] {
-  const mat = getMaterial(cfg.carcassMaterial);
+function tryDimensionVariations(
+  cfg: CabinetConfig,
+  dim: 'width' | 'height',
+  tolerance: number,
+  extraMaterials: Material[],
+): CabinetConfig[] {
+  const mat = getMaterial(cfg.carcassMaterial, extraMaterials);
   const sheetL = mat.sheetLength;
   const sheetW = mat.sheetWidth;
   const constraints =
@@ -253,11 +265,11 @@ function tryDimensionVariations(cfg: CabinetConfig, dim: 'width' | 'height', tol
  * Strategy: material-swap
  * Try all compatible panel materials with different thicknesses.
  */
-function tryMaterialSwaps(cfg: CabinetConfig): CabinetConfig[] {
+function tryMaterialSwaps(cfg: CabinetConfig, extraMaterials: Material[]): CabinetConfig[] {
   const candidates: CabinetConfig[] = [];
-  const currentMat = getMaterial(cfg.carcassMaterial);
+  const currentMat = getMaterial(cfg.carcassMaterial, extraMaterials);
 
-  for (const mat of MATERIALS) {
+  for (const mat of [...MATERIALS, ...extraMaterials]) {
     if (mat.category !== 'panel') continue;
     if (mat.key === cfg.carcassMaterial) continue;
     if (mat.thickness === currentMat.thickness) continue; // same thickness, skip
@@ -280,9 +292,9 @@ function tryShelfCountReduce(cfg: CabinetConfig): CabinetConfig[] {
 
 // ─── Helpers ───
 
-function evaluate(cfg: CabinetConfig): OptimizationResult {
-  const parts = generateParts(cfg);
-  return optimizeCutSheets(parts);
+function evaluate(cfg: CabinetConfig, extraMaterials: Material[]): OptimizationResult {
+  const parts = generateParts(cfg, extraMaterials);
+  return optimizeCutSheets(parts, undefined, undefined, undefined, undefined, undefined, extraMaterials);
 }
 
 function isValid(cfg: CabinetConfig): boolean {
@@ -309,6 +321,7 @@ function buildExplanation(
   original: CabinetConfig,
   optimized: CabinetConfig,
   strategy: SmartStrategy,
+  extraMaterials: Material[],
 ): { en: string; he: string } {
   const changes: string[] = [];
   const changesHe: string[] = [];
@@ -326,8 +339,8 @@ function buildExplanation(
     changesHe.push(`גובה ${original.height} → ${optimized.height} מ"מ`);
   }
   if (optimized.carcassMaterial !== original.carcassMaterial) {
-    const from = getMaterial(original.carcassMaterial);
-    const to = getMaterial(optimized.carcassMaterial);
+    const from = getMaterial(original.carcassMaterial, extraMaterials);
+    const to = getMaterial(optimized.carcassMaterial, extraMaterials);
     changes.push(`material ${from.name.en} → ${to.name.en}`);
     changesHe.push(`חומר ${from.name.he} → ${to.name.he}`);
   }

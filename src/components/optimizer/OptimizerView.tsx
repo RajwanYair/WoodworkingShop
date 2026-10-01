@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { useToastStore } from '../../store/toast-store';
 import { getMaterial } from '../../engine/materials';
 import { generateParts } from '../../engine/parts';
@@ -58,11 +59,17 @@ export function OptimizerView() {
     removeDefectZone,
   } = useCabinetStore();
   const lang = resolveEngineLang(i18n.language);
+  const customMaterials = useCustomMaterialsStore((state) => state.materials);
   // Phase 12 / Sprint 12 — load saved offcut catalog from IDB on first mount.
   useEffect(() => {
-    const { setOffcutCatalog } = useCabinetStore.getState();
+    const store = useCabinetStore.getState();
     idbLoadOffcuts()
-      .then(setOffcutCatalog)
+      .then((catalog) => {
+        const currentCatalog = useCabinetStore.getState().offcutCatalog;
+        const mergedCatalog = new Map(catalog.map((entry) => [entry.id, entry]));
+        for (const entry of currentCatalog) mergedCatalog.set(entry.id, entry);
+        store.setOffcutCatalog([...mergedCatalog.values()]);
+      })
       .catch(() => {});
   }, []);
   const [hoveredPartId, setHoveredPartId] = useState<string | null>(null);
@@ -91,8 +98,8 @@ export function OptimizerView() {
     setBomExporting(true);
     const bomData = cabinets.map((c) => ({
       name: c.name,
-      parts: generateParts(c.config),
-      hardware: generateHardware(c.config),
+      parts: generateParts(c.config, customMaterials),
+      hardware: generateHardware(c.config, customMaterials),
       notes: c.notes,
     }));
     const filename = `${filePrefix}-bill-of-materials.csv`;
@@ -127,7 +134,7 @@ export function OptimizerView() {
       useToastStore.getState().addToast(t('toast.bomExported'), 'success');
       setBomExporting(false);
     }
-  }, [bomExporting, cabinets, filePrefix, lang, t, i18n.language]);
+  }, [bomExporting, cabinets, customMaterials, filePrefix, lang, t, i18n.language]);
 
   /** Worker-based DXF all-sheets export (v3.22.0) */
   const handleDxfExportWorker = useCallback(() => {

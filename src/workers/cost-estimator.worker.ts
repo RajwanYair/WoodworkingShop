@@ -2,7 +2,7 @@
 import * as Comlink from 'comlink';
 import { estimateCost } from '../engine/cost-estimator';
 import type { CostBreakdown } from '../engine/cost-estimator';
-import type { OptimizationResult, HardwareItem } from '../engine/types';
+import type { OptimizationResult, HardwareItem, Material } from '../engine/types';
 
 export interface CostEstimatorInput {
   optimization: OptimizationResult;
@@ -14,6 +14,7 @@ export interface CostEstimatorInput {
   labourRate: number;
   labourHours: number;
   finishCost: number;
+  extraMaterials?: Material[];
 }
 
 export interface CostEstimatorResult {
@@ -35,6 +36,7 @@ const api: CostEstimatorWorkerApi = {
     labourRate,
     labourHours,
     finishCost,
+    extraMaterials = [],
   }: CostEstimatorInput): CostEstimatorResult {
     return {
       cost: estimateCost(
@@ -47,6 +49,7 @@ const api: CostEstimatorWorkerApi = {
         labourRate,
         labourHours,
         finishCost,
+        extraMaterials,
       ),
     };
   },

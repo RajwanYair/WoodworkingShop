@@ -2,8 +2,9 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { useCabinetStore, detectOsDarkMode } from '../../src/store/cabinet-store';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 import { computeDimensions } from '../../src/engine/dimensions';
-import type { DefectZone, OffcutEntry } from '../../src/engine/types';
+import type { DefectZone, Material, OffcutEntry } from '../../src/engine/types';
 import { setDefectZones } from '../../src/store/worker-schedule';
+import { useCustomMaterialsStore } from '../../src/store/custom-materials-store';
 
 describe('cabinet-store', () => {
   beforeEach(() => {
@@ -18,6 +19,7 @@ describe('cabinet-store', () => {
       darkMode: false,
       colorBlindMode: false,
     });
+    useCustomMaterialsStore.setState({ materials: [] });
     useCabinetStore.getState().setConfig({});
     useCabinetStore.setState({ _past: [], canUndo: false });
   });
@@ -163,6 +165,27 @@ describe('cabinet-store', () => {
     useCabinetStore.getState().setConfig({ shelfCount: 10 });
     // More shelves → should still have parts
     expect(useCabinetStore.getState().parts.length).toBeGreaterThan(0);
+  });
+
+  it('derives cabinet parts and optimization with a selected custom material', () => {
+    const customMaterial: Material = {
+      key: 'custom-store-oak-20',
+      name: { en: 'Custom Oak 20 mm', he: 'אלון מותאם 20 מ״מ' },
+      thickness: 20,
+      sheetWidth: 1220,
+      sheetLength: 2440,
+      pricePerSheet: 500,
+      currencyCode: 'ILS',
+      category: 'panel',
+      color: '#987654',
+      hasGrain: true,
+      densityKgM3: 700,
+    };
+    useCustomMaterialsStore.setState({ materials: [customMaterial] });
+
+    expect(() => useCabinetStore.getState().setConfig({ carcassMaterial: customMaterial.key })).not.toThrow();
+    expect(useCabinetStore.getState().parts.find((part) => part.material === customMaterial.key)?.thickness).toBe(20);
+    expect(useCabinetStore.getState().optimization.sheets[0]?.material).toBe(customMaterial.key);
   });
 
   it('supports undo/redo and clears redo stack on new change', () => {

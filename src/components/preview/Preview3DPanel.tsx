@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { applyExplodeFactor, buildCabinetScene, centerScene, getSceneBounds } from '../../engine/webgpu-renderer';
 import { getPbrMaterial } from '../../engine/pbr-materials';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { generateParts } from '../../engine/parts';
 import type { CabinetScene } from '../../engine/webgpu-renderer';
 import type { RendererCapabilities } from '../../engine/webgpu-renderer';
@@ -89,6 +90,7 @@ const TIER_BADGE: Record<string, string> = {
 export const Preview3DPanel = memo(function Preview3DPanel() {
   const { t } = useTranslation();
   const { config } = useCabinetStore();
+  const customMaterials = useCustomMaterialsStore((state) => state.materials);
   const capabilities = useRendererCapabilities();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -99,9 +101,9 @@ export const Preview3DPanel = memo(function Preview3DPanel() {
 
   // Build scene graph whenever config changes
   const scene = useMemo<CabinetScene>(() => {
-    const parts = generateParts(config);
+    const parts = generateParts(config, customMaterials);
     return centerScene(buildCabinetScene(parts));
-  }, [config]);
+  }, [config, customMaterials]);
 
   // Apply explode factor on top of the base scene
   const displayScene = useMemo<CabinetScene>(() => applyExplodeFactor(scene, explodeFactor), [scene, explodeFactor]);

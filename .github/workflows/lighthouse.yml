@@ -81,8 +81,9 @@ jobs:
             }
 
       - if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: lighthouse-report
           path: .lighthouseci/
           retention-days: 14
+          if-no-files-found: ignore

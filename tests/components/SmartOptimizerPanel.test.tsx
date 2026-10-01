@@ -27,9 +27,13 @@ describe('SmartOptimizerPanel', () => {
     await user.click(findButton);
 
     expect(await screen.findByText('No improvements found within tolerance')).toBeInTheDocument();
-    expect(findOptimizations).toHaveBeenCalledWith(useCabinetStore.getState().config, {
-      strategies: ['reduce-depth'],
-      tolerance: 20,
-    });
+    expect(findOptimizations).toHaveBeenCalledWith(
+      useCabinetStore.getState().config,
+      {
+        strategies: ['reduce-depth'],
+        tolerance: 20,
+      },
+      [],
+    );
   });
 });

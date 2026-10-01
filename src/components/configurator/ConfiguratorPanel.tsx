@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { validateConfig } from '../../engine/validation';
 import { getTemplateDefaults } from '../../engine/templates';
 import { ValidationPanel } from './ValidationPanel';
@@ -24,8 +25,9 @@ import type { FurnitureType, JoineryType } from '../../engine/types';
 export function ConfiguratorPanel() {
   const { t } = useTranslation();
   const { config, setConfig, resetConfig } = useCabinetStore();
+  const customMaterials = useCustomMaterialsStore((state) => state.materials);
 
-  const validationIssues = useMemo(() => validateConfig(config), [config]);
+  const validationIssues = useMemo(() => validateConfig(config, customMaterials), [config, customMaterials]);
 
   const handleFurnitureChange = (type: FurnitureType) => {
     setConfig({ ...getTemplateDefaults(type) });

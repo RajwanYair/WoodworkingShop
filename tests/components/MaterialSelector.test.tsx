@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
@@ -62,6 +62,22 @@ describe('MaterialSelector', () => {
 
     expect(useCabinetStore.getState().config.carcassMaterial).toBe('melamine-18');
     expect(useCabinetStore.getState().parts.some((part) => part.material === 'melamine-18')).toBe(true);
+  });
+
+  it('derives parts and cut sheets when a custom carcass material is selected', async () => {
+    const user = userEvent.setup();
+    useCustomMaterialsStore.setState({ materials: [customPanel] });
+    render(<MaterialSelector />);
+
+    await user.selectOptions(screen.getByRole('combobox', { name: /carcass/i }), customPanel.key);
+
+    const state = useCabinetStore.getState();
+    expect(state.parts.find((part) => part.material === customPanel.key)?.thickness).toBe(customPanel.thickness);
+    await waitFor(() => {
+      const updated = useCabinetStore.getState();
+      expect(updated.optimization.sheets.some((sheet) => sheet.material === customPanel.key)).toBe(true);
+      expect(updated.cost.sheetCosts.some((sheet) => sheet.material === customPanel.key)).toBe(true);
+    });
   });
 
   it('updates the back-panel material and generated back part', async () => {

@@ -13,12 +13,17 @@
  * Wood Handbook (Table 4-3).
  */
 
-import { assertFiniteNumber } from './invariant';
+import { assertBetweenInclusive, assertFiniteNumber } from './invariant';
 
 export type MoistureShrinkageSpecies =
   'oak' | 'maple' | 'cherry' | 'walnut' | 'pine' | 'douglas_fir' | 'cedar' | 'generic_hardwood' | 'generic_softwood';
 
 export type WoodGrainDirection = 'tangential' | 'radial';
+
+export const MOISTURE_SHRINKAGE_LIMITS = {
+  moistureContentPct: { min: 0, max: 100 },
+  dimensionMm: { min: 1, max: 3000 },
+} as const;
 
 /** Shrinkage coefficients: fractional dimensional change per 1% MC change (below FSP). */
 const SHRINKAGE_COEFF: Record<MoistureShrinkageSpecies, Record<WoodGrainDirection, number>> = {
@@ -70,19 +75,27 @@ export function calculateMoistureShrinkage(input: MoistureShrinkageInput): Moist
   const { initialMCPct, targetMCPct, species, dimensionMm, grain } = input;
 
   const fn = 'calculateMoistureShrinkage';
-  assertFiniteNumber(fn, 'initialMCPct', initialMCPct);
-  assertFiniteNumber(fn, 'targetMCPct', targetMCPct);
-  assertFiniteNumber(fn, 'dimensionMm', dimensionMm);
-
-  if (initialMCPct < 0) {
-    throw new RangeError('initialMCPct must be >= 0');
-  }
-  if (targetMCPct < 0) {
-    throw new RangeError('targetMCPct must be >= 0');
-  }
-  if (dimensionMm <= 0) {
-    throw new RangeError('dimensionMm must be greater than 0');
-  }
+  assertBetweenInclusive(
+    fn,
+    'initialMCPct',
+    initialMCPct,
+    MOISTURE_SHRINKAGE_LIMITS.moistureContentPct.min,
+    MOISTURE_SHRINKAGE_LIMITS.moistureContentPct.max,
+  );
+  assertBetweenInclusive(
+    fn,
+    'targetMCPct',
+    targetMCPct,
+    MOISTURE_SHRINKAGE_LIMITS.moistureContentPct.min,
+    MOISTURE_SHRINKAGE_LIMITS.moistureContentPct.max,
+  );
+  assertBetweenInclusive(
+    fn,
+    'dimensionMm',
+    dimensionMm,
+    MOISTURE_SHRINKAGE_LIMITS.dimensionMm.min,
+    MOISTURE_SHRINKAGE_LIMITS.dimensionMm.max,
+  );
 
   // Shrinkage only occurs below the fibre saturation point
   const effectiveInitial = Math.min(initialMCPct, FSP_PCT);

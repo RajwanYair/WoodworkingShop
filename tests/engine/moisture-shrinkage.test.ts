@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { calculateMoistureShrinkage } from '../../src/engine/moisture-shrinkage';
+import { calculateMoistureShrinkage, MOISTURE_SHRINKAGE_LIMITS } from '../../src/engine/moisture-shrinkage';
+import USDA_WHITE_OAK_SHRINKAGE_ORACLE from '../fixtures/oracles/white-oak-shrinkage-usda.json';
 
 describe('calculateMoistureShrinkage', () => {
   it('computes shrinkage for oak tangential from 30% to 8%', () => {
@@ -46,6 +47,26 @@ describe('calculateMoistureShrinkage', () => {
       finalDimensionMm: expected.finalDimensionMm,
       shrinkageCoefficient: expected.coefficient,
     });
+  });
+
+  it.each([
+    { grain: 'radial' as const, shrinkagePct: USDA_WHITE_OAK_SHRINKAGE_ORACLE.shrinkagePct.radial },
+    { grain: 'tangential' as const, shrinkagePct: USDA_WHITE_OAK_SHRINKAGE_ORACLE.shrinkagePct.tangential },
+  ])('matches the USDA white-oak $grain shrinkage reference within reported variability', ({ grain, shrinkagePct }) => {
+    const result = calculateMoistureShrinkage({
+      initialMCPct: USDA_WHITE_OAK_SHRINKAGE_ORACLE.initialMCPct,
+      targetMCPct: USDA_WHITE_OAK_SHRINKAGE_ORACLE.targetMCPct,
+      species: 'oak',
+      dimensionMm: USDA_WHITE_OAK_SHRINKAGE_ORACLE.dimensionMm,
+      grain,
+    });
+    const referenceChangeMm = (USDA_WHITE_OAK_SHRINKAGE_ORACLE.dimensionMm * shrinkagePct) / 100;
+    const allowedDifferenceMm = (referenceChangeMm * USDA_WHITE_OAK_SHRINKAGE_ORACLE.variabilityPct) / 100;
+
+    expect(Math.abs(result.changeAmountMm - referenceChangeMm)).toBeLessThanOrEqual(allowedDifferenceMm);
+    expect(
+      Math.abs(result.finalDimensionMm - (USDA_WHITE_OAK_SHRINKAGE_ORACLE.dimensionMm - referenceChangeMm)),
+    ).toBeLessThanOrEqual(allowedDifferenceMm);
   });
 
   it('caps effective MC at FSP (30%) when initial MC > 30', () => {
@@ -104,17 +125,44 @@ describe('calculateMoistureShrinkage', () => {
   });
 
   it.each([
+    {
+      initialMCPct: MOISTURE_SHRINKAGE_LIMITS.moistureContentPct.min,
+      targetMCPct: MOISTURE_SHRINKAGE_LIMITS.moistureContentPct.max,
+      dimensionMm: MOISTURE_SHRINKAGE_LIMITS.dimensionMm.min,
+    },
+    {
+      initialMCPct: MOISTURE_SHRINKAGE_LIMITS.moistureContentPct.max,
+      targetMCPct: MOISTURE_SHRINKAGE_LIMITS.moistureContentPct.min,
+      dimensionMm: MOISTURE_SHRINKAGE_LIMITS.dimensionMm.max,
+    },
+  ])('accepts declared input boundaries: $initialMCPct% to $targetMCPct%, $dimensionMm mm', (input) => {
+    expect(() => calculateMoistureShrinkage({ ...input, species: 'oak', grain: 'tangential' })).not.toThrow();
+  });
+
+  it.each([
     [
-      'initialMCPct < 0',
+      'initialMCPct below minimum',
       { initialMCPct: -1, targetMCPct: 8, species: 'oak' as const, dimensionMm: 100, grain: 'tangential' as const },
     ],
     [
-      'targetMCPct < 0',
+      'initialMCPct above maximum',
+      { initialMCPct: 101, targetMCPct: 8, species: 'oak' as const, dimensionMm: 100, grain: 'tangential' as const },
+    ],
+    [
+      'targetMCPct below minimum',
       { initialMCPct: 30, targetMCPct: -5, species: 'oak' as const, dimensionMm: 100, grain: 'tangential' as const },
+    ],
+    [
+      'targetMCPct above maximum',
+      { initialMCPct: 30, targetMCPct: 101, species: 'oak' as const, dimensionMm: 100, grain: 'tangential' as const },
     ],
     [
       'dimensionMm = 0',
       { initialMCPct: 30, targetMCPct: 8, species: 'oak' as const, dimensionMm: 0, grain: 'tangential' as const },
+    ],
+    [
+      'dimensionMm above maximum',
+      { initialMCPct: 30, targetMCPct: 8, species: 'oak' as const, dimensionMm: 3001, grain: 'tangential' as const },
     ],
     [
       'NaN initialMCPct',

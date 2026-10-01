@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { resolveEngineLang } from './resolve-engine-lang';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { findOptimizations } from '../../engine/smart-optimizer';
 import type { OptimizationSuggestion, SmartStrategy } from '../../engine/types';
 import {
@@ -32,6 +33,7 @@ function suggestionKey(s: OptimizationSuggestion): string {
 export function OptimizationNotesPanel() {
   const { t, i18n } = useTranslation();
   const { config, setConfig } = useCabinetStore();
+  const customMaterials = useCustomMaterialsStore((state) => state.materials);
   const lang = resolveEngineLang(i18n.language);
 
   const [tolerance, setTolerance] = useState(20);
@@ -45,12 +47,12 @@ export function OptimizationNotesPanel() {
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
-      setSuggestions(findOptimizations(config, { tolerance }));
+      setSuggestions(findOptimizations(config, { tolerance }, customMaterials));
     }, 150);
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, [config, tolerance]);
+  }, [config, tolerance, customMaterials]);
 
   const visible = suggestions.filter((s) => !dismissed.has(suggestionKey(s)));
 

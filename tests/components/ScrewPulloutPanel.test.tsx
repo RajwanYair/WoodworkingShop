@@ -9,6 +9,7 @@ describe('ScrewPulloutPanel', () => {
     render(<ScrewPulloutPanel />);
 
     const mediumForce = Number(screen.getByText(/^\d+\.\d+ N$/).textContent?.replace(' N', ''));
+    expect(screen.getByText(/USDA equation 8-10a estimates short-term ultimate load/)).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'High Density (Hickory, Teak)' }));
     const highForce = Number(screen.getByText(/^\d+\.\d+ N$/).textContent?.replace(' N', ''));
     expect(highForce).toBeGreaterThan(mediumForce);
@@ -16,6 +17,6 @@ describe('ScrewPulloutPanel', () => {
 
     const diameter = screen.getByRole('spinbutton', { name: 'Screw Diameter (mm)' });
     await user.clear(diameter);
-    expect(screen.getByRole('alert')).toHaveTextContent('screwDiameterMm must be positive');
+    expect(screen.getByRole('alert')).toHaveTextContent('screwDiameterMm must be >= 1 and <= 12, got 0');
   });
 });

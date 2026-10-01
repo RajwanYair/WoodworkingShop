@@ -47,11 +47,20 @@ export default defineConfig({
         skipWaiting: false,
         clientsClaim: false,
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+        globIgnores: ['**/assets/pdf-renderer-*.js'],
         navigateFallback: '/WoodworkingShop/index.html',
         navigateFallbackDenylist: [/^\/WoodworkingShop\/api\//],
         // Sprint 149 — offline fallback for navigation requests when cache is empty
         offlineGoogleAnalytics: false,
         runtimeCaching: [
+          {
+            urlPattern: ({ url }: { url: URL }) => url.pathname.startsWith('/WoodworkingShop/assets/pdf-renderer-'),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'pdf-renderer',
+              expiration: { maxEntries: 1, maxAgeSeconds: 60 * 60 * 24 * 365 },
+            },
+          },
           {
             // Cache Google Fonts stylesheets
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -112,7 +121,13 @@ export default defineConfig({
     target: 'es2022',
     chunkSizeWarningLimit: 1600,
     // v3.24.0: inject modulepreload polyfill for Safari < 16.4 compatibility
-    modulePreload: { polyfill: true },
+    modulePreload: {
+      polyfill: true,
+      resolveDependencies: (_filename, dependencies, { hostType }) =>
+        hostType === 'html'
+          ? dependencies.filter((dependency) => !dependency.includes('/pdf-renderer-'))
+          : dependencies,
+    },
     rollupOptions: {
       output: {
         // Sprint 63 — consolidated chunk strategy:
@@ -125,10 +140,11 @@ export default defineConfig({
         // Phase 18 prep: when Three.js is added, add:
         //   if (id.includes('three')) return 'three-vendor';
         manualChunks: (id) => {
-          if (id.includes('@react-pdf/renderer')) return 'pdf-renderer';
-          if (id.includes('/i18next') || id.includes('/react-i18next')) return 'i18n-vendor';
+          // Keep shared React modules in the eager vendor chunk, not the lazy PDF chunk.
           if (id.includes('/react-dom/') || id.includes('/node_modules/react/') || id.includes('/zustand'))
             return 'vendor';
+          if (id.includes('@react-pdf/renderer')) return 'pdf-renderer';
+          if (id.includes('/i18next') || id.includes('/react-i18next')) return 'i18n-vendor';
           // Sprint 140 — defer parse cost of heavy optimizer engine to OptimizerView lazy chunk
           if (id.includes('/cut-optimizer') || id.includes('/smart-optimizer') || id.includes('/assembly-dag'))
             return 'engine-optimizer';

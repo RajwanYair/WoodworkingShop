@@ -228,7 +228,8 @@
     "filterByMaterial": "Filter by material",
     "allMaterials": "All materials",
     "partsTableSearch": "Search parts",
-    "hardwareTableSearch": "Search hardware"
+    "hardwareTableSearch": "Search hardware",
+    "noTableResults": "No matching rows"
   },
   "preview": {
     "title": "Cabinet Preview",
@@ -2205,6 +2206,7 @@
     "pulloutForceLbf": "Pull-Out Force (lbf)",
     "withdrawalResistance": "Withdrawal Resistance",
     "safetyRating": "Safety Rating",
+    "modelNote": "USDA equation 8-10a estimates short-term ultimate load for seasoned side-grain wood screws, not allowable design capacity. It does not apply to sheet goods; ratings are heuristic. Verify the actual connection.",
     "low": "Low Density (Pine, Cedar)",
     "medium": "Medium Density (Maple, Oak)",
     "high": "High Density (Hickory, Teak)",

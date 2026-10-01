@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import * as fc from 'fast-check';
 import { calculateBoxJoint } from '../../src/engine/box-joint';
+import { propertyRunOptions } from '../property-seeds';
 
 describe('calculateBoxJoint', () => {
   const BASE = { boardWidthMm: 150, fingerWidthMm: 15, depthMm: 18 };
@@ -89,7 +90,7 @@ describe('calculateBoxJoint', () => {
           );
         },
       ),
-      { numRuns: 200 },
+      propertyRunOptions('tests/engine/box-joint.test.ts', 200),
     );
   });
 

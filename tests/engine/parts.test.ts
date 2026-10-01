@@ -3,6 +3,7 @@ import * as fc from 'fast-check';
 import { generateParts, computeEdgeBandingTotal, computePartsWeight } from '../../src/engine/parts';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 import { expectBilingualNames } from '../assertions';
+import { propertyRunOptions } from '../property-seeds';
 
 describe('generateParts', () => {
   const parts = generateParts(DEFAULT_CONFIG);
@@ -125,7 +126,7 @@ describe('generateParts', () => {
           ).toBe(true);
         },
       ),
-      { numRuns: 200 },
+      propertyRunOptions('tests/engine/parts.test.ts', 200),
     );
   });
 });

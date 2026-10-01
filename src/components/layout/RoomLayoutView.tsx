@@ -32,8 +32,19 @@ function CabinetRect({ cab, index, scale, offsetX, offsetY }: CabinetRectProps) 
   const d = cab.depth * scale;
   return (
     <g>
-      <rect x={x} y={y} width={w} height={d} fill="#d4a96a33" stroke="#7c4a2d" strokeWidth={1.5} rx={2} />
-      <text x={x + w / 2} y={y + d / 2 + 4} textAnchor="middle" fontSize={10} fill="#5a3520">
+      <rect
+        x={x}
+        y={y}
+        width={w}
+        height={d}
+        fill="currentColor"
+        fillOpacity={0.14}
+        stroke="currentColor"
+        strokeOpacity={0.8}
+        strokeWidth={1.5}
+        rx={2}
+      />
+      <text x={x + w / 2} y={y + d / 2 + 4} textAnchor="middle" fontSize={10} fill="currentColor">
         ({index + 1}) {cab.name}
       </text>
     </g>
@@ -59,12 +70,12 @@ function FloorPlan({ layout }: FloorPlanProps) {
       viewBox={`0 0 ${SVG_W} ${SVG_H}`}
       role="img"
       aria-label={layout.name}
-      className="border-wood-200 dark:border-wood-700 bg-wood-50 dark:bg-wood-900 max-h-96 w-full rounded-lg border"
+      className="border-wood-200 dark:border-wood-700 bg-wood-50 dark:bg-wood-900 text-wood-700 dark:text-wood-200 max-h-96 w-full rounded-lg border"
     >
       {/* Room outline */}
-      <rect x={offsetX} y={offsetY} width={roomW} height={roomH} fill="none" stroke="#7c4a2d" strokeWidth={2} />
+      <rect x={offsetX} y={offsetY} width={roomW} height={roomH} fill="none" stroke="currentColor" strokeWidth={2} />
       {/* Width label (top) */}
-      <text x={offsetX + roomW / 2} y={offsetY - 8} textAnchor="middle" fontSize={11} fill="#7c4a2d">
+      <text x={offsetX + roomW / 2} y={offsetY - 8} textAnchor="middle" fontSize={11} fill="currentColor">
         {layout.roomWidth} mm
       </text>
       {/* Depth label (left) */}
@@ -73,7 +84,7 @@ function FloorPlan({ layout }: FloorPlanProps) {
         y={offsetY + roomH / 2}
         textAnchor="middle"
         fontSize={11}
-        fill="#7c4a2d"
+        fill="currentColor"
         transform={`rotate(-90, ${offsetX - 8}, ${offsetY + roomH / 2})`}
       >
         {layout.roomDepth} mm

@@ -480,3 +480,73 @@ the in-flight quality sprints (84-87) and run first.
 - [x] Added an isolated RTL render helper; migrated E2E tests to semantic locators and removed serial execution and style-based assertions.
 - [x] Added per-test cleanup for mocks/stubs, fake timers, storage, URL, document direction, and rendered trees; fixed the AI assistant storage mock leak revealed by shuffle.
 - [x] Verified 4,470 tests across 280 files in normal and seeded-shuffle runs, 26 Chromium/Firefox E2E tests, and full `npm run ci` including 16 benchmark budgets. Sprint 303 is next.
+
+### Sprint 304 — Store, persistence, import/export contract matrix — 2026-09-28
+
+- [x] T1: action-level coverage for the cabinet, UI, optimizer-settings, snapshot and named-expression slices: transitions, invalid/no-op input, undo/redo, persistence/reload and cross-slice rescheduling. `loadSettings` now clamps once and reschedules exactly once from one normalized snapshot; `autoCoNest` and session autosave (500 ms debounce) reload correctly.
+- [x] T2: fault matrix for unavailable IndexedDB/localStorage, corrupt and future-schema records (never overwritten), quota failure, partial-write snapshot rollback, `crypto.randomUUID()` project IDs with collision checks, a serialized mutation queue for concurrent saves/deletes/imports, deletion retry and legacy-migration shape validation.
+- [x] T3: single-project and bundle round-trips preserve cabinets and snapshot history, regenerate IDs and omit ephemeral UI state through an explicit `SavedProject` allowlist; Hebrew, Arabic, Japanese, empty and 250-cabinet projects are covered.
+- [x] Verified `npm run ci`: 4,592 tests across 283 files, production build, bundle budgets and 16 benchmarks.
+
+### Sprint 303 — Pure-engine invariant matrix I (progress log, archived 2026-09-30)
+
+- Generated properties added for shelf deflection, hinge positions, panel weight, part generation, optimizer bounds and kerf clearance, material-yield conservation, cost arithmetic, box-joint geometry and named-parameter dependency order.
+- Dated birch-weight oracle (Engineering ToolBox, 510–770 kg/m³). The optimizer property exposed a diagonal placement with insufficient kerf; candidate-level clearance checks and a named regression fixed it.
+- Static inventory: 632 exported engine functions — 614 with a direct test call and body-line hits, 13 with line hits only, 0 uncovered, 5 declarations not measured; literal test titles map to 612 exports. These are traceability indicators, not behavioral guarantees.
+- Direct tests added for `getMaterialResult`, `getMachineProfile`, `defaultTokenGenerator`, `applyValidationPlugins` and the Web Serial adapter. `npm run ci` passed with 4,593 tests across 283 files.
+
+### Sprint 305 — Component behavior foundation (progress log, archived 2026-09-30)
+
+- 2026-09-29 → 2026-09-30: `userEvent` journeys added in batches for optimizer tables and OptimizerView, configurator controls (furniture type, joinery, shelves, doors, drawers), calculators, cabinet management, project manager and snapshots, materials and hardware catalogs.
+- Further batches covered presets, constraint repairs, cost panels, optimizer suggestions, material summary/selector, templates, CNC profiles, PDF settings, cut checklist, stock/offcuts, waste analytics, build log, labels, G-code presets, SaveLoadPanel, Marketplace and Sidebar.
+- Product defects fixed: invalid nested snapshot buttons; intermediate-keystroke clamping in custom clearance; unlabeled icon-only controls; 16 built-in templates referencing nonexistent `hdf-3` (now `mdf-3`, with a registry guard); grouped material area for differing sheet sizes and 100–5000 mm bounds; stale drafts committed by reset controls; missing clipboard-failure message.
+- Component coverage (statements): 41.3 % → 48.4 % → 57.4 % → 66.8 % → 74.2 % → 75.02 % (525 component tests), with no area floor lowered.
+- Open defect recorded: selecting a custom material throws during cabinet derivation because custom definitions are not propagated to the engine.
+
+## Phase 64 — Real User Journeys and Browser Confidence
+
+### Sprint 307 — App shell journeys — 2026-09-28
+
+- [x] T1: tab navigation by click, Alt+1…6, direct URLs for all seven tabs, Back/Forward restoration, shortcut suppression while editing and invalid-tab fallback.
+- [x] T2: header and Ctrl+Z/Ctrl+Y/Ctrl+Shift+Z undo/redo restore both the dimension and the generated Top Panel length; fixed Enter + blur committing a dimension twice.
+- [x] T3: dark mode (button and Alt+D), metric/imperial, six locales with RTL/LTR direction, focus mode, onboarding and shortcuts dialogs, Escape and focus restoration via the shared focus trap.
+- [x] T4: localized reset confirmation; cabinet add/switch/rename/reload/shortcut journeys verify `?cab=` index precedence, project state and toast. 32 smoke tests pass in Chromium and Firefox.
+
+### Sprint 308 — Configurator and validation journeys — 2026-09-28
+
+- [x] T1: width/height/depth slider ↔ text synchronization, exact 20 mm Top Panel delta, preview titles, range clamping, hard-limit rejection/recovery and reset.
+- [x] T2: every furniture type, joinery, carcass/back material, back panel, thickness source, shelf, door and drawer option asserts a part or hardware change; fixed `doors-only` edge banding.
+- [x] T3: all 11 repair actions verified against production validation issues (focus continuity, live region); fixed the wide-span warning so a centre support resolves it.
+- [x] T4: cabinet add/remove/rename/duplicate/mirror/reorder and switching reflected in optimizer, assembly and PDF names. 62 E2E tests pass in Chromium and Firefox.
+
+### Sprint 309 — Save/load, templates, catalogs and expressions — 2026-09-29
+
+- [x] T1: project save/load, same-name replace, JSON export/import, cancel, malformed/invalid imports, share fallback and snapshot save/restore/delete/diff; fixed snapshot ID collisions.
+- [x] T2: all six built-in presets and a reload-persistent saved configuration.
+- [x] T3: custom-material CRUD, community catalog URL import and hardware JSON import with schema, duplicate-ID, merge/replace and failure-atomicity checks.
+- [x] T4: mounted the named-expression panel; evaluator moved to the allowlisted arithmetic parser (CSP-safe); cycles, unknown names, invalid math and non-finite results surfaced. 76 E2E tests pass.
+
+### Sprint 310 — Preview, gestures, canvas and 3D — 2026-09-29
+
+- [x] Six views with viewBox/geometry assertions and dimension toggle; SVG parsing and PNG IHDR checks at 2×; touch-cancel lifecycle and pinch/swipe/wheel/orbit bounds; mounted the interactive 3D panel with WebGL fallback and a non-blank canvas.
+- [x] Chromium, Firefox, WebKit desktop and iPhone WebKit render all views without overflow; 24 Chromium visual baselines (cabinet/bookshelf × light/dark × LTR/RTL).
+
+### Sprint 311 — Optimizer controls and table journeys — 2026-09-30
+
+- [x] Kerf, sheet size, costs, guillotine rationale, rotation lock, co-nesting, colour-blind mode, grain hatch and labels; search/filter/sort; bulk replace; stock and offcut persistence; defect zones; SmartOptimizer candidate propagation; engine-oracle checks of yield, waste, grain and shopping list.
+- [x] Fixed stock-quantity Enter double commit and `autoCoNest` session persistence. Nine optimizer journeys pass in Chromium and Firefox; 5,169 unit tests across 338 files pass.
+
+### Sprint 312 — Export downloads as real artifacts (progress log, archived 2026-09-30)
+
+- [x] T1: 25 BOM/hardware CSV download behaviors (UTF-8 BOM, headers, quantities, five locales, escaping, formula-injection neutralization); fixed engine-language resolution for UI-only locales.
+- [x] T2: 25 DXF/G-code download behaviors parsing entities, layers, extents, labels, checksum, units, bounds, safe retract, multi-pass depth, kerf, tool compensation, presets and tool changes; DXF extents cross-checked against G-code.
+- [ ] T3: grouped and quantity-expanded labels plus an escaped UTF-8 A4 print sheet (25 behaviors). QR deferred: no encoder and production dependencies at the 8-package cap.
+- [x] T4: 27 real-PDF behaviors (page count/geometry, headings, options, multi-cabinet, size budget, text bounds, zero warnings); footer placement fixed; renderer WASM data resource allowed in `connect-src` only.
+- [x] T5: SHA-256 integrity manifest and ZIP entry-path validation; 29 behaviors parse the central directory and every payload.
+- Component follow-up: 25 GcodePreviewModal behaviors; numeric fields replace rather than append, invalid drafts revert on blur.
+
+### Sprint 314 — Calculator panels and numeric oracles (progress log, archived 2026-09-30)
+
+- [x] T1/T2: 27 production-browser journeys (Chromium + Firefox) expand all 24 mounted calculators and compare every finite option against the pure engine.
+- [x] T4: typed entry, ArrowUp/ArrowDown recomputation and clear-to-zero validation without NaN/Infinity.
+- [ ] T3: screw pull-out now follows USDA FPL-GTR-282 Eq. 8-10a with an independent #8 × 1 in oracle; white-oak shrinkage cites FPL-GTR-282 Table 4-3; glue and moisture bounds are shared between UI and engine; board-foot inputs reject non-finite values. Glue spread rates have no verifiable manufacturer source and are not claimed as oracles. Remaining calculators still need reference oracles.

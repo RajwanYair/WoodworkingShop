@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { calculateGlueCoverage } from '../../src/engine/glue-coverage';
+import { GLUE_COVERAGE_LIMITS } from '../../src/engine/glue-coverage';
 import type { WoodGlueType } from '../../src/engine/glue-coverage';
 
 describe('calculateGlueCoverage', () => {
@@ -105,11 +106,28 @@ describe('calculateGlueCoverage', () => {
     expect(r.netVolumeMl).toBeGreaterThan(0);
   });
 
+  it.each([
+    {
+      surfaceAreaMm2: GLUE_COVERAGE_LIMITS.surfaceAreaMm2.min,
+      jointCount: GLUE_COVERAGE_LIMITS.jointCount.min,
+    },
+    {
+      surfaceAreaMm2: GLUE_COVERAGE_LIMITS.surfaceAreaMm2.max,
+      jointCount: GLUE_COVERAGE_LIMITS.jointCount.max,
+    },
+  ])('accepts declared inclusive boundaries: $surfaceAreaMm2 mm² and $jointCount joints', (input) => {
+    expect(() => calculateGlueCoverage({ ...input, glueType: 'pva' })).not.toThrow();
+  });
+
   describe('error guards', () => {
     it.each([
       ['zero surfaceArea', { surfaceAreaMm2: 0, glueType: 'pva' as WoodGlueType }],
+      ['surfaceArea below minimum', { surfaceAreaMm2: 99, glueType: 'pva' as WoodGlueType }],
+      ['surfaceArea above maximum', { surfaceAreaMm2: 10_000_001, glueType: 'pva' as WoodGlueType }],
       ['negative surfaceArea', { surfaceAreaMm2: -500, glueType: 'pva' as WoodGlueType }],
       ['zero jointCount', { ...BASE, jointCount: 0 }],
+      ['jointCount above maximum', { ...BASE, jointCount: 101 }],
+      ['fractional jointCount', { ...BASE, jointCount: 1.5 }],
       ['NaN surfaceArea', { surfaceAreaMm2: Number.NaN, glueType: 'pva' as WoodGlueType }],
       ['infinite surfaceArea', { surfaceAreaMm2: Number.POSITIVE_INFINITY, glueType: 'pva' as WoodGlueType }],
       ['NaN jointCount', { ...BASE, jointCount: Number.NaN }],

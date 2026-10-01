@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import type {
   CabinetConfig,
   Part,
+  Material,
   HardwareItem,
   OptimizationResult,
   DerivedDimensions,
@@ -49,6 +50,7 @@ import {
 } from './slices/snapshotSlice';
 import { createOptimizerSettingsSlice, type OptimizerSettingsSlice } from './slices/optimizerSettingsSlice';
 import { createNamedExpressionsSlice, type NamedExpressionsSlice } from './slices/namedExpressionsSlice';
+import { getCustomMaterials, useCustomMaterialsStore } from './custom-materials-store';
 
 /**
  * Fire-and-forget: post a cut-optimization request to the worker via Comlink.
@@ -70,6 +72,7 @@ interface SessionSnapshot {
   /** Sprint 14 — project-level notes, optional so old sessions deserialise safely. */
   projectNotes?: string;
   sawKerf: number;
+  autoCoNest?: boolean;
   materialPriceOverrides: Record<string, number>;
   edgeBandingRate: number;
   hardwarePriceOverrides: Record<string, number>;
@@ -172,16 +175,20 @@ function derive(
   config: CabinetConfig,
   sawKerfMm = 4,
   sheetSizeOverrides: Record<string, { width: number; length: number }> = {},
+  extraMaterials: Material[] = getCustomMaterials(),
 ) {
-  const dimensions = computeDimensions(config);
-  const parts = generateParts(config);
-  const hardware = generateHardware(config);
+  const dimensions = computeDimensions(config, extraMaterials);
+  const parts = generateParts(config, extraMaterials);
+  const hardware = generateHardware(config, extraMaterials);
   // Sprint 16 — decorate with rotation locks before optimization.
   const optimization = optimizeCutSheets(
     applyLocks(parts),
     sawKerfMm,
     sheetSizeOverrides,
     config.cutMode ?? 'freeform',
+    [],
+    {},
+    extraMaterials,
   );
   const edgeBandingTotal = computeEdgeBandingTotal(parts);
   return { dimensions, parts, hardware, optimization, edgeBandingTotal };
@@ -192,23 +199,30 @@ function deriveProject(
   activeIndex: number,
   sawKerfMm = 4,
   sheetSizeOverrides: Record<string, { width: number; length: number }> = {},
+  extraMaterials: Material[] = getCustomMaterials(),
 ) {
   const activeConfig = cabinets[activeIndex].config;
-  const active = derive(activeConfig, sawKerfMm, sheetSizeOverrides);
+  const active = derive(activeConfig, sawKerfMm, sheetSizeOverrides, extraMaterials);
   // Combined parts from all cabinets (prefixed with cabinet index)
   const allParts: Part[] = cabinets.flatMap((cab, ci) =>
-    generateParts(cab.config).map((p) => ({
+    generateParts(cab.config, extraMaterials).map((p) => ({
       ...p,
       id: cabinets.length > 1 ? `C${ci + 1}-${p.id}` : p.id,
     })),
   );
   // Sprint 16 — apply rotation locks for combined optimization.
-  const combinedOptimization = optimizeCutSheets(
-    applyLocks(allParts),
-    sawKerfMm,
-    sheetSizeOverrides,
-    activeConfig.cutMode ?? 'freeform',
-  );
+  const combinedOptimization =
+    cabinets.length === 1
+      ? active.optimization
+      : optimizeCutSheets(
+          applyLocks(allParts),
+          sawKerfMm,
+          sheetSizeOverrides,
+          activeConfig.cutMode ?? 'freeform',
+          [],
+          {},
+          extraMaterials,
+        );
   return { config: activeConfig, ...active, allParts, combinedOptimization };
 }
 
@@ -217,17 +231,21 @@ function deriveProject(
 // the worker computes fresh optimization in the background.
 // v3.51.0 — Optimized: reuses the active cabinet's already-computed parts in the
 // allParts flatMap instead of calling generateParts twice for the same config.
-function deriveBaseProject(cabinets: CabinetEntry[], activeIndex: number) {
+function deriveBaseProject(
+  cabinets: CabinetEntry[],
+  activeIndex: number,
+  extraMaterials: Material[] = getCustomMaterials(),
+) {
   const activeConfig = cabinets[activeIndex].config;
   // Phase 11 / Sprint 5 — sync module-level cut mode from active config so
   // scheduleOptimization always uses the latest value without extra params.
   setCutModeWorker(activeConfig.cutMode ?? 'freeform');
-  const dimensions = computeDimensions(activeConfig);
-  const parts = generateParts(activeConfig);
-  const hardware = generateHardware(activeConfig);
+  const dimensions = computeDimensions(activeConfig, extraMaterials);
+  const parts = generateParts(activeConfig, extraMaterials);
+  const hardware = generateHardware(activeConfig, extraMaterials);
   const edgeBandingTotal = computeEdgeBandingTotal(parts);
   const allParts: Part[] = cabinets.flatMap((cab, ci) => {
-    const cabParts = ci === activeIndex ? parts : generateParts(cab.config);
+    const cabParts = ci === activeIndex ? parts : generateParts(cab.config, extraMaterials);
     return cabParts.map((p) => ({
       ...p,
       id: cabinets.length > 1 ? `C${ci + 1}-${p.id}` : p.id,
@@ -270,7 +288,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
   }
   // Sprint 16 — hydrate module-level lock map from session before deriving initial optimization.
   setRotationLocks(session?.rotationLockedPartIds ?? {});
-  const initial = deriveProjectMemo(initialCabinets, initialActiveIndex);
+  const initial = deriveProjectMemo(initialCabinets, initialActiveIndex, 4, {}, getCustomMaterials());
   const prefs = loadUiPrefs();
   const initialProjectName = session?.projectName || readProjectNameFromUrl();
   const initialProjectNotes = session?.projectNotes ?? '';
@@ -351,6 +369,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
       session?.labourRate ?? 75,
       session?.labourHours ?? 0,
       session?.finishCost ?? 0,
+      getCustomMaterials(),
     ),
     assemblySteps: generateAssemblySteps(initial.config),
 
@@ -773,6 +792,14 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
   };
 });
 
+useCustomMaterialsStore.subscribe((state, previousState) => {
+  if (state.materials === previousState.materials) return;
+  const cabinetState = useCabinetStore.getState();
+  const base = deriveBaseProject(cabinetState.cabinets, cabinetState.activeCabinetIndex, state.materials);
+  scheduleOptimization(base.parts, base.allParts, cabinetState.sawKerf, cabinetState.sheetSizeOverrides);
+  useCabinetStore.setState({ ...base, optimizationPending: true, costPending: true });
+});
+
 // v3.44.0 — Auto-save the full project session to localStorage on every state
 // change, debounced to 500 ms. Prevents data loss on HMR or manual page refresh.
 let _autoSaveTimer: ReturnType<typeof setTimeout> | null = null;
@@ -785,6 +812,7 @@ useCabinetStore.subscribe((state) => {
       projectName: state.projectName,
       projectNotes: state.projectNotes,
       sawKerf: state.sawKerf,
+      autoCoNest: state.autoCoNest,
       materialPriceOverrides: state.materialPriceOverrides,
       edgeBandingRate: state.edgeBandingRate,
       hardwarePriceOverrides: state.hardwarePriceOverrides,

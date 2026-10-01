@@ -8,17 +8,16 @@
 
 ## 📋 Supported Versions
 
-| Version | Supported        | Notes                                      |
-| ------- | ---------------- | ------------------------------------------ |
-| **3.x** | ✅ Active        | Current release — patches issued as needed |
-| 2.x     | ⚠️ Critical only | Security-critical fixes only               |
-| < 2.0   | ❌ End of life   | No longer supported                        |
+| Version | Status      | Notes                                              |
+| ------- | ----------- | -------------------------------------------------- |
+| **5.x** | Supported   | Current release line; security fixes as needed.    |
+| < 5.0   | Unsupported | Upgrade to the current release for security fixes. |
 
 ## 🚨 Reporting a Vulnerability
 
 **Do NOT open a public GitHub issue for security vulnerabilities.**
 
-1. Email the maintainer with subject `[SECURITY] WoodworkingShop — <brief description>`
+1. Use GitHub's **Report a vulnerability** option on the repository's Security tab. If that option is unavailable, contact the maintainer privately through their GitHub profile. Do not include exploit details in a public issue.
 2. Include:
    - Description of the vulnerability
    - Steps to reproduce

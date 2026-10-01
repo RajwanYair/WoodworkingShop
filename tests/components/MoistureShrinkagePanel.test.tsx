@@ -17,7 +17,7 @@ describe('MoistureShrinkagePanel', () => {
     const dimension = screen.getByLabelText(/dimension/i);
     await user.clear(dimension);
     await user.type(dimension, '0');
-    expect(screen.getByRole('alert')).toHaveTextContent('dimensionMm must be greater than 0');
+    expect(screen.getByRole('alert')).toHaveTextContent('dimensionMm must be >= 1 and <= 3000');
     expect(panel).not.toHaveTextContent('193.78 mm');
   });
 });

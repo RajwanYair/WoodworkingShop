@@ -1,9 +1,10 @@
+import { assertBetweenInclusive } from './invariant';
+
 /**
  * Screw Pull-Out Strength Estimator — Sprint 224
  *
- * Uses the Wood Handbook / NDS-based withdrawal resistance formula:
- *   W = 1800 × G² × D^0.6 × L  (W in lbf, D and L in inches, G = oven-dry specific gravity)
- * then converted to Newtons (1 lbf ≈ 4.448 N).
+ * Uses USDA Wood Handbook equation 8-10a for seasoned side-grain wood screws:
+ *   P = 108.25 × G² × D × L  (P in N, D and L in mm, G = specific gravity).
  *
  * Safety rating thresholds: adequate ≥ 300 N, marginal ≥ 100 N, insufficient < 100 N.
  */
@@ -11,6 +12,11 @@
 export type WoodDensityClass = 'low' | 'medium' | 'high' | 'sheet';
 
 export type SafetyRating = 'adequate' | 'marginal' | 'insufficient';
+
+export const SCREW_PULLOUT_LIMITS = {
+  screwDiameterMm: { min: 1, max: 12 },
+  threadLengthMm: { min: 5, max: 100 },
+} as const;
 
 export interface ScrewPulloutInput {
   /** Screw shank diameter in mm */
@@ -42,23 +48,33 @@ const SPECIFIC_GRAVITY: Record<WoodDensityClass, number> = {
   sheet: 0.55, // plywood / MDF
 };
 
-const MM_TO_IN = 1 / 25.4;
 const LBF_TO_N = 4.448_221_6;
 
 export function calculateScrewPullout(input: ScrewPulloutInput): ScrewPulloutResult {
   const { screwDiameterMm, threadLengthMm, densityClass } = input;
 
-  if (!Number.isFinite(screwDiameterMm) || screwDiameterMm <= 0)
-    throw new RangeError('screwDiameterMm must be positive');
-  if (!Number.isFinite(threadLengthMm) || threadLengthMm <= 0) throw new RangeError('threadLengthMm must be positive');
+  const fn = 'calculateScrewPullout';
+  assertBetweenInclusive(
+    fn,
+    'screwDiameterMm',
+    screwDiameterMm,
+    SCREW_PULLOUT_LIMITS.screwDiameterMm.min,
+    SCREW_PULLOUT_LIMITS.screwDiameterMm.max,
+  );
+  assertBetweenInclusive(
+    fn,
+    'threadLengthMm',
+    threadLengthMm,
+    SCREW_PULLOUT_LIMITS.threadLengthMm.min,
+    SCREW_PULLOUT_LIMITS.threadLengthMm.max,
+  );
 
   const G = SPECIFIC_GRAVITY[densityClass];
-  const D = screwDiameterMm * MM_TO_IN; // inches
-  const L = threadLengthMm * MM_TO_IN; // inches
+  const D = screwDiameterMm; // mm
+  const L = threadLengthMm; // mm
 
-  // NDS-based formula: F (lbf) = 1800 × G² × D^0.6 × L
-  const pulloutForceLbf = 1800 * G * G * Math.pow(D, 0.6) * L;
-  const pulloutForceN = pulloutForceLbf * LBF_TO_N;
+  const pulloutForceN = 108.25 * G * G * D * L;
+  const pulloutForceLbf = pulloutForceN / LBF_TO_N;
 
   // Withdrawal resistance: force per unit contact area (MPa = N/mm²)
   const contactAreaMm2 = Math.PI * screwDiameterMm * threadLengthMm;

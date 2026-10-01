@@ -36,7 +36,7 @@ export default defineConfig({
       reporter: ['text', 'lcov', 'json-summary'],
       reportsDirectory: path.join(tmpDir, 'coverage'),
       include: ['src/engine/**', 'src/utils/**', 'src/store/**', 'src/hooks/**'],
-      exclude: ['src/engine/types.ts', 'src/engine/index.ts'],
+      exclude: ['src/engine/index.ts'],
       thresholds: {
         statements: 85,
         branches: 78,

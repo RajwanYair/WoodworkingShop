@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, useMemo, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { getMaterial } from '../../engine/materials';
 import { getMaterialTextureId } from '../../engine/material-textures';
 import { computeEqualShelfPositions } from '../../engine/dimensions';
@@ -10,9 +11,10 @@ import { IconDownload } from '../layout/Icons';
 import { WebGLPreviewCanvas } from './WebGLPreviewCanvas';
 import { S } from './preview-constants';
 import { downloadSvg, downloadPng } from './preview-download-utils';
-import { ViewBox, PartRect, DimLine, DoorsOverlay } from './preview-svg-parts';
+import { ViewBox, PartRect, DimLine } from './preview-svg-parts';
 import type { TooltipHandlers } from './preview-svg-parts';
 import { FrontOpenView } from './FrontOpenView';
+import { FrontView } from './FrontView';
 import { IsometricView } from './IsometricView';
 
 type ViewId = 'front' | 'frontOpen' | 'side' | 'top' | 'back' | '3d';
@@ -28,6 +30,7 @@ interface TooltipInfo {
 export const CabinetPreview = memo(function CabinetPreview() {
   const { t } = useTranslation();
   const { config, dimensions: d, setConfig, units } = useCabinetStore();
+  const customMaterials = useCustomMaterialsStore((state) => state.materials);
   /** Format a mm value using the active unit system */
   const fd = (mm: number) => formatDim(mm, units);
   const [activeView, setActiveView] = useState<ViewId>('front');
@@ -43,10 +46,9 @@ export const CabinetPreview = memo(function CabinetPreview() {
   /** Phase 12 / Sprint 14 — toggle isometric vs. animated WebGL view (only relevant when VITE_ENABLE_WEBGL=true). */
   const [webglIsometric, setWebglIsometric] = useState(true);
 
-  const thick = getMaterial(config.carcassMaterial).thickness;
-  const bt = getMaterial(config.backPanelMaterial).thickness;
-  const color = getMaterial(config.carcassMaterial).color;
-  const kickH = (config.kickHeight ?? 0) * S; // SVG-px height of toe kick
+  const thick = getMaterial(config.carcassMaterial, customMaterials).thickness;
+  const bt = getMaterial(config.backPanelMaterial, customMaterials).thickness;
+  const color = getMaterial(config.carcassMaterial, customMaterials).color;
   const shelfPositions =
     config.shelfSpacing === 'custom' && config.customShelfPositions.length > 0
       ? config.customShelfPositions
@@ -63,12 +65,15 @@ export const CabinetPreview = memo(function CabinetPreview() {
   );
   const dimPad = showDims ? 45 : 30; // extra space for dimension lines
 
-  const carcassMatName = getMaterial(config.carcassMaterial).name[config.lang];
-  const backMatName = getMaterial(config.backPanelMaterial).name[config.lang];
+  const carcassMatName = getMaterial(config.carcassMaterial, customMaterials).name[config.lang];
+  const backMatName = getMaterial(config.backPanelMaterial, customMaterials).name[config.lang];
 
-  const showTooltip = useCallback((e: React.MouseEvent, label: string, dim: string, material?: string) => {
-    setTooltip({ label, dim, material, x: e.clientX, y: e.clientY });
-  }, []);
+  const showTooltip = useCallback(
+    (e: Pick<React.MouseEvent, 'clientX' | 'clientY'>, label: string, dim: string, material?: string) => {
+      setTooltip({ label, dim, material, x: e.clientX, y: e.clientY });
+    },
+    [],
+  );
   const hideTooltip = useCallback(() => setTooltip(null), []);
   const moveTooltip = useCallback((e: React.MouseEvent) => {
     setTooltip((prev) => (prev ? { ...prev, x: e.clientX, y: e.clientY } : null));
@@ -229,101 +234,21 @@ export const CabinetPreview = memo(function CabinetPreview() {
           </div>
         )}
         {activeView === 'front' && (
-          <ViewBox w={W + dimPad * 2} h={H + dimPad * 2}>
-            <g transform={`translate(${dimPad},${dimPad})`}>
-              <rect
-                x={0}
-                y={0}
-                width={W}
-                height={H}
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={1.5}
-                strokeOpacity={0.6}
-              />
-              <PartRect
-                x={0}
-                y={0}
-                w={T}
-                h={H}
-                fill={color}
-                label="Side Panel"
-                dim={`${thick}×${config.height}`}
-                material={carcassMatName}
-                {...tp}
-              />
-              <PartRect
-                x={W - T}
-                y={0}
-                w={T}
-                h={H}
-                fill={color}
-                label="Side Panel"
-                dim={`${thick}×${config.height}`}
-                material={carcassMatName}
-                {...tp}
-              />
-              <PartRect
-                x={T}
-                y={0}
-                w={W - 2 * T}
-                h={T}
-                fill={color}
-                label="Top Panel"
-                dim={`${d.internalWidth}×${thick}`}
-                material={carcassMatName}
-                {...tp}
-              />
-              <PartRect
-                x={T}
-                y={H - T}
-                w={W - 2 * T}
-                h={T}
-                fill={color}
-                label="Bottom Panel"
-                dim={`${d.internalWidth}×${thick}`}
-                material={carcassMatName}
-                {...tp}
-              />
-              {centreSupportXs.map((sx, i) => (
-                <PartRect
-                  key={`centre-support-front-${i}`}
-                  x={sx - Math.max(T * 0.25, 1)}
-                  y={T}
-                  w={Math.max(T * 0.5, 2)}
-                  h={H - 2 * T}
-                  fill={color}
-                  dashed
-                  label={`Centre Support ${i + 1}`}
-                  dim={`${thick}×${d.internalHeight}`}
-                  material={carcassMatName}
-                  {...tp}
-                />
-              ))}
-              {config.doorStyle !== 'none' && (
-                <DoorsOverlay config={config} d={d} scale={S} color={color} material={carcassMatName} tp={tp} />
-              )}
-              {/* Toe kick strip */}
-              {kickH > 0 && (
-                <rect
-                  x={T * 0.6}
-                  y={H - kickH}
-                  width={W - T * 0.6 * 2}
-                  height={kickH}
-                  fill={color}
-                  opacity={0.55}
-                  stroke="#666"
-                  strokeWidth={0.5}
-                />
-              )}
-              {showDims && (
-                <>
-                  <DimLine x1={0} y1={-8} x2={W} y2={-8} label={fd(config.width)} pos="above" />
-                  <DimLine x1={W + 8} y1={0} x2={W + 8} y2={H} label={fd(config.height)} pos="right" />
-                </>
-              )}
-            </g>
-          </ViewBox>
+          <FrontView
+            W={W}
+            H={H}
+            T={T}
+            thick={thick}
+            color={color}
+            carcassMatName={carcassMatName}
+            d={d}
+            config={config}
+            centreSupportXs={centreSupportXs}
+            showDims={showDims}
+            dimPad={dimPad}
+            fd={fd}
+            tp={tp}
+          />
         )}
 
         {activeView === 'frontOpen' && (
@@ -559,7 +484,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
                 WebGLPreviewCanvas returns null when the flag is absent. */}
             <WebGLPreviewCanvas
               config={config}
-              materialColor={getMaterial(config.carcassMaterial).color}
+              materialColor={getMaterial(config.carcassMaterial, customMaterials).color}
               isometric={webglIsometric}
               orbitYawDeg={orbitYaw}
               orbitPitchDeg={orbitPitch}

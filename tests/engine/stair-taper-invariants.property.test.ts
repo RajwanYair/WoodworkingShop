@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import * as fc from 'fast-check';
 import { calculateStairStringer } from '../../src/engine/stair-stringer';
 import { calculateTaperJig } from '../../src/engine/taper-jig';
+import { propertyRunOptions } from '../property-seeds';
 
 const NUM_RUNS = 200;
 const LENGTH_TOLERANCE_MM = 0.25;
@@ -31,7 +32,7 @@ describe('stair and taper property invariants', () => {
           landingIdentity
         );
       }),
-      { numRuns: NUM_RUNS },
+      propertyRunOptions('tests/engine/stair-taper-invariants.property.test.ts', NUM_RUNS),
     );
   });
 
@@ -67,7 +68,7 @@ describe('stair and taper property invariants', () => {
           );
         },
       ),
-      { numRuns: NUM_RUNS },
+      propertyRunOptions('tests/engine/stair-taper-invariants.property.test.ts', NUM_RUNS),
     );
   });
 

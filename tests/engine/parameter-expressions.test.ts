@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import * as fc from 'fast-check';
+import { propertyRunOptions } from '../property-seeds';
 import {
   buildParameterDependencyGraph,
   evaluateNamedParameters,
@@ -94,7 +95,7 @@ describe('evaluateNamedParameters', () => {
           expect(Object.keys(result.values)).toEqual(Object.keys(definitions));
         },
       ),
-      { numRuns: 200 },
+      propertyRunOptions('tests/engine/parameter-expressions.test.ts', 200),
     );
   });
 

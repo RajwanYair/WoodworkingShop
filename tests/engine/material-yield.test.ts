@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import * as fc from 'fast-check';
+import { propertyRunOptions } from '../property-seeds';
 import {
   optimizeYield,
   groupByMaterial,
@@ -167,7 +168,7 @@ describe('material-yield', () => {
             );
           },
         ),
-        { numRuns: 200 },
+        propertyRunOptions('tests/engine/material-yield.test.ts', 200),
       );
     });
   });

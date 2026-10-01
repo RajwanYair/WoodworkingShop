@@ -12,7 +12,7 @@
  * - G-code and validation are re-computed live when options change.
  */
 
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { parseToolpath, type ToolMove } from '../../engine/gcode-toolpath';
@@ -102,6 +102,7 @@ function arcToSvgPath(move: ToolMove): string {
 }
 
 export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Props) {
+  const gridId = `${useId().replaceAll(':', '')}-gcode-grid`;
   const { t } = useTranslation();
   const trapRef = useRef<HTMLDivElement>(null);
   useFocusTrap(trapRef, true, onClose);
@@ -311,7 +312,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
             role="img"
           >
             <defs>
-              <pattern id="gcode-grid" x="0" y="0" width={vbW / 10} height={vbH / 10} patternUnits="userSpaceOnUse">
+              <pattern id={gridId} x="0" y="0" width={vbW / 10} height={vbH / 10} patternUnits="userSpaceOnUse">
                 <path
                   d={`M ${vbW / 10} 0 L 0 0 0 ${vbH / 10}`}
                   fill="none"
@@ -322,7 +323,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
               </pattern>
             </defs>
             {/* Background graph-paper grid */}
-            {moves.length > 0 && <rect x={vbX} y={vbY} width={vbW} height={vbH} fill="url(#gcode-grid)" />}
+            {moves.length > 0 && <rect x={vbX} y={vbY} width={vbW} height={vbH} fill={`url(#${gridId})`} />}
             {moves.map((move, idx) => {
               if (move.kind === 'rapid') {
                 return (
