@@ -64,7 +64,7 @@ jobs:
           cd .. && sha256sum woodworkingshop-dist.tar.gz > woodworkingshop-dist.tar.gz.sha256
 
       - name: Generate build provenance attestation
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: |
             woodworkingshop-dist.tar.gz
