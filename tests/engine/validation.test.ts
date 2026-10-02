@@ -18,10 +18,31 @@ describe('validateConfig', () => {
   });
 
   it('raises CARCASS_TOO_NARROW error when width < 2t + 100', () => {
-    const issue = getIssue(validateConfig(cfg({ width: 100 })), 'CARCASS_TOO_NARROW')!;
+    const issue = getIssue(validateConfig(cfg({ width: 100, carcassMaterial: 'plywood-18' })), 'CARCASS_TOO_NARROW')!;
     expect(issue.severity).toBe('error');
     expect(issue.field).toBe('width');
-    expect(issue.suggestedValue).toBeTypeOf('number');
+    expect(issue.suggestedValue).toBe(136);
+    expect(issue.message.en).toContain('Minimum usable width is 136 mm.');
+    expect(issue.message.he).toContain('רוחב מינימלי שמיש: 136 מ"מ.');
+  });
+
+  it('uses the 18 mm fallback when validating an unknown carcass material', () => {
+    const issue = getIssue(
+      validateConfig(cfg({ width: 135, carcassMaterial: 'unknown-material' })),
+      'CARCASS_TOO_NARROW',
+    );
+    expect(issue?.suggestedValue).toBe(136);
+  });
+
+  it('rejects pocket-screw joinery for material thinner than 15 mm', () => {
+    const issue = getIssue(
+      validateConfig(cfg({ carcassMaterial: 'mdf-3', joineryType: 'pocket-screw' })),
+      'JOINERY_POCKET_SCREW_TOO_THIN',
+    );
+    expect(issue?.severity).toBe('error');
+    expect(issue?.field).toBe('carcassMaterial');
+    expect(issue?.fix?.patch?.joineryType).toBe('screw');
+    expect(issue?.fix?.labelKey).toBe('validation.fixSwitchJoinery');
   });
 
   it('clears the wide-span warning after applying its centre-support repair', () => {
@@ -32,7 +53,26 @@ describe('validateConfig', () => {
   });
 
   it('raises CARCASS_TOO_SHORT error when height is too small', () => {
-    expect(hasCode(validateConfig(cfg({ height: 100 })), 'CARCASS_TOO_SHORT')).toBe(true);
+    const issue = getIssue(validateConfig(cfg({ height: 100, carcassMaterial: 'plywood-18' })), 'CARCASS_TOO_SHORT')!;
+    expect(issue.severity).toBe('error');
+    expect(issue.field).toBe('height');
+    expect(issue.suggestedValue).toBe(136);
+    expect(issue.message.en).toContain('Minimum usable height is 136 mm.');
+    expect(issue.message.he).toContain('גובה מינימלי: 136 מ"מ.');
+  });
+
+  it.each([
+    ['minimum width', { width: 136 }, 'CARCASS_TOO_NARROW'],
+    ['minimum height', { height: 136 }, 'CARCASS_TOO_SHORT'],
+  ] as const)('accepts a cabinet at the exact %s', (_, dimensions, code) => {
+    expect(hasCode(validateConfig(cfg({ ...dimensions, carcassMaterial: 'plywood-18' })), code)).toBe(false);
+  });
+
+  it.each([
+    ['width', { width: 110 }, 'CARCASS_TOO_NARROW'],
+    ['height', { height: 110 }, 'CARCASS_TOO_SHORT'],
+  ] as const)('rejects a cabinet with %s just below the minimum', (_, dimensions, code) => {
+    expect(hasCode(validateConfig(cfg({ ...dimensions, carcassMaterial: 'plywood-18' })), code)).toBe(true);
   });
 
   it('raises DOOR_TOO_NARROW for a very narrow two-door cabinet', () => {
@@ -56,7 +96,39 @@ describe('validateConfig', () => {
   });
 
   it('raises KICK_TOO_TALL warning when kick > 50% of height', () => {
-    expect(getIssue(validateConfig(cfg({ height: 600, kickHeight: 350 })), 'KICK_TOO_TALL')?.severity).toBe('warning');
+    const issue = getIssue(validateConfig(cfg({ height: 600, kickHeight: 350 })), 'KICK_TOO_TALL');
+    expect(issue?.severity).toBe('warning');
+    expect(issue?.field).toBe('kickHeight');
+    expect(issue?.suggestedValue).toBe(270);
+    expect(issue?.message.en).toContain('more than 50%');
+    expect(issue?.message.he).toContain('50%');
+  });
+
+  it.each([
+    [299, false],
+    [300, false],
+    [301, true],
+  ])('reports KICK_TOO_TALL at %i mm for a 600 mm cabinet: %s', (kickHeight, shouldReport) => {
+    expect(hasCode(validateConfig(cfg({ height: 600, kickHeight })), 'KICK_TOO_TALL')).toBe(shouldReport);
+  });
+
+  it('recommends a toe-kick for a wardrobe without one', () => {
+    const issue = getIssue(
+      validateConfig(cfg({ furnitureType: 'wardrobe', kickHeight: 0 })),
+      'WARDROBE_MISSING_TOEKICK',
+    );
+    expect(issue?.severity).toBe('info');
+    expect(issue?.field).toBe('kickHeight');
+    expect(issue?.suggestedValue).toBe(80);
+    expect(issue?.message.en).toContain('80–100 mm toe-kick');
+    expect(issue?.message.he).toContain('80–100 מ"מ');
+  });
+
+  it.each([
+    ['a cabinet without a toe-kick', { furnitureType: 'cabinet' as const, kickHeight: 0 }],
+    ['a wardrobe with a toe-kick', { furnitureType: 'wardrobe' as const, kickHeight: 1 }],
+  ])('does not recommend a wardrobe toe-kick for %s', (_, overrides) => {
+    expect(hasCode(validateConfig(cfg(overrides)), 'WARDROBE_MISSING_TOEKICK')).toBe(false);
   });
 
   it('raises SHELF_CLEARANCE_TOO_SMALL when too many shelves in short cabinet', () => {
@@ -67,6 +139,57 @@ describe('validateConfig', () => {
 
   it('raises DRAWERS_TOO_MANY warning when drawers crowd shelves', () => {
     expect(hasCode(validateConfig(cfg({ height: 500, shelfCount: 2, drawerCount: 3 })), 'DRAWERS_TOO_MANY')).toBe(true);
+  });
+
+  it('provides a repair when drawers leave too little height for shelves', () => {
+    const issue = getIssue(
+      validateConfig(cfg({ height: 555, carcassMaterial: 'plywood-18', shelfCount: 1, drawerCount: 2 })),
+      'DRAWERS_TOO_MANY',
+    );
+    expect(issue?.severity).toBe('warning');
+    expect(issue?.field).toBe('drawerCount');
+    expect(issue?.fix?.patch?.shelfCount).toBe(0);
+    expect(issue?.fix?.labelKey).toBe('validation.fixRemoveShelves');
+    expect(issue?.message.en).toContain('leave only 199 mm');
+    expect(issue?.message.he).toContain('199 מ"מ');
+  });
+
+  it.each([
+    ['exactly 200 mm above the drawers', 556, 1, false],
+    ['1 mm below the minimum above the drawers', 555, 1, true],
+    ['no shelves to clear', 555, 0, false],
+  ])('reports DRAWERS_TOO_MANY when %s', (_, height, shelfCount, shouldReport) => {
+    expect(
+      hasCode(
+        validateConfig(cfg({ height, carcassMaterial: 'plywood-18', shelfCount, drawerCount: 2 })),
+        'DRAWERS_TOO_MANY',
+      ),
+    ).toBe(shouldReport);
+  });
+
+  it('reports high drawer density above the interior-height threshold', () => {
+    const issue = getIssue(
+      validateConfig(cfg({ height: 636, carcassMaterial: 'plywood-18', shelfCount: 0, drawerCount: 4 })),
+      'DRAWER_DENSITY_HIGH',
+    );
+    expect(issue?.severity).toBe('info');
+    expect(issue?.field).toBe('drawerCount');
+    expect(issue?.suggestedValue).toBe(3);
+    expect(issue?.message.en).toContain('High drawer density: 4 drawers in a 636 mm cabinet');
+    expect(issue?.message.he).toContain('4 מגירות בארון של 636 מ"מ');
+  });
+
+  it.each([
+    [2, false],
+    [3, false],
+    [4, true],
+  ])('reports DRAWER_DENSITY_HIGH for %i drawers in a 636 mm cabinet: %s', (drawerCount, shouldReport) => {
+    expect(
+      hasCode(
+        validateConfig(cfg({ height: 636, carcassMaterial: 'plywood-18', shelfCount: 0, drawerCount })),
+        'DRAWER_DENSITY_HIGH',
+      ),
+    ).toBe(shouldReport);
   });
 
   it('raises NO_BACK_TALL_CABINET warning for tall open-back cabinet', () => {
@@ -185,12 +308,25 @@ describe('validateConfig', () => {
   });
 
   it('raises DRAWER_STACK_OVERFLOW when total drawer stack exceeds interior height', () => {
-    expect(
-      getIssue(
-        validateConfig(cfg({ height: 600, drawerCount: 3, drawerHeights: [200, 200, 200], shelfCount: 0 })),
-        'DRAWER_STACK_OVERFLOW',
-      )?.severity,
-    ).toBe('error');
+    const issue = getIssue(
+      validateConfig(
+        cfg({
+          height: 600,
+          carcassMaterial: 'plywood-18',
+          drawerCount: 3,
+          drawerHeights: [200, 200, 200],
+          shelfCount: 0,
+        }),
+      ),
+      'DRAWER_STACK_OVERFLOW',
+    );
+    expect(issue?.severity).toBe('error');
+    expect(issue?.field).toBe('drawerCount');
+    expect(issue?.suggestedValue).toBe(3);
+    expect(issue?.message.en).toContain(
+      'Total drawer stack height (620 mm) exceeds the available interior height (564 mm).',
+    );
+    expect(issue?.message.he).toContain('סך גובה המגירות (620 מ"מ) חורג מגובה הפנים הזמין (564 מ"מ).');
   });
 
   it.each([
@@ -202,6 +338,44 @@ describe('validateConfig', () => {
         validateConfig(cfg({ height: 800, drawerCount: 2, drawerHeights: [firstDrawerHeight, 378], shelfCount: 0 })),
         'DRAWER_STACK_OVERFLOW',
       ),
+    ).toBe(shouldReport);
+  });
+
+  it('recommends reducing drawer count below the 100 mm per-drawer minimum', () => {
+    const issue = getIssue(
+      validateConfig(cfg({ height: 235, carcassMaterial: 'plywood-18', drawerCount: 2 })),
+      'EXCESSIVE_DRAWER_COUNT',
+    );
+    expect(issue?.severity).toBe('error');
+    expect(issue?.field).toBe('drawerCount');
+    expect(issue?.suggestedValue).toBe(1);
+    expect(issue?.message.en).toContain('Reduce to at most 1 drawer.');
+    expect(issue?.message.en).toContain('gives only 100 mm per drawer');
+    expect(issue?.message.he).toContain('הפחת ל-1 מגירות לכל היותר');
+    expect(issue?.message.he).toContain('100 מ"מ למגירה');
+  });
+
+  it('does not report excessive drawers when a short cabinet has no drawers', () => {
+    expect(hasCode(validateConfig(cfg({ height: 230, drawerCount: 0, shelfCount: 1 })), 'DRAWERS_TOO_MANY')).toBe(
+      false,
+    );
+  });
+
+  it('pluralizes the recommended drawer count when more than one can fit', () => {
+    const issue = getIssue(
+      validateConfig(cfg({ height: 335, carcassMaterial: 'plywood-18', drawerCount: 3 })),
+      'EXCESSIVE_DRAWER_COUNT',
+    );
+    expect(issue?.suggestedValue).toBe(2);
+    expect(issue?.message.en).toContain('Reduce to at most 2 drawers.');
+  });
+
+  it.each([
+    ['exactly 100 mm per drawer', 236, false],
+    ['below 100 mm per drawer', 235, true],
+  ])('reports EXCESSIVE_DRAWER_COUNT when %s', (_, height, shouldReport) => {
+    expect(
+      hasCode(validateConfig(cfg({ height, carcassMaterial: 'plywood-18', drawerCount: 2 })), 'EXCESSIVE_DRAWER_COUNT'),
     ).toBe(shouldReport);
   });
 

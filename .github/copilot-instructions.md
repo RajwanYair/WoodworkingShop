@@ -2,7 +2,7 @@
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.33.0** · **Next target: v5.34.0** (Phase 64)
+> **Current release: v5.34.0** · **Next target: v5.35.0** (Phase 73)
 >
 > Active sprint + completed phase history → **AGENTS.md** (loaded separately as context).
 > Sprint archive → **docs/SPRINT-HISTORY.md**.

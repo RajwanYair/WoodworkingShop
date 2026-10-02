@@ -41,7 +41,7 @@ src/
 │   ├── dimensions.ts        # Derived dimensions from config
 │   ├── parts.ts             # Part list generation
 │   ├── hardware.ts          # Hardware BOM generation
-│   ├── cut-optimizer.ts     # FFD bin-packing for cut sheets
+│   ├── cut-optimizer.ts     # MaxRects BSSF bin-packing for cut sheets
 │   ├── smart-optimizer.ts   # 5 optimization strategies
 │   ├── assembly.ts          # Assembly step generation
 │   ├── cost-estimator.ts    # Cost breakdown calculation
@@ -72,12 +72,18 @@ src/
 │   ├── index.ts             # i18next setup
 │   ├── en.json              # English translations
 │   └── he.json              # Hebrew translations (RTL)
+│   ├── ar.json              # Arabic translations (RTL)
+│   ├── de.json              # German translations
+│   ├── es.json              # Spanish translations
+│   └── fr.json              # French translations
 ├── utils/
 │   ├── bom-export.ts        # CSV bill of materials export
 │   ├── download.ts          # Shared file download helper
 │   ├── dxf-export.ts        # AutoCAD R12 DXF export for CNC
 │   ├── gcode-export.ts      # G-code export for CNC routers
+│   ├── indexed-db-storage.ts # IndexedDB persistence and localStorage migration
 │   ├── local-storage.ts     # localStorage persistence
+│   ├── project-storage.ts   # Saved projects and snapshots
 │   ├── units.ts             # Metric ↔ imperial conversion
 │   └── url-state.ts         # URL query param serialization
 └── assets/                  # Static assets (favicon, etc.)
@@ -131,6 +137,10 @@ Two supplementary stores:
 
 - `custom-materials-store.ts` — user-defined materials persisted to localStorage
 - `toast-store.ts` — notification queue with auto-dismiss
+
+Saved projects, configurations, and snapshots use IndexedDB through `idb-keyval` in
+`utils/indexed-db-storage.ts`. Existing localStorage project/config data migrates one-way on first
+access; session state and UI preferences continue to use localStorage.
 
 ## 📦 Build & Deploy
 

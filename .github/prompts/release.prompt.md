@@ -12,7 +12,7 @@ You are publishing a new Cabinet Planner release.
 1. `npm run check` — must pass with 0 errors / 0 warnings
    > `check` runs quality checks in parallel (`quality:fast`) then tests — use `npm run quality` if you need sequential output for debugging
 2. `npm run dead:check` — no orphaned exports
-3. `git status` — working tree is clean (all changes committed)
+3. `git status` — confirm all candidate changes are intentional and no unrelated user changes are present
 4. `CHANGELOG.md [Unreleased]` section is populated
 5. `ROADMAP.md` sprint items marked DONE where applicable
 
@@ -47,7 +47,7 @@ Files that embed the version string:
 - `AGENTS.md` — header line with version
 - `ROADMAP.md` — `Current version: X.Y.Z`
 
-Run a search: `grep -r "3\.\d\+\.\d\+" --include="*.md" .github/ *.md`
+Run a search: `rg -n "v?[0-9]+\.[0-9]+\.[0-9]+" .github/ *.md`
 
 ### 5 — Run `npm run release:build`
 
@@ -64,20 +64,18 @@ git tag -a vX.Y.Z -m "Release vX.Y.Z"
 git push origin main --follow-tags
 ```
 
-### 7 — Create GitHub Release
+### 7 — Verify GitHub Release
 
-```bash
-gh release create vX.Y.Z --generate-notes --title "v X.Y.Z"
-```
-
-Attach the generated SBOM from `dist/` if present.
+Pushing the annotated `vX.Y.Z` tag triggers `.github/workflows/release.yml`, which builds and attaches
+the release archive, checksum, and SBOM and creates the `WoodworkingShop vX.Y.Z` release. Do not
+create a duplicate release manually; verify the workflow run and published artifacts after the push.
 
 ## Constraints
 
 - Never skip `npm run check` before bumping
 - Never force-push after tagging
 - Keep release commit message format: `chore: release vX.Y.Z`
-- SBOM file from `dist/sbom.json` should be attached to the GitHub Release
+- The release workflow must publish its generated SBOM, archive, and checksum
 
 ## Output contract
 

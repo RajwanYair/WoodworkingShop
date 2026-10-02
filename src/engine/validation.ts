@@ -69,7 +69,8 @@ export function validateConfig(
 
   const mat = safeGetMaterial(config.carcassMaterial, extraMaterials);
   const t = mat?.thickness ?? 18;
-  const dims = computeDimensions(config, extraMaterials);
+  const dimensionConfig = mat ? config : { ...config, carcassMaterial: 'plywood-18' };
+  const dims = computeDimensions(dimensionConfig, extraMaterials);
 
   // ── Dimension sanity checks ──
 
@@ -237,7 +238,7 @@ export function validateConfig(
   issues.push(...checkJoineryConstraints(config, t));
 
   // ── Phase 12 / Sprint 9 — Custom rules from the registry ────────────────
-  const _backMat = safeGetMaterial(config.backPanelMaterial ?? '', extraMaterials);
+  const _backMat = safeGetMaterial(config.backPanelMaterial, extraMaterials);
   const ctx: ValidationContext = { dims, mat: mat ?? undefined, backMat: _backMat ?? undefined };
   for (const rule of _customRules) {
     if (rule.furnitureTypes && !rule.furnitureTypes.includes(config.furnitureType)) continue;

@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.34.0] — 2026-10-02
+
 ### Calculator Accuracy
 
 - Corrected the Woodgears cove-cut oracle to compare the published 200 mm fence distance within the engine's angle-rounding tolerance, rather than treating the derived angle as a table-published value.
@@ -22,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and calculated outputs, including arithmetic overflow.
 - Reject wood-turning diameters whose RPM formulas overflow or produce no positive speed, preventing non-finite calculator results.
 - Strengthened the wood-turning warning to state that RPM values are advisory, not safety limits, and that unbalanced blanks may require much lower speeds. Verified the AAW spindle-speed guidance but kept it out of the numeric oracle set because it does not validate this calculator's operation-specific estimates.
+- Added a published surface-speed arithmetic reference for wood-turning (100 mm at 1,270 RPM = 399.0 m/min); RPM ranges, operation factors, recommendations and safety limits remain explicitly unverified.
 
 ### Responsive Layout
 
@@ -45,7 +48,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Test Infrastructure
 
 - Added source-to-test ownership inventory and per-area coverage ratchet; directly covered the Sprint 301 store, hook, export, and calculator-panel gaps, and removed avoidable coverage exclusions.
-- Sprint 318 verification: `npm run check` passes with 5,256 unit tests across 341 files; the coverage ratchet, export golden suite, eight Chromium/Firefox visual comparisons, 16 benchmark budgets, and full no-retry browser matrix pass (439 passed, 13 intentional skips, zero failures). Raw bundle totals 2,816.1 KB against the 2,960 KB budget. v5.34.0 remains blocked by open Phase 63 dependencies and clean-checkout acceptance.
+- Sprint 318 verification: `npm run check` passes with 5,256 unit tests across 341 files; the coverage ratchet, export golden suite, eight Chromium/Firefox visual comparisons, 16 benchmark budgets, and full no-retry browser matrix pass (439 passed, 13 intentional skips, zero failures). Raw bundle totals 2,816.1 KB against the 2,960 KB budget. Sprint 306 is accepted under bounded mutation scope with no combined score claimed.
+  Clean-checkout acceptance passed from a fresh `npm ci` on 2026-10-02; `npm run check` passed
+  5,338 tests, and dead-code and release-build budgets passed.
 - Verified 4,465 tests across 278 files; coverage inventory maps all 351 production modules, with 0 unmeasured and 23 explicitly uncovered modules remaining.
 - Added deterministic Playwright and typed test fixtures, RTL render support, accessible E2E queries, and per-test environment cleanup; fixed a localStorage mock leak exposed by shuffled test execution.
 - Verified 4,470 tests across 280 files in normal and seeded-shuffle runs, all 26 Chromium/Firefox E2E tests, and the complete `npm run ci` gate including build, bundle, and benchmark budgets.

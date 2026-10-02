@@ -1,6 +1,6 @@
 # Cabinet Planner — User Guide
 
-> Version 5.33 · React 19 + TypeScript 6 · Progressive Web App
+> Version 5.34 · React 19 + TypeScript 6 · Progressive Web App
 
 ---
 
@@ -8,16 +8,18 @@
 
 1. [Getting Started](#getting-started)
 2. [Workflow Overview](#workflow-overview)
-3. [Configurator Tab](#configurator-tab)
-4. [Preview Tab](#preview-tab)
-5. [Cut Sheets Tab](#cut-sheets-tab)
-6. [Assembly Tab](#assembly-tab)
-7. [PDF Export Tab](#pdf-export-tab)
-8. [Keyboard Shortcuts](#keyboard-shortcuts)
-9. [Sharing & URL State](#sharing--url-state)
-10. [Dark Mode & Accessibility](#dark-mode--accessibility)
-11. [Tips & Tricks](#tips--tricks)
-12. [Troubleshooting](#troubleshooting)
+3. [Workspace Tab](#workspace-tab)
+4. [Configurator Tab](#configurator-tab)
+5. [Preview Tab](#preview-tab)
+6. [Cut Sheets Tab](#cut-sheets-tab)
+7. [Assembly Tab](#assembly-tab)
+8. [PDF Export Tab](#pdf-export-tab)
+9. [Calculators Tab](#calculators-tab)
+10. [Keyboard Shortcuts](#keyboard-shortcuts)
+11. [Sharing & URL State](#sharing--url-state)
+12. [Dark Mode & Accessibility](#dark-mode--accessibility)
+13. [Tips & Tricks](#tips--tricks)
+14. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -25,28 +27,38 @@
 
 Open the app at <https://rajwanyair.github.io/WoodworkingShop/>.
 
-No account or installation required. All data is stored locally in your browser
-(`localStorage`). The app works offline once cached by the service worker.
+No account or installation required. Saved projects, configurations, and snapshots use IndexedDB;
+older project data is migrated from localStorage on first access. Preferences and the active session
+also use localStorage. The app works offline once cached by the service worker.
 
 ---
 
 ## Workflow Overview
 
 ```text
-Configure → Preview → Cut Sheets → Assembly → PDF Export
+Workspace → Configure → Preview → Cut Sheets → Assembly → PDF Export
 ```
 
-Each tab builds on the previous. Work left-to-right for a full project:
+The main design path runs left-to-right. The Calculators tab is available whenever you need a
+woodworking estimate; it is not a required step in the cabinet workflow.
 
-| Step | Tab        | Output                                         |
-| ---- | ---------- | ---------------------------------------------- |
-| 1    | Configure  | Cabinet dimensions, materials, doors, drawers  |
-| 2    | Preview    | SVG front / side / top / back / 3-D views      |
-| 3    | Cut Sheets | Optimized sheet layouts, DXF, G-code, BOM      |
-| 4    | Assembly   | Step-by-step illustrated assembly instructions |
-| 5    | PDF Export | Print-ready PDF with all plans and cut lists   |
+| Tab         | Output                                                         |
+| ----------- | -------------------------------------------------------------- |
+| Workspace   | Start screen and entry point to the design workspace           |
+| Configure   | Cabinet dimensions, materials, doors, drawers, and room layout |
+| Preview     | Five orthographic SVG views and a 3-D view                     |
+| Cut Sheets  | Optimized layouts, parts and hardware tables, DXF, G-code, BOM |
+| Assembly    | Step-by-step illustrated assembly instructions                 |
+| PDF Export  | Print-ready PDF with plans, cut lists, and assembly steps      |
+| Calculators | Twenty-four expandable woodworking calculators                 |
 
 ---
+
+## Workspace Tab
+
+The Workspace tab is the starting screen. Open Project Manager from the header to save, search,
+sort, load, import, or export named projects. Cabinet projects and snapshots are stored in IndexedDB;
+legacy localStorage data is migrated when the IndexedDB store is first read.
 
 ## Configurator Tab
 
@@ -64,6 +76,7 @@ Each tab builds on the previous. Work left-to-right for a full project:
 
 - **Width / Height / Depth** — in millimetres (toggle to inches with the unit button).
 - **Toe Kick Height** — set to 0 for wall cabinets or base with no kick.
+- **Room Layout** — place cabinet instances in a room plan and adjust their positions and orientations.
 
 ### Materials
 
@@ -179,6 +192,12 @@ Generates a print-ready PDF including:
 
 **Print** from the PDF viewer, or use the floating print button (`Ctrl+P`).
 
+## Calculators Tab
+
+The Calculators tab contains twenty-four expandable tools for woodworking estimates, including
+finishing, joints, doors and drawers, wood turning, stair parts, and router setups. Expand a section
+to enter its inputs and view the calculated result.
+
 ---
 
 ## Keyboard Shortcuts
@@ -190,6 +209,7 @@ Generates a print-ready PDF including:
 | `Alt+3`                   | Go to Cut Sheets tab          |
 | `Alt+4`                   | Go to Assembly tab            |
 | `Alt+5`                   | Go to PDF Export tab          |
+| `Alt+6`                   | Go to Calculators tab         |
 | `Alt+D`                   | Toggle dark mode              |
 | `Ctrl+Z`                  | Undo last change              |
 | `Ctrl+Y` / `Ctrl+Shift+Z` | Redo                          |

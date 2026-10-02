@@ -4,6 +4,7 @@ import { generateParts, computeEdgeBandingTotal, computePartsWeight } from '../.
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 import { expectBilingualNames } from '../assertions';
 import { propertyRunOptions } from '../property-seeds';
+import type { Part } from '../../src/engine/types';
 
 describe('generateParts', () => {
   const parts = generateParts(DEFAULT_CONFIG);
@@ -26,6 +27,14 @@ describe('generateParts', () => {
     expect(sides.thickness).toBe(17); // plywood-17
   });
 
+  it('sizes top and bottom panels between the two side panels', () => {
+    const generated = generateParts({ ...DEFAULT_CONFIG, width: 1003 });
+    const expectedSpan = 1003 - 2 * 17;
+
+    expect(generated.find((part) => part.name.en === 'Top Panel')?.length).toBe(expectedSpan);
+    expect(generated.find((part) => part.name.en === 'Bottom Panel')?.length).toBe(expectedSpan);
+  });
+
   it('has adjustable shelves matching shelfCount', () => {
     const shelves = parts.find((p) => p.name.en === 'Adjustable Shelf');
     expect(shelves).toBeDefined();
@@ -33,9 +42,12 @@ describe('generateParts', () => {
   });
 
   it('has 2 doors for default config', () => {
-    const doors = parts.find((p) => p.name.en === 'Door');
-    expect(doors).toBeDefined();
-    expect(doors!.qty).toBe(2);
+    const generated = generateParts({ ...DEFAULT_CONFIG, width: 1004 });
+    const doors = generated.filter((part) => part.name.en === 'Door');
+
+    expect(doors).toHaveLength(1);
+    expect(doors[0]?.qty).toBe(2);
+    expectBilingualNames(doors);
   });
 
   it.each([
@@ -43,10 +55,20 @@ describe('generateParts', () => {
     ['doors-only', 'None', 'All 4 edges'],
     ['none', 'None', 'None'],
   ] as const)('applies %s edge banding to carcass and doors', (mode, carcassEdge, doorEdge) => {
-    const generated = generateParts({ ...DEFAULT_CONFIG, edgeBanding: mode });
+    const generated = generateParts({ ...DEFAULT_CONFIG, width: 1007, edgeBanding: mode });
 
     expect(generated.find((part) => part.name.en === 'Top Panel')?.edgeBanding.en).toBe(carcassEdge);
     expect(generated.find((part) => part.name.en === 'Door')?.edgeBanding.en).toBe(doorEdge);
+    expect(generated.find((part) => part.name.en === 'Toe Kick (Front)')?.edgeBanding.en).toBe(
+      mode === 'all-visible' ? 'Front edge' : 'None',
+    );
+    expect(
+      generated
+        .filter((part) =>
+          ['Side Panel', 'Top Panel', 'Bottom Panel', 'Fixed Shelf', 'Adjustable Shelf'].includes(part.name.en),
+        )
+        .map((part) => part.edgeBanding.en),
+    ).toEqual([carcassEdge, carcassEdge, carcassEdge, carcassEdge, carcassEdge]);
   });
 
   it('has a back panel with thin material', () => {
@@ -55,17 +77,13 @@ describe('generateParts', () => {
     expect(back!.thickness).toBe(4); // plywood-4
   });
 
-  it('includes fixed shelf when height > 1200', () => {
-    const fixed = parts.find((p) => p.name.en === 'Fixed Shelf');
-    expect(fixed).toBeDefined();
-    expect(fixed!.qty).toBe(1);
-  });
-
-  it('omits fixed shelf when height ≤ 1200', () => {
-    const cfg = { ...DEFAULT_CONFIG, height: 1000 };
-    const p = generateParts(cfg);
-    const fixed = p.find((x) => x.name.en === 'Fixed Shelf');
-    expect(fixed).toBeUndefined();
+  it.each([
+    [1199, false],
+    [1200, false],
+    [1201, true],
+  ])('includes a fixed shelf only above 1200 mm (height %i)', (height, includesFixedShelf) => {
+    const generated = generateParts({ ...DEFAULT_CONFIG, height });
+    expect(generated.some((part) => part.name.en === 'Fixed Shelf')).toBe(includesFixedShelf);
   });
 
   it('omits doors when doorStyle is none', () => {
@@ -75,26 +93,49 @@ describe('generateParts', () => {
     expect(doors).toBeUndefined();
   });
 
-  it('generates a single panel from the selected material source', () => {
+  it('generates glass doors from tempered glass with no edge banding', () => {
+    const generated = generateParts({ ...DEFAULT_CONFIG, width: 1005, doorStyle: 'glass' });
+    const glassDoors = generated.filter((part) => part.name.en === 'Glass Door');
+
+    expect(glassDoors).toHaveLength(1);
+    expect(glassDoors[0]).toMatchObject({
+      qty: 2,
+      material: 'tempered-glass-4',
+      thickness: 4,
+      edgeBanding: { en: 'None' },
+    });
+    expectBilingualNames(glassDoors);
+  });
+
+  it.each([
+    ['carcass', 'plywood-17', 17],
+    ['back', 'plywood-4', 4],
+  ] as const)('generates a single panel from the %s material source', (panelMaterialSource, material, thickness) => {
     const generated = generateParts({
       ...DEFAULT_CONFIG,
       furnitureType: 'panel',
       width: 600,
       height: 800,
-      panelMaterialSource: 'back',
+      panelMaterialSource,
     });
 
     expect(generated).toHaveLength(1);
+    expectBilingualNames(generated);
     expect(generated[0]).toMatchObject({
       id: 'P01',
       qty: 1,
       name: { en: 'Panel' },
-      material: 'plywood-4',
-      thickness: 4,
+      material,
+      thickness,
       length: 600,
       width: 800,
       edgeBanding: { en: 'All 4 edges' },
     });
+  });
+
+  it('omits edge banding from a single panel when disabled', () => {
+    const generated = generateParts({ ...DEFAULT_CONFIG, furnitureType: 'panel', width: 601, edgeBanding: 'none' });
+    expect(generated[0]?.edgeBanding.en).toBe('None');
   });
 
   it('generates desk parts without cabinet-only doors, drawers, supports, or toe kicks', () => {
@@ -124,6 +165,59 @@ describe('generateParts', () => {
     expect(generated.some((part) => /Door|Drawer|Centre Support|Toe Kick/.test(part.name.en))).toBe(false);
   });
 
+  it.each([
+    [0, false],
+    [1, true],
+  ])('includes an under-desk shelf only when shelfCount is positive (%i)', (shelfCount, includesShelf) => {
+    const generated = generateParts({ ...DEFAULT_CONFIG, furnitureType: 'desk', shelfCount });
+    expect(generated.some((part) => part.name.en === 'Under-desk Shelf')).toBe(includesShelf);
+  });
+
+  it.each([
+    ['all-visible', 'All 4 edges', 'Front edge'],
+    ['none', 'None', 'None'],
+  ] as const)('applies %s edge banding to desk parts', (edgeBanding, desktopEdge, otherEdge) => {
+    const generated = generateParts({
+      ...DEFAULT_CONFIG,
+      furnitureType: 'desk',
+      width: edgeBanding === 'all-visible' ? 1201 : 1202,
+      shelfCount: 1,
+      edgeBanding,
+    });
+
+    expect(
+      generated
+        .filter((part) => ['Desktop', 'Side Panel', 'Under-desk Shelf'].includes(part.name.en))
+        .map((part) => part.edgeBanding.en),
+    ).toEqual([desktopEdge, otherEdge, otherEdge]);
+    expectBilingualNames(generated);
+  });
+
+  it.each([
+    [true, true],
+    [false, false],
+  ])('includes a desk back panel when hasBack is %s', (hasBack, includesBackPanel) => {
+    const generated = generateParts({ ...DEFAULT_CONFIG, furnitureType: 'desk', hasBack });
+    expect(generated.some((part) => part.name.en === 'Back Panel')).toBe(includesBackPanel);
+  });
+
+  it.each([
+    { requestedCount: -2, edgeBanding: 'all-visible', expectedQuantities: [], expectedEdges: [] },
+    { requestedCount: 0, edgeBanding: 'all-visible', expectedQuantities: [], expectedEdges: [] },
+    { requestedCount: 2, edgeBanding: 'all-visible', expectedQuantities: [2], expectedEdges: ['Front edge'] },
+    { requestedCount: 2, edgeBanding: 'none', expectedQuantities: [2], expectedEdges: ['None'] },
+  ] as const)(
+    'generates centre supports for count $requestedCount with $edgeBanding banding',
+    ({ requestedCount, edgeBanding, expectedQuantities, expectedEdges }) => {
+      const generated = generateParts({ ...DEFAULT_CONFIG, shelfCentreSupports: requestedCount, edgeBanding });
+      const supports = generated.filter((part) => part.name.en === 'Centre Support');
+
+      expect(supports.map((part) => part.qty)).toEqual(expectedQuantities);
+      expect(supports.map((part) => part.edgeBanding.en)).toEqual(expectedEdges);
+      expectBilingualNames(supports);
+    },
+  );
+
   it('omits doors, drawers, and toe kicks from bookshelves while retaining shelves', () => {
     const generated = generateParts({
       ...DEFAULT_CONFIG,
@@ -138,10 +232,19 @@ describe('generateParts', () => {
     expect(generated.some((part) => /Door|Drawer|Toe Kick/.test(part.name.en))).toBe(false);
   });
 
+  it.each([
+    [0, false],
+    [100, true],
+  ])('generates cabinet toe-kick boards only when kickHeight is %s', (kickHeight, includesToeKick) => {
+    const generated = generateParts({ ...DEFAULT_CONFIG, kickHeight });
+    expect(generated.some((part) => part.name.en.startsWith('Toe Kick'))).toBe(includesToeKick);
+  });
+
   it('generates a wardrobe rail and toe-kick boards with configured dimensions', () => {
     const generated = generateParts({ ...DEFAULT_CONFIG, furnitureType: 'wardrobe' });
 
     expect(generated.find((part) => part.name.en === 'Hanging Rail')).toMatchObject({
+      name: { en: 'Hanging Rail', he: 'מוט תלייה' },
       thickness: 25,
       length: 966,
       width: 25,
@@ -157,6 +260,11 @@ describe('generateParts', () => {
     });
   });
 
+  it('omits a hanging rail from standard cabinets', () => {
+    const generated = generateParts({ ...DEFAULT_CONFIG, width: DEFAULT_CONFIG.width + 1 });
+    expect(generated.some((part) => part.name.en === 'Hanging Rail')).toBe(false);
+  });
+
   it('uses configured drawer heights and slide clearances in drawer parts', () => {
     const generated = generateParts({
       ...DEFAULT_CONFIG,
@@ -165,7 +273,36 @@ describe('generateParts', () => {
       drawerHeights: [120, 240],
     });
 
-    expect(generated.filter((part) => part.name.en.startsWith('Drawer '))).toHaveLength(8);
+    const drawerParts = generated.filter((part) => part.name.en.startsWith('Drawer '));
+    expect(drawerParts).toHaveLength(8);
+    expect(drawerParts.map((part) => part.name.he)).toEqual([
+      'חזית מגירה 1',
+      'דופן מגירה 1',
+      'קצה מגירה 1',
+      'תחתית מגירה 1',
+      'חזית מגירה 2',
+      'דופן מגירה 2',
+      'קצה מגירה 2',
+      'תחתית מגירה 2',
+    ]);
+    expect(drawerParts.map((part) => part.edgeBanding.en)).toEqual([
+      'All 4 edges',
+      'None',
+      'None',
+      'None',
+      'All 4 edges',
+      'None',
+      'None',
+      'None',
+    ]);
+    const unbandedDrawers = generateParts({
+      ...DEFAULT_CONFIG,
+      width: 1001,
+      depth: 400,
+      drawerCount: 1,
+      edgeBanding: 'none',
+    });
+    expect(unbandedDrawers.find((part) => part.name.en === 'Drawer 1 Front')?.edgeBanding.en).toBe('None');
     expect(
       generateParts({ ...DEFAULT_CONFIG, drawerCount: 0 }).filter((part) => part.name.en.startsWith('Drawer ')),
     ).toHaveLength(0);
@@ -212,7 +349,8 @@ describe('generateParts', () => {
   });
 
   it('all parts have bilingual names', () => {
-    expectBilingualNames(parts);
+    const generated = generateParts({ ...DEFAULT_CONFIG, width: 1006 });
+    expectBilingualNames(generated);
   });
 
   it('generates uniquely identified parts with finite positive dimensions for valid cabinet configurations', () => {
@@ -229,9 +367,10 @@ describe('generateParts', () => {
         (overrides) => {
           const generated = generateParts({ ...DEFAULT_CONFIG, ...overrides });
           const identifiers = generated.map((part) => part.id);
+          const expectedIdentifiers = generated.map((_, index) => `P${String(index + 1).padStart(2, '0')}`);
 
           expect(generated.length).toBeGreaterThan(0);
-          expect(new Set(identifiers).size).toBe(identifiers.length);
+          expect(identifiers).toEqual(expectedIdentifiers);
           expect(
             generated.every(
               (part) =>
@@ -253,21 +392,41 @@ describe('generateParts', () => {
 });
 
 describe('computeEdgeBandingTotal', () => {
-  it('computes total edge banding length', () => {
-    const generated = generateParts({ ...DEFAULT_CONFIG, edgeBanding: 'all-visible' });
-    const total = computeEdgeBandingTotal(generated);
-    const expected = generated.reduce(
-      (sum, part) =>
-        sum +
-        (part.edgeBanding.en === 'Front edge'
-          ? part.length * part.qty
-          : part.edgeBanding.en === 'All 4 edges'
-            ? 2 * (part.length + part.width) * part.qty
-            : 0),
-      0,
-    );
+  it('computes front-edge and four-edge totals from independent part fixtures', () => {
+    const parts: Part[] = [
+      {
+        id: 'P01',
+        qty: 2,
+        name: { en: 'Front edge panel', he: 'לוח קצה קדמי' },
+        material: 'plywood-17',
+        thickness: 17,
+        length: 600,
+        width: 300,
+        edgeBanding: { en: 'Front edge', he: 'קצה קדמי' },
+      },
+      {
+        id: 'P02',
+        qty: 3,
+        name: { en: 'Four-edge panel', he: 'לוח ארבעה קצוות' },
+        material: 'plywood-17',
+        thickness: 17,
+        length: 1000,
+        width: 300,
+        edgeBanding: { en: 'All 4 edges', he: 'כל 4 הקצוות' },
+      },
+      {
+        id: 'P03',
+        qty: 4,
+        name: { en: 'Unbanded panel', he: 'לוח ללא קנטים' },
+        material: 'plywood-17',
+        thickness: 17,
+        length: 800,
+        width: 400,
+        edgeBanding: { en: 'None', he: 'ללא' },
+      },
+    ];
 
-    expect(total).toBe(expected);
+    expect(computeEdgeBandingTotal(parts)).toBe(9000);
   });
 
   it('returns 0 when no edge banding', () => {

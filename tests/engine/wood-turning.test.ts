@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { calculateWoodTurning } from '../../src/engine/wood-turning';
 import type { TurningOperation } from '../../src/engine/wood-turning';
+import WOOD_TURNING_SURFACE_SPEED_ORACLE from '../fixtures/oracles/wood-turning-surface-speed.json';
 
 const MM_TO_IN = 1 / 25.4;
 
@@ -20,6 +21,17 @@ describe('calculateWoodTurning', () => {
       expect(result.surfaceSpeedMPerMin).toBe(surfaceSpeedMPerMin);
     },
   );
+
+  it('matches the published surface-speed formula for the reference case', () => {
+    const { input, expected } = WOOD_TURNING_SURFACE_SPEED_ORACLE;
+    const result = calculateWoodTurning({ blankDiameterMm: input.blankDiameterMm, operation: 'finishing' });
+    const referenceSurfaceSpeedMPerMin = Math.round(((Math.PI * input.blankDiameterMm * input.rpm) / 1000) * 10) / 10;
+    const engineSurfaceSpeedMPerMin =
+      Math.round(((Math.PI * input.blankDiameterMm * result.recommendedRpm) / 1000) * 10) / 10;
+
+    expect(referenceSurfaceSpeedMPerMin).toBe(expected.surfaceSpeedMPerMin);
+    expect(result.surfaceSpeedMPerMin).toBe(engineSurfaceSpeedMPerMin);
+  });
 
   describe('RPM limits follow 6000/d and 2000/d formulas', () => {
     it.each([

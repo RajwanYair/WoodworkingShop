@@ -32,18 +32,19 @@
 
 The release flow is considered valid only when all checks below pass:
 
-| Check                    | Command                                                                      | Expected Result                    |
-| ------------------------ | ---------------------------------------------------------------------------- | ---------------------------------- |
-| Quality gate             | `npm run check`                                                              | Pass                               |
-| Build and packaging gate | `npm run release:build`                                                      | Pass                               |
-| Main branch published    | `git push origin main`                                                       | Remote `main` matches local `HEAD` |
-| Tag publish              | `git tag vX.Y.Z && git push origin vX.Y.Z`                                   | Tag exists on origin               |
-| Release publish          | `gh release create vX.Y.Z --generate-notes --title "WoodworkingShop vX.Y.Z"` | GitHub release created             |
+| Check                         | Command                                                           | Expected Result                                                       |
+| ----------------------------- | ----------------------------------------------------------------- | --------------------------------------------------------------------- |
+| Quality gate                  | `npm run check`                                                   | Pass                                                                  |
+| Build and packaging gate      | `npm run release:build`                                           | Pass                                                                  |
+| Main branch and tag published | `git push origin main --follow-tags`                              | Remote `main` and annotated release tag match local `HEAD`            |
+| Release publish               | Push `vX.Y.Z`; `.github/workflows/release.yml` runs automatically | `WoodworkingShop vX.Y.Z` release includes archive, checksum, and SBOM |
 
 ## Operational Notes
 
 - `.vscode/mcp.json` is the source of truth for active MCP servers.
 - Server descriptions in `.vscode/mcp.json` must stay aligned with this document.
+- Publishing an annotated `v*` tag triggers the release workflow; do not also create a manual GitHub release.
+- The workflow uploads the generated SBOM from the workspace root; local `npm run sbom` writes under the OS temp directory.
 - If a server is temporarily disabled, record the reason in the sprint commit message.
 
 ## First-Run Setup

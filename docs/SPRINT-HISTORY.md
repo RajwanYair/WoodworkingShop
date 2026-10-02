@@ -507,7 +507,7 @@ the in-flight quality sprints (84-87) and run first.
 - Browser-derived inventory maps all 118 calculator controls to positive/negative behavior evidence and 108 high-use workspace controls to evidence or explicit waivers. Calculator suite passed 60/60 at two workers; configurator suite passed 62/62; optimizer parts/hardware inventory passed 2/2. A separate stock-persistence Firefox failure in a broad inventory grep was unrelated to these table-inventory tests.
 - Component ratchet: 572 tests, 75.04% statements, 69.05% branches, 73.10% functions and 75.74% lines; no floor lowered. The custom-material derivation defect is fixed. Sprint 305 acceptance is complete.
 
-### Sprint 306 — Mutation testing and quality evidence (in progress, 2026-10-02)
+### Sprint 306 — Mutation testing and quality evidence (completed under bounded scope, 2026-10-02)
 
 - Bounded Stryker targets: dimensions, parts, cut-optimizer and validation; two workers; no score threshold; JSON/HTML and temp files remain under the OS temp directory.
 - Four-module initial dry run: 1,366 mutants and 926 related tests in 2m55s. Focused `dimensions.ts` run: 122 mutants in 2m47s; 116 killed, five survived, one timed out (95.90%).
@@ -523,7 +523,8 @@ the in-flight quality sprints (84-87) and run first.
   94 survived and three with no coverage (57.64% overall; 58.41% of covered mutants). Added exact
   99/100/101 mm drawer-height and exact/exceeding drawer-stack boundaries, plus issue field and
   bilingual drawer-index assertions. A 35-second focused drawer-validation run killed all 30 mutants.
-  The full-static validation baseline remains unmeasured. A `cut-optimizer.ts` diagnostic invoked with
+  At this status capture the full-static validation baseline was unmeasured; the refreshed result is
+  recorded below. A `cut-optimizer.ts` diagnostic invoked with
   `--ignoreStatic` took 110m47s: 443 killed, 219 survived, one timed out and 45 with no coverage
   (62.71% overall; 66.97% of covered mutants). Added exact co-nesting yield, waste and conflict checks,
   plus empty-result and untouched-conflict cases; the focused metrics slice killed all 16 mutants in
@@ -551,7 +552,45 @@ the in-flight quality sprints (84-87) and run first.
   descending-loop timeout and no uncovered mutants (97.08%). The refreshed combined weekly run took
   7m39s: 472 mutants, 375 killed, 76 survived, 20 with no coverage and one timeout (79.66% overall;
   83.19% of covered mutants). Dimensions scored 97.08%; BOM remained at 72.54% overall and 77.14%
-  of covered mutants. It remains report-only with no threshold.
+  of covered mutants. Two clean baselines and the thresholded run produced identical per-mutant
+  statuses and a 79.66% overall score (83.19% covered). The weekly-only 79% gate passed in 7m45s;
+  the shared four-module config remains report-only, and S306 remains open.
+
+- Refreshed static-inclusive validation diagnostic with both validation suites (2026-10-02): 4m21s,
+  231 mutants, 226 killed, four survived and one with no coverage (97.84% overall; 98.26% of covered
+  mutants). Focused assertions
+  for carcass boundaries, toe-kick threshold/recommendation, wardrobe toe-kick advice, drawer density,
+  drawer/shelf clearance and excessive drawer count killed 38/38, 15/15, 8/8, 13/13, 17/17 and 18/18
+  mutants respectively; drawer-stack issue construction killed 6/6, registry sorting killed 3/3,
+  registry registration/removal killed 17/17, and the unknown-material fallback and joinery call-site
+  slices killed 4/4 and 5/5. The complete static-inclusive four-module
+  baseline and clean-checkout acceptance remain open.
+
+- Post-baseline survivor triage: added a low-height, zero-drawer case; the focused drawer-guard slice
+  killed all 4/4 mutants, including the former `true` and `>= 0` survivors. The focused
+  `safeGetMaterial` slice killed 5/6 mutants; the surviving `BlockStatement` removes the catch body,
+  and remains equivalent because `getMaterial` throws for unknown keys while `undefined` and `null`
+  both take the same nullish 18 mm fallback path. Added an empty-at-initialization registry assertion,
+  but the `ArrayDeclaration` mutant remains uncovered (`static`, `coveredBy: []`) by Stryker.
+- Refreshed the full static-inclusive validation run after the follow-up changes (4m13s): 229 mutants,
+  228 killed, one survived and none with no coverage (99.56% overall and covered). A fresh-import
+  registry test killed the static array mutant; removing the redundant `backPanelMaterial ?? ''`
+  fallback eliminated the uncovered literal. The sole survivor is the equivalent catch-block mutant:
+  `getMaterial` throws on unknown keys, and both caught `null` and uncaught `undefined` take the same
+  nullish 18 mm fallback. The complete static-inclusive four-module baseline and clean-checkout
+  acceptance remain open.
+- Bounded-scope close-out (2026-10-02): the combined static-inclusive run discovered 1,381 mutants but
+  was stopped at 109 tests when its estimated runtime rose to 35 hours; no combined score is claimed.
+  Static-inclusive module reports are retained for dimensions, validation and BOM; the parts aggregate
+  report is 84.69% overall (84.97% covered) and predates the final focused name/edge assertions. Follow-up
+  parts slices killed 33/37 cabinet-name/edge mutants and 29/33 toe-kick/rail mutants; the remaining
+  false-arm `none` to empty-string mutations are equivalent through `edgeLabel`'s default branch.
+  Focused wardrobe name and toe-kick front-edge probes killed their actionable mutants. The
+  `cut-optimizer.ts` `--ignoreStatic` diagnostic took 110m47s, so it remains outside the 15-minute
+  scheduled workflow; focused critical metric checks killed 16/16 mutants. The repeated dimensions+BOM
+  79% gate passed in 7m45s. This closes S306 under the revised bounded acceptance; it does not establish
+  a four-module aggregate or static-inclusive cut-optimizer score. Clean-checkout verification remains
+  required for release acceptance.
 
 ## Phase 64 — Real User Journeys and Browser Confidence
 
@@ -599,8 +638,9 @@ the in-flight quality sprints (84-87) and run first.
 
 - [x] T1/T2: 27 production-browser journeys (Chromium + Firefox) expand all 24 mounted calculators and compare every finite option against the pure engine.
 - [x] T4: typed entry, ArrowUp/ArrowDown recomputation and clear-to-zero validation without NaN/Infinity.
-- [ ] T3: screw pull-out now follows USDA FPL-GTR-282 Eq. 8-10a with an independent #8 × 1 in oracle; white-oak shrinkage cites FPL-GTR-282 Table 4-3; finish coverage/recoat compatibility has product-scoped manufacturer range oracles; glue and moisture bounds are shared between UI and engine; board-foot inputs reject non-finite values. Finish cure/volume and category-wide assumptions remain unverified. Glue spread rates remain unclaimed; two calculator oracle gaps remain.
+- [x] T3: screw pull-out now follows USDA FPL-GTR-282 Eq. 8-10a with an independent #8 × 1 in oracle; white-oak shrinkage cites FPL-GTR-282 Table 4-3; finish coverage/recoat compatibility has product-scoped manufacturer range oracles; glue and moisture bounds are shared between UI and engine; board-foot inputs reject non-finite values. Finish cure/volume and category-wide assumptions remain unverified. Glue spread rates remain unclaimed.
 - [ ] T3 update (2026-10-02): an OpenStax-backed honing-guide fixture verifies only the idealized right-triangle projection at 0.1 mm precision; real guide geometry and calibration remain excluded. Wood-turning still has no qualifying numeric oracle, so T3 remains open.
+- [x] T3 oracle close-out (2026-10-02): all 24 mounted calculators have linked reference cases. Wood-turning surface-speed output matches the published metric turning-speed equation to 0.1 m/min for a 100 mm, 1,270 RPM case. The fixture excludes RPM ranges, operation factors, recommendations and safety claims; the OpenStax honing-guide fixture likewise remains scoped to idealized right-triangle geometry.
 
 ### Sprint 318 — v5.34.0 verification evidence (2026-10-02)
 
@@ -608,4 +648,4 @@ the in-flight quality sprints (84-87) and run first.
 - [x] T1: Export golden test passes; all 8 Chromium/Firefox visual-regression comparisons pass; bundle totals 2,658.3 KB JavaScript, 68.0 KB CSS and 2,816.1 KB overall; all 16 benchmark budgets pass.
 - [x] T1: Full Playwright run against the fresh TEMP production build used one worker and zero retries: 439 passed, 13 intentionally skipped, 0 failed (30 minutes). The corrected keyboard journey also passed all 36 Chromium/Firefox cases. CI now installs and caches WebKit for its configured preview-acceptance projects.
 - [x] T2: Recorded browser scope in `docs/ARCHITECTURE.md`: full journey suite in Chromium/Firefox; WebKit desktop/mobile preview acceptance only; six-locale axe and responsive/visual preview matrices are Chromium-only.
-- Release gate: NOT READY. Phase 63 S303, S305 and S306 remain open, and the clean-checkout acceptance criterion has not been exercised. Do not mark v5.34.0 released until Phase 63 exits.
+- Release gate: NOT READY. Phase 63 S306 remains open, and the clean-checkout acceptance criterion has not been exercised. Do not mark v5.34.0 released until Phase 63 exits.

@@ -1,0 +1,14 @@
+{
+  "source": "Wikipedia, Speeds and feeds, Cutting speed; metric surface-speed equation V = πDN/1000 m/min for diameter D in mm and spindle speed N in RPM.",
+  "url": "https://en.wikipedia.org/wiki/Speeds_and_feeds",
+  "retrievedOn": "2026-10-02",
+  "condition": "A 100 mm diameter workpiece rotating at 1,270 RPM has a surface speed of 398.98 m/min, rounded to 399.0 m/min.",
+  "scope": "Validates surface-speed arithmetic only. Does not validate this calculator's RPM ranges, operation factors, recommended speeds, or any woodturning safety limit.",
+  "input": {
+    "blankDiameterMm": 100,
+    "rpm": 1270
+  },
+  "expected": {
+    "surfaceSpeedMPerMin": 399
+  }
+}

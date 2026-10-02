@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import * as fc from 'fast-check';
 import { propertyRunOptions } from '../property-seeds';
 import BIRCH_PANEL_WEIGHT_ORACLE from '../fixtures/oracles/birch-panel-weight.json';
@@ -53,6 +53,126 @@ describe('computePartWeightKg', () => {
 });
 
 describe('materials', () => {
+  it('initializes a complete, unique built-in catalogue', async () => {
+    vi.resetModules();
+    try {
+      const {
+        MATERIALS: catalog,
+        DEFAULT_CONFIG: defaultConfig,
+        BOOKSHELF_DEFAULTS: bookshelfDefaults,
+        DESK_DEFAULTS: deskDefaults,
+        WARDROBE_DEFAULTS: wardrobeDefaults,
+        PANEL_DEFAULTS: panelDefaults,
+        CABINET_DEFAULTS: cabinetDefaults,
+      } = await import('../../src/engine/materials');
+      const keys = catalog.map((material) => material.key);
+
+      expect(catalog).toHaveLength(12);
+      expect(new Set(keys).size).toBe(12);
+      expect(catalog.filter((material) => material.category === 'panel')).toHaveLength(9);
+      expect(catalog.filter((material) => material.category === 'back')).toHaveLength(2);
+      expect(catalog.filter((material) => material.category === 'door')).toHaveLength(1);
+      expect(catalog.filter((material) => material.hasGrain).map((material) => material.key)).toEqual([
+        'plywood-17',
+        'plywood-18',
+        'osb-18',
+        'plywood-4',
+      ]);
+      expect(
+        catalog.every(
+          (material) =>
+            material.key.length > 0 &&
+            material.name.en.trim().length > 0 &&
+            material.name.he.trim().length > 0 &&
+            material.color.length > 0 &&
+            material.thickness > 0 &&
+            material.sheetWidth > 0 &&
+            material.sheetLength > 0 &&
+            material.currencyCode === 'ILS' &&
+            (material.pricePerSheet ?? 0) > 0 &&
+            material.densityKgM3 > 0,
+        ),
+      ).toBe(true);
+
+      expect(defaultConfig).toMatchObject({
+        furnitureType: 'cabinet',
+        width: 1000,
+        height: 2000,
+        depth: 600,
+        shelfCount: 4,
+        shelfSpacing: 'equal',
+        customShelfPositions: [],
+        carcassMaterial: 'plywood-17',
+        backPanelMaterial: 'plywood-4',
+        hasBack: true,
+        doorCount: 2,
+        doorStyle: 'flat',
+        drawerSlideType: 'standard',
+        handleStyle: 'bar',
+        edgeBanding: 'all-visible',
+        cutMode: 'freeform',
+        lang: 'en',
+      });
+      expect(bookshelfDefaults).toMatchObject({
+        furnitureType: 'bookshelf',
+        width: 800,
+        height: 1800,
+        depth: 300,
+        shelfCount: 5,
+        kickHeight: 0,
+        doorStyle: 'none',
+        handleStyle: 'none',
+        edgeBanding: 'all-visible',
+      });
+      expect(deskDefaults).toMatchObject({
+        furnitureType: 'desk',
+        width: 1200,
+        height: 750,
+        depth: 600,
+        shelfCount: 0,
+        drawerCount: 0,
+        kickHeight: 0,
+        doorStyle: 'none',
+        handleStyle: 'none',
+        edgeBanding: 'all-visible',
+      });
+      expect(wardrobeDefaults).toMatchObject({
+        furnitureType: 'wardrobe',
+        width: 1000,
+        height: 2100,
+        depth: 600,
+        shelfCount: 1,
+        kickHeight: 100,
+        doorStyle: 'flat',
+        handleStyle: 'bar',
+        edgeBanding: 'all-visible',
+      });
+      expect(panelDefaults).toMatchObject({
+        furnitureType: 'panel',
+        width: 600,
+        height: 800,
+        depth: 18,
+        doorStyle: 'none',
+        handleStyle: 'none',
+        edgeBanding: 'all-visible',
+        panelMaterialSource: 'carcass',
+      });
+      expect(cabinetDefaults).toMatchObject({
+        furnitureType: 'cabinet',
+        width: 600,
+        height: 800,
+        depth: 500,
+        shelfCount: 2,
+        doorCount: 1,
+        doorStyle: 'flat',
+        handleStyle: 'bar',
+        kickHeight: 100,
+      });
+    } finally {
+      vi.resetModules();
+    }
+  });
+
   it('has 12 materials total', () => {
     expect(MATERIALS).toHaveLength(12);
   });
@@ -73,6 +193,11 @@ describe('materials', () => {
       expect(m.sheetWidth).toBe(1220);
       expect(m.sheetLength).toBe(2440);
       expect(m.category).toBe('panel');
+    });
+
+    it('looks up custom materials appended to the built-in catalogue', () => {
+      const customMaterial = { ...MATERIALS[0], key: 'custom-get-material' };
+      expect(getMaterial(customMaterial.key, [customMaterial])).toBe(customMaterial);
     });
 
     it('throws for unknown key', () => {

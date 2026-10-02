@@ -103,13 +103,13 @@
       "id": "wood-turning",
       "engine": "src/engine/wood-turning.ts",
       "test": "tests/engine/wood-turning.test.ts",
-      "oracleStatus": "no-verifiable-source",
-      "fixture": null,
-      "source": "American Association of Woodturners, Safety Guidebook for Woodturners, Safe Turning Speeds, p. 12; spindle-stock chart and warning about diameter-formula speeds for unbalanced bowls.",
-      "sourceUrl": "https://www.dmwoodturners.com/wp-content/uploads/2018/09/2016-AAW-Safety-Guidebook-for-Woodturners.pdf",
-      "retrievedOn": "2026-10-01",
-      "tolerance": null,
-      "reason": "The spindle-stock table does not validate the calculator's diameter bounds or operation factors. The guide warns that diameter-formula speeds may be too high for unbalanced bowls, so it is not a numerical oracle for these outputs."
+      "oracleStatus": "verified",
+      "fixture": "tests/fixtures/oracles/wood-turning-surface-speed.json",
+      "source": "Wikipedia, Speeds and feeds, Cutting speed and spindle speed calculations.",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Speeds_and_feeds",
+      "retrievedOn": "2026-10-02",
+      "tolerance": "Surface-speed arithmetic only: 100 mm at 1,270 RPM rounds to 399.0 m/min (0.1 m/min precision). RPM ranges, operation factors, recommendations, and woodturning safety limits are not validated.",
+      "reason": null
     },
     {
       "id": "frame-panel",

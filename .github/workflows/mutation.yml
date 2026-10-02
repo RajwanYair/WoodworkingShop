@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-node
       - name: Run bounded mutation suite
-        run: npm run test:mutation -- --mutate src/engine/dimensions.ts,src/utils/bom-export.ts --testFiles tests/engine/dimensions.test.ts,tests/utils/bom-export.test.ts
+        run: npm run test:mutation -- stryker.weekly.config.mjs
       - if: always()
         uses: actions/upload-artifact@v7
         with:
