@@ -77,8 +77,8 @@ export function OptimizationNotesPanel() {
   return (
     <div className="overflow-hidden rounded-lg border border-amber-200 bg-amber-50 dark:border-amber-700/50 dark:bg-amber-900/10">
       {/* ── Header ── */}
-      <div className="flex items-center justify-between border-b border-amber-200 px-4 py-2.5 dark:border-amber-700/50">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-b border-amber-200 px-4 py-2.5 dark:border-amber-700/50">
+        <div className="flex min-w-0 items-center gap-2">
           <span className="text-amber-800 dark:text-amber-300">
             <IconLightbulb size={16} />
           </span>
@@ -89,9 +89,9 @@ export function OptimizationNotesPanel() {
             </span>
           )}
         </div>
-        <div className="flex items-center gap-3">
+        <div className="ms-auto flex shrink-0 items-center gap-3">
           {/* Tolerance slider */}
-          <label className="flex items-center gap-1.5 text-xs text-amber-700 select-none dark:text-amber-400">
+          <label className="flex shrink-0 items-center gap-1.5 text-xs text-amber-700 select-none dark:text-amber-400">
             {t('optimizer.tolerance')} ±
             <input
               type="number"
@@ -108,6 +108,7 @@ export function OptimizationNotesPanel() {
           <button
             onClick={() => setOpen((o) => !o)}
             className="flex items-center gap-0.5 text-amber-800 select-none hover:underline dark:text-amber-300"
+            aria-label={t('optimizer.notes')}
             aria-expanded={open}
           >
             {open ? <IconChevronDown size={14} /> : <IconChevronRight size={14} />}
@@ -134,17 +135,17 @@ export function OptimizationNotesPanel() {
                       {STRATEGY_ICON[s.strategy]}
                     </span>
                     <div className="min-w-0">
-                      <p className="text-wood-700 dark:text-wood-200 truncate text-xs font-medium">
+                      <p className="text-wood-700 dark:text-wood-200 text-xs font-medium wrap-break-word">
                         {s.explanation[lang]}
                       </p>
                       <div className="mt-0.5 flex flex-wrap gap-3">
                         {s.savings.sheetsRemoved > 0 && (
-                          <span className="text-[11px] font-semibold text-green-600 dark:text-green-400">
+                          <span className="text-[11px] font-semibold text-green-800 dark:text-green-300">
                             −{s.savings.sheetsRemoved} {t('optimizer.sheetsRemoved')}
                           </span>
                         )}
                         {s.savings.yieldImprovement > 0 && (
-                          <span className="text-[11px] font-semibold text-green-600 dark:text-green-400">
+                          <span className="text-[11px] font-semibold text-green-800 dark:text-green-300">
                             +{s.savings.yieldImprovement}% {t('optimizer.yieldGain')}
                           </span>
                         )}
@@ -153,7 +154,7 @@ export function OptimizationNotesPanel() {
                             −{(s.savings.wasteReduced / 1_000_000).toFixed(3)} m² {t('optimizer.wasteReduced')}
                           </span>
                         )}
-                        <span className="text-wood-400 dark:text-wood-500 text-[11px]">
+                        <span className="text-wood-700 dark:text-wood-300 text-[11px]">
                           → {s.optimizedResult.totalSheets} {t('optimizer.sheets').toLowerCase()} /{' '}
                           {s.optimizedResult.overallYield}%
                         </span>
@@ -164,7 +165,7 @@ export function OptimizationNotesPanel() {
                   <div className="flex shrink-0 gap-1.5">
                     <button
                       onClick={() => handleApply(s)}
-                      className="rounded bg-green-600 px-2.5 py-1 text-[11px] font-medium text-white transition-colors hover:bg-green-700"
+                      className="rounded bg-green-700 px-2.5 py-1 text-[11px] font-medium text-white transition-colors hover:bg-green-800"
                     >
                       {t('optimizer.apply')}
                     </button>

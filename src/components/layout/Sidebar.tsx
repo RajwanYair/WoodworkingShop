@@ -34,29 +34,26 @@ export function Sidebar() {
           className="h-4 w-24 opacity-80"
           loading="lazy"
         />
-        <span className="text-xs" aria-hidden="true">
-          ✨🪵✨
-        </span>
       </div>
       <h2 className="text-wood-700 dark:text-wood-200 mb-3 text-sm font-semibold tracking-wide uppercase">
-        🪵✨ Summary 📊
+        🪵 Summary
       </h2>
 
       <dl className="mb-4 space-y-2 text-sm">
         <div className="flex justify-between">
-          <dt className="text-wood-600 dark:text-wood-300">🔲🧩 Parts</dt>
+          <dt className="text-wood-600 dark:text-wood-300">🔲 Parts</dt>
           <dd className="font-medium">{parts.length}</dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-wood-600 dark:text-wood-300">🔩🛠️ Hardware items</dt>
+          <dt className="text-wood-600 dark:text-wood-300">🔩 Hardware items</dt>
           <dd className="font-medium">{hardware.length}</dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-wood-600 dark:text-wood-300">📋🪚 Sheets needed</dt>
+          <dt className="text-wood-600 dark:text-wood-300">📋 Sheets needed</dt>
           <dd className="font-medium">{optimization.totalSheets}</dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-wood-600 dark:text-wood-300">📊🎯 Yield</dt>
+          <dt className="text-wood-600 dark:text-wood-300">📊 Yield</dt>
           <dd className="font-medium">{optimization.overallYield}%</dd>
         </div>
       </dl>

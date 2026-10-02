@@ -5,6 +5,7 @@ import { IconSettings, IconRuler, IconDocument, IconHelp } from './Icons';
 
 const SEEN_KEY = 'onboarding-seen';
 const TOTAL_STEPS = 3;
+const DISMISSED_EVENT = 'onboarding-dismissed';
 
 const WIZARD_STEPS: { icon: React.ReactElement; titleKey: string; descKey: string }[] = [
   { icon: <IconSettings size={32} />, titleKey: 'onboarding.wizardStep1Title', descKey: 'onboarding.wizardStep1Desc' },
@@ -26,6 +27,7 @@ function OnboardingOverlay() {
   const dismiss = () => {
     localStorage.setItem(SEEN_KEY, '1');
     setVisible(false);
+    window.dispatchEvent(new Event(DISMISSED_EVENT));
   };
 
   const dialogRef = useRef<HTMLDivElement>(null);

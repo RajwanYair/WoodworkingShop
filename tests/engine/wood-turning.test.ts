@@ -61,7 +61,7 @@ describe('calculateWoodTurning', () => {
     expect(large.maxRpm).toBeLessThan(small.maxRpm);
   });
 
-  it('keeps the recommended speed inside an achievable safe range for a large blank', () => {
+  it('keeps the recommended speed inside the reported range for a large blank', () => {
     const result = calculateWoodTurning({ blankDiameterMm: 1000, operation: 'finishing' });
 
     expect(result.minRpm).toBe(152);
@@ -75,6 +75,13 @@ describe('calculateWoodTurning', () => {
 
   it.each([Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY])(
     'throws for non-finite blank diameter %s',
+    (blankDiameterMm) => {
+      expect(() => calculateWoodTurning({ blankDiameterMm, operation: 'roughing' })).toThrow(RangeError);
+    },
+  );
+
+  it.each([Number.MIN_VALUE, 1e-305, Number.MAX_VALUE])(
+    'throws for finite blank diameter without usable RPM estimates: %s',
     (blankDiameterMm) => {
       expect(() => calculateWoodTurning({ blankDiameterMm, operation: 'roughing' })).toThrow(RangeError);
     },

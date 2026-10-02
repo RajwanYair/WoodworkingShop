@@ -1,6 +1,6 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import * as projectStorage from '../../src/utils/project-storage';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { useToastStore } from '../../src/store/toast-store';
@@ -16,9 +16,21 @@ vi.mock('@react-pdf/renderer', async (importOriginal) => ({
 
 import { PdfExportPanel } from '../../src/components/pdf/PdfExportPanel';
 
+function ActiveTabHarness() {
+  const activeTab = useCabinetStore((state) => state.activeTab);
+  return activeTab === 'pdf' ? <PdfExportPanel /> : <div>Another tab</div>;
+}
+
 describe('PdfExportPanel', () => {
+  let originalActiveTab: ReturnType<typeof useCabinetStore.getState>['activeTab'];
+
   beforeEach(() => {
     pdfMock.mockClear();
+    originalActiveTab = useCabinetStore.getState().activeTab;
+  });
+
+  afterEach(() => {
+    useCabinetStore.setState({ activeTab: originalActiveTab });
   });
 
   it('passes selected page options to the PDF document and downloads the result', async () => {
@@ -65,6 +77,50 @@ describe('PdfExportPanel', () => {
       );
     });
     expect(await screen.findByRole('button', { name: 'Generate PDF' })).toBeEnabled();
+  });
+
+  it('accepts only one PDF render during a rapid double submission', async () => {
+    const user = userEvent.setup();
+    let resolveBlob: (blob: Blob) => void = () => {};
+    const toBlob = vi.fn(
+      () =>
+        new Promise<Blob>((resolve) => {
+          resolveBlob = resolve;
+        }),
+    );
+    pdfMock.mockReturnValueOnce({ toBlob });
+    render(<PdfExportPanel />);
+
+    await user.dblClick(screen.getByRole('button', { name: 'Generate PDF' }));
+
+    expect(pdfMock).toHaveBeenCalledOnce();
+    expect(screen.getByRole('button', { name: 'Generating…' })).toBeDisabled();
+    await act(async () => resolveBlob(new Blob(['pdf'])));
+  });
+
+  it('does not download a generated PDF after navigation unmounts the panel', async () => {
+    const user = userEvent.setup();
+    let resolveBlob: (blob: Blob) => void = () => {};
+    pdfMock.mockReturnValueOnce({
+      toBlob: vi.fn(
+        () =>
+          new Promise<Blob>((resolve) => {
+            resolveBlob = resolve;
+          }),
+      ),
+    });
+    const createObjectUrl = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:pdf-export');
+    useCabinetStore.setState({ activeTab: 'pdf' });
+    render(<ActiveTabHarness />);
+
+    await user.click(screen.getByRole('button', { name: 'Generate PDF' }));
+    expect(screen.getByRole('button', { name: 'Generating…' })).toBeDisabled();
+
+    act(() => useCabinetStore.getState().setActiveTab('configurator'));
+    expect(screen.getByText('Another tab')).toBeInTheDocument();
+    await act(async () => resolveBlob(new Blob(['pdf'])));
+
+    expect(createObjectUrl).not.toHaveBeenCalled();
   });
 
   it('exports the current project settings and reports success', async () => {

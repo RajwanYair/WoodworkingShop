@@ -1,9 +1,32 @@
+import type { Locator } from '@playwright/test';
+import WORKSPACE_CONTROL_INVENTORY from '../fixtures/workspace-control-inventory.json' with { type: 'json' };
 import { test, expect } from './fixtures/app';
 import { DEFAULT_CONFIG, getMaterial } from '../../src/engine/materials';
 import { optimizeCutSheets } from '../../src/engine/cut-optimizer';
 import { generateParts } from '../../src/engine/parts';
 import { analyzeWaste, formatAreaM2 } from '../../src/engine/waste-analytics';
 import { buildGrainReport } from '../../src/engine/grain-report';
+
+function getAccessibleTableControl(main: Locator, table: Locator, control: object) {
+  if (!('role' in control) || typeof control.role !== 'string') {
+    throw new Error('Optimizer table inventory control has no role');
+  }
+  if (!('accessibleName' in control) || typeof control.accessibleName !== 'string') {
+    throw new Error('Optimizer table inventory control has no accessible name');
+  }
+
+  const options = { name: control.accessibleName, exact: true };
+  switch (control.role) {
+    case 'button':
+      return table.getByRole('button', options);
+    case 'combobox':
+      return main.getByRole('combobox', options);
+    case 'searchbox':
+      return main.getByRole('searchbox', options);
+    default:
+      throw new Error(`Unsupported optimizer table control role: ${control.role}`);
+  }
+}
 
 // Sprint 105 — smoke test for the optimizer view's new yield bars and hint
 // banners introduced in Sprint A3 p2. Keeping this as a behavioral test
@@ -289,6 +312,30 @@ test('sheet dimensions and cost overrides update visible optimizer summaries', a
     await input.fill('400');
     await input.press('Enter');
   });
+});
+
+test('optimizer parts and hardware table controls match the browser-derived inventory', async ({ appPage: page }) => {
+  await page.keyboard.press('Alt+3');
+
+  const inventory = WORKSPACE_CONTROL_INVENTORY.panels.find(
+    (panel) => panel.name === 'Optimizer parts and hardware tables',
+  );
+  if (!inventory) throw new Error('Optimizer table control inventory is missing');
+  const main = page.getByRole('main');
+
+  for (const control of inventory.controls) {
+    if (!('scope' in control) || typeof control.scope !== 'string') {
+      throw new Error('Optimizer table inventory control has no table scope');
+    }
+    const table = page.getByRole('table', { name: control.scope, exact: true });
+    await expect(table).toBeVisible();
+    await expect(getAccessibleTableControl(main, table, control)).toHaveCount(1);
+    expect('positiveTest' in control && typeof control.positiveTest === 'string').toBe(true);
+    expect(
+      ('negativeTest' in control && typeof control.negativeTest === 'string') ||
+        ('negativeWaiver' in control && typeof control.negativeWaiver === 'string'),
+    ).toBe(true);
+  }
 });
 
 test('parts and hardware tables search, filter, and sort visible rows', async ({ appPage: page }) => {

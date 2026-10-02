@@ -1,6 +1,6 @@
 # Roadmap
 
-> Last updated: 2026-10-01 (Arm-R-Seal coverage oracle)
+> Last updated: 2026-10-02 (Sprint 318 verification evidence)
 > Current app version: v5.33.0
 > Next release target: v5.34.0 (Phase 63 close-out + Phase 64 — Real User Journeys and Browser Confidence)
 > Program horizon: Phases 63–80 · Sprints 300–419 · v5.33.0 → v6.0.0 (execution order: §7.2 release train)
@@ -430,25 +430,25 @@ Phase priority uses the same scale: a phase is **P0** if any exit criterion prot
 
 Phase numbers are stable identifiers; this table is the execution order. Phase 80 is a continuous engineering track: its sprints may land in any release when they do not delay a P0 item.
 
-| Order | Release | Phase(s)                                                      | Priority | Sprints | Status                                        |
-| ----- | ------- | ------------------------------------------------------------- | -------- | ------- | --------------------------------------------- |
-| 1     | v5.34.0 | 63 Trustworthy test foundation + 64 Real user journeys        | P0       | 300–318 | IN PROGRESS (S300–S302, S304, S307–S311 DONE) |
-| 2     | v5.35.0 | 73 Product coherence and modern app shell                     | P0       | 371–378 | PLANNED                                       |
-| 3     | v5.36.0 | 65 Versioned data, import safety, durable offline             | P0       | 319–326 | PLANNED                                       |
-| 4     | v5.37.0 | 66 Cut-list and optimizer leadership                          | P0/P1    | 327–335 | PLANNED                                       |
-| 5     | v5.38.0 | 74 Universal cut-list workbench                               | P1       | 379–385 | PLANNED                                       |
-| 6     | v5.39.0 | 75 Shop-floor mode                                            | P1       | 386–391 | PLANNED                                       |
-| 7     | v5.40.0 | 67 CNC, hardware and manufacturing assurance                  | P0/P1    | 336–343 | PLANNED                                       |
-| 8     | v5.41.0 | 77 Door, drawer and construction systems                      | P1       | 398–403 | PLANNED                                       |
-| 9     | v5.42.0 | 68 Room design, cabinet rules, parametric authoring           | P1       | 344–352 | PLANNED                                       |
-| 10    | v5.43.0 | 76 Room capture, import and client presentation               | P2       | 392–397 | PLANNED                                       |
-| 11    | v5.44.0 | 78 Interop and desktop-class file workflows                   | P1/P2    | 404–408 | PLANNED                                       |
-| 12    | v5.45.0 | 69 Assembly, collaboration boundaries, plugins                | P1/P2    | 353–359 | PLANNED                                       |
-| 13    | v5.46.0 | 79 Estimating, quoting and job management                     | P2       | 409–413 | PLANNED                                       |
-| 14    | v5.47.0 | 70 Governance, documentation and supply chain                 | P1/P2    | 360–364 | PLANNED                                       |
-| 15    | v5.48.0 | 71 Performance, resilience and inclusive access               | P1       | 365–368 | PLANNED                                       |
-| —     | any     | 80 Developer platform and engineering excellence (continuous) | P1–P3    | 414–419 | PLANNED                                       |
-| 16    | v6.0.0  | 72 v6.0 readiness and strategic reassessment                  | P0       | 369–370 | PLANNED (runs last)                           |
+| Order | Release | Phase(s)                                                      | Priority | Sprints | Status                               |
+| ----- | ------- | ------------------------------------------------------------- | -------- | ------- | ------------------------------------ |
+| 1     | v5.34.0 | 63 Trustworthy test foundation + 64 Real user journeys        | P0       | 300–318 | IN PROGRESS (S64 verified; P63 open) |
+| 2     | v5.35.0 | 73 Product coherence and modern app shell                     | P0       | 371–378 | PLANNED                              |
+| 3     | v5.36.0 | 65 Versioned data, import safety, durable offline             | P0       | 319–326 | PLANNED                              |
+| 4     | v5.37.0 | 66 Cut-list and optimizer leadership                          | P0/P1    | 327–335 | PLANNED                              |
+| 5     | v5.38.0 | 74 Universal cut-list workbench                               | P1       | 379–385 | PLANNED                              |
+| 6     | v5.39.0 | 75 Shop-floor mode                                            | P1       | 386–391 | PLANNED                              |
+| 7     | v5.40.0 | 67 CNC, hardware and manufacturing assurance                  | P0/P1    | 336–343 | PLANNED                              |
+| 8     | v5.41.0 | 77 Door, drawer and construction systems                      | P1       | 398–403 | PLANNED                              |
+| 9     | v5.42.0 | 68 Room design, cabinet rules, parametric authoring           | P1       | 344–352 | PLANNED                              |
+| 10    | v5.43.0 | 76 Room capture, import and client presentation               | P2       | 392–397 | PLANNED                              |
+| 11    | v5.44.0 | 78 Interop and desktop-class file workflows                   | P1/P2    | 404–408 | PLANNED                              |
+| 12    | v5.45.0 | 69 Assembly, collaboration boundaries, plugins                | P1/P2    | 353–359 | PLANNED                              |
+| 13    | v5.46.0 | 79 Estimating, quoting and job management                     | P2       | 409–413 | PLANNED                              |
+| 14    | v5.47.0 | 70 Governance, documentation and supply chain                 | P1/P2    | 360–364 | PLANNED                              |
+| 15    | v5.48.0 | 71 Performance, resilience and inclusive access               | P1       | 365–368 | PLANNED                              |
+| —     | any     | 80 Developer platform and engineering excellence (continuous) | P1–P3    | 414–419 | PLANNED                              |
+| 16    | v6.0.0  | 72 v6.0 readiness and strategic reassessment                  | P0       | 369–370 | PLANNED (runs last)                  |
 
 Re-sequencing rule: a later phase may be pulled forward only when its dependencies are DONE and no P0 sprint in an earlier phase is open. Record every re-sequence in this table with a date.
 
@@ -463,38 +463,8 @@ Completed (evidence archived in [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 | 300    | Evidence baseline and roadmap correction                  | P0       | 2026-09-27 | Clean `npm ci`; local Vitest reporter; 4,415-test baseline; stale claims corrected      |
 | 301    | Coverage map and ownership                                | P0       | 2026-09-28 | 351 modules classified; per-area coverage ratchet; store/hook boundary tests            |
 | 302    | Test fixtures, accessibility queries, deterministic reset | P1       | 2026-09-28 | Deterministic Playwright fixture; typed builders; shuffle-safe suite; semantic locators |
+| 303    | Pure-engine invariant matrix I                            | P0       | 2026-10-02 | 634 exports; seeded invariants and named regressions; CI artifacts audited              |
 | 304    | Store, persistence, import/export contract matrix         | P0       | 2026-09-28 | All slice actions; IDB/localStorage fault matrix; allowlisted, Unicode-safe round-trips |
-
-**Sprint 303 — Pure-engine invariant matrix I** — P0 · L · S301 · IN PROGRESS 2026-09-28.
-
-- T1: Inventory each exported engine function in `src/engine/` and map happy path, boundary, invalid input, unit system, determinism, and interaction/composition cases to tests.
-- T2: Expand `fast-check` coverage for dimensions, part generation, grain/rotation, kerf, cut bounds, no-overlap, material yield, cost, joinery, and named expressions; persist minimal shrunk regression seeds.
-- T3: Cross-check engineering calculators against independently sourced reference examples and dated provenance in `tests/fixtures/oracles/`; never treat a second call to the same function as an oracle.
-- Tests: finite-number constraints; min/max and just-outside values; zero/negative/NaN/infinity; mm/inches conversion; reproducibility under fixed seeds; multi-cabinet composition.
-- Accept: engine inventory has an explicit status per exported function; high-risk geometry/optimizer modules have independent invariants and oracle tests; every regression is a named example plus generated property.
-
-Status (2026-10-01): a generated per-function artifact now maps 634 engine exports (623 `covered`,
-11 `indirect`, 0 `waived`); runtime helpers in `types.ts` are measured and directly tested. Fourteen
-fast-check suites use stable per-file seeds, including cove pass-depth, stair-stringer geometry,
-optimizer grain-rotation and kerf-clearance, and honing-guide projection and microbevel invariants.
-Dated Kreg and Ana White cabinet-plan oracles
-independently check published side-panel dimensions; the Kreg case also checks derived dimensions
-and half-sheet optimizer composition. The birch panel-weight oracle is sourced from Engineering
-ToolBox density data and exercised by `tests/engine/materials.test.ts`. Detail: SPRINT-HISTORY.
-
-The optimizer's diagonal kerf violation has a reconstructed fast-check replay in
-`tests/engine/cut-optimizer.property.test.ts` (seed `303003`); it was regenerated against
-the pre-fix engine, and is not the original historical trace. The committed history contains
-the named diagonal regression but no original shrink path. The kerf finite-guard invariant has a deterministic fast-check replay in
-`tests/engine/kerf-bending.test.ts` (seed `303011`, path `21`); it reproduces the
-invariant but not the original historical failure path. The cove pass-depth
-rounding defect now has a named regression and its exact minimized seed/path
-recorded in `tests/engine/cove-cut.test.ts`. A bounded 2026-10-01 audit of tracked
-engine tests, this sprint history, and engine-test commit history found no other
-persisted original shrink paths. External CI artifacts were not available for
-review, so Sprint 303 remains open until any retained artifacts are checked; do
-not report a regenerated path as historical. Calculator oracle coverage
-continues in S314 T3.
 
 **Sprint 305 — Component behavior foundation** — P1 · L · S302 · IN PROGRESS.
 
@@ -514,8 +484,53 @@ The `CabinetPreview.tsx` split (543 lines, no exceptions) is committed; `npm run
 
 Remaining to accept (priority order):
 
-1. Generate the component control inventory (T1) as an artifact (per panel: control, accessible name, positive test, negative test) and list uncovered controls.
-2. Cover remaining uncovered controls from that inventory or waive with reason; raise component floors to the new measured baseline.
+1. Extend the browser-derived control inventory beyond Calculators to the remaining high-use parent panels; continue listing uncovered controls.
+2. Cover remaining uncovered controls from that inventory or waive with reason.
+
+Status (2026-10-02): the committed calculator inventory maps 24 panels, 118 default controls and
+the Rabbet-only conditional offset control to accessible role/name and positive/negative E2E
+evidence. A Chromium regression verifies panel count, control counts and accessible names. The
+inventory exposed three face-frame fields without behavior assertions; positive output and
+zero-value error cases now cover all three, and the Number of Openings slider verifies keyboard
+clamping at both endpoints. A component-level glue coverage test checks invalid-area
+validation and recovery. Cove Cut's five inputs now reconcile the Woodgears oracle, recompute results,
+and verify zero-value errors with valid-value recovery. Finish Calculator buttons verify exclusive
+selection and its coats slider clamps at both keyboard boundaries. Box Joint inputs now reconcile derived layout outputs, reject zero values, and recover.
+The Wood Glue selector is restricted to its five supported types. Cabinet Door sizing verifies dimension updates, validation recovery, and exclusive overlay/door-count choices.
+Drawer Box now covers all seven controls with engine-matched dimensions, zero-value recovery, and exclusive slide selection. Screw Pull-Out exposes exclusive density selection through accessible pressed states.
+Kerf Bending covers all seven controls with engine-matched geometry, zero-value recovery, and exclusive material selection. Dado/Rabbet covers its five default controls and Rabbet-only offset with geometry, exclusivity, and error recovery verified.
+Finishing Coat now covers both numeric inputs with output and error recovery, and verifies exclusive selection across all five finish types.
+Wood Turning now verifies advisory RPM updates, diameter validation/recovery, and exclusive operation selection; its figures remain model-based, not a source-backed safety oracle. Frame and Panel now covers all six dimensions with engine-derived geometry, invalid-value handling, and recovery. The browser-derived workspace inventory now maps 108 controls across fourteen
+inventory groups on four non-calculator parent views: 12 furniture/joinery choices, 19 material,
+shelf, door and drawer controls, and three core-dimension controls in Configure; 15 Preview
+controls for view selection, dimensions, export, and interactive 3D; and seven controls covered by
+the Optimizer settings and rendered-presentation journey. The sixth group records five Cabinet
+summary cost-edit inputs; a Chromium inventory regression verifies their accessible roles and names,
+and the existing cost journey verifies each override increases the visible total. The seventh group
+records five parts/hardware table controls; Chromium inventory and behavior tests cover their
+accessible names, search, empty results, material filtering, and sort direction. Chromium
+regressions verify accessible names and scoped counts. Configure coverage checks drawer-, shelf-,
+and Panel-dependent control states, with explicit waivers where negative-value behavior is not
+asserted. The eighth group records seven Assembly view, tips, checklist-progress and download
+controls; Chromium verifies conditional states, progress reset, step navigation and the checklist
+download event. The ninth group adds 13 Configure dimension and toe-kick controls. Chromium verifies
+metric/imperial slider labels and width conversion, toe-kick inputs, and all four presets updating
+the numeric value. The tenth group adds six Quick Preset buttons, with accessible names checked by
+Chromium and resulting dimensions, furniture types, and parts covered by the existing preset
+journey. The eleventh group adds the three default Named Expressions controls; component tests cover
+invalid-name and out-of-range behavior, and the browser journey verifies the resulting cut
+dimensions. The twelfth group adds the Project Name and Project Notes fields; Chromium verifies
+their labels, edits, title synchronization and retained notes, with max-length behavior explicitly
+waived. The thirteenth group adds Door Reveal's range and number inputs; Chromium verifies paired
+updates and rejection beyond the 20 mm hard bound (the wider soft range remains intentionally
+permitted with a warning). The fourteenth group maps nine workspace cabinet lifecycle controls
+across initial, multi-cabinet, and rename states; Chromium checks their accessible names, while the
+existing lifecycle journey verifies add, rename, duplicate, mirror, reorder, removal, active
+selection, and project outputs. The inventory is not exhaustive: 19 of 118 calculator controls still need behavior evidence; remaining Configure controls and high-use parent panels also remain open.
+T3's measured component
+ratchet now passes with 572 tests at 75.04% statements, 69.05% branches, 73.10% functions, and
+75.74% lines; the component floors were refreshed to those measured counts without lowering any
+threshold.
 
 **Sprint 306 — Mutation testing and quality evidence** — P1 · M · S303–S305.
 
@@ -568,7 +583,9 @@ Detail and the GcodePreviewModal component follow-up are archived in SPRINT-HIST
 
 Status (2026-10-01): 27 production-browser journeys (Chromium + Firefox) compare every mounted calculator option with the pure engine; T4 passes. `tests/fixtures/oracles/INDEX.json` maps all 24 mounted calculators to their engine, test and oracle status.
 Sourced fixtures cover Arm-R-Seal coverage compatibility (General Finishes; product-specific range only), water-based polyurethane coverage/recoat compatibility (Rust-Oleum; cure and volume excluded), screw pull-out and white-oak shrinkage (USDA FPL-GTR-282), planer-pass depth (DEWALT DW735 manual), crown-moulding flat-cut angles and half-lap depth (WOOD Magazine), router-template offset (Wealden Tool), IRC stair riser/tread limits, and Calculator Academy rafter-length and cabinet-door examples.
-Other verified references include kerf-bending spacing (CalcGallery), Festool router-circle settings, Inch Calculator frame-panel width, overlay-door dimensions, WOOD Magazine box-joint, splined-joint, full-extension drawer and groove-depth references, WoodWorkCalc face-frame and one-sided taper geometry, and Woodgears cove-cut fence geometry; 2 entries remain explicitly marked as lacking a verifiable source.
+Other verified references include kerf-bending spacing (CalcGallery), Festool router-circle settings, Inch Calculator frame-panel width, overlay-door dimensions, WOOD Magazine box-joint, splined-joint, full-extension drawer and groove-depth references, WoodWorkCalc face-frame and one-sided taper geometry, and Woodgears cove-cut fence geometry.
+
+The AAW Safety Guidebook spindle-speed chart and warning were verified for context, but do not validate the wood-turning calculator's operation-specific estimates. Both wood-turning and honing-guide numerical oracles remain open.
 Later commits harden boundary/oracle tests for box joint, glue, planer, honing, crown, router, cove, moisture, rafter, taper, stair, turning, frame-panel, half-lap and spline calculators.
 
 Remaining to accept T3: obtain and verify published/reference cases for the 2 calculators currently marked `no-verifiable-source`, then record fixture dates and tolerances in the matrix. Finish oracles cover only named-product coverage/recoat compatibility; generic finish schedules, cure/volume estimates and glue spread rates stay unclaimed until verifiable manufacturer data supports them.
@@ -582,24 +599,34 @@ Remaining to accept T3: obtain and verify published/reference cases for the 2 ca
 
 **Sprint 316 — Accessibility, visual and responsive matrix** — P0 · L · S307–S315.
 
-- T1: Axe WCAG 2.2 AA scan for all seven tabs, six locales, light/dark, mobile nav, onboarding, shortcuts, project manager, import errors, export modal and optimizer error/loading states.
-- T2: Keyboard-only journeys: skip link, tab order, visible focus, no traps outside dialogs, dialog focus containment/return, Escape, native controls and reduced motion.
-- T3: Responsive widths: 320, 375, 768, 1024, 1440 CSS px; assert no horizontal overflow, clipped labels, overlapped actions or unreachable controls. Cover RTL at narrow and wide viewports.
-- T4: Visual snapshots for stable user-critical states, fonts loaded, animations disabled, data fixed, correct device/browser baseline; review updates as intentional diffs.
+- T1: DONE — Chromium axe WCAG 2.2 AA scans cover all seven tabs × six locales × light/dark, plus mobile navigation/onboarding, shortcuts, project manager, invalid-import errors, G-code export preview, and optimizer loading/error recovery. The accessibility spec passes 6/6 tests.
+- T2: DONE — Chromium keyboard-only journey covers the skip link, visible focus, main-content and tab order, keyboard tab activation, native range operation, onboarding focus containment/return and Escape, and reduced motion. Existing dialog regressions also cover shortcut-dialog Escape and focus return.
+- T3: DONE — Chromium matrix checks all seven primary tabs at 320, 375, 768, 1024 and 1440 CSS px in EN/LTR and HE/RTL for document overflow, offscreen controls, clipped text and intersecting actions; preview reachability and mobile navigation bounds are also checked.
+- T4: DONE — Stable snapshots cover Configurator, Preview, Cut Sheets and dark-mode header in Chromium and Firefox, plus all six preview views in four cabinet/bookshelf, light/dark and LTR/RTL scenarios. Tests wait for fonts and disable animations; the optimizer baselines were reviewed and intentionally refreshed.
 - Accept: no serious/critical axe violations; all discovered issues have explicit exception owner/expiry; screenshots do not replace semantic behavior assertions.
+
+Status (2026-10-01): T1 is complete with zero axe violations in the covered states; the scans fixed contrast issues, missing accessible names/labels, and keyboard access to scrollable error details.
+
+T2 is complete: the keyboard-only journey and onboarding/shortcut dialog regressions pass in Chromium. The journey exposed and fixed a focus-trap bug where a negative-tabindex modal backdrop could receive initial focus; the optimizer tolerance slider's label association was also corrected.
+
+T3 is complete: the Chromium matrix covers 70 tab/width/locale states, checking document overflow, offscreen controls, clipped text and overlapping actions; preview reachability and mobile navigation bounds are verified separately. It found and fixed simultaneous first-visit onboarding/gesture dialogs, a print action covering a Quick Preset at 320 px, optimizer header overflow and truncated suggestion explanations. Horizontally scrollable tables remain intentionally scrollable.
+
+T4 is complete: all core visual baselines pass in Chromium and Firefox, and all 24 preview-view combinations pass in Chromium. Snapshot capture waits for fonts and disables animations; only the reviewed optimizer baselines changed intentionally.
 
 **Sprint 317 — Worker, async and error recovery** — P0 · M · S301, S312.
 
-- T1: Test each worker request resolves, rejects, times out, aborts, terminates and recovers; stale replies cannot overwrite newer project results.
-- T2: Trigger one controlled crash in each panel boundary; assert localized fallback, retry/reset action, accessible alert and unaffected sibling panel.
-- T3: Exercise slow generation, double submission, navigation during generation and unmount cleanup.
+- T1: DONE — Covered resolve, reject, timeout, abort, worker termination and recovery for assembly, optimization and cost requests; late successful replies cannot replace newer results.
+- T2: DONE — Seven panel boundaries recover from controlled crashes without affecting a healthy sibling; localized EN/HE fallback, Retry action and accessible alert are verified.
+- T3: DONE — Deferred PDF rendering verifies the pending state, blocks rapid duplicate submissions, and suppresses download/error/state-update side effects after navigation unmounts the panel; the same single-flight cleanup guards current, full-project and ZIP exports.
 - Accept: no indefinite loading after worker failure; recovery is user-visible and worker termination does not corrupt project state.
 
 **Sprint 318 — v5.34.0 verification release** — P0 · M · S300–S317.
 
-- T1: Run full `npm run check`, E2E browser matrix, export artifact suite, visual snapshots, bundle and bench gates; attach test-count/coverage/browser artifacts.
-- T2: Update README/docs only from measured results; add zero-flake baseline and known browser limitations.
+- T1: DONE — `npm run check`, coverage map and ratchet, export golden suite, visual snapshots, full E2E matrix, bundle budget and all 16 benchmark budgets pass; evidence is archived in `docs/SPRINT-HISTORY.md`.
+- T2: DONE — Architecture and sprint-history claims now reflect measured results, the no-retry browser baseline, and browser-specific test scope.
 - Accept: all P0 workflows pass from clean checkout; every release claim links to an automated gate or observable evidence.
+
+Status (2026-10-02): T1 and T2 verification are complete. Release acceptance remains BLOCKED: Phase 63 S305 and S306 are still open, and clean-checkout verification has not been run from this dirty worktree. Do not treat v5.34.0 as release-ready until those dependencies and the Phase 63 exit criteria are satisfied.
 
 ### Phase 65 — Versioned Data, Import Safety, and Durable Offline Projects (Sprints 319–326; target v5.36.0) — P0
 

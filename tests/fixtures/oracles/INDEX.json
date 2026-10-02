@@ -105,10 +105,11 @@
       "test": "tests/engine/wood-turning.test.ts",
       "oracleStatus": "no-verifiable-source",
       "fixture": null,
-      "source": null,
-      "retrievedOn": null,
+      "source": "American Association of Woodturners, Safety Guidebook for Woodturners, Safe Turning Speeds, p. 12; spindle-stock chart and warning about diameter-formula speeds for unbalanced bowls.",
+      "sourceUrl": "https://www.dmwoodturners.com/wp-content/uploads/2018/09/2016-AAW-Safety-Guidebook-for-Woodturners.pdf",
+      "retrievedOn": "2026-10-01",
       "tolerance": null,
-      "reason": "Current RPM and surface-speed examples have no independently published tool or material reference recorded."
+      "reason": "The spindle-stock table does not validate the calculator's diameter bounds or operation factors. The guide warns that diameter-formula speeds may be too high for unbalanced bowls, so it is not a numerical oracle for these outputs."
     },
     {
       "id": "frame-panel",
@@ -225,8 +226,8 @@
       "fixture": "tests/fixtures/oracles/woodgears-cove-cut.json",
       "source": "Woodgears, Cove cutting table calculator",
       "sourceUrl": "https://woodgears.ca/cove/calculate.html",
-      "retrievedOn": "2026-10-01",
-      "tolerance": "Fence angle rounded to 0.1 degree; published fence distance rounded to the nearest millimeter.",
+      "retrievedOn": "2026-10-02",
+      "tolerance": "The live table shows 200 mm for 40 mm width and 20 mm depth with a 700 mm fence; the engine's 0.1-degree-rounded angle converts back to distance within 1 mm.",
       "reason": null
     },
     {

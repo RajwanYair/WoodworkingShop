@@ -38,7 +38,7 @@ export function StorageQuotaBadge() {
       className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-xs ${
         est.nearLimit
           ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300'
-          : 'bg-wood-100 text-wood-500 dark:bg-wood-700 dark:text-wood-400'
+          : 'bg-wood-100 text-wood-700 dark:bg-wood-700 dark:text-wood-200'
       }`}
       title={est.nearLimit ? warningLabel : label}
       aria-label={est.nearLimit ? warningLabel : label}

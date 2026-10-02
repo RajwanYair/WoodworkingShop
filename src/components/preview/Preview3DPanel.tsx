@@ -291,7 +291,7 @@ export const Preview3DPanel = memo(function Preview3DPanel() {
       </div>
 
       {/* Scene info */}
-      <p className="text-wood-500 text-[10px]" aria-live="polite">
+      <p className="text-wood-700 text-[10px]" aria-live="polite">
         {t('preview3d.meshCount', { count: displayScene.meshes.length })} ·{' '}
         {t('preview3d.rendererTier', { tier: capabilities.tier })} · {pbrMaterial.displayName.en}
       </p>

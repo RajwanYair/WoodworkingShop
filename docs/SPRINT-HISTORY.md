@@ -494,7 +494,9 @@ the in-flight quality sprints (84-87) and run first.
 - Dated birch-weight oracle (Engineering ToolBox, 510–770 kg/m³). The optimizer property exposed a diagonal placement with insufficient kerf; candidate-level clearance checks and a named regression fixed it.
 - Static inventory: 632 exported engine functions — 614 with a direct test call and body-line hits, 13 with line hits only, 0 uncovered, 5 declarations not measured; literal test titles map to 612 exports. These are traceability indicators, not behavioral guarantees.
 - Direct tests added for `getMaterialResult`, `getMachineProfile`, `defaultTokenGenerator`, `applyValidationPlugins` and the Web Serial adapter. `npm run ci` passed with 4,593 tests across 283 files.
-- 2026-10-01 trace audit: tracked engine tests, this history, and engine-test commit history contain no additional persisted original shrink paths beyond those recorded in the roadmap. External CI artifacts were not reviewed, so original traces remain unresolved rather than presumed absent.
+- 2026-10-02 trace audit: GitHub Actions artifacts from 2026-09-27 through 2026-10-01 include build distributions, Playwright reports and secret-scan reports, but no fast-check or shrink-trace artifacts.
+- The optimizer replay (seed `303003`) was regenerated against the pre-fix engine and is not the original trace. The kerf replay (seed `303011`, path `21`) reproduces its invariant but not the original failure path. Neither is presented as historical.
+- The cove rounding regression retains its exact minimized seed/path. With the retained-artifact inventory checked, Sprint 303 is complete; original shrink histories that were not persisted remain unavailable. Calculator oracle gaps continue in S314 T3.
 
 ### Sprint 305 — Component behavior foundation (progress log, archived 2026-09-30)
 
@@ -551,3 +553,11 @@ the in-flight quality sprints (84-87) and run first.
 - [x] T1/T2: 27 production-browser journeys (Chromium + Firefox) expand all 24 mounted calculators and compare every finite option against the pure engine.
 - [x] T4: typed entry, ArrowUp/ArrowDown recomputation and clear-to-zero validation without NaN/Infinity.
 - [ ] T3: screw pull-out now follows USDA FPL-GTR-282 Eq. 8-10a with an independent #8 × 1 in oracle; white-oak shrinkage cites FPL-GTR-282 Table 4-3; finish coverage/recoat compatibility has product-scoped manufacturer range oracles; glue and moisture bounds are shared between UI and engine; board-foot inputs reject non-finite values. Finish cure/volume and category-wide assumptions remain unverified. Glue spread rates remain unclaimed; two calculator oracle gaps remain.
+
+### Sprint 318 — v5.34.0 verification evidence (2026-10-02)
+
+- [x] T1: `npm run check` passes: quality gates and 5,256 unit tests across 341 files. Coverage passes for 356 production modules (315 direct, 26 indirect integration-only, 15 uncovered); 634 engine functions classify as 623 covered and 11 indirectly covered. The coverage ratchet passes after adding a rounding-rollover case to `units.test.ts`.
+- [x] T1: Export golden test passes; all 8 Chromium/Firefox visual-regression comparisons pass; bundle totals 2,658.3 KB JavaScript, 68.0 KB CSS and 2,816.1 KB overall; all 16 benchmark budgets pass.
+- [x] T1: Full Playwright run against the fresh TEMP production build used one worker and zero retries: 439 passed, 13 intentionally skipped, 0 failed (30 minutes). The corrected keyboard journey also passed all 36 Chromium/Firefox cases. CI now installs and caches WebKit for its configured preview-acceptance projects.
+- [x] T2: Recorded browser scope in `docs/ARCHITECTURE.md`: full journey suite in Chromium/Firefox; WebKit desktop/mobile preview acceptance only; six-locale axe and responsive/visual preview matrices are Chromium-only.
+- Release gate: NOT READY. Phase 63 S303, S305 and S306 remain open, and the clean-checkout acceptance criterion has not been exercised. Do not mark v5.34.0 released until Phase 63 exits.

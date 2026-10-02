@@ -43,7 +43,7 @@ export function CabinetSelector() {
         </h3>
         <button
           onClick={addCabinet}
-          className="bg-wood-600 hover:bg-wood-700 rounded px-2 py-0.5 text-xs text-white transition-colors"
+          className="bg-wood-600 hover:bg-wood-700 inline-flex min-h-6 items-center rounded px-2 py-0.5 text-xs text-white transition-colors"
         >
           + {t('project.add')}
         </button>
@@ -66,7 +66,7 @@ export function CabinetSelector() {
               <button
                 onClick={() => setActiveCabinet(i)}
                 onDoubleClick={() => startRename(i)}
-                className={`rounded px-2 py-1 text-xs transition-colors ${
+                className={`min-h-6 rounded px-2 py-1 text-xs transition-colors ${
                   i === activeCabinetIndex
                     ? 'bg-wood-600 text-white'
                     : 'bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700'
@@ -92,7 +92,7 @@ export function CabinetSelector() {
             {cabinets.length > 1 && (
               <button
                 onClick={() => removeCabinet(i)}
-                className="text-wood-400 text-xs leading-none hover:text-red-500"
+                className="text-wood-400 inline-flex min-h-6 min-w-6 items-center justify-center text-xs leading-none hover:text-red-500"
                 title={t('project.remove')}
                 aria-label={`${t('project.remove')} ${cab.name}`}
               >
@@ -102,7 +102,7 @@ export function CabinetSelector() {
             {/* Sprint 125 — duplicate button */}
             <button
               onClick={() => duplicateCabinet(i)}
-              className="text-wood-400 hover:text-wood-600 dark:hover:text-wood-200 text-xs leading-none"
+              className="text-wood-400 hover:text-wood-600 dark:hover:text-wood-200 inline-flex min-h-6 min-w-6 items-center justify-center text-xs leading-none"
               title={t('project.duplicate')}
               aria-label={`Duplicate ${cab.name}`}
             >
@@ -111,7 +111,7 @@ export function CabinetSelector() {
             {/* Sprint 93 — mirror button */}
             <button
               onClick={() => mirrorCabinet(i)}
-              className="text-wood-400 text-xs leading-none hover:text-purple-600 dark:hover:text-purple-300"
+              className="text-wood-400 inline-flex min-h-6 min-w-6 items-center justify-center text-xs leading-none hover:text-purple-600 dark:hover:text-purple-300"
               title={t('project.mirror')}
               aria-label={`Mirror ${cab.name}`}
             >
@@ -121,7 +121,7 @@ export function CabinetSelector() {
             {cabinets.length > 1 && i > 0 && (
               <button
                 onClick={() => moveCabinet(i, 'up')}
-                className="text-wood-400 hover:text-wood-600 dark:hover:text-wood-200 text-xs leading-none"
+                className="text-wood-400 hover:text-wood-600 dark:hover:text-wood-200 inline-flex min-h-6 min-w-6 items-center justify-center text-xs leading-none"
                 title={t('project.moveUp')}
                 aria-label={`${t('project.moveUp')}: ${cab.name}`}
               >
@@ -131,7 +131,7 @@ export function CabinetSelector() {
             {cabinets.length > 1 && i < cabinets.length - 1 && (
               <button
                 onClick={() => moveCabinet(i, 'down')}
-                className="text-wood-400 hover:text-wood-600 dark:hover:text-wood-200 text-xs leading-none"
+                className="text-wood-400 hover:text-wood-600 dark:hover:text-wood-200 inline-flex min-h-6 min-w-6 items-center justify-center text-xs leading-none"
                 title={t('project.moveDown')}
                 aria-label={`${t('project.moveDown')}: ${cab.name}`}
               >
@@ -148,7 +148,7 @@ export function CabinetSelector() {
       <div>
         <button
           onClick={() => setNotesOpen((o) => !o)}
-          className="text-wood-600 dark:text-wood-300 text-[10px] hover:underline"
+          className="text-wood-600 dark:text-wood-300 min-h-6 text-[10px] hover:underline"
         >
           {notesOpen ? '▾' : '▸'} {t('project.notes')}
         </button>

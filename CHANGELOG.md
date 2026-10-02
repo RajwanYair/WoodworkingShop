@@ -13,16 +13,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Calculator Accuracy
 
+- Corrected the Woodgears cove-cut oracle to compare the published 200 mm fence distance within the engine's angle-rounding tolerance, rather than treating the derived angle as a table-published value.
 - Corrected screw-pullout estimates to use USDA Wood Handbook FPL-GTR-282 Equation 8-10a
   and added a sourced #8, 1-inch side-grain reference case. The panel now states the equation's
   short-term ultimate-load scope, sheet-goods exclusion, and heuristic rating limitation.
   Engine validation now shares the panel's diameter and engagement limits.
 - Hardened board-foot and linear-foot conversions against non-finite dimensions, prices,
   and calculated outputs, including arithmetic overflow.
+- Reject wood-turning diameters whose RPM formulas overflow or produce no positive speed, preventing non-finite calculator results.
+- Strengthened the wood-turning warning to state that RPM values are advisory, not safety limits, and that unbalanced blanks may require much lower speeds. Verified the AAW spindle-speed guidance but kept it out of the numeric oracle set because it does not validate this calculator's operation-specific estimates.
+
+### Responsive Layout
+
+- Fixed mobile tab navigation overflowing narrow viewports by constraining each button and ellipsizing visible labels while preserving full accessible names.
+- Fixed the configurator furniture choices and assembly action toolbar overflowing narrow viewports by allowing the controls to wrap; added a Chromium EN/HE reachability regression across all seven primary tabs and five responsive widths.
+- Completed S316 T3's 70-state Chromium matrix across seven tabs, five widths and EN/HE; added checks for clipped text and overlapping actions. Fixed the print button covering a Quick Preset at 320 px and wrapped optimizer notes to preserve full strategy explanations.
+
+### Accessibility
+
+- Completed S316 T1 WCAG 2.2 AA axe coverage for all seven primary tabs across six locales and light/dark themes, plus mobile onboarding/navigation, shortcuts, project management and import errors, G-code export preview, and optimizer loading/error recovery. The Chromium accessibility spec passes 6/6 tests.
+- Fixed contrast and labeling issues found by the scans, and made scrollable ErrorBoundary details keyboard-focusable.
+- Completed S316 T2 keyboard-only Chromium journeys for skip navigation, visible focus, tab order and activation, native range input operation, reduced motion, and dialog focus containment, Escape dismissal, and focus return. Fixed the shared focus trap to ignore negative-tabindex elements and associated the Smart Optimizer tolerance label with its range input.
+- Sequenced first-visit touch guidance after onboarding dismissal so mobile users see one modal at a time. Completed S316 T4 with stable Chromium/Firefox core screenshots and 24 preview-view baselines; reviewed and refreshed only the optimizer screenshots affected by the responsive layout changes.
+
+### Worker Reliability
+
+- Completed S317 T1 lifecycle coverage for assembly, optimization and cost workers: success, rejection, timeout termination, abort, retry recovery, and stale-result suppression. The focused worker-schedule suite passes 8/8 tests; `npm run quality` passes.
+- Completed S317 T2 controlled crash and retry coverage for all seven panel boundaries, with sibling isolation, accessible alerts and Hebrew fallback labels. Localized panel titles and recovery controls now use all six locale bundles; the focused boundary suite passes 13/13 tests.
+- Completed S317 T3 deferred PDF-generation coverage for pending state, duplicate submission and navigation/unmount cleanup. Current-project, full-project and ZIP exports now share an in-flight guard and ignore late completion after unmount; the focused PDF suite passes 8/8 tests.
 
 ### Test Infrastructure
 
 - Added source-to-test ownership inventory and per-area coverage ratchet; directly covered the Sprint 301 store, hook, export, and calculator-panel gaps, and removed avoidable coverage exclusions.
+- Sprint 318 verification: `npm run check` passes with 5,256 unit tests across 341 files; the coverage ratchet, export golden suite, eight Chromium/Firefox visual comparisons, 16 benchmark budgets, and full no-retry browser matrix pass (439 passed, 13 intentional skips, zero failures). Raw bundle totals 2,816.1 KB against the 2,960 KB budget. v5.34.0 remains blocked by open Phase 63 dependencies and clean-checkout acceptance.
 - Verified 4,465 tests across 278 files; coverage inventory maps all 351 production modules, with 0 unmeasured and 23 explicitly uncovered modules remaining.
 - Added deterministic Playwright and typed test fixtures, RTL render support, accessible E2E queries, and per-test environment cleanup; fixed a localStorage mock leak exposed by shuffled test execution.
 - Verified 4,470 tests across 280 files in normal and seeded-shuffle runs, all 26 Chromium/Firefox E2E tests, and the complete `npm run ci` gate including build, bundle, and benchmark budgets.

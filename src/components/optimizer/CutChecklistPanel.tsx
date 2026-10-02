@@ -31,7 +31,7 @@ export function CutChecklistPanel() {
           <span aria-hidden="true">✂️</span>
           {t('cutChecklist.title')}
         </span>
-        <span className="text-wood-500 dark:text-wood-400 flex items-center gap-2 text-sm">
+        <span className="text-wood-700 dark:text-wood-300 flex items-center gap-2 text-sm">
           {checklist.checkedParts}/{checklist.totalParts}
           {checklist.isComplete && (
             <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700 dark:bg-green-900/40 dark:text-green-300">

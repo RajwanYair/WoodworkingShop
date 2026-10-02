@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { pdf } from '@react-pdf/renderer';
 import { useCabinetStore } from '../../store/cabinet-store';
@@ -31,8 +31,19 @@ export function PdfExportPanel() {
   const [pageSize, setPageSize] = useState<'A4' | 'LETTER'>('A4'); // Sprint 59
   const [orientation, setOrientation] = useState<'portrait' | 'landscape'>('portrait'); // Sprint 59
   const settingsFileRef = useRef<HTMLInputElement>(null);
+  const isMountedRef = useRef(false);
+  const activeExportRef = useRef(false);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   const handleGenerate = async () => {
+    if (activeExportRef.current) return;
+    activeExportRef.current = true;
     setGenerating(true);
     try {
       const lang = i18n.language as Lang;
@@ -53,6 +64,7 @@ export function PdfExportPanel() {
         />
       );
       const blob = await pdf(doc).toBlob();
+      if (!isMountedRef.current) return;
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -67,15 +79,19 @@ export function PdfExportPanel() {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (err) {
+      if (!isMountedRef.current) return;
       console.error('[PdfExportPanel] PDF generation failed:', err);
       useToastStore.getState().addToast(t('pdf.error'), 'error');
     } finally {
-      setGenerating(false);
+      activeExportRef.current = false;
+      if (isMountedRef.current) setGenerating(false);
     }
   };
 
   /** v3.58.0 — Export full project: all cabinets share cut sheets by material. */
   const handleGenerateAll = async () => {
+    if (activeExportRef.current) return;
+    activeExportRef.current = true;
     setGeneratingAll(true);
     try {
       const lang = i18n.language as Lang;
@@ -131,6 +147,7 @@ export function PdfExportPanel() {
         />
       );
       const blob = await pdf(doc).toBlob();
+      if (!isMountedRef.current) return;
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -145,10 +162,12 @@ export function PdfExportPanel() {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (err) {
+      if (!isMountedRef.current) return;
       console.error('[PdfExportPanel] Project PDF generation failed:', err);
       useToastStore.getState().addToast(t('pdf.error'), 'error');
     } finally {
-      setGeneratingAll(false);
+      activeExportRef.current = false;
+      if (isMountedRef.current) setGeneratingAll(false);
     }
   };
 
@@ -189,6 +208,8 @@ export function PdfExportPanel() {
 
   /** Sprint 86 — Export a ZIP bundle: PDF + DXF sheets + BOM CSV + glTF. */
   const handleExportZip = () => {
+    if (activeExportRef.current) return;
+    activeExportRef.current = true;
     setGeneratingZip(true);
     const lang = i18n.language as Lang;
     const safeName =
@@ -219,7 +240,9 @@ export function PdfExportPanel() {
           />
         );
         const pdfBlob = await pdf(doc).toBlob();
+        if (!isMountedRef.current) return;
         const pdfBytes = new Uint8Array(await pdfBlob.arrayBuffer());
+        if (!isMountedRef.current) return;
         entries.push({ name: `${safeName}.pdf`, data: pdfBytes });
 
         // 2) DXF — one file per cut sheet
@@ -260,14 +283,17 @@ export function PdfExportPanel() {
         entries.push({ name: 'README.txt', data: utf8Encode(readme) });
 
         entries.push(await createZipManifest(entries));
+        if (!isMountedRef.current) return;
         const zipBytes = buildZip(entries);
         downloadZip(zipBytes, `${safeName}-bundle.zip`);
         useToastStore.getState().addToast(t('pdf.zipExported'), 'success');
       } catch (err) {
+        if (!isMountedRef.current) return;
         console.error('[PdfExportPanel] ZIP export failed:', err);
         useToastStore.getState().addToast(t('pdf.error'), 'error');
       } finally {
-        setGeneratingZip(false);
+        activeExportRef.current = false;
+        if (isMountedRef.current) setGeneratingZip(false);
       }
     })();
   };

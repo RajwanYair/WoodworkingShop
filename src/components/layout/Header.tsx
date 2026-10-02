@@ -18,12 +18,6 @@ import {
   IconContrast,
   IconLayers,
   IconFolder,
-  IconSettings,
-  IconEye,
-  IconScissors,
-  IconHammer,
-  IconDocument,
-  IconRuler,
 } from './Icons';
 
 const tabs = ['workspace', 'configurator', 'preview', 'optimizer', 'assembly', 'pdf', 'calculators'] as const;
@@ -39,48 +33,13 @@ const TAB_SHORTCUTS: Record<(typeof tabs)[number], string> = {
 };
 
 const TAB_ICONS = {
-  workspace: (
-    <span aria-hidden="true" className="flex shrink-0 items-center gap-1 text-sm">
-      <span>🏷️</span>
-      <span>🪵</span>
-    </span>
-  ),
-  configurator: (
-    <span aria-hidden="true" className="flex shrink-0 items-center gap-1 text-sm">
-      <IconSettings size={13} />
-      <span>⚙️</span>
-    </span>
-  ),
-  preview: (
-    <span aria-hidden="true" className="flex shrink-0 items-center gap-1 text-sm">
-      <IconEye size={13} />
-      <span>👁️</span>
-    </span>
-  ),
-  optimizer: (
-    <span aria-hidden="true" className="flex shrink-0 items-center gap-1 text-sm">
-      <IconScissors size={13} />
-      <span>✂️</span>
-    </span>
-  ),
-  assembly: (
-    <span aria-hidden="true" className="flex shrink-0 items-center gap-1 text-sm">
-      <IconHammer size={13} />
-      <span>🔨</span>
-    </span>
-  ),
-  pdf: (
-    <span aria-hidden="true" className="flex shrink-0 items-center gap-1 text-sm">
-      <IconDocument size={13} />
-      <span>📄</span>
-    </span>
-  ),
-  calculators: (
-    <span aria-hidden="true" className="flex shrink-0 items-center gap-1 text-sm">
-      <IconRuler size={13} />
-      <span>🧮</span>
-    </span>
-  ),
+  workspace: '🏷️',
+  configurator: '⚙️',
+  preview: '👁️',
+  optimizer: '✂️',
+  assembly: '🔨',
+  pdf: '📄',
+  calculators: '🧮',
 } as const;
 
 export function Header() {
@@ -236,7 +195,9 @@ export function Header() {
               activeTab === tab ? 'bg-wood-600 text-white' : 'text-wood-200 hover:bg-wood-600'
             }`}
           >
-            {TAB_ICONS[tab]}
+            <span aria-hidden="true" className="shrink-0 text-sm">
+              {TAB_ICONS[tab]}
+            </span>
             {t(`tabs.${tab}`)}
           </button>
         ))}

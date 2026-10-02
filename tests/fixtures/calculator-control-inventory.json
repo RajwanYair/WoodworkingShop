@@ -1,0 +1,896 @@
+{
+  "capturedOn": "2026-10-02",
+  "source": "Rendered Calculators tab, Chromium accessibility labels and native control roles.",
+  "testFile": "tests/e2e/calculators.spec.ts",
+  "coverageRule": "A null positiveTest or negativeTest marks an uncovered assertion for Sprint 305; accordion collapse is tracked on each panel toggle.",
+  "panels": [
+    {
+      "name": "Finish Calculator",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "button",
+          "accessibleName": "Primer",
+          "positiveTest": "finish options reconcile area, required volume, and can sizes with the engine",
+          "negativeTest": "finish options reconcile area, required volume, and can sizes with the engine"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Stain",
+          "positiveTest": "finish options reconcile area, required volume, and can sizes with the engine",
+          "negativeTest": "finish options reconcile area, required volume, and can sizes with the engine"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Paint",
+          "positiveTest": "finish options reconcile area, required volume, and can sizes with the engine",
+          "negativeTest": "finish options reconcile area, required volume, and can sizes with the engine"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Varnish",
+          "positiveTest": "finish options reconcile area, required volume, and can sizes with the engine",
+          "negativeTest": "finish options reconcile area, required volume, and can sizes with the engine"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Oil",
+          "positiveTest": "finish options reconcile area, required volume, and can sizes with the engine",
+          "negativeTest": "finish options reconcile area, required volume, and can sizes with the engine"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Lacquer",
+          "positiveTest": "finish options reconcile area, required volume, and can sizes with the engine",
+          "negativeTest": "finish options reconcile area, required volume, and can sizes with the engine"
+        },
+        {
+          "role": "slider",
+          "accessibleName": "Coats",
+          "positiveTest": "finish options reconcile area, required volume, and can sizes with the engine",
+          "negativeTest": "finish options reconcile area, required volume, and can sizes with the engine"
+        }
+      ]
+    },
+    {
+      "name": "Face Frame Calculator",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Cabinet Width (mm)",
+          "positiveTest": "face frame widths reconcile opening dimensions with the engine",
+          "negativeTest": "numeric input typing, arrow stepping, and clearing never leak invalid results"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Cabinet Height (mm)",
+          "positiveTest": "face frame height and member widths update results and reject zero",
+          "negativeTest": "face frame height and member widths update results and reject zero"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Stile Width (mm)",
+          "positiveTest": "face frame height and member widths update results and reject zero",
+          "negativeTest": "face frame height and member widths update results and reject zero"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Rail Width (mm)",
+          "positiveTest": "face frame height and member widths update results and reject zero",
+          "negativeTest": "face frame height and member widths update results and reject zero"
+        },
+        {
+          "role": "slider",
+          "accessibleName": "Number of Openings",
+          "positiveTest": "face frame widths reconcile opening dimensions with the engine",
+          "negativeTest": "face frame widths reconcile opening dimensions with the engine"
+        }
+      ]
+    },
+    {
+      "name": "Cabinet Door Sizing Calculator",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Opening Width (mm)",
+          "positiveTest": "cabinet door opening dimensions update outputs and recover from nonpositive values",
+          "negativeTest": "cabinet door opening dimensions update outputs and recover from nonpositive values"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Opening Height (mm)",
+          "positiveTest": "cabinet door opening dimensions update outputs and recover from nonpositive values",
+          "negativeTest": "cabinet door opening dimensions update outputs and recover from nonpositive values"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Full Overlay",
+          "positiveTest": "every cabinet door count and overlay combination reconciles with the engine",
+          "negativeTest": "every cabinet door count and overlay combination reconciles with the engine"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Half Overlay",
+          "positiveTest": "every cabinet door count and overlay combination reconciles with the engine",
+          "negativeTest": "every cabinet door count and overlay combination reconciles with the engine"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Inset",
+          "positiveTest": "every cabinet door count and overlay combination reconciles with the engine",
+          "negativeTest": "every cabinet door count and overlay combination reconciles with the engine"
+        },
+        {
+          "role": "button",
+          "accessibleName": "1 door",
+          "positiveTest": "every cabinet door count and overlay combination reconciles with the engine",
+          "negativeTest": "every cabinet door count and overlay combination reconciles with the engine"
+        },
+        {
+          "role": "button",
+          "accessibleName": "2 doors",
+          "positiveTest": "every cabinet door count and overlay combination reconciles with the engine",
+          "negativeTest": "every cabinet door count and overlay combination reconciles with the engine"
+        }
+      ]
+    },
+    {
+      "name": "Drawer Box Sizing Calculator",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Opening Width (mm)",
+          "positiveTest": "drawer box controls recalculate dimensions, reject invalid values, and recover",
+          "negativeTest": "drawer box controls recalculate dimensions, reject invalid values, and recover"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Opening Height (mm)",
+          "positiveTest": "drawer box controls recalculate dimensions, reject invalid values, and recover",
+          "negativeTest": "drawer box controls recalculate dimensions, reject invalid values, and recover"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Cabinet Depth (mm)",
+          "positiveTest": "drawer box controls recalculate dimensions, reject invalid values, and recover",
+          "negativeTest": "drawer box controls recalculate dimensions, reject invalid values, and recover"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Side Thickness (mm)",
+          "positiveTest": "drawer box controls recalculate dimensions, reject invalid values, and recover",
+          "negativeTest": "drawer box controls recalculate dimensions, reject invalid values, and recover"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Side Mount",
+          "positiveTest": "drawer box controls recalculate dimensions, reject invalid values, and recover",
+          "negativeTest": "drawer box controls recalculate dimensions, reject invalid values, and recover"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Bottom Mount",
+          "positiveTest": "drawer box controls recalculate dimensions, reject invalid values, and recover",
+          "negativeTest": "drawer box controls recalculate dimensions, reject invalid values, and recover"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Centre Mount",
+          "positiveTest": "drawer box controls recalculate dimensions, reject invalid values, and recover",
+          "negativeTest": "drawer box controls recalculate dimensions, reject invalid values, and recover"
+        }
+      ]
+    },
+    {
+      "name": "Screw Pull-Out Strength Estimator",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Screw Diameter (mm)",
+          "positiveTest": "screw density reconciles pullout force with engine and validates diameter",
+          "negativeTest": "screw density reconciles pullout force with engine and validates diameter"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Thread Length in Wood (mm)",
+          "positiveTest": "screw density reconciles pullout force with engine and validates diameter",
+          "negativeTest": "screw density reconciles pullout force with engine and validates diameter"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Low Density (Pine, Cedar)",
+          "positiveTest": "screw density reconciles pullout force with engine and validates diameter",
+          "negativeTest": "screw density reconciles pullout force with engine and validates diameter"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Medium Density (Maple, Oak)",
+          "positiveTest": "screw density reconciles pullout force with engine and validates diameter",
+          "negativeTest": "screw density reconciles pullout force with engine and validates diameter"
+        },
+        {
+          "role": "button",
+          "accessibleName": "High Density (Hickory, Teak)",
+          "positiveTest": "screw density reconciles pullout force with engine and validates diameter",
+          "negativeTest": "screw density reconciles pullout force with engine and validates diameter"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Sheet Goods (Plywood, MDF)",
+          "positiveTest": "screw density reconciles pullout force with engine and validates diameter",
+          "negativeTest": "screw density reconciles pullout force with engine and validates diameter"
+        }
+      ]
+    },
+    {
+      "name": "Kerf Bending Calculator",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Panel Thickness (mm)",
+          "positiveTest": "kerf controls recompute geometry, reject invalid values, and select one material",
+          "negativeTest": "kerf controls recompute geometry, reject invalid values, and select one material"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Target Bend Radius (mm)",
+          "positiveTest": "kerf controls recompute geometry, reject invalid values, and select one material",
+          "negativeTest": "kerf controls recompute geometry, reject invalid values, and select one material"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Kerf Width (saw blade) (mm)",
+          "positiveTest": "kerf controls recompute geometry, reject invalid values, and select one material",
+          "negativeTest": "kerf controls recompute geometry, reject invalid values, and select one material"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Plywood",
+          "positiveTest": "kerf controls recompute geometry, reject invalid values, and select one material",
+          "negativeTest": "kerf controls recompute geometry, reject invalid values, and select one material"
+        },
+        {
+          "role": "button",
+          "accessibleName": "MDF",
+          "positiveTest": "kerf controls recompute geometry, reject invalid values, and select one material",
+          "negativeTest": "kerf controls recompute geometry, reject invalid values, and select one material"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Softwood",
+          "positiveTest": "kerf controls recompute geometry, reject invalid values, and select one material",
+          "negativeTest": "kerf controls recompute geometry, reject invalid values, and select one material"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Hardwood",
+          "positiveTest": "kerf controls recompute geometry, reject invalid values, and select one material",
+          "negativeTest": "kerf controls recompute geometry, reject invalid values, and select one material"
+        }
+      ]
+    },
+    {
+      "name": "Dado / Rabbet Joint Calculator",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "button",
+          "accessibleName": "Dado",
+          "positiveTest": "dado and rabbet controls reconcile geometry, recover from errors, and select one joint type",
+          "negativeTest": "dado and rabbet controls reconcile geometry, recover from errors, and select one joint type"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Rabbet",
+          "positiveTest": "dado and rabbet controls reconcile geometry, recover from errors, and select one joint type",
+          "negativeTest": "dado and rabbet controls reconcile geometry, recover from errors, and select one joint type"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Through Dado",
+          "positiveTest": "dado and rabbet controls reconcile geometry, recover from errors, and select one joint type",
+          "negativeTest": "dado and rabbet controls reconcile geometry, recover from errors, and select one joint type"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Mating Panel Thickness (mm)",
+          "positiveTest": "dado and rabbet controls reconcile geometry, recover from errors, and select one joint type",
+          "negativeTest": "dado and rabbet controls reconcile geometry, recover from errors, and select one joint type"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Receiving Board Thickness (mm)",
+          "positiveTest": "dado and rabbet controls reconcile geometry, recover from errors, and select one joint type",
+          "negativeTest": "dado and rabbet controls reconcile geometry, recover from errors, and select one joint type"
+        }
+      ],
+      "conditionalControls": [
+        {
+          "when": "Rabbet selected",
+          "role": "spinbutton",
+          "accessibleName": "Offset from Edge (mm)",
+          "positiveTest": "dado and rabbet controls reconcile geometry, recover from errors, and select one joint type",
+          "negativeTest": "dado and rabbet controls reconcile geometry, recover from errors, and select one joint type"
+        }
+      ]
+    },
+    {
+      "name": "Finishing Coat Calculator",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Surface Area (m²)",
+          "positiveTest": "finishing-coat controls reconcile output, recover from invalid values, and select one finish",
+          "negativeTest": "finishing-coat controls reconcile output, recover from invalid values, and select one finish"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Number of Coats",
+          "positiveTest": "finishing-coat controls reconcile output, recover from invalid values, and select one finish",
+          "negativeTest": "finishing-coat controls reconcile output, recover from invalid values, and select one finish"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Polyurethane",
+          "positiveTest": "finishing-coat controls reconcile output, recover from invalid values, and select one finish",
+          "negativeTest": "finishing-coat controls reconcile output, recover from invalid values, and select one finish"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Lacquer",
+          "positiveTest": "finishing-coat controls reconcile output, recover from invalid values, and select one finish",
+          "negativeTest": "finishing-coat controls reconcile output, recover from invalid values, and select one finish"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Shellac",
+          "positiveTest": "finishing-coat controls reconcile output, recover from invalid values, and select one finish",
+          "negativeTest": "finishing-coat controls reconcile output, recover from invalid values, and select one finish"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Water-Based",
+          "positiveTest": "finishing-coat controls reconcile output, recover from invalid values, and select one finish",
+          "negativeTest": "finishing-coat controls reconcile output, recover from invalid values, and select one finish"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Oil / Danish Oil",
+          "positiveTest": "finishing-coat controls reconcile output, recover from invalid values, and select one finish",
+          "negativeTest": "finishing-coat controls reconcile output, recover from invalid values, and select one finish"
+        }
+      ]
+    },
+    {
+      "name": "Wood Turning Speed Calculator",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Blank Diameter (mm)",
+          "positiveTest": "wood turning controls reconcile advisory RPM, recover from invalid diameters, and select one operation",
+          "negativeTest": "wood turning controls reconcile advisory RPM, recover from invalid diameters, and select one operation"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Roughing",
+          "positiveTest": "wood turning controls reconcile advisory RPM, recover from invalid diameters, and select one operation",
+          "negativeTest": "wood turning controls reconcile advisory RPM, recover from invalid diameters, and select one operation"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Finishing",
+          "positiveTest": "wood turning controls reconcile advisory RPM, recover from invalid diameters, and select one operation",
+          "negativeTest": "wood turning controls reconcile advisory RPM, recover from invalid diameters, and select one operation"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Sanding",
+          "positiveTest": "wood turning controls reconcile advisory RPM, recover from invalid diameters, and select one operation",
+          "negativeTest": "wood turning controls reconcile advisory RPM, recover from invalid diameters, and select one operation"
+        }
+      ]
+    },
+    {
+      "name": "Frame and Panel Calculator",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Frame Width (mm)",
+          "positiveTest": "frame panel dimensions update geometry, reject invalid inputs, and recover",
+          "negativeTest": "frame panel dimensions update geometry, reject invalid inputs, and recover"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Frame Height (mm)",
+          "positiveTest": "frame panel dimensions update geometry, reject invalid inputs, and recover",
+          "negativeTest": "frame panel dimensions update geometry, reject invalid inputs, and recover"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Stile Width (mm)",
+          "positiveTest": "frame panel dimensions update geometry, reject invalid inputs, and recover",
+          "negativeTest": "frame panel dimensions update geometry, reject invalid inputs, and recover"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Rail Width (mm)",
+          "positiveTest": "frame panel dimensions update geometry, reject invalid inputs, and recover",
+          "negativeTest": "frame panel dimensions update geometry, reject invalid inputs, and recover"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Groove Depth (mm)",
+          "positiveTest": "frame panel dimensions update geometry, reject invalid inputs, and recover",
+          "negativeTest": "frame panel dimensions update geometry, reject invalid inputs, and recover"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Panel Float (each side) (mm)",
+          "positiveTest": "frame panel dimensions update geometry, reject invalid inputs, and recover",
+          "negativeTest": "frame panel dimensions update geometry, reject invalid inputs, and recover"
+        }
+      ]
+    },
+    {
+      "name": "Taper Jig Calculator",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Workpiece Length (mm)",
+          "positiveTest": "taper jig dimensions update outputs, reject invalid values, and recover",
+          "negativeTest": "taper jig dimensions update outputs, reject invalid values, and recover"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Start Width (wide end) (mm)",
+          "positiveTest": "taper jig dimensions update outputs, reject invalid values, and recover",
+          "negativeTest": "taper jig dimensions update outputs, reject invalid values, and recover"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "End Width (narrow end) (mm)",
+          "positiveTest": "taper jig dimensions update outputs, reject invalid values, and recover",
+          "negativeTest": "taper jig dimensions update outputs, reject invalid values, and recover"
+        },
+        {
+          "role": "combobox",
+          "accessibleName": "Tapered Faces",
+          "positiveTest": "taper jig dimensions update outputs, reject invalid values, and recover",
+          "negativeTest": "taper jig dimensions update outputs, reject invalid values, and recover"
+        }
+      ]
+    },
+    {
+      "name": "Stair Stringer Calculator",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Total Rise (mm)",
+          "positiveTest": "stair stringer dimensions update geometry, reject invalid values, and recover",
+          "negativeTest": "stair stringer dimensions update geometry, reject invalid values, and recover"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Tread Depth (mm)",
+          "positiveTest": "stair stringer dimensions update geometry, reject invalid values, and recover",
+          "negativeTest": "stair stringer dimensions update geometry, reject invalid values, and recover"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Ideal Riser Height (mm)",
+          "positiveTest": "stair stringer dimensions update geometry, reject invalid values, and recover",
+          "negativeTest": "stair stringer dimensions update geometry, reject invalid values, and recover"
+        }
+      ]
+    },
+    {
+      "name": "Box Joint Calculator",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Board Width (mm)",
+          "positiveTest": "box-joint inputs update the layout and reject zero values",
+          "negativeTest": "box-joint inputs update the layout and reject zero values"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Desired Finger Width (mm)",
+          "positiveTest": "box-joint inputs update the layout and reject zero values",
+          "negativeTest": "box-joint inputs update the layout and reject zero values"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Joint Depth (board thickness) (mm)",
+          "positiveTest": "box-joint inputs update the layout and reject zero values",
+          "negativeTest": "box-joint inputs update the layout and reject zero values"
+        }
+      ]
+    },
+    {
+      "name": "Wood Glue Coverage Calculator",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Glue Surface Area (mm²)",
+          "positiveTest": "glue quantity and type reconcile volume and cure schedule with the engine",
+          "negativeTest": "glue quantity and type reconcile volume and cure schedule with the engine"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Number of Joints",
+          "positiveTest": "glue quantity and type reconcile volume and cure schedule with the engine",
+          "negativeTest": "glue quantity and type reconcile volume and cure schedule with the engine"
+        },
+        {
+          "role": "combobox",
+          "accessibleName": "Glue Type",
+          "positiveTest": "glue quantity and type reconcile volume and cure schedule with the engine",
+          "negativeTest": "glue quantity and type reconcile volume and cure schedule with the engine"
+        }
+      ]
+    },
+    {
+      "name": "Lumber Planer Pass Calculator",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Initial Thickness (mm)",
+          "positiveTest": "planer dimensions update passes, reject invalid values, and recover",
+          "negativeTest": "planer dimensions update passes, reject invalid values, and recover"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Target Thickness (mm)",
+          "positiveTest": "planer dimensions update passes, reject invalid values, and recover",
+          "negativeTest": "planer dimensions update passes, reject invalid values, and recover"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Max Pass Depth (mm)",
+          "positiveTest": "planer dimensions update passes, reject invalid values, and recover",
+          "negativeTest": "planer dimensions update passes, reject invalid values, and recover"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Snipe Length (each end) (mm)",
+          "positiveTest": "planer dimensions update passes, reject invalid values, and recover",
+          "negativeTest": "planer dimensions update passes, reject invalid values, and recover"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Board Length (mm)",
+          "positiveTest": "planer dimensions update passes, reject invalid values, and recover",
+          "negativeTest": "planer dimensions update passes, reject invalid values, and recover"
+        }
+      ]
+    },
+    {
+      "name": "Honing Guide Calculator",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Bevel Angle (°)",
+          "positiveTest": "honing guide dimensions update projections, reject invalid values, and recover",
+          "negativeTest": "honing guide dimensions update projections, reject invalid values, and recover"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Guide Height (mm)",
+          "positiveTest": "honing guide dimensions update projections, reject invalid values, and recover",
+          "negativeTest": "honing guide dimensions update projections, reject invalid values, and recover"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Micro-Bevel Angle (°)",
+          "positiveTest": "honing guide dimensions update projections, reject invalid values, and recover",
+          "negativeTest": "honing guide dimensions update projections, reject invalid values, and recover"
+        }
+      ]
+    },
+    {
+      "name": "Crown Moulding Cut Calculator",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Corner Angle (°)",
+          "positiveTest": "crown-moulding angles and cutting methods update results, reject invalid values, and recover",
+          "negativeTest": "crown-moulding angles and cutting methods update results, reject invalid values, and recover"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Spring Angle (°)",
+          "positiveTest": "crown-moulding angles and cutting methods update results, reject invalid values, and recover",
+          "negativeTest": "crown-moulding angles and cutting methods update results, reject invalid values, and recover"
+        },
+        {
+          "role": "combobox",
+          "accessibleName": "Cutting Method",
+          "positiveTest": "crown-moulding angles and cutting methods update results, reject invalid values, and recover",
+          "negativeTest": "crown-moulding angles and cutting methods update results, reject invalid values, and recover"
+        }
+      ]
+    },
+    {
+      "name": "Router Circle Jig Calculator",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Target Diameter (mm)",
+          "positiveTest": "router-circle dimensions and cut modes update geometry, reject invalid values, and recover",
+          "negativeTest": "router-circle dimensions and cut modes update geometry, reject invalid values, and recover"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Bit Diameter (mm)",
+          "positiveTest": "router-circle dimensions and cut modes update geometry, reject invalid values, and recover",
+          "negativeTest": "router-circle dimensions and cut modes update geometry, reject invalid values, and recover"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Pivot Hole Diameter (mm)",
+          "positiveTest": "router-circle dimensions and cut modes update geometry, reject invalid values, and recover",
+          "negativeTest": "router-circle dimensions and cut modes update geometry, reject invalid values, and recover"
+        },
+        {
+          "role": "combobox",
+          "accessibleName": "Cut Mode",
+          "positiveTest": "router-circle dimensions and cut modes update geometry, reject invalid values, and recover",
+          "negativeTest": "router-circle dimensions and cut modes update geometry, reject invalid values, and recover"
+        }
+      ]
+    },
+    {
+      "name": "Cove Cut (Table Saw)",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Cove Width (mm)",
+          "positiveTest": "cove cut inputs reconcile with the Woodgears reference and recompute outputs",
+          "negativeTest": "cove cut inputs reject zero values and recover with valid values"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Cove Depth (mm)",
+          "positiveTest": "cove cut inputs reconcile with the Woodgears reference and recompute outputs",
+          "negativeTest": "cove cut inputs reject zero values and recover with valid values"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Blade Diameter (mm)",
+          "positiveTest": "cove cut inputs reconcile with the Woodgears reference and recompute outputs",
+          "negativeTest": "cove cut inputs reject zero values and recover with valid values"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Blade Kerf (mm)",
+          "positiveTest": "cove cut inputs reconcile with the Woodgears reference and recompute outputs",
+          "negativeTest": "cove cut inputs reject zero values and recover with valid values"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Max Depth per Pass (mm)",
+          "positiveTest": "cove cut inputs reconcile with the Woodgears reference and recompute outputs",
+          "negativeTest": "cove cut inputs reject zero values and recover with valid values"
+        }
+      ]
+    },
+    {
+      "name": "Moisture Content & Shrinkage",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Initial MC (%)",
+          "positiveTest": "grain direction reconciles shrinkage and invalid dimensions report an error",
+          "negativeTest": "grain direction reconciles shrinkage and invalid dimensions report an error"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Target MC (%)",
+          "positiveTest": "grain direction reconciles shrinkage and invalid dimensions report an error",
+          "negativeTest": "grain direction reconciles shrinkage and invalid dimensions report an error"
+        },
+        {
+          "role": "combobox",
+          "accessibleName": "Species",
+          "positiveTest": "grain direction reconciles shrinkage and invalid dimensions report an error",
+          "negativeTest": null
+        },
+        {
+          "role": "combobox",
+          "accessibleName": "Grain Direction",
+          "positiveTest": "grain direction reconciles shrinkage and invalid dimensions report an error",
+          "negativeTest": null
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Board Dimension (mm)",
+          "positiveTest": "grain direction reconciles shrinkage and invalid dimensions report an error",
+          "negativeTest": "grain direction reconciles shrinkage and invalid dimensions report an error"
+        }
+      ]
+    },
+    {
+      "name": "Rafter Length & Birdsmouth",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Total Building Span (mm)",
+          "positiveTest": null,
+          "negativeTest": null
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Pitch Ratio (rise/run)",
+          "positiveTest": null,
+          "negativeTest": null
+        },
+        { "role": "spinbutton", "accessibleName": "Wall Plate Width (mm)", "positiveTest": null, "negativeTest": null },
+        { "role": "spinbutton", "accessibleName": "Overhang (mm)", "positiveTest": null, "negativeTest": null },
+        {
+          "role": "checkbox",
+          "accessibleName": "Shed roof (single slope)",
+          "positiveTest": "shed-roof mode reconciles rafter geometry with the engine",
+          "negativeTest": null
+        }
+      ]
+    },
+    {
+      "name": "Router Template Offset",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        { "role": "spinbutton", "accessibleName": "Bushing OD (mm)", "positiveTest": null, "negativeTest": null },
+        { "role": "spinbutton", "accessibleName": "Bit Diameter (mm)", "positiveTest": null, "negativeTest": null },
+        {
+          "role": "combobox",
+          "accessibleName": "Cut Type",
+          "positiveTest": "router-template cut type reconciles dimension adjustments with the engine",
+          "negativeTest": null
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Nominal Feature Dimension (mm)",
+          "positiveTest": "router-template cut type reconciles dimension adjustments with the engine",
+          "negativeTest": null
+        }
+      ]
+    },
+    {
+      "name": "Half-Lap Joint",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "combobox",
+          "accessibleName": "Lap Type",
+          "positiveTest": "half-lap board thickness reconciles notch dimensions with engine and rejects zero",
+          "negativeTest": null
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Board 1 Thickness (mm)",
+          "positiveTest": "half-lap board thickness reconciles notch dimensions with engine and rejects zero",
+          "negativeTest": "half-lap board thickness reconciles notch dimensions with engine and rejects zero"
+        },
+        { "role": "spinbutton", "accessibleName": "Board 1 Width (mm)", "positiveTest": null, "negativeTest": null },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Board 2 Thickness (mm)",
+          "positiveTest": null,
+          "negativeTest": null
+        },
+        { "role": "spinbutton", "accessibleName": "Board 2 Width (mm)", "positiveTest": null, "negativeTest": null }
+      ]
+    },
+    {
+      "name": "Spline Joint",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        { "role": "spinbutton", "accessibleName": "Board Thickness (mm)", "positiveTest": null, "negativeTest": null },
+        { "role": "spinbutton", "accessibleName": "Spline Thickness (mm)", "positiveTest": null, "negativeTest": null },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Slot Depth per Board (mm)",
+          "positiveTest": "spline count reconciles joint dimensions with engine and validates slot depth",
+          "negativeTest": "spline count reconciles joint dimensions with engine and validates slot depth"
+        },
+        { "role": "spinbutton", "accessibleName": "Joint Length (mm)", "positiveTest": null, "negativeTest": null },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Number of Splines",
+          "positiveTest": "spline count reconciles joint dimensions with engine and validates slot depth",
+          "negativeTest": null
+        }
+      ]
+    }
+  ]
+}

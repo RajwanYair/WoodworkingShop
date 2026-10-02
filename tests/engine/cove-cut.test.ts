@@ -14,7 +14,7 @@ describe('calculateCoveCut', () => {
     expect(result.fenceAngleDeg).toBeGreaterThan(0);
   });
 
-  it('matches the Woodgears published fence angle', () => {
+  it('matches the Woodgears published fence distance within angle-rounding tolerance', () => {
     const { sourceValues, derivedValues } = WOODGEARS_COVE_CUT_ORACLE;
     const result = calculateCoveCut({
       copeWidthMm: sourceValues.copeWidthMm,
@@ -23,7 +23,10 @@ describe('calculateCoveCut', () => {
       bladeKerfMm: sourceValues.bladeKerfMm,
     });
 
-    expect(result.fenceAngleDeg).toBe(derivedValues.fenceAngleDeg);
+    const distanceFromRoundedEngineAngleMm = Math.round(
+      sourceValues.fenceLengthMm * Math.tan((result.fenceAngleDeg * Math.PI) / 180),
+    );
+    expect(Math.abs(distanceFromRoundedEngineAngleMm - derivedValues.fenceDistanceMm)).toBeLessThanOrEqual(1);
   });
 
   it('changes fence angle when cove depth or blade kerf changes', () => {

@@ -527,8 +527,16 @@
     "notesPlaceholder": "Optional notes for this cabinet…"
   },
   "errors": {
+    "panel": "Panel",
+    "panelFailed": "{{panel}} failed to render",
+    "recoveryHint": "An unexpected error occurred. You can try reloading the panel or refreshing the page.",
+    "retry": "Retry",
     "copyDetails": "Copy error details",
-    "copied": "Copied!"
+    "details": "Error details",
+    "copied": "Copied!",
+    "reloadPage": "Reload page",
+    "warning": "Error",
+    "interactivePreview": "Interactive 3D preview"
   },
   "room": {
     "title": "Room Layout",
@@ -2271,7 +2279,7 @@
     "maxRpm": "Max RPM (advisory)",
     "recommendedRpm": "Recommended RPM",
     "surfaceSpeed": "Surface Speed (m/min)",
-    "safetyNote": "Follow your lathe manual. Start at the lowest speed and reduce speed if the blank vibrates."
+    "safetyNote": "Advisory estimate only, not a safety limit. Follow your lathe manual; start slowly and reduce speed if the blank vibrates. Unbalanced blanks may need much lower speeds."
   },
   "framePanel": {
     "title": "Frame and Panel Calculator",

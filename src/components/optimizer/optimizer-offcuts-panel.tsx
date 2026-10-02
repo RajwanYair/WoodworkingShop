@@ -70,7 +70,7 @@ export function OffcutsPanel({
                 <span className="text-wood-600 dark:text-wood-300">
                   {Math.round(oc.w)} × {Math.round(oc.h)} mm
                 </span>
-                <span className="text-wood-400 dark:text-wood-500">{(oc.area / 1_000_000).toFixed(3)} m²</span>
+                <span className="text-wood-700 dark:text-wood-200">{(oc.area / 1_000_000).toFixed(3)} m²</span>
                 {/* Phase 12 / Sprint 12 — save to offcut catalog */}
                 <button
                   onClick={() =>

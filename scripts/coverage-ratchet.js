@@ -99,7 +99,7 @@ function main() {
 
     const baseline = {
       _comment:
-        'Per-area coverage floor. Update only after intentional improvement; components are excluded from Vitest coverage until their measured baseline is established.',
+        'Per-area coverage floor. Update only after intentional improvement; includes engine, utils, store, hooks, and components.',
       _updated: new Date().toISOString().slice(0, 10),
       directories,
     };

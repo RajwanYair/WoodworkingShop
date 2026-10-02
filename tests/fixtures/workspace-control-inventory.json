@@ -1,0 +1,784 @@
+{
+  "capturedOn": "2026-10-02",
+  "source": "Rendered Configure, Preview, Optimizer and Cabinet summary surfaces, Chromium accessibility tree and native control roles.",
+  "testFile": "tests/e2e/configurator.spec.ts",
+  "panels": [
+    {
+      "name": "Configurator",
+      "controls": [
+        {
+          "scope": "🪑 Furniture Type",
+          "role": "radio",
+          "accessibleName": "Cabinet",
+          "positiveTest": "furniture and joinery options select correctly and update controls and parts",
+          "negativeWaiver": "Furniture type is an exclusive radio choice; invalid scalar input does not apply."
+        },
+        {
+          "scope": "🪑 Furniture Type",
+          "role": "radio",
+          "accessibleName": "Bookshelf",
+          "positiveTest": "furniture and joinery options select correctly and update controls and parts",
+          "negativeWaiver": "Furniture type is an exclusive radio choice; invalid scalar input does not apply."
+        },
+        {
+          "scope": "🪑 Furniture Type",
+          "role": "radio",
+          "accessibleName": "Desk",
+          "positiveTest": "furniture and joinery options select correctly and update controls and parts",
+          "negativeWaiver": "Furniture type is an exclusive radio choice; invalid scalar input does not apply."
+        },
+        {
+          "scope": "🪑 Furniture Type",
+          "role": "radio",
+          "accessibleName": "Wardrobe",
+          "positiveTest": "furniture and joinery options select correctly and update controls and parts",
+          "negativeWaiver": "Furniture type is an exclusive radio choice; invalid scalar input does not apply."
+        },
+        {
+          "scope": "🪑 Furniture Type",
+          "role": "radio",
+          "accessibleName": "Panel",
+          "positiveTest": "furniture and joinery options select correctly and update controls and parts",
+          "negativeWaiver": "Furniture type is an exclusive radio choice; invalid scalar input does not apply."
+        },
+        {
+          "scope": "🔧 Joinery Method",
+          "role": "radio",
+          "accessibleName": "Through-Screw",
+          "positiveTest": "furniture and joinery options select correctly and update controls and parts",
+          "negativeWaiver": "Joinery method is an exclusive radio choice; invalid scalar input does not apply."
+        },
+        {
+          "scope": "🔧 Joinery Method",
+          "role": "radio",
+          "accessibleName": "Pocket Screw",
+          "positiveTest": "furniture and joinery options select correctly and update controls and parts",
+          "negativeWaiver": "Joinery method is an exclusive radio choice; invalid scalar input does not apply."
+        },
+        {
+          "scope": "🔧 Joinery Method",
+          "role": "radio",
+          "accessibleName": "Dado Groove",
+          "positiveTest": "furniture and joinery options select correctly and update controls and parts",
+          "negativeWaiver": "Joinery method is an exclusive radio choice; invalid scalar input does not apply."
+        },
+        {
+          "scope": "🔧 Joinery Method",
+          "role": "radio",
+          "accessibleName": "Dowel",
+          "positiveTest": "furniture and joinery options select correctly and update controls and parts",
+          "negativeWaiver": "Joinery method is an exclusive radio choice; invalid scalar input does not apply."
+        },
+        {
+          "scope": "🔧 Joinery Method",
+          "role": "radio",
+          "accessibleName": "Biscuit",
+          "positiveTest": "furniture and joinery options select correctly and update controls and parts",
+          "negativeWaiver": "Joinery method is an exclusive radio choice; invalid scalar input does not apply."
+        },
+        {
+          "scope": "🔧 Joinery Method",
+          "role": "radio",
+          "accessibleName": "Mortise & Tenon",
+          "positiveTest": "furniture and joinery options select correctly and update controls and parts",
+          "negativeWaiver": "Joinery method is an exclusive radio choice; invalid scalar input does not apply."
+        },
+        {
+          "scope": "🔧 Joinery Method",
+          "role": "radio",
+          "accessibleName": "Dovetail",
+          "positiveTest": "furniture and joinery options select correctly and update controls and parts",
+          "negativeWaiver": "Joinery method is an exclusive radio choice; invalid scalar input does not apply."
+        }
+      ]
+    },
+    {
+      "name": "Configure materials and conditional options",
+      "controls": [
+        {
+          "role": "combobox",
+          "accessibleName": "Carcass Material Material Suggestions",
+          "positiveTest": "materials, back panel, shelf options, and edge banding update generated parts",
+          "negativeWaiver": "The journey verifies valid material selection and derived parts; invalid option values are not applicable."
+        },
+        {
+          "role": "combobox",
+          "accessibleName": "Back Panel Material",
+          "positiveTest": "materials, back panel, shelf options, and edge banding update generated parts",
+          "negativeWaiver": "The journey verifies valid material selection and derived parts; invalid option values are not applicable."
+        },
+        {
+          "role": "checkbox",
+          "accessibleName": "Include back panel",
+          "positiveTest": "materials, back panel, shelf options, and edge banding update generated parts",
+          "negativeTest": "materials, back panel, shelf options, and edge banding update generated parts"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Number of Shelves",
+          "positiveTest": "materials, back panel, shelf options, and edge banding update generated parts",
+          "negativeWaiver": "The journey verifies valid counts and generated parts; out-of-range entry behavior is not asserted."
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Centre Supports",
+          "positiveTest": "materials, back panel, shelf options, and edge banding update generated parts",
+          "negativeWaiver": "The journey verifies valid counts and generated parts; out-of-range entry behavior is not asserted."
+        },
+        {
+          "role": "radio",
+          "accessibleName": "Custom",
+          "positiveTest": "materials, back panel, shelf options, and edge banding update generated parts",
+          "negativeWaiver": "Shelf spacing is an exclusive radio choice; invalid scalar input does not apply."
+        },
+        {
+          "role": "radio",
+          "accessibleName": "Equal",
+          "positiveTest": "materials, back panel, shelf options, and edge banding update generated parts",
+          "negativeWaiver": "Shelf spacing is an exclusive radio choice; invalid scalar input does not apply."
+        },
+        {
+          "role": "combobox",
+          "accessibleName": "Edge Banding",
+          "positiveTest": "materials, back panel, shelf options, and edge banding update generated parts",
+          "negativeWaiver": "Edge banding is an exclusive option; invalid values cannot be selected in the native control."
+        },
+        {
+          "role": "radio",
+          "accessibleName": "1 doors",
+          "positiveTest": "door and drawer options update cut-list quantities and hardware",
+          "negativeWaiver": "Door count is an exclusive radio choice; invalid scalar input does not apply."
+        },
+        {
+          "role": "radio",
+          "accessibleName": "2 doors",
+          "positiveTest": "door and drawer options update cut-list quantities and hardware",
+          "negativeWaiver": "Door count is an exclusive radio choice; invalid scalar input does not apply."
+        },
+        {
+          "role": "combobox",
+          "accessibleName": "Door Style",
+          "positiveTest": "door and drawer options update cut-list quantities and hardware",
+          "negativeWaiver": "Door style is an exclusive option; invalid values cannot be selected in the native control."
+        },
+        {
+          "role": "combobox",
+          "accessibleName": "Handles",
+          "positiveTest": "door and drawer options update cut-list quantities and hardware",
+          "negativeWaiver": "Handle style is an exclusive option; invalid values cannot be selected in the native control."
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Number of Drawers",
+          "positiveTest": "door and drawer options update cut-list quantities and hardware",
+          "negativeWaiver": "The journey verifies valid counts and generated parts; out-of-range entry behavior is not asserted."
+        },
+        {
+          "state": "drawers",
+          "role": "radio",
+          "accessibleName": "Standard",
+          "positiveTest": "door and drawer options update cut-list quantities and hardware",
+          "negativeWaiver": "Drawer slide type is an exclusive radio choice; invalid scalar input does not apply."
+        },
+        {
+          "state": "drawers",
+          "role": "radio",
+          "accessibleName": "Soft-Close",
+          "positiveTest": "door and drawer options update cut-list quantities and hardware",
+          "negativeWaiver": "Drawer slide type is an exclusive radio choice; invalid scalar input does not apply."
+        },
+        {
+          "state": "drawers",
+          "role": "radio",
+          "accessibleName": "Full-Extension",
+          "positiveTest": "door and drawer options update cut-list quantities and hardware",
+          "negativeWaiver": "Drawer slide type is an exclusive radio choice; invalid scalar input does not apply."
+        },
+        {
+          "state": "custom-shelf",
+          "role": "spinbutton",
+          "accessibleName": "Shelf 1 position in mm",
+          "positiveTest": "materials, back panel, shelf options, and edge banding update generated parts",
+          "negativeTest": "materials, back panel, shelf options, and edge banding update generated parts"
+        },
+        {
+          "state": "panel",
+          "role": "radio",
+          "accessibleName": "Carcass material",
+          "positiveTest": "furniture and joinery options select correctly and update controls and parts",
+          "negativeTest": "furniture and joinery options select correctly and update controls and parts"
+        },
+        {
+          "state": "panel",
+          "role": "radio",
+          "accessibleName": "Back panel material",
+          "positiveTest": "furniture and joinery options select correctly and update controls and parts",
+          "negativeTest": "furniture and joinery options select correctly and update controls and parts"
+        }
+      ]
+    },
+    {
+      "name": "Configure core dimensions",
+      "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Width",
+          "positiveTest": "built-in presets update configuration and parts, and saved presets survive reload",
+          "negativeWaiver": "The preset journey verifies valid values; direct out-of-range entry behavior is not asserted here."
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Height",
+          "positiveTest": "built-in presets update configuration and parts, and saved presets survive reload",
+          "negativeWaiver": "The preset journey verifies valid values; direct out-of-range entry behavior is not asserted here."
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Depth",
+          "positiveTest": "built-in presets update configuration and parts, and saved presets survive reload",
+          "negativeWaiver": "The preset journey verifies valid values; direct out-of-range entry behavior is not asserted here."
+        }
+      ]
+    },
+    {
+      "name": "Cabinet summary cost edits",
+      "controls": [
+        {
+          "state": "cost-edit",
+          "triggerTitle": "Click to override price per sheet",
+          "role": "spinbutton",
+          "accessibleName": "Price per sheet for Sandwich Plywood 17 mm",
+          "positiveTest": "sheet dimensions and cost overrides update visible optimizer summaries",
+          "negativeWaiver": "The behavior journey verifies a valid positive override; invalid price entry is not asserted."
+        },
+        {
+          "state": "cost-edit",
+          "triggerTitle": "Click to set edge banding rate (₪/m)",
+          "role": "spinbutton",
+          "accessibleName": "Edge banding rate per meter",
+          "positiveTest": "sheet dimensions and cost overrides update visible optimizer summaries",
+          "negativeWaiver": "The behavior journey verifies a valid positive override; invalid rate entry is not asserted."
+        },
+        {
+          "state": "cost-edit",
+          "triggerTitle": "Click to set estimated labour hours",
+          "role": "spinbutton",
+          "accessibleName": "Labour hours",
+          "positiveTest": "sheet dimensions and cost overrides update visible optimizer summaries",
+          "negativeWaiver": "The behavior journey verifies valid hours; negative entry behavior is not asserted."
+        },
+        {
+          "state": "cost-edit",
+          "triggerTitle": "Click to override labour rate (₪/hr)",
+          "role": "spinbutton",
+          "accessibleName": "Labour rate per hour",
+          "positiveTest": "sheet dimensions and cost overrides update visible optimizer summaries",
+          "negativeWaiver": "The behavior journey verifies a valid positive override; invalid rate entry is not asserted."
+        },
+        {
+          "state": "cost-edit",
+          "triggerTitle": "Click to set finish/paint cost",
+          "role": "spinbutton",
+          "accessibleName": "Finish/paint cost",
+          "positiveTest": "sheet dimensions and cost overrides update visible optimizer summaries",
+          "negativeWaiver": "The behavior journey verifies a valid nonnegative cost; negative entry behavior is not asserted."
+        }
+      ]
+    },
+    {
+      "name": "Preview",
+      "controls": [
+        {
+          "role": "tab",
+          "accessibleName": "Front (Closed)",
+          "positiveTest": "preview views render expected geometry and dimension visibility",
+          "negativeWaiver": "View selection is navigation; no invalid scalar value applies."
+        },
+        {
+          "role": "tab",
+          "accessibleName": "Front (Open)",
+          "positiveTest": "preview views render expected geometry and dimension visibility",
+          "negativeWaiver": "View selection is navigation; no invalid scalar value applies."
+        },
+        {
+          "role": "tab",
+          "accessibleName": "Side",
+          "positiveTest": "preview views render expected geometry and dimension visibility",
+          "negativeWaiver": "View selection is navigation; no invalid scalar value applies."
+        },
+        {
+          "role": "tab",
+          "accessibleName": "Top",
+          "positiveTest": "preview views render expected geometry and dimension visibility",
+          "negativeWaiver": "View selection is navigation; no invalid scalar value applies."
+        },
+        {
+          "role": "tab",
+          "accessibleName": "Back",
+          "positiveTest": "preview views render expected geometry and dimension visibility",
+          "negativeWaiver": "View selection is navigation; no invalid scalar value applies."
+        },
+        {
+          "role": "tab",
+          "accessibleName": "3D",
+          "positiveTest": "interactive 3D panel renders and controls update its scene",
+          "negativeWaiver": "View selection is navigation; no invalid scalar value applies."
+        },
+        {
+          "role": "checkbox",
+          "accessibleName": "Dimensions",
+          "positiveTest": "preview views render expected geometry and dimension visibility",
+          "negativeTest": "preview views render expected geometry and dimension visibility"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Export SVG",
+          "positiveTest": "preview exports contain the selected view with valid SVG and PNG data",
+          "negativeWaiver": "Export is an action; invalid scalar input is not applicable."
+        },
+        {
+          "role": "button",
+          "accessibleName": "Export PNG (2×)",
+          "positiveTest": "preview exports contain the selected view with valid SVG and PNG data",
+          "negativeWaiver": "Export is an action; invalid scalar input is not applicable."
+        },
+        {
+          "role": "button",
+          "scope": "interactive-3d",
+          "accessibleName": "Zoom in",
+          "positiveTest": "interactive 3D panel renders and controls update its scene",
+          "negativeWaiver": "Zoom is a bounded action; invalid scalar input is not applicable."
+        },
+        {
+          "role": "button",
+          "scope": "interactive-3d",
+          "accessibleName": "Zoom out",
+          "positiveTest": "interactive 3D panel renders and controls update its scene",
+          "negativeWaiver": "Zoom is a bounded action; invalid scalar input is not applicable."
+        },
+        {
+          "role": "button",
+          "scope": "interactive-3d",
+          "accessibleName": "Reset camera",
+          "positiveTest": "interactive 3D panel renders and controls update its scene",
+          "negativeWaiver": "Reset is an action; invalid scalar input is not applicable."
+        },
+        {
+          "role": "slider",
+          "scope": "interactive-3d",
+          "accessibleName": "Explode view (0%)",
+          "positiveTest": "interactive 3D panel renders and controls update its scene",
+          "negativeWaiver": "The native range control bounds values between its declared endpoints."
+        },
+        {
+          "role": "checkbox",
+          "scope": "interactive-3d",
+          "accessibleName": "Wireframe",
+          "positiveTest": "interactive 3D panel renders and controls update its scene",
+          "negativeWaiver": "A binary display mode has no invalid scalar value."
+        },
+        {
+          "role": "checkbox",
+          "scope": "interactive-3d",
+          "accessibleName": "Edge banding",
+          "positiveTest": "interactive 3D panel renders and controls update its scene",
+          "negativeWaiver": "A binary display mode has no invalid scalar value."
+        }
+      ]
+    },
+    {
+      "name": "Optimizer journey controls",
+      "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Saw kerf",
+          "positiveTest": "optimizer controls update settings and rendered part presentation",
+          "negativeWaiver": "Out-of-range behavior is not asserted; the journey verifies the declared 8 mm maximum."
+        },
+        {
+          "role": "checkbox",
+          "accessibleName": "Guillotine cuts (panel saw compatible)",
+          "positiveTest": "optimizer controls update settings and rendered part presentation",
+          "negativeWaiver": "A binary cut-mode setting has no invalid scalar value."
+        },
+        {
+          "role": "checkbox",
+          "accessibleName": "Auto co-nest materials",
+          "positiveTest": "optimizer controls update settings and rendered part presentation",
+          "negativeWaiver": "A binary co-nesting setting has no invalid scalar value."
+        },
+        {
+          "role": "button",
+          "accessibleName": "CB",
+          "positiveTest": "optimizer controls update settings and rendered part presentation",
+          "negativeWaiver": "A display-mode toggle has no invalid scalar value."
+        },
+        {
+          "role": "button",
+          "accessibleName": "Labels",
+          "positiveTest": "optimizer controls update settings and rendered part presentation",
+          "negativeWaiver": "A display toggle has no invalid scalar value."
+        },
+        {
+          "role": "button",
+          "accessibleName": "Grain hatch",
+          "positiveTest": "optimizer controls update settings and rendered part presentation",
+          "negativeWaiver": "A display toggle has no invalid scalar value."
+        },
+        {
+          "role": "button",
+          "scope": "first-sheet",
+          "accessibleName": "Lock rotation (prevent 90° rotation by optimizer)",
+          "positiveTest": "optimizer controls update settings and rendered part presentation",
+          "negativeWaiver": "Rotation lock is a binary action; invalid scalar input does not apply."
+        }
+      ]
+    },
+    {
+      "name": "Optimizer parts and hardware tables",
+      "controls": [
+        {
+          "scope": "Parts List",
+          "role": "searchbox",
+          "accessibleName": "Search parts",
+          "positiveTest": "parts and hardware tables search, filter, and sort visible rows",
+          "negativeTest": "parts and hardware tables search, filter, and sort visible rows"
+        },
+        {
+          "scope": "Parts List",
+          "role": "combobox",
+          "accessibleName": "Filter by material",
+          "positiveTest": "parts and hardware tables search, filter, and sort visible rows",
+          "negativeWaiver": "The journey verifies a valid material filter; invalid material option values are not applicable."
+        },
+        {
+          "scope": "Parts List",
+          "role": "button",
+          "accessibleName": "Part Name",
+          "positiveTest": "parts and hardware tables search, filter, and sort visible rows",
+          "negativeTest": "parts and hardware tables search, filter, and sort visible rows"
+        },
+        {
+          "scope": "Hardware List",
+          "role": "searchbox",
+          "accessibleName": "Search hardware",
+          "positiveTest": "parts and hardware tables search, filter, and sort visible rows",
+          "negativeTest": "parts and hardware tables search, filter, and sort visible rows"
+        },
+        {
+          "scope": "Hardware List",
+          "role": "button",
+          "accessibleName": "Qty",
+          "positiveTest": "parts and hardware tables search, filter, and sort visible rows",
+          "negativeTest": "parts and hardware tables search, filter, and sort visible rows"
+        }
+      ]
+    },
+    {
+      "name": "Assembly guide controls",
+      "controls": [
+        {
+          "role": "button",
+          "accessibleName": "Step by step",
+          "positiveTest": "assembly control inventory verifies view modes and progress changes",
+          "negativeWaiver": "View mode is a two-choice toggle; invalid scalar values do not apply."
+        },
+        {
+          "role": "button",
+          "accessibleName": "Show all stages",
+          "positiveTest": "assembly control inventory verifies view modes and progress changes",
+          "negativeWaiver": "View mode is a two-choice toggle; invalid scalar values do not apply."
+        },
+        {
+          "role": "button",
+          "accessibleName": "Hide tips",
+          "positiveTest": "assembly control inventory verifies view modes and progress changes",
+          "negativeWaiver": "The tips control is a binary display toggle."
+        },
+        {
+          "state": "tips-hidden",
+          "role": "button",
+          "accessibleName": "Show tips",
+          "positiveTest": "assembly control inventory verifies view modes and progress changes",
+          "negativeWaiver": "The tips control is a binary display toggle."
+        },
+        {
+          "scope": "first-step",
+          "role": "checkbox",
+          "accessibleName": "Mark as done",
+          "positiveTest": "assembly control inventory verifies view modes and progress changes",
+          "negativeWaiver": "Step completion is a binary checklist control."
+        },
+        {
+          "state": "completed",
+          "role": "button",
+          "accessibleName": "Reset progress",
+          "positiveTest": "assembly control inventory verifies view modes and progress changes",
+          "negativeWaiver": "Reset is an action available only after progress has been recorded."
+        },
+        {
+          "role": "button",
+          "accessibleName": "Download checklist",
+          "positiveTest": "assembly checklist download produces assembly-checklist.txt",
+          "negativeWaiver": "Download is an action; invalid scalar input does not apply."
+        }
+      ]
+    },
+    {
+      "name": "Configure dimension sliders and toe kick",
+      "controls": [
+        {
+          "state": "metric",
+          "role": "slider",
+          "accessibleName": "Width (mm)",
+          "positiveTest": "Configure dimension sliders and toe-kick presets update their values",
+          "negativeWaiver": "The native range control is bounded by its declared endpoints."
+        },
+        {
+          "state": "metric",
+          "role": "slider",
+          "accessibleName": "Height (mm)",
+          "positiveTest": "Configure dimension sliders and toe-kick presets update their values",
+          "negativeWaiver": "The native range control is bounded by its declared endpoints."
+        },
+        {
+          "state": "metric",
+          "role": "slider",
+          "accessibleName": "Depth (mm)",
+          "positiveTest": "Configure dimension sliders and toe-kick presets update their values",
+          "negativeWaiver": "The native range control is bounded by its declared endpoints."
+        },
+        {
+          "state": "imperial",
+          "role": "slider",
+          "accessibleName": "Width (in)",
+          "positiveTest": "Configure dimension sliders and toe-kick presets update their values",
+          "negativeWaiver": "The native range control is bounded by its declared endpoints."
+        },
+        {
+          "state": "imperial",
+          "role": "slider",
+          "accessibleName": "Height (in)",
+          "positiveTest": "Configure dimension sliders and toe-kick presets update their values",
+          "negativeWaiver": "The native range control is bounded by its declared endpoints."
+        },
+        {
+          "state": "imperial",
+          "role": "slider",
+          "accessibleName": "Depth (in)",
+          "positiveTest": "Configure dimension sliders and toe-kick presets update their values",
+          "negativeWaiver": "The native range control is bounded by its declared endpoints."
+        },
+        {
+          "state": "metric",
+          "role": "button",
+          "accessibleName": "mm → in",
+          "positiveTest": "Configure dimension sliders and toe-kick presets update their values",
+          "negativeWaiver": "The units button toggles between two supported display modes."
+        },
+        {
+          "role": "slider",
+          "accessibleName": "Toe Kick Height (0 = no kick)",
+          "positiveTest": "Configure dimension sliders and toe-kick presets update their values",
+          "negativeWaiver": "The native range control is bounded by its declared endpoints."
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Toe Kick Height (0 = no kick)",
+          "positiveTest": "Configure dimension sliders and toe-kick presets update their values",
+          "negativeWaiver": "Invalid numeric entry behavior is not asserted by this journey."
+        },
+        {
+          "role": "button",
+          "accessibleName": "Set kick height to 0 mm",
+          "positiveTest": "Configure dimension sliders and toe-kick presets update their values",
+          "negativeWaiver": "Preset buttons select one of four supported toe-kick heights."
+        },
+        {
+          "role": "button",
+          "accessibleName": "Set kick height to 75 mm",
+          "positiveTest": "Configure dimension sliders and toe-kick presets update their values",
+          "negativeWaiver": "Preset buttons select one of four supported toe-kick heights."
+        },
+        {
+          "role": "button",
+          "accessibleName": "Set kick height to 100 mm",
+          "positiveTest": "Configure dimension sliders and toe-kick presets update their values",
+          "negativeWaiver": "Preset buttons select one of four supported toe-kick heights."
+        },
+        {
+          "role": "button",
+          "accessibleName": "Set kick height to 150 mm",
+          "positiveTest": "Configure dimension sliders and toe-kick presets update their values",
+          "negativeWaiver": "Preset buttons select one of four supported toe-kick heights."
+        }
+      ]
+    },
+    {
+      "name": "Configure quick presets",
+      "controls": [
+        {
+          "role": "button",
+          "accessibleName": "Kitchen Base 600×720×550 mm — standard base unit with toe kick",
+          "positiveTest": "built-in presets update configuration and parts, and saved presets survive reload",
+          "negativeWaiver": "Only the six fixed presets are selectable; arbitrary preset data is not user-entered."
+        },
+        {
+          "role": "button",
+          "accessibleName": "Kitchen Wall Unit 600×700×300 mm — standard overhead cabinet",
+          "positiveTest": "built-in presets update configuration and parts, and saved presets survive reload",
+          "negativeWaiver": "Only the six fixed presets are selectable; arbitrary preset data is not user-entered."
+        },
+        {
+          "role": "button",
+          "accessibleName": "Tall Pantry 600×2000×550 mm — full-height storage",
+          "positiveTest": "built-in presets update configuration and parts, and saved presets survive reload",
+          "negativeWaiver": "Only the six fixed presets are selectable; arbitrary preset data is not user-entered."
+        },
+        {
+          "role": "button",
+          "accessibleName": "Bookcase 800×1800×300 mm — open bookshelf",
+          "positiveTest": "built-in presets update configuration and parts, and saved presets survive reload",
+          "negativeWaiver": "Only the six fixed presets are selectable; arbitrary preset data is not user-entered."
+        },
+        {
+          "role": "button",
+          "accessibleName": "Double Wardrobe 1200×2200×600 mm — two-door hanging wardrobe",
+          "positiveTest": "built-in presets update configuration and parts, and saved presets survive reload",
+          "negativeWaiver": "Only the six fixed presets are selectable; arbitrary preset data is not user-entered."
+        },
+        {
+          "role": "button",
+          "accessibleName": "Bathroom Vanity 800×850×450 mm — with drawers, soft-close",
+          "positiveTest": "built-in presets update configuration and parts, and saved presets survive reload",
+          "negativeWaiver": "Only the six fixed presets are selectable; arbitrary preset data is not user-entered."
+        }
+      ]
+    },
+    {
+      "name": "Configure named expressions",
+      "controls": [
+        {
+          "role": "textbox",
+          "accessibleName": "Name",
+          "positiveTest": "named expressions edit, reject out-of-range values, and update generated cut-list dimensions",
+          "negativeTest": "NamedExpressionsPanel rejects an invalid name and does not apply out-of-range results"
+        },
+        {
+          "role": "textbox",
+          "accessibleName": "Formula",
+          "positiveTest": "named expressions edit, reject out-of-range values, and update generated cut-list dimensions",
+          "negativeTest": "NamedExpressionsPanel rejects an invalid name and does not apply out-of-range results"
+        },
+        {
+          "role": "button",
+          "accessibleName": "Add",
+          "positiveTest": "named expressions edit, reject out-of-range values, and update generated cut-list dimensions",
+          "negativeTest": "NamedExpressionsPanel rejects an invalid name and does not apply out-of-range results"
+        }
+      ]
+    },
+    {
+      "name": "Configure project metadata",
+      "controls": [
+        {
+          "role": "textbox",
+          "accessibleName": "Project Name",
+          "positiveTest": "Configure project metadata updates the browser title and notes",
+          "negativeWaiver": "Maximum-length enforcement is not asserted by this metadata journey."
+        },
+        {
+          "role": "textbox",
+          "accessibleName": "Project Notes",
+          "positiveTest": "Configure project metadata updates the browser title and notes",
+          "negativeWaiver": "Maximum-length enforcement is not asserted by this metadata journey."
+        }
+      ]
+    },
+    {
+      "name": "Configure door reveal",
+      "controls": [
+        {
+          "role": "slider",
+          "accessibleName": "Door Reveal (gap)",
+          "positiveTest": "Configure Door Reveal updates the paired range and number controls",
+          "negativeTest": "Configure Door Reveal rejects out-of-range numeric input"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Door Reveal (gap)",
+          "positiveTest": "Configure Door Reveal updates the paired range and number controls",
+          "negativeTest": "Configure Door Reveal rejects out-of-range numeric input"
+        }
+      ]
+    },
+    {
+      "name": "Workspace cabinet lifecycle",
+      "controls": [
+        {
+          "state": "initial",
+          "role": "button",
+          "accessibleName": "+ Add Cabinet",
+          "positiveTest": "cabinet duplicate, mirror, reorder, remove, and active selection reach project outputs",
+          "negativeWaiver": "Cabinet actions operate on existing entries; malformed scalar values do not apply."
+        },
+        {
+          "state": "initial",
+          "role": "button",
+          "accessibleName": "Duplicate Cabinet 1",
+          "positiveTest": "cabinet duplicate, mirror, reorder, remove, and active selection reach project outputs",
+          "negativeWaiver": "Cabinet actions operate on existing entries; malformed scalar values do not apply."
+        },
+        {
+          "state": "initial",
+          "role": "button",
+          "accessibleName": "Mirror Cabinet 1",
+          "positiveTest": "cabinet duplicate, mirror, reorder, remove, and active selection reach project outputs",
+          "negativeWaiver": "Cabinet actions operate on existing entries; malformed scalar values do not apply."
+        },
+        {
+          "state": "multi-cabinet",
+          "role": "button",
+          "accessibleName": "Duplicate Cabinet 2",
+          "positiveTest": "cabinet duplicate, mirror, reorder, remove, and active selection reach project outputs",
+          "negativeWaiver": "Cabinet actions operate on existing entries; malformed scalar values do not apply."
+        },
+        {
+          "state": "multi-cabinet",
+          "role": "button",
+          "accessibleName": "Mirror Cabinet 2",
+          "positiveTest": "cabinet duplicate, mirror, reorder, remove, and active selection reach project outputs",
+          "negativeWaiver": "Cabinet actions operate on existing entries; malformed scalar values do not apply."
+        },
+        {
+          "state": "multi-cabinet",
+          "role": "button",
+          "accessibleName": "Remove Cabinet 2",
+          "positiveTest": "cabinet duplicate, mirror, reorder, remove, and active selection reach project outputs",
+          "negativeWaiver": "Cabinet actions operate on existing entries; malformed scalar values do not apply."
+        },
+        {
+          "state": "multi-cabinet",
+          "role": "button",
+          "accessibleName": "Move cabinet up: Cabinet 2",
+          "positiveTest": "cabinet duplicate, mirror, reorder, remove, and active selection reach project outputs",
+          "negativeWaiver": "Cabinet actions operate on existing entries; malformed scalar values do not apply."
+        },
+        {
+          "state": "multi-cabinet",
+          "role": "button",
+          "accessibleName": "Move cabinet down: Cabinet 1",
+          "positiveTest": "cabinet duplicate, mirror, reorder, remove, and active selection reach project outputs",
+          "negativeWaiver": "Cabinet actions operate on existing entries; malformed scalar values do not apply."
+        },
+        {
+          "state": "renaming",
+          "role": "textbox",
+          "accessibleName": "Cabinet name",
+          "positiveTest": "cabinet duplicate, mirror, reorder, remove, and active selection reach project outputs",
+          "negativeWaiver": "The inline name editor accepts text and commits on Enter; dimension validation does not apply."
+        }
+      ]
+    }
+  ]
+}

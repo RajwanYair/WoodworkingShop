@@ -4,6 +4,8 @@ import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { IconX } from './Icons';
 
 const TOURED_KEY = 'woodworkingshop:preview-toured';
+const ONBOARDING_SEEN_KEY = 'onboarding-seen';
+const ONBOARDING_DISMISSED_EVENT = 'onboarding-dismissed';
 
 /** Returns true if the device supports touch events (uses the modern maxTouchPoints API). */
 function isTouchDevice(): boolean {
@@ -16,9 +18,13 @@ export function TouchGestureTutorial() {
   const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (isTouchDevice() && !localStorage.getItem(TOURED_KEY)) {
-      setVisible(true);
-    }
+    const showTutorial = () => {
+      if (isTouchDevice() && !localStorage.getItem(TOURED_KEY)) setVisible(true);
+    };
+
+    if (localStorage.getItem(ONBOARDING_SEEN_KEY)) showTutorial();
+    window.addEventListener(ONBOARDING_DISMISSED_EVENT, showTutorial);
+    return () => window.removeEventListener(ONBOARDING_DISMISSED_EVENT, showTutorial);
   }, []);
 
   const dismiss = () => {

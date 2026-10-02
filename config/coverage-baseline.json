@@ -1,6 +1,6 @@
 {
-  "_comment": "Per-area coverage floor. Update only after intentional improvement; components are excluded from Vitest coverage until their measured baseline is established.",
-  "_updated": "2026-09-30",
+  "_comment": "Per-area coverage floor. Update only after intentional improvement; includes engine, utils, store, hooks, and components.",
+  "_updated": "2026-10-02",
   "directories": {
     "engine": {
       "statements": {
@@ -76,20 +76,20 @@
     },
     "components": {
       "statements": {
-        "covered": 2695,
-        "total": 3592
+        "covered": 2787,
+        "total": 3714
       },
       "branches": {
-        "covered": 1770,
-        "total": 2574
+        "covered": 1814,
+        "total": 2627
       },
       "functions": {
-        "covered": 890,
-        "total": 1229
+        "covered": 924,
+        "total": 1264
       },
       "lines": {
-        "covered": 2462,
-        "total": 3262
+        "covered": 2532,
+        "total": 3343
       }
     }
   }

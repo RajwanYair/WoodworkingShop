@@ -521,8 +521,16 @@
     "notesPlaceholder": "Notes optionnelles pour cette armoire…"
   },
   "errors": {
+    "panel": "Panneau",
+    "panelFailed": "Impossible d'afficher {{panel}}",
+    "recoveryHint": "Une erreur inattendue s'est produite. Vous pouvez recharger le panneau ou actualiser la page.",
+    "retry": "Réessayer",
     "copyDetails": "Copier les détails de l'erreur",
-    "copied": "Copié !"
+    "details": "Détails de l'erreur",
+    "copied": "Copié !",
+    "reloadPage": "Actualiser la page",
+    "warning": "Erreur",
+    "interactivePreview": "Aperçu 3D interactif"
   },
   "room": {
     "title": "Plan de la pièce",
@@ -2009,7 +2017,7 @@
     "maxRpm": "Max RPM (advisory)",
     "recommendedRpm": "Recommended RPM",
     "surfaceSpeed": "Surface Speed (m/min)",
-    "safetyNote": "Follow your lathe manual. Start at the lowest speed and reduce speed if the blank vibrates."
+    "safetyNote": "Advisory estimate only, not a safety limit. Follow your lathe manual; start slowly and reduce speed if the blank vibrates. Unbalanced blanks may need much lower speeds."
   },
   "framePanel": {
     "title": "Frame and Panel Calculator",

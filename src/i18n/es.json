@@ -521,8 +521,16 @@
     "notesPlaceholder": "Notas opcionales para este armario…"
   },
   "errors": {
+    "panel": "Panel",
+    "panelFailed": "No se pudo mostrar {{panel}}",
+    "recoveryHint": "Se produjo un error inesperado. Puedes volver a cargar el panel o actualizar la página.",
+    "retry": "Reintentar",
     "copyDetails": "Copiar detalles del error",
-    "copied": "¡Copiado!"
+    "details": "Detalles del error",
+    "copied": "¡Copiado!",
+    "reloadPage": "Actualizar página",
+    "warning": "Error",
+    "interactivePreview": "Vista previa 3D interactiva"
   },
   "room": {
     "title": "Distribución de la habitación",
@@ -2009,7 +2017,7 @@
     "maxRpm": "Max RPM (advisory)",
     "recommendedRpm": "Recommended RPM",
     "surfaceSpeed": "Surface Speed (m/min)",
-    "safetyNote": "Follow your lathe manual. Start at the lowest speed and reduce speed if the blank vibrates."
+    "safetyNote": "Advisory estimate only, not a safety limit. Follow your lathe manual; start slowly and reduce speed if the blank vibrates. Unbalanced blanks may need much lower speeds."
   },
   "framePanel": {
     "title": "Frame and Panel Calculator",

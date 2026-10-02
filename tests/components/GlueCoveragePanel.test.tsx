@@ -22,4 +22,23 @@ describe('GlueCoveragePanel', () => {
     expect(panel).toHaveTextContent('15 min');
     expect(panel).toHaveTextContent('60 min');
   });
+
+  it('shows a validation error for an invalid area and recovers when corrected', async () => {
+    const user = userEvent.setup();
+    render(<GlueCoveragePanel />);
+
+    const panel = screen.getByRole('region', { name: /wood glue coverage calculator/i });
+    const surfaceArea = screen.getByRole('spinbutton', { name: /surface area/i });
+    await user.clear(surfaceArea);
+    await user.type(surfaceArea, '0');
+
+    expect(screen.getByRole('alert')).toHaveTextContent('surfaceAreaMm2');
+    expect(panel).not.toHaveTextContent('0.28 mL');
+
+    await user.clear(surfaceArea);
+    await user.type(surfaceArea, '50000');
+
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    expect(panel).toHaveTextContent('0.28 mL');
+  });
 });

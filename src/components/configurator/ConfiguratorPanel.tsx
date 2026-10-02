@@ -60,7 +60,7 @@ export function ConfiguratorPanel() {
         <legend className="text-wood-700 dark:text-wood-200 text-sm font-semibold tracking-wide uppercase">
           {t('config.furnitureType')}
         </legend>
-        <div className="flex gap-3">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
           {(['cabinet', 'bookshelf', 'desk', 'wardrobe', 'panel'] as const).map((ft) => (
             <label
               key={ft}

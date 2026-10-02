@@ -315,6 +315,17 @@ function App() {
             onTouchMove={appSwipe.onTouchMove}
             onTouchEnd={appSwipe.onTouchEnd}
           >
+            <div className="mb-3 flex justify-end">
+              <button
+                data-print="hide"
+                onClick={() => window.print()}
+                className="bg-wood-600 hover:bg-wood-700 flex h-12 w-12 items-center justify-center rounded-full text-white shadow-lg transition-colors print:hidden"
+                title="Print current view"
+                aria-label="Print current view"
+              >
+                <IconPrint size={20} />
+              </button>
+            </div>
             {/* Sprint 170 — print-only header: shows project name + date on paper */}
             <div className="print-only-header">
               {projectName ? `${projectName} — ` : ''}Cabinet Planner
@@ -352,7 +363,7 @@ function App() {
             )}
             {activeTab === 'configurator' && (
               <div className="space-y-6">
-                <ErrorBoundary panelName="Configurator">
+                <ErrorBoundary panelName={t('tabs.configurator')}>
                   <Suspense fallback={<SkeletonPane label={t('skeleton.loading')} />}>
                     <ConfiguratorPanel />
                   </Suspense>
@@ -364,12 +375,12 @@ function App() {
             )}
             {activeTab === 'preview' && (
               <div className="space-y-6">
-                <ErrorBoundary panelName="Preview">
+                <ErrorBoundary panelName={t('tabs.preview')}>
                   <Suspense fallback={<SkeletonPane label={t('skeleton.loading')} />}>
                     <CabinetPreview />
                   </Suspense>
                 </ErrorBoundary>
-                <ErrorBoundary panelName="Interactive 3D preview">
+                <ErrorBoundary panelName={t('errors.interactivePreview')}>
                   <Suspense fallback={<SkeletonPane label={t('skeleton.loading')} />}>
                     <Preview3DPanel />
                   </Suspense>
@@ -377,7 +388,7 @@ function App() {
               </div>
             )}
             {activeTab === 'optimizer' && (
-              <ErrorBoundary panelName="Optimizer">
+              <ErrorBoundary panelName={t('tabs.optimizer')}>
                 <Suspense fallback={<SkeletonPane label={t('skeleton.loadingOptimizer')} cards={4} />}>
                   <div className="space-y-8">
                     <ProjectSummaryPanel />
@@ -390,37 +401,26 @@ function App() {
               </ErrorBoundary>
             )}
             {activeTab === 'assembly' && (
-              <ErrorBoundary panelName="Assembly Guide">
+              <ErrorBoundary panelName={t('tabs.assembly')}>
                 <Suspense fallback={<SkeletonPane label={t('skeleton.loadingAssembly')} cards={3} />}>
                   <AssemblyGuide />
                 </Suspense>
               </ErrorBoundary>
             )}
             {activeTab === 'pdf' && (
-              <ErrorBoundary panelName="PDF Export">
+              <ErrorBoundary panelName={t('tabs.pdf')}>
                 <Suspense fallback={<SkeletonPane label={t('skeleton.loadingPdf')} cards={2} />}>
                   <PdfExportPanel />
                 </Suspense>
               </ErrorBoundary>
             )}
             {activeTab === 'calculators' && (
-              <ErrorBoundary panelName="Calculators">
+              <ErrorBoundary panelName={t('tabs.calculators')}>
                 <Suspense fallback={<SkeletonPane label={t('skeleton.loading')} cards={6} />}>
                   <CalculatorsPanel />
                 </Suspense>
               </ErrorBoundary>
             )}
-
-            {/* Print button — hidden when printing */}
-            <button
-              data-print="hide"
-              onClick={() => window.print()}
-              className="bg-wood-600 hover:bg-wood-700 fixed right-5 bottom-5 z-40 flex h-12 w-12 items-center justify-center rounded-full text-white shadow-lg transition-colors print:hidden"
-              title="Print current view"
-              aria-label="Print current view"
-            >
-              <IconPrint size={20} />
-            </button>
           </main>
         </div>
         <ToastContainer />

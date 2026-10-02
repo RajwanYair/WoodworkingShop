@@ -1,5 +1,6 @@
-import type { Page } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
+import WORKSPACE_CONTROL_INVENTORY from '../fixtures/workspace-control-inventory.json' with { type: 'json' };
 import { expect, test } from './fixtures/app';
 
 async function showParts(page: Page) {
@@ -10,6 +11,416 @@ async function showParts(page: Page) {
 function partRow(page: Page, name: string) {
   return page.getByRole('row').filter({ has: page.getByRole('cell', { name, exact: true }) });
 }
+
+function getControlMetadata(control: object) {
+  const scope = 'scope' in control && typeof control.scope === 'string' ? control.scope : undefined;
+  const state = 'state' in control && typeof control.state === 'string' ? control.state : undefined;
+  return { scope, state };
+}
+
+function getNegativeEvidence(control: object) {
+  const negativeTest =
+    'negativeTest' in control && typeof control.negativeTest === 'string' ? control.negativeTest : undefined;
+  const negativeWaiver =
+    'negativeWaiver' in control && typeof control.negativeWaiver === 'string' ? control.negativeWaiver : undefined;
+  return negativeTest ?? negativeWaiver;
+}
+
+function getAccessibleControl(scope: Locator, role: string, accessibleName: string) {
+  const options = { name: accessibleName, exact: true };
+  switch (role) {
+    case 'button':
+      return scope.getByRole('button', options);
+    case 'checkbox':
+      return scope.getByRole('checkbox', options);
+    case 'combobox':
+      return scope.getByRole('combobox', options);
+    case 'slider':
+      return scope.getByRole('slider', options);
+    case 'spinbutton':
+      return scope.getByRole('spinbutton', options);
+    case 'tab':
+      return scope.getByRole('tab', options);
+    case 'radio':
+      return scope.getByRole('radio', options);
+    case 'textbox':
+      return scope.getByRole('textbox', options);
+    default:
+      throw new Error(`Unsupported workspace control role: ${role}`);
+  }
+}
+
+test('configurator choice controls match the browser-derived accessible inventory', async ({ appPage: page }) => {
+  await page.getByRole('tab', { name: 'Configure', exact: true }).click();
+  await page.getByRole('radio', { name: 'Cabinet', exact: true }).waitFor();
+
+  const inventory = WORKSPACE_CONTROL_INVENTORY.panels.find((panel) => panel.name === 'Configurator');
+  if (!inventory) throw new Error('Configurator control inventory is missing');
+
+  for (const control of inventory.controls) {
+    const scope = getControlMetadata(control).scope;
+    if (!scope) throw new Error(`Configurator control ${control.accessibleName} has no group scope`);
+    const group = page.getByRole('group', { name: scope, exact: true });
+    await expect(getAccessibleControl(group, control.role, control.accessibleName)).toHaveCount(1);
+    expect(control.positiveTest).toBeTruthy();
+    expect(control.negativeWaiver).toBeTruthy();
+  }
+
+  for (const scope of ['🪑 Furniture Type', '🔧 Joinery Method']) {
+    const group = page.getByRole('group', { name: scope, exact: true });
+    const expectedCount = inventory.controls.filter((control) => getControlMetadata(control).scope === scope).length;
+    await expect(group.getByRole('radio')).toHaveCount(expectedCount);
+  }
+});
+
+test('Configure materials and conditional controls match the browser-derived inventory', async ({ appPage: page }) => {
+  await page.getByRole('tab', { name: 'Configure', exact: true }).click();
+
+  const main = page.getByRole('main');
+  const inventory = WORKSPACE_CONTROL_INVENTORY.panels.find(
+    (panel) => panel.name === 'Configure materials and conditional options',
+  );
+  if (!inventory) throw new Error('Configure materials and options inventory is missing');
+
+  for (const control of inventory.controls.filter((item) => !getControlMetadata(item).state)) {
+    await expect(getAccessibleControl(main, control.role, control.accessibleName)).toHaveCount(1);
+    expect(control.positiveTest).toBeTruthy();
+    expect(getNegativeEvidence(control)).toBeTruthy();
+  }
+
+  const customShelfPositionControl = inventory.controls.find(
+    (control) => getControlMetadata(control).state === 'custom-shelf',
+  );
+  if (!customShelfPositionControl) throw new Error('Custom shelf position inventory entry is missing');
+  const shelfPosition = getAccessibleControl(
+    main,
+    customShelfPositionControl.role,
+    customShelfPositionControl.accessibleName,
+  );
+  await expect(shelfPosition).toHaveCount(0);
+  await main.getByRole('radio', { name: 'Custom', exact: true }).check();
+  await expect(shelfPosition).toHaveCount(1);
+  await main.getByRole('radio', { name: 'Equal', exact: true }).check();
+  await expect(shelfPosition).toHaveCount(0);
+
+  const drawerSlideControls = inventory.controls.filter((control) => getControlMetadata(control).state === 'drawers');
+  for (const control of drawerSlideControls) {
+    await expect(getAccessibleControl(main, control.role, control.accessibleName)).toHaveCount(0);
+  }
+  const drawerCount = main.getByRole('spinbutton', { name: 'Number of Drawers' });
+  await drawerCount.fill('2');
+  await drawerCount.press('Enter');
+  for (const control of drawerSlideControls) {
+    await expect(getAccessibleControl(main, control.role, control.accessibleName)).toHaveCount(1);
+    expect(control.positiveTest).toBeTruthy();
+    expect(getNegativeEvidence(control)).toBeTruthy();
+  }
+
+  const panelSources = inventory.controls.filter((control) => getControlMetadata(control).state === 'panel');
+  for (const control of panelSources) {
+    await expect(getAccessibleControl(main, control.role, control.accessibleName)).toHaveCount(0);
+  }
+  await page.getByText('Panel', { exact: true }).click();
+  for (const control of panelSources) {
+    await expect(getAccessibleControl(main, control.role, control.accessibleName)).toHaveCount(1);
+    expect(control.positiveTest).toBeTruthy();
+    expect(getNegativeEvidence(control)).toBeTruthy();
+  }
+});
+
+test('Configure core dimensions match the browser-derived inventory', async ({ appPage: page }) => {
+  await page.getByRole('tab', { name: 'Configure', exact: true }).click();
+
+  const inventory = WORKSPACE_CONTROL_INVENTORY.panels.find((panel) => panel.name === 'Configure core dimensions');
+  if (!inventory) throw new Error('Configure dimensions inventory is missing');
+
+  for (const control of inventory.controls) {
+    await expect(getAccessibleControl(page.getByRole('main'), control.role, control.accessibleName)).toHaveCount(1);
+    expect(control.positiveTest).toBeTruthy();
+    expect(getNegativeEvidence(control)).toBeTruthy();
+  }
+});
+
+test('Configure dimension sliders and toe-kick presets match inventory and update values', async ({
+  appPage: page,
+}) => {
+  await page.getByRole('tab', { name: 'Configure', exact: true }).click();
+
+  const main = page.getByRole('main');
+  const inventory = WORKSPACE_CONTROL_INVENTORY.panels.find(
+    (panel) => panel.name === 'Configure dimension sliders and toe kick',
+  );
+  if (!inventory) throw new Error('Configure slider inventory is missing');
+
+  for (const control of inventory.controls.filter((item) => getControlMetadata(item).state !== 'imperial')) {
+    await expect(getAccessibleControl(main, control.role, control.accessibleName)).toHaveCount(1);
+    expect(control.positiveTest).toBeTruthy();
+    expect(getNegativeEvidence(control)).toBeTruthy();
+  }
+
+  const imperialSliders = inventory.controls.filter((item) => getControlMetadata(item).state === 'imperial');
+  for (const control of imperialSliders) {
+    await expect(getAccessibleControl(main, control.role, control.accessibleName)).toHaveCount(0);
+  }
+
+  await main.getByRole('button', { name: 'mm → in', exact: true }).click();
+  for (const control of imperialSliders) {
+    await expect(getAccessibleControl(main, control.role, control.accessibleName)).toHaveCount(1);
+  }
+  await expect(main.getByRole('spinbutton', { name: 'Width', exact: true })).toHaveValue('39.37');
+  await main.getByRole('button', { name: 'in → mm', exact: true }).click();
+  await expect(main.getByRole('spinbutton', { name: 'Width', exact: true })).toHaveValue('1000');
+
+  const kickHeight = main.getByRole('spinbutton', { name: 'Toe Kick Height (0 = no kick)', exact: true });
+  let testedPresetCount = 0;
+  for (const control of inventory.controls) {
+    if (!('role' in control) || control.role !== 'button') continue;
+    if (!('accessibleName' in control) || typeof control.accessibleName !== 'string') continue;
+    const kickHeightMatch = /^Set kick height to (\d+) mm$/.exec(control.accessibleName);
+    if (!kickHeightMatch) continue;
+    await main.getByRole('button', { name: control.accessibleName, exact: true }).click();
+    await expect(kickHeight).toHaveValue(kickHeightMatch[1]);
+    testedPresetCount += 1;
+  }
+  expect(testedPresetCount).toBe(4);
+});
+
+test('Configure quick preset controls match the browser-derived inventory', async ({ appPage: page }) => {
+  await page.getByRole('tab', { name: 'Configure', exact: true }).click();
+
+  const main = page.getByRole('main');
+  const inventory = WORKSPACE_CONTROL_INVENTORY.panels.find((panel) => panel.name === 'Configure quick presets');
+  if (!inventory) throw new Error('Configure quick preset inventory is missing');
+
+  for (const control of inventory.controls) {
+    await expect(getAccessibleControl(main, control.role, control.accessibleName)).toHaveCount(1);
+    expect(control.positiveTest).toBe(
+      'built-in presets update configuration and parts, and saved presets survive reload',
+    );
+    expect(getNegativeEvidence(control)).toBeTruthy();
+  }
+});
+
+test('Configure named expression controls match the browser-derived inventory', async ({ appPage: page }) => {
+  await page.getByRole('tab', { name: 'Configure', exact: true }).click();
+
+  const panel = page.getByRole('region', { name: 'Named parametric expressions panel' });
+  const inventory = WORKSPACE_CONTROL_INVENTORY.panels.find((item) => item.name === 'Configure named expressions');
+  if (!inventory) throw new Error('Configure named expression inventory is missing');
+
+  for (const control of inventory.controls) {
+    await expect(getAccessibleControl(panel, control.role, control.accessibleName)).toHaveCount(1);
+    expect(control.positiveTest).toBeTruthy();
+    expect(getNegativeEvidence(control)).toBeTruthy();
+  }
+});
+
+test('Configure project metadata controls match inventory and update title and notes', async ({ appPage: page }) => {
+  await page.getByRole('tab', { name: 'Configure', exact: true }).click();
+
+  const main = page.getByRole('main');
+  const inventory = WORKSPACE_CONTROL_INVENTORY.panels.find((item) => item.name === 'Configure project metadata');
+  if (!inventory) throw new Error('Configure project metadata inventory is missing');
+
+  for (const control of inventory.controls) {
+    await expect(getAccessibleControl(main, control.role, control.accessibleName)).toHaveCount(1);
+    expect(control.positiveTest).toBe('Configure project metadata updates the browser title and notes');
+    expect(getNegativeEvidence(control)).toBeTruthy();
+  }
+
+  const projectName = main.getByRole('textbox', { name: 'Project Name', exact: true });
+  const projectNotes = main.getByRole('textbox', { name: 'Project Notes', exact: true });
+  await projectName.fill('Roadmap QA');
+  await projectNotes.fill('Checking project metadata behavior.');
+  await expect.poll(() => page.title()).toBe('Roadmap QA — Cabinet Planner');
+  await expect(projectNotes).toHaveValue('Checking project metadata behavior.');
+});
+
+test('Configure Door Reveal updates paired controls and rejects out-of-range input', async ({ appPage: page }) => {
+  await page.getByRole('tab', { name: 'Configure', exact: true }).click();
+
+  const main = page.getByRole('main');
+  const inventory = WORKSPACE_CONTROL_INVENTORY.panels.find((item) => item.name === 'Configure door reveal');
+  if (!inventory) throw new Error('Configure Door Reveal inventory is missing');
+
+  for (const control of inventory.controls) {
+    await expect(getAccessibleControl(main, control.role, control.accessibleName)).toHaveCount(1);
+    expect(control.positiveTest).toBe('Configure Door Reveal updates the paired range and number controls');
+    expect(getNegativeEvidence(control)).toBe('Configure Door Reveal rejects out-of-range numeric input');
+  }
+
+  const doorRevealSlider = main.getByRole('slider', { name: 'Door Reveal (gap)', exact: true });
+  const doorRevealInput = main.getByRole('spinbutton', { name: 'Door Reveal (gap)', exact: true });
+  await doorRevealInput.fill('4.5');
+  await doorRevealInput.press('Enter');
+  await expect(doorRevealSlider).toHaveValue('4.5');
+  await expect(doorRevealInput).toHaveValue('4.5');
+
+  await doorRevealInput.fill('20.5');
+  await doorRevealInput.press('Enter');
+  await expect(doorRevealInput).toHaveValue('4.5');
+});
+
+test('Workspace cabinet lifecycle controls match inventory across selection states', async ({ appPage: page }) => {
+  await page.getByRole('tab', { name: 'Configure', exact: true }).click();
+
+  const main = page.getByRole('main');
+  const inventory = WORKSPACE_CONTROL_INVENTORY.panels.find((item) => item.name === 'Workspace cabinet lifecycle');
+  if (!inventory) throw new Error('Workspace cabinet lifecycle inventory is missing');
+
+  const initialControls = inventory.controls.filter((control) => getControlMetadata(control).state === 'initial');
+  for (const control of initialControls) {
+    await expect(getAccessibleControl(main, control.role, control.accessibleName)).toHaveCount(1);
+    expect(control.positiveTest).toBeTruthy();
+    expect(getNegativeEvidence(control)).toBeTruthy();
+  }
+
+  await main.getByRole('button', { name: '+ Add Cabinet', exact: true }).click();
+  const multiCabinetControls = inventory.controls.filter(
+    (control) => getControlMetadata(control).state === 'multi-cabinet',
+  );
+  for (const control of multiCabinetControls) {
+    await expect(getAccessibleControl(main, control.role, control.accessibleName)).toHaveCount(1);
+    expect(control.positiveTest).toBeTruthy();
+    expect(getNegativeEvidence(control)).toBeTruthy();
+  }
+
+  await main.getByRole('button', { name: /^Cabinet 2\d+ parts$/ }).dblclick();
+  const renameControl = inventory.controls.find((control) => getControlMetadata(control).state === 'renaming');
+  if (!renameControl) throw new Error('Workspace cabinet rename inventory is missing');
+  await expect(getAccessibleControl(main, renameControl.role, renameControl.accessibleName)).toHaveCount(1);
+});
+
+test('Cabinet summary cost edit controls match the browser-derived inventory', async ({ appPage: page }) => {
+  await page.keyboard.press('Alt+3');
+
+  const summary = page.getByRole('complementary', { name: 'Cabinet summary' });
+  await expect(summary).toBeVisible();
+  const inventory = WORKSPACE_CONTROL_INVENTORY.panels.find((panel) => panel.name === 'Cabinet summary cost edits');
+  if (!inventory) throw new Error('Cabinet summary cost inventory is missing');
+
+  for (const control of inventory.controls) {
+    if (!('triggerTitle' in control) || typeof control.triggerTitle !== 'string') {
+      throw new Error(`Cost control ${control.accessibleName} has no edit trigger`);
+    }
+    await summary.getByTitle(control.triggerTitle).first().click();
+    const input = getAccessibleControl(summary, control.role, control.accessibleName);
+    await expect(input).toHaveCount(1);
+    expect(control.positiveTest).toBeTruthy();
+    expect(getNegativeEvidence(control)).toBeTruthy();
+    await input.press('Escape');
+    await expect(input).toHaveCount(0);
+  }
+});
+
+test('Assembly controls match the inventory and update view, tips, progress, and download', async ({
+  appPage: page,
+}) => {
+  await page.getByRole('tab', { name: 'Assembly' }).click();
+
+  const main = page.getByRole('main');
+  const inventory = WORKSPACE_CONTROL_INVENTORY.panels.find((panel) => panel.name === 'Assembly guide controls');
+  if (!inventory) throw new Error('Assembly control inventory is missing');
+
+  for (const control of inventory.controls.filter((item) => !getControlMetadata(item).state)) {
+    const scope =
+      getControlMetadata(control).scope === 'first-step' ? main.locator('[data-assembly-step="true"]').first() : main;
+    const accessibleControl = getAccessibleControl(scope, control.role, control.accessibleName);
+    await expect(accessibleControl).toHaveCount(1);
+    expect(control.positiveTest).toBeTruthy();
+    expect(getNegativeEvidence(control)).toBeTruthy();
+  }
+
+  const showTipsControl = inventory.controls.find((item) => getControlMetadata(item).state === 'tips-hidden');
+  const resetProgressControl = inventory.controls.find((item) => getControlMetadata(item).state === 'completed');
+  if (!showTipsControl || !resetProgressControl)
+    throw new Error('Assembly conditional control inventory is incomplete');
+  const showTips = getAccessibleControl(main, showTipsControl.role, showTipsControl.accessibleName);
+  const resetProgress = getAccessibleControl(main, resetProgressControl.role, resetProgressControl.accessibleName);
+  await expect(showTips).toHaveCount(0);
+  await expect(resetProgress).toHaveCount(0);
+
+  await main.getByRole('button', { name: 'Hide tips', exact: true }).click();
+  await expect(showTips).toHaveCount(1);
+  await showTips.click();
+  await expect(main.getByRole('button', { name: 'Hide tips', exact: true })).toHaveCount(1);
+
+  const stepCompletion = main
+    .locator('[data-assembly-step="true"]')
+    .first()
+    .getByRole('checkbox', { name: 'Mark as done', exact: true });
+  await stepCompletion.check();
+  const completedStep = main
+    .locator('[data-assembly-step="true"]')
+    .first()
+    .getByRole('checkbox', { name: 'Done', exact: true });
+  await expect(completedStep).toBeChecked();
+  await expect(main.getByText(/1\/\d+ steps completed/)).toBeVisible();
+  await expect(resetProgress).toHaveCount(1);
+  await resetProgress.click();
+  await expect(
+    main.locator('[data-assembly-step="true"]').first().getByRole('checkbox', { name: 'Mark as done', exact: true }),
+  ).not.toBeChecked();
+  await expect(resetProgress).toHaveCount(0);
+
+  await main.getByRole('button', { name: 'Step by step', exact: true }).click();
+  await expect(main.getByRole('button', { name: 'Step by step', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await expect(main.getByRole('button', { name: /Previous/ })).toBeDisabled();
+  await expect(main.getByRole('button', { name: /Next/ })).toBeEnabled();
+  await main.getByRole('button', { name: 'Show all stages', exact: true }).click();
+
+  const checklistDownload = page.waitForEvent('download');
+  await main.getByRole('button', { name: 'Download checklist', exact: true }).click();
+  expect((await checklistDownload).suggestedFilename()).toBe('assembly-checklist.txt');
+});
+
+test('preview controls match the browser-derived accessible inventory', async ({ appPage: page }) => {
+  await page.getByRole('tab', { name: 'Preview', exact: true }).click();
+
+  const main = page.getByRole('main');
+  const preview = WORKSPACE_CONTROL_INVENTORY.panels.find((panel) => panel.name === 'Preview');
+  if (!preview) throw new Error('Preview control inventory is missing');
+  const viewSelector = main.getByRole('tablist', { name: 'Cabinet view selector' });
+  const interactivePreview = main.getByRole('region', { name: 'Interactive 3D Preview' });
+
+  for (const control of preview.controls) {
+    const controlScope = getControlMetadata(control).scope;
+    const scope = control.role === 'tab' ? viewSelector : controlScope === 'interactive-3d' ? interactivePreview : main;
+    await expect(getAccessibleControl(scope, control.role, control.accessibleName)).toHaveCount(1);
+    expect(control.positiveTest).toBeTruthy();
+    expect(getNegativeEvidence(control)).toBeTruthy();
+  }
+
+  await expect(viewSelector.getByRole('tab')).toHaveCount(
+    preview.controls.filter((control) => control.role === 'tab').length,
+  );
+  for (const role of ['button', 'checkbox', 'slider'] as const) {
+    const expectedCount = preview.controls.filter(
+      (control) => getControlMetadata(control).scope === 'interactive-3d' && control.role === role,
+    ).length;
+    await expect(interactivePreview.getByRole(role)).toHaveCount(expectedCount);
+  }
+});
+
+test('optimizer journey controls match the browser-derived accessible inventory', async ({ appPage: page }) => {
+  await page.keyboard.press('Alt+3');
+
+  const main = page.getByRole('main');
+  const firstSheet = page.locator('[data-testid="virtual-sheet-wrapper"]').first();
+  await expect(firstSheet).toBeVisible();
+  await firstSheet.scrollIntoViewIfNeeded();
+
+  const inventory = WORKSPACE_CONTROL_INVENTORY.panels.find((panel) => panel.name === 'Optimizer journey controls');
+  if (!inventory) throw new Error('Optimizer control inventory is missing');
+
+  for (const control of inventory.controls) {
+    const scope = getControlMetadata(control).scope === 'first-sheet' ? firstSheet : main;
+    const locator = getAccessibleControl(scope, control.role, control.accessibleName);
+    await expect(getControlMetadata(control).scope === 'first-sheet' ? locator.first() : locator).toHaveCount(1);
+    expect(control.positiveTest).toBeTruthy();
+    expect(getNegativeEvidence(control)).toBeTruthy();
+  }
+});
 
 test('furniture and joinery options select correctly and update controls and parts', async ({ appPage: page }) => {
   const configuratorTab = page.getByRole('tab', { name: 'Configure' });

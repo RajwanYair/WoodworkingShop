@@ -180,7 +180,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
         {/* Header */}
         <div className="border-wood-200 dark:border-wood-700 flex items-center justify-between border-b px-4 py-3">
           <h2 className="text-wood-800 dark:text-wood-100 text-sm font-semibold">
-            {t('gcode.previewTitle')} — <span className="text-wood-500 font-mono">{filename}</span>
+            {t('gcode.previewTitle')} — <span className="text-wood-700 dark:text-wood-300 font-mono">{filename}</span>
           </h2>
           <button
             onClick={onClose}
@@ -390,7 +390,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
         </div>
 
         {/* Legend */}
-        <div className="text-wood-500 dark:text-wood-400 border-wood-100 dark:border-wood-800 flex gap-4 border-t px-4 py-2 text-xs">
+        <div className="text-wood-700 dark:text-wood-300 border-wood-100 dark:border-wood-800 flex gap-4 border-t px-4 py-2 text-xs">
           <span className="flex items-center gap-1">
             <span className="inline-block w-6 border-t-2 border-dashed border-red-400" />
             {t('gcode.previewRapid')}
@@ -403,7 +403,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
             <span className="inline-block w-6 border-t-2 border-green-500" />
             {t('gcode.previewArc')}
           </span>
-          <span className="text-wood-400 ms-auto">
+          <span className="text-wood-700 dark:text-wood-300 ms-auto">
             {moves.length} {t('gcode.moveCount', { count: moves.length })}
           </span>
         </div>

@@ -66,6 +66,7 @@ export function FinishingCoatPanel() {
             <button
               key={ft}
               type="button"
+              aria-pressed={finishType === ft}
               onClick={() => setFinishType(ft)}
               className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
                 finishType === ft

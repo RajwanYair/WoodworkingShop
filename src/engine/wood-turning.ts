@@ -53,6 +53,9 @@ export function calculateWoodTurning(input: WoodTurningInput): WoodTurningResult
 
   const maxRpm = Math.floor(6000 / diameterIn);
   const minRpm = Math.floor(2000 / diameterIn);
+  if (!Number.isFinite(maxRpm) || !Number.isFinite(minRpm) || maxRpm <= 0) {
+    throw new RangeError('blankDiameterMm produces unusable RPM estimates');
+  }
 
   const recommendedRpm = Math.round(minRpm + (maxRpm - minRpm) * OPERATION_FACTOR[operation]);
 

@@ -509,8 +509,16 @@
     "notesPlaceholder": "ملاحظات اختيارية لهذه الخزانة…"
   },
   "errors": {
+    "panel": "اللوحة",
+    "panelFailed": "تعذر عرض {{panel}}",
+    "recoveryHint": "حدث خطأ غير متوقع. يمكنك محاولة إعادة تحميل اللوحة أو تحديث الصفحة.",
+    "retry": "إعادة المحاولة",
     "copyDetails": "نسخ تفاصيل الخطأ",
-    "copied": "تم النسخ!"
+    "details": "تفاصيل الخطأ",
+    "copied": "تم النسخ!",
+    "reloadPage": "إعادة تحميل الصفحة",
+    "warning": "خطأ",
+    "interactivePreview": "معاينة ثلاثية الأبعاد تفاعلية"
   },
   "room": {
     "title": "تخطيط الغرفة",
@@ -1997,7 +2005,7 @@
     "maxRpm": "Max RPM (advisory)",
     "recommendedRpm": "Recommended RPM",
     "surfaceSpeed": "Surface Speed (m/min)",
-    "safetyNote": "Follow your lathe manual. Start at the lowest speed and reduce speed if the blank vibrates."
+    "safetyNote": "Advisory estimate only, not a safety limit. Follow your lathe manual; start slowly and reduce speed if the blank vibrates. Unbalanced blanks may need much lower speeds."
   },
   "framePanel": {
     "title": "Frame and Panel Calculator",

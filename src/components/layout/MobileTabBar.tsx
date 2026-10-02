@@ -5,13 +5,13 @@ import { useHaptics } from '../../hooks/useHaptics';
 type Tab = CabinetState['activeTab'];
 
 const TABS: { id: Tab; icon: string; labelKey: string }[] = [
-  { id: 'workspace', icon: '🏷️🪵', labelKey: 'tabs.workspace' },
-  { id: 'configurator', icon: '⚙️🪚', labelKey: 'tabs.configurator' },
-  { id: 'preview', icon: '👁️✨', labelKey: 'tabs.preview' },
-  { id: 'optimizer', icon: '✂️📐', labelKey: 'tabs.optimizer' },
-  { id: 'assembly', icon: '🔨🧰', labelKey: 'tabs.assembly' },
-  { id: 'pdf', icon: '📄🗂️', labelKey: 'tabs.pdf' },
-  { id: 'calculators', icon: '🧮📏', labelKey: 'tabs.calculators' },
+  { id: 'workspace', icon: '🏷️', labelKey: 'tabs.workspace' },
+  { id: 'configurator', icon: '⚙️', labelKey: 'tabs.configurator' },
+  { id: 'preview', icon: '👁️', labelKey: 'tabs.preview' },
+  { id: 'optimizer', icon: '✂️', labelKey: 'tabs.optimizer' },
+  { id: 'assembly', icon: '🔨', labelKey: 'tabs.assembly' },
+  { id: 'pdf', icon: '📄', labelKey: 'tabs.pdf' },
+  { id: 'calculators', icon: '🧮', labelKey: 'tabs.calculators' },
 ];
 
 /**
@@ -42,7 +42,7 @@ export function MobileTabBar() {
               haptics.selectionChanged();
             }}
             className={[
-              'flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-xs transition-colors',
+              'flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 py-2 text-xs transition-colors',
               isActive ? 'text-wood-700 dark:text-wood-100 font-semibold' : 'text-wood-600 dark:text-wood-300',
             ].join(' ')}
           >
@@ -58,7 +58,7 @@ export function MobileTabBar() {
             <span aria-hidden="true" className="text-lg leading-none">
               {tab.icon}
             </span>
-            <span className="leading-none">{t(tab.labelKey)}</span>
+            <span className="block max-w-full truncate leading-none">{t(tab.labelKey)}</span>
           </button>
         );
       })}

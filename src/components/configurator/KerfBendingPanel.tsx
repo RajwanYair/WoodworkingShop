@@ -81,6 +81,7 @@ export function KerfBendingPanel() {
               key={m}
               type="button"
               onClick={() => setMaterial(m)}
+              aria-pressed={material === m}
               className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
                 material === m
                   ? 'bg-wood-600 text-white'

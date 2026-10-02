@@ -3,6 +3,9 @@ import os from 'node:os';
 import path from 'node:path';
 
 const tmpDir = path.join(os.tmpdir(), 'WoodworkingShop');
+const previewDist = process.env['WOODWORKINGSHOP_E2E_DIST_DIR'] ?? 'dist';
+const previewPort = process.env['WOODWORKINGSHOP_E2E_PORT'] ?? '4173';
+const previewUrl = `http://localhost:${previewPort}/WoodworkingShop/`;
 
 /**
  * Playwright E2E config for WoodworkingShop SPA.
@@ -29,7 +32,7 @@ export default defineConfig({
   use: {
     // In CI: preview server serves the pre-built dist on port 4173.
     // Locally: dev server on port 5173.
-    baseURL: 'http://localhost:4173/WoodworkingShop/',
+    baseURL: previewUrl,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
@@ -50,9 +53,10 @@ export default defineConfig({
   ],
   webServer: {
     // Match the deployed base path and exercise the production service worker locally.
-    command: 'npm run preview -- --port 4173 --strictPort',
-    url: 'http://localhost:4173/WoodworkingShop/',
-    reuseExistingServer: !process.env.CI,
+    command: `npm run preview -- --outDir "${previewDist}" --port ${previewPort} --strictPort`,
+    url: previewUrl,
+    reuseExistingServer:
+      !process.env['CI'] && !process.env['WOODWORKINGSHOP_E2E_DIST_DIR'] && !process.env['WOODWORKINGSHOP_E2E_PORT'],
     timeout: 60_000,
     stdout: 'ignore',
     stderr: 'pipe',

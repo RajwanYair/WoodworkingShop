@@ -40,6 +40,7 @@ export function DadoRabbetPanel() {
               key={jt}
               type="button"
               onClick={() => setJointType(jt)}
+              aria-pressed={jointType === jt}
               className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
                 jointType === jt
                   ? 'bg-wood-600 text-white'

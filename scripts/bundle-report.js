@@ -13,7 +13,7 @@
 import { readdirSync, statSync, readFileSync } from 'node:fs';
 import { join, extname, basename } from 'node:path';
 
-const DIST_DIR = 'dist';
+const DIST_DIR = process.env['WOODWORKINGSHOP_BUNDLE_DIST_DIR'] ?? 'dist';
 const BUDGET_FILE = 'config/bundle-budget.json';
 
 const budget = JSON.parse(readFileSync(BUDGET_FILE, 'utf8'));

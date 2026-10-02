@@ -79,6 +79,7 @@ export function ScrewPulloutPanel() {
               key={cls}
               type="button"
               onClick={() => setDensityClass(cls)}
+              aria-pressed={densityClass === cls}
               className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
                 densityClass === cls
                   ? 'bg-wood-600 text-white'

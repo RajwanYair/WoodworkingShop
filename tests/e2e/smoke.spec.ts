@@ -282,6 +282,86 @@ test('focus mode hides navigation and can be exited with its shortcut', async ({
   await expect(page.getByRole('tablist')).toBeVisible();
 });
 
+test('keyboard-only navigation skips to content, activates controls, traps dialogs, and respects reduced motion', async ({
+  appPage: page,
+}) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const configureAction = page.getByRole('button', { name: 'Configure' });
+  const transitionDurations = await configureAction.evaluate((element) =>
+    getComputedStyle(element)
+      .transitionDuration.split(',')
+      .map((duration) => (duration.endsWith('ms') ? Number.parseFloat(duration) : Number.parseFloat(duration) * 1000)),
+  );
+  expect(transitionDurations.every((duration) => duration <= 0.01)).toBe(true);
+
+  await page.keyboard.press('Tab');
+  const skipLink = page.getByRole('link', { name: 'Skip to content' });
+  await expect(skipLink).toBeFocused();
+  await expect(skipLink).toBeVisible();
+  await expect.poll(() => skipLink.evaluate((element) => element.matches(':focus-visible'))).toBe(true);
+
+  const helpButton = page.getByRole('button', { name: 'Help' });
+  let helpButtonReached = false;
+  for (let tabCount = 0; tabCount < 40; tabCount += 1) {
+    if (await helpButton.evaluate((element) => element === document.activeElement)) {
+      helpButtonReached = true;
+      break;
+    }
+    await page.keyboard.press('Tab');
+  }
+  expect(helpButtonReached).toBe(true);
+  await page.keyboard.press('Enter');
+  const onboardingDialog = page.getByRole('dialog', { name: 'Configure your cabinet' });
+  await expect(onboardingDialog).toBeVisible();
+  const skipButton = onboardingDialog.getByRole('button', { name: 'Skip' });
+  const nextButton = onboardingDialog.getByRole('button', { name: 'Next' });
+  await expect(skipButton).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(nextButton).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(skipButton).toBeFocused();
+  await page.keyboard.press('Shift+Tab');
+  await expect(nextButton).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(onboardingDialog).toHaveCount(0);
+  await expect(helpButton).toBeFocused();
+
+  let skipLinkReached = false;
+  for (let tabCount = 0; tabCount < 40; tabCount += 1) {
+    if (await skipLink.evaluate((element) => element === document.activeElement)) {
+      skipLinkReached = true;
+      break;
+    }
+    await page.keyboard.press('Shift+Tab');
+  }
+  expect(skipLinkReached).toBe(true);
+  await page.keyboard.press('Enter');
+  const mainContent = page.locator('#main-content');
+  await expect(mainContent).toBeFocused();
+  const printAction = page.getByRole('button', { name: 'Print current view' });
+  await page.keyboard.press('Tab');
+  await expect(printAction).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(configureAction).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('tab', { name: 'Configure' })).toHaveAttribute('aria-selected', 'true');
+
+  const widthSlider = page.getByRole('slider', { name: 'Width (mm)' });
+  let widthSliderReached = false;
+  for (let tabCount = 0; tabCount < 40; tabCount += 1) {
+    if (await widthSlider.evaluate((element) => element === document.activeElement)) {
+      widthSliderReached = true;
+      break;
+    }
+    await page.keyboard.press('Tab');
+  }
+  expect(widthSliderReached).toBe(true);
+  const initialWidth = Number(await widthSlider.inputValue());
+  const widthStep = Number(await widthSlider.getAttribute('step'));
+  await page.keyboard.press('ArrowRight');
+  await expect(widthSlider).toHaveValue(String(initialWidth + widthStep));
+});
+
 test('onboarding and shortcut dialogs close on Escape and restore focus', async ({ appPage: page }) => {
   const helpButton = page.getByRole('button', { name: 'Help' });
   await helpButton.click();

@@ -145,7 +145,7 @@ export function CostEstimatePanel() {
                         setMaterialPriceOverride(sc.material, null);
                         setEditingPrice(null);
                       }}
-                      className="text-wood-400 text-[10px] hover:text-red-500"
+                      className="text-wood-400 inline-flex min-h-6 min-w-6 items-center justify-center text-[10px] hover:text-red-500"
                       title={t('cost.resetPrice')}
                       aria-label={t('cost.resetPrice')}
                     >
@@ -159,7 +159,7 @@ export function CostEstimatePanel() {
                     setEditingPrice(sc.material);
                     setPriceInput(String(sc.pricePerSheet || defaultPrice));
                   }}
-                  className={`shrink-0 font-medium hover:underline ${hasOverride ? 'text-amber-800 dark:text-amber-300' : 'text-wood-700 dark:text-wood-200'}`}
+                  className={`inline-flex min-h-6 min-w-6 shrink-0 items-center justify-center px-1 font-medium hover:underline ${hasOverride ? 'text-amber-800 dark:text-amber-300' : 'text-wood-700 dark:text-wood-200'}`}
                   title={t('cost.editPrice')}
                 >
                   ₪{sc.subtotal} {hasOverride && <span className="text-[10px]">✎</span>}
@@ -205,7 +205,7 @@ export function CostEstimatePanel() {
                   setEditingEb(true);
                   setEbInput(String(edgeBandingRate));
                 }}
-                className="text-wood-700 dark:text-wood-200 shrink-0 font-medium hover:underline"
+                className="text-wood-700 dark:text-wood-200 inline-flex min-h-6 min-w-6 shrink-0 items-center justify-center px-1 font-medium hover:underline"
                 title={t('cost.editEbRate')}
               >
                 ₪{cost.edgeBandingCost}
@@ -256,7 +256,7 @@ export function CostEstimatePanel() {
                           setHardwarePriceOverride(hw.id, null);
                           setEditingHw(null);
                         }}
-                        className="text-wood-400 text-[10px] hover:text-red-500"
+                        className="text-wood-400 inline-flex min-h-6 min-w-6 items-center justify-center text-[10px] hover:text-red-500"
                         title={t('cost.resetPrice')}
                         aria-label={t('cost.resetPrice')}
                       >
@@ -270,7 +270,7 @@ export function CostEstimatePanel() {
                       setEditingHw(hw.id);
                       setHwPriceInput(String(hw.unitPrice));
                     }}
-                    className={`shrink-0 font-medium hover:underline ${hasHwOverride ? 'text-amber-800 dark:text-amber-300' : 'text-wood-700 dark:text-wood-200'}`}
+                    className={`inline-flex min-h-6 min-w-6 shrink-0 items-center justify-center px-1 font-medium hover:underline ${hasHwOverride ? 'text-amber-800 dark:text-amber-300' : 'text-wood-700 dark:text-wood-200'}`}
                     title={t('cost.editPrice')}
                   >
                     ₪{hw.subtotal}
@@ -332,7 +332,7 @@ export function CostEstimatePanel() {
                 setEditingLabourHours(true);
                 setLabourHoursInput(String(labourHours));
               }}
-              className="text-wood-700 dark:text-wood-200 shrink-0 font-medium hover:underline"
+              className="text-wood-700 dark:text-wood-200 inline-flex min-h-6 min-w-6 shrink-0 items-center justify-center px-1 font-medium hover:underline"
               title={t('cost.editLabourHours', 'Click to set estimated labour hours')}
             >
               {labourHours > 0 ? `${labourHours}h → ₪${cost.labourCost}` : t('cost.notSet', '—')}
@@ -372,7 +372,7 @@ export function CostEstimatePanel() {
                 setEditingLabourRate(true);
                 setLabourRateInput(String(labourRate));
               }}
-              className={`shrink-0 font-medium hover:underline ${labourRate !== DEFAULT_LABOUR_RATE ? 'text-amber-800 dark:text-amber-300' : 'text-wood-700 dark:text-wood-200'}`}
+              className={`inline-flex min-h-6 min-w-6 shrink-0 items-center justify-center px-1 font-medium hover:underline ${labourRate !== DEFAULT_LABOUR_RATE ? 'text-amber-800 dark:text-amber-300' : 'text-wood-700 dark:text-wood-200'}`}
               title={t('cost.editLabourRate', 'Click to override labour rate (₪/hr)')}
             >
               ₪{labourRate}/h{labourRate !== DEFAULT_LABOUR_RATE && <span className="text-[10px]"> ✎</span>}
@@ -411,7 +411,7 @@ export function CostEstimatePanel() {
                 setEditingFinish(true);
                 setFinishInput(String(finishCost));
               }}
-              className="text-wood-700 dark:text-wood-200 shrink-0 font-medium hover:underline"
+              className="text-wood-700 dark:text-wood-200 inline-flex min-h-6 min-w-6 shrink-0 items-center justify-center px-1 font-medium hover:underline"
               title={t('cost.editFinish', 'Click to set finish/paint cost')}
               aria-label={t('cost.editFinish', 'Click to set finish/paint cost')}
             >

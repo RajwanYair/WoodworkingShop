@@ -521,8 +521,16 @@
     "notesPlaceholder": "Optionale Notizen für diesen Schrank…"
   },
   "errors": {
+    "panel": "Panel",
+    "panelFailed": "{{panel}} konnte nicht angezeigt werden",
+    "recoveryHint": "Ein unerwarteter Fehler ist aufgetreten. Versuchen Sie, das Panel oder die Seite neu zu laden.",
+    "retry": "Erneut versuchen",
     "copyDetails": "Fehlerdetails kopieren",
-    "copied": "Kopiert!"
+    "details": "Fehlerdetails",
+    "copied": "Kopiert!",
+    "reloadPage": "Seite neu laden",
+    "warning": "Fehler",
+    "interactivePreview": "Interaktive 3D-Vorschau"
   },
   "room": {
     "title": "Raumplanung",
@@ -2009,7 +2017,7 @@
     "maxRpm": "Max RPM (advisory)",
     "recommendedRpm": "Recommended RPM",
     "surfaceSpeed": "Surface Speed (m/min)",
-    "safetyNote": "Follow your lathe manual. Start at the lowest speed and reduce speed if the blank vibrates."
+    "safetyNote": "Advisory estimate only, not a safety limit. Follow your lathe manual; start slowly and reduce speed if the blank vibrates. Unbalanced blanks may need much lower speeds."
   },
   "framePanel": {
     "title": "Frame and Panel Calculator",
