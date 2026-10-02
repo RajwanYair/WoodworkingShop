@@ -504,7 +504,54 @@ the in-flight quality sprints (84-87) and run first.
 - Further batches covered presets, constraint repairs, cost panels, optimizer suggestions, material summary/selector, templates, CNC profiles, PDF settings, cut checklist, stock/offcuts, waste analytics, build log, labels, G-code presets, SaveLoadPanel, Marketplace and Sidebar.
 - Product defects fixed: invalid nested snapshot buttons; intermediate-keystroke clamping in custom clearance; unlabeled icon-only controls; 16 built-in templates referencing nonexistent `hdf-3` (now `mdf-3`, with a registry guard); grouped material area for differing sheet sizes and 100–5000 mm bounds; stale drafts committed by reset controls; missing clipboard-failure message.
 - Component coverage (statements): 41.3 % → 48.4 % → 57.4 % → 66.8 % → 74.2 % → 75.02 % (525 component tests), with no area floor lowered.
-- Open defect recorded: selecting a custom material throws during cabinet derivation because custom definitions are not propagated to the engine.
+- Browser-derived inventory maps all 118 calculator controls to positive/negative behavior evidence and 108 high-use workspace controls to evidence or explicit waivers. Calculator suite passed 60/60 at two workers; configurator suite passed 62/62; optimizer parts/hardware inventory passed 2/2. A separate stock-persistence Firefox failure in a broad inventory grep was unrelated to these table-inventory tests.
+- Component ratchet: 572 tests, 75.04% statements, 69.05% branches, 73.10% functions and 75.74% lines; no floor lowered. The custom-material derivation defect is fixed. Sprint 305 acceptance is complete.
+
+### Sprint 306 — Mutation testing and quality evidence (in progress, 2026-10-02)
+
+- Bounded Stryker targets: dimensions, parts, cut-optimizer and validation; two workers; no score threshold; JSON/HTML and temp files remain under the OS temp directory.
+- Four-module initial dry run: 1,366 mutants and 926 related tests in 2m55s. Focused `dimensions.ts` run: 122 mutants in 2m47s; 116 killed, five survived, one timed out (95.90%).
+- Improved dimensions assertions for centre-support deflection, exact hinge and shelf-rating boundaries, material modulus outputs, maximum load, and the zero-deflection fallback. Four surviving nonpositive-count guards are equivalent; the initial static material-table survivor was resolved in a focused follow-up; the descending-loop mutant timed out.
+- Added `parts.ts` behavior assertions for material selection, furniture exclusions, part dimensions,
+  zero drawers, and edge-banding totals. A focused run invoked with `--ignoreStatic` took 5m11s:
+  307 mutants, 189 killed, 99 survived, one timed out and 18 with no coverage (61.89% overall;
+  65.74% of covered mutants). A 38-second follow-up over drawer-generation lines killed 15 of 18
+  mutants; two surviving count guards are equivalent because the nested loop has no iterations at
+  zero or negative counts, and one mutant timed out. This scoped diagnostic is not the static-inclusive
+  baseline; a full-static parts attempt was stopped after its runtime estimate exceeded an hour.
+- A validation diagnostic invoked with `--ignoreStatic` took 10m26s: 229 mutants, 132 killed,
+  94 survived and three with no coverage (57.64% overall; 58.41% of covered mutants). Added exact
+  99/100/101 mm drawer-height and exact/exceeding drawer-stack boundaries, plus issue field and
+  bilingual drawer-index assertions. A 35-second focused drawer-validation run killed all 30 mutants.
+  The full-static validation baseline remains unmeasured. A `cut-optimizer.ts` diagnostic invoked with
+  `--ignoreStatic` took 110m47s: 443 killed, 219 survived, one timed out and 45 with no coverage
+  (62.71% overall; 66.97% of covered mutants). Added exact co-nesting yield, waste and conflict checks,
+  plus empty-result and untouched-conflict cases; the focused metrics slice killed all 16 mutants in
+  23 seconds. This runtime rules out adding the full diagnostic to routine CI. The complete
+  static-inclusive four-module baseline remains open; no blocking threshold is set.
+- Added a weekly report-only dimensions and BOM mutation workflow (15-minute budget) with retained JSON/HTML artifacts. Other targets remain out of the schedule until their runtime is measured. Full four-module scoring baseline and runtime gate remain open; no blocking score threshold is set.
+- A BOM/ERP serializer diagnostic invoked with `--ignoreStatic` took 5m10s: 267 mutants, 197 killed, 49 survived and 21 with no coverage (73.78% overall; 80.08% of covered mutants). ERP assertions now verify total weight equals unit weight times quantity, non-grain output uses `none`, and unknown-material weight fields stay blank. The focused weight/grain/fallback slice killed all seven mutants; the static-inclusive baseline remains open.
+- Strengthened hardware and ERP CSV download tests to inspect each filename, MIME type, raw UTF-8 BOM bytes, and payload. Each focused diagnostic killed all three filename/BOM/MIME mutants (six total).
+- ERP schema tests now assert the exact ordered 13-column header, the first schema row, and the ISO-8601 generated-at row; focused diagnostics killed all 12 header mutants and all 11 metadata-initialization mutants.
+- ERP row construction is covered across part-number selection, weight, grain, and material fields: a focused 20-mutant slice killed all 20. BOM pricing now checks two-sheet cost multiplication and separates engine language from full locale; the focused pricing slice killed all 11 mutants.
+- A complete BOM part-row assertion now checks column order and values for a known single-cabinet fixture; the focused part-row slice killed all four mutants.
+- Static-inclusive BOM diagnostic (5m34s): 335 mutants, 243 killed, 72 survived and 20 with no
+  coverage (72.54% overall; 77.14% of covered mutants). The locale table now initializes in
+  `getBomHeaders`, making its literals runtime mutants; exact emitted summary, parts, hardware and
+  grain-direction assertions cover all six supported locales. The focused locale slice killed all
+  70 mutants in 1m25s, including the unsupported-locale English fallback. The full static-inclusive
+  four-module baseline and score/runtime gate remain open; no threshold is set.
+- Initial combined weekly dimensions+BOM run completed in 9m43s, within the 15-minute budget: 457 mutants,
+  359 killed, 77 survived, 20 with no coverage and one timeout (78.77% overall; 82.38% of covered
+  mutants). Dimensions scored 95.90% with one timeout; BOM scored 72.54% overall and 77.14% of
+  covered mutants. The report remains report-only; no score threshold is set.
+- Replaced the static modulus map with an allocation-free `getElasticModulus` switch and added
+  parameterized output checks for all nine supported material keys. The focused dimensions run took
+  2m18s: 137 mutants, 132 killed, four equivalent zero/negative-count guards survived, one
+  descending-loop timeout and no uncovered mutants (97.08%). The refreshed combined weekly run took
+  7m39s: 472 mutants, 375 killed, 76 survived, 20 with no coverage and one timeout (79.66% overall;
+  83.19% of covered mutants). Dimensions scored 97.08%; BOM remained at 72.54% overall and 77.14%
+  of covered mutants. It remains report-only with no threshold.
 
 ## Phase 64 — Real User Journeys and Browser Confidence
 
@@ -553,6 +600,7 @@ the in-flight quality sprints (84-87) and run first.
 - [x] T1/T2: 27 production-browser journeys (Chromium + Firefox) expand all 24 mounted calculators and compare every finite option against the pure engine.
 - [x] T4: typed entry, ArrowUp/ArrowDown recomputation and clear-to-zero validation without NaN/Infinity.
 - [ ] T3: screw pull-out now follows USDA FPL-GTR-282 Eq. 8-10a with an independent #8 × 1 in oracle; white-oak shrinkage cites FPL-GTR-282 Table 4-3; finish coverage/recoat compatibility has product-scoped manufacturer range oracles; glue and moisture bounds are shared between UI and engine; board-foot inputs reject non-finite values. Finish cure/volume and category-wide assumptions remain unverified. Glue spread rates remain unclaimed; two calculator oracle gaps remain.
+- [ ] T3 update (2026-10-02): an OpenStax-backed honing-guide fixture verifies only the idealized right-triangle projection at 0.1 mm precision; real guide geometry and calibration remain excluded. Wood-turning still has no qualifying numeric oracle, so T3 remains open.
 
 ### Sprint 318 — v5.34.0 verification evidence (2026-10-02)
 

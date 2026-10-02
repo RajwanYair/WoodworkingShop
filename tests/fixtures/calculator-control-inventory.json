@@ -771,13 +771,13 @@
           "role": "combobox",
           "accessibleName": "Species",
           "positiveTest": "grain direction reconciles shrinkage and invalid dimensions report an error",
-          "negativeTest": null
+          "negativeTest": "grain direction reconciles shrinkage and invalid dimensions report an error"
         },
         {
           "role": "combobox",
           "accessibleName": "Grain Direction",
           "positiveTest": "grain direction reconciles shrinkage and invalid dimensions report an error",
-          "negativeTest": null
+          "negativeTest": "grain direction reconciles shrinkage and invalid dimensions report an error"
         },
         {
           "role": "spinbutton",
@@ -797,22 +797,32 @@
         {
           "role": "spinbutton",
           "accessibleName": "Total Building Span (mm)",
-          "positiveTest": null,
-          "negativeTest": null
+          "positiveTest": "shed-roof mode reconciles rafter geometry with the engine",
+          "negativeTest": "shed-roof mode reconciles rafter geometry with the engine"
         },
         {
           "role": "spinbutton",
           "accessibleName": "Pitch Ratio (rise/run)",
-          "positiveTest": null,
-          "negativeTest": null
+          "positiveTest": "shed-roof mode reconciles rafter geometry with the engine",
+          "negativeTest": "shed-roof mode reconciles rafter geometry with the engine"
         },
-        { "role": "spinbutton", "accessibleName": "Wall Plate Width (mm)", "positiveTest": null, "negativeTest": null },
-        { "role": "spinbutton", "accessibleName": "Overhang (mm)", "positiveTest": null, "negativeTest": null },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Wall Plate Width (mm)",
+          "positiveTest": "shed-roof mode reconciles rafter geometry with the engine",
+          "negativeTest": "shed-roof mode reconciles rafter geometry with the engine"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Overhang (mm)",
+          "positiveTest": "shed-roof mode reconciles rafter geometry with the engine",
+          "negativeTest": "shed-roof mode reconciles rafter geometry with the engine"
+        },
         {
           "role": "checkbox",
           "accessibleName": "Shed roof (single slope)",
           "positiveTest": "shed-roof mode reconciles rafter geometry with the engine",
-          "negativeTest": null
+          "negativeTest": "shed-roof mode reconciles rafter geometry with the engine"
         }
       ]
     },
@@ -823,19 +833,29 @@
         "negativeTest": "every calculator expands to a numeric result with units and collapses again"
       },
       "controls": [
-        { "role": "spinbutton", "accessibleName": "Bushing OD (mm)", "positiveTest": null, "negativeTest": null },
-        { "role": "spinbutton", "accessibleName": "Bit Diameter (mm)", "positiveTest": null, "negativeTest": null },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Bushing OD (mm)",
+          "positiveTest": "router-template controls reconcile offsets and recover from invalid dimensions",
+          "negativeTest": "router-template controls reconcile offsets and recover from invalid dimensions"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Bit Diameter (mm)",
+          "positiveTest": "router-template controls reconcile offsets and recover from invalid dimensions",
+          "negativeTest": "router-template controls reconcile offsets and recover from invalid dimensions"
+        },
         {
           "role": "combobox",
           "accessibleName": "Cut Type",
           "positiveTest": "router-template cut type reconciles dimension adjustments with the engine",
-          "negativeTest": null
+          "negativeTest": "router-template controls reconcile offsets and recover from invalid dimensions"
         },
         {
           "role": "spinbutton",
           "accessibleName": "Nominal Feature Dimension (mm)",
           "positiveTest": "router-template cut type reconciles dimension adjustments with the engine",
-          "negativeTest": null
+          "negativeTest": "router-template controls reconcile offsets and recover from invalid dimensions"
         }
       ]
     },
@@ -849,23 +869,33 @@
         {
           "role": "combobox",
           "accessibleName": "Lap Type",
-          "positiveTest": "half-lap board thickness reconciles notch dimensions with engine and rejects zero",
-          "negativeTest": null
+          "positiveTest": "half-lap dimensions reconcile with the engine and recover from invalid values",
+          "negativeTest": "half-lap dimensions reconcile with the engine and recover from invalid values"
         },
         {
           "role": "spinbutton",
           "accessibleName": "Board 1 Thickness (mm)",
-          "positiveTest": "half-lap board thickness reconciles notch dimensions with engine and rejects zero",
-          "negativeTest": "half-lap board thickness reconciles notch dimensions with engine and rejects zero"
+          "positiveTest": "half-lap dimensions reconcile with the engine and recover from invalid values",
+          "negativeTest": "half-lap dimensions reconcile with the engine and recover from invalid values"
         },
-        { "role": "spinbutton", "accessibleName": "Board 1 Width (mm)", "positiveTest": null, "negativeTest": null },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Board 1 Width (mm)",
+          "positiveTest": "half-lap dimensions reconcile with the engine and recover from invalid values",
+          "negativeTest": "half-lap dimensions reconcile with the engine and recover from invalid values"
+        },
         {
           "role": "spinbutton",
           "accessibleName": "Board 2 Thickness (mm)",
-          "positiveTest": null,
-          "negativeTest": null
+          "positiveTest": "half-lap dimensions reconcile with the engine and recover from invalid values",
+          "negativeTest": "half-lap dimensions reconcile with the engine and recover from invalid values"
         },
-        { "role": "spinbutton", "accessibleName": "Board 2 Width (mm)", "positiveTest": null, "negativeTest": null }
+        {
+          "role": "spinbutton",
+          "accessibleName": "Board 2 Width (mm)",
+          "positiveTest": "half-lap dimensions reconcile with the engine and recover from invalid values",
+          "negativeTest": "half-lap dimensions reconcile with the engine and recover from invalid values"
+        }
       ]
     },
     {
@@ -875,20 +905,35 @@
         "negativeTest": "every calculator expands to a numeric result with units and collapses again"
       },
       "controls": [
-        { "role": "spinbutton", "accessibleName": "Board Thickness (mm)", "positiveTest": null, "negativeTest": null },
-        { "role": "spinbutton", "accessibleName": "Spline Thickness (mm)", "positiveTest": null, "negativeTest": null },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Board Thickness (mm)",
+          "positiveTest": "spline dimensions reconcile with the engine and recover from invalid values",
+          "negativeTest": "spline dimensions reconcile with the engine and recover from invalid values"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Spline Thickness (mm)",
+          "positiveTest": "spline dimensions reconcile with the engine and recover from invalid values",
+          "negativeTest": "spline dimensions reconcile with the engine and recover from invalid values"
+        },
         {
           "role": "spinbutton",
           "accessibleName": "Slot Depth per Board (mm)",
-          "positiveTest": "spline count reconciles joint dimensions with engine and validates slot depth",
-          "negativeTest": "spline count reconciles joint dimensions with engine and validates slot depth"
+          "positiveTest": "spline dimensions reconcile with the engine and recover from invalid values",
+          "negativeTest": "spline dimensions reconcile with the engine and recover from invalid values"
         },
-        { "role": "spinbutton", "accessibleName": "Joint Length (mm)", "positiveTest": null, "negativeTest": null },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Joint Length (mm)",
+          "positiveTest": "spline dimensions reconcile with the engine and recover from invalid values",
+          "negativeTest": "spline dimensions reconcile with the engine and recover from invalid values"
+        },
         {
           "role": "spinbutton",
           "accessibleName": "Number of Splines",
-          "positiveTest": "spline count reconciles joint dimensions with engine and validates slot depth",
-          "negativeTest": null
+          "positiveTest": "spline dimensions reconcile with the engine and recover from invalid values",
+          "negativeTest": "spline dimensions reconcile with the engine and recover from invalid values"
         }
       ]
     }

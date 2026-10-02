@@ -46,6 +46,15 @@ describe('computeDimensions', () => {
     expect(d.internalWidth).toBe(1000 - 2 * 16); // 968
     expect(d.internalHeight).toBe(2000 - 2 * 16); // 1968
   });
+
+  it('reduces shelf deflection when centre supports divide the span', () => {
+    const unsupported = computeDimensions({ ...DEFAULT_CONFIG, shelfCount: 1, shelfCentreSupports: 0 });
+    const supported = computeDimensions({ ...DEFAULT_CONFIG, shelfCount: 1, shelfCentreSupports: 1 });
+
+    expect(supported.shelfDeflections[0]?.deflectionMm).toBeLessThan(
+      unsupported.shelfDeflections[0]?.deflectionMm ?? 0,
+    );
+  });
 });
 
 describe('computeHingesPerDoor', () => {
@@ -66,9 +75,11 @@ describe('computeHingesPerDoor', () => {
 
   it('returns 5 for doors 1801–2200mm', () => {
     expect(computeHingesPerDoor(1994)).toBe(5);
+    expect(computeHingesPerDoor(2200)).toBe(5);
   });
 
   it('returns 6 for very tall doors >2200mm', () => {
+    expect(computeHingesPerDoor(2201)).toBe(6);
     expect(computeHingesPerDoor(2300)).toBe(6);
   });
 });
@@ -109,7 +120,7 @@ describe('computeShelfDeflection', () => {
     // 600 mm span, 18 mm birch plywood, 300 mm depth
     const result = computeShelfDeflection(600, 18, 300, 'plywood-18');
     expect(result.overLimit).toBe(false);
-    expect(result.deflectionMm).toBeGreaterThan(0);
+    expect(result.deflectionMm).toBe(0.08);
   });
 
   it('returns overLimit=true for a very long, thin chipboard shelf', () => {
@@ -125,10 +136,23 @@ describe('computeShelfDeflection', () => {
   });
 
   it('uses default modulus for unknown material key', () => {
-    // Should not throw and should return a numeric result
     const result = computeShelfDeflection(800, 18, 300, 'custom-exotic-wood');
-    expect(typeof result.deflectionMm).toBe('number');
+    expect(result.deflectionMm).toBe(0.61);
     expect(typeof result.overLimit).toBe('boolean');
+  });
+
+  it.each([
+    ['plywood-17', 0.28],
+    ['plywood-18', 0.26],
+    ['melamine-16', 0.65],
+    ['melamine-18', 0.65],
+    ['mdf-16', 0.73],
+    ['mdf-18', 0.73],
+    ['chipboard-16', 0.83],
+    ['chipboard-18', 0.83],
+    ['osb-18', 0.52],
+  ])('uses the configured elastic modulus for %s', (materialKey, expectedDeflection) => {
+    expect(computeShelfDeflection(800, 18, 300, materialKey).deflectionMm).toBe(expectedDeflection);
   });
 });
 
@@ -154,6 +178,16 @@ describe('computeShelfDeflection — deflectionRating', () => {
     expect(result.overLimit).toBe(true);
     expect(result.deflectionMm).toBeGreaterThan(1200 / 360);
     expect(result.deflectionMm).toBeLessThanOrEqual(1200 / 240);
+  });
+
+  it('uses inclusive thresholds at L/360 and L/240', () => {
+    const atSafeLimit = computeShelfDeflection(600, 10, 202.5, 'custom-boundary');
+    const atWarningLimit = computeShelfDeflection(600, 10, 135, 'custom-boundary');
+
+    expect(atSafeLimit.deflectionRating).toBe('safe');
+    expect(atSafeLimit.overLimit).toBe(false);
+    expect(atWarningLimit.deflectionMm).toBe(2.5);
+    expect(atWarningLimit.deflectionRating).toBe('warning');
   });
 
   it('deflectionRating is consistent with overLimit', () => {
@@ -236,11 +270,12 @@ describe('computeShelfDeflection — maxLoadKg', () => {
   });
 
   it('a safe shelf has maxLoadKg consistent with limit (deflection at limit = limitMm)', () => {
-    // For a safe shelf: deflectionMm <= limitMm, so maxLoadKg = round(0.05 * limitMm * L / deflectionMm / 9.81)
-    // which should be >= (0.05 * limitMm * L / limitMm / 9.81) = 0.05 * L / 9.81
     const r = computeShelfDeflection(600, 18, 300, 'plywood-18');
-    const expectedMin = Math.floor((0.05 * 600) / 9.81); // ~ 3 kg (conservative floor)
-    expect(r.maxLoadKg).toBeGreaterThanOrEqual(expectedMin);
+    expect(r.maxLoadKg).toBe(62);
+  });
+
+  it('uses the fallback max load when calculated deflection is zero', () => {
+    expect(computeShelfDeflection(0, 18, 300, 'plywood-18').maxLoadKg).toBe(9999);
   });
 });
 

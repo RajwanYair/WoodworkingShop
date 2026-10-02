@@ -75,6 +75,127 @@ describe('generateParts', () => {
     expect(doors).toBeUndefined();
   });
 
+  it('generates a single panel from the selected material source', () => {
+    const generated = generateParts({
+      ...DEFAULT_CONFIG,
+      furnitureType: 'panel',
+      width: 600,
+      height: 800,
+      panelMaterialSource: 'back',
+    });
+
+    expect(generated).toHaveLength(1);
+    expect(generated[0]).toMatchObject({
+      id: 'P01',
+      qty: 1,
+      name: { en: 'Panel' },
+      material: 'plywood-4',
+      thickness: 4,
+      length: 600,
+      width: 800,
+      edgeBanding: { en: 'All 4 edges' },
+    });
+  });
+
+  it('generates desk parts without cabinet-only doors, drawers, supports, or toe kicks', () => {
+    const generated = generateParts({
+      ...DEFAULT_CONFIG,
+      furnitureType: 'desk',
+      width: 1200,
+      height: 750,
+      shelfCount: 1,
+      shelfCentreSupports: 2,
+      drawerCount: 2,
+    });
+
+    expect(generated.find((part) => part.name.en === 'Desktop')).toMatchObject({
+      length: 1200,
+      width: 600,
+    });
+    expect(generated.find((part) => part.name.en === 'Side Panel')).toMatchObject({
+      qty: 2,
+      length: 733,
+    });
+    expect(generated.find((part) => part.name.en === 'Modesty Panel')).toMatchObject({
+      length: 1166,
+      width: 300,
+    });
+    expect(generated.find((part) => part.name.en === 'Under-desk Shelf')?.qty).toBe(1);
+    expect(generated.some((part) => /Door|Drawer|Centre Support|Toe Kick/.test(part.name.en))).toBe(false);
+  });
+
+  it('omits doors, drawers, and toe kicks from bookshelves while retaining shelves', () => {
+    const generated = generateParts({
+      ...DEFAULT_CONFIG,
+      furnitureType: 'bookshelf',
+      height: 1800,
+      shelfCount: 5,
+      drawerCount: 2,
+      doorStyle: 'flat',
+    });
+
+    expect(generated.find((part) => part.name.en === 'Adjustable Shelf')?.qty).toBe(5);
+    expect(generated.some((part) => /Door|Drawer|Toe Kick/.test(part.name.en))).toBe(false);
+  });
+
+  it('generates a wardrobe rail and toe-kick boards with configured dimensions', () => {
+    const generated = generateParts({ ...DEFAULT_CONFIG, furnitureType: 'wardrobe' });
+
+    expect(generated.find((part) => part.name.en === 'Hanging Rail')).toMatchObject({
+      thickness: 25,
+      length: 966,
+      width: 25,
+    });
+    expect(generated.find((part) => part.name.en === 'Toe Kick (Front)')).toMatchObject({
+      length: 1000,
+      width: 100,
+    });
+    expect(generated.find((part) => part.name.en === 'Toe Kick (Side)')).toMatchObject({
+      qty: 2,
+      length: 583,
+      width: 100,
+    });
+  });
+
+  it('uses configured drawer heights and slide clearances in drawer parts', () => {
+    const generated = generateParts({
+      ...DEFAULT_CONFIG,
+      depth: 400,
+      drawerCount: 2,
+      drawerHeights: [120, 240],
+    });
+
+    expect(generated.filter((part) => part.name.en.startsWith('Drawer '))).toHaveLength(8);
+    expect(
+      generateParts({ ...DEFAULT_CONFIG, drawerCount: 0 }).filter((part) => part.name.en.startsWith('Drawer ')),
+    ).toHaveLength(0);
+
+    expect(generated.find((part) => part.name.en === 'Drawer 1 Front')).toMatchObject({
+      length: 150,
+      width: 966,
+    });
+    expect(generated.find((part) => part.name.en === 'Drawer 2 Front')).toMatchObject({
+      length: 270,
+      width: 966,
+    });
+    expect(generated.find((part) => part.name.en === 'Drawer 1 Box Side')).toMatchObject({
+      qty: 2,
+      length: 353,
+      width: 120,
+    });
+    expect(generated.find((part) => part.name.en === 'Drawer 1 Box End')).toMatchObject({
+      qty: 2,
+      length: 906,
+      width: 120,
+    });
+    expect(generated.find((part) => part.name.en === 'Drawer 2 Bottom')).toMatchObject({
+      material: 'plywood-4',
+      length: 351,
+      width: 906,
+      thickness: 4,
+    });
+  });
+
   it('omits back panel when hasBack=false (Sprint A2)', () => {
     const cfg = { ...DEFAULT_CONFIG, hasBack: false };
     const p = generateParts(cfg);
@@ -133,9 +254,20 @@ describe('generateParts', () => {
 
 describe('computeEdgeBandingTotal', () => {
   it('computes total edge banding length', () => {
-    const parts = generateParts(DEFAULT_CONFIG);
-    const total = computeEdgeBandingTotal(parts);
-    expect(total).toBeGreaterThan(0);
+    const generated = generateParts({ ...DEFAULT_CONFIG, edgeBanding: 'all-visible' });
+    const total = computeEdgeBandingTotal(generated);
+    const expected = generated.reduce(
+      (sum, part) =>
+        sum +
+        (part.edgeBanding.en === 'Front edge'
+          ? part.length * part.qty
+          : part.edgeBanding.en === 'All 4 edges'
+            ? 2 * (part.length + part.width) * part.qty
+            : 0),
+      0,
+    );
+
+    expect(total).toBe(expected);
   });
 
   it('returns 0 when no edge banding', () => {

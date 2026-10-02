@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import * as fc from 'fast-check';
 import { calculateHoningGuide } from '../../src/engine/honing-guide';
+import HONING_GUIDE_RIGHT_TRIANGLE_ORACLE from '../fixtures/oracles/honing-guide-right-triangle.json';
 import { propertyRunOptions } from '../property-seeds';
 
 const NUM_RUNS = 200;
@@ -12,9 +13,12 @@ describe('calculateHoningGuide', () => {
     expect(result.actualBevelAngleDeg).toBe(25);
   });
 
-  it('calculates projection for 30° bevel at 20 mm guide height', () => {
-    const result = calculateHoningGuide({ bevelAngleDeg: 30, guideHeightMm: 20 });
-    expect(result.projectionMm).toBe(34.6);
+  it('matches the OpenStax idealized right-triangle projection oracle', () => {
+    const { input, expected } = HONING_GUIDE_RIGHT_TRIANGLE_ORACLE;
+    const result = calculateHoningGuide(input);
+
+    expect(result.projectionMm).toBe(expected.projectionMm);
+    expect(result.actualBevelAngleDeg).toBe(input.bevelAngleDeg);
   });
 
   it('returns null microbevelProjectionMm when microbevelDeg is 0 (default)', () => {

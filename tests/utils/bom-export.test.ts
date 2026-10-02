@@ -54,6 +54,100 @@ describe('generateBomCsv', () => {
     for (const s of expected) expect(csv).toContain(s);
   });
 
+  it.each([
+    {
+      locale: 'en',
+      summary: 'Material Summary',
+      summaryColumns:
+        'Material,Total Area (m²),Board-Feet (nominal 1 inch),Weight (kg),Price/Sheet,Est. Material Cost,,,,,',
+      partsHeader:
+        '#,Cabinet,Part ID,Part Name,Qty,Material,Thickness (mm),Length (mm),Width (mm),Area (m²),Edge Banding,Weight (kg),Grain Direction',
+      hardwareHeader: '#,Cabinet,Hardware ID,Hardware Name,Qty,Unit',
+      grainAlong: 'Along length',
+    },
+    {
+      locale: 'he',
+      summary: 'סיכום חומרים',
+      summaryColumns: 'חומר,שטח כולל (m²),רגלי לוח,משקל (kg),מחיר/גיליון,עלות חומרים משוערת,,,,,',
+      partsHeader:
+        '#,ארון,מזהה,שם חלק,כמות,חומר,עובי (מ"מ),אורך (מ"מ),רוחב (מ"מ),שטח (m²),חיזוק קצות,משקל (kg),כיוון גיד',
+      hardwareHeader: '#,ארון,מזהה,שם חומרה,כמות,יחידה',
+      grainAlong: 'לאורך הגיד',
+    },
+    {
+      locale: 'es',
+      summary: 'Resumen de materiales',
+      summaryColumns:
+        'Material,Área total (m²),Pies tabla (1 pulgada nominal),Peso (kg),Precio/Hoja,Coste material est.,,,,,',
+      partsHeader:
+        '#,Armario,ID Pieza,Nombre pieza,Cant.,Material,Espesor (mm),Largo (mm),Ancho (mm),Área (m²),Canteado,Peso (kg),Dirección veta',
+      hardwareHeader: '#,Armario,ID Herraje,Nombre herraje,Cant.,Unidad',
+      grainAlong: 'A lo largo',
+    },
+    {
+      locale: 'de',
+      summary: 'Materialzusammenfassung',
+      summaryColumns:
+        'Material,Gesamtfläche (m²),Brettfuß (nominal 1 Zoll),Gewicht (kg),Preis/Platte,Geschätzter Materialpreis,,,,,',
+      partsHeader:
+        '#,Korpus,Teile-ID,Teilename,Menge,Material,Dicke (mm),Länge (mm),Breite (mm),Fläche (m²),Kantenanleimer,Gewicht (kg),Faserrichtung',
+      hardwareHeader: '#,Korpus,Beschlag-ID,Beschlagname,Menge,Einheit',
+      grainAlong: 'Längs der Faser',
+    },
+    {
+      locale: 'fr',
+      summary: 'Résumé matériaux',
+      summaryColumns:
+        'Matériau,Surface totale (m²),Pieds-planche (nominal 1 pouce),Poids (kg),Prix/Feuille,Coût matériaux est.,,,,,',
+      partsHeader:
+        '#,Meuble,ID Pièce,Nom pièce,Qte,Matériau,Épaisseur (mm),Longueur (mm),Largeur (mm),Surface (m²),Chant,Poids (kg),Sens du fil',
+      hardwareHeader: '#,Meuble,ID Quincaillerie,Nom quincaillerie,Qte,Unité',
+      grainAlong: 'Dans la longueur',
+    },
+    {
+      locale: 'ar',
+      summary: 'ملخص المواد',
+      summaryColumns: 'المادة,المساحة الكلية (m²),أقدام لوح,الوزن (kg),سعر/لوح,تكلفة المواد المقدرة,,,,,',
+      partsHeader:
+        '#,خزانة,معرف الجزء,اسم الجزء,الكمية,المادة,السمك (mm),الطول (mm),العرض (mm),المساحة (m²),تشطيب الحواف,الوزن (kg),اتجاه الحبوب',
+      hardwareHeader: '#,خزانة,معرف العتاد,اسم العتاد,الكمية,الوحدة',
+      grainAlong: 'باتجاه الحبوب',
+    },
+  ])('serializes localized BOM headers and grain direction for $locale', (expected) => {
+    const grainPart: Part = { ...mockPart, material: 'plywood-17' };
+    const csv = generateBomCsv(
+      [{ name: 'Cabinet A', parts: [grainPart], hardware: [mockHardware] }],
+      'en',
+      expected.locale,
+    );
+    const lines = csv.split('\n');
+    expect(lines).toContain(`${expected.summary},,,,,,,,,,,,`);
+    expect(lines).toContain(`${expected.summaryColumns}`);
+    expect(lines.find((line) => line.startsWith('#,') && line.split(',').length === 13)).toBe(expected.partsHeader);
+    expect(lines).toContain(`${expected.hardwareHeader},,,,, `);
+    const grainRow = lines.find((line) => line.startsWith('1,Cabinet A,P01,'));
+    expect(grainRow?.split(',')[12]).toBe(expected.grainAlong);
+  });
+
+  it('falls back to English headers for an unsupported locale', () => {
+    const lines = generateBomCsv(singleCabinet, 'en', 'xx').split('\n');
+    expect(lines).toContain('Material Summary,,,,,,,,,,,,');
+    expect(lines).toContain(
+      'Material,Total Area (m²),Board-Feet (nominal 1 inch),Weight (kg),Price/Sheet,Est. Material Cost,,,,,',
+    );
+    expect(lines).toContain(
+      '#,Cabinet,Part ID,Part Name,Qty,Material,Thickness (mm),Length (mm),Width (mm),Area (m²),Edge Banding,Weight (kg),Grain Direction',
+    );
+  });
+
+  it('serializes all single-cabinet part columns in order', () => {
+    const lines = generateBomCsv(singleCabinet, 'en').split('\n');
+    const headerIndex = lines.findIndex((line) => line.startsWith('#,Cabinet,Part ID'));
+    expect(lines[headerIndex + 1]).toBe(
+      '1,Cabinet A,P01,Side Panel,2,Melamine 18 mm,18,2000,580,2.320000,Front edge,29.232,\u2014',
+    );
+  });
+
   it('includes hardware section after parts section', () => {
     const csv = generateBomCsv(singleCabinet, 'en');
     const lines = csv.split('\n');
@@ -144,14 +238,24 @@ describe('generateHardwareCsv', () => {
     expect(empty.split('\n').length).toBe(1);
   });
 
-  it('triggerDownload is called from downloadHardwareCsv', () => {
+  it('triggerDownload is called from downloadHardwareCsv', async () => {
     const mockAnchor = document.createElement('a');
     vi.spyOn(mockAnchor, 'click').mockImplementation(() => {});
     vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor);
-    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:test');
+    const createObjectUrl = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:test');
     vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
-    downloadHardwareCsv([{ name: 'Cabinet A', hardware: [mockHardware] }], 'en');
+    const cabinets = [{ name: 'Cabinet A', hardware: [mockHardware] }];
+    downloadHardwareCsv(cabinets, 'en');
+    const downloadedFile = createObjectUrl.mock.calls[0]![0];
+    if (!(downloadedFile instanceof Blob)) {
+      throw new Error('Expected a Blob to be created for the CSV download');
+    }
     expect(mockAnchor.click).toHaveBeenCalled();
+    expect(mockAnchor.download).toBe('hardware-list.csv');
+    expect(downloadedFile.type).toBe('text/csv;charset=utf-8');
+    const bytes = new Uint8Array(await downloadedFile.arrayBuffer());
+    expect([...bytes.slice(0, 3)]).toEqual([0xef, 0xbb, 0xbf]);
+    expect(new TextDecoder().decode(bytes.slice(3))).toBe(generateHardwareCsv(cabinets, 'en'));
     vi.restoreAllMocks();
   });
 
@@ -194,15 +298,23 @@ describe('generateBomCsv — header metadata', () => {
 describe('generateErpCsv', () => {
   it('has schema header, snake_case columns, area_m2 formula, and grain direction encoding', () => {
     const csv = generateErpCsv(singleCabinet);
-    expect(csv).toContain('#schema');
-    expect(csv).toContain('bom-erp-csv-v1');
+    expect(csv.split('\n')[0]).toBe('#schema,bom-erp-csv-v1');
+    const generatedLine = csv.split('\n').find((line) => line.startsWith('#generated,'));
+    expect(generatedLine).toMatch(/^#generated,\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
     expect(csv).toContain('2.3200');
     const headerLine = csv.split('\n').find((l) => l.startsWith('part_no'));
-    expect(headerLine).toBeDefined();
-    expect(headerLine).toContain('material_key');
-    expect(headerLine).toContain('area_m2');
-    expect(headerLine).toContain('grain_direction');
-    expect(headerLine).toContain('unit_weight_kg');
+    expect(headerLine).toBe(
+      'part_no,cabinet,description,qty,material_key,material_name_en,thickness_mm,length_mm,width_mm,area_m2,grain_direction,unit_weight_kg,total_weight_kg',
+    );
+    const headers = headerLine!.split(',');
+    const data = csv
+      .split('\n')
+      .find((line) => line.startsWith('P01,Cabinet A,Side Panel,'))!
+      .split(',');
+    expect(data[headers.indexOf('grain_direction')]).toBe('none');
+    const quantity = Number(data[headers.indexOf('qty')]);
+    const unitWeight = data[headers.indexOf('unit_weight_kg')];
+    expect(data[headers.indexOf('total_weight_kg')]).toBe((Number(unitWeight) * quantity).toFixed(4));
     // plywood-17 has hasGrain=true in the engine
     const grainPart: Part = { ...mockPart, material: 'plywood-17' };
     expect(generateErpCsv([{ name: 'Cabinet A', parts: [grainPart] }])).toContain('along_length');
@@ -225,17 +337,39 @@ describe('generateErpCsv', () => {
 
   it('falls back to material key for unknown materials', () => {
     const unknownPart: Part = { ...mockPart, material: 'unknown-mat-99' };
-    expect(generateErpCsv([{ name: 'Test', parts: [unknownPart] }])).toContain('unknown-mat-99');
+    const csv = generateErpCsv([{ name: 'Test', parts: [unknownPart] }]);
+    expect(csv).toContain('unknown-mat-99');
+    const headers = csv
+      .split('\n')
+      .find((line) => line.startsWith('part_no'))!
+      .split(',');
+    const data = csv
+      .split('\n')
+      .find((line) => line.startsWith('P01,Test,'))!
+      .split(',');
+    expect(data[headers.indexOf('grain_direction')]).toBe('none');
+    expect(data[headers.indexOf('unit_weight_kg')]).toBe('');
+    expect(data[headers.indexOf('total_weight_kg')]).toBe('');
   });
 
-  it('triggerDownload is called from downloadErpCsv', () => {
+  it('triggerDownload is called from downloadErpCsv', async () => {
     const mockAnchor = document.createElement('a');
     vi.spyOn(mockAnchor, 'click').mockImplementation(() => {});
     vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor);
-    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:test');
+    const createObjectUrl = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:test');
     vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+    vi.spyOn(Date.prototype, 'toISOString').mockReturnValue('2026-10-02T00:00:00.000Z');
     downloadErpCsv(singleCabinet);
+    const downloadedFile = createObjectUrl.mock.calls[0]![0];
+    if (!(downloadedFile instanceof Blob)) {
+      throw new Error('Expected a Blob to be created for the ERP CSV download');
+    }
     expect(mockAnchor.click).toHaveBeenCalled();
+    expect(mockAnchor.download).toBe('bom-erp.csv');
+    expect(downloadedFile.type).toBe('text/csv;charset=utf-8');
+    const bytes = new Uint8Array(await downloadedFile.arrayBuffer());
+    expect([...bytes.slice(0, 3)]).toEqual([0xef, 0xbb, 0xbf]);
+    expect(new TextDecoder().decode(bytes.slice(3))).toBe(generateErpCsv(singleCabinet));
     vi.restoreAllMocks();
   });
 });
@@ -300,6 +434,22 @@ describe('BOM CSV — area (m²) column', () => {
 
 // BOM multi-currency pricing
 describe('generateBomCsv — multi-currency', () => {
+  it('uses the full locale for currency formatting independently of engine language', () => {
+    const csv = generateBomCsv(singleCabinet, 'he', 'en');
+    const lines = csv.split('\n');
+    const summaryIdx = lines.findIndex((line) => line.includes('Material Summary'));
+    const headerRow = lines[summaryIdx + 1];
+    const dataRow = lines[summaryIdx + 2];
+    const englishIlsPrice = new Intl.NumberFormat('en', {
+      style: 'currency',
+      currency: 'ILS',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(165);
+    expect(headerRow).toContain('Price/Sheet');
+    expect(dataRow).toContain(englishIlsPrice);
+  });
+
   it('material summary header has price columns and ILS price for melamine-18', () => {
     // melamine-18 has pricePerSheet: 165, currencyCode: 'ILS'
     const csv = generateBomCsv(singleCabinet, 'en', 'en');
@@ -328,15 +478,27 @@ describe('generateBomCsv — multi-currency', () => {
 
   it('estimated cost is price \u00d7 sheets needed for the given area', () => {
     // melamine-18: 1220\u00d72440 mm sheet (2,976,800 mm\u00b2), pricePerSheet: 165
-    // mockPart: 2\u00d72000\u00d7580 = 2,320,000 mm\u00b2 \u2192 needs 1 sheet
-    // estimated cost = 165 \u00d7 1 = 165
-    const csv = generateBomCsv(singleCabinet, 'en', 'en');
+    // Four 2000\u00d7580 mm panels total 4,640,000 mm\u00b2 \u2192 needs 2 sheets, costing 330.
+    const twoSheetCabinet = [{ ...singleCabinet[0], parts: [{ ...mockPart, qty: 4 }] }];
+    const csv = generateBomCsv(twoSheetCabinet, 'en', 'en');
     const lines = csv.split('\n');
     const summaryIdx = lines.findIndex((l) => l.includes('Material Summary'));
     const dataRow = lines.slice(summaryIdx + 2).find((l) => l.includes('Melamine 18'));
     expect(dataRow).toBeDefined();
-    const matches = (dataRow ?? '').match(/165/g) ?? [];
-    expect(matches.length).toBeGreaterThanOrEqual(2);
+    const price = new Intl.NumberFormat('en', {
+      style: 'currency',
+      currency: 'ILS',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(165);
+    const estimatedCost = new Intl.NumberFormat('en', {
+      style: 'currency',
+      currency: 'ILS',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(330);
+    expect(dataRow).toContain(price);
+    expect(dataRow).toContain(estimatedCost);
   });
 
   it('he locale shows Hebrew column headers for price and cost', () => {

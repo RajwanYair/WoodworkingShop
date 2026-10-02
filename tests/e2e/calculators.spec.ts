@@ -356,26 +356,29 @@ test('kerf controls recompute geometry, reject invalid values, and select one ma
 });
 
 test('grain direction reconciles shrinkage and invalid dimensions report an error', async ({ appPage: page }) => {
-  const tangential = calculateMoistureShrinkage({
-    initialMCPct: 25,
-    targetMCPct: 8,
-    species: 'oak',
-    dimensionMm: 200,
-    grain: 'tangential',
-  });
-  const radial = calculateMoistureShrinkage({
-    initialMCPct: 25,
-    targetMCPct: 8,
-    species: 'oak',
-    dimensionMm: 200,
-    grain: 'radial',
-  });
   const calculator = await openCalculator(page, 'Moisture Content & Shrinkage');
-  await expect(calculator).toContainText(`${tangential.finalDimensionMm.toFixed(2)} mm`);
-  await calculator.getByLabel(/grain direction/i).selectOption('radial');
-  await expect(calculator).toContainText(`${radial.finalDimensionMm.toFixed(2)} mm`);
+  const speciesControl = calculator.getByRole('combobox', { name: 'Species', exact: true });
+  const grainControl = calculator.getByRole('combobox', { name: 'Grain Direction', exact: true });
 
-  for (const species of [
+  const expectShrinkage = async (
+    species: Parameters<typeof calculateMoistureShrinkage>[0]['species'],
+    grain: Parameters<typeof calculateMoistureShrinkage>[0]['grain'],
+  ) => {
+    const expected = calculateMoistureShrinkage({
+      initialMCPct: 25,
+      targetMCPct: 8,
+      species,
+      dimensionMm: 200,
+      grain,
+    });
+    const results = calculator.locator('dl dd');
+    await expect(results.nth(0)).toHaveText(`${expected.effectiveMCChangePct.toFixed(1)} %`);
+    await expect(results.nth(1)).toHaveText(`${expected.changeAmountMm.toFixed(2)} mm`);
+    await expect(results.nth(2)).toHaveText(`${expected.finalDimensionMm.toFixed(2)} mm`);
+    await expect(results.nth(3)).toHaveText(`${expected.shrinkageCoefficient.toFixed(5)}`);
+  };
+
+  const speciesOptions = [
     'oak',
     'maple',
     'cherry',
@@ -385,16 +388,16 @@ test('grain direction reconciles shrinkage and invalid dimensions report an erro
     'cedar',
     'generic_hardwood',
     'generic_softwood',
-  ] as const) {
-    const expected = calculateMoistureShrinkage({
-      initialMCPct: 25,
-      targetMCPct: 8,
-      species,
-      dimensionMm: 200,
-      grain: 'radial',
-    });
-    await calculator.getByLabel(/species/i).selectOption(species);
-    await expect(calculator).toContainText(`${expected.finalDimensionMm.toFixed(2)} mm`);
+  ] as const;
+
+  for (const species of speciesOptions) {
+    await speciesControl.selectOption(species);
+    for (const grain of ['tangential', 'radial'] as const) {
+      await grainControl.selectOption(grain);
+      await expect(speciesControl).toHaveValue(species);
+      await expect(grainControl).toHaveValue(grain);
+      await expectShrinkage(species, grain);
+    }
   }
 
   const spinbuttons = calculator.getByRole('spinbutton');
@@ -415,13 +418,13 @@ test('grain direction reconciles shrinkage and invalid dimensions report an erro
   await dimension.fill('3001');
   await expect(calculator.getByRole('alert')).toContainText('dimensionMm must be >= 1 and <= 3000');
   await dimension.fill('200');
-  await calculator.getByLabel(/species/i).selectOption('oak');
+  await speciesControl.selectOption('oak');
   await expect(calculator.getByRole('alert')).toHaveCount(0);
-  await expect(calculator).toContainText(`${radial.finalDimensionMm.toFixed(2)} mm`);
+  await expectShrinkage('oak', 'radial');
 
   await calculator.getByLabel(/dimension/i).fill('0');
   await expect(calculator.getByRole('alert')).toContainText('dimensionMm must be >= 1 and <= 3000');
-  await expect(calculator).not.toContainText(`${radial.finalDimensionMm.toFixed(2)} mm`);
+  await expect(calculator.locator('dl')).toHaveCount(0);
 });
 
 test('cabinet door opening dimensions update outputs and recover from nonpositive values', async ({
@@ -563,25 +566,82 @@ test('wood turning controls reconcile advisory RPM, recover from invalid diamete
 });
 
 test('shed-roof mode reconciles rafter geometry with the engine', async ({ appPage: page }) => {
-  const standardRoof = calculateRafterLength({
+  const parameters: Parameters<typeof calculateRafterLength>[0] = {
     totalSpanMm: 6000,
     pitchRatio: 0.5,
     plateWidthMm: 89,
     overhangMm: 450,
     shedRoof: false,
-  });
-  const shedRoof = calculateRafterLength({
-    totalSpanMm: 6000,
-    pitchRatio: 0.5,
-    plateWidthMm: 89,
-    overhangMm: 450,
-    shedRoof: true,
-  });
+  };
   const calculator = await openCalculator(page, 'Rafter Length & Birdsmouth');
-  await expect(calculator).toContainText(`${standardRoof.runMm.toFixed(0)} mm`);
-  await calculator.getByRole('checkbox', { name: /shed roof/i }).check();
-  await expect(calculator).toContainText(`${shedRoof.runMm.toFixed(0)} mm`);
-  await expect(calculator).toContainText(`${shedRoof.totalLengthMm.toFixed(1)} mm`);
+
+  const expectResults = async (overrides: Partial<typeof parameters> = {}) => {
+    const expected = calculateRafterLength({ ...parameters, ...overrides });
+    const results = calculator.locator('dl dd');
+    await expect(results.nth(0)).toHaveText(`${expected.runMm.toFixed(0)} mm`);
+    await expect(results.nth(1)).toHaveText(`${expected.riseMm.toFixed(1)} mm`);
+    await expect(results.nth(2)).toHaveText(`${expected.rafterLengthMm.toFixed(1)} mm`);
+    await expect(results.nth(3)).toHaveText(`${expected.totalLengthMm.toFixed(1)} mm`);
+    await expect(results.nth(4)).toHaveText(`${expected.plumbCutAngleDeg.toFixed(2)}°`);
+    await expect(results.nth(5)).toHaveText(`${expected.seatCutAngleDeg.toFixed(2)}°`);
+    await expect(results.nth(6)).toHaveText(`${expected.birdsmouthDepthMm.toFixed(1)} mm`);
+  };
+
+  await expectResults();
+
+  const inputCases = [
+    {
+      label: 'Total Building Span (mm)',
+      value: 8000,
+      invalidValue: 0,
+      error: 'totalSpanMm must be > 0',
+      input: { totalSpanMm: 8000 },
+    },
+    {
+      label: 'Pitch Ratio (rise/run)',
+      value: 0.75,
+      invalidValue: 0,
+      error: 'pitchRatio must be > 0',
+      input: { pitchRatio: 0.75 },
+    },
+    {
+      label: 'Wall Plate Width (mm)',
+      value: 140,
+      invalidValue: 0,
+      error: 'plateWidthMm must be > 0',
+      input: { plateWidthMm: 140 },
+    },
+    {
+      label: 'Overhang (mm)',
+      value: 600,
+      invalidValue: -1,
+      error: 'overhangMm must be >= 0',
+      input: { overhangMm: 600 },
+    },
+  ] as const;
+
+  for (const inputCase of inputCases) {
+    Object.assign(parameters, inputCase.input);
+    const field = calculator.getByRole('spinbutton', { name: inputCase.label, exact: true });
+    await field.fill(String(inputCase.value));
+    await expectResults();
+
+    await field.fill(String(inputCase.invalidValue));
+    await expect(calculator.getByRole('alert')).toContainText(inputCase.error);
+    await expect(calculator.locator('dl')).toHaveCount(0);
+
+    await field.fill(String(inputCase.value));
+    await expect(calculator.getByRole('alert')).toHaveCount(0);
+    await expectResults();
+  }
+
+  const shedRoof = calculator.getByRole('checkbox', { name: /shed roof/i });
+  await shedRoof.check();
+  await expect(shedRoof).toBeChecked();
+  await expectResults({ shedRoof: true });
+  await shedRoof.uncheck();
+  await expect(shedRoof).not.toBeChecked();
+  await expectResults({ shedRoof: false });
 });
 
 test('taper jig dimensions update outputs, reject invalid values, and recover', async ({ appPage: page }) => {
@@ -1359,70 +1419,226 @@ test('honing guide dimensions update projections, reject invalid values, and rec
   await expectProjection();
 });
 
-test('router-template cut type reconciles dimension adjustments with the engine', async ({ appPage: page }) => {
-  const inside = calculateRouterTemplate({
+test('router-template controls reconcile offsets and recover from invalid dimensions', async ({ appPage: page }) => {
+  const parameters: Parameters<typeof calculateRouterTemplate>[0] = {
     bushingODMm: 20,
     bitDiameterMm: 12,
     cutType: 'inside',
     nominalDimensionMm: 100,
-  });
-  const outside = calculateRouterTemplate({
-    bushingODMm: 20,
-    bitDiameterMm: 12,
-    cutType: 'outside',
-    nominalDimensionMm: 100,
-  });
+  };
   const calculator = await openCalculator(page, 'Router Template Offset');
-  await calculator.getByLabel(/nominal feature dimension/i).fill('100');
-  await expect(calculator).toContainText(`${inside.adjustedDimensionMm?.toFixed(3)} mm`);
-  await expect(calculator).toContainText(`+${inside.templateAdjustmentPerSideMm.toFixed(3)} mm`);
-  await calculator.getByLabel(/cut type/i).selectOption('outside');
-  await expect(calculator).toContainText(`${outside.templateAdjustmentPerSideMm.toFixed(3)} mm`);
-  await expect(calculator).toContainText(`${outside.adjustedDimensionMm?.toFixed(3)} mm`);
+
+  const expectResults = async () => {
+    const expected = calculateRouterTemplate(parameters);
+    const results = calculator.locator('dl dd');
+    await expect(results.nth(0)).toHaveText(`${expected.offsetMm.toFixed(3)} mm`);
+    await expect(results.nth(1)).toHaveText(
+      `${expected.templateAdjustmentPerSideMm > 0 ? '+' : ''}${expected.templateAdjustmentPerSideMm.toFixed(3)} mm`,
+    );
+    await expect(results.nth(2)).toHaveText(
+      `${expected.totalTemplateAdjustmentMm > 0 ? '+' : ''}${expected.totalTemplateAdjustmentMm.toFixed(3)} mm`,
+    );
+    await expect(results.nth(3)).toHaveText(`${expected.adjustedDimensionMm?.toFixed(3)} mm`);
+  };
+
+  await calculator.getByRole('spinbutton', { name: 'Nominal Feature Dimension (mm)', exact: true }).fill('100');
+  await expectResults();
+
+  const dimensionCases = [
+    {
+      label: 'Bushing OD (mm)',
+      value: 24,
+      invalidValue: 0,
+      error: 'bushingODMm must be greater than 0',
+      field: 'bushingODMm',
+    },
+    {
+      label: 'Bit Diameter (mm)',
+      value: 16,
+      invalidValue: 24,
+      error: 'bushingODMm must be greater than bitDiameterMm',
+      field: 'bitDiameterMm',
+    },
+    {
+      label: 'Nominal Feature Dimension (mm)',
+      value: 120,
+      invalidValue: 0,
+      error: 'nominalDimensionMm must be greater than 0',
+      field: 'nominalDimensionMm',
+    },
+  ] as const;
+
+  for (const dimensionCase of dimensionCases) {
+    const field = calculator.getByRole('spinbutton', { name: dimensionCase.label, exact: true });
+    Object.assign(parameters, { [dimensionCase.field]: dimensionCase.value });
+    await field.fill(String(dimensionCase.value));
+    await expectResults();
+
+    await field.fill(String(dimensionCase.invalidValue));
+    await expect(calculator.getByRole('alert')).toContainText(dimensionCase.error);
+    await expect(calculator.locator('dl')).toHaveCount(0);
+
+    await field.fill(String(dimensionCase.value));
+    await expect(calculator.getByRole('alert')).toHaveCount(0);
+    await expectResults();
+  }
+
+  const cutType = calculator.getByRole('combobox', { name: 'Cut Type', exact: true });
+  for (const value of ['inside', 'outside'] as const) {
+    parameters.cutType = value;
+    await cutType.selectOption(value);
+    await expect(cutType).toHaveValue(value);
+    await expectResults();
+  }
 });
 
-test('half-lap board thickness reconciles notch dimensions with engine and rejects zero', async ({ appPage: page }) => {
-  const expected = calculateHalfLap({
-    board1ThicknessMm: 20,
+test('half-lap dimensions reconcile with the engine and recover from invalid values', async ({ appPage: page }) => {
+  const parameters: Parameters<typeof calculateHalfLap>[0] = {
+    board1ThicknessMm: 19,
     board1WidthMm: 90,
     board2ThicknessMm: 19,
     board2WidthMm: 90,
     lapType: 'end_lap',
-  });
+  };
   const calculator = await openCalculator(page, 'Half-Lap Joint');
-  const thickness = calculator.getByLabel(/board 1 thickness/i);
-  await thickness.fill('20');
-  await expect(calculator).toContainText(`${expected.board1NotchDepthMm.toFixed(1)} mm`);
-  await expect(calculator).toContainText(`${expected.board1NotchWidthMm.toFixed(1)} mm`);
-  for (const lapType of ['end_lap', 't_lap', 'cross_lap'] as const) {
-    const joint = calculateHalfLap({
-      board1ThicknessMm: 20,
-      board1WidthMm: 90,
-      board2ThicknessMm: 19,
-      board2WidthMm: 90,
-      lapType,
-    });
-    await calculator.getByLabel(/lap type/i).selectOption(lapType);
-    await expect(calculator).toContainText(`${joint.board1NotchDepthMm.toFixed(1)} mm`);
-    await expect(calculator).toContainText(`${joint.board2NotchDepthMm.toFixed(1)} mm`);
-    await expect(calculator).toContainText(`${joint.finishedThicknessMm.toFixed(1)} mm`);
+
+  const expectResults = async () => {
+    const expected = calculateHalfLap(parameters);
+    const results = calculator.locator('dl dd');
+    await expect(results.nth(0)).toHaveText(`${expected.board1NotchDepthMm.toFixed(1)} mm`);
+    await expect(results.nth(1)).toHaveText(`${expected.board1NotchWidthMm.toFixed(1)} mm`);
+    await expect(results.nth(2)).toHaveText(`${expected.board2NotchDepthMm.toFixed(1)} mm`);
+    await expect(results.nth(3)).toHaveText(`${expected.board2NotchWidthMm.toFixed(1)} mm`);
+    await expect(results.nth(4)).toHaveText(`${expected.totalGlueAreaMm2.toFixed(0)} mm²`);
+    await expect(results.nth(5)).toHaveText(`${expected.finishedThicknessMm.toFixed(1)} mm`);
+  };
+
+  await expectResults();
+
+  const dimensionCases = [
+    {
+      label: 'Board 1 Thickness (mm)',
+      field: 'board1ThicknessMm',
+      value: 20,
+      error: 'board1ThicknessMm must be greater than 0',
+    },
+    {
+      label: 'Board 1 Width (mm)',
+      field: 'board1WidthMm',
+      value: 120,
+      error: 'board1WidthMm must be greater than 0',
+    },
+    {
+      label: 'Board 2 Thickness (mm)',
+      field: 'board2ThicknessMm',
+      value: 22,
+      error: 'board2ThicknessMm must be greater than 0',
+    },
+    {
+      label: 'Board 2 Width (mm)',
+      field: 'board2WidthMm',
+      value: 130,
+      error: 'board2WidthMm must be greater than 0',
+    },
+  ] as const;
+
+  for (const dimensionCase of dimensionCases) {
+    const field = calculator.getByRole('spinbutton', { name: dimensionCase.label, exact: true });
+    Object.assign(parameters, { [dimensionCase.field]: dimensionCase.value });
+    await field.fill(String(dimensionCase.value));
+    await expectResults();
+
+    await field.fill('0');
+    await expect(calculator.getByRole('alert')).toContainText(dimensionCase.error);
+    await expect(calculator.locator('dl')).toHaveCount(0);
+
+    await field.fill(String(dimensionCase.value));
+    await expect(calculator.getByRole('alert')).toHaveCount(0);
+    await expectResults();
   }
-  await thickness.fill('0');
-  await expect(calculator.getByRole('alert')).toContainText('board1ThicknessMm must be greater than 0');
+
+  const lapType = calculator.getByRole('combobox', { name: 'Lap Type', exact: true });
+  for (const value of ['end_lap', 't_lap', 'cross_lap'] as const) {
+    parameters.lapType = value;
+    await lapType.selectOption(value);
+    await expect(lapType).toHaveValue(value);
+    await expectResults();
+  }
 });
 
-test('spline count reconciles joint dimensions with engine and validates slot depth', async ({ appPage: page }) => {
-  const expected = calculateSplineJoint({
+test('spline dimensions reconcile with the engine and recover from invalid values', async ({ appPage: page }) => {
+  const parameters: Parameters<typeof calculateSplineJoint>[0] = {
     boardThicknessMm: 19,
     splineThicknessMm: 3,
     slotDepthPerBoardMm: 6,
     jointLengthMm: 120,
-    splineCount: 3,
-  });
+    splineCount: 2,
+  };
   const calculator = await openCalculator(page, 'Spline Joint');
-  await calculator.getByLabel(/number of splines/i).fill('3');
-  await expect(calculator).toContainText(`${expected.totalSplineLengthMm.toFixed(1)} mm`);
-  await expect(calculator).toContainText(`${expected.totalGlueAreaMm2.toFixed(0)} mm²`);
-  await calculator.getByLabel(/slot depth per board/i).fill('19');
-  await expect(calculator.getByRole('alert')).toContainText('slotDepthPerBoardMm must be < boardThicknessMm');
+
+  const expectResults = async () => {
+    const expected = calculateSplineJoint(parameters);
+    const results = calculator.locator('dl dd');
+    await expect(results.nth(0)).toHaveText(`${expected.recommendedSlotWidthMm.toFixed(2)} mm`);
+    await expect(results.nth(1)).toHaveText(`${expected.totalInsertionDepthMm.toFixed(2)} mm`);
+    await expect(results.nth(2)).toHaveText(`${expected.remainingWallThicknessMm.toFixed(2)} mm`);
+    await expect(results.nth(3)).toHaveText(`${expected.totalSplineLengthMm.toFixed(1)} mm`);
+    await expect(results.nth(4)).toHaveText(`${expected.glueAreaPerSplineMm2.toFixed(0)} mm²`);
+    await expect(results.nth(5)).toHaveText(`${expected.totalGlueAreaMm2.toFixed(0)} mm²`);
+  };
+
+  await expectResults();
+
+  const dimensionCases = [
+    {
+      label: 'Board Thickness (mm)',
+      field: 'boardThicknessMm',
+      value: 24,
+      invalidValue: 0,
+      error: 'boardThicknessMm must be > 0',
+    },
+    {
+      label: 'Spline Thickness (mm)',
+      field: 'splineThicknessMm',
+      value: 4,
+      invalidValue: 24,
+      error: 'splineThicknessMm must be < boardThicknessMm',
+    },
+    {
+      label: 'Slot Depth per Board (mm)',
+      field: 'slotDepthPerBoardMm',
+      value: 8,
+      invalidValue: 24,
+      error: 'slotDepthPerBoardMm must be < boardThicknessMm',
+    },
+    {
+      label: 'Joint Length (mm)',
+      field: 'jointLengthMm',
+      value: 180,
+      invalidValue: 0,
+      error: 'jointLengthMm must be > 0',
+    },
+    {
+      label: 'Number of Splines',
+      field: 'splineCount',
+      value: 3,
+      invalidValue: 2.5,
+      error: 'splineCount must be a positive safe integer',
+    },
+  ] as const;
+
+  for (const dimensionCase of dimensionCases) {
+    const field = calculator.getByRole('spinbutton', { name: dimensionCase.label, exact: true });
+    Object.assign(parameters, { [dimensionCase.field]: dimensionCase.value });
+    await field.fill(String(dimensionCase.value));
+    await expectResults();
+
+    await field.fill(String(dimensionCase.invalidValue));
+    await expect(calculator.getByRole('alert')).toContainText(dimensionCase.error);
+    await expect(calculator.locator('dl')).toHaveCount(0);
+
+    await field.fill(String(dimensionCase.value));
+    await expect(calculator.getByRole('alert')).toHaveCount(0);
+    await expectResults();
+  }
 });

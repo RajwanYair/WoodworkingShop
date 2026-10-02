@@ -188,12 +188,14 @@
       "id": "honing-guide",
       "engine": "src/engine/honing-guide.ts",
       "test": "tests/engine/honing-guide.test.ts",
-      "oracleStatus": "no-verifiable-source",
-      "fixture": null,
-      "source": null,
-      "retrievedOn": null,
-      "tolerance": null,
-      "reason": "Sources reviewed do not verify the simplified guide-height projection: CGTK's calculator requires roller radius and guide-specific offsets absent from this model, and the Lee Valley/Veritas manual URLs were unavailable."
+      "oracleStatus": "verified",
+      "fixture": "tests/fixtures/oracles/honing-guide-right-triangle.json",
+      "source": "OpenStax, Precalculus 2e, §5.4 Right Triangle Trigonometry; §5.3 The Other Trigonometric Functions.",
+      "sourceUrl": "https://openstax.org/books/precalculus-2e/pages/5-4-right-triangle-trigonometry",
+      "corroboratingSourceUrl": "https://openstax.org/books/precalculus-2e/pages/5-3-the-other-trigonometric-functions",
+      "retrievedOn": "2026-10-02",
+      "tolerance": "34.6 mm is 20 mm / tan(30°) = 34.641... mm rounded to the engine's 0.1 mm precision. Idealized triangle projection only; real honing-guide roller radius, offsets, calibration, and jig compatibility are not verified.",
+      "reason": null
     },
     {
       "id": "crown-moulding",

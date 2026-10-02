@@ -168,13 +168,20 @@ describe('validateConfig', () => {
       'DRAWER_HEIGHT_TOO_SMALL',
     )!;
     expect(issue.severity).toBe('error');
+    expect(issue.field).toBe('drawerCount');
     expect(issue.suggestedValue).toBe(100);
+    expect(issue.message.en).toContain('Drawer 2 height (60 mm)');
+    expect(issue.message.he).toContain('מגירה 2 (60 מ"מ)');
   });
 
-  it('does not raise DRAWER_HEIGHT_TOO_SMALL for adequate drawer heights', () => {
-    expect(
-      hasCode(validateConfig(cfg({ drawerCount: 3, drawerHeights: [150, 150, 120] })), 'DRAWER_HEIGHT_TOO_SMALL'),
-    ).toBe(false);
+  it.each([
+    [99, true],
+    [100, false],
+    [101, false],
+  ])('reports DRAWER_HEIGHT_TOO_SMALL for a single drawer of %i mm: %s', (height, shouldReport) => {
+    expect(hasCode(validateConfig(cfg({ drawerCount: 1, drawerHeights: [height] })), 'DRAWER_HEIGHT_TOO_SMALL')).toBe(
+      shouldReport,
+    );
   });
 
   it('raises DRAWER_STACK_OVERFLOW when total drawer stack exceeds interior height', () => {
@@ -186,8 +193,16 @@ describe('validateConfig', () => {
     ).toBe('error');
   });
 
-  it('does not raise DRAWER_STACK_OVERFLOW when stack fits', () => {
-    expect(hasCode(validateConfig(cfg({ height: 900, drawerCount: 2 })), 'DRAWER_STACK_OVERFLOW')).toBe(false);
+  it.each([
+    ['exactly fills the interior', 378, false],
+    ['exceeds the interior by 1 mm', 379, true],
+  ])('handles a drawer stack that %s', (_, firstDrawerHeight, shouldReport) => {
+    expect(
+      hasCode(
+        validateConfig(cfg({ height: 800, drawerCount: 2, drawerHeights: [firstDrawerHeight, 378], shelfCount: 0 })),
+        'DRAWER_STACK_OVERFLOW',
+      ),
+    ).toBe(shouldReport);
   });
 
   it('raises SPAN_TOO_WIDE warning when width > 1200 mm', () => {
