@@ -15,7 +15,7 @@ import { computePartsWeight } from '../../engine';
 
 export function ProjectSummaryPanel() {
   const { t } = useTranslation();
-  const { cabinets, allParts, combinedOptimization } = useCabinetStore();
+  const { cabinets, allParts, combinedOptimization, labourHours } = useCabinetStore();
 
   // Only meaningful with ≥ 2 cabinets
   if (cabinets.length < 2) return null;
@@ -44,6 +44,7 @@ export function ProjectSummaryPanel() {
       warn: grainConflicts > 0,
     },
     { label: t('summary.totalWeight'), value: `${totalWeightKg.toFixed(1)} kg` },
+    { label: t('summary.estimatedLabour'), value: labourHours > 0 ? `${labourHours} h` : t('cost.notSet', '—') },
   ];
 
   return (

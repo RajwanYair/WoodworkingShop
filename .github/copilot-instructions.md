@@ -6,6 +6,8 @@
 >
 > Active sprint + completed phase history → **AGENTS.md** (loaded separately as context).
 > Sprint archive → **docs/SPRINT-HISTORY.md**.
+> Planned refactor (ROADMAP §7.4, Phases 81–85): until the owning sprint runs, keep using the
+> layout below — do not create `src/app/`, `src/features/`, `src/ui/` or `src/platform/` early.
 
 ## Tech Stack
 

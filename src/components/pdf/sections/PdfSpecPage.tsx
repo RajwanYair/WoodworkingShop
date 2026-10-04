@@ -5,6 +5,7 @@ import type { PdfCtx } from '../pdf-i18n';
 import { PageHeader } from './PageChrome';
 import { PageFooter } from './PageChrome';
 import { SpecRow } from './SpecRow';
+import { computePartsWeight } from '../../../engine/parts';
 
 interface PdfSpecPageProps {
   ctx: PdfCtx;
@@ -18,6 +19,7 @@ interface PdfSpecPageProps {
   cMatThickness: number;
   bMatName: string;
   bMatThickness: number;
+  labourHours: number;
 }
 
 export function PdfSpecPage({
@@ -32,10 +34,12 @@ export function PdfSpecPage({
   cMatThickness,
   bMatName,
   bMatThickness,
+  labourHours,
 }: PdfSpecPageProps) {
   const { T, fontFamily, fontFamilyBold, textAlign, isRTL, date, coverTitle, lang, pageSize, orientation } = ctx;
   const rowDir = isRTL ? ({ flexDirection: 'row-reverse' } as const) : {};
   const specRowProps = { isRTL, fontFamily, fontFamilyBold };
+  const panelWeightKg = computePartsWeight(_parts);
   return (
     <Page size={pageSize} orientation={orientation} style={[s.page, { fontFamily }]}>
       <PageHeader section={`📐  ${T.specTitle}`} projectName={coverTitle} lang={lang} />
@@ -67,6 +71,8 @@ export function PdfSpecPage({
         <SpecRow {...specRowProps} label={T.specBackPanel} value={`${bMatName} (${bMatThickness} mm)`} />
         <SpecRow {...specRowProps} label={T.specEdgeBanding} value={config.edgeBanding} />
         <SpecRow {...specRowProps} label={T.specEdgeBandingTotal} value={`${(edgeBandingTotal / 1000).toFixed(1)} m`} />
+        <SpecRow {...specRowProps} label={T.specPanelWeight} value={`${panelWeightKg.toFixed(1)} kg`} />
+        {labourHours > 0 && <SpecRow {...specRowProps} label={T.specEstimatedLabour} value={`${labourHours} h`} />}
       </View>
 
       <Text style={[s.specGroupTitle, { fontFamily: fontFamilyBold, textAlign }]}>🚪 {T.specDoorsHardware}</Text>

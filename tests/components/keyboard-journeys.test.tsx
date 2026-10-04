@@ -73,4 +73,13 @@ describe('keyboard journeys — sprint 252', () => {
     await user.keyboard('?');
     expect(screen.queryByText('Ctrl + L')).not.toBeInTheDocument();
   });
+
+  it('lists Ctrl+K in the keyboard shortcuts modal', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.keyboard('?');
+
+    expect(screen.getByText('Ctrl + K')).toBeInTheDocument();
+  });
 });

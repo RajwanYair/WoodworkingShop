@@ -30,9 +30,23 @@ const calculatorNames = [
   'Router Template Offset',
   'Half-Lap Joint',
   'Spline Joint',
+  'Shelf Sag Calculator',
+  'Pocket Hole Calculator',
+  'Dowel Joint Calculator',
+  'Mortise & Tenon Calculator',
+  'Dovetail Layout Calculator',
 ] as const;
 
 describe('CalculatorsPanel', () => {
+  it('expands a calculator requested from the command palette', async () => {
+    render(<CalculatorsPanel request={{ id: 'shelf-deflection', sequence: 1 }} />);
+
+    expect(await screen.findByRole('button', { name: 'Shelf Sag Calculator' })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    );
+  });
+
   it('starts collapsed and expands only selected calculator on demand', async () => {
     const user = userEvent.setup();
     render(<CalculatorsPanel />);
@@ -68,7 +82,7 @@ describe('CalculatorsPanel', () => {
     expect(toggle).toHaveAttribute('aria-expanded', 'false');
     await user.click(toggle);
 
-    const calculator = screen.getByRole('region', { name });
+    const calculator = await screen.findByRole('region', { name });
     expect(toggle).toHaveAttribute('aria-expanded', 'true');
     expect(calculator).not.toHaveAttribute('role', 'alert');
     expect(calculator).toHaveTextContent(/\d/);
@@ -114,5 +128,80 @@ describe('FaceFramePanel', () => {
 
     expect(screen.getByRole('alert')).toBeInTheDocument();
     expect(panel).not.toHaveTextContent('624.0 mm');
+  });
+});
+
+describe('surfaced calculators', () => {
+  it('recalculates shelf deflection when the span changes', async () => {
+    const user = userEvent.setup();
+    render(<CalculatorsPanel />);
+
+    await user.click(screen.getByRole('button', { name: 'Shelf Sag Calculator' }));
+    const panel = await screen.findByRole('region', { name: 'Shelf Sag Calculator' });
+    expect(panel).toHaveTextContent('0.81 mm');
+    const spanInput = screen.getByRole('spinbutton', { name: /shelf span/i });
+    await user.clear(spanInput);
+    await user.type(spanInput, '1000');
+
+    expect(panel).toHaveTextContent('1.58 mm');
+    expect(panel).toHaveTextContent(/recommended max span/i);
+  });
+
+  it('recalculates pocket screw count when joint length changes', async () => {
+    const user = userEvent.setup();
+    render(<CalculatorsPanel />);
+
+    await user.click(screen.getByRole('button', { name: 'Pocket Hole Calculator' }));
+    const panel = await screen.findByRole('region', { name: 'Pocket Hole Calculator' });
+    expect(panel).toHaveTextContent('5');
+    const lengthInput = screen.getByRole('spinbutton', { name: /joint length/i });
+    await user.clear(lengthInput);
+    await user.type(lengthInput, '1200');
+
+    expect(panel).toHaveTextContent('9');
+    expect(panel).toHaveTextContent(/drill angle/i);
+  });
+
+  it('recalculates dowel spacing when the joint length changes', async () => {
+    const user = userEvent.setup();
+    render(<CalculatorsPanel />);
+
+    await user.click(screen.getByRole('button', { name: 'Dowel Joint Calculator' }));
+    const panel = await screen.findByRole('region', { name: 'Dowel Joint Calculator' });
+    expect(panel).toHaveTextContent('166.67 mm');
+    const lengthInput = screen.getByRole('spinbutton', { name: /joint length/i });
+    await user.clear(lengthInput);
+    await user.type(lengthInput, '1000');
+
+    expect(panel).toHaveTextContent('150 mm');
+    expect(panel).toHaveTextContent(/drill depth/i);
+  });
+
+  it('recalculates mortise-tenon length when the joint type changes', async () => {
+    const user = userEvent.setup();
+    render(<CalculatorsPanel />);
+
+    await user.click(screen.getByRole('button', { name: 'Mortise & Tenon Calculator' }));
+    const panel = await screen.findByRole('region', { name: 'Mortise & Tenon Calculator' });
+    expect(panel).toHaveTextContent('18 mm');
+    await user.selectOptions(screen.getByRole('combobox', { name: /joint type/i }), 'blind');
+
+    expect(panel).toHaveTextContent('32.4 mm');
+    expect(panel).toHaveTextContent(/mortise depth/i);
+  });
+
+  it('recalculates dovetail widths when the tail count changes', async () => {
+    const user = userEvent.setup();
+    render(<CalculatorsPanel />);
+
+    await user.click(screen.getByRole('button', { name: 'Dovetail Layout Calculator' }));
+    const panel = await screen.findByRole('region', { name: 'Dovetail Layout Calculator' });
+    expect(panel).toHaveTextContent('41.96 mm');
+    const tailCountInput = screen.getByRole('spinbutton', { name: /number of tails/i });
+    await user.clear(tailCountInput);
+    await user.type(tailCountInput, '5');
+
+    expect(panel).toHaveTextContent('33.48 mm');
+    expect(panel).toHaveTextContent(/slope ratio/i);
   });
 });

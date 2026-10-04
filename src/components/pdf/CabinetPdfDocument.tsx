@@ -60,6 +60,8 @@ export interface CabinetPdfProps {
   combinedOptimization?: OptimizationResult;
   /** Merged hardware list across all cabinets (used when allCabinetsData is set). */
   allHardware?: HardwareItem[];
+  /** User-entered project labour estimate, in hours. */
+  labourHours?: number;
 }
 
 export function CabinetPdfDocument({
@@ -78,6 +80,7 @@ export function CabinetPdfDocument({
   allCabinetsData,
   combinedOptimization,
   allHardware,
+  labourHours = 0,
 }: CabinetPdfProps) {
   const T = pdfI18n[lang as PdfLang] ?? pdfI18n.en;
   const isRTL = lang === 'he';
@@ -140,6 +143,7 @@ export function CabinetPdfDocument({
             cMatThickness={cMat.thickness}
             bMatName={bMat.name[lang]}
             bMatThickness={bMat.thickness}
+            labourHours={labourHours}
           />
           <PdfPartsPage ctx={ctx} parts={parts} />
           <PdfHardwarePage ctx={ctx} hardware={hardware} />

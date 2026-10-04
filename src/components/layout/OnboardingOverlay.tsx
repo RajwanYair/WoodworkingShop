@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
+import { dispatchCommandAction } from './command-registry';
 import { IconSettings, IconRuler, IconDocument, IconHelp } from './Icons';
 
 const SEEN_KEY = 'onboarding-seen';
@@ -127,15 +128,9 @@ function OnboardingOverlay() {
 export function HelpButton() {
   const { t } = useTranslation();
 
-  const open = () => {
-    localStorage.removeItem(SEEN_KEY);
-    // Force re-render by dispatching storage event
-    window.dispatchEvent(new Event('show-onboarding'));
-  };
-
   return (
     <button
-      onClick={open}
+      onClick={() => dispatchCommandAction('help.open')}
       className="text-wood-300 flex items-center transition-colors hover:text-white"
       aria-label={t('onboarding.help')}
       title={t('onboarding.help')}

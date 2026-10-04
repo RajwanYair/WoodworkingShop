@@ -158,8 +158,14 @@ export {
 } from './cabinet-notes';
 export type { CabinetNote, NoteStore, NoteScope, NoteError } from './cabinet-notes';
 
-export { analyseWaste, formatWasteReport, DEFAULT_WASTE_THRESHOLDS } from './waste-alert';
-export type { SheetWasteInput, WasteThresholds, WasteAlert, WasteAnalysisReport, WasteAlertLevel } from './waste-alert';
+export { analyseWaste, formatWasteReport, DEFAULT_WASTE_THRESHOLDS } from './inventory/index';
+export type {
+  SheetWasteInput,
+  WasteThresholds,
+  WasteAlert,
+  WasteAnalysisReport,
+  WasteAlertLevel,
+} from './inventory/index';
 
 export { buildCutPlanSummary, formatCutPlanSummary } from './cut-plan-summary';
 export type { SheetPlanInput, MaterialSummary, CutPlanSummary } from './cut-plan-summary';
@@ -180,8 +186,8 @@ export {
   checkAvailability,
   getShortfalls,
   formatAvailabilityReport,
-} from './stock-tracker';
-export type { StockItem, StockStore, StockUnit, DemandEntry, AvailabilityResult, StockStatus } from './stock-tracker';
+} from './stock/index';
+export type { StockItem, StockStore, StockUnit, DemandEntry, AvailabilityResult, StockStatus } from './stock/index';
 
 export { sortParts, sortPartsByPreset, invertSortCriteria, SORT_PRESETS } from './part-sort';
 export type { SortablePart, SortKey, SortDirection, SortCriterion, SortPreset } from './part-sort';
@@ -233,35 +239,13 @@ export type {
 } from './zone-validator';
 
 export {
-  STANDARD_CLEARANCES,
-  getEffectiveClearance,
-  validateApplianceClearance,
-  validateAllApplianceClearances,
-  getClearanceSummary,
-} from './appliance-clearance';
-export type {
-  ApplianceType,
-  ClearanceSpec,
-  AppliancePlacement,
-  Obstacle,
-  ClearanceSide,
-  ClearanceViolation,
-  ClearanceValidationResult,
-} from './appliance-clearance';
-
-export {
   TEMPLATE_CATALOGUE,
   getTemplatesByCategory,
   getTemplate,
-  instantiateTemplate as instantiateLibraryTemplate,
+  instantiateLibraryTemplate,
   listTemplateIds,
-} from './template-library';
-export type {
-  TemplateCategory,
-  TemplateDimensions,
-  CabinetTemplate,
-  TemplateInstance as LibraryTemplateInstance,
-} from './template-library';
+} from './templates/index';
+export type { TemplateCategory, TemplateDimensions, CabinetTemplate, LibraryTemplateInstance } from './templates/index';
 
 export { batchReplaceMaterial, listMaterials, countByMaterial } from './batch-replace';
 export type { BatchPart, BatchReplaceOptions, BatchReplaceResult } from './batch-replace';
@@ -669,7 +653,7 @@ export {
   getStockSummary,
   formatStockReport,
   DEFAULT_REORDER_MULTIPLIER,
-} from './stock-management';
+} from './stock/index';
 export type {
   PurchaseOrderStatus,
   PurchaseOrderLine,
@@ -680,7 +664,7 @@ export type {
   StockRecord,
   StockLedger,
   StockSummary,
-} from './stock-management';
+} from './stock/index';
 
 // Sprint 137 — WCAG 2.2 AA accessibility audit engine
 export {
@@ -859,7 +843,7 @@ export type {
 // Sprint 162 — Parametric Template Engine (Phase 36)
 export {
   validateTemplate,
-  instantiateTemplate as instantiateParametricTemplate,
+  instantiateParametricTemplate,
   getDefaultValues,
   getParamDependencies,
   evaluateExpression,
@@ -867,7 +851,7 @@ export {
   MAX_RULES,
   MAX_COMPUTED,
   MAX_EXPRESSION_LENGTH,
-} from './parametric-template';
+} from './templates/index';
 export type {
   ParamType,
   NumberConstraint,
@@ -880,10 +864,10 @@ export type {
   ComputedField,
   ParametricTemplate,
   ParamValues,
-  TemplateInstance as ParametricTemplateInstance,
+  ParametricTemplateInstance,
   TemplateValidationError,
   TemplateValidationResult,
-} from './parametric-template';
+} from './templates/index';
 
 // Sprint 163 — Batch Export Pipeline (Phase 36)
 export {
@@ -951,30 +935,6 @@ export type {
   MergeConflict,
 } from './version-history';
 
-// Sprint 167 — Production schedule planner (Phase 37)
-export {
-  createSchedule,
-  addTask,
-  computeSchedule,
-  detectConflicts as detectScheduleConflicts,
-  getScheduleMetrics,
-  crashTask,
-  MAX_TASKS,
-  MAX_RESOURCES,
-  DEFAULT_HOURS_PER_DAY,
-} from './production-schedule';
-export type {
-  TaskStatus,
-  ResourceKind,
-  WorkshopResource,
-  ScheduleTask,
-  ScheduledSlot,
-  ProductionSchedule,
-  ResourceConflict,
-  ScheduleMetrics,
-  IdGenerator as ScheduleIdGenerator,
-} from './production-schedule';
-
 // Sprint 168 — Nesting pattern library (Phase 37)
 export {
   createLibrary,
@@ -1032,9 +992,9 @@ export {
   compareDesigns,
   validateWeights,
   getCommonCriteria,
-  DEFAULT_WEIGHTS,
+  DEFAULT_DESIGN_COMPARISON_WEIGHTS as DEFAULT_WEIGHTS,
   CRITERION_META,
-} from './design-comparison';
+} from './inventory/index';
 export type {
   CriterionName,
   CriterionValue,
@@ -1042,8 +1002,8 @@ export type {
   CriterionWeight,
   CriterionComparison,
   NormalizedScore,
-  ComparisonResult,
-} from './design-comparison';
+  DesignComparisonResult as ComparisonResult,
+} from './inventory/index';
 
 // Sprint 172 — Dust collection estimator
 export {
@@ -1083,30 +1043,14 @@ export type {
   DependencyResult,
 } from './assembly-dependency';
 
-export {
-  checkWorkshopSafety,
-  getToolClearance,
-  getNoiseLevel,
-  recommendPpe,
-  computeSafetyScore,
-} from './workshop-safety';
-export type {
-  ToolType as WorkshopSafetyToolType,
-  PpeCategory,
-  WorkshopTool,
-  SafetyViolation,
-  PpeRecommendation,
-  SafetyResult,
-} from './workshop-safety';
-
-export { predictWaste, computeTotalDemand, estimatePartsPerSheet } from './waste-predictor';
+export { predictWaste, computeTotalDemand, estimatePartsPerSheet } from './inventory/index';
 export type {
   PredictorPart,
   SheetSize,
   ConfidenceLevel,
   SheetPrediction,
   WastePredictionResult,
-} from './waste-predictor';
+} from './inventory/index';
 
 export { generateMaintenanceSchedule, computeHealthScore, getMostUrgentPerTool } from './maintenance-scheduler';
 export type {
@@ -1128,15 +1072,6 @@ export {
 } from './layout-optimizer';
 export type { ToolPosition, WorkflowStep, SwapSuggestion, LayoutAnalysisResult } from './layout-optimizer';
 
-export { getSkillMultiplier, getBaseMinutes, estimateTaskTime, estimateProjectTime } from './time-estimator';
-export type {
-  SkillLevel,
-  OperationType as TimeEstimationOperationType,
-  ProjectTask,
-  TaskEstimate,
-  TimeEstimationResult,
-} from './time-estimator';
-
 export { findBestPrice, computePriceTrend, estimateProjectCost, detectPriceAnomalies } from './material-cost-tracker';
 export type {
   PriceEntry,
@@ -1147,7 +1082,7 @@ export type {
   ProjectCostResult,
 } from './material-cost-tracker';
 
-export { checkStock, analyzeInventory, projectUsage, generateReorderList } from './shop-inventory';
+export { checkStock, analyzeInventory, projectUsage, generateReorderList } from './stock/index';
 export type {
   InventoryItem,
   StockStatus as InventoryStockStatus,
@@ -1155,35 +1090,23 @@ export type {
   ProjectUsage,
   UsageProjection,
   InventoryAnalysisResult,
-} from './shop-inventory';
+} from './stock/index';
 
 export {
   getTemplate as getCabinetTemplate,
   getTemplatesByCategory as getCabinetTemplatesByCategory,
-  instantiateTemplate as instantiateCabinetTemplate,
+  instantiateCabinetTemplate,
   BUILT_IN_TEMPLATES,
-} from './cabinet-templates';
+} from './templates/index';
 
 export type {
   CabinetCategory,
-  DimensionConstraint as CabinetDimensionConstraint,
-  CabinetTemplate as BuiltInCabinetTemplate,
-  ValidationError as CabinetValidationError,
+  CabinetDimensionConstraint,
+  BuiltInCabinetTemplate,
+  CabinetValidationError,
   TemplateParams,
-  TemplateInstance as CabinetTemplateInstance,
-} from './cabinet-templates';
-
-export { calculateEdgeBanding, detectExposedEdges, allEdgesExposed, frontEdgesOnly } from './edge-banding-calc';
-
-export type {
-  EdgePosition,
-  EdgeExposure,
-  BandingSpec,
-  BandingPart,
-  EdgeBandingLine,
-  BandingGroup,
-  EdgeBandingResult,
-} from './edge-banding-calc';
+  CabinetTemplateInstance,
+} from './templates/index';
 
 export {
   generateUsageReport,
@@ -1218,27 +1141,16 @@ export {
   compareProjects,
   bestForCriterion,
   percentDifference,
-  DEFAULT_WEIGHTS as DEFAULT_PROJECT_COMPARISON_WEIGHTS,
-} from './project-comparison';
+  DEFAULT_PROJECT_COMPARISON_WEIGHTS,
+} from './inventory/index';
 
 export type {
   ProjectMetrics,
   ComparisonWeights,
   NormalisedScores,
   ProjectScore,
-  ComparisonResult as ProjectComparisonResult,
-} from './project-comparison';
-
-// Sprint 190 — Wood Movement Calculator
-export {
-  calculateWoodMovement,
-  calculatePanelMovement,
-  seasonalMovement,
-  SPECIES_COEFFICIENTS,
-  SEASONAL_PRESETS,
-} from './wood-movement';
-
-export type { WoodSpecies, WoodMovementInput, WoodMovementResult, SeasonalPreset } from './wood-movement';
+  ProjectComparisonResult,
+} from './inventory/index';
 
 // Sprint 191 — Toolpath Feed Rate Calculator
 export {
@@ -1258,18 +1170,6 @@ export type {
   DepthRecommendation,
 } from './feed-rate';
 
-// Sprint 192 — Cabinet Weight Estimator
-export { estimateCabinetWeight, categorizeFastener, maxShelfLoad, MATERIAL_DENSITIES } from './cabinet-weight';
-
-export type {
-  PanelMaterial,
-  WeightPanel,
-  WeightHardware,
-  WeightEstimate,
-  PanelWeight,
-  FastenerCategory,
-} from './cabinet-weight';
-
 // Sprint 193 — Dowel Joint Calculator
 export { calculateDowelJoint, selectDowelDiameter, minDowelsForLoad, STANDARD_DOWEL_DIAMETERS } from './dowel-joint';
 export type { DowelDiameter, JointOrientation, DowelJointInput, DowelPosition, DowelJointResult } from './dowel-joint';
@@ -1281,14 +1181,6 @@ export type { BandedEdge, PanelLabelInput, PanelLabel, PanelLabelBatch } from '.
 // Sprint 195 — Pocket Hole Joinery Calculator
 export { calculatePocketHole, selectScrewLength, selectThreadType, POCKET_SCREW_LENGTHS } from './pocket-hole';
 export type { ScrewHeadType, JointType, PocketHoleInput, PocketHoleResult } from './pocket-hole';
-
-// Sprint 196 — Veneer Calculator
-export { calculateVeneer, bestSheetForPanel, VENEER_THICKNESSES, STANDARD_VENEER_SHEETS } from './veneer-calc';
-export type { VeneerMatchPattern, VeneerSheetSize, VeneerInput, VeneerResult } from './veneer-calc';
-
-// Sprint 197 — Clamp Pressure Calculator
-export { calculateClampPressure, isPressureAdequate, GLUE_PRESSURE_PSI, CLAMP_FORCE_LBS } from './clamp-pressure';
-export type { GlueType, ClampType, ClampPressureInput, ClampPressureResult } from './clamp-pressure';
 
 // Sprint 198 — Drill Press Speed Calculator
 export { calculateDrillSpeed, maxBitDiameter, MATERIAL_SFM, BIT_TYPE_FACTOR } from './drill-speed';
@@ -1355,25 +1247,6 @@ export type {
   RouterPass,
   RouterDepthResult,
 } from './router-depth';
-
-// Sprint 208 — Biscuit Joinery Calculator
-export { calculateBiscuitLayout, recommendBiscuitSize } from './biscuit-joint';
-export type {
-  BiscuitSize,
-  BiscuitJointType,
-  BiscuitJointInput,
-  BiscuitPosition,
-  BiscuitJointResult,
-} from './biscuit-joint';
-
-// Sprint 209 — Sanding Progression Planner
-export { planSandingProgression, SANDING_GRITS } from './sanding-progression';
-export type {
-  SandingMaterial,
-  FinishTarget,
-  SandingProgressionInput,
-  SandingProgressionResult,
-} from './sanding-progression';
 
 // Sprint 210 — Finger Joint Calculator
 export { calculateFingerJoint } from './finger-joint';

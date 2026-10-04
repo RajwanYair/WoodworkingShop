@@ -1,6 +1,6 @@
 # Cabinet Planner Plugin API
 
-> **API version**: 1.2.0 · **App version**: ≥ 3.62.0 · **Stability**: `experimental`
+> **API version**: 1.2.0 · **App version**: ≥ 3.62.0 · **Stability**: `deprecated`
 > **Source**: [`src/engine/plugin.ts`](../src/engine/plugin.ts)
 > **Import from**: `src/engine/index.ts` (barrel) — never import directly from individual engine files.
 
@@ -14,6 +14,19 @@ source files.
 
 All hooks are **pure**: return new values instead of mutating inputs.
 A plugin only needs to implement the hooks it cares about; all hooks are optional.
+
+### v1 Compatibility Window
+
+Plugin API v1 is deprecated in favor of v2. The v1 registration functions
+remain compatibility facades over the shared v2 registry through app release
+v5.35.x and are scheduled for removal in v5.36.0. Existing v1 plugins remain
+active in v2 until deactivated or unregistered, and their hooks run only while
+active. Migrate registration and lifecycle management to `registerPluginV2`,
+`deactivatePlugin`, `activatePlugin`, and `unregisterPluginV2`.
+
+The v2 API extends the v1 hook shape; it does not replace individual hook
+signatures in this compatibility window. Hook stability metadata reports v1
+hooks as deprecated with `deprecatedIn: '2.0.0'`.
 
 ```ts
 import { registerPlugin, getPluginContract, pluginEventBus } from './engine';
@@ -42,7 +55,7 @@ const contract = getPluginContract();
 
 ## Hook Reference
 
-### `onPartsGenerated` — **stable** (since 1.0.0)
+### `onPartsGenerated` — **deprecated** (since 1.0.0; deprecated in 2.0.0)
 
 Called after `generateParts()` produces the initial part list.
 
@@ -74,7 +87,7 @@ onPartsGenerated(parts, cfg) {
 
 ---
 
-### `onConfigChange` — **stable** (since 1.0.0)
+### `onConfigChange` — **deprecated** (since 1.0.0; deprecated in 2.0.0)
 
 Called before a config change is committed to the Zustand store.
 
@@ -96,7 +109,7 @@ onConfigChange(cfg) {
 
 ---
 
-### `onValidate` — **experimental** (since 1.1.0)
+### `onValidate` — **deprecated** (since 1.1.0; deprecated in 2.0.0)
 
 Called after `validateConfig()` has run all built-in and custom rules.
 
@@ -118,7 +131,7 @@ onValidate(issues, cfg) {
 
 ---
 
-### `onGcodeGenerated` — **experimental** (since 1.2.0)
+### `onGcodeGenerated` — **deprecated** (since 1.2.0; deprecated in 2.0.0)
 
 Called after `cutSheetToGcode()` has assembled the raw G-code string for a single sheet.
 
@@ -366,14 +379,14 @@ for (const hook of PLUGIN_CONTRACT.hooks) {
 
 | Symbol                 | Category  | Stability      | Since |
 | ---------------------- | --------- | -------------- | ----- |
-| `CabinetPlannerPlugin` | Interface | `stable`       | 1.0.0 |
-| `onPartsGenerated`     | Hook      | `stable`       | 1.0.0 |
-| `onConfigChange`       | Hook      | `stable`       | 1.0.0 |
-| `onValidate`           | Hook      | `experimental` | 1.1.0 |
-| `onGcodeGenerated`     | Hook      | `experimental` | 1.2.0 |
-| `registerPlugin`       | Function  | `stable`       | 1.0.0 |
-| `unregisterPlugin`     | Function  | `stable`       | 1.0.0 |
-| `getPlugins`           | Function  | `stable`       | 1.0.0 |
+| `CabinetPlannerPlugin` | Interface | `deprecated`   | 1.0.0 |
+| `onPartsGenerated`     | Hook      | `deprecated`   | 1.0.0 |
+| `onConfigChange`       | Hook      | `deprecated`   | 1.0.0 |
+| `onValidate`           | Hook      | `deprecated`   | 1.1.0 |
+| `onGcodeGenerated`     | Hook      | `deprecated`   | 1.2.0 |
+| `registerPlugin`       | Function  | `deprecated`   | 1.0.0 |
+| `unregisterPlugin`     | Function  | `deprecated`   | 1.0.0 |
+| `getPlugins`           | Function  | `deprecated`   | 1.0.0 |
 | `getPluginContract`    | Function  | `stable`       | 1.0.0 |
 | `PLUGIN_CONTRACT`      | Constant  | `stable`       | 1.0.0 |
 | `PluginContract`       | Type      | `stable`       | 1.0.0 |

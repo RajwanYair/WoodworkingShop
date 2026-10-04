@@ -5,9 +5,9 @@ import {
   compareProjects,
   DEFAULT_WEIGHTS,
   percentDifference,
-} from '../../src/engine/project-comparison';
+} from '../../src/engine/inventory/comparison/project';
 
-import type { ComparisonWeights, ProjectMetrics } from '../../src/engine/project-comparison';
+import type { ComparisonWeights, ProjectMetrics } from '../../src/engine/inventory/comparison/project';
 
 const projectA: ProjectMetrics = {
   projectId: 'a',

@@ -148,10 +148,11 @@ describe('applyGcodePlugins', () => {
     expect(applyGcodePlugins(RAW_GCODE)).toBe(RAW_GCODE);
   });
 
-  it('onGcodeGenerated is listed in PLUGIN_CONTRACT as experimental', () => {
+  it('onGcodeGenerated is listed in PLUGIN_CONTRACT as deprecated for v2 migration', () => {
     const hook = PLUGIN_CONTRACT.hooks.find((h) => h.hookName === 'onGcodeGenerated');
     expect(hook).toBeDefined();
-    expect(hook?.stability).toBe('experimental');
+    expect(hook?.stability).toBe('deprecated');
     expect(hook?.introducedIn).toBe('1.2.0');
+    expect(hook?.deprecatedIn).toBe('2.0.0');
   });
 });

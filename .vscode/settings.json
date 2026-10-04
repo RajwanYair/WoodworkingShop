@@ -60,6 +60,9 @@
   "eslint.run": "onSave",
   "eslint.problems.shortenToSingleLine": true,
 
+  // This project uses ESLint and Prettier rather than Biome.
+  "biome.enabled": false,
+
   // ─── CSS / Stylelint ────────────────────────────────────────────────────────
   "css.validate": true,
   "stylelint.validate": ["css"],

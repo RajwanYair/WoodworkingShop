@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useStockTrackerStore } from '../../src/store/stock-tracker-store';
-import type { StockItem } from '../../src/engine/stock-tracker';
+import type { StockItem } from '../../src/engine/stock';
 
 const birchStock: StockItem = {
   materialKey: 'birch-ply',

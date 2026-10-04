@@ -1,8 +1,9 @@
 /**
- * Sprint 74 — WebSerial API integration helpers.
+ * Deprecated Web Serial compatibility API for external engine-barrel consumers.
  *
- * Pure TypeScript — no React, no DOM side-effects.
- * All WebSerial interaction is wrapped here so the UI layer can remain thin.
+ * Application UI uses `src/utils/webserial-cnc.ts` for browser I/O and
+ * `webserial-v2.ts` for pure stream-session state. Retain this API through
+ * v5.35.x; remove it in v5.36.0.
  *
  * Browser support: Chrome/Edge 89+, Opera 76+. Not available in Firefox or Safari.
  * Use `isWebSerialAvailable()` for progressive-enhancement guards.
@@ -12,7 +13,7 @@ import { utf8Encode } from '../utils/browser-compat';
 
 // ── Minimal Web Serial API typings (not in every @types/lib version) ──────────
 
-/** Minimal Web Serial API port handle (browser DOM shim). */
+/** @deprecated Use `CncSerialSession` from `src/utils/webserial-cnc.ts`. */
 export interface SerialPortHandle {
   open(options: {
     baudRate: number;
@@ -32,10 +33,10 @@ interface SerialNavigator {
 
 // ── Public types ──────────────────────────────────────────────────────────────
 
-/** Connection lifecycle state machine. */
+/** @deprecated Use `StreamSessionState` from `webserial-v2.ts`. */
 export type WebSerialState = 'disconnected' | 'connecting' | 'connected' | 'streaming' | 'error';
 
-/** Serial-port profile sent to `requestPort` / `open`. */
+/** @deprecated Use `SerialOptions` from `src/utils/webserial-cnc.ts`. */
 export interface WebSerialProfile {
   baudRate: number;
   dataBits?: 7 | 8;
@@ -45,7 +46,7 @@ export interface WebSerialProfile {
   bufferSize?: number;
 }
 
-/** Default CNC / 3D-printer profile. */
+/** @deprecated Use the machine-profile registry and `SerialOptions`. */
 export const DEFAULT_SERIAL_PROFILE: Readonly<WebSerialProfile> = {
   baudRate: 115200,
   dataBits: 8,
@@ -56,7 +57,7 @@ export const DEFAULT_SERIAL_PROFILE: Readonly<WebSerialProfile> = {
 
 // ── Public API ────────────────────────────────────────────────────────────────
 
-/** Returns true when the Web Serial API is available in this browser context. */
+/** @deprecated Use `isWebSerialAvailable` from `src/utils/webserial-cnc.ts`. */
 export function isWebSerialAvailable(): boolean {
   return typeof navigator !== 'undefined' && 'serial' in navigator;
 }
@@ -64,6 +65,7 @@ export function isWebSerialAvailable(): boolean {
 /**
  * Ask the browser to present the port-picker and open the chosen port.
  *
+ * @deprecated Use `openSerialPort` from `src/utils/webserial-cnc.ts`.
  * @throws {Error} when the user cancels the picker, access is denied, or
  *   the Web Serial API is unavailable.
  */
@@ -89,6 +91,7 @@ export async function connectToMachine(profile: WebSerialProfile): Promise<Seria
  * Each line is sent followed by `\n`. After every line the function yields
  * control via a microtask so callers can update progress UI.
  *
+ * @deprecated Use `CncSerialSession.send` from `src/utils/webserial-cnc.ts`.
  * @param port       An already-opened port handle.
  * @param lines      Array of G-code strings (without trailing newlines).
  * @param onProgress Optional callback fired after each line with `(sent, total)`.
@@ -120,6 +123,7 @@ export async function streamGcodeLines(
 /**
  * Close a serial port gracefully.
  * Safe to call even if the port is already closed.
+ * @deprecated Use `CncSerialSession.close` from `src/utils/webserial-cnc.ts`.
  */
 export async function disconnectFromMachine(port: SerialPortHandle): Promise<void> {
   try {

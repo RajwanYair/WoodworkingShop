@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { validateConfig } from '../../engine/validation';
-import { getTemplateDefaults } from '../../engine/templates';
+import { getConfiguratorTemplateDefaults } from '../../engine/templates/index';
 import { ValidationPanel } from './ValidationPanel';
 import { SubstitutionPanel } from './SubstitutionPanel';
 import { CabinetSelector } from './CabinetSelector';
@@ -30,7 +30,7 @@ export function ConfiguratorPanel() {
   const validationIssues = useMemo(() => validateConfig(config, customMaterials), [config, customMaterials]);
 
   const handleFurnitureChange = (type: FurnitureType) => {
-    setConfig({ ...getTemplateDefaults(type) });
+    setConfig({ ...getConfiguratorTemplateDefaults(type) });
   };
 
   const handleResetConfig = () => {

@@ -7,6 +7,7 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import {
   WEB_SERIAL_SUPPORTED,
+  isWebSerialAvailable,
   WebSerialUnsupportedError,
   SerialPortClosedError,
   openSerialPort,
@@ -59,6 +60,18 @@ function stubSerialApi(api = makeSerialApi()) {
 describe('WEB_SERIAL_SUPPORTED', () => {
   it('is a boolean', () => {
     expect(typeof WEB_SERIAL_SUPPORTED).toBe('boolean');
+  });
+});
+
+describe('isWebSerialAvailable', () => {
+  it.each([
+    ['missing API', undefined, false],
+    ['present API', { requestPort: vi.fn() }, true],
+  ])('returns %s support state', (_label, serial, expected) => {
+    if (serial === undefined) Reflect.deleteProperty(navigator, 'serial');
+    else Object.defineProperty(navigator, 'serial', { value: serial, configurable: true });
+
+    expect(isWebSerialAvailable()).toBe(expected);
   });
 });
 
@@ -144,13 +157,20 @@ describe('openSerialPort when Web Serial API present', () => {
 
   it('opens the port with the correct baud rate', async () => {
     const session = await openSerialPort({ baudRate: 9600 });
-    expect(port.open).toHaveBeenCalledWith({ baudRate: 9600 });
+    expect(port.open).toHaveBeenCalledWith({ baudRate: 9600, dataBits: 8, stopBits: 1, parity: 'none' });
+    await session.close();
+  });
+
+  it('passes machine profile serial settings through to the port', async () => {
+    const session = await openSerialPort({ baudRate: 9600, dataBits: 7, stopBits: 2, parity: 'even' });
+
+    expect(port.open).toHaveBeenCalledWith({ baudRate: 9600, dataBits: 7, stopBits: 2, parity: 'even' });
     await session.close();
   });
 
   it('uses controller-default baud rate when baudRate not given', async () => {
     const session = await openSerialPort({ controller: 'mach3' });
-    expect(port.open).toHaveBeenCalledWith({ baudRate: 9600 });
+    expect(port.open).toHaveBeenCalledWith({ baudRate: 9600, dataBits: 8, stopBits: 1, parity: 'none' });
     await session.close();
   });
 
@@ -186,6 +206,25 @@ describe('openSerialPort when Web Serial API present', () => {
     await session.close();
   });
 
+  it('send() stops after the current line when its abort signal is set', async () => {
+    const session = await openSerialPort();
+    const controller = new AbortController();
+    const progress: number[] = [];
+
+    await session.send(
+      'G28\nG1 X10',
+      (update) => {
+        progress.push(update.sent);
+        controller.abort();
+      },
+      controller.signal,
+    );
+
+    expect(progress).toEqual([1]);
+    expect(port._written).toHaveLength(1);
+    await session.close();
+  });
+
   it('send() throws SerialPortClosedError after close()', async () => {
     const session = await openSerialPort();
     await session.close();
@@ -195,6 +234,13 @@ describe('openSerialPort when Web Serial API present', () => {
   it('close() is idempotent', async () => {
     const session = await openSerialPort();
     await session.close();
+    await expect(session.close()).resolves.toBeUndefined();
+  });
+
+  it('close() ignores a port that was already closed by the device', async () => {
+    port.close.mockRejectedValue(new Error('Already closed'));
+    const session = await openSerialPort();
+
     await expect(session.close()).resolves.toBeUndefined();
   });
 });

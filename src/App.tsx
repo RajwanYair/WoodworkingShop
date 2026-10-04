@@ -1,6 +1,6 @@
 import './i18n';
 import './index.css';
-import { useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import workspaceBanner from '../docs/banner.svg';
 import { Header } from './components/layout/Header';
@@ -13,9 +13,11 @@ import { TouchGestureTutorial } from './components/layout/TouchGestureTutorial';
 import { MobileTabBar } from './components/layout/MobileTabBar';
 import { ActiveCabinetSwitcher } from './components/layout/ActiveCabinetSwitcher';
 import { ShortcutsModal } from './components/layout/ShortcutsModal';
+import { CommandPalette } from './components/layout/CommandPalette';
+import type { CalculatorId } from './components/configurator/calculator-catalog';
 import { SwUpdateBanner } from './components/layout/SwUpdateBanner';
 import { IconPrint } from './components/layout/Icons';
-import { useCabinetStore, type CabinetState } from './store/cabinet-store';
+import { useCabinetStore } from './store/cabinet-store';
 import { useToastStore } from './store/toast-store';
 import { useSystemDarkMode } from './hooks/useSystemDarkMode';
 import { usePwaFileHandlers } from './hooks/usePwaFileHandlers';
@@ -27,104 +29,101 @@ import { getCustomMaterials } from './store/custom-materials-store';
 import { downloadBomCsv } from './utils/bom-export';
 import { configToUrl, readTabFromUrl, pushTabToUrl } from './utils/url-state';
 import type { Lang } from './engine/types';
+import {
+  APP_TABS,
+  COMMANDS,
+  COMMAND_ACTION_EVENT,
+  isCommandAction,
+  matchesShortcut,
+  type CommandAction,
+} from './components/layout/command-registry';
 
-// Lazy-load heavy / route-isolated panels so the initial bundle stays lean
-// (Sprint 110). PDF in particular pulls in @react-pdf/renderer (~1.6 MB).
 const PdfExportPanel = lazy(() =>
-  import('./components/pdf/PdfExportPanel').then((m) => ({ default: m.PdfExportPanel })),
+  import('./components/pdf/PdfExportPanel').then((module) => ({ default: module.PdfExportPanel })),
 );
 const OptimizerView = lazy(() =>
-  import('./components/optimizer/OptimizerView').then((m) => ({ default: m.OptimizerView })),
+  import('./components/optimizer/OptimizerView').then((module) => ({ default: module.OptimizerView })),
 );
 const AssemblyGuide = lazy(() =>
-  import('./components/assembly/AssemblyGuide').then((m) => ({ default: m.AssemblyGuide })),
+  import('./components/assembly/AssemblyGuide').then((module) => ({ default: module.AssemblyGuide })),
 );
-// Phase 11 — RoomLayoutView is route-isolated; lazy-load to trim initial parse.
 const RoomLayoutViewLazy = lazy(() =>
-  import('./components/layout/RoomLayoutView').then((m) => ({ default: m.RoomLayoutView })),
+  import('./components/layout/RoomLayoutView').then((module) => ({ default: module.RoomLayoutView })),
 );
 const CalculatorsPanel = lazy(() =>
-  import('./components/configurator/CalculatorsPanel').then((m) => ({ default: m.CalculatorsPanel })),
+  import('./components/configurator/CalculatorsPanel').then((module) => ({ default: module.CalculatorsPanel })),
 );
 const Preview3DPanel = lazy(() =>
-  import('./components/preview/Preview3DPanel').then((m) => ({ default: m.Preview3DPanel })),
+  import('./components/preview/Preview3DPanel').then((module) => ({ default: module.Preview3DPanel })),
 );
 const ConfiguratorPanel = lazy(() =>
-  import('./components/configurator/ConfiguratorPanel').then((m) => ({ default: m.ConfiguratorPanel })),
+  import('./components/configurator/ConfiguratorPanel').then((module) => ({ default: module.ConfiguratorPanel })),
 );
 const CabinetPreview = lazy(() =>
-  import('./components/preview/CabinetPreview').then((m) => ({ default: m.CabinetPreview })),
+  import('./components/preview/CabinetPreview').then((module) => ({ default: module.CabinetPreview })),
 );
 const SmartOptimizerPanel = lazy(() =>
-  import('./components/optimizer/SmartOptimizerPanel').then((m) => ({ default: m.SmartOptimizerPanel })),
+  import('./components/optimizer/SmartOptimizerPanel').then((module) => ({ default: module.SmartOptimizerPanel })),
 );
-const PartsTable = lazy(() => import('./components/optimizer/Tables').then((m) => ({ default: m.PartsTable })));
-const HardwareTable = lazy(() => import('./components/optimizer/Tables').then((m) => ({ default: m.HardwareTable })));
+const PartsTable = lazy(() =>
+  import('./components/optimizer/Tables').then((module) => ({ default: module.PartsTable })),
+);
+const HardwareTable = lazy(() =>
+  import('./components/optimizer/Tables').then((module) => ({ default: module.HardwareTable })),
+);
 const ProjectSummaryPanel = lazy(() =>
-  import('./components/optimizer/ProjectSummaryPanel').then((m) => ({ default: m.ProjectSummaryPanel })),
+  import('./components/optimizer/ProjectSummaryPanel').then((module) => ({ default: module.ProjectSummaryPanel })),
 );
 
 function App() {
   const { activeTab, darkMode, projectName } = useCabinetStore();
-  const highContrastMode = useCabinetStore((s) => s.highContrastMode);
-  const focusMode = useCabinetStore((s) => s.focusMode);
+  const highContrastMode = useCabinetStore((state) => state.highContrastMode);
+  const focusMode = useCabinetStore((state) => state.focusMode);
   const { t, i18n } = useTranslation();
   const haptics = useHaptics();
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const [showCommandPalette, setShowCommandPalette] = useState(false);
+  const [calculatorRequest, setCalculatorRequest] = useState<{ id: CalculatorId; sequence: number } | null>(null);
+  const calculatorRequestSequence = useRef(0);
+  const closeCommandPalette = useCallback(() => setShowCommandPalette(false), []);
+  const openCalculator = useCallback((id: CalculatorId) => {
+    setCalculatorRequest({ id, sequence: ++calculatorRequestSequence.current });
+    useCabinetStore.getState().setActiveTab('calculators');
+  }, []);
   const mainRef = useRef<HTMLElement>(null);
-  // Track whether this is the initial render so we don't steal focus on load
   const isFirstRender = useRef(true);
 
-  // Ordered app tabs — used for swipe-based navigation
-  const APP_TABS: CabinetState['activeTab'][] = [
-    'workspace',
-    'configurator',
-    'preview',
-    'optimizer',
-    'assembly',
-    'pdf',
-    'calculators',
-  ];
-
-  // Sprint 82 — swipe left/right on the main content area to switch app tabs
-  // (skipped on 'preview' tab which has its own swipe gesture for SVG views)
   const appSwipe = useTouchGestures({
     onSwipeLeft: () => {
       if (activeTab === 'preview') return;
-      const idx = APP_TABS.indexOf(activeTab);
-      if (idx < APP_TABS.length - 1) {
-        useCabinetStore.getState().setActiveTab(APP_TABS[idx + 1]);
+      const index = APP_TABS.indexOf(activeTab);
+      if (index < APP_TABS.length - 1) {
+        useCabinetStore.getState().setActiveTab(APP_TABS[index + 1]);
         haptics.selectionChanged();
       }
     },
     onSwipeRight: () => {
       if (activeTab === 'preview') return;
-      const idx = APP_TABS.indexOf(activeTab);
-      if (idx > 0) {
-        useCabinetStore.getState().setActiveTab(APP_TABS[idx - 1]);
+      const index = APP_TABS.indexOf(activeTab);
+      if (index > 0) {
+        useCabinetStore.getState().setActiveTab(APP_TABS[index - 1]);
         haptics.selectionChanged();
       }
     },
   });
 
-  // Sync dark mode to <html> so browser-level UI (scrollbar, form controls,
-  // color-scheme) follows. The Tailwind `dark:` variant is class-based via
-  // @custom-variant in index.css.
   useEffect(() => {
     const root = document.documentElement;
     root.classList.toggle('dark', darkMode);
     root.style.colorScheme = darkMode ? 'dark' : 'light';
   }, [darkMode]);
 
-  // Sprint 298 — URL tab deep-linking and browser history synchronization.
   const initialTabFromUrlRef = useRef(readTabFromUrl());
   const tabUrlInitialisedRef = useRef(false);
-  const popStateTabRef = useRef<CabinetState['activeTab'] | null>(null);
+  const popStateTabRef = useRef<(typeof APP_TABS)[number] | null>(null);
   useEffect(() => {
     const tab = initialTabFromUrlRef.current;
-    if (tab) {
-      useCabinetStore.getState().setActiveTab(tab);
-    }
+    if (tab) useCabinetStore.getState().setActiveTab(tab);
   }, []);
 
   useEffect(() => {
@@ -151,7 +150,6 @@ function App() {
     if (activeTab !== initialTabFromUrlRef.current) pushTabToUrl(activeTab);
   }, [activeTab]);
 
-  // Sprint 48 — follow OS (prefers-color-scheme) changes in real-time
   useSystemDarkMode();
 
   // Phase 13 / Sprint 7 — PWA File Handling: open .cabinetplan files from OS
@@ -169,10 +167,98 @@ function App() {
     mainRef.current?.focus();
   }, [activeTab]);
 
-  // Keyboard shortcuts
+  // Keyboard shortcuts and palette actions share the command registry.
   useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      const target = e.target;
+    const executeCommand = (action: CommandAction) => {
+      const state = useCabinetStore.getState();
+      switch (action) {
+        case 'palette.open':
+          setShowCommandPalette(true);
+          break;
+        case 'history.undo':
+          state.undo();
+          break;
+        case 'history.redo':
+          state.redo();
+          break;
+        case 'snapshot.save':
+          state.saveSnapshot('');
+          useToastStore.getState().addToast(t('shortcuts.saveSnapshot'), 'success');
+          break;
+        case 'print.run':
+          window.print();
+          break;
+        case 'export.bom': {
+          const { cabinets, projectName: pName, config } = state;
+          const lang = (i18n.language as Lang) || (config.lang as Lang) || 'en';
+          const filePrefix = (pName.trim() || 'cabinet').replace(/[^\w\u05D0-\u05EA.-]/g, '-').replace(/-+/g, '-');
+          const bomData = (cabinets.length > 0 ? cabinets : [{ name: 'Cabinet', config }]).map((cabinet) => ({
+            name: cabinet.name,
+            parts: generateParts(cabinet.config, getCustomMaterials()),
+            hardware: generateHardware(cabinet.config, getCustomMaterials()),
+          }));
+          downloadBomCsv(bomData, lang, `${filePrefix}-bom.csv`, i18n.language);
+          useToastStore.getState().addToast(t('shortcuts.exportBom'), 'success');
+          break;
+        }
+        case 'config.reset':
+          state.resetConfig();
+          useToastStore.getState().addToast(t('shortcuts.resetConfig'), 'info');
+          break;
+        case 'share.copy': {
+          const url = configToUrl(state.config, state.projectName);
+          navigator.clipboard.writeText(url).then(
+            () => useToastStore.getState().addToast(t('shortcuts.copyLink'), 'success'),
+            () => useToastStore.getState().addToast(t('toast.linkCopyFailed'), 'error'),
+          );
+          break;
+        }
+        case 'cabinet.add':
+          state.addCabinet();
+          useToastStore.getState().addToast(t('shortcuts.addCabinet'), 'success');
+          haptics.notification('success');
+          break;
+        case 'focus.toggle': {
+          state.toggleFocusMode();
+          const entering = useCabinetStore.getState().focusMode;
+          useToastStore.getState().addToast(t(entering ? 'focusMode.enter' : 'focusMode.exit'), 'info');
+          break;
+        }
+        case 'theme.toggle':
+          state.toggleDarkMode();
+          break;
+        case 'units.toggle':
+          state.toggleUnits();
+          break;
+        case 'contrast.toggle':
+          state.toggleHighContrast();
+          break;
+        case 'templates.open':
+          window.dispatchEvent(new Event('templates:open'));
+          break;
+        case 'projects.open':
+          window.dispatchEvent(new Event('projects:open'));
+          break;
+        case 'shortcuts.toggle':
+          setShowShortcuts((visible) => !visible);
+          break;
+        case 'marketplace.open':
+          window.dispatchEvent(new Event('marketplace:open'));
+          break;
+        case 'help.open':
+          localStorage.removeItem('onboarding-seen');
+          window.dispatchEvent(new Event('show-onboarding'));
+          break;
+      }
+    };
+
+    const actionHandler = (event: Event) => {
+      const action: unknown = (event as CustomEvent<unknown>).detail;
+      if (isCommandAction(action)) executeCommand(action);
+    };
+
+    const handler = (event: KeyboardEvent) => {
+      const target = event.target;
       if (
         target instanceof HTMLElement &&
         (target.isContentEditable || target.closest('input, textarea, select, [contenteditable="true"]'))
@@ -180,112 +266,31 @@ function App() {
         return;
       }
 
-      const ctrl = e.ctrlKey || e.metaKey;
-
-      // Undo: Ctrl+Z
-      if (ctrl && !e.shiftKey && e.key === 'z') {
-        e.preventDefault();
-        useCabinetStore.getState().undo();
-        return;
-      }
-      // Redo: Ctrl+Y or Ctrl+Shift+Z
-      if (ctrl && (e.key === 'y' || (e.shiftKey && (e.key === 'z' || e.key === 'Z')))) {
-        e.preventDefault();
-        useCabinetStore.getState().redo();
-        return;
-      }
-      // Save snapshot: Ctrl+Shift+S
-      if (ctrl && e.shiftKey && (e.key === 's' || e.key === 'S')) {
-        e.preventDefault();
-        useCabinetStore.getState().saveSnapshot('');
-        useToastStore.getState().addToast(t('shortcuts.saveSnapshot'), 'success');
-        return;
-      }
-      // Print: Ctrl+P
-      if (ctrl && e.key === 'p') {
-        e.preventDefault();
-        window.print();
-        return;
-      }
-      // Export BOM CSV: Ctrl+E (Sprint 57)
-      if (ctrl && (e.key === 'e' || e.key === 'E')) {
-        e.preventDefault();
-        const { cabinets, projectName: pName, config } = useCabinetStore.getState();
-        const lang = (i18n.language as Lang) || (config.lang as Lang) || 'en';
-        const filePrefix = (pName.trim() || 'cabinet').replace(/[^\w\u05D0-\u05EA.-]/g, '-').replace(/-+/g, '-');
-        const bomData = (cabinets.length > 0 ? cabinets : [{ name: 'Cabinet', config }]).map((cab) => ({
-          name: cab.name,
-          parts: generateParts(cab.config, getCustomMaterials()),
-          hardware: generateHardware(cab.config, getCustomMaterials()),
-        }));
-        downloadBomCsv(bomData, lang, `${filePrefix}-bom.csv`, i18n.language);
-        useToastStore.getState().addToast(t('shortcuts.exportBom'), 'success');
-        return;
-      }
-      // Reset config to defaults: Ctrl+R (Sprint 66)
-      if (ctrl && (e.key === 'r' || e.key === 'R')) {
-        e.preventDefault();
-        useCabinetStore.getState().resetConfig();
-        useToastStore.getState().addToast(t('shortcuts.resetConfig'), 'info');
-        return;
-      }
-      // Copy share link: Ctrl+L (Sprint 71)
-      if (ctrl && (e.key === 'l' || e.key === 'L')) {
-        e.preventDefault();
-        const { config, projectName: pName } = useCabinetStore.getState();
-        const url = configToUrl(config, pName);
-        navigator.clipboard.writeText(url).then(
-          () => useToastStore.getState().addToast(t('shortcuts.copyLink'), 'success'),
-          () => useToastStore.getState().addToast(t('toast.linkCopyFailed'), 'error'),
-        );
-        return;
-      }
-      // Add cabinet: Ctrl+Shift+N (Sprint 86)
-      if (ctrl && e.shiftKey && (e.key === 'n' || e.key === 'N')) {
-        e.preventDefault();
-        useCabinetStore.getState().addCabinet();
-        useToastStore.getState().addToast(t('shortcuts.addCabinet'), 'success');
-        haptics.notification('success');
-        return;
-      }
-      // Focus/Kiosk mode: Ctrl+Shift+K (Sprint 90)
-      if (ctrl && e.shiftKey && (e.key === 'k' || e.key === 'K')) {
-        e.preventDefault();
-        useCabinetStore.getState().toggleFocusMode();
-        const entering = useCabinetStore.getState().focusMode;
-        useToastStore.getState().addToast(t(entering ? 'focusMode.enter' : 'focusMode.exit'), 'info');
-        return;
-      }
-      // Tab switching: Alt+1-6; Dark mode: Alt+D (Sprint 168)
-      if (e.altKey && !ctrl) {
-        const tabMap: Record<string, CabinetState['activeTab']> = {
-          '1': 'configurator',
-          '2': 'preview',
-          '3': 'optimizer',
-          '4': 'assembly',
-          '5': 'pdf',
-          '6': 'calculators',
-        };
-        const tab = tabMap[e.key];
-        if (tab) {
-          e.preventDefault();
-          useCabinetStore.getState().setActiveTab(tab);
-          haptics.selectionChanged();
-          return;
-        }
-        if (e.key === 'd' || e.key === 'D') {
-          e.preventDefault();
-          useCabinetStore.getState().toggleDarkMode();
-          return;
-        }
-      }
-      // Shortcuts help: ?
-      if (e.key === '?' && !ctrl) {
-        setShowShortcuts((v) => !v);
+      const state = useCabinetStore.getState();
+      const availability = { canUndo: state.canUndo, canRedo: state.canRedo };
+      const command = COMMANDS.find(
+        (candidate) =>
+          candidate.when(availability) &&
+          'shortcuts' in candidate &&
+          candidate.shortcuts?.some((shortcut) => matchesShortcut(event, shortcut)),
+      );
+      if (command) {
+        event.preventDefault();
+        command.handler({
+          run: executeCommand,
+          setActiveTab: (tab) => {
+            state.setActiveTab(tab);
+            haptics.selectionChanged();
+          },
+        });
       }
     };
+    window.addEventListener(COMMAND_ACTION_EVENT, actionHandler);
     window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
+    return () => {
+      window.removeEventListener(COMMAND_ACTION_EVENT, actionHandler);
+      window.removeEventListener('keydown', handler);
+    };
   }, [t, i18n.language, haptics]);
 
   return (
@@ -417,7 +422,7 @@ function App() {
             {activeTab === 'calculators' && (
               <ErrorBoundary panelName={t('tabs.calculators')}>
                 <Suspense fallback={<SkeletonPane label={t('skeleton.loading')} cards={6} />}>
-                  <CalculatorsPanel />
+                  <CalculatorsPanel request={calculatorRequest} />
                 </Suspense>
               </ErrorBoundary>
             )}
@@ -429,6 +434,7 @@ function App() {
         <TouchGestureTutorial />
         <SwUpdateBanner />
         {showShortcuts && <ShortcutsModal onClose={() => setShowShortcuts(false)} />}
+        <CommandPalette open={showCommandPalette} onClose={closeCommandPalette} onOpenCalculator={openCalculator} />
       </div>
     </div>
   );

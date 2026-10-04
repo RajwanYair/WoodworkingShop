@@ -61,6 +61,7 @@ export function PdfExportPanel() {
           cabinetCount={store.cabinets.length}
           pageSize={pageSize}
           orientation={orientation}
+          labourHours={store.labourHours}
         />
       );
       const blob = await pdf(doc).toBlob();
@@ -144,6 +145,7 @@ export function PdfExportPanel() {
           allCabinetsData={allCabinetsData}
           combinedOptimization={store.combinedOptimization}
           allHardware={allHardware}
+          labourHours={store.labourHours}
         />
       );
       const blob = await pdf(doc).toBlob();
@@ -237,6 +239,7 @@ export function PdfExportPanel() {
             cabinetCount={store.cabinets.length}
             pageSize={pageSize}
             orientation={orientation}
+            labourHours={store.labourHours}
           />
         );
         const pdfBlob = await pdf(doc).toBlob();

@@ -95,6 +95,16 @@ describe('ProjectSummaryPanel (Sprint 53)', () => {
     render(<ProjectSummaryPanel />);
     expect(screen.getByText('7')).toBeInTheDocument();
   });
+
+  it('labels the panel-only weight and shows user-entered estimated labour', () => {
+    seedMulti();
+    useCabinetStore.setState({ labourHours: 4.5 });
+    render(<ProjectSummaryPanel />);
+
+    expect(screen.getByText('Panel weight')).toBeInTheDocument();
+    expect(screen.getByText('Estimated labour')).toBeInTheDocument();
+    expect(screen.getByText('4.5 h')).toBeInTheDocument();
+  });
 });
 
 // ── Sprint 79 — avg sheet yield stat ─────────────────────────────────────────

@@ -6,8 +6,8 @@ import {
   checkAvailability,
   getShortfalls,
   formatAvailabilityReport,
-} from '../../src/engine/stock-tracker';
-import type { StockItem, DemandEntry } from '../../src/engine/stock-tracker';
+} from '../../src/engine/stock/tracker';
+import type { StockItem, DemandEntry } from '../../src/engine/stock/tracker';
 
 function item(materialKey: string, onHandQty: number, reorderLevel?: number): StockItem {
   return {

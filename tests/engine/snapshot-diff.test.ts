@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { diffSnapshots } from '../../src/engine/snapshot-diff';
+import { diffSnapshots } from '../../src/engine/inventory/comparison/snapshot-diff';
 import { cfg } from '../helpers';
 
 function makeSnap(overrides: Parameters<typeof cfg>[0] = {}) {

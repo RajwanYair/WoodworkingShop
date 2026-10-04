@@ -11,6 +11,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Consolidated plugin registration through the v2 lifecycle registry with a deprecated v1 compatibility window through v5.35.x; retired the unused Supabase stub and migrated the assembly sender to utility-owned browser I/O, retaining the public engine Web Serial API as a deprecated compatibility adapter through v5.35.x.
+- Added a schema-validated capability ledger and import-graph check for engine, utility, and service modules; generated JSON, Markdown, and build-chunk reports are written under the OS temp directory.
+- Added `npm run i18n:completeness` to report missing/extra translation keys, EN-identical ratios with an explicit token allowlist, and placeholder compatibility across all six locales; corrected a missing count interpolation in the Hebrew audit message.
+- Consolidated template implementations under `src/engine/templates/` with a disambiguated public barrel and backwards-compatible flat-module facades; Sprint 372 T1 is complete.
+- Consolidated stock, waste, and comparison implementation ownership under domain barrels while retaining distinct APIs and backwards-compatible flat-module facades; Sprint 372 T2 is complete.
+- Clarified the community catalog engine/adapter boundary and named its fetch/cache implementation `community-catalog-io.ts`, retaining the previous utility path as a compatibility facade; Sprint 372 T3 is in progress.
+- Ranked Sprint 373 calculator candidates using direct UI-consumer evidence and rough integration cost; corrected 16 barrel-reachable but unmounted modules to `surface-next`, each targeted to Sprint 373.
+- Surfaced five prioritized strength and joinery engines through lazy calculator panels, backed by component and engine-reconciled browser journeys; added project-summary labour estimates and panel-weight labels to single-cabinet PDF specifications.
+- Mounted the fuzzy command palette on Ctrl/Cmd+K with translated tab, action, calculator, preset, export, language and recent-project commands; added keyboard navigation, focus management, editable-field shortcut suppression and Chromium axe/E2E coverage.
+  A typed command registry now drives Header labels and shortcut hints, global shortcut handling, and `ShortcutsModal`. Added direct commands for all 29 calculators and capped, validated localStorage recents with component and browser regression coverage.
+
+### Removed
+
+- Retired eleven unconsumed engine calculators and their unit tests, public barrel exports, capability records, and unused locale strings as part of Sprint 373 T3.
+
+### Documentation
+
+- Restructured `ROADMAP.md` around a full refactor review: program overview with release-train, target-architecture and positioning diagrams; refactor decisions (§3.10); a measured refactor and tooling audit (§4.5); a 2026-10-04 harvest of ideas from open-source and commercial products (§5.5); and new Phases 81–85 (Sprints 420–451) for toolchain modernisation, architecture refactor, experience, documentation and optional on-device intelligence.
+- Re-sequenced the release train so the foundation (Phases 73, 81, 82, 65) ships before feature phases; re-opened Sprints 313 and 315 as v5.35.0 carry-over because no completion evidence existed.
+- Corrected stale documentation: README keyboard shortcuts (`Alt+1`–`Alt+6`), source tree, export formats, command descriptions, locale completeness and a corrupted heading; ARCHITECTURE directory map, store, worker, PWA (Workbox via `vite-plugin-pwa`), CI, i18n and accessibility diagrams; AGENTS active sprint, prompts and MCP servers; CONTRIBUTING gate description; USER-GUIDE preview views, focus-mode shortcut, 3-D/ZIP exports and offline troubleshooting; and the docs index.
+- Archived Sprint 316 and 317 evidence in `docs/SPRINT-HISTORY.md`.
+
 ## [5.34.0] — 2026-10-02
 
 ### Calculator Accuracy

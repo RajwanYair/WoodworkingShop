@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { Header } from '../../src/components/layout/Header';
+import { COMMANDS, formatShortcut } from '../../src/components/layout/command-registry';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 
 describe('Header', () => {
@@ -49,6 +50,29 @@ describe('Header', () => {
   it('renders language toggle', () => {
     render(<Header />);
     expect(screen.getAllByText('עברית').length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('exposes a command palette trigger', () => {
+    render(<Header />);
+    expect(screen.getAllByRole('button', { name: 'Command Palette' }).length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('renders command shortcut hints from the registry', () => {
+    render(<Header />);
+    const shortcutCommands = COMMANDS.filter((command) =>
+      ['palette.open', 'history.undo', 'history.redo'].includes(command.id),
+    );
+    const shortcutHints = shortcutCommands.flatMap((command) =>
+      ('shortcuts' in command ? (command.shortcuts ?? []) : []).slice(0, 1).map(formatShortcut),
+    );
+    const controlTitles = screen
+      .getAllByRole('button', { name: /Command Palette|Undo|Redo/ })
+      .map((button) => button.getAttribute('title') ?? '');
+
+    expect(shortcutHints).toHaveLength(3);
+    expect(controlTitles).toEqual(
+      expect.arrayContaining(shortcutHints.map((shortcut) => expect.stringContaining(shortcut))),
+    );
   });
 
   // ── Keyboard tab navigation (Sprint 22 — Phase 4 keyboard-only workflow) ──

@@ -10,7 +10,7 @@
 export { generateAssemblySteps, buildAssemblyDAG } from '../assembly.ts';
 export type { AssemblyStep } from '../assembly.ts';
 
-export { diffSnapshots } from '../snapshot-diff.ts';
-export type { FieldDelta, CabinetDiff, SnapshotDiff, SnapshotLike } from '../snapshot-diff.ts';
+export { diffSnapshots } from '../inventory/comparison/snapshot-diff';
+export type { FieldDelta, CabinetDiff, SnapshotDiff, SnapshotLike } from '../inventory/comparison/snapshot-diff';
 
 export { createJsonMemo } from '../memo.ts';

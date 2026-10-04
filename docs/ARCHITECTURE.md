@@ -12,15 +12,18 @@ Cabinet Planner is a client-side React SPA (no backend). All computation — dim
 
 ```mermaid
 graph LR
-  UI["Configurator UI"]:::ui -->|"patch config"| Store[("Zustand Store")]:::store
-  Store -->|config| Engine["Engine Module\npure TypeScript"]:::engine
-  Engine -->|"parts, hardware, dims, cost"| Store
-  Store --> Preview["SVG Preview\n6 views"]:::output
-  Store --> Optimizer["Cut Optimizer\nMaxRects"]:::output
-  Optimizer --> Smart["Smart Optimizer\n5 strategies"]:::output
+  UI["React UI<br/>7 tabs"]:::ui -->|"patch config"| Store[("Zustand Store<br/>slices + undo/redo")]:::store
+  Store -->|config| Engine["Engine<br/>pure TypeScript"]:::engine
+  Engine -->|"parts, hardware, dims"| Store
+  Store -->|"optimize, cost, assembly"| Workers["Web Workers<br/>worker-schedule.ts"]:::engine
+  Workers -->|"sheets, cost, steps"| Store
+  Store <--> Storage[("IndexedDB + localStorage")]:::store
+  Store --> Preview["SVG Preview<br/>6 views + WebGL 3D"]:::output
+  Store --> Optimizer["Cut Optimizer<br/>MaxRects + guillotine"]:::output
+  Optimizer --> Smart["Smart Optimizer<br/>5 strategies"]:::output
   Store --> Assembly["Assembly Guide"]:::output
   Store --> PDF["PDF Export"]:::output
-  Store --> Exports["DXF, G-code, CSV"]:::output
+  Store --> Exports["DXF, G-code, CSV, glTF, STEP, IFC, ZIP"]:::output
 
   classDef ui fill:#f0b040,stroke:#8b5022,color:#1a0806,font-weight:bold
   classDef store fill:#3a7a50,stroke:#1e4a30,color:#ffffff,font-weight:bold
@@ -30,86 +33,79 @@ graph LR
 
 ## 📁 Directory Layout
 
+Measured on 2026-10-04 (v5.34.0). The planned target layout is in [Target Architecture](#-target-architecture-phase-82).
+
 ```text
 src/
 ├── main.tsx                 # React 19 entry point
-├── App.tsx                  # Root component: tabs, keyboard shortcuts, layout
-├── index.css                # Tailwind theme, print styles, RTL support
-├── engine/                  # Pure TypeScript computation (no React)
-│   ├── types.ts             # Domain types: CabinetConfig, Part, HardwareItem, etc.
-│   ├── materials.ts         # Material database, constraints, defaults
+├── App.tsx                  # Root: 7 tabs, keyboard shortcuts, lazy panels, error boundaries
+├── index.css                # Tailwind v4 theme (wood-* tokens), print styles, RTL support
+├── engine/                  # Pure TypeScript computation (no React, no DOM) — 177 files
+│   ├── types.ts             # Domain types: CabinetConfig, Part, HardwareItem, …
 │   ├── dimensions.ts        # Derived dimensions from config
 │   ├── parts.ts             # Part list generation
 │   ├── hardware.ts          # Hardware BOM generation
-│   ├── cut-optimizer.ts     # MaxRects BSSF bin-packing for cut sheets
+│   ├── cut-optimizer.ts     # MaxRects BSSF + guillotine bin-packing
 │   ├── smart-optimizer.ts   # 5 optimization strategies
 │   ├── assembly.ts          # Assembly step generation
-│   ├── cost-estimator.ts    # Cost breakdown calculation
-│   └── index.ts             # Barrel exports
-├── components/
-│   ├── configurator/        # Config panel: sliders, selectors, material editor
-│   ├── preview/             # SVG cabinet views (6 views + isometric 3D)
-│   ├── optimizer/           # Cut sheet visualization, smart optimizer, comparison
-│   ├── assembly/            # Step-by-step assembly guide
-│   ├── pdf/
-│   │   ├── CabinetPdfDocument.tsx  # Thin orchestrator (imports sections/)
-│   │   ├── pdf-tokens.ts    # Font.register, StyleSheet, design tokens
-│   │   ├── pdf-i18n.ts      # EN+HE dictionary for PDF rendering
-│   │   ├── pdf-helpers.ts   # Pure helpers (assemblyStepsI18n, sheetSummary)
-│   │   ├── PdfExportPanel.tsx
-│   │   └── sections/        # 15 focused page/section components
-│   └── layout/              # Header, sidebar, toast, onboarding overlay
+│   ├── cost-estimator.ts    # Cost breakdown
+│   ├── …                    # 24 mounted calculators and supporting modules (165 top-level files)
+│   ├── assembly/ geometry/ hardware/ materials/ optimizer/   # Domain barrels
+│   ├── export/              # glTF, STEP, IFC writers
+│   ├── validation/          # Dimension, door and shelf rules
+│   └── index.ts             # Public barrel (1,448 lines)
+├── components/              # 116 .tsx files
+│   ├── configurator/        # Config panel, presets, materials, calculators, room layout (49 files)
+│   ├── preview/             # SVG views, isometric, WebGL 3D panel (9 files)
+│   ├── optimizer/           # Cut sheets, smart optimizer, tables, G-code preview (26 files)
+│   ├── assembly/            # Step-by-step guide, build log (5 files)
+│   ├── pdf/                 # Document orchestrator + sections/ (17 files)
+│   └── layout/              # Header, sidebar, toasts, onboarding, error boundary (19 files)
 ├── store/
-│   ├── cabinet-store.ts     # Main Zustand store: config, derived state, undo/redo
-│   ├── custom-materials-store.ts  # User-defined materials
-│   ├── room-store.ts        # Room layout state
-│   └── toast-store.ts       # Notification queue
-├── hooks/
-│   ├── useFocusTrap.ts      # Accessible modal focus management
-│   ├── useIntersectionVisible.ts
-│   └── usePwaFileHandlers.ts
-├── i18n/
-│   ├── index.ts             # i18next setup
-│   ├── en.json              # English translations
-│   └── he.json              # Hebrew translations (RTL)
-│   ├── ar.json              # Arabic translations (RTL)
-│   ├── de.json              # German translations
-│   ├── es.json              # Spanish translations
-│   └── fr.json              # French translations
-├── utils/
-│   ├── bom-export.ts        # CSV bill of materials export
-│   ├── download.ts          # Shared file download helper
-│   ├── dxf-export.ts        # AutoCAD R12 DXF export for CNC
-│   ├── gcode-export.ts      # G-code export for CNC routers
-│   ├── indexed-db-storage.ts # IndexedDB persistence and localStorage migration
-│   ├── local-storage.ts     # localStorage persistence
-│   ├── project-storage.ts   # Saved projects and snapshots
-│   ├── units.ts             # Metric ↔ imperial conversion
-│   └── url-state.ts         # URL query param serialization
-└── assets/                  # Static assets (favicon, etc.)
+│   ├── cabinet-store.ts     # Main store: cabinets, derived state, undo/redo
+│   ├── slices/              # uiSlice · snapshotSlice · optimizerSettingsSlice · namedExpressionsSlice
+│   ├── custom-materials-store.ts · custom-hardware-store.ts · room-store.ts
+│   ├── stock-tracker-store.ts · cost-variance-store.ts · toast-store.ts
+│   ├── safe-persist-storage.ts   # Fault-tolerant persistence wrapper
+│   └── worker-schedule.ts   # Worker lifecycle, abort, timeout, stale-result suppression
+├── workers/                 # cut-optimizer, cost-estimator, assembly, bom-export, dxf-export
+├── hooks/                   # useFocusTrap, useTouchGestures, useCamera, useHaptics,
+│                            #   useSwUpdate, usePwaFileHandlers, useSystemDarkMode, useIntersectionVisible
+├── i18n/                    # index.ts + en, he, ar, de, es, fr (non-English lazy-loaded)
+├── services/                # capability-contracts, error-reporter
+└── utils/                   # 33 files: BOM/DXF/G-code export, URL state, IndexedDB storage, ZIP, downloads
 
 public/
-├── manifest.json            # PWA manifest
-├── sw.js                    # Service worker (cache-first)
-├── robots.txt               # Search engine directives
-├── sitemap.xml              # Sitemap
-└── 404.html                 # GitHub Pages SPA fallback
+├── manifest.json            # PWA manifest with file handlers
+├── _headers · _redirects    # Cloudflare Pages security headers (CSP) and SPA fallback
+├── offline.html · 404.html  # Offline and GitHub Pages fallbacks
+├── robots.txt · sitemap.xml
+└── fonts/                   # Self-hosted fonts
 
-tests/                       # Vitest unit tests (mirrors src/ structure)
-  ├── helpers.ts             # Shared test fixtures (cfg, mockSheet, mockPart)
-  ├── assertions.ts          # Reusable test assertions (bilingual, sequential)
+tests/                       # 353 test files mirroring src/
+├── engine/ store/ utils/ hooks/ services/ i18n/   # Vitest unit and property tests
+├── components/              # Testing Library behaviour tests (separate coverage ratchet)
+├── e2e/                     # Playwright journeys, accessibility, visual baselines
+├── fixtures/                # Oracles, golden exports, project fixtures
+├── bench/                   # Vitest benchmarks (budgets in config/bench-budget.json)
+└── helpers.ts · assertions.ts · setup.ts
+
 .github/
-├── workflows/
-│   ├── ci.yml               # CI: typecheck → lint → test → build
-│   ├── release.yml          # Release: build + GitHub Release with artifacts
-│   └── pages.yml            # Deploy to GitHub Pages on push to main
-├── ISSUE_TEMPLATE/          # Bug report, feature request
-├── PULL_REQUEST_TEMPLATE.md
-├── CODEOWNERS
-├── CONTRIBUTING.md
-├── SECURITY.md
+├── workflows/               # 15 workflows: CI, release, pages, CodeQL, mutation, Lighthouse, …
+├── actions/setup-node/      # Composite checkout + Node + npm ci
+├── agents/ prompts/ instructions/ skills/ hooks/   # Copilot assets (validated in quality)
+├── ISSUE_TEMPLATE/ DISCUSSION_TEMPLATE/
+├── CONTRIBUTING.md · SECURITY.md · GOVERNANCE-POLICY.md
 └── dependabot.yml
 ```
+
+### CNC Serial Ownership
+
+`src/engine/webserial-v2.ts` owns the pure stream-session state machine;
+`src/utils/webserial-cnc.ts` owns browser Web Serial I/O and is used by the
+assembly panel. Keep device access out of the pure engine. The public
+`src/engine/webserial.ts` API remains as a deprecated compatibility adapter
+through v5.35.x and is scheduled for removal in v5.36.0.
 
 ## ⚙ Engine Module
 
@@ -126,28 +122,25 @@ The engine is a set of pure functions with no React dependency. All functions ta
 
 ## 🗄 State Management
 
-A single Zustand store (`cabinet-store.ts`) holds:
+The main Zustand store (`cabinet-store.ts`) composes four slices (`uiSlice`, `snapshotSlice`, `optimizerSettingsSlice`, `namedExpressionsSlice`) and holds:
 
 - **Project state**: array of `CabinetEntry` (name + config), active index
-- **Derived state**: dimensions, parts, hardware, optimization (recomputed on config change)
+- **Derived state**: dimensions and parts computed synchronously; optimization, cost and assembly scheduled on Web Workers by `worker-schedule.ts` (abort, timeout and stale-result suppression)
 - **Undo/redo**: past/future stacks of cabinet arrays (max 50 entries)
-- **UI state**: active tab, dark mode, color-blind mode, unit system
+- **UI state**: active tab, dark mode, high contrast, colour-blind mode, unit system, focus mode
 
-Two supplementary stores:
-
-- `custom-materials-store.ts` — user-defined materials persisted to localStorage
-- `toast-store.ts` — notification queue with auto-dismiss
+Satellite stores: `custom-materials-store.ts`, `custom-hardware-store.ts`, `room-store.ts`, `stock-tracker-store.ts`, `cost-variance-store.ts` and `toast-store.ts`. Phase 82 (Sprint 429) plans to fold them into domain slices with patch-based history.
 
 Saved projects, configurations, and snapshots use IndexedDB through `idb-keyval` in
 `utils/indexed-db-storage.ts`. Existing localStorage project/config data migrates one-way on first
-access; session state and UI preferences continue to use localStorage.
+access; session state and UI preferences continue to use localStorage via `safe-persist-storage.ts`.
 
 ## 📦 Build & Deploy
 
-- **Bundler**: Vite 8 with React plugin + Tailwind CSS plugin
-- **Code splitting**: `@react-pdf/renderer` is split into a separate chunk via `manualChunks` and lazy-loaded
-- **Deploy target**: GitHub Pages (base path: `/WoodworkingShop/`)
-- **PWA**: service worker in `public/sw.js` with cache-first strategy
+- **Bundler**: Vite 8 (Rolldown) with React plugin + Tailwind CSS plugin
+- **Code splitting**: every tab panel is `React.lazy`; `@react-pdf/renderer` is split into its own chunk via `manualChunks` and loaded on demand
+- **Deploy targets**: GitHub Pages (base path `/WoodworkingShop/`) and Cloudflare Pages (edge CDN, PR previews, CSP headers from `public/_headers`)
+- **PWA**: `vite-plugin-pwa` generates a Workbox service worker (`registerType: 'prompt'`); `useSwUpdate` shows the update-ready banner
 
 Intermediate artifact policy:
 
@@ -165,7 +158,7 @@ Cross-Origin-Opener-Policy:  same-origin
 Cross-Origin-Embedder-Policy: require-corp
 ```
 
-**Current status**: GitHub Pages does **not** set these headers, so `crossOriginIsolated` is `false` in production. The utility function `trySharedArrayBuffer(size)` in `src/workers/shared-buffer.ts` detects this and returns `null`, allowing the worker pipeline to fall back to standard transfer automatically.
+**Current status**: GitHub Pages does **not** set these headers, so `crossOriginIsolated` is `false` there. Cloudflare Pages sends `Cross-Origin-Opener-Policy: same-origin` but not COEP. The utility function `trySharedArrayBuffer(size)` in `src/workers/shared-buffer.ts` detects this and returns `null`, allowing the worker pipeline to fall back to standard transfer automatically.
 
 **To enable locally**: Add to `vite.config.ts` `server.headers`:
 
@@ -174,9 +167,9 @@ Cross-Origin-Embedder-Policy: require-corp
 'Cross-Origin-Embedder-Policy': 'require-corp',
 ```
 
-## 🎮 WebGL 3-D Preview (Phase 7 Evaluation)
+## 🎮 WebGL 3-D Preview
 
-A lightweight WebGL probe is included for future material-texture previews (v4.0+).
+The Preview tab mounts an interactive 3D panel (`Preview3DPanel`) beside the six SVG views. Sprint 440 plans a WebGPU renderer with a WebGL2 fallback.
 
 **Feature probe** — `src/engine/webgl-probe.ts`:
 
@@ -192,66 +185,57 @@ A lightweight WebGL probe is included for future material-texture previews (v4.0
 - Uses raw WebGL (no external library) to keep bundle impact near zero.
 - Falls back gracefully to a descriptive message if WebGL is unsupported.
 
-> Evaluation status and roadmap items for full material-texture + GLTF support: [ROADMAP.md](../ROADMAP.md).
+> Roadmap items for realistic materials and the WebGPU path: [ROADMAP.md — Sprint 440](../ROADMAP.md).
 
 ## 🧩 Component Tree
 
 ```mermaid
 graph TD
-  App["App.tsx"]:::root
+  App["App.tsx<br/>shortcuts · lazy panels · focus mode"]:::root
 
-  subgraph Sidebar_["Configurator Sidebar"]
-    Sidebar["ConfiguratorPanel"]:::config
-    PresetsPanel["PresetsPanel\n6 quick-start templates"]:::sub
-    DimSliders["DimensionSliders\nW, H, D, kick height"]:::sub
-    MatSel["MaterialSelector"]:::sub
-    DoorConfig["DoorConfig"]:::sub
-    DrawerConfig["DrawerConfig\nper-drawer heights"]:::sub
-    ShelfConfig["ShelfConfig"]:::sub
+  Header["Header<br/>tabs, undo/redo, theme, language, units"]:::layout
+  Sidebar["Sidebar<br/>cabinets, project summary, cost"]:::layout
+  Shell["ToastContainer · OnboardingManager · ShortcutsModal"]:::layout
+
+  subgraph Tabs["Seven tabs — each panel wrapped in an ErrorBoundary"]
+    Workspace["Workspace<br/>welcome banner"]:::tab
+    Config["Configurator<br/>ConfiguratorPanel + RoomLayoutView"]:::config
+    Preview["Preview<br/>CabinetPreview (6 SVG views) + Preview3DPanel"]:::view
+    Optimizer["Cut Sheets<br/>ProjectSummary · SmartOptimizer · Parts/Hardware tables · OptimizerView"]:::tab
+    Assembly["Assembly<br/>AssemblyGuide + build log"]:::tab
+    PDF["PDF Export<br/>PdfExportPanel + glTF/STEP/IFC"]:::tab
+    Calc["Calculators<br/>24 lazy calculator panels"]:::tab
   end
 
-  subgraph Preview_["Preview Panel"]
-    Preview["CabinetPreview\n6 views, SVG/PNG export"]:::view
-    FrontClosed["Front closed"]:::viewItem
-    FrontOpen["Front open, draggable shelves"]:::viewItem
-    SideView["Side"]:::viewItem
-    TopView["Top"]:::viewItem
-    BackView["Back"]:::viewItem
-    Iso3D["Isometric 3D"]:::viewItem
+  subgraph ConfigParts["Configurator sections"]
+    Presets["Quick presets"]:::sub
+    Dims["Dimensions + toe kick"]:::sub
+    Mat["Materials + custom catalog"]:::sub
+    Doors["Doors + drawers + shelves"]:::sub
+    Expr["Named expressions"]:::sub
   end
-
-  Header["Header\ntabs, undo/redo, dark mode, lang"]:::layout
-  Optimizer["Optimizer\ncut sheets, smart optimizer, comparison"]:::tab
-  Assembly["AssemblyGuide\nsteps, progress, tips"]:::tab
-  PDF["PdfExportPanel\nfull build plan"]:::tab
 
   App --> Header
   App --> Sidebar
+  App --> Shell
+  App --> Workspace
+  App --> Config
   App --> Preview
   App --> Optimizer
   App --> Assembly
   App --> PDF
-
-  Sidebar --> PresetsPanel
-  Sidebar --> DimSliders
-  Sidebar --> MatSel
-  Sidebar --> DoorConfig
-  Sidebar --> DrawerConfig
-  Sidebar --> ShelfConfig
-
-  Preview --> FrontClosed
-  Preview --> FrontOpen
-  Preview --> SideView
-  Preview --> TopView
-  Preview --> BackView
-  Preview --> Iso3D
+  App --> Calc
+  Config --> Presets
+  Config --> Dims
+  Config --> Mat
+  Config --> Doors
+  Config --> Expr
 
   classDef root fill:#8b5022,stroke:#f0b040,color:#ffffff,font-weight:bold
   classDef layout fill:#d4860a,stroke:#8b5022,color:#1a0806
   classDef config fill:#2a6a4a,stroke:#1a4030,color:#ffffff,font-weight:bold
   classDef sub fill:#e0f5ea,stroke:#4a9a6a,color:#1a3a28
   classDef view fill:#2a5a9a,stroke:#1a3a6e,color:#ffffff,font-weight:bold
-  classDef viewItem fill:#dce8f8,stroke:#5a8fd0,color:#1a2840
   classDef tab fill:#7a3a10,stroke:#c08040,color:#fae7c0
 ```
 
@@ -264,23 +248,23 @@ sequenceDiagram
   participant C as Configurator
   participant S as Zustand Store
   participant E as Engine
+  participant W as Workers
   participant V as Preview / Optimizer
 
   U->>C: Adjust dimension or material
   C->>S: patch config
   S->>S: Push undo history
-  S->>E: computeDimensions(config)
-  E-->>S: DerivedDimensions
-  S->>E: generateParts(config)
-  E-->>S: Part[]
-  S->>E: generateHardware(config)
-  E-->>S: HardwareItem[]
-  S->>E: optimizeCutSheets(parts)
-  E-->>S: OptimizationResult
-  S-->>V: Re-render with new state
+  S->>E: computeDimensions + generateParts + generateHardware
+  E-->>S: DerivedDimensions, Part[], HardwareItem[]
+  S-->>V: Re-render preview and tables
+  S->>W: scheduleOptimization / scheduleCost / scheduleAssembly
+  Note over S,W: Newer requests abort older ones,<br/>timeouts terminate and recreate the worker
+  W->>E: optimizeCutSheets, estimateCost, generateAssembly
+  W-->>S: OptimizationResult, CostBreakdown, steps
+  S-->>V: Re-render cut sheets, cost and assembly
 ```
 
-## Cut Optimizer Pipeline (v3.1.0+)
+## ✂ Cut Optimizer Pipeline
 
 The cut optimizer uses a Maximal Rectangles (MaxRects) algorithm with the
 Best Short Side Fit (BSSF) heuristic. Parts are queued in descending
@@ -311,41 +295,40 @@ flowchart TD
 
 ```mermaid
 graph TD
-  push["Push or PR to main"] --> ci["CI workflow\nci.yml"]
-  push --> pages["Pages workflow\npages.yml"]
+  push["Push or PR to main"] --> quality
+  push --> pages["pages.yml"]
 
-  subgraph CI [CI - Runs on Node 22, 24 and 26]
-    ci --> tc["Typecheck\ntsc --noEmit"]
-    tc --> lint["ESLint\n0 warnings"]
-    lint --> mdlint["markdownlint"]
-    mdlint --> fmt["format:check\nPrettier"]
-    fmt --> test["Vitest unit tests\n5,256 tests across 341 files"]
-    test --> cov["Coverage report\nNode 22 only"]
-    cov --> build["Vite build"]
-    build --> bcheck["Bundle budget check\n2,960 KB raw limit"]
-    bcheck --> e2e["Playwright E2E\nChromium + Firefox; WebKit preview subset"]
-    e2e --> lhci["Lighthouse CI\nperf / a11y / SEO"]
+  subgraph CI ["ci.yml — Node 24 (compat job adds Node 26)"]
+    quality["quality job<br/>quality:fast · mcp:validate · components:budget"] --> test["test job<br/>Vitest + coverage · bench:check · build · bundle:check"]
+    quality --> compat["compat job<br/>build + bundle on Node 24 and 26"]
+    test --> e2e["e2e job<br/>Playwright Chromium + Firefox + WebKit"]
+    test --> lhci["lighthouse job<br/>perf / a11y / SEO"]
   end
 
-  subgraph Deploy [Deploy - on main push]
+  subgraph Deploy ["Deploy — on main push"]
     pages --> dbuild["npm run build"]
-    dbuild --> upload["Upload dist artifact"]
-    upload --> ghpages["actions/deploy-pages\nGitHub Pages"]
+    dbuild --> ghpages["GitHub Pages"]
+    cfp["cloudflare-pages.yml"] --> cf["Cloudflare Pages + PR previews"]
   end
 
-  subgraph Release [Release - on v-star tag]
+  subgraph Release ["Release — on v* tag"]
     tag["git push --follow-tags"] --> rbuild["Build + quality check"]
-    rbuild --> archive["dist.tar.gz + SHA-256"]
-    archive --> ghrelease["gh release create\nauto-extract CHANGELOG"]
+    rbuild --> archive["dist.tar.gz + SHA-256 + SBOM"]
+    archive --> ghrelease["GitHub Release<br/>notes from CHANGELOG"]
   end
+
+  weekly["Weekly schedule"] --> mutation["mutation.yml<br/>Stryker dimensions + BOM ≥ 79 %"]
+  weekly --> codeql["codeql.yml"]
 
   classDef trigger fill:#8b5022,stroke:#f0b040,color:#fff,font-weight:bold
   classDef step fill:#fae7c0,stroke:#c08040,color:#3a1806
   classDef gate fill:#3a7a50,stroke:#1e4a30,color:#fff,font-weight:bold
-  class push,tag trigger
-  class ghpages,ghrelease gate
-  class tc,lint,mdlint,fmt,test,cov,build,bcheck,e2e,lhci,dbuild,upload,rbuild,archive step
+  class push,tag,weekly trigger
+  class ghpages,ghrelease,cf gate
+  class quality,test,compat,e2e,lhci,dbuild,rbuild,archive,mutation,codeql,cfp,pages step
 ```
+
+Planned (Phase 81): SHA-pinned actions, sharded E2E with blocking visual snapshots, build attestations and an OpenSSF Scorecard workflow.
 
 ## 📤 Export Pipeline
 
@@ -391,68 +374,77 @@ graph LR
 
 ```mermaid
 graph TD
-  browser["Browser / Install prompt"]
+  browser["Browser / install prompt"]
 
-  subgraph SW [Service Worker - public/sw.js]
-    sw["Cache-first strategy"]
-    cache[("Cache Storage\napp shell + assets")]
-    sw -- "cache miss" --> network["Network fetch"]
-    sw -- "cache hit" --> cache
-    network -- "cache update" --> cache
+  subgraph SW ["Service worker — generated by vite-plugin-pwa (Workbox)"]
+    sw["Precache app shell + hashed assets"]
+    cache[("Cache Storage")]
+    runtime["Runtime caching rules"]
+    sw --> cache
+    runtime --> cache
+    fallback["navigateFallback<br/>index.html"]
   end
 
-  subgraph App [React SPA]
+  subgraph App ["React SPA"]
     app["App.tsx"]
-    ls[("localStorage\npresets, materials,\ndark mode, undo")]
-    urlp["URL query params\nconfig + project name"]
+    update["useSwUpdate<br/>update-ready banner (prompt)"]
+    files["usePwaFileHandlers<br/>open .cabinetplan files"]
+    idb[("IndexedDB<br/>projects, configs, snapshots")]
+    ls[("localStorage<br/>preferences, session")]
+    urlp["URL state<br/>?tab= · ?cab= · shared config"]
+    app --- update
+    app --- files
+    app --- idb
     app --- ls
     app --- urlp
   end
 
   browser --> sw
   sw --> app
-  manifest["public/manifest.json\nname, icons, start_url"] --> browser
+  manifest["public/manifest.json<br/>icons, file handlers, share target"] --> browser
 
   classDef sw fill:#5a0fc8,stroke:#3a0a8a,color:#fff,font-weight:bold
   classDef app fill:#2a5a9a,stroke:#1a3a6e,color:#fff,font-weight:bold
   classDef storage fill:#f0b040,stroke:#8b5022,color:#1a0806
-  class sw,cache sw
-  class app,ls,urlp app
-  class manifest,browser storage
+  class sw,cache,runtime,fallback sw
+  class app,update,files,urlp app
+  class manifest,browser,idb,ls storage
 ```
+
+Offline reload, quota pressure and file-handler journeys are re-opened as Sprint 315 carry-over for v5.35.0.
 
 ## 🌐 i18n Architecture
 
 ```mermaid
 graph LR
-  init["src/i18n/index.ts\ni18next.init()"]
-  en["en.json\nEnglish LTR"]
-  he["he.json\nHebrew RTL"]
+  init["src/i18n/index.ts<br/>i18next.init()"]
+  en["en.json<br/>bundled, LTR"]
+  lazy["he · ar · de · es · fr<br/>dynamic import on demand"]
   init --> en
-  init --> he
+  init -. "changeLanguage" .-> lazy
 
-  store["cabinet-store.ts\nlanguage state"]
-  store -- "changeLanguage he" --> rtl["document dir=rtl\nTailwind RTL classes"]
-  store -- "changeLanguage en" --> ltr["document dir=ltr"]
+  store["language state"]
+  store -- "he, ar" --> rtl["document dir=rtl<br/>Tailwind logical properties"]
+  store -- "en, de, es, fr" --> ltr["document dir=ltr"]
 
-  comp["React components\nt('key.path')"]
+  comp["React components<br/>t('key.path')"]
   init --> comp
-  en --> comp
-  he --> comp
 
-  ci["CI: i18n:coverage\ni18n-coverage.js\nverifies key parity"]
+  ci["CI: i18n:coverage<br/>key parity across 6 locales"]
   en --> ci
-  he --> ci
+  lazy --> ci
 
   classDef file fill:#3a7a50,stroke:#1e4a30,color:#fff,font-weight:bold
   classDef process fill:#fae7c0,stroke:#c08040,color:#3a1806
   classDef check fill:#2a5a9a,stroke:#1a3a6e,color:#fff
-  class en,he file
-  class init,store,comp process
+  class en,lazy file
+  class init,store,comp,rtl,ltr process
   class ci check
 ```
 
-## ♿ Accessibility (WCAG 2.2 AA) — v3.70+
+English and Hebrew are complete. Arabic, German, Spanish and French still fall back to English for a share of strings; Sprint 375 adds a completeness gate, glossary and pseudo-locales, and Sprint 433 splits locale files into typed namespaces.
+
+## ♿ Accessibility (WCAG 2.2 AA)
 
 Cabinet Planner targets **WCAG 2.2 Level AA** compliance. This section documents the patterns, CI gates, and runtime mechanisms in place.
 
@@ -466,28 +458,28 @@ Cabinet Planner targets **WCAG 2.2 Level AA** compliance. This section documents
 
 ### CI Gate — axe-core + Playwright
 
-Every push to `main` runs `tests/e2e/accessibility.spec.ts`, which:
+`tests/e2e/accessibility.spec.ts` runs on every CI run against the production build:
 
 1. Launches the built app with `@playwright/test`
-2. Injects `@axe-core/playwright` and runs a full audit
-3. Fails the CI pipeline on **any WCAG 2.1 AA violation** (rule set: `wcag2a`, `wcag2aa`, `wcag21aa`)
+2. Injects `@axe-core/playwright` with tags `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa` and `wcag22aa`
+3. Fails the pipeline on any violation
 
-The test covers the homepage and the configurator tab. Violations are surfaced as named assertion failures with the impacted selector and the WCAG criterion ID.
+Coverage: all seven tabs × six locales × light/dark themes, plus mobile navigation and onboarding, the shortcuts dialog, project manager, invalid-import errors, G-code export preview and optimizer loading/error recovery (Sprint 316). A keyboard-only journey covers skip link, focus visibility, tab order and dialog focus return.
 
 ### Focus Management
 
-| Pattern                | Location                                                                                                                                          |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Focus trap**         | `ShortcutsModal.tsx` and `TemplatePicker.tsx` — modal dialogs trap focus within the modal boundary and restore it to the trigger element on close |
-| **Skip-to-main**       | `index.html` — `<a href="#main-content">` skip link at the top of the DOM, translatable via `a11y.skipToContent` i18n key                         |
-| **Tab order**          | All interactive elements follow logical DOM order; `tabIndex` is only used for hidden inputs (`tabIndex={-1}`)                                    |
-| **Keyboard shortcuts** | `?` = shortcuts modal, `Ctrl+Z` = undo, `Ctrl+Y` = redo, `1`–`5` = tab navigation (documented in ShortcutsModal)                                  |
+| Pattern                | Location                                                                                                                          |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| **Focus trap**         | `useFocusTrap` hook — shared by every modal dialog; ignores negative-tabindex elements and restores focus to the trigger on close |
+| **Skip-to-main**       | `index.html` — `<a href="#main-content">` skip link at the top of the DOM, translatable via `a11y.skipToContent` i18n key         |
+| **Tab order**          | All interactive elements follow logical DOM order; `tabIndex` is only used for hidden inputs (`tabIndex={-1}`)                    |
+| **Keyboard shortcuts** | `?` = shortcuts modal, `Ctrl+Z` / `Ctrl+Y` = undo/redo, `Alt+1`–`Alt+6` = tabs, `Alt+D` = dark mode, `Ctrl+Shift+K` = focus mode  |
 
 ### Visual Accessibility
 
 | Feature                      | Implementation                                                                                                                                      |
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **High-contrast mode**       | `.high-contrast` CSS class on `<body>`, toggled via `toggleHighContrast()` store action. Adds forced white-on-black overrides for all UI elements.  |
+| **High-contrast mode**       | `.high-contrast` CSS class on the app root wrapper, toggled via the `toggleHighContrast()` store action and persisted with UI preferences.          |
 | **Color-blind mode**         | `colorBlindMode` store toggle adds deuteranopia-friendly palette (amber → blue shift) for cut-sheet diagrams                                        |
 | **`prefers-reduced-motion`** | CSS `@media (prefers-reduced-motion: reduce)` disables all transitions and animations (`transition: none !important`, `animation: none !important`) |
 | **`prefers-color-scheme`**   | Dark mode auto-detected on first load via `detectOsDarkMode()`, persisted to localStorage                                                           |
@@ -506,10 +498,54 @@ The test covers the homepage and the configurator tab. Violations are surfaced a
 
 ### RTL Support
 
-Hebrew (`he`) locale triggers `document.dir = 'rtl'`. Tailwind's logical-property utilities (`start`, `end`, `ms-*`, `me-*`) are used throughout to ensure correct mirroring without manual CSS overrides.
+Hebrew (`he`) and Arabic (`ar`) locales set `document.dir = 'rtl'`. Tailwind's logical-property utilities (`start`, `end`, `ms-*`, `me-*`) are used throughout to ensure correct mirroring without manual CSS overrides.
 
 ### Known Limitations
 
 - PDF exports (`@react-pdf/renderer`) are not keyboard-navigable (the generated PDF is a binary file; this is a platform constraint).
 - The isometric 3D SVG view does not expose individual panel labels to screen readers — only the cabinet-level `<title>` and `<desc>` are present (improvement tracked in ROADMAP).
 - Browser verification is intentionally uneven: the full journey suite runs in Chromium and Firefox; desktop and mobile WebKit run preview acceptance only. The six-locale axe matrix and responsive/visual preview matrices are Chromium-only. Sprint 318's 2026-10-02 no-retry run passed 439 tests with 13 intentional project-scope skips and no failures.
+
+## 🎯 Target Architecture (Phase 82)
+
+Phase 82 of the [roadmap](../ROADMAP.md) restructures the code without changing behaviour. Export goldens, visual baselines and E2E journeys must stay identical.
+
+```mermaid
+flowchart TB
+  App["app/<br/>shell · routes (Navigation API) · command registry · error boundaries"]
+  Features["features/*<br/>configurator · preview · optimizer · assembly · pdf · calculators · workspace"]
+  UI["ui/<br/>design-system primitives"]
+  Store["store/<br/>domain slices · patch history"]
+  Platform["platform/<br/>storage · files · share · device · diagnostics"]
+  Workers["workers/<br/>typed WorkerJob pool"]
+  Engine["engine/*<br/>13 pure domains"]
+
+  App --> Features
+  Features --> UI
+  Features --> Store
+  Store --> Engine
+  Store --> Platform
+  Platform --> Workers
+  Workers --> Engine
+
+  classDef shell fill:#8b5022,stroke:#f0b040,color:#ffffff,font-weight:bold
+  classDef view fill:#f0b040,stroke:#8b5022,color:#1a0806,font-weight:bold
+  classDef state fill:#3a7a50,stroke:#1e4a30,color:#ffffff,font-weight:bold
+  classDef pure fill:#2a5a9a,stroke:#1a3a6e,color:#ffffff,font-weight:bold
+  classDef io fill:#fae7c0,stroke:#c08040,color:#3a1806
+  class App shell
+  class Features,UI view
+  class Store state
+  class Engine pure
+  class Platform,Workers io
+```
+
+| Rule (enforced by `npm run architecture:check` from Sprint 426) | Why                                                   |
+| --------------------------------------------------------------- | ----------------------------------------------------- |
+| `engine/` imports only `engine/`                                | Pure, deterministic, testable without a DOM           |
+| Browser APIs only in `platform/` and `app/`                     | One place to fake, harden and feature-detect          |
+| Cross-domain imports only through domain barrels                | Stable internal APIs; safe moves                      |
+| No import cycles                                                | Predictable loading and code splitting                |
+| Components ≤ 400 lines after Sprint 431                         | Reviewable files; primitives instead of copy-paste UI |
+
+Architecture decisions are recorded as ADRs in `docs/decisions/` from Sprint 426.

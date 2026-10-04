@@ -85,6 +85,15 @@ export function IconLink(p: IconProps) {
   );
 }
 
+export function IconSearch(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <circle cx="11" cy="11" r="7" />
+      <line x1="16" y1="16" x2="21" y2="21" />
+    </Icon>
+  );
+}
+
 export function IconPrint(p: IconProps) {
   return (
     <Icon {...p}>

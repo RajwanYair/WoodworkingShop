@@ -86,24 +86,28 @@
 
 ### 📤 Export
 
-| Format        | Details                                                                                       |
-| ------------- | --------------------------------------------------------------------------------------------- |
-| **PDF**       | Cover · specs · parts table · hardware BOM · cut diagrams · assembly sequence · shopping list |
-| **DXF**       | AutoCAD R12 DXF for CNC routers; per-sheet or combined                                        |
-| **G-code**    | CNC router toolpath export                                                                    |
-| **CSV BOM**   | Bill of materials as spreadsheet-ready CSV                                                    |
-| **SVG / PNG** | Preview panels as vector or raster image                                                      |
-| **JSON**      | Full config export/import                                                                     |
+| Format                | Details                                                                                       |
+| --------------------- | --------------------------------------------------------------------------------------------- |
+| **PDF**               | Cover · specs · parts table · hardware BOM · cut diagrams · assembly sequence · shopping list |
+| **DXF**               | AutoCAD R12 DXF for CNC routers; per-sheet or combined                                        |
+| **G-code**            | CNC router toolpath export with preview, tool and pass options                                |
+| **CSV**               | Bill of materials and hardware list as spreadsheet-ready CSV (formula-injection safe)         |
+| **Labels**            | Grouped or per-part label sheets for printing                                                 |
+| **SVG / PNG**         | Preview panels as vector or raster image                                                      |
+| **glTF / STEP / IFC** | 3D model exchange for viewers, CAD and BIM tools                                              |
+| **ZIP**               | Batch bundle with a SHA-256 manifest                                                          |
+| **JSON**              | Full project export/import                                                                    |
 
 ### 🛠 Other
 
 - 🏗 **Assembly guide** — numbered steps with progress bar, part highlighting, and pro tips
+- 🧮 **24 woodworking calculators** — joinery, finishing, sag, wood movement, router, stair and more, each checked against a published reference case
 - 💰 **Cost estimator** — per-material sheet costs + hardware + edge banding; live sidebar total
 - ↩ **Undo / Redo** — full change history (`Ctrl+Z` / `Ctrl+Y`)
-- ⌨ **Keyboard shortcuts** — `Alt+1-5` tabs, `Ctrl+Z/Y`, `Ctrl+P`, `?` for help modal
+- ⌨ **Keyboard shortcuts** — `Alt+1`–`Alt+6` tabs, `Alt+D` dark mode, `Ctrl+Z/Y`, `Ctrl+P`, `?` for help modal
 - 📱 **PWA / Offline** — service worker; installable as a desktop or mobile app
-- 🌐 **Multilingual** — 6 languages: EN, HE, AR, DE, ES, FR (with full RTL support)
-- ♿ **Accessible** — ARIA landmarks, keyboard nav, skip-to-content, screen-reader labels
+- 🌐 **Multilingual** — 6 languages: EN, HE, AR, DE, ES, FR (with full RTL support); EN and HE are complete, AR/DE/ES/FR are being completed ([Sprint 375](ROADMAP.md))
+- ♿ **Accessible** — WCAG 2.2 AA axe scans on every tab, keyboard-only journeys, skip-to-content, screen-reader labels
 - 🖨 **Print-friendly** — `@media print` hides UI chrome; optimises tables and SVGs for paper
 
 ---
@@ -148,7 +152,7 @@ npm run build
 | i18n          | 🌐 i18next 26 + react-i18next                              |
 | Build         | ⚡ Vite 8                                                  |
 | Unit tests    | 🧪 Vitest 4 + @testing-library/react                       |
-| E2E tests     | 🎭 Playwright                                              |
+| E2E tests     | 🎭 Playwright 1.61 + axe-core (Chromium, Firefox, WebKit)  |
 | Lint / format | 🧹 ESLint 10 (flat config) + Prettier                      |
 | CI/CD         | 🤖 GitHub Actions                                          |
 | Deploy        | 🚀 GitHub Pages + Cloudflare Pages (edge CDN, PR previews) |
@@ -162,25 +166,29 @@ All computation runs **client-side** — no backend, no account required.
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0b040', 'primaryTextColor': '#1a0e06', 'primaryBorderColor': '#8b5022', 'lineColor': '#7a4010', 'secondaryColor': '#f8ede0', 'tertiaryColor': '#fef7ed', 'edgeLabelBackground': '#fef7ed'}}}%%
 graph TD
-    UI["Configurator UI\nReact + Zustand"]
-    Store[("Cabinet Store\nZustand 5")]
-    Engine[["Engine\nPure TypeScript"]]
+    UI["React UI<br/>7 tabs · configurator · calculators"]
+    Store[("Zustand store<br/>slices · undo/redo")]
+    Engine[["Engine<br/>pure TypeScript"]]
+    Workers["Web Workers<br/>optimizer · cost · assembly · BOM · DXF"]
+    Storage[("IndexedDB + localStorage<br/>projects · snapshots · prefs")]
 
-    subgraph Outputs["Rendered and Exported"]
-        Preview["SVG Preview\n6 views + isometric 3D"]
-        Optimizer["Cut Optimizer\nMaxRects bin-pack"]
-        Smart["Smart Optimizer\n5 strategies"]
-        Assembly["Assembly Guide"]
-        PDF["PDF Export"]
-        Exports["DXF, G-code, CSV, JSON"]
+    subgraph Outputs["Rendered and exported"]
+        Preview["SVG preview<br/>6 views + WebGL 3D"]
+        Optimizer["Cut optimizer<br/>MaxRects · guillotine · smart"]
+        Assembly["Assembly guide"]
+        PDF["PDF build plan"]
+        Exports["DXF · G-code · CSV · glTF · STEP · IFC · ZIP"]
     end
 
     UI -->|"setConfig(patch)"| Store
     Store -->|config| Engine
-    Engine -->|"parts, hardware, dims, cost"| Store
+    Store -->|"heavy jobs"| Workers
+    Workers --> Engine
+    Engine -->|"parts, hardware, dims"| Store
+    Workers -->|"sheets, cost, steps"| Store
+    Store <--> Storage
     Store --> Preview
     Store --> Optimizer
-    Optimizer --> Smart
     Store --> Assembly
     Store --> PDF
     Store --> Exports
@@ -191,41 +199,70 @@ graph TD
     classDef output fill:#fae7c0,stroke:#c08040,color:#3a1806
 
     class UI ui
-    class Store store
-    class Engine engine
-    class Preview,Optimizer,Smart,Assembly,PDF,Exports output
+    class Store,Storage store
+    class Engine,Workers engine
+    class Preview,Optimizer,Assembly,PDF,Exports output
 ```
 
 **Engine modules** (`src/engine/`) are pure TypeScript with no React dependencies — fully testable without a DOM.
 
 ```text
 src/
-├── engine/          # Pure TS — types, materials, dimensions, parts, hardware,
-│                    #   cut-optimizer, smart-optimizer, assembly, cost-estimator
+├── engine/          # Pure TS — dimensions, parts, hardware, cut optimizers, assembly,
+│                    #   costing, calculators, exports (glTF/STEP/IFC), validation
 ├── components/      # React UI — configurator, preview, optimizer, assembly, pdf, layout
-├── store/           # Zustand — cabinet-store, custom-materials-store, toast-store
-├── hooks/           # useTouchGestures
-├── i18n/            # en.json · he.json · setup
-└── utils/           # bom-export · dxf-export · gcode-export · url-state · units · download
+├── store/           # Zustand — cabinet-store + slices, materials, hardware, room, toast stores
+├── workers/         # Web Workers — cut optimizer, cost, assembly, BOM, DXF
+├── hooks/           # Focus trap, touch gestures, camera, haptics, PWA update/file handlers
+├── i18n/            # en · he · ar · de · es · fr (non-English lazy-loaded)
+├── services/        # Capability contracts, error reporter
+└── utils/           # BOM/DXF/G-code export, URL state, storage, downloads, units
 ```
 
+The [roadmap](ROADMAP.md#target-architecture-phase-82) describes the planned move to domain folders, a `platform/` layer and feature-sliced UI.
+
 → Full architecture docs: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+
+---
+
+## 🗺 What's Next
+
+```mermaid
+flowchart LR
+  now["v5.34.0 ✅<br/>verified journeys"] --> c["v5.35.0<br/>command palette · 6 complete locales"]
+  c --> t["v5.36–v5.38<br/>TypeScript 7 · Vitest 5 · architecture refactor · versioned data"]
+  t --> d["v5.39–v5.40<br/>examples · shop drawings · docs site"]
+  d --> w["v5.41–v5.43<br/>cut-list workbench · 1D lumber · shop-floor mode"]
+  w --> m["v5.44–v5.48<br/>CNC · doors · rooms · files"]
+  m --> v6["v6.0<br/>best-in-class review"]
+
+  classDef done fill:#3a7a50,stroke:#1e4a30,color:#ffffff,font-weight:bold
+  classDef next fill:#f0b040,stroke:#8b5022,color:#1a0806,font-weight:bold
+  classDef later fill:#fae7c0,stroke:#c08040,color:#3a1806
+  class now done
+  class c next
+  class t,d,w,m,v6 later
+```
+
+Details, sprint contracts and the competitive benchmark live in [ROADMAP.md](ROADMAP.md).
 
 ---
 
 ## 🔧 Development Commands
 
 ```bash
-npm run typecheck       # TypeScript strict-mode check (tsc --noEmit)
+npm run typecheck       # TypeScript strict-mode check (tsc -b --noEmit)
 npm run lint            # ESLint — 0 warnings policy
 npm run format          # Prettier auto-format
 npm run format:check    # Verify formatting (used in CI)
-npm run i18n:coverage   # Check EN ↔ HE translation parity
-npm run bundle:check    # Bundle budget and size guard
-npm run bench:check     # Engine benchmark regression gate (5× baseline thresholds)
-npm run check           # typecheck + lint + format:check + test  (pre-commit gate)
-npm run ci              # check + build + bundle:check  (full CI pipeline)
-npm run test:e2e        # Playwright end-to-end tests
+npm run i18n:coverage   # Check translation key parity across all 6 locales
+npm run quality:fast    # All quality gates in parallel (types, lint, CSS, Markdown, i18n, AI-asset validators)
+npm run check           # quality:fast + unit tests  (pre-commit gate)
+npm run ci              # check + build + bundle:check + bench:check  (full CI gate)
+npm run test:e2e        # Playwright end-to-end, accessibility and visual tests
+npm run test:coverage   # Coverage report → %TEMP%/WoodworkingShop/coverage
+npm run dead:check      # Knip — unused files, exports and dependencies
+npm run capabilities:check # verify engine, utility and service capability classifications
 ```
 
 ## 🧰 Tooling and Intermediate Files
@@ -240,7 +277,9 @@ npm run test:e2e        # Playwright end-to-end tests
 ## 🌐 Internationalization
 
 The app ships with **6 languages**: English, Hebrew (RTL), Arabic (RTL),
-German, Spanish, and French.
+German, Spanish, and French. English loads with the app; the other locales are lazy-loaded.
+English and Hebrew are complete; Arabic, German, Spanish and French still fall back to English
+for some strings and are being completed in [Sprint 375](ROADMAP.md).
 All UI strings live in `src/i18n/{en,he,ar,de,es,fr}.json`.
 Run `npm run i18n:coverage` to verify all locale files are in sync.
 
@@ -259,7 +298,7 @@ Engine benchmarks are available with `npm run bench:check`.
 
 The app auto-deploys to **GitHub Pages** on every push to `main` via [`.github/workflows/pages.yml`](.github/workflows/pages.yml).
 
-### Cloudflare Pages (Phase 12 / Sprint 15)
+### Cloudflare Pages
 
 A parallel Cloudflare Pages deployment is configured via [`.github/workflows/cloudflare-pages.yml`](.github/workflows/cloudflare-pages.yml).
 It provides edge CDN delivery at 250+ PoPs and automatic PR preview deployments.
@@ -311,9 +350,9 @@ ideas, use [GitHub Discussions](https://github.com/RajwanYair/WoodworkingShop/di
 
 Quick checklist before opening a PR:
 
-1. `npm run check` passes (typecheck + lint + format + tests)
+1. `npm run check` passes (parallel quality gates + unit tests)
 2. `npm run build` succeeds with 0 warnings
-3. New features include unit tests
+3. New features include unit tests and a browser journey for every new control
 4. i18n keys added to **all 6 locale files** (en + he proper, ar/de/es/fr at minimum)
 
 ---
@@ -353,6 +392,6 @@ assembly instructions generator, woodworking project planner
 
 ---
 
-## �📄 License
+## 📄 License
 
 [MIT](LICENSE) © RajwanYair

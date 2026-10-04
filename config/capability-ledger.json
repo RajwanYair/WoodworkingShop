@@ -1,0 +1,910 @@
+{
+  "schemaVersion": 1,
+  "modules": {
+    "src/engine/a11y-audit.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/ai-assistant.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/analytics.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/assembly-dag.ts": {
+      "classification": "internal",
+      "rationale": "Assembly dependency graph is an engine scheduling primitive, not a standalone UI capability."
+    },
+    "src/engine/assembly-dependency.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/assembly-timer.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/assembly.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/assembly/index.ts": {
+      "classification": "public-api",
+      "rationale": "Stable assembly domain barrel for engine consumers.",
+      "documentation": "docs/API-BOUNDARIES.md"
+    },
+    "src/engine/audit-trail.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/bandsaw-speed.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/batch-export.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/batch-replace.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/board-feet.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/bom-filter.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/box-joint.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/bundle-strategy.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/cabinet-door.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/cabinet-notes.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/cloud-sync.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/cnc-job-queue.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/community-catalog.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/constraint-solver.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/cost-estimator.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/cost-summary-export.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/cost-variance.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/cove-cut.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/crdt-sync.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/crown-moulding.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/cut-checklist.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/cut-list-grouping.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/cut-optimizer.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/cut-plan-summary.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/dado-rabbet.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/dark-mode-tokens.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/dimensions.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/dovetail-layout.ts": {
+      "classification": "surfaced",
+      "rationale": "Mounted as a lazy calculator section in src/components/configurator/CalculatorsPanel.tsx."
+    },
+    "src/engine/dowel-joint.ts": {
+      "classification": "surfaced",
+      "rationale": "Mounted as a lazy calculator section in src/components/configurator/CalculatorsPanel.tsx."
+    },
+    "src/engine/drawer-box.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/drawer-runner.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/drawer-slide.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/drill-speed.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/dust-collection.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/edge-profile.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/erp-export.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/export-format.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/export-schema.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/export/gltf-export.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/export/ifc-export.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/export/index.ts": {
+      "classification": "public-api",
+      "rationale": "Stable export domain barrel for engine consumers.",
+      "documentation": "docs/API-BOUNDARIES.md"
+    },
+    "src/engine/export/step-export.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/face-frame.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/feed-rate.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/finger-joint.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/finish-calculator.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/finishing-coat.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/frame-panel.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/gcode-toolpath.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/gcode-validator.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/geometry/index.ts": {
+      "classification": "public-api",
+      "rationale": "Stable geometry domain barrel for engine consumers.",
+      "documentation": "docs/API-BOUNDARIES.md"
+    },
+    "src/engine/gltf-export.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/glue-coverage.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/glue-up-time.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/grain-conflict.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/grain-constraint.ts": {
+      "classification": "internal",
+      "rationale": "Per-part grain rule is consumed by part generation and optimizer constraints."
+    },
+    "src/engine/grain-report.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/half-lap.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/hardware-catalog.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/hardware-spec.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/hardware.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/hardware/index.ts": {
+      "classification": "public-api",
+      "rationale": "Stable hardware domain barrel for engine consumers.",
+      "documentation": "docs/API-BOUNDARIES.md"
+    },
+    "src/engine/hinge-bore.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/honing-guide.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/i18n-audit.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/index.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/invariant.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/iso7171.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/joint-detail.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/kerf-bending.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/kerf.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/layout-optimizer.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/layout-suggestions.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/lazy-features.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/machine-profiles.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/machining-job.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/maintenance-scheduler.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/manufacturer-catalog.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/material-cost-tracker.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/material-textures.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/material-usage-report.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/material-yield.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/materials.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/materials/index.ts": {
+      "classification": "public-api",
+      "rationale": "Stable materials domain barrel for engine consumers.",
+      "documentation": "docs/API-BOUNDARIES.md"
+    },
+    "src/engine/measurement-assistant.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/memo.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/mirror-cabinet.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/miter-angle.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/mobile-sync.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/moisture-shrinkage.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/mortise-tenon.ts": {
+      "classification": "surfaced",
+      "rationale": "Mounted as a lazy calculator section in src/components/configurator/CalculatorsPanel.tsx."
+    },
+    "src/engine/multi-machine.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/multi-stock-optimizer.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/nesting-patterns.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/optimizer/index.ts": {
+      "classification": "public-api",
+      "rationale": "Stable optimizer domain barrel for engine consumers.",
+      "documentation": "docs/API-BOUNDARIES.md"
+    },
+    "src/engine/panel-label.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/parameter-expressions.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/part-labeling.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/part-sort.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/parts.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/pbr-materials.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/pilot-hole.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/planer-passes.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/plugin-marketplace.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/plugin-v2.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/plugin.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/plugin-events.ts": {
+      "classification": "surfaced",
+      "rationale": "Shared plugin event bus is exposed through the engine plugin API."
+    },
+    "src/engine/pocket-hole.ts": {
+      "classification": "surfaced",
+      "rationale": "Mounted as a lazy calculator section in src/components/configurator/CalculatorsPanel.tsx."
+    },
+    "src/engine/project-library.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/project-settings.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/project-sharing.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/project-sync.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/rafter-length.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/room-planner.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/router-circle.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/router-depth.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/router-template.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/screw-pullout.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/shelf-deflection.ts": {
+      "classification": "surfaced",
+      "rationale": "Mounted as a lazy calculator section in src/components/configurator/CalculatorsPanel.tsx."
+    },
+    "src/engine/shelf-pin.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/shelf-spacing.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/smart-optimizer.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/snapshot-tags.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/spline-joint.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/stair-stringer.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/substitution.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/tablesaw-blade.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/taper-jig.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/templates.ts": {
+      "classification": "internal",
+      "rationale": "Backwards-compatible facade; implementation is owned by the consolidated domain module."
+    },
+    "src/engine/tool-wear.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/types.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/validation.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/validation/dimension-rules.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/validation/door-rules.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/validation/shelf-rules.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/version-history.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/webgl-probe.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/webgpu-renderer.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/webserial-v2.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/webserial.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/webxr-placement.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/wood-drying.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/wood-turning.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/workspace.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/zone-validator.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/services/capability-contracts.ts": {
+      "classification": "internal",
+      "rationale": "Optional integration contracts are consumed by service adapters and are not user-facing."
+    },
+    "src/services/error-reporter.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/utils/ai-assistant.ts": {
+      "classification": "internal",
+      "rationale": "Duplicate browser adapter is retained only for consolidation with the engine copy in Sprint 372.",
+      "targetSprint": 372
+    },
+    "src/utils/ar-placement.ts": {
+      "classification": "surface-next",
+      "rationale": "AR is deferred pending the platform and asset-cost decision in Sprint 396.",
+      "targetSprint": 396
+    },
+    "src/utils/audit-log.ts": {
+      "classification": "internal",
+      "rationale": "Audit-log storage is an infrastructure adapter with no distinct user workflow."
+    },
+    "src/utils/batch-export.ts": {
+      "classification": "internal",
+      "rationale": "Export adapter is retained for consolidation with the engine-side batch export in Sprint 372.",
+      "targetSprint": 372
+    },
+    "src/utils/bom-export.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/utils/browser-compat.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/utils/catalog-import.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/utils/checksum.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/utils/command-palette.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/utils/community-catalog.ts": {
+      "classification": "internal",
+      "rationale": "Compatibility facade preserving the established import path for the community catalog browser adapter."
+    },
+    "src/utils/community-catalog-io.ts": {
+      "classification": "internal",
+      "rationale": "Fetch and IndexedDB persistence adapter; kept distinct from the engine's separate catalog schema validator."
+    },
+    "src/utils/cost-comparison.ts": {
+      "classification": "surface-next",
+      "rationale": "Supplier comparison is planned with supplier price-list import and stale-price warnings.",
+      "targetSprint": 410
+    },
+    "src/utils/crdt-sync.ts": {
+      "classification": "internal",
+      "rationale": "Backend-free CRDT primitives are intentionally retained as internal sync-domain logic."
+    },
+    "src/utils/download.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/utils/dxf-builders.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/utils/dxf-export.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/utils/erp-export.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/utils/export-presets.ts": {
+      "classification": "internal",
+      "rationale": "Preset persistence is an adapter used by export workflows, not a standalone capability."
+    },
+    "src/utils/gcode-export.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/utils/gltf-download.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/utils/ifc-download.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/utils/ifc-export.ts": {
+      "classification": "internal",
+      "rationale": "IFC content generation is a pure export helper called by the IFC download adapter; consolidation is planned in Sprint 372.",
+      "targetSprint": 372
+    },
+    "src/utils/indexed-db-storage.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/utils/local-storage.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/utils/plugin-marketplace.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/utils/price-history.ts": {
+      "classification": "surface-next",
+      "rationale": "Supplier price history is planned with validated supplier-list import and stale-price warnings.",
+      "targetSprint": 410
+    },
+    "src/utils/project-branching.ts": {
+      "classification": "surface-next",
+      "rationale": "Design history and branching have an explicit capability decision and workflow in Sprint 438.",
+      "targetSprint": 438
+    },
+    "src/utils/project-storage.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/utils/step-download.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/utils/units.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/utils/url-state.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/utils/voice-annotation.ts": {
+      "classification": "internal",
+      "rationale": "Optional voice annotation storage has no committed product workflow or surfacing sprint."
+    },
+    "src/utils/webserial-cnc.ts": {
+      "classification": "internal",
+      "rationale": "Web Serial transport is an integration adapter consumed through CNC lifecycle workflows."
+    },
+    "src/utils/zip-writer.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/engine/templates/cabinet.ts": {
+      "classification": "surfaced",
+      "rationale": "Reachable through the consolidated domain barrel and its existing application consumers."
+    },
+    "src/engine/templates/parametric.ts": {
+      "classification": "surfaced",
+      "rationale": "Reachable through the consolidated domain barrel and its existing application consumers."
+    },
+    "src/engine/templates/data.ts": {
+      "classification": "surfaced",
+      "rationale": "Reachable through the consolidated domain barrel and its existing application consumers."
+    },
+    "src/engine/templates/expression.ts": {
+      "classification": "surfaced",
+      "rationale": "Reachable through the consolidated domain barrel and its existing application consumers."
+    },
+    "src/engine/templates/library.ts": {
+      "classification": "surfaced",
+      "rationale": "Reachable through the consolidated domain barrel and its existing application consumers."
+    },
+    "src/engine/stock/inventory.ts": {
+      "classification": "surfaced",
+      "rationale": "Reachable through the consolidated domain barrel and its existing application consumers."
+    },
+    "src/engine/stock/management.ts": {
+      "classification": "surfaced",
+      "rationale": "Reachable through the consolidated domain barrel and its existing application consumers."
+    },
+    "src/engine/stock/tracker.ts": {
+      "classification": "surfaced",
+      "rationale": "Reachable through the consolidated domain barrel and its existing application consumers."
+    },
+    "src/engine/templates/configurator.ts": {
+      "classification": "surfaced",
+      "rationale": "Reachable through the configurator templates barrel and its application consumers."
+    },
+    "src/engine/templates/index.ts": {
+      "classification": "surfaced",
+      "rationale": "Supported templates domain barrel imported by application consumers."
+    },
+    "src/engine/stock/index.ts": {
+      "classification": "surfaced",
+      "rationale": "Stock domain barrel imported by the stock tracker UI and engine public barrel."
+    },
+    "src/engine/cabinet-templates.ts": {
+      "classification": "internal",
+      "rationale": "Backwards-compatible facade; implementation is owned by the consolidated domain module."
+    },
+    "src/engine/parametric-template.ts": {
+      "classification": "internal",
+      "rationale": "Backwards-compatible facade; implementation is owned by the consolidated domain module."
+    },
+    "src/engine/shop-inventory.ts": {
+      "classification": "internal",
+      "rationale": "Backwards-compatible facade; implementation is owned by the consolidated domain module."
+    },
+    "src/engine/stock-management.ts": {
+      "classification": "internal",
+      "rationale": "Backwards-compatible facade; implementation is owned by the consolidated domain module."
+    },
+    "src/engine/stock-tracker.ts": {
+      "classification": "internal",
+      "rationale": "Backwards-compatible facade; implementation is owned by the consolidated domain module."
+    },
+    "src/engine/template-data.ts": {
+      "classification": "internal",
+      "rationale": "Backwards-compatible facade; implementation is owned by the consolidated domain module."
+    },
+    "src/engine/template-dsl.ts": {
+      "classification": "internal",
+      "rationale": "Backwards-compatible facade; implementation is owned by the consolidated domain module."
+    },
+    "src/engine/template-library.ts": {
+      "classification": "internal",
+      "rationale": "Backwards-compatible facade; implementation is owned by the consolidated domain module."
+    },
+    "src/engine/inventory/comparison/design.ts": {
+      "classification": "surfaced",
+      "rationale": "Reachable through the consolidated inventory domain and its UI or public engine-barrel consumers."
+    },
+    "src/engine/inventory/comparison/project.ts": {
+      "classification": "surfaced",
+      "rationale": "Reachable through the consolidated inventory domain and its UI or public engine-barrel consumers."
+    },
+    "src/engine/inventory/comparison/snapshot-diff.ts": {
+      "classification": "surfaced",
+      "rationale": "Reachable through the consolidated inventory domain and its UI or public engine-barrel consumers."
+    },
+    "src/engine/inventory/waste/alerts.ts": {
+      "classification": "surfaced",
+      "rationale": "Reachable through the consolidated inventory domain and its UI or public engine-barrel consumers."
+    },
+    "src/engine/inventory/waste/analytics.ts": {
+      "classification": "surfaced",
+      "rationale": "Reachable through the consolidated inventory domain and its UI or public engine-barrel consumers."
+    },
+    "src/engine/inventory/waste/predictor.ts": {
+      "classification": "surfaced",
+      "rationale": "Reachable through the consolidated inventory domain and its UI or public engine-barrel consumers."
+    },
+    "src/engine/design-comparison.ts": {
+      "classification": "internal",
+      "rationale": "Backwards-compatible facade; implementation is owned by the consolidated inventory domain module."
+    },
+    "src/engine/project-comparison.ts": {
+      "classification": "internal",
+      "rationale": "Backwards-compatible facade; implementation is owned by the consolidated inventory domain module."
+    },
+    "src/engine/snapshot-diff.ts": {
+      "classification": "internal",
+      "rationale": "Backwards-compatible facade; implementation is owned by the consolidated inventory domain module."
+    },
+    "src/engine/waste-alert.ts": {
+      "classification": "internal",
+      "rationale": "Backwards-compatible facade; implementation is owned by the consolidated inventory domain module."
+    },
+    "src/engine/waste-analytics.ts": {
+      "classification": "internal",
+      "rationale": "Backwards-compatible facade; implementation is owned by the consolidated inventory domain module."
+    },
+    "src/engine/waste-predictor.ts": {
+      "classification": "internal",
+      "rationale": "Backwards-compatible facade; implementation is owned by the consolidated inventory domain module."
+    },
+    "src/engine/inventory/index.ts": {
+      "classification": "surfaced",
+      "rationale": "Supported inventory domain barrel; preserves comparison and waste APIs behind one capability boundary."
+    },
+    "src/engine/inventory/comparison/index.ts": {
+      "classification": "surfaced",
+      "rationale": "Supported inventory domain barrel; preserves comparison and waste APIs behind one capability boundary."
+    },
+    "src/engine/inventory/waste/index.ts": {
+      "classification": "surfaced",
+      "rationale": "Supported inventory domain barrel; preserves comparison and waste APIs behind one capability boundary."
+    }
+  }
+}

@@ -7,17 +7,18 @@
 
 Configure any cabinet/furniture piece → live 6-view SVG preview → MaxRects cut-sheet optimizer → export PDF build plan, DXF, G-code, or BOM. **No server, no account.** Full RTL support (Hebrew/Arabic).
 
-## Active Sprint — Phase 64 complete; Phase 65 is next (Sprints 300–318 complete)
+## Active Sprint — Phase 73 (v5.35.0); Sprint 371 complete, Sprint 372 next
 
-| Sprint | Feature                                  | Status      |
-| ------ | ---------------------------------------- | ----------- |
-| 300    | Evidence baseline and roadmap correction | DONE        |
-| 301    | Coverage map and ownership               | DONE        |
-| 302    | Test fixtures and deterministic reset    | DONE        |
-| 303    | Pure-engine invariant matrix I           | DONE        |
-| 304    | Store, persistence, import/export matrix | DONE        |
-| 305    | Component behavior foundation            | DONE        |
-| 306    | Mutation testing and quality evidence    | IN PROGRESS |
+| Sprint   | Feature                                                   | Status     |
+| -------- | --------------------------------------------------------- | ---------- |
+| 300–318  | Phases 63–64 verification foundation (released v5.34.0)   | DONE       |
+| 313, 315 | Assembly/device flows; PWA/offline (Phase 64 carry-over)  | CARRY-OVER |
+| 371      | Capability map and surfacing ledger                       | DONE       |
+| 372–377  | Consolidation, palette, locales, critical path, UI        | PLANNED    |
+| 378      | v5.35.0 coherence release                                 | PLANNED    |
+| 420–434  | Toolchain modernisation (81) + architecture refactor (82) | PLANNED    |
+
+Release order and sprint contracts → [ROADMAP.md §7.2](ROADMAP.md).
 
 ## Tech Stack
 
@@ -102,7 +103,7 @@ import { cfg } from '../helpers'; // builds CabinetConfig from DEFAULT_CONFIG + 
 ## Docs
 
 - Architecture decisions & diagrams → [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
-- Active roadmap → [ROADMAP.md](ROADMAP.md) (Phase 63 — active; Sprint 303 next)
+- Active roadmap → [ROADMAP.md](ROADMAP.md) (Phase 73 next — Sprint 371; refactor program Phases 81–85)
 - Sprint history → [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 - Plugin API → [docs/PLUGIN-API.md](docs/PLUGIN-API.md)
 
@@ -110,29 +111,30 @@ import { cfg } from '../helpers'; // builds CabinetConfig from DEFAULT_CONFIG + 
 
 `.github/prompts/` contains reusable agent prompts:
 
-| Prompt                        | Purpose                                                       |
-| ----------------------------- | ------------------------------------------------------------- |
-| `new-feature.prompt.md`       | Add a full feature panel (engine → store → UI → i18n → mount) |
-| `fix-quality.prompt.md`       | Diagnose and fix all quality gate failures                    |
-| `fix-tests.prompt.md`         | Diagnose and fix all failing unit tests                       |
-| `i18n-add-keys.prompt.md`     | Add i18n keys with en/he parity validation                    |
-| `roadmap-sprint.prompt.md`    | Execute the current roadmap sprint item end-to-end            |
-| `roadmap-tracking.prompt.md`  | Track and update ROADMAP.md sprint progress                   |
-| `release.prompt.md`           | Full release workflow: bump → CHANGELOG → tag → GH release    |
-| `split-component.prompt.md`   | Split large React components (≤ 600 L target)                 |
-| `test-factory.prompt.md`      | Convert repetitive tests to `it.each` tables                  |
-| `bundle-optimize.prompt.md`   | Bundle size analysis and chunk optimization                   |
-| `a11y-audit.prompt.md`        | WCAG 2.2 AA accessibility audit and remediation               |
-| `perf-debug.prompt.md`        | Lighthouse / runtime performance diagnosis                    |
-| `security-audit.prompt.md`    | OWASP Top 10 security audit for client-side SPA               |
-| `dead-code.prompt.md`         | Find and remove unused exports/files via Knip                 |
-| `dependency-audit.prompt.md`  | Security + outdated + license audit of all deps               |
-| `clean-generated.prompt.md`   | Verify generated files go to $TEMP, clean leaks               |
-| `lighthouse-ci.prompt.md`     | Set up Lighthouse CI GitHub Actions gates                     |
-| `csp-hardening.prompt.md`     | Content Security Policy header hardening                      |
-| `pwa-audit.prompt.md`         | PWA manifest, service worker, and install-prompt audit        |
-| `code-review.prompt.md`       | Structured code review against all project conventions        |
-| `dependency-update.prompt.md` | Review and apply Dependabot dependency updates                |
+| Prompt                            | Purpose                                                       |
+| --------------------------------- | ------------------------------------------------------------- |
+| `new-feature.prompt.md`           | Add a full feature panel (engine → store → UI → i18n → mount) |
+| `fix-quality.prompt.md`           | Diagnose and fix all quality gate failures                    |
+| `fix-tests.prompt.md`             | Diagnose and fix all failing unit tests                       |
+| `i18n-add-keys.prompt.md`         | Add i18n keys with en/he parity validation                    |
+| `roadmap-sprint.prompt.md`        | Execute the current roadmap sprint item end-to-end            |
+| `roadmap-tracking.prompt.md`      | Track and update ROADMAP.md sprint progress                   |
+| `release.prompt.md`               | Full release workflow: bump → CHANGELOG → tag → GH release    |
+| `split-component.prompt.md`       | Split large React components (≤ 600 L target)                 |
+| `test-factory.prompt.md`          | Convert repetitive tests to `it.each` tables                  |
+| `bundle-optimize.prompt.md`       | Bundle size analysis and chunk optimization                   |
+| `a11y-audit.prompt.md`            | WCAG 2.2 AA accessibility audit and remediation               |
+| `perf-debug.prompt.md`            | Lighthouse / runtime performance diagnosis                    |
+| `security-audit.prompt.md`        | OWASP Top 10 security audit for client-side SPA               |
+| `dead-code.prompt.md`             | Find and remove unused exports/files via Knip                 |
+| `dependency-audit.prompt.md`      | Security + outdated + license audit of all deps               |
+| `clean-generated.prompt.md`       | Verify generated files go to $TEMP, clean leaks               |
+| `lighthouse-ci.prompt.md`         | Set up Lighthouse CI GitHub Actions gates                     |
+| `csp-hardening.prompt.md`         | Content Security Policy header hardening                      |
+| `pwa-audit.prompt.md`             | PWA manifest, service worker, and install-prompt audit        |
+| `code-review.prompt.md`           | Structured code review against all project conventions        |
+| `dependency-update.prompt.md`     | Review and apply Dependabot dependency updates                |
+| `workspace-maintenance.prompt.md` | Full workspace health check: gates, $TEMP policy, deps, audit |
 
 ## Copilot Agents
 
@@ -175,5 +177,6 @@ MCP authentication and first-run setup are documented in
 | `memory`             | Persistent agent notes across sessions                  |
 | `sequentialthinking` | Multi-step problem decomposition                        |
 | `context7`           | Up-to-date library documentation (React, Vite, etc.)    |
+| `chrome-devtools`    | Performance traces, console and network inspection      |
 | `cloudflare`         | Cloudflare Pages/Workers management                     |
 | `brave-search`       | Web search fallback for docs not in Context7            |

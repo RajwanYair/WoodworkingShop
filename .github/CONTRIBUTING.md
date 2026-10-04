@@ -43,7 +43,7 @@ npm ci
 npm run dev
 
 # 4 — full gate check (run before every commit)
-npm run check   # typecheck + lint + format:check + test
+npm run check   # quality:fast (types, lint, CSS, Markdown, format, i18n, AI-asset validators) + unit tests
 ```
 
 ---
@@ -98,7 +98,7 @@ Use [Conventional Commits](https://www.conventionalcommits.org/):
 
 Before opening a PR:
 
-- [ ] `npm run check` passes (typecheck + lint + format + tests)
+- [ ] `npm run check` passes (parallel quality gates + unit tests)
 - [ ] `npm run build` produces 0 warnings
 - [ ] New logic is covered by unit tests in `tests/`
 - [ ] i18n: keys added to **all 6 locale files** (en + he proper, ar/de/es/fr at minimum)

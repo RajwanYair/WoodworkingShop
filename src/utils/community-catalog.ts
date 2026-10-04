@@ -1,4 +1,4 @@
-/**
+export * from './community-catalog-io'; /**
  * Community Material Catalog — Future Horizons / Sprint 13
  *
  * Fetches a crowd-sourced material price + availability catalog from a CDN

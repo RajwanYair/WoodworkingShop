@@ -14,8 +14,9 @@
  * v2 plugins should use `registerPluginV2()` to benefit from lifecycle hooks.
  */
 
-import { pluginEventBus } from './plugin';
-import type { CabinetPlannerPlugin, PluginEventName, PluginEventHandler, PluginEventMap } from './plugin';
+import { pluginEventBus } from './plugin-events';
+import type { PluginEventName, PluginEventHandler, PluginEventMap } from './plugin-events';
+import type { CabinetPlannerPlugin } from './plugin';
 
 // ── API version ────────────────────────────────────────────────────────────
 

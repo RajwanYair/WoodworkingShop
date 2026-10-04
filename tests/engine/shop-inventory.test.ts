@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 
-import { checkStock, analyzeInventory, projectUsage, generateReorderList } from '../../src/engine/shop-inventory';
-import type { InventoryItem, ProjectUsage } from '../../src/engine/shop-inventory';
+import { checkStock, analyzeInventory, projectUsage, generateReorderList } from '../../src/engine/stock/inventory';
+import type { InventoryItem, ProjectUsage } from '../../src/engine/stock/inventory';
 
 function item(overrides: Partial<InventoryItem> & { materialId: string }): InventoryItem {
   return {

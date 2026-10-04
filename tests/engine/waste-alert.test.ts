@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { analyseWaste, formatWasteReport, DEFAULT_WASTE_THRESHOLDS } from '../../src/engine/waste-alert';
-import type { SheetWasteInput } from '../../src/engine/waste-alert';
+import { analyseWaste, formatWasteReport, DEFAULT_WASTE_THRESHOLDS } from '../../src/engine/inventory/waste/alerts';
+import type { SheetWasteInput } from '../../src/engine/inventory/waste/alerts';
 
 const sheet = (material: string, usedMm2: number, sheetAreaMm2: number): SheetWasteInput => ({
   material,

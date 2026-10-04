@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://woodworkingshop.dev/schemas/capability-ledger.schema.json",
+  "title": "Capability ledger",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "modules"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "modules": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["classification", "rationale"],
+        "properties": {
+          "classification": {
+            "enum": ["surfaced", "internal", "public-api", "surface-next", "retire"]
+          },
+          "rationale": { "type": "string", "minLength": 1 },
+          "targetSprint": { "type": "integer", "minimum": 1 },
+          "targetRelease": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+          "documentation": { "enum": ["docs/API-BOUNDARIES.md", "docs/PLUGIN-API.md"] }
+        },
+        "allOf": [
+          {
+            "if": { "properties": { "classification": { "const": "surface-next" } } },
+            "then": { "properties": { "targetSprint": { "type": "integer" } }, "required": ["targetSprint"] }
+          },
+          {
+            "if": { "properties": { "classification": { "const": "retire" } } },
+            "then": {
+              "properties": { "targetRelease": { "type": "string" }, "targetSprint": { "type": "integer" } },
+              "required": ["targetRelease", "targetSprint"]
+            }
+          },
+          {
+            "if": { "properties": { "classification": { "const": "public-api" } } },
+            "then": {
+              "properties": { "documentation": { "type": "string" } },
+              "required": ["documentation"]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

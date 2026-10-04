@@ -57,6 +57,18 @@ describe('PdfExportPanel', () => {
     expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:pdf-export');
   });
 
+  it('passes the user-entered labour estimate to the PDF document', async () => {
+    const user = userEvent.setup();
+    useCabinetStore.setState({ labourHours: 3.5 });
+    render(<PdfExportPanel />);
+
+    await user.click(screen.getByRole('button', { name: 'Generate PDF' }));
+
+    expect(pdfMock).toHaveBeenCalledWith(
+      expect.objectContaining({ props: expect.objectContaining({ labourHours: 3.5 }) }),
+    );
+  });
+
   it('reports a render failure and re-enables PDF generation', async () => {
     const user = userEvent.setup();
     pdfMock.mockReturnValueOnce({ toBlob: vi.fn().mockRejectedValue(new Error('render failed')) });

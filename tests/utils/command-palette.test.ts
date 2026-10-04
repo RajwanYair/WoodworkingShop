@@ -120,9 +120,19 @@ describe('searchCommands', () => {
     expect(results.find((r) => r.command.id === 'hidden.cmd')).toBeUndefined();
   });
 
+  it('excludes commands whose availability predicate returns false', () => {
+    registerCommands([{ ...makeCmd('undo', 'Undo'), when: () => false }]);
+    expect(searchCommands('undo')).toHaveLength(0);
+  });
+
   it('matches by keyword', () => {
     const results = searchCommands('cnc');
     expect(results.some((r) => r.command.id === 'export.gcode')).toBe(true);
+  });
+
+  it('matches fuzzy subsequences in command labels', () => {
+    const results = searchCommands('exgco');
+    expect(results[0]?.command.id).toBe('export.gcode');
   });
 
   it('matches by category', () => {
@@ -220,6 +230,21 @@ describe('recents', () => {
     await invokeCommand('a');
     await invokeCommand('b');
     expect(getRecentCommandIds()[0]).toBe('b');
+  });
+
+  it('keeps only the ten most recently invoked commands', async () => {
+    const ids = Array.from({ length: 12 }, (_, index) => `command.${index}`);
+    registerCommands(ids.map((id) => makeCmd(id, id)));
+
+    for (const id of ids) await invokeCommand(id);
+
+    expect(getRecentCommandIds()).toEqual(ids.slice(-10).reverse());
+  });
+
+  it('rejects malformed localStorage entries instead of trusting their types', () => {
+    localStorageMock.setItem('cabinet-planner-palette-recents', JSON.stringify(['valid.id', 42]));
+
+    expect(getRecentCommandIds()).toEqual([]);
   });
 
   it('deduplicates on re-invoke', async () => {

@@ -57,13 +57,19 @@ export type CncController = 'grbl' | 'linuxcnc' | 'mach3' | 'smoothie' | 'tinyg'
 export interface SerialOptions {
   /** Baud rate (default: 115200). */
   baudRate?: number;
+  /** Data bits (default: 8). */
+  dataBits?: 7 | 8;
+  /** Stop bits (default: 1). */
+  stopBits?: 1 | 2;
+  /** Parity mode (default: 'none'). */
+  parity?: 'none' | 'even' | 'odd';
   /** CNC controller hint — used to set default baud rate and line ending. */
   controller?: CncController;
   /** Line ending appended to each G-code line. Default: '\n'. */
   lineEnding?: '\n' | '\r\n';
 }
 
-export interface SendProgress {
+interface SendProgress {
   /** Total number of G-code lines in the current job. */
   total: number;
   /** Number of lines sent so far. */
@@ -79,8 +85,9 @@ export interface CncSerialSession {
    * Lines are sent one at a time with an optional inter-line delay.
    * @param gcode  Raw G-code string (multi-line allowed).
    * @param onProgress  Optional progress callback.
+   * @param signal      Optional signal to stop after the current line.
    */
-  send(gcode: string, onProgress?: (p: SendProgress) => void): Promise<void>;
+  send(gcode: string, onProgress?: (p: SendProgress) => void, signal?: AbortSignal): Promise<void>;
   /** Close the serial port and release resources. */
   close(): Promise<void>;
   /** Whether the port is still open. */
@@ -100,6 +107,11 @@ const CONTROLLER_BAUD: Record<CncController, number> = {
 
 // ── Public API ────────────────────────────────────────────────────────────────
 
+/** Re-evaluate Web Serial support at call time. */
+export function isWebSerialAvailable(): boolean {
+  return _serialSupported();
+}
+
 /**
  * Open a serial port to a CNC controller.
  * Triggers the browser's port picker dialog.
@@ -108,7 +120,7 @@ const CONTROLLER_BAUD: Record<CncController, number> = {
  * @throws When the user dismisses the port picker.
  */
 export async function openSerialPort(options: SerialOptions = {}): Promise<CncSerialSession> {
-  if (!_serialSupported()) throw new WebSerialUnsupportedError();
+  if (!isWebSerialAvailable()) throw new WebSerialUnsupportedError();
 
   const controller = options.controller ?? 'grbl';
   const baudRate = options.baudRate ?? CONTROLLER_BAUD[controller];
@@ -116,17 +128,23 @@ export async function openSerialPort(options: SerialOptions = {}): Promise<CncSe
 
   // This call opens the browser's port picker
   const port = await (navigator as Navigator & { serial: SerialApi }).serial.requestPort();
-  await port.open({ baudRate });
+  await port.open({
+    baudRate,
+    dataBits: options.dataBits ?? 8,
+    stopBits: options.stopBits ?? 1,
+    parity: options.parity ?? 'none',
+  });
 
   const writer = port.writable.getWriter();
   let _open = true;
+  let activeSend: Promise<void> | undefined;
 
   return {
     get isOpen() {
       return _open;
     },
 
-    async send(gcode: string, onProgress?: (p: SendProgress) => void): Promise<void> {
+    async send(gcode: string, onProgress?: (p: SendProgress) => void, signal?: AbortSignal): Promise<void> {
       if (!_open) throw new SerialPortClosedError();
       const lines = gcode
         .split('\n')
@@ -134,18 +152,31 @@ export async function openSerialPort(options: SerialOptions = {}): Promise<CncSe
         .filter((l) => l.length > 0 && !l.startsWith(';'));
       const total = lines.length;
 
-      for (let i = 0; i < lines.length; i++) {
-        const lineStr = lines[i] + lineEnding;
-        await writer.write(utf8Encode(lineStr));
-        onProgress?.({ total, sent: i + 1, percent: Math.round(((i + 1) / total) * 100) });
+      activeSend = (async () => {
+        for (let i = 0; i < lines.length; i++) {
+          if (signal?.aborted) break;
+          const lineStr = lines[i] + lineEnding;
+          await writer.write(utf8Encode(lineStr));
+          onProgress?.({ total, sent: i + 1, percent: Math.round(((i + 1) / total) * 100) });
+        }
+      })();
+      try {
+        await activeSend;
+      } finally {
+        activeSend = undefined;
       }
     },
 
     async close(): Promise<void> {
       if (!_open) return;
       _open = false;
+      await activeSend?.catch(() => undefined);
       writer.releaseLock();
-      await port.close();
+      try {
+        await port.close();
+      } catch {
+        // The device may already have closed the port.
+      }
     },
   };
 }
@@ -155,7 +186,7 @@ export async function openSerialPort(options: SerialOptions = {}): Promise<CncSe
  * Returns an empty array when the API is unsupported.
  */
 export async function listGrantedPorts(): Promise<SerialPortInfo[]> {
-  if (!_serialSupported()) return [];
+  if (!isWebSerialAvailable()) return [];
   const ports = await (navigator as Navigator & { serial: SerialApi }).serial.getPorts();
   return ports.map((p) => {
     try {
@@ -177,7 +208,12 @@ export function getDefaultBaudRate(controller: CncController): number {
 // ── Minimal Web Serial API typings (not yet in @types/w3c-web-serial everywhere) ─
 
 interface SerialPort {
-  open(options: { baudRate: number }): Promise<void>;
+  open(options: {
+    baudRate: number;
+    dataBits?: 7 | 8;
+    stopBits?: 1 | 2;
+    parity?: 'none' | 'even' | 'odd';
+  }): Promise<void>;
   close(): Promise<void>;
   readonly writable: WritableStream<Uint8Array>;
   readonly readable: ReadableStream<Uint8Array>;

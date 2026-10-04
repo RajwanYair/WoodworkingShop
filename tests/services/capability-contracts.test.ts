@@ -13,9 +13,9 @@ describe('capability contracts', () => {
   });
 
   it('returns known contract by id', () => {
-    const contract = getCapabilityContract('supabase-sync');
+    const contract = getCapabilityContract('error-reporter');
     expect(contract).toBeDefined();
-    expect(contract?.requiresNetwork).toBe(true);
+    expect(contract?.requiresNetwork).toBe(false);
   });
 
   it('returns undefined for unknown contract id', () => {
@@ -23,9 +23,7 @@ describe('capability contracts', () => {
   });
 
   it('filters optional network capabilities', () => {
-    const optionalNetwork = getOptionalNetworkCapabilities();
-    expect(optionalNetwork.length).toBeGreaterThan(0);
-    expect(optionalNetwork.every((contract) => contract.requiresNetwork && !contract.criticalPath)).toBe(true);
+    expect(getOptionalNetworkCapabilities()).toEqual([]);
   });
 
   it.each(CAPABILITY_CONTRACTS)('has source path under src for %s', (contract) => {

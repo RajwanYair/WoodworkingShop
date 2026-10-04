@@ -6,6 +6,8 @@ import { calculateCoveCut } from '../../src/engine/cove-cut';
 import { calculateCrownMoulding } from '../../src/engine/crown-moulding';
 import type { CrownCutMethod } from '../../src/engine/crown-moulding';
 import { calculateDadoRabbet } from '../../src/engine/dado-rabbet';
+import { calculateDowelJoint } from '../../src/engine/dowel-joint';
+import { calculateDovetailLayout } from '../../src/engine/dovetail-layout';
 import { calculateDrawerBox } from '../../src/engine/drawer-box';
 import { calculateFaceFrame } from '../../src/engine/face-frame';
 import { calculateFinish, computeFinishAreaM2 } from '../../src/engine/finish-calculator';
@@ -16,6 +18,7 @@ import { calculateHalfLap } from '../../src/engine/half-lap';
 import { calculateHoningGuide } from '../../src/engine/honing-guide';
 import { calculateKerfBending } from '../../src/engine/kerf-bending';
 import { calculateMoistureShrinkage } from '../../src/engine/moisture-shrinkage';
+import { calculateMortiseTenon } from '../../src/engine/mortise-tenon';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 import { calculatePlanerPasses } from '../../src/engine/planer-passes';
 import { generateParts } from '../../src/engine/parts';
@@ -25,9 +28,11 @@ import type { CircleCutMode } from '../../src/engine/router-circle';
 import { calculateRouterTemplate } from '../../src/engine/router-template';
 import { calculateScrewPullout } from '../../src/engine/screw-pullout';
 import { calculateSplineJoint } from '../../src/engine/spline-joint';
+import { calculateDeflection } from '../../src/engine/shelf-deflection';
 import { calculateStairStringer } from '../../src/engine/stair-stringer';
 import { calculateTaperJig } from '../../src/engine/taper-jig';
 import { calculateWoodTurning } from '../../src/engine/wood-turning';
+import { calculatePocketHole } from '../../src/engine/pocket-hole';
 import CALCULATOR_CONTROL_INVENTORY from '../fixtures/calculator-control-inventory.json' with { type: 'json' };
 import WOODGEARS_COVE_CUT_ORACLE from '../fixtures/oracles/woodgears-cove-cut.json' with { type: 'json' };
 
@@ -1640,5 +1645,81 @@ test('spline dimensions reconcile with the engine and recover from invalid value
     await field.fill(String(dimensionCase.value));
     await expect(calculator.getByRole('alert')).toHaveCount(0);
     await expectResults();
+  }
+});
+
+test('shelf span changes reconcile deflection with the engine', async ({ appPage: page }) => {
+  const calculator = await openCalculator(page, 'Shelf Sag Calculator');
+  const span = calculator.getByRole('spinbutton', { name: 'Shelf Span (mm)', exact: true });
+  for (const spanMm of [800, 1000]) {
+    const expected = calculateDeflection({
+      spanMm,
+      widthMm: 400,
+      thicknessMm: 18,
+      material: 'plywood',
+      loadType: 'uniform',
+      loadN: 20 * 9.81,
+      support: 'simple',
+    });
+    await span.fill(String(spanMm));
+    await expect(calculator).toContainText(`${expected.maxDeflectionMm.toFixed(2)} mm`);
+    await expect(calculator).toContainText(`${expected.recommendedMaxSpanMm} mm`);
+  }
+});
+
+test('pocket-hole joint length changes reconcile screw spacing with the engine', async ({ appPage: page }) => {
+  const calculator = await openCalculator(page, 'Pocket Hole Calculator');
+  const length = calculator.getByRole('spinbutton', { name: 'Joint Length (mm)', exact: true });
+  for (const jointLengthMm of [600, 1200]) {
+    const expected = calculatePocketHole({
+      workpieceThicknessMm: 18,
+      matingThicknessMm: 18,
+      jointLengthMm,
+      materialHardness: 'plywood',
+      jointType: 'butt',
+    });
+    await length.fill(String(jointLengthMm));
+    await expect(calculator).toContainText(String(expected.screwCount));
+    await expect(calculator).toContainText(`${expected.spacingMm} mm`);
+  }
+});
+
+test('dowel joint length changes reconcile positions with the engine', async ({ appPage: page }) => {
+  const calculator = await openCalculator(page, 'Dowel Joint Calculator');
+  const length = calculator.getByRole('spinbutton', { name: 'Joint Length (mm)', exact: true });
+  for (const jointLengthMm of [600, 1000]) {
+    const expected = calculateDowelJoint({ jointLengthMm, boardThicknessMm: 18, orientation: 'edge_to_face' });
+    await length.fill(String(jointLengthMm));
+    await expect(calculator).toContainText(`${expected.count}`);
+    await expect(calculator).toContainText(`${expected.spacingMm} mm`);
+  }
+});
+
+test('mortise-tenon joint type changes reconcile tenon length with the engine', async ({ appPage: page }) => {
+  const calculator = await openCalculator(page, 'Mortise & Tenon Calculator');
+  const jointType = calculator.getByRole('combobox', { name: 'Joint Type', exact: true });
+  for (const value of ['through', 'blind'] as const) {
+    const expected = calculateMortiseTenon({ stockThicknessMm: 18, stockWidthMm: 54, jointType: value });
+    await jointType.selectOption(value);
+    await expect(calculator).toContainText(`${expected.tenonLengthMm} mm`);
+    await expect(calculator).toContainText(`${expected.mortiseDepthMm} mm`);
+  }
+});
+
+test('dovetail tail count changes reconcile layout widths with the engine', async ({ appPage: page }) => {
+  const calculator = await openCalculator(page, 'Dovetail Layout Calculator');
+  const tailCount = calculator.getByRole('spinbutton', { name: 'Number of Tails', exact: true });
+  for (const count of [4, 5]) {
+    const expected = calculateDovetailLayout({
+      boardWidthMm: 250,
+      boardThicknessMm: 18,
+      tailCount: count,
+      angleDegrees: 8,
+      jointType: 'through',
+      style: 'hand_cut',
+    });
+    await tailCount.fill(String(count));
+    await expect(calculator).toContainText(`${expected.tails[0]?.narrowWidthMm ?? 0} mm`);
+    await expect(calculator).toContainText(expected.slopeRatio);
   }
 });
