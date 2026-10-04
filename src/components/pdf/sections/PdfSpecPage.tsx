@@ -2,6 +2,8 @@ import { Page, Text, View } from '@react-pdf/renderer';
 import type { CabinetConfig, DerivedDimensions, Part, HardwareItem, OptimizationResult } from '../../../engine/types';
 import { s } from '../pdf-tokens';
 import type { PdfCtx } from '../pdf-i18n';
+import { computePartsWeight } from '../../../engine/parts';
+import { estimateBuildTimeForProject } from '../../../utils/project-build-estimate';
 import { PageHeader } from './PageChrome';
 import { PageFooter } from './PageChrome';
 import { SpecRow } from './SpecRow';
@@ -24,7 +26,7 @@ export function PdfSpecPage({
   ctx,
   config,
   d,
-  parts: _parts,
+  parts,
   hardware,
   optimization,
   edgeBandingTotal,
@@ -36,6 +38,7 @@ export function PdfSpecPage({
   const { T, fontFamily, fontFamilyBold, textAlign, isRTL, date, coverTitle, lang, pageSize, orientation } = ctx;
   const rowDir = isRTL ? ({ flexDirection: 'row-reverse' } as const) : {};
   const specRowProps = { isRTL, fontFamily, fontFamilyBold };
+  const estimatedTime = estimateBuildTimeForProject(parts, 1, hardware);
   return (
     <Page size={pageSize} orientation={orientation} style={[s.page, { fontFamily }]}>
       <PageHeader section={`📐  ${T.specTitle}`} projectName={coverTitle} lang={lang} />
@@ -91,6 +94,16 @@ export function PdfSpecPage({
           {...specRowProps}
           label={T.specBackPanelSize}
           value={`${Math.round(d.backPanelWidth)} × ${Math.round(d.backPanelHeight)} mm`}
+        />
+      </View>
+
+      <Text style={[s.specGroupTitle, { fontFamily: fontFamilyBold, textAlign }]}>{T.specBuildEstimate}</Text>
+      <View style={s.specGroup}>
+        <SpecRow {...specRowProps} label={T.specEstimatedWeight} value={`${computePartsWeight(parts).toFixed(1)} kg`} />
+        <SpecRow
+          {...specRowProps}
+          label={T.specEstimatedBuildTime}
+          value={`${estimatedTime.totalHours.toFixed(1)} ${T.hours}`}
         />
       </View>
 

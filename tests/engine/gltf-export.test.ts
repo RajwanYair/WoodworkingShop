@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { generateGltfContent as generateBinaryGltfContent } from '../../src/engine/export/gltf-export';
+import { generateGltfContent as generateBinaryGltfContent } from '../../src/engine/export/gltf-document';
 import {
   buildGltfScene,
   serializeGltf,
@@ -9,7 +9,7 @@ import {
   GLTF_SCHEMA_VERSION,
   IFC_SCHEMA_VERSION,
   GLTF_GENERATOR,
-} from '../../src/engine/gltf-export';
+} from '../../src/engine/gltf-ifc-model';
 import type { Part } from '../../src/engine/types';
 import { cfg } from '../helpers';
 

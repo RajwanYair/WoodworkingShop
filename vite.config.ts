@@ -3,7 +3,8 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { resolve } from 'node:path';
-import { readFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { relative } from 'node:path';
 import os from 'node:os';
 import { sriPlugin } from './scripts/vite-plugin-sri.ts';
 
@@ -26,6 +27,34 @@ function cloudflareAnalyticsPlugin() {
   };
 }
 
+function capabilityChunkPlugin() {
+  return {
+    name: 'capability-chunk-map',
+    apply: 'build' as const,
+    generateBundle(
+      _options: unknown,
+      bundle: Record<string, { type: string; fileName: string; modules?: Record<string, unknown> }>,
+    ) {
+      const chunks: Record<string, string[]> = {};
+      for (const output of Object.values(bundle)) {
+        if (output.type !== 'chunk') continue;
+        for (const moduleId of Object.keys(output.modules ?? {})) {
+          const cleanId = moduleId.split(/[?#]/, 1)[0];
+          if (!cleanId) continue;
+          const sourcePath = relative(process.cwd(), cleanId).replaceAll('\\', '/');
+          if (!/^src\/(?:engine|utils|services)\//.test(sourcePath)) continue;
+          const moduleChunks = chunks[sourcePath] ?? [];
+          moduleChunks.push(output.fileName);
+          chunks[sourcePath] = moduleChunks;
+        }
+      }
+      const reportDirectory = resolve(os.tmpdir(), 'WoodworkingShop', 'capability-map');
+      mkdirSync(reportDirectory, { recursive: true });
+      writeFileSync(resolve(reportDirectory, 'chunks.json'), `${JSON.stringify(chunks, null, 2)}\n`);
+    },
+  };
+}
+
 // https://vite.dev/config/
 export default defineConfig({
   cacheDir: resolve(os.tmpdir(), 'WoodworkingShop', '.vite_cache'),
@@ -33,6 +62,7 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    capabilityChunkPlugin(),
     cloudflareAnalyticsPlugin(),
     sriPlugin(),
     VitePWA({

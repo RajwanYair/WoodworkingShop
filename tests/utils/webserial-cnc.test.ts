@@ -12,21 +12,23 @@ import {
   openSerialPort,
   listGrantedPorts,
   getDefaultBaudRate,
+  connectToMachine,
+  disconnectFromMachine,
+  isWebSerialAvailable,
+  streamGcodeLines,
 } from '../../src/utils/webserial-cnc';
 
 // ── Web Serial API mock ───────────────────────────────────────────────────────
 
 function makeWritableStream() {
   const written: Uint8Array[] = [];
-  const writer = {
-    write: vi.fn(async (chunk: Uint8Array) => {
-      written.push(chunk);
-    }),
-    releaseLock: vi.fn(),
-  };
+  const write = vi.fn(async (chunk: Uint8Array) => {
+    written.push(chunk);
+  });
+  const stream = new WritableStream<Uint8Array>({ write });
   return {
-    getWriter: () => writer,
-    _written: written,
+    stream,
+    written,
   };
 }
 
@@ -34,10 +36,10 @@ function makeSerialPort(writableStream = makeWritableStream()) {
   return {
     open: vi.fn(async () => {}),
     close: vi.fn(async () => {}),
-    writable: writableStream,
+    writable: writableStream.stream,
     readable: {} as ReadableStream,
     getInfo: vi.fn(() => ({ usbVendorId: 0x1234, usbProductId: 0xabcd })),
-    _written: writableStream._written,
+    _written: writableStream.written,
   };
 }
 
@@ -59,6 +61,46 @@ function stubSerialApi(api = makeSerialApi()) {
 describe('WEB_SERIAL_SUPPORTED', () => {
   it('is a boolean', () => {
     expect(typeof WEB_SERIAL_SUPPORTED).toBe('boolean');
+  });
+});
+
+describe('shared WebSerial transport', () => {
+  it('opens and closes a profile-based connection', async () => {
+    const port = makeSerialPort();
+    const api = stubSerialApi(makeSerialApi(port));
+
+    expect(isWebSerialAvailable()).toBe(true);
+    await connectToMachine({ baudRate: 57600 });
+    expect(api.requestPort).toHaveBeenCalledOnce();
+    expect(port.open).toHaveBeenCalledWith({
+      baudRate: 57600,
+      dataBits: 8,
+      stopBits: 1,
+      parity: 'none',
+      bufferSize: 4096,
+    });
+    await disconnectFromMachine(port);
+    expect(port.close).toHaveBeenCalledOnce();
+  });
+
+  it('streams lines with progress, cancellation, and a custom line ending', async () => {
+    const port = makeSerialPort();
+    const progress: Array<[number, number]> = [];
+    const controller = new AbortController();
+
+    await streamGcodeLines(
+      port,
+      ['G28', 'G1 X10'],
+      (sent, total) => {
+        progress.push([sent, total]);
+        if (sent === 1) controller.abort();
+      },
+      controller.signal,
+      '\r\n',
+    );
+
+    expect(port._written.map((chunk) => new TextDecoder().decode(chunk))).toEqual(['G28\r\n']);
+    expect(progress).toEqual([[1, 2]]);
   });
 });
 
@@ -144,13 +186,25 @@ describe('openSerialPort when Web Serial API present', () => {
 
   it('opens the port with the correct baud rate', async () => {
     const session = await openSerialPort({ baudRate: 9600 });
-    expect(port.open).toHaveBeenCalledWith({ baudRate: 9600 });
+    expect(port.open).toHaveBeenCalledWith({
+      baudRate: 9600,
+      dataBits: 8,
+      stopBits: 1,
+      parity: 'none',
+      bufferSize: 4096,
+    });
     await session.close();
   });
 
   it('uses controller-default baud rate when baudRate not given', async () => {
     const session = await openSerialPort({ controller: 'mach3' });
-    expect(port.open).toHaveBeenCalledWith({ baudRate: 9600 });
+    expect(port.open).toHaveBeenCalledWith({
+      baudRate: 9600,
+      dataBits: 8,
+      stopBits: 1,
+      parity: 'none',
+      bufferSize: 4096,
+    });
     await session.close();
   });
 

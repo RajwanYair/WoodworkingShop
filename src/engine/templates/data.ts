@@ -4,9 +4,9 @@
  * Extracted from templates.ts: the DEFAULT_EDGE_BANDING constant,
  * the private 	pl() factory, and the TEMPLATES array.
  */
-import type { CabinetConfig } from './types';
-import type { CabinetTemplate } from './templates';
-import { DEFAULT_CONFIG } from './materials.ts';
+import type { CabinetConfig } from '../types';
+import type { CabinetTemplate } from './index';
+import { DEFAULT_CONFIG } from '../materials.ts';
 
 /** Default edge-banding style applied to all built-in cabinet templates. */
 const DEFAULT_EDGE_BANDING = 'all-visible' as const;

@@ -2,9 +2,9 @@ import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TEMPLATES } from '../../engine/templates';
 import type { CabinetTemplate } from '../../engine/templates';
-import { useCabinetStore } from '../../store/cabinet-store';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { IconX } from '../layout/Icons';
+import { applyCabinetTemplate } from './apply-template';
 
 /** 80×60 schematic front-face SVG for a template card.
  *  Draws: outer carcass, optional toe-kick, door divider or shelves, handle dots. */
@@ -85,20 +85,12 @@ interface TemplatePickerProps {
 export function TemplatePicker({ onClose }: TemplatePickerProps) {
   const { t, i18n } = useTranslation();
   const lang = i18n.language as 'en' | 'he';
-  const setConfig = useCabinetStore((s) => s.setConfig);
   const dialogRef = useRef<HTMLDivElement>(null);
 
   useFocusTrap(dialogRef, true, onClose);
 
   const handleApply = (templateId: string) => {
-    const tpl = TEMPLATES.find((t) => t.id === templateId);
-    if (!tpl) return;
-    setConfig(tpl.config);
-    // Reflect the template in the URL
-    const url = new URL(window.location.href);
-    url.searchParams.set('tpl', templateId);
-    window.history.replaceState(null, '', url.pathname + '?' + url.searchParams.toString());
-    onClose();
+    if (applyCabinetTemplate(templateId)) onClose();
   };
 
   return (

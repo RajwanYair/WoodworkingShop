@@ -350,7 +350,7 @@
     "history": "היסטוריה",
     "diffTitle": "השוואת גרסאות",
     "noDiff": "התצורות זהות",
-    "changeCount": "שדה 1 שונה",
+    "changeCount": "{{count}} שדה השתנה",
     "changeCount_other": "{{count}} שדות שונו"
   },
   "workspace": {
@@ -651,6 +651,39 @@
     "hardwareExported": "קובץ CSV של פרזול הורד",
     "linkCopied": "קישור שיתוף הועתק ללוח",
     "linkCopyFailed": "לא ניתן להעתיק קישור — אנא העתק את הכתובת מסרגל הכתובות"
+  },
+  "commandPalette": {
+    "title": "לוח פקודות",
+    "search": "חיפוש פקודות",
+    "results": "תוצאות פקודות",
+    "noResults": "לא נמצאו פקודות מתאימות",
+    "actionFailed": "לא ניתן להשלים את הפקודה.",
+    "recent": "אחרונים",
+    "shortcutDescription": "פתיחת לוח הפקודות",
+    "close": "סגירת לוח הפקודות",
+    "categories": {
+      "actions": "פעולות",
+      "language": "שפה",
+      "calculators": "מחשבונים",
+      "presets": "תבניות",
+      "projects": "פרויקטים",
+      "exports": "ייצוא"
+    },
+    "commands": {
+      "undo": "ביטול",
+      "redo": "ביצוע מחדש",
+      "toggleTheme": "החלפת מצב כהה",
+      "toggleContrast": "החלפת ניגודיות גבוהה",
+      "copyLink": "העתקת קישור שיתוף",
+      "keyboardShortcuts": "קיצורי מקלדת",
+      "addCabinet": "הוספת ארון",
+      "exportBom": "ייצוא רשימת חומרים",
+      "saveSnapshot": "שמירת תמונת מצב",
+      "resetConfig": "איפוס התצורה",
+      "print": "הדפסה",
+      "redoAlternate": "ביצוע מחדש (חלופי)",
+      "toggleFocusMode": "החלפת מצב מיקוד"
+    }
   },
   "skeleton": {
     "loading": "טוען לוח…",
@@ -1384,26 +1417,6 @@
     "mergeConflict": "יש קונפליקטים במיזוג שדורשים פתרון.",
     "branchCreated": "הענף נוצר."
   },
-  "productionSchedule": {
-    "title": "לוח זמנים לייצור",
-    "task": "משימה",
-    "tasks": "משימות",
-    "resource": "משאב",
-    "resources": "משאבים",
-    "duration": "משך",
-    "dependencies": "תלויות",
-    "milestone": "אבן דרך",
-    "criticalPath": "נתיב קריטי",
-    "conflict": "קונפליקט משאבים",
-    "conflicts": "קונפליקטי משאבים",
-    "utilization": "ניצולת",
-    "spanDays": "טווח לוח הזמנים (ימים)",
-    "addTask": "הוסף משימה",
-    "compute": "חשב לוח זמנים",
-    "crash": "דחס משימה",
-    "noTasks": "אין עדיין משימות מתוזמנות.",
-    "scheduleReady": "לוח הזמנים חושב בהצלחה."
-  },
   "nestingPatterns": {
     "title": "ספריית תבניות קינון",
     "pattern": "תבנית",
@@ -1504,26 +1517,6 @@
     "cycleDetected": "זוהתה תלות מעגלית!",
     "earliestStart": "התחלה מוקדמת",
     "latestFinish": "סיום מאוחר"
-  },
-  "workshopSafety": {
-    "title": "בטיחות סדנה",
-    "score": "ציון בטיחות",
-    "passes": "עובר",
-    "fails": "נכשל",
-    "violations": "הפרות",
-    "critical": "קריטי",
-    "warning": "אזהרה",
-    "clearanceZone": "אזור פינוי",
-    "overlap": "חפיפה",
-    "noise": "רמת רעש",
-    "ppe": "ציוד מגן נדרש",
-    "safetyGlasses": "משקפי מגן",
-    "hearingProtection": "הגנת שמיעה",
-    "dustMask": "מסכת אבק",
-    "respirator": "מסנן",
-    "faceShield": "מגן פנים",
-    "pushStick": "מוט דחיפה",
-    "noViolations": "לא זוהו הפרות בטיחות."
   },
   "wastePredictor": {
     "title": "חיזוי פחת",
@@ -1691,27 +1684,6 @@
     "weights": "משקלות",
     "noProjects": "הוסף לפחות 2 פרויקטים להשוואה."
   },
-  "woodMovement": {
-    "title": "מחשבון תנועת עץ",
-    "width": "רוחב הלוח (מ״מ)",
-    "species": "סוג עץ",
-    "mcStart": "לחות התחלתית (%)",
-    "mcEnd": "לחות סופית (%)",
-    "change": "שינוי מימד",
-    "finalWidth": "רוחב סופי",
-    "direction": "כיוון",
-    "expansion": "התפשטות",
-    "contraction": "התכווצות",
-    "none": "ללא תנועה",
-    "gapPerSide": "מרווח לצד",
-    "preset": "תרחיש עונתי",
-    "temperateIndoor": "פנים ממוזג",
-    "controlledIndoor": "פנים מבוקר",
-    "unheatedWorkshop": "סדנה לא מחוממת",
-    "outdoorCovered": "חוץ מקורה",
-    "panelMovement": "תנועת פנל",
-    "customCoefficient": "מקדם מותאם"
-  },
   "feedRate": {
     "title": "מחשבון קצב הזנה",
     "cutterDiameter": "קוטר סכין (מ״מ)",
@@ -1749,24 +1721,6 @@
     "perPanel": "לכל לוח",
     "density": "צפיפות (ק״ג/מ³)"
   },
-  "dowelJoint": {
-    "title": "מחשבון חיבור דיבלים",
-    "diameter": "קוטר דיבל",
-    "spacing": "מרווח",
-    "depth": "עומק קדיחה",
-    "drillBit": "מקדח",
-    "count": "מספר דיבלים",
-    "clampTime": "זמן הידוק",
-    "orientation": "כיוון החיבור",
-    "edgeToFace": "קצה לפנים",
-    "edgeToEdge": "קצה לקצה",
-    "mitre": "גרונג",
-    "positions": "מיקומי דיבלים",
-    "jointLength": "אורך החיבור",
-    "boardThickness": "עובי הלוח",
-    "edgeClearance": "מרחק מקצה",
-    "dowelLength": "אורך דיבל"
-  },
   "panelLabel": {
     "title": "תוויות לוחות",
     "partId": "מזהה חלק",
@@ -1790,6 +1744,11 @@
     "screwLength": "אורך בורג",
     "drillAngle": "זווית קדיחה",
     "threadType": "סוג הברגה",
+    "materialHardness": "חומר החלק המתחבר",
+    "jointLength": "אורך החיבור",
+    "jointType": "סוג חיבור",
+    "softwood": "עץ רך",
+    "hardwood": "עץ קשה",
     "screwCount": "מספר ברגים",
     "spacing": "מרווח",
     "pocketBore": "קוטר כיס",
@@ -1821,23 +1780,6 @@
     "random": "אקראי",
     "bothFaces": "שני צדדים",
     "trimAllowance": "תוספת חיתוך"
-  },
-  "clampPressure": {
-    "title": "מחשבון לחץ הידוק",
-    "clampCount": "מלחצים נדרשים",
-    "totalForce": "כוח כולל",
-    "achievedPressure": "לחץ מושג",
-    "targetPressure": "לחץ יעד",
-    "spacing": "מרווח מלחצים",
-    "openTime": "זמן פתוח",
-    "clampTime": "זמן הידוק",
-    "glueType": "סוג דבק",
-    "clampType": "סוג מלחץ",
-    "pva": "דבק עץ (PVA)",
-    "polyurethane": "פוליאוריתן",
-    "epoxy": "אפוקסי",
-    "hide": "דבק עור",
-    "contact": "דבק מגע"
   },
   "drillSpeed": {
     "title": "מחשבון מהירות מקדחה",
@@ -2008,6 +1950,7 @@
     "fixed": "קבועה (מובנית)",
     "maxDeflection": "שקיעה מרבית",
     "exceedsLimit": "חריגה מהמגבלה",
+    "withinLimit": "בתוך המגבלה",
     "recommendedMaxSpan": "טווח מרבי מומלץ",
     "deflectionRatio": "יחס שקיעה"
   },
@@ -2036,37 +1979,6 @@
     "plywood": "דיקט",
     "mdf": "MDF",
     "hardPlastic": "פלסטיק קשיח"
-  },
-  "biscuitJoint": {
-    "title": "מחשבון חיבור ביסקוויט",
-    "description": "חישוב גודל ביסקוויט, עומק חריץ ומיקומי פריסה",
-    "jointLength": "אורך חיבור",
-    "boardThickness": "עובי לוח",
-    "jointType": "סוג חיבור",
-    "biscuitSize": "גודל ביסקוויט",
-    "slotDepth": "עומק חריץ",
-    "count": "כמות ביסקוויטים",
-    "spacing": "מרווח",
-    "edgeMargin": "שול קצה",
-    "edge": "קצה",
-    "butt": "קצה מול קצה",
-    "miter": "מיטר",
-    "auto": "אוטומטי"
-  },
-  "sandingProgression": {
-    "title": "מתכנן התקדמות שיוף",
-    "description": "תכנון רצף גריטים ואומדן מאמץ שיוף",
-    "startGrit": "גריט התחלה",
-    "targetGrit": "גריט יעד",
-    "area": "שטח",
-    "material": "חומר",
-    "finishTarget": "יעד גימור",
-    "gritSequence": "רצף גריטים",
-    "estimatedMinutes": "דקות משוערות",
-    "estimatedSheets": "כמות דפים משוערת",
-    "paint": "צבע",
-    "stain": "בייץ",
-    "clear": "שקוף"
   },
   "fingerJoint": {
     "title": "מחשבון חיבור אצבעות",

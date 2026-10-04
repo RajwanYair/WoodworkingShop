@@ -169,6 +169,24 @@ test('shortcuts, project import errors, and G-code export dialog pass axe WCAG 2
   await expectAccessibleState('G-code export preview dialog');
 });
 
+test('command palette opens with Ctrl+K, passes axe, and restores focus on Escape', async ({ appPage: page }) => {
+  const activeTab = page.getByRole('tab', { name: 'Workspace' });
+  await activeTab.focus();
+  await page.keyboard.press('Control+k');
+  const search = page.getByRole('combobox', { name: 'Search commands' });
+  await expect(search).toBeVisible();
+
+  const results = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
+  expect(results.violations, 'command palette').toHaveLength(0);
+
+  await search.fill('preview');
+  await expect(page.getByRole('option', { name: /Preview/ })).toBeVisible();
+  await page.keyboard.press('Escape');
+
+  await expect(page.getByRole('dialog', { name: 'Command palette' })).toHaveCount(0);
+  await expect(activeTab).toBeFocused();
+});
+
 test('optimizer loading and error recovery states pass axe WCAG 2.2 AA', async ({ appPage: page }) => {
   test.setTimeout(60_000);
 

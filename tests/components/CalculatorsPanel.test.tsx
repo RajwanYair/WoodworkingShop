@@ -60,6 +60,13 @@ describe('CalculatorsPanel', () => {
     expect(finishToggle).toHaveAttribute('aria-expanded', 'false');
   });
 
+  it('expands the calculator requested by a palette command', () => {
+    render(<CalculatorsPanel requestedSection={{ id: 'finish', request: 1 }} />);
+
+    expect(screen.getByRole('button', { name: /finish calculator/i })).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByLabelText(/finish type/i)).toBeInTheDocument();
+  });
+
   it.each(calculatorNames)('mounts %s and displays a numeric result with units when expanded', async (name) => {
     const user = userEvent.setup();
     render(<CalculatorsPanel />);

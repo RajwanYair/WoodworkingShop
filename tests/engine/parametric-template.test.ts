@@ -1,14 +1,14 @@
 import { describe, it, expect } from 'vitest';
 import {
   validateTemplate,
-  instantiateTemplate,
+  instantiateParametricTemplate as instantiateTemplate,
   getDefaultValues,
   getParamDependencies,
   evaluateExpression,
   MAX_PARAMS,
   MAX_EXPRESSION_LENGTH,
-} from '../../src/engine/parametric-template';
-import type { ParametricTemplate, ParamValues } from '../../src/engine/parametric-template';
+} from '../../src/engine/templates';
+import type { ParametricTemplate, ParamValues } from '../../src/engine/templates';
 
 function makeTemplate(overrides: Partial<ParametricTemplate> = {}): ParametricTemplate {
   return {

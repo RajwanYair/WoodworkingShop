@@ -2,7 +2,7 @@ const IDENTIFIER_PATTERN = /\b[A-Z_]\w*\b/gi;
 const SAFE_EXPRESSION_PATTERN = /^[\w+\-*/().,\s]+$/;
 
 const RESERVED_IDENTIFIERS = new Set(['Math']);
-import { evaluateTemplateExpr } from './template-dsl';
+import { evaluateTemplateExpr } from './templates';
 
 export interface ParameterGraphEdge {
   from: string;

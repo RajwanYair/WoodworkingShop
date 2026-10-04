@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "summary": {
-    "covered": 623,
-    "indirect": 11,
+    "covered": 540,
+    "indirect": 58,
     "waived": 0
   },
   "functions": [
@@ -316,47 +316,6 @@
         "computes durationMs for closed session",
         "counts events by kind",
         "returns null durationMs for open session"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/appliance-clearance.ts",
-      "functionName": "getClearanceSummary",
-      "tests": ["tests/engine/appliance-clearance.test.ts"],
-      "testCases": ["excludes zero-clearance sides", "returns non-zero sides for %s"],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/appliance-clearance.ts",
-      "functionName": "getEffectiveClearance",
-      "tests": ["tests/engine/appliance-clearance.test.ts"],
-      "testCases": ["merges custom overrides onto standard spec", "returns standard spec when no custom clearance"],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/appliance-clearance.ts",
-      "functionName": "validateAllApplianceClearances",
-      "tests": ["tests/engine/appliance-clearance.test.ts"],
-      "testCases": [
-        "aggregates violations from multiple appliances",
-        "handles empty appliance array",
-        "returns valid=true when no violations"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/appliance-clearance.ts",
-      "functionName": "validateApplianceClearance",
-      "tests": ["tests/engine/appliance-clearance.test.ts"],
-      "testCases": [
-        "cooktop detects overhead cabinet too close",
-        "detects front-side violation (door swing)",
-        "detects left-side violation",
-        "detects rear-side violation",
-        "detects right-side violation",
-        "does not flag bottom violations (bottom clearance is 0)",
-        "handles custom clearance overrides",
-        "returns no violations when obstacles are far away"
       ],
       "status": "covered"
     },
@@ -780,31 +739,6 @@
       "status": "covered"
     },
     {
-      "source": "src/engine/biscuit-joint.ts",
-      "functionName": "calculateBiscuitLayout",
-      "tests": ["tests/engine/biscuit-joint.test.ts"],
-      "testCases": [
-        "miter joints reduce depth limit",
-        "respects manual biscuit size override",
-        "returns at least 2 biscuits with valid positions",
-        "throws RangeError when $desc",
-        "uses spacing to determine count"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/biscuit-joint.ts",
-      "functionName": "recommendBiscuitSize",
-      "tests": ["tests/engine/biscuit-joint.test.ts"],
-      "testCases": [
-        "returns #0 for thin stock",
-        "returns #10 for medium stock",
-        "returns #20 for thick stock",
-        "throws RangeError when thickness <= 0"
-      ],
-      "status": "covered"
-    },
-    {
       "source": "src/engine/board-feet.ts",
       "functionName": "calculateBoardFeet",
       "tests": ["tests/engine/board-feet.test.ts"],
@@ -1049,37 +983,6 @@
       "status": "covered"
     },
     {
-      "source": "src/engine/cabinet-templates.ts",
-      "functionName": "getTemplate",
-      "tests": ["tests/engine/cabinet-templates.test.ts"],
-      "testCases": ["finds built-in template by ID", "finds custom templates", "returns undefined for unknown ID"],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/cabinet-templates.ts",
-      "functionName": "getTemplatesByCategory",
-      "tests": ["tests/engine/cabinet-templates.test.ts"],
-      "testCases": [
-        "returns empty array for category with no templates",
-        "returns only templates of the requested category"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/cabinet-templates.ts",
-      "functionName": "instantiateTemplate",
-      "tests": ["tests/engine/cabinet-templates.test.ts"],
-      "testCases": [
-        "applies parameter overrides",
-        "preserves template metadata in instance",
-        "reports validation errors for out-of-range dimensions",
-        "throws on unknown template ID",
-        "uses defaults when no params provided",
-        "validates all three dimensions independently"
-      ],
-      "status": "covered"
-    },
-    {
       "source": "src/engine/cabinet-weight.ts",
       "functionName": "categorizeFastener",
       "tests": ["tests/engine/cabinet-weight.test.ts"],
@@ -1111,29 +1014,6 @@
         "returns lower load for longer spans",
         "throws RangeError when $desc"
       ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/clamp-pressure.ts",
-      "functionName": "calculateClampPressure",
-      "tests": ["tests/engine/clamp-pressure.test.ts"],
-      "testCases": [
-        "achieves pressure within expected range for adequate clamping",
-        "computes valid result for standard PVA edge glue-up",
-        "respects custom max spacing",
-        "returns longer open/clamp times for polyurethane",
-        "returns zero clamp time for contact cement",
-        "throws RangeError for $desc",
-        "uses custom clamp force when provided",
-        "uses higher clamp count when spacing demands it"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/clamp-pressure.ts",
-      "functionName": "isPressureAdequate",
-      "tests": ["tests/engine/clamp-pressure.test.ts"],
-      "testCases": ["$psi PSI for $glue → $expected"],
       "status": "covered"
     },
     {
@@ -1368,6 +1248,62 @@
         "validates a well-formed catalog with one material"
       ],
       "status": "covered"
+    },
+    {
+      "source": "src/engine/comparison/design.ts",
+      "functionName": "compareDesigns",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
+    },
+    {
+      "source": "src/engine/comparison/design.ts",
+      "functionName": "createSnapshot",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
+    },
+    {
+      "source": "src/engine/comparison/design.ts",
+      "functionName": "getCommonCriteria",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
+    },
+    {
+      "source": "src/engine/comparison/design.ts",
+      "functionName": "validateWeights",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
+    },
+    {
+      "source": "src/engine/comparison/project.ts",
+      "functionName": "bestForCriterion",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
+    },
+    {
+      "source": "src/engine/comparison/project.ts",
+      "functionName": "compareProjects",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
+    },
+    {
+      "source": "src/engine/comparison/project.ts",
+      "functionName": "percentDifference",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
+    },
+    {
+      "source": "src/engine/comparison/snapshot-diff.ts",
+      "functionName": "diffSnapshots",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
       "source": "src/engine/constraint-solver.ts",
@@ -1704,8 +1640,10 @@
       "tests": ["tests/engine/cut-optimizer.test.ts"],
       "testCases": [
         "leaves untouched sheets unchanged",
+        "preserves grain conflicts from sheets excluded from co-nesting",
         "reduces total sheet count and sets partMaterial when two materials are co-nested",
-        "returns original result unchanged when coNestKeys is empty"
+        "returns original result unchanged when coNestKeys is empty",
+        "returns zero yield for an empty optimization result with a selected co-nest key"
       ],
       "status": "covered"
     },
@@ -1970,54 +1908,6 @@
       "status": "covered"
     },
     {
-      "source": "src/engine/design-comparison.ts",
-      "functionName": "compareDesigns",
-      "tests": ["tests/engine/design-comparison.test.ts"],
-      "testCases": [
-        "allows custom weights",
-        "computes delta correctly",
-        "generates a non-empty summary",
-        "identifies winner correctly for higher-is-better criteria",
-        "identifies winner correctly for lower-is-better criteria",
-        "includes design info in result",
-        "marks tie when values are equal",
-        "produces normalized scores in 0–1 range",
-        "produces total scores between 0 and 100"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/design-comparison.ts",
-      "functionName": "createSnapshot",
-      "tests": ["tests/engine/design-comparison.test.ts"],
-      "testCases": [
-        "creates a snapshot with all criteria",
-        "returns criteria present in both designs",
-        "throws on empty name",
-        "throws on unknown criterion",
-        "trims whitespace from name"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/design-comparison.ts",
-      "functionName": "getCommonCriteria",
-      "tests": ["tests/engine/design-comparison.test.ts"],
-      "testCases": ["returns criteria present in both designs"],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/design-comparison.ts",
-      "functionName": "validateWeights",
-      "tests": ["tests/engine/design-comparison.test.ts"],
-      "testCases": [
-        "accepts valid weights summing to 1",
-        "throws on negative weight",
-        "throws when weights do not sum to 1"
-      ],
-      "status": "covered"
-    },
-    {
       "source": "src/engine/dimensions.ts",
       "functionName": "computeDimensions",
       "tests": [
@@ -2035,6 +1925,7 @@
         "computes single door dimensions",
         "each shelfDeflection entry has required fields",
         "reconciles derived dimensions, side-panel parts, and half-sheet composition",
+        "reduces shelf deflection when centre supports divide the span",
         "resets only the active cabinet and supports undo/redo",
         "responds to material thickness changes",
         "returns empty shelfDeflections when shelfCount is 0",
@@ -2093,7 +1984,10 @@
         "returns a positive maxLoadKg",
         "returns overLimit=false for a short, thick plywood shelf",
         "returns overLimit=true for a very long, thin chipboard shelf",
-        "uses default modulus for unknown material key"
+        "uses default modulus for unknown material key",
+        "uses inclusive thresholds at L/360 and L/240",
+        "uses the configured elastic modulus for %s",
+        "uses the fallback max load when calculated deflection is zero"
       ],
       "status": "covered"
     },
@@ -2121,42 +2015,6 @@
       "functionName": "recommendedDovetailAngle",
       "tests": ["tests/engine/dovetail-layout.test.ts"],
       "testCases": ["returns 12° for softwood", "returns 8° for hardwood"],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/dowel-joint.ts",
-      "functionName": "calculateDowelJoint",
-      "tests": ["tests/engine/dowel-joint.test.ts"],
-      "testCases": [
-        "computes layout for 600mm edge-to-face joint (18mm board)",
-        "has correct number of positions matching count",
-        "positions are monotonically increasing",
-        "positions start at edgeClearance and end at (length - edgeClearance)",
-        "produces at least 2 dowels",
-        "throws RangeError when $desc",
-        "uses custom edge clearance",
-        "uses longer clamp time for edge-to-edge orientation",
-        "uses shallower depth for mitre joint",
-        "uses specified dowel diameter when provided"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/dowel-joint.ts",
-      "functionName": "minDowelsForLoad",
-      "tests": ["tests/engine/dowel-joint.test.ts"],
-      "testCases": [
-        "$load kg with $diameter mm → $expected dowels",
-        "always returns at least 2",
-        "throws RangeError when loadKg ≤ 0"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/dowel-joint.ts",
-      "functionName": "selectDowelDiameter",
-      "tests": ["tests/engine/dowel-joint.test.ts"],
-      "testCases": ["$thickness mm board → $expected mm dowel", "returns 6mm for very thin boards"],
       "status": "covered"
     },
     {
@@ -2334,51 +2192,6 @@
       "status": "covered"
     },
     {
-      "source": "src/engine/edge-banding-calc.ts",
-      "functionName": "allEdgesExposed",
-      "tests": ["tests/engine/edge-banding-calc.test.ts"],
-      "testCases": [
-        "calculates banding for a single part with all edges exposed",
-        "correctly computes cost with wastage",
-        "handles zero wastage correctly",
-        "returns all true",
-        "sorts groups by total length descending",
-        "throws RangeError for unknown bandingId"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/edge-banding-calc.ts",
-      "functionName": "calculateEdgeBanding",
-      "tests": ["tests/engine/edge-banding-calc.test.ts"],
-      "testCases": [
-        "calculates banding for a single part with all edges exposed",
-        "calculates banding for front edges only",
-        "correctly computes cost with wastage",
-        "groups by banding type across multiple parts",
-        "handles zero wastage correctly",
-        "returns empty result for empty parts",
-        "sorts groups by total length descending",
-        "throws RangeError for $desc",
-        "throws RangeError for unknown bandingId"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/edge-banding-calc.ts",
-      "functionName": "detectExposedEdges",
-      "tests": ["tests/engine/edge-banding-calc.test.ts"],
-      "testCases": ["all false returns no exposure", "returns correct exposure object"],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/edge-banding-calc.ts",
-      "functionName": "frontEdgesOnly",
-      "tests": ["tests/engine/edge-banding-calc.test.ts"],
-      "testCases": ["calculates banding for front edges only", "returns only top/bottom exposed"],
-      "status": "covered"
-    },
-    {
       "source": "src/engine/edge-profile.ts",
       "functionName": "calculateEdgeBandBom",
       "tests": ["tests/engine/edge-profile.test.ts"],
@@ -2482,7 +2295,7 @@
       "status": "covered"
     },
     {
-      "source": "src/engine/export/gltf-export.ts",
+      "source": "src/engine/export/gltf-document.ts",
       "functionName": "generateGltfContent",
       "tests": ["tests/engine/gltf-export.test.ts"],
       "testCases": [
@@ -2730,7 +2543,7 @@
       "status": "covered"
     },
     {
-      "source": "src/engine/gltf-export.ts",
+      "source": "src/engine/gltf-ifc-model.ts",
       "functionName": "buildGltfScene",
       "tests": ["tests/engine/gltf-export.test.ts"],
       "testCases": [
@@ -2754,7 +2567,7 @@
       "status": "covered"
     },
     {
-      "source": "src/engine/gltf-export.ts",
+      "source": "src/engine/gltf-ifc-model.ts",
       "functionName": "buildIfcScene",
       "tests": ["tests/engine/gltf-export.test.ts"],
       "testCases": [
@@ -2773,7 +2586,7 @@
       "status": "covered"
     },
     {
-      "source": "src/engine/gltf-export.ts",
+      "source": "src/engine/gltf-ifc-model.ts",
       "functionName": "estimateGltfSize",
       "tests": ["tests/engine/gltf-export.test.ts"],
       "testCases": [
@@ -2784,7 +2597,7 @@
       "status": "covered"
     },
     {
-      "source": "src/engine/gltf-export.ts",
+      "source": "src/engine/gltf-ifc-model.ts",
       "functionName": "serializeGltf",
       "tests": ["tests/engine/gltf-export.test.ts"],
       "testCases": [
@@ -2797,7 +2610,7 @@
       "status": "covered"
     },
     {
-      "source": "src/engine/gltf-export.ts",
+      "source": "src/engine/gltf-ifc-model.ts",
       "functionName": "serializeIfc",
       "tests": ["tests/engine/gltf-export.test.ts"],
       "testCases": [
@@ -3152,10 +2965,10 @@
       "tests": ["tests/engine/honing-guide.test.ts"],
       "testCases": [
         "calculates projection for 25° bevel at 25 mm guide height",
-        "calculates projection for 30° bevel at 20 mm guide height",
         "calculates shorter microbevel projection for a 5° micro-bevel",
         "echoes actualBevelAngleDeg",
         "keeps microbevel projection below the primary bevel across valid geometry",
+        "matches the OpenStax idealized right-triangle projection oracle",
         "microbevel projection formula: guideHeight / tan(bevel + micro)",
         "preserves projection scaling and angle monotonicity across valid geometry",
         "returns null microbevelProjectionMm when microbevelDeg is 0 (default)",
@@ -3992,7 +3805,11 @@
       "source": "src/engine/materials.ts",
       "functionName": "getMaterial",
       "tests": ["tests/components/CostEstimatePanel.test.tsx", "tests/engine/materials.test.ts"],
-      "testCases": ["returns correct material by key", "throws for unknown key"],
+      "testCases": [
+        "looks up custom materials appended to the built-in catalogue",
+        "returns correct material by key",
+        "throws for unknown key"
+      ],
       "status": "covered"
     },
     {
@@ -4570,63 +4387,6 @@
       "status": "covered"
     },
     {
-      "source": "src/engine/parametric-template.ts",
-      "functionName": "evaluateExpression",
-      "tests": ["tests/engine/parametric-template.test.ts"],
-      "testCases": ["evaluates \"$expr\" = $expected"],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/parametric-template.ts",
-      "functionName": "getDefaultValues",
-      "tests": ["tests/engine/parametric-template.test.ts"],
-      "testCases": ["returns default values for all parameters"],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/parametric-template.ts",
-      "functionName": "getParamDependencies",
-      "tests": ["tests/engine/parametric-template.test.ts"],
-      "testCases": ["returns dependency map from rules"],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/parametric-template.ts",
-      "functionName": "instantiateTemplate",
-      "tests": ["tests/engine/parametric-template.test.ts"],
-      "testCases": [
-        "applies conditional rules",
-        "applies default values when no overrides given",
-        "applies overrides to parameters",
-        "clamps numeric values to min/max",
-        "computes derived fields",
-        "rejects invalid choice values",
-        "snaps numeric values to step",
-        "throws on invalid template",
-        "warns on unknown override parameters"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/parametric-template.ts",
-      "functionName": "validateTemplate",
-      "tests": ["tests/engine/parametric-template.test.ts"],
-      "testCases": [
-        "accepts a valid template",
-        "rejects choice param with default not in options",
-        "rejects choice param with empty options",
-        "rejects computed field with expression too long",
-        "rejects duplicate parameter IDs",
-        "rejects empty template ID",
-        "rejects empty template name",
-        "rejects number param with min > max",
-        "rejects number param with step <= 0",
-        "rejects rule referencing unknown parameter",
-        "rejects too many parameters"
-      ],
-      "status": "covered"
-    },
-    {
       "source": "src/engine/part-labeling.ts",
       "functionName": "assignPartLabels",
       "tests": ["tests/engine/part-labeling.test.ts"],
@@ -4697,7 +4457,10 @@
         "tests/utils/ProjectWorkflow.full-project.test.tsx",
         "tests/utils/pdf-rendering-budget.test.tsx"
       ],
-      "testCases": ["computes total edge banding length", "returns 0 when no edge banding"],
+      "testCases": [
+        "computes front-edge and four-edge totals from independent part fixtures",
+        "returns 0 when no edge banding"
+      ],
       "status": "covered"
     },
     {
@@ -5039,7 +4802,8 @@
       "tests": ["tests/engine/plugin-v2.test.ts"],
       "testCases": [
         "getActivePlugins excludes deactivated plugins",
-        "getActivePlugins returns empty array when registry is empty"
+        "getActivePlugins returns empty array when registry is empty",
+        "shares registration, active-plugin reads, and removal with the v2 registry"
       ],
       "status": "covered"
     },
@@ -5060,6 +4824,7 @@
         "getRegistryEntry returns undefined for missing id",
         "registers and immediately becomes active",
         "removes the plugin from the registry",
+        "shares registration, active-plugin reads, and removal with the v2 registry",
         "transitions state back to active",
         "transitions state to deactivated",
         "transitions to error state when onActivate throws",
@@ -5193,11 +4958,13 @@
       "tests": [
         "tests/components/PluginRegistryPanel.test.tsx",
         "tests/engine/plugin-sandbox.test.ts",
+        "tests/engine/plugin-v2.test.ts",
         "tests/engine/plugin.test.ts"
       ],
       "testCases": [
         "getPlugins returns the registered plugin list",
         "registers a plugin",
+        "shares registration, active-plugin reads, and removal with the v2 registry",
         "starts empty",
         "unregisters a plugin"
       ],
@@ -5209,6 +4976,7 @@
       "tests": [
         "tests/components/PluginRegistryPanel.test.tsx",
         "tests/engine/plugin-sandbox.test.ts",
+        "tests/engine/plugin-v2.test.ts",
         "tests/engine/plugin.test.ts"
       ],
       "testCases": [
@@ -5227,6 +4995,7 @@
         "renders a registered plugin name and id",
         "renders multiple plugins in a list",
         "returns an error result when registering duplicate id",
+        "shares registration, active-plugin reads, and removal with the v2 registry",
         "shows \"Enabled\" button when plugin is active",
         "skips plugins that do not implement onGcodeGenerated",
         "toggles plugin back to enabled on second click",
@@ -5257,10 +5026,12 @@
       "tests": [
         "tests/components/PluginRegistryPanel.test.tsx",
         "tests/engine/plugin-sandbox.test.ts",
+        "tests/engine/plugin-v2.test.ts",
         "tests/engine/plugin.test.ts"
       ],
       "testCases": [
         "getPlugins returns the registered plugin list",
+        "shares registration, active-plugin reads, and removal with the v2 registry",
         "unregister is a no-op for unknown id",
         "unregisters a plugin"
       ],
@@ -5298,128 +5069,6 @@
       "functionName": "selectThreadType",
       "tests": ["tests/engine/pocket-hole.test.ts"],
       "testCases": ["$hardness → $expected"],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/production-schedule.ts",
-      "functionName": "addTask",
-      "tests": ["tests/engine/production-schedule.test.ts"],
-      "testCases": [
-        "adds a task to the schedule",
-        "computes correct metrics",
-        "computes critical path",
-        "detects over-allocation on same resource and day",
-        "handles milestones (zero duration)",
-        "reduces duration and recomputes",
-        "rejects duplicate task IDs",
-        "rejects exceeding MAX_TASKS",
-        "rejects tasks with missing dependencies",
-        "respects dependencies",
-        "returns empty for non-conflicting schedule",
-        "schedules independent tasks in parallel"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/production-schedule.ts",
-      "functionName": "computeSchedule",
-      "tests": ["tests/engine/production-schedule.test.ts"],
-      "testCases": [
-        "computes correct metrics",
-        "computes critical path",
-        "detects over-allocation on same resource and day",
-        "handles milestones (zero duration)",
-        "reduces duration and recomputes",
-        "respects dependencies",
-        "returns empty for non-conflicting schedule",
-        "returns zero span for empty schedule",
-        "schedules independent tasks in parallel"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/production-schedule.ts",
-      "functionName": "crashTask",
-      "tests": ["tests/engine/production-schedule.test.ts"],
-      "testCases": ["reduces duration and recomputes", "rejects negative duration", "rejects non-existent task"],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/production-schedule.ts",
-      "functionName": "createSchedule",
-      "tests": ["tests/engine/production-schedule.test.ts"],
-      "testCases": [
-        "adds a task to the schedule",
-        "computes correct metrics",
-        "computes critical path",
-        "creates a schedule with name and resources",
-        "detects over-allocation on same resource and day",
-        "handles milestones (zero duration)",
-        "reduces duration and recomputes",
-        "rejects $desc name",
-        "rejects duplicate task IDs",
-        "rejects exceeding MAX_TASKS",
-        "rejects more than MAX_RESOURCES",
-        "rejects negative duration",
-        "rejects non-existent task",
-        "rejects tasks with missing dependencies",
-        "respects dependencies",
-        "returns empty for non-conflicting schedule",
-        "returns zero span for empty schedule",
-        "schedules independent tasks in parallel"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/production-schedule.ts",
-      "functionName": "detectConflicts",
-      "tests": ["tests/engine/production-schedule.test.ts"],
-      "testCases": ["detects over-allocation on same resource and day", "returns empty for non-conflicting schedule"],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/production-schedule.ts",
-      "functionName": "getScheduleMetrics",
-      "tests": ["tests/engine/production-schedule.test.ts"],
-      "testCases": ["computes correct metrics"],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/project-comparison.ts",
-      "functionName": "bestForCriterion",
-      "tests": ["tests/engine/project-comparison.test.ts"],
-      "testCases": [
-        "finds cheapest project",
-        "finds fastest project",
-        "finds least wasteful project",
-        "returns undefined for empty array"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/project-comparison.ts",
-      "functionName": "compareProjects",
-      "tests": ["tests/engine/project-comparison.test.ts"],
-      "testCases": [
-        "applies custom weights",
-        "gives 100 to best and 0 to worst for each criterion (2 projects)",
-        "handles identical metrics (all score 100)",
-        "identifies best and worst projects",
-        "normalises scores to 0-100 range",
-        "ranks projects by weighted score",
-        "throws RangeError for all-zero weights",
-        "throws RangeError for fewer than 2 projects",
-        "throws RangeError for negative weights",
-        "uses default weights when none provided",
-        "waste-focused weights favour low-waste project"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/project-comparison.ts",
-      "functionName": "percentDifference",
-      "tests": ["tests/engine/project-comparison.test.ts"],
-      "testCases": ["percentDifference($a, $b) = $expected"],
       "status": "covered"
     },
     {
@@ -5882,19 +5531,6 @@
       "status": "covered"
     },
     {
-      "source": "src/engine/sanding-progression.ts",
-      "functionName": "planSandingProgression",
-      "tests": ["tests/engine/sanding-progression.test.ts"],
-      "testCases": [
-        "caps target grit by finish target recommendation",
-        "hardwood takes longer than softwood",
-        "larger area increases sheets and time",
-        "returns contiguous grit sequence within supported range",
-        "throws RangeError for $desc"
-      ],
-      "status": "covered"
-    },
-    {
       "source": "src/engine/screw-pullout.ts",
       "functionName": "calculateScrewPullout",
       "tests": ["tests/engine/screw-pullout.test.ts"],
@@ -6004,42 +5640,6 @@
       "status": "covered"
     },
     {
-      "source": "src/engine/shop-inventory.ts",
-      "functionName": "analyzeInventory",
-      "tests": ["tests/engine/shop-inventory.test.ts"],
-      "testCases": ["categorizes items correctly", "returns all checks in order", "throws on empty inventory"],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/shop-inventory.ts",
-      "functionName": "checkStock",
-      "tests": ["tests/engine/shop-inventory.test.ts"],
-      "testCases": [
-        "returns status \"%s\" for quantity=%d, reorderLevel=%d",
-        "treats negative quantity as out of stock",
-        "treats quantity exactly at reorder level as low"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/shop-inventory.ts",
-      "functionName": "generateReorderList",
-      "tests": ["tests/engine/shop-inventory.test.ts"],
-      "testCases": ["includes items at or below reorder level", "returns empty for fully stocked inventory"],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/shop-inventory.ts",
-      "functionName": "projectUsage",
-      "tests": ["tests/engine/shop-inventory.test.ts"],
-      "testCases": [
-        "determines fulfilment for each material",
-        "returns 0 available for materials not in inventory",
-        "throws on empty usage"
-      ],
-      "status": "covered"
-    },
-    {
       "source": "src/engine/smart-optimizer.ts",
       "functionName": "findOptimizations",
       "tests": ["tests/engine/smart-optimizer.test.ts"],
@@ -6064,25 +5664,6 @@
         "shelf-count-reduce decrements numShelves by 1",
         "shelf-count-reduce skips cabinets with fewer than 2 shelves",
         "supports custom materials when evaluating candidates"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/snapshot-diff.ts",
-      "functionName": "diffSnapshots",
-      "tests": ["tests/engine/snapshot-diff.test.ts"],
-      "testCases": [
-        "detects material change",
-        "detects multiple field changes in one cabinet",
-        "detects width change",
-        "does not include unchanged cabinets in cabinetDiffs",
-        "falls back to \"Cabinet N\" when snapshotB cabinet name is empty",
-        "fmt: formats boolean true as \"Yes\" and false as \"No\"",
-        "fmt: formats undefined as em-dash",
-        "reports added cabinets",
-        "reports removed cabinets",
-        "returns identical when both snapshots have same config",
-        "uses snapshotB cabinet name in diff"
       ],
       "status": "covered"
     },
@@ -6201,207 +5782,144 @@
       "status": "covered"
     },
     {
-      "source": "src/engine/stock-management.ts",
+      "source": "src/engine/stock/inventory.ts",
+      "functionName": "analyzeInventory",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
+    },
+    {
+      "source": "src/engine/stock/inventory.ts",
+      "functionName": "checkStock",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
+    },
+    {
+      "source": "src/engine/stock/inventory.ts",
+      "functionName": "generateReorderList",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
+    },
+    {
+      "source": "src/engine/stock/inventory.ts",
+      "functionName": "projectUsage",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
+    },
+    {
+      "source": "src/engine/stock/management.ts",
       "functionName": "addMaterial",
-      "tests": ["tests/engine/stock-management.test.ts"],
-      "testCases": [
-        "adds a record to the ledger",
-        "overrides an existing record",
-        "throws for negative onHand",
-        "throws for negative reorderPoint"
-      ],
-      "status": "covered"
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
-      "source": "src/engine/stock-management.ts",
+      "source": "src/engine/stock/management.ts",
       "functionName": "cancelPurchaseOrder",
-      "tests": ["tests/engine/stock-management.test.ts"],
-      "testCases": ["cancels a draft order", "throws when trying to cancel a received order"],
-      "status": "covered"
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
-      "source": "src/engine/stock-management.ts",
+      "source": "src/engine/stock/management.ts",
       "functionName": "computeReorderAlerts",
-      "tests": ["tests/engine/stock-management.test.ts"],
-      "testCases": [
-        "returns empty when all stock is above reorder point",
-        "sorts critical alerts before warning before info",
-        "suggestedOrderQty is at least DEFAULT_REORDER_MULTIPLIER times deficit",
-        "triggers critical alert at zero stock",
-        "triggers info alert when at reorder point",
-        "triggers warning alert at half the reorder point"
-      ],
-      "status": "covered"
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
-      "source": "src/engine/stock-management.ts",
+      "source": "src/engine/stock/management.ts",
       "functionName": "createPurchaseOrder",
-      "tests": ["tests/engine/stock-management.test.ts"],
-      "testCases": [
-        "appends order to ledger",
-        "cancels a draft order",
-        "counts pending orders",
-        "creates a draft order with a unique id",
-        "increases on-hand stock and marks fully received",
-        "marks partially-received when only some received",
-        "throws for blank supplier name",
-        "throws for empty lines",
-        "throws for negative received quantity",
-        "throws when order is not draft",
-        "throws when trying to cancel a received order",
-        "transitions draft → submitted"
-      ],
-      "status": "covered"
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
-      "source": "src/engine/stock-management.ts",
+      "source": "src/engine/stock/management.ts",
       "functionName": "createStockLedger",
-      "tests": ["tests/engine/stock-management.test.ts"],
-      "testCases": [
-        "adds a record to the ledger",
-        "overrides an existing record",
-        "returns non-empty string",
-        "starts empty",
-        "throws for negative onHand",
-        "throws for negative reorderPoint",
-        "throws for unknown material key",
-        "throws when order not found"
-      ],
-      "status": "covered"
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
-      "source": "src/engine/stock-management.ts",
+      "source": "src/engine/stock/management.ts",
       "functionName": "formatStockReport",
-      "tests": ["tests/engine/stock-management.test.ts"],
-      "testCases": [
-        "includes alert severity tags when present",
-        "reports material count and value",
-        "returns non-empty string"
-      ],
-      "status": "covered"
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
-      "source": "src/engine/stock-management.ts",
+      "source": "src/engine/stock/management.ts",
       "functionName": "getStockSummary",
-      "tests": ["tests/engine/stock-management.test.ts"],
-      "testCases": [
-        "accumulates total waste",
-        "computes total value correctly",
-        "counts critical and low stock",
-        "counts pending orders"
-      ],
-      "status": "covered"
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
-      "source": "src/engine/stock-management.ts",
+      "source": "src/engine/stock/management.ts",
       "functionName": "receivePurchaseOrder",
-      "tests": ["tests/engine/stock-management.test.ts"],
-      "testCases": [
-        "increases on-hand stock and marks fully received",
-        "marks partially-received when only some received",
-        "throws for negative received quantity",
-        "throws when trying to cancel a received order"
-      ],
-      "status": "covered"
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
-      "source": "src/engine/stock-management.ts",
+      "source": "src/engine/stock/management.ts",
       "functionName": "recordWaste",
-      "tests": ["tests/engine/stock-management.test.ts"],
-      "testCases": [
-        "accumulates total waste",
-        "deducts from on-hand and adds to waste log",
-        "throws for unknown material key",
-        "throws for zero or negative quantity",
-        "throws when wasting more than on-hand"
-      ],
-      "status": "covered"
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
-      "source": "src/engine/stock-management.ts",
+      "source": "src/engine/stock/management.ts",
       "functionName": "submitPurchaseOrder",
-      "tests": ["tests/engine/stock-management.test.ts"],
-      "testCases": [
-        "counts pending orders",
-        "increases on-hand stock and marks fully received",
-        "marks partially-received when only some received",
-        "throws for negative received quantity",
-        "throws when order is not draft",
-        "throws when order not found",
-        "throws when trying to cancel a received order",
-        "transitions draft → submitted"
-      ],
-      "status": "covered"
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
-      "source": "src/engine/stock-tracker.ts",
+      "source": "src/engine/stock/tracker.ts",
       "functionName": "addStockItem",
-      "tests": ["tests/engine/stock-tracker.test.ts"],
-      "testCases": [
-        "adds a new item",
-        "includes status and material key in output",
-        "replaces existing item with same key",
-        "returns low when on-hand is at reorder level",
-        "returns ok when stock covers demand",
-        "returns only shortfall and unknown entries",
-        "returns shortfall when stock is insufficient",
-        "updates quantity for existing key"
-      ],
-      "status": "covered"
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
-      "source": "src/engine/stock-tracker.ts",
+      "source": "src/engine/stock/tracker.ts",
       "functionName": "checkAvailability",
-      "tests": ["tests/engine/stock-tracker.test.ts"],
-      "testCases": [
-        "includes status and material key in output",
-        "returns low when on-hand is at reorder level",
-        "returns ok when stock covers demand",
-        "returns only shortfall and unknown entries",
-        "returns shortfall when stock is insufficient",
-        "returns unknown for items not in store"
-      ],
-      "status": "covered"
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
-      "source": "src/engine/stock-tracker.ts",
+      "source": "src/engine/stock/tracker.ts",
       "functionName": "createStockStore",
-      "tests": ["tests/engine/stock-tracker.test.ts"],
-      "testCases": [
-        "adds a new item",
-        "creates an empty store",
-        "includes status and material key in output",
-        "replaces existing item with same key",
-        "returns low when on-hand is at reorder level",
-        "returns ok when stock covers demand",
-        "returns only shortfall and unknown entries",
-        "returns shortfall when stock is insufficient",
-        "returns unchanged store for unknown key",
-        "returns unknown for items not in store",
-        "updates quantity for existing key"
-      ],
-      "status": "covered"
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
-      "source": "src/engine/stock-tracker.ts",
+      "source": "src/engine/stock/tracker.ts",
       "functionName": "formatAvailabilityReport",
-      "tests": ["tests/engine/stock-tracker.test.ts"],
-      "testCases": ["includes status and material key in output", "returns \"No demand entries.\" for empty input"],
-      "status": "covered"
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
-      "source": "src/engine/stock-tracker.ts",
+      "source": "src/engine/stock/tracker.ts",
       "functionName": "getShortfalls",
-      "tests": ["tests/engine/stock-tracker.test.ts"],
-      "testCases": ["returns only shortfall and unknown entries"],
-      "status": "covered"
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
-      "source": "src/engine/stock-tracker.ts",
+      "source": "src/engine/stock/tracker.ts",
       "functionName": "updateOnHand",
-      "tests": ["tests/engine/stock-tracker.test.ts"],
-      "testCases": ["returns unchanged store for unknown key", "updates quantity for existing key"],
-      "status": "covered"
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
       "source": "src/engine/substitution.ts",
@@ -6453,47 +5971,35 @@
       "status": "covered"
     },
     {
-      "source": "src/engine/template-dsl.ts",
+      "source": "src/engine/templates/cabinet.ts",
+      "functionName": "getTemplate",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
+    },
+    {
+      "source": "src/engine/templates/cabinet.ts",
+      "functionName": "getTemplatesByCategory",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
+    },
+    {
+      "source": "src/engine/templates/cabinet.ts",
+      "functionName": "instantiateTemplate",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
+    },
+    {
+      "source": "src/engine/templates/dsl.ts",
       "functionName": "evaluateTemplateExpr",
       "tests": [],
       "testCases": [],
       "status": "indirect"
     },
     {
-      "source": "src/engine/template-library.ts",
-      "functionName": "getTemplate",
-      "tests": ["tests/engine/template-library.test.ts"],
-      "testCases": ["returns a template by id", "returns undefined for unknown id"],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/template-library.ts",
-      "functionName": "getTemplatesByCategory",
-      "tests": ["tests/engine/template-library.test.ts"],
-      "testCases": ["returns base templates", "returns empty array for category with no templates"],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/template-library.ts",
-      "functionName": "instantiateTemplate",
-      "tests": ["tests/engine/template-library.test.ts"],
-      "testCases": [
-        "applies dimension overrides",
-        "preserves templateId in result",
-        "returns undefined for unknown template id",
-        "uses template defaults when no overrides provided"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/template-library.ts",
-      "functionName": "listTemplateIds",
-      "tests": ["tests/engine/template-library.test.ts"],
-      "testCases": ["returns an array of strings"],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/templates.ts",
+      "source": "src/engine/templates/index.ts",
       "functionName": "getTemplate",
       "tests": ["tests/engine/templates.test.ts"],
       "testCases": [
@@ -6509,7 +6015,7 @@
       "status": "covered"
     },
     {
-      "source": "src/engine/templates.ts",
+      "source": "src/engine/templates/index.ts",
       "functionName": "getTemplateDefaults",
       "tests": ["tests/engine/templates.test.ts"],
       "testCases": [
@@ -6524,7 +6030,7 @@
       "status": "covered"
     },
     {
-      "source": "src/engine/templates.ts",
+      "source": "src/engine/templates/index.ts",
       "functionName": "instantiateTemplate",
       "tests": ["tests/engine/templates.test.ts"],
       "testCases": [
@@ -6534,6 +6040,69 @@
         "templates without computedFields return base config unchanged"
       ],
       "status": "covered"
+    },
+    {
+      "source": "src/engine/templates/library.ts",
+      "functionName": "getTemplate",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
+    },
+    {
+      "source": "src/engine/templates/library.ts",
+      "functionName": "getTemplatesByCategory",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
+    },
+    {
+      "source": "src/engine/templates/library.ts",
+      "functionName": "instantiateTemplate",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
+    },
+    {
+      "source": "src/engine/templates/library.ts",
+      "functionName": "listTemplateIds",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
+    },
+    {
+      "source": "src/engine/templates/parametric.ts",
+      "functionName": "evaluateExpression",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
+    },
+    {
+      "source": "src/engine/templates/parametric.ts",
+      "functionName": "getDefaultValues",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
+    },
+    {
+      "source": "src/engine/templates/parametric.ts",
+      "functionName": "getParamDependencies",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
+    },
+    {
+      "source": "src/engine/templates/parametric.ts",
+      "functionName": "instantiateTemplate",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
+    },
+    {
+      "source": "src/engine/templates/parametric.ts",
+      "functionName": "validateTemplate",
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
       "source": "src/engine/time-estimator.ts",
@@ -6782,7 +6351,10 @@
       "testCases": [
         "re-registering the same id is a no-op",
         "registered rule appears in getCustomRules()",
-        "unregisterRule removes a rule by id"
+        "registers a different rule when the registry is non-empty",
+        "unregisterRule is a no-op for an unknown id",
+        "unregisterRule removes a rule by id",
+        "unregisters the first rule while preserving a later rule"
       ],
       "status": "covered"
     },
@@ -6797,10 +6369,14 @@
         "multiple issues from a single custom rule all appear",
         "re-registering the same id is a no-op",
         "registered rule appears in getCustomRules()",
+        "registers a different rule when the registry is non-empty",
         "rule with furnitureTypes runs for matching types",
         "rule with furnitureTypes skips non-matching types",
         "rule without furnitureTypes runs for all furniture types",
-        "unregisterRule removes a rule by id"
+        "sorts custom errors ahead of built-in warnings",
+        "unregisterRule is a no-op for an unknown id",
+        "unregisterRule removes a rule by id",
+        "unregisters the first rule while preserving a later rule"
       ],
       "status": "covered"
     },
@@ -6808,7 +6384,11 @@
       "source": "src/engine/validation.ts",
       "functionName": "unregisterRule",
       "tests": ["tests/engine/validation-rule-registry.test.ts"],
-      "testCases": ["unregisterRule is a no-op for an unknown id", "unregisterRule removes a rule by id"],
+      "testCases": [
+        "unregisterRule is a no-op for an unknown id",
+        "unregisterRule removes a rule by id",
+        "unregisters the first rule while preserving a later rule"
+      ],
       "status": "covered"
     },
     {
@@ -6829,6 +6409,7 @@
         "JOINERY_MIN_SHELF_GAP fires when many shelves crammed into a small cabinet",
         "NARROW_BACK_OMITTED fires at exactly 399 mm (boundary)",
         "a custom rule returning [] adds no issues",
+        "accepts a cabinet at the exact %s",
         "applies the \"$label\" repair and keeps the remaining issue accessible",
         "check() is called with a valid ValidationContext",
         "clears the wide-span warning after applying its centre-support repair",
@@ -6841,9 +6422,7 @@
         "does not raise DEPTH_EXCEEDS_WIDTH when %s",
         "does not raise DOOR_EXCEEDS_STANDARD_HINGE_RATING when %s",
         "does not raise DOOR_TOO_NARROW when %s",
-        "does not raise DRAWER_HEIGHT_TOO_SMALL for adequate drawer heights",
         "does not raise DRAWER_RUNNER_CLEARANCE_INSUFFICIENT when %s",
-        "does not raise DRAWER_STACK_OVERFLOW when stack fits",
         "does not raise EXCESSIVE_DRAWER_COUNT when %s",
         "does not raise HINGE_CLEARANCE_INSUFFICIENT when %s",
         "does not raise HINGE_CUP_EDGE_DISTANCE_UNSAFE when %s",
@@ -6860,9 +6439,14 @@
         "does not raise VENDOR_HINGE_PROFILE_UNKNOWN when hingeProfile is absent",
         "does not raise WIDE_SINGLE_DOOR when %s",
         "does not raise hinge compatibility issues when doorStyle is none",
+        "does not recommend a wardrobe toe-kick for %s",
+        "does not report excessive drawers when a short cabinet has no drawers",
         "every issue has both en and he messages",
+        "handles a drawer stack that %s",
         "issues from custom rules appear in validateConfig output",
         "multiple issues from a single custom rule all appear",
+        "pluralizes the recommended drawer count when more than one can fit",
+        "provides a repair when drawers leave too little height for shelves",
         "raises BACK_PANEL_OVERSIZED (info) when back panel > 9 mm",
         "raises BACK_REBATE_TOO_SHALLOW for a very thin panel with back",
         "raises CARCASS_HEIGHT_CRITICAL warning when height > 2400 mm",
@@ -6898,37 +6482,24 @@
         "raises WIDE_SINGLE_DOOR when single door exceeds 800 mm",
         "raises a span warning for wide chipboard span",
         "raises no deflection error for stiff plywood at moderate span",
+        "recommends a toe-kick for a wardrobe without one",
+        "recommends reducing drawer count below the 100 mm per-drawer minimum",
+        "rejects a cabinet with %s just below the minimum",
+        "rejects pocket-screw joinery for material thinner than 15 mm",
+        "reports DRAWERS_TOO_MANY when %s",
+        "reports DRAWER_DENSITY_HIGH for %i drawers in a 636 mm cabinet: %s",
+        "reports DRAWER_HEIGHT_TOO_SMALL for a single drawer of %i mm: %s",
+        "reports EXCESSIVE_DRAWER_COUNT when %s",
+        "reports KICK_TOO_TALL at %i mm for a 600 mm cabinet: %s",
+        "reports high drawer density above the interior-height threshold",
         "returns empty array for a valid default config",
         "rule with furnitureTypes runs for matching types",
         "rule with furnitureTypes skips non-matching types",
         "rule without furnitureTypes runs for all furniture types",
+        "sorts custom errors ahead of built-in warnings",
         "sorts issues: errors before warnings before info",
+        "uses the 18 mm fallback when validating an unknown carcass material",
         "valid config produces no error-severity issues"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/veneer-calc.ts",
-      "functionName": "bestSheetForPanel",
-      "tests": ["tests/engine/veneer-calc.test.ts"],
-      "testCases": [
-        "finds smallest sheet that fits 2400mm panel",
-        "returns undefined if no sheet is long enough",
-        "throws RangeError for panelLength ≤ 0"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/veneer-calc.ts",
-      "functionName": "calculateVeneer",
-      "tests": ["tests/engine/veneer-calc.test.ts"],
-      "testCases": [
-        "calculates strips per panel based on sheet width",
-        "computes valid result for standard book-match job",
-        "doubles adhesive area for both-faces vs single-face",
-        "respects custom trim allowance",
-        "throws RangeError for $desc",
-        "uses full sheet width for random pattern"
       ],
       "status": "covered"
     },
@@ -7054,93 +6625,53 @@
       "status": "covered"
     },
     {
-      "source": "src/engine/waste-alert.ts",
+      "source": "src/engine/waste/alerts.ts",
       "functionName": "analyseWaste",
-      "tests": ["tests/engine/waste-alert.test.ts"],
-      "testCases": [
-        "calculates per-material group waste %",
-        "includes alert level and message in output",
-        "marks as critical when waste is >150% of threshold",
-        "raises a group alert when material average exceeds group threshold",
-        "raises a project alert when overall waste exceeds project threshold",
-        "raises a warning when sheet waste exceeds threshold",
-        "respects custom threshold overrides",
-        "returns \"No waste threshold alerts.\" when no alerts",
-        "returns no alerts for an empty sheet list",
-        "returns no alerts when waste is below all thresholds"
-      ],
-      "status": "covered"
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
-      "source": "src/engine/waste-alert.ts",
+      "source": "src/engine/waste/alerts.ts",
       "functionName": "formatWasteReport",
-      "tests": ["tests/engine/waste-alert.test.ts"],
-      "testCases": [
-        "includes alert level and message in output",
-        "returns \"No waste threshold alerts.\" when no alerts"
-      ],
-      "status": "covered"
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
-      "source": "src/engine/waste-analytics.ts",
+      "source": "src/engine/waste/analytics.ts",
       "functionName": "analyzeWaste",
-      "tests": ["tests/engine/waste-analytics.test.ts"],
-      "testCases": [
-        "%s",
-        "aggregates totals correctly across two sheets of the same material",
-        "computes recoverable offcut area as sum of waste from candidate sheets only",
-        "does NOT mark sheet as offcut candidate when waste < 15%",
-        "groups separate materials into distinct byMaterial entries",
-        "identifies the worst sheet first in worstSheets",
-        "limits worstSheets to at most 3 entries",
-        "marks sheet as offcut candidate when waste ≥ 15%",
-        "returns zero totals for an empty sheet list"
-      ],
-      "status": "covered"
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
-      "source": "src/engine/waste-analytics.ts",
+      "source": "src/engine/waste/analytics.ts",
       "functionName": "formatAreaM2",
-      "tests": ["tests/engine/waste-analytics.test.ts"],
-      "testCases": ["%s"],
-      "status": "covered"
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
-      "source": "src/engine/waste-predictor.ts",
+      "source": "src/engine/waste/predictor.ts",
       "functionName": "computeTotalDemand",
-      "tests": ["tests/engine/waste-predictor.test.ts"],
-      "testCases": ["returns 0 for empty array", "sums area × quantity for all parts"],
-      "status": "covered"
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
-      "source": "src/engine/waste-predictor.ts",
+      "source": "src/engine/waste/predictor.ts",
       "functionName": "estimatePartsPerSheet",
-      "tests": ["tests/engine/waste-predictor.test.ts"],
-      "testCases": [
-        "fits multiple parts in normal orientation",
-        "picks rotated orientation when better",
-        "returns 0 when part is larger than sheet in both orientations",
-        "returns 1 when part just fits the sheet"
-      ],
-      "status": "covered"
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
-      "source": "src/engine/waste-predictor.ts",
+      "source": "src/engine/waste/predictor.ts",
       "functionName": "predictWaste",
-      "tests": ["tests/engine/waste-predictor.test.ts"],
-      "testCases": [
-        "assigns confidence level based on part complexity",
-        "assigns lower confidence for many parts",
-        "computes averageWaste across multiple sheets",
-        "handles oversized parts that do not fit any sheet",
-        "predictions are sorted by waste % ascending",
-        "predicts waste for single part and single sheet",
-        "recommends sheet with lowest waste",
-        "throws on empty parts array",
-        "throws on empty sheets array",
-        "throws on non-positive part dimensions"
-      ],
-      "status": "covered"
+      "tests": [],
+      "testCases": [],
+      "status": "indirect"
     },
     {
       "source": "src/engine/webgl-probe.ts",
@@ -7393,46 +6924,6 @@
       "status": "covered"
     },
     {
-      "source": "src/engine/webserial.ts",
-      "functionName": "connectToMachine",
-      "tests": ["tests/engine/webserial.test.ts"],
-      "testCases": [
-        "passes explicit profile options through to the selected port",
-        "propagates a port-picker rejection",
-        "rejects when the Serial API is unavailable",
-        "requests and opens a port with the complete profile defaults"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/webserial.ts",
-      "functionName": "disconnectFromMachine",
-      "tests": ["tests/engine/webserial.test.ts"],
-      "testCases": ["closes the port", "ignores an error when the port is already closed"],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/webserial.ts",
-      "functionName": "isWebSerialAvailable",
-      "tests": ["tests/engine/webserial.test.ts"],
-      "testCases": [
-        "returns false when the browser does not expose the Serial API",
-        "returns true when the browser exposes the Serial API"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/webserial.ts",
-      "functionName": "streamGcodeLines",
-      "tests": ["tests/engine/webserial.test.ts"],
-      "testCases": [
-        "stops before writing when the abort signal is already set",
-        "throws when the port has no writable stream",
-        "writes newline-terminated UTF-8 lines and reports progress"
-      ],
-      "status": "covered"
-    },
-    {
       "source": "src/engine/webxr-placement.ts",
       "functionName": "computeArPlacements",
       "tests": ["tests/engine/webxr-placement.test.ts"],
@@ -7504,39 +6995,6 @@
       "status": "covered"
     },
     {
-      "source": "src/engine/wood-movement.ts",
-      "functionName": "calculatePanelMovement",
-      "tests": ["tests/engine/wood-movement.test.ts"],
-      "testCases": ["sums board widths and calculates total movement", "throws RangeError for empty boards array"],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/wood-movement.ts",
-      "functionName": "calculateWoodMovement",
-      "tests": ["tests/engine/wood-movement.test.ts"],
-      "testCases": [
-        "$desc → direction=$direction",
-        "accepts custom numeric coefficient",
-        "computes correct contraction for cherry 500mm MC 14→6",
-        "computes correct expansion for oak 300mm MC 6→12",
-        "provides minimum 0.5mm gap when there is any movement",
-        "returns zero movement when MC is unchanged",
-        "throws RangeError when $desc"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/wood-movement.ts",
-      "functionName": "seasonalMovement",
-      "tests": ["tests/engine/wood-movement.test.ts"],
-      "testCases": [
-        "preset \"%s\" produces valid result",
-        "uses controlled_indoor preset (MC 7→9)",
-        "uses temperate_indoor preset (MC 6→12)"
-      ],
-      "status": "covered"
-    },
-    {
       "source": "src/engine/wood-turning.ts",
       "functionName": "calculateWoodTurning",
       "tests": ["tests/engine/wood-turning.test.ts"],
@@ -7546,65 +7004,12 @@
         "keeps the recommended speed inside the reported range for a large blank",
         "larger blank gives lower maxRpm",
         "matches the 100 mm $operation RPM and surface-speed oracle",
+        "matches the published surface-speed formula for the reference case",
         "roughing RPM is lower than finishing for same diameter",
         "surface speed is positive",
         "throws for finite blank diameter without usable RPM estimates: %s",
         "throws for non-finite blank diameter %s",
         "throws for zero diameter"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/workshop-safety.ts",
-      "functionName": "checkWorkshopSafety",
-      "tests": ["tests/engine/workshop-safety.test.ts"],
-      "testCases": [
-        "detects clearance violations between nearby tools",
-        "detects noise accumulation with 3+ loud tools",
-        "detects overlapping tool footprints as critical",
-        "fails safety check with many critical violations",
-        "includes PPE recommendations in result",
-        "no clearance violation when tools are far apart",
-        "passes with single well-placed tool",
-        "throws on empty tools array"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/workshop-safety.ts",
-      "functionName": "computeSafetyScore",
-      "tests": ["tests/engine/workshop-safety.test.ts"],
-      "testCases": [
-        "clamps score to 0 minimum",
-        "deducts 10 per warning",
-        "deducts 25 per critical violation",
-        "returns 100 when no violations",
-        "returns 100 when toolCount is 0"
-      ],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/workshop-safety.ts",
-      "functionName": "getNoiseLevel",
-      "tests": ["tests/engine/workshop-safety.test.ts"],
-      "testCases": ["returns %i dB for %s"],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/workshop-safety.ts",
-      "functionName": "getToolClearance",
-      "tests": ["tests/engine/workshop-safety.test.ts"],
-      "testCases": ["returns %i mm for %s"],
-      "status": "covered"
-    },
-    {
-      "source": "src/engine/workshop-safety.ts",
-      "functionName": "recommendPpe",
-      "tests": ["tests/engine/workshop-safety.test.ts"],
-      "testCases": [
-        "returns push-stick for table-saw",
-        "returns recommendations for all tools",
-        "returns safety-glasses for hand-tool"
       ],
       "status": "covered"
     },

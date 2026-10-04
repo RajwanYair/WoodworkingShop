@@ -11,6 +11,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added a Ctrl/Cmd+K command palette with calculator, template, language, recent-project, and built-in action commands; the typed registry also supplies the Header and shortcuts modal.
+- Added mounted pocket-hole, shelf-deflection, mortise-and-tenon, and dovetail-layout calculators, with estimated build time and panel weight in the project summary and PDF specification.
+- Added a generated capability map and classification ledger, plus a locale-completeness audit and woodworking translation glossary.
+
+### Removed
+
+- Retired the unused Supabase backend stub and removed its stale capability metadata; local-first project storage remains unchanged.
+- Retired ten unregistered calculator engines with no production callers: appliance clearance, biscuit joint, clamp pressure, dowel joint, edge-banding calculator, production schedule, sanding progression, veneer, wood movement, and workshop safety.
+
+### Changed
+
+- Deprecated Plugin API v1.3.0 as a compatibility facade over the shared v2 registry; existing v1 registrations and hooks remain supported through app v5.35.0.
+- Renamed ambiguous export modules by responsibility: the glTF/IFC scene model, full glTF document generator, and project-level IFC exporter now have distinct paths; existing named APIs and download behavior are preserved.
+- Consolidated template engines under one module directory while preserving the established engine barrel API through explicit aliases.
+- Consolidated stock APIs under `src/engine/stock/` with tracker, purchasing and inventory modules behind one public barrel; existing engine exports remain available.
+- Consolidated waste analytics, threshold alerts, and pre-cut prediction under `src/engine/waste/`; existing engine exports remain available and the analytics panel uses the family barrel.
+- Consolidated project scoring, design comparison, and snapshot diffs under `src/engine/comparison/`; explicit aliases preserve colliding result/weight names and the engine barrel API.
+- Consolidated WebSerial browser I/O in `src/utils/webserial-cnc.ts`; the pure v2 engine owns transport-neutral profiles and session state, with deprecated engine-barrel aliases retained.
+
 ## [5.34.0] — 2026-10-02
 
 ### Calculator Accuracy

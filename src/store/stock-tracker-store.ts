@@ -7,7 +7,7 @@ import {
   createStockStore,
   type StockItem,
   type StockStore,
-} from '../engine/stock-tracker';
+} from '../engine/stock';
 
 interface StockTrackerState {
   stockStore: StockStore;

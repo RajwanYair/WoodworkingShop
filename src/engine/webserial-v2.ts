@@ -62,6 +62,28 @@ export interface StreamError {
   errorMessage: string;
 }
 
+/** Connection lifecycle state used by the WebSerial UI. */
+export type WebSerialState = 'disconnected' | 'connecting' | 'connected' | 'streaming' | 'error';
+
+/** Serial connection settings, independent of browser transport APIs. */
+export interface WebSerialProfile {
+  baudRate: number;
+  dataBits?: 7 | 8;
+  stopBits?: 1 | 2;
+  parity?: 'none' | 'even' | 'odd';
+  /** Receive buffer size in bytes. */
+  bufferSize?: number;
+}
+
+/** Default CNC / 3D-printer serial settings. */
+export const DEFAULT_SERIAL_PROFILE: Readonly<WebSerialProfile> = {
+  baudRate: 115200,
+  dataBits: 8,
+  stopBits: 1,
+  parity: 'none',
+  bufferSize: 4096,
+} as const;
+
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 export const DEFAULT_MAX_RETRIES = 3;

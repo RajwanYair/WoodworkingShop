@@ -8,7 +8,7 @@
  * Pure TypeScript — no React, no DOM, no side effects.
  */
 
-import type { OptimizationResult, CutSheet } from './types';
+import type { OptimizationResult, CutSheet } from '../types';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

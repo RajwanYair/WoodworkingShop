@@ -5,7 +5,7 @@
  * per-cabinet config field deltas. Used by the SnapshotDiffModal UI component.
  */
 
-import type { CabinetConfig } from './types';
+import type { CabinetConfig } from '../types';
 
 export interface FieldDelta {
   field: string;

@@ -1,5 +1,6 @@
 import type { CabinetConfig, Part, ValidationIssue, Result } from './types';
 import { ok, err } from './types';
+import { getActivePlugins, registerPluginV2, unregisterPluginV2 } from './plugin-v2';
 
 // ─── Plugin Contract ─────────────────────────────────────────────────────────
 
@@ -45,7 +46,7 @@ export interface PluginContract {
 }
 
 /** Version of the v1 plugin API contract, independent from app package version. */
-export const PLUGIN_API_VERSION = '1.2.0' as const;
+export const PLUGIN_API_VERSION = '1.3.0' as const;
 
 /** Compatibility check result for a plugin's minimum required API version. */
 export interface PluginApiCompatibility {
@@ -114,7 +115,7 @@ export function getPluginApiCompatibility(
  */
 export const PLUGIN_CONTRACT: PluginContract = {
   apiVersion: PLUGIN_API_VERSION,
-  stability: 'experimental',
+  stability: 'deprecated',
   hooks: [
     {
       hookName: 'onPartsGenerated',
@@ -166,13 +167,16 @@ export function getPluginContract(): PluginContract {
 // ─── Plugin interface ────────────────────────────────────────────────────────
 
 /**
- * Cabinet Planner Plugin API — v1 draft (v3.49.2)
+ * Cabinet Planner Plugin API — v1 compatibility facade.
  *
  * A plugin can intercept the parts pipeline and/or hook into config changes.
  * All hooks are optional; a plugin only needs to implement what it cares about.
  *
  * Plugins are pure: hooks must be side-effect-free functions that return new
  * values instead of mutating their inputs.
+ *
+ * @deprecated Migrate to {@link CabinetPlannerPluginV2}; the v1 facade remains
+ * supported through app v5.35.0 and is scheduled for removal in v5.36.0.
  */
 export interface CabinetPlannerPlugin {
   /** Unique identifier (reverse-domain recommended: "com.example.myPlugin"). */
@@ -216,26 +220,37 @@ export interface CabinetPlannerPlugin {
 
 // ── Plugin registry ──────────────────────────────────────────────────────────
 
-const _plugins: CabinetPlannerPlugin[] = [];
-
-/** Register a plugin. Throws if a plugin with the same id is already registered. */
+/**
+ * Register a v1 plugin through the shared v2 registry.
+ *
+ * @deprecated Use {@link registerPluginV2}.
+ * @param plugin The v1 plugin to register.
+ * @returns A result indicating whether registration succeeded.
+ */
 export function registerPlugin(plugin: CabinetPlannerPlugin): Result<void, string> {
-  if (_plugins.some((p) => p.id === plugin.id)) {
-    return err(`Plugin "${plugin.id}" is already registered.`);
-  }
-  _plugins.push(plugin);
-  return ok(undefined);
+  const result = registerPluginV2(plugin);
+  return result.ok ? ok(undefined) : err(result.error);
 }
 
-/** Unregister a previously registered plugin by id. No-op if not found. */
+/**
+ * Unregister a plugin from the shared registry. No-op if not found.
+ *
+ * @deprecated Use {@link unregisterPluginV2}.
+ * @param id The plugin id to unregister.
+ * @returns Nothing.
+ */
 export function unregisterPlugin(id: string): void {
-  const idx = _plugins.findIndex((p) => p.id === id);
-  if (idx >= 0) _plugins.splice(idx, 1);
+  unregisterPluginV2(id);
 }
 
-/** Return a read-only snapshot of the currently registered plugins. */
+/**
+ * Return a read-only snapshot of active plugins in the shared registry.
+ *
+ * @deprecated Use {@link getActivePlugins}.
+ * @returns Active plugins in registration order.
+ */
 export function getPlugins(): readonly CabinetPlannerPlugin[] {
-  return _plugins;
+  return getActivePlugins();
 }
 
 /**
@@ -244,7 +259,7 @@ export function getPlugins(): readonly CabinetPlannerPlugin[] {
  */
 export function applyPartsPlugins(parts: Part[], cfg: CabinetConfig): Part[] {
   let result = parts;
-  for (const plugin of _plugins) {
+  for (const plugin of getActivePlugins()) {
     if (plugin.onPartsGenerated) {
       result = plugin.onPartsGenerated(result, cfg);
     }
@@ -258,7 +273,7 @@ export function applyPartsPlugins(parts: Part[], cfg: CabinetConfig): Part[] {
  */
 export function applyConfigPlugins(cfg: CabinetConfig): CabinetConfig {
   let result = cfg;
-  for (const plugin of _plugins) {
+  for (const plugin of getActivePlugins()) {
     if (plugin.onConfigChange) {
       result = plugin.onConfigChange(result);
     }
@@ -275,7 +290,7 @@ export function applyConfigPlugins(cfg: CabinetConfig): CabinetConfig {
  */
 export function applyGcodePlugins(raw: string): string {
   let result = raw;
-  for (const plugin of _plugins) {
+  for (const plugin of getActivePlugins()) {
     if (plugin.onGcodeGenerated) {
       result = plugin.onGcodeGenerated(result);
     }
@@ -292,7 +307,7 @@ export function applyGcodePlugins(raw: string): string {
  */
 export function applyValidationPlugins(issues: ValidationIssue[], cfg: CabinetConfig): ValidationIssue[] {
   let result = issues;
-  for (const plugin of _plugins) {
+  for (const plugin of getActivePlugins()) {
     if (plugin.onValidate) {
       result = plugin.onValidate(result, cfg);
     }

@@ -16,7 +16,7 @@ import {
   type PluginContext,
 } from '../../src/engine/plugin-v2';
 import type { CabinetPlannerPlugin } from '../../src/engine/plugin';
-import { pluginEventBus } from '../../src/engine/plugin';
+import { getPlugins, pluginEventBus, registerPlugin, unregisterPlugin } from '../../src/engine/plugin';
 
 // ── helpers ────────────────────────────────────────────────────────────────
 
@@ -121,6 +121,22 @@ describe('registerPluginV2 — v1 plugin', () => {
     const result = registerPluginV2(makeV1());
     expect(result.ok).toBe(false);
     if (!result.ok) expect(result.error).toMatch('already registered');
+  });
+});
+
+describe('v1 compatibility facade', () => {
+  it('shares registration, active-plugin reads, and removal with the v2 registry', () => {
+    const plugin = makeV1('legacy.facade');
+
+    expect(registerPlugin(plugin).ok).toBe(true);
+    expect(getRegistryEntry(plugin.id)).toMatchObject({ plugin, state: 'active' });
+    expect(getActivePlugins()).toContain(plugin);
+    expect(getPlugins()).toContain(plugin);
+
+    unregisterPlugin(plugin.id);
+
+    expect(getRegistryEntry(plugin.id)).toBeUndefined();
+    expect(getActivePlugins()).not.toContain(plugin);
   });
 });
 

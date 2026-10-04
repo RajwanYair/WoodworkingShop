@@ -1,7 +1,13 @@
-import { useState, useEffect, useRef } from 'react';
+import { useCallback, useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { IconSettings, IconRuler, IconDocument, IconHelp } from './Icons';
+import {
+  APP_COMMAND_DEFINITIONS,
+  createAppCommand,
+  registerCommands,
+  unregisterCommand,
+} from '../../utils/command-palette';
 
 const SEEN_KEY = 'onboarding-seen';
 const TOTAL_STEPS = 3;
@@ -127,11 +133,18 @@ function OnboardingOverlay() {
 export function HelpButton() {
   const { t } = useTranslation();
 
-  const open = () => {
+  const open = useCallback(() => {
     localStorage.removeItem(SEEN_KEY);
     // Force re-render by dispatching storage event
     window.dispatchEvent(new Event('show-onboarding'));
-  };
+  }, []);
+
+  useEffect(() => {
+    const definition = APP_COMMAND_DEFINITIONS.reopenOnboarding;
+    const command = createAppCommand(definition, t(definition.labelKey), t(definition.categoryKey), open);
+    registerCommands([command]);
+    return () => unregisterCommand(command.id);
+  }, [open, t]);
 
   return (
     <button

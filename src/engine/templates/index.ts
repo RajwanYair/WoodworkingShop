@@ -1,7 +1,13 @@
-﻿import type { CabinetConfig, FurnitureType } from './types';
-import { BOOKSHELF_DEFAULTS, CABINET_DEFAULTS, DESK_DEFAULTS, WARDROBE_DEFAULTS, PANEL_DEFAULTS } from './materials.ts';
-import { evaluateTemplateExpr } from './template-dsl';
-import { TEMPLATES } from './template-data';
+﻿import type { CabinetConfig, FurnitureType } from '../types';
+import {
+  BOOKSHELF_DEFAULTS,
+  CABINET_DEFAULTS,
+  DESK_DEFAULTS,
+  WARDROBE_DEFAULTS,
+  PANEL_DEFAULTS,
+} from '../materials.ts';
+import { evaluateTemplateExpr } from './dsl';
+import { TEMPLATES } from './data';
 export { evaluateTemplateExpr, TEMPLATES };
 export interface CabinetTemplate {
   id: string;
@@ -81,3 +87,60 @@ export function getTemplateDefaults(type: FurnitureType): Partial<CabinetConfig>
       return { ...CABINET_DEFAULTS };
   }
 }
+
+export {
+  TEMPLATE_CATALOGUE,
+  getTemplate as getLibraryTemplate,
+  getTemplatesByCategory as getLibraryTemplatesByCategory,
+  instantiateTemplate as instantiateLibraryTemplate,
+  listTemplateIds,
+} from './library';
+export type {
+  TemplateCategory,
+  TemplateDimensions,
+  CabinetTemplate as LibraryCabinetTemplate,
+  TemplateInstance as LibraryTemplateInstance,
+} from './library';
+
+export {
+  getTemplate as getCabinetTemplate,
+  getTemplatesByCategory as getCabinetTemplatesByCategory,
+  instantiateTemplate as instantiateCabinetTemplate,
+  BUILT_IN_TEMPLATES,
+} from './cabinet';
+export type {
+  CabinetCategory,
+  DimensionConstraint as CabinetDimensionConstraint,
+  CabinetTemplate as BuiltInCabinetTemplate,
+  ValidationError as CabinetValidationError,
+  TemplateParams,
+  TemplateInstance as CabinetTemplateInstance,
+} from './cabinet';
+
+export {
+  validateTemplate,
+  instantiateTemplate as instantiateParametricTemplate,
+  getDefaultValues,
+  getParamDependencies,
+  evaluateExpression,
+  MAX_PARAMS,
+  MAX_RULES,
+  MAX_COMPUTED,
+  MAX_EXPRESSION_LENGTH,
+} from './parametric';
+export type {
+  ParamType,
+  NumberConstraint,
+  ParamDefBase,
+  NumberParamDef,
+  BooleanParamDef,
+  ChoiceParamDef,
+  ParamDef,
+  ConditionalRule,
+  ComputedField,
+  ParametricTemplate,
+  ParamValues,
+  TemplateInstance as ParametricTemplateInstance,
+  TemplateValidationError,
+  TemplateValidationResult,
+} from './parametric';

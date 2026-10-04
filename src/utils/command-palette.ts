@@ -15,6 +15,157 @@
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
+export interface AppCommandDefinition {
+  id: string;
+  key?: string;
+  shortcut?: string;
+  labelKey: string;
+  categoryKey: string;
+}
+
+export const APP_COMMAND_DEFINITIONS = {
+  undo: {
+    id: 'header.undo',
+    key: 'z',
+    shortcut: 'Ctrl+Z',
+    labelKey: 'commandPalette.commands.undo',
+    categoryKey: 'commandPalette.categories.actions',
+  },
+  redo: {
+    id: 'header.redo',
+    key: 'y',
+    shortcut: 'Ctrl+Y',
+    labelKey: 'commandPalette.commands.redo',
+    categoryKey: 'commandPalette.categories.actions',
+  },
+  redoAlternate: {
+    id: 'action.redo-alternate',
+    key: 'z',
+    shortcut: 'Ctrl+Shift+Z',
+    labelKey: 'commandPalette.commands.redoAlternate',
+    categoryKey: 'commandPalette.categories.actions',
+  },
+  toggleTheme: {
+    id: 'header.toggle-theme',
+    key: 'd',
+    shortcut: 'Alt+D',
+    labelKey: 'commandPalette.commands.toggleTheme',
+    categoryKey: 'commandPalette.categories.actions',
+  },
+  toggleContrast: {
+    id: 'header.toggle-contrast',
+    labelKey: 'commandPalette.commands.toggleContrast',
+    categoryKey: 'commandPalette.categories.actions',
+  },
+  toggleUnits: {
+    id: 'header.toggle-units',
+    labelKey: 'config.toggleUnits',
+    categoryKey: 'commandPalette.categories.actions',
+  },
+  copyLink: {
+    id: 'header.copy-link',
+    key: 'l',
+    shortcut: 'Ctrl+L',
+    labelKey: 'commandPalette.commands.copyLink',
+    categoryKey: 'commandPalette.categories.actions',
+  },
+  openTemplates: {
+    id: 'header.open-templates',
+    labelKey: 'templates.title',
+    categoryKey: 'commandPalette.categories.actions',
+  },
+  openProjects: {
+    id: 'header.open-projects',
+    labelKey: 'projects.title',
+    categoryKey: 'commandPalette.categories.actions',
+  },
+  openMarketplace: {
+    id: 'header.open-marketplace',
+    labelKey: 'marketplace.title',
+    categoryKey: 'commandPalette.categories.actions',
+  },
+  openShortcuts: {
+    id: 'header.open-shortcuts',
+    key: '?',
+    shortcut: '?',
+    labelKey: 'commandPalette.commands.keyboardShortcuts',
+    categoryKey: 'commandPalette.categories.actions',
+  },
+  reopenOnboarding: {
+    id: 'help.onboarding',
+    labelKey: 'onboarding.help',
+    categoryKey: 'commandPalette.categories.actions',
+  },
+  addCabinet: {
+    id: 'action.add-cabinet',
+    key: 'n',
+    shortcut: 'Ctrl+Shift+N',
+    labelKey: 'commandPalette.commands.addCabinet',
+    categoryKey: 'commandPalette.categories.actions',
+  },
+  exportBom: {
+    id: 'action.export-bom',
+    key: 'e',
+    shortcut: 'Ctrl+E',
+    labelKey: 'commandPalette.commands.exportBom',
+    categoryKey: 'commandPalette.categories.exports',
+  },
+  saveSnapshot: {
+    id: 'action.save-snapshot',
+    key: 's',
+    shortcut: 'Ctrl+Shift+S',
+    labelKey: 'commandPalette.commands.saveSnapshot',
+    categoryKey: 'commandPalette.categories.actions',
+  },
+  resetConfig: {
+    id: 'action.reset-config',
+    key: 'r',
+    shortcut: 'Ctrl+R',
+    labelKey: 'commandPalette.commands.resetConfig',
+    categoryKey: 'commandPalette.categories.actions',
+  },
+  print: {
+    id: 'action.print',
+    key: 'p',
+    shortcut: 'Ctrl+P',
+    labelKey: 'commandPalette.commands.print',
+    categoryKey: 'commandPalette.categories.exports',
+  },
+  toggleFocusMode: {
+    id: 'action.toggle-focus-mode',
+    key: 'k',
+    shortcut: 'Ctrl+Shift+K',
+    labelKey: 'commandPalette.commands.toggleFocusMode',
+    categoryKey: 'commandPalette.categories.actions',
+  },
+} as const satisfies Record<string, AppCommandDefinition>;
+
+export const APP_SHORTCUTS = {
+  commandPalette: { key: 'k', shortcut: 'Ctrl+K', labelKey: 'commandPalette.shortcutDescription' },
+  undo: APP_COMMAND_DEFINITIONS.undo,
+  redo: APP_COMMAND_DEFINITIONS.redo,
+  redoAlternate: APP_COMMAND_DEFINITIONS.redoAlternate,
+  toggleTheme: APP_COMMAND_DEFINITIONS.toggleTheme,
+  saveSnapshot: APP_COMMAND_DEFINITIONS.saveSnapshot,
+  print: APP_COMMAND_DEFINITIONS.print,
+  exportBom: APP_COMMAND_DEFINITIONS.exportBom,
+  resetConfig: APP_COMMAND_DEFINITIONS.resetConfig,
+  copyLink: APP_COMMAND_DEFINITIONS.copyLink,
+  addCabinet: APP_COMMAND_DEFINITIONS.addCabinet,
+  toggleFocusMode: APP_COMMAND_DEFINITIONS.toggleFocusMode,
+  shortcuts: APP_COMMAND_DEFINITIONS.openShortcuts,
+} as const;
+
+export const APP_TAB_COMMANDS = [
+  { id: 'workspace', labelKey: 'tabs.workspace', shortcut: null, shortcutKey: null },
+  { id: 'configurator', labelKey: 'tabs.configurator', shortcut: 'Alt+1', shortcutKey: '1' },
+  { id: 'preview', labelKey: 'tabs.preview', shortcut: 'Alt+2', shortcutKey: '2' },
+  { id: 'optimizer', labelKey: 'tabs.optimizer', shortcut: 'Alt+3', shortcutKey: '3' },
+  { id: 'assembly', labelKey: 'tabs.assembly', shortcut: 'Alt+4', shortcutKey: '4' },
+  { id: 'pdf', labelKey: 'tabs.pdf', shortcut: 'Alt+5', shortcutKey: '5' },
+  { id: 'calculators', labelKey: 'tabs.calculators', shortcut: 'Alt+6', shortcutKey: '6' },
+] as const;
+
 export interface PaletteCommand {
   /** Unique command identifier, e.g. 'export.gcode'. */
   id: string;
@@ -28,8 +179,27 @@ export interface PaletteCommand {
   shortcut?: string;
   /** Extra search keywords (not displayed). */
   keywords?: string[];
+  /** When false, the command is omitted from search results. */
+  when?: () => boolean;
   /** When true, the command is not shown in search results but can still be invoked by ID. */
   hidden?: boolean;
+}
+
+export function createAppCommand(
+  definition: AppCommandDefinition,
+  label: string,
+  category: string,
+  action: PaletteCommand['action'],
+  when?: () => boolean,
+): PaletteCommand {
+  return {
+    id: definition.id,
+    label,
+    category,
+    action,
+    ...(definition.shortcut ? { shortcut: definition.shortcut } : {}),
+    ...(when ? { when } : {}),
+  };
 }
 
 export interface CommandGroup {
@@ -106,6 +276,7 @@ export function searchCommands(query: string, limit = 20): SearchResult[] {
 
   for (const cmd of _registry.values()) {
     if (cmd.hidden) continue;
+    if (cmd.when && !cmd.when()) continue;
     if (!q) {
       results.push({ command: cmd, score: 50 });
       continue;
