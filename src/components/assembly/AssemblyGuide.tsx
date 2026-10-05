@@ -47,21 +47,35 @@ export function AssemblyGuide() {
   const [showTips, setShowTips] = useState(true);
   const notes = cabinets[activeCabinetIndex]?.notes ?? '';
   // Sprint 52 — step completion checklist
-  const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
+  const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
 
-  const toggleStep = (index: number) =>
+  const toggleStep = (stepId: string) =>
     setCompletedSteps((prev) => {
       const next = new Set(prev);
-      if (next.has(index)) {
-        next.delete(index);
+      if (next.has(stepId)) {
+        next.delete(stepId);
+        let removedDependent = true;
+        while (removedDependent) {
+          removedDependent = false;
+          for (const step of steps) {
+            if (!next.has(step.id) || !(step.dependencies ?? []).some((dependency) => !next.has(dependency))) continue;
+            next.delete(step.id);
+            removedDependent = true;
+          }
+        }
       } else {
-        next.add(index);
+        next.add(stepId);
       }
       return next;
     });
 
   const resetProgress = () => setCompletedSteps(new Set());
   const totalMinutes = steps.reduce((sum, s) => sum + s.estimatedMinutes, 0);
+  const blockedStepIds = new Set(
+    steps
+      .filter((step) => step.dependencies?.some((dependency) => !completedSteps.has(dependency)))
+      .map((step) => step.id),
+  );
 
   // Sprint 18 — total assembly weight (sum of all parts' computed weights).
   const customMaterials = useCustomMaterialsStore((s) => s.materials);
@@ -266,8 +280,9 @@ export function AssemblyGuide() {
                       parts={parts}
                       lang={lang}
                       t={t}
-                      completed={completedSteps.has(steps.indexOf(s))}
-                      onToggleComplete={() => toggleStep(steps.indexOf(s))}
+                      completed={completedSteps.has(s.id)}
+                      completionBlocked={blockedStepIds.has(s.id)}
+                      onToggleComplete={() => toggleStep(s.id)}
                       showTips={showTips}
                     />
                   ))}
@@ -285,8 +300,9 @@ export function AssemblyGuide() {
                     parts={parts}
                     lang={lang}
                     t={t}
-                    completed={completedSteps.has(idx)}
-                    onToggleComplete={() => toggleStep(idx)}
+                    completed={completedSteps.has(s.id)}
+                    completionBlocked={blockedStepIds.has(s.id)}
+                    onToggleComplete={() => toggleStep(s.id)}
                     showTips={showTips}
                   />
                 );
@@ -389,6 +405,7 @@ interface StepCardProps {
   completed?: boolean;
   /** Sprint 52 — callback to toggle completion */
   onToggleComplete?: () => void;
+  completionBlocked?: boolean;
   /** Sprint 84 — when false, tips are hidden (only in all-steps view) */
   showTips?: boolean;
 }
@@ -402,6 +419,7 @@ function StepCard({
   t,
   completed = false,
   onToggleComplete,
+  completionBlocked = false,
   showTips = true,
 }: StepCardProps) {
   const highlightedParts = new Set(step.parts);
@@ -422,12 +440,20 @@ function StepCard({
             type="checkbox"
             id={checkboxId}
             checked={completed}
+            disabled={completionBlocked}
+            aria-describedby={completionBlocked ? `${checkboxId}-prerequisites` : undefined}
+            title={completionBlocked ? t('assembly.requiredStepsFirst') : undefined}
             onChange={onToggleComplete}
             className="accent-wood-500 h-4 w-4 cursor-pointer rounded"
           />
           <label htmlFor={checkboxId} className="text-wood-500 dark:text-wood-400 cursor-pointer text-xs select-none">
             {completed ? t('assembly.stepDone') : t('assembly.markStepDone')}
           </label>
+          {completionBlocked && (
+            <span id={`${checkboxId}-prerequisites`} className="sr-only">
+              {t('assembly.requiredStepsFirst')}
+            </span>
+          )}
         </div>
       )}
       <div className="flex items-start gap-4">

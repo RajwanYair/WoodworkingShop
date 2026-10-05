@@ -11,4 +11,4 @@ This file defines ownership and freshness expectations for repository-critical d
 | docs/SPRINT-HISTORY.md          | Repo Maintainer |           90 | 2026-10-04    |
 | docs/MCP-GITHUB-GOVERNANCE.md   | Repo Maintainer |           60 | 2026-10-02    |
 | .github/copilot-instructions.md | Repo Maintainer |           30 | 2026-10-04    |
-| AGENTS.md                       | Repo Maintainer |           30 | 2026-10-04    |
+| AGENTS.md                       | Repo Maintainer |           30 | 2026-10-05    |

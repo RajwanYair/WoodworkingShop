@@ -13,18 +13,39 @@ export function BuildLogPanel() {
   const { t } = useTranslation();
   const buildLog = useCabinetStore((s) => s.buildLog);
   const addBuildLogEntry = useCabinetStore((s) => s.addBuildLogEntry);
+  const updateBuildLogEntry = useCabinetStore((s) => s.updateBuildLogEntry);
   const deleteBuildLogEntry = useCabinetStore((s) => s.deleteBuildLogEntry);
   const clearBuildLog = useCabinetStore((s) => s.clearBuildLog);
 
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState('');
+  const [editingEntryId, setEditingEntryId] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleAdd = () => {
     if (!draft.trim()) return;
-    addBuildLogEntry(draft);
+    if (editingEntryId) {
+      updateBuildLogEntry(editingEntryId, draft);
+      setEditingEntryId(null);
+    } else {
+      addBuildLogEntry(draft);
+    }
     setDraft('');
     textareaRef.current?.focus();
+  };
+
+  const handleDelete = (id: string) => {
+    deleteBuildLogEntry(id);
+    if (editingEntryId === id) {
+      setEditingEntryId(null);
+      setDraft('');
+    }
+  };
+
+  const handleClear = () => {
+    clearBuildLog();
+    setEditingEntryId(null);
+    setDraft('');
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -74,8 +95,21 @@ export function BuildLogPanel() {
                 disabled={!draft.trim()}
                 className="bg-wood-600 hover:bg-wood-700 disabled:bg-wood-300 dark:disabled:bg-wood-700 rounded px-3 py-1 text-xs font-medium text-white transition-colors disabled:cursor-not-allowed"
               >
-                {t('buildLog.add')}
+                {editingEntryId ? t('buildLog.save') : t('buildLog.add')}
               </button>
+              {editingEntryId && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingEntryId(null);
+                    setDraft('');
+                    textareaRef.current?.focus();
+                  }}
+                  className="text-wood-500 dark:text-wood-400 px-2 py-1 text-xs"
+                >
+                  {t('buildLog.cancel')}
+                </button>
+              )}
             </div>
           </div>
 
@@ -101,7 +135,19 @@ export function BuildLogPanel() {
                     </div>
                     <button
                       type="button"
-                      onClick={() => deleteBuildLogEntry(entry.id)}
+                      onClick={() => {
+                        setEditingEntryId(entry.id);
+                        setDraft(entry.text);
+                        textareaRef.current?.focus();
+                      }}
+                      aria-label={t('buildLog.edit')}
+                      className="text-wood-400 dark:text-wood-500 hover:text-wood-700 dark:hover:text-wood-200 shrink-0 transition-colors"
+                    >
+                      {t('buildLog.edit')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(entry.id)}
                       aria-label={t('buildLog.delete')}
                       className="text-wood-400 dark:text-wood-500 shrink-0 transition-colors hover:text-red-500 dark:hover:text-red-400"
                     >
@@ -112,7 +158,7 @@ export function BuildLogPanel() {
               </ul>
               <button
                 type="button"
-                onClick={clearBuildLog}
+                onClick={handleClear}
                 className="text-wood-400 dark:text-wood-500 w-full text-center text-xs transition-colors hover:text-red-500 dark:hover:text-red-400"
               >
                 {t('buildLog.clearAll')}

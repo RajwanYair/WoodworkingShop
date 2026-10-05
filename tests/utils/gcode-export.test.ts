@@ -45,6 +45,11 @@ describe('cutSheetToGcode', () => {
     expect(gc).toContain('Tool diameter: 8');
   });
 
+  it('uses the configured spindle speed in spindle commands', () => {
+    const gc = cutSheetToGcode(mockSheet, { spindleRpm: 10_000 });
+    expect(gc).toContain('M3 S10000 ; spindle on');
+  });
+
   it('handles empty parts list', () => {
     const empty: CutSheet = { ...mockSheet, parts: [] };
     const gc = cutSheetToGcode(empty);

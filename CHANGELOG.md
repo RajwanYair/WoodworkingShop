@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Completed Sprint 313 T1/T4 assembly journeys and added dependency-aware step completion with downstream rollback; checklist downloads are parsed for ordered step content.
+- Advanced Sprint 313 T2 with editable, keyboard-submittable build-log entries persisted across reload, plus cross-browser camera permission/error/capture/retake/manual-stop and navigation-teardown journeys; physical camera capture remains unverified.
+- Completed Sprint 313 T3 browser-stub coverage: saved machine profiles now drive serial settings and G-code parameters, with safe sender pause/resume, disconnect/reconnect, and picker/write-error recovery.
+- Completed Sprint 315 T1 with Chromium and Firefox checks for manifest essentials, service-worker control, cached app-shell reload while offline, update-banner dismissal persistence, and user-confirmed waiting-worker reload.
+- Completed Sprint 315 T2 with Chromium and Firefox checks for near-limit and unavailable storage estimates; Project Manager keeps named saves available and both projects persist after reload.
+- Completed Sprint 315 T3's browser-shimmed file-handler journey in Chromium and Firefox: valid `.cabinetplan` data loads, while unsupported and malformed files preserve the current configuration. Native OS-level launch remains unverified.
+- Made assembly-step completion respect dependency prerequisites and clear downstream progress when a prerequisite is unchecked; Chromium and Firefox E2E journeys cover the behavior.
+- Continued Sprint 375 locale work with an eight-term glossary and 164 formerly missing camera, catalog, cost, cut, finish, machine, grain, marketplace, measurement, waste, nesting, onboarding, and label strings per AR/DE/ES/FR locale; removed five stale nesting and ten stale onboarding keys per locale. Missing keys fell by 164 per locale. Human review and the EN-identical backlog remain open.
 - Consolidated plugin registration through the v2 lifecycle registry with a deprecated v1 compatibility window through v5.35.x; retired the unused Supabase stub and migrated the assembly sender to utility-owned browser I/O, retaining the public engine Web Serial API as a deprecated compatibility adapter through v5.35.x.
 - Added a schema-validated capability ledger and import-graph check for engine, utility, and service modules; generated JSON, Markdown, and build-chunk reports are written under the OS temp directory.
 - Added `npm run i18n:completeness` to report missing/extra translation keys, EN-identical ratios with an explicit token allowlist, and placeholder compatibility across all six locales; corrected a missing count interpolation in the Hebrew audit message.
@@ -23,6 +31,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Surfaced five prioritized strength and joinery engines through lazy calculator panels, backed by component and engine-reconciled browser journeys; added project-summary labour estimates and panel-weight labels to single-cabinet PDF specifications.
 - Mounted the fuzzy command palette on Ctrl/Cmd+K with translated tab, action, calculator, preset, export, language and recent-project commands; added keyboard navigation, focus management, editable-field shortcut suppression and Chromium axe/E2E coverage.
   A typed command registry now drives Header labels and shortcut hints, global shortcut handling, and `ShortcutsModal`. Added direct commands for all 29 calculators and capped, validated localStorage recents with component and browser regression coverage.
+
+- Sprint 375 follow-up: cumulative missing-key additions are 232 in AR and 213 each in DE/ES/FR. All six bundles have exact 2,093-key parity, with no empty values or placeholder mismatches. Mounted calculator translations now include
+  cabinet-door, face-frame, drawer-box, screw-pullout, kerf-bending, dado-rabbet, finishing-coat, wood-turning, frame-panel, taper-jig, stair-stringer, box-joint, glue-coverage, planer-passes, honing-guide, crown-moulding, router-circle, cove-cut, moisture-shrinkage, rafter-length, router-template, half-lap, and spline-joint. Hardware-catalog UI adds 26 strings per locale; room-planner and 3D preview UI add 11 each.
+  CNC job-queue, project-sharing, and batch-export namespaces add 23, 21, and 19 strings per locale; design comparison, router depth, parametric templates, machining, feed rate, material catalog, maintenance scheduler, multi-machine workflow, drawer-slide calculator, material yield, panel labels, and drill-speed calculator add 18, 24, 21, 19, 18, 18, 17, 16, 18, 16, 16, and 16 strings per locale.
+  EN-identical: AR 22.49%, DE 21.29%, ES 21.29%, FR 21.38%; the 2% target remains open. The prior 116 review records were manually reviewed and approved on 2026-10-05; new constraints, config, French PDF, AR/DE/ES storage, job-queue, sharing, batch-export, design-comparison, router-depth, parametric-template, machining, feed-rate, catalog, maintenance-scheduler, multi-machine, drawer-slide, material-yield, panel-label, and drill-speed strings await review.
 
 ### Removed
 

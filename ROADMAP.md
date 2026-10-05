@@ -1,6 +1,6 @@
 # Roadmap
 
-> Last updated: 2026-10-04 (full strategic refactor review; release train re-sequenced)
+> Last updated: 2026-10-05 (S375 locale progress)
 > Current app version: v5.34.0
 > Next release target: v5.35.0 (Phase 73 — Product coherence and modern app shell)
 > Program horizon: Phases 63–85 · Sprints 300–451 · v5.34.0 → v6.0.0 (execution order: §7.2 release train)
@@ -891,10 +891,10 @@ Detail and the GcodePreviewModal component follow-up are archived in SPRINT-HIST
 
 **Sprint 313 — Assembly, build log, camera and machine flows** — P1 · L · S305, S307 · **CARRY-OVER → v5.35.0** (no completion evidence found on 2026-10-04; only the checklist download is covered by `tests/e2e/configurator.spec.ts`).
 
-- T1: Next/previous step, all-steps mode, tips toggle, mark/unmark/reset completion; assert dependency gating and progress/time counters.
-- T2: Add/edit/delete build log entry; Ctrl/Cmd+Enter; reload persistence; attach/capture camera photo with denied permission, no device and granted permission.
-- T3: Select machine profile; validate G-code compatibility and serial connection lifecycle with browser API stubs (connect, send, pause, disconnect, reconnect, errors).
-- T4: Print and download checklist; parse expected step order/text and filename.
+- T1: DONE — Assembly completion checkboxes follow the step DAG: dependent steps stay disabled until prerequisites are complete, and unchecking a prerequisite clears downstream completion. Chromium and Firefox journeys verify gating, rollback, next/previous, progress/time counters, tips, reset and all-step mode.
+- T2: IN PROGRESS — Build log supports add/edit/delete, Ctrl/Cmd+Enter and reload persistence; Chromium and Firefox journeys cover that lifecycle. Camera journeys in both browsers cover permission denial, missing device, capture, retake, manual stop and stream teardown on navigation. Remaining: verify a successful capture from a real camera device.
+- T3: DONE — Saved machine profiles initialize panel state and drive serial framing plus feed, plunge, safe-Z, pass-depth, tool-diameter and spindle settings. A Chromium Web Serial stub verifies exact settings and streamed commands, pause/resume without duplicate writes, disconnect/reconnect, and picker/write failure recovery.
+- T4: DONE — Browser download is read from disk and checked for filename, step count, order and rendered titles in Chromium and Firefox.
 - Accept: each step control changes progress/instructions, persisted build state reloads accurately and permissions/device failures remain recoverable.
 
 **Sprint 314 — All calculator panels and numeric oracles** — P0 · L · S303, S305.
@@ -914,11 +914,11 @@ Later commits harden boundary/oracle tests for box joint, glue, planer, honing, 
 
 Oracle update (2026-10-02): the honing-guide and wood-turning fixtures record published reference cases with explicit precision and exclusions; all 24 mounted calculators now have a linked source-backed case. Finish oracles cover only named-product coverage/recoat compatibility; generic finish schedules, cure/volume estimates and glue spread rates stay unclaimed until verifiable manufacturer data supports them.
 
-**Sprint 315 — PWA, offline, updates and storage pressure** — P1 · M · S307 · **CARRY-OVER → v5.35.0** (only service-worker registration is asserted in `tests/e2e/smoke.spec.ts`).
+**Sprint 315 — PWA, offline, updates and storage pressure** — P1 · M · S307 · **DONE** (browser-level journeys complete; native OS file launch remains unverified).
 
-- T1: Browser tests for install manifest, service worker registration, cached app shell reload offline and update-ready banner dismiss/reload.
-- T2: Simulate storage quota warning and unavailable storage; assert status, actions and no data loss.
-- T3: Open `.cabinetplan` file via supported file handler path; test unsupported/invalid file recovery.
+- T1: DONE — Chromium and Firefox verify manifest essentials, service-worker registration/activation/control, cached app-shell reload offline, update-banner dismissal for the tab, and user-confirmed reload through a real waiting worker.
+- T2: DONE — Chromium and Firefox simulate near-limit and unavailable estimates; Project Manager reports each state, allows named saves, and retains both projects after reload.
+- T3: DONE — Chromium and Firefox E2Es drive the registered `launchQueue` consumer with a valid `.cabinetplan`, unsupported file, and malformed payload; invalid inputs preserve the current configuration. Native OS-level launch remains unverified.
 - Accept: offline start works after one online load in supported browser; explain unsupported API status without blocking core workflows.
 
 **Sprint 316 — Accessibility, visual and responsive matrix** — P0 · L · S307–S315.
@@ -1394,7 +1394,11 @@ Sources: the §4.4 audit and the §5.4 cross-platform benchmark. Execution order
 **Sprint 375 — Translation completeness and locale quality** — P1 · L · S371.
 
 - T1: COMPLETE — Added `scripts/i18n-completeness.js` → `npm run i18n:completeness` to report missing/extra keys, empty values, EN-identical ratios (excluding `config/i18n-allowlist.json` tokens), and interpolation/plural-family placeholder parity across all six locales. The CLI is covered with synthetic locale fixtures and exposes the existing AR/DE/ES/FR backlog without blocking unrelated quality gates.
-- T2: Terminology glossary `src/i18n/glossary.json` (woodworking terms per locale); translate missing and EN-identical strings for AR/DE/ES/FR; track human-review status in a sidecar file, not inside locale JSON.
+- T2: IN PROGRESS — Since the initial audit, AR gained 232 formerly missing strings and DE/ES/FR gained 213 each; five stale nesting and ten onboarding keys were removed per locale. Key parity is exact in all six locales, with no empty values or placeholder mismatches.
+  Mounted calculator namespaces translated in this pass include shelf deflection, named expressions, pocket-hole, mortise-and-tenon, dowel-joint, dovetail-layout, cabinet-door, face-frame, drawer-box, screw-pullout, kerf-bending, dado-rabbet, finishing-coat, wood-turning, frame-panel, taper-jig, stair-stringer, box-joint, glue-coverage, planer-passes, honing-guide, crown-moulding, router-circle, cove-cut, moisture-shrinkage, rafter-length, router-template, half-lap, and spline-joint.
+  The mounted hardware-catalog import UI gained 26 strings per locale, room-planner and 3D preview UI gained 11 each, remaining optimizer labels were translated, and the constraints panel gained eight strings per locale. Config UI gained 2 AR, 7 DE, 5 ES, and 3 FR translations; the PDF panel gained two French labels, the storage badge gained AR/DE/ES text.
+  CNC job-queue, project-sharing, batch-export, router-depth, parametric-template, machining, feed-rate, material-catalog, maintenance-scheduler, multi-machine, drawer-slide, material-yield, panel-label, and drill-speed namespaces gained 23, 21, 19, 24, 21, 19, 18, 18, 17, 16, 18, 16, 16, and 16 strings per locale. EN-identical rates remain above target: AR 22.49%, DE 21.29%, ES 21.29%, FR 21.38%.
+  The prior 116 review records were manually reviewed and approved on 2026-10-05; new constraints, config, French PDF, AR/DE/ES storage, job-queue, sharing, batch-export, design-comparison, router-depth, parametric-template, machining, feed-rate, catalog, maintenance-scheduler, multi-machine, drawer-slide, material-yield, panel-label, and drill-speed strings await review.
 - T3: Test-only pseudo-locales generated at runtime: `en-XA` (accented, +40 % length) and `ar-XB` (bidi-wrapped). Responsive E2E at 320 px detects clipping and mirrored-layout errors.
 - T4: Formatting audit: numbers via `Intl.NumberFormat`, units via its `unit` style, dates via `Intl.DateTimeFormat`, plurals via i18next plural rules.
 - Accept: zero missing keys in all six locales; EN-identical ratio ≤ 2 % excluding the allowlist; no placeholder mismatch; pseudo-locale E2E passes without overflow.

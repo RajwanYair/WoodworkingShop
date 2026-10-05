@@ -484,7 +484,8 @@
   },
   "storage": {
     "usageLabel": "{{used}} KB / {{quota}} MB",
-    "nearLimitWarning": "Storage nearly full — consider exporting and deleting old projects"
+    "nearLimitWarning": "Storage nearly full — consider exporting and deleting old projects",
+    "unavailable": "Storage usage is unavailable in this browser."
   },
   "saves": {
     "title": "My Saved Cabinets",
@@ -613,6 +614,7 @@
     "stepsCompleted": "steps completed",
     "resetProgress": "Reset progress",
     "markStepDone": "Mark as done",
+    "requiredStepsFirst": "Complete the required steps first.",
     "stepDone": "Done",
     "allStepsDone": "All steps complete — your cabinet is built!",
     "estimatedTime": "Estimated time",
@@ -706,6 +708,9 @@
     "notSupported": "Web Serial is not supported in this browser. Use Chrome 89+ or Edge 89+.",
     "noSheets": "Run the cut optimizer first to generate G-code.",
     "streaming": "Sending line {{current}} of {{total}}…",
+    "pause": "Pause sending",
+    "resume": "Resume sending",
+    "paused": "Paused at line {{current}} of {{total}}.",
     "done": "Done — all {{total}} lines sent.",
     "error": "Connection error: {{message}}"
   },
@@ -1015,8 +1020,11 @@
   "buildLog": {
     "title": "Build Log",
     "addPlaceholder": "Add a build note…",
-    "hint": "Ctrl + Enter to save",
+    "hint": "Ctrl/Cmd + Enter to save",
     "add": "Add note",
+    "edit": "Edit entry",
+    "save": "Save note",
+    "cancel": "Cancel edit",
     "empty": "No notes yet. Log steps, adjustments, or observations.",
     "delete": "Delete entry",
     "clearAll": "Clear all entries"

@@ -28,13 +28,16 @@ export function StorageQuotaBadge() {
     };
   }, []);
 
-  if (!est || est.quotaBytes === 0) return null;
+  if (!est) return null;
 
-  const label = t('storage.usageLabel', { used: est.usedKb, quota: est.quotaMb });
+  const unavailable = est.quotaBytes === 0;
+  const label = unavailable
+    ? t('storage.unavailable')
+    : t('storage.usageLabel', { used: est.usedKb, quota: est.quotaMb });
   const warningLabel = t('storage.nearLimitWarning');
 
   return (
-    <div
+    <output
       className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-xs ${
         est.nearLimit
           ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300'
@@ -42,14 +45,13 @@ export function StorageQuotaBadge() {
       }`}
       title={est.nearLimit ? warningLabel : label}
       aria-label={est.nearLimit ? warningLabel : label}
-      role="status"
     >
-      <span className="font-mono">{label}</span>
+      <span className={unavailable ? '' : 'font-mono'}>{label}</span>
       {est.nearLimit && (
         <span className="font-bold" aria-hidden="true">
           ⚠
         </span>
       )}
-    </div>
+    </output>
   );
 }

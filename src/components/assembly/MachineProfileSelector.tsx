@@ -3,7 +3,7 @@
  * Exported by WebSerialPanel to let users choose their CNC machine before
  * connecting. Profile selection is persisted in localStorage.
  */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   MACHINE_PROFILES,
@@ -34,19 +34,22 @@ function saveProfile(id: string) {
 
 interface Props {
   /** Called whenever the user selects a different profile. */
-  onSelect: (profile: MachineProfile) => void;
+  readonly onSelect: (profile: MachineProfile) => void;
 }
 
 export function MachineProfileSelector({ onSelect }: Props) {
   const { t } = useTranslation();
   const [selected, setSelected] = useState<MachineProfile>(loadSavedProfile);
 
+  useEffect(() => {
+    onSelect(selected);
+  }, [onSelect, selected]);
+
   const handleChange = (id: string) => {
     const profile = MACHINE_PROFILES[id as keyof typeof MACHINE_PROFILES];
     if (!profile) return;
     setSelected(profile);
     saveProfile(id);
-    onSelect(profile);
   };
 
   return (

@@ -1,6 +1,42 @@
 import { test, expect } from './fixtures/app';
+import { cfg, makeCabinetEntry } from '../helpers';
 
 const consoleErrors: string[] = [];
+
+async function installWaitingServiceWorker(page: import('@playwright/test').Page): Promise<void> {
+  await expect
+    .poll(
+      () =>
+        page.evaluate(async () => {
+          const registration = await navigator.serviceWorker.getRegistration();
+          return registration?.active?.state === 'activated';
+        }),
+      { timeout: 15_000, intervals: [200, 500, 1000] },
+    )
+    .toBe(true);
+  await page.reload();
+  await expect
+    .poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller)), {
+      timeout: 15_000,
+      intervals: [200, 500, 1000],
+    })
+    .toBe(true);
+  await page.evaluate(async () => {
+    await navigator.serviceWorker.register('/WoodworkingShop/sw.js?e2e-update=1', {
+      scope: '/WoodworkingShop/',
+    });
+  });
+  await expect
+    .poll(
+      () =>
+        page.evaluate(async () => {
+          const registration = await navigator.serviceWorker.getRegistration();
+          return registration?.waiting?.state ?? 'not-waiting';
+        }),
+      { timeout: 15_000, intervals: [200, 500, 1000] },
+    )
+    .toBe('installed');
+}
 
 test.beforeEach(async ({ page }) => {
   consoleErrors.length = 0;
@@ -496,6 +532,134 @@ test('PWA service worker registers', async ({ appPage: page }) => {
       { timeout: 15_000, intervals: [200, 500, 1000] },
     )
     .toBe(true);
+});
+
+test('PWA manifest and cached app shell remain available after an offline reload', async ({ appPage: page }) => {
+  const manifestHref = await page.locator('link[rel="manifest"]').getAttribute('href');
+  expect(manifestHref).toBe('/WoodworkingShop/manifest.json');
+  if (!manifestHref) throw new Error('PWA manifest link is missing');
+
+  const manifestResponse = await page.request.get(manifestHref);
+  expect(manifestResponse.ok()).toBe(true);
+  const manifest = await manifestResponse.json();
+  expect(manifest).toMatchObject({
+    name: 'Cabinet Planner',
+    short_name: 'Cabinet',
+    start_url: '/WoodworkingShop/',
+    scope: '/WoodworkingShop/',
+    display: 'standalone',
+  });
+  expect(manifest.icons.length).toBeGreaterThan(0);
+
+  await expect
+    .poll(
+      () =>
+        page.evaluate(async () => {
+          const registration = await navigator.serviceWorker.getRegistration();
+          return registration?.active?.state ?? 'missing';
+        }),
+      { timeout: 15_000, intervals: [200, 500, 1000] },
+    )
+    .toBe('activated');
+
+  await page.reload();
+  await expect
+    .poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller)), {
+      timeout: 15_000,
+      intervals: [200, 500, 1000],
+    })
+    .toBe(true);
+  await expect(page.getByRole('banner')).toBeVisible();
+
+  await page.context().setOffline(true);
+  try {
+    await page.reload();
+    await expect(page.getByRole('banner')).toBeVisible();
+    await expect(page.getByRole('tab', { name: 'Configure' })).toBeVisible();
+  } finally {
+    await page.context().setOffline(false);
+  }
+});
+
+test('PWA file handler imports valid cabinet plans and ignores unsupported or malformed files', async ({
+  appPage: page,
+}) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'launchQueue', {
+      configurable: true,
+      value: {
+        consumer: null as unknown,
+        setConsumer: (consumer: unknown) => {
+          const launchQueue = Object.getOwnPropertyDescriptor(window, 'launchQueue')?.value;
+          if (typeof launchQueue !== 'object' || launchQueue === null) return;
+          Object.defineProperty(launchQueue, 'consumer', { configurable: true, value: consumer });
+        },
+      },
+    });
+  });
+  await page.reload();
+  await expect(page.getByRole('banner')).toBeVisible();
+  await page.getByRole('tab', { name: 'Configure' }).click();
+
+  const widthInput = page.getByRole('spinbutton', { name: 'Width' });
+  const initialWidth = await widthInput.inputValue();
+  const launchFile = async (name: string, type: string, content: string) =>
+    page.evaluate(
+      async ({ fileName, mimeType, fileContent }) => {
+        const launchQueue = Object.getOwnPropertyDescriptor(window, 'launchQueue')?.value;
+        if (typeof launchQueue !== 'object' || launchQueue === null || !('consumer' in launchQueue)) {
+          throw new Error('The app did not register a file launch consumer');
+        }
+        const consumer = launchQueue.consumer;
+        if (typeof consumer !== 'function') throw new Error('The app did not register a file launch consumer');
+        const consumeLaunch = consumer as (params: { files: Array<{ getFile: () => Promise<File> }> }) => Promise<void>;
+        await consumeLaunch({
+          files: [
+            {
+              getFile: async () => new File([fileContent], fileName, { type: mimeType }),
+            },
+          ],
+        });
+      },
+      { fileName: name, mimeType: type, fileContent: content },
+    );
+
+  await launchFile('unsupported.json', 'application/json', '{"cabinets":[]}');
+  await expect(widthInput).toHaveValue(initialWidth);
+  await launchFile('malformed.cabinetplan', 'application/cabinet-plan', '{ invalid json');
+  await expect(widthInput).toHaveValue(initialWidth);
+
+  const project = {
+    id: 'pwa-file-import',
+    name: 'PWA file import',
+    savedAt: '2026-09-28T12:00:00.000Z',
+    schemaVersion: '1.0',
+    cabinets: [makeCabinetEntry({ name: 'Imported Cabinet', config: cfg({ width: 777 }) })],
+  };
+  await launchFile('workshop.cabinetplan', 'application/cabinet-plan', JSON.stringify(project));
+  await expect(widthInput).toHaveValue('777');
+});
+
+test('PWA update banner dismisses for the tab and reloads only after user confirmation', async ({ appPage: page }) => {
+  await installWaitingServiceWorker(page);
+
+  const banner = page.getByRole('alert');
+  await expect(banner).toContainText('A new version is available!', { timeout: 15_000 });
+  await banner.getByRole('button', { name: 'Later' }).click();
+  await expect(banner).toHaveCount(0);
+  await expect.poll(() => page.evaluate(() => sessionStorage.getItem('swUpdate:dismissed'))).toBe('true');
+
+  await page.reload();
+  await expect(page.getByRole('banner')).toBeVisible();
+  await expect(page.getByRole('alert')).toHaveCount(0);
+
+  await page.evaluate(() => sessionStorage.removeItem('swUpdate:dismissed'));
+  await page.reload();
+  const updateBanner = page.getByRole('alert');
+  await expect(updateBanner).toContainText('A new version is available!', { timeout: 15_000 });
+  await updateBanner.getByRole('button', { name: 'Reload' }).click();
+  await expect(page.getByRole('banner')).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByRole('alert')).toHaveCount(0);
 });
 
 test('PDF panel renders generate button and content summary', async ({ appPage: page }) => {

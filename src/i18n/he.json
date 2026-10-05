@@ -484,7 +484,8 @@
   },
   "storage": {
     "usageLabel": "{{used}} KB / {{quota}} MB",
-    "nearLimitWarning": "האחסון כמעט מלא — שקול לייצא ולמחוק פרויקטים ישנים"
+    "nearLimitWarning": "האחסון כמעט מלא — שקול לייצא ולמחוק פרויקטים ישנים",
+    "unavailable": "לא ניתן לבדוק את השימוש באחסון בדפדפן זה."
   },
   "saves": {
     "title": "הארונות שלי",
@@ -613,6 +614,7 @@
     "stepsCompleted": "שלבים הושלמו",
     "resetProgress": "אפס התקדמות",
     "markStepDone": "סמן כבוצע",
+    "requiredStepsFirst": "יש להשלים תחילה את שלבי ההרכבה הנדרשים.",
     "stepDone": "בוצע",
     "allStepsDone": "כל השלבים הושלמו — הארון שלך מוכן!",
     "estimatedTime": "זמן משוער",
@@ -666,6 +668,9 @@
     "notSupported": "Web Serial אינו נתמך בדפדפן זה. השתמש ב-Chrome 89+ או Edge 89+.",
     "noSheets": "הפעל את ממטב החיתוך תחילה ליצירת G-code.",
     "streaming": "שולח שורה {{current}} מתוך {{total}}…",
+    "pause": "השהה שליחה",
+    "resume": "המשך שליחה",
+    "paused": "השליחה מושהית בשורה {{current}} מתוך {{total}}.",
     "done": "הסתיים — כל {{total}} השורות נשלחו.",
     "error": "שגיאת חיבור: {{message}}"
   },
@@ -1015,8 +1020,11 @@
   "buildLog": {
     "title": "יומן בנייה",
     "addPlaceholder": "הוסף הערת בנייה…",
-    "hint": "Ctrl + Enter לשמירה",
+    "hint": "Ctrl/Cmd + Enter לשמירה",
     "add": "הוסף הערה",
+    "edit": "ערוך רשומה",
+    "save": "שמור הערה",
+    "cancel": "בטל עריכה",
     "empty": "אין עדיין הערות. תעד שלבים, תיקונים או תצפיות.",
     "delete": "מחק רשומה",
     "clearAll": "נקה את כל הרשומות"

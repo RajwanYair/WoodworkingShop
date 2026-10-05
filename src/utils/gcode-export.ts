@@ -15,6 +15,7 @@ import { GCODE_SCHEMA_VERSION } from '../engine/export-schema';
 export interface GcodeOptions {
   feedRate: number; // mm/min XY cutting feed (default 1500)
   plungeRate: number; // mm/min Z plunge feed (default 600)
+  spindleRpm?: number; // RPM (default 18000)
   safeZ: number; // mm safe retract height (default 5)
   cutDepth: number; // mm total cut depth (material thickness)
   passDepth: number; // mm depth per pass (default 3)
@@ -50,6 +51,7 @@ const DEFAULTS: GcodeOptions = {
  */
 export function cutSheetToGcode(sheet: CutSheet, opts?: Partial<GcodeOptions>): string {
   const o = { ...DEFAULTS, ...opts, cutDepth: opts?.cutDepth ?? sheet.thickness };
+  const spindleRpm = o.spindleRpm ?? 18000;
   const offset = o.toolDiameter / 2;
   const lines: string[] = [];
 
@@ -66,7 +68,7 @@ export function cutSheetToGcode(sheet: CutSheet, opts?: Partial<GcodeOptions>): 
   lines.push('G21 ; mm mode');
   lines.push('G90 ; absolute positioning');
   lines.push(`G0 Z${o.safeZ.toFixed(1)} ; retract to safe height`);
-  lines.push('M3 S18000 ; spindle on');
+  lines.push(`M3 S${spindleRpm} ; spindle on`);
   lines.push('');
 
   for (let i = 0; i < sheet.parts.length; i++) {
@@ -77,7 +79,7 @@ export function cutSheetToGcode(sheet: CutSheet, opts?: Partial<GcodeOptions>): 
       lines.push(`G0 Z${o.safeZ.toFixed(1)} ; retract before tool change`);
       lines.push('M5 ; spindle off');
       lines.push('M6 T1 ; tool change');
-      lines.push('M3 S18000 ; spindle on');
+      lines.push(`M3 S${spindleRpm} ; spindle on`);
       lines.push('');
     }
     lines.push(`; --- Cut: ${part.partId} ${part.label} (${part.width}x${part.length}) ---`);

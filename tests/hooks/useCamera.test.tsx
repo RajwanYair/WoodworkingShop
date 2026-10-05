@@ -61,4 +61,37 @@ describe('useCamera', () => {
     expect(stop).toHaveBeenCalledOnce();
     expect(result.current.status).toBe('idle');
   });
+
+  it('stops every web camera track when the hook unmounts', async () => {
+    const stop = vi.fn();
+    const stream = { getTracks: () => [{ stop }] } as unknown as MediaStream;
+    setMediaDevices({ getUserMedia: vi.fn().mockResolvedValue(stream) } as unknown as MediaDevices);
+    const { result, unmount } = renderHook(() => useCamera());
+
+    await act(async () => result.current.startCamera());
+    unmount();
+
+    expect(stop).toHaveBeenCalledOnce();
+  });
+
+  it('stops a stream that resolves after the hook unmounts', async () => {
+    let completeRequest: ((stream: MediaStream) => void) | undefined;
+    const request = new Promise<MediaStream>((resolve) => {
+      completeRequest = resolve;
+    });
+    const stop = vi.fn();
+    const stream = { getTracks: () => [{ stop }] } as unknown as MediaStream;
+    setMediaDevices({ getUserMedia: vi.fn(() => request) } as unknown as MediaDevices);
+    const { result, unmount } = renderHook(() => useCamera());
+
+    const pendingStart = result.current.startCamera();
+    unmount();
+    await act(async () => {
+      completeRequest?.(stream);
+      await request;
+    });
+    await pendingStart;
+
+    expect(stop).toHaveBeenCalledOnce();
+  });
 });

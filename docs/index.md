@@ -12,10 +12,9 @@
 | [PLUGIN-API.md](PLUGIN-API.md)                       | Plugin API reference and lifecycle                        |
 | [MIGRATION.md](MIGRATION.md)                         | Breaking-change guide and localStorage key registry       |
 | [MCP-GITHUB-GOVERNANCE.md](MCP-GITHUB-GOVERNANCE.md) | MCP servers, authentication and GitHub governance         |
+| [ENGINEERING-DECISIONS.md](ENGINEERING-DECISIONS.md) | Evaluation outcomes and reconsideration triggers          |
 | [OWNERSHIP.md](OWNERSHIP.md)                         | Documentation owners and freshness limits                 |
 | [CLAIM-AUDIT.md](CLAIM-AUDIT.md)                     | Historical claim audit baseline (Phase 52)                |
-| [PDF-RENDERER-SPIKE.md](PDF-RENDERER-SPIKE.md)       | PDF renderer evaluation record                            |
-| [PNPM-EVALUATION.md](PNPM-EVALUATION.md)             | Package-manager evaluation record                         |
 | [SPRINT-HISTORY.md](SPRINT-HISTORY.md)               | Sprint-by-sprint development history                      |
 | [../CHANGELOG.md](../CHANGELOG.md)                   | Version-by-version change log                             |
 | [../ROADMAP.md](../ROADMAP.md)                       | Strategy, benchmark, release train and sprint contracts   |
