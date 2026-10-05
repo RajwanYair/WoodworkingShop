@@ -5,7 +5,7 @@
   "totalAllKB": 2960,
   "perFileKB": {
     "_default": 520,
-    "pdf-renderer": 1600
+    "pdfexportpanel": 1600
   },
   "perAssetKB": {
     "_default": 50,

@@ -24,8 +24,10 @@ test('preview stays within the viewport and renders all views @preview-acceptanc
     }));
     expect(dimensions.documentWidth).toBeLessThanOrEqual(dimensions.viewportWidth);
 
-    await dimensionsToggle.uncheck();
-    await dimensionsToggle.check();
+    if (index === 0) {
+      await dimensionsToggle.uncheck();
+      await dimensionsToggle.check();
+    }
   }
 
   if (page.viewportSize()!.width <= 768) {

@@ -77,14 +77,14 @@ export default defineConfig({
         skipWaiting: false,
         clientsClaim: false,
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
-        globIgnores: ['**/assets/pdf-renderer-*.js'],
+        globIgnores: ['**/assets/PdfExportPanel-*.js'],
         navigateFallback: '/WoodworkingShop/index.html',
         navigateFallbackDenylist: [/^\/WoodworkingShop\/api\//],
         // Sprint 149 — offline fallback for navigation requests when cache is empty
         offlineGoogleAnalytics: false,
         runtimeCaching: [
           {
-            urlPattern: ({ url }: { url: URL }) => url.pathname.startsWith('/WoodworkingShop/assets/pdf-renderer-'),
+            urlPattern: ({ url }: { url: URL }) => url.pathname.startsWith('/WoodworkingShop/assets/PdfExportPanel-'),
             handler: 'CacheFirst',
             options: {
               cacheName: 'pdf-renderer',
@@ -161,7 +161,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         // Sprint 63 — consolidated chunk strategy:
-        //   pdf-renderer : lazily-imported 300 KB PDF engine — own chunk for deferred loading.
+        //   PDF export   : route-isolated; the renderer stays inside the lazy PDF panel chunk.
         //   i18n-vendor  : i18next + react-i18next — stable, cached separately from app code.
         //   vendor       : React + React-DOM + Zustand — small combined chunk; rarely changes
         //                  together with app code, benefits from long-term browser caching.
@@ -173,7 +173,6 @@ export default defineConfig({
           // Keep shared React modules in the eager vendor chunk, not the lazy PDF chunk.
           if (id.includes('/react-dom/') || id.includes('/node_modules/react/') || id.includes('/zustand'))
             return 'vendor';
-          if (id.includes('@react-pdf/renderer')) return 'pdf-renderer';
           if (id.includes('/i18next') || id.includes('/react-i18next')) return 'i18n-vendor';
           // Sprint 140 — defer parse cost of heavy optimizer engine to OptimizerView lazy chunk
           if (id.includes('/cut-optimizer') || id.includes('/smart-optimizer') || id.includes('/assembly-dag'))

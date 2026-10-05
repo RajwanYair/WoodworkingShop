@@ -24,6 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Kept the PDF renderer inside the lazy `PdfExportPanel` chunk and excluded that panel from the service-worker precache, avoiding an eager 1.2 MB renderer request on the workspace route.
+- Deferred browser cut-sheet optimization to the existing worker during store initialization, while retaining synchronous fallback where Workers are unavailable.
+- Updated `fflate` to 0.8.3 to address the ZIP64 decompression advisory.
 - Deprecated Plugin API v1.3.0 as a compatibility facade over the shared v2 registry; existing v1 registrations and hooks remain supported through app v5.35.0.
 - Renamed ambiguous export modules by responsibility: the glTF/IFC scene model, full glTF document generator, and project-level IFC exporter now have distinct paths; existing named APIs and download behavior are preserved.
 - Consolidated template engines under one module directory while preserving the established engine barrel API through explicit aliases.

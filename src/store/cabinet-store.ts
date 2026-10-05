@@ -58,6 +58,13 @@ import { getCustomMaterials, useCustomMaterialsStore } from './custom-materials-
  */
 
 const MAX_HISTORY = 50;
+const EMPTY_OPTIMIZATION: OptimizationResult = {
+  sheets: [],
+  totalSheets: 0,
+  overallYield: 0,
+  totalWaste: 0,
+  grainConflictCount: 0,
+};
 
 // Phase 11 — UI preferences now live in uiSlice.ts.  Re-export so tests and
 // any external consumers that imported from cabinet-store still work.
@@ -288,7 +295,14 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
   }
   // Sprint 16 — hydrate module-level lock map from session before deriving initial optimization.
   setRotationLocks(session?.rotationLockedPartIds ?? {});
-  const initial = deriveProjectMemo(initialCabinets, initialActiveIndex, 4, {}, getCustomMaterials());
+  const hasWorker = typeof Worker !== 'undefined';
+  const initial: ReturnType<typeof deriveProject> = hasWorker
+    ? {
+        ...deriveBaseProject(initialCabinets, initialActiveIndex, getCustomMaterials()),
+        optimization: EMPTY_OPTIMIZATION,
+        combinedOptimization: EMPTY_OPTIMIZATION,
+      }
+    : deriveProjectMemo(initialCabinets, initialActiveIndex, 4, {}, getCustomMaterials());
   const prefs = loadUiPrefs();
   const initialProjectName = session?.projectName || readProjectNameFromUrl();
   const initialProjectNotes = session?.projectNotes ?? '';
@@ -356,8 +370,8 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
     rotationLockedPartIds: session?.rotationLockedPartIds ?? {},
     offcutCatalog: [],
     defectZones: {},
-    optimizationPending: false,
-    costPending: false,
+    optimizationPending: hasWorker,
+    costPending: hasWorker,
     assemblyPending: false,
     cost: estimateCost(
       initial.optimization,
@@ -791,6 +805,16 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
     },
   };
 });
+
+if (typeof Worker !== 'undefined') {
+  const initialState = useCabinetStore.getState();
+  scheduleOptimization(
+    initialState.parts,
+    initialState.allParts,
+    initialState.sawKerf,
+    initialState.sheetSizeOverrides,
+  );
+}
 
 useCustomMaterialsStore.subscribe((state, previousState) => {
   if (state.materials === previousState.materials) return;
