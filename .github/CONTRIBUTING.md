@@ -17,13 +17,25 @@ Thank you for your interest in contributing! Every improvement — bug fix, feat
 
 ```mermaid
 flowchart LR
-    F([Fork repo]) --> C([Clone locally])
-    C --> B([Create branch: feat/my-feature])
-    B --> D([Develop and test: npm run check])
-    D --> P([Open Pull Request])
-    P --> CI([CI passes: typecheck, lint, test, build])
+    I([Create or find GitHub issue]) --> S([Fetch latest base])
+    S --> B([Create issue branch])
+    B --> D([Develop and test])
+    D --> P([Open linked Pull Request])
+    P --> CI([Required checks pass])
     CI --> R([Review and merge])
 ```
+
+The canonical multi-contributor rules, including safe sync and conflict handling, are in [DEVELOPMENT-WORKFLOW.md](DEVELOPMENT-WORKFLOW.md). Every planned change must have an issue before implementation. Never commit or push feature work directly to `main`.
+
+### Start an issue branch
+
+```bash
+git status --short --branch
+git fetch origin
+git switch -c issue-<number>-<short-slug> origin/main
+```
+
+Push only the issue branch, then open a PR that references its issue. Keep unrelated roadmap items in separate issues and PRs. Run `npm run check` before opening or updating the PR; wait for required checks and review before merge.
 
 ---
 
@@ -42,7 +54,7 @@ npm ci
 # 3 — start dev server  →  http://localhost:5173/WoodworkingShop/
 npm run dev
 
-# 4 — full gate check (run before every commit)
+# 4 — full gate check (run before opening/updating a PR)
 npm run check   # typecheck + lint + format:check + test
 ```
 

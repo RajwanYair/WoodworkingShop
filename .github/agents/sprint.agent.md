@@ -28,11 +28,16 @@ table) from first line of code to a passing CI gate.
 
 ## How to start
 
-1. Read `.github/copilot-instructions.md` → find the first `TODO` sprint in
-   the Active Sprint table — that is your sprint.
-2. Read `ROADMAP.md` → locate the sprint's Deliverable description.
-3. Read `CHANGELOG.md` top section to understand the `[Unreleased]` accumulation.
-4. Call `manage_todo_list` to plan sub-tasks before writing any code.
+1. Read `.github/DEVELOPMENT-WORKFLOW.md` and follow its issue-first branch/PR process.
+2. Read `.github/copilot-instructions.md` → find the current WIP sprint in
+   the Active Sprint table; verify its status against `ROADMAP.md`.
+3. Read `ROADMAP.md` → locate the sprint's deliverable and acceptance criteria.
+4. Find the existing GitHub issue for the sprint. If none exists, create it with scope,
+   sprint/phase, dependencies, and acceptance criteria before editing. Stop if issue
+   registration is unavailable; do not begin untracked implementation.
+5. Fetch the latest base, inspect divergence and local edits, then create or switch to
+   `issue-<number>-<short-slug>` from `origin/main`. Never work directly on `main`.
+6. Read `CHANGELOG.md` top section and call `manage_todo_list` before implementation.
 
 ## Architecture layers (always implement in this order)
 
@@ -52,7 +57,10 @@ table) from first line of code to a passing CI gate.
 - `npm run dead:check` → no orphaned exports
 - `ROADMAP.md` sprint row marked ✓ Done
 - `CHANGELOG.md` `[Unreleased]` entry added
-- `git commit -m "feat(<scope>): Sprint NNN — <summary> (Phase NN)"`
+- Commit only on the issue branch using the repository's Conventional Commit format.
+- Open/update a PR that references the issue and records acceptance evidence, checks, and known gaps.
+- Never push feature work directly to `main`; do not merge without required checks and review.
+- Report the sprint complete only after the PR is merged and its acceptance evidence is recorded.
 
 ## Rules
 

@@ -154,6 +154,15 @@ Scoped instructions auto-injected by Copilot live in `.github/instructions/`.
 Reusable prompts live in `.github/prompts/`. Agent definitions live in `.github/agents/`.
 Full lists → **AGENTS.md**.
 
+## GitHub-First Multi-User Development
+
+- Before implementing any planned change, find or create its GitHub issue with scope and acceptance criteria. Roadmap sprint work must link its sprint/phase.
+- Fetch the latest base and use a dedicated `issue-<number>-<short-slug>` branch. Never commit or push feature work directly to `main`; use separate branches/worktrees for concurrent contributors.
+- Keep one primary issue per PR. Link the issue, report acceptance evidence and verification, pass required checks, and get review before merge.
+- Before syncing, preserve local edits, fetch, and inspect divergence. Rebase/merge the latest base only into the issue branch; never force-push shared history.
+- Do not mark a sprint done from a local commit alone; completion requires a merged PR plus acceptance evidence.
+- Follow [.github/DEVELOPMENT-WORKFLOW.md](DEVELOPMENT-WORKFLOW.md). Release tags are created only from reviewed, merged release commits.
+
 ## Workflows
 
 - **`npm run quality`** — typecheck + lint + lint:css + lint:md + format:check + i18n:coverage (sequential; good for debugging)

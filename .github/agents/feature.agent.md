@@ -27,6 +27,14 @@ features that comply with every project constraint from day one.
 
 Implement feature **`${featureName}`**: ${description}
 
+## GitHub Workflow
+
+1. Read `.github/DEVELOPMENT-WORKFLOW.md` and find or create a GitHub issue with scope and observable acceptance criteria before editing.
+2. Link any roadmap sprint/phase. Keep unrelated changes in separate issues and PRs.
+3. Fetch the latest base, inspect divergence and local edits, then work on `issue-<number>-<short-slug>` from `origin/main`.
+4. Never commit or push feature work directly to `main`. Open/update an issue-linked PR with verification results and known gaps; merge requires passing checks and review.
+5. If issue registration or branch creation is unavailable, stop before implementation and report the blocker.
+
 ## Architecture layers (implement in order)
 
 ### 1 — Engine (`src/engine/${feature}.ts`)
@@ -104,3 +112,4 @@ The final report must include:
 3. Acceptance checklist with pass/fail for each architecture layer
 4. i18n parity result
 5. Quality/test gate status
+6. Tracking issue and PR links; report implementation as pending until its PR is merged

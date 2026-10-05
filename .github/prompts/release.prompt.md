@@ -15,6 +15,8 @@ You are publishing a new Cabinet Planner release.
 3. `git status` — confirm all candidate changes are intentional and no unrelated user changes are present
 4. `CHANGELOG.md [Unreleased]` section is populated
 5. `ROADMAP.md` sprint items marked DONE where applicable
+6. A GitHub release issue exists with target version, scope, and acceptance criteria
+7. Work is on an issue-specific branch from the latest `origin/main`; never make release changes on shared `main`
 
 ## Steps
 
@@ -55,16 +57,22 @@ Run a search: `rg -n "v?[0-9]+\.[0-9]+\.[0-9]+" .github/ *.md`
 npm run release:build   # build + bundle:check + sbom
 ```
 
-### 6 — Commit and tag
+### 6 — Commit and open the release PR
 
 ```bash
 git add -A
 git commit -m "chore: release vX.Y.Z"
-git tag -a vX.Y.Z -m "Release vX.Y.Z"
-git push origin main --follow-tags
+git push -u origin issue-<number>-release-vX.Y.Z
+gh pr create --base main --title "chore: release vX.Y.Z" --body "Fixes #<issue>"
 ```
 
-### 7 — Verify GitHub Release
+Wait for required checks and review, then merge using the approved repository strategy. Never push release preparation directly to `main`.
+
+### 7 — Tag the merged release commit
+
+After merge, fetch `origin/main`, verify the release PR is included, and create/push the annotated tag from that merged commit only. Never force-push or retarget a published tag.
+
+### 8 — Verify GitHub Release
 
 Pushing the annotated `vX.Y.Z` tag triggers `.github/workflows/release.yml`, which builds and attaches
 the release archive, checksum, and SBOM and creates the `WoodworkingShop vX.Y.Z` release. Do not
@@ -74,6 +82,7 @@ create a duplicate release manually; verify the workflow run and published artif
 
 - Never skip `npm run check` before bumping
 - Never force-push after tagging
+- Never commit or push release preparation directly to `main`; tag only after the reviewed release PR is merged
 - Keep release commit message format: `chore: release vX.Y.Z`
 - The release workflow must publish its generated SBOM, archive, and checksum
 

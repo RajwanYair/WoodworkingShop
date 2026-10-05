@@ -71,6 +71,15 @@ npx vitest run        # run unit tests directly
 | **≤ 8 prod deps**         | No additions without removing one or proving > 50 KB savings                        |
 | **browserslist**          | Canonical source: `package.json#browserslist` only — no `.browserslistrc`           |
 
+## GitHub-First Development
+
+- Every planned change must have a GitHub issue with scope and acceptance criteria before implementation starts; link roadmap sprint/phase IDs where applicable.
+- Fetch the latest base, then develop on a dedicated `issue-<number>-<short-slug>` branch. Never commit or push feature work directly to shared `main`.
+- Submit one primary issue per PR, link it, record verification and known gaps, pass required CI checks, and obtain review before merge.
+- For concurrent contributors, use separate worktrees/branches. Preserve local edits, fetch and inspect divergence before syncing; integrate base changes only on the issue branch and never force-push shared history.
+- A sprint is complete only after its PR is merged and acceptance evidence is recorded, not merely because a local commit exists.
+- Canonical procedure: [.github/DEVELOPMENT-WORKFLOW.md](.github/DEVELOPMENT-WORKFLOW.md).
+
 ## Key Patterns
 
 ```ts
