@@ -34,8 +34,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Sprint 375 follow-up: cumulative missing-key additions are 232 in AR and 213 each in DE/ES/FR. All six bundles have exact 2,093-key parity, with no empty values or placeholder mismatches. Mounted calculator translations now include
   cabinet-door, face-frame, drawer-box, screw-pullout, kerf-bending, dado-rabbet, finishing-coat, wood-turning, frame-panel, taper-jig, stair-stringer, box-joint, glue-coverage, planer-passes, honing-guide, crown-moulding, router-circle, cove-cut, moisture-shrinkage, rafter-length, router-template, half-lap, and spline-joint. Hardware-catalog UI adds 26 strings per locale; room-planner and 3D preview UI add 11 each.
-  CNC job-queue, project-sharing, and batch-export namespaces add 23, 21, and 19 strings per locale; design comparison, router depth, parametric templates, machining, feed rate, material catalog, maintenance scheduler, multi-machine workflow, drawer-slide calculator, material yield, panel labels, and drill-speed calculator add 18, 24, 21, 19, 18, 18, 17, 16, 18, 16, 16, and 16 strings per locale.
-  EN-identical: AR 22.49%, DE 21.29%, ES 21.29%, FR 21.38%; the 2% target remains open. The prior 116 review records were manually reviewed and approved on 2026-10-05; new constraints, config, French PDF, AR/DE/ES storage, job-queue, sharing, batch-export, design-comparison, router-depth, parametric-template, machining, feed-rate, catalog, maintenance-scheduler, multi-machine, drawer-slide, material-yield, panel-label, and drill-speed strings await review.
+  CNC job-queue, project-sharing, and batch-export namespaces add 23, 21, and 19 strings per locale; design comparison, router depth, parametric templates,
+  machining, feed rate, material catalog, maintenance scheduler, multi-machine workflow, drawer-slide calculator, material yield, panel labels,
+  drill-speed calculator, wood-drying estimator, glue-up-time calculator, bandsaw-speed calculator, tablesaw-blade calculator,
+  appliance clearance, layout suggestions, version history, and plugin registry add 18, 24, 21, 19, 18, 18, 17, 16, 18,
+  16, 16, 16, 16, 16, 16, 16, 15, 15, 15, and 2 strings per locale.
+  EN-identical: AR 17.16%, DE 15.86%, ES 15.91%, FR 15.86%; the 2% target remains open. Config UI also gained one new
+  translation each in DE/ES/FR; command-palette category labels gained one DE and three FR values. The prior 216
+  translation-review records remain approved; nine new locale records for plugin version, command-palette, and Shaker-style
+  labels await review.
 
 ### Removed
 
