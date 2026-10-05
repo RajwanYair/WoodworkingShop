@@ -54,7 +54,8 @@ export function measureCriticalBundle(manifest, distDirectory) {
 /** @param {{ javascriptBrotliBytes: number, stylesheetBrotliBytes: number }} measured @param {{ initialJsBrotliKB: number, initialCssBrotliKB: number }} budget */
 export function getCriticalBundleViolations(measured, budget) {
   for (const [name, limit] of Object.entries(budget)) {
-    if (!Number.isFinite(limit) || limit <= 0) throw new Error(`Critical bundle budget '${name}' must be a positive number.`);
+    if (!Number.isFinite(limit) || limit <= 0)
+      throw new Error(`Critical bundle budget '${name}' must be a positive number.`);
   }
 
   const javascriptKB = measured.javascriptBrotliBytes / 1024;
