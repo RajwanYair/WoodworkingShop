@@ -4,8 +4,7 @@
 > conventions, and constraints so suggestions stay consistent with the codebase.
 > **Current release: v5.34.0** · **Next target: v5.35.0** (Phase 73)
 >
-> Active sprint + completed phase history → **AGENTS.md** (loaded separately as context).
-> Sprint archive → **docs/SPRINT-HISTORY.md**.
+> Active phase and sprint contracts → **ROADMAP.md**; completed sprint history → **docs/SPRINT-HISTORY.md**.
 
 ## Tech Stack
 

@@ -1540,82 +1540,14 @@ Each release artifact records: commit SHA; Node/npm/browser versions; pass/fail/
 
 ## 9. VS Code, Copilot, MCP, and GitHub Integration
 
-### VS Code Extensions (22 Recommended)
+### VS Code, Copilot, MCP, and GitHub Sources
 
-All recommended extensions provide direct value for this TypeScript/React/Tailwind stack:
+Avoid copying inventories here; these files are canonical and validated by CI:
 
-| Extension                       | Purpose                |
-| ------------------------------- | ---------------------- |
-| prettier-vscode                 | Format on save         |
-| vscode-eslint                   | Inline lint errors     |
-| vscode-stylelint                | CSS lint               |
-| errorlens                       | Inline error display   |
-| vscode-typescript-next          | Latest TS features     |
-| vscode-tailwindcss              | Tailwind IntelliSense  |
-| vitest.explorer                 | Test runner UI         |
-| ms-playwright.playwright        | E2E test runner        |
-| vscode-coverage-gutters         | Coverage overlay       |
-| i18n-ally                       | Translation management |
-| vscode-markdownlint             | Markdown lint          |
-| code-spell-checker              | Typo detection         |
-| jock.svg                        | SVG preview            |
-| github.copilot                  | AI completions         |
-| github.copilot-chat             | AI chat + agents       |
-| vscode-pull-request-github      | PR workflow            |
-| vscode-github-actions           | Workflow status        |
-| ms-vscode.powershell            | Terminal               |
-| eamodio.gitlens                 | Git blame/history      |
-| editorconfig.editorconfig       | Editor consistency     |
-| redhat.vscode-yaml              | YAML schema validation |
-| deque-systems.vscode-axe-linter | Accessibility lint     |
-
-### Copilot Agents (9)
-
-| Agent    | Scope                                         |
-| -------- | --------------------------------------------- |
-| sprint   | Execute current roadmap sprint item           |
-| release  | Full automated release workflow               |
-| feature  | Scaffold engine + store + UI + i18n + tests   |
-| debug    | Diagnose and fix failures without suppression |
-| a11y     | WCAG 2.2 AA audit and fix                     |
-| i18n     | Key management with 6-locale parity           |
-| cleanup  | Dead code, lint, $TEMP enforcement            |
-| security | OWASP Top 10 audit and CSP hardening          |
-| perf     | Lighthouse CI and Core Web Vitals             |
-
-### MCP Servers (10)
-
-| Server             | Type  | Purpose                           |
-| ------------------ | ----- | --------------------------------- |
-| github             | HTTP  | PRs, issues, Actions, code search |
-| filesystem         | stdio | Scoped workspace file access      |
-| fetch              | stdio | Web page/API retrieval            |
-| playwright         | stdio | Browser automation for E2E debug  |
-| memory             | stdio | Persistent agent notes            |
-| sequentialthinking | stdio | Multi-step reasoning              |
-| context7           | stdio | Up-to-date library docs           |
-| gitkraken          | HTTP  | Git ops, blame, diff              |
-| cloudflare         | HTTP  | Pages/Workers management          |
-| brave-search       | stdio | Web search fallback               |
-
-### GitHub Actions (14 Workflows)
-
-| Workflow                  | Trigger     | Purpose                   |
-| ------------------------- | ----------- | ------------------------- |
-| ci.yml                    | push/PR     | Full quality gate         |
-| release.yml               | tag push    | Build + GH release        |
-| pages.yml                 | main push   | Deploy to GitHub Pages    |
-| codeql.yml                | schedule/PR | Security analysis         |
-| dependency-review.yml     | PR          | Dep vulnerability check   |
-| secret-scan.yml           | push/PR     | Secret leak prevention    |
-| lighthouse.yml            | PR          | Performance budget        |
-| size-limit.yml            | PR          | Bundle size gate          |
-| labeler.yml               | PR          | Auto-label by path        |
-| stale.yml                 | schedule    | Close stale issues        |
-| pr-title.yml              | PR          | Conventional commit title |
-| dependabot-auto-merge.yml | PR          | Auto-merge patch deps     |
-| preview-deploy.yml        | PR          | Cloudflare preview URL    |
-| cloudflare-pages.yml      | main push   | Production deploy         |
+- Extension recommendations: `.vscode/extensions.json` (`npm run vscode:extensions:validate`)
+- MCP servers: `.vscode/mcp.json` (`npm run mcp:metadata:validate`)
+- Agents, prompts, and scoped instructions: `.github/agents/`, `.github/prompts/`, `.github/instructions/` (their contract validators)
+- GitHub Actions: `.github/workflows/` (`npm run workflows:validate`)
 
 ---
 
