@@ -27,6 +27,10 @@ features that comply with every project constraint from day one.
 
 Implement feature **`${featureName}`**: ${description}
 
+## Visible TODO List
+
+Before implementation, create and show a concise task checklist using the available task-list tool (or user-visible chat updates if unavailable). Update item status incrementally, including blockers and scope changes.
+
 ## GitHub Workflow
 
 1. Read `.github/DEVELOPMENT-WORKFLOW.md` and find or create a GitHub issue with scope and observable acceptance criteria before editing.
@@ -113,3 +117,4 @@ The final report must include:
 4. i18n parity result
 5. Quality/test gate status
 6. Tracking issue and PR links; report implementation as pending until its PR is merged
+7. Final TODO checklist status

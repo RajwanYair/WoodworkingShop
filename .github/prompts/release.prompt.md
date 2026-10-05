@@ -7,6 +7,8 @@ description: Prepare and publish a new Cabinet Planner release — version bump,
 
 You are publishing a new Cabinet Planner release.
 
+Before starting pre-flight work, create and show a concise TODO checklist using the available task-list tool; if unavailable, maintain it in user-visible chat updates. Update statuses incrementally through verification, preparation, review, tagging, and publication, and call out blockers or scope changes.
+
 ## Pre-flight checklist (verify before any changes)
 
 1. `npm run check` — must pass with 0 errors / 0 warnings

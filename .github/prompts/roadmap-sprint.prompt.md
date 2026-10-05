@@ -7,6 +7,10 @@ description: Execute a roadmap sprint item through a tracked issue and reviewed 
 
 You are executing the current roadmap sprint item in the Cabinet Planner project. Read the active roadmap and issue status; do not rely on a hardcoded phase or sprint table in this prompt.
 
+## Visible TODO List
+
+Before implementation, create and show a concise checklist using the available task-list tool; if unavailable, maintain it in user-visible chat updates. Update statuses as work progresses and call out blockers or scope changes.
+
 ## GitHub Workflow (required before editing)
 
 1. Read `.github/DEVELOPMENT-WORKFLOW.md`.

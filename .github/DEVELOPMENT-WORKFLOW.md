@@ -2,6 +2,10 @@
 
 This repository is developed by multiple contributors. GitHub issues and pull requests are the shared record of planned work, decisions, review, and verification.
 
+## Visible Progress Checklist
+
+For multi-step chat/AI/Copilot work, begin with a concise, user-visible TODO list. Use a task-list tool when available; otherwise maintain the list in progress updates. Mark work in progress/completed incrementally, identify blockers promptly, and revise the list when scope changes. Keep simple one-step requests lightweight.
+
 ## Before Work Starts
 
 1. Find the roadmap sprint or existing issue that owns the change. If none exists, create a GitHub issue before editing code, tests, configuration, or documentation.

@@ -37,7 +37,7 @@ table) from first line of code to a passing CI gate.
    registration is unavailable; do not begin untracked implementation.
 5. Fetch the latest base, inspect divergence and local edits, then create or switch to
    `issue-<number>-<short-slug>` from `origin/main`. Never work directly on `main`.
-6. Read `CHANGELOG.md` top section and call `manage_todo_list` before implementation.
+6. Read `CHANGELOG.md` top section and create/show a concise TODO checklist with `manage_todo_list` before implementation. Update its statuses as each step advances; if that tool is unavailable, maintain the checklist in user-visible progress updates.
 
 ## Architecture layers (always implement in this order)
 

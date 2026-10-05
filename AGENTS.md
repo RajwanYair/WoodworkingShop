@@ -80,6 +80,13 @@ npx vitest run        # run unit tests directly
 - A sprint is complete only after its PR is merged and acceptance evidence is recorded, not merely because a local commit exists.
 - Canonical procedure: [.github/DEVELOPMENT-WORKFLOW.md](.github/DEVELOPMENT-WORKFLOW.md).
 
+## Visible Work Checklist
+
+- For multi-step chat/AI/Copilot work, create a short, understandable TODO checklist before execution and show it to the user.
+- Use the available task-list tool when available; otherwise keep the checklist in user-visible chat updates.
+- Update item status as work progresses and call out blockers or scope changes; do not leave progress implicit.
+- Keep tracking proportional: simple one-step requests do not need a formal checklist.
+
 ## Key Patterns
 
 ```ts

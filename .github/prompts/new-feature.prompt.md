@@ -7,6 +7,10 @@ description: Add a new feature panel — engine function + React component + i18
 
 You are adding a new feature panel to the Cabinet Planner project.
 
+## Visible TODO List
+
+Before implementation, create and show a concise checklist using the available task-list tool; if unavailable, maintain it in user-visible chat updates. Update statuses as work progresses and call out blockers or scope changes.
+
 ## GitHub Workflow (required before editing)
 
 1. Read `.github/DEVELOPMENT-WORKFLOW.md`.

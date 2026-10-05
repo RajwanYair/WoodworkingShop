@@ -154,6 +154,13 @@ Scoped instructions auto-injected by Copilot live in `.github/instructions/`.
 Reusable prompts live in `.github/prompts/`. Agent definitions live in `.github/agents/`.
 Full lists → **AGENTS.md**.
 
+## Visible Work Checklist
+
+- For multi-step chat/AI/Copilot work, create a short, understandable TODO checklist before execution and show it to the user.
+- Use the available task-list tool when available; otherwise keep the checklist in user-visible chat updates.
+- Mark items in progress/completed as work proceeds, and explicitly note blockers or changed scope. Do not leave the user to infer progress from tool activity.
+- Keep the checklist proportional: one-step questions or tiny edits do not need ceremonial task tracking.
+
 ## GitHub-First Multi-User Development
 
 - Before implementing any planned change, find or create its GitHub issue with scope and acceptance criteria. Roadmap sprint work must link its sprint/phase.

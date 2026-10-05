@@ -23,6 +23,8 @@ Do not skip the pre-flight gate.
 
 ## Pre-flight (must all pass before any changes)
 
+Before the pre-flight edits begin, create and show a concise TODO checklist using `manage_todo_list`. Update each item incrementally as checks, release preparation, review, tagging, and publication proceed; if unavailable, maintain it in user-visible progress updates.
+
 ```bash
 npm run check          # quality:fast + tests — 0 errors required
 npm run dead:check     # 0 orphaned exports required
