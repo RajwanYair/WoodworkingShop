@@ -1401,9 +1401,12 @@ Sources: the §4.4 audit and the §5.4 cross-platform benchmark. Execution order
   maintenance-scheduler, multi-machine, drawer-slide, material-yield, panel-label, drill-speed, wood-drying, glue-up-time,
   bandsaw-speed, tablesaw-blade, appliance, suggestions, version-history, and plugin-registry namespaces gained 23, 21, 19,
   24, 21, 19, 18, 18, 17, 16, 18, 16, 16, 16, 16, 16, 16, 16, 15, 15, 15, and 2 strings per locale. EN-identical rates:
-  AR 17.16%, DE 15.86%, ES 15.91%, FR 15.86%; the 2% target remains open. Command-palette category labels gained one
-  DE and three FR translations. The prior 216 translation-review records remain approved; nine new locale records for plugin
-  version, command-palette, and Shaker-style labels await review.
+  AR 8.84%, DE 7.64%, ES 7.64%, FR 7.78%; the 2% target remains open. Command-palette category labels gained one
+  DE and three FR translations. Dust-collection, board-feet, assembly-dependency, cloud-sync, miter-angle, pilot-hole,
+  material-usage, shelf-pin, project-comparison, cut-list-grouping, waste-predictor, shop-inventory, CNC-stream, and
+  material-cost-tracker, stock-management, and tool-wear namespaces were translated across AR/DE/ES/FR. EN-identical
+  rates are now AR 7.21%, DE 6.05%, ES 6.01%, and FR 6.20%; the 2% target remains open. All 225 prior
+  translation-review records are approved; 64 new locale records across these 18 namespaces await review.
 - T3: Test-only pseudo-locales generated at runtime: `en-XA` (accented, +40 % length) and `ar-XB` (bidi-wrapped). Responsive E2E at 320 px detects clipping and mirrored-layout errors.
 - T4: Formatting audit: numbers via `Intl.NumberFormat`, units via its `unit` style, dates via `Intl.DateTimeFormat`, plurals via i18next plural rules.
 - Accept: zero missing keys in all six locales; EN-identical ratio ≤ 2 % excluding the allowlist; no placeholder mismatch; pseudo-locale E2E passes without overflow.

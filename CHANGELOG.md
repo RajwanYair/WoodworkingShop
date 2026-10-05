@@ -39,10 +39,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   drill-speed calculator, wood-drying estimator, glue-up-time calculator, bandsaw-speed calculator, tablesaw-blade calculator,
   appliance clearance, layout suggestions, version history, and plugin registry add 18, 24, 21, 19, 18, 18, 17, 16, 18,
   16, 16, 16, 16, 16, 16, 16, 15, 15, 15, and 2 strings per locale.
-  EN-identical: AR 17.16%, DE 15.86%, ES 15.91%, FR 15.86%; the 2% target remains open. Config UI also gained one new
-  translation each in DE/ES/FR; command-palette category labels gained one DE and three FR values. The prior 216
-  translation-review records remain approved; nine new locale records for plugin version, command-palette, and Shaker-style
-  labels await review.
+  EN-identical: AR 7.21%, DE 6.05%, ES 6.01%, FR 6.20%; the 2% target remains open. Config UI also gained one new
+  translation each in DE/ES/FR; command-palette category labels gained one DE and three FR values. Dust-collection,
+  board-feet, assembly-dependency, cloud-sync, miter-angle, pilot-hole, material-usage, shelf-pin, project-comparison,
+  cut-list-grouping, waste-predictor, shop-inventory, CNC-stream, material-cost-tracker, stock-management, and tool-wear
+  namespaces were translated across AR/DE/ES/FR. All 225 prior review records are approved; 64 new locale records await
+  review.
 
 ### Removed
 
