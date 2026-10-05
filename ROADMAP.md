@@ -1166,6 +1166,10 @@ A duplicate tool-wear namespace was corrected. EN-identical rates remain above t
 - Tests: bundle-report chunk-graph unit tests; bench budgets unchanged.
 - Accept: `npm run bundle:critical` blocks in `npm run ci`; first-load reduction reported from measurements.
 
+Status (2026-10-05): T1 is implemented: Vite emits its manifest, and `npm run bundle:critical` measures the initial static-import graph with Brotli quality 5. CI and release builds enforce the measured 168 KiB JS and 14 KiB CSS ceilings. Focused tests cover static imports, lazy-import exclusion, missing manifest entries and threshold failures.
+
+T2 remains incomplete: the remaining calculator panels, G-code/DXF modals and Marketplace are not all lazy-loaded or intent-preloaded. The first-load reduction report is therefore still outstanding.
+
 **Sprint 377 — Modern platform UI primitives and input modalities** — P2 · M · S374.
 
 - T1: Migrate modals to native `<dialog>` with `showModal()` while keeping the `useFocusTrap` return-focus contract; menus/tooltips to the Popover API with fallback.

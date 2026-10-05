@@ -149,6 +149,7 @@ export default defineConfig({
   },
   build: {
     target: 'es2022',
+    manifest: true,
     chunkSizeWarningLimit: 1600,
     // v3.24.0: inject modulepreload polyfill for Safari < 16.4 compatibility
     modulePreload: {

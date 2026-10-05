@@ -3,6 +3,10 @@
   "totalJsKB": 2850,
   "totalCssKB": 100,
   "totalAllKB": 2960,
+  "critical": {
+    "initialJsBrotliKB": 168,
+    "initialCssBrotliKB": 14
+  },
   "perFileKB": {
     "_default": 520,
     "pdfexportpanel": 1600
