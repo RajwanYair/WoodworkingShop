@@ -17,7 +17,7 @@ const lighthouseRuns = Number(process.env.WOODWORKINGSHOP_LIGHTHOUSE_RUNS ?? (pr
 mkdirSync(outputDir, { recursive: true });
 
 /**
- * Sprint 147 — Production Lighthouse CI gates.
+ * Sprint 376 — Production mobile Lighthouse CI gates.
  * Targets: TBT < 200 ms, FCP < 3 s, LCP < 4.8 s, CLS < 0.1
  * Category scores: performance ≥ 0.7, accessibility ≥ 0.95
  *
@@ -32,6 +32,10 @@ const config = {
       startServerReadyPattern: 'localhost:',
       startServerReadyTimeout: 60000,
       numberOfRuns: lighthouseRuns,
+      settings: {
+        formFactor: 'mobile',
+        throttlingMethod: 'simulate',
+      },
     },
     assert: {
       preset: 'lighthouse:no-pwa',

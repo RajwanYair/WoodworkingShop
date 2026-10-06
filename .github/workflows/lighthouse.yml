@@ -44,17 +44,17 @@ jobs:
 
             const body = `## ⚡ Lighthouse Report
 
-            | Category | Score |
-            |----------|-------|
-            | Performance | ${score('performance')} |
-            | Accessibility | ${score('accessibility')} |
-            | Best Practices | ${score('best-practices')} |
-            | SEO | ${score('seo')} |
+            | Category | Score | Gate |
+            |----------|-------|------|
+            | Performance | ${score('performance')} | ≥ 70 |
+            | Accessibility | ${score('accessibility')} | ≥ 95 |
+            | Best Practices | ${score('best-practices')} | ≥ 90 |
+            | SEO | ${score('seo')} | ≥ 90 (advisory) |
 
             | Metric | Value | Budget |
             |--------|-------|--------|
-            | FCP | ${metric('first-contentful-paint')} ms | ≤ 1200 ms |
-            | LCP | ${metric('largest-contentful-paint')} ms | ≤ 2500 ms |
+            | FCP | ${metric('first-contentful-paint')} ms | ≤ 3000 ms |
+            | LCP | ${metric('largest-contentful-paint')} ms | ≤ 4800 ms |
             | TBT | ${metric('total-blocking-time')} ms | ≤ 200 ms |
             | CLS | ${(lhr.audits['cumulative-layout-shift']?.numericValue ?? 0).toFixed(3)} | ≤ 0.1 |`;
 
