@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
+import { describe, it, expect, beforeAll, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../../src/App';
@@ -30,6 +30,7 @@ describe('keyboard journeys — sprint 252', () => {
   beforeEach(() => {
     useCabinetStore.getState().resetConfig();
     useCabinetStore.getState().setActiveTab('configurator');
+    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(null);
     if (useCabinetStore.getState().darkMode) {
       useCabinetStore.getState().toggleDarkMode();
     }
