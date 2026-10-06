@@ -1,11 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 48" role="img" aria-label="Woodgrain sparkle strip">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 48" role="img" aria-label="Oak grain sample with brass inlay">
   <defs>
-    <pattern id="grain" width="18" height="10" patternUnits="userSpaceOnUse">
-      <path d="M0 7c4-5 8-5 12 0s8 5 12 0" fill="none" stroke="currentColor" stroke-opacity="0.28" stroke-width="1.1" />
+    <pattern id="grain" width="48" height="24" patternUnits="userSpaceOnUse">
+      <path d="M-8 7c12-8 21 7 34 0s21 7 34 0M-8 18c12-7 21 6 34 0s21 6 34 0" fill="none" stroke="#6f4930" stroke-opacity=".52" stroke-width="1.1" />
     </pattern>
   </defs>
-  <rect x="1" y="4" width="238" height="40" rx="20" fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.4" />
-  <rect x="9" y="11" width="222" height="26" rx="13" fill="url(#grain)" />
-  <path d="M32 24l4 8 8 4-8 4-4 8-4-8-8-4 8-4 4-8z" fill="currentColor" fill-opacity="0.64" />
-  <path d="M208 24l3 6 6 3-6 3-3 6-3-6-6-3 6-3 3-6z" fill="currentColor" fill-opacity="0.56" />
+  <rect x="1" y="3" width="238" height="42" rx="5" fill="#c69a68" stroke="#183532" stroke-width="1.5" />
+  <rect x="7" y="8" width="226" height="32" rx="2" fill="url(#grain)" />
+  <path d="M18 8v32" stroke="#e6b95c" stroke-width="2" />
+  <circle cx="18" cy="24" r="2" fill="#183532" />
 </svg>

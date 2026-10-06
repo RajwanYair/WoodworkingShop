@@ -185,6 +185,26 @@ test('Configure dimension sliders and toe-kick presets match inventory and updat
   expect(testedPresetCount).toBe(4);
 });
 
+test('dimension slider uses 1 mm steps for pen and restores 10 mm steps for mouse', async ({ appPage: page }) => {
+  await page.getByRole('tab', { name: 'Configure', exact: true }).click();
+
+  const widthSlider = page.getByRole('slider', { name: 'Width (mm)', exact: true });
+  const minimum = Number(await widthSlider.getAttribute('min'));
+
+  await widthSlider.dispatchEvent('pointerdown', { pointerType: 'pen' });
+  await expect(widthSlider).toHaveAttribute('step', '1');
+  await widthSlider.focus();
+  await widthSlider.press('Home');
+  await widthSlider.press('ArrowRight');
+  await expect(widthSlider).toHaveValue(String(minimum + 1));
+
+  await widthSlider.dispatchEvent('pointerdown', { pointerType: 'mouse' });
+  await expect(widthSlider).toHaveAttribute('step', '10');
+  await widthSlider.press('Home');
+  await widthSlider.press('ArrowRight');
+  await expect(widthSlider).toHaveValue(String(minimum + 10));
+});
+
 test('Configure quick preset controls match the browser-derived inventory', async ({ appPage: page }) => {
   await page.getByRole('tab', { name: 'Configure', exact: true }).click();
 

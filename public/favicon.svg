@@ -1,1 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><defs><linearGradient id="a" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#a07042"/><stop offset="100%" stop-color="#5a4218"/></linearGradient></defs><rect width="52" height="52" x="6" y="6" fill="url(#a)" stroke="#3a2a10" stroke-width="2" rx="3"/><path fill="#3a2a10" d="M31 10h2v44h-2z"/><rect width="20" height="44" x="10" y="10" fill="none" stroke="#3a2a10" stroke-width="1.5" rx="1"/><rect width="20" height="44" x="34" y="10" fill="none" stroke="#3a2a10" stroke-width="1.5" rx="1"/><circle cx="26" cy="32" r="1.6" fill="#eacb8a"/><circle cx="38" cy="32" r="1.6" fill="#eacb8a"/><path fill="none" stroke="#7a5828" stroke-width=".6" d="M12 18q8 2 16 0M12 46q8-2 16 0m8-22q8-2 16 0M36 40q8 2 16 0" opacity=".5"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Cabinet Planner">
+	<rect x="4" y="4" width="56" height="56" rx="13" fill="#183532" />
+	<rect x="13" y="11" width="38" height="43" rx="2" fill="#9b7048" stroke="#e7c887" stroke-width="2" />
+	<path d="M32 12v41" stroke="#183532" stroke-width="2" />
+	<rect x="17" y="15" width="12" height="33" rx="1" fill="none" stroke="#f2e9d7" stroke-opacity=".8" stroke-width="1.5" />
+	<rect x="35" y="15" width="12" height="33" rx="1" fill="none" stroke="#f2e9d7" stroke-opacity=".8" stroke-width="1.5" />
+	<path d="M29 29h2v7h-2zm4 0h2v7h-2z" fill="#e6b95c" />
+</svg>
