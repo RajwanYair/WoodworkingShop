@@ -234,6 +234,7 @@ export function SheetCard({
 }) {
   const customMaterials = useCustomMaterialsStore((state) => state.materials);
   const mat = getMaterial(sheet.material, customMaterials);
+  const wasteCostFormatter = new Intl.NumberFormat(lang, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const sw = sheet.sheetWidth * S;
   const sl = sheet.sheetLength * S;
   /** Sprint 70 — step-by-step nesting placement animation */
@@ -265,7 +266,6 @@ export function SheetCard({
           >
             {sheet.parts.length}
           </span>
-          {/* Sprint 81 — per-sheet waste area label */}
           <span className="text-wood-400 dark:text-wood-500 ms-1.5 text-[10px] font-normal">
             · {t('optimizer.sheetWaste')}:{' '}
             {(
@@ -302,7 +302,7 @@ export function SheetCard({
             title={t('optimizer.sheetWasteCostTitle')}
           >
             {t('optimizer.sheetWasteCost', {
-              cost: (mat.pricePerSheet * (1 - sheet.yieldPercent / 100)).toFixed(2),
+              cost: wasteCostFormatter.format(mat.pricePerSheet * (1 - sheet.yieldPercent / 100)),
             })}
           </span>
         )}
