@@ -115,7 +115,7 @@ jobs:
       - run: npx playwright install chromium
       - uses: actions/download-artifact@v8
         with: { name: e2e-dist, path: dist }
-      - run: npx playwright test --grep @visual --project=chromium
+      - run: npx playwright test --grep '@visual' --project=chromium
         env:
           TMPDIR: ${{ runner.temp }}
           TEMP: ${{ runner.temp }}

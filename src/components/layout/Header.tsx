@@ -190,7 +190,7 @@ export function Header() {
           <select
             value={lang}
             onChange={(e) => changeLang(e.target.value as SupportedLang)}
-            className="text-wood-200 h-11 cursor-pointer rounded-full border-0 bg-transparent px-2 text-xs font-medium outline-none hover:text-white"
+            className="text-wood-200 h-11 w-32 min-w-0 cursor-pointer rounded-full border-0 bg-transparent px-2 text-xs font-medium outline-none hover:text-white"
             aria-label={t('footer.language')}
           >
             {SUPPORTED_LANGUAGES.map((l) => (
