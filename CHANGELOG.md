@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- ADR (Sprint 376): raised the aggregate dist budget from 2,960 KB to 2,970 KB after the T2 production build measured 2,965.1 KB, a 5.1 KB overage from emitted code-splitting chunks and assets. The JavaScript cap remains 2,850 KB; the initial route is independently gated at 700 KB raw / 175 KB Brotli.
 - Completed Sprint 313 T1/T4 assembly journeys and added dependency-aware step completion with downstream rollback; checklist downloads are parsed for ordered step content.
 - Advanced Sprint 313 T2 with editable, keyboard-submittable build-log entries persisted across reload, plus cross-browser camera permission/error/capture/retake/manual-stop and navigation-teardown journeys; physical camera capture remains unverified.
 - Completed Sprint 313 T3 browser-stub coverage: saved machine profiles now drive serial settings and G-code parameters, with safe sender pause/resume, disconnect/reconnect, and picker/write-error recovery.
@@ -39,12 +40,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   drill-speed calculator, wood-drying estimator, glue-up-time calculator, bandsaw-speed calculator, tablesaw-blade calculator,
   appliance clearance, layout suggestions, version history, and plugin registry add 18, 24, 21, 19, 18, 18, 17, 16, 18,
   16, 16, 16, 16, 16, 16, 16, 15, 15, 15, and 2 strings per locale.
-  EN-identical: AR 7.21%, DE 6.05%, ES 6.01%, FR 6.20%; the 2% target remains open. Config UI also gained one new
+  EN-identical: AR 1.20%, DE 1.49%, ES 1.44%, FR 1.63%; the 2% EN-identical target is met. Config UI also gained one new
   translation each in DE/ES/FR; command-palette category labels gained one DE and three FR values. Dust-collection,
   board-feet, assembly-dependency, cloud-sync, miter-angle, pilot-hole, material-usage, shelf-pin, project-comparison,
-  cut-list-grouping, waste-predictor, shop-inventory, CNC-stream, material-cost-tracker, stock-management, and tool-wear
-  namespaces were translated across AR/DE/ES/FR. All 225 prior review records are approved; 64 new locale records await
-  review.
+  cut-list-grouping, waste-predictor, shop-inventory, CNC-stream, material-cost-tracker, stock-management, tool-wear, and
+  Web Serial and storage-fallback namespaces were translated across AR/DE/ES/FR, and the mobileSync namespace was translated
+  into AR. The library, a11yAudit, aiAssistant, collab, darkMode, gltf, layoutOptimizer, and sync namespaces were translated
+  across AR/DE/ES/FR; analytics was translated into AR, and ERP labels into AR plus the German title. The fingerJoint
+  namespace was translated across AR/DE/ES/FR. All 225 prior review records are approved; 112 new locale records across 30
+  namespaces await review.
 
 ### Removed
 

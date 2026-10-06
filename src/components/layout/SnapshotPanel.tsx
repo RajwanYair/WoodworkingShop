@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatDate } from '../../i18n/format';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { IconChevronDown, IconChevronRight, IconX, IconCheck, IconFolder, IconDiff } from './Icons';
 import { SnapshotDiffModal } from './SnapshotDiffModal';
 
 export function SnapshotPanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { snapshots, saveSnapshot, restoreSnapshot, deleteSnapshot } = useCabinetStore();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
@@ -18,7 +19,7 @@ export function SnapshotPanel() {
 
   function fmtTimestamp(iso: string): string {
     try {
-      return new Date(iso).toLocaleString(undefined, {
+      return formatDate(iso, i18n.language, {
         month: 'short',
         day: 'numeric',
         hour: '2-digit',
@@ -67,7 +68,7 @@ export function SnapshotPanel() {
           <div className="flex gap-1">
             <input
               type="text"
-              className="border-wood-300 dark:border-wood-600 bg-wood-50 dark:bg-wood-800 text-wood-800 dark:text-wood-100 placeholder:text-wood-400 focus:ring-wood-400 grow rounded border px-2 py-1 text-xs focus:ring-1 focus:outline-none"
+              className="border-wood-300 dark:border-wood-600 bg-wood-50 dark:bg-wood-800 text-wood-800 dark:text-wood-100 placeholder:text-wood-400 focus:ring-accent grow rounded border px-2 py-1 text-xs focus:ring-1 focus:outline-none"
               placeholder={t('snapshot.namePlaceholder')}
               value={name}
               maxLength={60}
@@ -77,7 +78,7 @@ export function SnapshotPanel() {
             />
             <button
               type="button"
-              className="bg-wood-600 hover:bg-wood-700 shrink-0 rounded px-2 py-1 text-xs text-white transition-colors"
+              className="bg-accent hover:bg-accent-hover shrink-0 rounded px-2 py-1 text-xs text-white transition-colors"
               aria-label={t('snapshot.save')}
               onClick={handleSave}
             >

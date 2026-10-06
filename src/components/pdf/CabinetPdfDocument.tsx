@@ -8,6 +8,7 @@ import type {
   Lang,
 } from '../../engine/types';
 import { getMaterial } from '../../engine/materials';
+import { formatDate } from '../../i18n/format';
 import { pdfI18n } from './pdf-i18n';
 import type { PdfLang, PdfCtx } from './pdf-i18n';
 // Side-effect import: registers fonts + emoji source before any render
@@ -98,7 +99,7 @@ export function CabinetPdfDocument({
   const cMat = getMaterial(config.carcassMaterial);
   const bMat = getMaterial(config.backPanelMaterial);
   const dateLocale = isRTL ? 'he-IL' : 'en-GB';
-  const date = new Date().toLocaleDateString(dateLocale, { day: '2-digit', month: 'short', year: 'numeric' });
+  const date = formatDate(new Date(), dateLocale, { day: '2-digit', month: 'short', year: 'numeric' });
   const coverTitle = projectName?.trim() ? projectName.trim() : T.coverTitle;
   const docTitle = `${coverTitle} — ${config.width}×${config.height}×${config.depth}`;
 

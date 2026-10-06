@@ -53,6 +53,13 @@ export function useCamera(): UseCameraResult {
     };
   }, []);
 
+  useEffect(() => {
+    if (status !== 'active') return;
+    const video = videoRef.current;
+    const stream = streamRef.current;
+    if (video && stream) video.srcObject = stream;
+  }, [status]);
+
   const cap = (window as CapWindow).Capacitor;
   const isNative = cap?.isNativePlatform?.() ?? false;
   const capCamera = cap?.Plugins?.Camera;
@@ -117,10 +124,13 @@ export function useCamera(): UseCameraResult {
   const capturePhoto = useCallback(() => {
     const video = videoRef.current;
     if (!video || status !== 'active') return null;
+    if (video.videoWidth === 0 || video.videoHeight === 0) return null;
     const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth || 640;
-    canvas.height = video.videoHeight || 480;
-    canvas.getContext('2d')?.drawImage(video, 0, 0);
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const context = canvas.getContext('2d');
+    if (!context) return null;
+    context.drawImage(video, 0, 0);
     const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
     setPhotoDataUrl(dataUrl);
     stopCamera();

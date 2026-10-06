@@ -59,7 +59,7 @@ describe('CalculatorsPanel', () => {
     const finishToggle = screen.getByRole('button', { name: /finish calculator/i });
     await user.click(finishToggle);
     expect(finishToggle).toHaveAttribute('aria-expanded', 'true');
-    expect(screen.getByLabelText(/finish type/i)).toBeInTheDocument();
+    expect(await screen.findByLabelText(/finish type/i)).toBeInTheDocument();
 
     const faceFrameToggle = screen.getByRole('button', { name: /face frame calculator/i });
     await user.click(faceFrameToggle);
@@ -82,7 +82,7 @@ describe('CalculatorsPanel', () => {
     expect(toggle).toHaveAttribute('aria-expanded', 'false');
     await user.click(toggle);
 
-    const calculator = await screen.findByRole('region', { name });
+    const calculator = await screen.findByRole('region', { name }, { timeout: 10_000 });
     expect(toggle).toHaveAttribute('aria-expanded', 'true');
     expect(calculator).not.toHaveAttribute('role', 'alert');
     expect(calculator).toHaveTextContent(/\d/);

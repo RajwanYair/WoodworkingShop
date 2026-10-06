@@ -425,11 +425,9 @@ test('build log entries can be added, edited, persisted, and deleted', async ({ 
   await expect(reloadedBuildLog.getByText('No notes yet. Log steps, adjustments, or observations.')).toBeVisible();
 });
 
-test('machine profile settings drive the serial stream and its pause, reconnect, and error lifecycle', async ({
+test('machine profile settings drive the serial stream and its pause, reconnect, and error lifecycle @chromium-only', async ({
   appPage: page,
-  browserName,
 }) => {
-  test.skip(browserName !== 'chromium', 'Web Serial is only available in Chromium');
   test.setTimeout(60_000);
 
   await page.evaluate(() => {
@@ -595,6 +593,11 @@ test('camera can capture, retake, and stop a room photo stream', async ({ appPag
     if (!context) throw new Error('Canvas context unavailable in camera fixture');
     context.fillStyle = '#669944';
     context.fillRect(0, 0, source.width, source.height);
+    const paintFrame = () => {
+      context.fillRect(0, 0, source.width, source.height);
+      requestAnimationFrame(paintFrame);
+    };
+    requestAnimationFrame(paintFrame);
     const streams: MediaStream[] = [];
     Object.defineProperty(window, '__cameraStreams', { configurable: true, value: streams });
     Object.defineProperty(navigator, 'mediaDevices', {
@@ -1465,8 +1468,9 @@ test('project saving remains available near or without a storage estimate', asyn
   let dialog = page.getByRole('dialog', { name: 'Project Manager' });
   await expect(dialog.getByRole('status', { name: /Storage nearly full/i })).toBeVisible();
   await dialog.getByPlaceholder('Project name…').fill('Near limit project');
-  await expect(dialog.getByRole('button', { name: 'Save', exact: true })).toBeEnabled();
-  await dialog.getByRole('button', { name: 'Save', exact: true }).click();
+  const saveButton = dialog.getByRole('button', { name: 'Save', exact: true });
+  await expect(saveButton).toBeEnabled();
+  await saveButton.click();
   await expect(dialog.getByText('Near limit project', { exact: true })).toBeVisible();
   await dialog.getByText('Close', { exact: true }).click();
 

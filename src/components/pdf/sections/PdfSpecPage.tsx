@@ -6,6 +6,7 @@ import { PageHeader } from './PageChrome';
 import { PageFooter } from './PageChrome';
 import { SpecRow } from './SpecRow';
 import { computePartsWeight } from '../../../engine/parts';
+import { formatNumber } from '../../../i18n/format';
 
 interface PdfSpecPageProps {
   ctx: PdfCtx;
@@ -70,8 +71,16 @@ export function PdfSpecPage({
         <SpecRow {...specRowProps} label={T.specCarcass} value={`${cMatName} (${cMatThickness} mm)`} />
         <SpecRow {...specRowProps} label={T.specBackPanel} value={`${bMatName} (${bMatThickness} mm)`} />
         <SpecRow {...specRowProps} label={T.specEdgeBanding} value={config.edgeBanding} />
-        <SpecRow {...specRowProps} label={T.specEdgeBandingTotal} value={`${(edgeBandingTotal / 1000).toFixed(1)} m`} />
-        <SpecRow {...specRowProps} label={T.specPanelWeight} value={`${panelWeightKg.toFixed(1)} kg`} />
+        <SpecRow
+          {...specRowProps}
+          label={T.specEdgeBandingTotal}
+          value={`${formatNumber(edgeBandingTotal / 1000, lang, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} m`}
+        />
+        <SpecRow
+          {...specRowProps}
+          label={T.specPanelWeight}
+          value={`${formatNumber(panelWeightKg, lang, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} kg`}
+        />
         {labourHours > 0 && <SpecRow {...specRowProps} label={T.specEstimatedLabour} value={`${labourHours} h`} />}
       </View>
 
@@ -117,7 +126,12 @@ export function PdfSpecPage({
         </View>
         <View style={s.statBox}>
           <Text style={s.statEmoji}>♻️</Text>
-          <Text style={s.statValue}>{(optimization.totalWaste / 1_000_000).toFixed(2)}</Text>
+          <Text style={s.statValue}>
+            {formatNumber(optimization.totalWaste / 1_000_000, lang, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </Text>
           <Text style={[s.statLabel, { fontFamily }]}>{T.waste}</Text>
         </View>
         <View style={s.statBox}>

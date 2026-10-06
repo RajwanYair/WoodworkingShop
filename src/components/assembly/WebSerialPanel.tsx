@@ -176,7 +176,7 @@ export function WebSerialPanel() {
             type="button"
             disabled={isBusy || !hasSheets}
             onClick={handleConnect}
-            className="bg-wood-600 hover:bg-wood-700 disabled:bg-wood-300 dark:disabled:bg-wood-700 rounded px-3 py-1.5 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed"
+            className="bg-accent hover:bg-accent-hover disabled:bg-wood-300 dark:disabled:bg-wood-700 rounded px-3 py-1.5 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed"
           >
             {t('webserial.connect')}
           </button>

@@ -4,6 +4,7 @@ import { s, C } from '../pdf-tokens';
 import type { PdfCtx } from '../pdf-i18n';
 import { sheetSummary } from '../pdf-helpers';
 import { PageHeader, PageFooter } from './PageChrome';
+import { formatNumber } from '../../../i18n/format';
 
 interface PdfShoppingPageProps {
   ctx: PdfCtx;
@@ -59,7 +60,9 @@ export function PdfShoppingPage({ ctx, optimization, hardware, edgeBandingTotal 
         <View style={{ marginTop: 14 }}>
           <Text style={[s.sectionSubtitle, { fontFamily: fontFamilyBold, textAlign }]}>🎀 {T.edgeBandingSection}</Text>
           <Text style={[s.guideText, { fontFamily, textAlign }]}>
-            {T.edgeBandingRequired} {(edgeBandingTotal / 1000).toFixed(1)} {T.metres}
+            {T.edgeBandingRequired}{' '}
+            {formatNumber(edgeBandingTotal / 1000, lang, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}{' '}
+            {T.metres}
           </Text>
         </View>
       )}

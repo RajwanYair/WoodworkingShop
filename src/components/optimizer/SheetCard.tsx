@@ -7,6 +7,7 @@ import { useToastStore } from '../../store/toast-store';
 import { IconDxf, IconGcode, IconGrainVertical } from '../layout/Icons';
 import type { CutSheet, CutRect, Lang, DefectZone } from '../../engine/types';
 import { YieldBar } from './OptimizerStats';
+import { formatNumberFixed } from '../../i18n/format';
 
 /** Scale factor: mm → SVG px */
 const S = 0.12;
@@ -211,6 +212,7 @@ export function SheetCard({
   defectZones = [],
   filePrefix,
   partFilter,
+  preloadGcodePreview,
   onGcodePreview,
   rotationLockedPartIds,
   onToggleRotationLock,
@@ -227,6 +229,7 @@ export function SheetCard({
   defectZones?: DefectZone[];
   filePrefix: string;
   partFilter: string;
+  preloadGcodePreview?: () => void;
   onGcodePreview: (filename: string, sheet: CutSheet) => void;
   rotationLockedPartIds: Record<string, boolean>;
   onToggleRotationLock: (partId: string) => void;
@@ -250,9 +253,9 @@ export function SheetCard({
     const timer = setTimeout(() => setAnimStep((s) => s + 1), 350);
     return () => clearTimeout(timer);
   }, [animPlaying, animStep, partCount]);
-  /** Sprint 46: lower-cased filter term for matching part IDs and labels */
   const filterTerm = partFilter.trim().toLowerCase();
-
+  const partsArea = sheet.parts.reduce((total, part) => total + part.width * part.length, 0);
+  const wasteArea = (sheet.sheetWidth * sheet.sheetLength - partsArea) / 1_000_000;
   return (
     <div className="border-wood-200 dark:border-wood-700 rounded border p-4">
       <div className="mb-2 flex items-center justify-between gap-3">
@@ -267,12 +270,7 @@ export function SheetCard({
           </span>
           {/* Sprint 81 — per-sheet waste area label */}
           <span className="text-wood-400 dark:text-wood-500 ms-1.5 text-[10px] font-normal">
-            · {t('optimizer.sheetWaste')}:{' '}
-            {(
-              (sheet.sheetWidth * sheet.sheetLength - sheet.parts.reduce((s, p) => s + p.width * p.length, 0)) /
-              1_000_000
-            ).toFixed(3)}{' '}
-            m²
+            · {t('optimizer.sheetWaste')}: {formatNumberFixed(wasteArea, lang, 3)} m²
           </span>
           {mat.hasGrain && (
             <span
@@ -290,7 +288,7 @@ export function SheetCard({
                 className="ml-1.5 inline-flex items-center gap-0.5 rounded bg-red-100 px-1 text-[10px] font-normal text-red-700 dark:bg-red-900/30 dark:text-red-300"
                 title={`${conflictCount} part(s) had grain direction compromised to fit the sheet`}
               >
-                ⚠ {conflictCount} grain {conflictCount === 1 ? 'conflict' : 'conflicts'}
+                ⚠ {t('optimizer.grainConflicts', { count: conflictCount })}
               </span>
             ) : null;
           })()}
@@ -302,7 +300,7 @@ export function SheetCard({
             title={t('optimizer.sheetWasteCostTitle')}
           >
             {t('optimizer.sheetWasteCost', {
-              cost: (mat.pricePerSheet * (1 - sheet.yieldPercent / 100)).toFixed(2),
+              cost: formatNumberFixed(mat.pricePerSheet * (1 - sheet.yieldPercent / 100), lang, 2),
             })}
           </span>
         )}
@@ -317,6 +315,8 @@ export function SheetCard({
           <IconDxf size={11} /> DXF
         </button>
         <button
+          onPointerEnter={preloadGcodePreview}
+          onFocus={preloadGcodePreview}
           onClick={() => {
             const filename = `${filePrefix}-sheet-${sheet.sheetIndex + 1}.nc`;
             onGcodePreview(filename, sheet);
@@ -575,7 +575,7 @@ export function SheetCard({
               <button
                 type="button"
                 onClick={() => onToggleRotationLock(p.partId)}
-                className="hover:text-wood-900 dark:hover:text-wood-50 focus:ring-wood-500 ms-1 inline-flex items-center rounded text-[10px] focus:ring-1 focus:outline-none"
+                className="hover:text-wood-900 dark:hover:text-wood-50 focus:ring-accent ms-1 inline-flex items-center rounded text-[10px] focus:ring-1 focus:outline-none"
                 aria-label={isLocked ? t('optimizer.unlockRotation') : t('optimizer.lockRotation')}
                 title={isLocked ? t('optimizer.unlockRotation') : t('optimizer.lockRotation')}
                 aria-pressed={isLocked}
@@ -589,7 +589,7 @@ export function SheetCard({
 
       {/* Sprint 131 — Grain direction legend: only shown for grain-locked materials */}
       {mat.hasGrain && (
-        <p className="mt-1.5 flex items-center gap-1 text-[10px] text-amber-700 dark:text-amber-300">
+        <p className="mt-1.5 flex items-center gap-1 text-[10px] text-amber-800 dark:text-amber-300">
           <IconGrainVertical size={12} className="inline" />
           {t('optimizer.grainLegend')}
         </p>

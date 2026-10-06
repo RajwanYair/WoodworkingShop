@@ -51,6 +51,13 @@ function StatefulToolbar({ initialPartFilter = '' }: { initialPartFilter?: strin
 }
 
 describe('OptimizerToolbar', () => {
+  it('formats summary counts and waste area with the active locale', () => {
+    render(<OptimizerToolbar {...createToolbarProps()} totalSheets={1234} totalWaste={12_345_000} />);
+
+    expect(screen.getByText('1,234')).toBeInTheDocument();
+    expect(screen.getByText('12.35 m²')).toBeInTheDocument();
+  });
+
   it('clamps saw kerf and updates cutting settings from accessible controls', async () => {
     const user = userEvent.setup();
     useCabinetStore.setState({

@@ -3,12 +3,13 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../../i18n/format';
 import { calculateFinishingCoat, type FinishType } from '../../engine/finishing-coat';
 
 const FINISH_TYPES: FinishType[] = ['polyurethane', 'lacquer', 'shellac', 'waterbased', 'oil'];
 
 export function FinishingCoatPanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [surfaceAreaM2, setSurfaceAreaM2] = useState(2);
   const [coatCount, setCoatCount] = useState(3);
@@ -41,7 +42,7 @@ export function FinishingCoatPanel() {
             step={0.1}
             value={surfaceAreaM2}
             onChange={(e) => setSurfaceAreaM2(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -54,7 +55,7 @@ export function FinishingCoatPanel() {
             step={1}
             value={coatCount}
             onChange={(e) => setCoatCount(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
       </div>
@@ -70,7 +71,7 @@ export function FinishingCoatPanel() {
               onClick={() => setFinishType(ft)}
               className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
                 finishType === ft
-                  ? 'bg-wood-600 text-white'
+                  ? 'bg-accent text-white'
                   : 'bg-wood-100 text-wood-700 dark:bg-wood-700 dark:text-wood-200 hover:bg-wood-200 dark:hover:bg-wood-600'
               }`}
             >
@@ -94,22 +95,26 @@ export function FinishingCoatPanel() {
         >
           <dt className="text-wood-500 dark:text-wood-400">{t('finishingCoat.volumeNeeded')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.volumeLitres.toFixed(2)} L
+            {formatNumber(result.data.volumeLitres, i18n.language, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}{' '}
+            L
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('finishingCoat.coveragePerLitre')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.coveragePerLitreM2} m²/L
+            {formatNumber(result.data.coveragePerLitreM2, i18n.language)} m²/L
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('finishingCoat.dryTimeBetweenCoats')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.dryTimeBetweenCoatsMin} min
+            {formatNumber(result.data.dryTimeBetweenCoatsMin, i18n.language)} min
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('finishingCoat.totalDryTime')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.totalDryTimeHours} h
+            {formatNumber(result.data.totalDryTimeHours, i18n.language)} h
           </dd>
         </dl>
       )}

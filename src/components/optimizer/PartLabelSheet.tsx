@@ -89,7 +89,7 @@ export function PartLabelSheet() {
                 <button
                   type="button"
                   onClick={handlePrint}
-                  className="bg-wood-600 hover:bg-wood-700 rounded-md px-3 py-1.5 text-xs font-medium text-white"
+                  className="bg-accent hover:bg-accent-hover rounded-md px-3 py-1.5 text-xs font-medium text-white"
                 >
                   {t('partLabels.print')}
                 </button>

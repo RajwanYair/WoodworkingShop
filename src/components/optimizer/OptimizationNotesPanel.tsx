@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../../i18n/format';
 import { resolveEngineLang } from './resolve-engine-lang';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
@@ -141,22 +142,28 @@ export function OptimizationNotesPanel() {
                       <div className="mt-0.5 flex flex-wrap gap-3">
                         {s.savings.sheetsRemoved > 0 && (
                           <span className="text-[11px] font-semibold text-green-800 dark:text-green-300">
-                            −{s.savings.sheetsRemoved} {t('optimizer.sheetsRemoved')}
+                            −{formatNumber(s.savings.sheetsRemoved, i18n.language)} {t('optimizer.sheetsRemoved')}
                           </span>
                         )}
                         {s.savings.yieldImprovement > 0 && (
                           <span className="text-[11px] font-semibold text-green-800 dark:text-green-300">
-                            +{s.savings.yieldImprovement}% {t('optimizer.yieldGain')}
+                            +{formatNumber(s.savings.yieldImprovement, i18n.language)}% {t('optimizer.yieldGain')}
                           </span>
                         )}
                         {s.savings.wasteReduced > 0 && (
                           <span className="text-wood-600 dark:text-wood-300 text-[11px]">
-                            −{(s.savings.wasteReduced / 1_000_000).toFixed(3)} m² {t('optimizer.wasteReduced')}
+                            −
+                            {formatNumber(s.savings.wasteReduced / 1_000_000, i18n.language, {
+                              minimumFractionDigits: 3,
+                              maximumFractionDigits: 3,
+                            })}{' '}
+                            m² {t('optimizer.wasteReduced')}
                           </span>
                         )}
                         <span className="text-wood-700 dark:text-wood-300 text-[11px]">
-                          → {s.optimizedResult.totalSheets} {t('optimizer.sheets').toLowerCase()} /{' '}
-                          {s.optimizedResult.overallYield}%
+                          → {formatNumber(s.optimizedResult.totalSheets, i18n.language)}{' '}
+                          {t('optimizer.sheets').toLowerCase()} /{' '}
+                          {formatNumber(s.optimizedResult.overallYield, i18n.language)}%
                         </span>
                       </div>
                     </div>

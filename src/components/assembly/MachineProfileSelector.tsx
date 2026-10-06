@@ -5,6 +5,7 @@
  */
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatNumber, formatUnit } from '../../i18n/format';
 import {
   MACHINE_PROFILES,
   MACHINE_PROFILE_IDS,
@@ -38,7 +39,7 @@ interface Props {
 }
 
 export function MachineProfileSelector({ onSelect }: Props) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [selected, setSelected] = useState<MachineProfile>(loadSavedProfile);
 
   useEffect(() => {
@@ -60,7 +61,7 @@ export function MachineProfileSelector({ onSelect }: Props) {
         <select
           value={selected.id}
           onChange={(e) => handleChange(e.target.value)}
-          className="border-wood-300 dark:border-wood-600 dark:bg-wood-700 dark:text-wood-200 text-wood-800 focus:ring-wood-500 w-full rounded border bg-white px-2 py-1 text-sm focus:ring-2 focus:outline-none"
+          className="border-wood-300 dark:border-wood-600 dark:bg-wood-700 dark:text-wood-200 text-wood-800 focus:ring-accent w-full rounded border bg-white px-2 py-1 text-sm focus:ring-2 focus:outline-none"
         >
           {MACHINE_PROFILE_IDS.map((id) => (
             <option key={id} value={id}>
@@ -88,14 +89,18 @@ export function MachineProfileSelector({ onSelect }: Props) {
 
           <dt className="text-wood-700 dark:text-wood-200">{t('machine.spindleRpm')}</dt>
           <dd className="text-wood-700 dark:text-wood-200 font-medium">
-            {selected.spindleRpm === 0 ? '—' : selected.spindleRpm.toLocaleString()}
+            {selected.spindleRpm === 0 ? '—' : formatNumber(selected.spindleRpm, i18n.language)}
           </dd>
 
           <dt className="text-wood-700 dark:text-wood-200">{t('machine.toolDiameter')}</dt>
-          <dd className="text-wood-700 dark:text-wood-200 font-medium">{selected.toolDiameter} mm</dd>
+          <dd className="text-wood-700 dark:text-wood-200 font-medium">
+            {formatUnit(selected.toolDiameter, 'millimeter', i18n.language)}
+          </dd>
 
           <dt className="text-wood-700 dark:text-wood-200">{t('machine.passDepth')}</dt>
-          <dd className="text-wood-700 dark:text-wood-200 font-medium">{selected.passDepth} mm</dd>
+          <dd className="text-wood-700 dark:text-wood-200 font-medium">
+            {formatUnit(selected.passDepth, 'millimeter', i18n.language)}
+          </dd>
 
           <dt className="text-wood-700 dark:text-wood-200">{t('machine.workHolding')}</dt>
           <dd className="text-wood-700 dark:text-wood-200 font-medium">{selected.workHolding}</dd>

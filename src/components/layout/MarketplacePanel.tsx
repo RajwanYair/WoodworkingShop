@@ -6,6 +6,7 @@
  */
 import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../../i18n/format';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
 import {
   installPlugin,
@@ -122,15 +123,16 @@ const CATEGORY_LABELS: Record<FilterCategory, string> = {
   theme: 'marketplace.catTheme',
 };
 
-function StarRating({ rating }: { rating: number }) {
+function StarRating({ rating, locale }: { rating: number; locale: string }) {
   const full = Math.floor(rating);
   const half = rating - full >= 0.5;
+  const formattedRating = formatNumber(rating, locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
   return (
-    <span aria-label={`${rating.toFixed(1)} stars`} className="text-xs text-amber-400">
+    <span aria-label={`${formattedRating} stars`} className="text-xs text-amber-400">
       {'★'.repeat(full)}
       {half ? '½' : ''}
       {'☆'.repeat(5 - full - (half ? 1 : 0))}
-      <span className="text-wood-400 ms-1">{rating.toFixed(1)}</span>
+      <span className="text-wood-400 ms-1">{formattedRating}</span>
     </span>
   );
 }
@@ -142,7 +144,7 @@ interface MarketplacePanelProps {
 }
 
 export function MarketplacePanel({ onClose }: MarketplacePanelProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dialogRef = useRef<HTMLDivElement>(null);
   useFocusTrap(dialogRef, true, onClose);
 
@@ -219,7 +221,7 @@ export function MarketplacePanel({ onClose }: MarketplacePanelProps) {
                 aria-pressed={category === cat}
                 className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
                   category === cat
-                    ? 'bg-wood-600 text-white'
+                    ? 'bg-accent text-white'
                     : 'bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700'
                 }`}
               >
@@ -252,7 +254,7 @@ export function MarketplacePanel({ onClose }: MarketplacePanelProps) {
                       </div>
                       <p className="text-wood-500 dark:text-wood-400 mt-1 text-xs">{plugin.description}</p>
                       <div className="mt-1.5 flex flex-wrap items-center gap-3">
-                        {plugin.rating != null && <StarRating rating={plugin.rating} />}
+                        {plugin.rating != null && <StarRating rating={plugin.rating} locale={i18n.language} />}
                         {plugin.downloads != null && (
                           <span className="text-wood-400 text-xs">
                             {t('marketplace.downloads', { count: plugin.downloads })}
@@ -267,7 +269,7 @@ export function MarketplacePanel({ onClose }: MarketplacePanelProps) {
                       className={`shrink-0 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
                         isOn
                           ? 'bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900/40 dark:text-red-300'
-                          : 'bg-wood-600 hover:bg-wood-700 text-white'
+                          : 'bg-accent hover:bg-accent-hover text-white'
                       }`}
                     >
                       {isOn ? t('marketplace.uninstall') : t('marketplace.install')}

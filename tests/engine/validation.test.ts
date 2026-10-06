@@ -89,10 +89,13 @@ describe('validateConfig', () => {
   });
 
   it('raises DOOR_ASPECT_RATIO warning for tall narrow door', () => {
-    expect(
-      getIssue(validateConfig(cfg({ width: 300, height: 2000, doorCount: 1, doorStyle: 'flat' })), 'DOOR_ASPECT_RATIO')
-        ?.severity,
-    ).toBe('warning');
+    const issue = getIssue(
+      validateConfig(cfg({ width: 300, height: 2000, doorCount: 1, doorStyle: 'flat' }), undefined, 'de-DE'),
+      'DOOR_ASPECT_RATIO',
+    );
+
+    expect(issue?.severity).toBe('warning');
+    expect(issue?.message.en).toMatch(/Door aspect ratio \d+,\d:1/);
   });
 
   it('raises KICK_TOO_TALL warning when kick > 50% of height', () => {
@@ -444,6 +447,16 @@ describe('validateConfig — SHELF_LOAD_CAPACITY_LOW (Sprint 30)', () => {
     expect(issue.field).toBe('carcassMaterial');
   });
 
+  it('formats fixed-precision validation values with the requested locale', () => {
+    const issue = getIssue(
+      validateConfig(cfg({ shelfCount: 2, carcassMaterial: 'plywood-4' }), undefined, 'de-DE'),
+      'DADO_DEPTH_TOO_SHALLOW',
+    );
+
+    expect(issue?.message.en).toContain('1,3 mm');
+    expect(issue?.message.he).toContain('1,3 מ"מ');
+  });
+
   it.each([
     ['standard 18mm panel', { shelfCount: 3, carcassMaterial: 'plywood-18' as const }],
     ['no shelves', { shelfCount: 0 }],
@@ -468,10 +481,13 @@ describe('validateConfig — SHELF_LOAD_CAPACITY_LOW (Sprint 30)', () => {
   });
 
   it('raises BACK_REBATE_TOO_SHALLOW for a very thin panel with back', () => {
-    expect(
-      getIssue(validateConfig(cfg({ carcassMaterial: 'plywood-4', hasBack: true })), 'BACK_REBATE_TOO_SHALLOW')
-        ?.severity,
-    ).toBe('info');
+    const issue = getIssue(
+      validateConfig(cfg({ carcassMaterial: 'plywood-4', hasBack: true }), undefined, 'de-DE'),
+      'BACK_REBATE_TOO_SHALLOW',
+    );
+
+    expect(issue?.severity).toBe('info');
+    expect(issue?.message.en).toContain('only 2,0 mm');
   });
 
   it.each([

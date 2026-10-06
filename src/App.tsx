@@ -13,13 +13,12 @@ import { TouchGestureTutorial } from './components/layout/TouchGestureTutorial';
 import { MobileTabBar } from './components/layout/MobileTabBar';
 import { ActiveCabinetSwitcher } from './components/layout/ActiveCabinetSwitcher';
 import { ShortcutsModal } from './components/layout/ShortcutsModal';
-import { CommandPalette } from './components/layout/CommandPalette';
 import type { CalculatorId } from './components/configurator/calculator-catalog';
-import { SwUpdateBanner } from './components/layout/SwUpdateBanner';
 import { IconPrint } from './components/layout/Icons';
 import { useCabinetStore } from './store/cabinet-store';
 import { useToastStore } from './store/toast-store';
 import { useSystemDarkMode } from './hooks/useSystemDarkMode';
+import { useSwUpdate } from './hooks/useSwUpdate';
 import { usePwaFileHandlers } from './hooks/usePwaFileHandlers';
 import { useHaptics } from './hooks/useHaptics';
 import { useTouchGestures } from './hooks/useTouchGestures';
@@ -28,6 +27,7 @@ import { generateHardware } from './engine/hardware';
 import { getCustomMaterials } from './store/custom-materials-store';
 import { downloadBomCsv } from './utils/bom-export';
 import { configToUrl, readTabFromUrl, pushTabToUrl } from './utils/url-state';
+import { formatDate } from './i18n/format';
 import type { Lang } from './engine/types';
 import {
   APP_TABS,
@@ -74,6 +74,12 @@ const HardwareTable = lazy(() =>
 const ProjectSummaryPanel = lazy(() =>
   import('./components/optimizer/ProjectSummaryPanel').then((module) => ({ default: module.ProjectSummaryPanel })),
 );
+const CommandPalette = lazy(() =>
+  import('./components/layout/CommandPalette').then((module) => ({ default: module.CommandPalette })),
+);
+const SwUpdateBanner = lazy(() =>
+  import('./components/layout/SwUpdateBanner').then((module) => ({ default: module.SwUpdateBanner })),
+);
 
 function App() {
   const { activeTab, darkMode, projectName } = useCabinetStore();
@@ -81,6 +87,7 @@ function App() {
   const focusMode = useCabinetStore((state) => state.focusMode);
   const { t, i18n } = useTranslation();
   const haptics = useHaptics();
+  const { updateAvailable: swUpdateAvailable, reload: reloadSwUpdate } = useSwUpdate();
   const [showShortcuts, setShowShortcuts] = useState(false);
   const [showCommandPalette, setShowCommandPalette] = useState(false);
   const [calculatorRequest, setCalculatorRequest] = useState<{ id: CalculatorId; sequence: number } | null>(null);
@@ -302,7 +309,7 @@ function App() {
       <div className="app-bg text-wood-800 dark:text-wood-100 min-h-screen">
         <a
           href="#main-content"
-          className="bg-wood-600 sr-only rounded px-3 py-1 text-sm text-white focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50"
+          className="bg-accent sr-only rounded-full px-3 py-1 text-sm text-white focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50"
         >
           {t('a11y.skipToContent')}
         </a>
@@ -324,7 +331,7 @@ function App() {
               <button
                 data-print="hide"
                 onClick={() => window.print()}
-                className="bg-wood-600 hover:bg-wood-700 flex h-12 w-12 items-center justify-center rounded-full text-white shadow-lg transition-colors print:hidden"
+                className="bg-wood-50/80 text-wood-700 hover:bg-wood-50 dark:bg-wood-800/80 dark:text-wood-100 dark:hover:bg-wood-800 flex h-11 w-11 items-center justify-center rounded-full shadow-[0_2px_10px_rgb(0_0_0/0.08)] backdrop-blur-xl print:hidden"
                 title="Print current view"
                 aria-label="Print current view"
               >
@@ -334,7 +341,7 @@ function App() {
             {/* Sprint 170 — print-only header: shows project name + date on paper */}
             <div className="print-only-header">
               {projectName ? `${projectName} — ` : ''}Cabinet Planner
-              <span className="float-end text-[9pt] font-normal">{new Date().toLocaleDateString()}</span>
+              <span className="float-end text-[9pt] font-normal">{formatDate(new Date(), i18n.language)}</span>
             </div>
             {['preview', 'optimizer', 'assembly', 'pdf', 'calculators'].includes(activeTab) && (
               <ActiveCabinetSwitcher />
@@ -348,19 +355,21 @@ function App() {
                 <img
                   src={workspaceBanner}
                   alt={t('tabs.workspace')}
-                  className="border-wood-200 dark:border-wood-700 w-full rounded-xl border shadow-xl"
+                  className="w-full rounded-3xl shadow-[0_20px_60px_rgb(0_0_0/0.12)]"
                   width={1200}
                   height={260}
                   loading="eager"
                   fetchPriority="high"
                 />
-                <div className="space-y-2">
-                  <h2 className="text-wood-800 dark:text-wood-100 text-2xl font-bold">{t('app.title')}</h2>
-                  <p className="text-wood-600 dark:text-wood-300 text-sm">{t('app.subtitle')}</p>
+                <div className="space-y-3">
+                  <h2 className="text-wood-900 dark:text-wood-50 text-4xl font-semibold tracking-tight sm:text-5xl">
+                    {t('app.title')}
+                  </h2>
+                  <p className="text-wood-600 dark:text-wood-300 mx-auto max-w-xl text-lg">{t('app.subtitle')}</p>
                 </div>
                 <button
                   onClick={() => useCabinetStore.getState().setActiveTab('configurator')}
-                  className="bg-wood-600 hover:bg-wood-700 rounded-md px-5 py-2 text-sm font-medium text-white transition-colors"
+                  className="bg-accent rounded-full px-6 py-2.5 text-base font-medium text-white hover:brightness-110"
                 >
                   {t('tabs.configurator')}
                 </button>
@@ -432,9 +441,17 @@ function App() {
         {!focusMode && <MobileTabBar />}
         <OnboardingManager />
         <TouchGestureTutorial />
-        <SwUpdateBanner />
+        {swUpdateAvailable && sessionStorage.getItem('swUpdate:dismissed') !== 'true' && (
+          <Suspense fallback={null}>
+            <SwUpdateBanner reload={reloadSwUpdate} />
+          </Suspense>
+        )}
         {showShortcuts && <ShortcutsModal onClose={() => setShowShortcuts(false)} />}
-        <CommandPalette open={showCommandPalette} onClose={closeCommandPalette} onOpenCalculator={openCalculator} />
+        {showCommandPalette && (
+          <Suspense fallback={null}>
+            <CommandPalette open={showCommandPalette} onClose={closeCommandPalette} onOpenCalculator={openCalculator} />
+          </Suspense>
+        )}
       </div>
     </div>
   );

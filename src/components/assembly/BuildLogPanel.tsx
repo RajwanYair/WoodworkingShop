@@ -8,9 +8,10 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { formatDate } from '../../i18n/format';
 
 export function BuildLogPanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const buildLog = useCabinetStore((s) => s.buildLog);
   const addBuildLogEntry = useCabinetStore((s) => s.addBuildLogEntry);
   const updateBuildLogEntry = useCabinetStore((s) => s.updateBuildLogEntry);
@@ -85,7 +86,7 @@ export function BuildLogPanel() {
               onKeyDown={handleKeyDown}
               placeholder={t('buildLog.addPlaceholder')}
               rows={2}
-              className="border-wood-200 dark:border-wood-700 bg-wood-50 dark:bg-wood-800/60 text-wood-700 dark:text-wood-200 placeholder:text-wood-400 dark:placeholder:text-wood-500 focus:ring-wood-400 w-full resize-none rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:outline-none"
+              className="border-wood-200 dark:border-wood-700 bg-wood-50 dark:bg-wood-800/60 text-wood-700 dark:text-wood-200 placeholder:text-wood-400 dark:placeholder:text-wood-500 focus:ring-accent w-full resize-none rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:outline-none"
             />
             <div className="flex items-center justify-between">
               <span className="text-wood-400 dark:text-wood-500 text-xs">{t('buildLog.hint')}</span>
@@ -93,7 +94,7 @@ export function BuildLogPanel() {
                 type="button"
                 onClick={handleAdd}
                 disabled={!draft.trim()}
-                className="bg-wood-600 hover:bg-wood-700 disabled:bg-wood-300 dark:disabled:bg-wood-700 rounded px-3 py-1 text-xs font-medium text-white transition-colors disabled:cursor-not-allowed"
+                className="bg-accent hover:bg-accent-hover disabled:bg-wood-300 dark:disabled:bg-wood-700 rounded px-3 py-1 text-xs font-medium text-white transition-colors disabled:cursor-not-allowed"
               >
                 {editingEntryId ? t('buildLog.save') : t('buildLog.add')}
               </button>
@@ -130,7 +131,7 @@ export function BuildLogPanel() {
                         dateTime={entry.createdAt}
                         className="text-wood-400 dark:text-wood-500 mt-0.5 block text-xs"
                       >
-                        {new Date(entry.createdAt).toLocaleString()}
+                        {formatDate(entry.createdAt, i18n.language, { dateStyle: 'short', timeStyle: 'short' })}
                       </time>
                     </div>
                     <button

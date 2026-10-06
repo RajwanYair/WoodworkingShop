@@ -9,11 +9,11 @@ describe('RafterLengthPanel', () => {
     render(<RafterLengthPanel />);
 
     const panel = screen.getByRole('region', { name: /rafter/i });
-    expect(panel).toHaveTextContent('3000 mm');
+    expect(panel).toHaveTextContent('3,000 mm');
 
     await user.click(screen.getByRole('checkbox', { name: /shed roof/i }));
 
-    expect(panel).toHaveTextContent('6000 mm');
-    expect(panel).toHaveTextContent('7211.3 mm');
+    expect(panel).toHaveTextContent('6,000 mm');
+    expect(panel).toHaveTextContent('7,211.3 mm');
   });
 });

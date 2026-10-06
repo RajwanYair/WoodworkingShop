@@ -261,7 +261,7 @@ export const Preview3DPanel = memo(function Preview3DPanel() {
           step={EXPLODE_STEP}
           value={explodeFactor}
           onChange={handleExplodeChange}
-          className="accent-wood-600 w-full"
+          className="accent-accent w-full"
           aria-valuenow={explodeFactor}
           aria-valuemin={EXPLODE_MIN}
           aria-valuemax={EXPLODE_MAX}
@@ -275,7 +275,7 @@ export const Preview3DPanel = memo(function Preview3DPanel() {
             type="checkbox"
             checked={showWireframe}
             onChange={(e) => setShowWireframe(e.target.checked)}
-            className="accent-wood-600"
+            className="accent-accent"
           />
           {t('preview3d.wireframe')}
         </label>
@@ -284,7 +284,7 @@ export const Preview3DPanel = memo(function Preview3DPanel() {
             type="checkbox"
             checked={showEdgeBanding}
             onChange={(e) => setShowEdgeBanding(e.target.checked)}
-            className="accent-wood-600"
+            className="accent-accent"
           />
           {t('preview3d.edgeBanding')}
         </label>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { CutSheet, Lang } from '../../engine/types';
 import { getMaterial } from '../../engine/materials';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
+import { formatNumber } from '../../i18n/format';
 
 /** Sprint 160: Material usage summary — area, sheets, cost per material. */
 export function MaterialSummaryPanel({
@@ -103,8 +104,14 @@ export function MaterialSummaryPanel({
             </thead>
             <tbody>
               {rows.map((row, i) => {
-                const totalArea = row.totalArea.toFixed(2);
-                const totalCost = row.pricePerSheet > 0 ? (row.pricePerSheet * row.qty).toFixed(0) : null;
+                const totalArea = formatNumber(row.totalArea, lang, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                });
+                const totalCost =
+                  row.pricePerSheet > 0
+                    ? formatNumber(row.pricePerSheet * row.qty, lang, { maximumFractionDigits: 0 })
+                    : null;
                 const hasOverride = !!sheetSizeOverrides[row.materialKey];
                 const isEditing = editingKey === row.materialKey;
                 return (
@@ -128,7 +135,7 @@ export function MaterialSummaryPanel({
                             step={10}
                             value={editW}
                             onChange={(e) => setEditW(e.target.value)}
-                            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-16 rounded border bg-white px-1 py-0.5 text-center text-xs focus:ring-1 focus:outline-none"
+                            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent w-16 rounded border bg-white px-1 py-0.5 text-center text-xs focus:ring-1 focus:outline-none"
                             aria-label="Sheet width mm"
                           />
                           <span className="text-wood-400">×</span>
@@ -139,7 +146,7 @@ export function MaterialSummaryPanel({
                             step={10}
                             value={editL}
                             onChange={(e) => setEditL(e.target.value)}
-                            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-16 rounded border bg-white px-1 py-0.5 text-center text-xs focus:ring-1 focus:outline-none"
+                            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent w-16 rounded border bg-white px-1 py-0.5 text-center text-xs focus:ring-1 focus:outline-none"
                             aria-label="Sheet length mm"
                           />
                           <button

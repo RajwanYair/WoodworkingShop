@@ -50,6 +50,7 @@ export function checkDimensionRules(
   config: CabinetConfig,
   t: number,
   extraMaterials?: Parameters<typeof getMaterial>[1],
+  locale = 'en',
 ): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
 
@@ -130,8 +131,8 @@ export function checkDimensionRules(
       code: 'DADO_DEPTH_TOO_SHALLOW',
       severity: 'warning',
       message: {
-        en: `Panel thickness (${t} mm) is too thin for adequate shelf dado joints. A 1/3-depth dado would be only ${dadoDepth.toFixed(1)} mm — not enough to resist pullout. Use ≥ 15 mm panels for fixed shelves.`,
-        he: `עובי הלוח (${t} מ"מ) דק מדי לחריצי מדף יציבים. חריץ עומק 1/3 יהיה רק ${dadoDepth.toFixed(1)} מ"מ — לא מספיק לחוזק. השתמש בלוחות ≥ 15 מ"מ למדפים קבועים.`,
+        en: `Panel thickness (${t} mm) is too thin for adequate shelf dado joints. A 1/3-depth dado would be only ${formatOneDecimal(dadoDepth, locale)} mm — not enough to resist pullout. Use ≥ 15 mm panels for fixed shelves.`,
+        he: `עובי הלוח (${t} מ"מ) דק מדי לחריצי מדף יציבים. חריץ עומק 1/3 יהיה רק ${formatOneDecimal(dadoDepth, locale)} מ"מ — לא מספיק לחוזק. השתמש בלוחות ≥ 15 מ"מ למדפים קבועים.`,
       },
       field: 'carcassMaterial',
       fix: { patch: { carcassMaterial: 'plywood-18' }, labelKey: 'validation.fixUsePlywood18' },
@@ -160,8 +161,8 @@ export function checkDimensionRules(
       code: 'BACK_REBATE_TOO_SHALLOW',
       severity: 'info',
       message: {
-        en: `Panel thickness (${t} mm) is thin enough that a standard half-depth back rebate would be only ${(t / 2).toFixed(1)} mm — below the recommended ${MIN_BACK_REBATE_DEPTH_MM} mm minimum. Consider increasing panel thickness or using a face-frame attachment instead.`,
-        he: `עובי הלוח (${t} מ"מ) גורם לחריץ גב בעומק חצי להיות רק ${(t / 2).toFixed(1)} מ"מ — מתחת למינימום המומלץ ${MIN_BACK_REBATE_DEPTH_MM} מ"מ. שקול הגדלת עובי או שיטת חיבור אחרת לגב.`,
+        en: `Panel thickness (${t} mm) is thin enough that a standard half-depth back rebate would be only ${formatOneDecimal(t / 2, locale)} mm — below the recommended ${MIN_BACK_REBATE_DEPTH_MM} mm minimum. Consider increasing panel thickness or using a face-frame attachment instead.`,
+        he: `עובי הלוח (${t} מ"מ) גורם לחריץ גב בעומק חצי להיות רק ${formatOneDecimal(t / 2, locale)} מ"מ — מתחת למינימום המומלץ ${MIN_BACK_REBATE_DEPTH_MM} מ"מ. שקול הגדלת עובי או שיטת חיבור אחרת לגב.`,
       },
       field: 'carcassMaterial',
       fix: { patch: { carcassMaterial: 'plywood-18' }, labelKey: 'validation.fixUsePlywood18' },
@@ -221,4 +222,8 @@ export function checkDimensionRules(
   }
 
   return issues;
+}
+
+function formatOneDecimal(value: number, locale: string): string {
+  return new Intl.NumberFormat(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(value);
 }

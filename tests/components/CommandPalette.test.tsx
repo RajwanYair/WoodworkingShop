@@ -17,7 +17,7 @@ describe('CommandPalette', () => {
     render(<App />);
 
     await user.keyboard('{Control>}k{/Control}');
-    const search = screen.getByRole('combobox', { name: 'Search commands and actions...' });
+    const search = await screen.findByRole('combobox', { name: 'Search commands and actions...' }, { timeout: 5000 });
     await user.type(search, 'calculator.shelf-deflection');
     await user.keyboard('{Enter}');
 
@@ -32,9 +32,10 @@ describe('CommandPalette', () => {
   it('opens with Ctrl+K, filters commands, runs the selected command, and closes', async () => {
     const user = userEvent.setup();
     render(<App />);
+    await user.click(screen.getByRole('button', { name: 'Skip' }));
 
     await user.keyboard('{Control>}k{/Control}');
-    const search = screen.getByRole('combobox', { name: 'Search commands and actions...' });
+    const search = await screen.findByRole('combobox', { name: 'Search commands and actions...' }, { timeout: 5000 });
     expect(search).toHaveFocus();
     await user.type(search, 'calculators');
     await user.keyboard('{Enter}');
@@ -51,7 +52,9 @@ describe('CommandPalette', () => {
     const trigger = triggers[triggers.length - 1];
 
     await user.click(trigger);
-    expect(screen.getByRole('combobox', { name: 'Search commands and actions...' })).toHaveFocus();
+    expect(
+      await screen.findByRole('combobox', { name: 'Search commands and actions...' }, { timeout: 5000 }),
+    ).toHaveFocus();
     await user.keyboard('{Escape}');
 
     expect(screen.queryByRole('dialog', { name: 'Command Palette' })).not.toBeInTheDocument();

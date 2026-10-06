@@ -1,61 +1,70 @@
 import { useEffect, useRef, useState } from 'react';
-import { registerSW } from 'virtual:pwa-register';
 
 /**
- * Sprint 3 / Phase 11 — Uses the Workbox-generated SW via vite-plugin-pwa.
+ * Sprint 3 / Phase 11 — Registers the Workbox-generated service worker with
+ * the browser API, keeping update prompts under explicit user control.
  *
- * Detects when a new Service Worker is ready and exposes a `reload()` helper.
- * The `registerSW` call from `virtual:pwa-register` handles registration and
- * fires the `onNeedRefresh` callback when an update is waiting.
+ * Detects when a new service worker is waiting and exposes a `reload()` helper.
  *
- * `onNeedReload` is the SOLE reload trigger — it fires when the new SW takes
- * control and is guarded by `userTriggeredRef` to prevent cross-tab or
- * background SW activations from reloading this tab without user consent.
- *
- * `updateSW` is intentionally called with `reloadPage = false` so that
- * `virtual:pwa-register`'s internal `window.location.reload()` path is
- * suppressed. All reloads go through the `onNeedReload` guard below.
+ * The worker receives SKIP_WAITING only after the user clicks Reload. A
+ * controller change reloads this tab only when that same user action occurred.
  */
 export function useSwUpdate(): { updateAvailable: boolean; reload: () => void } {
-  const [updateAvailable, setUpdateAvailable] = useState(false);
-  // updateSW is the function returned by registerSW — calling it sends
-  // SKIP_WAITING to the waiting worker. We pass reloadPage=false so the
-  // virtual module does NOT call window.location.reload() internally.
-  // The reload is handled exclusively by onNeedReload + userTriggeredRef.
-  const [updateSW, setUpdateSW] = useState<((reloadPage?: boolean) => Promise<void>) | null>(null);
-  // Set to true only when the user explicitly clicks Reload in this tab.
-  // Prevents cross-tab or background SW activations from reloading this tab.
+  const [waitingWorker, setWaitingWorker] = useState<ServiceWorker | null>(null);
   const userTriggeredRef = useRef(false);
 
   useEffect(() => {
-    const update = registerSW({
-      onNeedReload() {
-        // Fires when the new SW takes control (controlling event, isUpdate=true).
-        // Guard: only reload if this tab's user explicitly requested the update.
-        if (userTriggeredRef.current) {
-          window.location.reload();
-        }
-      },
-      onNeedRefresh() {
-        setUpdateAvailable(true);
-        setUpdateSW(() => update);
-      },
-      onOfflineReady() {
-        // App is ready for offline use — no user action needed.
-      },
-    });
+    if (!('serviceWorker' in navigator)) return;
+
+    const serviceWorkerContainer = navigator.serviceWorker;
+    let mounted = true;
+    let registration: ServiceWorkerRegistration | undefined;
+    let installingWorker: ServiceWorker | null = null;
+
+    const handleControllerChange = () => {
+      if (userTriggeredRef.current) window.location.reload();
+    };
+
+    const handleInstallingStateChange = () => {
+      if (installingWorker?.state !== 'installed' || !registration?.active) return;
+      setWaitingWorker(installingWorker);
+      installingWorker.removeEventListener('statechange', handleInstallingStateChange);
+      installingWorker = null;
+    };
+
+    const handleUpdateFound = () => {
+      installingWorker = registration?.installing ?? null;
+      installingWorker?.addEventListener('statechange', handleInstallingStateChange);
+      handleInstallingStateChange();
+    };
+
+    const handleRegistered = (serviceWorkerRegistration: ServiceWorkerRegistration) => {
+      if (!mounted) return;
+      registration = serviceWorkerRegistration;
+      if (registration.waiting && registration.active) setWaitingWorker(registration.waiting);
+      registration.addEventListener('updatefound', handleUpdateFound);
+      handleUpdateFound();
+    };
+
+    serviceWorkerContainer.addEventListener('controllerchange', handleControllerChange);
+    void serviceWorkerContainer
+      .register(`${import.meta.env.BASE_URL}sw.js`, { scope: import.meta.env.BASE_URL })
+      .then(handleRegistered)
+      .catch(() => undefined);
+
     return () => {
-      // registerSW doesn't expose a cleanup, but effect cleanup is required.
+      mounted = false;
+      serviceWorkerContainer.removeEventListener('controllerchange', handleControllerChange);
+      registration?.removeEventListener('updatefound', handleUpdateFound);
+      installingWorker?.removeEventListener('statechange', handleInstallingStateChange);
     };
   }, []);
 
   const reload = () => {
+    if (!waitingWorker) return;
     userTriggeredRef.current = true;
-    // Pass false so virtual:pwa-register does NOT call window.location.reload()
-    // on its own. The reload fires exclusively via onNeedReload above once the
-    // new SW fires the `controlling` event.
-    void updateSW?.(false);
+    waitingWorker.postMessage({ type: 'SKIP_WAITING' });
   };
 
-  return { updateAvailable, reload };
+  return { updateAvailable: waitingWorker !== null, reload };
 }

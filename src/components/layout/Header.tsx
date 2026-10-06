@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { HelpButton } from './OnboardingOverlay';
 import { TemplatePicker } from '../configurator/TemplatePicker';
 import { ProjectManagerModal } from './ProjectManagerModal';
-import { MarketplacePanel } from './MarketplacePanel';
 import { SUPPORTED_LANGUAGES, RTL_LANGS, loadLocale, type SupportedLang } from '../../i18n';
 import { APP_TABS, dispatchCommandAction, formatShortcut, getCommand, type CommandId } from './command-registry';
 import {
@@ -29,6 +28,46 @@ const TAB_ICONS = {
   pdf: '📄',
   calculators: '🧮',
 } as const;
+
+const MarketplacePanel = lazy(() =>
+  import('./MarketplacePanel').then(({ MarketplacePanel }) => ({ default: MarketplacePanel })),
+);
+
+function preloadModule(loader: () => Promise<unknown>) {
+  void loader().catch(() => undefined);
+}
+
+function preloadMarketplacePanel() {
+  preloadModule(() => import('./MarketplacePanel'));
+}
+
+function preloadTab(tab: (typeof APP_TABS)[number]) {
+  switch (tab) {
+    case 'configurator':
+      preloadModule(() => import('../configurator/ConfiguratorPanel'));
+      preloadModule(() => import('./RoomLayoutView'));
+      break;
+    case 'preview':
+      preloadModule(() => import('../preview/CabinetPreview'));
+      preloadModule(() => import('../preview/Preview3DPanel'));
+      break;
+    case 'optimizer':
+      preloadModule(() => import('../optimizer/ProjectSummaryPanel'));
+      preloadModule(() => import('../optimizer/SmartOptimizerPanel'));
+      preloadModule(() => import('../optimizer/Tables'));
+      preloadModule(() => import('../optimizer/OptimizerView'));
+      break;
+    case 'assembly':
+      preloadModule(() => import('../assembly/AssemblyGuide'));
+      break;
+    case 'pdf':
+      preloadModule(() => import('../pdf/PdfExportPanel'));
+      break;
+    case 'calculators':
+      preloadModule(() => import('../configurator/CalculatorsPanel'));
+      break;
+  }
+}
 
 export function Header() {
   const { t, i18n } = useTranslation();
@@ -101,40 +140,21 @@ export function Header() {
 
   return (
     <header
-      className="bg-wood-700 flex flex-col gap-2 px-3 py-2 text-white sm:flex-row sm:items-center sm:justify-between sm:px-4 sm:py-3"
+      className="apple-nav sticky top-0 z-40 flex flex-col gap-2 px-3 pb-2 text-white sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-4 sm:pb-2.5"
       data-print="hide"
     >
       <div className="flex items-center justify-between">
         <div className="min-w-0">
-          <div className="mb-1 flex items-center gap-2">
-            <img
-              src={`${import.meta.env.BASE_URL}shop-badge.svg`}
-              alt=""
-              aria-hidden="true"
-              className="h-6 w-6 rounded-full"
-              loading="lazy"
-            />
-            <img
-              src={`${import.meta.env.BASE_URL}woodgrain-spark.svg`}
-              alt=""
-              aria-hidden="true"
-              className="h-6 w-20 opacity-80"
-              loading="lazy"
-            />
-          </div>
           <div className="flex items-baseline gap-2">
-            <h1 className="truncate text-lg font-bold sm:text-xl">🪵 {t('app.title')}</h1>
+            <h1 className="truncate text-lg font-semibold tracking-tight sm:text-xl">{t('app.title')}</h1>
             <span
-              className="text-wood-300 hidden font-mono text-xs select-none sm:inline"
+              className="text-wood-300 hidden text-xs tabular-nums select-none sm:inline"
               aria-label={`Version ${__APP_VERSION__}`}
             >
               v{__APP_VERSION__}
             </span>
           </div>
-          <p className="text-wood-200 hidden text-xs sm:block sm:text-sm">{t('app.subtitle')}</p>
-          <p className="text-wood-200 mt-1 hidden text-xs tracking-wide sm:block" aria-hidden="true">
-            ✨ 🛠️ 📐 🧰 🎯
-          </p>
+          <p className="text-wood-300 hidden max-w-48 truncate text-xs sm:block">{t('app.subtitle')}</p>
         </div>
         {/* Mobile-only controls row */}
         <div className="flex items-center gap-2 sm:hidden">
@@ -189,7 +209,7 @@ export function Header() {
       {/* Tab nav — horizontally scrollable on mobile */}
       <div
         ref={tabListRef}
-        className="-mx-3 flex scrollbar-none gap-1 overflow-x-auto px-3 sm:mx-0 sm:px-0"
+        className="-mx-3 flex scrollbar-none gap-0.5 overflow-x-auto px-3 sm:mx-0 sm:px-0"
         role="tablist"
         aria-label="Main navigation"
       >
@@ -199,14 +219,16 @@ export function Header() {
               key={tab}
               role="tab"
               onClick={() => runCommand(`tab.${tab}`)}
+              onPointerEnter={() => preloadTab(tab)}
+              onFocus={() => preloadTab(tab)}
               onKeyDown={(e) => handleTabKeyDown(e, i)}
               tabIndex={activeTab === tab ? 0 : -1}
               aria-selected={activeTab === tab}
               aria-current={activeTab === tab ? 'page' : undefined}
               aria-controls="main-content"
               title={commandTitle(`tab.${tab}`)}
-              className={`flex items-center gap-1.5 rounded px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-colors ${
-                activeTab === tab ? 'bg-wood-600 text-white' : 'text-wood-200 hover:bg-wood-600'
+              className={`flex items-center gap-1 rounded-full px-3 py-1.5 text-[0.8125rem] font-medium whitespace-nowrap ${
+                activeTab === tab ? 'bg-white/20 text-white' : 'text-wood-200 hover:bg-white/10 hover:text-white'
               }`}
             >
               <span aria-hidden="true" className="shrink-0 text-sm">
@@ -219,7 +241,7 @@ export function Header() {
       </div>
 
       {/* Desktop controls */}
-      <div className="hidden items-center gap-3 sm:flex">
+      <div className="hidden shrink-0 items-center gap-2.5 sm:flex">
         <button
           onClick={() => runCommand('palette.open')}
           className="text-wood-200 flex items-center hover:text-white"
@@ -317,6 +339,8 @@ export function Header() {
         </button>
         <button
           onClick={() => runCommand('marketplace.open')}
+          onPointerEnter={preloadMarketplacePanel}
+          onFocus={preloadMarketplacePanel}
           className="text-wood-200 flex items-center gap-1 hover:text-white"
           title={commandTitle('marketplace.open')}
           aria-label={commandLabel('marketplace.open')}
@@ -334,7 +358,11 @@ export function Header() {
       </div>
       {showTemplates && <TemplatePicker onClose={() => setShowTemplates(false)} />}
       {showProjects && <ProjectManagerModal onClose={() => setShowProjects(false)} />}
-      {showMarketplace && <MarketplacePanel onClose={() => setShowMarketplace(false)} />}
+      {showMarketplace && (
+        <Suspense fallback={null}>
+          <MarketplacePanel onClose={() => setShowMarketplace(false)} />
+        </Suspense>
+      )}
     </header>
   );
 }

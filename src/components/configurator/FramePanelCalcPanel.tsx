@@ -3,10 +3,11 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatMillimeters } from '../../i18n/format';
 import { calculateFramePanel } from '../../engine/frame-panel';
 
 export function FramePanelCalcPanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [frameWidthMm, setFrameWidthMm] = useState(600);
   const [frameHeightMm, setFrameHeightMm] = useState(900);
@@ -49,7 +50,7 @@ export function FramePanelCalcPanel() {
             step={10}
             value={frameWidthMm}
             onChange={(e) => setFrameWidthMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -62,7 +63,7 @@ export function FramePanelCalcPanel() {
             step={10}
             value={frameHeightMm}
             onChange={(e) => setFrameHeightMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -75,7 +76,7 @@ export function FramePanelCalcPanel() {
             step={5}
             value={stileWidthMm}
             onChange={(e) => setStileWidthMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -88,7 +89,7 @@ export function FramePanelCalcPanel() {
             step={5}
             value={railWidthMm}
             onChange={(e) => setRailWidthMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -101,7 +102,7 @@ export function FramePanelCalcPanel() {
             step={0.5}
             value={grooveDepthMm}
             onChange={(e) => setGrooveDepthMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -114,7 +115,7 @@ export function FramePanelCalcPanel() {
             step={0.5}
             value={panelFloatMm}
             onChange={(e) => setPanelFloatMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
       </div>
@@ -133,21 +134,24 @@ export function FramePanelCalcPanel() {
         >
           <dt className="text-wood-500 dark:text-wood-400">{t('framePanel.panelWidth')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.panelWidthMm.toFixed(1)} mm
+            {formatMillimeters(result.data.panelWidthMm, i18n.language, 1)}
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('framePanel.panelHeight')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.panelHeightMm.toFixed(1)} mm
+            {formatMillimeters(result.data.panelHeightMm, i18n.language, 1)}
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('framePanel.expansionAllowance')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono">
-            W: {result.data.widthFloatMm} mm · H: {result.data.heightFloatMm} mm
+            W: {formatMillimeters(result.data.widthFloatMm, i18n.language, 0)} · H:{' '}
+            {formatMillimeters(result.data.heightFloatMm, i18n.language, 0)}
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('framePanel.grooveDepth')}</dt>
-          <dd className="text-wood-800 dark:text-wood-100 font-mono">{result.data.grooveDepthMm} mm</dd>
+          <dd className="text-wood-800 dark:text-wood-100 font-mono">
+            {formatMillimeters(result.data.grooveDepthMm, i18n.language, 1)}
+          </dd>
         </dl>
       )}
     </section>

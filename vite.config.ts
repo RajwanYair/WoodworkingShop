@@ -150,6 +150,7 @@ export default defineConfig({
   },
   build: {
     target: 'es2022',
+    manifest: '.vite/build-manifest.json',
     chunkSizeWarningLimit: 1600,
     // v3.24.0: inject modulepreload polyfill for Safari < 16.4 compatibility
     modulePreload: {
@@ -159,7 +160,7 @@ export default defineConfig({
           ? dependencies.filter((dependency) => !dependency.includes('/pdf-renderer-'))
           : dependencies,
     },
-    rollupOptions: {
+    rolldownOptions: {
       output: {
         // Sprint 63 — consolidated chunk strategy:
         //   pdf-renderer : lazily-imported 300 KB PDF engine — own chunk for deferred loading.
@@ -170,15 +171,29 @@ export default defineConfig({
         //
         // Phase 18 prep: when Three.js is added, add:
         //   if (id.includes('three')) return 'three-vendor';
-        manualChunks: (id) => {
-          // Keep shared React modules in the eager vendor chunk, not the lazy PDF chunk.
-          if (id.includes('/react-dom/') || id.includes('/node_modules/react/') || id.includes('/zustand'))
-            return 'vendor';
-          if (id.includes('@react-pdf/renderer')) return 'pdf-renderer';
-          if (id.includes('/i18next') || id.includes('/react-i18next')) return 'i18n-vendor';
-          // Sprint 140 — defer parse cost of heavy optimizer engine to OptimizerView lazy chunk
-          if (id.includes('/cut-optimizer') || id.includes('/smart-optimizer') || id.includes('/assembly-dag'))
-            return 'engine-optimizer';
+        codeSplitting: {
+          groups: [
+            {
+              name: 'vendor',
+              test: /node_modules[\\/](?:react|react-dom|zustand)(?:[\\/]|$)/,
+              priority: 30,
+            },
+            {
+              name: 'i18n-vendor',
+              test: /node_modules[\\/](?:i18next|react-i18next)(?:[\\/]|$)/,
+              priority: 20,
+            },
+            {
+              name: 'pdf-renderer',
+              test: /node_modules[\\/]@react-pdf[\\/]renderer(?:[\\/]|$)/,
+              priority: 10,
+            },
+            {
+              name: 'engine-optimizer',
+              test: /[\\/](?:cut-optimizer|smart-optimizer|assembly-dag)[.\\/]/,
+              priority: 5,
+            },
+          ],
         },
       },
     },

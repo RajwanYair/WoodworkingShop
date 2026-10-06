@@ -42,7 +42,7 @@ export function GlueCoveragePanel() {
             step={1000}
             value={surfaceAreaMm2}
             onChange={(e) => setSurfaceAreaMm2(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -55,7 +55,7 @@ export function GlueCoveragePanel() {
             step={1}
             value={jointCount}
             onChange={(e) => setJointCount(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -64,7 +64,7 @@ export function GlueCoveragePanel() {
           <select
             value={glueType}
             onChange={(e) => setGlueType(e.target.value as WoodGlueType)}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 text-sm focus:ring-2 focus:outline-none"
           >
             {GLUE_TYPES.map((gt) => (
               <option key={gt} value={gt}>

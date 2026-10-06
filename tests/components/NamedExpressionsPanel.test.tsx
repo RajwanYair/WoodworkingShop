@@ -20,7 +20,7 @@ describe('NamedExpressionsPanel', () => {
     const name = screen.getByLabelText(/^name$/i);
     const expression = screen.getByLabelText(/^formula$/i);
     await user.type(name, '1invalid');
-    await user.type(expression, '42');
+    await user.type(expression, '1234');
     await user.click(screen.getByRole('button', { name: /^add$/i }));
     expect(screen.getByRole('alert')).toBeInTheDocument();
     expect(useCabinetStore.getState().namedExpressions).toEqual([]);
@@ -29,8 +29,8 @@ describe('NamedExpressionsPanel', () => {
     await user.type(name, 'shelf_gap');
     await user.click(screen.getByRole('button', { name: /^add$/i }));
 
-    expect(screen.getByText(/42\.00/)).toBeInTheDocument();
-    expect(useCabinetStore.getState().namedExpressions).toEqual([{ name: 'shelf_gap', expression: '42' }]);
+    expect(screen.getByText(/1,234\.00/)).toBeInTheDocument();
+    expect(useCabinetStore.getState().namedExpressions).toEqual([{ name: 'shelf_gap', expression: '1234' }]);
 
     await user.click(screen.getByRole('button', { name: /remove.*shelf_gap/i }));
     expect(useCabinetStore.getState().namedExpressions).toEqual([]);

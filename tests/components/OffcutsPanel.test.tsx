@@ -27,7 +27,7 @@ describe('OffcutsPanel', () => {
       id: 'offcut-1',
       material: sheet.material,
       thickness: sheet.thickness,
-      width: 700,
+      width: 1700,
       length: 500,
       addedAt: 0,
     };
@@ -38,6 +38,7 @@ describe('OffcutsPanel', () => {
         offcutCatalog={[]}
         onSaveOffcut={onSaveOffcut}
         onDeleteOffcut={onDeleteOffcut}
+        locale="en-US"
         t={translate}
       />,
     );
@@ -58,10 +59,11 @@ describe('OffcutsPanel', () => {
         offcutCatalog={[savedOffcut]}
         onSaveOffcut={onSaveOffcut}
         onDeleteOffcut={onDeleteOffcut}
+        locale="en-US"
         t={translate}
       />,
     );
-    expect(screen.getByText(/melamine-18 18mm — 700×500 mm/)).toBeInTheDocument();
+    expect(screen.getByText(/melamine-18 18mm — 1,700×500 mm/)).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Delete offcut' }));
     expect(onDeleteOffcut).toHaveBeenCalledWith('offcut-1');
   });

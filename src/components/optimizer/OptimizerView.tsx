@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { lazy, Suspense, useState, useRef, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
@@ -8,7 +8,6 @@ import { generateParts } from '../../engine/parts';
 import { generateHardware } from '../../engine/hardware';
 import { downloadAllSheetsDxf } from '../../utils/dxf-export';
 import { triggerDownload } from '../../utils/download';
-import { GcodePreviewModal } from './GcodePreviewModal';
 import { generateBomCsv } from '../../utils/bom-export';
 import { IconWarning, IconLightbulb } from '../layout/Icons';
 
@@ -35,6 +34,14 @@ import { resolveEngineLang } from './resolve-engine-lang';
 import { DefectZonePanel } from './optimizer-defect-zone-panel';
 import { ShoppingListPanel } from './optimizer-shopping-list-panel';
 import { OptimizerToolbar } from './OptimizerToolbar';
+
+const GcodePreviewModal = lazy(() =>
+  import('./GcodePreviewModal').then(({ GcodePreviewModal }) => ({ default: GcodePreviewModal })),
+);
+
+function preloadGcodePreviewModal() {
+  void import('./GcodePreviewModal');
+}
 
 export function OptimizerView() {
   const { t, i18n } = useTranslation();
@@ -273,15 +280,17 @@ export function OptimizerView() {
 
       {/* Sprint 8 — G-code toolpath preview modal */}
       {gcodePreview && (
-        <GcodePreviewModal
-          sheet={gcodePreview.sheet}
-          filename={gcodePreview.filename}
-          onClose={() => setGcodePreview(null)}
-          onDownload={(gcodeText) => {
-            triggerDownload(gcodeText, 'text/plain', gcodePreview.filename);
-            useToastStore.getState().addToast(t('toast.gcodeExported'), 'success');
-          }}
-        />
+        <Suspense fallback={null}>
+          <GcodePreviewModal
+            sheet={gcodePreview.sheet}
+            filename={gcodePreview.filename}
+            onClose={() => setGcodePreview(null)}
+            onDownload={(gcodeText) => {
+              triggerDownload(gcodeText, 'text/plain', gcodePreview.filename);
+              useToastStore.getState().addToast(t('toast.gcodeExported'), 'success');
+            }}
+          />
+        </Suspense>
       )}
 
       {/* Multi-cabinet label */}
@@ -336,6 +345,7 @@ export function OptimizerView() {
               defectZones={defectZones[sheet.material] ?? []}
               filePrefix={filePrefix}
               partFilter={partFilter}
+              preloadGcodePreview={preloadGcodePreviewModal}
               onGcodePreview={(filename, s) => setGcodePreview({ filename, sheet: s })}
               rotationLockedPartIds={rotationLockedPartIds}
               onToggleRotationLock={toggleRotationLock}
@@ -375,6 +385,7 @@ export function OptimizerView() {
           removeOffcutEntry(id);
           idbDeleteOffcut(id).catch(() => {});
         }}
+        locale={i18n.language}
         t={t}
       />
 

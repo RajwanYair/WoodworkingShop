@@ -4,8 +4,8 @@
 
 ## Current Sprint — Phase 73
 
-- Sprint 371 is complete; Sprints 372–374 are complete; Sprint 375 T2 (locale quality) is in progress.
-- Sprint 375 still has a substantial missing-translation and human-review backlog; Sprints 376–377 follow before Sprint 378 targets v5.35.0.
+- Sprint 371 is complete; Sprints 372–374 are complete; Sprint 375 T2 (locale quality) and T3 (responsive pseudo-locales) are complete; T4 (formatting audit) is in progress.
+- All 337 Sprint 375 locale review records are approved; Sprints 376–377 follow before Sprint 378 targets v5.35.0.
 - Sprint 315 is complete; Sprint 313 remains a Phase 64 carry-over only for successful physical-camera capture.
 - Sprints 420–434 cover toolchain modernization and the Phase 81–85 architecture refactor.
 - Release order and sprint contracts: [ROADMAP.md §7.2](ROADMAP.md).

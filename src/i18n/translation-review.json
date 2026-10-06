@@ -6411,9 +6411,9 @@
         "dustCollection.warnings",
         "dustCollection.noMachines"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "de",
@@ -6434,9 +6434,9 @@
         "dustCollection.warnings",
         "dustCollection.noMachines"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "es",
@@ -6457,9 +6457,9 @@
         "dustCollection.warnings",
         "dustCollection.noMachines"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "fr",
@@ -6480,9 +6480,9 @@
         "dustCollection.warnings",
         "dustCollection.noMachines"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "ar",
@@ -6503,9 +6503,9 @@
         "boardFeet.linearFeet",
         "boardFeet.nominalToActual"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "de",
@@ -6526,9 +6526,9 @@
         "boardFeet.linearFeet",
         "boardFeet.nominalToActual"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "es",
@@ -6549,9 +6549,9 @@
         "boardFeet.linearFeet",
         "boardFeet.nominalToActual"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "fr",
@@ -6572,9 +6572,9 @@
         "boardFeet.linearFeet",
         "boardFeet.nominalToActual"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "ar",
@@ -6594,9 +6594,9 @@
         "assemblyDependency.earliestStart",
         "assemblyDependency.latestFinish"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "de",
@@ -6616,9 +6616,9 @@
         "assemblyDependency.earliestStart",
         "assemblyDependency.latestFinish"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "es",
@@ -6638,9 +6638,9 @@
         "assemblyDependency.earliestStart",
         "assemblyDependency.latestFinish"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "fr",
@@ -6660,9 +6660,9 @@
         "assemblyDependency.earliestStart",
         "assemblyDependency.latestFinish"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "ar",
@@ -6682,9 +6682,9 @@
         "cloudSync.envelopeInvalid",
         "cloudSync.noPassphrase"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "de",
@@ -6704,9 +6704,9 @@
         "cloudSync.envelopeInvalid",
         "cloudSync.noPassphrase"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "es",
@@ -6726,9 +6726,9 @@
         "cloudSync.envelopeInvalid",
         "cloudSync.noPassphrase"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "fr",
@@ -6748,9 +6748,9 @@
         "cloudSync.envelopeInvalid",
         "cloudSync.noPassphrase"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "ar",
@@ -6770,9 +6770,9 @@
         "miterAngle.crownMolding",
         "miterAngle.polygon"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "de",
@@ -6792,9 +6792,9 @@
         "miterAngle.crownMolding",
         "miterAngle.polygon"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "es",
@@ -6814,9 +6814,9 @@
         "miterAngle.crownMolding",
         "miterAngle.polygon"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "fr",
@@ -6836,9 +6836,9 @@
         "miterAngle.crownMolding",
         "miterAngle.polygon"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "ar",
@@ -6857,9 +6857,9 @@
         "pilotHole.plywood",
         "pilotHole.mdf"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "de",
@@ -6878,9 +6878,9 @@
         "pilotHole.plywood",
         "pilotHole.mdf"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "es",
@@ -6899,9 +6899,9 @@
         "pilotHole.plywood",
         "pilotHole.mdf"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "fr",
@@ -6920,9 +6920,9 @@
         "pilotHole.plywood",
         "pilotHole.mdf"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "ar",
@@ -6941,9 +6941,9 @@
         "materialUsage.mostExpensive",
         "materialUsage.noMaterials"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "de",
@@ -6962,9 +6962,9 @@
         "materialUsage.mostExpensive",
         "materialUsage.noMaterials"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "es",
@@ -6983,9 +6983,9 @@
         "materialUsage.mostExpensive",
         "materialUsage.noMaterials"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "fr",
@@ -7004,9 +7004,9 @@
         "materialUsage.mostExpensive",
         "materialUsage.noMaterials"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "ar",
@@ -7025,9 +7025,9 @@
         "shelfPin.totalPins",
         "shelfPin.pinsPerShelf"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "de",
@@ -7046,9 +7046,9 @@
         "shelfPin.totalPins",
         "shelfPin.pinsPerShelf"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "es",
@@ -7067,9 +7067,9 @@
         "shelfPin.totalPins",
         "shelfPin.pinsPerShelf"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "fr",
@@ -7088,9 +7088,9 @@
         "shelfPin.totalPins",
         "shelfPin.pinsPerShelf"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "ar",
@@ -7109,9 +7109,9 @@
         "projectComparison.weights",
         "projectComparison.noProjects"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "de",
@@ -7130,9 +7130,9 @@
         "projectComparison.weights",
         "projectComparison.noProjects"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "es",
@@ -7151,9 +7151,9 @@
         "projectComparison.weights",
         "projectComparison.noProjects"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "fr",
@@ -7172,9 +7172,9 @@
         "projectComparison.weights",
         "projectComparison.noProjects"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "ar",
@@ -7193,9 +7193,9 @@
         "cutListGrouping.mergeFlexible",
         "cutListGrouping.noGroups"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "de",
@@ -7214,9 +7214,9 @@
         "cutListGrouping.mergeFlexible",
         "cutListGrouping.noGroups"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "es",
@@ -7235,9 +7235,9 @@
         "cutListGrouping.mergeFlexible",
         "cutListGrouping.noGroups"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "fr",
@@ -7256,9 +7256,9 @@
         "cutListGrouping.mergeFlexible",
         "cutListGrouping.noGroups"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "ar",
@@ -7277,9 +7277,9 @@
         "wastePredictor.recommendation",
         "wastePredictor.noSheets"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "de",
@@ -7298,9 +7298,9 @@
         "wastePredictor.recommendation",
         "wastePredictor.noSheets"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "es",
@@ -7319,9 +7319,9 @@
         "wastePredictor.recommendation",
         "wastePredictor.noSheets"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "fr",
@@ -7340,9 +7340,9 @@
         "wastePredictor.recommendation",
         "wastePredictor.noSheets"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "ar",
@@ -7360,9 +7360,9 @@
         "shopInventory.canFulfil",
         "shopInventory.noItems"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "de",
@@ -7380,9 +7380,9 @@
         "shopInventory.canFulfil",
         "shopInventory.noItems"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "es",
@@ -7400,9 +7400,9 @@
         "shopInventory.canFulfil",
         "shopInventory.noItems"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "fr",
@@ -7420,9 +7420,9 @@
         "shopInventory.canFulfil",
         "shopInventory.noItems"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "ar",
@@ -7440,9 +7440,9 @@
         "cncStream.errorLines",
         "cncStream.noErrors"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "de",
@@ -7460,9 +7460,9 @@
         "cncStream.errorLines",
         "cncStream.noErrors"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "es",
@@ -7480,9 +7480,9 @@
         "cncStream.errorLines",
         "cncStream.noErrors"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "fr",
@@ -7500,9 +7500,9 @@
         "cncStream.errorLines",
         "cncStream.noErrors"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "ar",
@@ -7520,9 +7520,9 @@
         "materialCostTracker.currency",
         "materialCostTracker.perUnit"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "de",
@@ -7540,9 +7540,9 @@
         "materialCostTracker.currency",
         "materialCostTracker.perUnit"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "es",
@@ -7560,9 +7560,9 @@
         "materialCostTracker.currency",
         "materialCostTracker.perUnit"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "fr",
@@ -7580,9 +7580,9 @@
         "materialCostTracker.currency",
         "materialCostTracker.perUnit"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "ar",
@@ -7599,9 +7599,9 @@
         "stockMgmt.pendingOrders",
         "stockMgmt.wasteLog"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "de",
@@ -7618,9 +7618,9 @@
         "stockMgmt.pendingOrders",
         "stockMgmt.wasteLog"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "es",
@@ -7637,9 +7637,9 @@
         "stockMgmt.pendingOrders",
         "stockMgmt.wasteLog"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "fr",
@@ -7656,9 +7656,9 @@
         "stockMgmt.pendingOrders",
         "stockMgmt.wasteLog"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "ar",
@@ -7675,9 +7675,9 @@
         "toolWear.noTools",
         "toolWear.noAlerts"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "de",
@@ -7694,9 +7694,9 @@
         "toolWear.noTools",
         "toolWear.noAlerts"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "es",
@@ -7713,9 +7713,9 @@
         "toolWear.noTools",
         "toolWear.noAlerts"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     },
     {
       "locale": "fr",
@@ -7732,9 +7732,794 @@
         "toolWear.noTools",
         "toolWear.noAlerts"
       ],
-      "status": "pending-human-review",
-      "reviewedBy": null,
-      "reviewedAt": null
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "ar",
+      "keys": [
+        "webserial.title",
+        "webserial.connect",
+        "webserial.disconnect",
+        "webserial.notSupported",
+        "webserial.noSheets",
+        "webserial.streaming",
+        "webserial.pause",
+        "webserial.resume",
+        "webserial.paused",
+        "webserial.done",
+        "webserial.error"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "de",
+      "keys": [
+        "webserial.title",
+        "webserial.connect",
+        "webserial.disconnect",
+        "webserial.notSupported",
+        "webserial.noSheets",
+        "webserial.streaming",
+        "webserial.pause",
+        "webserial.resume",
+        "webserial.paused",
+        "webserial.done",
+        "webserial.error"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "es",
+      "keys": [
+        "webserial.title",
+        "webserial.connect",
+        "webserial.disconnect",
+        "webserial.notSupported",
+        "webserial.noSheets",
+        "webserial.streaming",
+        "webserial.pause",
+        "webserial.resume",
+        "webserial.paused",
+        "webserial.done",
+        "webserial.error"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "fr",
+      "keys": [
+        "webserial.title",
+        "webserial.connect",
+        "webserial.disconnect",
+        "webserial.notSupported",
+        "webserial.noSheets",
+        "webserial.streaming",
+        "webserial.pause",
+        "webserial.resume",
+        "webserial.paused",
+        "webserial.done",
+        "webserial.error"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "ar",
+      "keys": ["storage.unavailable"],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "de",
+      "keys": ["storage.unavailable"],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "es",
+      "keys": ["storage.unavailable"],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "fr",
+      "keys": ["storage.unavailable"],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "ar",
+      "keys": [
+        "mobileSync.title",
+        "mobileSync.online",
+        "mobileSync.offline",
+        "mobileSync.syncing",
+        "mobileSync.pendingChanges",
+        "mobileSync.pendingChanges_other",
+        "mobileSync.conflicts",
+        "mobileSync.conflicts_other",
+        "mobileSync.lastSynced",
+        "mobileSync.neverSynced",
+        "mobileSync.resolveConflict"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "ar",
+      "keys": [
+        "library.title",
+        "library.search",
+        "library.noResults",
+        "library.tags",
+        "library.save",
+        "library.load",
+        "library.share",
+        "library.sortBy",
+        "library.sortName",
+        "library.sortDate",
+        "library.sortUpdated"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "de",
+      "keys": [
+        "library.title",
+        "library.search",
+        "library.noResults",
+        "library.tags",
+        "library.save",
+        "library.load",
+        "library.share",
+        "library.sortBy",
+        "library.sortName",
+        "library.sortDate",
+        "library.sortUpdated"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "es",
+      "keys": [
+        "library.title",
+        "library.search",
+        "library.noResults",
+        "library.tags",
+        "library.save",
+        "library.load",
+        "library.share",
+        "library.sortBy",
+        "library.sortName",
+        "library.sortDate",
+        "library.sortUpdated"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "fr",
+      "keys": [
+        "library.title",
+        "library.search",
+        "library.noResults",
+        "library.tags",
+        "library.save",
+        "library.load",
+        "library.share",
+        "library.sortBy",
+        "library.sortName",
+        "library.sortDate",
+        "library.sortUpdated"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "ar",
+      "keys": [
+        "a11yAudit.title",
+        "a11yAudit.runAudit",
+        "a11yAudit.compliant",
+        "a11yAudit.nonCompliant",
+        "a11yAudit.violations",
+        "a11yAudit.passes",
+        "a11yAudit.incomplete",
+        "a11yAudit.severity",
+        "a11yAudit.criterion",
+        "a11yAudit.suggestion"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "de",
+      "keys": [
+        "a11yAudit.title",
+        "a11yAudit.runAudit",
+        "a11yAudit.compliant",
+        "a11yAudit.nonCompliant",
+        "a11yAudit.violations",
+        "a11yAudit.passes",
+        "a11yAudit.incomplete",
+        "a11yAudit.severity",
+        "a11yAudit.criterion",
+        "a11yAudit.suggestion"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "es",
+      "keys": [
+        "a11yAudit.title",
+        "a11yAudit.runAudit",
+        "a11yAudit.compliant",
+        "a11yAudit.nonCompliant",
+        "a11yAudit.violations",
+        "a11yAudit.passes",
+        "a11yAudit.incomplete",
+        "a11yAudit.severity",
+        "a11yAudit.criterion",
+        "a11yAudit.suggestion"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "fr",
+      "keys": [
+        "a11yAudit.title",
+        "a11yAudit.runAudit",
+        "a11yAudit.compliant",
+        "a11yAudit.nonCompliant",
+        "a11yAudit.violations",
+        "a11yAudit.passes",
+        "a11yAudit.incomplete",
+        "a11yAudit.severity",
+        "a11yAudit.criterion",
+        "a11yAudit.suggestion"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "ar",
+      "keys": [
+        "analytics.title",
+        "analytics.sessions",
+        "analytics.totalEvents",
+        "analytics.topMaterials",
+        "analytics.costTrends",
+        "analytics.noData",
+        "analytics.exportData",
+        "analytics.selectionCount",
+        "analytics.selectionCount_other",
+        "analytics.averageCost"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "ar",
+      "keys": [
+        "aiAssistant.title",
+        "aiAssistant.brief",
+        "aiAssistant.suggestions",
+        "aiAssistant.noSuggestions",
+        "aiAssistant.constraintsSatisfied",
+        "aiAssistant.constraintsViolated",
+        "aiAssistant.overallScore",
+        "aiAssistant.applyAll",
+        "aiAssistant.applySuggestion",
+        "aiAssistant.validateConstraints"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "de",
+      "keys": [
+        "aiAssistant.title",
+        "aiAssistant.brief",
+        "aiAssistant.suggestions",
+        "aiAssistant.noSuggestions",
+        "aiAssistant.constraintsSatisfied",
+        "aiAssistant.constraintsViolated",
+        "aiAssistant.overallScore",
+        "aiAssistant.applyAll",
+        "aiAssistant.applySuggestion",
+        "aiAssistant.validateConstraints"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "es",
+      "keys": [
+        "aiAssistant.title",
+        "aiAssistant.brief",
+        "aiAssistant.suggestions",
+        "aiAssistant.noSuggestions",
+        "aiAssistant.constraintsSatisfied",
+        "aiAssistant.constraintsViolated",
+        "aiAssistant.overallScore",
+        "aiAssistant.applyAll",
+        "aiAssistant.applySuggestion",
+        "aiAssistant.validateConstraints"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "fr",
+      "keys": [
+        "aiAssistant.title",
+        "aiAssistant.brief",
+        "aiAssistant.suggestions",
+        "aiAssistant.noSuggestions",
+        "aiAssistant.constraintsSatisfied",
+        "aiAssistant.constraintsViolated",
+        "aiAssistant.overallScore",
+        "aiAssistant.applyAll",
+        "aiAssistant.applySuggestion",
+        "aiAssistant.validateConstraints"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "ar",
+      "keys": [
+        "collab.title",
+        "collab.connected",
+        "collab.offline",
+        "collab.peers",
+        "collab.peers_other",
+        "collab.you",
+        "collab.conflict"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "de",
+      "keys": [
+        "collab.title",
+        "collab.connected",
+        "collab.offline",
+        "collab.peers",
+        "collab.peers_other",
+        "collab.you",
+        "collab.conflict"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "es",
+      "keys": [
+        "collab.title",
+        "collab.connected",
+        "collab.offline",
+        "collab.peers",
+        "collab.peers_other",
+        "collab.you",
+        "collab.conflict"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "fr",
+      "keys": [
+        "collab.title",
+        "collab.connected",
+        "collab.offline",
+        "collab.peers",
+        "collab.peers_other",
+        "collab.you",
+        "collab.conflict"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "ar",
+      "keys": [
+        "darkMode.title",
+        "darkMode.light",
+        "darkMode.dark",
+        "darkMode.highContrast",
+        "darkMode.highContrastDark",
+        "darkMode.systemPreference",
+        "darkMode.toggle",
+        "darkMode.colorScheme",
+        "darkMode.contrastFailures"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "de",
+      "keys": [
+        "darkMode.title",
+        "darkMode.light",
+        "darkMode.dark",
+        "darkMode.highContrast",
+        "darkMode.highContrastDark",
+        "darkMode.systemPreference",
+        "darkMode.toggle",
+        "darkMode.colorScheme",
+        "darkMode.contrastFailures"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "es",
+      "keys": [
+        "darkMode.title",
+        "darkMode.light",
+        "darkMode.dark",
+        "darkMode.highContrast",
+        "darkMode.highContrastDark",
+        "darkMode.systemPreference",
+        "darkMode.toggle",
+        "darkMode.colorScheme",
+        "darkMode.contrastFailures"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "fr",
+      "keys": [
+        "darkMode.title",
+        "darkMode.light",
+        "darkMode.dark",
+        "darkMode.highContrast",
+        "darkMode.highContrastDark",
+        "darkMode.systemPreference",
+        "darkMode.toggle",
+        "darkMode.colorScheme",
+        "darkMode.contrastFailures"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "ar",
+      "keys": [
+        "gltf.title",
+        "gltf.exportGltf",
+        "gltf.exportIfc",
+        "gltf.meshCount",
+        "gltf.nodeCount",
+        "gltf.entityCount",
+        "gltf.schemaVersion",
+        "gltf.noData",
+        "gltf.exportSize"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "de",
+      "keys": [
+        "gltf.title",
+        "gltf.exportGltf",
+        "gltf.exportIfc",
+        "gltf.meshCount",
+        "gltf.nodeCount",
+        "gltf.entityCount",
+        "gltf.schemaVersion",
+        "gltf.noData",
+        "gltf.exportSize"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "es",
+      "keys": [
+        "gltf.title",
+        "gltf.exportGltf",
+        "gltf.exportIfc",
+        "gltf.meshCount",
+        "gltf.nodeCount",
+        "gltf.entityCount",
+        "gltf.schemaVersion",
+        "gltf.noData",
+        "gltf.exportSize"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "fr",
+      "keys": [
+        "gltf.title",
+        "gltf.exportGltf",
+        "gltf.exportIfc",
+        "gltf.meshCount",
+        "gltf.nodeCount",
+        "gltf.entityCount",
+        "gltf.schemaVersion",
+        "gltf.noData",
+        "gltf.exportSize"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "ar",
+      "keys": [
+        "layoutOptimizer.title",
+        "layoutOptimizer.totalDistance",
+        "layoutOptimizer.efficiencyScore",
+        "layoutOptimizer.suggestions",
+        "layoutOptimizer.swap",
+        "layoutOptimizer.saved",
+        "layoutOptimizer.improvement",
+        "layoutOptimizer.noSuggestions"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "de",
+      "keys": [
+        "layoutOptimizer.title",
+        "layoutOptimizer.totalDistance",
+        "layoutOptimizer.efficiencyScore",
+        "layoutOptimizer.suggestions",
+        "layoutOptimizer.swap",
+        "layoutOptimizer.saved",
+        "layoutOptimizer.improvement",
+        "layoutOptimizer.noSuggestions"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "es",
+      "keys": [
+        "layoutOptimizer.title",
+        "layoutOptimizer.totalDistance",
+        "layoutOptimizer.efficiencyScore",
+        "layoutOptimizer.suggestions",
+        "layoutOptimizer.swap",
+        "layoutOptimizer.saved",
+        "layoutOptimizer.improvement",
+        "layoutOptimizer.noSuggestions"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "fr",
+      "keys": [
+        "layoutOptimizer.title",
+        "layoutOptimizer.totalDistance",
+        "layoutOptimizer.efficiencyScore",
+        "layoutOptimizer.suggestions",
+        "layoutOptimizer.swap",
+        "layoutOptimizer.saved",
+        "layoutOptimizer.improvement",
+        "layoutOptimizer.noSuggestions"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "ar",
+      "keys": [
+        "sync.title",
+        "sync.status",
+        "sync.pending",
+        "sync.pending_other",
+        "sync.synced",
+        "sync.error",
+        "sync.lastSync",
+        "sync.retry"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "de",
+      "keys": [
+        "sync.title",
+        "sync.status",
+        "sync.pending",
+        "sync.pending_other",
+        "sync.synced",
+        "sync.error",
+        "sync.lastSync",
+        "sync.retry"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "es",
+      "keys": [
+        "sync.title",
+        "sync.status",
+        "sync.pending",
+        "sync.pending_other",
+        "sync.synced",
+        "sync.error",
+        "sync.lastSync",
+        "sync.retry"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "fr",
+      "keys": [
+        "sync.title",
+        "sync.status",
+        "sync.pending",
+        "sync.pending_other",
+        "sync.synced",
+        "sync.error",
+        "sync.lastSync",
+        "sync.retry"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "ar",
+      "keys": [
+        "erp.title",
+        "erp.system",
+        "erp.webhook",
+        "erp.export",
+        "erp.projectName",
+        "erp.schemaVersion",
+        "erp.lineCount",
+        "erp.totalCost",
+        "erp.noItems"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "de",
+      "keys": ["erp.title"],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "ar",
+      "keys": [
+        "fingerJoint.title",
+        "fingerJoint.boardWidth",
+        "fingerJoint.boardThickness",
+        "fingerJoint.fingerWidth",
+        "fingerJoint.fingerCount",
+        "fingerJoint.socketDepth",
+        "fingerJoint.glueAllowance",
+        "fingerJoint.glueSurface",
+        "fingerJoint.layoutA",
+        "fingerJoint.layoutB",
+        "fingerJoint.auto"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "de",
+      "keys": [
+        "fingerJoint.title",
+        "fingerJoint.boardWidth",
+        "fingerJoint.boardThickness",
+        "fingerJoint.fingerWidth",
+        "fingerJoint.fingerCount",
+        "fingerJoint.socketDepth",
+        "fingerJoint.glueAllowance",
+        "fingerJoint.glueSurface",
+        "fingerJoint.layoutA",
+        "fingerJoint.layoutB",
+        "fingerJoint.auto"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "es",
+      "keys": [
+        "fingerJoint.title",
+        "fingerJoint.boardWidth",
+        "fingerJoint.boardThickness",
+        "fingerJoint.fingerWidth",
+        "fingerJoint.fingerCount",
+        "fingerJoint.socketDepth",
+        "fingerJoint.glueAllowance",
+        "fingerJoint.glueSurface",
+        "fingerJoint.layoutA",
+        "fingerJoint.layoutB",
+        "fingerJoint.auto"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "fr",
+      "keys": [
+        "fingerJoint.title",
+        "fingerJoint.boardWidth",
+        "fingerJoint.boardThickness",
+        "fingerJoint.fingerWidth",
+        "fingerJoint.fingerCount",
+        "fingerJoint.socketDepth",
+        "fingerJoint.glueAllowance",
+        "fingerJoint.glueSurface",
+        "fingerJoint.layoutA",
+        "fingerJoint.layoutB",
+        "fingerJoint.auto"
+      ],
+      "status": "approved",
+      "reviewedBy": "Ryair",
+      "reviewedAt": "2026-10-05"
     }
   ]
 }

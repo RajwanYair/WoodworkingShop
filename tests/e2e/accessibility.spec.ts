@@ -131,6 +131,11 @@ test('shortcuts, project import errors, and G-code export dialog pass axe WCAG 2
   test.setTimeout(60_000);
 
   const expectAccessibleState = async (state: string) => {
+    await page.waitForFunction(() =>
+      Array.from(document.querySelectorAll('.animate-fade-in')).every(
+        (element) => getComputedStyle(element).opacity === '1',
+      ),
+    );
     const results = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
     const summary = results.violations
       .map((violation) => `${violation.id}: ${violation.nodes.map((node) => node.target.join(' ')).join(', ')}`)

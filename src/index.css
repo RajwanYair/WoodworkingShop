@@ -5,20 +5,162 @@
    regardless of Tailwind's internal generation order. */
 @custom-variant dark (.dark &);
 
+/* Apple-style neutral system grays. Each step keeps the relative luminance of the
+   former warm wood step, so every existing WCAG contrast pairing is preserved. */
 @theme {
-  --color-wood-50: #fdf8f0;
-  --color-wood-100: #f5ead6;
-  --color-wood-200: #e8d4ab;
-  --color-wood-300: #d4b87a;
-  --color-wood-400: #c49a4e;
-  --color-wood-500: #a67c2e;
-  --color-wood-600: #7c5c22;
-  --color-wood-700: #5a4218;
-  --color-wood-800: #3d2d10;
-  --color-wood-900: #241a0a;
-  --color-primary: #a67c2e;
-  --color-surface: #fdf8f0;
-  --color-surface-dark: #1a1510;
+  --font-sans:
+    -apple-system, 'BlinkMacSystemFont', 'SF Pro Text', 'SF Pro Display', system-ui, 'Segoe UI', 'Roboto',
+    'Helvetica Neue', 'Arial', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  --color-wood-50: #f7f8fe;
+  --color-wood-100: #eaebf1;
+  --color-wood-200: #d5d6dc;
+  --color-wood-300: #babbc1;
+  --color-wood-400: #66676d;
+  --color-wood-500: #616267;
+  --color-wood-600: #606167;
+  --color-wood-700: #45464c;
+  --color-wood-800: #2e2f35;
+  --color-wood-900: #1a1b21;
+  --color-primary: #0071e3;
+  --color-accent: #0071e3;
+  --color-accent-hover: #0062c4;
+  --color-accent-text: #06c;
+  --color-accent-text-dark: #2997ff;
+  --color-surface: #f5f5f7;
+  --color-surface-dark: #000;
+  --radius-sm: 0.375rem;
+  --radius: 0.5rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 0.875rem;
+  --radius-xl: 1.125rem;
+  --ease-apple: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.dark {
+  --color-wood-400: #9fa0a6;
+  --color-wood-500: #828389;
+}
+
+@layer base {
+  html {
+    accent-color: var(--color-accent);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-size-adjust: 100%;
+    font-optical-sizing: auto;
+  }
+
+  body {
+    background-color: var(--color-surface);
+    letter-spacing: -0.006em;
+  }
+
+  .dark body {
+    background-color: var(--color-surface-dark);
+  }
+
+  h1,
+  h2 {
+    letter-spacing: -0.022em;
+    line-height: 1.15;
+  }
+
+  h3,
+  h4 {
+    letter-spacing: -0.014em;
+  }
+
+  :where(*) {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :where(button, [role='tab'], [role='button'], a, select, input, textarea) {
+    touch-action: manipulation;
+  }
+
+  :where(button, [role='button'], [role='tab']):not(:disabled) {
+    transition-property: color, background-color, border-color, box-shadow, opacity, transform;
+    transition-duration: 160ms;
+    transition-timing-function: var(--ease-apple);
+  }
+
+  /* Instant press feedback on pointer-down. */
+  :where(button, [role='button'], [role='tab']):not(:disabled):active {
+    transform: scale(0.97);
+    transition-duration: 80ms;
+  }
+
+  :where(button, a, input, select, textarea, [tabindex]):focus-visible {
+    outline: 3px solid rgb(0 113 227 / 55%);
+    outline-offset: 2px;
+  }
+}
+
+/* Dark translucent global navigation, modelled on apple.com. */
+.apple-nav {
+  background-color: rgb(22 22 23 / 82%);
+  backdrop-filter: saturate(180%) blur(20px);
+  padding-top: max(0.5rem, env(safe-area-inset-top));
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .apple-nav {
+    background-color: #161617;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .apple-nav {
+    background-color: #000;
+    backdrop-filter: none;
+  }
+}
+
+.high-contrast .apple-nav {
+  background-color: var(--color-wood-700);
+  backdrop-filter: none;
+}
+
+/* Translucent bar material; content scrolls underneath it. */
+.apple-bar {
+  background-color: rgb(247 248 254 / 72%);
+  backdrop-filter: saturate(180%) blur(20px);
+  border-color: rgb(0 0 0 / 8%);
+}
+
+.dark .apple-bar {
+  background-color: rgb(26 27 33 / 72%);
+  border-color: rgb(255 255 255 / 10%);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .apple-bar {
+    background-color: var(--color-wood-50);
+    backdrop-filter: none;
+  }
+
+  .dark .apple-bar {
+    background-color: var(--color-wood-900);
+  }
+}
+
+@media (prefers-contrast: more) {
+  .apple-bar {
+    background-color: var(--color-wood-50);
+    backdrop-filter: none;
+    border-color: var(--color-wood-700);
+  }
+
+  .dark .apple-bar {
+    background-color: var(--color-wood-900);
+    border-color: var(--color-wood-200);
+  }
+}
+
+.high-contrast .apple-bar {
+  background-color: var(--color-wood-50);
+  backdrop-filter: none;
 }
 
 /* RTL support */
@@ -42,6 +184,9 @@
   --color-wood-800: #000;
   --color-wood-900: #000;
   --color-primary: #000;
+  --color-accent: #003f9e;
+  --color-accent-hover: #002f78;
+  --color-accent-text: #003f9e;
 }
 
 /* WCAG AA 2.2: visible focus rings, interactive borders, link underlines —
@@ -77,6 +222,7 @@
   --color-wood-800: #f8f8f8;
   --color-wood-900: #fff;
   --color-primary: #fff;
+  --color-accent-text-dark: #aaf;
 }
 
 .high-contrast.dark :focus-visible {
@@ -121,57 +267,13 @@
   }
 }
 
-/* ── Wood grain application background ────────────────────────────────────
-   Light mode: warm parchment (#f5ead6) with three layers of near-invisible
-   diagonal grain lines that simulate real wood.
-   Dark mode: deep espresso walnut (#1a1208) with amber-tinted grain.
-   High-contrast + forced-colors: plain solid, no image noise.
-   Print: overridden to white by the @media print block below.
-   ─────────────────────────────────────────────────────────────────────── */
+/* Flat Apple-style canvas; luminance matches the former parchment/walnut fills. */
 .app-bg {
-  background-color: #f5ead6;
-  background-image:
-    repeating-linear-gradient(170deg, transparent 0, transparent 5px, rgb(122 77 26 / 5%) 5px, rgb(122 77 26 / 5%) 6px),
-    repeating-linear-gradient(
-      175deg,
-      transparent 0,
-      transparent 16px,
-      rgb(100 60 15 / 4%) 16px,
-      rgb(100 60 15 / 4%) 17px
-    ),
-    repeating-linear-gradient(178deg, transparent 0, transparent 38px, rgb(80 45 10 / 3%) 38px, rgb(80 45 10 / 3%) 39px);
+  background-color: var(--color-wood-100);
 }
 
 .dark .app-bg {
-  background-color: #1a1208;
-  background-image:
-    repeating-linear-gradient(
-      170deg,
-      transparent 0,
-      transparent 5px,
-      rgb(200 150 70 / 6%) 5px,
-      rgb(200 150 70 / 6%) 6px
-    ),
-    repeating-linear-gradient(
-      175deg,
-      transparent 0,
-      transparent 16px,
-      rgb(175 115 45 / 5%) 16px,
-      rgb(175 115 45 / 5%) 17px
-    ),
-    repeating-linear-gradient(
-      178deg,
-      transparent 0,
-      transparent 38px,
-      rgb(220 170 100 / 3%) 38px,
-      rgb(220 170 100 / 3%) 39px
-    );
-}
-
-/* Strip grain pattern in high-contrast and forced-color environments */
-.high-contrast .app-bg,
-.high-contrast.dark .app-bg {
-  background-image: none;
+  background-color: #0d0d10;
 }
 
 /* v3.48.7 — High-contrast / forced-colours mode (Windows High Contrast,
@@ -230,7 +332,7 @@
 }
 
 .animate-slide-up {
-  animation: slide-up 0.25s ease-out;
+  animation: slide-up 0.32s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 /* Toast fade-in */
@@ -247,7 +349,7 @@
 }
 
 .animate-fade-in {
-  animation: fade-in 0.2s ease-out;
+  animation: fade-in 0.24s var(--ease-apple);
 }
 
 /* ─── Print-friendly styles ─── */

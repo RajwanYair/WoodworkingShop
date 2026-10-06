@@ -2,6 +2,7 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { MaterialSummaryPanel } from '../../src/components/optimizer/optimizer-material-summary-panel';
+import { formatNumber } from '../../src/i18n/format';
 import { makeCutSheet } from '../helpers';
 
 const labels: Record<string, string> = {
@@ -45,11 +46,15 @@ describe('MaterialSummaryPanel', () => {
         sheetSizeOverrides={{}}
         setSheetSizeOverride={vi.fn()}
         t={translate}
-        lang="en"
+        lang="he"
       />,
     );
 
-    expect(within(screen.getByRole('table')).getByText('3.72 m²')).toBeInTheDocument();
+    expect(
+      within(screen.getByRole('table')).getByText(
+        `${formatNumber(3.72, 'he', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} m²`,
+      ),
+    ).toBeInTheDocument();
   });
 
   it('keeps sheets with the same material but different thicknesses in separate rows', () => {
@@ -74,17 +79,21 @@ describe('MaterialSummaryPanel', () => {
     render(
       <MaterialSummaryPanel
         sheets={[makeCutSheet(), makeCutSheet({ sheetIndex: 1, material: 'plywood-18' })]}
-        materialPriceOverrides={{ 'melamine-18': 90, 'plywood-18': 120 }}
+        materialPriceOverrides={{ 'melamine-18': 1234, 'plywood-18': 1500 }}
         sheetSizeOverrides={{}}
         setSheetSizeOverride={vi.fn()}
         t={translate}
-        lang="en"
+        lang="he"
       />,
     );
 
     const rows = within(screen.getByRole('table')).getAllByRole('row');
-    expect(within(rows[1]!).getByText('₪90')).toBeInTheDocument();
-    expect(within(rows[2]!).getByText('₪120')).toBeInTheDocument();
+    expect(
+      within(rows[1]!).getByText(`₪${formatNumber(1234, 'he', { maximumFractionDigits: 0 })}`),
+    ).toBeInTheDocument();
+    expect(
+      within(rows[2]!).getByText(`₪${formatNumber(1500, 'he', { maximumFractionDigits: 0 })}`),
+    ).toBeInTheDocument();
   });
 
   it('uses the catalog price when no material override is present', () => {

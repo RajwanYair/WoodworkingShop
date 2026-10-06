@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { formatNumber } from '../../src/i18n/format';
 import { CostSummaryPanel } from '../../src/components/configurator/CostSummaryPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
@@ -26,7 +27,12 @@ describe('CostSummaryPanel', () => {
     await user.click(screen.getByRole('button', { name: /Cost Summary/ }));
     const table = screen.getByRole('table', { name: 'Cost breakdown table' });
     expect(table).toHaveTextContent('Materials');
-    expect(table).toHaveTextContent(useCabinetStore.getState().cost.totalCost.toFixed(2));
+    expect(table).toHaveTextContent(
+      formatNumber(useCabinetStore.getState().cost.totalCost, 'en', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+    );
 
     await user.click(screen.getByRole('button', { name: 'Export CSV' }));
 

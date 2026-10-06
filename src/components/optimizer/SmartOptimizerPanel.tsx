@@ -106,7 +106,7 @@ export function SmartOptimizerPanel() {
       <button
         onClick={handleFind}
         disabled={running || strategies.length === 0}
-        className="bg-wood-600 hover:bg-wood-700 w-full rounded py-2 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+        className="bg-accent hover:bg-accent-hover w-full rounded py-2 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
       >
         {running ? '…' : t('optimizer.find')}
       </button>

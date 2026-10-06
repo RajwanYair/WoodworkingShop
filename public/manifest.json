@@ -5,8 +5,8 @@
   "start_url": "/WoodworkingShop/",
   "scope": "/WoodworkingShop/",
   "display": "standalone",
-  "background_color": "#fdf8f0",
-  "theme_color": "#5a4218",
+  "background_color": "#eaebf1",
+  "theme_color": "#161617",
   "icons": [
     {
       "src": "favicon.svg",

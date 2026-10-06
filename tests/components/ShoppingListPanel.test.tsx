@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { ShoppingListPanel } from '../../src/components/optimizer/optimizer-shopping-list-panel';
+import { formatNumber } from '../../src/i18n/format';
 import { makeCutSheet } from '../helpers';
 
 const labels: Record<string, string> = {
@@ -19,15 +20,15 @@ describe('ShoppingListPanel', () => {
     render(
       <ShoppingListPanel
         sheets={[makeCutSheet(), makeCutSheet({ sheetIndex: 1 })]}
-        materialPriceOverrides={{ 'melamine-18': 200 }}
+        materialPriceOverrides={{ 'melamine-18': 617 }}
         t={translate}
-        lang="en"
+        lang="he"
       />,
     );
 
     const toggle = screen.getByRole('button', { name: /Shopping List/ });
-    expect(toggle).toHaveTextContent('2 sheets · ₪400');
-    expect(screen.getByText(/Melamine 18 mm/)).toBeInTheDocument();
+    expect(toggle).toHaveTextContent(`2 sheets · ₪${formatNumber(1234, 'he', { maximumFractionDigits: 0 })}`);
+    expect(screen.getByText(/מלמין/)).toBeInTheDocument();
     expect(screen.getByText(/×\s*2/)).toBeInTheDocument();
 
     await user.click(toggle);

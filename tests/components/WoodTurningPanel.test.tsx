@@ -9,6 +9,7 @@ describe('WoodTurningPanel', () => {
     render(<WoodTurningPanel />);
 
     expect(screen.getByText(/^1,270\s*RPM$/)).toBeInTheDocument();
+    expect(screen.getByText(/^[\d,]+ m\/min$/)).toBeInTheDocument();
     expect(screen.getByText('Min RPM (advisory)')).toBeInTheDocument();
     expect(screen.getByText('Max RPM (advisory)')).toBeInTheDocument();
     expect(

@@ -68,7 +68,11 @@ const WIDE_ANGLE_THRESHOLD_DEG = 155;
 // ── Door check functions ─────────────────────────────────────────────────────
 
 /** All door geometry and hinge checks (skips early when doorStyle === 'none'). */
-export function checkDoors(config: CabinetConfig, dims: ReturnType<typeof computeDimensions>): ValidationIssue[] {
+export function checkDoors(
+  config: CabinetConfig,
+  dims: ReturnType<typeof computeDimensions>,
+  locale = 'en',
+): ValidationIssue[] {
   const out: ValidationIssue[] = [];
   if (config.doorStyle === 'none') return out;
 
@@ -95,8 +99,8 @@ export function checkDoors(config: CabinetConfig, dims: ReturnType<typeof comput
         code: 'DOOR_ASPECT_RATIO',
         severity: 'warning',
         message: {
-          en: `Door aspect ratio ${ratio.toFixed(1)}:1 (height:width) exceeds ${MAX_DOOR_ASPECT_RATIO}:1. Tall narrow doors are prone to warping — consider adding a centre rail or using a stiffer material.`,
-          he: `יחס גובה-רוחב הדלת ${ratio.toFixed(1)}:1 חורג מ-${MAX_DOOR_ASPECT_RATIO}:1. דלתות גבוהות וצרות עלולות להתעוות — שקול הוספת פסת ביניים או חומר קשיח יותר.`,
+          en: `Door aspect ratio ${formatOneDecimal(ratio, locale)}:1 (height:width) exceeds ${MAX_DOOR_ASPECT_RATIO}:1. Tall narrow doors are prone to warping — consider adding a centre rail or using a stiffer material.`,
+          he: `יחס גובה-רוחב הדלת ${formatOneDecimal(ratio, locale)}:1 חורג מ-${MAX_DOOR_ASPECT_RATIO}:1. דלתות גבוהות וצרות עלולות להתעוות — שקול הוספת פסת ביניים או חומר קשיח יותר.`,
         },
         field: 'doorCount',
         fix: config.doorCount === 1 ? { patch: { doorCount: 2 }, labelKey: 'validation.fixSplitToDoors' } : undefined,
@@ -176,6 +180,10 @@ export function checkDoors(config: CabinetConfig, dims: ReturnType<typeof comput
   }
 
   return out;
+}
+
+function formatOneDecimal(value: number, locale: string): string {
+  return new Intl.NumberFormat(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(value);
 }
 
 /** Hinge arm / shelf clearance check — exported separately to keep checkDoors focused. */

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../../i18n/format';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { DEFAULT_LABOUR_RATE } from '../../engine/cost-estimator';
@@ -135,7 +136,7 @@ export function CostEstimatePanel() {
                       if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
                       if (e.key === 'Escape') setEditingPrice(null);
                     }}
-                    className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-16 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
+                    className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent w-16 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
                     ref={(el) => el?.focus()}
                     aria-label={`Price per sheet for ${sc.materialName.en}`}
                   />
@@ -193,7 +194,7 @@ export function CostEstimatePanel() {
                     if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
                     if (e.key === 'Escape') setEditingEb(false);
                   }}
-                  className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-14 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
+                  className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent w-14 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
                   ref={(el) => el?.focus()}
                   aria-label="Edge banding rate per meter"
                 />
@@ -246,7 +247,7 @@ export function CostEstimatePanel() {
                         if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
                         if (e.key === 'Escape') setEditingHw(null);
                       }}
-                      className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-14 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
+                      className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent w-14 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
                       ref={(el) => el?.focus()}
                       aria-label={`Price per unit for ${hw.name.en}`}
                     />
@@ -320,7 +321,7 @@ export function CostEstimatePanel() {
                   if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
                   if (e.key === 'Escape') setEditingLabourHours(false);
                 }}
-                className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-14 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
+                className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent w-14 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
                 ref={(el) => el?.focus()}
                 aria-label={t('cost.labourHoursAriaLabel', 'Labour hours')}
               />
@@ -360,7 +361,7 @@ export function CostEstimatePanel() {
                   if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
                   if (e.key === 'Escape') setEditingLabourRate(false);
                 }}
-                className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-14 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
+                className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent w-14 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
                 ref={(el) => el?.focus()}
                 aria-label={t('cost.labourRateAriaLabel', 'Labour rate per hour')}
               />
@@ -400,7 +401,7 @@ export function CostEstimatePanel() {
                   if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
                   if (e.key === 'Escape') setEditingFinish(false);
                 }}
-                className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-16 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
+                className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent w-16 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
                 ref={(el) => el?.focus()}
                 aria-label={t('cost.finishAriaLabel', 'Finish/paint cost')}
               />
@@ -442,7 +443,9 @@ export function CostEstimatePanel() {
         {totalWeightKg > 0 && (
           <div className="mt-1 flex justify-between">
             <span className="text-wood-600 dark:text-wood-300 text-xs">{t('cost.totalWeight')}</span>
-            <span className="text-wood-600 dark:text-wood-300 text-xs">~{totalWeightKg.toFixed(1)} kg</span>
+            <span className="text-wood-600 dark:text-wood-300 text-xs">
+              ~{formatNumber(totalWeightKg, i18n.language, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} kg
+            </span>
           </div>
         )}
         <p className="text-wood-600 dark:text-wood-300 mt-1 text-[10px]">{t('cost.disclaimer')}</p>

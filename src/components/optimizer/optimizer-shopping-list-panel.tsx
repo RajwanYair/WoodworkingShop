@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { CutSheet, Lang } from '../../engine/types';
 import { getMaterial } from '../../engine/materials';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
+import { formatNumber } from '../../i18n/format';
 import { IconList, IconChevronDown, IconChevronRight } from '../layout/Icons';
 
 /** Sprint 150: Group sheets by material+thickness and show shopping list. */
@@ -57,7 +58,8 @@ export function ShoppingListPanel({
           <IconList size={15} />
           {t('optimizer.shoppingList')}
           <span className="text-wood-600 dark:text-wood-300 ml-1 text-xs font-normal">
-            {totalSheets} {t('optimizer.sheets').toLowerCase()} · ₪{totalCost.toFixed(0)}
+            {totalSheets} {t('optimizer.sheets').toLowerCase()} · ₪
+            {formatNumber(totalCost, lang, { maximumFractionDigits: 0 })}
           </span>
         </span>
         {open ? <IconChevronDown size={14} /> : <IconChevronRight size={14} />}
@@ -77,14 +79,16 @@ export function ShoppingListPanel({
                 </span>
                 <span className="text-wood-600 dark:text-wood-300 mx-3">×{row.qty}</span>
                 <span className="text-wood-700 dark:text-wood-200 font-semibold">
-                  {row.pricePerSheet > 0 ? `₪${(row.qty * row.pricePerSheet).toFixed(0)}` : '—'}
+                  {row.pricePerSheet > 0
+                    ? `₪${formatNumber(row.qty * row.pricePerSheet, lang, { maximumFractionDigits: 0 })}`
+                    : '—'}
                 </span>
               </div>
             ))}
           </div>
           {totalCost > 0 && (
             <div className="text-wood-800 dark:text-wood-100 mt-2 flex justify-end text-xs font-bold">
-              {t('cost.total')}: ₪{totalCost.toFixed(0)}
+              {t('cost.total')}: ₪{formatNumber(totalCost, lang, { maximumFractionDigits: 0 })}
             </div>
           )}
         </div>

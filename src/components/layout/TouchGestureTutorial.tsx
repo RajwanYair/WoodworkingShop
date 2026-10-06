@@ -82,7 +82,7 @@ export function TouchGestureTutorial() {
         <button
           type="button"
           onClick={dismiss}
-          className="bg-wood-600 hover:bg-wood-700 w-full rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
+          className="bg-accent hover:bg-accent-hover w-full rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
         >
           {t('gestures.gotIt')}
         </button>

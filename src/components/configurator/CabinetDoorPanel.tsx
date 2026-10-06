@@ -6,12 +6,13 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatMillimeters, formatNumber } from '../../i18n/format';
 import { calculateCabinetDoor, type DoorOverlay } from '../../engine/cabinet-door';
 
 const OVERLAY_OPTIONS: DoorOverlay[] = ['full', 'half', 'inset'];
 
 export function CabinetDoorPanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [openingWidthMm, setOpeningWidthMm] = useState(550);
   const [openingHeightMm, setOpeningHeightMm] = useState(700);
@@ -45,7 +46,7 @@ export function CabinetDoorPanel() {
             max={1800}
             value={openingWidthMm}
             onChange={(e) => setOpeningWidthMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -58,7 +59,7 @@ export function CabinetDoorPanel() {
             max={2700}
             value={openingHeightMm}
             onChange={(e) => setOpeningHeightMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
       </div>
@@ -72,7 +73,7 @@ export function CabinetDoorPanel() {
             aria-pressed={overlay === opt}
             className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
               overlay === opt
-                ? 'bg-wood-600 text-white'
+                ? 'bg-accent text-white'
                 : 'bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700'
             }`}
           >
@@ -90,11 +91,11 @@ export function CabinetDoorPanel() {
             aria-pressed={doorCount === n}
             className={`flex-1 rounded border py-1.5 text-sm font-medium transition-colors ${
               doorCount === n
-                ? 'bg-wood-600 border-wood-500 text-white'
+                ? 'bg-accent border-accent text-white'
                 : 'bg-wood-50 dark:bg-wood-800 border-wood-200 dark:border-wood-700 text-wood-600 dark:text-wood-300 hover:bg-wood-100'
             }`}
           >
-            {n === 1 ? '1 door' : '2 doors'}
+            {t('cabinetDoor.doorOption', { count: n })}
           </button>
         ))}
       </div>
@@ -112,15 +113,19 @@ export function CabinetDoorPanel() {
           <div className="space-y-1">
             <div className="text-wood-600 dark:text-wood-300 flex justify-between">
               <span>{t('cabinetDoor.leafWidth')}</span>
-              <span className="font-mono font-medium">{result.data.doorLeaf.widthMm.toFixed(1)} mm</span>
+              <span className="font-mono font-medium">
+                {formatMillimeters(result.data.doorLeaf.widthMm, i18n.language, 1)}
+              </span>
             </div>
             <div className="text-wood-600 dark:text-wood-300 flex justify-between">
               <span>{t('cabinetDoor.leafHeight')}</span>
-              <span className="font-mono font-medium">{result.data.doorLeaf.heightMm.toFixed(1)} mm</span>
+              <span className="font-mono font-medium">
+                {formatMillimeters(result.data.doorLeaf.heightMm, i18n.language, 1)}
+              </span>
             </div>
             <div className="text-wood-600 dark:text-wood-300 flex justify-between">
               <span>{t('cabinetDoor.hingeCount')}</span>
-              <span className="font-mono font-medium">{result.data.hingeCount}</span>
+              <span className="font-mono font-medium">{formatNumber(result.data.hingeCount, i18n.language)}</span>
             </div>
           </div>
 

@@ -7,10 +7,11 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatMillimeters, formatNumber } from '../../i18n/format';
 import { calculateFaceFrame } from '../../engine/face-frame';
 
 export function FaceFramePanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [widthMm, setWidthMm] = useState(600);
   const [heightMm, setHeightMm] = useState(720);
@@ -51,7 +52,7 @@ export function FaceFramePanel() {
             max={2400}
             value={widthMm}
             onChange={(e) => setWidthMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -64,7 +65,7 @@ export function FaceFramePanel() {
             max={2700}
             value={heightMm}
             onChange={(e) => setHeightMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -77,7 +78,7 @@ export function FaceFramePanel() {
             max={100}
             value={stileWidthMm}
             onChange={(e) => setStileWidthMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -90,7 +91,7 @@ export function FaceFramePanel() {
             max={100}
             value={railWidthMm}
             onChange={(e) => setRailWidthMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
       </div>
@@ -106,9 +107,9 @@ export function FaceFramePanel() {
           value={openingCount}
           onChange={(e) => setOpeningCount(Number(e.target.value))}
           aria-label={t('faceFrame.openingCount')}
-          className="accent-wood-500 flex-1"
+          className="accent-accent flex-1"
         />
-        <span className="w-4 text-center font-mono">{openingCount}</span>
+        <span className="w-4 text-center font-mono">{formatNumber(openingCount, i18n.language)}</span>
       </label>
 
       {/* Error */}
@@ -124,23 +125,36 @@ export function FaceFramePanel() {
           <div className="grid grid-cols-2 gap-x-4 gap-y-1">
             <div className="text-wood-600 dark:text-wood-300 flex justify-between">
               <span>{t('faceFrame.openingWidth')}</span>
-              <span className="font-mono font-medium">{result.data.openingWidthMm.toFixed(1)} mm</span>
+              <span className="font-mono font-medium">
+                {formatMillimeters(result.data.openingWidthMm, i18n.language, 1)}
+              </span>
             </div>
             <div className="text-wood-600 dark:text-wood-300 flex justify-between">
               <span>{t('faceFrame.openingHeight')}</span>
-              <span className="font-mono font-medium">{result.data.openingHeightMm.toFixed(1)} mm</span>
+              <span className="font-mono font-medium">
+                {formatMillimeters(result.data.openingHeightMm, i18n.language, 1)}
+              </span>
             </div>
             <div className="text-wood-600 dark:text-wood-300 flex justify-between">
               <span>{t('faceFrame.stileLength')}</span>
-              <span className="font-mono font-medium">{result.data.stileLengthMm.toFixed(1)} mm</span>
+              <span className="font-mono font-medium">
+                {formatMillimeters(result.data.stileLengthMm, i18n.language, 1)}
+              </span>
             </div>
             <div className="text-wood-600 dark:text-wood-300 flex justify-between">
               <span>{t('faceFrame.topRailLength')}</span>
-              <span className="font-mono font-medium">{result.data.railLengthMm.toFixed(1)} mm</span>
+              <span className="font-mono font-medium">
+                {formatMillimeters(result.data.railLengthMm, i18n.language, 1)}
+              </span>
             </div>
             <div className="text-wood-600 dark:text-wood-300 col-span-2 flex justify-between">
               <span>{t('faceFrame.totalGlueSurface')}</span>
-              <span className="font-mono font-medium">{(result.data.totalGlueSurfaceMm2 / 100).toFixed(0)} cm²</span>
+              <span className="font-mono font-medium">
+                {formatNumber(result.data.totalGlueSurfaceMm2 / 100, i18n.language, {
+                  maximumFractionDigits: 0,
+                })}{' '}
+                cm²
+              </span>
             </div>
           </div>
 
@@ -153,10 +167,11 @@ export function FaceFramePanel() {
               {result.data.partList.map((part) => (
                 <li key={part.label} className="text-wood-700 dark:text-wood-200 flex justify-between text-xs">
                   <span>
-                    {part.qty}× {part.label}
+                    {formatNumber(part.qty, i18n.language)}× {part.label}
                   </span>
                   <span className="font-mono">
-                    {part.lengthMm.toFixed(1)} × {part.widthMm} mm
+                    {formatMillimeters(part.lengthMm, i18n.language, 1)} ×{' '}
+                    {formatMillimeters(part.widthMm, i18n.language, 0)}
                   </span>
                 </li>
               ))}

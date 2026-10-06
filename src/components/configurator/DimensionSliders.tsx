@@ -106,7 +106,7 @@ export function DimensionSliders() {
                 onClick={() => setConfig({ kickHeight: preset })}
                 className={`rounded border px-2 py-0.5 text-[10px] transition-colors ${
                   (config.kickHeight ?? 0) === preset
-                    ? 'border-wood-500 bg-wood-600 text-white'
+                    ? 'border-accent bg-accent text-white'
                     : 'border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800'
                 }`}
                 aria-label={`Set kick height to ${preset} mm`}

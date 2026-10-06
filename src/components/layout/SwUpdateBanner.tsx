@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSwUpdate } from '../../hooks/useSwUpdate';
 import { IconDownload, IconX } from './Icons';
 
 /**
@@ -14,12 +13,11 @@ import { IconDownload, IconX } from './Icons';
 
 const SESSION_DISMISS_KEY = 'swUpdate:dismissed';
 
-export function SwUpdateBanner() {
+export function SwUpdateBanner({ reload }: Readonly<{ reload: () => void }>) {
   const { t } = useTranslation();
-  const { updateAvailable, reload } = useSwUpdate();
   const [dismissed, setDismissed] = useState(() => sessionStorage.getItem(SESSION_DISMISS_KEY) === 'true');
 
-  if (!updateAvailable || dismissed) return null;
+  if (dismissed) return null;
 
   const handleDismiss = () => {
     sessionStorage.setItem(SESSION_DISMISS_KEY, 'true');
@@ -30,7 +28,7 @@ export function SwUpdateBanner() {
     <div
       role="alert"
       aria-live="polite"
-      className="fixed end-4 bottom-4 z-50 w-72 rounded-lg border border-gray-200 bg-white shadow-xl dark:border-gray-600 dark:bg-gray-800"
+      className="fixed inset-e-4 bottom-4 z-50 w-72 rounded-lg border border-gray-200 bg-white shadow-xl dark:border-gray-600 dark:bg-gray-800"
     >
       <div className="flex items-start gap-3 p-4">
         <span className="text-wood-600 dark:text-wood-400 mt-0.5 shrink-0">
@@ -51,7 +49,7 @@ export function SwUpdateBanner() {
       <div className="flex gap-2 border-t border-gray-100 px-4 py-3 dark:border-gray-700">
         <button
           onClick={reload}
-          className="bg-wood-600 hover:bg-wood-700 flex-1 rounded px-3 py-1.5 text-xs font-semibold text-white transition-colors"
+          className="bg-accent hover:bg-accent-hover flex-1 rounded px-3 py-1.5 text-xs font-semibold text-white transition-colors"
         >
           {t('swUpdate.reload')}
         </button>

@@ -23,11 +23,14 @@ import { ConstraintSuggestionsPanel } from './ConstraintSuggestionsPanel';
 import type { FurnitureType, JoineryType } from '../../engine/types';
 
 export function ConfiguratorPanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { config, setConfig, resetConfig } = useCabinetStore();
   const customMaterials = useCustomMaterialsStore((state) => state.materials);
 
-  const validationIssues = useMemo(() => validateConfig(config, customMaterials), [config, customMaterials]);
+  const validationIssues = useMemo(
+    () => validateConfig(config, customMaterials, i18n.language),
+    [config, customMaterials, i18n.language],
+  );
 
   const handleFurnitureChange = (type: FurnitureType) => {
     setConfig({ ...getConfiguratorTemplateDefaults(type) });
@@ -66,7 +69,7 @@ export function ConfiguratorPanel() {
               key={ft}
               className={`flex-1 cursor-pointer rounded border px-3 py-2 text-center text-sm font-medium transition-colors ${
                 config.furnitureType === ft
-                  ? 'bg-wood-600 border-wood-500 text-white'
+                  ? 'bg-accent border-accent text-white'
                   : 'bg-wood-50 dark:bg-wood-800 text-wood-600 dark:text-wood-300 border-wood-200 dark:border-wood-700 hover:bg-wood-100 dark:hover:bg-wood-700'
               }`}
             >
@@ -96,7 +99,7 @@ export function ConfiguratorPanel() {
                 key={src}
                 className={`flex-1 cursor-pointer rounded border px-3 py-2 text-center text-sm font-medium transition-colors ${
                   (config.panelMaterialSource ?? 'carcass') === src
-                    ? 'bg-wood-600 border-wood-500 text-white'
+                    ? 'bg-accent border-accent text-white'
                     : 'bg-wood-50 dark:bg-wood-800 text-wood-600 dark:text-wood-300 border-wood-200 dark:border-wood-700 hover:bg-wood-100 dark:hover:bg-wood-700'
                 }`}
               >
@@ -134,7 +137,7 @@ export function ConfiguratorPanel() {
                 key={jt}
                 className={`cursor-pointer rounded border px-3 py-1.5 text-xs font-medium transition-colors ${
                   (config.joineryType ?? 'screw') === jt
-                    ? 'bg-wood-600 border-wood-500 text-white'
+                    ? 'bg-accent border-accent text-white'
                     : 'bg-wood-50 dark:bg-wood-800 text-wood-600 dark:text-wood-300 border-wood-200 dark:border-wood-700 hover:bg-wood-100 dark:hover:bg-wood-700'
                 }`}
               >

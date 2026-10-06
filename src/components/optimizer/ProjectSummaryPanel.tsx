@@ -10,11 +10,12 @@
  * Returns null when the project has only a single cabinet.
  */
 import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../../i18n/format';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { computePartsWeight } from '../../engine';
 
 export function ProjectSummaryPanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { cabinets, allParts, combinedOptimization, labourHours } = useCabinetStore();
 
   // Only meaningful with ≥ 2 cabinets
@@ -22,7 +23,10 @@ export function ProjectSummaryPanel() {
 
   const totalSheets = combinedOptimization.totalSheets;
   const overallYield = combinedOptimization.overallYield;
-  const wasteM2 = (combinedOptimization.totalWaste / 1_000_000).toFixed(3);
+  const wasteM2 = formatNumber(combinedOptimization.totalWaste / 1_000_000, i18n.language, {
+    minimumFractionDigits: 3,
+    maximumFractionDigits: 3,
+  });
   const grainConflicts = combinedOptimization.grainConflictCount;
   const totalWeightKg = computePartsWeight(allParts);
 
@@ -32,19 +36,28 @@ export function ProjectSummaryPanel() {
     sheets.length > 0 ? Math.round(sheets.reduce((s, sh) => s + sh.yieldPercent, 0) / sheets.length) : 0;
 
   const stats: Array<{ label: string; value: string | number; warn?: boolean }> = [
-    { label: t('summary.totalCabinets'), value: cabinets.length },
-    { label: t('summary.totalParts'), value: allParts.length },
-    { label: t('summary.totalSheets'), value: totalSheets },
-    { label: t('summary.overallYield'), value: `${overallYield.toFixed(1)} %` },
-    { label: t('summary.avgSheetYield'), value: `${avgSheetYield} %` },
+    { label: t('summary.totalCabinets'), value: formatNumber(cabinets.length, i18n.language) },
+    { label: t('summary.totalParts'), value: formatNumber(allParts.length, i18n.language) },
+    { label: t('summary.totalSheets'), value: formatNumber(totalSheets, i18n.language) },
+    {
+      label: t('summary.overallYield'),
+      value: `${formatNumber(overallYield, i18n.language, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} %`,
+    },
+    { label: t('summary.avgSheetYield'), value: `${formatNumber(avgSheetYield, i18n.language)} %` },
     { label: t('summary.totalWaste'), value: `${wasteM2} m²` },
     {
       label: t('summary.grainConflicts'),
-      value: grainConflicts,
+      value: formatNumber(grainConflicts, i18n.language),
       warn: grainConflicts > 0,
     },
-    { label: t('summary.totalWeight'), value: `${totalWeightKg.toFixed(1)} kg` },
-    { label: t('summary.estimatedLabour'), value: labourHours > 0 ? `${labourHours} h` : t('cost.notSet', '—') },
+    {
+      label: t('summary.totalWeight'),
+      value: `${formatNumber(totalWeightKg, i18n.language, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} kg`,
+    },
+    {
+      label: t('summary.estimatedLabour'),
+      value: labourHours > 0 ? `${formatNumber(labourHours, i18n.language)} h` : t('cost.notSet', '—'),
+    },
   ];
 
   return (

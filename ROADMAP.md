@@ -1394,7 +1394,7 @@ Sources: the §4.4 audit and the §5.4 cross-platform benchmark. Execution order
 **Sprint 375 — Translation completeness and locale quality** — P1 · L · S371.
 
 - T1: COMPLETE — Added `scripts/i18n-completeness.js` → `npm run i18n:completeness` to report missing/extra keys, empty values, EN-identical ratios (excluding `config/i18n-allowlist.json` tokens), and interpolation/plural-family placeholder parity across all six locales. The CLI is covered with synthetic locale fixtures and exposes the existing AR/DE/ES/FR backlog without blocking unrelated quality gates.
-- T2: IN PROGRESS — Since the initial audit, AR gained 232 formerly missing strings and DE/ES/FR gained 213 each; five stale nesting and ten onboarding keys were removed per locale. Key parity is exact in all six locales, with no empty values or placeholder mismatches.
+- T2: COMPLETE — Since the initial audit, AR gained 232 formerly missing strings and DE/ES/FR gained 213 each; five stale nesting and ten onboarding keys were removed per locale. Key parity is exact in all six locales, with no empty values or placeholder mismatches.
   Mounted calculator namespaces translated in this pass include shelf deflection, named expressions, pocket-hole, mortise-and-tenon, dowel-joint, dovetail-layout, cabinet-door, face-frame, drawer-box, screw-pullout, kerf-bending, dado-rabbet, finishing-coat, wood-turning, frame-panel, taper-jig, stair-stringer, box-joint, glue-coverage, planer-passes, honing-guide, crown-moulding, router-circle, cove-cut, moisture-shrinkage, rafter-length, router-template, half-lap, and spline-joint.
   The mounted hardware-catalog import UI gained 26 strings per locale, room-planner and 3D preview UI gained 11 each, remaining optimizer labels were translated, and the constraints panel gained eight strings per locale. Config UI gained 2 AR, 8 DE, 6 ES, and 4 FR translations; the PDF panel gained two French labels, the storage badge gained AR/DE/ES text.
   CNC job-queue, project-sharing, batch-export, router-depth, parametric-template, machining, feed-rate, material-catalog,
@@ -1404,17 +1404,21 @@ Sources: the §4.4 audit and the §5.4 cross-platform benchmark. Execution order
   AR 8.84%, DE 7.64%, ES 7.64%, FR 7.78%; the 2% target remains open. Command-palette category labels gained one
   DE and three FR translations. Dust-collection, board-feet, assembly-dependency, cloud-sync, miter-angle, pilot-hole,
   material-usage, shelf-pin, project-comparison, cut-list-grouping, waste-predictor, shop-inventory, CNC-stream, and
-  material-cost-tracker, stock-management, and tool-wear namespaces were translated across AR/DE/ES/FR. EN-identical
-  rates are now AR 7.21%, DE 6.05%, ES 6.01%, and FR 6.20%; the 2% target remains open. All 225 prior
-  translation-review records are approved; 64 new locale records across these 18 namespaces await review.
-- T3: Test-only pseudo-locales generated at runtime: `en-XA` (accented, +40 % length) and `ar-XB` (bidi-wrapped). Responsive E2E at 320 px detects clipping and mirrored-layout errors.
-- T4: Formatting audit: numbers via `Intl.NumberFormat`, units via its `unit` style, dates via `Intl.DateTimeFormat`, plurals via i18next plural rules.
+  material-cost-tracker, stock-management, tool-wear, Web Serial, storage-fallback, library, a11yAudit, aiAssistant, collab,
+  darkMode, gltf, layoutOptimizer, sync, and fingerJoint namespaces were translated across AR/DE/ES/FR. The mobileSync and
+  analytics namespaces were translated into AR; ERP labels were translated into AR and the German ERP title was localized.
+  EN-identical rates are now AR 1.20%, DE 1.49%, ES 1.44%, and FR 1.63%, meeting the 2% target. All 337 locale
+  review records are approved; none remain pending.
+- T3: COMPLETE — Test-only pseudo-locales are generated at runtime: `en-XA` (accented, +40 % length) and `ar-XB` (bidi-wrapped). Chromium E2E passes 70 standard tab/width/locale states plus 14 pseudo-locale states at 320 px, checking document overflow, offscreen controls, clipped text and overlapping actions.
+- T4: COMPLETE — Replaced implicit locale date/number formatting, formatted selected physical measurements with `Intl.NumberFormat` unit style, moved manual UI/PDF singular-plural choices to i18next, and localized remaining fixed-precision UI/PDF and validation readouts. Editable numeric inputs, unit-conversion constraints, and machine geometry retain invariant decimal formatting by contract.
 - Accept: zero missing keys in all six locales; EN-identical ratio ≤ 2 % excluding the allowlist; no placeholder mismatch; pseudo-locale E2E passes without overflow.
 
 **Sprint 376 — Critical-path performance budget** — P1 · M · S371.
 
-- T1: Extend `scripts/bundle-report.js` with brotli sizes and the initial-route chunk graph; add `critical` budgets to `config/bundle-budget.json` set from the measured baseline.
-- T2: Lazy-load each calculator panel, the 3D/WebGL preview, PDF renderer, G-code/DXF modals and Marketplace; preload on hover/focus intent. No new dependency.
+- T1: COMPLETE — `scripts/bundle-report.js` reports per-file and aggregate Brotli sizes plus the initial-route static-import graph, CSS, and entry assets. Measured baseline: 1,832.9 KB raw / 511.1 KB Brotli; 1,046.6 KB (37.6%) of emitted JavaScript sits outside the initial route. `npm run bundle:critical` enforces the 1,840 KB / 515 KB budgets in CI. The graph excludes dynamic imports and on-demand workers; the current static PDF renderer remains in the baseline.
+- T2: COMPLETE — Each calculator panel, Marketplace, and G-code preview modal now load lazily and preload on pointer/focus intent; the PDF renderer and 3D/WebGL preview stay behind lazy route boundaries with tab-intent preloads.
+  DXF export remains an on-demand worker, not a modal. No new dependency. The initial route fell from 1,832.9 KB raw / 511.1 KB Brotli to 655.1 KB / 160.4 KB across 13 files (64.3% raw, 68.6% Brotli reduction); 2,241.9 KB (80.1%) of emitted JavaScript is outside the route.
+  The 700 KB / 175 KB critical gate passes. The aggregate dist cap is 2,970 KB per the measured T2 ADR in CHANGELOG.
 - T3: Raising any budget requires an ADR line in CHANGELOG with measured cause; `lighthouse.yml` asserts LCP, TBT and CLS with mobile throttling on the built app.
 - Tests: bundle-report chunk-graph unit tests; bench budgets unchanged.
 - Accept: `npm run bundle:critical` blocks in `npm run ci`; first-load reduction reported from measurements.

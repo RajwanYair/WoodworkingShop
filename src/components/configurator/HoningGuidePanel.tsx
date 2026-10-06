@@ -3,10 +3,11 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatMillimeters, formatNumber } from '../../i18n/format';
 import { calculateHoningGuide } from '../../engine/honing-guide';
 
 export function HoningGuidePanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [bevelAngleDeg, setBevelAngleDeg] = useState(25);
   const [guideHeightMm, setGuideHeightMm] = useState(25);
@@ -39,7 +40,7 @@ export function HoningGuidePanel() {
             step={1}
             value={bevelAngleDeg}
             onChange={(e) => setBevelAngleDeg(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -52,7 +53,7 @@ export function HoningGuidePanel() {
             step={1}
             value={guideHeightMm}
             onChange={(e) => setGuideHeightMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -65,7 +66,7 @@ export function HoningGuidePanel() {
             step={1}
             value={microbevelDeg}
             onChange={(e) => setMicrobevelDeg(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
       </div>
@@ -80,21 +81,21 @@ export function HoningGuidePanel() {
         <dl className="bg-wood-50 dark:bg-wood-900/40 grid grid-cols-2 gap-x-4 gap-y-2 rounded-lg p-3 text-sm">
           <dt className="text-wood-500 dark:text-wood-400">{t('honingGuide.projection')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.projectionMm.toFixed(1)} mm
+            {formatMillimeters(result.data.projectionMm, i18n.language, 1)}
           </dd>
 
           {result.data.microbevelProjectionMm !== null && (
             <>
               <dt className="text-wood-500 dark:text-wood-400">{t('honingGuide.microbevelProjection')}</dt>
               <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-                {result.data.microbevelProjectionMm.toFixed(1)} mm
+                {formatMillimeters(result.data.microbevelProjectionMm, i18n.language, 1)}
               </dd>
             </>
           )}
 
           <dt className="text-wood-500 dark:text-wood-400">{t('honingGuide.bevelAngle')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.actualBevelAngleDeg}°
+            {formatNumber(result.data.actualBevelAngleDeg, i18n.language)}°
           </dd>
         </dl>
       )}

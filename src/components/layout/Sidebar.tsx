@@ -1,12 +1,11 @@
-import { useEffect, useState, useRef } from 'react';
+import { lazy, Suspense, useEffect, useState, useRef } from 'react';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { CostEstimatePanel } from '../configurator/CostEstimatePanel';
-import { CostSummaryPanel } from '../configurator/CostSummaryPanel';
-import { CostVariancePanel } from '../configurator/CostVariancePanel';
-import { ShelfSpacingPresetsPanel } from '../configurator/ShelfSpacingPresetsPanel';
-import { SnapshotPanel } from './SnapshotPanel';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { IconBarChart, IconX } from './Icons';
+
+const SidebarDetailPanels = lazy(() =>
+  import('./SidebarDetailPanels').then((module) => ({ default: module.SidebarDetailPanels })),
+);
 
 export function Sidebar() {
   const { parts, hardware, optimization } = useCabinetStore();
@@ -26,46 +25,30 @@ export function Sidebar() {
 
   const content = (
     <>
-      <div className="mb-2 flex items-center justify-between">
-        <img
-          src={`${import.meta.env.BASE_URL}woodgrain-spark.svg`}
-          alt=""
-          aria-hidden="true"
-          className="h-4 w-24 opacity-80"
-          loading="lazy"
-        />
-      </div>
-      <h2 className="text-wood-700 dark:text-wood-200 mb-3 text-sm font-semibold tracking-wide uppercase">
-        🪵 Summary
-      </h2>
+      <h2 className="text-wood-800 dark:text-wood-100 mb-3 text-base font-semibold">Summary</h2>
 
-      <dl className="mb-4 space-y-2 text-sm">
-        <div className="flex justify-between">
-          <dt className="text-wood-600 dark:text-wood-300">🔲 Parts</dt>
-          <dd className="font-medium">{parts.length}</dd>
+      <dl className="divide-wood-200 dark:divide-wood-800 bg-wood-100/60 dark:bg-wood-800/60 mb-4 divide-y rounded-xl px-3 text-sm">
+        <div className="flex justify-between py-2">
+          <dt className="text-wood-600 dark:text-wood-300">Parts</dt>
+          <dd className="font-medium tabular-nums">{parts.length}</dd>
         </div>
-        <div className="flex justify-between">
-          <dt className="text-wood-600 dark:text-wood-300">🔩 Hardware items</dt>
-          <dd className="font-medium">{hardware.length}</dd>
+        <div className="flex justify-between py-2">
+          <dt className="text-wood-600 dark:text-wood-300">Hardware items</dt>
+          <dd className="font-medium tabular-nums">{hardware.length}</dd>
         </div>
-        <div className="flex justify-between">
-          <dt className="text-wood-600 dark:text-wood-300">📋 Sheets needed</dt>
-          <dd className="font-medium">{optimization.totalSheets}</dd>
+        <div className="flex justify-between py-2">
+          <dt className="text-wood-600 dark:text-wood-300">Sheets needed</dt>
+          <dd className="font-medium tabular-nums">{optimization.totalSheets}</dd>
         </div>
-        <div className="flex justify-between">
-          <dt className="text-wood-600 dark:text-wood-300">📊 Yield</dt>
-          <dd className="font-medium">{optimization.overallYield}%</dd>
+        <div className="flex justify-between py-2">
+          <dt className="text-wood-600 dark:text-wood-300">Yield</dt>
+          <dd className="font-medium tabular-nums">{optimization.overallYield}%</dd>
         </div>
       </dl>
 
-      <CostEstimatePanel />
-      {/* Sprint 95 — exportable cost breakdown */}
-      <CostSummaryPanel />
-      {/* Sprint 99 — cost variance tracker */}
-      <CostVariancePanel />
-      {/* Sprint 102 — shelf spacing presets */}
-      <ShelfSpacingPresetsPanel />
-      <SnapshotPanel />
+      <Suspense fallback={null}>
+        <SidebarDetailPanels />
+      </Suspense>
     </>
   );
 
@@ -74,7 +57,7 @@ export function Sidebar() {
       {/* Mobile toggle button */}
       <button
         onClick={() => setMobileOpen(!mobileOpen)}
-        className="bg-wood-600 hover:bg-wood-700 fixed inset-s-5 bottom-5 z-50 flex h-12 w-12 items-center justify-center rounded-full text-white shadow-lg transition-colors lg:hidden"
+        className="bg-accent fixed inset-s-5 bottom-20 z-50 flex h-12 w-12 items-center justify-center rounded-full text-white shadow-[0_8px_24px_rgb(0_0_0/0.18)] hover:brightness-110 lg:hidden"
         data-print="hide"
         aria-label="Toggle summary panel"
       >
@@ -92,7 +75,7 @@ export function Sidebar() {
           tabIndex={-1}
         >
           <div
-            className="absolute inset-0 bg-black/40"
+            className="absolute inset-0 bg-black/30"
             onClick={() => setMobileOpen(false)}
             onKeyDown={(e) => e.key === 'Enter' && setMobileOpen(false)}
             role="button"
@@ -101,11 +84,11 @@ export function Sidebar() {
           />
           <aside
             ref={mobileDialogRef}
-            className="bg-wood-50 dark:bg-wood-900 border-wood-200 dark:border-wood-800 animate-slide-up absolute inset-x-0 bottom-0 max-h-[70vh] overflow-y-auto rounded-t-xl border-t p-4"
+            className="bg-wood-50 dark:bg-wood-900 animate-slide-up absolute inset-x-0 bottom-0 max-h-[70vh] overflow-y-auto rounded-t-3xl p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-[0_-8px_32px_rgb(0_0_0/0.18)]"
             aria-label="Cabinet summary"
           >
             <div className="relative">
-              <div className="bg-wood-300 dark:bg-wood-600 mx-auto mb-3 h-1 w-10 rounded-full" />
+              <div className="bg-wood-300 dark:bg-wood-600 mx-auto mb-3 h-1.5 w-9 rounded-full" />
               <button
                 onClick={() => setMobileOpen(false)}
                 className="text-wood-400 hover:text-wood-700 dark:hover:text-wood-200 absolute top-0 right-0 flex items-center"
@@ -121,7 +104,7 @@ export function Sidebar() {
 
       {/* Desktop sidebar */}
       <aside
-        className="bg-wood-50 dark:bg-wood-900 border-wood-200 dark:border-wood-800 hidden w-64 overflow-y-auto border-e p-4 lg:block"
+        className="bg-wood-50 dark:bg-wood-900 border-wood-200 dark:border-wood-800 hidden w-64 overflow-y-auto border-e p-5 lg:block"
         aria-label="Cabinet summary"
         data-print="hide"
       >

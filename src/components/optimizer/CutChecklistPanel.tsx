@@ -84,7 +84,7 @@ export function CutChecklistPanel() {
                         type="checkbox"
                         checked={item.checked}
                         onChange={() => toggleCutPart(item.partId)}
-                        className="accent-wood-600 h-4 w-4 rounded"
+                        className="accent-accent h-4 w-4 rounded"
                         aria-label={`${item.label} — ${item.width}×${item.length} mm`}
                       />
                       <span

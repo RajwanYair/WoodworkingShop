@@ -1,6 +1,8 @@
 import { useRef, useState, useCallback, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { useTranslation } from 'react-i18next';
+import { formatDate } from '../../i18n/format';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useToastStore } from '../../store/toast-store';
 import {
@@ -19,7 +21,7 @@ interface ProjectManagerModalProps {
 }
 
 export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dialogRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cabinets = useCabinetStore((s) => s.cabinets);
@@ -98,13 +100,13 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
 
   const fmt = (iso: string) => {
     try {
-      return new Date(iso).toLocaleDateString();
+      return formatDate(iso, i18n.language);
     } catch {
       return iso;
     }
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop — click outside to close */}
       <button
@@ -155,7 +157,7 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
             <button
               onClick={handleSave}
               disabled={!saveName.trim()}
-              className="bg-wood-600 hover:bg-wood-700 rounded px-4 py-1.5 text-sm text-white transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+              className="bg-accent hover:bg-accent-hover rounded px-4 py-1.5 text-sm text-white transition-colors disabled:cursor-not-allowed disabled:opacity-40"
             >
               {t('projects.save')}
             </button>
@@ -190,7 +192,7 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
         </div>
 
         {/* Project list */}
-        <div className="flex-1 space-y-2 overflow-y-auto p-4">
+        <div className="min-h-0 flex-1 space-y-2 overflow-y-auto p-4">
           {visibleProjects.length === 0 ? (
             <p className="text-wood-700 dark:text-wood-200 py-6 text-center text-sm">
               {searchQuery ? t('projects.noResults', { query: searchQuery }) : t('projects.empty')}
@@ -259,6 +261,7 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

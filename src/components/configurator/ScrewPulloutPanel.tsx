@@ -6,12 +6,13 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../../i18n/format';
 import { calculateScrewPullout, SCREW_PULLOUT_LIMITS, type WoodDensityClass } from '../../engine/screw-pullout';
 
 const DENSITY_CLASSES: WoodDensityClass[] = ['low', 'medium', 'high', 'sheet'];
 
 export function ScrewPulloutPanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [screwDiameterMm, setScrewDiameterMm] = useState(4);
   const [threadLengthMm, setThreadLengthMm] = useState(30);
@@ -52,7 +53,7 @@ export function ScrewPulloutPanel() {
             step={0.5}
             value={screwDiameterMm}
             onChange={(e) => setScrewDiameterMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -65,7 +66,7 @@ export function ScrewPulloutPanel() {
             max={SCREW_PULLOUT_LIMITS.threadLengthMm.max}
             value={threadLengthMm}
             onChange={(e) => setThreadLengthMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
       </div>
@@ -82,7 +83,7 @@ export function ScrewPulloutPanel() {
               aria-pressed={densityClass === cls}
               className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
                 densityClass === cls
-                  ? 'bg-wood-600 text-white'
+                  ? 'bg-accent text-white'
                   : 'bg-wood-100 text-wood-700 dark:bg-wood-700 dark:text-wood-200 hover:bg-wood-200 dark:hover:bg-wood-600'
               }`}
             >
@@ -107,17 +108,29 @@ export function ScrewPulloutPanel() {
         >
           <dt className="text-wood-500 dark:text-wood-400">{t('screwPullout.pulloutForceN')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.pulloutForceN.toFixed(1)} N
+            {formatNumber(result.data.pulloutForceN, i18n.language, {
+              minimumFractionDigits: 1,
+              maximumFractionDigits: 1,
+            })}{' '}
+            N
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('screwPullout.pulloutForceLbf')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.pulloutForceLbf.toFixed(1)} lbf
+            {formatNumber(result.data.pulloutForceLbf, i18n.language, {
+              minimumFractionDigits: 1,
+              maximumFractionDigits: 1,
+            })}{' '}
+            lbf
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('screwPullout.withdrawalResistance')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.withdrawalResistanceMPa.toFixed(3)} MPa
+            {formatNumber(result.data.withdrawalResistanceMPa, i18n.language, {
+              minimumFractionDigits: 3,
+              maximumFractionDigits: 3,
+            })}{' '}
+            MPa
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('screwPullout.safetyRating')}</dt>

@@ -12,6 +12,7 @@ import path from 'path';
 const outputDir = process.env.CI
   ? path.resolve('.lighthouseci')
   : path.join(os.tmpdir(), 'WoodworkingShop', '.lighthouseci');
+const previewPort = process.env['LHCI_PREVIEW_PORT'] ?? '4173';
 mkdirSync(outputDir, { recursive: true });
 
 /**
@@ -25,11 +26,15 @@ mkdirSync(outputDir, { recursive: true });
 const config = {
   ci: {
     collect: {
-      startServerCommand: 'npm run preview -- --port 4173 --strictPort',
-      url: ['http://localhost:4173/WoodworkingShop/'],
-      startServerReadyPattern: 'localhost:4173',
+      startServerCommand: `npm run preview -- --port ${previewPort} --strictPort`,
+      url: [`http://localhost:${previewPort}/WoodworkingShop/`],
+      startServerReadyPattern: `localhost:${previewPort}`,
       startServerReadyTimeout: 60000,
       numberOfRuns: process.env.CI ? 3 : 1,
+      settings: {
+        formFactor: 'mobile',
+        throttlingMethod: 'simulate',
+      },
     },
     assert: {
       preset: 'lighthouse:no-pwa',

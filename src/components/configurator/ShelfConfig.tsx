@@ -5,9 +5,10 @@ import { CONSTRAINTS, HARD_LIMITS, getMaterial } from '../../engine/materials';
 import { computeEqualShelfPositions, computeShelfDeflection } from '../../engine/dimensions';
 import { SliderInput } from './SliderInput';
 import { IconWarning } from '../layout/Icons';
+import { formatNumber } from '../../i18n/format';
 
 export function ShelfConfig() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { config, dimensions, setConfig } = useCabinetStore();
   const customMaterials = useCustomMaterialsStore((state) => state.materials);
   const internalH = dimensions.internalHeight;
@@ -101,8 +102,14 @@ export function ShelfConfig() {
           <span>
             {t('shelves.deflectionWarning', {
               span: Math.round(effectiveShelfSpan),
-              sag: deflection.deflectionMm.toFixed(1),
-              limit: deflection.limitMm.toFixed(1),
+              sag: formatNumber(deflection.deflectionMm, i18n.language, {
+                minimumFractionDigits: 1,
+                maximumFractionDigits: 1,
+              }),
+              limit: formatNumber(deflection.limitMm, i18n.language, {
+                minimumFractionDigits: 1,
+                maximumFractionDigits: 1,
+              }),
             })}
           </span>
         </div>
@@ -171,11 +178,26 @@ export function ShelfConfig() {
                     {d && (
                       <span
                         className={`text-[10px] font-normal ${indicatorClass}`}
-                        title={t(deflectionKey, { sag: d.deflectionMm.toFixed(1) })}
-                        aria-label={t(deflectionKey, { sag: d.deflectionMm.toFixed(1) })}
+                        title={t(deflectionKey, {
+                          sag: formatNumber(d.deflectionMm, i18n.language, {
+                            minimumFractionDigits: 1,
+                            maximumFractionDigits: 1,
+                          }),
+                        })}
+                        aria-label={t(deflectionKey, {
+                          sag: formatNumber(d.deflectionMm, i18n.language, {
+                            minimumFractionDigits: 1,
+                            maximumFractionDigits: 1,
+                          }),
+                        })}
                       >
                         {rating !== 'safe' && <IconWarning size={10} className="me-0.5 inline" aria-hidden="true" />}
-                        {t(deflectionKey, { sag: d.deflectionMm.toFixed(1) })}
+                        {t(deflectionKey, {
+                          sag: formatNumber(d.deflectionMm, i18n.language, {
+                            minimumFractionDigits: 1,
+                            maximumFractionDigits: 1,
+                          }),
+                        })}
                       </span>
                     )}
                     {d && (

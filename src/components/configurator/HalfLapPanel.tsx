@@ -3,11 +3,12 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatMillimeters, formatNumber } from '../../i18n/format';
 import { calculateHalfLap } from '../../engine/half-lap';
 import type { HalfLapType } from '../../engine/half-lap';
 
 export function HalfLapPanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [board1ThicknessMm, setBoard1ThicknessMm] = useState(19);
   const [board1WidthMm, setBoard1WidthMm] = useState(90);
@@ -44,7 +45,7 @@ export function HalfLapPanel() {
           <select
             value={lapType}
             onChange={(e) => setLapType(e.target.value as HalfLapType)}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 col-span-2 rounded border px-2 py-1 text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent col-span-2 rounded border px-2 py-1 text-sm focus:ring-2 focus:outline-none"
           >
             <option value="end_lap">{t('halfLap.lapTypes.end_lap')}</option>
             <option value="t_lap">{t('halfLap.lapTypes.t_lap')}</option>
@@ -63,7 +64,7 @@ export function HalfLapPanel() {
             step={1}
             value={board1ThicknessMm}
             onChange={(e) => setBoard1ThicknessMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -76,7 +77,7 @@ export function HalfLapPanel() {
             step={1}
             value={board1WidthMm}
             onChange={(e) => setBoard1WidthMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -89,7 +90,7 @@ export function HalfLapPanel() {
             step={1}
             value={board2ThicknessMm}
             onChange={(e) => setBoard2ThicknessMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -102,7 +103,7 @@ export function HalfLapPanel() {
             step={1}
             value={board2WidthMm}
             onChange={(e) => setBoard2WidthMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
       </div>
@@ -117,32 +118,32 @@ export function HalfLapPanel() {
         <dl className="bg-wood-50 dark:bg-wood-900/40 grid grid-cols-2 gap-x-4 gap-y-2 rounded-lg p-3 text-sm">
           <dt className="text-wood-500 dark:text-wood-400">{t('halfLap.board1NotchDepth')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.board1NotchDepthMm.toFixed(1)} mm
+            {formatMillimeters(result.data.board1NotchDepthMm, i18n.language, 1)}
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('halfLap.board1NotchWidth')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.board1NotchWidthMm.toFixed(1)} mm
+            {formatMillimeters(result.data.board1NotchWidthMm, i18n.language, 1)}
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('halfLap.board2NotchDepth')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.board2NotchDepthMm.toFixed(1)} mm
+            {formatMillimeters(result.data.board2NotchDepthMm, i18n.language, 1)}
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('halfLap.board2NotchWidth')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.board2NotchWidthMm.toFixed(1)} mm
+            {formatMillimeters(result.data.board2NotchWidthMm, i18n.language, 1)}
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('halfLap.totalGlueArea')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.totalGlueAreaMm2.toFixed(0)} mm²
+            {formatNumber(result.data.totalGlueAreaMm2, i18n.language, { maximumFractionDigits: 0 })} mm²
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('halfLap.finishedThickness')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.finishedThicknessMm.toFixed(1)} mm
+            {formatMillimeters(result.data.finishedThicknessMm, i18n.language, 1)}
           </dd>
         </dl>
       )}

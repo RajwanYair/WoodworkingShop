@@ -6,10 +6,10 @@ const IconMap: Record<ToastType, React.ReactElement> = {
   error: <IconX size={16} />,
   info: <IconInfo size={16} />,
 };
-const colors: Record<ToastType, string> = {
-  success: 'bg-green-600',
-  error: 'bg-red-600',
-  info: 'bg-wood-600',
+const iconColors: Record<ToastType, string> = {
+  success: 'text-green-400',
+  error: 'text-red-400',
+  info: 'text-accent-text-dark',
 };
 
 function ToastList({ toasts, removeToast }: { toasts: Toast[]; removeToast: (id: number) => void }) {
@@ -18,9 +18,9 @@ function ToastList({ toasts, removeToast }: { toasts: Toast[]; removeToast: (id:
       {toasts.map((t) => (
         <div
           key={t.id}
-          className={`${colors[t.type]} animate-fade-in flex items-center gap-2 rounded px-4 py-2 text-sm text-white shadow-lg`}
+          className="animate-fade-in bg-wood-900/90 flex items-center gap-2.5 rounded-2xl px-4 py-2.5 text-sm font-medium text-white shadow-[0_10px_30px_rgb(0_0_0/0.25)] ring-1 ring-white/10 backdrop-blur-xl"
         >
-          <span className="shrink-0">{IconMap[t.type]}</span>
+          <span className={`shrink-0 ${iconColors[t.type]}`}>{IconMap[t.type]}</span>
           <span className="flex-1">{t.message}</span>
           <button
             onClick={() => removeToast(t.id)}

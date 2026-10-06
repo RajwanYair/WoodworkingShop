@@ -43,7 +43,7 @@ function ViolationRow({ violation, onApply }: ViolationRowProps) {
         </span>
         <button
           type="button"
-          className="bg-wood-600 hover:bg-wood-700 shrink-0 rounded px-2 py-0.5 text-xs font-medium text-white transition-colors"
+          className="bg-accent hover:bg-accent-hover shrink-0 rounded px-2 py-0.5 text-xs font-medium text-white transition-colors"
           onClick={() => onApply(violation.field, violation.correctedValue)}
           aria-label={`${t('constraints.fixField', { field: t(FIELD_LABEL_KEY[violation.field]) })}: ${violation.correctedValue}`}
         >

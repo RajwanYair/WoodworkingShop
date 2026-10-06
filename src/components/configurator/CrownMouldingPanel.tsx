@@ -3,11 +3,12 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../../i18n/format';
 import { calculateCrownMoulding } from '../../engine/crown-moulding';
 import type { CrownCutMethod } from '../../engine/crown-moulding';
 
 export function CrownMouldingPanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [cornerAngleDeg, setCornerAngleDeg] = useState(90);
   const [springAngleDeg, setSpringAngleDeg] = useState(38);
@@ -40,7 +41,7 @@ export function CrownMouldingPanel() {
             step={1}
             value={cornerAngleDeg}
             onChange={(e) => setCornerAngleDeg(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -53,7 +54,7 @@ export function CrownMouldingPanel() {
             step={1}
             value={springAngleDeg}
             onChange={(e) => setSpringAngleDeg(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -62,7 +63,7 @@ export function CrownMouldingPanel() {
           <select
             value={cuttingMethod}
             onChange={(e) => setCuttingMethod(e.target.value as CrownCutMethod)}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 text-sm focus:ring-2 focus:outline-none"
           >
             <option value="flat">{t('crownMoulding.methods.flat')}</option>
             <option value="in_position">{t('crownMoulding.methods.in_position')}</option>
@@ -80,12 +81,20 @@ export function CrownMouldingPanel() {
         <dl className="bg-wood-50 dark:bg-wood-900/40 grid grid-cols-2 gap-x-4 gap-y-2 rounded-lg p-3 text-sm">
           <dt className="text-wood-500 dark:text-wood-400">{t('crownMoulding.miterAngle')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.miterAngleDeg.toFixed(1)}°
+            {formatNumber(result.data.miterAngleDeg, i18n.language, {
+              minimumFractionDigits: 1,
+              maximumFractionDigits: 1,
+            })}
+            °
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('crownMoulding.bevelAngle')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.bevelAngleDeg.toFixed(1)}°
+            {formatNumber(result.data.bevelAngleDeg, i18n.language, {
+              minimumFractionDigits: 1,
+              maximumFractionDigits: 1,
+            })}
+            °
           </dd>
         </dl>
       )}

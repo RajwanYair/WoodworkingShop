@@ -1,12 +1,13 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatMillimeters, formatNumber } from '../../i18n/format';
 import { calculateDeflection, type LoadType, type ShelfMaterial } from '../../engine/shelf-deflection';
 
 const MATERIALS: ShelfMaterial[] = ['solidWood', 'plywood', 'mdf', 'particleboard', 'melamine'];
 const LOAD_TYPES: LoadType[] = ['uniform', 'center', 'combined'];
 
 export function ShelfDeflectionPanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [spanMm, setSpanMm] = useState(800);
   const [widthMm, setWidthMm] = useState(400);
   const [thicknessMm, setThicknessMm] = useState(18);
@@ -130,12 +131,14 @@ export function ShelfDeflectionPanel() {
           className="bg-wood-50 dark:bg-wood-800 grid grid-cols-2 gap-x-4 gap-y-1 rounded-md p-3 text-sm"
         >
           <dt className="text-wood-500 dark:text-wood-400">{t('shelfDeflection.maxDeflection')}</dt>
-          <dd className="font-mono">{result.data.maxDeflectionMm.toFixed(2)} mm</dd>
+          <dd className="font-mono">{formatMillimeters(result.data.maxDeflectionMm, i18n.language, 2)}</dd>
           <dt className="text-wood-500 dark:text-wood-400">{t('shelfDeflection.recommendedMaxSpan')}</dt>
-          <dd className="font-mono">{result.data.recommendedMaxSpanMm} mm</dd>
+          <dd className="font-mono">{formatMillimeters(result.data.recommendedMaxSpanMm, i18n.language, 0)}</dd>
           <dt className="text-wood-500 dark:text-wood-400">{t('shelfDeflection.deflectionRatio')}</dt>
           <dd className="font-mono">
-            {Number.isFinite(result.data.deflectionRatio) ? `L/${result.data.deflectionRatio}` : '∞'}
+            {Number.isFinite(result.data.deflectionRatio)
+              ? `L/${formatNumber(result.data.deflectionRatio, i18n.language)}`
+              : '∞'}
           </dd>
           <dt className="text-wood-500 dark:text-wood-400">{t('shelfDeflection.exceedsLimit')}</dt>
           <dd

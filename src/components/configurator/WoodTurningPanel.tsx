@@ -3,12 +3,13 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../../i18n/format';
 import { calculateWoodTurning, type TurningOperation } from '../../engine/wood-turning';
 
 const OPERATIONS: TurningOperation[] = ['roughing', 'finishing', 'sanding'];
 
 export function WoodTurningPanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [blankDiameterMm, setBlankDiameterMm] = useState(100);
   const [operation, setOperation] = useState<TurningOperation>('finishing');
@@ -40,7 +41,7 @@ export function WoodTurningPanel() {
             step={5}
             value={blankDiameterMm}
             onChange={(e) => setBlankDiameterMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
       </div>
@@ -56,7 +57,7 @@ export function WoodTurningPanel() {
               onClick={() => setOperation(op)}
               className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
                 operation === op
-                  ? 'bg-wood-600 text-white'
+                  ? 'bg-accent text-white'
                   : 'bg-wood-100 text-wood-700 dark:bg-wood-700 dark:text-wood-200 hover:bg-wood-200 dark:hover:bg-wood-600'
               }`}
             >
@@ -81,18 +82,22 @@ export function WoodTurningPanel() {
           >
             <dt className="text-wood-500 dark:text-wood-400">{t('woodTurning.recommendedRpm')}</dt>
             <dd className="text-wood-800 dark:text-wood-100 font-mono text-base font-semibold">
-              {result.data.recommendedRpm.toLocaleString()} RPM
+              {formatNumber(result.data.recommendedRpm, i18n.language)} RPM
             </dd>
 
             <dt className="text-wood-500 dark:text-wood-400">{t('woodTurning.minRpm')}</dt>
-            <dd className="text-wood-800 dark:text-wood-100 font-mono">{result.data.minRpm.toLocaleString()} RPM</dd>
+            <dd className="text-wood-800 dark:text-wood-100 font-mono">
+              {formatNumber(result.data.minRpm, i18n.language)} RPM
+            </dd>
 
             <dt className="text-wood-500 dark:text-wood-400">{t('woodTurning.maxRpm')}</dt>
-            <dd className="text-wood-800 dark:text-wood-100 font-mono">{result.data.maxRpm.toLocaleString()} RPM</dd>
+            <dd className="text-wood-800 dark:text-wood-100 font-mono">
+              {formatNumber(result.data.maxRpm, i18n.language)} RPM
+            </dd>
 
             <dt className="text-wood-500 dark:text-wood-400">{t('woodTurning.surfaceSpeed')}</dt>
             <dd className="text-wood-800 dark:text-wood-100 font-mono">
-              {result.data.surfaceSpeedMPerMin.toFixed(0)} m/min
+              {formatNumber(result.data.surfaceSpeedMPerMin, i18n.language, { maximumFractionDigits: 0 })} m/min
             </dd>
           </dl>
 

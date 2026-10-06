@@ -8,10 +8,10 @@ describe('ScrewPulloutPanel', () => {
     const user = userEvent.setup();
     render(<ScrewPulloutPanel />);
 
-    const mediumForce = Number(screen.getByText(/^\d+\.\d+ N$/).textContent?.replace(' N', ''));
+    const mediumForce = Number(screen.getByText(/^[\d,]+\.\d+\s+N$/).textContent?.replace(/[ ,N]/g, ''));
     expect(screen.getByText(/USDA equation 8-10a estimates short-term ultimate load/)).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'High Density (Hickory, Teak)' }));
-    const highForce = Number(screen.getByText(/^\d+\.\d+ N$/).textContent?.replace(' N', ''));
+    const highForce = Number(screen.getByText(/^[\d,]+\.\d+\s+N$/).textContent?.replace(/[ ,N]/g, ''));
     expect(highForce).toBeGreaterThan(mediumForce);
     expect(screen.getByText('Adequate')).toBeInTheDocument();
 

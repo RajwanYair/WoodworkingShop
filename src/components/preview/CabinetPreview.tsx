@@ -162,7 +162,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
               onClick={() => setActiveView(v.id)}
               className={`rounded px-3 py-1 text-xs font-medium transition-colors ${
                 activeView === v.id
-                  ? 'bg-wood-600 text-white'
+                  ? 'bg-accent text-white'
                   : 'bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700'
               }`}
             >
