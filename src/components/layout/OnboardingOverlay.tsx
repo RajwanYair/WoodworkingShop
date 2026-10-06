@@ -131,7 +131,7 @@ export function HelpButton() {
   return (
     <button
       onClick={() => dispatchCommandAction('help.open')}
-      className="text-wood-300 flex items-center transition-colors hover:text-white"
+      className="text-wood-200 flex h-8 w-8 shrink-0 items-center justify-center rounded-full hover:bg-white/10 hover:text-white active:bg-white/20"
       aria-label={t('onboarding.help')}
       title={t('onboarding.help')}
     >

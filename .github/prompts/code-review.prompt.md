@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: Code review — check a PR or changed files against all project conventions and quality rules.
 ---
 

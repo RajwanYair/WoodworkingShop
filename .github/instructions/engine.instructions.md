@@ -1,4 +1,5 @@
 ---
+description: 'Pure TypeScript engine rules: no React or side effects, full unit coverage.'
 applyTo: 'src/engine/**'
 ---
 

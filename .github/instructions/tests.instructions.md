@@ -1,4 +1,5 @@
 ---
+description: 'Vitest and Playwright test conventions, factories, and parametrised cases.'
 applyTo: 'tests/**'
 ---
 

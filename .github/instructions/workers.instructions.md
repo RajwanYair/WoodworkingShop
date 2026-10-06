@@ -1,4 +1,5 @@
 ---
+description: 'Web Worker module rules and sync fallbacks for tests.'
 applyTo: src/workers/**
 ---
 

@@ -661,7 +661,10 @@
     "collision": "Se detectó una superposición de armarios",
     "roomHeight": "Altura de la habitación",
     "floorPlan": "Plano de planta",
-    "wallOccupancy": "Ocupación de la pared"
+    "wallOccupancy": "Ocupación de la pared",
+    "selectCabinet": "Armario",
+    "positionX": "Posición X (mm)",
+    "positionY": "Posición Y (mm)"
   },
   "summary": {
     "title": "Resumen del proyecto",

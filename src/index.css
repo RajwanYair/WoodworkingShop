@@ -34,6 +34,15 @@
   --radius-lg: 0.875rem;
   --radius-xl: 1.125rem;
   --ease-apple: cubic-bezier(0.25, 0.1, 0.25, 1);
+
+  /* Size-specific tracking: small text opens up, display text tightens. */
+  --text-xs--letter-spacing: 0.01em;
+  --text-2xl--letter-spacing: -0.017em;
+  --text-3xl--letter-spacing: -0.02em;
+  --text-4xl--letter-spacing: -0.022em;
+  --text-4xl--line-height: 1.1;
+  --text-5xl--letter-spacing: -0.025em;
+  --text-5xl--line-height: 1.05;
 }
 
 .dark {
@@ -251,6 +260,26 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  /* Keep a gentle, non-vestibular cue instead of removing feedback entirely. */
+  .animate-slide-up,
+  .animate-fade-in {
+    animation: opacity-in 200ms ease-out !important;
+  }
+
+  :where(button, [role='button'], [role='tab']):not(:disabled):active {
+    transform: none;
+  }
+}
+
+@keyframes opacity-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }
 

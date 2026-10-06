@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: Convert repetitive Vitest tests in a file to it.each / describe.each parameterised form.
 ---
 

@@ -579,7 +579,10 @@
     "collision": "Cabinet overlap detected",
     "roomHeight": "Room height",
     "floorPlan": "Floor plan",
-    "wallOccupancy": "Wall occupancy"
+    "wallOccupancy": "Wall occupancy",
+    "selectCabinet": "Cabinet",
+    "positionX": "X position (mm)",
+    "positionY": "Y position (mm)"
   },
   "summary": {
     "title": "Project Summary",

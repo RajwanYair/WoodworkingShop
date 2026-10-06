@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: Diagnose and fix Lighthouse / runtime performance regressions — TBT, FCP, and sub-100 ms config→preview.
 ---
 

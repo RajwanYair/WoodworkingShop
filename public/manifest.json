@@ -1,30 +1,20 @@
 {
   "name": "Cabinet Planner",
   "short_name": "Cabinet",
+  "id": "/WoodworkingShop/",
   "description": "Interactive woodworking cabinet design tool with cut optimization",
   "start_url": "/WoodworkingShop/",
   "scope": "/WoodworkingShop/",
   "display": "standalone",
-  "background_color": "#eaebf1",
-  "theme_color": "#161617",
+  "background_color": "#f5f5f7",
+  "theme_color": "#f5f5f7",
+  "categories": ["productivity", "utilities"],
   "icons": [
     {
-      "src": "favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
-    {
       "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
-    },
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
     },
     {
       "src": "icon-512.png",
@@ -33,7 +23,13 @@
       "purpose": "any"
     },
     {
-      "src": "icon-512.png",
+      "src": "icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon-512-maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
@@ -47,26 +43,12 @@
       },
       "icons": [
         {
-          "src": "favicon.svg",
-          "sizes": "any",
-          "type": "image/svg+xml"
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
         }
       ],
       "launch_type": "single-client"
     }
-  ],
-  "share_target": {
-    "action": "/WoodworkingShop/",
-    "method": "POST",
-    "enctype": "multipart/form-data",
-    "params": {
-      "title": "name",
-      "files": [
-        {
-          "name": "cabinetplan",
-          "accept": ["application/cabinet-plan", ".cabinetplan"]
-        }
-      ]
-    }
-  }
+  ]
 }

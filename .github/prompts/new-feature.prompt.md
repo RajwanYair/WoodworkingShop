@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: Add a new feature panel — engine function + React component + i18n keys + store integration + mounting.
 ---
 

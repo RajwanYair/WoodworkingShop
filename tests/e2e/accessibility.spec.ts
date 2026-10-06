@@ -59,6 +59,12 @@ test('first-visit mobile navigation and onboarding pass axe WCAG 2.2 AA checks',
       configurable: true,
       get: () => 1,
     });
+    const nativeMatchMedia = window.matchMedia.bind(window);
+    window.matchMedia = (query: string) => {
+      const mediaQueryList = nativeMatchMedia(query);
+      if (query === '(pointer: coarse)') Object.defineProperty(mediaQueryList, 'matches', { value: true });
+      return mediaQueryList;
+    };
   });
   await page.goto('./');
   await expect(page.getByRole('dialog')).toBeVisible();

@@ -401,7 +401,7 @@ graph TD
 
   browser --> sw
   sw --> app
-  manifest["public/manifest.json<br/>icons, file handlers, share target"] --> browser
+  manifest["public/manifest.json<br/>icons, file handlers"] --> browser
 
   classDef sw fill:#5a0fc8,stroke:#3a0a8a,color:#fff,font-weight:bold
   classDef app fill:#2a5a9a,stroke:#1a3a6e,color:#fff,font-weight:bold

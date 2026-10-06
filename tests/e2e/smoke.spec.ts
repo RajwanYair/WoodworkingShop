@@ -543,13 +543,49 @@ test('PWA manifest and cached app shell remain available after an offline reload
   expect(manifestResponse.ok()).toBe(true);
   const manifest = await manifestResponse.json();
   expect(manifest).toMatchObject({
+    id: '/WoodworkingShop/',
     name: 'Cabinet Planner',
     short_name: 'Cabinet',
     start_url: '/WoodworkingShop/',
     scope: '/WoodworkingShop/',
     display: 'standalone',
+    background_color: '#f5f5f7',
+    theme_color: '#f5f5f7',
+    categories: ['productivity', 'utilities'],
   });
-  expect(manifest.icons.length).toBeGreaterThan(0);
+  expect(manifest.share_target).toBeUndefined();
+  expect(manifest.icons).toEqual(
+    expect.arrayContaining([
+      { src: 'icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+      { src: 'icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+      { src: 'icon-192-maskable.png', sizes: '192x192', type: 'image/png', purpose: 'maskable' },
+      { src: 'icon-512-maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+    ]),
+  );
+  await expect(page.locator('meta[name="apple-mobile-web-app-capable"]')).toHaveAttribute('content', 'yes');
+  await expect(page.locator('meta[name="apple-mobile-web-app-title"]')).toHaveAttribute('content', 'Cabinet');
+  await expect(page.locator('meta[name="theme-color"][media="(prefers-color-scheme: light)"]')).toHaveAttribute(
+    'content',
+    '#f5f5f7',
+  );
+  await expect(page.locator('meta[name="theme-color"][media="(prefers-color-scheme: dark)"]')).toHaveAttribute(
+    'content',
+    '#000000',
+  );
+  await expect(page.locator('meta[name="viewport"]')).toHaveAttribute(
+    'content',
+    'width=device-width, initial-scale=1.0, viewport-fit=cover',
+  );
+
+  const touchIconResponse = await page.request.get('/WoodworkingShop/icon-180.png');
+  expect(touchIconResponse.ok()).toBe(true);
+  expect(touchIconResponse.headers()['content-type']).toContain('image/png');
+
+  for (const icon of manifest.icons) {
+    const iconResponse = await page.request.get(`/WoodworkingShop/${icon.src}`);
+    expect(iconResponse.ok(), `${icon.src} should be served to the browser`).toBe(true);
+    expect(iconResponse.headers()['content-type']).toContain('image/png');
+  }
 
   await expect
     .poll(

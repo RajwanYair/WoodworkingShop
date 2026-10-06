@@ -1,4 +1,5 @@
 ---
+description: 'Client-side security rules for source and public files (OWASP, CSP, safe DOM usage).'
 applyTo: src/**,public/**
 ---
 

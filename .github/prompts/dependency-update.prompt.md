@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: Review and apply Dependabot PRs — verify changes are safe, run quality gates, and merge patch/minor updates.
 ---
 

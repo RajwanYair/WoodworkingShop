@@ -1,12 +1,13 @@
 ---
-mode: agent
+description: 'Audit and improve PWA installability, offline support, and manifest quality.'
+agent: agent
 tools:
-  - read_file
-  - replace_string_in_file
-  - create_file
-  - run_in_terminal
-  - grep_search
-  - file_search
+  - read/readFile
+  - edit/editFiles
+  - edit/createFile
+  - execute/runInTerminal
+  - search/textSearch
+  - search/fileSearch
 ---
 
 # PWA Audit & Enhancement

@@ -7,9 +7,12 @@ const TOURED_KEY = 'woodworkingshop:preview-toured';
 const ONBOARDING_SEEN_KEY = 'onboarding-seen';
 const ONBOARDING_DISMISSED_EVENT = 'onboarding-dismissed';
 
-/** Returns true if the device supports touch events (uses the modern maxTouchPoints API). */
+/** True only when touch is the primary input; touch-capable laptops driven by a mouse are excluded. */
 function isTouchDevice(): boolean {
-  return navigator.maxTouchPoints > 0;
+  return (
+    navigator.maxTouchPoints > 0 &&
+    (typeof window.matchMedia !== 'function' || window.matchMedia('(pointer: coarse)').matches)
+  );
 }
 
 export function TouchGestureTutorial() {

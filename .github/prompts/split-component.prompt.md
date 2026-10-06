@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: Split a large React component file into focused sub-components following project conventions.
 ---
 

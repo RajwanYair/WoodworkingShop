@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: Execute a roadmap sprint item end-to-end — implement feature, pass quality gates, commit.
 ---
 

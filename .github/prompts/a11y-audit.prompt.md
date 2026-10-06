@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: Audit the app for WCAG 2.2 AA accessibility issues and remediate every violation found.
 ---
 

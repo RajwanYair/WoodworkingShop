@@ -1,16 +1,13 @@
 ---
-mode: agent
 tools:
-  - read_file
-  - replace_string_in_file
-  - multi_replace_string_in_file
-  - run_in_terminal
-  - get_errors
-  - grep_search
-  - file_search
-  - list_dir
-  - manage_todo_list
-  - vscode_renameSymbol
+  - read/readFile
+  - edit/editFiles
+  - execute/runInTerminal
+  - read/problems
+  - search/textSearch
+  - search/fileSearch
+  - search/listDirectory
+  - todos
 description: >
   Full automated release workflow: pre-flight checks → version bump →
   CHANGELOG → version references → build → commit → tag → GitHub Release.

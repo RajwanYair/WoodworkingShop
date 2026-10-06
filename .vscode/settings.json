@@ -134,21 +134,14 @@
   "editor.suggest.preview": true,
   "chat.agent.enabled": true,
   "chat.agent.maxRequests": 999,
-  "chat.mcp.autoStart": true,
+  "chat.mcp.autostart": "newAndOutdated",
   "chat.mcp.gallery.enabled": true,
   "github.copilot.chat.followUps": "always",
   "github.copilot.chat.useProjectTemplates": true,
   "github.copilot.chat.agent.autoFix": true,
   "github.copilot.chat.agent.thinkingTool": true,
-  "chat.instructionsFilesLocations": {
-    ".github/instructions": true
-  },
-  "chat.promptFilesLocations": {
-    ".github/prompts": true
-  },
-  "chat.agentsFilesLocations": {
-    ".github/agents": true
-  },
+  // Default discovery covers .github/{instructions,prompts,agents,skills} and .agents/skills.
+  "chat.useAgentSkills": true,
   "github.copilot.chat.agent.runTasks": true,
   "github.copilot.chat.agent.autoApprove": false,
   "chat.mcp.discovery.enabled": {

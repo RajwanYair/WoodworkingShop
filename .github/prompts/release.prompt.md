@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: Prepare and publish a new Cabinet Planner release — version bump, CHANGELOG, tag, and GitHub Release.
 ---
 

@@ -661,7 +661,10 @@
     "collision": "Überschneidung von Schränken erkannt",
     "roomHeight": "Raumhöhe",
     "floorPlan": "Grundriss",
-    "wallOccupancy": "Wandbelegung"
+    "wallOccupancy": "Wandbelegung",
+    "selectCabinet": "Schrank",
+    "positionX": "X-Position (mm)",
+    "positionY": "Y-Position (mm)"
   },
   "summary": {
     "title": "Projektzusammenfassung",

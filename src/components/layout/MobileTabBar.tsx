@@ -1,17 +1,18 @@
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore, type CabinetState } from '../../store/cabinet-store';
 import { useHaptics } from '../../hooks/useHaptics';
+import { TAB_ICONS } from './tab-icons';
 
 type Tab = CabinetState['activeTab'];
 
-const TABS: { id: Tab; icon: string; labelKey: string }[] = [
-  { id: 'workspace', icon: '🏷️', labelKey: 'tabs.workspace' },
-  { id: 'configurator', icon: '⚙️', labelKey: 'tabs.configurator' },
-  { id: 'preview', icon: '👁️', labelKey: 'tabs.preview' },
-  { id: 'optimizer', icon: '✂️', labelKey: 'tabs.optimizer' },
-  { id: 'assembly', icon: '🔨', labelKey: 'tabs.assembly' },
-  { id: 'pdf', icon: '📄', labelKey: 'tabs.pdf' },
-  { id: 'calculators', icon: '🧮', labelKey: 'tabs.calculators' },
+const TABS: { id: Tab; labelKey: string }[] = [
+  { id: 'workspace', labelKey: 'tabs.workspace' },
+  { id: 'configurator', labelKey: 'tabs.configurator' },
+  { id: 'preview', labelKey: 'tabs.preview' },
+  { id: 'optimizer', labelKey: 'tabs.optimizer' },
+  { id: 'assembly', labelKey: 'tabs.assembly' },
+  { id: 'pdf', labelKey: 'tabs.pdf' },
+  { id: 'calculators', labelKey: 'tabs.calculators' },
 ];
 
 /**
@@ -32,6 +33,7 @@ export function MobileTabBar() {
     >
       {TABS.map((tab) => {
         const isActive = activeTab === tab.id;
+        const Icon = TAB_ICONS[tab.id];
         return (
           <button
             key={tab.id}
@@ -48,9 +50,7 @@ export function MobileTabBar() {
                 : 'text-wood-600 dark:text-wood-300 font-medium',
             ].join(' ')}
           >
-            <span aria-hidden="true" className={`text-lg leading-none ${isActive ? '' : 'opacity-70 grayscale'}`}>
-              {tab.icon}
-            </span>
+            <Icon size={22} className={isActive ? '' : 'opacity-80'} />
             <span className="block max-w-full truncate leading-none">{t(tab.labelKey)}</span>
           </button>
         );

@@ -138,6 +138,7 @@ const MM_PER_INCH = 25.4;
 function DimensionRow({ spec, value, step, unitLabel, metric, label, displayValue, onChange, tMessages }: RowProps) {
   const inputId = useId();
   const errorId = useId();
+  const [penPrecision, setPenPrecision] = useState(false);
   // The text input always edits in current display units; mm is the store value.
   const [text, setText] = useState<string>(() => valueToText(value, metric));
 
@@ -182,9 +183,12 @@ function DimensionRow({ spec, value, step, unitLabel, metric, label, displayValu
           type="range"
           min={spec.softMin}
           max={spec.softMax}
-          step={step}
+          step={penPrecision ? 1 : step}
           value={sliderValue}
           aria-label={`${label} (${unitLabel})`}
+          onPointerDown={(event) => {
+            setPenPrecision(event.pointerType === 'pen');
+          }}
           onChange={(e) => {
             const v = Number(e.target.value);
             onChange(v);

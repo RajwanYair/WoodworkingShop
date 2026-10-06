@@ -1,20 +1,16 @@
 ---
-mode: agent
 tools:
-  - read_file
-  - replace_string_in_file
-  - multi_replace_string_in_file
-  - create_file
-  - run_in_terminal
-  - get_errors
-  - grep_search
-  - file_search
-  - semantic_search
-  - explore_subagent
-  - vscode_listCodeUsages
-  - manage_todo_list
-  - list_dir
-  - view_image
+  - edit/editFiles
+  - edit/createFile
+  - execute/runInTerminal
+  - search/textSearch
+  - search/fileSearch
+  - search/codebase
+  - agent/runSubagent
+  - search/usages
+  - todos
+  - search/listDirectory
+  - read
 description: >
   Execute the current WIP sprint item end-to-end — implement the feature,
   pass all quality gates, update roadmap and changelog, then commit.

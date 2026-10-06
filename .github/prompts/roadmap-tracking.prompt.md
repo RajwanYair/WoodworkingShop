@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: Track and update ROADMAP.md sprint statuses, verify phase completion, plan next phase.
 ---
 

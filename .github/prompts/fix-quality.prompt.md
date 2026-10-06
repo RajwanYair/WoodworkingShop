@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: Diagnose and fix all failures reported by the quality gate (typecheck, lint, format, i18n, CSS).
 ---
 

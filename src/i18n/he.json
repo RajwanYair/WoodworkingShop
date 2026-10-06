@@ -579,7 +579,10 @@
     "collision": "זוהתה חפיפה בין ארונות",
     "roomHeight": "גובה חדר",
     "floorPlan": "תוכנית רצפה",
-    "wallOccupancy": "תפוסת קיר"
+    "wallOccupancy": "תפוסת קיר",
+    "selectCabinet": "ארון",
+    "positionX": "מיקום X (מ״מ)",
+    "positionY": "מיקום Y (מ״מ)"
   },
   "summary": {
     "title": "סיכום פרויקט",

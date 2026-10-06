@@ -72,6 +72,7 @@ export default defineConfig({
       base: '/WoodworkingShop/',
       injectRegister: false, // handled manually in useSwUpdate / main.tsx
       manifest: false, // keep the existing public/manifest.json
+      includeManifestIcons: false, // preserve the explicit any/maskable icon declarations
       workbox: {
         // Explicit opt-outs — never auto-activate the new SW or claim clients
         // without the user clicking "Update now" in the SwUpdateBanner.
@@ -90,30 +91,6 @@ export default defineConfig({
             options: {
               cacheName: 'pdf-renderer',
               expiration: { maxEntries: 1, maxAgeSeconds: 60 * 60 * 24 * 365 },
-            },
-          },
-          {
-            // Cache Google Fonts stylesheets
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-            handler: 'StaleWhileRevalidate',
-            options: { cacheName: 'google-fonts-stylesheets' },
-          },
-          {
-            // Cache Google Fonts files
-            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'google-fonts-webfonts',
-              expiration: { maxAgeSeconds: 60 * 60 * 24 * 365 },
-            },
-          },
-          {
-            // Sprint 149 — cache CDN assets (cdnjs) with SWR for offline resilience
-            urlPattern: /^https:\/\/cdnjs\.cloudflare\.com\/.*/i,
-            handler: 'StaleWhileRevalidate',
-            options: {
-              cacheName: 'cdn-assets',
-              expiration: { maxEntries: 30, maxAgeSeconds: 60 * 60 * 24 * 30 },
             },
           },
           {

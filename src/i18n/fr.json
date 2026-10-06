@@ -661,7 +661,10 @@
     "collision": "Chevauchement de meubles détecté",
     "roomHeight": "Hauteur de la pièce",
     "floorPlan": "Plan au sol",
-    "wallOccupancy": "Occupation du mur"
+    "wallOccupancy": "Occupation du mur",
+    "selectCabinet": "Armoire",
+    "positionX": "Position X (mm)",
+    "positionY": "Position Y (mm)"
   },
   "summary": {
     "title": "Résumé du projet",

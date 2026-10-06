@@ -661,7 +661,10 @@
     "collision": "تم رصد تداخل بين الخزائن",
     "roomHeight": "ارتفاع الغرفة",
     "floorPlan": "مخطط الأرضية",
-    "wallOccupancy": "إشغال الجدار"
+    "wallOccupancy": "إشغال الجدار",
+    "selectCabinet": "الخزانة",
+    "positionX": "موضع X (مم)",
+    "positionY": "موضع Y (مم)"
   },
   "summary": {
     "title": "ملخص المشروع",

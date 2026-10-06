@@ -1,8 +1,8 @@
 {
-  "$comment": "Bundle size budgets enforced by scripts/bundle-report.js. Values are KB. Tightening these (lowering numbers) is encouraged; loosening requires a justification in CHANGELOG. v3.54.0 bump: +75 KB JS, +50 KB total to absorb pre-existing organic growth (pdf-renderer + i18n catalog expansion) — see CHANGELOG. v3.58.0 bump: +125 KB JS, +130 KB total to absorb Sprints 16–20 feature growth (rotation lock UI, G-code M6 tool-change, assembly weight, DXF layers, Plugin EventBus, snapshot diff modal) merged into main as part of the production-hardening release — see CHANGELOG. v3.68.0 bump: +100 KB JS, +100 KB total to absorb design-check fix patches + validation engine growth — see CHANGELOG. v4.4.0 bump: +125 KB JS, +125 KB total to absorb Phase 21–23 growth (cost variance, stock tracker, waste analytics, grain report, cut checklist panels + Web Workers). v5.8.0 bump: +100 KB JS, +100 KB total to absorb Phase 24–33 growth (measurement assistant, machine profiles, edge profile, hinge bore, WebXR placement, machine profiles, hardware spec engine modules). v5.28.0 bump: +300 KB JS, +300 KB total to absorb Phase 41–52 growth (60+ new engine calculators across Sprints 190–247) — see CHANGELOG. Sprint 376 T1 critical baseline measured at 1833 KB raw / 511 KB Brotli, before PDF and calculator deferral; excludes on-demand worker scripts. Sprint 376 T2 measured 2965.1 KB total output; the 2970 KB aggregate cap and its 10 KB margin are documented in CHANGELOG.",
+  "$comment": "Bundle size budgets enforced by scripts/bundle-report.js. Values are KB. Tightening these (lowering numbers) is encouraged; loosening requires a justification in CHANGELOG. v3.54.0 bump: +75 KB JS, +50 KB total to absorb pre-existing organic growth (pdf-renderer + i18n catalog expansion) — see CHANGELOG. v3.58.0 bump: +125 KB JS, +130 KB total to absorb Sprints 16–20 feature growth (rotation lock UI, G-code M6 tool-change, assembly weight, DXF layers, Plugin EventBus, snapshot diff modal) merged into main as part of the production-hardening release — see CHANGELOG. v3.68.0 bump: +100 KB JS, +100 KB total to absorb design-check fix patches + validation engine growth — see CHANGELOG. v4.4.0 bump: +125 KB JS, +125 KB total to absorb Phase 21–23 growth (cost variance, stock tracker, waste analytics, grain report, cut checklist panels + Web Workers). v5.8.0 bump: +100 KB JS, +100 KB total to absorb Phase 24–33 growth (measurement assistant, machine profiles, edge profile, hinge bore, WebXR placement, machine profiles, hardware spec engine modules). v5.28.0 bump: +300 KB JS, +300 KB total to absorb Phase 41–52 growth (60+ new engine calculators across Sprints 190–247) — see CHANGELOG. Sprint 376 T1 critical baseline measured at 1833 KB raw / 511 KB Brotli, before PDF and calculator deferral; excludes on-demand worker scripts. Sprint 376 T2 measured 2965.1 KB total output; the 2970 KB aggregate cap and its 10 KB margin are documented in CHANGELOG. Unreleased PWA branding measured 3012 KB total output; the aggregate cap is 3025 KB (13 KB margin), with unchanged JS and critical-route budgets; the 192px/512px standard PNG caps reflect the measured icon sizes — see CHANGELOG.",
   "totalJsKB": 2850,
   "totalCssKB": 100,
-  "totalAllKB": 2970,
+  "totalAllKB": 3025,
   "critical": {
     "$comment": "Sprint 376 T2 baseline: 655.1 KB raw / 160.4 KB Brotli across 13 initial-route files after deferring the PDF renderer and calculator panels; excludes on-demand worker scripts.",
     "rawKB": 700,
@@ -14,8 +14,8 @@
   },
   "perAssetKB": {
     "_default": 50,
-    "icon-512.png": 10,
-    "icon-192.png": 5,
+    "icon-512.png": 20,
+    "icon-192.png": 6,
     "favicon.svg": 5
   }
 }

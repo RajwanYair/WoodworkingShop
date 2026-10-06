@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: Verify all intermediate/generated files go to $TEMP, clean any that leaked into workspace.
 ---
 

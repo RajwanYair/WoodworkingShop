@@ -1,20 +1,17 @@
 ---
-mode: agent
 tools:
-  - read_file
-  - apply_patch
-  - create_file
-  - runTests
-  - run_task
-  - run_in_terminal
-  - get_errors
-  - grep_search
-  - file_search
-  - semantic_search
-  - runSubagent
-  - vscode_listCodeUsages
-  - list_dir
-  - manage_todo_list
+  - read/readFile
+  - edit/editFiles
+  - edit/createFile
+  - execute
+  - read/problems
+  - search/textSearch
+  - search/fileSearch
+  - search/codebase
+  - agent/runSubagent
+  - search/usages
+  - search/listDirectory
+  - todos
 description: >
   Debug a failing test, build error, or runtime exception — diagnose root cause,
   apply the fix, and verify all quality gates pass.

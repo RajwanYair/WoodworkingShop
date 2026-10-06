@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: Analyse bundle size, identify heavy chunks, and apply targeted optimisations to meet the 1.8 MB budget.
 ---
 

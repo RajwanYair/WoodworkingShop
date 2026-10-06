@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: OWASP Top 10 security audit — scan for vulnerabilities, fix them, and document mitigations.
 ---
 

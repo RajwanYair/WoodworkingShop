@@ -1,4 +1,5 @@
 ---
+description: 'SVG rendering and standalone SVG asset conventions.'
 applyTo: 'src/components/**/*.tsx,src/components/**/*.ts,docs/*.svg,public/*.svg'
 ---
 

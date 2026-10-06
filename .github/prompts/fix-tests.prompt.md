@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: Diagnose and fix failing unit tests — trace assertion failures, update snapshots, fix regressions.
 ---
 

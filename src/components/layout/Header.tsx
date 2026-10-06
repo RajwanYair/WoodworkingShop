@@ -12,22 +12,18 @@ import {
   IconUndo,
   IconRedo,
   IconLink,
-  IconHelp,
   IconContrast,
   IconLayers,
   IconFolder,
   IconSearch,
+  IconKeyboard,
 } from './Icons';
+import { TAB_ICONS } from './tab-icons';
 
-const TAB_ICONS = {
-  workspace: '🏷️',
-  configurator: '⚙️',
-  preview: '👁️',
-  optimizer: '✂️',
-  assembly: '🔨',
-  pdf: '📄',
-  calculators: '🧮',
-} as const;
+const ICON_BUTTON =
+  'text-wood-200 flex h-8 w-8 shrink-0 items-center justify-center rounded-full hover:bg-white/10 hover:text-white active:bg-white/20 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent';
+const MOBILE_ICON_BUTTON = ICON_BUTTON.replace('h-8 w-8', 'h-11 w-11');
+const GROUP_DIVIDER = 'mx-1 h-5 w-px shrink-0 bg-white/15';
 
 const MarketplacePanel = lazy(() =>
   import('./MarketplacePanel').then(({ MarketplacePanel }) => ({ default: MarketplacePanel })),
@@ -148,53 +144,53 @@ export function Header() {
           <div className="flex items-baseline gap-2">
             <h1 className="truncate text-lg font-semibold tracking-tight sm:text-xl">{t('app.title')}</h1>
             <span
-              className="text-wood-300 hidden text-xs tabular-nums select-none sm:inline"
+              className="text-wood-300 hidden text-xs tabular-nums select-none 2xl:inline"
               aria-label={`Version ${__APP_VERSION__}`}
             >
               v{__APP_VERSION__}
             </span>
           </div>
-          <p className="text-wood-300 hidden max-w-48 truncate text-xs sm:block">{t('app.subtitle')}</p>
+          <p className="text-wood-300 hidden max-w-48 truncate text-xs 2xl:block">{t('app.subtitle')}</p>
         </div>
         {/* Mobile-only controls row */}
-        <div className="flex items-center gap-2 sm:hidden">
+        <div className="-me-2 flex items-center sm:hidden">
           <button
             onClick={() => runCommand('palette.open')}
-            className="text-wood-200 flex items-center hover:text-white"
+            className={MOBILE_ICON_BUTTON}
             aria-label={commandLabel('palette.open')}
             title={commandTitle('palette.open')}
           >
-            <IconSearch size={16} />
+            <IconSearch size={18} />
           </button>
           <button
             onClick={() => runCommand('history.undo')}
             disabled={!canUndo}
-            className="text-wood-200 flex items-center hover:text-white disabled:opacity-30"
+            className={MOBILE_ICON_BUTTON}
             aria-label={commandLabel('history.undo')}
             title={commandTitle('history.undo')}
           >
-            <IconUndo size={16} />
+            <IconUndo size={18} />
           </button>
           <button
             onClick={() => runCommand('history.redo')}
             disabled={!canRedo}
-            className="text-wood-200 flex items-center hover:text-white disabled:opacity-30"
+            className={MOBILE_ICON_BUTTON}
             aria-label={commandLabel('history.redo')}
             title={commandTitle('history.redo')}
           >
-            <IconRedo size={16} />
+            <IconRedo size={18} />
           </button>
           <button
             onClick={() => runCommand('theme.toggle')}
-            className="text-wood-200 flex items-center hover:text-white"
+            className={MOBILE_ICON_BUTTON}
             aria-label={darkMode ? 'Light mode' : 'Dark mode'}
           >
-            {darkMode ? <IconSun size={16} /> : <IconMoon size={16} />}
+            {darkMode ? <IconSun size={18} /> : <IconMoon size={18} />}
           </button>
           <select
             value={lang}
             onChange={(e) => changeLang(e.target.value as SupportedLang)}
-            className="text-wood-200 cursor-pointer border-0 bg-transparent text-xs font-medium outline-none hover:text-white"
+            className="text-wood-200 h-11 cursor-pointer rounded-full border-0 bg-transparent px-2 text-xs font-medium outline-none hover:text-white"
             aria-label={t('footer.language')}
           >
             {SUPPORTED_LANGUAGES.map((l) => (
@@ -214,6 +210,7 @@ export function Header() {
         aria-label="Main navigation"
       >
         {APP_TABS.map((tab, i) => {
+          const Icon = TAB_ICONS[tab];
           return (
             <button
               key={tab}
@@ -227,13 +224,11 @@ export function Header() {
               aria-current={activeTab === tab ? 'page' : undefined}
               aria-controls="main-content"
               title={commandTitle(`tab.${tab}`)}
-              className={`flex items-center gap-1 rounded-full px-3 py-1.5 text-[0.8125rem] font-medium whitespace-nowrap ${
+              className={`flex min-h-8 items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[0.8125rem] font-medium whitespace-nowrap 2xl:px-3 ${
                 activeTab === tab ? 'bg-white/20 text-white' : 'text-wood-200 hover:bg-white/10 hover:text-white'
               }`}
             >
-              <span aria-hidden="true" className="shrink-0 text-sm">
-                {TAB_ICONS[tab]}
-              </span>
+              <Icon size={15} className="hidden shrink-0 2xl:block" />
               {t(`tabs.${tab}`)}
             </button>
           );
@@ -241,10 +236,10 @@ export function Header() {
       </div>
 
       {/* Desktop controls */}
-      <div className="hidden shrink-0 items-center gap-2.5 sm:flex">
+      <div className="hidden shrink-0 items-center sm:flex 2xl:gap-0.5">
         <button
           onClick={() => runCommand('palette.open')}
-          className="text-wood-200 flex items-center hover:text-white"
+          className={ICON_BUTTON}
           aria-label={commandLabel('palette.open')}
           title={commandTitle('palette.open')}
         >
@@ -253,7 +248,7 @@ export function Header() {
         <button
           onClick={() => runCommand('history.undo')}
           disabled={!canUndo}
-          className="text-wood-200 flex items-center hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
+          className={ICON_BUTTON}
           title={commandTitle('history.undo')}
           aria-label="Undo"
         >
@@ -262,7 +257,7 @@ export function Header() {
         <button
           onClick={() => runCommand('history.redo')}
           disabled={!canRedo}
-          className="text-wood-200 flex items-center hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
+          className={ICON_BUTTON}
           title={commandTitle('history.redo')}
           aria-label="Redo"
         >
@@ -270,15 +265,16 @@ export function Header() {
         </button>
         <button
           onClick={() => runCommand('share.copy')}
-          className="text-wood-200 flex items-center hover:text-white"
+          className={ICON_BUTTON}
           title={commandTitle('share.copy')}
           aria-label={commandLabel('share.copy')}
         >
           <IconLink size={16} />
         </button>
+        <span aria-hidden="true" className={GROUP_DIVIDER} />
         <button
           onClick={() => runCommand('theme.toggle')}
-          className="text-wood-200 flex items-center hover:text-white"
+          className={ICON_BUTTON}
           title={commandTitle('theme.toggle')}
           aria-label={darkMode ? 'Light mode' : 'Dark mode'}
         >
@@ -286,7 +282,7 @@ export function Header() {
         </button>
         <button
           onClick={() => runCommand('contrast.toggle')}
-          className={`flex items-center ${highContrastMode ? 'text-white' : 'text-wood-200 hover:text-white'}`}
+          className={`${ICON_BUTTON} ${highContrastMode ? 'bg-white/20 text-white' : ''}`}
           title={commandTitle('contrast.toggle')}
           aria-label={highContrastMode ? 'Disable high contrast' : 'Enable high contrast'}
           aria-pressed={highContrastMode}
@@ -295,7 +291,7 @@ export function Header() {
         </button>
         <button
           onClick={() => runCommand('units.toggle')}
-          className="text-wood-200 px-1 text-sm font-medium hover:text-white"
+          className={`${ICON_BUTTON} text-xs font-semibold`}
           title={commandTitle('units.toggle')}
           aria-label={units === 'metric' ? 'Switch to imperial' : 'Switch to metric'}
         >
@@ -304,7 +300,7 @@ export function Header() {
         <select
           value={lang}
           onChange={(e) => changeLang(e.target.value as SupportedLang)}
-          className="text-wood-200 cursor-pointer border-0 bg-transparent text-xs font-medium outline-none hover:text-white"
+          className="text-wood-200 h-8 cursor-pointer rounded-full border-0 bg-transparent px-2 text-xs font-medium outline-none hover:bg-white/10 hover:text-white"
           aria-label={t('footer.language')}
         >
           {SUPPORTED_LANGUAGES.map((l) => (
@@ -313,9 +309,10 @@ export function Header() {
             </option>
           ))}
         </select>
+        <span aria-hidden="true" className={GROUP_DIVIDER} />
         <button
           onClick={() => runCommand('templates.open')}
-          className="text-wood-200 flex items-center hover:text-white"
+          className={ICON_BUTTON}
           title={commandTitle('templates.open')}
           aria-label={commandLabel('templates.open')}
         >
@@ -323,25 +320,17 @@ export function Header() {
         </button>
         <button
           onClick={() => runCommand('projects.open')}
-          className="text-wood-200 flex items-center hover:text-white"
+          className={ICON_BUTTON}
           title={commandTitle('projects.open')}
           aria-label={commandLabel('projects.open')}
         >
           <IconFolder size={16} />
         </button>
         <button
-          onClick={() => runCommand('shortcuts.toggle')}
-          className="text-wood-200 flex items-center hover:text-white"
-          title={commandTitle('shortcuts.toggle')}
-          aria-label={commandLabel('shortcuts.toggle')}
-        >
-          <IconHelp size={16} />
-        </button>
-        <button
           onClick={() => runCommand('marketplace.open')}
           onPointerEnter={preloadMarketplacePanel}
           onFocus={preloadMarketplacePanel}
-          className="text-wood-200 flex items-center gap-1 hover:text-white"
+          className={ICON_BUTTON}
           title={commandTitle('marketplace.open')}
           aria-label={commandLabel('marketplace.open')}
         >
@@ -352,7 +341,15 @@ export function Header() {
             className="h-4 w-4"
             loading="lazy"
           />
-          🛒
+        </button>
+        <span aria-hidden="true" className={GROUP_DIVIDER} />
+        <button
+          onClick={() => runCommand('shortcuts.toggle')}
+          className={ICON_BUTTON}
+          title={commandTitle('shortcuts.toggle')}
+          aria-label={commandLabel('shortcuts.toggle')}
+        >
+          <IconKeyboard size={16} />
         </button>
         <HelpButton />
       </div>

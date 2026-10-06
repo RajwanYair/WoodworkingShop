@@ -1,4 +1,5 @@
 ---
+description: 'Export/storage utility rules for src/utils.'
 applyTo: src/utils/**
 ---
 
