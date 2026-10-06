@@ -136,7 +136,7 @@ export function Header() {
 
   return (
     <header
-      className="apple-nav sticky top-0 z-40 flex flex-col gap-2 px-3 pb-2 text-white sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-4 sm:pb-2.5"
+      className="apple-nav sticky top-0 z-40 flex flex-col gap-2 px-3 pb-2 text-white xl:flex-row xl:items-center xl:justify-between xl:gap-3 xl:px-4 xl:pb-2.5"
       data-print="hide"
     >
       <div className="flex items-center justify-between">
