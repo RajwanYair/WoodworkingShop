@@ -49,14 +49,14 @@ jobs:
   e2e-build:
     runs-on: ubuntu-latest
     needs: quality
-    env:
-      TMPDIR: ${{ runner.temp }}
-      TEMP: ${{ runner.temp }}
-      TMP: ${{ runner.temp }}
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-node
       - run: npm run build:e2e
+        env:
+          TMPDIR: ${{ runner.temp }}
+          TEMP: ${{ runner.temp }}
+          TMP: ${{ runner.temp }}
       - uses: actions/upload-artifact@v7
         with: { name: e2e-dist, path: dist, retention-days: 1 }
   compat:
@@ -78,10 +78,6 @@ jobs:
   e2e:
     runs-on: ubuntu-latest
     needs: [test, e2e-build]
-    env:
-      TMPDIR: ${{ runner.temp }}
-      TEMP: ${{ runner.temp }}
-      TMP: ${{ runner.temp }}
     strategy:
       fail-fast: false
       matrix:
@@ -95,6 +91,10 @@ jobs:
       - uses: actions/download-artifact@v8
         with: { name: e2e-dist, path: dist }
       - run: npx playwright test --shard=${{ matrix.shard }}/4 --grep-invert @visual
+        env:
+          TMPDIR: ${{ runner.temp }}
+          TEMP: ${{ runner.temp }}
+          TMP: ${{ runner.temp }}
       - if: always()
         uses: actions/upload-artifact@v7
         with:
@@ -105,10 +105,6 @@ jobs:
   e2e-visual:
     runs-on: windows-latest
     needs: [test, e2e-build]
-    env:
-      TMPDIR: ${{ runner.temp }}
-      TEMP: ${{ runner.temp }}
-      TMP: ${{ runner.temp }}
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-node
@@ -120,6 +116,10 @@ jobs:
       - uses: actions/download-artifact@v8
         with: { name: e2e-dist, path: dist }
       - run: npx playwright test --grep @visual --project=chromium
+        env:
+          TMPDIR: ${{ runner.temp }}
+          TEMP: ${{ runner.temp }}
+          TMP: ${{ runner.temp }}
       - if: always()
         uses: actions/upload-artifact@v7
         with:
@@ -131,10 +131,6 @@ jobs:
     if: ${{ !cancelled() }}
     needs: [e2e, e2e-visual]
     runs-on: ubuntu-latest
-    env:
-      TMPDIR: ${{ runner.temp }}
-      TEMP: ${{ runner.temp }}
-      TMP: ${{ runner.temp }}
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-node
@@ -145,6 +141,9 @@ jobs:
           merge-multiple: true
       - name: Merge Playwright reports
         env:
+          TMPDIR: ${{ runner.temp }}
+          TEMP: ${{ runner.temp }}
+          TMP: ${{ runner.temp }}
           PLAYWRIGHT_HTML_REPORT: ${{ runner.temp }}/WoodworkingShop/playwright-report
         run: |
           if compgen -G "${{ runner.temp }}/WoodworkingShop/all-blob-reports/*.zip" > /dev/null; then
