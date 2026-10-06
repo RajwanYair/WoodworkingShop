@@ -15,6 +15,7 @@ import { estimateCost } from '../../src/engine/cost-estimator';
 import { findOptimizations } from '../../src/engine/smart-optimizer';
 import { validateConfig } from '../../src/engine/validation';
 import { generateHardware } from '../../src/engine/hardware';
+import { OPTIMIZER_BENCHMARK_CORPUS, runOptimizerBenchmarkScenario } from './optimizer-corpus';
 
 // ─── Deterministic configs used across all benchmarks ───────────────────────
 // Keep wardrobe within standard sheet dimensions (2440×1220 mm) so the
@@ -135,6 +136,16 @@ describe('cut optimizer', () => {
     },
     SLOW,
   );
+
+  for (const scenario of OPTIMIZER_BENCHMARK_CORPUS) {
+    bench(
+      `optimizeCutSheets — corpus: ${scenario.id}`,
+      () => {
+        runOptimizerBenchmarkScenario(scenario);
+      },
+      SLOW,
+    );
+  }
 });
 
 describe('hardware', () => {

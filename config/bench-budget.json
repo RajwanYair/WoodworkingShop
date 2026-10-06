@@ -18,6 +18,34 @@
     "maxMeanMs": 1.136548,
     "baseline": 0.22731
   },
+  "optimizeCutSheets — corpus: small-sheet": {
+    "maxMeanMs": 0.08293,
+    "baseline": 0.016586
+  },
+  "optimizeCutSheets — corpus: large-sheet": {
+    "maxMeanMs": 0.133816,
+    "baseline": 0.026763
+  },
+  "optimizeCutSheets — corpus: long-strips": {
+    "maxMeanMs": 0.073752,
+    "baseline": 0.01475
+  },
+  "optimizeCutSheets — corpus: mixed-thickness": {
+    "maxMeanMs": 0.098883,
+    "baseline": 0.019777
+  },
+  "optimizeCutSheets — corpus: rotation-locks": {
+    "maxMeanMs": 0.153564,
+    "baseline": 0.030713
+  },
+  "optimizeCutSheets — corpus: defect-zones": {
+    "maxMeanMs": 0.160454,
+    "baseline": 0.032091
+  },
+  "optimizeCutSheets — corpus: offcut-reuse": {
+    "maxMeanMs": 0.144571,
+    "baseline": 0.028914
+  },
   "validateConfig — valid wardrobe": {
     "maxMeanMs": 0.162856,
     "baseline": 0.032571
