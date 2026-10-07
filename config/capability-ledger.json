@@ -747,10 +747,14 @@
       "classification": "surfaced",
       "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
     },
+    "src/services/local-diagnostics.ts": {
+      "classification": "internal",
+      "rationale": "Local diagnostic collection is an implementation detail consumed by DiagnosticsModal."
+    },
     "src/utils/ai-assistant-io.ts": {
       "classification": "surface-next",
-      "rationale": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373.",
-      "targetSprint": 373
+      "rationale": "Legacy remote-provider I/O has no application importer; decide whether it is removed or replaced by the on-device-only assistant contract.",
+      "targetSprint": 451
     },
     "src/utils/ar-placement.ts": {
       "classification": "surface-next",
@@ -763,8 +767,8 @@
     },
     "src/utils/batch-export-runner.ts": {
       "classification": "surface-next",
-      "rationale": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373.",
-      "targetSprint": 373
+      "rationale": "Parallel export runner awaits the multi-select, progress, cancellation, and archive workflow contract.",
+      "targetSprint": 326
     },
     "src/utils/bom-export.ts": {
       "classification": "surfaced",
@@ -797,8 +801,8 @@
     },
     "src/utils/crdt-document.ts": {
       "classification": "surface-next",
-      "rationale": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373.",
-      "targetSprint": 373
+      "rationale": "In-memory CRDT document awaits the explicit collaboration and production-sync decision; no shipped collaboration is implied.",
+      "targetSprint": 357
     },
     "src/utils/download.ts": {
       "classification": "surfaced",
@@ -834,8 +838,8 @@
     },
     "src/utils/ifc-project-export.ts": {
       "classification": "surface-next",
-      "rationale": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373.",
-      "targetSprint": 373
+      "rationale": "Project-level IFC exporter awaits the export-format conformance and independent-viewer verification contract.",
+      "targetSprint": 341
     },
     "src/utils/indexed-db-storage.ts": {
       "classification": "surfaced",

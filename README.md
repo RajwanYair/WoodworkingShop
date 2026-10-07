@@ -134,6 +134,10 @@ npm run build
 
 > **Node.js >= 22** is required.
 
+### Dev Container
+
+Open the repository in VS Code and run **Dev Containers: Reopen in Container**. The container pins Node.js to 26.10.0, installs the exact dependencies from `package-lock.json`, and installs the matching Chromium and Firefox Playwright browsers.
+
 ---
 
 ## 🏗 Tech Stack

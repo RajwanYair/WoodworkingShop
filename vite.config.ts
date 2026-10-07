@@ -2,43 +2,12 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
-import { resolve } from 'node:path';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { relative } from 'node:path';
+import { relative, resolve } from 'node:path';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import { sriPlugin } from './scripts/vite-plugin-sri.ts';
 
 const { version } = JSON.parse(readFileSync('./package.json', 'utf-8')) as { version: string };
-const capabilityReportRoot = resolve(os.tmpdir(), 'WoodworkingShop', 'capability-map');
-
-function capabilityChunkManifestPlugin() {
-  return {
-    name: 'capability-chunk-manifest',
-    buildStart() {
-      mkdirSync(capabilityReportRoot, { recursive: true });
-      writeFileSync(resolve(capabilityReportRoot, 'output-chunks.json'), '{}');
-    },
-    generateBundle(
-      _options: unknown,
-      bundle: Record<string, { type: string; fileName?: string; modules?: Record<string, unknown> }>,
-    ) {
-      const manifestPath = resolve(capabilityReportRoot, 'output-chunks.json');
-      const outputChunks: Record<string, string> = existsSync(manifestPath)
-        ? JSON.parse(readFileSync(manifestPath, 'utf8'))
-        : {};
-      for (const output of Object.values(bundle)) {
-        if (output.type !== 'chunk' || !output.modules) continue;
-        for (const moduleId of Object.keys(output.modules)) {
-          const normalizedId = moduleId.replaceAll('\\', '/');
-          const sourcePath = normalizedId.slice(normalizedId.lastIndexOf('/src/') + 1);
-          if (sourcePath.startsWith('src/') && output.fileName) outputChunks[resolve(sourcePath)] = output.fileName;
-        }
-      }
-      mkdirSync(capabilityReportRoot, { recursive: true });
-      writeFileSync(resolve(capabilityReportRoot, 'output-chunks.json'), JSON.stringify(outputChunks, null, 2));
-    },
-  };
-}
 
 /**
  * Phase 12 / Sprint 15 — Cloudflare Web Analytics beacon injection.
@@ -78,9 +47,9 @@ function capabilityChunkPlugin() {
           chunks[sourcePath] = moduleChunks;
         }
       }
-      const reportDirectory = resolve(os.tmpdir(), 'WoodworkingShop', 'capability-map');
-      mkdirSync(reportDirectory, { recursive: true });
-      writeFileSync(resolve(reportDirectory, 'chunks.json'), `${JSON.stringify(chunks, null, 2)}\n`);
+      const metadataDirectory = resolve(process.cwd(), 'dist', '.vite');
+      mkdirSync(metadataDirectory, { recursive: true });
+      writeFileSync(resolve(metadataDirectory, 'capability-chunks.json'), `${JSON.stringify(chunks, null, 2)}\n`);
     },
   };
 }
@@ -92,7 +61,6 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    capabilityChunkManifestPlugin(),
     capabilityChunkPlugin(),
     cloudflareAnalyticsPlugin(),
     sriPlugin(),

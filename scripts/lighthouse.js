@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
@@ -64,12 +64,14 @@ const config = {
   },
 };
 
-const resolvedConfigPath = path.join(os.tmpdir(), 'WoodworkingShop', 'lighthouserc.resolved.json');
-mkdirSync(path.dirname(resolvedConfigPath), { recursive: true });
-writeFileSync(resolvedConfigPath, JSON.stringify(config, null, 2));
+const configDirectory = mkdtempSync(path.join(os.tmpdir(), 'WoodworkingShop-lighthouse-'));
+const resolvedConfigPath = path.join(configDirectory, 'lighthouserc.resolved.json');
 
 try {
-  execSync(`npx --yes @lhci/cli@0.15.1 autorun --config=${resolvedConfigPath}`, { stdio: 'inherit' });
+  writeFileSync(resolvedConfigPath, JSON.stringify(config, null, 2));
+  execSync(`npx --yes @lhci/cli@0.15.1 autorun --config="${resolvedConfigPath}"`, { stdio: 'inherit' });
 } catch {
-  process.exit(1);
+  process.exitCode = 1;
+} finally {
+  rmSync(configDirectory, { recursive: true, force: true });
 }

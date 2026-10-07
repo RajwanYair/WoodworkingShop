@@ -1,3 +1,4 @@
+import { readFile } from 'node:fs/promises';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from './fixtures/app';
 
@@ -52,4 +53,40 @@ test('Ctrl+K does not open the command palette while editing a dimension', async
 
   await expect(page.getByRole('dialog', { name: 'Command Palette' })).toHaveCount(0);
   await expect(configuratorTab).toHaveAttribute('aria-selected', 'true');
+});
+
+test('exports a local diagnostics bundle without project contents or network requests', async ({ appPage: page }) => {
+  const requests: string[] = [];
+  const appOrigin = new URL(page.url()).origin;
+  page.on('request', (request) => {
+    if (new URL(request.url()).origin !== appOrigin) requests.push(request.url());
+  });
+
+  await page.keyboard.press('Control+k');
+  const palette = page.getByRole('dialog', { name: 'Command Palette' });
+  const search = palette.getByRole('combobox', { name: 'Search commands and actions...' });
+  await search.fill('local diagnostics');
+  await search.press('Enter');
+
+  const diagnostics = page.getByRole('dialog', { name: 'Local diagnostics' });
+  await expect(diagnostics).toBeVisible();
+  const downloadPromise = page.waitForEvent('download');
+  await diagnostics.getByRole('button', { name: 'Export diagnostic bundle' }).click();
+  const download = await downloadPromise;
+  const downloadPath = await download.path();
+  expect(download.suggestedFilename()).toBe('woodworkingshop-diagnostics.json');
+  expect(downloadPath).not.toBeNull();
+  const bundleText = await readFile(downloadPath!, 'utf8');
+  const bundle: unknown = JSON.parse(bundleText);
+
+  expect(bundle).toMatchObject({
+    storage: { usedBytes: expect.any(Number), quotaBytes: expect.any(Number) },
+    workers: { cutOptimizer: expect.any(Boolean), costEstimator: expect.any(Boolean), assembly: expect.any(Boolean) },
+    errors: expect.any(Array),
+  });
+  expect(bundle).toHaveProperty('webVitals.lcpMs');
+  expect(bundle).toHaveProperty('webVitals.cls');
+  expect(bundle).toHaveProperty('webVitals.inpMs');
+  expect(bundleText).not.toMatch(/cabinet|projectName|projectId|project contents/i);
+  expect(requests).toEqual([]);
 });

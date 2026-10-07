@@ -2413,6 +2413,27 @@
     "errorExprTooLong": "הנוסחה חייבת להכיל לכל היותר 256 תווים",
     "errorDimensionBounds": "ערך {{dimension}} {{value}} חייב להיות בין {{min}} ל-{{max}} מ״מ."
   },
+  "diagnostics": {
+    "title": "אבחון מקומי",
+    "close": "סגירת האבחון המקומי",
+    "webVitals": "מדדי Web Vitals (הפעלת עמוד זו)",
+    "lcp": "הצגת התוכן הגדולה ביותר",
+    "cls": "הסטת פריסה מצטברת",
+    "interaction": "אינטראקציה עד הציור הבא (INP)",
+    "workers": "זמינות תהליכי רקע",
+    "cutWorker": "מיטוב חיתוך",
+    "costWorker": "הערכת עלויות",
+    "assemblyWorker": "מדריך הרכבה",
+    "available": "זמין",
+    "unavailable": "לא זמין",
+    "storage": "הערכת אחסון בדפדפן",
+    "storageUsage": "בשימוש {{used}} בתים מתוך {{quota}} בתים",
+    "loading": "טוען הערכה…",
+    "errorCount": "שגיאות שעברו ניקוי ונשמרות בזיכרון: {{count}}",
+    "privacy": "החבילה אינה כוללת תוכן פרויקט ונשמרת רק לאחר בחירת ייצוא. היא לעולם אינה נשלחת אוטומטית.",
+    "export": "ייצוא חבילת אבחון",
+    "exported": "חבילת האבחון הורדה."
+  },
   "commandPalette": {
     "title": "לוח פקודות",
     "searchPlaceholder": "חיפוש פקודות ופעולות...",

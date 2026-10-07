@@ -31,6 +31,8 @@ flowchart LR
 
 **Prerequisites:** Node.js >= 22, npm 10+, Git
 
+Alternatively, open the repository in VS Code and run **Dev Containers: Reopen in Container**. The checked-in `.devcontainer/devcontainer.json` pins Node.js and installs the Playwright browser versions matched to `package-lock.json`.
+
 ```bash
 # 1 — fork on GitHub, then clone your fork
 git clone https://github.com/<your-username>/WoodworkingShop.git

@@ -34,6 +34,7 @@ const COMMAND_ACTIONS = [
   'templates.open',
   'projects.open',
   'shortcuts.toggle',
+  'diagnostics.open',
   'marketplace.open',
   'help.open',
 ] as const;
@@ -276,6 +277,15 @@ export const COMMANDS = [
     showInPalette: true,
     when: alwaysAvailable,
     handler: (context: CommandExecutionContext) => context.run('marketplace.open'),
+  },
+  {
+    id: 'diagnostics.open',
+    labelKey: 'diagnostics.title',
+    categoryKey: 'commandPalette.categoryActions',
+    keywords: ['support', 'bug report', 'export'],
+    showInPalette: true,
+    when: alwaysAvailable,
+    handler: (context: CommandExecutionContext) => context.run('diagnostics.open'),
   },
   {
     id: 'help.open',

@@ -2413,6 +2413,27 @@
     "errorExprTooLong": "Formula must be 256 characters or fewer",
     "errorDimensionBounds": "{{dimension}} value {{value}} must be between {{min}} and {{max}} mm."
   },
+  "diagnostics": {
+    "title": "Local diagnostics",
+    "close": "Close local diagnostics",
+    "webVitals": "Web Vitals (this page session)",
+    "lcp": "Largest contentful paint",
+    "cls": "Cumulative layout shift",
+    "interaction": "Interaction to next paint (INP)",
+    "workers": "Worker availability",
+    "cutWorker": "Cut optimizer",
+    "costWorker": "Cost estimator",
+    "assemblyWorker": "Assembly guide",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "storage": "Browser storage estimate",
+    "storageUsage": "{{used}} bytes used of {{quota}} bytes",
+    "loading": "Loading estimate…",
+    "errorCount": "Sanitized errors retained in memory: {{count}}",
+    "privacy": "The bundle excludes project contents and is saved only when you export it. It is never sent automatically.",
+    "export": "Export diagnostic bundle",
+    "exported": "Diagnostic bundle downloaded."
+  },
   "commandPalette": {
     "title": "Command Palette",
     "searchPlaceholder": "Search commands and actions...",

@@ -86,7 +86,7 @@ export function getFetch(): FetchLike | null {
 
 export function parseQueryString(search: string): QueryRecord {
   const source = search.startsWith('?') ? search.slice(1) : search;
-  const params: QueryRecord = {};
+  const params = Object.create(null) as QueryRecord;
   if (!source) return params;
 
   for (const segment of source.split('&')) {

@@ -89,6 +89,9 @@ const SwUpdateBanner = lazy(() =>
 const ShortcutsModal = lazy(() =>
   import('./components/layout/ShortcutsModal').then((module) => ({ default: module.ShortcutsModal })),
 );
+const DiagnosticsModal = lazy(() =>
+  import('./components/layout/DiagnosticsModal').then((module) => ({ default: module.DiagnosticsModal })),
+);
 
 function App() {
   const { activeTab, darkMode, projectName } = useCabinetStore();
@@ -98,6 +101,7 @@ function App() {
   const haptics = useHaptics();
   const { updateAvailable: swUpdateAvailable, reload: reloadSwUpdate } = useSwUpdate();
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const [showDiagnostics, setShowDiagnostics] = useState(false);
   const [showCommandPalette, setShowCommandPalette] = useState(false);
   const [calculatorRequest, setCalculatorRequest] = useState<{ id: CalculatorId; sequence: number } | null>(null);
   const calculatorRequestSequence = useRef(0);
@@ -424,6 +428,9 @@ function App() {
         case 'shortcuts.toggle':
           setShowShortcuts((visible) => !visible);
           break;
+        case 'diagnostics.open':
+          setShowDiagnostics(true);
+          break;
         case 'marketplace.open':
           window.dispatchEvent(new Event('marketplace:open'));
           break;
@@ -628,6 +635,11 @@ function App() {
         {showShortcuts && (
           <Suspense fallback={null}>
             <ShortcutsModal onClose={() => setShowShortcuts(false)} />
+          </Suspense>
+        )}
+        {showDiagnostics && (
+          <Suspense fallback={null}>
+            <DiagnosticsModal onClose={() => setShowDiagnostics(false)} />
           </Suspense>
         )}
         {showCommandPalette && (

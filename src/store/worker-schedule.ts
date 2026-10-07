@@ -38,6 +38,14 @@ let _workerApplyFn: ((partial: Partial<CabinetState>) => void) | null = null;
 /** Injected by `initWorkerSchedule`; reads the latest state without importing the store. */
 let _getState: (() => CabinetState) | null = null;
 
+export function getWorkerHealth(): { cutOptimizer: boolean; costEstimator: boolean; assembly: boolean } {
+  return {
+    cutOptimizer: _cutWorker !== null,
+    costEstimator: _costWorker !== null,
+    assembly: _assemblyWorker !== null,
+  };
+}
+
 // Latest-wins counters: each scheduling call increments and captures its own
 // id; the promise handler discards the result if a newer call has been issued.
 let _cutCallId = 0;
