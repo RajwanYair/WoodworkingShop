@@ -1425,13 +1425,9 @@ Status (2026-10-04): T1–T3 complete. Palette coverage includes tabs, built-in 
 - T4: COMPLETE — Replaced implicit locale date/number formatting, formatted selected physical measurements with `Intl.NumberFormat` unit style, moved manual UI/PDF singular-plural choices to i18next, and localized remaining fixed-precision UI/PDF and validation readouts. Editable numeric inputs, unit-conversion constraints, and machine geometry retain invariant decimal formatting by contract.
 - Accept: zero missing keys in all six locales; EN-identical ratio ≤ 2 % excluding the allowlist; no placeholder mismatch; pseudo-locale E2E passes without overflow.
 
-Status (2026-10-04): T1 tooling complete. The latest audit reports zero missing keys, 16 target-only keys, and zero placeholder mismatches in AR/DE/ES/FR; HE has zero missing/extra keys and zero placeholder mismatches. EN-identical rates are 38.60% (AR), 37.75% (DE), 37.42% (ES), and 37.61% (FR); HE is 0.47%.
+Status (2026-10-07): T1–T4 acceptance is complete. `npm run i18n:completeness` reports zero missing, extra, or empty keys and zero placeholder mismatches in all six locales. EN-identical rates are 1.21% (AR), 1.40% (DE), 1.35% (ES), and 1.68% (FR); all 337 translation-review records are approved. The separate glossary-term review tracker is not part of this acceptance gate.
 
-T2 remains in progress. The six-locale woodworking glossary and separate pending-review tracker are started.
-
-Translation batches cover the command palette, assembly and optimizer workflows, 3D preview, parts table, and mounted woodworking calculators, including box joints, cove cuts, crown moulding, frame and panel, honing, kerf bending, planer passes, rafters, screw pull-out, wood turning, router templates/circles, taper and stair stringers, and glue coverage.
-
-A duplicate tool-wear namespace was corrected. EN-identical rates remain above the 2% acceptance threshold. T3–T4 remain outstanding; Sprint 375 acceptance is not yet met.
+The Chromium run of `tests/e2e/preview-acceptance.spec.ts` passes all four tests, including the standard responsive matrix and both pseudo-locales at 320 px. It exposed a long-word overflow in the workspace welcome copy under `en-XA`; the content is now width-constrained and wraps long words.
 
 **Sprint 376 — Critical-path performance budget** — P1 · M · S371.
 
@@ -1458,6 +1454,8 @@ A duplicate tool-wear namespace was corrected. EN-identical rates remain above t
 - T4: Pen input: `pointerType === 'pen'` precision for dimension drags and the room editor; no action may depend on pressure.
 - Tests: axe per dialog; S307/S316 journeys unchanged; forced-colors emulation; reduced-motion E2E.
 - Accept: capability detection only (no UA sniffing); clean fallback where an API is missing.
+
+Status (2026-10-07): T4 is complete. Dimension sliders and room-layout dragging use 1 mm precision for pen input and retain 10 mm precision for mouse/touch; the two component suites pass 24 tests. T1–T3 remain assigned to S431/S439 as noted above.
 
 **Sprint 378 — v5.35.0 coherence release** — P0 · S · S371–S377, S313, S315.
 

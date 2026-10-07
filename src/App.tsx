@@ -520,7 +520,7 @@ function App() {
             {activeTab === 'workspace' && (
               <section
                 aria-label={t('tabs.workspace')}
-                className="mx-auto flex max-w-6xl flex-col items-center gap-6 text-center"
+                className="mx-auto flex w-full max-w-6xl min-w-0 flex-col items-center gap-6 text-center"
               >
                 <img
                   src={`${import.meta.env.BASE_URL}workspace-banner.webp`}
@@ -533,11 +533,13 @@ function App() {
                   loading="eager"
                   fetchPriority="high"
                 />
-                <div className="space-y-3">
-                  <h2 className="text-wood-900 dark:text-wood-50 text-4xl font-semibold tracking-tight sm:text-5xl">
+                <div className="w-full min-w-0 space-y-3">
+                  <h2 className="text-wood-900 dark:text-wood-50 text-4xl font-semibold tracking-tight wrap-break-word sm:text-5xl">
                     {t('app.title')}
                   </h2>
-                  <p className="text-wood-600 dark:text-wood-300 mx-auto max-w-xl text-lg">{t('app.subtitle')}</p>
+                  <p className="text-wood-600 dark:text-wood-300 mx-auto max-w-xl text-lg wrap-break-word">
+                    {t('app.subtitle')}
+                  </p>
                 </div>
                 <button
                   onClick={() => useCabinetStore.getState().setActiveTab('configurator')}
