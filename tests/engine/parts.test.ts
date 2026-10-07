@@ -392,6 +392,19 @@ describe('generateParts', () => {
 });
 
 describe('computeEdgeBandingTotal', () => {
+  it('derives raw stock dimensions only when the process is enabled and retains finished edge lengths', () => {
+    const base = { ...DEFAULT_CONFIG, furnitureType: 'panel' as const, width: 600, height: 400 };
+    const finished = generateParts(base)[0];
+    const enabled = generateParts({
+      ...base,
+      edgeBandingProcess: { enabled: true, bandThicknessMm: 1, trimAllowanceMm: 0 },
+    })[0];
+
+    expect(finished).toMatchObject({ length: 600, width: 400, rawLength: 600, rawWidth: 400 });
+    expect(enabled).toMatchObject({ length: 600, width: 400, rawLength: 598, rawWidth: 398 });
+    expect(computeEdgeBandingTotal([enabled!])).toBe(2000);
+  });
+
   it('computes front-edge and four-edge totals from independent part fixtures', () => {
     const parts: Part[] = [
       {

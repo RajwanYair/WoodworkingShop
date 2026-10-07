@@ -186,6 +186,10 @@
       "status": "surfaced"
     },
     {
+      "path": "src/engine/edge-banding.ts",
+      "status": "surfaced"
+    },
+    {
       "path": "src/engine/edge-profile.ts",
       "status": "surfaced"
     },

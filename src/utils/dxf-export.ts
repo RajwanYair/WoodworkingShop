@@ -78,7 +78,24 @@ export function cutSheetToDxf(sheet: CutSheet): string {
       partLayer = matLayer;
     }
     addRect(lines, part.x, part.y, part.width, part.length, partLayer);
-    if (part.edgeBanding && part.edgeBanding.trim().length > 0) {
+    const finishedDimensionsDiffer =
+      (part.finishedWidth ?? part.width) !== part.width || (part.finishedLength ?? part.length) !== part.length;
+    if (finishedDimensionsDiffer) {
+      const bandedEdges =
+        part.bandedEdges ??
+        (part.edgeBanding?.includes('4')
+          ? ['length-start', 'length-end', 'width-start', 'width-end']
+          : part.edgeBanding?.trim()
+            ? ['width-start']
+            : []);
+      for (const edge of bandedEdges) {
+        const startX = edge === 'width-start' ? part.x : edge === 'width-end' ? part.x + part.width : part.x;
+        const startY = edge === 'length-start' ? part.y : edge === 'length-end' ? part.y + part.length : part.y;
+        const endX = edge.startsWith('length-') ? part.x + part.width : startX;
+        const endY = edge.startsWith('width-') ? part.y + part.length : startY;
+        addDxfEdge(lines, startX, startY, endX, endY);
+      }
+    } else if (part.edgeBanding && part.edgeBanding.trim().length > 0) {
       addRect(lines, part.x, part.y, part.width, part.length, 'EDGE_BANDED');
     }
     addLabel(lines, part, 'LABELS');
@@ -93,6 +110,27 @@ export function cutSheetToDxf(sheet: CutSheet): string {
   lines.push('0', 'EOF');
 
   return lines.join('\n');
+}
+
+function addDxfEdge(lines: string[], x1: number, y1: number, x2: number, y2: number): void {
+  lines.push(
+    '0',
+    'LINE',
+    '8',
+    'EDGE_BANDED',
+    '10',
+    String(x1),
+    '20',
+    String(y1),
+    '30',
+    '0',
+    '11',
+    String(x2),
+    '21',
+    String(y2),
+    '31',
+    '0',
+  );
 }
 
 export async function downloadDxfForSheet(sheet: CutSheet, filename: string): Promise<void> {

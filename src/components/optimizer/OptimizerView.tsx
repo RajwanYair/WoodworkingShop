@@ -101,6 +101,7 @@ export function OptimizerView() {
       parts: generateParts(c.config, customMaterials),
       hardware: generateHardware(c.config, customMaterials),
       notes: c.notes,
+      edgeBandingProcess: c.config.edgeBandingProcess,
     }));
     const filename = `${filePrefix}-bill-of-materials.csv`;
 

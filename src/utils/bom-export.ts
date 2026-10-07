@@ -1,4 +1,4 @@
-import type { Part, HardwareItem, Lang, Material } from '../engine/types';
+import type { Part, HardwareItem, Lang, Material, EdgeBandingProcess, BandedEdge } from '../engine/types';
 import { getMaterial, computePartWeightKg } from '../engine/materials';
 import { triggerDownload } from './download';
 
@@ -17,6 +17,11 @@ interface BomHeaders {
   partsHeader: string;
   hwHeader: string;
   grainAlong: string;
+  rawLengthCol: string;
+  rawWidthCol: string;
+  edgeScheduleCol: string;
+  manufacturingSchedule: string;
+  scheduleHeaders: [string, string, string, string, string, string, string];
 }
 
 function getBomHeaders(locale: string): BomHeaders {
@@ -33,6 +38,19 @@ function getBomHeaders(locale: string): BomHeaders {
         '#,Cabinet,Part ID,Part Name,Qty,Material,Thickness (mm),Length (mm),Width (mm),Area (m\u00b2),Edge Banding,Weight (kg),Grain Direction',
       hwHeader: '#,Cabinet,Hardware ID,Hardware Name,Qty,Unit',
       grainAlong: 'Along length',
+      rawLengthCol: 'Raw stock length (mm)',
+      rawWidthCol: 'Raw stock width (mm)',
+      edgeScheduleCol: 'Banded edges',
+      manufacturingSchedule: 'Edge-Banding Schedule',
+      scheduleHeaders: [
+        'Cabinet',
+        'Part ID',
+        'Qty',
+        'Edge',
+        'Edge length (mm)',
+        'Band thickness (mm)',
+        'Trim allowance (mm)',
+      ],
     },
     he: {
       materialSummary: '\u05e1\u05d9\u05db\u05d5\u05dd \u05d7\u05d5\u05de\u05e8\u05d9\u05dd',
@@ -47,6 +65,20 @@ function getBomHeaders(locale: string): BomHeaders {
       hwHeader:
         '#,\u05d0\u05e8\u05d5\u05df,\u05de\u05d6\u05d4\u05d4,\u05e9\u05dd \u05d7\u05d5\u05de\u05e8\u05d4,\u05db\u05de\u05d5\u05ea,\u05d9\u05d7\u05d9\u05d3\u05d4',
       grainAlong: '\u05dc\u05d0\u05d5\u05e8\u05da \u05d4\u05d2\u05d9\u05d3',
+      rawLengthCol: '\u05d0\u05d5\u05e8\u05da \u05dc\u05d5\u05d7 \u05d2\u05dc\u05dd (mm)',
+      rawWidthCol: '\u05e8\u05d5\u05d7\u05d1 \u05dc\u05d5\u05d7 \u05d2\u05dc\u05dd (mm)',
+      edgeScheduleCol: '\u05e7\u05e6\u05d5\u05d5\u05ea \u05de\u05e6\u05d5\u05e4\u05d9\u05dd',
+      manufacturingSchedule:
+        '\u05dc\u05d5\u05d7 \u05e2\u05d1\u05d5\u05d3\u05d5\u05ea \u05dc\u05e4\u05e1\u05d9 \u05e7\u05e6\u05d4',
+      scheduleHeaders: [
+        '\u05d0\u05e8\u05d5\u05df',
+        '\u05de\u05d6\u05d4\u05d4',
+        '\u05db\u05de\u05d5\u05ea',
+        '\u05e7\u05e6\u05d4',
+        '\u05d0\u05d5\u05e8\u05da \u05e7\u05e6\u05d4 (mm)',
+        '\u05e2\u05d5\u05d1\u05d9 \u05e4\u05e1 (mm)',
+        '\u05d4\u05e7\u05e6\u05d0\u05ea \u05d7\u05d9\u05ea\u05d5\u05da (mm)',
+      ],
     },
     es: {
       materialSummary: 'Resumen de materiales',
@@ -60,6 +92,19 @@ function getBomHeaders(locale: string): BomHeaders {
         '#,Armario,ID Pieza,Nombre pieza,Cant.,Material,Espesor (mm),Largo (mm),Ancho (mm),\u00c1rea (m\u00b2),Canteado,Peso (kg),Direcci\u00f3n veta',
       hwHeader: '#,Armario,ID Herraje,Nombre herraje,Cant.,Unidad',
       grainAlong: 'A lo largo',
+      rawLengthCol: 'Largo bruto (mm)',
+      rawWidthCol: 'Ancho bruto (mm)',
+      edgeScheduleCol: 'Cantos canteados',
+      manufacturingSchedule: 'Plan de canteado',
+      scheduleHeaders: [
+        'Armario',
+        'ID pieza',
+        'Cant.',
+        'Canto',
+        'Largo del canto (mm)',
+        'Grosor del canto (mm)',
+        'Margen de recorte (mm)',
+      ],
     },
     de: {
       materialSummary: 'Materialzusammenfassung',
@@ -73,6 +118,19 @@ function getBomHeaders(locale: string): BomHeaders {
         '#,Korpus,Teile-ID,Teilename,Menge,Material,Dicke (mm),L\u00e4nge (mm),Breite (mm),Fl\u00e4che (m\u00b2),Kantenanleimer,Gewicht (kg),Faserrichtung',
       hwHeader: '#,Korpus,Beschlag-ID,Beschlagname,Menge,Einheit',
       grainAlong: 'L\u00e4ngs der Faser',
+      rawLengthCol: 'Rohl\u00e4nge (mm)',
+      rawWidthCol: 'Rohbreite (mm)',
+      edgeScheduleCol: 'Bekantete Kanten',
+      manufacturingSchedule: 'Kantenbearbeitungsplan',
+      scheduleHeaders: [
+        'Schrank',
+        'Teile-ID',
+        'Menge',
+        'Kante',
+        'Kantenl\u00e4nge (mm)',
+        'Bandst\u00e4rke (mm)',
+        'Bes\u00e4umzugabe (mm)',
+      ],
     },
     fr: {
       materialSummary: 'R\u00e9sum\u00e9 mat\u00e9riaux',
@@ -86,6 +144,19 @@ function getBomHeaders(locale: string): BomHeaders {
         '#,Meuble,ID Pi\u00e8ce,Nom pi\u00e8ce,Qte,Mat\u00e9riau,\u00c9paisseur (mm),Longueur (mm),Largeur (mm),Surface (m\u00b2),Chant,Poids (kg),Sens du fil',
       hwHeader: '#,Meuble,ID Quincaillerie,Nom quincaillerie,Qte,Unit\u00e9',
       grainAlong: 'Dans la longueur',
+      rawLengthCol: 'Longueur brute (mm)',
+      rawWidthCol: 'Largeur brute (mm)',
+      edgeScheduleCol: 'Chants plaqu\u00e9s',
+      manufacturingSchedule: 'Plan de pose des chants',
+      scheduleHeaders: [
+        'Meuble',
+        'ID pi\u00e8ce',
+        'Qt\u00e9',
+        'Chant',
+        'Longueur du chant (mm)',
+        '\u00c9paisseur du chant (mm)',
+        'Marge de recoupe (mm)',
+      ],
     },
     ar: {
       materialSummary: '\u0645\u0644\u062e\u0635 \u0627\u0644\u0645\u0648\u0627\u062f',
@@ -101,6 +172,20 @@ function getBomHeaders(locale: string): BomHeaders {
       hwHeader:
         '#,\u062e\u0632\u0627\u0646\u0629,\u0645\u0639\u0631\u0641 \u0627\u0644\u0639\u062a\u0627\u062f,\u0627\u0633\u0645 \u0627\u0644\u0639\u062a\u0627\u062f,\u0627\u0644\u0643\u0645\u064a\u0629,\u0627\u0644\u0648\u062d\u062f\u0629',
       grainAlong: '\u0628\u0627\u062a\u062c\u0627\u0647 \u0627\u0644\u062d\u0628\u0648\u0628',
+      rawLengthCol: '\u0637\u0648\u0644 \u0627\u0644\u0644\u0648\u062d \u0627\u0644\u062e\u0627\u0645 (mm)',
+      rawWidthCol: '\u0639\u0631\u0636 \u0627\u0644\u0644\u0648\u062d \u0627\u0644\u062e\u0627\u0645 (mm)',
+      edgeScheduleCol: '\u0627\u0644\u062d\u0648\u0627\u0641 \u0627\u0644\u0645\u0643\u0633\u064a\u0629',
+      manufacturingSchedule:
+        '\u062c\u062f\u0648\u0644 \u062a\u0643\u0633\u064a\u0629 \u0627\u0644\u062d\u0648\u0627\u0641',
+      scheduleHeaders: [
+        '\u062e\u0632\u0627\u0646\u0629',
+        '\u0645\u0639\u0631\u0641 \u0627\u0644\u0642\u0637\u0639\u0629',
+        '\u0627\u0644\u0643\u0645\u064a\u0629',
+        '\u0627\u0644\u062d\u0627\u0641\u0629',
+        '\u0637\u0648\u0644 \u0627\u0644\u062d\u0627\u0641\u0629 (mm)',
+        '\u0633\u0645\u0627\u0643\u0629 \u0627\u0644\u0634\u0631\u064a\u0637 (mm)',
+        '\u0633\u0645\u0627\u062d\u0629 \u0627\u0644\u062a\u0634\u0630\u064a\u0628 (mm)',
+      ],
     },
   };
   return BOM_HEADERS[locale] ?? BOM_HEADERS['en'];
@@ -141,7 +226,13 @@ function formatCurrency(amount: number, currencyCode: string, locale: string): s
  *                  Defaults to `lang`. Supports 'en', 'he', 'es', 'de', 'fr', 'ar'.
  */
 export function generateBomCsv(
-  cabinets: { name: string; parts: Part[]; hardware: HardwareItem[]; notes?: string }[],
+  cabinets: {
+    name: string;
+    parts: Part[];
+    hardware: HardwareItem[];
+    notes?: string;
+    edgeBandingProcess?: EdgeBandingProcess;
+  }[],
   lang: Lang,
   locale?: string,
 ): string {
@@ -178,12 +269,14 @@ export function generateBomCsv(
   const weightKgByMat = new Map<string, number>(); // Sprint 162
   for (const cab of cabinets) {
     for (const p of cab.parts) {
-      const area = p.qty * p.length * p.width;
+      const rawLength = p.rawLength ?? p.length;
+      const rawWidth = p.rawWidth ?? p.width;
+      const area = p.qty * rawLength * rawWidth;
       areaMm2ByMat.set(p.material, (areaMm2ByMat.get(p.material) ?? 0) + area);
       // Sprint 162: accumulate weight
       try {
         const density = getMaterial(p.material).densityKgM3;
-        const wKg = computePartWeightKg(p.length, p.width, p.thickness, p.qty, density);
+        const wKg = computePartWeightKg(rawLength, rawWidth, p.thickness, p.qty, density);
         weightKgByMat.set(p.material, (weightKgByMat.get(p.material) ?? 0) + wKg);
       } catch {
         /* unknown material — skip */
@@ -214,8 +307,14 @@ export function generateBomCsv(
   }
   rows.push('');
 
+  const hasEnabledEdgeBandingProcess = cabinets.some((cab) => cab.edgeBandingProcess?.enabled === true);
+
   // Parts header
-  rows.push(h.partsHeader);
+  rows.push(
+    hasEnabledEdgeBandingProcess
+      ? [h.partsHeader, h.rawLengthCol, h.rawWidthCol, h.edgeScheduleCol].join(',')
+      : h.partsHeader,
+  );
 
   const isMultiCabinet = cabinets.length > 1;
   let partRowNum = 0;
@@ -232,7 +331,13 @@ export function generateBomCsv(
       let partWeight = '';
       try {
         const density = getMaterial(p.material).densityKgM3;
-        partWeight = computePartWeightKg(p.length, p.width, p.thickness, p.qty, density).toFixed(3);
+        partWeight = computePartWeightKg(
+          p.rawLength ?? p.length,
+          p.rawWidth ?? p.width,
+          p.thickness,
+          p.qty,
+          density,
+        ).toFixed(3);
       } catch {
         /* skip */
       }
@@ -247,24 +352,56 @@ export function generateBomCsv(
       const partId = isMultiCabinet ? `C${cabIdx + 1}-${p.id}` : p.id;
       partRowNum += 1;
       // Sprint 87 — part face area in m²
-      const partArea = ((p.length * p.width * p.qty) / 1_000_000).toFixed(6);
-      rows.push(
-        csvRow([
-          String(partRowNum),
-          cab.name,
-          partId,
-          p.name[lang],
-          String(p.qty),
-          matName,
-          String(p.thickness),
-          String(p.length),
-          String(p.width),
-          partArea,
-          p.edgeBanding[lang],
-          partWeight,
-          grainDir,
-        ]),
-      );
+      const rawLength = p.rawLength ?? p.length;
+      const rawWidth = p.rawWidth ?? p.width;
+      const partArea = ((rawLength * rawWidth * p.qty) / 1_000_000).toFixed(6);
+      const bandedEdges = getBandedEdges(p);
+      const partColumns = [
+        String(partRowNum),
+        cab.name,
+        partId,
+        p.name[lang],
+        String(p.qty),
+        matName,
+        String(p.thickness),
+        String(p.length),
+        String(p.width),
+        partArea,
+        p.edgeBanding[lang],
+        partWeight,
+        grainDir,
+      ];
+      if (hasEnabledEdgeBandingProcess) {
+        partColumns.push(String(rawLength), String(rawWidth), bandedEdges.join('; '));
+      }
+      rows.push(csvRow(partColumns));
+    }
+  }
+
+  if (hasEnabledEdgeBandingProcess) {
+    rows.push('');
+    rows.push(h.manufacturingSchedule);
+    rows.push(csvRow(h.scheduleHeaders));
+    for (let cabIdx = 0; cabIdx < cabinets.length; cabIdx++) {
+      const cab = cabinets[cabIdx];
+      if (!cab.edgeBandingProcess?.enabled) continue;
+      for (const p of cab.parts) {
+        for (const edge of getBandedEdges(p)) {
+          const edgeLength = edge.startsWith('length-') ? p.width : p.length;
+          const partId = isMultiCabinet ? `C${cabIdx + 1}-${p.id}` : p.id;
+          rows.push(
+            csvRow([
+              cab.name,
+              partId,
+              String(p.qty),
+              edge,
+              String(edgeLength),
+              String(cab.edgeBandingProcess.bandThicknessMm),
+              String(cab.edgeBandingProcess.trimAllowanceMm),
+            ]),
+          );
+        }
+      }
     }
   }
 
@@ -306,6 +443,13 @@ function safeGetMaterialName(key: string, lang: Lang): string {
   }
 }
 
+function getBandedEdges(part: Part): BandedEdge[] {
+  if (part.bandedEdges) return part.bandedEdges;
+  if (part.edgeBanding.en === 'All 4 edges') return ['length-start', 'length-end', 'width-start', 'width-end'];
+  if (part.edgeBanding.en === 'Front edge') return ['width-start'];
+  return [];
+}
+
 function csvRow(fields: string[]): string {
   return fields
     .map((f) => {
@@ -320,7 +464,13 @@ function csvRow(fields: string[]): string {
 }
 
 export function downloadBomCsv(
-  cabinets: { name: string; parts: Part[]; hardware: HardwareItem[]; notes?: string }[],
+  cabinets: {
+    name: string;
+    parts: Part[];
+    hardware: HardwareItem[];
+    notes?: string;
+    edgeBandingProcess?: EdgeBandingProcess;
+  }[],
   lang: Lang,
   filename = 'bill-of-materials.csv',
   locale?: string,

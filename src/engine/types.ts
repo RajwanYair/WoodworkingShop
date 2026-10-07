@@ -72,6 +72,14 @@ export interface Material {
 export type DoorStyle = 'flat' | 'shaker' | 'glass' | 'none';
 /** Which visible edges receive banding treatment. */
 export type EdgeBanding = 'all-visible' | 'doors-only' | 'none';
+export type BandedEdge = 'length-start' | 'length-end' | 'width-start' | 'width-end';
+
+/** Opt-in process allowances used to derive raw substrate dimensions. */
+export interface EdgeBandingProcess {
+  enabled: boolean;
+  bandThicknessMm: number;
+  trimAllowanceMm: number;
+}
 
 /**
  * Sprint 12 — Joinery type used to assemble the carcass.
@@ -214,6 +222,7 @@ export interface CabinetConfig {
 
   // Edge banding
   edgeBanding: EdgeBanding;
+  edgeBandingProcess?: EdgeBandingProcess;
 
   /**
    * Phase 11 / Sprint 5 — Cut optimizer algorithm.
@@ -272,6 +281,9 @@ export interface Part {
   length: number; // mm (grain direction)
   width: number; // mm
   edgeBanding: { en: string; he: string };
+  bandedEdges?: BandedEdge[];
+  rawLength?: number;
+  rawWidth?: number;
   /** Sprint 16 — when true the cut-optimizer must not rotate this part 90°. */
   rotationLocked?: boolean;
   /**
@@ -303,6 +315,9 @@ export interface CutRect {
   label: string;
   length: number; // mm
   width: number; // mm
+  finishedLength?: number;
+  finishedWidth?: number;
+  bandedEdges?: BandedEdge[];
   x: number; // placed x on sheet
   y: number; // placed y on sheet
   edgeBanding?: string; // edge banding description (e.g. 'Front edge', '4 edges')

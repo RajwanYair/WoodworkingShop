@@ -49,7 +49,8 @@ function sortParts(
 
 export function PartsTable() {
   const { t, i18n } = useTranslation();
-  const { parts } = useCabinetStore();
+  const { parts, config } = useCabinetStore();
+  const showRawDimensions = config.edgeBandingProcess?.enabled === true;
   const customMaterials = useCustomMaterialsStore((state) => state.materials);
   const lang = resolveEngineLang(i18n.language);
   /** Sprint 171 — sortable column headers */
@@ -156,6 +157,16 @@ export function PartsTable() {
             {thBtn('material', t('parts.material'))}
             {thBtn('length', t('parts.length'), 'text-end')}
             {thBtn('width', t('parts.width'), 'text-end')}
+            {showRawDimensions && (
+              <th scope="col" className="px-2 py-1 text-end">
+                {t('parts.rawLength')}
+              </th>
+            )}
+            {showRawDimensions && (
+              <th scope="col" className="px-2 py-1 text-end">
+                {t('parts.rawWidth')}
+              </th>
+            )}
             {thBtn('thickness', t('parts.thickness'), 'text-end')}
             <th scope="col" className="px-2 py-1 text-start">
               {t('parts.edge')}
@@ -176,6 +187,8 @@ export function PartsTable() {
                 <td className="px-2 py-1">{mat.name[lang]}</td>
                 <td className="px-2 py-1 text-end">{p.length}</td>
                 <td className="px-2 py-1 text-end">{p.width}</td>
+                {showRawDimensions && <td className="px-2 py-1 text-end">{p.rawLength ?? p.length}</td>}
+                {showRawDimensions && <td className="px-2 py-1 text-end">{p.rawWidth ?? p.width}</td>}
                 <td className="px-2 py-1 text-end">{p.thickness}</td>
                 <td className="px-2 py-1">{p.edgeBanding[lang]}</td>
               </tr>
@@ -183,7 +196,7 @@ export function PartsTable() {
           })}
           {sorted.length === 0 && (
             <tr>
-              <td colSpan={8} className="px-4 py-8 text-center">
+              <td colSpan={showRawDimensions ? 10 : 8} className="px-4 py-8 text-center">
                 <div role="status" aria-live="polite" className="text-wood-500 dark:text-wood-400">
                   {t('optimizer.noTableResults')}
                 </div>

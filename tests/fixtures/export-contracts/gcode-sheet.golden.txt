@@ -11,7 +11,7 @@ G90 ; absolute positioning
 G0 Z5.0 ; retract to safe height
 M3 S18000 ; spindle on
 
-; --- Cut: P01 Side Panel (300x600) ---
+; --- Cut: P01 Side Panel (blank 300x600) ---
 G0 X7.00 Y7.00
 G1 Z-3.00 F600
 G1 X313.00 Y7.00 F1500

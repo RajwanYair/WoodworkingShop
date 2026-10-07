@@ -58,6 +58,14 @@ describe('generateErpPayload — schema envelope', () => {
     expect(typeof payload.appVersion).toBe('string');
     expect(payload.appVersion.length).toBeGreaterThan(0);
   });
+
+  it('preserves the legacy payload when the edge-banding process is disabled', () => {
+    const payload = generateErpPayload('Test', cfg(), [mockPart], [], mockOptimization);
+
+    expect(payload).not.toHaveProperty('edgeBandingSchedule');
+    expect(payload.parts[0]).not.toHaveProperty('rawLengthMm');
+    expect(payload.parts[0]).not.toHaveProperty('bandedEdges');
+  });
 });
 
 describe('generateErpPayload — project section', () => {
@@ -83,6 +91,33 @@ describe('generateErpPayload — project section', () => {
 });
 
 describe('generateErpPayload — parts', () => {
+  it('exports raw dimensions and per-edge banding schedule for manufacturing', () => {
+    const bandedPart: Part = {
+      ...mockPart,
+      rawWidth: 579,
+      bandedEdges: ['width-start'],
+    };
+    const payload = generateErpPayload(
+      'Test',
+      cfg({ edgeBandingProcess: { enabled: true, bandThicknessMm: 1, trimAllowanceMm: 0 } }),
+      [bandedPart],
+      [],
+      mockOptimization,
+    );
+
+    expect(payload.parts[0]).toMatchObject({ rawLengthMm: 720, rawWidthMm: 579, areaMm2: 2 * 720 * 579 });
+    expect(payload.edgeBandingSchedule).toEqual([
+      {
+        partId: 'P01',
+        edge: 'width-start',
+        qty: 2,
+        edgeLengthMm: 720,
+        bandThicknessMm: 1,
+        trimAllowanceMm: 0,
+      },
+    ]);
+  });
+
   it('builds a part line for each part', () => {
     const payload = generateErpPayload('Test', cfg(), [mockPart], [], mockOptimization);
     expect(payload.parts).toHaveLength(1);

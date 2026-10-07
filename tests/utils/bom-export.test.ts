@@ -33,8 +33,51 @@ const singleCabinet = [
     hardware: [mockHardware],
   },
 ];
+const edgeBandedCabinet = [
+  {
+    ...singleCabinet[0],
+    edgeBandingProcess: { enabled: true, bandThicknessMm: 1, trimAllowanceMm: 0 },
+  },
+];
 
 describe('generateBomCsv', () => {
+  it('preserves the legacy BOM schema when edge-banding process is disabled', () => {
+    const csv = generateBomCsv(singleCabinet, 'en');
+
+    expect(csv).toContain(
+      '#,Cabinet,Part ID,Part Name,Qty,Material,Thickness (mm),Length (mm),Width (mm),Area (m²),Edge Banding,Weight (kg),Grain Direction',
+    );
+    expect(csv).not.toContain('Edge-Banding Schedule');
+    expect(csv).not.toContain('Raw stock length');
+  });
+
+  it('reports raw blank dimensions and creates a per-edge manufacturing schedule', () => {
+    const rawPart: Part = {
+      ...mockPart,
+      rawLength: 2000,
+      rawWidth: 579,
+      bandedEdges: ['width-start'],
+    };
+    const csv = generateBomCsv(
+      [
+        {
+          name: 'Cabinet A',
+          parts: [rawPart],
+          hardware: [],
+          edgeBandingProcess: { enabled: true, bandThicknessMm: 1, trimAllowanceMm: 0 },
+        },
+      ],
+      'en',
+    );
+    const lines = csv.split('\n');
+    const partRow = lines.find((line) => line.startsWith('1,Cabinet A,P01,'));
+
+    expect(partRow?.split(',').slice(13)).toEqual(['2000', '579', 'width-start']);
+    expect(csv).toContain('Edge-Banding Schedule');
+    expect(csv).toContain('Cabinet A,P01,2,width-start,2000,1,0');
+    expect(lines.find((line) => line.startsWith('Melamine 18 mm,'))).toContain('2.316');
+  });
+
   it('has material summary section and parts header row after the summary', () => {
     const csv = generateBomCsv(singleCabinet, 'en');
     const lines = csv.split('\n');
@@ -61,7 +104,7 @@ describe('generateBomCsv', () => {
       summaryColumns:
         'Material,Total Area (m²),Board-Feet (nominal 1 inch),Weight (kg),Price/Sheet,Est. Material Cost,,,,,',
       partsHeader:
-        '#,Cabinet,Part ID,Part Name,Qty,Material,Thickness (mm),Length (mm),Width (mm),Area (m²),Edge Banding,Weight (kg),Grain Direction',
+        '#,Cabinet,Part ID,Part Name,Qty,Material,Thickness (mm),Length (mm),Width (mm),Area (m²),Edge Banding,Weight (kg),Grain Direction,Raw stock length (mm),Raw stock width (mm),Banded edges',
       hardwareHeader: '#,Cabinet,Hardware ID,Hardware Name,Qty,Unit',
       grainAlong: 'Along length',
     },
@@ -70,7 +113,7 @@ describe('generateBomCsv', () => {
       summary: 'סיכום חומרים',
       summaryColumns: 'חומר,שטח כולל (m²),רגלי לוח,משקל (kg),מחיר/גיליון,עלות חומרים משוערת,,,,,',
       partsHeader:
-        '#,ארון,מזהה,שם חלק,כמות,חומר,עובי (מ"מ),אורך (מ"מ),רוחב (מ"מ),שטח (m²),חיזוק קצות,משקל (kg),כיוון גיד',
+        '#,ארון,מזהה,שם חלק,כמות,חומר,עובי (מ"מ),אורך (מ"מ),רוחב (מ"מ),שטח (m²),חיזוק קצות,משקל (kg),כיוון גיד,אורך לוח גלם (mm),רוחב לוח גלם (mm),קצוות מצופים',
       hardwareHeader: '#,ארון,מזהה,שם חומרה,כמות,יחידה',
       grainAlong: 'לאורך הגיד',
     },
@@ -80,7 +123,7 @@ describe('generateBomCsv', () => {
       summaryColumns:
         'Material,Área total (m²),Pies tabla (1 pulgada nominal),Peso (kg),Precio/Hoja,Coste material est.,,,,,',
       partsHeader:
-        '#,Armario,ID Pieza,Nombre pieza,Cant.,Material,Espesor (mm),Largo (mm),Ancho (mm),Área (m²),Canteado,Peso (kg),Dirección veta',
+        '#,Armario,ID Pieza,Nombre pieza,Cant.,Material,Espesor (mm),Largo (mm),Ancho (mm),Área (m²),Canteado,Peso (kg),Dirección veta,Largo bruto (mm),Ancho bruto (mm),Cantos canteados',
       hardwareHeader: '#,Armario,ID Herraje,Nombre herraje,Cant.,Unidad',
       grainAlong: 'A lo largo',
     },
@@ -90,7 +133,7 @@ describe('generateBomCsv', () => {
       summaryColumns:
         'Material,Gesamtfläche (m²),Brettfuß (nominal 1 Zoll),Gewicht (kg),Preis/Platte,Geschätzter Materialpreis,,,,,',
       partsHeader:
-        '#,Korpus,Teile-ID,Teilename,Menge,Material,Dicke (mm),Länge (mm),Breite (mm),Fläche (m²),Kantenanleimer,Gewicht (kg),Faserrichtung',
+        '#,Korpus,Teile-ID,Teilename,Menge,Material,Dicke (mm),Länge (mm),Breite (mm),Fläche (m²),Kantenanleimer,Gewicht (kg),Faserrichtung,Rohlänge (mm),Rohbreite (mm),Bekantete Kanten',
       hardwareHeader: '#,Korpus,Beschlag-ID,Beschlagname,Menge,Einheit',
       grainAlong: 'Längs der Faser',
     },
@@ -100,7 +143,7 @@ describe('generateBomCsv', () => {
       summaryColumns:
         'Matériau,Surface totale (m²),Pieds-planche (nominal 1 pouce),Poids (kg),Prix/Feuille,Coût matériaux est.,,,,,',
       partsHeader:
-        '#,Meuble,ID Pièce,Nom pièce,Qte,Matériau,Épaisseur (mm),Longueur (mm),Largeur (mm),Surface (m²),Chant,Poids (kg),Sens du fil',
+        '#,Meuble,ID Pièce,Nom pièce,Qte,Matériau,Épaisseur (mm),Longueur (mm),Largeur (mm),Surface (m²),Chant,Poids (kg),Sens du fil,Longueur brute (mm),Largeur brute (mm),Chants plaqués',
       hardwareHeader: '#,Meuble,ID Quincaillerie,Nom quincaillerie,Qte,Unité',
       grainAlong: 'Dans la longueur',
     },
@@ -109,42 +152,38 @@ describe('generateBomCsv', () => {
       summary: 'ملخص المواد',
       summaryColumns: 'المادة,المساحة الكلية (m²),أقدام لوح,الوزن (kg),سعر/لوح,تكلفة المواد المقدرة,,,,,',
       partsHeader:
-        '#,خزانة,معرف الجزء,اسم الجزء,الكمية,المادة,السمك (mm),الطول (mm),العرض (mm),المساحة (m²),تشطيب الحواف,الوزن (kg),اتجاه الحبوب',
+        '#,خزانة,معرف الجزء,اسم الجزء,الكمية,المادة,السمك (mm),الطول (mm),العرض (mm),المساحة (m²),تشطيب الحواف,الوزن (kg),اتجاه الحبوب,طول اللوح الخام (mm),عرض اللوح الخام (mm),الحواف المكسية',
       hardwareHeader: '#,خزانة,معرف العتاد,اسم العتاد,الكمية,الوحدة',
       grainAlong: 'باتجاه الحبوب',
     },
   ])('serializes localized BOM headers and grain direction for $locale', (expected) => {
     const grainPart: Part = { ...mockPart, material: 'plywood-17' };
-    const csv = generateBomCsv(
-      [{ name: 'Cabinet A', parts: [grainPart], hardware: [mockHardware] }],
-      'en',
-      expected.locale,
-    );
+    const csv = generateBomCsv([{ ...edgeBandedCabinet[0], parts: [grainPart] }], 'en', expected.locale);
     const lines = csv.split('\n');
     expect(lines).toContain(`${expected.summary},,,,,,,,,,,,`);
     expect(lines).toContain(`${expected.summaryColumns}`);
-    expect(lines.find((line) => line.startsWith('#,') && line.split(',').length === 13)).toBe(expected.partsHeader);
+    expect(lines.find((line) => line.startsWith('#,') && line.split(',').length === 16)).toBe(expected.partsHeader);
     expect(lines).toContain(`${expected.hardwareHeader},,,,, `);
     const grainRow = lines.find((line) => line.startsWith('1,Cabinet A,P01,'));
     expect(grainRow?.split(',')[12]).toBe(expected.grainAlong);
   });
 
   it('falls back to English headers for an unsupported locale', () => {
-    const lines = generateBomCsv(singleCabinet, 'en', 'xx').split('\n');
+    const lines = generateBomCsv(edgeBandedCabinet, 'en', 'xx').split('\n');
     expect(lines).toContain('Material Summary,,,,,,,,,,,,');
     expect(lines).toContain(
       'Material,Total Area (m²),Board-Feet (nominal 1 inch),Weight (kg),Price/Sheet,Est. Material Cost,,,,,',
     );
     expect(lines).toContain(
-      '#,Cabinet,Part ID,Part Name,Qty,Material,Thickness (mm),Length (mm),Width (mm),Area (m²),Edge Banding,Weight (kg),Grain Direction',
+      '#,Cabinet,Part ID,Part Name,Qty,Material,Thickness (mm),Length (mm),Width (mm),Area (m²),Edge Banding,Weight (kg),Grain Direction,Raw stock length (mm),Raw stock width (mm),Banded edges',
     );
   });
 
   it('serializes all single-cabinet part columns in order', () => {
-    const lines = generateBomCsv(singleCabinet, 'en').split('\n');
+    const lines = generateBomCsv(edgeBandedCabinet, 'en').split('\n');
     const headerIndex = lines.findIndex((line) => line.startsWith('#,Cabinet,Part ID'));
     expect(lines[headerIndex + 1]).toBe(
-      '1,Cabinet A,P01,Side Panel,2,Melamine 18 mm,18,2000,580,2.320000,Front edge,29.232,\u2014',
+      '1,Cabinet A,P01,Side Panel,2,Melamine 18 mm,18,2000,580,2.320000,Front edge,29.232,\u2014,2000,580,width-start',
     );
   });
 
@@ -211,7 +250,8 @@ describe('generateBomCsv', () => {
     expect(csv).toContain('C1-P01');
     expect(csv).toContain('C2-P01');
     expect(csv).toContain('C3-P01');
-    expect(csv).not.toMatch(/,P01,/);
+    const partsSection = csv.split('Edge-Banding Schedule')[0] ?? '';
+    expect(partsSection).not.toMatch(/,P01,/);
   });
 
   it('has version header and ISO timestamp', () => {
@@ -426,8 +466,8 @@ describe('BOM CSV — area (m²) column', () => {
     );
     const mLines = multiCsv.split('\n').filter(Boolean);
     const mHeaderIdx = mLines.findIndex((l) => l.startsWith('#,Cabinet,Part ID'));
-    const hwIdx = mLines.findIndex((l) => l.startsWith('#,Cabinet,Hardware ID'));
-    const dataRows = mLines.slice(mHeaderIdx + 1, hwIdx).filter((l) => !l.startsWith('#') && l.trim().length > 0);
+    const scheduleIdx = mLines.findIndex((l) => l.startsWith('Edge-Banding Schedule'));
+    const dataRows = mLines.slice(mHeaderIdx + 1, scheduleIdx).filter((l) => !l.startsWith('#') && l.trim().length > 0);
     for (const row of dataRows) expect(isNaN(parseFloat(row.split(',')[9]))).toBe(false);
   });
 });

@@ -9,10 +9,16 @@
  */
 
 import { generateBomCsv } from '../utils/bom-export';
-import type { Part, HardwareItem, Lang } from '../engine/types';
+import type { Part, HardwareItem, Lang, EdgeBandingProcess } from '../engine/types';
 
 export interface BomWorkerInput {
-  cabinets: { name: string; parts: Part[]; hardware: HardwareItem[]; notes?: string }[];
+  cabinets: {
+    name: string;
+    parts: Part[];
+    hardware: HardwareItem[];
+    notes?: string;
+    edgeBandingProcess?: EdgeBandingProcess;
+  }[];
   lang: Lang;
   /** Full i18next locale for column header translation (e.g. 'es', 'de', 'fr', 'ar'). */
   locale?: string;

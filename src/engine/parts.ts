@@ -1,6 +1,7 @@
 import type { CabinetConfig, Material, Part } from './types';
 import { getMaterial, computePartWeightKg } from './materials.ts';
 import { computeDimensions } from './dimensions';
+import { deriveRawStockDimensions } from './edge-banding';
 import { createJsonMemo } from './memo';
 
 /**
@@ -37,7 +38,7 @@ export const generateParts: (cfg: CabinetConfig, extraMaterials?: Material[]) =>
         width: cfg.height,
         edgeBanding: edgeLabel(allVisibleEdges ? '4-edges' : 'none'),
       });
-      return parts;
+      return withManufacturingDimensions(parts, cfg);
     }
 
     // ── Desk-specific parts ──
@@ -107,7 +108,7 @@ export const generateParts: (cfg: CabinetConfig, extraMaterials?: Material[]) =>
         });
       }
 
-      return parts;
+      return withManufacturingDimensions(parts, cfg);
     }
 
     const isWardrobe = cfg.furnitureType === 'wardrobe';
@@ -320,13 +321,26 @@ export const generateParts: (cfg: CabinetConfig, extraMaterials?: Material[]) =>
       });
     }
 
-    return parts;
+    return withManufacturingDimensions(parts, cfg);
   },
 );
 
 // ─── Helpers ───
 
 type EdgeCode = 'none' | 'front' | '4-edges';
+
+function withManufacturingDimensions(parts: Part[], cfg: CabinetConfig): Part[] {
+  return parts.map((part) => {
+    const bandedEdges =
+      part.edgeBanding.en === 'All 4 edges'
+        ? (['length-start', 'length-end', 'width-start', 'width-end'] as const)
+        : part.edgeBanding.en === 'Front edge'
+          ? (['width-start'] as const)
+          : [];
+    const raw = deriveRawStockDimensions(part.length, part.width, bandedEdges, cfg.edgeBandingProcess);
+    return { ...part, bandedEdges: [...bandedEdges], rawLength: raw.length, rawWidth: raw.width };
+  });
+}
 
 function edgeLabel(code: EdgeCode): { en: string; he: string } {
   switch (code) {
@@ -345,8 +359,12 @@ function edgeLabel(code: EdgeCode): { en: string; he: string } {
 export function computeEdgeBandingTotal(parts: Part[]): number {
   let total = 0;
   for (const p of parts) {
-    if (p.edgeBanding.en === 'Front edge') {
-      total += p.length * p.qty; // one long edge per piece
+    if (p.bandedEdges) {
+      const lengthEdges = p.bandedEdges.filter((edge) => edge.startsWith('length-')).length;
+      const widthEdges = p.bandedEdges.length - lengthEdges;
+      total += (lengthEdges * p.width + widthEdges * p.length) * p.qty;
+    } else if (p.edgeBanding.en === 'Front edge') {
+      total += p.length * p.qty;
     } else if (p.edgeBanding.en === 'All 4 edges') {
       total += 2 * (p.length + p.width) * p.qty;
     }

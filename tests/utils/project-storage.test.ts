@@ -202,6 +202,21 @@ describe('project-storage', () => {
     },
   );
 
+  it('rejects invalid edge-banding process settings without persisting a project', async () => {
+    const invalidCabinet = {
+      ...sampleCabinets[0],
+      config: { ...DEFAULT_CONFIG, edgeBandingProcess: { enabled: true, bandThicknessMm: -1, trimAllowanceMm: 0 } },
+    };
+    const file = new File(
+      [JSON.stringify({ name: 'Invalid process', cabinets: [invalidCabinet] })],
+      'invalid-process.cabinet-project.json',
+      { type: 'application/json' },
+    );
+
+    await expect(importProjectJson(file)).rejects.toThrow(/cabinet/i);
+    expect(memProjects).toEqual([]);
+  });
+
   it('saveProject replaces a project with the same name, preserving its id', async () => {
     const first = await saveProject('Same Name', sampleCabinets);
     const second = await saveProject('Same Name', sampleCabinets);

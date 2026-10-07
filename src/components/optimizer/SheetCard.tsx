@@ -7,6 +7,7 @@ import { useToastStore } from '../../store/toast-store';
 import { IconDxf, IconGcode, IconGrainVertical } from '../layout/Icons';
 import type { CutSheet, CutRect, Lang, DefectZone } from '../../engine/types';
 import { YieldBar } from './OptimizerStats';
+import { getEdgeBandingLines } from './edge-banding-markers';
 
 /** Scale factor: mm → SVG px */
 const S = 0.12;
@@ -52,7 +53,7 @@ function PartRect({
   const w = part.width * scale;
   const h = part.length * scale;
   const hasEB = part.edgeBanding && part.edgeBanding !== 'None' && part.edgeBanding !== 'ללא';
-  const is4Edge = hasEB && part.edgeBanding!.includes('4');
+  const bandedEdges = part.bandedEdges;
   const ebColor = '#FF6B35'; // orange indicator for edge banding
 
   return (
@@ -87,31 +88,27 @@ function PartRect({
       {/* Edge banding indicators — colored lines on banded edges */}
       {hasEB && (
         <>
-          {/* Front edge (bottom of part) */}
-          <line
-            x1={x}
-            y1={y + h}
-            x2={x + w}
-            y2={y + h}
-            stroke={ebColor}
-            strokeWidth={2}
-            opacity={isFaded ? 0.2 : 0.9}
-          />
-          {is4Edge && (
-            <>
-              <line x1={x} y1={y} x2={x + w} y2={y} stroke={ebColor} strokeWidth={2} opacity={isFaded ? 0.2 : 0.9} />
-              <line x1={x} y1={y} x2={x} y2={y + h} stroke={ebColor} strokeWidth={2} opacity={isFaded ? 0.2 : 0.9} />
-              <line
-                x1={x + w}
-                y1={y}
-                x2={x + w}
-                y2={y + h}
-                stroke={ebColor}
-                strokeWidth={2}
-                opacity={isFaded ? 0.2 : 0.9}
-              />
-            </>
-          )}
+          {getEdgeBandingLines(
+            bandedEdges ??
+              (part.edgeBanding?.includes('4')
+                ? ['length-start', 'length-end', 'width-start', 'width-end']
+                : ['width-start']),
+            x,
+            y,
+            w,
+            h,
+          ).map(({ edge, x1, y1, x2, y2 }) => (
+            <line
+              key={edge}
+              x1={x1}
+              y1={y1}
+              x2={x2}
+              y2={y2}
+              stroke={ebColor}
+              strokeWidth={2}
+              opacity={isFaded ? 0.2 : 0.9}
+            />
+          ))}
         </>
       )}
       {/* Grain direction arrow — only for grain-sensitive materials */}
@@ -178,7 +175,7 @@ function PartRect({
       >
         {part.width}×{part.length}
       </text>
-      <title>{`${part.partId}: ${part.label}\n${part.width} × ${part.length} mm\nGrain: ${part.grainVertical ? '↕ vertical' : '↔ horizontal'}${hasEB ? `\nEdge: ${part.edgeBanding}` : ''}${part.grainConflict ? '\n⚠ Grain direction compromised — rotated to fit' : ''}${part.rationale ? `\n${part.rationale}` : ''}`}</title>
+      <title>{`${part.partId}: ${part.label}\nRaw: ${part.width} × ${part.length} mm\nFinished: ${part.finishedWidth ?? part.width} × ${part.finishedLength ?? part.length} mm\nGrain: ${part.grainVertical ? '↕ vertical' : '↔ horizontal'}${hasEB ? `\nEdge: ${part.edgeBanding}` : ''}${part.grainConflict ? '\n⚠ Grain direction compromised — rotated to fit' : ''}${part.rationale ? `\n${part.rationale}` : ''}`}</title>
       {/* Sprint 9 — placement rationale ⓘ marker in top-left corner when rationale is available */}
       {part.rationale && w > 10 && h > 10 && (
         <g pointerEvents="none" opacity={isFaded ? 0.2 : 0.75} aria-hidden="true">

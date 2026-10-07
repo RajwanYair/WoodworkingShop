@@ -142,6 +142,22 @@ describe('url-state', () => {
       });
     });
 
+    it('round-trips enabled edge-banding process settings', () => {
+      const config = cfg({
+        edgeBandingProcess: { enabled: true, bandThicknessMm: 1.5, trimAllowanceMm: 0.2 },
+      });
+      expect(paramsToConfig(configToParams(config))).toMatchObject({
+        edgeBandingProcess: { enabled: true, bandThicknessMm: 1.5, trimAllowanceMm: 0.2 },
+      });
+    });
+
+    it.each(['2,1,0', '1,-1,0', '1,1,-0.1', '1,1', '1,1,0,extra'])(
+      'ignores invalid edge process URL value %s',
+      (ebp) => {
+        expect(paramsToConfig(toRecord(`ebp=${encodeURIComponent(ebp)}`)).edgeBandingProcess).toBeUndefined();
+      },
+    );
+
     it('encode → decode for default config returns empty patch', () => {
       const params = configToParams(DEFAULT_CONFIG);
       const decoded = paramsToConfig(params);

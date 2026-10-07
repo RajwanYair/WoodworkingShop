@@ -141,7 +141,7 @@ export function CabinetPdfDocument({
             bMatName={bMat.name[lang]}
             bMatThickness={bMat.thickness}
           />
-          <PdfPartsPage ctx={ctx} parts={parts} />
+          <PdfPartsPage ctx={ctx} parts={parts} showRawDimensions={config.edgeBandingProcess?.enabled === true} />
           <PdfHardwarePage ctx={ctx} hardware={hardware} />
         </>
       )}

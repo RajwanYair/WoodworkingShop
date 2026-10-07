@@ -1,7 +1,7 @@
 import { Page, Text, View } from '@react-pdf/renderer';
 import type { HardwareItem } from '../../../engine/types';
 import { getMaterial } from '../../../engine/materials';
-import { s, C, partsColWidths, hwColWidths } from '../pdf-tokens';
+import { s, C, partsColWidths, partsColWidthsWithoutRaw, hwColWidths } from '../pdf-tokens';
 import type { PdfCtx } from '../pdf-i18n';
 import type { CabinetPdfEntry } from '../CabinetPdfDocument';
 import { PageHeader, PageFooter } from './PageChrome';
@@ -20,6 +20,22 @@ export function PdfMultiCabSection({ ctx, allCabinetsData }: PdfMultiCabSectionP
         const cabBMat = getMaterial(cab.config.backPanelMaterial);
         const cabLabel = `${T.cabinetOfPrefix} ${ci + 1} ${T.cabinetOfMiddle} ${allCabinetsData.length}`;
         const cabTitle = cab.name.trim() || cabLabel;
+        const showRawDimensions = cab.config.edgeBandingProcess?.enabled === true;
+        const partColumnWidths = showRawDimensions ? partsColWidths : partsColWidthsWithoutRaw;
+        const partColumnHeaders = showRawDimensions
+          ? [
+              T.thId,
+              T.thPartName,
+              T.thQty,
+              T.thMaterial,
+              T.thLength,
+              T.thWidth,
+              T.thRawLength,
+              T.thRawWidth,
+              T.thThickness,
+              T.thEdgeBand,
+            ]
+          : [T.thId, T.thPartName, T.thQty, T.thMaterial, T.thLength, T.thWidth, T.thThickness, T.thEdgeBand];
         return (
           <Page key={`cab-${ci}`} size={pageSize} orientation={orientation} style={[s.page, { fontFamily }]}>
             <PageHeader section={`🗄️  ${cabTitle}`} projectName={coverTitle} lang={lang} />
@@ -99,28 +115,36 @@ export function PdfMultiCabSection({ ctx, allCabinetsData }: PdfMultiCabSectionP
               </Text>
             </View>
             <View style={s.tableHeader}>
-              {[T.thId, T.thPartName, T.thQty, T.thMaterial, T.thLength, T.thWidth, T.thThickness, T.thEdgeBand].map(
-                (h, i) => (
-                  <Text key={i} style={[s.thText, { width: partsColWidths[i], fontFamily: fontFamilyBold }]}>
-                    {h}
-                  </Text>
-                ),
-              )}
+              {partColumnHeaders.map((h, i) => (
+                <Text key={i} style={[s.thText, { width: partColumnWidths[i], fontFamily: fontFamilyBold }]}>
+                  {h}
+                </Text>
+              ))}
             </View>
             {cab.parts.map((p, i) => (
               <View key={p.id} style={[s.tableRow, i % 2 === 1 ? s.tableRowAlt : {}]} wrap={false}>
-                <Text style={[s.tdText, { width: partsColWidths[0], color: C.accent, fontFamily: fontFamilyBold }]}>
+                <Text style={[s.tdText, { width: partColumnWidths[0], color: C.accent, fontFamily: fontFamilyBold }]}>
                   {p.id}
                 </Text>
-                <Text style={[s.tdText, { width: partsColWidths[1], fontFamily }]}>{p.name[lang]}</Text>
-                <Text style={[s.tdText, { width: partsColWidths[2], textAlign: 'center' }]}>{p.qty}</Text>
-                <Text style={[s.tdText, { width: partsColWidths[3], color: C.secondary, fontFamily }]}>
+                <Text style={[s.tdText, { width: partColumnWidths[1], fontFamily }]}>{p.name[lang]}</Text>
+                <Text style={[s.tdText, { width: partColumnWidths[2], textAlign: 'center' }]}>{p.qty}</Text>
+                <Text style={[s.tdText, { width: partColumnWidths[3], color: C.secondary, fontFamily }]}>
                   {getMaterial(p.material).name[lang]}
                 </Text>
-                <Text style={[s.tdText, { width: partsColWidths[4] }]}>{p.length}</Text>
-                <Text style={[s.tdText, { width: partsColWidths[5] }]}>{p.width}</Text>
-                <Text style={[s.tdText, { width: partsColWidths[6], textAlign: 'center' }]}>{p.thickness}</Text>
-                <Text style={[s.tdText, { width: partsColWidths[7], fontSize: 7, fontFamily }]}>
+                <Text style={[s.tdText, { width: partColumnWidths[4] }]}>{p.length}</Text>
+                <Text style={[s.tdText, { width: partColumnWidths[5] }]}>{p.width}</Text>
+                {showRawDimensions && (
+                  <>
+                    <Text style={[s.tdText, { width: partColumnWidths[6] }]}>{p.rawLength ?? p.length}</Text>
+                    <Text style={[s.tdText, { width: partColumnWidths[7] }]}>{p.rawWidth ?? p.width}</Text>
+                  </>
+                )}
+                <Text style={[s.tdText, { width: partColumnWidths[showRawDimensions ? 8 : 6], textAlign: 'center' }]}>
+                  {p.thickness}
+                </Text>
+                <Text
+                  style={[s.tdText, { width: partColumnWidths[showRawDimensions ? 9 : 7], fontSize: 7, fontFamily }]}
+                >
                   {p.edgeBanding[lang]}
                 </Text>
               </View>

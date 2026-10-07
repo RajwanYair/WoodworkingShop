@@ -80,7 +80,14 @@ export function cutSheetToGcode(sheet: CutSheet, opts?: Partial<GcodeOptions>): 
       lines.push('M3 S18000 ; spindle on');
       lines.push('');
     }
-    lines.push(`; --- Cut: ${part.partId} ${part.label} (${part.width}x${part.length}) ---`);
+    const finishedWidth = part.finishedWidth ?? part.width;
+    const finishedLength = part.finishedLength ?? part.length;
+    const finishedNote =
+      finishedWidth !== part.width || finishedLength !== part.length
+        ? `; Finished: ${finishedWidth}x${finishedLength}`
+        : '';
+    const dimensions = `(blank ${part.width}x${part.length})${finishedNote}`;
+    lines.push(`; --- Cut: ${part.partId} ${part.label} ${dimensions} ---`);
     addPartProfile(lines, part, o, offset);
     lines.push('');
   }

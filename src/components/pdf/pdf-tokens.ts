@@ -297,5 +297,6 @@ export const s = StyleSheet.create({
 });
 
 // ─── Column widths ───
-export const partsColWidths = ['7%', '23%', '5%', '18%', '11%', '11%', '8%', '17%'];
+export const partsColWidths = ['6%', '20%', '4%', '15%', '8%', '8%', '7%', '7%', '8%', '17%'];
+export const partsColWidthsWithoutRaw = ['7%', '23%', '5%', '18%', '11%', '11%', '8%', '17%'];
 export const hwColWidths = ['45%', '15%', '20%', '20%'];
