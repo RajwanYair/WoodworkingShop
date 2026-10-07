@@ -769,6 +769,23 @@
     "tableAriaLabel": "Tabelle der Kostenabweichungen",
     "editActualAriaLabel": "Ist-Kosten für {{key}} eingeben"
   },
+  "cutSequence": {
+    "title": "Schnittfolge (Plattensäge)",
+    "layoutOnly": "Der Freiform-Modus erzeugt nur ein Verschachtelungslayout, keine geprüfte Schnittfolge. Wechseln Sie in den Guillotine-Modus für Schritt-für-Schritt-Anweisungen.",
+    "assumptionsTitle": "Annahmen und Maschinengrenzen",
+    "assumeThrough": "Jeder Schnitt verläuft von Kante zu Kante durch die geschnittene Platte (keine Tauch- oder gestoppten Schnitte).",
+    "assumeKerf": "Die Schnittfuge beträgt {{kerf}} mm und liegt auf der abgewandten Seite jedes Maßes.",
+    "assumeOrigin": "Abstände werden von der oberen oder linken Plattenkante gemessen, wie im Diagramm gezeigt.",
+    "assumeLimits": "Sägekapazität, Anschlagweg, Vorritzen und Besäumen werden nicht geprüft; prüfen Sie dies an Ihrer Maschine.",
+    "download": "Anweisungen herunterladen",
+    "sheetHeading": "Platte {{num}} — {{material}}",
+    "notRealizable": "Dieses Layout kann nicht nur mit durchgehenden Schnitten gefertigt werden.",
+    "noCuts": "Keine Schnitte erforderlich.",
+    "step": "{{step}}. {{type}} der Platte {{panelWidth}}×{{panelLength}} mm bei {{offset}} mm (Stufe {{stage}})",
+    "crosscut": "Querschnitt",
+    "rip": "Längsschnitt",
+    "diagramLabel": "Schnittdiagramm Platte {{num}} mit {{count}} nummerierten Schnitten"
+  },
   "cutChecklist": {
     "title": "Zuschnitt-Checkliste für Teile",
     "progress": "{{checked}} von {{total}} Teilen zugeschnitten",

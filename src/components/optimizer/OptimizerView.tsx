@@ -15,6 +15,7 @@ import { IconWarning, IconLightbulb } from '../layout/Icons';
 import { OptimizationNotesPanel } from './OptimizationNotesPanel';
 import { WasteAnalyticsPanel } from './WasteAnalyticsPanel';
 import { CutChecklistPanel } from './CutChecklistPanel';
+import { CutSequencePanel } from './CutSequencePanel';
 import { StockTrackerPanel } from './StockTrackerPanel';
 import { GrainReportPanel } from './GrainReportPanel';
 import { PartLabelSheet } from './PartLabelSheet';
@@ -299,6 +300,9 @@ export function OptimizerView() {
 
       {/* Sprint 94 — Part cutting checklist */}
       <CutChecklistPanel />
+
+      {/* Sprint 330 — Panel-saw cut sequence */}
+      <CutSequencePanel sheets={displayOpt.sheets} filePrefix={filePrefix} />
 
       {/* Sprint 97 — Stock tracker dashboard */}
       <StockTrackerPanel />
