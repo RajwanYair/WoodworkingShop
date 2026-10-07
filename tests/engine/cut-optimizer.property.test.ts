@@ -13,7 +13,7 @@
  * with part dimensions capped at 1200 mm. Grain-specific properties use
  * `plywood-18` to exercise orientation constraints and conflict reporting.
  */
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import * as fc from 'fast-check';
 import { optimizeCutSheets } from '../../src/engine/cut-optimizer';
 import type { Part } from '../../src/engine/types';
@@ -271,5 +271,189 @@ describe('cut-optimizer property tests', () => {
       }),
       propertyRunOptions('tests/engine/cut-optimizer.property.test.ts', NUM_RUNS),
     );
+  });
+
+  it('P11 — mixed-material placements retain their source material and thickness', () => {
+    const mixedMaterialParts = arbParts.map((parts) =>
+      parts.map((part, index) => ({
+        ...part,
+        material: index % 2 === 0 ? 'melamine-16' : 'plywood-18',
+        thickness: index % 2 === 0 ? 16 : 18,
+      })),
+    );
+
+    fc.assert(
+      fc.property(
+        mixedMaterialParts,
+        fc.constantFrom<'freeform' | 'guillotine'>('freeform', 'guillotine'),
+        (parts, cutMode) => {
+          const result = optimizeCutSheets(parts, 3, {}, cutMode);
+          const expectedCount = parts.reduce((count, part) => count + part.qty, 0);
+          const placedCount = result.sheets.reduce((count, sheet) => count + sheet.parts.length, 0);
+
+          return (
+            placedCount === expectedCount &&
+            result.sheets.every((sheet) =>
+              sheet.parts.every((placed) => {
+                const source = parts.find((part) => part.id === placed.partId);
+                return source?.material === sheet.material && source.thickness === sheet.thickness;
+              }),
+            )
+          );
+        },
+      ),
+      propertyRunOptions('tests/engine/cut-optimizer.property.test.ts', NUM_RUNS),
+    );
+  });
+
+  it('P12 — freeform placements stay clear of generated defect zones', () => {
+    const defectZone = { x: 0, y: 0, width: 350, length: 350 };
+
+    fc.assert(
+      fc.property(arbParts, (parts) => {
+        const result = optimizeCutSheets(parts, 3, {}, 'freeform', [], { [MATERIAL]: [defectZone] });
+        const expectedCount = parts.reduce((count, part) => count + part.qty, 0);
+        const placedParts = result.sheets.flatMap((sheet) => sheet.parts);
+
+        return (
+          placedParts.length === expectedCount &&
+          placedParts.every(
+            (part) =>
+              part.x >= defectZone.x + defectZone.width ||
+              part.x + part.width <= defectZone.x ||
+              part.y >= defectZone.y + defectZone.length ||
+              part.y + part.length <= defectZone.y,
+          )
+        );
+      }),
+      propertyRunOptions('tests/engine/cut-optimizer.property.test.ts', NUM_RUNS),
+    );
+  });
+
+  it('P13 — guillotine mode rejects generated active defect constraints', () => {
+    const defectZone = { x: 0, y: 0, width: 350, length: 350 };
+
+    fc.assert(
+      fc.property(arbParts, (parts) => {
+        expect(() => optimizeCutSheets(parts, 3, {}, 'guillotine', [], { [MATERIAL]: [defectZone] })).toThrow(
+          RangeError,
+        );
+        return true;
+      }),
+      propertyRunOptions('tests/engine/cut-optimizer.property.test.ts', NUM_RUNS),
+    );
+  });
+
+  it('P14 — duplicate part IDs preserve the aggregate requested quantity', () => {
+    const duplicateIds = fc
+      .array(arbPart, { minLength: 1, maxLength: 8 })
+      .map((parts) => parts.map((part) => ({ ...part, id: 'shared-part-id' })));
+
+    fc.assert(
+      fc.property(duplicateIds, (parts) => {
+        const result = optimizeCutSheets(parts);
+        const expectedParts = parts
+          .flatMap((part) =>
+            Array.from({ length: part.qty }, () => {
+              const sides = [part.length, part.width].sort((first, second) => first - second);
+              return `${part.id}|${part.material}|${sides[0]}|${sides[1]}`;
+            }),
+          )
+          .sort();
+        const actualParts = result.sheets
+          .flatMap((sheet) =>
+            sheet.parts.map((part) => {
+              const sides = [part.length, part.width].sort((first, second) => first - second);
+              return `${part.partId}|${sheet.material}|${sides[0]}|${sides[1]}`;
+            }),
+          )
+          .sort();
+
+        return JSON.stringify(actualParts) === JSON.stringify(expectedParts);
+      }),
+      propertyRunOptions('tests/engine/cut-optimizer.property.test.ts', NUM_RUNS),
+    );
+  });
+
+  it.each(['freeform', 'guillotine'] as const)('P15 — %s accepts an exact-boundary fit', (cutMode) => {
+    const boundaryPart: Part = {
+      id: 'boundary-fit',
+      name: { en: 'Boundary fit', he: 'Boundary fit' },
+      qty: 1,
+      material: MATERIAL,
+      thickness: 16,
+      length: 1000,
+      width: 1000,
+      edgeBanding: { en: 'none', he: 'none' },
+    };
+    const result = optimizeCutSheets([boundaryPart], 3, { [MATERIAL]: { width: 1000, length: 1000 } }, cutMode);
+
+    expect(result.sheets.flatMap((sheet) => sheet.parts)).toHaveLength(1);
+  });
+
+  it('P16 — preserves bounds when placements use large coordinates', () => {
+    const parts: Part[] = [
+      {
+        id: 'wide-strip',
+        name: { en: 'Wide strip', he: 'Wide strip' },
+        qty: 1,
+        material: MATERIAL,
+        thickness: 16,
+        length: 1000,
+        width: 99900,
+        edgeBanding: { en: 'none', he: 'none' },
+      },
+      {
+        id: 'end-panel',
+        name: { en: 'End panel', he: 'End panel' },
+        qty: 1,
+        material: MATERIAL,
+        thickness: 16,
+        length: 1000,
+        width: 90,
+        edgeBanding: { en: 'none', he: 'none' },
+      },
+    ];
+    const result = optimizeCutSheets(parts, 3, { [MATERIAL]: { width: 100000, length: 2000 } });
+    const placements = result.sheets.flatMap((sheet) => sheet.parts);
+
+    expect(placements).toHaveLength(parts.length);
+    expect(placements.every((part) => part.x >= 0 && part.x + part.width <= 100000)).toBe(true);
+    expect(placements.find((part) => part.partId === 'end-panel')?.x).toBeGreaterThan(99000);
+  });
+
+  it('P17 — never returns placements for generated parts that cannot fit stock', () => {
+    const impossiblePart = fc
+      .record({
+        length: fc.integer({ min: 2441, max: 5000 }),
+        width: fc.integer({ min: 1221, max: 3000 }),
+      })
+      .map(({ length, width }): Part => ({
+        id: 'impossible-part',
+        name: { en: 'Impossible part', he: 'Impossible part' },
+        qty: 1,
+        material: MATERIAL,
+        thickness: 16,
+        length,
+        width,
+        edgeBanding: { en: 'none', he: 'none' },
+      }));
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+
+    try {
+      fc.assert(
+        fc.property(
+          impossiblePart,
+          fc.constantFrom<'freeform' | 'guillotine'>('freeform', 'guillotine'),
+          (part, cutMode) => {
+            const result = optimizeCutSheets([part], 3, { [MATERIAL]: { width: 1220, length: 2440 } }, cutMode);
+            return result.sheets.every((sheet) => sheet.parts.length === 0);
+          },
+        ),
+        propertyRunOptions('tests/engine/cut-optimizer.property.test.ts', NUM_RUNS),
+      );
+    } finally {
+      warn.mockRestore();
+    }
   });
 });

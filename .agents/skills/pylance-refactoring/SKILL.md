@@ -9,12 +9,12 @@ Use this skill to orchestrate named Pylance automated refactorings across one fi
 
 ## Verified Tool Facts
 
-- `pylanceInvokeRefactoring` takes one `fileUri`, one refactoring `name`, and optional `mode`.
-- `mode="update"` applies the returned workspace edit; omitted `mode` defaults to `update`.
-- `mode="edits"` returns a WorkspaceEdit without modifying files.
-- `mode="string"` returns updated content for the target file without modifying files.
-- `pylanceWorkspaceRoots` returns workspace root URIs, and `pylanceWorkspaceUserFiles` returns Pylance-visible user Python files for a workspace root.
-- In VS Code-backed Copilot Chat, `mode="update"` applies a VS Code workspace edit to editor buffers. It does not save files to disk. A terminal reads the on-disk file, so terminal validation can miss refactoring edits until the user or Copilot saves the edited files.
+-   `pylanceInvokeRefactoring` takes one `fileUri`, one refactoring `name`, and optional `mode`.
+-   `mode="update"` applies the returned workspace edit; omitted `mode` defaults to `update`.
+-   `mode="edits"` returns a WorkspaceEdit without modifying files.
+-   `mode="string"` returns updated content for the target file without modifying files.
+-   `pylanceWorkspaceRoots` returns workspace root URIs, and `pylanceWorkspaceUserFiles` returns Pylance-visible user Python files for a workspace root.
+-   In VS Code-backed Copilot Chat, `mode="update"` applies a VS Code workspace edit to editor buffers. It does not save files to disk. A terminal reads the on-disk file, so terminal validation can miss refactoring edits until the user or Copilot saves the edited files.
 
 ## Batch Workflow
 
@@ -33,12 +33,12 @@ Use this skill to orchestrate named Pylance automated refactorings across one fi
 
 ## Common Workflows
 
-- **Remove unused imports from the whole workspace**: `pylanceWorkspaceRoots` → `pylanceWorkspaceUserFiles` → for each target file call `pylanceInvokeRefactoring` with `name="source.unusedImports"`.
-- **Clean imports under a folder**: get user files, filter paths to the requested folder such as `src/` or `tests/`, then run `source.unusedImports` per matching file.
-- **Expand wildcard imports, then clean up**: run `source.convertImportStar` across the target files first, then run `source.unusedImports` across the same target files.
-- **Convert imported names to module-qualified imports, then clean up**: run `source.convertImportToModule`, then `source.unusedImports` if the user asked for cleanup too.
-- **Preview workspace cleanup**: run the requested refactoring with `mode="edits"` on each target file, summarize files with edits, then wait for the user to confirm before applying if the request was only a preview.
-- **Run Pylance fix-all on a file set**: run `source.fixAll.pylance` per target file. This applies the fixes configured by Pylance settings, so use settings/diagnostics tools when the user asks what fix-all includes.
+-   **Remove unused imports from the whole workspace**: `pylanceWorkspaceRoots` → `pylanceWorkspaceUserFiles` → for each target file call `pylanceInvokeRefactoring` with `name="source.unusedImports"`.
+-   **Clean imports under a folder**: get user files, filter paths to the requested folder such as `src/` or `tests/`, then run `source.unusedImports` per matching file.
+-   **Expand wildcard imports, then clean up**: run `source.convertImportStar` across the target files first, then run `source.unusedImports` across the same target files.
+-   **Convert imported names to module-qualified imports, then clean up**: run `source.convertImportToModule`, then `source.unusedImports` if the user asked for cleanup too.
+-   **Preview workspace cleanup**: run the requested refactoring with `mode="edits"` on each target file, summarize files with edits, then wait for the user to confirm before applying if the request was only a preview.
+-   **Run Pylance fix-all on a file set**: run `source.fixAll.pylance` per target file. This applies the fixes configured by Pylance settings, so use settings/diagnostics tools when the user asks what fix-all includes.
 
 ## Refactoring Map
 
@@ -54,12 +54,12 @@ Use this skill to orchestrate named Pylance automated refactorings across one fi
 
 ## Working Rules
 
-- Treat workspace-wide refactoring as orchestration over many single-file tool calls, not as one bulk API call.
-- Prefer `pylanceWorkspaceUserFiles` over raw globbing for workspace-wide requests so the target set matches Pylance's user-code view.
-- Preserve the user's scope exactly: all files, selected files, a folder, tests only, src only, changed files only, or explicit exclusions.
-- In VS Code-backed Copilot Chat, do not assume terminal tools can see `mode="update"` results until files are saved. Save before terminal validation, or use Pylance/editor-visible tools for immediate post-refactor checks.
-- Use this skill for the named refactorings above, not for arbitrary code rewrites.
-- Do not use this for semantic rename, reference search, diagnostics explanation, or signature-impact analysis; use Pylance LSP or signature compatibility tools for those.
-- If `pylanceInvokeRefactoring` returns no edits for a file, count it as a no-op instead of inventing a manual cleanup.
-- If a later manual edit is needed, keep it separate from the automated refactoring and explain why.
-- After `mode="update"`, do not manually reapply the same refactoring to the same file.
+-   Treat workspace-wide refactoring as orchestration over many single-file tool calls, not as one bulk API call.
+-   Prefer `pylanceWorkspaceUserFiles` over raw globbing for workspace-wide requests so the target set matches Pylance's user-code view.
+-   Preserve the user's scope exactly: all files, selected files, a folder, tests only, src only, changed files only, or explicit exclusions.
+-   In VS Code-backed Copilot Chat, do not assume terminal tools can see `mode="update"` results until files are saved. Save before terminal validation, or use Pylance/editor-visible tools for immediate post-refactor checks.
+-   Use this skill for the named refactorings above, not for arbitrary code rewrites.
+-   Do not use this for semantic rename, reference search, diagnostics explanation, or signature-impact analysis; use Pylance LSP or signature compatibility tools for those.
+-   If `pylanceInvokeRefactoring` returns no edits for a file, count it as a no-op instead of inventing a manual cleanup.
+-   If a later manual edit is needed, keep it separate from the automated refactoring and explain why.
+-   After `mode="update"`, do not manually reapply the same refactoring to the same file.

@@ -116,14 +116,10 @@ describe('optimizeCutSheets defect zone avoidance — Phase 12 / Sprint 13', () 
     expect(r1.sheets[0].parts[0].y).toBe(r2.sheets[0].parts[0].y);
   });
 
-  it('defect zones do not affect guillotine mode (silently ignored)', () => {
-    // Guillotine does not implement defect zone pre-blocking; should still pack
-    // without crashing and place at least one part.
+  it('rejects defect zones in guillotine mode rather than returning an unsafe plan', () => {
     const parts = [makePart('P1', 300, 400)];
     const dz: DefectZone = { x: 0, y: 0, width: 400, length: 300 };
-    const result = optimizeCutSheets(parts, 3, {}, 'guillotine', [], { 'melamine-18': [dz] });
-    expect(result.sheets).toHaveLength(1);
-    expect(result.sheets[0].parts).toHaveLength(1);
+    expect(() => optimizeCutSheets(parts, 3, {}, 'guillotine', [], { 'melamine-18': [dz] })).toThrow(RangeError);
   });
 
   it('totalSheets and grainConflictCount remain accurate with defect zones', () => {

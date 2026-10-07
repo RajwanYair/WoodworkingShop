@@ -3,16 +3,13 @@ mode: agent
 tools:
   - read_file
   - create_file
-  - replace_string_in_file
-  - multi_replace_string_in_file
+  - apply_patch
   - run_in_terminal
   - get_errors
   - grep_search
   - semantic_search
-  - explore_subagent
   - file_search
   - list_dir
-  - manage_todo_list
 description: >
   Scaffold a complete new feature — engine module, store slice, React panel,
   i18n keys, unit tests, and mounting in the parent component.

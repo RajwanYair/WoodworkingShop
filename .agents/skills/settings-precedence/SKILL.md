@@ -43,7 +43,7 @@ const value = config.get('pythonProjects');
 // ❌ WRONG: get() returns defaultValue even from other extensions!
 const config = vscode.workspace.getConfiguration('python');
 if (config.get('useEnvironmentsExtension')) {
-  // May return true from another extension's package.json default!
+    // May return true from another extension's package.json default!
 }
 
 // ✅ RIGHT: Use inspect() and check explicit values only
@@ -51,13 +51,13 @@ const config = vscode.workspace.getConfiguration('python', scope);
 const inspected = config.inspect('useEnvironmentsExtension');
 
 const hasExplicitValue =
-  inspected?.globalValue !== undefined ||
-  inspected?.workspaceValue !== undefined ||
-  inspected?.workspaceFolderValue !== undefined;
+    inspected?.globalValue !== undefined ||
+    inspected?.workspaceValue !== undefined ||
+    inspected?.workspaceFolderValue !== undefined;
 
 if (hasExplicitValue) {
-  // User explicitly set this value
-  const effectiveValue = inspected?.workspaceFolderValue ?? inspected?.workspaceValue ?? inspected?.globalValue;
+    // User explicitly set this value
+    const effectiveValue = inspected?.workspaceFolderValue ?? inspected?.workspaceValue ?? inspected?.globalValue;
 }
 ```
 
@@ -73,8 +73,8 @@ const inspected = config.inspect('pythonPath');
 const hasUserValue = inspected?.workspaceValue !== undefined;
 
 if (!hasUserValue) {
-  // Only set if user hasn't explicitly chosen
-  await config.update('pythonPath', detectedPath, ConfigurationTarget.Workspace);
+    // Only set if user hasn't explicitly chosen
+    await config.update('pythonPath', detectedPath, ConfigurationTarget.Workspace);
 }
 ```
 
@@ -98,13 +98,13 @@ For multi-root workspaces, `pythonProjects` settings need a `workspace` property
 
 ```json
 {
-  "python-envs.pythonProjects": [
-    {
-      "path": ".",
-      "workspace": "/path/to/workspace-folder",
-      "envManager": "ms-python.python:venv"
-    }
-  ]
+    "python-envs.pythonProjects": [
+        {
+            "path": ".",
+            "workspace": "/path/to/workspace-folder",
+            "envManager": "ms-python.python:venv"
+        }
+    ]
 }
 ```
 
@@ -171,7 +171,7 @@ await config.update('defaultEnvManager', 'venv', ConfigurationTarget.Global);
 // Fix: Only write defaults if no value exists
 const current = config.inspect('defaultEnvManager');
 if (current?.globalValue === undefined && current?.workspaceValue === undefined) {
-  await config.update('defaultEnvManager', 'venv', ConfigurationTarget.Global);
+    await config.update('defaultEnvManager', 'venv', ConfigurationTarget.Global);
 }
 ```
 
@@ -201,61 +201,61 @@ const project = {
 import * as vscode from 'vscode';
 
 async function getProjectConfig(projectUri: vscode.Uri): Promise<ProjectConfig | undefined> {
-  const workspaceFolder = vscode.workspace.getWorkspaceFolder(projectUri);
-  if (!workspaceFolder) {
-    return undefined;
-  }
+    const workspaceFolder = vscode.workspace.getWorkspaceFolder(projectUri);
+    if (!workspaceFolder) {
+        return undefined;
+    }
 
-  // Always pass scope!
-  const config = vscode.workspace.getConfiguration('python-envs', workspaceFolder.uri);
+    // Always pass scope!
+    const config = vscode.workspace.getConfiguration('python-envs', workspaceFolder.uri);
 
-  // Use inspect() to understand where values come from
-  const inspected = config.inspect<ProjectConfig[]>('pythonProjects');
+    // Use inspect() to understand where values come from
+    const inspected = config.inspect<ProjectConfig[]>('pythonProjects');
 
-  // Prefer most specific value
-  const projects = inspected?.workspaceFolderValue ?? inspected?.workspaceValue ?? inspected?.globalValue ?? []; // Don't use defaultValue!
+    // Prefer most specific value
+    const projects = inspected?.workspaceFolderValue ?? inspected?.workspaceValue ?? inspected?.globalValue ?? []; // Don't use defaultValue!
 
-  // Find project matching the URI
-  return projects.find((p) => path.resolve(workspaceFolder.uri.fsPath, p.path) === projectUri.fsPath);
+    // Find project matching the URI
+    return projects.find((p) => path.resolve(workspaceFolder.uri.fsPath, p.path) === projectUri.fsPath);
 }
 
 async function saveProjectConfig(projectUri: vscode.Uri, projectConfig: ProjectConfig): Promise<void> {
-  const workspaceFolder = vscode.workspace.getWorkspaceFolder(projectUri);
-  if (!workspaceFolder) {
-    return;
-  }
+    const workspaceFolder = vscode.workspace.getWorkspaceFolder(projectUri);
+    if (!workspaceFolder) {
+        return;
+    }
 
-  const config = vscode.workspace.getConfiguration('python-envs', workspaceFolder.uri);
+    const config = vscode.workspace.getConfiguration('python-envs', workspaceFolder.uri);
 
-  const inspected = config.inspect<ProjectConfig[]>('pythonProjects');
+    const inspected = config.inspect<ProjectConfig[]>('pythonProjects');
 
-  // Get existing projects (not including defaults!)
-  const existingProjects = inspected?.workspaceFolderValue ?? inspected?.workspaceValue ?? [];
+    // Get existing projects (not including defaults!)
+    const existingProjects = inspected?.workspaceFolderValue ?? inspected?.workspaceValue ?? [];
 
-  // Ensure workspace property for multi-root
-  const configToSave: ProjectConfig = {
-    ...projectConfig,
-    workspace: workspaceFolder.uri.fsPath,
-  };
+    // Ensure workspace property for multi-root
+    const configToSave: ProjectConfig = {
+        ...projectConfig,
+        workspace: workspaceFolder.uri.fsPath,
+    };
 
-  // Update or add
-  const projectIndex = existingProjects.findIndex(
-    (p) => path.resolve(workspaceFolder.uri.fsPath, p.path) === projectUri.fsPath,
-  );
+    // Update or add
+    const projectIndex = existingProjects.findIndex(
+        (p) => path.resolve(workspaceFolder.uri.fsPath, p.path) === projectUri.fsPath,
+    );
 
-  const updatedProjects = [...existingProjects];
-  if (projectIndex >= 0) {
-    updatedProjects[projectIndex] = configToSave;
-  } else {
-    updatedProjects.push(configToSave);
-  }
+    const updatedProjects = [...existingProjects];
+    if (projectIndex >= 0) {
+        updatedProjects[projectIndex] = configToSave;
+    } else {
+        updatedProjects.push(configToSave);
+    }
 
-  // Write to workspace folder scope in multi-root
-  const target =
-    vscode.workspace.workspaceFolders?.length > 1
-      ? vscode.ConfigurationTarget.WorkspaceFolder
-      : vscode.ConfigurationTarget.Workspace;
+    // Write to workspace folder scope in multi-root
+    const target =
+        vscode.workspace.workspaceFolders?.length > 1
+            ? vscode.ConfigurationTarget.WorkspaceFolder
+            : vscode.ConfigurationTarget.Workspace;
 
-  await config.update('pythonProjects', updatedProjects, target);
+    await config.update('pythonProjects', updatedProjects, target);
 }
 ```

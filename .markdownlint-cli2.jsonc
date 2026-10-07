@@ -1,3 +1,3 @@
 {
-  "ignores": [".agents/skills/**"]
+  "ignores": [".agents/skills/**"],
 }

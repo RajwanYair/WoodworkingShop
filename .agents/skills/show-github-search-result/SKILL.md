@@ -17,8 +17,8 @@ To use this skill, pass raw search results from a GitHub search query. The skill
 ## How to Render GitHub Search Results
 
 - If you have the original query, use that to help determine the most important fields to include in the table. Ex:
-  - If the query included a specific label, make sure to not include that label in the table as all results will have it.
-  - If the query included "is:pr", then focus on fields relevant to pull requests such as "review status" and "merge status".
-  - Include a column related to the sort value, if given.
-  - Don't include columns that will all have the same value for all the resulting issues.
+    - If the query included a specific label, make sure to not include that label in the table as all results will have it.
+    - If the query included "is:pr", then focus on fields relevant to pull requests such as "review status" and "merge status".
+    - Include a column related to the sort value, if given.
+    - Don't include columns that will all have the same value for all the resulting issues.
 - Always include a column for the number and title of the item. Format the number as a markdown link to the issue or PR. Ex: [#123](https://github.com/owner/repo/issues/123)

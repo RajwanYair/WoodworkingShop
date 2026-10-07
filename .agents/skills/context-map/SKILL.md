@@ -24,31 +24,26 @@ Before implementing any changes, analyze the codebase and create a context map.
 ## Context Map
 
 ### Files to Modify
-
-| File         | Purpose     | Changes Needed |
-| ------------ | ----------- | -------------- |
-| path/to/file | description | what changes   |
+| File | Purpose | Changes Needed |
+|------|---------|----------------|
+| path/to/file | description | what changes |
 
 ### Dependencies (may need updates)
-
-| File        | Relationship                 |
-| ----------- | ---------------------------- |
+| File | Relationship |
+|------|--------------|
 | path/to/dep | imports X from modified file |
 
 ### Test Files
-
-| Test         | Coverage                     |
-| ------------ | ---------------------------- |
+| Test | Coverage |
+|------|----------|
 | path/to/test | tests affected functionality |
 
 ### Reference Patterns
-
-| File            | Pattern           |
-| --------------- | ----------------- |
+| File | Pattern |
+|------|---------|
 | path/to/similar | example to follow |
 
 ### Risk Assessment
-
 - [ ] Breaking changes to public API
 - [ ] Database migrations needed
 - [ ] Configuration changes required

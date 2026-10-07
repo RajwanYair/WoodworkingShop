@@ -7,3 +7,4 @@ package-lock.json
 *.svg
 # TypeDoc generated API docs — not source, should not be formatted
 docs/api/
+.agents/skills/**

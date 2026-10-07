@@ -18,12 +18,12 @@ docker info  # Must succeed - Docker required for local dev
 
 Your knowledge of the Sandbox SDK may be outdated. **Prefer retrieval over pre-training** for any Sandbox SDK task.
 
-| Resource      | URL                                                            |
-| ------------- | -------------------------------------------------------------- |
-| Docs          | <https://developers.cloudflare.com/sandbox/>                   |
-| API Reference | <https://developers.cloudflare.com/sandbox/api/>               |
-| Examples      | <https://github.com/cloudflare/sandbox-sdk/tree/main/examples> |
-| Get Started   | <https://developers.cloudflare.com/sandbox/get-started/>       |
+| Resource | URL |
+|----------|-----|
+| Docs | https://developers.cloudflare.com/sandbox/ |
+| API Reference | https://developers.cloudflare.com/sandbox/api/ |
+| Examples | https://github.com/cloudflare/sandbox-sdk/tree/main/examples |
+| Get Started | https://developers.cloudflare.com/sandbox/get-started/ |
 
 When implementing features, fetch the relevant doc page or example first.
 
@@ -33,18 +33,16 @@ When implementing features, fetch the relevant doc page or example first.
 
 ```jsonc
 {
-  "containers": [
-    {
-      "class_name": "Sandbox",
-      "image": "./Dockerfile",
-      "instance_type": "lite",
-      "max_instances": 1,
-    },
-  ],
+  "containers": [{
+    "class_name": "Sandbox",
+    "image": "./Dockerfile",
+    "instance_type": "lite",
+    "max_instances": 1
+  }],
   "durable_objects": {
-    "bindings": [{ "class_name": "Sandbox", "name": "Sandbox" }],
+    "bindings": [{ "class_name": "Sandbox", "name": "Sandbox" }]
   },
-  "migrations": [{ "new_sqlite_classes": ["Sandbox"], "tag": "v1" }],
+  "migrations": [{ "new_sqlite_classes": ["Sandbox"], "tag": "v1" }]
 }
 ```
 
@@ -52,22 +50,22 @@ When implementing features, fetch the relevant doc page or example first.
 
 ```typescript
 import { getSandbox } from '@cloudflare/sandbox';
-export { Sandbox } from '@cloudflare/sandbox'; // Required export
+export { Sandbox } from '@cloudflare/sandbox';  // Required export
 ```
 
 ## Quick Reference
 
-| Task                   | Method                                                       |
-| ---------------------- | ------------------------------------------------------------ |
-| Get sandbox            | `getSandbox(env.Sandbox, 'user-123')`                        |
-| Run command            | `await sandbox.exec('python script.py')`                     |
-| Run code (interpreter) | `await sandbox.runCode(code, { language: 'python' })`        |
-| Write file             | `await sandbox.writeFile('/workspace/app.py', content)`      |
-| Read file              | `await sandbox.readFile('/workspace/app.py')`                |
-| Create directory       | `await sandbox.mkdir('/workspace/src', { recursive: true })` |
-| List files             | `await sandbox.listFiles('/workspace')`                      |
-| Expose port            | `await sandbox.exposePort(8080)`                             |
-| Destroy                | `await sandbox.destroy()`                                    |
+| Task | Method |
+|------|--------|
+| Get sandbox | `getSandbox(env.Sandbox, 'user-123')` |
+| Run command | `await sandbox.exec('python script.py')` |
+| Run code (interpreter) | `await sandbox.runCode(code, { language: 'python' })` |
+| Write file | `await sandbox.writeFile('/workspace/app.py', content)` |
+| Read file | `await sandbox.readFile('/workspace/app.py')` |
+| Create directory | `await sandbox.mkdir('/workspace/src', { recursive: true })` |
+| List files | `await sandbox.listFiles('/workspace')` |
+| Expose port | `await sandbox.exposePort(8080)` |
+| Destroy | `await sandbox.destroy()` |
 
 ## Core Patterns
 
@@ -106,12 +104,12 @@ const files = await sandbox.listFiles('/workspace/project');
 
 ## When to Use What
 
-| Need                    | Use         | Why                             |
-| ----------------------- | ----------- | ------------------------------- |
-| Shell commands, scripts | `exec()`    | Direct control, streaming       |
-| LLM-generated code      | `runCode()` | Rich outputs, state persistence |
-| Build/test pipelines    | `exec()`    | Exit codes, stderr capture      |
-| Data analysis           | `runCode()` | Charts, tables, pandas          |
+| Need | Use | Why |
+|------|-----|-----|
+| Shell commands, scripts | `exec()` | Direct control, streaming |
+| LLM-generated code | `runCode()` | Rich outputs, state persistence |
+| Build/test pipelines | `exec()` | Exit codes, stderr capture |
+| Data analysis | `runCode()` | Charts, tables, pandas |
 
 ## Extending the Dockerfile
 
@@ -147,7 +145,7 @@ const { url } = await sandbox.exposePort(8080);
 
 **Production requirement**: Preview URLs need a custom domain with wildcard DNS (`*.yourdomain.com`). The `.workers.dev` domain does not support preview URL subdomains.
 
-See: <https://developers.cloudflare.com/sandbox/guides/expose-services/>
+See: https://developers.cloudflare.com/sandbox/guides/expose-services/
 
 ## OpenAI Agents SDK Integration
 

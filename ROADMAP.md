@@ -129,8 +129,8 @@ Historical artifacts:
 | Tool configs     | All at workspace root (Vite convention) | **Keep**  | Never move; documented in copilot-instructions    |
 | Budget configs   | `config/` directory                     | **Keep**  | Add JSON Schema validation for budget files       |
 | VS Code settings | Comprehensive, well-sectioned           | **Clean** | Remove disabled/suspended entries                 |
-| Extensions       | 22 recommended, 60+ unwanted            | **Keep**  | Periodic review; document keep/remove rationale   |
-| MCP servers      | 10 servers with clear ownership         | **Keep**  | Add health-check ping in CI                       |
+| Extensions       | 28 recommended, 84 unwanted             | **Keep**  | Periodic review; document keep/remove rationale   |
+| MCP servers      | 3 focused servers                       | **Trim**  | GitHub, browser QA, and package docs              |
 | Copilot assets   | 9 agents, 22 prompts, 9 instructions    | **Keep**  | Version-align with release; test for parse errors |
 
 ### 3.6 Infrastructure and Deployment
@@ -1579,7 +1579,7 @@ Each release artifact records: commit SHA; Node/npm/browser versions; pass/fail/
 
 ## 9. VS Code, Copilot, MCP, and GitHub Integration
 
-### VS Code Extensions (22 Recommended)
+### VS Code Extensions (28 Recommended; 84 Unwanted)
 
 All recommended extensions provide direct value for this TypeScript/React/Tailwind stack:
 
@@ -1607,6 +1607,12 @@ All recommended extensions provide direct value for this TypeScript/React/Tailwi
 | editorconfig.editorconfig       | Editor consistency     |
 | redhat.vscode-yaml              | YAML schema validation |
 | deque-systems.vscode-axe-linter | Accessibility lint     |
+| oderwat.indent-rainbow          | Indentation guides     |
+| pflannery.vscode-versionlens    | Package version hints  |
+| pretty-ts-errors                | TS error formatting    |
+| path-intellisense               | Path completion        |
+| npm-intellisense                | npm completions        |
+| bierner.markdown-mermaid        | Mermaid in Markdown    |
 
 ### Copilot Agents (9)
 
@@ -1622,20 +1628,13 @@ All recommended extensions provide direct value for this TypeScript/React/Tailwi
 | security | OWASP Top 10 audit and CSP hardening          |
 | perf     | Lighthouse CI and Core Web Vitals             |
 
-### MCP Servers (10)
+### MCP Servers (3 Core)
 
-| Server             | Type  | Purpose                           |
-| ------------------ | ----- | --------------------------------- |
-| github             | HTTP  | PRs, issues, Actions, code search |
-| filesystem         | stdio | Scoped workspace file access      |
-| fetch              | stdio | Web page/API retrieval            |
-| playwright         | stdio | Browser automation for E2E debug  |
-| memory             | stdio | Persistent agent notes            |
-| sequentialthinking | stdio | Multi-step reasoning              |
-| context7           | stdio | Up-to-date library docs           |
-| gitkraken          | HTTP  | Git ops, blame, diff              |
-| cloudflare         | HTTP  | Pages/Workers management          |
-| brave-search       | stdio | Web search fallback               |
+| Server     | Type  | Purpose                           |
+| ---------- | ----- | --------------------------------- |
+| github     | HTTP  | PRs, issues, Actions, code search |
+| playwright | stdio | Browser automation for E2E debug  |
+| context7   | stdio | Up-to-date library docs           |
 
 ### GitHub Actions (14 Workflows)
 

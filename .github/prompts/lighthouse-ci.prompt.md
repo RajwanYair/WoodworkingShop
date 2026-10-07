@@ -3,7 +3,7 @@ mode: agent
 tools:
   - read_file
   - create_file
-  - replace_string_in_file
+  - apply_patch
   - run_in_terminal
   - grep_search
   - file_search

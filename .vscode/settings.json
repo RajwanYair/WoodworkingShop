@@ -131,8 +131,6 @@
   "editor.suggest.preview": true,
   "chat.agent.enabled": true,
   "chat.agent.maxRequests": 999,
-  "chat.mcp.autoStart": true,
-  "chat.mcp.gallery.enabled": true,
   "github.copilot.chat.followUps": "always",
   "github.copilot.chat.useProjectTemplates": true,
   "github.copilot.chat.agent.autoFix": true,
@@ -162,8 +160,6 @@
   // Checkpoints — restore the workspace to any prior point in an agent session
   "chat.checkpoints.enabled": true,
   "chat.checkpoints.showFileChanges": true,
-  // Todo list tool — surfaces the agent's manage_todo_list plan as a UI widget
-  "chat.tools.todos.showWidget": true,
   // KaTeX math rendering in chat responses — useful for the calculator formulae
   "chat.math.enabled": true,
   // Summarise long agent histories instead of truncating — preserves task context
@@ -172,7 +168,7 @@
   "chat.editing.confirmEditRequestRemoval": true,
   "chat.editing.confirmEditRequestRetry": true,
   "chat.editing.autoAcceptDelay": 0,
-  // Virtual tool grouping kicks in once many MCP tools are active (this repo has 10 servers)
+  // Virtual tool grouping remains available if additional MCP tools are enabled.
   "github.copilot.chat.virtualTools.threshold": 128,
   // TypeScript language-context provider — richer, faster type-aware chat answers & fixes
   "github.copilot.chat.languageContext.typescript.enabled": true,
@@ -296,9 +292,6 @@
   "diffEditor.ignoreTrimWhitespace": false,
   "diffEditor.renderSideBySide": false,
 
-  // ─── Git Graph ──────────────────────────────────────────────────────────────
-  "git-graph.repository.fetchAndPrune": true,
-
   // ─── Indent Rainbow ─────────────────────────────────────────────────────────
   "indentRainbow.colors": [
     "rgba(16, 185, 129, 0.15)",
@@ -315,7 +308,7 @@
   "playwright.showTrace": false,
 
   // ─── MCP ────────────────────────────────────────────────────────────────────
-  "chat.mcp.access": "all",
+  "chat.mcp.autostart": "newAndOutdated",
 
   // ─── YAML (redhat extension) ────────────────────────────────────────────────
   "yaml.schemas": {

@@ -2,7 +2,6 @@
 name: commit
 description: Commit staged or unstaged changes with an AI-generated commit message that matches the repository's existing commit style. Use when the user asks to 'commit', 'commit changes', 'create a commit', 'save my work', or 'check in code'.
 ---
-
 <!-- Customize this skill and select save to override its behavior. Delete that copy to restore the built-in behavior. -->
 
 # Commit Changes
@@ -57,7 +56,7 @@ git diff --cached
 Using the diff and the commit convention detected in step 1, draft a commit message with:
 
 - A **subject line** (≤ 72 characters) that summarises the change, following the repository's convention.
-- An optional **body** that explains _why_ the change was made, only when the diff is non-trivial.
+- An optional **body** that explains *why* the change was made, only when the diff is non-trivial.
 - Reference issue/ticket numbers when they appear in branch names or related context.
 - Focus on the intent of the change, not a file-by-file inventory.
 

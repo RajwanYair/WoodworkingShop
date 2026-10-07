@@ -62,7 +62,8 @@ export function optimizeCutSheetsResult(
  *                              When present, replaces `mat.sheetWidth` /
  *                              `mat.sheetLength` for that material key.
  * @param cutMode             - Packing algorithm: `'freeform'` = MaxRects BSSF
- *                              (default); `'guillotine'` = strip-based FFD.
+ *                              (default); `'guillotine'` = strip-based FFD,
+ *                              which rejects active defect zones.
  * @param offcutCatalog       - Catalog offcuts used as pre-populated starting
  *                              sheets before opening full sheets.
  * @param defectZones         - Per-material defect zones; MaxRects pre-blocks
@@ -70,6 +71,7 @@ export function optimizeCutSheetsResult(
  * @param extraMaterials      - Optional custom materials used by these parts.
  * @returns Full optimisation result including all sheets, placed rects, yield
  *          percentage, and waste area per sheet.
+ * @throws RangeError If an active defect zone is supplied with guillotine mode.
  */
 export function optimizeCutSheets(
   parts: Part[],
@@ -101,6 +103,10 @@ export function optimizeCutSheets(
   let sheetIdx = 0;
 
   for (const [, group] of groups) {
+    if (cutMode === 'guillotine' && (defectZones[group.materialKey]?.length ?? 0) > 0) {
+      throw new RangeError('optimizeCutSheets: defect zones are not supported in guillotine mode');
+    }
+
     const mat = getMaterial(group.materialKey, extraMaterials);
     const override = sheetSizeOverrides[group.materialKey];
     const sheetLength = override?.length ?? mat.sheetLength;

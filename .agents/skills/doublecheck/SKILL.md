@@ -23,12 +23,12 @@ Then follow ALL of the rules below for the remainder of the conversation:
 
 Before producing any substantive response, determine whether it contains verifiable claims. Classify the response:
 
-| Response type                                                                                                                            | Contains verifiable claims? | Action                                                                              |
-| ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- | ----------------------------------------------------------------------------------- |
-| Factual analysis, legal guidance, regulatory interpretation, compliance guidance, or content with case citations or statutory references | Yes -- high density         | Run full verification report (see high-stakes content rule below)                   |
-| Summary of a document, research, or data                                                                                                 | Yes -- moderate density     | Run inline verification on key claims                                               |
-| Code generation, creative writing, brainstorming                                                                                         | Rarely                      | Skip verification; note that doublecheck mode doesn't apply to this type of content |
-| Casual conversation, clarifying questions, status updates                                                                                | No                          | Skip verification silently                                                          |
+| Response type | Contains verifiable claims? | Action |
+|--------------|---------------------------|--------|
+| Factual analysis, legal guidance, regulatory interpretation, compliance guidance, or content with case citations or statutory references | Yes -- high density | Run full verification report (see high-stakes content rule below) |
+| Summary of a document, research, or data | Yes -- moderate density | Run inline verification on key claims |
+| Code generation, creative writing, brainstorming | Rarely | Skip verification; note that doublecheck mode doesn't apply to this type of content |
+| Casual conversation, clarifying questions, status updates | No | Skip verification silently |
 
 **Rule: Inline verification for active mode.**
 
@@ -98,21 +98,20 @@ Re-read the target text with a critical lens. Your job in this layer is extracti
 
 Go through the target text sentence by sentence and pull out every statement that asserts something verifiable. Categorize each claim:
 
-| Category        | What to look for                                                    | Examples                                                                                                                |
-| --------------- | ------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| **Factual**     | Assertions about how things are or were                             | "Python was created in 1991", "The GPL requires derivative works to be open-sourced"                                    |
-| **Statistical** | Numbers, percentages, quantities                                    | "95% of enterprises use cloud services", "The contract has a 30-day termination clause"                                 |
-| **Citation**    | References to specific documents, cases, laws, papers, or standards | "Under Section 230 of the CDA...", "In _Mayo v. Prometheus_ (2012)..."                                                  |
-| **Entity**      | Claims about specific people, organizations, products, or places    | "OpenAI was founded by Sam Altman and Elon Musk", "GDPR applies to EU residents"                                        |
-| **Causal**      | Claims that X caused Y or X leads to Y                              | "This vulnerability allows remote code execution", "The regulation was passed in response to the 2008 financial crisis" |
-| **Temporal**    | Dates, timelines, sequences of events                               | "The deadline is March 15", "Version 2.0 was released before the security patch"                                        |
+| Category | What to look for | Examples |
+|----------|-----------------|---------|
+| **Factual** | Assertions about how things are or were | "Python was created in 1991", "The GPL requires derivative works to be open-sourced" |
+| **Statistical** | Numbers, percentages, quantities | "95% of enterprises use cloud services", "The contract has a 30-day termination clause" |
+| **Citation** | References to specific documents, cases, laws, papers, or standards | "Under Section 230 of the CDA...", "In *Mayo v. Prometheus* (2012)..." |
+| **Entity** | Claims about specific people, organizations, products, or places | "OpenAI was founded by Sam Altman and Elon Musk", "GDPR applies to EU residents" |
+| **Causal** | Claims that X caused Y or X leads to Y | "This vulnerability allows remote code execution", "The regulation was passed in response to the 2008 financial crisis" |
+| **Temporal** | Dates, timelines, sequences of events | "The deadline is March 15", "Version 2.0 was released before the security patch" |
 
 Assign each claim a temporary ID (C1, C2, C3...) for tracking through subsequent layers.
 
 ### Step 2: Check Internal Consistency
 
 Review the extracted claims against each other:
-
 - Does the text contradict itself anywhere? (e.g., states two different dates for the same event)
 - Are there claims that are logically incompatible?
 - Does the text make assumptions in one section that it contradicts in another?
@@ -122,7 +121,6 @@ Flag any internal contradictions immediately -- these don't need external verifi
 ### Step 3: Initial Confidence Assessment
 
 For each claim, make an initial assessment based only on your own knowledge:
-
 - Do you recall this being accurate?
 - Is this the kind of claim where models frequently hallucinate? (Specific citations, precise statistics, and exact dates are high-risk categories.)
 - Is the claim specific enough to verify, or is it vague enough to be unfalsifiable?
@@ -153,7 +151,6 @@ For each claim:
 ### What Counts as a Source
 
 Prefer primary and authoritative sources:
-
 - Official documentation, specifications, and standards
 - Court records, legislative texts, regulatory filings
 - Peer-reviewed publications
@@ -197,7 +194,6 @@ Check for these common patterns:
 ### Adversarial Questions
 
 For each major claim that passed Layers 1 and 2, ask:
-
 - What would make this claim wrong?
 - Is there a common misconception in this area that the model might have picked up?
 - If I were a subject matter expert, would I object to how this is stated?
@@ -206,7 +202,6 @@ For each major claim that passed Layers 1 and 2, ask:
 ### Red Flags to Escalate
 
 If you find any of these, flag them prominently in the report:
-
 - A specific citation that cannot be found anywhere
 - A statistic with no identifiable source
 - A legal or regulatory claim that contradicts what authoritative sources say
@@ -222,13 +217,13 @@ After completing all three layers, produce the report using the template in `ass
 
 Assign each claim a final rating:
 
-| Rating               | Meaning                                                                                 | What the user should do                                                                  |
-| -------------------- | --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| **VERIFIED**         | Supporting source found and linked                                                      | Spot-check the source link if the claim is critical to your work                         |
-| **PLAUSIBLE**        | Consistent with general knowledge, no specific source found                             | Treat as reasonable but unconfirmed; verify independently if relying on it for decisions |
-| **UNVERIFIED**       | Could not find supporting or contradicting evidence                                     | Do not rely on this claim without independent verification                               |
-| **DISPUTED**         | Found contradicting evidence from a credible source                                     | Review the contradicting source; this claim may be wrong                                 |
-| **FABRICATION RISK** | Matches hallucination patterns (e.g., unfindable citation, unsourced precise statistic) | Assume this is wrong until you can confirm it from a primary source                      |
+| Rating | Meaning | What the user should do |
+|--------|---------|------------------------|
+| **VERIFIED** | Supporting source found and linked | Spot-check the source link if the claim is critical to your work |
+| **PLAUSIBLE** | Consistent with general knowledge, no specific source found | Treat as reasonable but unconfirmed; verify independently if relying on it for decisions |
+| **UNVERIFIED** | Could not find supporting or contradicting evidence | Do not rely on this claim without independent verification |
+| **DISPUTED** | Found contradicting evidence from a credible source | Review the contradicting source; this claim may be wrong |
+| **FABRICATION RISK** | Matches hallucination patterns (e.g., unfindable citation, unsourced precise statistic) | Assume this is wrong until you can confirm it from a primary source |
 
 ### Report Principles
 
@@ -243,7 +238,6 @@ Assign each claim a final rating:
 Always include this at the end of the report:
 
 > **Limitations of this verification:**
->
 > - This tool accelerates human verification; it does not replace it.
 > - Web search results may not include the most recent information or paywalled sources.
 > - The adversarial review uses the same underlying model that may have produced the original output. It catches many issues but cannot catch all of them.
@@ -257,7 +251,6 @@ Always include this at the end of the report:
 ### Legal Content
 
 Legal content carries elevated hallucination risk because:
-
 - Case names, citations, and holdings are frequently fabricated by models
 - Jurisdictional nuances are often flattened or omitted
 - Statutory language may be paraphrased in ways that change the legal meaning

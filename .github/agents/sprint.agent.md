@@ -2,17 +2,14 @@
 mode: agent
 tools:
   - read_file
-  - replace_string_in_file
-  - multi_replace_string_in_file
+    - apply_patch
   - create_file
   - run_in_terminal
   - get_errors
   - grep_search
   - file_search
   - semantic_search
-  - explore_subagent
   - vscode_listCodeUsages
-  - manage_todo_list
   - list_dir
   - view_image
 description: >
@@ -32,7 +29,7 @@ table) from first line of code to a passing CI gate.
    the Active Sprint table — that is your sprint.
 2. Read `ROADMAP.md` → locate the sprint's Deliverable description.
 3. Read `CHANGELOG.md` top section to understand the `[Unreleased]` accumulation.
-4. Call `manage_todo_list` to plan sub-tasks before writing any code.
+4. Break the sprint into small, verifiable changes before writing any code.
 
 ## Architecture layers (always implement in this order)
 
