@@ -1435,14 +1435,15 @@ The Chromium run of `tests/e2e/preview-acceptance.spec.ts` passes all four tests
 - T2: COMPLETE — Each calculator panel, Marketplace, and G-code preview modal now load lazily and preload on pointer/focus intent; the PDF renderer and 3D/WebGL preview stay behind lazy route boundaries with tab-intent preloads.
   DXF export remains an on-demand worker, not a modal. No new dependency. The initial route fell from 1,832.9 KB raw / 511.1 KB Brotli to 655.1 KB / 160.4 KB across 13 files (64.3% raw, 68.6% Brotli reduction); 2,241.9 KB (80.1%) of emitted JavaScript is outside the route.
   The 700 KB / 175 KB critical gate passes. The aggregate dist cap is 2,970 KB per the measured T2 ADR in CHANGELOG.
-- T3: IN PROGRESS — `lighthouse.yml` asserts LCP, TBT and CLS with mobile throttling on the built app; the existing
+- T3: COMPLETE — `lighthouse.yml` asserts LCP, TBT and CLS with mobile throttling on the built app; the existing
   `scripts/lighthouse.js` gate also checks FCP, performance score and Lighthouse insights. Initial sheet optimization
-  now runs in the existing worker on Worker-capable browsers, with pending sidebar and cost values; the BOM exporter
-  loads only when invoked. The workspace LCP banner now uses a preloaded, responsive WebP; Lighthouse confirms image
-  discovery and responsive delivery. The initial route is 590.2 KB raw / 148.2 KB Brotli, down from 655.1 KB / 160.4 KB.
-  The latest local Lighthouse run measured performance 0.83, FCP 1,785 ms, LCP 2,573 ms, TBT 501 ms, and CLS 0;
-  fixed thresholds still fail and results vary between runs. Remaining: reduce main-thread work and meet the existing
-  Lighthouse thresholds consistently; do not raise bundle or metric budgets without a measured ADR.
+  runs in the existing worker on Worker-capable browsers, with pending sidebar and cost values. Both BOM export entry
+  points now dynamically import the exporter. A cold mobile browser load requests neither BOM chunk; Ctrl+E fetches
+  them on demand and completes the export. The workspace LCP banner uses a preloaded, responsive WebP; Lighthouse
+  confirms image discovery and responsive delivery. The current critical route is 605.1 KB raw / 153.2 KB Brotli,
+  within the unchanged 700 KB / 175 KB budget. Three consecutive local mobile Lighthouse runs measured performance
+  95–96, FCP 1,697–1,717 ms, LCP 2,616–2,624 ms, TBT 43–114 ms and CLS 0; all satisfy the existing fixed thresholds.
+  No bundle or metric budget was raised.
 - Tests: bundle-report chunk-graph unit tests; bench budgets unchanged.
 - Accept: `npm run bundle:critical` blocks in `npm run ci`; first-load reduction reported from measurements.
 

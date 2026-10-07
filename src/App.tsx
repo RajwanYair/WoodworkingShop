@@ -14,7 +14,6 @@ import { ActiveCabinetSwitcher } from './components/layout/ActiveCabinetSwitcher
 import type { CalculatorId } from './components/configurator/calculator-catalog';
 import { CALCULATOR_COMMANDS, type CalculatorCommandId } from './components/configurator/calculator-commands';
 import { listProjects } from './utils/project-storage';
-import { downloadBomCsv } from './utils/bom-export';
 import { IconPrint } from './components/layout/Icons';
 import { useCabinetStore } from './store/cabinet-store';
 import { useToastStore } from './store/toast-store';
@@ -259,8 +258,14 @@ function App() {
       parts: generateParts(cab.config, materials),
       hardware: generateHardware(cab.config, materials),
     }));
-    downloadBomCsv(bomData, lang, `${filePrefix}-bom.csv`, i18n.language);
-    useToastStore.getState().addToast(t('shortcuts.exportBom'), 'success');
+    void import('./utils/bom-export')
+      .then(({ downloadBomCsv }) => {
+        downloadBomCsv(bomData, lang, `${filePrefix}-bom.csv`, i18n.language);
+        useToastStore.getState().addToast(t('shortcuts.exportBom'), 'success');
+      })
+      .catch(() => {
+        useToastStore.getState().addToast(t('commandPalette.commandFailed'), 'error');
+      });
   }, [i18n.language, t]);
 
   const addCabinet = useCallback(() => {

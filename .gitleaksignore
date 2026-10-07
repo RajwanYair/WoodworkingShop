@@ -23,3 +23,7 @@ f88f6c49ee48078d5bcf3c928f48ba3325a43ccc:src/engine/validation/shelf-rules.ts:ge
 
 # validation.ts — rule key in earlier monolith (commit d8321f4f)
 d8321f4f7d4890c3d49d9e75f97fb32a4cd1d287:src/engine/validation.ts:generic-api-key:712
+
+1791a40405f09070f15e54149beb342be1a05f4a:.agents/skills/playwright-skill/core/third-party-integrations.md:generic-api-key:489
+1791a40405f09070f15e54149beb342be1a05f4a:.agents/skills/playwright-skill/core/third-party-integrations.md:generic-api-key:490
+1791a40405f09070f15e54149beb342be1a05f4a:.agents/skills/playwright-skill/core/configuration.md:generic-api-key:531
