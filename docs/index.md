@@ -1,6 +1,6 @@
 # Documentation Index
 
-> Cabinet Planner — woodworking design tool for custom furniture.
+> WoodworkingShop — woodworking design tool for custom furniture.
 
 ## 📖 Documents
 

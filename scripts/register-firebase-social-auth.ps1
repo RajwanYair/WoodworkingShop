@@ -3,7 +3,7 @@
     Guided setup checklist for Firebase Authentication and social OAuth providers.
 
 .DESCRIPTION
-    Prints console steps and callback URLs needed to register the Cabinet Planner
+    Prints console steps and callback URLs needed to register the WoodworkingShop
     web app with Google, Facebook, and GitHub through Firebase Authentication.
     It also prints a restrictive Firestore rules starter for per-user project JSON.
     This is instructional only: it does not create resources, change provider
@@ -135,7 +135,7 @@ Write-Host 'Never enter provider client secrets in chat, source files, VITE_* va
 Write-Section '1. Create/register the Firebase web app'
 Write-GuideStep -Number '1' -Title 'Select the existing Firebase project' -Details @(
     'Open the Firebase project and add a Web app if one is not already registered.',
-    'Use a clear nickname such as Cabinet Planner Web. Firebase Hosting is not required for the current GitHub Pages deployment.',
+    'Use a clear nickname such as WoodworkingShop Web. Firebase Hosting is not required for the current GitHub Pages deployment.',
     'Copy the web configuration. The authDomain must match the value used by this guide.',
     'The Firebase web apiKey/appId identify the client project; they are not OAuth client secrets. Keep provider client secrets server-side in Firebase configuration only.'
 ) -Url "$firebaseConsole/settings/general"

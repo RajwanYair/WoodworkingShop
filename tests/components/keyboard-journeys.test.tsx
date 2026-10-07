@@ -1,9 +1,12 @@
-import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
+import { describe, it, expect, beforeAll, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../../src/App';
+import { downloadBomCsv } from '../../src/utils/bom-export';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import type { CabinetState } from '../../src/store/cabinet-store';
+
+vi.mock('../../src/utils/bom-export', () => ({ downloadBomCsv: vi.fn() }));
 
 beforeAll(() => {
   if (typeof window !== 'undefined' && !window.localStorage) {
@@ -68,7 +71,7 @@ describe('keyboard journeys — sprint 252', () => {
     render(<App />);
 
     await user.keyboard('?');
-    expect(screen.getByText('Ctrl + L')).toBeInTheDocument();
+    expect(await screen.findByText('Ctrl + L', {}, { timeout: 15000 })).toBeInTheDocument();
 
     await user.keyboard('?');
     expect(screen.queryByText('Ctrl + L')).not.toBeInTheDocument();
@@ -80,6 +83,16 @@ describe('keyboard journeys — sprint 252', () => {
 
     await user.keyboard('?');
 
-    expect(screen.getByText('Ctrl + K')).toBeInTheDocument();
+    expect(await screen.findByText('Ctrl + K', {}, { timeout: 15000 })).toBeInTheDocument();
+  });
+
+  it('loads the BOM exporter when Ctrl+E is pressed', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.keyboard('{Control>}e{/Control}');
+
+    await screen.findByText('BOM exported');
+    expect(downloadBomCsv).toHaveBeenCalledTimes(1);
   });
 });

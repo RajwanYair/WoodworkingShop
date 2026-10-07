@@ -1,7 +1,7 @@
 /**
  * Sprint 87 — Plugin Marketplace Panel
  *
- * Browses, installs, and uninstalls Cabinet Planner plugins from a bundled
+ * Browses, installs, and uninstalls WoodworkingShop plugins from a bundled
  * stub catalog.  Network fetching is intentionally deferred (offline-first).
  */
 import { useState, useRef } from 'react';
@@ -27,7 +27,7 @@ const STUB_CATALOG: MarketplaceCatalog = {
     {
       id: 'com.cabinet-planner.gcode-post-fanuc',
       name: 'FANUC G-code Post-processor',
-      description: 'Converts Cabinet Planner G-code to FANUC-compatible dialect with tool-change macros.',
+      description: 'Converts WoodworkingShop G-code to FANUC-compatible dialect with tool-change macros.',
       version: '1.2.0',
       author: 'CNC Tools Ltd.',
       category: 'export',

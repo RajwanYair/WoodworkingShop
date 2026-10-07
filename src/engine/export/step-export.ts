@@ -306,8 +306,8 @@ export function generateStepContent(config: CabinetConfig, parts: Part[]): StepR
   const header = [
     'ISO-10303-21;',
     'HEADER;',
-    `FILE_DESCRIPTION(('Cabinet Planner STEP Export - Sprint 80'),'2;1');`,
-    `FILE_NAME('${projectName.replace(/'/g, '')}.stp','${timestamp}',('Cabinet Planner'),('Cabinet Planner'),'Open CASCADE STEP processor 6.7','Cabinet Planner v4.0','');`,
+    `FILE_DESCRIPTION(('WoodworkingShop STEP Export - Sprint 80'),'2;1');`,
+    `FILE_NAME('${projectName.replace(/'/g, '')}.stp','${timestamp}',('WoodworkingShop'),('WoodworkingShop'),'Open CASCADE STEP processor 6.7','WoodworkingShop v4.0','');`,
     `FILE_SCHEMA(('AUTOMOTIVE_DESIGN { 1 0 10303 214 3 1 1 1 }'));`,
     'ENDSEC;',
     'DATA;',

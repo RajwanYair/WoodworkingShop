@@ -1,4 +1,4 @@
-# Cabinet Planner — User Guide
+# WoodworkingShop — User Guide
 
 > Version 5.34 · React 19 + TypeScript 6 · Progressive Web App
 

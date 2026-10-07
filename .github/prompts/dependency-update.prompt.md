@@ -5,7 +5,7 @@ description: Review and apply Dependabot PRs — verify changes are safe, run qu
 
 # Dependency Update Review
 
-You are reviewing and applying dependency updates for the Cabinet Planner project.
+You are reviewing and applying dependency updates for the WoodworkingShop project.
 
 ## Inputs
 

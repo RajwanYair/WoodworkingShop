@@ -2,7 +2,6 @@ import './i18n';
 import './index.css';
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
-import workspaceBanner from '../docs/banner.svg';
 import { Header } from './components/layout/Header';
 import { SkeletonPane } from './components/layout/SkeletonPane';
 import { Sidebar } from './components/layout/Sidebar';
@@ -12,7 +11,6 @@ import { OnboardingManager } from './components/layout/OnboardingOverlay';
 import { TouchGestureTutorial } from './components/layout/TouchGestureTutorial';
 import { MobileTabBar } from './components/layout/MobileTabBar';
 import { ActiveCabinetSwitcher } from './components/layout/ActiveCabinetSwitcher';
-import { ShortcutsModal } from './components/layout/ShortcutsModal';
 import type { CalculatorId } from './components/configurator/calculator-catalog';
 import { IconPrint } from './components/layout/Icons';
 import { useCabinetStore } from './store/cabinet-store';
@@ -25,7 +23,6 @@ import { useTouchGestures } from './hooks/useTouchGestures';
 import { generateParts } from './engine/parts';
 import { generateHardware } from './engine/hardware';
 import { getCustomMaterials } from './store/custom-materials-store';
-import { downloadBomCsv } from './utils/bom-export';
 import { configToUrl, readTabFromUrl, pushTabToUrl } from './utils/url-state';
 import { formatDate } from './i18n/format';
 import type { Lang } from './engine/types';
@@ -79,6 +76,9 @@ const CommandPalette = lazy(() =>
 );
 const SwUpdateBanner = lazy(() =>
   import('./components/layout/SwUpdateBanner').then((module) => ({ default: module.SwUpdateBanner })),
+);
+const ShortcutsModal = lazy(() =>
+  import('./components/layout/ShortcutsModal').then((module) => ({ default: module.ShortcutsModal })),
 );
 
 function App() {
@@ -204,8 +204,14 @@ function App() {
             parts: generateParts(cabinet.config, getCustomMaterials()),
             hardware: generateHardware(cabinet.config, getCustomMaterials()),
           }));
-          downloadBomCsv(bomData, lang, `${filePrefix}-bom.csv`, i18n.language);
-          useToastStore.getState().addToast(t('shortcuts.exportBom'), 'success');
+          void import('./utils/bom-export')
+            .then(({ downloadBomCsv }) => {
+              downloadBomCsv(bomData, lang, `${filePrefix}-bom.csv`, i18n.language);
+              useToastStore.getState().addToast(t('shortcuts.exportBom'), 'success');
+            })
+            .catch(() => {
+              useToastStore.getState().addToast(t('commandPalette.commandFailed'), 'error');
+            });
           break;
         }
         case 'config.reset':
@@ -340,7 +346,7 @@ function App() {
             </div>
             {/* Sprint 170 — print-only header: shows project name + date on paper */}
             <div className="print-only-header">
-              {projectName ? `${projectName} — ` : ''}Cabinet Planner
+              {projectName ? `${projectName} — ` : ''}WoodworkingShop
               <span className="float-end text-[9pt] font-normal">{formatDate(new Date(), i18n.language)}</span>
             </div>
             {['preview', 'optimizer', 'assembly', 'pdf', 'calculators'].includes(activeTab) && (
@@ -353,7 +359,9 @@ function App() {
                 className="mx-auto flex max-w-6xl flex-col items-center gap-6 text-center"
               >
                 <img
-                  src={workspaceBanner}
+                  src={`${import.meta.env.BASE_URL}workspace-banner.webp`}
+                  srcSet={`${import.meta.env.BASE_URL}workspace-banner-480.webp 480w, ${import.meta.env.BASE_URL}workspace-banner-800.webp 800w, ${import.meta.env.BASE_URL}workspace-banner.webp 1200w`}
+                  sizes="(min-width: 1456px) 1152px, (min-width: 1024px) calc(100vw - 304px), (min-width: 640px) calc(100vw - 48px), calc(100vw - 24px)"
                   alt={t('tabs.workspace')}
                   className="w-full rounded-3xl shadow-[0_20px_60px_rgb(0_0_0/0.12)]"
                   width={1200}
@@ -446,7 +454,11 @@ function App() {
             <SwUpdateBanner reload={reloadSwUpdate} />
           </Suspense>
         )}
-        {showShortcuts && <ShortcutsModal onClose={() => setShowShortcuts(false)} />}
+        {showShortcuts && (
+          <Suspense fallback={null}>
+            <ShortcutsModal onClose={() => setShowShortcuts(false)} />
+          </Suspense>
+        )}
         {showCommandPalette && (
           <Suspense fallback={null}>
             <CommandPalette open={showCommandPalette} onClose={closeCommandPalette} onOpenCalculator={openCalculator} />

@@ -1,7 +1,7 @@
 /**
  * Sprint 153 — Manufacturer Embedding API.
  *
- * Allows manufacturers to embed their product catalogs into the Cabinet Planner
+ * Allows manufacturers to embed their product catalogs into the WoodworkingShop
  * via a typed JSON API. The API supports:
  *   - Registering a manufacturer with branding metadata
  *   - Submitting material catalogs with regional pricing

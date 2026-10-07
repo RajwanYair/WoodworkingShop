@@ -5,7 +5,7 @@ description: Add i18n keys to en.json + he.json with full parity — validates J
 
 # Add i18n Keys
 
-You are adding localization keys to the Cabinet Planner project.
+You are adding localization keys to the WoodworkingShop project.
 
 ## Rules
 

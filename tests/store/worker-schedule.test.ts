@@ -186,10 +186,11 @@ describe('worker schedule fallbacks', () => {
   });
 
   it('clears optimization and cost pending state after rejection and recovers on later requests', async () => {
+    const terminate = vi.fn();
     vi.stubGlobal(
       'Worker',
       class WorkerStub {
-        terminate() {}
+        terminate = terminate;
       },
     );
     const state = useCabinetStore.getState();
@@ -218,6 +219,7 @@ describe('worker schedule fallbacks', () => {
     scheduleOptimization([], [], 0, {});
     await vi.waitFor(() => expect(patches).toContainEqual({ optimizationPending: false }));
     expect(run).toHaveBeenCalledTimes(3);
+    expect(terminate).toHaveBeenCalledOnce();
 
     patches = [];
     scheduleOptimization([], [], 0, {});
@@ -229,6 +231,45 @@ describe('worker schedule fallbacks', () => {
       costPending: true,
     });
     expect(run).toHaveBeenCalledTimes(5);
+  });
+
+  it('terminates an in-flight optimization when a newer request supersedes it', () => {
+    const terminate = vi.fn();
+    vi.stubGlobal(
+      'Worker',
+      class WorkerStub {
+        terminate = terminate;
+      },
+    );
+    const run = vi.fn(() => new Promise<never>(() => {}));
+    vi.mocked(Comlink.wrap).mockReturnValue({ run } as never);
+
+    scheduleOptimization([], [], 0, {});
+    scheduleOptimization([], [], 0, {});
+
+    expect(terminate).toHaveBeenCalledOnce();
+    expect(run).toHaveBeenCalledTimes(2);
+  });
+
+  it('terminates in-flight optimization when the superseding request is already aborted', () => {
+    const terminate = vi.fn();
+    vi.stubGlobal(
+      'Worker',
+      class WorkerStub {
+        terminate = terminate;
+      },
+    );
+    const run = vi.fn(() => new Promise<never>(() => {}));
+    vi.mocked(Comlink.wrap).mockReturnValue({ run } as never);
+    const controller = new AbortController();
+
+    scheduleOptimization([], [], 0, {});
+    controller.abort();
+    scheduleOptimization([], [], 0, {}, controller.signal);
+
+    expect(terminate).toHaveBeenCalledOnce();
+    expect(run).toHaveBeenCalledOnce();
+    expect(patches.at(-1)).toEqual({ optimizationPending: false });
   });
 
   it('terminates timed-out optimization and cost workers and recovers on retry', async () => {

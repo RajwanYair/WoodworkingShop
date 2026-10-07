@@ -1,4 +1,4 @@
-; Cabinet Planner G-code Export
+; WoodworkingShop G-code Export
 ; Version: <APP_VERSION>  Schema: gcode-v1
 ; Generated: <ISO_TIMESTAMP>
 ; G-code for sheet 1 - melamine-18 18mm

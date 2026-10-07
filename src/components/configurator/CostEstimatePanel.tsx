@@ -13,6 +13,7 @@ export function CostEstimatePanel() {
   const { t, i18n } = useTranslation();
   const {
     cost,
+    costPending,
     cabinets,
     materialPriceOverrides,
     setMaterialPriceOverride,
@@ -423,7 +424,7 @@ export function CostEstimatePanel() {
       </div>
 
       {/* Per-cabinet cost when multiple cabinets */}
-      {cabinets.length > 1 && totalNonZero && (
+      {cabinets.length > 1 && totalNonZero && !costPending && (
         <div className="border-wood-100 dark:border-wood-800 border-t pt-2">
           <div className="flex justify-between text-xs">
             <span className="text-wood-600 dark:text-wood-300">{t('cost.perUnit')}</span>
@@ -438,7 +439,14 @@ export function CostEstimatePanel() {
       <div className="border-wood-300 dark:border-wood-600 border-t pt-2">
         <div className="flex justify-between">
           <span className="text-wood-700 dark:text-wood-200 text-sm font-bold">{t('cost.total')}</span>
-          <span className="text-sm font-bold text-green-700 dark:text-green-400">₪{cost.totalCost}</span>
+          <span className="text-sm font-bold text-green-700 dark:text-green-400">
+            {costPending ? '…' : `₪${cost.totalCost}`}
+          </span>
+          {costPending && (
+            <span className="sr-only" aria-live="polite">
+              {t('optimizer.statusPending')}
+            </span>
+          )}
         </div>
         {totalWeightKg > 0 && (
           <div className="mt-1 flex justify-between">

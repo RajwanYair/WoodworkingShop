@@ -36,7 +36,7 @@ export interface MarketplaceEntry {
   category: PluginCategory;
   /** Comma-free download / install URL (may be a local path). */
   packageUrl: string;
-  /** Semver range of Cabinet Planner API versions this plugin supports. e.g. `'>=1.0.0'` */
+  /** Semver range of WoodworkingShop API versions this plugin supports. e.g. `'>=1.0.0'` */
   apiVersionRange: string;
   /** ISO 8601 date of last publish. */
   publishedAt: string;

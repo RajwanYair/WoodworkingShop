@@ -1,4 +1,4 @@
-# Cabinet Planner BOM Export,,,,,,,,,,
+# WoodworkingShop BOM Export,,,,,,,,,,
 # Version: <APP_VERSION>  Schema: bom-csv-v1
 # Generated: <ISO_TIMESTAMP>
 # Cabinets: 1  Parts: 2  Hardware: 4,,,,,,,,,,

@@ -138,7 +138,7 @@ test('BOM browser download starts with the UTF-8 byte-order mark', async ({ appP
 
 test('BOM CSV includes its versioned schema and ISO generation timestamp', async ({ appPage: page }) => {
   const { content } = await downloadBom(page);
-  expect(content).toContain('# Cabinet Planner BOM Export');
+  expect(content).toContain('# WoodworkingShop BOM Export');
   expect(content).toContain('Schema: bom-csv-v1');
   expect(content).toMatch(/^# Generated: \d{4}-\d{2}-\d{2}T/m);
 });

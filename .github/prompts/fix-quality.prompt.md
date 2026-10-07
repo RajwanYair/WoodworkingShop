@@ -5,7 +5,7 @@ description: Diagnose and fix all failures reported by the quality gate (typeche
 
 # Fix Quality Gate
 
-You are fixing failing quality gate checks in the Cabinet Planner project.
+You are fixing failing quality gate checks in the WoodworkingShop project.
 
 ## Task
 

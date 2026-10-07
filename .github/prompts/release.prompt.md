@@ -1,11 +1,11 @@
 ---
 agent: agent
-description: Prepare and publish a new Cabinet Planner release — version bump, CHANGELOG, tag, and GitHub Release.
+description: Prepare and publish a new WoodworkingShop release — version bump, CHANGELOG, tag, and GitHub Release.
 ---
 
 # Release
 
-You are publishing a new Cabinet Planner release.
+You are publishing a new WoodworkingShop release.
 
 ## Pre-flight checklist (verify before any changes)
 

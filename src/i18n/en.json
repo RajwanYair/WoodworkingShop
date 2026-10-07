@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "Cabinet Planner",
+    "title": "WoodworkingShop",
     "subtitle": "Interactive Woodworking Design Tool"
   },
   "a11y": {
@@ -769,7 +769,7 @@
     "noMaterials": "Catalog is empty."
   },
   "onboarding": {
-    "title": "Welcome to Cabinet Planner!",
+    "title": "Welcome to WoodworkingShop!",
     "subtitle": "Design, optimize, and build your furniture in 3 easy steps.",
     "wizardStep1Title": "Configure your cabinet",
     "wizardStep1Desc": "Choose furniture type, dimensions, materials, doors, drawers, and shelves to match your space.",

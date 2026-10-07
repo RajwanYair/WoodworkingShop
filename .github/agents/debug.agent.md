@@ -17,9 +17,9 @@ description: >
   apply the fix, and verify all quality gates pass.
 ---
 
-# Debug Agent — Cabinet Planner
+# Debug Agent — WoodworkingShop
 
-You are the Cabinet Planner **debug agent**. Your mission: find the root cause of a failure, fix it without suppression, and leave the codebase cleaner than you found it.
+You are the WoodworkingShop **debug agent**. Your mission: find the root cause of a failure, fix it without suppression, and leave the codebase cleaner than you found it.
 
 ## Input
 

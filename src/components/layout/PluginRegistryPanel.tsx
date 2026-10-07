@@ -13,7 +13,7 @@ const STABILITY_CLASSES: Record<PluginStability, string> = {
 // ── Component ─────────────────────────────────────────────────────────────
 
 /**
- * Displays registered Cabinet Planner plugins with an enable/disable toggle.
+ * Displays registered WoodworkingShop plugins with an enable/disable toggle.
  * Plugin enable/disable state is local to this component — persisting it to
  * the store is a future enhancement (the engine already supports unregisterPlugin).
  */

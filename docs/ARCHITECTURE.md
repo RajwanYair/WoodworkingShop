@@ -1,10 +1,10 @@
 # 🏛 Architecture
 
 <div align="center">
-  <img src="banner.svg" alt="Cabinet Planner" width="100%"/>
+  <img src="banner.svg" alt="WoodworkingShop" width="100%"/>
 </div>
 
-Cabinet Planner is a client-side React SPA (no backend). All computation — dimensions, parts, hardware, cut-sheet optimization, cost estimation — runs in the browser.
+WoodworkingShop is a client-side React SPA (no backend). All computation — dimensions, parts, hardware, cut-sheet optimization, cost estimation — runs in the browser.
 
 > **Module reference** — For competitive positioning, product strategy, and sprint planning see [ROADMAP.md](../ROADMAP.md). For user-facing feature descriptions see [USER-GUIDE.md](USER-GUIDE.md).
 
@@ -446,7 +446,7 @@ English and Hebrew are complete. Arabic, German, Spanish and French still fall b
 
 ## ♿ Accessibility (WCAG 2.2 AA)
 
-Cabinet Planner targets **WCAG 2.2 Level AA** compliance. This section documents the patterns, CI gates, and runtime mechanisms in place.
+WoodworkingShop targets **WCAG 2.2 Level AA** compliance. This section documents the patterns, CI gates, and runtime mechanisms in place.
 
 ### Compliance Target
 

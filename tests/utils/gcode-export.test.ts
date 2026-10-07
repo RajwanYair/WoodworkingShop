@@ -80,7 +80,7 @@ describe('cutSheetToGcode', () => {
 
   it('includes version header comment', () => {
     const gc = cutSheetToGcode(mockSheet);
-    expect(gc).toContain('Cabinet Planner G-code Export');
+    expect(gc).toContain('WoodworkingShop G-code Export');
     expect(gc).toContain('Schema: gcode-v1');
   });
 

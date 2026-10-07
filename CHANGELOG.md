@@ -1,7 +1,7 @@
 # Changelog
 
 <div align="center">
-  <img src="docs/banner.svg" alt="Cabinet Planner" width="100%"/>
+  <img src="docs/banner.svg" alt="WoodworkingShop" width="100%"/>
 </div>
 
 All notable changes to this project will be documented in this file.
@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Deferred initial cut-sheet optimization to the existing Web Worker path in browsers that support workers; the sidebar and cost estimate show pending values until results arrive. Deferred the BOM CSV exporter and shortcuts modal until invoked, reducing the initial route from 655.1 KB raw / 160.4 KB Brotli to 590.2 KB / 148.2 KB.
+  The workspace LCP banner is now a preloaded responsive WebP; its LCP-discovery and responsive-image audits pass. The latest local Lighthouse run measured FCP 1,785 ms, LCP 2,573 ms, TBT 501 ms, and performance 0.83. Acceptance remains open because the fixed thresholds still fail and run-to-run variation remains.
 - Measured the opaque standard and maskable PWA icon assets in the production build at 3,012 KB total. Raised the aggregate bundle ceiling from 2,970 KB to 3,025 KB, retaining a 13 KB measured margin, and adjusted only the 192px/512px standard PNG caps; JavaScript, initial-route, and all other per-asset budgets remain unchanged.
 - Improved PWA install metadata and assets: added opaque Apple/standard/maskable PNG icons, stable app identity, palette-matched browser theme colors and iOS standalone/safe-area metadata; stopped advertising the unimplemented POST share target. Removed unused external-font startup hints and cross-origin Workbox caches; PDF emoji artwork remains an on-demand network asset. Added browser checks for manifest entries, icon delivery, theme metadata and offline app-shell reload.
 - ADR (Sprint 376): raised the aggregate dist budget from 2,960 KB to 2,970 KB after the T2 production build measured 2,965.1 KB, a 5.1 KB overage from emitted code-splitting chunks and assets. The JavaScript cap remains 2,850 KB; the initial route is independently gated at 700 KB raw / 175 KB Brotli.
@@ -3769,7 +3771,7 @@ Complete architectural decision audit, tooling cleanup, and production readiness
   selector forces each sheet card onto its own page and hides analysis panels.
 - **Project name field** (Sprint 152) — a free-text "Project Name" input at the top of
   `SaveLoadPanel` stores the name in `CabinetState.projectName`. The document `<title>`
-  updates reactively (`<name> — Cabinet Planner`). The name is also used as the JSON
+  updates reactively (`<name> — WoodworkingShop`). The name is also used as the JSON
   export filename prefix.
 
 ### 🐛 Fixed

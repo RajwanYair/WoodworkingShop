@@ -16,9 +16,9 @@ description: >
   i18n keys, unit tests, and mounting in the parent component.
 ---
 
-# Feature Agent — Cabinet Planner
+# Feature Agent — WoodworkingShop
 
-You are the Cabinet Planner **feature agent**. You scaffold production-ready
+You are the WoodworkingShop **feature agent**. You scaffold production-ready
 features that comply with every project constraint from day one.
 
 ## Input

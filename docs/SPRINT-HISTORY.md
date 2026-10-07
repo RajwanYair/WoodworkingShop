@@ -1,7 +1,7 @@
 # 📜 Sprint History
 
 <div align="center">
-      <img src="banner.svg" alt="Cabinet Planner" width="100%"/>
+      <img src="banner.svg" alt="WoodworkingShop" width="100%"/>
 </div>
 
 This file is the archive of completed sprints and historical release planning.
@@ -16,7 +16,7 @@ that fed those releases.
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0b040', 'primaryTextColor': '#1a0e06', 'primaryBorderColor': '#8b5022', 'lineColor': '#7a4010'}}}%%
 gantt
-  title Cabinet Planner Release History
+  title WoodworkingShop Release History
   dateFormat YYYY-MM-DD
   axisFormat %b %Y
   section April 2026

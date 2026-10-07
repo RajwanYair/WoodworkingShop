@@ -272,7 +272,7 @@ export function PdfExportPanel() {
 
         // 5) README
         const readme = [
-          `Cabinet Planner — Export Bundle`,
+          `WoodworkingShop — Export Bundle`,
           `Project: ${store.projectName || safeName}`,
           `Generated: ${new Date().toISOString()}`,
           ``,

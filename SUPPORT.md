@@ -1,6 +1,6 @@
 # Support
 
-Cabinet Planner is a free, open-source project maintained by volunteers. Community support is provided on a best-effort basis; there is no paid support or response-time guarantee.
+WoodworkingShop is a free, open-source project maintained by volunteers. Community support is provided on a best-effort basis; there is no paid support or response-time guarantee.
 
 ## Questions and usage help
 

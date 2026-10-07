@@ -8,7 +8,7 @@ const SidebarDetailPanels = lazy(() =>
 );
 
 export function Sidebar() {
-  const { parts, hardware, optimization } = useCabinetStore();
+  const { parts, hardware, optimization, optimizationPending } = useCabinetStore();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(() => window.matchMedia?.('(min-width: 1024px)').matches ?? true);
   const mobileDialogRef = useRef<HTMLElement>(null);
@@ -38,11 +38,15 @@ export function Sidebar() {
         </div>
         <div className="flex justify-between py-2">
           <dt className="text-wood-600 dark:text-wood-300">Sheets needed</dt>
-          <dd className="font-medium tabular-nums">{optimization.totalSheets}</dd>
+          <dd className="font-medium tabular-nums" aria-live="polite">
+            {optimizationPending ? '…' : optimization.totalSheets}
+          </dd>
         </div>
         <div className="flex justify-between py-2">
           <dt className="text-wood-600 dark:text-wood-300">Yield</dt>
-          <dd className="font-medium tabular-nums">{optimization.overallYield}%</dd>
+          <dd className="font-medium tabular-nums" aria-live="polite">
+            {optimizationPending ? '…' : `${optimization.overallYield}%`}
+          </dd>
         </div>
       </dl>
 

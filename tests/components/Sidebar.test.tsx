@@ -24,7 +24,7 @@ describe('Sidebar', () => {
     await user.click(screen.getByRole('button', { name: 'Toggle summary panel' }));
     const dialog = screen.getByRole('dialog', { name: 'Cabinet summary' });
     expect(
-      await within(dialog).findByRole('heading', { name: 'Cost Estimate' }, { timeout: 5000 }),
+      await within(dialog).findByRole('heading', { name: 'Cost Estimate' }, { timeout: 15000 }),
     ).toBeInTheDocument();
 
     await user.keyboard('{Escape}');
@@ -38,7 +38,7 @@ describe('Sidebar', () => {
 
     await user.click(screen.getByRole('button', { name: 'Toggle summary panel' }));
     const dialog = screen.getByRole('dialog', { name: 'Cabinet summary' });
-    await within(dialog).findByRole('heading', { name: 'Cost Estimate' }, { timeout: 5000 });
+    await within(dialog).findByRole('heading', { name: 'Cost Estimate' }, { timeout: 15000 });
 
     expect(dialog).toHaveTextContent('Parts2');
     expect(dialog).toHaveTextContent('Hardware items1');

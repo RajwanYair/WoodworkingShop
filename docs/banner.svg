@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 260" width="1200" height="260" role="img" aria-labelledby="banner-title banner-description">
-  <title id="banner-title">Cabinet Planner</title>
+  <title id="banner-title">WoodworkingShop</title>
   <desc id="banner-description">Browser-based cabinet design and cut-list optimizer with a cabinet illustration, feature highlights, technology stack, and project details.</desc>
   <defs>
     <!-- Rich dark wood background -->
@@ -150,11 +150,11 @@
   <text x="114" y="244" font-family="'Segoe UI',monospace,Arial" font-size="9" fill="#e8a840" opacity="0.6" text-anchor="middle">600 mm</text>
 
   <!-- ══ Main text block ══ -->
-  <!-- Title: Cabinet Planner -->
+  <!-- Title: WoodworkingShop -->
   <text x="242" y="86"
     font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif"
     font-size="62" font-weight="800" fill="url(#amber)" letter-spacing="-2"
-    opacity="0.98">Cabinet Planner</text>
+    opacity="0.98">WoodworkingShop</text>
 
   <!-- Underline accent bar -->
   <rect x="242" y="94" width="600" height="4" fill="url(#amber)" rx="2" opacity="0.85"/>

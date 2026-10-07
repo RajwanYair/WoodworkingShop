@@ -51,7 +51,7 @@ describe('cutSheetToDxf', () => {
 
   it('includes version header comment', () => {
     const dxf = cutSheetToDxf(mockSheet);
-    expect(dxf).toContain('Cabinet Planner DXF Export');
+    expect(dxf).toContain('WoodworkingShop DXF Export');
     expect(dxf).toContain('Schema: dxf-ac1015-v2');
   });
 

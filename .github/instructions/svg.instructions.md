@@ -3,7 +3,7 @@ description: 'SVG rendering and standalone SVG asset conventions.'
 applyTo: 'src/components/**/*.tsx,src/components/**/*.ts,docs/*.svg,public/*.svg'
 ---
 
-# SVG Instructions — Cabinet Planner
+# SVG Instructions — WoodworkingShop
 
 These instructions apply to all SVG rendering code in `src/components/` and all
 standalone `.svg` assets under `docs/` and `public/`.

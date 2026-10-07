@@ -3,7 +3,7 @@ description: 'Client-side security rules for source and public files (OWASP, CSP
 applyTo: src/**,public/**
 ---
 
-# Security Instructions — Cabinet Planner
+# Security Instructions — WoodworkingShop
 
 Rules enforced for every source and public file.
 

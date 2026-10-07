@@ -18,7 +18,7 @@ export type PluginStability = 'stable' | 'experimental' | 'deprecated';
 
 /**
  * Describes the versioned stability contract of a single hook
- * exposed by the Cabinet Planner plugin API.
+ * exposed by the WoodworkingShop plugin API.
  */
 export interface PluginHookContract {
   /** Name of the hook as it appears on CabinetPlannerPlugin. */
@@ -34,13 +34,13 @@ export interface PluginHookContract {
 }
 
 /**
- * The formal, versioned contract document for the Cabinet Planner plugin API.
+ * The formal, versioned contract document for the WoodworkingShop plugin API.
  *
  * Third-party plugin authors should check this object to understand which
  * hooks are safe to rely on in production.
  */
 export interface PluginContract {
-  /** The Cabinet Planner API semver version this contract describes. */
+  /** The WoodworkingShop API semver version this contract describes. */
   apiVersion: string;
   /** Overall stability of the plugin API surface. */
   stability: PluginStability;
@@ -113,7 +113,7 @@ export function getPluginApiCompatibility(
 }
 
 /**
- * The published stability contract for the Cabinet Planner Plugin API v1.
+ * The published stability contract for the WoodworkingShop Plugin API v1.
  * Update this object whenever a hook is added, changed, or deprecated.
  */
 export const PLUGIN_CONTRACT: PluginContract = {
@@ -174,7 +174,7 @@ export function getPluginContract(): PluginContract {
 // ─── Plugin interface ────────────────────────────────────────────────────────
 
 /**
- * Cabinet Planner Plugin API — v1 draft (v3.49.2)
+ * WoodworkingShop Plugin API — v1 draft (v3.49.2)
  *
  * A plugin can intercept the parts pipeline and/or hook into config changes.
  * All hooks are optional; a plugin only needs to implement what it cares about.

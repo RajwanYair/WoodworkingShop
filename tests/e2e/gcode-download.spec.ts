@@ -109,7 +109,7 @@ function gcodeSheetSize(content: string): { width: number; length: number } {
 test('DXF download uses the expected filename and schema metadata', async ({ appPage: page }) => {
   const artifact = await downloadDxf(page);
   expect(artifact.filename).toBe('cabinet-sheet-1.dxf');
-  expect(artifact.content).toContain('Cabinet Planner DXF Export');
+  expect(artifact.content).toContain('WoodworkingShop DXF Export');
   expect(artifact.content).toContain('Schema: dxf-ac1015-v2');
 });
 
@@ -226,7 +226,7 @@ test('DXF entity parser identifies profiles, labels, dimensions, and UTF-8 text'
 test('G-code download uses the expected filename and versioned schema', async ({ appPage: page }) => {
   const artifact = await downloadGcode(page);
   expect(artifact.filename).toBe('cabinet-sheet-1.nc');
-  expect(artifact.content).toMatch(/^; Cabinet Planner G-code Export$/m);
+  expect(artifact.content).toMatch(/^; WoodworkingShop G-code Export$/m);
   expect(artifact.content).toMatch(/^; Version: .* Schema: gcode-v1$/m);
 });
 

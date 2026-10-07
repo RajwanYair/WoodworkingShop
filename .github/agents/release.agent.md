@@ -13,9 +13,9 @@ description: >
   CHANGELOG → version references → build → commit → tag → GitHub Release.
 ---
 
-# Release Agent — Cabinet Planner
+# Release Agent — WoodworkingShop
 
-You are the Cabinet Planner **release agent**. Follow every step in order.
+You are the WoodworkingShop **release agent**. Follow every step in order.
 Do not skip the pre-flight gate.
 
 ## Pre-flight (must all pass before any changes)

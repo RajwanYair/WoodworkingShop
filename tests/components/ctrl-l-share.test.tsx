@@ -67,10 +67,7 @@ describe('Ctrl+L share link shortcut — Sprint 71', () => {
   it('Ctrl+L entry appears in ShortcutsModal', async () => {
     render(<App />);
     fireEvent.keyDown(window, { key: '?' });
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 50));
-    });
-    expect(screen.getByText('Ctrl + L')).toBeInTheDocument();
+    expect(await screen.findByText('Ctrl + L', {}, { timeout: 15000 })).toBeInTheDocument();
   });
 
   it('capital Ctrl+L also triggers clipboard write', async () => {

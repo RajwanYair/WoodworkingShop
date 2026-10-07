@@ -14,7 +14,7 @@ tools:
 
 ## Goal
 
-Ensure the Cabinet Planner PWA passes all Lighthouse PWA checks and provides
+Ensure the WoodworkingShop PWA passes all Lighthouse PWA checks and provides
 a reliable offline experience.
 
 ## Checklist

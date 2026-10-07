@@ -2,7 +2,7 @@
 
 ## Our Commitment
 
-We want Cabinet Planner to be a welcoming, respectful project for people with
+We want WoodworkingShop to be a welcoming, respectful project for people with
 different backgrounds, identities, experience levels, and viewpoints. Everyone
 participating in project spaces is expected to help keep them constructive and
 free from harassment.
@@ -29,4 +29,4 @@ and may edit or remove content or restrict participation when needed to protect
 the community.
 
 This policy applies to project discussions, issues, pull requests, reviews, and
-other spaces when someone is representing Cabinet Planner or its community.
+other spaces when someone is representing WoodworkingShop or its community.

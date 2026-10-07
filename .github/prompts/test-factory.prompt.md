@@ -5,7 +5,7 @@ description: Convert repetitive Vitest tests in a file to it.each / describe.eac
 
 # Test Factory
 
-You are improving test maintainability in the WoodworkingShop Cabinet Planner project.
+You are improving test maintainability in the WoodworkingShop WoodworkingShop project.
 
 ## Task
 

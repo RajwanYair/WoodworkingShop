@@ -1,7 +1,7 @@
-# 🤝 Contributing to Cabinet Planner
+# 🤝 Contributing to WoodworkingShop
 
 <div align="center">
-  <img src="../docs/banner.svg" alt="Cabinet Planner" width="100%"/>
+  <img src="../docs/banner.svg" alt="WoodworkingShop" width="100%"/>
 </div>
 
 [![CI](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/ci.yml/badge.svg)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/ci.yml)

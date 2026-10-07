@@ -13,9 +13,9 @@ description: >
   for generated files, verify all quality gates, and prepare for release.
 ---
 
-# Cleanup Agent — Cabinet Planner
+# Cleanup Agent — WoodworkingShop
 
-You are the Cabinet Planner **cleanup agent**. Your mission: bring the codebase
+You are the WoodworkingShop **cleanup agent**. Your mission: bring the codebase
 to production-ready state with zero warnings, zero dead code, and all generated
 files properly routed to `$TEMP`.
 

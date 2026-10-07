@@ -233,6 +233,61 @@ export function applyLocks(parts: Part[]): Part[] {
   return touched ? out : parts;
 }
 
+function applyAutomaticCoNesting(result: OptimizationResult, sawKerfMm: number): OptimizationResult {
+  if (!_autoCoNest) return result;
+  const candidates = findCoNestCandidates(result);
+  return candidates.length > 0
+    ? applyCoNesting(result, new Set(candidates.map((candidate) => candidate.key)), sawKerfMm)
+    : result;
+}
+
+function runOptimizationSynchronously(
+  activeParts: Part[],
+  allParts: Part[],
+  sawKerfMm: number,
+  sheetSizeOverrides: Record<string, { width: number; length: number }>,
+  extraMaterials: ReturnType<typeof getCustomMaterials>,
+): void {
+  if (!_workerApplyFn) return;
+  const activeRes = optimizeCutSheetsResult(
+    activeParts,
+    sawKerfMm,
+    sheetSizeOverrides,
+    _cutMode,
+    _offcutCatalog,
+    _defectZones,
+    extraMaterials,
+  );
+  const combinedRes = optimizeCutSheetsResult(
+    allParts,
+    sawKerfMm,
+    sheetSizeOverrides,
+    _cutMode,
+    _offcutCatalog,
+    _defectZones,
+    extraMaterials,
+  );
+  if (!activeRes.ok || !combinedRes.ok) {
+    _workerApplyFn({ optimizationPending: false });
+    return;
+  }
+  const activeOptimization = applyAutomaticCoNesting(activeRes.value, sawKerfMm);
+  const combinedOptimization = applyAutomaticCoNesting(combinedRes.value, sawKerfMm);
+  _workerApplyFn({
+    optimization: activeOptimization,
+    combinedOptimization,
+    optimizationPending: false,
+  });
+  scheduleCostFromState(_getState!(), activeOptimization);
+}
+
+function handleCutOptimizationFailure(callId: number): void {
+  if (_latestCutId !== callId) return;
+  _latestCutId = 0;
+  terminateCutWorker();
+  _workerApplyFn?.({ optimizationPending: false });
+}
+
 // ── Schedule functions ────────────────────────────────────────────────────────
 
 /**
@@ -246,9 +301,11 @@ export function scheduleOptimization(
   sheetSizeOverrides: Record<string, { width: number; length: number }>,
   signal?: AbortSignal,
 ): void {
+  if (_latestCutId !== 0) terminateCutWorker();
   const callId = ++_cutCallId;
   _latestCutId = callId;
   if (signal?.aborted) {
+    _latestCutId = 0;
     _workerApplyFn?.({ optimizationPending: false });
     return;
   }
@@ -259,45 +316,8 @@ export function scheduleOptimization(
   const proxy = getCutProxy();
   if (!proxy) {
     // Synchronous fallback (tests / browsers without Worker support).
-    if (_workerApplyFn) {
-      const activeRes = optimizeCutSheetsResult(
-        lockedActive,
-        sawKerfMm,
-        sheetSizeOverrides,
-        _cutMode,
-        _offcutCatalog,
-        _defectZones,
-        extraMaterials,
-      );
-      const combinedRes = optimizeCutSheetsResult(
-        lockedAll,
-        sawKerfMm,
-        sheetSizeOverrides,
-        _cutMode,
-        _offcutCatalog,
-        _defectZones,
-        extraMaterials,
-      );
-      if (activeRes.ok && combinedRes.ok) {
-        let activeOpt = activeRes.value;
-        let combinedOpt = combinedRes.value;
-        if (_autoCoNest) {
-          const aCands = findCoNestCandidates(activeOpt);
-          if (aCands.length > 0) activeOpt = applyCoNesting(activeOpt, new Set(aCands.map((c) => c.key)), sawKerfMm);
-          const cCands = findCoNestCandidates(combinedOpt);
-          if (cCands.length > 0)
-            combinedOpt = applyCoNesting(combinedOpt, new Set(cCands.map((c) => c.key)), sawKerfMm);
-        }
-        _workerApplyFn({
-          optimization: activeOpt,
-          combinedOptimization: combinedOpt,
-          optimizationPending: false,
-        });
-        scheduleCostFromState(_getState!(), activeOpt);
-      } else {
-        _workerApplyFn({ optimizationPending: false });
-      }
-    }
+    runOptimizationSynchronously(lockedActive, lockedAll, sawKerfMm, sheetSizeOverrides, extraMaterials);
+    _latestCutId = 0;
     return;
   }
   const input: CutOptimizerInput = {
@@ -311,15 +331,11 @@ export function scheduleOptimization(
     extraMaterials,
     autoCoNest: _autoCoNest,
   };
-  const stopRequest = () => {
-    if (_latestCutId !== callId) return;
-    _latestCutId = 0;
-    terminateCutWorker();
-    _workerApplyFn?.({ optimizationPending: false });
-  };
+  const stopRequest = () => handleCutOptimizationFailure(callId);
   void withWorkerDeadline(proxy.run(input), signal, () => _latestCutId === callId, stopRequest, stopRequest)
     .then((result) => {
       if (!_workerApplyFn || _latestCutId !== callId) return; // stale
+      _latestCutId = 0;
       _workerApplyFn({
         optimization: result.activeResult,
         combinedOptimization: result.combinedResult,
@@ -333,9 +349,7 @@ export function scheduleOptimization(
       });
       scheduleCostFromState(_getState!(), result.activeResult);
     })
-    .catch(() => {
-      if (_workerApplyFn && _latestCutId === callId) _workerApplyFn({ optimizationPending: false });
-    });
+    .catch(() => handleCutOptimizationFailure(callId));
 }
 
 export function scheduleAssembly(config: CabinetConfig, signal?: AbortSignal): void {
@@ -368,18 +382,7 @@ export function scheduleAssembly(config: CabinetConfig, signal?: AbortSignal): v
     });
 }
 
-function scheduleCost(
-  optimization: OptimizationResult,
-  hardware: HardwareItem[],
-  edgeBandingTotal: number,
-  materialPriceOverrides: Record<string, number>,
-  edgeBandingRate: number,
-  hardwarePriceOverrides: Record<string, number>,
-  labourRate: number,
-  labourHours: number,
-  finishCost: number,
-  signal?: AbortSignal,
-): void {
+function scheduleCost(input: CostEstimatorInput, signal?: AbortSignal): void {
   const callId = ++_costCallId;
   _latestCostId = callId;
   if (signal?.aborted) {
@@ -391,34 +394,22 @@ function scheduleCost(
     if (_workerApplyFn) {
       _workerApplyFn({
         cost: estimateCost(
-          optimization,
-          hardware,
-          edgeBandingTotal,
-          materialPriceOverrides,
-          edgeBandingRate,
-          hardwarePriceOverrides,
-          labourRate,
-          labourHours,
-          finishCost,
-          getCustomMaterials(),
+          input.optimization,
+          input.hardware,
+          input.edgeBandingTotal,
+          input.materialPriceOverrides,
+          input.edgeBandingRate,
+          input.hardwarePriceOverrides,
+          input.labourRate,
+          input.labourHours,
+          input.finishCost,
+          input.extraMaterials ?? getCustomMaterials(),
         ),
         costPending: false,
       });
     }
     return;
   }
-  const input: CostEstimatorInput = {
-    optimization,
-    hardware,
-    edgeBandingTotal,
-    materialPriceOverrides,
-    edgeBandingRate,
-    hardwarePriceOverrides,
-    labourRate,
-    labourHours,
-    finishCost,
-    extraMaterials: getCustomMaterials(),
-  };
   const stopRequest = () => {
     if (_latestCostId !== callId) return;
     _latestCostId = 0;
@@ -444,15 +435,18 @@ export function scheduleCostFromState(
   signal?: AbortSignal,
 ): void {
   scheduleCost(
-    optimizationOverride ?? state.optimization,
-    hardwareOverride ?? state.hardware,
-    edgeBandingTotalOverride ?? state.edgeBandingTotal,
-    partialOverrides?.materialPriceOverrides ?? state.materialPriceOverrides,
-    partialOverrides?.edgeBandingRate ?? state.edgeBandingRate,
-    partialOverrides?.hardwarePriceOverrides ?? state.hardwarePriceOverrides,
-    partialOverrides?.labourRate ?? state.labourRate,
-    partialOverrides?.labourHours ?? state.labourHours,
-    partialOverrides?.finishCost ?? state.finishCost,
+    {
+      optimization: optimizationOverride ?? state.optimization,
+      hardware: hardwareOverride ?? state.hardware,
+      edgeBandingTotal: edgeBandingTotalOverride ?? state.edgeBandingTotal,
+      materialPriceOverrides: partialOverrides?.materialPriceOverrides ?? state.materialPriceOverrides,
+      edgeBandingRate: partialOverrides?.edgeBandingRate ?? state.edgeBandingRate,
+      hardwarePriceOverrides: partialOverrides?.hardwarePriceOverrides ?? state.hardwarePriceOverrides,
+      labourRate: partialOverrides?.labourRate ?? state.labourRate,
+      labourHours: partialOverrides?.labourHours ?? state.labourHours,
+      finishCost: partialOverrides?.finishCost ?? state.finishCost,
+      extraMaterials: getCustomMaterials(),
+    },
     signal,
   );
 }

@@ -5,7 +5,7 @@ description: Split a large React component file into focused sub-components foll
 
 # Split Component
 
-You are refactoring a large React component in the WoodworkingShop Cabinet Planner project.
+You are refactoring a large React component in the WoodworkingShop WoodworkingShop project.
 
 ## Task
 

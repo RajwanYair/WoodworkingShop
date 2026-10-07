@@ -5,7 +5,7 @@ description: Execute a roadmap sprint item end-to-end — implement feature, pas
 
 # Roadmap Sprint
 
-You are executing a sprint item in the Cabinet Planner project (currently Phase 21).
+You are executing a sprint item in the WoodworkingShop project (currently Phase 21).
 
 ## Current Phase — Phase 21: Marketplace + Build UX (v4.2.0)
 

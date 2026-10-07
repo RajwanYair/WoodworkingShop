@@ -252,7 +252,7 @@ test('Configure project metadata controls match inventory and update title and n
   const projectNotes = main.getByRole('textbox', { name: 'Project Notes', exact: true });
   await projectName.fill('Roadmap QA');
   await projectNotes.fill('Checking project metadata behavior.');
-  await expect.poll(() => page.title()).toBe('Roadmap QA — Cabinet Planner');
+  await expect.poll(() => page.title()).toBe('Roadmap QA — WoodworkingShop');
   await expect(projectNotes).toHaveValue('Checking project metadata behavior.');
 });
 

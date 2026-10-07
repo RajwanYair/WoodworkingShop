@@ -11,7 +11,7 @@ describe('Header', () => {
 
   it('renders app title', () => {
     render(<Header />);
-    expect(screen.getByRole('heading', { name: /Cabinet Planner/ })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /WoodworkingShop/ })).toBeInTheDocument();
   });
 
   it('renders all four tab buttons', () => {

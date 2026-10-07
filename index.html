@@ -18,25 +18,33 @@
     />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://rajwanyair.github.io/WoodworkingShop/" />
-    <link rel="preload" href="./docs/banner.svg" as="image" type="image/svg+xml" fetchpriority="high" />
+    <link
+      rel="preload"
+      href="%BASE_URL%workspace-banner.webp"
+      as="image"
+      type="image/webp"
+      fetchpriority="high"
+      imagesrcset="%BASE_URL%workspace-banner-480.webp 480w, %BASE_URL%workspace-banner-800.webp 800w, %BASE_URL%workspace-banner.webp 1200w"
+      imagesizes="(min-width: 1456px) 1152px, (min-width: 1024px) calc(100vw - 304px), (min-width: 640px) calc(100vw - 48px), calc(100vw - 24px)"
+    />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Cabinet Planner — Woodworking Design Tool" />
+    <meta property="og:title" content="WoodworkingShop — Woodworking Design Tool" />
     <meta
       property="og:description"
       content="Design cabinets and furniture in your browser. Optimize cut lists, preview projects, and export build plans, BOMs, DXF, and G-code in six languages."
     />
     <meta property="og:url" content="https://rajwanyair.github.io/WoodworkingShop/" />
-    <meta property="og:site_name" content="Cabinet Planner" />
+    <meta property="og:site_name" content="WoodworkingShop" />
     <meta property="og:image" content="https://rajwanyair.github.io/WoodworkingShop/icon-512.png" />
     <meta property="og:image:width" content="512" />
     <meta property="og:image:height" content="512" />
-    <meta property="og:image:alt" content="Cabinet Planner — woodworking design tool icon" />
+    <meta property="og:image:alt" content="WoodworkingShop — woodworking design tool icon" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Cabinet Planner — Woodworking Design Tool" />
+    <meta name="twitter:title" content="WoodworkingShop — Woodworking Design Tool" />
     <meta
       name="twitter:description"
       content="Design cabinets and furniture in your browser. Optimize cut lists, preview projects, and export build plans, BOMs, DXF, and G-code in six languages."
@@ -48,7 +56,7 @@
       {
         "@context": "https://schema.org",
         "@type": "WebApplication",
-        "name": "Cabinet Planner",
+        "name": "WoodworkingShop",
         "description": "Design cabinets and furniture in your browser. Optimize cut lists, preview projects, and export build plans, BOMs, DXF, and G-code in six languages.",
         "url": "https://rajwanyair.github.io/WoodworkingShop/",
         "applicationCategory": "DesignApplication",
@@ -58,7 +66,7 @@
       }
     </script>
 
-    <title>Cabinet Planner — Woodworking Design Tool</title>
+    <title>WoodworkingShop — Woodworking Design Tool</title>
 
     <!-- Content Security Policy (v3.62.0 — Phase 12 / Sprint 16: added CSP report-to via _headers)
          Authoritative CSP lives in public/_headers (Cloudflare Pages HTTP header) and includes
@@ -78,7 +86,7 @@
   <body>
     <div id="root"></div>
     <noscript>
-      <p class="noscript-msg">Cabinet Planner requires JavaScript to run. Please enable JavaScript in your browser.</p>
+      <p class="noscript-msg">WoodworkingShop requires JavaScript to run. Please enable JavaScript in your browser.</p>
     </noscript>
     <script type="module" src="/src/main.tsx"></script>
     <!-- SW registration moved to external file to avoid unsafe-inline in script-src -->

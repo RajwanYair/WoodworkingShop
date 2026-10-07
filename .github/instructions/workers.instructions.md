@@ -3,7 +3,7 @@ description: 'Web Worker module rules and sync fallbacks for tests.'
 applyTo: src/workers/**
 ---
 
-# Web Worker Instructions — Cabinet Planner
+# Web Worker Instructions — WoodworkingShop
 
 Rules enforced for every file under `src/workers/`.
 

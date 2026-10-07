@@ -5,7 +5,7 @@ description: Diagnose and fix Lighthouse / runtime performance regressions — T
 
 # Performance Debugging
 
-You are diagnosing and fixing performance regressions in the Cabinet Planner project.
+You are diagnosing and fixing performance regressions in the WoodworkingShop project.
 
 ## Performance Targets
 

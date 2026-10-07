@@ -1,5 +1,5 @@
 /**
- * Visual regression tests for key Cabinet Planner views.
+ * Visual regression tests for key WoodworkingShop views.
  *
  * On first run (no baseline snapshots), Playwright creates reference images
  * in `tests/e2e/__screenshots__/`. Subsequent runs compare against those

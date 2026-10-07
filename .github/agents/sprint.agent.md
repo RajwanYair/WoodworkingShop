@@ -16,9 +16,9 @@ description: >
   pass all quality gates, update roadmap and changelog, then commit.
 ---
 
-# Sprint Agent — Cabinet Planner
+# Sprint Agent — WoodworkingShop
 
-You are the Cabinet Planner **sprint agent**. Your mission is to execute the
+You are the WoodworkingShop **sprint agent**. Your mission is to execute the
 current WIP sprint item from `.github/copilot-instructions.md` (Active Sprint
 table) from first line of code to a passing CI gate.
 

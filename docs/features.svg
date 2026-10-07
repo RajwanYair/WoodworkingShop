@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" role="img" aria-labelledby="features-title features-description">
-  <title id="features-title">Cabinet Planner features</title>
+  <title id="features-title">WoodworkingShop features</title>
   <desc id="features-description">A workshop drawing of six capabilities: design, cut optimization, export, preview, assembly, and platform support.</desc>
   <rect width="1000" height="360" rx="8" fill="#e8eee8" />
   <text x="48" y="52" font-family="'Segoe UI',Arial,sans-serif" font-size="27" font-weight="700" fill="#183532">From a dimension to a build plan</text>

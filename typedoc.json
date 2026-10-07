@@ -2,7 +2,7 @@
   "$schema": "https://typedoc.org/schema.json",
   "entryPoints": ["src/engine/index.ts"],
   "out": "docs/api",
-  "name": "Cabinet Planner — Engine & Plugin API",
+  "name": "WoodworkingShop — Engine & Plugin API",
   "readme": "none",
   "tsconfig": "tsconfig.app.json",
   "includeVersion": true,

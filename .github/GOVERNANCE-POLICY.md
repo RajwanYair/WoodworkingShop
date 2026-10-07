@@ -143,8 +143,8 @@ Examples: "best-in-class," "most flexible," "trusted by professionals"
 **Example Revision**:
 
 ```markdown
-- **Before**: Cabinet Planner is the best-in-class cabinet planner.
-- **After**: Cabinet Planner provides [specific measurable features: MaxRects bin-packing, 6-language i18n, WCAG 2.2 AA accessibility].
+- **Before**: WoodworkingShop is the best-in-class cabinet planner.
+- **After**: WoodworkingShop provides [specific measurable features: MaxRects bin-packing, 6-language i18n, WCAG 2.2 AA accessibility].
 ```
 
 ### Known Limitations (Cannot Meet Gate)

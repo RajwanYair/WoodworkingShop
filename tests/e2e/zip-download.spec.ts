@@ -310,7 +310,7 @@ test('ZIP BOM payload includes the versioned schema and cabinet counts', async (
   const { files, names } = await downloadBundle(appPage);
   const csvName = names.find((name) => name.endsWith('-bom.csv'))!;
   const csv = decodeUtf8(files[csvName]!);
-  expect(csv).toContain('# Cabinet Planner BOM Export');
+  expect(csv).toContain('# WoodworkingShop BOM Export');
   expect(csv).toContain('Schema: bom-csv-v1');
   expect(csv).toMatch(/^# Cabinets: 1  Parts: \d+  Hardware: \d+/m);
 });

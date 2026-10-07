@@ -2,7 +2,7 @@
  * Community Material Catalog — Future Horizons / Sprint 13
  *
  * Fetches a crowd-sourced material price + availability catalog from a CDN
- * (default: the Cabinet Planner GitHub releases CDN).  The result is cached
+ * (default: the WoodworkingShop GitHub releases CDN).  The result is cached
  * in IndexedDB so the catalog is available offline after the first fetch.
  *
  * The community catalog can override built-in material prices and add new

@@ -13,7 +13,7 @@ export const pdfI18n = {
     hardwareItems: 'Hardware items',
     cabinetsInProject: 'Cabinets in project',
     generated: 'Generated',
-    brandFooter: 'Cabinet Planner — Interactive Woodworking Design Tool',
+    brandFooter: 'WoodworkingShop — Interactive Woodworking Design Tool',
     specTitle: 'Cabinet Specifications',
     specDimensions: 'Dimensions',
     specExternal: 'External (W × H × D)',

@@ -5,7 +5,7 @@ description: Add a new feature panel — engine function + React component + i18
 
 # New Feature Panel
 
-You are adding a new feature panel to the Cabinet Planner project.
+You are adding a new feature panel to the WoodworkingShop project.
 
 ## Task
 

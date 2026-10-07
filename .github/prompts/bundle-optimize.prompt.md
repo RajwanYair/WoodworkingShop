@@ -5,7 +5,7 @@ description: Analyse bundle size, identify heavy chunks, and apply targeted opti
 
 # Bundle Optimisation
 
-You are optimising the production bundle of the Cabinet Planner project.
+You are optimising the production bundle of the WoodworkingShop project.
 
 ## Budget
 

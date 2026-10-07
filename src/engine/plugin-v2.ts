@@ -40,7 +40,7 @@ export type PluginLifecycleState = (typeof PLUGIN_LIFECYCLE_STATES)[number];
 export type PluginContext = {
   /** The id of the plugin this context belongs to. */
   readonly pluginId: string;
-  /** Cabinet Planner Plugin API version this context was created under. */
+  /** WoodworkingShop Plugin API version this context was created under. */
   readonly apiVersion: typeof PLUGIN_API_V2_VERSION;
   /** Emit a typed event on the shared plugin event bus. */
   emit<E extends PluginEventName>(event: E, payload: PluginEventMap[E]): void;
@@ -76,7 +76,7 @@ export function createPluginContext(pluginId: string): PluginContext {
 // ── Plugin v2 interface ────────────────────────────────────────────────────
 
 /**
- * Cabinet Planner Plugin API v2.
+ * WoodworkingShop Plugin API v2.
  *
  * Extends the v1 `CabinetPlannerPlugin` interface with lifecycle hooks that
  * are called by the plugin runtime at key state transitions. A v2 plugin must

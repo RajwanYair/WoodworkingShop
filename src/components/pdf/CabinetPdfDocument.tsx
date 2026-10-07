@@ -117,7 +117,7 @@ export function CabinetPdfDocument({
   };
 
   return (
-    <Document title={docTitle} author="Cabinet Planner" subject="Woodworking Build Plan">
+    <Document title={docTitle} author="WoodworkingShop" subject="Woodworking Build Plan">
       {includeCover && (
         <PdfCoverPage
           ctx={ctx}

@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * Cabinet Planner engine public API.
+ * WoodworkingShop engine public API.
  *
  * This barrel module re-exports every public symbol from the engine layer.
  * Third-party plugins should import exclusively from this module — never from

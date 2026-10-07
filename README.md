@@ -1,7 +1,7 @@
-# WoodworkingShop — Free Cabinet Planner & Cut-List Optimizer
+# WoodworkingShop — Free WoodworkingShop & Cut-List Optimizer
 
 <div align="center">
-  <img src="docs/banner.svg" alt="Cabinet Planner — Interactive Woodworking Design Tool" width="100%"/>
+  <img src="docs/banner.svg" alt="WoodworkingShop — Interactive Woodworking Design Tool" width="100%"/>
 </div>
 
 <div align="center">
@@ -29,14 +29,14 @@
 
 ---
 
-> **Cabinet Planner** is a free, open-source, browser-based woodworking design tool
+> **WoodworkingShop** is a free, open-source, browser-based woodworking design tool
 > and cut-list optimizer: configure any cabinet or furniture piece, see a live
 > 6-view 3D preview, optimize your cut sheets with MaxRects bin-packing, and export
 > a complete PDF build plan, DXF, G-code, or BOM — all without a server, account,
 > or installation. Supports 6 languages including RTL (Hebrew, Arabic).
 
 <div align="center">
-  <img src="docs/features.svg" alt="Cabinet Planner features — Design, Optimize, Export, Preview, Assembly, Platform" width="100%"/>
+  <img src="docs/features.svg" alt="WoodworkingShop features — Design, Optimize, Export, Preview, Assembly, Platform" width="100%"/>
 </div>
 
 ---
@@ -378,7 +378,7 @@ panel optimization, 2D bin packing, wood cutting calculator,
 material waste reduction, edge banding calculator, hardware BOM generator,
 assembly instructions generator, woodworking project planner
 
-### Why Cabinet Planner?
+### Why WoodworkingShop?
 
 | Need                        | Solution                                                      |
 | --------------------------- | ------------------------------------------------------------- |

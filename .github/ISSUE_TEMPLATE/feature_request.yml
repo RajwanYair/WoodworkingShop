@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for suggesting an improvement to Cabinet Planner!
+        Thanks for suggesting an improvement to WoodworkingShop!
         Check the [Roadmap](https://github.com/RajwanYair/WoodworkingShop/blob/main/ROADMAP.md) — your idea may already be planned.
 
   - type: dropdown

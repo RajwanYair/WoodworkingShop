@@ -48,7 +48,7 @@ export interface IfcExportResult {
  * @returns {@link IfcExportResult} with the file content and entity count.
  */
 export function exportToIfc(cabinets: readonly CabinetEntry[], options: IfcExportOptions = {}): IfcExportResult {
-  const author = options.author ?? 'Cabinet Planner';
+  const author = options.author ?? 'WoodworkingShop';
   const appVersion = options.appVersion ?? '3.62';
   const startX = options.startX ?? 0;
   const gap = options.gapMm ?? 10;
@@ -60,9 +60,9 @@ export function exportToIfc(cabinets: readonly CabinetEntry[], options: IfcExpor
   const now = new Date().toISOString().slice(0, 19);
   lines.push('ISO-10303-21;');
   lines.push('HEADER;');
-  lines.push(`FILE_DESCRIPTION(('IFC2X3 Cabinet Planner Export'),'2;1');`);
+  lines.push(`FILE_DESCRIPTION(('IFC2X3 WoodworkingShop Export'),'2;1');`);
   lines.push(`FILE_NAME('cabinet-planner.ifc','${now}',('${author}'),(''),`);
-  lines.push(`  'Cabinet Planner ${appVersion}','IFC2X3','');`);
+  lines.push(`  'WoodworkingShop ${appVersion}','IFC2X3','');`);
   lines.push("FILE_SCHEMA(('IFC2X3'));");
   lines.push('ENDSEC;');
   lines.push('DATA;');
@@ -86,7 +86,7 @@ export function exportToIfc(cabinets: readonly CabinetEntry[], options: IfcExpor
   const idOwnerHistory = ids.next();
 
   lines.push(`#${idOrg}=IFCORGANIZATION($,'${author}',$,$,$);`);
-  lines.push(`#${idApp}=IFCAPPLICATION(#${idOrg},'${appVersion}','Cabinet Planner','cabinet-planner');`);
+  lines.push(`#${idApp}=IFCAPPLICATION(#${idOrg},'${appVersion}','WoodworkingShop','cabinet-planner');`);
   lines.push(`#${idPerson}=IFCPERSON($,'${author}',$,$,$,$,$,$);`);
   lines.push(`#${idPersonOrg}=IFCPERSONANDORGANIZATION(#${idPerson},#${idOrg},$);`);
   lines.push(`#${idOwnerHistory}=IFCOWNERHISTORY(#${idPersonOrg},#${idApp},$,.ADDED.,$,$,$,0);`);
@@ -121,7 +121,7 @@ export function exportToIfc(cabinets: readonly CabinetEntry[], options: IfcExpor
   const idRelBldgStorey = ids.next();
 
   lines.push(
-    `#${idProject}=IFCPROJECT('${guid()}',#${idOwnerHistory},'Cabinet Planner Project',$,$,$,$,(#${idGeomCtx}),#${idUnitAssignment});`,
+    `#${idProject}=IFCPROJECT('${guid()}',#${idOwnerHistory},'WoodworkingShop Project',$,$,$,$,(#${idGeomCtx}),#${idUnitAssignment});`,
   );
   lines.push(`#${idSite}=IFCSITE('${guid()}',#${idOwnerHistory},'Site',$,$,$,$,$,.ELEMENT.,$,$,$,$,$);`);
   lines.push(`#${idBuilding}=IFCBUILDING('${guid()}',#${idOwnerHistory},'Building',$,$,$,$,$,.ELEMENT.,$,$,$);`);

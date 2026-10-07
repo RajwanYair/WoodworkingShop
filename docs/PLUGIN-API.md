@@ -1,4 +1,4 @@
-# Cabinet Planner Plugin API
+# WoodworkingShop Plugin API
 
 > **API version**: 1.2.0 · **App version**: ≥ 3.62.0 · **Stability**: `deprecated`
 > **Source**: [`src/engine/plugin.ts`](../src/engine/plugin.ts)
@@ -8,7 +8,7 @@
 
 ## Overview
 
-The Cabinet Planner Plugin API lets you intercept the parts pipeline, config changes,
+The WoodworkingShop Plugin API lets you intercept the parts pipeline, config changes,
 validation results, and G-code output — without forking the application or modifying
 source files.
 
@@ -147,7 +147,7 @@ onGcodeGenerated?(raw: string): string
 
 ```ts
 onGcodeGenerated(raw) {
-  const header = `%\nO0001 (Cabinet Planner — ${new Date().toISOString()})\n`;
+  const header = `%\nO0001 (WoodworkingShop — ${new Date().toISOString()})\n`;
   return header + raw;
 },
 ```

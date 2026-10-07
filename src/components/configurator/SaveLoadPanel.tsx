@@ -28,7 +28,7 @@ export function SaveLoadPanel() {
 
   // Sprint 152 — sync project name to document title
   useEffect(() => {
-    document.title = projectName ? `${projectName} — Cabinet Planner` : 'Cabinet Planner';
+    document.title = projectName ? `${projectName} — WoodworkingShop` : 'WoodworkingShop';
   }, [projectName]);
 
   useEffect(() => {
@@ -87,7 +87,7 @@ export function SaveLoadPanel() {
 
   const handleShare = async () => {
     const url = window.location.href;
-    const title = projectName ? `${projectName} — Cabinet Planner` : 'Cabinet Planner';
+    const title = projectName ? `${projectName} — WoodworkingShop` : 'WoodworkingShop';
     // Sprint 166 — use native share sheet on mobile; fall back to clipboard
     if (navigator.share) {
       try {

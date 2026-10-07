@@ -137,8 +137,8 @@ export function generateIfcContent(config: CabinetConfig, parts: Part[]): IfcRes
   const header = [
     'ISO-10303-21;',
     'HEADER;',
-    `FILE_DESCRIPTION(('Cabinet Planner IFC Export - Sprint 79'),'2;1');`,
-    `FILE_NAME('cabinet-${config.width}x${config.height}x${config.depth}.ifc','${timestamp}',('Cabinet Planner'),('Cabinet Planner'),'IFC2X3','Cabinet Planner v4.0','');`,
+    `FILE_DESCRIPTION(('WoodworkingShop IFC Export - Sprint 79'),'2;1');`,
+    `FILE_NAME('cabinet-${config.width}x${config.height}x${config.depth}.ifc','${timestamp}',('WoodworkingShop'),('WoodworkingShop'),'IFC2X3','WoodworkingShop v4.0','');`,
     `FILE_SCHEMA(('IFC2X3'));`,
     'ENDSEC;',
     'DATA;',
@@ -146,7 +146,7 @@ export function generateIfcContent(config: CabinetConfig, parts: Part[]): IfcRes
 
   // ── Owner history ─────────────────────────────────────────────────────────
   lines.push(line(idPerson, `IFCPERSON($,'CabinetPlanner','User',$,$,$,$,$);`));
-  lines.push(line(idOrg, `IFCORGANIZATION($,'Cabinet Planner',$,$,$);`));
+  lines.push(line(idOrg, `IFCORGANIZATION($,'WoodworkingShop',$,$,$);`));
   lines.push(line(idPersonOrg, `IFCPERSONANDORGANIZATION(#${idPerson},#${idOrg},$);`));
   lines.push(line(idOwnerHistory, `IFCOWNERHISTORY(#${idPersonOrg},#${idOrg},$,.NOCHANGE.,$,$,$,0);`));
 
