@@ -1,158 +1,143 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { useToastStore } from '../../store/toast-store';
-import { configToUrl } from '../../utils/url-state';
+import { HelpButton } from './OnboardingOverlay';
+import { TemplatePicker } from '../configurator/TemplatePicker';
+import { ProjectManagerModal } from './ProjectManagerModal';
+import { SUPPORTED_LANGUAGES, RTL_LANGS, loadLocale, type SupportedLang } from '../../i18n';
+import { APP_TABS, dispatchCommandAction, formatShortcut, getCommand, type CommandId } from './command-registry';
 import {
   APP_COMMAND_DEFINITIONS,
-  APP_SHORTCUTS,
-  APP_TAB_COMMANDS,
   createAppCommand,
   registerCommands,
   unregisterCommand,
 } from '../../utils/command-palette';
-import { HelpButton } from './OnboardingOverlay';
-import { TemplatePicker } from '../configurator/TemplatePicker';
-import { applyCabinetTemplate } from '../configurator/apply-template';
 import { TEMPLATES } from '../../engine/templates';
-import { ProjectManagerModal } from './ProjectManagerModal';
-import { MarketplacePanel } from './MarketplacePanel';
-import { SUPPORTED_LANGUAGES, RTL_LANGS, loadLocale, type SupportedLang } from '../../i18n';
+import { applyCabinetTemplate } from '../configurator/apply-template';
 import {
   IconSun,
   IconMoon,
   IconUndo,
   IconRedo,
   IconLink,
-  IconHelp,
   IconContrast,
   IconLayers,
   IconFolder,
+  IconSearch,
+  IconKeyboard,
 } from './Icons';
+import { TAB_ICONS } from './tab-icons';
 
-const tabs = APP_TAB_COMMANDS.map(({ id }) => id);
+const ICON_BUTTON =
+  'text-wood-200 flex h-8 w-8 shrink-0 items-center justify-center rounded-full hover:bg-white/10 hover:text-white active:bg-white/20 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent';
+const MOBILE_ICON_BUTTON = ICON_BUTTON.replace('h-8 w-8', 'h-11 w-11');
+const GROUP_DIVIDER = 'mx-1 h-5 w-px shrink-0 bg-white/15';
 
-const TAB_ICONS = {
-  workspace: '🏷️',
-  configurator: '⚙️',
-  preview: '👁️',
-  optimizer: '✂️',
-  assembly: '🔨',
-  pdf: '📄',
-  calculators: '🧮',
-} as const;
+const MarketplacePanel = lazy(() =>
+  import('./MarketplacePanel').then(({ MarketplacePanel }) => ({ default: MarketplacePanel })),
+);
+
+function preloadModule(loader: () => Promise<unknown>) {
+  void loader().catch(() => undefined);
+}
+
+function preloadMarketplacePanel() {
+  preloadModule(() => import('./MarketplacePanel'));
+}
+
+function preloadTab(tab: (typeof APP_TABS)[number]) {
+  switch (tab) {
+    case 'configurator':
+      preloadModule(() => import('../configurator/ConfiguratorPanel'));
+      preloadModule(() => import('./RoomLayoutView'));
+      break;
+    case 'preview':
+      preloadModule(() => import('../preview/CabinetPreview'));
+      preloadModule(() => import('../preview/Preview3DPanel'));
+      break;
+    case 'optimizer':
+      preloadModule(() => import('../optimizer/ProjectSummaryPanel'));
+      preloadModule(() => import('../optimizer/SmartOptimizerPanel'));
+      preloadModule(() => import('../optimizer/Tables'));
+      preloadModule(() => import('../optimizer/OptimizerView'));
+      break;
+    case 'assembly':
+      preloadModule(() => import('../assembly/AssemblyGuide'));
+      break;
+    case 'pdf':
+      preloadModule(() => import('../pdf/PdfExportPanel'));
+      break;
+    case 'calculators':
+      preloadModule(() => import('../configurator/CalculatorsPanel'));
+      break;
+  }
+}
 
 export function Header() {
   const { t, i18n } = useTranslation();
-  const {
-    activeTab,
-    setActiveTab,
-    darkMode,
-    toggleDarkMode,
-    highContrastMode,
-    toggleHighContrast,
-    units,
-    toggleUnits,
-    canUndo,
-    canRedo,
-    undo,
-    redo,
-  } = useCabinetStore();
+  const { activeTab, setActiveTab, darkMode, highContrastMode, units, canUndo, canRedo } = useCabinetStore();
   const lang = i18n.language;
   const [showTemplates, setShowTemplates] = useState(false);
   const [showProjects, setShowProjects] = useState(false);
   const [showMarketplace, setShowMarketplace] = useState(false);
   const tabListRef = useRef<HTMLDivElement>(null);
-
-  /** Arrow-key / Home / End navigation inside the tab list.
-   *  Follows WAI-ARIA Authoring Practices Guide § 3.22 (Tabs Pattern). */
-  const handleTabKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
-    const isRtl = document.documentElement.dir === 'rtl';
-    let next = -1;
-    if ((e.key === 'ArrowRight' && !isRtl) || (e.key === 'ArrowLeft' && isRtl)) {
-      next = (currentIndex + 1) % tabs.length;
-    } else if ((e.key === 'ArrowLeft' && !isRtl) || (e.key === 'ArrowRight' && isRtl)) {
-      next = (currentIndex - 1 + tabs.length) % tabs.length;
-    } else if (e.key === 'Home') {
-      next = 0;
-    } else if (e.key === 'End') {
-      next = tabs.length - 1;
-    }
-    if (next >= 0) {
-      e.preventDefault();
-      setActiveTab(tabs[next]);
-      const buttons = tabListRef.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]');
-      buttons?.[next]?.focus();
-    }
+  const commandLabel = (id: CommandId) => {
+    const command = getCommand(id);
+    return command ? t(command.labelKey) : '';
+  };
+  const runCommand = (id: CommandId) => {
+    const command = getCommand(id);
+    command?.handler({ run: dispatchCommandAction, setActiveTab });
+  };
+  const commandTitle = (id: CommandId) => {
+    const command = getCommand(id);
+    if (!command) return '';
+    const shortcut = 'shortcuts' in command ? command.shortcuts?.[0] : undefined;
+    return shortcut ? `${commandLabel(id)} (${formatShortcut(shortcut)})` : commandLabel(id);
   };
 
-  const changeLang = useCallback(
-    (next: SupportedLang) => {
-      void loadLocale(next).then(() => {
-        i18n.changeLanguage(next);
-        document.documentElement.dir = RTL_LANGS.has(next) ? 'rtl' : 'ltr';
-        // Engine-facing lang stays 'en'|'he' — AR/ES/DE/FR fall back to EN for BOM column headers.
-        const engineLang: 'en' | 'he' = next === 'he' || next === 'ar' ? 'he' : 'en';
-        useCabinetStore.getState().setConfig({ lang: engineLang });
-      });
-    },
-    [i18n],
-  );
-
-  const copyShareLink = useCallback(() => {
-    const { config, projectName } = useCabinetStore.getState();
-    const url = configToUrl(config, projectName);
-    navigator.clipboard.writeText(url).then(
-      () => useToastStore.getState().addToast(t('toast.linkCopied'), 'success'),
-      () => useToastStore.getState().addToast(t('toast.linkCopyFailed'), 'error'),
-    );
-  }, [t]);
-
-  const openTemplates = useCallback(() => setShowTemplates(true), []);
-  const openProjects = useCallback(() => setShowProjects(true), []);
-  const openMarketplace = useCallback(() => setShowMarketplace(true), []);
-  const openShortcuts = useCallback(() => {
-    window.dispatchEvent(new KeyboardEvent('keydown', { key: APP_COMMAND_DEFINITIONS.openShortcuts.key }));
-  }, []);
-
   useEffect(() => {
+    const openTemplates = () => setShowTemplates(true);
+    const openProjects = () => setShowProjects(true);
+    const openMarketplace = () => setShowMarketplace(true);
     const commands = [
       createAppCommand(
         APP_COMMAND_DEFINITIONS.undo,
         t(APP_COMMAND_DEFINITIONS.undo.labelKey),
         t(APP_COMMAND_DEFINITIONS.undo.categoryKey),
-        undo,
-        () => canUndo,
+        () => useCabinetStore.getState().undo(),
+        () => useCabinetStore.getState().canUndo,
       ),
       createAppCommand(
         APP_COMMAND_DEFINITIONS.redo,
         t(APP_COMMAND_DEFINITIONS.redo.labelKey),
         t(APP_COMMAND_DEFINITIONS.redo.categoryKey),
-        redo,
+        () => useCabinetStore.getState().redo(),
+        () => useCabinetStore.getState().canRedo,
       ),
       createAppCommand(
         APP_COMMAND_DEFINITIONS.toggleTheme,
         t(APP_COMMAND_DEFINITIONS.toggleTheme.labelKey),
         t(APP_COMMAND_DEFINITIONS.toggleTheme.categoryKey),
-        toggleDarkMode,
+        () => useCabinetStore.getState().toggleDarkMode(),
       ),
       createAppCommand(
         APP_COMMAND_DEFINITIONS.toggleContrast,
         t(APP_COMMAND_DEFINITIONS.toggleContrast.labelKey),
         t(APP_COMMAND_DEFINITIONS.toggleContrast.categoryKey),
-        toggleHighContrast,
+        () => useCabinetStore.getState().toggleHighContrast(),
       ),
       createAppCommand(
         APP_COMMAND_DEFINITIONS.toggleUnits,
         t(APP_COMMAND_DEFINITIONS.toggleUnits.labelKey),
         t(APP_COMMAND_DEFINITIONS.toggleUnits.categoryKey),
-        toggleUnits,
+        () => useCabinetStore.getState().toggleUnits(),
       ),
       createAppCommand(
         APP_COMMAND_DEFINITIONS.copyLink,
         t(APP_COMMAND_DEFINITIONS.copyLink.labelKey),
         t(APP_COMMAND_DEFINITIONS.copyLink.categoryKey),
-        copyShareLink,
+        () => dispatchCommandAction('share.copy'),
       ),
       createAppCommand(
         APP_COMMAND_DEFINITIONS.openTemplates,
@@ -162,7 +147,7 @@ export function Header() {
       ),
       ...TEMPLATES.map((template) => ({
         id: `header.template.${template.id}`,
-        label: template.name[i18n.language === 'he' ? 'he' : 'en'],
+        label: template.name[lang === 'he' ? 'he' : 'en'],
         category: t('commandPalette.categories.presets'),
         keywords: [template.id],
         action: () => {
@@ -186,103 +171,122 @@ export function Header() {
         APP_COMMAND_DEFINITIONS.openShortcuts,
         t(APP_COMMAND_DEFINITIONS.openShortcuts.labelKey),
         t(APP_COMMAND_DEFINITIONS.openShortcuts.categoryKey),
-        openShortcuts,
+        () => dispatchCommandAction('shortcuts.toggle'),
       ),
-      ...SUPPORTED_LANGUAGES.map((language) => ({
-        id: `header.language.${language.code}`,
-        label: language.nativeLabel,
-        category: t('commandPalette.categories.language'),
-        keywords: [language.code, language.nativeLabel],
-        when: () => i18n.language !== language.code,
-        action: () => changeLang(language.code),
-      })),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.reopenOnboarding,
+        t(APP_COMMAND_DEFINITIONS.reopenOnboarding.labelKey),
+        t(APP_COMMAND_DEFINITIONS.reopenOnboarding.categoryKey),
+        () => dispatchCommandAction('help.open'),
+      ),
     ];
     registerCommands(commands);
     return () => commands.forEach(({ id }) => unregisterCommand(id));
-  }, [
-    canRedo,
-    canUndo,
-    changeLang,
-    copyShareLink,
-    i18n,
-    openMarketplace,
-    openProjects,
-    openShortcuts,
-    openTemplates,
-    redo,
-    t,
-    toggleDarkMode,
-    toggleHighContrast,
-    toggleUnits,
-    undo,
-  ]);
+  }, [lang, t]);
+
+  useEffect(() => {
+    const openTemplates = () => setShowTemplates(true);
+    const openProjects = () => setShowProjects(true);
+    const openMarketplace = () => setShowMarketplace(true);
+    window.addEventListener('templates:open', openTemplates);
+    window.addEventListener('projects:open', openProjects);
+    window.addEventListener('marketplace:open', openMarketplace);
+    return () => {
+      window.removeEventListener('templates:open', openTemplates);
+      window.removeEventListener('projects:open', openProjects);
+      window.removeEventListener('marketplace:open', openMarketplace);
+    };
+  }, []);
+
+  /** Arrow-key / Home / End navigation inside the tab list.
+   *  Follows WAI-ARIA Authoring Practices Guide § 3.22 (Tabs Pattern). */
+  const handleTabKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
+    const isRtl = document.documentElement.dir === 'rtl';
+    let next = -1;
+    if ((e.key === 'ArrowRight' && !isRtl) || (e.key === 'ArrowLeft' && isRtl)) {
+      next = (currentIndex + 1) % APP_TABS.length;
+    } else if ((e.key === 'ArrowLeft' && !isRtl) || (e.key === 'ArrowRight' && isRtl)) {
+      next = (currentIndex - 1 + APP_TABS.length) % APP_TABS.length;
+    } else if (e.key === 'Home') {
+      next = 0;
+    } else if (e.key === 'End') {
+      next = APP_TABS.length - 1;
+    }
+    if (next >= 0) {
+      e.preventDefault();
+      runCommand(`tab.${APP_TABS[next]}`);
+      const buttons = tabListRef.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+      buttons?.[next]?.focus();
+    }
+  };
+
+  const changeLang = (next: SupportedLang) => {
+    void loadLocale(next).then(() => {
+      i18n.changeLanguage(next);
+      document.documentElement.dir = RTL_LANGS.has(next) ? 'rtl' : 'ltr';
+      // Engine-facing lang stays 'en'|'he' — AR/ES/DE/FR fall back to EN for BOM column headers.
+      const engineLang: 'en' | 'he' = next === 'he' || next === 'ar' ? 'he' : 'en';
+      useCabinetStore.getState().setConfig({ lang: engineLang });
+    });
+  };
 
   return (
     <header
-      className="bg-wood-700 flex flex-col gap-2 px-3 py-2 text-white sm:flex-row sm:items-center sm:justify-between sm:px-4 sm:py-3"
+      className="apple-nav sticky top-0 z-40 flex flex-col gap-2 px-3 pb-2 text-white xl:flex-row xl:items-center xl:justify-between xl:gap-3 xl:px-4 xl:pb-2.5"
       data-print="hide"
     >
       <div className="flex items-center justify-between">
         <div className="min-w-0">
-          <div className="mb-1 flex items-center gap-2">
-            <img
-              src={`${import.meta.env.BASE_URL}shop-badge.svg`}
-              alt=""
-              aria-hidden="true"
-              className="h-6 w-6 rounded-full"
-              loading="lazy"
-            />
-            <img
-              src={`${import.meta.env.BASE_URL}woodgrain-spark.svg`}
-              alt=""
-              aria-hidden="true"
-              className="h-6 w-20 opacity-80"
-              loading="lazy"
-            />
-          </div>
           <div className="flex items-baseline gap-2">
-            <h1 className="truncate text-lg font-bold sm:text-xl">🪵 {t('app.title')}</h1>
+            <h1 className="truncate text-lg font-semibold tracking-tight sm:text-xl">{t('app.title')}</h1>
             <span
-              className="text-wood-300 hidden font-mono text-xs select-none sm:inline"
+              className="text-wood-300 hidden text-xs tabular-nums select-none 2xl:inline"
               aria-label={`Version ${__APP_VERSION__}`}
             >
               v{__APP_VERSION__}
             </span>
           </div>
-          <p className="text-wood-200 hidden text-xs sm:block sm:text-sm">{t('app.subtitle')}</p>
-          <p className="text-wood-200 mt-1 hidden text-xs tracking-wide sm:block" aria-hidden="true">
-            ✨ 🛠️ 📐 🧰 🎯
-          </p>
+          <p className="text-wood-300 hidden max-w-48 truncate text-xs 2xl:block">{t('app.subtitle')}</p>
         </div>
         {/* Mobile-only controls row */}
-        <div className="flex items-center gap-2 sm:hidden">
+        <div className="-me-2 flex items-center sm:hidden">
           <button
-            onClick={undo}
+            onClick={() => runCommand('palette.open')}
+            className={MOBILE_ICON_BUTTON}
+            aria-label={commandLabel('palette.open')}
+            title={commandTitle('palette.open')}
+          >
+            <IconSearch size={18} />
+          </button>
+          <button
+            onClick={() => runCommand('history.undo')}
             disabled={!canUndo}
-            className="text-wood-200 flex items-center hover:text-white disabled:opacity-30"
-            aria-label={t('commandPalette.commands.undo')}
+            className={MOBILE_ICON_BUTTON}
+            aria-label={commandLabel('history.undo')}
+            title={commandTitle('history.undo')}
           >
-            <IconUndo size={16} />
+            <IconUndo size={18} />
           </button>
           <button
-            onClick={redo}
+            onClick={() => runCommand('history.redo')}
             disabled={!canRedo}
-            className="text-wood-200 flex items-center hover:text-white disabled:opacity-30"
-            aria-label={t('commandPalette.commands.redo')}
+            className={MOBILE_ICON_BUTTON}
+            aria-label={commandLabel('history.redo')}
+            title={commandTitle('history.redo')}
           >
-            <IconRedo size={16} />
+            <IconRedo size={18} />
           </button>
           <button
-            onClick={toggleDarkMode}
-            className="text-wood-200 flex items-center hover:text-white"
+            onClick={() => runCommand('theme.toggle')}
+            className={MOBILE_ICON_BUTTON}
             aria-label={darkMode ? 'Light mode' : 'Dark mode'}
           >
-            {darkMode ? <IconSun size={16} /> : <IconMoon size={16} />}
+            {darkMode ? <IconSun size={18} /> : <IconMoon size={18} />}
           </button>
           <select
             value={lang}
             onChange={(e) => changeLang(e.target.value as SupportedLang)}
-            className="text-wood-200 cursor-pointer border-0 bg-transparent text-xs font-medium outline-none hover:text-white"
+            className="text-wood-200 h-11 w-32 min-w-0 cursor-pointer rounded-full border-0 bg-transparent px-2 text-xs font-medium outline-none hover:text-white"
             aria-label={t('footer.language')}
           >
             {SUPPORTED_LANGUAGES.map((l) => (
@@ -297,86 +301,94 @@ export function Header() {
       {/* Tab nav — horizontally scrollable on mobile */}
       <div
         ref={tabListRef}
-        className="-mx-3 flex scrollbar-none gap-1 overflow-x-auto px-3 sm:mx-0 sm:px-0"
+        className="-mx-3 flex scrollbar-none gap-0.5 overflow-x-auto px-3 sm:mx-0 sm:px-0"
         role="tablist"
         aria-label="Main navigation"
       >
-        {tabs.map((tab, i) => (
-          <button
-            key={tab}
-            role="tab"
-            onClick={() => setActiveTab(tab)}
-            onKeyDown={(e) => handleTabKeyDown(e, i)}
-            tabIndex={activeTab === tab ? 0 : -1}
-            aria-selected={activeTab === tab}
-            aria-current={activeTab === tab ? 'page' : undefined}
-            aria-controls="main-content"
-            title={
-              APP_TAB_COMMANDS[i].shortcut
-                ? `${t(APP_TAB_COMMANDS[i].labelKey)} (${APP_TAB_COMMANDS[i].shortcut})`
-                : t(APP_TAB_COMMANDS[i].labelKey)
-            }
-            className={`flex items-center gap-1.5 rounded px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-colors ${
-              activeTab === tab ? 'bg-wood-600 text-white' : 'text-wood-200 hover:bg-wood-600'
-            }`}
-          >
-            <span aria-hidden="true" className="shrink-0 text-sm">
-              {TAB_ICONS[tab]}
-            </span>
-            {t(`tabs.${tab}`)}
-          </button>
-        ))}
+        {APP_TABS.map((tab, i) => {
+          const Icon = TAB_ICONS[tab];
+          return (
+            <button
+              key={tab}
+              role="tab"
+              onClick={() => runCommand(`tab.${tab}`)}
+              onPointerEnter={() => preloadTab(tab)}
+              onFocus={() => preloadTab(tab)}
+              onKeyDown={(e) => handleTabKeyDown(e, i)}
+              tabIndex={activeTab === tab ? 0 : -1}
+              aria-selected={activeTab === tab}
+              aria-current={activeTab === tab ? 'page' : undefined}
+              aria-controls="main-content"
+              title={commandTitle(`tab.${tab}`)}
+              className={`flex min-h-8 items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[0.8125rem] font-medium whitespace-nowrap 2xl:px-3 ${
+                activeTab === tab ? 'bg-white/20 text-white' : 'text-wood-200 hover:bg-white/10 hover:text-white'
+              }`}
+            >
+              <Icon size={15} className="hidden shrink-0 2xl:block" />
+              {t(`tabs.${tab}`)}
+            </button>
+          );
+        })}
       </div>
 
       {/* Desktop controls */}
-      <div className="hidden items-center gap-3 sm:flex">
+      <div className="hidden shrink-0 items-center sm:flex 2xl:gap-0.5">
         <button
-          onClick={undo}
+          onClick={() => runCommand('palette.open')}
+          className={ICON_BUTTON}
+          aria-label={commandLabel('palette.open')}
+          title={commandTitle('palette.open')}
+        >
+          <IconSearch size={16} />
+        </button>
+        <button
+          onClick={() => runCommand('history.undo')}
           disabled={!canUndo}
-          className="text-wood-200 flex items-center hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
-          title={`${t('commandPalette.commands.undo')} (${APP_SHORTCUTS.undo.shortcut})`}
+          className={ICON_BUTTON}
+          title={commandTitle('history.undo')}
           aria-label="Undo"
         >
           <IconUndo size={16} />
         </button>
         <button
-          onClick={redo}
+          onClick={() => runCommand('history.redo')}
           disabled={!canRedo}
-          className="text-wood-200 flex items-center hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
-          title={`${t('commandPalette.commands.redo')} (${APP_SHORTCUTS.redo.shortcut})`}
+          className={ICON_BUTTON}
+          title={commandTitle('history.redo')}
           aria-label="Redo"
         >
           <IconRedo size={16} />
         </button>
         <button
-          onClick={copyShareLink}
-          className="text-wood-200 flex items-center hover:text-white"
-          title="Copy shareable link"
-          aria-label="Copy shareable link"
+          onClick={() => runCommand('share.copy')}
+          className={ICON_BUTTON}
+          title={commandTitle('share.copy')}
+          aria-label={commandLabel('share.copy')}
         >
           <IconLink size={16} />
         </button>
+        <span aria-hidden="true" className={GROUP_DIVIDER} />
         <button
-          onClick={toggleDarkMode}
-          className="text-wood-200 flex items-center hover:text-white"
-          title={t('footer.darkMode')}
+          onClick={() => runCommand('theme.toggle')}
+          className={ICON_BUTTON}
+          title={commandTitle('theme.toggle')}
           aria-label={darkMode ? 'Light mode' : 'Dark mode'}
         >
           {darkMode ? <IconSun size={16} /> : <IconMoon size={16} />}
         </button>
         <button
-          onClick={toggleHighContrast}
-          className={`flex items-center ${highContrastMode ? 'text-white' : 'text-wood-200 hover:text-white'}`}
-          title={t('footer.highContrast')}
+          onClick={() => runCommand('contrast.toggle')}
+          className={`${ICON_BUTTON} ${highContrastMode ? 'bg-white/20 text-white' : ''}`}
+          title={commandTitle('contrast.toggle')}
           aria-label={highContrastMode ? 'Disable high contrast' : 'Enable high contrast'}
           aria-pressed={highContrastMode}
         >
           <IconContrast size={16} />
         </button>
         <button
-          onClick={toggleUnits}
-          className="text-wood-200 px-1 text-sm font-medium hover:text-white"
-          title={t('config.toggleUnits')}
+          onClick={() => runCommand('units.toggle')}
+          className={`${ICON_BUTTON} text-xs font-semibold`}
+          title={commandTitle('units.toggle')}
           aria-label={units === 'metric' ? 'Switch to imperial' : 'Switch to metric'}
         >
           {units === 'metric' ? 'mm' : 'in'}
@@ -384,7 +396,7 @@ export function Header() {
         <select
           value={lang}
           onChange={(e) => changeLang(e.target.value as SupportedLang)}
-          className="text-wood-200 cursor-pointer border-0 bg-transparent text-xs font-medium outline-none hover:text-white"
+          className="text-wood-200 h-8 cursor-pointer rounded-full border-0 bg-transparent px-2 text-xs font-medium outline-none hover:bg-white/10 hover:text-white"
           aria-label={t('footer.language')}
         >
           {SUPPORTED_LANGUAGES.map((l) => (
@@ -393,35 +405,30 @@ export function Header() {
             </option>
           ))}
         </select>
+        <span aria-hidden="true" className={GROUP_DIVIDER} />
         <button
-          onClick={openTemplates}
-          className="text-wood-200 flex items-center hover:text-white"
-          title={t('templates.title')}
-          aria-label={t('templates.title')}
+          onClick={() => runCommand('templates.open')}
+          className={ICON_BUTTON}
+          title={commandTitle('templates.open')}
+          aria-label={commandLabel('templates.open')}
         >
           <IconLayers size={16} />
         </button>
         <button
-          onClick={openProjects}
-          className="text-wood-200 flex items-center hover:text-white"
-          title={t('projects.title')}
-          aria-label={t('projects.title')}
+          onClick={() => runCommand('projects.open')}
+          className={ICON_BUTTON}
+          title={commandTitle('projects.open')}
+          aria-label={commandLabel('projects.open')}
         >
           <IconFolder size={16} />
         </button>
         <button
-          onClick={openShortcuts}
-          className="text-wood-200 flex items-center hover:text-white"
-          title={t('commandPalette.commands.keyboardShortcuts')}
-          aria-label={t('commandPalette.commands.keyboardShortcuts')}
-        >
-          <IconHelp size={16} />
-        </button>
-        <button
-          onClick={openMarketplace}
-          className="text-wood-200 flex items-center gap-1 hover:text-white"
-          title={t('marketplace.title')}
-          aria-label={t('marketplace.title')}
+          onClick={() => runCommand('marketplace.open')}
+          onPointerEnter={preloadMarketplacePanel}
+          onFocus={preloadMarketplacePanel}
+          className={ICON_BUTTON}
+          title={commandTitle('marketplace.open')}
+          aria-label={commandLabel('marketplace.open')}
         >
           <img
             src={`${import.meta.env.BASE_URL}shop-badge.svg`}
@@ -430,13 +437,25 @@ export function Header() {
             className="h-4 w-4"
             loading="lazy"
           />
-          🛒
+        </button>
+        <span aria-hidden="true" className={GROUP_DIVIDER} />
+        <button
+          onClick={() => runCommand('shortcuts.toggle')}
+          className={ICON_BUTTON}
+          title={commandTitle('shortcuts.toggle')}
+          aria-label={commandLabel('shortcuts.toggle')}
+        >
+          <IconKeyboard size={16} />
         </button>
         <HelpButton />
       </div>
       {showTemplates && <TemplatePicker onClose={() => setShowTemplates(false)} />}
       {showProjects && <ProjectManagerModal onClose={() => setShowProjects(false)} />}
-      {showMarketplace && <MarketplacePanel onClose={() => setShowMarketplace(false)} />}
+      {showMarketplace && (
+        <Suspense fallback={null}>
+          <MarketplacePanel onClose={() => setShowMarketplace(false)} />
+        </Suspense>
+      )}
     </header>
   );
 }

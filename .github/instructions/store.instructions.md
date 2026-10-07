@@ -1,4 +1,5 @@
 ---
+description: 'Zustand store slice, undo/redo, and persistence conventions.'
 applyTo: 'src/store/**'
 ---
 

@@ -107,7 +107,7 @@ class ErrorBoundaryView extends Component<ErrorBoundaryViewProps, ErrorBoundaryS
           <button
             type="button"
             onClick={this.handleReset}
-            className="bg-wood-600 hover:bg-wood-700 rounded px-4 py-2 text-sm font-medium text-white transition-colors"
+            className="bg-accent hover:bg-accent-hover rounded px-4 py-2 text-sm font-medium text-white transition-colors"
           >
             {messages.retry}
           </button>

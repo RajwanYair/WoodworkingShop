@@ -135,6 +135,7 @@ export type UiSlice = {
 
   // Build log actions (Sprint 89)
   addBuildLogEntry: (text: string) => void;
+  updateBuildLogEntry: (id: string, text: string) => void;
   deleteBuildLogEntry: (id: string) => void;
   clearBuildLog: () => void;
 
@@ -233,6 +234,15 @@ export function createUiSlice(
           createdAt: new Date().toISOString(),
         };
         const buildLog = [entry, ...s.buildLog];
+        saveBuildLog(buildLog);
+        return { buildLog };
+      }),
+
+    updateBuildLogEntry: (id, text) =>
+      set((s) => {
+        const trimmedText = text.trim();
+        if (!trimmedText) return {};
+        const buildLog = s.buildLog.map((entry) => (entry.id === id ? { ...entry, text: trimmedText } : entry));
         saveBuildLog(buildLog);
         return { buildLog };
       }),

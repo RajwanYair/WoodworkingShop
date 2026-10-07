@@ -1,12 +1,12 @@
 name: 🗂️ Sprint Task
-description: Track a Phase 21 sprint deliverable
-title: '[Sprint ${sprintId}] '
+description: Track a roadmap sprint deliverable
+title: '[Sprint] '
 labels: ['sprint', 'roadmap']
 body:
   - type: markdown
     attributes:
       value: |
-        Use this template to track a single Phase 21 sprint item end-to-end.
+        Use this template to track a single roadmap sprint item end-to-end.
         Link it to the relevant section in [ROADMAP.md](../blob/main/ROADMAP.md).
 
   - type: input

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { Sidebar } from '../../src/components/layout/Sidebar';
@@ -22,7 +22,10 @@ describe('Sidebar', () => {
     render(<Sidebar />);
 
     await user.click(screen.getByRole('button', { name: 'Toggle summary panel' }));
-    expect(screen.getByRole('dialog', { name: 'Cabinet summary' })).toBeInTheDocument();
+    const dialog = screen.getByRole('dialog', { name: 'Cabinet summary' });
+    expect(
+      await within(dialog).findByRole('heading', { name: 'Cost Estimate' }, { timeout: 15000 }),
+    ).toBeInTheDocument();
 
     await user.keyboard('{Escape}');
 
@@ -35,6 +38,7 @@ describe('Sidebar', () => {
 
     await user.click(screen.getByRole('button', { name: 'Toggle summary panel' }));
     const dialog = screen.getByRole('dialog', { name: 'Cabinet summary' });
+    await within(dialog).findByRole('heading', { name: 'Cost Estimate' }, { timeout: 15000 });
 
     expect(dialog).toHaveTextContent('Parts2');
     expect(dialog).toHaveTextContent('Hardware items1');

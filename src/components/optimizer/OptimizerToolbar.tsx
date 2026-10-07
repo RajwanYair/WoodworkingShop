@@ -15,6 +15,7 @@ import { useCabinetStore } from '../../store/cabinet-store';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { useToastStore } from '../../store/toast-store';
 import { generateHardware } from '../../engine/hardware';
+import { formatNumber } from '../../i18n/format';
 import { downloadHardwareCsv } from '../../utils/bom-export';
 import { downloadAllSheetsGcode } from '../../utils/gcode-export';
 import { Stat } from './OptimizerStats';
@@ -98,17 +99,22 @@ export function OptimizerToolbar({
       <div
         className={`grid w-full gap-3 sm:gap-4 ${grainConflictCount > 0 ? 'grid-cols-2 lg:grid-cols-6' : 'grid-cols-2 lg:grid-cols-5'}`}
       >
-        <Stat label={t('optimizer.sheets')} value={String(totalSheets)} />
-        <Stat label={t('optimizer.yield')} value={`${overallYield}%`} />
-        <Stat label={t('optimizer.waste')} value={`${(totalWaste / 1_000_000).toFixed(2)} m²`} />
-        <Stat label={t('optimizer.totalParts')} value={String(partCount)} />
-        <Stat label={t('optimizer.cuts')} value={String(cutCount)} />
+        <Stat label={t('optimizer.sheets')} value={formatNumber(totalSheets, lang)} />
+        <Stat label={t('optimizer.yield')} value={`${formatNumber(overallYield, lang)}%`} />
+        <Stat
+          label={t('optimizer.waste')}
+          value={`${formatNumber(totalWaste / 1_000_000, lang, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} m²`}
+        />
+        <Stat label={t('optimizer.totalParts')} value={formatNumber(partCount, lang)} />
+        <Stat label={t('optimizer.cuts')} value={formatNumber(cutCount, lang)} />
         {grainConflictCount > 0 && (
           <div
             className="rounded border border-amber-300 bg-amber-50 p-3 text-center dark:border-amber-700 dark:bg-amber-900/20"
             title={t('optimizer.grainConflictsTitle', { count: grainConflictCount })}
           >
-            <div className="text-lg font-bold text-amber-700 dark:text-amber-300">{grainConflictCount}</div>
+            <div className="text-lg font-bold text-amber-700 dark:text-amber-300">
+              {formatNumber(grainConflictCount, lang)}
+            </div>
             <div className="text-xs text-amber-600 dark:text-amber-400">{t('optimizer.grainConflicts')}</div>
           </div>
         )}
@@ -124,7 +130,7 @@ export function OptimizerToolbar({
             onChange={(e) => setPartFilter(e.target.value)}
             placeholder={t('optimizer.filterPartsPlaceholder')}
             aria-label={t('optimizer.filterParts')}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-32 rounded border bg-white px-2 py-0.5 text-xs focus:ring-1 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent w-32 rounded border bg-white px-2 py-0.5 text-xs focus:ring-1 focus:outline-none"
           />
           {partFilter && (
             <button
@@ -148,7 +154,7 @@ export function OptimizerToolbar({
             step={0.5}
             value={sawKerf}
             onChange={(e) => setSawKerf(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-14 rounded border bg-white px-1 py-0.5 text-center text-xs focus:ring-1 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent w-14 rounded border bg-white px-1 py-0.5 text-center text-xs focus:ring-1 focus:outline-none"
             aria-label={t('optimizer.sawKerf')}
           />
           mm
@@ -160,7 +166,7 @@ export function OptimizerToolbar({
             type="checkbox"
             checked={config.cutMode === 'guillotine'}
             onChange={(e) => setConfig({ cutMode: e.target.checked ? 'guillotine' : 'freeform' })}
-            className="accent-wood-600 dark:accent-wood-400 h-3.5 w-3.5"
+            className="accent-accent dark:accent-accent h-3.5 w-3.5"
             aria-label={t('optimizer.guillotineMode')}
           />
           {t('optimizer.guillotineMode')}
@@ -175,7 +181,7 @@ export function OptimizerToolbar({
             type="checkbox"
             checked={autoCoNest}
             onChange={(e) => setAutoCoNest(e.target.checked)}
-            className="accent-wood-600 dark:accent-wood-400 h-3.5 w-3.5"
+            className="accent-accent dark:accent-accent h-3.5 w-3.5"
             aria-label={t('optimizer.autoCoNest')}
           />
           {t('optimizer.autoCoNest')}

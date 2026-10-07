@@ -65,7 +65,6 @@
     "dev": "vite",
     "prebuild": "node scripts/sync-sw-version.js",
     "build": "tsc -b && vite build",
-    "postbuild": "node scripts/capability-map.js",
     "prebuild:nocheck": "node scripts/sync-sw-version.js",
     "build:nocheck": "vite build",
     "preview": "vite preview",
@@ -84,7 +83,6 @@
     "typecheck": "tsc -b --noEmit",
     "quality": "npm run typecheck && npm run lint && npm run lint:css && npm run lint:md && npm run format:check && npm run i18n:coverage && npm run agents:validate && npm run prompts:validate && npm run instructions:validate && npm run vscode:extensions:validate && npm run mcp:metadata:validate && npm run ai:context:validate && npm run workflows:validate && npm run hooks:validate && npm run template:sync:validate && npm run pdf:budget && npm run components:budget",
     "quality:fast": "node scripts/parallel-quality.js",
-    "capabilities:check": "node scripts/capability-map.js",
     "check": "npm run quality:fast && npm run test",
     "ci": "npm run check && npm run build && npm run bundle:check && npm run bundle:critical && npm run bench:check",
     "release:build": "npm run build && npm run bundle:check && npm run bundle:critical && npm run sbom",
@@ -102,9 +100,7 @@
     "exports:golden:update": "node scripts/update-export-golden-baseline.js",
     "exports:golden:check": "vitest run tests/utils/export-golden-baseline.test.ts",
     "i18n:coverage": "node scripts/i18n-coverage.js",
-    "i18n:completeness": "node scripts/i18n-completeness.js",
     "bundle:check": "node scripts/bundle-report.js",
-    "bundle:critical": "node scripts/bundle-critical.js",
     "lighthouse": "node scripts/lighthouse.js",
     "mcp:validate": "node scripts/validate-mcp-governance.js",
     "docs:freshness": "node scripts/check-docs-freshness.js",
@@ -123,7 +119,15 @@
     "dead:check": "knip",
     "sbom": "node scripts/sbom.js",
     "validate:commitmsg": "node scripts/validate-commit-msg.js",
-    "prepare": "npx simple-git-hooks"
+    "prepare": "npx simple-git-hooks",
+    "prebuild:e2e": "node scripts/sync-sw-version.js",
+    "build:e2e": "vite build --mode e2e",
+    "i18n:completeness": "node scripts/i18n-completeness.js",
+    "bundle:critical": "node scripts/bundle-report.js --critical",
+    "pretest:e2e": "npm run build:e2e",
+    "capabilities:init": "node scripts/capability-map.js --initialize-ledger",
+    "capabilities:check": "node scripts/capability-map.js",
+    "postbuild": "node scripts/capability-map.js"
   },
   "engines": {
     "node": ">=22.0.0"
@@ -146,12 +150,31 @@
       "src/utils/plugin-marketplace.ts!",
       "src/utils/project-branching.ts!",
       "src/utils/ar-placement.ts!",
-      "src/utils/batch-export-runner.ts!",
+      "src/utils/batch-export.ts!",
       "src/utils/cost-comparison.ts!",
-      "src/utils/erp-export-download.ts!",
+      "src/utils/erp-export.ts!",
       "src/utils/export-presets.ts!",
       "src/utils/webserial-cnc.ts!",
-      "tests/helpers.ts!"
+      "src/services/supabase.ts!",
+      "tests/helpers.ts!",
+      "src/engine/stock/index.ts!",
+      "src/engine/inventory/index.ts!",
+      "src/engine/inventory/waste/index.ts!",
+      "src/engine/inventory/comparison/index.ts!",
+      "src/engine/templates/index.ts!",
+      "src/engine/stock-tracker.ts!",
+      "src/engine/stock-management.ts!",
+      "src/engine/shop-inventory.ts!",
+      "src/engine/waste-alert.ts!",
+      "src/engine/waste-analytics.ts!",
+      "src/engine/waste-predictor.ts!",
+      "src/engine/design-comparison.ts!",
+      "src/engine/project-comparison.ts!",
+      "src/engine/snapshot-diff.ts!",
+      "src/engine/template-data.ts!",
+      "src/engine/template-dsl.ts!",
+      "src/utils/batch-export-runner.ts!",
+      "src/utils/erp-export-download.ts!"
     ],
     "project": [
       "src/**/*.{ts,tsx}",
@@ -231,6 +254,7 @@
     "typescript-eslint": "^8.62.1",
     "vite": "^8.3.2",
     "vite-plugin-pwa": "1.3.0",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "ajv": "^8.20.0"
   }
 }

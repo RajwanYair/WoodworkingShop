@@ -2,6 +2,8 @@ import { Page, Text, View } from '@react-pdf/renderer';
 import type { CabinetConfig, OptimizationResult, HardwareItem } from '../../../engine/types';
 import { s } from '../pdf-tokens';
 import type { PdfCtx } from '../pdf-i18n';
+import i18n from '../../../i18n';
+import { formatNumber } from '../../../i18n/format';
 
 interface PdfCoverPageProps {
   ctx: PdfCtx;
@@ -61,7 +63,8 @@ export function PdfCoverPage({
               <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>{T.doorsShelves}</Text>
             </View>
             <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>
-              {config.doorCount} {config.doorCount > 1 ? T.doors : T.door} · {config.shelfCount} {T.specShelves}
+              {i18n.t('pdf.coverDoor', { count: config.doorCount, lng: ctx.lang })} ·{' '}
+              {formatNumber(config.shelfCount, ctx.lang)} {T.specShelves}
             </Text>
           </View>
           <View style={[s.coverInfoRow, rowDir]}>
@@ -70,8 +73,8 @@ export function PdfCoverPage({
               <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>{T.cutSheets}</Text>
             </View>
             <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>
-              {optimization.totalSheets} {optimization.totalSheets !== 1 ? T.sheets : T.sheet} ·{' '}
-              {optimization.overallYield}% {T.yield}
+              {i18n.t('pdf.coverSheet', { count: optimization.totalSheets, lng: ctx.lang })} ·{' '}
+              {formatNumber(optimization.overallYield, ctx.lang)}% {T.yield}
             </Text>
           </View>
           <View style={[s.coverInfoRow, rowDir]}>
@@ -80,7 +83,7 @@ export function PdfCoverPage({
               <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>{T.hardwareItems}</Text>
             </View>
             <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>
-              {hardware.length} {hardware.length !== 1 ? T.itemTypePlural : T.itemType}
+              {i18n.t('pdf.coverHardware', { count: hardware.length, lng: ctx.lang })}
             </Text>
           </View>
           {cabinetCount > 1 && (
@@ -90,7 +93,7 @@ export function PdfCoverPage({
                 <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>{T.cabinetsInProject}</Text>
               </View>
               <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>
-                {cabinetCount} {T.cabinets}
+                {formatNumber(cabinetCount, ctx.lang)} {T.cabinets}
               </Text>
             </View>
           )}

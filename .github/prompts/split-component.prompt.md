@@ -1,11 +1,11 @@
 ---
-mode: agent
+agent: agent
 description: Split a large React component file into focused sub-components following project conventions.
 ---
 
 # Split Component
 
-You are refactoring a large React component in the WoodworkingShop Cabinet Planner project.
+You are refactoring a large React component in the WoodworkingShop WoodworkingShop project.
 
 ## Task
 

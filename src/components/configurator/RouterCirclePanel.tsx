@@ -3,11 +3,12 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatMillimeters, formatNumber } from '../../i18n/format';
 import { calculateRouterCircle } from '../../engine/router-circle';
 import type { CircleCutMode } from '../../engine/router-circle';
 
 export function RouterCirclePanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [targetDiameterMm, setTargetDiameterMm] = useState(300);
   const [bitDiameterMm, setBitDiameterMm] = useState(12);
@@ -46,7 +47,7 @@ export function RouterCirclePanel() {
             step={1}
             value={targetDiameterMm}
             onChange={(e) => setTargetDiameterMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -59,7 +60,7 @@ export function RouterCirclePanel() {
             step={0.1}
             value={bitDiameterMm}
             onChange={(e) => setBitDiameterMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -72,7 +73,7 @@ export function RouterCirclePanel() {
             step={0.1}
             value={pivotHoleDiameterMm}
             onChange={(e) => setPivotHoleDiameterMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -81,7 +82,7 @@ export function RouterCirclePanel() {
           <select
             value={cutMode}
             onChange={(e) => setCutMode(e.target.value as CircleCutMode)}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 text-sm focus:ring-2 focus:outline-none"
           >
             <option value="disc">{t('routerCircle.modes.disc')}</option>
             <option value="hole">{t('routerCircle.modes.hole')}</option>
@@ -99,22 +100,26 @@ export function RouterCirclePanel() {
         <dl className="bg-wood-50 dark:bg-wood-900/40 grid grid-cols-2 gap-x-4 gap-y-2 rounded-lg p-3 text-sm">
           <dt className="text-wood-500 dark:text-wood-400">{t('routerCircle.armLength')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.armLengthMm.toFixed(1)} mm
+            {formatMillimeters(result.data.armLengthMm, i18n.language, 1)}
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('routerCircle.circumference')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.circumferenceMm.toFixed(1)} mm
+            {formatMillimeters(result.data.circumferenceMm, i18n.language, 1)}
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('routerCircle.area')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.areaMm2.toFixed(1)} mm²
+            {formatNumber(result.data.areaMm2, i18n.language, {
+              minimumFractionDigits: 1,
+              maximumFractionDigits: 1,
+            })}{' '}
+            mm²
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('routerCircle.pivotOffset')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.pivotOffsetMm.toFixed(1)} mm
+            {formatMillimeters(result.data.pivotOffsetMm, i18n.language, 1)}
           </dd>
         </dl>
       )}

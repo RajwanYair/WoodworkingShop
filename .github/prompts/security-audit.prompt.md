@@ -1,11 +1,11 @@
 ---
-mode: agent
+agent: agent
 description: OWASP Top 10 security audit — scan for vulnerabilities, fix them, and document mitigations.
 ---
 
 # Security Audit
 
-You are performing a security audit of the Cabinet Planner project against the OWASP Top 10 for client-side SPAs.
+You are performing a security audit of the WoodworkingShop project against the OWASP Top 10 for client-side SPAs.
 
 ## Scope
 

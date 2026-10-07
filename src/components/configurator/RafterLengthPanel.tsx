@@ -3,10 +3,11 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatMillimeters, formatNumber } from '../../i18n/format';
 import { calculateRafterLength } from '../../engine/rafter-length';
 
 export function RafterLengthPanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [totalSpanMm, setTotalSpanMm] = useState(6000);
   const [pitchRatio, setPitchRatio] = useState(0.5);
@@ -41,7 +42,7 @@ export function RafterLengthPanel() {
             step={100}
             value={totalSpanMm}
             onChange={(e) => setTotalSpanMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -54,7 +55,7 @@ export function RafterLengthPanel() {
             step={0.1}
             value={pitchRatio}
             onChange={(e) => setPitchRatio(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -67,7 +68,7 @@ export function RafterLengthPanel() {
             step={1}
             value={plateWidthMm}
             onChange={(e) => setPlateWidthMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -80,7 +81,7 @@ export function RafterLengthPanel() {
             step={50}
             value={overhangMm}
             onChange={(e) => setOverhangMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -89,7 +90,7 @@ export function RafterLengthPanel() {
             type="checkbox"
             checked={shedRoof}
             onChange={(e) => setShedRoof(e.target.checked)}
-            className="accent-wood-600"
+            className="accent-accent"
           />
           <span>{t('rafterLength.shedRoof')}</span>
         </label>
@@ -105,37 +106,45 @@ export function RafterLengthPanel() {
         <dl className="bg-wood-50 dark:bg-wood-900/40 grid grid-cols-2 gap-x-4 gap-y-2 rounded-lg p-3 text-sm">
           <dt className="text-wood-500 dark:text-wood-400">{t('rafterLength.run')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.runMm.toFixed(0)} mm
+            {formatMillimeters(result.data.runMm, i18n.language, 0)}
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('rafterLength.rise')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.riseMm.toFixed(1)} mm
+            {formatMillimeters(result.data.riseMm, i18n.language, 1)}
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('rafterLength.rafterLength')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.rafterLengthMm.toFixed(1)} mm
+            {formatMillimeters(result.data.rafterLengthMm, i18n.language, 1)}
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('rafterLength.totalLength')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.totalLengthMm.toFixed(1)} mm
+            {formatMillimeters(result.data.totalLengthMm, i18n.language, 1)}
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('rafterLength.plumbCut')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.plumbCutAngleDeg.toFixed(2)}°
+            {formatNumber(result.data.plumbCutAngleDeg, i18n.language, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+            °
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('rafterLength.seatCut')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.seatCutAngleDeg.toFixed(2)}°
+            {formatNumber(result.data.seatCutAngleDeg, i18n.language, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+            °
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('rafterLength.birdsmouthDepth')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.birdsmouthDepthMm.toFixed(1)} mm
+            {formatMillimeters(result.data.birdsmouthDepthMm, i18n.language, 1)}
           </dd>
         </dl>
       )}

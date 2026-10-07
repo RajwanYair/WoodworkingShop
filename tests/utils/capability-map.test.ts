@@ -85,6 +85,22 @@ describe('checkCapabilityLedger', () => {
     },
   ];
 
+  it('accepts the path-keyed schema-v1 ledger representation', () => {
+    const errors = checkCapabilityLedger(
+      inventory,
+      {
+        schemaVersion: 1,
+        modules: {
+          'src/engine/live.ts': { classification: 'surfaced', rationale: 'Imported by App.' },
+          'src/engine/retired-late.ts': { classification: 'internal', rationale: 'Internal helper.' },
+        },
+      },
+      '5.34.0',
+    );
+
+    expect(errors).toEqual([]);
+  });
+
   it('reports overdue retirements and ledger entries without source modules', () => {
     const errors = checkCapabilityLedger(
       inventory,

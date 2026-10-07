@@ -1,11 +1,11 @@
 ---
-mode: agent
+agent: agent
 description: Review and apply Dependabot PRs — verify changes are safe, run quality gates, and merge patch/minor updates.
 ---
 
 # Dependency Update Review
 
-You are reviewing and applying dependency updates for the Cabinet Planner project.
+You are reviewing and applying dependency updates for the WoodworkingShop project.
 
 ## Inputs
 

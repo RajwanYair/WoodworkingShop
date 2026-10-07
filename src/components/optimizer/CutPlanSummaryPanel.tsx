@@ -1,12 +1,13 @@
 import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../../i18n/format';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { buildCutPlanSummary } from '../../engine/cut-plan-summary';
 import type { SheetPlanInput } from '../../engine/cut-plan-summary';
 import type { CutSheet } from '../../engine/types';
 
-function mm2ToM2(mm2: number): string {
-  return (mm2 / 1_000_000).toFixed(3);
+function mm2ToM2(mm2: number, locale: string): string {
+  return formatNumber(mm2 / 1_000_000, locale, { minimumFractionDigits: 3, maximumFractionDigits: 3 });
 }
 
 function groupSheets(sheets: CutSheet[]): SheetPlanInput[] {
@@ -32,7 +33,7 @@ function groupSheets(sheets: CutSheet[]): SheetPlanInput[] {
 
 /** Collapsible cut plan summary panel — per-material waste breakdown (Sprint 103). */
 export function CutPlanSummaryPanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { optimization } = useCabinetStore();
   const [open, setOpen] = useState(false);
 
@@ -71,8 +72,8 @@ export function CutPlanSummaryPanel() {
                     <td className="text-wood-700 dark:text-wood-200 max-w-[100px] truncate py-1 font-medium">
                       {mat.material}
                     </td>
-                    <td className="py-1 text-end tabular-nums">{mat.sheetCount}</td>
-                    <td className="py-1 text-end tabular-nums">{mm2ToM2(mat.usedAreaMm2)}</td>
+                    <td className="py-1 text-end tabular-nums">{formatNumber(mat.sheetCount, i18n.language)}</td>
+                    <td className="py-1 text-end tabular-nums">{mm2ToM2(mat.usedAreaMm2, i18n.language)}</td>
                     <td
                       className={`py-1 text-end font-medium tabular-nums ${
                         mat.wastePercent > 30
@@ -82,7 +83,7 @@ export function CutPlanSummaryPanel() {
                             : 'text-green-600 dark:text-green-400'
                       }`}
                     >
-                      {mat.wastePercent}%
+                      {formatNumber(mat.wastePercent, i18n.language)}%
                     </td>
                   </tr>
                 ))}
@@ -93,9 +94,9 @@ export function CutPlanSummaryPanel() {
           {/* Totals footer */}
           <dl className="border-wood-200 dark:border-wood-600 grid grid-cols-2 gap-x-2 gap-y-1 border-t pt-2 text-sm">
             <dt className="text-wood-600 dark:text-wood-300">{t('cutPlanSummary.totalSheets')}</dt>
-            <dd className="text-end font-medium tabular-nums">{summary.totalSheets}</dd>
+            <dd className="text-end font-medium tabular-nums">{formatNumber(summary.totalSheets, i18n.language)}</dd>
             <dt className="text-wood-600 dark:text-wood-300">{t('cutPlanSummary.totalUsedM2')}</dt>
-            <dd className="text-end font-medium tabular-nums">{mm2ToM2(summary.totalUsedMm2)}</dd>
+            <dd className="text-end font-medium tabular-nums">{mm2ToM2(summary.totalUsedMm2, i18n.language)}</dd>
             <dt className="text-wood-600 dark:text-wood-300">{t('cutPlanSummary.overallWaste')}</dt>
             <dd
               className={`text-end font-semibold tabular-nums ${
@@ -106,7 +107,7 @@ export function CutPlanSummaryPanel() {
                     : 'text-green-600 dark:text-green-400'
               }`}
             >
-              {summary.overallWastePercent}%
+              {formatNumber(summary.overallWastePercent, i18n.language)}%
             </dd>
           </dl>
         </div>

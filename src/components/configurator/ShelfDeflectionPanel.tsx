@@ -1,27 +1,39 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { calculateDeflection } from '../../engine/shelf-deflection';
-import type { LoadType, ShelfMaterial } from '../../engine/shelf-deflection';
+import { formatMillimeters, formatNumber } from '../../i18n/format';
+import { calculateDeflection, type LoadType, type ShelfMaterial } from '../../engine/shelf-deflection';
+
+const MATERIALS: ShelfMaterial[] = ['solidWood', 'plywood', 'mdf', 'particleboard', 'melamine'];
+const LOAD_TYPES: LoadType[] = ['uniform', 'center', 'combined'];
 
 export function ShelfDeflectionPanel() {
-  const { t } = useTranslation();
-  const [spanMm, setSpanMm] = useState(600);
-  const [widthMm, setWidthMm] = useState(300);
+  const { t, i18n } = useTranslation();
+  const [spanMm, setSpanMm] = useState(800);
+  const [widthMm, setWidthMm] = useState(400);
   const [thicknessMm, setThicknessMm] = useState(18);
-  const [loadN, setLoadN] = useState(100);
   const [material, setMaterial] = useState<ShelfMaterial>('plywood');
   const [loadType, setLoadType] = useState<LoadType>('uniform');
+  const [loadKg, setLoadKg] = useState(20);
   const [support, setSupport] = useState<'simple' | 'fixed'>('simple');
+
   const result = useMemo(() => {
     try {
       return {
-        data: calculateDeflection({ spanMm, widthMm, thicknessMm, material, loadType, loadN, support }),
+        data: calculateDeflection({
+          spanMm,
+          widthMm,
+          thicknessMm,
+          material,
+          loadType,
+          loadN: loadKg * 9.81,
+          support,
+        }),
         error: null,
       };
     } catch (error) {
       return { data: null, error: error instanceof Error ? error.message : String(error) };
     }
-  }, [spanMm, widthMm, thicknessMm, material, loadType, loadN, support]);
+  }, [spanMm, widthMm, thicknessMm, material, loadType, loadKg, support]);
 
   return (
     <section aria-label={t('shelfDeflection.title')} className="space-y-3">
@@ -31,7 +43,7 @@ export function ShelfDeflectionPanel() {
           <span>{t('shelfDeflection.span')} (mm)</span>
           <input
             type="number"
-            min={1}
+            min="1"
             value={spanMm}
             onChange={(event) => setSpanMm(Number(event.target.value))}
             className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border px-2 py-1 font-mono text-sm"
@@ -41,7 +53,7 @@ export function ShelfDeflectionPanel() {
           <span>{t('shelfDeflection.width')} (mm)</span>
           <input
             type="number"
-            min={1}
+            min="1"
             value={widthMm}
             onChange={(event) => setWidthMm(Number(event.target.value))}
             className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border px-2 py-1 font-mono text-sm"
@@ -51,19 +63,9 @@ export function ShelfDeflectionPanel() {
           <span>{t('shelfDeflection.thickness')} (mm)</span>
           <input
             type="number"
-            min={1}
+            min="1"
             value={thicknessMm}
             onChange={(event) => setThicknessMm(Number(event.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border px-2 py-1 font-mono text-sm"
-          />
-        </label>
-        <label className="text-wood-600 dark:text-wood-300 flex flex-col gap-1 text-sm">
-          <span>{t('shelfDeflection.load')} (N)</span>
-          <input
-            type="number"
-            min={0}
-            value={loadN}
-            onChange={(event) => setLoadN(Number(event.target.value))}
             className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border px-2 py-1 font-mono text-sm"
           />
         </label>
@@ -74,12 +76,23 @@ export function ShelfDeflectionPanel() {
             onChange={(event) => setMaterial(event.target.value as ShelfMaterial)}
             className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border px-2 py-1 text-sm"
           >
-            <option value="solidWood">{t('shelfDeflection.solidWood')}</option>
-            <option value="plywood">{t('shelfDeflection.plywood')}</option>
-            <option value="mdf">{t('shelfDeflection.mdf')}</option>
-            <option value="particleboard">{t('shelfDeflection.particleboard')}</option>
-            <option value="melamine">{t('shelfDeflection.melamine')}</option>
+            {MATERIALS.map((option) => (
+              <option key={option} value={option}>
+                {t(`shelfDeflection.${option}`)}
+              </option>
+            ))}
           </select>
+        </label>
+        <label className="text-wood-600 dark:text-wood-300 flex flex-col gap-1 text-sm">
+          <span>{t('shelfDeflection.load')} (kg)</span>
+          <input
+            type="number"
+            min="0"
+            step="0.5"
+            value={loadKg}
+            onChange={(event) => setLoadKg(Number(event.target.value))}
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border px-2 py-1 font-mono text-sm"
+          />
         </label>
         <label className="text-wood-600 dark:text-wood-300 flex flex-col gap-1 text-sm">
           <span>{t('shelfDeflection.loadType')}</span>
@@ -88,23 +101,25 @@ export function ShelfDeflectionPanel() {
             onChange={(event) => setLoadType(event.target.value as LoadType)}
             className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border px-2 py-1 text-sm"
           >
-            <option value="uniform">{t('shelfDeflection.uniform')}</option>
-            <option value="center">{t('shelfDeflection.center')}</option>
-            <option value="combined">{t('shelfDeflection.combined')}</option>
-          </select>
-        </label>
-        <label className="text-wood-600 dark:text-wood-300 col-span-2 flex flex-col gap-1 text-sm">
-          <span>{t('shelfDeflection.support')}</span>
-          <select
-            value={support}
-            onChange={(event) => setSupport(event.target.value as 'simple' | 'fixed')}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border px-2 py-1 text-sm"
-          >
-            <option value="simple">{t('shelfDeflection.simple')}</option>
-            <option value="fixed">{t('shelfDeflection.fixed')}</option>
+            {LOAD_TYPES.map((option) => (
+              <option key={option} value={option}>
+                {t(`shelfDeflection.${option}`)}
+              </option>
+            ))}
           </select>
         </label>
       </div>
+      <label className="text-wood-600 dark:text-wood-300 flex flex-col gap-1 text-sm">
+        <span>{t('shelfDeflection.support')}</span>
+        <select
+          value={support}
+          onChange={(event) => setSupport(event.target.value as 'simple' | 'fixed')}
+          className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border px-2 py-1 text-sm"
+        >
+          <option value="simple">{t('shelfDeflection.simple')}</option>
+          <option value="fixed">{t('shelfDeflection.fixed')}</option>
+        </select>
+      </label>
       {result.error && (
         <p role="alert" className="text-sm text-red-600 dark:text-red-400">
           {result.error}
@@ -113,16 +128,26 @@ export function ShelfDeflectionPanel() {
       {result.data && (
         <dl
           aria-live="polite"
-          className="bg-wood-50 dark:bg-wood-900 grid grid-cols-2 gap-x-4 gap-y-2 rounded-md p-3 text-sm"
+          className="bg-wood-50 dark:bg-wood-800 grid grid-cols-2 gap-x-4 gap-y-1 rounded-md p-3 text-sm"
         >
-          <dt>{t('shelfDeflection.maxDeflection')}</dt>
-          <dd>{result.data.maxDeflectionMm} mm</dd>
-          <dt>{t('shelfDeflection.recommendedMaxSpan')}</dt>
-          <dd>{result.data.recommendedMaxSpanMm} mm</dd>
-          <dt>{t('shelfDeflection.deflectionRatio')}</dt>
-          <dd>1:{result.data.deflectionRatio}</dd>
-          <dt>{t('shelfDeflection.exceedsLimit')}</dt>
-          <dd>{t(result.data.exceedsLimit ? 'shelfDeflection.exceedsLimit' : 'shelfDeflection.withinLimit')}</dd>
+          <dt className="text-wood-500 dark:text-wood-400">{t('shelfDeflection.maxDeflection')}</dt>
+          <dd className="font-mono">{formatMillimeters(result.data.maxDeflectionMm, i18n.language, 2)}</dd>
+          <dt className="text-wood-500 dark:text-wood-400">{t('shelfDeflection.recommendedMaxSpan')}</dt>
+          <dd className="font-mono">{formatMillimeters(result.data.recommendedMaxSpanMm, i18n.language, 0)}</dd>
+          <dt className="text-wood-500 dark:text-wood-400">{t('shelfDeflection.deflectionRatio')}</dt>
+          <dd className="font-mono">
+            {Number.isFinite(result.data.deflectionRatio)
+              ? `L/${formatNumber(result.data.deflectionRatio, i18n.language)}`
+              : '∞'}
+          </dd>
+          <dt className="text-wood-500 dark:text-wood-400">{t('shelfDeflection.exceedsLimit')}</dt>
+          <dd
+            className={
+              result.data.exceedsLimit ? 'text-amber-700 dark:text-amber-400' : 'text-green-700 dark:text-green-400'
+            }
+          >
+            {t(result.data.exceedsLimit ? 'shelfDeflection.yes' : 'shelfDeflection.no')}
+          </dd>
         </dl>
       )}
     </section>

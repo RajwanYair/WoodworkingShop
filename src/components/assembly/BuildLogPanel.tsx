@@ -8,23 +8,45 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { formatDate } from '../../i18n/format';
 
 export function BuildLogPanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const buildLog = useCabinetStore((s) => s.buildLog);
   const addBuildLogEntry = useCabinetStore((s) => s.addBuildLogEntry);
+  const updateBuildLogEntry = useCabinetStore((s) => s.updateBuildLogEntry);
   const deleteBuildLogEntry = useCabinetStore((s) => s.deleteBuildLogEntry);
   const clearBuildLog = useCabinetStore((s) => s.clearBuildLog);
 
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState('');
+  const [editingEntryId, setEditingEntryId] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleAdd = () => {
     if (!draft.trim()) return;
-    addBuildLogEntry(draft);
+    if (editingEntryId) {
+      updateBuildLogEntry(editingEntryId, draft);
+      setEditingEntryId(null);
+    } else {
+      addBuildLogEntry(draft);
+    }
     setDraft('');
     textareaRef.current?.focus();
+  };
+
+  const handleDelete = (id: string) => {
+    deleteBuildLogEntry(id);
+    if (editingEntryId === id) {
+      setEditingEntryId(null);
+      setDraft('');
+    }
+  };
+
+  const handleClear = () => {
+    clearBuildLog();
+    setEditingEntryId(null);
+    setDraft('');
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -64,7 +86,7 @@ export function BuildLogPanel() {
               onKeyDown={handleKeyDown}
               placeholder={t('buildLog.addPlaceholder')}
               rows={2}
-              className="border-wood-200 dark:border-wood-700 bg-wood-50 dark:bg-wood-800/60 text-wood-700 dark:text-wood-200 placeholder:text-wood-400 dark:placeholder:text-wood-500 focus:ring-wood-400 w-full resize-none rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:outline-none"
+              className="border-wood-200 dark:border-wood-700 bg-wood-50 dark:bg-wood-800/60 text-wood-700 dark:text-wood-200 placeholder:text-wood-400 dark:placeholder:text-wood-500 focus:ring-accent w-full resize-none rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:outline-none"
             />
             <div className="flex items-center justify-between">
               <span className="text-wood-400 dark:text-wood-500 text-xs">{t('buildLog.hint')}</span>
@@ -72,10 +94,23 @@ export function BuildLogPanel() {
                 type="button"
                 onClick={handleAdd}
                 disabled={!draft.trim()}
-                className="bg-wood-600 hover:bg-wood-700 disabled:bg-wood-300 dark:disabled:bg-wood-700 rounded px-3 py-1 text-xs font-medium text-white transition-colors disabled:cursor-not-allowed"
+                className="bg-accent hover:bg-accent-hover disabled:bg-wood-300 dark:disabled:bg-wood-700 rounded px-3 py-1 text-xs font-medium text-white transition-colors disabled:cursor-not-allowed"
               >
-                {t('buildLog.add')}
+                {editingEntryId ? t('buildLog.save') : t('buildLog.add')}
               </button>
+              {editingEntryId && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingEntryId(null);
+                    setDraft('');
+                    textareaRef.current?.focus();
+                  }}
+                  className="text-wood-500 dark:text-wood-400 px-2 py-1 text-xs"
+                >
+                  {t('buildLog.cancel')}
+                </button>
+              )}
             </div>
           </div>
 
@@ -96,12 +131,24 @@ export function BuildLogPanel() {
                         dateTime={entry.createdAt}
                         className="text-wood-400 dark:text-wood-500 mt-0.5 block text-xs"
                       >
-                        {new Date(entry.createdAt).toLocaleString()}
+                        {formatDate(entry.createdAt, i18n.language, { dateStyle: 'short', timeStyle: 'short' })}
                       </time>
                     </div>
                     <button
                       type="button"
-                      onClick={() => deleteBuildLogEntry(entry.id)}
+                      onClick={() => {
+                        setEditingEntryId(entry.id);
+                        setDraft(entry.text);
+                        textareaRef.current?.focus();
+                      }}
+                      aria-label={t('buildLog.edit')}
+                      className="text-wood-400 dark:text-wood-500 hover:text-wood-700 dark:hover:text-wood-200 shrink-0 transition-colors"
+                    >
+                      {t('buildLog.edit')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(entry.id)}
                       aria-label={t('buildLog.delete')}
                       className="text-wood-400 dark:text-wood-500 shrink-0 transition-colors hover:text-red-500 dark:hover:text-red-400"
                     >
@@ -112,7 +159,7 @@ export function BuildLogPanel() {
               </ul>
               <button
                 type="button"
-                onClick={clearBuildLog}
+                onClick={handleClear}
                 className="text-wood-400 dark:text-wood-500 w-full text-center text-xs transition-colors hover:text-red-500 dark:hover:text-red-400"
               >
                 {t('buildLog.clearAll')}

@@ -58,12 +58,16 @@ const MIN_DRAWER_HEIGHT_MM = 100;
 /**
  * Run all manufacturing constraint checks on a cabinet configuration.
  *
+ * @param config Cabinet configuration to validate.
+ * @param extraMaterials Optional custom material catalog.
+ * @param locale Locale used to format precision-controlled values in messages.
  * @returns Array of ValidationIssue. Empty array means the config is valid.
  *          Issues are sorted: errors first, then warnings, then info.
  */
 export function validateConfig(
   config: CabinetConfig,
   extraMaterials?: Parameters<typeof getMaterial>[1],
+  locale = 'en',
 ): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
 
@@ -101,7 +105,7 @@ export function validateConfig(
   }
 
   // ── Door checks ──
-  issues.push(...checkDoors(config, dims));
+  issues.push(...checkDoors(config, dims, locale));
 
   // ── Toe-kick check ──
 
@@ -223,7 +227,7 @@ export function validateConfig(
   issues.push(...checkShelfRules(config, dims, mat, t));
 
   // ── Structural / manufacturing / dimension rules ──
-  issues.push(...checkDimensionRules(config, t, extraMaterials));
+  issues.push(...checkDimensionRules(config, t, extraMaterials, locale));
 
   // ── Hinge arm / shelf clearance (Phase 5 assembly risk) ──
   issues.push(...checkHingeShelfInterference(config, dims, t));

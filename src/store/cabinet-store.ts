@@ -58,13 +58,6 @@ import { getCustomMaterials, useCustomMaterialsStore } from './custom-materials-
  */
 
 const MAX_HISTORY = 50;
-const EMPTY_OPTIMIZATION: OptimizationResult = {
-  sheets: [],
-  totalSheets: 0,
-  overallYield: 0,
-  totalWaste: 0,
-  grainConflictCount: 0,
-};
 
 // Phase 11 — UI preferences now live in uiSlice.ts.  Re-export so tests and
 // any external consumers that imported from cabinet-store still work.
@@ -295,14 +288,15 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
   }
   // Sprint 16 — hydrate module-level lock map from session before deriving initial optimization.
   setRotationLocks(session?.rotationLockedPartIds ?? {});
-  const hasWorker = typeof Worker !== 'undefined';
-  const initial: ReturnType<typeof deriveProject> = hasWorker
+  const deferInitialOptimization = typeof Worker !== 'undefined';
+  const initial = deferInitialOptimization
     ? {
-        ...deriveBaseProject(initialCabinets, initialActiveIndex, getCustomMaterials()),
-        optimization: EMPTY_OPTIMIZATION,
-        combinedOptimization: EMPTY_OPTIMIZATION,
+        ...deriveBaseProject(initialCabinets, initialActiveIndex),
+        optimization: { sheets: [], totalSheets: 0, overallYield: 0, totalWaste: 0, grainConflictCount: 0 },
+        combinedOptimization: { sheets: [], totalSheets: 0, overallYield: 0, totalWaste: 0, grainConflictCount: 0 },
       }
     : deriveProjectMemo(initialCabinets, initialActiveIndex, 4, {}, getCustomMaterials());
+  if (deferInitialOptimization) scheduleOptimization(initial.parts, initial.allParts, 4, {});
   const prefs = loadUiPrefs();
   const initialProjectName = session?.projectName || readProjectNameFromUrl();
   const initialProjectNotes = session?.projectNotes ?? '';
@@ -370,8 +364,8 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
     rotationLockedPartIds: session?.rotationLockedPartIds ?? {},
     offcutCatalog: [],
     defectZones: {},
-    optimizationPending: hasWorker,
-    costPending: hasWorker,
+    optimizationPending: deferInitialOptimization,
+    costPending: deferInitialOptimization,
     assemblyPending: false,
     cost: estimateCost(
       initial.optimization,
@@ -462,8 +456,8 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
 
     undo: () =>
       set((state) => {
-        if (state._past.length === 0) return state;
-        const prevCabinets = state._past[state._past.length - 1];
+        const prevCabinets = state._past.at(-1);
+        if (!prevCabinets) return state;
         const past = state._past.slice(0, -1);
         const idx = Math.min(state.activeCabinetIndex, prevCabinets.length - 1);
         pushConfigToUrl(prevCabinets[idx].config, idx);
@@ -562,7 +556,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
       set((state) => {
         if (!Number.isInteger(index) || index < 0 || index >= state.cabinets.length) return state;
         const src = state.cabinets[index];
-        const baseName = src.name.replace(/\s*\(copy(?:\s+\d+)?\)\s*$/, '');
+        const baseName = src.name.replace(/ \(copy(?: \d+)?\)$/, '');
         const copies = state.cabinets.filter((c) => c.name.startsWith(baseName + ' (copy')).length;
         const newName = copies === 0 ? `${baseName} (copy)` : `${baseName} (copy ${copies + 1})`;
         const newEntry: CabinetEntry = { name: newName, config: { ...src.config } };
@@ -626,12 +620,9 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
         const cabinets = [...state.cabinets];
         [cabinets[index], cabinets[targetIndex]] = [cabinets[targetIndex], cabinets[index]];
         // Keep active index pointing at the moved cabinet
-        const newActive =
-          state.activeCabinetIndex === index
-            ? targetIndex
-            : state.activeCabinetIndex === targetIndex
-              ? index
-              : state.activeCabinetIndex;
+        let newActive = state.activeCabinetIndex;
+        if (state.activeCabinetIndex === index) newActive = targetIndex;
+        else if (state.activeCabinetIndex === targetIndex) newActive = index;
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         const base = deriveBaseProject(cabinets, newActive);
         pushConfigToUrl(cabinets[newActive].config, newActive);
@@ -806,16 +797,6 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
   };
 });
 
-if (typeof Worker !== 'undefined') {
-  const initialState = useCabinetStore.getState();
-  scheduleOptimization(
-    initialState.parts,
-    initialState.allParts,
-    initialState.sawKerf,
-    initialState.sheetSizeOverrides,
-  );
-}
-
 useCustomMaterialsStore.subscribe((state, previousState) => {
   if (state.materials === previousState.materials) return;
   const cabinetState = useCabinetStore.getState();
@@ -854,8 +835,7 @@ useCabinetStore.subscribe((state) => {
 // idbLoadSnapshots handles one-way migration from localStorage on first run.
 // We only overwrite state when IndexedDB has data, to avoid wiping a session
 // that already loaded from localStorage before the async call resolves.
-void idbLoadSnapshots<ProjectSnapshot>().then((snaps) => {
-  if (snaps.length > 0) {
-    useCabinetStore.setState({ snapshots: snaps });
-  }
-});
+const loadedSnapshots = await idbLoadSnapshots<ProjectSnapshot>();
+if (loadedSnapshots.length > 0) {
+  useCabinetStore.setState({ snapshots: loadedSnapshots });
+}

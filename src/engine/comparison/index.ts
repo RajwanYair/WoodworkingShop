@@ -18,6 +18,7 @@ export {
   validateWeights,
   getCommonCriteria,
   DEFAULT_WEIGHTS,
+  DEFAULT_WEIGHTS as DEFAULT_DESIGN_COMPARISON_WEIGHTS,
   CRITERION_META,
 } from './design';
 export type {

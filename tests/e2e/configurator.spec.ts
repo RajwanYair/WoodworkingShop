@@ -185,6 +185,26 @@ test('Configure dimension sliders and toe-kick presets match inventory and updat
   expect(testedPresetCount).toBe(4);
 });
 
+test('dimension slider uses 1 mm steps for pen and restores 10 mm steps for mouse', async ({ appPage: page }) => {
+  await page.getByRole('tab', { name: 'Configure', exact: true }).click();
+
+  const widthSlider = page.getByRole('slider', { name: 'Width (mm)', exact: true });
+  const minimum = Number(await widthSlider.getAttribute('min'));
+
+  await widthSlider.dispatchEvent('pointerdown', { pointerType: 'pen' });
+  await expect(widthSlider).toHaveAttribute('step', '1');
+  await widthSlider.focus();
+  await widthSlider.press('Home');
+  await widthSlider.press('ArrowRight');
+  await expect(widthSlider).toHaveValue(String(minimum + 1));
+
+  await widthSlider.dispatchEvent('pointerdown', { pointerType: 'mouse' });
+  await expect(widthSlider).toHaveAttribute('step', '10');
+  await widthSlider.press('Home');
+  await widthSlider.press('ArrowRight');
+  await expect(widthSlider).toHaveValue(String(minimum + 10));
+});
+
 test('Configure quick preset controls match the browser-derived inventory', async ({ appPage: page }) => {
   await page.getByRole('tab', { name: 'Configure', exact: true }).click();
 
@@ -232,7 +252,7 @@ test('Configure project metadata controls match inventory and update title and n
   const projectNotes = main.getByRole('textbox', { name: 'Project Notes', exact: true });
   await projectName.fill('Roadmap QA');
   await projectNotes.fill('Checking project metadata behavior.');
-  await expect.poll(() => page.title()).toBe('Roadmap QA — Cabinet Planner');
+  await expect.poll(() => page.title()).toBe('Roadmap QA — WoodworkingShop');
   await expect(projectNotes).toHaveValue('Checking project metadata behavior.');
 });
 
@@ -345,11 +365,18 @@ test('Assembly controls match the inventory and update view, tips, progress, and
   await showTips.click();
   await expect(main.getByRole('button', { name: 'Hide tips', exact: true })).toHaveCount(1);
 
-  const stepCompletion = main
-    .locator('[data-assembly-step="true"]')
-    .first()
-    .getByRole('checkbox', { name: 'Mark as done', exact: true });
+  const assemblySteps = main.locator('[data-assembly-step="true"]');
+  const firstStep = assemblySteps.first();
+  const stepCompletion = firstStep.getByRole('checkbox', { name: 'Mark as done', exact: true });
+  const dependentStepCompletion = assemblySteps.nth(1).getByRole('checkbox', { name: 'Mark as done', exact: true });
+  await expect(dependentStepCompletion).toBeDisabled();
   await stepCompletion.check();
+  await expect(dependentStepCompletion).toBeEnabled();
+  await dependentStepCompletion.check();
+  await firstStep.getByRole('checkbox', { name: 'Done', exact: true }).uncheck();
+  await expect(dependentStepCompletion).toBeDisabled();
+  await expect(dependentStepCompletion).not.toBeChecked();
+  await firstStep.getByRole('checkbox', { name: 'Mark as done', exact: true }).check();
   const completedStep = main
     .locator('[data-assembly-step="true"]')
     .first()
@@ -365,13 +392,266 @@ test('Assembly controls match the inventory and update view, tips, progress, and
 
   await main.getByRole('button', { name: 'Step by step', exact: true }).click();
   await expect(main.getByRole('button', { name: 'Step by step', exact: true })).toHaveAttribute('aria-pressed', 'true');
-  await expect(main.getByRole('button', { name: /Previous/ })).toBeDisabled();
-  await expect(main.getByRole('button', { name: /Next/ })).toBeEnabled();
+  const previousStep = main.getByRole('button', { name: /Previous/ });
+  const nextStep = main.getByRole('button', { name: /Next/ });
+  await expect(previousStep).toBeDisabled();
+  await expect(nextStep).toBeEnabled();
+  await expect(main.getByRole('heading', { level: 2 })).toContainText(/Estimated time: \d+ min/);
+  await nextStep.click();
+  await expect(main.getByText(/^2 \/ \d+$/)).toBeVisible();
+  await expect(previousStep).toBeEnabled();
+  await previousStep.click();
+  await expect(main.getByText(/^1 \/ \d+$/)).toBeVisible();
   await main.getByRole('button', { name: 'Show all stages', exact: true }).click();
+  await expect(assemblySteps.nth(1).getByRole('checkbox', { name: 'Mark as done', exact: true })).toBeDisabled();
 
   const checklistDownload = page.waitForEvent('download');
   await main.getByRole('button', { name: 'Download checklist', exact: true }).click();
-  expect((await checklistDownload).suggestedFilename()).toBe('assembly-checklist.txt');
+  const download = await checklistDownload;
+  expect(download.suggestedFilename()).toBe('assembly-checklist.txt');
+  const downloadPath = await download.path();
+  if (!downloadPath) throw new Error('Assembly checklist did not produce a downloadable file');
+  const checklist = await readFile(downloadPath, 'utf8');
+  const stepTitles = await assemblySteps.locator('h3').allTextContents();
+  const checklistSteps = checklist.split('\n').filter((line) => line.startsWith('[ ] Step '));
+  expect(checklistSteps).toHaveLength(stepTitles.length);
+  for (const [index, title] of stepTitles.entries()) {
+    expect(checklistSteps[index]).toContain(`[ ] Step ${index + 1}: ${title}`);
+  }
+});
+
+test('build log entries can be added, edited, persisted, and deleted', async ({ appPage: page }) => {
+  await page.getByRole('tab', { name: 'Assembly' }).click();
+  const buildLog = page.getByRole('region', { name: 'Build Log' });
+  await buildLog.getByRole('button', { name: /Build Log/ }).click();
+
+  const editor = buildLog.getByRole('textbox', { name: 'Add a build note…' });
+  await editor.fill('Hinges aligned');
+  await editor.press('ControlOrMeta+Enter');
+  await expect(buildLog.getByText('Hinges aligned')).toBeVisible();
+
+  await buildLog.getByRole('button', { name: 'Edit entry' }).click();
+  await editor.fill('Hinges aligned and tested');
+  await editor.press('ControlOrMeta+Enter');
+  await expect(buildLog.getByText('Hinges aligned and tested')).toBeVisible();
+  await expect(buildLog.getByText('Hinges aligned', { exact: true })).toHaveCount(0);
+
+  await page.reload();
+  await page.getByRole('tab', { name: 'Assembly' }).click();
+  const reloadedBuildLog = page.getByRole('region', { name: 'Build Log' });
+  await reloadedBuildLog.getByRole('button', { name: /Build Log/ }).click();
+  await expect(reloadedBuildLog.getByText('Hinges aligned and tested')).toBeVisible();
+  await reloadedBuildLog.getByRole('button', { name: 'Delete entry' }).click();
+  await expect(reloadedBuildLog.getByText('No notes yet. Log steps, adjustments, or observations.')).toBeVisible();
+});
+
+test('machine profile settings drive the serial stream and its pause, reconnect, and error lifecycle @chromium-only', async ({
+  appPage: page,
+}) => {
+  test.setTimeout(60_000);
+
+  await page.evaluate(() => {
+    const fixture = {
+      openOptions: [] as { baudRate: number; dataBits: number; stopBits: number; parity: string }[],
+      writes: [] as string[],
+      closeCount: 0,
+      holdFirstWrite: true,
+      releaseFirstWrite: undefined as (() => void) | undefined,
+      failNextRequest: false,
+      failNextWrite: false,
+    };
+    const createPort = () => ({
+      open: async (options: (typeof fixture.openOptions)[number]) => fixture.openOptions.push(options),
+      close: async () => {
+        fixture.closeCount += 1;
+      },
+      writable: new WritableStream<Uint8Array>({
+        write: async (chunk) => {
+          if (fixture.failNextWrite) {
+            fixture.failNextWrite = false;
+            throw new Error('Write failed');
+          }
+          fixture.writes.push(new TextDecoder().decode(chunk));
+          if (fixture.holdFirstWrite && fixture.writes.length === 1) {
+            await new Promise<void>((resolve) => {
+              fixture.releaseFirstWrite = resolve;
+            });
+            fixture.holdFirstWrite = false;
+          }
+        },
+      }),
+    });
+    Object.defineProperty(window, '__machineSerialFixture', { configurable: true, value: fixture });
+    Object.defineProperty(navigator, 'serial', {
+      configurable: true,
+      value: {
+        requestPort: async () => {
+          if (fixture.failNextRequest) {
+            fixture.failNextRequest = false;
+            throw new Error('Picker canceled');
+          }
+          return createPort();
+        },
+      },
+    });
+  });
+
+  await page.keyboard.press('Alt+3');
+  await expect(page.getByRole('status')).toContainText('Optimization complete');
+  await page.getByRole('tab', { name: 'Assembly' }).click();
+  const profile = page.getByRole('combobox', { name: 'Select machine profile' });
+  await profile.selectOption('mach3-generic');
+  await expect(profile).toHaveValue('mach3-generic');
+  await expect(page.getByText('Mach3 via USB/parallel port adapter on a Windows CNC router.')).toBeVisible();
+
+  const connect = page.getByRole('button', { name: 'Connect to machine' });
+  await connect.click();
+  await expect(page.getByRole('button', { name: 'Pause sending' })).toBeVisible();
+  await expect
+    .poll(() => page.evaluate(() => Reflect.get(window, '__machineSerialFixture').writes.length))
+    .toBeGreaterThan(0);
+  await page.getByRole('button', { name: 'Pause sending' }).click();
+  await page.evaluate(() => {
+    const fixture = Reflect.get(window, '__machineSerialFixture') as { releaseFirstWrite?: () => void };
+    fixture.releaseFirstWrite?.();
+  });
+  await expect(page.getByRole('button', { name: 'Resume sending' })).toBeVisible();
+
+  const pausedWrites = await page.evaluate(() => {
+    const fixture = Reflect.get(window, '__machineSerialFixture') as {
+      openOptions: { baudRate: number; dataBits: number; stopBits: number; parity: string }[];
+      writes: string[];
+    };
+    return fixture;
+  });
+  expect(pausedWrites.openOptions[0]).toEqual({ baudRate: 9600, dataBits: 8, stopBits: 1, parity: 'none' });
+  expect(pausedWrites.writes).toHaveLength(1);
+  await page.getByRole('button', { name: 'Resume sending' }).click();
+  await expect(page.getByText(/Done — all \d+ lines sent\./)).toBeVisible();
+
+  const sentGcode = await page.evaluate(() => {
+    const fixture = Reflect.get(window, '__machineSerialFixture') as { writes: string[] };
+    return fixture.writes.join('');
+  });
+  expect(sentGcode).toContain('M3 S20000 ; spindle on');
+  expect(sentGcode).toContain('G0 Z8.0 ; retract to safe height');
+  expect(sentGcode).toContain('F3000');
+  expect(sentGcode).toContain('F1200');
+  expect(sentGcode).not.toContain('F1500');
+  expect(sentGcode).not.toContain('F600');
+  expect(sentGcode).not.toContain('S18000');
+  const doneMessage = await page.getByText(/Done — all \d+ lines sent\./).textContent();
+  const reportedLineCount = Number(doneMessage?.match(/\d+/)?.[0]);
+  const actualWriteCount = await page.evaluate(() => {
+    const fixture = Reflect.get(window, '__machineSerialFixture') as { writes: string[] };
+    return fixture.writes.length;
+  });
+  expect(actualWriteCount).toBe(reportedLineCount);
+
+  await page.getByRole('button', { name: 'Disconnect' }).click();
+  await expect(connect).toBeVisible();
+  await connect.click();
+  await expect(page.getByText(/Done — all \d+ lines sent\./)).toBeVisible();
+  await page.evaluate(() => {
+    const fixture = Reflect.get(window, '__machineSerialFixture') as {
+      closeCount: number;
+      failNextRequest: boolean;
+    };
+    fixture.failNextRequest = true;
+    return fixture.closeCount;
+  });
+  await page.getByRole('button', { name: 'Disconnect' }).click();
+  await expect(connect).toBeVisible();
+  await connect.click();
+  await expect(page.getByText('Connection error: Picker canceled')).toBeVisible();
+  await expect(connect).toBeEnabled();
+  await connect.click();
+  await expect(page.getByText(/Done — all \d+ lines sent\./)).toBeVisible();
+  await page.getByRole('button', { name: 'Disconnect' }).click();
+
+  await page.evaluate(() => {
+    const fixture = Reflect.get(window, '__machineSerialFixture') as { failNextWrite: boolean };
+    fixture.failNextWrite = true;
+  });
+  await connect.click();
+  await expect(page.getByText('Connection error: Write failed')).toBeVisible();
+  await expect(connect).toBeEnabled();
+  await connect.click();
+  await expect(page.getByText(/Done — all \d+ lines sent\./)).toBeVisible();
+  await page.getByRole('button', { name: 'Disconnect' }).click();
+});
+
+for (const failure of [
+  { name: 'permission denial', errorName: 'NotAllowedError', message: 'Permission denied' },
+  { name: 'missing camera device', errorName: 'NotFoundError', message: 'No camera found' },
+]) {
+  test(`camera ${failure.name} is recoverable`, async ({ appPage: page }) => {
+    await page.addInitScript((scenario) => {
+      Object.defineProperty(navigator, 'mediaDevices', {
+        configurable: true,
+        value: {
+          getUserMedia: () => Promise.reject(new DOMException(scenario.message, scenario.errorName)),
+        },
+      });
+    }, failure);
+    await page.reload();
+    await page.getByRole('tab', { name: 'Assembly' }).click();
+
+    const camera = page.getByRole('region', { name: 'Room Photo Reference' });
+    await camera.getByRole('button', { name: 'Open Camera' }).click();
+    await expect(camera.getByRole('alert')).toContainText(`Camera error: ${failure.message}`);
+    await expect(camera.getByRole('button', { name: 'Open Camera' })).toBeVisible();
+  });
+}
+
+test('camera can capture, retake, and stop a room photo stream', async ({ appPage: page }) => {
+  await page.addInitScript(() => {
+    const source = document.createElement('canvas');
+    source.width = 640;
+    source.height = 480;
+    const context = source.getContext('2d');
+    if (!context) throw new Error('Canvas context unavailable in camera fixture');
+    context.fillStyle = '#669944';
+    context.fillRect(0, 0, source.width, source.height);
+    const paintFrame = () => {
+      context.fillRect(0, 0, source.width, source.height);
+      requestAnimationFrame(paintFrame);
+    };
+    requestAnimationFrame(paintFrame);
+    const streams: MediaStream[] = [];
+    Object.defineProperty(window, '__cameraStreams', { configurable: true, value: streams });
+    Object.defineProperty(navigator, 'mediaDevices', {
+      configurable: true,
+      value: {
+        getUserMedia: async () => {
+          const stream = source.captureStream(1).clone();
+          streams.push(stream);
+          return stream;
+        },
+      },
+    });
+  });
+  await page.reload();
+  await page.getByRole('tab', { name: 'Assembly' }).click();
+
+  const camera = page.getByRole('region', { name: 'Room Photo Reference' });
+  await camera.getByRole('button', { name: 'Open Camera' }).click();
+  const video = camera.locator('video[aria-label="Live camera feed"]');
+  await expect(video).toBeVisible();
+  await camera.getByRole('button', { name: 'Take Photo' }).click();
+  await expect(camera.getByRole('img', { name: 'Captured room photo' })).toHaveAttribute('src', /^data:image\/jpeg/);
+  await camera.getByRole('button', { name: 'Retake' }).click();
+  await expect(video).toBeVisible();
+  await camera.getByRole('button', { name: 'Stop Camera' }).click();
+  await expect(camera.getByRole('button', { name: 'Open Camera' })).toBeVisible();
+  await camera.getByRole('button', { name: 'Open Camera' }).click();
+  await expect(video).toBeVisible();
+  await page.getByRole('tab', { name: 'Configure', exact: true }).click();
+  const allTracksStopped = await page.evaluate(() => {
+    const streams = Reflect.get(window, '__cameraStreams') as MediaStream[];
+    return streams.every((stream) => stream.getTracks().every((track) => track.readyState === 'ended'));
+  });
+  expect(allTracksStopped).toBe(true);
 });
 
 test('preview controls match the browser-derived accessible inventory', async ({ appPage: page }) => {
@@ -1200,6 +1480,45 @@ test('project manager saves, loads, exports, imports, and rejects corrupt projec
     buffer: Buffer.from(JSON.stringify({ cabinets: 'not-an-array' })),
   });
   await expect(importDialog.getByText('Kitchen Revision', { exact: true })).toHaveCount(2);
+});
+
+test('project saving remains available near or without a storage estimate', async ({ appPage: page }) => {
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, 'storage', {
+      configurable: true,
+      value: { estimate: async () => ({ usage: 90 * 1024 * 1024, quota: 100 * 1024 * 1024 }) },
+    });
+  });
+  await page.getByRole('button', { name: 'Project Manager' }).click();
+  let dialog = page.getByRole('dialog', { name: 'Project Manager' });
+  await expect(dialog.getByRole('status', { name: /Storage nearly full/i })).toBeVisible();
+  await dialog.getByPlaceholder('Project name…').fill('Near limit project');
+  const saveButton = dialog.getByRole('button', { name: 'Save', exact: true });
+  await expect(saveButton).toBeEnabled();
+  await saveButton.click();
+  await expect(dialog.getByText('Near limit project', { exact: true })).toBeVisible();
+  await dialog.getByText('Close', { exact: true }).click();
+
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, 'storage', {
+      configurable: true,
+      value: { estimate: async () => ({ usage: 0, quota: 0 }) },
+    });
+  });
+  await page.getByRole('button', { name: 'Project Manager' }).click();
+  dialog = page.getByRole('dialog', { name: 'Project Manager' });
+  await expect(dialog.getByRole('status', { name: /unavailable/i })).toBeVisible();
+  await expect(dialog.getByRole('button', { name: 'Save', exact: true })).toBeEnabled();
+  await dialog.getByPlaceholder('Project name…').fill('Unavailable estimate project');
+  await dialog.getByRole('button', { name: 'Save', exact: true }).click();
+  await expect(dialog.getByText('Unavailable estimate project', { exact: true })).toBeVisible();
+  await dialog.getByText('Close', { exact: true }).click();
+
+  await page.reload();
+  await page.getByRole('button', { name: 'Project Manager' }).click();
+  dialog = page.getByRole('dialog', { name: 'Project Manager' });
+  await expect(dialog.getByText('Near limit project', { exact: true })).toBeVisible();
+  await expect(dialog.getByText('Unavailable estimate project', { exact: true })).toBeVisible();
 });
 
 test('canceling share copies its URL and snapshots compare, restore, and delete', async ({ appPage: page }) => {

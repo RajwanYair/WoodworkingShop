@@ -1,11 +1,11 @@
 ---
-mode: agent
+agent: agent
 description: Code review — check a PR or changed files against all project conventions and quality rules.
 ---
 
 # Code Review
 
-You are reviewing code changes in the Cabinet Planner project.
+You are reviewing code changes in the WoodworkingShop project.
 
 ## Input
 

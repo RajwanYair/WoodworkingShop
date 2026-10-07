@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { analyzeWaste, formatAreaM2 } from '../../engine/waste';
+import { formatNumber } from '../../i18n/format';
+import { analyzeWaste } from '../../engine/waste';
 import type { OptimizationResult } from '../../engine/types';
 
 interface Props {
@@ -15,9 +16,14 @@ const RATING_CLASSES = {
 } as const;
 
 export function WasteAnalyticsPanel({ result }: Props) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [open, setOpen] = useState(false);
   const analytics = analyzeWaste(result);
+  const formatLocalizedAreaM2 = (areaMm2: number) =>
+    `${formatNumber(areaMm2 / 1_000_000, i18n.language, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })} m²`;
 
   return (
     <section className="border-wood-200 bg-wood-50 dark:border-wood-700 dark:bg-wood-900/30 rounded-lg border">
@@ -37,7 +43,11 @@ export function WasteAnalyticsPanel({ result }: Props) {
           >
             {t(`wasteAnalytics.rating.${analytics.efficiencyRating}`)}
             {' · '}
-            {analytics.overallWastePercent.toFixed(1)}%
+            {formatNumber(analytics.overallWastePercent, i18n.language, {
+              minimumFractionDigits: 1,
+              maximumFractionDigits: 1,
+            })}
+            %
           </span>
           <span aria-hidden="true" className="text-wood-400 dark:text-wood-500">
             {open ? '▲' : '▼'}
@@ -49,12 +59,18 @@ export function WasteAnalyticsPanel({ result }: Props) {
         <div className="border-wood-200 dark:border-wood-700 space-y-4 border-t px-4 pt-3 pb-4">
           {/* Summary stats row */}
           <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <StatItem label={t('wasteAnalytics.totalSheets')} value={String(analytics.totalSheets)} />
-            <StatItem label={t('wasteAnalytics.totalWaste')} value={formatAreaM2(analytics.totalWasteMm2)} />
-            <StatItem label={t('wasteAnalytics.offcutCandidates')} value={String(analytics.offcutCandidateCount)} />
+            <StatItem
+              label={t('wasteAnalytics.totalSheets')}
+              value={formatNumber(analytics.totalSheets, i18n.language)}
+            />
+            <StatItem label={t('wasteAnalytics.totalWaste')} value={formatLocalizedAreaM2(analytics.totalWasteMm2)} />
+            <StatItem
+              label={t('wasteAnalytics.offcutCandidates')}
+              value={formatNumber(analytics.offcutCandidateCount, i18n.language)}
+            />
             <StatItem
               label={t('wasteAnalytics.recoverableArea')}
-              value={formatAreaM2(analytics.offcutCandidateAreaMm2)}
+              value={formatLocalizedAreaM2(analytics.offcutCandidateAreaMm2)}
             />
           </dl>
 
@@ -78,12 +94,14 @@ export function WasteAnalyticsPanel({ result }: Props) {
                     {analytics.byMaterial.map((m) => (
                       <tr key={m.material} className="border-wood-100 dark:border-wood-800 border-b">
                         <td className="text-wood-700 dark:text-wood-300 py-1 pe-3 font-mono text-xs">{m.material}</td>
-                        <td className="text-wood-600 dark:text-wood-400 py-1 pe-3 text-end">{m.sheetCount}</td>
+                        <td className="text-wood-600 dark:text-wood-400 py-1 pe-3 text-end">
+                          {formatNumber(m.sheetCount, i18n.language)}
+                        </td>
                         <td className="text-wood-600 dark:text-wood-400 py-1 pe-3 text-end tabular-nums">
-                          {formatAreaM2(m.usedAreaMm2)}
+                          {formatLocalizedAreaM2(m.usedAreaMm2)}
                         </td>
                         <td className="py-1 text-end">
-                          <WasteBadge percent={m.wastePercent} />
+                          <WasteBadge percent={m.wastePercent} locale={i18n.language} />
                         </td>
                       </tr>
                     ))}
@@ -113,7 +131,7 @@ export function WasteAnalyticsPanel({ result }: Props) {
                         </span>
                       )}
                     </span>
-                    <WasteBadge percent={s.wastePercent} />
+                    <WasteBadge percent={s.wastePercent} locale={i18n.language} />
                   </li>
                 ))}
               </ul>
@@ -150,9 +168,10 @@ function StatItem({ label, value }: StatItemProps) {
 
 interface WasteBadgeProps {
   percent: number;
+  locale: string;
 }
 
-function WasteBadge({ percent }: WasteBadgeProps) {
+function WasteBadge({ percent, locale }: WasteBadgeProps) {
   const cls =
     percent <= 10
       ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
@@ -160,5 +179,9 @@ function WasteBadge({ percent }: WasteBadgeProps) {
         ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
         : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
 
-  return <span className={`rounded px-1.5 py-0.5 text-xs font-medium tabular-nums ${cls}`}>{percent.toFixed(1)}%</span>;
+  return (
+    <span className={`rounded px-1.5 py-0.5 text-xs font-medium tabular-nums ${cls}`}>
+      {formatNumber(percent, locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%
+    </span>
+  );
 }

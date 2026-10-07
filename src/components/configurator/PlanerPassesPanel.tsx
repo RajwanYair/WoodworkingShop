@@ -47,7 +47,7 @@ export function PlanerPassesPanel() {
             step={1}
             value={initialThicknessMm}
             onChange={(e) => setInitialThicknessMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -60,7 +60,7 @@ export function PlanerPassesPanel() {
             step={1}
             value={targetThicknessMm}
             onChange={(e) => setTargetThicknessMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -73,7 +73,7 @@ export function PlanerPassesPanel() {
             step={0.5}
             value={maxPassDepthMm}
             onChange={(e) => setMaxPassDepthMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -86,7 +86,7 @@ export function PlanerPassesPanel() {
             step={5}
             value={snipeLengthMm}
             onChange={(e) => setSnipeLengthMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -99,7 +99,7 @@ export function PlanerPassesPanel() {
             step={50}
             value={boardLengthMm}
             onChange={(e) => setBoardLengthMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
       </div>

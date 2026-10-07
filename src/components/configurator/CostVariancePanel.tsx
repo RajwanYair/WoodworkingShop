@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../../i18n/format';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useCostVarianceStore } from '../../store/cost-variance-store';
 import { generateCostVarianceReport } from '../../engine/cost-variance';
@@ -15,16 +16,16 @@ function varClass(v: number) {
   return VAR_ZERO;
 }
 
-function fmt(n: number, currency: string) {
+function fmt(n: number, currency: string, locale: string) {
   try {
-    return new Intl.NumberFormat(undefined, { style: 'currency', currency, maximumFractionDigits: 2 }).format(n);
+    return new Intl.NumberFormat(locale, { style: 'currency', currency, maximumFractionDigits: 2 }).format(n);
   } catch {
-    return `${currency} ${n.toFixed(2)}`;
+    return `${currency} ${formatNumber(n, locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   }
 }
 
 export function CostVariancePanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { cost } = useCabinetStore();
   const { actualCosts, setActualCost } = useCostVarianceStore();
   const [open, setOpen] = useState(false);
@@ -72,7 +73,7 @@ export function CostVariancePanel() {
               className={`rounded-full px-1.5 py-0.5 text-xs font-medium ${report.totalVariance > 0 ? 'bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-400' : 'bg-green-100 text-green-600 dark:bg-green-900/40 dark:text-green-400'}`}
             >
               {report.totalVariance > 0 ? '+' : ''}
-              {report.totalVariance.toFixed(0)}
+              {formatNumber(report.totalVariance, i18n.language, { maximumFractionDigits: 0 })}
             </span>
           )}
         </span>
@@ -101,7 +102,7 @@ export function CostVariancePanel() {
                     <tr key={line.materialKey} className="border-wood-100 dark:border-wood-800 border-t">
                       <td className="text-wood-700 dark:text-wood-300 py-1 font-mono text-xs">{line.materialName}</td>
                       <td className="text-wood-500 dark:text-wood-400 py-1 text-end text-xs tabular-nums">
-                        {fmt(line.estimatedCost, line.currencyCode)}
+                        {fmt(line.estimatedCost, line.currencyCode, i18n.language)}
                       </td>
                       <td className="py-1 text-end text-xs tabular-nums">
                         {editKey === line.materialKey ? (
@@ -126,13 +127,13 @@ export function CostVariancePanel() {
                             className="tabular-nums underline-offset-2 hover:underline"
                             aria-label={t('costVariance.editActualAriaLabel', { key: line.materialName })}
                           >
-                            {fmt(line.actualCost, line.currencyCode)}
+                            {fmt(line.actualCost, line.currencyCode, i18n.language)}
                           </button>
                         )}
                       </td>
                       <td className={`py-1 text-end text-xs font-medium tabular-nums ${varClass(line.variance)}`}>
                         {line.variance > 0 ? '+' : ''}
-                        {fmt(line.variance, line.currencyCode)}
+                        {fmt(line.variance, line.currencyCode, i18n.language)}
                         <span className="text-wood-400 ms-1">
                           ({line.variancePct > 0 ? '+' : ''}
                           {line.variancePct}%)
@@ -147,14 +148,14 @@ export function CostVariancePanel() {
                       {t('costVariance.total')}
                     </td>
                     <td className="py-1 text-end text-xs font-bold tabular-nums">
-                      {fmt(report.totalEstimated, report.currencyCode)}
+                      {fmt(report.totalEstimated, report.currencyCode, i18n.language)}
                     </td>
                     <td className="py-1 text-end text-xs font-bold tabular-nums">
-                      {fmt(report.totalActual, report.currencyCode)}
+                      {fmt(report.totalActual, report.currencyCode, i18n.language)}
                     </td>
                     <td className={`py-1 text-end text-xs font-bold tabular-nums ${varClass(report.totalVariance)}`}>
                       {report.totalVariance > 0 ? '+' : ''}
-                      {fmt(report.totalVariance, report.currencyCode)}
+                      {fmt(report.totalVariance, report.currencyCode, i18n.language)}
                     </td>
                   </tr>
                 </tfoot>
@@ -162,7 +163,7 @@ export function CostVariancePanel() {
 
               {report.totalSavings > 0 && (
                 <p className="mt-2 text-xs text-green-600 dark:text-green-400">
-                  {t('costVariance.savings', { amount: fmt(report.totalSavings, report.currencyCode) })}
+                  {t('costVariance.savings', { amount: fmt(report.totalSavings, report.currencyCode, i18n.language) })}
                 </p>
               )}
             </>

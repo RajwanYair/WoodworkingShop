@@ -275,8 +275,7 @@ export function searchCommands(query: string, limit = 20): SearchResult[] {
   const results: SearchResult[] = [];
 
   for (const cmd of _registry.values()) {
-    if (cmd.hidden) continue;
-    if (cmd.when && !cmd.when()) continue;
+    if (cmd.hidden || (cmd.when && !cmd.when())) continue;
     if (!q) {
       results.push({ command: cmd, score: 50 });
       continue;
@@ -327,7 +326,7 @@ export function getRecentCommandIds(): string[] {
     const raw = window.localStorage.getItem(RECENTS_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw) as unknown;
-    return Array.isArray(parsed) ? (parsed as string[]) : [];
+    return Array.isArray(parsed) && parsed.every((id): id is string => typeof id === 'string') ? parsed : [];
   } catch {
     return [];
   }
@@ -376,5 +375,34 @@ function _score(cmd: PaletteCommand, q: string): number {
   if (category === q) return 45;
   if (category.includes(q)) return 40;
   if (id.includes(q)) return 30;
-  return 0;
+  return Math.max(
+    fuzzySubsequenceScore(label, q),
+    fuzzySubsequenceScore(id, q),
+    fuzzySubsequenceScore(category, q),
+    ...keywords.map((keyword) => fuzzySubsequenceScore(keyword, q)),
+  );
+}
+
+function fuzzySubsequenceScore(value: string, query: string): number {
+  let queryIndex = 0;
+  let firstMatch = -1;
+  let lastMatch = -1;
+  let consecutive = 0;
+  let longestRun = 0;
+
+  for (let index = 0; index < value.length && queryIndex < query.length; index += 1) {
+    if (value[index] !== query[queryIndex]) continue;
+    if (firstMatch === -1) firstMatch = index;
+    consecutive = lastMatch === index - 1 ? consecutive + 1 : 1;
+    longestRun = Math.max(longestRun, consecutive);
+    lastMatch = index;
+    queryIndex += 1;
+  }
+
+  if (queryIndex !== query.length) return 0;
+  const span = lastMatch - firstMatch + 1;
+  return Math.min(
+    29,
+    Math.max(1, Math.round((query.length / value.length) * 20 + longestRun * 2 - (span - query.length))),
+  );
 }

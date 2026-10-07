@@ -212,7 +212,7 @@ export function StockTrackerPanel() {
               <button
                 type="button"
                 onClick={handleAdd}
-                className="bg-wood-600 hover:bg-wood-700 rounded-md px-3 py-1.5 text-xs font-medium text-white"
+                className="bg-accent hover:bg-accent-hover rounded-md px-3 py-1.5 text-xs font-medium text-white"
               >
                 {t('stockTracker.add')}
               </button>

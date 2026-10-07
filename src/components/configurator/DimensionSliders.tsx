@@ -106,7 +106,7 @@ export function DimensionSliders() {
                 onClick={() => setConfig({ kickHeight: preset })}
                 className={`rounded border px-2 py-0.5 text-[10px] transition-colors ${
                   (config.kickHeight ?? 0) === preset
-                    ? 'border-wood-500 bg-wood-600 text-white'
+                    ? 'border-accent bg-accent text-white'
                     : 'border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800'
                 }`}
                 aria-label={`Set kick height to ${preset} mm`}
@@ -138,6 +138,7 @@ const MM_PER_INCH = 25.4;
 function DimensionRow({ spec, value, step, unitLabel, metric, label, displayValue, onChange, tMessages }: RowProps) {
   const inputId = useId();
   const errorId = useId();
+  const [penPrecision, setPenPrecision] = useState(false);
   // The text input always edits in current display units; mm is the store value.
   const [text, setText] = useState<string>(() => valueToText(value, metric));
 
@@ -182,9 +183,12 @@ function DimensionRow({ spec, value, step, unitLabel, metric, label, displayValu
           type="range"
           min={spec.softMin}
           max={spec.softMax}
-          step={step}
+          step={penPrecision ? 1 : step}
           value={sliderValue}
           aria-label={`${label} (${unitLabel})`}
+          onPointerDown={(event) => {
+            setPenPrecision(event.pointerType === 'pen');
+          }}
           onChange={(e) => {
             const v = Number(e.target.value);
             onChange(v);

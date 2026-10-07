@@ -1,7 +1,7 @@
 # 📜 Sprint History
 
 <div align="center">
-      <img src="banner.svg" alt="Cabinet Planner" width="100%"/>
+      <img src="banner.svg" alt="WoodworkingShop" width="100%"/>
 </div>
 
 This file is the archive of completed sprints and historical release planning.
@@ -16,7 +16,7 @@ that fed those releases.
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f0b040', 'primaryTextColor': '#1a0e06', 'primaryBorderColor': '#8b5022', 'lineColor': '#7a4010'}}}%%
 gantt
-  title Cabinet Planner Release History
+  title WoodworkingShop Release History
   dateFormat YYYY-MM-DD
   axisFormat %b %Y
   section April 2026
@@ -649,3 +649,27 @@ the in-flight quality sprints (84-87) and run first.
 - [x] T1: Full Playwright run against the fresh TEMP production build used one worker and zero retries: 439 passed, 13 intentionally skipped, 0 failed (30 minutes). The corrected keyboard journey also passed all 36 Chromium/Firefox cases. CI now installs and caches WebKit for its configured preview-acceptance projects.
 - [x] T2: Recorded browser scope in `docs/ARCHITECTURE.md`: full journey suite in Chromium/Firefox; WebKit desktop/mobile preview acceptance only; six-locale axe and responsive/visual preview matrices are Chromium-only.
 - Release gate: NOT READY. Phase 63 S306 remains open, and the clean-checkout acceptance criterion has not been exercised. Do not mark v5.34.0 released until Phase 63 exits.
+- Superseded (2026-10-02): S306 closed under its bounded scope and clean-checkout acceptance passed (`npm run check` 5,338 tests, `dead:check`, `release:build`); v5.34.0 was released.
+
+### Sprint 316 — Accessibility, visual and responsive matrix (archived 2026-10-04)
+
+- [x] T1: Chromium axe WCAG 2.2 AA scans across seven tabs × six locales × light/dark plus mobile navigation, onboarding, shortcuts, project manager, import errors, G-code preview and optimizer recovery; zero violations after contrast, labelling and focusable-scroll fixes.
+- [x] T2: Keyboard-only journey (skip link, focus visibility, tab order and activation, native range, dialog containment, Escape, focus return, reduced motion); fixed a focus-trap bug on negative-tabindex backdrops.
+- [x] T3: 70-state responsive matrix (seven tabs × 320/375/768/1024/1440 px × EN/HE) for overflow, offscreen controls, clipped text and overlapping actions; fixed four layout defects.
+- [x] T4: Chromium/Firefox core visual baselines and 24 preview-view combinations with fonts loaded and animations disabled.
+
+### Sprint 317 — Worker, async and error recovery (archived 2026-10-04)
+
+- [x] T1: Resolve, reject, timeout, abort, termination and recovery for assembly, optimization and cost workers; late replies cannot overwrite newer results.
+- [x] T2: Seven panel error boundaries recover from controlled crashes without affecting siblings; localized fallback, Retry and accessible alert.
+- [x] T3: Deferred PDF generation blocks duplicate submissions and suppresses side effects after unmount; current, full-project and ZIP exports share the guard.
+
+### Sprints 313 and 315 — carry-over decision (2026-10-04)
+
+- [ ] S313 (assembly steps, build log, camera, machine profile and serial lifecycle) and S315 (offline reload, update banner, storage pressure, file handlers) had no completion record; only the checklist download and service-worker registration are asserted in E2E. Both are re-opened for v5.35.0 (ROADMAP §7.2, Sprint 378 T0).
+
+## 2026-10-04 — Strategic refactor review
+
+- Roadmap restructured with a program overview, target architecture, competitive positioning and a re-sequenced release train (foundation first: Phases 73 → 81 → 82 → 65).
+- Added Phases 81–85 (Sprints 420–451): toolchain modernisation, architecture refactor, experience and delight, documentation and community, optional on-device intelligence.
+- Corrected documentation drift in README, ARCHITECTURE, AGENTS, CONTRIBUTING and the docs index.

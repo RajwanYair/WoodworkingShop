@@ -3,7 +3,7 @@
  *
  * Thin client for three AI providers (OpenAI, Anthropic, Ollama).
  * The user supplies their own API key; it is stored in localStorage only —
- * it is never sent to any Cabinet Planner server or analytics pipeline.
+ * it is never sent to any WoodworkingShop server or analytics pipeline.
  *
  * Only the current CabinetConfig JSON is included in requests; no PII is sent.
  *

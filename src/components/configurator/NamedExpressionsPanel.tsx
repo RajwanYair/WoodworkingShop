@@ -1,5 +1,6 @@
 import { useState, useId } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../../i18n/format';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { evaluateNamedParameters } from '../../engine/parameter-expressions';
 import { HARD_LIMITS } from '../../engine/materials';
@@ -19,7 +20,7 @@ type DimensionKey = 'width' | 'height' | 'depth';
  * output before applying values to config fields.
  */
 export function NamedExpressionsPanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const {
     namedExpressions,
     expressionErrors,
@@ -136,6 +137,13 @@ export function NamedExpressionsPanel() {
         <ul className="space-y-2" aria-label={t('namedExpressions.listLabel')}>
           {namedExpressions.map((expr) => {
             const value = resolvedValues[expr.name];
+            const formattedValue =
+              value === undefined
+                ? undefined
+                : formatNumber(value, i18n.language, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  });
             const error = expressionErrors[expr.name] ?? (evalError.includes(expr.name) ? evalError : '');
             return (
               <li
@@ -149,9 +157,9 @@ export function NamedExpressionsPanel() {
                   {value !== undefined && !error && (
                     <span
                       className="ms-2 font-mono text-xs font-medium text-green-700 dark:text-green-400"
-                      aria-label={t('namedExpressions.resolvedValue', { name: expr.name, value })}
+                      aria-label={t('namedExpressions.resolvedValue', { name: expr.name, value: formattedValue })}
                     >
-                      → {value.toFixed(2)}
+                      → {formattedValue}
                     </span>
                   )}
                   {error && (
@@ -190,7 +198,7 @@ export function NamedExpressionsPanel() {
                     type="button"
                     onClick={() => handleApply(expr.name)}
                     disabled={value === undefined || Boolean(error)}
-                    className="bg-wood-600 hover:bg-wood-700 disabled:bg-wood-300 dark:disabled:bg-wood-700 rounded px-2 py-1 text-xs font-medium text-white disabled:cursor-not-allowed"
+                    className="bg-accent hover:bg-accent-hover disabled:bg-wood-300 dark:disabled:bg-wood-700 rounded px-2 py-1 text-xs font-medium text-white disabled:cursor-not-allowed"
                     aria-label={t('namedExpressions.apply', { name: expr.name })}
                   >
                     {t('namedExpressions.applyButton')}
@@ -246,7 +254,7 @@ export function NamedExpressionsPanel() {
               onKeyDown={handleKeyDown}
               placeholder={t('namedExpressions.namePlaceholder')}
               disabled={editingName !== null}
-              className="border-wood-300 text-wood-800 focus:border-wood-500 focus:ring-wood-500 dark:border-wood-600 dark:bg-wood-900 dark:text-wood-200 w-full rounded border bg-white px-2 py-1 font-mono text-xs focus:ring-1 focus:outline-none"
+              className="border-wood-300 text-wood-800 focus:border-wood-500 focus:ring-accent dark:border-wood-600 dark:bg-wood-900 dark:text-wood-200 w-full rounded border bg-white px-2 py-1 font-mono text-xs focus:ring-1 focus:outline-none"
               aria-describedby={addError ? `${nameInputId}-error` : undefined}
               maxLength={MAX_NAME_LENGTH}
             />
@@ -265,7 +273,7 @@ export function NamedExpressionsPanel() {
               }}
               onKeyDown={handleKeyDown}
               placeholder={t('namedExpressions.exprPlaceholder')}
-              className="border-wood-300 text-wood-800 focus:border-wood-500 focus:ring-wood-500 dark:border-wood-600 dark:bg-wood-900 dark:text-wood-200 w-full rounded border bg-white px-2 py-1 font-mono text-xs focus:ring-1 focus:outline-none"
+              className="border-wood-300 text-wood-800 focus:border-wood-500 focus:ring-accent dark:border-wood-600 dark:bg-wood-900 dark:text-wood-200 w-full rounded border bg-white px-2 py-1 font-mono text-xs focus:ring-1 focus:outline-none"
               aria-describedby={addError ? `${nameInputId}-error` : undefined}
               maxLength={MAX_EXPR_LENGTH}
             />
@@ -274,7 +282,7 @@ export function NamedExpressionsPanel() {
             <button
               type="button"
               onClick={handleAdd}
-              className="bg-wood-600 hover:bg-wood-700 focus-visible:ring-wood-500 rounded px-3 py-1 text-xs font-medium text-white focus-visible:ring-2 focus-visible:outline-none disabled:opacity-50"
+              className="bg-accent hover:bg-accent-hover focus-visible:ring-accent rounded px-3 py-1 text-xs font-medium text-white focus-visible:ring-2 focus-visible:outline-none disabled:opacity-50"
             >
               {t(editingName ? 'namedExpressions.save' : 'namedExpressions.add')}
             </button>

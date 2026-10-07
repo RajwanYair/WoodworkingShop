@@ -4,22 +4,23 @@ import { s } from '../pdf-tokens';
 import type { PdfCtx } from '../pdf-i18n';
 import { computePartsWeight } from '../../../engine/parts';
 import { estimateBuildTimeForProject } from '../../../utils/project-build-estimate';
-import { PageHeader } from './PageChrome';
-import { PageFooter } from './PageChrome';
+import { PageFooter, PageHeader } from './PageChrome';
 import { SpecRow } from './SpecRow';
+import { formatNumber } from '../../../i18n/format';
 
 interface PdfSpecPageProps {
-  ctx: PdfCtx;
-  config: CabinetConfig;
-  d: DerivedDimensions;
-  parts: Part[];
-  hardware: HardwareItem[];
-  optimization: OptimizationResult;
-  edgeBandingTotal: number;
-  cMatName: string;
-  cMatThickness: number;
-  bMatName: string;
-  bMatThickness: number;
+  readonly ctx: PdfCtx;
+  readonly config: CabinetConfig;
+  readonly d: DerivedDimensions;
+  readonly parts: Part[];
+  readonly hardware: HardwareItem[];
+  readonly optimization: OptimizationResult;
+  readonly edgeBandingTotal: number;
+  readonly cMatName: string;
+  readonly cMatThickness: number;
+  readonly bMatName: string;
+  readonly bMatThickness: number;
+  readonly labourHours: number;
 }
 
 export function PdfSpecPage({
@@ -34,10 +35,12 @@ export function PdfSpecPage({
   cMatThickness,
   bMatName,
   bMatThickness,
+  labourHours,
 }: PdfSpecPageProps) {
   const { T, fontFamily, fontFamilyBold, textAlign, isRTL, date, coverTitle, lang, pageSize, orientation } = ctx;
   const rowDir = isRTL ? ({ flexDirection: 'row-reverse' } as const) : {};
   const specRowProps = { isRTL, fontFamily, fontFamilyBold };
+  const panelWeightKg = computePartsWeight(parts);
   const estimatedTime = estimateBuildTimeForProject(parts, 1, hardware);
   return (
     <Page size={pageSize} orientation={orientation} style={[s.page, { fontFamily }]}>
@@ -69,7 +72,17 @@ export function PdfSpecPage({
         <SpecRow {...specRowProps} label={T.specCarcass} value={`${cMatName} (${cMatThickness} mm)`} />
         <SpecRow {...specRowProps} label={T.specBackPanel} value={`${bMatName} (${bMatThickness} mm)`} />
         <SpecRow {...specRowProps} label={T.specEdgeBanding} value={config.edgeBanding} />
-        <SpecRow {...specRowProps} label={T.specEdgeBandingTotal} value={`${(edgeBandingTotal / 1000).toFixed(1)} m`} />
+        <SpecRow
+          {...specRowProps}
+          label={T.specEdgeBandingTotal}
+          value={`${formatNumber(edgeBandingTotal / 1000, lang, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} m`}
+        />
+        <SpecRow
+          {...specRowProps}
+          label={T.specPanelWeight}
+          value={`${formatNumber(panelWeightKg, lang, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} kg`}
+        />
+        {labourHours > 0 && <SpecRow {...specRowProps} label={T.specEstimatedLabour} value={`${labourHours} h`} />}
       </View>
 
       <Text style={[s.specGroupTitle, { fontFamily: fontFamilyBold, textAlign }]}>🚪 {T.specDoorsHardware}</Text>
@@ -124,7 +137,12 @@ export function PdfSpecPage({
         </View>
         <View style={s.statBox}>
           <Text style={s.statEmoji}>♻️</Text>
-          <Text style={s.statValue}>{(optimization.totalWaste / 1_000_000).toFixed(2)}</Text>
+          <Text style={s.statValue}>
+            {formatNumber(optimization.totalWaste / 1_000_000, lang, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </Text>
           <Text style={[s.statLabel, { fontFamily }]}>{T.waste}</Text>
         </View>
         <View style={s.statBox}>

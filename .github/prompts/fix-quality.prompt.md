@@ -1,11 +1,11 @@
 ---
-mode: agent
+agent: agent
 description: Diagnose and fix all failures reported by the quality gate (typecheck, lint, format, i18n, CSS).
 ---
 
 # Fix Quality Gate
 
-You are fixing failing quality gate checks in the Cabinet Planner project.
+You are fixing failing quality gate checks in the WoodworkingShop project.
 
 ## Task
 

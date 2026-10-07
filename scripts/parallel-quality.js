@@ -23,6 +23,7 @@ const checks = [
   'workflows:validate',
   'hooks:validate',
   'template:sync:validate',
+  'capabilities:check',
   'pdf:budget',
   'components:budget',
 ];

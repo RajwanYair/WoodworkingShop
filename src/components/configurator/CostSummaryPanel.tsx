@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../../i18n/format';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { buildCostSummary, costSummaryToCsv } from '../../engine/cost-summary-export';
 import { useState } from 'react';
@@ -14,7 +15,7 @@ function downloadCsv(csv: string, filename: string): void {
 }
 
 export function CostSummaryPanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const cost = useCabinetStore((s) => s.cost);
   const [open, setOpen] = useState(false);
 
@@ -40,7 +41,7 @@ export function CostSummaryPanel() {
         <span className="text-wood-500 dark:text-wood-400 flex items-center gap-2 text-sm tabular-nums">
           <span className="text-wood-700 dark:text-wood-200 font-medium">
             {summary.currency}
-            {summary.totalCost.toFixed(2)}
+            {formatNumber(summary.totalCost, i18n.language, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </span>
           <span aria-hidden="true" className="text-wood-400 dark:text-wood-500">
             {open ? '▲' : '▼'}
@@ -65,10 +66,10 @@ export function CostSummaryPanel() {
                   <td className="text-wood-700 dark:text-wood-300 py-1">{t(line.labelKey)}</td>
                   <td className="text-wood-800 dark:text-wood-200 py-1 text-end tabular-nums">
                     {summary.currency}
-                    {line.amount.toFixed(2)}
+                    {formatNumber(line.amount, i18n.language, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </td>
                   <td className="text-wood-400 dark:text-wood-500 py-1 text-end tabular-nums">
-                    {line.pct.toFixed(1)}%
+                    {formatNumber(line.pct, i18n.language, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%
                   </td>
                 </tr>
               ))}
@@ -78,9 +79,12 @@ export function CostSummaryPanel() {
                 <td className="text-wood-800 dark:text-wood-100 pt-2">{t('costSummary.total')}</td>
                 <td className="text-wood-800 dark:text-wood-100 pt-2 text-end tabular-nums">
                   {summary.currency}
-                  {summary.totalCost.toFixed(2)}
+                  {formatNumber(summary.totalCost, i18n.language, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </td>
-                <td className="text-wood-500 pt-2 text-end tabular-nums">100%</td>
+                <td className="text-wood-500 pt-2 text-end tabular-nums">{formatNumber(100, i18n.language)}%</td>
               </tr>
             </tfoot>
           </table>
@@ -90,7 +94,7 @@ export function CostSummaryPanel() {
             <button
               type="button"
               onClick={handleExport}
-              className="bg-wood-600 hover:bg-wood-700 dark:bg-wood-500 dark:hover:bg-wood-600 rounded-md px-3 py-1.5 text-xs font-medium text-white"
+              className="bg-accent hover:bg-accent-hover rounded-md px-3 py-1.5 text-xs font-medium text-white"
             >
               {t('costSummary.exportCsv')}
             </button>

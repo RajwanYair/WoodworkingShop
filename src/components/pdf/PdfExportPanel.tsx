@@ -61,6 +61,7 @@ export function PdfExportPanel() {
           cabinetCount={store.cabinets.length}
           pageSize={pageSize}
           orientation={orientation}
+          labourHours={store.labourHours}
         />
       );
       const blob = await pdf(doc).toBlob();
@@ -144,6 +145,7 @@ export function PdfExportPanel() {
           allCabinetsData={allCabinetsData}
           combinedOptimization={store.combinedOptimization}
           allHardware={allHardware}
+          labourHours={store.labourHours}
         />
       );
       const blob = await pdf(doc).toBlob();
@@ -237,6 +239,7 @@ export function PdfExportPanel() {
             cabinetCount={store.cabinets.length}
             pageSize={pageSize}
             orientation={orientation}
+            labourHours={store.labourHours}
           />
         );
         const pdfBlob = await pdf(doc).toBlob();
@@ -269,7 +272,7 @@ export function PdfExportPanel() {
 
         // 5) README
         const readme = [
-          `Cabinet Planner — Export Bundle`,
+          `WoodworkingShop — Export Bundle`,
           `Project: ${store.projectName || safeName}`,
           `Generated: ${new Date().toISOString()}`,
           ``,
@@ -350,7 +353,7 @@ export function PdfExportPanel() {
             <button
               onClick={handleGenerateAll}
               disabled={generating || generatingAll}
-              className="bg-wood-600 hover:bg-wood-700 rounded-lg px-6 py-3 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+              className="bg-accent hover:bg-accent-hover rounded-lg px-6 py-3 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
             >
               {generatingAll ? t('pdf.generatingAll') : t('pdf.generateAll', { count: store.cabinets.length })}
             </button>
@@ -366,7 +369,7 @@ export function PdfExportPanel() {
           <button
             onClick={handleGenerate}
             disabled={generating || generatingAll}
-            className="bg-wood-600 hover:bg-wood-700 rounded-lg px-6 py-3 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+            className="bg-accent hover:bg-accent-hover rounded-lg px-6 py-3 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
           >
             {generating ? t('pdf.generating') : t('pdf.generate')}
           </button>

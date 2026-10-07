@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: >
   Comprehensive workspace health check — clean generated files, run all quality
   gates, verify $TEMP enforcement, audit dependencies, and confirm production readiness.

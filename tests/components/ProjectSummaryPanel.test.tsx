@@ -63,8 +63,8 @@ describe('ProjectSummaryPanel (Sprint 53)', () => {
     seedMulti();
     render(<ProjectSummaryPanel />);
     expect(screen.getByRole('region', { name: /multi-cabinet project summary/i })).toBeInTheDocument();
-    expect(screen.getByText('Total weight')).toBeInTheDocument();
-    expect(screen.getByText('Total Time')).toBeInTheDocument();
+    expect(screen.getByText('Panel weight')).toBeInTheDocument();
+    expect(screen.getByText('Total estimated time')).toBeInTheDocument();
   });
 
   it('shows cabinet names in the subtitle', () => {
@@ -96,6 +96,16 @@ describe('ProjectSummaryPanel (Sprint 53)', () => {
     seedMulti();
     render(<ProjectSummaryPanel />);
     expect(screen.getByText('7')).toBeInTheDocument();
+  });
+
+  it('labels the panel-only weight and shows user-entered estimated labour', () => {
+    seedMulti();
+    useCabinetStore.setState({ labourHours: 4.5 });
+    render(<ProjectSummaryPanel />);
+
+    expect(screen.getByText('Panel weight')).toBeInTheDocument();
+    expect(screen.getByText('Estimated labour')).toBeInTheDocument();
+    expect(screen.getByText('4.5 h')).toBeInTheDocument();
   });
 });
 

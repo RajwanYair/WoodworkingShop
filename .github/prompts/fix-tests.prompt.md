@@ -1,11 +1,11 @@
 ---
-mode: agent
+agent: agent
 description: Diagnose and fix failing unit tests — trace assertion failures, update snapshots, fix regressions.
 ---
 
 # Fix Tests
 
-You are diagnosing and fixing failing unit tests in the Cabinet Planner project.
+You are diagnosing and fixing failing unit tests in the WoodworkingShop project.
 
 ## Task
 

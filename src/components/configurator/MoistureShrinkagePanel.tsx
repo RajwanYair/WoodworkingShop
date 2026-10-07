@@ -3,11 +3,12 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatMillimeters, formatNumber } from '../../i18n/format';
 import { calculateMoistureShrinkage, MOISTURE_SHRINKAGE_LIMITS } from '../../engine/moisture-shrinkage';
 import type { MoistureShrinkageSpecies, WoodGrainDirection } from '../../engine/moisture-shrinkage';
 
 export function MoistureShrinkagePanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [initialMCPct, setInitialMCPct] = useState(25);
   const [targetMCPct, setTargetMCPct] = useState(8);
@@ -54,7 +55,7 @@ export function MoistureShrinkagePanel() {
             step={1}
             value={initialMCPct}
             onChange={(e) => setInitialMCPct(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -67,7 +68,7 @@ export function MoistureShrinkagePanel() {
             step={1}
             value={targetMCPct}
             onChange={(e) => setTargetMCPct(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -76,7 +77,7 @@ export function MoistureShrinkagePanel() {
           <select
             value={species}
             onChange={(e) => setSpecies(e.target.value as MoistureShrinkageSpecies)}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 text-sm focus:ring-2 focus:outline-none"
           >
             {speciesOptions.map((s) => (
               <option key={s} value={s}>
@@ -91,7 +92,7 @@ export function MoistureShrinkagePanel() {
           <select
             value={grain}
             onChange={(e) => setGrain(e.target.value as WoodGrainDirection)}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 text-sm focus:ring-2 focus:outline-none"
           >
             <option value="tangential">{t('moistureShrinkage.grains.tangential')}</option>
             <option value="radial">{t('moistureShrinkage.grains.radial')}</option>
@@ -107,7 +108,7 @@ export function MoistureShrinkagePanel() {
             step={1}
             value={dimensionMm}
             onChange={(e) => setDimensionMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
       </div>
@@ -122,22 +123,29 @@ export function MoistureShrinkagePanel() {
         <dl className="bg-wood-50 dark:bg-wood-900/40 grid grid-cols-2 gap-x-4 gap-y-2 rounded-lg p-3 text-sm">
           <dt className="text-wood-500 dark:text-wood-400">{t('moistureShrinkage.effectiveMCChange')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.effectiveMCChangePct.toFixed(1)} %
+            {formatNumber(result.data.effectiveMCChangePct, i18n.language, {
+              minimumFractionDigits: 1,
+              maximumFractionDigits: 1,
+            })}{' '}
+            %
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('moistureShrinkage.changeAmount')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.changeAmountMm.toFixed(2)} mm
+            {formatMillimeters(result.data.changeAmountMm, i18n.language, 2)}
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('moistureShrinkage.finalDimension')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.finalDimensionMm.toFixed(2)} mm
+            {formatMillimeters(result.data.finalDimensionMm, i18n.language, 2)}
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('moistureShrinkage.coefficient')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.shrinkageCoefficient.toFixed(5)}
+            {formatNumber(result.data.shrinkageCoefficient, i18n.language, {
+              minimumFractionDigits: 5,
+              maximumFractionDigits: 5,
+            })}
           </dd>
         </dl>
       )}

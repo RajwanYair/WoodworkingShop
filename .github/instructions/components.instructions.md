@@ -1,4 +1,5 @@
 ---
+description: 'React component conventions: named exports, Tailwind logical properties, ARIA, i18n, size limits.'
 applyTo: 'src/components/**/*.tsx'
 ---
 

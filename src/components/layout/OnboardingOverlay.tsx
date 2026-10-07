@@ -1,6 +1,7 @@
 import { useCallback, useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
+import { dispatchCommandAction } from './command-registry';
 import { IconSettings, IconRuler, IconDocument, IconHelp } from './Icons';
 import {
   APP_COMMAND_DEFINITIONS,
@@ -61,7 +62,7 @@ function OnboardingOverlay() {
         onClick={dismiss}
         tabIndex={-1}
       />
-      <div className="dark:bg-wood-800 relative mx-4 w-full max-w-sm rounded-xl bg-white p-6 shadow-2xl">
+      <div className="dark:bg-wood-800 relative mx-4 w-full max-w-sm rounded-3xl bg-white p-7 shadow-[0_24px_64px_rgb(0_0_0/0.25)]">
         {/* Progress dots */}
         <div
           className="mb-5 flex justify-center gap-2"
@@ -72,7 +73,7 @@ function OnboardingOverlay() {
           {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
             <span
               key={i}
-              className={`block h-2 w-2 rounded-full transition-colors ${i === step ? 'bg-wood-600 dark:bg-wood-300' : 'bg-wood-200 dark:bg-wood-600'}`}
+              className={`block h-2 w-2 rounded-full transition-colors ${i === step ? 'bg-accent dark:bg-accent-text-dark' : 'bg-wood-200 dark:bg-wood-600'}`}
             />
           ))}
         </div>
@@ -80,7 +81,7 @@ function OnboardingOverlay() {
         {/* Step content */}
         <div className="flex flex-col items-center gap-3 text-center">
           <span className="text-wood-600 dark:text-wood-300">{current.icon}</span>
-          <h2 id="onboarding-title" className="text-wood-700 dark:text-wood-100 text-base font-bold">
+          <h2 id="onboarding-title" className="text-wood-900 dark:text-wood-50 text-xl font-semibold tracking-tight">
             {t(current.titleKey)}
           </h2>
           <p className="text-wood-600 dark:text-wood-300 text-sm">{t(current.descKey)}</p>
@@ -110,7 +111,7 @@ function OnboardingOverlay() {
             <button
               type="button"
               onClick={dismiss}
-              className="bg-wood-600 hover:bg-wood-700 rounded px-4 py-1.5 text-sm font-medium text-white transition-colors"
+              className="bg-accent hover:bg-accent-hover rounded px-4 py-1.5 text-sm font-medium text-white transition-colors"
             >
               {t('onboarding.getStarted')}
             </button>
@@ -118,7 +119,7 @@ function OnboardingOverlay() {
             <button
               type="button"
               onClick={() => setStep((s) => s + 1)}
-              className="bg-wood-600 hover:bg-wood-700 rounded px-4 py-1.5 text-sm font-medium text-white transition-colors"
+              className="bg-accent hover:bg-accent-hover rounded px-4 py-1.5 text-sm font-medium text-white transition-colors"
             >
               {t('onboarding.next')}
             </button>
@@ -148,8 +149,8 @@ export function HelpButton() {
 
   return (
     <button
-      onClick={open}
-      className="text-wood-300 flex items-center transition-colors hover:text-white"
+      onClick={() => dispatchCommandAction('help.open')}
+      className="text-wood-200 flex h-8 w-8 shrink-0 items-center justify-center rounded-full hover:bg-white/10 hover:text-white active:bg-white/20"
       aria-label={t('onboarding.help')}
       title={t('onboarding.help')}
     >

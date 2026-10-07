@@ -1,5 +1,5 @@
 999
-Cabinet Planner DXF Export
+WoodworkingShop DXF Export
 999
 Version: <APP_VERSION>
 999

@@ -1,79 +1,66 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 320" width="1000" height="320" role="img" aria-labelledby="features-title features-description">
-  <title id="features-title">Cabinet Planner features</title>
-  <desc id="features-description">An overview of design, optimization, export, preview, assembly, cost, and platform capabilities.</desc>
-  <defs>
-    <linearGradient id="fbg" x1="0" y1="0" x2="1000" y2="320" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#0f0a06"/>
-      <stop offset="100%" stop-color="#1a1008"/>
-    </linearGradient>
-    <linearGradient id="fcard" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#2a1a0a"/>
-      <stop offset="100%" stop-color="#1a0e04"/>
-    </linearGradient>
-    <linearGradient id="faccent" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#c08030"/>
-      <stop offset="100%" stop-color="#f0c060"/>
-    </linearGradient>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" width="1000" height="360" role="img" aria-labelledby="features-title features-description">
+  <title id="features-title">WoodworkingShop features</title>
+  <desc id="features-description">A workshop drawing of six capabilities: design, cut optimization, export, preview, assembly, and platform support.</desc>
+  <rect width="1000" height="360" rx="8" fill="#e8eee8" />
+  <text x="48" y="52" font-family="'Segoe UI',Arial,sans-serif" font-size="27" font-weight="700" fill="#183532">From a dimension to a build plan</text>
+  <text x="50" y="76" font-family="'Segoe UI',Arial,sans-serif" font-size="13" fill="#526d64">A focused set of tools for designing, nesting, and making furniture.</text>
+  <path d="M50 94h900" stroke="#b9c9bd" stroke-width="1" />
 
-  <!-- Background -->
-  <rect width="1000" height="320" fill="url(#fbg)" rx="12"/>
+  <g font-family="'Segoe UI',Arial,sans-serif" fill="#294740">
+    <g transform="translate(52 116)" stroke="#277d70" stroke-width="2" fill="none" stroke-linejoin="round">
+      <path d="M2 2h32v34H2zM18 3v32M7 7h7v11H7zM22 7h7v11h-7z" />
+      <circle cx="16" cy="23" r="1" fill="#d77a57" stroke="none" />
+      <circle cx="20" cy="23" r="1" fill="#d77a57" stroke="none" />
+    </g>
+    <text x="101" y="132" font-size="16" font-weight="700" fill="#183532">Design</text>
+    <text x="101" y="155" font-size="12">4 furniture types · Live dimensions</text>
+    <text x="101" y="173" font-size="12">Materials, doors, drawers, and shelves</text>
+    <text x="101" y="191" font-size="12">Save projects or share a design link</text>
 
-  <!-- Title -->
-  <text x="500" y="38" font-family="'Segoe UI',Arial,sans-serif" font-size="22" font-weight="700"
-    fill="#f0c060" text-anchor="middle" letter-spacing="0.5">Feature Overview — Cabinet Planner</text>
-  <rect x="300" y="44" width="400" height="2" fill="url(#faccent)" rx="1" opacity="0.6"/>
+    <g transform="translate(370 116)" stroke="#b77932" stroke-width="2" fill="none" stroke-linejoin="round">
+      <rect x="1" y="2" width="36" height="32" rx="1" />
+      <path d="M5 7h12v8H5zm16 0h12v8H21zM5 19h8v12H5zm12 0h16v5H17zm0 9h16v3H17z" />
+    </g>
+    <text x="419" y="132" font-size="16" font-weight="700" fill="#183532">Optimize</text>
+    <text x="419" y="155" font-size="12">MaxRects sheet nesting</text>
+    <text x="419" y="173" font-size="12">Grain-aware placement and rotation</text>
+    <text x="419" y="191" font-size="12">5 strategies to reduce material waste</text>
 
-  <!-- Row 1: Design | Optimize | Export -->
-  <!-- Card 1: Design -->
-  <rect x="30" y="64" width="300" height="110" rx="10" fill="url(#fcard)" stroke="#5a3010" stroke-width="1"/>
-  <text x="50" y="90" font-family="'Segoe UI',Arial,sans-serif" font-size="14" font-weight="700" fill="#f0b040">🎛 Design</text>
-  <text x="50" y="112" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• 6 furniture types (cabinet, desk, wardrobe…)</text>
-  <text x="50" y="128" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Parametric dimensions with live preview</text>
-  <text x="50" y="144" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Materials, doors, drawers, shelves, grain</text>
-  <text x="50" y="160" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Shareable URLs &amp; JSON config save/load</text>
+    <g transform="translate(688 116)" stroke="#ce704e" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M5 2h20l9 9v25H5zM25 2v10h9M12 22h15m-15 6h15" />
+      <path d="M26 17l4 4-4 4" />
+    </g>
+    <text x="737" y="132" font-size="16" font-weight="700" fill="#183532">Export</text>
+    <text x="737" y="155" font-size="12">PDF plans · DXF · CNC G-code</text>
+    <text x="737" y="173" font-size="12">Parts, hardware, and shopping lists</text>
+    <text x="737" y="191" font-size="12">CSV, SVG, PNG, and model formats</text>
 
-  <!-- Card 2: Optimize -->
-  <rect x="350" y="64" width="300" height="110" rx="10" fill="url(#fcard)" stroke="#5a3010" stroke-width="1"/>
-  <text x="370" y="90" font-family="'Segoe UI',Arial,sans-serif" font-size="14" font-weight="700" fill="#f0b040">📐 Optimize</text>
-  <text x="370" y="112" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• MaxRects 2D bin-packing (web worker)</text>
-  <text x="370" y="128" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Grain-aware — never rotates grain parts</text>
-  <text x="370" y="144" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• 5 smart optimization strategies</text>
-  <text x="370" y="160" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Interactive sheets with hover highlight</text>
+    <g transform="translate(52 238)" stroke="#277d70" stroke-width="2" fill="none" stroke-linejoin="round">
+      <path d="M2 8l17-7 17 7-17 7zM2 8v20l17 8 17-8V8M19 15v21" />
+      <path d="M8 5l17 7" stroke="#b77932" />
+    </g>
+    <text x="101" y="254" font-size="16" font-weight="700" fill="#183532">Preview</text>
+    <text x="101" y="277" font-size="12">6 live cabinet views, including isometric</text>
+    <text x="101" y="295" font-size="12">Dimensions, grain direction, and materials</text>
+    <text x="101" y="313" font-size="12">Touch zoom and vector or PNG download</text>
 
-  <!-- Card 3: Export -->
-  <rect x="670" y="64" width="300" height="110" rx="10" fill="url(#fcard)" stroke="#5a3010" stroke-width="1"/>
-  <text x="690" y="90" font-family="'Segoe UI',Arial,sans-serif" font-size="14" font-weight="700" fill="#f0b040">📤 Export</text>
-  <text x="690" y="112" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• PDF build plan (cover, specs, assembly)</text>
-  <text x="690" y="128" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• DXF for CNC routers / laser cutters</text>
-  <text x="690" y="144" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• G-code toolpath for CNC machines</text>
-  <text x="690" y="160" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• CSV BOM, SVG/PNG preview panels</text>
+    <g transform="translate(370 238)" stroke="#b77932" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 7h30M8 7v22h20V7M13 12v12m10-12v12M5 32h26" />
+      <circle cx="18" cy="18" r="3" stroke="#277d70" />
+    </g>
+    <text x="419" y="254" font-size="16" font-weight="700" fill="#183532">Build &amp; cost</text>
+    <text x="419" y="277" font-size="12">Step-by-step assembly guidance</text>
+    <text x="419" y="295" font-size="12">Live material and hardware estimates</text>
+    <text x="419" y="313" font-size="12">Undo, redo, and keyboard commands</text>
 
-  <!-- Row 2: Preview | Assembly | Platform -->
-  <!-- Card 4: Preview -->
-  <rect x="30" y="190" width="300" height="110" rx="10" fill="url(#fcard)" stroke="#5a3010" stroke-width="1"/>
-  <text x="50" y="216" font-family="'Segoe UI',Arial,sans-serif" font-size="14" font-weight="700" fill="#f0b040">🖼 Preview</text>
-  <text x="50" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• 6 views: front, side, top, back, iso-3D</text>
-  <text x="50" y="254" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Dimension annotations with arrowheads</text>
-  <text x="50" y="270" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Grain arrows, dark mode, touch zoom</text>
-  <text x="50" y="286" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• SVG + PNG download of any view</text>
-
-  <!-- Card 5: Assembly -->
-  <rect x="350" y="190" width="300" height="110" rx="10" fill="url(#fcard)" stroke="#5a3010" stroke-width="1"/>
-  <text x="370" y="216" font-family="'Segoe UI',Arial,sans-serif" font-size="14" font-weight="700" fill="#f0b040">🏗 Assembly &amp; Cost</text>
-  <text x="370" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Step-by-step assembly guide with tips</text>
-  <text x="370" y="254" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Live cost estimator per material</text>
-  <text x="370" y="270" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Hardware BOM with quantities</text>
-  <text x="370" y="286" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Undo/Redo, keyboard shortcuts</text>
-
-  <!-- Card 6: Platform -->
-  <rect x="670" y="190" width="300" height="110" rx="10" fill="url(#fcard)" stroke="#5a3010" stroke-width="1"/>
-  <text x="690" y="216" font-family="'Segoe UI',Arial,sans-serif" font-size="14" font-weight="700" fill="#f0b040">🌐 Platform</text>
-  <text x="690" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• PWA — installable, works offline</text>
-  <text x="690" y="254" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• 6 languages with RTL support</text>
-  <text x="690" y="270" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• WCAG 2.2 AA accessible</text>
-  <text x="690" y="286" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#c09060">• Lighthouse score 97+ / a11y 100</text>
-
-  <!-- Bottom bar -->
-  <rect x="30" y="310" width="940" height="3" fill="url(#faccent)" rx="1.5" opacity="0.4"/>
+    <g transform="translate(688 238)" stroke="#ce704e" stroke-width="2" fill="none" stroke-linecap="round">
+      <circle cx="19" cy="19" r="17" />
+      <path d="M2 19h34M19 2c8 8 8 26 0 34M19 2c-8 8-8 26 0 34M5 9h28M5 29h28" />
+    </g>
+    <text x="737" y="254" font-size="16" font-weight="700" fill="#183532">Platform</text>
+    <text x="737" y="277" font-size="12">Installable PWA with offline support</text>
+    <text x="737" y="295" font-size="12">6 languages, including Hebrew and Arabic</text>
+    <text x="737" y="313" font-size="12">RTL layouts · WCAG 2.2 AA</text>
+  </g>
+  <path d="M50 340h900" stroke="#277d70" stroke-opacity=".55" stroke-width="2" />
 </svg>

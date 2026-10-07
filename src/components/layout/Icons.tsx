@@ -85,6 +85,15 @@ export function IconLink(p: IconProps) {
   );
 }
 
+export function IconSearch(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <circle cx="11" cy="11" r="7" />
+      <line x1="16" y1="16" x2="21" y2="21" />
+    </Icon>
+  );
+}
+
 export function IconPrint(p: IconProps) {
   return (
     <Icon {...p}>
@@ -499,6 +508,34 @@ export function IconLayers(p: IconProps) {
       <polygon points="12 2 2 7 12 12 22 7 12 2" />
       <polyline points="2 17 12 22 22 17" />
       <polyline points="2 12 12 17 22 12" />
+    </Icon>
+  );
+}
+
+export function IconKeyboard(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <rect x="2" y="6" width="20" height="12" rx="2" />
+      <line x1="6" y1="10" x2="6.01" y2="10" strokeWidth={2.5} />
+      <line x1="10" y1="10" x2="10.01" y2="10" strokeWidth={2.5} />
+      <line x1="14" y1="10" x2="14.01" y2="10" strokeWidth={2.5} />
+      <line x1="18" y1="10" x2="18.01" y2="10" strokeWidth={2.5} />
+      <line x1="7" y1="14" x2="17" y2="14" />
+    </Icon>
+  );
+}
+
+export function IconCalculator(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <rect x="5" y="2" width="14" height="20" rx="2" />
+      <rect x="8" y="5" width="8" height="4" rx="0.5" />
+      <line x1="9" y1="13" x2="9.01" y2="13" strokeWidth={2.5} />
+      <line x1="12" y1="13" x2="12.01" y2="13" strokeWidth={2.5} />
+      <line x1="15" y1="13" x2="15.01" y2="13" strokeWidth={2.5} />
+      <line x1="9" y1="17" x2="9.01" y2="17" strokeWidth={2.5} />
+      <line x1="12" y1="17" x2="12.01" y2="17" strokeWidth={2.5} />
+      <line x1="15" y1="17" x2="15.01" y2="17" strokeWidth={2.5} />
     </Icon>
   );
 }

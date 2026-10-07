@@ -368,7 +368,7 @@ export function serializeIfc(scene: IfcScene): IfcExportResult {
   const lines: string[] = [
     'ISO-10303-21;',
     'HEADER;',
-    `FILE_DESCRIPTION(('Cabinet Planner IFC Export'),'2;1');`,
+    `FILE_DESCRIPTION(('WoodworkingShop IFC Export'),'2;1');`,
     `FILE_NAME('cabinet-export.ifc','${now}',('CabinetPlanner'),(''),` +
       `'${GLTF_GENERATOR}','${IFC_SCHEMA_VERSION}','');`,
     `FILE_SCHEMA(('${IFC_SCHEMA_VERSION}'));`,

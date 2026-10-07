@@ -1,4 +1,4 @@
-# Cabinet Planner — User Guide
+# WoodworkingShop — User Guide
 
 > Version 5.34 · React 19 + TypeScript 6 · Progressive Web App
 
@@ -46,7 +46,7 @@ woodworking estimate; it is not a required step in the cabinet workflow.
 | ----------- | -------------------------------------------------------------- |
 | Workspace   | Start screen and entry point to the design workspace           |
 | Configure   | Cabinet dimensions, materials, doors, drawers, and room layout |
-| Preview     | Five orthographic SVG views and a 3-D view                     |
+| Preview     | Six SVG views and an interactive 3-D panel                     |
 | Cut Sheets  | Optimized layouts, parts and hardware tables, DXF, G-code, BOM |
 | Assembly    | Step-by-step illustrated assembly instructions                 |
 | PDF Export  | Print-ready PDF with plans, cut lists, and assembly steps      |
@@ -114,13 +114,15 @@ The configurator highlights problems in real time:
 
 ## Preview Tab
 
-Displays 5 orthographic views plus a simplified 3-D perspective:
+Displays six SVG views plus an interactive 3-D panel:
 
-- **Front** — face view with doors and handles
+- **Front (closed)** — face view with doors and handles
+- **Front (open)** — interior with shelves (drag to reposition) and drawers
 - **Side** — left profile showing depth and toe kick
 - **Top** — plan view showing depth and back position
 - **Back** — back panel (or open-back indicator)
-- **3-D** — isometric-style rendered view
+- **Isometric** — 3-D style SVG drawing
+- **Interactive 3-D** — WebGL orbit view below the SVG views, with a text fallback when WebGL is unavailable
 
 ### Interactions
 
@@ -190,6 +192,8 @@ Generates a print-ready PDF including:
 - Parts and hardware tables
 - Assembly instructions
 
+The tab also exports 3-D models (glTF, STEP, IFC) and a ZIP bundle with a SHA-256 manifest.
+
 **Print** from the PDF viewer, or use the floating print button (`Ctrl+P`).
 
 ## Calculators Tab
@@ -215,6 +219,7 @@ to enter its inputs and view the calculated result.
 | `Ctrl+Y` / `Ctrl+Shift+Z` | Redo                          |
 | `Ctrl+Shift+S`            | Save named snapshot           |
 | `Ctrl+P`                  | Print current view            |
+| `Ctrl+Shift+K`            | Toggle focus mode             |
 | `?`                       | Open keyboard shortcuts help  |
 | `Arrow Left / Right`      | Navigate tab bar when focused |
 | `Home / End`              | Jump to first / last tab      |
@@ -274,11 +279,11 @@ Use `?tpl=kitchen-base` (or other template IDs) to pre-load a named template.
 
 ## Troubleshooting
 
-| Symptom                         | Cause                   | Fix                                                   |
-| ------------------------------- | ----------------------- | ----------------------------------------------------- |
-| Preview is blank                | SVG not loaded          | Refresh the page                                      |
-| Cut sheets show 0% yield        | No parts generated      | Check configurator for red errors                     |
-| PDF is empty                    | Lazy chunk not loaded   | Switch to PDF tab and wait for `Loading…` to complete |
-| URL too long to share           | Many non-default fields | Use the compact base64 URL format                     |
-| Cabinet data lost after refresh | localStorage cleared    | Use Ctrl+Shift+S to save before closing               |
-| App offline shows stale UI      | Service worker cache    | Hard-refresh (`Ctrl+Shift+R`) to bust the cache       |
+| Symptom                         | Cause                   | Fix                                                        |
+| ------------------------------- | ----------------------- | ---------------------------------------------------------- |
+| Preview is blank                | SVG not loaded          | Refresh the page                                           |
+| Cut sheets show 0% yield        | No parts generated      | Check configurator for red errors                          |
+| PDF is empty                    | Lazy chunk not loaded   | Switch to PDF tab and wait for `Loading…` to complete      |
+| URL too long to share           | Many non-default fields | Use the compact base64 URL format                          |
+| Cabinet data lost after refresh | Browser storage cleared | Save in Project Manager and export JSON backups            |
+| App offline shows stale UI      | Service worker cache    | Accept the update banner, or hard-refresh (`Ctrl+Shift+R`) |

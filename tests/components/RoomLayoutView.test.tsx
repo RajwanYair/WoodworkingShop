@@ -1,4 +1,5 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 // Mock zustand persist middleware as a passthrough so localStorage isn't needed
@@ -44,7 +45,7 @@ describe('RoomLayoutView', () => {
   it('displays room name and dimensions', () => {
     useRoomStore.setState({ layouts: [LAYOUT], activeLayoutId: 'l1' });
     render(<RoomLayoutView />);
-    expect(screen.getByText(/Kitchen/)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Kitchen/ })).toBeInTheDocument();
     expect(screen.getAllByText(/4000/).length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText(/3000/).length).toBeGreaterThanOrEqual(1);
   });
@@ -65,13 +66,72 @@ describe('RoomLayoutView', () => {
   it('falls back to first layout when activeLayoutId is null', () => {
     useRoomStore.setState({ layouts: [LAYOUT], activeLayoutId: null });
     render(<RoomLayoutView />);
-    expect(screen.getByText(/Kitchen/)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Kitchen/ })).toBeInTheDocument();
   });
 
-  it('renders SVG floor plan image', () => {
+  it('renders the interactive SVG floor plan', () => {
     useRoomStore.setState({ layouts: [LAYOUT], activeLayoutId: 'l1' });
     render(<RoomLayoutView />);
-    expect(screen.getByRole('img', { name: 'Kitchen' })).toBeInTheDocument();
+    expect(screen.getByRole('group', { name: /Kitchen/ })).toBeInTheDocument();
+  });
+
+  it('moves the selected cabinet by 10mm with an arrow key and 1mm with Shift+arrow', async () => {
+    useRoomStore.setState({ layouts: [LAYOUT], activeLayoutId: 'l1' });
+    render(<RoomLayoutView />);
+    const cabinet = screen.getByRole('button', { name: 'Base Unit' });
+    const user = userEvent.setup();
+
+    await user.click(cabinet);
+    await user.keyboard('{ArrowRight}{Shift>}{ArrowDown}{/Shift}');
+
+    expect(useRoomStore.getState().layouts[0].cabinets[0]).toMatchObject({ x: 110, y: 101 });
+  });
+
+  it('updates cabinet position through numeric controls and clamps it to the room', async () => {
+    useRoomStore.setState({ layouts: [LAYOUT], activeLayoutId: 'l1' });
+    render(<RoomLayoutView />);
+    const user = userEvent.setup();
+    const input = screen.getByRole('spinbutton', { name: 'X position (mm)' });
+
+    await user.clear(input);
+    await user.type(input, '3900');
+
+    expect(useRoomStore.getState().layouts[0].cabinets[0]).toMatchObject({ x: 3400, y: 100 });
+  });
+
+  it.each([
+    ['mouse', 10],
+    ['touch', 10],
+    ['pen', 1],
+  ])('moves by the expected precision for %s pointer input', (pointerType, step) => {
+    useRoomStore.setState({ layouts: [LAYOUT], activeLayoutId: 'l1' });
+    render(<RoomLayoutView />);
+    const cabinet = screen.getByRole('button', { name: 'Base Unit' });
+    const bounds = {
+      x: 0,
+      y: 0,
+      left: 0,
+      top: 0,
+      right: 640,
+      bottom: 400,
+      width: 640,
+      height: 400,
+      toJSON: () => ({}),
+    };
+    const boundsSpy = vi.spyOn(SVGSVGElement.prototype, 'getBoundingClientRect').mockReturnValue(bounds);
+    const initialX = 108.2;
+    const initialY = 43.2;
+    fireEvent.pointerDown(cabinet, { pointerId: 1, pointerType, clientX: initialX, clientY: initialY });
+    fireEvent.pointerMove(cabinet, {
+      pointerId: 1,
+      pointerType,
+      clientX: initialX + step * 0.6 * 0.112,
+      clientY: initialY,
+    });
+    fireEvent.pointerUp(cabinet, { pointerId: 1, pointerType });
+    boundsSpy.mockRestore();
+
+    expect(useRoomStore.getState().layouts[0].cabinets[0].x).toBe(100 + step);
   });
 
   // Sprint 67 — position numbers in SVG floor plan

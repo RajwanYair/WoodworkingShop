@@ -1,7 +1,7 @@
 # Changelog
 
 <div align="center">
-  <img src="docs/banner.svg" alt="Cabinet Planner" width="100%"/>
+  <img src="docs/banner.svg" alt="WoodworkingShop" width="100%"/>
 </div>
 
 All notable changes to this project will be documented in this file.
@@ -13,14 +13,59 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added a Ctrl/Cmd+K command palette with calculator, template, language, recent-project, and built-in action commands; the typed registry also supplies the Header and shortcuts modal.
-- Added mounted pocket-hole, shelf-deflection, mortise-and-tenon, and dovetail-layout calculators, with estimated build time and panel weight in the project summary and PDF specification.
-- Added a generated capability map and classification ledger, plus a locale-completeness audit and woodworking translation glossary.
+- Added an opt-in local diagnostics dialog with buffered Web Vitals, worker availability, aggregate storage estimates, and bounded sanitized error history. Its explicit JSON export excludes project contents and makes no network requests. Added a Dev Container pinned to Node.js 26.10.0 with Playwright browsers installed from the package lock.
+- Deferred initial cut-sheet optimization to the existing Web Worker path in browsers that support workers; the sidebar and cost estimate show pending values until results arrive. Both BOM export entry points dynamically import the exporter, and the cold mobile browser path does not request its chunks until Ctrl+E is invoked. The workspace LCP banner is a preloaded responsive WebP; its LCP-discovery and responsive-image audits pass.
+  Sprint 376 T3 now passes the unchanged critical-route budget at 605.1 KB raw / 153.2 KB Brotli (700 KB / 175 KB). Three consecutive local mobile Lighthouse runs measured performance 95–96, FCP 1,697–1,717 ms, LCP 2,616–2,624 ms, TBT 43–114 ms, and CLS 0. No bundle or metric budgets were raised.
+- Measured the opaque standard and maskable PWA icon assets in the production build at 3,012 KB total. Raised the aggregate bundle ceiling from 2,970 KB to 3,025 KB, retaining a 13 KB measured margin, and adjusted only the 192px/512px standard PNG caps; JavaScript, initial-route, and all other per-asset budgets remain unchanged. The integrated build measured 3,057.4 KB total, so the aggregate ceiling is now 3,070 KB (12.6 KB margin).
+  The deferred 1,172.7 KB PDF renderer has a 1,200 KB per-file cap instead of inheriting the default 520 KB cap.
+- Improved PWA install metadata and assets: added opaque Apple/standard/maskable PNG icons, stable app identity, palette-matched browser theme colors and iOS standalone/safe-area metadata; stopped advertising the unimplemented POST share target. Removed unused external-font startup hints and cross-origin Workbox caches; PDF emoji artwork remains an on-demand network asset. Added browser checks for manifest entries, icon delivery, theme metadata and offline app-shell reload.
+- ADR (Sprint 376): raised the aggregate dist budget from 2,960 KB to 2,970 KB after the T2 production build measured 2,965.1 KB, a 5.1 KB overage from emitted code-splitting chunks and assets. The JavaScript cap remains 2,850 KB; the initial route is independently gated at 700 KB raw / 175 KB Brotli.
+- Completed Sprint 313 T1/T4 assembly journeys and added dependency-aware step completion with downstream rollback; checklist downloads are parsed for ordered step content.
+- Advanced Sprint 313 T2 with editable, keyboard-submittable build-log entries persisted across reload, plus cross-browser camera permission/error/capture/retake/manual-stop and navigation-teardown journeys; physical camera capture remains unverified.
+- Completed Sprint 313 T3 browser-stub coverage: saved machine profiles now drive serial settings and G-code parameters, with safe sender pause/resume, disconnect/reconnect, and picker/write-error recovery.
+- Completed Sprint 315 T1 with Chromium and Firefox checks for manifest essentials, service-worker control, cached app-shell reload while offline, update-banner dismissal persistence, and user-confirmed waiting-worker reload.
+- Completed Sprint 315 T2 with Chromium and Firefox checks for near-limit and unavailable storage estimates; Project Manager keeps named saves available and both projects persist after reload.
+- Completed Sprint 315 T3's browser-shimmed file-handler journey in Chromium and Firefox: valid `.cabinetplan` data loads, while unsupported and malformed files preserve the current configuration. Native OS-level launch remains unverified.
+- Made assembly-step completion respect dependency prerequisites and clear downstream progress when a prerequisite is unchecked; Chromium and Firefox E2E journeys cover the behavior.
+- Continued Sprint 375 locale work with an eight-term glossary and 164 formerly missing camera, catalog, cost, cut, finish, machine, grain, marketplace, measurement, waste, nesting, onboarding, and label strings per AR/DE/ES/FR locale; removed five stale nesting and ten stale onboarding keys per locale. Missing keys fell by 164 per locale. Human review and the EN-identical backlog remain open.
+- Consolidated plugin registration through the v2 lifecycle registry with a deprecated v1 compatibility window through v5.35.x; retired the unused Supabase stub and migrated the assembly sender to utility-owned browser I/O, retaining the public engine Web Serial API as a deprecated compatibility adapter through v5.35.x.
+- Added a schema-validated capability ledger and import-graph check for engine, utility, and service modules; generated JSON, Markdown, and build-chunk reports are written under the OS temp directory.
+- Added `npm run i18n:completeness` to report missing/extra translation keys, EN-identical ratios with an explicit token allowlist, and placeholder compatibility across all six locales; corrected a missing count interpolation in the Hebrew audit message.
+- Consolidated template implementations under `src/engine/templates/` with a disambiguated public barrel and backwards-compatible flat-module facades; Sprint 372 T1 is complete.
+- Consolidated stock, waste, and comparison implementation ownership under domain barrels while retaining distinct APIs and backwards-compatible flat-module facades; Sprint 372 T2 is complete.
+- Clarified the community catalog engine/adapter boundary and named its fetch/cache implementation `community-catalog-io.ts`, retaining the previous utility path as a compatibility facade; Sprint 372 T3 is in progress.
+- Ranked Sprint 373 calculator candidates using direct UI-consumer evidence and rough integration cost; corrected 16 barrel-reachable but unmounted modules to `surface-next`, each targeted to Sprint 373.
+- Surfaced five prioritized strength and joinery engines through lazy calculator panels, backed by component and engine-reconciled browser journeys; added project-summary labour estimates and panel-weight labels to single-cabinet PDF specifications.
+- Mounted the fuzzy command palette on Ctrl/Cmd+K with translated tab, action, calculator, preset, export, language and recent-project commands; added keyboard navigation, focus management, editable-field shortcut suppression and Chromium axe/E2E coverage.
+  A typed command registry now drives Header labels and shortcut hints, global shortcut handling, and `ShortcutsModal`. Added direct commands for all 29 calculators and capped, validated localStorage recents with component and browser regression coverage.
+
+- Sprint 375 follow-up: cumulative missing-key additions are 232 in AR and 213 each in DE/ES/FR. All six bundles have exact 2,093-key parity, with no empty values or placeholder mismatches. Mounted calculator translations now include
+  cabinet-door, face-frame, drawer-box, screw-pullout, kerf-bending, dado-rabbet, finishing-coat, wood-turning, frame-panel, taper-jig, stair-stringer, box-joint, glue-coverage, planer-passes, honing-guide, crown-moulding, router-circle, cove-cut, moisture-shrinkage, rafter-length, router-template, half-lap, and spline-joint. Hardware-catalog UI adds 26 strings per locale; room-planner and 3D preview UI add 11 each.
+  CNC job-queue, project-sharing, and batch-export namespaces add 23, 21, and 19 strings per locale; design comparison, router depth, parametric templates,
+  machining, feed rate, material catalog, maintenance scheduler, multi-machine workflow, drawer-slide calculator, material yield, panel labels,
+  drill-speed calculator, wood-drying estimator, glue-up-time calculator, bandsaw-speed calculator, tablesaw-blade calculator,
+  appliance clearance, layout suggestions, version history, and plugin registry add 18, 24, 21, 19, 18, 18, 17, 16, 18,
+  16, 16, 16, 16, 16, 16, 16, 15, 15, 15, and 2 strings per locale.
+  EN-identical: AR 1.20%, DE 1.49%, ES 1.44%, FR 1.63%; the 2% EN-identical target is met. Config UI also gained one new
+  translation each in DE/ES/FR; command-palette category labels gained one DE and three FR values. Dust-collection,
+  board-feet, assembly-dependency, cloud-sync, miter-angle, pilot-hole, material-usage, shelf-pin, project-comparison,
+  cut-list-grouping, waste-predictor, shop-inventory, CNC-stream, material-cost-tracker, stock-management, tool-wear, and
+  Web Serial and storage-fallback namespaces were translated across AR/DE/ES/FR, and the mobileSync namespace was translated
+  into AR. The library, a11yAudit, aiAssistant, collab, darkMode, gltf, layoutOptimizer, and sync namespaces were translated
+  across AR/DE/ES/FR; analytics was translated into AR, and ERP labels into AR plus the German title. The fingerJoint
+  namespace was translated across AR/DE/ES/FR. All 225 prior review records are approved; 112 new locale records across 30
+  namespaces await review.
 
 ### Removed
 
-- Retired the unused Supabase backend stub and removed its stale capability metadata; local-first project storage remains unchanged.
-- Retired ten unregistered calculator engines with no production callers: appliance clearance, biscuit joint, clamp pressure, dowel joint, edge-banding calculator, production schedule, sanding progression, veneer, wood movement, and workshop safety.
+- Retired eleven unconsumed engine calculators and their unit tests, public barrel exports, capability records, and unused locale strings as part of Sprint 373 T3.
+
+### Documentation
+
+- Restructured `ROADMAP.md` around a full refactor review: program overview with release-train, target-architecture and positioning diagrams; refactor decisions (§3.10); a measured refactor and tooling audit (§4.5); a 2026-10-04 harvest of ideas from open-source and commercial products (§5.5); and new Phases 81–85 (Sprints 420–451) for toolchain modernisation, architecture refactor, experience, documentation and optional on-device intelligence.
+- Re-sequenced the release train so the foundation (Phases 73, 81, 82, 65) ships before feature phases; re-opened Sprints 313 and 315 as v5.35.0 carry-over because no completion evidence existed.
+- Corrected stale documentation: README keyboard shortcuts (`Alt+1`–`Alt+6`), source tree, export formats, command descriptions, locale completeness and a corrupted heading; ARCHITECTURE directory map, store, worker, PWA (Workbox via `vite-plugin-pwa`), CI, i18n and accessibility diagrams; AGENTS active sprint, prompts and MCP servers; CONTRIBUTING gate description; USER-GUIDE preview views, focus-mode shortcut, 3-D/ZIP exports and offline troubleshooting; and the docs index.
+- Archived Sprint 316 and 317 evidence in `docs/SPRINT-HISTORY.md`.
 
 ### Changed
 
@@ -3742,7 +3787,7 @@ Complete architectural decision audit, tooling cleanup, and production readiness
   selector forces each sheet card onto its own page and hides analysis panels.
 - **Project name field** (Sprint 152) — a free-text "Project Name" input at the top of
   `SaveLoadPanel` stores the name in `CabinetState.projectName`. The document `<title>`
-  updates reactively (`<name> — Cabinet Planner`). The name is also used as the JSON
+  updates reactively (`<name> — WoodworkingShop`). The name is also used as the JSON
   export filename prefix.
 
 ### 🐛 Fixed

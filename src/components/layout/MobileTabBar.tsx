@@ -1,17 +1,18 @@
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore, type CabinetState } from '../../store/cabinet-store';
 import { useHaptics } from '../../hooks/useHaptics';
+import { TAB_ICONS } from './tab-icons';
 
 type Tab = CabinetState['activeTab'];
 
-const TABS: { id: Tab; icon: string; labelKey: string }[] = [
-  { id: 'workspace', icon: '🏷️', labelKey: 'tabs.workspace' },
-  { id: 'configurator', icon: '⚙️', labelKey: 'tabs.configurator' },
-  { id: 'preview', icon: '👁️', labelKey: 'tabs.preview' },
-  { id: 'optimizer', icon: '✂️', labelKey: 'tabs.optimizer' },
-  { id: 'assembly', icon: '🔨', labelKey: 'tabs.assembly' },
-  { id: 'pdf', icon: '📄', labelKey: 'tabs.pdf' },
-  { id: 'calculators', icon: '🧮', labelKey: 'tabs.calculators' },
+const TABS: { id: Tab; labelKey: string }[] = [
+  { id: 'workspace', labelKey: 'tabs.workspace' },
+  { id: 'configurator', labelKey: 'tabs.configurator' },
+  { id: 'preview', labelKey: 'tabs.preview' },
+  { id: 'optimizer', labelKey: 'tabs.optimizer' },
+  { id: 'assembly', labelKey: 'tabs.assembly' },
+  { id: 'pdf', labelKey: 'tabs.pdf' },
+  { id: 'calculators', labelKey: 'tabs.calculators' },
 ];
 
 /**
@@ -27,11 +28,12 @@ export function MobileTabBar() {
   return (
     <nav
       aria-label={t('a11y.mobileTabNav')}
-      className="border-wood-200 bg-wood-50 dark:border-wood-700 dark:bg-wood-900 fixed inset-x-0 bottom-0 z-40 flex border-t pb-[env(safe-area-inset-bottom)] lg:hidden"
+      className="apple-bar fixed inset-x-0 bottom-0 z-40 flex border-t pb-[env(safe-area-inset-bottom)] lg:hidden"
       data-print="hide"
     >
       {TABS.map((tab) => {
         const isActive = activeTab === tab.id;
+        const Icon = TAB_ICONS[tab.id];
         return (
           <button
             key={tab.id}
@@ -42,22 +44,13 @@ export function MobileTabBar() {
               haptics.selectionChanged();
             }}
             className={[
-              'flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 py-2 text-xs transition-colors',
-              isActive ? 'text-wood-700 dark:text-wood-100 font-semibold' : 'text-wood-600 dark:text-wood-300',
+              'flex min-h-12 min-w-0 flex-1 flex-col items-center justify-center gap-1 pt-2 pb-1.5 text-[0.6875rem] select-none',
+              isActive
+                ? 'text-accent-text dark:text-accent-text-dark font-semibold'
+                : 'text-wood-600 dark:text-wood-300 font-medium',
             ].join(' ')}
           >
-            {isActive ? (
-              <img
-                src={`${import.meta.env.BASE_URL}tab-sparkle.svg`}
-                alt=""
-                aria-hidden="true"
-                className="h-3 w-8 opacity-90"
-                loading="lazy"
-              />
-            ) : null}
-            <span aria-hidden="true" className="text-lg leading-none">
-              {tab.icon}
-            </span>
+            <Icon size={22} className={isActive ? '' : 'opacity-80'} />
             <span className="block max-w-full truncate leading-none">{t(tab.labelKey)}</span>
           </button>
         );

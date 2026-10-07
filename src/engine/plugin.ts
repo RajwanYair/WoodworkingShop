@@ -1,6 +1,9 @@
 import type { CabinetConfig, Part, ValidationIssue, Result } from './types';
 import { ok, err } from './types';
-import { getActivePlugins, registerPluginV2, unregisterPluginV2 } from './plugin-v2';
+import { getActivePlugins, getRegistryEntries, registerPluginV2, unregisterPluginV2 } from './plugin-v2';
+
+export { pluginEventBus, PluginEventBus } from './plugin-events';
+export type { PluginEventMap, PluginEventName, PluginEventHandler } from './plugin-events';
 
 // ─── Plugin Contract ─────────────────────────────────────────────────────────
 
@@ -15,7 +18,7 @@ export type PluginStability = 'stable' | 'experimental' | 'deprecated';
 
 /**
  * Describes the versioned stability contract of a single hook
- * exposed by the Cabinet Planner plugin API.
+ * exposed by the WoodworkingShop plugin API.
  */
 export interface PluginHookContract {
   /** Name of the hook as it appears on CabinetPlannerPlugin. */
@@ -31,13 +34,13 @@ export interface PluginHookContract {
 }
 
 /**
- * The formal, versioned contract document for the Cabinet Planner plugin API.
+ * The formal, versioned contract document for the WoodworkingShop plugin API.
  *
  * Third-party plugin authors should check this object to understand which
  * hooks are safe to rely on in production.
  */
 export interface PluginContract {
-  /** The Cabinet Planner API semver version this contract describes. */
+  /** The WoodworkingShop API semver version this contract describes. */
   apiVersion: string;
   /** Overall stability of the plugin API surface. */
   stability: PluginStability;
@@ -110,7 +113,7 @@ export function getPluginApiCompatibility(
 }
 
 /**
- * The published stability contract for the Cabinet Planner Plugin API v1.
+ * The published stability contract for the WoodworkingShop Plugin API v1.
  * Update this object whenever a hook is added, changed, or deprecated.
  */
 export const PLUGIN_CONTRACT: PluginContract = {
@@ -119,24 +122,27 @@ export const PLUGIN_CONTRACT: PluginContract = {
   hooks: [
     {
       hookName: 'onPartsGenerated',
-      stability: 'stable',
+      stability: 'deprecated',
       introducedIn: '1.0.0',
+      deprecatedIn: '2.0.0',
       description:
         'Intercepts the generated Part[] list. Return a modified copy; never mutate the input. ' +
         'Return the same array reference to signal no change.',
     },
     {
       hookName: 'onConfigChange',
-      stability: 'stable',
+      stability: 'deprecated',
       introducedIn: '1.0.0',
+      deprecatedIn: '2.0.0',
       description:
         'Intercepts a config change before it is committed to the store. ' +
         'Return a modified CabinetConfig or the original object for no change.',
     },
     {
       hookName: 'onValidate',
-      stability: 'experimental',
+      stability: 'deprecated',
       introducedIn: '1.1.0',
+      deprecatedIn: '2.0.0',
       description:
         'Called after validateConfig() has run all built-in and custom rules. ' +
         'The plugin may add, remove, or modify ValidationIssue objects. ' +
@@ -145,8 +151,9 @@ export const PLUGIN_CONTRACT: PluginContract = {
     {
       // Phase 13 / Sprint 17 — G-code post-processor hook
       hookName: 'onGcodeGenerated',
-      stability: 'experimental',
+      stability: 'deprecated',
       introducedIn: '1.2.0',
+      deprecatedIn: '2.0.0',
       description:
         'Called after cutSheetToGcode() has produced the raw G-code string. ' +
         'The plugin may rewrite, annotate, or transliterate the output for a ' +
@@ -178,6 +185,7 @@ export function getPluginContract(): PluginContract {
  * @deprecated Migrate to {@link CabinetPlannerPluginV2}; the v1 facade remains
  * supported through app v5.35.0 and is scheduled for removal in v5.36.0.
  */
+/** @deprecated Use {@link CabinetPlannerPluginV2}; the v1 adapter is retained through v5.35.x. */
 export interface CabinetPlannerPlugin {
   /** Unique identifier (reverse-domain recommended: "com.example.myPlugin"). */
   id: string;
@@ -243,14 +251,9 @@ export function unregisterPlugin(id: string): void {
   unregisterPluginV2(id);
 }
 
-/**
- * Return a read-only snapshot of active plugins in the shared registry.
- *
- * @deprecated Use {@link getActivePlugins}.
- * @returns Active plugins in registration order.
- */
+/** @deprecated Use `getActivePlugins`; this adapter remains through v5.35.x. */
 export function getPlugins(): readonly CabinetPlannerPlugin[] {
-  return getActivePlugins();
+  return getRegistryEntries().map((entry) => entry.plugin);
 }
 
 /**
@@ -371,112 +374,3 @@ export function runWithSandbox<T>(fn: () => T, fallback: T, opts: SandboxOptions
   }
   return result;
 }
-
-// ───────────────────────────────────────────────────────────────────────────
-// Sprint 20 — Plugin Event Bus
-// ───────────────────────────────────────────────────────────────────────────
-
-/**
- * Sprint 20 — strongly-typed payloads emitted by the plugin event bus.
- *
- * Plugins subscribe via {@link pluginEventBus}.on(event, handler) and receive
- * the payload type associated with that event. Add new event entries here
- * when wiring a new emit site.
- */
-export interface PluginEventMap {
-  /** Cabinet configuration changed (any field). */
-  'config:change': { config: CabinetConfig };
-  /** Cut-optimization run completed. */
-  'optimization:complete': { sheetCount: number; yieldPercent: number };
-  /** A project session was saved (auto-save or explicit). */
-  'project:save': { projectName: string };
-  /** A part's rotation lock was toggled (Sprint 16 + 20). */
-  'part:rotation-lock': { partId: string; locked: boolean };
-  /** A v2 plugin was installed. */
-  'plugin:install': { pluginId: string };
-  /** A v2 plugin was uninstalled. */
-  'plugin:uninstall': { pluginId: string };
-  /** A v2 plugin became active. */
-  'plugin:activate': { pluginId: string };
-  /** A v2 plugin was deactivated. */
-  'plugin:deactivate': { pluginId: string };
-  /** A v2 plugin lifecycle hook threw an error. */
-  'plugin:error': { pluginId: string; message: string };
-}
-
-export type PluginEventName = keyof PluginEventMap;
-export type PluginEventHandler<E extends PluginEventName> = (payload: PluginEventMap[E]) => void;
-
-/**
- * Sprint 20 — lightweight publish/subscribe event bus for the plugin API.
- *
- * Engine and store code can `emit()` named events; plugins (and other
- * subscribers) call `on()` to react. Each handler runs inside a try/catch so a
- * faulty subscriber cannot break the application.
- *
- * The bus is intentionally synchronous: handlers run on the emitter's tick.
- * Keep handlers fast; for slow work, defer with `queueMicrotask` or
- * `setTimeout`.
- */
-export class PluginEventBus {
-  private readonly handlers: Map<PluginEventName, Set<(payload: unknown) => void>> = new Map();
-
-  /** Register a handler for `event`. Returns an `off` function for convenience. */
-  on<E extends PluginEventName>(event: E, handler: PluginEventHandler<E>): () => void {
-    let set = this.handlers.get(event);
-    if (!set) {
-      set = new Set<(payload: unknown) => void>();
-      this.handlers.set(event, set);
-    }
-    set.add(handler as (payload: unknown) => void);
-    return () => this.off(event, handler);
-  }
-
-  /** Remove a handler previously registered with `on`. No-op if not present. */
-  off<E extends PluginEventName>(event: E, handler: PluginEventHandler<E>): void {
-    this.handlers.get(event)?.delete(handler as (payload: unknown) => void);
-  }
-
-  /**
-   * Fire `event` with the given payload. Handlers run in registration order.
-   * A thrown handler is caught and reported via `console.error` so it cannot
-   * abort sibling handlers or the calling code.
-   */
-  emit<E extends PluginEventName>(event: E, payload: PluginEventMap[E]): void {
-    const set = this.handlers.get(event);
-    if (!set) return;
-    for (const handler of set) {
-      try {
-        handler(payload);
-      } catch (err) {
-        console.error(`[pluginEventBus] handler for "${event}" threw:`, err);
-      }
-    }
-  }
-
-  /** Remove all handlers (testing utility). */
-  clear(): void {
-    this.handlers.clear();
-  }
-
-  /**
-   * Register a one-shot handler: fires exactly once then unregisters itself.
-   * Returns an `off` function that cancels the subscription before it fires.
-   */
-  once<E extends PluginEventName>(event: E, handler: PluginEventHandler<E>): () => void {
-    const wrapper: PluginEventHandler<E> = (payload) => {
-      remove();
-      handler(payload);
-    };
-    const remove = this.on(event, wrapper);
-    return remove;
-  }
-
-  /** Return the number of active handlers registered for `event`. */
-  listenerCount(event: PluginEventName): number {
-    return this.handlers.get(event)?.size ?? 0;
-  }
-}
-
-/** Process-wide singleton plugin event bus. */
-export const pluginEventBus = new PluginEventBus();

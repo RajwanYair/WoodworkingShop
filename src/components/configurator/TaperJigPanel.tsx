@@ -40,7 +40,7 @@ export function TaperJigPanel() {
             step={10}
             value={workpieceLengthMm}
             onChange={(e) => setWorkpieceLengthMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -53,7 +53,7 @@ export function TaperJigPanel() {
             step={1}
             value={startWidthMm}
             onChange={(e) => setStartWidthMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -66,7 +66,7 @@ export function TaperJigPanel() {
             step={1}
             value={endWidthMm}
             onChange={(e) => setEndWidthMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -75,7 +75,7 @@ export function TaperJigPanel() {
           <select
             value={taperedFaces}
             onChange={(e) => setTaperedFaces(Number(e.target.value) as 1 | 2)}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 text-sm focus:ring-2 focus:outline-none"
           >
             <option value={1}>{t('taperJig.oneFace')}</option>
             <option value={2}>{t('taperJig.twoFaces')}</option>

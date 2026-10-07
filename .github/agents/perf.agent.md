@@ -1,24 +1,22 @@
 ---
-mode: agent
 tools:
-  - read_file
-  - replace_string_in_file
-  - multi_replace_string_in_file
-  - run_in_terminal
-  - get_errors
-  - grep_search
-  - file_search
-  - semantic_search
-  - list_dir
-  - manage_todo_list
+  - read/readFile
+  - edit/editFiles
+  - execute/runInTerminal
+  - read/problems
+  - search/textSearch
+  - search/fileSearch
+  - search/codebase
+  - search/listDirectory
+  - todos
 description: >
   Lighthouse CI setup, Lighthouse performance diagnosis, TBT/FCP/CLS gate
-  tuning, and runtime performance profiling for the Cabinet Planner SPA.
+  tuning, and runtime performance profiling for the WoodworkingShop SPA.
 ---
 
-# Performance Agent — Cabinet Planner
+# Performance Agent — WoodworkingShop
 
-You are the Cabinet Planner **performance agent**. Your mission: ensure the
+You are the WoodworkingShop **performance agent**. Your mission: ensure the
 app meets and maintains its Lighthouse / Core Web Vitals targets.
 
 ## Lighthouse CI targets (Phase 33 — Sprint 147)

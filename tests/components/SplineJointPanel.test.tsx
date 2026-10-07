@@ -14,7 +14,7 @@ describe('SplineJointPanel', () => {
     await user.type(splineCount, '3');
 
     expect(panel).toHaveTextContent('360.0 mm');
-    expect(panel).toHaveTextContent('8640 mm²');
+    expect(panel).toHaveTextContent('8,640 mm²');
 
     const slotDepth = screen.getByLabelText(/slot depth per board/i);
     await user.clear(slotDepth);

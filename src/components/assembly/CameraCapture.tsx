@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCamera } from '../../hooks/useCamera';
 
@@ -8,6 +9,12 @@ import { useCamera } from '../../hooks/useCamera';
 export function CameraCapture() {
   const { t } = useTranslation();
   const { status, photoDataUrl, videoRef, startCamera, stopCamera, capturePhoto, error, isSupported } = useCamera();
+  const [videoReady, setVideoReady] = useState(false);
+
+  const openCamera = () => {
+    setVideoReady(false);
+    void startCamera();
+  };
 
   if (!isSupported) {
     return <p className="text-wood-500 dark:text-wood-400 text-sm italic">{t('camera.notSupported')}</p>;
@@ -21,13 +28,22 @@ export function CameraCapture() {
       {status === 'active' && (
         <div className="border-wood-300 dark:border-wood-600 relative overflow-hidden rounded-lg border">
           {/* Live camera — no captions available for getUserMedia streams */}
-          <video ref={videoRef} autoPlay playsInline muted className="w-full" aria-label={t('camera.videoFeed')}>
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            muted
+            className="w-full"
+            aria-label={t('camera.videoFeed')}
+            onLoadedData={() => setVideoReady(true)}
+          >
             <track kind="captions" srcLang="en" label="" />
           </video>
           <div className="absolute bottom-2 flex w-full justify-center gap-3 px-2">
             <button
               onClick={() => capturePhoto()}
-              className="bg-wood-600 hover:bg-wood-700 rounded-full px-5 py-2 text-sm font-semibold text-white shadow"
+              disabled={!videoReady}
+              className="bg-accent hover:bg-accent-hover disabled:bg-wood-400 rounded-full px-5 py-2 text-sm font-semibold text-white shadow disabled:cursor-not-allowed"
             >
               {t('camera.capture')}
             </button>
@@ -50,7 +66,7 @@ export function CameraCapture() {
             className="border-wood-300 dark:border-wood-600 w-full rounded-lg border"
           />
           <button
-            onClick={() => void startCamera()}
+            onClick={openCamera}
             className="border-wood-300 text-wood-700 hover:bg-wood-50 dark:border-wood-600 dark:text-wood-200 dark:hover:bg-wood-800 rounded-md border px-3 py-1 text-sm"
           >
             {t('camera.retake')}
@@ -68,8 +84,8 @@ export function CameraCapture() {
       {/* Idle: open camera button */}
       {(status === 'idle' || status === 'error') && (
         <button
-          onClick={() => void startCamera()}
-          className="bg-wood-600 hover:bg-wood-700 rounded-md px-4 py-2 text-sm font-medium text-white"
+          onClick={openCamera}
+          className="bg-accent hover:bg-accent-hover rounded-md px-4 py-2 text-sm font-medium text-white"
         >
           {t('camera.start')}
         </button>

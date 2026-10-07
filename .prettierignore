@@ -5,5 +5,8 @@ test-results
 playwright-report
 package-lock.json
 *.svg
+# Vendored agent skills and Playwright MCP scratch output
+.agents/
+.playwright-mcp/
 # TypeDoc generated API docs — not source, should not be formatted
 docs/api/

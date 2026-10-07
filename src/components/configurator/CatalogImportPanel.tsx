@@ -80,14 +80,14 @@ export function CatalogImportPanel() {
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder={t('catalogImport.urlPlaceholder')}
-          className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 text-wood-800 dark:text-wood-200 focus:ring-wood-500 min-w-0 flex-1 rounded border bg-white px-2 py-1 text-sm focus:ring-2 focus:outline-none"
+          className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 text-wood-800 dark:text-wood-200 focus:ring-accent min-w-0 flex-1 rounded border bg-white px-2 py-1 text-sm focus:ring-2 focus:outline-none"
           disabled={status === 'loading'}
         />
         <button
           type="button"
           onClick={handleImport}
           disabled={status === 'loading' || !url.trim()}
-          className="bg-wood-600 hover:bg-wood-700 disabled:bg-wood-300 dark:disabled:bg-wood-700 rounded px-3 py-1 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed"
+          className="bg-accent hover:bg-accent-hover disabled:bg-wood-300 dark:disabled:bg-wood-700 rounded px-3 py-1 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed"
         >
           {status === 'loading' ? t('catalogImport.importing') : t('catalogImport.importButton')}
         </button>
@@ -122,7 +122,7 @@ export function CatalogImportPanel() {
                     checked={selected.has(cm.id) && !inLibrary}
                     disabled={inLibrary}
                     onChange={() => toggleSelect(cm.id)}
-                    className="accent-wood-600"
+                    className="accent-accent"
                   />
                   <div
                     className="border-wood-200 dark:border-wood-600 h-4 w-4 shrink-0 rounded-sm border"
@@ -153,7 +153,7 @@ export function CatalogImportPanel() {
             type="button"
             onClick={handleAdd}
             disabled={selected.size === 0}
-            className="bg-wood-600 hover:bg-wood-700 disabled:bg-wood-300 dark:disabled:bg-wood-700 rounded px-3 py-1.5 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed"
+            className="bg-accent hover:bg-accent-hover disabled:bg-wood-300 dark:disabled:bg-wood-700 rounded px-3 py-1.5 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed"
           >
             {t('catalogImport.addSelected')}
           </button>

@@ -1,4 +1,5 @@
 {
+  "tokens": ["{{count}}", "—", "A4", "MDF", "Oracle SCM", "SAP (IDOC CSV)", "Shapeoko 3", "X-Carve 1000"],
   "identical": [
     "erp.sap",
     "erp.oracle",

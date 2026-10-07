@@ -3,10 +3,11 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatMillimeters, formatNumber } from '../../i18n/format';
 import { calculateCoveCut } from '../../engine/cove-cut';
 
 export function CoveCutPanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [copeWidthMm, setCopeWidthMm] = useState(100);
   const [copeDepthMm, setCopeDepthMm] = useState(15);
@@ -41,7 +42,7 @@ export function CoveCutPanel() {
             step={1}
             value={copeWidthMm}
             onChange={(e) => setCopeWidthMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -54,7 +55,7 @@ export function CoveCutPanel() {
             step={0.5}
             value={copeDepthMm}
             onChange={(e) => setCopeDepthMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -67,7 +68,7 @@ export function CoveCutPanel() {
             step={1}
             value={bladeDiameterMm}
             onChange={(e) => setBladeDiameterMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -80,7 +81,7 @@ export function CoveCutPanel() {
             step={0.1}
             value={bladeKerfMm}
             onChange={(e) => setBladeKerfMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -93,7 +94,7 @@ export function CoveCutPanel() {
             step={0.25}
             value={maxPassDepthMm}
             onChange={(e) => setMaxPassDepthMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
       </div>
@@ -108,19 +109,27 @@ export function CoveCutPanel() {
         <dl className="bg-wood-50 dark:bg-wood-900/40 grid grid-cols-2 gap-x-4 gap-y-2 rounded-lg p-3 text-sm">
           <dt className="text-wood-500 dark:text-wood-400">{t('coveCut.fenceAngle')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.fenceAngleDeg.toFixed(1)}°
+            {formatNumber(result.data.fenceAngleDeg, i18n.language, {
+              minimumFractionDigits: 1,
+              maximumFractionDigits: 1,
+            })}
+            °
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('coveCut.passCount')}</dt>
-          <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">{result.data.passCount}</dd>
+          <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
+            {formatNumber(result.data.passCount, i18n.language)}
+          </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('coveCut.depthPerPass')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.depthPerPassMm.toFixed(2)} mm
+            {formatMillimeters(result.data.depthPerPassMm, i18n.language, 2)}
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('coveCut.bladeHeight')}</dt>
-          <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">{result.data.bladeHeightMm} mm</dd>
+          <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
+            {formatMillimeters(result.data.bladeHeightMm, i18n.language, 0)}
+          </dd>
         </dl>
       )}
     </section>

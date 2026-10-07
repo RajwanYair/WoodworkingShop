@@ -3,12 +3,13 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatMillimeters, formatNumber } from '../../i18n/format';
 import { calculateKerfBending, type KerfMaterial } from '../../engine/kerf-bending';
 
 const MATERIALS: KerfMaterial[] = ['plywood', 'mdf', 'softwood', 'hardwood'];
 
 export function KerfBendingPanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [thicknessMm, setThicknessMm] = useState(18);
   const [bendRadiusMm, setBendRadiusMm] = useState(150);
@@ -42,7 +43,7 @@ export function KerfBendingPanel() {
             step={1}
             value={thicknessMm}
             onChange={(e) => setThicknessMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -55,7 +56,7 @@ export function KerfBendingPanel() {
             step={10}
             value={bendRadiusMm}
             onChange={(e) => setBendRadiusMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -68,7 +69,7 @@ export function KerfBendingPanel() {
             step={0.1}
             value={kerfWidthMm}
             onChange={(e) => setKerfWidthMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
       </div>
@@ -84,7 +85,7 @@ export function KerfBendingPanel() {
               aria-pressed={material === m}
               className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
                 material === m
-                  ? 'bg-wood-600 text-white'
+                  ? 'bg-accent text-white'
                   : 'bg-wood-100 text-wood-700 dark:bg-wood-700 dark:text-wood-200 hover:bg-wood-200 dark:hover:bg-wood-600'
               }`}
             >
@@ -115,21 +116,23 @@ export function KerfBendingPanel() {
             >
               <dt className="text-wood-500 dark:text-wood-400">{t('kerfBending.kerfSpacing')}</dt>
               <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-                {result.data.kerfSpacingMm.toFixed(1)} mm
+                {formatMillimeters(result.data.kerfSpacingMm, i18n.language, 1)}
               </dd>
 
               <dt className="text-wood-500 dark:text-wood-400">{t('kerfBending.kerfDepth')}</dt>
               <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-                {result.data.kerfDepthMm.toFixed(1)} mm
+                {formatMillimeters(result.data.kerfDepthMm, i18n.language, 1)}
               </dd>
 
               <dt className="text-wood-500 dark:text-wood-400">{t('kerfBending.remainingThickness')}</dt>
               <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-                {result.data.remainingThicknessMm.toFixed(1)} mm
+                {formatMillimeters(result.data.remainingThicknessMm, i18n.language, 1)}
               </dd>
 
               <dt className="text-wood-500 dark:text-wood-400">{t('kerfBending.kerfCount')}</dt>
-              <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">{result.data.kerfCount}</dd>
+              <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
+                {formatNumber(result.data.kerfCount, i18n.language)}
+              </dd>
             </dl>
           )}
         </>

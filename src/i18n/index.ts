@@ -1,6 +1,7 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import en from './en.json';
+import { createPseudoLocale } from './pseudo-locales';
 
 /** All supported UI languages. RTL locales: he, ar. */
 export const SUPPORTED_LANGUAGES = [
@@ -10,12 +11,20 @@ export const SUPPORTED_LANGUAGES = [
   { code: 'de', label: 'German', nativeLabel: 'Deutsch', rtl: false },
   { code: 'fr', label: 'French', nativeLabel: 'Français', rtl: false },
   { code: 'ar', label: 'Arabic', nativeLabel: 'العربية', rtl: true },
+  ...(import.meta.env.MODE === 'e2e'
+    ? [
+        { code: 'en-XA', label: 'Pseudo English', nativeLabel: 'English (pseudo)', rtl: false },
+        { code: 'ar-XB', label: 'Pseudo Arabic', nativeLabel: 'العربية (pseudo)', rtl: true },
+      ]
+    : []),
 ] as const;
 
 export type SupportedLang = (typeof SUPPORTED_LANGUAGES)[number]['code'];
 
 /** RTL language codes — used to set document.documentElement.dir. */
-export const RTL_LANGS = new Set<SupportedLang>(['he', 'ar']);
+export const RTL_LANGS = new Set<SupportedLang>(
+  SUPPORTED_LANGUAGES.filter((language) => language.rtl).map(({ code }) => code),
+);
 
 /**
  * Locale loader map — each entry is a dynamic import that Vite will code-split
@@ -27,6 +36,12 @@ const LOCALE_LOADERS: Partial<Record<SupportedLang, () => Promise<Record<string,
   de: () => import('./de.json').then((m) => m.default as Record<string, unknown>),
   fr: () => import('./fr.json').then((m) => m.default as Record<string, unknown>),
   ar: () => import('./ar.json').then((m) => m.default as Record<string, unknown>),
+  ...(import.meta.env.MODE === 'e2e'
+    ? {
+        'en-XA': async () => createPseudoLocale(en, 'en-XA'),
+        'ar-XB': async () => createPseudoLocale(en, 'ar-XB'),
+      }
+    : {}),
 };
 
 /**

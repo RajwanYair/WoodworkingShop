@@ -9,7 +9,6 @@ import { fileURLToPath } from 'node:url';
 const SOURCE_EXTENSIONS = ['.ts', '.tsx', '.js', '.jsx'];
 const MODULE_DIRECTORIES = ['src/engine', 'src/utils', 'src/services'];
 const UI_DIRECTORIES = ['src/components', 'src/store', 'src/hooks', 'src/workers'];
-const REPORT_DIRECTORY = path.join(os.tmpdir(), 'WoodworkingShop', 'capability-map');
 const LEDGER_PATH = 'config/capability-ledger.json';
 const VALID_STATUSES = new Set(['surfaced', 'internal', 'public-api', 'surface-next', 'retire']);
 
@@ -182,10 +181,12 @@ function relativePath(repoRoot, filePath) {
   return normalizePath(path.relative(repoRoot, filePath));
 }
 
-function readChunkMetadata() {
-  const filePath = path.join(REPORT_DIRECTORY, 'chunks.json');
+function readChunkMetadata(repoRoot) {
+  const filePath = path.join(repoRoot, 'dist', '.vite', 'capability-chunks.json');
   if (!fs.existsSync(filePath)) return {};
-  return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  const chunks = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  fs.rmSync(filePath, { force: true });
+  return chunks;
 }
 
 function collectRepositoryInventory(repoRoot) {
@@ -211,7 +212,7 @@ function collectRepositoryInventory(repoRoot) {
     modulePaths,
     uiRoots,
     testRoots: testFiles.map((filePath) => relativePath(repoRoot, filePath)),
-    outputChunks: readChunkMetadata(),
+    outputChunks: readChunkMetadata(repoRoot),
   });
 }
 
@@ -227,12 +228,12 @@ function compareVersions(left, right) {
   return 0;
 }
 
-/** @param {ReturnType<typeof buildCapabilityInventory>} inventory @param {{modules: object[]}} ledger @param {string} currentVersion */
+/** @param {ReturnType<typeof buildCapabilityInventory>} inventory @param {{modules: object[]|Record<string, object>}} ledger @param {string} currentVersion */
 export function checkCapabilityLedger(inventory, ledger, currentVersion) {
   const errors = [];
   const entries = new Map();
 
-  for (const entry of ledger.modules ?? []) {
+  for (const entry of normalizeLedgerEntries(ledger)) {
     if (entries.has(entry.path)) errors.push(`Duplicate ledger entry: ${entry.path}`);
     entries.set(entry.path, entry);
     if (!VALID_STATUSES.has(entry.status)) errors.push(`${entry.path}: invalid status '${entry.status}'.`);
@@ -300,11 +301,24 @@ function inferInitialLedger(inventory, documentation) {
   };
 }
 
+function normalizeLedgerEntries(ledger) {
+  if (Array.isArray(ledger.modules)) return ledger.modules;
+  if (!ledger.modules || typeof ledger.modules !== 'object') return [];
+  return Object.entries(ledger.modules).map(([modulePath, entry]) => ({
+    path: modulePath,
+    status: entry.classification,
+    reason: entry.rationale,
+    documentedIn: entry.documentation,
+    targetSprint: entry.targetSprint,
+    targetRelease: entry.targetRelease,
+  }));
+}
+
 function writeReports(inventory, ledger) {
-  fs.mkdirSync(REPORT_DIRECTORY, { recursive: true });
-  const entries = new Map(ledger.modules.map((entry) => [entry.path, entry]));
+  const reportDirectory = fs.mkdtempSync(path.join(os.tmpdir(), 'WoodworkingShop-capability-map-'));
+  const entries = new Map(normalizeLedgerEntries(ledger).map((entry) => [entry.path, entry]));
   const report = inventory.map((module) => ({ ...module, ...entries.get(module.path) }));
-  fs.writeFileSync(path.join(REPORT_DIRECTORY, 'capability-map.json'), `${JSON.stringify(report, null, 2)}\n`);
+  fs.writeFileSync(path.join(reportDirectory, 'capability-map.json'), `${JSON.stringify(report, null, 2)}\n`);
   const rows = report.map(
     (module) =>
       `| ${module.path} | ${module.status ?? 'unclassified'} | ${module.uiImporters.join(', ') || '-'} | ${module.internalImporters.join(', ') || '-'} | ${module.barrelOnly ? 'yes' : 'no'} | ${module.testImporters.join(', ') || '-'} | ${module.outputChunks.join(', ') || 'not built'} |`,
@@ -319,7 +333,8 @@ function writeReports(inventory, ledger) {
     ...rows,
     '',
   ].join('\n');
-  fs.writeFileSync(path.join(REPORT_DIRECTORY, 'capability-map.md'), markdown);
+  fs.writeFileSync(path.join(reportDirectory, 'capability-map.md'), markdown);
+  return reportDirectory;
 }
 
 async function main() {
@@ -329,13 +344,21 @@ async function main() {
   const packageJson = JSON.parse(fs.readFileSync(path.join(repoRoot, 'package.json'), 'utf8'));
 
   if (process.argv.includes('--init-ledger')) {
-    if (fs.existsSync(ledgerPath)) throw new Error(`${LEDGER_PATH} already exists; refusing to overwrite it.`);
     const documentation = ['docs/API-BOUNDARIES.md', 'docs/PLUGIN-API.md']
       .filter((filePath) => fs.existsSync(path.join(repoRoot, filePath)))
       .map((filePath) => fs.readFileSync(path.join(repoRoot, filePath), 'utf8'))
       .join('\n');
     fs.mkdirSync(path.dirname(ledgerPath), { recursive: true });
-    fs.writeFileSync(ledgerPath, `${JSON.stringify(inferInitialLedger(inventory, documentation), null, 2)}\n`);
+    try {
+      fs.writeFileSync(ledgerPath, `${JSON.stringify(inferInitialLedger(inventory, documentation), null, 2)}\n`, {
+        flag: 'wx',
+      });
+    } catch (error) {
+      if (error instanceof Error && 'code' in error && error.code === 'EEXIST') {
+        throw new Error(`${LEDGER_PATH} already exists; refusing to overwrite it.`, { cause: error });
+      }
+      throw error;
+    }
     console.log(
       `Created ${LEDGER_PATH} with ${inventory.length} classified modules; review each entry before release.`,
     );
@@ -343,9 +366,9 @@ async function main() {
   }
 
   const ledger = JSON.parse(fs.readFileSync(ledgerPath, 'utf8'));
-  writeReports(inventory, ledger);
+  const reportDirectory = writeReports(inventory, ledger);
   const errors = checkCapabilityLedger(inventory, ledger, packageJson.version);
-  console.log(`Capability map: ${inventory.length} modules; reports written to ${REPORT_DIRECTORY}`);
+  console.log(`Capability map: ${inventory.length} modules; reports written to ${reportDirectory}`);
   if (errors.length > 0) {
     console.error(`Capability ledger check failed (${errors.length}):`);
     for (const error of errors) console.error(`  - ${error}`);

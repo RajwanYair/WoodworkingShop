@@ -1,23 +1,21 @@
 ---
-mode: agent
 tools:
-  - read_file
-  - replace_string_in_file
-  - multi_replace_string_in_file
-  - run_in_terminal
-  - get_errors
-  - grep_search
-  - file_search
-  - list_dir
-  - manage_todo_list
+  - read/readFile
+  - edit/editFiles
+  - execute/runInTerminal
+  - read/problems
+  - search/textSearch
+  - search/fileSearch
+  - search/listDirectory
+  - todos
 description: >
   Production cleanup — remove dead code, fix lint/format issues, enforce $TEMP
   for generated files, verify all quality gates, and prepare for release.
 ---
 
-# Cleanup Agent — Cabinet Planner
+# Cleanup Agent — WoodworkingShop
 
-You are the Cabinet Planner **cleanup agent**. Your mission: bring the codebase
+You are the WoodworkingShop **cleanup agent**. Your mission: bring the codebase
 to production-ready state with zero warnings, zero dead code, and all generated
 files properly routed to `$TEMP`.
 

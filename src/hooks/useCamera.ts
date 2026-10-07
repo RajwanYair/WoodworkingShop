@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 
 // Minimal Capacitor types — avoids adding @capacitor/core as a prod dep.
 interface CapacitorCameraPlugin {
@@ -42,6 +42,23 @@ export function useCamera(): UseCameraResult {
   const [error, setError] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  const mountedRef = useRef(false);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+      streamRef.current?.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (status !== 'active') return;
+    const video = videoRef.current;
+    const stream = streamRef.current;
+    if (video && stream) video.srcObject = stream;
+  }, [status]);
 
   const cap = (window as CapWindow).Capacitor;
   const isNative = cap?.isNativePlatform?.() ?? false;
@@ -66,9 +83,11 @@ export function useCamera(): UseCameraResult {
           resultType: 'dataUrl',
           source: 'CAMERA',
         });
+        if (!mountedRef.current) return;
         setPhotoDataUrl(photo.dataUrl ?? null);
         setStatus('captured');
       } catch (e) {
+        if (!mountedRef.current) return;
         setError(e instanceof Error ? e.message : 'Camera error');
         setStatus('error');
       }
@@ -86,12 +105,17 @@ export function useCamera(): UseCameraResult {
         video: { facingMode: 'environment' },
         audio: false,
       });
+      if (!mountedRef.current) {
+        stream.getTracks().forEach((track) => track.stop());
+        return;
+      }
       streamRef.current = stream;
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
       setStatus('active');
     } catch (e) {
+      if (!mountedRef.current) return;
       setError(e instanceof Error ? e.message : 'Camera error');
       setStatus('error');
     }
@@ -100,10 +124,13 @@ export function useCamera(): UseCameraResult {
   const capturePhoto = useCallback(() => {
     const video = videoRef.current;
     if (!video || status !== 'active') return null;
+    if (video.videoWidth === 0 || video.videoHeight === 0) return null;
     const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth || 640;
-    canvas.height = video.videoHeight || 480;
-    canvas.getContext('2d')?.drawImage(video, 0, 0);
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const context = canvas.getContext('2d');
+    if (!context) return null;
+    context.drawImage(video, 0, 0);
     const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
     setPhotoDataUrl(dataUrl);
     stopCamera();

@@ -1,10 +1,159 @@
 # Roadmap
 
-> Last updated: 2026-10-02 (v5.34.0 clean-checkout acceptance)
+> Last updated: 2026-10-05 (S375 locale progress)
 > Current app version: v5.34.0
 > Next release target: v5.35.0 (Phase 73 — Product coherence and modern app shell)
-> Program horizon: Phases 63–80 · Sprints 300–419 · v5.34.0 → v6.0.0 (execution order: §7.2 release train)
-> Strategy: best-in-class, local-first, production-grade woodworking planning platform
+> Program horizon: Phases 63–85 · Sprints 300–451 · v5.34.0 → v6.0.0 (execution order: §7.2 release train)
+> Strategy: best-in-class, local-first, production-grade woodworking planning platform — **refactor the foundation first, then lead on workflow depth**
+
+---
+
+## ★ Program at a Glance (2026-10-04 review)
+
+### Where we stand
+
+| Dimension      | Today (measured 2026-10-04)                                                                                          | v6.0 target                                                                                     | Phases    |
+| -------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | --------- |
+| Verification   | 5,338 Vitest tests (clean checkout 2026-10-02); 439 Playwright tests; axe on 7 tabs × 6 locales × 2 themes           | Full mutation baseline (incremental Stryker), browser-mode component tests, ARIA snapshots      | 81        |
+| Architecture   | 165 flat engine modules + 7 thin domain folders; 1,448-line engine barrel; 97 engine modules unreachable from the UI | Domain-split engine, platform layer, feature-sliced UI, enforced layer rules, zero Knip hatches | 73, 82    |
+| Toolchain      | TypeScript 6, Vitest 4, Playwright 1.61, manual memoisation                                                          | TypeScript 7 (native), Vitest 5 projects + browser mode, Playwright 1.63, React Compiler 1.0    | 81        |
+| Product depth  | Cabinet generator, MaxRects sheet optimizer, 24 calculators, 10 export formats                                       | Parts-only workbench, 1D lumber optimizer, cut sequence, construction systems, shop-floor mode  | 66, 74–77 |
+| Localization   | EN + HE complete with RTL; AR/DE/ES/FR ≈ 60 % English fallback                                                       | Six complete locales, then up to 12 through community translation                               | 73, 84    |
+| Experience     | Seven tabs, static onboarding, SVG views + basic WebGL box                                                           | Guided first run, examples gallery, shop drawings, design timeline, realistic WebGPU preview    | 83        |
+| Docs & visuals | Hand-maintained metrics and three static SVGs                                                                        | Docs site, generated screenshots and demo video, generated metrics, CI-verified diagrams        | 84        |
+| Supply chain   | Tag-pinned actions, SBOM, CodeQL, dependency review                                                                  | SHA-pinned actions, build attestations, published OpenSSF Scorecard                             | 81        |
+
+### Release train
+
+```mermaid
+flowchart LR
+  subgraph foundation["① Foundation — refactor first"]
+    direction TB
+    r534["v5.34.0 ✅<br/>63 + 64 Verification"] --> r535["v5.35.0 ▶ NEXT<br/>73 Coherence + app shell"]
+    r535 --> r536["v5.36.0<br/>81 Toolchain"]
+    r536 --> r537["v5.37.0<br/>82 Architecture refactor"]
+    r537 --> r538["v5.38.0<br/>65 Versioned data"]
+  end
+  subgraph delight["② Experience"]
+    direction TB
+    r539["v5.39.0<br/>83 Experience + delight"] --> r540["v5.40.0<br/>84 Docs + community"]
+  end
+  subgraph workflow["③ Workflow leadership"]
+    direction TB
+    r541["v5.41.0<br/>66 Optimizer"] --> r542["v5.42.0<br/>74 Cut-list workbench"]
+    r542 --> r543["v5.43.0<br/>75 Shop-floor mode"]
+  end
+  subgraph making["④ Manufacturing + rooms"]
+    direction TB
+    r544["v5.44.0<br/>67 CNC + hardware"] --> r545["v5.45.0<br/>77 Doors + construction"]
+    r545 --> r546["v5.46.0<br/>68 Room design"]
+    r546 --> r547["v5.47.0<br/>76 Room capture"]
+    r547 --> r548["v5.48.0<br/>78 Interop + files"]
+  end
+  subgraph platform["⑤ Platform + v6"]
+    direction TB
+    r549["v5.49.0<br/>69 Assembly + plugins"] --> r550["v5.50.0<br/>79 Estimating"]
+    r550 --> r551["v5.51.0<br/>70 Governance"]
+    r551 --> r552["v5.52.0<br/>71 Performance"]
+    r552 --> r600["v6.0.0<br/>72 Readiness"]
+  end
+  foundation --> delight --> workflow --> making --> platform
+
+  classDef done fill:#3a7a50,stroke:#1e4a30,color:#ffffff,font-weight:bold
+  classDef next fill:#f0b040,stroke:#8b5022,color:#1a0806,font-weight:bold
+  classDef planned fill:#fae7c0,stroke:#c08040,color:#3a1806
+  classDef major fill:#2a5a9a,stroke:#1a3a6e,color:#ffffff,font-weight:bold
+  class r534 done
+  class r535 next
+  class r536,r537,r538,r539,r540,r541,r542,r543,r544,r545,r546,r547,r548,r549,r550,r551,r552 planned
+  class r600 major
+```
+
+Continuous tracks outside the train: Phase 80 (developer platform, remaining sprints) and Phase 85 (optional on-device intelligence, after Phase 82).
+
+### Target architecture (Phase 82)
+
+```mermaid
+flowchart TB
+  App["app/<br/>shell · routes (Navigation API) · command registry · error boundaries"]
+  Features["features/*<br/>configurator · preview · optimizer · cut-list · shop · assembly · pdf · calculators · room"]
+  UI["ui/<br/>design-system primitives on wood-* tokens"]
+  Store["store/<br/>domain slices · patch history · selectors"]
+  Platform["platform/<br/>storage adapter · files · share · device capabilities"]
+  Workers["workers/<br/>typed WorkerJob pool"]
+  Engine["engine/*<br/>pure domains: core · geometry · materials · hardware · joinery · optimizer · assembly · costing · export · room · calculators · workshop · project"]
+
+  App --> Features
+  Features --> UI
+  Features --> Store
+  Store --> Engine
+  Store --> Platform
+  Platform --> Workers
+  Workers --> Engine
+
+  classDef shell fill:#8b5022,stroke:#f0b040,color:#ffffff,font-weight:bold
+  classDef view fill:#f0b040,stroke:#8b5022,color:#1a0806,font-weight:bold
+  classDef state fill:#3a7a50,stroke:#1e4a30,color:#ffffff,font-weight:bold
+  classDef pure fill:#2a5a9a,stroke:#1a3a6e,color:#ffffff,font-weight:bold
+  classDef io fill:#fae7c0,stroke:#c08040,color:#3a1806
+  class App shell
+  class Features,UI view
+  class Store state
+  class Engine pure
+  class Platform,Workers io
+```
+
+Layer rules are enforced automatically from Sprint 426: the engine imports nothing outside the engine; features never import platform code directly; the platform never imports React.
+
+### Competitive positioning
+
+```mermaid
+quadrantChart
+  title Directional positioning, 2026-10 review
+  x-axis Narrow workflow --> Design-to-manufacture depth
+  y-axis Closed or costly --> Open, accessible and free
+  quadrant-1 Open and deep — our target
+  quadrant-2 Open but shallow
+  quadrant-3 Niche tools
+  quadrant-4 Deep but closed
+  WoodworkingShop today: [0.52, 0.88]
+  WoodworkingShop v6 target: [0.82, 0.93]
+  OpenCutList on SketchUp: [0.55, 0.60]
+  CutList Optimizer: [0.30, 0.42]
+  SketchUp: [0.42, 0.32]
+  Fusion: [0.72, 0.28]
+  Polyboard: [0.80, 0.22]
+  Mozaik: [0.84, 0.18]
+  Cabinet Vision: [0.92, 0.10]
+```
+
+Placement is a qualitative judgment from the §5 benchmarks, not a measurement; Sprint 370 replaces it with scored criteria.
+
+### Twelve bets harvested from the best products
+
+| #   | Bet                                                       | Harvested from                                                           | Lands in        | Why woodworkers will love it                        |
+| --- | --------------------------------------------------------- | ------------------------------------------------------------------------ | --------------- | --------------------------------------------------- |
+| 1   | Parts-only cut list with spreadsheet paste and CSV import | CutList Optimizer, OpenCutList, MaxCut                                   | S379–S380       | Use the optimizer without designing a cabinet       |
+| 2   | Linear (1D) lumber optimizer                              | Opticutter, MaxCut, CutList Plus fx                                      | S381            | Face frames, rails, trim and solid wood             |
+| 3   | Executable cut sequence and QR part labels                | CutList Plus fx, OpenCutList, cabinet CAD shop-floor modules             | S330, S388      | Cut in order; scan to track                         |
+| 4   | Shop-floor mode: wake lock, large targets, read-aloud     | Shop-floor suites and mobile workshop apps                               | S386–S391       | Works on a dusty tablet at the saw                  |
+| 5   | Shop drawings with exploded callouts                      | Published woodworking plans, SketchUp LayOut, OpenCutList exploded views | S437            | Print-ready plans, not just cut lists               |
+| 6   | Construction systems and door styles                      | Mozaik, Cabinet Vision, Polyboard                                        | S398–S403       | Frameless, face-frame and inset the way shops build |
+| 7   | Command palette and keyboard-first workflow               | VS Code, Figma, Excalidraw                                               | S374            | Every action two keystrokes away                    |
+| 8   | Save-in-place files, round-trip exports, encrypted links  | Photopea, Excalidraw                                                     | S384, S404–S405 | Desktop-class files with privacy                    |
+| 9   | Design history timeline with branches                     | Fusion timeline, Figma version history                                   | S438            | Experiment without fear                             |
+| 10  | Realistic WebGPU preview with WebGL2 fallback             | Retail kitchen planners, Roomle, Shapr3D                                 | S440            | See the finished piece before cutting               |
+| 11  | Examples gallery and guided first run                     | Figma, Onshape learning paths, Excalidraw libraries                      | S435            | Real value within the first minute                  |
+| 12  | Optional on-device design assistant                       | Browser built-in AI (Prompt API), Onshape and SketchUp assistants        | S448–S450       | Describe a piece, review the diff, then apply       |
+
+### What changed in this revision
+
+- **New refactor program (Phases 81–85, Sprints 420–451):** toolchain modernisation, architecture refactor, experience and delight, documentation and community, optional on-device intelligence (§7.4).
+- **Re-sequenced release train:** the foundation (73 → 81 → 82 → 65) now precedes the feature phases; later targets moved to v5.38.0–v5.52.0 (§7.2).
+- **Absorbed sprints:** S414 → S421, S415 → S420, S417 → S425, S418 → S422, S377 T1/T3 → S431, S377 T2 → S439.
+- **Honest carry-over:** S313 (assembly, build log, camera, machine flows) and S315 (PWA, offline, storage pressure) had no completion evidence and are re-opened for v5.35.0.
+- **Refreshed facts:** TypeScript 7.0 (native) and Vitest 5.0 are released, Playwright 1.63, React Compiler 1.0, and the Navigation API is Baseline 2026; tool counts in §3.5 and §9 were corrected (29 extensions, 11 MCP servers, 15 workflows).
+- **Same-day documentation fixes:** README, ARCHITECTURE, AGENTS, CONTRIBUTING and the docs index now match the code.
 
 ---
 
@@ -72,16 +221,18 @@ Historical artifacts:
 
 ### 3.1 Language and Framework
 
-| Decision     | Current               | Alternatives Considered                   | Verdict              | Rationale                                                                                                          |
-| ------------ | --------------------- | ----------------------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| Language     | TypeScript 6 (strict) | Rust+WASM, Dart/Flutter, plain JS, Go     | **Keep TS 6**        | Best DX for browser-first apps; `erasableSyntaxOnly` eliminates enum/namespace footguns; ecosystem depth unmatched |
-| UI framework | React 19              | Svelte 5, SolidJS, Vue 3.5, Qwik          | **Keep React 19**    | Largest ecosystem, best Copilot/tooling support, concurrent rendering for heavy previews                           |
-| Styling      | Tailwind CSS v4       | CSS Modules, Vanilla Extract, Panda CSS   | **Keep Tailwind v4** | Zero-runtime, design token system via CSS vars, logical properties for RTL                                         |
-| State        | Zustand 5 (slices)    | Jotai, Redux Toolkit, Signals, Nanostores | **Keep Zustand**     | Minimal API, no boilerplate, excellent TS inference, undo/redo via middleware                                      |
-| Build        | Vite 8 (Rolldown)     | Turbopack, Rspack, esbuild-only, Farm     | **Keep Vite 8**      | Fastest HMR, native Rolldown perf, worker import syntax, proven plugin ecosystem                                   |
-| Testing      | Vitest 4 + Playwright | Jest, Cypress, Testing Library only       | **Keep Vitest + PW** | Same config as Vite, bench support, component + E2E in one stack                                                   |
-| i18n         | i18next 26            | Paraglide, LinguiJS, FormatJS             | **Keep i18next**     | Mature, massive plugin ecosystem, works with react-i18next, i18n-ally extension                                    |
-| PDF          | @react-pdf/renderer   | pdfkit, jsPDF, Puppeteer PDF              | **Keep @react-pdf**  | React component model for layouts, off-main-thread support, no headless browser needed                             |
+| Decision     | Current               | Alternatives Considered                   | Verdict              | Rationale                                                                                                      |
+| ------------ | --------------------- | ----------------------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Language     | TypeScript 6 (strict) | Rust+WASM, Dart/Flutter, plain JS, Go     | **Upgrade to TS 7**  | TypeScript 7.0 (native Go port, released 2026) keeps the language and is ~10× faster to check; migrate in S420 |
+| UI framework | React 19              | Svelte 5, SolidJS, Vue 3.5, Qwik          | **Keep React 19**    | Largest ecosystem, best Copilot/tooling support, concurrent rendering for heavy previews                       |
+| Styling      | Tailwind CSS v4       | CSS Modules, Vanilla Extract, Panda CSS   | **Keep Tailwind v4** | Zero-runtime, design token system via CSS vars, logical properties for RTL                                     |
+| State        | Zustand 5 (slices)    | Jotai, Redux Toolkit, Signals, Nanostores | **Keep Zustand**     | Minimal API, no boilerplate, excellent TS inference, undo/redo via middleware                                  |
+| Build        | Vite 8 (Rolldown)     | Turbopack, Rspack, esbuild-only, Farm     | **Keep Vite 8**      | Fastest HMR, native Rolldown perf, worker import syntax, proven plugin ecosystem                               |
+| Testing      | Vitest 4 + Playwright | Jest, Cypress, Testing Library only       | **Vitest 5 + PW**    | Same config as Vite; Vitest 5 projects + browser mode (S421) and Playwright 1.63 (S422)                        |
+| Rendering    | Manual memoisation    | Signals, `useMemo` audits only            | **React Compiler**   | React Compiler 1.0 removes hand-written memoisation where proven safe; opt-in flag first (S423)                |
+| Routing      | `?tab=` + History API | React Router, TanStack Router             | **Navigation API**   | Baseline 2026 (Chrome 102, Firefox 147, Safari 26.2); typed route table, no router dependency (S430)           |
+| i18n         | i18next 26            | Paraglide, LinguiJS, FormatJS             | **Keep i18next**     | Mature, massive plugin ecosystem, works with react-i18next, i18n-ally extension                                |
+| PDF          | @react-pdf/renderer   | pdfkit, jsPDF, Puppeteer PDF              | **Keep @react-pdf**  | React component model for layouts, off-main-thread support, no headless browser needed                         |
 
 ### 3.2 Frontend Architecture
 
@@ -112,55 +263,61 @@ Historical artifacts:
 
 ### 3.4 Documentation Strategy
 
-| Area           | Current State                                       | Decision        | Standard                                         |
-| -------------- | --------------------------------------------------- | --------------- | ------------------------------------------------ |
-| Amount         | 12 docs in `docs/`, plus README, ROADMAP, CHANGELOG | **Right-sized** | No doc without an owner and freshness date       |
-| API docs       | TypeDoc auto-generated                              | **Keep**        | Generated on `npm run docs:api`, not committed   |
-| User guide     | `docs/USER-GUIDE.md`                                | **Keep**        | Update per feature release                       |
-| Architecture   | `docs/ARCHITECTURE.md`                              | **Keep**        | Decision records with dates                      |
-| Sprint history | `docs/SPRINT-HISTORY.md`                            | **Keep**        | Append-only log                                  |
-| Dead docs      | None detected                                       | **Enforce**     | `npm run dead:check` catches unused              |
-| Code methods   | Engine functions are pure, fully tested             | **Keep**        | Boundary guards with RangeError, no side-effects |
+| Area           | Current State                                       | Decision        | Standard                                                                                        |
+| -------------- | --------------------------------------------------- | --------------- | ----------------------------------------------------------------------------------------------- |
+| Amount         | 12 docs in `docs/`, plus README, ROADMAP, CHANGELOG | **Restructure** | Diátaxis (tutorials, how-to, reference, explanation) on a docs site (S442)                      |
+| API docs       | TypeDoc auto-generated                              | **Keep**        | Generated on `npm run docs:api`, not committed; linked from the docs site                       |
+| User guide     | `docs/USER-GUIDE.md`                                | **Upgrade**     | Task-based how-to pages with generated screenshots per locale and theme (S443)                  |
+| Architecture   | `docs/ARCHITECTURE.md`                              | **Upgrade**     | ADRs in `docs/decisions/` (S426); diagrams parsed in CI (S444)                                  |
+| Sprint history | `docs/SPRINT-HISTORY.md`                            | **Keep**        | Append-only log                                                                                 |
+| Metrics        | Hand-copied test counts, sizes and locale claims    | **Generate**    | `docs:metrics` writes marked blocks from real runs; hand-edited metrics are forbidden (S444)    |
+| Visuals        | 3 static SVGs + Mermaid                             | **Expand**      | Screenshot gallery, 30-second demo video, version tokens synced from `package.json` (S443–S444) |
+| Dead docs      | None detected                                       | **Enforce**     | Link checker + `docs:freshness` in `quality` (S444)                                             |
+| Code methods   | Engine functions are pure, fully tested             | **Keep**        | Boundary guards with RangeError, no side-effects                                                |
 
 ### 3.5 Configuration and Governance
 
-| Area             | Current                                 | Decision  | Next Action                                       |
-| ---------------- | --------------------------------------- | --------- | ------------------------------------------------- |
-| Tool configs     | All at workspace root (Vite convention) | **Keep**  | Never move; documented in copilot-instructions    |
-| Budget configs   | `config/` directory                     | **Keep**  | Add JSON Schema validation for budget files       |
-| VS Code settings | Comprehensive, well-sectioned           | **Clean** | Remove disabled/suspended entries                 |
-| Extensions       | 22 recommended, 60+ unwanted            | **Keep**  | Periodic review; document keep/remove rationale   |
-| MCP servers      | 10 servers with clear ownership         | **Keep**  | Add health-check ping in CI                       |
-| Copilot assets   | 9 agents, 22 prompts, 9 instructions    | **Keep**  | Version-align with release; test for parse errors |
+| Area             | Current                                        | Decision  | Next Action                                       |
+| ---------------- | ---------------------------------------------- | --------- | ------------------------------------------------- |
+| Tool configs     | All at workspace root (Vite convention)        | **Keep**  | Never move; documented in copilot-instructions    |
+| Budget configs   | `config/` directory                            | **Keep**  | Add JSON Schema validation for budget files       |
+| VS Code settings | Comprehensive, well-sectioned                  | **Clean** | Remove disabled/suspended entries                 |
+| Extensions       | 29 recommended, 80 unwanted                    | **Keep**  | Periodic review; document keep/remove rationale   |
+| MCP servers      | 11 servers with clear ownership                | **Keep**  | Add health-check ping in CI                       |
+| Copilot assets   | 9 agents, 22 prompts, 9 instructions, 3 skills | **Keep**  | Version-align with release; test for parse errors |
 
 ### 3.6 Infrastructure and Deployment
 
-| Area            | Current                        | Decision | Next Action                                             |
-| --------------- | ------------------------------ | -------- | ------------------------------------------------------- |
-| Hosting         | GitHub Pages (static)          | **Keep** | Free, fast, immutable deploys per release               |
-| Preview deploys | Cloudflare Pages PR previews   | **Keep** | Validate preview URLs in PR checks                      |
-| CI              | GitHub Actions (14 workflows)  | **Keep** | Harden with `permissions: read-all`, pin actions by SHA |
-| SBOM            | CycloneDX generation           | **Keep** | Attach to GitHub releases as artifact                   |
-| Supply chain    | Dependabot + dependency-review | **Keep** | Add Scorecard badge                                     |
-| Secrets         | Zero secrets in codebase       | **Keep** | Secret scan workflow blocks PRs                         |
+| Area            | Current                        | Decision | Next Action                                    |
+| --------------- | ------------------------------ | -------- | ---------------------------------------------- |
+| Hosting         | GitHub Pages (static)          | **Keep** | Free, fast, immutable deploys per release      |
+| Preview deploys | Cloudflare Pages PR previews   | **Keep** | Validate preview URLs in PR checks             |
+| CI              | GitHub Actions (15 workflows)  | **Keep** | Pin actions by SHA, per-job permissions (S425) |
+| SBOM            | CycloneDX generation           | **Keep** | Attach to GitHub releases as artifact          |
+| Supply chain    | Dependabot + dependency-review | **Keep** | Add Scorecard badge                            |
+| Secrets         | Zero secrets in codebase       | **Keep** | Secret scan workflow blocks PRs                |
 
 ### 3.7 Tooling Versions (Pinned)
 
-| Tool         | Version                                          | Update Policy                                               |
-| ------------ | ------------------------------------------------ | ----------------------------------------------------------- |
-| Node.js      | ≥ 22 (`package.json#engines`); CI on current LTS | Follow LTS schedule; raise floor only with a CHANGELOG note |
-| npm          | 11.x                                             | Latest stable                                               |
-| TypeScript   | 6.0.x                                            | Pin major; update patch promptly                            |
-| React        | 19.x                                             | Pin major; follow canary for 20                             |
-| Vite         | 8.x                                              | Pin major; Rolldown is default                              |
-| Vitest       | 4.x                                              | Pin major; align with Vite                                  |
-| Playwright   | 1.61+                                            | Latest stable; browsers auto-update                         |
-| Tailwind CSS | 4.x                                              | Pin major; v4 syntax only                                   |
-| ESLint       | 10.x                                             | Flat config only                                            |
-| Prettier     | 3.x                                              | Latest stable                                               |
-| Stylelint    | 17.x                                             | Latest stable                                               |
-| ripgrep      | 15.x                                             | System install via scoop/brew                               |
-| GitHub CLI   | Latest                                           | System install via winget/brew                              |
+Latest versions were checked against the npm registry on 2026-10-04.
+
+| Tool         | Pinned today                                 | Latest (2026-10-04) | Target and sprint                                            |
+| ------------ | -------------------------------------------- | ------------------- | ------------------------------------------------------------ |
+| Node.js      | ≥ 22 (`package.json#engines`); CI default 24 | 26 current          | Raise floor to 24 with a CHANGELOG note (S425)               |
+| npm          | 11.x                                         | 11.x                | Latest stable                                                |
+| TypeScript   | 6.0.x                                        | 7.0.2               | TS 7 native for typecheck/build (S420)                       |
+| React        | 19.x                                         | 19.3.0              | Keep; enable React Compiler 1.0 (S423)                       |
+| Vite         | 8.x                                          | 8.3.0               | Keep; Rolldown is default                                    |
+| Vitest       | 4.x                                          | 5.0.1               | Vitest 5 + browser mode projects (S421)                      |
+| Playwright   | 1.61                                         | 1.63.0              | 1.63; sharding and ARIA snapshots (S422)                     |
+| Tailwind CSS | 4.x                                          | 4.3.3               | Keep; v4 syntax only                                         |
+| ESLint       | 10.x                                         | 10.x                | Keep; flat config, 7 plugins; oxlint pre-pass is an ADR only |
+| Knip         | 6.x                                          | 6.39.0              | Zero entry hatches (S424)                                    |
+| Stryker      | 10.x                                         | 10.0.0              | Incremental mode for the full baseline (S424)                |
+| Prettier     | 3.x                                          | 3.x                 | Latest stable                                                |
+| Stylelint    | 17.x                                         | 17.x                | Latest stable                                                |
+| ripgrep      | 15.x                                         | —                   | System install via scoop/brew                                |
+| GitHub CLI   | Latest                                       | —                   | System install via winget/brew                               |
 
 ### 3.8 Testing Strategy (New Decisions — 2026-09-27)
 
@@ -197,6 +354,29 @@ Historical artifacts:
 | Component test runtime | jsdom only                                                                                                     | **Evaluate Vitest browser mode for layout-dependent components**   | Real layout/focus without full E2E cost (S414)                                               |
 | Type checker           | `tsc`                                                                                                          | **Evaluate TypeScript native preview (`tsgo`) as a fast path**     | Faster local and CI typecheck if parity holds (S415)                                         |
 | Release provenance     | SBOM generated                                                                                                 | **GitHub artifact attestations for `dist/` and SBOM**              | Verifiable builds for a supply-chain-conscious OSS project (S417)                            |
+
+### 3.10 Refactor Decisions (2026-10-04 full review)
+
+Principles: refactor **behaviour-preserving first** (golden exports, visual baselines and E2E journeys must stay identical), **delete before moving** (S371–S373 retire unreachable code before Phase 82 restructures it), and **automate every rule** (no convention that depends on reviewer memory).
+
+| Area               | Current (measured)                                                                     | Decision                                                                                   | Sprint    |
+| ------------------ | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | --------- |
+| Engine layout      | 165 flat modules beside 7 mostly barrel-only folders; `engine/index.ts` is 1,448 lines | **13 domain folders with public barrels**, moved by a codemod                              | S427      |
+| Browser I/O        | Pure helpers and browser I/O mixed in `src/utils/` (33 files) and `src/services/`      | **`src/platform/`** for storage, files, share and device APIs; `utils/` keeps pure helpers | S428      |
+| State              | 1 main store + 5 satellite stores; history stores full snapshots                       | **Domain slices in one store** + patch-based history middleware (no new dependency)        | S429      |
+| UI organisation    | 116 components in 6 type folders (`configurator/` has 49 files)                        | **Feature-sliced `src/features/*`** + `src/app/` shell                                     | S430      |
+| Design system      | Tokens exist; buttons, fields and dialogs re-implemented per panel                     | **`src/ui/` primitives** (native `<dialog>`, Popover, NumberField with units/fractions)    | S431      |
+| Component size     | Gate at 600 lines; `SheetCard.tsx` 599, `IsometricView.tsx` 583                        | **Target ≤ 400 lines** after primitives land; gate lowered only from measured results      | S431      |
+| Workers            | Five workers with hand-written scheduling in `store/worker-schedule.ts`                | **Typed `WorkerJob<I, O>` pool** with abort, progress and health                           | S432      |
+| i18n               | One 2,368-key JSON per locale                                                          | **Namespaces per feature**, lazy-loaded, typed keys                                        | S433      |
+| Architecture rules | Conventions in instructions files only                                                 | **Fitness functions in CI** (layer rules, cycles, size) + ADRs in `docs/decisions/`        | S426      |
+| Dead-code hatches  | 22 Knip `entry` overrides, 13 for otherwise-unused modules                             | **Zero hatches**; new hatch requires an ADR                                                | S424      |
+| Lint speed         | ESLint only                                                                            | **oxlint pre-pass ADR** (speed only; ESLint and the 7-plugin rule remain authoritative)    | S424      |
+| Mutation testing   | Bounded slices; full four-module run estimated at 35 h                                 | **Stryker incremental mode** to reach the full baseline in weekly CI                       | S424      |
+| CI snapshots       | E2E runs with `--ignore-snapshots`                                                     | **Linux-pinned baselines** in a Playwright container image, then blocking                  | S422      |
+| 3D preview         | Raw WebGL box                                                                          | **WebGPU renderer with WebGL2 fallback**; ADR on in-house vs lazily loaded library         | S440      |
+| Docs               | Hand-maintained; metrics drift                                                         | **Docs site + generated screenshots/metrics + diagram checks**                             | S442–S444 |
+| AI features        | Rule-based assistant, partly unwired                                                   | **Optional, on-device only**, feature-detected, never auto-applies                         | S448–S450 |
 
 ---
 
@@ -273,8 +453,22 @@ Measured by static search of `src/` on 2026-09-30; S371 must replace these heuri
 | `src/services/supabase.ts`, `src/utils/command-palette.ts`, `src/utils/voice-annotation.ts`, `src/utils/ar-placement.ts`, `src/utils/price-history.ts`, `src/utils/cost-comparison.ts` have zero importers                                                                                                                                                            | Dead or unfinished features                                           | S371, S374            |
 | AR/DE/ES/FR: ≈ 60 % of values identical to English and 224–234 keys missing (fallback); HE complete                                                                                                                                                                                                                                                                   | Six-locale claim is only partly true                                  | S375                  |
 | Bundle budget raised seven times; only raw totals are gated                                                                                                                                                                                                                                                                                                           | No first-load performance guarantee                                   | S376                  |
-| No File System Access, Screen Wake Lock, BarcodeDetector or speech synthesis usage; `share_target` declared in `public/manifest.json` without a test                                                                                                                                                                                                                  | Desktop-class and shop-floor web capabilities unused                  | S386–S389, S404, S406 |
+| No File System Access, Screen Wake Lock, BarcodeDetector or speech synthesis usage; unsupported `share_target` removed pending service-worker POST handling                                                                                                                                                                                                           | Desktop-class and shop-floor web capabilities unused                  | S386–S389, S404, S406 |
 | No parts-only cut list, CSV part import, or 1D linear optimizer                                                                                                                                                                                                                                                                                                       | Largest workflow gap versus dedicated cut-list tools                  | S379–S381             |
+
+### 4.5 Refactor and Tooling Audit (2026-10-04)
+
+Measured from the working tree at `56aef6e` (v5.34.0) and the npm registry on 2026-10-04.
+
+| Finding                                                                                                                                                        | Impact                                                        | Sprint               |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | -------------------- |
+| Phase 64 is marked COMPLETE, but S313 (build log, camera, machine/serial flows) and S315 (offline reload, quota, file handlers) have no status or E2E evidence | Release-train claim is not fully evidenced                    | Carry-over → v5.35.0 |
+| `src/` has 63,791 TypeScript lines; `src/engine/` 177 files (165 top-level); `src/components/` 116 `.tsx` files; 353 test files; 12 E2E specs                  | Flat engine and type-based folders slow navigation and review | S427, S430           |
+| Two components sit at the 600-line gate (`SheetCard.tsx` 599, `IsometricView.tsx` 583); `Icons.tsx` 515                                                        | Next feature in these files forces an emergency split         | S431                 |
+| TypeScript 7.0.2, Vitest 5.0.1, Playwright 1.63.0, `babel-plugin-react-compiler` 1.0.0 released; the project pins TS 6, Vitest 4 and Playwright 1.61           | Slower feedback; missing browser-mode and ARIA-snapshot tools | S420–S423            |
+| CI actions are pinned by tag, not SHA; spell check is commented out in `ci.yml`; Lighthouse writes `.lighthouseci/` into the workspace                         | Supply-chain and `$TEMP` policy gaps                          | S422, S424, S425     |
+| 22 Knip `entry` overrides in `package.json`, 13 for modules with no importers                                                                                  | Dead code can hide behind hatches                             | S371, S424           |
+| README, ARCHITECTURE, CONTRIBUTING and AGENTS had drifted (source tree, shortcuts, PWA design, CI matrix, active sprint, tool counts)                          | Fixed on 2026-10-04; automation prevents recurrence           | S444                 |
 
 ---
 
@@ -315,7 +509,7 @@ Product capabilities are directional and must be reverified against official doc
 | **Deepnest / SVGnest** (MIT)                         | Irregular nesting         | DXF/SVG import of arbitrary shapes, genetic placement — reference for irregular part support                                                            | S335                              |
 | **Boxes.py** (GPLv3, Python)                         | Parametric generators     | 100+ parametrised box/tray/shelf generators, finger-joint auto-sizing from thickness, kerf ("burn") compensation, flex/living-hinge cuts                | S349                              |
 | **MakerCase** (web)                                  | Box generator             | Instant finger/T-slot box SVG; simple UI pattern for generators                                                                                         | S349                              |
-| **Blender Home Builder** (GPLv3, add-on)             | Interior / cabinet design | Wall-based room layout, cabinet library drops snapping to walls, fillers/end panels, countertops, appliance library, 2D layout views with page sizes    | S345, S347                        |
+| **Blender Home Builder** (GPLv3, add-on)             | Interior / cabinet design | Wall-based room layout, cabinet library drops snapping to walls, fillers/end panels, countertops, appliance library, 2D layout views with page sizes    | S345                              |
 | **Sweet Home 3D** (GPLv2, Java)                      | Interior design           | Room drawing with walls/doors/windows, furniture catalog import, plan + 3D views, huge locale set                                                       | S347                              |
 | **FreeCAD Woodworking Workbench** (LGPL)             | CAD                       | Timber list from solids, grain direction on parts, exploded assembly views                                                                              | S353                              |
 | **Easel / Carbide Create** (web, proprietary)        | Browser CAM               | 2D toolpath preview and simulation, material/bit library, cut-depth passes, time estimate                                                               | S336, S337                        |
@@ -373,6 +567,28 @@ Scope: web apps, Windows/macOS desktop suites, iPadOS/iOS and Android apps, and 
 
 † S416 covers optional device-integration spikes (Web Bluetooth/WebHID/WebUSB) only after the core flows ship with non-device fallbacks.
 
+### 5.5 Harvest Review (2026-10-04)
+
+New or re-verified ideas from this review. Facts marked ✓ were checked against the official source on 2026-10-04; others remain directional and must be reverified at sprint start (§7.1).
+
+| Source (platform)                                               | Verified fact or pattern                                                                                                    | What we harvest                                                                     | Sprint(s)        | Priority |
+| --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ---------------- | -------- |
+| OpenCutList v7.1.0 (SketchUp, GPLv3) ✓                          | Parts list, cutting diagrams, labels, cost and weight reports; 13 languages; Arabic and Hebrew experimental **without RTL** | Keep RTL leadership; add weight/cost reports, exploded views and label workflow     | S383, S388, S437 | P1       |
+| OpenCutList translation model ✓                                 | Community translation on a hosted platform; 13 languages                                                                    | Community translation pipeline; grow from 6 to up to 12 locales                     | S446             | P2       |
+| CutList Optimizer (web) ✓                                       | Panels + stock tables; kerf, labels on panels, single-sheet mode, material, edge banding and grain options                  | Parts-only workbench and options parity                                             | S379–S381        | P1       |
+| Published woodworking plans, SketchUp LayOut                    | Dimensioned orthographic views and exploded isometrics with balloon callouts keyed to the cut list                          | Shop drawings in PDF and SVG                                                        | S437             | P1       |
+| Fusion timeline, Figma version history                          | Visual history with named checkpoints, compare and restore                                                                  | Design history timeline over existing `version-history.ts` / `project-branching.ts` | S438             | P2       |
+| Figma, Onshape learning paths, Excalidraw libraries             | Example files and guided tours deliver value in the first minute                                                            | Examples gallery and guided first run                                               | S435             | P1       |
+| Retail kitchen planners, Roomle, Shapr3D                        | Realistic materials, lighting and opening animations sell the design                                                        | WebGPU preview with WebGL2 fallback                                                 | S440             | P2       |
+| Browser built-in AI (Chrome) ✓                                  | Translator, Language Detector and Summarizer in Chrome 138 stable; Prompt API on the web from Chrome 148; Chrome-only       | Optional on-device assistant; never required, never auto-applies                    | S448–S450        | P3       |
+| Navigation API ✓                                                | Baseline 2026: Chrome 102, Firefox 147, Safari 26.2                                                                         | Replace manual History sync with a typed route table                                | S430             | P1       |
+| TypeScript 7.0 ✓, Vitest 5 browser mode ✓, React Compiler 1.0 ✓ | Native compiler (~10× faster), real-browser component tests with ARIA snapshots and traces, automatic memoisation           | Faster feedback loops and fewer manual optimisations                                | S420–S423        | P1       |
+| Excalidraw, Squoosh (PWA store listings)                        | PWAs packaged for app stores reach users who never visit a URL                                                              | Store distribution ADR via PWABuilder (Microsoft Store, Google Play TWA)            | S446             | P2       |
+| Section 508 / EN 301 549 conformance reports                    | Public accessibility conformance reports build institutional trust                                                          | Publish an Accessibility Conformance Report (ACR)                                   | S445             | P2       |
+| Vite, Vitest, Excalidraw docs sites                             | Searchable docs sites with live examples and screenshots                                                                    | Diátaxis docs site with generated screenshots and a demo video                      | S442–S444        | P1       |
+
+License rule unchanged: product behaviour is reimplemented independently; no GPL code, assets or data are copied.
+
 ---
 
 ## 6. Production Readiness Gates (Blocking)
@@ -403,18 +619,23 @@ Combined: `npm run ci` runs all of the above in CI.
 
 Planned gates (become blocking in the sprint that introduces them):
 
-| Gate                     | Planned command              | Threshold                                                        | Sprint |
-| ------------------------ | ---------------------------- | ---------------------------------------------------------------- | ------ |
-| Mutation score           | `npm run test:mutation`      | Report-only first; block at measured baseline                    | S306   |
-| E2E browser matrix       | `npm run test:e2e`           | P0 journeys pass in Chromium, Firefox, WebKit, mobile emulations | S318   |
-| Capability map           | `npm run capabilities:check` | Every engine module classified; no new unclassified module       | S371   |
-| Locale completeness      | `npm run i18n:completeness`  | No missing keys; untranslated ratio ≤ allowlist per locale       | S375   |
-| Critical-path budget     | `npm run bundle:critical`    | Brotli initial-route JS/CSS within measured budget               | S376   |
-| Release readiness report | `npm run release:readiness`  | Every gate reports PASS/FAIL/NOT RUN with evidence path          | S360   |
+| Gate                     | Planned command              | Threshold                                                         | Sprint |
+| ------------------------ | ---------------------------- | ----------------------------------------------------------------- | ------ |
+| Mutation score           | `npm run test:mutation`      | Report-only first; block at measured baseline                     | S306   |
+| E2E browser matrix       | `npm run test:e2e`           | P0 journeys pass in Chromium, Firefox, WebKit, mobile emulations  | S318   |
+| Capability map           | `npm run capabilities:check` | Every engine module classified; no new unclassified module        | S371   |
+| Locale completeness      | `npm run i18n:completeness`  | No missing keys; untranslated ratio ≤ allowlist per locale        | S375   |
+| Critical-path budget     | `npm run bundle:critical`    | Brotli initial-route JS/CSS within measured budget                | S376   |
+| Release readiness report | `npm run release:readiness`  | Every gate reports PASS/FAIL/NOT RUN with evidence path           | S360   |
+| Architecture fitness     | `npm run architecture:check` | Layer rules, zero import cycles, domain barrels only              | S426   |
+| Visual snapshots in CI   | `npm run test:e2e`           | Snapshot comparison blocking (no `--ignore-snapshots`)            | S422   |
+| Knip hatches             | `npm run dead:check`         | Zero `entry` overrides without an ADR                             | S424   |
+| Spell check              | `npm run spell:check`        | Zero unknown words in `src/`, `docs/` and root Markdown           | S424   |
+| Docs verification        | `npm run docs:verify`        | Metrics fresh, Mermaid parses, links resolve, screenshots current | S444   |
 
 ---
 
-## 7. Forward Program Plan (Phases 63–72)
+## 7. Forward Program Plan (Phases 63–85)
 
 ### 7.1 Priorities, Sizing, and Sprint Contract
 
@@ -428,29 +649,38 @@ Phase priority uses the same scale: a phase is **P0** if any exit criterion prot
 
 ### 7.2 Release Train (execution order)
 
-Phase numbers are stable identifiers; this table is the execution order. Phase 80 is a continuous engineering track: its sprints may land in any release when they do not delay a P0 item.
+Phase numbers are stable identifiers; this table is the execution order. Phases 80 and 85 are continuous tracks: their sprints may land in any release when they do not delay a P0 item (Phase 85 only after Phase 82).
 
-| Order | Release | Phase(s)                                                      | Priority | Sprints | Status                         |
-| ----- | ------- | ------------------------------------------------------------- | -------- | ------- | ------------------------------ |
-| 1     | v5.34.0 | 63 Trustworthy test foundation + 64 Real user journeys        | P0       | 300–318 | COMPLETE; clean install passed |
-| 2     | v5.35.0 | 73 Product coherence and modern app shell                     | P0       | 371–378 | NEXT                           |
-| 3     | v5.36.0 | 65 Versioned data, import safety, durable offline             | P0       | 319–326 | PLANNED                        |
-| 4     | v5.37.0 | 66 Cut-list and optimizer leadership                          | P0/P1    | 327–335 | PLANNED                        |
-| 5     | v5.38.0 | 74 Universal cut-list workbench                               | P1       | 379–385 | PLANNED                        |
-| 6     | v5.39.0 | 75 Shop-floor mode                                            | P1       | 386–391 | PLANNED                        |
-| 7     | v5.40.0 | 67 CNC, hardware and manufacturing assurance                  | P0/P1    | 336–343 | PLANNED                        |
-| 8     | v5.41.0 | 77 Door, drawer and construction systems                      | P1       | 398–403 | PLANNED                        |
-| 9     | v5.42.0 | 68 Room design, cabinet rules, parametric authoring           | P1       | 344–352 | PLANNED                        |
-| 10    | v5.43.0 | 76 Room capture, import and client presentation               | P2       | 392–397 | PLANNED                        |
-| 11    | v5.44.0 | 78 Interop and desktop-class file workflows                   | P1/P2    | 404–408 | PLANNED                        |
-| 12    | v5.45.0 | 69 Assembly, collaboration boundaries, plugins                | P1/P2    | 353–359 | PLANNED                        |
-| 13    | v5.46.0 | 79 Estimating, quoting and job management                     | P2       | 409–413 | PLANNED                        |
-| 14    | v5.47.0 | 70 Governance, documentation and supply chain                 | P1/P2    | 360–364 | PLANNED                        |
-| 15    | v5.48.0 | 71 Performance, resilience and inclusive access               | P1       | 365–368 | PLANNED                        |
-| —     | any     | 80 Developer platform and engineering excellence (continuous) | P1–P3    | 414–419 | PLANNED                        |
-| 16    | v6.0.0  | 72 v6.0 readiness and strategic reassessment                  | P0       | 369–370 | PLANNED (runs last)            |
+| Order | Release | Phase(s)                                                      | Priority | Sprints                                            | Status                                     |
+| ----- | ------- | ------------------------------------------------------------- | -------- | -------------------------------------------------- | ------------------------------------------ |
+| 1     | v5.34.0 | 63 Trustworthy test foundation + 64 Real user journeys        | P0       | 300–318                                            | RELEASED; S313 and S315 carried to v5.35.0 |
+| 2     | v5.35.0 | 73 Product coherence and modern app shell (+ S313, S315)      | P0       | 371–378, 313, 315                                  | NEXT                                       |
+| 3     | v5.36.0 | 81 Toolchain modernisation                                    | P1       | 420–425                                            | PLANNED (new 2026-10-04)                   |
+| 4     | v5.37.0 | 82 Architecture refactor                                      | P0       | 426–434                                            | PLANNED (new 2026-10-04)                   |
+| 5     | v5.38.0 | 65 Versioned data, import safety, durable offline             | P0       | 319–326                                            | PLANNED (was v5.36.0)                      |
+| 6     | v5.39.0 | 83 Experience and delight                                     | P1       | 435–441                                            | PLANNED (new 2026-10-04)                   |
+| 7     | v5.40.0 | 84 Documentation, visual storytelling and community           | P1       | 442–447                                            | PLANNED (new 2026-10-04)                   |
+| 8     | v5.41.0 | 66 Cut-list and optimizer leadership                          | P0/P1    | 327–335                                            | PLANNED (was v5.37.0)                      |
+| 9     | v5.42.0 | 74 Universal cut-list workbench                               | P1       | 379–385                                            | PLANNED (was v5.38.0)                      |
+| 10    | v5.43.0 | 75 Shop-floor mode                                            | P1       | 386–391                                            | PLANNED (was v5.39.0)                      |
+| 11    | v5.44.0 | 67 CNC, hardware and manufacturing assurance                  | P0/P1    | 336–343                                            | PLANNED (was v5.40.0)                      |
+| 12    | v5.45.0 | 77 Door, drawer and construction systems                      | P1       | 398–403                                            | PLANNED (was v5.41.0)                      |
+| 13    | v5.46.0 | 68 Room design, cabinet rules, parametric authoring           | P1       | 344–352                                            | PLANNED (was v5.42.0)                      |
+| 14    | v5.47.0 | 76 Room capture, import and client presentation               | P2       | 392–397                                            | PLANNED (was v5.43.0)                      |
+| 15    | v5.48.0 | 78 Interop and desktop-class file workflows                   | P1/P2    | 404–408                                            | PLANNED (was v5.44.0)                      |
+| 16    | v5.49.0 | 69 Assembly, collaboration boundaries, plugins                | P1/P2    | 353–359                                            | PLANNED (was v5.45.0)                      |
+| 17    | v5.50.0 | 79 Estimating, quoting and job management                     | P2       | 409–413                                            | PLANNED (was v5.46.0)                      |
+| 18    | v5.51.0 | 70 Governance, documentation and supply chain                 | P1/P2    | 360–364                                            | PLANNED (was v5.47.0)                      |
+| 19    | v5.52.0 | 71 Performance, resilience and inclusive access               | P1       | 365–368                                            | PLANNED (was v5.48.0)                      |
+| —     | any     | 80 Developer platform and engineering excellence (continuous) | P1–P3    | 416, 419 (414, 415, 417, 418 absorbed by Phase 81) | PLANNED                                    |
+| —     | any     | 85 Optional on-device intelligence (continuous, after 82)     | P3       | 448–451                                            | PLANNED (new 2026-10-04)                   |
+| 20    | v6.0.0  | 72 v6.0 readiness and strategic reassessment                  | P0       | 369–370                                            | PLANNED (runs last)                        |
+
+Why the foundation moved first (2026-10-04): every feature phase adds modules, components and locale keys. Retiring dead code (73), upgrading the toolchain (81) and fixing the structure (82) before that growth is cheaper than refactoring afterwards, and Phase 65's storage and schema work lands directly on the new `platform/` layer instead of being moved twice.
 
 Re-sequencing rule: a later phase may be pulled forward only when its dependencies are DONE and no P0 sprint in an earlier phase is open. Record every re-sequence in this table with a date.
+
+- 2026-10-04: Phases 81–85 added; Phases 65–71 and 73–79 shifted after the foundation; S313 and S315 re-opened as v5.35.0 carry-over.
 
 ### Phase 63 — Trustworthy Test Foundation (Sprints 300–306; ships in v5.34.0 with Phase 64) — P0
 
@@ -466,6 +696,10 @@ Completed (evidence archived in [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 | 303    | Pure-engine invariant matrix I                            | P0       | 2026-10-02 | 634 exports; seeded invariants and named regressions; CI artifacts audited              |
 | 304    | Store, persistence, import/export contract matrix         | P0       | 2026-09-28 | All slice actions; IDB/localStorage fault matrix; allowlisted, Unicode-safe round-trips |
 | 305    | Component behavior foundation                             | P1       | 2026-10-02 | 118 calculator controls; 108 workspace controls; 75.04% component statements            |
+| 306    | Mutation testing and quality evidence                     | P1       | 2026-10-02 | Bounded Stryker scope; weekly dimensions+BOM gate at 79 %; full baseline moved to S424  |
+
+<details>
+<summary>Sprint 305–306 progress logs (archived detail — expand for evidence)</summary>
 
 **Sprint 305 — Component behavior foundation** — P1 · L · S302 · COMPLETE 2026-10-02.
 
@@ -628,7 +862,9 @@ static-inclusive cut-optimizer score is claimed, and the shared four-module conf
 threshold. Clean-checkout acceptance passed on 2026-10-02 from a fresh `npm ci`; `npm run check`
 passed all 5,338 tests, `npm run dead:check` passed, and `npm run release:build` stayed within budget.
 
-### Phase 64 — Real User Journeys and Browser Confidence (Sprints 307–318; target v5.34.0) — P0
+</details>
+
+### Phase 64 — Real User Journeys and Browser Confidence (Sprints 307–318; released in v5.34.0; S313 and S315 carried to v5.35.0) — P0
 
 **Exit:** each primary workflow is exercised in a real browser through user-visible controls; export downloads are opened and checked; Chromium, Firefox, WebKit and selected mobile projects pass; accessibility scans cover all tabs and modal states.
 
@@ -653,12 +889,12 @@ Completed (evidence archived in [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 Detail and the GcodePreviewModal component follow-up are archived in SPRINT-HISTORY.
 
-**Sprint 313 — Assembly, build log, camera and machine flows** — P1 · L · S305, S307.
+**Sprint 313 — Assembly, build log, camera and machine flows** — P1 · L · S305, S307 · **CARRY-OVER → v5.35.0** (no completion evidence found on 2026-10-04; only the checklist download is covered by `tests/e2e/configurator.spec.ts`).
 
-- T1: Next/previous step, all-steps mode, tips toggle, mark/unmark/reset completion; assert dependency gating and progress/time counters.
-- T2: Add/edit/delete build log entry; Ctrl/Cmd+Enter; reload persistence; attach/capture camera photo with denied permission, no device and granted permission.
-- T3: Select machine profile; validate G-code compatibility and serial connection lifecycle with browser API stubs (connect, send, pause, disconnect, reconnect, errors).
-- T4: Print and download checklist; parse expected step order/text and filename.
+- T1: DONE — Assembly completion checkboxes follow the step DAG: dependent steps stay disabled until prerequisites are complete, and unchecking a prerequisite clears downstream completion. Chromium and Firefox journeys verify gating, rollback, next/previous, progress/time counters, tips, reset and all-step mode.
+- T2: IN PROGRESS — Build log supports add/edit/delete, Ctrl/Cmd+Enter and reload persistence; Chromium and Firefox journeys cover that lifecycle. Camera journeys in both browsers cover permission denial, missing device, capture, retake, manual stop and stream teardown on navigation. Remaining: verify a successful capture from a real camera device.
+- T3: DONE — Saved machine profiles initialize panel state and drive serial framing plus feed, plunge, safe-Z, pass-depth, tool-diameter and spindle settings. A Chromium Web Serial stub verifies exact settings and streamed commands, pause/resume without duplicate writes, disconnect/reconnect, and picker/write failure recovery.
+- T4: DONE — Browser download is read from disk and checked for filename, step count, order and rendered titles in Chromium and Firefox.
 - Accept: each step control changes progress/instructions, persisted build state reloads accurately and permissions/device failures remain recoverable.
 
 **Sprint 314 — All calculator panels and numeric oracles** — P0 · L · S303, S305.
@@ -678,11 +914,11 @@ Later commits harden boundary/oracle tests for box joint, glue, planer, honing, 
 
 Oracle update (2026-10-02): the honing-guide and wood-turning fixtures record published reference cases with explicit precision and exclusions; all 24 mounted calculators now have a linked source-backed case. Finish oracles cover only named-product coverage/recoat compatibility; generic finish schedules, cure/volume estimates and glue spread rates stay unclaimed until verifiable manufacturer data supports them.
 
-**Sprint 315 — PWA, offline, updates and storage pressure** — P1 · M · S307.
+**Sprint 315 — PWA, offline, updates and storage pressure** — P1 · M · S307 · **DONE** (browser-level journeys complete; native OS file launch remains unverified).
 
-- T1: Browser tests for install manifest, service worker registration, cached app shell reload offline and update-ready banner dismiss/reload.
-- T2: Simulate storage quota warning and unavailable storage; assert status, actions and no data loss.
-- T3: Open `.cabinetplan` file via supported file handler path; test unsupported/invalid file recovery.
+- T1: DONE — Chromium and Firefox verify manifest essentials, service-worker registration/activation/control, cached app-shell reload offline, update-banner dismissal for the tab, and user-confirmed reload through a real waiting worker.
+- T2: DONE — Chromium and Firefox simulate near-limit and unavailable estimates; Project Manager reports each state, allows named saves, and retains both projects after reload.
+- T3: DONE — Chromium and Firefox E2Es drive the registered `launchQueue` consumer with a valid `.cabinetplan`, unsupported file, and malformed payload; invalid inputs preserve the current configuration. Native OS-level launch remains unverified.
 - Accept: offline start works after one online load in supported browser; explain unsupported API status without blocking core workflows.
 
 **Sprint 316 — Accessibility, visual and responsive matrix** — P0 · L · S307–S315.
@@ -716,7 +952,7 @@ T4 is complete: all core visual baselines pass in Chromium and Firefox, and all 
 
 Status (2026-10-02): T1 and T2 verification and clean-checkout acceptance are complete. Fresh-install quality and test gates, dead-code scan, production build, and bundle budget all pass; v5.34.0 is release-ready.
 
-### Phase 65 — Versioned Data, Import Safety, and Durable Offline Projects (Sprints 319–326; target v5.36.0) — P0
+### Phase 65 — Versioned Data, Import Safety, and Durable Offline Projects (Sprints 319–326; target v5.38.0) — P0
 
 **Exit:** project/catalog schemas validate before mutation; upgrades are lossless and tested; IDB remains default until OPFS is proven; batch export is deterministic and safe.
 
@@ -775,7 +1011,7 @@ Status (2026-10-02): T1 and T2 verification and clean-checkout acceptance are co
 - T3: Download ZIP in browser and inspect archive entries/content; test one/all cabinet, format toggles, no selection, cancellation and failed PDF.
 - Accept: archive can be unpacked by a standard ZIP reader; every manifest entry matches bytes; partial failures are surfaced and never mislabelled as success.
 
-### Phase 66 — Cut-List and Optimizer Leadership (Sprints 327–335; target v5.37.0) — P0
+### Phase 66 — Cut-List and Optimizer Leadership (Sprints 327–335; target v5.41.0) — P0
 
 **Exit:** cut results are benchmarked for quality, manufacturability and determinism; no optimization strategy can violate grain, kerf, stock, defect or material constraints.
 
@@ -837,7 +1073,7 @@ Status (2026-10-02): T1 and T2 verification and clean-checkout acceptance are co
 - T3: ADR: proceed/defer/reject. Any dependency must pass MIT policy, bundle budget, deterministic correctness and maintenance requirements.
 - Accept: no runtime dependency or production feature lands from the spike; implementation proceeds only with explicit user value and compatibility proof.
 
-### Phase 67 — CNC, Hardware and Manufacturing Assurance (Sprints 336–343; target v5.40.0) — P0
+### Phase 67 — CNC, Hardware and Manufacturing Assurance (Sprints 336–343; target v5.44.0) — P0
 
 **Exit:** generated files are simulation-checked, operation data is explicit, machine communication is recoverable, and unit representation is unambiguous.
 
@@ -893,7 +1129,7 @@ Status (2026-10-02): T1 and T2 verification and clean-checkout acceptance are co
 - T2: Full browser workflow builds a multi-cabinet project, downloads dossier and validates every file against contracts.
 - Accept: all exports describe the same project snapshot and schema versions; inconsistent/stale async results cannot mix.
 
-### Phase 68 — Room Design, Cabinet Rules, and Parametric Authoring (Sprints 344–352; target v5.42.0) — P1
+### Phase 68 — Room Design, Cabinet Rules, and Parametric Authoring (Sprints 344–352; target v5.46.0) — P1
 
 **Exit:** room planning is a usable, accessible 2D layout workflow; cabinet modifications remain dimensionally valid and explainable.
 
@@ -955,7 +1191,7 @@ Status (2026-10-02): T1 and T2 verification and clean-checkout acceptance are co
 - T1: Full room-to-cabinet-to-optimizer-to-dossier journey on desktop and tablet, including offline save/reload.
 - Accept: clearance and production outputs match same revision; all new controls covered by interaction matrix.
 
-### Phase 69 — Assembly, Collaboration Boundaries, and Plugin Ecosystem (Sprints 353–359; target v5.45.0) — P1
+### Phase 69 — Assembly, Collaboration Boundaries, and Plugin Ecosystem (Sprints 353–359; target v5.49.0) — P1
 
 **Sprint 353 — Assembly animation and synchronized 3D steps** — P2 · M · S313.
 
@@ -998,7 +1234,7 @@ Status (2026-10-02): T1 and T2 verification and clean-checkout acceptance are co
 - T1: Full test and artifact matrix; publish plugin compatibility and data migration notes.
 - Accept: all active P0 gates pass; deferred collaboration has a clear boundary and no misleading UI claim.
 
-### Phase 70 — Governance, Documentation, and Supply Chain (Sprints 360–364; target v5.47.0) — P1
+### Phase 70 — Governance, Documentation, and Supply Chain (Sprints 360–364; target v5.51.0) — P1
 
 **Sprint 360 — Release readiness report** — P1 · M · existing quality scripts.
 
@@ -1031,13 +1267,18 @@ Status (2026-10-02): T1 and T2 verification and clean-checkout acceptance are co
 - T2: Add sample validation command and contributor templates only if repository maintainers approve added governance.
 - Accept: community content cannot execute code through catalog path; no GPL source/assets are copied into MIT project.
 
-### Phase 71 — Performance, Resilience, and Inclusive Access (Sprints 365–368; target v5.48.0) — P1
+### Phase 71 — Performance, Resilience, and Inclusive Access (Sprints 365–368; target v5.52.0) — P1
 
-**Sprint 365 — Realistic project performance budget** — P1 · M · S327, S318.
+**Sprint 365 — Realistic project performance budget** — P1 · L · S327, S318, S376.
 
-- T1: Benchmark cold load, interaction latency, optimizer runtime, memory, PDF generation and large project import on representative low/mid hardware.
-- T2: Define user-centric budgets and sample projects; capture regressions in Lighthouse/browser performance artifact.
-- Accept: budgets derive from measured baseline and target devices; no arbitrary numbers without measurements.
+- T1: Establish a repeatable production-build baseline on pinned Chromium and Lighthouse versions for desktop and mobile emulation. Run five audits per profile against a fresh load and a representative returning-user load; record the median and spread for the app shell, configurator, preview, optimizer and PDF entry points. Use small, typical and large project fixtures, and include optimizer runs, tab switches, dimension edits and project import in browser traces.
+- T2: Report Lighthouse Performance, Accessibility, Best Practices and SEO scores separately; do not hide regressions in an aggregate score. Retain the existing mobile hard gates (Performance ≥ 0.90, Accessibility ≥ 0.95, Best Practices ≥ 0.90; FCP ≤ 1.2 s, LCP ≤ 2.5 s, TBT ≤ 200 ms, CLS ≤ 0.1) and the current SEO advisory while establishing stable desktop results.
+  Set score targets from the measured baseline, then ratchet gates toward ≥ 0.95 in each category without weakening an existing gate. Treat TBT as a lab proxy for responsiveness, not as INP; assess INP against field data only if privacy-preserving, representative data becomes available.
+- T3: Use Lighthouse diagnostics, browser waterfalls and Playwright traces to identify the largest user-visible costs: critical-route JS/CSS and lazy boundaries (coordinate with S376), font/image loading and layout reservation, long main-thread tasks, React render work, worker scheduling, and expensive preview/PDF paths.
+  Rank fixes by measured impact and user workflow; preserve deterministic engine results, offline behavior, accessibility and reduced-motion behavior. Avoid adding a production dependency unless an ADR shows a net performance benefit.
+- T4: Implement and compare the highest-impact fixes using the same build, fixtures, browser profiles and run count as the baseline. Record before/after score distributions, Core Web Vitals, initial-route transfer size, interaction traces and any trade-offs; retain only changes with repeatable improvement and no workflow, visual, accessibility or export regressions.
+- T5: Make the measured budgets blocking in CI, attach Lighthouse reports and browser traces as artifacts, and report desktop and mobile results independently. Keep generated reports under the configured temporary/artifact locations; document the baseline, device/throttling profile and budget rationale so future budget changes require evidence.
+- Accept: a dated, reproducible desktop/mobile baseline and before/after report exist; the current hard gates remain blocking, desktop gates are added from measured results, and score targets are ratcheted only after stable runs. Representative core workflows meet the agreed budgets without new accessibility, responsiveness, output-correctness or offline regressions; all budgets are evidence-based rather than arbitrary.
 
 **Sprint 366 — Large project and memory stress** — P1 · L · S365.
 
@@ -1082,20 +1323,37 @@ Sources: the §4.4 audit and the §5.4 cross-platform benchmark. Execution order
 
 **Exit:** every engine/utils/services module is classified and is either reachable from the UI, documented as internal/public API, or removed; one owner module per capability; command palette ships; AR/DE/ES/FR meet the completeness gate; first-load bytes are measured and gated.
 
-**Sprint 371 — Capability map and surfacing ledger** — P0 · M · S301.
+**Sprint 371 — Capability map and surfacing ledger** — P0 · M · S301 · DONE (2026-10-04).
 
 - T1: Add `scripts/capability-map.js` (reuse the import-graph walk in `scripts/test-coverage-map.js`): for each module in `src/engine/**`, `src/utils/**` and `src/services/**` record UI importers (components, store, hooks, workers, `App.tsx`), engine-internal importers, barrel-only exposure, tests and output chunk. Write JSON + Markdown to `$TEMP/WoodworkingShop/capability-map/`.
 - T2: Add `config/capability-ledger.json` (schema `config/schemas/capability-ledger.schema.json`) classifying each module as `surfaced`, `internal`, `public-api` (documented in `docs/API-BOUNDARIES.md` or `docs/PLUGIN-API.md`), `surface-next` (target sprint required) or `retire` (reason + target release).
 - T3: `npm run capabilities:check` fails on unclassified modules, `retire` modules still present after their target release, and `surfaced` modules that lost all UI importers. Add to `quality:fast`.
 - Tests: `tests/utils/capability-map.test.ts` with fixture trees for direct, transitive, barrel-only, dynamic `import()` and `?worker` imports.
-- Accept: all 163 top-level engine modules plus utils/services classified and reviewed; gate runs in under 5 s.
+- Result: all 213 engine/utils/services modules are classified: 189 have a transitive UI import path and 24 are explicitly internal, documented public API, or assigned a future surfacing/retirement decision. The production build emits 97 of the 189 source-reachable modules; 92 are tree-shaken and reported as not emitted. Generated JSON and Markdown reports are written under `$TEMP/WoodworkingShop/capability-map/` and are not committed.
+- Accept: all engine modules plus utils/services classified and reviewed; `npm run capabilities:check` passes in 3.03 s; fixture tests cover direct, transitive, barrel-only, dynamic, alias, worker and test-only paths. Production build and bundle budget pass.
 
 **Sprint 372 — Duplicate-module consolidation** — P1 · L · S371.
 
-- T1: Templates: merge `templates.ts`, `template-library.ts`, `template-data.ts`, `cabinet-templates.ts`, `parametric-template.ts` and `template-dsl.ts` into `src/engine/templates/` (data, library, parametric DSL) with one public API. `router-template.ts` stays a calculator.
-- T2: One module each for stock (`stock-management`, `stock-tracker`, `shop-inventory`), waste (`waste-alert`, `waste-analytics`, `waste-predictor`) and comparison (`project-comparison`, `design-comparison`, `snapshot-diff`), keeping the variant with UI importers.
-- T3: Engine/utils name clashes (`ai-assistant`, `batch-export`, `community-catalog`, `crdt-sync`, `erp-export`, `gltf-export`, `ifc-export`, plus `engine/gltf-export.ts` vs `engine/export/gltf-export.ts`): pure logic in engine; browser I/O in utils under a distinct `*-download.ts` / `*-io.ts` name.
-- T4: Fold `webserial.ts` into `webserial-v2.ts`; keep plugin v1 as a deprecated facade over v2 for one minor release (documented in `docs/PLUGIN-API.md`); retire `src/services/supabase.ts` unless an ADR in `docs/ARCHITECTURE.md` approves an adapter.
+- T1: DONE — Consolidated the six template implementations in `src/engine/templates/` (configurator, data, library, cabinet, parametric and expression modules) behind an explicit non-colliding domain barrel. Legacy flat modules remain compatibility facades, engine public aliases are preserved, and `router-template.ts` remains separate.
+  Focused template/consumer tests pass 157/157; typecheck, focused lint, Prettier and `git diff --check` pass. Production build and bundle budget pass at 2,816.4 KB / 2,960 KB.
+- T2: DONE — Consolidated stock, waste and comparison ownership under `src/engine/stock/` and `src/engine/inventory/`, with explicit domain barrels and compatibility facades at the prior flat paths. Kept distinct data models and behavior as submodules rather than merging unlike APIs; UI, tests and the engine public barrel now consume the domain owners, while existing engine-level names remain compatible.
+  All 156 focused stock/waste/comparison/store/component tests pass; typecheck, capability-ledger validation, engine function coverage mapping, focused lint, Prettier and `git diff --check` pass. The coverage map tracks 634 engine functions (608 directly covered, 26 indirectly covered). Production build and bundle budget pass at 2,816.4 KB / 2,960 KB.
+- T3: DONE — Clarified `community-catalog` ownership: the engine validates the
+  shareable schema; the utility fetches and caches a separate regional material catalog.
+  The utility implementation now lives in `community-catalog-io.ts`; the original
+  `community-catalog.ts` path remains a compatibility facade. Audited and documented
+  same-name AI, batch-export, CRDT, ERP, IFC, and glTF module boundaries in
+  `docs/API-BOUNDARIES.md`; their schemas or I/O ownership differ, so no behavior was
+  merged. Community catalog/engine tests pass 56/56; typecheck and capability-ledger
+  validation pass. No test imports or engine implementation files were changed for
+  this clarification.
+- T4: DONE — Retired the unreferenced Supabase local-only stub and its metadata. Routed
+  v1 plugin registration through the v2 registry, marked v1 deprecated through v5.35.x,
+  and documented removal in v5.36.0 with cross-version registration/deactivation tests.
+  Migrated the assembly panel to `utils/webserial-cnc.ts`, preserving machine profile
+  settings, progress, abort, and close behavior. Kept the public `engine/webserial.ts`
+  API as a deprecated compatibility adapter through v5.35.x; the pure session model
+  remains in `webserial-v2.ts` because engine code cannot own browser I/O.
 - Tests: tests move with code; no coverage floor lowered; `npm run dead:check` clean; golden exports byte-identical.
 - Accept: no two modules own one capability; public barrel exports unchanged or aliased with deprecation; bundle not larger.
 
@@ -1104,39 +1362,43 @@ T3's AI assistant, batch export, community catalog, CRDT, ERP download, glTF eng
 
 **Sprint 373 — Surface high-value engines, retire the rest** — P1 · L · S371, S372.
 
-- T1: Rank the calculator candidates by user value and implementation cost. The capability map's shared-barrel reachability is not evidence that a calculator has a user-facing journey; verify feature-panel registrations and direct engine calls before classifying one as surfaced.
-
-| Rank | Candidate             | User value | Cost   | Sprint 373 disposition                      |
-| ---: | --------------------- | ---------- | ------ | ------------------------------------------- |
-|    1 | `pocket-hole`         | High       | Low    | T2 calculator                               |
-|    2 | `shelf-deflection`    | High       | Medium | T2 calculator                               |
-|    3 | `mortise-tenon`       | High       | Medium | T2 calculator                               |
-|    4 | `dovetail-layout`     | High       | Medium | T2 calculator                               |
-|    5 | `cabinet-weight`      | High       | Low    | T2 project summary and PDF                  |
-|    6 | `time-estimator`      | High       | Medium | T2 project summary and PDF                  |
-|    7 | `dowel-joint`         | Medium     | Medium | T3 unless a production caller is verified   |
-|    8 | `biscuit-joint`       | Medium     | Low    | T3 unless a production caller is verified   |
-|    9 | `wood-movement`       | Medium     | Medium | T3 unless a production caller is verified   |
-|   10 | `production-schedule` | Medium     | High   | T3 unless a production caller is verified   |
-|   11 | `appliance-clearance` | Medium     | Low    | Verify existing configuration use before T3 |
-|   12 | `edge-banding-calc`   | Medium     | Low    | T3 unless a production caller is verified   |
-|   13 | `clamp-pressure`      | Medium     | Medium | T3 unless a production caller is verified   |
-|   14 | `veneer-calc`         | Low        | Medium | T3 unless a production caller is verified   |
-|   15 | `workshop-safety`     | High       | High   | T3 unless a production caller is verified   |
-|   16 | `sanding-progression` | Low        | Low    | T3 unless a production caller is verified   |
-
-- T2: DONE — Mounted the four selected joinery/strength calculators in `CalculatorsPanel.tsx`; project summary and PDF spec page show estimated build time and panel weight.
-- T3: DONE — Verified production callers, direct tests, engine barrel exports, and locale-key usage; retired ten unregistered candidates and recorded the removals in CHANGELOG.
+- T1: COMPLETE — ranked `surface-next` modules by user value and cost. Evidence check: all 16 candidates have engine tests and public barrel exports, but `CalculatorsPanel.tsx` imports none of them; the current project weight display uses a separate materials calculation. Barrel reachability alone is not user surfacing. Priority order (value / integration cost; source size is a rough cost proxy):
+  1. `shelf-deflection` (high / medium, 203 lines): cabinet strength result directly informs shelf sizing.
+  2. `pocket-hole` (high / medium, 188 lines): common joinery workflow with actionable drill and fastener settings.
+  3. `cabinet-weight` (high / medium, 211 lines): useful project-level handling/load estimate; avoid duplicating the existing aggregate panel-weight display.
+  4. `time-estimator` (high / medium, 179 lines): build-time estimate belongs in the project summary and PDF specification.
+  5. `dowel-joint` (medium-high / medium, 199 lines).
+  6. `mortise-tenon` (medium-high / medium, 181 lines).
+  7. `dovetail-layout` (medium-high / medium, 223 lines).
+  8. `biscuit-joint` (medium / medium, 138 lines).
+  9. `appliance-clearance` (high / high, 247 lines): valuable, but needs placement context beyond a compact calculator form.
+  10. `wood-movement` (medium-high / medium, 172 lines).
+  11. `edge-banding-calc` (medium / medium, 207 lines).
+  12. `veneer-calc` (medium / medium, 172 lines).
+  13. `clamp-pressure` (medium / low-medium, 152 lines).
+  14. `sanding-progression` (medium / low-medium, 102 lines).
+  15. `workshop-safety` (high / high, 293 lines): prioritize after a dedicated safety workflow and sourced rule review are defined.
+  16. `production-schedule` (medium / high, 439 lines): broad scheduling UI and resource model make this the costliest candidate.
+      These were ordering decisions, not completion claims. The initial triage tagged all candidates `surface-next` for Sprint 373; T2 surfaced shelf-deflection, pocket-hole, dowel-joint, mortise-tenon, and dovetail-layout, while T3 retired the eleven unconsumed engine candidates. Revisit the ranking if implementation discovery materially changes the integration cost.
+- T2: COMPLETE — Lazily mount shelf-deflection, pocket-hole, dowel-joint, mortise-tenon, and dovetail-layout
+  calculators in `CalculatorsPanel.tsx`. Component journeys, browser option-delta checks against each engine, and
+  the accessible control inventory cover all five. The project summary shows the persisted, user-entered labour
+  estimate and accurately labels the existing materials-derived value as panel weight; single-cabinet PDF
+  specifications include those same values. Capability-map reachability is unchanged at 234 modules: 196
+  UI-reachable and 38 not UI-reachable before and after. The capability-ledger `surface-next` backlog fell from
+  19 to 16 modules.
+- T3: COMPLETE — Retired the eleven remaining unused engine candidates with their tests, public barrel exports, capability records, and unused locale strings; recorded the removals in CHANGELOG. Capability-map size fell from 234 to 223 modules, with UI reachability falling from 196 to 185 and not-UI-reachable remaining 38. The engine `surface-next` backlog is empty; four utility candidates now have explicit decision owners in S326, S341, S357, and S451.
 - Tests: each surfaced module gets a component journey and a browser option-delta journey (S314 pattern) plus a sourced oracle where one exists.
 - Accept: no `surface-next` row without a target sprint; report the existing 21-module `surface-next` baseline and the post-T3 count.
 
-Status: T1–T3 complete. The `surface-next` count remains 21 (20 target Sprint 373; `command-palette` targets Sprint 374); T2 surfaced four calculators, while T3 retired ten calculator modules that had been misclassified as surfaced solely through the shared barrel. No T3 locale keys had production call sites; shared edge-banding translations remain. The 20 Sprint 373 `surface-next` rows still require explicit disposition.
+Status (2026-10-07): T1–T3 complete. T2 surfaced four calculators, while T3 retired ten calculator modules that had been misclassified as surfaced solely through the shared barrel. No T3 locale keys had production call sites; shared edge-banding translations remain.
+The capability ledger now has no Sprint 373 targets; its four former utility candidates are assigned to S326 (batch export), S341 (IFC conformance), S357 (CRDT sync decision), and S451 (AI provider decision). These are future decisions, not claims that the utilities are shipped.
 
 **Sprint 374 — Command palette and keyboard-first workflow** — P1 · M · S371.
 
-- T1: Mount `src/utils/command-palette.ts` as `src/components/layout/CommandPalette.tsx` on Ctrl/Cmd+K: fuzzy search across tabs, actions (add cabinet, undo/redo, exports, units, theme, language), calculators, presets and recent projects.
-- T2: A typed command registry (`as const` descriptors: id, i18n label key, shortcut, `when` predicate, handler) feeds the palette, header buttons and `ShortcutsModal`, so labels and shortcuts cannot diverge.
-- T3: Recent commands (capped, localStorage) and palette entries for every calculator.
+- T1: COMPLETE — Mounted the command palette on Ctrl/Cmd+K with fuzzy search across tabs and actions, including add cabinet, undo/redo, exports, units, theme, language, calculators, presets and recent projects. Added combobox/listbox keyboard behavior, focus trapping/return, editable-field shortcut suppression, and Chromium E2E coverage with a zero-violation axe scan.
+- T2: COMPLETE — Typed command descriptors (`as const`: id, i18n label key, shortcut, `when` predicate, handler) now drive palette commands, Header labels and shortcut hints, global key handling, and `ShortcutsModal`; registry and Header tests guard uniqueness and displayed bindings.
+- T3: COMPLETE — Added direct palette commands for all 29 calculators and capped, validated localStorage recents. Component coverage verifies calculator command parity and malformed-storage handling; Chromium E2E confirms direct section opening and recent-command surfacing.
 - Tests: fuzzy-ranking unit tests; combobox/listbox ARIA pattern with axe; E2E open → filter → run → Escape → focus return; no trigger while typing in inputs.
 - Accept: every header action is reachable from the palette; zero duplicate shortcut definitions; WCAG 2.2 AA.
 
@@ -1144,33 +1406,49 @@ Status (2026-10-04): T1–T3 complete. Palette coverage includes tabs, built-in 
 
 **Sprint 375 — Translation completeness and locale quality** — P1 · L · S371.
 
-- T1: `scripts/i18n-completeness.js` → `npm run i18n:completeness`: per locale, missing keys, values identical to EN (excluding `config/i18n-allowlist.json` tokens such as units and brand names), interpolation/plural placeholder parity.
-- T2: Terminology glossary `src/i18n/glossary.json` (woodworking terms per locale); translate missing and EN-identical strings for AR/DE/ES/FR; track human-review status in a sidecar file, not inside locale JSON.
-- T3: Test-only pseudo-locales generated at runtime: `en-XA` (accented, +40 % length) and `ar-XB` (bidi-wrapped). Responsive E2E at 320 px detects clipping and mirrored-layout errors.
-- T4: Formatting audit: numbers via `Intl.NumberFormat`, units via its `unit` style, dates via `Intl.DateTimeFormat`, plurals via i18next plural rules.
+- T1: COMPLETE — Added `scripts/i18n-completeness.js` → `npm run i18n:completeness` to report missing/extra keys, empty values, EN-identical ratios (excluding `config/i18n-allowlist.json` tokens), and interpolation/plural-family placeholder parity across all six locales. The CLI is covered with synthetic locale fixtures and exposes the existing AR/DE/ES/FR backlog without blocking unrelated quality gates.
+- T2: COMPLETE — Since the initial audit, AR gained 232 formerly missing strings and DE/ES/FR gained 213 each; five stale nesting and ten onboarding keys were removed per locale. Key parity is exact in all six locales, with no empty values or placeholder mismatches.
+  Mounted calculator namespaces translated in this pass include shelf deflection, named expressions, pocket-hole, mortise-and-tenon, dowel-joint, dovetail-layout, cabinet-door, face-frame, drawer-box, screw-pullout, kerf-bending, dado-rabbet, finishing-coat, wood-turning, frame-panel, taper-jig, stair-stringer, box-joint, glue-coverage, planer-passes, honing-guide, crown-moulding, router-circle, cove-cut, moisture-shrinkage, rafter-length, router-template, half-lap, and spline-joint.
+  The mounted hardware-catalog import UI gained 26 strings per locale, room-planner and 3D preview UI gained 11 each, remaining optimizer labels were translated, and the constraints panel gained eight strings per locale. Config UI gained 2 AR, 8 DE, 6 ES, and 4 FR translations; the PDF panel gained two French labels, the storage badge gained AR/DE/ES text.
+  CNC job-queue, project-sharing, batch-export, router-depth, parametric-template, machining, feed-rate, material-catalog,
+  maintenance-scheduler, multi-machine, drawer-slide, material-yield, panel-label, drill-speed, wood-drying, glue-up-time,
+  bandsaw-speed, tablesaw-blade, appliance, suggestions, version-history, and plugin-registry namespaces gained 23, 21, 19,
+  24, 21, 19, 18, 18, 17, 16, 18, 16, 16, 16, 16, 16, 16, 16, 15, 15, 15, and 2 strings per locale. EN-identical rates:
+  AR 8.84%, DE 7.64%, ES 7.64%, FR 7.78%; the 2% target remains open. Command-palette category labels gained one
+  DE and three FR translations. Dust-collection, board-feet, assembly-dependency, cloud-sync, miter-angle, pilot-hole,
+  material-usage, shelf-pin, project-comparison, cut-list-grouping, waste-predictor, shop-inventory, CNC-stream, and
+  material-cost-tracker, stock-management, tool-wear, Web Serial, storage-fallback, library, a11yAudit, aiAssistant, collab,
+  darkMode, gltf, layoutOptimizer, sync, and fingerJoint namespaces were translated across AR/DE/ES/FR. The mobileSync and
+  analytics namespaces were translated into AR; ERP labels were translated into AR and the German ERP title was localized.
+  EN-identical rates are now AR 1.20%, DE 1.49%, ES 1.44%, and FR 1.63%, meeting the 2% target. All 337 locale
+  review records are approved; none remain pending.
+- T3: COMPLETE — Test-only pseudo-locales are generated at runtime: `en-XA` (accented, +40 % length) and `ar-XB` (bidi-wrapped). Chromium E2E passes 70 standard tab/width/locale states plus 14 pseudo-locale states at 320 px, checking document overflow, offscreen controls, clipped text and overlapping actions.
+- T4: COMPLETE — Replaced implicit locale date/number formatting, formatted selected physical measurements with `Intl.NumberFormat` unit style, moved manual UI/PDF singular-plural choices to i18next, and localized remaining fixed-precision UI/PDF and validation readouts. Editable numeric inputs, unit-conversion constraints, and machine geometry retain invariant decimal formatting by contract.
 - Accept: zero missing keys in all six locales; EN-identical ratio ≤ 2 % excluding the allowlist; no placeholder mismatch; pseudo-locale E2E passes without overflow.
 
-Status (2026-10-04): T1 tooling complete. The latest audit reports zero missing keys, 16 target-only keys, and zero placeholder mismatches in AR/DE/ES/FR; HE has zero missing/extra keys and zero placeholder mismatches. EN-identical rates are 38.60% (AR), 37.75% (DE), 37.42% (ES), and 37.61% (FR); HE is 0.47%.
+Status (2026-10-07): T1–T4 acceptance is complete. `npm run i18n:completeness` reports zero missing, extra, or empty keys and zero placeholder mismatches in all six locales. EN-identical rates are 1.21% (AR), 1.40% (DE), 1.35% (ES), and 1.68% (FR); all 337 translation-review records are approved. The separate glossary-term review tracker is not part of this acceptance gate.
 
-T2 remains in progress. The six-locale woodworking glossary and separate pending-review tracker are started.
-
-Translation batches cover the command palette, assembly and optimizer workflows, 3D preview, parts table, and mounted woodworking calculators, including box joints, cove cuts, crown moulding, frame and panel, honing, kerf bending, planer passes, rafters, screw pull-out, wood turning, router templates/circles, taper and stair stringers, and glue coverage.
-
-A duplicate tool-wear namespace was corrected. EN-identical rates remain above the 2% acceptance threshold. T3–T4 remain outstanding; Sprint 375 acceptance is not yet met.
+The Chromium run of `tests/e2e/preview-acceptance.spec.ts` passes all four tests, including the standard responsive matrix and both pseudo-locales at 320 px. It exposed a long-word overflow in the workspace welcome copy under `en-XA`; the content is now width-constrained and wraps long words.
 
 **Sprint 376 — Critical-path performance budget** — P1 · M · S371.
 
-- T1: Extend `scripts/bundle-report.js` with brotli sizes and the initial-route chunk graph; add `critical` budgets to `config/bundle-budget.json` set from the measured baseline.
-- T2: Lazy-load each calculator panel, the 3D/WebGL preview, PDF renderer, G-code/DXF modals and Marketplace; preload on hover/focus intent. No new dependency.
-- T3: Raising any budget requires an ADR line in CHANGELOG with measured cause; `lighthouse.yml` asserts LCP, TBT and CLS with mobile throttling on the built app.
+- T1: COMPLETE — `scripts/bundle-report.js` reports per-file and aggregate Brotli sizes plus the initial-route static-import graph, CSS, and entry assets. Measured baseline: 1,832.9 KB raw / 511.1 KB Brotli; 1,046.6 KB (37.6%) of emitted JavaScript sits outside the initial route. `npm run bundle:critical` enforces the 1,840 KB / 515 KB budgets in CI. The graph excludes dynamic imports and on-demand workers; the current static PDF renderer remains in the baseline.
+- T2: COMPLETE — Each calculator panel, Marketplace, and G-code preview modal now load lazily and preload on pointer/focus intent; the PDF renderer and 3D/WebGL preview stay behind lazy route boundaries with tab-intent preloads.
+  DXF export remains an on-demand worker, not a modal. No new dependency. The initial route fell from 1,832.9 KB raw / 511.1 KB Brotli to 655.1 KB / 160.4 KB across 13 files (64.3% raw, 68.6% Brotli reduction); 2,241.9 KB (80.1%) of emitted JavaScript is outside the route.
+  The 700 KB / 175 KB critical gate passes. The aggregate dist cap is 2,970 KB per the measured T2 ADR in CHANGELOG.
+- T3: COMPLETE — `lighthouse.yml` asserts LCP, TBT and CLS with mobile throttling on the built app; the existing
+  `scripts/lighthouse.js` gate also checks FCP, performance score and Lighthouse insights. Initial sheet optimization
+  runs in the existing worker on Worker-capable browsers, with pending sidebar and cost values. Both BOM export entry
+  points now dynamically import the exporter. A cold mobile browser load requests neither BOM chunk; Ctrl+E fetches
+  them on demand and completes the export. The workspace LCP banner uses a preloaded, responsive WebP; Lighthouse
+  confirms image discovery and responsive delivery. The current critical route is 605.1 KB raw / 153.2 KB Brotli,
+  within the unchanged 700 KB / 175 KB budget. Three consecutive local mobile Lighthouse runs measured performance
+  95–96, FCP 1,697–1,717 ms, LCP 2,616–2,624 ms, TBT 43–114 ms and CLS 0; all satisfy the existing fixed thresholds.
+  No bundle or metric budget was raised.
 - Tests: bundle-report chunk-graph unit tests; bench budgets unchanged.
 - Accept: `npm run bundle:critical` blocks in `npm run ci`; first-load reduction reported from measurements.
 
-Status (2026-10-05): T1 is implemented: Vite emits its manifest, and `npm run bundle:critical` measures the initial static-import graph with Brotli quality 5. CI and release builds enforce the measured 168 KiB JS and 14 KiB CSS ceilings. Focused tests cover static imports, lazy-import exclusion, missing manifest entries and threshold failures.
-
-T2 remains incomplete: the remaining calculator panels, G-code/DXF modals and Marketplace are not all lazy-loaded or intent-preloaded. The first-load reduction report is therefore still outstanding.
-
-**Sprint 377 — Modern platform UI primitives and input modalities** — P2 · M · S374.
+**Sprint 377 — Modern platform UI primitives and input modalities** — P2 · M · S374 · (2026-10-04: T1 and T3 move into the S431 design system, T2 into S439; T4 pen input stays here).
 
 - T1: Migrate modals to native `<dialog>` with `showModal()` while keeping the `useFocusTrap` return-focus contract; menus/tooltips to the Popover API with fallback.
 - T2: View Transitions for tab and preview-view changes, disabled under `prefers-reduced-motion`.
@@ -1179,12 +1457,16 @@ T2 remains incomplete: the remaining calculator panels, G-code/DXF modals and Ma
 - Tests: axe per dialog; S307/S316 journeys unchanged; forced-colors emulation; reduced-motion E2E.
 - Accept: capability detection only (no UA sniffing); clean fallback where an API is missing.
 
-**Sprint 378 — v5.35.0 coherence release** — P0 · S · S371–S377.
+Status (2026-10-07): T4 is complete. Dimension sliders and room-layout dragging use 1 mm precision for pen input and retain 10 mm precision for mouse/touch; the two component suites pass 24 tests. T1–T3 remain assigned to S431/S439 as noted above.
+
+**Sprint 378 — v5.35.0 coherence release** — P0 · S · S371–S377, S313, S315.
+
+- T0: Close the Phase 64 carry-over first: S313 (assembly steps, build log, camera permission branches, machine profile and serial lifecycle) and S315 (offline reload, update banner, quota/unavailable storage, `.cabinetplan` file handler) with browser evidence.
 
 - T1: Full `npm run ci` and E2E matrix; release notes publish the capability-map summary, locale completeness table and critical-path numbers.
 - Accept: new gates blocking; README locale claims match the completeness report.
 
-### Phase 74 — Universal Cut-List Workbench (Sprints 379–385; target v5.38.0) — P1
+### Phase 74 — Universal Cut-List Workbench (Sprints 379–385; target v5.42.0) — P1
 
 **Exit:** any part list — typed, pasted or imported — can be optimized on sheet and linear stock without designing a cabinet, and results flow into labels, PDF, costs and shop mode.
 
@@ -1240,7 +1522,7 @@ T2 remains incomplete: the remaining calculator panels, G-code/DXF modals and Ma
 - T1: Journey in Chromium, Firefox and WebKit: paste list → sheet + linear optimize → labels → PDF → share link → reopen.
 - Accept: every artifact comes from the same snapshot; `docs/USER-GUIDE.md` gains a parts-only section.
 
-### Phase 75 — Shop-Floor Mode (Sprints 386–391; target v5.39.0) — P1
+### Phase 75 — Shop-Floor Mode (Sprints 386–391; target v5.43.0) — P1
 
 **Exit:** the app works on a workshop tablet or phone with dirty hands — large targets, readable at distance, screen kept awake, steps read aloud, parts tracked by scanning labels — fully offline.
 
@@ -1286,7 +1568,7 @@ T2 remains incomplete: the remaining calculator panels, G-code/DXF modals and Ma
 - T1: Offline tablet/phone journeys: open project → shop mode → cut → scan → assemble; accessibility review of shop mode.
 - Accept: offline E2E passes on WebKit iPad and Android Chrome emulation.
 
-### Phase 76 — Room Capture, Import and Client Presentation (Sprints 392–397; target v5.43.0) — P2
+### Phase 76 — Room Capture, Import and Client Presentation (Sprints 392–397; target v5.47.0) — P2
 
 **Exit:** rooms can start from an existing plan, cabinet runs can be auto-filled, and clients receive a presentation pack separate from shop documents.
 
@@ -1330,7 +1612,7 @@ T2 remains incomplete: the remaining calculator panels, G-code/DXF modals and Ma
 - T1: Journey: import plan → auto-fill run → countertop → client pack → shop dossier, desktop and tablet.
 - Accept: all outputs from one revision; new controls in the §8.3 inventory.
 
-### Phase 77 — Door, Drawer and Construction Systems (Sprints 398–403; target v5.41.0) — P1
+### Phase 77 — Door, Drawer and Construction Systems (Sprints 398–403; target v5.45.0) — P1
 
 **Exit:** cabinets can be built frameless, face-frame or inset; door and drawer-front styles generate correct parts; hardware follows sourced rules; outsourced orders export cleanly.
 
@@ -1375,7 +1657,7 @@ T2 remains incomplete: the remaining calculator panels, G-code/DXF modals and Ma
 - T1: Journey: face-frame kitchen with shaker doors → hardware rules → dossier and outsourced orders; golden updates reviewed as semantic diffs.
 - Accept: default-profile projects remain byte-identical to pre-phase exports.
 
-### Phase 78 — Interop and Desktop-Class File Workflows (Sprints 404–408; target v5.44.0) — P1/P2
+### Phase 78 — Interop and Desktop-Class File Workflows (Sprints 404–408; target v5.48.0) — P1/P2
 
 **Exit:** projects behave like desktop documents (open, save in place, recent files), exports round-trip, and the app receives files from the OS and other apps.
 
@@ -1414,7 +1696,7 @@ T2 remains incomplete: the remaining calculator panels, G-code/DXF modals and Ma
 - T1: Journey: open file → edit → save in place → export PNG → reopen PNG → share to device → reopen.
 - Accept: all paths produce the same canonical snapshot.
 
-### Phase 79 — Estimating, Quoting and Job Management (Sprints 409–413; target v5.46.0) — P2
+### Phase 79 — Estimating, Quoting and Job Management (Sprints 409–413; target v5.50.0) — P2
 
 **Exit:** a small shop can price a job, send a quote and track it through production, entirely offline.
 
@@ -1448,6 +1730,8 @@ T2 remains incomplete: the remaining calculator panels, G-code/DXF modals and Ma
 - Accept: variance report reconciles with `cost-variance-store`.
 
 ### Phase 80 — Developer Platform and Engineering Excellence (Sprints 414–419; continuous track) — P1–P3
+
+As of 2026-10-04, S414 is absorbed by S421, S415 by S420, S417 by S425 and S418 by S422 (Phase 81). Their contracts below remain as reference; only S416 and S419 stay on this track.
 
 **Exit:** faster, more trustworthy feedback loops and verifiable releases, without weakening any gate.
 
@@ -1487,6 +1771,284 @@ T2 remains incomplete: the remaining calculator panels, G-code/DXF modals and Ma
 - T2: `.devcontainer/` with pinned Node and Playwright browsers (justified root addition under §10); README contributing section updated.
 - Accept: no network calls added; project content excluded from diagnostics unless the user opts in.
 
+**Status (2026-10-05):** T1 and T2 complete. The local-only bundle includes session Web Vitals, worker availability, aggregate browser storage, and sanitized in-memory errors. Chromium E2E verifies the explicit JSON download, project-data exclusion, and absence of cross-origin requests. The Dev Container pins Node.js 26.10.0 and installs browsers from the locked Playwright package.
+
+### 7.4 Refactor Program (Phases 81–85, added 2026-10-04)
+
+Sources: §3.10 refactor decisions, §4.5 audit and §5.5 harvest. All §7.1 constraints apply. Two extra rules govern Phases 81 and 82:
+
+1. **Behaviour-preserving:** export goldens stay byte-identical, visual baselines unchanged, every E2E journey passes unmodified (selectors may change only through the typed test-id registry).
+2. **Mechanical moves are scripted:** file moves and import rewrites run through committed codemods under `scripts/codemods/`, so a reviewer checks the script and the diff summary rather than thousands of lines.
+
+```mermaid
+flowchart LR
+  s371["S371–S373<br/>retire dead code"] --> s420["S420–S425<br/>toolchain"]
+  s420 --> s426["S426<br/>ADRs + fitness rules"]
+  s426 --> s427["S427<br/>engine domains"]
+  s426 --> s428["S428<br/>platform layer"]
+  s427 --> s429["S429<br/>store slices"]
+  s428 --> s429
+  s429 --> s430["S430<br/>features + routes"]
+  s431["S431<br/>ui primitives"] --> s430
+  s428 --> s432["S432<br/>worker pool"]
+  s430 --> s433["S433<br/>i18n namespaces"]
+  s432 --> s434["S434<br/>v5.37.0"]
+  s433 --> s434
+  s434 --> p83["Phase 83<br/>experience"]
+  p83 --> p84["Phase 84<br/>docs + community"]
+  s434 -.-> p85["Phase 85<br/>on-device AI"]
+
+  classDef prior fill:#3a7a50,stroke:#1e4a30,color:#ffffff
+  classDef refactor fill:#2a5a9a,stroke:#1a3a6e,color:#ffffff,font-weight:bold
+  classDef ux fill:#f0b040,stroke:#8b5022,color:#1a0806
+  classDef optional fill:#fae7c0,stroke:#c08040,color:#3a1806
+  class s371 prior
+  class s420,s426,s427,s428,s429,s430,s431,s432,s433,s434 refactor
+  class p83,p84 ux
+  class p85 optional
+```
+
+### Phase 81 — Toolchain Modernisation (Sprints 420–425; target v5.36.0) — P1
+
+**Exit:** the project runs on the current major toolchain; local and CI feedback is measurably faster; no gate is weakened; supply-chain hardening is complete.
+
+**Sprint 420 — TypeScript 7 native compiler** — P1 · M · none (absorbs S415).
+
+- T1: Install TypeScript 7 and run it against `tsconfig.app.json`, `tsconfig.node.json`, `tsconfig.test.json` and `tsconfig.e2e.json`; record diagnostics deltas and wall-clock time beside TypeScript 6 in `%TEMP%/WoodworkingShop/ts7/`.
+- T2: Resolve removed or changed compiler options; keep `strict`, `erasableSyntaxOnly`, `noImplicitOverride`, `verbatimModuleSyntax` and `skipLibCheck` semantics.
+- T3: Switch `typecheck` and `build` to TypeScript 7. If typescript-eslint's type-aware rules still need the TypeScript 6 JavaScript API, keep it as a lint-only devDependency with an ADR and a removal trigger.
+- T4: Update the `TypeScript` token in AGENTS.md, copilot-instructions.md, README badges and `docs/tech-stack.svg` in the same commit (`ai:context:validate` enforces it).
+- Accept: zero new diagnostics or each delta explained; typecheck time reported before and after; `npm run ci` green.
+
+**Sprint 421 — Vitest 5 and unified test projects** — P1 · L · S420 (absorbs S414).
+
+- T1: Migrate to Vitest 5 following the official migration guide; keep the root config files (`vitest.config.ts`, `vitest.components.config.ts`, `vitest.bench.config.ts`) or merge them into one `projects` config only if coverage reports and ratchets stay identical.
+- T2: Add a `components-browser` project (`@vitest/browser-playwright`, Chromium) for layout-, focus-, pointer- and canvas-dependent components (preview, sheets, dialogs, parts grid); jsdom remains the default project.
+- T3: Adopt ARIA snapshots for dialog, tablist, toolbar and table regions; use trace view for failures; write traces to `%TEMP%`.
+- T4: Measure runtime and flake rate over 10 CI runs; ADR with numbers.
+- Accept: no duplicated test files; coverage floors unchanged or higher; browser project within the agreed runtime budget.
+
+**Sprint 422 — Playwright 1.63, blocking snapshots and CI speed** — P1 · M · S421 (absorbs S418).
+
+- T1: Upgrade to Playwright 1.63; adopt `toMatchAriaSnapshot` for each tab's landmark structure and the clock API for timers.
+- T2: Generate Linux visual baselines in the official Playwright container image and remove `--ignore-snapshots` from `ci.yml`.
+- T3: Shard E2E with blob reports merged into one HTML report; PR fast lane (affected tags + P0 journeys) and full matrix on `main`, nightly and release; track p50/p95 duration.
+- T4: Move Lighthouse output from `.lighthouseci/` to `%TEMP%/WoodworkingShop/lighthouse/` to satisfy the intermediate-files rule.
+- Accept: snapshot comparisons block CI; PR feedback time reduced with no gate removed from `main` or release.
+
+**Sprint 423 — React Compiler 1.0** — P2 · M · S421.
+
+- T1: Enable React Compiler behind a build flag using the integration path documented for the current `@vitejs/plugin-react`; verify `eslint-plugin-react-hooks` compiler rules are clean first.
+- T2: Measure render counts and interaction latency for configurator slider drags, optimizer re-runs and preview view switches with and without the compiler (Playwright trace + React Profiler build).
+- T3: Remove hand-written `useMemo`/`useCallback`/`memo` only where the compiler output proves equivalent; keep the flag for one release as the rollback path.
+- Accept: no behaviour or visual change; measured improvement or an ADR closing the item.
+
+**Sprint 424 — Lint, dead-code, spelling and mutation hardening** — P1 · M · S371–S373.
+
+- T1: Remove all 22 Knip `entry` overrides in `package.json`: delete, wire or document each module (capability ledger is the source of truth); a new override requires an ADR.
+- T2: Fix the cspell configuration and re-enable spell checking as `npm run spell:check` in `quality:fast` and CI.
+- T3: ADR on an oxlint pre-pass for speed only; ESLint and the 7-plugin rule remain authoritative and blocking.
+- T4: Enable Stryker incremental mode in `mutation.yml`, cache the incremental file, and complete the full static-inclusive four-module baseline over successive weekly runs.
+- Accept: `npm run dead:check` passes with zero hatches; spell check blocks CI; a full mutation baseline is published with date and score.
+
+**Sprint 425 — Supply chain hardening and v5.36.0 release** — P1 · M · S420–S424 (absorbs S417).
+
+- T1: Pin every action by full commit SHA with version comments; least-privilege `permissions` per job; Dependabot keeps pins current.
+- T2: `actions/attest-build-provenance` for the `dist/` archive and CycloneDX SBOM; document `gh attestation verify` in README.
+- T3: Add an OpenSSF Scorecard workflow and publish the dated score (prepares S361).
+- T4: Raise the Node floor to 24 if all CI jobs already run on 24 or 26; CHANGELOG note.
+- Accept: release assets verifiable; `npm run ci` green; tool tokens synced across docs.
+
+### Phase 82 — Architecture Refactor (Sprints 426–434; target v5.37.0) — P0
+
+**Exit:** the codebase follows the target architecture in §★; layer rules are enforced by CI; every user-visible behaviour, export byte and visual baseline is unchanged.
+
+**Sprint 426 — ADRs and architecture fitness functions** — P0 · M · S371.
+
+- T1: Create `docs/decisions/` with an ADR template (context, decision, consequences, status, date) and backfill ADRs for the existing big decisions in §3 (local-first, Zustand, react-pdf, dependency cap, no router library).
+- T2: `scripts/check-architecture.js` (reusing the S371 import graph) → `npm run architecture:check`: allowed layer edges (§★ target architecture), zero import cycles, cross-domain imports only through barrels, React and DOM forbidden in `engine/` and `platform/` contracts. Add to `quality:fast`.
+- T3: Mirror the simplest rules with ESLint core `no-restricted-imports` for in-editor feedback (no new plugin).
+- Tests: fixture graphs for each rule; the current tree reports a baseline of violations that later sprints burn down to zero.
+- Accept: gate runs in under 5 s and blocks new violations immediately.
+
+**Sprint 427 — Engine domain split** — P0 · L · S426.
+
+- T1: `scripts/codemods/move-engine-domains.js` moves the 165 top-level modules into `core`, `geometry`, `materials`, `hardware`, `joinery`, `optimizer`, `assembly`, `costing`, `export`, `room`, `calculators`, `workshop` and `project`, rewriting imports in `src/` and `tests/`.
+- T2: Each domain gets a curated `index.ts`; `engine/index.ts` shrinks from 1,448 lines to domain re-exports while keeping the public plugin API stable (documented in `docs/API-BOUNDARIES.md` and `docs/PLUGIN-API.md`).
+- T3: Move tests to mirror the new paths with the same codemod.
+- Accept: golden exports byte-identical; test count unchanged; `architecture:check` shows zero cross-domain deep imports.
+
+**Sprint 428 — Platform layer** — P0 · L · S426.
+
+- T1: Create `src/platform/` with `storage/` (`StorageAdapter` interface; IndexedDB implementation; localStorage only for small preferences), `files/` (download, file input; File System Access later in S404), `share/` (Web Share, clipboard, URL state), `device/` (camera, haptics, wake lock, serial capability probes) and `diagnostics/` (error reporter).
+- T2: Move browser I/O out of `src/utils/` and `src/services/`; `utils/` keeps pure helpers or folds them into `engine/core`; retire `services/` once empty.
+- T3: Contract tests per adapter run against fake implementations and the real browser (Vitest browser project).
+- Accept: no `window`, `document`, `navigator`, `indexedDB` or `localStorage` access outside `platform/` and `app/` (enforced by S426).
+
+**Sprint 429 — Store refactor: domain slices and patch history** — P0 · L · S427, S428.
+
+- T1: Compose one store from domain slices (`project`, `cabinets`, `catalog`, `optimizer`, `ui`, later `partsList` and `shop`); fold the custom-materials, custom-hardware, stock-tracker, cost-variance and room stores into slices or document why each stays separate.
+- T2: In-house history middleware storing structural patches instead of full cabinet-array snapshots; keep the 50-step limit and grouping of slider drags into one undo step.
+- T3: Persistence goes through `StorageAdapter` with a version field per slice (prepares S319).
+- Tests: every existing store test passes unchanged; new memory test shows history size for a 50-cabinet project before and after.
+- Accept: undo/redo journeys (S307) unchanged; measured memory reduction reported.
+
+**Sprint 430 — Feature-sliced UI and typed routing** — P1 · L · S429, S431.
+
+- T1: Move `src/components/*` into `src/features/{workspace,configurator,preview,optimizer,assembly,pdf,calculators}/` and the shell (header, tabs, toasts, error boundaries) into `src/app/`, via codemod.
+- T2: Typed route table driven by the Navigation API with a History API fallback; `?tab=` and `?cab=` deep links keep working; Alt+1…Alt+6 and the command registry (S374) consume the same table.
+- T3: Update `config/component-budget-exceptions.json` paths, coverage-map ownership and instructions files (`components.instructions.md` `applyTo`).
+- Accept: S307 shell journeys and all deep links pass unchanged in Chromium, Firefox and WebKit.
+
+**Sprint 431 — Design-system primitives** — P1 · L · S426 (absorbs S377 T1 and T3).
+
+- T1: `src/ui/` primitives: Button, IconButton, Field, NumberField (units, fractions via S342 when available), Select, Switch, Tabs, Dialog (native `<dialog>` + `useFocusTrap` return-focus contract), Popover/Tooltip (Popover API with fallback), Toast, Table, Meter, EmptyState, Skeleton.
+- T2: Tokens in the Tailwind v4 `@theme` with `light-dark()`, high-contrast and `forced-colors` support; container queries for panels reused in sidebar and main areas.
+- T3: Migrate the highest-traffic panels first; split `SheetCard.tsx`, `IsometricView.tsx` and `Icons.tsx` below 400 lines.
+- Tests: axe and ARIA snapshot per primitive; keyboard contract tests; RTL rendering.
+- Accept: no panel re-implements a primitive; component budget target lowered toward 400 lines from measured results.
+
+**Sprint 432 — Typed worker platform** — P1 · M · S428.
+
+- T1: `WorkerJob<I, O>` contract (`id`, input schema version, `AbortSignal`, progress events, timeout, typed result or error) with a small pool and health checks; Comlink stays the transport.
+- T2: Port optimizer, cost, assembly, BOM and DXF workers; replace hand-written scheduling in `store/worker-schedule.ts` while preserving its stale-result suppression.
+- T3: Use transferables for large results; keep the `SharedArrayBuffer` path behind `crossOriginIsolated`.
+- Accept: the S317 worker recovery suite passes unchanged; no indefinite loading states.
+
+**Sprint 433 — i18n namespaces and typed keys** — P1 · M · S430 (prepares S375).
+
+- T1: Split each 2,368-key locale file into feature namespaces under `src/i18n/{locale}/{namespace}.json` with a codemod; lazy-load namespaces with their feature.
+- T2: Typed resources so an unknown `t('key')` fails typecheck; update `scripts/i18n-coverage.js` for namespaces.
+- T3: Update `.vscode` i18n-ally settings and `i18n.instructions.md`.
+- Accept: zero missing keys; initial-route locale bytes measured and reduced.
+
+**Sprint 434 — v5.37.0 refactor release** — P0 · S · S426–S433.
+
+- T1: Full `npm run ci`, E2E matrix, golden exports and visual baselines unchanged; `architecture:check` at zero violations.
+- T2: Update `docs/ARCHITECTURE.md` diagrams and directory map, `AGENTS.md`, copilot instructions, scoped instruction `applyTo` globs and VS Code snippets to the new layout.
+- Accept: release notes state "no user-visible change" and publish before/after metrics (typecheck time, test time, largest file, module count per domain).
+
+### Phase 83 — Experience and Delight (Sprints 435–441; target v5.39.0) — P1
+
+**Exit:** a first-time visitor reaches a useful result within one minute; the preview and printed plans feel professional; every change animates calmly and respects reduced motion.
+
+**Sprint 435 — Examples gallery and guided first run** — P1 · M · S430.
+
+- T1: Examples gallery (kitchen base run, wall cabinets, bookcase, wardrobe, bathroom vanity, workshop storage) as ordinary project files with thumbnails generated from the SVG renderer.
+- T2: Replace the static onboarding with a skippable guided tour anchored to real controls (Popover API), resumable from Help and the command palette.
+- T3: Empty states with one primary next action per panel; "What's new" panel generated from the CHANGELOG at build time.
+- Tests: first-run journey timed in Playwright; tour keyboard and screen-reader paths; RTL.
+- Accept: median scripted time from first load to first exported PDF under 60 s; tour never blocks keyboard users.
+
+**Sprint 436 — Project home** — P1 · M · S435, S429.
+
+- T1: Project home with recent projects, generated thumbnails, search, duplicate, delete with undo, and "start from example/template".
+- T2: Storage usage and backup reminder from the S321 health data.
+- Accept: every action reachable by keyboard and from the command palette.
+
+**Sprint 437 — Shop drawings with exploded callouts** — P1 · L · S427.
+
+- T1: Dimensioned orthographic views (front, side, top, section) with chained and overall dimensions in metric or fractional imperial.
+- T2: Exploded isometric with balloon callouts keyed to cut-list part numbers and labels.
+- T3: Add to PDF and SVG exports; print-scale checks reuse the S340 calibration ruler.
+- Tests: SVG geometry oracles; parsed PDF pages; RTL labels.
+- Accept: every part in the cut list appears exactly once with a matching callout number.
+
+**Sprint 438 — Design history timeline** — P2 · M · S429.
+
+- T1: Capability-ledger decision for `version-history.ts` and `project-branching.ts`; surface one as a visual timeline of named checkpoints with compare (reusing snapshot diff), restore and branch.
+- T2: Automatic checkpoints before imports, template applies and bulk changes.
+- Accept: restore is undoable; branch names and diffs are localized; no duplicate history systems remain.
+
+**Sprint 439 — Motion and micro-interactions** — P2 · S · S431 (absorbs S377 T2).
+
+- T1: View Transitions for tab and preview-view changes; `@starting-style` entry animations for dialogs and toasts; skeletons for lazy panels.
+- T2: Everything disabled under `prefers-reduced-motion`; INP measured in E2E and kept within budget.
+- Accept: no layout shift introduced (CLS unchanged); reduced-motion E2E passes.
+
+**Sprint 440 — Realistic 3D preview** — P2 · L · S432.
+
+- T1: ADR: in-house WebGPU renderer versus a lazily loaded library (dependency cap: only by replacing another dependency or proving the savings rule).
+- T2: WebGPU path with WebGL2 fallback: physically based materials from catalog colours and grain direction, soft shadows, orbit, door and drawer open animation, PNG export.
+- T3: SVG views remain the accessible and printable source of truth; 3D is an enhancement.
+- Tests: capability probes, context-loss recovery, non-blank canvas, fallback journey.
+- Accept: lazily loaded; critical-path budget unchanged; works with WebGL2 only.
+
+**Sprint 441 — v5.39.0 experience release** — P1 · S · S435–S440.
+
+- T1: Full matrix; moderated or self-run usability script recorded in SPRINT-HISTORY (tasks, completion time, issues found).
+- Accept: no P0/P1 usability issue left open.
+
+### Phase 84 — Documentation, Visual Storytelling and Community (Sprints 442–447; target v5.40.0) — P1
+
+**Exit:** docs are searchable, task-based and visually current; every metric in docs is generated; contributors and translators have a clear path in.
+
+**Sprint 442 — Diátaxis docs site** — P1 · M · S434.
+
+- T1: ADR choosing a static docs generator (devDependency only) deployed with the app on GitHub Pages under `/docs/`.
+- T2: Reorganise content into Tutorials (first cabinet, first cut list), How-to (export DXF, print labels, import parts), Reference (shortcuts, file formats, calculators, plugin API) and Explanation (architecture, optimizer, accessibility).
+- T3: Search, dark mode, RTL rendering for Hebrew pages, and links from in-app Help.
+- Accept: README stays the landing page; every doc page has an owner in `docs/OWNERSHIP.md`.
+
+**Sprint 443 — Generated screenshots and demo media** — P1 · M · S441.
+
+- T1: `npm run docs:screens` (Playwright) captures every tab × light/dark × LTR/RTL at fixed viewport into `docs/screens/` (compressed WebP/AVIF with `<picture>` fallbacks).
+- T2: A 30-second demo video (configure → preview → optimize → export) recorded by Playwright for the README hero and docs site.
+- T3: Regenerated on release only; size budget for committed media.
+- Accept: README and USER-GUIDE images match the current release; alt text describes each image.
+
+**Sprint 444 — Living diagrams and generated metrics** — P1 · M · S442.
+
+- T1: `scripts/docs-metrics.js` writes test counts, coverage, bundle sizes, locale completeness and module counts into `<!-- metrics:start -->` blocks from real run outputs.
+- T2: `npm run docs:verify`: Mermaid blocks parse, internal and external links resolve (cached), screenshots are current, version tokens in `docs/*.svg` match `package.json`; add to `quality`.
+- T3: Wire `docs:freshness` into `quality` (closes S363 T2 early).
+- Accept: hand-edited metrics fail CI; stale diagrams fail CI.
+
+**Sprint 445 — Accessibility conformance report and trust pages** — P2 · S · S368.
+
+- T1: Publish an Accessibility Conformance Report (WCAG 2.2 AA) with tested browsers, assistive technologies and known limitations.
+- T2: Privacy page ("nothing leaves your device unless you share it"), browser support matrix and offline guarantees.
+- Accept: every claim links to a test, gate or dated manual review.
+
+**Sprint 446 — Community, translation and distribution** — P2 · M · S375, S433.
+
+- T1: Contributor path: good-first-issue labels, Discussions categories, devcontainer (S419 T2), architecture tour in the docs site.
+- T2: Community translation workflow on a hosted open-source translation platform, gated by S375 completeness checks; add locales by demand (candidates: IT, PT-BR, PL, NL, ZH-Hans, JA) up to 12.
+- T3: ADR on app-store distribution of the PWA (Microsoft Store, Google Play via Trusted Web Activity) with no code fork.
+- Accept: a new locale lands without code changes; translation reviews are tracked outside locale JSON.
+
+**Sprint 447 — v5.40.0 documentation release** — P1 · S · S442–S446.
+
+- T1: `docs:verify`, screenshots and metrics regenerated; docs site deployed.
+- Accept: README claims all trace to generated metrics or gates.
+
+### Phase 85 — Optional On-Device Intelligence (Sprints 448–451; continuous track after Phase 82) — P3
+
+**Exit:** a clear go/no-go decision backed by a working, privacy-preserving spike. The deterministic engine remains the only source of geometry; AI output is always a reviewable proposal.
+
+**Sprint 448 — Natural-language design proposals (spike)** — P3 · M · S429, S374.
+
+- T1: Feature-detect the browser built-in Prompt API; with no API present the feature is hidden, with no network fallback.
+- T2: Translate a request ("600 mm base cabinet with three drawers, soft-close") into a typed config patch validated by the engine; show a diff and preview before the user applies it (undoable).
+- T3: Model-download consent UI and a privacy note; no project data leaves the device.
+- Accept: proposals never bypass validation; ADR records accuracy on a fixed prompt set.
+
+**Sprint 449 — Plain-language explanations** — P3 · S · S448.
+
+- T1: Explain validation issues and optimizer trade-offs using on-device summarisation where available, with deterministic templated text as the always-available fallback.
+- Accept: explanations are never the only source of a safety or dimension fact.
+
+**Sprint 450 — Agent interfaces** — P3 · M · S374.
+
+- T1: Local MCP server script (`scripts/mcp-server.js`) exposing pure engine functions (dimensions, parts, optimize, export) to coding agents for design-by-chat in VS Code.
+- T2: Spike exposing command-registry actions to in-browser agents through emerging web agent APIs, feature-detected and permission-gated.
+- Accept: agents can only call the same validated commands a user can; no ambient storage or network access.
+
+**Sprint 451 — Intelligence decision** — P3 · S · S448–S450.
+
+- T1: Go/no-go ADR per capability based on accuracy, browser availability, privacy and maintenance cost.
+- Accept: features that do not meet the bar are removed rather than left half-surfaced.
+
 ---
 
 ## 8. Complete Verification Plan — Unit Through Real Browser
@@ -1524,28 +2086,32 @@ For exports additionally assert canonical header/schema version, units/axis, enc
 
 For each visible control below: use the control as a user would; assert changed visible state AND the downstream result it is meant to control; assert keyboard operation and accessible name; verify disabled/invalid/loading/error/cancel where applicable. Build a generated control inventory per panel and fail CI if a new interactive control is absent from the matrix or explicitly waived.
 
-| Surface                    | Controls/options to exercise                                                                                                                                                                               | Observable behavior to assert                                                                                                                                             |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| App shell/header           | 7 tabs by click and Alt+1…6; `?tab=`; browser back/forward; dark mode; language 6 locales; metric/imperial; undo/redo; reset; add cabinet; focus mode; help; shortcuts; mobile overflow/sidebar            | Active tab/panel, selected/RTL state, URL, theme class, unit display without geometry drift, undo/redo restores values, reset/add confirmation, focus and modal lifecycle |
-| Onboarding and dialogs     | Next/back/skip/get started; project manager search/sort/save/load/import/export; snapshot create/restore/delete/diff; marketplace/plugin registry; Escape, backdrop, close, focus trap                     | Correct step/content, cancellation has no mutation, dialog focus enters/returns, data persists, import errors are actionable                                              |
-| Configurator dimensions    | Width/height/depth/kick sliders and numeric fields; keyboard arrows; clear/re-enter; unit switch                                                                                                           | Exact normalized values, validation state, generated parts and all preview views reflect updated dimensions                                                               |
-| Configurator choices       | Furniture type (all supported); joinery; carcass/back materials; include back; thickness source; shelf count/spacing/custom positions/supports; doors/count/style/handle/edge banding; drawers/count/slide | Conditional options show/hide correctly; selected value persists; parts/hardware/weight/cost/assembly change to expected oracle                                           |
-| Materials/catalog          | Add/edit/delete custom sheet material; price/color/grain/thickness; import community/hardware catalog; merge/replace/cancel                                                                                | Validation, catalog contents and optimizer material choice; malformed file leaves previous state unchanged                                                                |
-| Presets/expressions        | Each preset; save user preset; expression add/edit/remove; dependent/cyclic/invalid expression                                                                                                             | Preset dimensions/parts; evaluation/error message; dependency propagation; undo/redo and persistence                                                                      |
-| Preview 2D                 | Front, front-open, side, top, back, isometric; dimensions toggle; zoom/pan; swipe; pinch; SVG and PNG downloads                                                                                            | Correct view geometry, dimension labels, bounded transform, view change and parsed artifact dimensions/content                                                            |
-| Preview 3D                 | WebGPU/WebGL/SVG fallback, orbit, explode slider, wireframe, edge banding                                                                                                                                  | Canvas actually draws, controls alter rendered state; supported fallback is semantic and usable; WebGL unavailable path tested                                            |
-| Optimizer                  | Kerf; sheet size; material/hardware prices and quantities; labor/finish; edge banding; grain/rotation; auto co-nest; color-blind; hatch/name; filters/sorts                                                | Sheet count/yield/waste/cost/cut list changes to expected results; no invalid packing; accessible meter values                                                            |
-| Optimizer panels           | Smart strategies; before/after compare; cut checklist; waste/offcut analytics; grain report; stock tracker; defect zones; shopping list; material summary; virtual sheet navigation                        | Every action changes expected specific rows/parts/sheets; no virtualization omission; table search/sort is correct                                                        |
-| Export and labels          | BOM/hardware CSV; DXF; G-code; PDF single/all; labels/print; ZIP where wired; all format options                                                                                                           | Listen for download, inspect bytes with parser, filename/schema/units/content/options/page count; no stale data or false success toast                                    |
-| Assembly                   | Previous/next/all steps; tips; completion checkboxes; reset; timer; print/checklist; build log; camera; machine profile; serial connection                                                                 | Step text and dependencies, count/time, persistence, downloaded checklist, camera permission branches, safe serial lifecycle                                              |
-| Calculators                | Every panel and every select/radio/input/toggle; collapse/expand                                                                                                                                           | Numeric result/units/precision against independent oracle; valid and invalid values; each option causes output delta                                                      |
-| PWA/storage                | Offline reload, SW update dismiss/reload, file open, quota warning, storage unavailable                                                                                                                    | App shell/core project remain usable, recovery and user data visible, no reload/data loss surprises                                                                       |
-| Responsive/RTL             | 320/375/768/1024/1440 widths; EN/HE/AR; zoom/reflow and mobile nav                                                                                                                                         | No horizontal overflow or overlap; labels fit; RTL direction/order correct; all controls remain reachable                                                                 |
-| Command palette (S374)     | Ctrl/Cmd+K; filter; arrow/Enter; Escape; recent commands                                                                                                                                                   | Command executes the same effect as its header/shortcut twin; focus returns; ARIA combobox semantics                                                                      |
-| Parts grid (S379–S381)     | Cell edit, paste, add/duplicate/delete rows, CSV import wizard, stock tables, linear tab                                                                                                                   | Parts/stock persisted with undo; sheet and linear results match engine oracles; invalid rows never applied                                                                |
-| Shop mode (S386–S390)      | Enter/exit, wake lock, next/back/mark done, read-aloud toggle, scan/manual code, station select, display window                                                                                            | Step and part state persist per revision; scans map to the right part; every camera/speech path has a manual equivalent                                                   |
-| Room import (S392–S395)    | DXF/scan import, scale check, auto-fill alternatives, countertop cutouts, client pack export                                                                                                               | Valid geometry only; chosen fill applied with undo; client pack excludes shop-only data                                                                                   |
-| File workflows (S404–S406) | Open, save in place, save as, recent files, drop artifact, share target                                                                                                                                    | Same canonical bytes for every save path; permission denial recoverable; imported artifacts validated before mutation                                                     |
+| Surface                         | Controls/options to exercise                                                                                                                                                                               | Observable behavior to assert                                                                                                                                             |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| App shell/header                | 7 tabs by click and Alt+1…6; `?tab=`; browser back/forward; dark mode; language 6 locales; metric/imperial; undo/redo; reset; add cabinet; focus mode; help; shortcuts; mobile overflow/sidebar            | Active tab/panel, selected/RTL state, URL, theme class, unit display without geometry drift, undo/redo restores values, reset/add confirmation, focus and modal lifecycle |
+| Onboarding and dialogs          | Next/back/skip/get started; project manager search/sort/save/load/import/export; snapshot create/restore/delete/diff; marketplace/plugin registry; Escape, backdrop, close, focus trap                     | Correct step/content, cancellation has no mutation, dialog focus enters/returns, data persists, import errors are actionable                                              |
+| Configurator dimensions         | Width/height/depth/kick sliders and numeric fields; keyboard arrows; clear/re-enter; unit switch                                                                                                           | Exact normalized values, validation state, generated parts and all preview views reflect updated dimensions                                                               |
+| Configurator choices            | Furniture type (all supported); joinery; carcass/back materials; include back; thickness source; shelf count/spacing/custom positions/supports; doors/count/style/handle/edge banding; drawers/count/slide | Conditional options show/hide correctly; selected value persists; parts/hardware/weight/cost/assembly change to expected oracle                                           |
+| Materials/catalog               | Add/edit/delete custom sheet material; price/color/grain/thickness; import community/hardware catalog; merge/replace/cancel                                                                                | Validation, catalog contents and optimizer material choice; malformed file leaves previous state unchanged                                                                |
+| Presets/expressions             | Each preset; save user preset; expression add/edit/remove; dependent/cyclic/invalid expression                                                                                                             | Preset dimensions/parts; evaluation/error message; dependency propagation; undo/redo and persistence                                                                      |
+| Preview 2D                      | Front, front-open, side, top, back, isometric; dimensions toggle; zoom/pan; swipe; pinch; SVG and PNG downloads                                                                                            | Correct view geometry, dimension labels, bounded transform, view change and parsed artifact dimensions/content                                                            |
+| Preview 3D                      | WebGPU/WebGL/SVG fallback, orbit, explode slider, wireframe, edge banding                                                                                                                                  | Canvas actually draws, controls alter rendered state; supported fallback is semantic and usable; WebGL unavailable path tested                                            |
+| Optimizer                       | Kerf; sheet size; material/hardware prices and quantities; labor/finish; edge banding; grain/rotation; auto co-nest; color-blind; hatch/name; filters/sorts                                                | Sheet count/yield/waste/cost/cut list changes to expected results; no invalid packing; accessible meter values                                                            |
+| Optimizer panels                | Smart strategies; before/after compare; cut checklist; waste/offcut analytics; grain report; stock tracker; defect zones; shopping list; material summary; virtual sheet navigation                        | Every action changes expected specific rows/parts/sheets; no virtualization omission; table search/sort is correct                                                        |
+| Export and labels               | BOM/hardware CSV; DXF; G-code; PDF single/all; labels/print; ZIP where wired; all format options                                                                                                           | Listen for download, inspect bytes with parser, filename/schema/units/content/options/page count; no stale data or false success toast                                    |
+| Assembly                        | Previous/next/all steps; tips; completion checkboxes; reset; timer; print/checklist; build log; camera; machine profile; serial connection                                                                 | Step text and dependencies, count/time, persistence, downloaded checklist, camera permission branches, safe serial lifecycle                                              |
+| Calculators                     | Every panel and every select/radio/input/toggle; collapse/expand                                                                                                                                           | Numeric result/units/precision against independent oracle; valid and invalid values; each option causes output delta                                                      |
+| PWA/storage                     | Offline reload, SW update dismiss/reload, file open, quota warning, storage unavailable                                                                                                                    | App shell/core project remain usable, recovery and user data visible, no reload/data loss surprises                                                                       |
+| Responsive/RTL                  | 320/375/768/1024/1440 widths; EN/HE/AR; zoom/reflow and mobile nav                                                                                                                                         | No horizontal overflow or overlap; labels fit; RTL direction/order correct; all controls remain reachable                                                                 |
+| Command palette (S374)          | Ctrl/Cmd+K; filter; arrow/Enter; Escape; recent commands                                                                                                                                                   | Command executes the same effect as its header/shortcut twin; focus returns; ARIA combobox semantics                                                                      |
+| Local diagnostics (S419)        | Open from command palette; inspect Web Vitals, workers, storage and errors; export bundle; close with Escape/backdrop/button                                                                               | Dialog is keyboard accessible; export downloads sanitized JSON; project contents are absent and no cross-origin request occurs                                            |
+| Parts grid (S379–S381)          | Cell edit, paste, add/duplicate/delete rows, CSV import wizard, stock tables, linear tab                                                                                                                   | Parts/stock persisted with undo; sheet and linear results match engine oracles; invalid rows never applied                                                                |
+| Shop mode (S386–S390)           | Enter/exit, wake lock, next/back/mark done, read-aloud toggle, scan/manual code, station select, display window                                                                                            | Step and part state persist per revision; scans map to the right part; every camera/speech path has a manual equivalent                                                   |
+| Room import (S392–S395)         | DXF/scan import, scale check, auto-fill alternatives, countertop cutouts, client pack export                                                                                                               | Valid geometry only; chosen fill applied with undo; client pack excludes shop-only data                                                                                   |
+| File workflows (S404–S406)      | Open, save in place, save as, recent files, drop artifact, share target                                                                                                                                    | Same canonical bytes for every save path; permission denial recoverable; imported artifacts validated before mutation                                                     |
+| First run (S435–S436)           | Examples gallery, guided tour next/back/skip/resume, empty-state actions, project home search/duplicate/delete/undo                                                                                        | Example opens as an editable project; tour focus and Escape behave; deletes are undoable                                                                                  |
+| Drawings + timeline (S437–S438) | Shop-drawing export options, callout numbering, checkpoint create/compare/restore/branch                                                                                                                   | Callouts match cut-list numbers; restore is undoable; branches persist                                                                                                    |
+| Assistant (S448–S450)           | Prompt entry, proposal diff, apply/discard, model-download consent                                                                                                                                         | Hidden when unsupported; proposals validated; nothing applied without confirmation                                                                                        |
 
 ### 8.4 Calculator and Engine Domain Inventory
 
@@ -1579,34 +2145,41 @@ Each release artifact records: commit SHA; Node/npm/browser versions; pass/fail/
 
 ## 9. VS Code, Copilot, MCP, and GitHub Integration
 
-### VS Code Extensions (22 Recommended)
+### VS Code Extensions (29 Recommended, 80 Unwanted)
 
-All recommended extensions provide direct value for this TypeScript/React/Tailwind stack:
+All recommended extensions provide direct value for this TypeScript/React/Tailwind stack (`.vscode/extensions.json` is the source of truth; `npm run vscode:extensions:validate` enforces the policy):
 
-| Extension                       | Purpose                |
-| ------------------------------- | ---------------------- |
-| prettier-vscode                 | Format on save         |
-| vscode-eslint                   | Inline lint errors     |
-| vscode-stylelint                | CSS lint               |
-| errorlens                       | Inline error display   |
-| vscode-typescript-next          | Latest TS features     |
-| vscode-tailwindcss              | Tailwind IntelliSense  |
-| vitest.explorer                 | Test runner UI         |
-| ms-playwright.playwright        | E2E test runner        |
-| vscode-coverage-gutters         | Coverage overlay       |
-| i18n-ally                       | Translation management |
-| vscode-markdownlint             | Markdown lint          |
-| code-spell-checker              | Typo detection         |
-| jock.svg                        | SVG preview            |
-| github.copilot                  | AI completions         |
-| github.copilot-chat             | AI chat + agents       |
-| vscode-pull-request-github      | PR workflow            |
-| vscode-github-actions           | Workflow status        |
-| ms-vscode.powershell            | Terminal               |
-| eamodio.gitlens                 | Git blame/history      |
-| editorconfig.editorconfig       | Editor consistency     |
-| redhat.vscode-yaml              | YAML schema validation |
-| deque-systems.vscode-axe-linter | Accessibility lint     |
+| Extension                       | Purpose                 |
+| ------------------------------- | ----------------------- |
+| prettier-vscode                 | Format on save          |
+| vscode-eslint                   | Inline lint errors      |
+| vscode-stylelint                | CSS lint                |
+| errorlens                       | Inline error display    |
+| vscode-typescript-next          | Latest TS features      |
+| vscode-tailwindcss              | Tailwind IntelliSense   |
+| vitest.explorer                 | Test runner UI          |
+| ms-playwright.playwright        | E2E test runner         |
+| vscode-coverage-gutters         | Coverage overlay        |
+| i18n-ally                       | Translation management  |
+| vscode-markdownlint             | Markdown lint           |
+| code-spell-checker              | Typo detection          |
+| jock.svg                        | SVG preview             |
+| github.copilot                  | AI completions          |
+| github.copilot-chat             | AI chat + agents        |
+| vscode-pull-request-github      | PR workflow             |
+| vscode-github-actions           | Workflow status         |
+| ms-vscode.powershell            | Terminal                |
+| eamodio.gitlens                 | Git blame/history       |
+| editorconfig.editorconfig       | Editor consistency      |
+| redhat.vscode-yaml              | YAML schema validation  |
+| deque-systems.vscode-axe-linter | Accessibility lint      |
+| oderwat.indent-rainbow          | Indentation guides      |
+| mhutchie.git-graph              | Commit graph            |
+| pflannery.vscode-versionlens    | Dependency versions     |
+| yoavbls.pretty-ts-errors        | Readable TS errors      |
+| path-intellisense               | Path completion         |
+| npm-intellisense                | Import completion       |
+| bierner.markdown-mermaid        | Mermaid preview in docs |
 
 ### Copilot Agents (9)
 
@@ -1622,39 +2195,45 @@ All recommended extensions provide direct value for this TypeScript/React/Tailwi
 | security | OWASP Top 10 audit and CSP hardening          |
 | perf     | Lighthouse CI and Core Web Vitals             |
 
-### MCP Servers (10)
+### MCP Servers (11)
 
-| Server             | Type  | Purpose                           |
-| ------------------ | ----- | --------------------------------- |
-| github             | HTTP  | PRs, issues, Actions, code search |
-| filesystem         | stdio | Scoped workspace file access      |
-| fetch              | stdio | Web page/API retrieval            |
-| playwright         | stdio | Browser automation for E2E debug  |
-| memory             | stdio | Persistent agent notes            |
-| sequentialthinking | stdio | Multi-step reasoning              |
-| context7           | stdio | Up-to-date library docs           |
-| gitkraken          | HTTP  | Git ops, blame, diff              |
-| cloudflare         | HTTP  | Pages/Workers management          |
-| brave-search       | stdio | Web search fallback               |
+| Server             | Type  | Purpose                              |
+| ------------------ | ----- | ------------------------------------ |
+| github             | HTTP  | PRs, issues, Actions, code search    |
+| filesystem         | stdio | Scoped workspace file access         |
+| fetch              | stdio | Web page/API retrieval               |
+| playwright         | stdio | Browser automation for E2E debug     |
+| memory             | stdio | Persistent agent notes               |
+| sequentialthinking | stdio | Multi-step reasoning                 |
+| context7           | stdio | Up-to-date library docs              |
+| chrome-devtools    | stdio | Performance traces, console, network |
+| gitkraken          | HTTP  | Git ops, blame, diff                 |
+| cloudflare         | HTTP  | Pages/Workers management             |
+| brave-search       | stdio | Web search fallback                  |
 
-### GitHub Actions (14 Workflows)
+Planned: a project-local engine MCP server (S450) so agents can compute dimensions, parts and cut sheets through the same validated functions as the UI.
 
-| Workflow                  | Trigger     | Purpose                   |
-| ------------------------- | ----------- | ------------------------- |
-| ci.yml                    | push/PR     | Full quality gate         |
-| release.yml               | tag push    | Build + GH release        |
-| pages.yml                 | main push   | Deploy to GitHub Pages    |
-| codeql.yml                | schedule/PR | Security analysis         |
-| dependency-review.yml     | PR          | Dep vulnerability check   |
-| secret-scan.yml           | push/PR     | Secret leak prevention    |
-| lighthouse.yml            | PR          | Performance budget        |
-| size-limit.yml            | PR          | Bundle size gate          |
-| labeler.yml               | PR          | Auto-label by path        |
-| stale.yml                 | schedule    | Close stale issues        |
-| pr-title.yml              | PR          | Conventional commit title |
-| dependabot-auto-merge.yml | PR          | Auto-merge patch deps     |
-| preview-deploy.yml        | PR          | Cloudflare preview URL    |
-| cloudflare-pages.yml      | main push   | Production deploy         |
+### GitHub Actions (15 Workflows)
+
+| Workflow                  | Trigger      | Purpose                                                |
+| ------------------------- | ------------ | ------------------------------------------------------ |
+| ci.yml                    | push/PR      | Quality → test → compat (Node 24, 26), E2E, Lighthouse |
+| release.yml               | tag push     | Build + GH release                                     |
+| pages.yml                 | main push    | Deploy to GitHub Pages                                 |
+| codeql.yml                | schedule/PR  | Security analysis                                      |
+| dependency-review.yml     | PR           | Dep vulnerability check                                |
+| secret-scan.yml           | push/PR      | Secret leak prevention                                 |
+| lighthouse.yml            | PR           | Performance budget                                     |
+| size-limit.yml            | PR           | Bundle size gate                                       |
+| mutation.yml              | weekly (Mon) | Stryker dimensions+BOM gate (79 %)                     |
+| labeler.yml               | PR           | Auto-label by path                                     |
+| stale.yml                 | schedule     | Close stale issues                                     |
+| pr-title.yml              | PR           | Conventional commit title                              |
+| dependabot-auto-merge.yml | PR           | Auto-merge patch deps                                  |
+| preview-deploy.yml        | PR           | Cloudflare preview URL                                 |
+| cloudflare-pages.yml      | main push    | Production deploy                                      |
+
+Planned: Scorecard and attestation steps (S425), sharded E2E (S422), docs site deploy (S442).
 
 ---
 
@@ -1665,12 +2244,27 @@ All recommended extensions provide direct value for this TypeScript/React/Tailwi
 ├── Tool configs only: vite.config.ts, eslint.config.js, tsconfig*.json, etc.
 ├── Project essentials: package.json, index.html, README.md, ROADMAP.md, CHANGELOG.md
 ├── config/         Budget files, schema definitions, sync manifests
-├── docs/           Architecture, user guide, sprint history, API docs
+├── docs/           Architecture, user guide, sprint history, decisions/ (S426), screens/ (S443)
 ├── public/         Static assets served as-is (manifest, fonts, SVGs)
-├── scripts/        Build/CI helper scripts (Node.js)
-├── src/            Application source code
+├── scripts/        Build/CI helper scripts (Node.js); codemods/ (S427)
+├── src/            Application source code (target layout below)
 ├── tests/          All test files mirroring src/
-└── .github/        CI, agents, prompts, instructions, actions
+└── .github/        CI, agents, prompts, instructions, skills, actions
+```
+
+Target `src/` layout after Phase 82 (S426–S434):
+
+```text
+src/
+├── app/            Shell: App.tsx, routes (Navigation API), command registry, error boundaries
+├── features/       workspace · configurator · preview · optimizer · assembly · pdf · calculators (+ cut-list, shop, room later)
+├── ui/             Design-system primitives on wood-* tokens
+├── store/          Domain slices + patch history middleware
+├── engine/         core · geometry · materials · hardware · joinery · optimizer · assembly · costing · export · room · calculators · workshop · project
+├── platform/       storage · files · share · device · diagnostics (all browser I/O)
+├── workers/        Typed WorkerJob pool + workers
+├── i18n/           {locale}/{namespace}.json + typed resources
+└── utils/          Pure helpers only (shrinks toward zero)
 ```
 
 Rules:
@@ -1702,4 +2296,8 @@ The project may claim best-in-class status only when:
 - Every engine/utils/services module is classified in the capability ledger; nothing ships unreachable without a `public-api` or `internal` justification, and no capability has two owner modules.
 - All six locales pass the completeness gate; locale claims in README match the generated report.
 - First-load (critical-path) bytes are gated from measured budgets; no budget raised without a recorded cause.
+- The architecture fitness gate reports zero violations; no file exceeds the component budget without an ADR.
+- The toolchain is on current majors (TypeScript, Vitest, Playwright) within one release of their stable date, or an ADR explains the delay.
+- Every metric, screenshot and diagram in the docs is generated or CI-verified; none is hand-maintained.
+- A first-time user can reach an exported plan within one minute, verified by a scripted journey.
 - Local-first operation remains complete; network/cloud behavior is opt-in, disclosed and independently threat-modeled.

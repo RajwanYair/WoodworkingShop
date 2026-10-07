@@ -14,6 +14,7 @@ import {
   type CabinetPlannerPlugin,
 } from '../../src/engine/plugin';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import { deactivatePlugin, getRegistryEntry, registerPluginV2 } from '../../src/engine/plugin-v2';
 import type { Part, ValidationIssue } from '../../src/engine/types';
 
 const mockPart: Part = {
@@ -44,6 +45,7 @@ describe('Plugin registry', () => {
     registerPlugin(plugin);
     expect(getPlugins()).toHaveLength(1);
     expect(getPlugins()[0].id).toBe('test.plugin');
+    expect(getRegistryEntry(plugin.id)?.plugin).toBe(plugin);
   });
 
   it('returns an error result when registering duplicate id', () => {
@@ -91,6 +93,27 @@ describe('applyPartsPlugins', () => {
     const result = applyPartsPlugins([mockPart], DEFAULT_CONFIG);
     expect(result).toHaveLength(2);
     expect(result[1].id).toBe('P99');
+  });
+
+  it('skips compatibility plugins deactivated through the v2 registry', () => {
+    const plugin: CabinetPlannerPlugin = {
+      id: 'parts.deactivated',
+      name: 'Deactivated Parts Plugin',
+      version: '1.0.0',
+      onPartsGenerated: (parts) => [...parts, { ...mockPart, id: 'P100' }],
+    };
+    registerPlugin(plugin);
+    deactivatePlugin(plugin.id);
+
+    expect(applyPartsPlugins([mockPart], DEFAULT_CONFIG)).toEqual([mockPart]);
+    expect(getPlugins()).toContain(plugin);
+  });
+
+  it('rejects duplicate ids across both API versions', () => {
+    const plugin: CabinetPlannerPlugin = { id: 'shared.registry', name: 'First', version: '1.0.0' };
+    registerPlugin(plugin);
+
+    expect(registerPluginV2({ ...plugin }).ok).toBe(false);
   });
 
   it('chains multiple onPartsGenerated hooks in order', () => {
@@ -252,13 +275,15 @@ describe('PluginContract', () => {
   it('onPartsGenerated hook is listed as stable', () => {
     const hook = PLUGIN_CONTRACT.hooks.find((h) => h.hookName === 'onPartsGenerated');
     expect(hook).toBeDefined();
-    expect(hook?.stability).toBe('stable');
+    expect(hook?.stability).toBe('deprecated');
+    expect(hook?.deprecatedIn).toBe('2.0.0');
   });
 
   it('onConfigChange hook is listed as stable', () => {
     const hook = PLUGIN_CONTRACT.hooks.find((h) => h.hookName === 'onConfigChange');
     expect(hook).toBeDefined();
-    expect(hook?.stability).toBe('stable');
+    expect(hook?.stability).toBe('deprecated');
+    expect(hook?.deprecatedIn).toBe('2.0.0');
   });
 });
 

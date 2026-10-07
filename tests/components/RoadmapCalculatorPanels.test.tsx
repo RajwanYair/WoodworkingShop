@@ -9,7 +9,7 @@ describe('roadmap calculator panels', () => {
     render(<CalculatorsPanel />);
 
     await user.click(screen.getByRole('button', { name: 'Pocket Hole Calculator' }));
-    const panel = screen.getByRole('region', { name: 'Pocket Hole Calculator' });
+    const panel = await screen.findByRole('region', { name: 'Pocket Hole Calculator' });
     expect(panel).toHaveTextContent('137.5 mm');
     await user.clear(screen.getByLabelText(/workpiece thickness/i));
     await user.type(screen.getByLabelText(/workpiece thickness/i), '15');
@@ -27,20 +27,20 @@ describe('roadmap calculator panels', () => {
     render(<CalculatorsPanel />);
 
     await user.click(screen.getByRole('button', { name: 'Shelf Sag Calculator' }));
-    const shelfPanel = screen.getByRole('region', { name: 'Shelf Sag Calculator' });
+    const shelfPanel = await screen.findByRole('region', { name: 'Shelf Sag Calculator' });
     const initialDeflection = shelfPanel.textContent;
     await user.clear(screen.getByLabelText(/shelf span/i));
-    await user.type(screen.getByLabelText(/shelf span/i), '800');
+    await user.type(screen.getByLabelText(/shelf span/i), '1000');
     expect(shelfPanel.textContent).not.toBe(initialDeflection);
 
     await user.click(screen.getByRole('button', { name: 'Mortise & Tenon Calculator' }));
-    const mortisePanel = screen.getByRole('region', { name: 'Mortise & Tenon Calculator' });
+    const mortisePanel = await screen.findByRole('region', { name: 'Mortise & Tenon Calculator' });
     await user.clear(screen.getByLabelText(/stock thickness/i));
     await user.type(screen.getByLabelText(/stock thickness/i), '30');
     expect(mortisePanel).toHaveTextContent('10 mm');
 
     await user.click(screen.getByRole('button', { name: 'Dovetail Layout Calculator' }));
-    const dovetailPanel = screen.getByRole('region', { name: 'Dovetail Layout Calculator' });
+    const dovetailPanel = await screen.findByRole('region', { name: 'Dovetail Layout Calculator' });
     const initialLayout = dovetailPanel.textContent;
     await user.clear(screen.getByLabelText(/number of tails/i));
     await user.type(screen.getByLabelText(/number of tails/i), '3');

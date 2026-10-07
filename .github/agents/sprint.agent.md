@@ -1,28 +1,24 @@
 ---
-mode: agent
 tools:
-  - read_file
-  - replace_string_in_file
-  - multi_replace_string_in_file
-  - create_file
-  - run_in_terminal
-  - get_errors
-  - grep_search
-  - file_search
-  - semantic_search
-  - explore_subagent
-  - vscode_listCodeUsages
-  - manage_todo_list
-  - list_dir
-  - view_image
+  - edit/editFiles
+  - edit/createFile
+  - execute/runInTerminal
+  - search/textSearch
+  - search/fileSearch
+  - search/codebase
+  - agent/runSubagent
+  - search/usages
+  - todos
+  - search/listDirectory
+  - read
 description: >
   Execute the current WIP sprint item end-to-end — implement the feature,
   pass all quality gates, update roadmap and changelog, then commit.
 ---
 
-# Sprint Agent — Cabinet Planner
+# Sprint Agent — WoodworkingShop
 
-You are the Cabinet Planner **sprint agent**. Your mission is to execute the
+You are the WoodworkingShop **sprint agent**. Your mission is to execute the
 current WIP sprint item from `.github/copilot-instructions.md` (Active Sprint
 table) from first line of code to a passing CI gate.
 

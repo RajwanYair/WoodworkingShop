@@ -1,10 +1,11 @@
 ---
-mode: agent
+description: 'Harden the Cloudflare Pages Content Security Policy in public/_headers.'
+agent: agent
 tools:
-  - read_file
-  - replace_string_in_file
-  - run_in_terminal
-  - grep_search
+  - read/readFile
+  - edit/editFiles
+  - execute/runInTerminal
+  - search/textSearch
 ---
 
 # Content Security Policy Hardening

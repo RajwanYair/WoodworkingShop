@@ -938,51 +938,54 @@
       ]
     },
     {
-      "name": "Pocket Hole Calculator",
-      "toggle": {
-        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
-        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
-      },
-      "controls": [
-        {
-          "role": "spinbutton",
-          "accessibleName": "Workpiece Thickness (mm)",
-          "positiveTest": "roadmap calculator options reconcile with engine",
-          "negativeTest": "invalid roadmap calculator inputs report errors and recover"
-        },
-        {
-          "role": "spinbutton",
-          "accessibleName": "Mating Piece Thickness (mm)",
-          "positiveTest": "roadmap calculator options reconcile with engine",
-          "negativeTest": "invalid roadmap calculator inputs report errors and recover"
-        },
-        {
-          "role": "spinbutton",
-          "accessibleName": "Joint Length (mm)",
-          "positiveTest": "roadmap calculator options reconcile with engine",
-          "negativeTest": "invalid roadmap calculator inputs report errors and recover"
-        },
-        {
-          "role": "combobox",
-          "accessibleName": "Mating Material",
-          "positiveTest": "roadmap calculator options reconcile with engine",
-          "negativeTest": "invalid roadmap calculator inputs report errors and recover"
-        },
-        {
-          "role": "combobox",
-          "accessibleName": "Joint Type",
-          "positiveTest": "roadmap calculator options reconcile with engine",
-          "negativeTest": "invalid roadmap calculator inputs report errors and recover"
-        }
-      ]
-    },
-    {
       "name": "Shelf Sag Calculator",
       "toggle": {
         "positiveTest": "every calculator expands to a numeric result with units and collapses again",
         "negativeTest": "every calculator expands to a numeric result with units and collapses again"
       },
       "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Shelf Span (mm)",
+          "positiveTest": "shelf span changes reconcile deflection with the engine",
+          "negativeTest": "shelf span changes reconcile deflection with the engine"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Shelf Depth (mm)",
+          "positiveTest": "shelf span changes reconcile deflection with the engine",
+          "negativeTest": "shelf span changes reconcile deflection with the engine"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Shelf Thickness (mm)",
+          "positiveTest": "shelf span changes reconcile deflection with the engine",
+          "negativeTest": "shelf span changes reconcile deflection with the engine"
+        },
+        {
+          "role": "combobox",
+          "accessibleName": "Material",
+          "positiveTest": "shelf span changes reconcile deflection with the engine",
+          "negativeTest": "shelf span changes reconcile deflection with the engine"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Total Load (kg)",
+          "positiveTest": "shelf span changes reconcile deflection with the engine",
+          "negativeTest": "shelf span changes reconcile deflection with the engine"
+        },
+        {
+          "role": "combobox",
+          "accessibleName": "Load Type",
+          "positiveTest": "shelf span changes reconcile deflection with the engine",
+          "negativeTest": "shelf span changes reconcile deflection with the engine"
+        },
+        {
+          "role": "combobox",
+          "accessibleName": "Support Type",
+          "positiveTest": "shelf span changes reconcile deflection with the engine",
+          "negativeTest": "shelf span changes reconcile deflection with the engine"
+        },
         {
           "role": "spinbutton",
           "accessibleName": "Shelf Span (mm)",
@@ -1028,12 +1031,126 @@
       ]
     },
     {
+      "name": "Pocket Hole Calculator",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Workpiece Thickness (mm)",
+          "positiveTest": "pocket-hole joint length changes reconcile screw spacing with the engine",
+          "negativeTest": "pocket-hole joint length changes reconcile screw spacing with the engine"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Mating Piece Thickness (mm)",
+          "positiveTest": "pocket-hole joint length changes reconcile screw spacing with the engine",
+          "negativeTest": "pocket-hole joint length changes reconcile screw spacing with the engine"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Joint Length (mm)",
+          "positiveTest": "pocket-hole joint length changes reconcile screw spacing with the engine",
+          "negativeTest": "pocket-hole joint length changes reconcile screw spacing with the engine"
+        },
+        {
+          "role": "combobox",
+          "accessibleName": "Mating Material",
+          "positiveTest": "pocket-hole joint length changes reconcile screw spacing with the engine",
+          "negativeTest": "pocket-hole joint length changes reconcile screw spacing with the engine"
+        },
+        {
+          "role": "combobox",
+          "accessibleName": "Joint Type",
+          "positiveTest": "pocket-hole joint length changes reconcile screw spacing with the engine",
+          "negativeTest": "pocket-hole joint length changes reconcile screw spacing with the engine"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Workpiece Thickness (mm)",
+          "positiveTest": "roadmap calculator options reconcile with engine",
+          "negativeTest": "invalid roadmap calculator inputs report errors and recover"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Mating Piece Thickness (mm)",
+          "positiveTest": "roadmap calculator options reconcile with engine",
+          "negativeTest": "invalid roadmap calculator inputs report errors and recover"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Joint Length (mm)",
+          "positiveTest": "roadmap calculator options reconcile with engine",
+          "negativeTest": "invalid roadmap calculator inputs report errors and recover"
+        },
+        {
+          "role": "combobox",
+          "accessibleName": "Mating Material",
+          "positiveTest": "roadmap calculator options reconcile with engine",
+          "negativeTest": "invalid roadmap calculator inputs report errors and recover"
+        },
+        {
+          "role": "combobox",
+          "accessibleName": "Joint Type",
+          "positiveTest": "roadmap calculator options reconcile with engine",
+          "negativeTest": "invalid roadmap calculator inputs report errors and recover"
+        }
+      ]
+    },
+    {
+      "name": "Dowel Joint Calculator",
+      "toggle": {
+        "positiveTest": "every calculator expands to a numeric result with units and collapses again",
+        "negativeTest": "every calculator expands to a numeric result with units and collapses again"
+      },
+      "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Joint Length (mm)",
+          "positiveTest": "dowel joint length changes reconcile positions with the engine",
+          "negativeTest": "dowel joint length changes reconcile positions with the engine"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Board Thickness (mm)",
+          "positiveTest": "dowel joint length changes reconcile positions with the engine",
+          "negativeTest": "dowel joint length changes reconcile positions with the engine"
+        },
+        {
+          "role": "combobox",
+          "accessibleName": "Joint Orientation",
+          "positiveTest": "dowel joint length changes reconcile positions with the engine",
+          "negativeTest": "dowel joint length changes reconcile positions with the engine"
+        }
+      ]
+    },
+    {
       "name": "Mortise & Tenon Calculator",
       "toggle": {
         "positiveTest": "every calculator expands to a numeric result with units and collapses again",
         "negativeTest": "every calculator expands to a numeric result with units and collapses again"
       },
       "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Stock Thickness (mm)",
+          "positiveTest": "mortise-tenon joint type changes reconcile tenon length with the engine",
+          "negativeTest": "mortise-tenon joint type changes reconcile tenon length with the engine"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Stock Width (mm)",
+          "positiveTest": "mortise-tenon joint type changes reconcile tenon length with the engine",
+          "negativeTest": "mortise-tenon joint type changes reconcile tenon length with the engine"
+        },
+        {
+          "role": "combobox",
+          "accessibleName": "Joint Type",
+          "positiveTest": "mortise-tenon joint type changes reconcile tenon length with the engine",
+          "negativeTest": "mortise-tenon joint type changes reconcile tenon length with the engine"
+        },
         {
           "role": "spinbutton",
           "accessibleName": "Stock Thickness (mm)",
@@ -1061,6 +1178,42 @@
         "negativeTest": "every calculator expands to a numeric result with units and collapses again"
       },
       "controls": [
+        {
+          "role": "spinbutton",
+          "accessibleName": "Board Width (mm)",
+          "positiveTest": "dovetail tail count changes reconcile layout widths with the engine",
+          "negativeTest": "dovetail tail count changes reconcile layout widths with the engine"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Board Thickness (mm)",
+          "positiveTest": "dovetail tail count changes reconcile layout widths with the engine",
+          "negativeTest": "dovetail tail count changes reconcile layout widths with the engine"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Number of Tails",
+          "positiveTest": "dovetail tail count changes reconcile layout widths with the engine",
+          "negativeTest": "dovetail tail count changes reconcile layout widths with the engine"
+        },
+        {
+          "role": "spinbutton",
+          "accessibleName": "Dovetail Angle (°)",
+          "positiveTest": "dovetail tail count changes reconcile layout widths with the engine",
+          "negativeTest": "dovetail tail count changes reconcile layout widths with the engine"
+        },
+        {
+          "role": "combobox",
+          "accessibleName": "Joint Type",
+          "positiveTest": "dovetail tail count changes reconcile layout widths with the engine",
+          "negativeTest": "dovetail tail count changes reconcile layout widths with the engine"
+        },
+        {
+          "role": "combobox",
+          "accessibleName": "Cut Style",
+          "positiveTest": "dovetail tail count changes reconcile layout widths with the engine",
+          "negativeTest": "dovetail tail count changes reconcile layout widths with the engine"
+        },
         {
           "role": "spinbutton",
           "accessibleName": "Board Width (mm)",

@@ -1,20 +1,23 @@
 {
-  "$comment": "Bundle size budgets enforced by scripts/bundle-report.js. Values are KB. Tightening these (lowering numbers) is encouraged; loosening requires a justification in CHANGELOG. v3.54.0 bump: +75 KB JS, +50 KB total to absorb pre-existing organic growth (pdf-renderer + i18n catalog expansion) — see CHANGELOG. v3.58.0 bump: +125 KB JS, +130 KB total to absorb Sprints 16–20 feature growth (rotation lock UI, G-code M6 tool-change, assembly weight, DXF layers, Plugin EventBus, snapshot diff modal) merged into main as part of the production-hardening release — see CHANGELOG. v3.68.0 bump: +100 KB JS, +100 KB total to absorb design-check fix patches + validation engine growth — see CHANGELOG. v4.4.0 bump: +125 KB JS, +125 KB total to absorb Phase 21–23 growth (cost variance, stock tracker, waste analytics, grain report, cut checklist panels + Web Workers). v5.8.0 bump: +100 KB JS, +100 KB total to absorb Phase 24–33 growth (measurement assistant, machine profiles, edge profile, hinge bore, WebXR placement, community catalog, hardware spec engine modules). v5.28.0 bump: +300 KB JS, +300 KB total to absorb Phase 41–52 growth (60+ new engine calculators across Sprints 190–247: wood movement, feed rate, cabinet weight, dowel joint, panel labels, material cost, shop inventory, cabinet templates, edge banding, finger joint, pilot hole, glue-up, bandsaw speed, tablesaw height, mortise-tenon, shelf deflection, router bit, biscuit joint, sanding, miter, shelf pin, drawer slide, wood drying, dovetail, pocket hole, veneer, clamp, drill press, board feet, cabinet door, face frame, drawer box, screw pull-out, kerf bending, dado-rabbet, finishing coat, wood turning, frame-panel, taper jig, stair stringer, box joint, glue coverage, planer passes, honing guide, crown moulding, router circle, cove cut, moisture shrinkage, rafter length, router template, half-lap, spline joint) — see CHANGELOG.",
+  "$comment": "Bundle size budgets enforced by scripts/bundle-report.js. Values are KB. Tightening these (lowering numbers) is encouraged; loosening requires a justification in CHANGELOG. v3.54.0 bump: +75 KB JS, +50 KB total to absorb pre-existing organic growth (pdf-renderer + i18n catalog expansion) — see CHANGELOG. v3.58.0 bump: +125 KB JS, +130 KB total to absorb Sprints 16–20 feature growth (rotation lock UI, G-code M6 tool-change, assembly weight, DXF layers, Plugin EventBus, snapshot diff modal) merged into main as part of the production-hardening release — see CHANGELOG. v3.68.0 bump: +100 KB JS, +100 KB total to absorb design-check fix patches + validation engine growth — see CHANGELOG. v4.4.0 bump: +125 KB JS, +125 KB total to absorb Phase 21–23 growth (cost variance, stock tracker, waste analytics, grain report, cut checklist panels + Web Workers). v5.8.0 bump: +100 KB JS, +100 KB total to absorb Phase 24–33 growth (measurement assistant, machine profiles, edge profile, hinge bore, WebXR placement, machine profiles, hardware spec engine modules). v5.28.0 bump: +300 KB JS, +300 KB total to absorb Phase 41–52 growth (60+ new engine calculators across Sprints 190–247) — see CHANGELOG. Sprint 376 T1 critical baseline measured at 1833 KB raw / 511 KB Brotli, before PDF and calculator deferral; excludes on-demand worker scripts. Sprint 376 T2 measured 2965.1 KB total output; the 2970 KB aggregate cap and its 10 KB margin are documented in CHANGELOG. Unreleased PWA branding measured 3012 KB total output; the aggregate cap is 3025 KB (13 KB margin), with unchanged JS and critical-route budgets; the 192px/512px standard PNG caps reflect the measured icon sizes. Merged build measured 3057.4 KB total and a 1172.7 KB deferred PDF renderer chunk; the 3070 KB aggregate and 1200 KB renderer caps retain measured margins — see CHANGELOG.",
   "totalJsKB": 2850,
   "totalCssKB": 100,
-  "totalAllKB": 2960,
-  "critical": {
-    "initialJsBrotliKB": 168,
-    "initialCssBrotliKB": 14
-  },
+  "totalAllKB": 3070,
   "perFileKB": {
     "_default": 520,
-    "pdfexportpanel": 1600
+    "pdf-renderer": 1200
   },
   "perAssetKB": {
     "_default": 50,
-    "icon-512.png": 10,
-    "icon-192.png": 5,
+    "icon-512.png": 20,
+    "icon-192.png": 6,
     "favicon.svg": 5
+  },
+  "critical": {
+    "$comment": "Sprint 376 T2 baseline: 655.1 KB raw / 160.4 KB Brotli across 13 initial-route files after deferring the PDF renderer and calculator panels; excludes on-demand worker scripts.",
+    "rawKB": 700,
+    "brotliKB": 175,
+    "initialJsBrotliKB": 168,
+    "initialCssBrotliKB": 14
   }
 }

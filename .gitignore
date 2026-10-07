@@ -40,6 +40,7 @@ playwright-report
 test-results
 blob-report
 playwright/.cache
+.playwright-mcp/
 
 # Lighthouse CI
 .lighthouseci

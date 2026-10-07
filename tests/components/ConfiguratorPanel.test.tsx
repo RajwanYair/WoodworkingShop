@@ -4,6 +4,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ConfiguratorPanel } from '../../src/components/configurator/ConfiguratorPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import { formatNumber } from '../../src/i18n/format';
 
 describe('ConfiguratorPanel', () => {
   beforeEach(() => {
@@ -31,6 +32,27 @@ describe('ConfiguratorPanel', () => {
   it('renders shelf config section', () => {
     render(<ConfiguratorPanel />);
     expect(screen.getAllByText(/shelves/i).length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('localizes engineering precision in the custom-shelf deflection rating', () => {
+    const config = {
+      ...DEFAULT_CONFIG,
+      carcassMaterial: 'chipboard-18' as const,
+      shelfSpacing: 'custom' as const,
+      width: 1000,
+    };
+    useCabinetStore.setState({ config, cabinets: [{ name: 'Cabinet 1', config }], activeCabinetIndex: 0 });
+    render(<ConfiguratorPanel />);
+
+    const deflection = useCabinetStore.getState().dimensions.shelfDeflections[0];
+    if (!deflection) throw new Error('Expected the first shelf deflection to be calculated');
+    const formattedSag = formatNumber(deflection.deflectionMm, 'en', {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
+    });
+    expect(
+      screen.getAllByText((_, node) => node?.textContent?.includes(`(${formattedSag} mm)`) ?? false).length,
+    ).toBeGreaterThan(0);
   });
 
   it('renders door config section', () => {

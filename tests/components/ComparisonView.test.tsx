@@ -25,8 +25,6 @@ describe('ComparisonView', () => {
     expect(screen.getByText('Optimized')).toBeInTheDocument();
     expect(screen.getByText('3')).toBeInTheDocument();
     expect(screen.getByText('2')).toBeInTheDocument();
-    expect(
-      screen.getByText(new RegExp(`W: ${DEFAULT_CONFIG.width}→${DEFAULT_CONFIG.width + 50} mm`)),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/W\s*:\s*1,000\s*→\s*1,050\s+mm/)).toBeInTheDocument();
   });
 });

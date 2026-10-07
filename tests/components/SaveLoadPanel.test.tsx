@@ -198,9 +198,9 @@ describe('SaveLoadPanel', () => {
     const projectName = screen.getByRole('textbox', { name: 'Project Name' });
 
     await user.type(projectName, 'Workshop plan');
-    await waitFor(() => expect(document.title).toBe('Workshop plan — Cabinet Planner'));
+    await waitFor(() => expect(document.title).toBe('Workshop plan — WoodworkingShop'));
     await user.clear(projectName);
-    await waitFor(() => expect(document.title).toBe('Cabinet Planner'));
+    await waitFor(() => expect(document.title).toBe('WoodworkingShop'));
   });
 
   it('updates project notes in the shared project state', async () => {
@@ -388,7 +388,7 @@ describe('SaveLoadPanel', () => {
 
     await user.click(screen.getByRole('button', { name: 'Share Link' }));
 
-    expect(share).toHaveBeenCalledWith({ title: 'Workshop plan — Cabinet Planner', url: window.location.href });
+    expect(share).toHaveBeenCalledWith({ title: 'Workshop plan — WoodworkingShop', url: window.location.href });
     expect(writeText).not.toHaveBeenCalled();
   });
 

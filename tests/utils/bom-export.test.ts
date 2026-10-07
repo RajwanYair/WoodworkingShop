@@ -216,7 +216,7 @@ describe('generateBomCsv', () => {
 
   it('has version header and ISO timestamp', () => {
     const csv = generateBomCsv(singleCabinet, 'en');
-    expect(csv).toContain('Cabinet Planner BOM Export');
+    expect(csv).toContain('WoodworkingShop BOM Export');
     expect(csv).toContain('Schema: bom-csv-v1');
     expect(csv).toMatch(/Generated: \d{4}-\d{2}-\d{2}T/);
   });

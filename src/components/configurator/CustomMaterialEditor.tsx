@@ -142,7 +142,7 @@ export function CustomMaterialEditor() {
                   <button
                     onClick={commitEdit}
                     disabled={!editDraft.name[lang].trim()}
-                    className="bg-wood-600 hover:bg-wood-700 flex-1 rounded px-2 py-1 text-xs font-medium text-white transition-colors disabled:opacity-40"
+                    className="bg-accent hover:bg-accent-hover flex-1 rounded px-2 py-1 text-xs font-medium text-white transition-colors disabled:opacity-40"
                   >
                     {t('config.saveEdit')}
                   </button>
@@ -288,7 +288,7 @@ export function CustomMaterialEditor() {
           <button
             onClick={handleAdd}
             disabled={!draft.name[lang].trim()}
-            className="bg-wood-600 hover:bg-wood-700 col-span-2 rounded px-3 py-1.5 text-sm font-medium text-white transition-colors disabled:opacity-40"
+            className="bg-accent hover:bg-accent-hover col-span-2 rounded px-3 py-1.5 text-sm font-medium text-white transition-colors disabled:opacity-40"
           >
             {t('config.addMaterial')}
           </button>

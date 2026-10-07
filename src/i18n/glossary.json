@@ -1,4 +1,71 @@
 {
+  "version": 1,
+  "terms": {
+    "cabinet": {
+      "en": "cabinet",
+      "he": "ארון",
+      "ar": "خزانة",
+      "de": "Schrank",
+      "es": "armario",
+      "fr": "armoire"
+    },
+    "carcass": {
+      "en": "cabinet carcass",
+      "he": "גוף הארון",
+      "ar": "هيكل الخزانة",
+      "de": "Korpus",
+      "es": "caja del armario",
+      "fr": "caisson de l'armoire"
+    },
+    "cutList": {
+      "en": "cut list",
+      "he": "רשימת חיתוך",
+      "ar": "قائمة القطع",
+      "de": "Zuschnittliste",
+      "es": "lista de corte",
+      "fr": "liste de débit"
+    },
+    "edgeBanding": {
+      "en": "edge banding",
+      "he": "קנטים",
+      "ar": "تلبيس الحواف",
+      "de": "Kantenumleimer",
+      "es": "canto",
+      "fr": "placage de chants"
+    },
+    "grainDirection": {
+      "en": "grain direction",
+      "he": "כיוון הסיבים",
+      "ar": "اتجاه ألياف الخشب",
+      "de": "Faserverlauf",
+      "es": "dirección de la veta",
+      "fr": "sens du fil du bois"
+    },
+    "joinery": {
+      "en": "joinery",
+      "he": "חיבורי עץ",
+      "ar": "وصلات النجارة",
+      "de": "Holzverbindungen",
+      "es": "ensambles de madera",
+      "fr": "assemblages en bois"
+    },
+    "kerf": {
+      "en": "kerf",
+      "he": "רוחב חריץ המסור",
+      "ar": "عرض شق المنشار",
+      "de": "Schnittfugenbreite",
+      "es": "ancho de corte",
+      "fr": "largeur du trait de scie"
+    },
+    "offcut": {
+      "en": "offcut",
+      "he": "שארית חומר",
+      "ar": "قطعة متبقية",
+      "de": "Reststück",
+      "es": "retal",
+      "fr": "chute"
+    }
+  },
   "cabinetCarcass": {
     "en": "cabinet carcass",
     "he": "גוף הארון",

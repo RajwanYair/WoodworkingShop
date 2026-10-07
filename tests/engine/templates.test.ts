@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import {
-  getTemplateDefaults,
+  getConfiguratorTemplateDefaults as getTemplateDefaults,
   TEMPLATES,
-  getTemplate,
+  getConfiguratorTemplate as getTemplate,
   evaluateTemplateExpr,
-  instantiateTemplate,
+  instantiateConfiguratorTemplate as instantiateTemplate,
 } from '../../src/engine/templates';
 import { generateParts } from '../../src/engine/parts';
 import { MATERIALS } from '../../src/engine/materials';

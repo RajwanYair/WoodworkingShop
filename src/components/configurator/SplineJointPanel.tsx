@@ -3,10 +3,11 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatMillimeters, formatNumber } from '../../i18n/format';
 import { calculateSplineJoint } from '../../engine/spline-joint';
 
 export function SplineJointPanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [boardThicknessMm, setBoardThicknessMm] = useState(19);
   const [splineThicknessMm, setSplineThicknessMm] = useState(3);
@@ -50,7 +51,7 @@ export function SplineJointPanel() {
             step={0.5}
             value={boardThicknessMm}
             onChange={(event) => setBoardThicknessMm(Number(event.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -63,7 +64,7 @@ export function SplineJointPanel() {
             step={0.1}
             value={splineThicknessMm}
             onChange={(event) => setSplineThicknessMm(Number(event.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -76,7 +77,7 @@ export function SplineJointPanel() {
             step={0.1}
             value={slotDepthPerBoardMm}
             onChange={(event) => setSlotDepthPerBoardMm(Number(event.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -89,7 +90,7 @@ export function SplineJointPanel() {
             step={1}
             value={jointLengthMm}
             onChange={(event) => setJointLengthMm(Number(event.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -102,7 +103,7 @@ export function SplineJointPanel() {
             step={1}
             value={splineCount}
             onChange={(event) => setSplineCount(Number(event.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
       </div>
@@ -117,32 +118,32 @@ export function SplineJointPanel() {
         <dl className="bg-wood-50 dark:bg-wood-900/40 grid grid-cols-2 gap-x-4 gap-y-2 rounded-lg p-3 text-sm">
           <dt className="text-wood-500 dark:text-wood-400">{t('splineJoint.recommendedSlotWidth')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.recommendedSlotWidthMm.toFixed(2)} mm
+            {formatMillimeters(result.data.recommendedSlotWidthMm, i18n.language, 2)}
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('splineJoint.totalInsertionDepth')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.totalInsertionDepthMm.toFixed(2)} mm
+            {formatMillimeters(result.data.totalInsertionDepthMm, i18n.language, 2)}
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('splineJoint.remainingWallThickness')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.remainingWallThicknessMm.toFixed(2)} mm
+            {formatMillimeters(result.data.remainingWallThicknessMm, i18n.language, 2)}
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('splineJoint.totalSplineLength')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.totalSplineLengthMm.toFixed(1)} mm
+            {formatMillimeters(result.data.totalSplineLengthMm, i18n.language, 1)}
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('splineJoint.glueAreaPerSpline')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.glueAreaPerSplineMm2.toFixed(0)} mm²
+            {formatNumber(result.data.glueAreaPerSplineMm2, i18n.language, { maximumFractionDigits: 0 })} mm²
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('splineJoint.totalGlueArea')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.totalGlueAreaMm2.toFixed(0)} mm²
+            {formatNumber(result.data.totalGlueAreaMm2, i18n.language, { maximumFractionDigits: 0 })} mm²
           </dd>
         </dl>
       )}

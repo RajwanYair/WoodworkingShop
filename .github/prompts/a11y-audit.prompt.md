@@ -1,11 +1,11 @@
 ---
-mode: agent
+agent: agent
 description: Audit the app for WCAG 2.2 AA accessibility issues and remediate every violation found.
 ---
 
 # Accessibility Audit (WCAG 2.2 AA)
 
-You are auditing and fixing accessibility issues in the Cabinet Planner project.
+You are auditing and fixing accessibility issues in the WoodworkingShop project.
 
 ## Scope
 

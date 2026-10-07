@@ -1,16 +1,19 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { calculateDovetailLayout } from '../../engine/dovetail-layout';
-import type { DovetailStyle, DovetailType } from '../../engine/dovetail-layout';
+import { calculateDovetailLayout, type DovetailStyle, type DovetailType } from '../../engine/dovetail-layout';
+
+const JOINT_TYPES: DovetailType[] = ['through', 'half_blind'];
+const CUT_STYLES: DovetailStyle[] = ['hand_cut', 'machine_cut'];
 
 export function DovetailLayoutPanel() {
   const { t } = useTranslation();
-  const [boardWidthMm, setBoardWidthMm] = useState(200);
+  const [boardWidthMm, setBoardWidthMm] = useState(250);
   const [boardThicknessMm, setBoardThicknessMm] = useState(18);
-  const [tailCount, setTailCount] = useState(5);
-  const [angleDegrees, setAngleDegrees] = useState(10);
+  const [tailCount, setTailCount] = useState(4);
+  const [angleDegrees, setAngleDegrees] = useState(8);
   const [jointType, setJointType] = useState<DovetailType>('through');
   const [style, setStyle] = useState<DovetailStyle>('hand_cut');
+
   const result = useMemo(() => {
     try {
       return {
@@ -30,7 +33,7 @@ export function DovetailLayoutPanel() {
           <span>{t('dovetailLayout.boardWidth')} (mm)</span>
           <input
             type="number"
-            min={1}
+            min="1"
             value={boardWidthMm}
             onChange={(event) => setBoardWidthMm(Number(event.target.value))}
             className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border px-2 py-1 font-mono text-sm"
@@ -40,7 +43,7 @@ export function DovetailLayoutPanel() {
           <span>{t('dovetailLayout.boardThickness')} (mm)</span>
           <input
             type="number"
-            min={1}
+            min="1"
             value={boardThicknessMm}
             onChange={(event) => setBoardThicknessMm(Number(event.target.value))}
             className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border px-2 py-1 font-mono text-sm"
@@ -50,8 +53,8 @@ export function DovetailLayoutPanel() {
           <span>{t('dovetailLayout.tailCount')}</span>
           <input
             type="number"
-            min={1}
-            step={1}
+            min="1"
+            step="1"
             value={tailCount}
             onChange={(event) => setTailCount(Number(event.target.value))}
             className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border px-2 py-1 font-mono text-sm"
@@ -61,8 +64,8 @@ export function DovetailLayoutPanel() {
           <span>{t('dovetailLayout.angle')} (°)</span>
           <input
             type="number"
-            min={5}
-            max={20}
+            min="5"
+            max="20"
             value={angleDegrees}
             onChange={(event) => setAngleDegrees(Number(event.target.value))}
             className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border px-2 py-1 font-mono text-sm"
@@ -75,8 +78,11 @@ export function DovetailLayoutPanel() {
             onChange={(event) => setJointType(event.target.value as DovetailType)}
             className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border px-2 py-1 text-sm"
           >
-            <option value="through">{t('dovetailLayout.through')}</option>
-            <option value="half_blind">{t('dovetailLayout.halfBlind')}</option>
+            {JOINT_TYPES.map((option) => (
+              <option key={option} value={option}>
+                {t(`dovetailLayout.${option === 'half_blind' ? 'halfBlind' : option}`)}
+              </option>
+            ))}
           </select>
         </label>
         <label className="text-wood-600 dark:text-wood-300 flex flex-col gap-1 text-sm">
@@ -86,8 +92,11 @@ export function DovetailLayoutPanel() {
             onChange={(event) => setStyle(event.target.value as DovetailStyle)}
             className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border px-2 py-1 text-sm"
           >
-            <option value="hand_cut">{t('dovetailLayout.handCut')}</option>
-            <option value="machine_cut">{t('dovetailLayout.machineCut')}</option>
+            {CUT_STYLES.map((option) => (
+              <option key={option} value={option}>
+                {t(`dovetailLayout.${option === 'hand_cut' ? 'handCut' : 'machineCut'}`)}
+              </option>
+            ))}
           </select>
         </label>
       </div>
@@ -99,16 +108,18 @@ export function DovetailLayoutPanel() {
       {result.data && (
         <dl
           aria-live="polite"
-          className="bg-wood-50 dark:bg-wood-900 grid grid-cols-2 gap-x-4 gap-y-2 rounded-md p-3 text-sm"
+          className="bg-wood-50 dark:bg-wood-800 grid grid-cols-2 gap-x-4 gap-y-1 rounded-md p-3 text-sm"
         >
-          <dt>{t('dovetailLayout.slopeRatio')}</dt>
-          <dd>{result.data.slopeRatio}</dd>
-          <dt>{t('dovetailLayout.pinWidth')}</dt>
-          <dd>{result.data.pins[1]?.widthMm.toFixed(1) ?? '0'} mm</dd>
-          <dt>{t('dovetailLayout.tailWidth')}</dt>
-          <dd>{result.data.tails[0]?.narrowWidthMm.toFixed(1) ?? '0'} mm</dd>
-          <dt>{t('dovetailLayout.socketDepth')}</dt>
-          <dd>{result.data.socketDepthMm} mm</dd>
+          <dt className="text-wood-500 dark:text-wood-400">{t('dovetailLayout.slopeRatio')}</dt>
+          <dd className="font-mono">{result.data.slopeRatio}</dd>
+          <dt className="text-wood-500 dark:text-wood-400">{t('dovetailLayout.tailCount')}</dt>
+          <dd className="font-mono">{result.data.tailCount}</dd>
+          <dt className="text-wood-500 dark:text-wood-400">{t('dovetailLayout.pinWidth')}</dt>
+          <dd className="font-mono">{result.data.pins[1]?.widthMm ?? 0} mm</dd>
+          <dt className="text-wood-500 dark:text-wood-400">{t('dovetailLayout.tailWidth')}</dt>
+          <dd className="font-mono">{result.data.tails[0]?.narrowWidthMm ?? 0} mm</dd>
+          <dt className="text-wood-500 dark:text-wood-400">{t('dovetailLayout.socketDepth')}</dt>
+          <dd className="font-mono">{result.data.socketDepthMm} mm</dd>
         </dl>
       )}
     </section>

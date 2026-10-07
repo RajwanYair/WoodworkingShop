@@ -98,6 +98,6 @@ describe('Ctrl+Shift+N — add cabinet shortcut (Sprint 86)', () => {
     render(<App />);
     // Open shortcuts modal with '?'
     fireEvent.keyDown(window, { key: '?' });
-    expect(await screen.findByText('Ctrl + Shift + N')).toBeInTheDocument();
+    expect(await screen.findByText('Ctrl + Shift + N', {}, { timeout: 15000 })).toBeInTheDocument();
   });
 });

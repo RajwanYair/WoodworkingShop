@@ -63,6 +63,19 @@ describe('TouchGestureTutorial', () => {
     expect(screen.queryByRole('dialog')).toBeNull();
   });
 
+  it.each([
+    [true, 'shows'],
+    [false, 'hides'],
+  ])('primary coarse pointer=%s %s the tutorial on touch-capable hardware', (coarse) => {
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn((query: string) => ({ matches: query === '(pointer: coarse)' && coarse, media: query })),
+    );
+    render(<TouchGestureTutorial />);
+    expect(screen.queryByRole('dialog') !== null).toBe(coarse);
+    vi.unstubAllGlobals();
+  });
+
   it('renders all four gesture hints', () => {
     render(<TouchGestureTutorial />);
     expect(screen.getByText(/pinch/i)).toBeInTheDocument();

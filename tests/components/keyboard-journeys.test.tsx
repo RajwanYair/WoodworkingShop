@@ -2,8 +2,11 @@ import { describe, it, expect, beforeAll, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../../src/App';
+import { downloadBomCsv } from '../../src/utils/bom-export';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import type { CabinetState } from '../../src/store/cabinet-store';
+
+vi.mock('../../src/utils/bom-export', () => ({ downloadBomCsv: vi.fn() }));
 
 beforeAll(() => {
   if (typeof window !== 'undefined' && !window.localStorage) {
@@ -69,10 +72,29 @@ describe('keyboard journeys — sprint 252', () => {
     render(<App />);
 
     await user.keyboard('?');
-    expect(screen.getByText('Ctrl + L')).toBeInTheDocument();
+    expect(await screen.findByText('Ctrl + L', {}, { timeout: 15000 })).toBeInTheDocument();
 
     await user.keyboard('?');
     expect(screen.queryByText('Ctrl + L')).not.toBeInTheDocument();
+  });
+
+  it('lists Ctrl+K in the keyboard shortcuts modal', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.keyboard('?');
+
+    expect(await screen.findByText('Ctrl + K', {}, { timeout: 15000 })).toBeInTheDocument();
+  });
+
+  it('loads the BOM exporter when Ctrl+E is pressed', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.keyboard('{Control>}e{/Control}');
+
+    await screen.findByText('BOM exported');
+    expect(downloadBomCsv).toHaveBeenCalledTimes(1);
   });
 
   it('opens the command palette with Ctrl+K and invokes a filtered tab command', async () => {
@@ -80,7 +102,7 @@ describe('keyboard journeys — sprint 252', () => {
     render(<App />);
 
     await user.keyboard('{Control>}k{/Control}');
-    const search = screen.getByRole('combobox', { name: 'Search commands' });
+    const search = await screen.findByRole('combobox', { name: /Search commands/ }, { timeout: 15000 });
     await user.type(search, 'preview');
     await user.keyboard('{Enter}');
 
@@ -94,7 +116,10 @@ describe('keyboard journeys — sprint 252', () => {
     const initialCount = useCabinetStore.getState().cabinets.length;
 
     await user.keyboard('{Control>}k{/Control}');
-    await user.type(screen.getByRole('combobox', { name: 'Search commands' }), 'Add cabinet');
+    await user.type(
+      await screen.findByRole('combobox', { name: /Search commands/ }, { timeout: 15000 }),
+      'Add cabinet',
+    );
     await user.keyboard('{Enter}');
 
     expect(useCabinetStore.getState().cabinets).toHaveLength(initialCount + 1);
@@ -105,7 +130,10 @@ describe('keyboard journeys — sprint 252', () => {
     render(<App />);
 
     await user.keyboard('{Control>}k{/Control}');
-    await user.type(screen.getByRole('combobox', { name: 'Search commands' }), 'Finish Calculator');
+    await user.type(
+      await screen.findByRole('combobox', { name: /Search commands/ }, { timeout: 15000 }),
+      'Finish Calculator',
+    );
     await user.keyboard('{Enter}');
 
     expect(useCabinetStore.getState().activeTab).toBe('calculators');

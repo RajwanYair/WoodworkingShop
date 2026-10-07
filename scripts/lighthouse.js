@@ -1,7 +1,7 @@
-import { execSync } from 'child_process';
-import { writeFileSync, mkdirSync } from 'fs';
-import os from 'os';
-import path from 'path';
+import { execSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 
 /**
  * Lighthouse CI wrapper.
@@ -12,7 +12,7 @@ import path from 'path';
 const outputDir = process.env.CI
   ? path.resolve('.lighthouseci')
   : path.join(os.tmpdir(), 'WoodworkingShop', '.lighthouseci');
-const lighthousePort = Number(process.env.WOODWORKINGSHOP_LIGHTHOUSE_PORT ?? 4173);
+const previewPort = process.env['LHCI_PREVIEW_PORT'] ?? process.env.WOODWORKINGSHOP_LIGHTHOUSE_PORT ?? '4173';
 const lighthouseRuns = Number(process.env.WOODWORKINGSHOP_LIGHTHOUSE_RUNS ?? (process.env.CI ? 3 : 1));
 mkdirSync(outputDir, { recursive: true });
 
@@ -27,11 +27,15 @@ mkdirSync(outputDir, { recursive: true });
 const config = {
   ci: {
     collect: {
-      startServerCommand: `npm run preview -- --port ${lighthousePort} --strictPort`,
-      url: [`http://localhost:${lighthousePort}/WoodworkingShop/`],
-      startServerReadyPattern: 'localhost:',
+      startServerCommand: `npm run preview -- --port ${previewPort} --strictPort`,
+      url: [`http://localhost:${previewPort}/WoodworkingShop/`],
+      startServerReadyPattern: `localhost:${previewPort}`,
       startServerReadyTimeout: 60000,
       numberOfRuns: lighthouseRuns,
+      settings: {
+        formFactor: 'mobile',
+        throttlingMethod: 'simulate',
+      },
     },
     assert: {
       preset: 'lighthouse:no-pwa',
@@ -60,12 +64,14 @@ const config = {
   },
 };
 
-const resolvedConfigPath = path.join(os.tmpdir(), 'WoodworkingShop', 'lighthouserc.resolved.json');
-mkdirSync(path.dirname(resolvedConfigPath), { recursive: true });
-writeFileSync(resolvedConfigPath, JSON.stringify(config, null, 2));
+const configDirectory = mkdtempSync(path.join(os.tmpdir(), 'WoodworkingShop-lighthouse-'));
+const resolvedConfigPath = path.join(configDirectory, 'lighthouserc.resolved.json');
 
 try {
-  execSync(`npx --yes @lhci/cli@0.15.1 autorun --config=${resolvedConfigPath}`, { stdio: 'inherit' });
+  writeFileSync(resolvedConfigPath, JSON.stringify(config, null, 2));
+  execSync(`npx --yes @lhci/cli@0.15.1 autorun --config="${resolvedConfigPath}"`, { stdio: 'inherit' });
 } catch {
-  process.exit(1);
+  process.exitCode = 1;
+} finally {
+  rmSync(configDirectory, { recursive: true, force: true });
 }

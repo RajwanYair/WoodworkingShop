@@ -1,3 +1,4 @@
 {
-  "ignores": [".agents/skills/**"]
+  // Vendored third-party agent skills keep their upstream formatting.
+  "ignores": [".agents/**", ".playwright-mcp/**", "node_modules/**"],
 }

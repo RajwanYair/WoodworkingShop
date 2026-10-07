@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "Cabinet Planner",
+    "title": "WoodworkingShop",
     "subtitle": "Interactive Woodworking Design Tool"
   },
   "a11y": {
@@ -134,6 +134,12 @@
     "totalParts": "Total Parts",
     "cuts": "Saw Passes",
     "sheet": "Sheet",
+    "grainConflicts_zero": "No grain conflicts",
+    "grainConflicts_one": "{{count}} grain conflict",
+    "grainConflicts_two": "{{count}} grain conflicts",
+    "grainConflicts_few": "{{count}} grain conflicts",
+    "grainConflicts_many": "{{count}} grain conflicts",
+    "grainConflicts_other": "{{count}} grain conflicts",
     "smart": "Smart Optimizer",
     "smartDesc": "Find dimension tweaks that reduce sheets or improve yield",
     "lowYieldWarning": "Sheet #{{num}} is only {{yield}}% used. Try the Smart Optimizer below to consolidate.",
@@ -404,6 +410,24 @@
   },
   "pdf": {
     "title": "Export PDF",
+    "coverDoor_zero": "No doors",
+    "coverDoor_one": "{{count}} door",
+    "coverDoor_two": "{{count}} doors",
+    "coverDoor_few": "{{count}} doors",
+    "coverDoor_many": "{{count}} doors",
+    "coverDoor_other": "{{count}} doors",
+    "coverSheet_zero": "No sheets",
+    "coverSheet_one": "{{count}} sheet",
+    "coverSheet_two": "{{count}} sheets",
+    "coverSheet_few": "{{count}} sheets",
+    "coverSheet_many": "{{count}} sheets",
+    "coverSheet_other": "{{count}} sheets",
+    "coverHardware_zero": "No item types",
+    "coverHardware_one": "{{count}} item type",
+    "coverHardware_two": "{{count}} item types",
+    "coverHardware_few": "{{count}} item types",
+    "coverHardware_many": "{{count}} item types",
+    "coverHardware_other": "{{count}} item types",
     "generate": "Generate PDF",
     "generateCurrent": "Export current cabinet only",
     "generateAll": "Export Full Project ({{count}} cabinets)",
@@ -484,7 +508,8 @@
   },
   "storage": {
     "usageLabel": "{{used}} KB / {{quota}} MB",
-    "nearLimitWarning": "Storage nearly full — consider exporting and deleting old projects"
+    "nearLimitWarning": "Storage nearly full — consider exporting and deleting old projects",
+    "unavailable": "Storage usage is unavailable in this browser."
   },
   "saves": {
     "title": "My Saved Cabinets",
@@ -554,7 +579,10 @@
     "collision": "Cabinet overlap detected",
     "roomHeight": "Room height",
     "floorPlan": "Floor plan",
-    "wallOccupancy": "Wall occupancy"
+    "wallOccupancy": "Wall occupancy",
+    "selectCabinet": "Cabinet",
+    "positionX": "X position (mm)",
+    "positionY": "Y position (mm)"
   },
   "summary": {
     "title": "Project Summary",
@@ -566,7 +594,12 @@
     "avgSheetYield": "Avg sheet yield",
     "totalWaste": "Total waste",
     "grainConflicts": "Grain conflicts",
-    "totalWeight": "Total weight"
+    "totalWeight": "Panel weight",
+    "estimatedLabour": "Estimated labour"
+  },
+  "timeEstimator": {
+    "totalTime": "Total estimated time",
+    "hours": "hours"
   },
   "cost": {
     "title": "Cost Estimate",
@@ -612,6 +645,7 @@
     "stepsCompleted": "steps completed",
     "resetProgress": "Reset progress",
     "markStepDone": "Mark as done",
+    "requiredStepsFirst": "Complete the required steps first.",
     "stepDone": "Done",
     "allStepsDone": "All steps complete — your cabinet is built!",
     "estimatedTime": "Estimated time",
@@ -652,39 +686,6 @@
     "linkCopied": "Shareable link copied to clipboard",
     "linkCopyFailed": "Could not copy link — please copy the URL from the address bar"
   },
-  "commandPalette": {
-    "title": "Command palette",
-    "search": "Search commands",
-    "results": "Command results",
-    "noResults": "No matching commands",
-    "actionFailed": "The command could not be completed.",
-    "recent": "Recent",
-    "shortcutDescription": "Open command palette",
-    "close": "Close command palette",
-    "categories": {
-      "actions": "Actions",
-      "language": "Language",
-      "calculators": "Calculators",
-      "presets": "Presets",
-      "projects": "Projects",
-      "exports": "Exports"
-    },
-    "commands": {
-      "undo": "Undo",
-      "redo": "Redo",
-      "toggleTheme": "Toggle dark mode",
-      "toggleContrast": "Toggle high contrast",
-      "copyLink": "Copy share link",
-      "keyboardShortcuts": "Keyboard shortcuts",
-      "addCabinet": "Add cabinet",
-      "exportBom": "Export bill of materials",
-      "saveSnapshot": "Save snapshot",
-      "resetConfig": "Reset configuration",
-      "print": "Print",
-      "redoAlternate": "Redo (alternate)",
-      "toggleFocusMode": "Toggle focus mode"
-    }
-  },
   "shortcuts": {
     "saveSnapshot": "Snapshot saved",
     "exportBom": "BOM exported",
@@ -705,6 +706,9 @@
     "notSupported": "Web Serial is not supported in this browser. Use Chrome 89+ or Edge 89+.",
     "noSheets": "Run the cut optimizer first to generate G-code.",
     "streaming": "Sending line {{current}} of {{total}}…",
+    "pause": "Pause sending",
+    "resume": "Resume sending",
+    "paused": "Paused at line {{current}} of {{total}}.",
     "done": "Done — all {{total}} lines sent.",
     "error": "Connection error: {{message}}"
   },
@@ -736,7 +740,7 @@
     "noMaterials": "Catalog is empty."
   },
   "onboarding": {
-    "title": "Welcome to Cabinet Planner!",
+    "title": "Welcome to WoodworkingShop!",
     "subtitle": "Design, optimize, and build your furniture in 3 easy steps.",
     "wizardStep1Title": "Configure your cabinet",
     "wizardStep1Desc": "Choose furniture type, dimensions, materials, doors, drawers, and shelves to match your space.",
@@ -1014,8 +1018,11 @@
   "buildLog": {
     "title": "Build Log",
     "addPlaceholder": "Add a build note…",
-    "hint": "Ctrl + Enter to save",
+    "hint": "Ctrl/Cmd + Enter to save",
     "add": "Add note",
+    "edit": "Edit entry",
+    "save": "Save note",
+    "cancel": "Cancel edit",
     "empty": "No notes yet. Log steps, adjustments, or observations.",
     "delete": "Delete entry",
     "clearAll": "Clear all entries"
@@ -1437,6 +1444,7 @@
   },
   "toolWear": {
     "title": "Tool Wear Tracker",
+    "inventory": "Inventory",
     "tool": "Tool",
     "tools": "Tools",
     "condition": "Condition",
@@ -1449,6 +1457,24 @@
     "replacement": "Needs Replacement",
     "noTools": "No tools in inventory.",
     "noAlerts": "All tools in good condition."
+  },
+  "dowelJoint": {
+    "title": "Dowel Joint Calculator",
+    "diameter": "Dowel Diameter",
+    "spacing": "Spacing",
+    "depth": "Drill Depth",
+    "drillBit": "Drill Bit",
+    "count": "Number of Dowels",
+    "clampTime": "Clamp Time",
+    "orientation": "Joint Orientation",
+    "edgeToFace": "Edge to Face",
+    "edgeToEdge": "Edge to Edge",
+    "mitre": "Mitre",
+    "positions": "Dowel Positions",
+    "jointLength": "Joint Length",
+    "boardThickness": "Board Thickness",
+    "edgeClearance": "Edge Clearance",
+    "dowelLength": "Dowel Length"
   },
   "designComparison": {
     "title": "Design Comparison",
@@ -1563,27 +1589,6 @@
     "noSuggestions": "Layout is already optimal.",
     "metres": "m"
   },
-  "timeEstimator": {
-    "title": "Time Estimator",
-    "totalTime": "Total Time",
-    "criticalPath": "Critical Path",
-    "hours": "hours",
-    "minutes": "minutes",
-    "skillLevel": "Skill Level",
-    "beginner": "Beginner",
-    "intermediate": "Intermediate",
-    "expert": "Expert",
-    "cutting": "Cutting",
-    "edgeBanding": "Edge Banding",
-    "drilling": "Drilling",
-    "assembly": "Assembly",
-    "sanding": "Sanding",
-    "finishing": "Finishing",
-    "hardware": "Hardware Installation",
-    "parallel": "Parallel Tasks",
-    "sequential": "Sequential Tasks",
-    "noTasks": "No project tasks defined."
-  },
   "materialCostTracker": {
     "title": "Material Cost Tracker",
     "bestPrice": "Best Price",
@@ -1611,20 +1616,6 @@
     "needed": "Needed",
     "canFulfil": "Can Fulfil",
     "noItems": "No inventory items."
-  },
-  "edgeBanding": {
-    "title": "Edge Banding",
-    "totalLength": "Total Length",
-    "totalCost": "Total Cost",
-    "wastage": "Wastage",
-    "group": "Banding Group",
-    "edgeCount": "Edge Count",
-    "lengthWithWaste": "Length (incl. waste)",
-    "costWithWaste": "Cost (incl. waste)",
-    "color": "Color",
-    "noEdges": "No exposed edges found.",
-    "allExposed": "All Edges Exposed",
-    "frontOnly": "Front Edges Only"
   },
   "materialUsage": {
     "title": "Material Usage Report",
@@ -1704,23 +1695,6 @@
     "roughing": "Roughing",
     "finishing": "Finishing"
   },
-  "cabinetWeight": {
-    "title": "Cabinet Weight Estimator",
-    "panelWeight": "Panel Weight",
-    "hardwareWeight": "Hardware Weight",
-    "totalEmpty": "Empty Weight",
-    "totalLoaded": "Loaded Weight",
-    "contents": "Contents Weight (kg)",
-    "fastenerCategory": "Fastener Category",
-    "reinforcement": "Reinforcement Needed",
-    "light": "Light Duty",
-    "medium": "Medium Duty",
-    "heavy": "Heavy Duty",
-    "structural": "Structural",
-    "maxShelfLoad": "Max Shelf Load",
-    "perPanel": "Per Panel",
-    "density": "Density (kg/m³)"
-  },
   "panelLabel": {
     "title": "Panel Labels",
     "partId": "Part ID",
@@ -1744,11 +1718,6 @@
     "screwLength": "Screw Length",
     "drillAngle": "Drill Angle",
     "threadType": "Thread Type",
-    "materialHardness": "Mating Material",
-    "jointLength": "Joint Length",
-    "jointType": "Joint Type",
-    "softwood": "Softwood",
-    "hardwood": "Hardwood",
     "screwCount": "Number of Screws",
     "spacing": "Spacing",
     "pocketBore": "Pocket Bore",
@@ -1762,24 +1731,15 @@
     "washerHead": "Washer Head",
     "buttJoint": "Butt Joint",
     "mitreJoint": "Mitre Joint",
-    "edgeJoint": "Edge Joint"
-  },
-  "veneer": {
-    "title": "Veneer Calculator",
-    "sheetsRequired": "Sheets Required",
-    "stripsPerPanel": "Strips per Panel",
-    "stripWidth": "Strip Width",
-    "totalArea": "Total Area",
-    "waste": "Waste",
-    "adhesiveArea": "Adhesive Area",
-    "adhesiveVolume": "Adhesive Volume",
-    "pressTime": "Press Time",
-    "matchPattern": "Match Pattern",
-    "bookMatch": "Book Match",
-    "slipMatch": "Slip Match",
-    "random": "Random",
-    "bothFaces": "Both Faces",
-    "trimAllowance": "Trim Allowance"
+    "edgeJoint": "Edge Joint",
+    "jointLength": "Joint Length",
+    "jointType": "Joint Type",
+    "material": "Mating Material",
+    "softwood": "Softwood",
+    "hardwood": "Hardwood",
+    "plywood": "Plywood",
+    "mdf": "MDF",
+    "materialHardness": "Mating Material"
   },
   "drillSpeed": {
     "title": "Drill Press Speed Calculator",
@@ -1950,9 +1910,11 @@
     "fixed": "Fixed (built-in)",
     "maxDeflection": "Maximum Deflection",
     "exceedsLimit": "Exceeds Limit",
-    "withinLimit": "Within Limit",
     "recommendedMaxSpan": "Recommended Max Span",
-    "deflectionRatio": "Deflection Ratio"
+    "deflectionRatio": "Deflection Ratio",
+    "yes": "Yes",
+    "no": "No",
+    "withinLimit": "Within Limit"
   },
   "routerDepth": {
     "title": "Router Depth-of-Cut Calculator",
@@ -2067,6 +2029,12 @@
     "openingWidth": "Opening Width",
     "openingHeight": "Opening Height",
     "doorCount": "Number of Doors",
+    "doorOption_zero": "No doors",
+    "doorOption_one": "{{count}} door",
+    "doorOption_two": "{{count}} doors",
+    "doorOption_few": "{{count}} doors",
+    "doorOption_many": "{{count}} doors",
+    "doorOption_other": "{{count}} doors",
     "overlay": "Overlay Style",
     "overlayAmount": "Overlay Amount",
     "gap": "Gap per Side",
@@ -2444,5 +2412,87 @@
     "errorExprRequired": "Formula is required",
     "errorExprTooLong": "Formula must be 256 characters or fewer",
     "errorDimensionBounds": "{{dimension}} value {{value}} must be between {{min}} and {{max}} mm."
+  },
+  "diagnostics": {
+    "title": "Local diagnostics",
+    "close": "Close local diagnostics",
+    "webVitals": "Web Vitals (this page session)",
+    "lcp": "Largest contentful paint",
+    "cls": "Cumulative layout shift",
+    "interaction": "Interaction to next paint (INP)",
+    "workers": "Worker availability",
+    "cutWorker": "Cut optimizer",
+    "costWorker": "Cost estimator",
+    "assemblyWorker": "Assembly guide",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "storage": "Browser storage estimate",
+    "storageUsage": "{{used}} bytes used of {{quota}} bytes",
+    "loading": "Loading estimate…",
+    "errorCount": "Sanitized errors retained in memory: {{count}}",
+    "privacy": "The bundle excludes project contents and is saved only when you export it. It is never sent automatically.",
+    "export": "Export diagnostic bundle",
+    "exported": "Diagnostic bundle downloaded."
+  },
+  "commandPalette": {
+    "title": "Command Palette",
+    "searchPlaceholder": "Search commands and actions...",
+    "close": "Close command palette",
+    "categoryNavigation": "Navigation",
+    "categoryActions": "Actions",
+    "categoryCalculators": "Calculators",
+    "categoryExports": "Exports",
+    "categoryProjects": "Recent projects",
+    "categoryRecent": "Recent commands",
+    "categoryLanguages": "Languages",
+    "undo": "Undo",
+    "redo": "Redo",
+    "toggleUnits": "Toggle measurement units",
+    "toggleTheme": "Toggle dark mode",
+    "openPresets": "Open cabinet presets",
+    "exportBom": "Export BOM CSV",
+    "openDxf": "Open DXF export tools",
+    "openGcode": "Open G-code tools",
+    "openPdf": "Open PDF export",
+    "saveSnapshot": "Save snapshot",
+    "print": "Print current view",
+    "resetConfig": "Reset cabinet configuration to defaults",
+    "copyLink": "Copy shareable link",
+    "toggleFocusMode": "Toggle focus mode",
+    "openShortcuts": "Open keyboard shortcuts",
+    "shortcutsTitle": "Keyboard shortcuts",
+    "closeShortcuts": "Close keyboard shortcuts",
+    "switchLanguage": "Switch to {{language}}",
+    "openProject": "Open {{name}}",
+    "noResults": "No matching commands.",
+    "commandFailed": "Could not run this command",
+    "search": "Search commands",
+    "results": "Command results",
+    "actionFailed": "The command could not be completed.",
+    "recent": "Recent",
+    "shortcutDescription": "Open command palette",
+    "categories": {
+      "actions": "Actions",
+      "language": "Language",
+      "calculators": "Calculators",
+      "presets": "Presets",
+      "projects": "Projects",
+      "exports": "Exports"
+    },
+    "commands": {
+      "undo": "Undo",
+      "redo": "Redo",
+      "toggleTheme": "Toggle dark mode",
+      "toggleContrast": "Toggle high contrast",
+      "copyLink": "Copy share link",
+      "keyboardShortcuts": "Keyboard shortcuts",
+      "addCabinet": "Add cabinet",
+      "exportBom": "Export bill of materials",
+      "saveSnapshot": "Save snapshot",
+      "resetConfig": "Reset configuration",
+      "print": "Print",
+      "redoAlternate": "Redo (alternate)",
+      "toggleFocusMode": "Toggle focus mode"
+    }
   }
 }

@@ -14,6 +14,7 @@ describe('MachineProfileSelector', () => {
     const profileSelect = screen.getByRole('combobox', { name: 'Select machine profile' });
     expect(profileSelect).toHaveValue('shapeoko-3');
     expect(screen.getByText(MACHINE_PROFILES['shapeoko-3'].description)).toBeInTheDocument();
+    expect(onSelect).toHaveBeenCalledWith(MACHINE_PROFILES['shapeoko-3']);
 
     await user.selectOptions(profileSelect, 'genmitsu-3018');
 

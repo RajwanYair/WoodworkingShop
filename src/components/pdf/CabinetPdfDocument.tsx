@@ -8,6 +8,7 @@ import type {
   Lang,
 } from '../../engine/types';
 import { getMaterial } from '../../engine/materials';
+import { formatDate } from '../../i18n/format';
 import { pdfI18n } from './pdf-i18n';
 import type { PdfLang, PdfCtx } from './pdf-i18n';
 // Side-effect import: registers fonts + emoji source before any render
@@ -60,6 +61,8 @@ export interface CabinetPdfProps {
   combinedOptimization?: OptimizationResult;
   /** Merged hardware list across all cabinets (used when allCabinetsData is set). */
   allHardware?: HardwareItem[];
+  /** User-entered project labour estimate, in hours. */
+  labourHours?: number;
 }
 
 export function CabinetPdfDocument({
@@ -78,6 +81,7 @@ export function CabinetPdfDocument({
   allCabinetsData,
   combinedOptimization,
   allHardware,
+  labourHours = 0,
 }: CabinetPdfProps) {
   const T = pdfI18n[lang as PdfLang] ?? pdfI18n.en;
   const isRTL = lang === 'he';
@@ -95,7 +99,7 @@ export function CabinetPdfDocument({
   const cMat = getMaterial(config.carcassMaterial);
   const bMat = getMaterial(config.backPanelMaterial);
   const dateLocale = isRTL ? 'he-IL' : 'en-GB';
-  const date = new Date().toLocaleDateString(dateLocale, { day: '2-digit', month: 'short', year: 'numeric' });
+  const date = formatDate(new Date(), dateLocale, { day: '2-digit', month: 'short', year: 'numeric' });
   const coverTitle = projectName?.trim() ? projectName.trim() : T.coverTitle;
   const docTitle = `${coverTitle} — ${config.width}×${config.height}×${config.depth}`;
 
@@ -113,7 +117,7 @@ export function CabinetPdfDocument({
   };
 
   return (
-    <Document title={docTitle} author="Cabinet Planner" subject="Woodworking Build Plan">
+    <Document title={docTitle} author="WoodworkingShop" subject="Woodworking Build Plan">
       {includeCover && (
         <PdfCoverPage
           ctx={ctx}
@@ -140,6 +144,7 @@ export function CabinetPdfDocument({
             cMatThickness={cMat.thickness}
             bMatName={bMat.name[lang]}
             bMatThickness={bMat.thickness}
+            labourHours={labourHours}
           />
           <PdfPartsPage ctx={ctx} parts={parts} />
           <PdfHardwarePage ctx={ctx} hardware={hardware} />

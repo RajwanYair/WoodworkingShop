@@ -3,11 +3,12 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatMillimeters } from '../../i18n/format';
 import { calculateRouterTemplate } from '../../engine/router-template';
 import type { RouterTemplateCutType } from '../../engine/router-template';
 
 export function RouterTemplatePanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [bushingODMm, setBushingODMm] = useState(20);
   const [bitDiameterMm, setBitDiameterMm] = useState(12);
@@ -46,7 +47,7 @@ export function RouterTemplatePanel() {
             step={0.5}
             value={bushingODMm}
             onChange={(e) => setBushingODMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -59,7 +60,7 @@ export function RouterTemplatePanel() {
             step={0.5}
             value={bitDiameterMm}
             onChange={(e) => setBitDiameterMm(Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
 
@@ -68,7 +69,7 @@ export function RouterTemplatePanel() {
           <select
             value={cutType}
             onChange={(e) => setCutType(e.target.value as RouterTemplateCutType)}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 text-sm focus:ring-2 focus:outline-none"
           >
             <option value="inside">{t('routerTemplate.cutTypes.inside')}</option>
             <option value="outside">{t('routerTemplate.cutTypes.outside')}</option>
@@ -85,7 +86,7 @@ export function RouterTemplatePanel() {
             placeholder={t('routerTemplate.optional')}
             value={nominalDimensionMm}
             onChange={(e) => setNominalDimensionMm(e.target.value === '' ? '' : Number(e.target.value))}
-            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-500 rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent rounded border px-2 py-1 font-mono text-sm focus:ring-2 focus:outline-none"
           />
         </label>
       </div>
@@ -100,26 +101,26 @@ export function RouterTemplatePanel() {
         <dl className="bg-wood-50 dark:bg-wood-900/40 grid grid-cols-2 gap-x-4 gap-y-2 rounded-lg p-3 text-sm">
           <dt className="text-wood-500 dark:text-wood-400">{t('routerTemplate.offset')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-            {result.data.offsetMm.toFixed(3)} mm
+            {formatMillimeters(result.data.offsetMm, i18n.language, 3)}
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('routerTemplate.adjustmentPerSide')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
             {result.data.templateAdjustmentPerSideMm > 0 ? '+' : ''}
-            {result.data.templateAdjustmentPerSideMm.toFixed(3)} mm
+            {formatMillimeters(result.data.templateAdjustmentPerSideMm, i18n.language, 3)}
           </dd>
 
           <dt className="text-wood-500 dark:text-wood-400">{t('routerTemplate.totalAdjustment')}</dt>
           <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
             {result.data.totalTemplateAdjustmentMm > 0 ? '+' : ''}
-            {result.data.totalTemplateAdjustmentMm.toFixed(3)} mm
+            {formatMillimeters(result.data.totalTemplateAdjustmentMm, i18n.language, 3)}
           </dd>
 
           {result.data.adjustedDimensionMm !== null && (
             <>
               <dt className="text-wood-500 dark:text-wood-400">{t('routerTemplate.adjustedDimension')}</dt>
               <dd className="text-wood-800 dark:text-wood-100 font-mono font-semibold">
-                {result.data.adjustedDimensionMm.toFixed(3)} mm
+                {formatMillimeters(result.data.adjustedDimensionMm, i18n.language, 3)}
               </dd>
             </>
           )}

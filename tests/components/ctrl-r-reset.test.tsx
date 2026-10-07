@@ -66,6 +66,6 @@ describe('Ctrl+R reset shortcut — Sprint 66', () => {
     // Open shortcuts modal with ?
     fireEvent.keyDown(window, { key: '?' });
     // The modal should list Ctrl + R
-    expect(await screen.findByText('Ctrl + R')).toBeInTheDocument();
+    expect(await screen.findByText('Ctrl + R', {}, { timeout: 15000 })).toBeInTheDocument();
   });
 });

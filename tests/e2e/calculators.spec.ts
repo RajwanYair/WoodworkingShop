@@ -6,6 +6,8 @@ import { calculateCoveCut } from '../../src/engine/cove-cut';
 import { calculateCrownMoulding } from '../../src/engine/crown-moulding';
 import type { CrownCutMethod } from '../../src/engine/crown-moulding';
 import { calculateDadoRabbet } from '../../src/engine/dado-rabbet';
+import { calculateDowelJoint } from '../../src/engine/dowel-joint';
+import { calculateDeflection } from '../../src/engine/shelf-deflection';
 import { calculateDovetailLayout } from '../../src/engine/dovetail-layout';
 import { calculateDrawerBox } from '../../src/engine/drawer-box';
 import { calculateFaceFrame } from '../../src/engine/face-frame';
@@ -17,9 +19,9 @@ import { calculateHalfLap } from '../../src/engine/half-lap';
 import { calculateHoningGuide } from '../../src/engine/honing-guide';
 import { calculateKerfBending } from '../../src/engine/kerf-bending';
 import { calculateMoistureShrinkage } from '../../src/engine/moisture-shrinkage';
+import { formatMillimeters, formatNumber } from '../../src/i18n/format';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 import { calculatePlanerPasses } from '../../src/engine/planer-passes';
-import { calculatePocketHole } from '../../src/engine/pocket-hole';
 import { calculateMortiseTenon } from '../../src/engine/mortise-tenon';
 import { generateParts } from '../../src/engine/parts';
 import { calculateRafterLength } from '../../src/engine/rafter-length';
@@ -31,7 +33,7 @@ import { calculateSplineJoint } from '../../src/engine/spline-joint';
 import { calculateStairStringer } from '../../src/engine/stair-stringer';
 import { calculateTaperJig } from '../../src/engine/taper-jig';
 import { calculateWoodTurning } from '../../src/engine/wood-turning';
-import { calculateDeflection } from '../../src/engine/shelf-deflection';
+import { calculatePocketHole } from '../../src/engine/pocket-hole';
 import CALCULATOR_CONTROL_INVENTORY from '../fixtures/calculator-control-inventory.json' with { type: 'json' };
 import WOODGEARS_COVE_CUT_ORACLE from '../fixtures/oracles/woodgears-cove-cut.json' with { type: 'json' };
 
@@ -48,8 +50,12 @@ const finishOptions = [
 
 async function openCalculator(page: import('@playwright/test').Page, name: string) {
   await page.keyboard.press('Alt+6');
-  await page.getByRole('button', { name }).click();
-  return page.getByRole('region', { name });
+  const toggle = page.getByRole('button', { name, exact: true });
+  await toggle.click();
+  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+  const calculator = page.getByRole('region', { name });
+  await expect(calculator.locator('input, select, textarea, button').first()).toBeVisible();
+  return calculator;
 }
 
 function getAccessibleControl(panel: Locator, role: string, accessibleName: string) {
@@ -582,13 +588,17 @@ test('shed-roof mode reconciles rafter geometry with the engine', async ({ appPa
   const expectResults = async (overrides: Partial<typeof parameters> = {}) => {
     const expected = calculateRafterLength({ ...parameters, ...overrides });
     const results = calculator.locator('dl dd');
-    await expect(results.nth(0)).toHaveText(`${expected.runMm.toFixed(0)} mm`);
-    await expect(results.nth(1)).toHaveText(`${expected.riseMm.toFixed(1)} mm`);
-    await expect(results.nth(2)).toHaveText(`${expected.rafterLengthMm.toFixed(1)} mm`);
-    await expect(results.nth(3)).toHaveText(`${expected.totalLengthMm.toFixed(1)} mm`);
-    await expect(results.nth(4)).toHaveText(`${expected.plumbCutAngleDeg.toFixed(2)}°`);
-    await expect(results.nth(5)).toHaveText(`${expected.seatCutAngleDeg.toFixed(2)}°`);
-    await expect(results.nth(6)).toHaveText(`${expected.birdsmouthDepthMm.toFixed(1)} mm`);
+    await expect(results.nth(0)).toHaveText(formatMillimeters(expected.runMm, 'en', 0));
+    await expect(results.nth(1)).toHaveText(formatMillimeters(expected.riseMm, 'en', 1));
+    await expect(results.nth(2)).toHaveText(formatMillimeters(expected.rafterLengthMm, 'en', 1));
+    await expect(results.nth(3)).toHaveText(formatMillimeters(expected.totalLengthMm, 'en', 1));
+    await expect(results.nth(4)).toHaveText(
+      `${formatNumber(expected.plumbCutAngleDeg, 'en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}°`,
+    );
+    await expect(results.nth(5)).toHaveText(
+      `${formatNumber(expected.seatCutAngleDeg, 'en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}°`,
+    );
+    await expect(results.nth(6)).toHaveText(formatMillimeters(expected.birdsmouthDepthMm, 'en', 1));
   };
 
   await expectResults();
@@ -734,7 +744,7 @@ test('frame panel dimensions update geometry, reject invalid inputs, and recover
     await expect(calculator).toContainText(`${expected.panelWidthMm.toFixed(1)} mm`);
     await expect(calculator).toContainText(`${expected.panelHeightMm.toFixed(1)} mm`);
     await expect(calculator).toContainText(`W: ${expected.widthFloatMm} mm · H: ${expected.heightFloatMm} mm`);
-    await expect(calculator).toContainText(`${expected.grooveDepthMm} mm`);
+    await expect(calculator).toContainText(formatMillimeters(expected.grooveDepthMm, 'en', 1));
 
     await field.fill(String(controlCase.invalidValue));
     await expect(calculator.getByRole('alert')).toContainText(controlCase.error);
@@ -1073,10 +1083,12 @@ test('router-circle dimensions and cut modes update geometry, reject invalid val
   const expectGeometry = async () => {
     const expected = calculateRouterCircle(parameters);
     const results = calculator.locator('dl dd');
-    await expect(results.nth(0)).toHaveText(`${expected.armLengthMm.toFixed(1)} mm`);
-    await expect(results.nth(1)).toHaveText(`${expected.circumferenceMm.toFixed(1)} mm`);
-    await expect(results.nth(2)).toHaveText(`${expected.areaMm2.toFixed(1)} mm²`);
-    await expect(results.nth(3)).toHaveText(`${expected.pivotOffsetMm.toFixed(1)} mm`);
+    await expect(results.nth(0)).toHaveText(formatMillimeters(expected.armLengthMm, 'en', 1));
+    await expect(results.nth(1)).toHaveText(formatMillimeters(expected.circumferenceMm, 'en', 1));
+    await expect(results.nth(2)).toHaveText(
+      `${formatNumber(expected.areaMm2, 'en', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} mm²`,
+    );
+    await expect(results.nth(3)).toHaveText(formatMillimeters(expected.pivotOffsetMm, 'en', 1));
   };
 
   const dimensionCases = [
@@ -1194,11 +1206,13 @@ test('screw density reconciles pullout force with engine and validates diameter'
   const medium = calculateScrewPullout({ screwDiameterMm: 4, threadLengthMm: 30, densityClass: 'medium' });
   const high = calculateScrewPullout({ screwDiameterMm: 4, threadLengthMm: 30, densityClass: 'high' });
   const calculator = await openCalculator(page, 'Screw Pull-Out Strength Estimator');
-  const force = calculator.getByText(/^\d+\.\d+ N$/);
+  const force = calculator.locator('dl dd').first();
   await expect(calculator).toContainText('USDA equation 8-10a estimates short-term ultimate load');
-  await expect(force).toHaveText(`${medium.pulloutForceN.toFixed(1)} N`);
+  const formatForce = (value: number) =>
+    `${formatNumber(value, 'en', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} N`;
+  await expect(force).toHaveText(formatForce(medium.pulloutForceN));
   await calculator.getByRole('button', { name: 'High Density (Hickory, Teak)' }).click();
-  await expect(force).toHaveText(`${high.pulloutForceN.toFixed(1)} N`);
+  await expect(force).toHaveText(formatForce(high.pulloutForceN));
   expect(high.pulloutForceN).toBeGreaterThan(medium.pulloutForceN);
   const densityOptions = [
     ['low', 'Low Density (Pine, Cedar)'],
@@ -1209,9 +1223,13 @@ test('screw density reconciles pullout force with engine and validates diameter'
   for (const [densityClass, label] of densityOptions) {
     const expected = calculateScrewPullout({ screwDiameterMm: 4, threadLengthMm: 30, densityClass });
     await calculator.getByRole('button', { name: label }).click();
-    await expect(force).toHaveText(`${expected.pulloutForceN.toFixed(1)} N`);
-    await expect(calculator).toContainText(`${expected.pulloutForceLbf.toFixed(1)} lbf`);
-    await expect(calculator).toContainText(`${expected.withdrawalResistanceMPa.toFixed(3)} MPa`);
+    await expect(force).toHaveText(formatForce(expected.pulloutForceN));
+    await expect(calculator).toContainText(
+      `${formatNumber(expected.pulloutForceLbf, 'en', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} lbf`,
+    );
+    await expect(calculator).toContainText(
+      `${formatNumber(expected.withdrawalResistanceMPa, 'en', { minimumFractionDigits: 3, maximumFractionDigits: 3 })} MPa`,
+    );
     await expect(calculator.getByRole('button', { name: label })).toHaveAttribute('aria-pressed', 'true');
     for (const [, otherLabel] of densityOptions) {
       if (otherLabel !== label) {
@@ -1229,7 +1247,7 @@ test('screw density reconciles pullout force with engine and validates diameter'
     const expected = calculateScrewPullout({ screwDiameterMm, threadLengthMm, densityClass: 'medium' });
     await diameter.fill(String(screwDiameterMm));
     await threadLength.fill(String(threadLengthMm));
-    await expect(force).toHaveText(`${expected.pulloutForceN.toFixed(1)} N`);
+    await expect(force).toHaveText(formatForce(expected.pulloutForceN));
   }
   await expect(calculator).toContainText('Adequate');
   await diameter.fill('');
@@ -1513,7 +1531,9 @@ test('half-lap dimensions reconcile with the engine and recover from invalid val
     await expect(results.nth(1)).toHaveText(`${expected.board1NotchWidthMm.toFixed(1)} mm`);
     await expect(results.nth(2)).toHaveText(`${expected.board2NotchDepthMm.toFixed(1)} mm`);
     await expect(results.nth(3)).toHaveText(`${expected.board2NotchWidthMm.toFixed(1)} mm`);
-    await expect(results.nth(4)).toHaveText(`${expected.totalGlueAreaMm2.toFixed(0)} mm²`);
+    await expect(results.nth(4)).toHaveText(
+      `${formatNumber(expected.totalGlueAreaMm2, 'en', { maximumFractionDigits: 0 })} mm²`,
+    );
     await expect(results.nth(5)).toHaveText(`${expected.finishedThicknessMm.toFixed(1)} mm`);
   };
 
@@ -1579,6 +1599,7 @@ test('spline dimensions reconcile with the engine and recover from invalid value
     splineCount: 2,
   };
   const calculator = await openCalculator(page, 'Spline Joint');
+  const locale = (await page.locator('html').getAttribute('lang')) ?? 'en';
 
   const expectResults = async () => {
     const expected = calculateSplineJoint(parameters);
@@ -1587,8 +1608,12 @@ test('spline dimensions reconcile with the engine and recover from invalid value
     await expect(results.nth(1)).toHaveText(`${expected.totalInsertionDepthMm.toFixed(2)} mm`);
     await expect(results.nth(2)).toHaveText(`${expected.remainingWallThicknessMm.toFixed(2)} mm`);
     await expect(results.nth(3)).toHaveText(`${expected.totalSplineLengthMm.toFixed(1)} mm`);
-    await expect(results.nth(4)).toHaveText(`${expected.glueAreaPerSplineMm2.toFixed(0)} mm²`);
-    await expect(results.nth(5)).toHaveText(`${expected.totalGlueAreaMm2.toFixed(0)} mm²`);
+    await expect(results.nth(4)).toHaveText(
+      `${formatNumber(expected.glueAreaPerSplineMm2, locale, { maximumFractionDigits: 0 })} mm²`,
+    );
+    await expect(results.nth(5)).toHaveText(
+      `${formatNumber(expected.totalGlueAreaMm2, locale, { maximumFractionDigits: 0 })} mm²`,
+    );
   };
 
   await expectResults();
@@ -1644,6 +1669,82 @@ test('spline dimensions reconcile with the engine and recover from invalid value
     await field.fill(String(dimensionCase.value));
     await expect(calculator.getByRole('alert')).toHaveCount(0);
     await expectResults();
+  }
+});
+
+test('shelf span changes reconcile deflection with the engine', async ({ appPage: page }) => {
+  const calculator = await openCalculator(page, 'Shelf Sag Calculator');
+  const span = calculator.getByRole('spinbutton', { name: 'Shelf Span (mm)', exact: true });
+  for (const spanMm of [800, 1000]) {
+    const expected = calculateDeflection({
+      spanMm,
+      widthMm: 400,
+      thicknessMm: 18,
+      material: 'plywood',
+      loadType: 'uniform',
+      loadN: 20 * 9.81,
+      support: 'simple',
+    });
+    await span.fill(String(spanMm));
+    await expect(calculator).toContainText(`${expected.maxDeflectionMm.toFixed(2)} mm`);
+    await expect(calculator).toContainText(`${expected.recommendedMaxSpanMm} mm`);
+  }
+});
+
+test('pocket-hole joint length changes reconcile screw spacing with the engine', async ({ appPage: page }) => {
+  const calculator = await openCalculator(page, 'Pocket Hole Calculator');
+  const length = calculator.getByRole('spinbutton', { name: 'Joint Length (mm)', exact: true });
+  for (const jointLengthMm of [600, 1200]) {
+    const expected = calculatePocketHole({
+      workpieceThicknessMm: 18,
+      matingThicknessMm: 18,
+      jointLengthMm,
+      materialHardness: 'plywood',
+      jointType: 'butt',
+    });
+    await length.fill(String(jointLengthMm));
+    await expect(calculator).toContainText(String(expected.screwCount));
+    await expect(calculator).toContainText(`${expected.spacingMm} mm`);
+  }
+});
+
+test('dowel joint length changes reconcile positions with the engine', async ({ appPage: page }) => {
+  const calculator = await openCalculator(page, 'Dowel Joint Calculator');
+  const length = calculator.getByRole('spinbutton', { name: 'Joint Length (mm)', exact: true });
+  for (const jointLengthMm of [600, 1000]) {
+    const expected = calculateDowelJoint({ jointLengthMm, boardThicknessMm: 18, orientation: 'edge_to_face' });
+    await length.fill(String(jointLengthMm));
+    await expect(calculator).toContainText(`${expected.count}`);
+    await expect(calculator).toContainText(`${expected.spacingMm} mm`);
+  }
+});
+
+test('mortise-tenon joint type changes reconcile tenon length with the engine', async ({ appPage: page }) => {
+  const calculator = await openCalculator(page, 'Mortise & Tenon Calculator');
+  const jointType = calculator.getByRole('combobox', { name: 'Joint Type', exact: true });
+  for (const value of ['through', 'blind'] as const) {
+    const expected = calculateMortiseTenon({ stockThicknessMm: 18, stockWidthMm: 54, jointType: value });
+    await jointType.selectOption(value);
+    await expect(calculator).toContainText(`${expected.tenonLengthMm} mm`);
+    await expect(calculator).toContainText(`${expected.mortiseDepthMm} mm`);
+  }
+});
+
+test('dovetail tail count changes reconcile layout widths with the engine', async ({ appPage: page }) => {
+  const calculator = await openCalculator(page, 'Dovetail Layout Calculator');
+  const tailCount = calculator.getByRole('spinbutton', { name: 'Number of Tails', exact: true });
+  for (const count of [4, 5]) {
+    const expected = calculateDovetailLayout({
+      boardWidthMm: 250,
+      boardThicknessMm: 18,
+      tailCount: count,
+      angleDegrees: 8,
+      jointType: 'through',
+      style: 'hand_cut',
+    });
+    await tailCount.fill(String(count));
+    await expect(calculator).toContainText(`${expected.tails[0]?.narrowWidthMm ?? 0} mm`);
+    await expect(calculator).toContainText(expected.slopeRatio);
   }
 });
 

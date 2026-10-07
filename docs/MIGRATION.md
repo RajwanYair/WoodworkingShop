@@ -1,10 +1,10 @@
 # Migration Guide
 
-This document covers breaking changes and migration steps for each major version boundary of **Cabinet Planner**.
+This document covers breaking changes and migration steps for each major version boundary of **WoodworkingShop**.
 
 ## Versioning Policy
 
-Cabinet Planner uses [Semantic Versioning](https://semver.org/):
+WoodworkingShop uses [Semantic Versioning](https://semver.org/):
 
 - **Patch** (`3.x.y → 3.x.(y+1)`) — new features, bug fixes, no breaking changes.
 - **Minor** (`3.x.0 → 3.(x+1).0`) — significant feature additions; backwards-compatible.

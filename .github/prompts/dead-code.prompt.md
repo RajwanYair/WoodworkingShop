@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: Find and remove dead code, unused exports, and orphaned files.
 ---
 

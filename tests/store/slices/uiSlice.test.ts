@@ -273,6 +273,17 @@ describe('createUiSlice — build log actions', () => {
     expect(get().buildLog).toEqual([]);
     expect(loadBuildLog()).toEqual([]);
   });
+
+  it('updates entry text without changing its timestamp and persists the edit', () => {
+    const { get } = makeSlice();
+    get().addBuildLogEntry('Original note');
+    const [entry] = get().buildLog;
+
+    get().updateBuildLogEntry(entry.id, '  Updated note  ');
+
+    expect(get().buildLog).toEqual([{ ...entry, text: 'Updated note' }]);
+    expect(loadBuildLog()).toEqual([{ ...entry, text: 'Updated note' }]);
+  });
 });
 
 describe('createUiSlice — focus mode', () => {

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../../i18n/format';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { DEFAULT_LABOUR_RATE } from '../../engine/cost-estimator';
@@ -12,6 +13,7 @@ export function CostEstimatePanel() {
   const { t, i18n } = useTranslation();
   const {
     cost,
+    costPending,
     cabinets,
     materialPriceOverrides,
     setMaterialPriceOverride,
@@ -135,7 +137,7 @@ export function CostEstimatePanel() {
                       if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
                       if (e.key === 'Escape') setEditingPrice(null);
                     }}
-                    className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-16 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
+                    className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent w-16 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
                     ref={(el) => el?.focus()}
                     aria-label={`Price per sheet for ${sc.materialName.en}`}
                   />
@@ -193,7 +195,7 @@ export function CostEstimatePanel() {
                     if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
                     if (e.key === 'Escape') setEditingEb(false);
                   }}
-                  className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-14 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
+                  className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent w-14 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
                   ref={(el) => el?.focus()}
                   aria-label="Edge banding rate per meter"
                 />
@@ -246,7 +248,7 @@ export function CostEstimatePanel() {
                         if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
                         if (e.key === 'Escape') setEditingHw(null);
                       }}
-                      className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-14 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
+                      className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent w-14 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
                       ref={(el) => el?.focus()}
                       aria-label={`Price per unit for ${hw.name.en}`}
                     />
@@ -320,7 +322,7 @@ export function CostEstimatePanel() {
                   if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
                   if (e.key === 'Escape') setEditingLabourHours(false);
                 }}
-                className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-14 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
+                className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent w-14 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
                 ref={(el) => el?.focus()}
                 aria-label={t('cost.labourHoursAriaLabel', 'Labour hours')}
               />
@@ -360,7 +362,7 @@ export function CostEstimatePanel() {
                   if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
                   if (e.key === 'Escape') setEditingLabourRate(false);
                 }}
-                className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-14 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
+                className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent w-14 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
                 ref={(el) => el?.focus()}
                 aria-label={t('cost.labourRateAriaLabel', 'Labour rate per hour')}
               />
@@ -400,7 +402,7 @@ export function CostEstimatePanel() {
                   if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
                   if (e.key === 'Escape') setEditingFinish(false);
                 }}
-                className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 w-16 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
+                className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent w-16 rounded border bg-white px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
                 ref={(el) => el?.focus()}
                 aria-label={t('cost.finishAriaLabel', 'Finish/paint cost')}
               />
@@ -422,7 +424,7 @@ export function CostEstimatePanel() {
       </div>
 
       {/* Per-cabinet cost when multiple cabinets */}
-      {cabinets.length > 1 && totalNonZero && (
+      {cabinets.length > 1 && totalNonZero && !costPending && (
         <div className="border-wood-100 dark:border-wood-800 border-t pt-2">
           <div className="flex justify-between text-xs">
             <span className="text-wood-600 dark:text-wood-300">{t('cost.perUnit')}</span>
@@ -437,12 +439,21 @@ export function CostEstimatePanel() {
       <div className="border-wood-300 dark:border-wood-600 border-t pt-2">
         <div className="flex justify-between">
           <span className="text-wood-700 dark:text-wood-200 text-sm font-bold">{t('cost.total')}</span>
-          <span className="text-sm font-bold text-green-700 dark:text-green-400">₪{cost.totalCost}</span>
+          <span className="text-sm font-bold text-green-700 dark:text-green-400">
+            {costPending ? '…' : `₪${cost.totalCost}`}
+          </span>
+          {costPending && (
+            <span className="sr-only" aria-live="polite">
+              {t('optimizer.statusPending')}
+            </span>
+          )}
         </div>
         {totalWeightKg > 0 && (
           <div className="mt-1 flex justify-between">
             <span className="text-wood-600 dark:text-wood-300 text-xs">{t('cost.totalWeight')}</span>
-            <span className="text-wood-600 dark:text-wood-300 text-xs">~{totalWeightKg.toFixed(1)} kg</span>
+            <span className="text-wood-600 dark:text-wood-300 text-xs">
+              ~{formatNumber(totalWeightKg, i18n.language, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} kg
+            </span>
           </div>
         )}
         <p className="text-wood-600 dark:text-wood-300 mt-1 text-[10px]">{t('cost.disclaimer')}</p>

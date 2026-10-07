@@ -1,5 +1,5 @@
 import { createRef } from 'react';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { CameraCapture } from '../../src/components/assembly/CameraCapture';
@@ -24,6 +24,21 @@ function createCameraResult(overrides: Partial<UseCameraResult> = {}): UseCamera
 }
 
 describe('CameraCapture', () => {
+  it('enables capture only after video data is available', async () => {
+    const user = userEvent.setup();
+    const camera = createCameraResult({ status: 'active' });
+    vi.mocked(useCamera).mockReturnValue(camera);
+
+    render(<CameraCapture />);
+
+    const captureButton = screen.getByRole('button', { name: 'Take Photo' });
+    expect(captureButton).toBeDisabled();
+    act(() => screen.getByLabelText('Live camera feed').dispatchEvent(new Event('loadeddata')));
+    expect(captureButton).toBeEnabled();
+    await user.click(captureButton);
+    expect(camera.capturePhoto).toHaveBeenCalledOnce();
+  });
+
   it('shows a supported-device notice without camera controls when unavailable', () => {
     vi.mocked(useCamera).mockReturnValue(createCameraResult({ isSupported: false }));
 

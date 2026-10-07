@@ -45,6 +45,11 @@ describe('cutSheetToGcode', () => {
     expect(gc).toContain('Tool diameter: 8');
   });
 
+  it('uses the configured spindle speed in spindle commands', () => {
+    const gc = cutSheetToGcode(mockSheet, { spindleRpm: 10_000 });
+    expect(gc).toContain('M3 S10000 ; spindle on');
+  });
+
   it('handles empty parts list', () => {
     const empty: CutSheet = { ...mockSheet, parts: [] };
     const gc = cutSheetToGcode(empty);
@@ -75,7 +80,7 @@ describe('cutSheetToGcode', () => {
 
   it('includes version header comment', () => {
     const gc = cutSheetToGcode(mockSheet);
-    expect(gc).toContain('Cabinet Planner G-code Export');
+    expect(gc).toContain('WoodworkingShop G-code Export');
     expect(gc).toContain('Schema: gcode-v1');
   });
 

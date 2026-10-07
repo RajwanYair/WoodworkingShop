@@ -1,12 +1,13 @@
 ---
-mode: agent
+description: 'Set up and tune Lighthouse CI performance, accessibility, and SEO gates.'
+agent: agent
 tools:
-  - read_file
-  - create_file
-  - replace_string_in_file
-  - run_in_terminal
-  - grep_search
-  - file_search
+  - read/readFile
+  - edit/createFile
+  - edit/editFiles
+  - execute/runInTerminal
+  - search/textSearch
+  - search/fileSearch
 ---
 
 # Lighthouse CI Setup & Tuning

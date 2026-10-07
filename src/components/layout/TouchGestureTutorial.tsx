@@ -7,9 +7,12 @@ const TOURED_KEY = 'woodworkingshop:preview-toured';
 const ONBOARDING_SEEN_KEY = 'onboarding-seen';
 const ONBOARDING_DISMISSED_EVENT = 'onboarding-dismissed';
 
-/** Returns true if the device supports touch events (uses the modern maxTouchPoints API). */
+/** True only when touch is the primary input; touch-capable laptops driven by a mouse are excluded. */
 function isTouchDevice(): boolean {
-  return navigator.maxTouchPoints > 0;
+  return (
+    navigator.maxTouchPoints > 0 &&
+    (typeof window.matchMedia !== 'function' || window.matchMedia('(pointer: coarse)').matches)
+  );
 }
 
 export function TouchGestureTutorial() {
@@ -82,7 +85,7 @@ export function TouchGestureTutorial() {
         <button
           type="button"
           onClick={dismiss}
-          className="bg-wood-600 hover:bg-wood-700 w-full rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
+          className="bg-accent hover:bg-accent-hover w-full rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
         >
           {t('gestures.gotIt')}
         </button>

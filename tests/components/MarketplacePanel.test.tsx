@@ -18,6 +18,7 @@ describe('MarketplacePanel', () => {
     render(<MarketplacePanel onClose={() => {}} />);
 
     const dialog = screen.getByRole('dialog', { name: 'Plugin Marketplace' });
+    expect(within(dialog).getByLabelText('4.7 stars')).toBeInTheDocument();
     await user.click(within(dialog).getByRole('button', { name: 'Export' }));
 
     const pluginList = within(dialog).getByRole('list');

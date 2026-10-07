@@ -23,6 +23,20 @@ export interface CapabilityLedgerEntry {
   targetRelease?: string;
 }
 
+export interface PathKeyedCapabilityLedgerEntry {
+  classification: CapabilityLedgerEntry['status'];
+  rationale: string;
+  documentation?: CapabilityLedgerEntry['documentedIn'];
+  targetSprint?: number;
+  targetRelease?: string;
+}
+
+export interface CapabilityLedger {
+  schemaVersion?: 1;
+  version?: number;
+  modules: CapabilityLedgerEntry[] | Record<string, PathKeyedCapabilityLedgerEntry>;
+}
+
 export function buildImportGraph(sources: Readonly<Record<string, string>>): Map<string, ImportEdge[]>;
 export function buildCapabilityInventory(
   sources: Readonly<Record<string, string>>,
@@ -32,6 +46,6 @@ export function findReachableRoots(graph: Map<string, ImportEdge[]>, target: str
 export function isBarrelOnlyExposure(graph: Map<string, ImportEdge[]>, target: string): boolean;
 export function checkCapabilityLedger(
   inventory: CapabilityModule[],
-  ledger: { modules: CapabilityLedgerEntry[] },
+  ledger: CapabilityLedger,
   currentVersion: string,
 ): string[];

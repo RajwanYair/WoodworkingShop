@@ -29,7 +29,7 @@ export function PageHeader({
       {/* Separate emoji from text to avoid bidi algorithm conflicts with RTL */}
       <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 4 }]}>
         <Text style={[s.pageHeaderBrand, { fontFamily: 'Helvetica', flex: 0 }]}>🪵</Text>
-        <Text style={[s.pageHeaderBrand, { fontFamily: ffBold }]}>{isRTL ? 'מתכנן ארונות' : 'Cabinet Planner'}</Text>
+        <Text style={[s.pageHeaderBrand, { fontFamily: ffBold }]}>{isRTL ? 'מתכנן ארונות' : 'WoodworkingShop'}</Text>
       </View>
       {/* Separate emoji and text */}
       <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 3 }]}>
@@ -53,7 +53,7 @@ export function PageFooter({ date, lang = 'en' }: { readonly date: string; reado
       {/* Separate emoji from text to avoid bidi algorithm conflicts with RTL */}
       <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 4 }]}>
         <Text style={[s.footerLeft, { fontFamily: 'Helvetica', flex: 0 }]}>🪵</Text>
-        <Text style={[s.footerLeft, { fontFamily: ff }]}>{isRTL ? 'מתכנן ארונות' : 'Cabinet Planner'}</Text>
+        <Text style={[s.footerLeft, { fontFamily: ff }]}>{isRTL ? 'מתכנן ארונות' : 'WoodworkingShop'}</Text>
       </View>
       {/* Separate calendar emoji from date text */}
       <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 4 }]}>

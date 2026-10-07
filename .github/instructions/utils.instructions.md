@@ -1,8 +1,9 @@
 ---
+description: 'Export/storage utility rules for src/utils.'
 applyTo: src/utils/**
 ---
 
-# Utilities Instructions — Cabinet Planner
+# Utilities Instructions — WoodworkingShop
 
 Rules enforced for every file under `src/utils/`.
 

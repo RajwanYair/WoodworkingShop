@@ -95,8 +95,9 @@ export interface CncSerialSession {
    * Lines are sent one at a time with an optional inter-line delay.
    * @param gcode  Raw G-code string (multi-line allowed).
    * @param onProgress  Optional progress callback.
+   * @param signal  Optional cancellation signal.
    */
-  send(gcode: string, onProgress?: (p: SendProgress) => void): Promise<void>;
+  send(gcode: string, onProgress?: (p: SendProgress) => void, signal?: AbortSignal): Promise<void>;
   /** Close the serial port and release resources. */
   close(): Promise<void>;
   /** Whether the port is still open. */
@@ -135,7 +136,7 @@ export async function openSerialPort(options: SerialOptions = {}): Promise<CncSe
       return _open;
     },
 
-    async send(gcode: string, onProgress?: (p: SendProgress) => void): Promise<void> {
+    async send(gcode: string, onProgress?: (p: SendProgress) => void, signal?: AbortSignal): Promise<void> {
       if (!_open) throw new SerialPortClosedError();
       const lines = gcode
         .split('\n')
@@ -146,7 +147,7 @@ export async function openSerialPort(options: SerialOptions = {}): Promise<CncSe
         port,
         lines,
         (sent) => onProgress?.({ total, sent, percent: Math.round((sent / total) * 100) }),
-        undefined,
+        signal,
         lineEnding,
       );
     },

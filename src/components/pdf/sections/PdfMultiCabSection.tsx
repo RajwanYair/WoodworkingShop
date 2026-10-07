@@ -5,6 +5,7 @@ import { s, C, partsColWidths, hwColWidths } from '../pdf-tokens';
 import type { PdfCtx } from '../pdf-i18n';
 import type { CabinetPdfEntry } from '../CabinetPdfDocument';
 import { PageHeader, PageFooter } from './PageChrome';
+import { formatNumber } from '../../../i18n/format';
 
 interface PdfMultiCabSectionProps {
   ctx: PdfCtx;
@@ -70,7 +71,11 @@ export function PdfMultiCabSection({ ctx, allCabinetsData }: PdfMultiCabSectionP
                 { emoji: '🗂️', label: T.specBackPanel, val: `${cabBMat.name[lang]} ${cabBMat.thickness}mm` },
                 { emoji: '🚪', label: T.specDoorStyle, val: `${cab.config.doorCount} × ${cab.config.doorStyle}` },
                 { emoji: '📚', label: T.specShelfCount, val: String(cab.config.shelfCount) },
-                { emoji: '📏', label: T.specEdgeBandingTotal, val: `${(cab.edgeBandingTotal / 1000).toFixed(1)} m` },
+                {
+                  emoji: '📏',
+                  label: T.specEdgeBandingTotal,
+                  val: `${formatNumber(cab.edgeBandingTotal / 1000, lang, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} m`,
+                },
               ].map(({ emoji, label, val }) => (
                 <View
                   key={label}

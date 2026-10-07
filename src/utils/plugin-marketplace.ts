@@ -1,7 +1,7 @@
 /**
  * Plugin Marketplace — Sprint 18
  *
- * Browse, install, and manage Cabinet Planner plugins from a catalog.
+ * Browse, install, and manage WoodworkingShop plugins from a catalog.
  * The marketplace catalog is fetched from a CDN (or loaded from a bundled
  * stub in tests/offline) and cached in IndexedDB.  Installed plugin IDs are
  * persisted to localStorage.
@@ -49,7 +49,7 @@ export interface MarketplacePlugin {
   downloads?: number;
   /** ISO timestamp of last publish. */
   publishedAt: string;
-  /** Minimum Cabinet Planner API version required. */
+  /** Minimum WoodworkingShop API version required. */
   minApiVersion: string;
   /** Optional array of tags for search. */
   tags?: string[];

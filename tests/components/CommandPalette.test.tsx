@@ -1,81 +1,79 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { useState } from 'react';
-import { CommandPalette } from '../../src/components/layout/CommandPalette';
-import { clearRecentCommands, clearRegistry, registerCommands } from '../../src/utils/command-palette';
-import { renderWithLocale } from '../render-with-locale';
+import { beforeEach, describe, expect, it } from 'vitest';
+import App from '../../src/App';
+import { useCabinetStore } from '../../src/store/cabinet-store';
+import { clearRecentCommands, getRecentCommandIds } from '../../src/utils/command-palette';
 
 describe('CommandPalette', () => {
   beforeEach(() => {
-    clearRegistry();
     clearRecentCommands();
+    useCabinetStore.getState().resetConfig();
+    useCabinetStore.getState().setActiveTab('configurator');
   });
 
-  it('filters commands and invokes the active result with Enter', async () => {
+  it('opens a searched calculator directly and lists it in recent commands', async () => {
     const user = userEvent.setup();
-    const openPreview = vi.fn();
-    const onClose = vi.fn();
-    registerCommands([
-      { id: 'tab.preview', label: 'Preview', category: 'Tabs', action: openPreview, shortcut: 'Alt+2' },
-      { id: 'theme.dark', label: 'Dark mode', category: 'Actions', action: vi.fn() },
-    ]);
-    await renderWithLocale(<CommandPalette open onClose={onClose} />);
+    render(<App />);
 
-    const search = screen.getByRole('combobox', { name: 'Search commands' });
-    await user.type(search, 'prev');
-
-    expect(screen.getAllByRole('option')).toHaveLength(1);
-    expect(screen.getByRole('option', { name: /Preview.*Alt\+2/ })).toHaveAttribute('aria-selected', 'true');
+    await user.keyboard('{Control>}k{/Control}');
+    const search = await screen.findByRole('combobox', { name: 'Search commands and actions...' }, { timeout: 5000 });
+    await user.type(search, 'calculator.shelf-deflection');
     await user.keyboard('{Enter}');
 
-    expect(openPreview).toHaveBeenCalledOnce();
-    expect(onClose).toHaveBeenCalledOnce();
+    expect(useCabinetStore.getState().activeTab).toBe('calculators');
+    expect(getRecentCommandIds()).toContain('calculator.shelf-deflection');
+
+    const triggers = screen.getAllByRole('button', { name: 'Command Palette' });
+    await user.click(triggers[triggers.length - 1]);
+    expect(screen.getByRole('group', { name: 'Recent commands' })).toHaveTextContent('Shelf Sag Calculator');
   });
 
-  it('reports an empty result set and closes on Escape', async () => {
+  it('opens with Ctrl+K, filters commands, runs the selected command, and closes', async () => {
     const user = userEvent.setup();
-    const onClose = vi.fn();
-    registerCommands([{ id: 'tab.preview', label: 'Preview', category: 'Tabs', action: vi.fn() }]);
-    await renderWithLocale(<CommandPalette open onClose={onClose} />);
+    render(<App />);
+    await user.click(screen.getByRole('button', { name: 'Skip' }));
 
-    await user.type(screen.getByRole('combobox', { name: 'Search commands' }), 'missing');
-
-    expect(screen.getByText('No matching commands')).toBeInTheDocument();
-    await user.keyboard('{Escape}');
-    expect(onClose).toHaveBeenCalledOnce();
-  });
-
-  it('shows recent commands and restores focus to the opener on Escape', async () => {
-    const user = userEvent.setup();
-    const action = vi.fn();
-    registerCommands([{ id: 'tab.preview', label: 'Preview', category: 'Tabs', action }]);
-    await renderWithLocale(<PaletteHarness />);
-
-    const opener = screen.getByRole('button', { name: 'Open palette' });
-    await user.click(opener);
-    await user.type(screen.getByRole('combobox', { name: 'Search commands' }), 'preview');
+    await user.keyboard('{Control>}k{/Control}');
+    const search = await screen.findByRole('combobox', { name: 'Search commands and actions...' }, { timeout: 5000 });
+    expect(search).toHaveFocus();
+    await user.type(search, 'calculators');
     await user.keyboard('{Enter}');
 
-    expect(action).toHaveBeenCalledOnce();
-    expect(opener).toHaveFocus();
+    expect(useCabinetStore.getState().activeTab).toBe('calculators');
+    expect(screen.queryByRole('dialog', { name: 'Command Palette' })).not.toBeInTheDocument();
+  });
 
-    await user.click(opener);
-    expect(screen.getByText('Preview')).toBeInTheDocument();
-    expect(screen.getByText('Recent')).toBeInTheDocument();
+  it('opens from the Header and restores trigger focus after Escape', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(screen.getByRole('button', { name: 'Skip' }));
+    const triggers = screen.getAllByRole('button', { name: 'Command Palette' });
+    const trigger = triggers[triggers.length - 1];
+
+    await user.click(trigger);
+    expect(
+      await screen.findByRole('combobox', { name: 'Search commands and actions...' }, { timeout: 5000 }),
+    ).toHaveFocus();
     await user.keyboard('{Escape}');
-    expect(opener).toHaveFocus();
+
+    expect(screen.queryByRole('dialog', { name: 'Command Palette' })).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+  });
+
+  it('does not intercept Ctrl+K while a dimension field is being edited', async () => {
+    const user = userEvent.setup();
+    render(
+      <>
+        <input aria-label="Editable field" />
+        <App />
+      </>,
+    );
+    const input = screen.getByRole('textbox', { name: 'Editable field' });
+
+    await user.click(input);
+    await user.keyboard('{Control>}k{/Control}');
+
+    expect(screen.queryByRole('dialog', { name: 'Command Palette' })).not.toBeInTheDocument();
   });
 });
-
-function PaletteHarness() {
-  const [open, setOpen] = useState(false);
-  return (
-    <>
-      <button type="button" onClick={() => setOpen(true)}>
-        Open palette
-      </button>
-      <CommandPalette open={open} onClose={() => setOpen(false)} />
-    </>
-  );
-}

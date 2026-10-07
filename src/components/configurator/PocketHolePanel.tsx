@@ -1,15 +1,18 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { calculatePocketHole } from '../../engine/pocket-hole';
-import type { JointType, MaterialHardness } from '../../engine/pocket-hole';
+import { calculatePocketHole, type JointType, type MaterialHardness } from '../../engine/pocket-hole';
+
+const MATERIALS: MaterialHardness[] = ['softwood', 'hardwood', 'plywood', 'mdf'];
+const JOINT_TYPES: JointType[] = ['butt', 'mitre', 'edge'];
 
 export function PocketHolePanel() {
   const { t } = useTranslation();
   const [workpieceThicknessMm, setWorkpieceThicknessMm] = useState(18);
   const [matingThicknessMm, setMatingThicknessMm] = useState(18);
   const [jointLengthMm, setJointLengthMm] = useState(600);
-  const [materialHardness, setMaterialHardness] = useState<MaterialHardness>('hardwood');
+  const [materialHardness, setMaterialHardness] = useState<MaterialHardness>('plywood');
   const [jointType, setJointType] = useState<JointType>('butt');
+
   const result = useMemo(() => {
     try {
       return {
@@ -35,7 +38,7 @@ export function PocketHolePanel() {
           <span>{t('pocketHole.workpieceThickness')} (mm)</span>
           <input
             type="number"
-            min={1}
+            min="1"
             value={workpieceThicknessMm}
             onChange={(event) => setWorkpieceThicknessMm(Number(event.target.value))}
             className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border px-2 py-1 font-mono text-sm"
@@ -45,7 +48,7 @@ export function PocketHolePanel() {
           <span>{t('pocketHole.matingThickness')} (mm)</span>
           <input
             type="number"
-            min={1}
+            min="1"
             value={matingThicknessMm}
             onChange={(event) => setMatingThicknessMm(Number(event.target.value))}
             className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border px-2 py-1 font-mono text-sm"
@@ -55,23 +58,24 @@ export function PocketHolePanel() {
           <span>{t('pocketHole.jointLength')} (mm)</span>
           <input
             type="number"
-            min={1}
+            min="1"
             value={jointLengthMm}
             onChange={(event) => setJointLengthMm(Number(event.target.value))}
             className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border px-2 py-1 font-mono text-sm"
           />
         </label>
         <label className="text-wood-600 dark:text-wood-300 flex flex-col gap-1 text-sm">
-          <span>{t('pocketHole.materialHardness')}</span>
+          <span>{t('pocketHole.material')}</span>
           <select
             value={materialHardness}
             onChange={(event) => setMaterialHardness(event.target.value as MaterialHardness)}
             className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border px-2 py-1 text-sm"
           >
-            <option value="softwood">{t('pocketHole.softwood')}</option>
-            <option value="hardwood">{t('pocketHole.hardwood')}</option>
-            <option value="plywood">{t('shelfDeflection.plywood')}</option>
-            <option value="mdf">{t('shelfDeflection.mdf')}</option>
+            {MATERIALS.map((option) => (
+              <option key={option} value={option}>
+                {t(`pocketHole.${option}`)}
+              </option>
+            ))}
           </select>
         </label>
         <label className="text-wood-600 dark:text-wood-300 col-span-2 flex flex-col gap-1 text-sm">
@@ -81,9 +85,11 @@ export function PocketHolePanel() {
             onChange={(event) => setJointType(event.target.value as JointType)}
             className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border px-2 py-1 text-sm"
           >
-            <option value="butt">{t('pocketHole.buttJoint')}</option>
-            <option value="mitre">{t('pocketHole.mitreJoint')}</option>
-            <option value="edge">{t('pocketHole.edgeJoint')}</option>
+            {JOINT_TYPES.map((option) => (
+              <option key={option} value={option}>
+                {t(`pocketHole.${option}Joint`)}
+              </option>
+            ))}
           </select>
         </label>
       </div>
@@ -95,16 +101,22 @@ export function PocketHolePanel() {
       {result.data && (
         <dl
           aria-live="polite"
-          className="bg-wood-50 dark:bg-wood-900 grid grid-cols-2 gap-x-4 gap-y-2 rounded-md p-3 text-sm"
+          className="bg-wood-50 dark:bg-wood-800 grid grid-cols-2 gap-x-4 gap-y-1 rounded-md p-3 text-sm"
         >
-          <dt>{t('pocketHole.screwLength')}</dt>
-          <dd>{result.data.screwLengthMm} mm</dd>
-          <dt>{t('pocketHole.drillAngle')}</dt>
-          <dd>{result.data.drillAngleDeg}°</dd>
-          <dt>{t('pocketHole.screwCount')}</dt>
-          <dd>{result.data.screwCount}</dd>
-          <dt>{t('pocketHole.spacing')}</dt>
-          <dd>{result.data.spacingMm} mm</dd>
+          <dt className="text-wood-500 dark:text-wood-400">{t('pocketHole.screwLength')}</dt>
+          <dd className="font-mono">
+            {result.data.screwLengthInches} in ({result.data.screwLengthMm} mm)
+          </dd>
+          <dt className="text-wood-500 dark:text-wood-400">{t('pocketHole.threadType')}</dt>
+          <dd>{t(`pocketHole.${result.data.threadType === 'washer_head' ? 'washerHead' : result.data.threadType}`)}</dd>
+          <dt className="text-wood-500 dark:text-wood-400">{t('pocketHole.screwCount')}</dt>
+          <dd className="font-mono">{result.data.screwCount}</dd>
+          <dt className="text-wood-500 dark:text-wood-400">{t('pocketHole.spacing')}</dt>
+          <dd className="font-mono">{result.data.spacingMm} mm</dd>
+          <dt className="text-wood-500 dark:text-wood-400">{t('pocketHole.drillAngle')}</dt>
+          <dd className="font-mono">{result.data.drillAngleDeg}°</dd>
+          <dt className="text-wood-500 dark:text-wood-400">{t('pocketHole.collarDepth')}</dt>
+          <dd className="font-mono">{result.data.collarDepthMm} mm</dd>
         </dl>
       )}
     </section>

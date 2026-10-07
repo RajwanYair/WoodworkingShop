@@ -6,6 +6,7 @@ import { computePartWeightKg, getMaterial } from '../../engine/materials';
 import type { AssemblyStep } from '../../engine/assembly';
 import type { Lang, Part, HardwareItem } from '../../engine/types';
 import { triggerDownload } from '../../utils/download';
+import { formatDate, formatNumber } from '../../i18n/format';
 import { IconPrint, IconLightbulb, IconDownload } from '../layout/Icons';
 import { WebSerialPanel } from './WebSerialPanel';
 import { CameraCapture } from './CameraCapture';
@@ -47,21 +48,35 @@ export function AssemblyGuide() {
   const [showTips, setShowTips] = useState(true);
   const notes = cabinets[activeCabinetIndex]?.notes ?? '';
   // Sprint 52 — step completion checklist
-  const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
+  const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
 
-  const toggleStep = (index: number) =>
+  const toggleStep = (stepId: string) =>
     setCompletedSteps((prev) => {
       const next = new Set(prev);
-      if (next.has(index)) {
-        next.delete(index);
+      if (next.has(stepId)) {
+        next.delete(stepId);
+        let removedDependent = true;
+        while (removedDependent) {
+          removedDependent = false;
+          for (const step of steps) {
+            if (!next.has(step.id) || !(step.dependencies ?? []).some((dependency) => !next.has(dependency))) continue;
+            next.delete(step.id);
+            removedDependent = true;
+          }
+        }
       } else {
-        next.add(index);
+        next.add(stepId);
       }
       return next;
     });
 
   const resetProgress = () => setCompletedSteps(new Set());
   const totalMinutes = steps.reduce((sum, s) => sum + s.estimatedMinutes, 0);
+  const blockedStepIds = new Set(
+    steps
+      .filter((step) => step.dependencies?.some((dependency) => !completedSteps.has(dependency)))
+      .map((step) => step.id),
+  );
 
   // Sprint 18 — total assembly weight (sum of all parts' computed weights).
   const customMaterials = useCustomMaterialsStore((s) => s.materials);
@@ -74,7 +89,7 @@ export function AssemblyGuide() {
   /** Sprint 78 — generate plain-text assembly checklist and trigger download. */
   const downloadChecklist = () => {
     const lines: string[] = [
-      `Assembly Checklist — ${new Date().toLocaleDateString()}`,
+      `Assembly Checklist — ${formatDate(new Date(), i18n.language)}`,
       `Steps: ${steps.length}  |  Estimated time: ${totalMinutes} min`,
       '',
       ...steps.map(
@@ -100,7 +115,12 @@ export function AssemblyGuide() {
           </span>
           {/* Sprint 18 — total assembly weight */}
           <span className="text-wood-400 dark:text-wood-500 ms-2 text-xs font-normal">
-            · {t('assembly.totalWeight')}: {totalWeightKg.toFixed(1)} {t('assembly.kg')}
+            · {t('assembly.totalWeight')}:{' '}
+            {formatNumber(totalWeightKg, i18n.language, {
+              minimumFractionDigits: 1,
+              maximumFractionDigits: 1,
+            })}{' '}
+            {t('assembly.kg')}
           </span>
         </h2>
         <div className="flex flex-wrap items-center gap-2">
@@ -164,7 +184,7 @@ export function AssemblyGuide() {
               onClick={() => setViewMode('paginated')}
               className={`px-3 py-1.5 transition-colors ${
                 viewMode === 'paginated'
-                  ? 'bg-wood-600 text-white'
+                  ? 'bg-accent text-white'
                   : 'bg-wood-50 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-700'
               }`}
               aria-pressed={viewMode === 'paginated' ? 'true' : 'false'}
@@ -176,7 +196,7 @@ export function AssemblyGuide() {
               onClick={() => setViewMode('all')}
               className={`px-3 py-1.5 transition-colors ${
                 viewMode === 'all'
-                  ? 'bg-wood-600 text-white'
+                  ? 'bg-accent text-white'
                   : 'bg-wood-50 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-700'
               }`}
               aria-pressed={viewMode === 'all' ? 'true' : 'false'}
@@ -239,7 +259,7 @@ export function AssemblyGuide() {
             <button
               onClick={() => setActiveStep(Math.min(steps.length - 1, activeStep + 1))}
               disabled={activeStep === steps.length - 1}
-              className="bg-wood-600 hover:bg-wood-700 rounded px-4 py-2 text-sm font-medium text-white transition-colors disabled:opacity-30"
+              className="bg-accent hover:bg-accent-hover rounded px-4 py-2 text-sm font-medium text-white transition-colors disabled:opacity-30"
             >
               {t('assembly.next')} →
             </button>
@@ -266,8 +286,9 @@ export function AssemblyGuide() {
                       parts={parts}
                       lang={lang}
                       t={t}
-                      completed={completedSteps.has(steps.indexOf(s))}
-                      onToggleComplete={() => toggleStep(steps.indexOf(s))}
+                      completed={completedSteps.has(s.id)}
+                      completionBlocked={blockedStepIds.has(s.id)}
+                      onToggleComplete={() => toggleStep(s.id)}
                       showTips={showTips}
                     />
                   ))}
@@ -285,8 +306,9 @@ export function AssemblyGuide() {
                     parts={parts}
                     lang={lang}
                     t={t}
-                    completed={completedSteps.has(idx)}
-                    onToggleComplete={() => toggleStep(idx)}
+                    completed={completedSteps.has(s.id)}
+                    completionBlocked={blockedStepIds.has(s.id)}
+                    onToggleComplete={() => toggleStep(s.id)}
                     showTips={showTips}
                   />
                 );
@@ -353,7 +375,7 @@ function HardwareChecklist({
                 id={id}
                 checked={isChecked}
                 onChange={() => toggle(id)}
-                className="accent-wood-500 print:border-wood-400 h-4 w-4 cursor-pointer rounded print:border"
+                className="accent-accent print:border-wood-400 h-4 w-4 cursor-pointer rounded print:border"
               />
               <label
                 htmlFor={id}
@@ -389,6 +411,7 @@ interface StepCardProps {
   completed?: boolean;
   /** Sprint 52 — callback to toggle completion */
   onToggleComplete?: () => void;
+  completionBlocked?: boolean;
   /** Sprint 84 — when false, tips are hidden (only in all-steps view) */
   showTips?: boolean;
 }
@@ -402,6 +425,7 @@ function StepCard({
   t,
   completed = false,
   onToggleComplete,
+  completionBlocked = false,
   showTips = true,
 }: StepCardProps) {
   const highlightedParts = new Set(step.parts);
@@ -422,12 +446,20 @@ function StepCard({
             type="checkbox"
             id={checkboxId}
             checked={completed}
+            disabled={completionBlocked}
+            aria-describedby={completionBlocked ? `${checkboxId}-prerequisites` : undefined}
+            title={completionBlocked ? t('assembly.requiredStepsFirst') : undefined}
             onChange={onToggleComplete}
-            className="accent-wood-500 h-4 w-4 cursor-pointer rounded"
+            className="accent-accent h-4 w-4 cursor-pointer rounded"
           />
           <label htmlFor={checkboxId} className="text-wood-500 dark:text-wood-400 cursor-pointer text-xs select-none">
             {completed ? t('assembly.stepDone') : t('assembly.markStepDone')}
           </label>
+          {completionBlocked && (
+            <span id={`${checkboxId}-prerequisites`} className="sr-only">
+              {t('assembly.requiredStepsFirst')}
+            </span>
+          )}
         </div>
       )}
       <div className="flex items-start gap-4">
@@ -436,7 +468,7 @@ function StepCard({
         </span>
         <div className="flex-1">
           <div className="mb-1 flex flex-wrap items-center gap-2">
-            <span className="bg-wood-600 rounded-full px-2 py-0.5 text-xs font-bold text-white">
+            <span className="bg-accent rounded-full px-2 py-0.5 text-xs font-bold text-white">
               {step.stepNumber}/{stepCount}
             </span>
             <h3 className="text-wood-700 dark:text-wood-200 text-base font-semibold">{step.title[lang]}</h3>
@@ -468,7 +500,7 @@ function StepCard({
               href={`https://www.youtube.com/results?search_query=${encodeURIComponent(step.videoKeyword)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-red-600 hover:underline dark:text-red-400"
+              className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-red-700 hover:underline dark:text-red-400"
             >
               ▶ {t('assembly.watchVideo')}
             </a>

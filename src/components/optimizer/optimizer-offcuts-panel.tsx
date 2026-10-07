@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { formatNumber } from '../../i18n/format';
 import type { CutSheet, OffcutEntry } from '../../engine/types';
 import { computeOffcuts } from './compute-offcuts';
 import { IconScissors, IconChevronDown, IconChevronRight } from '../layout/Icons';
@@ -16,12 +17,14 @@ export function OffcutsPanel({
   offcutCatalog,
   onSaveOffcut,
   onDeleteOffcut,
+  locale,
   t,
 }: {
   sheets: CutSheet[];
   offcutCatalog: OffcutEntry[];
   onSaveOffcut: (entry: OffcutEntry) => void;
   onDeleteOffcut: (id: string) => void;
+  locale: string;
   t: (k: string) => string;
 }) {
   const [open, setOpen] = useState(true);
@@ -50,7 +53,9 @@ export function OffcutsPanel({
         <span className="flex items-center gap-2">
           <IconScissors size={15} />
           {t('optimizer.offcuts')}
-          <span className="text-wood-600 dark:text-wood-300 ml-1 text-xs font-normal">({offcuts.length})</span>
+          <span className="text-wood-600 dark:text-wood-300 ml-1 text-xs font-normal">
+            ({formatNumber(offcuts.length, locale)})
+          </span>
         </span>
         {open ? <IconChevronDown size={14} /> : <IconChevronRight size={14} />}
       </button>
@@ -68,9 +73,11 @@ export function OffcutsPanel({
                   {oc.material} {oc.thickness}mm
                 </span>
                 <span className="text-wood-600 dark:text-wood-300">
-                  {Math.round(oc.w)} × {Math.round(oc.h)} mm
+                  {formatNumber(Math.round(oc.w), locale)} × {formatNumber(Math.round(oc.h), locale)} mm
                 </span>
-                <span className="text-wood-700 dark:text-wood-200">{(oc.area / 1_000_000).toFixed(3)} m²</span>
+                <span className="text-wood-700 dark:text-wood-200">
+                  {formatNumber(oc.area / 1_000_000, locale, { minimumFractionDigits: 3, maximumFractionDigits: 3 })} m²
+                </span>
                 {/* Phase 12 / Sprint 12 — save to offcut catalog */}
                 <button
                   onClick={() =>
@@ -96,7 +103,7 @@ export function OffcutsPanel({
           {offcutCatalog.length > 0 && (
             <div className="mt-4">
               <p className="text-wood-700 dark:text-wood-200 mb-2 text-xs font-semibold">
-                {t('optimizer.offcutCatalog')} ({offcutCatalog.length})
+                {t('optimizer.offcutCatalog')} ({formatNumber(offcutCatalog.length, locale)})
               </p>
               <div className="space-y-1">
                 {offcutCatalog.map((oc) => (
@@ -105,7 +112,8 @@ export function OffcutsPanel({
                     className="border-wood-200 dark:border-wood-700 flex items-center justify-between gap-2 rounded border px-3 py-1.5 text-xs"
                   >
                     <span className="text-wood-600 dark:text-wood-300">
-                      {oc.material} {oc.thickness}mm — {oc.width}×{oc.length} mm
+                      {oc.material} {formatNumber(oc.thickness, locale)}mm — {formatNumber(oc.width, locale)}×
+                      {formatNumber(oc.length, locale)} mm
                     </span>
                     <button
                       onClick={() => onDeleteOffcut(oc.id)}

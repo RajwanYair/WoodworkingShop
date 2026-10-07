@@ -1,4 +1,4 @@
-# Cabinet Planner — GitHub Copilot Instructions
+# WoodworkingShop — GitHub Copilot Instructions
 
 > These instructions give Copilot context about this project's architecture,
 > conventions, and constraints so suggestions stay consistent with the codebase.
@@ -6,6 +6,8 @@
 >
 > Active sprint + completed phase history → **AGENTS.md** (loaded separately as context).
 > Sprint archive → **docs/SPRINT-HISTORY.md**.
+> Planned refactor (ROADMAP §7.4, Phases 81–85): until the owning sprint runs, keep using the
+> layout below — do not create `src/app/`, `src/features/`, `src/ui/` or `src/platform/` early.
 
 ## Tech Stack
 
@@ -68,57 +70,11 @@ tests/
 
 ## Key Patterns
 
-### Store (Zustand)
-
-```ts
-// Read state
-const { config, cabinets } = useCabinetStore();
-// Update state (always return full slice)
-set((state) => ({ ...state, config: { ...state.config, width } }));
-// Mutate from outside React
-useCabinetStore.getState().setConfig({ width: 800 });
-```
-
-### Translation
-
-```tsx
-const { t } = useTranslation();
-// Always use dot-namespaced keys matching en.json / he.json structure
-<label>{t('config.width')}</label>;
-```
-
-### Testing engine functions
-
-```ts
-// Import directly — no store or React needed
-import { generateParts } from '../../src/engine/parts';
-import { cfg } from '../helpers'; // test factory — builds CabinetConfig from DEFAULT_CONFIG + overrides
-```
-
-### Worker imports (Vite)
-
-```ts
-// src/workers/cut-optimizer.worker.ts
-import CutOptimizerWorker from './workers/cut-optimizer.worker?worker';
-// Never import workers directly in unit tests — use sync fallback
-```
-
-### Non-component exports from component directories
-
-When a component file needs a utility function that would violate `react-refresh/only-export-components`:
-
-```ts
-// ❌ Wrong — mixing component and non-component exports in the same file
-export function computeOffcuts(sheet: CutSheet) { ... }
-export function SheetCard(...) { ... }
-
-// ✅ Correct — extract to a sibling .ts file
-// src/components/optimizer/compute-offcuts.ts
-export function computeOffcuts(sheet: CutSheet) { ... }
-// src/components/optimizer/SheetCard.tsx
-import { computeOffcuts } from './compute-offcuts';
-export function SheetCard(...) { ... }
-```
+- Zustand updates spread current state; outside React, use `getState().action()`.
+- Translations use `t('namespace.key')`; keys exist in all six locale files.
+- Engine tests import pure functions and shared factories, never React or the store.
+- App code imports workers with `?worker`; unit tests use synchronous engine fallbacks.
+- Component files export components only; keep helpers in sibling `.ts` files.
 
 ## Cut Optimizer Coordinate System
 
@@ -128,20 +84,11 @@ The MaxRects BSSF cut-optimizer uses:
 - `y` → along the sheet length / grain direction (`sheetLength`)
 - `p.x + p.width ≤ sheetWidth` and `p.y + p.length ≤ sheetLength`
 
-## What Copilot Should Never Do
+## Additional Constraints
 
-- Add `// eslint-disable-*` comments
-- Use `as any` or `as unknown as T` without a type guard
-- Import `@supabase/supabase-js`, `valibot`, `zod` — these are not WoodworkingShop dependencies
-- Add features not requested (no unsolicited refactors, no extra docstrings)
-- Hardcode pixel values — use Tailwind utility classes
-- Skip the `he.json` update when adding i18n keys
-- Use IE-only or deprecated browser APIs — the project targets modern evergreen browsers only (`not ie 11` in `package.json#browserslist`)
-- Add `enum` or `namespace` — use `as const` objects or union types (TypeScript 6 `erasableSyntaxOnly`)
-- Add `sonarjs` or `promise` ESLint plugins — not in this project's config
-- Add JS-style `//` comments inside `.json` files — use `.jsonc` extension for comment-annotated JSON
-- Leave disabled/suppressed config options without a JSDoc-style justification comment
-- Introduce dead code, dead imports, or dead config entries (run `npm run dead:check` to verify)
+- Do not add unapproved dependencies or ESLint plugins, unrequested features, or deprecated APIs; target `package.json#browserslist`.
+- JSON files cannot contain comments; use `.jsonc` when comments are needed.
+- Justify disabled config options and check for dead code with `npm run dead:check`.
 
 ## VS Code Snippets
 

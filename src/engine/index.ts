@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * Cabinet Planner engine public API.
+ * WoodworkingShop engine public API.
  *
  * This barrel module re-exports every public symbol from the engine layer.
  * Third-party plugins should import exclusively from this module — never from
@@ -180,8 +180,8 @@ export {
   checkAvailability,
   getShortfalls,
   formatAvailabilityReport,
-} from './stock';
-export type { StockItem, StockStore, StockUnit, DemandEntry, AvailabilityResult, StockStatus } from './stock';
+} from './stock/index';
+export type { StockItem, StockStore, StockUnit, DemandEntry, AvailabilityResult, StockStatus } from './stock/index';
 
 export { sortParts, sortPartsByPreset, invertSortCriteria, SORT_PRESETS } from './part-sort';
 export type { SortablePart, SortKey, SortDirection, SortCriterion, SortPreset } from './part-sort';
@@ -845,7 +845,7 @@ export type {
 // Sprint 162 — Parametric Template Engine (Phase 36)
 export {
   validateTemplate,
-  instantiateTemplate as instantiateParametricTemplate,
+  instantiateParametricTemplate,
   getDefaultValues,
   getParamDependencies,
   evaluateExpression,
@@ -994,7 +994,7 @@ export {
   compareDesigns,
   validateWeights,
   getCommonCriteria,
-  DEFAULT_WEIGHTS,
+  DEFAULT_DESIGN_COMPARISON_WEIGHTS as DEFAULT_WEIGHTS,
   CRITERION_META,
 } from './comparison';
 export type {
@@ -1067,15 +1067,6 @@ export {
   analyzeLayout,
 } from './layout-optimizer';
 export type { ToolPosition, WorkflowStep, SwapSuggestion, LayoutAnalysisResult } from './layout-optimizer';
-
-export { getSkillMultiplier, getBaseMinutes, estimateTaskTime, estimateProjectTime } from './time-estimator';
-export type {
-  SkillLevel,
-  OperationType as TimeEstimationOperationType,
-  ProjectTask,
-  TaskEstimate,
-  TimeEstimationResult,
-} from './time-estimator';
 
 export { findBestPrice, computePriceTrend, estimateProjectCost, detectPriceAnomalies } from './material-cost-tracker';
 export type {
@@ -1174,6 +1165,10 @@ export type {
   DepthRecommendationInput,
   DepthRecommendation,
 } from './feed-rate';
+
+// Sprint 193 — Dowel Joint Calculator
+export { calculateDowelJoint, selectDowelDiameter, minDowelsForLoad, STANDARD_DOWEL_DIAMETERS } from './dowel-joint';
+export type { DowelDiameter, JointOrientation, DowelJointInput, DowelPosition, DowelJointResult } from './dowel-joint';
 
 // Sprint 192 — Cabinet Weight Estimator
 export { estimateCabinetWeight, categorizeFastener, maxShelfLoad, MATERIAL_DENSITIES } from './cabinet-weight';

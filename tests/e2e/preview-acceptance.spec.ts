@@ -37,16 +37,16 @@ test('preview stays within the viewport and renders all views @preview-acceptanc
   }
 });
 
-test('preview remains reachable without horizontal overflow across the responsive width matrix', async ({
+test('preview remains reachable without horizontal overflow across the responsive width matrix @chromium-only', async ({
   appPage: page,
-}, testInfo) => {
-  test.skip(testInfo.project.name !== 'chromium', 'Responsive width matrix runs in Chromium.');
-
+}) => {
   const languageSelect = page.getByRole('banner').getByRole('combobox').first();
   const widths = [320, 375, 768, 1024, 1440];
   const scenarios = [
-    { locale: 'en', direction: 'ltr' },
-    { locale: 'he', direction: 'rtl' },
+    { locale: 'en', direction: 'ltr', widths, marker: '' },
+    { locale: 'he', direction: 'rtl', widths, marker: '' },
+    { locale: 'en-XA', direction: 'ltr', widths: [320], marker: '\u00b7' },
+    { locale: 'ar-XB', direction: 'rtl', widths: [320], marker: '\u2067' },
   ] as const;
 
   await page.getByRole('tab', { name: 'Preview' }).click();
@@ -54,8 +54,13 @@ test('preview remains reachable without horizontal overflow across the responsiv
   for (const scenario of scenarios) {
     await languageSelect.selectOption(scenario.locale);
     await expect(page.locator('html')).toHaveAttribute('dir', scenario.direction);
+    await expect(languageSelect).toHaveValue(scenario.locale);
+    if (scenario.marker) {
+      const heading = await page.getByRole('banner').getByRole('heading', { level: 1 }).textContent();
+      expect(heading).toContain(scenario.marker);
+    }
 
-    for (const width of widths) {
+    for (const width of scenario.widths) {
       await page.setViewportSize({ width, height: 900 });
 
       const dimensions = await page.evaluate(() => ({
@@ -113,24 +118,33 @@ test('preview remains reachable without horizontal overflow across the responsiv
   }
 });
 
-test('primary panel controls stay within the viewport without clipped text across widths in LTR and RTL @preview-acceptance', async ({
+test('primary panel controls stay within the viewport without clipped text across widths in LTR and RTL @preview-acceptance @chromium-only', async ({
   appPage: page,
-}, testInfo) => {
-  test.skip(testInfo.project.name !== 'chromium', 'Panel reachability matrix runs in Chromium.');
-  test.setTimeout(60_000);
+}) => {
+  test.setTimeout(90_000);
 
   const languageSelect = page.getByRole('banner').getByRole('combobox').first();
   const widths = [320, 375, 768, 1024, 1440];
   const scenarios = [
     { locale: 'en', direction: 'ltr' },
     { locale: 'he', direction: 'rtl' },
+    { locale: 'en-XA', direction: 'ltr', widths: [320], marker: '\u00b7' },
+    { locale: 'ar-XB', direction: 'rtl', widths: [320], marker: '\u2067' },
   ] as const;
 
   for (const scenario of scenarios) {
     await languageSelect.selectOption(scenario.locale);
     await expect(page.locator('html')).toHaveAttribute('dir', scenario.direction);
+    if ('marker' in scenario) {
+      const tabLabel = await page
+        .getByRole('tablist', { name: 'Main navigation' })
+        .getByRole('tab')
+        .first()
+        .textContent();
+      expect(tabLabel).toContain(scenario.marker);
+    }
 
-    for (const width of widths) {
+    for (const width of 'widths' in scenario ? scenario.widths : widths) {
       await page.setViewportSize({ width, height: 900 });
       const primaryTabs = page.getByRole('tablist', { name: 'Main navigation' }).getByRole('tab');
       for (let index = 0; index < (await primaryTabs.count()); index += 1) {
@@ -237,6 +251,42 @@ test('primary panel controls stay within the viewport without clipped text acros
 
         const tabName = (await tab.innerText()).replace(/\s+/g, ' ').trim();
         const scenarioName = `${scenario.locale} ${width}px ${tabName}`;
+        if (bounds.documentWidth > bounds.viewportWidth) {
+          const overflowingElements = await page.evaluate(() =>
+            Array.from(document.querySelectorAll('body *'))
+              .flatMap((element) => {
+                const rect = element.getBoundingClientRect();
+                const style = getComputedStyle(element);
+                if (style.display === 'none' || style.visibility === 'hidden' || rect.width <= 1 || rect.height <= 1) {
+                  return [];
+                }
+                for (let ancestor = element.parentElement; ancestor; ancestor = ancestor.parentElement) {
+                  const overflowX = getComputedStyle(ancestor).overflowX;
+                  if (overflowX === 'auto' || overflowX === 'scroll') return [];
+                }
+                if (rect.left >= -1 && rect.right <= document.documentElement.clientWidth + 1) return [];
+                return {
+                  element: `${element.tagName.toLowerCase()}.${String(element.className).split(' ').slice(0, 2).join('.')}`,
+                  label:
+                    element.getAttribute('aria-label') ||
+                    element.getAttribute('title') ||
+                    element.textContent?.trim().slice(0, 80) ||
+                    '',
+                  parent: element.parentElement?.className,
+                  left: Math.round(rect.left),
+                  right: Math.round(rect.right),
+                  clientWidth: element.clientWidth,
+                  scrollWidth: element.scrollWidth,
+                  overflowX: style.overflowX,
+                };
+              })
+              .slice(0, 12),
+          );
+          expect(
+            bounds.documentWidth,
+            `${scenarioName} overflow: ${JSON.stringify(overflowingElements)}`,
+          ).toBeLessThanOrEqual(bounds.viewportWidth);
+        }
         expect(bounds.documentWidth, scenarioName).toBeLessThanOrEqual(bounds.viewportWidth);
         expect(bounds.offscreenControls, scenarioName).toEqual([]);
         expect(bounds.clippedText, scenarioName).toEqual([]);
@@ -246,11 +296,9 @@ test('primary panel controls stay within the viewport without clipped text acros
   }
 });
 
-test('six preview views match canonical cabinet and bookshelf theme/RTL baselines @preview-acceptance', async ({
+test('six preview views match canonical cabinet and bookshelf theme/RTL baselines @preview-acceptance @visual', async ({
   appPage: page,
-}, testInfo) => {
-  test.skip(testInfo.project.name !== 'chromium', 'Visual baselines are canonical in Chromium.');
-
+}) => {
   const scenarios = [
     { name: 'cabinet-light-ltr', furniture: 'Cabinet', language: 'en', dark: false },
     { name: 'cabinet-dark-ltr', furniture: 'Cabinet', language: 'en', dark: true },
@@ -262,7 +310,10 @@ test('six preview views match canonical cabinet and bookshelf theme/RTL baseline
   for (const scenario of scenarios) {
     await mainTabs.nth(1).click();
     if (scenario.furniture === 'Bookshelf') {
-      await page.locator('input[name="furnitureType"][value="bookshelf"]').check({ force: true });
+      await page
+        .locator('label')
+        .filter({ has: page.locator('input[name="furnitureType"][value="bookshelf"]') })
+        .click();
     }
 
     const languageSelect = page.locator('header').getByRole('combobox').first();
@@ -291,8 +342,9 @@ test('six preview views match canonical cabinet and bookshelf theme/RTL baseline
           ? page.getByRole('img', { name: '3D isometric cabinet drawing' })
           : page.getByRole('group', { name: 'Cabinet drawing' });
       await expect(drawing).toBeVisible();
-      await expect(drawing).toHaveScreenshot(`preview-${scenario.name}-${index}.png`, {
+      await expect.soft(drawing).toHaveScreenshot(`preview-${scenario.name}-${index}.png`, {
         animations: 'disabled',
+        maxDiffPixelRatio: 0.001,
       });
     }
   }

@@ -1,44 +1,179 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Capability Ledger",
+  "$id": "https://woodworkingshop.dev/schemas/capability-ledger.schema.json",
+  "title": "Capability ledger",
   "type": "object",
-  "required": ["version", "modules"],
   "additionalProperties": false,
+  "required": ["schemaVersion", "modules", "version"],
   "properties": {
-    "version": { "const": 1 },
+    "schemaVersion": {
+      "const": 1
+    },
     "modules": {
-      "type": "array",
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["classification", "rationale"],
+        "properties": {
+          "classification": {
+            "enum": ["surfaced", "internal", "public-api", "surface-next", "retire"]
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          },
+          "targetSprint": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "targetRelease": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+          },
+          "documentation": {
+            "enum": ["docs/API-BOUNDARIES.md", "docs/PLUGIN-API.md"]
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "classification": {
+                  "const": "surface-next"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "targetSprint": {
+                  "type": "integer"
+                }
+              },
+              "required": ["targetSprint"]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "classification": {
+                  "const": "retire"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "targetRelease": {
+                  "type": "string"
+                },
+                "targetSprint": {
+                  "type": "integer"
+                }
+              },
+              "required": ["targetRelease", "targetSprint"]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "classification": {
+                  "const": "public-api"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "documentation": {
+                  "type": "string"
+                }
+              },
+              "required": ["documentation"]
+            }
+          }
+        ]
+      },
       "items": {
         "type": "object",
         "required": ["path", "status"],
         "additionalProperties": false,
         "properties": {
-          "path": { "type": "string", "pattern": "^src/(engine|utils|services)/.+\\.(ts|tsx|js|jsx)$" },
-          "status": { "enum": ["surfaced", "internal", "public-api", "surface-next", "retire"] },
-          "reason": { "type": "string", "minLength": 1 },
-          "documentedIn": { "enum": ["docs/API-BOUNDARIES.md", "docs/PLUGIN-API.md"] },
-          "targetSprint": { "type": "integer", "minimum": 1 },
-          "targetRelease": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" }
+          "path": {
+            "type": "string",
+            "pattern": "^src/(engine|utils|services)/.+\\.(ts|tsx|js|jsx)$"
+          },
+          "status": {
+            "enum": ["surfaced", "internal", "public-api", "surface-next", "retire"]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "documentedIn": {
+            "enum": ["docs/API-BOUNDARIES.md", "docs/PLUGIN-API.md"]
+          },
+          "targetSprint": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "targetRelease": {
+            "type": "string",
+            "pattern": "^\\d+\\.\\d+\\.\\d+$"
+          }
         },
         "allOf": [
           {
-            "if": { "properties": { "status": { "const": "internal" } } },
-            "then": { "required": ["reason"] }
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "internal"
+                }
+              }
+            },
+            "then": {
+              "required": ["reason"]
+            }
           },
           {
-            "if": { "properties": { "status": { "const": "public-api" } } },
-            "then": { "required": ["documentedIn"] }
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "public-api"
+                }
+              }
+            },
+            "then": {
+              "required": ["documentedIn"]
+            }
           },
           {
-            "if": { "properties": { "status": { "const": "surface-next" } } },
-            "then": { "required": ["targetSprint", "reason"] }
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "surface-next"
+                }
+              }
+            },
+            "then": {
+              "required": ["targetSprint", "reason"]
+            }
           },
           {
-            "if": { "properties": { "status": { "const": "retire" } } },
-            "then": { "required": ["targetRelease", "reason"] }
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "retire"
+                }
+              }
+            },
+            "then": {
+              "required": ["targetRelease", "reason"]
+            }
           }
         ]
       }
+    },
+    "version": {
+      "const": 1
     }
   }
 }

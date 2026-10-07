@@ -1,11 +1,11 @@
 ---
-mode: agent
+agent: agent
 description: Analyse bundle size, identify heavy chunks, and apply targeted optimisations to meet the 1.8 MB budget.
 ---
 
 # Bundle Optimisation
 
-You are optimising the production bundle of the Cabinet Planner project.
+You are optimising the production bundle of the WoodworkingShop project.
 
 ## Budget
 

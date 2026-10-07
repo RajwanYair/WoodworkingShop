@@ -18,7 +18,7 @@ export function ActiveCabinetSwitcher() {
           onClick={() => setActiveCabinet(i)}
           className={`rounded px-2 py-1 text-xs transition-colors ${
             i === activeCabinetIndex
-              ? 'bg-wood-600 text-white'
+              ? 'bg-accent text-white'
               : 'bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700'
           }`}
           aria-current={i === activeCabinetIndex ? 'true' : undefined}

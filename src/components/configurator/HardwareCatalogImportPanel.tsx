@@ -81,7 +81,7 @@ export function HardwareCatalogImportPanel() {
                   value={option}
                   checked={mode === option}
                   onChange={() => setMode(option)}
-                  className="accent-wood-600"
+                  className="accent-accent"
                 />
                 {t(`hardwareCatalog.import${option === 'merge' ? 'Merge' : 'Replace'}`)}
               </label>
@@ -96,7 +96,7 @@ export function HardwareCatalogImportPanel() {
             type="button"
             onClick={handleImport}
             disabled={rawCatalog === null}
-            className="bg-wood-600 hover:bg-wood-700 disabled:bg-wood-300 dark:disabled:bg-wood-700 rounded px-3 py-1.5 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed"
+            className="bg-accent hover:bg-accent-hover disabled:bg-wood-300 dark:disabled:bg-wood-700 rounded px-3 py-1.5 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed"
           >
             {t('hardwareCatalog.importButton')}
           </button>

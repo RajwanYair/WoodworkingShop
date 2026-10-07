@@ -1,16 +1,21 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { calculateMortiseTenon } from '../../engine/mortise-tenon';
-import type { MortiseTenonType } from '../../engine/mortise-tenon';
+import { calculateMortiseTenon, type MortiseTenonType } from '../../engine/mortise-tenon';
+
+const JOINT_TYPES: MortiseTenonType[] = ['through', 'blind', 'wedged', 'stub'];
 
 export function MortiseTenonPanel() {
   const { t } = useTranslation();
   const [stockThicknessMm, setStockThicknessMm] = useState(18);
-  const [stockWidthMm, setStockWidthMm] = useState(90);
-  const [jointType, setJointType] = useState<MortiseTenonType>('blind');
+  const [stockWidthMm, setStockWidthMm] = useState(54);
+  const [jointType, setJointType] = useState<MortiseTenonType>('through');
+
   const result = useMemo(() => {
     try {
-      return { data: calculateMortiseTenon({ stockThicknessMm, stockWidthMm, jointType }), error: null };
+      return {
+        data: calculateMortiseTenon({ stockThicknessMm, stockWidthMm, jointType }),
+        error: null,
+      };
     } catch (error) {
       return { data: null, error: error instanceof Error ? error.message : String(error) };
     }
@@ -24,7 +29,7 @@ export function MortiseTenonPanel() {
           <span>{t('mortiseTenon.stockThickness')} (mm)</span>
           <input
             type="number"
-            min={1}
+            min="1"
             value={stockThicknessMm}
             onChange={(event) => setStockThicknessMm(Number(event.target.value))}
             className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border px-2 py-1 font-mono text-sm"
@@ -34,7 +39,7 @@ export function MortiseTenonPanel() {
           <span>{t('mortiseTenon.stockWidth')} (mm)</span>
           <input
             type="number"
-            min={1}
+            min="1"
             value={stockWidthMm}
             onChange={(event) => setStockWidthMm(Number(event.target.value))}
             className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border px-2 py-1 font-mono text-sm"
@@ -47,10 +52,11 @@ export function MortiseTenonPanel() {
             onChange={(event) => setJointType(event.target.value as MortiseTenonType)}
             className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border px-2 py-1 text-sm"
           >
-            <option value="through">{t('mortiseTenon.through')}</option>
-            <option value="blind">{t('mortiseTenon.blind')}</option>
-            <option value="wedged">{t('mortiseTenon.wedged')}</option>
-            <option value="stub">{t('mortiseTenon.stub')}</option>
+            {JOINT_TYPES.map((option) => (
+              <option key={option} value={option}>
+                {t(`mortiseTenon.${option}`)}
+              </option>
+            ))}
           </select>
         </label>
       </div>
@@ -62,16 +68,20 @@ export function MortiseTenonPanel() {
       {result.data && (
         <dl
           aria-live="polite"
-          className="bg-wood-50 dark:bg-wood-900 grid grid-cols-2 gap-x-4 gap-y-2 rounded-md p-3 text-sm"
+          className="bg-wood-50 dark:bg-wood-800 grid grid-cols-2 gap-x-4 gap-y-1 rounded-md p-3 text-sm"
         >
-          <dt>{t('mortiseTenon.tenonThickness')}</dt>
-          <dd>{result.data.tenonThicknessMm} mm</dd>
-          <dt>{t('mortiseTenon.tenonWidth')}</dt>
-          <dd>{result.data.tenonWidthMm} mm</dd>
-          <dt>{t('mortiseTenon.tenonLength')}</dt>
-          <dd>{result.data.tenonLengthMm} mm</dd>
-          <dt>{t('mortiseTenon.recommendedChisel')}</dt>
-          <dd>{result.data.recommendedChiselMm} mm</dd>
+          <dt className="text-wood-500 dark:text-wood-400">{t('mortiseTenon.tenonThickness')}</dt>
+          <dd className="font-mono">{result.data.tenonThicknessMm} mm</dd>
+          <dt className="text-wood-500 dark:text-wood-400">{t('mortiseTenon.tenonWidth')}</dt>
+          <dd className="font-mono">{result.data.tenonWidthMm} mm</dd>
+          <dt className="text-wood-500 dark:text-wood-400">{t('mortiseTenon.tenonLength')}</dt>
+          <dd className="font-mono">{result.data.tenonLengthMm} mm</dd>
+          <dt className="text-wood-500 dark:text-wood-400">{t('mortiseTenon.mortiseDepth')}</dt>
+          <dd className="font-mono">{result.data.mortiseDepthMm} mm</dd>
+          <dt className="text-wood-500 dark:text-wood-400">{t('mortiseTenon.recommendedChisel')}</dt>
+          <dd className="font-mono">{result.data.recommendedChiselMm} mm</dd>
+          <dt className="text-wood-500 dark:text-wood-400">{t('mortiseTenon.glueSurfaceArea')}</dt>
+          <dd className="font-mono">{result.data.glueSurfaceAreaMm2} mm²</dd>
         </dl>
       )}
     </section>

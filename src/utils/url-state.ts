@@ -1,6 +1,6 @@
 import type { CabinetConfig, DrawerSlideType } from '../engine/types';
 import { DEFAULT_CONFIG, CONSTRAINTS } from '../engine/materials';
-import { getTemplate } from '../engine/templates';
+import { getConfiguratorTemplate } from '../engine/templates/index';
 import { getQueryValue, parseQueryString, serializeQueryRecord, type QueryRecord } from './browser-compat';
 
 /**
@@ -124,7 +124,7 @@ export function readConfigFromUrl(): Partial<CabinetConfig> {
   const params = parseQueryString(window.location.search);
   const tplId = params.tpl;
   if (tplId) {
-    const tpl = getTemplate(tplId);
+    const tpl = getConfiguratorTemplate(tplId);
     if (tpl) {
       // Template provides the full config; URL params then override individual fields
       const urlOverrides = paramsToConfig(params);

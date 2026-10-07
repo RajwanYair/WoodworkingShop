@@ -2,9 +2,8 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
-import { resolve } from 'node:path';
+import { relative, resolve } from 'node:path';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { relative } from 'node:path';
 import os from 'node:os';
 import { sriPlugin } from './scripts/vite-plugin-sri.ts';
 
@@ -48,9 +47,9 @@ function capabilityChunkPlugin() {
           chunks[sourcePath] = moduleChunks;
         }
       }
-      const reportDirectory = resolve(os.tmpdir(), 'WoodworkingShop', 'capability-map');
-      mkdirSync(reportDirectory, { recursive: true });
-      writeFileSync(resolve(reportDirectory, 'chunks.json'), `${JSON.stringify(chunks, null, 2)}\n`);
+      const metadataDirectory = resolve(process.cwd(), 'dist', '.vite');
+      mkdirSync(metadataDirectory, { recursive: true });
+      writeFileSync(resolve(metadataDirectory, 'capability-chunks.json'), `${JSON.stringify(chunks, null, 2)}\n`);
     },
   };
 }
@@ -71,6 +70,7 @@ export default defineConfig({
       base: '/WoodworkingShop/',
       injectRegister: false, // handled manually in useSwUpdate / main.tsx
       manifest: false, // keep the existing public/manifest.json
+      includeManifestIcons: false, // preserve the explicit any/maskable icon declarations
       workbox: {
         // Explicit opt-outs — never auto-activate the new SW or claim clients
         // without the user clicking "Update now" in the SwUpdateBanner.
@@ -89,30 +89,6 @@ export default defineConfig({
             options: {
               cacheName: 'pdf-renderer',
               expiration: { maxEntries: 1, maxAgeSeconds: 60 * 60 * 24 * 365 },
-            },
-          },
-          {
-            // Cache Google Fonts stylesheets
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-            handler: 'StaleWhileRevalidate',
-            options: { cacheName: 'google-fonts-stylesheets' },
-          },
-          {
-            // Cache Google Fonts files
-            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'google-fonts-webfonts',
-              expiration: { maxAgeSeconds: 60 * 60 * 24 * 365 },
-            },
-          },
-          {
-            // Sprint 149 — cache CDN assets (cdnjs) with SWR for offline resilience
-            urlPattern: /^https:\/\/cdnjs\.cloudflare\.com\/.*/i,
-            handler: 'StaleWhileRevalidate',
-            options: {
-              cacheName: 'cdn-assets',
-              expiration: { maxEntries: 30, maxAgeSeconds: 60 * 60 * 24 * 30 },
             },
           },
           {
@@ -149,7 +125,7 @@ export default defineConfig({
   },
   build: {
     target: 'es2022',
-    manifest: true,
+    manifest: '.vite/manifest.json',
     chunkSizeWarningLimit: 1600,
     // v3.24.0: inject modulepreload polyfill for Safari < 16.4 compatibility
     modulePreload: {
@@ -159,7 +135,7 @@ export default defineConfig({
           ? dependencies.filter((dependency) => !dependency.includes('/pdf-renderer-'))
           : dependencies,
     },
-    rollupOptions: {
+    rolldownOptions: {
       output: {
         // Sprint 63 — consolidated chunk strategy:
         //   PDF export   : route-isolated; the renderer stays inside the lazy PDF panel chunk.
@@ -170,14 +146,29 @@ export default defineConfig({
         //
         // Phase 18 prep: when Three.js is added, add:
         //   if (id.includes('three')) return 'three-vendor';
-        manualChunks: (id) => {
-          // Keep shared React modules in the eager vendor chunk, not the lazy PDF chunk.
-          if (id.includes('/react-dom/') || id.includes('/node_modules/react/') || id.includes('/zustand'))
-            return 'vendor';
-          if (id.includes('/i18next') || id.includes('/react-i18next')) return 'i18n-vendor';
-          // Sprint 140 — defer parse cost of heavy optimizer engine to OptimizerView lazy chunk
-          if (id.includes('/cut-optimizer') || id.includes('/smart-optimizer') || id.includes('/assembly-dag'))
-            return 'engine-optimizer';
+        codeSplitting: {
+          groups: [
+            {
+              name: 'vendor',
+              test: /node_modules[\\/](?:react|react-dom|zustand)(?:[\\/]|$)/,
+              priority: 30,
+            },
+            {
+              name: 'i18n-vendor',
+              test: /node_modules[\\/](?:i18next|react-i18next)(?:[\\/]|$)/,
+              priority: 20,
+            },
+            {
+              name: 'pdf-renderer',
+              test: /node_modules[\\/]@react-pdf[\\/]renderer(?:[\\/]|$)/,
+              priority: 10,
+            },
+            {
+              name: 'engine-optimizer',
+              test: /[\\/](?:cut-optimizer|smart-optimizer|assembly-dag)[.\\/]/,
+              priority: 5,
+            },
+          ],
         },
       },
     },

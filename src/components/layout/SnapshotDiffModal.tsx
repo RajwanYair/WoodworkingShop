@@ -55,7 +55,7 @@ export function SnapshotDiffModal({ snapshots, onClose }: Props) {
                 id="snap-before"
                 value={idA}
                 onChange={(e) => setIdA(e.target.value)}
-                className="border-wood-300 dark:border-wood-600 bg-wood-50 dark:bg-wood-800 text-wood-800 dark:text-wood-100 focus:ring-wood-400 w-full rounded border px-2 py-1.5 text-xs focus:ring-1 focus:outline-none"
+                className="border-wood-300 dark:border-wood-600 bg-wood-50 dark:bg-wood-800 text-wood-800 dark:text-wood-100 focus:ring-accent w-full rounded border px-2 py-1.5 text-xs focus:ring-1 focus:outline-none"
               >
                 {snapshots.map((s) => (
                   <option key={s.id} value={s.id} disabled={s.id === idB}>
@@ -72,7 +72,7 @@ export function SnapshotDiffModal({ snapshots, onClose }: Props) {
                 id="snap-after"
                 value={idB}
                 onChange={(e) => setIdB(e.target.value)}
-                className="border-wood-300 dark:border-wood-600 bg-wood-50 dark:bg-wood-800 text-wood-800 dark:text-wood-100 focus:ring-wood-400 w-full rounded border px-2 py-1.5 text-xs focus:ring-1 focus:outline-none"
+                className="border-wood-300 dark:border-wood-600 bg-wood-50 dark:bg-wood-800 text-wood-800 dark:text-wood-100 focus:ring-accent w-full rounded border px-2 py-1.5 text-xs focus:ring-1 focus:outline-none"
               >
                 {snapshots.map((s) => (
                   <option key={s.id} value={s.id} disabled={s.id === idA}>
@@ -133,7 +133,7 @@ export function SnapshotDiffModal({ snapshots, onClose }: Props) {
           <button
             type="button"
             onClick={onClose}
-            className="bg-wood-600 hover:bg-wood-700 rounded px-3 py-1.5 text-xs text-white transition-colors"
+            className="bg-accent hover:bg-accent-hover rounded px-3 py-1.5 text-xs text-white transition-colors"
           >
             {t('snapshot.diff.close')}
           </button>

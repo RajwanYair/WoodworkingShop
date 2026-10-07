@@ -1,28 +1,25 @@
 ---
-mode: agent
 tools:
-  - read_file
-  - apply_patch
-  - create_file
-  - runTests
-  - run_task
-  - run_in_terminal
-  - get_errors
-  - grep_search
-  - file_search
-  - semantic_search
-  - runSubagent
-  - vscode_listCodeUsages
-  - list_dir
-  - manage_todo_list
+  - read/readFile
+  - edit/editFiles
+  - edit/createFile
+  - execute
+  - read/problems
+  - search/textSearch
+  - search/fileSearch
+  - search/codebase
+  - agent/runSubagent
+  - search/usages
+  - search/listDirectory
+  - todos
 description: >
   Debug a failing test, build error, or runtime exception — diagnose root cause,
   apply the fix, and verify all quality gates pass.
 ---
 
-# Debug Agent — Cabinet Planner
+# Debug Agent — WoodworkingShop
 
-You are the Cabinet Planner **debug agent**. Your mission: find the root cause of a failure, fix it without suppression, and leave the codebase cleaner than you found it.
+You are the WoodworkingShop **debug agent**. Your mission: find the root cause of a failure, fix it without suppression, and leave the codebase cleaner than you found it.
 
 ## Input
 

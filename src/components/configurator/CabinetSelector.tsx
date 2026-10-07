@@ -43,7 +43,7 @@ export function CabinetSelector() {
         </h3>
         <button
           onClick={addCabinet}
-          className="bg-wood-600 hover:bg-wood-700 inline-flex min-h-6 items-center rounded px-2 py-0.5 text-xs text-white transition-colors"
+          className="bg-accent hover:bg-accent-hover inline-flex min-h-6 items-center rounded px-2 py-0.5 text-xs text-white transition-colors"
         >
           + {t('project.add')}
         </button>
@@ -68,7 +68,7 @@ export function CabinetSelector() {
                 onDoubleClick={() => startRename(i)}
                 className={`min-h-6 rounded px-2 py-1 text-xs transition-colors ${
                   i === activeCabinetIndex
-                    ? 'bg-wood-600 text-white'
+                    ? 'bg-accent text-white'
                     : 'bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700'
                 }`}
                 title={`${cab.name} — double-click to rename`}
@@ -76,7 +76,7 @@ export function CabinetSelector() {
                 {cab.name}
                 {/* Sprint 82 — part count badge */}
                 <span
-                  className="ms-1 text-[9px] font-normal opacity-80"
+                  className="ms-1 text-[9px] font-normal"
                   aria-label={`${generateParts(cab.config, customMaterials).length} parts`}
                 >
                   ({generateParts(cab.config, customMaterials).length})
@@ -158,7 +158,7 @@ export function CabinetSelector() {
             value={cabinets[activeCabinetIndex]?.notes ?? ''}
             onChange={(e) => setNotes(activeCabinetIndex, e.target.value)}
             placeholder={t('project.notesPlaceholder')}
-            className="border-wood-200 dark:border-wood-700 dark:bg-wood-800 text-wood-700 dark:text-wood-200 placeholder-wood-400 focus:ring-wood-400 mt-1 w-full resize-y rounded border bg-white p-1.5 text-xs focus:ring-1 focus:outline-none"
+            className="border-wood-200 dark:border-wood-700 dark:bg-wood-800 text-wood-700 dark:text-wood-200 placeholder-wood-400 focus:ring-accent mt-1 w-full resize-y rounded border bg-white p-1.5 text-xs focus:ring-1 focus:outline-none"
           />
         )}
       </div>

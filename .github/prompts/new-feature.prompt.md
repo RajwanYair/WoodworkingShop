@@ -1,11 +1,11 @@
 ---
-mode: agent
+agent: agent
 description: Add a new feature panel — engine function + React component + i18n keys + store integration + mounting.
 ---
 
 # New Feature Panel
 
-You are adding a new feature panel to the Cabinet Planner project.
+You are adding a new feature panel to the WoodworkingShop project.
 
 ## Task
 

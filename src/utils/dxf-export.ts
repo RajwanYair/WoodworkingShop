@@ -1,4 +1,4 @@
-﻿import type { CutSheet, CutRect } from '../engine/types';
+import type { CutSheet, CutRect } from '../engine/types';
 import { triggerDownload } from './download';
 import { appendChecksumToDxf } from './checksum';
 import { DXF_SCHEMA_VERSION } from '../engine/export-schema';
@@ -44,7 +44,7 @@ export function cutSheetToDxf(sheet: CutSheet): string {
   // ΓöÇΓöÇ Metadata comments (before first SECTION) ΓöÇΓöÇ
   lines.push(
     '999',
-    'Cabinet Planner DXF Export',
+    'WoodworkingShop DXF Export',
     '999',
     `Version: ${__APP_VERSION__}`,
     '999',

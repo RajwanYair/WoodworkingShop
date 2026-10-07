@@ -37,6 +37,7 @@ describe('CostEstimatePanel', () => {
       cabinets: [{ name: 'Cabinet 1', config }],
       activeCabinetIndex: 0,
       cost: fixtureCost,
+      costPending: false,
       materialPriceOverrides: {},
       edgeBandingRate: 3,
       hardwarePriceOverrides: {},
@@ -44,6 +45,21 @@ describe('CostEstimatePanel', () => {
       labourHours: 2,
       finishCost: 0,
     });
+  });
+
+  it('announces pending optimization instead of showing a provisional total', () => {
+    useCabinetStore.setState({
+      costPending: true,
+      cabinets: [
+        { name: 'Cabinet 1', config: { ...DEFAULT_CONFIG } },
+        { name: 'Cabinet 2', config: { ...DEFAULT_CONFIG } },
+      ],
+    });
+    render(<CostEstimatePanel />);
+
+    expect(screen.getByText('Computing cut sheets…')).toHaveClass('sr-only');
+    expect(screen.getByText('…')).toBeInTheDocument();
+    expect(screen.queryByText(/Cost per unit/)).not.toBeInTheDocument();
   });
 
   it('updates the project finish cost from the estimate panel', async () => {

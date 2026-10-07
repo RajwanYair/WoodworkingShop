@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatDate } from '../../i18n/format';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useToastStore } from '../../store/toast-store';
 import { loadSavedConfigs, saveConfig, deleteSavedConfig, type SavedConfig } from '../../utils/local-storage';
@@ -14,7 +15,7 @@ import {
 } from './save-load-json';
 
 export function SaveLoadPanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { config, setConfig, projectName, setProjectName, projectNotes, setProjectNotes } = useCabinetStore();
   const loadProject = useCabinetStore((s) => s.loadProject);
   const cabinets = useCabinetStore((s) => s.cabinets);
@@ -27,7 +28,7 @@ export function SaveLoadPanel() {
 
   // Sprint 152 — sync project name to document title
   useEffect(() => {
-    document.title = projectName ? `${projectName} — Cabinet Planner` : 'Cabinet Planner';
+    document.title = projectName ? `${projectName} — WoodworkingShop` : 'WoodworkingShop';
   }, [projectName]);
 
   useEffect(() => {
@@ -86,7 +87,7 @@ export function SaveLoadPanel() {
 
   const handleShare = async () => {
     const url = window.location.href;
-    const title = projectName ? `${projectName} — Cabinet Planner` : 'Cabinet Planner';
+    const title = projectName ? `${projectName} — WoodworkingShop` : 'WoodworkingShop';
     // Sprint 166 — use native share sheet on mobile; fall back to clipboard
     if (navigator.share) {
       try {
@@ -173,7 +174,7 @@ export function SaveLoadPanel() {
           value={projectName}
           onChange={(e) => setProjectName(e.target.value)}
           placeholder={t('saves.projectNamePlaceholder')}
-          className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 text-wood-800 dark:text-wood-100 w-full rounded border bg-white px-2 py-1 text-xs focus:ring-1 focus:outline-none"
+          className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent text-wood-800 dark:text-wood-100 w-full rounded border bg-white px-2 py-1 text-xs focus:ring-1 focus:outline-none"
           maxLength={80}
           aria-label={t('saves.projectName')}
         />
@@ -189,7 +190,7 @@ export function SaveLoadPanel() {
           onChange={(e) => setProjectNotes(e.target.value)}
           placeholder={t('saves.projectNotesPlaceholder')}
           rows={3}
-          className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-wood-400 text-wood-800 dark:text-wood-100 w-full resize-y rounded border bg-white px-2 py-1 text-xs focus:ring-1 focus:outline-none"
+          className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 focus:ring-accent text-wood-800 dark:text-wood-100 w-full resize-y rounded border bg-white px-2 py-1 text-xs focus:ring-1 focus:outline-none"
           maxLength={1000}
           aria-label={t('saves.projectNotes')}
         />
@@ -218,7 +219,7 @@ export function SaveLoadPanel() {
         />
         <button
           onClick={handleSave}
-          className="bg-wood-600 hover:bg-wood-600 rounded px-3 py-1.5 text-xs font-medium text-white transition-colors"
+          className="bg-accent hover:bg-accent-hover rounded px-3 py-1.5 text-xs font-medium text-white transition-colors"
         >
           {t('saves.save')}
         </button>
@@ -235,12 +236,12 @@ export function SaveLoadPanel() {
               <div className="min-w-0 flex-1">
                 <div className="text-wood-700 dark:text-wood-200 truncate font-medium">{c.name}</div>
                 <div className="text-wood-400 dark:text-wood-500">
-                  {c.config.width}×{c.config.height}×{c.config.depth} — {new Date(c.savedAt).toLocaleDateString()}
+                  {c.config.width}×{c.config.height}×{c.config.depth} — {formatDate(c.savedAt, i18n.language)}
                 </div>
               </div>
               <button
                 onClick={() => handleLoad(c)}
-                className="bg-wood-600 hover:bg-wood-600 shrink-0 rounded px-2 py-0.5 text-xs text-white"
+                className="bg-accent hover:bg-accent-hover shrink-0 rounded px-2 py-0.5 text-xs text-white"
               >
                 {t('saves.load')}
               </button>
@@ -261,29 +262,29 @@ export function SaveLoadPanel() {
       )}
 
       {/* Export / Import */}
-      <div className="border-wood-100 dark:border-wood-800 flex gap-2 border-t pt-1">
+      <div className="border-wood-100 dark:border-wood-800 grid grid-cols-2 gap-2 border-t pt-1 sm:grid-cols-4">
         <button
           onClick={handleExportCabinet}
-          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 flex-1 rounded border px-2 py-1.5 text-xs font-medium transition-colors"
+          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 min-w-0 rounded border px-2 py-1.5 text-xs font-medium transition-colors"
         >
           ↓ {t('saves.exportCabinet')}
         </button>
         <button
           onClick={handleExportProject}
-          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 flex-1 rounded border px-2 py-1.5 text-xs font-medium transition-colors"
+          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 min-w-0 rounded border px-2 py-1.5 text-xs font-medium transition-colors"
         >
           ↓ {t('saves.exportProject', { count: cabinets.length })}
         </button>
         <button
           onClick={handleImport}
-          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 flex-1 rounded border px-2 py-1.5 text-xs font-medium transition-colors"
+          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 min-w-0 rounded border px-2 py-1.5 text-xs font-medium transition-colors"
         >
           ↑ {t('saves.import')}
         </button>
         {/* Sprint 166 — share / copy link */}
         <button
           onClick={handleShare}
-          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 flex-1 rounded border px-2 py-1.5 text-xs font-medium transition-colors"
+          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 min-w-0 rounded border px-2 py-1.5 text-xs font-medium transition-colors"
           aria-label={t('saves.share')}
         >
           ⎘ {t('saves.share')}

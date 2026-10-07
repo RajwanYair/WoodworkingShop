@@ -7,13 +7,14 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../../i18n/format';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { calculateFinish, computeFinishAreaM2, FINISH_SPECS, type FinishType } from '../../engine/finish-calculator';
 
 const FINISH_TYPES: FinishType[] = ['primer', 'stain', 'paint', 'varnish', 'oil', 'lacquer'];
 
 export function FinishCalculatorPanel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const parts = useCabinetStore((s) => s.parts);
 
   const [finishType, setFinishType] = useState<FinishType>('paint');
@@ -43,7 +44,7 @@ export function FinishCalculatorPanel() {
             aria-pressed={finishType === ft}
             className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
               finishType === ft
-                ? 'bg-wood-600 text-white'
+                ? 'bg-accent text-white'
                 : 'bg-wood-100 dark:bg-wood-800 text-wood-600 dark:text-wood-300 hover:bg-wood-200 dark:hover:bg-wood-700'
             }`}
           >
@@ -62,7 +63,7 @@ export function FinishCalculatorPanel() {
           value={coats}
           onChange={(e) => setCoats(Number(e.target.value))}
           aria-label={t('finish.coats')}
-          className="accent-wood-500 flex-1"
+          className="accent-accent flex-1"
         />
         <span className="w-4 text-center font-mono">{coats}</span>
       </label>
@@ -71,11 +72,19 @@ export function FinishCalculatorPanel() {
       <div className="bg-wood-50 dark:bg-wood-800/60 space-y-1.5 rounded-lg p-3 text-sm">
         <div className="text-wood-600 dark:text-wood-300 flex justify-between">
           <span>{t('finish.surfaceArea')}</span>
-          <span className="font-mono font-medium">{areaM2.toFixed(2)} m²</span>
+          <span className="font-mono font-medium">
+            {formatNumber(areaM2, i18n.language, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} m²
+          </span>
         </div>
         <div className="text-wood-600 dark:text-wood-300 flex justify-between">
           <span>{t('finish.litresNeeded')}</span>
-          <span className="font-mono font-medium">{estimate.litresNeeded.toFixed(2)} L</span>
+          <span className="font-mono font-medium">
+            {formatNumber(estimate.litresNeeded, i18n.language, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}{' '}
+            L
+          </span>
         </div>
         {/* Can sizes */}
         <div className="border-wood-200 dark:border-wood-700 border-t pt-1.5">
@@ -86,11 +95,18 @@ export function FinishCalculatorPanel() {
                 key={size}
                 className="bg-wood-200 dark:bg-wood-700 text-wood-700 dark:text-wood-200 rounded px-2 py-0.5 font-mono text-xs"
               >
-                {count}×{size}L
+                {formatNumber(count, i18n.language)}×{formatNumber(size, i18n.language)}L
               </span>
             ))}
             <span className="text-wood-600 dark:text-wood-500 text-xs">
-              ({t('finish.totalCans', { litres: estimate.totalCanLitres.toFixed(2) })})
+              (
+              {t('finish.totalCans', {
+                litres: formatNumber(estimate.totalCanLitres, i18n.language, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }),
+              })}
+              )
             </span>
           </div>
         </div>

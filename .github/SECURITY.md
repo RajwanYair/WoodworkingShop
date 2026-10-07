@@ -1,7 +1,7 @@
 # 🔐 Security Policy
 
 <div align="center">
-  <img src="../docs/banner.svg" alt="Cabinet Planner" width="100%"/>
+  <img src="../docs/banner.svg" alt="WoodworkingShop" width="100%"/>
 </div>
 
 [![Security: Responsible Disclosure](https://img.shields.io/badge/security-responsible%20disclosure-brightgreen)](SECURITY.md)

@@ -38,13 +38,10 @@ describe('StorageQuotaBadge', () => {
     expect(screen.queryByRole('status')).toBeNull();
   });
 
-  it('renders nothing when quotaBytes is 0', async () => {
+  it('reports unavailable storage estimates instead of hiding the status', async () => {
     mockEstimate.mockResolvedValue(makeEstimate({ quotaBytes: 0, usedBytes: 0 }));
     render(<StorageQuotaBadge />);
-    await waitFor(() => {
-      // quotaBytes=0 means the component returns null — no role="status" element
-      expect(screen.queryByRole('status')).toBeNull();
-    });
+    expect(await screen.findByRole('status', { name: /unavailable/i })).toBeInTheDocument();
   });
 
   it('renders a status badge after estimate resolves', async () => {

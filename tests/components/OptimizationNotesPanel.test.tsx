@@ -33,6 +33,7 @@ describe('OptimizationNotesPanel', () => {
     render(<OptimizationNotesPanel />);
 
     await screen.findByText('A narrower cabinet improves sheet yield.');
+    expect(screen.getByText(/0\.080 m²/)).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Apply' }));
     expect(useCabinetStore.getState().config.width).toBe(850);
     expect(screen.queryByText('A narrower cabinet improves sheet yield.')).not.toBeInTheDocument();

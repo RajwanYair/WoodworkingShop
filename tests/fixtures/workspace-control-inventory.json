@@ -519,7 +519,7 @@
         {
           "role": "button",
           "accessibleName": "Download checklist",
-          "positiveTest": "assembly checklist download produces assembly-checklist.txt",
+          "positiveTest": "assembly checklist download produces a parsed file with ordered step titles",
           "negativeWaiver": "Download is an action; invalid scalar input does not apply."
         }
       ]

@@ -20,8 +20,12 @@ export {
   computePartWeightKg,
 } from '../materials.ts';
 
-export { TEMPLATES, getTemplate, getTemplateDefaults } from '../templates/index.ts';
-export type { CabinetTemplate } from '../templates/index.ts';
+export {
+  TEMPLATES,
+  getConfiguratorTemplate as getTemplate,
+  getConfiguratorTemplateDefaults as getTemplateDefaults,
+} from '../templates/index';
+export type { ConfiguratorCabinetTemplate as CabinetTemplate } from '../templates/index';
 
 export { estimateCost, DEFAULT_LABOUR_RATE } from '../cost-estimator.ts';
 export type { CostBreakdown, SheetCost, HardwareCost } from '../cost-estimator.ts';

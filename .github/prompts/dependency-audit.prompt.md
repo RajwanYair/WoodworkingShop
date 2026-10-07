@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: Run full dependency audit — check vulnerabilities, outdated packages, and license compliance.
 ---
 
