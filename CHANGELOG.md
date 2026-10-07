@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Pinned the release SBOM generator to CycloneDX npm 6.0.1, removed an unused benchmark type export, and aligned Knip's project graph and workspace tooling counts with the checked-in configuration.
 - Added an initial-route Brotli budget from the Vite static-import graph and enforced it in CI and release builds; lazy dynamic imports are excluded from the first-load measurement.
 - Kept the PDF renderer inside the lazy `PdfExportPanel` chunk and excluded that panel from the service-worker precache, avoiding an eager 1.2 MB renderer request on the workspace route.
 - Deferred browser cut-sheet optimization to the existing worker during store initialization, while retaining synchronous fallback where Workers are unavailable.

@@ -1,7 +1,7 @@
 ---
 name: address-pr-comments
-description: 'Address review comments (including Copilot comments) on the active pull request. Use when: responding to PR feedback, fixing review comments, resolving PR threads, implementing requested changes from reviewers, addressing code review, fixing PR issues.'
-argument-hint: 'Optionally specify a reviewer name or file to focus on'
+description: "Address review comments (including Copilot comments) on the active pull request. Use when: responding to PR feedback, fixing review comments, resolving PR threads, implementing requested changes from reviewers, addressing code review, fixing PR issues."
+argument-hint: "Optionally specify a reviewer name or file to focus on"
 ---
 
 # Address PR Review Comments
@@ -21,8 +21,7 @@ Read the active pull request, identify unresolved review comments and feedback, 
 Call the `github-pull-request_currentActivePullRequest` tool.
 
 **Refresh logic**: Check whether a refresh is needed before reading:
-
-- Call the tool once _without_ `refresh` to get the cached state
+- Call the tool once *without* `refresh` to get the cached state
 - Inspect the `lastUpdatedAt` field in the result
 - If the timestamp is **less than 3 minutes ago**, the PR is actively changing - call the tool again with `refresh: true` to ensure you have the latest comments and state
 - If the timestamp is older than 3 minutes, proceed with the cached data
@@ -39,7 +38,6 @@ Group related threads by file (`file` field) to handle them efficiently.
 ### 3. Plan Changes
 
 Before modifying any files:
-
 1. Read each unresolved comment carefully
 2. Identify the file and location each comment refers to
 3. Determine the minimal correct fix for each, if a fix is needed (not all comments are worthy of a change)
@@ -48,7 +46,6 @@ Before modifying any files:
 ### 4. Implement Changes
 
 Work through the grouped comments file by file:
-
 - Read the relevant file section before editing
 - Apply the requested change
 - Do not refactor or modify code outside the scope of each comment
@@ -57,14 +54,12 @@ Work through the grouped comments file by file:
 ### 5. Verify
 
 After all changes are made:
-
 - Review that each originally unresolved thread has a corresponding code change or a note about why no code change was needed.
 - Ensure no unrelated code was modified
 
 ### 6. Resolve Threads
 
 For each thread that was addressed (either by a code change or by a deliberate decision not to change):
-
 - Call `github-pull-request_resolveReviewThread` with the `id` from the `reviewThreads` array.
 - Only resolve threads where `canResolve` is `true`.
 - Skip threads that are already resolved (`isResolved: true`) or where `canResolve` is `false`.
@@ -72,7 +67,6 @@ For each thread that was addressed (either by a code change or by a deliberate d
 ### 7. Summarize
 
 Provide a concise summary of:
-
 - Which comments were addressed and what changes were made
 - Any comments that were intentionally skipped (with reasoning)
 - Any follow-up questions for the reviewer

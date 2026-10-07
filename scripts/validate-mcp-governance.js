@@ -7,14 +7,14 @@ import ts from 'typescript';
 const repoRoot = process.cwd();
 const mcpPath = path.join(repoRoot, '.vscode', 'mcp.json');
 
-const requiredCoreServers = ['github', 'filesystem', 'fetch', 'playwright', 'memory', 'sequentialthinking', 'context7'];
+const requiredCoreServers = ['github', 'playwright', 'context7'];
 
 /**
  * Parse JSONC with TypeScript's config parser so comments/trailing commas are supported.
  */
 function parseJsonc(filePath) {
   const text = fs.readFileSync(filePath, 'utf8');
-  const parsed = ts.parseConfigFileTextToJson(filePath, text);
+  const parsed = ts.parseConfigFileTextToJson(filePath.replaceAll('\\', '/'), text);
   if (parsed.error) {
     const message = ts.flattenDiagnosticMessageText(parsed.error.messageText, '\n');
     throw new Error(`Failed to parse ${filePath}: ${message}`);

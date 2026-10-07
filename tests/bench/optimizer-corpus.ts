@@ -12,7 +12,7 @@ type Coverage =
   | 'defects'
   | 'offcuts';
 
-export interface OptimizerBenchmarkInputs {
+interface OptimizerBenchmarkInputs {
   parts: Part[];
   sawKerfMm: number;
   sheetSizeOverrides: Record<string, { width: number; length: number }>;

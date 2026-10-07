@@ -165,15 +165,8 @@ MCP authentication and first-run setup are documented in
 
 ## MCP Servers (`.vscode/mcp.json`)
 
-| Server               | Purpose                                                 |
-| -------------------- | ------------------------------------------------------- |
-| `github`             | Official GitHub MCP — PRs, issues, Actions, code search |
-| `filesystem`         | Scoped workspace file access                            |
-| `fetch`              | Retrieve web content and API responses                  |
-| `playwright`         | Browser automation for E2E debugging                    |
-| `gitkraken`          | Git ops, blame, diff, PR workflow                       |
-| `memory`             | Persistent agent notes across sessions                  |
-| `sequentialthinking` | Multi-step problem decomposition                        |
-| `context7`           | Up-to-date library documentation (React, Vite, etc.)    |
-| `cloudflare`         | Cloudflare Pages/Workers management                     |
-| `brave-search`       | Web search fallback for docs not in Context7            |
+| Server       | Purpose                                                 |
+| ------------ | ------------------------------------------------------- |
+| `github`     | Official GitHub MCP — PRs, issues, Actions, code search |
+| `playwright` | Browser automation for E2E debugging                    |
+| `context7`   | Up-to-date library documentation (React, Vite, etc.)    |

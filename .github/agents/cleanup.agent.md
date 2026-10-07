@@ -2,14 +2,12 @@
 mode: agent
 tools:
   - read_file
-  - replace_string_in_file
-  - multi_replace_string_in_file
+  - apply_patch
   - run_in_terminal
   - get_errors
   - grep_search
   - file_search
   - list_dir
-  - manage_todo_list
 description: >
   Production cleanup — remove dead code, fix lint/format issues, enforce $TEMP
   for generated files, verify all quality gates, and prepare for release.

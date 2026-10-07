@@ -2,14 +2,12 @@
 mode: agent
 tools:
   - read_file
-  - replace_string_in_file
-  - multi_replace_string_in_file
+  - apply_patch
   - run_in_terminal
   - get_errors
   - grep_search
   - file_search
   - list_dir
-  - manage_todo_list
   - vscode_renameSymbol
 description: >
   Full automated release workflow: pre-flight checks → version bump →

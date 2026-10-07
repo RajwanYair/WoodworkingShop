@@ -154,16 +154,13 @@
       "tests/helpers.ts!"
     ],
     "project": [
-      "src/**/*.{ts,tsx}",
+      "src/**/*.{ts,tsx,css}",
       "tests/**/*.{ts,tsx}",
       "scripts/**/*.js"
-    ],
-    "ignore": [
-      "src/env.d.ts"
     ]
   },
   "simple-git-hooks": {
-    "pre-commit": "npx lint-staged",
+    "pre-commit": "npx lint-staged --max-arg-length 7000",
     "commit-msg": "node scripts/validate-commit-msg.js $1"
   },
   "lint-staged": {

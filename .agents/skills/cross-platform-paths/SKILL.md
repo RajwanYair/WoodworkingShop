@@ -115,8 +115,8 @@ const pythonExe = isWindows ? 'python.exe' : 'python';
 
 // Activate script
 const activateScript = isWindows
-  ? path.join(venvPath, 'Scripts', 'activate.bat')
-  : path.join(venvPath, 'bin', 'activate');
+    ? path.join(venvPath, 'Scripts', 'activate.bat')
+    : path.join(venvPath, 'bin', 'activate');
 
 // pyenv command
 const pyenvCmd = isWindows ? 'pyenv.bat' : 'pyenv';
@@ -140,15 +140,15 @@ traceLog(`Discovered: ${filePath}`); // Keep original
 ```typescript
 // ❌ WRONG: Assuming Uri
 function process(locator: Uri | string) {
-  const fsPath = locator.fsPath; // Crashes if string!
+    const fsPath = locator.fsPath; // Crashes if string!
 }
 
 // ✅ RIGHT: Handle both types
 function process(locator: Uri | string) {
-  const fsPath = locator instanceof Uri ? locator.fsPath : locator;
+    const fsPath = locator instanceof Uri ? locator.fsPath : locator;
 
-  // Now normalize for comparisons
-  const normalized = path.resolve(fsPath);
+    // Now normalize for comparisons
+    const normalized = path.resolve(fsPath);
 }
 ```
 
@@ -161,16 +161,16 @@ import * as path from 'path';
 // Check file exists (cross-platform)
 const configPath = path.join(projectRoot, 'pyproject.toml');
 if (fs.existsSync(configPath)) {
-  // File exists
+    // File exists
 }
 
 // Use async version when possible
 import { promises as fsPromises } from 'fs';
 try {
-  await fsPromises.access(configPath);
-  // File exists
+    await fsPromises.access(configPath);
+    // File exists
 } catch {
-  // File does not exist
+    // File does not exist
 }
 ```
 

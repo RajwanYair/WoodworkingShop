@@ -14,7 +14,6 @@ tools:
   - runSubagent
   - vscode_listCodeUsages
   - list_dir
-  - manage_todo_list
 description: >
   Debug a failing test, build error, or runtime exception — diagnose root cause,
   apply the fix, and verify all quality gates pass.

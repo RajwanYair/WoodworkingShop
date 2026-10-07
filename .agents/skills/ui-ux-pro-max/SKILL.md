@@ -1,6 +1,6 @@
 ---
 name: ui-ux-pro-max
-description: 'UI/UX design intelligence for web, mobile, and desktop. This skill should be used when designing, building, reviewing, or fixing interfaces, including pages, components, design systems, accessibility, interaction, responsive layout, typography, color, charts, and stack-specific UI implementation. Searchable local data: 79 searchable styles (50 active), 192 product palettes and reasoning profiles, 74 font pairings, 119 UX guidelines, 105 icons, 17 GSAP presets, 25 chart types, and 22 stacks.'
+description: "UI/UX design intelligence for web, mobile, and desktop. This skill should be used when designing, building, reviewing, or fixing interfaces, including pages, components, design systems, accessibility, interaction, responsive layout, typography, color, charts, and stack-specific UI implementation. Searchable local data: 79 searchable styles (50 active), 192 product palettes and reasoning profiles, 74 font pairings, 119 UX guidelines, 105 icons, 17 GSAP presets, 25 chart types, and 22 stacks."
 ---
 
 # UI/UX Pro Max - Design Intelligence
@@ -15,20 +15,20 @@ Skip it for pure backend logic, API/database design, non-visual performance work
 
 ## Rule Categories by Priority
 
-_Follow priority 1→10 to decide which category to focus on first; use `--domain <Domain>` to query full details. The full rule text for every category lives in `references/quick-reference.md` — read it on demand rather than loading it every time._
+*Follow priority 1→10 to decide which category to focus on first; use `--domain <Domain>` to query full details. The full rule text for every category lives in `references/quick-reference.md` — read it on demand rather than loading it every time.*
 
-| Priority | Category            | Impact   | Domain                | Key Checks (Must Have)                                                | Anti-Patterns (Avoid)                                                        |
-| -------- | ------------------- | -------- | --------------------- | --------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| 1        | Accessibility       | CRITICAL | `ux`                  | Contrast 4.5:1, Alt text, Keyboard nav, Aria-labels                   | Removing focus rings, Icon-only buttons without labels                       |
-| 2        | Touch & Interaction | CRITICAL | `ux`                  | Min size 44×44px, 8px+ spacing, Loading feedback                      | Reliance on hover only, Instant state changes (0ms)                          |
-| 3        | Performance         | HIGH     | `ux`                  | WebP/AVIF, Lazy loading, Reserve space (CLS &lt; 0.1)                 | Layout thrashing, Cumulative Layout Shift                                    |
-| 4        | Style Selection     | HIGH     | `style`, `product`    | Match product type, Consistency, SVG icons (no emoji)                 | Mixing flat & skeuomorphic randomly, Emoji as icons                          |
-| 5        | Layout & Responsive | HIGH     | `ux`                  | Mobile-first breakpoints, Viewport meta, No horizontal scroll         | Horizontal scroll, Fixed px container widths, Disable zoom                   |
-| 6        | Typography & Color  | MEDIUM   | `typography`, `color` | Base 16px, Line-height 1.5, Semantic color tokens                     | Text &lt; 12px body, Gray-on-gray, Raw hex in components                     |
-| 7        | Animation           | MEDIUM   | `ux`, `gsap`          | Context-aware timing, Motion conveys meaning, Spatial continuity      | One duration for every transition, Animating width/height, No reduced-motion |
-| 8        | Forms & Feedback    | MEDIUM   | `ux`                  | Visible labels, Error near field, Helper text, Progressive disclosure | Placeholder-only label, Errors only at top, Overwhelm upfront                |
-| 9        | Navigation Patterns | HIGH     | `ux`                  | Predictable back, Bottom nav ≤5, Deep linking                         | Overloaded nav, Broken back behavior, No deep links                          |
-| 10       | Charts & Data       | LOW      | `chart`               | Legends, Tooltips, Accessible colors                                  | Relying on color alone to convey meaning                                     |
+| Priority | Category | Impact | Domain | Key Checks (Must Have) | Anti-Patterns (Avoid) |
+|----------|----------|--------|--------|------------------------|------------------------|
+| 1 | Accessibility | CRITICAL | `ux` | Contrast 4.5:1, Alt text, Keyboard nav, Aria-labels | Removing focus rings, Icon-only buttons without labels |
+| 2 | Touch & Interaction | CRITICAL | `ux` | Min size 44×44px, 8px+ spacing, Loading feedback | Reliance on hover only, Instant state changes (0ms) |
+| 3 | Performance | HIGH | `ux` | WebP/AVIF, Lazy loading, Reserve space (CLS &lt; 0.1) | Layout thrashing, Cumulative Layout Shift |
+| 4 | Style Selection | HIGH | `style`, `product` | Match product type, Consistency, SVG icons (no emoji) | Mixing flat & skeuomorphic randomly, Emoji as icons |
+| 5 | Layout & Responsive | HIGH | `ux` | Mobile-first breakpoints, Viewport meta, No horizontal scroll | Horizontal scroll, Fixed px container widths, Disable zoom |
+| 6 | Typography & Color | MEDIUM | `typography`, `color` | Base 16px, Line-height 1.5, Semantic color tokens | Text &lt; 12px body, Gray-on-gray, Raw hex in components |
+| 7 | Animation | MEDIUM | `ux`, `gsap` | Context-aware timing, Motion conveys meaning, Spatial continuity | One duration for every transition, Animating width/height, No reduced-motion |
+| 8 | Forms & Feedback | MEDIUM | `ux` | Visible labels, Error near field, Helper text, Progressive disclosure | Placeholder-only label, Errors only at top, Overwhelm upfront |
+| 9 | Navigation Patterns | HIGH | `ux` | Predictable back, Bottom nav ≤5, Deep linking | Overloaded nav, Broken back behavior, No deep links |
+| 10 | Charts & Data | LOW | `chart` | Legends, Tooltips, Accessible colors | Relying on color alone to convey meaning |
 
 For the full rule list per category (all 119 UX guidelines with rationale), read `references/quick-reference.md`. For app-specific polish rules (icons, touch feedback, dark mode contrast, safe areas) and the canonical pre-delivery checklist, read `references/pro-rules.md`.
 
@@ -65,7 +65,6 @@ This skill handles UI/UX design intelligence and implementation guidance. It doe
 ### Step 1: Analyze User Requirements
 
 Extract from the user request:
-
 - **Product type**: SaaS, e-commerce, portfolio, dashboard, entertainment, tool, productivity, or hybrid
 - **Target audience & context**: age group, usage context (commute, leisure, work)
 - **Style keywords**: playful, vibrant, minimal, dark mode, content-first, immersive, etc.
@@ -82,7 +81,6 @@ python "${CLAUDE_PLUGIN_ROOT}/.claude/skills/ui-ux-pro-max/scripts/search.py" "<
 This aggregates product/style/color/landing/typography matches, applies reasoning rules from `ui-reasoning.csv`, and returns pattern, style, colors, typography, effects, and anti-patterns to avoid.
 
 **Example:**
-
 ```bash
 python "${CLAUDE_PLUGIN_ROOT}/.claude/skills/ui-ux-pro-max/scripts/search.py" "beauty spa wellness service" --design-system -p "Serenity Spa"
 ```
@@ -96,7 +94,6 @@ python "${CLAUDE_PLUGIN_ROOT}/.claude/skills/ui-ux-pro-max/scripts/search.py" "<
 ```
 
 This creates:
-
 - `design-system/<project-slug>/MASTER.md` — Global Source of Truth
 - `design-system/<project-slug>/pages/` — Folder for page-specific overrides
 
@@ -107,7 +104,6 @@ If `design-system/<project-slug>/MASTER.md` already exists, `--persist` **skips 
 Read an existing `MASTER.md` before deciding whether `--force` is justified. Never use `--force` without explicit user authorization.
 
 **Retrieval when building a specific page:**
-
 1. Read `design-system/<project-slug>/MASTER.md`
 2. Check if `design-system/<project-slug>/pages/<page-name>.md` exists — if so, its rules override Master
 3. Otherwise use Master rules exclusively
@@ -120,18 +116,17 @@ Three optional 1-10 sliders that tune `--design-system` output without changing 
 python "${CLAUDE_PLUGIN_ROOT}/.claude/skills/ui-ux-pro-max/scripts/search.py" "<query>" --design-system --variance <1-10> --motion <1-10> --density <1-10>
 ```
 
-| Dial         | Low (1-3)                                                      | Mid (4-7)                           | High (8-10)                                              |
-| ------------ | -------------------------------------------------------------- | ----------------------------------- | -------------------------------------------------------- |
-| `--variance` | Centered / minimal (biases toward Minimalism-style categories) | Balanced / modern                   | Bold / asymmetric (biases toward Brutalism, Bento Grids) |
-| `--motion`   | Subtle micro-interactions                                      | Standard scroll/stagger motion      | Complex choreography (pin, Flip, SplitText)              |
-| `--density`  | Spacious (24-96px spacing scale)                               | Standard (16-64px, current default) | Dense/dashboard (8-32px spacing scale)                   |
+| Dial | Low (1-3) | Mid (4-7) | High (8-10) |
+|------|-----------|-----------|-------------|
+| `--variance` | Centered / minimal (biases toward Minimalism-style categories) | Balanced / modern | Bold / asymmetric (biases toward Brutalism, Bento Grids) |
+| `--motion` | Subtle micro-interactions | Standard scroll/stagger motion | Complex choreography (pin, Flip, SplitText) |
+| `--density` | Spacious (24-96px spacing scale) | Standard (16-64px, current default) | Dense/dashboard (8-32px spacing scale) |
 
 - `--motion` attaches a ready-to-use GSAP snippet (with framework notes, Do/Don't, and performance notes) pulled from `--domain gsap`, matched to the resolved tier (Subtle/Standard/Complex).
 - `--density` overrides the `--space-*` CSS variable table in the ASCII/markdown/MASTER.md output — use it for dashboards (high) vs. marketing pages (low) without hand-editing tokens.
 - Leaving a dial unset keeps that part of the output exactly as it was before (no behavior change).
 
 **Example:**
-
 ```bash
 python "${CLAUDE_PLUGIN_ROOT}/.claude/skills/ui-ux-pro-max/scripts/search.py" "internal analytics dashboard" --design-system --variance 8 --motion 7 --density 8 -p "Ops Console"
 ```
@@ -142,20 +137,20 @@ python "${CLAUDE_PLUGIN_ROOT}/.claude/skills/ui-ux-pro-max/scripts/search.py" "i
 python "${CLAUDE_PLUGIN_ROOT}/.claude/skills/ui-ux-pro-max/scripts/search.py" "<keyword>" --domain <domain> [-n <max_results>]
 ```
 
-| Need                            | Domain         | Example                                               |
-| ------------------------------- | -------------- | ----------------------------------------------------- |
-| Product type patterns           | `product`      | `"entertainment social" --domain product`             |
-| More style options              | `style`        | `"glassmorphism dark" --domain style`                 |
-| Color palettes                  | `color`        | `"entertainment vibrant" --domain color`              |
-| Font pairings                   | `typography`   | `"playful modern" --domain typography`                |
-| Individual Google Fonts         | `google-fonts` | `"sans serif popular variable" --domain google-fonts` |
-| Chart recommendations           | `chart`        | `"real-time dashboard" --domain chart`                |
-| UX best practices               | `ux`           | `"error summary validation" --domain ux`              |
-| Landing page structure          | `landing`      | `"hero social-proof" --domain landing`                |
-| Icon recommendations            | `icons`        | `"decorative icon aria hidden" --domain icons`        |
-| GSAP animation presets          | `gsap`         | `"scroll reveal stagger" --domain gsap`               |
-| React/Next.js performance       | `react`        | `"rerender memo list" --domain react`                 |
-| App/native interface guidelines | `web`          | `"accessibilityLabel touch safe-areas" --domain web`  |
+| Need | Domain | Example |
+|------|--------|---------|
+| Product type patterns | `product` | `"entertainment social" --domain product` |
+| More style options | `style` | `"glassmorphism dark" --domain style` |
+| Color palettes | `color` | `"entertainment vibrant" --domain color` |
+| Font pairings | `typography` | `"playful modern" --domain typography` |
+| Individual Google Fonts | `google-fonts` | `"sans serif popular variable" --domain google-fonts` |
+| Chart recommendations | `chart` | `"real-time dashboard" --domain chart` |
+| UX best practices | `ux` | `"error summary validation" --domain ux` |
+| Landing page structure | `landing` | `"hero social-proof" --domain landing` |
+| Icon recommendations | `icons` | `"decorative icon aria hidden" --domain icons` |
+| GSAP animation presets | `gsap` | `"scroll reveal stagger" --domain gsap` |
+| React/Next.js performance | `react` | `"rerender memo list" --domain react` |
+| App/native interface guidelines | `web` | `"accessibilityLabel touch safe-areas" --domain web` |
 
 Domain is auto-detected from the query if `--domain` is omitted — but auto-detection can misroute overlapping terms (e.g. "font" matches both `typography` and `google-fonts`). If results look off-topic, pass `--domain` explicitly.
 
@@ -172,7 +167,6 @@ python "${CLAUDE_PLUGIN_ROOT}/.claude/skills/ui-ux-pro-max/scripts/search.py" "<
 ## If a search returns 0 results
 
 Do not fabricate output. Instead:
-
 1. Retry once with a narrower query or an explicit domain/stack.
 2. If still empty, fall back to the priority table above and say explicitly to the user that this recommendation came from the built-in defaults, not a database match (e.g. "no palette match for X, using general SaaS defaults").
 3. Never present a 0-result search as if it returned data.
@@ -205,15 +199,15 @@ Then synthesize the design system + detailed searches and implement.
 - Use `--design-system` for a new project/page and `--domain` for a focused concern
 - Pass the detected stack explicitly for implementation-specific guidance
 
-| Problem                        | What to Do                                                                                          |
-| ------------------------------ | --------------------------------------------------------------------------------------------------- |
-| Can't decide on style/color    | Re-run `--design-system` with different keywords                                                    |
-| Dark mode contrast issues      | `references/quick-reference.md` §6: `color-dark-mode` + `color-accessible-pairs`                    |
-| Animations feel unnatural      | `references/quick-reference.md` §7: `spring-physics` + `easing` + `exit-faster-than-enter`          |
-| Form UX is poor                | `references/quick-reference.md` §8: `inline-validation` + `error-clarity` + `focus-management`      |
-| Navigation feels confusing     | `references/quick-reference.md` §9: `nav-hierarchy` + `bottom-nav-limit` + `back-behavior`          |
-| Layout breaks on small screens | `references/quick-reference.md` §5: `mobile-first` + `breakpoint-consistency`                       |
-| Performance / jank             | `references/quick-reference.md` §3: `virtualize-lists` + `main-thread-budget` + `debounce-throttle` |
+| Problem | What to Do |
+|---------|------------|
+| Can't decide on style/color | Re-run `--design-system` with different keywords |
+| Dark mode contrast issues | `references/quick-reference.md` §6: `color-dark-mode` + `color-accessible-pairs` |
+| Animations feel unnatural | `references/quick-reference.md` §7: `spring-physics` + `easing` + `exit-faster-than-enter` |
+| Form UX is poor | `references/quick-reference.md` §8: `inline-validation` + `error-clarity` + `focus-management` |
+| Navigation feels confusing | `references/quick-reference.md` §9: `nav-hierarchy` + `bottom-nav-limit` + `back-behavior` |
+| Layout breaks on small screens | `references/quick-reference.md` §5: `mobile-first` + `breakpoint-consistency` |
+| Performance / jank | `references/quick-reference.md` §3: `virtualize-lists` + `main-thread-budget` + `debounce-throttle` |
 
 ## Before Delivering App UI
 

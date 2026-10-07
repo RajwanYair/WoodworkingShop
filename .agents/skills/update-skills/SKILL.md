@@ -2,7 +2,6 @@
 name: update-skills
 description: Create or update repository skills and instructions when major learnings are discovered during a session. Use when the user says "learn!", when a significant pattern or pitfall is identified, or when reusable domain knowledge should be captured for future sessions.
 ---
-
 <!-- Customize this skill and select save to override its behavior. Delete that copy to restore the built-in behavior. -->
 
 # Update Skills & Instructions
@@ -19,19 +18,16 @@ When a major repository learning is discovered — a recurring pattern, a non-ob
 ## Decision: Skill vs Instruction vs Learning
 
 **Add a learning to an existing instruction** when:
-
 - The insight is small (1-4 sentences) and fits naturally into an existing instruction file
 - It refines or extends an existing guideline
 - Follow the pattern in `.github/instructions/learnings.instructions.md`
 
 **Create or update a skill** (`.github/skills/{name}/SKILL.md` or `.agents/skills/{name}/SKILL.md`) when:
-
 - The knowledge is substantial (multi-step procedure, detailed guidelines, or rich examples)
 - It covers a distinct domain area (e.g., "how to debug X", "patterns for Y")
 - Future sessions should be able to invoke it by name
 
 **Create or update an instruction** (`.github/instructions/{name}.instructions.md`) when:
-
 - The rule should apply automatically based on file patterns (`applyTo`) or globally
 - It's a coding convention, architectural constraint, or process rule
 - It doesn't need to be invoked on demand
@@ -41,7 +37,6 @@ When a major repository learning is discovered — a recurring pattern, a non-ob
 ### 1. Identify the Learning
 
 Reflect on what went wrong or what was discovered:
-
 - What was the problem or unexpected behavior?
 - Why was it a problem? (root cause, not symptoms)
 - How was it fixed or what's the correct approach?
@@ -77,8 +72,8 @@ If the knowledge warrants a standalone skill:
 
 ```markdown
 ---
-name: { skill-name }
-description: { One-line description of when and why to use this skill. }
+name: {skill-name}
+description: {One-line description of when and why to use this skill.}
 ---
 
 # {Skill Title}
@@ -86,8 +81,8 @@ description: { One-line description of when and why to use this skill. }
 {Body with guidelines, procedures, examples, and learnings.}
 ```
 
-1. The `name` field **must match** the parent folder name exactly.
-2. Include concrete examples — skills with examples are far more useful than abstract rules.
+3. The `name` field **must match** the parent folder name exactly.
+4. Include concrete examples — skills with examples are far more useful than abstract rules.
 
 ### 3c. Create a New Instruction
 
@@ -95,7 +90,7 @@ If the knowledge should apply automatically:
 
 ```markdown
 ---
-description: { When these instructions should be loaded }
+description: {When these instructions should be loaded}
 applyTo: '{glob pattern}' # optional — auto-load when matching files are attached
 ---
 
@@ -105,7 +100,6 @@ applyTo: '{glob pattern}' # optional — auto-load when matching files are attac
 ### 4. Quality Checks
 
 Before saving:
-
 - Is the learning **general enough** to help future sessions, not just this one?
 - Is it **specific enough** to be actionable, not just a vague principle?
 - Does it include a **concrete example** of right vs wrong?
@@ -115,7 +109,6 @@ Before saving:
 ### 5. Inform the User
 
 After creating or updating the file:
-
 - Summarize what was captured and where
 - Explain why this location was chosen
 - Note if any existing content was updated vs new content created
