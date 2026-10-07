@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 
-import { predictWaste, computeTotalDemand, estimatePartsPerSheet } from '../../src/engine/inventory/waste/predictor';
-import type { PredictorPart, SheetSize } from '../../src/engine/inventory/waste/predictor';
+import { predictWaste, computeTotalDemand, estimatePartsPerSheet } from '../../src/engine/waste';
+import type { PredictorPart, SheetSize } from '../../src/engine/waste';
 
 const STANDARD_SHEET: SheetSize = { width: 2440, length: 1220 };
 const HALF_SHEET: SheetSize = { width: 1220, length: 610 };

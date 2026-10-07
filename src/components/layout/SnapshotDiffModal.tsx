@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { diffSnapshots } from '../../engine/inventory/comparison';
+import { diffSnapshots } from '../../engine/comparison';
 import type { ProjectSnapshot } from '../../store/cabinet-store';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { IconX } from './Icons';

@@ -1,7 +1,7 @@
 /**
  * Community Material Catalog — Future Horizons / Sprint 13
  *
- * Tests for src/utils/community-catalog.ts
+ * Tests for src/utils/community-catalog-io.ts
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
@@ -12,9 +12,9 @@ import {
   getCommunityMaterialsByRegion,
   mergeMaterialCatalogs,
   DEFAULT_CATALOG_URL,
-} from '../../src/utils/community-catalog';
+} from '../../src/utils/community-catalog-io';
 import { MATERIALS } from '../../src/engine/materials';
-import type { CommunityMaterial, CommunityCatalog } from '../../src/utils/community-catalog';
+import type { CommunityMaterial, CommunityCatalog } from '../../src/utils/community-catalog-io';
 
 // ── Fixtures ──────────────────────────────────────────────────────────────────
 

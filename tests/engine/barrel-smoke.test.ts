@@ -9,6 +9,17 @@ import * as HardwareBarrel from '../../src/engine/hardware/index.ts';
 import * as MaterialsBarrel from '../../src/engine/materials/index.ts';
 import * as OptimizerBarrel from '../../src/engine/optimizer/index.ts';
 import * as AssemblyBarrel from '../../src/engine/assembly/index.ts';
+import * as EngineBarrel from '../../src/engine/index.ts';
+
+describe('engine public barrel', () => {
+  it('preserves deprecated WebSerial transport exports', () => {
+    expect(typeof EngineBarrel.isWebSerialAvailable).toBe('function');
+    expect(typeof EngineBarrel.connectToMachine).toBe('function');
+    expect(typeof EngineBarrel.streamGcodeLines).toBe('function');
+    expect(typeof EngineBarrel.disconnectFromMachine).toBe('function');
+    expect(EngineBarrel.DEFAULT_SERIAL_PROFILE.baudRate).toBe(115200);
+  });
+});
 
 describe('engine/geometry barrel', () => {
   it('re-exports dimension and part functions', () => {

@@ -1,112 +1,168 @@
 import { describe, expect, it } from 'vitest';
-import path from 'node:path';
-import { createCapabilityMap, validateLedger } from '../../scripts/capability-map.js';
+import {
+  buildCapabilityInventory,
+  buildImportGraph,
+  checkCapabilityLedger,
+  findReachableRoots,
+  isBarrelOnlyExposure,
+} from '../../scripts/capability-map.js';
 
-describe('createCapabilityMap', () => {
-  it('records direct, transitive, barrel-only, dynamic, and worker import paths', () => {
-    const root = path.join(process.cwd(), 'src');
-    const testsRoot = path.join(process.cwd(), 'tests');
-    const files = new Map([
-      [path.join(root, 'App.tsx'), `import './components/Panel'; void import('./engine/dynamic');`],
-      [path.join(root, 'components/Panel.tsx'), `export { feature } from '../engine/index';`],
-      [path.join(root, 'engine/index.ts'), `export { feature } from './feature';`],
-      [path.join(root, 'engine/feature.ts'), `export const feature = true;`],
-      [path.join(root, 'engine/dynamic.ts'), `export const dynamicFeature = true;`],
-      [path.join(root, 'engine/worker.ts'), `export const workerFeature = true;`],
-      [path.join(root, 'engine/alias.ts'), `export const aliasFeature = true;`],
-      [path.join(root, 'workers/task.worker.ts'), `import '../engine/worker';`],
-      [path.join(root, 'components/WorkerPanel.tsx'), `import TaskWorker from '../workers/task.worker?worker';`],
-      [path.join(root, 'components/AliasPanel.tsx'), `import { aliasFeature } from '@/engine/alias';`],
-      [path.join(root, 'utils/index.ts'), `export { helper } from './helper';`],
-      [path.join(root, 'utils/helper.ts'), `export const helper = true;`],
-      [path.join(testsRoot, 'utils/feature.test.ts'), `import '../../src/engine/feature';`],
-      [
-        path.join(testsRoot, 'utils/test-bridge.test.ts'),
-        `import '../../src/components/Panel'; import '../../src/engine/dynamic';`,
-      ],
+describe('buildImportGraph', () => {
+  const sources = {
+    'src/App.tsx': 'import "./components/Panel"; import("./utils/lazy");',
+    'src/components/Panel.tsx': 'import "../engine"; import "../workers/cut.worker?worker";',
+    'src/engine/index.ts': 'export { calculate } from "./calculate";',
+    'src/engine/calculate.ts': 'export function calculate() { return 1; }',
+    'src/utils/lazy.ts': 'export const loaded = true;',
+    'src/workers/cut.worker.ts': 'export const result = 1;',
+  };
+
+  it('tracks direct, transitive, barrel, dynamic, and worker imports', () => {
+    const graph = buildImportGraph(sources);
+
+    expect(graph.get('src/App.tsx')).toEqual([
+      { target: 'src/components/Panel.tsx', kind: 'static' },
+      { target: 'src/utils/lazy.ts', kind: 'dynamic' },
     ]);
-
-    const records = createCapabilityMap(files);
-    const byPath = new Map(records.map((record) => [record.path, record]));
-
-    expect(byPath.get('src/engine/feature.ts')).toMatchObject({
-      uiImporters: [],
-      transitiveUiImporters: ['src/App.tsx', 'src/components/Panel.tsx'],
-      barrelOnlyExposure: true,
-      testImporters: ['tests/utils/feature.test.ts'],
-    });
-    expect(byPath.get('src/engine/dynamic.ts')?.uiImporters).toEqual(['src/App.tsx']);
-    expect(byPath.get('src/engine/worker.ts')?.uiImporters).toEqual(['src/workers/task.worker.ts']);
-    expect(byPath.get('src/engine/alias.ts')?.uiImporters).toEqual(['src/components/AliasPanel.tsx']);
-    expect(byPath.get('src/utils/helper.ts')?.barrelOnlyExposure).toBe(true);
-    expect(byPath.get('src/engine/index.ts')?.transitiveUiImporters).toContain('src/App.tsx');
-    expect(byPath.get('src/engine/dynamic.ts')?.transitiveUiImporters).toEqual(['src/App.tsx']);
+    expect(graph.get('src/components/Panel.tsx')).toEqual([
+      { target: 'src/engine/index.ts', kind: 'static' },
+      { target: 'src/workers/cut.worker.ts', kind: 'worker' },
+    ]);
+    expect(graph.get('src/engine/index.ts')).toEqual([{ target: 'src/engine/calculate.ts', kind: 'static' }]);
+    expect(findReachableRoots(graph, 'src/engine/calculate.ts', ['src/App.tsx'])).toEqual(['src/App.tsx']);
+    expect(isBarrelOnlyExposure(graph, 'src/engine/calculate.ts')).toBe(true);
+    expect(isBarrelOnlyExposure(graph, 'src/utils/lazy.ts')).toBe(false);
   });
 });
 
-describe('validateLedger', () => {
-  const record = {
-    path: 'src/engine/feature.ts',
-    kind: 'engine',
-    uiImporters: [],
-    transitiveUiImporters: [],
-    engineInternalImporters: [],
-    barrelOnlyExposure: false,
-    testImporters: [],
-    outputChunk: null,
-  };
+describe('buildCapabilityInventory', () => {
+  it('records transitive UI and test importers with the emitted output chunk', () => {
+    const inventory = buildCapabilityInventory(
+      {
+        'src/App.tsx': 'import "./components/Panel";',
+        'src/components/Panel.tsx': 'import "../engine/calculate";',
+        'src/engine/calculate.ts': 'export const value = 1;',
+        'tests/engine/calculate.test.ts': 'import "../../src/engine/calculate";',
+      },
+      {
+        modulePaths: ['src/engine/calculate.ts'],
+        uiRoots: ['src/App.tsx'],
+        testRoots: ['tests/engine/calculate.test.ts'],
+        outputChunks: { 'src/engine/calculate.ts': ['assets/engine.js'] },
+      },
+    );
 
-  it.each([
+    expect(inventory).toEqual([
+      {
+        path: 'src/engine/calculate.ts',
+        uiImporters: ['src/App.tsx', 'src/components/Panel.tsx'],
+        internalImporters: [],
+        barrelOnly: false,
+        testImporters: ['tests/engine/calculate.test.ts'],
+        outputChunks: ['assets/engine.js'],
+      },
+    ]);
+  });
+});
+
+describe('checkCapabilityLedger', () => {
+  const inventory = [
     {
-      name: 'a missing classification',
-      modules: {},
-      expected: /missing capability classification/,
+      path: 'src/engine/live.ts',
+      uiImporters: ['src/App.tsx'],
+      internalImporters: [],
+      barrelOnly: false,
+      testImporters: [],
+      outputChunks: [],
     },
     {
-      name: 'a surfaced module without UI reachability',
-      modules: { [record.path]: { classification: 'surfaced', rationale: 'Expected UI usage.' } },
-      expected: /surfaced but has no transitive UI importer/,
+      path: 'src/engine/retired-late.ts',
+      uiImporters: [],
+      internalImporters: [],
+      barrelOnly: false,
+      testImporters: [],
+      outputChunks: [],
     },
-    {
-      name: 'an already-due retirement',
-      modules: {
-        [record.path]: {
-          classification: 'retire',
-          rationale: 'Remove obsolete code.',
-          targetSprint: 300,
-          targetRelease: '0.0.0',
+  ];
+
+  it('accepts the path-keyed schema-v1 ledger representation', () => {
+    const errors = checkCapabilityLedger(
+      inventory,
+      {
+        schemaVersion: 1,
+        modules: {
+          'src/engine/live.ts': { classification: 'surfaced', rationale: 'Imported by App.' },
+          'src/engine/retired-late.ts': { classification: 'internal', rationale: 'Internal helper.' },
         },
       },
-      expected: /still present at or after retirement release/,
-    },
-    {
-      name: 'an undocumented public API',
-      modules: {
-        [record.path]: {
-          classification: 'public-api',
-          rationale: 'Public consumer contract.',
-          documentation: 'docs/API-BOUNDARIES.md',
-        },
+      '5.34.0',
+    );
+
+    expect(errors).toEqual([]);
+  });
+
+  it('reports overdue retirements and ledger entries without source modules', () => {
+    const errors = checkCapabilityLedger(
+      inventory,
+      {
+        modules: [
+          { path: 'src/engine/live.ts', status: 'surfaced' },
+          {
+            path: 'src/engine/retired-late.ts',
+            status: 'retire',
+            reason: 'Replaced by the supported API.',
+            targetRelease: '5.34.0',
+          },
+          { path: 'src/utils/stale.ts', status: 'internal', reason: 'No longer present.' },
+        ],
       },
-      expected: /public-api requires a mention/,
-    },
-    {
-      name: 'an invalid schema classification',
-      modules: { [record.path]: { classification: 'unclassified', rationale: 'Needs review.' } },
-      expected: /must be equal to one of the allowed values/,
-    },
-  ])('rejects $name', ({ modules, expected }) => {
-    expect(validateLedger([record], { schemaVersion: 1, modules })).toEqual(
-      expect.arrayContaining([expect.stringMatching(expected)]),
+      '5.34.0',
+    );
+
+    expect(errors).toEqual(
+      expect.arrayContaining([
+        'src/engine/retired-late.ts: retirement target 5.34.0 is overdue; module still exists.',
+        'src/utils/stale.ts: ledger entry does not match a source module.',
+      ]),
     );
   });
 
-  it('accepts a classified internal module with a rationale', () => {
-    expect(
-      validateLedger([record], {
-        schemaVersion: 1,
-        modules: { [record.path]: { classification: 'internal', rationale: 'Consumed by engine internals.' } },
-      }),
-    ).toEqual([]);
+  it('rejects a surfaced module that loses every UI importer and an unclassified module', () => {
+    const lostSurfaceInventory = inventory.map((module) => ({
+      ...module,
+      uiImporters: module.path === 'src/engine/live.ts' ? [] : module.uiImporters,
+    }));
+    const errors = checkCapabilityLedger(
+      lostSurfaceInventory,
+      { modules: [{ path: 'src/engine/live.ts', status: 'surfaced' }] },
+      '5.34.0',
+    );
+
+    expect(errors).toEqual(
+      expect.arrayContaining([
+        'src/engine/live.ts: surfaced module has no UI importers.',
+        'src/engine/retired-late.ts: unclassified module.',
+      ]),
+    );
+  });
+
+  it('requires a target sprint and reason for surface-next modules', () => {
+    const errors = checkCapabilityLedger(
+      inventory,
+      {
+        modules: [
+          { path: 'src/engine/live.ts', status: 'surface-next', targetSprint: 0 },
+          { path: 'src/engine/retired-late.ts', status: 'internal', reason: 'Internal-only helper.' },
+        ],
+      },
+      '5.34.0',
+    );
+
+    expect(errors).toEqual(
+      expect.arrayContaining([
+        'src/engine/live.ts: surface-next requires a positive targetSprint.',
+        'src/engine/live.ts: surface-next requires a reason.',
+      ]),
+    );
   });
 });

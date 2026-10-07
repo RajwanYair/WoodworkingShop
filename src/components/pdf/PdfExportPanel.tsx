@@ -4,7 +4,7 @@ import { pdf } from '@react-pdf/renderer';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { CabinetPdfDocument } from './CabinetPdfDocument';
 import type { CabinetPdfEntry } from './CabinetPdfDocument';
-import { generateErpPayload, downloadErpJson } from '../../utils/erp-export';
+import { generateErpPayload, downloadErpJson } from '../../utils/erp-export-download';
 import { downloadIfcFile } from '../../utils/ifc-download';
 import { downloadStepFile } from '../../utils/step-download';
 import { downloadGltfFile } from '../../utils/gltf-download';
@@ -17,7 +17,7 @@ import { generateHardware } from '../../engine/hardware';
 import { computeDimensions } from '../../engine/dimensions';
 import { generateBomCsv } from '../../utils/bom-export';
 import { cutSheetToDxf } from '../../utils/dxf-export';
-import { generateGltfContent } from '../../engine/export/gltf-export';
+import { generateGltfContent } from '../../engine/export/gltf-document';
 import { buildZip, createZipManifest, downloadZip } from '../../utils/zip-writer';
 import { utf8Encode } from '../../utils/browser-compat';
 

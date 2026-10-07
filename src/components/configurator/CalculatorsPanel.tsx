@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState, type ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CALCULATOR_CATALOG, type CalculatorId } from './calculator-catalog';
+import type { CalculatorCommandId } from './calculator-commands';
 
 function lazyCalculator<T extends ComponentType>(loader: () => Promise<{ default: T }>) {
   return {
@@ -98,10 +99,11 @@ const CALCULATOR_PANELS = {
 } satisfies Record<CalculatorId, ReturnType<typeof lazyCalculator>>;
 
 interface CalculatorsPanelProps {
-  request?: { id: CalculatorId; sequence: number } | null;
+  readonly request?: { id: CalculatorId; sequence: number } | null;
+  readonly requestedSection?: { id: CalculatorCommandId; request: number } | null;
 }
 
-export function CalculatorsPanel({ request = null }: CalculatorsPanelProps) {
+export function CalculatorsPanel({ request = null, requestedSection = null }: CalculatorsPanelProps) {
   const { t } = useTranslation();
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
 
@@ -109,6 +111,12 @@ export function CalculatorsPanel({ request = null }: CalculatorsPanelProps) {
     if (!request) return;
     setExpandedIds((previous) => new Set(previous).add(request.id));
   }, [request]);
+
+  useEffect(() => {
+    if (requestedSection) {
+      setExpandedIds((prev) => new Set(prev).add(requestedSection.id));
+    }
+  }, [requestedSection]);
 
   const toggleSection = (id: string) => {
     setExpandedIds((prev) => {
@@ -146,7 +154,7 @@ export function CalculatorsPanel({ request = null }: CalculatorsPanelProps) {
             </button>
             {expandedIds.has(id) && (
               <div className="border-wood-200 dark:border-wood-700 border-t px-4 py-3">
-                <Suspense fallback={<p role="status">{t('skeleton.loading')}</p>}>
+                <Suspense fallback={<output aria-live="polite">{t('skeleton.loading')}</output>}>
                   <Component />
                 </Suspense>
               </div>

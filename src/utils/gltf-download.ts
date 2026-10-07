@@ -1,7 +1,7 @@
 /**
  * Sprint 84 — browser download helper for glTF 2.0 files.
  */
-import { generateGltfContent } from '../engine/export/gltf-export';
+import { generateGltfContent } from '../engine/export/gltf-document';
 import type { CabinetConfig, Part } from '../engine/types';
 
 /**

@@ -4,7 +4,7 @@ import { test, expect } from './fixtures/app';
 import { DEFAULT_CONFIG, getMaterial } from '../../src/engine/materials';
 import { optimizeCutSheets } from '../../src/engine/cut-optimizer';
 import { generateParts } from '../../src/engine/parts';
-import { analyzeWaste, formatAreaM2 } from '../../src/engine/inventory/waste';
+import { analyzeWaste, formatAreaM2 } from '../../src/engine/waste';
 import { buildGrainReport } from '../../src/engine/grain-report';
 
 function getAccessibleTableControl(main: Locator, table: Locator, control: object) {

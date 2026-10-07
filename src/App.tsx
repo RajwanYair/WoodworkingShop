@@ -12,6 +12,9 @@ import { TouchGestureTutorial } from './components/layout/TouchGestureTutorial';
 import { MobileTabBar } from './components/layout/MobileTabBar';
 import { ActiveCabinetSwitcher } from './components/layout/ActiveCabinetSwitcher';
 import type { CalculatorId } from './components/configurator/calculator-catalog';
+import { CALCULATOR_COMMANDS, type CalculatorCommandId } from './components/configurator/calculator-commands';
+import { listProjects } from './utils/project-storage';
+import { downloadBomCsv } from './utils/bom-export';
 import { IconPrint } from './components/layout/Icons';
 import { useCabinetStore } from './store/cabinet-store';
 import { useToastStore } from './store/toast-store';
@@ -25,6 +28,13 @@ import { generateHardware } from './engine/hardware';
 import { getCustomMaterials } from './store/custom-materials-store';
 import { configToUrl, readTabFromUrl, pushTabToUrl } from './utils/url-state';
 import { formatDate } from './i18n/format';
+import {
+  APP_COMMAND_DEFINITIONS,
+  APP_TAB_COMMANDS,
+  createAppCommand,
+  registerCommands,
+  unregisterCommand,
+} from './utils/command-palette';
 import type { Lang } from './engine/types';
 import {
   APP_TABS,
@@ -97,23 +107,98 @@ function App() {
     setCalculatorRequest({ id, sequence: ++calculatorRequestSequence.current });
     useCabinetStore.getState().setActiveTab('calculators');
   }, []);
+  const [, setProjectCommandsVersion] = useState(0);
+  const [requestedCalculatorSection, setRequestedCalculatorSection] = useState<{
+    id: CalculatorCommandId;
+    request: number;
+  } | null>(null);
   const mainRef = useRef<HTMLElement>(null);
   const isFirstRender = useRef(true);
 
+  // Ordered app tabs — used for swipe-based navigation
+  useEffect(() => {
+    const commands = APP_TAB_COMMANDS.map(({ id, labelKey, shortcut }) => ({
+      id: `tab.${id}`,
+      label: t(labelKey),
+      category: 'tabs',
+      ...(shortcut ? { shortcut } : {}),
+      action: () => useCabinetStore.getState().setActiveTab(id),
+    }));
+    registerCommands(commands);
+    return () => commands.forEach(({ id }) => unregisterCommand(id));
+  }, [t]);
+
+  useEffect(() => {
+    if (!showCommandPalette) return;
+
+    let cancelled = false;
+    const projectCommandIds: string[] = [];
+
+    void listProjects()
+      .then((projects) => {
+        if (cancelled) return;
+        const commands = projects
+          .sort((a, b) => new Date(b.savedAt).getTime() - new Date(a.savedAt).getTime())
+          .slice(0, 10)
+          .map((project) => {
+            const id = `project.open.${project.id}`;
+            projectCommandIds.push(id);
+            return {
+              id,
+              label: project.name,
+              category: t('commandPalette.categories.projects'),
+              keywords: [project.id],
+              action: () => {
+                const store = useCabinetStore.getState();
+                store.loadProject(project.cabinets);
+                store.setProjectName(project.name);
+                useToastStore.getState().addToast(t('projects.loaded'), 'success');
+              },
+            };
+          });
+        registerCommands(commands);
+        setProjectCommandsVersion((version) => version + 1);
+      })
+      .catch(() => undefined);
+
+    return () => {
+      cancelled = true;
+      projectCommandIds.forEach(unregisterCommand);
+    };
+  }, [showCommandPalette, t]);
+
+  useEffect(() => {
+    let request = 0;
+    const commands = CALCULATOR_COMMANDS.map(({ id, titleKey }) => ({
+      id: `calculator.${id}`,
+      label: t(titleKey),
+      category: t('commandPalette.categories.calculators'),
+      action: () => {
+        request += 1;
+        setRequestedCalculatorSection({ id, request });
+        useCabinetStore.getState().setActiveTab('calculators');
+      },
+    }));
+    registerCommands(commands);
+    return () => commands.forEach(({ id }) => unregisterCommand(id));
+  }, [t]);
+
+  // Sprint 82 — swipe left/right on the main content area to switch app tabs
+  // (skipped on 'preview' tab which has its own swipe gesture for SVG views)
   const appSwipe = useTouchGestures({
     onSwipeLeft: () => {
       if (activeTab === 'preview') return;
-      const index = APP_TABS.indexOf(activeTab);
-      if (index < APP_TABS.length - 1) {
-        useCabinetStore.getState().setActiveTab(APP_TABS[index + 1]);
+      const idx = APP_TAB_COMMANDS.findIndex(({ id }) => id === activeTab);
+      if (idx < APP_TAB_COMMANDS.length - 1) {
+        useCabinetStore.getState().setActiveTab(APP_TAB_COMMANDS[idx + 1].id);
         haptics.selectionChanged();
       }
     },
     onSwipeRight: () => {
       if (activeTab === 'preview') return;
-      const index = APP_TABS.indexOf(activeTab);
-      if (index > 0) {
-        useCabinetStore.getState().setActiveTab(APP_TABS[index - 1]);
+      const idx = APP_TAB_COMMANDS.findIndex(({ id }) => id === activeTab);
+      if (idx > 0) {
+        useCabinetStore.getState().setActiveTab(APP_TAB_COMMANDS[idx - 1].id);
         haptics.selectionChanged();
       }
     },
@@ -163,6 +248,85 @@ function App() {
   usePwaFileHandlers((project) => {
     useCabinetStore.getState().loadProject(project.cabinets);
   });
+
+  const exportBom = useCallback(() => {
+    const { cabinets, projectName: pName, config } = useCabinetStore.getState();
+    const lang = (i18n.language as Lang) || (config.lang as Lang) || 'en';
+    const filePrefix = (pName.trim() || 'cabinet').replace(/[^\w\u05D0-\u05EA.-]/g, '-').replace(/-+/g, '-');
+    const materials = getCustomMaterials();
+    const bomData = (cabinets.length > 0 ? cabinets : [{ name: 'Cabinet', config }]).map((cab) => ({
+      name: cab.name,
+      parts: generateParts(cab.config, materials),
+      hardware: generateHardware(cab.config, materials),
+    }));
+    downloadBomCsv(bomData, lang, `${filePrefix}-bom.csv`, i18n.language);
+    useToastStore.getState().addToast(t('shortcuts.exportBom'), 'success');
+  }, [i18n.language, t]);
+
+  const addCabinet = useCallback(() => {
+    useCabinetStore.getState().addCabinet();
+    useToastStore.getState().addToast(t('shortcuts.addCabinet'), 'success');
+    haptics.notification('success');
+  }, [haptics, t]);
+
+  const saveSnapshot = useCallback(() => {
+    useCabinetStore.getState().saveSnapshot('');
+    useToastStore.getState().addToast(t('shortcuts.saveSnapshot'), 'success');
+  }, [t]);
+
+  const resetConfig = useCallback(() => {
+    useCabinetStore.getState().resetConfig();
+    useToastStore.getState().addToast(t('shortcuts.resetConfig'), 'info');
+  }, [t]);
+
+  const toggleFocusMode = useCallback(() => {
+    useCabinetStore.getState().toggleFocusMode();
+    const entering = useCabinetStore.getState().focusMode;
+    useToastStore.getState().addToast(t(entering ? 'focusMode.enter' : 'focusMode.exit'), 'info');
+  }, [t]);
+
+  useEffect(() => {
+    const commands = [
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.addCabinet,
+        t(APP_COMMAND_DEFINITIONS.addCabinet.labelKey),
+        t(APP_COMMAND_DEFINITIONS.addCabinet.categoryKey),
+        addCabinet,
+      ),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.exportBom,
+        t(APP_COMMAND_DEFINITIONS.exportBom.labelKey),
+        t(APP_COMMAND_DEFINITIONS.exportBom.categoryKey),
+        exportBom,
+      ),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.saveSnapshot,
+        t(APP_COMMAND_DEFINITIONS.saveSnapshot.labelKey),
+        t(APP_COMMAND_DEFINITIONS.saveSnapshot.categoryKey),
+        saveSnapshot,
+      ),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.resetConfig,
+        t(APP_COMMAND_DEFINITIONS.resetConfig.labelKey),
+        t(APP_COMMAND_DEFINITIONS.resetConfig.categoryKey),
+        resetConfig,
+      ),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.print,
+        t(APP_COMMAND_DEFINITIONS.print.labelKey),
+        t(APP_COMMAND_DEFINITIONS.print.categoryKey),
+        () => window.print(),
+      ),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.toggleFocusMode,
+        t(APP_COMMAND_DEFINITIONS.toggleFocusMode.labelKey),
+        t(APP_COMMAND_DEFINITIONS.toggleFocusMode.categoryKey),
+        toggleFocusMode,
+      ),
+    ];
+    registerCommands(commands);
+    return () => commands.forEach(({ id }) => unregisterCommand(id));
+  }, [addCabinet, exportBom, resetConfig, saveSnapshot, t, toggleFocusMode]);
 
   // Focus restoration: move focus to the main landmark when the active tab changes
   // so keyboard users land at the start of new content (WCAG 2.2 success criterion 2.4.3)
@@ -304,7 +468,7 @@ function App() {
       window.removeEventListener(COMMAND_ACTION_EVENT, actionHandler);
       window.removeEventListener('keydown', handler);
     };
-  }, [t, i18n.language, haptics]);
+  }, [haptics, i18n.language, t]);
 
   return (
     <div
@@ -439,7 +603,7 @@ function App() {
             {activeTab === 'calculators' && (
               <ErrorBoundary panelName={t('tabs.calculators')}>
                 <Suspense fallback={<SkeletonPane label={t('skeleton.loading')} cards={6} />}>
-                  <CalculatorsPanel request={calculatorRequest} />
+                  <CalculatorsPanel request={calculatorRequest} requestedSection={requestedCalculatorSection} />
                 </Suspense>
               </ErrorBoundary>
             )}

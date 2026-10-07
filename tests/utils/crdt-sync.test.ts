@@ -15,7 +15,7 @@ import {
   deserializeOps,
   exportSnapshot,
   importSnapshot,
-} from '../../src/utils/crdt-sync';
+} from '../../src/utils/crdt-document';
 
 describe('createCrdtDocument', () => {
   it('initialises with clock 0', () => {

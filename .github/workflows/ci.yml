@@ -43,7 +43,7 @@ jobs:
       # Test execution itself is blocking (npm test must pass before reaching this step)
       - uses: codecov/codecov-action@v5
         with: { files: /tmp/WoodworkingShop/coverage/lcov.info, flags: unit, fail_ci_if_error: false }
-      - run: npm run bench:check && npm run build && npm run bundle:check
+      - run: npm run bench:check && npm run build && npm run bundle:check && npm run bundle:critical
       - uses: actions/upload-artifact@v7
         with: { name: dist, path: dist, retention-days: 7 }
   e2e-build:
@@ -74,7 +74,7 @@ jobs:
           path: /tmp/WoodworkingShop/.vite_cache
           key: "vite-${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('vite.config.ts', 'package-lock.json') }}"
           restore-keys: 'vite-${{ runner.os }}-node${{ matrix.node-version }}-'
-      - run: npm run build && npm run bundle:check
+      - run: npm run build && npm run bundle:check && npm run bundle:critical
   e2e:
     runs-on: ubuntu-latest
     needs: [test, e2e-build]

@@ -33,6 +33,7 @@ describe('keyboard journeys — sprint 252', () => {
   beforeEach(() => {
     useCabinetStore.getState().resetConfig();
     useCabinetStore.getState().setActiveTab('configurator');
+    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(null);
     if (useCabinetStore.getState().darkMode) {
       useCabinetStore.getState().toggleDarkMode();
     }
@@ -94,5 +95,59 @@ describe('keyboard journeys — sprint 252', () => {
 
     await screen.findByText('BOM exported');
     expect(downloadBomCsv).toHaveBeenCalledTimes(1);
+  });
+
+  it('opens the command palette with Ctrl+K and invokes a filtered tab command', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.keyboard('{Control>}k{/Control}');
+    const search = await screen.findByRole('combobox', { name: /Search commands/ }, { timeout: 15000 });
+    await user.type(search, 'preview');
+    await user.keyboard('{Enter}');
+
+    expect(useCabinetStore.getState().activeTab).toBe('preview');
+    expect(screen.queryByRole('dialog', { name: 'Command palette' })).not.toBeInTheDocument();
+  });
+
+  it('adds a cabinet from the command palette', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    const initialCount = useCabinetStore.getState().cabinets.length;
+
+    await user.keyboard('{Control>}k{/Control}');
+    await user.type(
+      await screen.findByRole('combobox', { name: /Search commands/ }, { timeout: 15000 }),
+      'Add cabinet',
+    );
+    await user.keyboard('{Enter}');
+
+    expect(useCabinetStore.getState().cabinets).toHaveLength(initialCount + 1);
+  });
+
+  it('opens and expands a calculator from the command palette', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.keyboard('{Control>}k{/Control}');
+    await user.type(
+      await screen.findByRole('combobox', { name: /Search commands/ }, { timeout: 15000 }),
+      'Finish Calculator',
+    );
+    await user.keyboard('{Enter}');
+
+    expect(useCabinetStore.getState().activeTab).toBe('calculators');
+    expect(await screen.findByRole('button', { expanded: true }, { timeout: 10_000 })).toBeInTheDocument();
+  });
+
+  it('does not open the command palette when Ctrl+K is pressed in an input', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    const languageSelect = screen.getAllByRole('combobox', { name: /language/i })[0];
+    await user.click(languageSelect);
+    await user.keyboard('{Control>}k{/Control}');
+
+    expect(screen.queryByRole('dialog', { name: 'Command palette' })).not.toBeInTheDocument();
   });
 });

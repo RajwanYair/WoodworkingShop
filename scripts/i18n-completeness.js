@@ -1,143 +1,159 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const scriptDir = dirname(fileURLToPath(import.meta.url));
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const localeCodes = ['en', 'he', 'ar', 'de', 'es', 'fr'];
-const maxIdenticalRatio = 2;
-const args = process.argv.slice(2);
+const identicalRatioThreshold = 0.02;
+const showAllKeys = process.argv.includes('--all');
+const localeDirectory = optionValue('--locale-dir', resolve(root, 'src/i18n'));
+const customAudit = process.argv.includes('--locale-dir') || process.argv.includes('--allowlist');
+const locales = Object.fromEntries(
+  localeCodes.map((locale) => [locale, flatten(readJson(resolve(localeDirectory, `${locale}.json`)))]),
+);
+const allowlistData = readJson(optionValue('--allowlist', resolve(root, 'config/i18n-allowlist.json')));
+const allowlistedIdenticalKeys = new Set(allowlistData.identical ?? []);
+const allowlistedTokens = new Set(allowlistData.tokens ?? []);
+const reference = locales.en;
+const invalidAllowlistKeys = [...allowlistedIdenticalKeys].filter((key) => !(key in reference));
+const maxSamples = 8;
+let failed = invalidAllowlistKeys.length > 0;
 
-function getOption(name, fallback) {
-  const index = args.indexOf(name);
-  if (index === -1) return fallback;
-  const value = args[index + 1];
-  if (!value) throw new Error(`Missing value for ${name}`);
-  return resolve(value);
+console.log('i18n completeness (reference: en)');
+console.log('='.repeat(52));
+if (showAllKeys) console.log('Detailed key lists enabled.');
+
+if (invalidAllowlistKeys.length > 0) {
+  printKeys('Allowlist keys not found in EN', invalidAllowlistKeys);
 }
 
-function flattenLocale(tree, prefix = '', result = {}) {
-  for (const [key, value] of Object.entries(tree)) {
-    const fullKey = prefix ? `${prefix}.${key}` : key;
-    if (typeof value === 'string') {
-      result[fullKey] = value;
-    } else if (value && typeof value === 'object' && !Array.isArray(value)) {
-      flattenLocale(value, fullKey, result);
-    } else {
-      throw new Error(`Translation value at ${fullKey} must be a string or nested object`);
+for (const locale of localeCodes.filter((code) => code !== 'en')) {
+  const target = locales[locale];
+  const referenceKeys = Object.keys(reference);
+  const missing = referenceKeys.filter((key) => !(key in target) && !hasPluralSibling(target, key)).sort();
+  const extra = Object.keys(target)
+    .filter((key) => !(key in reference) && !hasPluralSibling(reference, key))
+    .sort();
+  const empty = Object.entries(target)
+    .filter(([, value]) => value.trim() === '')
+    .map(([key]) => key)
+    .sort();
+  const placeholderKeys = referenceKeys.filter((key) => !pluralFamily(key) || key.endsWith('_other'));
+  const placeholderMismatches = placeholderKeys
+    .filter((key) => {
+      const targetKey = key in target ? key : matchingPluralSibling(target, key);
+      return targetKey !== undefined && !samePlaceholders(reference[key], target[targetKey]);
+    })
+    .sort();
+  const eligibleKeys = Object.keys(target).filter((key) => key in reference && !allowlistedIdenticalKeys.has(key));
+  const identicalKeys = eligibleKeys.filter(
+    (key) => target[key] === reference[key] && !allowlistedTokens.has(target[key]),
+  );
+  const ratioDenominator = customAudit ? Object.keys(target).length : eligibleKeys.length;
+  const identicalRatio = ratioDenominator === 0 ? 0 : identicalKeys.length / ratioDenominator;
+
+  if (customAudit) {
+    console.log(
+      `\n[${locale}] keys=${Object.keys(target).length} missing=${missing.length} extra=${extra.length} empty=${empty.length} placeholders=${placeholderMismatches.length} EN-identical=${identicalKeys.length}/${ratioDenominator} (${(identicalRatio * 100).toFixed(2)}%)`,
+    );
+    printCustomKeys('Missing keys', missing);
+    printCustomKeys('Extra keys', extra);
+    printCustomKeys('Empty keys', empty);
+    for (const key of placeholderMismatches) {
+      const targetKey = key in target ? key : matchingPluralSibling(target, key);
+      if (targetKey) {
+        console.log(
+          `${key} EN=[${placeholders(reference[key]).join(', ')}] ${locale}=[${placeholders(target[targetKey]).join(', ')}]`,
+        );
+      }
     }
+  } else {
+    console.log(
+      `\n[${locale}] missing: ${missing.length}; extra: ${extra.length}; empty: ${empty.length}; placeholder mismatches: ${placeholderMismatches.length}; EN-identical: ${identicalKeys.length}/${eligibleKeys.length} (${(identicalRatio * 100).toFixed(2)}%)`,
+    );
+    printKeys('Missing', missing);
+    printKeys('Extra', extra);
+    printKeys('Empty', empty);
+    printKeys('Placeholder mismatches', placeholderMismatches);
+    printKeys('EN-identical samples', identicalKeys);
   }
-  return result;
+
+  failed ||=
+    missing.length > 0 ||
+    extra.length > 0 ||
+    empty.length > 0 ||
+    placeholderMismatches.length > 0 ||
+    identicalRatio > identicalRatioThreshold;
 }
 
-function getPlaceholders(value) {
-  return [...value.matchAll(/\{\{\s*[-&]?\s*([^,}\s]+)(?:\s*,[^}]*)?\s*\}\}/g)].map((match) => match[1]).sort();
-}
-
-function getPluralBase(key) {
-  const match = /^(.*)_(zero|one|two|few|many|other)$/.exec(key);
-  return match ? { base: match[1] } : null;
-}
-
-function getReferenceValue(key, reference) {
-  if (Object.prototype.hasOwnProperty.call(reference, key)) return reference[key];
-  const plural = getPluralBase(key);
-  if (!plural) return undefined;
-  if (Object.prototype.hasOwnProperty.call(reference, `${plural.base}_other`)) return reference[`${plural.base}_other`];
-  if (Object.prototype.hasOwnProperty.call(reference, plural.base)) return reference[plural.base];
-  const sibling = Object.keys(reference).find((candidate) => getPluralBase(candidate)?.base === plural.base);
-  return sibling ? reference[sibling] : undefined;
-}
-
-function listIssues(label, values) {
-  if (values.length === 0) return;
-  const shown = values.slice(0, 12);
-  console.log(`  ${label}: ${values.length} (${shown.join(', ')}${values.length > shown.length ? ', …' : ''})`);
-}
+console.log(
+  failed
+    ? `\nResult: ${customAudit ? 'locale completeness checks failed' : `locale completeness thresholds not met (EN-identical limit: ${(identicalRatioThreshold * 100).toFixed(0)}%).`}`
+    : customAudit
+      ? '\nResult: all locale completeness checks pass.'
+      : '\nResult: locale completeness thresholds met.',
+);
+if (failed) process.exitCode = 1;
 
 function readJson(path) {
   return JSON.parse(readFileSync(path, 'utf8'));
 }
 
-function main() {
-  const localeDir = getOption('--locale-dir', resolve(scriptDir, '../src/i18n'));
-  const allowlistPath = getOption('--allowlist', resolve(scriptDir, '../config/i18n-allowlist.json'));
-  const allowlistData = readJson(allowlistPath);
-  if (!Array.isArray(allowlistData.tokens) || !allowlistData.tokens.every((token) => typeof token === 'string')) {
-    throw new Error('The i18n allowlist must contain a tokens array of strings');
-  }
-  const allowlistedTokens = new Set(allowlistData.tokens);
-  const locales = {};
-
-  for (const locale of localeCodes) {
-    const path = resolve(localeDir, `${locale}.json`);
-    if (!existsSync(path)) throw new Error(`Missing locale file: ${path}`);
-    locales[locale] = flattenLocale(readJson(path));
-  }
-
-  const reference = locales.en;
-  const referenceKeys = Object.keys(reference).sort();
-  const eligibleKeys = referenceKeys.filter((key) => !allowlistedTokens.has(reference[key]));
-  const referenceEmpty = referenceKeys.filter((key) => reference[key].trim() === '');
-  let failed = referenceEmpty.length > 0;
-
-  console.log(`i18n completeness (EN reference, EN-identical limit ${maxIdenticalRatio}%)`);
-  console.log(`Reference keys: ${referenceKeys.length}; allowlisted token values: ${allowlistedTokens.size}`);
-  listIssues('Empty EN values', referenceEmpty);
-
-  for (const locale of localeCodes.filter((code) => code !== 'en')) {
-    const target = locales[locale];
-    const targetKeys = Object.keys(target);
-    const targetKeySet = new Set(targetKeys);
-    const referenceKeySet = new Set(referenceKeys);
-    const referencePluralBases = new Set(referenceKeys.map((key) => getPluralBase(key)?.base).filter(Boolean));
-    const targetPluralBases = new Set(targetKeys.map((key) => getPluralBase(key)?.base).filter(Boolean));
-    const missing = referenceKeys.filter((key) => {
-      const plural = getPluralBase(key);
-      return !targetKeySet.has(key) && (!plural || !targetPluralBases.has(plural.base));
-    });
-    const extra = targetKeys
-      .filter((key) => {
-        const plural = getPluralBase(key);
-        return !referenceKeySet.has(key) && (!plural || !referencePluralBases.has(plural.base));
-      })
-      .sort();
-    const empty = targetKeys.filter((key) => target[key].trim() === '').sort();
-    const identical = eligibleKeys.filter((key) => target[key] === reference[key]);
-    const ratio = eligibleKeys.length === 0 ? 0 : (identical.length / eligibleKeys.length) * 100;
-    const placeholderMismatches = targetKeys.flatMap((key) => {
-      const expectedValue = getReferenceValue(key, reference);
-      if (expectedValue === undefined) return [];
-      const expected = getPlaceholders(expectedValue);
-      const actual = getPlaceholders(target[key]);
-      return expected.join('\0') === actual.join('\0')
-        ? []
-        : [`${key} EN=[${expected.join(',')}] ${locale}=[${actual.join(',')}]`];
-    });
-    const localeFailed =
-      missing.length > 0 ||
-      extra.length > 0 ||
-      empty.length > 0 ||
-      placeholderMismatches.length > 0 ||
-      ratio > maxIdenticalRatio;
-    failed ||= localeFailed;
-
-    console.log(
-      `[${locale}] keys=${targetKeys.length} missing=${missing.length} extra=${extra.length} empty=${empty.length} placeholders=${placeholderMismatches.length} EN-identical=${identical.length}/${eligibleKeys.length} (${ratio.toFixed(2)}%)`,
-    );
-    listIssues('Missing keys', missing);
-    listIssues('Extra keys', extra);
-    listIssues('Empty values', empty);
-    listIssues('Placeholder mismatches', placeholderMismatches);
-    if (ratio > maxIdenticalRatio) listIssues('EN-identical keys', identical);
-  }
-
-  console.log(failed ? 'Result: locale completeness needs work.' : 'Result: all locale completeness checks pass.');
-  if (failed) process.exitCode = 1;
+function optionValue(name, fallback) {
+  const index = process.argv.indexOf(name);
+  return index < 0 ? fallback : resolve(process.argv[index + 1]);
 }
 
-try {
-  main();
-} catch (error) {
-  console.error(error instanceof Error ? error.message : String(error));
-  process.exitCode = 1;
+function pluralFamily(key) {
+  const match = key.match(/^(.*)_(?:zero|one|two|few|many|other)$/);
+  return match?.[1];
+}
+
+function hasPluralSibling(source, key) {
+  const family = pluralFamily(key);
+  return Boolean(family && Object.keys(source).some((candidate) => pluralFamily(candidate) === family));
+}
+
+function matchingPluralSibling(source, key) {
+  const family = pluralFamily(key);
+  if (!family) return undefined;
+  const candidates = Object.keys(source).filter((candidate) => pluralFamily(candidate) === family);
+  return candidates.find((candidate) => candidate.endsWith('_other')) ?? candidates[0];
+}
+
+function flatten(value, prefix = '', result = {}) {
+  for (const [key, child] of Object.entries(value)) {
+    const fullKey = prefix ? `${prefix}.${key}` : key;
+    if (typeof child === 'string') {
+      result[fullKey] = child;
+    } else if (child && typeof child === 'object' && !Array.isArray(child)) {
+      flatten(child, fullKey, result);
+    }
+  }
+  return result;
+}
+
+function placeholders(value) {
+  return [...value.matchAll(/{{\s*-?\s*([^,\s}]+)(?:\s*,[^{}]*)?}}/g)].map((match) => match[1]).sort();
+}
+
+function samePlaceholders(referenceValue, targetValue) {
+  const referencePlaceholders = placeholders(referenceValue);
+  const targetPlaceholders = placeholders(targetValue);
+  return (
+    referencePlaceholders.length === targetPlaceholders.length &&
+    referencePlaceholders.every((placeholder, index) => placeholder === targetPlaceholders[index])
+  );
+}
+
+function printKeys(label, keys) {
+  if (keys.length === 0) return;
+  const displayed = showAllKeys ? keys : keys.slice(0, maxSamples);
+  console.log(
+    `  ${label} (${keys.length}): ${displayed.join(', ')}${!showAllKeys && keys.length > maxSamples ? ', ...' : ''}`,
+  );
+}
+
+function printCustomKeys(label, keys) {
+  if (keys.length > 0) console.log(`${label}: ${keys.length} (${keys.join(', ')})`);
 }

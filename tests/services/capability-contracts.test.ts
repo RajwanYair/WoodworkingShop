@@ -22,8 +22,10 @@ describe('capability contracts', () => {
     expect(getCapabilityContract('unknown')).toBeUndefined();
   });
 
-  it('filters optional network capabilities', () => {
-    expect(getOptionalNetworkCapabilities()).toEqual([]);
+  it('does not advertise unimplemented network capabilities', () => {
+    const optionalNetwork = getOptionalNetworkCapabilities();
+    expect(optionalNetwork).toEqual([]);
+    expect(optionalNetwork.every((contract) => contract.requiresNetwork && !contract.criticalPath)).toBe(true);
   });
 
   it.each(CAPABILITY_CONTRACTS)('has source path under src for %s', (contract) => {

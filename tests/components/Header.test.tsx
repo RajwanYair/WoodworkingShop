@@ -3,6 +3,8 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { Header } from '../../src/components/layout/Header';
 import { COMMANDS, formatShortcut } from '../../src/components/layout/command-registry';
 import { useCabinetStore } from '../../src/store/cabinet-store';
+import { getCommand } from '../../src/utils/command-palette';
+import { TEMPLATES } from '../../src/engine/templates';
 
 describe('Header', () => {
   beforeEach(() => {
@@ -73,6 +75,51 @@ describe('Header', () => {
     expect(controlTitles).toEqual(
       expect.arrayContaining(shortcutHints.map((shortcut) => expect.stringContaining(shortcut))),
     );
+  });
+
+  it('registers a palette command that uses the same unit-toggle action', () => {
+    render(<Header />);
+    const initialUnits = useCabinetStore.getState().units;
+    const toggleUnitsCommand = getCommand('header.toggle-units');
+
+    expect(toggleUnitsCommand).not.toBeNull();
+    expect(toggleUnitsCommand?.when?.()).not.toBe(false);
+    toggleUnitsCommand?.action();
+
+    expect(useCabinetStore.getState().units).not.toBe(initialUnits);
+  });
+
+  it('applies a preset from its palette command', () => {
+    render(<Header />);
+    const template = TEMPLATES[0];
+    const command = getCommand(`header.template.${template.id}`);
+    const originalUrl = window.location.href;
+
+    expect(command?.label).toBe(template.name.en);
+    command?.action();
+
+    expect(useCabinetStore.getState().config.width).toBe(template.config.width);
+    expect(new URL(window.location.href).searchParams.get('tpl')).toBe(template.id);
+    window.history.replaceState(null, '', originalUrl);
+  });
+
+  it('registers every Header-owned action in the command palette', () => {
+    render(<Header />);
+    const commandIds = [
+      'header.undo',
+      'header.redo',
+      'header.toggle-theme',
+      'header.toggle-contrast',
+      'header.toggle-units',
+      'header.copy-link',
+      'header.open-templates',
+      'header.open-projects',
+      'header.open-marketplace',
+      'header.open-shortcuts',
+      'help.onboarding',
+    ];
+
+    expect(commandIds.every((id) => getCommand(id) !== null)).toBe(true);
   });
 
   // ── Keyboard tab navigation (Sprint 22 — Phase 4 keyboard-only workflow) ──

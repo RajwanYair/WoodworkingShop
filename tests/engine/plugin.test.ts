@@ -267,6 +267,11 @@ describe('PluginContract', () => {
     expect(getPluginContract()).toBe(PLUGIN_CONTRACT);
   });
 
+  it('marks the v1 contract as deprecated', () => {
+    expect(PLUGIN_CONTRACT.stability).toBe('deprecated');
+    expect(PLUGIN_CONTRACT.apiVersion).toBe('1.3.0');
+  });
+
   it('onPartsGenerated hook is listed as stable', () => {
     const hook = PLUGIN_CONTRACT.hooks.find((h) => h.hookName === 'onPartsGenerated');
     expect(hook).toBeDefined();

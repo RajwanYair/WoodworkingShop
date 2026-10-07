@@ -17,7 +17,7 @@ import { getInitialRouteFiles } from './bundle-graph.js';
 
 const DIST_DIR = process.env['WOODWORKINGSHOP_BUNDLE_DIST_DIR'] ?? 'dist';
 const BUDGET_FILE = 'config/bundle-budget.json';
-const MANIFEST_FILE = join(DIST_DIR, '.vite', 'build-manifest.json');
+const MANIFEST_FILE = join(DIST_DIR, '.vite', 'manifest.json');
 const JAVASCRIPT_FILE_PATTERN = /\.(?:js|mjs)$/i;
 const criticalOnly = process.argv.includes('--critical');
 

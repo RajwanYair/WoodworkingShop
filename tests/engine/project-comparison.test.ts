@@ -3,11 +3,11 @@ import { describe, expect, it } from 'vitest';
 import {
   bestForCriterion,
   compareProjects,
-  DEFAULT_WEIGHTS,
+  DEFAULT_PROJECT_COMPARISON_WEIGHTS,
   percentDifference,
-} from '../../src/engine/inventory/comparison/project';
+} from '../../src/engine/comparison';
 
-import type { ComparisonWeights, ProjectMetrics } from '../../src/engine/inventory/comparison/project';
+import type { ComparisonWeights, ProjectComparisonResult, ProjectMetrics } from '../../src/engine/comparison';
 
 const projectA: ProjectMetrics = {
   projectId: 'a',
@@ -61,9 +61,9 @@ describe('compareProjects', () => {
   });
 
   it('uses default weights when none provided', () => {
-    const result = compareProjects([projectA, projectB]);
+    const result: ProjectComparisonResult = compareProjects([projectA, projectB]);
 
-    expect(result.weights).toEqual(DEFAULT_WEIGHTS);
+    expect(result.weights).toEqual(DEFAULT_PROJECT_COMPARISON_WEIGHTS);
   });
 
   it('applies custom weights', () => {

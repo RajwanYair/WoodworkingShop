@@ -11,7 +11,7 @@ import {
   buildConfigContext,
   callAiAssistant,
   DEFAULT_AI_MODELS,
-} from '../../src/utils/ai-assistant';
+} from '../../src/utils/ai-assistant-io';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 
 // ── localStorage stub (jsdom exposes window.localStorage but not bare global) ─

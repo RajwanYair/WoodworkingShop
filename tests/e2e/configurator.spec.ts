@@ -988,7 +988,12 @@ async function dispatchTouch(
   await target.evaluate(
     (element, event) => {
       const createTouches = (points: { x: number; y: number }[]) =>
-        points.map((point) => ({ clientX: point.x, clientY: point.y }));
+        points.map((point, identifier) => ({
+          identifier,
+          target: element,
+          clientX: point.x,
+          clientY: point.y,
+        }));
       const touchEvent = new Event(event.type, { bubbles: true, cancelable: true });
       Object.defineProperties(touchEvent, {
         touches: { value: createTouches(event.touches) },

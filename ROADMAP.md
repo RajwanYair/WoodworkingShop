@@ -341,7 +341,7 @@ Latest versions were checked against the npm registry on 2026-10-04.
 | Engine surface         | 97 of 163 top-level engine modules are not imported by components, store, hooks, utils or workers              | **Capability map: surface, keep internal, or retire**              | Unreachable features add bundle, test and maintenance cost without user value (S371–S373)    |
 | Duplicate modules      | 6 template modules; 3 stock, 3 waste, 3 comparison modules; 7 engine/utils name clashes; v1 + v2 serial/plugin | **One owner module per capability**                                | Reduces drift and ambiguous imports (S372)                                                   |
 | Supabase stub          | `src/services/supabase.ts` has zero importers                                                                  | **Retire unless an adapter ADR is approved**                       | Conflicts with the local-first/no-Supabase rule; dead adapter surface (S372)                 |
-| Locale quality         | AR/DE/ES/FR ≈ 60 % of values identical to English; 224–234 keys missing per locale                             | **Translation completeness gate + glossary + pseudo-locales**      | "6 locales" is currently a fallback claim, not a translated product (S375)                   |
+| Locale quality         | AR/DE/ES/FR ≈ 55–57 % of values identical to English; zero missing keys and 16 target-only keys per locale     | **Translation completeness gate + glossary + pseudo-locales**      | "6 locales" is currently a fallback claim, not a translated product (S375)                   |
 | Bundle budgets         | Raw totals (2,960 KB), loosened seven times per `config/bundle-budget.json`                                    | **Critical-path compressed budget; loosening needs ADR**           | Users feel first-load bytes, not total emitted bytes (S376)                                  |
 | Command surface        | Header buttons + shortcuts; `src/utils/command-palette.ts` unwired                                             | **Ctrl/Cmd+K command palette**                                     | Keyboard-first pattern from VS Code, Figma, Excalidraw (S374)                                |
 | QR codes               | Deferred: no encoder, production dependencies at the 8/8 cap                                                   | **In-house pure-TS QR encoder (no dependency)**                    | Byte-mode QR + Reed–Solomon is small and spec-testable; unblocks labels S312 T3, S334, S388  |
@@ -424,7 +424,7 @@ All eight stale claims found on 2026-09-27 (hard-coded test counts, README badge
 | 30  | Hardware catalog                        | PARTIAL | `catalog/hardware.json` 20+ items, bilingual; **no drilling patterns / SKUs**                                  | S338, S351, S402                   |
 | 31  | QR part labels                          | BLOCKED | No encoder; production dependencies at the 8/8 cap                                                             | In-house encoder → S388            |
 | 32  | Custom material in cabinet derivation   | DONE    | Custom material selection propagates to parts, cut sheets and costs (114 focused store/component tests passed) | S305                               |
-| 33  | Locale translation completeness         | PARTIAL | HE complete; AR/DE/ES/FR ≈ 60 % English fallback, 224–234 keys missing                                         | S375                               |
+| 33  | Locale translation completeness         | PARTIAL | HE 0.47%; AR/DE/ES/FR 37.42–38.60% EN-identical; no missing keys/placeholders; 16 extra keys each              | S375                               |
 | 34  | Component budget gate                   | DONE    | `CabinetPreview.tsx` is 543 lines with no exceptions; `npm run ci` passed on commit `312f38c`                  | S305                               |
 
 ### 4.3 Test-Suite Baseline (latest recorded evidence)
@@ -1357,9 +1357,12 @@ Sources: the §4.4 audit and the §5.4 cross-platform benchmark. Execution order
 - Tests: tests move with code; no coverage floor lowered; `npm run dead:check` clean; golden exports byte-identical.
 - Accept: no two modules own one capability; public barrel exports unchanged or aliased with deprecation; bundle not larger.
 
+Status (2026-10-03): T1's six template modules now live behind `src/engine/templates/` with the root engine barrel aliases preserved. T2 is complete: stock, waste and comparison families now live under their respective `src/engine/` directories behind public barrels, with distinct implementations preserved and conflicting API names explicitly aliased.
+T3's AI assistant, batch export, community catalog, CRDT, ERP download, glTF engine modules, and project-level IFC exporter now have distinct ownership paths with public APIs preserved. T4 is complete: the unused Supabase stub is retired; Plugin API v1.3.0 forwards to the shared v2 registry through app v5.35.0; WebSerial browser I/O is centralized in the utility transport adapter, while v2 owns transport-neutral profiles and session state. Deprecated engine-barrel aliases preserve existing callers.
+
 **Sprint 373 — Surface high-value engines, retire the rest** — P1 · L · S371, S372.
 
-- T1: COMPLETE — ranked `surface-next` modules by user value and cost. Evidence check: all 16 candidates have engine tests and public barrel exports, but `CalculatorsPanel.tsx` imports none of them; the current project weight display uses a separate materials calculation. Therefore barrel reachability is not counted as user surfacing. Priority order (value / integration cost; source size is a rough cost proxy):
+- T1: COMPLETE — ranked `surface-next` modules by user value and cost. Evidence check: all 16 candidates have engine tests and public barrel exports, but `CalculatorsPanel.tsx` imports none of them; the current project weight display uses a separate materials calculation. Barrel reachability alone is not user surfacing. Priority order (value / integration cost; source size is a rough cost proxy):
   1. `shelf-deflection` (high / medium, 203 lines): cabinet strength result directly informs shelf sizing.
   2. `pocket-hole` (high / medium, 188 lines): common joinery workflow with actionable drill and fastener settings.
   3. `cabinet-weight` (high / medium, 211 lines): useful project-level handling/load estimate; avoid duplicating the existing aggregate panel-weight display.
@@ -1386,7 +1389,9 @@ Sources: the §4.4 audit and the §5.4 cross-platform benchmark. Execution order
   19 to 16 modules.
 - T3: COMPLETE — Retired the eleven remaining unused engine candidates with their tests, public barrel exports, capability records, and unused locale strings; recorded the removals in CHANGELOG. Capability-map size fell from 234 to 223 modules, with UI reachability falling from 196 to 185 and not-UI-reachable remaining 38. The engine `surface-next` backlog is empty; five utility candidates remain queued for follow-up.
 - Tests: each surfaced module gets a component journey and a browser option-delta journey (S314 pattern) plus a sourced oracle where one exists.
-- Accept: no `surface-next` row without a target sprint; unwired-module count reported before and after.
+- Accept: no `surface-next` row without a target sprint; report the existing 21-module `surface-next` baseline and the post-T3 count.
+
+Status: T1–T3 complete. The `surface-next` count remains 21 (20 target Sprint 373; `command-palette` targets Sprint 374); T2 surfaced four calculators, while T3 retired ten calculator modules that had been misclassified as surfaced solely through the shared barrel. No T3 locale keys had production call sites; shared edge-banding translations remain. The 20 Sprint 373 `surface-next` rows still require explicit disposition.
 
 **Sprint 374 — Command palette and keyboard-first workflow** — P1 · M · S371.
 
@@ -1395,6 +1400,8 @@ Sources: the §4.4 audit and the §5.4 cross-platform benchmark. Execution order
 - T3: COMPLETE — Added direct palette commands for all 29 calculators and capped, validated localStorage recents. Component coverage verifies calculator command parity and malformed-storage handling; Chromium E2E confirms direct section opening and recent-command surfacing.
 - Tests: fuzzy-ranking unit tests; combobox/listbox ARIA pattern with axe; E2E open → filter → run → Escape → focus return; no trigger while typing in inputs.
 - Accept: every header action is reachable from the palette; zero duplicate shortcut definitions; WCAG 2.2 AA.
+
+Status (2026-10-04): T1–T3 complete. Palette coverage includes tabs, built-in actions, calculators, templates, languages and recent projects; typed command metadata and shared callbacks feed the palette, Header and `ShortcutsModal`. Unit, accessibility and keyboard-journey checks pass.
 
 **Sprint 375 — Translation completeness and locale quality** — P1 · L · S371.
 
@@ -1417,6 +1424,14 @@ Sources: the §4.4 audit and the §5.4 cross-platform benchmark. Execution order
 - T3: COMPLETE — Test-only pseudo-locales are generated at runtime: `en-XA` (accented, +40 % length) and `ar-XB` (bidi-wrapped). Chromium E2E passes 70 standard tab/width/locale states plus 14 pseudo-locale states at 320 px, checking document overflow, offscreen controls, clipped text and overlapping actions.
 - T4: COMPLETE — Replaced implicit locale date/number formatting, formatted selected physical measurements with `Intl.NumberFormat` unit style, moved manual UI/PDF singular-plural choices to i18next, and localized remaining fixed-precision UI/PDF and validation readouts. Editable numeric inputs, unit-conversion constraints, and machine geometry retain invariant decimal formatting by contract.
 - Accept: zero missing keys in all six locales; EN-identical ratio ≤ 2 % excluding the allowlist; no placeholder mismatch; pseudo-locale E2E passes without overflow.
+
+Status (2026-10-04): T1 tooling complete. The latest audit reports zero missing keys, 16 target-only keys, and zero placeholder mismatches in AR/DE/ES/FR; HE has zero missing/extra keys and zero placeholder mismatches. EN-identical rates are 38.60% (AR), 37.75% (DE), 37.42% (ES), and 37.61% (FR); HE is 0.47%.
+
+T2 remains in progress. The six-locale woodworking glossary and separate pending-review tracker are started.
+
+Translation batches cover the command palette, assembly and optimizer workflows, 3D preview, parts table, and mounted woodworking calculators, including box joints, cove cuts, crown moulding, frame and panel, honing, kerf bending, planer passes, rafters, screw pull-out, wood turning, router templates/circles, taper and stair stringers, and glue coverage.
+
+A duplicate tool-wear namespace was corrected. EN-identical rates remain above the 2% acceptance threshold. T3–T4 remain outstanding; Sprint 375 acceptance is not yet met.
 
 **Sprint 376 — Critical-path performance budget** — P1 · M · S371.
 

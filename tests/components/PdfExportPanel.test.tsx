@@ -101,6 +101,7 @@ describe('PdfExportPanel', () => {
         }),
     );
     pdfMock.mockReturnValueOnce({ toBlob });
+    const downloadClick = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
     render(<PdfExportPanel />);
 
     await user.dblClick(screen.getByRole('button', { name: 'Generate PDF' }));
@@ -108,6 +109,7 @@ describe('PdfExportPanel', () => {
     expect(pdfMock).toHaveBeenCalledOnce();
     expect(screen.getByRole('button', { name: 'Generating…' })).toBeDisabled();
     await act(async () => resolveBlob(new Blob(['pdf'])));
+    expect(downloadClick).toHaveBeenCalledOnce();
   });
 
   it('does not download a generated PDF after navigation unmounts the panel', async () => {

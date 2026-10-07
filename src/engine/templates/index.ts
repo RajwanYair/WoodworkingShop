@@ -1,7 +1,9 @@
 export {
   TEMPLATE_CATALOGUE,
   getTemplatesByCategory,
+  getTemplatesByCategory as getLibraryTemplatesByCategory,
   getTemplate,
+  getTemplate as getLibraryTemplate,
   instantiateTemplate as instantiateLibraryTemplate,
   listTemplateIds,
 } from './library';
@@ -9,6 +11,7 @@ export type {
   TemplateCategory,
   TemplateDimensions,
   CabinetTemplate,
+  CabinetTemplate as LibraryCabinetTemplate,
   TemplateInstance as LibraryTemplateInstance,
 } from './library';
 

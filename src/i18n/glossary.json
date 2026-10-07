@@ -65,5 +65,93 @@
       "es": "retal",
       "fr": "chute"
     }
+  },
+  "cabinetCarcass": {
+    "en": "cabinet carcass",
+    "he": "גוף הארון",
+    "ar": "هيكل الخزانة",
+    "de": "Korpus",
+    "es": "armazón del mueble",
+    "fr": "caisson de l'armoire"
+  },
+  "backPanel": {
+    "en": "back panel",
+    "he": "לוח אחורי",
+    "ar": "اللوح الخلفي",
+    "de": "Rückwand",
+    "es": "panel trasero",
+    "fr": "panneau arrière"
+  },
+  "shelf": {
+    "en": "shelf",
+    "he": "מדף",
+    "ar": "رف",
+    "de": "Einlegeboden",
+    "es": "estante",
+    "fr": "étagère"
+  },
+  "grainDirection": {
+    "en": "grain direction",
+    "he": "כיוון הסיבים",
+    "ar": "اتجاه الألياف",
+    "de": "Faserrichtung",
+    "es": "dirección de la veta",
+    "fr": "sens du fil du bois"
+  },
+  "kerfWidth": {
+    "en": "kerf width",
+    "he": "רוחב חריץ הניסור",
+    "ar": "عرض شق المنشار",
+    "de": "Schnittfugenbreite",
+    "es": "ancho de corte",
+    "fr": "largeur du trait de scie"
+  },
+  "offcut": {
+    "en": "offcut",
+    "he": "שארית לוח",
+    "ar": "قطعة متبقية",
+    "de": "Reststück",
+    "es": "retal",
+    "fr": "chute"
+  },
+  "cutList": {
+    "en": "cut list",
+    "he": "רשימת חלקים לחיתוך",
+    "ar": "قائمة القطع",
+    "de": "Zuschnittliste",
+    "es": "lista de corte",
+    "fr": "liste de débit"
+  },
+  "edgeBanding": {
+    "en": "edge banding",
+    "he": "קנט",
+    "ar": "تلبيس الحواف",
+    "de": "Kantenband",
+    "es": "canto",
+    "fr": "bande de chant"
+  },
+  "dovetailJoint": {
+    "en": "dovetail joint",
+    "he": "חיבור זנב סנונית",
+    "ar": "وصلة ذيل الحمامة",
+    "de": "Schwalbenschwanzverbindung",
+    "es": "unión de cola de milano",
+    "fr": "assemblage à queue d'aronde"
+  },
+  "mortiseAndTenonJoint": {
+    "en": "mortise-and-tenon joint",
+    "he": "חיבור חריץ ובליטה",
+    "ar": "وصلة النقر واللسان",
+    "de": "Schlitz-und-Zapfen-Verbindung",
+    "es": "unión de caja y espiga",
+    "fr": "assemblage à tenon et mortaise"
+  },
+  "pocketHoleJoint": {
+    "en": "pocket-hole joint",
+    "he": "חיבור בורג כיס",
+    "ar": "وصلة برغي الجيب",
+    "de": "Taschenlochverbindung",
+    "es": "unión con tornillo de bolsillo",
+    "fr": "assemblage par vis en poche"
   }
 }

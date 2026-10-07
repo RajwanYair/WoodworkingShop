@@ -2,32 +2,32 @@ import { Page, Text, View } from '@react-pdf/renderer';
 import type { CabinetConfig, DerivedDimensions, Part, HardwareItem, OptimizationResult } from '../../../engine/types';
 import { s } from '../pdf-tokens';
 import type { PdfCtx } from '../pdf-i18n';
-import { PageHeader } from './PageChrome';
-import { PageFooter } from './PageChrome';
-import { SpecRow } from './SpecRow';
 import { computePartsWeight } from '../../../engine/parts';
+import { estimateBuildTimeForProject } from '../../../utils/project-build-estimate';
+import { PageFooter, PageHeader } from './PageChrome';
+import { SpecRow } from './SpecRow';
 import { formatNumber } from '../../../i18n/format';
 
 interface PdfSpecPageProps {
-  ctx: PdfCtx;
-  config: CabinetConfig;
-  d: DerivedDimensions;
-  parts: Part[];
-  hardware: HardwareItem[];
-  optimization: OptimizationResult;
-  edgeBandingTotal: number;
-  cMatName: string;
-  cMatThickness: number;
-  bMatName: string;
-  bMatThickness: number;
-  labourHours: number;
+  readonly ctx: PdfCtx;
+  readonly config: CabinetConfig;
+  readonly d: DerivedDimensions;
+  readonly parts: Part[];
+  readonly hardware: HardwareItem[];
+  readonly optimization: OptimizationResult;
+  readonly edgeBandingTotal: number;
+  readonly cMatName: string;
+  readonly cMatThickness: number;
+  readonly bMatName: string;
+  readonly bMatThickness: number;
+  readonly labourHours: number;
 }
 
 export function PdfSpecPage({
   ctx,
   config,
   d,
-  parts: _parts,
+  parts,
   hardware,
   optimization,
   edgeBandingTotal,
@@ -40,7 +40,8 @@ export function PdfSpecPage({
   const { T, fontFamily, fontFamilyBold, textAlign, isRTL, date, coverTitle, lang, pageSize, orientation } = ctx;
   const rowDir = isRTL ? ({ flexDirection: 'row-reverse' } as const) : {};
   const specRowProps = { isRTL, fontFamily, fontFamilyBold };
-  const panelWeightKg = computePartsWeight(_parts);
+  const panelWeightKg = computePartsWeight(parts);
+  const estimatedTime = estimateBuildTimeForProject(parts, 1, hardware);
   return (
     <Page size={pageSize} orientation={orientation} style={[s.page, { fontFamily }]}>
       <PageHeader section={`📐  ${T.specTitle}`} projectName={coverTitle} lang={lang} />
@@ -106,6 +107,16 @@ export function PdfSpecPage({
           {...specRowProps}
           label={T.specBackPanelSize}
           value={`${Math.round(d.backPanelWidth)} × ${Math.round(d.backPanelHeight)} mm`}
+        />
+      </View>
+
+      <Text style={[s.specGroupTitle, { fontFamily: fontFamilyBold, textAlign }]}>{T.specBuildEstimate}</Text>
+      <View style={s.specGroup}>
+        <SpecRow {...specRowProps} label={T.specEstimatedWeight} value={`${computePartsWeight(parts).toFixed(1)} kg`} />
+        <SpecRow
+          {...specRowProps}
+          label={T.specEstimatedBuildTime}
+          value={`${estimatedTime.totalHours.toFixed(1)} ${T.hours}`}
         />
       </View>
 

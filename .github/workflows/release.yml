@@ -55,6 +55,7 @@ jobs:
           SBOM_PID=$!
           npm run build
           npm run bundle:check
+          npm run bundle:critical
           wait $SBOM_PID
 
       # Archive + sha256

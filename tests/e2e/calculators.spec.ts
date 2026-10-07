@@ -7,6 +7,7 @@ import { calculateCrownMoulding } from '../../src/engine/crown-moulding';
 import type { CrownCutMethod } from '../../src/engine/crown-moulding';
 import { calculateDadoRabbet } from '../../src/engine/dado-rabbet';
 import { calculateDowelJoint } from '../../src/engine/dowel-joint';
+import { calculateDeflection } from '../../src/engine/shelf-deflection';
 import { calculateDovetailLayout } from '../../src/engine/dovetail-layout';
 import { calculateDrawerBox } from '../../src/engine/drawer-box';
 import { calculateFaceFrame } from '../../src/engine/face-frame';
@@ -18,9 +19,10 @@ import { calculateHalfLap } from '../../src/engine/half-lap';
 import { calculateHoningGuide } from '../../src/engine/honing-guide';
 import { calculateKerfBending } from '../../src/engine/kerf-bending';
 import { calculateMoistureShrinkage } from '../../src/engine/moisture-shrinkage';
-import { calculateMortiseTenon } from '../../src/engine/mortise-tenon';
+import { formatMillimeters, formatNumber } from '../../src/i18n/format';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 import { calculatePlanerPasses } from '../../src/engine/planer-passes';
+import { calculateMortiseTenon } from '../../src/engine/mortise-tenon';
 import { generateParts } from '../../src/engine/parts';
 import { calculateRafterLength } from '../../src/engine/rafter-length';
 import { calculateRouterCircle } from '../../src/engine/router-circle';
@@ -28,12 +30,10 @@ import type { CircleCutMode } from '../../src/engine/router-circle';
 import { calculateRouterTemplate } from '../../src/engine/router-template';
 import { calculateScrewPullout } from '../../src/engine/screw-pullout';
 import { calculateSplineJoint } from '../../src/engine/spline-joint';
-import { calculateDeflection } from '../../src/engine/shelf-deflection';
 import { calculateStairStringer } from '../../src/engine/stair-stringer';
 import { calculateTaperJig } from '../../src/engine/taper-jig';
 import { calculateWoodTurning } from '../../src/engine/wood-turning';
 import { calculatePocketHole } from '../../src/engine/pocket-hole';
-import { formatMillimeters, formatNumber } from '../../src/i18n/format';
 import CALCULATOR_CONTROL_INVENTORY from '../fixtures/calculator-control-inventory.json' with { type: 'json' };
 import WOODGEARS_COVE_CUT_ORACLE from '../fixtures/oracles/woodgears-cove-cut.json' with { type: 'json' };
 
@@ -1746,4 +1746,77 @@ test('dovetail tail count changes reconcile layout widths with the engine', asyn
     await expect(calculator).toContainText(`${expected.tails[0]?.narrowWidthMm ?? 0} mm`);
     await expect(calculator).toContainText(expected.slopeRatio);
   }
+});
+
+test('roadmap calculator options reconcile with engine', async ({ appPage: page }) => {
+  const pocketHole = await openCalculator(page, 'Pocket Hole Calculator');
+  const pocketParameters = {
+    workpieceThicknessMm: 18,
+    matingThicknessMm: 18,
+    jointLengthMm: 200,
+    materialHardness: 'hardwood' as const,
+    jointType: 'butt' as const,
+  };
+  await pocketHole.getByLabel('Joint Length (mm)').fill(String(pocketParameters.jointLengthMm));
+  let pocketResult = calculatePocketHole(pocketParameters);
+  await expect(pocketHole.locator('dl dd').nth(3)).toHaveText(`${pocketResult.spacingMm} mm`);
+
+  const shelf = await openCalculator(page, 'Shelf Sag Calculator');
+  const shelfParameters = {
+    spanMm: 800,
+    widthMm: 300,
+    thicknessMm: 18,
+    material: 'plywood' as const,
+    loadType: 'uniform' as const,
+    loadN: 100,
+    support: 'simple' as const,
+  };
+  await shelf.getByLabel('Shelf Span (mm)').fill(String(shelfParameters.spanMm));
+  let shelfResult = calculateDeflection(shelfParameters);
+  await expect(shelf.locator('dl dd').nth(0)).toHaveText(`${shelfResult.maxDeflectionMm} mm`);
+
+  const mortise = await openCalculator(page, 'Mortise & Tenon Calculator');
+  const mortiseParameters = { stockThicknessMm: 30, stockWidthMm: 90, jointType: 'blind' as const };
+  await mortise.getByLabel('Stock Thickness (mm)').fill(String(mortiseParameters.stockThicknessMm));
+  let mortiseResult = calculateMortiseTenon(mortiseParameters);
+  await expect(mortise.locator('dl dd').nth(0)).toHaveText(`${mortiseResult.tenonThicknessMm} mm`);
+
+  const dovetail = await openCalculator(page, 'Dovetail Layout Calculator');
+  const dovetailParameters = {
+    boardWidthMm: 200,
+    boardThicknessMm: 18,
+    tailCount: 3,
+    angleDegrees: 10,
+    jointType: 'through' as const,
+    style: 'hand_cut' as const,
+  };
+  await dovetail.getByLabel('Number of Tails').fill(String(dovetailParameters.tailCount));
+  const dovetailResult = calculateDovetailLayout(dovetailParameters);
+  await expect(dovetail.locator('dl dd').nth(2)).toHaveText(`${dovetailResult.tails[0]!.narrowWidthMm.toFixed(1)} mm`);
+});
+
+test('invalid roadmap calculator inputs report errors and recover', async ({ appPage: page }) => {
+  const pocketHole = await openCalculator(page, 'Pocket Hole Calculator');
+  await pocketHole.getByLabel('Workpiece Thickness (mm)').fill('0');
+  await expect(pocketHole.getByRole('alert')).toContainText('workpieceThicknessMm must be > 0');
+  await pocketHole.getByLabel('Workpiece Thickness (mm)').fill('18');
+  await expect(pocketHole.getByRole('alert')).toHaveCount(0);
+
+  const shelf = await openCalculator(page, 'Shelf Sag Calculator');
+  await shelf.getByLabel('Shelf Span (mm)').fill('0');
+  await expect(shelf.getByRole('alert')).toContainText('spanMm must be > 0');
+  await shelf.getByLabel('Shelf Span (mm)').fill('600');
+  await expect(shelf.getByRole('alert')).toHaveCount(0);
+
+  const mortise = await openCalculator(page, 'Mortise & Tenon Calculator');
+  await mortise.getByLabel('Stock Thickness (mm)').fill('0');
+  await expect(mortise.getByRole('alert')).toContainText('stockThicknessMm must be > 0');
+  await mortise.getByLabel('Stock Thickness (mm)').fill('18');
+  await expect(mortise.getByRole('alert')).toHaveCount(0);
+
+  const dovetail = await openCalculator(page, 'Dovetail Layout Calculator');
+  await dovetail.getByLabel('Number of Tails').fill('0');
+  await expect(dovetail.getByRole('alert')).toContainText('tailCount must be a positive integer');
+  await dovetail.getByLabel('Number of Tails').fill('5');
+  await expect(dovetail.getByRole('alert')).toHaveCount(0);
 });

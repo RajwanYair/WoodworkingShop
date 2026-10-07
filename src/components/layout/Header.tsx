@@ -7,6 +7,14 @@ import { ProjectManagerModal } from './ProjectManagerModal';
 import { SUPPORTED_LANGUAGES, RTL_LANGS, loadLocale, type SupportedLang } from '../../i18n';
 import { APP_TABS, dispatchCommandAction, formatShortcut, getCommand, type CommandId } from './command-registry';
 import {
+  APP_COMMAND_DEFINITIONS,
+  createAppCommand,
+  registerCommands,
+  unregisterCommand,
+} from '../../utils/command-palette';
+import { TEMPLATES } from '../../engine/templates';
+import { applyCabinetTemplate } from '../configurator/apply-template';
+import {
   IconSun,
   IconMoon,
   IconUndo,
@@ -87,6 +95,94 @@ export function Header() {
     const shortcut = 'shortcuts' in command ? command.shortcuts?.[0] : undefined;
     return shortcut ? `${commandLabel(id)} (${formatShortcut(shortcut)})` : commandLabel(id);
   };
+
+  useEffect(() => {
+    const openTemplates = () => setShowTemplates(true);
+    const openProjects = () => setShowProjects(true);
+    const openMarketplace = () => setShowMarketplace(true);
+    const commands = [
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.undo,
+        t(APP_COMMAND_DEFINITIONS.undo.labelKey),
+        t(APP_COMMAND_DEFINITIONS.undo.categoryKey),
+        () => useCabinetStore.getState().undo(),
+        () => useCabinetStore.getState().canUndo,
+      ),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.redo,
+        t(APP_COMMAND_DEFINITIONS.redo.labelKey),
+        t(APP_COMMAND_DEFINITIONS.redo.categoryKey),
+        () => useCabinetStore.getState().redo(),
+        () => useCabinetStore.getState().canRedo,
+      ),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.toggleTheme,
+        t(APP_COMMAND_DEFINITIONS.toggleTheme.labelKey),
+        t(APP_COMMAND_DEFINITIONS.toggleTheme.categoryKey),
+        () => useCabinetStore.getState().toggleDarkMode(),
+      ),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.toggleContrast,
+        t(APP_COMMAND_DEFINITIONS.toggleContrast.labelKey),
+        t(APP_COMMAND_DEFINITIONS.toggleContrast.categoryKey),
+        () => useCabinetStore.getState().toggleHighContrast(),
+      ),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.toggleUnits,
+        t(APP_COMMAND_DEFINITIONS.toggleUnits.labelKey),
+        t(APP_COMMAND_DEFINITIONS.toggleUnits.categoryKey),
+        () => useCabinetStore.getState().toggleUnits(),
+      ),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.copyLink,
+        t(APP_COMMAND_DEFINITIONS.copyLink.labelKey),
+        t(APP_COMMAND_DEFINITIONS.copyLink.categoryKey),
+        () => dispatchCommandAction('share.copy'),
+      ),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.openTemplates,
+        t(APP_COMMAND_DEFINITIONS.openTemplates.labelKey),
+        t(APP_COMMAND_DEFINITIONS.openTemplates.categoryKey),
+        openTemplates,
+      ),
+      ...TEMPLATES.map((template) => ({
+        id: `header.template.${template.id}`,
+        label: template.name[lang === 'he' ? 'he' : 'en'],
+        category: t('commandPalette.categories.presets'),
+        keywords: [template.id],
+        action: () => {
+          applyCabinetTemplate(template.id);
+          setShowTemplates(false);
+        },
+      })),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.openProjects,
+        t(APP_COMMAND_DEFINITIONS.openProjects.labelKey),
+        t(APP_COMMAND_DEFINITIONS.openProjects.categoryKey),
+        openProjects,
+      ),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.openMarketplace,
+        t(APP_COMMAND_DEFINITIONS.openMarketplace.labelKey),
+        t(APP_COMMAND_DEFINITIONS.openMarketplace.categoryKey),
+        openMarketplace,
+      ),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.openShortcuts,
+        t(APP_COMMAND_DEFINITIONS.openShortcuts.labelKey),
+        t(APP_COMMAND_DEFINITIONS.openShortcuts.categoryKey),
+        () => dispatchCommandAction('shortcuts.toggle'),
+      ),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.reopenOnboarding,
+        t(APP_COMMAND_DEFINITIONS.reopenOnboarding.labelKey),
+        t(APP_COMMAND_DEFINITIONS.reopenOnboarding.categoryKey),
+        () => dispatchCommandAction('help.open'),
+      ),
+    ];
+    registerCommands(commands);
+    return () => commands.forEach(({ id }) => unregisterCommand(id));
+  }, [lang, t]);
 
   useEffect(() => {
     const openTemplates = () => setShowTemplates(true);

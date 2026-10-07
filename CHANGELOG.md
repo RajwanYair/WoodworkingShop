@@ -15,7 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Deferred initial cut-sheet optimization to the existing Web Worker path in browsers that support workers; the sidebar and cost estimate show pending values until results arrive. Deferred the BOM CSV exporter and shortcuts modal until invoked, reducing the initial route from 655.1 KB raw / 160.4 KB Brotli to 590.2 KB / 148.2 KB.
   The workspace LCP banner is now a preloaded responsive WebP; its LCP-discovery and responsive-image audits pass. The latest local Lighthouse run measured FCP 1,785 ms, LCP 2,573 ms, TBT 501 ms, and performance 0.83. Acceptance remains open because the fixed thresholds still fail and run-to-run variation remains.
-- Measured the opaque standard and maskable PWA icon assets in the production build at 3,012 KB total. Raised the aggregate bundle ceiling from 2,970 KB to 3,025 KB, retaining a 13 KB measured margin, and adjusted only the 192px/512px standard PNG caps; JavaScript, initial-route, and all other per-asset budgets remain unchanged.
+- Measured the opaque standard and maskable PWA icon assets in the production build at 3,012 KB total. Raised the aggregate bundle ceiling from 2,970 KB to 3,025 KB, retaining a 13 KB measured margin, and adjusted only the 192px/512px standard PNG caps; JavaScript, initial-route, and all other per-asset budgets remain unchanged. The integrated build measured 3,057.4 KB total, so the aggregate ceiling is now 3,070 KB (12.6 KB margin).
+  The deferred 1,172.7 KB PDF renderer has a 1,200 KB per-file cap instead of inheriting the default 520 KB cap.
 - Improved PWA install metadata and assets: added opaque Apple/standard/maskable PNG icons, stable app identity, palette-matched browser theme colors and iOS standalone/safe-area metadata; stopped advertising the unimplemented POST share target. Removed unused external-font startup hints and cross-origin Workbox caches; PDF emoji artwork remains an on-demand network asset. Added browser checks for manifest entries, icon delivery, theme metadata and offline app-shell reload.
 - ADR (Sprint 376): raised the aggregate dist budget from 2,960 KB to 2,970 KB after the T2 production build measured 2,965.1 KB, a 5.1 KB overage from emitted code-splitting chunks and assets. The JavaScript cap remains 2,850 KB; the initial route is independently gated at 700 KB raw / 175 KB Brotli.
 - Completed Sprint 313 T1/T4 assembly journeys and added dependency-aware step completion with downstream rollback; checklist downloads are parsed for ordered step content.
@@ -64,6 +65,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Re-sequenced the release train so the foundation (Phases 73, 81, 82, 65) ships before feature phases; re-opened Sprints 313 and 315 as v5.35.0 carry-over because no completion evidence existed.
 - Corrected stale documentation: README keyboard shortcuts (`Alt+1`–`Alt+6`), source tree, export formats, command descriptions, locale completeness and a corrupted heading; ARCHITECTURE directory map, store, worker, PWA (Workbox via `vite-plugin-pwa`), CI, i18n and accessibility diagrams; AGENTS active sprint, prompts and MCP servers; CONTRIBUTING gate description; USER-GUIDE preview views, focus-mode shortcut, 3-D/ZIP exports and offline troubleshooting; and the docs index.
 - Archived Sprint 316 and 317 evidence in `docs/SPRINT-HISTORY.md`.
+
+### Changed
+
+- Added an initial-route Brotli budget from the Vite static-import graph and enforced it in CI and release builds; lazy dynamic imports are excluded from the first-load measurement.
+- Kept the PDF renderer inside the lazy `PdfExportPanel` chunk and excluded that panel from the service-worker precache, avoiding an eager 1.2 MB renderer request on the workspace route.
+- Deferred browser cut-sheet optimization to the existing worker during store initialization, while retaining synchronous fallback where Workers are unavailable.
+- Updated `fflate` to 0.8.3 to address the ZIP64 decompression advisory.
+- Deprecated Plugin API v1.3.0 as a compatibility facade over the shared v2 registry; existing v1 registrations and hooks remain supported through app v5.35.0.
+- Renamed ambiguous export modules by responsibility: the glTF/IFC scene model, full glTF document generator, and project-level IFC exporter now have distinct paths; existing named APIs and download behavior are preserved.
+- Consolidated template engines under one module directory while preserving the established engine barrel API through explicit aliases.
+- Consolidated stock APIs under `src/engine/stock/` with tracker, purchasing and inventory modules behind one public barrel; existing engine exports remain available.
+- Consolidated waste analytics, threshold alerts, and pre-cut prediction under `src/engine/waste/`; existing engine exports remain available and the analytics panel uses the family barrel.
+- Consolidated project scoring, design comparison, and snapshot diffs under `src/engine/comparison/`; explicit aliases preserve colliding result/weight names and the engine barrel API.
+- Consolidated WebSerial browser I/O in `src/utils/webserial-cnc.ts`; the pure v2 engine owns transport-neutral profiles and session state, with deprecated engine-barrel aliases retained.
 
 ## [5.34.0] — 2026-10-02
 

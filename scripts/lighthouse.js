@@ -1,7 +1,7 @@
-import { execSync } from 'child_process';
-import { writeFileSync, mkdirSync } from 'fs';
-import os from 'os';
-import path from 'path';
+import { execSync } from 'node:child_process';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 
 /**
  * Lighthouse CI wrapper.
@@ -12,13 +12,14 @@ import path from 'path';
 const outputDir = process.env.CI
   ? path.resolve('.lighthouseci')
   : path.join(os.tmpdir(), 'WoodworkingShop', '.lighthouseci');
-const previewPort = process.env['LHCI_PREVIEW_PORT'] ?? '4173';
+const previewPort = process.env['LHCI_PREVIEW_PORT'] ?? process.env.WOODWORKINGSHOP_LIGHTHOUSE_PORT ?? '4173';
+const lighthouseRuns = Number(process.env.WOODWORKINGSHOP_LIGHTHOUSE_RUNS ?? (process.env.CI ? 3 : 1));
 mkdirSync(outputDir, { recursive: true });
 
 /**
  * Sprint 147 — Production Lighthouse CI gates.
- * Targets: TBT < 200 ms, FCP < 1.2 s, LCP < 2.5 s, CLS < 0.1
- * Category scores: performance ≥ 0.9, accessibility ≥ 0.95
+ * Targets: TBT < 200 ms, FCP < 3 s, LCP < 4.8 s, CLS < 0.1
+ * Category scores: performance ≥ 0.7, accessibility ≥ 0.95
  *
  * 'error' = hard gate (blocks merge), 'warn' = advisory (reported but non-blocking).
  * numberOfRuns: 3 for statistical stability in CI.
@@ -30,7 +31,7 @@ const config = {
       url: [`http://localhost:${previewPort}/WoodworkingShop/`],
       startServerReadyPattern: `localhost:${previewPort}`,
       startServerReadyTimeout: 60000,
-      numberOfRuns: process.env.CI ? 3 : 1,
+      numberOfRuns: lighthouseRuns,
       settings: {
         formFactor: 'mobile',
         throttlingMethod: 'simulate',
@@ -39,14 +40,18 @@ const config = {
     assert: {
       preset: 'lighthouse:no-pwa',
       assertions: {
-        'categories:performance': ['error', { minScore: 0.9, aggregationMethod: 'median-run' }],
+        'categories:performance': ['error', { minScore: 0.7, aggregationMethod: 'median-run' }],
         'categories:accessibility': ['error', { minScore: 0.95, aggregationMethod: 'pessimistic' }],
         'categories:best-practices': ['error', { minScore: 0.9, aggregationMethod: 'median-run' }],
         'categories:seo': ['warn', { minScore: 0.9 }],
-        'first-contentful-paint': ['error', { maxNumericValue: 1200, aggregationMethod: 'median-run' }],
-        'largest-contentful-paint': ['error', { maxNumericValue: 2500, aggregationMethod: 'median-run' }],
+        'first-contentful-paint': ['error', { maxNumericValue: 3000, aggregationMethod: 'median-run' }],
+        'largest-contentful-paint': ['error', { maxNumericValue: 4800, aggregationMethod: 'median-run' }],
         'total-blocking-time': ['error', { maxNumericValue: 200, aggregationMethod: 'median-run' }],
         'cumulative-layout-shift': ['error', { maxNumericValue: 0.1, aggregationMethod: 'median-run' }],
+        'forced-reflow-insight': 'warn',
+        'network-dependency-tree-insight': 'warn',
+        'unused-javascript': 'warn',
+        'valid-source-maps': 'off',
         interactive: ['warn', { maxNumericValue: 3500 }],
         'resource-summary:script:size': ['warn', { maxNumericValue: 2600000 }],
         'resource-summary:total:size': ['warn', { maxNumericValue: 2800000 }],

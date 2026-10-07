@@ -158,14 +158,8 @@ export {
 } from './cabinet-notes';
 export type { CabinetNote, NoteStore, NoteScope, NoteError } from './cabinet-notes';
 
-export { analyseWaste, formatWasteReport, DEFAULT_WASTE_THRESHOLDS } from './inventory/index';
-export type {
-  SheetWasteInput,
-  WasteThresholds,
-  WasteAlert,
-  WasteAnalysisReport,
-  WasteAlertLevel,
-} from './inventory/index';
+export { analyseWaste, formatWasteReport, DEFAULT_WASTE_THRESHOLDS } from './waste';
+export type { SheetWasteInput, WasteThresholds, WasteAlert, WasteAnalysisReport, WasteAlertLevel } from './waste';
 
 export { buildCutPlanSummary, formatCutPlanSummary } from './cut-plan-summary';
 export type { SheetPlanInput, MaterialSummary, CutPlanSummary } from './cut-plan-summary';
@@ -240,12 +234,17 @@ export type {
 
 export {
   TEMPLATE_CATALOGUE,
-  getTemplatesByCategory,
-  getTemplate,
+  getLibraryTemplatesByCategory as getTemplatesByCategory,
+  getLibraryTemplate as getTemplate,
   instantiateLibraryTemplate,
   listTemplateIds,
-} from './templates/index';
-export type { TemplateCategory, TemplateDimensions, CabinetTemplate, LibraryTemplateInstance } from './templates/index';
+} from './templates';
+export type {
+  TemplateCategory,
+  TemplateDimensions,
+  LibraryCabinetTemplate as CabinetTemplate,
+  LibraryTemplateInstance,
+} from './templates';
 
 export { batchReplaceMaterial, listMaterials, countByMaterial } from './batch-replace';
 export type { BatchPart, BatchReplaceOptions, BatchReplaceResult } from './batch-replace';
@@ -302,14 +301,14 @@ export {
   buildSvgPatternDefs,
 } from './material-textures';
 export type { MaterialTexture, MaterialTextureId, GrainLine } from './material-textures';
+/** @deprecated Import browser transport functions from `src/utils/webserial-cnc.ts`. */
 export {
   isWebSerialAvailable,
   connectToMachine,
   streamGcodeLines,
   disconnectFromMachine,
-  DEFAULT_SERIAL_PROFILE,
-} from './webserial';
-export type { WebSerialState, WebSerialProfile, SerialPortHandle } from './webserial';
+} from '../utils/webserial-cnc';
+export type { SerialPortHandle } from '../utils/webserial-cnc';
 export { MACHINE_PROFILES, MACHINE_PROFILE_IDS, getMachineProfile, getDefaultMachineProfile } from './machine-profiles';
 export type { MachineProfile, MachineProfileId, ControllerFirmware, SpindleHint } from './machine-profiles';
 export { extractToolSetup, generateMachiningJob, validateMachiningJob, resetIdCounter } from './machining-job';
@@ -598,7 +597,7 @@ export {
   GLTF_SCHEMA_VERSION,
   IFC_SCHEMA_VERSION,
   GLTF_GENERATOR,
-} from './gltf-export';
+} from './gltf-ifc-model';
 export type {
   GltfComponentType,
   GltfAccessorType,
@@ -612,7 +611,7 @@ export type {
   IfcRelationship,
   IfcScene,
   IfcExportResult,
-} from './gltf-export';
+} from './gltf-ifc-model';
 
 // Sprint 134 — WebSerial CNC streaming v2
 export {
@@ -630,6 +629,7 @@ export {
   formatStreamReport,
   DEFAULT_MAX_RETRIES,
   SESSION_ID_PREFIX,
+  DEFAULT_SERIAL_PROFILE,
 } from './webserial-v2';
 export type {
   StreamLineState,
@@ -638,6 +638,8 @@ export type {
   StreamSession,
   StreamProgress,
   StreamError,
+  WebSerialState,
+  WebSerialProfile,
 } from './webserial-v2';
 
 // Sprint 135 — Advanced stock management
@@ -653,7 +655,7 @@ export {
   getStockSummary,
   formatStockReport,
   DEFAULT_REORDER_MULTIPLIER,
-} from './stock/index';
+} from './stock';
 export type {
   PurchaseOrderStatus,
   PurchaseOrderLine,
@@ -664,7 +666,7 @@ export type {
   StockRecord,
   StockLedger,
   StockSummary,
-} from './stock/index';
+} from './stock';
 
 // Sprint 137 — WCAG 2.2 AA accessibility audit engine
 export {
@@ -851,7 +853,7 @@ export {
   MAX_RULES,
   MAX_COMPUTED,
   MAX_EXPRESSION_LENGTH,
-} from './templates/index';
+} from './templates';
 export type {
   ParamType,
   NumberConstraint,
@@ -867,7 +869,7 @@ export type {
   ParametricTemplateInstance,
   TemplateValidationError,
   TemplateValidationResult,
-} from './templates/index';
+} from './templates';
 
 // Sprint 163 — Batch Export Pipeline (Phase 36)
 export {
@@ -994,7 +996,7 @@ export {
   getCommonCriteria,
   DEFAULT_DESIGN_COMPARISON_WEIGHTS as DEFAULT_WEIGHTS,
   CRITERION_META,
-} from './inventory/index';
+} from './comparison';
 export type {
   CriterionName,
   CriterionValue,
@@ -1002,8 +1004,8 @@ export type {
   CriterionWeight,
   CriterionComparison,
   NormalizedScore,
-  DesignComparisonResult as ComparisonResult,
-} from './inventory/index';
+  ComparisonResult,
+} from './comparison';
 
 // Sprint 172 — Dust collection estimator
 export {
@@ -1043,14 +1045,8 @@ export type {
   DependencyResult,
 } from './assembly-dependency';
 
-export { predictWaste, computeTotalDemand, estimatePartsPerSheet } from './inventory/index';
-export type {
-  PredictorPart,
-  SheetSize,
-  ConfidenceLevel,
-  SheetPrediction,
-  WastePredictionResult,
-} from './inventory/index';
+export { predictWaste, computeTotalDemand, estimatePartsPerSheet } from './waste';
+export type { PredictorPart, SheetSize, ConfidenceLevel, SheetPrediction, WastePredictionResult } from './waste';
 
 export { generateMaintenanceSchedule, computeHealthScore, getMostUrgentPerTool } from './maintenance-scheduler';
 export type {
@@ -1082,22 +1078,22 @@ export type {
   ProjectCostResult,
 } from './material-cost-tracker';
 
-export { checkStock, analyzeInventory, projectUsage, generateReorderList } from './stock/index';
+export { checkStock, analyzeInventory, projectUsage, generateReorderList } from './stock';
 export type {
   InventoryItem,
-  StockStatus as InventoryStockStatus,
+  InventoryStockStatus,
   StockCheck,
   ProjectUsage,
   UsageProjection,
   InventoryAnalysisResult,
-} from './stock/index';
+} from './stock';
 
 export {
-  getTemplate as getCabinetTemplate,
-  getTemplatesByCategory as getCabinetTemplatesByCategory,
+  getCabinetTemplate,
+  getCabinetTemplatesByCategory,
   instantiateCabinetTemplate,
   BUILT_IN_TEMPLATES,
-} from './templates/index';
+} from './templates';
 
 export type {
   CabinetCategory,
@@ -1106,7 +1102,7 @@ export type {
   CabinetValidationError,
   TemplateParams,
   CabinetTemplateInstance,
-} from './templates/index';
+} from './templates';
 
 export {
   generateUsageReport,
@@ -1141,16 +1137,16 @@ export {
   compareProjects,
   bestForCriterion,
   percentDifference,
-  DEFAULT_PROJECT_COMPARISON_WEIGHTS,
-} from './inventory/index';
+  DEFAULT_WEIGHTS as DEFAULT_PROJECT_COMPARISON_WEIGHTS,
+} from './comparison';
 
 export type {
   ProjectMetrics,
   ComparisonWeights,
   NormalisedScores,
   ProjectScore,
-  ProjectComparisonResult,
-} from './inventory/index';
+  ComparisonResult as ProjectComparisonResult,
+} from './comparison';
 
 // Sprint 191 — Toolpath Feed Rate Calculator
 export {
@@ -1173,6 +1169,18 @@ export type {
 // Sprint 193 — Dowel Joint Calculator
 export { calculateDowelJoint, selectDowelDiameter, minDowelsForLoad, STANDARD_DOWEL_DIAMETERS } from './dowel-joint';
 export type { DowelDiameter, JointOrientation, DowelJointInput, DowelPosition, DowelJointResult } from './dowel-joint';
+
+// Sprint 192 — Cabinet Weight Estimator
+export { estimateCabinetWeight, categorizeFastener, maxShelfLoad, MATERIAL_DENSITIES } from './cabinet-weight';
+
+export type {
+  PanelMaterial,
+  WeightPanel,
+  WeightHardware,
+  WeightEstimate,
+  PanelWeight,
+  FastenerCategory,
+} from './cabinet-weight';
 
 // Sprint 194 — Panel Layout Label Generator
 export { generatePanelLabel, generateLabelBatch, formatLabelText } from './panel-label';

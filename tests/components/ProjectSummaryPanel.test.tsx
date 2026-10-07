@@ -63,6 +63,8 @@ describe('ProjectSummaryPanel (Sprint 53)', () => {
     seedMulti();
     render(<ProjectSummaryPanel />);
     expect(screen.getByRole('region', { name: /multi-cabinet project summary/i })).toBeInTheDocument();
+    expect(screen.getByText('Panel weight')).toBeInTheDocument();
+    expect(screen.getByText('Total estimated time')).toBeInTheDocument();
   });
 
   it('shows cabinet names in the subtitle', () => {

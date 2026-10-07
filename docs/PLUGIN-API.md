@@ -1,6 +1,6 @@
 # WoodworkingShop Plugin API
 
-> **API version**: 1.2.0 · **App version**: ≥ 3.62.0 · **Stability**: `deprecated`
+> **API version**: 1.3.0 · **App version**: ≥ 3.62.0 · **Stability**: `deprecated`
 > **Source**: [`src/engine/plugin.ts`](../src/engine/plugin.ts)
 > **Import from**: `src/engine/index.ts` (barrel) — never import directly from individual engine files.
 
@@ -37,11 +37,17 @@ import type { CabinetPlannerPlugin } from './engine';
 
 ## Stability Tiers
 
-| Tier           | Meaning                                                             |
-| -------------- | ------------------------------------------------------------------- |
-| `stable`       | Guaranteed not to break within a major version (1.x).               |
-| `experimental` | May change without notice. Opt-in only; do not use in production.   |
-| `deprecated`   | Will be removed in the next major release. Migrate off immediately. |
+| Tier           | Meaning                                                                |
+| -------------- | ---------------------------------------------------------------------- |
+| `stable`       | Guaranteed not to break within a major version (1.x).                  |
+| `experimental` | May change without notice. Opt-in only; do not use in production.      |
+| `deprecated`   | The v1 facade is supported through app v5.35.0 and removed in v5.36.0. |
+
+Plugin API v1.3.0 is a compatibility facade over the shared v2 registry. Existing
+v1 plugins continue to register and run their hooks, but should migrate to
+`CabinetPlannerPluginV2` and `registerPluginV2` before app v5.36.0. V1
+registrations are visible to v2 registry queries and v1 unregister calls remove
+the same registry entry; v1 plugins do not receive v2 lifecycle callbacks.
 
 Check hook stability at runtime:
 

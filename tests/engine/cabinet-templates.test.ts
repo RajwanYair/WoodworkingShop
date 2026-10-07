@@ -2,11 +2,11 @@ import { describe, it, expect } from 'vitest';
 
 import {
   BUILT_IN_TEMPLATES,
-  getTemplate,
-  getTemplatesByCategory,
-  instantiateTemplate,
-} from '../../src/engine/cabinet-templates';
-import type { CabinetTemplate } from '../../src/engine/cabinet-templates';
+  getCabinetTemplate as getTemplate,
+  getCabinetTemplatesByCategory as getTemplatesByCategory,
+  instantiateCabinetTemplate as instantiateTemplate,
+} from '../../src/engine/templates';
+import type { BuiltInCabinetTemplate as CabinetTemplate } from '../../src/engine/templates';
 
 describe('BUILT_IN_TEMPLATES', () => {
   it('contains 6 templates', () => {

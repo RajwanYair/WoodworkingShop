@@ -1,3 +1,13 @@
 {
-  "tokens": ["{{count}}", "—", "A4", "MDF", "Oracle SCM", "SAP (IDOC CSV)", "Shapeoko 3", "X-Carve 1000"]
+  "tokens": ["{{count}}", "—", "A4", "MDF", "Oracle SCM", "SAP (IDOC CSV)", "Shapeoko 3", "X-Carve 1000"],
+  "identical": [
+    "erp.sap",
+    "erp.oracle",
+    "pdf.pageSizeA4",
+    "cost.notSet",
+    "plugins.version",
+    "gcode.presetShapeoko3",
+    "gcode.presetXcarve1000",
+    "gcode.presetGenmitsu"
+  ]
 }

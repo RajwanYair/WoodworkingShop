@@ -49,7 +49,7 @@ export interface PluginContract {
 }
 
 /** Version of the v1 plugin API contract, independent from app package version. */
-export const PLUGIN_API_VERSION = '1.2.0' as const;
+export const PLUGIN_API_VERSION = '1.3.0' as const;
 
 /** Compatibility check result for a plugin's minimum required API version. */
 export interface PluginApiCompatibility {
@@ -174,13 +174,16 @@ export function getPluginContract(): PluginContract {
 // ─── Plugin interface ────────────────────────────────────────────────────────
 
 /**
- * WoodworkingShop Plugin API — v1 draft (v3.49.2)
+ * Cabinet Planner Plugin API — v1 compatibility facade.
  *
  * A plugin can intercept the parts pipeline and/or hook into config changes.
  * All hooks are optional; a plugin only needs to implement what it cares about.
  *
  * Plugins are pure: hooks must be side-effect-free functions that return new
  * values instead of mutating their inputs.
+ *
+ * @deprecated Migrate to {@link CabinetPlannerPluginV2}; the v1 facade remains
+ * supported through app v5.35.0 and is scheduled for removal in v5.36.0.
  */
 /** @deprecated Use {@link CabinetPlannerPluginV2}; the v1 adapter is retained through v5.35.x. */
 export interface CabinetPlannerPlugin {
@@ -225,18 +228,30 @@ export interface CabinetPlannerPlugin {
 
 // ── Plugin registry ──────────────────────────────────────────────────────────
 
-/** @deprecated Use `registerPluginV2`; this adapter remains through v5.35.x. */
+/**
+ * Register a v1 plugin through the shared v2 registry.
+ *
+ * @deprecated Use {@link registerPluginV2}.
+ * @param plugin The v1 plugin to register.
+ * @returns A result indicating whether registration succeeded.
+ */
 export function registerPlugin(plugin: CabinetPlannerPlugin): Result<void, string> {
   const result = registerPluginV2(plugin);
   return result.ok ? ok(undefined) : err(result.error);
 }
 
-/** @deprecated Use `unregisterPluginV2`; this adapter remains through v5.35.x. */
+/**
+ * Unregister a plugin from the shared registry. No-op if not found.
+ *
+ * @deprecated Use {@link unregisterPluginV2}.
+ * @param id The plugin id to unregister.
+ * @returns Nothing.
+ */
 export function unregisterPlugin(id: string): void {
   unregisterPluginV2(id);
 }
 
-/** @deprecated Use `getRegistryEntries`; this adapter remains through v5.35.x. */
+/** @deprecated Use `getActivePlugins`; this adapter remains through v5.35.x. */
 export function getPlugins(): readonly CabinetPlannerPlugin[] {
   return getRegistryEntries().map((entry) => entry.plugin);
 }

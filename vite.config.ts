@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { resolve } from 'node:path';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { relative } from 'node:path';
 import os from 'node:os';
 import { sriPlugin } from './scripts/vite-plugin-sri.ts';
 
@@ -56,6 +57,34 @@ function cloudflareAnalyticsPlugin() {
   };
 }
 
+function capabilityChunkPlugin() {
+  return {
+    name: 'capability-chunk-map',
+    apply: 'build' as const,
+    generateBundle(
+      _options: unknown,
+      bundle: Record<string, { type: string; fileName: string; modules?: Record<string, unknown> }>,
+    ) {
+      const chunks: Record<string, string[]> = {};
+      for (const output of Object.values(bundle)) {
+        if (output.type !== 'chunk') continue;
+        for (const moduleId of Object.keys(output.modules ?? {})) {
+          const cleanId = moduleId.split(/[?#]/, 1)[0];
+          if (!cleanId) continue;
+          const sourcePath = relative(process.cwd(), cleanId).replaceAll('\\', '/');
+          if (!/^src\/(?:engine|utils|services)\//.test(sourcePath)) continue;
+          const moduleChunks = chunks[sourcePath] ?? [];
+          moduleChunks.push(output.fileName);
+          chunks[sourcePath] = moduleChunks;
+        }
+      }
+      const reportDirectory = resolve(os.tmpdir(), 'WoodworkingShop', 'capability-map');
+      mkdirSync(reportDirectory, { recursive: true });
+      writeFileSync(resolve(reportDirectory, 'chunks.json'), `${JSON.stringify(chunks, null, 2)}\n`);
+    },
+  };
+}
+
 // https://vite.dev/config/
 export default defineConfig({
   cacheDir: resolve(os.tmpdir(), 'WoodworkingShop', '.vite_cache'),
@@ -64,6 +93,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     capabilityChunkManifestPlugin(),
+    capabilityChunkPlugin(),
     cloudflareAnalyticsPlugin(),
     sriPlugin(),
     VitePWA({
@@ -79,14 +109,14 @@ export default defineConfig({
         skipWaiting: false,
         clientsClaim: false,
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
-        globIgnores: ['**/assets/pdf-renderer-*.js'],
+        globIgnores: ['**/assets/PdfExportPanel-*.js'],
         navigateFallback: '/WoodworkingShop/index.html',
         navigateFallbackDenylist: [/^\/WoodworkingShop\/api\//],
         // Sprint 149 — offline fallback for navigation requests when cache is empty
         offlineGoogleAnalytics: false,
         runtimeCaching: [
           {
-            urlPattern: ({ url }: { url: URL }) => url.pathname.startsWith('/WoodworkingShop/assets/pdf-renderer-'),
+            urlPattern: ({ url }: { url: URL }) => url.pathname.startsWith('/WoodworkingShop/assets/PdfExportPanel-'),
             handler: 'CacheFirst',
             options: {
               cacheName: 'pdf-renderer',
@@ -127,7 +157,7 @@ export default defineConfig({
   },
   build: {
     target: 'es2022',
-    manifest: '.vite/build-manifest.json',
+    manifest: '.vite/manifest.json',
     chunkSizeWarningLimit: 1600,
     // v3.24.0: inject modulepreload polyfill for Safari < 16.4 compatibility
     modulePreload: {
@@ -140,7 +170,7 @@ export default defineConfig({
     rolldownOptions: {
       output: {
         // Sprint 63 — consolidated chunk strategy:
-        //   pdf-renderer : lazily-imported 300 KB PDF engine — own chunk for deferred loading.
+        //   PDF export   : route-isolated; the renderer stays inside the lazy PDF panel chunk.
         //   i18n-vendor  : i18next + react-i18next — stable, cached separately from app code.
         //   vendor       : React + React-DOM + Zustand — small combined chunk; rarely changes
         //                  together with app code, benefits from long-term browser caching.

@@ -5,8 +5,8 @@ import {
   validateWeights,
   getCommonCriteria,
   DEFAULT_WEIGHTS,
-} from '../../src/engine/inventory/comparison/design';
-import type { CriterionWeight, DesignSnapshot } from '../../src/engine/inventory/comparison/design';
+} from '../../src/engine/comparison';
+import type { CriterionWeight, DesignSnapshot } from '../../src/engine/comparison';
 
 function makeSnapshot(id: string, name: string, values: Partial<Record<string, number>> = {}): DesignSnapshot {
   const defaults = {

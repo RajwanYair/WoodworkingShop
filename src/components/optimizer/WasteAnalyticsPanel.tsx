@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n/format';
-import { analyzeWaste } from '../../engine/inventory/waste';
+import { analyzeWaste } from '../../engine/waste';
 import type { OptimizationResult } from '../../engine/types';
 
 interface Props {

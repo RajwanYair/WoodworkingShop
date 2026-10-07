@@ -135,6 +135,8 @@ test('PDF text extraction includes the configured cabinet dimensions', async ({ 
 test('PDF text extraction includes cabinet specifications', async ({ appPage }) => {
   const { pages } = await downloadPdf(appPage);
   expect(pages.join(' ')).toContain('Cabinet Specifications');
+  expect(pages.join(' ')).toContain('Estimated panel weight');
+  expect(pages.join(' ')).toContain('Estimated build time');
 });
 
 test('PDF text extraction includes the parts list', async ({ appPage }) => {
