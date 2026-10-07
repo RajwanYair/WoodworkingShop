@@ -237,7 +237,19 @@
     "expandQty": "Desglosar piezas con cantidad múltiple (una etiqueta por pieza)",
     "print": "Imprimir etiquetas",
     "printTitle": "Etiquetas de piezas",
-    "gridAriaLabel": "Tarjetas de etiquetas de piezas"
+    "gridAriaLabel": "Tarjetas de etiquetas de piezas",
+    "pageSize": "Papel",
+    "a4": "A4",
+    "letter": "Letter",
+    "rows": "Filas",
+    "columns": "Columnas",
+    "grain": "Veta",
+    "alongLength": "a lo largo",
+    "alongWidth": "a lo ancho",
+    "unspecified": "sin especificar",
+    "edgeBanding": "Canteado",
+    "quantity": "Cantidad",
+    "qrReference": "Referencia QR"
   },
   "stockTracker": {
     "title": "Control de existencias",

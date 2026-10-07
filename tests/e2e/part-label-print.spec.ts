@@ -17,8 +17,18 @@ async function openPartLabels(page: import('@playwright/test').Page) {
   return page.getByRole('list', { name: 'Part label cards' });
 }
 
-async function printLabels(page: import('@playwright/test').Page) {
+async function printLabels(
+  page: import('@playwright/test').Page,
+  settings: { pageSize?: 'A4' | 'Letter'; rows?: number; columns?: number; expanded?: boolean } = {},
+) {
   const list = await openPartLabels(page);
+  if (settings.expanded) {
+    await page.getByRole('checkbox', { name: 'Expand multi-qty parts (one label per piece)' }).check();
+  }
+  if (settings.pageSize) await page.getByLabel('Paper').selectOption(settings.pageSize);
+  if (settings.rows !== undefined) await page.getByRole('spinbutton', { name: 'Rows' }).fill(String(settings.rows));
+  if (settings.columns !== undefined)
+    await page.getByRole('spinbutton', { name: 'Columns' }).fill(String(settings.columns));
   const visibleLabels = (await list.getByRole('listitem').allTextContents()).map((text) => text.match(/P-\d{3}/)?.[0]);
   const popupPromise = page.waitForEvent('popup').then(async (popup) => {
     await popup.evaluate(() => {
@@ -74,7 +84,7 @@ test('each label card presents a name, dimensions and material', async ({ appPag
   expect(names.length).toBeGreaterThan(0);
   expect(names.every((name) => name.trim().length > 0)).toBe(true);
   expect(dimensions.every((value) => /^\d+\s*×\s*\d+$/.test(value.trim()))).toBe(true);
-  expect(materials.length).toBe(names.length);
+  expect(materials).toHaveLength(names.length);
   expect(materials.every((material) => material.trim().length > 0)).toBe(true);
 });
 
@@ -146,7 +156,7 @@ test('print popup declares UTF-8 document encoding', async ({ appPage: page }) =
 test('print popup preserves the preview label count', async ({ appPage: page }) => {
   const { popup, visibleLabels } = await printLabels(page);
   const printedLabels = await popup.locator('.label').allTextContents();
-  expect(printedLabels.length).toBe(visibleLabels.length);
+  expect(printedLabels).toHaveLength(visibleLabels.length);
 });
 
 test('print popup preserves label identifiers and ordering', async ({ appPage: page }) => {
@@ -157,10 +167,18 @@ test('print popup preserves label identifiers and ordering', async ({ appPage: p
 
 test('print popup keeps each label identifier paired with its part text', async ({ appPage: page }) => {
   const { list, popup } = await printLabels(page);
-  const normalize = (text: string) => text.replace(/\s+/g, '').trim();
-  const previewCards = (await list.getByRole('listitem').allTextContents()).map(normalize);
-  const printedCards = (await popup.locator('.label').allTextContents()).map(normalize);
-
+  const previewCards = await list.locator('li').evaluateAll((cards) =>
+    cards.map((card) => ({
+      label: card.querySelector('span')?.textContent,
+      name: card.querySelector('span:nth-child(2)')?.textContent,
+    })),
+  );
+  const printedCards = await popup.locator('.label').evaluateAll((cards) =>
+    cards.map((card) => ({
+      label: card.querySelector('strong')?.textContent,
+      name: card.querySelector('span')?.textContent,
+    })),
+  );
   expect(printedCards).toEqual(previewCards);
 });
 
@@ -200,11 +218,33 @@ test('print popup requests A4 portrait with 8 mm margins', async ({ appPage: pag
   expect(printCss).toContain('@page{size:A4 portrait;margin:8mm}');
 });
 
-test('print popup lays labels out in three responsive columns', async ({ appPage: page }) => {
-  const { popup } = await printLabels(page);
+test('print controls apply Letter paper and a custom label grid', async ({ appPage: page }) => {
+  const { popup } = await printLabels(page, { pageSize: 'Letter', rows: 4, columns: 2 });
   const printCss = await popup.locator('style').textContent();
-  expect(printCss).toContain('grid-template-columns:repeat(3,minmax(0,1fr))');
-  expect(await popup.locator('main.label-grid').count()).toBe(1);
+  expect(printCss).toContain('@page{size:Letter portrait;margin:8mm}');
+  expect(printCss).toContain('grid-template-columns:repeat(2,minmax(0,1fr))');
+  expect(printCss).toContain('grid-template-rows:repeat(4,minmax(30mm,auto))');
+});
+
+test('printed QR exposes only the stable label reference', async ({ appPage: page }) => {
+  const { popup } = await printLabels(page);
+  const qr = popup.locator('.label').first().locator('.qr');
+  await expect(qr).toBeVisible();
+  await expect(qr).toHaveAttribute('aria-label', /^QR reference P-\d{3}$/);
+  await expect(qr.locator('title')).toHaveText(/^QR reference P-\d{3}$/);
+});
+
+test('expanded piece QR retains its lowercase label suffix', async ({ appPage: page }) => {
+  const { popup } = await printLabels(page, { expanded: true });
+  await expect(popup.locator('.label').first().locator('.qr')).toHaveAttribute('aria-label', /^QR reference P-\d{3}a$/);
+});
+
+test('print popup defaults to two columns with legible label height', async ({ appPage: page }) => {
+  const { popup, visibleLabels } = await printLabels(page);
+  const printCss = await popup.locator('style').textContent();
+  expect(printCss).toContain('grid-template-columns:repeat(2,minmax(0,1fr))');
+  expect(printCss).toContain('grid-template-rows:repeat(4,minmax(30mm,auto))');
+  expect(await popup.locator('main .label-grid').count()).toBe(Math.ceil(visibleLabels.length / 8));
 });
 
 test('print popup prevents label cards from splitting across pages', async ({ appPage: page }) => {
@@ -229,13 +269,13 @@ test('print popup contains one card for every source label', async ({ appPage: p
 
 test('print popup includes a main printable region', async ({ appPage: page }) => {
   const { popup } = await printLabels(page);
-  await expect(popup.locator('main.label-grid')).toBeVisible();
-  await expect(popup.locator('main.label-grid .label').first()).toBeVisible();
+  await expect(popup.locator('main .label-grid')).toBeVisible();
+  await expect(popup.locator('main .label-grid .label').first()).toBeVisible();
 
   const printCss = await popup.locator('style').textContent();
   expect(printCss).toContain('@page{size:A4 portrait;margin:8mm}');
   expect(printCss).toContain('grid-template-columns:repeat(3,minmax(0,1fr))');
   expect(printCss).toContain('break-inside:avoid');
   expect(printCss).toContain('page-break-inside:avoid');
-  expect(await popup.locator('main.label-grid').count()).toBe(1);
+  expect(await popup.locator('main .label-grid').count()).toBe(1);
 });

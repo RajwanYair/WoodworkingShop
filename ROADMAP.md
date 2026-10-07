@@ -824,7 +824,7 @@ Status (2026-10-02): T1 and T2 verification and clean-checkout acceptance are co
 - T2: Material conversion/import/export and migration; UI filters by type and thickness/grain suitability.
 - Accept: one type cannot accidentally be packed with another; catalog import and legacy material fixtures pass.
 
-**Sprint 334 — Shop-floor labels v2** — P1 · M · S312.
+**Sprint 334 — Shop-floor labels v2 — DONE (#178)** — P1 · M · S312.
 
 - T1: Add configurable label layout, QR with non-sensitive stable part/project reference, material/dimensions/grain/edge banding and quantity.
 - T2: Support standard page sizes and user-defined grid; test print CSS and QR payload with parser.
