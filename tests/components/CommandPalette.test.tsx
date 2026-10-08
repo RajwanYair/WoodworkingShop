@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useState } from 'react';
@@ -58,13 +58,13 @@ describe('CommandPalette', () => {
     await user.keyboard('{Enter}');
 
     expect(action).toHaveBeenCalledOnce();
-    expect(opener).toHaveFocus();
+    await waitFor(() => expect(opener).toHaveFocus());
 
     await user.click(opener);
     expect(screen.getByText('Preview')).toBeInTheDocument();
     expect(screen.getByText('Recent')).toBeInTheDocument();
     await user.keyboard('{Escape}');
-    expect(opener).toHaveFocus();
+    await waitFor(() => expect(opener).toHaveFocus());
   });
 });
 
