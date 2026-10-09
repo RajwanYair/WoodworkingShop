@@ -64,6 +64,7 @@ jobs:
       - run: npm run build && npm run bundle:check && npm run bundle:critical
   e2e:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     needs: test
     steps:
       - uses: actions/checkout@v5
