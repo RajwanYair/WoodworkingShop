@@ -571,6 +571,7 @@
     "delete": "حذف",
     "placeholder": "اسم الخزانة…",
     "empty": "لا توجد تهيئات محفوظة",
+    "loadFailed": "تعذر تحميل التهيئات المحفوظة",
     "export": "تصدير JSON",
     "exportCabinet": "تصدير خزانة",
     "exportProject": "تصدير المشروع ({{count}} خزائن)",

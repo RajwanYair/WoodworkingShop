@@ -303,7 +303,12 @@ test('Cabinet summary cost edit controls match the browser-derived inventory', a
     if (!('triggerTitle' in control) || typeof control.triggerTitle !== 'string') {
       throw new Error(`Cost control ${control.accessibleName} has no edit trigger`);
     }
-    await summary.getByTitle(control.triggerTitle).first().click();
+    const trigger =
+      'triggerAccessibleName' in control && typeof control.triggerAccessibleName === 'string'
+        ? summary.getByRole('button', { name: control.triggerAccessibleName, exact: true })
+        : summary.getByTitle(control.triggerTitle).first();
+    await expect(trigger).toHaveCount(1);
+    await trigger.click();
     const input = getAccessibleControl(summary, control.role, control.accessibleName);
     await expect(input).toHaveCount(1);
     expect(control.positiveTest).toBeTruthy();

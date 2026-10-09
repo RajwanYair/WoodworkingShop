@@ -25,7 +25,7 @@ concurrency:
 jobs:
   deploy:
     name: Build & Deploy to CF Pages
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # Skip silently when the CF account variable is not configured (e.g. forks).
     # Note: secrets cannot be compared in if: conditions — use vars instead.
     if: ${{ vars.CLOUDFLARE_ACCOUNT_ID != '' }}
@@ -38,7 +38,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
@@ -53,10 +53,11 @@ jobs:
           VITE_CF_ANALYTICS_TOKEN: ${{ secrets.VITE_CF_ANALYTICS_TOKEN }}
 
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
+        uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: 4.149.0
           command: pages deploy dist --project-name=cabinet-planner
           # GitHubToken enables PR preview deployment comments
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}

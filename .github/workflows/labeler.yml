@@ -11,7 +11,7 @@ permissions:
 jobs:
   label:
     name: Label PR by changed paths
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Label pull request
         uses: actions/labeler@v5

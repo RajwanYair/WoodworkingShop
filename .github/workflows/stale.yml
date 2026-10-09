@@ -13,7 +13,7 @@ permissions:
 jobs:
   stale:
     name: Mark and close stale items
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Stale action
         uses: actions/stale@v10

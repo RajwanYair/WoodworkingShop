@@ -571,6 +571,7 @@
     "delete": "Supprimer",
     "placeholder": "Nom de l'armoire…",
     "empty": "Aucune configuration enregistrée",
+    "loadFailed": "Impossible de charger les configurations enregistrées",
     "export": "Exporter JSON",
     "exportCabinet": "Exporter l'armoire",
     "exportProject": "Exporter le projet ({{count}} armoires)",
