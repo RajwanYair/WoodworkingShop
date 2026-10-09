@@ -1158,6 +1158,8 @@ Translation batches cover the command palette, assembly and optimizer workflows,
 
 A duplicate tool-wear namespace was corrected. EN-identical rates remain above the 2% acceptance threshold. T3–T4 remain outstanding; Sprint 375 acceptance is not yet met.
 
+T3 complete (2026-10-08, #180): test-only runtime pseudo-locales now stress every primary panel at 320 px in expanded LTR and bidi RTL modes. The journey checks clipping, offscreen controls, overlapping actions and document overflow; it exposed and fixed wrapping for Save/Load export actions. T2 and T4 remain open, so Sprint 375 remains in progress.
+
 **Sprint 376 — Critical-path performance budget** — P1 · M · S371.
 
 - T1: Extend `scripts/bundle-report.js` with brotli sizes and the initial-route chunk graph; add `critical` budgets to `config/bundle-budget.json` set from the measured baseline.
