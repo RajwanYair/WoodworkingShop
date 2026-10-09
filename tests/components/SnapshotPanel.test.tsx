@@ -1,14 +1,21 @@
-import { render, screen } from '@testing-library/react';
-import { within } from '@testing-library/react';
+import { act, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 import { SnapshotPanel } from '../../src/components/layout/SnapshotPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import type { ProjectSnapshot } from '../../src/store/cabinet-store';
 
+const showModalDescriptor = Object.getOwnPropertyDescriptor(HTMLDialogElement.prototype, 'showModal');
+
 describe('SnapshotPanel', () => {
   beforeEach(() => {
+    Object.defineProperty(HTMLDialogElement.prototype, 'showModal', {
+      configurable: true,
+      value: function (this: HTMLDialogElement) {
+        this.setAttribute('open', '');
+      },
+    });
     const cabinets = [{ name: 'Cabinet 1', config: { ...DEFAULT_CONFIG } }];
     const snapshots: ProjectSnapshot[] = [
       {
@@ -27,6 +34,14 @@ describe('SnapshotPanel', () => {
     useCabinetStore.setState({ cabinets, config: cabinets[0].config, activeCabinetIndex: 0, snapshots });
   });
 
+  afterEach(() => {
+    if (showModalDescriptor) {
+      Object.defineProperty(HTMLDialogElement.prototype, 'showModal', showModalDescriptor);
+    } else {
+      Reflect.deleteProperty(HTMLDialogElement.prototype, 'showModal');
+    }
+  });
+
   it('opens a snapshot comparison, displays the changed dimension, and closes it', async () => {
     const user = userEvent.setup();
     render(<SnapshotPanel />);
@@ -38,9 +53,29 @@ describe('SnapshotPanel', () => {
     expect(dialog).toHaveTextContent('After dimensions');
     expect(dialog).toHaveTextContent('777');
     expect(dialog).toHaveTextContent('888');
+    expect(dialog).toHaveAttribute('open');
 
     await user.click(within(dialog).getAllByRole('button', { name: 'Close' })[0]);
     expect(screen.queryByRole('dialog', { name: 'Compare Snapshots' })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Compare Snapshots' })).toHaveFocus();
+  });
+
+  it('closes the native dialog when a cancel event is dispatched', async () => {
+    const user = userEvent.setup();
+    render(<SnapshotPanel />);
+
+    await user.click(screen.getByRole('button', { name: 'Compare Snapshots' }));
+    const dialog = screen.getByRole('dialog', { name: 'Compare Snapshots' });
+    const cancelEvent = new Event('cancel', { cancelable: true });
+
+    let wasCancelled = true;
+    act(() => {
+      wasCancelled = dialog.dispatchEvent(cancelEvent);
+    });
+
+    expect(wasCancelled).toBe(false);
+    expect(screen.queryByRole('dialog', { name: 'Compare Snapshots' })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Compare Snapshots' })).toHaveFocus();
   });
 
   it('saves a named snapshot, restores its configuration, and deletes a snapshot', async () => {

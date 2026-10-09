@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { diffSnapshots } from '../../engine/comparison';
 import type { ProjectSnapshot } from '../../store/cabinet-store';
@@ -14,9 +14,14 @@ export function SnapshotDiffModal({ snapshots, onClose }: Props) {
   const { t } = useTranslation();
   const [idA, setIdA] = useState(snapshots[1]?.id ?? snapshots[0]?.id ?? '');
   const [idB, setIdB] = useState(snapshots[0]?.id ?? '');
-  const dialogRef = useRef<HTMLDivElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
-  useFocusTrap(dialogRef, true, onClose);
+  useFocusTrap(dialogRef, true);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (dialog && !dialog.open) dialog.showModal();
+  }, []);
 
   const snapA = snapshots.find((s) => s.id === idA);
   const snapB = snapshots.find((s) => s.id === idB);
@@ -24,13 +29,16 @@ export function SnapshotDiffModal({ snapshots, onClose }: Props) {
   const diff = snapA && snapB ? diffSnapshots(snapA, snapB) : null;
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
+    <dialog
+      ref={dialogRef}
       aria-label={t('snapshot.diff.title')}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      className="fixed inset-0 z-50 m-0 flex h-full w-full max-w-none items-center justify-center overflow-hidden border-0 bg-transparent p-4 backdrop:bg-black/50"
+      onCancel={(event) => {
+        event.preventDefault();
+        onClose();
+      }}
     >
-      <div ref={dialogRef} className="dark:bg-wood-900 w-full max-w-lg overflow-hidden rounded-xl bg-white shadow-2xl">
+      <div className="dark:bg-wood-900 w-full max-w-lg overflow-hidden rounded-xl bg-white shadow-2xl">
         {/* Header */}
         <div className="border-wood-200 dark:border-wood-700 flex items-center justify-between border-b px-5 py-4">
           <h2 className="text-wood-800 dark:text-wood-100 text-sm font-semibold">{t('snapshot.diff.title')}</h2>
@@ -139,6 +147,6 @@ export function SnapshotDiffModal({ snapshots, onClose }: Props) {
           </button>
         </div>
       </div>
-    </div>
+    </dialog>
   );
 }
