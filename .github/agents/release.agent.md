@@ -12,8 +12,8 @@ tools:
   - manage_todo_list
   - vscode_renameSymbol
 description: >
-  Full automated release workflow: pre-flight checks → version bump →
-  CHANGELOG → version references → build → commit → tag → GitHub Release.
+  Full release workflow: issue registration → version bump → CHANGELOG →
+  issue branch → PR review/merge → tag → GitHub Release.
 ---
 
 # Release Agent — Cabinet Planner
@@ -23,6 +23,8 @@ Do not skip the pre-flight gate.
 
 ## Pre-flight (must all pass before any changes)
 
+Before the pre-flight edits begin, create and show a concise TODO checklist using `manage_todo_list`. Update each item incrementally as checks, release preparation, review, tagging, and publication proceed; if unavailable, maintain it in user-visible progress updates.
+
 ```bash
 npm run check          # quality:fast + tests — 0 errors required
 npm run dead:check     # 0 orphaned exports required
@@ -31,6 +33,8 @@ git status             # confirm candidate changes are intentional and no unrela
 
 Also verify:
 
+- A GitHub release issue exists with target version, scope, and acceptance criteria; create it before release edits if missing.
+- Work is on a dedicated issue branch based on the latest `origin/main`, never directly on `main`.
 - `CHANGELOG.md [Unreleased]` section is populated with at least one entry
 - `ROADMAP.md` release-blocking sprint items and clean-checkout acceptance are complete
 
@@ -76,16 +80,29 @@ rg -n "v?[0-9]+\.[0-9]+\.[0-9]+" .github/ *.md
 npm run release:build   # build + bundle:check + sbom
 ```
 
-## Step 6 — Commit and tag
+## Step 6 — Commit and open the release PR
 
 ```bash
 git add -A
 git commit -m "chore: release vX.Y.Z"
-git tag -a vX.Y.Z -m "Release vX.Y.Z"
-git push origin main --follow-tags
+git push -u origin issue-<number>-release-vX.Y.Z
+gh pr create --base main --title "chore: release vX.Y.Z" --body "Fixes #<issue>"
 ```
 
-## Step 7 — Verify GitHub Release
+Wait for required checks and review, then merge the PR using the repository's approved merge strategy. Never push release preparation directly to `main`.
+
+## Step 7 — Tag the merged release commit
+
+After merge, fetch `origin/main`, verify the release PR is included, and create the annotated tag from that merged commit. Push only the tag; never force-push or retarget a published tag.
+
+```bash
+git fetch origin
+git switch --detach origin/main
+git tag -a vX.Y.Z -m "Release vX.Y.Z"
+git push origin vX.Y.Z
+```
+
+## Step 8 — Verify GitHub Release
 
 Pushing the annotated `vX.Y.Z` tag triggers `.github/workflows/release.yml`, which builds the
 release archive, checksum, and SBOM and creates the `WoodworkingShop vX.Y.Z` GitHub Release. Do not
@@ -103,5 +120,5 @@ create a duplicate release manually. Verify the workflow run and published artif
 1. Pre-flight checks pass on a clean working tree.
 2. Version and release metadata are updated consistently.
 3. Release build artifacts are generated successfully.
-4. The release commit passes clean-checkout acceptance before it is tagged and pushed without history rewrites.
+4. The release PR is reviewed and merged before the merged commit is tagged and published without history rewrites.
 5. The release workflow completes and publishes its artifacts; report the release URL.

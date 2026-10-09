@@ -60,3 +60,14 @@ body:
       description: Any other approaches you've thought about?
     validations:
       required: false
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: '✅ Acceptance criteria'
+      description: State observable outcomes that a future implementation and PR can verify.
+      placeholder: |
+        - [ ] Given …, when …, then …
+        - [ ] Tests cover …
+    validations:
+      required: true

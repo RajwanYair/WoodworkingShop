@@ -1,13 +1,13 @@
 name: 🗂️ Sprint Task
-description: Track a Phase 21 sprint deliverable
+description: Track one roadmap sprint deliverable
 title: '[Sprint ${sprintId}] '
 labels: ['sprint', 'roadmap']
 body:
   - type: markdown
     attributes:
       value: |
-        Use this template to track a single Phase 21 sprint item end-to-end.
-        Link it to the relevant section in [ROADMAP.md](../blob/main/ROADMAP.md).
+        Create one issue before implementation for a single roadmap sprint item.
+        Link the relevant section in [ROADMAP.md](../blob/main/ROADMAP.md). Use a dedicated issue branch and submit a reviewed PR; never push feature work directly to main.
 
   - type: input
     id: sprint
@@ -52,8 +52,10 @@ body:
     id: acceptance
     attributes:
       label: '✅ Acceptance criteria'
-      description: List the checkboxes that must be ticked for this item to be DONE.
+      description: List verifiable checkboxes. Sprint completion requires merged PR evidence.
       value: |
+        - [ ] PR references this issue and records acceptance evidence
+        - [ ] Required review and checks pass before merge
         - [ ] `npm run quality` → 0 errors, 0 warnings
         - [ ] `npm test` → all pass
         - [ ] `npm run dead:check` → no orphaned exports
@@ -67,3 +69,11 @@ body:
     attributes:
       label: '🔗 ROADMAP.md section'
       placeholder: 'Phase 21 · Sprint 89'
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: '🔗 Dependencies / related issues'
+      description: List blockers, prerequisite issues, and related work; keep unrelated items in separate issues.
+    validations:
+      required: false

@@ -32,20 +32,23 @@
 
 The release flow is considered valid only when all checks below pass:
 
-| Check                         | Command                                                           | Expected Result                                                       |
-| ----------------------------- | ----------------------------------------------------------------- | --------------------------------------------------------------------- |
-| Quality gate                  | `npm run check`                                                   | Pass                                                                  |
-| Build and packaging gate      | `npm run release:build`                                           | Pass                                                                  |
-| Main branch and tag published | `git push origin main --follow-tags`                              | Remote `main` and annotated release tag match local `HEAD`            |
-| Release publish               | Push `vX.Y.Z`; `.github/workflows/release.yml` runs automatically | `WoodworkingShop vX.Y.Z` release includes archive, checksum, and SBOM |
+| Check                        | Command                                                           | Expected Result                                                          |
+| ---------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Quality gate                 | `npm run check`                                                   | Pass                                                                     |
+| Build and packaging gate     | `npm run release:build`                                           | Pass                                                                     |
+| Issue branch and reviewed PR | GitHub issue + PR to `main`                                       | Issue acceptance is linked; required checks and review pass before merge |
+| Release tag published        | Push `vX.Y.Z` from the merged release commit                      | Tag points to reviewed `main`; release workflow publishes artifacts      |
+| Release publish              | Push `vX.Y.Z`; `.github/workflows/release.yml` runs automatically | `WoodworkingShop vX.Y.Z` release includes archive, checksum, and SBOM    |
 
 ## Operational Notes
 
 - `.vscode/mcp.json` is the source of truth for active MCP servers.
 - Server descriptions in `.vscode/mcp.json` must stay aligned with this document.
+- Planned development starts only after a GitHub issue exists; see [DEVELOPMENT-WORKFLOW.md](../.github/DEVELOPMENT-WORKFLOW.md) for issue branches, PR review, and multi-user sync rules.
 - Publishing an annotated `v*` tag triggers the release workflow; do not also create a manual GitHub release.
+- Never push feature or release-preparation commits directly to `main`; merge the reviewed PR before tagging.
 - The workflow uploads the generated SBOM from the workspace root; local `npm run sbom` writes under the OS temp directory.
-- If a server is temporarily disabled, record the reason in the sprint commit message.
+- If a server is temporarily disabled, record the reason in the owning GitHub issue or PR.
 
 ## First-Run Setup
 
