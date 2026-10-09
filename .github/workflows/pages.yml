@@ -25,7 +25,7 @@ jobs:
     name: Build & Deploy
     # 'github-pages' is the special environment name required by actions/deploy-pages.
     # GitHub auto-creates it when Pages is configured to deploy from Actions.
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-node

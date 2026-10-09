@@ -10,7 +10,7 @@ permissions:
 jobs:
   pr-title:
     name: Validate PR title
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Check conventional commit format
         uses: amannn/action-semantic-pull-request@v5
