@@ -19,6 +19,7 @@ env:
 jobs:
   quality:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-node
@@ -34,6 +35,7 @@ jobs:
       #   run: npx --yes cspell lint --no-progress --show-suggestions --gitignore "**/*.{ts,tsx,md}"
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     needs: quality
     steps:
       - uses: actions/checkout@v5
@@ -48,6 +50,7 @@ jobs:
         with: { name: dist, path: dist, retention-days: 7 }
   compat:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     needs: quality
     strategy:
       fail-fast: false
@@ -80,6 +83,7 @@ jobs:
         with: { name: playwright-report, path: playwright-report/, retention-days: 7, if-no-files-found: ignore }
   lighthouse:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     needs: test
     steps:
       - uses: actions/checkout@v5
