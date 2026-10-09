@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rajwanyair.github.io/WoodworkingShop/schemas/project-v1.schema.json",
+  "title": "Cabinet Planner Project",
+  "description": "Canonical exported Cabinet Planner project document, schema version 1.0.",
+  "type": "object",
+  "required": ["id", "name", "savedAt", "schemaVersion", "generatedAt", "cabinets"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "savedAt": { "type": "string", "description": "ISO 8601 timestamp for the last save." },
+    "schemaVersion": { "const": "1.0" },
+    "generatedAt": { "type": "string", "description": "ISO 8601 timestamp for this export." },
+    "cabinets": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/cabinet" }
+    },
+    "snapshots": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/snapshot" }
+    }
+  },
+  "$defs": {
+    "cabinet": {
+      "type": "object",
+      "required": ["name", "config"],
+      "properties": {
+        "name": { "type": "string" },
+        "notes": { "type": "string" },
+        "config": { "$ref": "#/$defs/cabinetConfig" }
+      },
+      "additionalProperties": true
+    },
+    "cabinetConfig": {
+      "type": "object",
+      "required": [
+        "furnitureType",
+        "width",
+        "height",
+        "depth",
+        "shelfCount",
+        "shelfSpacing",
+        "customShelfPositions",
+        "carcassMaterial",
+        "backPanelMaterial",
+        "doorCount",
+        "doorStyle",
+        "doorReveal",
+        "drawerCount",
+        "kickHeight",
+        "handleStyle",
+        "edgeBanding",
+        "lang"
+      ],
+      "properties": {
+        "furnitureType": { "enum": ["cabinet", "bookshelf", "desk", "wardrobe", "panel"] },
+        "width": { "type": "number" },
+        "height": { "type": "number" },
+        "depth": { "type": "number" },
+        "shelfCount": { "type": "number" },
+        "shelfSpacing": { "enum": ["equal", "custom"] },
+        "customShelfPositions": { "type": "array", "items": { "type": "number" } },
+        "shelfCentreSupports": { "type": "number" },
+        "carcassMaterial": { "type": "string" },
+        "backPanelMaterial": { "type": "string" },
+        "hasBack": { "type": "boolean" },
+        "panelMaterialSource": { "enum": ["carcass", "back"] },
+        "doorCount": { "enum": [1, 2] },
+        "doorStyle": { "enum": ["flat", "shaker", "glass", "none"] },
+        "doorReveal": { "type": "number" },
+        "drawerCount": { "type": "number" },
+        "drawerHeights": { "type": "array", "items": { "type": "number" } },
+        "drawerSlideType": { "enum": ["standard", "soft-close", "full-extension"] },
+        "kickHeight": { "type": "number" },
+        "handleStyle": { "enum": ["bar", "knob", "cup", "none"] },
+        "hingeProfile": { "type": "string" },
+        "hardwareOverrides": {
+          "type": "object",
+          "additionalProperties": { "type": "number" }
+        },
+        "joineryType": {
+          "enum": ["pocket-screw", "dado", "dowel", "biscuit", "screw", "mortise-tenon", "dovetail"]
+        },
+        "edgeBanding": { "enum": ["all-visible", "doors-only", "none"] },
+        "cutMode": { "enum": ["guillotine", "freeform"] },
+        "lang": { "enum": ["en", "he"] },
+        "isMirrored": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "snapshot": {
+      "type": "object",
+      "required": ["id", "name", "cabinets", "timestamp"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "cabinets": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/cabinet" }
+        },
+        "timestamp": { "type": "string", "description": "ISO 8601 timestamp when the snapshot was created." }
+      },
+      "additionalProperties": true
+    }
+  }
+}
