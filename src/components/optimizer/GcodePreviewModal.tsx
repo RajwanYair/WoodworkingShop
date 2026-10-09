@@ -12,7 +12,7 @@
  * - G-code and validation are re-computed live when options change.
  */
 
-import { useState, useMemo, useRef, useId } from 'react';
+import { useState, useMemo, useRef, useId, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { parseToolpath, type ToolMove } from '../../engine/gcode-toolpath';
@@ -104,8 +104,11 @@ function arcToSvgPath(move: ToolMove): string {
 export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Props) {
   const gridId = `${useId().replaceAll(':', '')}-gcode-grid`;
   const { t } = useTranslation();
-  const trapRef = useRef<HTMLDivElement>(null);
-  useFocusTrap(trapRef, true, onClose);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  useFocusTrap(dialogRef, true);
+  useEffect(() => {
+    dialogRef.current?.showModal();
+  }, []);
   const [showSettings, setShowSettings] = useState(false);
   const [activePreset, setActivePreset] = useState<string | null>(null);
   const [numericDrafts, setNumericDrafts] = useState<Partial<Record<NumericOption, string>>>({});
@@ -161,22 +164,24 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+    <dialog
+      ref={dialogRef}
+      aria-label={t('gcode.previewTitle')}
+      onCancel={(event) => {
+        event.preventDefault();
+        onClose();
+      }}
+      className="fixed inset-0 z-50 m-0 flex h-full w-full max-w-none items-center justify-center border-0 bg-transparent p-4 backdrop:bg-black/60"
+    >
       {/* Invisible backdrop button — keyboard-accessible dismiss */}
       <button
         type="button"
-        className="absolute inset-0 h-full w-full cursor-default"
+        className="absolute inset-0 h-full w-full cursor-default border-0 bg-transparent p-0"
         aria-label={t('gcodeValidator.dismiss')}
         tabIndex={-1}
         onClick={onClose}
       />
-      <div
-        ref={trapRef}
-        role="dialog"
-        aria-modal="true"
-        aria-label={t('gcode.previewTitle')}
-        className="dark:bg-wood-900 relative flex w-full max-w-2xl flex-col gap-0 overflow-hidden rounded-xl bg-white shadow-2xl"
-      >
+      <div className="dark:bg-wood-900 relative flex w-full max-w-2xl flex-col gap-0 overflow-hidden rounded-xl bg-white shadow-2xl">
         {/* Header */}
         <div className="border-wood-200 dark:border-wood-700 flex items-center justify-between border-b px-4 py-3">
           <h2 className="text-wood-800 dark:text-wood-100 text-sm font-semibold">
@@ -427,6 +432,6 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
           </button>
         </div>
       </div>
-    </div>
+    </dialog>
   );
 }
