@@ -544,9 +544,11 @@ describe('migrateProject', () => {
       savedAt: '2025-01-01T00:00:00.000Z',
       cabinets: sampleCabinets,
     };
+    const original = { ...raw };
     const result = migrateProject(raw);
     expect(result.name).toBe('Legacy Project');
     expect(result.schemaVersion).toBe(CURRENT_SCHEMA_VERSION);
+    expect(raw).toEqual(original);
   });
 
   it.each([

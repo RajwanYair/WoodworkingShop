@@ -20,12 +20,6 @@ function toAsciiJson(value: unknown, indent?: number | string): string {
 const LEGACY_SCHEMA_VERSION = '0.9' as const;
 const CURRENT_BUNDLE_SCHEMA_VERSION = 1 as const;
 
-export const PROJECT_SCHEMA_REGISTRY = {
-  latest: CURRENT_SCHEMA_VERSION,
-  supportedImportVersions: [LEGACY_SCHEMA_VERSION, CURRENT_SCHEMA_VERSION],
-  migrations: [{ from: LEGACY_SCHEMA_VERSION, to: CURRENT_SCHEMA_VERSION }],
-} as const;
-
 export interface SavedProject {
   id: string;
   name: string;
@@ -124,15 +118,37 @@ function migrateLegacyProjectV09(raw: Record<string, unknown>): Record<string, u
   };
 }
 
+const PROJECT_MIGRATIONS = [
+  { from: LEGACY_SCHEMA_VERSION, to: CURRENT_SCHEMA_VERSION, migrate: migrateLegacyProjectV09 },
+] as const;
+
+export const PROJECT_SCHEMA_REGISTRY = {
+  latest: CURRENT_SCHEMA_VERSION,
+  supportedImportVersions: [LEGACY_SCHEMA_VERSION, CURRENT_SCHEMA_VERSION],
+  migrations: PROJECT_MIGRATIONS.map(({ from, to }) => ({ from, to })),
+} as const;
+
 function normaliseProjectRecord(raw: Record<string, unknown>): Record<string, unknown> {
-  const version = detectProjectSchemaVersion(raw);
+  let version = detectProjectSchemaVersion(raw);
   if (!isSupportedSchemaVersion(version)) {
     throw new Error(`Unsupported project schema version: ${version}`);
   }
-  if (version === LEGACY_SCHEMA_VERSION) {
-    return migrateLegacyProjectV09(raw);
+
+  let project: Record<string, unknown> = { ...raw, schemaVersion: version };
+  while (version !== PROJECT_SCHEMA_REGISTRY.latest) {
+    const migration = PROJECT_MIGRATIONS.find((candidate) => candidate.from === version);
+    if (!migration) {
+      throw new Error(`No migration path from project schema version: ${version}`);
+    }
+
+    project = migration.migrate(project);
+    if (project['schemaVersion'] !== migration.to) {
+      throw new Error(`Project migration from ${migration.from} did not produce schema version ${migration.to}`);
+    }
+    version = migration.to;
   }
-  return { ...raw, schemaVersion: CURRENT_SCHEMA_VERSION };
+
+  return project;
 }
 
 function parseBundleSchemaVersion(raw: Record<string, unknown>): number {
