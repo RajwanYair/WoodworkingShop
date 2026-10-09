@@ -29,7 +29,7 @@ jobs:
           wranglerVersion: 4.149.0
           command: pages deploy dist --project-name=woodworkingshop --branch=pr-${{ github.event.pull_request.number }}
       - name: Comment preview URL
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const url = `https://pr-${context.issue.number}.woodworkingshop.pages.dev`;
