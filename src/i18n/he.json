@@ -1093,7 +1093,19 @@
     "expandQty": "פרוס חלקים רבי-כמות (תווית לכל יחידה)",
     "print": "הדפס תוויות",
     "printTitle": "תווית חלקים",
-    "gridAriaLabel": "כרטיסי תווית חלקים"
+    "gridAriaLabel": "כרטיסי תווית חלקים",
+    "pageSize": "גודל נייר",
+    "a4": "A4",
+    "letter": "Letter",
+    "rows": "שורות",
+    "columns": "עמודות",
+    "grain": "כיוון הסיבים",
+    "alongLength": "לאורך",
+    "alongWidth": "לרוחב",
+    "unspecified": "לא צוין",
+    "edgeBanding": "קנטים",
+    "quantity": "כמות",
+    "qrReference": "מזהה QR"
   },
   "wasteAnalytics": {
     "title": "ניתוח פסולת",

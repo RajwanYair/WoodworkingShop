@@ -237,7 +237,19 @@
     "expandQty": "توسيع الأجزاء متعددة الكمية (ملصق لكل قطعة)",
     "print": "طباعة الملصقات",
     "printTitle": "ملصقات القطع",
-    "gridAriaLabel": "بطاقات ملصقات القطع"
+    "gridAriaLabel": "بطاقات ملصقات القطع",
+    "pageSize": "حجم الورق",
+    "a4": "A4",
+    "letter": "Letter",
+    "rows": "الصفوف",
+    "columns": "الأعمدة",
+    "grain": "اتجاه الألياف",
+    "alongLength": "على طول القطعة",
+    "alongWidth": "على عرض القطعة",
+    "unspecified": "غير محدد",
+    "edgeBanding": "تغليف الحواف",
+    "quantity": "الكمية",
+    "qrReference": "مرجع QR"
   },
   "stockTracker": {
     "title": "متابعة المخزون",

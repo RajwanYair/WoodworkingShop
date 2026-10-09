@@ -34,13 +34,31 @@ export function PartLabelSheet() {
   const { allParts } = useCabinetStore();
   const [open, setOpen] = useState(false);
   const [expandQty, setExpandQty] = useState(false);
+  const [pageSize, setPageSize] = useState<'A4' | 'Letter'>('A4');
+  const [rows, setRows] = useState(4);
+  const [columns, setColumns] = useState(2);
 
   const labeled = useMemo(() => assignPartLabels(allParts, { expandMultiQty: expandQty }), [allParts, expandQty]);
 
   function handlePrint() {
     const win = window.open('', '_blank', 'width=800,height=600');
     if (!win) return;
-    win.document.write(buildPartLabelPrintHtml(labeled, t('partLabels.printTitle')));
+    win.document.write(
+      buildPartLabelPrintHtml(labeled, t('partLabels.printTitle'), {
+        pageSize,
+        rows,
+        columns,
+        labels: {
+          grain: t('partLabels.grain'),
+          alongLength: t('partLabels.alongLength'),
+          alongWidth: t('partLabels.alongWidth'),
+          unspecified: t('partLabels.unspecified'),
+          edgeBanding: t('partLabels.edgeBanding'),
+          quantity: t('partLabels.quantity'),
+          qrReference: t('partLabels.qrReference'),
+        },
+      }),
+    );
     win.document.close();
     win.setTimeout(() => {
       win.focus();
@@ -86,6 +104,41 @@ export function PartLabelSheet() {
                   />
                   {t('partLabels.expandQty')}
                 </label>
+                <div className="flex flex-wrap items-center gap-2 text-xs">
+                  <label className="text-wood-600 dark:text-wood-300 flex items-center gap-1">
+                    {t('partLabels.pageSize')}
+                    <select
+                      value={pageSize}
+                      onChange={(event) => setPageSize(event.currentTarget.value === 'Letter' ? 'Letter' : 'A4')}
+                      className="border-wood-300 dark:border-wood-600 rounded border bg-white px-1.5 py-1"
+                    >
+                      <option value="A4">{t('partLabels.a4')}</option>
+                      <option value="Letter">{t('partLabels.letter')}</option>
+                    </select>
+                  </label>
+                  <label className="text-wood-600 dark:text-wood-300 flex items-center gap-1">
+                    {t('partLabels.rows')}
+                    <input
+                      type="number"
+                      min={1}
+                      max={8}
+                      value={rows}
+                      onChange={(event) => setRows(Math.max(1, Math.min(8, Number(event.currentTarget.value) || 1)))}
+                      className="border-wood-300 dark:border-wood-600 w-14 rounded border bg-white px-1.5 py-1"
+                    />
+                  </label>
+                  <label className="text-wood-600 dark:text-wood-300 flex items-center gap-1">
+                    {t('partLabels.columns')}
+                    <input
+                      type="number"
+                      min={1}
+                      max={4}
+                      value={columns}
+                      onChange={(event) => setColumns(Math.max(1, Math.min(4, Number(event.currentTarget.value) || 1)))}
+                      className="border-wood-300 dark:border-wood-600 w-14 rounded border bg-white px-1.5 py-1"
+                    />
+                  </label>
+                </div>
                 <button
                   type="button"
                   onClick={handlePrint}

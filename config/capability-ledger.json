@@ -516,6 +516,10 @@
       "status": "surfaced"
     },
     {
+      "path": "src/engine/qr-code.ts",
+      "status": "surfaced"
+    },
+    {
       "path": "src/engine/rafter-length.ts",
       "status": "surfaced"
     },
