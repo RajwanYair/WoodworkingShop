@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup-node
       - name: Quality checks (parallel)
         run: npm run quality:fast
@@ -38,7 +38,7 @@ jobs:
     timeout-minutes: 45
     needs: quality
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup-node
       - run: npm test && npm run test:coverage
       # Coverage upload is best-effort; CI should not fail if Codecov is unavailable (network, quota, etc.)
@@ -56,7 +56,7 @@ jobs:
       fail-fast: false
       matrix: { node-version: [24, 26] }
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup-node
         with: { node-version: '${{ matrix.node-version }}' }
       - uses: actions/cache@v5
@@ -70,7 +70,7 @@ jobs:
     timeout-minutes: 45
     needs: test
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup-node
       - uses: actions/cache@v5
         with: { path: ~/.cache/ms-playwright, key: "pw-${{ runner.os }}-webkit-${{ hashFiles('package-lock.json') }}" }
@@ -86,7 +86,7 @@ jobs:
     timeout-minutes: 45
     needs: test
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup-node
       - uses: actions/download-artifact@v8
         with: { name: dist, path: dist }
