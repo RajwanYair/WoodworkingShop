@@ -769,6 +769,23 @@
     "tableAriaLabel": "Tabla de desglose de desviaciones de costes",
     "editActualAriaLabel": "Introducir el coste real de {{key}}"
   },
+  "cutSequence": {
+    "title": "Secuencia de corte (sierra de paneles)",
+    "layoutOnly": "El modo libre genera solo una distribución de anidado, no un orden de corte verificado. Cambie al modo guillotina para obtener instrucciones paso a paso.",
+    "assumptionsTitle": "Supuestos y límites de la máquina",
+    "assumeThrough": "Cada corte atraviesa de borde a borde el panel que se corta (sin cortes de inmersión ni detenidos).",
+    "assumeKerf": "El ancho de corte es {{kerf}} mm y se toma en el lado opuesto de cada medida.",
+    "assumeOrigin": "Las distancias se miden desde el borde superior o izquierdo del panel, como en el diagrama.",
+    "assumeLimits": "No se comprueban la capacidad de la sierra, el recorrido de la guía, el incisor ni el saneado; verifíquelo en su máquina.",
+    "download": "Descargar instrucciones",
+    "sheetHeading": "Tablero {{num}} — {{material}}",
+    "notRealizable": "Esta distribución no se puede cortar solo con cortes de borde a borde.",
+    "noCuts": "No se necesitan cortes.",
+    "step": "{{step}}. {{type}} del panel de {{panelWidth}}×{{panelLength}} mm a {{offset}} mm (etapa {{stage}})",
+    "crosscut": "Corte transversal",
+    "rip": "Corte longitudinal",
+    "diagramLabel": "Diagrama de corte del tablero {{num}} con {{count}} cortes numerados"
+  },
   "cutChecklist": {
     "title": "Lista de corte de piezas",
     "progress": "{{checked}} de {{total}} piezas cortadas",

@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a Ctrl/Cmd+K command palette with calculator, template, language, recent-project, and built-in action commands; the typed registry also supplies the Header and shortcuts modal.
 - Added mounted pocket-hole, shelf-deflection, mortise-and-tenon, and dovetail-layout calculators, with estimated build time and panel weight in the project summary and PDF specification.
 - Added a generated capability map and classification ledger, plus a locale-completeness audit and woodworking translation glossary.
+- Added a panel-saw cut sequence for guillotine mode: a kerf-adjusted, staged cut tree replayed against the sheet geometry, with a numbered diagram, step-by-step instructions, stated machine assumptions, and a text export. Freeform layouts are labelled as nesting only, and layouts that need non-through cuts are flagged.
 
 ### Removed
 

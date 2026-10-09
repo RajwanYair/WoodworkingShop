@@ -142,6 +142,10 @@
       "status": "surfaced"
     },
     {
+      "path": "src/engine/cut-sequence.ts",
+      "status": "surfaced"
+    },
+    {
       "path": "src/engine/dado-rabbet.ts",
       "status": "surfaced"
     },

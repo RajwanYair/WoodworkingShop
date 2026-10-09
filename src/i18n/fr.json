@@ -769,6 +769,23 @@
     "tableAriaLabel": "Tableau du détail des écarts de coûts",
     "editActualAriaLabel": "Saisir le coût réel pour {{key}}"
   },
+  "cutSequence": {
+    "title": "Séquence de coupe (scie à panneaux)",
+    "layoutOnly": "Le mode libre produit uniquement un plan d'imbrication, pas un ordre de coupe vérifié. Passez en mode guillotine pour des instructions étape par étape.",
+    "assumptionsTitle": "Hypothèses et limites de la machine",
+    "assumeThrough": "Chaque coupe traverse de bord à bord le panneau coupé (pas de coupe plongeante ni arrêtée).",
+    "assumeKerf": "Le trait de scie est de {{kerf}} mm et se trouve du côté opposé de chaque mesure.",
+    "assumeOrigin": "Les distances sont mesurées depuis le bord supérieur ou gauche du panneau, comme sur le schéma.",
+    "assumeLimits": "La capacité de la scie, la course du guide, l'inciseur et le délignage ne sont pas vérifiés ; contrôlez-les sur votre machine.",
+    "download": "Télécharger les instructions",
+    "sheetHeading": "Panneau {{num}} — {{material}}",
+    "notRealizable": "Ce plan ne peut pas être réalisé uniquement avec des coupes de bord à bord.",
+    "noCuts": "Aucune coupe nécessaire.",
+    "step": "{{step}}. {{type}} du panneau {{panelWidth}}×{{panelLength}} mm à {{offset}} mm (étape {{stage}})",
+    "crosscut": "Coupe transversale",
+    "rip": "Refente",
+    "diagramLabel": "Schéma de coupe du panneau {{num}} avec {{count}} coupes numérotées"
+  },
   "cutChecklist": {
     "title": "Liste de découpe des pièces",
     "progress": "{{checked}} sur {{total}} pièces débitées",

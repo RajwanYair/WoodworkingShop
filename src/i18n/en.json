@@ -1024,6 +1024,23 @@
     "enter": "Focus mode enabled",
     "exit": "Focus mode disabled"
   },
+  "cutSequence": {
+    "title": "Cut sequence (panel saw)",
+    "layoutOnly": "Freeform mode produces a nesting layout only, not a verified cut order. Switch to guillotine mode for step-by-step panel-saw instructions.",
+    "assumptionsTitle": "Assumptions and machine limits",
+    "assumeThrough": "Every cut runs edge to edge through the panel being cut (no plunge or stopped cuts).",
+    "assumeKerf": "Blade kerf is {{kerf}} mm and is taken on the far side of each measurement.",
+    "assumeOrigin": "Offsets are measured from the panel's top or left edge as shown in the diagram.",
+    "assumeLimits": "Saw capacity, fence travel, scoring and edge trimming are not checked; verify against your machine.",
+    "download": "Download instructions",
+    "sheetHeading": "Sheet {{num}} — {{material}}",
+    "notRealizable": "This layout cannot be cut with edge-to-edge cuts only.",
+    "noCuts": "No cuts needed.",
+    "step": "{{step}}. {{type}} the {{panelWidth}}×{{panelLength}} mm panel at {{offset}} mm (stage {{stage}})",
+    "crosscut": "Crosscut",
+    "rip": "Rip",
+    "diagramLabel": "Sheet {{num}} cut diagram with {{count}} numbered cuts"
+  },
   "cutChecklist": {
     "title": "Part Cutting Checklist",
     "progress": "{{checked}} of {{total}} parts cut",
