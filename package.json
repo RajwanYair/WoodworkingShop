@@ -113,7 +113,7 @@
     "test:e2e": "playwright test",
     "test:e2e:install": "playwright install --with-deps chromium firefox",
     "test:mutation": "stryker run",
-    "bench": "vitest bench",
+    "bench": "vitest bench --config vitest.bench.config.ts",
     "bench:check": "node scripts/bench-check.js",
     "bench:update": "node scripts/bench-check.js --update",
     "test:summary": "node scripts/vitest-reporter.js",
