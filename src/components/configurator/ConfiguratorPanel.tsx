@@ -11,6 +11,7 @@ import { DimensionSliders } from './DimensionSliders';
 import { MaterialSelector } from './MaterialSelector';
 import { ShelfConfig } from './ShelfConfig';
 import { DoorConfig } from './DoorConfig';
+import { EdgeBandingProcessPanel } from './EdgeBandingProcessPanel';
 import { DrawerConfig } from './DrawerConfig';
 import { CustomMaterialEditor } from './CustomMaterialEditor';
 import { CatalogImportPanel } from './CatalogImportPanel';
@@ -116,6 +117,7 @@ export function ConfiguratorPanel() {
       )}
 
       <DimensionSliders />
+      <EdgeBandingProcessPanel />
       <NamedExpressionsPanel />
       <MaterialSelector />
       <CustomMaterialEditor />

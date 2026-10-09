@@ -258,6 +258,7 @@ export function PdfExportPanel() {
             name: c.name,
             parts: generateParts(c.config),
             hardware: generateHardware(c.config),
+            edgeBandingProcess: c.config.edgeBandingProcess,
           })),
           lang,
         );

@@ -23,6 +23,22 @@ describe('ConfiguratorPanel', () => {
     expect(screen.getAllByText(/depth/i).length).toBeGreaterThanOrEqual(1);
   }, 15000);
 
+  it('enables raw blank sizing without changing finished part dimensions', async () => {
+    const user = userEvent.setup();
+    render(<ConfiguratorPanel />);
+    const partBefore = useCabinetStore.getState().parts.find((part) => (part.bandedEdges?.length ?? 0) > 0);
+
+    await user.click(screen.getByRole('checkbox', { name: 'Size blanks for applied edge banding' }));
+
+    const config = useCabinetStore.getState().config;
+    const bandedPart = useCabinetStore.getState().parts.find((part) => part.id === partBefore?.id);
+    expect(config.edgeBandingProcess).toMatchObject({ enabled: true, bandThicknessMm: 1, trimAllowanceMm: 0 });
+    expect(partBefore).toBeDefined();
+    expect(bandedPart).toBeDefined();
+    expect([bandedPart?.length, bandedPart?.width]).toEqual([partBefore?.length, partBefore?.width]);
+    expect(bandedPart?.rawLength !== bandedPart?.length || bandedPart?.rawWidth !== bandedPart?.width).toBe(true);
+  });
+
   it('renders material selectors', () => {
     render(<ConfiguratorPanel />);
     expect(screen.getByText(/carcass/i)).toBeInTheDocument();

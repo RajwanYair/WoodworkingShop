@@ -25,8 +25,11 @@ export interface ErpPartLine {
   thicknessMm: number;
   lengthMm: number;
   widthMm: number;
+  rawLengthMm?: number;
+  rawWidthMm?: number;
   areaMm2: number;
   edgeBanding: string;
+  bandedEdges?: Part['bandedEdges'];
 }
 
 export interface ErpHardwareLine {
@@ -61,6 +64,14 @@ export interface ErpPayload {
     joineryType?: string;
   };
   parts: ErpPartLine[];
+  edgeBandingSchedule?: {
+    partId: string;
+    edge: string;
+    qty: number;
+    edgeLengthMm: number;
+    bandThicknessMm?: number;
+    trimAllowanceMm?: number;
+  }[];
   hardware: ErpHardwareLine[];
   materialSummary: ErpMaterialSummaryLine[];
   totals: {
@@ -111,8 +122,15 @@ export function generateErpPayload(
       thicknessMm: p.thickness,
       lengthMm: p.length,
       widthMm: p.width,
-      areaMm2: p.qty * p.length * p.width,
+      areaMm2: p.qty * (p.rawLength ?? p.length) * (p.rawWidth ?? p.width),
       edgeBanding: p.edgeBanding.en,
+      ...(config.edgeBandingProcess?.enabled
+        ? {
+            rawLengthMm: p.rawLength ?? p.length,
+            rawWidthMm: p.rawWidth ?? p.width,
+            bandedEdges: p.bandedEdges,
+          }
+        : {}),
     };
   });
 
@@ -129,7 +147,10 @@ export function generateErpPayload(
   // ── Material summary (one row per unique material key) ──
   const areaByMat = new Map<string, number>();
   for (const p of parts) {
-    areaByMat.set(p.material, (areaByMat.get(p.material) ?? 0) + p.qty * p.length * p.width);
+    areaByMat.set(
+      p.material,
+      (areaByMat.get(p.material) ?? 0) + p.qty * (p.rawLength ?? p.length) * (p.rawWidth ?? p.width),
+    );
   }
 
   const materialSummary: ErpMaterialSummaryLine[] = [];
@@ -181,6 +202,20 @@ export function generateErpPayload(
       joineryType: config.joineryType,
     },
     parts: erpParts,
+    ...(config.edgeBandingProcess?.enabled
+      ? {
+          edgeBandingSchedule: parts.flatMap((part) =>
+            (part.bandedEdges ?? []).map((edge) => ({
+              partId: part.id,
+              edge,
+              qty: part.qty,
+              edgeLengthMm: edge.startsWith('length-') ? part.width : part.length,
+              bandThicknessMm: config.edgeBandingProcess?.bandThicknessMm,
+              trimAllowanceMm: config.edgeBandingProcess?.trimAllowanceMm,
+            })),
+          ),
+        }
+      : {}),
     hardware: erpHardware,
     materialSummary,
     totals: {

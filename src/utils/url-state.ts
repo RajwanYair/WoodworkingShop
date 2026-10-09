@@ -35,6 +35,10 @@ export function configToParams(cfg: CabinetConfig): QueryRecord {
   if ((cfg.drawerSlideType ?? 'standard') !== (def.drawerSlideType ?? 'standard'))
     params.dst = cfg.drawerSlideType ?? 'standard';
   if (cfg.edgeBanding !== def.edgeBanding) params.eb = cfg.edgeBanding;
+  if (cfg.edgeBandingProcess) {
+    const { enabled, bandThicknessMm, trimAllowanceMm } = cfg.edgeBandingProcess;
+    params.ebp = `${enabled ? 1 : 0},${bandThicknessMm},${trimAllowanceMm}`;
+  }
   if (cfg.lang !== def.lang) params.lang = cfg.lang;
   if ((cfg.panelMaterialSource ?? 'carcass') !== 'carcass') params.pms = cfg.panelMaterialSource!;
 
@@ -99,6 +103,17 @@ export function paramsToConfig(params: QueryRecord): Partial<CabinetConfig> {
     patch.drawerSlideType = dst as DrawerSlideType;
   const eb = params.eb;
   if (eb === 'all-visible' || eb === 'doors-only' || eb === 'none') patch.edgeBanding = eb;
+  const ebp = params.ebp?.split(',').map(Number);
+  if (
+    ebp?.length === 3 &&
+    (ebp[0] === 0 || ebp[0] === 1) &&
+    Number.isFinite(ebp[1]) &&
+    ebp[1] >= 0 &&
+    Number.isFinite(ebp[2]) &&
+    ebp[2] >= 0
+  ) {
+    patch.edgeBandingProcess = { enabled: ebp[0] === 1, bandThicknessMm: ebp[1], trimAllowanceMm: ebp[2] };
+  }
   const lang = params.lang;
   if (lang === 'en' || lang === 'he') patch.lang = lang;
   const pms = params.pms;

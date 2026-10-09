@@ -52,6 +52,33 @@ describe('optimizeCutSheets', () => {
     }
   });
 
+  it('packs raw blank dimensions and rotates finished sizes and banded edge identities with the part', () => {
+    const part: Part = {
+      id: 'EDGE-01',
+      name: { en: 'Edge test', he: 'Edge test' },
+      qty: 1,
+      material: 'melamine-18',
+      thickness: 18,
+      length: 400,
+      width: 700,
+      rawLength: 398,
+      rawWidth: 700,
+      bandedEdges: ['length-start', 'length-end'],
+      edgeBanding: { en: 'Front edge', he: 'קצה קדמי' },
+    };
+    const result = optimizeCutSheets([part], 0, { 'melamine-18': { width: 500, length: 1000 } });
+    const placed = result.sheets[0]?.parts[0];
+
+    expect(placed).toMatchObject({
+      length: 700,
+      width: 398,
+      finishedLength: 700,
+      finishedWidth: 400,
+      rotated: true,
+      bandedEdges: ['width-end', 'width-start'],
+    });
+  });
+
   it('handles empty parts list', () => {
     const result = optimizeCutSheets([]);
     expect(result.totalSheets).toBe(0);

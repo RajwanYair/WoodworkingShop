@@ -65,7 +65,18 @@ function isCabinetEntry(value: unknown): value is CabinetEntry {
   const config = value['config'];
   if (!isRecord(config)) return false;
 
+  const edgeBandingProcess = config['edgeBandingProcess'];
+  const validEdgeBandingProcess =
+    edgeBandingProcess === undefined ||
+    (isRecord(edgeBandingProcess) &&
+      typeof edgeBandingProcess['enabled'] === 'boolean' &&
+      isFiniteNumber(edgeBandingProcess['bandThicknessMm']) &&
+      edgeBandingProcess['bandThicknessMm'] >= 0 &&
+      isFiniteNumber(edgeBandingProcess['trimAllowanceMm']) &&
+      edgeBandingProcess['trimAllowanceMm'] >= 0);
+
   return (
+    validEdgeBandingProcess &&
     isOneOf(config['furnitureType'], ['cabinet', 'bookshelf', 'desk', 'wardrobe', 'panel']) &&
     ['width', 'height', 'depth', 'shelfCount', 'doorReveal', 'drawerCount', 'kickHeight'].every((key) =>
       isFiniteNumber(config[key]),

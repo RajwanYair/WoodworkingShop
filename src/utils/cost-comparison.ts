@@ -11,7 +11,7 @@
 
 import type { CabinetConfig } from '../engine/types';
 import { estimateCost, type CostBreakdown } from '../engine/cost-estimator';
-import { generateParts } from '../engine/parts';
+import { computeEdgeBandingTotal, generateParts } from '../engine/parts';
 import { getMaterial, MATERIALS } from '../engine/materials';
 import { optimizeCutSheets } from '../engine/cut-optimizer';
 import { generateHardware } from '../engine/hardware';
@@ -78,14 +78,7 @@ export function estimateScenario(label: string, config: CabinetConfig): Scenario
   const hardware = generateHardware(config);
   const hwList = hardware.map((h) => ({ id: h.id, qty: h.qty, name: h.name }));
   // Sum edge banding metres across all placed parts
-  const edgeBandingTotal = optimization.sheets
-    .flatMap((s) => s.parts)
-    .reduce((sum, p) => {
-      const ebStr = p.edgeBanding ?? '';
-      const sides = ebStr.split(',').filter(Boolean).length;
-      const perimMm = 2 * ((p.width ?? 0) + (p.length ?? 0));
-      return sum + (sides > 0 ? perimMm / 1000 : 0);
-    }, 0);
+  const edgeBandingTotal = computeEdgeBandingTotal(parts) / 1000;
   const estimate = estimateCost(optimization, hwList, edgeBandingTotal);
 
   const mat = getMaterial(config.carcassMaterial);
@@ -151,14 +144,7 @@ export function compareMaterialCosts(config: CabinetConfig, materialKeys?: strin
     const optimization = optimizeCutSheets(parts);
     const hardware = generateHardware(testConfig);
     const hwList = hardware.map((h) => ({ id: h.id, qty: h.qty, name: h.name }));
-    const edgeBandingTotal = optimization.sheets
-      .flatMap((s) => s.parts)
-      .reduce((sum, p) => {
-        const ebStr = p.edgeBanding ?? '';
-        const sides = ebStr.split(',').filter(Boolean).length;
-        const perimMm = 2 * ((p.width ?? 0) + (p.length ?? 0));
-        return sum + (sides > 0 ? perimMm / 1000 : 0);
-      }, 0);
+    const edgeBandingTotal = computeEdgeBandingTotal(parts) / 1000;
     const estimate = estimateCost(optimization, hwList, edgeBandingTotal);
 
     variants.push({

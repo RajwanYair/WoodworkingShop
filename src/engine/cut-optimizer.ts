@@ -1,4 +1,4 @@
-import type { Part, CutSheet, OptimizationResult, Result, OffcutEntry, DefectZone, Material } from './types';
+import type { Part, CutRect, CutSheet, OptimizationResult, Result, OffcutEntry, DefectZone, Material } from './types';
 import { ok, err } from './types';
 import { getMaterial, SAW_KERF } from './materials.ts';
 
@@ -90,8 +90,11 @@ export function optimizeCutSheets(
       group.rects.push({
         partId: p.id,
         label: p.name.en,
-        length: p.length,
-        width: p.width,
+        length: p.rawLength ?? p.length,
+        width: p.rawWidth ?? p.width,
+        finishedLength: p.length,
+        finishedWidth: p.width,
+        bandedEdges: p.bandedEdges,
         edgeBanding: p.edgeBanding.en,
         rotationLocked: p.rotationLocked === true,
       });
@@ -152,6 +155,9 @@ export function optimizeCutSheets(
           label: r.label,
           length: r.length,
           width: r.width,
+          finishedLength: r.finishedLength,
+          finishedWidth: r.finishedWidth,
+          bandedEdges: r.bandedEdges,
           x: r.x,
           y: r.y,
           edgeBanding: r.edgeBanding,
@@ -193,6 +199,9 @@ export function optimizeCutSheets(
           label: r.label,
           length: r.length,
           width: r.width,
+          finishedLength: r.finishedLength,
+          finishedWidth: r.finishedWidth,
+          bandedEdges: r.bandedEdges,
           x: r.x,
           y: r.y,
           edgeBanding: r.edgeBanding,
@@ -222,11 +231,30 @@ export function optimizeCutSheets(
 
 // ─── Internal types & helpers ───
 
+function rotateBandedEdges(edges: Part['bandedEdges']): Part['bandedEdges'] {
+  if (!edges) return edges;
+  return edges.map((edge) => {
+    switch (edge) {
+      case 'length-start':
+        return 'width-end';
+      case 'length-end':
+        return 'width-start';
+      case 'width-start':
+        return 'length-start';
+      case 'width-end':
+        return 'length-end';
+    }
+  });
+}
+
 interface Rect {
   partId: string;
   label: string;
   length: number; // along grain (y)
   width: number; // across grain (x)
+  finishedLength?: number;
+  finishedWidth?: number;
+  bandedEdges?: CutRect['bandedEdges'];
   edgeBanding?: string;
   /** Sprint 16 — when true this individual part must not be rotated 90° by the packer. */
   rotationLocked?: boolean;
@@ -334,6 +362,9 @@ function packGuillotine(
           ...rect,
           width: w,
           length: h,
+          finishedWidth: rotated ? rect.finishedLength : rect.finishedWidth,
+          finishedLength: rotated ? rect.finishedWidth : rect.finishedLength,
+          bandedEdges: rotated ? rotateBandedEdges(rect.bandedEdges) : rect.bandedEdges,
           x: curX,
           y: stripY,
           rotated,
@@ -477,6 +508,9 @@ function packMaxRects(
       ...rect,
       length: best.h,
       width: best.w,
+      finishedLength: best.rotated ? rect.finishedWidth : rect.finishedLength,
+      finishedWidth: best.rotated ? rect.finishedLength : rect.finishedWidth,
+      bandedEdges: best.rotated ? rotateBandedEdges(rect.bandedEdges) : rect.bandedEdges,
       x: best.x,
       y: best.y,
       rotated: best.rotated,

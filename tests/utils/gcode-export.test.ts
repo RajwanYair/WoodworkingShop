@@ -29,7 +29,18 @@ describe('cutSheetToGcode', () => {
   it('includes part ID and dimensions in comment', () => {
     const gc = cutSheetToGcode(mockSheet);
     expect(gc).toContain('P01');
-    expect(gc).toContain('300x600');
+    expect(gc).toContain('blank 300x600');
+  });
+
+  it('includes finished dimensions when they differ from the raw blank', () => {
+    const part = mockSheet.parts[0]!;
+    const sheet: CutSheet = {
+      ...mockSheet,
+      parts: [{ ...part, width: 579, finishedWidth: 580, bandedEdges: ['width-start'] }],
+    };
+    const gc = cutSheetToGcode(sheet);
+    expect(gc).toContain('blank 579x600');
+    expect(gc).toContain('Finished: 580x600');
   });
 
   it('generates multi-pass cuts when thickness > passDepth', () => {

@@ -11,7 +11,7 @@ G90 ; absolute positioning
 G0 Z5.0 ; retract to safe height
 M3 S18000 ; spindle on
 
-; --- Cut: P11 Toe Kick (Front) (100x900) ---
+; --- Cut: P11 Toe Kick (Front) (blank 100x900) ---
 G0 X-3.00 Y-3.00
 G1 Z-3.00 F600
 G1 X103.00 Y-3.00 F1500
@@ -45,7 +45,7 @@ G1 X-3.00 Y903.00
 G1 X-3.00 Y-3.00
 G0 Z5.0
 
-; --- Cut: P02 Top Panel (560x866) ---
+; --- Cut: P02 Top Panel (blank 560x866) ---
 G0 X100.00 Y-3.00
 G1 Z-3.00 F600
 G1 X666.00 Y-3.00 F1500
@@ -79,7 +79,7 @@ G1 X100.00 Y869.00
 G1 X100.00 Y-3.00
 G0 Z5.0
 
-; --- Cut: P03 Bottom Panel (560x866) ---
+; --- Cut: P03 Bottom Panel (blank 560x866) ---
 G0 X100.00 Y866.00
 G1 Z-3.00 F600
 G1 X666.00 Y866.00 F1500
@@ -113,7 +113,7 @@ G1 X100.00 Y1738.00
 G1 X100.00 Y866.00
 G0 Z5.0
 
-; --- Cut: P06 Drawer 1 Front (866x180) ---
+; --- Cut: P06 Drawer 1 Front (blank 866x180) ---
 G0 X-3.00 Y1735.00
 G1 Z-3.00 F600
 G1 X869.00 Y1735.00 F1500
@@ -147,7 +147,7 @@ G1 X-3.00 Y1921.00
 G1 X-3.00 Y1735.00
 G0 Z5.0
 
-; --- Cut: P04 Adjustable Shelf (540x864) ---
+; --- Cut: P04 Adjustable Shelf (blank 540x864) ---
 G0 X663.00 Y-3.00
 G1 Z-3.00 F600
 G1 X1209.00 Y-3.00 F1500
@@ -181,7 +181,7 @@ G1 X663.00 Y867.00
 G1 X663.00 Y-3.00
 G0 Z5.0
 
-; --- Cut: P04 Adjustable Shelf (540x864) ---
+; --- Cut: P04 Adjustable Shelf (blank 540x864) ---
 G0 X663.00 Y864.00
 G1 Z-3.00 F600
 G1 X1209.00 Y864.00 F1500
@@ -215,7 +215,7 @@ G1 X663.00 Y1734.00
 G1 X663.00 Y864.00
 G0 Z5.0
 
-; --- Cut: P08 Drawer 1 Box End (806x150) ---
+; --- Cut: P08 Drawer 1 Box End (blank 806x150) ---
 G0 X-3.00 Y1918.00
 G1 Z-3.00 F600
 G1 X809.00 Y1918.00 F1500
@@ -249,7 +249,7 @@ G1 X-3.00 Y2074.00
 G1 X-3.00 Y1918.00
 G0 Z5.0
 
-; --- Cut: P08 Drawer 1 Box End (806x150) ---
+; --- Cut: P08 Drawer 1 Box End (blank 806x150) ---
 G0 X-3.00 Y2071.00
 G1 Z-3.00 F600
 G1 X809.00 Y2071.00 F1500
@@ -283,7 +283,7 @@ G1 X-3.00 Y2227.00
 G1 X-3.00 Y2071.00
 G0 Z5.0
 
-; --- Cut: P12 Toe Kick (Side) (100x543) ---
+; --- Cut: P12 Toe Kick (Side) (blank 100x543) ---
 G0 X-3.00 Y900.00
 G1 Z-3.00 F600
 G1 X103.00 Y900.00 F1500
@@ -317,7 +317,7 @@ G1 X-3.00 Y1449.00
 G1 X-3.00 Y900.00
 G0 Z5.0
 
-; --- Cut: P12 Toe Kick (Side) (100x543) ---
+; --- Cut: P12 Toe Kick (Side) (blank 100x543) ---
 G0 X866.00 Y1731.00
 G1 Z-3.00 F600
 G1 X972.00 Y1731.00 F1500
@@ -351,7 +351,7 @@ G1 X866.00 Y2280.00
 G1 X866.00 Y1731.00
 G0 Z5.0
 
-; --- Cut: P07 Drawer 1 Box Side (150x500) ---
+; --- Cut: P07 Drawer 1 Box Side (blank 150x500) ---
 G0 X969.00 Y1731.00
 G1 Z-3.00 F600
 G1 X1125.00 Y1731.00 F1500

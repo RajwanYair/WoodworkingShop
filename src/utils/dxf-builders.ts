@@ -389,7 +389,11 @@ export function addLabel(lines: string[], part: CutRect, layer: string) {
     '40',
     String(fontSize), // text height
     '1',
-    `${part.partId} ${part.width}x${part.length}`,
+    `${part.partId} ${part.width}x${part.length}${
+      (part.finishedWidth ?? part.width) !== part.width || (part.finishedLength ?? part.length) !== part.length
+        ? ` finished ${part.finishedWidth ?? part.width}x${part.finishedLength ?? part.length}`
+        : ''
+    }`,
     '72',
     '1', // horizontal center
     '73',
