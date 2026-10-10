@@ -72,6 +72,10 @@ describe('idbLoadProjects / idbSaveProjects', () => {
       getItemSpy.mockRestore();
       vi.unstubAllGlobals();
     }
+
+    const recoveredProjects = [{ id: 'recovered', name: 'Recovered' }];
+    await expect(idbSaveProjects(recoveredProjects)).resolves.toBeUndefined();
+    expect(await idbLoadProjects()).toEqual(recoveredProjects);
   });
 
   it('rejects a non-array IndexedDB value without replacing the corrupt record', async () => {
@@ -90,6 +94,48 @@ describe('idbLoadProjects / idbSaveProjects', () => {
     await idbSaveProjects(projects);
     const loaded = await idbLoadProjects();
     expect(loaded).toEqual(projects);
+  });
+
+  it('preserves existing projects and recovers after a quota write failure', async () => {
+    const existingProjects = [{ id: 'existing', name: 'Existing' }];
+    const recoveredProjects = [...existingProjects, { id: 'recovered', name: 'Recovered' }];
+    await idbSaveProjects(existingProjects);
+    const putSpy = vi.spyOn(IDBObjectStore.prototype, 'put').mockImplementationOnce(() => {
+      throw new DOMException('The storage quota has been exceeded', 'QuotaExceededError');
+    });
+
+    try {
+      await expect(idbSaveProjects(recoveredProjects)).rejects.toMatchObject({ name: 'QuotaExceededError' });
+      expect(await idbLoadProjects()).toEqual(existingProjects);
+    } finally {
+      putSpy.mockRestore();
+    }
+
+    await idbSaveProjects(recoveredProjects);
+    expect(await idbLoadProjects()).toEqual(recoveredProjects);
+  });
+
+  it('preserves existing projects when a write transaction aborts', async () => {
+    const existingProjects = [{ id: 'existing', name: 'Existing' }];
+    await idbSaveProjects(existingProjects);
+    const originalPut = IDBObjectStore.prototype.put;
+    const putSpy = vi.spyOn(IDBObjectStore.prototype, 'put').mockImplementationOnce(function <T>(
+      this: IDBObjectStore,
+      value: T,
+      key?: IDBValidKey,
+    ) {
+      const request = key === undefined ? originalPut.call(this, value) : originalPut.call(this, value, key);
+      queueMicrotask(() => this.transaction.abort());
+      return request;
+    });
+
+    try {
+      await expect(idbSaveProjects([{ id: 'interrupted', name: 'Interrupted' }])).rejects.toBeNull();
+    } finally {
+      putSpy.mockRestore();
+    }
+
+    expect(await idbLoadProjects()).toEqual(existingProjects);
   });
 
   it('overwrites previous data on second save', async () => {
