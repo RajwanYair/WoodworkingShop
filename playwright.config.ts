@@ -5,6 +5,7 @@ import path from 'node:path';
 const tmpDir = path.join(os.tmpdir(), 'WoodworkingShop');
 const previewDist = process.env['WOODWORKINGSHOP_E2E_DIST_DIR'] ?? 'dist';
 const previewPort = process.env['WOODWORKINGSHOP_E2E_PORT'] ?? '4173';
+const physicalCameraEnabled = process.env['WOODWORKINGSHOP_PHYSICAL_CAMERA'] === '1';
 const previewUrl = `http://localhost:${previewPort}/WoodworkingShop/`;
 
 /**
@@ -38,8 +39,8 @@ export default defineConfig({
     video: 'retain-on-failure',
   },
   projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-    { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] }, grepInvert: /@physical-camera/ },
+    { name: 'firefox', use: { ...devices['Desktop Firefox'] }, grepInvert: /@physical-camera/ },
     {
       name: 'webkit-desktop',
       use: { ...devices['Desktop Safari'] },
@@ -50,6 +51,15 @@ export default defineConfig({
       use: { ...devices['iPhone 13'] },
       grep: /@preview-acceptance/,
     },
+    ...(physicalCameraEnabled
+      ? [
+          {
+            name: 'chromium-physical-camera',
+            use: { ...devices['Desktop Chrome'], headless: false },
+            grep: /@physical-camera/,
+          },
+        ]
+      : []),
   ],
   webServer: {
     // Match the deployed base path and exercise the production service worker locally.

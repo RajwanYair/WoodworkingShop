@@ -657,6 +657,7 @@ Detail and the GcodePreviewModal component follow-up are archived in SPRINT-HIST
 
 - T1: Next/previous step, all-steps mode, tips toggle, mark/unmark/reset completion; assert dependency gating and progress/time counters.
 - T2: Add/edit/delete build log entry; Ctrl/Cmd+Enter; reload persistence; attach/capture camera photo with denied permission, no device and granted permission.
+  - Physical-camera acceptance (2026-10-10): PASS — opt-in headed Chromium E2E used the attached HP HD Camera, decoded a non-zero JPEG frame, and verified track cleanup. Normal CI excludes this hardware-only project.
 - T3: Select machine profile; validate G-code compatibility and serial connection lifecycle with browser API stubs (connect, send, pause, disconnect, reconnect, errors).
 - T4: Print and download checklist; parse expected step order/text and filename.
 - Accept: each step control changes progress/instructions, persisted build state reloads accurately and permissions/device failures remain recoverable.
