@@ -1,5 +1,6 @@
 import Ajv2020, { type ErrorObject } from 'ajv/dist/2020.js';
 import projectSchema from '../../config/schemas/project-v1.schema.json';
+import { HARD_LIMITS } from '../engine/materials';
 import type { CabinetEntry, ProjectSnapshot } from '../store/cabinet-store';
 import { utf8ArrayBuffer, utf8Encode } from './browser-compat';
 import { idbLoadProjects, idbSaveProjects, idbLoadSnapshots, idbSaveSnapshots } from './indexed-db-storage';
@@ -21,6 +22,8 @@ function toAsciiJson(value: unknown, indent?: number | string): string {
 }
 const LEGACY_SCHEMA_VERSION = '0.9' as const;
 const CURRENT_BUNDLE_SCHEMA_VERSION = 1 as const;
+const MAX_IMPORT_FILE_SIZE_BYTES = 50 * 1024 * 1024;
+const UNSAFE_IMPORT_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
 
 export const PROJECT_SCHEMA_REGISTRY = {
   latest: CURRENT_SCHEMA_VERSION,
@@ -52,12 +55,35 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
+function assertSafeImportProperties(root: unknown): void {
+  const pending: unknown[] = [root];
+  while (pending.length > 0) {
+    const current = pending.pop();
+    if (Array.isArray(current)) {
+      for (const value of current) pending.push(value);
+    } else if (isRecord(current)) {
+      for (const [key, value] of Object.entries(current)) {
+        if (UNSAFE_IMPORT_KEYS.has(key)) throw new Error('Project file contains an unsafe property key');
+        pending.push(value);
+      }
+    }
+  }
+}
+
+function assertImportFileSize(file: File): void {
+  if (file.size > MAX_IMPORT_FILE_SIZE_BYTES) throw new Error('Import file exceeds the 50 MiB limit');
+}
+
 function isOneOf<T extends string>(value: unknown, values: readonly T[]): value is T {
   return values.some((candidate) => candidate === value);
 }
 
 function isFiniteNumber(value: unknown): value is number {
   return typeof value === 'number' && Number.isFinite(value);
+}
+
+function isWithinHardLimit(value: unknown, minimum: number, maximum: number): boolean {
+  return isFiniteNumber(value) && value >= minimum && value <= maximum;
 }
 
 function isCabinetEntry(value: unknown): value is CabinetEntry {
@@ -69,9 +95,10 @@ function isCabinetEntry(value: unknown): value is CabinetEntry {
 
   return (
     isOneOf(config['furnitureType'], ['cabinet', 'bookshelf', 'desk', 'wardrobe', 'panel']) &&
-    ['width', 'height', 'depth', 'shelfCount', 'doorReveal', 'drawerCount', 'kickHeight'].every((key) =>
-      isFiniteNumber(config[key]),
-    ) &&
+    isWithinHardLimit(config['width'], HARD_LIMITS.minWidth, HARD_LIMITS.maxWidth) &&
+    isWithinHardLimit(config['height'], HARD_LIMITS.minHeight, HARD_LIMITS.maxHeight) &&
+    isWithinHardLimit(config['depth'], HARD_LIMITS.minDepth, HARD_LIMITS.maxDepth) &&
+    ['shelfCount', 'doorReveal', 'drawerCount', 'kickHeight'].every((key) => isFiniteNumber(config[key])) &&
     isOneOf(config['shelfSpacing'], ['equal', 'custom']) &&
     Array.isArray(config['customShelfPositions']) &&
     config['customShelfPositions'].every(isFiniteNumber) &&
@@ -272,8 +299,10 @@ export function exportProjectJson(project: SavedProject, snapshots?: ProjectSnap
 
 export function importProjectJson(file: File): Promise<SavedProject> {
   return withProjectWriteLock(async () => {
+    assertImportFileSize(file);
     const text = await file.text();
     const raw = JSON.parse(text) as unknown;
+    assertSafeImportProperties(raw);
     const project = migrateProject(raw);
     const projects = await load();
     const snapshots = project.snapshots ?? [];
@@ -354,8 +383,10 @@ export async function exportProjectsBundle(projects: SavedProject[]): Promise<vo
 /** Import a `.cabinet-projects.json` bundle, merging all contained projects */
 export function importProjectsBundle(file: File): Promise<SavedProject[]> {
   return withProjectWriteLock(async () => {
+    assertImportFileSize(file);
     const text = await file.text();
     const parsed = JSON.parse(text) as unknown;
+    assertSafeImportProperties(parsed);
     if (!isRecord(parsed)) {
       throw new Error('Invalid bundle: root must be an object');
     }

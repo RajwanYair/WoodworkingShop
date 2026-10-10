@@ -202,6 +202,90 @@ describe('project-storage', () => {
     },
   );
 
+  it.each([
+    { description: 'malformed JSON', contents: '{' },
+    { description: 'a non-object root', contents: '[]' },
+  ])('rejects $description without changing saved projects', async ({ contents }) => {
+    const existing = await saveProject('Keep this project', sampleCabinets);
+    const projectsBeforeImport = [...memProjects];
+    vi.mocked(idbSaveProjects).mockClear();
+    const file = new File([contents], 'invalid-project.json', { type: 'application/json' });
+
+    await expect(importProjectJson(file)).rejects.toThrow();
+
+    expect(memProjects).toEqual(projectsBeforeImport);
+    expect(memProjects).toContain(existing);
+    expect(idbSaveProjects).not.toHaveBeenCalled();
+  });
+
+  it.each(['project', 'bundle'] as const)('rejects oversized %s files before reading them', async (kind) => {
+    const file = new File(['{}'], `${kind}.json`, { type: 'application/json' });
+    Object.defineProperty(file, 'size', { value: 50 * 1024 * 1024 + 1 });
+    const text = vi.spyOn(file, 'text');
+    const importFile = kind === 'project' ? importProjectJson : importProjectsBundle;
+
+    await expect(importFile(file)).rejects.toThrow(/50 mib/i);
+
+    expect(text).not.toHaveBeenCalled();
+    expect(memProjects).toEqual([]);
+  });
+
+  it.each([
+    {
+      description: 'an invalid enum',
+      config: { ...DEFAULT_CONFIG, furnitureType: 'unknown' },
+    },
+    {
+      description: 'an impossible dimension',
+      config: { ...DEFAULT_CONFIG, width: -1 },
+    },
+  ])('rejects $description without persisting the project', async ({ config }) => {
+    const file = new File(
+      [
+        JSON.stringify({
+          id: 'unsafe-config',
+          name: 'Unsafe config',
+          savedAt: '2025-01-01T00:00:00.000Z',
+          cabinets: [{ id: 'cab-1', name: 'Cabinet', config, notes: '' }],
+        }),
+      ],
+      'unsafe-config.json',
+      { type: 'application/json' },
+    );
+
+    await expect(importProjectJson(file)).rejects.toThrow(/cabinet/i);
+    expect(memProjects).toEqual([]);
+  });
+
+  it.each(['project', 'bundle'] as const)('rejects prototype-pollution keys in a %s import', async (kind) => {
+    const validProject = {
+      id: 'polluted-project',
+      name: 'Prototype key',
+      savedAt: '2025-01-01T00:00:00.000Z',
+      cabinets: sampleCabinets,
+    };
+    const projectContents = JSON.stringify(validProject).replace('{', '{"__proto__":{"polluted":true},');
+    const contents = kind === 'project' ? projectContents : `{"version":1,"projects":[${projectContents}]}`;
+    const file = new File([contents], 'prototype-key.json', { type: 'application/json' });
+    const importFile = kind === 'project' ? importProjectJson : importProjectsBundle;
+
+    await expect(importFile(file)).rejects.toThrow(/unsafe property key/i);
+
+    expect(Object.prototype).not.toHaveProperty('polluted');
+    expect(memProjects).toEqual([]);
+  });
+
+  it('does not reflect a hostile filename in import errors', async () => {
+    const filename = '<img src=x onerror=alert(1)>.json';
+    const file = new File(['{'], filename, { type: 'application/json' });
+    const error = await importProjectJson(file).catch((caught: unknown) => caught);
+
+    expect(error).toBeInstanceOf(Error);
+    if (!(error instanceof Error)) throw new Error('Invalid project file did not produce an Error');
+    expect(error.message).not.toContain(filename);
+    expect(memProjects).toEqual([]);
+  });
+
   it('saveProject replaces a project with the same name, preserving its id', async () => {
     const first = await saveProject('Same Name', sampleCabinets);
     const second = await saveProject('Same Name', sampleCabinets);
