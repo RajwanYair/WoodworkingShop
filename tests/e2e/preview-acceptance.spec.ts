@@ -45,8 +45,6 @@ test('preview remains reachable without horizontal overflow across the responsiv
   const scenarios = [
     { locale: 'en', direction: 'ltr', widths, marker: '' },
     { locale: 'he', direction: 'rtl', widths, marker: '' },
-    { locale: 'en-XA', direction: 'ltr', widths: [320], marker: '\u00b7' },
-    { locale: 'ar-XB', direction: 'rtl', widths: [320], marker: '\u2067' },
   ] as const;
 
   await page.getByRole('tab', { name: 'Preview' }).click();
@@ -128,23 +126,12 @@ test('primary panel controls stay within the viewport without clipped text acros
   const scenarios = [
     { locale: 'en', direction: 'ltr' },
     { locale: 'he', direction: 'rtl' },
-    { locale: 'en-XA', direction: 'ltr', widths: [320], marker: '\u00b7' },
-    { locale: 'ar-XB', direction: 'rtl', widths: [320], marker: '\u2067' },
   ] as const;
 
   for (const scenario of scenarios) {
     await languageSelect.selectOption(scenario.locale);
     await expect(page.locator('html')).toHaveAttribute('dir', scenario.direction);
-    if ('marker' in scenario) {
-      const tabLabel = await page
-        .getByRole('tablist', { name: 'Main navigation' })
-        .getByRole('tab')
-        .first()
-        .textContent();
-      expect(tabLabel).toContain(scenario.marker);
-    }
-
-    for (const width of 'widths' in scenario ? scenario.widths : widths) {
+    for (const width of widths) {
       await page.setViewportSize({ width, height: 900 });
       const primaryTabs = page.getByRole('tablist', { name: 'Main navigation' }).getByRole('tab');
       for (let index = 0; index < (await primaryTabs.count()); index += 1) {

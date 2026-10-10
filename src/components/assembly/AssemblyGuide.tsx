@@ -432,7 +432,7 @@ function StepCard({
   const checkboxId = stepIndex !== undefined ? `step-complete-${stepIndex}` : undefined;
   return (
     <div
-      className={`print-keep rounded-lg border p-5 transition-colors ${
+      className={`print-keep rounded-lg border p-5 wrap-break-word transition-colors ${
         completed
           ? 'border-green-300 bg-green-50/50 dark:border-green-800 dark:bg-green-900/10'
           : 'border-wood-200 dark:border-wood-700'
@@ -466,7 +466,7 @@ function StepCard({
         <span className="text-3xl" role="img" aria-hidden="true">
           {step.icon}
         </span>
-        <div className="flex-1">
+        <div className="min-w-0 flex-1">
           <div className="mb-1 flex flex-wrap items-center gap-2">
             <span className="bg-accent rounded-full px-2 py-0.5 text-xs font-bold text-white">
               {step.stepNumber}/{stepCount}
