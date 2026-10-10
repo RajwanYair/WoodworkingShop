@@ -484,6 +484,12 @@
   },
   "storage": {
     "usageLabel": "{{used}} KB / {{quota}} MB",
+    "backupScope": "Backup includes saved projects, configurations, snapshots, and offcuts. It excludes session state, browser caches, optional feature data, and plugin credentials.",
+    "backupDownload": "Download backup",
+    "restoreBackup": "Restore backup",
+    "backupExported": "Storage backup downloaded",
+    "backupRestored": "Storage backup restored",
+    "backupError": "Could not export or restore this storage backup",
     "nearLimitWarning": "Storage nearly full — consider exporting and deleting old projects"
   },
   "saves": {

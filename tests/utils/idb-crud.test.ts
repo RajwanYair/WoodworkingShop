@@ -11,6 +11,8 @@ import {
   idbLoadSnapshots,
   idbSaveSnapshots,
   idbDeleteSnapshot,
+  idbLoadOffcuts,
+  idbSaveOffcuts,
   idbGet,
   idbSet,
   idbDel,
@@ -231,5 +233,16 @@ describe('idbGet / idbSet / idbDel / idbKeys', () => {
     const k = await idbKeys();
     expect(k).toContain('key-a');
     expect(k).toContain('key-b');
+  });
+});
+
+describe('idbLoadOffcuts / idbSaveOffcuts', () => {
+  it('replaces the offcut catalog', async () => {
+    await idbSaveOffcuts([{ id: 'old', material: 'plywood-17', thickness: 17, width: 300, length: 600, addedAt: 1 }]);
+    const replacement = [{ id: 'new', material: 'plywood-17', thickness: 17, width: 400, length: 800, addedAt: 2 }];
+
+    await idbSaveOffcuts(replacement);
+
+    expect(await idbLoadOffcuts()).toEqual(replacement);
   });
 });

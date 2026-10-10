@@ -558,7 +558,13 @@
   },
   "storage": {
     "usageLabel": "{{used}} Ko / {{quota}} Mo",
-    "nearLimitWarning": "Stockage presque plein — envisagez d'exporter et de supprimer les anciens projets"
+    "nearLimitWarning": "Stockage presque plein — envisagez d'exporter et de supprimer les anciens projets",
+    "backupScope": "La sauvegarde inclut les projets, configurations, instantanés et chutes enregistrés. Elle exclut l’état de session, le cache du navigateur, les données des fonctions facultatives et les identifiants des extensions.",
+    "backupDownload": "Télécharger la sauvegarde",
+    "restoreBackup": "Restaurer la sauvegarde",
+    "backupExported": "Sauvegarde du stockage téléchargée",
+    "backupRestored": "Sauvegarde du stockage restaurée",
+    "backupError": "Impossible d’exporter ou de restaurer cette sauvegarde du stockage"
   },
   "saves": {
     "title": "Mes armoires enregistrées",
