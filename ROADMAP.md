@@ -1,6 +1,6 @@
 # Roadmap
 
-> Last updated: 2026-10-02 (v5.34.0 clean-checkout acceptance)
+> Last updated: 2026-10-10 (Sprint 321 T1 persistence inventory)
 > Current app version: v5.34.0
 > Next release target: v5.35.0 (Phase 73 — Product coherence and modern app shell)
 > Program horizon: Phases 63–80 · Sprints 300–419 · v5.34.0 → v6.0.0 (execution order: §7.2 release train)
@@ -736,7 +736,7 @@ Status (2026-10-02): T1 and T2 verification and clean-checkout acceptance are co
 
 **Sprint 321 — Persistence resilience baseline** — P0 · M · S304.
 
-- T1: Inventory durable and ephemeral state, data size, write frequency and multi-tab interactions.
+- T1: DONE — inventory durable and ephemeral state, qualitative data size, write frequency and multi-tab behavior (#213).
 - T2: Add IDB upgrade, interrupted write, blocked upgrade, quota, private-mode/unavailable and recovery tests.
 - T3: Expose storage health/export-backup action and test restore through browser UI.
 - Accept: existing IndexedDB remains source of truth; every failure mode either recovers or clearly preserves downloadable user data.

@@ -79,30 +79,31 @@ For persistent project storage, use **Project JSON** (`exportProjectJson`) which
 
 ---
 
-## localStorage Keys
+## Legacy localStorage Migration Keys
 
-| Key                | Owner                       | Notes                                      |
-| ------------------ | --------------------------- | ------------------------------------------ |
-| `cabinet-planner`  | `cabinet-store.ts`          | Main cabinet config + undo stack           |
-| `custom-materials` | `custom-materials-store.ts` | User-defined materials                     |
-| `room-layouts`     | `room-store.ts`             | Multi-cabinet room layout (added v3.53.32) |
-| `onboarding-seen`  | `OnboardingOverlay.tsx`     | Set to `'1'` once tour is dismissed        |
+These are legacy keys read when the corresponding IndexedDB collection is first
+loaded and no collection exists yet. The original localStorage values are retained
+after migration. Current durable and transient state is inventoried in
+[ARCHITECTURE.md](ARCHITECTURE.md#persistence-inventory).
+
+| Legacy localStorage key         | IndexedDB collection                          |
+| ------------------------------- | --------------------------------------------- |
+| `cabinet-planner-projects-v1`   | `cabinet-planner-projects` / `all-projects`   |
+| `cabinet-planner-saved-configs` | `cabinet-planner-configs` / `all-configs`     |
+| `woodworkingshop:snapshots`     | `cabinet-planner-snapshots` / `all-snapshots` |
 
 ---
 
 ## Data Migration Functions
 
-All migration utilities live in `src/utils/project-storage.ts`:
+Project JSON export and import helpers live in `src/utils/project-storage.ts`:
 
 ```ts
-// Export current project as versioned JSON
-exportProjectJson(cabinets, projectName): ProjectJson
-
-// Import (merges stored config with DEFAULT_CONFIG for forward compatibility)
-importProjectJson(json: unknown): ProjectJson
-
-// Upgrade persisted JSON to latest schema version
-migrateProject(raw: unknown): ProjectJson
+exportProjectJson(project: SavedProject, snapshots?: ProjectSnapshot[]): void
+importProjectJson(file: File): Promise<SavedProject>
+migrateProject(raw: unknown): SavedProject
 ```
 
-Any JSON with `schemaVersion < CURRENT_SCHEMA_VERSION` is automatically upgraded in-place by `migrateProject`.
+Import normalizes supported legacy project schemas to the current schema. Unsupported
+schema versions and structurally invalid payloads are rejected; migration does not
+rewrite the source JSON in place.
