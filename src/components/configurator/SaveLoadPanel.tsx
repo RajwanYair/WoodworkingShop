@@ -3,7 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useToastStore } from '../../store/toast-store';
 import { loadSavedConfigs, saveConfig, deleteSavedConfig, type SavedConfig } from '../../utils/local-storage';
-import { listProjects, exportProjectsBundle, importProjectsBundle } from '../../utils/project-storage';
+import {
+  listProjects,
+  exportProjectsBundle,
+  importProjectsBundle,
+  previewProjectsBundle,
+  readSafeProjectImportJson,
+  type SavedProject,
+} from '../../utils/project-storage';
+import type { CabinetEntry } from '../../store/cabinet-store';
 import {
   buildCabinetExport,
   buildProjectExport,
@@ -12,6 +20,10 @@ import {
   isValidConfig,
   triggerJsonDownload,
 } from './save-load-json';
+
+type PendingImport =
+  | { kind: 'active'; cabinets: CabinetEntry[]; projectName?: string; projectNotes?: string }
+  | { kind: 'bundle'; file: File; projects: SavedProject[] };
 
 export function SaveLoadPanel() {
   const { t } = useTranslation();
@@ -22,6 +34,8 @@ export function SaveLoadPanel() {
   const [configs, setConfigs] = useState<SavedConfig[]>([]);
   const [saveName, setSaveName] = useState('');
   const [showSaved, setShowSaved] = useState(false);
+  const [pendingImport, setPendingImport] = useState<PendingImport | null>(null);
+  const [importError, setImportError] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const bundleInputRef = useRef<HTMLInputElement>(null);
 
@@ -81,17 +95,18 @@ export function SaveLoadPanel() {
     bundleInputRef.current?.click();
   };
 
-  const handleBundleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBundleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    importProjectsBundle(file)
-      .then((added) => {
-        addToast(t('saves.importedBundle', { count: added.length }), 'success');
-      })
-      .catch(() => {
-        addToast(t('toast.invalidFile'), 'error');
-      });
-    e.target.value = '';
+    setPendingImport(null);
+    setImportError(false);
+    try {
+      setPendingImport({ kind: 'bundle', file, projects: await previewProjectsBundle(file) });
+    } catch {
+      setImportError(true);
+    } finally {
+      e.target.value = '';
+    }
   };
 
   const handleShare = async () => {
@@ -139,36 +154,57 @@ export function SaveLoadPanel() {
     fileInputRef.current?.click();
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      try {
-        const parsed = JSON.parse(reader.result as string);
-        // Project format (multi-cabinet)
-        if (isProjectExport(parsed)) {
-          loadProject(parsed.cabinets);
-          if (typeof parsed.projectName === 'string') setProjectName(parsed.projectName);
-          if (typeof parsed.projectNotes === 'string') setProjectNotes(parsed.projectNotes);
-          addToast(t('toast.imported'), 'success');
-        } else if (isCabinetExport(parsed)) {
-          setConfig(parsed.cabinet.config);
-          addToast(t('toast.imported'), 'success');
-          // Legacy single-config format
-        } else if (isValidConfig(parsed)) {
-          setConfig(parsed);
-          addToast(t('toast.imported'), 'success');
-        } else {
-          addToast(t('toast.invalidFile'), 'error');
-        }
-      } catch {
-        addToast(t('toast.invalidFile'), 'error');
+    setPendingImport(null);
+    setImportError(false);
+    try {
+      const parsed = await readSafeProjectImportJson(file);
+      if (isProjectExport(parsed)) {
+        setPendingImport({
+          kind: 'active',
+          cabinets: parsed.cabinets,
+          ...(typeof parsed.projectName === 'string' ? { projectName: parsed.projectName } : {}),
+          ...(typeof parsed.projectNotes === 'string' ? { projectNotes: parsed.projectNotes } : {}),
+        });
+      } else if (isCabinetExport(parsed)) {
+        setPendingImport({ kind: 'active', cabinets: [parsed.cabinet] });
+      } else if (isValidConfig(parsed)) {
+        setPendingImport({ kind: 'active', cabinets: [{ name: 'Cabinet', config: parsed }] });
+      } else {
+        setImportError(true);
       }
-    };
-    reader.readAsText(file);
-    // reset input so re-importing the same file works
-    e.target.value = '';
+    } catch {
+      setImportError(true);
+    } finally {
+      e.target.value = '';
+    }
+  };
+
+  const handleConfirmImport = async () => {
+    if (!pendingImport) return;
+    try {
+      if (pendingImport.kind === 'bundle') {
+        const added = await importProjectsBundle(pendingImport.file);
+        addToast(t('saves.importedBundle', { count: added.length }), 'success');
+      } else {
+        loadProject(pendingImport.cabinets, {
+          ...(pendingImport.projectName !== undefined ? { projectName: pendingImport.projectName } : {}),
+          ...(pendingImport.projectNotes !== undefined ? { projectNotes: pendingImport.projectNotes } : {}),
+        });
+        addToast(t('toast.imported'), 'success');
+      }
+      setPendingImport(null);
+      setImportError(false);
+    } catch {
+      setImportError(true);
+    }
+  };
+
+  const handleCancelImport = () => {
+    setPendingImport(null);
+    setImportError(false);
   };
 
   return (
@@ -271,6 +307,47 @@ export function SaveLoadPanel() {
       )}
 
       {/* Export / Import */}
+      {pendingImport && (
+        <section className="border-wood-300 dark:border-wood-600 space-y-2 rounded border p-3" aria-live="polite">
+          <h4 className="text-wood-700 dark:text-wood-200 text-xs font-semibold">{t('saves.importPreviewTitle')}</h4>
+          {pendingImport.kind === 'active' ? (
+            <div className="text-wood-600 dark:text-wood-300 space-y-1 text-xs">
+              {pendingImport.projectName && <p className="break-words">{pendingImport.projectName}</p>}
+              {pendingImport.projectNotes && <p className="break-words">{pendingImport.projectNotes}</p>}
+              <p>{t('saves.importPreviewCabinets', { count: pendingImport.cabinets.length })}</p>
+            </div>
+          ) : (
+            <ul className="divide-wood-100 dark:divide-wood-700 max-h-32 divide-y overflow-y-auto">
+              {pendingImport.projects.map((project) => (
+                <li key={`${project.id}-${project.name}`} className="text-wood-600 dark:text-wood-300 py-1 text-xs">
+                  {project.name} · {t('saves.importPreviewCabinets', { count: project.cabinets.length })}
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => void handleConfirmImport()}
+              className="bg-wood-600 hover:bg-wood-700 rounded px-3 py-1.5 text-xs font-medium text-white"
+            >
+              {t('saves.confirmImport')}
+            </button>
+            <button
+              type="button"
+              onClick={handleCancelImport}
+              className="border-wood-300 dark:border-wood-600 text-wood-700 dark:text-wood-200 rounded border px-3 py-1.5 text-xs"
+            >
+              {t('saves.cancelImport')}
+            </button>
+          </div>
+        </section>
+      )}
+      {importError && (
+        <p className="text-xs text-red-600 dark:text-red-400" role="alert" aria-live="assertive">
+          {t('saves.importFailed')}
+        </p>
+      )}
       <div className="border-wood-100 dark:border-wood-800 flex gap-2 border-t pt-1">
         <button
           onClick={handleExportCabinet}

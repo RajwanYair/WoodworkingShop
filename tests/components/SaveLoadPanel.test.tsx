@@ -19,6 +19,8 @@ vi.mock('../../src/utils/project-storage', () => ({
   exportProjectsBundle: vi.fn(),
   importProjectsBundle: vi.fn(),
   listProjects: vi.fn(),
+  previewProjectsBundle: vi.fn(),
+  readSafeProjectImportJson: vi.fn(),
 }));
 
 const savedConfig: SavedConfig = {
@@ -33,6 +35,7 @@ async function uploadJsonFile(
   buttonName: RegExp,
   fileName: string,
   contents: string,
+  confirm = true,
 ) {
   const inputClick = vi.spyOn(HTMLInputElement.prototype, 'click').mockImplementation(() => {});
   await user.click(screen.getByRole('button', { name: buttonName }));
@@ -41,6 +44,14 @@ async function uploadJsonFile(
   );
   if (!input) throw new Error('Import file input was not opened');
   await user.upload(input, new File([contents], fileName, { type: 'application/json' }));
+  if (confirm) {
+    await waitFor(() => {
+      if (screen.queryByRole('alert')) return;
+      expect(screen.getByRole('button', { name: 'Confirm import' })).toBeInTheDocument();
+    });
+    const confirmButton = screen.queryByRole('button', { name: 'Confirm import' });
+    if (confirmButton) await user.click(confirmButton);
+  }
   return input;
 }
 
@@ -48,6 +59,9 @@ describe('SaveLoadPanel', () => {
   beforeEach(() => {
     vi.mocked(loadSavedConfigs).mockResolvedValue([]);
     vi.mocked(saveConfig).mockResolvedValue(savedConfig);
+    vi.mocked(projectStorage.readSafeProjectImportJson).mockImplementation(async (file) =>
+      JSON.parse(await file.text()),
+    );
     const config = { ...DEFAULT_CONFIG };
     useCabinetStore.setState({
       config,
@@ -155,6 +169,35 @@ describe('SaveLoadPanel', () => {
       );
     });
     expect(projectStorage.exportProjectsBundle).not.toHaveBeenCalled();
+  });
+
+  it('previews an active-project import and applies it only after confirmation', async () => {
+    const user = userEvent.setup();
+    render(<SaveLoadPanel />);
+    const importedConfig = { ...DEFAULT_CONFIG, width: 900 };
+    const payload = JSON.stringify({
+      version: 1,
+      projectName: 'Imported Kitchen',
+      projectNotes: 'Confirm before applying',
+      cabinets: [{ name: 'Imported Base', config: importedConfig }],
+    });
+
+    await uploadJsonFile(user, /Import JSON/, 'project.json', payload, false);
+
+    expect(await screen.findByText('Imported Kitchen')).toBeInTheDocument();
+    expect(useCabinetStore.getState().config.width).toBe(DEFAULT_CONFIG.width);
+    expect(useCabinetStore.getState().projectName).toBe('');
+    expect(useCabinetStore.getState().projectNotes).toBe('');
+
+    await user.click(screen.getByRole('button', { name: 'Cancel import' }));
+    expect(useCabinetStore.getState().config.width).toBe(DEFAULT_CONFIG.width);
+
+    await uploadJsonFile(user, /Import JSON/, 'project.json', payload, false);
+    await user.click(screen.getByRole('button', { name: 'Confirm import' }));
+
+    expect(useCabinetStore.getState().config.width).toBe(900);
+    expect(useCabinetStore.getState().projectName).toBe('Imported Kitchen');
+    expect(useCabinetStore.getState().projectNotes).toBe('Confirm before applying');
   });
 
   it('updates the saved-cabinet section expanded state when toggled', async () => {
@@ -368,11 +411,7 @@ describe('SaveLoadPanel', () => {
 
     await uploadJsonFile(user, /Import JSON/, 'broken.json', '{ invalid json');
 
-    await waitFor(() =>
-      expect(useToastStore.getState().toasts).toEqual(
-        expect.arrayContaining([expect.objectContaining({ message: 'Invalid configuration file', type: 'error' })]),
-      ),
-    );
+    expect(await screen.findByRole('alert')).toHaveTextContent('Project import could not be prepared');
     expect(useCabinetStore.getState().config.width).toBe(width);
   });
 
@@ -383,11 +422,7 @@ describe('SaveLoadPanel', () => {
 
     await uploadJsonFile(user, /Import JSON/, 'invalid.json', JSON.stringify({ version: 1, cabinets: [] }));
 
-    await waitFor(() =>
-      expect(useToastStore.getState().toasts).toEqual(
-        expect.arrayContaining([expect.objectContaining({ message: 'Invalid configuration file', type: 'error' })]),
-      ),
-    );
+    expect(await screen.findByRole('alert')).toHaveTextContent('Project import could not be prepared');
     expect(useCabinetStore.getState().config.width).toBe(width);
   });
 
@@ -507,6 +542,21 @@ describe('SaveLoadPanel', () => {
         cabinets: [{ name: 'Second cabinet', config: { ...DEFAULT_CONFIG } }],
       },
     ]);
+    const importedProjects = [
+      {
+        id: 'imported-1',
+        name: 'Imported project',
+        savedAt: '2026-09-30T10:00:00.000Z',
+        cabinets: [{ name: 'Imported cabinet', config: { ...DEFAULT_CONFIG } }],
+      },
+      {
+        id: 'imported-2',
+        name: 'Second project',
+        savedAt: '2026-09-30T10:00:00.000Z',
+        cabinets: [{ name: 'Second cabinet', config: { ...DEFAULT_CONFIG } }],
+      },
+    ];
+    vi.mocked(projectStorage.previewProjectsBundle).mockResolvedValue(importedProjects);
     render(<SaveLoadPanel />);
 
     await uploadJsonFile(user, /Import Bundle/, 'projects.cabinet-projects.json', '{"projects":[]}');
@@ -519,16 +569,12 @@ describe('SaveLoadPanel', () => {
 
   it('reports a rejected bundle import and clears the selected file', async () => {
     const user = userEvent.setup();
-    vi.mocked(projectStorage.importProjectsBundle).mockRejectedValue(new Error('Invalid bundle'));
+    vi.mocked(projectStorage.previewProjectsBundle).mockRejectedValue(new Error('Invalid bundle'));
     render(<SaveLoadPanel />);
 
     const input = await uploadJsonFile(user, /Import Bundle/, 'broken.cabinet-projects.json', '{ invalid');
 
-    await waitFor(() =>
-      expect(useToastStore.getState().toasts).toEqual(
-        expect.arrayContaining([expect.objectContaining({ message: 'Invalid configuration file', type: 'error' })]),
-      ),
-    );
+    expect(await screen.findByRole('alert')).toHaveTextContent('Project import could not be prepared');
     expect(input).toHaveValue('');
   });
 });
