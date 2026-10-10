@@ -30,6 +30,21 @@ describe('validateProjectPayload', () => {
     expect(result.diagnostics.find((diagnostic) => diagnostic.path === '$.schemaVersion')?.actual).toBe('"2.0"');
   });
 
+  it('reports missing required fields and extra top-level fields', () => {
+    const canonicalProject = makeSavedProject({ generatedAt: '2026-01-01T00:00:00.000Z' });
+    const missingName: Record<string, unknown> = { ...canonicalProject };
+    delete missingName['name'];
+    const options = { recoveryAction: 'Choose another project file' };
+
+    const missingResult = validateProjectPayload(missingName, options);
+    const extraResult = validateProjectPayload({ ...canonicalProject, unexpected: true }, options);
+
+    expect(missingResult.diagnostics).toContainEqual(
+      expect.objectContaining({ path: '$.name', expected: 'required property "name"', actual: 'missing' }),
+    );
+    expect(extraResult.diagnostics).toContainEqual(expect.objectContaining({ path: '$.unexpected', actual: 'true' }));
+  });
+
   it('caps diagnostics and escapes markup in untrusted actual values', () => {
     const project = { ...makeSavedProject(), schemaVersion: '2.0', unexpected: '<script>alert(1)</script>' };
     const result = validateProjectPayload(project, { recoveryAction: 'Review the project file', maxDiagnostics: 1 });
