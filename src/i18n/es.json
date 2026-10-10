@@ -558,7 +558,13 @@
   },
   "storage": {
     "usageLabel": "{{used}} KB / {{quota}} MB",
-    "nearLimitWarning": "Almacenamiento casi lleno — considere exportar y eliminar proyectos antiguos"
+    "nearLimitWarning": "Almacenamiento casi lleno — considere exportar y eliminar proyectos antiguos",
+    "backupScope": "La copia incluye proyectos, configuraciones, instantáneas y retales guardados. Excluye el estado de sesión, la caché del navegador, los datos de funciones opcionales y las credenciales de complementos.",
+    "backupDownload": "Descargar copia",
+    "restoreBackup": "Restaurar copia",
+    "backupExported": "Copia del almacenamiento descargada",
+    "backupRestored": "Copia del almacenamiento restaurada",
+    "backupError": "No se pudo exportar ni restaurar esta copia del almacenamiento"
   },
   "saves": {
     "title": "Mis armarios guardados",

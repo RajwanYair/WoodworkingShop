@@ -13,6 +13,7 @@ import {
 } from '../../utils/project-storage';
 import { IconX, IconDownload, IconFolder } from '../layout/Icons';
 import { StorageQuotaBadge } from './StorageQuotaBadge';
+import { createStorageBackup, downloadStorageBackup, restoreStorageBackup } from '../../utils/storage-backup';
 
 interface ProjectManagerModalProps {
   onClose: () => void;
@@ -22,6 +23,7 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
   const { t } = useTranslation();
   const dialogRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const backupInputRef = useRef<HTMLInputElement>(null);
   const cabinets = useCabinetStore((s) => s.cabinets);
   const snapshots = useCabinetStore((s) => s.snapshots);
   const projectName = useCabinetStore((s) => s.projectName);
@@ -93,6 +95,30 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
       addToast(t('projects.importError'), 'error');
     } finally {
       if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
+  const handleBackupExport = async () => {
+    try {
+      downloadStorageBackup(await createStorageBackup());
+      addToast(t('storage.backupExported'), 'success');
+    } catch {
+      addToast(t('storage.backupError'), 'error');
+    }
+  };
+
+  const handleBackupRestore = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const backup = await restoreStorageBackup(file);
+      useCabinetStore.setState({ snapshots: backup.snapshots });
+      addToast(t('storage.backupRestored'), 'success');
+      refresh();
+    } catch {
+      addToast(t('storage.backupError'), 'error');
+    } finally {
+      if (backupInputRef.current) backupInputRef.current.value = '';
     }
   };
 
@@ -235,28 +261,56 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
           )}
         </div>
 
-        {/* Footer — import button */}
-        <div className="border-wood-200 dark:border-wood-700 flex items-center justify-between border-t p-4">
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".json"
-            onChange={handleImport}
-            className="hidden"
-            id="pm-import-file"
-          />
-          <label
-            htmlFor="pm-import-file"
-            className="bg-wood-100 dark:bg-wood-700 text-wood-700 dark:text-wood-200 hover:bg-wood-200 dark:hover:bg-wood-600 cursor-pointer rounded px-3 py-1.5 text-sm transition-colors"
-          >
-            {t('projects.import')}
-          </label>
-          <button
-            onClick={onClose}
-            className="bg-wood-100 dark:bg-wood-700 text-wood-700 dark:text-wood-200 hover:bg-wood-200 dark:hover:bg-wood-600 rounded px-4 py-1.5 text-sm transition-colors"
-          >
-            {t('templates.close')}
-          </button>
+        {/* Footer — import and backup controls */}
+        <div className="border-wood-200 dark:border-wood-700 border-t p-4">
+          <p className="text-wood-500 dark:text-wood-400 mb-3 text-xs">{t('storage.backupScope')}</p>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => void handleBackupExport()}
+                className="bg-wood-600 hover:bg-wood-700 flex items-center gap-2 rounded px-3 py-1.5 text-sm text-white transition-colors"
+              >
+                <IconDownload size={16} />
+                {t('storage.backupDownload')}
+              </button>
+              <input
+                ref={backupInputRef}
+                type="file"
+                accept=".json,application/json"
+                onChange={handleBackupRestore}
+                className="hidden"
+                aria-label={t('storage.restoreBackup')}
+              />
+              <button
+                type="button"
+                onClick={() => backupInputRef.current?.click()}
+                className="bg-wood-100 dark:bg-wood-700 text-wood-700 dark:text-wood-200 hover:bg-wood-200 dark:hover:bg-wood-600 rounded px-3 py-1.5 text-sm transition-colors"
+              >
+                {t('storage.restoreBackup')}
+              </button>
+            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".json"
+              onChange={handleImport}
+              className="hidden"
+              id="pm-import-file"
+            />
+            <label
+              htmlFor="pm-import-file"
+              className="bg-wood-100 dark:bg-wood-700 text-wood-700 dark:text-wood-200 hover:bg-wood-200 dark:hover:bg-wood-600 cursor-pointer rounded px-3 py-1.5 text-sm transition-colors"
+            >
+              {t('projects.import')}
+            </label>
+            <button
+              onClick={onClose}
+              className="bg-wood-100 dark:bg-wood-700 text-wood-700 dark:text-wood-200 hover:bg-wood-200 dark:hover:bg-wood-600 rounded px-4 py-1.5 text-sm transition-colors"
+            >
+              {t('templates.close')}
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -558,7 +558,13 @@
   },
   "storage": {
     "usageLabel": "{{used}} KB / {{quota}} MB",
-    "nearLimitWarning": "Speicher fast voll — erwägen Sie, alte Projekte zu exportieren und zu löschen"
+    "nearLimitWarning": "Speicher fast voll — erwägen Sie, alte Projekte zu exportieren und zu löschen",
+    "backupScope": "Das Backup enthält gespeicherte Projekte, Konfigurationen, Momentaufnahmen und Verschnittreste. Sitzungsstatus, Browser-Cache, optionale Funktionsdaten und Plugin-Zugangsdaten sind ausgeschlossen.",
+    "backupDownload": "Backup herunterladen",
+    "restoreBackup": "Backup wiederherstellen",
+    "backupExported": "Speicher-Backup heruntergeladen",
+    "backupRestored": "Speicher-Backup wiederhergestellt",
+    "backupError": "Speicher-Backup konnte nicht exportiert oder wiederhergestellt werden"
   },
   "saves": {
     "title": "Meine gespeicherten Schränke",

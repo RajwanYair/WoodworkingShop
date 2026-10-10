@@ -158,6 +158,12 @@ export async function idbSaveOffcut(entry: OffcutEntry): Promise<void> {
   await set(IDB_OFFCUTS_KEY, [...all, entry], offcutStore);
 }
 
+/** Replace the saved offcut catalog. */
+export async function idbSaveOffcuts(entries: OffcutEntry[]): Promise<void> {
+  assertIndexedDBAvailable();
+  await set(IDB_OFFCUTS_KEY, entries, offcutStore);
+}
+
 /** Remove an offcut catalog entry by id. */
 export async function idbDeleteOffcut(id: string): Promise<void> {
   assertIndexedDBAvailable();

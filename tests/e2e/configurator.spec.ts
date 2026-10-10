@@ -1207,6 +1207,34 @@ test('project manager saves, loads, exports, imports, and rejects corrupt projec
   await expect(importDialog.getByText('Kitchen Revision', { exact: true })).toHaveCount(2);
 });
 
+test('project manager exports and restores a core storage backup', async ({ appPage: page }) => {
+  await page.getByRole('button', { name: 'Project Manager' }).click();
+  const dialog = page.getByRole('dialog', { name: 'Project Manager' });
+  await dialog.getByPlaceholder('Project name…').fill('Backup round trip');
+  await dialog.getByRole('button', { name: 'Save', exact: true }).click();
+  await expect(dialog.getByText('Backup round trip', { exact: true })).toBeVisible();
+
+  const downloadPromise = page.waitForEvent('download');
+  await dialog.getByRole('button', { name: 'Download backup' }).click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toMatch(/^woodworkingshop-backup-\d{4}-\d{2}-\d{2}\.json$/);
+  const downloadPath = await download.path();
+  if (!downloadPath) throw new Error('Storage backup did not produce a downloadable file');
+  const backup: unknown = JSON.parse(await readFile(downloadPath, 'utf8'));
+  expect(backup).toMatchObject({ format: 'woodworkingshop-core-backup', version: 1 });
+
+  await dialog.getByRole('button', { name: 'Delete', exact: true }).click();
+  await expect(dialog.getByText('No saved projects')).toBeVisible();
+  await dialog.getByLabel('Restore backup').setInputFiles({
+    name: download.suggestedFilename(),
+    mimeType: 'application/json',
+    buffer: await readFile(downloadPath),
+  });
+
+  await expect(page.getByText('Storage backup restored')).toBeVisible();
+  await expect(dialog.getByText('Backup round trip', { exact: true })).toBeVisible();
+});
+
 test('canceling share copies its URL and snapshots compare, restore, and delete', async ({ appPage: page }) => {
   await page.evaluate(() => {
     Object.defineProperty(navigator, 'share', {
