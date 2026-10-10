@@ -72,4 +72,23 @@ describe('HardwareCatalogImportPanel', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent('Invalid hardware item at index 0');
     expect(useCustomHardwareStore.getState().items).toEqual([existingHardware]);
   });
+
+  it('cancels a validated catalog preview without changing stored hardware', async () => {
+    const user = userEvent.setup();
+    render(<HardwareCatalogImportPanel />);
+
+    const file = new File(
+      [JSON.stringify({ schemaVersion: HARDWARE_CATALOG_SCHEMA_VERSION, items: [importedHardware] })],
+      'hardware.json',
+      { type: 'application/json' },
+    );
+    await user.upload(screen.getByLabelText('Catalog JSON file'), file);
+
+    expect(await screen.findByText('Soft-Close Hinge')).toBeInTheDocument();
+    expect(useCustomHardwareStore.getState().items).toEqual([existingHardware]);
+    await user.click(screen.getByRole('button', { name: 'Cancel import' }));
+
+    expect(screen.queryByText('Soft-Close Hinge')).not.toBeInTheDocument();
+    expect(useCustomHardwareStore.getState().items).toEqual([existingHardware]);
+  });
 });

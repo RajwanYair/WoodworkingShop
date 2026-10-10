@@ -4,13 +4,20 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 import { ProjectManagerModal } from '../../src/components/layout/ProjectManagerModal';
 import { useCabinetStore } from '../../src/store/cabinet-store';
-import { listProjects, saveProject, type SavedProject } from '../../src/utils/project-storage';
+import {
+  importProjectJson,
+  listProjects,
+  previewProjectJson,
+  saveProject,
+  type SavedProject,
+} from '../../src/utils/project-storage';
 
 vi.mock('../../src/utils/project-storage', () => ({
   deleteProject: vi.fn(),
   exportProjectJson: vi.fn(),
   importProjectJson: vi.fn(),
   listProjects: vi.fn(),
+  previewProjectJson: vi.fn(),
   saveProject: vi.fn(),
 }));
 
@@ -71,5 +78,39 @@ describe('ProjectManagerModal', () => {
 
     await waitFor(() => expect(saveProject).toHaveBeenCalledWith('New Workshop', expect.any(Array)));
     expect(useCabinetStore.getState().projectName).toBe('New Workshop');
+  });
+
+  it('previews an imported project without persisting it until confirmation', async () => {
+    const user = userEvent.setup();
+    const importedProject: SavedProject = {
+      id: 'preview-project',
+      name: 'Imported Workshop',
+      savedAt: '2026-09-30T10:00:00.000Z',
+      cabinets: [{ name: 'Imported Cabinet', config: { ...DEFAULT_CONFIG } }],
+    };
+    vi.mocked(importProjectJson).mockResolvedValue(importedProject);
+    vi.mocked(previewProjectJson).mockResolvedValue(importedProject);
+    render(<ProjectManagerModal onClose={vi.fn()} />);
+
+    await user.upload(
+      screen.getByLabelText('Import JSON'),
+      new File([JSON.stringify(importedProject)], 'workshop.json', { type: 'application/json' }),
+    );
+
+    expect(await screen.findByText('Imported Workshop')).toBeInTheDocument();
+    expect(importProjectJson).not.toHaveBeenCalled();
+    expect(useCabinetStore.getState().projectName).toBe('Current Workshop');
+    expect(useCabinetStore.getState().cabinets[0].name).toBe('Current Cabinet');
+
+    await user.click(screen.getByRole('button', { name: 'Cancel import' }));
+    expect(importProjectJson).not.toHaveBeenCalled();
+    expect(screen.queryByText('Imported Workshop')).not.toBeInTheDocument();
+
+    await user.upload(
+      screen.getByLabelText('Import JSON'),
+      new File([JSON.stringify(importedProject)], 'workshop.json', { type: 'application/json' }),
+    );
+    await user.click(screen.getByRole('button', { name: 'Confirm import' }));
+    await waitFor(() => expect(importProjectJson).toHaveBeenCalledWith(expect.any(File)));
   });
 });

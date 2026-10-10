@@ -165,7 +165,7 @@ export type CabinetState = {
   renameCabinet: (index: number, name: string) => void;
   setNotes: (index: number, notes: string) => void;
   toggleRotationLock: (partId: string) => void;
-  loadProject: (cabinets: CabinetEntry[]) => void;
+  loadProject: (cabinets: CabinetEntry[], metadata?: { projectName?: string; projectNotes?: string }) => void;
   bulkReplaceMaterial: (fromKey: string, toKey: string) => void;
   setOffcutCatalog: (catalog: OffcutEntry[]) => void;
   addOffcutEntry: (entry: OffcutEntry) => void;
@@ -681,7 +681,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
         return { cabinets };
       }),
 
-    loadProject: (cabinets) =>
+    loadProject: (cabinets, metadata) =>
       set((state) => {
         if (cabinets.length === 0) return state;
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
@@ -696,6 +696,8 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
         return {
           cabinets: migrated,
           activeCabinetIndex: 0,
+          ...(metadata?.projectName !== undefined ? { projectName: metadata.projectName } : {}),
+          ...(metadata?.projectNotes !== undefined ? { projectNotes: metadata.projectNotes } : {}),
           ...base,
           optimizationPending: true,
           costPending: true,

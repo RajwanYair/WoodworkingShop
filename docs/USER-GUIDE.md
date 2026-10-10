@@ -59,6 +59,8 @@ woodworking estimate; it is not a required step in the cabinet workflow.
 The Workspace tab is the starting screen. Open Project Manager from the header to save, search,
 sort, load, import, or export named projects. Cabinet projects and snapshots are stored in IndexedDB;
 legacy localStorage data is migrated when the IndexedDB store is first read.
+Project and hardware-catalog JSON imports are staged for review before confirmation. Canceling or
+rejecting a file leaves the current data unchanged; a project bundle is saved only when every entry is valid.
 
 ## Configurator Tab
 

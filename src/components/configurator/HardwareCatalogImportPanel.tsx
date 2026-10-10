@@ -40,6 +40,13 @@ export function HardwareCatalogImportPanel() {
     setPreview([]);
   };
 
+  const handleCancelImport = () => {
+    setRawCatalog(null);
+    setPreview([]);
+    setError('');
+    setResult('');
+  };
+
   return (
     <section className="border-wood-200 dark:border-wood-700 rounded-lg border p-4">
       <h3 className="text-wood-700 dark:text-wood-200 mb-3 text-sm font-semibold">
@@ -92,14 +99,23 @@ export function HardwareCatalogImportPanel() {
               {t('hardwareCatalog.importExisting', { count: existingItems.length })}
             </p>
           )}
-          <button
-            type="button"
-            onClick={handleImport}
-            disabled={rawCatalog === null}
-            className="bg-wood-600 hover:bg-wood-700 disabled:bg-wood-300 dark:disabled:bg-wood-700 rounded px-3 py-1.5 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed"
-          >
-            {t('hardwareCatalog.importButton')}
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={handleImport}
+              disabled={rawCatalog === null}
+              className="bg-wood-600 hover:bg-wood-700 disabled:bg-wood-300 dark:disabled:bg-wood-700 rounded px-3 py-1.5 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed"
+            >
+              {t('hardwareCatalog.importButton')}
+            </button>
+            <button
+              type="button"
+              onClick={handleCancelImport}
+              className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 rounded border px-3 py-1.5 text-sm font-medium transition-colors"
+            >
+              {t('hardwareCatalog.importCancel')}
+            </button>
+          </div>
         </div>
       )}
 

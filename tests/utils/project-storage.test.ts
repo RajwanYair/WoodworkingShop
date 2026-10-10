@@ -8,6 +8,8 @@ import {
   exportProjectsBundle,
   importProjectJson,
   importProjectsBundle,
+  previewProjectJson,
+  previewProjectsBundle,
   CURRENT_SCHEMA_VERSION,
   PROJECT_SCHEMA_REGISTRY,
   type SavedProject,
@@ -565,7 +567,35 @@ describe('project-storage', () => {
     await expect(importProjectsBundle(file)).rejects.toThrow(/projects/i);
   });
 
-  it('importProjectsBundle skips malformed project entries', async () => {
+  it('previews a project without persisting it', async () => {
+    const project = { id: 'preview', name: 'Preview', savedAt: '2025-01-01T00:00:00.000Z', cabinets: sampleCabinets };
+    const file = new File([JSON.stringify(project)], 'preview.json', { type: 'application/json' });
+    vi.mocked(idbSaveProjects).mockClear();
+
+    await expect(previewProjectJson(file)).resolves.toMatchObject({ name: 'Preview', cabinets: sampleCabinets });
+
+    expect(idbSaveProjects).not.toHaveBeenCalled();
+    expect(memProjects).toEqual([]);
+  });
+
+  it('previews an entire bundle without persisting it', async () => {
+    const bundle = {
+      version: 1,
+      projects: [{ id: 'preview', name: 'Preview', savedAt: '2025-01-01T00:00:00.000Z', cabinets: sampleCabinets }],
+    };
+    const file = new File([JSON.stringify(bundle)], 'preview-bundle.json', { type: 'application/json' });
+    vi.mocked(idbSaveProjects).mockClear();
+
+    await expect(previewProjectsBundle(file)).resolves.toMatchObject([{ name: 'Preview', cabinets: sampleCabinets }]);
+
+    expect(idbSaveProjects).not.toHaveBeenCalled();
+    expect(memProjects).toEqual([]);
+  });
+
+  it('rejects malformed bundle members without persisting any project', async () => {
+    const existing = await saveProject('Keep this project', sampleCabinets);
+    const projectsBeforeImport = [...memProjects];
+    vi.mocked(idbSaveProjects).mockClear();
     const bundle = {
       version: 1,
       exportedAt: new Date().toISOString(),
@@ -575,9 +605,12 @@ describe('project-storage', () => {
       ],
     };
     const file = new File([JSON.stringify(bundle)], 'partial.json', { type: 'application/json' });
-    const added = await importProjectsBundle(file);
-    expect(added).toHaveLength(1);
-    expect(added[0].name).toBe('Valid');
+
+    await expect(importProjectsBundle(file)).rejects.toThrow(/project at index 0/i);
+
+    expect(memProjects).toEqual(projectsBeforeImport);
+    expect(memProjects).toContain(existing);
+    expect(idbSaveProjects).not.toHaveBeenCalled();
   });
 });
 

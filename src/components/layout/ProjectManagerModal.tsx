@@ -9,6 +9,7 @@ import {
   deleteProject,
   exportProjectJson,
   importProjectJson,
+  previewProjectJson,
   type SavedProject,
 } from '../../utils/project-storage';
 import { IconX, IconDownload, IconFolder } from '../layout/Icons';
@@ -32,6 +33,8 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
   const [saveName, setSaveName] = useState(projectName || '');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortMode, setSortMode] = useState<'date' | 'name'>('date');
+  const [pendingImport, setPendingImport] = useState<{ file: File; project: SavedProject } | null>(null);
+  const [importError, setImportError] = useState(false);
 
   /** Projects after search filter + sort. */
   const visibleProjects = projects
@@ -86,14 +89,32 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
     const file = e.target.files?.[0];
     if (!file) return;
     try {
-      await importProjectJson(file);
-      addToast(t('projects.imported'), 'success');
-      refresh();
+      const project = await previewProjectJson(file);
+      setPendingImport({ file, project });
+      setImportError(false);
     } catch {
-      addToast(t('projects.importError'), 'error');
+      setImportError(true);
     } finally {
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
+  };
+
+  const handleConfirmImport = async () => {
+    if (!pendingImport) return;
+    try {
+      await importProjectJson(pendingImport.file);
+      setPendingImport(null);
+      setImportError(false);
+      addToast(t('projects.imported'), 'success');
+      refresh();
+    } catch {
+      setImportError(true);
+    }
+  };
+
+  const handleCancelImport = () => {
+    setPendingImport(null);
+    setImportError(false);
   };
 
   const fmt = (iso: string) => {
@@ -191,6 +212,36 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
 
         {/* Project list */}
         <div className="flex-1 space-y-2 overflow-y-auto p-4">
+          {pendingImport && (
+            <section className="border-wood-300 dark:border-wood-600 space-y-2 rounded border p-3" aria-live="polite">
+              <h3 className="text-wood-800 dark:text-wood-100 text-sm font-semibold">{t('projects.previewTitle')}</h3>
+              <p className="text-wood-700 dark:text-wood-200 text-sm">{pendingImport.project.name}</p>
+              <p className="text-wood-500 dark:text-wood-400 text-xs">
+                {t('projects.previewCabinets', { count: pendingImport.project.cabinets.length })}
+              </p>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => void handleConfirmImport()}
+                  className="bg-wood-600 hover:bg-wood-700 rounded px-3 py-1.5 text-sm text-white"
+                >
+                  {t('projects.confirmImport')}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCancelImport}
+                  className="border-wood-300 dark:border-wood-600 text-wood-700 dark:text-wood-200 rounded border px-3 py-1.5 text-sm"
+                >
+                  {t('projects.cancelImport')}
+                </button>
+              </div>
+            </section>
+          )}
+          {importError && (
+            <p className="text-xs text-red-600 dark:text-red-400" role="alert" aria-live="assertive">
+              {t('projects.importError')}
+            </p>
+          )}
           {visibleProjects.length === 0 ? (
             <p className="text-wood-700 dark:text-wood-200 py-6 text-center text-sm">
               {searchQuery ? t('projects.noResults', { query: searchQuery }) : t('projects.empty')}

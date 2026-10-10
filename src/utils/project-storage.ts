@@ -74,6 +74,18 @@ function assertImportFileSize(file: File): void {
   if (file.size > MAX_IMPORT_FILE_SIZE_BYTES) throw new Error('Import file exceeds the 50 MiB limit');
 }
 
+export async function readSafeProjectImportJson(file: File): Promise<unknown> {
+  assertImportFileSize(file);
+  const parsed: unknown = JSON.parse(await file.text());
+  assertSafeImportProperties(parsed);
+  return parsed;
+}
+
+async function parseProjectFile(file: File): Promise<SavedProject> {
+  const raw = await readSafeProjectImportJson(file);
+  return migrateProject(raw);
+}
+
 function isOneOf<T extends string>(value: unknown, values: readonly T[]): value is T {
   return values.some((candidate) => candidate === value);
 }
@@ -299,11 +311,7 @@ export function exportProjectJson(project: SavedProject, snapshots?: ProjectSnap
 
 export function importProjectJson(file: File): Promise<SavedProject> {
   return withProjectWriteLock(async () => {
-    assertImportFileSize(file);
-    const text = await file.text();
-    const raw = JSON.parse(text) as unknown;
-    assertSafeImportProperties(raw);
-    const project = migrateProject(raw);
+    const project = await parseProjectFile(file);
     const projects = await load();
     const snapshots = project.snapshots ?? [];
     const existingSnapshots = snapshots.length > 0 ? await idbLoadSnapshots<ProjectSnapshot>() : [];
@@ -341,6 +349,36 @@ export function importProjectJson(file: File): Promise<SavedProject> {
     }
     return project;
   });
+}
+
+export function previewProjectJson(file: File): Promise<SavedProject> {
+  return parseProjectFile(file);
+}
+
+async function parseProjectsBundleFile(file: File): Promise<SavedProject[]> {
+  const parsed = await readSafeProjectImportJson(file);
+  if (!isRecord(parsed)) {
+    throw new Error('Invalid bundle: root must be an object');
+  }
+  const bundleVersion = parseBundleSchemaVersion(parsed);
+  if (bundleVersion > CURRENT_BUNDLE_SCHEMA_VERSION) {
+    throw new Error(`Unsupported bundle version: ${bundleVersion}`);
+  }
+  const incoming = parsed['projects'];
+  if (!Array.isArray(incoming)) {
+    throw new TypeError('Invalid bundle: missing projects array');
+  }
+  return incoming.map((raw, index) => {
+    try {
+      return migrateProject(raw);
+    } catch (cause) {
+      throw new Error(`Invalid bundle project at index ${index}`, { cause });
+    }
+  });
+}
+
+export function previewProjectsBundle(file: File): Promise<SavedProject[]> {
+  return parseProjectsBundleFile(file);
 }
 
 /** Export multiple projects as a single `.cabinet-projects.json` bundle */
@@ -383,43 +421,22 @@ export async function exportProjectsBundle(projects: SavedProject[]): Promise<vo
 /** Import a `.cabinet-projects.json` bundle, merging all contained projects */
 export function importProjectsBundle(file: File): Promise<SavedProject[]> {
   return withProjectWriteLock(async () => {
-    assertImportFileSize(file);
-    const text = await file.text();
-    const parsed = JSON.parse(text) as unknown;
-    assertSafeImportProperties(parsed);
-    if (!isRecord(parsed)) {
-      throw new Error('Invalid bundle: root must be an object');
-    }
-    const bundleVersion = parseBundleSchemaVersion(parsed);
-    if (bundleVersion > CURRENT_BUNDLE_SCHEMA_VERSION) {
-      throw new Error(`Unsupported bundle version: ${bundleVersion}`);
-    }
-    const incoming = parsed.projects;
-    if (!Array.isArray(incoming)) {
-      throw new TypeError('Invalid bundle: missing projects array');
-    }
+    const incoming = await parseProjectsBundleFile(file);
     const existing = await load();
     const existingNames = new Set(existing.map((p) => p.name.toLowerCase()));
     const existingIds = new Set(existing.map((p) => p.id));
-    const added: SavedProject[] = [];
-    for (const raw of incoming) {
-      let proj: SavedProject;
-      try {
-        proj = migrateProject(raw);
-      } catch {
-        continue; // skip malformed entries
-      }
+    const added = incoming.map((project) => {
       const merged: SavedProject = {
-        ...proj,
+        ...project,
         id: createProjectId(existingIds),
         savedAt: new Date().toISOString(),
-        name: existingNames.has(proj.name.toLowerCase()) ? `${proj.name} (imported)` : proj.name,
+        name: existingNames.has(project.name.toLowerCase()) ? `${project.name} (imported)` : project.name,
       };
-      existing.push(merged);
       existingNames.add(merged.name.toLowerCase());
       existingIds.add(merged.id);
-      added.push(merged);
-    }
+      return merged;
+    });
+    existing.push(...added);
     await save(existing);
     return added;
   });

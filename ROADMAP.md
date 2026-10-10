@@ -1,6 +1,6 @@
 # Roadmap
 
-> Last updated: 2026-10-02 (v5.34.0 clean-checkout acceptance)
+> Last updated: 2026-10-10 (Sprint 320 import workflow implementation)
 > Current app version: v5.34.0
 > Next release target: v5.35.0 (Phase 73 — Product coherence and modern app shell)
 > Program horizon: Phases 63–80 · Sprints 300–419 · v5.34.0 → v6.0.0 (execution order: §7.2 release train)
@@ -729,10 +729,12 @@ Status (2026-10-02): T1 and T2 verification and clean-checkout acceptance are co
 
 **Sprint 320 — Validation diagnostics and safe import UI** — P0 · M · S319.
 
-- T1: Report JSON path, expected type/range, actual value and localized recovery action; cap displayed errors safely.
-- T2: Test malformed JSON, wrong root, missing/extra fields, prototype-pollution keys, oversized files, invalid enum, impossible dimensions and hostile filenames.
-- T3: UI preview/confirm step before applying imported project/catalog; transactional all-or-nothing behavior.
+- T1: DONE — Report JSON path, expected type/range, actual value and localized recovery action; cap displayed errors safely (#207).
+- T2: DONE — Test malformed JSON, wrong root, missing/extra fields, prototype-pollution keys, oversized files, invalid enum, impossible dimensions and hostile filenames (#209).
+- T3: DONE — Preview/confirm/cancel for imported projects and catalogs; bundle imports are all-or-nothing and project metadata is applied atomically (#211).
 - Accept: no import creates partial state; error details are screen-reader accessible and do not expose executable HTML.
+
+Status (2026-10-10): T1–T3 implementation is complete. Sprint 320 remains gated by its Sprint 319 migration dependency; keep the sprint open until that dependency is accepted.
 
 **Sprint 321 — Persistence resilience baseline** — P0 · M · S304.
 
