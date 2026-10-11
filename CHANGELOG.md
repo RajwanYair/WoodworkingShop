@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Completed Sprint 334 shop-floor labels with A4/Letter paper, configurable label grids, scannable non-sensitive QR references, and material, dimensions, grain, edge-banding, and quantity metadata.
 - Added a Ctrl/Cmd+K command palette with calculator, template, language, recent-project, and built-in action commands; the typed registry also supplies the Header and shortcuts modal.
 - Added mounted pocket-hole, shelf-deflection, mortise-and-tenon, and dovetail-layout calculators, with estimated build time and panel weight in the project summary and PDF specification.
 - Added a generated capability map and classification ledger, plus a locale-completeness audit and woodworking translation glossary.

@@ -43,9 +43,20 @@ describe('PartLabelSheet', () => {
     await user.click(screen.getByRole('checkbox', { name: 'Expand multi-qty parts (one label per piece)' }));
     expect(screen.getByText('P-001a')).toBeInTheDocument();
     expect(screen.getByText('P-001b')).toBeInTheDocument();
+    await user.selectOptions(screen.getByLabelText('Paper'), 'Letter');
+    const rows = screen.getByRole('spinbutton', { name: 'Rows' });
+    const columns = screen.getByRole('spinbutton', { name: 'Columns' });
+    expect(rows).toHaveValue(4);
+    expect(columns).toHaveValue(2);
 
     await user.click(screen.getByRole('button', { name: 'Print Labels' }));
     expect(write).toHaveBeenCalledWith(expect.stringContaining('P-001a'));
+    expect(write).toHaveBeenCalledWith(expect.stringContaining('@page{size:Letter portrait'));
+    expect(write).toHaveBeenCalledWith(expect.stringContaining('grid-template-columns:repeat(2,minmax(0,1fr))'));
+    expect(write).toHaveBeenCalledWith(expect.stringContaining('grid-template-rows:repeat(4,minmax(30mm,auto))'));
+    expect(write).toHaveBeenCalledWith(expect.stringContaining('Quantity: 1'));
+    expect(write).toHaveBeenCalledWith(expect.stringContaining('Edge banding: none'));
+    expect(write).toHaveBeenCalledWith(expect.stringContaining('data-qr-reference="true"'));
     await waitFor(() => expect(print).toHaveBeenCalledOnce());
   });
 });

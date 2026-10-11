@@ -23,12 +23,28 @@ describe('buildPartLabelPrintHtml', () => {
     expect(html).toContain('&lt;title&gt;');
     expect(html).not.toContain('<img src=x');
     expect(html).not.toContain('<script>');
+    expect(html).not.toContain('data-qr-reference');
   });
 
-  it('retains grouped quantity and dimensions in the printable card', () => {
+  it('prints material, dimensions, quantity and a QR reference for generated labels', () => {
     const html = buildPartLabelPrintHtml([part], 'Part Labels');
-    expect(html).toContain('600 × 400');
-    expect(html).toContain('plywood-18&amp;&lt;script&gt; ×2');
+    expect(html).toContain('600 × 400 × 18 mm');
+    expect(html).toContain('plywood-18&amp;&lt;script&gt;');
+    expect(html).toContain('Quantity: 2');
     expect(html).toContain('P-001');
+    expect(html).toContain('data-qr-reference="true"');
+  });
+
+  it('uses the selected paper size and bounded label grid', () => {
+    const html = buildPartLabelPrintHtml([part], 'Part Labels', { pageSize: 'Letter', rows: 4, columns: 2 });
+    expect(html).toContain('@page{size:Letter portrait');
+    expect(html).toContain('grid-template-columns:repeat(2,minmax(0,1fr))');
+    expect(html).toContain('grid-template-rows:repeat(4,minmax(30mm,auto))');
+  });
+
+  it('defaults to a legible four-row, two-column label grid', () => {
+    const html = buildPartLabelPrintHtml([part], 'Part Labels');
+    expect(html).toContain('grid-template-columns:repeat(2,minmax(0,1fr))');
+    expect(html).toContain('grid-template-rows:repeat(4,minmax(30mm,auto))');
   });
 });

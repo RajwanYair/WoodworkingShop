@@ -237,7 +237,19 @@
     "expandQty": "Teile mit Mehrfachmenge aufteilen (ein Etikett je Teil)",
     "print": "Etiketten drucken",
     "printTitle": "Teileetiketten",
-    "gridAriaLabel": "Teileetikettenkarten"
+    "gridAriaLabel": "Teileetikettenkarten",
+    "pageSize": "Papierformat",
+    "a4": "A4",
+    "letter": "Letter",
+    "rows": "Zeilen",
+    "columns": "Spalten",
+    "grain": "Maserung",
+    "alongLength": "längs",
+    "alongWidth": "quer",
+    "unspecified": "nicht angegeben",
+    "edgeBanding": "Kantenumleimer",
+    "quantity": "Menge",
+    "qrReference": "QR-Referenz"
   },
   "stockTracker": {
     "title": "Lagerbestand",

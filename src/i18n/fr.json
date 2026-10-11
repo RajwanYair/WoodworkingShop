@@ -237,7 +237,19 @@
     "expandQty": "Développer les pièces en plusieurs exemplaires (une étiquette par pièce)",
     "print": "Imprimer les étiquettes",
     "printTitle": "Étiquettes des pièces",
-    "gridAriaLabel": "Cartes d'étiquettes des pièces"
+    "gridAriaLabel": "Cartes d'étiquettes des pièces",
+    "pageSize": "Papier",
+    "a4": "A4",
+    "letter": "Letter",
+    "rows": "Lignes",
+    "columns": "Colonnes",
+    "grain": "Sens du fil",
+    "alongLength": "dans le sens de la longueur",
+    "alongWidth": "dans le sens de la largeur",
+    "unspecified": "non spécifié",
+    "edgeBanding": "Chant",
+    "quantity": "Quantité",
+    "qrReference": "Référence QR"
   },
   "stockTracker": {
     "title": "Suivi du stock",

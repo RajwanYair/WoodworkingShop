@@ -1093,7 +1093,19 @@
     "expandQty": "Expand multi-qty parts (one label per piece)",
     "print": "Print Labels",
     "printTitle": "Part Labels",
-    "gridAriaLabel": "Part label cards"
+    "gridAriaLabel": "Part label cards",
+    "pageSize": "Paper",
+    "a4": "A4",
+    "letter": "Letter",
+    "rows": "Rows",
+    "columns": "Columns",
+    "grain": "Grain",
+    "alongLength": "along length",
+    "alongWidth": "along width",
+    "unspecified": "not specified",
+    "edgeBanding": "Edge banding",
+    "quantity": "Quantity",
+    "qrReference": "QR reference"
   },
   "wasteAnalytics": {
     "title": "Waste Analytics",
