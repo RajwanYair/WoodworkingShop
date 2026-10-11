@@ -33,7 +33,7 @@ console.log('⏱  Running engine benchmarks…\n');
 mkdirSync(tmpDir, { recursive: true });
 
 try {
-  execSync('npx vitest bench --config vitest.bench.config.ts', {
+  execSync(`npx vitest bench --config vitest.bench.config.ts --reporter=json --outputFile="${results}"`, {
     cwd: root,
     stdio: 'inherit',
     env: { ...process.env, CI: '1' }, // CI=1 disables watch in Vitest
@@ -51,20 +51,21 @@ if (!existsSync(results)) {
 const raw = JSON.parse(readFileSync(results, 'utf-8'));
 const budget = existsSync(budgetSrc) ? JSON.parse(readFileSync(budgetSrc, 'utf-8')) : {};
 
-// Flatten all benchmark entries across files and groups
+// Flatten benchmark tasks from Vitest's JSON reporter output.
 const benches = [];
-for (const file of raw.files ?? []) {
-  for (const group of file.groups ?? []) {
-    const groupLabel = (group.fullName ?? '').replace(/^.*> /, '');
-    for (const b of group.benchmarks ?? []) {
-      if (!b.name) continue;
-      benches.push({
-        group: groupLabel,
-        name: b.name,
-        meanMs: typeof b.mean === 'number' ? b.mean : Infinity,
-        hz: typeof b.hz === 'number' ? b.hz : 0,
-        p99Ms: typeof b.p99 === 'number' ? b.p99 : Infinity,
-      });
+for (const testResult of raw.testResults ?? []) {
+  for (const assertion of testResult.assertionResults ?? []) {
+    for (const benchmark of assertion.benchmarks ?? []) {
+      for (const task of benchmark.tasks ?? []) {
+        if (!task.name) continue;
+        benches.push({
+          group: (assertion.ancestorTitles ?? []).join(' > '),
+          name: task.name,
+          meanMs: typeof task.latency?.mean === 'number' ? task.latency.mean : Infinity,
+          hz: typeof task.throughput?.mean === 'number' ? task.throughput.mean : 0,
+          p99Ms: typeof task.latency?.p99 === 'number' ? task.latency.p99 : Infinity,
+        });
+      }
     }
   }
 }
@@ -87,8 +88,8 @@ if (isUpdate) {
   };
   for (const b of benches) {
     newBudget[b.name] = {
-      maxMeanMs: parseFloat((b.meanMs * MULTIPLIER).toFixed(6)),
-      baseline: parseFloat(b.meanMs.toFixed(6)),
+      maxMeanMs: Number.parseFloat((b.meanMs * MULTIPLIER).toFixed(6)),
+      baseline: Number.parseFloat(b.meanMs.toFixed(6)),
     };
   }
   writeFileSync(budgetSrc, JSON.stringify(newBudget, null, 2) + '\n', 'utf-8');

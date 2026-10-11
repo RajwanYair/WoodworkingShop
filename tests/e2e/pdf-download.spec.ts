@@ -81,19 +81,24 @@ async function downloadPdf(page: Page, options: PdfOptions = {}) {
     pageSizes.push({ width, height });
     for (const item of text.items) {
       if (!('str' in item) || !('transform' in item) || !item.str.trim()) continue;
-      const [left, top, right, bottom] = viewport.convertToViewportRectangle([
-        item.transform[4],
-        item.transform[5] - item.height,
-        item.transform[4] + item.width,
-        item.transform[5],
-      ]);
+      const corners = [
+        [item.transform[4], item.transform[5] - item.height],
+        [item.transform[4] + item.width, item.transform[5] - item.height],
+        [item.transform[4], item.transform[5]],
+        [item.transform[4] + item.width, item.transform[5]],
+      ].map(([x, y]) => {
+        const point = viewport.convertToViewportPoint(x, y);
+        return [Number(point[0]), Number(point[1])];
+      });
+      const horizontal = corners.map(([x]) => x);
+      const vertical = corners.map(([, y]) => y);
       textBounds.push({
         pageNumber,
         text: item.str,
-        left: Math.min(left, right),
-        top: Math.min(top, bottom),
-        right: Math.max(left, right),
-        bottom: Math.max(top, bottom),
+        left: Math.min(...horizontal),
+        top: Math.min(...vertical),
+        right: Math.max(...horizontal),
+        bottom: Math.max(...vertical),
       });
     }
   }
@@ -177,7 +182,7 @@ test('cover-page option is enabled by default', async ({ appPage }) => {
 test('disabling the cover omits only cover content from the PDF', async ({ appPage }) => {
   const withCover = await downloadPdf(appPage);
   const withoutCover = await downloadPdf(appPage, { includeCover: false });
-  expect(withoutCover.pages.length).toBe(withCover.pages.length - 1);
+  expect(withoutCover.pages).toHaveLength(withCover.pages.length - 1);
   expect(withoutCover.pages[0]).toContain('Cabinet Specifications');
 });
 

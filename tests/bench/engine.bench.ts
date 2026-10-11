@@ -6,7 +6,7 @@
  * Run:  npm run bench
  * Check: npm run bench:check
  */
-import { bench, describe } from 'vitest';
+import { describe, test, type BenchRunOptions } from 'vitest';
 import { cfg } from '../helpers';
 import { computeDimensions } from '../../src/engine/dimensions';
 import { generateParts, computeEdgeBandingTotal } from '../../src/engine/parts';
@@ -45,6 +45,12 @@ const SLOW = { time: 200, warmupIterations: 2 };
 /** Minimum-iteration cap for very slow functions (< 5 ops/s). */
 const CRAWL = { iterations: 10, warmupIterations: 2 };
 
+function registerBenchmark(name: string, fn: () => void, options: BenchRunOptions): void {
+  test(name, async ({ bench }) => {
+    await bench(name, fn).run(options);
+  });
+}
+
 // ─── Pre-built artefacts reused inside bench loops ──────────────────────────
 // (computed once here so each bench iteration isolates the function under test)
 
@@ -60,7 +66,7 @@ const baseEdge = computeEdgeBandingTotal(baseParts);
 // ─── Benchmarks ─────────────────────────────────────────────────────────────
 
 describe('dimensions', () => {
-  bench(
+  registerBenchmark(
     'computeDimensions — base cabinet',
     () => {
       computeDimensions(base);
@@ -68,7 +74,7 @@ describe('dimensions', () => {
     FAST,
   );
 
-  bench(
+  registerBenchmark(
     'computeDimensions — wardrobe',
     () => {
       computeDimensions(wardrobe);
@@ -76,7 +82,7 @@ describe('dimensions', () => {
     FAST,
   );
 
-  bench(
+  registerBenchmark(
     'computeDimensions — desk',
     () => {
       computeDimensions(desk);
@@ -86,7 +92,7 @@ describe('dimensions', () => {
 });
 
 describe('parts', () => {
-  bench(
+  registerBenchmark(
     'generateParts — base cabinet',
     () => {
       generateParts(base);
@@ -94,7 +100,7 @@ describe('parts', () => {
     FAST,
   );
 
-  bench(
+  registerBenchmark(
     'generateParts — wardrobe 4-shelf 2-drawer',
     () => {
       generateParts(wardrobe);
@@ -102,7 +108,7 @@ describe('parts', () => {
     FAST,
   );
 
-  bench(
+  registerBenchmark(
     'generateParts — desk 2-drawer',
     () => {
       generateParts(desk);
@@ -110,7 +116,7 @@ describe('parts', () => {
     FAST,
   );
 
-  bench(
+  registerBenchmark(
     'computeEdgeBandingTotal — base cabinet',
     () => {
       computeEdgeBandingTotal(baseParts);
@@ -120,7 +126,7 @@ describe('parts', () => {
 });
 
 describe('cut optimizer', () => {
-  bench(
+  registerBenchmark(
     `optimizeCutSheets — base cabinet (${baseParts.length} part types)`,
     () => {
       optimizeCutSheets(baseParts);
@@ -128,7 +134,7 @@ describe('cut optimizer', () => {
     SLOW,
   );
 
-  bench(
+  registerBenchmark(
     `optimizeCutSheets — wardrobe (${wardrobeParts.length} part types)`,
     () => {
       optimizeCutSheets(wardrobeParts);
@@ -138,7 +144,7 @@ describe('cut optimizer', () => {
 });
 
 describe('hardware', () => {
-  bench(
+  registerBenchmark(
     'generateHardware — base cabinet',
     () => {
       generateHardware(base);
@@ -146,7 +152,7 @@ describe('hardware', () => {
     FAST,
   );
 
-  bench(
+  registerBenchmark(
     'generateHardware — wardrobe',
     () => {
       generateHardware(wardrobe);
@@ -156,7 +162,7 @@ describe('hardware', () => {
 });
 
 describe('cost estimator', () => {
-  bench(
+  registerBenchmark(
     'estimateCost — base cabinet',
     () => {
       estimateCost(baseOpt, baseHardware, baseEdge);
@@ -164,7 +170,7 @@ describe('cost estimator', () => {
     FAST,
   );
 
-  bench(
+  registerBenchmark(
     'estimateCost — wardrobe',
     () => {
       estimateCost(wardrobeOpt, generateHardware(wardrobe), computeEdgeBandingTotal(wardrobeParts));
@@ -174,7 +180,7 @@ describe('cost estimator', () => {
 });
 
 describe('smart optimizer', () => {
-  bench(
+  registerBenchmark(
     'findOptimizations — base cabinet (default strategies)',
     () => {
       findOptimizations(base);
@@ -184,7 +190,7 @@ describe('smart optimizer', () => {
 });
 
 describe('validation', () => {
-  bench(
+  registerBenchmark(
     'validateConfig — valid base cabinet',
     () => {
       validateConfig(base);
@@ -192,7 +198,7 @@ describe('validation', () => {
     FAST,
   );
 
-  bench(
+  registerBenchmark(
     'validateConfig — valid wardrobe',
     () => {
       validateConfig(wardrobe);

@@ -1,6 +1,6 @@
 # WoodworkingShop - Agent Context
 
-> **v5.35.0**; React 19; TypeScript 6; Vite 8; Vitest 4; Playwright 1.61; i18next 26; Zustand 5; Tailwind CSS v4; Node >= 22.
+> **v5.35.0**; React 19; TypeScript 6; Vite 8; Vitest 5; Playwright 1.63; i18next 26; Zustand 5; Tailwind CSS v4; Node >= 22.
 
 ## Release Status
 

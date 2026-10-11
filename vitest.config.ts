@@ -30,10 +30,6 @@ export default defineConfig({
     include: ['tests/**/*.test.ts', 'tests/**/*.test.tsx'],
     exclude: ['tests/e2e/**', 'node_modules/**', 'dist/**'],
     setupFiles: ['tests/setup.ts'],
-    benchmark: {
-      outputJson: path.join(tmpDir, 'bench-results.json'),
-      reporters: ['default'],
-    },
     coverage: {
       provider: 'v8',
       // Phase 11 / Sprint 6 — lcov for Codecov upload; text for terminal summary.

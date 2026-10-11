@@ -4,7 +4,7 @@
 
 ## Stack
 
-React 19, TypeScript 6 (strict), Vite 8/Rolldown, Tailwind CSS v4 (`@import "tailwindcss"`), Zustand 5, i18next 26, Vitest 4, Playwright 1.61, axe-core, `@react-pdf/renderer`, Node >= 22. Six locales: EN, HE, AR, DE, ES, FR. Run `npm ci` at the repository root; dependencies install into the repository-local `node_modules/` from `package-lock.json`.
+React 19, TypeScript 6 (strict), Vite 8/Rolldown, Tailwind CSS v4 (`@import "tailwindcss"`), Zustand 5, i18next 26, Vitest 5, Playwright 1.63, axe-core, `@react-pdf/renderer`, Node >= 22. Six locales: EN, HE, AR, DE, ES, FR. Run `npm ci` at the repository root; dependencies install into the repository-local `node_modules/` from `package-lock.json`.
 
 ## Architecture
 
