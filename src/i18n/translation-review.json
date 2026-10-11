@@ -8520,6 +8520,106 @@
       "status": "approved",
       "reviewedBy": "Ryair",
       "reviewedAt": "2026-10-05"
+    },
+    {
+      "locale": "ar",
+      "keys": [
+        "diagnostics.title",
+        "diagnostics.close",
+        "diagnostics.webVitals",
+        "diagnostics.lcp",
+        "diagnostics.cls",
+        "diagnostics.interaction",
+        "diagnostics.workers",
+        "diagnostics.cutWorker",
+        "diagnostics.costWorker",
+        "diagnostics.assemblyWorker",
+        "diagnostics.available",
+        "diagnostics.unavailable",
+        "diagnostics.storage",
+        "diagnostics.storageUsage",
+        "diagnostics.loading",
+        "diagnostics.errorCount",
+        "diagnostics.privacy",
+        "diagnostics.export",
+        "diagnostics.exported"
+      ],
+      "status": "pending"
+    },
+    {
+      "locale": "de",
+      "keys": [
+        "diagnostics.title",
+        "diagnostics.close",
+        "diagnostics.webVitals",
+        "diagnostics.lcp",
+        "diagnostics.cls",
+        "diagnostics.interaction",
+        "diagnostics.workers",
+        "diagnostics.cutWorker",
+        "diagnostics.costWorker",
+        "diagnostics.assemblyWorker",
+        "diagnostics.available",
+        "diagnostics.unavailable",
+        "diagnostics.storage",
+        "diagnostics.storageUsage",
+        "diagnostics.loading",
+        "diagnostics.errorCount",
+        "diagnostics.privacy",
+        "diagnostics.export",
+        "diagnostics.exported"
+      ],
+      "status": "pending"
+    },
+    {
+      "locale": "es",
+      "keys": [
+        "diagnostics.title",
+        "diagnostics.close",
+        "diagnostics.webVitals",
+        "diagnostics.lcp",
+        "diagnostics.cls",
+        "diagnostics.interaction",
+        "diagnostics.workers",
+        "diagnostics.cutWorker",
+        "diagnostics.costWorker",
+        "diagnostics.assemblyWorker",
+        "diagnostics.available",
+        "diagnostics.unavailable",
+        "diagnostics.storage",
+        "diagnostics.storageUsage",
+        "diagnostics.loading",
+        "diagnostics.errorCount",
+        "diagnostics.privacy",
+        "diagnostics.export",
+        "diagnostics.exported"
+      ],
+      "status": "pending"
+    },
+    {
+      "locale": "fr",
+      "keys": [
+        "diagnostics.title",
+        "diagnostics.close",
+        "diagnostics.webVitals",
+        "diagnostics.lcp",
+        "diagnostics.cls",
+        "diagnostics.interaction",
+        "diagnostics.workers",
+        "diagnostics.cutWorker",
+        "diagnostics.costWorker",
+        "diagnostics.assemblyWorker",
+        "diagnostics.available",
+        "diagnostics.unavailable",
+        "diagnostics.storage",
+        "diagnostics.storageUsage",
+        "diagnostics.loading",
+        "diagnostics.errorCount",
+        "diagnostics.privacy",
+        "diagnostics.export",
+        "diagnostics.exported"
+      ],
+      "status": "pending"
     }
   ]
 }

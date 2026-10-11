@@ -233,8 +233,7 @@ The [roadmap](ROADMAP.md#target-architecture-phase-82) describes the planned mov
 
 ```mermaid
 flowchart LR
-  now["v5.34.0 ✅<br/>verified journeys"] --> c["v5.35.0<br/>command palette · 6 complete locales"]
-  c --> t["v5.36–v5.38<br/>TypeScript 7 · Vitest 5 · architecture refactor · versioned data"]
+  now["v5.35.0 ✅<br/>coherence · command palette · verified journeys"] --> t["v5.36–v5.38<br/>TypeScript 7 · Vitest 5 · architecture refactor · versioned data"]
   t --> d["v5.39–v5.40<br/>examples · shop drawings · docs site"]
   d --> w["v5.41–v5.43<br/>cut-list workbench · 1D lumber · shop-floor mode"]
   w --> m["v5.44–v5.48<br/>CNC · doors · rooms · files"]
@@ -282,8 +281,10 @@ npm run capabilities:check # verify engine, utility and service capability class
 
 The app ships with **6 languages**: English, Hebrew (RTL), Arabic (RTL),
 German, Spanish, and French. English loads with the app; the other locales are lazy-loaded.
-English and Hebrew are complete; Arabic, German, Spanish and French still fall back to English
-for some strings and are being completed in [Sprint 375](ROADMAP.md).
+English and Hebrew are complete. Arabic, German, Spanish and French still fall back to English
+for some strings; the current completeness audit reports zero missing keys and EN-identical rates
+of 1.20%, 1.38%, 1.34% and 1.66%, respectively, within the 2% limit. See [Sprint 375](ROADMAP.md)
+for the translation scope and review status.
 All UI strings live in `src/i18n/{en,he,ar,de,es,fr}.json`.
 Run `npm run i18n:coverage` to verify all locale files are in sync.
 

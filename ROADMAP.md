@@ -1,9 +1,9 @@
 # Roadmap
 
-> Last updated: 2026-10-05 (S375 locale progress)
-> Current app version: v5.34.0
-> Next release target: v5.35.0 (Phase 73 — Product coherence and modern app shell)
-> Program horizon: Phases 63–85 · Sprints 300–451 · v5.34.0 → v6.0.0 (execution order: §7.2 release train)
+> Last updated: 2026-10-11 (v5.35.0 release)
+> Current app version: v5.35.0
+> Next release target: v5.36.0 (Phase 81 — Toolchain modernisation)
+> Program horizon: Phases 63–85 · Sprints 300–451 · v5.35.0 → v6.0.0 (execution order: §7.2 release train)
 > Strategy: best-in-class, local-first, production-grade woodworking planning platform — **refactor the foundation first, then lead on workflow depth**
 
 ---
@@ -29,8 +29,8 @@
 flowchart LR
   subgraph foundation["① Foundation — refactor first"]
     direction TB
-    r534["v5.34.0 ✅<br/>63 + 64 Verification"] --> r535["v5.35.0 ▶ NEXT<br/>73 Coherence + app shell"]
-    r535 --> r536["v5.36.0<br/>81 Toolchain"]
+    r534["v5.34.0 ✅<br/>63 + 64 Verification"] --> r535["v5.35.0 ✅<br/>73 Coherence + app shell"]
+    r535 --> r536["v5.36.0 ▶ NEXT<br/>81 Toolchain"]
     r536 --> r537["v5.37.0<br/>82 Architecture refactor"]
     r537 --> r538["v5.38.0<br/>65 Versioned data"]
   end
@@ -651,30 +651,30 @@ Phase priority uses the same scale: a phase is **P0** if any exit criterion prot
 
 Phase numbers are stable identifiers; this table is the execution order. Phases 80 and 85 are continuous tracks: their sprints may land in any release when they do not delay a P0 item (Phase 85 only after Phase 82).
 
-| Order | Release | Phase(s)                                                      | Priority | Sprints                                            | Status                                     |
-| ----- | ------- | ------------------------------------------------------------- | -------- | -------------------------------------------------- | ------------------------------------------ |
-| 1     | v5.34.0 | 63 Trustworthy test foundation + 64 Real user journeys        | P0       | 300–318                                            | RELEASED; S313 and S315 carried to v5.35.0 |
-| 2     | v5.35.0 | 73 Product coherence and modern app shell (+ S313, S315)      | P0       | 371–378, 313, 315                                  | NEXT                                       |
-| 3     | v5.36.0 | 81 Toolchain modernisation                                    | P1       | 420–425                                            | PLANNED (new 2026-10-04)                   |
-| 4     | v5.37.0 | 82 Architecture refactor                                      | P0       | 426–434                                            | PLANNED (new 2026-10-04)                   |
-| 5     | v5.38.0 | 65 Versioned data, import safety, durable offline             | P0       | 319–326                                            | PLANNED (was v5.36.0)                      |
-| 6     | v5.39.0 | 83 Experience and delight                                     | P1       | 435–441                                            | PLANNED (new 2026-10-04)                   |
-| 7     | v5.40.0 | 84 Documentation, visual storytelling and community           | P1       | 442–447                                            | PLANNED (new 2026-10-04)                   |
-| 8     | v5.41.0 | 66 Cut-list and optimizer leadership                          | P0/P1    | 327–335                                            | PLANNED (was v5.37.0)                      |
-| 9     | v5.42.0 | 74 Universal cut-list workbench                               | P1       | 379–385                                            | PLANNED (was v5.38.0)                      |
-| 10    | v5.43.0 | 75 Shop-floor mode                                            | P1       | 386–391                                            | PLANNED (was v5.39.0)                      |
-| 11    | v5.44.0 | 67 CNC, hardware and manufacturing assurance                  | P0/P1    | 336–343                                            | PLANNED (was v5.40.0)                      |
-| 12    | v5.45.0 | 77 Door, drawer and construction systems                      | P1       | 398–403                                            | PLANNED (was v5.41.0)                      |
-| 13    | v5.46.0 | 68 Room design, cabinet rules, parametric authoring           | P1       | 344–352                                            | PLANNED (was v5.42.0)                      |
-| 14    | v5.47.0 | 76 Room capture, import and client presentation               | P2       | 392–397                                            | PLANNED (was v5.43.0)                      |
-| 15    | v5.48.0 | 78 Interop and desktop-class file workflows                   | P1/P2    | 404–408                                            | PLANNED (was v5.44.0)                      |
-| 16    | v5.49.0 | 69 Assembly, collaboration boundaries, plugins                | P1/P2    | 353–359                                            | PLANNED (was v5.45.0)                      |
-| 17    | v5.50.0 | 79 Estimating, quoting and job management                     | P2       | 409–413                                            | PLANNED (was v5.46.0)                      |
-| 18    | v5.51.0 | 70 Governance, documentation and supply chain                 | P1/P2    | 360–364                                            | PLANNED (was v5.47.0)                      |
-| 19    | v5.52.0 | 71 Performance, resilience and inclusive access               | P1       | 365–368                                            | PLANNED (was v5.48.0)                      |
-| —     | any     | 80 Developer platform and engineering excellence (continuous) | P1–P3    | 416, 419 (414, 415, 417, 418 absorbed by Phase 81) | PLANNED                                    |
-| —     | any     | 85 Optional on-device intelligence (continuous, after 82)     | P3       | 448–451                                            | PLANNED (new 2026-10-04)                   |
-| 20    | v6.0.0  | 72 v6.0 readiness and strategic reassessment                  | P0       | 369–370                                            | PLANNED (runs last)                        |
+| Order | Release | Phase(s)                                                      | Priority | Sprints                                            | Status                   |
+| ----- | ------- | ------------------------------------------------------------- | -------- | -------------------------------------------------- | ------------------------ |
+| 1     | v5.34.0 | 63 Trustworthy test foundation + 64 Real user journeys        | P0       | 300–318                                            | RELEASED                 |
+| 2     | v5.35.0 | 73 Product coherence and modern app shell (+ S313, S315)      | P0       | 371–378, 313, 315                                  | RELEASED                 |
+| 3     | v5.36.0 | 81 Toolchain modernisation                                    | P1       | 420–425                                            | NEXT                     |
+| 4     | v5.37.0 | 82 Architecture refactor                                      | P0       | 426–434                                            | PLANNED (new 2026-10-04) |
+| 5     | v5.38.0 | 65 Versioned data, import safety, durable offline             | P0       | 319–326                                            | PLANNED (was v5.36.0)    |
+| 6     | v5.39.0 | 83 Experience and delight                                     | P1       | 435–441                                            | PLANNED (new 2026-10-04) |
+| 7     | v5.40.0 | 84 Documentation, visual storytelling and community           | P1       | 442–447                                            | PLANNED (new 2026-10-04) |
+| 8     | v5.41.0 | 66 Cut-list and optimizer leadership                          | P0/P1    | 327–335                                            | PLANNED (was v5.37.0)    |
+| 9     | v5.42.0 | 74 Universal cut-list workbench                               | P1       | 379–385                                            | PLANNED (was v5.38.0)    |
+| 10    | v5.43.0 | 75 Shop-floor mode                                            | P1       | 386–391                                            | PLANNED (was v5.39.0)    |
+| 11    | v5.44.0 | 67 CNC, hardware and manufacturing assurance                  | P0/P1    | 336–343                                            | PLANNED (was v5.40.0)    |
+| 12    | v5.45.0 | 77 Door, drawer and construction systems                      | P1       | 398–403                                            | PLANNED (was v5.41.0)    |
+| 13    | v5.46.0 | 68 Room design, cabinet rules, parametric authoring           | P1       | 344–352                                            | PLANNED (was v5.42.0)    |
+| 14    | v5.47.0 | 76 Room capture, import and client presentation               | P2       | 392–397                                            | PLANNED (was v5.43.0)    |
+| 15    | v5.48.0 | 78 Interop and desktop-class file workflows                   | P1/P2    | 404–408                                            | PLANNED (was v5.44.0)    |
+| 16    | v5.49.0 | 69 Assembly, collaboration boundaries, plugins                | P1/P2    | 353–359                                            | PLANNED (was v5.45.0)    |
+| 17    | v5.50.0 | 79 Estimating, quoting and job management                     | P2       | 409–413                                            | PLANNED (was v5.46.0)    |
+| 18    | v5.51.0 | 70 Governance, documentation and supply chain                 | P1/P2    | 360–364                                            | PLANNED (was v5.47.0)    |
+| 19    | v5.52.0 | 71 Performance, resilience and inclusive access               | P1       | 365–368                                            | PLANNED (was v5.48.0)    |
+| —     | any     | 80 Developer platform and engineering excellence (continuous) | P1–P3    | 416, 419 (414, 415, 417, 418 absorbed by Phase 81) | PLANNED                  |
+| —     | any     | 85 Optional on-device intelligence (continuous, after 82)     | P3       | 448–451                                            | PLANNED (new 2026-10-04) |
+| 20    | v6.0.0  | 72 v6.0 readiness and strategic reassessment                  | P0       | 369–370                                            | PLANNED (runs last)      |
 
 Why the foundation moved first (2026-10-04): every feature phase adds modules, components and locale keys. Retiring dead code (73), upgrading the toolchain (81) and fixing the structure (82) before that growth is cheaper than refactoring afterwards, and Phase 65's storage and schema work lands directly on the new `platform/` layer instead of being moved twice.
 
@@ -1321,7 +1321,7 @@ Executes last on the release train (§7.2), after the expansion phases in §7.3.
 
 Sources: the §4.4 audit and the §5.4 cross-platform benchmark. Execution order is in §7.2. All §7.1 constraints apply: ≤ 8 production dependencies, local-first, MIT, no copied GPL code or assets, zero suppressions, EN + HE for every key (all six locales after S375), and a browser journey for every new control.
 
-### Phase 73 — Product Coherence and Modern App Shell (Sprints 371–378; target v5.35.0) — P0
+### Phase 73 — Product Coherence and Modern App Shell (Sprints 371–378; released in v5.35.0) — P0
 
 **Exit:** every engine/utils/services module is classified and is either reachable from the UI, documented as internal/public API, or removed; one owner module per capability; command palette ships; AR/DE/ES/FR meet the completeness gate; first-load bytes are measured and gated.
 
@@ -1465,8 +1465,10 @@ Status (2026-10-07): T4 is complete. Dimension sliders and room-layout dragging 
 
 - T0: DONE — Closed the Phase 64 carry-over with S313 browser journeys and 2026-10-10 physical-camera acceptance, plus S315 Chromium/Firefox offline reload, update, storage-pressure and `.cabinetplan` journeys. Native OS file launch remains unverified and outside browser-level acceptance.
 
-- T1: Full `npm run ci` and E2E matrix; release notes publish the capability-map summary, locale completeness table and critical-path numbers.
+- T1: DONE — Full GitHub CI and E2E matrix passed. Release notes publish the capability-map summary, locale completeness table and critical-path numbers.
 - Accept: new gates blocking; README locale claims match the completeness report.
+
+Status (2026-10-11): Accepted for v5.35.0. GitHub CI passed all jobs; `npm run capabilities:check` reports 219 modules; `npm run i18n:completeness` reports zero missing, extra, empty, or placeholder-mismatched keys, with all locales below the 2% EN-identical limit. The release build measures the critical route at 608.0 KB raw / 154.8 KB Brotli against unchanged 700 KB / 175 KB budgets. The 19 diagnostics strings in AR/DE/ES/FR have pending locale-review records.
 
 ### Phase 74 — Universal Cut-List Workbench (Sprints 379–385; target v5.42.0) — P1
 

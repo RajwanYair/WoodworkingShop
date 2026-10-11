@@ -9,11 +9,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.35.0] — 2026-10-11
+
+### Release Summary
+
+- Capability map: 219 classified modules.
+- Locale completeness: zero missing, extra, empty, or placeholder-mismatched keys across all six locales. English-identical rates are HE 1.02%, AR 1.20%, DE 1.38%, ES 1.34%, and FR 1.66%, all within the 2% limit. The 19 new diagnostics strings per locale are translated for AR/DE/ES/FR; their 76 review records remain pending.
+- Critical route: 608.0 KB raw / 154.8 KB Brotli against unchanged budgets of 700 KB / 175 KB.
+- GitHub CI passed the full quality, unit, compatibility, browser, visual, Lighthouse, build, and bundle matrix.
+
 ## [Unreleased]
 
 ### Added
 
 - Added an opt-in local diagnostics dialog with buffered Web Vitals, worker availability, aggregate storage estimates, and bounded sanitized error history. Its explicit JSON export excludes project contents and makes no network requests. Added a Dev Container pinned to Node.js 26.10.0 with Playwright browsers installed from the package lock.
+- Translated the local diagnostics interface into Arabic, German, Spanish, and French; added the strings to the pending locale-review tracker.
 - Deferred initial cut-sheet optimization to the existing Web Worker path in browsers that support workers; the sidebar and cost estimate show pending values until results arrive. Both BOM export entry points dynamically import the exporter, and the cold mobile browser path does not request its chunks until Ctrl+E is invoked. The workspace LCP banner is a preloaded responsive WebP; its LCP-discovery and responsive-image audits pass.
   Sprint 376 T3 now passes the unchanged critical-route budget at 605.1 KB raw / 153.2 KB Brotli (700 KB / 175 KB). Three consecutive local mobile Lighthouse runs measured performance 95–96, FCP 1,697–1,717 ms, LCP 2,616–2,624 ms, TBT 43–114 ms, and CLS 0. No bundle or metric budgets were raised.
 - Measured the opaque standard and maskable PWA icon assets in the production build at 3,012 KB total. Raised the aggregate bundle ceiling from 2,970 KB to 3,025 KB, retaining a 13 KB measured margin, and adjusted only the 192px/512px standard PNG caps; JavaScript, initial-route, and all other per-asset budgets remain unchanged. The integrated build measured 3,057.4 KB total, so the aggregate ceiling is now 3,070 KB (12.6 KB margin).
@@ -63,7 +73,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Documentation
 
 - Restructured `ROADMAP.md` around a full refactor review: program overview with release-train, target-architecture and positioning diagrams; refactor decisions (§3.10); a measured refactor and tooling audit (§4.5); a 2026-10-04 harvest of ideas from open-source and commercial products (§5.5); and new Phases 81–85 (Sprints 420–451) for toolchain modernisation, architecture refactor, experience, documentation and optional on-device intelligence.
-- Re-sequenced the release train so the foundation (Phases 73, 81, 82, 65) ships before feature phases; re-opened Sprints 313 and 315 as v5.35.0 carry-over because no completion evidence existed.
+- Re-sequenced the release train so the foundation (Phases 73, 81, 82, 65) ships before feature phases; closed the Sprints 313 and 315 v5.35.0 carry-over with browser acceptance evidence, including the S313 physical-camera acceptance on 2026-10-10.
 - Corrected stale documentation: README keyboard shortcuts (`Alt+1`–`Alt+6`), source tree, export formats, command descriptions, locale completeness and a corrupted heading; ARCHITECTURE directory map, store, worker, PWA (Workbox via `vite-plugin-pwa`), CI, i18n and accessibility diagrams; AGENTS active sprint, prompts and MCP servers; CONTRIBUTING gate description; USER-GUIDE preview views, focus-mode shortcut, 3-D/ZIP exports and offline troubleshooting; and the docs index.
 - Archived Sprint 316 and 317 evidence in `docs/SPRINT-HISTORY.md`.
 
