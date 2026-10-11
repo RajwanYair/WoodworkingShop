@@ -11,23 +11,23 @@ metadata and answers paged queries (hot functions, call tree, time-sliced views)
 
 ## Tools
 
-- `pylancePythonProfiling` — start/stop captures and inspect sessions. One `action` per call.
-- `pylancePythonProfileExplorer` — load a capture's metadata JSON and query it.
+-   `pylancePythonProfiling` — start/stop captures and inspect sessions. One `action` per call.
+-   `pylancePythonProfileExplorer` — load a capture's metadata JSON and query it.
 
 Run `{"action":"help"}` on either tool to print its full surface.
 
 ## Verified Tool Facts
 
-- Backends: CPU = `profiling.sampling` (Tachyon), Trace = `sys.monitoring`, Memory = Memray.
-- **CPU profiling requires Python 3.15+.** The tool resolves the workspace-selected interpreter (same
-  resolution as the other Pylance MCP tools). If it is below 3.15, capture returns a structured error
-  naming the selected version. Fix by selecting a 3.15+ interpreter or passing `pythonPath` explicitly.
-- Trace and Memory work on older interpreters (Trace needs 3.12+ for `sys.monitoring`).
-- Every capture returns a `profilingSessionId` immediately and writes artifacts under an `artifactsDir`,
-  including a `*.metadata.json` sidecar. Pass that metadata path to the explorer, not the raw binary.
-- Captures own their own session lifecycle; they do not require `pylancePythonDebug`.
-- The injected handshake and sampler wrapper are code **we add on the fly** — the user's source is never
-  edited. Region boundaries and markers are expressed as `file:line`.
+-   Backends: CPU = `profiling.sampling` (Tachyon), Trace = `sys.monitoring`, Memory = Memray.
+-   **CPU profiling requires Python 3.15+.** The tool resolves the workspace-selected interpreter (same
+    resolution as the other Pylance MCP tools). If it is below 3.15, capture returns a structured error
+    naming the selected version. Fix by selecting a 3.15+ interpreter or passing `pythonPath` explicitly.
+-   Trace and Memory work on older interpreters (Trace needs 3.12+ for `sys.monitoring`).
+-   Every capture returns a `profilingSessionId` immediately and writes artifacts under an `artifactsDir`,
+    including a `*.metadata.json` sidecar. Pass that metadata path to the explorer, not the raw binary.
+-   Captures own their own session lifecycle; they do not require `pylancePythonDebug`.
+-   The injected handshake and sampler wrapper are code **we add on the fly** — the user's source is never
+    edited. Region boundaries and markers are expressed as `file:line`.
 
 ## Actions (`pylancePythonProfiling`)
 
@@ -54,11 +54,11 @@ Launch a script under the CPU sampler, then load the result:
 
 ```json
 {
-  "action": "startCpu",
-  "mode": "launch",
-  "script": "/path/to/app.py",
-  "pythonPath": "/path/to/python",
-  "samplingRate": "1khz"
+    "action": "startCpu",
+    "mode": "launch",
+    "script": "/path/to/app.py",
+    "pythonPath": "/path/to/python",
+    "samplingRate": "1khz"
 }
 ```
 
@@ -87,12 +87,12 @@ from the region's first instruction with no attach-latency contamination. Launch
 
 ```json
 {
-  "action": "startCpuRegion",
-  "mode": "launch",
-  "script": "/path/to/app.py",
-  "pythonPath": "/path/to/python",
-  "regionStartLocation": "app.py:42",
-  "regionStopLocation": "app.py:88"
+    "action": "startCpuRegion",
+    "mode": "launch",
+    "script": "/path/to/app.py",
+    "pythonPath": "/path/to/python",
+    "regionStartLocation": "app.py:42",
+    "regionStopLocation": "app.py:88"
 }
 ```
 
@@ -110,10 +110,10 @@ slice CPU views exactly to the region with `startTimeMs`/`endTimeMs`.
 
 Guidance:
 
-- Locations are `file:line`; relative paths resolve against the target's working directory.
-- The start line must actually execute, or the region never starts (the tool reports the target exited
-  before reaching the start location).
-- Use `stopCpu` to fetch artifacts or to stop early.
+-   Locations are `file:line`; relative paths resolve against the target's working directory.
+-   The start line must actually execute, or the region never starts (the tool reports the target exited
+    before reaching the start location).
+-   Use `stopCpu` to fetch artifacts or to stop early.
 
 ## Scenario 3 — Sub-region markers
 
@@ -124,13 +124,13 @@ Pass `regionMarkers` as `"label@file:line"` (or just `"file:line"`):
 
 ```json
 {
-  "action": "startCpuRegion",
-  "mode": "launch",
-  "script": "/path/to/app.py",
-  "pythonPath": "/path/to/python",
-  "regionStartLocation": "app.py:42",
-  "regionStopLocation": "app.py:88",
-  "regionMarkers": ["load@app.py:50", "compute@app.py:64", "render@app.py:80"]
+    "action": "startCpuRegion",
+    "mode": "launch",
+    "script": "/path/to/app.py",
+    "pythonPath": "/path/to/python",
+    "regionStartLocation": "app.py:42",
+    "regionStopLocation": "app.py:88",
+    "regionMarkers": ["load@app.py:50", "compute@app.py:64", "render@app.py:80"]
 }
 ```
 
@@ -147,11 +147,11 @@ recorded. The explorer surfaces them under `region.markers`; use adjacent marker
 
 ```json
 {
-  "action": "takeHeapSnapshot",
-  "mode": "launch",
-  "script": "/path/to/app.py",
-  "pythonPath": "/path/to/python",
-  "traceNativeMemory": true
+    "action": "takeHeapSnapshot",
+    "mode": "launch",
+    "script": "/path/to/app.py",
+    "pythonPath": "/path/to/python",
+    "traceNativeMemory": true
 }
 ```
 
@@ -166,27 +166,27 @@ Load the capture's metadata JSON, then query views with the returned `profileId`
 {"action":"query","profileId":"cpu-...","view":"search","queryText":"compute"}
 ```
 
-- CPU views: `summary | callTree | bottomUp | eventLog | search | nodeContext`.
-- Trace views: `summary | events | byCategory | byProcessThread | timelineSlices | search`.
-- Heap views: `summary | allocations | search`.
-- For region captures, `loadCpuProfile` returns a `region` block (bounds + markers). Slice a CPU view to
-  the region or a sub-region with `startTimeMs`/`endTimeMs` (both are ms from start).
-- `search` `queryText` syntax: space-separated terms OR; `+term` AND; `/regex/`; `"phrase"` exact.
-- `/regex/` format — a common, safe subset, always case-insensitive:
-  - Supported: literals and escaped metacharacters; `.`; character classes `[...]`/`[^...]`/ranges and `\d \D \w \W \s \S`; anchors `^` `$`; groups `( )` and `(?: )`; alternation `|`; quantifiers `* + ? {m} {m,} {m,n}` (a trailing lazy `?` is accepted); control escapes `\n \r \t \f \v \0`.
-  - Not supported (the term degrades to a literal substring match): word boundaries `\b` `\B`, named groups, back-references, look-around `(?=) (?!) (?<=) (?<!)`, hex/Unicode escapes `\xHH`/`\uHHHH`, Unicode property escapes `\p{...}`, and all flags (`i s m g u y`).
-- Use `loadTrace` / `loadHeapSnapshot` for the other backends.
+-   CPU views: `summary | callTree | bottomUp | eventLog | search | nodeContext`.
+-   Trace views: `summary | events | byCategory | byProcessThread | timelineSlices | search`.
+-   Heap views: `summary | allocations | search`.
+-   For region captures, `loadCpuProfile` returns a `region` block (bounds + markers). Slice a CPU view to
+    the region or a sub-region with `startTimeMs`/`endTimeMs` (both are ms from start).
+-   `search` `queryText` syntax: space-separated terms OR; `+term` AND; `/regex/`; `"phrase"` exact.
+-   `/regex/` format — a common, safe subset, always case-insensitive:
+    -   Supported: literals and escaped metacharacters; `.`; character classes `[...]`/`[^...]`/ranges and `\d \D \w \W \s \S`; anchors `^` `$`; groups `( )` and `(?: )`; alternation `|`; quantifiers `* + ? {m} {m,} {m,n}` (a trailing lazy `?` is accepted); control escapes `\n \r \t \f \v \0`.
+    -   Not supported (the term degrades to a literal substring match): word boundaries `\b` `\B`, named groups, back-references, look-around `(?=) (?!) (?<=) (?<!)`, hex/Unicode escapes `\xHH`/`\uHHHH`, Unicode property escapes `\p{...}`, and all flags (`i s m g u y`).
+-   Use `loadTrace` / `loadHeapSnapshot` for the other backends.
 
 ## Working Rules
 
-- Always pass the `*.metadata.json` sidecar to the explorer loaders, never the raw `.bin`/`.ndjson`.
-- For CPU work, verify or select a 3.15+ interpreter first; surface the version error verbatim if it
-  fails rather than guessing.
-- Prefer `startCpuRegion` over `startCpu` + `duration` when the user cares about a specific code range —
-  the handshake guarantees the sampler is live at region start instead of racing attach latency.
-- Prefer markers over many tiny region captures when labeling several adjacent phases under one attach.
-- Report the `profilingSessionId`, `artifactsDir`, and (for regions) the resolved start/stop/marker
-  locations so the user can re-open the capture later.
+-   Always pass the `*.metadata.json` sidecar to the explorer loaders, never the raw `.bin`/`.ndjson`.
+-   For CPU work, verify or select a 3.15+ interpreter first; surface the version error verbatim if it
+    fails rather than guessing.
+-   Prefer `startCpuRegion` over `startCpu` + `duration` when the user cares about a specific code range —
+    the handshake guarantees the sampler is live at region start instead of racing attach latency.
+-   Prefer markers over many tiny region captures when labeling several adjacent phases under one attach.
+-   Report the `profilingSessionId`, `artifactsDir`, and (for regions) the resolved start/stop/marker
+    locations so the user can re-open the capture later.
 
 ## Known limitations and quirks
 
@@ -195,33 +195,33 @@ guessing a fix.
 
 ### Capture
 
-- **Memray (memory) is unsupported on Windows.** `takeHeapSnapshot` returns a platform-aware error on
-  win32 — there is no package to install. Capture memory on Linux/WSL or macOS instead.
-- **`blocking:true` is unsupported on Windows.** It returns a structured error before any sampler starts;
-  re-run without `blocking:true`, or capture on Linux/WSL.
-- **Attach/region on a Windows `uv venv` interpreter can fail to produce an artifact.** The uv venv
-  trampoline-shim `python.exe` re-execs the real interpreter as a child and then exits, so the launched
-  PID is gone before Tachyon can sample it. (A stdlib `python -m venv` does not have this problem — attach
-  works there.) Use launch mode, attach to the real `python.exe` child PID, or pass the base interpreter as
-  `pythonPath`. The tool surfaces this hint when an attach/region capture on a uv venv yields no artifact.
-- **`samplingMode:"gil"` is near-unusable under GIL contention** — it collects very few samples. For
-  GIL-bound workloads prefer `cpu` (or `wall`) and read thread behavior from the call tree.
-- **`samplingRate` saturates around 400–500 Hz.** Requesting a higher rate does not raise the effective
-  sample frequency; treat ~500 Hz as the practical ceiling and do not infer precision beyond it.
-- **Region markers force per-line `sys.monitoring` while the region is active**, which slows the target.
-  Keep markers out of tight hot loops, or accept the slowdown for the measured region only.
-- **A marker on the exact region-start line folds into `t=0`.** Place markers on lines strictly inside the
-  region (after the start line) so their timestamps are distinct.
+-   **Memray (memory) is unsupported on Windows.** `takeHeapSnapshot` returns a platform-aware error on
+    win32 — there is no package to install. Capture memory on Linux/WSL or macOS instead.
+-   **`blocking:true` is unsupported on Windows.** It returns a structured error before any sampler starts;
+    re-run without `blocking:true`, or capture on Linux/WSL.
+-   **Attach/region on a Windows `uv venv` interpreter can fail to produce an artifact.** The uv venv
+    trampoline-shim `python.exe` re-execs the real interpreter as a child and then exits, so the launched
+    PID is gone before Tachyon can sample it. (A stdlib `python -m venv` does not have this problem — attach
+    works there.) Use launch mode, attach to the real `python.exe` child PID, or pass the base interpreter as
+    `pythonPath`. The tool surfaces this hint when an attach/region capture on a uv venv yields no artifact.
+-   **`samplingMode:"gil"` is near-unusable under GIL contention** — it collects very few samples. For
+    GIL-bound workloads prefer `cpu` (or `wall`) and read thread behavior from the call tree.
+-   **`samplingRate` saturates around 400–500 Hz.** Requesting a higher rate does not raise the effective
+    sample frequency; treat ~500 Hz as the practical ceiling and do not infer precision beyond it.
+-   **Region markers force per-line `sys.monitoring` while the region is active**, which slows the target.
+    Keep markers out of tight hot loops, or accept the slowdown for the measured region only.
+-   **A marker on the exact region-start line folds into `t=0`.** Place markers on lines strictly inside the
+    region (after the start line) so their timestamps are distinct.
 
 ### Exploring
 
-- **Pass the `*.metadata.json` sidecar to the loaders, never a raw `.bin`.** Loading a raw capture binary
-  returns a friendly hint pointing at the metadata sidecar instead of an opaque parse error.
-- **CPU views summarize a single thread.** `loadCpuProfile` reports the analyzed thread under
-  `threads.analyzed` (with its sample count); other threads are not aggregated into the same view. State
-  this limitation when reporting multi-threaded results.
-- **`bottomUp` sorted by self can list zero-self bootstrap frames first.** When reading `bottomUp` by
-  self time, look past root/bootstrap frames with zero self to find the true hot leaves.
-- **Trace event views scan all events and honor `startTimeMs`/`endTimeMs`.** `events`, `search`,
-  `byCategory`, and `byProcessThread` page over the full event set and reconcile with `summary`; use the
-  time window to reach later events rather than expecting one page to cover the whole trace.
+-   **Pass the `*.metadata.json` sidecar to the loaders, never a raw `.bin`.** Loading a raw capture binary
+    returns a friendly hint pointing at the metadata sidecar instead of an opaque parse error.
+-   **CPU views summarize a single thread.** `loadCpuProfile` reports the analyzed thread under
+    `threads.analyzed` (with its sample count); other threads are not aggregated into the same view. State
+    this limitation when reporting multi-threaded results.
+-   **`bottomUp` sorted by self can list zero-self bootstrap frames first.** When reading `bottomUp` by
+    self time, look past root/bootstrap frames with zero self to find the true hot leaves.
+-   **Trace event views scan all events and honor `startTimeMs`/`endTimeMs`.** `events`, `search`,
+    `byCategory`, and `byProcessThread` page over the full event set and reconcile with `summary`; use the
+    time window to reach later events rather than expecting one page to cover the whole trace.

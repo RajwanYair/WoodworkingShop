@@ -19,21 +19,21 @@ Debug a failing unit test by iteratively adding verbose logging, running the tes
 Repeat until the root cause is understood:
 
 1. **Add verbose logging** around the suspicious code:
-   - Use `console.log('[DEBUG]', ...)` with descriptive labels
-   - Log input values, intermediate states, and return values
-   - Log before/after key operations
-   - Add timestamps if timing might be relevant
+    - Use `console.log('[DEBUG]', ...)` with descriptive labels
+    - Log input values, intermediate states, and return values
+    - Log before/after key operations
+    - Add timestamps if timing might be relevant
 
 2. **Run the test** and capture output
 
 3. **Assess the logging output:**
-   - What values are unexpected?
-   - Where does the behavior diverge from expectations?
-   - What additional logging would help narrow down the issue?
+    - What values are unexpected?
+    - Where does the behavior diverge from expectations?
+    - What additional logging would help narrow down the issue?
 
 4. **Decide next action:**
-   - If root cause is clear → proceed to fix
-   - If more information needed → add more targeted logging and repeat
+    - If root cause is clear → proceed to fix
+    - If more information needed → add more targeted logging and repeat
 
 ### Phase 3: Fix and Verify
 
@@ -44,22 +44,22 @@ Repeat until the root cause is understood:
 ### Phase 4: Clean Up
 
 1. **Remove ALL debugging artifacts:**
-   - Delete all `console.log('[DEBUG]', ...)` statements added
-   - Remove any temporary variables or code added for debugging
-   - Ensure the code is in a clean, production-ready state
+    - Delete all `console.log('[DEBUG]', ...)` statements added
+    - Remove any temporary variables or code added for debugging
+    - Ensure the code is in a clean, production-ready state
 
 2. **Verify the test still passes** after cleanup
 
 ### Phase 5: Document and Learn
 
 1. **Provide a summary** to the user (1-3 sentences):
-   - What was the bug?
-   - What was the fix?
+    - What was the bug?
+    - What was the fix?
 
 2. **Record the learning** by following the learning instructions (if you have them):
-   - Extract a single, clear learning from this debugging session
-   - Add it to the "Learnings" section of the most relevant instruction file
-   - If a similar learning already exists, increment its counter instead
+    - Extract a single, clear learning from this debugging session
+    - Add it to the "Learnings" section of the most relevant instruction file
+    - If a similar learning already exists, increment its counter instead
 
 ## Logging Conventions
 

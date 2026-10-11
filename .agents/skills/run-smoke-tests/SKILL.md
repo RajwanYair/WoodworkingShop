@@ -80,24 +80,24 @@ import { waitForCondition } from '../testUtils';
 import { ENVS_EXTENSION_ID } from '../constants';
 
 suite('Smoke: [Feature Name]', function () {
-  this.timeout(60_000);
+    this.timeout(60_000);
 
-  test('[Test description]', async function () {
-    // Arrange
-    const extension = vscode.extensions.getExtension(ENVS_EXTENSION_ID);
-    assert.ok(extension, 'Extension not found');
+    test('[Test description]', async function () {
+        // Arrange
+        const extension = vscode.extensions.getExtension(ENVS_EXTENSION_ID);
+        assert.ok(extension, 'Extension not found');
 
-    // Ensure extension is active
-    if (!extension.isActive) {
-      await extension.activate();
-    }
+        // Ensure extension is active
+        if (!extension.isActive) {
+            await extension.activate();
+        }
 
-    // Act
-    const result = await someOperation();
+        // Act
+        const result = await someOperation();
 
-    // Assert
-    assert.strictEqual(result, expected, 'Description of what went wrong');
-  });
+        // Assert
+        assert.strictEqual(result, expected, 'Description of what went wrong');
+    });
 });
 ```
 

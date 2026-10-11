@@ -75,20 +75,20 @@ import { waitForCondition, TestEventHandler } from '../testUtils';
 import { ENVS_EXTENSION_ID } from '../constants';
 
 suite('Integration: [Component A] + [Component B]', function () {
-  this.timeout(120_000);
+    this.timeout(120_000);
 
-  let api: ExtensionApi;
+    let api: ExtensionApi;
 
-  suiteSetup(async function () {
-    const extension = vscode.extensions.getExtension(ENVS_EXTENSION_ID);
-    assert.ok(extension, 'Extension not found');
-    if (!extension.isActive) await extension.activate();
-    api = extension.exports;
-  });
+    suiteSetup(async function () {
+        const extension = vscode.extensions.getExtension(ENVS_EXTENSION_ID);
+        assert.ok(extension, 'Extension not found');
+        if (!extension.isActive) await extension.activate();
+        api = extension.exports;
+    });
 
-  test('[Interaction test]', async function () {
-    // Test component interaction
-  });
+    test('[Interaction test]', async function () {
+        // Test component interaction
+    });
 });
 ```
 

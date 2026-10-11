@@ -20,11 +20,9 @@ Review UI implementations against design quality standards and your design syste
 ## Two Modes
 
 ### Mode 1: Design Review
-
 Evaluate existing UI for design system compliance, three quality pillars (Frictionless, Quality Craft, Trustworthy), accessibility, and code quality.
 
 ### Mode 2: Creative Frontend Design
-
 Create distinctive interfaces that avoid generic "AI slop" aesthetics, have clear conceptual direction, and execute with precision.
 
 ---
@@ -32,7 +30,6 @@ Create distinctive interfaces that avoid generic "AI slop" aesthetics, have clea
 ## Creative Frontend Design
 
 Before coding, commit to an aesthetic direction:
-
 - **Purpose**: What problem does this solve? Who uses it?
 - **Tone**: minimal, maximalist, retro-futuristic, organic, luxury, playful, editorial, brutalist, art deco, soft/pastel, industrial, etc.
 - **Constraints**: Framework, performance, accessibility requirements.
@@ -57,20 +54,17 @@ Match implementation complexity to vision. Maximalist = elaborate code. Minimali
 ### Design System Workflow
 
 **Before implementing:**
-
 1. Review component in your Storybook / component library for API and usage
 2. Use Figma Dev Mode to get exact specs (spacing, tokens, properties)
 3. Implement using design system components + design tokens
 
 **During review:**
-
 1. Compare implementation to Figma design
 2. Verify design tokens are used (not hardcoded values)
 3. Check all variants/states are implemented correctly
 4. Flag deviations (needs design approval)
 
 **If component doesn't exist:**
-
 1. Check if existing component can be adapted
 2. Reach out to design for new component creation
 3. Document exception and rationale in code
@@ -105,7 +99,6 @@ Match implementation complexity to vision. Maximalist = elaborate code. Minimali
 ### 2. Quality is Craft
 
 **Evaluate:**
-
 - Design system compliance: matches Figma specs, uses design tokens
 - Aesthetic direction: distinctive typography, cohesive colors, intentional motion
 - Accessibility: Grade C minimum (WCAG 2.1 A), Grade B ideal (WCAG 2.1 AA)
@@ -115,7 +108,6 @@ Match implementation complexity to vision. Maximalist = elaborate code. Minimali
 ### 3. Trustworthy Building
 
 **Evaluate:**
-
 - AI transparency: disclaimer on AI-generated content
 - Error transparency: actionable error messages
 

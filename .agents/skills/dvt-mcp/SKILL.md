@@ -5,7 +5,7 @@ compatibility: Requires the DVT MCP Server to be configured and running for the 
 license: https://eda.amiq.com/end-user-license-agreement
 metadata:
   author: AMIQ EDA s.r.l.
-  version: '1.4'
+  version: '1.3'
 ---
 
 # Using the DVT MCP Server Efficiently
@@ -18,36 +18,34 @@ The DVT MCP Server gives you compiler-backed knowledge of design and verificatio
 
 ## Tool Selection Guide
 
-| Goal                                                                                   | Tool(s) to use                                                   |
-| -------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| Find where a type/symbol (module, interface, class...) is defined                      | `dvt_get_symbol_locations` → `dvt_get_symbol_definitions`        |
-| Read the full source of a type/symbol                                                  | `dvt_get_symbol_definitions`                                     |
-| Find all usages of a type/symbol                                                       | `dvt_get_symbol_references`                                      |
-| Find all usages of a local variable or signal                                          | `dvt_get_identifier_references`                                  |
-| Understand what a type/symbol depends on                                               | `dvt_get_symbol_dependencies`                                    |
-| Get comprehensive info on any identifier (declaration, references, types, inheritance) | `dvt_get_identifier_info`                                        |
-| List all identifiers in a file                                                         | `dvt_get_file_identifiers`                                       |
-| List all compiled files                                                                | `dvt_get_compiled_files`                                         |
-| Get compilation errors/warnings for files                                              | `dvt_get_problems`                                               |
-| Get Verissimo linting failures for files                                               | `dvt_get_linting_failures`                                       |
-| Rebuild the whole project and get fresh errors                                         | `dvt_build_project`                                              |
-| Recompile specific files after editing them                                            | `dvt_compile_changed_files`                                      |
-| Get current file/context & hierarchical scope from cursor position                     | `dvt_get_cursor_scope`                                           |
-| Explore the RTL design hierarchy                                                       | `dvt_get_design_top` → `dvt_search_design_hierarchy`             |
-| Explore the UVM verification hierarchy                                                 | `dvt_get_verification_top` → `dvt_search_verification_hierarchy` |
-| Find instances with a specific port or parameter                                       | `dvt_search_design_hierarchy` with `port_name_filter`            |
-| Find constraints on a random field                                                     | `dvt_get_field_constraints`                                      |
-| Get messages extracted from a simulation log file                                      | `dvt_get_simulation_log_messages`                                |
-| Load a waveform dump file                                                              | `dvt_waveform_load_file`                                         |
-| Retrieve signals paths from a waveform dump file                                       | `dvt_waveform_search_signals_paths`                              |
-| Retrieve values of signals from a waveform dump file                                   | `dvt_waveform_get_signal_value_changes`                          |
-| Start a Runtime Elaboration session                                                    | `dvt_start_runtime_elaboration`                                  |
-| Stop a Runtime Elaboration session                                                     | `dvt_stop_runtime_elaboration`                                   |
-| Wait for debugger to hit breakpoint or finish                                          | `dvt_debugger_wait`                                              |
-| Step through code (step_over, step_into, etc.)                                         | `dvt_debugger_step`                                              |
-| Evaluate expressions in debugger context                                               | `dvt_debugger_evaluate_expression`                               |
-| Set or remove breakpoints                                                              | `dvt_debugger_toggle_breakpoint`                                 |
-| List active breakpoints                                                                | `dvt_debugger_get_active_breakpoints`                            |
+| Goal | Tool(s) to use |
+|---|---|
+| Find where a type/symbol (module, interface, class...)  is defined | `dvt_get_symbol_locations` → `dvt_get_symbol_definitions` |
+| Read the full source of a type/symbol | `dvt_get_symbol_definitions` |
+| Find all usages of a type/symbol | `dvt_get_symbol_references` |
+| Find all usages of a local variable or signal | `dvt_get_identifier_references` |
+| Understand what a type/symbol depends on | `dvt_get_symbol_dependencies` |
+| Get comprehensive info on any identifier (declaration, references, types, inheritance) | `dvt_get_identifier_info` |
+| List all identifiers in a file | `dvt_get_file_identifiers` |
+| List all compiled files | `dvt_get_compiled_files` |
+| Get compilation errors/warnings or Verissimo linting failures for files | `dvt_get_problems` |
+| Rebuild the whole project and get fresh errors | `dvt_build_project` |
+| Recompile specific files after editing them | `dvt_compile_changed_files` |
+| Explore the RTL design hierarchy | `dvt_get_design_top` → `dvt_search_design_hierarchy` |
+| Explore the UVM verification hierarchy | `dvt_get_verification_top` → `dvt_search_verification_hierarchy` |
+| Find instances with a specific port or parameter | `dvt_search_design_hierarchy` with `port_name_filter` |
+| Find constraints on a random field | `dvt_get_field_constraints` |
+| Get messages extracted from a simulation log file | `dvt_get_simulation_log_messages` |
+| Load a waveform dump file | `dvt_waveform_load_file` |
+| Retrieve signals paths from a waveform dump file | `dvt_waveform_search_signals_paths` |
+| Retrieve values of signals from a waveform dump file | `dvt_waveform_get_signal_value_changes` |
+| Start a Runtime Elaboration session | `dvt_start_runtime_elaboration` |
+| Stop a Runtime Elaboration session | `dvt_stop_runtime_elaboration` |
+| Wait for debugger to hit breakpoint or finish | `dvt_debugger_wait` |
+| Step through code (step_over, step_into, etc.) | `dvt_debugger_stepping` |
+| Evaluate expressions in debugger context | `dvt_debugger_evaluate_expression` |
+| Set or remove breakpoints | `dvt_debugger_toggle_breakpoint` |
+| List active breakpoints | `dvt_debugger_get_active_breakpoints` |
 
 ---
 
@@ -85,12 +83,12 @@ Once errors are resolved, optionally re-run with `include_warnings: true` to add
 
 Use this iterative loop until the project is clean:
 
-0. **Assert Verissimo setup** - make sure the current build configuration file (`<project>/.dvt/<name>.build`) contains Verissimo directives (`+dvt_verissimo_lint_on`, `+dvt_verissimo_ruleset`, and `+dvt_verissimo_use_baseline_report`(optional)). If these are not present, stop and inform that the Verissimo linter is not configured.
-1. **Get current linting failures** — call `dvt_get_linting_failures` for files under investigation.
+0. **Assert Verissimo setup** - make sure the current build configuration file (`<project>/.dvt/<name>.build`) contains Verissimo directives (`+dvt_verissimo_lint_on` and `+dvt_verissimo_ruleset`). If these are not present, stop and inform that the Verissimo linter is not configured.
+1. **Get current linting failures** — call `dvt_get_problems` with `include_linting_problems: true` for files under investigation. Use `include_warnings: false`.
 2. **Understand each failure** — use `dvt_get_symbol_definitions` or `dvt_get_symbol_locations` to understand the types, ports, and interfaces involved. Don't guess — look up the actual definitions.
 3. **Fix the files** — edit only what is needed to address the root cause. Avoid cascading, speculative changes.
 4. **Recompile the changed files** — call `dvt_compile_changed_files` with the list of files you edited. This is faster than a full rebuild and gives immediate feedback.
-5. **Repeat** until `dvt_get_linting_failures` returns no linting failures.
+5. **Repeat** until `dvt_get_problems` returns no linting failures.
 
 > If a fix introduces a new failure, treat it as a new iteration rather than undoing changes speculatively. Compile first, then decide.
 
@@ -170,7 +168,6 @@ When asked to trace a signal, port, or wire through the RTL design:
    - Using a more specific hierarchical path: `"i_top.i_alu.i_adder.clk"`
    - Providing the `file_path` parameter to limit the search to a specific file
 4. **Correlate with design hierarchy** — use `dvt_search_design_hierarchy` with `port_name_filter` to find all instances that expose a port with a given name, then use `dvt_get_identifier_info` on the instances of interest.
-5.
 
 > `dvt_get_identifier_info` returns type-aware results backed by the compiler — prefer it over text-search to avoid false positives from comments or string literals.
 
@@ -185,7 +182,7 @@ Use this flow to debug UVM verification code at runtime using the debugger:
 3. **Start Runtime Elaboration** — call `dvt_start_runtime_elaboration` with `isDebug: true` and the target `uvmTestName`. Use `argumentsFile` if a .args/.f file exists.
 4. **Wait for breakpoint** — call `dvt_debugger_wait` to pause until a breakpoint is hit or elaboration finishes. If suspended, the response includes the call stack.
 5. **Inspect state** — while suspended, use `dvt_debugger_evaluate_expression` to check variable values, signal states, or any SystemVerilog expression in the current scope.
-6. **Step through code** — use `dvt_debugger_step` to control execution:
+6. **Step through code** — use `dvt_debugger_stepping` to control execution:
    - `step_over`: execute current line, stop at next line in same scope
    - `step_into`: enter the function/task called on the current line
    - `step_return`: run until the current function/task returns

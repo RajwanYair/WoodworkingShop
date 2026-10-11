@@ -86,22 +86,26 @@ import { waitForCondition } from '../testUtils';
 import { ENVS_EXTENSION_ID } from '../constants';
 
 suite('E2E: [Workflow Name]', function () {
-  this.timeout(120_000); // 2 minutes
+    this.timeout(120_000); // 2 minutes
 
-  let api: ExtensionApi;
+    let api: ExtensionApi;
 
-  suiteSetup(async function () {
-    const extension = vscode.extensions.getExtension(ENVS_EXTENSION_ID);
-    assert.ok(extension, 'Extension not found');
-    if (!extension.isActive) await extension.activate();
-    api = extension.exports;
-  });
+    suiteSetup(async function () {
+        const extension = vscode.extensions.getExtension(ENVS_EXTENSION_ID);
+        assert.ok(extension, 'Extension not found');
+        if (!extension.isActive) await extension.activate();
+        api = extension.exports;
+    });
 
-  test('[Test description]', async function () {
-    // Use real API (flat structure, not nested!)
-    // api.getEnvironments(), not api.environments.getEnvironments()
-    await waitForCondition(async () => (await api.getEnvironments('all')).length > 0, 60_000, 'No environments found');
-  });
+    test('[Test description]', async function () {
+        // Use real API (flat structure, not nested!)
+        // api.getEnvironments(), not api.environments.getEnvironments()
+        await waitForCondition(
+            async () => (await api.getEnvironments('all')).length > 0,
+            60_000,
+            'No environments found',
+        );
+    });
 });
 ```
 

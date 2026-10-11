@@ -17,13 +17,13 @@ Use this skill when the answer should be grounded in current Pylance documentati
 
 ## When Docs Are Not Enough
 
-- Use `pylanceSettings` when the user needs the effective settings for the current workspace.
-- Use `pylanceLSP` diagnostics when the user asks about a specific Problems entry, diagnostic code, or file error.
-- Use `pylancePythonEnvironments` when the question depends on the editor-selected interpreter.
+-   Use `pylanceSettings` when the user needs the effective settings for the current workspace.
+-   Use `pylanceLSP` diagnostics when the user asks about a specific Problems entry, diagnostic code, or file error.
+-   Use `pylancePythonEnvironments` when the question depends on the editor-selected interpreter.
 
 ## Working Rules
 
-- Prefer official docs for settings, diagnostics, feature support, configuration, and troubleshooting claims.
-- Do not treat source search as official product guidance.
-- Do not read referenced doc paths directly from disk; fetch references through `pylanceDocuments` so uncached docs are retrieved correctly.
-- Include the setting name, diagnostic code, or feature name that changed the answer when reporting the result.
+-   Prefer official docs for settings, diagnostics, feature support, configuration, and troubleshooting claims.
+-   Do not treat source search as official product guidance.
+-   Do not read referenced doc paths directly from disk; fetch references through `pylanceDocuments` so uncached docs are retrieved correctly.
+-   Include the setting name, diagnostic code, or feature name that changed the answer when reporting the result.

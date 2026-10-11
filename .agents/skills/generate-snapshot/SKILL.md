@@ -46,11 +46,11 @@ Files sorted by `priority_score = change_count × max_complexity`
 
 ```json
 {
-  "path": "src/features/terminal/terminalManager.ts",
-  "change_count": 45,
-  "churn": 1200,
-  "max_complexity": 18,
-  "priority_score": 810
+    "path": "src/features/terminal/terminalManager.ts",
+    "change_count": 45,
+    "churn": 1200,
+    "max_complexity": 18,
+    "priority_score": 810
 }
 ```
 
@@ -87,9 +87,9 @@ High priority_score = frequently changed AND complex = prime refactoring target.
 1. Sort by `priority_score` descending
 2. Top items = files that change often AND are complex
 3. These are prime candidates for:
-   - Breaking into smaller modules
-   - Adding tests before changes
-   - Simplifying complex functions
+    - Breaking into smaller modules
+    - Adding tests before changes
+    - Simplifying complex functions
 
 ### Temporal Coupling
 

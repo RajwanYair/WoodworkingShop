@@ -43,10 +43,10 @@ The user pasted the prompt. You are in a multi-step dialog. Detect what you can,
 
 3. **Auth + scope probe (FIRST irreversible action).** Run `scripts/auth-probe.sh`. If account enumeration needs Wrangler, set `PROJECT_ROOT`, approved canonical `WRANGLER_BIN`, and exact `WRANGLER_VERSION` first. Branch on `status`:
    - `ok`: continue to Step 4. The script already picked the account (single-account token, or one matching `$CLOUDFLARE_ACCOUNT_ID`).
-   - `missing_token` or `missing_scope`: ask the user to create a token at <https://dash.cloudflare.com/profile/api-tokens> → Custom token → permission `Account.Turnstile:Edit` → include the target account in Account Resources. **Do NOT direct them to `wrangler login`** unless wrangler's OAuth scope includes `Account.Turnstile:Edit` (varies by wrangler version). Offer two ways to provide the token without chat, cleanest first:
+   - `missing_token` or `missing_scope`: ask the user to create a token at https://dash.cloudflare.com/profile/api-tokens → Custom token → permission `Account.Turnstile:Edit` → include the target account in Account Resources. **Do NOT direct them to `wrangler login`** unless wrangler's OAuth scope includes `Account.Turnstile:Edit` (varies by wrangler version). Offer two ways to provide the token without chat, cleanest first:
      1. **Export + relaunch** (token enters neither chat nor shell history): `read -rsp 'Cloudflare API token: ' token; echo; export CLOUDFLARE_API_TOKEN="$token"; unset token`, then restart the agent from that terminal.
      2. **Save to file** (token in a user-only file): `umask 077; read -rsp 'Cloudflare API token: ' token; echo; printf '%s' "$token" > ~/.cf-turnstile-token; unset token`, then load it without printing it.
-        Do not ask the user to paste the API token into chat. When auth is established, re-run `auth-probe.sh` and resume from Step 4.
+     Do not ask the user to paste the API token into chat. When auth is established, re-run `auth-probe.sh` and resume from Step 4.
    - `network_failure`: the probe could not reach `api.cloudflare.com`. Show the diagnostic (VPN/proxy, TLS interception, DNS). Do not treat this as a scope problem. Ask the user to fix connectivity, then re-run `auth-probe.sh`.
    - `upstream_failure`: the API returned an unexpected response (`http_code` non-4xx). Do not assume the token is bad. Show the code, ask the user to retry after a brief wait, and re-run `auth-probe.sh`.
    - `multiple_accounts`: the token covers more than one account and `$CLOUDFLARE_ACCOUNT_ID` is unset. Present the numbered `accounts` list. **[wait for user]** Then export `CLOUDFLARE_ACCOUNT_ID=<chosen>` and re-run `auth-probe.sh`.
@@ -98,17 +98,21 @@ The user pasted the prompt. You are in a multi-step dialog. Detect what you can,
        signal: AbortSignal.timeout(10_000),
        body: new URLSearchParams({
          secret: process.env.TURNSTILE_SECRET,
-         response: token, // cf-turnstile-response from the request
-         remoteip: clientIp, // X-Forwarded-For / req.ip / etc.
+         response: token,         // cf-turnstile-response from the request
+         remoteip: clientIp,      // X-Forwarded-For / req.ip / etc.
        }),
      });
      if (!r.ok) throw new Error(`siteverify ${r.status}`);
      result = await r.json();
    } catch (err) {
      // Network error, non-2xx, or non-JSON body from siteverify. Fail closed.
-     return res.status(403).send('forbidden'); // adapt to your framework
+     return res.status(403).send('forbidden');  // adapt to your framework
    }
-   if (!result.success || result.action !== expectedAction || !expectedHostnames.has(result.hostname)) {
+   if (
+     !result.success ||
+     result.action !== expectedAction ||
+     !expectedHostnames.has(result.hostname)
+   ) {
      return res.status(403).send('forbidden');
    }
    // existing handler logic runs here, unchanged
@@ -271,7 +275,6 @@ Use this flow when the prompt says the widget is already created and provides on
    ```
 
    The secret remains in one non-exported shell variable and standard-input pipes. It is validated before the sink starts. The repeated `secret list` check confirms the exact Worker target immediately before the standard `secret put` command. For an ignored local env file or another platform's secret manager, preserve the same ordering, confirmation, trusted-executable, and standard-input rules. Never put the secret in command arguments, exported environment variables, temporary files, logs, diffs, or chat. Repeat the complete guarded flow for each mapping.
-
 8. Wire the integration, then validate the actual destination through the protected backend using a fresh real token. Verify success once and verify replay rejection. A post-write `secret list` confirms only the binding name, not its value. If the backend cannot be exercised, stop with destination validation pending.
 
 ### The frontend-edit contract
@@ -299,32 +302,29 @@ Backend: use the canonical siteverify fetch from Step 9 inside the existing hand
 During the Step 6 codebase scan, also look for existing reCAPTCHA or hCaptcha. If found, switch Step 7 to a migration plan.
 
 Detection signals:
-
 - reCAPTCHA: `https://www.google.com/recaptcha/api.js`, `class="g-recaptcha"`, `data-sitekey="6L..."`, backend POST to `/recaptcha/api/siteverify`
 - hCaptcha: `https://js.hcaptcha.com/1/api.js`, `class="h-captcha"`, backend POST to `https://hcaptcha.com/siteverify`
 
 Substitution:
-
 - Replace script tags with `https://challenges.cloudflare.com/turnstile/v0/api.js` (`async defer`).
 - Replace `class="g-recaptcha"` / `class="h-captcha"` divs with `class="cf-turnstile"`, update `data-sitekey` to the new Turnstile sitekey, and set a meaningful `data-action` for the protected surface.
 - Token field changes from `g-recaptcha-response` to `cf-turnstile-response`.
 - Backend siteverify URL points at `https://challenges.cloudflare.com/turnstile/v0/siteverify`. Drop `RECAPTCHA_SECRET` / `HCAPTCHA_SECRET` env vars; add `TURNSTILE_SECRET`.
 
 Edge cases to surface to the user:
-
 - **reCAPTCHA v3 score thresholds.** Turnstile has no score. Tell the user explicitly that migrated code will reject on `success === false`.
 - **reCAPTCHA Enterprise.** Don't auto-migrate. Point at [developers.cloudflare.com/turnstile/migration/recaptcha/](https://developers.cloudflare.com/turnstile/migration/recaptcha/).
 - **Custom `action=` values.** Preserve any valid custom action the user passed to `grecaptcha.execute` as `data-action` on the widget. Otherwise, use the stable action assigned in Step 7. In both cases, validate the returned action in the backend.
 
 ## Edge cases
 
-| Situation                                   | Action                                                                                                                                                                                                                                                 |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Account enumeration is unavailable          | Ask the user for the account ID and export `CLOUDFLARE_ACCOUNT_ID`, or obtain approval for canonical absolute `WRANGLER_BIN` and exact `WRANGLER_VERSION`. Do not install or run a project-local Wrangler.                                             |
-| Multiple Cloudflare accounts                | `scripts/auth-probe.sh` returns all accounts; ask the user to choose, export `CLOUDFLARE_ACCOUNT_ID`                                                                                                                                                   |
-| Cloudflare Pages project                    | Wire siteverify inside a Pages Function (or the equivalent for your framework). The Pages Plugin at [developers.cloudflare.com/pages/functions/plugins/turnstile](https://developers.cloudflare.com/pages/functions/plugins/turnstile/) is a shortcut. |
-| Cloudflare Workers backend                  | Use the canonical fetch idiom from Step 9 inside the Worker's request handler. `fetch` to `challenges.cloudflare.com` works the same way it does in Node.                                                                                              |
-| `EXPECTED_HOSTNAME` mismatch                | Update widget domains via PUT, not PATCH (PATCH returns `10405 Method not allowed`): `curl -X PUT .../widgets/$SITEKEY -d '{"name":"...","mode":"managed","domains":[...]}'`                                                                           |
-| Token expired mid-flow                      | Stop, re-run `scripts/auth-probe.sh`, prompt for fresh credentials                                                                                                                                                                                     |
-| Validation returns `invalid-input-secret`   | The secret didn't reach the backend. Re-check `TURNSTILE_SECRET` in the customer's env / secret manager. If it's a Workers backend, run `wrangler secret list` to confirm the secret is bound to the right script.                                     |
-| Validation returns `invalid-input-response` | Expected for a dummy probe token; that means the secret IS valid. validate.sh treats this as success.                                                                                                                                                  |
+| Situation                                      | Action                                                                                                                                                                                                                                |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Account enumeration is unavailable             | Ask the user for the account ID and export `CLOUDFLARE_ACCOUNT_ID`, or obtain approval for canonical absolute `WRANGLER_BIN` and exact `WRANGLER_VERSION`. Do not install or run a project-local Wrangler. |
+| Multiple Cloudflare accounts                   | `scripts/auth-probe.sh` returns all accounts; ask the user to choose, export `CLOUDFLARE_ACCOUNT_ID`                                                                                                                                  |
+| Cloudflare Pages project                       | Wire siteverify inside a Pages Function (or the equivalent for your framework). The Pages Plugin at [developers.cloudflare.com/pages/functions/plugins/turnstile](https://developers.cloudflare.com/pages/functions/plugins/turnstile/) is a shortcut. |
+| Cloudflare Workers backend                     | Use the canonical fetch idiom from Step 9 inside the Worker's request handler. `fetch` to `challenges.cloudflare.com` works the same way it does in Node.                                                                             |
+| `EXPECTED_HOSTNAME` mismatch                   | Update widget domains via PUT, not PATCH (PATCH returns `10405 Method not allowed`): `curl -X PUT .../widgets/$SITEKEY -d '{"name":"...","mode":"managed","domains":[...]}'`                                                          |
+| Token expired mid-flow                         | Stop, re-run `scripts/auth-probe.sh`, prompt for fresh credentials                                                                                                                                                                    |
+| Validation returns `invalid-input-secret`      | The secret didn't reach the backend. Re-check `TURNSTILE_SECRET` in the customer's env / secret manager. If it's a Workers backend, run `wrangler secret list` to confirm the secret is bound to the right script.                    |
+| Validation returns `invalid-input-response`    | Expected for a dummy probe token; that means the secret IS valid. validate.sh treats this as success.                                                                                                                                 |

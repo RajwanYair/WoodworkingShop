@@ -53,27 +53,27 @@ This skill documents manager-specific discovery patterns, environment variable p
 
 ```typescript
 async function getPoetryVirtualenvsPath(): Promise<string> {
-  // 1. Check environment variable first
-  const envVar = process.env.POETRY_VIRTUALENVS_PATH;
-  if (envVar) return envVar;
+    // 1. Check environment variable first
+    const envVar = process.env.POETRY_VIRTUALENVS_PATH;
+    if (envVar) return envVar;
 
-  // 2. Check local poetry.toml
-  const localConfig = await readPoetryToml(projectRoot);
-  if (localConfig?.virtualenvs?.path) {
-    return resolvePoetryPath(localConfig.virtualenvs.path);
-  }
+    // 2. Check local poetry.toml
+    const localConfig = await readPoetryToml(projectRoot);
+    if (localConfig?.virtualenvs?.path) {
+        return resolvePoetryPath(localConfig.virtualenvs.path);
+    }
 
-  // 3. Use platform-specific default
-  return getDefaultPoetryCache();
+    // 3. Use platform-specific default
+    return getDefaultPoetryCache();
 }
 
 function resolvePoetryPath(configPath: string): string {
-  // Handle {cache-dir} placeholder
-  if (configPath.includes('{cache-dir}')) {
-    const cacheDir = getDefaultPoetryCache();
-    return configPath.replace('{cache-dir}', cacheDir);
-  }
-  return configPath;
+    // Handle {cache-dir} placeholder
+    if (configPath.includes('{cache-dir}')) {
+        const cacheDir = getDefaultPoetryCache();
+        return configPath.replace('{cache-dir}', cacheDir);
+    }
+    return configPath;
 }
 ```
 
@@ -112,19 +112,19 @@ function resolvePoetryPath(configPath: string): string {
 
 ```typescript
 function getPipenvVirtualenvsPath(): string {
-  // Check WORKON_HOME first
-  if (process.env.WORKON_HOME) {
-    return process.env.WORKON_HOME;
-  }
+    // Check WORKON_HOME first
+    if (process.env.WORKON_HOME) {
+        return process.env.WORKON_HOME;
+    }
 
-  // Check XDG_DATA_HOME on Linux
-  if (process.platform === 'linux') {
-    const xdgData = process.env.XDG_DATA_HOME || path.join(os.homedir(), '.local', 'share');
-    return path.join(xdgData, 'virtualenvs');
-  }
+    // Check XDG_DATA_HOME on Linux
+    if (process.platform === 'linux') {
+        const xdgData = process.env.XDG_DATA_HOME || path.join(os.homedir(), '.local', 'share');
+        return path.join(xdgData, 'virtualenvs');
+    }
 
-  // Windows/macOS defaults
-  return path.join(os.homedir(), '.virtualenvs');
+    // Windows/macOS defaults
+    return path.join(os.homedir(), '.virtualenvs');
 }
 ```
 
@@ -163,26 +163,26 @@ function getPipenvVirtualenvsPath(): string {
 
 ```typescript
 function getPyenvRoot(): string {
-  if (process.env.PYENV_ROOT) {
-    return process.env.PYENV_ROOT;
-  }
+    if (process.env.PYENV_ROOT) {
+        return process.env.PYENV_ROOT;
+    }
 
-  if (process.platform === 'win32') {
-    // pyenv-win uses different structure
-    return path.join(os.homedir(), '.pyenv', 'pyenv-win');
-  }
+    if (process.platform === 'win32') {
+        // pyenv-win uses different structure
+        return path.join(os.homedir(), '.pyenv', 'pyenv-win');
+    }
 
-  return path.join(os.homedir(), '.pyenv');
+    return path.join(os.homedir(), '.pyenv');
 }
 
 function getPyenvVersionsPath(): string {
-  const root = getPyenvRoot();
-  return path.join(root, 'versions');
+    const root = getPyenvRoot();
+    return path.join(root, 'versions');
 }
 
 // Use path.resolve() for comparisons!
 function comparePyenvPaths(pathA: string, pathB: string): boolean {
-  return path.resolve(pathA) === path.resolve(pathB);
+    return path.resolve(pathA) === path.resolve(pathB);
 }
 ```
 
@@ -224,18 +224,18 @@ function comparePyenvPaths(pathA: string, pathB: string): boolean {
 
 ```typescript
 function getCondaActivationCommand(shell: ShellType, envName: string): string {
-  switch (shell) {
-    case 'fish':
-      // Fish uses different syntax!
-      return `conda activate ${envName}`;
-    case 'cmd':
-      return `activate.bat ${envName}`;
-    case 'powershell':
-      return `conda activate ${envName}`;
-    default:
-      // bash, zsh
-      return `source activate ${envName}`;
-  }
+    switch (shell) {
+        case 'fish':
+            // Fish uses different syntax!
+            return `conda activate ${envName}`;
+        case 'cmd':
+            return `activate.bat ${envName}`;
+        case 'powershell':
+            return `conda activate ${envName}`;
+        default:
+            // bash, zsh
+            return `source activate ${envName}`;
+    }
 }
 ```
 
@@ -260,33 +260,33 @@ function getCondaActivationCommand(shell: ShellType, envName: string): string {
 
 ```typescript
 async function getVenvVersion(venvPath: string): Promise<string | undefined> {
-  const cfgPath = path.join(venvPath, 'pyvenv.cfg');
+    const cfgPath = path.join(venvPath, 'pyvenv.cfg');
 
-  try {
-    const content = await fs.readFile(cfgPath, 'utf-8');
-    const lines = content.split('\n');
+    try {
+        const content = await fs.readFile(cfgPath, 'utf-8');
+        const lines = content.split('\n');
 
-    for (const line of lines) {
-      const [key, value] = line.split('=').map((s) => s.trim());
-      if (key === 'version') {
-        return value;
-      }
+        for (const line of lines) {
+            const [key, value] = line.split('=').map((s) => s.trim());
+            if (key === 'version') {
+                return value;
+            }
+        }
+
+        // Fall back to parsing home path
+        const homeLine = lines.find((l) => l.startsWith('home'));
+        if (homeLine) {
+            const home = homeLine.split('=')[1].trim();
+            const match = home.match(/(\d+)\.(\d+)/);
+            if (match) {
+                return `${match[1]}.${match[2]}`;
+            }
+        }
+    } catch {
+        // Config file not found or unreadable
     }
 
-    // Fall back to parsing home path
-    const homeLine = lines.find((l) => l.startsWith('home'));
-    if (homeLine) {
-      const home = homeLine.split('=')[1].trim();
-      const match = home.match(/(\d+)\.(\d+)/);
-      if (match) {
-        return `${match[1]}.${match[2]}`;
-      }
-    }
-  } catch {
-    // Config file not found or unreadable
-  }
-
-  return undefined;
+    return undefined;
 }
 ```
 
@@ -312,18 +312,18 @@ The PET server is a Rust-based locator that communicates via JSON-RPC over stdio
 
 ```typescript
 async function fetchFromPET<T>(method: string, params: unknown): Promise<T> {
-  const timeout = 30000; // 30 seconds
+    const timeout = 30000; // 30 seconds
 
-  const result = await Promise.race([
-    this.client.request(method, params),
-    new Promise<never>((_, reject) => setTimeout(() => reject(new Error('PET server timeout')), timeout)),
-  ]);
+    const result = await Promise.race([
+        this.client.request(method, params),
+        new Promise<never>((_, reject) => setTimeout(() => reject(new Error('PET server timeout')), timeout)),
+    ]);
 
-  // Validate response type
-  if (!isValidResponse<T>(result)) {
-    throw new Error(`Invalid response from PET: ${JSON.stringify(result)}`);
-  }
+    // Validate response type
+    if (!isValidResponse<T>(result)) {
+        throw new Error(`Invalid response from PET: ${JSON.stringify(result)}`);
+    }
 
-  return result;
+    return result;
 }
 ```

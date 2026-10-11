@@ -2,7 +2,6 @@
 name: troubleshoot
 description: Investigate unexpected behavior in the current Copilot agent session by analyzing its event log. Use when the user asks why something happened, why a request was slow, why a tool was or was not used, or why instructions/skills/agents did not load.
 ---
-
 <!-- Customize this skill and select save to override its behavior. Delete that copy to restore the built-in behavior. -->
 
 # Troubleshoot
@@ -12,7 +11,6 @@ description: Investigate unexpected behavior in the current Copilot agent sessio
 This skill investigates and explains unexpected agent behavior in the **current Copilot agent session** using its on-disk event log.
 
 Use this skill for questions like:
-
 - Why did this request take so long?
 - Why was a tool called (or not called)?
 - Why did an instruction/skill/agent file not load?
@@ -26,7 +24,7 @@ Base every conclusion on evidence from the event log. Do not guess.
 The skill runs **inside** the session's agent, so the log is on the same machine. It lives outside the workspace — read it via the terminal (`run_in_terminal`), never `grep_search`.
 
 1. **If a `Session log:` path is provided with this message, use it.** It may point to a session **other than** the current one (via `#session`) and may be **comma-separated paths** — investigate all of them and compare.
-2. **Sticky reference:** if no path is on the _current_ message but an earlier turn in **this conversation** already established a target (a `Session log:` path, or a `#session:` reference), keep analyzing **that same session** for the follow-up. Do **not** fall back to self-discovery here — the newest log is the _current_ session, which is the wrong one. Switch only if the user references a new session.
+2. **Sticky reference:** if no path is on the *current* message but an earlier turn in **this conversation** already established a target (a `Session log:` path, or a `#session:` reference), keep analyzing **that same session** for the follow-up. Do **not** fall back to self-discovery here — the newest log is the *current* session, which is the wrong one. Switch only if the user references a new session.
 3. **Otherwise, self-discover it:** pick the **most recently modified** `events.jsonl` under `${XDG_STATE_HOME:-$HOME}/.copilot/session-state/<sessionId>/` — this skill is appending to the current session's log, so it's reliably newest. Honor `XDG_STATE_HOME`, else `$HOME`.
 4. **If none exists** there, this isn't a Copilot session — tell the user the skill supports Copilot sessions only, and stop.
 
@@ -35,12 +33,12 @@ The skill runs **inside** the session's agent, so the log is on the same machine
 Each line is a JSON object sharing one envelope:
 
 ```json
-{ "type": "...", "id": "...", "parentId": "...", "agentId": "...", "timestamp": "ISO-8601", "data": {} }
+{ "type": "...", "id": "...", "parentId": "...", "agentId": "...", "timestamp": "ISO-8601", "data": { } }
 ```
 
 - `type` — the event kind (see below).
 - `id` — unique event id.
-- `parentId` — the **chronologically preceding** event, not a logical parent. It is a flat back-pointer over every event, _not_ the user → turn → tool-call hierarchy. Do not treat it as a logical parent.
+- `parentId` — the **chronologically preceding** event, not a logical parent. It is a flat back-pointer over every event, *not* the user → turn → tool-call hierarchy. Do not treat it as a logical parent.
 - `agentId` — present for sub-agent events; absent for the main agent and session-level events.
 - `timestamp` — ISO-8601 time. Compute durations by differencing timestamps (e.g. a tool's start vs. its completion, a turn's `assistant.turn_start` vs. the `assistant.message`).
 - `data` — type-specific payload.
@@ -59,7 +57,6 @@ Each line is a JSON object sharing one envelope:
 ### Reconstructing the flow
 
 Iterate records in order and rebuild the logical tree from context:
-
 - `session.start` is the root.
 - a `user.message` begins a turn.
 - an `assistant.message` answers the current `user.message` — unless it has `data.parentToolCallId`, in which case it belongs to the sub-agent spawned by that tool call.
@@ -68,10 +65,9 @@ Iterate records in order and rebuild the logical tree from context:
 
 ## Secondary Source — Agent Host Wire Log (protocol communication)
 
-`events.jsonl` is the **primary** source and answers almost every question on its own. A _separate_ log captures the **transport/protocol** between VS Code and the agent host process — the JSON-RPC-style frames that drive sessions.
+`events.jsonl` is the **primary** source and answers almost every question on its own. A *separate* log captures the **transport/protocol** between VS Code and the agent host process — the JSON-RPC-style frames that drive sessions.
 
 **Use the wire log only when the symptom points at the agent host / transport itself, not the model or a tool.** Reach for it when:
-
 - the agent host won't start, or the session never begins;
 - requests **hang or time out**, or the agent appears stuck "connecting" / unresponsive;
 - `createSession` / `subscribe` fails, or expected updates/notifications never arrive;
@@ -88,7 +84,6 @@ Iterate records in order and rebuild the logical tree from context:
 ```
 
 The VS Code user-data dir depends on the build:
-
 - Windows: `%APPDATA%\Code` (Insiders: `Code - Insiders`; OSS/dev may use `Code - OSS` or a custom `--user-data-dir`)
 - macOS: `~/Library/Application Support/Code`
 - Linux: `~/.config/Code`
@@ -104,13 +99,7 @@ A new `logs/<timestamp>/` folder is created per VS Code session — pick the **m
 Each line is a JSON-RPC frame plus an `_ahpLog` envelope:
 
 ```json
-{
-  "jsonrpc": "2.0",
-  "id": 12,
-  "method": "createSession",
-  "params": {},
-  "_ahpLog": { "ts": "ISO-8601", "dir": "c2s", "connectionId": "…", "transport": "local" }
-}
+{ "jsonrpc": "2.0", "id": 12, "method": "createSession", "params": {}, "_ahpLog": { "ts": "ISO-8601", "dir": "c2s", "connectionId": "…", "transport": "local" } }
 ```
 
 - `_ahpLog.dir` — direction: `c2s` = VS Code → host (requests/notifications), `s2c` = host → VS Code (results/errors/actions/notifications).
@@ -121,7 +110,6 @@ Each line is a JSON-RPC frame plus an `_ahpLog` envelope:
 Triage: look for `error` frames, requests (`c2s` with an `id`) that have **no matching `s2c` response** (hangs/timeouts), or a missing `s2c` after `createSession` / `subscribe`. Apply the same streaming / `jq` / `node` rules as for `events.jsonl`.
 
 ### Locating it (terminal)
-
 - macOS/Linux: `ls -t ~/Library/Application\ Support/Code*/logs/*/ahp/ahp-*.jsonl ~/.config/Code*/logs/*/ahp/ahp-*.jsonl 2>/dev/null | head -n 1`
 - Windows (PowerShell): `Get-ChildItem "$env:APPDATA\Code*\logs\*\ahp\ahp-*.jsonl" -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 1`
 
@@ -132,7 +120,6 @@ The event log is outside the workspace, so `grep_search` cannot read it. **Use `
 ### Do a single triage pass first (important for efficiency)
 
 Each terminal command is a separate round-trip, so **don't run one command per question.** Do **one streaming pass** (constant memory — `events.jsonl` can be hundreds of MB, so never load it whole) that prints, in a single read:
-
 - the event counts by type,
 - every tool call with success/failure and duration (pair each `tool.execution_start` with its `tool.execution_complete` by `toolCallId`),
 - the user messages.
@@ -140,7 +127,6 @@ Each terminal command is a separate round-trip, so **don't run one command per q
 Use a streaming `jq` program (macOS/Linux) or a streaming Node `readline` pass (Windows) — the per-query examples below are the building blocks. Then run targeted follow-ups only to drill in.
 
 ### macOS / Linux / WSL / Git Bash (`grep` / `jq`)
-
 - Locate the newest log: `ls -t "${XDG_STATE_HOME:-$HOME}"/.copilot/session-state/*/events.jsonl | head -n 1`
 - Check size first: `ls -lh <logPath>`
 - Errors: `grep '"success":false' <logPath>` (tool failures) and `grep '"type":"tool.execution_complete"' <logPath>`
@@ -150,25 +136,21 @@ Use a streaming `jq` program (macOS/Linux) or a streaming Node `readline` pass (
 - Assistant turns: `jq -c 'select(.type=="assistant.message") | {model:.data.model, out:.data.outputTokens}' <logPath>`
 
 ### Windows (PowerShell + Node.js)
-
 **Do not parse the log with PowerShell JSON.** `Get-Content … | ForEach-Object { ConvertFrom-Json }` (or any per-line `ConvertFrom-Json`) deserializes one object at a time and is slow even on small logs. Use `Select-String` for plain-text matches and a **streaming** `node` pass for anything that needs JSON. Use `jq` instead if it is available.
 
 - Locate the newest log:
-
   ```powershell
   $stateHome = if ($env:XDG_STATE_HOME) { $env:XDG_STATE_HOME } else { $HOME }
   Get-ChildItem (Join-Path $stateHome '.copilot\session-state\*\events.jsonl') | Sort-Object LastWriteTime -Descending | Select-Object -First 1
   ```
-
 - Check size first: `(Get-Item <logPath>).Length`
 - Plain-text matches (fast, streaming, no parsing): `Select-String '"success":false' <logPath>`
 - JSON queries — a **streaming** `node` pass (constant memory, safe for hundreds-of-MB logs; pass the log path as an argument so it stays quote-safe). Use this shape and change only the per-line `if (…)` to select what you need (tool failures, tool calls, assistant turns, …):
-  `node -e "const rl=require('readline').createInterface({input:require('fs').createReadStream(process.argv[1])});rl.on('line',l=>{if(!l)return;let x;try{x=JSON.parse(l)}catch{return}if(x.type==='tool.execution_complete'&&x.data.success===false)console.log(x.data.toolCallId,JSON.stringify(x.data.result))})" "<logPath>"`
+    `node -e "const rl=require('readline').createInterface({input:require('fs').createReadStream(process.argv[1])});rl.on('line',l=>{if(!l)return;let x;try{x=JSON.parse(l)}catch{return}if(x.type==='tool.execution_complete'&&x.data.success===false)console.log(x.data.toolCallId,JSON.stringify(x.data.result))})" "<logPath>"`
   For aggregates (e.g. counts by type), accumulate into an object as you go and print it on `rl.on('close', …)`.
 - For a very large log, narrow with `Select-String` first to find the line, then read that small slice with `read_file`.
 
 ### General rules
-
 - **One streaming pass, not many.** Each command is a round-trip; prefer the single triage pass, then targeted follow-ups. Never load a whole (hundreds-of-MB) log into memory (`readFileSync` / `Get-Content`) — stream (`jq` / the readline pass) or narrow with `grep` / `Select-String` first. Check size first if unsure (`ls -lh` / `(Get-Item).Length`).
 - **Never deserialize JSON line-by-line in the shell** (PowerShell `ConvertFrom-Json` in a loop) — slow. Use one `jq` filter or one `node` pass.
 - Use `read_file` only for small targeted ranges, never an entire log.
