@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { safePersistStorage } from './safe-persist-storage';
 
 interface CostVarianceState {
   /** Map of materialKey → user-entered actual cost. */
@@ -22,6 +23,6 @@ export const useCostVarianceStore = create<CostVarianceState>()(
         }),
       clearAll: () => set({ actualCosts: {} }),
     }),
-    { name: 'woodworkingshop:costvariance' },
+    { name: 'woodworkingshop:costvariance', storage: safePersistStorage },
   ),
 );

@@ -1,0 +1,21 @@
+{
+  "source": "WOOD Magazine, Raised-Panel Doors, Analyze your options",
+  "url": "https://www.woodmagazine.com/woodworking-plans/home/raised-panel-doors",
+  "corroboratingSource": "Calculator Academy, Cabinet Door Calculator, Example 1",
+  "corroboratingSourceUrl": "https://calculator.academy/cabinet-door-calculator/",
+  "retrievedOn": "2026-10-01",
+  "input": {
+    "openingWidthMm": 406.4,
+    "openingHeightMm": 762,
+    "doorCount": 1,
+    "overlay": "full",
+    "overlayMm": 12.7,
+    "gapMm": 0
+  },
+  "expected": {
+    "doorWidthMm": 431.8,
+    "doorHeightMm": 787.4
+  },
+  "tolerance": "Exact to 0.1 mm, matching the engine's output precision.",
+  "scope": "Validates a single overlay door with zero edge clearance: the published 16 x 30 in opening plus 1/2 in overlay on each edge produces a 17 x 31 in door. Does not validate hinge counts or the engine's configurable/default clearance policy."
+}

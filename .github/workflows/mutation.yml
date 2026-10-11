@@ -1,0 +1,33 @@
+name: Mutation Testing
+
+on:
+  schedule:
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mutation-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  mutation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/setup-node
+      - name: Run bounded mutation suite
+        run: npm run test:mutation -- stryker.weekly.config.mjs
+      - if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: mutation-report
+          path: /tmp/WoodworkingShop/mutation/
+          retention-days: 14
+          if-no-files-found: ignore

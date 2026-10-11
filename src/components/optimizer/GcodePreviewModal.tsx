@@ -12,7 +12,7 @@
  * - G-code and validation are re-computed live when options change.
  */
 
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { parseToolpath, type ToolMove } from '../../engine/gcode-toolpath';
@@ -77,6 +77,8 @@ const PRESET_T_KEY: Record<string, string> = {
   genmitsu: 'gcode.presetGenmitsu',
 };
 
+type NumericOption = keyof Omit<GcodeOptions, 'useArcs' | 'cutDepth' | 'emitToolChange'>;
+
 const PAD = 10; // SVG padding in user units
 const SVG_SIZE = 400; // rendered SVG square pixels
 
@@ -100,11 +102,13 @@ function arcToSvgPath(move: ToolMove): string {
 }
 
 export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Props) {
+  const gridId = `${useId().replaceAll(':', '')}-gcode-grid`;
   const { t } = useTranslation();
   const trapRef = useRef<HTMLDivElement>(null);
   useFocusTrap(trapRef, true, onClose);
   const [showSettings, setShowSettings] = useState(false);
   const [activePreset, setActivePreset] = useState<string | null>(null);
+  const [numericDrafts, setNumericDrafts] = useState<Partial<Record<NumericOption, string>>>({});
   const [options, setOptions] = useState<GcodeOptions>({
     feedRate: 1500,
     plungeRate: 600,
@@ -134,6 +138,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
 
   function applyPreset(preset: MachinePreset) {
     setActivePreset(preset.id);
+    setNumericDrafts({});
     setOptions((prev) => ({
       ...prev,
       feedRate: preset.feedRate,
@@ -145,11 +150,13 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
     }));
   }
 
-  function setNum(key: keyof Omit<GcodeOptions, 'useArcs'>, raw: string) {
-    const n = parseFloat(raw);
-    if (!isNaN(n) && n > 0) {
-      setActivePreset(null); // no longer a named preset
+  function setNum(key: NumericOption, raw: string) {
+    setNumericDrafts((prev) => ({ ...prev, [key]: raw }));
+    const n = Number(raw);
+    if (raw.trim().length > 0 && Number.isFinite(n) && n >= 0.1) {
+      setActivePreset('custom');
       setOptions((prev) => ({ ...prev, [key]: n }));
+      setNumericDrafts((prev) => ({ ...prev, [key]: undefined }));
     }
   }
 
@@ -173,7 +180,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
         {/* Header */}
         <div className="border-wood-200 dark:border-wood-700 flex items-center justify-between border-b px-4 py-3">
           <h2 className="text-wood-800 dark:text-wood-100 text-sm font-semibold">
-            {t('gcode.previewTitle')} — <span className="text-wood-500 font-mono">{filename}</span>
+            {t('gcode.previewTitle')} — <span className="text-wood-700 dark:text-wood-300 font-mono">{filename}</span>
           </h2>
           <button
             onClick={onClose}
@@ -247,10 +254,11 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
                     <span className="text-wood-500 dark:text-wood-400 text-[9px]">{label}</span>
                     <input
                       type="number"
-                      value={options[key]}
+                      value={numericDrafts[key] ?? options[key]}
                       min={0.1}
                       step={key === 'toolDiameter' ? 0.001 : 1}
                       onChange={(e) => setNum(key, e.target.value)}
+                      onBlur={() => setNumericDrafts((prev) => ({ ...prev, [key]: undefined }))}
                       className="border-wood-300 dark:border-wood-600 dark:bg-wood-900 text-wood-700 dark:text-wood-200 w-full rounded border bg-white px-1.5 py-0.5 text-xs"
                       aria-label={label}
                     />
@@ -264,7 +272,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
                       type="checkbox"
                       checked={options.useArcs}
                       onChange={(e) => {
-                        setActivePreset(null);
+                        setActivePreset('custom');
                         setOptions((prev) => ({ ...prev, useArcs: e.target.checked }));
                       }}
                       className="border-wood-300 dark:border-wood-600 h-3.5 w-3.5 rounded"
@@ -280,7 +288,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
                       type="checkbox"
                       checked={options.emitToolChange}
                       onChange={(e) => {
-                        setActivePreset(null);
+                        setActivePreset('custom');
                         setOptions((prev) => ({ ...prev, emitToolChange: e.target.checked }));
                       }}
                       className="border-wood-300 dark:border-wood-600 h-3.5 w-3.5 rounded"
@@ -304,7 +312,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
             role="img"
           >
             <defs>
-              <pattern id="gcode-grid" x="0" y="0" width={vbW / 10} height={vbH / 10} patternUnits="userSpaceOnUse">
+              <pattern id={gridId} x="0" y="0" width={vbW / 10} height={vbH / 10} patternUnits="userSpaceOnUse">
                 <path
                   d={`M ${vbW / 10} 0 L 0 0 0 ${vbH / 10}`}
                   fill="none"
@@ -315,7 +323,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
               </pattern>
             </defs>
             {/* Background graph-paper grid */}
-            {moves.length > 0 && <rect x={vbX} y={vbY} width={vbW} height={vbH} fill="url(#gcode-grid)" />}
+            {moves.length > 0 && <rect x={vbX} y={vbY} width={vbW} height={vbH} fill={`url(#${gridId})`} />}
             {moves.map((move, idx) => {
               if (move.kind === 'rapid') {
                 return (
@@ -382,7 +390,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
         </div>
 
         {/* Legend */}
-        <div className="text-wood-500 dark:text-wood-400 border-wood-100 dark:border-wood-800 flex gap-4 border-t px-4 py-2 text-xs">
+        <div className="text-wood-700 dark:text-wood-300 border-wood-100 dark:border-wood-800 flex gap-4 border-t px-4 py-2 text-xs">
           <span className="flex items-center gap-1">
             <span className="inline-block w-6 border-t-2 border-dashed border-red-400" />
             {t('gcode.previewRapid')}
@@ -395,7 +403,7 @@ export function GcodePreviewModal({ sheet, onClose, onDownload, filename }: Prop
             <span className="inline-block w-6 border-t-2 border-green-500" />
             {t('gcode.previewArc')}
           </span>
-          <span className="text-wood-400 ms-auto">
+          <span className="text-wood-700 dark:text-wood-300 ms-auto">
             {moves.length} {t('gcode.moveCount', { count: moves.length })}
           </span>
         </div>

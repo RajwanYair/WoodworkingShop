@@ -7,17 +7,6 @@ import { getMaterial } from './materials.ts';
  * Values are conservative design estimates (lower bound) rather than
  * published nominal values so warnings err on the side of caution.
  */
-const ELASTIC_MODULUS_BY_KEY: Record<string, number> = {
-  'plywood-17': 6500,
-  'plywood-18': 7000,
-  'melamine-16': 2800,
-  'melamine-18': 2800,
-  'mdf-16': 2500,
-  'mdf-18': 2500,
-  'chipboard-16': 2200,
-  'chipboard-18': 2200,
-  'osb-18': 3500,
-};
 /** Default modulus (N/mm²) for materials not in the lookup (e.g. custom). */
 const DEFAULT_MODULUS = 3000;
 
@@ -152,13 +141,35 @@ export interface ShelfDeflectionResult {
   maxLoadKg: import('./types').Kg;
 }
 
+function getElasticModulus(materialKey: string): number {
+  switch (materialKey) {
+    case 'plywood-17':
+      return 6500;
+    case 'plywood-18':
+      return 7000;
+    case 'melamine-16':
+    case 'melamine-18':
+      return 2800;
+    case 'mdf-16':
+    case 'mdf-18':
+      return 2500;
+    case 'chipboard-16':
+    case 'chipboard-18':
+      return 2200;
+    case 'osb-18':
+      return 3500;
+    default:
+      return DEFAULT_MODULUS;
+  }
+}
+
 export function computeShelfDeflection(
   spanMm: number,
   thicknessMm: number,
   shelfDepthMm: number,
   materialKey: string,
 ): ShelfDeflectionResult {
-  const E = ELASTIC_MODULUS_BY_KEY[materialKey] ?? DEFAULT_MODULUS;
+  const E = getElasticModulus(materialKey);
   // Second moment of area for a rectangular section
   const I = (shelfDepthMm * Math.pow(thicknessMm, 3)) / 12;
   // Uniform load intensity (N/mm)

@@ -11,8 +11,8 @@ import {
   getStockSummary,
   formatStockReport,
   DEFAULT_REORDER_MULTIPLIER,
-} from '../../src/engine/stock-management';
-import type { StockLedger, StockRecord } from '../../src/engine/stock-management';
+} from '../../src/engine/stock';
+import type { StockLedger, StockRecord } from '../../src/engine/stock';
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────────
 

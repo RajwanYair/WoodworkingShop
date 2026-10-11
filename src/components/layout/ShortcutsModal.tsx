@@ -1,33 +1,26 @@
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
+import { APP_SHORTCUTS, APP_TAB_COMMANDS } from '../../utils/command-palette';
 
 interface ShortcutsModalProps {
   onClose: () => void;
 }
 
-const SHORTCUTS = [
-  { key: 'Alt + 1', descEn: 'Configurator tab', descHe: 'לשונית קונפיגורטור' },
-  { key: 'Alt + 2', descEn: 'Preview tab', descHe: 'לשונית תצוגה מקדימה' },
-  { key: 'Alt + 3', descEn: 'Optimizer tab', descHe: 'לשונית אופטימיזציה' },
-  { key: 'Alt + 4', descEn: 'Assembly tab', descHe: 'לשונית הרכבה' },
-  { key: 'Alt + 5', descEn: 'PDF tab', descHe: 'לשונית PDF' },
-  { key: 'Alt + D', descEn: 'Toggle dark mode', descHe: 'החלפת מצב כהה' },
-  { key: 'Ctrl + Z', descEn: 'Undo', descHe: 'בטל' },
-  { key: 'Ctrl + Y', descEn: 'Redo', descHe: 'בצע שוב' },
-  { key: 'Ctrl + Shift + Z', descEn: 'Redo (alternate)', descHe: 'בצע שוב (חלופי)' },
-  { key: 'Ctrl + P', descEn: 'Print', descHe: 'הדפס' },
-  { key: 'Ctrl + E', descEn: 'Export BOM CSV', descHe: 'ייצוא BOM CSV' },
-  { key: 'Ctrl + L', descEn: 'Copy share link', descHe: 'העתק קישור שיתוף' },
-  { key: 'Ctrl + Shift + N', descEn: 'Add cabinet', descHe: 'הוסף ארון' },
-  { key: 'Ctrl + Shift + K', descEn: 'Toggle focus mode', descHe: 'מצב מיקוד' },
-  { key: 'Ctrl + R', descEn: 'Reset cabinet to defaults', descHe: 'איפוס ארון לברירת מחדל' },
-  { key: '?', descEn: 'Show / hide this panel', descHe: 'הצג / הסתר לוח זה' },
+const SHORTCUTS: { key: string; descEn?: string; descHe?: string; descKey?: string }[] = [
+  ...Object.values(APP_SHORTCUTS).map(({ shortcut, labelKey }) => ({
+    key: shortcut.includes('+') ? shortcut.replaceAll('+', ' + ') : shortcut,
+    descKey: labelKey,
+  })),
+  ...APP_TAB_COMMANDS.filter((command) => command.shortcut !== null).map(({ shortcut, labelKey }) => ({
+    key: shortcut.replaceAll('+', ' + '),
+    descKey: labelKey,
+  })),
   { key: 'Escape', descEn: 'Close this panel', descHe: 'סגור לוח זה' },
 ];
 
 export function ShortcutsModal({ onClose }: ShortcutsModalProps) {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const dialogRef = useRef<HTMLDivElement>(null);
   const isHe = i18n.language === 'he';
 
@@ -78,7 +71,9 @@ export function ShortcutsModal({ onClose }: ShortcutsModalProps) {
                       {s.key}
                     </kbd>
                   </td>
-                  <td className="text-wood-600 dark:text-wood-300 py-1.5">{isHe ? s.descHe : s.descEn}</td>
+                  <td className="text-wood-600 dark:text-wood-300 py-1.5">
+                    {s.descKey ? t(s.descKey) : isHe ? s.descHe : s.descEn}
+                  </td>
                 </tr>
               ))}
             </tbody>

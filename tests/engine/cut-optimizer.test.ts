@@ -195,7 +195,7 @@ describe('optimizeCutSheets — grain conflict aggregation', () => {
 });
 
 // ─── Co-nesting test helpers (shared by findCoNestCandidates + applyCoNesting) ───
-const makePt = (id: string, w: number, l: number) => ({
+const makePt = (id: string, w: number, l: number, grainConflict = false) => ({
   partId: id,
   label: id,
   x: 0,
@@ -203,6 +203,7 @@ const makePt = (id: string, w: number, l: number) => ({
   width: w,
   length: l,
   grainVertical: true as const,
+  ...(grainConflict ? { grainConflict: true } : {}),
   edgeBanding: '',
 });
 const fakeSht = (material: string, idx: number, parts: ReturnType<typeof makePt>[] = [], thickness = 18) => ({
@@ -259,6 +260,14 @@ describe('applyCoNesting', () => {
     expect(applyCoNesting(r, new Set())).toBe(r);
   });
 
+  it('returns zero yield for an empty optimization result with a selected co-nest key', () => {
+    const result = applyCoNesting(fakeRes(), new Set(['18x1220x2440']));
+    expect(result.totalSheets).toBe(0);
+    expect(result.overallYield).toBe(0);
+    expect(result.totalWaste).toBe(0);
+    expect(result.grainConflictCount).toBe(0);
+  });
+
   it('reduces total sheet count and sets partMaterial when two materials are co-nested', () => {
     const sharedParts = (mat: string, idx: number) =>
       fakeSht(mat, idx, [makePt(`${mat}-P1`, 400, 400), makePt(`${mat}-P2`, 400, 400)]);
@@ -266,7 +275,11 @@ describe('applyCoNesting', () => {
     const out = applyCoNesting(r, new Set(['18x1220x2440']));
     // All 4 parts fit on 1 shared sheet (640000mm² << 2976800mm²)
     expect(out.totalSheets).toBeLessThan(r.totalSheets);
+    expect(out.overallYield).toBe(21.5);
+    expect(out.totalWaste).toBe(2_336_800);
+    expect(out.grainConflictCount).toBe(0);
     expect(out.sheets.every((s) => s.parts.every((p) => p.partMaterial !== undefined))).toBe(true);
+    expect(out.sheets[0].yieldPercent).toBe(21.5);
     const allParts = out.sheets.flatMap((s) => s.parts);
     expect(allParts.find((p) => p.partId === 'plywood-18-P1')?.partMaterial).toBe('plywood-18');
     expect(allParts.find((p) => p.partId === 'melamine-18-P1')?.partMaterial).toBe('melamine-18');
@@ -281,5 +294,14 @@ describe('applyCoNesting', () => {
     const hdfSheet = applyCoNesting(r, new Set(['18x1220x2440'])).sheets.find((s) => s.material === 'hdf-3');
     expect(hdfSheet).toBeDefined();
     expect(hdfSheet?.parts[0].partId).toBe('BP1');
+  });
+
+  it('preserves grain conflicts from sheets excluded from co-nesting', () => {
+    const result = fakeRes(
+      fakeSht('hdf-3', 0, [makePt('BP1', 100, 100, true), makePt('BP2', 100, 100, true)], 3),
+      fakeSht('plywood-18', 1, [makePt('P1', 200, 200)]),
+      fakeSht('melamine-18', 2, [makePt('P2', 200, 200)]),
+    );
+    expect(applyCoNesting(result, new Set(['18x1220x2440'])).grainConflictCount).toBe(2);
   });
 });

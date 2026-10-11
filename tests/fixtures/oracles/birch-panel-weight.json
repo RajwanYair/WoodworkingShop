@@ -1,0 +1,17 @@
+{
+  "source": "Density of Wood Species: Data & Material Guide",
+  "url": "https://www.engineeringtoolbox.com/wood-density-d_40.html",
+  "retrievedOn": "2026-09-28",
+  "condition": "seasoned and dry wood",
+  "species": "Birch",
+  "densityCases": [
+    { "densityKgM3": 510, "expectedWeightKg": 9.18 },
+    { "densityKgM3": 770, "expectedWeightKg": 13.86 }
+  ],
+  "panel": {
+    "lengthMm": 1000,
+    "widthMm": 1000,
+    "thicknessMm": 18,
+    "quantity": 1
+  }
+}

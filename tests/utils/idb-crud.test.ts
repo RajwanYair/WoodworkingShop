@@ -2,7 +2,7 @@
  * Integration tests for idb-keyval CRUD helpers in indexed-db-storage.ts.
  * Uses fake-indexeddb (imported globally via tests/setup.ts) — no mocking of idb-keyval.
  */
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
   idbLoadProjects,
   idbSaveProjects,
@@ -27,6 +27,59 @@ describe('idbLoadProjects / idbSaveProjects', () => {
   it('returns empty array when store is empty', async () => {
     const result = await idbLoadProjects();
     expect(result).toEqual([]);
+  });
+
+  it.each(['{not-json', '{}', 'null'])(
+    'preserves malformed legacy data and leaves the IndexedDB key unset',
+    async (legacyData) => {
+      const legacyKey = 'cabinet-planner-projects-v1';
+      const previousValue = localStorage.getItem(legacyKey);
+      await idbDel('all-projects');
+      localStorage.setItem(legacyKey, legacyData);
+
+      try {
+        await expect(idbLoadProjects()).rejects.toThrow(/migrate legacy project data/i);
+        expect(await idbGet('all-projects')).toBeUndefined();
+      } finally {
+        if (previousValue === null) localStorage.removeItem(legacyKey);
+        else localStorage.setItem(legacyKey, previousValue);
+      }
+    },
+  );
+
+  it('rejects unavailable localStorage without initializing the IndexedDB key', async () => {
+    await idbDel('all-projects');
+    const getItemSpy = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new DOMException('Storage access is blocked', 'SecurityError');
+    });
+
+    try {
+      await expect(idbLoadProjects()).rejects.toThrow(/unable to migrate legacy project data/i);
+      expect(await idbGet('all-projects')).toBeUndefined();
+    } finally {
+      getItemSpy.mockRestore();
+    }
+  });
+
+  it('reports unavailable IndexedDB without falling back to localStorage', async () => {
+    const getItemSpy = vi.spyOn(Storage.prototype, 'getItem');
+    vi.stubGlobal('indexedDB', undefined);
+
+    try {
+      await expect(idbLoadProjects()).rejects.toThrow(/indexeddb is unavailable/i);
+      expect(getItemSpy).not.toHaveBeenCalled();
+    } finally {
+      getItemSpy.mockRestore();
+      vi.unstubAllGlobals();
+    }
+  });
+
+  it('rejects a non-array IndexedDB value without replacing the corrupt record', async () => {
+    const corruptRecord = { projects: 'not-an-array' };
+    await idbSet('all-projects', corruptRecord);
+
+    await expect(idbLoadProjects()).rejects.toThrow(/invalid saved project storage/i);
+    expect(await idbGet('all-projects')).toEqual(corruptRecord);
   });
 
   it('round-trips an array of projects', async () => {

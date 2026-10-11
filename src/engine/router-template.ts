@@ -19,6 +19,8 @@
  * nominal feature dimension changes after template adjustment.
  */
 
+import { assertFiniteNumber } from './invariant';
+
 export type RouterTemplateCutType = 'inside' | 'outside';
 
 export interface RouterTemplateInput {
@@ -50,8 +52,19 @@ export interface RouterTemplateResult {
   adjustedDimensionMm: number | null;
 }
 
+/**
+ * Calculate guide-bushing offset and the corresponding template adjustment.
+ * @param input Bushing/bit diameters, cut direction, and optional feature dimension in millimetres.
+ * @returns Offset, per-side/total template adjustment, and optional adjusted dimension.
+ * @throws {RangeError} When dimensions are non-finite/out of range or the adjusted feature is not positive.
+ */
 export function calculateRouterTemplate(input: RouterTemplateInput): RouterTemplateResult {
   const { bushingODMm, bitDiameterMm, cutType, nominalDimensionMm } = input;
+
+  const fn = 'calculateRouterTemplate';
+  assertFiniteNumber(fn, 'bushingODMm', bushingODMm);
+  assertFiniteNumber(fn, 'bitDiameterMm', bitDiameterMm);
+  if (nominalDimensionMm !== undefined) assertFiniteNumber(fn, 'nominalDimensionMm', nominalDimensionMm);
 
   if (bushingODMm <= 0) {
     throw new RangeError('bushingODMm must be greater than 0');
@@ -67,16 +80,23 @@ export function calculateRouterTemplate(input: RouterTemplateInput): RouterTempl
   }
 
   const offsetMm = Math.round(((bushingODMm - bitDiameterMm) / 2) * 1000) / 1000;
+  assertFiniteNumber(fn, 'offsetMm', offsetMm);
 
   // Inside cut: template must grow by offset per side (pattern is inside the bushing path)
   // Outside cut: template must shrink by offset per side
   const templateAdjustmentPerSideMm = cutType === 'inside' ? offsetMm : -offsetMm;
   const totalTemplateAdjustmentMm = Math.round(templateAdjustmentPerSideMm * 2 * 1000) / 1000;
+  assertFiniteNumber(fn, 'templateAdjustmentPerSideMm', templateAdjustmentPerSideMm);
+  assertFiniteNumber(fn, 'totalTemplateAdjustmentMm', totalTemplateAdjustmentMm);
 
   let adjustedDimensionMm: number | null = null;
   if (nominalDimensionMm !== undefined) {
     // Template dimension = nominal + total adjustment (shrink or grow)
     adjustedDimensionMm = Math.round((nominalDimensionMm + totalTemplateAdjustmentMm) * 1000) / 1000;
+    assertFiniteNumber(fn, 'adjustedDimensionMm', adjustedDimensionMm);
+    if (adjustedDimensionMm <= 0) {
+      throw new RangeError(`calculateRouterTemplate: adjustedDimensionMm must be positive, got ${adjustedDimensionMm}`);
+    }
   }
 
   return {

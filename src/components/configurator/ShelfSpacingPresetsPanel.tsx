@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { getMaterial } from '../../engine/materials';
 import { calculateShelfSpacing, getShelfPresets } from '../../engine/shelf-spacing';
 import type { ShelfPresetId } from '../../engine/shelf-spacing';
@@ -9,6 +10,7 @@ import type { ShelfPresetId } from '../../engine/shelf-spacing';
 export function ShelfSpacingPresetsPanel() {
   const { t, i18n } = useTranslation();
   const { config } = useCabinetStore();
+  const customMaterials = useCustomMaterialsStore((state) => state.materials);
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<ShelfPresetId>('books-standard');
   const [customClearance, setCustomClearance] = useState(250);
@@ -16,7 +18,7 @@ export function ShelfSpacingPresetsPanel() {
   const lang = i18n.language === 'he' ? 'he' : 'en';
   const presets = getShelfPresets();
 
-  const carcassMat = getMaterial(config.carcassMaterial);
+  const carcassMat = getMaterial(config.carcassMaterial, customMaterials);
   const matThickness = carcassMat?.thickness ?? 18;
 
   // Internal height = external height − 2× carcass panel thickness (top + bottom)
@@ -28,7 +30,7 @@ export function ShelfSpacingPresetsPanel() {
         selected,
         internalHeightMm,
         matThickness,
-        selected === 'custom' ? customClearance : undefined,
+        selected === 'custom' ? Math.max(50, customClearance) : undefined,
       ),
     [selected, internalHeightMm, matThickness, customClearance],
   );
@@ -89,7 +91,8 @@ export function ShelfSpacingPresetsPanel() {
                   max={2000}
                   step={10}
                   value={customClearance}
-                  onChange={(e) => setCustomClearance(Math.max(50, Number(e.target.value)))}
+                  onChange={(e) => setCustomClearance(Number(e.target.value))}
+                  onBlur={() => setCustomClearance(Math.max(50, customClearance))}
                   className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 dark:text-wood-100 w-24 rounded border bg-white px-2 py-1 text-sm"
                 />
                 <span className="text-wood-500 text-xs">{t('shelfSpacingPanel.mm')}</span>

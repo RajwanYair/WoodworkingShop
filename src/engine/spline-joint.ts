@@ -4,6 +4,8 @@
  * Computes slot and spline sizing plus estimated glue area for a spline joint.
  */
 
+import { assertFiniteNumber } from './invariant';
+
 export interface SplineJointInput {
   /** Thickness of each mating board (mm). */
   boardThicknessMm: number;
@@ -41,6 +43,13 @@ export interface SplineJointResult {
 export function calculateSplineJoint(input: SplineJointInput): SplineJointResult {
   const { boardThicknessMm, splineThicknessMm, slotDepthPerBoardMm, jointLengthMm, splineCount } = input;
 
+  const fn = 'calculateSplineJoint';
+  assertFiniteNumber(fn, 'boardThicknessMm', boardThicknessMm);
+  assertFiniteNumber(fn, 'splineThicknessMm', splineThicknessMm);
+  assertFiniteNumber(fn, 'slotDepthPerBoardMm', slotDepthPerBoardMm);
+  assertFiniteNumber(fn, 'jointLengthMm', jointLengthMm);
+  assertFiniteNumber(fn, 'splineCount', splineCount);
+
   if (boardThicknessMm <= 0) {
     throw new RangeError(`calculateSplineJoint: boardThicknessMm must be > 0, got ${boardThicknessMm}`);
   }
@@ -53,8 +62,8 @@ export function calculateSplineJoint(input: SplineJointInput): SplineJointResult
   if (jointLengthMm <= 0) {
     throw new RangeError(`calculateSplineJoint: jointLengthMm must be > 0, got ${jointLengthMm}`);
   }
-  if (!Number.isInteger(splineCount) || splineCount <= 0) {
-    throw new RangeError(`calculateSplineJoint: splineCount must be a positive integer, got ${splineCount}`);
+  if (!Number.isSafeInteger(splineCount) || splineCount <= 0) {
+    throw new RangeError(`calculateSplineJoint: splineCount must be a positive safe integer, got ${splineCount}`);
   }
   if (splineThicknessMm >= boardThicknessMm) {
     throw new RangeError(
@@ -78,6 +87,12 @@ export function calculateSplineJoint(input: SplineJointInput): SplineJointResult
   // Two slot walls per board and two boards per spline: 4 wall faces total.
   const glueAreaPerSplineMm2 = round3(4 * slotDepthPerBoardMm * jointLengthMm);
   const totalGlueAreaMm2 = round3(glueAreaPerSplineMm2 * splineCount);
+  assertFiniteNumber(fn, 'recommendedSlotWidthMm', recommendedSlotWidthMm);
+  assertFiniteNumber(fn, 'totalInsertionDepthMm', totalInsertionDepthMm);
+  assertFiniteNumber(fn, 'remainingWallThicknessMm', remainingWallThicknessMm);
+  assertFiniteNumber(fn, 'totalSplineLengthMm', totalSplineLengthMm);
+  assertFiniteNumber(fn, 'glueAreaPerSplineMm2', glueAreaPerSplineMm2);
+  assertFiniteNumber(fn, 'totalGlueAreaMm2', totalGlueAreaMm2);
 
   return {
     recommendedSlotWidthMm,

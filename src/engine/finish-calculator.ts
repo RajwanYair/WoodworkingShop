@@ -129,10 +129,19 @@ function selectCanSizes(litresNeeded: number): CanSelection[] {
  * @param totalAreaM2   Total exposed surface area in m² (all parts, both faces + edges).
  * @param finishType    Chosen finish product type.
  * @param coats         Number of coats to apply (defaults to `FINISH_SPECS[finishType].defaultCoats`).
+ * @returns Finish volume and a combination of standard can sizes.
+ * @throws {RangeError} when the surface area is negative or non-finite, or coats are not positive and finite.
  */
 export function calculateFinish(totalAreaM2: number, finishType: FinishType, coats?: number): FinishEstimate {
+  if (!Number.isFinite(totalAreaM2) || totalAreaM2 < 0) {
+    throw new RangeError(`calculateFinish: totalAreaM2 must be finite and non-negative, got ${totalAreaM2}`);
+  }
+
   const spec = FINISH_SPECS[finishType];
   const actualCoats = coats ?? spec.defaultCoats;
+  if (!Number.isFinite(actualCoats) || actualCoats <= 0) {
+    throw new RangeError(`calculateFinish: coats must be positive and finite, got ${actualCoats}`);
+  }
   const litresNeeded = (totalAreaM2 * actualCoats) / spec.coverageM2PerLitre;
   const canSizes = selectCanSizes(litresNeeded);
   const totalCanLitres = canSizes.reduce((s, c) => s + c.size * c.count, 0);

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import * as fc from 'fast-check';
 import { calculateCompoundMiter, calculatePolygonMiter } from '../../src/engine/miter-angle';
 import { calculateRafterLength } from '../../src/engine/rafter-length';
+import { propertyRunOptions } from '../property-seeds';
 
 const NUM_RUNS = 200;
 const ANGLE_TOLERANCE = 0.05;
@@ -18,7 +19,7 @@ describe('geometry property invariants', () => {
 
         return miterIdentity && interiorIdentity;
       }),
-      { numRuns: NUM_RUNS },
+      propertyRunOptions('tests/engine/geometry-invariants.property.test.ts', NUM_RUNS),
     );
   });
 
@@ -38,7 +39,7 @@ describe('geometry property invariants', () => {
           result.bevelAngle <= 90
         );
       }),
-      { numRuns: NUM_RUNS },
+      propertyRunOptions('tests/engine/geometry-invariants.property.test.ts', NUM_RUNS),
     );
   });
 
@@ -68,7 +69,7 @@ describe('geometry property invariants', () => {
           Math.abs(result.plumbCutAngleDeg + result.seatCutAngleDeg - 90) < ANGLE_TOLERANCE
         );
       }),
-      { numRuns: NUM_RUNS },
+      propertyRunOptions('tests/engine/geometry-invariants.property.test.ts', NUM_RUNS),
     );
   });
 

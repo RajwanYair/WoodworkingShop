@@ -1,10 +1,38 @@
 import { describe, it, expect } from 'vitest';
 import { calculateWoodTurning } from '../../src/engine/wood-turning';
 import type { TurningOperation } from '../../src/engine/wood-turning';
+import WOOD_TURNING_SURFACE_SPEED_ORACLE from '../fixtures/oracles/wood-turning-surface-speed.json';
 
 const MM_TO_IN = 1 / 25.4;
 
 describe('calculateWoodTurning', () => {
+  it.each([
+    { operation: 'roughing' as const, recommendedRpm: 914, surfaceSpeedMPerMin: 287.1 },
+    { operation: 'finishing' as const, recommendedRpm: 1270, surfaceSpeedMPerMin: 399 },
+    { operation: 'sanding' as const, recommendedRpm: 1422, surfaceSpeedMPerMin: 446.7 },
+  ])(
+    'matches the 100 mm $operation RPM and surface-speed oracle',
+    ({ operation, recommendedRpm, surfaceSpeedMPerMin }) => {
+      const result = calculateWoodTurning({ blankDiameterMm: 100, operation });
+
+      expect(result.minRpm).toBe(508);
+      expect(result.maxRpm).toBe(1524);
+      expect(result.recommendedRpm).toBe(recommendedRpm);
+      expect(result.surfaceSpeedMPerMin).toBe(surfaceSpeedMPerMin);
+    },
+  );
+
+  it('matches the published surface-speed formula for the reference case', () => {
+    const { input, expected } = WOOD_TURNING_SURFACE_SPEED_ORACLE;
+    const result = calculateWoodTurning({ blankDiameterMm: input.blankDiameterMm, operation: 'finishing' });
+    const referenceSurfaceSpeedMPerMin = Math.round(((Math.PI * input.blankDiameterMm * input.rpm) / 1000) * 10) / 10;
+    const engineSurfaceSpeedMPerMin =
+      Math.round(((Math.PI * input.blankDiameterMm * result.recommendedRpm) / 1000) * 10) / 10;
+
+    expect(referenceSurfaceSpeedMPerMin).toBe(expected.surfaceSpeedMPerMin);
+    expect(result.surfaceSpeedMPerMin).toBe(engineSurfaceSpeedMPerMin);
+  });
+
   describe('RPM limits follow 6000/d and 2000/d formulas', () => {
     it.each([
       [50, Math.floor(6000 / (50 * MM_TO_IN)), Math.floor(2000 / (50 * MM_TO_IN))],
@@ -44,6 +72,32 @@ describe('calculateWoodTurning', () => {
     const large = calculateWoodTurning({ blankDiameterMm: 300, operation: 'finishing' });
     expect(large.maxRpm).toBeLessThan(small.maxRpm);
   });
+
+  it('keeps the recommended speed inside the reported range for a large blank', () => {
+    const result = calculateWoodTurning({ blankDiameterMm: 1000, operation: 'finishing' });
+
+    expect(result.minRpm).toBe(152);
+    expect(result.maxRpm).toBe(152);
+    expect(result.recommendedRpm).toBe(152);
+    expect(result.surfaceSpeedMPerMin).toBe(477.5);
+    expect(result.minRpm).toBeLessThanOrEqual(result.maxRpm);
+    expect(result.recommendedRpm).toBeGreaterThanOrEqual(result.minRpm);
+    expect(result.recommendedRpm).toBeLessThanOrEqual(result.maxRpm);
+  });
+
+  it.each([Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY])(
+    'throws for non-finite blank diameter %s',
+    (blankDiameterMm) => {
+      expect(() => calculateWoodTurning({ blankDiameterMm, operation: 'roughing' })).toThrow(RangeError);
+    },
+  );
+
+  it.each([Number.MIN_VALUE, 1e-305, Number.MAX_VALUE])(
+    'throws for finite blank diameter without usable RPM estimates: %s',
+    (blankDiameterMm) => {
+      expect(() => calculateWoodTurning({ blankDiameterMm, operation: 'roughing' })).toThrow(RangeError);
+    },
+  );
 
   it('throws for zero diameter', () => {
     expect(() => calculateWoodTurning({ blankDiameterMm: 0, operation: 'roughing' })).toThrow(RangeError);

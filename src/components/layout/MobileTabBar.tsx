@@ -1,17 +1,18 @@
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore, type CabinetState } from '../../store/cabinet-store';
 import { useHaptics } from '../../hooks/useHaptics';
+import { transitionTab } from './transition-tab';
 
 type Tab = CabinetState['activeTab'];
 
 const TABS: { id: Tab; icon: string; labelKey: string }[] = [
-  { id: 'workspace', icon: '🏷️🪵', labelKey: 'tabs.workspace' },
-  { id: 'configurator', icon: '⚙️🪚', labelKey: 'tabs.configurator' },
-  { id: 'preview', icon: '👁️✨', labelKey: 'tabs.preview' },
-  { id: 'optimizer', icon: '✂️📐', labelKey: 'tabs.optimizer' },
-  { id: 'assembly', icon: '🔨🧰', labelKey: 'tabs.assembly' },
-  { id: 'pdf', icon: '📄🗂️', labelKey: 'tabs.pdf' },
-  { id: 'calculators', icon: '🧮📏', labelKey: 'tabs.calculators' },
+  { id: 'workspace', icon: '🏷️', labelKey: 'tabs.workspace' },
+  { id: 'configurator', icon: '⚙️', labelKey: 'tabs.configurator' },
+  { id: 'preview', icon: '👁️', labelKey: 'tabs.preview' },
+  { id: 'optimizer', icon: '✂️', labelKey: 'tabs.optimizer' },
+  { id: 'assembly', icon: '🔨', labelKey: 'tabs.assembly' },
+  { id: 'pdf', icon: '📄', labelKey: 'tabs.pdf' },
+  { id: 'calculators', icon: '🧮', labelKey: 'tabs.calculators' },
 ];
 
 /**
@@ -35,25 +36,30 @@ export function MobileTabBar() {
         return (
           <button
             key={tab.id}
-            role="tab"
-            aria-selected={isActive}
+            aria-current={isActive ? 'page' : undefined}
             aria-label={t(tab.labelKey)}
             onClick={() => {
-              setActiveTab(tab.id);
+              if (activeTab !== tab.id) transitionTab(() => setActiveTab(tab.id));
               haptics.selectionChanged();
             }}
             className={[
-              'flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-xs transition-colors',
-              isActive ? 'text-wood-700 dark:text-wood-100 font-semibold' : 'text-wood-400 dark:text-wood-500',
+              'flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 py-2 text-xs transition-colors',
+              isActive ? 'text-wood-700 dark:text-wood-100 font-semibold' : 'text-wood-600 dark:text-wood-300',
             ].join(' ')}
           >
             {isActive ? (
-              <img src="/tab-sparkle.svg" alt="" aria-hidden="true" className="h-3 w-8 opacity-90" loading="lazy" />
+              <img
+                src={`${import.meta.env.BASE_URL}tab-sparkle.svg`}
+                alt=""
+                aria-hidden="true"
+                className="h-3 w-8 opacity-90"
+                loading="lazy"
+              />
             ) : null}
             <span aria-hidden="true" className="text-lg leading-none">
               {tab.icon}
             </span>
-            <span className="leading-none">{t(tab.labelKey)}</span>
+            <span className="block max-w-full truncate leading-none">{t(tab.labelKey)}</span>
           </button>
         );
       })}

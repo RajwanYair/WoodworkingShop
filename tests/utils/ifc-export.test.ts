@@ -4,7 +4,7 @@
  * Tests for src/utils/ifc-export.ts
  */
 import { describe, it, expect } from 'vitest';
-import { exportToIfc, guid } from '../../src/utils/ifc-export';
+import { exportToIfc, guid } from '../../src/utils/ifc-project-export';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 import type { CabinetEntry } from '../../src/store/cabinet-store';
 

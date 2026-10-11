@@ -7,18 +7,21 @@ export function DefectZonePanel({
   materials,
   defectZones,
   onAdd,
+  onUpdate,
   onRemove,
   t,
 }: {
   materials: string[];
   defectZones: Record<string, DefectZone[]>;
   onAdd: (materialKey: string, zone: DefectZone) => void;
+  onUpdate: (materialKey: string, zoneIndex: number, zone: DefectZone) => void;
   onRemove: (materialKey: string, zoneIndex: number) => void;
   t: (k: string) => string;
 }) {
   const [open, setOpen] = useState(false);
   const [editMat, setEditMat] = useState('');
   const [form, setForm] = useState({ x: 0, y: 0, width: 100, length: 100 });
+  const [editingZone, setEditingZone] = useState<{ materialKey: string; index: number } | null>(null);
 
   const allZones = materials.flatMap((m) => (defectZones[m] ?? []).map((z, i) => ({ ...z, material: m, idx: i })));
 
@@ -26,7 +29,15 @@ export function DefectZonePanel({
 
   const handleAdd = () => {
     if (!editMat || form.width <= 0 || form.length <= 0) return;
-    onAdd(editMat, { x: form.x, y: form.y, width: form.width, length: form.length });
+    const zone = { x: form.x, y: form.y, width: form.width, length: form.length };
+    if (editingZone) onUpdate(editingZone.materialKey, editingZone.index, zone);
+    else onAdd(editMat, zone);
+    setEditingZone(null);
+    setForm({ x: 0, y: 0, width: 100, length: 100 });
+  };
+
+  const cancelEdit = () => {
+    setEditingZone(null);
     setForm({ x: 0, y: 0, width: 100, length: 100 });
   };
 
@@ -54,6 +65,7 @@ export function DefectZonePanel({
               <select
                 value={editMat}
                 onChange={(e) => setEditMat(e.target.value)}
+                disabled={editingZone !== null}
                 className="border-wood-300 dark:border-wood-600 rounded border bg-white px-1.5 py-1 text-xs dark:bg-neutral-800"
               >
                 <option value="">—</option>
@@ -82,8 +94,17 @@ export function DefectZonePanel({
               disabled={!editMat || form.width <= 0 || form.length <= 0}
               className="rounded bg-red-600 px-2.5 py-1 text-xs font-medium text-white hover:bg-red-700 disabled:opacity-40"
             >
-              {t('optimizer.defectAdd')}
+              {editingZone ? t('common.saveEdit') : t('optimizer.defectAdd')}
             </button>
+            {editingZone && (
+              <button
+                type="button"
+                onClick={cancelEdit}
+                className="border-wood-300 dark:border-wood-600 rounded border px-2.5 py-1 text-xs"
+              >
+                {t('common.cancel')}
+              </button>
+            )}
           </div>
           {/* Existing zones */}
           {allZones.length === 0 ? (
@@ -98,9 +119,22 @@ export function DefectZonePanel({
                   </span>
                   <button
                     type="button"
+                    onClick={() => {
+                      setEditMat(z.material);
+                      setForm({ x: z.x, y: z.y, width: z.width, length: z.length });
+                      setEditingZone({ materialKey: z.material, index: z.idx });
+                    }}
+                    className="text-wood-500 hover:text-wood-700 dark:hover:text-wood-200"
+                    aria-label={`${t('common.edit')} ${z.material}`}
+                  >
+                    {t('common.edit')}
+                  </button>
+                  <button
+                    type="button"
                     onClick={() => onRemove(z.material, z.idx)}
                     className="ms-auto text-[10px] text-red-400 hover:text-red-600"
                     title={t('optimizer.defectRemove')}
+                    aria-label={`${t('optimizer.defectRemove')} ${z.material}`}
                   >
                     ✕
                   </button>

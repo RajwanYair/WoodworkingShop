@@ -41,7 +41,7 @@ src/
 │   ├── dimensions.ts        # Derived dimensions from config
 │   ├── parts.ts             # Part list generation
 │   ├── hardware.ts          # Hardware BOM generation
-│   ├── cut-optimizer.ts     # FFD bin-packing for cut sheets
+│   ├── cut-optimizer.ts     # MaxRects BSSF bin-packing for cut sheets
 │   ├── smart-optimizer.ts   # 5 optimization strategies
 │   ├── assembly.ts          # Assembly step generation
 │   ├── cost-estimator.ts    # Cost breakdown calculation
@@ -72,12 +72,18 @@ src/
 │   ├── index.ts             # i18next setup
 │   ├── en.json              # English translations
 │   └── he.json              # Hebrew translations (RTL)
+│   ├── ar.json              # Arabic translations (RTL)
+│   ├── de.json              # German translations
+│   ├── es.json              # Spanish translations
+│   └── fr.json              # French translations
 ├── utils/
 │   ├── bom-export.ts        # CSV bill of materials export
 │   ├── download.ts          # Shared file download helper
 │   ├── dxf-export.ts        # AutoCAD R12 DXF export for CNC
 │   ├── gcode-export.ts      # G-code export for CNC routers
+│   ├── indexed-db-storage.ts # IndexedDB persistence and localStorage migration
 │   ├── local-storage.ts     # localStorage persistence
+│   ├── project-storage.ts   # Saved projects and snapshots
 │   ├── units.ts             # Metric ↔ imperial conversion
 │   └── url-state.ts         # URL query param serialization
 └── assets/                  # Static assets (favicon, etc.)
@@ -131,6 +137,10 @@ Two supplementary stores:
 
 - `custom-materials-store.ts` — user-defined materials persisted to localStorage
 - `toast-store.ts` — notification queue with auto-dismiss
+
+Saved projects, configurations, and snapshots use IndexedDB through `idb-keyval` in
+`utils/indexed-db-storage.ts`. Existing localStorage project/config data migrates one-way on first
+access; session state and UI preferences continue to use localStorage.
 
 ## 📦 Build & Deploy
 
@@ -309,11 +319,11 @@ graph TD
     tc --> lint["ESLint\n0 warnings"]
     lint --> mdlint["markdownlint"]
     mdlint --> fmt["format:check\nPrettier"]
-    fmt --> test["Vitest unit tests\n~1900+ tests"]
+    fmt --> test["Vitest unit tests\n5,256 tests across 341 files"]
     test --> cov["Coverage report\nNode 22 only"]
     cov --> build["Vite build"]
-    build --> bcheck["Bundle budget check\n2 MB gzip limit"]
-    bcheck --> e2e["Playwright E2E\nChromium + Firefox"]
+    build --> bcheck["Bundle budget check\n2,960 KB raw limit"]
+    bcheck --> e2e["Playwright E2E\nChromium + Firefox; WebKit preview subset"]
     e2e --> lhci["Lighthouse CI\nperf / a11y / SEO"]
   end
 
@@ -502,3 +512,4 @@ Hebrew (`he`) locale triggers `document.dir = 'rtl'`. Tailwind's logical-propert
 
 - PDF exports (`@react-pdf/renderer`) are not keyboard-navigable (the generated PDF is a binary file; this is a platform constraint).
 - The isometric 3D SVG view does not expose individual panel labels to screen readers — only the cabinet-level `<title>` and `<desc>` are present (improvement tracked in ROADMAP).
+- Browser verification is intentionally uneven: the full journey suite runs in Chromium and Firefox; desktop and mobile WebKit run preview acceptance only. The six-locale axe matrix and responsive/visual preview matrices are Chromium-only. Sprint 318's 2026-10-02 no-retry run passed 439 tests with 13 intentional project-scope skips and no failures.

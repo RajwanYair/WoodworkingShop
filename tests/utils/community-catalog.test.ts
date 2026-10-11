@@ -1,7 +1,7 @@
 /**
  * Community Material Catalog — Future Horizons / Sprint 13
  *
- * Tests for src/utils/community-catalog.ts
+ * Tests for src/utils/community-catalog-io.ts
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
@@ -12,9 +12,9 @@ import {
   getCommunityMaterialsByRegion,
   mergeMaterialCatalogs,
   DEFAULT_CATALOG_URL,
-} from '../../src/utils/community-catalog';
+} from '../../src/utils/community-catalog-io';
 import { MATERIALS } from '../../src/engine/materials';
-import type { CommunityMaterial, CommunityCatalog } from '../../src/utils/community-catalog';
+import type { CommunityMaterial, CommunityCatalog } from '../../src/utils/community-catalog-io';
 
 // ── Fixtures ──────────────────────────────────────────────────────────────────
 
@@ -39,7 +39,7 @@ function makeCatalog(materials: CommunityMaterial[] = []): CommunityCatalog {
   return { version: '1', updatedAt: '2025-01-01T00:00:00Z', materials };
 }
 
-function makeFetch(catalog: CommunityCatalog, status = 200): typeof fetch {
+function makeFetch(catalog: unknown, status = 200): typeof fetch {
   return vi.fn().mockResolvedValue({
     ok: status >= 200 && status < 300,
     status,
@@ -77,13 +77,12 @@ describe('validateCatalog', () => {
     expect(() => validateCatalog({ version: '1' })).toThrow('materials');
   });
 
-  it('filters out invalid material entries silently', () => {
+  it('rejects the catalog when a material entry is invalid', () => {
     const raw = {
       version: '1',
       materials: [makeMaterial('valid'), { not: 'a material' }, makeMaterial('also-valid')],
     };
-    const result = validateCatalog(raw);
-    expect(result.materials).toHaveLength(2);
+    expect(() => validateCatalog(raw)).toThrow('Invalid community material at index 1');
   });
 
   it('uses current timestamp when updatedAt missing', () => {
@@ -124,6 +123,24 @@ describe('fetchCommunityMaterials', () => {
   it('throws on non-OK HTTP response', async () => {
     const badFetch = makeFetch(makeCatalog(), 404);
     await expect(fetchCommunityMaterials('https://x.com', badFetch)).rejects.toThrow('HTTP 404');
+  });
+
+  it('rejects invalid material rows without partially replacing the cached catalog', async () => {
+    const existing = makeCatalog([makeMaterial('existing')]);
+    await fetchCommunityMaterials('https://example.com/valid', makeFetch(existing));
+
+    const invalidCatalog = {
+      version: '1',
+      updatedAt: '2025-01-02T00:00:00Z',
+      materials: [makeMaterial('valid-new'), { key: 'invalid', thickness: '18', pricePerSheet: 100 }],
+    };
+
+    await expect(fetchCommunityMaterials('https://example.com/invalid', makeFetch(invalidCatalog))).rejects.toThrow(
+      'Invalid community material at index 1',
+    );
+    const { materials, meta } = await loadCachedCommunityMaterials();
+    expect(materials.map((material) => material.key)).toEqual(['existing']);
+    expect(meta?.url).toBe('https://example.com/valid');
   });
 });
 

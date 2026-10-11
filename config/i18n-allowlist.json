@@ -1,0 +1,12 @@
+{
+  "identical": [
+    "erp.sap",
+    "erp.oracle",
+    "pdf.pageSizeA4",
+    "cost.notSet",
+    "plugins.version",
+    "gcode.presetShapeoko3",
+    "gcode.presetXcarve1000",
+    "gcode.presetGenmitsu"
+  ]
+}

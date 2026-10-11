@@ -1,0 +1,20 @@
+{
+  "source": "Festool, Routing circles using MFS multi-routing template",
+  "url": "https://www.festoolusa.com/knowledge/application-examples/routing-circles",
+  "retrievedOn": "2026-10-01",
+  "condition": "For a 200 mm target radius with a 14 mm cutter, Festool specifies a 193 mm setting for an outer radius and a 207 mm setting for an inner radius.",
+  "input": {
+    "targetDiameterMm": 400,
+    "bitDiameterMm": 14
+  },
+  "cases": [
+    {
+      "cutMode": "disc",
+      "armLengthMm": 193
+    },
+    {
+      "cutMode": "hole",
+      "armLengthMm": 207
+    }
+  ]
+}

@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { findOptimizations, type SmartOptimizerOptions } from '../../engine/smart-optimizer';
 import { ComparisonView } from './ComparisonView';
-import type { OptimizationSuggestion, SmartStrategy, Lang } from '../../engine/types';
+import { resolveEngineLang } from './resolve-engine-lang';
+import type { OptimizationSuggestion, SmartStrategy } from '../../engine/types';
 
 const ALL_STRATEGIES: SmartStrategy[] = [
   'reduce-depth',
@@ -16,7 +18,8 @@ const ALL_STRATEGIES: SmartStrategy[] = [
 export function SmartOptimizerPanel() {
   const { t, i18n } = useTranslation();
   const { config, setConfig } = useCabinetStore();
-  const lang = i18n.language as Lang;
+  const customMaterials = useCustomMaterialsStore((state) => state.materials);
+  const lang = resolveEngineLang(i18n.language);
 
   const [strategies, setStrategies] = useState<SmartStrategy[]>([...ALL_STRATEGIES]);
   const [tolerance, setTolerance] = useState(20);
@@ -33,7 +36,7 @@ export function SmartOptimizerPanel() {
     // Use setTimeout to let the UI update before heavy computation
     setTimeout(() => {
       const opts: Partial<SmartOptimizerOptions> = { strategies, tolerance };
-      const suggestions = findOptimizations(config, opts);
+      const suggestions = findOptimizations(config, opts, customMaterials);
       setResults(suggestions);
       setRunning(false);
     }, 10);
@@ -60,9 +63,7 @@ export function SmartOptimizerPanel() {
 
       {/* Strategy checkboxes */}
       <div>
-        <label className="text-wood-600 dark:text-wood-300 mb-1 block text-xs font-medium">
-          {t('optimizer.strategies')}
-        </label>
+        <p className="text-wood-600 dark:text-wood-300 mb-1 block text-xs font-medium">{t('optimizer.strategies')}</p>
         <div className="flex flex-wrap gap-2">
           {ALL_STRATEGIES.map((s) => (
             <label
@@ -83,10 +84,14 @@ export function SmartOptimizerPanel() {
 
       {/* Tolerance slider */}
       <div>
-        <label className="text-wood-600 dark:text-wood-300 mb-1 block text-xs font-medium">
+        <label
+          htmlFor="smart-optimizer-tolerance"
+          className="text-wood-600 dark:text-wood-300 mb-1 block text-xs font-medium"
+        >
           {t('optimizer.tolerance')}: ±{tolerance} mm
         </label>
         <input
+          id="smart-optimizer-tolerance"
           type="range"
           min={2}
           max={50}

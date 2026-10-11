@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import { formatDim } from '../../utils/units';
 import type { UnitSystem } from '../../utils/units';
 import { getMaterialTexture } from '../../engine/material-textures';
@@ -66,6 +67,14 @@ export function IsometricView({
   showDims: boolean;
   units: UnitSystem;
 }) {
+  const resourcePrefix = useId().replaceAll(':', '');
+  const resourceIds = {
+    handle: `${resourcePrefix}-iso-handle-grad`,
+    top: `${resourcePrefix}-iso-tex-top`,
+    side: `${resourcePrefix}-iso-tex-side`,
+    front: `${resourcePrefix}-iso-tex-front`,
+  };
+
   const sc = 0.18; // scale
   const W = w * sc;
   const H = h * sc;
@@ -98,9 +107,9 @@ export function IsometricView({
 
   // Sprint 69 — material texture atlas: pattern fills fall back to brightness-adjusted colours
   const tex = materialId ? getMaterialTexture(materialId) : undefined;
-  const topFill = tex ? 'url(#iso-tex-top)' : adjustBrightness(color, 20);
-  const sideFill = tex ? 'url(#iso-tex-side)' : adjustBrightness(color, -30);
-  const frontFill = tex ? 'url(#iso-tex-front)' : color;
+  const topFill = tex ? `url(#${resourceIds.top})` : adjustBrightness(color, 20);
+  const sideFill = tex ? `url(#${resourceIds.side})` : adjustBrightness(color, -30);
+  const frontFill = tex ? `url(#${resourceIds.front})` : color;
   const interiorFill = adjustBrightness(color, -50);
 
   // Derive drawer front height strips (distributed from bottom above kick)
@@ -135,17 +144,14 @@ export function IsometricView({
       className="border-wood-200 dark:border-wood-700 dark:bg-wood-800 text-wood-600 dark:text-wood-200 max-h-125 w-full max-w-lg rounded border bg-white"
     >
       <defs>
-        <filter id="iso-shadow" x="-8%" y="-5%" width="120%" height="120%">
-          <feDropShadow dx="3" dy="5" stdDeviation="5" floodColor="#000" floodOpacity="0.28" />
-        </filter>
-        <linearGradient id="iso-handle-grad" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id={resourceIds.handle} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#e8c060" />
           <stop offset="50%" stopColor="#c8a040" />
           <stop offset="100%" stopColor="#a07820" />
         </linearGradient>
         {tex && (
           <>
-            <pattern id="iso-tex-top" x="0" y="0" width="64" height="64" patternUnits="userSpaceOnUse">
+            <pattern id={resourceIds.top} x="0" y="0" width="64" height="64" patternUnits="userSpaceOnUse">
               <rect width="64" height="64" fill={tex.baseColor} />
               {tex.grainLines.map((l, idx) => (
                 <line
@@ -160,7 +166,7 @@ export function IsometricView({
                 />
               ))}
             </pattern>
-            <pattern id="iso-tex-side" x="0" y="0" width="64" height="64" patternUnits="userSpaceOnUse">
+            <pattern id={resourceIds.side} x="0" y="0" width="64" height="64" patternUnits="userSpaceOnUse">
               <rect width="64" height="64" fill={tex.sideColor ?? adjustBrightness(tex.baseColor, -30)} />
               {tex.grainLines.map((l, idx) => (
                 <line
@@ -175,7 +181,7 @@ export function IsometricView({
                 />
               ))}
             </pattern>
-            <pattern id="iso-tex-front" x="0" y="0" width="64" height="64" patternUnits="userSpaceOnUse">
+            <pattern id={resourceIds.front} x="0" y="0" width="64" height="64" patternUnits="userSpaceOnUse">
               <rect width="64" height="64" fill={tex.baseColor} />
               {tex.grainLines.map((l, idx) => (
                 <line
@@ -458,7 +464,7 @@ export function IsometricView({
                   [handleX + 12 * sc, handleY + 1 * sc, -0.5 * sc],
                   [handleX, handleY + 1 * sc, -0.5 * sc],
                 )}
-                fill="url(#iso-handle-grad)"
+                fill={`url(#${resourceIds.handle})`}
                 stroke="#a07820"
                 strokeWidth={0.4}
               />
@@ -517,7 +523,7 @@ export function IsometricView({
                     [dx + dw - 6 * sc, dr + dh * 0.55, -0.5 * sc],
                     [dx + dw - 8 * sc, dr + dh * 0.55, -0.5 * sc],
                   )}
-                  fill="url(#iso-handle-grad)"
+                  fill={`url(#${resourceIds.handle})`}
                   stroke="#a07820"
                   strokeWidth={0.4}
                 />
