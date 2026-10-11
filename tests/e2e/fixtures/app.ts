@@ -7,6 +7,7 @@ type AppFixtures = {
 export const test = base.extend<AppFixtures>({
   appPage: async ({ page }, use) => {
     await page.clock.setFixedTime(new Date('2026-09-28T12:00:00.000Z'));
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.addInitScript(() => {
       const initialized = sessionStorage.getItem('woodworkingshop:e2e-initialized') === '1';
       if (!initialized) {

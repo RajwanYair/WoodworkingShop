@@ -35,7 +35,7 @@
     "fetch": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-fetch"],
+      "args": ["-y", "mcp-fetch-server@1.1.2"],
       "description": "Fetch web pages and API payloads for fact-grounded debugging and research."
     },
 

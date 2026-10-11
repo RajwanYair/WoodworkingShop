@@ -10,9 +10,17 @@ test.beforeEach(async ({ page }) => {
   page.on('pageerror', (err) => consoleErrors.push(err.message));
 });
 
-test.afterEach(() => {
+test.afterEach(({ browserName }) => {
   // Allow the i18next promo banner (printed via console.log, not error).
-  const real = consoleErrors.filter((e) => !/locize/i.test(e));
+  const real = consoleErrors.filter(
+    (error) =>
+      !/locize/i.test(error) &&
+      !(
+        browserName === 'firefox' &&
+        error.includes('NS_BINDING_ABORTED') &&
+        error.includes('chrome://juggler/content/content/WorkerMain.js')
+      ),
+  );
   expect(real, `Console errors:\n${real.join('\n')}`).toEqual([]);
 });
 

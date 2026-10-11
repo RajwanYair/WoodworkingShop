@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { GrainReportPanel } from '../../src/components/optimizer/GrainReportPanel';
@@ -12,7 +12,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  useCabinetStore.setState({ allParts: originalParts });
+  act(() => useCabinetStore.setState({ allParts: originalParts }));
 });
 
 describe('GrainReportPanel', () => {
