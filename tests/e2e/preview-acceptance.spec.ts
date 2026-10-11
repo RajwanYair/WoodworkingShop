@@ -1,4 +1,5 @@
 import { expect, test } from './fixtures/app';
+import { applyPseudoLocale } from './pseudo-locales';
 
 const views = ['Front (Closed)', 'Front (Open)', 'Side', 'Top', 'Back', '3D'] as const;
 
@@ -117,20 +118,21 @@ test('primary panel controls stay within the viewport without clipped text acros
   appPage: page,
 }, testInfo) => {
   test.skip(testInfo.project.name !== 'chromium', 'Panel reachability matrix runs in Chromium.');
-  test.setTimeout(60_000);
+  test.setTimeout(90_000);
 
   const languageSelect = page.getByRole('banner').getByRole('combobox').first();
-  const widths = [320, 375, 768, 1024, 1440];
   const scenarios = [
-    { locale: 'en', direction: 'ltr' },
-    { locale: 'he', direction: 'rtl' },
+    { locale: 'en', direction: 'ltr', widths: [320, 375, 768, 1024, 1440], pseudoLocale: null },
+    { locale: 'he', direction: 'rtl', widths: [320, 375, 768, 1024, 1440], pseudoLocale: null },
+    { locale: 'en', direction: 'ltr', widths: [320], pseudoLocale: 'en-XA' },
+    { locale: 'ar', direction: 'rtl', widths: [320], pseudoLocale: 'ar-XB' },
   ] as const;
 
   for (const scenario of scenarios) {
     await languageSelect.selectOption(scenario.locale);
     await expect(page.locator('html')).toHaveAttribute('dir', scenario.direction);
 
-    for (const width of widths) {
+    for (const width of scenario.widths) {
       await page.setViewportSize({ width, height: 900 });
       const primaryTabs = page.getByRole('tablist', { name: 'Main navigation' }).getByRole('tab');
       for (let index = 0; index < (await primaryTabs.count()); index += 1) {
@@ -138,6 +140,10 @@ test('primary panel controls stay within the viewport without clipped text acros
         await tab.click();
         await expect(tab).toHaveAttribute('aria-selected', 'true');
         await expect(page.getByRole('main').getByRole('heading').first()).toBeVisible();
+        if (scenario.pseudoLocale) {
+          await applyPseudoLocale(page, scenario.pseudoLocale);
+          await expect(page.getByRole('main')).toHaveAttribute('data-e2e-pseudo-locale', scenario.pseudoLocale);
+        }
 
         const bounds = await page.getByRole('main').evaluate((main) => {
           const viewportWidth = document.documentElement.clientWidth;
@@ -225,6 +231,17 @@ test('primary panel controls stay within the viewport without clipped text acros
               return [`${name(element)} overlaps ${name(otherElement)}`];
             }),
           );
+          const overflowingElements = Array.from(document.body.querySelectorAll('*'))
+            .filter((element) => {
+              const rect = element.getBoundingClientRect();
+              const style = getComputedStyle(element);
+              return style.display !== 'none' && style.visibility !== 'hidden' && rect.right > viewportWidth + 1;
+            })
+            .slice(0, 12)
+            .map((element) => {
+              const rect = element.getBoundingClientRect();
+              return `${element.tagName.toLowerCase()}.${String(element.className).slice(0, 50)} ${Math.round(rect.left)}-${Math.round(rect.right)} ${element.textContent?.trim().slice(0, 70) ?? ''}`;
+            });
 
           return {
             viewportWidth,
@@ -232,15 +249,18 @@ test('primary panel controls stay within the viewport without clipped text acros
             offscreenControls,
             clippedText,
             overlappingActions,
+            overflowingElements,
           };
         });
 
         const tabName = (await tab.innerText()).replace(/\s+/g, ' ').trim();
-        const scenarioName = `${scenario.locale} ${width}px ${tabName}`;
-        expect(bounds.documentWidth, scenarioName).toBeLessThanOrEqual(bounds.viewportWidth);
+        const scenarioName = `${scenario.pseudoLocale ?? scenario.locale} ${width}px ${tabName}`;
         expect(bounds.offscreenControls, scenarioName).toEqual([]);
         expect(bounds.clippedText, scenarioName).toEqual([]);
         expect(bounds.overlappingActions, scenarioName).toEqual([]);
+        expect(bounds.documentWidth, `${scenarioName}: ${bounds.overflowingElements.join(' | ')}`).toBeLessThanOrEqual(
+          bounds.viewportWidth,
+        );
       }
     }
   }

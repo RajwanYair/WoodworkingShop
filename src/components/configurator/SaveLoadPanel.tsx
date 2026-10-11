@@ -274,26 +274,26 @@ export function SaveLoadPanel() {
       <div className="border-wood-100 dark:border-wood-800 flex gap-2 border-t pt-1">
         <button
           onClick={handleExportCabinet}
-          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 flex-1 rounded border px-2 py-1.5 text-xs font-medium transition-colors"
+          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 min-w-0 flex-1 rounded border px-2 py-1.5 text-xs font-medium wrap-break-word transition-colors"
         >
           ↓ {t('saves.exportCabinet')}
         </button>
         <button
           onClick={handleExportProject}
-          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 flex-1 rounded border px-2 py-1.5 text-xs font-medium transition-colors"
+          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 min-w-0 flex-1 rounded border px-2 py-1.5 text-xs font-medium wrap-break-word transition-colors"
         >
           ↓ {t('saves.exportProject', { count: cabinets.length })}
         </button>
         <button
           onClick={handleImport}
-          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 flex-1 rounded border px-2 py-1.5 text-xs font-medium transition-colors"
+          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 min-w-0 flex-1 rounded border px-2 py-1.5 text-xs font-medium wrap-break-word transition-colors"
         >
           ↑ {t('saves.import')}
         </button>
         {/* Sprint 166 — share / copy link */}
         <button
           onClick={handleShare}
-          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 flex-1 rounded border px-2 py-1.5 text-xs font-medium transition-colors"
+          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 min-w-0 flex-1 rounded border px-2 py-1.5 text-xs font-medium wrap-break-word transition-colors"
           aria-label={t('saves.share')}
         >
           ⎘ {t('saves.share')}
@@ -313,14 +313,14 @@ export function SaveLoadPanel() {
       <div className="flex gap-2">
         <button
           onClick={handleExportSavedBundle}
-          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 flex-1 rounded border px-2 py-1.5 text-xs font-medium transition-colors"
+          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 min-w-0 flex-1 rounded border px-2 py-1.5 text-xs font-medium wrap-break-word transition-colors"
           title={t('saves.exportBundleTip')}
         >
           ⬇ {t('saves.exportBundle')}
         </button>
         <button
           onClick={handleImportBundle}
-          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 flex-1 rounded border px-2 py-1.5 text-xs font-medium transition-colors"
+          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-700 min-w-0 flex-1 rounded border px-2 py-1.5 text-xs font-medium wrap-break-word transition-colors"
           title={t('saves.importBundleTip')}
         >
           ⬆ {t('saves.importBundle')}
