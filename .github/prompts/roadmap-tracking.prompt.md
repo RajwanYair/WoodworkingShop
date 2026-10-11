@@ -21,7 +21,8 @@ Read `ROADMAP.md` and `.github/copilot-instructions.md` to identify:
 
 Ensure both files agree on sprint statuses. The source of truth is:
 
-- `git log --oneline` — committed sprints are DONE.
+- GitHub issue and merged PR — a sprint is DONE only when its acceptance criteria are evidenced in a merged PR.
+- `git log --oneline` — confirms merged changes, but a local or feature-branch commit alone is not completion evidence.
 - `CHANGELOG.md [Unreleased]` — work in progress for current sprint.
 
 ### 3 — Plan next phase

@@ -7,6 +7,19 @@ description: Add a new feature panel — engine function + React component + i18
 
 You are adding a new feature panel to the Cabinet Planner project.
 
+## Visible TODO List
+
+Before implementation, create and show a concise checklist using the available task-list tool; if unavailable, maintain it in user-visible chat updates. Update statuses as work progresses and call out blockers or scope changes.
+
+## GitHub Workflow (required before editing)
+
+1. Read `.github/DEVELOPMENT-WORKFLOW.md`.
+2. Find or create a GitHub issue with scope, dependencies, and observable acceptance criteria; include a ROADMAP sprint/phase when applicable.
+3. Fetch and inspect the latest base, preserve local edits, and create `issue-<number>-<short-slug>` from `origin/main`.
+4. Keep implementation on that issue branch. Never commit or push feature work directly to `main`.
+5. Open/update a PR that references the issue and records acceptance evidence, verification, and known gaps. Merge requires passing checks and review.
+6. Stop before editing if the work cannot be registered or isolated on its own branch.
+
 ## Task
 
 Implement **${featureName}** — `${description}`.

@@ -1,23 +1,23 @@
 ---
 mode: agent
-description: Execute a roadmap sprint item end-to-end — implement feature, pass quality gates, commit.
+description: Execute a roadmap sprint item through a tracked issue and reviewed pull request.
 ---
 
 # Roadmap Sprint
 
-You are executing a sprint item in the Cabinet Planner project (currently Phase 21).
+You are executing the current roadmap sprint item in the Cabinet Planner project. Read the active roadmap and issue status; do not rely on a hardcoded phase or sprint table in this prompt.
 
-## Current Phase — Phase 21: Marketplace + Build UX (v4.2.0)
+## Visible TODO List
 
-| Sprint | Feature                  | Status |
-| ------ | ------------------------ | ------ |
-| 87     | Plugin Marketplace Panel | DONE   |
-| 88     | Finish/Paint Calculator  | DONE   |
-| 89     | Project Build Log        | WIP    |
-| 90     | Focus/Kiosk Mode         | TODO   |
-| 91     | Release v4.2.0           | TODO   |
+Before implementation, create and show a concise checklist using the available task-list tool; if unavailable, maintain it in user-visible chat updates. Update statuses as work progresses and call out blockers or scope changes.
 
-**Next up**: Sprint 89 — Project Build Log (`src/components/assembly/BuildLogPanel.tsx`)
+## GitHub Workflow (required before editing)
+
+1. Read `.github/DEVELOPMENT-WORKFLOW.md`.
+2. Find or create the sprint's GitHub issue with scope, dependencies, acceptance criteria, and ROADMAP sprint/phase reference.
+3. Fetch and inspect the latest base; preserve local edits and create `issue-<number>-<short-slug>` from `origin/main`.
+4. Do not implement on shared `main` or push feature work to it. Submit an issue-linked PR with verification and known gaps; completion requires merge and acceptance evidence.
+5. Stop before editing if the issue cannot be registered or the working branch cannot be isolated.
 
 ## Task
 

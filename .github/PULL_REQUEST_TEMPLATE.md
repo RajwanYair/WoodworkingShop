@@ -4,6 +4,12 @@
 
 <!-- Brief description of what this PR changes and why. -->
 
+## Tracking
+
+- Issue: <!-- Fixes #123 | Closes #123 | Refs #123 -->
+- Roadmap sprint/phase (if applicable):
+- Scope is limited to one primary issue: <!-- Yes / No; explain any exception -->
+
 ## Type of Change
 
 - [ ] Feature / enhancement
@@ -40,6 +46,10 @@
 - [ ] `CHANGELOG.md [Unreleased]` entry added
 - [ ] ROADMAP sprint item marked DONE (if applicable)
 - [ ] Browser-visible feature tested in Chrome + Firefox
+
+## Acceptance Evidence
+
+<!-- Summarize how each linked issue acceptance criterion was verified. Include actual commands/results and known gaps. -->
 
 ## Related Issues / Sprints
 

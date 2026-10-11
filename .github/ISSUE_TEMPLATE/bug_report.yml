@@ -60,6 +60,17 @@ body:
       required: true
 
   - type: textarea
+    id: acceptance
+    attributes:
+      label: '✅ Acceptance criteria'
+      description: State observable behavior that will demonstrate the bug is fixed.
+      placeholder: |
+        - [ ] Given …, when …, then …
+        - [ ] Regression test covers …
+    validations:
+      required: true
+
+  - type: textarea
     id: actual
     attributes:
       label: '❌ Actual behaviour'
