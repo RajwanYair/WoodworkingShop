@@ -1,3 +1,5 @@
+import Ajv2020, { type ErrorObject } from 'ajv/dist/2020.js';
+import projectSchema from '../../config/schemas/project-v1.schema.json';
 import type { CabinetEntry, ProjectSnapshot } from '../store/cabinet-store';
 import { utf8ArrayBuffer, utf8Encode } from './browser-compat';
 import { idbLoadProjects, idbSaveProjects, idbLoadSnapshots, idbSaveSnapshots } from './indexed-db-storage';
@@ -450,5 +452,134 @@ export function importSettingsJson(raw: unknown): ProjectSettings {
     labourRate: typeof p['labourRate'] === 'number' ? p['labourRate'] : 75,
     labourHours: typeof p['labourHours'] === 'number' ? p['labourHours'] : 0,
     finishCost: typeof p['finishCost'] === 'number' ? p['finishCost'] : 0,
+  };
+}
+
+const DEFAULT_DIAGNOSTIC_LIMIT = 10;
+const MAX_DIAGNOSTIC_LIMIT = 20;
+const MAX_ACTUAL_LENGTH = 120;
+const MISSING = Symbol('missing');
+
+const validateProjectSchema = new Ajv2020({ allErrors: true }).compile(projectSchema);
+
+export interface ProjectValidationOptions {
+  recoveryAction: string;
+  maxDiagnostics?: number;
+}
+
+export interface ProjectValidationDiagnostic {
+  path: string;
+  expected: string;
+  actual: string;
+  recoveryAction: string;
+}
+
+export interface ProjectValidationResult {
+  valid: boolean;
+  diagnostics: ProjectValidationDiagnostic[];
+  truncated: boolean;
+}
+
+function decodeJsonPointer(pointer: string): string[] {
+  if (!pointer) return [];
+  return pointer
+    .slice(1)
+    .split('/')
+    .map((segment) => segment.replace(/~1/g, '/').replace(/~0/g, '~'));
+}
+
+function getPropertyName(error: ErrorObject, key: 'missingProperty' | 'additionalProperty'): string | undefined {
+  const value = error.params[key];
+  return typeof value === 'string' ? value : undefined;
+}
+
+function errorPath(error: ErrorObject): string[] {
+  const segments = decodeJsonPointer(error.instancePath);
+  const property =
+    error.keyword === 'required'
+      ? getPropertyName(error, 'missingProperty')
+      : error.keyword === 'additionalProperties'
+        ? getPropertyName(error, 'additionalProperty')
+        : undefined;
+  if (property !== undefined) segments.push(property);
+  return segments;
+}
+
+function escapeDiagnosticText(value: string): string {
+  return value.replace(/[<>&]/g, (character) => {
+    if (character === '<') return '\\u003c';
+    if (character === '>') return '\\u003e';
+    return '\\u0026';
+  });
+}
+
+function formatPath(segments: string[]): string {
+  return segments.reduce((path, segment) => {
+    if (/^[a-z_$][\w$]*$/i.test(segment)) return `${path}.${segment}`;
+    if (/^(?:0|[1-9]\d*)$/.test(segment)) return `${path}[${segment}]`;
+    return `${path}[${escapeDiagnosticText(JSON.stringify(segment))}]`;
+  }, '$');
+}
+
+function valueAtPath(root: unknown, segments: string[]): unknown | typeof MISSING {
+  let current = root;
+  for (const segment of segments) {
+    if (Array.isArray(current)) {
+      const index = Number(segment);
+      if (!Number.isInteger(index) || String(index) !== segment || index >= current.length) return MISSING;
+      current = current[index];
+    } else if (current !== null && typeof current === 'object') {
+      if (!Object.prototype.hasOwnProperty.call(current, segment)) return MISSING;
+      current = (current as Record<string, unknown>)[segment];
+    } else {
+      return MISSING;
+    }
+  }
+  return current;
+}
+
+function summarizeActual(value: unknown | typeof MISSING): string {
+  if (value === MISSING) return 'missing';
+  if (value === null) return 'null';
+  if (typeof value === 'string') {
+    const summary = escapeDiagnosticText(JSON.stringify(value));
+    return summary.length > MAX_ACTUAL_LENGTH ? `${summary.slice(0, MAX_ACTUAL_LENGTH - 1)}…` : summary;
+  }
+  if (typeof value === 'number' || typeof value === 'boolean') return String(value);
+  if (Array.isArray(value)) return `array (${value.length} items)`;
+  if (typeof value === 'object') return 'object';
+  return typeof value;
+}
+
+function diagnosticFor(error: ErrorObject, payload: unknown, recoveryAction: string): ProjectValidationDiagnostic {
+  const segments = errorPath(error);
+  const message = error.message ?? 'does not match the project format';
+  const missingProperty = getPropertyName(error, 'missingProperty');
+  const expected =
+    error.keyword === 'required' && missingProperty !== undefined
+      ? `required property ${JSON.stringify(missingProperty)}`
+      : escapeDiagnosticText(message);
+  return {
+    path: formatPath(segments),
+    expected,
+    actual: summarizeActual(valueAtPath(payload, segments)),
+    recoveryAction,
+  };
+}
+
+export function validateProjectPayload(payload: unknown, options: ProjectValidationOptions): ProjectValidationResult {
+  if (validateProjectSchema(payload)) {
+    return { valid: true, diagnostics: [], truncated: false };
+  }
+
+  const errors = validateProjectSchema.errors ?? [];
+  const requestedLimit = options.maxDiagnostics ?? DEFAULT_DIAGNOSTIC_LIMIT;
+  const limit = Number.isFinite(requestedLimit)
+    ? Math.min(MAX_DIAGNOSTIC_LIMIT, Math.max(0, Math.floor(requestedLimit)))
+    : DEFAULT_DIAGNOSTIC_LIMIT;
+  return {
+    valid: false,
+    diagnostics: errors.slice(0, limit).map((error) => diagnosticFor(error, payload, options.recoveryAction)),
+    truncated: errors.length > limit,
   };
 }
