@@ -15,6 +15,7 @@ test('configurator tab — default view screenshot', async ({ appPage: page }) =
   await page.waitForLoadState('networkidle');
   await page.getByRole('tab', { name: 'Configure' }).click();
   await expect(page.getByRole('slider').first()).toBeVisible();
+  await page.evaluate(() => document.fonts.ready);
 
   await expect(page).toHaveScreenshot('configurator-default.png', {
     maxDiffPixelRatio: 0.05,
@@ -28,6 +29,7 @@ test('preview tab — cabinet SVG screenshot', async ({ appPage: page }) => {
   // Navigate to Preview (Alt+2) and wait for the SVG to render.
   await page.keyboard.press('Alt+2');
   await expect(page.getByRole('main').getByRole('img').first()).toBeVisible({ timeout: 8_000 });
+  await page.evaluate(() => document.fonts.ready);
 
   await expect(page).toHaveScreenshot('preview-tab.png', {
     maxDiffPixelRatio: 0.05,
@@ -42,6 +44,7 @@ test('optimizer tab — cut sheets screenshot', async ({ appPage: page }) => {
   await page.keyboard.press('Alt+3');
   // Wait for the optimizer content area to appear.
   await expect(page.getByRole('main')).toBeVisible({ timeout: 8_000 });
+  await page.evaluate(() => document.fonts.ready);
 
   await expect(page).toHaveScreenshot('optimizer-tab.png', {
     maxDiffPixelRatio: 0.05,
@@ -54,6 +57,7 @@ test('dark mode toggle — header appearance', async ({ appPage: page }) => {
 
   // Activate dark mode via Alt+D shortcut.
   await page.keyboard.press('Alt+d');
+  await page.evaluate(() => document.fonts.ready);
 
   await expect(page.getByRole('banner')).toHaveScreenshot('header-dark-mode.png', {
     maxDiffPixelRatio: 0.05,

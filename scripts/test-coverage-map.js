@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import * as prettier from 'prettier';
 import ts from 'typescript';
 import { fileURLToPath } from 'node:url';
 
@@ -15,11 +16,12 @@ const lcovPaths = [
   path.join(reportRoot, 'coverage-components', 'lcov.info'),
 ];
 const outputPath = path.join(reportRoot, 'coverage-map.csv');
+const functionStatusArtifactPath = path.join(repoRoot, 'tests', 'fixtures', 'engine-function-status.json');
 const inventoryDirectories = ['engine', 'utils', 'store', 'hooks', 'components'];
 const coverageExclusions = new Map([
-  ['src/engine/types.ts', 'Excluded from thresholds: domain type declarations are erased at runtime.'],
   ['src/engine/index.ts', 'Excluded from thresholds: public API barrel with re-exports only.'],
 ]);
+const functionCoverageWaivers = new Map();
 
 function filesUnder(directory) {
   if (!fs.existsSync(directory)) return [];
@@ -158,6 +160,24 @@ export function classifyFunctionCoverage(directTestFiles, lineHits, bodyRange) {
   return 'uncovered';
 }
 
+/**
+ * @param {readonly string[]} directTestFiles
+ * @param {Map<number, number> | undefined} lineHits
+ * @param {{startLine: number | null, endLine: number | null}} bodyRange
+ * @param {string | undefined} waiverReason
+ */
+export function getFunctionCoverageStatus(directTestFiles, lineHits, bodyRange, waiverReason) {
+  if (waiverReason !== undefined) {
+    if (!waiverReason.trim()) throw new Error('A coverage waiver must include a reason.');
+    return 'waived';
+  }
+
+  const classification = classifyFunctionCoverage(directTestFiles, lineHits, bodyRange);
+  if (classification === 'direct test listed; body lines hit') return 'covered';
+  if (classification === 'body lines hit; no direct-call match') return 'indirect';
+  throw new Error(`Engine function has no measured body coverage: ${classification}.`);
+}
+
 /** @param {ts.SourceFile} sourceFile @param {string} specifier @returns {string[]} */
 export function getDirectFunctionCalls(sourceFile, specifier) {
   const namedImports = new Map();
@@ -273,7 +293,7 @@ export function getDirectFunctionTestCases(sourceFile, specifier) {
   return new Map([...testCases].map(([name, titles]) => [name, [...titles].sort()]));
 }
 
-function main() {
+async function main() {
   const sourceFiles = inventoryDirectories
     .flatMap((directory) => filesUnder(path.join(sourceRoot, directory)))
     .filter((file) => /\.tsx?$/.test(file));
@@ -381,13 +401,21 @@ function main() {
     const source = path.relative(repoRoot, file).replaceAll(path.sep, '/');
     const testsByFunction = engineFunctions.get(path.resolve(file).toLowerCase());
     const lineHits = coverage.get(path.resolve(file).toLowerCase());
-    return [...(testsByFunction ?? [])].map(([functionName, entry]) => ({
-      source,
-      functionName,
-      tests: [...entry.tests].sort(),
-      testCases: [...entry.testCases].sort(),
-      status: classifyFunctionCoverage([...entry.tests], lineHits, entry),
-    }));
+    return [...(testsByFunction ?? [])].map(([functionName, entry]) => {
+      const tests = [...entry.tests].sort();
+      const testCases = [...entry.testCases].sort();
+      const waiverReason = functionCoverageWaivers.get(`${source}#${functionName}`);
+      const status = getFunctionCoverageStatus(tests, lineHits, entry, waiverReason);
+
+      return {
+        source,
+        functionName,
+        tests,
+        testCases,
+        status,
+        ...(waiverReason ? { waiverReason } : {}),
+      };
+    });
   });
   const functionOutputPath = path.join(reportRoot, 'coverage-map-functions.csv');
   const functionCsv = [
@@ -397,6 +425,29 @@ function main() {
     ),
   ].join('\n');
   fs.writeFileSync(functionOutputPath, `${functionCsv}\n`, 'utf8');
+
+  const statusCounts = functionRows.reduce(
+    (result, row) => {
+      result[row.status] += 1;
+      return result;
+    },
+    { covered: 0, indirect: 0, waived: 0 },
+  );
+  const statusArtifact = JSON.stringify(
+    {
+      schemaVersion: 1,
+      summary: statusCounts,
+      functions: functionRows,
+    },
+    null,
+    2,
+  );
+  const prettierConfig = await prettier.resolveConfig(functionStatusArtifactPath);
+  const formattedStatusArtifact = await prettier.format(statusArtifact, {
+    ...prettierConfig,
+    filepath: functionStatusArtifactPath,
+  });
+  fs.writeFileSync(functionStatusArtifactPath, formattedStatusArtifact, 'utf8');
 
   const counts = rows.reduce((result, row) => {
     result[row.classification] = (result[row.classification] ?? 0) + 1;
@@ -408,6 +459,7 @@ function main() {
   }
   console.log(`CSV: ${outputPath}`);
   console.log(`Engine function inventory: ${functionRows.length} functions in ${functionOutputPath}`);
+  console.log(`Tracked function status artifact: ${functionStatusArtifactPath}`);
   const functionCounts = functionRows.reduce((result, row) => {
     result[row.status] = (result[row.status] ?? 0) + 1;
     return result;
@@ -418,10 +470,8 @@ function main() {
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  try {
-    main();
-  } catch (error) {
+  main().catch((error) => {
     console.error(error instanceof Error ? error.message : String(error));
     process.exitCode = 1;
-  }
+  });
 }

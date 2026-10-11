@@ -1,0 +1,23 @@
+{
+  "source": "DEWALT, DW735 Instruction Manual, Planing Depth",
+  "url": "https://assets.dewalt.com/GLOBALBOM/QU/DW735/12/Instruction_Manual/EN/N486408_DW735_NA.pdf",
+  "retrievedOn": "2026-10-01",
+  "machineLimit": {
+    "model": "DW735",
+    "maximumCutDepthIn": 0.125,
+    "stockWidthConditionIn": "less than 6"
+  },
+  "engineInput": {
+    "initialThicknessMm": 25.4,
+    "targetThicknessMm": 19.05,
+    "maxPassDepthMm": 3.175,
+    "boardLengthMm": 1000
+  },
+  "expected": {
+    "totalRemovalMm": 6.35,
+    "passCount": 2
+  },
+  "conversion": "1 in = 25.4 mm; the manual's 1/8 in maximum cut depth is 3.175 mm and the 1/4 in thickness reduction is 6.35 mm.",
+  "tolerance": "Exact total removal and pass count; pass count is the ceiling of total removal divided by the manual's maximum cut depth.",
+  "scope": "Validates only the pass count when the caller supplies the DW735's 1/8 in maximum depth for stock less than 6 in wide. Does not validate the calculator's default cut depth, even distribution policy, or snipe allowance."
+}

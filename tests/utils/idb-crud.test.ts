@@ -61,6 +61,19 @@ describe('idbLoadProjects / idbSaveProjects', () => {
     }
   });
 
+  it('reports unavailable IndexedDB without falling back to localStorage', async () => {
+    const getItemSpy = vi.spyOn(Storage.prototype, 'getItem');
+    vi.stubGlobal('indexedDB', undefined);
+
+    try {
+      await expect(idbLoadProjects()).rejects.toThrow(/indexeddb is unavailable/i);
+      expect(getItemSpy).not.toHaveBeenCalled();
+    } finally {
+      getItemSpy.mockRestore();
+      vi.unstubAllGlobals();
+    }
+  });
+
   it('rejects a non-array IndexedDB value without replacing the corrupt record', async () => {
     const corruptRecord = { projects: 'not-an-array' };
     await idbSet('all-projects', corruptRecord);

@@ -5,8 +5,11 @@
  */
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
+  APP_COMMAND_DEFINITIONS,
+  APP_SHORTCUTS,
   registerCommands,
   unregisterCommand,
+  createAppCommand,
   getCommand,
   getAllCommands,
   clearRegistry,
@@ -49,6 +52,23 @@ beforeEach(() => {
   localStorageMock.clear();
   clearRegistry();
   clearRecentCommands();
+});
+
+describe('application command definitions', () => {
+  it('creates palette commands from the canonical descriptor and reuses it for shortcuts', () => {
+    const definition = APP_COMMAND_DEFINITIONS.copyLink;
+    const action = vi.fn();
+    const command = createAppCommand(definition, 'Copy link', 'Actions', action);
+
+    expect(command).toMatchObject({
+      id: definition.id,
+      label: 'Copy link',
+      category: 'Actions',
+      shortcut: definition.shortcut,
+      action,
+    });
+    expect(APP_SHORTCUTS.copyLink).toBe(definition);
+  });
 });
 
 // ── registerCommands / getCommand ─────────────────────────────────────────────

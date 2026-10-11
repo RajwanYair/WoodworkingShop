@@ -64,6 +64,7 @@
     "doorsOnly": "דלתות בלבד",
     "noBanding": "ללא",
     "reset": "איפוס לברירת מחדל",
+    "resetConfirm": "לאפס את הארון הזה לתצורת ברירת המחדל? לא ניתן לבטל פעולה זו.",
     "furnitureType": "🪑 סוג רהיט",
     "ft_cabinet": "ארון",
     "ft_bookshelf": "כוננייה",
@@ -225,7 +226,10 @@
     "statusPending": "מחשב גיליונות חיתוך…",
     "statusComplete": "אופטימיזציה הסתיימה — {{count}} גיליונות נדרשים",
     "filterByMaterial": "סנן לפי חומר",
-    "allMaterials": "כל החומרים"
+    "allMaterials": "כל החומרים",
+    "partsTableSearch": "חיפוש חלקים",
+    "hardwareTableSearch": "חיפוש פרזול",
+    "noTableResults": "לא נמצאו שורות תואמות"
   },
   "preview": {
     "title": "תצוגה מקדימה",
@@ -346,7 +350,7 @@
     "history": "היסטוריה",
     "diffTitle": "השוואת גרסאות",
     "noDiff": "התצורות זהות",
-    "changeCount": "שדה 1 שונה",
+    "changeCount": "{{count}} שדה השתנה",
     "changeCount_other": "{{count}} שדות שונו"
   },
   "workspace": {
@@ -493,6 +497,7 @@
     "delete": "מחק",
     "placeholder": "שם הארון…",
     "empty": "אין הגדרות שמורות",
+    "loadFailed": "לא ניתן לטעון הגדרות שמורות",
     "export": "ייצוא JSON",
     "exportCabinet": "ייצוא ארון",
     "exportProject": "ייצוא פרויקט ({{count}} ארונות)",
@@ -523,8 +528,16 @@
     "notesPlaceholder": "הערות אופציונליות לארון זה…"
   },
   "errors": {
+    "panel": "חלונית",
+    "panelFailed": "לא ניתן להציג את החלונית: {{panel}}",
+    "recoveryHint": "אירעה שגיאה בלתי צפויה. אפשר לנסות שוב או לטעון מחדש את הדף.",
+    "retry": "נסה שוב",
     "copyDetails": "העתק פרטי שגיאה",
-    "copied": "הועתק!"
+    "details": "פרטי שגיאה",
+    "copied": "הועתק!",
+    "reloadPage": "טען מחדש את הדף",
+    "warning": "שגיאה",
+    "interactivePreview": "תצוגת תלת־ממד אינטראקטיבית"
   },
   "room": {
     "title": "פריסת חדר",
@@ -639,6 +652,39 @@
     "hardwareExported": "קובץ CSV של פרזול הורד",
     "linkCopied": "קישור שיתוף הועתק ללוח",
     "linkCopyFailed": "לא ניתן להעתיק קישור — אנא העתק את הכתובת מסרגל הכתובות"
+  },
+  "commandPalette": {
+    "title": "לוח פקודות",
+    "search": "חיפוש פקודות",
+    "results": "תוצאות פקודות",
+    "noResults": "לא נמצאו פקודות מתאימות",
+    "actionFailed": "לא ניתן להשלים את הפקודה.",
+    "recent": "אחרונים",
+    "shortcutDescription": "פתיחת לוח הפקודות",
+    "close": "סגירת לוח הפקודות",
+    "categories": {
+      "actions": "פעולות",
+      "language": "שפה",
+      "calculators": "מחשבונים",
+      "presets": "תבניות",
+      "projects": "פרויקטים",
+      "exports": "ייצוא"
+    },
+    "commands": {
+      "undo": "ביטול",
+      "redo": "ביצוע מחדש",
+      "toggleTheme": "החלפת מצב כהה",
+      "toggleContrast": "החלפת ניגודיות גבוהה",
+      "copyLink": "העתקת קישור שיתוף",
+      "keyboardShortcuts": "קיצורי מקלדת",
+      "addCabinet": "הוספת ארון",
+      "exportBom": "ייצוא רשימת חומרים",
+      "saveSnapshot": "שמירת תמונת מצב",
+      "resetConfig": "איפוס התצורה",
+      "print": "הדפסה",
+      "redoAlternate": "ביצוע מחדש (חלופי)",
+      "toggleFocusMode": "החלפת מצב מיקוד"
+    }
   },
   "skeleton": {
     "loading": "טוען לוח…",
@@ -1372,26 +1418,6 @@
     "mergeConflict": "יש קונפליקטים במיזוג שדורשים פתרון.",
     "branchCreated": "הענף נוצר."
   },
-  "productionSchedule": {
-    "title": "לוח זמנים לייצור",
-    "task": "משימה",
-    "tasks": "משימות",
-    "resource": "משאב",
-    "resources": "משאבים",
-    "duration": "משך",
-    "dependencies": "תלויות",
-    "milestone": "אבן דרך",
-    "criticalPath": "נתיב קריטי",
-    "conflict": "קונפליקט משאבים",
-    "conflicts": "קונפליקטי משאבים",
-    "utilization": "ניצולת",
-    "spanDays": "טווח לוח הזמנים (ימים)",
-    "addTask": "הוסף משימה",
-    "compute": "חשב לוח זמנים",
-    "crash": "דחס משימה",
-    "noTasks": "אין עדיין משימות מתוזמנות.",
-    "scheduleReady": "לוח הזמנים חושב בהצלחה."
-  },
   "nestingPatterns": {
     "title": "ספריית תבניות קינון",
     "pattern": "תבנית",
@@ -1492,26 +1518,6 @@
     "cycleDetected": "זוהתה תלות מעגלית!",
     "earliestStart": "התחלה מוקדמת",
     "latestFinish": "סיום מאוחר"
-  },
-  "workshopSafety": {
-    "title": "בטיחות סדנה",
-    "score": "ציון בטיחות",
-    "passes": "עובר",
-    "fails": "נכשל",
-    "violations": "הפרות",
-    "critical": "קריטי",
-    "warning": "אזהרה",
-    "clearanceZone": "אזור פינוי",
-    "overlap": "חפיפה",
-    "noise": "רמת רעש",
-    "ppe": "ציוד מגן נדרש",
-    "safetyGlasses": "משקפי מגן",
-    "hearingProtection": "הגנת שמיעה",
-    "dustMask": "מסכת אבק",
-    "respirator": "מסנן",
-    "faceShield": "מגן פנים",
-    "pushStick": "מוט דחיפה",
-    "noViolations": "לא זוהו הפרות בטיחות."
   },
   "wastePredictor": {
     "title": "חיזוי פחת",
@@ -1650,7 +1656,19 @@
     "packsNeeded": "אריזות נדרשות",
     "noItems": "לא נמצאו פריטי חומרה.",
     "addItem": "הוסף פריט",
-    "editItem": "ערוך פריט"
+    "editItem": "ערוך פריט",
+    "importTitle": "ייבוא קטלוג חומרה",
+    "importFile": "קובץ קטלוג JSON",
+    "importPreview": "{{count}} פריטי חומרה אומתו.",
+    "importMode": "אופן הייבוא",
+    "importMerge": "מיזוג: עדכון מזהים תואמים ושמירת פריטים אחרים",
+    "importReplace": "החלפת כל פריטי החומרה המותאמים אישית",
+    "importExisting": "{{count}} פריטי חומרה מותאמים אישית קיימים.",
+    "importButton": "ייבוא קטלוג",
+    "importSuccess": "יובאו {{count}} פריטי חומרה.",
+    "importError": "ייבוא קטלוג החומרה נכשל: {{message}}",
+    "importStored": "חומרה מותאמת אישית ({{count}})",
+    "importEmpty": "לא יובאה חומרה מותאמת אישית."
   },
   "projectComparison": {
     "title": "השוואת פרויקטים",
@@ -1666,27 +1684,6 @@
     "sheets": "לוחות",
     "weights": "משקלות",
     "noProjects": "הוסף לפחות 2 פרויקטים להשוואה."
-  },
-  "woodMovement": {
-    "title": "מחשבון תנועת עץ",
-    "width": "רוחב הלוח (מ״מ)",
-    "species": "סוג עץ",
-    "mcStart": "לחות התחלתית (%)",
-    "mcEnd": "לחות סופית (%)",
-    "change": "שינוי מימד",
-    "finalWidth": "רוחב סופי",
-    "direction": "כיוון",
-    "expansion": "התפשטות",
-    "contraction": "התכווצות",
-    "none": "ללא תנועה",
-    "gapPerSide": "מרווח לצד",
-    "preset": "תרחיש עונתי",
-    "temperateIndoor": "פנים ממוזג",
-    "controlledIndoor": "פנים מבוקר",
-    "unheatedWorkshop": "סדנה לא מחוממת",
-    "outdoorCovered": "חוץ מקורה",
-    "panelMovement": "תנועת פנל",
-    "customCoefficient": "מקדם מותאם"
   },
   "feedRate": {
     "title": "מחשבון קצב הזנה",
@@ -1725,24 +1722,6 @@
     "perPanel": "לכל לוח",
     "density": "צפיפות (ק״ג/מ³)"
   },
-  "dowelJoint": {
-    "title": "מחשבון חיבור דיבלים",
-    "diameter": "קוטר דיבל",
-    "spacing": "מרווח",
-    "depth": "עומק קדיחה",
-    "drillBit": "מקדח",
-    "count": "מספר דיבלים",
-    "clampTime": "זמן הידוק",
-    "orientation": "כיוון החיבור",
-    "edgeToFace": "קצה לפנים",
-    "edgeToEdge": "קצה לקצה",
-    "mitre": "גרונג",
-    "positions": "מיקומי דיבלים",
-    "jointLength": "אורך החיבור",
-    "boardThickness": "עובי הלוח",
-    "edgeClearance": "מרחק מקצה",
-    "dowelLength": "אורך דיבל"
-  },
   "panelLabel": {
     "title": "תוויות לוחות",
     "partId": "מזהה חלק",
@@ -1766,6 +1745,11 @@
     "screwLength": "אורך בורג",
     "drillAngle": "זווית קדיחה",
     "threadType": "סוג הברגה",
+    "materialHardness": "חומר החלק המתחבר",
+    "jointLength": "אורך החיבור",
+    "jointType": "סוג חיבור",
+    "softwood": "עץ רך",
+    "hardwood": "עץ קשה",
     "screwCount": "מספר ברגים",
     "spacing": "מרווח",
     "pocketBore": "קוטר כיס",
@@ -1797,23 +1781,6 @@
     "random": "אקראי",
     "bothFaces": "שני צדדים",
     "trimAllowance": "תוספת חיתוך"
-  },
-  "clampPressure": {
-    "title": "מחשבון לחץ הידוק",
-    "clampCount": "מלחצים נדרשים",
-    "totalForce": "כוח כולל",
-    "achievedPressure": "לחץ מושג",
-    "targetPressure": "לחץ יעד",
-    "spacing": "מרווח מלחצים",
-    "openTime": "זמן פתוח",
-    "clampTime": "זמן הידוק",
-    "glueType": "סוג דבק",
-    "clampType": "סוג מלחץ",
-    "pva": "דבק עץ (PVA)",
-    "polyurethane": "פוליאוריתן",
-    "epoxy": "אפוקסי",
-    "hide": "דבק עור",
-    "contact": "דבק מגע"
   },
   "drillSpeed": {
     "title": "מחשבון מהירות מקדחה",
@@ -1984,6 +1951,7 @@
     "fixed": "קבועה (מובנית)",
     "maxDeflection": "שקיעה מרבית",
     "exceedsLimit": "חריגה מהמגבלה",
+    "withinLimit": "בתוך המגבלה",
     "recommendedMaxSpan": "טווח מרבי מומלץ",
     "deflectionRatio": "יחס שקיעה"
   },
@@ -2012,37 +1980,6 @@
     "plywood": "דיקט",
     "mdf": "MDF",
     "hardPlastic": "פלסטיק קשיח"
-  },
-  "biscuitJoint": {
-    "title": "מחשבון חיבור ביסקוויט",
-    "description": "חישוב גודל ביסקוויט, עומק חריץ ומיקומי פריסה",
-    "jointLength": "אורך חיבור",
-    "boardThickness": "עובי לוח",
-    "jointType": "סוג חיבור",
-    "biscuitSize": "גודל ביסקוויט",
-    "slotDepth": "עומק חריץ",
-    "count": "כמות ביסקוויטים",
-    "spacing": "מרווח",
-    "edgeMargin": "שול קצה",
-    "edge": "קצה",
-    "butt": "קצה מול קצה",
-    "miter": "מיטר",
-    "auto": "אוטומטי"
-  },
-  "sandingProgression": {
-    "title": "מתכנן התקדמות שיוף",
-    "description": "תכנון רצף גריטים ואומדן מאמץ שיוף",
-    "startGrit": "גריט התחלה",
-    "targetGrit": "גריט יעד",
-    "area": "שטח",
-    "material": "חומר",
-    "finishTarget": "יעד גימור",
-    "gritSequence": "רצף גריטים",
-    "estimatedMinutes": "דקות משוערות",
-    "estimatedSheets": "כמות דפים משוערת",
-    "paint": "צבע",
-    "stain": "בייץ",
-    "clear": "שקוף"
   },
   "fingerJoint": {
     "title": "מחשבון חיבור אצבעות",
@@ -2190,6 +2127,7 @@
     "pulloutForceLbf": "כוח שליפה (lbf)",
     "withdrawalResistance": "התנגדות שליפה",
     "safetyRating": "דירוג בטיחות",
+    "modelNote": "משוואת USDA 8-10a מעריכה עומס שליפה מרבי לטווח קצר עבור ברגי עץ בעץ מתובל ובכיוון הסיבים; היא אינה קיבולת תכן מותרת. היא אינה חלה על לוחות. הדירוגים היוריסטיים בלבד; יש לבדוק את החיבור בפועל.",
     "low": "צפיפות נמוכה (אורן, ארז)",
     "medium": "צפיפות בינונית (מייפל, אלון)",
     "high": "צפיפות גבוהה (היקורי, טיק)",
@@ -2250,11 +2188,11 @@
     "roughing": "גסה",
     "finishing": "גמר",
     "sanding": "שיוף",
-    "minRpm": "מינ׳ סל״ד בטוח",
-    "maxRpm": "מקס׳ סל״ד בטוח",
+    "minRpm": "מינימום סל״ד (המלצה)",
+    "maxRpm": "מקסימום סל״ד (המלצה)",
     "recommendedRpm": "סל״ד מומלץ",
     "surfaceSpeed": "מהירות פני שטח (מ/דקה)",
-    "safetyNote": "תמיד התחל במהירות נמוכה והגבר בהדרגה"
+    "safetyNote": "הערכה מייעצת בלבד, ולא מגבלת בטיחות. פעלו לפי הוראות המחרטה; התחילו לאט והפחיתו מהירות אם חומר הגלם רועד. חומר גלם לא מאוזן עשוי לדרוש מהירות נמוכה בהרבה."
   },
   "framePanel": {
     "title": "מחשבון מסגרת ולוח",
@@ -2295,7 +2233,6 @@
     "stringerLength": "אורך קרש",
     "stringerAngle": "זווית קרש",
     "ircPass": "עומד בדרישות IRC 2021",
-    "riserTooShort": "גובה פסיעה מתחת מינימום IRC",
     "riserTooTall": "גובה פסיעה מעל מקסימום IRC",
     "treadTooShallow": "עומק שלב הדריכה מתחת מינימום IRC"
   },
@@ -2381,6 +2318,7 @@
   "coveCut": {
     "copeDepth": "עומק הקערה",
     "bladeDiameter": "קוטר הלהב",
+    "bladeKerf": "רוחב חיתוך הלהב",
     "copeWidth": "רוחב הקערה",
     "fenceAngle": "זווית המחסום",
     "maxPassDepth": "עומק מקסימלי למעבר",
@@ -2484,19 +2422,28 @@
     "description": "הגדר נוסחאות לשימוש חוזר עם משתני המידות של הארון (למשל shelf_gap = height / (shelfCount + 1)).",
     "listLabel": "רשימת ביטויים מוגדרי שם",
     "addTitle": "הוסף ביטוי",
+    "editTitle": "ערוך ביטוי",
     "nameLabel": "שם",
     "namePlaceholder": "למשל shelf_gap",
     "exprLabel": "נוסחה",
     "exprPlaceholder": "למשל height / (shelfCount + 1)",
     "add": "הוסף",
+    "editButton": "עריכה",
+    "edit": "ערוך את {{name}}",
+    "save": "שמירה",
+    "cancel": "ביטול",
+    "applyButton": "החל",
+    "apply": "החל את {{name}}",
+    "applyTarget": "מידה לעדכון באמצעות {{name}}",
     "empty": "לא הוגדרו ביטויים עדיין.",
     "remove": "הסר {{name}}",
     "resolvedValue": "{{name}} = {{value}}",
-    "hint": "משתנים זמינים: width, height, depth, shelfCount, doorCount, drawerCount, kickHeight. תומך ב: +, -, *, /, (), Math.*",
+    "hint": "משתנים זמינים: width, height, depth, shelfCount, doorCount, drawerCount, kickHeight. תומך ב: +, -, *, /, (), Math.floor, ceil, round, min, max, abs, trunc.",
     "errorNameRequired": "שם הוא שדה חובה",
     "errorNameInvalid": "השם חייב להתחיל באות או _ ולהכיל רק אותיות, ספרות ו-_",
     "errorNameTooLong": "השם חייב להכיל לכל היותר 32 תווים",
     "errorExprRequired": "נוסחה היא שדה חובה",
-    "errorExprTooLong": "הנוסחה חייבת להכיל לכל היותר 256 תווים"
+    "errorExprTooLong": "הנוסחה חייבת להכיל לכל היותר 256 תווים",
+    "errorDimensionBounds": "ערך {{dimension}} {{value}} חייב להיות בין {{min}} ל-{{max}} מ״מ."
   }
 }

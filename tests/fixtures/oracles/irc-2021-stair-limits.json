@@ -1,0 +1,17 @@
+{
+  "source": "2021 International Residential Code, Sections R311.7.5.1 and R311.7.5.2",
+  "urls": [
+    "https://codes.iccsafe.org/content/IRC2021P3/chapter-3-building-planning#IRC2021P3_Pt03_Ch03_SecR311.7.5.1",
+    "https://codes.iccsafe.org/content/IRC2021P3/chapter-3-building-planning#IRC2021P3_Pt03_Ch03_SecR311.7.5.2"
+  ],
+  "retrievedOn": "2026-10-01",
+  "condition": "R311.7.5.1 sets a maximum riser height of 7 3/4 inches; R311.7.5.2 sets a minimum tread depth of 10 inches. These clauses do not set a minimum riser height.",
+  "input": {
+    "totalRiseMm": 590.55,
+    "treadDepthMm": 254,
+    "idealRiserMm": 1000
+  },
+  "expected": {
+    "passesIrc": true
+  }
+}

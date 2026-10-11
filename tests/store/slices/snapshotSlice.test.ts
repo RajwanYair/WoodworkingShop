@@ -112,14 +112,15 @@ describe('createSnapshotSlice — saveSnapshot', () => {
     expect(get().snapshots[0].name).toMatch(/^Snapshot \d{4}-\d{2}-\d{2}/);
   });
 
-  it('assigns unique IDs across multiple saves', () => {
-    const { get } = makeSlice();
-    get().saveSnapshot('A');
-    // Ensure at least 1 ms apart so Date.now() differs
+  it('assigns unique IDs when snapshots are saved in the same millisecond', () => {
     vi.useFakeTimers();
-    vi.advanceTimersByTime(2);
-    get().saveSnapshot('B');
-    vi.useRealTimers();
+    const { get } = makeSlice();
+    try {
+      get().saveSnapshot('A');
+      get().saveSnapshot('B');
+    } finally {
+      vi.useRealTimers();
+    }
     const [a, b] = get().snapshots;
     expect(a.id).not.toBe(b.id);
   });

@@ -6,6 +6,7 @@ import {
   getDirectFunctionTestCases,
   getExportedFunctionLineRanges,
   getExportedFunctionNames,
+  getFunctionCoverageStatus,
 } from '../../scripts/test-coverage-map.js';
 
 function parseTypeScript(source: string, fileName: string): ts.SourceFile {
@@ -118,5 +119,40 @@ describe('classifyFunctionCoverage', () => {
     { name: 'body measured but unhit', files: [], hits: new Map([[5, 0]]), range: bodyRange, expected: 'uncovered' },
   ])('classifies $name', ({ files, hits, range, expected }) => {
     expect(classifyFunctionCoverage(files, hits, range)).toBe(expected);
+  });
+});
+
+describe('getFunctionCoverageStatus', () => {
+  const bodyRange = { startLine: 4, endLine: 7 };
+
+  it.each([
+    {
+      name: 'directly covered function',
+      tests: ['tests/engine/example.test.ts'],
+      hits: new Map([[5, 1]]),
+      waiverReason: undefined,
+      expected: 'covered',
+    },
+    {
+      name: 'indirectly covered function',
+      tests: [],
+      hits: new Map([[5, 1]]),
+      waiverReason: undefined,
+      expected: 'indirect',
+    },
+    {
+      name: 'explicit waiver',
+      tests: [],
+      hits: undefined,
+      waiverReason: 'Runtime behavior is exercised by the platform host.',
+      expected: 'waived',
+    },
+  ])('assigns the required state to a $name', ({ tests, hits, waiverReason, expected }) => {
+    expect(getFunctionCoverageStatus(tests, hits, bodyRange, waiverReason)).toBe(expected);
+  });
+
+  it('rejects unreasoned waivers and unmeasured functions', () => {
+    expect(() => getFunctionCoverageStatus([], undefined, bodyRange, '  ')).toThrow(/must include a reason/);
+    expect(() => getFunctionCoverageStatus([], undefined, bodyRange, undefined)).toThrow(/no measured body coverage/);
   });
 });

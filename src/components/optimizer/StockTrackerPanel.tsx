@@ -2,8 +2,8 @@ import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useStockTrackerStore } from '../../store/stock-tracker-store';
-import { checkAvailability } from '../../engine/stock-tracker';
-import type { DemandEntry, StockItem } from '../../engine/stock-tracker';
+import { checkAvailability } from '../../engine/stock';
+import type { DemandEntry, StockItem } from '../../engine/stock';
 
 const STATUS_STYLES = {
   ok: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
@@ -111,7 +111,7 @@ export function StockTrackerPanel() {
                           value={editQty}
                           onChange={(e) => setEditQty(e.target.value)}
                           onBlur={() => commitEdit(r.materialKey)}
-                          onKeyDown={(e) => e.key === 'Enter' && commitEdit(r.materialKey)}
+                          onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
                           className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 w-16 rounded border px-1 text-end text-sm"
                           aria-label={t('stockTracker.editQtyAriaLabel', { key: r.materialKey })}
                         />
@@ -169,8 +169,11 @@ export function StockTrackerPanel() {
             </summary>
             <div className="mt-2 flex flex-wrap items-end gap-2">
               <div className="flex flex-col gap-0.5">
-                <label className="text-wood-500 text-xs">{t('stockTracker.materialKey')}</label>
+                <label htmlFor="stock-material-key" className="text-wood-500 text-xs">
+                  {t('stockTracker.materialKey')}
+                </label>
                 <input
+                  id="stock-material-key"
                   type="text"
                   value={newKey}
                   onChange={(e) => setNewKey(e.target.value)}
@@ -179,8 +182,11 @@ export function StockTrackerPanel() {
                 />
               </div>
               <div className="flex flex-col gap-0.5">
-                <label className="text-wood-500 text-xs">{t('stockTracker.onHand')}</label>
+                <label htmlFor="stock-on-hand" className="text-wood-500 text-xs">
+                  {t('stockTracker.onHand')}
+                </label>
                 <input
+                  id="stock-on-hand"
                   type="number"
                   min={0}
                   value={newQty}
@@ -190,8 +196,11 @@ export function StockTrackerPanel() {
                 />
               </div>
               <div className="flex flex-col gap-0.5">
-                <label className="text-wood-500 text-xs">{t('stockTracker.reorderAt')}</label>
+                <label htmlFor="stock-reorder-at" className="text-wood-500 text-xs">
+                  {t('stockTracker.reorderAt')}
+                </label>
                 <input
+                  id="stock-reorder-at"
                   type="number"
                   min={0}
                   value={newReorder}

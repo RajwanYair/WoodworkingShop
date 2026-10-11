@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { buildZip, downloadZip } from '../../src/utils/zip-writer';
+import { buildZip, createZipManifest, downloadZip } from '../../src/utils/zip-writer';
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -27,6 +27,71 @@ describe('buildZip', () => {
     expect(view.getUint32(endOffset, true)).toBe(0x06054b50);
     expect(view.getUint16(endOffset + 8, true)).toBe(1);
     expect(view.getUint16(endOffset + 10, true)).toBe(1);
+  });
+
+  it.each([
+    ['', 'empty'],
+    ['/root.txt', 'absolute'],
+    ['C:/root.txt', 'drive-qualified'],
+    ['../outside.txt', 'parent-relative'],
+    ['sheets/../outside.txt', 'nested traversal'],
+    ['./local.txt', 'dot segment'],
+    ['sheets//empty-segment.txt', 'empty path segment'],
+    ['sheets\\outside.dxf', 'backslash separator'],
+    ['folder/', 'directory path'],
+    ['bad\nname.txt', 'control character'],
+  ])('rejects %s as an unsafe %s ZIP entry path', (name) => {
+    expect(() => buildZip([{ name, data: new Uint8Array() }])).toThrow(RangeError);
+  });
+
+  it('rejects duplicate entry paths', () => {
+    const entry = { name: 'parts/list.csv', data: new Uint8Array() };
+    expect(() => buildZip([entry, entry])).toThrow(/Duplicate ZIP entry path/);
+  });
+
+  it('rejects paths whose UTF-8 name exceeds the ZIP filename field', () => {
+    expect(() => buildZip([{ name: 'a'.repeat(65_536), data: new Uint8Array() }])).toThrow(RangeError);
+  });
+
+  it('creates a sorted manifest with byte sizes and SHA-256 checksums', async () => {
+    const entries = [
+      { name: 'z-last.txt', data: new TextEncoder().encode('world') },
+      { name: 'a-first.txt', data: new TextEncoder().encode('hello') },
+    ];
+    const originalNames = entries.map(({ name }) => name);
+    const manifestEntry = await createZipManifest(entries);
+    const manifest = JSON.parse(new TextDecoder().decode(manifestEntry.data)) as {
+      format: string;
+      version: number;
+      checksumAlgorithm: string;
+      files: { path: string; sizeBytes: number; sha256: string }[];
+    };
+
+    expect(manifestEntry.name).toBe('manifest.json');
+    expect(manifest).toEqual({
+      format: 'cabinet-planner-export-bundle',
+      version: 1,
+      checksumAlgorithm: 'SHA-256',
+      files: [
+        {
+          path: 'a-first.txt',
+          sizeBytes: 5,
+          sha256: '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824',
+        },
+        {
+          path: 'z-last.txt',
+          sizeBytes: 5,
+          sha256: '486ea46224d1bb4fb680f34f7c9ad96a8f24ec88be73ea8e5a6c65260e9cb8a7',
+        },
+      ],
+    });
+    expect(entries.map(({ name }) => name)).toEqual(originalNames);
+  });
+
+  it('rejects an input entry that conflicts with the manifest path', async () => {
+    await expect(createZipManifest([{ name: 'manifest.json', data: new Uint8Array() }])).rejects.toThrow(
+      /reserved for the integrity manifest/,
+    );
   });
 
   it('writes a valid empty archive directory record', () => {

@@ -23,6 +23,7 @@ import AssemblyWorker from '../workers/assembly.worker?worker';
 import type { AssemblyWorkerApi } from '../workers/assembly.worker';
 // Type-only import — erased at runtime, so no circular dependency.
 import type { CabinetState } from './cabinet-store';
+import { getCustomMaterials } from './custom-materials-store';
 
 // ── Worker proxies ────────────────────────────────────────────────────────────
 // Kept module-level to avoid serialisation into Zustand state.
@@ -254,6 +255,7 @@ export function scheduleOptimization(
   // Sprint 16 — decorate with rotation locks before sending to optimizer.
   const lockedActive = applyLocks(activeParts);
   const lockedAll = applyLocks(allParts);
+  const extraMaterials = getCustomMaterials();
   const proxy = getCutProxy();
   if (!proxy) {
     // Synchronous fallback (tests / browsers without Worker support).
@@ -265,6 +267,7 @@ export function scheduleOptimization(
         _cutMode,
         _offcutCatalog,
         _defectZones,
+        extraMaterials,
       );
       const combinedRes = optimizeCutSheetsResult(
         lockedAll,
@@ -273,6 +276,7 @@ export function scheduleOptimization(
         _cutMode,
         _offcutCatalog,
         _defectZones,
+        extraMaterials,
       );
       if (activeRes.ok && combinedRes.ok) {
         let activeOpt = activeRes.value;
@@ -289,6 +293,7 @@ export function scheduleOptimization(
           combinedOptimization: combinedOpt,
           optimizationPending: false,
         });
+        scheduleCostFromState(_getState!(), activeOpt);
       } else {
         _workerApplyFn({ optimizationPending: false });
       }
@@ -303,6 +308,7 @@ export function scheduleOptimization(
     cutMode: _cutMode,
     offcutCatalog: _offcutCatalog,
     defectZones: _defectZones,
+    extraMaterials,
     autoCoNest: _autoCoNest,
   };
   const stopRequest = () => {
@@ -394,6 +400,7 @@ function scheduleCost(
           labourRate,
           labourHours,
           finishCost,
+          getCustomMaterials(),
         ),
         costPending: false,
       });
@@ -410,6 +417,7 @@ function scheduleCost(
     labourRate,
     labourHours,
     finishCost,
+    extraMaterials: getCustomMaterials(),
   };
   const stopRequest = () => {
     if (_latestCostId !== callId) return;

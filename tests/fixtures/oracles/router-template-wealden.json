@@ -1,0 +1,13 @@
+{
+  "source": "Wealden Tool Company Limited, Guide Bushes Part One - The Basics",
+  "url": "https://www.wealdentool.com/kb/rons-tips/guide-bushes/guide-bushes-part-one-basics/",
+  "retrievedOn": "2026-10-01",
+  "condition": "The source gives the offset formula as half the difference between guide-bush outside diameter and cutter diameter, with a 20 mm bush and 10 mm cutter yielding 5 mm. Cut direction changes template adjustment direction, not offset magnitude.",
+  "input": {
+    "bushingODMm": 20,
+    "bitDiameterMm": 10
+  },
+  "expected": {
+    "offsetMm": 5
+  }
+}

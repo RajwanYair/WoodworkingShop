@@ -3,7 +3,8 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { resolve } from 'node:path';
-import { readFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { relative } from 'node:path';
 import os from 'node:os';
 import { sriPlugin } from './scripts/vite-plugin-sri.ts';
 
@@ -26,6 +27,34 @@ function cloudflareAnalyticsPlugin() {
   };
 }
 
+function capabilityChunkPlugin() {
+  return {
+    name: 'capability-chunk-map',
+    apply: 'build' as const,
+    generateBundle(
+      _options: unknown,
+      bundle: Record<string, { type: string; fileName: string; modules?: Record<string, unknown> }>,
+    ) {
+      const chunks: Record<string, string[]> = {};
+      for (const output of Object.values(bundle)) {
+        if (output.type !== 'chunk') continue;
+        for (const moduleId of Object.keys(output.modules ?? {})) {
+          const cleanId = moduleId.split(/[?#]/, 1)[0];
+          if (!cleanId) continue;
+          const sourcePath = relative(process.cwd(), cleanId).replaceAll('\\', '/');
+          if (!/^src\/(?:engine|utils|services)\//.test(sourcePath)) continue;
+          const moduleChunks = chunks[sourcePath] ?? [];
+          moduleChunks.push(output.fileName);
+          chunks[sourcePath] = moduleChunks;
+        }
+      }
+      const reportDirectory = resolve(os.tmpdir(), 'WoodworkingShop', 'capability-map');
+      mkdirSync(reportDirectory, { recursive: true });
+      writeFileSync(resolve(reportDirectory, 'chunks.json'), `${JSON.stringify(chunks, null, 2)}\n`);
+    },
+  };
+}
+
 // https://vite.dev/config/
 export default defineConfig({
   cacheDir: resolve(os.tmpdir(), 'WoodworkingShop', '.vite_cache'),
@@ -33,6 +62,7 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    capabilityChunkPlugin(),
     cloudflareAnalyticsPlugin(),
     sriPlugin(),
     VitePWA({
@@ -47,11 +77,20 @@ export default defineConfig({
         skipWaiting: false,
         clientsClaim: false,
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+        globIgnores: ['**/assets/PdfExportPanel-*.js'],
         navigateFallback: '/WoodworkingShop/index.html',
         navigateFallbackDenylist: [/^\/WoodworkingShop\/api\//],
         // Sprint 149 — offline fallback for navigation requests when cache is empty
         offlineGoogleAnalytics: false,
         runtimeCaching: [
+          {
+            urlPattern: ({ url }: { url: URL }) => url.pathname.startsWith('/WoodworkingShop/assets/PdfExportPanel-'),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'pdf-renderer',
+              expiration: { maxEntries: 1, maxAgeSeconds: 60 * 60 * 24 * 365 },
+            },
+          },
           {
             // Cache Google Fonts stylesheets
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -110,13 +149,20 @@ export default defineConfig({
   },
   build: {
     target: 'es2022',
+    manifest: true,
     chunkSizeWarningLimit: 1600,
     // v3.24.0: inject modulepreload polyfill for Safari < 16.4 compatibility
-    modulePreload: { polyfill: true },
+    modulePreload: {
+      polyfill: true,
+      resolveDependencies: (_filename, dependencies, { hostType }) =>
+        hostType === 'html'
+          ? dependencies.filter((dependency) => !dependency.includes('/pdf-renderer-'))
+          : dependencies,
+    },
     rollupOptions: {
       output: {
         // Sprint 63 — consolidated chunk strategy:
-        //   pdf-renderer : lazily-imported 300 KB PDF engine — own chunk for deferred loading.
+        //   PDF export   : route-isolated; the renderer stays inside the lazy PDF panel chunk.
         //   i18n-vendor  : i18next + react-i18next — stable, cached separately from app code.
         //   vendor       : React + React-DOM + Zustand — small combined chunk; rarely changes
         //                  together with app code, benefits from long-term browser caching.
@@ -125,10 +171,10 @@ export default defineConfig({
         // Phase 18 prep: when Three.js is added, add:
         //   if (id.includes('three')) return 'three-vendor';
         manualChunks: (id) => {
-          if (id.includes('@react-pdf/renderer')) return 'pdf-renderer';
-          if (id.includes('/i18next') || id.includes('/react-i18next')) return 'i18n-vendor';
+          // Keep shared React modules in the eager vendor chunk, not the lazy PDF chunk.
           if (id.includes('/react-dom/') || id.includes('/node_modules/react/') || id.includes('/zustand'))
             return 'vendor';
+          if (id.includes('/i18next') || id.includes('/react-i18next')) return 'i18n-vendor';
           // Sprint 140 — defer parse cost of heavy optimizer engine to OptimizerView lazy chunk
           if (id.includes('/cut-optimizer') || id.includes('/smart-optimizer') || id.includes('/assembly-dag'))
             return 'engine-optimizer';

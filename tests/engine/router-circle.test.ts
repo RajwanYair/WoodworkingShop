@@ -1,26 +1,55 @@
 import { describe, it, expect } from 'vitest';
+import FESTOOL_ROUTER_CIRCLE_ORACLE from '../fixtures/oracles/festool-router-circle.json';
 import { calculateRouterCircle } from '../../src/engine/router-circle';
 
 describe('calculateRouterCircle', () => {
-  it('calculates disc mode arm length as radius + bit/2', () => {
+  it('calculates disc mode arm length as radius - bit/2', () => {
     const result = calculateRouterCircle({
       targetDiameterMm: 300,
       bitDiameterMm: 12,
       cutMode: 'disc',
     });
 
-    expect(result.armLengthMm).toBe(156);
+    expect(result.armLengthMm).toBe(144);
   });
 
-  it('calculates hole mode arm length as radius - bit/2', () => {
+  it('calculates hole mode arm length as radius + bit/2', () => {
     const result = calculateRouterCircle({
       targetDiameterMm: 300,
       bitDiameterMm: 12,
       cutMode: 'hole',
     });
 
-    expect(result.armLengthMm).toBe(144);
+    expect(result.armLengthMm).toBe(156);
   });
+
+  it.each([
+    { cutMode: 'disc' as const, armLengthMm: 95 },
+    { cutMode: 'hole' as const, armLengthMm: 105 },
+  ])('matches the 200 mm diameter $cutMode oracle', ({ cutMode, armLengthMm }) => {
+    expect(calculateRouterCircle({ targetDiameterMm: 200, bitDiameterMm: 10, cutMode })).toEqual({
+      armLengthMm,
+      circumferenceMm: 628.3,
+      areaMm2: 31415.9,
+      pivotOffsetMm: 3,
+    });
+  });
+
+  it.each(FESTOOL_ROUTER_CIRCLE_ORACLE.cases)(
+    'matches Festool 200 mm radius / 14 mm cutter setting for $cutMode',
+    ({ cutMode, armLengthMm }) => {
+      if (cutMode !== 'disc' && cutMode !== 'hole') {
+        throw new Error(`Unexpected Festool oracle cut mode: ${cutMode}`);
+      }
+
+      expect(
+        calculateRouterCircle({
+          ...FESTOOL_ROUTER_CIRCLE_ORACLE.input,
+          cutMode,
+        }).armLengthMm,
+      ).toBe(armLengthMm);
+    },
+  );
 
   it('calculates circumference as pi × diameter', () => {
     const result = calculateRouterCircle({
@@ -29,8 +58,7 @@ describe('calculateRouterCircle', () => {
       cutMode: 'disc',
     });
 
-    const expected = Math.round(Math.PI * 200 * 10) / 10;
-    expect(result.circumferenceMm).toBe(expected);
+    expect(result.circumferenceMm).toBe(628.3);
   });
 
   it('calculates area as pi × r^2', () => {
@@ -40,8 +68,7 @@ describe('calculateRouterCircle', () => {
       cutMode: 'disc',
     });
 
-    const expected = Math.round(Math.PI * 100 * 100 * 10) / 10;
-    expect(result.areaMm2).toBe(expected);
+    expect(result.areaMm2).toBe(31415.9);
   });
 
   it('uses default pivot hole diameter of 6 mm', () => {
@@ -74,6 +101,21 @@ describe('calculateRouterCircle', () => {
       { targetDiameterMm: 200, bitDiameterMm: 10, pivotHoleDiameterMm: 0, cutMode: 'disc' as const },
     ],
   ])('throws RangeError for invalid input: %s', (_label, input) => {
+    expect(() => calculateRouterCircle(input)).toThrow(RangeError);
+  });
+
+  it.each([
+    ['NaN targetDiameterMm', { targetDiameterMm: Number.NaN, bitDiameterMm: 10, cutMode: 'disc' as const }],
+    [
+      'infinite bitDiameterMm',
+      { targetDiameterMm: 200, bitDiameterMm: Number.POSITIVE_INFINITY, cutMode: 'disc' as const },
+    ],
+    [
+      'NaN pivotHoleDiameterMm',
+      { targetDiameterMm: 200, bitDiameterMm: 10, pivotHoleDiameterMm: Number.NaN, cutMode: 'disc' as const },
+    ],
+    ['overflowing area', { targetDiameterMm: Number.MAX_VALUE, bitDiameterMm: 10, cutMode: 'disc' as const }],
+  ])('throws RangeError for non-finite input: %s', (_label, input) => {
     expect(() => calculateRouterCircle(input)).toThrow(RangeError);
   });
 });

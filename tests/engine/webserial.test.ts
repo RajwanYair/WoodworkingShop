@@ -1,12 +1,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   connectToMachine,
-  DEFAULT_SERIAL_PROFILE,
   disconnectFromMachine,
   isWebSerialAvailable,
   streamGcodeLines,
-} from '../../src/engine/webserial';
-import type { SerialPortHandle, WebSerialProfile } from '../../src/engine/webserial';
+  WebSerialUnsupportedError,
+} from '../../src/utils/webserial-cnc';
+import type { SerialPortHandle } from '../../src/utils/webserial-cnc';
+import { DEFAULT_SERIAL_PROFILE } from '../../src/engine/webserial-v2';
+import type { WebSerialProfile } from '../../src/engine/webserial-v2';
 
 interface SerialApiStub {
   requestPort: ReturnType<typeof vi.fn<() => Promise<SerialPortHandle>>>;
@@ -60,9 +62,7 @@ describe('isWebSerialAvailable', () => {
 
 describe('connectToMachine', () => {
   it('rejects when the Serial API is unavailable', async () => {
-    await expect(connectToMachine(DEFAULT_SERIAL_PROFILE)).rejects.toThrow(
-      'WebSerial API is not available in this browser.',
-    );
+    await expect(connectToMachine(DEFAULT_SERIAL_PROFILE)).rejects.toBeInstanceOf(WebSerialUnsupportedError);
   });
 
   it('requests and opens a port with the complete profile defaults', async () => {

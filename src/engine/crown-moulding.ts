@@ -1,3 +1,5 @@
+import { assertFiniteNumber } from './invariant';
+
 export type CrownCutMethod = 'flat' | 'in_position';
 
 export interface CrownMouldingInput {
@@ -12,8 +14,18 @@ export interface CrownMouldingResult {
   cuttingMethod: CrownCutMethod;
 }
 
+/**
+ * Calculate miter and bevel settings for crown moulding.
+ * @param input Inside corner angle, moulding spring angle, and cutting method.
+ * @returns Rounded miter and bevel angles in degrees.
+ * @throws {RangeError} When an angle is non-finite or outside its supported range.
+ */
 export function calculateCrownMoulding(input: CrownMouldingInput): CrownMouldingResult {
   const { cornerAngleDeg, springAngleDeg, cuttingMethod } = input;
+
+  const fn = 'calculateCrownMoulding';
+  assertFiniteNumber(fn, 'cornerAngleDeg', cornerAngleDeg);
+  assertFiniteNumber(fn, 'springAngleDeg', springAngleDeg);
 
   if (cornerAngleDeg <= 0 || cornerAngleDeg >= 180) {
     throw new RangeError('cornerAngleDeg must be between 0° and 180° (exclusive)');
@@ -35,8 +47,8 @@ export function calculateCrownMoulding(input: CrownMouldingInput): CrownMoulding
   const halfCornerRad = ((cornerAngleDeg / 2) * Math.PI) / 180;
   const springRad = (springAngleDeg * Math.PI) / 180;
 
-  const miterRad = Math.atan(Math.cos(springRad) * Math.tan(halfCornerRad));
-  const sinBevel = Math.sin(springRad) * Math.sin(halfCornerRad);
+  const miterRad = Math.atan(Math.sin(springRad) * Math.tan(halfCornerRad));
+  const sinBevel = Math.cos(springRad) * Math.sin(halfCornerRad);
 
   if (Math.abs(sinBevel) > 1) {
     throw new RangeError('Invalid combination of cornerAngleDeg and springAngleDeg');

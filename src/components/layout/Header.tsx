@@ -1,12 +1,23 @@
-import { useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useToastStore } from '../../store/toast-store';
 import { configToUrl } from '../../utils/url-state';
+import {
+  APP_COMMAND_DEFINITIONS,
+  APP_SHORTCUTS,
+  APP_TAB_COMMANDS,
+  createAppCommand,
+  registerCommands,
+  unregisterCommand,
+} from '../../utils/command-palette';
 import { HelpButton } from './OnboardingOverlay';
 import { TemplatePicker } from '../configurator/TemplatePicker';
+import { applyCabinetTemplate } from '../configurator/apply-template';
+import { TEMPLATES } from '../../engine/templates';
 import { ProjectManagerModal } from './ProjectManagerModal';
 import { MarketplacePanel } from './MarketplacePanel';
+import { transitionTab } from './transition-tab';
 import { SUPPORTED_LANGUAGES, RTL_LANGS, loadLocale, type SupportedLang } from '../../i18n';
 import {
   IconSun,
@@ -18,69 +29,18 @@ import {
   IconContrast,
   IconLayers,
   IconFolder,
-  IconSettings,
-  IconEye,
-  IconScissors,
-  IconHammer,
-  IconDocument,
-  IconRuler,
 } from './Icons';
 
-const tabs = ['workspace', 'configurator', 'preview', 'optimizer', 'assembly', 'pdf', 'calculators'] as const;
-
-const TAB_SHORTCUTS: Record<(typeof tabs)[number], string> = {
-  workspace: '',
-  configurator: 'Alt+1',
-  preview: 'Alt+2',
-  optimizer: 'Alt+3',
-  assembly: 'Alt+4',
-  pdf: 'Alt+5',
-  calculators: 'Alt+6',
-};
+const tabs = APP_TAB_COMMANDS.map(({ id }) => id);
 
 const TAB_ICONS = {
-  workspace: (
-    <span aria-hidden="true" className="flex shrink-0 items-center gap-1 text-sm">
-      <span>🏷️</span>
-      <span>🪵</span>
-    </span>
-  ),
-  configurator: (
-    <span aria-hidden="true" className="flex shrink-0 items-center gap-1 text-sm">
-      <IconSettings size={13} />
-      <span>⚙️</span>
-    </span>
-  ),
-  preview: (
-    <span aria-hidden="true" className="flex shrink-0 items-center gap-1 text-sm">
-      <IconEye size={13} />
-      <span>👁️</span>
-    </span>
-  ),
-  optimizer: (
-    <span aria-hidden="true" className="flex shrink-0 items-center gap-1 text-sm">
-      <IconScissors size={13} />
-      <span>✂️</span>
-    </span>
-  ),
-  assembly: (
-    <span aria-hidden="true" className="flex shrink-0 items-center gap-1 text-sm">
-      <IconHammer size={13} />
-      <span>🔨</span>
-    </span>
-  ),
-  pdf: (
-    <span aria-hidden="true" className="flex shrink-0 items-center gap-1 text-sm">
-      <IconDocument size={13} />
-      <span>📄</span>
-    </span>
-  ),
-  calculators: (
-    <span aria-hidden="true" className="flex shrink-0 items-center gap-1 text-sm">
-      <IconRuler size={13} />
-      <span>🧮</span>
-    </span>
-  ),
+  workspace: '🏷️',
+  configurator: '⚙️',
+  preview: '👁️',
+  optimizer: '✂️',
+  assembly: '🔨',
+  pdf: '📄',
+  calculators: '🧮',
 } as const;
 
 export function Header() {
@@ -121,21 +81,142 @@ export function Header() {
     }
     if (next >= 0) {
       e.preventDefault();
-      setActiveTab(tabs[next]);
+      if (tabs[next] !== activeTab) transitionTab(() => setActiveTab(tabs[next]));
       const buttons = tabListRef.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]');
       buttons?.[next]?.focus();
     }
   };
 
-  const changeLang = (next: SupportedLang) => {
-    void loadLocale(next).then(() => {
-      i18n.changeLanguage(next);
-      document.documentElement.dir = RTL_LANGS.has(next) ? 'rtl' : 'ltr';
-      // Engine-facing lang stays 'en'|'he' — AR/ES/DE/FR fall back to EN for BOM column headers.
-      const engineLang: 'en' | 'he' = next === 'he' || next === 'ar' ? 'he' : 'en';
-      useCabinetStore.getState().setConfig({ lang: engineLang });
-    });
-  };
+  const changeLang = useCallback(
+    (next: SupportedLang) => {
+      void loadLocale(next).then(() => {
+        i18n.changeLanguage(next);
+        document.documentElement.dir = RTL_LANGS.has(next) ? 'rtl' : 'ltr';
+        // Engine-facing lang stays 'en'|'he' — AR/ES/DE/FR fall back to EN for BOM column headers.
+        const engineLang: 'en' | 'he' = next === 'he' || next === 'ar' ? 'he' : 'en';
+        useCabinetStore.getState().setConfig({ lang: engineLang });
+      });
+    },
+    [i18n],
+  );
+
+  const copyShareLink = useCallback(() => {
+    const { config, projectName } = useCabinetStore.getState();
+    const url = configToUrl(config, projectName);
+    navigator.clipboard.writeText(url).then(
+      () => useToastStore.getState().addToast(t('toast.linkCopied'), 'success'),
+      () => useToastStore.getState().addToast(t('toast.linkCopyFailed'), 'error'),
+    );
+  }, [t]);
+
+  const openTemplates = useCallback(() => setShowTemplates(true), []);
+  const openProjects = useCallback(() => setShowProjects(true), []);
+  const openMarketplace = useCallback(() => setShowMarketplace(true), []);
+  const openShortcuts = useCallback(() => {
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: APP_COMMAND_DEFINITIONS.openShortcuts.key }));
+  }, []);
+
+  useEffect(() => {
+    const commands = [
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.undo,
+        t(APP_COMMAND_DEFINITIONS.undo.labelKey),
+        t(APP_COMMAND_DEFINITIONS.undo.categoryKey),
+        undo,
+        () => canUndo,
+      ),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.redo,
+        t(APP_COMMAND_DEFINITIONS.redo.labelKey),
+        t(APP_COMMAND_DEFINITIONS.redo.categoryKey),
+        redo,
+      ),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.toggleTheme,
+        t(APP_COMMAND_DEFINITIONS.toggleTheme.labelKey),
+        t(APP_COMMAND_DEFINITIONS.toggleTheme.categoryKey),
+        toggleDarkMode,
+      ),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.toggleContrast,
+        t(APP_COMMAND_DEFINITIONS.toggleContrast.labelKey),
+        t(APP_COMMAND_DEFINITIONS.toggleContrast.categoryKey),
+        toggleHighContrast,
+      ),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.toggleUnits,
+        t(APP_COMMAND_DEFINITIONS.toggleUnits.labelKey),
+        t(APP_COMMAND_DEFINITIONS.toggleUnits.categoryKey),
+        toggleUnits,
+      ),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.copyLink,
+        t(APP_COMMAND_DEFINITIONS.copyLink.labelKey),
+        t(APP_COMMAND_DEFINITIONS.copyLink.categoryKey),
+        copyShareLink,
+      ),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.openTemplates,
+        t(APP_COMMAND_DEFINITIONS.openTemplates.labelKey),
+        t(APP_COMMAND_DEFINITIONS.openTemplates.categoryKey),
+        openTemplates,
+      ),
+      ...TEMPLATES.map((template) => ({
+        id: `header.template.${template.id}`,
+        label: template.name[i18n.language === 'he' ? 'he' : 'en'],
+        category: t('commandPalette.categories.presets'),
+        keywords: [template.id],
+        action: () => {
+          applyCabinetTemplate(template.id);
+          setShowTemplates(false);
+        },
+      })),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.openProjects,
+        t(APP_COMMAND_DEFINITIONS.openProjects.labelKey),
+        t(APP_COMMAND_DEFINITIONS.openProjects.categoryKey),
+        openProjects,
+      ),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.openMarketplace,
+        t(APP_COMMAND_DEFINITIONS.openMarketplace.labelKey),
+        t(APP_COMMAND_DEFINITIONS.openMarketplace.categoryKey),
+        openMarketplace,
+      ),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.openShortcuts,
+        t(APP_COMMAND_DEFINITIONS.openShortcuts.labelKey),
+        t(APP_COMMAND_DEFINITIONS.openShortcuts.categoryKey),
+        openShortcuts,
+      ),
+      ...SUPPORTED_LANGUAGES.map((language) => ({
+        id: `header.language.${language.code}`,
+        label: language.nativeLabel,
+        category: t('commandPalette.categories.language'),
+        keywords: [language.code, language.nativeLabel],
+        when: () => i18n.language !== language.code,
+        action: () => changeLang(language.code),
+      })),
+    ];
+    registerCommands(commands);
+    return () => commands.forEach(({ id }) => unregisterCommand(id));
+  }, [
+    canRedo,
+    canUndo,
+    changeLang,
+    copyShareLink,
+    i18n,
+    openMarketplace,
+    openProjects,
+    openShortcuts,
+    openTemplates,
+    redo,
+    t,
+    toggleDarkMode,
+    toggleHighContrast,
+    toggleUnits,
+    undo,
+  ]);
 
   return (
     <header
@@ -180,7 +261,7 @@ export function Header() {
             onClick={undo}
             disabled={!canUndo}
             className="text-wood-200 flex items-center hover:text-white disabled:opacity-30"
-            aria-label="Undo"
+            aria-label={t('commandPalette.commands.undo')}
           >
             <IconUndo size={16} />
           </button>
@@ -188,7 +269,7 @@ export function Header() {
             onClick={redo}
             disabled={!canRedo}
             className="text-wood-200 flex items-center hover:text-white disabled:opacity-30"
-            aria-label="Redo"
+            aria-label={t('commandPalette.commands.redo')}
           >
             <IconRedo size={16} />
           </button>
@@ -225,18 +306,26 @@ export function Header() {
           <button
             key={tab}
             role="tab"
-            onClick={() => setActiveTab(tab)}
+            onClick={() => {
+              if (activeTab !== tab) transitionTab(() => setActiveTab(tab));
+            }}
             onKeyDown={(e) => handleTabKeyDown(e, i)}
             tabIndex={activeTab === tab ? 0 : -1}
             aria-selected={activeTab === tab}
             aria-current={activeTab === tab ? 'page' : undefined}
             aria-controls="main-content"
-            title={TAB_SHORTCUTS[tab] ? `${t(`tabs.${tab}`)} (${TAB_SHORTCUTS[tab]})` : t(`tabs.${tab}`)}
+            title={
+              APP_TAB_COMMANDS[i].shortcut
+                ? `${t(APP_TAB_COMMANDS[i].labelKey)} (${APP_TAB_COMMANDS[i].shortcut})`
+                : t(APP_TAB_COMMANDS[i].labelKey)
+            }
             className={`flex items-center gap-1.5 rounded px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-colors ${
               activeTab === tab ? 'bg-wood-600 text-white' : 'text-wood-200 hover:bg-wood-600'
             }`}
           >
-            {TAB_ICONS[tab]}
+            <span aria-hidden="true" className="shrink-0 text-sm">
+              {TAB_ICONS[tab]}
+            </span>
             {t(`tabs.${tab}`)}
           </button>
         ))}
@@ -248,7 +337,7 @@ export function Header() {
           onClick={undo}
           disabled={!canUndo}
           className="text-wood-200 flex items-center hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
-          title="Undo (Ctrl+Z)"
+          title={`${t('commandPalette.commands.undo')} (${APP_SHORTCUTS.undo.shortcut})`}
           aria-label="Undo"
         >
           <IconUndo size={16} />
@@ -257,20 +346,13 @@ export function Header() {
           onClick={redo}
           disabled={!canRedo}
           className="text-wood-200 flex items-center hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
-          title="Redo (Ctrl+Y)"
+          title={`${t('commandPalette.commands.redo')} (${APP_SHORTCUTS.redo.shortcut})`}
           aria-label="Redo"
         >
           <IconRedo size={16} />
         </button>
         <button
-          onClick={() => {
-            const { config, projectName } = useCabinetStore.getState();
-            const url = configToUrl(config, projectName);
-            navigator.clipboard.writeText(url).then(
-              () => useToastStore.getState().addToast(t('toast.linkCopied'), 'success'),
-              () => useToastStore.getState().addToast(t('toast.linkCopyFailed'), 'error'),
-            );
-          }}
+          onClick={copyShareLink}
           className="text-wood-200 flex items-center hover:text-white"
           title="Copy shareable link"
           aria-label="Copy shareable link"
@@ -315,7 +397,7 @@ export function Header() {
           ))}
         </select>
         <button
-          onClick={() => setShowTemplates(true)}
+          onClick={openTemplates}
           className="text-wood-200 flex items-center hover:text-white"
           title={t('templates.title')}
           aria-label={t('templates.title')}
@@ -323,7 +405,7 @@ export function Header() {
           <IconLayers size={16} />
         </button>
         <button
-          onClick={() => setShowProjects(true)}
+          onClick={openProjects}
           className="text-wood-200 flex items-center hover:text-white"
           title={t('projects.title')}
           aria-label={t('projects.title')}
@@ -331,15 +413,15 @@ export function Header() {
           <IconFolder size={16} />
         </button>
         <button
-          onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: '?' }))}
+          onClick={openShortcuts}
           className="text-wood-200 flex items-center hover:text-white"
-          title="Keyboard shortcuts (?)"
-          aria-label="Keyboard shortcuts"
+          title={t('commandPalette.commands.keyboardShortcuts')}
+          aria-label={t('commandPalette.commands.keyboardShortcuts')}
         >
           <IconHelp size={16} />
         </button>
         <button
-          onClick={() => setShowMarketplace(true)}
+          onClick={openMarketplace}
           className="text-wood-200 flex items-center gap-1 hover:text-white"
           title={t('marketplace.title')}
           aria-label={t('marketplace.title')}

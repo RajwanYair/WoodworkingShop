@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { CONSTRAINTS, HARD_LIMITS, getMaterial } from '../../engine/materials';
 import { computeEqualShelfPositions, computeShelfDeflection } from '../../engine/dimensions';
 import { SliderInput } from './SliderInput';
@@ -8,6 +9,7 @@ import { IconWarning } from '../layout/Icons';
 export function ShelfConfig() {
   const { t } = useTranslation();
   const { config, dimensions, setConfig } = useCabinetStore();
+  const customMaterials = useCustomMaterialsStore((state) => state.materials);
   const internalH = dimensions.internalHeight;
 
   /**
@@ -47,7 +49,7 @@ export function ShelfConfig() {
     config.shelfCount > 0
       ? computeShelfDeflection(
           effectiveShelfSpan,
-          getMaterial(config.carcassMaterial).thickness,
+          getMaterial(config.carcassMaterial, customMaterials).thickness,
           dimensions.shelfDepth,
           config.carcassMaterial,
         )

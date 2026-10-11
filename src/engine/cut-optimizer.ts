@@ -1,4 +1,4 @@
-import type { Part, CutSheet, OptimizationResult, Result, OffcutEntry, DefectZone } from './types';
+import type { Part, CutSheet, OptimizationResult, Result, OffcutEntry, DefectZone, Material } from './types';
 import { ok, err } from './types';
 import { getMaterial, SAW_KERF } from './materials.ts';
 
@@ -33,9 +33,12 @@ export function optimizeCutSheetsResult(
   cutMode: 'guillotine' | 'freeform' = 'freeform',
   offcutCatalog: OffcutEntry[] = [],
   defectZones: Record<string, DefectZone[]> = {},
+  extraMaterials: Material[] = [],
 ): Result<OptimizationResult, string> {
   try {
-    return ok(optimizeCutSheets(parts, sawKerfMm, sheetSizeOverrides, cutMode, offcutCatalog, defectZones));
+    return ok(
+      optimizeCutSheets(parts, sawKerfMm, sheetSizeOverrides, cutMode, offcutCatalog, defectZones, extraMaterials),
+    );
   } catch (e) {
     return err(e instanceof Error ? e.message : String(e));
   }
@@ -64,6 +67,7 @@ export function optimizeCutSheetsResult(
  *                              sheets before opening full sheets.
  * @param defectZones         - Per-material defect zones; MaxRects pre-blocks
  *                              these regions on every new sheet.
+ * @param extraMaterials      - Optional custom materials used by these parts.
  * @returns Full optimisation result including all sheets, placed rects, yield
  *          percentage, and waste area per sheet.
  */
@@ -74,6 +78,7 @@ export function optimizeCutSheets(
   cutMode: 'guillotine' | 'freeform' = 'freeform',
   offcutCatalog: OffcutEntry[] = [],
   defectZones: Record<string, DefectZone[]> = {},
+  extraMaterials: Material[] = [],
 ): OptimizationResult {
   // Group parts by material key (which implies thickness).
   const groups = new Map<string, { rects: Rect[]; materialKey: string }>();
@@ -96,7 +101,7 @@ export function optimizeCutSheets(
   let sheetIdx = 0;
 
   for (const [, group] of groups) {
-    const mat = getMaterial(group.materialKey);
+    const mat = getMaterial(group.materialKey, extraMaterials);
     const override = sheetSizeOverrides[group.materialKey];
     const sheetLength = override?.length ?? mat.sheetLength;
     const sheetWidth = override?.width ?? mat.sheetWidth;

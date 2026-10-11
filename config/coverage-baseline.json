@@ -1,95 +1,95 @@
 {
-  "_comment": "Per-area coverage floor measured from core and dedicated component reports. Update only after intentional improvement.",
-  "_updated": "2026-09-27",
+  "_comment": "Per-area coverage floor. Update only after intentional improvement; includes engine, utils, store, hooks, and components.",
+  "_updated": "2026-10-02",
   "directories": {
     "engine": {
       "statements": {
-        "covered": 7942,
-        "total": 8286
+        "covered": 8093,
+        "total": 8324
       },
       "branches": {
-        "covered": 4506,
-        "total": 5065
+        "covered": 4598,
+        "total": 5108
       },
       "functions": {
-        "covered": 1407,
-        "total": 1432
+        "covered": 1428,
+        "total": 1440
       },
       "lines": {
-        "covered": 7071,
-        "total": 7356
+        "covered": 7208,
+        "total": 7388
       }
     },
     "utils": {
       "statements": {
-        "covered": 1611,
-        "total": 1895
+        "covered": 1906,
+        "total": 2006
       },
       "branches": {
-        "covered": 655,
-        "total": 846
+        "covered": 776,
+        "total": 925
       },
       "functions": {
-        "covered": 355,
-        "total": 389
+        "covered": 399,
+        "total": 413
       },
       "lines": {
-        "covered": 1435,
-        "total": 1680
+        "covered": 1706,
+        "total": 1772
       }
     },
     "store": {
       "statements": {
-        "covered": 490,
-        "total": 699
+        "covered": 741,
+        "total": 824
       },
       "branches": {
-        "covered": 190,
-        "total": 341
+        "covered": 299,
+        "total": 401
       },
       "functions": {
-        "covered": 184,
-        "total": 255
+        "covered": 250,
+        "total": 278
       },
       "lines": {
-        "covered": 439,
-        "total": 598
+        "covered": 664,
+        "total": 704
       }
     },
     "hooks": {
       "statements": {
-        "covered": 137,
-        "total": 170
+        "covered": 192,
+        "total": 225
       },
       "branches": {
-        "covered": 76,
-        "total": 105
+        "covered": 102,
+        "total": 135
       },
       "functions": {
-        "covered": 32,
-        "total": 34
+        "covered": 39,
+        "total": 41
       },
       "lines": {
-        "covered": 125,
-        "total": 155
+        "covered": 179,
+        "total": 209
       }
     },
     "components": {
       "statements": {
-        "covered": 1432,
-        "total": 3464
+        "covered": 2787,
+        "total": 3714
       },
       "branches": {
-        "covered": 889,
-        "total": 2467
+        "covered": 1814,
+        "total": 2627
       },
       "functions": {
-        "covered": 387,
-        "total": 1195
+        "covered": 924,
+        "total": 1264
       },
       "lines": {
-        "covered": 1310,
-        "total": 3146
+        "covered": 2532,
+        "total": 3343
       }
     }
   }

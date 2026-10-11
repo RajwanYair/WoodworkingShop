@@ -11,12 +11,276 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added a Ctrl/Cmd+K command palette with calculator, template, language, recent-project, and built-in action commands; the typed registry also supplies the Header and shortcuts modal.
+- Added mounted pocket-hole, shelf-deflection, mortise-and-tenon, and dovetail-layout calculators, with estimated build time and panel weight in the project summary and PDF specification.
+- Added a generated capability map and classification ledger, plus a locale-completeness audit and woodworking translation glossary.
+
+### Removed
+
+- Retired the unused Supabase backend stub and removed its stale capability metadata; local-first project storage remains unchanged.
+- Retired ten unregistered calculator engines with no production callers: appliance clearance, biscuit joint, clamp pressure, dowel joint, edge-banding calculator, production schedule, sanding progression, veneer, wood movement, and workshop safety.
+
+### Changed
+
+- Added an initial-route Brotli budget from the Vite static-import graph and enforced it in CI and release builds; lazy dynamic imports are excluded from the first-load measurement.
+- Kept the PDF renderer inside the lazy `PdfExportPanel` chunk and excluded that panel from the service-worker precache, avoiding an eager 1.2 MB renderer request on the workspace route.
+- Deferred browser cut-sheet optimization to the existing worker during store initialization, while retaining synchronous fallback where Workers are unavailable.
+- Updated `fflate` to 0.8.3 to address the ZIP64 decompression advisory.
+- Deprecated Plugin API v1.3.0 as a compatibility facade over the shared v2 registry; existing v1 registrations and hooks remain supported through app v5.35.0.
+- Renamed ambiguous export modules by responsibility: the glTF/IFC scene model, full glTF document generator, and project-level IFC exporter now have distinct paths; existing named APIs and download behavior are preserved.
+- Consolidated template engines under one module directory while preserving the established engine barrel API through explicit aliases.
+- Consolidated stock APIs under `src/engine/stock/` with tracker, purchasing and inventory modules behind one public barrel; existing engine exports remain available.
+- Consolidated waste analytics, threshold alerts, and pre-cut prediction under `src/engine/waste/`; existing engine exports remain available and the analytics panel uses the family barrel.
+- Consolidated project scoring, design comparison, and snapshot diffs under `src/engine/comparison/`; explicit aliases preserve colliding result/weight names and the engine barrel API.
+- Consolidated WebSerial browser I/O in `src/utils/webserial-cnc.ts`; the pure v2 engine owns transport-neutral profiles and session state, with deprecated engine-barrel aliases retained.
+
+## [5.34.0] — 2026-10-02
+
+### Calculator Accuracy
+
+- Corrected the Woodgears cove-cut oracle to compare the published 200 mm fence distance within the engine's angle-rounding tolerance, rather than treating the derived angle as a table-published value.
+- Corrected screw-pullout estimates to use USDA Wood Handbook FPL-GTR-282 Equation 8-10a
+  and added a sourced #8, 1-inch side-grain reference case. The panel now states the equation's
+  short-term ultimate-load scope, sheet-goods exclusion, and heuristic rating limitation.
+  Engine validation now shares the panel's diameter and engagement limits.
+- Hardened board-foot and linear-foot conversions against non-finite dimensions, prices,
+  and calculated outputs, including arithmetic overflow.
+- Reject wood-turning diameters whose RPM formulas overflow or produce no positive speed, preventing non-finite calculator results.
+- Strengthened the wood-turning warning to state that RPM values are advisory, not safety limits, and that unbalanced blanks may require much lower speeds. Verified the AAW spindle-speed guidance but kept it out of the numeric oracle set because it does not validate this calculator's operation-specific estimates.
+- Added a published surface-speed arithmetic reference for wood-turning (100 mm at 1,270 RPM = 399.0 m/min); RPM ranges, operation factors, recommendations and safety limits remain explicitly unverified.
+
+### Responsive Layout
+
+- Fixed mobile tab navigation overflowing narrow viewports by constraining each button and ellipsizing visible labels while preserving full accessible names.
+- Fixed the configurator furniture choices and assembly action toolbar overflowing narrow viewports by allowing the controls to wrap; added a Chromium EN/HE reachability regression across all seven primary tabs and five responsive widths.
+- Completed S316 T3's 70-state Chromium matrix across seven tabs, five widths and EN/HE; added checks for clipped text and overlapping actions. Fixed the print button covering a Quick Preset at 320 px and wrapped optimizer notes to preserve full strategy explanations.
+
+### Accessibility
+
+- Completed S316 T1 WCAG 2.2 AA axe coverage for all seven primary tabs across six locales and light/dark themes, plus mobile onboarding/navigation, shortcuts, project management and import errors, G-code export preview, and optimizer loading/error recovery. The Chromium accessibility spec passes 6/6 tests.
+- Fixed contrast and labeling issues found by the scans, and made scrollable ErrorBoundary details keyboard-focusable.
+- Completed S316 T2 keyboard-only Chromium journeys for skip navigation, visible focus, tab order and activation, native range input operation, reduced motion, and dialog focus containment, Escape dismissal, and focus return. Fixed the shared focus trap to ignore negative-tabindex elements and associated the Smart Optimizer tolerance label with its range input.
+- Sequenced first-visit touch guidance after onboarding dismissal so mobile users see one modal at a time. Completed S316 T4 with stable Chromium/Firefox core screenshots and 24 preview-view baselines; reviewed and refreshed only the optimizer screenshots affected by the responsive layout changes.
+
+### Worker Reliability
+
+- Completed S317 T1 lifecycle coverage for assembly, optimization and cost workers: success, rejection, timeout termination, abort, retry recovery, and stale-result suppression. The focused worker-schedule suite passes 8/8 tests; `npm run quality` passes.
+- Completed S317 T2 controlled crash and retry coverage for all seven panel boundaries, with sibling isolation, accessible alerts and Hebrew fallback labels. Localized panel titles and recovery controls now use all six locale bundles; the focused boundary suite passes 13/13 tests.
+- Completed S317 T3 deferred PDF-generation coverage for pending state, duplicate submission and navigation/unmount cleanup. Current-project, full-project and ZIP exports now share an in-flight guard and ignore late completion after unmount; the focused PDF suite passes 8/8 tests.
+
 ### Test Infrastructure
 
 - Added source-to-test ownership inventory and per-area coverage ratchet; directly covered the Sprint 301 store, hook, export, and calculator-panel gaps, and removed avoidable coverage exclusions.
+- Sprint 318 verification: `npm run check` passes with 5,256 unit tests across 341 files; the coverage ratchet, export golden suite, eight Chromium/Firefox visual comparisons, 16 benchmark budgets, and full no-retry browser matrix pass (439 passed, 13 intentional skips, zero failures). Raw bundle totals 2,816.1 KB against the 2,960 KB budget. Sprint 306 is accepted under bounded mutation scope with no combined score claimed.
+  Clean-checkout acceptance passed from a fresh `npm ci` on 2026-10-02; `npm run check` passed
+  5,338 tests, and dead-code and release-build budgets passed.
 - Verified 4,465 tests across 278 files; coverage inventory maps all 351 production modules, with 0 unmeasured and 23 explicitly uncovered modules remaining.
 - Added deterministic Playwright and typed test fixtures, RTL render support, accessible E2E queries, and per-test environment cleanup; fixed a localStorage mock leak exposed by shuffled test execution.
 - Verified 4,470 tests across 280 files in normal and seeded-shuffle runs, all 26 Chromium/Firefox E2E tests, and the complete `npm run ci` gate including build, bundle, and benchmark budgets.
+
+### Optimizer Workflow Confidence
+
+- Completed Sprint 311 T2 with eight user-visible optimizer journeys passing in Chromium and Firefox. Coverage verifies table search/filter and real sort order, bulk material replacement, stock create/edit/remove and reload persistence, offcut catalog save/remove, defect-zone create/edit/remove and sheet overlays, and persistent optimizer settings. Fixed stock quantity Enter handling to avoid committing twice and persisted the auto-co-nesting setting with the project session.
+  All 5,169 unit tests pass across 338 files. The aggregate quality gate remains blocked only by the pre-existing expired `CabinetPreview.tsx` component-budget exception.
+- Completed Sprint 311 T3 with a SmartOptimizer browser journey passing in Chromium and Firefox. It verifies strategy filtering, original-versus-candidate comparison, applying the candidate to cabinet configuration, matching Side Panel dimensions in the parts table and rendered sheet, cut-checklist progress, and virtualized sheet rendering.
+- Completed Sprint 311 T4 with engine-oracle browser checks for accessible yield values, waste totals and material breakdowns, grain constraints, material usage, and shopping-list quantities and costs. The complete optimizer suite passes all 18 Chromium and Firefox runs.
+
+### Export Artifact Confidence
+
+- Completed Sprint 312 T1 with 25 real-download BOM and hardware CSV behaviors; all 25 pass in
+  Chromium and Firefox. Coverage validates filenames, UTF-8 BOM bytes, schema and headers, row
+  counts and quantities, EN/HE/ES/DE/FR localization, CSV escaping, and formula-injection
+  neutralization. Fixed optimizer language resolution for UI locales backed by English engine data.
+  All 4,913 unit tests, production build, bundle budget (2,792.1 KB / 2,960 KB), and 16 benchmarks
+  pass. The aggregate quality gate remains blocked by the pre-existing expired
+  `CabinetPreview.tsx` component-budget exception; Sprint 312 T3–T5 remain open.
+- Completed Sprint 312 T2 with 25 real-download DXF and G-code browser behaviors; all 25 passed in Chromium and Firefox. Tests parse DXF group-code entities, layers, profile bounds, labels, dimensions and checksum, and validate G-code schema, units, labels, motion bounds, kerf changes, tool compensation, safe retract, pass depths, presets, feed rates and tool-change commands. DXF extents are checked against the G-code artifact.
+  The 4,900-test unit suite, production build, bundle budget (2,791.9 KB / 2,960 KB), and all 16 benchmarks pass. The coverage ratchet remains below its component floors (74.61% statements, 68.61% branches, 71.85% functions, 75.08% lines); quality remains blocked by the pre-existing expired `CabinetPreview.tsx` component-budget exception. Sprint 312 T1, T3, T4 and T5 remain open.
+- Sprint 312 T3: Added grouped and quantity-expanded part labels with a print sheet that escapes
+  dynamic text and specifies UTF-8, A4 portrait, 8 mm margins, a three-column grid, and page-break
+  protection. All 25 browser behaviors pass in Chromium and Firefox; 4,915 unit tests pass. QR
+  generation and payload resolution remain open because no encoder dependency is available within
+  the existing eight-package production dependency cap. The aggregate quality gate remains blocked
+  by the pre-existing expired `CabinetPreview.tsx` component-budget exception; Sprint 312 T4 and T5
+  remain open.
+- Sprint 312 T4: Added 27 real-PDF browser behaviors; all 27 pass in both Chromium and Firefox.
+  Tests parse downloaded artifacts to verify signatures, page geometry, extracted headings and
+  dimensions, export options, multi-cabinet content, printable text bounds, and zero browser
+  warnings/errors. Raised the shared footer within the page margin to prevent text clipping and
+  permitted the renderer's embedded WASM resource in `connect-src` without broadening `script-src`.
+  All 4,915 unit tests, the production build, bundle budget (2,793.1 KB / 2,960 KB), and 16
+  benchmarks pass. The aggregate quality gate remains blocked by the pre-existing expired
+  `CabinetPreview.tsx` component-budget exception; Sprint 312 T5 remains open.
+- Sprint 312 T5: Added 29 real ZIP-download behaviors; all pass in Chromium and Firefox. ZIP entries
+  now reject unsafe, duplicate, and unrepresentable paths, and each bundle includes a sorted
+  SHA-256 manifest. Tests parse the central directory and extracted files, verifying CRC-32,
+  manifest coverage and checksums, and PDF, DXF, BOM, glTF, README, and multi-cabinet contents.
+  The ZIP parser is dev-only. All 4,929 unit tests, the production build, bundle budget
+  (2,795.5 KB / 2,960 KB), and 16 benchmarks pass. The aggregate quality gate remains blocked by
+  the expired `CabinetPreview.tsx` component-budget exception. QR encoding remains deferred under
+  the existing production dependency cap; Sprint 312 T5 is complete.
+
+### Component Behavior Foundation
+
+- Added 25 GcodePreviewModal behaviors for machine presets, numeric edits and rejection, option disclosure,
+  custom settings, tool-change/arc toggles, and download/dismiss behavior. Fixed numeric fields so values can
+  be replaced instead of appended, invalid drafts revert on blur, and manual changes show the Custom preset.
+  The coverage ratchet passed with 4,900 unit tests and 525 component tests; component coverage measures
+  75.02% statements, 68.76% branches, 72.41% functions, and 75.47% lines without lowering any area floor.
+  Build, bundle budget (2,791.9 KB / 2,960 KB), and all 16 benchmarks passed. Quality remains blocked only
+  by the pre-existing expired `CabinetPreview.tsx` budget exception.
+- Added 25 OptimizerView behaviors for live status announcements, single/multi-cabinet result selection,
+  low-yield and material-consolidation recommendations, and part-label visibility. The coverage ratchet
+  passed with 4,875 unit tests and 500 component tests; component coverage now measures 74.16% statements,
+  68.18% branches, 71.02% functions, and 74.76% lines without lowering any area floor. Production build,
+  bundle budget (2,791.7 KB / 2,960 KB), and all 16 benchmarks passed. Quality remains blocked only by the
+  pre-existing expired `CabinetPreview.tsx` component-budget exception.
+- Added 25 MaterialSummaryPanel behaviors covering area aggregation, per-material pricing, locale labels, sheet-size
+  display/edit/reset, and range boundaries. Fixed grouped area totals for differently sized sheets and enforced the
+  input controls' 100–5000 mm bounds. The coverage ratchet passed with 4,850 unit tests and 475 component tests;
+  component coverage now measures 74.07% statements, 67.36% branches, 71.02% functions, and 74.76% lines without
+  lowering an area floor. Build, bundle budget (2,791.7 KB / 2,960 KB), and all 16 benchmarks passed. Quality remains
+  blocked by the pre-existing expired `CabinetPreview.tsx` budget exception.
+- Added 25 MaterialSelector behaviors for carcass/back material choices, custom-material presentation, back-panel
+  inclusion, deflection/weight/cost substitutions, and multi-cabinet replacement. The coverage ratchet passed with
+  4,825 unit tests and 450 component tests; component coverage now measures 74.03% statements, 67.34% branches,
+  70.93% functions, and 74.70% lines without lowering an area floor. Build, bundle budget (2,791.7 KB / 2,960 KB),
+  and all 16 benchmarks passed. Quality remains blocked by the pre-existing expired `CabinetPreview.tsx` budget
+  exception. Custom-material options are visible, but selecting one currently fails during cabinet derivation.
+- Added 25 SaveLoadPanel journeys for save/list feedback, project metadata, cabinet/project export, validated JSON
+  import variants, bundle import/export, share-sheet/clipboard fallback, and import error recovery. Clipboard failure
+  now uses the dedicated translated share-failure message.
+- Raised measured component coverage to 73.36% statements, 67.06% branches, 69.87% functions, and 74.15% lines;
+  the coverage ratchet passed with 425 component tests and no area floor lowered.
+- Verified `npm test`: 4,800 tests across 335 files. Production build, bundle budget (2,791.7 KB / 2,960 KB), and
+  all 16 benchmarks passed. The aggregate quality gate remains blocked by the pre-existing expired
+  `CabinetPreview.tsx` component-budget exception.
+
+- Added 25 cost-estimate behaviors covering sheet/hardware price overrides, labour, finish and edge-banding edits,
+  keyboard commit/cancel, invalid and zero values, reset actions, and multi-cabinet/zero-total summaries. Reset
+  controls now expose translated accessible names and avoid committing stale drafts when activated.
+- Raised measured component coverage to 71.71% statements, 65.78% branches, 68.81% functions, and 72.43% lines;
+  the coverage ratchet passed with 400 component tests and no area floor lowered.
+- Verified 4,775 unit tests across 335 files. Full quality/build/bundle/benchmark verification is pending.
+
+- Added 25 component behavior tests across material-usage grouping/pricing/size editing, optimizer toolbar filtering
+  and toggles, Marketplace search/install lifecycle, PDF settings import and full-project export, and saved-project
+  save/export/bundle feedback.
+- Raised measured component coverage to 69.98% statements, 63.37% branches, 66.61% functions, and 70.89% lines;
+  the coverage ratchet passed with 375 component tests and no area floor lowered.
+- Verified `npm test`: 4,750 tests across 335 files. Production build, bundle budgets (2,791.4 KB / 2,960 KB),
+  and all 16 benchmarks passed. The aggregate quality/CI gate remains blocked by the existing expired
+  `CabinetPreview.tsx` component-budget exception.
+
+- Added component behavior coverage for Marketplace no-results search, live mobile Sidebar summary totals, empty
+  snapshot history, PDF project-settings export, and optimizer low-yield/material-consolidation recommendations.
+- Raised measured component coverage to 68.13% statements, 62.04% branches, 64.97% functions, and 69.01% lines;
+  the coverage ratchet passed with 350 component tests and no area floor lowered.
+- Verified `npm test`: 4,725 tests across 335 files. Production build, bundle budgets (2,791.4 KB / 2,960 KB),
+  and all 16 benchmarks passed. The full quality/CI gate remains blocked by the pre-existing expired
+  `CabinetPreview.tsx` component-budget exception.
+
+- Added component interaction coverage for Marketplace filtering/install persistence, mobile Sidebar Escape-close, snapshot save/restore/delete, PDF render-error recovery, and optimizer cutting controls.
+- Raised measured component coverage to 67.94% statements, 61.53% branches, 64.73% functions, and 68.83% lines; the coverage ratchet passed with 345 component tests and no area floor lowered.
+- Verified `npm test`: 4,720 tests across 335 files. Production build, bundle budgets (2,791.4 KB / 2,960 KB), and all 16 benchmarks passed. `npm run ci` remains blocked by the pre-existing expired `CabinetPreview.tsx` component-budget exception.
+
+- Added component interaction coverage for defect-zone validation, camera support and retake states, Web Serial support and empty-sheet guards, Smart Optimizer strategy selection/results, and saved-configuration deletion.
+- Raised measured component coverage to 66.76% statements, 60.56% branches, 62.77% functions, and 67.69% lines; the coverage ratchet passed with 340 component tests and no area floor lowered.
+- Verified full `npm run ci`: 4,715 unit tests across 332 files, production build and bundle budgets passed (2,791.4 KB / 2,960 KB), and all 16 benchmarks stayed within budget.
+
+- Replaced conditional optimizer-table checks with accessible interaction tests for material filtering, search, sorting, and hardware quantity override/reset behavior.
+- Added configurator journeys for furniture type and conditional controls, generated panel parts, joinery, shelf positions, door and hinge behavior, drawer slides, and reset confirmation.
+- Raised measured component statement coverage from 41.3% to 48.4%; the coverage ratchet update passed without lowering any area floor.
+- Verified full `npm run ci`: 4,648 tests across 284 files, production build, bundle budgets, and all 16 benchmarks.
+- Added user-level calculator journeys for dado/rabbet validation, stair IRC warnings, symmetric taper settings, finish volume/drying changes, and glue volume across joint count and glue type.
+- Raised measured component statement coverage to 49.95% (1,787/3,577); the coverage ratchet update passed without lowering any area floor.
+- Verified full `npm run ci`: 4,653 tests across 289 files, production build, bundle budgets, and all 16 benchmarks.
+- Added Configure control journeys for cabinet management, dimension units and invalid rollback, back-panel material state, door/hardware changes, and drawer slides/heights/count.
+- Raised measured component coverage to 50.62% statements, 45.29% branches, 41.83% functions, and 51.58% lines; 4,658 unit tests and 288 component tests passed with no lowered area floor.
+- Verified full `npm run ci`: 4,658 tests across 293 files, production build, bundle budgets, and all 16 benchmarks.
+- Added project save/load/search, snapshot compare, community-material import, custom-material lifecycle, and hardware-catalog import interaction tests, including invalid-input preservation.
+- Fixed invalid nested buttons in the snapshot panel by separating compare and expand controls.
+- Raised measured component coverage to 54.54% statements, 47.95% branches, 46.24% functions, and 55.55% lines; 4,666 unit tests and 296 component tests passed without lowering any floor.
+- Verified full `npm run ci`: 4,666 tests across 298 files, production build and bundle budgets passed, and all 16 benchmarks stayed within budget.
+- Added component interaction coverage for quick presets, saved configurations, constraint repairs, cost editing, and custom shelf spacing. Fixed custom-clearance replacement typing and added an accessible name to the finish-cost edit control.
+- Raised measured component coverage to 55.72% statements, 49.19% branches, 48.48% functions, and 56.70% lines; the coverage ratchet passed with 4,677 unit tests and 307 component tests and no lowered area floor.
+- Verified full `npm run ci`: 4,677 tests across 303 files, production build and bundle budgets passed, and all 16 benchmarks stayed within budget.
+- Added component interaction coverage for cost summary export, actual-cost variance editing, optimizer suggestion apply/restore, material sheet-size overrides, and shopping-list grouping/collapse. Added translated accessible names to the material summary's icon-only size controls.
+- Raised measured component coverage to 57.40% statements, 50.87% branches, 51.02% functions, and 58.24% lines; the ratchet passed with 4,682 unit tests and 312 component tests without lowering any area floor.
+- Added interaction coverage for project-wide material replacement, optimizer comparison metrics, template application, persisted CNC profile selection, and PDF page options/download. Corrected 16 built-in templates that referenced nonexistent `hdf-3` instead of registered `mdf-3`.
+- Raised measured component coverage to 61.03% statements, 53.41% branches, 53.87% functions, and 62.00% lines; the ratchet passed with 4,687 unit tests and 317 component tests without lowering any area floor.
+- Added an engine regression guard verifying every built-in template uses registered carcass and back-panel materials.
+- Verified full `npm run ci`: 4,688 unit tests across 313 files, production build and bundle budgets passed, and all 16 benchmarks stayed within budget.
+- Added optimizer interaction coverage for cut-plan summary, cut checklist, stock tracker, offcut catalog, and waste analytics; associated visible stock-add labels with their inputs.
+- Raised measured component coverage to 62.01% statements, 54.70% branches, 56.16% functions, and 62.92% lines; the coverage ratchet passed with 322 component tests without lowering any area floor.
+- Verified full `npm run ci`: 4,693 unit tests across 318 files, production build and bundle budgets passed (2,791.4 KB / 2,960 KB), and all 16 benchmarks stayed within budget.
+- Added component journeys for build-log keyboard save/focus/clear, grain-report grouping, quantity-expanded part labels and print output, G-code preset regeneration/download, and optimizer explanation statistics.
+- Added cabinet-store initialization tests for missing/malformed/unavailable persistence and shared-link overrides; measured component coverage is now 64.05% statements, 57.12% branches, 59.10% functions, and 64.83% lines, with the coverage ratchet passing across 328 component tests.
+- Verified full `npm run ci`: 4,703 tests across 323 files, production build and bundle budgets passed (2,791.4 KB / 2,960 KB), and all 16 benchmarks stayed within budget.
+- Added calculator interaction coverage for cabinet-door sizing, drawer slide clearances, kerf-bend feasibility, screw pull-out density/rating changes, and wood-turning operation/diameter speeds.
+- Raised measured component coverage to 65.90% statements, 59.03% branches, 61.30% functions, and 66.86% lines; the coverage ratchet passed with 333 component tests and no area floor lowered.
+- Verified full `npm run ci`: 4,708 tests across 328 files, production build and bundle budgets passed (2,791.4 KB / 2,960 KB), and all 16 benchmarks stayed within budget.
+
+### Validation and Repair Journeys
+
+- Fixed the wide-span warning so the recommended centre-support repair clears it, and restored keyboard focus after a repair removes its issue row or validation panel.
+- Covered all 11 distinct validation repair actions against production-generated issues; browser tests verify repaired values, warning removal, focus, and live-region relationships.
+- Verified 4,620 unit tests across 283 files, all 58 Chromium/Firefox E2E tests, and the complete `npm run ci` gate including build, bundle, and benchmark budgets.
+
+### Cabinet Configuration Journeys
+
+- Added accessible cabinet-specific remove names and browser coverage for cabinet add/remove/rename/duplicate/mirror/reorder, active-cabinet switching, and optimizer, assembly, and PDF outputs.
+- Verified all 62 Chromium/Firefox E2E tests and the complete `npm run ci` gate: 4,620 unit tests across 283 files, production build, bundle budgets, and all 16 benchmarks.
+
+### Save, Share, and Snapshot Journeys
+
+- Added browser coverage for project save/load, same-name replacement, JSON export/import, canceled saves, invalid/corrupt imports, share cancellation with clipboard fallback, and snapshot save/restore/delete/diff.
+- Fixed snapshot ID collisions for saves in the same millisecond; added a unit regression test. Project branching and comparison remain utility-level and covered by their unit tests.
+- Verified all 66 Chromium/Firefox E2E tests and the complete `npm run ci` gate: 4,620 unit tests across 283 files, production build, bundle budgets, and all 16 benchmarks.
+
+### Preset Journeys
+
+- Added browser coverage for all six built-in cabinet presets, asserting configuration and generated cut-list output; verified named saved configurations survive reload and restore their expected dimensions and parts.
+- Verified all 68 Chromium/Firefox E2E tests and the complete `npm run ci` gate: 4,620 unit tests across 283 files, production build, bundle budgets, and all 16 benchmarks.
+
+### Catalog Import Journeys
+
+- Added browser coverage for custom-material add/edit/delete and valid/invalid community catalog imports.
+- Cached community catalog imports now reject malformed entries before writing, preserving the previously cached materials and metadata on failure.
+- Added a versioned custom-hardware JSON import with strict row and duplicate-ID validation, persisted merge/replace behavior, and no state change when any row fails validation.
+- Verified all 74 Chromium/Firefox E2E tests and the complete `npm run ci` gate: 4,632 unit tests across 284 files, production build, bundle budgets, and all 16 benchmarks.
+
+### Named Expression Journeys
+
+- Mounted the named-expression panel in the configurator and added editing plus application of evaluated values to cabinet dimensions with hard-bound checks.
+- Replaced CSP-blocked dynamic function construction with the existing allowlisted arithmetic parser; added visible feedback for cycles, unsupported functions, and out-of-range values.
+- Verified all 76 Chromium/Firefox E2E tests and the complete `npm run ci` gate: 4,638 unit tests across 284 files, production build, bundle budgets, and all 16 benchmarks.
+
+### Preview View and Export Coverage
+
+- Added six-view browser checks for selection state, expected SVG viewBox geometry, non-empty drawings, and dimension visibility.
+- Added SVG parsing and PNG signature/IHDR checks, including view-specific and sanitized download names after changing views.
+- Verified the two new journeys in Chromium and Firefox; 80 E2E tests pass across both browsers.
+
+### Preview Gesture Coverage
+
+- Added touch-cancel cleanup, prevented stale swipe detection after multi-touch, and synchronized pinch scale when a swipe changes views.
+- Added browser coverage for 3D wheel zoom bounds and orbit drag cancellation, plus touch swipe boundaries, pinch scaling, and cancellation.
+- Verified all 82 Chromium/Firefox E2E tests pass; all 8 touch-gesture hook tests pass.
+
+### Interactive 3D Preview
+
+- Mounted the existing interactive 3D scene panel in Preview; verified explode, wireframe, edge-band, zoom, and reset controls.
+- Preserved static WebGL drawing-buffer contents and tested feature-disabled, capability-fallback, and WebGL-enabled nonblank rendering paths.
+- Verified full `npm run ci`: 4,641 tests across 284 files, production build, bundle budgets, and all 16 benchmarks; all 86 Chromium/Firefox E2E tests pass.
+
+### Preview Acceptance Matrix
+
+- Added WebKit desktop and iPhone WebKit browser projects scoped to tagged acceptance coverage.
+- Verified all six preview views fit without document overflow in Chromium, Firefox, WebKit desktop, and iPhone WebKit.
+- Added 24 Chromium visual baselines for cabinet/bookshelf configurations in light/dark and LTR/RTL states; all compare cleanly.
 
 ## [5.33.0] — 2026-09-27
 

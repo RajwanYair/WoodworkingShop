@@ -1,7 +1,7 @@
 /**
  * Phase 11 — Sprint 4: Property-based tests for the MaxRects cut optimizer.
  *
- * Uses fast-check to generate arbitrary Part lists and assert four invariants
+ * Uses fast-check to generate arbitrary Part lists and assert packing invariants
  * that must hold for every valid input:
  *
  *   1. No two placed parts on the same sheet overlap.
@@ -9,14 +9,15 @@
  *   3. Parts flagged rotationLocked never appear rotated in the output.
  *   4. Every individual part instance (qty-expanded) is placed on a sheet.
  *
- * All tests use the `melamine-16` material (no-grain, 1220 × 2440 mm sheet)
- * and cap part dimensions to 1200 mm so every generated part is guaranteed to
- * fit onto a single sheet, keeping invariant 4 falsifiable.
+ * The general packing properties use `melamine-16` (no-grain, 1220 × 2440 mm)
+ * with part dimensions capped at 1200 mm. Grain-specific properties use
+ * `plywood-18` to exercise orientation constraints and conflict reporting.
  */
 import { describe, expect, it } from 'vitest';
 import * as fc from 'fast-check';
 import { optimizeCutSheets } from '../../src/engine/cut-optimizer';
 import type { Part } from '../../src/engine/types';
+import { propertyRunOptions } from '../property-seeds';
 
 // ─── constants ───────────────────────────────────────────────────────────────
 const MATERIAL = 'melamine-16'; // no grain, 1220 × 2440 mm
@@ -137,7 +138,7 @@ describe('cut-optimizer property tests', () => {
           return true;
         },
       ),
-      { numRuns: NUM_RUNS },
+      propertyRunOptions('tests/engine/cut-optimizer.property.test.ts', NUM_RUNS),
     );
   });
 
@@ -147,7 +148,7 @@ describe('cut-optimizer property tests', () => {
         const result = optimizeCutSheets(parts);
         return result.sheets.every((sheet) => sheet.yieldPercent >= 0 && sheet.yieldPercent <= 100);
       }),
-      { numRuns: NUM_RUNS },
+      propertyRunOptions('tests/engine/cut-optimizer.property.test.ts', NUM_RUNS),
     );
   });
 
@@ -165,7 +166,7 @@ describe('cut-optimizer property tests', () => {
           ),
         );
       }),
-      { numRuns: NUM_RUNS },
+      propertyRunOptions('tests/engine/cut-optimizer.property.test.ts', NUM_RUNS),
     );
   });
 
@@ -180,7 +181,10 @@ describe('cut-optimizer property tests', () => {
           return result.sheets.every((sheet) => hasKerfClearance(sheet.parts, sawKerfMm));
         },
       ),
-      { numRuns: NUM_RUNS },
+      {
+        ...propertyRunOptions('tests/engine/cut-optimizer.property.test.ts', NUM_RUNS),
+        path: '183:3:2:6:3:2:3:3:6:6:6:7:10:7:7:6:6:15:18:18:19:1:0:7:3:3:8:3:3:3:3:9:3:3:3:5:3:3:12:4:3:3:15:16:16:16:31:0:4:2:4:2:7:8:8:13:8:9:9:9:10',
+      },
     );
   });
 
@@ -200,7 +204,45 @@ describe('cut-optimizer property tests', () => {
           }),
         );
       }),
-      { numRuns: NUM_RUNS },
+      propertyRunOptions('tests/engine/cut-optimizer.property.test.ts', NUM_RUNS),
+    );
+  });
+
+  it('P9 — isolated grain-bearing parts that fit naturally are never rotated', () => {
+    const grainPart = arbPart.map((part) => ({ ...part, material: 'plywood-18', thickness: 18 }));
+    fc.assert(
+      fc.property(grainPart, fc.constantFrom<'freeform' | 'guillotine'>('freeform', 'guillotine'), (part, cutMode) => {
+        const result = optimizeCutSheets([part], 3, {}, cutMode);
+
+        return result.sheets.every((sheet) =>
+          sheet.parts.every((placed) => placed.rotated !== true && placed.grainVertical && !placed.grainConflict),
+        );
+      }),
+      propertyRunOptions('tests/engine/cut-optimizer.property.test.ts', NUM_RUNS),
+    );
+  });
+
+  it('P10 — reports every forced grain rotation as a conflict', () => {
+    const grainParts = arbParts.map((parts) =>
+      parts.map((part) => ({ ...part, material: 'plywood-18', thickness: 18 })),
+    );
+
+    fc.assert(
+      fc.property(
+        grainParts,
+        fc.constantFrom<'freeform' | 'guillotine'>('freeform', 'guillotine'),
+        (parts, cutMode) => {
+          const result = optimizeCutSheets(parts, 3, {}, cutMode);
+          const placements = result.sheets.flatMap((sheet) => sheet.parts);
+          const conflictCount = placements.filter((placed) => placed.grainConflict === true).length;
+
+          return (
+            placements.every((placed) => placed.rotated !== true || placed.grainConflict === true) &&
+            result.grainConflictCount === conflictCount
+          );
+        },
+      ),
+      propertyRunOptions('tests/engine/cut-optimizer.property.test.ts', NUM_RUNS),
     );
   });
 
@@ -212,7 +254,7 @@ describe('cut-optimizer property tests', () => {
         const placedCount = result.sheets.reduce((sum, sheet) => sum + sheet.parts.length, 0);
         return placedCount === totalInstances;
       }),
-      { numRuns: NUM_RUNS },
+      propertyRunOptions('tests/engine/cut-optimizer.property.test.ts', NUM_RUNS),
     );
   });
 
@@ -227,7 +269,7 @@ describe('cut-optimizer property tests', () => {
         const expected = Math.round((usedArea / totalSheetArea) * 100 * 100) / 100;
         return Math.abs(result.overallYield - expected) < 0.01;
       }),
-      { numRuns: NUM_RUNS },
+      propertyRunOptions('tests/engine/cut-optimizer.property.test.ts', NUM_RUNS),
     );
   });
 });

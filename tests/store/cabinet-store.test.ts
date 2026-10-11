@@ -2,8 +2,9 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { useCabinetStore, detectOsDarkMode } from '../../src/store/cabinet-store';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
 import { computeDimensions } from '../../src/engine/dimensions';
-import type { DefectZone, OffcutEntry } from '../../src/engine/types';
+import type { DefectZone, Material, OffcutEntry } from '../../src/engine/types';
 import { setDefectZones } from '../../src/store/worker-schedule';
+import { useCustomMaterialsStore } from '../../src/store/custom-materials-store';
 
 describe('cabinet-store', () => {
   beforeEach(() => {
@@ -18,6 +19,7 @@ describe('cabinet-store', () => {
       darkMode: false,
       colorBlindMode: false,
     });
+    useCustomMaterialsStore.setState({ materials: [] });
     useCabinetStore.getState().setConfig({});
     useCabinetStore.setState({ _past: [], canUndo: false });
   });
@@ -75,6 +77,64 @@ describe('cabinet-store', () => {
     });
   });
 
+  it('applies shared-link config over the restored cabinet session', async () => {
+    window.localStorage.setItem(
+      'woodworkingshop:session',
+      JSON.stringify({
+        cabinets: [{ name: 'Saved cabinet', config: { ...DEFAULT_CONFIG, width: 812 } }],
+        activeCabinetIndex: 0,
+      }),
+    );
+    window.history.replaceState(null, '', '/?w=900');
+
+    vi.resetModules();
+    const { useCabinetStore: restoredStore } = await import('../../src/store/cabinet-store');
+
+    expect(restoredStore.getState()).toMatchObject({
+      cabinets: [{ name: 'Saved cabinet', config: { width: 900 } }],
+      config: { width: 900 },
+    });
+  });
+
+  it('falls back to the default cabinet when the persisted session is malformed', async () => {
+    window.localStorage.setItem('woodworkingshop:session', '{bad json');
+
+    vi.resetModules();
+    const { useCabinetStore: restoredStore } = await import('../../src/store/cabinet-store');
+
+    expect(restoredStore.getState()).toMatchObject({
+      cabinets: [{ name: 'Cabinet 1', config: DEFAULT_CONFIG }],
+      config: DEFAULT_CONFIG,
+    });
+  });
+
+  it('initializes the default cabinet when no persisted session exists', async () => {
+    window.localStorage.removeItem('woodworkingshop:session');
+
+    vi.resetModules();
+    const { useCabinetStore: restoredStore } = await import('../../src/store/cabinet-store');
+
+    expect(restoredStore.getState()).toMatchObject({
+      cabinets: [{ name: 'Cabinet 1', config: DEFAULT_CONFIG }],
+      config: DEFAULT_CONFIG,
+    });
+  });
+
+  it('initializes the default cabinet when session storage cannot be read', async () => {
+    vi.spyOn(window.localStorage, 'getItem').mockImplementation((key) => {
+      if (key === 'woodworkingshop:session') throw new Error('storage unavailable');
+      return null;
+    });
+
+    vi.resetModules();
+    const { useCabinetStore: restoredStore } = await import('../../src/store/cabinet-store');
+
+    expect(restoredStore.getState()).toMatchObject({
+      cabinets: [{ name: 'Cabinet 1', config: DEFAULT_CONFIG }],
+      config: DEFAULT_CONFIG,
+    });
+  });
+
   it('updates config via setConfig', () => {
     useCabinetStore.getState().setConfig({ width: 800 });
     expect(useCabinetStore.getState().config.width).toBe(800);
@@ -105,6 +165,27 @@ describe('cabinet-store', () => {
     useCabinetStore.getState().setConfig({ shelfCount: 10 });
     // More shelves → should still have parts
     expect(useCabinetStore.getState().parts.length).toBeGreaterThan(0);
+  });
+
+  it('derives cabinet parts and optimization with a selected custom material', () => {
+    const customMaterial: Material = {
+      key: 'custom-store-oak-20',
+      name: { en: 'Custom Oak 20 mm', he: 'אלון מותאם 20 מ״מ' },
+      thickness: 20,
+      sheetWidth: 1220,
+      sheetLength: 2440,
+      pricePerSheet: 500,
+      currencyCode: 'ILS',
+      category: 'panel',
+      color: '#987654',
+      hasGrain: true,
+      densityKgM3: 700,
+    };
+    useCustomMaterialsStore.setState({ materials: [customMaterial] });
+
+    expect(() => useCabinetStore.getState().setConfig({ carcassMaterial: customMaterial.key })).not.toThrow();
+    expect(useCabinetStore.getState().parts.find((part) => part.material === customMaterial.key)?.thickness).toBe(20);
+    expect(useCabinetStore.getState().optimization.sheets[0]?.material).toBe(customMaterial.key);
   });
 
   it('supports undo/redo and clears redo stack on new change', () => {
@@ -146,10 +227,22 @@ describe('cabinet-store', () => {
     expect(useCabinetStore.getState()).toBe(before);
   });
 
-  it('switches active cabinet', () => {
+  it('switches active cabinet and refreshes its derived state', () => {
     useCabinetStore.getState().addCabinet();
+    useCabinetStore.getState().setConfig({ width: 777 });
     useCabinetStore.getState().setActiveCabinet(0);
-    expect(useCabinetStore.getState().activeCabinetIndex).toBe(0);
+    expect(useCabinetStore.getState()).toMatchObject({
+      activeCabinetIndex: 0,
+      config: DEFAULT_CONFIG,
+      dimensions: computeDimensions(DEFAULT_CONFIG),
+    });
+
+    useCabinetStore.getState().setActiveCabinet(1);
+    expect(useCabinetStore.getState()).toMatchObject({
+      activeCabinetIndex: 1,
+      config: { ...DEFAULT_CONFIG, width: 777 },
+      dimensions: computeDimensions({ ...DEFAULT_CONFIG, width: 777 }),
+    });
   });
 
   it.each([-1, 1, 0.5])('does not change state when selecting invalid cabinet index %i', (index) => {
@@ -389,6 +482,20 @@ describe('cabinet-store', () => {
         'mdf-18': [otherMaterialZone],
       });
       setDefectZones({});
+    });
+
+    it.each([-1, 1, 0.5])('does not change state when removing defect zone at invalid index %i', (index) => {
+      const zone: DefectZone = { x: 10, y: 20, width: 30, length: 40 };
+      setDefectZones({ 'plywood-17': [zone] });
+      useCabinetStore.setState({ defectZones: { 'plywood-17': [zone] } });
+      const before = useCabinetStore.getState();
+
+      try {
+        before.removeDefectZone('plywood-17', index);
+        expect(useCabinetStore.getState()).toBe(before);
+      } finally {
+        setDefectZones({});
+      }
     });
   });
 

@@ -18,12 +18,12 @@
 [![Tailwind](https://img.shields.io/badge/Tailwind-4-38bdf8?logo=tailwindcss&logoColor=white)](src/index.css)
 [![PWA](https://img.shields.io/badge/PWA-offline--ready-5a0fc8?logo=pwa&logoColor=white)](public/manifest.json)
 [![i18n](https://img.shields.io/badge/i18n-6%20languages%20%28EN%20HE%20AR%20DE%20ES%20FR%29-orange?logo=googletranslate&logoColor=white)](src/i18n)
-[![Bundle](https://img.shields.io/badge/bundle-<200KB%20gzip-blue?logo=webpack&logoColor=white)](config/bundle-budget.json)
+[![Bundle](https://img.shields.io/badge/bundle-size%20budgets-enforced-blue?logo=webpack&logoColor=white)](config/bundle-budget.json)
 [![a11y](https://img.shields.io/badge/a11y-WCAG%202.2%20AA-green?logo=accessibility&logoColor=white)](tests/e2e)
 [![Last Commit](https://img.shields.io/github/last-commit/RajwanYair/WoodworkingShop?logo=github)](https://github.com/RajwanYair/WoodworkingShop/commits/main)
 [![GitHub Stars](https://img.shields.io/github/stars/RajwanYair/WoodworkingShop?style=social)](https://github.com/RajwanYair/WoodworkingShop/stargazers)
 
-**[🚀 Live Demo](https://rajwanyair.github.io/WoodworkingShop/)** · **[📋 Changelog](CHANGELOG.md)** · **[🗺 Roadmap](ROADMAP.md)** · **[🏛 Architecture](docs/ARCHITECTURE.md)** · **[📖 User Guide](docs/USER-GUIDE.md)** · **[📚 Docs](docs/index.md)**
+**[🚀 Live Demo](https://rajwanyair.github.io/WoodworkingShop/)** · **[📋 Changelog](CHANGELOG.md)** · **[🗺 Roadmap](ROADMAP.md)** · **[🏛 Architecture](docs/ARCHITECTURE.md)** · **[📖 User Guide](docs/USER-GUIDE.md)** · **[🛟 Support](SUPPORT.md)** · **[📚 Docs](docs/index.md)**
 
 </div>
 
@@ -121,7 +121,7 @@ npm ci
 # 3 — dev server  →  http://localhost:5173/WoodworkingShop/
 npm run dev
 
-# 4 — run 950+ unit tests
+# 4 — run the unit tests
 npm test
 
 # 5 — production build  →  dist/
@@ -246,29 +246,12 @@ Run `npm run i18n:coverage` to verify all locale files are in sync.
 
 ---
 
-## ⚡ Performance Benchmarks
+## ⚡ Performance
 
-Measured on a mid-range development machine (Intel i7 / 16 GB RAM, Chrome 125, production build).
-
-| Metric                                       | Value     | Target   |
-| -------------------------------------------- | --------- | -------- |
-| Lighthouse Performance score                 | 97 / 100  | ≥ 90     |
-| Lighthouse Accessibility score               | 100 / 100 | 100      |
-| First Contentful Paint (FCP)                 | ~0.4 s    | < 1.0 s  |
-| Largest Contentful Paint (LCP)               | ~0.7 s    | < 2.5 s  |
-| Total Blocking Time (TBT)                    | 0 ms      | < 200 ms |
-| Cumulative Layout Shift (CLS)                | 0.000     | < 0.1    |
-| JS bundle — main entry (gzip)                | ~130 KB   | < 200 KB |
-| JS bundle — PDF chunk (gzip, lazy-loaded)    | ~490 KB   | < 600 KB |
-| Cut-optimizer (200-part project, web worker) | < 15 ms   | < 50 ms  |
-| generateParts (default 2000 mm cabinet)      | < 0.3 ms  | < 1 ms   |
-| BOM CSV generation (10 cabinets)             | < 2 ms    | < 10 ms  |
-| Engine bench — generateParts (wardrobe)      | < 0.5 ms  | < 1 ms   |
-| Engine bench — findOptimizations (12 parts)  | < 2 ms    | < 10 ms  |
-
-> Benchmarks are measured against the production build (`npm run build`).
-> Run `npm run preview` locally and open Chrome DevTools → Lighthouse to reproduce.
-> Worker timing is reported in the browser console (debug build only).
+Performance is checked against a production build by Lighthouse CI. The workflow
+enforces the current score and timing budgets; results vary by browser and runner.
+Run `npm run build` followed by `npm run lighthouse` to reproduce the check locally.
+Engine benchmarks are available with `npm run bench:check`.
 
 ---
 
@@ -322,7 +305,9 @@ gh release create vX.Y.Z --generate-notes
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please read [`.github/CONTRIBUTING.md`](.github/CONTRIBUTING.md) first.
+Contributions are welcome! Please read [`.github/CONTRIBUTING.md`](.github/CONTRIBUTING.md)
+and the [Code of Conduct](CODE_OF_CONDUCT.md) first. For questions and project
+ideas, use [GitHub Discussions](https://github.com/RajwanYair/WoodworkingShop/discussions).
 
 Quick checklist before opening a PR:
 
@@ -336,11 +321,10 @@ Quick checklist before opening a PR:
 ## 🔍 GitHub Topics & Discoverability
 
 <!-- GitHub repository topics (set via Settings → Topics):
-     woodworking  cabinet-design  cut-optimizer  furniture-planner  woodworking-tools
-     cabinet-maker  bin-packing  maxrects  pdf-export  dxf-export  gcode  bom
-     react  typescript  vite  tailwindcss  zustand  pwa  offline-app  web-app
-     multilingual  hebrew  rtl  arabic  open-source  mit-license  browser-based  no-backend
-     cnc  nesting  sheet-goods  parametric-design  furniture-design  cut-list
+  woodworking  cabinet-design  cut-list-optimizer  furniture-planner  cnc-router
+  cut-list  sheet-nesting  maxrects  cabinet-maker  dxf  gcode  bin-packing
+  woodworking-tools  furniture-design  browser-based  pwa  multilingual
+  hebrew  rtl  open-source  cnc  nesting  offline-app  pdf-export
 -->
 
 **Keywords:** cabinet planner, woodworking design tool, cut list optimizer,
@@ -357,15 +341,15 @@ assembly instructions generator, woodworking project planner
 
 ### Why Cabinet Planner?
 
-| Need                        | Solution                                                  |
-| --------------------------- | --------------------------------------------------------- |
-| **Design cabinets quickly** | Parametric configurator with live 6-view preview          |
-| **Minimize material waste** | MaxRects bin-packing optimizer reduces sheet waste to <5% |
-| **Export for CNC machines** | DXF and G-code output for router/laser cutters            |
-| **Generate cut lists**      | Automatic BOM with CSV/PDF export                         |
-| **Work offline**            | PWA — install on any device, no internet needed           |
-| **Multi-language**          | EN, HE, AR (RTL), DE, ES, FR                              |
-| **Free forever**            | MIT license, no account, no backend, no tracking          |
+| Need                        | Solution                                                      |
+| --------------------------- | ------------------------------------------------------------- |
+| **Design cabinets quickly** | Parametric configurator with live 6-view preview              |
+| **Plan sheet cuts**         | MaxRects bin-packing optimizer lays out parts on stock sheets |
+| **Export for CNC machines** | DXF and G-code output for CNC routers                         |
+| **Generate cut lists**      | Automatic BOM with CSV/PDF export                             |
+| **Work offline**            | PWA — install on any device, no internet needed               |
+| **Multi-language**          | EN, HE, AR (RTL), DE, ES, FR                                  |
+| **Free and open source**    | MIT license; no account required                              |
 
 ---
 
