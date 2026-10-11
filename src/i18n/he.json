@@ -497,6 +497,7 @@
     "delete": "מחק",
     "placeholder": "שם הארון…",
     "empty": "אין הגדרות שמורות",
+    "loadFailed": "לא ניתן לטעון הגדרות שמורות",
     "export": "ייצוא JSON",
     "exportCabinet": "ייצוא ארון",
     "exportProject": "ייצוא פרויקט ({{count}} ארונות)",
