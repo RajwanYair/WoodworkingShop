@@ -1,4 +1,4 @@
-import type { OptimizationResult } from './types';
+import type { Material, OptimizationResult } from './types';
 import { getMaterial } from './materials.ts';
 
 export interface CostBreakdown {
@@ -81,6 +81,7 @@ export function estimateCost(
   labourRate: number = DEFAULT_LABOUR_RATE,
   labourHours: number = 0,
   finishCost: number = 0,
+  extraMaterials: Material[] = [],
 ): CostBreakdown {
   // Group sheets by material
   const sheetMap = new Map<string, { qty: number; mat: ReturnType<typeof getMaterial> }>();
@@ -90,7 +91,7 @@ export function estimateCost(
     if (existing) {
       existing.qty++;
     } else {
-      sheetMap.set(key, { qty: 1, mat: getMaterial(sheet.material) });
+      sheetMap.set(key, { qty: 1, mat: getMaterial(sheet.material, extraMaterials) });
     }
   }
 

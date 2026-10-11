@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { CabinetPreview } from '../../src/components/preview/CabinetPreview';
 import { useCabinetStore } from '../../src/store/cabinet-store';
@@ -26,6 +27,17 @@ describe('CabinetPreview — isometric 3D view', () => {
     fireEvent.click(btn3d);
     // The SVG should have the isometric aria-label
     expect(screen.getByLabelText('3D isometric cabinet drawing')).toBeInTheDocument();
+  });
+
+  it('exposes cabinet parts as individually named keyboard targets', async () => {
+    const user = userEvent.setup();
+    render(<CabinetPreview />);
+    const part = screen.getByRole('img', { name: /Top Panel/ });
+
+    expect(part).toHaveAttribute('tabindex', '0');
+    await user.click(part);
+    expect(part).toHaveFocus();
+    expect(screen.getByText('Top Panel')).toBeInTheDocument();
   });
 
   it('isometric SVG contains polygon elements for drawer depth (Sprint 174)', () => {

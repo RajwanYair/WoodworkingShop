@@ -135,10 +135,17 @@ export function readConfigFromUrl(): Partial<CabinetConfig> {
 }
 
 /** Update browser URL without reload */
-export function pushConfigToUrl(cfg: CabinetConfig): void {
+export function pushConfigToUrl(cfg: CabinetConfig, activeCabinetIndex?: number): void {
   const params = configToParams(cfg);
+  const currentParams = parseQueryString(window.location.search);
+  if (currentParams.tab) params.tab = currentParams.tab;
+  if (activeCabinetIndex !== undefined && Number.isInteger(activeCabinetIndex) && activeCabinetIndex >= 0) {
+    if (activeCabinetIndex > 0) params.cab = String(activeCabinetIndex);
+  } else if (currentParams.cab) {
+    params.cab = currentParams.cab;
+  }
   // Preserve projectName param so it survives config changes (Sprint 157)
-  const currentPn = getQueryValue(window.location.search, 'pn');
+  const currentPn = currentParams.pn;
   if (currentPn) params.pn = currentPn;
   const qs = serializeQueryRecord(params);
   const url = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
@@ -165,16 +172,37 @@ export function readTabFromUrl():
   return null;
 }
 
+/** Read a valid zero-based active-cabinet index from the current URL. */
+export function readActiveCabinetIndexFromUrl(cabinetCount: number): number | null {
+  if (!Number.isInteger(cabinetCount) || cabinetCount <= 0) return null;
+  const raw = getQueryValue(globalThis.location.search, 'cab');
+  if (raw === null || !/^\d+$/.test(raw)) return null;
+  const index = Number(raw);
+  return index < cabinetCount ? index : null;
+}
+
+/** Update the active-cabinet URL state without discarding other query params. */
+export function pushActiveCabinetIndexToUrl(index: number): void {
+  if (!Number.isInteger(index) || index < 0) return;
+  const params = parseQueryString(globalThis.location.search);
+  if (index === 0) delete params.cab;
+  else params.cab = String(index);
+  const qs = serializeQueryRecord(params);
+  const url = qs ? `${globalThis.location.pathname}?${qs}` : globalThis.location.pathname;
+  globalThis.history.replaceState(null, '', url);
+}
+
 /**
  * Write the active tab into the current URL without discarding other params.
  * Sprint 298 — URL tab deep-linking.
  */
-export function pushTabToUrl(tab: string): void {
+export function pushTabToUrl(tab: string, replace = false): void {
   const params = parseQueryString(globalThis.location.search);
   params.tab = tab;
   const qs = serializeQueryRecord(params);
   const url = qs ? `${globalThis.location.pathname}?${qs}` : globalThis.location.pathname;
-  globalThis.history.replaceState(null, '', url);
+  if (replace) globalThis.history.replaceState(null, '', url);
+  else globalThis.history.pushState(null, '', url);
 }
 
 /**

@@ -3,7 +3,7 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { calculateGlueCoverage } from '../../engine/glue-coverage';
+import { calculateGlueCoverage, GLUE_COVERAGE_LIMITS } from '../../engine/glue-coverage';
 import type { WoodGlueType } from '../../engine/glue-coverage';
 
 const GLUE_TYPES: WoodGlueType[] = ['pva', 'polyurethane', 'epoxy', 'hide', 'ca'];
@@ -37,8 +37,8 @@ export function GlueCoveragePanel() {
           <span>{t('glueCoverage.surfaceArea')} (mm²)</span>
           <input
             type="number"
-            min={100}
-            max={10000000}
+            min={GLUE_COVERAGE_LIMITS.surfaceAreaMm2.min}
+            max={GLUE_COVERAGE_LIMITS.surfaceAreaMm2.max}
             step={1000}
             value={surfaceAreaMm2}
             onChange={(e) => setSurfaceAreaMm2(Number(e.target.value))}
@@ -50,8 +50,8 @@ export function GlueCoveragePanel() {
           <span>{t('glueCoverage.jointCount')}</span>
           <input
             type="number"
-            min={1}
-            max={100}
+            min={GLUE_COVERAGE_LIMITS.jointCount.min}
+            max={GLUE_COVERAGE_LIMITS.jointCount.max}
             step={1}
             value={jointCount}
             onChange={(e) => setJointCount(Number(e.target.value))}

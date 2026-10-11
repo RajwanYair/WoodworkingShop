@@ -1,4 +1,4 @@
-export type CapabilityStatus = 'active' | 'experimental' | 'disabled';
+type CapabilityStatus = 'active' | 'experimental' | 'disabled';
 
 export interface CapabilityContract {
   id: string;
@@ -25,24 +25,7 @@ export const CAPABILITY_CONTRACTS: readonly CapabilityContract[] = [
     status: 'active',
     description: 'Collects sanitized client-side error telemetry for local diagnostics and optional forwarding.',
   },
-  {
-    id: 'supabase-sync',
-    name: 'Supabase Sync Adapter',
-    owner: 'Repo Maintainer',
-    sourceFile: 'src/services/supabase.ts',
-    requiresNetwork: true,
-    criticalPath: false,
-    defaultEnabled: false,
-    status: 'experimental',
-    featureFlag: 'SUPABASE_SYNC',
-    description:
-      'Optional cloud-sync boundary adapter. Core workflows must remain fully functional when this capability is unavailable.',
-  },
 ] as const;
-
-export function getCapabilityContracts(): readonly CapabilityContract[] {
-  return CAPABILITY_CONTRACTS;
-}
 
 export function getCapabilityContract(id: string): CapabilityContract | undefined {
   return CAPABILITY_CONTRACTS.find((contract) => contract.id === id);

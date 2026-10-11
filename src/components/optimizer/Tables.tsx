@@ -2,12 +2,20 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { getMaterial } from '../../engine/materials';
+import { useCustomMaterialsStore } from '../../store/custom-materials-store';
+import { resolveEngineLang } from './resolve-engine-lang';
 import type { Lang, Part } from '../../engine/types';
 
 type SortKey = 'id' | 'name' | 'qty' | 'material' | 'length' | 'width' | 'thickness';
 type SortDir = 'asc' | 'desc';
 
-function sortParts(parts: Part[], key: SortKey, dir: SortDir, lang: Lang): Part[] {
+function sortParts(
+  parts: Part[],
+  key: SortKey,
+  dir: SortDir,
+  lang: Lang,
+  extraMaterials: Parameters<typeof getMaterial>[1],
+): Part[] {
   return [...parts].sort((a, b) => {
     let cmp = 0;
     switch (key) {
@@ -21,7 +29,9 @@ function sortParts(parts: Part[], key: SortKey, dir: SortDir, lang: Lang): Part[
         cmp = a.qty - b.qty;
         break;
       case 'material':
-        cmp = getMaterial(a.material).name[lang].localeCompare(getMaterial(b.material).name[lang]);
+        cmp = getMaterial(a.material, extraMaterials).name[lang].localeCompare(
+          getMaterial(b.material, extraMaterials).name[lang],
+        );
         break;
       case 'length':
         cmp = a.length - b.length;
@@ -40,12 +50,14 @@ function sortParts(parts: Part[], key: SortKey, dir: SortDir, lang: Lang): Part[
 export function PartsTable() {
   const { t, i18n } = useTranslation();
   const { parts } = useCabinetStore();
-  const lang = i18n.language as Lang;
+  const customMaterials = useCustomMaterialsStore((state) => state.materials);
+  const lang = resolveEngineLang(i18n.language);
   /** Sprint 171 — sortable column headers */
   const [sortKey, setSortKey] = useState<SortKey>('id');
   const [sortDir, setSortDir] = useState<SortDir>('asc');
   /** Sprint 65 — material filter */
   const [materialFilter, setMaterialFilter] = useState<string>('');
+  const [search, setSearch] = useState('');
 
   const handleSort = (key: SortKey) => {
     if (key === sortKey) {
@@ -60,21 +72,33 @@ export function PartsTable() {
   // Sprint 65 — collect unique material keys for the filter dropdown
   const uniqueMaterials = [...new Set(parts.map((p) => p.material))].sort();
 
-  const filtered = materialFilter ? parts.filter((p) => p.material === materialFilter) : parts;
-  const sorted = sortParts(filtered, sortKey, sortDir, lang);
+  const query = search.trim().toLowerCase();
+  const filtered = parts.filter((part) => {
+    const matchesMaterial = !materialFilter || part.material === materialFilter;
+    const material = getMaterial(part.material, customMaterials);
+    const matchesSearch =
+      !query ||
+      [part.id, part.name[lang], part.name.en, part.material, material.name[lang], material.name.en]
+        .join(' ')
+        .toLowerCase()
+        .includes(query);
+    return matchesMaterial && matchesSearch;
+  });
+  const sorted = sortParts(filtered, sortKey, sortDir, lang, customMaterials);
 
   const thBtn = (key: SortKey, label: string, align = 'text-start') => (
     <th
       className={`px-2 py-1 ${align}`}
+      scope="col"
       aria-sort={sortKey === key ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
     >
       <button
         type="button"
         onClick={() => handleSort(key)}
-        className="hover:text-wood-600 dark:hover:text-wood-100 font-semibold transition-colors"
+        className="hover:text-wood-600 dark:hover:text-wood-100 focus-visible:outline-wood-600 dark:focus-visible:outline-wood-300 rounded-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
       >
         {label}
-        {arrow(key)}
+        <span aria-hidden="true">{arrow(key)}</span>
       </button>
     </th>
   );
@@ -85,35 +109,45 @@ export function PartsTable() {
         <h3 className="text-wood-700 dark:text-wood-200 text-sm font-semibold tracking-wide uppercase">
           {t('parts.title')}
         </h3>
-        {/* Sprint 65 — material filter dropdown */}
-        {uniqueMaterials.length > 1 && (
-          <label className="text-wood-600 dark:text-wood-300 flex items-center gap-2 text-xs">
-            {t('optimizer.filterByMaterial')}
-            <select
-              value={materialFilter}
-              onChange={(e) => setMaterialFilter(e.target.value)}
-              className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 text-wood-700 dark:text-wood-200 rounded border bg-white px-2 py-0.5 text-xs"
-              aria-label={t('optimizer.filterByMaterial')}
-            >
-              <option value="">{t('optimizer.allMaterials')}</option>
-              {uniqueMaterials.map((mat) => {
-                let label = mat;
-                try {
-                  label = getMaterial(mat).name[lang];
-                } catch {
-                  /* keep key */
-                }
-                return (
-                  <option key={mat} value={mat}>
-                    {label}
-                  </option>
-                );
-              })}
-            </select>
-          </label>
-        )}
+        <div className="flex flex-wrap items-center gap-3">
+          <input
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder={t('optimizer.partsTableSearch')}
+            aria-label={t('optimizer.partsTableSearch')}
+            className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border bg-white px-2 py-1 text-xs"
+          />
+          {/* Sprint 65 — material filter dropdown */}
+          {uniqueMaterials.length > 1 && (
+            <label className="text-wood-600 dark:text-wood-300 flex items-center gap-2 text-xs">
+              {t('optimizer.filterByMaterial')}
+              <select
+                value={materialFilter}
+                onChange={(e) => setMaterialFilter(e.target.value)}
+                className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 text-wood-700 dark:text-wood-200 rounded border bg-white px-2 py-0.5 text-xs"
+                aria-label={t('optimizer.filterByMaterial')}
+              >
+                <option value="">{t('optimizer.allMaterials')}</option>
+                {uniqueMaterials.map((mat) => {
+                  let label = mat;
+                  try {
+                    label = getMaterial(mat, customMaterials).name[lang];
+                  } catch {
+                    /* keep key */
+                  }
+                  return (
+                    <option key={mat} value={mat}>
+                      {label}
+                    </option>
+                  );
+                })}
+              </select>
+            </label>
+          )}
+        </div>
       </div>
-      <table className="w-full border-collapse text-sm">
+      <table aria-label={t('parts.title')} className="w-max min-w-full border-collapse text-sm">
         <thead>
           <tr className="bg-wood-100 dark:bg-wood-800 text-wood-700 dark:text-wood-300">
             {thBtn('id', t('parts.id'))}
@@ -123,14 +157,19 @@ export function PartsTable() {
             {thBtn('length', t('parts.length'), 'text-end')}
             {thBtn('width', t('parts.width'), 'text-end')}
             {thBtn('thickness', t('parts.thickness'), 'text-end')}
-            <th className="px-2 py-1 text-start">{t('parts.edge')}</th>
+            <th scope="col" className="px-2 py-1 text-start">
+              {t('parts.edge')}
+            </th>
           </tr>
         </thead>
         <tbody>
           {sorted.map((p) => {
-            const mat = getMaterial(p.material);
+            const mat = getMaterial(p.material, customMaterials);
             return (
-              <tr key={p.id} className="border-wood-100 dark:border-wood-800 border-b">
+              <tr
+                key={p.id}
+                className="border-wood-100 dark:border-wood-800 even:bg-wood-50/60 dark:even:bg-wood-900/30 hover:bg-wood-100 dark:hover:bg-wood-800/60 border-b transition-colors"
+              >
                 <td className="px-2 py-1 font-mono">{p.id}</td>
                 <td className="px-2 py-1">{p.name[lang]}</td>
                 <td className="px-2 py-1 text-end">{p.qty}</td>
@@ -142,6 +181,15 @@ export function PartsTable() {
               </tr>
             );
           })}
+          {sorted.length === 0 && (
+            <tr>
+              <td colSpan={8} className="px-4 py-8 text-center">
+                <div role="status" aria-live="polite" className="text-wood-500 dark:text-wood-400">
+                  {t('optimizer.noTableResults')}
+                </div>
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>
@@ -151,30 +199,95 @@ export function PartsTable() {
 export function HardwareTable() {
   const { t, i18n } = useTranslation();
   const { hardware, hardwareQtyOverrides, setHardwareQtyOverride } = useCabinetStore();
-  const lang = i18n.language as Lang;
+  const lang = resolveEngineLang(i18n.language);
+  const [search, setSearch] = useState('');
+  const [sortKey, setSortKey] = useState<'name' | 'qty' | 'unit' | 'supplier'>('name');
+  const [sortDir, setSortDir] = useState<SortDir>('asc');
+  const query = search.trim().toLowerCase();
+  const visibleHardware = hardware
+    .filter((item) =>
+      [
+        item.id,
+        item.name[lang],
+        item.name.en,
+        item.unit[lang],
+        item.unit.en,
+        item.supplierName ?? '',
+        item.supplierUrl ?? '',
+      ]
+        .join(' ')
+        .toLowerCase()
+        .includes(query),
+    )
+    .sort((a, b) => {
+      const aQty = hardwareQtyOverrides[a.id] ?? a.qty;
+      const bQty = hardwareQtyOverrides[b.id] ?? b.qty;
+      const comparison =
+        sortKey === 'qty'
+          ? aQty - bQty
+          : sortKey === 'name'
+            ? a.name[lang].localeCompare(b.name[lang])
+            : sortKey === 'unit'
+              ? a.unit[lang].localeCompare(b.unit[lang])
+              : (a.supplierName ?? '').localeCompare(b.supplierName ?? '');
+      return sortDir === 'asc' ? comparison : -comparison;
+    });
+
+  const sortableHeader = (key: 'name' | 'qty' | 'unit' | 'supplier', label: string, className: string) => (
+    <th
+      className={className}
+      scope="col"
+      aria-sort={sortKey === key ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
+    >
+      <button
+        type="button"
+        onClick={() => {
+          if (key === sortKey) setSortDir((direction) => (direction === 'asc' ? 'desc' : 'asc'));
+          else {
+            setSortKey(key);
+            setSortDir('asc');
+          }
+        }}
+        className="hover:text-wood-600 dark:hover:text-wood-100 focus-visible:outline-wood-600 dark:focus-visible:outline-wood-300 rounded-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+      >
+        {label}
+        <span aria-hidden="true">{sortKey === key ? (sortDir === 'asc' ? ' ▲' : ' ▼') : ''}</span>
+      </button>
+    </th>
+  );
 
   return (
     <div className="overflow-x-auto">
-      <h3 className="text-wood-700 dark:text-wood-200 mb-2 text-sm font-semibold tracking-wide uppercase">
-        {t('hardware.title')}
-      </h3>
-      <table className="w-full border-collapse text-sm">
+      <div className="mb-2 flex flex-wrap items-center justify-between gap-3">
+        <h3 className="text-wood-700 dark:text-wood-200 text-sm font-semibold tracking-wide uppercase">
+          {t('hardware.title')}
+        </h3>
+        <input
+          type="search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder={t('optimizer.hardwareTableSearch')}
+          aria-label={t('optimizer.hardwareTableSearch')}
+          className="border-wood-300 dark:border-wood-600 dark:bg-wood-800 rounded border bg-white px-2 py-1 text-xs"
+        />
+      </div>
+      <table aria-label={t('hardware.title')} className="w-max min-w-full border-collapse text-sm">
         <thead>
           <tr className="bg-wood-100 dark:bg-wood-800 text-wood-700 dark:text-wood-300">
-            <th className="px-2 py-1 text-start">{t('hardware.name')}</th>
-            <th className="w-24 px-2 py-1 text-end">{t('hardware.qty')}</th>
-            <th className="px-2 py-1 text-start">{t('hardware.unit')}</th>
-            <th className="w-20 px-2 py-1 text-start">{t('hardware.supplier')}</th>
+            {sortableHeader('name', t('hardware.name'), 'px-2 py-1 text-start')}
+            {sortableHeader('qty', t('hardware.qty'), 'w-24 px-2 py-1 text-end')}
+            {sortableHeader('unit', t('hardware.unit'), 'px-2 py-1 text-start')}
+            {sortableHeader('supplier', t('hardware.supplier'), 'w-20 px-2 py-1 text-start')}
           </tr>
         </thead>
         <tbody>
-          {hardware.map((h) => {
+          {visibleHardware.map((h) => {
             const overridden = hardwareQtyOverrides[h.id];
             const displayQty = overridden ?? h.qty;
             return (
               <tr
                 key={h.id}
-                className={`border-wood-100 dark:border-wood-800 border-b ${overridden !== undefined ? 'bg-amber-50 dark:bg-amber-900/20' : ''}`}
+                className={`border-wood-100 dark:border-wood-800 even:bg-wood-50/60 dark:even:bg-wood-900/30 hover:bg-wood-100 dark:hover:bg-wood-800/60 border-b transition-colors ${overridden !== undefined ? 'bg-amber-50 dark:bg-amber-900/20' : ''}`}
               >
                 <td className="px-2 py-1">{h.name[lang]}</td>
                 <td className="px-2 py-1 text-end">
@@ -209,6 +322,15 @@ export function HardwareTable() {
               </tr>
             );
           })}
+          {visibleHardware.length === 0 && (
+            <tr>
+              <td colSpan={4} className="px-4 py-8 text-center">
+                <div role="status" aria-live="polite" className="text-wood-500 dark:text-wood-400">
+                  {t('optimizer.noTableResults')}
+                </div>
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
       <p className="text-wood-400 dark:text-wood-500 mt-1 text-xs">{t('hardware.qtyHint')}</p>

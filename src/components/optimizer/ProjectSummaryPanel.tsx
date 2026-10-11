@@ -11,7 +11,8 @@
  */
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { computePartsWeight } from '../../engine';
+import { computePartsWeight, generateHardware } from '../../engine';
+import { estimateBuildTimeForProject } from '../../utils/project-build-estimate';
 
 export function ProjectSummaryPanel() {
   const { t } = useTranslation();
@@ -25,6 +26,8 @@ export function ProjectSummaryPanel() {
   const wasteM2 = (combinedOptimization.totalWaste / 1_000_000).toFixed(3);
   const grainConflicts = combinedOptimization.grainConflictCount;
   const totalWeightKg = computePartsWeight(allParts);
+  const allHardware = cabinets.flatMap((cabinet) => generateHardware(cabinet.config));
+  const estimatedTime = estimateBuildTimeForProject(allParts, cabinets.length, allHardware);
 
   // Sprint 79 — average yield per individual sheet
   const sheets = combinedOptimization.sheets ?? [];
@@ -44,6 +47,10 @@ export function ProjectSummaryPanel() {
       warn: grainConflicts > 0,
     },
     { label: t('summary.totalWeight'), value: `${totalWeightKg.toFixed(1)} kg` },
+    {
+      label: t('timeEstimator.totalTime'),
+      value: `${estimatedTime.totalHours.toFixed(1)} ${t('timeEstimator.hours')}`,
+    },
   ];
 
   return (

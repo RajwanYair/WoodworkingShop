@@ -1,10 +1,17 @@
-import { useState, useEffect, useRef } from 'react';
+import { useCallback, useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { IconSettings, IconRuler, IconDocument, IconHelp } from './Icons';
+import {
+  APP_COMMAND_DEFINITIONS,
+  createAppCommand,
+  registerCommands,
+  unregisterCommand,
+} from '../../utils/command-palette';
 
 const SEEN_KEY = 'onboarding-seen';
 const TOTAL_STEPS = 3;
+const DISMISSED_EVENT = 'onboarding-dismissed';
 
 const WIZARD_STEPS: { icon: React.ReactElement; titleKey: string; descKey: string }[] = [
   { icon: <IconSettings size={32} />, titleKey: 'onboarding.wizardStep1Title', descKey: 'onboarding.wizardStep1Desc' },
@@ -26,6 +33,7 @@ function OnboardingOverlay() {
   const dismiss = () => {
     localStorage.setItem(SEEN_KEY, '1');
     setVisible(false);
+    window.dispatchEvent(new Event(DISMISSED_EVENT));
   };
 
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -57,6 +65,8 @@ function OnboardingOverlay() {
         {/* Progress dots */}
         <div
           className="mb-5 flex justify-center gap-2"
+          role="status"
+          aria-live="polite"
           aria-label={t('onboarding.stepOf', { step: step + 1, total: TOTAL_STEPS })}
         >
           {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
@@ -90,7 +100,7 @@ function OnboardingOverlay() {
             <button
               type="button"
               onClick={dismiss}
-              className="text-wood-400 hover:text-wood-600 dark:text-wood-500 dark:hover:text-wood-300 rounded px-3 py-1.5 text-sm transition-colors"
+              className="text-wood-700 hover:text-wood-800 dark:text-wood-300 dark:hover:text-wood-100 rounded px-3 py-1.5 text-sm transition-colors"
             >
               {t('onboarding.skip')}
             </button>
@@ -123,11 +133,18 @@ function OnboardingOverlay() {
 export function HelpButton() {
   const { t } = useTranslation();
 
-  const open = () => {
+  const open = useCallback(() => {
     localStorage.removeItem(SEEN_KEY);
     // Force re-render by dispatching storage event
     window.dispatchEvent(new Event('show-onboarding'));
-  };
+  }, []);
+
+  useEffect(() => {
+    const definition = APP_COMMAND_DEFINITIONS.reopenOnboarding;
+    const command = createAppCommand(definition, t(definition.labelKey), t(definition.categoryKey), open);
+    registerCommands([command]);
+    return () => unregisterCommand(command.id);
+  }, [open, t]);
 
   return (
     <button

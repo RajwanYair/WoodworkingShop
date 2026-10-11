@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { analyzeWaste, formatAreaM2 } from '../../src/engine/waste-analytics';
+import { analyzeWaste, formatAreaM2 } from '../../src/engine/waste';
 import type { OptimizationResult, CutSheet } from '../../src/engine/types';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────

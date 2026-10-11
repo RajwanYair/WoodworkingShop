@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  applyHardwareCatalogImport,
   calculateHardwareCost,
   filterHardware,
   getCategories,
   getManufacturers,
+  HARDWARE_CATALOG_SCHEMA_VERSION,
+  parseHardwareCatalog,
   sortHardware,
   validateHardwareItem,
 } from '../../src/engine/hardware-catalog';
@@ -237,5 +240,38 @@ describe('validateHardwareItem', () => {
     expect(errors).toContain('name is required');
     expect(errors).toContain('unitPrice must be >= 0');
     expect(errors).toContain('packSize must be >= 1');
+  });
+});
+
+describe('parseHardwareCatalog', () => {
+  it('returns items from a valid versioned catalog', () => {
+    expect(parseHardwareCatalog({ schemaVersion: HARDWARE_CATALOG_SCHEMA_VERSION, items: [catalog[0]] })).toEqual([
+      catalog[0],
+    ]);
+  });
+
+  it.each([
+    [null, 'schemaVersion'],
+    [{ schemaVersion: '2.0', items: [] }, 'schemaVersion'],
+    [{ schemaVersion: HARDWARE_CATALOG_SCHEMA_VERSION, items: [null] }, 'index 0'],
+    [{ schemaVersion: HARDWARE_CATALOG_SCHEMA_VERSION, items: [{ ...catalog[0], packSize: 1.5 }] }, 'index 0'],
+    [{ schemaVersion: HARDWARE_CATALOG_SCHEMA_VERSION, items: [catalog[0], catalog[0]] }, 'Duplicate hardware item id'],
+  ])('rejects invalid catalog data %#', (raw, message) => {
+    expect(() => parseHardwareCatalog(raw)).toThrow(message);
+  });
+});
+
+describe('applyHardwareCatalogImport', () => {
+  it('updates matching IDs and appends new IDs when merging without mutating inputs', () => {
+    const updated = { ...catalog[0], name: 'Updated Hinge' };
+    const imported = [updated, { ...catalog[1], id: 'new-item' }];
+    const result = applyHardwareCatalogImport(catalog.slice(0, 1), imported, 'merge');
+
+    expect(result).toEqual([updated, imported[1]]);
+    expect(catalog[0].name).toBe('Soft-Close Hinge');
+  });
+
+  it('replaces the existing catalog when replace mode is selected', () => {
+    expect(applyHardwareCatalogImport(catalog, [catalog[2]], 'replace')).toEqual([catalog[2]]);
   });
 });

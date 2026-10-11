@@ -1,0 +1,18 @@
+{
+  "source": "WoodWorkCalc, Table Leg & Board Taper Calculator, worked example",
+  "url": "https://www.woodworkcalc.com/calculators/taper-angle",
+  "corroboratingSource": "WoodCalcs, Taper Calculator, formula states table-saw jig offset equals taper per side",
+  "corroboratingSourceUrl": "https://woodcalcs.uk/project-maths/taper-calculator/",
+  "retrievedOn": "2026-10-01",
+  "example": {
+    "workpieceLengthMm": 600,
+    "startWidthMm": 60,
+    "endWidthMm": 30,
+    "arrangement": "one-sided",
+    "jigOffsetMm": 30,
+    "taperAngleDeg": 2.862405
+  },
+  "jigOffsetMm": 30,
+  "roundedTaperAngleDeg": 2.86,
+  "scope": "Checks one-sided taper offset and angle rounded to 0.01 degrees; WoodWorkCalc describes layout geometry rather than machine-specific jig setup, and the source example does not report taper-per-foot output."
+}

@@ -60,17 +60,19 @@ bundle size and developer experience without regressing PDF quality.
 
 ## 4. Bundle Impact
 
-The `@react-pdf/renderer` chunk is **already isolated** in a dedicated Vite
-split (`pdf-renderer` manualChunk added in Sprint 63). It is never included in
-the initial JS payload — it loads only when the user opens the PDF export panel.
+The PDF export panel is route-isolated. `@react-pdf/renderer` remains inside
+the `PdfExportPanel` dynamic-import chunk; manually splitting the renderer
+caused Vite to request that shared chunk during the initial workspace load.
+The panel chunk is excluded from the service-worker precache and cached on
+demand when the user opens the PDF export panel.
 
 ```text
-Initial bundle (excl. pdf-renderer chunk): ~220 KB gzip
-pdf-renderer lazy chunk:                   ~285 KB gzip   ← loads on demand
+Initial entry bundle:                      ~60 KB gzip
+PDF export panel, including renderer:      ~465 KB gzip   ← loads on demand
 pdfme equivalent (hypothetical):           ~95 KB gzip
 ```
 
-**Savings if migrated**: ~190 KB on a lazy chunk that the user explicitly
+**Savings if migrated**: ~370 KB on a lazy chunk that the user explicitly
 requests. The initial load time is **not affected**.
 
 ---
@@ -97,7 +99,7 @@ Rationale:
 ### Future re-evaluation triggers
 
 - If pdfme ships first-class RTL/bidi support
-- If the `pdf-renderer` chunk grows beyond 500 KB gzip
+- If the `PdfExportPanel` chunk grows beyond 500 KB gzip
 - If pdfme adds a React wrapper that eliminates the migration cost
 
 ---
@@ -106,5 +108,5 @@ Rationale:
 
 - [@react-pdf/renderer](https://github.com/diegomura/react-pdf) — v4.5.1
 - [pdfme](https://github.com/pdfmeHQ/pdfme) — v4.x
-- [Sprint 63 — chunk strategy](../vite.config.ts) — `pdf-renderer` manualChunk
+- [Vite chunk strategy](../vite.config.ts) — PDF panel route isolation
 - [CabinetPdfDocument.tsx](../src/components/pdf/CabinetPdfDocument.tsx)

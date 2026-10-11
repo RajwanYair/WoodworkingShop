@@ -8,7 +8,7 @@
  *  - Re-registering the same id is idempotent.
  *  - Built-in rules continue to work after the registry is introduced.
  */
-import { describe, it, expect, afterEach } from 'vitest';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import { validateConfig, registerRule, unregisterRule, getCustomRules } from '../../src/engine/validation';
 import type { ValidationRule } from '../../src/engine/types';
 import { cfg } from '../helpers';
@@ -21,6 +21,24 @@ afterEach(() => {
 });
 
 describe('registerRule / getCustomRules', () => {
+  it('starts with no custom rules registered', async () => {
+    vi.resetModules();
+    try {
+      const { getCustomRules: getFreshCustomRules } = await import('../../src/engine/validation');
+      expect(getFreshCustomRules()).toHaveLength(0);
+    } finally {
+      vi.resetModules();
+    }
+  });
+
+  it('unregisters the first rule while preserving a later rule', () => {
+    registerRule({ id: 'TEST_REMOVE_FIRST', severity: 'info', check: () => [] });
+    registerRule({ id: 'TEST_KEEP_LATER', severity: 'info', check: () => [] });
+    unregisterRule('TEST_REMOVE_FIRST');
+    expect(getCustomRules().some((r) => r.id === 'TEST_REMOVE_FIRST')).toBe(false);
+    expect(getCustomRules().some((r) => r.id === 'TEST_KEEP_LATER')).toBe(true);
+  });
+
   it('registered rule appears in getCustomRules()', () => {
     const rule: ValidationRule = {
       id: 'TEST_NOOP',
@@ -38,15 +56,28 @@ describe('registerRule / getCustomRules', () => {
     expect(getCustomRules().filter((r) => r.id === 'TEST_IDEM').length).toBe(1);
   });
 
+  it('registers a different rule when the registry is non-empty', () => {
+    registerRule({ id: 'TEST_FIRST', severity: 'info', check: () => [] });
+    registerRule({ id: 'TEST_SECOND', severity: 'info', check: () => [] });
+    expect(getCustomRules().map((rule) => rule.id)).toEqual(expect.arrayContaining(['TEST_FIRST', 'TEST_SECOND']));
+  });
+
   it('unregisterRule removes a rule by id', () => {
     registerRule({ id: 'TEST_REMOVE', severity: 'info', check: () => [] });
+    registerRule({ id: 'TEST_KEEP_SECOND', severity: 'info', check: () => [] });
     expect(getCustomRules().some((r) => r.id === 'TEST_REMOVE')).toBe(true);
     unregisterRule('TEST_REMOVE');
     expect(getCustomRules().some((r) => r.id === 'TEST_REMOVE')).toBe(false);
+    expect(getCustomRules().some((r) => r.id === 'TEST_KEEP_SECOND')).toBe(true);
   });
 
   it('unregisterRule is a no-op for an unknown id', () => {
+    const rule: ValidationRule = { id: 'TEST_KEEP', severity: 'info', check: () => [] };
+    registerRule(rule);
+    const countBefore = getCustomRules().length;
     expect(() => unregisterRule('DOES_NOT_EXIST')).not.toThrow();
+    expect(getCustomRules()).toContain(rule);
+    expect(getCustomRules()).toHaveLength(countBefore);
   });
 });
 
@@ -64,6 +95,8 @@ describe('custom rules invoked by validateConfig()', () => {
     validateConfig(cfg());
     expect(capturedCtx).toBeDefined();
     expect(capturedCtx!.dims).toBeDefined();
+    expect(capturedCtx!.mat).toBeDefined();
+    expect(capturedCtx!.backMat).toBeDefined();
     // mat may be undefined for unknown keys, but dims is always present
     expect(typeof capturedCtx!.dims.internalWidth).toBe('number');
   });
@@ -84,6 +117,20 @@ describe('custom rules invoked by validateConfig()', () => {
     });
     const issues = validateConfig(cfg());
     expect(issues.some((i) => i.code === 'ALWAYS_WARN')).toBe(true);
+  });
+
+  it('sorts custom errors ahead of built-in warnings', () => {
+    registerRule({
+      id: 'CUSTOM_ERROR_SORT',
+      severity: 'error',
+      check() {
+        return [{ code: 'CUSTOM_ERROR_SORT', severity: 'error', message: { en: 'custom error', he: 'שגיאה מותאמת' } }];
+      },
+    });
+    const issues = validateConfig(cfg({ height: 600, kickHeight: 350 }));
+    expect(issues.findIndex((issue) => issue.code === 'CUSTOM_ERROR_SORT')).toBeLessThan(
+      issues.findIndex((issue) => issue.code === 'KICK_TOO_TALL'),
+    );
   });
 
   it('multiple issues from a single custom rule all appear', () => {

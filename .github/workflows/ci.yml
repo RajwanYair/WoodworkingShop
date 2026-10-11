@@ -18,7 +18,8 @@ env:
 
 jobs:
   quality:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-node
@@ -33,7 +34,8 @@ jobs:
       # - name: Spell check
       #   run: npx --yes cspell lint --no-progress --show-suggestions --gitignore "**/*.{ts,tsx,md}"
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
     needs: quality
     steps:
       - uses: actions/checkout@v5
@@ -43,11 +45,12 @@ jobs:
       # Test execution itself is blocking (npm test must pass before reaching this step)
       - uses: codecov/codecov-action@v5
         with: { files: /tmp/WoodworkingShop/coverage/lcov.info, flags: unit, fail_ci_if_error: false }
-      - run: npm run bench:check && npm run build && npm run bundle:check
-      - uses: actions/upload-artifact@v4
+      - run: npm run bench:check && npm run build && npm run bundle:check && npm run bundle:critical
+      - uses: actions/upload-artifact@v7
         with: { name: dist, path: dist, retention-days: 7 }
   compat:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
     needs: quality
     strategy:
       fail-fast: false
@@ -61,32 +64,34 @@ jobs:
           path: /tmp/WoodworkingShop/.vite_cache
           key: "vite-${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('vite.config.ts', 'package-lock.json') }}"
           restore-keys: 'vite-${{ runner.os }}-node${{ matrix.node-version }}-'
-      - run: npm run build && npm run bundle:check
+      - run: npm run build && npm run bundle:check && npm run bundle:critical
   e2e:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
     needs: test
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-node
       - uses: actions/cache@v5
-        with: { path: ~/.cache/ms-playwright, key: "pw-${{ runner.os }}-${{ hashFiles('package-lock.json') }}" }
-      - run: npx playwright install --with-deps chromium firefox
-      - uses: actions/download-artifact@v4
+        with: { path: ~/.cache/ms-playwright, key: "pw-${{ runner.os }}-webkit-${{ hashFiles('package-lock.json') }}" }
+      - run: npx playwright install --with-deps chromium firefox webkit
+      - uses: actions/download-artifact@v8
         with: { name: dist, path: dist }
       - run: npx playwright test --ignore-snapshots
       - if: always()
-        uses: actions/upload-artifact@v4
-        with: { name: playwright-report, path: playwright-report/, retention-days: 7 }
+        uses: actions/upload-artifact@v7
+        with: { name: playwright-report, path: playwright-report/, retention-days: 7, if-no-files-found: ignore }
   lighthouse:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
     needs: test
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-node
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with: { name: dist, path: dist }
       - run: npm run lighthouse
         env: { LHCI_GITHUB_APP_TOKEN: '${{ secrets.LHCI_GITHUB_APP_TOKEN }}' }
       - if: always()
-        uses: actions/upload-artifact@v4
-        with: { name: lighthouse-report, path: .lighthouseci/, retention-days: 7 }
+        uses: actions/upload-artifact@v7
+        with: { name: lighthouse-report, path: .lighthouseci/, retention-days: 7, if-no-files-found: ignore }

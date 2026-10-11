@@ -97,6 +97,11 @@ describe('calculateBoardFeet', () => {
     { desc: 'lengthIn = -10', override: { lengthIn: -10 } },
     { desc: 'quantity = 0', override: { quantity: 0 } },
     { desc: 'quantity = 2.5', override: { quantity: 2.5 } },
+    { desc: 'thicknessIn is NaN', override: { thicknessIn: Number.NaN } },
+    { desc: 'widthIn is infinite', override: { widthIn: Number.POSITIVE_INFINITY } },
+    { desc: 'lengthIn is NaN', override: { lengthIn: Number.NaN } },
+    { desc: 'custom cost is infinite', override: { costPerBf: Number.POSITIVE_INFINITY } },
+    { desc: 'volume overflows', override: { thicknessIn: 1e200, widthIn: 1e200 } },
   ])('throws RangeError for $desc', ({ override }) => {
     expect(() => calculateBoardFeet({ ...baseInput, ...override })).toThrow(RangeError);
   });
@@ -117,6 +122,7 @@ describe('linearFeetToBoardFeet', () => {
     { desc: 'thicknessIn = 0', args: [0, 6, 8] as const },
     { desc: 'widthIn = -1', args: [1, -1, 8] as const },
     { desc: 'linearFeet = -5', args: [1, 6, -5] as const },
+    { desc: 'linearFeet is infinite', args: [1, 6, Number.POSITIVE_INFINITY] as const },
   ])('throws RangeError for $desc', ({ args }) => {
     expect(() => linearFeetToBoardFeet(...(args as Parameters<typeof linearFeetToBoardFeet>))).toThrow(RangeError);
   });

@@ -12,6 +12,7 @@ import {
   IconGrainVertical,
 } from '../layout/Icons';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { useToastStore } from '../../store/toast-store';
 import { generateHardware } from '../../engine/hardware';
 import { downloadHardwareCsv } from '../../utils/bom-export';
@@ -73,6 +74,7 @@ export function OptimizerToolbar({
     setAutoCoNest,
     cabinets,
   } = useCabinetStore();
+  const customMaterials = useCustomMaterialsStore((state) => state.materials);
 
   const cutCount = sheets.reduce((acc, sh) => {
     const xs = new Set<number>();
@@ -230,7 +232,10 @@ export function OptimizerToolbar({
 
           <button
             onClick={() => {
-              const hwData = cabinets.map((c) => ({ name: c.name, hardware: generateHardware(c.config) }));
+              const hwData = cabinets.map((c) => ({
+                name: c.name,
+                hardware: generateHardware(c.config, customMaterials),
+              }));
               downloadHardwareCsv(hwData, lang, `${filePrefix}-hardware-list.csv`);
               useToastStore.getState().addToast(t('toast.hardwareExported'), 'success');
             }}

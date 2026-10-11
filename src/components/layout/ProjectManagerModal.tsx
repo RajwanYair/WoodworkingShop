@@ -172,7 +172,7 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
             className="border-wood-300 dark:border-wood-600 dark:bg-wood-700 text-wood-800 dark:text-wood-100 focus:border-wood-500 flex-1 rounded border bg-white px-2 py-1 text-sm focus:outline-none"
             aria-label={t('projects.searchPlaceholder')}
           />
-          <label className="text-wood-500 dark:text-wood-400 shrink-0 text-xs">{t('projects.sortLabel')}:</label>
+          <label className="text-wood-700 dark:text-wood-300 shrink-0 text-xs">{t('projects.sortLabel')}:</label>
           <select
             value={sortMode}
             onChange={(e) => setSortMode(e.target.value as 'date' | 'name')}
@@ -192,7 +192,7 @@ export function ProjectManagerModal({ onClose }: ProjectManagerModalProps) {
         {/* Project list */}
         <div className="flex-1 space-y-2 overflow-y-auto p-4">
           {visibleProjects.length === 0 ? (
-            <p className="text-wood-400 dark:text-wood-500 py-6 text-center text-sm">
+            <p className="text-wood-700 dark:text-wood-200 py-6 text-center text-sm">
               {searchQuery ? t('projects.noResults', { query: searchQuery }) : t('projects.empty')}
             </p>
           ) : (

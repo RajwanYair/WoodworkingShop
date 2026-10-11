@@ -9,6 +9,8 @@ import {
   createUiSlice,
   detectOsDarkModeUi,
   loadUiPrefs,
+  loadBuildLog,
+  loadCutChecklist,
   saveUiPrefs,
   UI_PREFS_KEY,
   type UiSlice,
@@ -30,9 +32,6 @@ const localStorageMock = {
     for (const k of Object.keys(_lsData)) delete _lsData[k];
   },
 };
-vi.stubGlobal('localStorage', localStorageMock);
-Object.defineProperty(window, 'localStorage', { value: localStorageMock, writable: true, configurable: true });
-
 // ── helpers ───────────────────────────────────────────────────────────────────
 
 /** Build a UiSlice by wiring a simple patch-based set fn. */
@@ -73,7 +72,10 @@ describe('detectOsDarkModeUi', () => {
 // ── localStorage helpers ──────────────────────────────────────────────────────
 
 describe('loadUiPrefs / saveUiPrefs', () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => {
+    vi.stubGlobal('localStorage', localStorageMock);
+    localStorage.clear();
+  });
 
   it('returns empty object when nothing is stored', () => {
     expect(loadUiPrefs()).toEqual({});
@@ -160,7 +162,10 @@ describe('createUiSlice — setProjectName / setProjectNotes', () => {
 });
 
 describe('createUiSlice — toggleDarkMode', () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => {
+    vi.stubGlobal('localStorage', localStorageMock);
+    localStorage.clear();
+  });
 
   it('toggles false → true', () => {
     const { get } = makeSlice({ darkMode: false });
@@ -182,7 +187,10 @@ describe('createUiSlice — toggleDarkMode', () => {
 });
 
 describe('createUiSlice — toggleColorBlindMode', () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => {
+    vi.stubGlobal('localStorage', localStorageMock);
+    localStorage.clear();
+  });
 
   it('toggles false → true', () => {
     const { get } = makeSlice();
@@ -198,7 +206,10 @@ describe('createUiSlice — toggleColorBlindMode', () => {
 });
 
 describe('createUiSlice — toggleHighContrast', () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => {
+    vi.stubGlobal('localStorage', localStorageMock);
+    localStorage.clear();
+  });
 
   it('toggles false → true', () => {
     const { get } = makeSlice();
@@ -214,7 +225,10 @@ describe('createUiSlice — toggleHighContrast', () => {
 });
 
 describe('createUiSlice — toggleUnits', () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => {
+    vi.stubGlobal('localStorage', localStorageMock);
+    localStorage.clear();
+  });
 
   it('toggles metric → imperial', () => {
     const { get } = makeSlice({ units: 'metric' });
@@ -232,5 +246,65 @@ describe('createUiSlice — toggleUnits', () => {
     const { get } = makeSlice({ units: 'metric' });
     get().toggleUnits();
     expect(loadUiPrefs().units).toBe('imperial');
+  });
+});
+
+describe('createUiSlice — build log actions', () => {
+  beforeEach(() => {
+    vi.stubGlobal('localStorage', localStorageMock);
+    localStorage.clear();
+  });
+
+  it('adds trimmed entries, deletes by id, and clears persisted build log', () => {
+    const { get } = makeSlice();
+    get().addBuildLogEntry('  Cut side panels  ');
+
+    const [entry] = get().buildLog;
+    expect(entry.text).toBe('Cut side panels');
+    expect(() => new Date(entry.createdAt).toISOString()).not.toThrow();
+    expect(loadBuildLog()).toEqual([entry]);
+
+    get().deleteBuildLogEntry(entry.id);
+    expect(get().buildLog).toEqual([]);
+    expect(loadBuildLog()).toEqual([]);
+
+    get().addBuildLogEntry('Glue-up complete');
+    get().clearBuildLog();
+    expect(get().buildLog).toEqual([]);
+    expect(loadBuildLog()).toEqual([]);
+  });
+});
+
+describe('createUiSlice — focus mode', () => {
+  it('toggles focus mode on and off', () => {
+    const { get } = makeSlice();
+    get().toggleFocusMode();
+    expect(get().focusMode).toBe(true);
+    get().toggleFocusMode();
+    expect(get().focusMode).toBe(false);
+  });
+});
+
+describe('createUiSlice — cut checklist actions', () => {
+  beforeEach(() => {
+    vi.stubGlobal('localStorage', localStorageMock);
+    localStorage.clear();
+  });
+
+  it('toggles part completion and clears persisted checklist', () => {
+    const { get } = makeSlice();
+    get().toggleCutPart('part-1');
+    expect(get().checkedPartIds).toEqual(['part-1']);
+    expect(loadCutChecklist()).toEqual(['part-1']);
+
+    get().toggleCutPart('part-1');
+    expect(get().checkedPartIds).toEqual([]);
+    expect(loadCutChecklist()).toEqual([]);
+
+    get().toggleCutPart('part-1');
+    get().toggleCutPart('part-2');
+    get().clearCutChecklist();
+    expect(get().checkedPartIds).toEqual([]);
+    expect(loadCutChecklist()).toEqual([]);
   });
 });

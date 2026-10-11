@@ -52,6 +52,7 @@ export function WoodTurningPanel() {
             <button
               key={op}
               type="button"
+              aria-pressed={operation === op}
               onClick={() => setOperation(op)}
               className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
                 operation === op

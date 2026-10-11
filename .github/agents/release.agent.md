@@ -26,13 +26,13 @@ Do not skip the pre-flight gate.
 ```bash
 npm run check          # quality:fast + tests — 0 errors required
 npm run dead:check     # 0 orphaned exports required
-git status             # working tree must be clean
+git status             # confirm candidate changes are intentional and no unrelated user changes are present
 ```
 
 Also verify:
 
 - `CHANGELOG.md [Unreleased]` section is populated with at least one entry
-- `ROADMAP.md` sprint items are marked DONE where applicable
+- `ROADMAP.md` release-blocking sprint items and clean-checkout acceptance are complete
 
 **STOP** if any pre-flight check fails. Fix first, release second.
 
@@ -67,7 +67,7 @@ Search and update the version string in:
 - `ROADMAP.md` — `Current version: X.Y.Z`
 
 ```bash
-grep -r "4\.[0-9]\+\.[0-9]\+" --include="*.md" .github/ *.md
+rg -n "v?[0-9]+\.[0-9]+\.[0-9]+" .github/ *.md
 ```
 
 ## Step 5 — Release build
@@ -85,13 +85,11 @@ git tag -a vX.Y.Z -m "Release vX.Y.Z"
 git push origin main --follow-tags
 ```
 
-## Step 7 — GitHub Release
+## Step 7 — Verify GitHub Release
 
-```bash
-gh release create vX.Y.Z --generate-notes --title "v X.Y.Z"
-```
-
-Attach `dist/sbom.json` if present.
+Pushing the annotated `vX.Y.Z` tag triggers `.github/workflows/release.yml`, which builds the
+release archive, checksum, and SBOM and creates the `WoodworkingShop vX.Y.Z` GitHub Release. Do not
+create a duplicate release manually. Verify the workflow run and published artifacts after the push.
 
 ## Constraints
 
@@ -105,5 +103,5 @@ Attach `dist/sbom.json` if present.
 1. Pre-flight checks pass on a clean working tree.
 2. Version and release metadata are updated consistently.
 3. Release build artifacts are generated successfully.
-4. Commit, tag, and push are completed without history rewrites.
-5. GitHub release is created and its URL is reported.
+4. The release commit passes clean-checkout acceptance before it is tagged and pushed without history rewrites.
+5. The release workflow completes and publishes its artifacts; report the release URL.

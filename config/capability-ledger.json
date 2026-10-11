@@ -1,0 +1,871 @@
+{
+  "version": 1,
+  "modules": [
+    {
+      "path": "src/engine/a11y-audit.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/ai-assistant.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/analytics.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/assembly-dag.ts",
+      "status": "surface-next",
+      "targetSprint": 373,
+      "reason": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373."
+    },
+    {
+      "path": "src/engine/assembly-dependency.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/assembly-timer.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/assembly.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/assembly/index.ts",
+      "status": "surface-next",
+      "targetSprint": 373,
+      "reason": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373."
+    },
+    {
+      "path": "src/engine/audit-trail.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/bandsaw-speed.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/batch-export.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/batch-replace.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/board-feet.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/bom-filter.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/box-joint.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/bundle-strategy.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/cabinet-door.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/cabinet-notes.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/templates/cabinet.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/cabinet-weight.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/cloud-sync.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/cnc-job-queue.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/community-catalog.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/constraint-solver.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/cost-estimator.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/cost-summary-export.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/cost-variance.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/cove-cut.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/crdt-sync.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/crown-moulding.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/cut-checklist.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/cut-list-grouping.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/cut-optimizer.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/cut-plan-summary.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/dado-rabbet.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/dark-mode-tokens.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/comparison/design.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/comparison/index.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/dimensions.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/dovetail-layout.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/drawer-box.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/drawer-runner.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/drawer-slide.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/drill-speed.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/dust-collection.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/edge-profile.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/erp-export.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/export-format.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/export-schema.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/export/gltf-document.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/export/ifc-export.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/export/index.ts",
+      "status": "surface-next",
+      "targetSprint": 373,
+      "reason": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373."
+    },
+    {
+      "path": "src/engine/export/step-export.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/face-frame.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/feed-rate.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/finger-joint.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/finish-calculator.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/finishing-coat.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/frame-panel.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/gcode-toolpath.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/gcode-validator.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/geometry/index.ts",
+      "status": "surface-next",
+      "targetSprint": 373,
+      "reason": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373."
+    },
+    {
+      "path": "src/engine/gltf-ifc-model.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/glue-coverage.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/glue-up-time.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/grain-conflict.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/grain-constraint.ts",
+      "status": "surface-next",
+      "targetSprint": 373,
+      "reason": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373."
+    },
+    {
+      "path": "src/engine/grain-report.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/half-lap.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/hardware-catalog.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/hardware-spec.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/hardware.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/hardware/index.ts",
+      "status": "surface-next",
+      "targetSprint": 373,
+      "reason": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373."
+    },
+    {
+      "path": "src/engine/hinge-bore.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/honing-guide.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/i18n-audit.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/index.ts",
+      "status": "public-api",
+      "documentedIn": "docs/PLUGIN-API.md"
+    },
+    {
+      "path": "src/engine/invariant.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/iso7171.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/joint-detail.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/kerf-bending.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/kerf.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/layout-optimizer.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/layout-suggestions.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/lazy-features.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/machine-profiles.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/machining-job.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/maintenance-scheduler.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/manufacturer-catalog.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/material-cost-tracker.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/material-textures.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/material-usage-report.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/material-yield.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/materials.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/materials/index.ts",
+      "status": "surface-next",
+      "targetSprint": 373,
+      "reason": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373."
+    },
+    {
+      "path": "src/engine/measurement-assistant.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/memo.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/mirror-cabinet.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/miter-angle.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/mobile-sync.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/moisture-shrinkage.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/mortise-tenon.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/multi-machine.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/multi-stock-optimizer.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/nesting-patterns.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/optimizer/index.ts",
+      "status": "surface-next",
+      "targetSprint": 373,
+      "reason": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373."
+    },
+    {
+      "path": "src/engine/panel-label.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/parameter-expressions.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/templates/parametric.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/part-labeling.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/part-sort.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/parts.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/pbr-materials.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/pilot-hole.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/planer-passes.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/plugin-marketplace.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/plugin-v2.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/plugin.ts",
+      "status": "public-api",
+      "documentedIn": "docs/PLUGIN-API.md"
+    },
+    {
+      "path": "src/engine/pocket-hole.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/comparison/project.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/project-library.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/project-settings.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/project-sharing.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/project-sync.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/rafter-length.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/room-planner.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/router-circle.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/router-depth.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/router-template.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/screw-pullout.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/shelf-deflection.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/shelf-pin.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/shelf-spacing.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/stock/inventory.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/smart-optimizer.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/comparison/snapshot-diff.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/snapshot-tags.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/spline-joint.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/stair-stringer.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/stock/management.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/stock/tracker.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/stock/index.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/substitution.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/tablesaw-blade.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/taper-jig.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/templates/data.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/templates/dsl.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/templates/library.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/templates/index.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/time-estimator.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/tool-wear.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/types.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/validation.ts",
+      "status": "public-api",
+      "documentedIn": "docs/PLUGIN-API.md"
+    },
+    {
+      "path": "src/engine/validation/dimension-rules.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/validation/door-rules.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/validation/shelf-rules.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/version-history.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/waste/alerts.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/waste/analytics.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/waste/predictor.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/waste/index.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/webgl-probe.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/webgpu-renderer.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/webserial-v2.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/webxr-placement.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/wood-drying.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/wood-turning.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/workspace.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/engine/zone-validator.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/services/capability-contracts.ts",
+      "status": "public-api",
+      "documentedIn": "docs/API-BOUNDARIES.md"
+    },
+    {
+      "path": "src/services/error-reporter.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/utils/ai-assistant-io.ts",
+      "status": "surface-next",
+      "targetSprint": 373,
+      "reason": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373."
+    },
+    {
+      "path": "src/utils/ar-placement.ts",
+      "status": "surface-next",
+      "targetSprint": 373,
+      "reason": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373."
+    },
+    {
+      "path": "src/utils/audit-log.ts",
+      "status": "surface-next",
+      "targetSprint": 373,
+      "reason": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373."
+    },
+    {
+      "path": "src/utils/batch-export-runner.ts",
+      "status": "surface-next",
+      "targetSprint": 373,
+      "reason": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373."
+    },
+    {
+      "path": "src/utils/bom-export.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/utils/browser-compat.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/utils/catalog-import.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/utils/checksum.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/utils/command-palette.ts",
+      "status": "surface-next",
+      "targetSprint": 374,
+      "reason": "Sprint 374 mounts the command palette and typed command registry."
+    },
+    {
+      "path": "src/utils/community-catalog-io.ts",
+      "status": "surface-next",
+      "targetSprint": 373,
+      "reason": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373."
+    },
+    {
+      "path": "src/utils/cost-comparison.ts",
+      "status": "surface-next",
+      "targetSprint": 373,
+      "reason": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373."
+    },
+    {
+      "path": "src/utils/crdt-document.ts",
+      "status": "surface-next",
+      "targetSprint": 373,
+      "reason": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373."
+    },
+    {
+      "path": "src/utils/download.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/utils/dxf-builders.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/utils/dxf-export.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/utils/erp-export-download.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/utils/export-presets.ts",
+      "status": "surface-next",
+      "targetSprint": 373,
+      "reason": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373."
+    },
+    {
+      "path": "src/utils/gcode-export.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/utils/gltf-download.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/utils/ifc-download.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/utils/ifc-project-export.ts",
+      "status": "surface-next",
+      "targetSprint": 373,
+      "reason": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373."
+    },
+    {
+      "path": "src/utils/indexed-db-storage.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/utils/local-storage.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/utils/plugin-marketplace.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/utils/price-history.ts",
+      "status": "surface-next",
+      "targetSprint": 373,
+      "reason": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373."
+    },
+    {
+      "path": "src/utils/project-branching.ts",
+      "status": "surface-next",
+      "targetSprint": 373,
+      "reason": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373."
+    },
+    {
+      "path": "src/utils/project-build-estimate.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/utils/project-storage.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/utils/step-download.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/utils/units.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/utils/url-state.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/utils/voice-annotation.ts",
+      "status": "surface-next",
+      "targetSprint": 373,
+      "reason": "No UI-root or internal importer; evaluate for surfacing or retirement in Sprint 373."
+    },
+    {
+      "path": "src/utils/webserial-cnc.ts",
+      "status": "surfaced"
+    },
+    {
+      "path": "src/utils/zip-writer.ts",
+      "status": "surfaced"
+    }
+  ]
+}

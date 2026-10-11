@@ -1,4 +1,4 @@
-import type { CabinetConfig, HardwareItem, VendorHingeProfile, HardwareCatalogEntry } from './types';
+import type { CabinetConfig, HardwareItem, Material, VendorHingeProfile, HardwareCatalogEntry } from './types';
 import { computeDimensions } from './dimensions';
 import catalogRaw from '../catalog/hardware.json';
 
@@ -62,11 +62,11 @@ export const VENDOR_HINGE_PROFILES: VendorHingeProfile[] = HARDWARE_CATALOG.filt
  * Generate the full hardware (ironmongery) list for a cabinet config.
  * Quantities follow standard Israeli carpentry practice.
  */
-export function generateHardware(cfg: CabinetConfig): HardwareItem[] {
+export function generateHardware(cfg: CabinetConfig, extraMaterials?: Material[]): HardwareItem[] {
   // Plain plates have no hardware
   if (cfg.furnitureType === 'panel') return [];
 
-  const d = computeDimensions(cfg);
+  const d = computeDimensions(cfg, extraMaterials);
   const items: HardwareItem[] = [];
   const hasDoors = cfg.doorStyle !== 'none' && cfg.doorCount > 0;
 

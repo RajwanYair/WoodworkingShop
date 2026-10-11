@@ -4,8 +4,8 @@
  * Tests for src/utils/batch-export.ts
  */
 import { describe, it, expect, vi } from 'vitest';
-import { batchExport, makeStringExportTask, filterTasksByFormat } from '../../src/utils/batch-export';
-import type { ExportTask, ExportTaskResult } from '../../src/utils/batch-export';
+import { batchExport, makeStringExportTask, filterTasksByFormat } from '../../src/utils/batch-export-runner';
+import type { ExportTask, ExportTaskResult } from '../../src/utils/batch-export-runner';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 

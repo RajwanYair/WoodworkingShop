@@ -1,0 +1,21 @@
+{
+  "source": "WOOD Magazine, Make and Mount Super-Simple Drawers, Size the drawer to fit the hole",
+  "url": "https://www.woodmagazine.com/woodworking-how-to/doors-drawers/make-and-mount-super-simple-drawers",
+  "retrievedOn": "2026-10-01",
+  "sourceValues": {
+    "slideType": "full-extension",
+    "clearancePerSideIn": 0.5,
+    "openingWidthIn": 20,
+    "boxWidthIn": 19
+  },
+  "input": {
+    "openingWidthMm": 508,
+    "slideType": "side"
+  },
+  "expected": {
+    "boxWidthMm": 482.6
+  },
+  "conversion": "1 in = 25.4 mm; full-extension slides require 1/2 in per side, so a 20 in opening yields a 19 in box width.",
+  "tolerance": "0.01 mm for the published box-width value after unit conversion.",
+  "scope": "Validates only drawer-box width for the source's full-extension, side-mount slide clearance. Height, depth, false-front size, and bottom/center slide clearances are excluded."
+}

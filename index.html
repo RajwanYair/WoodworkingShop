@@ -2,24 +2,25 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/WoodworkingShop/favicon.svg" />
-    <link rel="apple-touch-icon" href="/WoodworkingShop/icon-192.png" />
-    <link rel="manifest" href="/WoodworkingShop/manifest.json" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#5a4218" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Interactive woodworking cabinet design tool with smart cut optimization, PDF export, and bilingual support."
+      content="Design cabinets and furniture in your browser. Optimize cut lists, preview projects, and export build plans, BOMs, DXF, and G-code in six languages."
     />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://rajwanyair.github.io/WoodworkingShop/" />
+    <link rel="preload" href="./docs/banner.svg" as="image" type="image/svg+xml" fetchpriority="high" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Cabinet Planner — Woodworking Design Tool" />
     <meta
       property="og:description"
-      content="Design custom cabinets and bookshelves with smart cut optimization, 3D preview, DXF export, and step-by-step assembly guides."
+      content="Design cabinets and furniture in your browser. Optimize cut lists, preview projects, and export build plans, BOMs, DXF, and G-code in six languages."
     />
     <meta property="og:url" content="https://rajwanyair.github.io/WoodworkingShop/" />
     <meta property="og:site_name" content="Cabinet Planner" />
@@ -31,7 +32,10 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Cabinet Planner — Woodworking Design Tool" />
-    <meta name="twitter:description" content="Design custom cabinets with smart cut optimization and PDF export." />
+    <meta
+      name="twitter:description"
+      content="Design cabinets and furniture in your browser. Optimize cut lists, preview projects, and export build plans, BOMs, DXF, and G-code in six languages."
+    />
     <meta name="twitter:image" content="https://rajwanyair.github.io/WoodworkingShop/icon-512.png" />
 
     <!-- Structured Data -->
@@ -40,18 +44,14 @@
         "@context": "https://schema.org",
         "@type": "WebApplication",
         "name": "Cabinet Planner",
-        "description": "Interactive woodworking cabinet design tool with smart cut optimization, 3D preview, DXF export, and bilingual support.",
+        "description": "Design cabinets and furniture in your browser. Optimize cut lists, preview projects, and export build plans, BOMs, DXF, and G-code in six languages.",
         "url": "https://rajwanyair.github.io/WoodworkingShop/",
         "applicationCategory": "DesignApplication",
         "operatingSystem": "Any",
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-        "inLanguage": ["en", "he"]
+        "inLanguage": ["en", "he", "ar", "de", "es", "fr"]
       }
     </script>
-
-    <!-- v3.24.0: preload static assets to eliminate render-blocking fetches -->
-    <link rel="preload" href="/WoodworkingShop/manifest.json" as="fetch" crossorigin="anonymous" />
-    <link rel="preload" href="/WoodworkingShop/icon-192.png" as="image" type="image/png" />
 
     <!-- v3.40.0: preconnect to CDNs used at runtime (react-pdf Twemoji, cdnjs) -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin="anonymous" />
@@ -71,7 +71,7 @@
          connect-src cdnjs/cloudflareinsights/csp-worker: react-pdf Twemoji + CF beacon + CSP reports. -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; worker-src 'self' blob:; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' blob: https://cdnjs.cloudflare.com https://cloudflareinsights.com https://csp.cabinet-planner.workers.dev; object-src 'none'; base-uri 'self'; form-action 'self'"
+      content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; worker-src 'self' blob:; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob: https://cdnjs.cloudflare.com https://cloudflareinsights.com https://csp.cabinet-planner.workers.dev; object-src 'none'; base-uri 'self'; form-action 'self'"
     />
   </head>
   <body>
