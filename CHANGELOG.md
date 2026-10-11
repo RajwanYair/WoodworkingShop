@@ -9,6 +9,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.35.1] — 2026-10-11
+
+### Changed
+
+- Updated compatible npm dependencies and refreshed the transitive lockfile; upgraded Playwright, Vitest and coverage, jsdom, PDF.js, and vite-plugin-pwa.
+- Replaced the ESLint-10-incompatible React rules package and moved the mutation toolchain to the latest peer-compatible Stryker release.
+- Migrated benchmark registration and reporting to Vitest 5 and PDF text bounds to the PDF.js 6 viewport API.
+- Retained TypeScript 6 because the published TypeScript ESLint parser does not support TypeScript 7; the TypeScript 7 migration remains in Phase 81.
+
 ## [5.35.0] — 2026-10-11
 
 ### Release Summary

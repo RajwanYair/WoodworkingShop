@@ -1,9 +1,9 @@
 # Roadmap
 
-> Last updated: 2026-10-11 (v5.35.0 release)
-> Current app version: v5.35.0
+> Last updated: 2026-10-11 (v5.35.1 maintenance release)
+> Current app version: v5.35.1
 > Next release target: v5.36.0 (Phase 81 — Toolchain modernisation)
-> Program horizon: Phases 63–85 · Sprints 300–451 · v5.35.0 → v6.0.0 (execution order: §7.2 release train)
+> Program horizon: Phases 63–85 · Sprints 300–451 · v5.35.1 → v6.0.0 (execution order: §7.2 release train)
 > Strategy: best-in-class, local-first, production-grade woodworking planning platform — **refactor the foundation first, then lead on workflow depth**
 
 ---
@@ -16,7 +16,7 @@
 | -------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | --------- |
 | Verification   | 5,338 Vitest tests (clean checkout 2026-10-02); 439 Playwright tests; axe on 7 tabs × 6 locales × 2 themes           | Full mutation baseline (incremental Stryker), browser-mode component tests, ARIA snapshots      | 81        |
 | Architecture   | 165 flat engine modules + 7 thin domain folders; 1,448-line engine barrel; 97 engine modules unreachable from the UI | Domain-split engine, platform layer, feature-sliced UI, enforced layer rules, zero Knip hatches | 73, 82    |
-| Toolchain      | TypeScript 6, Vitest 4, Playwright 1.61, manual memoisation                                                          | TypeScript 7 (native), Vitest 5 projects + browser mode, Playwright 1.63, React Compiler 1.0    | 81        |
+| Toolchain      | TypeScript 6, Vitest 5, Playwright 1.63, ESLint 10, Stryker 9.6.1; manual memoisation                                | TypeScript 7 (native), Vitest browser mode, React Compiler 1.0                                  | 81        |
 | Product depth  | Cabinet generator, MaxRects sheet optimizer, 24 calculators, 10 export formats                                       | Parts-only workbench, 1D lumber optimizer, cut sequence, construction systems, shop-floor mode  | 66, 74–77 |
 | Localization   | EN + HE complete with RTL; AR/DE/ES/FR ≈ 60 % English fallback                                                       | Six complete locales, then up to 12 through community translation                               | 73, 84    |
 | Experience     | Seven tabs, static onboarding, SVG views + basic WebGL box                                                           | Guided first run, examples gallery, shop drawings, design timeline, realistic WebGPU preview    | 83        |
@@ -465,7 +465,7 @@ Measured from the working tree at `56aef6e` (v5.34.0) and the npm registry on 20
 | Phase 64 is marked COMPLETE, but S313 (build log, camera, machine/serial flows) and S315 (offline reload, quota, file handlers) have no status or E2E evidence | Release-train claim is not fully evidenced                    | Carry-over → v5.35.0 |
 | `src/` has 63,791 TypeScript lines; `src/engine/` 177 files (165 top-level); `src/components/` 116 `.tsx` files; 353 test files; 12 E2E specs                  | Flat engine and type-based folders slow navigation and review | S427, S430           |
 | Two components sit at the 600-line gate (`SheetCard.tsx` 599, `IsometricView.tsx` 583); `Icons.tsx` 515                                                        | Next feature in these files forces an emergency split         | S431                 |
-| TypeScript 7.0.2, Vitest 5.0.1, Playwright 1.63.0, `babel-plugin-react-compiler` 1.0.0 released; the project pins TS 6, Vitest 4 and Playwright 1.61           | Slower feedback; missing browser-mode and ARIA-snapshot tools | S420–S423            |
+| TS 7 + React Compiler 1.0 released; Vitest 5/Playwright 1.63 adopted. typescript-eslint 8.70 requires TS <6.1; TS 7 awaits parser support.                     | TS 7 awaits parser support; browser-mode work remains         | S420–S423            |
 | CI actions are pinned by tag, not SHA; spell check is commented out in `ci.yml`; Lighthouse writes `.lighthouseci/` into the workspace                         | Supply-chain and `$TEMP` policy gaps                          | S422, S424, S425     |
 | 22 Knip `entry` overrides in `package.json`, 13 for modules with no importers                                                                                  | Dead code can hide behind hatches                             | S371, S424           |
 | README, ARCHITECTURE, CONTRIBUTING and AGENTS had drifted (source tree, shortcuts, PWA design, CI matrix, active sprint, tool counts)                          | Fixed on 2026-10-04; automation prevents recurrence           | S444                 |

@@ -1,6 +1,6 @@
 # WoodworkingShop — GitHub Copilot Instructions
 
-> **Current release: v5.35.0**; next: v5.36.0 (Phase 81). Active sprint/status: [AGENTS.md](../AGENTS.md); archived work: [docs/SPRINT-HISTORY.md](../docs/SPRINT-HISTORY.md). Until the owning Phase 81-85 sprint runs, keep the layout below; do not create `src/app/`, `src/features/`, `src/ui/` or `src/platform/` early.
+> **Current release: v5.35.1**; next: v5.36.0 (Phase 81). Active sprint/status: [AGENTS.md](../AGENTS.md); archived work: [docs/SPRINT-HISTORY.md](../docs/SPRINT-HISTORY.md). Until the owning Phase 81-85 sprint runs, keep the layout below; do not create `src/app/`, `src/features/`, `src/ui/` or `src/platform/` early.
 
 ## Stack
 

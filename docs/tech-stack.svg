@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 96" width="800" height="96" role="img" aria-labelledby="stack-title stack-description">
   <title id="stack-title">WoodworkingShop technology stack</title>
-  <desc id="stack-description">React 19, TypeScript 6, Vite 8, Tailwind CSS 4, Zustand 5, Vitest 4, and i18next 26.</desc>
+  <desc id="stack-description">React 19, TypeScript 6, Vite 8, Tailwind CSS 4, Zustand 5, Vitest 5, and i18next 26.</desc>
   <rect width="800" height="96" rx="8" fill="#e8eee8" />
   <text x="24" y="25" font-family="'Segoe UI',Arial,sans-serif" font-size="10" font-weight="700" fill="#34514b">BUILT WITH</text>
   <path d="M24 32h752" stroke="#b9c9bd" stroke-width="1" />
@@ -17,7 +17,7 @@
     <circle cx="510" cy="63" r="5" fill="#c88722" />
     <text x="523" y="68" fill="#223d3b">Zustand 5</text>
     <circle cx="626" cy="63" r="5" fill="#6d9833" />
-    <text x="639" y="68" fill="#223d3b">Vitest 4</text>
+    <text x="639" y="68" fill="#223d3b">Vitest 5</text>
     <circle cx="716" cy="63" r="5" fill="#c47720" />
     <text x="729" y="68" fill="#223d3b">i18next 26</text>
   </g>

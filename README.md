@@ -139,7 +139,7 @@ npm run build
 ## 🏗 Tech Stack
 
 <div align="center">
-  <img src="docs/tech-stack.svg" alt="Tech stack: React 19, TypeScript 6, Vite 8, Tailwind 4, Zustand 5, Vitest 4, i18next 26" width="100%"/>
+  <img src="docs/tech-stack.svg" alt="Tech stack: React 19, TypeScript 6, Vite 8, Tailwind 4, Zustand 5, Vitest 5, i18next 26" width="100%"/>
 </div>
 
 | Layer         | Technology                                                 |
@@ -151,8 +151,8 @@ npm run build
 | PDF           | 📄 @react-pdf/renderer 4                                   |
 | i18n          | 🌐 i18next 26 + react-i18next                              |
 | Build         | ⚡ Vite 8                                                  |
-| Unit tests    | 🧪 Vitest 4 + @testing-library/react                       |
-| E2E tests     | 🎭 Playwright 1.61 + axe-core (Chromium, Firefox, WebKit)  |
+| Unit tests    | 🧪 Vitest 5 + @testing-library/react                       |
+| E2E tests     | 🎭 Playwright 1.63 + axe-core (Chromium, Firefox, WebKit)  |
 | Lint / format | 🧹 ESLint 10 (flat config) + Prettier                      |
 | CI/CD         | 🤖 GitHub Actions                                          |
 | Deploy        | 🚀 GitHub Pages + Cloudflare Pages (edge CDN, PR previews) |
@@ -229,8 +229,9 @@ The [roadmap](ROADMAP.md#target-architecture-phase-82) describes the planned mov
 
 ```mermaid
 flowchart LR
-  now["v5.35.0 ✅<br/>coherence · command palette · verified journeys"] --> t["v5.36–v5.38<br/>TypeScript 7 · Vitest 5 · architecture refactor · versioned data"]
-  t --> d["v5.39–v5.40<br/>examples · shop drawings · docs site"]
+  now["v5.35.1 ✅<br/>dependency · test-tooling maintenance"] --> t["v5.36.0 ▶<br/>Phase 81 · toolchain modernisation"]
+  t --> a["v5.37.0<br/>architecture refactor"] --> d0["v5.38.0<br/>versioned data"]
+  d0 --> d["v5.39–v5.40<br/>examples · shop drawings · docs site"]
   d --> w["v5.41–v5.43<br/>cut-list workbench · 1D lumber · shop-floor mode"]
   w --> m["v5.44–v5.48<br/>CNC · doors · rooms · files"]
   m --> v6["v6.0<br/>best-in-class review"]
@@ -239,8 +240,8 @@ flowchart LR
   classDef next fill:#f0b040,stroke:#8b5022,color:#1a0806,font-weight:bold
   classDef later fill:#fae7c0,stroke:#c08040,color:#3a1806
   class now done
-  class c next
-  class t,d,w,m,v6 later
+  class t next
+  class a,d0,d,w,m,v6 later
 ```
 
 Details, sprint contracts and the competitive benchmark live in [ROADMAP.md](ROADMAP.md).
