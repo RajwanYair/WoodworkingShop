@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect, beforeEach } from 'vitest';
+import userEvent from '@testing-library/user-event';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ConfiguratorPanel } from '../../src/components/configurator/ConfiguratorPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
@@ -50,6 +51,100 @@ describe('ConfiguratorPanel', () => {
   it('renders save/load panel', () => {
     render(<ConfiguratorPanel />);
     expect(screen.getByText(/my saved cabinets/i)).toBeInTheDocument();
+  });
+
+  it('switches furniture type and updates panel-specific controls', async () => {
+    const user = userEvent.setup();
+    render(<ConfiguratorPanel />);
+
+    await user.click(screen.getByRole('radio', { name: 'Panel' }));
+
+    expect(useCabinetStore.getState().config.furnitureType).toBe('panel');
+    expect(useCabinetStore.getState().parts).toHaveLength(1);
+    expect(useCabinetStore.getState().parts[0].name.en).toBe('Panel');
+    expect(screen.getByText('Plate thickness from')).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: 'Back panel material' })).toBeInTheDocument();
+    expect(screen.queryByRole('group', { name: /shelves/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('group', { name: /doors/i })).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('radio', { name: 'Cabinet' }));
+    expect(useCabinetStore.getState().config.furnitureType).toBe('cabinet');
+    expect(screen.getByRole('group', { name: /shelves/i })).toBeInTheDocument();
+    expect(screen.getByRole('group', { name: /doors/i })).toBeInTheDocument();
+  });
+
+  it('updates the joinery selection in cabinet configuration', async () => {
+    const user = userEvent.setup();
+    render(<ConfiguratorPanel />);
+
+    const dowelOption = screen.getByRole('radio', { name: 'Dowel' });
+    await user.click(dowelOption);
+
+    expect(useCabinetStore.getState().config.joineryType).toBe('dowel');
+    expect(dowelOption).toBeChecked();
+  });
+
+  it('edits custom shelf positions and restores equal spacing', async () => {
+    const user = userEvent.setup();
+    render(<ConfiguratorPanel />);
+
+    await user.click(screen.getByRole('radio', { name: 'Custom' }));
+    expect(useCabinetStore.getState().config.shelfSpacing).toBe('custom');
+    const firstPosition = screen.getByRole('spinbutton', { name: 'Shelf 1 position in mm' });
+    await user.clear(firstPosition);
+    await user.type(firstPosition, '42');
+    expect(useCabinetStore.getState().config.customShelfPositions[0]).toBe(42);
+
+    await user.click(screen.getByRole('button', { name: 'Reset to equal spacing' }));
+    expect(useCabinetStore.getState().config.customShelfPositions[0]).not.toBe(42);
+    expect(useCabinetStore.getState().config.shelfSpacing).toBe('custom');
+  });
+
+  it('updates door count and removes door parts and hinges when door style is None', async () => {
+    const user = userEvent.setup();
+    render(<ConfiguratorPanel />);
+
+    await user.click(screen.getByRole('radio', { name: '1 doors' }));
+    expect(useCabinetStore.getState().config.doorCount).toBe(1);
+
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Door Style' }), 'none');
+    expect(useCabinetStore.getState().config.doorStyle).toBe('none');
+    expect(useCabinetStore.getState().parts.some((part) => part.name.en === 'Door')).toBe(false);
+    expect(useCabinetStore.getState().hardware.some((item) => item.id === 'H01')).toBe(false);
+  });
+
+  it('shows drawer slide choices after entering a drawer count and stores the selected slide', async () => {
+    const user = userEvent.setup();
+    render(<ConfiguratorPanel />);
+
+    const drawerCount = screen.getByRole('spinbutton', { name: 'Number of Drawers' });
+    await user.clear(drawerCount);
+    await user.type(drawerCount, '2');
+    await user.keyboard('{Enter}');
+
+    expect(useCabinetStore.getState().config.drawerCount).toBe(2);
+    const fullExtension = screen.getByRole('radio', { name: 'Full-Extension' });
+    await user.click(fullExtension);
+
+    expect(useCabinetStore.getState().config.drawerSlideType).toBe('full-extension');
+    expect(fullExtension).toBeChecked();
+  });
+
+  it.each([false, true])('resets configuration only when confirmation returns %s', async (confirmed) => {
+    const user = userEvent.setup();
+    const changedConfig = { ...DEFAULT_CONFIG, width: DEFAULT_CONFIG.width + 100 };
+    useCabinetStore.setState({
+      config: changedConfig,
+      cabinets: [{ name: 'Cabinet 1', config: changedConfig }],
+      activeCabinetIndex: 0,
+    });
+    const confirm = vi.spyOn(window, 'confirm').mockReturnValue(confirmed);
+    render(<ConfiguratorPanel />);
+
+    await user.click(screen.getByRole('button', { name: 'Reset to Defaults' }));
+
+    expect(confirm).toHaveBeenCalledOnce();
+    expect(useCabinetStore.getState().config.width).toBe(confirmed ? DEFAULT_CONFIG.width : changedConfig.width);
   });
 });
 

@@ -3,10 +3,13 @@
  *
  * Tests for src/utils/command-palette.ts
  */
-import { describe, it, expect, beforeEach, beforeAll, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
+  APP_COMMAND_DEFINITIONS,
+  APP_SHORTCUTS,
   registerCommands,
   unregisterCommand,
+  createAppCommand,
   getCommand,
   getAllCommands,
   clearRegistry,
@@ -37,11 +40,6 @@ const localStorageMock = (() => {
   };
 })();
 
-beforeAll(() => {
-  vi.stubGlobal('localStorage', localStorageMock);
-  Object.defineProperty(window, 'localStorage', { value: localStorageMock, configurable: true });
-});
-
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 function makeCmd(id: string, label: string, category = 'Test', keywords?: string[]): PaletteCommand {
@@ -49,8 +47,28 @@ function makeCmd(id: string, label: string, category = 'Test', keywords?: string
 }
 
 beforeEach(() => {
+  vi.stubGlobal('localStorage', localStorageMock);
+  Object.defineProperty(window, 'localStorage', { value: localStorageMock, configurable: true });
+  localStorageMock.clear();
   clearRegistry();
   clearRecentCommands();
+});
+
+describe('application command definitions', () => {
+  it('creates palette commands from the canonical descriptor and reuses it for shortcuts', () => {
+    const definition = APP_COMMAND_DEFINITIONS.copyLink;
+    const action = vi.fn();
+    const command = createAppCommand(definition, 'Copy link', 'Actions', action);
+
+    expect(command).toMatchObject({
+      id: definition.id,
+      label: 'Copy link',
+      category: 'Actions',
+      shortcut: definition.shortcut,
+      action,
+    });
+    expect(APP_SHORTCUTS.copyLink).toBe(definition);
+  });
 });
 
 // ── registerCommands / getCommand ─────────────────────────────────────────────

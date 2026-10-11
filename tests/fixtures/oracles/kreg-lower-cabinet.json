@@ -1,0 +1,31 @@
+{
+  "source": "DIY Garage Workshop Cabinets - Part 1: Lowers",
+  "url": "https://learn.kregtool.com/plans/easy-garage-shop-cabinets-part-1-lowers/",
+  "retrievedOn": "2026-10-01",
+  "author": "Castor Woodworks",
+  "publishedPlan": {
+    "nominalCabinetInches": {
+      "height": 34.5,
+      "width": 24,
+      "depth": 24
+    },
+    "sidePanel": {
+      "quantity": 2,
+      "lengthInches": 34.5,
+      "widthInches": 23.75,
+      "thicknessInches": 0.75
+    },
+    "stock": "3/4-inch plywood, half sheet"
+  },
+  "convertedMm": {
+    "cabinetHeight": 876.3,
+    "cabinetWidth": 609.6,
+    "cabinetDepth": 609.6,
+    "sidePanelLength": 876.3,
+    "sidePanelWidth": 603.25,
+    "panelThickness": 19.05,
+    "halfSheetWidth": 1219.2,
+    "halfSheetLength": 1219.2
+  },
+  "conversion": "1 inch = 25.4 mm; half-sheet dimensions assume a nominal 48 x 96 inch plywood sheet split into two 48 x 48 inch sheets."
+}

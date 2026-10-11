@@ -3,6 +3,9 @@ import { useEffect, type RefObject } from 'react';
 const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
+const getFocusableElements = (container: HTMLElement) =>
+  Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE)).filter((element) => element.tabIndex >= 0);
+
 /**
  * Sprint 8 — useFocusTrap
  *
@@ -21,9 +24,10 @@ export function useFocusTrap(
     if (!active) return;
     const el = containerRef.current;
     if (!el) return;
+    const previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
 
     // Set initial focus on the first focusable child, or the container
-    const focusable = Array.from(el.querySelectorAll<HTMLElement>(FOCUSABLE));
+    const focusable = getFocusableElements(el);
     if (focusable.length > 0) {
       focusable[0].focus();
     } else {
@@ -36,7 +40,7 @@ export function useFocusTrap(
         return;
       }
       if (e.key !== 'Tab') return;
-      const items = Array.from(el.querySelectorAll<HTMLElement>(FOCUSABLE));
+      const items = getFocusableElements(el);
       if (items.length === 0) return;
       const first = items[0];
       const last = items[items.length - 1];
@@ -52,8 +56,10 @@ export function useFocusTrap(
         }
       }
     };
-
     el.addEventListener('keydown', handleKeyDown);
-    return () => el.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      el.removeEventListener('keydown', handleKeyDown);
+      if (previouslyFocused?.isConnected) previouslyFocused.focus();
+    };
   }, [active, containerRef, onEscape]);
 }

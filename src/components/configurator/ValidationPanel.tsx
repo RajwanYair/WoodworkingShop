@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ValidationIssue, ValidationSeverity, CabinetConfig } from '../../engine/types';
 import { IconWarning, IconInfo, IconX } from '../layout/Icons';
@@ -41,6 +41,8 @@ export function ValidationPanel({ issues }: ValidationPanelProps) {
   const { setConfig } = useCabinetStore();
   const [dismissed, setDismissed] = useState<Set<string>>(new Set());
   const [collapsed, setCollapsed] = useState(false);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const restoreToggleFocus = useRef(false);
 
   const visible = useMemo(
     () =>
@@ -49,6 +51,13 @@ export function ValidationPanel({ issues }: ValidationPanelProps) {
         .sort((a, b) => SEVERITY_ORDER[a.severity] - SEVERITY_ORDER[b.severity]),
     [issues, dismissed],
   );
+
+  useLayoutEffect(() => {
+    if (restoreToggleFocus.current) {
+      toggleRef.current?.focus();
+      restoreToggleFocus.current = false;
+    }
+  }, [visible.length]);
 
   if (visible.length === 0) return null;
 
@@ -63,6 +72,11 @@ export function ValidationPanel({ issues }: ValidationPanelProps) {
   };
 
   const fixIssue = (issue: ValidationIssue) => {
+    if (visible.length > 1) {
+      restoreToggleFocus.current = true;
+    } else {
+      document.querySelector<HTMLButtonElement>('[role="tab"][aria-selected="true"]')?.focus();
+    }
     // v3.58.0 \u2014 prefer the rich `fix.patch` (multi-field, programmatic) over
     // the legacy `field`/`suggestedValue` pair. Either path will close the issue.
     if (issue.fix?.patch) {
@@ -93,6 +107,7 @@ export function ValidationPanel({ issues }: ValidationPanelProps) {
       {/* Header */}
       <div className="bg-wood-50 dark:bg-wood-800 border-wood-200 dark:border-wood-700 flex items-center justify-between border-b px-3 py-2">
         <button
+          ref={toggleRef}
           type="button"
           className="text-wood-700 dark:text-wood-200 hover:text-wood-900 dark:hover:text-wood-50 flex items-center gap-2 text-sm font-semibold transition-colors"
           onClick={() => setCollapsed((c) => !c)}

@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import {
   TEMPLATE_CATALOGUE,
-  getTemplatesByCategory,
-  getTemplate,
-  instantiateTemplate,
+  getLibraryTemplatesByCategory as getTemplatesByCategory,
+  getLibraryTemplate as getTemplate,
+  instantiateLibraryTemplate as instantiateTemplate,
   listTemplateIds,
-} from '../../src/engine/template-library';
+} from '../../src/engine/templates';
 
 describe('TEMPLATE_CATALOGUE', () => {
   it('contains at least 8 templates', () => {

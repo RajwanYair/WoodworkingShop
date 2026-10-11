@@ -1,0 +1,16 @@
+{
+  "source": "WOOD Magazine, Cut perfect grooves & rabbets without a dado set",
+  "url": "https://www.woodmagazine.com/woodworking-tips/techniques/intermediate/rip-blade",
+  "retrievedOn": "2026-10-01",
+  "sourceValues": {
+    "stockThicknessIn": 0.75,
+    "stockThicknessMm": 19.05,
+    "maximumDepthRatio": 0.3333333333333333
+  },
+  "derivedValues": {
+    "maximumDepthMm": 6.35,
+    "cutDepthMm": 6.3,
+    "remainingThicknessMm": 12.8
+  },
+  "tolerance": "Source says groove depth must not exceed one-third of stock thickness. Cut depth is rounded down to 0.1 mm to preserve that upper bound; remaining thickness follows engine precision."
+}

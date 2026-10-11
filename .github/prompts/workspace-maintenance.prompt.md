@@ -11,17 +11,26 @@ Run a full workspace health check and fix every issue found.
 
 ## Steps (run in order — each must pass before the next)
 
-### 1 — Clean generated files
+### 1 — Preflight and generated-file audit
 
-Ensure no intermediate files exist in the workspace root:
+Before changing files or running broad cleanup:
+
+- Read applicable workspace and repository instructions.
+- Run `git status --short --branch` and preserve all pre-existing user changes.
+- Identify project roots from manifests and workflows; do not treat a multi-project workspace as one repository.
+- Select quality gates from each repository's scripts and CI configuration. Do not report unconfigured or unavailable checks as passed.
+
+Audit generated files without deleting or moving anything:
 
 ```bash
-# Remove any stray generated files
-Remove-Item -Recurse -Force -ErrorAction SilentlyContinue `
-  dist, coverage, playwright-report, test-results, .lighthouseci, .eslintcache
+# Inspect common generated paths and their git status before proposing cleanup
+git status --short --ignored -- dist coverage playwright-report test-results .lighthouseci .eslintcache
+git check-ignore -v dist coverage playwright-report test-results .lighthouseci .eslintcache
 ```
 
-Verify that:
+Compare any findings with repository configuration and `$TEMP` policy. Only remove or relocate an artifact after confirming it is generated, safe to discard, and within the requested scope. Never use broad cleanup commands or make the working tree clean by deleting unrelated changes.
+
+Verify configured temporary locations, for example:
 
 - `.eslintcache` → should be in `$TEMP\WoodworkingShop\`
 - `.vite_cache` → should be in `$TEMP\WoodworkingShop\.vite_cache\`
@@ -81,10 +90,10 @@ Zero high/critical vulnerabilities. For moderate: document in `SECURITY.md`.
 ### 8 — Dependency freshness
 
 ```bash
-npx npm-check-updates --format group --target minor
+npm outdated
 ```
 
-Review outdated packages. Apply non-breaking minor/patch updates.
+Report outdated packages and compatibility evidence. Do not update dependencies or lockfiles unless the user requests dependency changes.
 
 ### 9 — i18n coverage
 
@@ -125,7 +134,7 @@ Must pass completely before marking workspace as production-ready.
 - [ ] `npm audit` reports zero high/critical
 - [ ] No generated files in workspace root (only in `$TEMP`)
 - [ ] `dist/` only created during build (never committed)
-- [ ] Working tree is clean
+- [ ] Pre-existing user changes are preserved; any remaining working-tree changes are identified
 
 ## Reporting
 

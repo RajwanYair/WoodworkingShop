@@ -25,6 +25,10 @@ describe('mmToInches', () => {
     // 1.5875mm = 1/16"
     expect(mmToInches(1.5875)).toBe('1/16"');
   });
+
+  it('rounds a fraction up to the next whole inch', () => {
+    expect(mmToInches(25.4 * 1.99)).toBe('2"');
+  });
 });
 
 describe('formatDim', () => {

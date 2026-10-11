@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { assignPartLabels } from '../../engine/part-labeling';
 import type { LabeledPart } from '../../engine/part-labeling';
+import { buildPartLabelPrintHtml } from './build-part-label-print-html';
 
 interface LabelCardProps {
   part: LabeledPart;
@@ -37,26 +38,14 @@ export function PartLabelSheet() {
   const labeled = useMemo(() => assignPartLabels(allParts, { expandMultiQty: expandQty }), [allParts, expandQty]);
 
   function handlePrint() {
-    const printContent = labeled
-      .map(
-        (p) =>
-          `<div class="label"><strong>${p.partLabel}</strong><br>${p.name.en}<br>${p.length} × ${p.width}<br>${p.material}${p.qty > 1 ? ` ×${p.qty}` : ''}</div>`,
-      )
-      .join('');
-
     const win = window.open('', '_blank', 'width=800,height=600');
     if (!win) return;
-    win.document.write(
-      `<!DOCTYPE html><html><head><title>${t('partLabels.printTitle')}</title>` +
-        `<style>body{font-family:monospace;margin:8mm}` +
-        `.label{display:inline-block;border:1px solid #888;padding:4mm 6mm;margin:2mm;text-align:center;min-width:40mm;font-size:10pt}` +
-        `strong{font-size:14pt;display:block;margin-bottom:2mm}` +
-        `@media print{.no-print{display:none}}</style>` +
-        `</head><body>${printContent}</body></html>`,
-    );
+    win.document.write(buildPartLabelPrintHtml(labeled, t('partLabels.printTitle')));
     win.document.close();
-    win.focus();
-    win.print();
+    win.setTimeout(() => {
+      win.focus();
+      win.print();
+    }, 100);
   }
 
   return (

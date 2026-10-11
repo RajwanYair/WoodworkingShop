@@ -5,6 +5,7 @@ import {
   getPlugins,
   applyPartsPlugins,
   applyConfigPlugins,
+  applyValidationPlugins,
   getPluginContract,
   comparePluginApiVersions,
   getPluginApiCompatibility,
@@ -13,7 +14,7 @@ import {
   type CabinetPlannerPlugin,
 } from '../../src/engine/plugin';
 import { DEFAULT_CONFIG } from '../../src/engine/materials';
-import type { Part } from '../../src/engine/types';
+import type { Part, ValidationIssue } from '../../src/engine/types';
 
 const mockPart: Part = {
   id: 'P01',
@@ -153,6 +154,62 @@ describe('applyConfigPlugins', () => {
   });
 });
 
+describe('applyValidationPlugins', () => {
+  const initialIssue: ValidationIssue = {
+    code: 'test.initial',
+    severity: 'warning',
+    message: { en: 'Initial issue', he: 'Initial issue' },
+  };
+
+  it('returns the original issue array when no validation hooks are registered', () => {
+    const issues = [initialIssue];
+
+    expect(applyValidationPlugins(issues, DEFAULT_CONFIG)).toBe(issues);
+  });
+
+  it('applies registered onValidate hooks to validation issues', () => {
+    const addedIssue: ValidationIssue = {
+      code: 'test.plugin',
+      severity: 'info',
+      message: { en: 'Plugin issue', he: 'Plugin issue' },
+    };
+    registerPlugin({
+      id: 'validation.adder',
+      name: 'Validation Adder',
+      version: '1.0.0',
+      onValidate: (issues) => [...issues, addedIssue],
+    });
+
+    expect(applyValidationPlugins([initialIssue], DEFAULT_CONFIG)).toEqual([initialIssue, addedIssue]);
+  });
+
+  it('chains validation hooks in registration order', () => {
+    const calls: string[] = [];
+    registerPlugin({
+      id: 'validation.first',
+      name: 'First Validator',
+      version: '1.0.0',
+      onValidate: (issues) => {
+        calls.push('first');
+        return issues;
+      },
+    });
+    registerPlugin({
+      id: 'validation.second',
+      name: 'Second Validator',
+      version: '1.0.0',
+      onValidate: (issues) => {
+        calls.push('second');
+        return issues;
+      },
+    });
+
+    applyValidationPlugins([initialIssue], DEFAULT_CONFIG);
+
+    expect(calls).toEqual(['first', 'second']);
+  });
+});
+
 describe('PluginContract', () => {
   it('PLUGIN_API_VERSION is independent semver', () => {
     expect(PLUGIN_API_VERSION).toMatch(/^\d+\.\d+\.\d+$/);
@@ -185,6 +242,11 @@ describe('PluginContract', () => {
 
   it('getPluginContract() returns the same object as PLUGIN_CONTRACT', () => {
     expect(getPluginContract()).toBe(PLUGIN_CONTRACT);
+  });
+
+  it('marks the v1 contract as deprecated', () => {
+    expect(PLUGIN_CONTRACT.stability).toBe('deprecated');
+    expect(PLUGIN_CONTRACT.apiVersion).toBe('1.3.0');
   });
 
   it('onPartsGenerated hook is listed as stable', () => {

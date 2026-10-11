@@ -27,7 +27,7 @@ env:
 jobs:
   release:
     name: Build & Publish
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
         with:
@@ -55,6 +55,7 @@ jobs:
           SBOM_PID=$!
           npm run build
           npm run bundle:check
+          npm run bundle:critical
           wait $SBOM_PID
 
       # Archive + sha256

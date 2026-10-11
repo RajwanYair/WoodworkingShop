@@ -1,0 +1,13 @@
+{
+  "cabinetCarcass": { "he": "pending", "ar": "pending", "de": "pending", "es": "pending", "fr": "pending" },
+  "backPanel": { "he": "pending", "ar": "pending", "de": "pending", "es": "pending", "fr": "pending" },
+  "shelf": { "he": "pending", "ar": "pending", "de": "pending", "es": "pending", "fr": "pending" },
+  "grainDirection": { "he": "pending", "ar": "pending", "de": "pending", "es": "pending", "fr": "pending" },
+  "kerfWidth": { "he": "pending", "ar": "pending", "de": "pending", "es": "pending", "fr": "pending" },
+  "offcut": { "he": "pending", "ar": "pending", "de": "pending", "es": "pending", "fr": "pending" },
+  "cutList": { "he": "pending", "ar": "pending", "de": "pending", "es": "pending", "fr": "pending" },
+  "edgeBanding": { "he": "pending", "ar": "pending", "de": "pending", "es": "pending", "fr": "pending" },
+  "dovetailJoint": { "he": "pending", "ar": "pending", "de": "pending", "es": "pending", "fr": "pending" },
+  "mortiseAndTenonJoint": { "he": "pending", "ar": "pending", "de": "pending", "es": "pending", "fr": "pending" },
+  "pocketHoleJoint": { "he": "pending", "ar": "pending", "de": "pending", "es": "pending", "fr": "pending" }
+}

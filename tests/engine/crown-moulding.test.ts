@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import WOOD_MAGAZINE_CROWN_MOULDING_ORACLE from '../fixtures/oracles/wood-magazine-crown-moulding.json';
 import { calculateCrownMoulding } from '../../src/engine/crown-moulding';
 
 describe('calculateCrownMoulding', () => {
@@ -15,21 +16,44 @@ describe('calculateCrownMoulding', () => {
       expect(result.miterAngleDeg).toBe(22.5);
       expect(result.bevelAngleDeg).toBe(0);
     });
+
+    it.each([
+      { cornerAngleDeg: 90, miterAngleDeg: 45 },
+      { cornerAngleDeg: 135, miterAngleDeg: 22.5 },
+      { cornerAngleDeg: 179.8, miterAngleDeg: 0.1 },
+    ])('matches the in-position miter oracle for a $cornerAngleDeg° corner', ({ cornerAngleDeg, miterAngleDeg }) => {
+      expect(calculateCrownMoulding({ cornerAngleDeg, springAngleDeg: 38, cuttingMethod: 'in_position' })).toEqual({
+        miterAngleDeg,
+        bevelAngleDeg: 0,
+        cuttingMethod: 'in_position',
+      });
+    });
   });
 
   describe('flat method', () => {
     it('returns compound angles for 90° corner with 38° spring (flat)', () => {
       const result = calculateCrownMoulding({ cornerAngleDeg: 90, springAngleDeg: 38, cuttingMethod: 'flat' });
       expect(result.cuttingMethod).toBe('flat');
-      // For 90° corner: halfCorner = 45°; miter = atan(cos(38°)×tan(45°))
-      const halfCornerRad = (45 * Math.PI) / 180;
-      const springRad = (38 * Math.PI) / 180;
-      const expectedMiter =
-        Math.round(((Math.atan(Math.cos(springRad) * Math.tan(halfCornerRad)) * 180) / Math.PI) * 10) / 10;
-      const expectedBevel =
-        Math.round(((Math.asin(Math.sin(springRad) * Math.sin(halfCornerRad)) * 180) / Math.PI) * 10) / 10;
-      expect(result.miterAngleDeg).toBe(expectedMiter);
-      expect(result.bevelAngleDeg).toBe(expectedBevel);
+      expect(result.miterAngleDeg).toBe(31.6);
+      expect(result.bevelAngleDeg).toBe(33.9);
+    });
+
+    it('matches the WOOD Magazine 38° crown flat-cut settings', () => {
+      const result = calculateCrownMoulding({
+        ...WOOD_MAGAZINE_CROWN_MOULDING_ORACLE.input,
+        cuttingMethod: 'flat',
+      });
+
+      expect(result.miterAngleDeg).toBe(WOOD_MAGAZINE_CROWN_MOULDING_ORACLE.expected.miterAngleDeg);
+      expect(result.bevelAngleDeg).toBe(WOOD_MAGAZINE_CROWN_MOULDING_ORACLE.expected.bevelAngleDeg);
+    });
+
+    it('matches the compound-angle oracle for a 135° corner and 38° spring', () => {
+      expect(calculateCrownMoulding({ cornerAngleDeg: 135, springAngleDeg: 38, cuttingMethod: 'flat' })).toEqual({
+        miterAngleDeg: 56.1,
+        bevelAngleDeg: 46.7,
+        cuttingMethod: 'flat',
+      });
     });
 
     it('returns positive miter and bevel angles for flat method', () => {
@@ -38,9 +62,9 @@ describe('calculateCrownMoulding', () => {
       expect(result.bevelAngleDeg).toBeGreaterThan(0);
     });
 
-    it('flat method bevel is less than miter angle for common angles', () => {
+    it('flat method bevel exceeds miter for the standard 38° spring angle', () => {
       const result = calculateCrownMoulding({ cornerAngleDeg: 90, springAngleDeg: 38, cuttingMethod: 'flat' });
-      expect(result.bevelAngleDeg).toBeLessThan(result.miterAngleDeg);
+      expect(result.bevelAngleDeg).toBeGreaterThan(result.miterAngleDeg);
     });
 
     it('echoes cuttingMethod', () => {
@@ -55,6 +79,16 @@ describe('calculateCrownMoulding', () => {
     ['springAngleDeg = 0', { cornerAngleDeg: 90, springAngleDeg: 0, cuttingMethod: 'flat' as const }],
     ['springAngleDeg = 90', { cornerAngleDeg: 90, springAngleDeg: 90, cuttingMethod: 'flat' as const }],
   ])('throws RangeError for invalid input: %s', (_label, input) => {
+    expect(() => calculateCrownMoulding(input)).toThrow(RangeError);
+  });
+
+  it.each([
+    ['NaN cornerAngleDeg', { cornerAngleDeg: Number.NaN, springAngleDeg: 38, cuttingMethod: 'flat' as const }],
+    [
+      'infinite springAngleDeg',
+      { cornerAngleDeg: 90, springAngleDeg: Number.POSITIVE_INFINITY, cuttingMethod: 'flat' as const },
+    ],
+  ])('throws RangeError for non-finite input: %s', (_label, input) => {
     expect(() => calculateCrownMoulding(input)).toThrow(RangeError);
   });
 });

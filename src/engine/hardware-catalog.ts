@@ -44,6 +44,111 @@ export type HardwareSortField = 'name' | 'price' | 'category' | 'manufacturer';
 /** Sort direction. */
 export type SortDirection = 'asc' | 'desc';
 
+/** Schema version for imported custom hardware catalogs. */
+export const HARDWARE_CATALOG_SCHEMA_VERSION = '1.0' as const;
+
+/** How imported entries are applied to the current catalog. */
+export type HardwareCatalogImportMode = 'merge' | 'replace';
+
+const HARDWARE_CATEGORIES: readonly HardwareCategory[] = [
+  'hinge',
+  'handle',
+  'knob',
+  'slide',
+  'screw',
+  'cam-lock',
+  'shelf-pin',
+  'bracket',
+  'catch',
+  'other',
+];
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
+function parseHardwareItem(raw: unknown): HardwareItem | null {
+  if (!isRecord(raw)) return null;
+  const { id, name, category, sku, manufacturer, unitPrice, packSize, description, tags } = raw;
+  if (
+    !isNonEmptyString(id) ||
+    !isNonEmptyString(name) ||
+    typeof category !== 'string' ||
+    !HARDWARE_CATEGORIES.includes(category as HardwareCategory) ||
+    typeof sku !== 'string' ||
+    typeof manufacturer !== 'string' ||
+    typeof unitPrice !== 'number' ||
+    !Number.isFinite(unitPrice) ||
+    unitPrice < 0 ||
+    typeof packSize !== 'number' ||
+    !Number.isSafeInteger(packSize) ||
+    packSize < 1 ||
+    typeof description !== 'string' ||
+    !Array.isArray(tags) ||
+    !tags.every((tag: unknown) => typeof tag === 'string')
+  ) {
+    return null;
+  }
+  return {
+    id,
+    name,
+    category: category as HardwareCategory,
+    sku,
+    manufacturer,
+    unitPrice,
+    packSize,
+    description,
+    tags,
+  };
+}
+
+/**
+ * Validate an imported JSON envelope and return its hardware items.
+ * @param raw - Untrusted parsed JSON value.
+ * @returns A validated list of hardware items.
+ * @throws {TypeError} When the envelope, an item, or item identifiers are invalid.
+ */
+export function parseHardwareCatalog(raw: unknown): HardwareItem[] {
+  if (!isRecord(raw) || raw['schemaVersion'] !== HARDWARE_CATALOG_SCHEMA_VERSION || !Array.isArray(raw['items'])) {
+    throw new TypeError(
+      `Hardware catalog must use schemaVersion ${HARDWARE_CATALOG_SCHEMA_VERSION} and contain an items array`,
+    );
+  }
+
+  const items: HardwareItem[] = [];
+  const ids = new Set<string>();
+  for (const [index, rawItem] of raw['items'].entries()) {
+    const item = parseHardwareItem(rawItem);
+    if (!item) throw new TypeError(`Invalid hardware item at index ${index}`);
+    if (ids.has(item.id)) throw new TypeError(`Duplicate hardware item id at index ${index}: ${item.id}`);
+    ids.add(item.id);
+    items.push(item);
+  }
+  return items;
+}
+
+/**
+ * Apply validated hardware items to an existing catalog.
+ * @param existing - Current catalog contents.
+ * @param imported - Items validated by {@link parseHardwareCatalog}.
+ * @param mode - Whether matching IDs are updated or the catalog is replaced.
+ * @returns The new catalog without mutating either input.
+ */
+export function applyHardwareCatalogImport(
+  existing: readonly HardwareItem[],
+  imported: readonly HardwareItem[],
+  mode: HardwareCatalogImportMode,
+): HardwareItem[] {
+  if (mode === 'replace') return [...imported];
+  const merged = new Map(existing.map((item) => [item.id, item]));
+  for (const item of imported) merged.set(item.id, item);
+  return [...merged.values()];
+}
+
 /** Per-item cost summary. */
 export interface HardwareCostLine {
   readonly item: HardwareItem;

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { DEFAULT_LABOUR_RATE } from '../../engine/cost-estimator';
 import { getMaterial, computePartWeightKg } from '../../engine/materials';
 import type { Lang } from '../../engine/types';
@@ -27,11 +28,12 @@ export function CostEstimatePanel() {
     setFinishCost,
   } = useCabinetStore();
   const lang = i18n.language as Lang;
+  const customMaterials = useCustomMaterialsStore((state) => state.materials);
 
   // Compute total panel weight from all parts across all cabinets
   const totalWeightKg = allParts.reduce((sum, p) => {
     try {
-      const mat = getMaterial(p.material);
+      const mat = getMaterial(p.material, customMaterials);
       return sum + computePartWeightKg(p.length, p.width, p.thickness, p.qty, mat.densityKgM3);
     } catch {
       return sum;
@@ -104,7 +106,7 @@ export function CostEstimatePanel() {
         {cost.sheetCosts.map((sc, i) => {
           const isEditing = editingPrice === sc.material;
           const hasOverride = sc.material in materialPriceOverrides;
-          const defaultPrice = getMaterial(sc.material).pricePerSheet ?? 0;
+          const defaultPrice = getMaterial(sc.material, customMaterials).pricePerSheet ?? 0;
           return (
             <div key={i} className="flex items-center justify-between gap-2 text-xs">
               <span className="text-wood-600 dark:text-wood-300 flex-1 truncate">
@@ -119,7 +121,12 @@ export function CostEstimatePanel() {
                     step={5}
                     value={priceInput}
                     onChange={(e) => setPriceInput(e.target.value)}
-                    onBlur={() => {
+                    onBlur={(e) => {
+                      if (
+                        e.relatedTarget instanceof HTMLButtonElement &&
+                        e.relatedTarget.getAttribute('aria-label') === t('cost.resetPrice')
+                      )
+                        return;
                       const val = Number(priceInput);
                       setMaterialPriceOverride(sc.material, isNaN(val) || val <= 0 ? null : val);
                       setEditingPrice(null);
@@ -138,8 +145,9 @@ export function CostEstimatePanel() {
                         setMaterialPriceOverride(sc.material, null);
                         setEditingPrice(null);
                       }}
-                      className="text-wood-400 text-[10px] hover:text-red-500"
+                      className="text-wood-400 inline-flex min-h-6 min-w-6 items-center justify-center text-[10px] hover:text-red-500"
                       title={t('cost.resetPrice')}
+                      aria-label={t('cost.resetPrice')}
                     >
                       ↺
                     </button>
@@ -151,7 +159,8 @@ export function CostEstimatePanel() {
                     setEditingPrice(sc.material);
                     setPriceInput(String(sc.pricePerSheet || defaultPrice));
                   }}
-                  className={`shrink-0 font-medium hover:underline ${hasOverride ? 'text-amber-800 dark:text-amber-300' : 'text-wood-700 dark:text-wood-200'}`}
+                  aria-label={`${t('cost.editPrice')}: ${sc.materialName[lang]}`}
+                  className={`inline-flex min-h-6 min-w-6 shrink-0 items-center justify-center px-1 font-medium hover:underline ${hasOverride ? 'text-amber-800 dark:text-amber-300' : 'text-wood-700 dark:text-wood-200'}`}
                   title={t('cost.editPrice')}
                 >
                   ₪{sc.subtotal} {hasOverride && <span className="text-[10px]">✎</span>}
@@ -197,7 +206,7 @@ export function CostEstimatePanel() {
                   setEditingEb(true);
                   setEbInput(String(edgeBandingRate));
                 }}
-                className="text-wood-700 dark:text-wood-200 shrink-0 font-medium hover:underline"
+                className="text-wood-700 dark:text-wood-200 inline-flex min-h-6 min-w-6 shrink-0 items-center justify-center px-1 font-medium hover:underline"
                 title={t('cost.editEbRate')}
               >
                 ₪{cost.edgeBandingCost}
@@ -224,7 +233,12 @@ export function CostEstimatePanel() {
                       step={0.5}
                       value={hwPriceInput}
                       onChange={(e) => setHwPriceInput(e.target.value)}
-                      onBlur={() => {
+                      onBlur={(e) => {
+                        if (
+                          e.relatedTarget instanceof HTMLButtonElement &&
+                          e.relatedTarget.getAttribute('aria-label') === t('cost.resetPrice')
+                        )
+                          return;
                         const val = Number(hwPriceInput);
                         setHardwarePriceOverride(hw.id, isNaN(val) || val < 0 ? null : val);
                         setEditingHw(null);
@@ -243,8 +257,9 @@ export function CostEstimatePanel() {
                           setHardwarePriceOverride(hw.id, null);
                           setEditingHw(null);
                         }}
-                        className="text-wood-400 text-[10px] hover:text-red-500"
+                        className="text-wood-400 inline-flex min-h-6 min-w-6 items-center justify-center text-[10px] hover:text-red-500"
                         title={t('cost.resetPrice')}
+                        aria-label={t('cost.resetPrice')}
                       >
                         ↺
                       </button>
@@ -256,7 +271,7 @@ export function CostEstimatePanel() {
                       setEditingHw(hw.id);
                       setHwPriceInput(String(hw.unitPrice));
                     }}
-                    className={`shrink-0 font-medium hover:underline ${hasHwOverride ? 'text-amber-800 dark:text-amber-300' : 'text-wood-700 dark:text-wood-200'}`}
+                    className={`inline-flex min-h-6 min-w-6 shrink-0 items-center justify-center px-1 font-medium hover:underline ${hasHwOverride ? 'text-amber-800 dark:text-amber-300' : 'text-wood-700 dark:text-wood-200'}`}
                     title={t('cost.editPrice')}
                   >
                     ₪{hw.subtotal}
@@ -318,7 +333,7 @@ export function CostEstimatePanel() {
                 setEditingLabourHours(true);
                 setLabourHoursInput(String(labourHours));
               }}
-              className="text-wood-700 dark:text-wood-200 shrink-0 font-medium hover:underline"
+              className="text-wood-700 dark:text-wood-200 inline-flex min-h-6 min-w-6 shrink-0 items-center justify-center px-1 font-medium hover:underline"
               title={t('cost.editLabourHours', 'Click to set estimated labour hours')}
             >
               {labourHours > 0 ? `${labourHours}h → ₪${cost.labourCost}` : t('cost.notSet', '—')}
@@ -358,7 +373,7 @@ export function CostEstimatePanel() {
                 setEditingLabourRate(true);
                 setLabourRateInput(String(labourRate));
               }}
-              className={`shrink-0 font-medium hover:underline ${labourRate !== DEFAULT_LABOUR_RATE ? 'text-amber-800 dark:text-amber-300' : 'text-wood-700 dark:text-wood-200'}`}
+              className={`inline-flex min-h-6 min-w-6 shrink-0 items-center justify-center px-1 font-medium hover:underline ${labourRate !== DEFAULT_LABOUR_RATE ? 'text-amber-800 dark:text-amber-300' : 'text-wood-700 dark:text-wood-200'}`}
               title={t('cost.editLabourRate', 'Click to override labour rate (₪/hr)')}
             >
               ₪{labourRate}/h{labourRate !== DEFAULT_LABOUR_RATE && <span className="text-[10px]"> ✎</span>}
@@ -397,8 +412,9 @@ export function CostEstimatePanel() {
                 setEditingFinish(true);
                 setFinishInput(String(finishCost));
               }}
-              className="text-wood-700 dark:text-wood-200 shrink-0 font-medium hover:underline"
+              className="text-wood-700 dark:text-wood-200 inline-flex min-h-6 min-w-6 shrink-0 items-center justify-center px-1 font-medium hover:underline"
               title={t('cost.editFinish', 'Click to set finish/paint cost')}
+              aria-label={t('cost.editFinish', 'Click to set finish/paint cost')}
             >
               {finishCost > 0 ? `₪${finishCost}` : t('cost.notSet', '—')}
             </button>

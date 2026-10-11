@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { TouchGestureTutorial } from '../../src/components/layout/TouchGestureTutorial';
 
 const TOURED_KEY = 'woodworkingshop:preview-toured';
+const ONBOARDING_SEEN_KEY = 'onboarding-seen';
 
 // jsdom provides window.localStorage but not the bare `localStorage` global.
 // Stub it so component code that calls localStorage.getItem/setItem works.
@@ -21,11 +22,12 @@ const localStorageMock = (() => {
     },
   };
 })();
-vi.stubGlobal('localStorage', localStorageMock);
 
 describe('TouchGestureTutorial', () => {
   beforeEach(() => {
+    vi.stubGlobal('localStorage', localStorageMock);
     localStorageMock.clear();
+    localStorageMock.setItem(ONBOARDING_SEEN_KEY, '1');
     // Simulate a touch device
     Object.defineProperty(navigator, 'maxTouchPoints', { value: 1, configurable: true });
   });

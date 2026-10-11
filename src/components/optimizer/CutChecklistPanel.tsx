@@ -2,11 +2,11 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { buildCutChecklist } from '../../engine/cut-checklist';
-import type { Lang } from '../../engine/types';
+import { resolveEngineLang } from './resolve-engine-lang';
 
 export function CutChecklistPanel() {
   const { t, i18n } = useTranslation();
-  const lang = i18n.language as Lang;
+  const lang = resolveEngineLang(i18n.language);
   const { allParts, checkedPartIds, toggleCutPart, clearCutChecklist } = useCabinetStore();
   const [open, setOpen] = useState(false);
 
@@ -31,7 +31,7 @@ export function CutChecklistPanel() {
           <span aria-hidden="true">✂️</span>
           {t('cutChecklist.title')}
         </span>
-        <span className="text-wood-500 dark:text-wood-400 flex items-center gap-2 text-sm">
+        <span className="text-wood-700 dark:text-wood-300 flex items-center gap-2 text-sm">
           {checklist.checkedParts}/{checklist.totalParts}
           {checklist.isComplete && (
             <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700 dark:bg-green-900/40 dark:text-green-300">

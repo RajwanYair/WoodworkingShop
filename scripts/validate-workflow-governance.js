@@ -50,6 +50,29 @@ const workflowPolicies = [
     path: '.github/workflows/secret-scan.yml',
     requiredTokens: ['name: Secret Scan', 'gitleaks/gitleaks-action@v3', 'GITLEAKS_CONFIG: .github/.gitleaks.toml'],
   },
+  {
+    name: 'Mutation testing workflow',
+    path: '.github/workflows/mutation.yml',
+    requiredTokens: [
+      'name: Mutation Testing',
+      "cron: '0 8 * * 1'",
+      'timeout-minutes: 15',
+      'npm run test:mutation',
+      'stryker.weekly.config.mjs',
+      'name: mutation-report',
+    ],
+  },
+  {
+    name: 'Weekly mutation threshold config',
+    path: 'stryker.weekly.config.mjs',
+    requiredTokens: [
+      "'src/engine/dimensions.ts'",
+      "'src/utils/bom-export.ts'",
+      "'tests/engine/dimensions.test.ts'",
+      "'tests/utils/bom-export.test.ts'",
+      'break: 79',
+    ],
+  },
 ];
 
 function main() {

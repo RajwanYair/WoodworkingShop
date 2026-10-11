@@ -1,0 +1,28 @@
+{
+  "source": "WoodWorkCalc, Cabinet Face Frame Cut List Calculator, worked example",
+  "url": "https://www.woodworkcalc.com/calculators/face-frame",
+  "retrievedOn": "2026-10-01",
+  "publishedExample": {
+    "outsideWidthMm": 800,
+    "outsideHeightMm": 700,
+    "outsideStileWidthMm": 50,
+    "topRailWidthMm": 50,
+    "bottomRailWidthMm": 50,
+    "centerStileWidthMm": 40,
+    "railLengthMm": 700,
+    "outerStileLengthMm": 700
+  },
+  "engineInput": {
+    "cabinetWidthMm": 800,
+    "cabinetHeightMm": 700,
+    "stileWidthMm": 50,
+    "railWidthMm": 50,
+    "openingCount": 1
+  },
+  "expected": {
+    "railLengthMm": 700,
+    "stileLengthMm": 700
+  },
+  "tolerance": "Exact match in millimetres.",
+  "scope": "Cross-checks only rail length and full-height outer stile length from the published 800 x 700 mm example. The source also has a 40 mm center stile and two side-by-side openings, which this engine does not model; opening layout and center-stile dimensions are excluded."
+}

@@ -64,6 +64,7 @@
     "doorsOnly": "Doors Only",
     "noBanding": "None",
     "reset": "Reset to Defaults",
+    "resetConfirm": "Reset this cabinet to its default configuration? This cannot be undone.",
     "furnitureType": "🪑 Furniture Type",
     "ft_cabinet": "Cabinet",
     "ft_bookshelf": "Bookshelf",
@@ -225,7 +226,10 @@
     "statusPending": "Computing cut sheets…",
     "statusComplete": "Optimization complete — {{count}} sheet(s) required",
     "filterByMaterial": "Filter by material",
-    "allMaterials": "All materials"
+    "allMaterials": "All materials",
+    "partsTableSearch": "Search parts",
+    "hardwareTableSearch": "Search hardware",
+    "noTableResults": "No matching rows"
   },
   "preview": {
     "title": "Cabinet Preview",
@@ -493,6 +497,7 @@
     "delete": "Delete",
     "placeholder": "Cabinet name…",
     "empty": "No saved configurations",
+    "loadFailed": "Could not load saved configurations",
     "export": "Export JSON",
     "exportCabinet": "Export Cabinet",
     "exportProject": "Export Project ({{count}} cabinets)",
@@ -523,8 +528,16 @@
     "notesPlaceholder": "Optional notes for this cabinet…"
   },
   "errors": {
+    "panel": "Panel",
+    "panelFailed": "{{panel}} failed to render",
+    "recoveryHint": "An unexpected error occurred. You can try reloading the panel or refreshing the page.",
+    "retry": "Retry",
     "copyDetails": "Copy error details",
-    "copied": "Copied!"
+    "details": "Error details",
+    "copied": "Copied!",
+    "reloadPage": "Reload page",
+    "warning": "Error",
+    "interactivePreview": "Interactive 3D preview"
   },
   "room": {
     "title": "Room Layout",
@@ -639,6 +652,39 @@
     "hardwareExported": "Hardware CSV downloaded",
     "linkCopied": "Shareable link copied to clipboard",
     "linkCopyFailed": "Could not copy link — please copy the URL from the address bar"
+  },
+  "commandPalette": {
+    "title": "Command palette",
+    "search": "Search commands",
+    "results": "Command results",
+    "noResults": "No matching commands",
+    "actionFailed": "The command could not be completed.",
+    "recent": "Recent",
+    "shortcutDescription": "Open command palette",
+    "close": "Close command palette",
+    "categories": {
+      "actions": "Actions",
+      "language": "Language",
+      "calculators": "Calculators",
+      "presets": "Presets",
+      "projects": "Projects",
+      "exports": "Exports"
+    },
+    "commands": {
+      "undo": "Undo",
+      "redo": "Redo",
+      "toggleTheme": "Toggle dark mode",
+      "toggleContrast": "Toggle high contrast",
+      "copyLink": "Copy share link",
+      "keyboardShortcuts": "Keyboard shortcuts",
+      "addCabinet": "Add cabinet",
+      "exportBom": "Export bill of materials",
+      "saveSnapshot": "Save snapshot",
+      "resetConfig": "Reset configuration",
+      "print": "Print",
+      "redoAlternate": "Redo (alternate)",
+      "toggleFocusMode": "Toggle focus mode"
+    }
   },
   "shortcuts": {
     "saveSnapshot": "Snapshot saved",
@@ -1372,26 +1418,6 @@
     "mergeConflict": "Merge has conflicts that need resolution.",
     "branchCreated": "Branch created."
   },
-  "productionSchedule": {
-    "title": "Production Schedule",
-    "task": "Task",
-    "tasks": "Tasks",
-    "resource": "Resource",
-    "resources": "Resources",
-    "duration": "Duration",
-    "dependencies": "Dependencies",
-    "milestone": "Milestone",
-    "criticalPath": "Critical Path",
-    "conflict": "Resource Conflict",
-    "conflicts": "Resource Conflicts",
-    "utilization": "Utilization",
-    "spanDays": "Schedule Span (days)",
-    "addTask": "Add Task",
-    "compute": "Compute Schedule",
-    "crash": "Compress Task",
-    "noTasks": "No tasks scheduled yet.",
-    "scheduleReady": "Schedule computed successfully."
-  },
   "nestingPatterns": {
     "title": "Nesting Pattern Library",
     "pattern": "Pattern",
@@ -1492,26 +1518,6 @@
     "cycleDetected": "Circular dependency detected!",
     "earliestStart": "Earliest Start",
     "latestFinish": "Latest Finish"
-  },
-  "workshopSafety": {
-    "title": "Workshop Safety",
-    "score": "Safety Score",
-    "passes": "Passes",
-    "fails": "Fails",
-    "violations": "Violations",
-    "critical": "Critical",
-    "warning": "Warning",
-    "clearanceZone": "Clearance Zone",
-    "overlap": "Overlap",
-    "noise": "Noise Level",
-    "ppe": "PPE Required",
-    "safetyGlasses": "Safety Glasses",
-    "hearingProtection": "Hearing Protection",
-    "dustMask": "Dust Mask",
-    "respirator": "Respirator",
-    "faceShield": "Face Shield",
-    "pushStick": "Push Stick",
-    "noViolations": "No safety violations detected."
   },
   "wastePredictor": {
     "title": "Waste Predictor",
@@ -1650,7 +1656,19 @@
     "packsNeeded": "Packs Needed",
     "noItems": "No hardware items found.",
     "addItem": "Add Item",
-    "editItem": "Edit Item"
+    "editItem": "Edit Item",
+    "importTitle": "Import Hardware Catalog",
+    "importFile": "Catalog JSON file",
+    "importPreview": "{{count}} hardware items validated.",
+    "importMode": "Import behavior",
+    "importMerge": "Merge: update matching IDs and keep other items",
+    "importReplace": "Replace all custom hardware",
+    "importExisting": "{{count}} existing custom hardware items.",
+    "importButton": "Import catalog",
+    "importSuccess": "{{count}} hardware items imported.",
+    "importError": "Hardware catalog import failed: {{message}}",
+    "importStored": "Custom hardware ({{count}})",
+    "importEmpty": "No custom hardware imported."
   },
   "projectComparison": {
     "title": "Project Comparison",
@@ -1666,27 +1684,6 @@
     "sheets": "Sheets",
     "weights": "Weights",
     "noProjects": "Add at least 2 projects to compare."
-  },
-  "woodMovement": {
-    "title": "Wood Movement Calculator",
-    "width": "Board Width (mm)",
-    "species": "Wood Species",
-    "mcStart": "Initial MC (%)",
-    "mcEnd": "Final MC (%)",
-    "change": "Dimensional Change",
-    "finalWidth": "Final Width",
-    "direction": "Direction",
-    "expansion": "Expansion",
-    "contraction": "Contraction",
-    "none": "No Movement",
-    "gapPerSide": "Gap Per Side",
-    "preset": "Seasonal Preset",
-    "temperateIndoor": "Temperate Indoor",
-    "controlledIndoor": "Controlled Indoor",
-    "unheatedWorkshop": "Unheated Workshop",
-    "outdoorCovered": "Outdoor Covered",
-    "panelMovement": "Panel Movement",
-    "customCoefficient": "Custom Coefficient"
   },
   "feedRate": {
     "title": "Feed Rate Calculator",
@@ -1725,24 +1722,6 @@
     "perPanel": "Per Panel",
     "density": "Density (kg/m³)"
   },
-  "dowelJoint": {
-    "title": "Dowel Joint Calculator",
-    "diameter": "Dowel Diameter",
-    "spacing": "Spacing",
-    "depth": "Drill Depth",
-    "drillBit": "Drill Bit",
-    "count": "Number of Dowels",
-    "clampTime": "Clamp Time",
-    "orientation": "Joint Orientation",
-    "edgeToFace": "Edge to Face",
-    "edgeToEdge": "Edge to Edge",
-    "mitre": "Mitre",
-    "positions": "Dowel Positions",
-    "jointLength": "Joint Length",
-    "boardThickness": "Board Thickness",
-    "edgeClearance": "Edge Clearance",
-    "dowelLength": "Dowel Length"
-  },
   "panelLabel": {
     "title": "Panel Labels",
     "partId": "Part ID",
@@ -1766,6 +1745,11 @@
     "screwLength": "Screw Length",
     "drillAngle": "Drill Angle",
     "threadType": "Thread Type",
+    "materialHardness": "Mating Material",
+    "jointLength": "Joint Length",
+    "jointType": "Joint Type",
+    "softwood": "Softwood",
+    "hardwood": "Hardwood",
     "screwCount": "Number of Screws",
     "spacing": "Spacing",
     "pocketBore": "Pocket Bore",
@@ -1797,23 +1781,6 @@
     "random": "Random",
     "bothFaces": "Both Faces",
     "trimAllowance": "Trim Allowance"
-  },
-  "clampPressure": {
-    "title": "Clamp Pressure Calculator",
-    "clampCount": "Clamps Required",
-    "totalForce": "Total Force",
-    "achievedPressure": "Achieved Pressure",
-    "targetPressure": "Target Pressure",
-    "spacing": "Clamp Spacing",
-    "openTime": "Open Time",
-    "clampTime": "Clamp Time",
-    "glueType": "Glue Type",
-    "clampType": "Clamp Type",
-    "pva": "PVA (Wood Glue)",
-    "polyurethane": "Polyurethane",
-    "epoxy": "Epoxy",
-    "hide": "Hide Glue",
-    "contact": "Contact Cement"
   },
   "drillSpeed": {
     "title": "Drill Press Speed Calculator",
@@ -1984,6 +1951,7 @@
     "fixed": "Fixed (built-in)",
     "maxDeflection": "Maximum Deflection",
     "exceedsLimit": "Exceeds Limit",
+    "withinLimit": "Within Limit",
     "recommendedMaxSpan": "Recommended Max Span",
     "deflectionRatio": "Deflection Ratio"
   },
@@ -2012,37 +1980,6 @@
     "plywood": "Plywood",
     "mdf": "MDF",
     "hardPlastic": "Hard Plastic"
-  },
-  "biscuitJoint": {
-    "title": "Biscuit Joinery Calculator",
-    "description": "Calculate biscuit size, slot depth, and layout positions",
-    "jointLength": "Joint Length",
-    "boardThickness": "Board Thickness",
-    "jointType": "Joint Type",
-    "biscuitSize": "Biscuit Size",
-    "slotDepth": "Slot Depth",
-    "count": "Biscuit Count",
-    "spacing": "Spacing",
-    "edgeMargin": "Edge Margin",
-    "edge": "Edge",
-    "butt": "Butt",
-    "miter": "Miter",
-    "auto": "Auto"
-  },
-  "sandingProgression": {
-    "title": "Sanding Progression Planner",
-    "description": "Plan grit sequence and estimate sanding effort",
-    "startGrit": "Start Grit",
-    "targetGrit": "Target Grit",
-    "area": "Area",
-    "material": "Material",
-    "finishTarget": "Finish Target",
-    "gritSequence": "Grit Sequence",
-    "estimatedMinutes": "Estimated Minutes",
-    "estimatedSheets": "Estimated Sheets",
-    "paint": "Paint",
-    "stain": "Stain",
-    "clear": "Clear"
   },
   "fingerJoint": {
     "title": "Finger Joint Calculator",
@@ -2190,6 +2127,7 @@
     "pulloutForceLbf": "Pull-Out Force (lbf)",
     "withdrawalResistance": "Withdrawal Resistance",
     "safetyRating": "Safety Rating",
+    "modelNote": "USDA equation 8-10a estimates short-term ultimate load for seasoned side-grain wood screws, not allowable design capacity. It does not apply to sheet goods; ratings are heuristic. Verify the actual connection.",
     "low": "Low Density (Pine, Cedar)",
     "medium": "Medium Density (Maple, Oak)",
     "high": "High Density (Hickory, Teak)",
@@ -2250,11 +2188,11 @@
     "roughing": "Roughing",
     "finishing": "Finishing",
     "sanding": "Sanding",
-    "minRpm": "Min Safe RPM",
-    "maxRpm": "Max Safe RPM",
+    "minRpm": "Min RPM (advisory)",
+    "maxRpm": "Max RPM (advisory)",
     "recommendedRpm": "Recommended RPM",
     "surfaceSpeed": "Surface Speed (m/min)",
-    "safetyNote": "Always start at lowest speed and increase gradually"
+    "safetyNote": "Advisory estimate only, not a safety limit. Follow your lathe manual; start slowly and reduce speed if the blank vibrates. Unbalanced blanks may need much lower speeds."
   },
   "framePanel": {
     "title": "Frame and Panel Calculator",
@@ -2295,7 +2233,6 @@
     "stringerLength": "Stringer Length",
     "stringerAngle": "Stringer Angle",
     "ircPass": "Passes IRC 2021 riser and tread limits",
-    "riserTooShort": "Riser height below IRC minimum 4\" (101.6 mm)",
     "riserTooTall": "Riser height exceeds IRC maximum 7¾\" (196.85 mm)",
     "treadTooShallow": "Tread depth below IRC minimum 10\" (254 mm)"
   },
@@ -2381,6 +2318,7 @@
   "coveCut": {
     "copeDepth": "Cove Depth",
     "bladeDiameter": "Blade Diameter",
+    "bladeKerf": "Blade Kerf",
     "copeWidth": "Cove Width",
     "fenceAngle": "Fence Angle",
     "maxPassDepth": "Max Depth per Pass",
@@ -2484,19 +2422,28 @@
     "description": "Define reusable formulas using cabinet dimensions as variables (e.g. shelf_gap = height / (shelfCount + 1)).",
     "listLabel": "Named expression list",
     "addTitle": "Add expression",
+    "editTitle": "Edit expression",
     "nameLabel": "Name",
     "namePlaceholder": "e.g. shelf_gap",
     "exprLabel": "Formula",
     "exprPlaceholder": "e.g. height / (shelfCount + 1)",
     "add": "Add",
+    "editButton": "Edit",
+    "edit": "Edit {{name}}",
+    "save": "Save",
+    "cancel": "Cancel",
+    "applyButton": "Apply",
+    "apply": "Apply {{name}}",
+    "applyTarget": "Dimension to update with {{name}}",
     "empty": "No expressions defined yet.",
     "remove": "Remove {{name}}",
     "resolvedValue": "{{name}} = {{value}}",
-    "hint": "Available variables: width, height, depth, shelfCount, doorCount, drawerCount, kickHeight. Supports +, -, *, /, (), Math.*",
+    "hint": "Available variables: width, height, depth, shelfCount, doorCount, drawerCount, kickHeight. Supports +, -, *, /, (), Math.floor, ceil, round, min, max, abs, trunc.",
     "errorNameRequired": "Name is required",
     "errorNameInvalid": "Name must start with a letter or _ and contain only letters, digits and _",
     "errorNameTooLong": "Name must be 32 characters or fewer",
     "errorExprRequired": "Formula is required",
-    "errorExprTooLong": "Formula must be 256 characters or fewer"
+    "errorExprTooLong": "Formula must be 256 characters or fewer",
+    "errorDimensionBounds": "{{dimension}} value {{value}} must be between {{min}} and {{max}} mm."
   }
 }

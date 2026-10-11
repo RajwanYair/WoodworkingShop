@@ -81,8 +81,16 @@ export function createSnapshotSlice(
       set((state) => {
         const now = new Date();
         const autoName = `Snapshot ${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        const idPrefix = `snap-${Date.now()}`;
+        const existingIds = new Set(state.snapshots.map((snapshot) => snapshot.id));
+        let id = idPrefix;
+        let suffix = 1;
+        while (existingIds.has(id)) {
+          id = `${idPrefix}-${suffix}`;
+          suffix += 1;
+        }
         const snap: ProjectSnapshot = {
-          id: `snap-${Date.now()}`,
+          id,
           name: name.trim() || autoName,
           cabinets: getCurrentCabinets(),
           timestamp: now.toISOString(),

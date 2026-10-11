@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { CutSheet, Lang } from '../../engine/types';
 import { getMaterial } from '../../engine/materials';
+import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 
 /** Sprint 160: Material usage summary — area, sheets, cost per material. */
 export function MaterialSummaryPanel({
@@ -23,6 +24,7 @@ export function MaterialSummaryPanel({
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const [editW, setEditW] = useState('');
   const [editL, setEditL] = useState('');
+  const customMaterials = useCustomMaterialsStore((state) => state.materials);
 
   // Group by material + thickness — Sprint 165: include materialKey in row data
   const groups = new Map<
@@ -31,7 +33,7 @@ export function MaterialSummaryPanel({
       materialKey: string;
       name: { en: string; he: string };
       thickness: number;
-      sheetArea: number;
+      totalArea: number;
       qty: number;
       pricePerSheet: number;
       defaultW: number;
@@ -39,7 +41,7 @@ export function MaterialSummaryPanel({
     }
   >();
   for (const sheet of sheets) {
-    const mat = getMaterial(sheet.material);
+    const mat = getMaterial(sheet.material, customMaterials);
     const key = `${sheet.material}-${sheet.thickness}`;
     if (!groups.has(key)) {
       const pricePerSheet = materialPriceOverrides[sheet.material] ?? mat.pricePerSheet ?? 0;
@@ -47,14 +49,16 @@ export function MaterialSummaryPanel({
         materialKey: sheet.material,
         name: mat.name,
         thickness: sheet.thickness,
-        sheetArea: (sheet.sheetWidth * sheet.sheetLength) / 1e6, // m²
+        totalArea: 0,
         qty: 0,
         pricePerSheet,
         defaultW: mat.sheetWidth,
         defaultL: mat.sheetLength,
       });
     }
-    groups.get(key)!.qty += 1;
+    const group = groups.get(key)!;
+    group.qty += 1;
+    group.totalArea += (sheet.sheetWidth * sheet.sheetLength) / 1e6;
   }
 
   const rows = [...groups.values()];
@@ -69,7 +73,9 @@ export function MaterialSummaryPanel({
   const commitEdit = (key: string) => {
     const w = parseFloat(editW);
     const l = parseFloat(editL);
-    if (w > 0 && l > 0) setSheetSizeOverride(key, { width: w, length: l });
+    if (w >= 100 && w <= 5000 && l >= 100 && l <= 5000) {
+      setSheetSizeOverride(key, { width: w, length: l });
+    }
     setEditingKey(null);
   };
 
@@ -97,7 +103,7 @@ export function MaterialSummaryPanel({
             </thead>
             <tbody>
               {rows.map((row, i) => {
-                const totalArea = (row.sheetArea * row.qty).toFixed(2);
+                const totalArea = row.totalArea.toFixed(2);
                 const totalCost = row.pricePerSheet > 0 ? (row.pricePerSheet * row.qty).toFixed(0) : null;
                 const hasOverride = !!sheetSizeOverrides[row.materialKey];
                 const isEditing = editingKey === row.materialKey;
@@ -141,6 +147,7 @@ export function MaterialSummaryPanel({
                             onClick={() => commitEdit(row.materialKey)}
                             className="px-1 text-xs text-green-600 hover:underline dark:text-green-400"
                             title="Apply"
+                            aria-label={t('optimizer.apply')}
                           >
                             ✓
                           </button>
@@ -149,6 +156,7 @@ export function MaterialSummaryPanel({
                             onClick={() => setEditingKey(null)}
                             className="text-wood-400 hover:text-wood-600 px-1 text-xs"
                             title="Cancel"
+                            aria-label={t('common.cancel')}
                           >
                             ✗
                           </button>
@@ -167,6 +175,7 @@ export function MaterialSummaryPanel({
                             onClick={() => startEdit(row.materialKey, row.defaultW, row.defaultL)}
                             className="text-wood-400 hover:text-wood-600 dark:hover:text-wood-300 text-xs"
                             title={t('optimizer.sheetSizeEdit')}
+                            aria-label={t('optimizer.sheetSizeEdit')}
                           >
                             ✎
                           </button>
@@ -176,6 +185,7 @@ export function MaterialSummaryPanel({
                               onClick={() => setSheetSizeOverride(row.materialKey, null)}
                               className="text-xs text-red-400 hover:text-red-600"
                               title={t('optimizer.sheetSizeReset')}
+                              aria-label={t('optimizer.sheetSizeReset')}
                             >
                               ↺
                             </button>

@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import * as fc from 'fast-check';
+import { propertyRunOptions } from '../property-seeds';
 import {
   buildParameterDependencyGraph,
   evaluateNamedParameters,
@@ -65,6 +67,38 @@ describe('evaluateNamedParameters', () => {
     });
   });
 
+  it('evaluates supported Math functions through the safe arithmetic parser', () => {
+    const result = evaluateNamedParameters({ width: 'Math.max(base, 640)' }, { base: 600 });
+    expect(result.values.width).toBe(640);
+  });
+
+  it('evaluates generated acyclic chains independently of definition insertion order', () => {
+    fc.assert(
+      fc.property(
+        fc.integer({ min: 1, max: 1000 }),
+        fc.array(fc.integer({ min: 1, max: 100 }), { minLength: 1, maxLength: 8 }),
+        (base, increments) => {
+          const definitions = Object.fromEntries(
+            increments
+              .map((increment, index) => [
+                `parameter${index}`,
+                index === 0 ? `base + ${increment}` : `parameter${index - 1} + ${increment}`,
+              ])
+              .reverse(),
+          );
+          const expectedOrder = increments.map((_, index) => `parameter${index}`);
+          const expectedFinalValue = base + increments.reduce((sum, increment) => sum + increment, 0);
+          const result = evaluateNamedParameters(definitions, { base });
+
+          expect(result.order).toEqual(expectedOrder);
+          expect(result.values[expectedOrder.at(-1)!]).toBe(expectedFinalValue);
+          expect(Object.keys(result.values)).toEqual(Object.keys(definitions));
+        },
+      ),
+      propertyRunOptions('tests/engine/parameter-expressions.test.ts', 200),
+    );
+  });
+
   it.each<{
     definitions: Record<string, string>;
     values: Record<string, number>;
@@ -84,6 +118,16 @@ describe('evaluateNamedParameters', () => {
       definitions: { dangerous: 'globalThis.alert(1)' },
       values: {},
       expected: /unknown dependency globalThis/i,
+    },
+    {
+      definitions: { invalidMath: '1 / 0' },
+      values: {},
+      expected: /non-finite result/i,
+    },
+    {
+      definitions: { invalidMath: 'Math.sqrt(9)' },
+      values: {},
+      expected: /Math.sqrt is not permitted/i,
     },
   ])('throws on invalid definitions', ({ definitions, values, expected }) => {
     expect(() => evaluateNamedParameters(definitions, values)).toThrow(expected);

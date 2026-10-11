@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import WOOD_MAGAZINE_HALF_LAP_ORACLE from '../fixtures/oracles/wood-magazine-half-lap-depth.json';
 import { calculateHalfLap } from '../../src/engine/half-lap';
 
 describe('calculateHalfLap', () => {
@@ -12,6 +13,19 @@ describe('calculateHalfLap', () => {
     });
     expect(r.board1NotchDepthMm).toBe(9.5);
     expect(r.board2NotchDepthMm).toBe(9.5);
+  });
+
+  it('matches WOOD Magazine half-lap cut-depth guidance', () => {
+    const result = calculateHalfLap({
+      board1ThicknessMm: WOOD_MAGAZINE_HALF_LAP_ORACLE.boardThicknessMm,
+      board1WidthMm: 90,
+      board2ThicknessMm: WOOD_MAGAZINE_HALF_LAP_ORACLE.boardThicknessMm,
+      board2WidthMm: 90,
+      lapType: 'cross_lap',
+    });
+
+    expect(result.board1NotchDepthMm).toBe(WOOD_MAGAZINE_HALF_LAP_ORACLE.notchDepthMm);
+    expect(result.board2NotchDepthMm).toBe(WOOD_MAGAZINE_HALF_LAP_ORACLE.notchDepthMm);
   });
 
   it('notch width of each board equals the width of the mating board', () => {
@@ -46,6 +60,27 @@ describe('calculateHalfLap', () => {
       lapType: 'end_lap',
     });
     expect(r.finishedThicknessMm).toBe(25);
+  });
+
+  it('matches the asymmetric half-lap cut and glue-area oracle', () => {
+    expect(
+      calculateHalfLap({
+        board1ThicknessMm: 19,
+        board1WidthMm: 90,
+        board2ThicknessMm: 18,
+        board2WidthMm: 60,
+        lapType: 'cross_lap',
+      }),
+    ).toEqual({
+      board1NotchDepthMm: 9.5,
+      board1NotchWidthMm: 60,
+      board2NotchDepthMm: 9,
+      board2NotchWidthMm: 90,
+      board1GlueAreaMm2: 570,
+      board2GlueAreaMm2: 810,
+      totalGlueAreaMm2: 1380,
+      finishedThicknessMm: 19,
+    });
   });
 
   it.each([
@@ -86,6 +121,36 @@ describe('calculateHalfLap', () => {
         board1WidthMm: 90,
         board2ThicknessMm: 19,
         board2WidthMm: 0,
+        lapType: 'end_lap' as const,
+      },
+    ],
+    [
+      'NaN board1ThicknessMm',
+      {
+        board1ThicknessMm: Number.NaN,
+        board1WidthMm: 90,
+        board2ThicknessMm: 19,
+        board2WidthMm: 90,
+        lapType: 'end_lap' as const,
+      },
+    ],
+    [
+      'infinite board2WidthMm',
+      {
+        board1ThicknessMm: 19,
+        board1WidthMm: 90,
+        board2ThicknessMm: 19,
+        board2WidthMm: Number.POSITIVE_INFINITY,
+        lapType: 'end_lap' as const,
+      },
+    ],
+    [
+      'overflowing glue area',
+      {
+        board1ThicknessMm: Number.MAX_VALUE,
+        board1WidthMm: 90,
+        board2ThicknessMm: 19,
+        board2WidthMm: 90,
         lapType: 'end_lap' as const,
       },
     ],
