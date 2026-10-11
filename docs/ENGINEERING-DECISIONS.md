@@ -12,8 +12,8 @@ Its lazy-loaded PDF chunk is outside the initial app payload, while the current 
 
 ## Package Manager
 
-**Decision:** Keep npm; defer pnpm migration.
+**Decision:** Keep npm with a repository-local install; defer pnpm migration.
 
-The project shares a parent npm-workspace installation. Moving to pnpm would require changing that shared workspace, CI setup, lockfile, and install configuration. Potential install and disk savings did not justify the cross-workspace migration risk at evaluation time. Source record: Sprint 64, Phase 17.
+Current setup uses `package-lock.json` and `npm ci` at the repository root. There is no npm-workspaces declaration or shared parent install in this checkout. The earlier shared-workspace rationale is historical (Sprint 64, Phase 17), not the current environment. No measured install-time or disk benefit currently justifies changing package managers.
 
-**Re-evaluate when:** the shared workspace is ready to migrate, npm install time becomes a bottleneck, or a separately scoped migration can verify Windows, CI, and build compatibility.
+**Re-evaluate when:** clean-install time becomes a measured bottleneck or a separately scoped migration can verify Windows, CI, and build compatibility.

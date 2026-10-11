@@ -1,116 +1,41 @@
 # WoodworkingShop — GitHub Copilot Instructions
 
-> These instructions give Copilot context about this project's architecture,
-> conventions, and constraints so suggestions stay consistent with the codebase.
-> **Current release: v5.35.0** · **Next target: v5.36.0** (Phase 81)
->
-> Active sprint + completed phase history → **AGENTS.md** (loaded separately as context).
-> Sprint archive → **docs/SPRINT-HISTORY.md**.
-> Planned refactor (ROADMAP §7.4, Phases 81–85): until the owning sprint runs, keep using the
-> layout below — do not create `src/app/`, `src/features/`, `src/ui/` or `src/platform/` early.
+> **Current release: v5.35.0**; next: v5.36.0 (Phase 81). Active sprint/status: [AGENTS.md](../AGENTS.md); archived work: [docs/SPRINT-HISTORY.md](../docs/SPRINT-HISTORY.md). Until the owning Phase 81-85 sprint runs, keep the layout below; do not create `src/app/`, `src/features/`, `src/ui/` or `src/platform/` early.
 
-## Tech Stack
+## Stack
 
-| Layer        | Technology                                                                    |
-| ------------ | ----------------------------------------------------------------------------- |
-| UI framework | React 19 + TypeScript 6 (strict)                                              |
-| Build tool   | Vite 8 (Rolldown bundler)                                                     |
-| CSS          | Tailwind CSS v4 (`@import "tailwindcss"` syntax — no `@tailwind` directives)  |
-| State        | Zustand 5 — single store at `src/store/cabinet-store.ts` with undo/redo       |
-| i18n         | i18next 26 + react-i18next — EN, HE (RTL), AR (RTL), DE, ES, FR               |
-| Tests        | Vitest 4 (unit + bench) + Playwright 1.61 (E2E) + axe-core (a11y)             |
-| PDF          | `@react-pdf/renderer` — PDFs rendered off the main thread                     |
-| Node         | ≥ 22; packages hoisted to parent `MyScripts/node_modules/` via npm workspaces |
+React 19, TypeScript 6 (strict), Vite 8/Rolldown, Tailwind CSS v4 (`@import "tailwindcss"`), Zustand 5, i18next 26, Vitest 4, Playwright 1.61, axe-core, `@react-pdf/renderer`, Node >= 22. Six locales: EN, HE, AR, DE, ES, FR. Run `npm ci` at the repository root; dependencies install into the repository-local `node_modules/` from `package-lock.json`.
 
-## Project Structure
+## Architecture
 
-```text
-src/
-  engine/       Pure TypeScript (no React): dimensions → parts → cut-optimizer → assembly
-  store/        Zustand store — cabinet-store.ts, custom-materials-store.ts, room-store.ts, toast-store.ts
-  components/   React components grouped by feature: configurator/ preview/ optimizer/ assembly/ pdf/ layout/
-  utils/        Export helpers: bom-export, dxf-export, gcode-export, url-state, project-storage
-  i18n/         en.json + he.json + ar.json + de.json + es.json + fr.json
-                MUST update en.json AND he.json for every new key; other languages copy the en value at minimum
-  workers/      Web Workers (?worker import suffix); bom-export.worker.ts, cut-optimizer.worker.ts
-.github/
-  actions/
-    setup-node/ composite action — checkout + setup-node + npm ci (used by ci.yml to avoid repetition)
-  instructions/ scoped Copilot instruction files (engine, components, store, tests, i18n)
-tests/
-  engine/       Unit tests for pure engine functions (80% coverage required)
-  store/        Zustand store action tests
-  utils/        Utility function tests
-  e2e/          Playwright smoke + accessibility tests
-  bench/        Vitest benchmark tests (results gated by config/bench-budget.json)
-```
+- `src/engine/`: pure TypeScript; no React or side effects. Engine tests use shared factories, never the store or React.
+- `src/store/`: Zustand store slices; use `getState().action()` outside React.
+- `src/components/`: feature-grouped React UI. Each `.tsx` exports React components only; move helpers/constants to sibling `.ts` files.
+- `src/utils/`, `src/workers/`, `src/i18n/`: exports/storage, `?worker` imports, and six locale JSON files. Unit tests use synchronous worker fallbacks.
+- `tests/`: engine, store, utils, component, E2E and benchmark suites. Engine coverage is gated at 80%.
+- `.github/instructions/` contains path-scoped rules; follow the rules matching files you change.
 
-## Coding Conventions
+## Rules
 
-- **Zero suppression rule**: no `eslint-disable`, no `@ts-ignore`, no `@ts-nocheck`, no `as any`
-- **TypeScript strictness**: `noImplicitOverride`, `allowUnreachableCode: false`, `allowUnusedLabels: false` are enforced — do not add unreachable branches or unused labels
-- **`erasableSyntaxOnly: true`**: no `enum`, no `namespace`, no `const enum` — use `as const` objects or union types instead
-- **i18n parity**: every new `t('key')` call must have matching entries in both `en.json` and `he.json`
-- **Engine functions are pure**: `src/engine/` has no side effects, no React imports, fully tested
-- **react-refresh rule**: component files (`src/components/**/*.tsx`) must export **only** React components. Extract non-component exports (utilities, constants) to separate `.ts` files. Example: `compute-offcuts.ts` alongside `SheetCard.tsx`.
-- **ARIA via jsx-a11y**: `eslint-plugin-jsx-a11y` enforces correctness at lint time —
-  do NOT add redundant `role="list"` / `role="listitem"` on semantic `<ul>` / `<li>`;
-  do NOT attach `onKeyDown` to non-interactive `<div>` (use `useFocusTrap` or document-level listener)
-- **ESLint plugins (7 total)**: jsx-a11y, react-hooks, react-refresh, react, regexp, no-only-tests, testing-library.
-  No sonarjs, no promise plugin. `--max-warnings 0` is enforced in CI.
-- **RTL-safe layout**: use Tailwind logical properties (`ms-*`, `me-*`, `start-*`, `end-*`) not `ml-*`/`mr-*`
-- **No hardcoded colours**: use `wood-*` design tokens or Tailwind semantic classes
-- **CSS via Stylelint**: `stylelint.config.js` + `package.json#browserslist` (canonical — read by both Stylelint and VS Code language services) drives compatibility.
-  Run `npm run lint:css` before commit; auto-fix with `npx stylelint --fix "src/**/*.css"`
-- **Tool configs stay at root**: do NOT move `vite.config.ts`, `vitest.config.ts`,
-  `playwright.config.ts`, `eslint.config.js`, `stylelint.config.js`, `typedoc.json`,
-  or `tsconfig.*.json` into subdirs. These match Vite/React/ESLint defaults and moving
-  them creates churn without benefit. Only docs and non-tool assets go in `docs/`
-- **Test style**: use `it.each` for parametrised negative/positive test pairs; group related assertions in one `it` rather than one `expect` per `it`
+- No `eslint-disable`, `@ts-ignore`, `@ts-nocheck` or `as any`. Keep strict TypeScript checks; `erasableSyntaxOnly` forbids `enum` and `namespace` (use `as const` or unions).
+- Every translation key must exist in all locales; update EN and HE, and use the EN value as the minimum for AR/DE/ES/FR.
+- Component files export components only. Do not add redundant list roles to `<ul>/<li>` or `onKeyDown` to non-interactive `<div>`; use `useFocusTrap` or a document listener.
+- Use Tailwind logical properties (`ms-*`, `me-*`, `start-*`, `end-*`), not `ml-*`/`mr-*`; use `wood-*` tokens or semantic colors, not hardcoded colors.
+- Stylelint compatibility comes from `package.json#browserslist` and `stylelint.config.js`; run `npm run lint:css` for CSS changes.
+- Keep Vite, Vitest, Playwright, ESLint, Stylelint, TypeDoc and TypeScript configs at the repo root. Put docs and non-tool assets in `docs/`.
+- Use `it.each` for parameterized cases and group related assertions. ESLint runs with zero warnings; do not add dependencies, plugins, deprecated APIs or unrequested features. Target `package.json#browserslist`.
+- JSON does not support comments; use JSONC where needed. Justify disabled options and run `npm run dead:check` when changing exports/dependencies.
 
-## Key Patterns
+## Optimizer Coordinates
 
-- Zustand updates spread current state; outside React, use `getState().action()`.
-- Translations use `t('namespace.key')`; keys exist in all six locale files.
-- Engine tests import pure functions and shared factories, never React or the store.
-- App code imports workers with `?worker`; unit tests use synchronous engine fallbacks.
-- Component files export components only; keep helpers in sibling `.ts` files.
+MaxRects BSSF: `x` is across `sheetWidth`; `y` follows sheet length/grain. Each part must satisfy `p.x + p.width <= sheetWidth` and `p.y + p.length <= sheetLength`.
 
-## Cut Optimizer Coordinate System
+## Validation
 
-The MaxRects BSSF cut-optimizer uses:
+- `npm run quality`: typecheck, lint, CSS/Markdown lint, format check and i18n coverage, sequentially; use for diagnosis.
+- `npm run quality:fast`: same checks in parallel. `npm run check` adds unit tests and is the pre-commit gate.
+- `npm run ci`: full check, build, bundle and benchmark gates. `npm run release:build` runs build, bundle check and SBOM after `npm run check`.
 
-- `x` → across the sheet width (`sheetWidth`)
-- `y` → along the sheet length / grain direction (`sheetLength`)
-- `p.x + p.width ≤ sheetWidth` and `p.y + p.length ≤ sheetLength`
+## Temporary Files
 
-## Additional Constraints
-
-- Do not add unapproved dependencies or ESLint plugins, unrequested features, or deprecated APIs; target `package.json#browserslist`.
-- JSON files cannot contain comments; use `.jsonc` when comments are needed.
-- Justify disabled config options and check for dead code with `npm run dead:check`.
-
-## VS Code Snippets
-
-Key snippets in `.vscode/snippets.code-snippets`: `iteach`, `rfc`, `hook`, `eng`, `engguard`,
-`slice`, `storetest`, `zsel`, `t18`, `wrkr`, `vmock`, `vspy`, `uefx`, `umemo`, `ucb`, `tw-rtl`.
-
-## Scoped Instructions, Prompts & Agents
-
-Scoped instructions auto-injected by Copilot live in `.github/instructions/`.
-Reusable prompts live in `.github/prompts/`. Agent definitions live in `.github/agents/`.
-Full lists → **AGENTS.md**.
-
-## Workflows
-
-- **`npm run quality`** — typecheck + lint + lint:css + lint:md + format:check + i18n:coverage (sequential; good for debugging)
-- **`npm run quality:fast`** — same checks run in parallel via `scripts/parallel-quality.js` (mirrors CI; use for release gate)
-- **`npm run check`** — `quality:fast` + `npm test` (full pre-commit gate — runs quality in parallel)
-- **`npm run ci`** — `check` + build + bundle:check + bench:check (full CI gate)
-- **`npm run release:build`** — build + bundle:check + sbom (no tests; run after `npm run check`)
-
-## Intermediate Files & Caching
-
-- All intermediate build files, ESLint caches (`.eslintcache`), Vite caches (`.vite_cache`), Playwright test results, and test reports **MUST** be written to paths inside the OS `$TEMP` or `tempfile.gettempdir()` directory. We never pollute the root workspace or `node_modules/.cache` with intermediate build telemetry.
-- Coverage output goes to `/tmp/WoodworkingShop/coverage/` (Linux/CI) or `%TEMP%\WoodworkingShop\coverage\` (Windows dev).
-- `skipLibCheck: true` is set in all tsconfigs due to `@react-pdf/types` shipping `const enum` in `.d.ts` files (TS18055 under `verbatimModuleSyntax`). Remove once upstream fixes `primitive.d.ts`.
+Write build/test intermediates, caches, Playwright results and reports under OS `$TEMP` (or `tempfile.gettempdir()`), never the workspace or `node_modules/.cache`. Coverage: `/tmp/WoodworkingShop/coverage/` on Linux/CI; `%TEMP%\WoodworkingShop\coverage\` on Windows. Keep `skipLibCheck: true` until `@react-pdf/types` fixes its `const enum` declaration (TS18055 with `verbatimModuleSyntax`).

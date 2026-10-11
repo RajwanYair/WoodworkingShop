@@ -33,14 +33,14 @@ graph LR
 
 ## 📁 Directory Layout
 
-Measured on 2026-10-04 (v5.34.0). The planned target layout is in [Target Architecture](#-target-architecture-phase-82).
+Measured on 2026-10-11 (v5.35.0). The planned target layout is in [Target Architecture](#-target-architecture-phase-82).
 
 ```text
 src/
 ├── main.tsx                 # React 19 entry point
 ├── App.tsx                  # Root: 7 tabs, keyboard shortcuts, lazy panels, error boundaries
 ├── index.css                # Tailwind v4 theme (wood-* tokens), print styles, RTL support
-├── engine/                  # Pure TypeScript computation (no React, no DOM) — 177 files
+├── engine/                  # Pure TypeScript computation (no React, no DOM) — 182 .ts files
 │   ├── types.ts             # Domain types: CabinetConfig, Part, HardwareItem, …
 │   ├── dimensions.ts        # Derived dimensions from config
 │   ├── parts.ts             # Part list generation
@@ -54,13 +54,13 @@ src/
 │   ├── export/              # glTF, STEP, IFC writers
 │   ├── validation/          # Dimension, door and shelf rules
 │   └── index.ts             # Public barrel (1,448 lines)
-├── components/              # 116 .tsx files
-│   ├── configurator/        # Config panel, presets, materials, calculators, room layout (49 files)
-│   ├── preview/             # SVG views, isometric, WebGL 3D panel (9 files)
-│   ├── optimizer/           # Cut sheets, smart optimizer, tables, G-code preview (26 files)
+├── components/              # 124 .tsx files
+│   ├── configurator/        # Config panel, presets, materials, calculators, room layout (53 files)
+│   ├── preview/             # SVG views, isometric, WebGL 3D panel (7 files)
+│   ├── optimizer/           # Cut sheets, smart optimizer, tables, G-code preview (23 files)
 │   ├── assembly/            # Step-by-step guide, build log (5 files)
-│   ├── pdf/                 # Document orchestrator + sections/ (17 files)
-│   └── layout/              # Header, sidebar, toasts, onboarding, error boundary (19 files)
+│   ├── pdf/                 # Document orchestrator + sections/ (14 files)
+│   └── layout/              # Header, sidebar, toasts, onboarding, error boundary (22 files)
 ├── store/
 │   ├── cabinet-store.ts     # Main store: cabinets, derived state, undo/redo
 │   ├── slices/              # uiSlice · snapshotSlice · optimizerSettingsSlice · namedExpressionsSlice
@@ -73,7 +73,7 @@ src/
 │                            #   useSwUpdate, usePwaFileHandlers, useSystemDarkMode, useIntersectionVisible
 ├── i18n/                    # index.ts + en, he, ar, de, es, fr (non-English lazy-loaded)
 ├── services/                # capability-contracts, error-reporter
-└── utils/                   # 33 files: BOM/DXF/G-code export, URL state, IndexedDB storage, ZIP, downloads
+└── utils/                   # 34 .ts files: BOM/DXF/G-code export, URL state, IndexedDB storage, ZIP, downloads
 
 public/
 ├── manifest.json            # PWA manifest with file handlers
@@ -82,7 +82,7 @@ public/
 ├── robots.txt · sitemap.xml
 └── fonts/                   # Self-hosted fonts
 
-tests/                       # 353 test files mirroring src/
+tests/                       # 345 Vitest files plus 15 Playwright spec files
 ├── engine/ store/ utils/ hooks/ services/ i18n/   # Vitest unit and property tests
 ├── components/              # Testing Library behaviour tests (separate coverage ratchet)
 ├── e2e/                     # Playwright journeys, accessibility, visual baselines
@@ -411,7 +411,9 @@ graph TD
   class manifest,browser,idb,ls storage
 ```
 
-Offline reload, quota pressure and file-handler journeys are re-opened as Sprint 315 carry-over for v5.35.0.
+Sprint 315 browser acceptance is complete: Chromium/Firefox cover offline app-shell reload, storage
+pressure, and valid/malformed `.cabinetplan` handling. Native OS-level file launch remains unverified
+and is explicitly outside browser-level acceptance.
 
 ## 🌐 i18n Architecture
 
@@ -442,7 +444,9 @@ graph LR
   class ci check
 ```
 
-English and Hebrew are complete. Arabic, German, Spanish and French still fall back to English for a share of strings; Sprint 375 adds a completeness gate, glossary and pseudo-locales, and Sprint 433 splits locale files into typed namespaces.
+All six locales have exact key parity with no missing, extra, empty, or placeholder-mismatched values.
+EN-identical rates are 1.02% (HE), 1.20% (AR), 1.38% (DE), 1.34% (ES), and 1.66% (FR), all below
+the 2% limit. Human review remains for four diagnostic-string records covering 76 keys.
 
 ## ♿ Accessibility (WCAG 2.2 AA)
 

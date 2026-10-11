@@ -22,6 +22,10 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    pool: 'threads',
+    execArgv: process.allowedNodeEnvironmentFlags.has('--no-experimental-webstorage')
+      ? ['--no-experimental-webstorage']
+      : [],
     testTimeout: 15000,
     include: ['tests/**/*.test.ts', 'tests/**/*.test.tsx'],
     exclude: ['tests/e2e/**', 'node_modules/**', 'dist/**'],

@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Release Summary
 
 - Capability map: 219 classified modules.
-- Locale completeness: zero missing, extra, empty, or placeholder-mismatched keys across all six locales. English-identical rates are HE 1.02%, AR 1.20%, DE 1.38%, ES 1.34%, and FR 1.66%, all within the 2% limit. The 19 new diagnostics strings per locale are translated for AR/DE/ES/FR; their 76 review records remain pending.
+- Locale completeness: zero missing, extra, empty, or placeholder-mismatched keys across all six locales. English-identical rates are HE 1.02%, AR 1.20%, DE 1.38%, ES 1.34%, and FR 1.66%, all within the 2% limit. The 19 new diagnostics strings per locale are translated for AR/DE/ES/FR; four review records covering 76 keys remain pending.
 - Critical route: 608.0 KB raw / 154.8 KB Brotli against unchanged budgets of 700 KB / 175 KB.
 - GitHub CI passed the full quality, unit, compatibility, browser, visual, Lighthouse, build, and bundle matrix.
 
@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added an opt-in local diagnostics dialog with buffered Web Vitals, worker availability, aggregate storage estimates, and bounded sanitized error history. Its explicit JSON export excludes project contents and makes no network requests. Added a Dev Container pinned to Node.js 26.10.0 with Playwright browsers installed from the package lock.
+- Added an opt-in local diagnostics dialog with buffered Web Vitals, worker availability, aggregate storage estimates, and bounded sanitized error history. Its explicit JSON export excludes project contents and makes no network requests.
 - Translated the local diagnostics interface into Arabic, German, Spanish, and French; added the strings to the pending locale-review tracker.
 - Deferred initial cut-sheet optimization to the existing Web Worker path in browsers that support workers; the sidebar and cost estimate show pending values until results arrive. Both BOM export entry points dynamically import the exporter, and the cold mobile browser path does not request its chunks until Ctrl+E is invoked. The workspace LCP banner is a preloaded responsive WebP; its LCP-discovery and responsive-image audits pass.
   Sprint 376 T3 now passes the unchanged critical-route budget at 605.1 KB raw / 153.2 KB Brotli (700 KB / 175 KB). Three consecutive local mobile Lighthouse runs measured performance 95–96, FCP 1,697–1,717 ms, LCP 2,616–2,624 ms, TBT 43–114 ms, and CLS 0. No bundle or metric budgets were raised.
@@ -37,13 +37,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Completed Sprint 315 T2 with Chromium and Firefox checks for near-limit and unavailable storage estimates; Project Manager keeps named saves available and both projects persist after reload.
 - Completed Sprint 315 T3's browser-shimmed file-handler journey in Chromium and Firefox: valid `.cabinetplan` data loads, while unsupported and malformed files preserve the current configuration. Native OS-level launch remains unverified.
 - Made assembly-step completion respect dependency prerequisites and clear downstream progress when a prerequisite is unchecked; Chromium and Firefox E2E journeys cover the behavior.
-- Continued Sprint 375 locale work with an eight-term glossary and 164 formerly missing camera, catalog, cost, cut, finish, machine, grain, marketplace, measurement, waste, nesting, onboarding, and label strings per AR/DE/ES/FR locale; removed five stale nesting and ten stale onboarding keys per locale. Missing keys fell by 164 per locale. Human review and the EN-identical backlog remain open.
+- Continued Sprint 375 locale work with an eight-term glossary and 164 formerly missing camera, catalog, cost, cut, finish, machine, grain, marketplace, measurement, waste, nesting, onboarding, and label strings per AR/DE/ES/FR locale; removed five stale nesting and ten stale onboarding keys per locale. Missing keys fell by 164 per locale. The EN-identical backlog is within the 2% target; four records covering 76 diagnostics translation keys remain in human review.
 - Consolidated plugin registration through the v2 lifecycle registry with a deprecated v1 compatibility window through v5.35.x; retired the unused Supabase stub and migrated the assembly sender to utility-owned browser I/O, retaining the public engine Web Serial API as a deprecated compatibility adapter through v5.35.x.
 - Added a schema-validated capability ledger and import-graph check for engine, utility, and service modules; generated JSON, Markdown, and build-chunk reports are written under the OS temp directory.
 - Added `npm run i18n:completeness` to report missing/extra translation keys, EN-identical ratios with an explicit token allowlist, and placeholder compatibility across all six locales; corrected a missing count interpolation in the Hebrew audit message.
 - Consolidated template implementations under `src/engine/templates/` with a disambiguated public barrel and backwards-compatible flat-module facades; Sprint 372 T1 is complete.
 - Consolidated stock, waste, and comparison implementation ownership under domain barrels while retaining distinct APIs and backwards-compatible flat-module facades; Sprint 372 T2 is complete.
-- Clarified the community catalog engine/adapter boundary and named its fetch/cache implementation `community-catalog-io.ts`, retaining the previous utility path as a compatibility facade; Sprint 372 T3 is in progress.
+- Clarified the community catalog engine/adapter boundary and named its fetch/cache implementation `community-catalog-io.ts`, retaining the previous utility path as a compatibility facade; Sprint 372 T3 is complete.
 - Ranked Sprint 373 calculator candidates using direct UI-consumer evidence and rough integration cost; corrected 16 barrel-reachable but unmounted modules to `surface-next`, each targeted to Sprint 373.
 - Surfaced five prioritized strength and joinery engines through lazy calculator panels, backed by component and engine-reconciled browser journeys; added project-summary labour estimates and panel-weight labels to single-cabinet PDF specifications.
 - Mounted the fuzzy command palette on Ctrl/Cmd+K with translated tab, action, calculator, preset, export, language and recent-project commands; added keyboard navigation, focus management, editable-field shortcut suppression and Chromium axe/E2E coverage.
@@ -63,11 +63,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Web Serial and storage-fallback namespaces were translated across AR/DE/ES/FR, and the mobileSync namespace was translated
   into AR. The library, a11yAudit, aiAssistant, collab, darkMode, gltf, layoutOptimizer, and sync namespaces were translated
   across AR/DE/ES/FR; analytics was translated into AR, and ERP labels into AR plus the German title. The fingerJoint
-  namespace was translated across AR/DE/ES/FR. All 225 prior review records are approved; 112 new locale records across 30
-  namespaces await review.
+  namespace was translated across AR/DE/ES/FR. All 337 prior locale review records are approved; the separate four
+  diagnostics-string review records (76 keys) remain pending.
 
 ### Removed
 
+- Removed the optional Dev Container; local Node.js and npm are the documented development environment.
 - Retired eleven unconsumed engine calculators and their unit tests, public barrel exports, capability records, and unused locale strings as part of Sprint 373 T3.
 
 ### Documentation

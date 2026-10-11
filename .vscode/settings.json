@@ -134,7 +134,7 @@
   "editor.suggest.preview": true,
   "chat.agent.enabled": true,
   "chat.agent.maxRequests": 999,
-  "chat.mcp.autostart": "newAndOutdated",
+  "chat.mcp.autostart": "never",
   "chat.mcp.gallery.enabled": true,
   "github.copilot.chat.followUps": "always",
   "github.copilot.chat.useProjectTemplates": true,

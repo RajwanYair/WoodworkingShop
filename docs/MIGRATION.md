@@ -1,33 +1,39 @@
 # Migration Guide
 
-This document covers breaking changes and migration steps for each major version boundary of **WoodworkingShop**.
+This document describes the current project-file and browser-storage migration contracts for **WoodworkingShop v5.35.0**. The next release target is v5.36.0.
 
 ## Versioning Policy
 
 WoodworkingShop uses [Semantic Versioning](https://semver.org/):
 
-- **Patch** (`3.x.y → 3.x.(y+1)`) — new features, bug fixes, no breaking changes.
-- **Minor** (`3.x.0 → 3.(x+1).0`) — significant feature additions; backwards-compatible.
-- **Major** (`3.x.x → 4.0.0`) — breaking changes to the public API surface, stored data schema, or URL state format.
+- **Patch** (`5.x.y → 5.x.(y+1)`) — fixes and compatible changes.
+- **Minor** (`5.x.0 → 5.(x+1).0`) — compatible feature additions.
+- **Major** (`5.x.x → 6.0.0`) — breaking changes to public APIs, stored data, or URL state.
 
 ---
 
-## v3 → v4 (planned)
+## Current Project Files
 
-> **Status**: Not yet released. These are planned breaking changes for the v4 major.
+Individual project files use schema `1.0`; multi-project bundles use format version `1`.
+`src/utils/project-storage.ts` owns validation and migration.
 
-### Planned breaking changes
+- Imports without `schemaVersion` are treated as current `1.0` files.
+- Legacy `0.9` files using `projectName` are migrated to the `1.0` `name` field.
+- Unsupported future project schema versions are rejected; unknown versions are not silently downgraded.
+- Cabinet and project data is stored in IndexedDB. On first access, the app migrates legacy project,
+  saved-config, and snapshot arrays from their old localStorage keys when the corresponding IndexedDB
+  store is empty. Legacy keys are left in place.
+- Use the app's JSON project and bundle exports for backups; browser storage is not a substitute for a backup.
 
-| Area             | Change                                                                                        | Migration action                                                         |
-| ---------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| **URL state**    | `?c=<base64>` config parameter encoded with new Zstandard compression (smaller URLs)          | Old URLs remain readable via a compatibility shim; no user action needed |
-| **Project JSON** | Schema version bumped from `1` to `2`; `customShelfPositions` renamed to `shelfPositions`     | Run `migrateProject()` — it handles v1→v2 automatically                  |
-| **Room layout**  | `room-layouts` localStorage key added; format not backwards-compatible with v3 store state    | First load in v4 starts with an empty room layout                        |
-| **CSP**          | `script-src 'unsafe-inline'` removed; inline SW registration moved to `public/sw-register.js` | No user action; build artifact change only                               |
+Current IndexedDB databases/object stores are `cabinet-planner-projects/projects`,
+`cabinet-planner-configs/saved-configs`, and `cabinet-planner-snapshots/snapshots`.
 
 ---
 
-## v3.53 series — notable migration notes
+## Historical v3.53 Notes
+
+The entries below describe the legacy v3.53 implementation and are retained as migration history,
+not as the current project-file or storage contract.
 
 ### v3.53.28 — Project JSON import/export (`migrateProject`)
 
@@ -73,20 +79,32 @@ WoodworkingShop uses [Semantic Versioning](https://semver.org/):
 
 ## URL State Format
 
-The URL state (`?c=…`) encodes a `CabinetConfig` as a base64-encoded JSON string. The format is **not** guaranteed stable across major versions.
+Shareable URLs encode only non-default configuration values as compact query parameters, with optional
+`tab`, cabinet index, template, and project-name parameters. The format is **not** guaranteed stable
+across major versions.
 
-For persistent project storage, use **Project JSON** (`exportProjectJson`) which is versioned and migrated.
+For persistent project storage, use versioned Project JSON or a project bundle.
 
 ---
 
-## localStorage Keys
+## Browser Storage
 
-| Key                | Owner                       | Notes                                      |
-| ------------------ | --------------------------- | ------------------------------------------ |
-| `cabinet-planner`  | `cabinet-store.ts`          | Main cabinet config + undo stack           |
-| `custom-materials` | `custom-materials-store.ts` | User-defined materials                     |
-| `room-layouts`     | `room-store.ts`             | Multi-cabinet room layout (added v3.53.32) |
-| `onboarding-seen`  | `OnboardingOverlay.tsx`     | Set to `'1'` once tour is dismissed        |
+Projects, saved configurations, and snapshots use IndexedDB. These localStorage keys remain active
+for preferences and feature state:
+
+| Key                                                            | Owner                                                        |
+| -------------------------------------------------------------- | ------------------------------------------------------------ |
+| `woodworkingshop:session`                                      | `cabinet-store.ts`                                           |
+| `woodworkingshop:prefs`                                        | `store/slices/uiSlice.ts`                                    |
+| `woodworkingshop:buildlog`                                     | `store/slices/uiSlice.ts`                                    |
+| `woodworkingshop:cutchecklist`                                 | `store/slices/uiSlice.ts`                                    |
+| `woodworkingshop:snapshots`                                    | `store/slices/snapshotSlice.ts` (also migrated to IndexedDB) |
+| `woodworkingshop:namedExpressions`                             | `store/slices/namedExpressionsSlice.ts`                      |
+| `custom-materials`, `custom-hardware`, `room-layouts`          | Corresponding Zustand stores                                 |
+| `woodworkingshop:stocktracker`, `woodworkingshop:costvariance` | Corresponding persisted Zustand stores                       |
+
+One-time legacy IndexedDB migrations read `cabinet-planner-projects-v1` (projects),
+`cabinet-planner-saved-configs` (saved configurations), and `woodworkingshop:snapshots` (snapshots).
 
 ---
 
@@ -95,14 +113,14 @@ For persistent project storage, use **Project JSON** (`exportProjectJson`) which
 All migration utilities live in `src/utils/project-storage.ts`:
 
 ```ts
-// Export current project as versioned JSON
-exportProjectJson(cabinets, projectName): ProjectJson
+// Download a versioned project JSON file
+exportProjectJson(project: SavedProject, snapshots?: ProjectSnapshot[]): void
 
-// Import (merges stored config with DEFAULT_CONFIG for forward compatibility)
-importProjectJson(json: unknown): ProjectJson
+// Import a project file and migrate its supported schema
+importProjectJson(file: File): Promise<SavedProject>
 
-// Upgrade persisted JSON to latest schema version
-migrateProject(raw: unknown): ProjectJson
+migrateProject(raw: unknown): SavedProject
 ```
 
-Any JSON with `schemaVersion < CURRENT_SCHEMA_VERSION` is automatically upgraded in-place by `migrateProject`.
+`PROJECT_SCHEMA_REGISTRY` currently supports `0.9` and `1.0`; only the defined legacy `0.9` shape
+is migrated. Project-bundle format version is `1`.

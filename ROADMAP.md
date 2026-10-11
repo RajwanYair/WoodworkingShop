@@ -2016,7 +2016,7 @@ flowchart LR
 
 **Sprint 446 — Community, translation and distribution** — P2 · M · S375, S433.
 
-- T1: Contributor path: good-first-issue labels, Discussions categories, devcontainer (S419 T2), architecture tour in the docs site.
+- T1: Contributor path: good-first-issue labels, Discussions categories, streamlined local setup, architecture tour in the docs site.
 - T2: Community translation workflow on a hosted open-source translation platform, gated by S375 completeness checks; add locales by demand (candidates: IT, PT-BR, PL, NL, ZH-Hans, JA) up to 12.
 - T3: ADR on app-store distribution of the PWA (Microsoft Store, Google Play via Trusted Web Activity) with no code fork.
 - Accept: a new locale lands without code changes; translation reviews are tracked outside locale JSON.
@@ -2199,21 +2199,17 @@ All recommended extensions provide direct value for this TypeScript/React/Tailwi
 | security | OWASP Top 10 audit and CSP hardening          |
 | perf     | Lighthouse CI and Core Web Vitals             |
 
-### MCP Servers (11)
+### MCP Servers (7)
 
 | Server             | Type  | Purpose                              |
 | ------------------ | ----- | ------------------------------------ |
 | github             | HTTP  | PRs, issues, Actions, code search    |
 | filesystem         | stdio | Scoped workspace file access         |
-| fetch              | stdio | Web page/API retrieval               |
 | playwright         | stdio | Browser automation for E2E debug     |
 | memory             | stdio | Persistent agent notes               |
 | sequentialthinking | stdio | Multi-step reasoning                 |
 | context7           | stdio | Up-to-date library docs              |
 | chrome-devtools    | stdio | Performance traces, console, network |
-| gitkraken          | HTTP  | Git ops, blame, diff                 |
-| cloudflare         | HTTP  | Pages/Workers management             |
-| brave-search       | stdio | Web search fallback                  |
 
 Planned: a project-local engine MCP server (S450) so agents can compute dimensions, parts and cut sheets through the same validated functions as the UI.
 
@@ -2274,7 +2270,7 @@ src/
 Rules:
 
 - No intermediate/generated files in workspace — all go to `$TEMP/WoodworkingShop/`
-- No new root files without explicit justification in this document (approved: `.devcontainer/` in S419)
+- No new root files without explicit justification in this document
 - Dead files caught by `npm run dead:check` (Knip)
 - Template assets synced to parent `MyScripts/templates/` via `npm run template:sync`
 

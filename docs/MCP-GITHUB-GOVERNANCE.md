@@ -4,19 +4,15 @@
 
 ## MCP Server Governance Matrix
 
-| Server               | Tier     | Owner           | Purpose                                                   | Secret Source                                         |
-| -------------------- | -------- | --------------- | --------------------------------------------------------- | ----------------------------------------------------- |
-| `github`             | Core     | Repo Maintainer | PR, issue, workflow, and code search operations in chat   | GitHub auth token managed by VS Code/GitHub extension |
-| `filesystem`         | Core     | Repo Maintainer | Workspace-scoped file system access for edits and audits  | None                                                  |
-| `fetch`              | Core     | Repo Maintainer | Retrieve web/API payloads for fact-grounded decisions     | None                                                  |
-| `playwright`         | Core     | QA/Testing      | Browser automation and E2E diagnostics                    | None                                                  |
-| `memory`             | Core     | Repo Maintainer | Persistent agent memory and session context               | None                                                  |
-| `sequentialthinking` | Core     | Repo Maintainer | Structured multi-step reasoning for complex tasks         | None                                                  |
-| `context7`           | Core     | Repo Maintainer | Current package and framework documentation lookup        | None                                                  |
-| `chrome-devtools`    | Optional | QA/Performance  | Chrome performance traces and browser diagnostics         | None                                                  |
-| `gitkraken`          | Optional | Repo Maintainer | Advanced git/PR workflow support                          | GitKraken-managed auth                                |
-| `cloudflare`         | Optional | Platform Owner  | Cloudflare Pages/Workers operations when needed           | Cloudflare auth via MCP provider                      |
-| `brave-search`       | Optional | Repo Maintainer | Web search fallback when docs are unavailable in Context7 | VS Code secret input `brave-api-key`                  |
+| Server               | Tier     | Owner           | Purpose                                                  | Secret Source                                         |
+| -------------------- | -------- | --------------- | -------------------------------------------------------- | ----------------------------------------------------- |
+| `github`             | Core     | Repo Maintainer | PR, issue, workflow, and code search operations in chat  | GitHub auth token managed by VS Code/GitHub extension |
+| `filesystem`         | Core     | Repo Maintainer | Workspace-scoped file system access for edits and audits | None                                                  |
+| `playwright`         | Core     | QA/Testing      | Browser automation and E2E diagnostics                   | None                                                  |
+| `memory`             | Core     | Repo Maintainer | Persistent agent memory and session context              | None                                                  |
+| `sequentialthinking` | Core     | Repo Maintainer | Structured multi-step reasoning for complex tasks        | None                                                  |
+| `context7`           | Core     | Repo Maintainer | Current package and framework documentation lookup       | None                                                  |
+| `chrome-devtools`    | Optional | QA/Performance  | Chrome performance traces and browser diagnostics        | None                                                  |
 
 ## Governance Rules
 
@@ -32,17 +28,19 @@
 
 The release flow is considered valid only when all checks below pass:
 
-| Check                         | Command                                                           | Expected Result                                                       |
-| ----------------------------- | ----------------------------------------------------------------- | --------------------------------------------------------------------- |
-| Quality gate                  | `npm run check`                                                   | Pass                                                                  |
-| Build and packaging gate      | `npm run release:build`                                           | Pass                                                                  |
-| Main branch and tag published | `git push origin main --follow-tags`                              | Remote `main` and annotated release tag match local `HEAD`            |
-| Release publish               | Push `vX.Y.Z`; `.github/workflows/release.yml` runs automatically | `WoodworkingShop vX.Y.Z` release includes archive, checksum, and SBOM |
+| Check                    | Command                                                           | Expected Result                                                        |
+| ------------------------ | ----------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| Quality gate             | `npm run check`                                                   | Pass                                                                   |
+| Build and packaging gate | `npm run release:build`                                           | Pass                                                                   |
+| Main branch updated      | Merge the reviewed release PR to `main`                           | Release commit is present on `main`                                    |
+| Release tag published    | `git push origin vX.Y.Z`                                          | Annotated tag points to the merged release commit                      |
+| Release publish          | Push `vX.Y.Z`; `.github/workflows/release.yml` runs automatically | `WoodworkingShop vX.Y.Z` includes archive, checksum, SBOM, attestation |
 
 ## Operational Notes
 
-- `.vscode/mcp.json` is the source of truth for active MCP servers.
+- `.vscode/mcp.json` is the source of truth for the seven configured MCP servers.
 - Server descriptions in `.vscode/mcp.json` must stay aligned with this document.
+- Workspace setting `chat.mcp.autostart: "never"` keeps servers available on demand without starting them automatically; use **MCP: List Servers** to start one.
 - Publishing an annotated `v*` tag triggers the release workflow; do not also create a manual GitHub release.
 - The workflow uploads the generated SBOM from the workspace root; local `npm run sbom` writes under the OS temp directory.
 - If a server is temporarily disabled, record the reason in the sprint commit message.
@@ -53,13 +51,10 @@ No administrator privileges or machine-wide installation are required. Local
 servers use `npx`; VS Code may ask to trust each configured server before its
 first launch. Confirm only after reviewing the server entry in `.vscode/mcp.json`.
 
-| Integration     | One-time user action                                                                                                                                     | When to enable                                          |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| GitHub MCP      | Sign in to GitHub in VS Code and approve the GitHub MCP authorization prompt.                                                                            | Core PR, issue, and Actions workflows                   |
-| Brave Search    | Create a Brave Search API key, then enter it in the masked `brave-api-key` prompt when VS Code requests it. VS Code stores this input in secret storage. | Optional open-web research beyond package documentation |
-| GitKraken       | Complete the GitKraken MCP provider's browser sign-in when prompted.                                                                                     | Optional advanced Git and PR workflows                  |
-| Cloudflare      | Complete the Cloudflare provider sign-in and select an account when prompted.                                                                            | Only for Pages/Workers deployment work                  |
-| Chrome DevTools | Install Chrome if it is not already available, then start the server from VS Code.                                                                       | Optional browser performance traces and diagnostics     |
+| Integration     | One-time user action                                                          | When to enable                                      |
+| --------------- | ----------------------------------------------------------------------------- | --------------------------------------------------- |
+| GitHub MCP      | Sign in to GitHub in VS Code and approve the GitHub MCP authorization prompt. | PR, issue, and Actions workflows                    |
+| Chrome DevTools | Ensure Chrome is installed, then start it from **MCP: List Servers**.         | Optional performance traces and browser diagnostics |
 
 For daily use, open **Chat: Open Customizations** to review project agents and
 skills, or type `/` in chat to invoke a skill such as `/browser-qa`,

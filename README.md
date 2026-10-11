@@ -45,21 +45,21 @@
 
 ### 🎛 Configurator
 
-| Feature               | Details                                                                                     |
-| --------------------- | ------------------------------------------------------------------------------------------- |
-| **Quick Presets**     | 6 one-click templates: kitchen base/wall, tall pantry, bookcase, wardrobe, bathroom vanity  |
-| **Furniture types**   | Cabinet · Bookshelf · Desk · Wardrobe — each with type-specific part generation             |
-| **Dimensions**        | Width / height / depth sliders with free-text numeric entry; metric mm or fractional inches |
-| **Toe kick / plinth** | Configurable kick height (0 = flush-to-floor or wall-mounted)                               |
-| **Shelves**           | Count, equal or custom spacing, drag-to-reposition in the preview                           |
-| **Doors**             | Flat · Shaker · Glass · None; 1 or 2 doors; configurable reveal                             |
-| **Drawers**           | 0–6 drawers with individual per-drawer box height                                           |
-| **Materials**         | Built-in library (plywood, melamine, MDF, chipboard, glass) + custom material editor        |
-| **Grain direction**   | Mark materials as grain-sensitive — cut optimizer never rotates those parts 90°             |
-| **Edge banding**      | All-visible · Doors-only · None                                                             |
-| **Handles**           | Bar · Knob · Cup pull · None                                                                |
-| **Save / Load**       | localStorage presets + download/upload JSON config files                                    |
-| **Shareable URLs**    | Full config encoded in URL query params; one-click copy                                     |
+| Feature               | Details                                                                                                     |
+| --------------------- | ----------------------------------------------------------------------------------------------------------- |
+| **Quick Presets**     | 6 one-click templates: kitchen base/wall, tall pantry, bookcase, wardrobe, bathroom vanity                  |
+| **Furniture types**   | Cabinet · Bookshelf · Desk · Wardrobe — each with type-specific part generation                             |
+| **Dimensions**        | Width / height / depth sliders with free-text numeric entry; metric mm or fractional inches                 |
+| **Toe kick / plinth** | Configurable kick height (0 = flush-to-floor or wall-mounted)                                               |
+| **Shelves**           | Count, equal or custom spacing, drag-to-reposition in the preview                                           |
+| **Doors**             | Flat · Shaker · Glass · None; 1 or 2 doors; configurable reveal                                             |
+| **Drawers**           | 0–6 drawers with individual per-drawer box height                                                           |
+| **Materials**         | Built-in library (plywood, melamine, MDF, chipboard, glass) + custom material editor                        |
+| **Grain direction**   | Mark materials as grain-sensitive — cut optimizer never rotates those parts 90°                             |
+| **Edge banding**      | All-visible · Doors-only · None                                                                             |
+| **Handles**           | Bar · Knob · Cup pull · None                                                                                |
+| **Save / Load**       | IndexedDB projects/configs/snapshots; legacy localStorage data migrates on first access; JSON import/export |
+| **Shareable URLs**    | Full config encoded in URL query params; one-click copy                                                     |
 
 ### 🖼 Preview
 
@@ -106,7 +106,7 @@
 - ↩ **Undo / Redo** — full change history (`Ctrl+Z` / `Ctrl+Y`)
 - ⌨ **Keyboard shortcuts** — `Alt+1`–`Alt+6` tabs, `Alt+D` dark mode, `Ctrl+Z/Y`, `Ctrl+P`, `?` for help modal
 - 📱 **PWA / Offline** — service worker; installable as a desktop or mobile app
-- 🌐 **Multilingual** — 6 languages: EN, HE, AR, DE, ES, FR (with full RTL support); EN and HE are complete, AR/DE/ES/FR are being completed ([Sprint 375](ROADMAP.md))
+- 🌐 **Multilingual** — 6 languages: EN, HE, AR, DE, ES, FR (with RTL support); all locale keys are in parity, with four review records (76 diagnostic strings) pending ([Sprint 375](ROADMAP.md))
 - ♿ **Accessible** — WCAG 2.2 AA axe scans on every tab, keyboard-only journeys, skip-to-content, screen-reader labels
 - 🖨 **Print-friendly** — `@media print` hides UI chrome; optimises tables and SVGs for paper
 
@@ -133,10 +133,6 @@ npm run build
 ```
 
 > **Node.js >= 22** is required.
-
-### Dev Container
-
-Open the repository in VS Code and run **Dev Containers: Reopen in Container**. The container pins Node.js to 26.10.0, installs the exact dependencies from `package-lock.json`, and installs the matching Chromium and Firefox Playwright browsers.
 
 ---
 
@@ -261,7 +257,7 @@ npm run format:check    # Verify formatting (used in CI)
 npm run i18n:coverage   # Check translation key parity across all 6 locales
 npm run quality:fast    # All quality gates in parallel (types, lint, CSS, Markdown, i18n, AI-asset validators)
 npm run check           # quality:fast + unit tests  (pre-commit gate)
-npm run ci              # check + build + bundle:check + bench:check  (full CI gate)
+npm run ci              # check + build + bundle budgets + benchmarks  (full CI gate)
 npm run test:e2e        # Playwright end-to-end, accessibility and visual tests
 npm run test:coverage   # Coverage report → %TEMP%/WoodworkingShop/coverage
 npm run dead:check      # Knip — unused files, exports and dependencies
@@ -270,7 +266,7 @@ npm run capabilities:check # verify engine, utility and service capability class
 
 ## 🧰 Tooling and Intermediate Files
 
-- Shared development tooling baseline is maintained one level up under `MyScripts/.tools`.
+- Run `npm ci` at the repository root to install the lockfile-pinned dependencies into the repository-local `node_modules/`; no shared parent npm workspace or container is required.
 - Project scripts remain the source of truth for this repository's behavior.
 - Intermediate artifacts and cache outputs are routed to OS TEMP paths (for example `%TEMP%/WoodworkingShop`) rather than committed workspace folders.
 - Generated outputs such as `dist`, `coverage`, `test-results`, and Playwright HTML reports are treated as disposable artifacts, not source-of-truth content.
@@ -281,10 +277,10 @@ npm run capabilities:check # verify engine, utility and service capability class
 
 The app ships with **6 languages**: English, Hebrew (RTL), Arabic (RTL),
 German, Spanish, and French. English loads with the app; the other locales are lazy-loaded.
-English and Hebrew are complete. Arabic, German, Spanish and French still fall back to English
-for some strings; the current completeness audit reports zero missing keys and EN-identical rates
-of 1.20%, 1.38%, 1.34% and 1.66%, respectively, within the 2% limit. See [Sprint 375](ROADMAP.md)
-for the translation scope and review status.
+All six locale files have exact key parity with no missing, extra, empty, or placeholder-mismatched
+values. EN-identical rates are 1.02% (HE), 1.20% (AR), 1.38% (DE), 1.34% (ES), and 1.66% (FR),
+all below the 2% limit. Human review remains for 76 new diagnostics translation entries.
+See [Sprint 375](ROADMAP.md) for translation scope and review status.
 All UI strings live in `src/i18n/{en,he,ar,de,es,fr}.json`.
 Run `npm run i18n:coverage` to verify all locale files are in sync.
 
@@ -322,15 +318,20 @@ so direct URL navigation and refreshes work correctly on Cloudflare Pages.
 For a tagged release:
 
 ```bash
-# 1 — bump version
-npm version patch   # or minor / major
+# 1 — bump package.json and package-lock.json without creating a tag
+npm version patch --no-git-tag-version   # or minor / major
 
-# 2 — update CHANGELOG.md, push
-git push --follow-tags
+# 2 — update CHANGELOG.md and commit the release version
+git add package.json package-lock.json CHANGELOG.md
+git commit -m "chore: release vX.Y.Z"
 
-# 3 — create GitHub Release (CI builds and attaches artifacts)
-gh release create vX.Y.Z --generate-notes
+# 3 — after the release commit is merged to main, tag it to trigger release.yml
+git tag -a vX.Y.Z -m "WoodworkingShop vX.Y.Z"
+git push origin vX.Y.Z
 ```
+
+The tag-triggered workflow creates the GitHub Release and uploads the build archive, checksum,
+and SBOM; do not create a second release manually with `gh release create`.
 
 ---
 

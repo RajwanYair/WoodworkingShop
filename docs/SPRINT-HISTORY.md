@@ -673,3 +673,13 @@ the in-flight quality sprints (84-87) and run first.
 - Roadmap restructured with a program overview, target architecture, competitive positioning and a re-sequenced release train (foundation first: Phases 73 → 81 → 82 → 65).
 - Added Phases 81–85 (Sprints 420–451): toolchain modernisation, architecture refactor, experience and delight, documentation and community, optional on-device intelligence.
 - Corrected documentation drift in README, ARCHITECTURE, AGENTS, CONTRIBUTING and the docs index.
+
+## 2026-10-11 — v5.35.0 carry-over close-out
+
+- Supersedes the 2026-10-04 S313/S315 carry-over decision: Sprint 313 assembly, build-log, camera,
+  machine-profile, and serial-lifecycle browser journeys are complete; physical-camera acceptance
+  passed on 2026-10-10.
+- Sprint 315 Chromium/Firefox journeys now cover offline app-shell reload, update handling, storage
+  pressure, and valid/malformed `.cabinetplan` files. Native OS-level file launch remains unverified
+  and is explicitly outside browser-level acceptance.
+- Evidence is summarized in `CHANGELOG.md` and the Sprint 378 status in `ROADMAP.md`.
