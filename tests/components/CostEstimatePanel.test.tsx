@@ -237,7 +237,7 @@ describe('CostEstimatePanel', () => {
     const user = userEvent.setup();
     render(<CostEstimatePanel />);
 
-    await user.click(screen.getByRole('button', { name: '₪200' }));
+    await user.click(screen.getByRole('button', { name: `Click to override price per sheet: ${material.name.en}` }));
     const input = screen.getByRole('spinbutton', { name: `Price per sheet for ${material.name.en}` });
     await user.clear(input);
     await user.type(input, '175');
@@ -251,7 +251,7 @@ describe('CostEstimatePanel', () => {
     useCabinetStore.setState({ materialPriceOverrides: { [material.key]: 175 } });
     render(<CostEstimatePanel />);
 
-    await user.click(screen.getByRole('button', { name: /₪200/ }));
+    await user.click(screen.getByRole('button', { name: `Click to override price per sheet: ${material.name.en}` }));
     const input = screen.getByRole('spinbutton', { name: `Price per sheet for ${material.name.en}` });
     await user.clear(input);
     await user.type(input, '0');
@@ -265,7 +265,7 @@ describe('CostEstimatePanel', () => {
     useCabinetStore.setState({ materialPriceOverrides: { [material.key]: 175 } });
     render(<CostEstimatePanel />);
 
-    await user.click(screen.getByRole('button', { name: /₪200/ }));
+    await user.click(screen.getByRole('button', { name: `Click to override price per sheet: ${material.name.en}` }));
     const input = screen.getByRole('spinbutton', { name: `Price per sheet for ${material.name.en}` });
     await user.clear(input);
     await user.type(input, '-1');
@@ -278,14 +278,16 @@ describe('CostEstimatePanel', () => {
     const user = userEvent.setup();
     render(<CostEstimatePanel />);
 
-    await user.click(screen.getByRole('button', { name: '₪200' }));
+    await user.click(screen.getByRole('button', { name: `Click to override price per sheet: ${material.name.en}` }));
     const input = screen.getByRole('spinbutton', { name: `Price per sheet for ${material.name.en}` });
     await user.clear(input);
     await user.type(input, '175');
     await user.keyboard('{Escape}');
 
     expect(useCabinetStore.getState().materialPriceOverrides).not.toHaveProperty(material.key);
-    expect(screen.getByRole('button', { name: '₪200' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: `Click to override price per sheet: ${material.name.en}` }),
+    ).toBeInTheDocument();
   });
 
   it('resets an existing material sheet-price override', async () => {
@@ -293,7 +295,7 @@ describe('CostEstimatePanel', () => {
     useCabinetStore.setState({ materialPriceOverrides: { [material.key]: 175 } });
     render(<CostEstimatePanel />);
 
-    await user.click(screen.getByRole('button', { name: /₪200/ }));
+    await user.click(screen.getByRole('button', { name: `Click to override price per sheet: ${material.name.en}` }));
     await user.click(screen.getByRole('button', { name: 'Reset to default price' }));
 
     expect(useCabinetStore.getState().materialPriceOverrides).not.toHaveProperty(material.key);

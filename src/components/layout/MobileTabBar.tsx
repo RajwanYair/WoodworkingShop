@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore, type CabinetState } from '../../store/cabinet-store';
 import { useHaptics } from '../../hooks/useHaptics';
+import { transitionTab } from './transition-tab';
 
 type Tab = CabinetState['activeTab'];
 
@@ -38,7 +39,7 @@ export function MobileTabBar() {
             aria-current={isActive ? 'page' : undefined}
             aria-label={t(tab.labelKey)}
             onClick={() => {
-              setActiveTab(tab.id);
+              if (activeTab !== tab.id) transitionTab(() => setActiveTab(tab.id));
               haptics.selectionChanged();
             }}
             className={[

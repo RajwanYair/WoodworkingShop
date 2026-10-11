@@ -30,7 +30,7 @@ describe('PdfExportPanel', () => {
   });
 
   afterEach(() => {
-    useCabinetStore.setState({ activeTab: originalActiveTab });
+    act(() => useCabinetStore.setState({ activeTab: originalActiveTab }));
   });
 
   it('passes selected page options to the PDF document and downloads the result', async () => {

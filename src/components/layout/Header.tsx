@@ -17,6 +17,7 @@ import { applyCabinetTemplate } from '../configurator/apply-template';
 import { TEMPLATES } from '../../engine/templates';
 import { ProjectManagerModal } from './ProjectManagerModal';
 import { MarketplacePanel } from './MarketplacePanel';
+import { transitionTab } from './transition-tab';
 import { SUPPORTED_LANGUAGES, RTL_LANGS, loadLocale, type SupportedLang } from '../../i18n';
 import {
   IconSun,
@@ -80,7 +81,7 @@ export function Header() {
     }
     if (next >= 0) {
       e.preventDefault();
-      setActiveTab(tabs[next]);
+      if (tabs[next] !== activeTab) transitionTab(() => setActiveTab(tabs[next]));
       const buttons = tabListRef.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]');
       buttons?.[next]?.focus();
     }
@@ -305,7 +306,9 @@ export function Header() {
           <button
             key={tab}
             role="tab"
-            onClick={() => setActiveTab(tab)}
+            onClick={() => {
+              if (activeTab !== tab) transitionTab(() => setActiveTab(tab));
+            }}
             onKeyDown={(e) => handleTabKeyDown(e, i)}
             tabIndex={activeTab === tab ? 0 : -1}
             aria-selected={activeTab === tab}
