@@ -159,6 +159,7 @@ export function CostEstimatePanel() {
                     setEditingPrice(sc.material);
                     setPriceInput(String(sc.pricePerSheet || defaultPrice));
                   }}
+                  aria-label={`${t('cost.editPrice')}: ${sc.materialName[lang]}`}
                   className={`inline-flex min-h-6 min-w-6 shrink-0 items-center justify-center px-1 font-medium hover:underline ${hasOverride ? 'text-amber-800 dark:text-amber-300' : 'text-wood-700 dark:text-wood-200'}`}
                   title={t('cost.editPrice')}
                 >

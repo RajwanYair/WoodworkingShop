@@ -497,6 +497,7 @@
     "delete": "Delete",
     "placeholder": "Cabinet name…",
     "empty": "No saved configurations",
+    "loadFailed": "Could not load saved configurations",
     "export": "Export JSON",
     "exportCabinet": "Export Cabinet",
     "exportProject": "Export Project ({{count}} cabinets)",

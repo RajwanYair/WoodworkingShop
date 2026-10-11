@@ -571,6 +571,7 @@
     "delete": "Löschen",
     "placeholder": "Schrankname…",
     "empty": "Keine gespeicherten Konfigurationen",
+    "loadFailed": "Gespeicherte Konfigurationen konnten nicht geladen werden",
     "export": "JSON exportieren",
     "exportCabinet": "Schrank exportieren",
     "exportProject": "Projekt exportieren ({{count}} Schränke)",
