@@ -12,9 +12,13 @@ export function Sidebar() {
   const { parts, hardware, optimization } = useCabinetStore();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(() => window.matchMedia?.('(min-width: 1024px)').matches ?? true);
-  const mobileDialogRef = useRef<HTMLElement>(null);
+  const mobileDialogRef = useRef<HTMLDialogElement>(null);
 
-  useFocusTrap(mobileDialogRef, mobileOpen, () => setMobileOpen(false));
+  useFocusTrap(mobileDialogRef, mobileOpen);
+
+  useEffect(() => {
+    if (mobileOpen) mobileDialogRef.current?.showModal();
+  }, [mobileOpen]);
 
   useEffect(() => {
     if (typeof window.matchMedia !== 'function') return;
@@ -83,25 +87,25 @@ export function Sidebar() {
 
       {/* Mobile overlay */}
       {mobileOpen && (
-        <div
-          className="fixed inset-0 z-40 lg:hidden"
+        <dialog
+          ref={mobileDialogRef}
+          className="fixed inset-0 z-40 m-0 flex h-full w-full max-w-none flex-col justify-end overflow-hidden border-0 bg-transparent p-0 backdrop:bg-black/40 lg:hidden"
           data-print="hide"
-          role="dialog"
-          aria-modal="true"
           aria-label="Cabinet summary"
-          tabIndex={-1}
+          onCancel={(event) => {
+            event.preventDefault();
+            setMobileOpen(false);
+          }}
         >
-          <div
-            className="absolute inset-0 bg-black/40"
+          <button
+            type="button"
+            className="absolute inset-0 h-full w-full cursor-default border-0 bg-transparent p-0"
             onClick={() => setMobileOpen(false)}
-            onKeyDown={(e) => e.key === 'Enter' && setMobileOpen(false)}
-            role="button"
-            tabIndex={0}
             aria-label="Close panel"
+            tabIndex={-1}
           />
           <aside
-            ref={mobileDialogRef}
-            className="bg-wood-50 dark:bg-wood-900 border-wood-200 dark:border-wood-800 animate-slide-up absolute inset-x-0 bottom-0 max-h-[70vh] overflow-y-auto rounded-t-xl border-t p-4"
+            className="bg-wood-50 dark:bg-wood-900 border-wood-200 dark:border-wood-800 animate-slide-up relative z-10 max-h-[70vh] w-full overflow-y-auto rounded-t-xl border-t p-4"
             aria-label="Cabinet summary"
           >
             <div className="relative">
@@ -116,7 +120,7 @@ export function Sidebar() {
             </div>
             {content}
           </aside>
-        </div>
+        </dialog>
       )}
 
       {/* Desktop sidebar */}
