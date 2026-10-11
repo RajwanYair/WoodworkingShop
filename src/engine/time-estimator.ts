@@ -10,7 +10,7 @@
 export type SkillLevel = 'beginner' | 'intermediate' | 'expert';
 
 /** Operation types with base time in minutes per unit. */
-export type OperationType = 'cutting' | 'edgeBanding' | 'drilling' | 'assembly' | 'sanding' | 'finishing' | 'hardware';
+type OperationType = 'cutting' | 'edgeBanding' | 'drilling' | 'assembly' | 'sanding' | 'finishing' | 'hardware';
 
 /** A single task in the project timeline. */
 export interface ProjectTask {
@@ -23,7 +23,7 @@ export interface ProjectTask {
 }
 
 /** Time breakdown for a single task. */
-export interface TaskEstimate {
+interface TaskEstimate {
   readonly taskId: string;
   readonly operation: OperationType;
   readonly baseMinutes: number;
@@ -67,23 +67,9 @@ const SKILL_MULTIPLIERS: Record<SkillLevel, number> = {
 } as const;
 
 /**
- * Get the skill multiplier for a given level.
- */
-export function getSkillMultiplier(skill: SkillLevel): number {
-  return SKILL_MULTIPLIERS[skill];
-}
-
-/**
- * Get base minutes for an operation (per unit, at intermediate level).
- */
-export function getBaseMinutes(operation: OperationType): number {
-  return BASE_MINUTES_PER_UNIT[operation];
-}
-
-/**
  * Estimate time for a single task given skill level.
  */
-export function estimateTaskTime(task: ProjectTask, skill: SkillLevel): TaskEstimate {
+function estimateTaskTime(task: ProjectTask, skill: SkillLevel): TaskEstimate {
   const baseMinutes = BASE_MINUTES_PER_UNIT[task.operation] * task.quantity;
   const multiplier = SKILL_MULTIPLIERS[skill];
   const adjustedMinutes = Math.round(baseMinutes * multiplier * 100) / 100;

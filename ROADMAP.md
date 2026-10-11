@@ -151,7 +151,7 @@ Placement is a qualitative judgment from the §5 benchmarks, not a measurement; 
 - **New refactor program (Phases 81–85, Sprints 420–451):** toolchain modernisation, architecture refactor, experience and delight, documentation and community, optional on-device intelligence (§7.4).
 - **Re-sequenced release train:** the foundation (73 → 81 → 82 → 65) now precedes the feature phases; later targets moved to v5.38.0–v5.52.0 (§7.2).
 - **Absorbed sprints:** S414 → S421, S415 → S420, S417 → S425, S418 → S422, S377 T1/T3 → S431, S377 T2 → S439.
-- **Honest carry-over:** S313 (assembly, build log, camera, machine flows) and S315 (PWA, offline, storage pressure) had no completion evidence and are re-opened for v5.35.0.
+- **Carry-over closure:** S313 and S315 were re-opened for v5.35.0; their browser acceptance evidence is now recorded below. S313 physical-camera acceptance passed on 2026-10-10. S315 native OS file launch remains unverified and outside browser-level acceptance.
 - **Refreshed facts:** TypeScript 7.0 (native) and Vitest 5.0 are released, Playwright 1.63, React Compiler 1.0, and the Navigation API is Baseline 2026; tool counts in §3.5 and §9 were corrected (29 extensions, 11 MCP servers, 15 workflows).
 - **Same-day documentation fixes:** README, ARCHITECTURE, AGENTS, CONTRIBUTING and the docs index now match the code.
 
@@ -889,13 +889,15 @@ Completed (evidence archived in [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 
 Detail and the GcodePreviewModal component follow-up are archived in SPRINT-HISTORY.
 
-**Sprint 313 — Assembly, build log, camera and machine flows** — P1 · L · S305, S307 · **CARRY-OVER → v5.35.0** (no completion evidence found on 2026-10-04; only the checklist download is covered by `tests/e2e/configurator.spec.ts`).
+**Sprint 313 — Assembly, build log, camera and machine flows** — P1 · L · S305, S307 · **DONE** (browser acceptance complete; physical-camera capture passed 2026-10-10).
 
 - T1: DONE — Assembly completion checkboxes follow the step DAG: dependent steps stay disabled until prerequisites are complete, and unchecking a prerequisite clears downstream completion. Chromium and Firefox journeys verify gating, rollback, next/previous, progress/time counters, tips, reset and all-step mode.
 - T2: DONE — Build log supports add/edit/delete, Ctrl/Cmd+Enter and reload persistence; Chromium and Firefox journeys cover that lifecycle. Camera journeys cover permission denial, missing device, capture, retake, manual stop and navigation teardown. Physical-camera acceptance passed on 2026-10-10 with an attached HP HD Camera, a decoded JPEG frame and verified track cleanup.
 - T3: DONE — Saved machine profiles initialize panel state and drive serial framing plus feed, plunge, safe-Z, pass-depth, tool-diameter and spindle settings. A Chromium Web Serial stub verifies exact settings and streamed commands, pause/resume without duplicate writes, disconnect/reconnect, and picker/write failure recovery.
 - T4: DONE — Browser download is read from disk and checked for filename, step count, order and rendered titles in Chromium and Firefox.
 - Accept: each step control changes progress/instructions, persisted build state reloads accurately and permissions/device failures remain recoverable.
+
+Physical-camera acceptance: attached HP HD Camera, captured and decoded a JPEG frame, and verified camera-track cleanup.
 
 **Sprint 314 — All calculator panels and numeric oracles** — P0 · L · S303, S305.
 
@@ -1461,7 +1463,7 @@ Status (2026-10-07): T4 is complete. Dimension sliders and room-layout dragging 
 
 **Sprint 378 — v5.35.0 coherence release** — P0 · S · S371–S377, S313, S315.
 
-- T0: Close the Phase 64 carry-over first: S313 (assembly steps, build log, camera permission branches, machine profile and serial lifecycle) and S315 (offline reload, update banner, quota/unavailable storage, `.cabinetplan` file handler) with browser evidence.
+- T0: DONE — Closed the Phase 64 carry-over with S313 browser journeys and 2026-10-10 physical-camera acceptance, plus S315 Chromium/Firefox offline reload, update, storage-pressure and `.cabinetplan` journeys. Native OS file launch remains unverified and outside browser-level acceptance.
 
 - T1: Full `npm run ci` and E2E matrix; release notes publish the capability-map summary, locale completeness table and critical-path numbers.
 - Accept: new gates blocking; README locale claims match the completeness report.

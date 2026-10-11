@@ -5,9 +5,9 @@
 ## Current Sprint — Phase 73
 
 - Sprints 371–376 are complete; Sprint 376 T3 passed three consecutive local mobile Lighthouse runs without changing thresholds.
-- Sprint 377 T4 is complete; T1–T3 moved to S431/S439. Sprint 378 remains gated by Sprint 313's successful physical-camera capture before v5.35.0.
+- Sprint 377 T4 is complete; T1–T3 moved to S431/S439. Sprint 313 T1–T4 are complete, including physical-camera acceptance on 2026-10-10; Sprint 378 is now gated by the full CI/E2E release matrix.
 - All 337 Sprint 375 locale review records are approved.
-- Sprint 315 is complete; Sprint 313 remains a Phase 64 carry-over only for successful physical-camera capture.
+- Sprints 313 and 315 are complete; Sprint 315's native OS file-launch behavior remains unverified and is explicitly outside browser-level acceptance.
 - Sprints 420–434 cover toolchain modernization and the Phase 81–85 architecture refactor.
 - Release order and sprint contracts: [ROADMAP.md §7.2](ROADMAP.md).
 

@@ -118,7 +118,9 @@ test('rendered calculator controls match the accessible control inventory', asyn
 
     const expectedControls = [...inventory.controls, ...(inventory.conditionalControls ?? [])];
     for (const role of ['button', 'checkbox', 'combobox', 'slider', 'spinbutton'] as const) {
-      const expectedCount = expectedControls.filter((control) => control.role === role).length;
+      const expectedCount = new Set(
+        expectedControls.filter((control) => control.role === role).map((control) => control.accessibleName),
+      ).size;
       await expect(panel.getByRole(role)).toHaveCount(expectedCount);
     }
   }
@@ -1768,10 +1770,16 @@ test('roadmap calculator options reconcile with engine', async ({ appPage: page 
     thicknessMm: 18,
     material: 'plywood' as const,
     loadType: 'uniform' as const,
-    loadN: 100,
+    loadN: 98.1,
     support: 'simple' as const,
   };
   await shelf.getByLabel('Shelf Span (mm)').fill(String(shelfParameters.spanMm));
+  await shelf.getByLabel('Shelf Depth (mm)').fill(String(shelfParameters.widthMm));
+  await shelf.getByLabel('Shelf Thickness (mm)').fill(String(shelfParameters.thicknessMm));
+  await shelf.getByLabel('Material').selectOption(shelfParameters.material);
+  await shelf.getByLabel('Total Load (kg)').fill('10');
+  await shelf.getByLabel('Load Type').selectOption(shelfParameters.loadType);
+  await shelf.getByLabel('Support Type').selectOption(shelfParameters.support);
   let shelfResult = calculateDeflection(shelfParameters);
   await expect(shelf.locator('dl dd').nth(0)).toHaveText(`${shelfResult.maxDeflectionMm} mm`);
 
@@ -1790,9 +1798,14 @@ test('roadmap calculator options reconcile with engine', async ({ appPage: page 
     jointType: 'through' as const,
     style: 'hand_cut' as const,
   };
+  await dovetail.getByLabel('Board Width (mm)').fill(String(dovetailParameters.boardWidthMm));
+  await dovetail.getByLabel('Board Thickness (mm)').fill(String(dovetailParameters.boardThicknessMm));
   await dovetail.getByLabel('Number of Tails').fill(String(dovetailParameters.tailCount));
+  await dovetail.getByLabel('Tail Angle (°)').fill(String(dovetailParameters.angleDegrees));
+  await dovetail.getByLabel('Joint Type').selectOption(dovetailParameters.jointType);
+  await dovetail.getByLabel('Cut Style').selectOption(dovetailParameters.style);
   const dovetailResult = calculateDovetailLayout(dovetailParameters);
-  await expect(dovetail.locator('dl dd').nth(2)).toHaveText(`${dovetailResult.tails[0]!.narrowWidthMm.toFixed(1)} mm`);
+  await expect(dovetail.locator('dl dd').nth(3)).toHaveText(`${dovetailResult.tails[0]!.narrowWidthMm} mm`);
 });
 
 test('invalid roadmap calculator inputs report errors and recover', async ({ appPage: page }) => {

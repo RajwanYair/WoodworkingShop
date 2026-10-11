@@ -1005,12 +1005,6 @@
           "negativeTest": "invalid roadmap calculator inputs report errors and recover"
         },
         {
-          "role": "spinbutton",
-          "accessibleName": "Total Load (N)",
-          "positiveTest": "roadmap calculator options reconcile with engine",
-          "negativeTest": "invalid roadmap calculator inputs report errors and recover"
-        },
-        {
           "role": "combobox",
           "accessibleName": "Material",
           "positiveTest": "roadmap calculator options reconcile with engine",

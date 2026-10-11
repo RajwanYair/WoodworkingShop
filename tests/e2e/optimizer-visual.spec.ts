@@ -402,9 +402,10 @@ test('parts and hardware tables search, filter, and sort visible rows', async ({
 });
 
 test('stock inventory changes persist across reload and can be removed', async ({ appPage: page }) => {
-  await page.keyboard.press('Alt+3');
+  await page.getByRole('tab', { name: 'Cut Sheets' }).click();
 
   const stockTracker = page.getByRole('button', { name: /Stock Tracker/ });
+  await expect(stockTracker).toBeVisible();
   await stockTracker.click();
   await expect(stockTracker).toHaveAttribute('aria-expanded', 'true');
   await page.getByText('+ Add stock item').click();

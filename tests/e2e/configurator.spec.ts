@@ -524,12 +524,18 @@ test('machine profile settings drive the serial stream and its pause, reconnect,
 
   const pausedWrites = await page.evaluate(() => {
     const fixture = Reflect.get(window, '__machineSerialFixture') as {
-      openOptions: { baudRate: number; dataBits: number; stopBits: number; parity: string }[];
+      openOptions: { baudRate: number; dataBits: number; stopBits: number; parity: string; bufferSize: number }[];
       writes: string[];
     };
     return fixture;
   });
-  expect(pausedWrites.openOptions[0]).toEqual({ baudRate: 9600, dataBits: 8, stopBits: 1, parity: 'none' });
+  expect(pausedWrites.openOptions[0]).toEqual({
+    baudRate: 9600,
+    dataBits: 8,
+    stopBits: 1,
+    parity: 'none',
+    bufferSize: 4096,
+  });
   expect(pausedWrites.writes).toHaveLength(1);
   await page.getByRole('button', { name: 'Resume sending' }).click();
   await expect(page.getByText(/Done — all \d+ lines sent\./)).toBeVisible();

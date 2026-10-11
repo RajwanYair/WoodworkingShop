@@ -635,10 +635,6 @@
       "classification": "surfaced",
       "rationale": "Reachable through the consolidated domain barrel and its existing application consumers."
     },
-    "src/engine/templates/dsl.ts": {
-      "classification": "internal",
-      "rationale": "No direct UI-root importer remains after the domain module migration."
-    },
     "src/engine/templates/expression.ts": {
       "classification": "surfaced",
       "rationale": "Reachable through the consolidated domain barrel and its existing application consumers."
