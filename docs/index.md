@@ -10,6 +10,7 @@
 | [ARCHITECTURE.md](ARCHITECTURE.md)                   | System design, data flow, module map, target architecture |
 | [API-BOUNDARIES.md](API-BOUNDARIES.md)               | Public versus internal module boundaries                  |
 | [PLUGIN-API.md](PLUGIN-API.md)                       | Plugin API reference and lifecycle                        |
+| [OPFS-FEASIBILITY.md](OPFS-FEASIBILITY.md)           | OPFS browser, security, quota, and deployment constraints |
 | [MIGRATION.md](MIGRATION.md)                         | Breaking-change guide and localStorage key registry       |
 | [MCP-GITHUB-GOVERNANCE.md](MCP-GITHUB-GOVERNANCE.md) | MCP servers, authentication and GitHub governance         |
 | [ENGINEERING-DECISIONS.md](ENGINEERING-DECISIONS.md) | Evaluation outcomes and reconsideration triggers          |

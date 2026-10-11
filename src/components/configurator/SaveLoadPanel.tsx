@@ -32,8 +32,18 @@ export function SaveLoadPanel() {
   }, [projectName]);
 
   useEffect(() => {
-    void loadSavedConfigs().then(setConfigs);
-  }, []);
+    let mounted = true;
+    void loadSavedConfigs()
+      .then((savedConfigs) => {
+        if (mounted && savedConfigs.length > 0) setConfigs(savedConfigs);
+      })
+      .catch(() => {
+        if (mounted) addToast(t('saves.loadFailed'), 'error');
+      });
+    return () => {
+      mounted = false;
+    };
+  }, [addToast, t]);
 
   const handleSave = () => {
     const name = saveName.trim() || `${config.width}×${config.height}×${config.depth}`;

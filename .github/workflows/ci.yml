@@ -18,7 +18,8 @@ env:
 
 jobs:
   quality:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-node
@@ -33,7 +34,8 @@ jobs:
       # - name: Spell check
       #   run: npx --yes cspell lint --no-progress --show-suggestions --gitignore "**/*.{ts,tsx,md}"
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
     needs: quality
     steps:
       - uses: actions/checkout@v5
@@ -60,7 +62,8 @@ jobs:
       - uses: actions/upload-artifact@v7
         with: { name: e2e-dist, path: dist, retention-days: 1 }
   compat:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
     needs: quality
     strategy:
       fail-fast: false
@@ -76,7 +79,8 @@ jobs:
           restore-keys: 'vite-${{ runner.os }}-node${{ matrix.node-version }}-'
       - run: npm run build && npm run bundle:check && npm run bundle:critical
   e2e:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
     needs: [test, e2e-build]
     strategy:
       fail-fast: false
@@ -159,7 +163,8 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
   lighthouse:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
     needs: test
     steps:
       - uses: actions/checkout@v5

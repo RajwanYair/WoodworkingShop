@@ -246,6 +246,7 @@
         {
           "state": "cost-edit",
           "triggerTitle": "Click to override price per sheet",
+          "triggerAccessibleName": "Click to override price per sheet: Sandwich Plywood 17 mm",
           "role": "spinbutton",
           "accessibleName": "Price per sheet for Sandwich Plywood 17 mm",
           "positiveTest": "sheet dimensions and cost overrides update visible optimizer summaries",

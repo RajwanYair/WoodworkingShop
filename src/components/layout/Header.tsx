@@ -14,6 +14,7 @@ import {
 } from '../../utils/command-palette';
 import { TEMPLATES } from '../../engine/templates';
 import { applyCabinetTemplate } from '../configurator/apply-template';
+import { transitionTab } from './transition-tab';
 import {
   IconSun,
   IconMoon,
@@ -94,6 +95,27 @@ export function Header() {
     if (!command) return '';
     const shortcut = 'shortcuts' in command ? command.shortcuts?.[0] : undefined;
     return shortcut ? `${commandLabel(id)} (${formatShortcut(shortcut)})` : commandLabel(id);
+  };
+
+  const handleTabKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
+    const isRtl = document.documentElement.dir === 'rtl';
+    let next = -1;
+    if ((event.key === 'ArrowRight' && !isRtl) || (event.key === 'ArrowLeft' && isRtl)) {
+      next = (currentIndex + 1) % APP_TABS.length;
+    } else if ((event.key === 'ArrowLeft' && !isRtl) || (event.key === 'ArrowRight' && isRtl)) {
+      next = (currentIndex - 1 + APP_TABS.length) % APP_TABS.length;
+    } else if (event.key === 'Home') {
+      next = 0;
+    } else if (event.key === 'End') {
+      next = APP_TABS.length - 1;
+    }
+    if (next >= 0) {
+      event.preventDefault();
+      const nextTab = APP_TABS[next];
+      if (nextTab && nextTab !== activeTab) transitionTab(() => runCommand(`tab.${nextTab}`));
+      const buttons = tabListRef.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+      buttons?.[next]?.focus();
+    }
   };
 
   useEffect(() => {
@@ -198,28 +220,6 @@ export function Header() {
     };
   }, []);
 
-  /** Arrow-key / Home / End navigation inside the tab list.
-   *  Follows WAI-ARIA Authoring Practices Guide § 3.22 (Tabs Pattern). */
-  const handleTabKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
-    const isRtl = document.documentElement.dir === 'rtl';
-    let next = -1;
-    if ((e.key === 'ArrowRight' && !isRtl) || (e.key === 'ArrowLeft' && isRtl)) {
-      next = (currentIndex + 1) % APP_TABS.length;
-    } else if ((e.key === 'ArrowLeft' && !isRtl) || (e.key === 'ArrowRight' && isRtl)) {
-      next = (currentIndex - 1 + APP_TABS.length) % APP_TABS.length;
-    } else if (e.key === 'Home') {
-      next = 0;
-    } else if (e.key === 'End') {
-      next = APP_TABS.length - 1;
-    }
-    if (next >= 0) {
-      e.preventDefault();
-      runCommand(`tab.${APP_TABS[next]}`);
-      const buttons = tabListRef.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]');
-      buttons?.[next]?.focus();
-    }
-  };
-
   const changeLang = (next: SupportedLang) => {
     void loadLocale(next).then(() => {
       i18n.changeLanguage(next);
@@ -311,7 +311,9 @@ export function Header() {
             <button
               key={tab}
               role="tab"
-              onClick={() => runCommand(`tab.${tab}`)}
+              onClick={() => {
+                if (activeTab !== tab) transitionTab(() => runCommand(`tab.${tab}`));
+              }}
               onPointerEnter={() => preloadTab(tab)}
               onFocus={() => preloadTab(tab)}
               onKeyDown={(e) => handleTabKeyDown(e, i)}

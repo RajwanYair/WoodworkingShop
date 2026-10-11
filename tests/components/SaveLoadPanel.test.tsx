@@ -71,6 +71,19 @@ describe('SaveLoadPanel', () => {
     expect(useCabinetStore.getState().config.width).toBe(800);
   });
 
+  it('reports when saved configurations cannot be loaded', async () => {
+    vi.mocked(loadSavedConfigs).mockRejectedValue(new Error('Storage unavailable'));
+    render(<SaveLoadPanel />);
+
+    await waitFor(() => {
+      expect(useToastStore.getState().toasts).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ message: 'Could not load saved configurations', type: 'error' }),
+        ]),
+      );
+    });
+  });
+
   it('saves with a dimensions-based name when the name field is blank', async () => {
     const user = userEvent.setup();
     render(<SaveLoadPanel />);

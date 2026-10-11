@@ -10,3 +10,4 @@ package-lock.json
 .playwright-mcp/
 # TypeDoc generated API docs — not source, should not be formatted
 docs/api/
+.agents/skills/
