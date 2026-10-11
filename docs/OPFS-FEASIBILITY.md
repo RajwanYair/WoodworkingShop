@@ -1,0 +1,30 @@
+# OPFS Feasibility Review
+
+Status: browser and deployment constraints only; no adapter recommendation. Reviewed 2026-10-11 for Sprint 322 T1.
+
+## Compatibility and Security
+
+| Area                     | Verified constraint                                                                                                                                                                                                                                                                                     | Consequence for Cabinet Planner                                                                                                                                                                                     |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Secure context           | `navigator.storage.getDirectory()` and OPFS require a secure context. HTTPS and localhost are potentially trustworthy origins.                                                                                                                                                                          | GitHub Pages' HTTPS deployment meets the transport requirement; an insecure non-local HTTP host does not. No server-side filesystem permission is needed.                                                           |
+| Browser availability     | MDN compatibility data lists `getDirectory()` from Chrome 86, Firefox 111, and Safari 15.2; `FileSystemSyncAccessHandle` from Chrome 102, Firefox 111, and Safari 15.2.                                                                                                                                 | API presence is not proof that target-version behavior, quotas, or recovery are equivalent. Feature detection and the S322 browser matrix remain required.                                                          |
+| Worker execution         | `FileSystemSyncAccessHandle` is only available in dedicated workers. Its synchronous operations are intended not to block the main thread.                                                                                                                                                              | A synchronous large-file adapter would require a worker protocol, lifecycle handling, and explicit close/flush behavior. This is additional complexity over the current `idb-keyval` path.                          |
+| Origin boundary          | OPFS is private to the web origin, not to a URL path or application. GitHub Pages project paths on the same `*.github.io` origin share the browser origin boundary.                                                                                                                                     | OPFS is not an application-level security boundary between projects hosted on one origin. Same-origin scripts can access that origin's data. Keep data minimized and do not imply encryption or user-visible files. |
+| Quota and eviction       | OPFS and IndexedDB share browser-managed origin storage. Quotas vary by browser/device; estimates are approximate. Writes beyond quota can fail with `QuotaExceededError`. Best-effort origin data can be evicted under storage pressure; private browsing may be temporary or reject directory access. | OPFS does not remove quota, persistence, private-mode, or backup requirements. Preserve the existing downloadable backup/recovery path and test failures before any migration.                                      |
+| Atomicity and durability | The documented synchronous handle exposes `flush()` and an exclusive per-file access handle. The APIs cited here do not establish an application-level atomic transaction across multiple files or a project plus metadata.                                                                             | Do not claim multi-file atomicity or stronger durability. The prototype/benchmark phase must test interrupted writes, flush/close behavior, concurrency, and recovery against the IndexedDB baseline.               |
+
+The current project persistence implementation remains IndexedDB via `idb-keyval` in [`src/utils/indexed-db-storage.ts`](../src/utils/indexed-db-storage.ts). This review does not change that implementation or the release default.
+
+## Deferred Evidence
+
+- Sprint 321 must finish its persistence inventory and failure/recovery baseline before the comparison dataset and failure model are fixed.
+- Sprint 322 T2 must benchmark representative cabinet projects and large exports in current Chromium, Firefox, and WebKit, recording latency, stored size, and failures rather than extrapolating from API descriptions.
+- Sprint 322 T3 owns the adapter recommendation. It must cover fallback, backup, rollback, support matrix, and whether any measured benefit is material.
+- No OPFS implementation, default migration, or claim of improved speed, atomicity, or data safety is authorized by this T1 review.
+
+## References
+
+- MDN, [StorageManager.getDirectory()](https://developer.mozilla.org/en-US/docs/Web/API/StorageManager/getDirectory), browser compatibility and secure-context requirements.
+- MDN, [FileSystemSyncAccessHandle](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemSyncAccessHandle), dedicated-worker restriction and handle operations.
+- MDN, [Storage quotas and eviction criteria](https://developer.mozilla.org/en-US/docs/Web/API/Storage_API/Storage_quotas_and_eviction_criteria), origin-wide quotas, best-effort eviction, estimates, and quota errors.
+- MDN, [Secure contexts](https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Secure_Contexts), HTTPS and localhost trust requirements.
