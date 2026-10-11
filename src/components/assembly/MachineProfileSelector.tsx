@@ -69,32 +69,32 @@ export function MachineProfileSelector({ onSelect }: Props) {
 
       {/* Spec summary */}
       <div className="bg-wood-50 dark:bg-wood-800/50 rounded p-3 text-xs">
-        <p className="text-wood-500 dark:text-wood-400 mb-2">{selected.description}</p>
+        <p className="text-wood-700 dark:text-wood-200 mb-2">{selected.description}</p>
         <dl className="grid grid-cols-2 gap-x-4 gap-y-1">
-          <dt className="text-wood-400 dark:text-wood-500">{t('machine.firmware')}</dt>
+          <dt className="text-wood-700 dark:text-wood-200">{t('machine.firmware')}</dt>
           <dd className="text-wood-700 dark:text-wood-200 font-medium">{selected.firmware}</dd>
 
-          <dt className="text-wood-400 dark:text-wood-500">{t('machine.baudRate')}</dt>
+          <dt className="text-wood-700 dark:text-wood-200">{t('machine.baudRate')}</dt>
           <dd className="text-wood-700 dark:text-wood-200 font-medium">{selected.baudRate}</dd>
 
-          <dt className="text-wood-400 dark:text-wood-500">{t('machine.feedRate')}</dt>
+          <dt className="text-wood-700 dark:text-wood-200">{t('machine.feedRate')}</dt>
           <dd className="text-wood-700 dark:text-wood-200 font-medium">{selected.feedRate}</dd>
 
-          <dt className="text-wood-400 dark:text-wood-500">{t('machine.plungeRate')}</dt>
+          <dt className="text-wood-700 dark:text-wood-200">{t('machine.plungeRate')}</dt>
           <dd className="text-wood-700 dark:text-wood-200 font-medium">{selected.plungeRate}</dd>
 
-          <dt className="text-wood-400 dark:text-wood-500">{t('machine.spindleRpm')}</dt>
+          <dt className="text-wood-700 dark:text-wood-200">{t('machine.spindleRpm')}</dt>
           <dd className="text-wood-700 dark:text-wood-200 font-medium">
             {selected.spindleRpm === 0 ? '—' : selected.spindleRpm.toLocaleString()}
           </dd>
 
-          <dt className="text-wood-400 dark:text-wood-500">{t('machine.toolDiameter')}</dt>
+          <dt className="text-wood-700 dark:text-wood-200">{t('machine.toolDiameter')}</dt>
           <dd className="text-wood-700 dark:text-wood-200 font-medium">{selected.toolDiameter} mm</dd>
 
-          <dt className="text-wood-400 dark:text-wood-500">{t('machine.passDepth')}</dt>
+          <dt className="text-wood-700 dark:text-wood-200">{t('machine.passDepth')}</dt>
           <dd className="text-wood-700 dark:text-wood-200 font-medium">{selected.passDepth} mm</dd>
 
-          <dt className="text-wood-400 dark:text-wood-500">{t('machine.workHolding')}</dt>
+          <dt className="text-wood-700 dark:text-wood-200">{t('machine.workHolding')}</dt>
           <dd className="text-wood-700 dark:text-wood-200 font-medium">{selected.workHolding}</dd>
         </dl>
       </div>

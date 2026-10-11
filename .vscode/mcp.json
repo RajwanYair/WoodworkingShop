@@ -35,7 +35,7 @@
     "fetch": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-fetch"],
+      "args": ["-y", "mcp-fetch-server@1.1.2"],
       "description": "Fetch web pages and API payloads for fact-grounded debugging and research."
     },
 
@@ -71,6 +71,21 @@
       "description": "Retrieves current, version-accurate documentation for npm packages — prevents hallucinated APIs."
     },
 
+    // ─── Chrome DevTools — interactive performance traces and diagnostics ─
+    "chrome-devtools": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@1.10.1",
+        "--headless",
+        "--isolated",
+        "--no-usage-statistics",
+        "--performance-crux=false"
+      ],
+      "description": "Optional isolated Chrome diagnostics and performance traces; complements Playwright MCP. Usage statistics and CrUX URL submissions are disabled."
+    },
+
     // ─── GitKraken — advanced git/PR workflow operations ─────────────────────
     "gitkraken": {
       "type": "http",
@@ -89,11 +104,11 @@
     "brave-search": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+      "args": ["-y", "@brave/brave-search-mcp-server"],
       "env": {
         "BRAVE_API_KEY": "${input:brave-api-key}"
       },
-      "description": "Web search fallback for documentation and references when package docs are not available in Context7."
+      "description": "Maintained Brave Search server for current web research when Context7 does not cover the source."
     }
   }
 }

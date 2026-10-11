@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import type {
   CabinetConfig,
   Part,
+  Material,
   HardwareItem,
   OptimizationResult,
   DerivedDimensions,
@@ -16,7 +17,12 @@ import { optimizeCutSheets } from '../engine/cut-optimizer';
 import { estimateCost } from '../engine/cost-estimator';
 import { generateAssemblySteps, type AssemblyStep } from '../engine/assembly';
 import { createJsonMemo } from '../engine/memo';
-import { readConfigFromUrl, pushConfigToUrl, readProjectNameFromUrl } from '../utils/url-state';
+import {
+  readActiveCabinetIndexFromUrl,
+  readConfigFromUrl,
+  pushConfigToUrl,
+  readProjectNameFromUrl,
+} from '../utils/url-state';
 import { idbLoadSnapshots } from '../utils/indexed-db-storage';
 import { pluginEventBus } from '../engine/plugin';
 import { mirrorConfig, mirrorName } from '../engine/mirror-cabinet';
@@ -44,6 +50,7 @@ import {
 } from './slices/snapshotSlice';
 import { createOptimizerSettingsSlice, type OptimizerSettingsSlice } from './slices/optimizerSettingsSlice';
 import { createNamedExpressionsSlice, type NamedExpressionsSlice } from './slices/namedExpressionsSlice';
+import { getCustomMaterials, useCustomMaterialsStore } from './custom-materials-store';
 
 /**
  * Fire-and-forget: post a cut-optimization request to the worker via Comlink.
@@ -51,6 +58,13 @@ import { createNamedExpressionsSlice, type NamedExpressionsSlice } from './slice
  */
 
 const MAX_HISTORY = 50;
+const EMPTY_OPTIMIZATION: OptimizationResult = {
+  sheets: [],
+  totalSheets: 0,
+  overallYield: 0,
+  totalWaste: 0,
+  grainConflictCount: 0,
+};
 
 // Phase 11 — UI preferences now live in uiSlice.ts.  Re-export so tests and
 // any external consumers that imported from cabinet-store still work.
@@ -65,6 +79,7 @@ interface SessionSnapshot {
   /** Sprint 14 — project-level notes, optional so old sessions deserialise safely. */
   projectNotes?: string;
   sawKerf: number;
+  autoCoNest?: boolean;
   materialPriceOverrides: Record<string, number>;
   edgeBandingRate: number;
   hardwarePriceOverrides: Record<string, number>;
@@ -156,6 +171,7 @@ export type CabinetState = {
   addOffcutEntry: (entry: OffcutEntry) => void;
   removeOffcutEntry: (id: string) => void;
   addDefectZone: (materialKey: string, zone: DefectZone) => void;
+  updateDefectZone: (materialKey: string, zoneIndex: number, zone: DefectZone) => void;
   removeDefectZone: (materialKey: string, zoneIndex: number) => void;
 } & UiSlice &
   OptimizerSettingsSlice &
@@ -166,16 +182,20 @@ function derive(
   config: CabinetConfig,
   sawKerfMm = 4,
   sheetSizeOverrides: Record<string, { width: number; length: number }> = {},
+  extraMaterials: Material[] = getCustomMaterials(),
 ) {
-  const dimensions = computeDimensions(config);
-  const parts = generateParts(config);
-  const hardware = generateHardware(config);
+  const dimensions = computeDimensions(config, extraMaterials);
+  const parts = generateParts(config, extraMaterials);
+  const hardware = generateHardware(config, extraMaterials);
   // Sprint 16 — decorate with rotation locks before optimization.
   const optimization = optimizeCutSheets(
     applyLocks(parts),
     sawKerfMm,
     sheetSizeOverrides,
     config.cutMode ?? 'freeform',
+    [],
+    {},
+    extraMaterials,
   );
   const edgeBandingTotal = computeEdgeBandingTotal(parts);
   return { dimensions, parts, hardware, optimization, edgeBandingTotal };
@@ -186,23 +206,30 @@ function deriveProject(
   activeIndex: number,
   sawKerfMm = 4,
   sheetSizeOverrides: Record<string, { width: number; length: number }> = {},
+  extraMaterials: Material[] = getCustomMaterials(),
 ) {
   const activeConfig = cabinets[activeIndex].config;
-  const active = derive(activeConfig, sawKerfMm, sheetSizeOverrides);
+  const active = derive(activeConfig, sawKerfMm, sheetSizeOverrides, extraMaterials);
   // Combined parts from all cabinets (prefixed with cabinet index)
   const allParts: Part[] = cabinets.flatMap((cab, ci) =>
-    generateParts(cab.config).map((p) => ({
+    generateParts(cab.config, extraMaterials).map((p) => ({
       ...p,
       id: cabinets.length > 1 ? `C${ci + 1}-${p.id}` : p.id,
     })),
   );
   // Sprint 16 — apply rotation locks for combined optimization.
-  const combinedOptimization = optimizeCutSheets(
-    applyLocks(allParts),
-    sawKerfMm,
-    sheetSizeOverrides,
-    activeConfig.cutMode ?? 'freeform',
-  );
+  const combinedOptimization =
+    cabinets.length === 1
+      ? active.optimization
+      : optimizeCutSheets(
+          applyLocks(allParts),
+          sawKerfMm,
+          sheetSizeOverrides,
+          activeConfig.cutMode ?? 'freeform',
+          [],
+          {},
+          extraMaterials,
+        );
   return { config: activeConfig, ...active, allParts, combinedOptimization };
 }
 
@@ -211,17 +238,21 @@ function deriveProject(
 // the worker computes fresh optimization in the background.
 // v3.51.0 — Optimized: reuses the active cabinet's already-computed parts in the
 // allParts flatMap instead of calling generateParts twice for the same config.
-function deriveBaseProject(cabinets: CabinetEntry[], activeIndex: number) {
+function deriveBaseProject(
+  cabinets: CabinetEntry[],
+  activeIndex: number,
+  extraMaterials: Material[] = getCustomMaterials(),
+) {
   const activeConfig = cabinets[activeIndex].config;
   // Phase 11 / Sprint 5 — sync module-level cut mode from active config so
   // scheduleOptimization always uses the latest value without extra params.
   setCutModeWorker(activeConfig.cutMode ?? 'freeform');
-  const dimensions = computeDimensions(activeConfig);
-  const parts = generateParts(activeConfig);
-  const hardware = generateHardware(activeConfig);
+  const dimensions = computeDimensions(activeConfig, extraMaterials);
+  const parts = generateParts(activeConfig, extraMaterials);
+  const hardware = generateHardware(activeConfig, extraMaterials);
   const edgeBandingTotal = computeEdgeBandingTotal(parts);
   const allParts: Part[] = cabinets.flatMap((cab, ci) => {
-    const cabParts = ci === activeIndex ? parts : generateParts(cab.config);
+    const cabParts = ci === activeIndex ? parts : generateParts(cab.config, extraMaterials);
     return cabParts.map((p) => ({
       ...p,
       id: cabinets.length > 1 ? `C${ci + 1}-${p.id}` : p.id,
@@ -250,6 +281,8 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
       config: { ...DEFAULT_CONFIG, ...c.config },
     }));
     initialActiveIndex = Math.min(session.activeCabinetIndex, initialCabinets.length - 1);
+    const urlActiveIndex = readActiveCabinetIndexFromUrl(initialCabinets.length);
+    if (urlActiveIndex !== null) initialActiveIndex = urlActiveIndex;
     if (Object.keys(urlPatch).length > 0) {
       // Shared-link scenario: apply URL params on top of the restored active cabinet
       initialCabinets = initialCabinets.map((cab, i) =>
@@ -262,7 +295,14 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
   }
   // Sprint 16 — hydrate module-level lock map from session before deriving initial optimization.
   setRotationLocks(session?.rotationLockedPartIds ?? {});
-  const initial = deriveProjectMemo(initialCabinets, initialActiveIndex);
+  const hasWorker = typeof Worker !== 'undefined';
+  const initial: ReturnType<typeof deriveProject> = hasWorker
+    ? {
+        ...deriveBaseProject(initialCabinets, initialActiveIndex, getCustomMaterials()),
+        optimization: EMPTY_OPTIMIZATION,
+        combinedOptimization: EMPTY_OPTIMIZATION,
+      }
+    : deriveProjectMemo(initialCabinets, initialActiveIndex, 4, {}, getCustomMaterials());
   const prefs = loadUiPrefs();
   const initialProjectName = session?.projectName || readProjectNameFromUrl();
   const initialProjectNotes = session?.projectNotes ?? '';
@@ -330,8 +370,8 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
     rotationLockedPartIds: session?.rotationLockedPartIds ?? {},
     offcutCatalog: [],
     defectZones: {},
-    optimizationPending: false,
-    costPending: false,
+    optimizationPending: hasWorker,
+    costPending: hasWorker,
     assemblyPending: false,
     cost: estimateCost(
       initial.optimization,
@@ -343,6 +383,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
       session?.labourRate ?? 75,
       session?.labourHours ?? 0,
       session?.finishCost ?? 0,
+      getCustomMaterials(),
     ),
     assemblySteps: generateAssemblySteps(initial.config),
 
@@ -376,7 +417,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
         const cabinets = state.cabinets.map((cab, i) =>
           i === state.activeCabinetIndex ? { ...cab, config: { ...cab.config, ...patch } } : cab,
         );
-        pushConfigToUrl(cabinets[state.activeCabinetIndex].config);
+        pushConfigToUrl(cabinets[state.activeCabinetIndex].config, state.activeCabinetIndex);
         // Sprint 20 — notify plugins that config changed.
         pluginEventBus.emit('config:change', { config: cabinets[state.activeCabinetIndex].config });
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
@@ -401,7 +442,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
         const cabinets = state.cabinets.map((cab, i) =>
           i === state.activeCabinetIndex ? { ...cab, config: DEFAULT_CONFIG } : cab,
         );
-        pushConfigToUrl(DEFAULT_CONFIG);
+        pushConfigToUrl(DEFAULT_CONFIG, state.activeCabinetIndex);
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         const base = deriveBaseProject(cabinets, state.activeCabinetIndex);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
@@ -425,7 +466,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
         const prevCabinets = state._past[state._past.length - 1];
         const past = state._past.slice(0, -1);
         const idx = Math.min(state.activeCabinetIndex, prevCabinets.length - 1);
-        pushConfigToUrl(prevCabinets[idx].config);
+        pushConfigToUrl(prevCabinets[idx].config, idx);
         const base = deriveBaseProject(prevCabinets, idx);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         scheduleAssembly(base.config);
@@ -449,7 +490,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
         const nextCabinets = state._future[0];
         const future = state._future.slice(1);
         const idx = Math.min(state.activeCabinetIndex, nextCabinets.length - 1);
-        pushConfigToUrl(nextCabinets[idx].config);
+        pushConfigToUrl(nextCabinets[idx].config, idx);
         const base = deriveBaseProject(nextCabinets, idx);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         scheduleAssembly(base.config);
@@ -473,7 +514,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
         const newCab: CabinetEntry = { name: `Cabinet ${state.cabinets.length + 1}`, config: { ...DEFAULT_CONFIG } };
         const cabinets = [...state.cabinets, newCab];
         const idx = cabinets.length - 1;
-        pushConfigToUrl(cabinets[idx].config);
+        pushConfigToUrl(cabinets[idx].config, idx);
         const base = deriveBaseProject(cabinets, idx);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         scheduleAssembly(base.config);
@@ -493,11 +534,12 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
 
     removeCabinet: (index) =>
       set((state) => {
-        if (state.cabinets.length <= 1) return state;
+        if (state.cabinets.length <= 1 || !Number.isInteger(index) || index < 0 || index >= state.cabinets.length)
+          return state;
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         const cabinets = state.cabinets.filter((_, i) => i !== index);
         const idx = Math.min(state.activeCabinetIndex, cabinets.length - 1);
-        pushConfigToUrl(cabinets[idx].config);
+        pushConfigToUrl(cabinets[idx].config, idx);
         const base = deriveBaseProject(cabinets, idx);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         scheduleAssembly(base.config);
@@ -518,7 +560,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
     // Sprint 125 — duplicate an existing cabinet with an incremented name
     duplicateCabinet: (index) =>
       set((state) => {
-        if (index < 0 || index >= state.cabinets.length) return state;
+        if (!Number.isInteger(index) || index < 0 || index >= state.cabinets.length) return state;
         const src = state.cabinets[index];
         const baseName = src.name.replace(/\s*\(copy(?:\s+\d+)?\)\s*$/, '');
         const copies = state.cabinets.filter((c) => c.name.startsWith(baseName + ' (copy')).length;
@@ -527,7 +569,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
         const cabinets = [...state.cabinets.slice(0, index + 1), newEntry, ...state.cabinets.slice(index + 1)];
         const newIndex = index + 1;
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
-        pushConfigToUrl(cabinets[newIndex].config);
+        pushConfigToUrl(cabinets[newIndex].config, newIndex);
         const base = deriveBaseProject(cabinets, newIndex);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         scheduleAssembly(base.config);
@@ -548,7 +590,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
     // Sprint 93 — create a mirrored twin of an existing cabinet
     mirrorCabinet: (index) =>
       set((state) => {
-        if (index < 0 || index >= state.cabinets.length) return state;
+        if (!Number.isInteger(index) || index < 0 || index >= state.cabinets.length) return state;
         const src = state.cabinets[index];
         const newEntry: CabinetEntry = {
           name: mirrorName(src.name),
@@ -557,7 +599,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
         const cabinets = [...state.cabinets.slice(0, index + 1), newEntry, ...state.cabinets.slice(index + 1)];
         const newIndex = index + 1;
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
-        pushConfigToUrl(cabinets[newIndex].config);
+        pushConfigToUrl(cabinets[newIndex].config, newIndex);
         const base = deriveBaseProject(cabinets, newIndex);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         scheduleAssembly(base.config);
@@ -578,6 +620,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
     // Sprint 61 — reorder cabinets within the project list
     moveCabinet: (index, direction) =>
       set((state) => {
+        if (!Number.isInteger(index) || index < 0 || index >= state.cabinets.length) return state;
         const targetIndex = direction === 'up' ? index - 1 : index + 1;
         if (targetIndex < 0 || targetIndex >= state.cabinets.length) return state;
         const cabinets = [...state.cabinets];
@@ -591,6 +634,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
               : state.activeCabinetIndex;
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         const base = deriveBaseProject(cabinets, newActive);
+        pushConfigToUrl(cabinets[newActive].config, newActive);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         scheduleAssembly(base.config);
         return {
@@ -609,8 +653,8 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
 
     setActiveCabinet: (index) =>
       set((state) => {
-        if (index < 0 || index >= state.cabinets.length) return state;
-        pushConfigToUrl(state.cabinets[index].config);
+        if (!Number.isInteger(index) || index < 0 || index >= state.cabinets.length) return state;
+        pushConfigToUrl(state.cabinets[index].config, index);
         const base = deriveBaseProject(state.cabinets, index);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         scheduleAssembly(base.config);
@@ -625,23 +669,27 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
 
     renameCabinet: (index, name) =>
       set((state) => {
+        if (!Number.isInteger(index) || index < 0 || index >= state.cabinets.length) return state;
         const cabinets = state.cabinets.map((cab, i) => (i === index ? { ...cab, name } : cab));
         return { cabinets };
       }),
 
     setNotes: (index, notes) =>
       set((state) => {
+        if (!Number.isInteger(index) || index < 0 || index >= state.cabinets.length) return state;
         const cabinets = state.cabinets.map((cab, i) => (i === index ? { ...cab, notes } : cab));
         return { cabinets };
       }),
 
     loadProject: (cabinets) =>
       set((state) => {
+        if (cabinets.length === 0) return state;
         const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         const migrated = cabinets.map((c) => ({
           ...c,
           config: { ...DEFAULT_CONFIG, ...c.config },
         }));
+        pushConfigToUrl(migrated[0].config, 0);
         const base = deriveBaseProject(migrated, 0);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         scheduleAssembly(base.config);
@@ -728,8 +776,20 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
       const base = deriveBaseProject(state.cabinets, state.activeCabinetIndex);
       scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
     },
+    updateDefectZone: (materialKey, zoneIndex, zone) => {
+      const existing = getDefectZones()[materialKey] ?? [];
+      if (!Number.isInteger(zoneIndex) || zoneIndex < 0 || zoneIndex >= existing.length) return;
+      const updatedList = existing.map((current, index) => (index === zoneIndex ? zone : current));
+      const updated = { ...getDefectZones(), [materialKey]: updatedList };
+      setDefectZones(updated);
+      set((s) => ({ ...s, defectZones: { ...s.defectZones, [materialKey]: updatedList } }));
+      const state = useCabinetStore.getState();
+      const base = deriveBaseProject(state.cabinets, state.activeCabinetIndex);
+      scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
+    },
     removeDefectZone: (materialKey, zoneIndex) => {
       const existing = getDefectZones()[materialKey] ?? [];
+      if (!Number.isInteger(zoneIndex) || zoneIndex < 0 || zoneIndex >= existing.length) return;
       const filtered = existing.filter((_, i) => i !== zoneIndex);
       const updated = { ...getDefectZones(), [materialKey]: filtered };
       setDefectZones(updated);
@@ -746,6 +806,24 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
   };
 });
 
+if (typeof Worker !== 'undefined') {
+  const initialState = useCabinetStore.getState();
+  scheduleOptimization(
+    initialState.parts,
+    initialState.allParts,
+    initialState.sawKerf,
+    initialState.sheetSizeOverrides,
+  );
+}
+
+useCustomMaterialsStore.subscribe((state, previousState) => {
+  if (state.materials === previousState.materials) return;
+  const cabinetState = useCabinetStore.getState();
+  const base = deriveBaseProject(cabinetState.cabinets, cabinetState.activeCabinetIndex, state.materials);
+  scheduleOptimization(base.parts, base.allParts, cabinetState.sawKerf, cabinetState.sheetSizeOverrides);
+  useCabinetStore.setState({ ...base, optimizationPending: true, costPending: true });
+});
+
 // v3.44.0 — Auto-save the full project session to localStorage on every state
 // change, debounced to 500 ms. Prevents data loss on HMR or manual page refresh.
 let _autoSaveTimer: ReturnType<typeof setTimeout> | null = null;
@@ -758,6 +836,7 @@ useCabinetStore.subscribe((state) => {
       projectName: state.projectName,
       projectNotes: state.projectNotes,
       sawKerf: state.sawKerf,
+      autoCoNest: state.autoCoNest,
       materialPriceOverrides: state.materialPriceOverrides,
       edgeBandingRate: state.edgeBandingRate,
       hardwarePriceOverrides: state.hardwarePriceOverrides,

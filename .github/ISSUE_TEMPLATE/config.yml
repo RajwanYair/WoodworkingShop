@@ -1,6 +1,9 @@
 blank_issues_enabled: false
 contact_links:
-  - name: 💬 Ask a Question (GitHub Discussions)
+  - name: Support and usage help
+    url: https://github.com/RajwanYair/WoodworkingShop/blob/main/SUPPORT.md
+    about: Find documentation, ask questions, report bugs, or disclose security issues safely.
+  - name: Ask a question (GitHub Discussions)
     url: https://github.com/RajwanYair/WoodworkingShop/discussions
     about: For questions, ideas, and general support — please use Discussions rather than Issues.
   - name: 🚀 Live Demo

@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import WOODWORKCALC_TAPER_ORACLE from '../fixtures/oracles/woodworkcalc-taper-angle.json';
 import { calculateTaperJig } from '../../src/engine/taper-jig';
 
 describe('calculateTaperJig', () => {
@@ -35,6 +36,33 @@ describe('calculateTaperJig', () => {
     expect(r.taperPerFootMm).toBeCloseTo(expected, 1);
   });
 
+  it.each([
+    { taperedFaces: 1 as const, angleDeg: 2.45, offsetMm: 30, perFootMm: 13.1 },
+    { taperedFaces: 2 as const, angleDeg: 1.23, offsetMm: 15, perFootMm: 6.5 },
+  ])(
+    'matches the dimensional oracle for $taperedFaces tapered face(s)',
+    ({ taperedFaces, angleDeg, offsetMm, perFootMm }) => {
+      const result = calculateTaperJig({ ...BASE, taperedFaces });
+
+      expect(result.taperAngleDeg).toBe(angleDeg);
+      expect(result.jigOffsetMm).toBe(offsetMm);
+      expect(result.materialRemovedPerFaceMm).toBe(offsetMm);
+      expect(result.taperPerFootMm).toBe(perFootMm);
+    },
+  );
+
+  it('matches the published WoodWorkCalc one-sided taper example', () => {
+    const result = calculateTaperJig({
+      workpieceLengthMm: WOODWORKCALC_TAPER_ORACLE.example.workpieceLengthMm,
+      startWidthMm: WOODWORKCALC_TAPER_ORACLE.example.startWidthMm,
+      endWidthMm: WOODWORKCALC_TAPER_ORACLE.example.endWidthMm,
+      taperedFaces: 1,
+    });
+
+    expect(result.jigOffsetMm).toBe(WOODWORKCALC_TAPER_ORACLE.jigOffsetMm);
+    expect(result.taperAngleDeg).toBe(WOODWORKCALC_TAPER_ORACLE.roundedTaperAngleDeg);
+  });
+
   it('defaults to 1 tapered face when taperedFaces is omitted', () => {
     const r = calculateTaperJig({
       workpieceLengthMm: 500,
@@ -62,6 +90,9 @@ describe('calculateTaperJig', () => {
       ['zero endWidth', { ...BASE, endWidthMm: 0 }],
       ['endWidth equal to startWidth', { ...BASE, endWidthMm: 70 }],
       ['endWidth greater than startWidth', { ...BASE, endWidthMm: 80 }],
+      ['NaN workpieceLength', { ...BASE, workpieceLengthMm: Number.NaN }],
+      ['infinite startWidth', { ...BASE, startWidthMm: Number.POSITIVE_INFINITY }],
+      ['NaN endWidth', { ...BASE, endWidthMm: Number.NaN }],
     ])('throws RangeError for %s', (_, input) => {
       expect(() => calculateTaperJig(input)).toThrow(RangeError);
     });

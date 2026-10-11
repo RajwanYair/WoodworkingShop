@@ -18,6 +18,8 @@
  *   totalGlueArea   = glueAreaOnePiece × 2 (both mating faces)
  */
 
+import { assertFiniteNumber } from './invariant';
+
 export type HalfLapType = 'end_lap' | 't_lap' | 'cross_lap';
 
 export interface HalfLapInput {
@@ -52,8 +54,20 @@ export interface HalfLapResult {
   finishedThicknessMm: number;
 }
 
+/**
+ * Calculate notch dimensions and glue areas for a half-lap joint.
+ * @param input Both board thicknesses/widths in millimetres and the lap variant.
+ * @returns Notch depths/widths, glue areas, and finished thickness in millimetres.
+ * @throws {RangeError} When dimensions are non-finite/non-positive or calculations overflow.
+ */
 export function calculateHalfLap(input: HalfLapInput): HalfLapResult {
   const { board1ThicknessMm, board1WidthMm, board2ThicknessMm, board2WidthMm } = input;
+
+  const fn = 'calculateHalfLap';
+  assertFiniteNumber(fn, 'board1ThicknessMm', board1ThicknessMm);
+  assertFiniteNumber(fn, 'board1WidthMm', board1WidthMm);
+  assertFiniteNumber(fn, 'board2ThicknessMm', board2ThicknessMm);
+  assertFiniteNumber(fn, 'board2WidthMm', board2WidthMm);
 
   if (board1ThicknessMm <= 0) {
     throw new RangeError('board1ThicknessMm must be greater than 0');
@@ -81,6 +95,14 @@ export function calculateHalfLap(input: HalfLapInput): HalfLapResult {
   const totalGlueAreaMm2 = round3(board1GlueAreaMm2 + board2GlueAreaMm2);
 
   const finishedThicknessMm = round3(Math.max(board1ThicknessMm, board2ThicknessMm));
+  assertFiniteNumber(fn, 'board1NotchDepthMm', board1NotchDepthMm);
+  assertFiniteNumber(fn, 'board1NotchWidthMm', board1NotchWidthMm);
+  assertFiniteNumber(fn, 'board2NotchDepthMm', board2NotchDepthMm);
+  assertFiniteNumber(fn, 'board2NotchWidthMm', board2NotchWidthMm);
+  assertFiniteNumber(fn, 'board1GlueAreaMm2', board1GlueAreaMm2);
+  assertFiniteNumber(fn, 'board2GlueAreaMm2', board2GlueAreaMm2);
+  assertFiniteNumber(fn, 'totalGlueAreaMm2', totalGlueAreaMm2);
+  assertFiniteNumber(fn, 'finishedThicknessMm', finishedThicknessMm);
 
   return {
     board1NotchDepthMm,

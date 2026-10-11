@@ -1,0 +1,23 @@
+{
+  "source": "WOOD Magazine, How to Make Box Joints",
+  "url": "https://www.woodmagazine.com/woodworking-tips/techniques/joinery/making-box-joints",
+  "retrievedOn": "2026-10-01",
+  "input": {
+    "boardWidthMm": 133.35,
+    "fingerWidthMm": 6.35,
+    "depthMm": 6.35
+  },
+  "expected": {
+    "fingerCount": 21,
+    "actualFingerWidthMm": 6.35,
+    "edgeWasteMm": 0
+  },
+  "sourceValues": {
+    "boardWidthIn": "5 1/4",
+    "fingerWidthIn": "1/4",
+    "stockThicknessIn": "1/4"
+  },
+  "conversion": "1 in = 25.4 mm; the source says workpiece width should be an increment of finger width, giving 21 quarter-inch positions across 5 1/4 in.",
+  "tolerance": "Exact finger count; actual finger width and edge waste to 0.01 mm engine precision.",
+  "scope": "Validates only the published integral-width example's finger count, finger width, and absence of partial edge fingers. Glue-area output and the calculator's general odd-count adjustment are excluded."
+}

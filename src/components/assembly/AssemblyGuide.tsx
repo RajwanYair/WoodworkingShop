@@ -103,7 +103,7 @@ export function AssemblyGuide() {
             · {t('assembly.totalWeight')}: {totalWeightKg.toFixed(1)} {t('assembly.kg')}
           </span>
         </h2>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {/* Sprint 52 — progress indicator + reset */}
           {completedSteps.size > 0 && (
             <>

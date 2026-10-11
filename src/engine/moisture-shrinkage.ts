@@ -13,10 +13,17 @@
  * Wood Handbook (Table 4-3).
  */
 
+import { assertBetweenInclusive, assertFiniteNumber } from './invariant';
+
 export type MoistureShrinkageSpecies =
   'oak' | 'maple' | 'cherry' | 'walnut' | 'pine' | 'douglas_fir' | 'cedar' | 'generic_hardwood' | 'generic_softwood';
 
 export type WoodGrainDirection = 'tangential' | 'radial';
+
+export const MOISTURE_SHRINKAGE_LIMITS = {
+  moistureContentPct: { min: 0, max: 100 },
+  dimensionMm: { min: 1, max: 3000 },
+} as const;
 
 /** Shrinkage coefficients: fractional dimensional change per 1% MC change (below FSP). */
 const SHRINKAGE_COEFF: Record<MoistureShrinkageSpecies, Record<WoodGrainDirection, number>> = {
@@ -58,18 +65,37 @@ export interface MoistureShrinkageResult {
   shrinkageCoefficient: number;
 }
 
+/**
+ * Estimate dimensional shrinkage or swelling from moisture-content change.
+ * @param input Initial/target moisture percentages, species, dimension in millimetres, and grain direction.
+ * @returns Effective MC change, dimensional change/final size in millimetres, and the coefficient used.
+ * @throws {RangeError} When numeric inputs are non-finite/out of range or the calculation overflows.
+ */
 export function calculateMoistureShrinkage(input: MoistureShrinkageInput): MoistureShrinkageResult {
   const { initialMCPct, targetMCPct, species, dimensionMm, grain } = input;
 
-  if (initialMCPct < 0) {
-    throw new RangeError('initialMCPct must be >= 0');
-  }
-  if (targetMCPct < 0) {
-    throw new RangeError('targetMCPct must be >= 0');
-  }
-  if (dimensionMm <= 0) {
-    throw new RangeError('dimensionMm must be greater than 0');
-  }
+  const fn = 'calculateMoistureShrinkage';
+  assertBetweenInclusive(
+    fn,
+    'initialMCPct',
+    initialMCPct,
+    MOISTURE_SHRINKAGE_LIMITS.moistureContentPct.min,
+    MOISTURE_SHRINKAGE_LIMITS.moistureContentPct.max,
+  );
+  assertBetweenInclusive(
+    fn,
+    'targetMCPct',
+    targetMCPct,
+    MOISTURE_SHRINKAGE_LIMITS.moistureContentPct.min,
+    MOISTURE_SHRINKAGE_LIMITS.moistureContentPct.max,
+  );
+  assertBetweenInclusive(
+    fn,
+    'dimensionMm',
+    dimensionMm,
+    MOISTURE_SHRINKAGE_LIMITS.dimensionMm.min,
+    MOISTURE_SHRINKAGE_LIMITS.dimensionMm.max,
+  );
 
   // Shrinkage only occurs below the fibre saturation point
   const effectiveInitial = Math.min(initialMCPct, FSP_PCT);
@@ -79,6 +105,9 @@ export function calculateMoistureShrinkage(input: MoistureShrinkageInput): Moist
   const shrinkageCoefficient = SHRINKAGE_COEFF[species][grain];
   const changeAmountMm = Math.round(dimensionMm * effectiveMCChangePct * shrinkageCoefficient * 100) / 100;
   const finalDimensionMm = Math.round((dimensionMm - changeAmountMm) * 100) / 100;
+  assertFiniteNumber(fn, 'effectiveMCChangePct', effectiveMCChangePct);
+  assertFiniteNumber(fn, 'changeAmountMm', changeAmountMm);
+  assertFiniteNumber(fn, 'finalDimensionMm', finalDimensionMm);
 
   return {
     effectiveMCChangePct,

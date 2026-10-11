@@ -12,7 +12,7 @@
 
 import * as Comlink from 'comlink';
 import { optimizeCutSheetsResult, findCoNestCandidates, applyCoNesting } from '../engine/cut-optimizer';
-import type { Part, OptimizationResult, OffcutEntry, DefectZone } from '../engine/types';
+import type { Part, OptimizationResult, OffcutEntry, DefectZone, Material } from '../engine/types';
 
 export interface CutOptimizerInput {
   activeParts: Part[];
@@ -25,6 +25,8 @@ export interface CutOptimizerInput {
   offcutCatalog?: OffcutEntry[];
   /** Per-material defect zones to pre-block on each new sheet. */
   defectZones?: Record<string, DefectZone[]>;
+  /** Custom materials referenced by the part list. */
+  extraMaterials?: Material[];
   /** Sprint 107 — automatically apply multi-material co-nesting. */
   autoCoNest?: boolean;
 }
@@ -47,6 +49,7 @@ const api: CutOptimizerWorkerApi = {
     cutMode = 'freeform',
     offcutCatalog = [],
     defectZones = {},
+    extraMaterials = [],
     autoCoNest = false,
   }: CutOptimizerInput): CutOptimizerResult {
     const activeRes = optimizeCutSheetsResult(
@@ -56,6 +59,7 @@ const api: CutOptimizerWorkerApi = {
       cutMode,
       offcutCatalog,
       defectZones,
+      extraMaterials,
     );
     if (!activeRes.ok) throw new Error(activeRes.error);
     const combinedRes = optimizeCutSheetsResult(
@@ -65,6 +69,7 @@ const api: CutOptimizerWorkerApi = {
       cutMode,
       offcutCatalog,
       defectZones,
+      extraMaterials,
     );
     if (!combinedRes.ok) throw new Error(combinedRes.error);
 

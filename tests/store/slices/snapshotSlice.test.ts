@@ -26,9 +26,6 @@ const localStorageMock = {
     for (const k of Object.keys(_lsData)) delete _lsData[k];
   },
 };
-vi.stubGlobal('localStorage', localStorageMock);
-Object.defineProperty(window, 'localStorage', { value: localStorageMock, writable: true, configurable: true });
-
 // ── helpers ───────────────────────────────────────────────────────────────────
 
 const CABINET: CabinetEntry = { name: 'C1', config: DEFAULT_CONFIG };
@@ -53,7 +50,10 @@ function makeSlice(initial: ProjectSnapshot[] = [], onRestore = vi.fn()) {
 // ── loadSnapshotsFromStorage / persistSnapshots ───────────────────────────────
 
 describe('loadSnapshotsFromStorage', () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => {
+    vi.stubGlobal('localStorage', localStorageMock);
+    localStorage.clear();
+  });
 
   it('returns empty array when nothing stored', () => {
     expect(loadSnapshotsFromStorage()).toEqual([]);
@@ -66,7 +66,10 @@ describe('loadSnapshotsFromStorage', () => {
 });
 
 describe('persistSnapshots', () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => {
+    vi.stubGlobal('localStorage', localStorageMock);
+    localStorage.clear();
+  });
 
   it('round-trips snapshots through localStorage', () => {
     const snap: ProjectSnapshot = { id: 's1', name: 'Test', cabinets: [CABINET], timestamp: '2026-01-01T00:00:00Z' };
@@ -91,7 +94,10 @@ describe('createSnapshotSlice — initial state', () => {
 // ── saveSnapshot ─────────────────────────────────────────────────────────────
 
 describe('createSnapshotSlice — saveSnapshot', () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => {
+    vi.stubGlobal('localStorage', localStorageMock);
+    localStorage.clear();
+  });
 
   it('adds a new snapshot to the list', () => {
     const { get } = makeSlice();
@@ -106,14 +112,15 @@ describe('createSnapshotSlice — saveSnapshot', () => {
     expect(get().snapshots[0].name).toMatch(/^Snapshot \d{4}-\d{2}-\d{2}/);
   });
 
-  it('assigns unique IDs across multiple saves', () => {
-    const { get } = makeSlice();
-    get().saveSnapshot('A');
-    // Ensure at least 1 ms apart so Date.now() differs
+  it('assigns unique IDs when snapshots are saved in the same millisecond', () => {
     vi.useFakeTimers();
-    vi.advanceTimersByTime(2);
-    get().saveSnapshot('B');
-    vi.useRealTimers();
+    const { get } = makeSlice();
+    try {
+      get().saveSnapshot('A');
+      get().saveSnapshot('B');
+    } finally {
+      vi.useRealTimers();
+    }
     const [a, b] = get().snapshots;
     expect(a.id).not.toBe(b.id);
   });
@@ -146,7 +153,10 @@ describe('createSnapshotSlice — restoreSnapshot', () => {
 // ── deleteSnapshot ────────────────────────────────────────────────────────────
 
 describe('createSnapshotSlice — deleteSnapshot', () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => {
+    vi.stubGlobal('localStorage', localStorageMock);
+    localStorage.clear();
+  });
 
   it('removes the snapshot by id', () => {
     const snap: ProjectSnapshot = { id: 'd1', name: 'D', cabinets: [], timestamp: '2026-01-01T00:00:00Z' };

@@ -455,3 +455,197 @@ the in-flight quality sprints (84-87) and run first.
 | 158    | Cloud sync engine with E2E encryption (AES-256-GCM, PBKDF2)            | ✓ Done |
 | 159    | Multi-machine workflow distribution (capability-match, load balancing) | ✓ Done |
 | 160    | Project sharing links with expiration (token-based, permissions)       | ✓ Done |
+
+## Phase 63 — Trustworthy Test Foundation
+
+### Sprint 300 — Evidence baseline and roadmap correction — 2026-09-27
+
+- [x] Verified clean `npm ci` install and project-local Vitest execution.
+- [x] Fixed `scripts/vitest-reporter.js` to invoke local Vitest and parse JSON assertion results; added regression tests for counts and invalid reports.
+- [x] Recorded 4,415 passing tests across 254 files; 0 failures and 0 skips.
+- [x] Recorded coverage: 91.64% statements, 84.91% branches, 92.83% functions, 92.18% lines.
+- [x] Verified quality gate, production build, and all 5 Chromium smoke tests; updated roadmap and agent context. Sprint 301 is next.
+
+### Sprint 301 — Coverage map and ownership — 2026-09-28
+
+- [x] Added `scripts/test-coverage-map.js` to classify all 351 production modules as direct, indirect integration-only, uncovered, or not measured; final inventory: 257 direct, 71 indirect, 23 uncovered, 0 not measured.
+- [x] Added coverage floors for engine, utils, store, hooks, and components; `npm run test:coverage:ratchet` passes with only engine type declarations and the public API barrel excluded.
+- [x] Added direct boundary/interaction coverage for the named store and hook targets, plus export and calculator-panel behavior; verified 4,465 tests across 278 files and `npm run quality:fast`.
+- [x] Recorded remaining uncovered modules in the generated inventory for prioritization in Sprint 305. Sprint 302 is next.
+
+### Sprint 302 — Test fixtures, accessibility queries, and deterministic reset — 2026-09-28
+
+- [x] Added a shared deterministic Playwright app fixture with isolated browser storage, fixed time, dismissed onboarding/tutorial overlays, and a named default-cabinet assertion.
+- [x] Added typed independent builders for projects, materials, hardware, optimizer results, cut sheets, and downloadable outputs; froze the legacy shared sheet fixture.
+- [x] Added an isolated RTL render helper; migrated E2E tests to semantic locators and removed serial execution and style-based assertions.
+- [x] Added per-test cleanup for mocks/stubs, fake timers, storage, URL, document direction, and rendered trees; fixed the AI assistant storage mock leak revealed by shuffle.
+- [x] Verified 4,470 tests across 280 files in normal and seeded-shuffle runs, 26 Chromium/Firefox E2E tests, and full `npm run ci` including 16 benchmark budgets. Sprint 303 is next.
+
+### Sprint 304 — Store, persistence, import/export contract matrix — 2026-09-28
+
+- [x] T1: action-level coverage for the cabinet, UI, optimizer-settings, snapshot and named-expression slices: transitions, invalid/no-op input, undo/redo, persistence/reload and cross-slice rescheduling. `loadSettings` now clamps once and reschedules exactly once from one normalized snapshot; `autoCoNest` and session autosave (500 ms debounce) reload correctly.
+- [x] T2: fault matrix for unavailable IndexedDB/localStorage, corrupt and future-schema records (never overwritten), quota failure, partial-write snapshot rollback, `crypto.randomUUID()` project IDs with collision checks, a serialized mutation queue for concurrent saves/deletes/imports, deletion retry and legacy-migration shape validation.
+- [x] T3: single-project and bundle round-trips preserve cabinets and snapshot history, regenerate IDs and omit ephemeral UI state through an explicit `SavedProject` allowlist; Hebrew, Arabic, Japanese, empty and 250-cabinet projects are covered.
+- [x] Verified `npm run ci`: 4,592 tests across 283 files, production build, bundle budgets and 16 benchmarks.
+
+### Sprint 303 — Pure-engine invariant matrix I (progress log, archived 2026-09-30)
+
+- Generated properties added for shelf deflection, hinge positions, panel weight, part generation, optimizer bounds and kerf clearance, material-yield conservation, cost arithmetic, box-joint geometry, named-parameter dependency order, and honing-guide projection scaling, angle monotonicity and microbevel behavior.
+- Dated birch-weight oracle (Engineering ToolBox, 510–770 kg/m³). The optimizer property exposed a diagonal placement with insufficient kerf; candidate-level clearance checks and a named regression fixed it.
+- Static inventory: 632 exported engine functions — 614 with a direct test call and body-line hits, 13 with line hits only, 0 uncovered, 5 declarations not measured; literal test titles map to 612 exports. These are traceability indicators, not behavioral guarantees.
+- Direct tests added for `getMaterialResult`, `getMachineProfile`, `defaultTokenGenerator`, `applyValidationPlugins` and the Web Serial adapter. `npm run ci` passed with 4,593 tests across 283 files.
+- 2026-10-02 trace audit: GitHub Actions artifacts from 2026-09-27 through 2026-10-01 include build distributions, Playwright reports and secret-scan reports, but no fast-check or shrink-trace artifacts.
+- The optimizer replay (seed `303003`) was regenerated against the pre-fix engine and is not the original trace. The kerf replay (seed `303011`, path `21`) reproduces its invariant but not the original failure path. Neither is presented as historical.
+- The cove rounding regression retains its exact minimized seed/path. With the retained-artifact inventory checked, Sprint 303 is complete; original shrink histories that were not persisted remain unavailable. Calculator oracle gaps continue in S314 T3.
+
+### Sprint 305 — Component behavior foundation (progress log, archived 2026-09-30)
+
+- 2026-09-29 → 2026-09-30: `userEvent` journeys added in batches for optimizer tables and OptimizerView, configurator controls (furniture type, joinery, shelves, doors, drawers), calculators, cabinet management, project manager and snapshots, materials and hardware catalogs.
+- Further batches covered presets, constraint repairs, cost panels, optimizer suggestions, material summary/selector, templates, CNC profiles, PDF settings, cut checklist, stock/offcuts, waste analytics, build log, labels, G-code presets, SaveLoadPanel, Marketplace and Sidebar.
+- Product defects fixed: invalid nested snapshot buttons; intermediate-keystroke clamping in custom clearance; unlabeled icon-only controls; 16 built-in templates referencing nonexistent `hdf-3` (now `mdf-3`, with a registry guard); grouped material area for differing sheet sizes and 100–5000 mm bounds; stale drafts committed by reset controls; missing clipboard-failure message.
+- Component coverage (statements): 41.3 % → 48.4 % → 57.4 % → 66.8 % → 74.2 % → 75.02 % (525 component tests), with no area floor lowered.
+- Browser-derived inventory maps all 118 calculator controls to positive/negative behavior evidence and 108 high-use workspace controls to evidence or explicit waivers. Calculator suite passed 60/60 at two workers; configurator suite passed 62/62; optimizer parts/hardware inventory passed 2/2. A separate stock-persistence Firefox failure in a broad inventory grep was unrelated to these table-inventory tests.
+- Component ratchet: 572 tests, 75.04% statements, 69.05% branches, 73.10% functions and 75.74% lines; no floor lowered. The custom-material derivation defect is fixed. Sprint 305 acceptance is complete.
+
+### Sprint 306 — Mutation testing and quality evidence (completed under bounded scope, 2026-10-02)
+
+- Bounded Stryker targets: dimensions, parts, cut-optimizer and validation; two workers; no score threshold; JSON/HTML and temp files remain under the OS temp directory.
+- Four-module initial dry run: 1,366 mutants and 926 related tests in 2m55s. Focused `dimensions.ts` run: 122 mutants in 2m47s; 116 killed, five survived, one timed out (95.90%).
+- Improved dimensions assertions for centre-support deflection, exact hinge and shelf-rating boundaries, material modulus outputs, maximum load, and the zero-deflection fallback. Four surviving nonpositive-count guards are equivalent; the initial static material-table survivor was resolved in a focused follow-up; the descending-loop mutant timed out.
+- Added `parts.ts` behavior assertions for material selection, furniture exclusions, part dimensions,
+  zero drawers, and edge-banding totals. A focused run invoked with `--ignoreStatic` took 5m11s:
+  307 mutants, 189 killed, 99 survived, one timed out and 18 with no coverage (61.89% overall;
+  65.74% of covered mutants). A 38-second follow-up over drawer-generation lines killed 15 of 18
+  mutants; two surviving count guards are equivalent because the nested loop has no iterations at
+  zero or negative counts, and one mutant timed out. This scoped diagnostic is not the static-inclusive
+  baseline; a full-static parts attempt was stopped after its runtime estimate exceeded an hour.
+- A validation diagnostic invoked with `--ignoreStatic` took 10m26s: 229 mutants, 132 killed,
+  94 survived and three with no coverage (57.64% overall; 58.41% of covered mutants). Added exact
+  99/100/101 mm drawer-height and exact/exceeding drawer-stack boundaries, plus issue field and
+  bilingual drawer-index assertions. A 35-second focused drawer-validation run killed all 30 mutants.
+  At this status capture the full-static validation baseline was unmeasured; the refreshed result is
+  recorded below. A `cut-optimizer.ts` diagnostic invoked with
+  `--ignoreStatic` took 110m47s: 443 killed, 219 survived, one timed out and 45 with no coverage
+  (62.71% overall; 66.97% of covered mutants). Added exact co-nesting yield, waste and conflict checks,
+  plus empty-result and untouched-conflict cases; the focused metrics slice killed all 16 mutants in
+  23 seconds. This runtime rules out adding the full diagnostic to routine CI. The complete
+  static-inclusive four-module baseline remains open; no blocking threshold is set.
+- Added a weekly report-only dimensions and BOM mutation workflow (15-minute budget) with retained JSON/HTML artifacts. Other targets remain out of the schedule until their runtime is measured. Full four-module scoring baseline and runtime gate remain open; no blocking score threshold is set.
+- A BOM/ERP serializer diagnostic invoked with `--ignoreStatic` took 5m10s: 267 mutants, 197 killed, 49 survived and 21 with no coverage (73.78% overall; 80.08% of covered mutants). ERP assertions now verify total weight equals unit weight times quantity, non-grain output uses `none`, and unknown-material weight fields stay blank. The focused weight/grain/fallback slice killed all seven mutants; the static-inclusive baseline remains open.
+- Strengthened hardware and ERP CSV download tests to inspect each filename, MIME type, raw UTF-8 BOM bytes, and payload. Each focused diagnostic killed all three filename/BOM/MIME mutants (six total).
+- ERP schema tests now assert the exact ordered 13-column header, the first schema row, and the ISO-8601 generated-at row; focused diagnostics killed all 12 header mutants and all 11 metadata-initialization mutants.
+- ERP row construction is covered across part-number selection, weight, grain, and material fields: a focused 20-mutant slice killed all 20. BOM pricing now checks two-sheet cost multiplication and separates engine language from full locale; the focused pricing slice killed all 11 mutants.
+- A complete BOM part-row assertion now checks column order and values for a known single-cabinet fixture; the focused part-row slice killed all four mutants.
+- Static-inclusive BOM diagnostic (5m34s): 335 mutants, 243 killed, 72 survived and 20 with no
+  coverage (72.54% overall; 77.14% of covered mutants). The locale table now initializes in
+  `getBomHeaders`, making its literals runtime mutants; exact emitted summary, parts, hardware and
+  grain-direction assertions cover all six supported locales. The focused locale slice killed all
+  70 mutants in 1m25s, including the unsupported-locale English fallback. The full static-inclusive
+  four-module baseline and score/runtime gate remain open; no threshold is set.
+- Initial combined weekly dimensions+BOM run completed in 9m43s, within the 15-minute budget: 457 mutants,
+  359 killed, 77 survived, 20 with no coverage and one timeout (78.77% overall; 82.38% of covered
+  mutants). Dimensions scored 95.90% with one timeout; BOM scored 72.54% overall and 77.14% of
+  covered mutants. The report remains report-only; no score threshold is set.
+- Replaced the static modulus map with an allocation-free `getElasticModulus` switch and added
+  parameterized output checks for all nine supported material keys. The focused dimensions run took
+  2m18s: 137 mutants, 132 killed, four equivalent zero/negative-count guards survived, one
+  descending-loop timeout and no uncovered mutants (97.08%). The refreshed combined weekly run took
+  7m39s: 472 mutants, 375 killed, 76 survived, 20 with no coverage and one timeout (79.66% overall;
+  83.19% of covered mutants). Dimensions scored 97.08%; BOM remained at 72.54% overall and 77.14%
+  of covered mutants. Two clean baselines and the thresholded run produced identical per-mutant
+  statuses and a 79.66% overall score (83.19% covered). The weekly-only 79% gate passed in 7m45s;
+  the shared four-module config remains report-only, and S306 remains open.
+
+- Refreshed static-inclusive validation diagnostic with both validation suites (2026-10-02): 4m21s,
+  231 mutants, 226 killed, four survived and one with no coverage (97.84% overall; 98.26% of covered
+  mutants). Focused assertions
+  for carcass boundaries, toe-kick threshold/recommendation, wardrobe toe-kick advice, drawer density,
+  drawer/shelf clearance and excessive drawer count killed 38/38, 15/15, 8/8, 13/13, 17/17 and 18/18
+  mutants respectively; drawer-stack issue construction killed 6/6, registry sorting killed 3/3,
+  registry registration/removal killed 17/17, and the unknown-material fallback and joinery call-site
+  slices killed 4/4 and 5/5. The complete static-inclusive four-module
+  baseline and clean-checkout acceptance remain open.
+
+- Post-baseline survivor triage: added a low-height, zero-drawer case; the focused drawer-guard slice
+  killed all 4/4 mutants, including the former `true` and `>= 0` survivors. The focused
+  `safeGetMaterial` slice killed 5/6 mutants; the surviving `BlockStatement` removes the catch body,
+  and remains equivalent because `getMaterial` throws for unknown keys while `undefined` and `null`
+  both take the same nullish 18 mm fallback path. Added an empty-at-initialization registry assertion,
+  but the `ArrayDeclaration` mutant remains uncovered (`static`, `coveredBy: []`) by Stryker.
+- Refreshed the full static-inclusive validation run after the follow-up changes (4m13s): 229 mutants,
+  228 killed, one survived and none with no coverage (99.56% overall and covered). A fresh-import
+  registry test killed the static array mutant; removing the redundant `backPanelMaterial ?? ''`
+  fallback eliminated the uncovered literal. The sole survivor is the equivalent catch-block mutant:
+  `getMaterial` throws on unknown keys, and both caught `null` and uncaught `undefined` take the same
+  nullish 18 mm fallback. The complete static-inclusive four-module baseline and clean-checkout
+  acceptance remain open.
+- Bounded-scope close-out (2026-10-02): the combined static-inclusive run discovered 1,381 mutants but
+  was stopped at 109 tests when its estimated runtime rose to 35 hours; no combined score is claimed.
+  Static-inclusive module reports are retained for dimensions, validation and BOM; the parts aggregate
+  report is 84.69% overall (84.97% covered) and predates the final focused name/edge assertions. Follow-up
+  parts slices killed 33/37 cabinet-name/edge mutants and 29/33 toe-kick/rail mutants; the remaining
+  false-arm `none` to empty-string mutations are equivalent through `edgeLabel`'s default branch.
+  Focused wardrobe name and toe-kick front-edge probes killed their actionable mutants. The
+  `cut-optimizer.ts` `--ignoreStatic` diagnostic took 110m47s, so it remains outside the 15-minute
+  scheduled workflow; focused critical metric checks killed 16/16 mutants. The repeated dimensions+BOM
+  79% gate passed in 7m45s. This closes S306 under the revised bounded acceptance; it does not establish
+  a four-module aggregate or static-inclusive cut-optimizer score. Clean-checkout verification remains
+  required for release acceptance.
+
+## Phase 64 — Real User Journeys and Browser Confidence
+
+### Sprint 307 — App shell journeys — 2026-09-28
+
+- [x] T1: tab navigation by click, Alt+1…6, direct URLs for all seven tabs, Back/Forward restoration, shortcut suppression while editing and invalid-tab fallback.
+- [x] T2: header and Ctrl+Z/Ctrl+Y/Ctrl+Shift+Z undo/redo restore both the dimension and the generated Top Panel length; fixed Enter + blur committing a dimension twice.
+- [x] T3: dark mode (button and Alt+D), metric/imperial, six locales with RTL/LTR direction, focus mode, onboarding and shortcuts dialogs, Escape and focus restoration via the shared focus trap.
+- [x] T4: localized reset confirmation; cabinet add/switch/rename/reload/shortcut journeys verify `?cab=` index precedence, project state and toast. 32 smoke tests pass in Chromium and Firefox.
+
+### Sprint 308 — Configurator and validation journeys — 2026-09-28
+
+- [x] T1: width/height/depth slider ↔ text synchronization, exact 20 mm Top Panel delta, preview titles, range clamping, hard-limit rejection/recovery and reset.
+- [x] T2: every furniture type, joinery, carcass/back material, back panel, thickness source, shelf, door and drawer option asserts a part or hardware change; fixed `doors-only` edge banding.
+- [x] T3: all 11 repair actions verified against production validation issues (focus continuity, live region); fixed the wide-span warning so a centre support resolves it.
+- [x] T4: cabinet add/remove/rename/duplicate/mirror/reorder and switching reflected in optimizer, assembly and PDF names. 62 E2E tests pass in Chromium and Firefox.
+
+### Sprint 309 — Save/load, templates, catalogs and expressions — 2026-09-29
+
+- [x] T1: project save/load, same-name replace, JSON export/import, cancel, malformed/invalid imports, share fallback and snapshot save/restore/delete/diff; fixed snapshot ID collisions.
+- [x] T2: all six built-in presets and a reload-persistent saved configuration.
+- [x] T3: custom-material CRUD, community catalog URL import and hardware JSON import with schema, duplicate-ID, merge/replace and failure-atomicity checks.
+- [x] T4: mounted the named-expression panel; evaluator moved to the allowlisted arithmetic parser (CSP-safe); cycles, unknown names, invalid math and non-finite results surfaced. 76 E2E tests pass.
+
+### Sprint 310 — Preview, gestures, canvas and 3D — 2026-09-29
+
+- [x] Six views with viewBox/geometry assertions and dimension toggle; SVG parsing and PNG IHDR checks at 2×; touch-cancel lifecycle and pinch/swipe/wheel/orbit bounds; mounted the interactive 3D panel with WebGL fallback and a non-blank canvas.
+- [x] Chromium, Firefox, WebKit desktop and iPhone WebKit render all views without overflow; 24 Chromium visual baselines (cabinet/bookshelf × light/dark × LTR/RTL).
+
+### Sprint 311 — Optimizer controls and table journeys — 2026-09-30
+
+- [x] Kerf, sheet size, costs, guillotine rationale, rotation lock, co-nesting, colour-blind mode, grain hatch and labels; search/filter/sort; bulk replace; stock and offcut persistence; defect zones; SmartOptimizer candidate propagation; engine-oracle checks of yield, waste, grain and shopping list.
+- [x] Fixed stock-quantity Enter double commit and `autoCoNest` session persistence. Nine optimizer journeys pass in Chromium and Firefox; 5,169 unit tests across 338 files pass.
+
+### Sprint 312 — Export downloads as real artifacts (progress log, archived 2026-09-30)
+
+- [x] T1: 25 BOM/hardware CSV download behaviors (UTF-8 BOM, headers, quantities, five locales, escaping, formula-injection neutralization); fixed engine-language resolution for UI-only locales.
+- [x] T2: 25 DXF/G-code download behaviors parsing entities, layers, extents, labels, checksum, units, bounds, safe retract, multi-pass depth, kerf, tool compensation, presets and tool changes; DXF extents cross-checked against G-code.
+- [x] T3: grouped and quantity-expanded labels plus an escaped UTF-8 A4 print sheet (26 behaviors), including a browser assertion that each printed label identifier stays paired with its part text. QR deferred to S388: no encoder and production dependencies at the 8-package cap.
+- [x] T4: 27 real-PDF behaviors (page count/geometry, headings, options, multi-cabinet, size budget, text bounds, zero warnings); footer placement fixed; renderer WASM data resource allowed in `connect-src` only.
+- [x] T5: SHA-256 integrity manifest and ZIP entry-path validation; 29 behaviors parse the central directory and every payload.
+- Component follow-up: 25 GcodePreviewModal behaviors; numeric fields replace rather than append, invalid drafts revert on blur.
+
+### Sprint 314 — Calculator panels and numeric oracles (progress log, archived 2026-10-01)
+
+- [x] T1/T2: 27 production-browser journeys (Chromium + Firefox) expand all 24 mounted calculators and compare every finite option against the pure engine.
+- [x] T4: typed entry, ArrowUp/ArrowDown recomputation and clear-to-zero validation without NaN/Infinity.
+- [x] T3: screw pull-out now follows USDA FPL-GTR-282 Eq. 8-10a with an independent #8 × 1 in oracle; white-oak shrinkage cites FPL-GTR-282 Table 4-3; finish coverage/recoat compatibility has product-scoped manufacturer range oracles; glue and moisture bounds are shared between UI and engine; board-foot inputs reject non-finite values. Finish cure/volume and category-wide assumptions remain unverified. Glue spread rates remain unclaimed.
+- [ ] T3 update (2026-10-02): an OpenStax-backed honing-guide fixture verifies only the idealized right-triangle projection at 0.1 mm precision; real guide geometry and calibration remain excluded. Wood-turning still has no qualifying numeric oracle, so T3 remains open.
+- [x] T3 oracle close-out (2026-10-02): all 24 mounted calculators have linked reference cases. Wood-turning surface-speed output matches the published metric turning-speed equation to 0.1 m/min for a 100 mm, 1,270 RPM case. The fixture excludes RPM ranges, operation factors, recommendations and safety claims; the OpenStax honing-guide fixture likewise remains scoped to idealized right-triangle geometry.
+
+### Sprint 318 — v5.34.0 verification evidence (2026-10-02)
+
+- [x] T1: `npm run check` passes: quality gates and 5,256 unit tests across 341 files. Coverage passes for 356 production modules (315 direct, 26 indirect integration-only, 15 uncovered); 634 engine functions classify as 623 covered and 11 indirectly covered. The coverage ratchet passes after adding a rounding-rollover case to `units.test.ts`.
+- [x] T1: Export golden test passes; all 8 Chromium/Firefox visual-regression comparisons pass; bundle totals 2,658.3 KB JavaScript, 68.0 KB CSS and 2,816.1 KB overall; all 16 benchmark budgets pass.
+- [x] T1: Full Playwright run against the fresh TEMP production build used one worker and zero retries: 439 passed, 13 intentionally skipped, 0 failed (30 minutes). The corrected keyboard journey also passed all 36 Chromium/Firefox cases. CI now installs and caches WebKit for its configured preview-acceptance projects.
+- [x] T2: Recorded browser scope in `docs/ARCHITECTURE.md`: full journey suite in Chromium/Firefox; WebKit desktop/mobile preview acceptance only; six-locale axe and responsive/visual preview matrices are Chromium-only.
+- Release gate: NOT READY. Phase 63 S306 remains open, and the clean-checkout acceptance criterion has not been exercised. Do not mark v5.34.0 released until Phase 63 exits.

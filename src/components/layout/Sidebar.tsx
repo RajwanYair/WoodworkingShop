@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { CostEstimatePanel } from '../configurator/CostEstimatePanel';
 import { CostSummaryPanel } from '../configurator/CostSummaryPanel';
@@ -11,37 +11,49 @@ import { IconBarChart, IconX } from './Icons';
 export function Sidebar() {
   const { parts, hardware, optimization } = useCabinetStore();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(() => window.matchMedia?.('(min-width: 1024px)').matches ?? true);
   const mobileDialogRef = useRef<HTMLElement>(null);
 
   useFocusTrap(mobileDialogRef, mobileOpen, () => setMobileOpen(false));
 
+  useEffect(() => {
+    if (typeof window.matchMedia !== 'function') return;
+    const desktopQuery = window.matchMedia('(min-width: 1024px)');
+    const handleChange = () => setIsDesktop(desktopQuery.matches);
+    desktopQuery.addEventListener('change', handleChange);
+    return () => desktopQuery.removeEventListener('change', handleChange);
+  }, []);
+
   const content = (
     <>
       <div className="mb-2 flex items-center justify-between">
-        <img src="/woodgrain-spark.svg" alt="" aria-hidden="true" className="h-4 w-24 opacity-80" loading="lazy" />
-        <span className="text-xs" aria-hidden="true">
-          ✨🪵✨
-        </span>
+        <img
+          src={`${import.meta.env.BASE_URL}woodgrain-spark.svg`}
+          alt=""
+          aria-hidden="true"
+          className="h-4 w-24 opacity-80"
+          loading="lazy"
+        />
       </div>
       <h2 className="text-wood-700 dark:text-wood-200 mb-3 text-sm font-semibold tracking-wide uppercase">
-        🪵✨ Summary 📊
+        🪵 Summary
       </h2>
 
       <dl className="mb-4 space-y-2 text-sm">
         <div className="flex justify-between">
-          <dt className="text-wood-600 dark:text-wood-300">🔲🧩 Parts</dt>
+          <dt className="text-wood-600 dark:text-wood-300">🔲 Parts</dt>
           <dd className="font-medium">{parts.length}</dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-wood-600 dark:text-wood-300">🔩🛠️ Hardware items</dt>
+          <dt className="text-wood-600 dark:text-wood-300">🔩 Hardware items</dt>
           <dd className="font-medium">{hardware.length}</dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-wood-600 dark:text-wood-300">📋🪚 Sheets needed</dt>
+          <dt className="text-wood-600 dark:text-wood-300">📋 Sheets needed</dt>
           <dd className="font-medium">{optimization.totalSheets}</dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-wood-600 dark:text-wood-300">📊🎯 Yield</dt>
+          <dt className="text-wood-600 dark:text-wood-300">📊 Yield</dt>
           <dd className="font-medium">{optimization.overallYield}%</dd>
         </div>
       </dl>
@@ -113,7 +125,7 @@ export function Sidebar() {
         aria-label="Cabinet summary"
         data-print="hide"
       >
-        {content}
+        {isDesktop && content}
       </aside>
     </>
   );

@@ -3,7 +3,7 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { calculateMoistureShrinkage } from '../../engine/moisture-shrinkage';
+import { calculateMoistureShrinkage, MOISTURE_SHRINKAGE_LIMITS } from '../../engine/moisture-shrinkage';
 import type { MoistureShrinkageSpecies, WoodGrainDirection } from '../../engine/moisture-shrinkage';
 
 export function MoistureShrinkagePanel() {
@@ -49,8 +49,8 @@ export function MoistureShrinkagePanel() {
           <span>{t('moistureShrinkage.initialMC')} (%)</span>
           <input
             type="number"
-            min={0}
-            max={100}
+            min={MOISTURE_SHRINKAGE_LIMITS.moistureContentPct.min}
+            max={MOISTURE_SHRINKAGE_LIMITS.moistureContentPct.max}
             step={1}
             value={initialMCPct}
             onChange={(e) => setInitialMCPct(Number(e.target.value))}
@@ -62,8 +62,8 @@ export function MoistureShrinkagePanel() {
           <span>{t('moistureShrinkage.targetMC')} (%)</span>
           <input
             type="number"
-            min={0}
-            max={100}
+            min={MOISTURE_SHRINKAGE_LIMITS.moistureContentPct.min}
+            max={MOISTURE_SHRINKAGE_LIMITS.moistureContentPct.max}
             step={1}
             value={targetMCPct}
             onChange={(e) => setTargetMCPct(Number(e.target.value))}
@@ -102,8 +102,8 @@ export function MoistureShrinkagePanel() {
           <span>{t('moistureShrinkage.dimension')} (mm)</span>
           <input
             type="number"
-            min={1}
-            max={3000}
+            min={MOISTURE_SHRINKAGE_LIMITS.dimensionMm.min}
+            max={MOISTURE_SHRINKAGE_LIMITS.dimensionMm.max}
             step={1}
             value={dimensionMm}
             onChange={(e) => setDimensionMm(Number(e.target.value))}

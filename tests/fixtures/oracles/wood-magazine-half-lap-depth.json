@@ -1,0 +1,9 @@
+{
+  "source": "WOOD Magazine, Half-lap joints, Step 2: Test cutting depth",
+  "url": "https://www.woodmagazine.com/woodworking-tips/techniques/joinery/half-lap-joints",
+  "retrievedOn": "2026-10-01",
+  "rule": "Set the cutting depth to precisely one-half of the workpiece thickness; equal-thickness mating pieces should have flush top and bottom faces.",
+  "boardThicknessMm": 19,
+  "notchDepthMm": 9.5,
+  "scope": "Validates only notch depth for equal-thickness stock; the source does not establish the calculator's glue-area outputs."
+}

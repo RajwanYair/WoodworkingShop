@@ -25,24 +25,40 @@ const configStore = createStore('cabinet-planner-configs', 'saved-configs');
 const LS_PROJECTS_KEY = 'cabinet-planner-projects-v1';
 const IDB_PROJECTS_KEY = 'all-projects';
 
+function loadLegacyArray<T>(key: string, dataLabel: string): T[] {
+  try {
+    const raw = localStorage.getItem(key);
+    const data: unknown = raw === null ? [] : JSON.parse(raw);
+    return requireArray<T>(data, `Legacy ${dataLabel} data must be an array`);
+  } catch (error) {
+    throw new Error(`Unable to migrate legacy ${dataLabel} data from localStorage`, { cause: error });
+  }
+}
+
+function requireArray<T>(value: unknown, message: string): T[] {
+  if (!Array.isArray(value)) throw new TypeError(message);
+  return value as T[];
+}
+
+function assertIndexedDBAvailable(): void {
+  if (typeof indexedDB === 'undefined') throw new Error('IndexedDB is unavailable');
+}
+
 /** Load all saved projects from IndexedDB, migrating from localStorage on first run. */
 export async function idbLoadProjects<T>(): Promise<T[]> {
-  let data = await get<T[]>(IDB_PROJECTS_KEY, projectStore);
+  assertIndexedDBAvailable();
+  let data: unknown = await get<unknown>(IDB_PROJECTS_KEY, projectStore);
   if (data === undefined) {
     // One-time migration from localStorage
-    try {
-      const raw = localStorage.getItem(LS_PROJECTS_KEY);
-      data = raw ? (JSON.parse(raw) as T[]) : [];
-    } catch {
-      data = [];
-    }
+    data = loadLegacyArray<T>(LS_PROJECTS_KEY, 'project');
     await set(IDB_PROJECTS_KEY, data, projectStore);
   }
-  return Array.isArray(data) ? data : [];
+  return requireArray<T>(data, 'Invalid saved project storage: expected an array');
 }
 
 /** Persist all projects to IndexedDB. */
 export async function idbSaveProjects<T>(projects: T[]): Promise<void> {
+  assertIndexedDBAvailable();
   await set(IDB_PROJECTS_KEY, projects, projectStore);
 }
 
@@ -53,21 +69,18 @@ const IDB_CONFIGS_KEY = 'all-configs';
 
 /** Load all saved configs from IndexedDB, migrating from localStorage on first run. */
 export async function idbLoadConfigs<T>(): Promise<T[]> {
-  let data = await get<T[]>(IDB_CONFIGS_KEY, configStore);
+  assertIndexedDBAvailable();
+  let data: unknown = await get<unknown>(IDB_CONFIGS_KEY, configStore);
   if (data === undefined) {
-    try {
-      const raw = localStorage.getItem(LS_CONFIGS_KEY);
-      data = raw ? (JSON.parse(raw) as T[]) : [];
-    } catch {
-      data = [];
-    }
+    data = loadLegacyArray<T>(LS_CONFIGS_KEY, 'saved-config');
     await set(IDB_CONFIGS_KEY, data, configStore);
   }
-  return Array.isArray(data) ? data : [];
+  return requireArray<T>(data, 'Invalid saved config storage: expected an array');
 }
 
 /** Persist all saved configs to IndexedDB. */
 export async function idbSaveConfigs<T>(configs: T[]): Promise<void> {
+  assertIndexedDBAvailable();
   await set(IDB_CONFIGS_KEY, configs, configStore);
 }
 
@@ -79,21 +92,18 @@ const snapshotStore = createStore('cabinet-planner-snapshots', 'snapshots');
 
 /** Load all snapshots from IndexedDB, migrating from localStorage on first run. */
 export async function idbLoadSnapshots<T>(): Promise<T[]> {
-  let data = await get<T[]>(IDB_SNAPSHOTS_KEY, snapshotStore);
+  assertIndexedDBAvailable();
+  let data: unknown = await get<unknown>(IDB_SNAPSHOTS_KEY, snapshotStore);
   if (data === undefined) {
-    try {
-      const raw = localStorage.getItem(LS_SNAPSHOTS_KEY);
-      data = raw ? (JSON.parse(raw) as T[]) : [];
-    } catch {
-      data = [];
-    }
+    data = loadLegacyArray<T>(LS_SNAPSHOTS_KEY, 'snapshot');
     await set(IDB_SNAPSHOTS_KEY, data, snapshotStore);
   }
-  return Array.isArray(data) ? data : [];
+  return requireArray<T>(data, 'Invalid saved snapshot storage: expected an array');
 }
 
 /** Persist all snapshots to IndexedDB. */
 export async function idbSaveSnapshots<T>(snapshots: T[]): Promise<void> {
+  assertIndexedDBAvailable();
   await set(IDB_SNAPSHOTS_KEY, snapshots, snapshotStore);
 }
 
@@ -107,21 +117,25 @@ export async function idbDeleteSnapshot<T extends { id: string }>(id: string): P
 
 /** Read any value from the projects store (used for ad-hoc metadata). */
 export async function idbGet<T>(key: string): Promise<T | undefined> {
+  assertIndexedDBAvailable();
   return get<T>(key, projectStore);
 }
 
 /** Write any value to the projects store. */
 export async function idbSet<T>(key: string, value: T): Promise<void> {
+  assertIndexedDBAvailable();
   return set(key, value, projectStore);
 }
 
 /** Delete a key from the projects store. */
 export async function idbDel(key: string): Promise<void> {
+  assertIndexedDBAvailable();
   return del(key, projectStore);
 }
 
 /** List all keys in the projects store (used for quota reporting). */
 export async function idbKeys(): Promise<IDBValidKey[]> {
+  assertIndexedDBAvailable();
   return keys(projectStore);
 }
 
@@ -132,18 +146,21 @@ const IDB_OFFCUTS_KEY = 'all-offcuts';
 
 /** Load all saved offcut catalog entries from IndexedDB. */
 export async function idbLoadOffcuts(): Promise<OffcutEntry[]> {
+  assertIndexedDBAvailable();
   const data = await get<OffcutEntry[]>(IDB_OFFCUTS_KEY, offcutStore);
   return Array.isArray(data) ? data : [];
 }
 
 /** Append a new offcut entry to the catalog. */
 export async function idbSaveOffcut(entry: OffcutEntry): Promise<void> {
+  assertIndexedDBAvailable();
   const all = await idbLoadOffcuts();
   await set(IDB_OFFCUTS_KEY, [...all, entry], offcutStore);
 }
 
 /** Remove an offcut catalog entry by id. */
 export async function idbDeleteOffcut(id: string): Promise<void> {
+  assertIndexedDBAvailable();
   const all = await idbLoadOffcuts();
   await set(
     IDB_OFFCUTS_KEY,
@@ -207,6 +224,7 @@ const urlRefStore = createStore('cabinet-planner-url-refs', 'url-refs');
  * The key should be a short random string generated by `generateShareRefKey()`.
  */
 export async function storeUrlRef(key: string, compressedConfig: string): Promise<void> {
+  assertIndexedDBAvailable();
   await set(key, compressedConfig, urlRefStore);
 }
 
@@ -215,10 +233,12 @@ export async function storeUrlRef(key: string, compressedConfig: string): Promis
  * Returns `undefined` when the ref is not present (cleared storage, other device).
  */
 export async function loadUrlRef(key: string): Promise<string | undefined> {
+  assertIndexedDBAvailable();
   return get<string>(key, urlRefStore);
 }
 
 /** Remove a URL ref from storage (e.g. after the share link is superseded). */
 export async function deleteUrlRef(key: string): Promise<void> {
+  assertIndexedDBAvailable();
   await del(key, urlRefStore);
 }

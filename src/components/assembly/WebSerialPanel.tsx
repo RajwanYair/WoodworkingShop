@@ -10,19 +10,12 @@ import {
   connectToMachine,
   streamGcodeLines,
   disconnectFromMachine,
-  type WebSerialState,
-  type WebSerialProfile,
-} from '../../engine/webserial';
+  type SerialPortHandle,
+} from '../../utils/webserial-cnc';
+import type { WebSerialState, WebSerialProfile } from '../../engine/webserial-v2';
 import { cutSheetToGcode } from '../../utils/gcode-export';
 import { MachineProfileSelector } from './MachineProfileSelector';
 import { getDefaultMachineProfile, type MachineProfile } from '../../engine/machine-profiles';
-
-/** Internal serial port handle type (matches engine/webserial SerialPortHandle). */
-interface PortHandle {
-  close(): Promise<void>;
-  readonly writable: WritableStream<Uint8Array> | null;
-  readonly readable: ReadableStream<Uint8Array> | null;
-}
 
 export function WebSerialPanel() {
   const { t } = useTranslation();
@@ -33,7 +26,7 @@ export function WebSerialPanel() {
   const [progress, setProgress] = useState<{ current: number; total: number } | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [machineProfile, setMachineProfile] = useState<MachineProfile>(getDefaultMachineProfile);
-  const portRef = useRef<PortHandle | null>(null);
+  const portRef = useRef<SerialPortHandle | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
   // Collect all G-code lines from every cut sheet
@@ -62,7 +55,7 @@ export function WebSerialPanel() {
         parity: machineProfile.parity,
       };
       const port = await connectToMachine(profile);
-      portRef.current = port as unknown as PortHandle;
+      portRef.current = port;
       const lines = buildGcodeLines();
       if (lines.length === 0) {
         setState('connected');
@@ -72,12 +65,7 @@ export function WebSerialPanel() {
       const ac = new AbortController();
       abortRef.current = ac;
       setProgress({ current: 0, total: lines.length });
-      await streamGcodeLines(
-        port as Parameters<typeof streamGcodeLines>[0],
-        lines,
-        (sent, total) => setProgress({ current: sent, total }),
-        ac.signal,
-      );
+      await streamGcodeLines(port, lines, (sent, total) => setProgress({ current: sent, total }), ac.signal);
       setState('connected');
       setProgress(null);
     } catch (err) {
@@ -90,7 +78,7 @@ export function WebSerialPanel() {
   const handleDisconnect = useCallback(async () => {
     abortRef.current?.abort();
     if (portRef.current) {
-      await disconnectFromMachine(portRef.current as Parameters<typeof disconnectFromMachine>[0]);
+      await disconnectFromMachine(portRef.current);
       portRef.current = null;
     }
     setState('disconnected');

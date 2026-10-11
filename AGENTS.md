@@ -1,21 +1,23 @@
 # Cabinet Planner — AI Agent Context
 
 > Browser-based woodworking design tool · React 19 + TypeScript 6 + Vite 8
-> **v5.32.0** · MIT · Node ≥ 22 · [Live demo](https://rajwanyair.github.io/WoodworkingShop/)
+> **v5.34.0** · MIT · Node ≥ 22 · [Live demo](https://rajwanyair.github.io/WoodworkingShop/)
 
 ## What It Does
 
 Configure any cabinet/furniture piece → live 6-view SVG preview → MaxRects cut-sheet optimizer → export PDF build plan, DXF, G-code, or BOM. **No server, no account.** Full RTL support (Hebrew/Arabic).
 
-## Active Sprint — Phase 62 (Sprints 295–299)
+## Active Sprint — Phase 64 complete; Phase 65 is next (Sprints 300–318 complete)
 
-| Sprint | Feature                                               | Status |
-| ------ | ----------------------------------------------------- | ------ |
-| 295    | Phase 62 Planning Baseline                            | DONE   |
-| 296    | Named Expressions UI Panel (configurator integration) | DONE   |
-| 297    | Per-Part Grain Direction Constraint                   | DONE   |
-| 298    | URL Tab Deep-Linking (`?tab=`)                        | DONE   |
-| 299    | Export Schema Versioning + Release v5.32.0            | DONE   |
+| Sprint | Feature                                  | Status      |
+| ------ | ---------------------------------------- | ----------- |
+| 300    | Evidence baseline and roadmap correction | DONE        |
+| 301    | Coverage map and ownership               | DONE        |
+| 302    | Test fixtures and deterministic reset    | DONE        |
+| 303    | Pure-engine invariant matrix I           | DONE        |
+| 304    | Store, persistence, import/export matrix | DONE        |
+| 305    | Component behavior foundation            | DONE        |
+| 306    | Mutation testing and quality evidence    | IN PROGRESS |
 
 ## Tech Stack
 
@@ -40,7 +42,7 @@ src/
   i18n/        en.json + he.json + ar.json + de.json + es.json + fr.json
   workers/     Web Workers (?worker import suffix)
 tests/         Vitest unit tests mirroring src/
-.github/       CI workflows, prompts/, agents/, instructions/, actions/
+.github/       CI workflows, prompts/, agents/, skills/, instructions/, actions/
 ```
 
 ## Key Commands
@@ -100,7 +102,7 @@ import { cfg } from '../helpers'; // builds CabinetConfig from DEFAULT_CONFIG + 
 ## Docs
 
 - Architecture decisions & diagrams → [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
-- Active roadmap → [ROADMAP.md](ROADMAP.md) (Phase 33 — active)
+- Active roadmap → [ROADMAP.md](ROADMAP.md) (Phase 63 — active; Sprint 303 next)
 - Sprint history → [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md)
 - Plugin API → [docs/PLUGIN-API.md](docs/PLUGIN-API.md)
 
@@ -147,6 +149,19 @@ import { cfg } from '../helpers'; // builds CabinetConfig from DEFAULT_CONFIG + 
 | `security` | OWASP Top 10 security audit and CSP hardening                 |
 | `perf`     | Lighthouse CI setup and Core Web Vitals tuning                |
 | `cleanup`  | Production cleanup — dead code, lint, $TEMP enforcement       |
+
+## Copilot Skills
+
+Project skills are available in chat by their slash-command name:
+
+| Skill             | Purpose                                                                   |
+| ----------------- | ------------------------------------------------------------------------- |
+| `browser-qa`      | Explore the running app and verify browser, responsive, and RTL behavior  |
+| `docs-sync-audit` | Compare project docs and setup guidance against source/configuration      |
+| `test-gap-audit`  | Identify missing or weak behavior-level tests before implementing changes |
+
+MCP authentication and first-run setup are documented in
+[docs/MCP-GITHUB-GOVERNANCE.md](docs/MCP-GITHUB-GOVERNANCE.md#first-run-setup).
 
 ## MCP Servers (`.vscode/mcp.json`)
 

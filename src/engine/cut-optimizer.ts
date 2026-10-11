@@ -1,4 +1,4 @@
-import type { Part, CutSheet, OptimizationResult, Result, OffcutEntry, DefectZone } from './types';
+import type { Part, CutSheet, OptimizationResult, Result, OffcutEntry, DefectZone, Material } from './types';
 import { ok, err } from './types';
 import { getMaterial, SAW_KERF } from './materials.ts';
 
@@ -33,9 +33,12 @@ export function optimizeCutSheetsResult(
   cutMode: 'guillotine' | 'freeform' = 'freeform',
   offcutCatalog: OffcutEntry[] = [],
   defectZones: Record<string, DefectZone[]> = {},
+  extraMaterials: Material[] = [],
 ): Result<OptimizationResult, string> {
   try {
-    return ok(optimizeCutSheets(parts, sawKerfMm, sheetSizeOverrides, cutMode, offcutCatalog, defectZones));
+    return ok(
+      optimizeCutSheets(parts, sawKerfMm, sheetSizeOverrides, cutMode, offcutCatalog, defectZones, extraMaterials),
+    );
   } catch (e) {
     return err(e instanceof Error ? e.message : String(e));
   }
@@ -64,6 +67,7 @@ export function optimizeCutSheetsResult(
  *                              sheets before opening full sheets.
  * @param defectZones         - Per-material defect zones; MaxRects pre-blocks
  *                              these regions on every new sheet.
+ * @param extraMaterials      - Optional custom materials used by these parts.
  * @returns Full optimisation result including all sheets, placed rects, yield
  *          percentage, and waste area per sheet.
  */
@@ -74,6 +78,7 @@ export function optimizeCutSheets(
   cutMode: 'guillotine' | 'freeform' = 'freeform',
   offcutCatalog: OffcutEntry[] = [],
   defectZones: Record<string, DefectZone[]> = {},
+  extraMaterials: Material[] = [],
 ): OptimizationResult {
   // Group parts by material key (which implies thickness).
   const groups = new Map<string, { rects: Rect[]; materialKey: string }>();
@@ -96,7 +101,7 @@ export function optimizeCutSheets(
   let sheetIdx = 0;
 
   for (const [, group] of groups) {
-    const mat = getMaterial(group.materialKey);
+    const mat = getMaterial(group.materialKey, extraMaterials);
     const override = sheetSizeOverrides[group.materialKey];
     const sheetLength = override?.length ?? mat.sheetLength;
     const sheetWidth = override?.width ?? mat.sheetWidth;
@@ -402,7 +407,7 @@ function packMaxRects(
     let bestEffective = Infinity;
 
     for (let si = 0; si < sheets.length; si++) {
-      const candidate = findBestPlacement(sheets[si].free, rect, kerf, allowRotForRect);
+      const candidate = findBestPlacement(sheets[si].free, rect, kerf, allowRotForRect, sheets[si].placed);
       if (candidate) {
         const effective = candidate.score + si * SHEET_PREFERENCE_PENALTY;
         if (effective < bestEffective) {
@@ -417,7 +422,7 @@ function packMaxRects(
     if (!best && trackGrainConflicts && rect.rotationLocked !== true) {
       let bestForcedEffective = Infinity;
       for (let si = 0; si < sheets.length; si++) {
-        const candidate = findBestPlacement(sheets[si].free, rect, kerf, true);
+        const candidate = findBestPlacement(sheets[si].free, rect, kerf, true, sheets[si].placed);
         if (candidate) {
           const effective = candidate.score + si * SHEET_PREFERENCE_PENALTY;
           if (effective < bestForcedEffective) {
@@ -442,10 +447,10 @@ function packMaxRects(
         free: initFree,
       };
       sheets.push(sheet);
-      let candidate = findBestPlacement(sheet.free, rect, kerf, allowRotForRect);
+      let candidate = findBestPlacement(sheet.free, rect, kerf, allowRotForRect, sheet.placed);
       if (!candidate && trackGrainConflicts && rect.rotationLocked !== true) {
         // Last-resort forced rotation for grain-constrained materials (Sprint 16: locks override).
-        candidate = findBestPlacement(sheet.free, rect, kerf, true);
+        candidate = findBestPlacement(sheet.free, rect, kerf, true, sheet.placed);
         if (candidate) {
           grainConflict = true;
         }
@@ -494,6 +499,7 @@ function findBestPlacement(
   rect: Rect,
   kerf: number,
   allowRotation = true,
+  placed: readonly PlacedRect[] = [],
 ): {
   freeIdx: number;
   x: number;
@@ -521,6 +527,7 @@ function findBestPlacement(
       const needW = o.w;
       const needH = o.h;
       if (needW > f.w || needH > f.h) continue;
+      if (!preservesKerfClearance(f.x, f.y, needW, needH, placed, kerf)) continue;
       const leftoverX = f.w - needW;
       const leftoverY = f.h - needH;
       const leftoverMin = Math.min(leftoverX, leftoverY);
@@ -543,6 +550,21 @@ function findBestPlacement(
     void kerf; // kerf used downstream when splitting
   }
   return best;
+}
+
+function preservesKerfClearance(
+  x: number,
+  y: number,
+  width: number,
+  length: number,
+  placed: readonly PlacedRect[],
+  kerf: number,
+): boolean {
+  return placed.every((existing) => {
+    const horizontalGap = Math.max(x - (existing.x + existing.width), existing.x - (x + width));
+    const verticalGap = Math.max(y - (existing.y + existing.length), existing.y - (y + length));
+    return horizontalGap >= kerf || verticalGap >= kerf;
+  });
 }
 
 /**

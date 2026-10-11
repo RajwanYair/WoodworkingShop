@@ -1,3 +1,5 @@
+import { assertFiniteNumber, assertGreaterThan, assertIntegerAtLeast } from './invariant';
+
 /**
  * Board-Feet Calculator — Sprint 199
  *
@@ -75,45 +77,51 @@ export interface BoardFeetResult {
  *
  * @param input - Lumber dimensions and options
  * @returns Board feet calculation with cost and weight estimates
- * @throws RangeError for non-positive dimensions or quantity
+ * @throws RangeError for non-finite/non-positive dimensions, invalid quantity or cost, or non-finite calculated results
  */
 export function calculateBoardFeet(input: BoardFeetInput): BoardFeetResult {
   const { thicknessIn, widthIn, lengthIn, quantity = 1, useNominal = false, species, costPerBf } = input;
+  const fn = 'calculateBoardFeet';
 
-  if (thicknessIn <= 0) {
-    throw new RangeError(`calculateBoardFeet: thicknessIn must be > 0, got ${thicknessIn}`);
-  }
-  if (widthIn <= 0) {
-    throw new RangeError(`calculateBoardFeet: widthIn must be > 0, got ${widthIn}`);
-  }
-  if (lengthIn <= 0) {
-    throw new RangeError(`calculateBoardFeet: lengthIn must be > 0, got ${lengthIn}`);
-  }
-  if (quantity <= 0 || !Number.isInteger(quantity)) {
-    throw new RangeError(`calculateBoardFeet: quantity must be a positive integer, got ${quantity}`);
-  }
+  assertGreaterThan(fn, 'thicknessIn', thicknessIn, 0);
+  assertGreaterThan(fn, 'widthIn', widthIn, 0);
+  assertGreaterThan(fn, 'lengthIn', lengthIn, 0);
+  assertIntegerAtLeast(fn, 'quantity', quantity, 1);
+  if (costPerBf !== undefined) assertFiniteNumber(fn, 'costPerBf', costPerBf);
 
   // Convert nominal to actual if requested
   const actualThicknessIn = useNominal ? (NOMINAL_TO_ACTUAL[String(thicknessIn)] ?? thicknessIn) : thicknessIn;
   const actualWidthIn = useNominal ? (NOMINAL_TO_ACTUAL[String(widthIn)] ?? widthIn) : widthIn;
 
   // Board feet formula: (T × W × L) / 144
-  const boardFeet = Math.round(((actualThicknessIn * actualWidthIn * lengthIn) / 144) * 1000) / 1000;
-  const totalBoardFeet = Math.round(boardFeet * quantity * 1000) / 1000;
+  const boardFeet = assertFiniteNumber(
+    fn,
+    'boardFeet',
+    Math.round(((actualThicknessIn * actualWidthIn * lengthIn) / 144) * 1000) / 1000,
+  );
+  const totalBoardFeet = assertFiniteNumber(fn, 'totalBoardFeet', Math.round(boardFeet * quantity * 1000) / 1000);
 
   // Volume in cubic inches
-  const volumeCuIn = Math.round(actualThicknessIn * actualWidthIn * lengthIn * quantity * 100) / 100;
+  const volumeCuIn = assertFiniteNumber(
+    fn,
+    'volumeCuIn',
+    Math.round(actualThicknessIn * actualWidthIn * lengthIn * quantity * 100) / 100,
+  );
 
   // Cost estimate
   let estimatedCost: number | null = null;
   if (costPerBf !== undefined) {
-    estimatedCost = Math.round(totalBoardFeet * costPerBf * 100) / 100;
+    estimatedCost = assertFiniteNumber(fn, 'estimatedCost', Math.round(totalBoardFeet * costPerBf * 100) / 100);
   } else if (species && species in SPECIES_COST_PER_BF) {
-    estimatedCost = Math.round(totalBoardFeet * SPECIES_COST_PER_BF[species] * 100) / 100;
+    estimatedCost = assertFiniteNumber(
+      fn,
+      'estimatedCost',
+      Math.round(totalBoardFeet * SPECIES_COST_PER_BF[species] * 100) / 100,
+    );
   }
 
   // Weight estimate: average ~3.5 lbs per board foot (mid-range hardwood)
-  const estimatedWeightLbs = Math.round(totalBoardFeet * 3.5 * 100) / 100;
+  const estimatedWeightLbs = assertFiniteNumber(fn, 'estimatedWeightLbs', Math.round(totalBoardFeet * 3.5 * 100) / 100);
 
   return {
     boardFeet,
@@ -133,17 +141,13 @@ export function calculateBoardFeet(input: BoardFeetInput): BoardFeetResult {
  * @param widthIn - Actual width in inches
  * @param linearFeet - Length in linear feet
  * @returns Board feet
+ * @throws RangeError for non-finite/non-positive inputs or a non-finite calculated result
  */
 export function linearFeetToBoardFeet(thicknessIn: number, widthIn: number, linearFeet: number): number {
-  if (thicknessIn <= 0) {
-    throw new RangeError(`linearFeetToBoardFeet: thicknessIn must be > 0, got ${thicknessIn}`);
-  }
-  if (widthIn <= 0) {
-    throw new RangeError(`linearFeetToBoardFeet: widthIn must be > 0, got ${widthIn}`);
-  }
-  if (linearFeet <= 0) {
-    throw new RangeError(`linearFeetToBoardFeet: linearFeet must be > 0, got ${linearFeet}`);
-  }
+  const fn = 'linearFeetToBoardFeet';
+  assertGreaterThan(fn, 'thicknessIn', thicknessIn, 0);
+  assertGreaterThan(fn, 'widthIn', widthIn, 0);
+  assertGreaterThan(fn, 'linearFeet', linearFeet, 0);
 
-  return Math.round(((thicknessIn * widthIn * linearFeet) / 12) * 1000) / 1000;
+  return assertFiniteNumber(fn, 'boardFeet', Math.round(((thicknessIn * widthIn * linearFeet) / 12) * 1000) / 1000);
 }

@@ -35,7 +35,7 @@ function MaterialGroupRow({ group }: { group: GrainMaterialGroup }) {
           </span>
           <span className="text-wood-800 dark:text-wood-100 font-medium">{group.materialName}</span>
         </span>
-        <span className="text-wood-500 flex items-center gap-3 text-xs">
+        <span className="text-wood-700 dark:text-wood-300 flex items-center gap-3 text-xs">
           <span>
             {group.constrainedInstances}/{group.totalInstances} {t('grainReport.constrained')}
           </span>
@@ -58,7 +58,7 @@ function MaterialGroupRow({ group }: { group: GrainMaterialGroup }) {
                 {p.hasGrain && (
                   <span
                     title={t('grainReport.grainSensitive')}
-                    className="ms-1 rounded bg-amber-100 px-1 text-amber-600 dark:bg-amber-900/40 dark:text-amber-300"
+                    className="ms-1 rounded bg-amber-100 px-1 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
                   >
                     {t('grainReport.grainBadge')}
                   </span>
@@ -91,7 +91,7 @@ export function GrainReportPanel() {
           <span aria-hidden="true">⟵</span>
           {t('grainReport.title')}
           {report.hasAnyGrainConstraint && (
-            <span className="rounded-full bg-amber-100 px-1.5 py-0.5 text-xs font-medium text-amber-600 dark:bg-amber-900/40 dark:text-amber-300">
+            <span className="rounded-full bg-amber-100 px-1.5 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
               {report.totalConstrained}
             </span>
           )}

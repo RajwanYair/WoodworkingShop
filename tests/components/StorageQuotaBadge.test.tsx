@@ -55,21 +55,19 @@ describe('StorageQuotaBadge', () => {
     });
   });
 
-  it('applies amber styling when nearLimit is true', async () => {
+  it('exposes a warning label when nearLimit is true', async () => {
     mockEstimate.mockResolvedValue(makeEstimate({ nearLimit: true, percentUsed: 85, usedKb: 170000, quotaMb: 200 }));
     render(<StorageQuotaBadge />);
     await waitFor(() => {
-      const badge = screen.getByRole('status');
-      expect(badge.className).toMatch(/amber/);
+      expect(screen.getByRole('status', { name: /storage nearly full/i })).toBeInTheDocument();
     });
   });
 
-  it('does NOT apply amber styling when storage is normal', async () => {
+  it('exposes the usage label when storage is normal', async () => {
     mockEstimate.mockResolvedValue(makeEstimate({ nearLimit: false, percentUsed: 30 }));
     render(<StorageQuotaBadge />);
     await waitFor(() => {
-      const badge = screen.getByRole('status');
-      expect(badge.className).not.toMatch(/amber/);
+      expect(screen.getByRole('status', { name: '51200 KB / 200 MB' })).toBeInTheDocument();
     });
   });
 

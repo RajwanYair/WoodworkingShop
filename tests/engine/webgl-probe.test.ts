@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
   probeWebGLTier,
   isWebGLAvailable,
@@ -9,6 +9,7 @@ import {
 describe('webgl-probe', () => {
   beforeEach(() => {
     resetWebGLProbeCache();
+    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(null);
   });
 
   it('returns a valid tier string', () => {
