@@ -15,6 +15,7 @@
 | [MCP-GITHUB-GOVERNANCE.md](MCP-GITHUB-GOVERNANCE.md) | MCP servers, authentication and GitHub governance          |
 | [ENGINEERING-DECISIONS.md](ENGINEERING-DECISIONS.md) | Evaluation outcomes and reconsideration triggers           |
 | [OWNERSHIP.md](OWNERSHIP.md)                         | Documentation owners and freshness limits                  |
+| [SESSION-LEARNINGS.md](SESSION-LEARNINGS.md)         | Reusable lessons from locally indexed project sessions     |
 | [CLAIM-AUDIT.md](CLAIM-AUDIT.md)                     | Historical claim audit baseline (Phase 52)                 |
 | [SPRINT-HISTORY.md](SPRINT-HISTORY.md)               | Sprint-by-sprint development history                       |
 | [../CHANGELOG.md](../CHANGELOG.md)                   | Version-by-version change log                              |
