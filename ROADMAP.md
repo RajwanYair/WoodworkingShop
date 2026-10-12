@@ -1826,7 +1826,9 @@ flowchart LR
 
 **Sprint 421 — Vitest 5 and unified test projects** — P1 · L · S420 (absorbs S414).
 
-**Status / Remaining:** Vitest 5 is present on `main`. T2 is implemented in draft [PR #236](https://github.com/RajwanYair/WoodworkingShop/pull/236), stacked on [Sprint 420 PR #227](https://github.com/RajwanYair/WoodworkingShop/pull/227) and tracked by [issue #235](https://github.com/RajwanYair/WoodworkingShop/issues/235). T3 is tracked by [issue #237](https://github.com/RajwanYair/WoodworkingShop/issues/237), blocked by #235. T4 (10-run runtime/flake measurement and ADR) remains.
+**Status / Remaining:** Vitest 5 is present on `main`. T2 is implemented in draft [PR #236](https://github.com/RajwanYair/WoodworkingShop/pull/236), stacked on [Sprint 420 PR #227](https://github.com/RajwanYair/WoodworkingShop/pull/227) and tracked by [issue #235](https://github.com/RajwanYair/WoodworkingShop/issues/235).
+
+T3 is implemented in draft [PR #238](https://github.com/RajwanYair/WoodworkingShop/pull/238), stacked on #236 and tracked by [issue #237](https://github.com/RajwanYair/WoodworkingShop/issues/237). T4 (10-run runtime/flake measurement and ADR) remains.
 
 - T1: Migrate to Vitest 5 following the official migration guide; keep the root config files (`vitest.config.ts`, `vitest.components.config.ts`, `vitest.bench.config.ts`) or merge them into one `projects` config only if coverage reports and ratchets stay identical.
 - T2: Add a `components-browser` project (`@vitest/browser-playwright`, Chromium) for layout-, focus-, pointer- and canvas-dependent components (preview, sheets, dialogs, parts grid); jsdom remains the default project.
