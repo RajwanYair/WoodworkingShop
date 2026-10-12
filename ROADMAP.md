@@ -221,18 +221,18 @@ Historical artifacts:
 
 ### 3.1 Language and Framework
 
-| Decision     | Current               | Alternatives Considered                   | Verdict              | Rationale                                                                                                      |
-| ------------ | --------------------- | ----------------------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------- |
-| Language     | TypeScript 6 (strict) | Rust+WASM, Dart/Flutter, plain JS, Go     | **Upgrade to TS 7**  | TypeScript 7.0 (native Go port, released 2026) keeps the language and is ~10× faster to check; migrate in S420 |
-| UI framework | React 19              | Svelte 5, SolidJS, Vue 3.5, Qwik          | **Keep React 19**    | Largest ecosystem, best Copilot/tooling support, concurrent rendering for heavy previews                       |
-| Styling      | Tailwind CSS v4       | CSS Modules, Vanilla Extract, Panda CSS   | **Keep Tailwind v4** | Zero-runtime, design token system via CSS vars, logical properties for RTL                                     |
-| State        | Zustand 5 (slices)    | Jotai, Redux Toolkit, Signals, Nanostores | **Keep Zustand**     | Minimal API, no boilerplate, excellent TS inference, undo/redo via middleware                                  |
-| Build        | Vite 8 (Rolldown)     | Turbopack, Rspack, esbuild-only, Farm     | **Keep Vite 8**      | Fastest HMR, native Rolldown perf, worker import syntax, proven plugin ecosystem                               |
-| Testing      | Vitest 4 + Playwright | Jest, Cypress, Testing Library only       | **Vitest 5 + PW**    | Same config as Vite; Vitest 5 projects + browser mode (S421) and Playwright 1.63 (S422)                        |
-| Rendering    | Manual memoisation    | Signals, `useMemo` audits only            | **React Compiler**   | React Compiler 1.0 removes hand-written memoisation where proven safe; opt-in flag first (S423)                |
-| Routing      | `?tab=` + History API | React Router, TanStack Router             | **Navigation API**   | Baseline 2026 (Chrome 102, Firefox 147, Safari 26.2); typed route table, no router dependency (S430)           |
-| i18n         | i18next 26            | Paraglide, LinguiJS, FormatJS             | **Keep i18next**     | Mature, massive plugin ecosystem, works with react-i18next, i18n-ally extension                                |
-| PDF          | @react-pdf/renderer   | pdfkit, jsPDF, Puppeteer PDF              | **Keep @react-pdf**  | React component model for layouts, off-main-thread support, no headless browser needed                         |
+| Decision     | Current                                           | Alternatives Considered                   | Verdict                | Rationale                                                                                                                                      |
+| ------------ | ------------------------------------------------- | ----------------------------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Language     | TypeScript 7.0 (strict; TS 6 API alias for tools) | Rust+WASM, Dart/Flutter, plain JS, Go     | **Keep TS 7**          | Native compiler handles typecheck/build; preserve the TS 6 API alias until typescript-eslint and utility consumers support the stable TS 7 API |
+| UI framework | React 19                                          | Svelte 5, SolidJS, Vue 3.5, Qwik          | **Keep React 19**      | Largest ecosystem, best Copilot/tooling support, concurrent rendering for heavy previews                                                       |
+| Styling      | Tailwind CSS v4                                   | CSS Modules, Vanilla Extract, Panda CSS   | **Keep Tailwind v4**   | Zero-runtime, design token system via CSS vars, logical properties for RTL                                                                     |
+| State        | Zustand 5 (slices)                                | Jotai, Redux Toolkit, Signals, Nanostores | **Keep Zustand**       | Minimal API, no boilerplate, excellent TS inference, undo/redo via middleware                                                                  |
+| Build        | Vite 8 (Rolldown)                                 | Turbopack, Rspack, esbuild-only, Farm     | **Keep Vite 8**        | Fastest HMR, native Rolldown perf, worker import syntax, proven plugin ecosystem                                                               |
+| Testing      | Vitest 5 + Playwright 1.64                        | Jest, Cypress, Testing Library only       | **Keep Vitest 5 + PW** | Same config as Vite; browser-mode projects remain planned (S421)                                                                               |
+| Rendering    | Manual memoisation                                | Signals, `useMemo` audits only            | **React Compiler**     | React Compiler 1.0 removes hand-written memoisation where proven safe; opt-in flag first (S423)                                                |
+| Routing      | `?tab=` + History API                             | React Router, TanStack Router             | **Navigation API**     | Baseline 2026 (Chrome 102, Firefox 147, Safari 26.2); typed route table, no router dependency (S430)                                           |
+| i18n         | i18next 26                                        | Paraglide, LinguiJS, FormatJS             | **Keep i18next**       | Mature, massive plugin ecosystem, works with react-i18next, i18n-ally extension                                                                |
+| PDF          | @react-pdf/renderer                               | pdfkit, jsPDF, Puppeteer PDF              | **Keep @react-pdf**    | React component model for layouts, off-main-thread support, no headless browser needed                                                         |
 
 ### 3.2 Frontend Architecture
 
@@ -299,25 +299,25 @@ Historical artifacts:
 
 ### 3.7 Tooling Versions (Pinned)
 
-Latest versions were checked against the npm registry on 2026-10-04.
+Latest versions were checked against the npm registry on 2026-10-12.
 
-| Tool         | Pinned today                                 | Latest (2026-10-04) | Target and sprint                                            |
-| ------------ | -------------------------------------------- | ------------------- | ------------------------------------------------------------ |
-| Node.js      | ≥ 22 (`package.json#engines`); CI default 24 | 26 current          | Raise floor to 24 with a CHANGELOG note (S425)               |
-| npm          | 11.x                                         | 11.x                | Latest stable                                                |
-| TypeScript   | 6.0.x                                        | 7.0.2               | TS 7 native for typecheck/build (S420)                       |
-| React        | 19.x                                         | 19.3.0              | Keep; enable React Compiler 1.0 (S423)                       |
-| Vite         | 8.x                                          | 8.3.0               | Keep; Rolldown is default                                    |
-| Vitest       | 4.x                                          | 5.0.1               | Vitest 5 + browser mode projects (S421)                      |
-| Playwright   | 1.61                                         | 1.63.0              | 1.63; sharding and ARIA snapshots (S422)                     |
-| Tailwind CSS | 4.x                                          | 4.3.3               | Keep; v4 syntax only                                         |
-| ESLint       | 10.x                                         | 10.x                | Keep; flat config, 7 plugins; oxlint pre-pass is an ADR only |
-| Knip         | 6.x                                          | 6.39.0              | Zero entry hatches (S424)                                    |
-| Stryker      | 10.x                                         | 10.0.0              | Incremental mode for the full baseline (S424)                |
-| Prettier     | 3.x                                          | 3.x                 | Latest stable                                                |
-| Stylelint    | 17.x                                         | 17.x                | Latest stable                                                |
-| ripgrep      | 15.x                                         | —                   | System install via scoop/brew                                |
-| GitHub CLI   | Latest                                       | —                   | System install via winget/brew                               |
+| Tool         | Pinned today                                 | Latest (2026-10-04) | Target and sprint                                                             |
+| ------------ | -------------------------------------------- | ------------------- | ----------------------------------------------------------------------------- |
+| Node.js      | ≥ 22 (`package.json#engines`); CI default 24 | 26 current          | Raise floor to 24 with a CHANGELOG note (S425)                                |
+| npm          | 11.x                                         | 11.x                | Latest stable                                                                 |
+| TypeScript   | 7.0.2 (TS 6 API alias for tools)             | 7.0.2               | TS 7 native for typecheck/build; remove API alias when consumers support TS 7 |
+| React        | 19.x                                         | 19.3.0              | Keep; enable React Compiler 1.0 (S423)                                        |
+| Vite         | 8.3.4                                        | 8.3.4               | Keep; Rolldown is default                                                     |
+| Vitest       | 5.0.4                                        | 5.0.4               | Keep; browser mode projects remain planned (S421)                             |
+| Playwright   | 1.64.0                                       | 1.64.0              | Keep; sharding and ARIA snapshots                                             |
+| Tailwind CSS | 4.x                                          | 4.3.3               | Keep; v4 syntax only                                                          |
+| ESLint       | 10.x                                         | 10.x                | Keep; flat config, 7 plugins; oxlint pre-pass is an ADR only                  |
+| Knip         | 6.x                                          | 6.39.0              | Zero entry hatches (S424)                                                     |
+| Stryker      | 10.x                                         | 10.0.0              | Incremental mode for the full baseline (S424)                                 |
+| Prettier     | 3.x                                          | 3.x                 | Latest stable                                                                 |
+| Stylelint    | 17.x                                         | 17.x                | Latest stable                                                                 |
+| ripgrep      | 15.x                                         | —                   | System install via scoop/brew                                                 |
+| GitHub CLI   | Latest                                       | —                   | System install via winget/brew                                                |
 
 ### 3.8 Testing Strategy (New Decisions — 2026-09-27)
 
@@ -460,15 +460,15 @@ Measured by static search of `src/` on 2026-09-30; S371 must replace these heuri
 
 Measured from the working tree at `56aef6e` (v5.34.0) and the npm registry on 2026-10-04.
 
-| Finding                                                                                                                                                        | Impact                                                        | Sprint               |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | -------------------- |
-| Phase 64 is marked COMPLETE, but S313 (build log, camera, machine/serial flows) and S315 (offline reload, quota, file handlers) have no status or E2E evidence | Release-train claim is not fully evidenced                    | Carry-over → v5.35.0 |
-| `src/` has 63,791 TypeScript lines; `src/engine/` 177 files (165 top-level); `src/components/` 116 `.tsx` files; 353 test files; 12 E2E specs                  | Flat engine and type-based folders slow navigation and review | S427, S430           |
-| Two components sit at the 600-line gate (`SheetCard.tsx` 599, `IsometricView.tsx` 583); `Icons.tsx` 515                                                        | Next feature in these files forces an emergency split         | S431                 |
-| TS 7 + React Compiler 1.0 released; Vitest 5/Playwright 1.63 adopted. typescript-eslint 8.70 requires TS <6.1; TS 7 awaits parser support.                     | TS 7 awaits parser support; browser-mode work remains         | S420–S423            |
-| CI actions are pinned by tag, not SHA; spell check is commented out in `ci.yml`; Lighthouse writes `.lighthouseci/` into the workspace                         | Supply-chain and `$TEMP` policy gaps                          | S422, S424, S425     |
-| 22 Knip `entry` overrides in `package.json`, 13 for modules with no importers                                                                                  | Dead code can hide behind hatches                             | S371, S424           |
-| README, ARCHITECTURE, CONTRIBUTING and AGENTS had drifted (source tree, shortcuts, PWA design, CI matrix, active sprint, tool counts)                          | Fixed on 2026-10-04; automation prevents recurrence           | S444                 |
+| Finding                                                                                                                                                        | Impact                                                                                                 | Sprint               |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | -------------------- |
+| Phase 64 is marked COMPLETE, but S313 (build log, camera, machine/serial flows) and S315 (offline reload, quota, file handlers) have no status or E2E evidence | Release-train claim is not fully evidenced                                                             | Carry-over → v5.35.0 |
+| `src/` has 63,791 TypeScript lines; `src/engine/` 177 files (165 top-level); `src/components/` 116 `.tsx` files; 353 test files; 12 E2E specs                  | Flat engine and type-based folders slow navigation and review                                          | S427, S430           |
+| Two components sit at the 600-line gate (`SheetCard.tsx` 599, `IsometricView.tsx` 583); `Icons.tsx` 515                                                        | Next feature in these files forces an emergency split                                                  | S431                 |
+| TypeScript 7.0, Vitest 5 and Playwright 1.64 are adopted; typescript-eslint 8.71.1 still requires the TypeScript 6 API compatibility alias.                    | Remove TS 6 API alias when parser and script consumers support the TS 7 API; browser-mode work remains | S420–S423            |
+| CI actions are pinned by tag, not SHA; spell check is commented out in `ci.yml`; Lighthouse writes `.lighthouseci/` into the workspace                         | Supply-chain and `$TEMP` policy gaps                                                                   | S422, S424, S425     |
+| 22 Knip `entry` overrides in `package.json`, 13 for modules with no importers                                                                                  | Dead code can hide behind hatches                                                                      | S371, S424           |
+| README, ARCHITECTURE, CONTRIBUTING and AGENTS had drifted (source tree, shortcuts, PWA design, CI matrix, active sprint, tool counts)                          | Fixed on 2026-10-04; automation prevents recurrence                                                    | S444                 |
 
 ---
 
@@ -1818,11 +1818,11 @@ flowchart LR
 
 **Sprint 420 — TypeScript 7 native compiler** — P1 · M · none (absorbs S415).
 
-- T1: Install TypeScript 7 and run it against `tsconfig.app.json`, `tsconfig.node.json`, `tsconfig.test.json` and `tsconfig.e2e.json`; record diagnostics deltas and wall-clock time beside TypeScript 6 in `%TEMP%/WoodworkingShop/ts7/`.
+- T1: Run TypeScript 7 against all four project configs; no new diagnostics. Local sequential project-reference checks measured 49.41 s with the TypeScript 6 API compiler and 33.84 s with TypeScript 7 (single-run observations, not a controlled benchmark).
 - T2: Resolve removed or changed compiler options; keep `strict`, `erasableSyntaxOnly`, `noImplicitOverride`, `verbatimModuleSyntax` and `skipLibCheck` semantics.
-- T3: Switch `typecheck` and `build` to TypeScript 7. If typescript-eslint's type-aware rules still need the TypeScript 6 JavaScript API, keep it as a lint-only devDependency with an ADR and a removal trigger.
+- T3: Switch `typecheck` and `build` to TypeScript 7. Keep `@typescript/typescript6` aliased as `typescript` for typescript-eslint, TypeDoc and compiler-API utilities, with the removal trigger documented in `docs/ENGINEERING-DECISIONS.md`.
 - T4: Update the `TypeScript` token in AGENTS.md, copilot-instructions.md, README badges and `docs/tech-stack.svg` in the same commit (`ai:context:validate` enforces it).
-- Accept: zero new diagnostics or each delta explained; typecheck time reported before and after; `npm run ci` green.
+- Accept: zero new diagnostics; typecheck time recorded for both compilers; `npm run ci` green.
 
 **Sprint 421 — Vitest 5 and unified test projects** — P1 · L · S420 (absorbs S414).
 

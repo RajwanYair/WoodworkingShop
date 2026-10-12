@@ -10,18 +10,18 @@
 
 ### Technology Version Claims (Rule 1)
 
-| Claim                 | Source of Truth            | Actual Value | Status      |
-| --------------------- | -------------------------- | ------------ | ----------- |
-| React 19              | `package.json#react`       | `^19.3.0`    | ✅ VERIFIED |
-| TypeScript 6 (strict) | `package.json#typescript`  | `^6.0.3`     | ✅ VERIFIED |
-| Vite 8                | `package.json#vite`        | `^8.3.0`     | ✅ VERIFIED |
-| Tailwind CSS 4        | `package.json#tailwindcss` | `^4.3.1`     | ✅ VERIFIED |
-| Zustand 5             | `package.json#zustand`     | `^5.0.15`    | ✅ VERIFIED |
-| Vitest 5              | `package.json#vitest`      | `^5.0.1`     | ✅ VERIFIED |
-| Playwright 1.63       | `package.json`             | `^1.63.0`    | ✅ VERIFIED |
-| i18next 26            | `package.json#i18next`     | `^26.4.2`    | ✅ VERIFIED |
-| @react-pdf/renderer 4 | `package.json`             | `^4.9.0`     | ✅ VERIFIED |
-| Node ≥ 22             | `package.json#engines`     | `">=22.0.0"` | ✅ VERIFIED |
+| Claim                 | Source of Truth                   | Actual Value            | Status      |
+| --------------------- | --------------------------------- | ----------------------- | ----------- |
+| React 19              | `package.json#react`              | `^19.3.0`               | ✅ VERIFIED |
+| TypeScript 7 (strict) | `package.json#@typescript/native` | `npm:typescript@^7.0.2` | ✅ VERIFIED |
+| Vite 8                | `package.json#vite`               | `^8.3.4`                | ✅ VERIFIED |
+| Tailwind CSS 4        | `package.json#tailwindcss`        | `^4.3.1`                | ✅ VERIFIED |
+| Zustand 5             | `package.json#zustand`            | `^5.0.15`               | ✅ VERIFIED |
+| Vitest 5              | `package.json#vitest`             | `^5.0.4`                | ✅ VERIFIED |
+| Playwright 1.64       | `package.json`                    | `^1.64.0`               | ✅ VERIFIED |
+| i18next 26            | `package.json#i18next`            | `^26.4.4`               | ✅ VERIFIED |
+| @react-pdf/renderer 4 | `package.json`                    | `^4.9.0`                | ✅ VERIFIED |
+| Node ≥ 22             | `package.json#engines`            | `">=22.0.0"`            | ✅ VERIFIED |
 
 ### Feature Claims (Rule 2)
 

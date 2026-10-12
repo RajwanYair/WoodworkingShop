@@ -12,7 +12,7 @@
 [![CodeQL](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/codeql.yml/badge.svg)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/codeql.yml)
 [![codecov](https://codecov.io/gh/RajwanYair/WoodworkingShop/graph/badge.svg)](https://codecov.io/gh/RajwanYair/WoodworkingShop)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178c6?logo=typescript&logoColor=white)](tsconfig.json)
+[![TypeScript](https://img.shields.io/badge/TypeScript-7.0-3178c6?logo=typescript&logoColor=white)](tsconfig.json)
 [![React](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=white)](package.json)
 [![Vite](https://img.shields.io/badge/Vite-8-646cff?logo=vite&logoColor=white)](vite.config.ts)
 [![Tailwind](https://img.shields.io/badge/Tailwind-4-38bdf8?logo=tailwindcss&logoColor=white)](src/index.css)
@@ -139,20 +139,20 @@ npm run build
 ## 🏗 Tech Stack
 
 <div align="center">
-  <img src="docs/tech-stack.svg" alt="Tech stack: React 19, TypeScript 6, Vite 8, Tailwind 4, Zustand 5, Vitest 5, i18next 26" width="100%"/>
+  <img src="docs/tech-stack.svg" alt="Tech stack: React 19, TypeScript 7, Vite 8, Tailwind 4, Zustand 5, Vitest 5, i18next 26" width="100%"/>
 </div>
 
 | Layer         | Technology                                                 |
 | ------------- | ---------------------------------------------------------- |
 | Framework     | ⚛️ React 19                                                |
-| Language      | 🔷 TypeScript 6 (strict mode)                              |
+| Language      | 🔷 TypeScript 7.0 (strict mode; TS 6 API alias for tools)  |
 | Styling       | 🎨 Tailwind CSS 4                                          |
 | State         | 🐻 Zustand 5                                               |
 | PDF           | 📄 @react-pdf/renderer 4                                   |
 | i18n          | 🌐 i18next 26 + react-i18next                              |
 | Build         | ⚡ Vite 8                                                  |
 | Unit tests    | 🧪 Vitest 5 + @testing-library/react                       |
-| E2E tests     | 🎭 Playwright 1.63 + axe-core (Chromium, Firefox, WebKit)  |
+| E2E tests     | 🎭 Playwright 1.64 + axe-core (Chromium, Firefox, WebKit)  |
 | Lint / format | 🧹 ESLint 10 (flat config) + Prettier                      |
 | CI/CD         | 🤖 GitHub Actions                                          |
 | Deploy        | 🚀 GitHub Pages + Cloudflare Pages (edge CDN, PR previews) |

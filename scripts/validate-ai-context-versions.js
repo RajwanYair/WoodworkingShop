@@ -49,7 +49,7 @@ function main() {
   const appVersion = packageJson.version;
 
   const reactMajor = getMajor(packageJson.dependencies.react);
-  const tsMajor = getMajor(packageJson.devDependencies.typescript);
+  const tsMajor = getMajor(packageJson.devDependencies['@typescript/native']);
   const viteMajor = getMajor(packageJson.devDependencies.vite);
   const vitestMajor = getMajor(packageJson.devDependencies.vitest);
   const playwrightMajorMinor = getMajorMinor(packageJson.devDependencies['@playwright/test']);
@@ -60,6 +60,23 @@ function main() {
   const copilotText = readText(copilotInstructionsPath);
   const agentsText = readText(agentsPath);
   const errors = [];
+
+  if (tsMajor !== 7) {
+    errors.push(`TypeScript compiler must remain at major 7; found ${tsMajor}`);
+  }
+
+  assertIncludes(
+    packageJson.scripts.build,
+    'node node_modules/@typescript/native/bin/tsc -b',
+    'package.json#scripts.build',
+    errors,
+  );
+  assertIncludes(
+    packageJson.scripts.typecheck,
+    'node node_modules/@typescript/native/bin/tsc -b --noEmit',
+    'package.json#scripts.typecheck',
+    errors,
+  );
 
   assertIncludes(copilotText, `Current release: v${appVersion}`, '.github/copilot-instructions.md', errors);
   assertIncludes(agentsText, `**v${appVersion}**`, 'AGENTS.md', errors);
