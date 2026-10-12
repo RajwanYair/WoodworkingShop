@@ -1,7 +1,7 @@
 {
   "name": "woodworkingshop",
   "version": "5.35.1",
-  "description": "Free browser-based woodworking design app for cabinets and furniture, with cut-list optimization, CNC exports, and offline support",
+  "description": "Free online cabinet planner and woodworking cut-list optimizer with CNC exports and offline support",
   "keywords": [
     "woodworking",
     "cabinet-design",

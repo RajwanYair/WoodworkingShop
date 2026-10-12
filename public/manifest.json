@@ -2,7 +2,7 @@
   "name": "WoodworkingShop",
   "short_name": "Cabinet",
   "id": "/WoodworkingShop/",
-  "description": "Interactive woodworking cabinet design tool with cut optimization",
+  "description": "Free online cabinet planner and woodworking cut-list optimizer with CNC exports and offline support",
   "start_url": "/WoodworkingShop/",
   "scope": "/WoodworkingShop/",
   "display": "standalone",

@@ -37,6 +37,9 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     needs: quality
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-node
@@ -44,7 +47,11 @@ jobs:
       # Coverage upload is best-effort; CI should not fail if Codecov is unavailable (network, quota, etc.)
       # Test execution itself is blocking (npm test must pass before reaching this step)
       - uses: codecov/codecov-action@v5
-        with: { files: /tmp/WoodworkingShop/coverage/lcov.info, flags: unit, fail_ci_if_error: false }
+        with:
+          files: /tmp/WoodworkingShop/coverage/lcov.info
+          flags: unit
+          use_oidc: true
+          fail_ci_if_error: false
       - run: npm run bench:check && npm run build && npm run bundle:check && npm run bundle:critical
       - uses: actions/upload-artifact@v7
         with: { name: dist, path: dist, retention-days: 7 }

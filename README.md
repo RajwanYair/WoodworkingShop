@@ -1,16 +1,15 @@
-# WoodworkingShop — Free WoodworkingShop & Cut-List Optimizer
+# WoodworkingShop — Free Online Cabinet Planner & Woodworking Cut-List Optimizer
 
 <div align="center">
-  <img src="docs/banner.svg" alt="WoodworkingShop — Interactive Woodworking Design Tool" width="100%"/>
+  <img src="docs/social-preview.png" alt="WoodworkingShop cabinet preview and design workspace" width="100%"/>
 </div>
 
 <div align="center">
 
-[![CI](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/ci.yml/badge.svg)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/ci.yml)
-[![Deploy](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/pages.yml/badge.svg)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/pages.yml)
-[![Cloudflare Pages](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/cloudflare-pages.yml/badge.svg)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/cloudflare-pages.yml)
-[![CodeQL](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/codeql.yml/badge.svg)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/codeql.yml)
-[![codecov](https://codecov.io/gh/RajwanYair/WoodworkingShop/graph/badge.svg)](https://codecov.io/gh/RajwanYair/WoodworkingShop)
+[![CI](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/ci.yml?query=branch%3Amain)
+[![Deploy](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/pages.yml/badge.svg?branch=main)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/pages.yml?query=branch%3Amain)
+[![CodeQL](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/codeql.yml?query=branch%3Amain)
+[![codecov](https://codecov.io/gh/RajwanYair/WoodworkingShop/branch/main/graph/badge.svg)](https://codecov.io/gh/RajwanYair/WoodworkingShop)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-7.0%20native-3178c6?logo=typescript&logoColor=white)](tsconfig.json)
 [![React](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=white)](package.json)
@@ -18,9 +17,9 @@
 [![Tailwind](https://img.shields.io/badge/Tailwind-4-38bdf8?logo=tailwindcss&logoColor=white)](src/index.css)
 [![PWA](https://img.shields.io/badge/PWA-offline--ready-5a0fc8?logo=pwa&logoColor=white)](public/manifest.json)
 [![i18n](https://img.shields.io/badge/i18n-6%20languages%20%28EN%20HE%20AR%20DE%20ES%20FR%29-orange?logo=googletranslate&logoColor=white)](src/i18n)
-[![Bundle](https://img.shields.io/badge/bundle-size%20budgets-enforced-blue?logo=webpack&logoColor=white)](config/bundle-budget.json)
+[![Build budget](https://img.shields.io/badge/Build%20budget-enforced%20in%20CI-blue?logo=githubactions&logoColor=white)](config/bundle-budget.json)
 [![a11y](https://img.shields.io/badge/a11y-WCAG%202.2%20AA-green?logo=accessibility&logoColor=white)](tests/e2e)
-[![Last Commit](https://img.shields.io/github/last-commit/RajwanYair/WoodworkingShop?logo=github)](https://github.com/RajwanYair/WoodworkingShop/commits/main)
+[![Last Commit](https://img.shields.io/github/last-commit/RajwanYair/WoodworkingShop/main?logo=github)](https://github.com/RajwanYair/WoodworkingShop/commits/main)
 [![GitHub Stars](https://img.shields.io/github/stars/RajwanYair/WoodworkingShop?style=social)](https://github.com/RajwanYair/WoodworkingShop/stargazers)
 
 **[🚀 Live Demo](https://rajwanyair.github.io/WoodworkingShop/)** · **[📋 Changelog](CHANGELOG.md)** · **[🗺 Roadmap](ROADMAP.md)** · **[🏛 Architecture](docs/ARCHITECTURE.md)** · **[📖 User Guide](docs/USER-GUIDE.md)** · **[🛟 Support](SUPPORT.md)** · **[📚 Docs](docs/index.md)**
@@ -29,11 +28,7 @@
 
 ---
 
-> **WoodworkingShop** is a free, open-source, browser-based woodworking design tool
-> and cut-list optimizer: configure any cabinet or furniture piece, see a live
-> 6-view 3D preview, optimize your cut sheets with MaxRects bin-packing, and export
-> a complete PDF build plan, DXF, G-code, or BOM — all without a server, account,
-> or installation. Supports 6 languages including RTL (Hebrew, Arabic).
+> **WoodworkingShop** is a free online cabinet planner and woodworking cut-list optimizer. Design cabinets and furniture in your browser, reduce sheet-material waste with MaxRects nesting, and export build plans, BOMs, DXF, and CNC G-code. No account or installation is required; six languages are supported, including Hebrew and Arabic RTL.
 
 <div align="center">
   <img src="docs/features.svg" alt="WoodworkingShop features — Design, Optimize, Export, Preview, Assembly, Platform" width="100%"/>
@@ -142,20 +137,20 @@ npm run build
   <img src="docs/tech-stack.svg" alt="Tech stack: React 19, TypeScript 7 native, Vite 8, Tailwind 4, Zustand 5, Vitest 5, i18next 26" width="100%"/>
 </div>
 
-| Layer         | Technology                                                 |
-| ------------- | ---------------------------------------------------------- |
-| Framework     | ⚛️ React 19                                                |
-| Language      | 🔷 TypeScript 7 native (strict mode)                       |
-| Styling       | 🎨 Tailwind CSS 4                                          |
-| State         | 🐻 Zustand 5                                               |
-| PDF           | 📄 @react-pdf/renderer 4                                   |
-| i18n          | 🌐 i18next 26 + react-i18next                              |
-| Build         | ⚡ Vite 8                                                  |
-| Unit tests    | 🧪 Vitest 5 + @testing-library/react                       |
-| E2E tests     | 🎭 Playwright 1.63 + axe-core (Chromium, Firefox, WebKit)  |
-| Lint / format | 🧹 ESLint 10 (flat config) + Prettier                      |
-| CI/CD         | 🤖 GitHub Actions                                          |
-| Deploy        | 🚀 GitHub Pages + Cloudflare Pages (edge CDN, PR previews) |
+| Layer         | Technology                                                |
+| ------------- | --------------------------------------------------------- |
+| Framework     | ⚛️ React 19                                               |
+| Language      | 🔷 TypeScript 7 native (strict mode)                      |
+| Styling       | 🎨 Tailwind CSS 4                                         |
+| State         | 🐻 Zustand 5                                              |
+| PDF           | 📄 @react-pdf/renderer 4                                  |
+| i18n          | 🌐 i18next 26 + react-i18next                             |
+| Build         | ⚡ Vite 8                                                 |
+| Unit tests    | 🧪 Vitest 5 + @testing-library/react                      |
+| E2E tests     | 🎭 Playwright 1.63 + axe-core (Chromium, Firefox, WebKit) |
+| Lint / format | 🧹 ESLint 10 (flat config) + Prettier                     |
+| CI/CD         | 🤖 GitHub Actions                                         |
+| Deploy        | 🚀 GitHub Pages; optional Cloudflare Pages integration    |
 
 ---
 
@@ -302,8 +297,7 @@ The app auto-deploys to **GitHub Pages** on every push to `main` via [`.github/w
 
 ### Cloudflare Pages
 
-A parallel Cloudflare Pages deployment is configured via [`.github/workflows/cloudflare-pages.yml`](.github/workflows/cloudflare-pages.yml).
-It provides edge CDN delivery at 250+ PoPs and automatic PR preview deployments.
+An optional Cloudflare Pages deployment is configured via [`.github/workflows/cloudflare-pages.yml`](.github/workflows/cloudflare-pages.yml). The workflow runs only when the `CLOUDFLARE_ACCOUNT_ID` repository variable is configured; otherwise it is skipped. GitHub Pages remains the primary public deployment.
 
 **Setup** (one-time, in the GitHub repository settings under _Secrets and variables → Actions_):
 
@@ -364,28 +358,7 @@ Quick checklist before opening a PR:
 
 ---
 
-## 🔍 GitHub Topics & Discoverability
-
-<!-- GitHub repository topics (set via Settings → Topics):
-  woodworking  cabinet-design  cut-list-optimizer  furniture-planner  cnc-router
-  cut-list  sheet-nesting  maxrects  cabinet-maker  dxf  gcode  bin-packing
-  woodworking-tools  furniture-design  browser-based  pwa  multilingual
-  hebrew  rtl  open-source  cnc  nesting  offline-app  pdf-export
--->
-
-**Keywords:** cabinet planner, woodworking design tool, cut list optimizer,
-furniture layout planner, sheet goods optimizer, MaxRects bin packing algorithm,
-CNC export DXF G-code, cabinet maker software free, free woodworking app,
-browser-based cabinet design, parametric furniture designer,
-multilingual RTL Hebrew Arabic, PWA offline woodworking,
-React TypeScript woodworking app, cut sheet optimizer free online,
-cabinet layout generator, kitchen cabinet planner, wardrobe designer,
-bookcase builder, furniture cut list software, nesting software free,
-panel optimization, 2D bin packing, wood cutting calculator,
-material waste reduction, edge banding calculator, hardware BOM generator,
-assembly instructions generator, woodworking project planner
-
-### Why WoodworkingShop?
+## Why WoodworkingShop?
 
 | Need                        | Solution                                                      |
 | --------------------------- | ------------------------------------------------------------- |

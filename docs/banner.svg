@@ -189,7 +189,7 @@
   <text x="688" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">6 Languages</text>
 
   <rect x="738" y="144" width="80" height="23" rx="11.5" fill="url(#pillBg)" stroke="#7a4010" stroke-width="1"/>
-  <text x="778" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">5,167 Tests</text>
+  <text x="778" y="159" font-family="'Segoe UI',Arial,sans-serif" font-size="11" fill="#e8a060" text-anchor="middle">Unit Tests</text>
 
   <!-- ── Tech stack row (shifted right to clear feature pills & tagline) ── -->
   <text x="1080" y="100"
@@ -213,7 +213,7 @@
   <text x="1053" y="173" font-family="monospace,'Courier New'" font-size="10" fill="#f59e0b" text-anchor="middle">Zustand 5</text>
   <!-- Vitest -->
   <rect x="1090" y="159" width="66" height="21" rx="5" fill="#0d0d0d" opacity="0.9"/>
-  <text x="1123" y="173" font-family="monospace,'Courier New'" font-size="10" fill="#acd268" text-anchor="middle">Vitest 4</text>
+  <text x="1123" y="173" font-family="monospace,'Courier New'" font-size="10" fill="#acd268" text-anchor="middle">Vitest 5</text>
 
   <!-- ── Bottom stats bar ── -->
   <rect x="7" y="202" width="1186" height="50" rx="0" fill="#0e0804" opacity="0.55"/>
@@ -227,7 +227,7 @@
 
   <!-- Stat 2: Tests -->
   <text x="400" y="222" font-family="'Segoe UI',Arial,sans-serif" font-size="10" fill="#906040" text-anchor="middle">UNIT TESTS</text>
-  <text x="400" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="600" fill="#f0c060" text-anchor="middle">5,167 passing</text>
+  <text x="400" y="238" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="600" fill="#f0c060" text-anchor="middle">Quality gates in CI</text>
 
   <!-- Divider -->
   <line x1="472" y1="208" x2="472" y2="246" stroke="#5a3010" stroke-width="1" opacity="0.6"/>

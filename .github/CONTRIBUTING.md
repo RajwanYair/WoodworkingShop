@@ -7,7 +7,7 @@
 [![CI](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/ci.yml/badge.svg)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/ci.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)](../tsconfig.json)
 [![ESLint](https://img.shields.io/badge/ESLint-0%20warnings-4b32c3?logo=eslint)](../eslint.config.js)
-[![Prettier](https://img.shields.io/badge/code%20style-prettier-f7b93e?logo=prettier)](../.prettierrc)
+[![Prettier](https://img.shields.io/badge/code%20style-prettier-f7b93e?logo=prettier)](../.prettierrc.json)
 
 Thank you for your interest in contributing! Every improvement — bug fix, feature, translation, or doc update — is appreciated.
 
