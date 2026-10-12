@@ -49,7 +49,7 @@ function main() {
   const appVersion = packageJson.version;
 
   const reactMajor = getMajor(packageJson.dependencies.react);
-  const tsMajor = getMajor(packageJson.devDependencies.typescript);
+  const tsMajor = getMajor(packageJson.devDependencies['@typescript/native']);
   const viteMajor = getMajor(packageJson.devDependencies.vite);
   const vitestMajor = getMajor(packageJson.devDependencies.vitest);
   const playwrightMajorMinor = getMajorMinor(packageJson.devDependencies['@playwright/test']);

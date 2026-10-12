@@ -12,7 +12,7 @@
 [![CodeQL](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/codeql.yml/badge.svg)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/codeql.yml)
 [![codecov](https://codecov.io/gh/RajwanYair/WoodworkingShop/graph/badge.svg)](https://codecov.io/gh/RajwanYair/WoodworkingShop)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178c6?logo=typescript&logoColor=white)](tsconfig.json)
+[![TypeScript](https://img.shields.io/badge/TypeScript-7.0%20native-3178c6?logo=typescript&logoColor=white)](tsconfig.json)
 [![React](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=white)](package.json)
 [![Vite](https://img.shields.io/badge/Vite-8-646cff?logo=vite&logoColor=white)](vite.config.ts)
 [![Tailwind](https://img.shields.io/badge/Tailwind-4-38bdf8?logo=tailwindcss&logoColor=white)](src/index.css)
@@ -139,13 +139,13 @@ npm run build
 ## 🏗 Tech Stack
 
 <div align="center">
-  <img src="docs/tech-stack.svg" alt="Tech stack: React 19, TypeScript 6, Vite 8, Tailwind 4, Zustand 5, Vitest 5, i18next 26" width="100%"/>
+  <img src="docs/tech-stack.svg" alt="Tech stack: React 19, TypeScript 7 native, Vite 8, Tailwind 4, Zustand 5, Vitest 5, i18next 26" width="100%"/>
 </div>
 
 | Layer         | Technology                                                 |
 | ------------- | ---------------------------------------------------------- |
 | Framework     | ⚛️ React 19                                                |
-| Language      | 🔷 TypeScript 6 (strict mode)                              |
+| Language      | 🔷 TypeScript 7 native (strict mode)                       |
 | Styling       | 🎨 Tailwind CSS 4                                          |
 | State         | 🐻 Zustand 5                                               |
 | PDF           | 📄 @react-pdf/renderer 4                                   |
@@ -251,7 +251,7 @@ Details, sprint contracts and the competitive benchmark live in [ROADMAP.md](ROA
 ## 🔧 Development Commands
 
 ```bash
-npm run typecheck       # TypeScript strict-mode check (tsc -b --noEmit)
+npm run typecheck       # TypeScript strict-mode check (native tsc -b --noEmit)
 npm run lint            # ESLint — 0 warnings policy
 npm run format          # Prettier auto-format
 npm run format:check    # Verify formatting (used in CI)
