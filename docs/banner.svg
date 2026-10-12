@@ -200,13 +200,13 @@
   <rect x="1024" y="107" width="58" height="21" rx="5" fill="#20232a" opacity="0.9"/>
   <text x="1053" y="121" font-family="monospace,'Courier New'" font-size="10" fill="#61dafb" text-anchor="middle">React 19</text>
   <!-- TypeScript -->
-  <rect x="1090" y="107" width="66" height="21" rx="5" fill="#3178c6" opacity="0.9"/>
-  <text x="1123" y="121" font-family="monospace,'Courier New'" font-size="10" fill="#fff" text-anchor="middle">TypeScript 6</text>
+  <rect x="1084" y="107" width="78" height="21" rx="5" fill="#3178c6" opacity="0.9"/>
+  <text x="1123" y="121" font-family="monospace,'Courier New'" font-size="10" fill="#fff" text-anchor="middle">TypeScript 7</text>
   <!-- Vite -->
   <rect x="1024" y="133" width="58" height="21" rx="5" fill="#1a1a2e" opacity="0.9"/>
   <text x="1053" y="147" font-family="monospace,'Courier New'" font-size="10" fill="#646cff" text-anchor="middle">Vite 8</text>
   <!-- Tailwind -->
-  <rect x="1090" y="133" width="66" height="21" rx="5" fill="#0f172a" opacity="0.9"/>
+  <rect x="1084" y="133" width="78" height="21" rx="5" fill="#0f172a" opacity="0.9"/>
   <text x="1123" y="147" font-family="monospace,'Courier New'" font-size="10" fill="#38bdf8" text-anchor="middle">Tailwind 4</text>
   <!-- Zustand -->
   <rect x="1024" y="159" width="58" height="21" rx="5" fill="#1c1917" opacity="0.9"/>
