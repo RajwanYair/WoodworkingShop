@@ -35,8 +35,8 @@ const workflowPolicies = [
     path: '.github/workflows/codeql.yml',
     requiredTokens: [
       'name: CodeQL Security Analysis',
-      'github/codeql-action/init@v3',
-      'github/codeql-action/analyze@v3',
+      'github/codeql-action/init@v4',
+      'github/codeql-action/analyze@v4',
       'schedule:',
     ],
   },
