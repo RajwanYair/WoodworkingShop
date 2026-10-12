@@ -61,6 +61,23 @@ function main() {
   const agentsText = readText(agentsPath);
   const errors = [];
 
+  if (tsMajor !== 7) {
+    errors.push(`TypeScript compiler must remain at major 7; found ${tsMajor}`);
+  }
+
+  assertIncludes(
+    packageJson.scripts.build,
+    'node node_modules/@typescript/native/bin/tsc -b',
+    'package.json#scripts.build',
+    errors,
+  );
+  assertIncludes(
+    packageJson.scripts.typecheck,
+    'node node_modules/@typescript/native/bin/tsc -b --noEmit',
+    'package.json#scripts.typecheck',
+    errors,
+  );
+
   assertIncludes(copilotText, `Current release: v${appVersion}`, '.github/copilot-instructions.md', errors);
   assertIncludes(agentsText, `**v${appVersion}**`, 'AGENTS.md', errors);
 

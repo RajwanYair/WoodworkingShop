@@ -29,6 +29,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Toolchain Updates
+
+- Upgraded direct npm dependencies and refreshed compatible transitive dependencies; explicitly enforced TypeScript 7.0 for builds and typechecks while retaining a separate TypeScript 6 API alias only for tools whose published peer ranges have not added TypeScript 7 support.
+- Upgraded Playwright to 1.64 and Stryker to 10; kept Babel 7 scoped to consumers that require it while Stryker uses its nested Babel 8 toolchain.
+
 ### Added
 
 - Added an opt-in local diagnostics dialog with buffered Web Vitals, worker availability, aggregate storage estimates, and bounded sanitized error history. Its explicit JSON export excludes project contents and makes no network requests.

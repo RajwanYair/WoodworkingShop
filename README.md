@@ -137,20 +137,20 @@ npm run build
   <img src="docs/tech-stack.svg" alt="Tech stack: React 19, TypeScript 7 native, Vite 8, Tailwind 4, Zustand 5, Vitest 5, i18next 26" width="100%"/>
 </div>
 
-| Layer         | Technology                                                |
-| ------------- | --------------------------------------------------------- |
-| Framework     | ⚛️ React 19                                               |
-| Language      | 🔷 TypeScript 7 native (strict mode)                      |
-| Styling       | 🎨 Tailwind CSS 4                                         |
-| State         | 🐻 Zustand 5                                              |
-| PDF           | 📄 @react-pdf/renderer 4                                  |
-| i18n          | 🌐 i18next 26 + react-i18next                             |
-| Build         | ⚡ Vite 8                                                 |
-| Unit tests    | 🧪 Vitest 5 + @testing-library/react                      |
-| E2E tests     | 🎭 Playwright 1.63 + axe-core (Chromium, Firefox, WebKit) |
-| Lint / format | 🧹 ESLint 10 (flat config) + Prettier                     |
-| CI/CD         | 🤖 GitHub Actions                                         |
-| Deploy        | 🚀 GitHub Pages; optional Cloudflare Pages integration    |
+| Layer         | Technology                                                          |
+| ------------- | ------------------------------------------------------------------- |
+| Framework     | ⚛️ React 19                                                         |
+| Language      | 🔷 TypeScript 7.0 native (strict; TypeScript 6 API alias for tools) |
+| Styling       | 🎨 Tailwind CSS 4                                                   |
+| State         | 🐻 Zustand 5                                                        |
+| PDF           | 📄 @react-pdf/renderer 4                                            |
+| i18n          | 🌐 i18next 26 + react-i18next                                       |
+| Build         | ⚡ Vite 8                                                           |
+| Unit tests    | 🧪 Vitest 5 + @testing-library/react                                |
+| E2E tests     | 🎭 Playwright 1.64 + axe-core (Chromium, Firefox, WebKit)           |
+| Lint / format | 🧹 ESLint 10 (flat config) + Prettier                               |
+| CI/CD         | 🤖 GitHub Actions                                                   |
+| Deploy        | 🚀 GitHub Pages; optional Cloudflare Pages integration              |
 
 ---
 
