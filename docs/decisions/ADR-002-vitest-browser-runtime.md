@@ -1,6 +1,6 @@
 # ADR-002: Vitest Browser Project Runtime and Flake Measurement
 
-- Status: Proposed — four of ten runs recorded
+- Status: Proposed — five of ten runs recorded
 - Date: 2026-10-12
 - Issue: [Sprint 421 T4 / #239](https://github.com/RajwanYair/WoodworkingShop/issues/239)
 - Measured commit: `fa2749d79954fc0e7fa8e9c1bb84f7439586c2c9` (T2/T3 stack)
@@ -25,11 +25,12 @@ Sprint 421 added a Chromium component-browser project and Playwright ARIA snapsh
 | 2    | [38299282155](https://github.com/RajwanYair/WoodworkingShop/actions/runs/38299282155) | `fa2749d` | 7m39s    |     51s |     42s | 6m19s, 1 failure / 5185 | 24: 41s; 26: 54s |                               skipped | The same CommandPalette active-tab assertion failed again; 5184 passed. E2E, visual, and Lighthouse were skipped. The isolated spec passed 10/10 locally; repeated CI-only failure, not yet confirmed as a flake. |
 | 3    | [38300637209](https://github.com/RajwanYair/WoodworkingShop/actions/runs/38300637209) | `fa2749d` | 17m38s   |     45s |     40s |       7m11s, all passed | 24: 50s; 26: 52s | shards 1–4, visual, Lighthouse passed | All CI jobs passed on the unchanged SHA; the CommandPalette failure did not recur.                                                                                                                                |
 | 4    | [38303021612](https://github.com/RajwanYair/WoodworkingShop/actions/runs/38303021612) | `fa2749d` | 15m29s   |     44s |     55s |       5m32s, all passed | 24: 48s; 26: 57s | shards 1–4, visual, Lighthouse passed | All 13 CI jobs passed on the unchanged SHA; the CommandPalette failure did not recur.                                                                                                                             |
-| 5–10 | Pending                                                                               | `fa2749d` |          |         |         |                         |                  |                                       |                                                                                                                                                                                                                   |
+| 5    | [38305225255](https://github.com/RajwanYair/WoodworkingShop/actions/runs/38305225255) | `fa2749d` | 12m51s   |     56s |     42s |       4m45s, all passed | 24: 50s; 26: 56s | shards 1–4, visual, Lighthouse passed | All workflow jobs passed on the unchanged SHA; the CommandPalette failure did not recur.                                                                                                                          |
+| 6–10 | Pending                                                                               | `fa2749d` |          |         |         |                         |                  |                                       |                                                                                                                                                                                                                   |
 
 ## Decision
 
-Pending completion of the ten-run sample and confirmation of the applicable browser-project runtime budget. The first two CI runs failed on the same CommandPalette active-tab assertion, while runs 3 and 4 passed on the same SHA. The observed full-workflow test failure rate is 2/4; treat the test as a candidate intermittent failure, with root cause and final classification still open.
+Pending completion of the ten-run sample and confirmation of the applicable browser-project runtime budget. The first two CI runs failed on the same CommandPalette active-tab assertion, while runs 3–5 passed on the same SHA. The observed full-workflow test failure rate is 2/5; treat the test as a candidate intermittent failure, with root cause and final classification still open.
 
 ## Consequences
 
