@@ -5,7 +5,7 @@
  * cabinets in the project. The operation is undoable via the normal undo stack.
  */
 
-import { useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { useTranslation } from 'react-i18next';
 import { resolveEngineLang } from './resolve-engine-lang';
@@ -39,10 +39,13 @@ export function BulkReplaceModal({ onClose }: Props) {
   const [toKey, setToKey] = useState<string>(allMaterials[0]?.key ?? '');
   const [applied, setApplied] = useState(false);
 
-  const dialogContainerRef = useRef<HTMLDivElement>(null);
+  const dialogContainerRef = useRef<HTMLDialogElement>(null);
 
-  // Sprint 8 — focus trap via shared hook (also handles ESC)
-  useFocusTrap(dialogContainerRef, true, onClose);
+  useEffect(() => {
+    dialogContainerRef.current?.showModal();
+  }, []);
+
+  useFocusTrap(dialogContainerRef, true);
 
   function handleApply() {
     if (!fromKey || !toKey || fromKey === toKey) return;
@@ -60,22 +63,23 @@ export function BulkReplaceModal({ onClose }: Props) {
   const targetMaterials = allMaterials.filter((m) => m.key !== fromKey);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop — click outside to close */}
+    <dialog
+      ref={dialogContainerRef}
+      aria-label={t('bulkReplace.title', 'Bulk Material Replace')}
+      onCancel={(event) => {
+        event.preventDefault();
+        onClose();
+      }}
+      className="fixed inset-0 z-50 m-0 flex h-full w-full max-w-none items-center justify-center border-0 bg-transparent p-4 backdrop:bg-black/50"
+    >
       <button
         type="button"
-        className="absolute inset-0 h-full w-full cursor-default border-0 bg-black/50 p-0"
+        className="absolute inset-0 h-full w-full cursor-default border-0 bg-transparent p-0"
         onClick={onClose}
-        aria-label="Close dialog"
+        aria-label={t('common.close', 'Close')}
         tabIndex={-1}
       />
-      <div
-        ref={dialogContainerRef}
-        role="dialog"
-        aria-modal="true"
-        aria-label={t('bulkReplace.title', 'Bulk Material Replace')}
-        className="dark:bg-wood-900 relative flex w-full max-w-md flex-col gap-5 rounded-xl bg-white p-6 shadow-2xl"
-      >
+      <div className="dark:bg-wood-900 relative flex w-full max-w-md flex-col gap-5 rounded-xl bg-white p-6 shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between">
           <h2 className="text-wood-900 dark:text-wood-50 text-lg font-semibold">
@@ -181,6 +185,6 @@ export function BulkReplaceModal({ onClose }: Props) {
           </button>
         </div>
       </div>
-    </div>
+    </dialog>
   );
 }
