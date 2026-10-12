@@ -1830,7 +1830,7 @@ flowchart LR
 
 - T1: Migrate to Vitest 5 following the official migration guide; keep the root config files (`vitest.config.ts`, `vitest.components.config.ts`, `vitest.bench.config.ts`) or merge them into one `projects` config only if coverage reports and ratchets stay identical.
 - T2: Add a `components-browser` project (`@vitest/browser-playwright`, Chromium) for layout-, focus-, pointer- and canvas-dependent components (preview, sheets, dialogs, parts grid); jsdom remains the default project.
-- T3: Adopt ARIA snapshots for dialog, tablist, optimizer controls group and table regions; use trace view for failures; write traces to `%TEMP%`.
+- T3: Adopt ARIA snapshots for dialog, tablist, the named cabinet-door overlay group and table regions; use trace view for failures; write traces to `%TEMP%`.
 - T4: Measure runtime and flake rate over 10 CI runs; ADR with numbers.
 - Accept: no duplicated test files; coverage floors unchanged or higher; browser project within the agreed runtime budget.
 

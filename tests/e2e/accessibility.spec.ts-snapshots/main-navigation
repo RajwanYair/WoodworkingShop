@@ -1,0 +1,8 @@
+- tablist "Main navigation":
+  - tab "Workspace" [selected]
+  - tab "Configure"
+  - tab "Preview"
+  - tab "Cut Sheets"
+  - tab "Assembly"
+  - tab "Export PDF"
+  - tab "Calculators"

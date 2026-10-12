@@ -1,0 +1,4 @@
+- group "Overlay Style":
+  - button "Full Overlay" [pressed]
+  - button "Half Overlay"
+  - button "Inset"
