@@ -1,0 +1,65 @@
+- dialog "Keyboard shortcuts":
+  - heading "Keyboard shortcuts" [level=2]
+  - button "Close keyboard shortcuts": ✕
+  - table:
+    - rowgroup:
+      - row "Alt + 1 Configure":
+        - cell "Alt + 1"
+        - cell "Configure"
+      - row "Alt + 2 Preview":
+        - cell "Alt + 2"
+        - cell "Preview"
+      - row "Alt + 3 Cut Sheets":
+        - cell "Alt + 3"
+        - cell "Cut Sheets"
+      - row "Alt + 4 Assembly":
+        - cell "Alt + 4"
+        - cell "Assembly"
+      - row "Alt + 5 Export PDF":
+        - cell "Alt + 5"
+        - cell "Export PDF"
+      - row "Alt + 6 Calculators":
+        - cell "Alt + 6"
+        - cell "Calculators"
+      - row "Ctrl + K Command Palette":
+        - cell "Ctrl + K"
+        - cell "Command Palette"
+      - row "Ctrl + Z Undo":
+        - cell "Ctrl + Z"
+        - cell "Undo"
+      - row "Ctrl + Y Redo":
+        - cell "Ctrl + Y"
+        - cell "Redo"
+      - row "Ctrl + Shift + Z Redo":
+        - cell "Ctrl + Shift + Z"
+        - cell "Redo"
+      - row "Ctrl + Shift + S Save snapshot":
+        - cell "Ctrl + Shift + S"
+        - cell "Save snapshot"
+      - row "Ctrl + P Print current view":
+        - cell "Ctrl + P"
+        - cell "Print current view"
+      - row "Ctrl + E Export BOM CSV":
+        - cell "Ctrl + E"
+        - cell "Export BOM CSV"
+      - row "Ctrl + R Reset cabinet configuration to defaults":
+        - cell "Ctrl + R"
+        - cell "Reset cabinet configuration to defaults"
+      - row "Ctrl + L Copy shareable link":
+        - cell "Ctrl + L"
+        - cell "Copy shareable link"
+      - row "Ctrl + Shift + N Cabinet added":
+        - cell "Ctrl + Shift + N"
+        - cell "Cabinet added"
+      - row "Ctrl + Shift + K Toggle focus mode":
+        - cell "Ctrl + Shift + K"
+        - cell "Toggle focus mode"
+      - row "Alt + D Toggle dark mode":
+        - cell "Alt + D"
+        - cell "Toggle dark mode"
+      - row "? Open keyboard shortcuts":
+        - cell "?"
+        - cell "Open keyboard shortcuts"
+      - row "Escape Close keyboard shortcuts":
+        - cell "Escape"
+        - cell "Close keyboard shortcuts"

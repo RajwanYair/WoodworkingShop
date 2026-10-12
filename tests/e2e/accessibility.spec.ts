@@ -48,6 +48,55 @@ test('configurator tab passes axe WCAG 2.2 AA checks', async ({ appPage: page })
   expect(violations, `Found ${violations.length} accessibility violation(s) in configurator`).toHaveLength(0);
 });
 
+test('representative dialog, navigation, control group, and tables match ARIA snapshots', async ({ appPage: page }) => {
+  test.setTimeout(60_000);
+
+  const navigation = page.getByRole('tablist', { name: 'Main navigation' });
+  await expect(navigation).toBeVisible();
+  await expect(navigation).toMatchAriaSnapshot({ name: 'main-navigation' });
+
+  await page.getByRole('button', { name: 'Keyboard shortcuts' }).click();
+  const shortcutsDialog = page.getByRole('dialog', { name: 'Keyboard Shortcuts' });
+  await expect(shortcutsDialog).toBeVisible();
+  await expect(shortcutsDialog).toMatchAriaSnapshot({ name: 'keyboard-shortcuts-dialog' });
+  await page.keyboard.press('Escape');
+
+  await page.keyboard.press('Alt+6');
+  const cabinetDoorCalculator = page.getByRole('button', {
+    name: 'Cabinet Door Sizing Calculator',
+    exact: true,
+  });
+  await cabinetDoorCalculator.click();
+  await expect(cabinetDoorCalculator).toHaveAttribute('aria-expanded', 'true');
+  const overlayGroup = page
+    .getByRole('region', { name: 'Cabinet Door Sizing Calculator' })
+    .getByRole('group', { name: 'Overlay Style' });
+  await expect(overlayGroup).toBeVisible();
+  await expect(overlayGroup).toMatchAriaSnapshot({ name: 'cabinet-door-overlay-group' });
+
+  await page.keyboard.press('Alt+3');
+  const partsTable = page.getByRole('table', { name: 'Parts List', exact: true });
+  const hardwareTable = page.getByRole('table', { name: 'Hardware List', exact: true });
+  await expect(partsTable).toBeVisible({ timeout: 30_000 });
+  await expect(hardwareTable).toBeVisible();
+  await expect(partsTable).toMatchAriaSnapshot(`
+    - table "Parts List":
+      - rowgroup:
+        - row:
+          - columnheader "ID"
+          - columnheader "Part Name"
+  `);
+  await expect(hardwareTable).toMatchAriaSnapshot(`
+    - table "Hardware List":
+      - rowgroup:
+        - row:
+          - columnheader "Item"
+          - columnheader "Qty"
+          - columnheader "Unit"
+          - columnheader "Supplier"
+  `);
+});
+
 test('first-visit mobile navigation and onboarding pass axe WCAG 2.2 AA checks', async ({ page }) => {
   test.setTimeout(60_000);
   await page.setViewportSize({ width: 390, height: 844 });
