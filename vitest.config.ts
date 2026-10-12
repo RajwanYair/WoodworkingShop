@@ -28,7 +28,7 @@ export default defineConfig({
       : [],
     testTimeout: 15000,
     include: ['tests/**/*.test.ts', 'tests/**/*.test.tsx'],
-    exclude: ['tests/e2e/**', 'node_modules/**', 'dist/**'],
+    exclude: ['tests/e2e/**', 'tests/components-browser/**', 'node_modules/**', 'dist/**'],
     setupFiles: ['tests/setup.ts'],
     coverage: {
       provider: 'v8',
