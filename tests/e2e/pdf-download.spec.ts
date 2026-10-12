@@ -10,7 +10,18 @@ type PdfOptions = {
   pageSize?: 'A4' | 'LETTER';
   orientation?: 'portrait' | 'landscape';
   fullProject?: boolean;
+  locale?: 'en' | 'he' | 'es' | 'de' | 'fr' | 'ar';
 };
+
+const PDF_LOCALES = ['he', 'en', 'es', 'de', 'fr', 'ar'] as const;
+const PDF_LABELS = {
+  en: { title: 'Export PDF', generate: 'Generate PDF' },
+  he: { title: 'ייצוא PDF', generate: 'צור PDF' },
+  es: { title: 'Exportar PDF', generate: 'Generar PDF' },
+  de: { title: 'PDF exportieren', generate: 'PDF generieren' },
+  fr: { title: 'Exporter le PDF', generate: 'Générer le PDF' },
+  ar: { title: 'تصدير PDF', generate: 'إنشاء PDF' },
+} as const;
 
 type TextBounds = { pageNumber: number; text: string; left: number; top: number; right: number; bottom: number };
 
@@ -33,8 +44,14 @@ async function addNamedSecondCabinet(page: Page) {
 
 async function downloadPdf(page: Page, options: PdfOptions = {}) {
   if (options.fullProject) await addNamedSecondCabinet(page);
+  if (options.locale) {
+    await page.getByRole('banner').getByRole('combobox').first().selectOption(options.locale);
+    const direction = options.locale === 'he' || options.locale === 'ar' ? 'rtl' : 'ltr';
+    await expect(page.locator('html')).toHaveAttribute('dir', direction);
+  }
   await page.getByRole('tab', { name: /pdf/i }).click();
-  await expect(page.getByRole('heading', { name: /^export pdf$/i })).toBeVisible({ timeout: 30_000 });
+  const pdfTitle = options.locale ? PDF_LABELS[options.locale].title : 'Export PDF';
+  await expect(page.getByRole('heading', { name: pdfTitle, exact: true })).toBeVisible({ timeout: 30_000 });
   if (options.includeCover === false) {
     await page.getByRole('checkbox', { name: 'Include cover page' }).uncheck();
   }
@@ -50,19 +67,36 @@ async function downloadPdf(page: Page, options: PdfOptions = {}) {
     if (message.type() === 'warning' || message.type() === 'error') diagnostics.push(message.text());
   };
   const onPageError = (error: Error) => diagnostics.push(error.message);
+  const onRequestFailed = (request: import('@playwright/test').Request) =>
+    diagnostics.push(`${request.method()} ${request.url()}: ${request.failure()?.errorText ?? 'request failed'}`);
   page.on('console', onConsole);
   page.on('pageerror', onPageError);
+  page.on('requestfailed', onRequestFailed);
 
-  const downloadPromise = page.waitForEvent('download');
-  const buttonName = options.fullProject
-    ? 'Export Full Project (2 cabinets)'
-    : options.fullProject === false
-      ? 'Export current cabinet only'
-      : 'Generate PDF';
-  await page.getByRole('button', { name: buttonName, exact: true }).click();
-  const download = await downloadPromise;
+  const downloadPromise = page.waitForEvent('download', { timeout: 30_000 });
+  const generateButtonName = options.locale
+    ? PDF_LABELS[options.locale].generate
+    : options.fullProject
+      ? 'Export Full Project (2 cabinets)'
+      : options.fullProject === false
+        ? 'Export current cabinet only'
+        : 'Generate PDF';
+  await page.getByRole('button', { name: generateButtonName, exact: true }).click();
+  let download;
+  try {
+    download = await downloadPromise;
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const toastMessages = await page.getByRole('alert').allTextContents();
+    throw new Error(
+      [`PDF download failed for ${options.locale ?? 'en'}: ${errorMessage}`, ...diagnostics, ...toastMessages]
+        .filter(Boolean)
+        .join('\n'),
+    );
+  }
   page.off('console', onConsole);
   page.off('pageerror', onPageError);
+  page.off('requestfailed', onRequestFailed);
   const path = await download.path();
   if (!path) throw new Error('PDF export did not produce a downloadable file');
 
@@ -114,6 +148,16 @@ test('PDF browser download uses the current-cabinet filename pattern', async ({ 
 test('PDF browser download starts with the PDF signature', async ({ appPage }) => {
   const { bytes } = await downloadPdf(appPage);
   expect(new TextDecoder('ascii').decode(bytes.subarray(0, 5))).toBe('%PDF-');
+});
+
+test('PDF export succeeds in every supported language', async ({ appPage }) => {
+  for (const locale of PDF_LOCALES) {
+    const { bytes, pages, diagnostics } = await downloadPdf(appPage, { locale });
+    expect(new TextDecoder('ascii').decode(bytes.subarray(0, 5)), locale).toBe('%PDF-');
+    expect(diagnostics, `${locale} PDF browser diagnostics`).toEqual([]);
+    const expectedMaterial = locale === 'he' ? 'פנלפלק' : 'Sandwich Plywood';
+    expect(normalizePdfText(pages.join(' ')), `${locale} PDF material name`).toContain(expectedMaterial);
+  }
 });
 
 test('PDF browser download stays within the configured size range', async ({ appPage }) => {

@@ -2,7 +2,6 @@ import { Text, View } from '@react-pdf/renderer';
 import type { CabinetConfig, DerivedDimensions, Lang } from '../../../engine/types';
 import { getMaterial } from '../../../engine/materials';
 import { pdfI18n } from '../pdf-i18n';
-import type { PdfLang } from '../pdf-i18n';
 import { C } from '../pdf-tokens';
 
 export function ExplodedView({
@@ -18,7 +17,7 @@ export function ExplodedView({
   bMat: string;
   lang?: Lang;
 }) {
-  const T = pdfI18n[lang as PdfLang] ?? pdfI18n.en;
+  const T = pdfI18n[lang ?? 'en'];
   const ff = lang === 'he' ? 'NotoSansHebrew' : 'Helvetica';
   const ffBold = lang === 'he' ? 'NotoSansHebrew' : 'Helvetica-Bold';
   const maxW = 400;

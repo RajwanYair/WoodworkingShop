@@ -19,11 +19,11 @@ Font.register({
   family: 'NotoSansHebrew',
   fonts: [
     {
-      src: '/fonts/NotoSansHebrew-Regular.ttf',
+      src: `${import.meta.env.BASE_URL}fonts/NotoSansHebrew-Regular.ttf`,
       fontWeight: 400,
     },
     {
-      src: '/fonts/NotoSansHebrew-Bold.ttf',
+      src: `${import.meta.env.BASE_URL}fonts/NotoSansHebrew-Bold.ttf`,
       fontWeight: 700,
     },
   ],
