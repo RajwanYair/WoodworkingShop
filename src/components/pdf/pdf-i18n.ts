@@ -1,5 +1,3 @@
-import type { Lang } from '../../engine/types';
-
 // ─── PDF i18n dictionary ───
 // @react-pdf/renderer runs outside the React tree so useTranslation() is unavailable.
 // This dictionary provides all structural labels in both supported PDF languages.
@@ -313,6 +311,11 @@ export const pdfI18n = {
 export type PdfLang = keyof typeof pdfI18n;
 type PdfTranslations = (typeof pdfI18n)[PdfLang];
 
+/** Resolve UI locales to the PDF catalog currently available for structural labels. */
+export function resolvePdfLang(locale: string): PdfLang {
+  return locale.toLowerCase().split(/[-_]/, 1)[0] === 'he' ? 'he' : 'en';
+}
+
 /** Shared render context passed to every PDF page-section component. */
 export interface PdfCtx {
   T: PdfTranslations;
@@ -320,7 +323,7 @@ export interface PdfCtx {
   fontFamilyBold: string;
   textAlign: 'left' | 'right';
   isRTL: boolean;
-  lang: Lang;
+  lang: PdfLang;
   date: string;
   coverTitle: string;
   pageSize: 'A4' | 'LETTER';

@@ -11,7 +11,7 @@ import { downloadGltfFile } from '../../utils/gltf-download';
 import { exportSettingsJson, importSettingsJson } from '../../utils/project-storage';
 import type { ProjectSettings } from '../../utils/project-storage';
 import { useToastStore } from '../../store/toast-store';
-import type { Lang } from '../../engine/types';
+import { resolvePdfLang } from './pdf-i18n';
 import { generateParts, computeEdgeBandingTotal } from '../../engine/parts';
 import { generateHardware } from '../../engine/hardware';
 import { computeDimensions } from '../../engine/dimensions';
@@ -46,7 +46,7 @@ export function PdfExportPanel() {
     activeExportRef.current = true;
     setGenerating(true);
     try {
-      const lang = i18n.language as Lang;
+      const lang = resolvePdfLang(i18n.resolvedLanguage ?? i18n.language);
       const doc = (
         <CabinetPdfDocument
           config={store.config}
@@ -95,7 +95,7 @@ export function PdfExportPanel() {
     activeExportRef.current = true;
     setGeneratingAll(true);
     try {
-      const lang = i18n.language as Lang;
+      const lang = resolvePdfLang(i18n.resolvedLanguage ?? i18n.language);
 
       // Build per-cabinet data from the store's cabinet list.
       const allCabinetsData: CabinetPdfEntry[] = store.cabinets.map((cab, ci) => {
@@ -213,7 +213,7 @@ export function PdfExportPanel() {
     if (activeExportRef.current) return;
     activeExportRef.current = true;
     setGeneratingZip(true);
-    const lang = i18n.language as Lang;
+    const lang = resolvePdfLang(i18n.resolvedLanguage ?? i18n.language);
     const safeName =
       (store.projectName.trim() || 'cabinet-plan')
         .replace(/[^\w\u05D0-\u05EA.-]/g, '-')

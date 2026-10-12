@@ -1,12 +1,5 @@
 import { Document } from '@react-pdf/renderer';
-import type {
-  CabinetConfig,
-  DerivedDimensions,
-  Part,
-  HardwareItem,
-  OptimizationResult,
-  Lang,
-} from '../../engine/types';
+import type { CabinetConfig, DerivedDimensions, Part, HardwareItem, OptimizationResult } from '../../engine/types';
 import { getMaterial } from '../../engine/materials';
 import { formatDate } from '../../i18n/format';
 import { pdfI18n } from './pdf-i18n';
@@ -40,7 +33,7 @@ export interface CabinetPdfProps {
   hardware: HardwareItem[];
   optimization: OptimizationResult;
   edgeBandingTotal: number;
-  lang: Lang;
+  lang: PdfLang;
   /** v3.19.0 — project name shown on cover page title */
   projectName?: string;
   /** v3.19.0 — whether to render the cover page (default: true) */
@@ -83,7 +76,7 @@ export function CabinetPdfDocument({
   allHardware,
   labourHours = 0,
 }: CabinetPdfProps) {
-  const T = pdfI18n[lang as PdfLang] ?? pdfI18n.en;
+  const T = pdfI18n[lang];
   const isRTL = lang === 'he';
   const fontFamily = isRTL ? 'NotoSansHebrew' : 'Helvetica';
   const fontFamilyBold = isRTL ? 'NotoSansHebrew' : 'Helvetica-Bold';

@@ -1,7 +1,6 @@
 import type { CabinetConfig, DerivedDimensions, OptimizationResult, Lang } from '../../engine/types';
 import { getMaterial } from '../../engine/materials';
 import { pdfI18n } from './pdf-i18n';
-import type { PdfLang } from './pdf-i18n';
 
 export interface AssemblyStep {
   emoji: string;
@@ -16,7 +15,7 @@ export function assemblyStepsI18n(
   backName: string,
   lang: Lang,
 ): AssemblyStep[] {
-  const T = pdfI18n[lang as PdfLang] ?? pdfI18n.en;
+  const T = pdfI18n[lang];
   const steps: AssemblyStep[] = [
     {
       emoji: '✂️',

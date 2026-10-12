@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import * as projectStorage from '../../src/utils/project-storage';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { useToastStore } from '../../src/store/toast-store';
+import { resolvePdfLang } from '../../src/components/pdf/pdf-i18n';
 
 const { pdfMock } = vi.hoisted(() => ({
   pdfMock: vi.fn(() => ({ toBlob: vi.fn().mockResolvedValue(new Blob(['pdf'])) })),
@@ -258,5 +259,18 @@ describe('PdfExportPanel', () => {
         }),
       }),
     );
+  });
+});
+
+describe('resolvePdfLang', () => {
+  it.each(['en', 'es', 'de', 'fr', 'ar', 'en-XA', 'ar-XB', 'unknown'])(
+    'uses the English PDF catalog for %s',
+    (locale) => {
+      expect(resolvePdfLang(locale)).toBe('en');
+    },
+  );
+
+  it.each(['he', 'he-IL'])('uses the Hebrew PDF catalog for %s', (locale) => {
+    expect(resolvePdfLang(locale)).toBe('he');
   });
 });
