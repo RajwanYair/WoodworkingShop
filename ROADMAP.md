@@ -1,8 +1,8 @@
 # Roadmap
 
 > Last updated: 2026-10-13 (project status refresh)
-> Current app version: v5.35.1
-> Next release target: v5.36.0 (Phase 81 — Toolchain modernisation)
+> Current release: v5.35.1
+> Release candidate: v5.36.0 (Phase 81 — Toolchain modernisation)
 > Program horizon: Phases 63–85 · Sprints 300–451 · v5.35.1 → v6.0.0 (execution order: §7.2 release train)
 > Strategy: best-in-class, local-first, production-grade woodworking planning platform — **refactor the foundation first, then lead on workflow depth**
 
@@ -10,8 +10,8 @@
 
 The measurements in the 2026-10-04 overview below are a dated historical baseline; the live status is summarized here.
 
-- **Release:** v5.35.1 is current. v5.36.0 remains gated on Phase 81/Sprint 425 acceptance; do not tag it while the blocking work below is open.
-- **Main:** `2dac79d`; merged TypeScript 7 build/typecheck enforcement and PDF locale/base-path fixes. GitHub CI passed for this commit.
+- **Release:** v5.35.1 remains current; v5.36.0 is awaiting tag-triggered workflow verification.
+- **Main:** `fd16f23`; CI and Scorecard passed on the source commit; release metadata is being prepared. The separate Stryker mutation workflow remains a known failure.
 - **Verification:** 5,195 Vitest tests pass with bounded worker concurrency; 526 Playwright tests are currently listed. `npm run quality:fast`, `npm run dead:check`, and `npm run release:build` pass. The full Stryker initial test run still exceeds its timeout; dry runs pass.
 - **Localization:** `npm run i18n:completeness` reports 2,167 keys, no missing/extra/empty values or placeholder mismatches, and EN-identical rates of HE 1.02%, AR 1.20%, DE 1.38%, ES 1.34%, FR 1.66%.
 - **Phase 81:** S420's build/typecheck compiler switch is implemented. S421's Chromium project, ARIA snapshots, and runtime/flake measurements remain in open PRs #236, #238 and #244. S422 uses Playwright 1.64; blocking snapshots, E2E sharding, and temp-only Lighthouse output remain.

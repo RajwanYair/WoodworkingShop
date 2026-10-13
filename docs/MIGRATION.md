@@ -1,6 +1,6 @@
 # Migration Guide
 
-This document describes the current project-file and browser-storage migration contracts for **WoodworkingShop v5.35.1**. The next release target is v5.36.0.
+This document describes the current project-file and browser-storage migration contracts for **WoodworkingShop v5.36.0**. The next release target is v5.37.0.
 
 ## Versioning Policy
 

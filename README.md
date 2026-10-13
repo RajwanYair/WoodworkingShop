@@ -230,19 +230,17 @@ The [roadmap](ROADMAP.md#target-architecture-phase-82) describes the planned mov
 
 ```mermaid
 flowchart LR
-  now["v5.35.1 ✅<br/>dependency · test-tooling maintenance"] --> t["v5.36.0 ▶<br/>Phase 81 · toolchain modernisation"]
-  t --> a["v5.37.0<br/>architecture refactor"] --> d0["v5.38.0<br/>versioned data"]
-  d0 --> d["v5.39–v5.40<br/>examples · shop drawings · docs site"]
-  d --> w["v5.41–v5.43<br/>cut-list workbench · 1D lumber · shop-floor mode"]
-  w --> m["v5.44–v5.48<br/>CNC · doors · rooms · files"]
-  m --> v6["v6.0<br/>best-in-class review"]
+  now["v5.36.0<br/>release workflow pending"] --> t["v5.37.0 ▶<br/>Phase 82 · architecture refactor"]
+  t --> a["v5.38.0<br/>versioned data"] --> d0["v5.39–v5.40<br/>examples · shop drawings · docs site"]
+  d0 --> d["v5.41–v5.43<br/>cut-list workbench · 1D lumber · shop-floor mode"]
+  d --> w["v5.44–v5.48<br/>CNC · doors · rooms · files"]
+  w --> m["v6.0<br/>best-in-class review"]
 
   classDef done fill:#3a7a50,stroke:#1e4a30,color:#ffffff,font-weight:bold
   classDef next fill:#f0b040,stroke:#8b5022,color:#1a0806,font-weight:bold
   classDef later fill:#fae7c0,stroke:#c08040,color:#3a1806
-  class now done
-  class t next
-  class a,d0,d,w,m,v6 later
+  class now next
+  class t,a,d0,d,w,m later
 ```
 
 Details, sprint contracts and the competitive benchmark live in [ROADMAP.md](ROADMAP.md).

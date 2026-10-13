@@ -9,29 +9,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [5.35.1] — 2026-10-11
-
-### Changed
-
-- Updated compatible npm dependencies and refreshed the transitive lockfile; upgraded Playwright, Vitest and coverage, jsdom, PDF.js, and vite-plugin-pwa.
-- Replaced the ESLint-10-incompatible React rules package and moved the mutation toolchain to the latest peer-compatible Stryker release.
-- Migrated benchmark registration and reporting to Vitest 5 and PDF text bounds to the PDF.js 6 viewport API.
-- Retained TypeScript 6 because the published TypeScript ESLint parser does not support TypeScript 7; the TypeScript 7 migration remains in Phase 81.
-
-## [5.35.0] — 2026-10-11
-
-### Release Summary
-
-- Capability map: 219 classified modules.
-- Locale completeness: zero missing, extra, empty, or placeholder-mismatched keys across all six locales. English-identical rates are HE 1.02%, AR 1.20%, DE 1.38%, ES 1.34%, and FR 1.66%, all within the 2% limit. The 19 new diagnostics strings per locale are translated for AR/DE/ES/FR; four review records covering 76 keys remain pending.
-- Critical route: 608.0 KB raw / 154.8 KB Brotli against unchanged budgets of 700 KB / 175 KB.
-- GitHub CI passed the full quality, unit, compatibility, browser, visual, Lighthouse, build, and bundle matrix.
-
 ## [Unreleased]
+
+## [5.36.0] — 2026-10-13
 
 ### Toolchain Updates
 
 - Raised the minimum supported Node.js version to 24 and aligned the Cloudflare Pages deployment job with the CI Node 24/26 support matrix.
+- Pinned GitHub Actions to full commit SHAs, scoped workflow permissions per job, and added scheduled OpenSSF Scorecard reporting; the first published score is 6.5/10.
+- Added SLSA build provenance for the release archive, checksum and SBOM, with `gh attestation verify` instructions in the README.
 - Upgraded direct npm dependencies and refreshed compatible transitive dependencies; explicitly enforced TypeScript 7.0 for builds and typechecks while retaining a separate TypeScript 6 API alias only for tools whose published peer ranges have not added TypeScript 7 support.
 - Upgraded Playwright to 1.64 and Stryker to 10; kept Babel 7 scoped to consumers that require it while Stryker uses its nested Babel 8 toolchain.
 - Enabled blocking CSpell checks for source files and maintained Markdown with British English and supported locale dictionaries; corrected spelling errors and added a reviewed technical vocabulary.
@@ -107,6 +93,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Consolidated waste analytics, threshold alerts, and pre-cut prediction under `src/engine/waste/`; existing engine exports remain available and the analytics panel uses the family barrel.
 - Consolidated project scoring, design comparison, and snapshot diffs under `src/engine/comparison/`; explicit aliases preserve colliding result/weight names and the engine barrel API.
 - Consolidated WebSerial browser I/O in `src/utils/webserial-cnc.ts`; the pure v2 engine owns transport-neutral profiles and session state, with deprecated engine-barrel aliases retained.
+
+## [5.35.1] — 2026-10-11
+
+### Changed
+
+- Updated compatible npm dependencies and refreshed the transitive lockfile; upgraded Playwright, Vitest and coverage, jsdom, PDF.js, and vite-plugin-pwa.
+- Replaced the ESLint-10-incompatible React rules package and moved the mutation toolchain to the latest peer-compatible Stryker release.
+- Migrated benchmark registration and reporting to Vitest 5 and PDF text bounds to the PDF.js 6 viewport API.
+- Retained TypeScript 6 because the published TypeScript ESLint parser does not support TypeScript 7; the TypeScript 7 migration remains in Phase 81.
+
+## [5.35.0] — 2026-10-11
+
+### Release Summary
+
+- Capability map: 219 classified modules.
+- Locale completeness: zero missing, extra, empty, or placeholder-mismatched keys across all six locales. English-identical rates are HE 1.02%, AR 1.20%, DE 1.38%, ES 1.34%, and FR 1.66%, all within the 2% limit. The 19 new diagnostics strings per locale are translated for AR/DE/ES/FR; four review records covering 76 keys remain pending.
+- Critical route: 608.0 KB raw / 154.8 KB Brotli against unchanged budgets of 700 KB / 175 KB.
+- GitHub CI passed the full quality, unit, compatibility, browser, visual, Lighthouse, build, and bundle matrix.
 
 ## [5.34.0] — 2026-10-02
 
