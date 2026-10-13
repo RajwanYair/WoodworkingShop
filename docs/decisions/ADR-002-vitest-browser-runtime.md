@@ -1,6 +1,6 @@
 # ADR-002: Vitest Browser Project Runtime and Flake Measurement
 
-- Status: Proposed — nine of ten runs recorded
+- Status: Proposed — ten of ten runs recorded
 - Date: 2026-10-12
 - Issue: [Sprint 421 T4 / #239](https://github.com/RajwanYair/WoodworkingShop/issues/239)
 - Measured commit: `fa2749d79954fc0e7fa8e9c1bb84f7439586c2c9` (T2/T3 stack)
@@ -30,12 +30,18 @@ Sprint 421 added a Chromium component-browser project and Playwright ARIA snapsh
 | 7   | [38343060356](https://github.com/RajwanYair/WoodworkingShop/actions/runs/38343060356) | `fa2749d` | 16m42s   |     53s |   2m12s |       7m14s, all passed | 24: 48s; 26: 43s | shards 1–4, visual, Lighthouse passed | All workflow jobs passed on the unchanged SHA; the CommandPalette failure did not recur.                                                                                                                          |
 | 8   | [38344476659](https://github.com/RajwanYair/WoodworkingShop/actions/runs/38344476659) | `fa2749d` | 16m47s   |   1m05s |     52s |       7m16s, all passed | 24: 33s; 26: 41s | shards 1–4, visual, Lighthouse passed | All jobs passed. Playwright reported 8 flaky test instances that passed on retry: 1 visual, 3 shard 4, 2 shard 3, 2 shard 1.                                                                                      |
 | 9   | [38346022436](https://github.com/RajwanYair/WoodworkingShop/actions/runs/38346022436) | `fa2749d` | 39m40s   |     52s |     42s |       5m01s, all passed | 24: 49s; 26: 37s | shards 1–4, visual, Lighthouse passed | All workflow jobs passed. Playwright reported 10 flaky test instances that passed on retry: 1 visual, 3 each in shards 1, 2, and 4.                                                                               |
-| 10  | Pending                                                                               | `fa2749d` |          |         |         |                         |                  |                                       |                                                                                                                                                                                                                   |
+| 10  | [38349371476](https://github.com/RajwanYair/WoodworkingShop/actions/runs/38349371476) | `fa2749d` | 23m25s   |     56s |     43s |       7m32s, all passed | 24: 54s; 26: 41s | shards 1–4, visual, Lighthouse passed | All workflow jobs passed. Three Playwright test instances in shard 2 failed initially and passed on retry.                                                                                                        |
 
 ## Decision
 
-Pending completion of the ten-run sample and confirmation of the applicable browser-project runtime budget. The first two CI runs failed on the same CommandPalette active-tab assertion, while runs 3–9 passed on the same SHA. The observed full-workflow test failure rate is 2/9. Runs 8 and 9 reported 18 flaky test instances that passed on retry; keep retry flakes distinct from workflow failures while investigating the CommandPalette root cause.
+The ten-run sample is complete on the unchanged SHA. These are baseline measurements, not pass/fail thresholds: the parent T2 issue specifies no numeric runtime budget.
+
+Full-workflow duration was 16m08.5s median and 39m40s p95; the browser-component job was 45s median and 2m12s p95.
+
+Two of ten workflows failed (20%) on the same CommandPalette active-tab assertion in runs 1 and 2; runs 3–10 passed. The isolated spec passed 10/10 locally, but the CI-only failure has no established root cause, so it remains a candidate intermittent failure, not a confirmed flake.
+
+Runs 8–10 reported 21 Playwright test instances that failed initially and passed on retry; keep these separate from workflow failures.
 
 ## Consequences
 
-Pending measurement results. No numeric runtime budget is specified by the parent T2 issue; do not infer one from CI job timeouts.
+Use these results as the runtime and reliability baseline for future browser-project changes. Revisit a numeric budget only when the project owner defines one; do not infer it from CI job timeouts.
