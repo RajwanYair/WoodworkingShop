@@ -1873,7 +1873,7 @@ flowchart LR
 
 - T1: DONE — Every external GitHub Action is pinned to a verified full commit SHA with a release comment; workflow permissions are scoped to individual jobs; weekly Dependabot GitHub Actions updates remain enabled.
 - T2: DONE — Release provenance covers the build archive, checksum, and CycloneDX SBOM; README documents `gh attestation verify` scoped to the repository and release workflow.
-- T3: IN PROGRESS — Added the scheduled/manual Scorecard workflow with code-scanning results and a README badge; publish the dated score after the first successful GitHub Actions run.
+- T3: DONE — Added the scheduled Scorecard workflow, code-scanning results, and README badge. The first published Scorecard result is 6.5/10 (2026-10-13).
 - T4: DONE — Raised the supported Node floor to 24, aligned all CI setup-node jobs to Node 24 or newer (compat matrix 24/26), and updated setup and support docs.
 - Accept: release assets verifiable; `npm run ci` green; tool tokens synced across docs.
 
