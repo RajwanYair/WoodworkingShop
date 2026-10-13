@@ -1,6 +1,15 @@
 {
   "version": "0.2",
-  "language": "en",
+  "language": "en-US, en-GB, fr",
+  "import": ["@cspell/dict-en-gb-mit/cspell-ext.json", "@cspell/dict-fr-fr/cspell-ext.json"],
+  "ignoreRegExpList": ["/\\p{Script=Hebrew}+/gu", "/\\p{Script=Arabic}+/gu"],
+  "dictionaryDefinitions": [
+    {
+      "name": "woodworkingshop-project",
+      "path": ".cspell/project-words.txt"
+    }
+  ],
+  "dictionaries": ["en-gb", "fr-fr", "woodworkingshop-project"],
   "words": [
     "errorlens",
     "Horrobin",
@@ -78,6 +87,5 @@
     "pdf"
   ],
   "ignorePatterns": [],
-  "ignoreWords": [],
-  "import": []
+  "ignoreWords": []
 }

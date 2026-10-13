@@ -5,6 +5,9 @@ const reportDirectory = path.join(os.tmpdir(), 'WoodworkingShop', 'mutation');
 const relativeToWorkspace = (target) => path.relative(process.cwd(), target);
 
 export default {
+  incremental: true,
+  incrementalFile: process.env.STRYKER_INCREMENTAL_FILE ?? path.join(reportDirectory, 'stryker-incremental.json'),
+  ignoreStatic: false,
   mutate: [
     'src/engine/dimensions.ts',
     'src/engine/parts.ts',

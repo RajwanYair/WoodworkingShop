@@ -467,12 +467,12 @@ export function contrastRatio(fg: readonly [number, number, number], bg: readonl
  * text size and font weight.
  *
  * @param ratio      - Contrast ratio (output of contrastRatio())
- * @param largText   - True for large text (≥18pt regular or ≥14pt bold)
+ * @param largeText  - True for large text (≥18pt regular or ≥14pt bold)
  * @param level      - 'AA' (minimum) or 'AAA' (enhanced)
  */
-export function meetsContrastRequirement(ratio: number, largText: boolean, level: WcagLevel = 'AA'): boolean {
-  if (level === 'AAA') return largText ? ratio >= 4.5 : ratio >= 7;
-  return largText ? ratio >= 3 : ratio >= 4.5;
+export function meetsContrastRequirement(ratio: number, largeText: boolean, level: WcagLevel = 'AA'): boolean {
+  if (level === 'AAA') return largeText ? ratio >= 4.5 : ratio >= 7;
+  return largeText ? ratio >= 3 : ratio >= 4.5;
 }
 
 // ---------------------------------------------------------------------------
@@ -536,11 +536,11 @@ export function addPass(result: AuditResult, pass: AuditPass): AuditResult {
  * Add an incomplete check to an AuditResult (returns a new result — immutable).
  */
 export function addIncomplete(result: AuditResult, incomplete: AuditIncomplete): AuditResult {
-  const incompletes = [...result.incomplete, incomplete];
+  const incompleteChecks = [...result.incomplete, incomplete];
   return {
     ...result,
-    incomplete: incompletes,
-    incompleteCount: incompletes.length,
+    incomplete: incompleteChecks,
+    incompleteCount: incompleteChecks.length,
   };
 }
 

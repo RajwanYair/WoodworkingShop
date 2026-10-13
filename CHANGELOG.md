@@ -31,8 +31,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Toolchain Updates
 
+- Raised the minimum supported Node.js version to 24 and aligned the Cloudflare Pages deployment job with the CI Node 24/26 support matrix.
 - Upgraded direct npm dependencies and refreshed compatible transitive dependencies; explicitly enforced TypeScript 7.0 for builds and typechecks while retaining a separate TypeScript 6 API alias only for tools whose published peer ranges have not added TypeScript 7 support.
 - Upgraded Playwright to 1.64 and Stryker to 10; kept Babel 7 scoped to consumers that require it while Stryker uses its nested Babel 8 toolchain.
+- Enabled blocking CSpell checks for source files and maintained Markdown with British English and supported locale dictionaries; corrected spelling errors and added a reviewed technical vocabulary.
 
 ### Added
 

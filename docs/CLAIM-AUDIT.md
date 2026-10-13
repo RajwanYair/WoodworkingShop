@@ -21,7 +21,7 @@
 | Playwright 1.64       | `package.json`                    | `^1.64.0`               | ✅ VERIFIED |
 | i18next 26            | `package.json#i18next`            | `^26.4.4`               | ✅ VERIFIED |
 | @react-pdf/renderer 4 | `package.json`                    | `^4.9.0`                | ✅ VERIFIED |
-| Node ≥ 22             | `package.json#engines`            | `">=22.0.0"`            | ✅ VERIFIED |
+| Node ≥ 24             | `package.json#engines`            | `">=24.0.0"`            | ✅ VERIFIED |
 
 ### Feature Claims (Rule 2)
 

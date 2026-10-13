@@ -23,3 +23,13 @@ Current setup uses `package-lock.json` and `npm ci` at the repository root. Ther
 **Decision:** Use TypeScript 7.0.2 for builds and project typechecks, with both scripts invoking `@typescript/native` explicitly and `ai:context:validate` enforcing compiler major 7. Keep `@typescript/typescript6` under the `typescript` alias only for tools whose published peer ranges stop at TypeScript 6, and for the VS Code language-service SDK; this compatibility alias does not select the build compiler. TypeScript 7.0 does not yet provide the compiler API expected by those tools.
 
 **Re-evaluate when:** typescript-eslint, TypeDoc, and the editor language service support TypeScript 7's API; then remove the compatibility alias and verify those tools against TypeScript 7 alone. Do not downgrade the build or typecheck compiler to satisfy a tooling peer range.
+
+## Oxlint Pre-pass (Sprint 424)
+
+**Decision:** Do not add Oxlint to the blocking lint or quality pipeline yet. Keep ESLint as the sole authoritative lint gate; revisit an opt-in fast-feedback command only if lint latency becomes a measured developer bottleneck.
+
+**Evidence:** On this Windows workspace, one clean `npm run lint` run took 5.87 seconds. A warmed ephemeral Oxlint 1.83.0 scan of `src` and `tests` took 1.82 seconds. Its default scan emitted 11 warnings and included `tests/e2e`, which the existing ESLint config ignores. The trial did not establish rule parity.
+
+The blocking `quality:fast` runner executes checks concurrently, and ESLint must still pass after any pre-pass. Adding Oxlint cannot reduce the required full-gate duration and would add configuration and maintenance cost.
+
+**Re-evaluate when:** repeated lint measurements show a material developer-feedback bottleneck, and a scoped Oxlint config can demonstrate rule parity for selected fast rules without widening the existing ESLint file scope. Benchmark both clean and failing runs before adding a package or CI step. Oxlint remains advisory unless the ESLint rules and seven-plugin gate stay unchanged and blocking.

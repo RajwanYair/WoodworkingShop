@@ -9,36 +9,6 @@
     "furniture-planner",
     "cnc-router",
     "cut-list",
-    "sheet-nesting",
-    "maxrects",
-    "cabinet-maker",
-    "dxf-export",
-    "gcode",
-    "bill-of-materials",
-    "woodworking-tools",
-    "furniture-design",
-    "browser-based",
-    "pwa",
-    "multilingual",
-    "hebrew",
-    "rtl",
-    "open-source"
-  ],
-  "homepage": "https://rajwanyair.github.io/WoodworkingShop/",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/RajwanYair/WoodworkingShop.git"
-  },
-  "bugs": {
-    "url": "https://github.com/RajwanYair/WoodworkingShop/issues"
-  },
-  "type": "module",
-  "private": true,
-  "browserslist": [
-    "last 2 Chrome versions",
-    "last 2 Firefox versions",
-    "last 2 Safari versions",
-    "last 2 Edge versions",
     "not dead",
     "not ie 11",
     "not ie_mob 11"
@@ -89,6 +59,7 @@
     "test:coverage:ratchet:update": "npm run test:coverage && npm run test:coverage:components && node scripts/coverage-ratchet.js --update",
     "lint": "node scripts/lint.js",
     "lint:css": "node scripts/lint-css.js",
+    "spell:check": "cspell lint --no-progress --no-show-suggestions --gitignore --no-must-find-files --config cspell.json \"src/**/*.{ts,tsx}\" \"docs/**/*.md\" \"*.md\"",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "node node_modules/@typescript/native/bin/tsc -b --noEmit",
@@ -141,7 +112,7 @@
     "postbuild": "node scripts/capability-map.js"
   },
   "engines": {
-    "node": ">=22.0.0"
+    "node": ">=24.0.0"
   },
   "knip": {
     "entry": [
@@ -209,6 +180,8 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
     "@babel/core": "^7.29.7",
+    "@cspell/dict-en-gb-mit": "^3.1.30",
+    "@cspell/dict-fr-fr": "^2.3.2",
     "@eslint-react/eslint-plugin": "5.26.1",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.64.0",
@@ -225,6 +198,7 @@
     "@typescript/native": "npm:typescript@^7.0.2",
     "@vitejs/plugin-react": "^6.1.2",
     "@vitest/coverage-v8": "^5.0.4",
+    "cspell": "^10.3.6",
     "eslint": "^10.12.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jsx-a11y": "^6.10.2",

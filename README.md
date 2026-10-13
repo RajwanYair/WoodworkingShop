@@ -10,6 +10,7 @@
 [![Deploy](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/pages.yml/badge.svg)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/pages.yml)
 [![Cloudflare Pages](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/cloudflare-pages.yml/badge.svg)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/cloudflare-pages.yml)
 [![CodeQL](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/codeql.yml/badge.svg)](https://github.com/RajwanYair/WoodworkingShop/actions/workflows/codeql.yml)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/RajwanYair/WoodworkingShop/badge)](https://scorecard.dev/viewer/?uri=github.com/RajwanYair/WoodworkingShop)
 [![codecov](https://codecov.io/gh/RajwanYair/WoodworkingShop/graph/badge.svg)](https://codecov.io/gh/RajwanYair/WoodworkingShop)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-7.0-3178c6?logo=typescript&logoColor=white)](tsconfig.json)
@@ -132,7 +133,7 @@ npm test
 npm run build
 ```
 
-> **Node.js >= 22** is required.
+> **Node.js >= 24** is required.
 
 ---
 
@@ -334,13 +335,21 @@ git push origin vX.Y.Z
 The tag-triggered workflow creates the GitHub Release and uploads the build archive, checksum,
 and SBOM; do not create a second release manually with `gh release create`.
 
+After downloading the release files, verify each attestation against this repository and its release workflow:
+
+```bash
+gh attestation verify woodworkingshop-dist.tar.gz --repo RajwanYair/WoodworkingShop --signer-workflow RajwanYair/WoodworkingShop/.github/workflows/release.yml
+gh attestation verify woodworkingshop-dist.tar.gz.sha256 --repo RajwanYair/WoodworkingShop --signer-workflow RajwanYair/WoodworkingShop/.github/workflows/release.yml
+gh attestation verify sbom.json --repo RajwanYair/WoodworkingShop --signer-workflow RajwanYair/WoodworkingShop/.github/workflows/release.yml
+```
+
 ---
 
 ## ❓ Troubleshooting
 
 | Issue                | Solution                                                                        |
 | -------------------- | ------------------------------------------------------------------------------- |
-| `npm ci` fails       | Ensure **Node.js >= 22**. Delete `node_modules` and retry                       |
+| `npm ci` fails       | Ensure **Node.js >= 24**. Delete `node_modules` and retry                       |
 | TypeScript errors    | Run `npm run typecheck` for details. Strict mode is on                          |
 | Lint failures        | Run `npm run lint` — 0 warnings policy; fix root causes                         |
 | Chunk size warning   | Expected for `@react-pdf/renderer` (~1.5 MB) — it is code-split and lazy-loaded |

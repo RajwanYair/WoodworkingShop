@@ -2,8 +2,12 @@ import baseConfig from './stryker.config.mjs';
 
 export default {
   ...baseConfig,
+  incremental: false,
   mutate: ['src/engine/dimensions.ts', 'src/utils/bom-export.ts'],
-  testFiles: ['tests/engine/dimensions.test.ts', 'tests/utils/bom-export.test.ts'],
+  vitest: {
+    configFile: 'vitest.mutation.config.ts',
+    related: false,
+  },
   thresholds: {
     ...baseConfig.thresholds,
     break: 79,

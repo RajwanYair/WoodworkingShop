@@ -1,10 +1,23 @@
 # Roadmap
 
-> Last updated: 2026-10-11 (v5.35.1 maintenance release)
+> Last updated: 2026-10-13 (project status refresh)
 > Current app version: v5.35.1
 > Next release target: v5.36.0 (Phase 81 — Toolchain modernisation)
 > Program horizon: Phases 63–85 · Sprints 300–451 · v5.35.1 → v6.0.0 (execution order: §7.2 release train)
 > Strategy: best-in-class, local-first, production-grade woodworking planning platform — **refactor the foundation first, then lead on workflow depth**
+
+## Current Status (2026-10-13)
+
+The measurements in the 2026-10-04 overview below are a dated historical baseline; the live status is summarized here.
+
+- **Release:** v5.35.1 is current. v5.36.0 remains gated on Phase 81/Sprint 425 acceptance; do not tag it while the blocking work below is open.
+- **Main:** `2dac79d`; merged TypeScript 7 build/typecheck enforcement and PDF locale/base-path fixes. GitHub CI passed for this commit.
+- **Verification:** 5,195 Vitest tests pass with bounded worker concurrency; 526 Playwright tests are currently listed. `npm run quality:fast`, `npm run dead:check`, and `npm run release:build` pass. The full Stryker initial test run still exceeds its timeout; dry runs pass.
+- **Localization:** `npm run i18n:completeness` reports 2,167 keys, no missing/extra/empty values or placeholder mismatches, and EN-identical rates of HE 1.02%, AR 1.20%, DE 1.38%, ES 1.34%, FR 1.66%.
+- **Phase 81:** S420's build/typecheck compiler switch is implemented. S421's Chromium project, ARIA snapshots, and runtime/flake measurements remain in open PRs #236, #238 and #244. S422 uses Playwright 1.64; blocking snapshots, E2E sharding, and temp-only Lighthouse output remain.
+- S423 React Compiler evaluation remains open. S424 T2 spell-check and T3 Oxlint evaluation are complete; T1 Knip-entry cleanup is blocked on public API classification, and T4 mutation baseline remains open. S425 supply-chain acceptance is not complete.
+- **GitHub work:** #226's compiler switch is on `main`; draft PR #227 retains additional ADR/evidence work. The Context7 skill is on `main`, but #228's exact-source acceptance is unverified and PR #229 proposes a broader variant. #232 remains in open PR #233.
+- #234's discovery branch has no issue-linked PR and its social-card acceptance is unmet. Superseded dependency PRs and the incompatible Babel 8 proposal were closed. Other sprint chains remain active pending acceptance and review.
 
 ---
 
@@ -303,7 +316,7 @@ Latest versions were checked against the npm registry on 2026-10-12.
 
 | Tool         | Pinned today                                 | Latest (2026-10-04) | Target and sprint                                                             |
 | ------------ | -------------------------------------------- | ------------------- | ----------------------------------------------------------------------------- |
-| Node.js      | ≥ 22 (`package.json#engines`); CI default 24 | 26 current          | Raise floor to 24 with a CHANGELOG note (S425)                                |
+| Node.js      | ≥ 24 (`package.json#engines`); CI uses 24/26 | 26 current          | Raise floor to 24 with a CHANGELOG note (S425)                                |
 | npm          | 11.x                                         | 11.x                | Latest stable                                                                 |
 | TypeScript   | 7.0.2 (TS 6 API alias for tools)             | 7.0.2               | TS 7 native for typecheck/build; remove API alias when consumers support TS 7 |
 | React        | 19.x                                         | 19.3.0              | Keep; enable React Compiler 1.0 (S423)                                        |
@@ -1832,9 +1845,9 @@ flowchart LR
 - T4: Measure runtime and flake rate over 10 CI runs; ADR with numbers.
 - Accept: no duplicated test files; coverage floors unchanged or higher; browser project within the agreed runtime budget.
 
-**Sprint 422 — Playwright 1.63, blocking snapshots and CI speed** — P1 · M · S421 (absorbs S418).
+**Sprint 422 — Playwright, blocking snapshots and CI speed** — P1 · M · S421 (absorbs S418).
 
-- T1: Upgrade to Playwright 1.63; adopt `toMatchAriaSnapshot` for each tab's landmark structure and the clock API for timers.
+- T1: DONE — Playwright 1.64 is adopted. Remaining: adopt `toMatchAriaSnapshot` for each tab's landmark structure and the clock API for timers.
 - T2: Generate Linux visual baselines in the official Playwright container image and remove `--ignore-snapshots` from `ci.yml`.
 - T3: Shard E2E with blob reports merged into one HTML report; PR fast lane (affected tags + P0 journeys) and full matrix on `main`, nightly and release; track p50/p95 duration.
 - T4: Move Lighthouse output from `.lighthouseci/` to `%TEMP%/WoodworkingShop/lighthouse/` to satisfy the intermediate-files rule.
@@ -1849,18 +1862,19 @@ flowchart LR
 
 **Sprint 424 — Lint, dead-code, spelling and mutation hardening** — P1 · M · S371–S373.
 
-- T1: Remove all 22 Knip `entry` overrides in `package.json`: delete, wire or document each module (capability ledger is the source of truth); a new override requires an ADR.
-- T2: Fix the cspell configuration and re-enable spell checking as `npm run spell:check` in `quality:fast` and CI.
-- T3: ADR on an oxlint pre-pass for speed only; ESLint and the 7-plugin rule remain authoritative and blocking.
-- T4: Enable Stryker incremental mode in `mutation.yml`, cache the incremental file, and complete the full static-inclusive four-module baseline over successive weekly runs.
+- T1: BLOCKED — Removing the 28 current `entry` patterns makes Knip report 844 exported types as unused, including documented `public-api` barrels. The capability ledger also identifies roots as `surface-next`/`internal`, while workflow, test, worker, and i18n roots are not ledger modules. Reconcile each root's ownership and public contract before removing overrides; keep `npm run dead:check` passing in the meantime.
+- T2: DONE — Corrected `cspell.json`, added pinned locale dictionaries and the reviewed project vocabulary, and enabled `npm run spell:check` in `quality:fast` and CI; 410 scoped files pass with zero findings.
+- T3: DONE — `docs/ENGINEERING-DECISIONS.md` records the Oxlint 1.83.0 local trial and defers adoption: the required ESLint gate remains, so a sequential pre-pass cannot shorten `quality:fast`.
+- T4: IN PROGRESS — The four-module Stryker config preserves static mutants and uses an OS-temp incremental file; `mutation.yml` restores/saves that cache and gives each weekly run a graceful 14-minute baseline slice while retaining the separate two-module 79% gate. The weekly dry run discovers 87 tests, but a two-mutant probe reports zero completed tests.
+  Running the active mutant directly in Stryker's sandbox makes two existing assertions fail. The adapter's mutant-run/result path remains unresolved, so neither the weekly score nor the four-module baseline is accepted.
 - Accept: `npm run dead:check` passes with zero hatches; spell check blocks CI; a full mutation baseline is published with date and score.
 
 **Sprint 425 — Supply chain hardening and v5.36.0 release** — P1 · M · S420–S424 (absorbs S417).
 
-- T1: Pin every action by full commit SHA with version comments; least-privilege `permissions` per job; Dependabot keeps pins current.
-- T2: `actions/attest-build-provenance` for the `dist/` archive and CycloneDX SBOM; document `gh attestation verify` in README.
-- T3: Add an OpenSSF Scorecard workflow and publish the dated score (prepares S361).
-- T4: Raise the Node floor to 24 if all CI jobs already run on 24 or 26; CHANGELOG note.
+- T1: DONE — Every external GitHub Action is pinned to a verified full commit SHA with a release comment; workflow permissions are scoped to individual jobs; weekly Dependabot GitHub Actions updates remain enabled.
+- T2: DONE — Release provenance covers the build archive, checksum, and CycloneDX SBOM; README documents `gh attestation verify` scoped to the repository and release workflow.
+- T3: IN PROGRESS — Added the scheduled/manual Scorecard workflow with code-scanning results and a README badge; publish the dated score after the first successful GitHub Actions run.
+- T4: DONE — Raised the supported Node floor to 24, aligned all CI setup-node jobs to Node 24 or newer (compat matrix 24/26), and updated setup and support docs.
 - Accept: release assets verifiable; `npm run ci` green; tool tokens synced across docs.
 
 ### Phase 82 — Architecture Refactor (Sprints 426–434; target v5.37.0) — P0

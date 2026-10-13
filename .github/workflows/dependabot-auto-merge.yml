@@ -4,20 +4,19 @@ on:
   pull_request:
     branches: [main]
 
-permissions:
-  contents: write
-  pull-requests: write
-
 jobs:
   auto-merge:
     name: Auto-merge Dependabot patch/minor
     runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      pull-requests: write
     # Only runs on Dependabot PRs
     if: github.actor == 'dependabot[bot]'
     steps:
       - name: Fetch Dependabot metadata
         id: meta
-        uses: dependabot/fetch-metadata@v2
+        uses: dependabot/fetch-metadata@21025c705c08248db411dc16f3619e6b5f9ea21a # v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 

@@ -12,6 +12,7 @@ const checks = [
   'lint',
   'lint:css',
   'lint:md',
+  'spell:check',
   'format:check',
   'i18n:coverage',
   'agents:validate',

@@ -29,7 +29,7 @@ flowchart LR
 
 ## ⚡ Quick Setup
 
-**Prerequisites:** Node.js >= 22, npm 10+, Git
+**Prerequisites:** Node.js >= 24, npm 10+, Git
 
 ```bash
 # 1 — fork on GitHub, then clone your fork

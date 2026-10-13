@@ -16,11 +16,6 @@ concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: true
 
-permissions:
-  attestations: write
-  contents: write
-  id-token: write
-
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -28,14 +23,18 @@ jobs:
   release:
     name: Build & Publish
     runs-on: ubuntu-24.04
+    permissions:
+      attestations: write
+      contents: write
+      id-token: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           fetch-depth: 0
       - uses: ./.github/actions/setup-node
 
       # Vite pre-bundle cache — key tracks only config + lockfile (source changes don't affect it)
-      - uses: actions/cache@v5
+      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
         with:
           path: /tmp/WoodworkingShop/.vite_cache
           key: vite-${{ runner.os }}-${{ hashFiles('vite.config.ts', 'package-lock.json') }}
@@ -65,7 +64,7 @@ jobs:
           cd .. && sha256sum woodworkingshop-dist.tar.gz > woodworkingshop-dist.tar.gz.sha256
 
       - name: Generate build provenance attestation
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
         with:
           subject-path: |
             woodworkingshop-dist.tar.gz
@@ -84,7 +83,7 @@ jobs:
           ver="${{ steps.version.outputs.version }}" && ver="${ver#v}"
           notes=$(awk "/^## \\[${ver}\\]/{f=1;next} /^## \\[/{f=0} f" CHANGELOG.md)
           { echo "notes<<EOF"; echo "${notes:-Release ${ver}}"; echo "EOF"; } >> "$GITHUB_OUTPUT"
-      - uses: softprops/action-gh-release@v3
+      - uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3
         with:
           tag_name: ${{ steps.version.outputs.version }}
           name: WoodworkingShop ${{ steps.version.outputs.version }}

@@ -34,7 +34,7 @@ const SEVERITY_TEXT_CLASS: Record<ValidationSeverity, string> = {
 
 /**
  * Shows manufacturing constraint validation issues derived from validateConfig().
- * Issues are dismissable individually. The panel hides when all are dismissed.
+ * Issues are dismissible individually. The panel hides when all are dismissed.
  */
 export function ValidationPanel({ issues }: ValidationPanelProps) {
   const { t, i18n } = useTranslation();
