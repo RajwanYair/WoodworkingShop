@@ -1,22 +1,13 @@
 import { create } from 'zustand';
 import { browserLocalStorage } from '../platform/storage/index';
-import type {
-  CabinetConfig,
-  Part,
-  Material,
-  HardwareItem,
-  OptimizationResult,
-  DerivedDimensions,
-  OffcutEntry,
-  DefectZone,
-} from '../engine/core/types';
+import type { CabinetConfig, Part, Material } from '../engine/core/types';
 import { DEFAULT_CONFIG } from '../engine/materials/materials';
 import { computeDimensions } from '../engine/geometry/dimensions';
 import { generateParts, computeEdgeBandingTotal } from '../engine/geometry/parts';
 import { generateHardware } from '../engine/hardware/hardware';
 import { optimizeCutSheets } from '../engine/optimizer/cut-optimizer';
 import { estimateCost } from '../engine/costing/cost-estimator';
-import { generateAssemblySteps, type AssemblyStep } from '../engine/assembly/assembly';
+import { generateAssemblySteps } from '../engine/assembly/assembly';
 import { createJsonMemo } from '../engine/core/memo';
 import {
   readActiveCabinetIndexFromUrl,
@@ -32,9 +23,7 @@ import {
   setRotationLocks,
   setCutModeWorker,
   setOffcutCatalog,
-  getOffcutCatalog,
   setDefectZones,
-  getDefectZones,
   setAutoCoNest,
   applyLocks,
   scheduleOptimization,
@@ -51,14 +40,22 @@ import {
 } from './slices/snapshotSlice';
 import { createOptimizerSettingsSlice, type OptimizerSettingsSlice } from './slices/optimizerSettingsSlice';
 import { createNamedExpressionsSlice, type NamedExpressionsSlice } from './slices/namedExpressionsSlice';
+import type { CabinetEntry } from './slices/cabinetTypes';
+import {
+  appendCabinetPatch,
+  applyCabinetPatch,
+  createCabinetPatch,
+  MAX_CABINET_HISTORY,
+} from './slices/cabinetHistory';
+import { createProjectSlice, type ProjectSlice } from './slices/projectSlice';
+import { createCatalogSlice, type CatalogSlice } from './slices/catalogSlice';
+import type { CabinetState } from './store-types';
 import { getCustomMaterials, useCustomMaterialsStore } from './custom-materials-store';
 
 /**
  * Fire-and-forget: post a cut-optimization request to the worker via Comlink.
  * Falls back to synchronous computation when Workers are unavailable (e.g. tests).
  */
-
-const MAX_HISTORY = 50;
 
 // Phase 11 — UI preferences now live in uiSlice.ts.  Re-export so tests and
 // any external consumers that imported from cabinet-store still work.
@@ -103,74 +100,13 @@ function saveSession(snap: SessionSnapshot): void {
   }
 }
 
-export interface CabinetEntry {
-  name: string;
-  config: CabinetConfig;
-  notes?: string;
-}
+export type { CabinetEntry } from './slices/cabinetTypes';
 
 // Phase 11 — ProjectSnapshot moved to snapshotSlice.ts; re-export for backward
 // compat (tests + utils import it from cabinet-store).
 export type { ProjectSnapshot } from './slices/snapshotSlice';
 
-/**
- * Phase 11: CabinetState is now composed of the Config slice (inline) +
- * three extracted slices.  The external API is identical — components and
- * tests continue to import everything from this file.
- */
-export type CabinetState = {
-  // ── Config / multi-cabinet state ──
-  cabinets: CabinetEntry[];
-  activeCabinetIndex: number;
-  config: CabinetConfig;
-  dimensions: DerivedDimensions;
-  parts: Part[];
-  hardware: HardwareItem[];
-  optimization: OptimizationResult;
-  edgeBandingTotal: number;
-  cost: ReturnType<typeof estimateCost>;
-  assemblySteps: AssemblyStep[];
-  allParts: Part[];
-  combinedOptimization: OptimizationResult;
-  optimizationPending: boolean;
-  costPending: boolean;
-  assemblyPending: boolean;
-  _past: CabinetEntry[][];
-  _future: CabinetEntry[][];
-  canUndo: boolean;
-  canRedo: boolean;
-  rotationLockedPartIds: Record<string, boolean>;
-  /** Phase 12 / Sprint 12 — saved partial-sheet offcuts available for reuse. */
-  offcutCatalog: OffcutEntry[];
-  /** Phase 12 / Sprint 13 — per-material defect zones pre-blocked in MaxRects packing. */
-  defectZones: Record<string, DefectZone[]>;
-
-  // ── Config actions ──
-  setConfig: (patch: Partial<CabinetConfig>) => void;
-  resetConfig: () => void;
-  undo: () => void;
-  redo: () => void;
-  addCabinet: () => void;
-  removeCabinet: (index: number) => void;
-  duplicateCabinet: (index: number) => void;
-  mirrorCabinet: (index: number) => void;
-  moveCabinet: (index: number, direction: 'up' | 'down') => void;
-  setActiveCabinet: (index: number) => void;
-  renameCabinet: (index: number, name: string) => void;
-  setNotes: (index: number, notes: string) => void;
-  toggleRotationLock: (partId: string) => void;
-  loadProject: (cabinets: CabinetEntry[]) => void;
-  bulkReplaceMaterial: (fromKey: string, toKey: string) => void;
-  setOffcutCatalog: (catalog: OffcutEntry[]) => void;
-  addOffcutEntry: (entry: OffcutEntry) => void;
-  removeOffcutEntry: (id: string) => void;
-  addDefectZone: (materialKey: string, zone: DefectZone) => void;
-  updateDefectZone: (materialKey: string, zoneIndex: number, zone: DefectZone) => void;
-  removeDefectZone: (materialKey: string, zoneIndex: number) => void;
-} & UiSlice &
-  OptimizerSettingsSlice &
-  SnapshotSlice &
-  NamedExpressionsSlice;
+export type { CabinetState } from './store-types';
 
 function derive(
   config: CabinetConfig,
@@ -263,6 +199,35 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
   // v3.21.0 — Inject `set` and `get` so worker-schedule callbacks can update state.
   initWorkerSchedule(set as (partial: Partial<CabinetState>) => void, () => get());
 
+  let historyGroupStart: CabinetEntry[] | null = null;
+
+  function historyUpdate(state: CabinetState, cabinets: CabinetEntry[]) {
+    if (historyGroupStart !== null) {
+      return { _past: state._past, _future: state._future, canUndo: state.canUndo, canRedo: state.canRedo };
+    }
+    return {
+      _past: appendCabinetPatch(state._past, state.cabinets, cabinets),
+      _future: [],
+      canUndo: true,
+      canRedo: false,
+    };
+  }
+
+  function endHistoryGroup(): void {
+    const previous = historyGroupStart;
+    if (previous === null) return;
+    historyGroupStart = null;
+    const state = get();
+    const patch = createCabinetPatch(previous, state.cabinets);
+    if (patch.changes.length === 0) return;
+    set({
+      _past: appendCabinetPatch(state._past, previous, state.cabinets),
+      _future: [],
+      canUndo: true,
+      canRedo: false,
+    });
+  }
+
   const urlPatch = readConfigFromUrl();
   // v3.44.0 — Restore session from localStorage when present.
   // URL config params take precedence for the active cabinet (enables shared links).
@@ -321,9 +286,10 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
   }
   // Called by SnapshotSlice restoreSnapshot so the config slice handles undo history.
   function handleRestoreSnapshot(cabinets: CabinetEntry[]) {
+    endHistoryGroup();
     const state = get();
-    const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
     const migrated = cabinets.map((c) => ({ ...c, config: { ...DEFAULT_CONFIG, ...c.config } }));
+    const past = appendCabinetPatch(state._past, state.cabinets, migrated);
     const base = deriveBaseProject(migrated, 0);
     scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
     scheduleAssembly(base.config);
@@ -350,6 +316,8 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
     set(partial);
   };
   const uiSet = sliceSetImpl as SliceSetFn<UiSlice>;
+  const projectSet = sliceSetImpl as SliceSetFn<ProjectSlice>;
+  const catalogSet = sliceSetImpl as SliceSetFn<CatalogSlice>;
   const optSet = sliceSetImpl as SliceSetFn<OptimizerSettingsSlice>;
   const snapSet = sliceSetImpl as SliceSetFn<SnapshotSlice>;
 
@@ -363,8 +331,6 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
     canUndo: false,
     canRedo: false,
     rotationLockedPartIds: session?.rotationLockedPartIds ?? {},
-    offcutCatalog: [],
-    defectZones: {},
     optimizationPending: deferInitialOptimization,
     costPending: deferInitialOptimization,
     assemblyPending: false,
@@ -383,7 +349,23 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
     assemblySteps: generateAssemblySteps(initial.config),
 
     // ── UI slice ───────────────────────────────────────────────────────────
-    ...createUiSlice(uiSet, prefs, initialProjectName, initialProjectNotes, loadBuildLog(), loadCutChecklist()),
+    ...createUiSlice(uiSet, prefs, loadBuildLog(), loadCutChecklist()),
+
+    // Project identity and URL state are separate from display preferences.
+    ...createProjectSlice(projectSet, initialProjectName, initialProjectNotes),
+
+    // Offcut/defect catalogs own the store-facing data; worker mirrors remain behind injected callbacks.
+    ...createCatalogSlice(
+      catalogSet,
+      () => get() as CatalogSlice,
+      setOffcutCatalog,
+      setDefectZones,
+      () => {
+        const state = get();
+        const base = deriveBaseProject(state.cabinets, state.activeCabinetIndex);
+        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
+      },
+    ),
 
     // ── Optimizer settings slice ───────────────────────────────────────────
     ...createOptimizerSettingsSlice(
@@ -407,6 +389,10 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
     ...createNamedExpressionsSlice(sliceSetImpl as SliceSetFn<NamedExpressionsSlice>),
 
     // ── Config actions (inline) ────────────────────────────────────────────
+    beginHistoryGroup: () => {
+      historyGroupStart ??= get().cabinets;
+    },
+    endHistoryGroup,
     setConfig: (patch) =>
       set((state) => {
         const cabinets = state.cabinets.map((cab, i) =>
@@ -415,7 +401,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
         pushConfigToUrl(cabinets[state.activeCabinetIndex].config, state.activeCabinetIndex);
         // Sprint 20 — notify plugins that config changed.
         pluginEventBus.emit('config:change', { config: cabinets[state.activeCabinetIndex].config });
-        const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
+        const history = historyUpdate(state, cabinets);
         const base = deriveBaseProject(cabinets, state.activeCabinetIndex);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         scheduleAssembly(base.config);
@@ -425,10 +411,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
           optimizationPending: true,
           costPending: true,
           assemblyPending: true,
-          _past: past,
-          _future: [],
-          canUndo: true,
-          canRedo: false,
+          ...history,
         };
       }),
 
@@ -438,7 +421,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
           i === state.activeCabinetIndex ? { ...cab, config: DEFAULT_CONFIG } : cab,
         );
         pushConfigToUrl(DEFAULT_CONFIG, state.activeCabinetIndex);
-        const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
+        const history = historyUpdate(state, cabinets);
         const base = deriveBaseProject(cabinets, state.activeCabinetIndex);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         scheduleAssembly(base.config);
@@ -448,17 +431,16 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
           optimizationPending: true,
           costPending: true,
           assemblyPending: true,
-          _past: past,
-          _future: [],
-          canUndo: true,
-          canRedo: false,
+          ...history,
         };
       }),
 
-    undo: () =>
-      set((state) => {
-        const prevCabinets = state._past.at(-1);
-        if (!prevCabinets) return state;
+    undo: () => {
+      endHistoryGroup();
+      return set((state) => {
+        const patch = state._past.at(-1);
+        if (!patch) return state;
+        const prevCabinets = applyCabinetPatch(state.cabinets, patch, 'backward');
         const past = state._past.slice(0, -1);
         const idx = Math.min(state.activeCabinetIndex, prevCabinets.length - 1);
         pushConfigToUrl(prevCabinets[idx].config, idx);
@@ -473,16 +455,19 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
           costPending: true,
           assemblyPending: true,
           _past: past,
-          _future: [state.cabinets, ...state._future],
+          _future: [patch, ...state._future],
           canUndo: past.length > 0,
           canRedo: true,
         };
-      }),
+      });
+    },
 
-    redo: () =>
-      set((state) => {
-        if (state._future.length === 0) return state;
-        const nextCabinets = state._future[0];
+    redo: () => {
+      endHistoryGroup();
+      return set((state) => {
+        const patch = state._future[0];
+        if (!patch) return state;
+        const nextCabinets = applyCabinetPatch(state.cabinets, patch, 'forward');
         const future = state._future.slice(1);
         const idx = Math.min(state.activeCabinetIndex, nextCabinets.length - 1);
         pushConfigToUrl(nextCabinets[idx].config, idx);
@@ -496,18 +481,19 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
           optimizationPending: true,
           costPending: true,
           assemblyPending: true,
-          _past: [...state._past, state.cabinets],
+          _past: [...state._past, patch].slice(-MAX_CABINET_HISTORY),
           _future: future,
           canUndo: true,
           canRedo: future.length > 0,
         };
-      }),
+      });
+    },
 
     addCabinet: () =>
       set((state) => {
-        const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         const newCab: CabinetEntry = { name: `Cabinet ${state.cabinets.length + 1}`, config: { ...DEFAULT_CONFIG } };
         const cabinets = [...state.cabinets, newCab];
+        const past = appendCabinetPatch(state._past, state.cabinets, cabinets);
         const idx = cabinets.length - 1;
         pushConfigToUrl(cabinets[idx].config, idx);
         const base = deriveBaseProject(cabinets, idx);
@@ -531,8 +517,8 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
       set((state) => {
         if (state.cabinets.length <= 1 || !Number.isInteger(index) || index < 0 || index >= state.cabinets.length)
           return state;
-        const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         const cabinets = state.cabinets.filter((_, i) => i !== index);
+        const past = appendCabinetPatch(state._past, state.cabinets, cabinets);
         const idx = Math.min(state.activeCabinetIndex, cabinets.length - 1);
         pushConfigToUrl(cabinets[idx].config, idx);
         const base = deriveBaseProject(cabinets, idx);
@@ -563,7 +549,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
         const newEntry: CabinetEntry = { name: newName, config: { ...src.config } };
         const cabinets = [...state.cabinets.slice(0, index + 1), newEntry, ...state.cabinets.slice(index + 1)];
         const newIndex = index + 1;
-        const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
+        const past = appendCabinetPatch(state._past, state.cabinets, cabinets);
         pushConfigToUrl(cabinets[newIndex].config, newIndex);
         const base = deriveBaseProject(cabinets, newIndex);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
@@ -593,7 +579,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
         };
         const cabinets = [...state.cabinets.slice(0, index + 1), newEntry, ...state.cabinets.slice(index + 1)];
         const newIndex = index + 1;
-        const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
+        const past = appendCabinetPatch(state._past, state.cabinets, cabinets);
         pushConfigToUrl(cabinets[newIndex].config, newIndex);
         const base = deriveBaseProject(cabinets, newIndex);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
@@ -624,8 +610,8 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
         let newActive = state.activeCabinetIndex;
         if (state.activeCabinetIndex === index) newActive = targetIndex;
         else if (state.activeCabinetIndex === targetIndex) newActive = index;
-        const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         const base = deriveBaseProject(cabinets, newActive);
+        const past = appendCabinetPatch(state._past, state.cabinets, cabinets);
         pushConfigToUrl(cabinets[newActive].config, newActive);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         scheduleAssembly(base.config);
@@ -676,11 +662,11 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
     loadProject: (cabinets) =>
       set((state) => {
         if (cabinets.length === 0) return state;
-        const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         const migrated = cabinets.map((c) => ({
           ...c,
           config: { ...DEFAULT_CONFIG, ...c.config },
         }));
+        const past = appendCabinetPatch(state._past, state.cabinets, migrated);
         pushConfigToUrl(migrated[0].config, 0);
         const base = deriveBaseProject(migrated, 0);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
@@ -720,13 +706,13 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
     bulkReplaceMaterial: (fromKey, toKey) =>
       set((state) => {
         if (fromKey === toKey) return state;
-        const past = [...state._past, state.cabinets].slice(-MAX_HISTORY);
         const cabinets = state.cabinets.map((cab) => {
           const config = { ...cab.config };
           if (config.carcassMaterial === fromKey) config.carcassMaterial = toKey;
           if (config.backPanelMaterial === fromKey) config.backPanelMaterial = toKey;
           return { ...cab, config };
         });
+        const past = appendCabinetPatch(state._past, state.cabinets, cabinets);
         const base = deriveBaseProject(cabinets, state.activeCabinetIndex);
         scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
         scheduleAssembly(base.config);
@@ -742,59 +728,6 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
           canRedo: false,
         };
       }),
-    // Phase 12 / Sprint 12 — offcut catalog actions
-    setOffcutCatalog: (catalog) => {
-      setOffcutCatalog(catalog);
-      set({ offcutCatalog: catalog });
-    },
-    addOffcutEntry: (entry) => {
-      setOffcutCatalog([...getOffcutCatalog(), entry]);
-      set((s) => ({ offcutCatalog: [...s.offcutCatalog, entry] }));
-    },
-    removeOffcutEntry: (id) => {
-      setOffcutCatalog(getOffcutCatalog().filter((e) => e.id !== id));
-      set((s) => ({ offcutCatalog: s.offcutCatalog.filter((e) => e.id !== id) }));
-    },
-    addDefectZone: (materialKey, zone) => {
-      const dz = getDefectZones();
-      const updated = { ...dz, [materialKey]: [...(dz[materialKey] ?? []), zone] };
-      setDefectZones(updated);
-      set((s) => {
-        const newDz = { ...s.defectZones, [materialKey]: [...(s.defectZones[materialKey] ?? []), zone] };
-        return { defectZones: newDz };
-      });
-      // Re-run the optimizer so the new zone is immediately applied.
-      const state = useCabinetStore.getState();
-      const base = deriveBaseProject(state.cabinets, state.activeCabinetIndex);
-      scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
-    },
-    updateDefectZone: (materialKey, zoneIndex, zone) => {
-      const existing = getDefectZones()[materialKey] ?? [];
-      if (!Number.isInteger(zoneIndex) || zoneIndex < 0 || zoneIndex >= existing.length) return;
-      const updatedList = existing.map((current, index) => (index === zoneIndex ? zone : current));
-      const updated = { ...getDefectZones(), [materialKey]: updatedList };
-      setDefectZones(updated);
-      set((s) => ({ ...s, defectZones: { ...s.defectZones, [materialKey]: updatedList } }));
-      const state = useCabinetStore.getState();
-      const base = deriveBaseProject(state.cabinets, state.activeCabinetIndex);
-      scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
-    },
-    removeDefectZone: (materialKey, zoneIndex) => {
-      const existing = getDefectZones()[materialKey] ?? [];
-      if (!Number.isInteger(zoneIndex) || zoneIndex < 0 || zoneIndex >= existing.length) return;
-      const filtered = existing.filter((_, i) => i !== zoneIndex);
-      const updated = { ...getDefectZones(), [materialKey]: filtered };
-      setDefectZones(updated);
-      set((s) => {
-        const ex = s.defectZones[materialKey] ?? [];
-        const newList = ex.filter((_, i) => i !== zoneIndex);
-        return { defectZones: { ...s.defectZones, [materialKey]: newList } };
-      });
-      // Re-run the optimizer so the removed zone is no longer applied.
-      const state = useCabinetStore.getState();
-      const base = deriveBaseProject(state.cabinets, state.activeCabinetIndex);
-      scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
-    },
   };
 });
 

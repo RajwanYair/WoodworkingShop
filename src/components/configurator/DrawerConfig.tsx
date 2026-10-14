@@ -6,7 +6,7 @@ import type { DrawerSlideType } from '../../engine/core/types';
 
 export function DrawerConfig() {
   const { t, i18n } = useTranslation();
-  const { config, setConfig } = useCabinetStore();
+  const { config, setConfig, beginHistoryGroup, endHistoryGroup } = useCabinetStore();
   const isHe = i18n.language === 'he';
 
   const setDrawerHeight = (idx: number, val: number) => {
@@ -28,6 +28,8 @@ export function DrawerConfig() {
           // Reset drawerHeights when count changes
           setConfig({ drawerCount: v, drawerHeights: undefined });
         }}
+        onChangeStart={beginHistoryGroup}
+        onChangeEnd={endHistoryGroup}
         softMin={0}
         softMax={4}
         hardMin={0}
@@ -68,6 +70,8 @@ export function DrawerConfig() {
                 label={isHe ? `מגירה ${i + 1}` : `Drawer ${i + 1}`}
                 value={config.drawerHeights?.[i] ?? 150}
                 onChange={(v) => setDrawerHeight(i, v)}
+                onChangeStart={beginHistoryGroup}
+                onChangeEnd={endHistoryGroup}
                 softMin={80}
                 softMax={250}
                 hardMin={50}

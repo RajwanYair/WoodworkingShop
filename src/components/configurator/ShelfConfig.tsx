@@ -9,7 +9,7 @@ import { formatNumber } from '../../i18n/format';
 
 export function ShelfConfig() {
   const { t, i18n } = useTranslation();
-  const { config, dimensions, setConfig } = useCabinetStore();
+  const { config, dimensions, setConfig, beginHistoryGroup, endHistoryGroup } = useCabinetStore();
   const customMaterials = useCustomMaterialsStore((state) => state.materials);
   const internalH = dimensions.internalHeight;
 
@@ -66,6 +66,8 @@ export function ShelfConfig() {
         label={t('config.shelfCount')}
         value={config.shelfCount}
         onChange={(v) => setConfig({ shelfCount: v })}
+        onChangeStart={beginHistoryGroup}
+        onChangeEnd={endHistoryGroup}
         softMin={CONSTRAINTS.minShelves}
         softMax={CONSTRAINTS.maxShelves}
         hardMin={HARD_LIMITS.minShelves}
@@ -81,6 +83,8 @@ export function ShelfConfig() {
           label={t('config.shelfCentreSupports')}
           value={config.shelfCentreSupports ?? 0}
           onChange={(v) => setConfig({ shelfCentreSupports: v })}
+          onChangeStart={beginHistoryGroup}
+          onChangeEnd={endHistoryGroup}
           softMin={0}
           softMax={3}
           hardMin={0}

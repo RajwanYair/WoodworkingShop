@@ -202,6 +202,47 @@ describe('cabinet-store', () => {
     expect(useCabinetStore.getState().config.width).toBe(888);
   });
 
+  it('groups repeated config updates into one reversible history patch', () => {
+    const originalWidth = useCabinetStore.getState().config.width;
+    const { beginHistoryGroup, endHistoryGroup, setConfig } = useCabinetStore.getState();
+
+    beginHistoryGroup();
+    setConfig({ width: 800 });
+    setConfig({ width: 900 });
+    endHistoryGroup();
+
+    expect(useCabinetStore.getState()._past).toHaveLength(1);
+    useCabinetStore.getState().undo();
+    expect(useCabinetStore.getState().config.width).toBe(originalWidth);
+    useCabinetStore.getState().redo();
+    expect(useCabinetStore.getState().config.width).toBe(900);
+  });
+
+  it('does not create history for a gesture without config changes', () => {
+    const { beginHistoryGroup, endHistoryGroup } = useCabinetStore.getState();
+
+    beginHistoryGroup();
+    endHistoryGroup();
+
+    expect(useCabinetStore.getState()._past).toHaveLength(0);
+    expect(useCabinetStore.getState().canUndo).toBe(false);
+  });
+
+  it('flushes a grouped edit before undoing it', () => {
+    const originalWidth = useCabinetStore.getState().config.width;
+    const { beginHistoryGroup, setConfig } = useCabinetStore.getState();
+
+    beginHistoryGroup();
+    setConfig({ width: 800 });
+    setConfig({ width: 900 });
+    useCabinetStore.getState().undo();
+
+    expect(useCabinetStore.getState().config.width).toBe(originalWidth);
+    expect(useCabinetStore.getState().canRedo).toBe(true);
+    useCabinetStore.getState().redo();
+    expect(useCabinetStore.getState().config.width).toBe(900);
+  });
+
   // Multi-cabinet
   it('adds a new cabinet', () => {
     useCabinetStore.getState().addCabinet();

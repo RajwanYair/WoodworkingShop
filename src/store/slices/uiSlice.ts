@@ -6,7 +6,6 @@
  * none of these actions trigger re-optimization or re-derivation.
  */
 import type { UnitSystem } from '../../utils/units';
-import { pushProjectNameToUrl } from '../../utils/url-state';
 import { browserLocalStorage } from '../../platform/storage/index';
 
 // ─── Persisted preference helpers (shared with cabinet-store.ts) ─────────────
@@ -109,8 +108,6 @@ type ActiveTab = 'workspace' | 'configurator' | 'preview' | 'optimizer' | 'assem
 export type UiSlice = {
   // State
   activeTab: ActiveTab;
-  projectName: string;
-  projectNotes: string;
   darkMode: boolean;
   colorBlindMode: boolean;
   highContrastMode: boolean;
@@ -127,8 +124,6 @@ export type UiSlice = {
 
   // Actions
   setActiveTab: (tab: ActiveTab) => void;
-  setProjectName: (name: string) => void;
-  setProjectNotes: (notes: string) => void;
   toggleDarkMode: () => void;
   toggleColorBlindMode: () => void;
   toggleHighContrast: () => void;
@@ -161,16 +156,12 @@ type UiSet = (partial: Partial<UiSlice> | ((s: UiSlice) => Partial<UiSlice>)) =>
 export function createUiSlice(
   set: UiSet,
   initialPrefs: UiPersistedPrefs,
-  initialProjectName: string,
-  initialProjectNotes: string,
   initialBuildLog: BuildLogEntry[],
   initialCheckedPartIds: string[],
 ): UiSlice {
   return {
     // ── Initial state ──
     activeTab: 'workspace',
-    projectName: initialProjectName,
-    projectNotes: initialProjectNotes,
     darkMode: initialPrefs.darkMode ?? detectOsDarkModeUi(),
     colorBlindMode: initialPrefs.colorBlindMode ?? false,
     highContrastMode: initialPrefs.highContrastMode ?? false,
@@ -181,13 +172,6 @@ export function createUiSlice(
 
     // ── Actions ──
     setActiveTab: (tab) => set({ activeTab: tab }),
-
-    setProjectName: (name) => {
-      set({ projectName: name });
-      pushProjectNameToUrl(name);
-    },
-
-    setProjectNotes: (notes) => set({ projectNotes: notes }),
 
     toggleDarkMode: () =>
       set((s) => {

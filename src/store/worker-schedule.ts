@@ -29,7 +29,7 @@ import type { CostEstimatorWorkerApi, CostEstimatorInput } from '../workers/cost
 import AssemblyWorker from '../workers/assembly.worker?worker';
 import type { AssemblyWorkerApi } from '../workers/assembly.worker';
 // Type-only import — erased at runtime, so no circular dependency.
-import type { CabinetState } from './cabinet-store';
+import type { CabinetState } from './store-types';
 import { getCustomMaterials } from './custom-materials-store';
 
 // ── Worker proxies ────────────────────────────────────────────────────────────
@@ -166,16 +166,8 @@ export function setOffcutCatalog(catalog: OffcutEntry[]): void {
   _offcutCatalog = catalog;
 }
 
-export function getOffcutCatalog(): OffcutEntry[] {
-  return _offcutCatalog;
-}
-
 export function setDefectZones(zones: Record<string, DefectZone[]>): void {
   _defectZones = zones;
-}
-
-export function getDefectZones(): Record<string, DefectZone[]> {
-  return _defectZones;
 }
 
 export function setAutoCoNest(enabled: boolean): void {

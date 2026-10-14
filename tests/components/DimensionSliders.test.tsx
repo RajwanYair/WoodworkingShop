@@ -12,6 +12,10 @@ describe('DimensionSliders', () => {
       config,
       cabinets: [{ name: 'Cabinet 1', config }],
       activeCabinetIndex: 0,
+      _past: [],
+      _future: [],
+      canUndo: false,
+      canRedo: false,
       units: 'metric',
     });
   });
@@ -56,5 +60,20 @@ describe('DimensionSliders', () => {
 
     expect(slider).toHaveAttribute('step', '1');
     expect(useCabinetStore.getState().config.width).toBe(601);
+  });
+
+  it('groups pointer changes into one undo step', () => {
+    render(<DimensionSliders />);
+    const slider = screen.getByRole('slider', { name: 'Width (mm)' });
+
+    fireEvent.pointerDown(slider, { pointerType: 'mouse' });
+    fireEvent.change(slider, { target: { value: '610' } });
+    fireEvent.change(slider, { target: { value: '620' } });
+    fireEvent.pointerUp(slider, { pointerType: 'mouse' });
+
+    expect(useCabinetStore.getState().config.width).toBe(620);
+    expect(useCabinetStore.getState()._past).toHaveLength(1);
+    useCabinetStore.getState().undo();
+    expect(useCabinetStore.getState().config.width).toBe(DEFAULT_CONFIG.width);
   });
 });

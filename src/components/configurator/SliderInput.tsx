@@ -24,6 +24,8 @@ export interface SliderInputProps {
   unit?: string;
   decimals?: number;
   ariaLabel?: string;
+  onChangeStart?: () => void;
+  onChangeEnd?: () => void;
 }
 
 export function SliderInput({
@@ -38,6 +40,8 @@ export function SliderInput({
   unit,
   decimals = 0,
   ariaLabel,
+  onChangeStart,
+  onChangeEnd,
 }: SliderInputProps) {
   const { t } = useTranslation();
   const inputId = useId();
@@ -100,6 +104,28 @@ export function SliderInput({
           step={step}
           value={sliderValue}
           aria-label={ariaLabel ?? label}
+          onPointerDown={onChangeStart}
+          onPointerUp={onChangeEnd}
+          onPointerCancel={onChangeEnd}
+          onBlur={onChangeEnd}
+          onKeyDown={(event) => {
+            if (
+              ['ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'End', 'Home', 'PageDown', 'PageUp'].includes(
+                event.key,
+              )
+            ) {
+              onChangeStart?.();
+            }
+          }}
+          onKeyUp={(event) => {
+            if (
+              ['ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'End', 'Home', 'PageDown', 'PageUp'].includes(
+                event.key,
+              )
+            ) {
+              onChangeEnd?.();
+            }
+          }}
           onChange={(e) => {
             const v = Number(e.target.value);
             onChange(v);

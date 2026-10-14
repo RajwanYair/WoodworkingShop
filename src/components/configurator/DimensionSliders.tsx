@@ -41,7 +41,7 @@ const SPECS: DimSpec[] = [
 
 export function DimensionSliders() {
   const { t } = useTranslation();
-  const { config, setConfig, units, toggleUnits } = useCabinetStore();
+  const { config, setConfig, units, toggleUnits, beginHistoryGroup, endHistoryGroup } = useCabinetStore();
   const step = sliderStep(units);
 
   return (
@@ -66,6 +66,8 @@ export function DimensionSliders() {
           unitLabel={units === 'metric' ? 'mm' : 'in'}
           metric={units === 'metric'}
           label={t(`config.${spec.key}`)}
+          onChangeStart={beginHistoryGroup}
+          onChangeEnd={endHistoryGroup}
           onChange={(v) => setConfig({ [spec.key]: v })}
           displayValue={formatDim(config[spec.key], units)}
           tMessages={{
@@ -128,6 +130,8 @@ interface RowProps {
   unitLabel: string;
   metric: boolean;
   label: string;
+  onChangeStart: () => void;
+  onChangeEnd: () => void;
   displayValue: string;
   onChange: (mm: number) => void;
   tMessages: { outOfRange: string; outsideRecommended: string };
@@ -135,7 +139,19 @@ interface RowProps {
 
 const MM_PER_INCH = 25.4;
 
-function DimensionRow({ spec, value, step, unitLabel, metric, label, displayValue, onChange, tMessages }: RowProps) {
+function DimensionRow({
+  spec,
+  value,
+  step,
+  unitLabel,
+  metric,
+  label,
+  onChangeStart,
+  onChangeEnd,
+  displayValue,
+  onChange,
+  tMessages,
+}: Readonly<RowProps>) {
   const inputId = useId();
   const errorId = useId();
   const [penPrecision, setPenPrecision] = useState(false);
@@ -187,7 +203,29 @@ function DimensionRow({ spec, value, step, unitLabel, metric, label, displayValu
           value={sliderValue}
           aria-label={`${label} (${unitLabel})`}
           onPointerDown={(event) => {
+            onChangeStart();
             setPenPrecision(event.pointerType === 'pen');
+          }}
+          onPointerUp={onChangeEnd}
+          onPointerCancel={onChangeEnd}
+          onBlur={onChangeEnd}
+          onKeyDown={(event) => {
+            if (
+              ['ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'End', 'Home', 'PageDown', 'PageUp'].includes(
+                event.key,
+              )
+            ) {
+              onChangeStart();
+            }
+          }}
+          onKeyUp={(event) => {
+            if (
+              ['ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'End', 'Home', 'PageDown', 'PageUp'].includes(
+                event.key,
+              )
+            ) {
+              onChangeEnd();
+            }
           }}
           onChange={(e) => {
             const v = Number(e.target.value);

@@ -6,7 +6,7 @@ import { SliderInput } from './SliderInput';
 
 export function DoorConfig() {
   const { t } = useTranslation();
-  const { config, setConfig } = useCabinetStore();
+  const { config, setConfig, beginHistoryGroup, endHistoryGroup } = useCabinetStore();
 
   return (
     <fieldset className="space-y-4">
@@ -51,6 +51,8 @@ export function DoorConfig() {
         label={t('config.doorReveal')}
         value={config.doorReveal}
         onChange={(v) => setConfig({ doorReveal: v })}
+        onChangeStart={beginHistoryGroup}
+        onChangeEnd={endHistoryGroup}
         softMin={CONSTRAINTS.minReveal}
         softMax={CONSTRAINTS.maxReveal}
         hardMin={HARD_LIMITS.minReveal}
