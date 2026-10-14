@@ -41,9 +41,10 @@ export function FrontOpenView({
 }: FrontOpenViewProps) {
   const [dragIdx, setDragIdx] = useState<number | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+  const dragPrecisionRef = useRef(1);
 
   const svgYToShelfPos = useCallback(
-    (clientY: number) => {
+    (clientY: number, precision: number) => {
       if (!svgRef.current) return 0;
       const svg = svgRef.current;
       const pt = svg.createSVGPoint();
@@ -53,7 +54,8 @@ export function FrontOpenView({
       const bottomY = dimPad + H - T;
       const topY = dimPad + T;
       const clampedY = Math.max(topY + T * 0.6, Math.min(bottomY - T * 0.6, svgPt.y));
-      return Math.round((bottomY - clampedY) / S);
+      const millimeters = (bottomY - clampedY) / S;
+      return Math.round(millimeters * precision) / precision;
     },
     [H, T, dimPad],
   );
@@ -61,7 +63,7 @@ export function FrontOpenView({
   const handleShelfDrag = useCallback(
     (e: React.PointerEvent) => {
       if (dragIdx === null) return;
-      const pos = svgYToShelfPos(e.clientY);
+      const pos = svgYToShelfPos(e.clientY, dragPrecisionRef.current);
       const newPositions = [...shelfPositions];
       newPositions[dragIdx] = pos;
       newPositions.sort((a, b) => a - b);
@@ -164,8 +166,9 @@ export function FrontOpenView({
             <g
               key={i}
               onPointerDown={(e) => {
+                dragPrecisionRef.current = e.pointerType === 'pen' ? 10 : 1;
                 setDragIdx(i);
-                (e.target as Element).setPointerCapture(e.pointerId);
+                e.currentTarget.setPointerCapture(e.pointerId);
               }}
               className="cursor-ns-resize"
             >
