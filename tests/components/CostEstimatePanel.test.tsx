@@ -2,8 +2,8 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { CostEstimatePanel } from '../../src/components/configurator/CostEstimatePanel';
-import type { CostBreakdown } from '../../src/engine/cost-estimator';
-import { DEFAULT_CONFIG, getMaterial } from '../../src/engine/materials';
+import type { CostBreakdown } from '../../src/engine/costing/cost-estimator';
+import { DEFAULT_CONFIG, getMaterial } from '../../src/engine/materials/materials';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 
 const material = getMaterial('mdf-3');

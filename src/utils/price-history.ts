@@ -10,10 +10,10 @@
  * Key schema: '<materialId>:<timestamp-ms>'
  */
 
-import { set, del, keys, createStore, entries } from 'idb-keyval';
+import { createIndexedDbAdapter } from '../platform/storage/index';
 
 // ── IDB store ─────────────────────────────────────────────────────────────────
-const priceStore = createStore('cabinet-planner-price-history', 'price-history');
+const priceStore = createIndexedDbAdapter('cabinet-planner-price-history', 'price-history');
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -81,7 +81,7 @@ export async function recordPrice(
     recordedAt: ts.toISOString(),
     source: opts.source,
   };
-  await set(key, entry, priceStore);
+  await priceStore.set(key, entry);
   return entry;
 }
 
@@ -90,7 +90,7 @@ export async function recordPrice(
  * Silently ignores unknown keys.
  */
 export async function deletePriceEntry(key: string): Promise<void> {
-  await del(key, priceStore);
+  await priceStore.delete(key);
 }
 
 /**
@@ -98,8 +98,10 @@ export async function deletePriceEntry(key: string): Promise<void> {
  */
 export async function clearMaterialHistory(materialId: string): Promise<void> {
   const prefix = `${materialId}:`;
-  const allKeys = (await keys(priceStore)).filter((k): k is string => typeof k === 'string' && k.startsWith(prefix));
-  await Promise.all(allKeys.map((k) => del(k, priceStore)));
+  const allKeys = (await priceStore.keys()).filter(
+    (key): key is string => typeof key === 'string' && key.startsWith(prefix),
+  );
+  await Promise.all(allKeys.map((key) => priceStore.delete(key)));
 }
 
 // ── Read ──────────────────────────────────────────────────────────────────────
@@ -107,9 +109,9 @@ export async function clearMaterialHistory(materialId: string): Promise<void> {
 /** Return all price entries for a material, sorted chronologically (oldest first). */
 export async function getMaterialHistory(materialId: string): Promise<PriceEntry[]> {
   const prefix = `${materialId}:`;
-  const all = (await entries<string, PriceEntry>(priceStore)) as [string, PriceEntry][];
+  const all = await priceStore.entries<PriceEntry>();
   return all
-    .filter(([k]) => k.startsWith(prefix))
+    .filter(([key]) => typeof key === 'string' && key.startsWith(prefix))
     .map(([, v]) => v)
     .sort((a, b) => a.recordedAt.localeCompare(b.recordedAt));
 }
@@ -141,7 +143,7 @@ export async function getPriceStats(materialId: string): Promise<PriceStats | nu
 
 /** Return a list of all material IDs that have at least one price entry. */
 export async function listTrackedMaterials(): Promise<string[]> {
-  const allKeys = (await keys(priceStore)).filter((k): k is string => typeof k === 'string');
-  const ids = new Set(allKeys.map((k) => k.split(':')[0]));
+  const allKeys = (await priceStore.keys()).filter((key): key is string => typeof key === 'string');
+  const ids = new Set(allKeys.map((key) => key.split(':')[0]));
   return [...ids].sort();
 }

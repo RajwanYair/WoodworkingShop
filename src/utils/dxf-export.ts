@@ -1,7 +1,7 @@
-import type { CutSheet, CutRect } from '../engine/types';
+import type { CutSheet, CutRect } from '../engine/core/types';
 import { triggerDownload } from './download';
 import { appendChecksumToDxf } from './checksum';
-import { DXF_SCHEMA_VERSION } from '../engine/export-schema';
+import { DXF_SCHEMA_VERSION } from '../engine/export/export-schema';
 import {
   buildDxfHeader,
   buildDxfClasses,

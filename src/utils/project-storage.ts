@@ -1,6 +1,7 @@
 import type { CabinetEntry, ProjectSnapshot } from '../store/cabinet-store';
 import { utf8ArrayBuffer, utf8Encode } from './browser-compat';
 import { idbLoadProjects, idbSaveProjects, idbLoadSnapshots, idbSaveSnapshots } from './indexed-db-storage';
+import { downloadContent, readTextFile } from '../platform/files/index';
 
 /** Current schema version written on every export. */
 export const CURRENT_SCHEMA_VERSION = '1.0' as const;
@@ -257,20 +258,13 @@ export function exportProjectJson(project: SavedProject, snapshots?: ProjectSnap
     ...createProjectExportRecord(project, snapshots),
     generatedAt: new Date().toISOString(),
   };
-  const blob = new Blob([toAsciiJson(payload, 2)], { type: 'application/json;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${project.name.replace(/[^\w-]/g, '_')}.cabinet-project.json`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+  const filename = `${project.name.replace(/[^\w-]/g, '_')}.cabinet-project.json`;
+  downloadContent(toAsciiJson(payload, 2), 'application/json;charset=utf-8', filename);
 }
 
 export function importProjectJson(file: File): Promise<SavedProject> {
   return withProjectWriteLock(async () => {
-    const text = await file.text();
+    const text = await readTextFile(file);
     const raw = JSON.parse(text) as unknown;
     const project = migrateProject(raw);
     const projects = await load();
@@ -338,21 +332,14 @@ export async function exportProjectsBundle(projects: SavedProject[]): Promise<vo
     manifest,
     projects: fileEntries.map((entry) => entry.project),
   };
-  const blob = new Blob([toAsciiJson(payload, 2)], { type: 'application/json;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `cabinet-projects-bundle-${new Date().toISOString().slice(0, 10)}.cabinet-projects.json`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+  const filename = `cabinet-projects-bundle-${new Date().toISOString().slice(0, 10)}.cabinet-projects.json`;
+  downloadContent(toAsciiJson(payload, 2), 'application/json;charset=utf-8', filename);
 }
 
 /** Import a `.cabinet-projects.json` bundle, merging all contained projects */
 export function importProjectsBundle(file: File): Promise<SavedProject[]> {
   return withProjectWriteLock(async () => {
-    const text = await file.text();
+    const text = await readTextFile(file);
     const parsed = JSON.parse(text) as unknown;
     if (!isRecord(parsed)) {
       throw new Error('Invalid bundle: root must be an object');
@@ -409,15 +396,8 @@ export interface ProjectSettings {
 
 /** Trigger a browser download of the current settings as a `.cabinet-settings.json` file. */
 export function exportSettingsJson(settings: ProjectSettings, projectName: string): void {
-  const blob = new Blob([toAsciiJson(settings, 2)], { type: 'application/json;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${projectName.replace(/[^\w\u05D0-\u05EA.-]/g, '_')}.cabinet-settings.json`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+  const filename = `${projectName.replace(/[^\w\u05D0-\u05EA.-]/g, '_')}.cabinet-settings.json`;
+  downloadContent(toAsciiJson(settings, 2), 'application/json;charset=utf-8', filename);
 }
 
 /**

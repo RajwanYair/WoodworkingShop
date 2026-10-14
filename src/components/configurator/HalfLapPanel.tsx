@@ -4,8 +4,8 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatMillimeters, formatNumber } from '../../i18n/format';
-import { calculateHalfLap } from '../../engine/half-lap';
-import type { HalfLapType } from '../../engine/half-lap';
+import { calculateHalfLap } from '../../engine/joinery/half-lap';
+import type { HalfLapType } from '../../engine/joinery/half-lap';
 
 export function HalfLapPanel() {
   const { t, i18n } = useTranslation();

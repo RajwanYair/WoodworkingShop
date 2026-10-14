@@ -6,6 +6,7 @@ import type { WebVitalsSnapshot } from '../../services/local-diagnostics';
 import { getStorageEstimate, type StorageEstimate } from '../../utils/indexed-db-storage';
 import { getWorkerHealth } from '../../store/worker-schedule';
 import { getLocalErrorReports } from '../../services/error-reporter';
+import { downloadContent } from '../../platform/files/index';
 
 interface DiagnosticsModalProps {
   readonly onClose: () => void;
@@ -35,12 +36,7 @@ export function DiagnosticsModal({ onClose }: DiagnosticsModalProps) {
 
   const exportBundle = async () => {
     const bundle = await createDiagnosticBundle(vitals);
-    const url = URL.createObjectURL(new Blob([JSON.stringify(bundle, null, 2)], { type: 'application/json' }));
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'woodworkingshop-diagnostics.json';
-    link.click();
-    URL.revokeObjectURL(url);
+    downloadContent(JSON.stringify(bundle, null, 2), 'application/json', 'woodworkingshop-diagnostics.json');
     setExported(true);
   };
 

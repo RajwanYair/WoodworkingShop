@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import type { CabinetConfig, Part } from '../../src/engine/types';
+import type { CabinetConfig, Part } from '../../src/engine/core/types';
 import { cfg } from '../helpers';
 import { downloadGltfFile } from '../../src/utils/gltf-download';
 import { downloadIfcFile } from '../../src/utils/ifc-download';

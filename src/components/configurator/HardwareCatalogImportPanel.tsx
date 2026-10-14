@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { parseHardwareCatalog, type HardwareCatalogImportMode, type HardwareItem } from '../../engine/hardware-catalog';
+import {
+  parseHardwareCatalog,
+  type HardwareCatalogImportMode,
+  type HardwareItem,
+} from '../../engine/hardware/hardware-catalog';
 import { useCustomHardwareStore } from '../../store/custom-hardware-store';
 
 export function HardwareCatalogImportPanel() {

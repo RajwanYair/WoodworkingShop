@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SaveLoadPanel } from '../../src/components/configurator/SaveLoadPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { deleteSavedConfig, loadSavedConfigs, saveConfig, type SavedConfig } from '../../src/utils/local-storage';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 import * as projectStorage from '../../src/utils/project-storage';
 import * as saveLoadJson from '../../src/components/configurator/save-load-json';
 import { useToastStore } from '../../src/store/toast-store';

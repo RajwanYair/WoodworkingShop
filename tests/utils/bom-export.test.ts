@@ -6,7 +6,7 @@ import {
   generateErpCsv,
   downloadErpCsv,
 } from '../../src/utils/bom-export';
-import type { Part, HardwareItem } from '../../src/engine/types';
+import type { Part, HardwareItem } from '../../src/engine/core/types';
 
 const mockPart: Part = {
   id: 'P01',

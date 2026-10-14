@@ -1,5 +1,5 @@
 import { Page, Text, View } from '@react-pdf/renderer';
-import type { CabinetConfig, OptimizationResult, HardwareItem } from '../../../engine/types';
+import type { CabinetConfig, OptimizationResult, HardwareItem } from '../../../engine/core/types';
 import { s } from '../pdf-tokens';
 import type { PdfCtx } from '../pdf-i18n';
 import i18n from '../../../i18n';

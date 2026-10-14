@@ -1,5 +1,12 @@
-import { DEFAULT_CONFIG } from '../src/engine/materials';
-import type { CabinetConfig, CutRect, CutSheet, HardwareItem, Material, OptimizationResult } from '../src/engine/types';
+import { DEFAULT_CONFIG } from '../src/engine/materials/materials';
+import type {
+  CabinetConfig,
+  CutRect,
+  CutSheet,
+  HardwareItem,
+  Material,
+  OptimizationResult,
+} from '../src/engine/core/types';
 import type { CabinetEntry } from '../src/store/cabinet-store';
 import type { ExportOutput } from '../src/utils/batch-export-runner';
 import type { SavedProject } from '../src/utils/project-storage';

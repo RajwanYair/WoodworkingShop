@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { formatNumber } from '../../src/i18n/format';
 import { CostSummaryPanel } from '../../src/components/configurator/CostSummaryPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 
 describe('CostSummaryPanel', () => {
   beforeEach(() => {

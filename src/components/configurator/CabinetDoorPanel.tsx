@@ -7,7 +7,7 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatMillimeters, formatNumber } from '../../i18n/format';
-import { calculateCabinetDoor, type DoorOverlay } from '../../engine/cabinet-door';
+import { calculateCabinetDoor, type DoorOverlay } from '../../engine/geometry/cabinet-door';
 
 const OVERLAY_OPTIONS: DoorOverlay[] = ['full', 'half', 'inset'];
 

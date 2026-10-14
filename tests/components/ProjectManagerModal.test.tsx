@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 import { ProjectManagerModal } from '../../src/components/layout/ProjectManagerModal';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { listProjects, saveProject, type SavedProject } from '../../src/utils/project-storage';

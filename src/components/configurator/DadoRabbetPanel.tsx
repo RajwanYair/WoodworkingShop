@@ -4,7 +4,7 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatMillimeters } from '../../i18n/format';
-import { calculateDadoRabbet, type DadoRabbetJointType } from '../../engine/dado-rabbet';
+import { calculateDadoRabbet, type DadoRabbetJointType } from '../../engine/joinery/dado-rabbet';
 
 const JOINT_TYPES: DadoRabbetJointType[] = ['dado', 'rabbet', 'throughDado'];
 

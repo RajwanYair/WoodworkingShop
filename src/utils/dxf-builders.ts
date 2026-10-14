@@ -3,7 +3,7 @@
  *
  * Extracted from dxf-export.ts: all internal DXF geometry builder functions.
  */
-import type { CutRect } from '../engine/types';
+import type { CutRect } from '../engine/core/types';
 
 /** Build the DXF HEADER section. Appends optional extra `$VAR/value` pairs. */
 export function buildDxfHeader(extraVars: string[] = []): string[] {

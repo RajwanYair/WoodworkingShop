@@ -8,8 +8,8 @@
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import type { CabinetConfig } from '../../src/engine/types';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import type { CabinetConfig } from '../../src/engine/core/types';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 

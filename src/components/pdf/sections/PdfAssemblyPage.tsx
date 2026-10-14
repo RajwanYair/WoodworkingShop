@@ -1,5 +1,5 @@
 import { Page, Text, View } from '@react-pdf/renderer';
-import type { CabinetConfig, DerivedDimensions } from '../../../engine/types';
+import type { CabinetConfig, DerivedDimensions } from '../../../engine/core/types';
 import { s } from '../pdf-tokens';
 import type { PdfCtx } from '../pdf-i18n';
 import { assemblyStepsI18n } from '../pdf-helpers';

@@ -4,7 +4,7 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatMillimeters, formatNumber } from '../../i18n/format';
-import { calculateCoveCut } from '../../engine/cove-cut';
+import { calculateCoveCut } from '../../engine/calculators/cove-cut';
 
 export function CoveCutPanel() {
   const { t, i18n } = useTranslation();

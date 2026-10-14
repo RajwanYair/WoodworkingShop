@@ -18,7 +18,7 @@ export const CAPABILITY_CONTRACTS: readonly CapabilityContract[] = [
     id: 'error-reporter',
     name: 'Client Error Reporter',
     owner: 'Repo Maintainer',
-    sourceFile: 'src/services/error-reporter.ts',
+    sourceFile: 'src/platform/diagnostics/error-reporter.ts',
     requiresNetwork: false,
     criticalPath: false,
     defaultEnabled: true,

@@ -10,11 +10,18 @@
  * cabinet-store.ts has no direct reference to the module-level vars here.
  */
 import * as Comlink from 'comlink';
-import type { CabinetConfig, Part, HardwareItem, OptimizationResult, OffcutEntry, DefectZone } from '../engine/types';
-import { optimizeCutSheetsResult, findCoNestCandidates, applyCoNesting } from '../engine/cut-optimizer';
-import { estimateCost } from '../engine/cost-estimator';
-import { generateAssemblySteps } from '../engine/assembly';
-import { pluginEventBus } from '../engine/plugin';
+import type {
+  CabinetConfig,
+  Part,
+  HardwareItem,
+  OptimizationResult,
+  OffcutEntry,
+  DefectZone,
+} from '../engine/core/types';
+import { optimizeCutSheetsResult, findCoNestCandidates, applyCoNesting } from '../engine/optimizer/cut-optimizer';
+import { estimateCost } from '../engine/costing/cost-estimator';
+import { generateAssemblySteps } from '../engine/assembly/assembly';
+import { pluginEventBus } from '../engine/core/plugin';
 import CutOptimizerWorker from '../workers/cut-optimizer.worker?worker';
 import type { CutOptimizerWorkerApi, CutOptimizerInput } from '../workers/cut-optimizer.worker';
 import CostEstimatorWorker from '../workers/cost-estimator.worker?worker';

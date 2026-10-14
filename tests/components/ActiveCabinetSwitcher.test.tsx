@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { ActiveCabinetSwitcher } from '../../src/components/layout/ActiveCabinetSwitcher';
 import { useCabinetStore } from '../../src/store/cabinet-store';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 
 describe('ActiveCabinetSwitcher', () => {
   beforeEach(() => {

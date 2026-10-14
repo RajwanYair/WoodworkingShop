@@ -4,7 +4,8 @@
  */
 
 import { generateIfcContent } from '../engine/export/ifc-export';
-import type { CabinetConfig, Part } from '../engine/types';
+import type { CabinetConfig, Part } from '../engine/core/types';
+import { downloadContent } from '../platform/files/index';
 
 /**
  * Generate IFC content for the given config + parts and trigger a browser
@@ -16,11 +17,5 @@ import type { CabinetConfig, Part } from '../engine/types';
  */
 export function downloadIfcFile(config: CabinetConfig, parts: Part[], filename = 'cabinet'): void {
   const { content } = generateIfcContent(config, parts);
-  const blob = new Blob([content], { type: 'application/x-step' });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement('a');
-  anchor.href = url;
-  anchor.download = `${filename}.ifc`;
-  anchor.click();
-  URL.revokeObjectURL(url);
+  downloadContent(content, 'application/x-step', `${filename}.ifc`);
 }

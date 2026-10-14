@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { createJsonMemo } from '../../src/engine/memo';
+import { createJsonMemo } from '../../src/engine/core/memo';
 
 describe('createJsonMemo', () => {
   it('returns cached result on repeated identical primitive args', () => {
@@ -88,16 +88,16 @@ describe('createJsonMemo', () => {
 
 describe('generateParts memoisation', () => {
   it('returns same array reference for identical configs', async () => {
-    const { generateParts } = await import('../../src/engine/parts');
-    const { DEFAULT_CONFIG } = await import('../../src/engine/materials');
+    const { generateParts } = await import('../../src/engine/geometry/parts');
+    const { DEFAULT_CONFIG } = await import('../../src/engine/materials/materials');
     const result1 = generateParts(DEFAULT_CONFIG);
     const result2 = generateParts(DEFAULT_CONFIG);
     expect(result1).toBe(result2); // same reference = cache hit
   });
 
   it('returns different reference for different configs', async () => {
-    const { generateParts } = await import('../../src/engine/parts');
-    const { DEFAULT_CONFIG } = await import('../../src/engine/materials');
+    const { generateParts } = await import('../../src/engine/geometry/parts');
+    const { DEFAULT_CONFIG } = await import('../../src/engine/materials/materials');
     const result1 = generateParts(DEFAULT_CONFIG);
     const result2 = generateParts({ ...DEFAULT_CONFIG, shelfCount: DEFAULT_CONFIG.shelfCount + 1 });
     expect(result1).not.toBe(result2);

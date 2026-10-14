@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Material } from '../engine/types';
+import type { Material } from '../engine/core/types';
 
 interface CustomMaterialsState {
   materials: Material[];

@@ -17,13 +17,14 @@ import { listProjects } from './utils/project-storage';
 import { IconPrint } from './components/layout/Icons';
 import { useCabinetStore } from './store/cabinet-store';
 import { useToastStore } from './store/toast-store';
+import { copyText } from './platform/share/index';
 import { useSystemDarkMode } from './hooks/useSystemDarkMode';
 import { useSwUpdate } from './hooks/useSwUpdate';
 import { usePwaFileHandlers } from './hooks/usePwaFileHandlers';
 import { useHaptics } from './hooks/useHaptics';
 import { useTouchGestures } from './hooks/useTouchGestures';
-import { generateParts } from './engine/parts';
-import { generateHardware } from './engine/hardware';
+import { generateParts } from './engine/geometry/parts';
+import { generateHardware } from './engine/hardware/hardware';
 import { getCustomMaterials } from './store/custom-materials-store';
 import { configToUrl, readTabFromUrl, pushTabToUrl } from './utils/url-state';
 import { formatDate } from './i18n/format';
@@ -34,7 +35,7 @@ import {
   registerCommands,
   unregisterCommand,
 } from './utils/command-palette';
-import type { Lang } from './engine/types';
+import type { Lang } from './engine/core/types';
 import {
   APP_TABS,
   COMMANDS,
@@ -393,9 +394,10 @@ function App() {
           break;
         case 'share.copy': {
           const url = configToUrl(state.config, state.projectName);
-          navigator.clipboard.writeText(url).then(
-            () => useToastStore.getState().addToast(t('shortcuts.copyLink'), 'success'),
-            () => useToastStore.getState().addToast(t('toast.linkCopyFailed'), 'error'),
+          void copyText(url).then((copied) =>
+            useToastStore
+              .getState()
+              .addToast(t(copied ? 'shortcuts.copyLink' : 'toast.linkCopyFailed'), copied ? 'success' : 'error'),
           );
           break;
         }

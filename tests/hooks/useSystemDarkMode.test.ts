@@ -2,7 +2,7 @@ import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { useSystemDarkMode } from '../../src/hooks/useSystemDarkMode';
 import { useCabinetStore } from '../../src/store/cabinet-store';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 

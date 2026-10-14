@@ -1,7 +1,7 @@
 import { useId } from 'react';
 import { formatDim } from '../../utils/units';
 import type { UnitSystem } from '../../utils/units';
-import { getMaterialTexture } from '../../engine/material-textures';
+import { getMaterialTexture } from '../../engine/materials/material-textures';
 
 // ─── Isometric 3D view ───
 

@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { HardwareCatalogImportPanel } from '../../src/components/configurator/HardwareCatalogImportPanel';
-import { HARDWARE_CATALOG_SCHEMA_VERSION, type HardwareItem } from '../../src/engine/hardware-catalog';
+import { HARDWARE_CATALOG_SCHEMA_VERSION, type HardwareItem } from '../../src/engine/hardware/hardware-catalog';
 import { useCustomHardwareStore } from '../../src/store/custom-hardware-store';
 
 const existingHardware: HardwareItem = {

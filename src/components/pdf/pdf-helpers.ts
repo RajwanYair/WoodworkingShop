@@ -1,5 +1,5 @@
-import type { CabinetConfig, DerivedDimensions, OptimizationResult, Lang } from '../../engine/types';
-import { getMaterial } from '../../engine/materials';
+import type { CabinetConfig, DerivedDimensions, OptimizationResult, Lang } from '../../engine/core/types';
+import { getMaterial } from '../../engine/materials/materials';
 import { pdfI18n } from './pdf-i18n';
 
 export interface AssemblyStep {

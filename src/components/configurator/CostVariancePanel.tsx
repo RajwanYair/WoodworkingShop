@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n/format';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useCostVarianceStore } from '../../store/cost-variance-store';
-import { generateCostVarianceReport } from '../../engine/cost-variance';
-import type { MaterialCostEntry } from '../../engine/cost-variance';
+import { generateCostVarianceReport } from '../../engine/costing/cost-variance';
+import type { MaterialCostEntry } from '../../engine/costing/cost-variance';
 
 const VAR_POS = 'text-red-600 dark:text-red-400';
 const VAR_NEG = 'text-green-600 dark:text-green-400';

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { formatNumber } from '../../i18n/format';
-import type { CutSheet, OffcutEntry } from '../../engine/types';
+import type { CutSheet, OffcutEntry } from '../../engine/core/types';
 import { computeOffcuts } from './compute-offcuts';
 import { IconScissors, IconChevronDown, IconChevronRight } from '../layout/Icons';
 

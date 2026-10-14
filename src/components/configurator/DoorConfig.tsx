@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { CONSTRAINTS, HARD_LIMITS } from '../../engine/materials';
-import type { HandleStyle, DoorStyle, EdgeBanding } from '../../engine/types';
+import { CONSTRAINTS, HARD_LIMITS } from '../../engine/materials/materials';
+import type { HandleStyle, DoorStyle, EdgeBanding } from '../../engine/core/types';
 import { SliderInput } from './SliderInput';
 
 export function DoorConfig() {

@@ -8,13 +8,13 @@
  */
 import { describe, test, type BenchRunOptions } from 'vitest';
 import { cfg } from '../helpers';
-import { computeDimensions } from '../../src/engine/dimensions';
-import { generateParts, computeEdgeBandingTotal } from '../../src/engine/parts';
-import { optimizeCutSheets } from '../../src/engine/cut-optimizer';
-import { estimateCost } from '../../src/engine/cost-estimator';
-import { findOptimizations } from '../../src/engine/smart-optimizer';
-import { validateConfig } from '../../src/engine/validation';
-import { generateHardware } from '../../src/engine/hardware';
+import { computeDimensions } from '../../src/engine/geometry/dimensions';
+import { generateParts, computeEdgeBandingTotal } from '../../src/engine/geometry/parts';
+import { optimizeCutSheets } from '../../src/engine/optimizer/cut-optimizer';
+import { estimateCost } from '../../src/engine/costing/cost-estimator';
+import { findOptimizations } from '../../src/engine/optimizer/smart-optimizer';
+import { validateConfig } from '../../src/engine/core/validation';
+import { generateHardware } from '../../src/engine/hardware/hardware';
 
 // ─── Deterministic configs used across all benchmarks ───────────────────────
 // Keep wardrobe within standard sheet dimensions (2440×1220 mm) so the

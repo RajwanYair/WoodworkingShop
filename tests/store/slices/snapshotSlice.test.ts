@@ -10,7 +10,7 @@ import {
   type ProjectSnapshot,
 } from '../../../src/store/slices/snapshotSlice';
 import type { CabinetEntry } from '../../../src/store/cabinet-store';
-import { DEFAULT_CONFIG } from '../../../src/engine/materials';
+import { DEFAULT_CONFIG } from '../../../src/engine/materials/materials';
 
 // ── localStorage stub ──────────────────────────────────────────────────────
 const _lsData: Record<string, string> = {};

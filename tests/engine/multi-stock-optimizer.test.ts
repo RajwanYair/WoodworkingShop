@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { optimizeWithMultiStock } from '../../src/engine/multi-stock-optimizer';
-import type { Part } from '../../src/engine/types';
+import { optimizeWithMultiStock } from '../../src/engine/optimizer/multi-stock-optimizer';
+import type { Part } from '../../src/engine/core/types';
 
 function part(overrides: Partial<Part> = {}): Part {
   return {

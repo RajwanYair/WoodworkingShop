@@ -12,7 +12,7 @@ import {
   registerCommands,
   unregisterCommand,
 } from '../../utils/command-palette';
-import { TEMPLATES } from '../../engine/templates';
+import { TEMPLATES } from '../../engine/project/templates/index';
 import { applyCabinetTemplate } from '../configurator/apply-template';
 import { transitionTab } from './transition-tab';
 import {

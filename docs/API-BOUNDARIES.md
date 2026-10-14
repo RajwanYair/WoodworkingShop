@@ -7,16 +7,18 @@ Source of truth: src/services/capability-contracts.ts
 The following engine barrels are supported module boundaries for internal and downstream consumers:
 
 - `src/engine/assembly/index.ts`
+- `src/engine/calculators/index.ts`
+- `src/engine/core/index.ts`
+- `src/engine/costing/index.ts`
 - `src/engine/export/index.ts`
 - `src/engine/geometry/index.ts`
 - `src/engine/hardware/index.ts`
+- `src/engine/joinery/index.ts`
 - `src/engine/materials/index.ts`
 - `src/engine/optimizer/index.ts`
-- `src/engine/stock/index.ts`
-- `src/engine/inventory/index.ts`
-- `src/engine/inventory/waste/index.ts`
-- `src/engine/inventory/comparison/index.ts`
-- `src/engine/templates/index.ts`
+- `src/engine/project/index.ts`
+- `src/engine/room/index.ts`
+- `src/engine/workshop/index.ts`
 
 ## Boundary Rules
 

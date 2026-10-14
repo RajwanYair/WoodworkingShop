@@ -1,4 +1,10 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
+import {
+  captureVideoFrame,
+  isCameraSupported,
+  requestEnvironmentCamera,
+  stopMediaStream,
+} from '../platform/device/index';
 
 // Minimal Capacitor types — avoids adding @capacitor/core as a prod dep.
 interface CapacitorCameraPlugin {
@@ -48,7 +54,7 @@ export function useCamera(): UseCameraResult {
     mountedRef.current = true;
     return () => {
       mountedRef.current = false;
-      streamRef.current?.getTracks().forEach((track) => track.stop());
+      stopMediaStream(streamRef.current);
       streamRef.current = null;
     };
   }, []);
@@ -63,10 +69,10 @@ export function useCamera(): UseCameraResult {
   const cap = (window as CapWindow).Capacitor;
   const isNative = cap?.isNativePlatform?.() ?? false;
   const capCamera = cap?.Plugins?.Camera;
-  const isSupported = isNative ? !!capCamera : Boolean(navigator.mediaDevices?.getUserMedia);
+  const isSupported = isNative ? !!capCamera : isCameraSupported();
 
   const stopCamera = useCallback(() => {
-    streamRef.current?.getTracks().forEach((t) => t.stop());
+    stopMediaStream(streamRef.current);
     streamRef.current = null;
     setStatus((prev) => (prev === 'active' ? 'idle' : prev));
   }, []);
@@ -95,18 +101,10 @@ export function useCamera(): UseCameraResult {
     }
 
     // --- Web getUserMedia path ---
-    if (!navigator.mediaDevices?.getUserMedia) {
-      setError('Camera not supported');
-      setStatus('error');
-      return;
-    }
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment' },
-        audio: false,
-      });
+      const stream = await requestEnvironmentCamera();
       if (!mountedRef.current) {
-        stream.getTracks().forEach((track) => track.stop());
+        stopMediaStream(stream);
         return;
       }
       streamRef.current = stream;
@@ -124,14 +122,8 @@ export function useCamera(): UseCameraResult {
   const capturePhoto = useCallback(() => {
     const video = videoRef.current;
     if (!video || status !== 'active') return null;
-    if (video.videoWidth === 0 || video.videoHeight === 0) return null;
-    const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    const context = canvas.getContext('2d');
-    if (!context) return null;
-    context.drawImage(video, 0, 0);
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+    const dataUrl = captureVideoFrame(video);
+    if (!dataUrl) return null;
     setPhotoDataUrl(dataUrl);
     stopCamera();
     setStatus('captured');

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { calculateDovetailLayout, type DovetailStyle, type DovetailType } from '../../engine/dovetail-layout';
+import { calculateDovetailLayout, type DovetailStyle, type DovetailType } from '../../engine/joinery/dovetail-layout';
 
 const JOINT_TYPES: DovetailType[] = ['through', 'half_blind'];
 const CUT_STYLES: DovetailStyle[] = ['hand_cut', 'machine_cut'];

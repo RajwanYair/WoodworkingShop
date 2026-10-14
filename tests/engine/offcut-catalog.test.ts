@@ -5,8 +5,8 @@
  * before opening full-size sheets.
  */
 import { describe, it, expect } from 'vitest';
-import { optimizeCutSheets } from '../../src/engine/cut-optimizer';
-import type { Part, OffcutEntry } from '../../src/engine/types';
+import { optimizeCutSheets } from '../../src/engine/optimizer/cut-optimizer';
+import type { Part, OffcutEntry } from '../../src/engine/core/types';
 
 /** Build a minimal Part fixture for testing. */
 function makePart(id: string, width: number, length: number, material = 'melamine-18'): Part {

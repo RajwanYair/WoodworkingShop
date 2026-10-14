@@ -2,13 +2,13 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { OptimizationNotesPanel } from '../../src/components/optimizer/OptimizationNotesPanel';
-import type { OptimizationSuggestion } from '../../src/engine/types';
+import type { OptimizationSuggestion } from '../../src/engine/core/types';
 import { useCabinetStore } from '../../src/store/cabinet-store';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 import { makeOptimizationResult } from '../helpers';
-import { findOptimizations } from '../../src/engine/smart-optimizer';
+import { findOptimizations } from '../../src/engine/optimizer/smart-optimizer';
 
-vi.mock('../../src/engine/smart-optimizer', () => ({ findOptimizations: vi.fn() }));
+vi.mock('../../src/engine/optimizer/smart-optimizer', () => ({ findOptimizations: vi.fn() }));
 
 const suggestion: OptimizationSuggestion = {
   originalConfig: { ...DEFAULT_CONFIG },

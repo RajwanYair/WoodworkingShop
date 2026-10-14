@@ -5,7 +5,7 @@
  * edge-case layout scenario. The optimizer must produce identical, valid
  * output for these inputs on every run.
  */
-import type { Part } from '../../src/engine/types';
+import type { Part } from '../../src/engine/core/types';
 
 /** Helper: build a minimal Part record. */
 function part(id: string, qty: number, material: string, thickness: number, length: number, width: number): Part {

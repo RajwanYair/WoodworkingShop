@@ -4,7 +4,7 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n/format';
-import { calculateWoodTurning, type TurningOperation } from '../../engine/wood-turning';
+import { calculateWoodTurning, type TurningOperation } from '../../engine/calculators/wood-turning';
 
 const OPERATIONS: TurningOperation[] = ['roughing', 'finishing', 'sanding'];
 

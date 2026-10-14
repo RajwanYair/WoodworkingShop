@@ -15,10 +15,10 @@
 import { useState, useMemo, useRef, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
-import { parseToolpath, type ToolMove } from '../../engine/gcode-toolpath';
-import { validateGcode } from '../../engine/gcode-validator';
+import { parseToolpath, type ToolMove } from '../../engine/export/gcode-toolpath';
+import { validateGcode } from '../../engine/export/gcode-validator';
 import { cutSheetToGcode, type GcodeOptions } from '../../utils/gcode-export';
-import type { CutSheet } from '../../engine/types';
+import type { CutSheet } from '../../engine/core/types';
 
 interface Props {
   /** The cut sheet to generate and preview G-code for */

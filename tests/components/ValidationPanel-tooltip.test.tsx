@@ -4,7 +4,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { ValidationPanel } from '../../src/components/configurator/ValidationPanel';
-import type { ValidationIssue } from '../../src/engine/types';
+import type { ValidationIssue } from '../../src/engine/core/types';
 
 const ISSUE_A: ValidationIssue = {
   code: 'CARCASS_TOO_NARROW',

@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n/format';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
-import { DEFAULT_LABOUR_RATE } from '../../engine/cost-estimator';
-import { getMaterial, computePartWeightKg } from '../../engine/materials';
-import type { Lang } from '../../engine/types';
+import { DEFAULT_LABOUR_RATE } from '../../engine/costing/cost-estimator';
+import { getMaterial, computePartWeightKg } from '../../engine/materials/materials';
+import type { Lang } from '../../engine/core/types';
 
 const BAR_COLORS = ['#8B6F47', '#A0845C', '#C49A6C', '#6B8E23', '#4682B4'];
 

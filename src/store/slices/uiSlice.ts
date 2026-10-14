@@ -7,6 +7,7 @@
  */
 import type { UnitSystem } from '../../utils/units';
 import { pushProjectNameToUrl } from '../../utils/url-state';
+import { browserLocalStorage } from '../../platform/storage/index';
 
 // ─── Persisted preference helpers (shared with cabinet-store.ts) ─────────────
 // NOTE: these are intentionally duplicated from cabinet-store.ts so the slice
@@ -34,7 +35,7 @@ export interface UiPersistedPrefs {
 export function loadUiPrefs(): UiPersistedPrefs {
   if (typeof window === 'undefined') return {};
   try {
-    const raw = window.localStorage.getItem(UI_PREFS_KEY);
+    const raw = browserLocalStorage.getItem(UI_PREFS_KEY);
     return raw ? (JSON.parse(raw) as UiPersistedPrefs) : {};
   } catch {
     return {};
@@ -44,7 +45,7 @@ export function loadUiPrefs(): UiPersistedPrefs {
 export function saveUiPrefs(prefs: UiPersistedPrefs): void {
   if (typeof window === 'undefined') return;
   try {
-    window.localStorage.setItem(UI_PREFS_KEY, JSON.stringify(prefs));
+    browserLocalStorage.setItem(UI_PREFS_KEY, JSON.stringify(prefs));
   } catch {
     /* quota / disabled — ignore */
   }
@@ -53,7 +54,7 @@ export function saveUiPrefs(prefs: UiPersistedPrefs): void {
 export function loadBuildLog(): BuildLogEntry[] {
   if (typeof window === 'undefined') return [];
   try {
-    const raw = window.localStorage.getItem(BUILD_LOG_KEY);
+    const raw = browserLocalStorage.getItem(BUILD_LOG_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw) as unknown;
     return Array.isArray(parsed) ? (parsed as BuildLogEntry[]) : [];
@@ -65,7 +66,7 @@ export function loadBuildLog(): BuildLogEntry[] {
 function saveBuildLog(log: BuildLogEntry[]): void {
   if (typeof window === 'undefined') return;
   try {
-    window.localStorage.setItem(BUILD_LOG_KEY, JSON.stringify(log));
+    browserLocalStorage.setItem(BUILD_LOG_KEY, JSON.stringify(log));
   } catch {
     /* quota / disabled — ignore */
   }
@@ -74,7 +75,7 @@ function saveBuildLog(log: BuildLogEntry[]): void {
 export function loadCutChecklist(): string[] {
   if (typeof window === 'undefined') return [];
   try {
-    const raw = window.localStorage.getItem(CUT_CHECKLIST_KEY);
+    const raw = browserLocalStorage.getItem(CUT_CHECKLIST_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw) as unknown;
     return Array.isArray(parsed) ? (parsed as string[]) : [];
@@ -86,7 +87,7 @@ export function loadCutChecklist(): string[] {
 function saveCutChecklist(ids: string[]): void {
   if (typeof window === 'undefined') return;
   try {
-    window.localStorage.setItem(CUT_CHECKLIST_KEY, JSON.stringify(ids));
+    browserLocalStorage.setItem(CUT_CHECKLIST_KEY, JSON.stringify(ids));
   } catch {
     /* quota / disabled — ignore */
   }

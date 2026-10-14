@@ -2,6 +2,8 @@
 // On native Capacitor builds: delegates to the Capacitor Haptics plugin.
 // On web: falls back to the Web Vibration API (navigator.vibrate).
 
+import { isWebVibrationSupported, vibrate } from '../platform/device/index';
+
 // Minimal Capacitor types — avoids adding @capacitor/core as a prod dep.
 interface CapacitorHapticsPlugin {
   impact(options: { style: 'LIGHT' | 'MEDIUM' | 'HEAVY' }): Promise<void>;
@@ -47,14 +49,14 @@ export function useHaptics(): UseHapticsResult {
   const cap = (window as CapWindow).Capacitor;
   const isNative = cap?.isNativePlatform?.() ?? false;
   const hap = cap?.Plugins?.Haptics;
-  const hasVibrate = typeof navigator !== 'undefined' && 'vibrate' in navigator;
+  const hasVibrate = isWebVibrationSupported();
   const isAvailable = isNative ? Boolean(hap) : hasVibrate;
 
   function impact(style: ImpactStyle = 'medium'): void {
     if (isNative && hap) {
       void hap.impact({ style: style.toUpperCase() as 'LIGHT' | 'MEDIUM' | 'HEAVY' });
     } else if (hasVibrate) {
-      navigator.vibrate(WEB_IMPACT[style]);
+      vibrate(WEB_IMPACT[style]);
     }
   }
 
@@ -62,7 +64,7 @@ export function useHaptics(): UseHapticsResult {
     if (isNative && hap) {
       void hap.notification({ type: type.toUpperCase() as 'SUCCESS' | 'WARNING' | 'ERROR' });
     } else if (hasVibrate) {
-      navigator.vibrate(WEB_NOTIFICATION[type]);
+      vibrate(WEB_NOTIFICATION[type]);
     }
   }
 
@@ -70,7 +72,7 @@ export function useHaptics(): UseHapticsResult {
     if (isNative && hap) {
       void hap.selectionChanged();
     } else if (hasVibrate) {
-      navigator.vibrate(5);
+      vibrate(5);
     }
   }
 

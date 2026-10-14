@@ -1,0 +1,1 @@
+export { getFetch } from './fetch';

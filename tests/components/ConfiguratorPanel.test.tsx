@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ConfiguratorPanel } from '../../src/components/configurator/ConfiguratorPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 import { formatNumber } from '../../src/i18n/format';
 
 describe('ConfiguratorPanel', () => {

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { filterSuggestions, generateSuggestions, scoreSuggestion } from '../../src/engine/layout-suggestions';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
-import type { CabinetConfig } from '../../src/engine/types';
+import { filterSuggestions, generateSuggestions, scoreSuggestion } from '../../src/engine/optimizer/layout-suggestions';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
+import type { CabinetConfig } from '../../src/engine/core/types';
 import { cfg } from '../helpers';
 
 // ---------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
-import type { CabinetConfig } from '../../engine/types';
+import type { CabinetConfig } from '../../engine/core/types';
 import { IconKitchen, IconWallUnit, IconWardrobe, IconBookshelf, IconBathroom } from '../layout/Icons';
 
 interface Preset {

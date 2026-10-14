@@ -14,7 +14,7 @@ import {
   mergeBranch,
 } from '../../src/utils/project-branching';
 import { idbSaveProjects } from '../../src/utils/indexed-db-storage';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 import type { SavedProject } from '../../src/utils/project-storage';
 import type { CabinetEntry } from '../../src/store/cabinet-store';
 

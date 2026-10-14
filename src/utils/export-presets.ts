@@ -9,11 +9,11 @@
  * 'user:') are created, updated, and deleted interactively.
  */
 
-import { get, set, del, keys, createStore } from 'idb-keyval';
+import { createIndexedDbAdapter } from '../platform/storage/index';
 import type { GcodeOptions } from './gcode-export';
 
 // ── IDB store ─────────────────────────────────────────────────────────────────
-const presetStore = createStore('cabinet-planner-export-presets', 'presets');
+const presetStore = createIndexedDbAdapter('cabinet-planner-export-presets', 'presets');
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -176,7 +176,7 @@ export async function savePreset(name: string, format: ExportFormat, settings: P
     settings,
     savedAt: new Date().toISOString(),
   };
-  await set(key, preset, presetStore);
+  await presetStore.set(key, preset);
   return preset;
 }
 
@@ -185,24 +185,22 @@ export async function loadPreset(key: string): Promise<ExportPreset | null> {
   // Check built-ins first
   const builtin = BUILTIN_PRESETS.find((p) => p.key === key);
   if (builtin) return builtin;
-  const stored = await get<ExportPreset>(key, presetStore);
+  const stored = await presetStore.get<ExportPreset>(key);
   return stored ?? null;
 }
 
 /** Delete a user preset by key.  Silently ignores unknown keys and built-ins. */
 export async function deletePreset(key: string): Promise<void> {
   if (BUILTIN_PRESETS.some((p) => p.key === key)) return; // built-ins are read-only
-  await del(key, presetStore);
+  await presetStore.delete(key);
 }
 
 /** List all presets (built-in + user) optionally filtered by format. */
 export async function listPresets(filter?: { format?: ExportFormat }): Promise<ExportPreset[]> {
-  const allKeys = (await keys(presetStore)) as string[];
+  const allKeys = (await presetStore.keys()).filter((key): key is string => typeof key === 'string');
   const userPresets = (
     await Promise.all(
-      allKeys
-        .filter((k) => typeof k === 'string' && k.startsWith(USER_PREFIX))
-        .map((k) => get<ExportPreset>(k, presetStore)),
+      allKeys.filter((key) => key.startsWith(USER_PREFIX)).map((key) => presetStore.get<ExportPreset>(key)),
     )
   ).filter((p): p is ExportPreset => p != null);
 
@@ -215,17 +213,15 @@ export async function listPresets(filter?: { format?: ExportFormat }): Promise<E
 
 /** Return all user-created presets (excludes built-ins). */
 export async function listUserPresets(): Promise<ExportPreset[]> {
-  const allKeys = (await keys(presetStore)) as string[];
+  const allKeys = (await presetStore.keys()).filter((key): key is string => typeof key === 'string');
   const stored = await Promise.all(
-    allKeys
-      .filter((k) => typeof k === 'string' && k.startsWith(USER_PREFIX))
-      .map((k) => get<ExportPreset>(k, presetStore)),
+    allKeys.filter((key) => key.startsWith(USER_PREFIX)).map((key) => presetStore.get<ExportPreset>(key)),
   );
   return stored.filter((p): p is ExportPreset => p != null);
 }
 
 /** Total number of user presets stored in IDB. */
 export async function userPresetCount(): Promise<number> {
-  const k = await keys(presetStore);
-  return k.filter((key) => typeof key === 'string' && (key as string).startsWith(USER_PREFIX)).length;
+  const keys = await presetStore.keys();
+  return keys.filter((key) => typeof key === 'string' && key.startsWith(USER_PREFIX)).length;
 }

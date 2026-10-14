@@ -2,7 +2,8 @@
  * Sprint 84 — browser download helper for glTF 2.0 files.
  */
 import { generateGltfContent } from '../engine/export/gltf-document';
-import type { CabinetConfig, Part } from '../engine/types';
+import type { CabinetConfig, Part } from '../engine/core/types';
+import { downloadContent } from '../platform/files/index';
 
 /**
  * Generate a glTF 2.0 file for the given config + parts and trigger a
@@ -10,13 +11,5 @@ import type { CabinetConfig, Part } from '../engine/types';
  */
 export function downloadGltfFile(config: CabinetConfig, parts: Part[], filename = 'cabinet'): void {
   const { content } = generateGltfContent(config, parts);
-  const blob = new Blob([content], { type: 'model/gltf+json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${filename}.gltf`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+  downloadContent(content, 'model/gltf+json', `${filename}.gltf`);
 }

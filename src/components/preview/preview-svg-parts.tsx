@@ -1,5 +1,5 @@
 import { createContext, useContext, useId, useState } from 'react';
-import type { CabinetConfig } from '../../engine/types';
+import type { CabinetConfig } from '../../engine/core/types';
 
 interface PreviewSvgResourceIds {
   shadow: string;

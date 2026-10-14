@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import * as fc from 'fast-check';
-import { generateParts, computeEdgeBandingTotal, computePartsWeight } from '../../src/engine/parts';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import { generateParts, computeEdgeBandingTotal, computePartsWeight } from '../../src/engine/geometry/parts';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 import { expectBilingualNames } from '../assertions';
 import { propertyRunOptions } from '../property-seeds';
-import type { Part } from '../../src/engine/types';
+import type { Part } from '../../src/engine/core/types';
 
 describe('generateParts', () => {
   const parts = generateParts(DEFAULT_CONFIG);

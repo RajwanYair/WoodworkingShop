@@ -32,7 +32,7 @@ vi.mock('zustand/middleware', async () => {
 
 import { OptimizerView } from '../../src/components/optimizer/OptimizerView';
 import { useCabinetStore } from '../../src/store/cabinet-store';
-import type { OptimizationResult } from '../../src/engine/types';
+import type { OptimizationResult } from '../../src/engine/core/types';
 
 const MOCK_PART = {
   partId: 'P01',

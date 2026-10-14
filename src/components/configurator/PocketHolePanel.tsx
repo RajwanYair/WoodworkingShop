@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { calculatePocketHole, type JointType, type MaterialHardness } from '../../engine/pocket-hole';
+import { calculatePocketHole, type JointType, type MaterialHardness } from '../../engine/calculators/pocket-hole';
 
 const MATERIALS: MaterialHardness[] = ['softwood', 'hardwood', 'plywood', 'mdf'];
 const JOINT_TYPES: JointType[] = ['butt', 'mitre', 'edge'];

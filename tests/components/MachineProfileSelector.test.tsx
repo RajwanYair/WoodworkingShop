@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { MachineProfileSelector } from '../../src/components/assembly/MachineProfileSelector';
-import { MACHINE_PROFILES } from '../../src/engine/machine-profiles';
+import { MACHINE_PROFILES } from '../../src/engine/workshop/machine-profiles';
 
 describe('MachineProfileSelector', () => {
   it('restores the saved profile and persists selected machine settings', async () => {

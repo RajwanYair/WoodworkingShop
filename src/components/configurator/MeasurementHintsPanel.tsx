@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { getMeasurementHints, type HintLevel } from '../../engine/measurement-assistant';
+import { getMeasurementHints, type HintLevel } from '../../engine/calculators/measurement-assistant';
 
 const LEVEL_STYLE: Record<HintLevel, string> = {
   standard: 'border-blue-200 bg-blue-50 text-blue-800 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-200',

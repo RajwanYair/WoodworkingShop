@@ -4,7 +4,7 @@ import { Header } from '../../src/components/layout/Header';
 import { COMMANDS, formatShortcut } from '../../src/components/layout/command-registry';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { getCommand } from '../../src/utils/command-palette';
-import { TEMPLATES } from '../../src/engine/templates';
+import { TEMPLATES } from '../../src/engine/project/templates/index';
 
 describe('Header', () => {
   beforeEach(() => {

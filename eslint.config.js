@@ -46,6 +46,38 @@ export default defineConfig([
       'react-hooks/exhaustive-deps': 'warn',
     },
   },
+  {
+    files: ['src/engine/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              regex: '^react(?:-dom)?(?:/|$)',
+              message: 'Engine modules must remain React-free.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/features/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              regex: String.raw`^(?:(?:\.\./)+platform(?:/|$)|@/platform(?:/|$))`,
+              message: 'Features must use an app/store-facing platform boundary, not platform internals.',
+            },
+          ],
+        },
+      ],
+    },
+  },
   // testing-library + no-only-tests rules applied only to test files
   {
     files: ['tests/**/*.{ts,tsx}'],

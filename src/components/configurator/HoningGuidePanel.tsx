@@ -4,7 +4,7 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatMillimeters, formatNumber } from '../../i18n/format';
-import { calculateHoningGuide } from '../../engine/honing-guide';
+import { calculateHoningGuide } from '../../engine/calculators/honing-guide';
 
 export function HoningGuidePanel() {
   const { t, i18n } = useTranslation();

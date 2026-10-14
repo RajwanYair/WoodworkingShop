@@ -17,7 +17,7 @@
  *   - Offline-first: no remote dependency.
  */
 
-import { set, del, entries, createStore } from 'idb-keyval';
+import { createIndexedDbAdapter } from '../platform/storage/index';
 import { utf8ArrayBuffer } from './browser-compat';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -65,7 +65,7 @@ export interface AuditLogOptions {
 
 // ── IDB store ─────────────────────────────────────────────────────────────────
 
-export const auditLogStore = createStore('cabinet-planner-audit', 'entries');
+const auditLogStore = createIndexedDbAdapter('cabinet-planner-audit', 'entries');
 
 // ── Internal state ────────────────────────────────────────────────────────────
 
@@ -78,8 +78,8 @@ export function _resetSeq(): void {
 
 /** Delete every entry in the audit store (for test isolation). */
 export async function _clearAllAuditEntries(): Promise<void> {
-  const all = (await entries<string, AuditEntry>(auditLogStore)) as [string, AuditEntry][];
-  await Promise.all(all.map(([k]) => del(k, auditLogStore)));
+  const all = await auditLogStore.entries<AuditEntry>();
+  await Promise.all(all.map(([key]) => auditLogStore.delete(String(key))));
 }
 
 // ── Core API ──────────────────────────────────────────────────────────────────
@@ -115,7 +115,7 @@ export async function logOperation(
     ...(options.actor ? { actor: options.actor } : {}),
   };
 
-  await set(key, entry, auditLogStore);
+  await auditLogStore.set(key, entry);
   return entry;
 }
 
@@ -123,10 +123,10 @@ export async function logOperation(
  * Retrieve all audit entries for a project, sorted chronologically (oldest first).
  */
 export async function getAuditLog(projectId: string): Promise<AuditEntry[]> {
-  const all = (await entries<string, AuditEntry>(auditLogStore)) as [string, AuditEntry][];
+  const all = await auditLogStore.entries<AuditEntry>();
   return all
-    .filter(([k]) => k.startsWith(`${projectId}:`))
-    .sort(([a], [b]) => a.localeCompare(b))
+    .filter(([key]) => typeof key === 'string' && key.startsWith(`${projectId}:`))
+    .sort(([left], [right]) => String(left).localeCompare(String(right)))
     .map(([, v]) => v);
 }
 
@@ -142,9 +142,9 @@ export async function getRecentAuditEntries(projectId: string, limit = 50): Prom
  * Delete all audit entries for a project.
  */
 export async function clearAuditLog(projectId: string): Promise<void> {
-  const all = (await entries<string, AuditEntry>(auditLogStore)) as [string, AuditEntry][];
-  const keys = all.filter(([k]) => k.startsWith(`${projectId}:`)).map(([k]) => k);
-  await Promise.all(keys.map((k) => del(k, auditLogStore)));
+  const all = await auditLogStore.entries<AuditEntry>();
+  const keys = all.filter(([key]) => String(key).startsWith(`${projectId}:`)).map(([key]) => String(key));
+  await Promise.all(keys.map((key) => auditLogStore.delete(key)));
 }
 
 /**
@@ -152,20 +152,20 @@ export async function clearAuditLog(projectId: string): Promise<void> {
  * Silently ignores unknown keys.
  */
 export async function deleteAuditEntry(key: string): Promise<void> {
-  await del(key, auditLogStore);
+  await auditLogStore.delete(key);
 }
 
 /**
  * Returns a list of all project IDs that have at least one audit entry.
  */
 export async function listAuditedProjects(): Promise<string[]> {
-  const all = (await entries<string, AuditEntry>(auditLogStore)) as [string, AuditEntry][];
+  const all = await auditLogStore.entries<AuditEntry>();
   const ids = new Set<string>();
-  for (const [k] of all) {
-    const projectId = k.split(':')[0];
+  for (const [key] of all) {
+    const projectId = String(key).split(':')[0];
     if (projectId) ids.add(projectId);
   }
-  return [...ids].sort();
+  return [...ids].sort((left, right) => left.localeCompare(right));
 }
 
 /**

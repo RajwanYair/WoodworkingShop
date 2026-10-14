@@ -9,7 +9,12 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n/format';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { calculateFinish, computeFinishAreaM2, FINISH_SPECS, type FinishType } from '../../engine/finish-calculator';
+import {
+  calculateFinish,
+  computeFinishAreaM2,
+  FINISH_SPECS,
+  type FinishType,
+} from '../../engine/calculators/finish-calculator';
 
 const FINISH_TYPES: FinishType[] = ['primer', 'stain', 'paint', 'varnish', 'oil', 'lacquer'];
 

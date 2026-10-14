@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import type { KeyboardEvent, PointerEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRoomStore } from '../../store/room-store';
-import type { RoomLayout, RoomCabinet } from '../../engine/types';
+import type { RoomLayout, RoomCabinet } from '../../engine/core/types';
 
 /**
  * Sprint 55 — Room Layout Floor-Plan View

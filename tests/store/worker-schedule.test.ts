@@ -1,9 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import * as Comlink from 'comlink';
-import { generateAssemblySteps } from '../../src/engine/assembly';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
-import { generateParts } from '../../src/engine/parts';
-import type { Part } from '../../src/engine/types';
+import { generateAssemblySteps } from '../../src/engine/assembly/assembly';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
+import { generateParts } from '../../src/engine/geometry/parts';
+import type { Part } from '../../src/engine/core/types';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import {
   applyLocks,

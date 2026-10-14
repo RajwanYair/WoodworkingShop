@@ -8,9 +8,9 @@
  *  - sequential dependency within the door sub-chain (handles follow hinges)
  */
 import { describe, it, expect } from 'vitest';
-import { generateAssemblySteps, buildAssemblyDAG } from '../../src/engine/assembly';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
-import type { CabinetConfig } from '../../src/engine/types';
+import { generateAssemblySteps, buildAssemblyDAG } from '../../src/engine/assembly/assembly';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
+import type { CabinetConfig } from '../../src/engine/core/types';
 
 // Config factory: spread DEFAULT_CONFIG + overrides
 function cfg(overrides: Partial<CabinetConfig> = {}): CabinetConfig {

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { isWebGLAvailable, probeWebGLTier } from '../../engine/webgl-probe';
-import type { CabinetConfig } from '../../engine/types';
+import { isWebGLAvailable, probeWebGLTier } from '../../platform/device/index';
+import type { CabinetConfig } from '../../engine/core/types';
 
 /** Phase 12 / Sprint 14 — feature flag guard. Component renders nothing when the flag is absent. */
 const WEBGL_ENABLED = import.meta.env.VITE_ENABLE_WEBGL === 'true';

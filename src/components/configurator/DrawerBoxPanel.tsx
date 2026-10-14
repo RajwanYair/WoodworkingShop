@@ -7,7 +7,7 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatMillimeters } from '../../i18n/format';
-import { calculateDrawerBox, type DrawerSlideType } from '../../engine/drawer-box';
+import { calculateDrawerBox, type DrawerSlideType } from '../../engine/geometry/drawer-box';
 
 const SLIDE_TYPES: DrawerSlideType[] = ['side', 'bottom', 'center'];
 

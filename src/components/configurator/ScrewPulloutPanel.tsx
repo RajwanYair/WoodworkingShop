@@ -7,7 +7,11 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n/format';
-import { calculateScrewPullout, SCREW_PULLOUT_LIMITS, type WoodDensityClass } from '../../engine/screw-pullout';
+import {
+  calculateScrewPullout,
+  SCREW_PULLOUT_LIMITS,
+  type WoodDensityClass,
+} from '../../engine/calculators/screw-pullout';
 
 const DENSITY_CLASSES: WoodDensityClass[] = ['low', 'medium', 'high', 'sheet'];
 

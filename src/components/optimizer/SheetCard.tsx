@@ -1,11 +1,11 @@
 /** Sprint A3 (Phase 16.5) — extracted from OptimizerView.tsx */
 import { useState, useEffect } from 'react';
-import { getMaterial } from '../../engine/materials';
+import { getMaterial } from '../../engine/materials/materials';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { downloadDxfForSheet } from '../../utils/dxf-export';
 import { useToastStore } from '../../store/toast-store';
 import { IconDxf, IconGcode, IconGrainVertical } from '../layout/Icons';
-import type { CutSheet, CutRect, Lang, DefectZone } from '../../engine/types';
+import type { CutSheet, CutRect, Lang, DefectZone } from '../../engine/core/types';
 import { YieldBar } from './OptimizerStats';
 import { formatNumberFixed } from '../../i18n/format';
 

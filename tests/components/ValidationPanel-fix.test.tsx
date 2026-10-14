@@ -7,9 +7,9 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { ValidationPanel } from '../../src/components/configurator/ValidationPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
-import { validateConfig } from '../../src/engine/validation';
+import { validateConfig } from '../../src/engine/core/validation';
 import { cfg } from '../helpers';
-import type { CabinetConfig, ValidationIssue } from '../../src/engine/types';
+import type { CabinetConfig, ValidationIssue } from '../../src/engine/core/types';
 
 // Fixture — issue that has a field + suggestedValue (Fix button should appear)
 const FIXABLE_ISSUE: ValidationIssue = {

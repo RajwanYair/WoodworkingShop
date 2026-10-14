@@ -3,7 +3,7 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { calculatePlanerPasses } from '../../engine/planer-passes';
+import { calculatePlanerPasses } from '../../engine/calculators/planer-passes';
 
 export function PlanerPassesPanel() {
   const { t } = useTranslation();

@@ -1,6 +1,6 @@
 import { Page, Text } from '@react-pdf/renderer';
-import type { DerivedDimensions } from '../../../engine/types';
-import { getMaterial } from '../../../engine/materials';
+import type { DerivedDimensions } from '../../../engine/core/types';
+import { getMaterial } from '../../../engine/materials/materials';
 import { s } from '../pdf-tokens';
 import type { PdfCtx } from '../pdf-i18n';
 import { PageHeader, PageFooter } from './PageChrome';

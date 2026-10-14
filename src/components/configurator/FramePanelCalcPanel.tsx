@@ -4,7 +4,7 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatMillimeters } from '../../i18n/format';
-import { calculateFramePanel } from '../../engine/frame-panel';
+import { calculateFramePanel } from '../../engine/calculators/frame-panel';
 
 export function FramePanelCalcPanel() {
   const { t, i18n } = useTranslation();

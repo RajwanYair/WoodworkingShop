@@ -1,6 +1,6 @@
 import { Page, Text, View } from '@react-pdf/renderer';
-import type { Part } from '../../../engine/types';
-import { getMaterial } from '../../../engine/materials';
+import type { Part } from '../../../engine/core/types';
+import { getMaterial } from '../../../engine/materials/materials';
 import { s, C, partsColWidths } from '../pdf-tokens';
 import type { PdfCtx } from '../pdf-i18n';
 import { PageHeader, PageFooter } from './PageChrome';

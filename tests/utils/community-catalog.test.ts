@@ -13,7 +13,7 @@ import {
   mergeMaterialCatalogs,
   DEFAULT_CATALOG_URL,
 } from '../../src/utils/community-catalog-io';
-import { MATERIALS } from '../../src/engine/materials';
+import { MATERIALS } from '../../src/engine/materials/materials';
 import type { CommunityMaterial, CommunityCatalog } from '../../src/utils/community-catalog-io';
 
 // ── Fixtures ──────────────────────────────────────────────────────────────────

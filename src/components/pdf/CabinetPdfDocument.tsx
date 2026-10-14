@@ -1,6 +1,6 @@
 import { Document } from '@react-pdf/renderer';
-import type { CabinetConfig, DerivedDimensions, Part, HardwareItem, OptimizationResult } from '../../engine/types';
-import { getMaterial } from '../../engine/materials';
+import type { CabinetConfig, DerivedDimensions, Part, HardwareItem, OptimizationResult } from '../../engine/core/types';
+import { getMaterial } from '../../engine/materials/materials';
 import { formatDate } from '../../i18n/format';
 import { pdfI18n } from './pdf-i18n';
 import type { PdfLang, PdfCtx } from './pdf-i18n';

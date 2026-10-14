@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { buildCutChecklist } from '../../engine/cut-checklist';
+import { buildCutChecklist } from '../../engine/assembly/cut-checklist';
 import { resolveEngineLang } from './resolve-engine-lang';
 
 export function CutChecklistPanel() {

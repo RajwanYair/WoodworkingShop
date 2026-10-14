@@ -7,13 +7,6 @@
 
 export type QueryRecord = Record<string, string>;
 
-type FetchLike = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
-
-interface MediaRecorderConstructorLike {
-  isTypeSupported(mimeType: string): boolean;
-  new (stream: MediaStream, options?: MediaRecorderOptions): MediaRecorder;
-}
-
 function decodeQueryComponent(value: string): string {
   try {
     return decodeURIComponent(value.replace(/\+/g, ' '));
@@ -79,11 +72,6 @@ export function cloneJson<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
 }
 
-export function getFetch(): FetchLike | null {
-  const candidate = (globalThis as Record<string, unknown>)['fetch'];
-  return typeof candidate === 'function' ? (candidate as FetchLike) : null;
-}
-
 export function parseQueryString(search: string): QueryRecord {
   const source = search.startsWith('?') ? search.slice(1) : search;
   const params = Object.create(null) as QueryRecord;
@@ -114,9 +102,4 @@ export function serializeQueryRecord(params: QueryRecord): string {
 export function getQueryValue(search: string, key: string): string | null {
   const params = parseQueryString(search);
   return Object.prototype.hasOwnProperty.call(params, key) ? params[key]! : null;
-}
-
-export function getMediaRecorderConstructor(): MediaRecorderConstructorLike | null {
-  const candidate = (globalThis as Record<string, unknown>)['MediaRecorder'];
-  return typeof candidate === 'function' ? (candidate as MediaRecorderConstructorLike) : null;
 }

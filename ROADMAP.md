@@ -1,21 +1,21 @@
 # Roadmap
 
-> Last updated: 2026-10-13 (project status refresh)
-> Current release: v5.35.1
-> Release candidate: v5.36.0 (Phase 81 — Toolchain modernisation)
-> Program horizon: Phases 63–85 · Sprints 300–451 · v5.35.1 → v6.0.0 (execution order: §7.2 release train)
+> Last updated: 2026-10-13 (v5.36.0 release)
+> Current release: v5.36.0
+> Next release target: v5.37.0 (Phase 82 — Architecture Refactor)
+> Program horizon: Phases 63–85 · Sprints 300–451 · v5.36.0 → v6.0.0 (execution order: §7.2 release train)
 > Strategy: best-in-class, local-first, production-grade woodworking planning platform — **refactor the foundation first, then lead on workflow depth**
 
 ## Current Status (2026-10-13)
 
 The measurements in the 2026-10-04 overview below are a dated historical baseline; the live status is summarized here.
 
-- **Release:** v5.35.1 remains current; v5.36.0 is awaiting tag-triggered workflow verification.
-- **Main:** `fd16f23`; CI and Scorecard passed on the source commit; release metadata is being prepared. The separate Stryker mutation workflow remains a known failure.
-- **Verification:** 5,195 Vitest tests pass with bounded worker concurrency; 526 Playwright tests are currently listed. `npm run quality:fast`, `npm run dead:check`, and `npm run release:build` pass. The full Stryker initial test run still exceeds its timeout; dry runs pass.
+- **Release:** v5.36.0 was published on 2026-10-13 after its tag-triggered release workflow passed. Next: v5.37.0, Phase 82.
+- **Main:** `b04ca107`; GitHub CI, Scorecard, and the v5.36.0 release workflow passed. The separate Stryker mutation workflow remains a known failure.
+- **Verification:** `npm run ci` passes with 5,195 Vitest tests, all bundle budgets, and 16 benchmark budgets. The full Stryker initial test run still exceeds its timeout; the focused Vitest adapter probe reports zero completed mutants.
 - **Localization:** `npm run i18n:completeness` reports 2,167 keys, no missing/extra/empty values or placeholder mismatches, and EN-identical rates of HE 1.02%, AR 1.20%, DE 1.38%, ES 1.34%, FR 1.66%.
 - **Phase 81:** S420's build/typecheck compiler switch is implemented. S421's Chromium project, ARIA snapshots, and runtime/flake measurements remain in open PRs #236, #238 and #244. S422 uses Playwright 1.64; blocking snapshots, E2E sharding, and temp-only Lighthouse output remain.
-- S423 React Compiler evaluation remains open. S424 T2 spell-check and T3 Oxlint evaluation are complete; T1 Knip-entry cleanup is blocked on public API classification, and T4 mutation baseline remains open. S425 supply-chain acceptance is not complete.
+- S423 React Compiler evaluation remains open. S424 T2 spell-check and T3 Oxlint evaluation are complete; T1 Knip-entry cleanup is blocked on public API classification, and T4 mutation baseline remains open. S425 supply-chain acceptance is complete.
 - **GitHub work:** #226's compiler switch is on `main`; draft PR #227 retains additional ADR/evidence work. The Context7 skill is on `main`, but #228's exact-source acceptance is unverified and PR #229 proposes a broader variant. #232 remains in open PR #233.
 - #234's discovery branch has no issue-linked PR and its social-card acceptance is unmet. Superseded dependency PRs and the incompatible Babel 8 proposal were closed. Other sprint chains remain active pending acceptance and review.
 
@@ -43,8 +43,8 @@ flowchart LR
   subgraph foundation["① Foundation — refactor first"]
     direction TB
     r534["v5.34.0 ✅<br/>63 + 64 Verification"] --> r535["v5.35.0 ✅<br/>73 Coherence + app shell"]
-    r535 --> r536["v5.36.0 ▶ NEXT<br/>81 Toolchain"]
-    r536 --> r537["v5.37.0<br/>82 Architecture refactor"]
+    r535 --> r536["v5.36.0 ✅<br/>81 Toolchain"]
+    r536 --> r537["v5.37.0 ▶ NEXT<br/>82 Architecture refactor"]
     r537 --> r538["v5.38.0<br/>65 Versioned data"]
   end
   subgraph delight["② Experience"]
@@ -77,8 +77,9 @@ flowchart LR
   classDef planned fill:#fae7c0,stroke:#c08040,color:#3a1806
   classDef major fill:#2a5a9a,stroke:#1a3a6e,color:#ffffff,font-weight:bold
   class r534 done
-  class r535 next
-  class r536,r537,r538,r539,r540,r541,r542,r543,r544,r545,r546,r547,r548,r549,r550,r551,r552 planned
+  class r534,r535,r536 done
+  class r537 next
+  class r538,r539,r540,r541,r542,r543,r544,r545,r546,r547,r548,r549,r550,r551,r552 planned
   class r600 major
 ```
 
@@ -668,8 +669,8 @@ Phase numbers are stable identifiers; this table is the execution order. Phases 
 | ----- | ------- | ------------------------------------------------------------- | -------- | -------------------------------------------------- | ------------------------ |
 | 1     | v5.34.0 | 63 Trustworthy test foundation + 64 Real user journeys        | P0       | 300–318                                            | RELEASED                 |
 | 2     | v5.35.0 | 73 Product coherence and modern app shell (+ S313, S315)      | P0       | 371–378, 313, 315                                  | RELEASED                 |
-| 3     | v5.36.0 | 81 Toolchain modernisation                                    | P1       | 420–425                                            | NEXT                     |
-| 4     | v5.37.0 | 82 Architecture refactor                                      | P0       | 426–434                                            | PLANNED (new 2026-10-04) |
+| 3     | v5.36.0 | 81 Toolchain modernisation                                    | P1       | 420–425                                            | RELEASED                 |
+| 4     | v5.37.0 | 82 Architecture refactor                                      | P0       | 426–434                                            | NEXT                     |
 | 5     | v5.38.0 | 65 Versioned data, import safety, durable offline             | P0       | 319–326                                            | PLANNED (was v5.36.0)    |
 | 6     | v5.39.0 | 83 Experience and delight                                     | P1       | 435–441                                            | PLANNED (new 2026-10-04) |
 | 7     | v5.40.0 | 84 Documentation, visual storytelling and community           | P1       | 442–447                                            | PLANNED (new 2026-10-04) |
@@ -1883,25 +1884,25 @@ flowchart LR
 
 **Sprint 426 — ADRs and architecture fitness functions** — P0 · M · S371.
 
-- T1: Create `docs/decisions/` with an ADR template (context, decision, consequences, status, date) and backfill ADRs for the existing big decisions in §3 (local-first, Zustand, react-pdf, dependency cap, no router library).
-- T2: `scripts/check-architecture.js` (reusing the S371 import graph) → `npm run architecture:check`: allowed layer edges (§★ target architecture), zero import cycles, cross-domain imports only through barrels, React and DOM forbidden in `engine/` and `platform/` contracts. Add to `quality:fast`.
-- T3: Mirror the simplest rules with ESLint core `no-restricted-imports` for in-editor feedback (no new plugin).
+- T1: DONE — Added an ADR template and five accepted ADRs covering local-first architecture, Zustand state, React PDF, the production dependency cap, and routing without a client router; each ADR cites current implementation and revisit triggers.
+- T2: DONE — Added `scripts/check-architecture.js` and `npm run architecture:check` to both quality aggregates, reusing the S371 import graph. It enforces target-layer edges, cycles, engine purity, platform contract DOM types, and cross-domain barrels; the 27 current violations are recorded in the baseline, with zero new violations. Focused fixtures pass and the gate runs in ~1.6 s.
+- T3: DONE — ESLint core `no-restricted-imports` rejects React imports from `engine/` and direct `platform/` imports from `features/`; in-memory probes confirm the restrictions and allowed feature-to-UI imports.
 - Tests: fixture graphs for each rule; the current tree reports a baseline of violations that later sprints burn down to zero.
 - Accept: gate runs in under 5 s and blocks new violations immediately.
 
 **Sprint 427 — Engine domain split** — P0 · L · S426.
 
-- T1: `scripts/codemods/move-engine-domains.js` moves the 165 top-level modules into `core`, `geometry`, `materials`, `hardware`, `joinery`, `optimizer`, `assembly`, `costing`, `export`, `room`, `calculators`, `workshop` and `project`, rewriting imports in `src/` and `tests/`.
-- T2: Each domain gets a curated `index.ts`; `engine/index.ts` shrinks from 1,448 lines to domain re-exports while keeping the public plugin API stable (documented in `docs/API-BOUNDARIES.md` and `docs/PLUGIN-API.md`).
-- T3: Move tests to mirror the new paths with the same codemod.
-- Accept: golden exports byte-identical; test count unchanged; `architecture:check` shows zero cross-domain deep imports.
+- T1: DONE — `scripts/codemods/move-engine-domains.js` moves the 165 top-level modules into `core`, `geometry`, `materials`, `hardware`, `joinery`, `optimizer`, `assembly`, `costing`, `export`, `room`, `calculators`, `workshop` and `project`, rewriting imports in `src/` and `tests/`.
+- T2: DONE — Each domain has a curated `index.ts`; `engine/index.ts` is reduced to domain re-exports while preserving the v5.36.0 public API and plugin compatibility (documented in `docs/API-BOUNDARIES.md` and `docs/PLUGIN-API.md`). The capability ledger classifies each public domain barrel; `npm run architecture:check` reports zero new violations and no cross-domain deep imports.
+- T3: DONE — The migration codemod moves 135 single-domain engine suites under `tests/engine/<domain>/`, rewrites their relative imports transactionally, and leaves 36 cross-domain integration/API suites at the root.
+- Accept: DONE — golden exports byte-identical; 5,206 tests pass across the unchanged 349 test files; `architecture:check` reports zero new violations and no cross-domain deep imports.
 
 **Sprint 428 — Platform layer** — P0 · L · S426.
 
-- T1: Create `src/platform/` with `storage/` (`StorageAdapter` interface; IndexedDB implementation; localStorage only for small preferences), `files/` (download, file input; File System Access later in S404), `share/` (Web Share, clipboard, URL state), `device/` (camera, haptics, wake lock, serial capability probes) and `diagnostics/` (error reporter).
-- T2: Move browser I/O out of `src/utils/` and `src/services/`; `utils/` keeps pure helpers or folds them into `engine/core`; retire `services/` once empty.
-- T3: Contract tests per adapter run against fake implementations and the real browser (Vitest browser project).
-- Accept: no `window`, `document`, `navigator`, `indexedDB` or `localStorage` access outside `platform/` and `app/` (enforced by S426).
+- T1: DONE — Created `src/platform/{storage,files,share,device,diagnostics}` with an engine-independent `StorageAdapter` and IndexedDB implementation, generic download and text-file readers, Web Share/clipboard helpers, camera/vibration/wake-lock/serial capability adapters, and the privacy-first error reporter. Initial adapter contracts are covered by focused unit tests.
+- T2: DONE — Browser I/O in `utils/` and `services/` now routes through `platform/`, including IndexedDB, localStorage, downloads, file reads, share/history, fetch, camera/audio/canvas, MediaRecorder, Web Serial/XR, WebGL probing, Web Vitals and error reporting. Shared component export/download paths also use `platform/files`. `services/` remains for store-aware diagnostic aggregation and capability metadata; retire it when those owners move to their target layers.
+- T3: DONE — Fake adapter contracts and a dedicated Playwright Chromium suite cover storage, files, URL history, device probes and diagnostics; the suite runs once in CI. Vitest Browser Mode is deferred because the available provider is 5.0.1 with an exact peer while the project uses Vitest 5.0.4; mixed versions fail, so the existing Playwright stack is used without downgrading Vitest.
+- Accept: IN PROGRESS — `utils/` and `services/` no longer access browser globals directly, and architecture reports zero new findings. UI components and store/bootstrap code still access browser APIs directly, so the source-wide `platform/` and `app/` boundary and its enforcement remain open for S430.
 
 **Sprint 429 — Store refactor: domain slices and patch history** — P0 · L · S427, S428.
 

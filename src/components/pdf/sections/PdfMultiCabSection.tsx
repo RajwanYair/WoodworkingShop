@@ -1,6 +1,6 @@
 import { Page, Text, View } from '@react-pdf/renderer';
-import type { HardwareItem } from '../../../engine/types';
-import { getMaterial } from '../../../engine/materials';
+import type { HardwareItem } from '../../../engine/core/types';
+import { getMaterial } from '../../../engine/materials/materials';
 import { s, C, partsColWidths, hwColWidths } from '../pdf-tokens';
 import type { PdfCtx } from '../pdf-i18n';
 import type { CabinetPdfEntry } from '../CabinetPdfDocument';

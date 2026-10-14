@@ -12,14 +12,15 @@ import { exportSettingsJson, importSettingsJson } from '../../utils/project-stor
 import type { ProjectSettings } from '../../utils/project-storage';
 import { useToastStore } from '../../store/toast-store';
 import { resolvePdfLang } from './pdf-i18n';
-import { generateParts, computeEdgeBandingTotal } from '../../engine/parts';
-import { generateHardware } from '../../engine/hardware';
-import { computeDimensions } from '../../engine/dimensions';
+import { generateParts, computeEdgeBandingTotal } from '../../engine/geometry/parts';
+import { generateHardware } from '../../engine/hardware/hardware';
+import { computeDimensions } from '../../engine/geometry/dimensions';
 import { generateBomCsv } from '../../utils/bom-export';
 import { cutSheetToDxf } from '../../utils/dxf-export';
 import { generateGltfContent } from '../../engine/export/gltf-document';
 import { buildZip, createZipManifest, downloadZip } from '../../utils/zip-writer';
 import { utf8Encode } from '../../utils/browser-compat';
+import { downloadBlob } from '../../platform/files/index';
 
 export function PdfExportPanel() {
   const { t, i18n } = useTranslation();
@@ -66,19 +67,12 @@ export function PdfExportPanel() {
       );
       const blob = await pdf(doc).toBlob();
       if (!isMountedRef.current) return;
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
       const safeName =
         (store.projectName.trim() || 'cabinet-plan')
           .replace(/[^\w\u05D0-\u05EA.-]/g, '-')
           .replace(/-+/g, '-')
           .replace(/^-|-$/g, '') || 'cabinet-plan';
-      a.download = `${safeName}-${store.config.width}x${store.config.height}x${store.config.depth}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      downloadBlob(blob, `${safeName}-${store.config.width}x${store.config.height}x${store.config.depth}.pdf`);
     } catch (err) {
       if (!isMountedRef.current) return;
       console.error('[PdfExportPanel] PDF generation failed:', err);
@@ -150,19 +144,12 @@ export function PdfExportPanel() {
       );
       const blob = await pdf(doc).toBlob();
       if (!isMountedRef.current) return;
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
       const safeName =
         (store.projectName.trim() || 'cabinet-project')
           .replace(/[^\w\u05D0-\u05EA.-]/g, '-')
           .replace(/-+/g, '-')
           .replace(/^-|-$/g, '') || 'cabinet-project';
-      a.download = `${safeName}-${store.cabinets.length}-cabinets-${totalPartsCount}-parts.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      downloadBlob(blob, `${safeName}-${store.cabinets.length}-cabinets-${totalPartsCount}-parts.pdf`);
     } catch (err) {
       if (!isMountedRef.current) return;
       console.error('[PdfExportPanel] Project PDF generation failed:', err);

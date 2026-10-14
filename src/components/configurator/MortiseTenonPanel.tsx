@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { calculateMortiseTenon, type MortiseTenonType } from '../../engine/mortise-tenon';
+import { calculateMortiseTenon, type MortiseTenonType } from '../../engine/joinery/mortise-tenon';
 
 const JOINT_TYPES: MortiseTenonType[] = ['through', 'blind', 'wedged', 'stub'];
 

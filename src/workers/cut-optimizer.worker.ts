@@ -11,8 +11,8 @@
  */
 
 import * as Comlink from 'comlink';
-import { optimizeCutSheetsResult, findCoNestCandidates, applyCoNesting } from '../engine/cut-optimizer';
-import type { Part, OptimizationResult, OffcutEntry, DefectZone, Material } from '../engine/types';
+import { optimizeCutSheetsResult, findCoNestCandidates, applyCoNesting } from '../engine/optimizer/cut-optimizer';
+import type { Part, OptimizationResult, OffcutEntry, DefectZone, Material } from '../engine/core/types';
 
 export interface CutOptimizerInput {
   activeParts: Part[];

@@ -10,7 +10,7 @@
  * NOTE: Pure TypeScript — no React, no DOM, no side effects.
  */
 
-import type { CabinetConfig, Part } from '../types';
+import type { CabinetConfig, Part } from '../core/contracts/index';
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
 

@@ -5,9 +5,9 @@ import { useCabinetStore, type CabinetEntry } from '../../src/store/cabinet-stor
 import { cfg } from '../helpers';
 import { buildProjectExport, isProjectExport } from '../../src/components/configurator/save-load-json';
 import { CabinetPdfDocument, type CabinetPdfEntry } from '../../src/components/pdf/CabinetPdfDocument';
-import { computeDimensions } from '../../src/engine/dimensions';
-import { computeEdgeBandingTotal, generateParts } from '../../src/engine/parts';
-import { generateHardware } from '../../src/engine/hardware';
+import { computeDimensions } from '../../src/engine/geometry/dimensions';
+import { computeEdgeBandingTotal, generateParts } from '../../src/engine/geometry/parts';
+import { generateHardware } from '../../src/engine/hardware/hardware';
 
 describe('Full project workflow - apt. cabinets', () => {
   it('exports/imports a multi-cabinet project JSON and generates full-project PDF', { timeout: 120000 }, async () => {

@@ -11,7 +11,7 @@
  * NOTE: Pure TypeScript — no React, no DOM, no side effects.
  */
 
-import type { CabinetConfig, Part } from '../types';
+import type { CabinetConfig, Part } from '../core/contracts/index';
 
 // ─── glTF 2.0 type stubs (subset used here) ──────────────────────────────────
 

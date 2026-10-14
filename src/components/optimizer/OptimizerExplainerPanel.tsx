@@ -1,7 +1,7 @@
 /** Sprint A3 (Phase 16.5) — extracted from OptimizerView.tsx */
 import { useState } from 'react';
 import { IconLightbulb, IconChevronDown, IconChevronRight } from '../layout/Icons';
-import type { CutSheet } from '../../engine/types';
+import type { CutSheet } from '../../engine/core/types';
 
 /** Sprint 7 — "Why this layout?" placement statistics explainer panel. */
 export function OptimizerExplainerPanel({

@@ -3,7 +3,7 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { calculateStairStringer } from '../../engine/stair-stringer';
+import { calculateStairStringer } from '../../engine/calculators/stair-stringer';
 
 export function StairStringerPanel() {
   const { t } = useTranslation();

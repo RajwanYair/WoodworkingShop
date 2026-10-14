@@ -21,6 +21,7 @@ const checks = [
   'vscode:extensions:validate',
   'mcp:metadata:validate',
   'ai:context:validate',
+  'architecture:check',
   'workflows:validate',
   'hooks:validate',
   'template:sync:validate',

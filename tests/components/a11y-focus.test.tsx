@@ -12,8 +12,8 @@ import { ValidationPanel } from '../../src/components/configurator/ValidationPan
 import { DimensionSliders } from '../../src/components/configurator/DimensionSliders';
 import { ConfiguratorPanel } from '../../src/components/configurator/ConfiguratorPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
-import type { ValidationIssue } from '../../src/engine/types';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
+import type { ValidationIssue } from '../../src/engine/core/types';
 
 // ── Fixtures ────────────────────────────────────────────────────────────────
 

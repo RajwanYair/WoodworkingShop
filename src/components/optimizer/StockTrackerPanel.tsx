@@ -2,8 +2,8 @@ import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useStockTrackerStore } from '../../store/stock-tracker-store';
-import { checkAvailability } from '../../engine/stock';
-import type { DemandEntry, StockItem } from '../../engine/stock';
+import { checkAvailability } from '../../engine/workshop/stock/index';
+import type { DemandEntry, StockItem } from '../../engine/workshop/stock/index';
 
 const STATUS_STYLES = {
   ok: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',

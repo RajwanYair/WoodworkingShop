@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getPlugins, getPluginContract, type CabinetPlannerPlugin, type PluginStability } from '../../engine/plugin';
+import {
+  getPlugins,
+  getPluginContract,
+  type CabinetPlannerPlugin,
+  type PluginStability,
+} from '../../engine/core/plugin';
 
 // ── Stability badge colours ───────────────────────────────────────────────
 

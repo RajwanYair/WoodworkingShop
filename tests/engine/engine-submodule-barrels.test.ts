@@ -89,19 +89,19 @@ describe('engine/export barrel', () => {
 
 describe('engine/validation barrel', () => {
   it('re-exports validateConfig', async () => {
-    const { validateConfig } = await import('../../src/engine/validation');
+    const { validateConfig } = await import('../../src/engine/core/validation');
     expect(typeof validateConfig).toBe('function');
   });
 });
 
 describe('engine/plugin barrel', () => {
   it('re-exports registerPlugin', async () => {
-    const { registerPlugin } = await import('../../src/engine/plugin');
+    const { registerPlugin } = await import('../../src/engine/core/plugin');
     expect(typeof registerPlugin).toBe('function');
   });
 
   it('re-exports getPluginContract', async () => {
-    const { getPluginContract } = await import('../../src/engine/plugin');
+    const { getPluginContract } = await import('../../src/engine/core/plugin');
     expect(typeof getPluginContract).toBe('function');
   });
 });

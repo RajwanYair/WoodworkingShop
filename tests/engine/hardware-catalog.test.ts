@@ -5,8 +5,8 @@ import {
   getHardwareCatalog,
   getHardwareCatalogByCategory,
   getHardwareCatalogEntry,
-} from '../../src/engine/hardware';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
+} from '../../src/engine/hardware/hardware';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 
 // Sprint 10 — Vendor hinge profiles
 describe('VENDOR_HINGE_PROFILES catalog', () => {

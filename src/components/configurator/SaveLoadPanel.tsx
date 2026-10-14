@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatDate } from '../../i18n/format';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { shareLink } from '../../platform/share/index';
 import { useToastStore } from '../../store/toast-store';
 import { loadSavedConfigs, saveConfig, deleteSavedConfig, type SavedConfig } from '../../utils/local-storage';
 import { listProjects, exportProjectsBundle, importProjectsBundle } from '../../utils/project-storage';
@@ -98,19 +99,10 @@ export function SaveLoadPanel() {
   const handleShare = async () => {
     const url = window.location.href;
     const title = projectName ? `${projectName} — WoodworkingShop` : 'WoodworkingShop';
-    // Sprint 166 — use native share sheet on mobile; fall back to clipboard
-    if (navigator.share) {
-      try {
-        await navigator.share({ title, url });
-        return;
-      } catch {
-        /* user cancelled or API failed — fall through to clipboard */
-      }
-    }
-    try {
-      await navigator.clipboard.writeText(url);
+    const result = await shareLink(title, url);
+    if (result === 'copied') {
       addToast(t('toast.linkCopied'), 'success');
-    } catch {
+    } else if (result === 'failed') {
       addToast(t('toast.linkCopyFailed'), 'error');
     }
   };

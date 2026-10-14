@@ -6,7 +6,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
 import App from '../../src/App';
 import { useCabinetStore } from '../../src/store/cabinet-store';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 
 // Provide a minimal localStorage polyfill for the jsdom environment used in these tests
 beforeAll(() => {

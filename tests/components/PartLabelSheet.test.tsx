@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { PartLabelSheet } from '../../src/components/optimizer/PartLabelSheet';
-import type { Part } from '../../src/engine/types';
+import type { Part } from '../../src/engine/core/types';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 
 let originalParts: Part[];

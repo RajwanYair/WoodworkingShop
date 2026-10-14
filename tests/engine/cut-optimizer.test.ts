@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeAll } from 'vitest';
-import type { Part } from '../../src/engine/types';
-import { optimizeCutSheets, findCoNestCandidates, applyCoNesting } from '../../src/engine/cut-optimizer';
-import { generateParts } from '../../src/engine/parts';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import type { Part } from '../../src/engine/core/types';
+import { optimizeCutSheets, findCoNestCandidates, applyCoNesting } from '../../src/engine/optimizer/cut-optimizer';
+import { generateParts } from '../../src/engine/geometry/parts';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 
 /** Factory for a grain-sensitive plywood-17 part used in narrow-sheet override tests. */
 const mkPlywoodPart = (id: string, width: number): Part => ({

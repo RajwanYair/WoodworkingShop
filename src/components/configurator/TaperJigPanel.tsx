@@ -3,7 +3,7 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { calculateTaperJig } from '../../engine/taper-jig';
+import { calculateTaperJig } from '../../engine/calculators/taper-jig';
 
 export function TaperJigPanel() {
   const { t } = useTranslation();

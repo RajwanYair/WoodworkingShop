@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { estimateBuildTimeForProject } from '../../src/utils/project-build-estimate';
-import type { HardwareItem, Part } from '../../src/engine/types';
+import type { HardwareItem, Part } from '../../src/engine/core/types';
 
 const parts: Part[] = [
   {

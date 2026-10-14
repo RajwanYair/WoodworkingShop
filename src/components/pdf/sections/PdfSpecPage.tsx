@@ -1,8 +1,14 @@
 import { Page, Text, View } from '@react-pdf/renderer';
-import type { CabinetConfig, DerivedDimensions, Part, HardwareItem, OptimizationResult } from '../../../engine/types';
+import type {
+  CabinetConfig,
+  DerivedDimensions,
+  Part,
+  HardwareItem,
+  OptimizationResult,
+} from '../../../engine/core/types';
 import { s } from '../pdf-tokens';
 import type { PdfCtx } from '../pdf-i18n';
-import { computePartsWeight } from '../../../engine/parts';
+import { computePartsWeight } from '../../../engine/geometry/parts';
 import { estimateBuildTimeForProject } from '../../../utils/project-build-estimate';
 import { PageFooter, PageHeader } from './PageChrome';
 import { SpecRow } from './SpecRow';

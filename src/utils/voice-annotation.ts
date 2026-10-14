@@ -14,14 +14,15 @@
  * No telemetry.  No server.  All data stays on-device.
  */
 
-import { get, set, del, keys, createStore } from 'idb-keyval';
-import { getMediaRecorderConstructor } from './browser-compat';
+import { createIndexedDbAdapter } from '../platform/storage/index';
+import { getSupportedMediaRecorderMimeType, startAudioRecording } from '../platform/device/index';
+import { createObjectUrl, revokeObjectUrl } from '../platform/files/index';
 
 // ── IDB stores ────────────────────────────────────────────────────────────────
 // Metadata and binary blobs live in separate stores so metadata queries
 // (list all for a step) don't need to deserialise audio blobs.
-const metaStore = createStore('cabinet-planner-voice-annotations', 'annotations');
-const blobStore = createStore('cabinet-planner-voice-blobs', 'blobs');
+const metaStore = createIndexedDbAdapter('cabinet-planner-voice-annotations', 'annotations');
+const blobStore = createIndexedDbAdapter('cabinet-planner-voice-blobs', 'blobs');
 
 const IDB_META_KEY = 'all-annotations';
 
@@ -72,20 +73,7 @@ const PREFERRED_MIME_TYPES = ['audio/webm;codecs=opus', 'audio/ogg;codecs=opus',
  * private browsing without mic permission).
  */
 export function getSupportedMimeType(): string | null {
-  const mediaRecorderCtor = getMediaRecorderConstructor();
-  const mediaRecorderGlobal = (globalThis as Record<string, unknown>)['MediaRecorder'] as
-    | {
-        isTypeSupported?: (mimeType: string) => boolean;
-      }
-    | undefined;
-  const isTypeSupported = mediaRecorderCtor?.isTypeSupported ?? mediaRecorderGlobal?.isTypeSupported;
-  if (typeof isTypeSupported !== 'function') return null;
-
-  for (const mime of PREFERRED_MIME_TYPES) {
-    if (isTypeSupported(mime)) return mime;
-  }
-  // Browser supports MediaRecorder but none of the preferred types.
-  return '';
+  return getSupportedMediaRecorderMimeType(PREFERRED_MIME_TYPES);
 }
 
 // ── Recording ─────────────────────────────────────────────────────────────────
@@ -98,49 +86,24 @@ export function getSupportedMimeType(): string | null {
  * @throws  When `getUserMedia` is rejected (permission denied / no mic).
  */
 export async function startRecording(stepId: string): Promise<RecordingSession> {
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-  const mimeType = getSupportedMimeType() ?? '';
-  const recorderOptions: MediaRecorderOptions = mimeType ? { mimeType } : {};
-  const mediaRecorder = getMediaRecorderConstructor();
-  if (!mediaRecorder) {
-    stream.getTracks().forEach((track) => track.stop());
-    throw new Error('MediaRecorder API is not available in this browser.');
-  }
-  const recorder = new mediaRecorder(stream, recorderOptions);
-  const chunks: Blob[] = [];
-  const startMs = Date.now();
-
-  recorder.ondataavailable = (ev: BlobEvent) => {
-    if (ev.data.size > 0) chunks.push(ev.data);
-  };
-  recorder.start(100); // collect data every 100 ms
+  const recording = await startAudioRecording(PREFERRED_MIME_TYPES);
 
   return {
     async stop(): Promise<VoiceAnnotation> {
-      await new Promise<void>((resolve) => {
-        recorder.onstop = () => resolve();
-        recorder.stop();
-      });
-      // Release microphone
-      stream.getTracks().forEach((t) => t.stop());
-
-      const durationMs = Date.now() - startMs;
-      const effectiveMime = mimeType || (chunks[0]?.type ?? 'audio/webm');
-      const blob = new Blob(chunks, { type: effectiveMime });
+      const { blob, durationMs, mimeType } = await recording.stop();
       const annotation: VoiceAnnotation = {
         id: generateAnnotationId(),
         stepId,
         createdAt: Date.now(),
         durationMs,
-        mimeType: effectiveMime,
+        mimeType,
         sizeBytes: blob.size,
       };
       await saveVoiceAnnotation(annotation, blob);
       return annotation;
     },
     cancel(): void {
-      if (recorder.state !== 'inactive') recorder.stop();
-      stream.getTracks().forEach((t) => t.stop());
+      recording.cancel();
     },
   };
 }
@@ -151,8 +114,8 @@ export async function startRecording(stepId: string): Promise<RecordingSession> 
 export async function saveVoiceAnnotation(annotation: VoiceAnnotation, blob: Blob): Promise<void> {
   const all = await _loadAllMeta();
   const updated = all.filter((a) => a.id !== annotation.id).concat(annotation);
-  await set(IDB_META_KEY, updated, metaStore);
-  await set(annotation.id, blob, blobStore);
+  await metaStore.set(IDB_META_KEY, updated);
+  await blobStore.set(annotation.id, blob);
 }
 
 /** Load metadata + blob for a single annotation.  Returns `null` when not found. */
@@ -160,7 +123,7 @@ export async function loadVoiceAnnotation(id: string): Promise<{ annotation: Voi
   const all = await _loadAllMeta();
   const annotation = all.find((a) => a.id === id);
   if (!annotation) return null;
-  const blob = await get<Blob>(id, blobStore);
+  const blob = await blobStore.get<Blob>(id);
   if (!blob) return null;
   return { annotation, blob };
 }
@@ -183,24 +146,22 @@ export async function getAllVoiceAnnotations(): Promise<VoiceAnnotation[]> {
  */
 export async function deleteVoiceAnnotation(id: string): Promise<void> {
   const all = await _loadAllMeta();
-  await set(
+  await metaStore.set(
     IDB_META_KEY,
     all.filter((a) => a.id !== id),
-    metaStore,
   );
-  await del(id, blobStore);
+  await blobStore.delete(id);
 }
 
 /** Delete all annotations for a given step. */
 export async function deleteAllAnnotationsForStep(stepId: string): Promise<void> {
   const all = await _loadAllMeta();
   const toDelete = all.filter((a) => a.stepId === stepId);
-  await set(
+  await metaStore.set(
     IDB_META_KEY,
     all.filter((a) => a.stepId !== stepId),
-    metaStore,
   );
-  await Promise.all(toDelete.map((a) => del(a.id, blobStore)));
+  await Promise.all(toDelete.map((annotation) => blobStore.delete(annotation.id)));
 }
 
 /** Total storage used by voice annotations in bytes. */
@@ -211,8 +172,7 @@ export async function getVoiceAnnotationStorageBytes(): Promise<number> {
 
 /** Return the number of blob keys in the blob store (used in tests). */
 export async function _blobStoreKeyCount(): Promise<number> {
-  const k = await keys(blobStore);
-  return k.length;
+  return (await blobStore.keys()).length;
 }
 
 // ── Playback ──────────────────────────────────────────────────────────────────
@@ -222,17 +182,17 @@ export async function _blobStoreKeyCount(): Promise<number> {
  * `<audio>` element's `src`.  Caller must revoke when done.
  */
 export function createAnnotationUrl(blob: Blob): string {
-  return URL.createObjectURL(blob);
+  return createObjectUrl(blob);
 }
 
 /** Revoke an object URL previously created by {@link createAnnotationUrl}. */
 export function revokeAnnotationUrl(url: string): void {
-  URL.revokeObjectURL(url);
+  revokeObjectUrl(url);
 }
 
 // ── Internal helpers ──────────────────────────────────────────────────────────
 
 async function _loadAllMeta(): Promise<VoiceAnnotation[]> {
-  const data = await get<VoiceAnnotation[]>(IDB_META_KEY, metaStore);
+  const data = await metaStore.get<VoiceAnnotation[]>(IDB_META_KEY);
   return Array.isArray(data) ? data : [];
 }

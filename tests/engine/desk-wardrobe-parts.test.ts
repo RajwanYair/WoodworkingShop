@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { generateParts } from '../../src/engine/parts';
-import { DEFAULT_CONFIG, DESK_DEFAULTS, WARDROBE_DEFAULTS } from '../../src/engine/materials';
-import type { CabinetConfig } from '../../src/engine/types';
+import { generateParts } from '../../src/engine/geometry/parts';
+import { DEFAULT_CONFIG, DESK_DEFAULTS, WARDROBE_DEFAULTS } from '../../src/engine/materials/materials';
+import type { CabinetConfig } from '../../src/engine/core/types';
 import { expectBilingualNames } from '../assertions';
 
 describe('desk parts', () => {

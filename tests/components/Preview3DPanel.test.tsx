@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Preview3DPanel } from '../../src/components/preview/Preview3DPanel';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 
 // ---------------------------------------------------------------------------

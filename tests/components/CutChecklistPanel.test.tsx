@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
-import { generateParts } from '../../src/engine/parts';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
+import { generateParts } from '../../src/engine/geometry/parts';
 import { CutChecklistPanel } from '../../src/components/optimizer/CutChecklistPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 

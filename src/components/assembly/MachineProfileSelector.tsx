@@ -5,19 +5,20 @@
  */
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { browserLocalStorage } from '../../platform/storage/index';
 import { formatNumber, formatUnit } from '../../i18n/format';
 import {
   MACHINE_PROFILES,
   MACHINE_PROFILE_IDS,
   getDefaultMachineProfile,
   type MachineProfile,
-} from '../../engine/machine-profiles';
+} from '../../engine/workshop/machine-profiles';
 
 const LS_KEY = 'cabinet-planner:machine-profile';
 
 function loadSavedProfile(): MachineProfile {
   try {
-    const id = localStorage.getItem(LS_KEY);
+    const id = browserLocalStorage.getItem(LS_KEY);
     if (id && id in MACHINE_PROFILES) return MACHINE_PROFILES[id as keyof typeof MACHINE_PROFILES];
   } catch {
     // localStorage unavailable (SSR / private mode)
@@ -27,7 +28,7 @@ function loadSavedProfile(): MachineProfile {
 
 function saveProfile(id: string) {
   try {
-    localStorage.setItem(LS_KEY, id);
+    browserLocalStorage.setItem(LS_KEY, id);
   } catch {
     // ignore
   }

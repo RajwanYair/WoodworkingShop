@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { findOptimizations } from '../../src/engine/smart-optimizer';
-import { DEFAULT_CONFIG, MATERIALS } from '../../src/engine/materials';
+import { findOptimizations } from '../../src/engine/optimizer/smart-optimizer';
+import { DEFAULT_CONFIG, MATERIALS } from '../../src/engine/materials/materials';
 import { cfg } from '../helpers';
 
 describe('smart-optimizer', () => {

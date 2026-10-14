@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import type { CutSheet } from '../../src/engine/types';
+import type { CutSheet } from '../../src/engine/core/types';
 import {
   cutSheetToDxf,
   downloadDxfForSheet,

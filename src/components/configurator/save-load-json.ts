@@ -1,5 +1,6 @@
-import type { CabinetConfig } from '../../engine/types';
+import type { CabinetConfig } from '../../engine/core/types';
 import type { CabinetEntry } from '../../store/cabinet-store';
+import { downloadContent } from '../../platform/files/index';
 
 export interface ProjectExport {
   version: 1;
@@ -15,13 +16,7 @@ export interface CabinetExport {
 
 export function triggerJsonDownload(payload: unknown, fileName: string): void {
   const json = JSON.stringify(payload, null, 2);
-  const blob = new Blob([json], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = fileName;
-  a.click();
-  URL.revokeObjectURL(url);
+  downloadContent(json, 'application/json', fileName);
 }
 
 export function buildProjectExport(

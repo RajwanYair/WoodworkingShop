@@ -5,9 +5,13 @@
  * entries into the app's Material format for addition to the custom-materials store.
  */
 
-import { validateCommunityCatalog, type CommunityCatalog, type CommunityMaterial } from '../engine/community-catalog';
-import type { Material } from '../engine/types';
-import { getFetch } from './browser-compat';
+import {
+  validateCommunityCatalog,
+  type CommunityCatalog,
+  type CommunityMaterial,
+} from '../engine/materials/community-catalog';
+import type { Material } from '../engine/core/types';
+import { getFetch } from '../platform/network/index';
 
 /** Standard sheet dimensions used when catalog entry lacks explicit size. */
 const DEFAULT_SHEET_WIDTH = 1220;

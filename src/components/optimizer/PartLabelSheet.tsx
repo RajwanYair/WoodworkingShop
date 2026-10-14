@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { assignPartLabels } from '../../engine/part-labeling';
-import type { LabeledPart } from '../../engine/part-labeling';
+import { assignPartLabels } from '../../engine/workshop/part-labeling';
+import type { LabeledPart } from '../../engine/workshop/part-labeling';
 import { buildPartLabelPrintHtml } from './build-part-label-print-html';
 
 interface LabelCardProps {

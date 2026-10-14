@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import type { CutSheet, Lang } from '../../engine/types';
-import { getMaterial } from '../../engine/materials';
+import type { CutSheet, Lang } from '../../engine/core/types';
+import { getMaterial } from '../../engine/materials/materials';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { formatNumber } from '../../i18n/format';
 import { IconList, IconChevronDown, IconChevronRight } from '../layout/Icons';

@@ -2,6 +2,7 @@ import { Component, type ReactNode, type ErrorInfo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IconWarning } from './Icons';
 import { sendErrorReport } from '../../services/error-reporter';
+import { copyText } from '../../platform/share/index';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -67,15 +68,12 @@ class ErrorBoundaryView extends Component<ErrorBoundaryViewProps, ErrorBoundaryS
 
   private handleCopyError = () => {
     const detail = this.state.error?.stack ?? this.state.error?.message ?? 'Unknown error';
-    navigator.clipboard.writeText(detail).then(
-      () => {
+    void copyText(detail).then((copied) => {
+      if (copied) {
         this.setState({ copied: true });
         setTimeout(() => this.setState({ copied: false }), 2000);
-      },
-      () => {
-        /* clipboard unavailable — silent fail */
-      },
-    );
+      }
+    });
   };
 
   override render() {

@@ -10,8 +10,8 @@
  * Pure function — no React, no side effects.
  */
 
-import type { Part, HardwareItem, OptimizationResult, CabinetConfig } from '../engine/types';
-import { getMaterial } from '../engine/materials';
+import type { Part, HardwareItem, OptimizationResult, CabinetConfig } from '../engine/core/types';
+import { getMaterial } from '../engine/materials/materials';
 import { triggerDownload } from './download';
 
 // ── Schema types ─────────────────────────────────────────────────────────────

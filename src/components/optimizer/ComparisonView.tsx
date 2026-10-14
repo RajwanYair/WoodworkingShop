@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n/format';
-import type { CabinetConfig, OptimizationResult, OptimizationSuggestion } from '../../engine/types';
+import type { CabinetConfig, OptimizationResult, OptimizationSuggestion } from '../../engine/core/types';
 import { resolveEngineLang } from './resolve-engine-lang';
 
 export function ComparisonView({ suggestion }: { suggestion: OptimizationSuggestion }) {

@@ -9,12 +9,12 @@
  * single currency before cross-currency comparisons.
  */
 
-import type { CabinetConfig } from '../engine/types';
-import { estimateCost, type CostBreakdown } from '../engine/cost-estimator';
-import { generateParts } from '../engine/parts';
-import { getMaterial, MATERIALS } from '../engine/materials';
-import { optimizeCutSheets } from '../engine/cut-optimizer';
-import { generateHardware } from '../engine/hardware';
+import type { CabinetConfig } from '../engine/core/types';
+import { estimateCost, type CostBreakdown } from '../engine/costing/cost-estimator';
+import { generateParts } from '../engine/geometry/parts';
+import { getMaterial, MATERIALS } from '../engine/materials/materials';
+import { optimizeCutSheets } from '../engine/optimizer/cut-optimizer';
+import { generateHardware } from '../engine/hardware/hardware';
 
 // ── Re-export CostBreakdown as CostEstimate alias for API clarity ─────────────
 export type CostEstimate = CostBreakdown;

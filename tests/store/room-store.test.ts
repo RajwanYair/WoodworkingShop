@@ -10,7 +10,7 @@ vi.mock('zustand/middleware', async () => {
 });
 
 import { useRoomStore } from '../../src/store/room-store';
-import type { RoomLayout, RoomCabinet } from '../../src/engine/types';
+import type { RoomLayout, RoomCabinet } from '../../src/engine/core/types';
 
 const makeLayout = (id: string): RoomLayout => ({
   id,

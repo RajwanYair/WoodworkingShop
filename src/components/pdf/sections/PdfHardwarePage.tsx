@@ -1,5 +1,5 @@
 import { Page, Text, View } from '@react-pdf/renderer';
-import type { HardwareItem } from '../../../engine/types';
+import type { HardwareItem } from '../../../engine/core/types';
 import { s, C, hwColWidths } from '../pdf-tokens';
 import type { PdfCtx } from '../pdf-i18n';
 import { PageHeader, PageFooter } from './PageChrome';

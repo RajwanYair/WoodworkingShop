@@ -13,7 +13,7 @@ import {
   type SavedProject,
 } from '../../src/utils/project-storage';
 import type { ProjectSnapshot } from '../../src/store/cabinet-store';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 import { idbSaveProjects, idbSaveSnapshots } from '../../src/utils/indexed-db-storage';
 
 // In-memory IndexedDB mock — keeps projects and snapshots separately

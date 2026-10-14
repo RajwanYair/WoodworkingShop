@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { panelMaterials, backMaterials, getMaterial } from '../../engine/materials';
-import { findSubstitutions } from '../../engine/substitution';
+import { panelMaterials, backMaterials, getMaterial } from '../../engine/materials/materials';
+import { findSubstitutions } from '../../engine/hardware/substitution';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { useToastStore } from '../../store/toast-store';
-import type { Lang, Material, MaterialSubstitution } from '../../engine/types';
+import type { Lang, Material, MaterialSubstitution } from '../../engine/core/types';
 
 /** Sprint 172 — colored swatch square for the currently selected material */
 function MaterialSwatch({ color }: { color?: string }) {

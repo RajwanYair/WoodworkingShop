@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
-import type { CabinetConfig, DerivedDimensions } from '../../engine/types';
+import type { CabinetConfig, DerivedDimensions } from '../../engine/core/types';
 import { S } from './preview-constants';
 import { ViewBox, PartRect, DimLine } from './preview-svg-parts';
 import type { TooltipHandlers } from './preview-svg-parts';

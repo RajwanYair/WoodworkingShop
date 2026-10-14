@@ -25,5 +25,10 @@
     "allowUnreachableCode": false,
     "allowUnusedLabels": false
   },
-  "include": ["playwright.config.ts", "tests/e2e/**/*.ts"]
+  "include": [
+    "playwright.config.ts",
+    "playwright.platform.config.ts",
+    "tests/e2e/**/*.ts",
+    "tests/platform/browser/**/*.ts"
+  ]
 }

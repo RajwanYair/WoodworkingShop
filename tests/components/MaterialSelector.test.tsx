@@ -1,8 +1,8 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
-import type { Material } from '../../src/engine/types';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
+import type { Material } from '../../src/engine/core/types';
 import { MaterialSelector } from '../../src/components/configurator/MaterialSelector';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { useCustomMaterialsStore } from '../../src/store/custom-materials-store';

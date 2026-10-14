@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { buildCutChecklist } from '../../src/engine/cut-checklist';
-import type { Part } from '../../src/engine/types';
+import { buildCutChecklist } from '../../src/engine/assembly/cut-checklist';
+import type { Part } from '../../src/engine/core/types';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 

@@ -4,7 +4,7 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n/format';
-import { calculateFinishingCoat, type FinishType } from '../../engine/finishing-coat';
+import { calculateFinishingCoat, type FinishType } from '../../engine/calculators/finishing-coat';
 
 const FINISH_TYPES: FinishType[] = ['polyurethane', 'lacquer', 'shellac', 'waterbased', 'oil'];
 

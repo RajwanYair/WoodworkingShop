@@ -1,5 +1,5 @@
 import { Text, View } from '@react-pdf/renderer';
-import type { Lang } from '../../../engine/types';
+import type { Lang } from '../../../engine/core/types';
 import { s } from '../pdf-tokens';
 
 export function PageHeader({

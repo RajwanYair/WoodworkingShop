@@ -544,12 +544,18 @@ flowchart TB
   class Platform,Workers io
 ```
 
-| Rule (enforced by `npm run architecture:check` from Sprint 426) | Why                                                   |
-| --------------------------------------------------------------- | ----------------------------------------------------- |
-| `engine/` imports only `engine/`                                | Pure, deterministic, testable without a DOM           |
-| Browser APIs only in `platform/` and `app/`                     | One place to fake, harden and feature-detect          |
-| Cross-domain imports only through domain barrels                | Stable internal APIs; safe moves                      |
-| No import cycles                                                | Predictable loading and code splitting                |
-| Components ≤ 400 lines after Sprint 431                         | Reviewable files; primitives instead of copy-paste UI |
+Sprint 428's initial platform surface is under `src/platform/{storage,files,share,device,diagnostics}`. It currently owns IndexedDB CRUD and legacy migration, quota estimates, generic downloads and text-file reads, clipboard/native sharing and History API operations, camera/audio acquisition and MediaRecorder, Web Serial/XR access and device capability helpers, voice annotation persistence, Web Vitals observation, and error reporting.
+
+Compatibility facades and store-aware diagnostics remain in `utils/` and `services/`; retire `services/` when its app-level contracts and bundle aggregation have owners elsewhere.
+
+Platform adapter contracts run with fakes in Vitest and with native browser APIs in `tests/platform/browser/` via the dedicated Playwright Chromium job. The Vitest Browser provider is not used because its published peer version does not match the repository's Vitest patch version.
+
+Architecture rules:
+
+- `engine/` imports only `engine/`: pure and DOM-free; enforced by S426.
+- Browser APIs only in `platform/` and `app/`: migration and enforcement remain open.
+- Cross-domain imports only through domain barrels: enforced by S426/S427.
+- No import cycles: enforced by S426.
+- Components ≤ 400 lines after Sprint 431: reviewable files with primitives instead of copy-paste UI.
 
 Architecture decisions are recorded as ADRs in `docs/decisions/` from Sprint 426.

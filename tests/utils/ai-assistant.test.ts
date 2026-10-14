@@ -12,7 +12,7 @@ import {
   callAiAssistant,
   DEFAULT_AI_MODELS,
 } from '../../src/utils/ai-assistant-io';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 
 // ── localStorage stub (jsdom exposes window.localStorage but not bare global) ─
 const localStorageStore = new Map<string, string>();

@@ -5,10 +5,10 @@ import {
   getConfiguratorTemplate as getTemplate,
   evaluateTemplateExpr,
   instantiateConfiguratorTemplate as instantiateTemplate,
-} from '../../src/engine/templates';
-import { generateParts } from '../../src/engine/parts';
-import { MATERIALS } from '../../src/engine/materials';
-import type { FurnitureType } from '../../src/engine/types';
+} from '../../src/engine/project/templates/index';
+import { generateParts } from '../../src/engine/geometry/parts';
+import { MATERIALS } from '../../src/engine/materials/materials';
+import type { FurnitureType } from '../../src/engine/core/types';
 
 describe('getTemplateDefaults', () => {
   const allTypes: FurnitureType[] = ['cabinet', 'bookshelf', 'desk', 'wardrobe', 'panel'];

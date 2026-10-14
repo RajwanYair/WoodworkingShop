@@ -1,17 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n/format';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { buildCostSummary, costSummaryToCsv } from '../../engine/cost-summary-export';
+import { buildCostSummary, costSummaryToCsv } from '../../engine/costing/cost-summary-export';
 import { useState } from 'react';
+import { downloadContent } from '../../platform/files/index';
 
 function downloadCsv(csv: string, filename: string): void {
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
+  downloadContent(csv, 'text/csv;charset=utf-8;', filename);
 }
 
 export function CostSummaryPanel() {

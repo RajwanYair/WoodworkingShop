@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { generateHardware } from '../../src/engine/hardware';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import { generateHardware } from '../../src/engine/hardware/hardware';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 import { expectBilingualNames } from '../assertions';
 
 describe('generateHardware', () => {

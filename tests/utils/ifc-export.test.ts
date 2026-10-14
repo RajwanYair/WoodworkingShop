@@ -5,7 +5,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { exportToIfc, guid } from '../../src/utils/ifc-project-export';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 import type { CabinetEntry } from '../../src/store/cabinet-store';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────

@@ -2,9 +2,9 @@ import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n/format';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { buildCutPlanSummary } from '../../engine/cut-plan-summary';
-import type { SheetPlanInput } from '../../engine/cut-plan-summary';
-import type { CutSheet } from '../../engine/types';
+import { buildCutPlanSummary } from '../../engine/optimizer/cut-plan-summary';
+import type { SheetPlanInput } from '../../engine/optimizer/cut-plan-summary';
+import type { CutSheet } from '../../engine/core/types';
 
 function mm2ToM2(mm2: number, locale: string): string {
   return formatNumber(mm2 / 1_000_000, locale, { minimumFractionDigits: 3, maximumFractionDigits: 3 });

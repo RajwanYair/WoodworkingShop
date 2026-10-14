@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { validateConstraints, applyConstraints, getDimensionRange } from '../../engine/constraint-solver';
-import type { ConstraintViolation, DimensionField } from '../../engine/constraint-solver';
-import type { CabinetConfig } from '../../engine/types';
+import { validateConstraints, applyConstraints, getDimensionRange } from '../../engine/core/constraint-solver';
+import type { ConstraintViolation, DimensionField } from '../../engine/core/constraint-solver';
+import type { CabinetConfig } from '../../engine/core/types';
 
 /** Map a DimensionField to its localisation key suffix. */
 const FIELD_LABEL_KEY: Record<DimensionField, string> = {

@@ -3,8 +3,8 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { calculateGlueCoverage, GLUE_COVERAGE_LIMITS } from '../../engine/glue-coverage';
-import type { WoodGlueType } from '../../engine/glue-coverage';
+import { calculateGlueCoverage, GLUE_COVERAGE_LIMITS } from '../../engine/calculators/glue-coverage';
+import type { WoodGlueType } from '../../engine/calculators/glue-coverage';
 
 const GLUE_TYPES: WoodGlueType[] = ['pva', 'polyurethane', 'epoxy', 'hide', 'ca'];
 

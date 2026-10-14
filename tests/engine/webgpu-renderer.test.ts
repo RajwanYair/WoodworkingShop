@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import type { Part } from '../../src/engine/types';
+import type { Part } from '../../src/engine/core/types';
 import {
   applyExplodeFactor,
   buildBoxMesh,
@@ -11,7 +11,7 @@ import {
   FALLBACK_CAPABILITIES,
   getMeshBounds,
   getSceneBounds,
-} from '../../src/engine/webgpu-renderer';
+} from '../../src/engine/room/webgpu-renderer';
 
 // ---------------------------------------------------------------------------
 // Test fixtures

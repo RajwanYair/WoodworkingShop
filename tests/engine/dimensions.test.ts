@@ -7,8 +7,8 @@ import {
   computeHingePositions,
   computeEqualShelfPositions,
   computeShelfDeflection,
-} from '../../src/engine/dimensions';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
+} from '../../src/engine/geometry/dimensions';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 
 describe('computeDimensions', () => {
   it('computes internal dimensions from default config', () => {

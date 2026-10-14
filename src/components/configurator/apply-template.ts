@@ -1,4 +1,4 @@
-import { getConfiguratorTemplate } from '../../engine/templates';
+import { getConfiguratorTemplate } from '../../engine/project/templates/index';
 import { useCabinetStore } from '../../store/cabinet-store';
 
 export function applyCabinetTemplate(templateId: string): boolean {

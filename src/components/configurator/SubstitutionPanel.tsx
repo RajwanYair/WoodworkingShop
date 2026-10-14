@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { findSubstitutions } from '../../engine/substitution';
-import { getMaterial } from '../../engine/materials';
-import type { Lang, MaterialSubstitution } from '../../engine/types';
+import { findSubstitutions } from '../../engine/hardware/substitution';
+import { getMaterial } from '../../engine/materials/materials';
+import type { Lang, MaterialSubstitution } from '../../engine/core/types';
 
 /** Benefit category badge colour map */
 const BENEFIT_CLASSES: Record<MaterialSubstitution['benefit'], string> = {

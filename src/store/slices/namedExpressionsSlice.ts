@@ -1,3 +1,5 @@
+import { browserLocalStorage } from '../../platform/storage/index';
+
 /**
  * Sprint 296 — Named Expressions Slice
  *
@@ -50,7 +52,7 @@ export type NamedExpressionsSlice = {
 export function loadNamedExpressionsFromStorage(): NamedExpression[] {
   if (typeof window === 'undefined') return [];
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
+    const raw = browserLocalStorage.getItem(STORAGE_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw) as unknown;
     return Array.isArray(parsed) ? (parsed as NamedExpression[]) : [];
@@ -62,7 +64,7 @@ export function loadNamedExpressionsFromStorage(): NamedExpression[] {
 function saveNamedExpressionsToStorage(entries: NamedExpression[]): void {
   if (typeof window === 'undefined') return;
   try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+    browserLocalStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
   } catch {
     /* quota / disabled — ignore */
   }

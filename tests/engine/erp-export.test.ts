@@ -7,10 +7,10 @@ import {
   validateErpPayload,
   exportErp,
   ERP_SCHEMA_VERSION,
-} from '../../src/engine/erp-export';
-import type { ErpHeader, ErpLineItem } from '../../src/engine/erp-export';
-import type { OptimizationResult, CutSheet, CutRect } from '../../src/engine/types';
-import type { CostBreakdown } from '../../src/engine/cost-estimator';
+} from '../../src/engine/export/erp-export';
+import type { ErpHeader, ErpLineItem } from '../../src/engine/export/erp-export';
+import type { OptimizationResult, CutSheet, CutRect } from '../../src/engine/core/types';
+import type { CostBreakdown } from '../../src/engine/costing/cost-estimator';
 import { cfg } from '../helpers';
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────────

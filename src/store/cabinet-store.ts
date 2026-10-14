@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { browserLocalStorage } from '../platform/storage/index';
 import type {
   CabinetConfig,
   Part,
@@ -8,15 +9,15 @@ import type {
   DerivedDimensions,
   OffcutEntry,
   DefectZone,
-} from '../engine/types';
-import { DEFAULT_CONFIG } from '../engine/materials';
-import { computeDimensions } from '../engine/dimensions';
-import { generateParts, computeEdgeBandingTotal } from '../engine/parts';
-import { generateHardware } from '../engine/hardware';
-import { optimizeCutSheets } from '../engine/cut-optimizer';
-import { estimateCost } from '../engine/cost-estimator';
-import { generateAssemblySteps, type AssemblyStep } from '../engine/assembly';
-import { createJsonMemo } from '../engine/memo';
+} from '../engine/core/types';
+import { DEFAULT_CONFIG } from '../engine/materials/materials';
+import { computeDimensions } from '../engine/geometry/dimensions';
+import { generateParts, computeEdgeBandingTotal } from '../engine/geometry/parts';
+import { generateHardware } from '../engine/hardware/hardware';
+import { optimizeCutSheets } from '../engine/optimizer/cut-optimizer';
+import { estimateCost } from '../engine/costing/cost-estimator';
+import { generateAssemblySteps, type AssemblyStep } from '../engine/assembly/assembly';
+import { createJsonMemo } from '../engine/core/memo';
 import {
   readActiveCabinetIndexFromUrl,
   readConfigFromUrl,
@@ -24,8 +25,8 @@ import {
   readProjectNameFromUrl,
 } from '../utils/url-state';
 import { idbLoadSnapshots } from '../utils/indexed-db-storage';
-import { pluginEventBus } from '../engine/plugin';
-import { mirrorConfig, mirrorName } from '../engine/mirror-cabinet';
+import { pluginEventBus } from '../engine/core/plugin';
+import { mirrorConfig, mirrorName } from '../engine/geometry/mirror-cabinet';
 import {
   initWorkerSchedule,
   setRotationLocks,
@@ -87,7 +88,7 @@ interface SessionSnapshot {
 function loadSession(): SessionSnapshot | null {
   if (typeof window === 'undefined') return null;
   try {
-    const raw = window.localStorage.getItem(SESSION_KEY);
+    const raw = browserLocalStorage.getItem(SESSION_KEY);
     return raw ? (JSON.parse(raw) as SessionSnapshot) : null;
   } catch {
     return null;
@@ -96,7 +97,7 @@ function loadSession(): SessionSnapshot | null {
 function saveSession(snap: SessionSnapshot): void {
   if (typeof window === 'undefined') return;
   try {
-    window.localStorage.setItem(SESSION_KEY, JSON.stringify(snap));
+    browserLocalStorage.setItem(SESSION_KEY, JSON.stringify(snap));
   } catch {
     /* quota exceeded — ignore */
   }

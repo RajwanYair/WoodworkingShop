@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
-import { CONSTRAINTS, HARD_LIMITS, getMaterial } from '../../engine/materials';
-import { computeEqualShelfPositions, computeShelfDeflection } from '../../engine/dimensions';
+import { CONSTRAINTS, HARD_LIMITS, getMaterial } from '../../engine/materials/materials';
+import { computeEqualShelfPositions, computeShelfDeflection } from '../../engine/geometry/dimensions';
 import { SliderInput } from './SliderInput';
 import { IconWarning } from '../layout/Icons';
 import { formatNumber } from '../../i18n/format';

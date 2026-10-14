@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { calculateDowelJoint, type JointOrientation } from '../../engine/dowel-joint';
+import { calculateDowelJoint, type JointOrientation } from '../../engine/joinery/dowel-joint';
 
 const ORIENTATIONS: JointOrientation[] = ['edge_to_face', 'edge_to_edge', 'mitre'];
 const ORIENTATION_LABELS: Record<JointOrientation, string> = {

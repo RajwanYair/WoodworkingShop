@@ -1,4 +1,5 @@
 import { utf8Encode } from './browser-compat';
+import { downloadBytes } from '../platform/files/index';
 
 /**
  * Sprint 86 — Minimal PKZIP (no-compression / stored) writer.
@@ -219,16 +220,5 @@ export function buildZip(entries: ZipEntry[]): Uint8Array {
  * Trigger a browser download of `data` as `filename`.
  */
 export function downloadZip(data: Uint8Array, filename: string): void {
-  // Copy into a plain ArrayBuffer to satisfy Blob's type constraint
-  const ab = new ArrayBuffer(data.byteLength);
-  new Uint8Array(ab).set(data);
-  const blob = new Blob([ab], { type: 'application/zip' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+  downloadBytes(data, 'application/zip', filename);
 }

@@ -4,8 +4,8 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatMillimeters, formatNumber } from '../../i18n/format';
-import { calculateRouterCircle } from '../../engine/router-circle';
-import type { CircleCutMode } from '../../engine/router-circle';
+import { calculateRouterCircle } from '../../engine/calculators/router-circle';
+import type { CircleCutMode } from '../../engine/calculators/router-circle';
 
 export function RouterCirclePanel() {
   const { t, i18n } = useTranslation();

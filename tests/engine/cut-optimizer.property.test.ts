@@ -15,8 +15,8 @@
  */
 import { describe, expect, it } from 'vitest';
 import * as fc from 'fast-check';
-import { optimizeCutSheets } from '../../src/engine/cut-optimizer';
-import type { Part } from '../../src/engine/types';
+import { optimizeCutSheets } from '../../src/engine/optimizer/cut-optimizer';
+import type { Part } from '../../src/engine/core/types';
 import { propertyRunOptions } from '../property-seeds';
 
 // ─── constants ───────────────────────────────────────────────────────────────

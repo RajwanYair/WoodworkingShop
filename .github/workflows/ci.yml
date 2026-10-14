@@ -62,6 +62,17 @@ jobs:
           TMP: ${{ runner.temp }}
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with: { name: e2e-dist, path: dist, retention-days: 1 }
+  platform-browser:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    timeout-minutes: 20
+    needs: quality
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: ./.github/actions/setup-node
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:platform:browser
   compat:
     runs-on: ubuntu-24.04
     permissions:

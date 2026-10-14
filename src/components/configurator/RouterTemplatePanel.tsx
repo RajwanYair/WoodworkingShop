@@ -4,8 +4,8 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatMillimeters } from '../../i18n/format';
-import { calculateRouterTemplate } from '../../engine/router-template';
-import type { RouterTemplateCutType } from '../../engine/router-template';
+import { calculateRouterTemplate } from '../../engine/joinery/router-template';
+import type { RouterTemplateCutType } from '../../engine/joinery/router-template';
 
 export function RouterTemplatePanel() {
   const { t, i18n } = useTranslation();

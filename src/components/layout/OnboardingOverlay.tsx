@@ -1,5 +1,6 @@
 import { useCallback, useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { browserLocalStorage } from '../../platform/storage/index';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { dispatchCommandAction } from './command-registry';
 import { IconSettings, IconRuler, IconDocument, IconHelp } from './Icons';
@@ -26,13 +27,13 @@ function OnboardingOverlay() {
   const [step, setStep] = useState(0);
 
   useEffect(() => {
-    if (!localStorage.getItem(SEEN_KEY)) {
+    if (!browserLocalStorage.getItem(SEEN_KEY)) {
       setVisible(true);
     }
   }, []);
 
   const dismiss = () => {
-    localStorage.setItem(SEEN_KEY, '1');
+    browserLocalStorage.setItem(SEEN_KEY, '1');
     setVisible(false);
     window.dispatchEvent(new Event(DISMISSED_EVENT));
   };
@@ -135,7 +136,7 @@ export function HelpButton() {
   const { t } = useTranslation();
 
   const open = useCallback(() => {
-    localStorage.removeItem(SEEN_KEY);
+    browserLocalStorage.removeItem(SEEN_KEY);
     // Force re-render by dispatching storage event
     window.dispatchEvent(new Event('show-onboarding'));
   }, []);

@@ -2,8 +2,8 @@ import { useState, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n/format';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { evaluateNamedParameters } from '../../engine/parameter-expressions';
-import { HARD_LIMITS } from '../../engine/materials';
+import { evaluateNamedParameters } from '../../engine/core/parameter-expressions';
+import { HARD_LIMITS } from '../../engine/materials/materials';
 import type { NamedExpression } from '../../store/slices/namedExpressionsSlice';
 
 const NAME_PATTERN = /^[a-z_]\w*$/i;

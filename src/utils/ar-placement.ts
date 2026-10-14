@@ -6,7 +6,6 @@
  * cabinet geometry into AR world-space.
  *
  * All functions are pure (no side effects, no React, no IDB).
- * `navigator.xr` is accessed through a thin accessor so tests can stub it.
  */
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -61,46 +60,7 @@ export interface WallSnapResult {
 
 // ── Feature detection ─────────────────────────────────────────────────────────
 
-/**
- * Minimal WebXR Device API surface needed for feature detection.
- * Declared locally to avoid requiring `@types/webxr` in every consumer.
- */
-interface XRSystem {
-  isSessionSupported(mode: 'inline' | 'immersive-vr' | 'immersive-ar'): Promise<boolean>;
-}
-
-/**
- * Internal accessor — allows tests to replace `navigator.xr`.
- * @internal
- */
-function _getXR(): XRSystem | null {
-  if (typeof navigator === 'undefined') return null;
-  return (navigator as Navigator & { xr?: XRSystem }).xr ?? null;
-}
-
-/**
- * Returns `true` when the browser exposes the WebXR Device API.
- * Does **not** guarantee immersive-ar support — call `isImmersiveARSupported()`
- * for that.
- */
-export function isWebXRSupported(): boolean {
-  return _getXR() !== null;
-}
-
-/**
- * Async check: resolves to `true` when the device can run `immersive-ar`
- * sessions.  Resolves to `false` if WebXR is absent or the mode is
- * unsupported.
- */
-export async function isImmersiveARSupported(): Promise<boolean> {
-  const xr = _getXR();
-  if (!xr) return false;
-  try {
-    return await xr.isSessionSupported('immersive-ar');
-  } catch {
-    return false;
-  }
-}
+export { isWebXRSupported, isImmersiveARSupported } from '../platform/device/index';
 
 // ── Unit helpers ──────────────────────────────────────────────────────────────
 

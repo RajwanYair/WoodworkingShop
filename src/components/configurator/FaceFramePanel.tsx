@@ -8,7 +8,7 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatMillimeters, formatNumber } from '../../i18n/format';
-import { calculateFaceFrame } from '../../engine/face-frame';
+import { calculateFaceFrame } from '../../engine/calculators/face-frame';
 
 export function FaceFramePanel() {
   const { t, i18n } = useTranslation();

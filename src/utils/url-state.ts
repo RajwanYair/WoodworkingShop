@@ -1,7 +1,8 @@
-import type { CabinetConfig, DrawerSlideType } from '../engine/types';
-import { DEFAULT_CONFIG, CONSTRAINTS } from '../engine/materials';
-import { getConfiguratorTemplate } from '../engine/templates/index';
+import type { CabinetConfig, DrawerSlideType } from '../engine/core/types';
+import { DEFAULT_CONFIG, CONSTRAINTS } from '../engine/materials/materials';
+import { getConfiguratorTemplate } from '../engine/project/templates/index';
 import { getQueryValue, parseQueryString, serializeQueryRecord, type QueryRecord } from './browser-compat';
+import { getBrowserUrl, pushBrowserUrl, replaceBrowserUrl } from '../platform/share/index';
 
 /**
  * Encode a CabinetConfig into URL search params.
@@ -110,18 +111,17 @@ export function paramsToConfig(params: QueryRecord): Partial<CabinetConfig> {
 /** Build a shareable URL from config. Preserves the current ?pn= project name if set. */
 export function configToUrl(cfg: CabinetConfig, projectName?: string): string {
   const params = configToParams(cfg);
+  const currentUrl = getBrowserUrl();
   // v3.29.0: preserve project name in shareable link
-  const pn = projectName ?? getQueryValue(window.location.search, 'pn');
+  const pn = projectName ?? getQueryValue(currentUrl.search, 'pn');
   if (pn) params.pn = pn;
   const qs = serializeQueryRecord(params);
-  return qs
-    ? `${window.location.origin}${window.location.pathname}?${qs}`
-    : window.location.origin + window.location.pathname;
+  return qs ? `${currentUrl.origin}${currentUrl.pathname}?${qs}` : currentUrl.origin + currentUrl.pathname;
 }
 
 /** Read config from current URL, merging ?tpl= template if present */
 export function readConfigFromUrl(): Partial<CabinetConfig> {
-  const params = parseQueryString(window.location.search);
+  const params = parseQueryString(getBrowserUrl().search);
   const tplId = params.tpl;
   if (tplId) {
     const tpl = getConfiguratorTemplate(tplId);
@@ -137,7 +137,8 @@ export function readConfigFromUrl(): Partial<CabinetConfig> {
 /** Update browser URL without reload */
 export function pushConfigToUrl(cfg: CabinetConfig, activeCabinetIndex?: number): void {
   const params = configToParams(cfg);
-  const currentParams = parseQueryString(window.location.search);
+  const currentUrl = getBrowserUrl();
+  const currentParams = parseQueryString(currentUrl.search);
   if (currentParams.tab) params.tab = currentParams.tab;
   if (activeCabinetIndex !== undefined && Number.isInteger(activeCabinetIndex) && activeCabinetIndex >= 0) {
     if (activeCabinetIndex > 0) params.cab = String(activeCabinetIndex);
@@ -148,13 +149,13 @@ export function pushConfigToUrl(cfg: CabinetConfig, activeCabinetIndex?: number)
   const currentPn = currentParams.pn;
   if (currentPn) params.pn = currentPn;
   const qs = serializeQueryRecord(params);
-  const url = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
-  window.history.replaceState(null, '', url);
+  const url = qs ? `${currentUrl.pathname}?${qs}` : currentUrl.pathname;
+  replaceBrowserUrl(url);
 }
 
 /** Read project name from current URL (Sprint 157) */
 export function readProjectNameFromUrl(): string {
-  return getQueryValue(window.location.search, 'pn') ?? '';
+  return getQueryValue(getBrowserUrl().search, 'pn') ?? '';
 }
 
 /**
@@ -164,7 +165,7 @@ export function readProjectNameFromUrl(): string {
  */
 export function readTabFromUrl():
   'workspace' | 'configurator' | 'preview' | 'optimizer' | 'assembly' | 'pdf' | 'calculators' | null {
-  const raw = getQueryValue(globalThis.location.search, 'tab');
+  const raw = getQueryValue(getBrowserUrl().search, 'tab');
   const VALID_TABS = new Set(['workspace', 'configurator', 'preview', 'optimizer', 'assembly', 'pdf', 'calculators']);
   if (raw && VALID_TABS.has(raw)) {
     return raw as 'workspace' | 'configurator' | 'preview' | 'optimizer' | 'assembly' | 'pdf' | 'calculators';
@@ -175,7 +176,7 @@ export function readTabFromUrl():
 /** Read a valid zero-based active-cabinet index from the current URL. */
 export function readActiveCabinetIndexFromUrl(cabinetCount: number): number | null {
   if (!Number.isInteger(cabinetCount) || cabinetCount <= 0) return null;
-  const raw = getQueryValue(globalThis.location.search, 'cab');
+  const raw = getQueryValue(getBrowserUrl().search, 'cab');
   if (raw === null || !/^\d+$/.test(raw)) return null;
   const index = Number(raw);
   return index < cabinetCount ? index : null;
@@ -184,12 +185,13 @@ export function readActiveCabinetIndexFromUrl(cabinetCount: number): number | nu
 /** Update the active-cabinet URL state without discarding other query params. */
 export function pushActiveCabinetIndexToUrl(index: number): void {
   if (!Number.isInteger(index) || index < 0) return;
-  const params = parseQueryString(globalThis.location.search);
+  const currentUrl = getBrowserUrl();
+  const params = parseQueryString(currentUrl.search);
   if (index === 0) delete params.cab;
   else params.cab = String(index);
   const qs = serializeQueryRecord(params);
-  const url = qs ? `${globalThis.location.pathname}?${qs}` : globalThis.location.pathname;
-  globalThis.history.replaceState(null, '', url);
+  const url = qs ? `${currentUrl.pathname}?${qs}` : currentUrl.pathname;
+  replaceBrowserUrl(url);
 }
 
 /**
@@ -197,12 +199,13 @@ export function pushActiveCabinetIndexToUrl(index: number): void {
  * Sprint 298 — URL tab deep-linking.
  */
 export function pushTabToUrl(tab: string, replace = false): void {
-  const params = parseQueryString(globalThis.location.search);
+  const currentUrl = getBrowserUrl();
+  const params = parseQueryString(currentUrl.search);
   params.tab = tab;
   const qs = serializeQueryRecord(params);
-  const url = qs ? `${globalThis.location.pathname}?${qs}` : globalThis.location.pathname;
-  if (replace) globalThis.history.replaceState(null, '', url);
-  else globalThis.history.pushState(null, '', url);
+  const url = qs ? `${currentUrl.pathname}?${qs}` : currentUrl.pathname;
+  if (replace) replaceBrowserUrl(url);
+  else pushBrowserUrl(url);
 }
 
 /**
@@ -210,7 +213,8 @@ export function pushTabToUrl(tab: string, replace = false): void {
  * Truncated to 60 characters. Removes the param when name is empty.
  */
 export function pushProjectNameToUrl(name: string): void {
-  const params = parseQueryString(window.location.search);
+  const currentUrl = getBrowserUrl();
+  const params = parseQueryString(currentUrl.search);
   const trimmed = name.trim().slice(0, 60);
   if (trimmed) {
     params.pn = trimmed;
@@ -218,8 +222,8 @@ export function pushProjectNameToUrl(name: string): void {
     delete params.pn;
   }
   const qs = serializeQueryRecord(params);
-  const url = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
-  window.history.replaceState(null, '', url);
+  const url = qs ? `${currentUrl.pathname}?${qs}` : currentUrl.pathname;
+  replaceBrowserUrl(url);
 }
 
 // ── Compact serialisation (Sprint 35) ────────────────────────────────────────
@@ -304,7 +308,8 @@ export function generateShareRefKey(): string {
  */
 export async function pushConfigToUrlOffline(cfg: CabinetConfig, projectName?: string): Promise<void> {
   const compact = compressConfigToBase64(cfg);
-  const pn = projectName ?? getQueryValue(window.location.search, 'pn');
+  const currentUrl = getBrowserUrl();
+  const pn = projectName ?? getQueryValue(currentUrl.search, 'pn');
   const params: QueryRecord = {};
   if (pn) params.pn = pn;
 
@@ -317,7 +322,7 @@ export async function pushConfigToUrlOffline(cfg: CabinetConfig, projectName?: s
   }
 
   const qs = serializeQueryRecord(params);
-  window.history.replaceState(null, '', qs ? `${window.location.pathname}?${qs}` : window.location.pathname);
+  replaceBrowserUrl(qs ? `${currentUrl.pathname}?${qs}` : currentUrl.pathname);
 }
 
 /**
@@ -336,7 +341,7 @@ export async function resolveUrlRef(key: string): Promise<Partial<CabinetConfig>
  * Returns an empty object (not null) when nothing is decoded.
  */
 export async function readConfigFromUrlAsync(): Promise<Partial<CabinetConfig>> {
-  const params = parseQueryString(window.location.search);
+  const params = parseQueryString(getBrowserUrl().search);
 
   const ref = params.ref;
   if (ref) {

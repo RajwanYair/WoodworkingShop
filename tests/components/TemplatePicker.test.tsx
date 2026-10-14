@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { TemplatePicker } from '../../src/components/configurator/TemplatePicker';
-import { TEMPLATES } from '../../src/engine/templates';
+import { TEMPLATES } from '../../src/engine/project/templates/index';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 
 describe('TemplatePicker', () => {

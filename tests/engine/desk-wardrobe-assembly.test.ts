@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { generateAssemblySteps } from '../../src/engine/assembly';
-import { DEFAULT_CONFIG, DESK_DEFAULTS, WARDROBE_DEFAULTS } from '../../src/engine/materials';
-import type { CabinetConfig } from '../../src/engine/types';
+import { generateAssemblySteps } from '../../src/engine/assembly/assembly';
+import { DEFAULT_CONFIG, DESK_DEFAULTS, WARDROBE_DEFAULTS } from '../../src/engine/materials/materials';
+import type { CabinetConfig } from '../../src/engine/core/types';
 import { expectSequentialSteps, expectBilingualSteps } from '../assertions';
 
 describe('desk assembly', () => {

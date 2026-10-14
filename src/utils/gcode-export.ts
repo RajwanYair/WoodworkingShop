@@ -1,9 +1,9 @@
-import type { CutSheet, CutRect } from '../engine/types';
+import type { CutSheet, CutRect } from '../engine/core/types';
 import { triggerDownload } from './download';
-import { validateGcode, type GcodeValidationResult } from '../engine/gcode-validator';
-import { applyGcodePlugins } from '../engine/plugin';
+import { validateGcode, type GcodeValidationResult } from '../engine/export/gcode-validator';
+import { applyGcodePlugins } from '../engine/core/plugin';
 import { appendChecksumToGcode } from './checksum';
-import { GCODE_SCHEMA_VERSION } from '../engine/export-schema';
+import { GCODE_SCHEMA_VERSION } from '../engine/export/export-schema';
 
 /**
  * Generate basic G-code for a CNC router to cut parts from a sheet.

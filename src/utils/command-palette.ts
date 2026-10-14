@@ -1,3 +1,5 @@
+import { browserLocalStorage } from '../platform/storage/index';
+
 /**
  * Command Palette — Sprint 15
  *
@@ -323,7 +325,7 @@ export async function invokeCommand(id: string): Promise<void> {
 /** Return the last N invoked command IDs (most recent first). */
 export function getRecentCommandIds(): string[] {
   try {
-    const raw = window.localStorage.getItem(RECENTS_KEY);
+    const raw = browserLocalStorage.getItem(RECENTS_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw) as unknown;
     return Array.isArray(parsed) && parsed.every((id): id is string => typeof id === 'string') ? parsed : [];
@@ -342,7 +344,7 @@ export function getRecentCommands(): PaletteCommand[] {
 /** Clear the recents list. */
 export function clearRecentCommands(): void {
   try {
-    window.localStorage.removeItem(RECENTS_KEY);
+    browserLocalStorage.removeItem(RECENTS_KEY);
   } catch {
     // storage unavailable
   }
@@ -352,7 +354,7 @@ function _addRecent(id: string): void {
   try {
     const current = getRecentCommandIds().filter((r) => r !== id);
     const updated = [id, ...current].slice(0, MAX_RECENTS);
-    window.localStorage.setItem(RECENTS_KEY, JSON.stringify(updated));
+    browserLocalStorage.setItem(RECENTS_KEY, JSON.stringify(updated));
   } catch {
     // storage unavailable — recents are best-effort
   }

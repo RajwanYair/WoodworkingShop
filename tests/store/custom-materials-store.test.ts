@@ -14,7 +14,7 @@ import {
   getCustomPanelMaterials,
   getCustomBackMaterials,
 } from '../../src/store/custom-materials-store';
-import type { Material } from '../../src/engine/types';
+import type { Material } from '../../src/engine/core/types';
 
 const panelMaterial: Material = {
   key: 'custom-oak-20',

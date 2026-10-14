@@ -1,3 +1,5 @@
+import { browserLocalStorage, createIndexedDbAdapter } from '../platform/storage/index';
+
 /**
  * Plugin Marketplace — Sprint 18
  *
@@ -10,12 +12,11 @@
  * and renders the marketplace component.
  */
 
-import { get, set, del, createStore } from 'idb-keyval';
-import { getPluginApiCompatibility, type PluginApiCompatibility } from '../engine/plugin';
-import { getFetch } from './browser-compat';
+import { getPluginApiCompatibility, type PluginApiCompatibility } from '../engine/core/plugin';
+import { getFetch } from '../platform/network/index';
 
 // ── IDB store ─────────────────────────────────────────────────────────────────
-const marketplaceStore = createStore('cabinet-planner-marketplace', 'marketplace');
+const marketplaceStore = createIndexedDbAdapter('cabinet-planner-marketplace', 'marketplace');
 
 const CATALOG_KEY = 'catalog';
 const CATALOG_META_KEY = 'catalog-meta';
@@ -105,26 +106,26 @@ export async function fetchMarketplaceCatalog(url: string = DEFAULT_MARKETPLACE_
     throw new Error('Marketplace catalog has invalid format');
   }
   const catalog: MarketplaceCatalog = { ...raw, fetchedAt: new Date().toISOString() };
-  await set(CATALOG_KEY, catalog, marketplaceStore);
+  await marketplaceStore.set(CATALOG_KEY, catalog);
   const meta: CatalogCacheMeta = {
     version: catalog.version,
     fetchedAt: catalog.fetchedAt,
     pluginCount: catalog.plugins.length,
   };
-  await set(CATALOG_META_KEY, meta, marketplaceStore);
+  await marketplaceStore.set(CATALOG_META_KEY, meta);
   return catalog;
 }
 
 /** Load the cached marketplace catalog.  Returns `null` when nothing is cached. */
 export async function loadCachedCatalog(): Promise<MarketplaceCatalog | null> {
-  const stored = await get<MarketplaceCatalog>(CATALOG_KEY, marketplaceStore);
+  const stored = await marketplaceStore.get<MarketplaceCatalog>(CATALOG_KEY);
   return stored ?? null;
 }
 
 /** Clear the cached catalog from IDB. */
 export async function clearCatalogCache(): Promise<void> {
-  await del(CATALOG_KEY, marketplaceStore);
-  await del(CATALOG_META_KEY, marketplaceStore);
+  await marketplaceStore.delete(CATALOG_KEY);
+  await marketplaceStore.delete(CATALOG_META_KEY);
 }
 
 // ── Search ────────────────────────────────────────────────────────────────────
@@ -192,7 +193,7 @@ export function splitPluginsByCompatibility(
 
 function _loadInstalledIds(): string[] {
   try {
-    const raw = window.localStorage.getItem(INSTALLED_KEY);
+    const raw = browserLocalStorage.getItem(INSTALLED_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw) as unknown;
     return Array.isArray(parsed) ? (parsed as string[]) : [];
@@ -203,7 +204,7 @@ function _loadInstalledIds(): string[] {
 
 function _saveInstalledIds(ids: string[]): void {
   try {
-    window.localStorage.setItem(INSTALLED_KEY, JSON.stringify(ids));
+    browserLocalStorage.setItem(INSTALLED_KEY, JSON.stringify(ids));
   } catch {
     // best-effort
   }
@@ -234,7 +235,7 @@ export function uninstallPlugin(id: string): void {
 /** Remove all installed plugin records (factory reset). */
 export function clearInstalledPlugins(): void {
   try {
-    window.localStorage.removeItem(INSTALLED_KEY);
+    browserLocalStorage.removeItem(INSTALLED_KEY);
   } catch {
     // best-effort
   }

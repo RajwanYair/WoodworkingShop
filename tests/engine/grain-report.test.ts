@@ -4,8 +4,8 @@
  * Tests for src/engine/grain-report.ts
  */
 import { describe, it, expect } from 'vitest';
-import { buildGrainReport, grainReportToCsv } from '../../src/engine/grain-report';
-import type { Part } from '../../src/engine/types';
+import { buildGrainReport, grainReportToCsv } from '../../src/engine/optimizer/grain-report';
+import type { Part } from '../../src/engine/core/types';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 

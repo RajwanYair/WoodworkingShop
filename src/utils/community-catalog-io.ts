@@ -31,11 +31,12 @@
  * }
  */
 
-import { get, set, createStore } from 'idb-keyval';
-import type { Material } from '../engine/types';
+import { createIndexedDbAdapter } from '../platform/storage/index';
+import { getFetch } from '../platform/network/index';
+import type { Material } from '../engine/core/types';
 
 // ── IDB store ─────────────────────────────────────────────────────────────────
-const catalogStore = createStore('cabinet-planner-community-catalog', 'catalog');
+const catalogStore = createIndexedDbAdapter('cabinet-planner-community-catalog', 'catalog');
 const CACHE_KEY = 'community-materials';
 const META_KEY = 'community-materials-meta';
 
@@ -111,9 +112,11 @@ function _isValidMaterial(m: unknown): m is CommunityMaterial {
  */
 export async function fetchCommunityMaterials(
   url: string = DEFAULT_CATALOG_URL,
-  fetchImpl: typeof fetch = fetch,
+  fetchImpl?: typeof fetch,
 ): Promise<CommunityCatalog> {
-  const response = await fetchImpl(url);
+  const fetchFn = fetchImpl ?? getFetch();
+  if (!fetchFn) throw new Error('Fetch API is not available in this browser.');
+  const response = await fetchFn(url);
   if (!response.ok) {
     throw new Error(`Community catalog fetch failed: HTTP ${response.status}`);
   }
@@ -121,13 +124,13 @@ export async function fetchCommunityMaterials(
   const catalog = validateCatalog(raw);
 
   // Persist to IDB
-  await set(CACHE_KEY, catalog.materials, catalogStore);
+  await catalogStore.set(CACHE_KEY, catalog.materials);
   const meta: CatalogCacheMeta = {
     fetchedAt: Date.now(),
     url,
     version: catalog.version,
   };
-  await set(META_KEY, meta, catalogStore);
+  await catalogStore.set(META_KEY, meta);
 
   return catalog;
 }
@@ -140,8 +143,8 @@ export async function loadCachedCommunityMaterials(): Promise<{
   materials: CommunityMaterial[];
   meta: CatalogCacheMeta | null;
 }> {
-  const materials = await get<CommunityMaterial[]>(CACHE_KEY, catalogStore);
-  const meta = await get<CatalogCacheMeta>(META_KEY, catalogStore);
+  const materials = await catalogStore.get<CommunityMaterial[]>(CACHE_KEY);
+  const meta = await catalogStore.get<CatalogCacheMeta>(META_KEY);
   return {
     materials: Array.isArray(materials) ? materials : [],
     meta: meta ?? null,
@@ -152,8 +155,8 @@ export async function loadCachedCommunityMaterials(): Promise<{
  * Clear the community catalog cache from IndexedDB.
  */
 export async function clearCommunityMaterialsCache(): Promise<void> {
-  await set(CACHE_KEY, [], catalogStore);
-  await set(META_KEY, null, catalogStore);
+  await catalogStore.set(CACHE_KEY, []);
+  await catalogStore.set(META_KEY, null);
 }
 
 // ── Filtering ─────────────────────────────────────────────────────────────────

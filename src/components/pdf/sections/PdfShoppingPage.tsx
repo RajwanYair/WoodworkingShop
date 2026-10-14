@@ -1,5 +1,5 @@
 import { Page, Text, View } from '@react-pdf/renderer';
-import type { HardwareItem, OptimizationResult } from '../../../engine/types';
+import type { HardwareItem, OptimizationResult } from '../../../engine/core/types';
 import { s, C } from '../pdf-tokens';
 import type { PdfCtx } from '../pdf-i18n';
 import { sheetSummary } from '../pdf-helpers';

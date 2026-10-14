@@ -1,11 +1,11 @@
 import type { Locator } from '@playwright/test';
 import WORKSPACE_CONTROL_INVENTORY from '../fixtures/workspace-control-inventory.json' with { type: 'json' };
 import { test, expect } from './fixtures/app';
-import { DEFAULT_CONFIG, getMaterial } from '../../src/engine/materials';
-import { optimizeCutSheets } from '../../src/engine/cut-optimizer';
-import { generateParts } from '../../src/engine/parts';
-import { analyzeWaste, formatAreaM2 } from '../../src/engine/waste';
-import { buildGrainReport } from '../../src/engine/grain-report';
+import { DEFAULT_CONFIG, getMaterial } from '../../src/engine/materials/materials';
+import { optimizeCutSheets } from '../../src/engine/optimizer/cut-optimizer';
+import { generateParts } from '../../src/engine/geometry/parts';
+import { analyzeWaste, formatAreaM2 } from '../../src/engine/optimizer/waste/index';
+import { buildGrainReport } from '../../src/engine/optimizer/grain-report';
 
 function getAccessibleTableControl(main: Locator, table: Locator, control: object) {
   if (!('role' in control) || typeof control.role !== 'string') {

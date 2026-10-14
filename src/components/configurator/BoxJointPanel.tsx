@@ -3,7 +3,7 @@
  */
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { calculateBoxJoint } from '../../engine/box-joint';
+import { calculateBoxJoint } from '../../engine/joinery/box-joint';
 
 export function BoxJointPanel() {
   const { t } = useTranslation();

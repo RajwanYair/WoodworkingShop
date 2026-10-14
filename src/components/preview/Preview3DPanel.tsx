@@ -1,13 +1,13 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { applyExplodeFactor, buildCabinetScene, centerScene, getSceneBounds } from '../../engine/webgpu-renderer';
-import { getPbrMaterial } from '../../engine/pbr-materials';
+import { applyExplodeFactor, buildCabinetScene, centerScene, getSceneBounds } from '../../engine/room/webgpu-renderer';
+import { getPbrMaterial } from '../../engine/materials/pbr-materials';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
-import { generateParts } from '../../engine/parts';
-import type { CabinetScene } from '../../engine/webgpu-renderer';
-import type { RendererCapabilities } from '../../engine/webgpu-renderer';
+import { generateParts } from '../../engine/geometry/parts';
+import type { CabinetScene } from '../../engine/room/webgpu-renderer';
+import type { RendererCapabilities } from '../../engine/room/webgpu-renderer';
 
 // ---------------------------------------------------------------------------
 // Renderer capability hook (DOM-side probe — not in the engine layer)

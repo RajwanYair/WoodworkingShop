@@ -1,3 +1,5 @@
+import { browserLocalStorage } from '../platform/storage/index';
+
 /**
  * Phase 13 / Sprint 8 — BYO AI design assistant.
  *
@@ -15,8 +17,8 @@
  *     longer than the current microtask.
  */
 
-import type { CabinetConfig } from '../engine/types';
-import { getFetch } from './browser-compat';
+import type { CabinetConfig } from '../engine/core/types';
+import { getFetch } from '../platform/network/index';
 
 /** Supported AI provider identifiers. */
 export type AiProvider = 'openai' | 'anthropic' | 'ollama';
@@ -44,7 +46,7 @@ const LS_AI_CONFIG_KEY = 'cabinet-planner-ai-config';
 /** Read the stored AI configuration from localStorage. Returns null when not set. */
 export function getAiConfig(): AiConfig | null {
   try {
-    const raw = window.localStorage.getItem(LS_AI_CONFIG_KEY);
+    const raw = browserLocalStorage.getItem(LS_AI_CONFIG_KEY);
     if (!raw) return null;
     const p = JSON.parse(raw) as Record<string, unknown>;
     const provider = p['provider'];
@@ -63,12 +65,12 @@ export function getAiConfig(): AiConfig | null {
 
 /** Persist AI configuration to localStorage. */
 export function setAiConfig(config: AiConfig): void {
-  window.localStorage.setItem(LS_AI_CONFIG_KEY, JSON.stringify(config));
+  browserLocalStorage.setItem(LS_AI_CONFIG_KEY, JSON.stringify(config));
 }
 
 /** Remove stored AI configuration from localStorage. */
 export function clearAiConfig(): void {
-  window.localStorage.removeItem(LS_AI_CONFIG_KEY);
+  browserLocalStorage.removeItem(LS_AI_CONFIG_KEY);
 }
 
 /** System prompt prefix used for all providers. */

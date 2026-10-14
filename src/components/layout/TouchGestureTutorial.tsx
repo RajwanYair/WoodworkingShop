@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { browserLocalStorage } from '../../platform/storage/index';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { IconX } from './Icons';
 
@@ -22,16 +23,16 @@ export function TouchGestureTutorial() {
 
   useEffect(() => {
     const showTutorial = () => {
-      if (isTouchDevice() && !localStorage.getItem(TOURED_KEY)) setVisible(true);
+      if (isTouchDevice() && !browserLocalStorage.getItem(TOURED_KEY)) setVisible(true);
     };
 
-    if (localStorage.getItem(ONBOARDING_SEEN_KEY)) showTutorial();
+    if (browserLocalStorage.getItem(ONBOARDING_SEEN_KEY)) showTutorial();
     window.addEventListener(ONBOARDING_DISMISSED_EVENT, showTutorial);
     return () => window.removeEventListener(ONBOARDING_DISMISSED_EVENT, showTutorial);
   }, []);
 
   const dismiss = () => {
-    localStorage.setItem(TOURED_KEY, '1');
+    browserLocalStorage.setItem(TOURED_KEY, '1');
     setVisible(false);
   };
 

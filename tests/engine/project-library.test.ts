@@ -6,9 +6,9 @@ import {
   importLibraryEntry,
   searchLibrary,
   sortLibrary,
-} from '../../src/engine/project-library';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
-import type { LibraryEntry } from '../../src/engine/project-library';
+} from '../../src/engine/project/project-library';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
+import type { LibraryEntry } from '../../src/engine/project/project-library';
 
 // ---------------------------------------------------------------------------
 // Helpers

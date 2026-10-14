@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { RoomCabinet, RoomLayout, RoomWall } from '../engine/types';
-import { generateDefaultWalls, snapToWall, clampToRoom } from '../engine/room-planner';
+import type { RoomCabinet, RoomLayout, RoomWall } from '../engine/core/types';
+import { generateDefaultWalls, snapToWall, clampToRoom } from '../engine/room/room-planner';
 
 interface RoomState {
   layouts: RoomLayout[];

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useId } from 'react';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { CONSTRAINTS, HARD_LIMITS } from '../../engine/materials';
+import { CONSTRAINTS, HARD_LIMITS } from '../../engine/materials/materials';
 import { formatDim, sliderStep } from '../../utils/units';
 import { SliderInput } from './SliderInput';
 

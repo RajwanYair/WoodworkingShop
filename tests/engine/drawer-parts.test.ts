@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { generateParts } from '../../src/engine/parts';
-import { generateHardware } from '../../src/engine/hardware';
+import { generateParts } from '../../src/engine/geometry/parts';
+import { generateHardware } from '../../src/engine/hardware/hardware';
 import { cfg } from '../helpers';
 
 describe('drawer parts generation', () => {

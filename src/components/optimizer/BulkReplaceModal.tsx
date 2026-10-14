@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { resolveEngineLang } from './resolve-engine-lang';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
-import { MATERIALS } from '../../engine/materials';
+import { MATERIALS } from '../../engine/materials/materials';
 
 interface Props {
   onClose: () => void;

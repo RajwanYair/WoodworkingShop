@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { PluginRegistryPanel } from '../../src/components/layout/PluginRegistryPanel';
-import { registerPlugin, unregisterPlugin, getPlugins, type CabinetPlannerPlugin } from '../../src/engine/plugin';
+import { registerPlugin, unregisterPlugin, getPlugins, type CabinetPlannerPlugin } from '../../src/engine/core/plugin';
 
 // Reset the plugin registry before each test so tests are isolated.
 beforeEach(() => {

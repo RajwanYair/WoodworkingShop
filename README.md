@@ -230,7 +230,7 @@ The [roadmap](ROADMAP.md#target-architecture-phase-82) describes the planned mov
 
 ```mermaid
 flowchart LR
-  now["v5.36.0<br/>release workflow pending"] --> t["v5.37.0 ▶<br/>Phase 82 · architecture refactor"]
+  now["v5.36.0 ✅<br/>Phase 81 · toolchain modernisation"] --> t["v5.37.0 ▶<br/>Phase 82 · architecture refactor"]
   t --> a["v5.38.0<br/>versioned data"] --> d0["v5.39–v5.40<br/>examples · shop drawings · docs site"]
   d0 --> d["v5.41–v5.43<br/>cut-list workbench · 1D lumber · shop-floor mode"]
   d --> w["v5.44–v5.48<br/>CNC · doors · rooms · files"]

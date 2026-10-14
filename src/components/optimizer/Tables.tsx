@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { getMaterial } from '../../engine/materials';
+import { getMaterial } from '../../engine/materials/materials';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { resolveEngineLang } from './resolve-engine-lang';
-import type { Lang, Part } from '../../engine/types';
+import type { Lang, Part } from '../../engine/core/types';
 
 type SortKey = 'id' | 'name' | 'qty' | 'material' | 'length' | 'width' | 'thickness';
 type SortDir = 'asc' | 'desc';

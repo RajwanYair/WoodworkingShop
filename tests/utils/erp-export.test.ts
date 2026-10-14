@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { generateErpPayload, type ErpPayload } from '../../src/utils/erp-export-download';
-import type { Part, HardwareItem, OptimizationResult } from '../../src/engine/types';
+import type { Part, HardwareItem, OptimizationResult } from '../../src/engine/core/types';
 import { cfg } from '../helpers';
 
 // ── fixtures ──────────────────────────────────────────────────────────────

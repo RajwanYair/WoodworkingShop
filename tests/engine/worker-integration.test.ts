@@ -10,7 +10,7 @@
 
 import { describe, it, expect, beforeEach } from 'vitest';
 import { useCabinetStore } from '../../src/store/cabinet-store';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -116,8 +116,8 @@ describe('cut-optimizer sync fallback (Worker unavailable)', () => {
 
 describe('createJsonMemo integration — engine memoisation', () => {
   it('memo-wrapped computeDimensions returns same reference on identical config', async () => {
-    const { createJsonMemo } = await import('../../src/engine/memo');
-    const { computeDimensions } = await import('../../src/engine/dimensions');
+    const { createJsonMemo } = await import('../../src/engine/core/memo');
+    const { computeDimensions } = await import('../../src/engine/geometry/dimensions');
     const memoCompute = createJsonMemo(computeDimensions);
 
     const cfg = { ...DEFAULT_CONFIG };
@@ -128,8 +128,8 @@ describe('createJsonMemo integration — engine memoisation', () => {
   });
 
   it('cache miss produces a new result when config changes', async () => {
-    const { createJsonMemo } = await import('../../src/engine/memo');
-    const { computeDimensions } = await import('../../src/engine/dimensions');
+    const { createJsonMemo } = await import('../../src/engine/core/memo');
+    const { computeDimensions } = await import('../../src/engine/geometry/dimensions');
     const memoCompute = createJsonMemo(computeDimensions);
 
     const r1 = memoCompute({ ...DEFAULT_CONFIG, width: 600 });

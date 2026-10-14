@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { generateIfcContent } from '../../src/engine/export/ifc-export';
 import { generateStepContent } from '../../src/engine/export/step-export';
-import type { Part } from '../../src/engine/types';
+import type { Part } from '../../src/engine/core/types';
 import { cfg } from '../helpers';
 
 // ── fixtures ──────────────────────────────────────────────────────────────

@@ -11,8 +11,8 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { ProjectSummaryPanel } from '../../src/components/optimizer/ProjectSummaryPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
-import type { OptimizationResult } from '../../src/engine/types';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
+import type { OptimizationResult } from '../../src/engine/core/types';
 
 const emptyOpt: OptimizationResult = {
   sheets: [],

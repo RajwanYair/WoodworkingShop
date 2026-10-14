@@ -8,7 +8,7 @@ import { useCabinetStore } from '../../store/cabinet-store';
 import { isWebSerialAvailable, openSerialPort, type CncSerialSession } from '../../utils/webserial-cnc';
 import { cutSheetToGcode } from '../../utils/gcode-export';
 import { MachineProfileSelector } from './MachineProfileSelector';
-import { getDefaultMachineProfile, type MachineProfile } from '../../engine/machine-profiles';
+import { getDefaultMachineProfile, type MachineProfile } from '../../engine/workshop/machine-profiles';
 
 type ConnectionState = 'disconnected' | 'connecting' | 'connected' | 'streaming' | 'paused' | 'error';
 

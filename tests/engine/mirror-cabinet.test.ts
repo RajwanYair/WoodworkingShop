@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { mirrorConfig, mirrorName } from '../../src/engine/mirror-cabinet';
-import type { CabinetConfig } from '../../src/engine/types';
+import { mirrorConfig, mirrorName } from '../../src/engine/geometry/mirror-cabinet';
+import type { CabinetConfig } from '../../src/engine/core/types';
 import { cfg } from '../helpers';
 
 // ─── mirrorConfig ─────────────────────────────────────────────────────────────

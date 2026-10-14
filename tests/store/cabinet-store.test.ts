@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { useCabinetStore, detectOsDarkMode } from '../../src/store/cabinet-store';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
-import { computeDimensions } from '../../src/engine/dimensions';
-import type { DefectZone, Material, OffcutEntry } from '../../src/engine/types';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
+import { computeDimensions } from '../../src/engine/geometry/dimensions';
+import type { DefectZone, Material, OffcutEntry } from '../../src/engine/core/types';
 import { setDefectZones } from '../../src/store/worker-schedule';
 import { useCustomMaterialsStore } from '../../src/store/custom-materials-store';
 

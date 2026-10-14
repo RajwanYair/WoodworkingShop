@@ -9,7 +9,7 @@
  */
 
 import { generateBomCsv } from '../utils/bom-export';
-import type { Part, HardwareItem, Lang } from '../engine/types';
+import type { Part, HardwareItem, Lang } from '../engine/core/types';
 
 export interface BomWorkerInput {
   cabinets: { name: string; parts: Part[]; hardware: HardwareItem[]; notes?: string }[];

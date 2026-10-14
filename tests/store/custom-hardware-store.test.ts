@@ -8,7 +8,7 @@ vi.mock('zustand/middleware', async () => {
   };
 });
 
-import { HARDWARE_CATALOG_SCHEMA_VERSION, type HardwareItem } from '../../src/engine/hardware-catalog';
+import { HARDWARE_CATALOG_SCHEMA_VERSION, type HardwareItem } from '../../src/engine/hardware/hardware-catalog';
 import { useCustomHardwareStore } from '../../src/store/custom-hardware-store';
 
 const hinge: HardwareItem = {

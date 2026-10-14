@@ -2,8 +2,8 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
-import { validateConfig } from '../../engine/validation';
-import { getConfiguratorTemplateDefaults } from '../../engine/templates/index';
+import { validateConfig } from '../../engine/core/validation';
+import { getConfiguratorTemplateDefaults } from '../../engine/project/templates/index';
 import { ValidationPanel } from './ValidationPanel';
 import { SubstitutionPanel } from './SubstitutionPanel';
 import { CabinetSelector } from './CabinetSelector';
@@ -20,7 +20,7 @@ import { MeasurementHintsPanel } from './MeasurementHintsPanel';
 import { PresetsPanel } from './PresetsPanel';
 import { SaveLoadPanel } from './SaveLoadPanel';
 import { ConstraintSuggestionsPanel } from './ConstraintSuggestionsPanel';
-import type { FurnitureType, JoineryType } from '../../engine/types';
+import type { FurnitureType, JoineryType } from '../../engine/core/types';
 
 export function ConfiguratorPanel() {
   const { t, i18n } = useTranslation();

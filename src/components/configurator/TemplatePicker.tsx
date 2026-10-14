@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { TEMPLATES, type ConfiguratorCabinetTemplate } from '../../engine/templates/index';
+import { TEMPLATES, type ConfiguratorCabinetTemplate } from '../../engine/project/templates/index';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { IconX } from '../layout/Icons';

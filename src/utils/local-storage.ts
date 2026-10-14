@@ -1,4 +1,4 @@
-import type { CabinetConfig } from '../engine/types';
+import type { CabinetConfig } from '../engine/core/types';
 import { idbLoadConfigs, idbSaveConfigs } from './indexed-db-storage';
 
 export interface SavedConfig {

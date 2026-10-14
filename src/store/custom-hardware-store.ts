@@ -5,7 +5,7 @@ import {
   parseHardwareCatalog,
   type HardwareCatalogImportMode,
   type HardwareItem,
-} from '../engine/hardware-catalog';
+} from '../engine/hardware/hardware-catalog';
 
 interface CustomHardwareState {
   items: HardwareItem[];

@@ -14,12 +14,12 @@ import {
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { useToastStore } from '../../store/toast-store';
-import { generateHardware } from '../../engine/hardware';
+import { generateHardware } from '../../engine/hardware/hardware';
 import { formatNumber } from '../../i18n/format';
 import { downloadHardwareCsv } from '../../utils/bom-export';
 import { downloadAllSheetsGcode } from '../../utils/gcode-export';
 import { Stat } from './OptimizerStats';
-import type { Lang, CutSheet } from '../../engine/types';
+import type { Lang, CutSheet } from '../../engine/core/types';
 
 export type OptimizerToolbarProps = {
   sheets: CutSheet[];

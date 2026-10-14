@@ -2,9 +2,9 @@ import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
-import { getMaterial } from '../../engine/materials';
-import { calculateShelfSpacing, getShelfPresets } from '../../engine/shelf-spacing';
-import type { ShelfPresetId } from '../../engine/shelf-spacing';
+import { getMaterial } from '../../engine/materials/materials';
+import { calculateShelfSpacing, getShelfPresets } from '../../engine/geometry/shelf-spacing';
+import type { ShelfPresetId } from '../../engine/geometry/shelf-spacing';
 
 /** Collapsible panel — shelf spacing presets (Sprint 102). */
 export function ShelfSpacingPresetsPanel() {

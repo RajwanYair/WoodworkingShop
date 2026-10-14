@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import { MATERIALS, DEFAULT_CONFIG } from '../../src/engine/materials';
+import { MATERIALS, DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 import { BulkReplaceModal } from '../../src/components/optimizer/BulkReplaceModal';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 

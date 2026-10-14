@@ -1,4 +1,4 @@
-import type { LabeledPart } from '../../engine/part-labeling';
+import type { LabeledPart } from '../../engine/workshop/part-labeling';
 
 const htmlEscapes: Record<string, string> = {
   '&': '&amp;',

@@ -7,8 +7,8 @@ import {
   WebSerialUnsupportedError,
 } from '../../src/utils/webserial-cnc';
 import type { SerialPortHandle } from '../../src/utils/webserial-cnc';
-import { DEFAULT_SERIAL_PROFILE } from '../../src/engine/webserial-v2';
-import type { WebSerialProfile } from '../../src/engine/webserial-v2';
+import { DEFAULT_SERIAL_PROFILE } from '../../src/engine/workshop/webserial-v2';
+import type { WebSerialProfile } from '../../src/engine/workshop/webserial-v2';
 
 interface SerialApiStub {
   requestPort: ReturnType<typeof vi.fn<() => Promise<SerialPortHandle>>>;

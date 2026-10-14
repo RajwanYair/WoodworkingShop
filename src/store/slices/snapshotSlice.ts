@@ -8,6 +8,7 @@
  */
 import type { CabinetEntry } from '../cabinet-store';
 import { idbSaveSnapshots } from '../../utils/indexed-db-storage';
+import { browserLocalStorage } from '../../platform/storage/index';
 
 // ─── Persistence helpers ──────────────────────────────────────────────────────
 
@@ -16,7 +17,7 @@ const SNAPSHOTS_KEY = 'woodworkingshop:snapshots';
 export function loadSnapshotsFromStorage(): ProjectSnapshot[] {
   if (typeof window === 'undefined') return [];
   try {
-    const raw = window.localStorage.getItem(SNAPSHOTS_KEY);
+    const raw = browserLocalStorage.getItem(SNAPSHOTS_KEY);
     return raw ? (JSON.parse(raw) as ProjectSnapshot[]) : [];
   } catch {
     return [];
@@ -26,7 +27,7 @@ export function loadSnapshotsFromStorage(): ProjectSnapshot[] {
 export function persistSnapshots(snaps: ProjectSnapshot[]): void {
   if (typeof window === 'undefined') return;
   try {
-    window.localStorage.setItem(SNAPSHOTS_KEY, JSON.stringify(snaps));
+    browserLocalStorage.setItem(SNAPSHOTS_KEY, JSON.stringify(snaps));
   } catch {
     /* quota exceeded — ignore */
   }

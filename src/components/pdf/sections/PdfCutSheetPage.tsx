@@ -1,6 +1,6 @@
 import { Page, Text, View } from '@react-pdf/renderer';
-import type { CutSheet } from '../../../engine/types';
-import { getMaterial } from '../../../engine/materials';
+import type { CutSheet } from '../../../engine/core/types';
+import { getMaterial } from '../../../engine/materials/materials';
 import { s, C } from '../pdf-tokens';
 import type { PdfCtx } from '../pdf-i18n';
 import { PageHeader, PageFooter } from './PageChrome';

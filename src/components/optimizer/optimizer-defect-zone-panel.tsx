@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { DefectZone } from '../../engine/types';
+import type { DefectZone } from '../../engine/core/types';
 import { IconWarning } from '../layout/Icons';
 
 /** Phase 12 / Sprint 13 — per-material defect zone manager panel. */

@@ -4,8 +4,8 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n/format';
-import { calculateCrownMoulding } from '../../engine/crown-moulding';
-import type { CrownCutMethod } from '../../engine/crown-moulding';
+import { calculateCrownMoulding } from '../../engine/calculators/crown-moulding';
+import type { CrownCutMethod } from '../../engine/calculators/crown-moulding';
 
 export function CrownMouldingPanel() {
   const { t, i18n } = useTranslation();

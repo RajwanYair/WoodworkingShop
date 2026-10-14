@@ -1,4 +1,4 @@
-import type { CutSheet } from '../../engine/types';
+import type { CutSheet } from '../../engine/core/types';
 
 /** Sprint 147: compute usable free strips per sheet.
  *  Strategy: find the largest axis-aligned free rectangle by checking

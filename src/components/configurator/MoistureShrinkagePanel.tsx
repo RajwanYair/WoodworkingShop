@@ -4,8 +4,8 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatMillimeters, formatNumber } from '../../i18n/format';
-import { calculateMoistureShrinkage, MOISTURE_SHRINKAGE_LIMITS } from '../../engine/moisture-shrinkage';
-import type { MoistureShrinkageSpecies, WoodGrainDirection } from '../../engine/moisture-shrinkage';
+import { calculateMoistureShrinkage, MOISTURE_SHRINKAGE_LIMITS } from '../../engine/calculators/moisture-shrinkage';
+import type { MoistureShrinkageSpecies, WoodGrainDirection } from '../../engine/calculators/moisture-shrinkage';
 
 export function MoistureShrinkagePanel() {
   const { t, i18n } = useTranslation();

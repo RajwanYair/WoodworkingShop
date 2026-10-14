@@ -3,7 +3,8 @@
  */
 
 import { generateStepContent } from '../engine/export/step-export';
-import type { CabinetConfig, Part } from '../engine/types';
+import type { CabinetConfig, Part } from '../engine/core/types';
+import { downloadContent } from '../platform/files/index';
 
 /**
  * Generate a STEP Part 21 file for the given config + parts and trigger a
@@ -15,11 +16,5 @@ import type { CabinetConfig, Part } from '../engine/types';
  */
 export function downloadStepFile(config: CabinetConfig, parts: Part[], filename = 'cabinet'): void {
   const { content } = generateStepContent(config, parts);
-  const blob = new Blob([content], { type: 'application/x-step' });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement('a');
-  anchor.href = url;
-  anchor.download = `${filename}.stp`;
-  anchor.click();
-  URL.revokeObjectURL(url);
+  downloadContent(content, 'application/x-step', `${filename}.stp`);
 }

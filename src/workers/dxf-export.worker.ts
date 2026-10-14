@@ -11,7 +11,7 @@
  */
 
 import { cutSheetToDxf } from '../utils/dxf-export';
-import type { CutSheet } from '../engine/types';
+import type { CutSheet } from '../engine/core/types';
 
 export interface DxfWorkerInput {
   mode: 'single' | 'all';

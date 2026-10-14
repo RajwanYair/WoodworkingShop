@@ -3,9 +3,9 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SmartOptimizerPanel } from '../../src/components/optimizer/SmartOptimizerPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
-import { findOptimizations } from '../../src/engine/smart-optimizer';
+import { findOptimizations } from '../../src/engine/optimizer/smart-optimizer';
 
-vi.mock('../../src/engine/smart-optimizer', () => ({ findOptimizations: vi.fn() }));
+vi.mock('../../src/engine/optimizer/smart-optimizer', () => ({ findOptimizations: vi.fn() }));
 
 describe('SmartOptimizerPanel', () => {
   beforeEach(() => {

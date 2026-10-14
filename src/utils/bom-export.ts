@@ -1,5 +1,5 @@
-import type { Part, HardwareItem, Lang, Material } from '../engine/types';
-import { getMaterial, computePartWeightKg } from '../engine/materials';
+import type { Part, HardwareItem, Lang, Material } from '../engine/core/types';
+import { getMaterial, computePartWeightKg } from '../engine/materials/materials';
 import { triggerDownload } from './download';
 
 // ── Sprint 15 — Localized BOM column headers ──────────────────────────────────

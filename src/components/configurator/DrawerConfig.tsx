@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { HARD_LIMITS } from '../../engine/materials';
+import { HARD_LIMITS } from '../../engine/materials/materials';
 import { SliderInput } from './SliderInput';
-import type { DrawerSlideType } from '../../engine/types';
+import type { DrawerSlideType } from '../../engine/core/types';
 
 export function DrawerConfig() {
   const { t, i18n } = useTranslation();

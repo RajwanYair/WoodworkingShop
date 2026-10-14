@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
-import type { Material, MaterialCategory, Lang } from '../../engine/types';
+import type { Material, MaterialCategory, Lang } from '../../engine/core/types';
 
 const EMPTY: Omit<Material, 'key'> = {
   name: { en: '', he: '' },

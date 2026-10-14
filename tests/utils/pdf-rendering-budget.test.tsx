@@ -5,9 +5,9 @@ import { pdf } from '@react-pdf/renderer';
 import { useCabinetStore, type CabinetEntry } from '../../src/store/cabinet-store';
 import { cfg } from '../helpers';
 import { CabinetPdfDocument, type CabinetPdfEntry } from '../../src/components/pdf/CabinetPdfDocument';
-import { computeDimensions } from '../../src/engine/dimensions';
-import { computeEdgeBandingTotal, generateParts } from '../../src/engine/parts';
-import { generateHardware } from '../../src/engine/hardware';
+import { computeDimensions } from '../../src/engine/geometry/dimensions';
+import { computeEdgeBandingTotal, generateParts } from '../../src/engine/geometry/parts';
+import { generateHardware } from '../../src/engine/hardware/hardware';
 
 type BudgetConfig = {
   fullProject: {

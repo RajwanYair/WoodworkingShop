@@ -4,8 +4,8 @@ import { formatNumber } from '../../i18n/format';
 import { resolveEngineLang } from './resolve-engine-lang';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
-import { findOptimizations } from '../../engine/smart-optimizer';
-import type { OptimizationSuggestion, SmartStrategy } from '../../engine/types';
+import { findOptimizations } from '../../engine/optimizer/smart-optimizer';
+import type { OptimizationSuggestion, SmartStrategy } from '../../engine/core/types';
 import {
   IconLightbulb,
   IconRefresh,

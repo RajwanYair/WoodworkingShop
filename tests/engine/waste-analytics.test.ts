@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { analyzeWaste, formatAreaM2 } from '../../src/engine/waste';
-import type { OptimizationResult, CutSheet } from '../../src/engine/types';
+import { analyzeWaste, formatAreaM2 } from '../../src/engine/optimizer/waste/index';
+import type { OptimizationResult, CutSheet } from '../../src/engine/core/types';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 

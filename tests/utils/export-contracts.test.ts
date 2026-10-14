@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { cutSheetToDxf } from '../../src/utils/dxf-export';
 import { cutSheetToGcode } from '../../src/utils/gcode-export';
 import { generateBomCsv } from '../../src/utils/bom-export';
-import type { HardwareItem, Part } from '../../src/engine/types';
+import type { HardwareItem, Part } from '../../src/engine/core/types';
 import { mockSheet } from '../helpers';
 
 const THIS_DIR = dirname(fileURLToPath(import.meta.url));

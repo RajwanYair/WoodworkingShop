@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { fetchCommunityCatalog, communityMaterialToMaterial } from '../../utils/catalog-import';
-import type { CommunityMaterial } from '../../engine/community-catalog';
+import type { CommunityMaterial } from '../../engine/materials/community-catalog';
 
 type ImportStatus = 'idle' | 'loading' | 'done' | 'error';
 

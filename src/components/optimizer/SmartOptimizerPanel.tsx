@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
-import { findOptimizations, type SmartOptimizerOptions } from '../../engine/smart-optimizer';
+import { findOptimizations, type SmartOptimizerOptions } from '../../engine/optimizer/smart-optimizer';
 import { ComparisonView } from './ComparisonView';
 import { resolveEngineLang } from './resolve-engine-lang';
-import type { OptimizationSuggestion, SmartStrategy } from '../../engine/types';
+import type { OptimizationSuggestion, SmartStrategy } from '../../engine/core/types';
 
 const ALL_STRATEGIES: SmartStrategy[] = [
   'reduce-depth',

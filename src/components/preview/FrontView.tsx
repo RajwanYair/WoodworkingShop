@@ -1,4 +1,4 @@
-import type { CabinetConfig, DerivedDimensions } from '../../engine/types';
+import type { CabinetConfig, DerivedDimensions } from '../../engine/core/types';
 import { S } from './preview-constants';
 import { ViewBox, PartRect, DimLine, DoorsOverlay } from './preview-svg-parts';
 import type { TooltipHandlers } from './preview-svg-parts';

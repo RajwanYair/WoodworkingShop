@@ -12,10 +12,10 @@ import {
   PLUGIN_API_VERSION,
   PLUGIN_CONTRACT,
   type CabinetPlannerPlugin,
-} from '../../src/engine/plugin';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
-import { deactivatePlugin, getRegistryEntry, registerPluginV2 } from '../../src/engine/plugin-v2';
-import type { Part, ValidationIssue } from '../../src/engine/types';
+} from '../../src/engine/core/plugin';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
+import { deactivatePlugin, getRegistryEntry, registerPluginV2 } from '../../src/engine/core/plugin-v2';
+import type { Part, ValidationIssue } from '../../src/engine/core/types';
 
 const mockPart: Part = {
   id: 'P01',

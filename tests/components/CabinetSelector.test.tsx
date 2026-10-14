@@ -9,7 +9,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { CabinetSelector } from '../../src/components/configurator/CabinetSelector';
 import { useCabinetStore } from '../../src/store/cabinet-store';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 import { generateParts } from '../../src/engine';
 
 function seedSingle() {

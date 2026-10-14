@@ -1,0 +1,100 @@
+import { describe, it, expect } from 'vitest';
+import WOODWORKCALC_TAPER_ORACLE from '../../fixtures/oracles/woodworkcalc-taper-angle.json';
+import { calculateTaperJig } from '../../../src/engine/calculators/taper-jig';
+
+describe('calculateTaperJig', () => {
+  const BASE = {
+    workpieceLengthMm: 700,
+    startWidthMm: 70,
+    endWidthMm: 40,
+    taperedFaces: 1 as const,
+  };
+
+  it('computes jig offset as total removal for 1-face taper', () => {
+    const r = calculateTaperJig(BASE);
+    expect(r.jigOffsetMm).toBeCloseTo(30, 1);
+    expect(r.materialRemovedPerFaceMm).toBeCloseTo(30, 1);
+    expect(r.taperedFaces).toBe(1);
+  });
+
+  it('computes jig offset as half removal per face for 2-face taper', () => {
+    const r = calculateTaperJig({ ...BASE, taperedFaces: 2 });
+    expect(r.jigOffsetMm).toBeCloseTo(15, 1);
+    expect(r.materialRemovedPerFaceMm).toBeCloseTo(15, 1);
+    expect(r.taperedFaces).toBe(2);
+  });
+
+  it('computes taper angle correctly', () => {
+    const r = calculateTaperJig(BASE);
+    const expected = Math.atan(30 / 700) * (180 / Math.PI);
+    expect(r.taperAngleDeg).toBeCloseTo(expected, 1);
+  });
+
+  it('computes taper per foot correctly', () => {
+    const r = calculateTaperJig(BASE);
+    const expected = (30 / 700) * 304.8;
+    expect(r.taperPerFootMm).toBeCloseTo(expected, 1);
+  });
+
+  it.each([
+    { taperedFaces: 1 as const, angleDeg: 2.45, offsetMm: 30, perFootMm: 13.1 },
+    { taperedFaces: 2 as const, angleDeg: 1.23, offsetMm: 15, perFootMm: 6.5 },
+  ])(
+    'matches the dimensional oracle for $taperedFaces tapered face(s)',
+    ({ taperedFaces, angleDeg, offsetMm, perFootMm }) => {
+      const result = calculateTaperJig({ ...BASE, taperedFaces });
+
+      expect(result.taperAngleDeg).toBe(angleDeg);
+      expect(result.jigOffsetMm).toBe(offsetMm);
+      expect(result.materialRemovedPerFaceMm).toBe(offsetMm);
+      expect(result.taperPerFootMm).toBe(perFootMm);
+    },
+  );
+
+  it('matches the published WoodWorkCalc one-sided taper example', () => {
+    const result = calculateTaperJig({
+      workpieceLengthMm: WOODWORKCALC_TAPER_ORACLE.example.workpieceLengthMm,
+      startWidthMm: WOODWORKCALC_TAPER_ORACLE.example.startWidthMm,
+      endWidthMm: WOODWORKCALC_TAPER_ORACLE.example.endWidthMm,
+      taperedFaces: 1,
+    });
+
+    expect(result.jigOffsetMm).toBe(WOODWORKCALC_TAPER_ORACLE.jigOffsetMm);
+    expect(result.taperAngleDeg).toBe(WOODWORKCALC_TAPER_ORACLE.roundedTaperAngleDeg);
+  });
+
+  it('defaults to 1 tapered face when taperedFaces is omitted', () => {
+    const r = calculateTaperJig({
+      workpieceLengthMm: 500,
+      startWidthMm: 60,
+      endWidthMm: 35,
+    });
+    expect(r.taperedFaces).toBe(1);
+    expect(r.jigOffsetMm).toBeCloseTo(25, 1);
+  });
+
+  it('handles a very shallow taper (small angle)', () => {
+    const r = calculateTaperJig({
+      workpieceLengthMm: 1000,
+      startWidthMm: 50,
+      endWidthMm: 48,
+    });
+    expect(r.taperAngleDeg).toBeGreaterThan(0);
+    expect(r.taperAngleDeg).toBeLessThan(1);
+  });
+
+  describe('error guards', () => {
+    it.each([
+      ['zero workpieceLength', { ...BASE, workpieceLengthMm: 0 }],
+      ['zero startWidth', { ...BASE, startWidthMm: 0 }],
+      ['zero endWidth', { ...BASE, endWidthMm: 0 }],
+      ['endWidth equal to startWidth', { ...BASE, endWidthMm: 70 }],
+      ['endWidth greater than startWidth', { ...BASE, endWidthMm: 80 }],
+      ['NaN workpieceLength', { ...BASE, workpieceLengthMm: Number.NaN }],
+      ['infinite startWidth', { ...BASE, startWidthMm: Number.POSITIVE_INFINITY }],
+      ['NaN endWidth', { ...BASE, endWidthMm: Number.NaN }],
+    ])('throws RangeError for %s', (_, input) => {
+      expect(() => calculateTaperJig(input)).toThrow(RangeError);
+    });
+  });
+});

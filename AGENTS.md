@@ -4,7 +4,7 @@
 
 ## Release Status
 
-- v5.36.0 (Phase 81: toolchain modernisation) is the release candidate pending tag-workflow verification. Next: v5.37.0, Phase 82 (Sprints 426-434).
+- v5.36.0 (Phase 81: toolchain modernisation) is released. Next: v5.37.0, Phase 82 (Sprints 426-434).
 - Phases 81-85 cover toolchain modernization, architecture, UX, documentation and optional on-device intelligence; see [ROADMAP.md](ROADMAP.md) for contracts and release order.
 - Completed sprint evidence: [docs/SPRINT-HISTORY.md](docs/SPRINT-HISTORY.md). Release notes: [CHANGELOG.md](CHANGELOG.md).
 

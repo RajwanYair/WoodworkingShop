@@ -4,7 +4,7 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatMillimeters, formatNumber } from '../../i18n/format';
-import { calculateKerfBending, type KerfMaterial } from '../../engine/kerf-bending';
+import { calculateKerfBending, type KerfMaterial } from '../../engine/calculators/kerf-bending';
 
 const MATERIALS: KerfMaterial[] = ['plywood', 'mdf', 'softwood', 'hardwood'];
 

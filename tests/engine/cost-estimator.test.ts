@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import * as fc from 'fast-check';
 import { propertyRunOptions } from '../property-seeds';
-import { estimateCost } from '../../src/engine/cost-estimator';
-import type { OptimizationResult } from '../../src/engine/types';
+import { estimateCost } from '../../src/engine/costing/cost-estimator';
+import type { OptimizationResult } from '../../src/engine/core/types';
 import { mockSheet } from '../helpers';
 
 function mockOptimization(overrides: Partial<OptimizationResult> = {}): OptimizationResult {

@@ -1,6 +1,6 @@
 import { useState, useMemo, useRef, useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { ValidationIssue, ValidationSeverity, CabinetConfig } from '../../engine/types';
+import type { ValidationIssue, ValidationSeverity, CabinetConfig } from '../../engine/core/types';
 import { IconWarning, IconInfo, IconX } from '../layout/Icons';
 import { useCabinetStore } from '../../store/cabinet-store';
 

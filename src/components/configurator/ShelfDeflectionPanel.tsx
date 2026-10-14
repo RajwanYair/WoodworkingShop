@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatMillimeters, formatNumber } from '../../i18n/format';
-import { calculateDeflection, type LoadType, type ShelfMaterial } from '../../engine/shelf-deflection';
+import { calculateDeflection, type LoadType, type ShelfMaterial } from '../../engine/calculators/shelf-deflection';
 
 const MATERIALS: ShelfMaterial[] = ['solidWood', 'plywood', 'mdf', 'particleboard', 'melamine'];
 const LOAD_TYPES: LoadType[] = ['uniform', 'center', 'combined'];

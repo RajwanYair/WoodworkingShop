@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { buildGrainReport } from '../../engine/grain-report';
-import type { GrainMaterialGroup } from '../../engine/grain-report';
+import { buildGrainReport } from '../../engine/optimizer/grain-report';
+import type { GrainMaterialGroup } from '../../engine/optimizer/grain-report';
 
 function GrainBar({ constrained, total }: { constrained: number; total: number }) {
   const pct = total > 0 ? Math.round((constrained / total) * 100) : 0;

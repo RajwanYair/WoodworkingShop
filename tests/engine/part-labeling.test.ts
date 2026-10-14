@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { assignPartLabels, buildPartLabelMap, formatPartLabelsAsCsv } from '../../src/engine/part-labeling';
-import type { Part } from '../../src/engine/types';
+import { assignPartLabels, buildPartLabelMap, formatPartLabelsAsCsv } from '../../src/engine/workshop/part-labeling';
+import type { Part } from '../../src/engine/core/types';
 
 function makePart(overrides: Partial<Part> = {}): Part {
   return {

@@ -22,32 +22,22 @@
  */
 
 import { utf8Encode } from './browser-compat';
-import { DEFAULT_SERIAL_PROFILE } from '../engine/webserial-v2';
-import type { WebSerialProfile } from '../engine/webserial-v2';
+import { getGrantedSerialPorts, isWebSerialSupported, requestSerialPort } from '../platform/device/index';
+import type { SerialPortHandle, SerialPortInfo } from '../platform/device/index';
+import { DEFAULT_SERIAL_PROFILE } from '../engine/workshop/webserial-v2';
+import type { WebSerialProfile } from '../engine/workshop/webserial-v2';
 
 // ── Feature detection ─────────────────────────────────────────────────────────
 
 /** True when the Web Serial API is available in this browser context. */
-export const WEB_SERIAL_SUPPORTED: boolean = typeof navigator !== 'undefined' && 'serial' in navigator;
+export const WEB_SERIAL_SUPPORTED: boolean = isWebSerialSupported();
 
 /** Runtime check — re-evaluates on every call so stubs in tests are honoured. */
 export function isWebSerialAvailable(): boolean {
-  return typeof navigator !== 'undefined' && (navigator as Navigator & { serial?: unknown }).serial != null;
+  return isWebSerialSupported();
 }
 
-/** Browser serial-port handle used by the CNC transport adapter. */
-export interface SerialPortHandle {
-  open(options: {
-    baudRate: number;
-    dataBits?: number;
-    stopBits?: number;
-    parity?: string;
-    bufferSize?: number;
-  }): Promise<void>;
-  close(): Promise<void>;
-  readonly writable: WritableStream<Uint8Array> | null;
-  readonly readable: ReadableStream<Uint8Array> | null;
-}
+export type { SerialPortHandle } from '../platform/device/index';
 
 // ── Error types ───────────────────────────────────────────────────────────────
 
@@ -165,15 +155,7 @@ export async function openSerialPort(options: SerialOptions = {}): Promise<CncSe
  * Returns an empty array when the API is unsupported.
  */
 export async function listGrantedPorts(): Promise<SerialPortInfo[]> {
-  if (!isWebSerialAvailable()) return [];
-  const ports = await (navigator as Navigator & { serial: SerialApi }).serial.getPorts();
-  return ports.map((p) => {
-    try {
-      return p.getInfo();
-    } catch {
-      return {};
-    }
-  });
+  return getGrantedSerialPorts();
 }
 
 /**
@@ -193,15 +175,7 @@ export function getDefaultBaudRate(controller: CncController): number {
  */
 export async function connectToMachine(profile: WebSerialProfile): Promise<SerialPortHandle> {
   if (!isWebSerialAvailable()) throw new WebSerialUnsupportedError();
-  const port = await (navigator as Navigator & { serial: SerialApi }).serial.requestPort();
-  await port.open({
-    baudRate: profile.baudRate,
-    dataBits: profile.dataBits ?? 8,
-    stopBits: profile.stopBits ?? 1,
-    parity: profile.parity ?? 'none',
-    bufferSize: profile.bufferSize ?? 4096,
-  });
-  return port;
+  return requestSerialPort(profile);
 }
 
 /**
@@ -248,21 +222,4 @@ export async function disconnectFromMachine(port: SerialPortHandle): Promise<voi
   } catch {
     // The browser may already have closed the port.
   }
-}
-
-// ── Minimal Web Serial API typings (not yet in @types/w3c-web-serial everywhere) ─
-
-interface SerialPort extends SerialPortHandle {
-  readonly readable: ReadableStream<Uint8Array>;
-  getInfo(): SerialPortInfo;
-}
-
-interface SerialPortInfo {
-  usbVendorId?: number;
-  usbProductId?: number;
-}
-
-interface SerialApi {
-  requestPort(): Promise<SerialPort>;
-  getPorts(): Promise<SerialPort[]>;
 }

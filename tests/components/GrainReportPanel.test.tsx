@@ -2,7 +2,7 @@ import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { GrainReportPanel } from '../../src/components/optimizer/GrainReportPanel';
-import type { Part } from '../../src/engine/types';
+import type { Part } from '../../src/engine/core/types';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 
 let originalParts: Part[];

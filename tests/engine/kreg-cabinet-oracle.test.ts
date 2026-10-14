@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import KREG_LOWER_CABINET_ORACLE from '../fixtures/oracles/kreg-lower-cabinet.json';
-import { computeDimensions } from '../../src/engine/dimensions';
-import { optimizeCutSheets } from '../../src/engine/cut-optimizer';
-import { generateParts } from '../../src/engine/parts';
+import { computeDimensions } from '../../src/engine/geometry/dimensions';
+import { optimizeCutSheets } from '../../src/engine/optimizer/cut-optimizer';
+import { generateParts } from '../../src/engine/geometry/parts';
 import { cfg, makeMaterial } from '../helpers';
 
 describe('Kreg lower-cabinet independent oracle', () => {

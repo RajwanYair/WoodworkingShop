@@ -12,7 +12,7 @@ import {
   URL_REF_THRESHOLD,
   REF_KEY_LENGTH,
 } from '../../src/utils/url-state';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 import { cfg } from '../helpers';
 import * as idbStorage from '../../src/utils/indexed-db-storage';
 

@@ -1,0 +1,135 @@
+import { describe, expect, it } from 'vitest';
+import * as fc from 'fast-check';
+import { propertyRunOptions } from '../../property-seeds';
+import {
+  buildParameterDependencyGraph,
+  evaluateNamedParameters,
+  extractExpressionDependencies,
+  parameterDependencyGraphToMermaid,
+} from '../../../src/engine/core/parameter-expressions';
+
+describe('extractExpressionDependencies', () => {
+  it.each([
+    { expression: 'width + depth * 2', expected: ['width', 'depth'] },
+    { expression: 'Math.max(width, depth)', expected: ['width', 'depth'] },
+    { expression: 'height + height + width', expected: ['height', 'width'] },
+  ])('returns unique dependencies for "$expression"', ({ expression, expected }) => {
+    expect(extractExpressionDependencies(expression)).toEqual(expected);
+  });
+});
+
+describe('buildParameterDependencyGraph', () => {
+  it('creates dependency edges from dependency to parameter', () => {
+    const graph = buildParameterDependencyGraph({
+      panelArea: 'width * height',
+      totalArea: 'panelArea * count',
+      offcutRatio: '(waste / totalArea) * 100',
+    });
+
+    expect(graph.nodes).toEqual(['panelArea', 'totalArea', 'offcutRatio']);
+    expect(graph.edges).toEqual([
+      { from: 'panelArea', to: 'totalArea' },
+      { from: 'totalArea', to: 'offcutRatio' },
+    ]);
+  });
+
+  it('renders the graph as mermaid flowchart text', () => {
+    const graph = buildParameterDependencyGraph({ a: '1', b: 'a + 2' });
+    const mermaid = parameterDependencyGraphToMermaid(graph);
+
+    expect(mermaid).toContain('flowchart LR');
+    expect(mermaid).toContain('a[a]');
+    expect(mermaid).toContain('a --> b');
+  });
+});
+
+describe('evaluateNamedParameters', () => {
+  it('evaluates parameters in topological order and returns named values only', () => {
+    const result = evaluateNamedParameters(
+      {
+        panelArea: 'width * height',
+        totalArea: 'panelArea * count',
+        wastePercent: '(waste / totalArea) * 100',
+      },
+      {
+        width: 600,
+        height: 720,
+        count: 2,
+        waste: 86400,
+      },
+    );
+
+    expect(result.order).toEqual(['panelArea', 'totalArea', 'wastePercent']);
+    expect(result.values).toEqual({
+      panelArea: 432000,
+      totalArea: 864000,
+      wastePercent: 10,
+    });
+  });
+
+  it('evaluates supported Math functions through the safe arithmetic parser', () => {
+    const result = evaluateNamedParameters({ width: 'Math.max(base, 640)' }, { base: 600 });
+    expect(result.values.width).toBe(640);
+  });
+
+  it('evaluates generated acyclic chains independently of definition insertion order', () => {
+    fc.assert(
+      fc.property(
+        fc.integer({ min: 1, max: 1000 }),
+        fc.array(fc.integer({ min: 1, max: 100 }), { minLength: 1, maxLength: 8 }),
+        (base, increments) => {
+          const definitions = Object.fromEntries(
+            increments
+              .map((increment, index) => [
+                `parameter${index}`,
+                index === 0 ? `base + ${increment}` : `parameter${index - 1} + ${increment}`,
+              ])
+              .reverse(),
+          );
+          const expectedOrder = increments.map((_, index) => `parameter${index}`);
+          const expectedFinalValue = base + increments.reduce((sum, increment) => sum + increment, 0);
+          const result = evaluateNamedParameters(definitions, { base });
+
+          expect(result.order).toEqual(expectedOrder);
+          expect(result.values[expectedOrder.at(-1)!]).toBe(expectedFinalValue);
+          expect(Object.keys(result.values)).toEqual(Object.keys(definitions));
+        },
+      ),
+      propertyRunOptions('tests/engine/parameter-expressions.test.ts', 200),
+    );
+  });
+
+  it.each<{
+    definitions: Record<string, string>;
+    values: Record<string, number>;
+    expected: RegExp;
+  }>([
+    {
+      definitions: { a: 'b + 1', b: 'a + 1' },
+      values: {},
+      expected: /cyclic parameter dependencies/i,
+    },
+    {
+      definitions: { panelArea: 'width * height' },
+      values: { width: 600 },
+      expected: /unknown dependency height/i,
+    },
+    {
+      definitions: { dangerous: 'globalThis.alert(1)' },
+      values: {},
+      expected: /unknown dependency globalThis/i,
+    },
+    {
+      definitions: { invalidMath: '1 / 0' },
+      values: {},
+      expected: /non-finite result/i,
+    },
+    {
+      definitions: { invalidMath: 'Math.sqrt(9)' },
+      values: {},
+      expected: /Math.sqrt is not permitted/i,
+    },
+  ])('throws on invalid definitions', ({ definitions, values, expected }) => {
+    expect(() => evaluateNamedParameters(definitions, values)).toThrow(expected);
+  });
+});

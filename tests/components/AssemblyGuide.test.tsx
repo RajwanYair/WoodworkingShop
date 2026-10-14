@@ -12,10 +12,10 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { AssemblyGuide } from '../../src/components/assembly/AssemblyGuide';
 import { useCabinetStore } from '../../src/store/cabinet-store';
-import { DEFAULT_CONFIG } from '../../src/engine/materials';
-import { generateAssemblySteps } from '../../src/engine/assembly';
-import { generateParts } from '../../src/engine/parts';
-import { generateHardware } from '../../src/engine/hardware';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
+import { generateAssemblySteps } from '../../src/engine/assembly/assembly';
+import { generateParts } from '../../src/engine/geometry/parts';
+import { generateHardware } from '../../src/engine/hardware/hardware';
 
 function seedStore() {
   const config = { ...DEFAULT_CONFIG };

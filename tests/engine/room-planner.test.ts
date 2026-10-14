@@ -11,8 +11,8 @@ import {
   SNAP_THRESHOLD_MM,
   MIN_ROOM_DIMENSION_MM,
   MAX_ROOM_DIMENSION_MM,
-} from '../../src/engine/room-planner';
-import type { RoomLayout, RoomCabinet } from '../../src/engine/types';
+} from '../../src/engine/room/room-planner';
+import type { RoomLayout, RoomCabinet } from '../../src/engine/core/types';
 
 // ─── Test factory ─────────────────────────────────────────────────────────────
 

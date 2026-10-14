@@ -9,8 +9,8 @@ import {
   GLTF_SCHEMA_VERSION,
   IFC_SCHEMA_VERSION,
   GLTF_GENERATOR,
-} from '../../src/engine/gltf-ifc-model';
-import type { Part } from '../../src/engine/types';
+} from '../../src/engine/export/gltf-ifc-model';
+import type { Part } from '../../src/engine/core/types';
 import { cfg } from '../helpers';
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────────

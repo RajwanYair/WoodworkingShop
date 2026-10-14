@@ -1,6 +1,6 @@
-import { estimateProjectTime } from '../engine/time-estimator';
-import type { ProjectTask } from '../engine/time-estimator';
-import type { HardwareItem, Part } from '../engine/types';
+import { estimateProjectTime } from '../engine/assembly/time-estimator';
+import type { ProjectTask } from '../engine/assembly/time-estimator';
+import type { HardwareItem, Part } from '../engine/core/types';
 
 export function estimateBuildTimeForProject(
   parts: readonly Part[],

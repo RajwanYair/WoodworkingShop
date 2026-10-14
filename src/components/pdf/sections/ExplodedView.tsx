@@ -1,6 +1,6 @@
 import { Text, View } from '@react-pdf/renderer';
-import type { CabinetConfig, DerivedDimensions, Lang } from '../../../engine/types';
-import { getMaterial } from '../../../engine/materials';
+import type { CabinetConfig, DerivedDimensions, Lang } from '../../../engine/core/types';
+import { getMaterial } from '../../../engine/materials/materials';
 import { pdfI18n } from '../pdf-i18n';
 import { C } from '../pdf-tokens';
 

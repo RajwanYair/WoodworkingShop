@@ -4,7 +4,7 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatMillimeters, formatNumber } from '../../i18n/format';
-import { calculateSplineJoint } from '../../engine/spline-joint';
+import { calculateSplineJoint } from '../../engine/joinery/spline-joint';
 
 export function SplineJointPanel() {
   const { t, i18n } = useTranslation();
