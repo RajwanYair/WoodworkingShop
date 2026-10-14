@@ -1,8 +1,32 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { useState } from 'react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { GcodePreviewModal } from '../../src/components/optimizer/GcodePreviewModal';
 import { makeCutRect, makeCutSheet } from '../helpers';
+
+let originalShowModal: PropertyDescriptor | undefined;
+let showModalMock: ReturnType<typeof vi.fn>;
+
+beforeEach(() => {
+  originalShowModal = Object.getOwnPropertyDescriptor(HTMLDialogElement.prototype, 'showModal');
+  showModalMock = vi.fn(function (this: HTMLDialogElement) {
+    this.setAttribute('open', '');
+    within(this).getAllByRole('button', { name: 'Dismiss' })[1]?.focus();
+  });
+  Object.defineProperty(HTMLDialogElement.prototype, 'showModal', {
+    configurable: true,
+    value: showModalMock,
+  });
+});
+
+afterEach(() => {
+  if (originalShowModal) {
+    Object.defineProperty(HTMLDialogElement.prototype, 'showModal', originalShowModal);
+  } else {
+    Reflect.deleteProperty(HTMLDialogElement.prototype, 'showModal');
+  }
+});
 
 function renderModal(sheet = makeCutSheet()) {
   const onClose = vi.fn();
@@ -16,6 +40,58 @@ async function openCncOptions(user: ReturnType<typeof userEvent.setup>) {
 }
 
 describe('GcodePreviewModal', () => {
+  it('opens a native dialog and restores focus to its trigger when dismissed', async () => {
+    const user = userEvent.setup();
+
+    function ModalHarness() {
+      const [isOpen, setIsOpen] = useState(false);
+      return (
+        <>
+          <button onClick={() => setIsOpen(true)}>Open G-code preview</button>
+          {isOpen && (
+            <GcodePreviewModal
+              sheet={makeCutSheet()}
+              filename="cabinet.nc"
+              onClose={() => setIsOpen(false)}
+              onDownload={vi.fn()}
+            />
+          )}
+        </>
+      );
+    }
+
+    render(<ModalHarness />);
+    const trigger = screen.getByRole('button', { name: 'Open G-code preview' });
+    await user.click(trigger);
+
+    const dialog = screen.getByRole('dialog', { name: 'G-code Toolpath Preview' });
+    expect(dialog.tagName).toBe('DIALOG');
+    expect(showModalMock).toHaveBeenCalledOnce();
+
+    await user.click(screen.getAllByRole('button', { name: 'Dismiss' })[1]);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+  });
+
+  it('closes when the native dialog receives a cancel event', () => {
+    const { onClose } = renderModal();
+    const dialog = screen.getByRole('dialog', { name: 'G-code Toolpath Preview' });
+    const cancelEvent = new Event('cancel', { cancelable: true });
+
+    fireEvent(dialog, cancelEvent);
+
+    expect(onClose).toHaveBeenCalledOnce();
+    expect(cancelEvent.defaultPrevented).toBe(true);
+  });
+
+  it('closes when the native dialog backdrop is clicked', () => {
+    const { onClose } = renderModal();
+
+    fireEvent.click(screen.getAllByRole('button', { name: 'Dismiss' })[0]);
+
+    expect(onClose).toHaveBeenCalledOnce();
+  });
+
   it('applies a machine preset and downloads the regenerated G-code', async () => {
     const user = userEvent.setup();
     const onClose = vi.fn();
