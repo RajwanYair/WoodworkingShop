@@ -1,0 +1,18 @@
+{
+  "title": "Rechner für Verleimungszeiten",
+  "glueType": "Klebstoffart",
+  "temperature": "Temperatur",
+  "humidity": "Relative Luftfeuchtigkeit",
+  "jointArea": "Verbindungsfläche",
+  "jointCount": "Anzahl der Verbindungen",
+  "openTime": "Offene Zeit",
+  "clampTime": "Spannzeit",
+  "cureTime": "Vollständige Aushärtezeit",
+  "recommendedPsi": "Empfohlener Pressdruck",
+  "clampsNeeded": "Benötigte Zwingen",
+  "pva": "PVA (Gelb-/Weißleim)",
+  "polyurethane": "Polyurethanleim",
+  "epoxy": "Epoxidharz",
+  "hideGlue": "Hautleim",
+  "caGlue": "CA (Sekundenkleber)"
+}

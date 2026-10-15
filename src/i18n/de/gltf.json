@@ -1,0 +1,11 @@
+{
+  "title": "3D-Export",
+  "exportGltf": "glTF 2.0 exportieren",
+  "exportIfc": "IFC 4.3 exportieren",
+  "meshCount": "Netze",
+  "nodeCount": "Knoten",
+  "entityCount": "Entitäten",
+  "schemaVersion": "Schemaversion",
+  "noData": "Keine Teile zum Exportieren.",
+  "exportSize": "Geschätzte Exportgröße"
+}

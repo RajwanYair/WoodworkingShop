@@ -11,7 +11,7 @@ vi.mock('zustand/middleware', async () => {
   };
 });
 
-import { RoomLayoutView } from '../../src/components/layout/RoomLayoutView';
+import { RoomLayoutView } from '../../src/features/workspace/RoomLayoutView';
 import { useRoomStore } from '../../src/store/room-store';
 
 const LAYOUT = {

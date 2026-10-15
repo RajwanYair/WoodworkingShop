@@ -1,0 +1,11 @@
+{
+  "title": "Teileliste",
+  "id": "Kennung",
+  "name": "Teilename",
+  "qty": "Mge.",
+  "material": "Werkstoff",
+  "length": "Länge",
+  "width": "Breite",
+  "thickness": "Dicke",
+  "edge": "Kante"
+}

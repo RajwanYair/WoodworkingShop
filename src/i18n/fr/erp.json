@@ -1,0 +1,13 @@
+{
+  "title": "Export ERP / MRP",
+  "system": "Système cible",
+  "sap": "SAP (IDOC CSV)",
+  "oracle": "Oracle SCM",
+  "webhook": "Webhook générique",
+  "export": "Exporter vers ERP",
+  "projectName": "Nom du projet",
+  "schemaVersion": "Version du schéma",
+  "lineCount": "Lignes",
+  "totalCost": "Coût total",
+  "noItems": "Aucune ligne à exporter"
+}

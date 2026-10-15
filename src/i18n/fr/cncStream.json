@@ -1,0 +1,14 @@
+{
+  "title": "Flux CNC v2",
+  "startStream": "Démarrer le flux",
+  "pauseStream": "Mettre en pause",
+  "resumeStream": "Reprendre",
+  "cancelStream": "Annuler",
+  "retryLine": "Réessayer la ligne",
+  "progress": "Progression",
+  "linesRemaining": "Lignes restantes",
+  "estimatedTime": "Temps estimé",
+  "sessionState": "État de la session",
+  "errorLines": "Lignes en erreur",
+  "noErrors": "Aucune erreur."
+}

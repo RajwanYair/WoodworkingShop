@@ -1,0 +1,9 @@
+{
+  "title": "التعاون",
+  "connected": "متصل",
+  "offline": "غير متصل",
+  "peers": "{{count}} مشارك",
+  "peers_other": "{{count}} مشاركين",
+  "you": "أنت",
+  "conflict": "تم حل التعارض"
+}

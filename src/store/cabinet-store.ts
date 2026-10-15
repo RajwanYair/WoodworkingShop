@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { browserLocalStorage } from '../platform/storage/index';
+import { browserLocalStorage, createLocalStorageAdapter } from '../platform/storage/index';
 import type { CabinetConfig, Part, Material } from '../engine/core/types';
 import { DEFAULT_CONFIG } from '../engine/materials/materials';
 import { computeDimensions } from '../engine/geometry/dimensions';
@@ -9,15 +9,8 @@ import { optimizeCutSheets } from '../engine/optimizer/cut-optimizer';
 import { estimateCost } from '../engine/costing/cost-estimator';
 import { generateAssemblySteps } from '../engine/assembly/assembly';
 import { createJsonMemo } from '../engine/core/memo';
-import {
-  readActiveCabinetIndexFromUrl,
-  readConfigFromUrl,
-  pushConfigToUrl,
-  readProjectNameFromUrl,
-} from '../utils/url-state';
+import { readActiveCabinetIndexFromUrl, readConfigFromUrl, readProjectNameFromUrl } from '../utils/url-state';
 import { idbLoadSnapshots } from '../utils/indexed-db-storage';
-import { pluginEventBus } from '../engine/core/plugin';
-import { mirrorConfig, mirrorName } from '../engine/geometry/mirror-cabinet';
 import {
   initWorkerSchedule,
   setRotationLocks,
@@ -41,14 +34,16 @@ import {
 import { createOptimizerSettingsSlice, type OptimizerSettingsSlice } from './slices/optimizerSettingsSlice';
 import { createNamedExpressionsSlice, type NamedExpressionsSlice } from './slices/namedExpressionsSlice';
 import type { CabinetEntry } from './slices/cabinetTypes';
-import {
-  appendCabinetPatch,
-  applyCabinetPatch,
-  createCabinetPatch,
-  MAX_CABINET_HISTORY,
-} from './slices/cabinetHistory';
+import { appendCabinetPatch } from './slices/cabinetHistory';
+import { createCabinetsSlice } from './slices/cabinetsSlice';
 import { createProjectSlice, type ProjectSlice } from './slices/projectSlice';
 import { createCatalogSlice, type CatalogSlice } from './slices/catalogSlice';
+import {
+  createCabinetSessionRecord,
+  readCabinetSessionRecord,
+  readLegacyCabinetSession,
+  type CabinetSessionSnapshot,
+} from './slices/sessionPersistence';
 import type { CabinetState } from './store-types';
 import { getCustomMaterials, useCustomMaterialsStore } from './custom-materials-store';
 
@@ -63,41 +58,22 @@ export { detectOsDarkModeUi as detectOsDarkMode } from './slices/uiSlice';
 
 // v3.44.0 — Auto-save: snapshot of project state persisted across page refreshes.
 const SESSION_KEY = 'woodworkingshop:session';
-interface SessionSnapshot {
-  cabinets: CabinetEntry[];
-  activeCabinetIndex: number;
-  projectName: string;
-  /** Sprint 14 — project-level notes, optional so old sessions deserialise safely. */
-  projectNotes?: string;
-  sawKerf: number;
-  autoCoNest?: boolean;
-  materialPriceOverrides: Record<string, number>;
-  edgeBandingRate: number;
-  hardwarePriceOverrides: Record<string, number>;
-  hardwareQtyOverrides: Record<string, number>;
-  sheetSizeOverrides: Record<string, { width: number; length: number }>;
-  labourRate: number;
-  labourHours: number;
-  finishCost: number;
-  /** Sprint 16 — per-part rotation lock map (partId → true). */
-  rotationLockedPartIds?: Record<string, boolean>;
-}
-function loadSession(): SessionSnapshot | null {
+const sessionAdapter = createLocalStorageAdapter(browserLocalStorage);
+
+function loadSession(): CabinetSessionSnapshot | null {
   if (typeof window === 'undefined') return null;
   try {
-    const raw = browserLocalStorage.getItem(SESSION_KEY);
-    return raw ? (JSON.parse(raw) as SessionSnapshot) : null;
+    const raw = sessionAdapter.readSync<unknown>(SESSION_KEY);
+    if (raw === undefined) return null;
+    return readCabinetSessionRecord(raw) ?? readLegacyCabinetSession(raw);
   } catch {
     return null;
   }
 }
-function saveSession(snap: SessionSnapshot): void {
+function saveSession(snap: CabinetSessionSnapshot): void {
   if (typeof window === 'undefined') return;
-  try {
-    browserLocalStorage.setItem(SESSION_KEY, JSON.stringify(snap));
-  } catch {
-    /* quota exceeded — ignore */
-  }
+  // Keep the legacy flat fields so existing readers keep working, and add versioned slices.
+  sessionAdapter.set(SESSION_KEY, { ...snap, ...createCabinetSessionRecord(snap) }).catch(() => undefined);
 }
 
 export type { CabinetEntry } from './slices/cabinetTypes';
@@ -199,34 +175,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
   // v3.21.0 — Inject `set` and `get` so worker-schedule callbacks can update state.
   initWorkerSchedule(set as (partial: Partial<CabinetState>) => void, () => get());
 
-  let historyGroupStart: CabinetEntry[] | null = null;
-
-  function historyUpdate(state: CabinetState, cabinets: CabinetEntry[]) {
-    if (historyGroupStart !== null) {
-      return { _past: state._past, _future: state._future, canUndo: state.canUndo, canRedo: state.canRedo };
-    }
-    return {
-      _past: appendCabinetPatch(state._past, state.cabinets, cabinets),
-      _future: [],
-      canUndo: true,
-      canRedo: false,
-    };
-  }
-
-  function endHistoryGroup(): void {
-    const previous = historyGroupStart;
-    if (previous === null) return;
-    historyGroupStart = null;
-    const state = get();
-    const patch = createCabinetPatch(previous, state.cabinets);
-    if (patch.changes.length === 0) return;
-    set({
-      _past: appendCabinetPatch(state._past, previous, state.cabinets),
-      _future: [],
-      canUndo: true,
-      canRedo: false,
-    });
-  }
+  const cabinetsSlice = createCabinetsSlice(set, () => get(), deriveBaseProject);
 
   const urlPatch = readConfigFromUrl();
   // v3.44.0 — Restore session from localStorage when present.
@@ -286,7 +235,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
   }
   // Called by SnapshotSlice restoreSnapshot so the config slice handles undo history.
   function handleRestoreSnapshot(cabinets: CabinetEntry[]) {
-    endHistoryGroup();
+    cabinetsSlice.endHistoryGroup();
     const state = get();
     const migrated = cabinets.map((c) => ({ ...c, config: { ...DEFAULT_CONFIG, ...c.config } }));
     const past = appendCabinetPatch(state._past, state.cabinets, migrated);
@@ -388,346 +337,7 @@ export const useCabinetStore = create<CabinetState>((set, get) => {
     // ── Named expressions slice ────────────────────────────────────────────
     ...createNamedExpressionsSlice(sliceSetImpl as SliceSetFn<NamedExpressionsSlice>),
 
-    // ── Config actions (inline) ────────────────────────────────────────────
-    beginHistoryGroup: () => {
-      historyGroupStart ??= get().cabinets;
-    },
-    endHistoryGroup,
-    setConfig: (patch) =>
-      set((state) => {
-        const cabinets = state.cabinets.map((cab, i) =>
-          i === state.activeCabinetIndex ? { ...cab, config: { ...cab.config, ...patch } } : cab,
-        );
-        pushConfigToUrl(cabinets[state.activeCabinetIndex].config, state.activeCabinetIndex);
-        // Sprint 20 — notify plugins that config changed.
-        pluginEventBus.emit('config:change', { config: cabinets[state.activeCabinetIndex].config });
-        const history = historyUpdate(state, cabinets);
-        const base = deriveBaseProject(cabinets, state.activeCabinetIndex);
-        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
-        scheduleAssembly(base.config);
-        return {
-          cabinets,
-          ...base,
-          optimizationPending: true,
-          costPending: true,
-          assemblyPending: true,
-          ...history,
-        };
-      }),
-
-    resetConfig: () =>
-      set((state) => {
-        const cabinets = state.cabinets.map((cab, i) =>
-          i === state.activeCabinetIndex ? { ...cab, config: DEFAULT_CONFIG } : cab,
-        );
-        pushConfigToUrl(DEFAULT_CONFIG, state.activeCabinetIndex);
-        const history = historyUpdate(state, cabinets);
-        const base = deriveBaseProject(cabinets, state.activeCabinetIndex);
-        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
-        scheduleAssembly(base.config);
-        return {
-          cabinets,
-          ...base,
-          optimizationPending: true,
-          costPending: true,
-          assemblyPending: true,
-          ...history,
-        };
-      }),
-
-    undo: () => {
-      endHistoryGroup();
-      return set((state) => {
-        const patch = state._past.at(-1);
-        if (!patch) return state;
-        const prevCabinets = applyCabinetPatch(state.cabinets, patch, 'backward');
-        const past = state._past.slice(0, -1);
-        const idx = Math.min(state.activeCabinetIndex, prevCabinets.length - 1);
-        pushConfigToUrl(prevCabinets[idx].config, idx);
-        const base = deriveBaseProject(prevCabinets, idx);
-        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
-        scheduleAssembly(base.config);
-        return {
-          cabinets: prevCabinets,
-          activeCabinetIndex: idx,
-          ...base,
-          optimizationPending: true,
-          costPending: true,
-          assemblyPending: true,
-          _past: past,
-          _future: [patch, ...state._future],
-          canUndo: past.length > 0,
-          canRedo: true,
-        };
-      });
-    },
-
-    redo: () => {
-      endHistoryGroup();
-      return set((state) => {
-        const patch = state._future[0];
-        if (!patch) return state;
-        const nextCabinets = applyCabinetPatch(state.cabinets, patch, 'forward');
-        const future = state._future.slice(1);
-        const idx = Math.min(state.activeCabinetIndex, nextCabinets.length - 1);
-        pushConfigToUrl(nextCabinets[idx].config, idx);
-        const base = deriveBaseProject(nextCabinets, idx);
-        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
-        scheduleAssembly(base.config);
-        return {
-          cabinets: nextCabinets,
-          activeCabinetIndex: idx,
-          ...base,
-          optimizationPending: true,
-          costPending: true,
-          assemblyPending: true,
-          _past: [...state._past, patch].slice(-MAX_CABINET_HISTORY),
-          _future: future,
-          canUndo: true,
-          canRedo: future.length > 0,
-        };
-      });
-    },
-
-    addCabinet: () =>
-      set((state) => {
-        const newCab: CabinetEntry = { name: `Cabinet ${state.cabinets.length + 1}`, config: { ...DEFAULT_CONFIG } };
-        const cabinets = [...state.cabinets, newCab];
-        const past = appendCabinetPatch(state._past, state.cabinets, cabinets);
-        const idx = cabinets.length - 1;
-        pushConfigToUrl(cabinets[idx].config, idx);
-        const base = deriveBaseProject(cabinets, idx);
-        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
-        scheduleAssembly(base.config);
-        return {
-          cabinets,
-          activeCabinetIndex: idx,
-          ...base,
-          optimizationPending: true,
-          costPending: true,
-          assemblyPending: true,
-          _past: past,
-          _future: [],
-          canUndo: true,
-          canRedo: false,
-        };
-      }),
-
-    removeCabinet: (index) =>
-      set((state) => {
-        if (state.cabinets.length <= 1 || !Number.isInteger(index) || index < 0 || index >= state.cabinets.length)
-          return state;
-        const cabinets = state.cabinets.filter((_, i) => i !== index);
-        const past = appendCabinetPatch(state._past, state.cabinets, cabinets);
-        const idx = Math.min(state.activeCabinetIndex, cabinets.length - 1);
-        pushConfigToUrl(cabinets[idx].config, idx);
-        const base = deriveBaseProject(cabinets, idx);
-        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
-        scheduleAssembly(base.config);
-        return {
-          cabinets,
-          activeCabinetIndex: idx,
-          ...base,
-          optimizationPending: true,
-          costPending: true,
-          assemblyPending: true,
-          _past: past,
-          _future: [],
-          canUndo: true,
-          canRedo: false,
-        };
-      }),
-
-    // Sprint 125 — duplicate an existing cabinet with an incremented name
-    duplicateCabinet: (index) =>
-      set((state) => {
-        if (!Number.isInteger(index) || index < 0 || index >= state.cabinets.length) return state;
-        const src = state.cabinets[index];
-        const baseName = src.name.replace(/ \(copy(?: \d+)?\)$/, '');
-        const copies = state.cabinets.filter((c) => c.name.startsWith(baseName + ' (copy')).length;
-        const newName = copies === 0 ? `${baseName} (copy)` : `${baseName} (copy ${copies + 1})`;
-        const newEntry: CabinetEntry = { name: newName, config: { ...src.config } };
-        const cabinets = [...state.cabinets.slice(0, index + 1), newEntry, ...state.cabinets.slice(index + 1)];
-        const newIndex = index + 1;
-        const past = appendCabinetPatch(state._past, state.cabinets, cabinets);
-        pushConfigToUrl(cabinets[newIndex].config, newIndex);
-        const base = deriveBaseProject(cabinets, newIndex);
-        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
-        scheduleAssembly(base.config);
-        return {
-          cabinets,
-          activeCabinetIndex: newIndex,
-          ...base,
-          optimizationPending: true,
-          costPending: true,
-          assemblyPending: true,
-          _past: past,
-          _future: [],
-          canUndo: true,
-          canRedo: false,
-        };
-      }),
-
-    // Sprint 93 — create a mirrored twin of an existing cabinet
-    mirrorCabinet: (index) =>
-      set((state) => {
-        if (!Number.isInteger(index) || index < 0 || index >= state.cabinets.length) return state;
-        const src = state.cabinets[index];
-        const newEntry: CabinetEntry = {
-          name: mirrorName(src.name),
-          config: mirrorConfig(src.config),
-        };
-        const cabinets = [...state.cabinets.slice(0, index + 1), newEntry, ...state.cabinets.slice(index + 1)];
-        const newIndex = index + 1;
-        const past = appendCabinetPatch(state._past, state.cabinets, cabinets);
-        pushConfigToUrl(cabinets[newIndex].config, newIndex);
-        const base = deriveBaseProject(cabinets, newIndex);
-        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
-        scheduleAssembly(base.config);
-        return {
-          cabinets,
-          activeCabinetIndex: newIndex,
-          ...base,
-          optimizationPending: true,
-          costPending: true,
-          assemblyPending: true,
-          _past: past,
-          _future: [],
-          canUndo: true,
-          canRedo: false,
-        };
-      }),
-
-    // Sprint 61 — reorder cabinets within the project list
-    moveCabinet: (index, direction) =>
-      set((state) => {
-        if (!Number.isInteger(index) || index < 0 || index >= state.cabinets.length) return state;
-        const targetIndex = direction === 'up' ? index - 1 : index + 1;
-        if (targetIndex < 0 || targetIndex >= state.cabinets.length) return state;
-        const cabinets = [...state.cabinets];
-        [cabinets[index], cabinets[targetIndex]] = [cabinets[targetIndex], cabinets[index]];
-        // Keep active index pointing at the moved cabinet
-        let newActive = state.activeCabinetIndex;
-        if (state.activeCabinetIndex === index) newActive = targetIndex;
-        else if (state.activeCabinetIndex === targetIndex) newActive = index;
-        const base = deriveBaseProject(cabinets, newActive);
-        const past = appendCabinetPatch(state._past, state.cabinets, cabinets);
-        pushConfigToUrl(cabinets[newActive].config, newActive);
-        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
-        scheduleAssembly(base.config);
-        return {
-          cabinets,
-          activeCabinetIndex: newActive,
-          ...base,
-          optimizationPending: true,
-          costPending: true,
-          assemblyPending: true,
-          _past: past,
-          _future: [],
-          canUndo: true,
-          canRedo: false,
-        };
-      }),
-
-    setActiveCabinet: (index) =>
-      set((state) => {
-        if (!Number.isInteger(index) || index < 0 || index >= state.cabinets.length) return state;
-        pushConfigToUrl(state.cabinets[index].config, index);
-        const base = deriveBaseProject(state.cabinets, index);
-        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
-        scheduleAssembly(base.config);
-        return {
-          activeCabinetIndex: index,
-          ...base,
-          optimizationPending: true,
-          costPending: true,
-          assemblyPending: true,
-        };
-      }),
-
-    renameCabinet: (index, name) =>
-      set((state) => {
-        if (!Number.isInteger(index) || index < 0 || index >= state.cabinets.length) return state;
-        const cabinets = state.cabinets.map((cab, i) => (i === index ? { ...cab, name } : cab));
-        return { cabinets };
-      }),
-
-    setNotes: (index, notes) =>
-      set((state) => {
-        if (!Number.isInteger(index) || index < 0 || index >= state.cabinets.length) return state;
-        const cabinets = state.cabinets.map((cab, i) => (i === index ? { ...cab, notes } : cab));
-        return { cabinets };
-      }),
-
-    loadProject: (cabinets) =>
-      set((state) => {
-        if (cabinets.length === 0) return state;
-        const migrated = cabinets.map((c) => ({
-          ...c,
-          config: { ...DEFAULT_CONFIG, ...c.config },
-        }));
-        const past = appendCabinetPatch(state._past, state.cabinets, migrated);
-        pushConfigToUrl(migrated[0].config, 0);
-        const base = deriveBaseProject(migrated, 0);
-        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
-        scheduleAssembly(base.config);
-        return {
-          cabinets: migrated,
-          activeCabinetIndex: 0,
-          ...base,
-          optimizationPending: true,
-          costPending: true,
-          assemblyPending: true,
-          _past: past,
-          _future: [],
-          canUndo: true,
-          canRedo: false,
-        };
-      }),
-
-    /** Sprint 16 — toggle per-part rotation lock and trigger re-optimization. */
-    toggleRotationLock: (partId) =>
-      set((state) => {
-        const next = { ...state.rotationLockedPartIds };
-        if (next[partId]) {
-          delete next[partId];
-        } else {
-          next[partId] = true;
-        }
-        // Update module-level map BEFORE scheduling so the optimizer sees fresh locks.
-        setRotationLocks(next);
-        // Sprint 20 — notify plugins.
-        pluginEventBus.emit('part:rotation-lock', { partId, locked: next[partId] === true });
-        const base = deriveBaseProject(state.cabinets, state.activeCabinetIndex);
-        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
-        return { rotationLockedPartIds: next, ...base, optimizationPending: true };
-      }),
-    // v3.18.0 — Bulk material replacement across all cabinets
-    bulkReplaceMaterial: (fromKey, toKey) =>
-      set((state) => {
-        if (fromKey === toKey) return state;
-        const cabinets = state.cabinets.map((cab) => {
-          const config = { ...cab.config };
-          if (config.carcassMaterial === fromKey) config.carcassMaterial = toKey;
-          if (config.backPanelMaterial === fromKey) config.backPanelMaterial = toKey;
-          return { ...cab, config };
-        });
-        const past = appendCabinetPatch(state._past, state.cabinets, cabinets);
-        const base = deriveBaseProject(cabinets, state.activeCabinetIndex);
-        scheduleOptimization(base.parts, base.allParts, state.sawKerf, state.sheetSizeOverrides);
-        scheduleAssembly(base.config);
-        return {
-          cabinets,
-          ...base,
-          optimizationPending: true,
-          costPending: true,
-          assemblyPending: true,
-          _past: past,
-          _future: [],
-          canUndo: true,
-          canRedo: false,
-        };
-      }),
+    ...cabinetsSlice,
   };
 });
 

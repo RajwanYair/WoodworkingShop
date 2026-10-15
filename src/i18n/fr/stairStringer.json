@@ -1,0 +1,15 @@
+{
+  "title": "Calculateur de limon d’escalier",
+  "totalRise": "Hauteur totale",
+  "treadDepth": "Profondeur du giron",
+  "idealRiser": "Hauteur idéale de contremarche",
+  "riserCount": "Nombre de contremarches",
+  "actualRiser": "Hauteur réelle de contremarche",
+  "treadCount": "Nombre de marches",
+  "totalRun": "Reculement total",
+  "stringerLength": "Longueur du limon",
+  "stringerAngle": "Angle du limon",
+  "ircPass": "Respecte les limites IRC 2021 de hauteur de contremarche et de profondeur de marche",
+  "riserTooTall": "La contremarche dépasse le maximum IRC de 7¾\" (196.85 mm)",
+  "treadTooShallow": "Le giron est inférieur au minimum IRC de 10\" (254 mm)"
+}

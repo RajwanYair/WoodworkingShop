@@ -44,14 +44,14 @@ export const create${Feature}Slice = (set: SetState<${Feature}Slice>): ${Feature
 
 Register the slice in `src/store/cabinet-store.ts`.
 
-### 3 — Component (`src/components/${tab}/${Feature}Panel.tsx`)
+### 3 — Component (`src/features/${tab}/${Feature}Panel.tsx`)
 
 - Named export only (no default export) — satisfies `react-refresh`
 - Tailwind classes with `wood-*` design tokens; no hardcoded colours
 - Logical Tailwind props only (`ms-*`, `me-*`, `ps-*`, `pe-*`)
 - RTL-safe layout
 - ARIA-correct: labels on inputs, `aria-live` on dynamic regions, no redundant `role`
-- ≤ 600 lines; extract helpers to sibling `.ts` files
+- ≤ 396 lines, the measured component budget; extract helpers to sibling `.ts` files
 
 ### 4 — i18n keys
 

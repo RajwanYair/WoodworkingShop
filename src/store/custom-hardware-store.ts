@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { versionedPersistOptions } from './slices/versionedPersist';
 import {
   applyHardwareCatalogImport,
   parseHardwareCatalog,
@@ -23,6 +24,6 @@ export const useCustomHardwareStore = create<CustomHardwareState>()(
         }));
       },
     }),
-    { name: 'custom-hardware' },
+    versionedPersistOptions('custom-hardware'),
   ),
 );

@@ -1,0 +1,18 @@
+{
+  "title": "מחשבון מידות תיבת מגירה",
+  "openingWidth": "רוחב פתח",
+  "openingHeight": "גובה פתח",
+  "openingDepth": "עומק ארון",
+  "slideType": "סוג מסילה",
+  "sideThickness": "עובי דופן",
+  "falseFrontThickness": "עובי חזית מדומה",
+  "boxWidth": "רוחב תיבה",
+  "boxHeight": "גובה תיבה",
+  "boxDepth": "עומק תיבה",
+  "falseFrontWidth": "רוחב חזית מדומה",
+  "falseFrontHeight": "גובה חזית מדומה",
+  "bottom": "מסילה תחתונה",
+  "side": "מסילה צדדית",
+  "center": "מסילה מרכזית",
+  "noteShort": "עומק תיבה קצר — ודא אורך מסילה"
+}

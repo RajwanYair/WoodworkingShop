@@ -1,0 +1,17 @@
+{
+  "title": "Distancias para electrodomésticos",
+  "oven": "Horno",
+  "dishwasher": "Lavavajillas",
+  "refrigerator": "Frigorífico",
+  "cooktop": "Placa de cocción",
+  "microwave": "Microondas",
+  "clearanceTop": "Distancia superior",
+  "clearanceBottom": "Distancia inferior",
+  "clearanceLeft": "Distancia izquierda",
+  "clearanceRight": "Distancia derecha",
+  "clearanceRear": "Distancia trasera",
+  "clearanceFront": "Distancia frontal (apertura de puerta)",
+  "violation": "Faltan {{shortfall}} mm de distancia en el lado {{side}} del electrodoméstico {{appliance}}",
+  "allClear": "Se cumplen todas las distancias de los electrodomésticos.",
+  "checkClearances": "Comprobar distancias"
+}

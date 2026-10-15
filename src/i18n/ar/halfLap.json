@@ -1,0 +1,19 @@
+{
+  "title": "وصلة نصفية",
+  "lapType": "نوع الوصلة",
+  "board1Thickness": "سماكة اللوح الأول",
+  "board1Width": "عرض اللوح الأول",
+  "board2Thickness": "سماكة اللوح الثاني",
+  "board2Width": "عرض اللوح الثاني",
+  "board1NotchDepth": "عمق الجزء المقتطع من اللوح الأول",
+  "board1NotchWidth": "عرض الجزء المقتطع من اللوح الأول",
+  "board2NotchDepth": "عمق الجزء المقتطع من اللوح الثاني",
+  "board2NotchWidth": "عرض الجزء المقتطع من اللوح الثاني",
+  "totalGlueArea": "إجمالي مساحة اللصق",
+  "finishedThickness": "السماكة النهائية",
+  "lapTypes": {
+    "end_lap": "وصلة طرفية نصفية",
+    "t_lap": "وصلة نصفية على شكل T",
+    "cross_lap": "وصلة نصفية متقاطعة"
+  }
+}

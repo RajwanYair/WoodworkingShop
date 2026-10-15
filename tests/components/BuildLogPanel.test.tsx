@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { BuildLogPanel } from '../../src/components/assembly/BuildLogPanel';
+import { BuildLogPanel } from '../../src/features/assembly/BuildLogPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 
 describe('BuildLogPanel', () => {

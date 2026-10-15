@@ -1,0 +1,13 @@
+{
+  "title": "Project Summary",
+  "sectionLabel": "Multi-cabinet project summary",
+  "totalCabinets": "Cabinets",
+  "totalParts": "Total parts",
+  "totalSheets": "Sheets used",
+  "overallYield": "Overall yield",
+  "avgSheetYield": "Avg sheet yield",
+  "totalWaste": "Total waste",
+  "grainConflicts": "Grain conflicts",
+  "totalWeight": "Panel weight",
+  "estimatedLabour": "Estimated labour"
+}

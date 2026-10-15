@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { FramePanelCalcPanel } from '../../src/components/configurator/FramePanelCalcPanel';
+import { FramePanelCalcPanel } from '../../src/features/calculators/FramePanelCalcPanel';
 
 describe('FramePanelCalcPanel', () => {
   it('recalculates panel dimensions and reports an invalid frame opening accessibly', async () => {

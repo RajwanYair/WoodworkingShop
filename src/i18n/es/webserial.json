@@ -1,0 +1,13 @@
+{
+  "title": "Enviar G-code por USB / puerto serie",
+  "connect": "Conectar a la máquina",
+  "disconnect": "Desconectar",
+  "notSupported": "Web Serial no se admite en este navegador. Usa Chrome 89+ o Edge 89+.",
+  "noSheets": "Ejecuta primero la optimización de corte para generar G-code.",
+  "streaming": "Enviando la línea {{current}} de {{total}}…",
+  "pause": "Pausar el envío",
+  "resume": "Reanudar el envío",
+  "paused": "Envío pausado en la línea {{current}} de {{total}}.",
+  "done": "Listo: se han enviado las {{total}} líneas.",
+  "error": "Error de conexión: {{message}}"
+}

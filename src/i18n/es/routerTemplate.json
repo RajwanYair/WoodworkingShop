@@ -1,0 +1,16 @@
+{
+  "title": "Compensación de plantilla para fresadora",
+  "bushingOD": "Diámetro exterior del casquillo copiador",
+  "bitDiameter": "Diámetro de la fresa",
+  "cutType": "Tipo de corte",
+  "nominalDimension": "Dimensión nominal de la pieza",
+  "optional": "opcional",
+  "offset": "Desplazamiento del casquillo",
+  "adjustmentPerSide": "Ajuste de plantilla (por lado)",
+  "totalAdjustment": "Ajuste total de la plantilla",
+  "adjustedDimension": "Dimensión ajustada de la plantilla",
+  "cutTypes": {
+    "inside": "Interior (cavidad o rebaje)",
+    "outside": "Exterior (isla o resalte)"
+  }
+}

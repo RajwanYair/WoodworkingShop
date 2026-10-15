@@ -1,0 +1,15 @@
+{
+  "title": "Calculateur de finition",
+  "surfaceArea": "Surface à traiter",
+  "coatCount": "Nombre de couches",
+  "finishType": "Type de finition",
+  "polyurethane": "Polyuréthane",
+  "lacquer": "Laque",
+  "shellac": "Gomme-laque",
+  "waterbased": "À base d’eau",
+  "oil": "Huile / huile danoise",
+  "volumeNeeded": "Volume nécessaire",
+  "dryTimeBetweenCoats": "Temps de séchage entre les couches",
+  "totalDryTime": "Temps de séchage total",
+  "coveragePerLitre": "Rendement par litre"
+}

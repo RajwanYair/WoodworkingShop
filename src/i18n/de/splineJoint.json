@@ -1,0 +1,14 @@
+{
+  "title": "Fremdfederverbindung",
+  "boardThickness": "Brettdicke",
+  "splineThickness": "Dicke der Fremdfeder",
+  "slotDepthPerBoard": "Nutentiefe je Brett",
+  "jointLength": "Verbindungslänge",
+  "splineCount": "Anzahl der Fremdfedern",
+  "recommendedSlotWidth": "Empfohlene Nutbreite",
+  "totalInsertionDepth": "Gesamte Einstecktiefe",
+  "remainingWallThickness": "Verbleibende Materialstärke",
+  "totalSplineLength": "Gesamtlänge der Fremdfedern",
+  "glueAreaPerSpline": "Leimfläche je Fremdfeder",
+  "totalGlueArea": "Gesamte Leimfläche"
+}

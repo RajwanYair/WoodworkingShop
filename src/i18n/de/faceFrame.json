@@ -1,0 +1,16 @@
+{
+  "title": "Frontrahmen-Rechner",
+  "cabinetWidth": "Schrankbreite",
+  "cabinetHeight": "Schrankhöhe",
+  "stileWidth": "Breite des Rahmenschenkels",
+  "railWidth": "Breite der Rahmentraverse",
+  "openingCount": "Anzahl der Öffnungen",
+  "openingWidth": "Öffnungsbreite",
+  "openingHeight": "Öffnungshöhe",
+  "stileLength": "Länge des Rahmenschenkels",
+  "topRailLength": "Länge der oberen Traverse",
+  "bottomRailLength": "Länge der unteren Traverse",
+  "middleRailLength": "Länge der mittleren Traverse",
+  "totalGlueSurface": "Gesamte Leimfläche",
+  "partList": "Stückliste"
+}

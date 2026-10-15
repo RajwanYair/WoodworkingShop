@@ -1,0 +1,16 @@
+{
+  "title": "إزاحة قالب الموجّه",
+  "bushingOD": "القطر الخارجي لجلبة التوجيه",
+  "bitDiameter": "قطر لقمة الموجّه",
+  "cutType": "نوع القطع",
+  "nominalDimension": "البعد الاسمي للميزة",
+  "optional": "اختياري",
+  "offset": "إزاحة جلبة التوجيه",
+  "adjustmentPerSide": "تعديل القالب (لكل جانب)",
+  "totalAdjustment": "إجمالي تعديل القالب",
+  "adjustedDimension": "بُعد القالب بعد التعديل",
+  "cutTypes": {
+    "inside": "داخلي (جيب أو تجويف)",
+    "outside": "خارجي (جزيرة أو بروز)"
+  }
+}

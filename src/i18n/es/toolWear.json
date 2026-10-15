@@ -1,0 +1,16 @@
+{
+  "title": "Seguimiento del desgaste de herramientas",
+  "inventory": "Inventario",
+  "tool": "Herramienta",
+  "condition": "Estado",
+  "usage": "Registro de uso",
+  "addTool": "Añadir herramienta",
+  "logUsage": "Registrar uso",
+  "alerts": "Alertas de mantenimiento",
+  "costPerMeter": "Coste por metro",
+  "replacement": "Necesita reemplazo",
+  "noTools": "No hay herramientas en el inventario.",
+  "noAlerts": "Todas las herramientas están en buen estado.",
+  "tools": "Herramientas",
+  "remaining": "Vida útil restante"
+}

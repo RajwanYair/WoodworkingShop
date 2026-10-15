@@ -11,7 +11,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { ErrorBoundary } from '../../src/components/layout/ErrorBoundary';
+import { ErrorBoundary } from '../../src/app/ErrorBoundary';
 import { renderWithLocale } from '../render-with-locale';
 
 function Bomb({ shouldThrow }: { shouldThrow: boolean }) {

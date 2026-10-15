@@ -1,0 +1,15 @@
+{
+  "title": "מחשבון ג׳יג עיגול לראוטר",
+  "targetDiameter": "קוטר יעד",
+  "bitDiameter": "קוטר הביט",
+  "pivotHoleDiameter": "קוטר חור ציר",
+  "cutMode": "מצב חיתוך",
+  "armLength": "אורך זרוע (ציר למרכז הביט)",
+  "circumference": "היקף",
+  "area": "שטח",
+  "pivotOffset": "היסט ציר",
+  "modes": {
+    "disc": "דיסק (חיתוך חיצוני)",
+    "hole": "חור (חיתוך פנימי)"
+  }
+}

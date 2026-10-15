@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { Header } from '../../src/components/layout/Header';
-import { MobileTabBar } from '../../src/components/layout/MobileTabBar';
-import { transitionTab } from '../../src/components/layout/transition-tab';
+import { Header } from '../../src/app/Header';
+import { MobileTabBar } from '../../src/app/MobileTabBar';
+import { transitionTab } from '../../src/app/transition-tab';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 
 const originalMatchMedia = Object.getOwnPropertyDescriptor(window, 'matchMedia');

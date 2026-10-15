@@ -1,6 +1,6 @@
 import { render, screen, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { VirtualSheetWrapper } from '../../src/components/optimizer/VirtualSheetWrapper';
+import { VirtualSheetWrapper } from '../../src/features/optimizer/VirtualSheetWrapper';
 
 describe('VirtualSheetWrapper', () => {
   let observerCallback: IntersectionObserverCallback | null = null;

@@ -1,21 +1,34 @@
 /**
- * i18n coverage report — compares all locale key structures against en.json.
+ * i18n coverage report — compares locale namespace directories against English.
  * Run: node scripts/i18n-coverage.js
  */
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const localeDir = resolve(__dirname, '../src/i18n');
-const localeFiles = readdirSync(localeDir).filter((file) => /^[a-z]{2}(?:-[A-Z]{2})?\.json$/.test(file));
-const locales = Object.fromEntries(
-  localeFiles.map((file) => [file.slice(0, -5), JSON.parse(readFileSync(resolve(localeDir, file), 'utf8'))]),
-);
+
+function loadLocale(code) {
+  const directory = resolve(localeDir, code);
+  if (!existsSync(directory)) throw new Error(`Missing locale directory: src/i18n/${code}`);
+  const merged = {};
+  for (const file of readdirSync(directory)
+    .filter((name) => name.endsWith('.json'))
+    .sort()) {
+    merged[file.slice(0, -5)] = JSON.parse(readFileSync(resolve(directory, file), 'utf8'));
+  }
+  return merged;
+}
+
+const localeCodes = readdirSync(localeDir, { withFileTypes: true })
+  .filter((entry) => entry.isDirectory() && /^[a-z]{2}$/.test(entry.name))
+  .map((entry) => entry.name);
+const locales = Object.fromEntries(localeCodes.map((code) => [code, loadLocale(code)]));
 const en = locales.en;
 
 if (!en) {
-  throw new Error('Missing reference locale: src/i18n/en.json');
+  throw new Error('Missing reference locale: src/i18n/en');
 }
 
 function collectKeys(obj, prefix = '') {

@@ -1,0 +1,13 @@
+{
+  "title": "معاينة تفاعلية ثلاثية الأبعاد",
+  "resetCamera": "إعادة ضبط الكاميرا",
+  "zoomIn": "تكبير العرض",
+  "zoomOut": "تصغير العرض",
+  "explode": "عرض الأجزاء متباعدة",
+  "wireframe": "عرض هيكلي سلكي",
+  "edgeBanding": "إظهار تلبيس الحواف",
+  "rendererTier": "مستوى العرض: {{tier}}",
+  "noGpu": "WebGPU غير متاح، ومخطط المشهد جاهز",
+  "meshCount": "{{count}} جزء",
+  "meshCount_other": "{{count}} أجزاء"
+}

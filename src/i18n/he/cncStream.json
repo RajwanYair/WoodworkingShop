@@ -1,0 +1,14 @@
+{
+  "title": "סטרימינג CNC v2",
+  "startStream": "התחל סטרימינג",
+  "pauseStream": "השהה",
+  "resumeStream": "המשך",
+  "cancelStream": "בטל",
+  "retryLine": "נסה שורה שוב",
+  "progress": "התקדמות",
+  "linesRemaining": "שורות שנותרו",
+  "estimatedTime": "זמן משוער",
+  "sessionState": "מצב הפעלה",
+  "errorLines": "שורות שגויות",
+  "noErrors": "אין שגיאות."
+}

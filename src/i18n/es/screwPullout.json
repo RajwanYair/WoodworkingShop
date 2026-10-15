@@ -1,0 +1,18 @@
+{
+  "title": "Estimador de resistencia al arrancamiento de tornillos",
+  "screwDiameter": "Diámetro del tornillo",
+  "threadLength": "Longitud roscada en la madera",
+  "species": "Especie de madera / densidad",
+  "pulloutForceN": "Fuerza estimada de extracción",
+  "pulloutForceLbf": "Fuerza de extracción (lbf)",
+  "withdrawalResistance": "Resistencia al arrancamiento",
+  "safetyRating": "Evaluación de seguridad",
+  "modelNote": "La ecuación USDA 8-10a estima la carga última a corto plazo para tornillos en madera seca instalados en la cara, no una capacidad admisible de diseño. No se aplica a tableros; los valores son orientativos. Comprueba la unión real.",
+  "low": "Densidad baja (pino, cedro)",
+  "medium": "Densidad media (arce, roble)",
+  "high": "Densidad alta (nogal americano, teca)",
+  "sheet": "Tableros (contrachapado, MDF)",
+  "adequate": "Adecuada",
+  "marginal": "Justa: considera un tornillo mayor o un orificio guía",
+  "insufficient": "Insuficiente: usa un elemento de fijación mecánico"
+}

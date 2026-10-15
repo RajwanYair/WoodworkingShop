@@ -1,0 +1,13 @@
+{
+  "title": "ייצוא ERP / MRP",
+  "system": "מערכת יעד",
+  "sap": "SAP (IDOC CSV)",
+  "oracle": "Oracle SCM",
+  "webhook": "Webhook גנרי",
+  "export": "ייצוא ל-ERP",
+  "projectName": "שם הפרויקט",
+  "schemaVersion": "גרסת סכמה",
+  "lineCount": "פריטי שורה",
+  "totalCost": "עלות סך הכול",
+  "noItems": "אין פריטים לייצוא"
+}

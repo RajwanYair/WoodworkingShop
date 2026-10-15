@@ -1,0 +1,16 @@
+{
+  "title": "Gehrungswinkel-Rechner",
+  "polygonSides": "Anzahl der Seiten",
+  "miterAngle": "Gehrungswinkel",
+  "interiorAngle": "Innenwinkel",
+  "bevelAngle": "Schrägschnittwinkel",
+  "tiltAngle": "Neigungswinkel",
+  "cornerAngle": "Eckwinkel",
+  "springAngle": "Anstellwinkel",
+  "wallAngle": "Wandwinkel",
+  "insideCorner": "Innenecke",
+  "outsideCorner": "Außenecke",
+  "compound": "Doppelgehrung",
+  "crownMolding": "Deckenleiste",
+  "polygon": "Polygonverbindung"
+}

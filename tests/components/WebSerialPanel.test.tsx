@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
-import { WebSerialPanel } from '../../src/components/assembly/WebSerialPanel';
+import { WebSerialPanel } from '../../src/features/assembly/WebSerialPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { makeOptimizationResult } from '../helpers';
 

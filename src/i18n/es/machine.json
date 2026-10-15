@@ -1,0 +1,12 @@
+{
+  "title": "Perfil de máquina",
+  "selectProfile": "Seleccionar perfil de máquina",
+  "firmware": "Firmware",
+  "baudRate": "Velocidad en baudios",
+  "feedRate": "Velocidad de avance (mm/min)",
+  "plungeRate": "Velocidad de penetración (mm/min)",
+  "spindleRpm": "Velocidad del husillo (RPM)",
+  "passDepth": "Profundidad por pasada (mm)",
+  "toolDiameter": "Diámetro de herramienta (mm)",
+  "workHolding": "Sujeción de la pieza"
+}

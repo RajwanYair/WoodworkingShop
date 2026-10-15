@@ -1,0 +1,19 @@
+{
+  "title": "حاسبة تخطيط وصلات ذيل الحمامة",
+  "boardWidth": "عرض اللوح",
+  "boardThickness": "سماكة اللوح",
+  "tailCount": "عدد الذيول",
+  "angle": "زاوية ذيل الحمامة",
+  "slopeRatio": "نسبة الميل",
+  "jointType": "نوع الوصلة",
+  "through": "ذيل حمامة نافذ",
+  "halfBlind": "ذيل حمامة نصف أعمى",
+  "style": "أسلوب القطع",
+  "handCut": "قطع يدوي",
+  "machineCut": "قطع آلي",
+  "pinWidth": "عرض السن",
+  "tailWidth": "عرض الذيل",
+  "socketDepth": "عمق التجويف",
+  "pinToTailRatio": "نسبة الأسنان إلى الذيول",
+  "halfPin": "نصف سن"
+}

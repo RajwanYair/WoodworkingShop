@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
-import { DimensionSliders } from '../../src/components/configurator/DimensionSliders';
+import { DimensionSliders } from '../../src/features/configurator/DimensionSliders';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 
 describe('DimensionSliders', () => {

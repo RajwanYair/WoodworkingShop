@@ -32,7 +32,7 @@ vi.mock('zustand/middleware', async () => {
   return { ...actual, persist: (fn: (...args: unknown[]) => unknown) => fn };
 });
 
-import { OptimizerView } from '../../src/components/optimizer/OptimizerView';
+import { OptimizerView } from '../../src/features/optimizer/OptimizerView';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import type { OptimizationResult } from '../../src/engine/core/types';
 

@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 
 const SOURCE_EXTENSIONS = ['.ts', '.tsx', '.js', '.jsx'];
 const MODULE_DIRECTORIES = ['src/engine', 'src/utils', 'src/services'];
-const UI_DIRECTORIES = ['src/components', 'src/store', 'src/hooks', 'src/workers'];
+const UI_DIRECTORIES = ['src/app', 'src/features', 'src/ui', 'src/store', 'src/hooks', 'src/workers'];
 const LEDGER_PATH = 'config/capability-ledger.json';
 const VALID_STATUSES = new Set(['surfaced', 'internal', 'public-api', 'surface-next', 'retire']);
 

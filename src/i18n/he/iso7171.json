@@ -1,0 +1,11 @@
+{
+  "title": "תאימות ISO 7171",
+  "compliant": "עומד בתקן",
+  "nonCompliant": "אינו עומד בתקן",
+  "failCount": "{{count}} כשל",
+  "failCount_other": "{{count}} כשלים",
+  "advisoryCount": "{{count}} הערה",
+  "advisoryCount_other": "{{count}} הערות",
+  "validate": "בדוק תאימות",
+  "noViolations": "לא נמצאו הפרות"
+}

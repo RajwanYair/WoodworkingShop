@@ -1,0 +1,13 @@
+{
+  "customHeading": "Posiciones personalizadas de estantes (mm desde la base)",
+  "resetEqual": "Restablecer espaciado igual",
+  "position": "Estante {{n}}",
+  "internalHeight": "Altura interna: {{h}} mm",
+  "deflectionWarning": "Vano del estante {{span}} mm: pandeo estimado {{sag}} mm supera el límite L/360 ({{limit}} mm). Considere un panel más grueso, un soporte central o un vano más corto.",
+  "deflectionSafe": "Vano del estante OK — pandeo estimado {{sag}} mm (bien dentro del límite L/360 {{limit}} mm)",
+  "deflectionDanger": "Alerta de pandeo: {{sag}} mm supera L/240 — se requiere soporte estructural o panel más grueso para este vano de {{span}} mm",
+  "deflectionRatingSafe": "Pandeo OK ({{sag}} mm)",
+  "deflectionRatingWarning": "Advertencia de pandeo ({{sag}} mm)",
+  "deflectionRatingDanger": "Peligro de pandeo ({{sag}} mm)",
+  "loadCapacity": "máx. {{kg}} kg"
+}

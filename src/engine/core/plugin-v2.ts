@@ -16,7 +16,7 @@
 
 import { pluginEventBus } from './plugin-events';
 import type { PluginEventName, PluginEventHandler, PluginEventMap } from './plugin-events';
-import type { CabinetPlannerPlugin } from './plugin';
+import type { CabinetPlannerPlugin } from './plugin-types';
 
 // ── API version ────────────────────────────────────────────────────────────
 

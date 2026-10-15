@@ -1,0 +1,12 @@
+{
+  "title": "לוח נתונים",
+  "sessions": "סשנים",
+  "totalEvents": "סך אירועים",
+  "topMaterials": "חומרים נפוצים",
+  "costTrends": "מגמות עלויות",
+  "noData": "אין נתוני ניתוח",
+  "exportData": "ייצוא נתונים",
+  "selectionCount": "בחירה {{count}}",
+  "selectionCount_other": "{{count}} בחירות",
+  "averageCost": "עלות אמצעית"
+}

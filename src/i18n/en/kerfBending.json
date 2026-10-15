@@ -1,0 +1,16 @@
+{
+  "title": "Kerf Bending Calculator",
+  "thickness": "Panel Thickness",
+  "bendRadius": "Target Bend Radius",
+  "material": "Material Type",
+  "kerfWidth": "Kerf Width (saw blade)",
+  "kerfSpacing": "Kerf Spacing",
+  "kerfCount": "Number of Kerfs",
+  "kerfDepth": "Kerf Depth",
+  "remainingThickness": "Remaining Wall Thickness",
+  "tooFewKerfs": "Bend radius too tight — increase radius or reduce thickness",
+  "plywood": "Plywood",
+  "mdf": "MDF",
+  "softwood": "Softwood",
+  "hardwood": "Hardwood"
+}

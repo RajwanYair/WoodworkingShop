@@ -1,0 +1,13 @@
+{
+  "title": "Lagerverwaltung",
+  "addMaterial": "Material hinzufügen",
+  "createOrder": "Bestellung erstellen",
+  "submitOrder": "Bestellung absenden",
+  "receiveOrder": "Waren annehmen",
+  "cancelOrder": "Bestellung stornieren",
+  "recordWaste": "Verschnitt erfassen",
+  "reorderAlerts": "Nachbestellungswarnungen",
+  "totalValue": "Gesamtwert des Lagerbestands",
+  "pendingOrders": "Ausstehende Bestellungen",
+  "wasteLog": "Verschnittprotokoll"
+}

@@ -1,0 +1,13 @@
+{
+  "title": "G-Code per USB / serieller Schnittstelle senden",
+  "connect": "Mit der Maschine verbinden",
+  "disconnect": "Verbindung trennen",
+  "notSupported": "Web Serial wird in diesem Browser nicht unterstützt. Verwenden Sie Chrome 89+ oder Edge 89+.",
+  "noSheets": "Führen Sie zuerst die Zuschnittoptimierung aus, um G-Code zu erzeugen.",
+  "streaming": "Zeile {{current}} von {{total}} wird gesendet…",
+  "pause": "Senden pausieren",
+  "resume": "Senden fortsetzen",
+  "paused": "Bei Zeile {{current}} von {{total}} pausiert.",
+  "done": "Fertig — alle {{total}} Zeilen wurden gesendet.",
+  "error": "Verbindungsfehler: {{message}}"
+}

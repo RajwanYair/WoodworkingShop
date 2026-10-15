@@ -1,0 +1,11 @@
+{
+  "title": "Referenzfoto des Raums",
+  "start": "Kamera öffnen",
+  "capture": "Foto aufnehmen",
+  "stop": "Kamera stoppen",
+  "retake": "Erneut aufnehmen",
+  "capturedAlt": "Aufgenommenes Raumfoto",
+  "videoFeed": "Live-Kamerabild",
+  "notSupported": "Kamera wird auf diesem Gerät nicht unterstützt",
+  "error": "Kamerafehler"
+}

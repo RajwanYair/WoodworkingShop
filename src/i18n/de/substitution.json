@@ -1,0 +1,15 @@
+{
+  "title": "Materialvorschläge",
+  "switch": "Zu {{name}} wechseln",
+  "switchShort": "Verwenden",
+  "benefit": {
+    "deflection": "Durchbiegung",
+    "weight": "Gewicht",
+    "cost": "Kosten"
+  },
+  "quant": {
+    "savedKgPerSheet": "Spart {{value}} kg/Platte",
+    "deflectionReductionPct": "{{value}}% weniger Durchbiegung",
+    "costDeltaPct": "{{value}}% Kostenänderung"
+  }
+}

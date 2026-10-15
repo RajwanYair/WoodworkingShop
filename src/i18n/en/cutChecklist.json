@@ -1,0 +1,8 @@
+{
+  "title": "Part Cutting Checklist",
+  "progress": "{{checked}} of {{total}} parts cut",
+  "progressAriaLabel": "{{percent}}% of parts cut",
+  "complete": "All cut!",
+  "clearAll": "Reset checklist",
+  "empty": "No parts to cut yet — configure a cabinet first."
+}

@@ -1,0 +1,11 @@
+{
+  "title": "Optimiseur d'agencement",
+  "totalDistance": "Distance totale parcourue",
+  "efficiencyScore": "Score d'efficacité",
+  "suggestions": "Suggestions d'échange",
+  "swap": "Échanger",
+  "saved": "Économisé",
+  "improvement": "Amélioration",
+  "noSuggestions": "L'agencement est déjà optimal.",
+  "metres": "m"
+}

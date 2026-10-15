@@ -1,0 +1,16 @@
+{
+  "title": "Calculateur d'angles d'onglet",
+  "polygonSides": "Nombre de côtés",
+  "miterAngle": "Angle d'onglet",
+  "interiorAngle": "Angle intérieur",
+  "bevelAngle": "Angle de biseau",
+  "tiltAngle": "Angle d'inclinaison",
+  "cornerAngle": "Angle de coin",
+  "springAngle": "Angle de ressort",
+  "wallAngle": "Angle du mur",
+  "insideCorner": "Coin intérieur",
+  "outsideCorner": "Coin extérieur",
+  "compound": "Onglet composé",
+  "crownMolding": "Moulure couronnée",
+  "polygon": "Assemblage polygonal"
+}

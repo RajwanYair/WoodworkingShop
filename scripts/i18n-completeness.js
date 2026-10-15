@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -8,9 +8,7 @@ const identicalRatioThreshold = 0.02;
 const showAllKeys = process.argv.includes('--all');
 const localeDirectory = optionValue('--locale-dir', resolve(root, 'src/i18n'));
 const customAudit = process.argv.includes('--locale-dir') || process.argv.includes('--allowlist');
-const locales = Object.fromEntries(
-  localeCodes.map((locale) => [locale, flatten(readJson(resolve(localeDirectory, `${locale}.json`)))]),
-);
+const locales = Object.fromEntries(localeCodes.map((locale) => [locale, flatten(readLocale(localeDirectory, locale))]));
 const allowlistData = readJson(optionValue('--allowlist', resolve(root, 'config/i18n-allowlist.json')));
 const allowlistedIdenticalKeys = new Set(allowlistData.identical ?? []);
 const allowlistedTokens = new Set(allowlistData.tokens ?? []);
@@ -97,6 +95,19 @@ if (failed) process.exitCode = 1;
 
 function readJson(path) {
   return JSON.parse(readFileSync(path, 'utf8'));
+}
+
+function readLocale(directory, locale) {
+  const file = resolve(directory, `${locale}.json`);
+  if (existsSync(file)) return readJson(file);
+  const localeDir = resolve(directory, locale);
+  const merged = {};
+  for (const name of readdirSync(localeDir)
+    .filter((entry) => entry.endsWith('.json'))
+    .sort()) {
+    merged[name.slice(0, -5)] = readJson(resolve(localeDir, name));
+  }
+  return merged;
 }
 
 function optionValue(name, fallback) {

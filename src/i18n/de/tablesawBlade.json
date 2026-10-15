@@ -1,0 +1,18 @@
+{
+  "title": "Rechner für die Höhe des Tischkreissägeblatts",
+  "bladeDiameter": "Sägeblattdurchmesser",
+  "kerf": "Schnittfugenbreite",
+  "workpieceThickness": "Werkstückstärke",
+  "cutType": "Schnittart",
+  "dadoDepth": "Quernuttiefe",
+  "bladeHeight": "Sägeblatthöhe",
+  "maxCutDepth": "Maximale Schnitttiefe",
+  "bladeExposure": "Sägeblattüberstand über dem Werkstück",
+  "kerfWaste": "Schnittfugenverlust",
+  "isFeasible": "Schnitt ausführbar",
+  "safetyMargin": "Sicherheitszugabe",
+  "through": "Durchgangsschnitt",
+  "dado": "Quernut",
+  "rabbet": "Falz",
+  "groove": "Längsnut"
+}

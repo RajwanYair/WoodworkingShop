@@ -1,0 +1,11 @@
+{
+  "title": "מחשבון נדיר קופסאות",
+  "boardWidth": "רוחב הלוח",
+  "fingerWidth": "רוחב נדיר רצוי",
+  "depth": "עומק חיבור (עובי הלוח)",
+  "fingerCount": "מספר נדירים",
+  "actualFingerWidth": "רוחב נדיר בפועל",
+  "socketCount": "מספר שקעים (לוח מזווג)",
+  "glueSurface": "שטח דבקה",
+  "edgeWaste": "פסולת קצה (כל צד)"
+}

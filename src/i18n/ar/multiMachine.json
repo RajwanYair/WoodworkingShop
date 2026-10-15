@@ -1,0 +1,18 @@
+{
+  "title": "سير العمل على عدة ماكينات",
+  "distribute": "توزيع المهام",
+  "strategy": "أسلوب التوزيع",
+  "leastLoaded": "الأقل انشغالًا",
+  "fastestFirst": "الأسرع أولًا",
+  "roundRobin": "بالتناوب",
+  "assigned": "تم الإسناد",
+  "unassigned": "غير مسندة",
+  "dispatched": "تم الإرسال",
+  "complete": "مكتملة",
+  "failed": "فشلت",
+  "progress": "التقدم",
+  "estimatedTime": "إجمالي الوقت المقدّر",
+  "machineLoad": "عبء الماكينة",
+  "noCapable": "لا توجد ماكينة مؤهلة متاحة.",
+  "includeOffline": "تضمين الماكينات غير المتصلة"
+}

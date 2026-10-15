@@ -1,0 +1,21 @@
+{
+  "title": "CNC-Bearbeitungsauftrag",
+  "generateJob": "CNC-Bearbeitungsauftrag erstellen",
+  "sendToMachine": "An Maschine senden",
+  "profileCut": "Kontur fräsen",
+  "dado": "Nut fräsen",
+  "rabbet": "Falz fräsen",
+  "drill": "Bohren",
+  "pocket": "Tasche fräsen",
+  "totalTime": "Geschätzte Bearbeitungszeit",
+  "totalPasses": "Anzahl der Durchgänge",
+  "operations": "Bearbeitungsschritte",
+  "toolSetup": "Werkzeugeinrichtung",
+  "toolDiameter": "Werkzeugdurchmesser",
+  "passDepth": "Zustelltiefe pro Durchgang",
+  "feedRate": "Vorschub",
+  "spindleRpm": "Spindeldrehzahl (U/min)",
+  "jobValid": "Auftrag geprüft und bereit zur Übertragung.",
+  "jobErrors": "Der Auftrag enthält {{count}} Fehler.",
+  "noMachine": "Kein Maschinenprofil ausgewählt."
+}

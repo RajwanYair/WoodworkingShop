@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { OptimizationNotesPanel } from '../../src/components/optimizer/OptimizationNotesPanel';
+import { OptimizationNotesPanel } from '../../src/features/optimizer/OptimizationNotesPanel';
 import type { OptimizationSuggestion } from '../../src/engine/core/types';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
@@ -40,5 +40,15 @@ describe('OptimizationNotesPanel', () => {
 
     await user.click(screen.getByRole('button', { name: 'Restore dismissed suggestions' }));
     expect(await screen.findByText('A narrower cabinet improves sheet yield.')).toBeInTheDocument();
+  });
+
+  it('shows a positive empty state when no optimization suggestions are found', async () => {
+    vi.mocked(findOptimizations).mockReturnValue([]);
+    render(<OptimizationNotesPanel />);
+
+    expect(
+      await screen.findByText('No suggestions within the current tolerance — design is well optimized.'),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('spinbutton', { name: 'Tolerance' })).toBeVisible();
   });
 });

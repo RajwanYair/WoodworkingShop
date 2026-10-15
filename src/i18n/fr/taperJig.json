@@ -1,0 +1,14 @@
+{
+  "title": "Calculateur de guide de coupe en biais",
+  "workpieceLength": "Longueur de la pièce",
+  "startWidth": "Largeur au départ (extrémité large)",
+  "endWidth": "Largeur à l’arrivée (extrémité étroite)",
+  "taperedFaces": "Faces à biseauter",
+  "oneFace": "Une face",
+  "twoFaces": "Deux faces (symétriques)",
+  "taperAngle": "Angle de la pente",
+  "jigOffset": "Décalage du guide",
+  "materialRemoved": "Matière retirée par face",
+  "taperPerFoot": "Pente par pied",
+  "note": "Retournez la pièce après la première passe pour obtenir une pente symétrique"
+}

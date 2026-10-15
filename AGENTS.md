@@ -13,3 +13,4 @@
 - [.github/copilot-instructions.md](.github/copilot-instructions.md): shared architecture, conventions and quality commands.
 - [.github/instructions/](.github/instructions/): path-scoped rules; follow those matching changed files.
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/API-BOUNDARIES.md](docs/API-BOUNDARIES.md) and [docs/PLUGIN-API.md](docs/PLUGIN-API.md): architecture and API boundaries.
+- Current layout: `src/app/`, `src/features/`, `src/ui/`, `src/platform/`, and `src/i18n/{locale}/{namespace}.json`. Do not recreate `src/components/` or monolithic locale JSON.

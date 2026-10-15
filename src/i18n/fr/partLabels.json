@@ -1,0 +1,8 @@
+{
+  "title": "Planche d’étiquettes des pièces",
+  "noParts": "Aucune pièce : configurez d’abord un meuble.",
+  "expandQty": "Développer les pièces en quantité multiple (une étiquette par pièce)",
+  "print": "Imprimer les étiquettes",
+  "printTitle": "Étiquettes des pièces",
+  "gridAriaLabel": "Cartes d’étiquettes des pièces"
+}

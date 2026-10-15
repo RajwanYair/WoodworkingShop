@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import { DefectZonePanel } from '../../src/components/optimizer/optimizer-defect-zone-panel';
+import { DefectZonePanel } from '../../src/features/optimizer/optimizer-defect-zone-panel';
 
 const labels: Record<string, string> = {
   'optimizer.defectZones': 'Defect zones',

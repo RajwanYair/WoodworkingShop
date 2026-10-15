@@ -1,0 +1,25 @@
+{
+  "title": "Projekt-Snapshots",
+  "save": "Snapshot speichern",
+  "namePlaceholder": "Snapshot-Name…",
+  "restore": "Wiederherstellen",
+  "delete": "Snapshot löschen",
+  "empty": "Noch keine Snapshots gespeichert.",
+  "startFirst": "Ersten Snapshot benennen",
+  "savedAt": "Gespeichert {{when}}",
+  "cabinetCount": "{{count}} Schrank",
+  "cabinetCount_other": "{{count}} Schränke",
+  "compare": "Vergleichen",
+  "diff": {
+    "title": "Snapshots vergleichen",
+    "before": "Vorher",
+    "after": "Nachher",
+    "close": "Schließen",
+    "selectTwo": "Wählen Sie zwei verschiedene Snapshots zum Vergleichen.",
+    "identical": "Diese Snapshots sind identisch — keine Änderungen erkannt.",
+    "cabinetsAdded": "{{count}} Schrank hinzugefügt",
+    "cabinetsAdded_other": "{{count}} Schränke hinzugefügt",
+    "cabinetsRemoved": "{{count}} Schrank entfernt",
+    "cabinetsRemoved_other": "{{count}} Schränke entfernt"
+  }
+}

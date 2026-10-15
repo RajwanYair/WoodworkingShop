@@ -1,0 +1,14 @@
+{
+  "title": "Werkstattbestand",
+  "stock": "Bestand",
+  "inStock": "Auf Lager",
+  "lowStock": "Niedriger Bestand",
+  "outOfStock": "Nicht auf Lager",
+  "reorderLevel": "Mindestbestand",
+  "reorderList": "Nachbestellliste",
+  "quantity": "Menge",
+  "available": "Verfügbar",
+  "needed": "Benötigt",
+  "canFulfil": "Lieferbar",
+  "noItems": "Keine Lagerartikel vorhanden."
+}

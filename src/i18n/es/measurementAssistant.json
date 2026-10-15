@@ -1,0 +1,15 @@
+{
+  "title": "Consejos de medidas",
+  "kitchenBaseHeight": "La altura estándar de un mueble bajo de cocina es {{standard}} mm (la tuya: {{current}} mm)",
+  "kitchenBaseDepth": "La profundidad estándar de un mueble bajo de cocina es {{standard}} mm (la tuya: {{current}} mm)",
+  "overheadGap": "Deja {{gap}} mm entre la encimera y el mueble superior para acceder cómodamente",
+  "bookshelfDepthShallow": "La profundidad mínima para libros A4 en una estantería es {{min}} mm (la tuya: {{current}} mm)",
+  "bookshelfDepthDeep": "Una estantería de más de {{recommended}} mm de profundidad desperdicia material (la tuya: {{current}} mm)",
+  "bookshelfSpan": "El tramo de estante de {{current}} mm supera el límite seguro de {{maxSpan}} mm para un tablero de 18 mm; considera añadir un soporte central",
+  "wardrobeDepthShallow": "La profundidad del armario de {{current}} mm es menor que los {{min}} mm recomendados para colgar ropa",
+  "tallCabinet": "La altura del armario de {{current}} mm supera el alcance cómodo de pie ({{max}} mm)",
+  "deskHeight": "La altura ergonómica del escritorio es de {{min}}–{{max}} mm (la tuya: {{current}} mm)",
+  "deskDepth": "La profundidad mínima para un escritorio con monitor es {{min}} mm (la tuya: {{current}} mm)",
+  "reachZone": "La parte superior del armario, a {{current}} mm, supera la zona de alcance cómodo ({{max}} mm)",
+  "sheetAlignment": "El ancho de {{current}} mm no coincide con el tablero estándar de {{nearest}} mm; ajústalo para reducir los recortes"
+}

@@ -1,0 +1,15 @@
+{
+  "title": "حاسبة مواد الطلاء النهائي",
+  "surfaceArea": "مساحة السطح",
+  "coatCount": "عدد الطبقات",
+  "finishType": "نوع الطلاء النهائي",
+  "polyurethane": "بولي يوريثان",
+  "lacquer": "ورنيش لاكيه",
+  "shellac": "شيلاك",
+  "waterbased": "مائي",
+  "oil": "زيت / زيت دنماركي",
+  "volumeNeeded": "الحجم المطلوب",
+  "dryTimeBetweenCoats": "مدة الجفاف بين الطبقات",
+  "totalDryTime": "إجمالي مدة الجفاف",
+  "coveragePerLitre": "التغطية لكل لتر"
+}

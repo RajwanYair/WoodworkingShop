@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { KerfBendingPanel } from '../../src/components/configurator/KerfBendingPanel';
+import { KerfBendingPanel } from '../../src/features/calculators/KerfBendingPanel';
 
 describe('KerfBendingPanel', () => {
   it('recalculates material-dependent kerfs and warns when the panel is too thin', async () => {

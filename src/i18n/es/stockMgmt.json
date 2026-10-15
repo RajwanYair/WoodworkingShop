@@ -1,0 +1,13 @@
+{
+  "title": "Gestión de existencias",
+  "addMaterial": "Añadir material",
+  "createOrder": "Crear pedido",
+  "submitOrder": "Enviar pedido",
+  "receiveOrder": "Recibir mercancía",
+  "cancelOrder": "Cancelar pedido",
+  "recordWaste": "Registrar desperdicio",
+  "reorderAlerts": "Alertas de reposición",
+  "totalValue": "Valor total del inventario",
+  "pendingOrders": "Pedidos pendientes",
+  "wasteLog": "Registro de desperdicio"
+}

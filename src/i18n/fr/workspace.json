@@ -1,0 +1,12 @@
+{
+  "title": "Espace de travail multi-projets",
+  "newProject": "Nouveau projet",
+  "rename": "Renommer",
+  "remove": "Supprimer le projet",
+  "addTab": "Ajouter un onglet",
+  "noProjects": "Aucun projet dans cet espace de travail",
+  "sharedMaterial": "Matériau partagé",
+  "importWorkspace": "Importer l'espace de travail",
+  "exportWorkspace": "Exporter l'espace de travail",
+  "activeProject": "Projet actif"
+}

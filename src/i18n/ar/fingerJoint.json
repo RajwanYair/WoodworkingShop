@@ -1,0 +1,13 @@
+{
+  "title": "حاسبة وصلة الأصابع",
+  "boardWidth": "عرض اللوح",
+  "boardThickness": "سماكة اللوح",
+  "fingerWidth": "عرض الإصبع",
+  "fingerCount": "عدد الأصابع",
+  "socketDepth": "عمق التجويف",
+  "glueAllowance": "سماحية الغراء",
+  "glueSurface": "مساحة سطح اللصق",
+  "layoutA": "ترتيب اللوح A",
+  "layoutB": "ترتيب اللوح B",
+  "auto": "تلقائي"
+}

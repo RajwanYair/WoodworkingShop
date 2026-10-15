@@ -1,0 +1,17 @@
+{
+  "title": "¡Bienvenido al Planificador de Armarios!",
+  "subtitle": "Diseñe, optimice y construya su mobiliario en 3 sencillos pasos.",
+  "getStarted": "Comenzar",
+  "help": "Ayuda",
+  "dismissBackdrop": "Cerrar introducción",
+  "wizardStep1Title": "Configura tu armario",
+  "wizardStep1Desc": "Elige el tipo de mueble, las dimensiones, los materiales, las puertas, los cajones y los estantes para tu espacio.",
+  "wizardStep2Title": "Optimiza los planos de corte",
+  "wizardStep2Desc": "El optimizador distribuye cada pieza sobre los tableros, reduce el desperdicio y crea un diseño imprimible.",
+  "wizardStep3Title": "Exporta y construye",
+  "wizardStep3Desc": "Descarga un plano PDF, un archivo DXF para CNC, G-code para máquinas o una lista de materiales CSV; después, sigue la guía de montaje.",
+  "stepOf": "Paso {{step}} de {{total}}",
+  "next": "Siguiente",
+  "back": "Atrás",
+  "skip": "Omitir"
+}

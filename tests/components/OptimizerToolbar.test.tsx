@@ -4,8 +4,8 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import i18n from '../../src/i18n';
 import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
-import { OptimizerToolbar } from '../../src/components/optimizer/OptimizerToolbar';
-import type { OptimizerToolbarProps } from '../../src/components/optimizer/OptimizerToolbar';
+import { OptimizerToolbar } from '../../src/features/optimizer/OptimizerToolbar';
+import type { OptimizerToolbarProps } from '../../src/features/optimizer/OptimizerToolbar';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { makeCutSheet } from '../helpers';
 

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { SplineJointPanel } from '../../src/components/configurator/SplineJointPanel';
+import { SplineJointPanel } from '../../src/features/calculators/SplineJointPanel';
 
 describe('SplineJointPanel', () => {
   it('scales total spline length and glue area and reports an over-deep slot', async () => {

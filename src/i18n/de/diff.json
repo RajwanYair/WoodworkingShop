@@ -1,0 +1,16 @@
+{
+  "furnitureType": "Typ",
+  "width": "Breite",
+  "height": "Höhe",
+  "depth": "Tiefe",
+  "shelfCount": "Böden",
+  "carcassMaterial": "Korpusmaterial",
+  "backPanelMaterial": "Rückwandmaterial",
+  "doorCount": "Türen",
+  "doorStyle": "Türstil",
+  "drawerCount": "Schubladen",
+  "kickHeight": "Sockelleistenhöhe",
+  "handleStyle": "Griffstil",
+  "edgeBanding": "Kantenbeschichtung",
+  "hasBack": "Hat Rückwand"
+}

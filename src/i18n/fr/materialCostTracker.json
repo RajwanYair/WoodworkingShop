@@ -1,0 +1,14 @@
+{
+  "title": "Suivi du coût des matériaux",
+  "bestPrice": "Meilleur prix",
+  "supplier": "Fournisseur",
+  "trend": "Tendance",
+  "rising": "En hausse",
+  "falling": "En baisse",
+  "stable": "Stable",
+  "totalCost": "Coût total",
+  "anomaly": "Anomalie de prix",
+  "noPrice": "Aucune donnée de prix disponible.",
+  "currency": "Devise",
+  "perUnit": "par unité"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Distribución de la habitación",
+  "sectionLabel": "Plano de planta de la habitación",
+  "empty": "No hay distribuciones de habitación configuradas",
+  "cabinets": "armarios",
+  "utilized": "utilizado",
+  "walls": "Paredes",
+  "wallNorth": "Pared posterior",
+  "wallSouth": "Pared frontal",
+  "wallEast": "Pared derecha",
+  "wallWest": "Pared izquierda",
+  "hasOpening": "Tiene una abertura",
+  "snapToWall": "Ajustar a la pared",
+  "collision": "Se detectó una superposición de armarios",
+  "roomHeight": "Altura de la habitación",
+  "floorPlan": "Plano de planta",
+  "wallOccupancy": "Ocupación de la pared",
+  "selectCabinet": "Armario",
+  "positionX": "Posición X (mm)",
+  "positionY": "Posición Y (mm)"
+}

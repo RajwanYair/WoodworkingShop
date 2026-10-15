@@ -1,0 +1,12 @@
+{
+  "title": "Barrierefreiheitsprüfung",
+  "runAudit": "Prüfung starten",
+  "compliant": "Konform",
+  "nonCompliant": "Nicht konform",
+  "violations": "Verstöße",
+  "passes": "Bestanden",
+  "incomplete": "Unvollständig",
+  "severity": "Schweregrad",
+  "criterion": "Kriterium",
+  "suggestion": "Vorschlag"
+}

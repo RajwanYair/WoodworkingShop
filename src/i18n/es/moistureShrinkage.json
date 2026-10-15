@@ -1,0 +1,25 @@
+{
+  "species_cherry": "Cerezo",
+  "dimension": "Dimensión de la tabla",
+  "coefficient": "Coeficiente de contracción",
+  "species_oak": "Roble",
+  "species_cedar": "Cedro",
+  "species_pine": "Pino",
+  "grain": "Dirección de la veta",
+  "species_maple": "Arce",
+  "initialMC": "Contenido de humedad inicial",
+  "changeAmount": "Cambio dimensional",
+  "species_douglas_fir": "Abeto de Douglas",
+  "species_generic_hardwood": "Madera dura genérica",
+  "grains": {
+    "tangential": "Tangencial",
+    "radial": "Radial (perpendicular a los anillos)"
+  },
+  "species": "Especie",
+  "finalDimension": "Dimensión final",
+  "effectiveMCChange": "Cambio efectivo del contenido de humedad",
+  "title": "Humedad y contracción de la madera",
+  "targetMC": "Contenido de humedad objetivo",
+  "species_generic_softwood": "Madera blanda genérica",
+  "species_walnut": "Nogal"
+}

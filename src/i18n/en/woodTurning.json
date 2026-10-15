@@ -1,0 +1,13 @@
+{
+  "title": "Wood Turning Speed Calculator",
+  "blankDiameter": "Blank Diameter",
+  "operation": "Operation",
+  "roughing": "Roughing",
+  "finishing": "Finishing",
+  "sanding": "Sanding",
+  "minRpm": "Min RPM (advisory)",
+  "maxRpm": "Max RPM (advisory)",
+  "recommendedRpm": "Recommended RPM",
+  "surfaceSpeed": "Surface Speed (m/min)",
+  "safetyNote": "Advisory estimate only, not a safety limit. Follow your lathe manual; start slowly and reduce speed if the blank vibrates. Unbalanced blanks may need much lower speeds."
+}

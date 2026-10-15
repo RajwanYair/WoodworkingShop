@@ -1,0 +1,19 @@
+{
+  "title": "Halbholzverbindung",
+  "lapType": "Verbindungsart",
+  "board1Thickness": "Dicke von Brett 1",
+  "board1Width": "Breite von Brett 1",
+  "board2Thickness": "Dicke von Brett 2",
+  "board2Width": "Breite von Brett 2",
+  "board1NotchDepth": "Ausklinkungstiefe an Brett 1",
+  "board1NotchWidth": "Ausklinkungsbreite an Brett 1",
+  "board2NotchDepth": "Ausklinkungstiefe an Brett 2",
+  "board2NotchWidth": "Ausklinkungsbreite an Brett 2",
+  "totalGlueArea": "Gesamte Leimfläche",
+  "finishedThickness": "Endgültige Dicke",
+  "lapTypes": {
+    "end_lap": "Stirnseitige Halbholzverbindung",
+    "t_lap": "T-förmige Halbholzverbindung",
+    "cross_lap": "Kreuzüberblattung"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "title": "📐 Vérification des contraintes",
+  "panelLabel": "Volet de suggestions sur les contraintes dimensionnelles",
+  "violations": "Contraintes non respectées",
+  "allValid": "Toutes les dimensions respectent les limites de fabrication.",
+  "rangeHints": "Aperçu des plages dimensionnelles",
+  "fix": "Corriger",
+  "fixField": "Corriger {{field}}",
+  "fixAll": "Tout corriger"
+}

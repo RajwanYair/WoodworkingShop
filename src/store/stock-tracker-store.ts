@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { safePersistStorage } from './safe-persist-storage';
+import { versionedPersistOptions } from './slices/versionedPersist';
 import {
   addStockItem as engineAddStockItem,
   updateOnHand as engineUpdateOnHand,
@@ -33,6 +33,6 @@ export const useStockTrackerStore = create<StockTrackerState>()(
 
       clearAll: () => set({ stockStore: createStockStore() }),
     }),
-    { name: 'woodworkingshop:stocktracker', storage: safePersistStorage },
+    versionedPersistOptions('woodworkingshop:stocktracker'),
   ),
 );

@@ -1,0 +1,18 @@
+{
+  "title": "Rechner für die Holztrocknungsdauer",
+  "thickness": "Brettstärke",
+  "speciesClass": "Rohdichteklasse der Holzart",
+  "softwood": "Nadelholz",
+  "mediumHardwood": "Mittelhartes Laubholz",
+  "denseHardwood": "Dichtes Hartholz",
+  "initialMoisture": "Anfangsfeuchte",
+  "targetMoisture": "Zielholzfeuchte",
+  "method": "Trocknungsverfahren",
+  "airDry": "Lufttrocknung",
+  "kilnDry": "Kammertrocknung",
+  "estimatedDays": "Geschätzte Tage",
+  "estimatedWeeks": "Geschätzte Wochen",
+  "defectRisk": "Risiko von Trocknungsschäden",
+  "equalization": "Ausgleichstage",
+  "emc": "Gleichgewichtsfeuchte (EMC)"
+}

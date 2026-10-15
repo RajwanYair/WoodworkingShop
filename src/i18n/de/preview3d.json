@@ -1,0 +1,13 @@
+{
+  "title": "Interaktive 3D-Vorschau",
+  "resetCamera": "Kamera zurücksetzen",
+  "zoomIn": "Vergrößern",
+  "zoomOut": "Verkleinern",
+  "explode": "Explosionsdarstellung",
+  "wireframe": "Drahtmodell anzeigen",
+  "edgeBanding": "Kantenumleimung anzeigen",
+  "rendererTier": "Renderer-Stufe: {{tier}}",
+  "noGpu": "WebGPU nicht verfügbar, Szenengraph ist bereit",
+  "meshCount": "{{count}} Teil",
+  "meshCount_other": "{{count}} Teile"
+}

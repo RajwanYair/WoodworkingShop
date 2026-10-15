@@ -1,0 +1,13 @@
+{
+  "title": "שלח G-code דרך USB / סריאלי",
+  "connect": "התחבר למכונה",
+  "disconnect": "התנתק",
+  "notSupported": "Web Serial אינו נתמך בדפדפן זה. השתמש ב-Chrome 89+ או Edge 89+.",
+  "noSheets": "הפעל את ממטב החיתוך תחילה ליצירת G-code.",
+  "streaming": "שולח שורה {{current}} מתוך {{total}}…",
+  "pause": "השהה שליחה",
+  "resume": "המשך שליחה",
+  "paused": "השליחה מושהית בשורה {{current}} מתוך {{total}}.",
+  "done": "הסתיים — כל {{total}} השורות נשלחו.",
+  "error": "שגיאת חיבור: {{message}}"
+}

@@ -1,0 +1,12 @@
+{
+  "title": "Profil machine",
+  "selectProfile": "Sélectionner un profil machine",
+  "firmware": "Micrologiciel",
+  "baudRate": "Débit en bauds",
+  "feedRate": "Vitesse d’avance (mm/min)",
+  "plungeRate": "Vitesse de plongée (mm/min)",
+  "spindleRpm": "Vitesse de broche (tr/min)",
+  "passDepth": "Profondeur de passe (mm)",
+  "toolDiameter": "Diamètre de l’outil (mm)",
+  "workHolding": "Maintien de la pièce"
+}

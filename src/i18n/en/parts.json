@@ -1,0 +1,11 @@
+{
+  "title": "Parts List",
+  "id": "ID",
+  "name": "Part Name",
+  "qty": "Qty",
+  "material": "Material",
+  "length": "Length",
+  "width": "Width",
+  "thickness": "Thick.",
+  "edge": "Edge Band"
+}

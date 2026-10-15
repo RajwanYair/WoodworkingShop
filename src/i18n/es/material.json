@@ -1,0 +1,6 @@
+{
+  "reassignAll": "Aplicar a todos los armarios",
+  "reassignAllTip": "Establecer este material en todos los armarios del proyecto",
+  "reassignedAll": "Material aplicado a todos los armarios",
+  "alreadyUniform": "Todos los armarios ya usan este material"
+}

@@ -1,0 +1,12 @@
+{
+  "title": "لوحة التحليلات",
+  "sessions": "الجلسات",
+  "totalEvents": "إجمالي الأحداث",
+  "topMaterials": "المواد الأكثر استخدامًا",
+  "costTrends": "اتجاهات التكاليف",
+  "noData": "لا تتوفر بيانات تحليلية",
+  "exportData": "تصدير التحليلات",
+  "selectionCount": "{{count}} عملية تحديد",
+  "selectionCount_other": "{{count}} عمليات تحديد",
+  "averageCost": "متوسط التكلفة"
+}

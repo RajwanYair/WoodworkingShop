@@ -1,6 +1,10 @@
 import '@testing-library/jest-dom/vitest';
 import { afterEach, vi } from 'vitest';
-import '../src/i18n';
+import i18n from '../src/i18n';
+import { loadLocaleFiles } from './i18n/load-locale-files';
+
+// Production boots the eager workspace bundle. Component tests render panels directly, so they need every English namespace.
+i18n.addResourceBundle('en', 'translation', loadLocaleFiles('en'), true, true);
 // Polyfill IndexedDB for jsdom — required by idb-keyval (used in indexed-db-storage.ts).
 import 'fake-indexeddb/auto';
 

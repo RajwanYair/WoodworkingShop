@@ -1,0 +1,15 @@
+{
+  "title": "Calculateur d'espacement des taquets d'étagère",
+  "spacing": "Espacement des trous",
+  "positions": "Positions réglables",
+  "holeCount": "Nombre total de trous",
+  "drillDepth": "Profondeur de perçage",
+  "edgeClearance": "Retrait du bord",
+  "pinDiameter": "Diamètre du taquet",
+  "adjustmentRange": "Plage de réglage",
+  "euro32": "Système Euro 32 mm",
+  "singleRow": "Rangée simple",
+  "doubleRow": "Double rangée",
+  "totalPins": "Nombre total de taquets requis",
+  "pinsPerShelf": "Taquets par étagère"
+}

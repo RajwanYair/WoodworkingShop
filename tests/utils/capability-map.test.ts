@@ -39,8 +39,8 @@ describe('buildCapabilityInventory', () => {
   it('records transitive UI and test importers with the emitted output chunk', () => {
     const inventory = buildCapabilityInventory(
       {
-        'src/App.tsx': 'import "./components/Panel";',
-        'src/components/Panel.tsx': 'import "../engine/calculate";',
+        'src/App.tsx': 'import "./features/panel/Panel";',
+        'src/features/panel/Panel.tsx': 'import "../../engine/calculate";',
         'src/engine/calculate.ts': 'export const value = 1;',
         'tests/engine/calculate.test.ts': 'import "../../src/engine/calculate";',
       },
@@ -55,7 +55,7 @@ describe('buildCapabilityInventory', () => {
     expect(inventory).toEqual([
       {
         path: 'src/engine/calculate.ts',
-        uiImporters: ['src/App.tsx', 'src/components/Panel.tsx'],
+        uiImporters: ['src/App.tsx', 'src/features/panel/Panel.tsx'],
         internalImporters: [],
         barrelOnly: false,
         testImporters: ['tests/engine/calculate.test.ts'],

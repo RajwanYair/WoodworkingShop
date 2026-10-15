@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 import { generateParts } from '../../src/engine/geometry/parts';
-import { HardwareTable, PartsTable } from '../../src/components/optimizer/Tables';
+import { HardwareTable, PartsTable } from '../../src/features/optimizer/Tables';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { makeHardwareItem } from '../helpers';
 

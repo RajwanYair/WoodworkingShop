@@ -1,0 +1,17 @@
+{
+  "title": "مسافات خلوص الأجهزة المنزلية",
+  "oven": "فرن",
+  "dishwasher": "غسالة أطباق",
+  "refrigerator": "ثلاجة",
+  "cooktop": "موقد طهي",
+  "microwave": "ميكروويف",
+  "clearanceTop": "الخلوص العلوي",
+  "clearanceBottom": "الخلوص السفلي",
+  "clearanceLeft": "الخلوص الأيسر",
+  "clearanceRight": "الخلوص الأيمن",
+  "clearanceRear": "الخلوص الخلفي",
+  "clearanceFront": "الخلوص الأمامي (مساحة فتح الباب)",
+  "violation": "مسافة الخلوص غير كافية: ينقص {{shortfall}} مم من جهة {{side}} للجهاز {{appliance}}",
+  "allClear": "تم استيفاء جميع مسافات خلوص الأجهزة.",
+  "checkClearances": "تحقق من مسافات الخلوص"
+}

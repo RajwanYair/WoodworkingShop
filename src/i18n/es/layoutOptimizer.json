@@ -1,0 +1,11 @@
+{
+  "title": "Optimizador de distribución",
+  "totalDistance": "Distancia total recorrida",
+  "efficiencyScore": "Puntuación de eficiencia",
+  "suggestions": "Sugerencias de intercambio",
+  "swap": "Intercambiar",
+  "saved": "Ahorrado",
+  "improvement": "Mejora",
+  "noSuggestions": "La distribución ya es óptima.",
+  "metres": "m"
+}

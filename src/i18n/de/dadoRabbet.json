@@ -1,0 +1,14 @@
+{
+  "title": "Rechner für Nut- und Falzverbindungen",
+  "jointType": "Verbindungstyp",
+  "dado": "Nut",
+  "rabbet": "Falz",
+  "throughDado": "Durchgehende Nut",
+  "matingThickness": "Stärke des einzupassenden Bretts",
+  "boardThickness": "Stärke des Trägerbretts",
+  "cutWidth": "Schnittbreite",
+  "cutDepth": "Schnitttiefe",
+  "offsetFromEdge": "Abstand zur Kante",
+  "bitsRecommendation": "Empfohlener Fräser / Sägeblatt",
+  "passCount": "Erforderliche Fräspässe"
+}

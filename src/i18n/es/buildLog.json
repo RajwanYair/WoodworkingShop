@@ -1,0 +1,12 @@
+{
+  "title": "Registro de construcción",
+  "addPlaceholder": "Añadir una nota de construcción…",
+  "hint": "Ctrl/Cmd + Intro para guardar",
+  "add": "Añadir nota",
+  "edit": "Editar entrada",
+  "save": "Guardar nota",
+  "cancel": "Cancelar edición",
+  "empty": "Aún no hay notas. Registra pasos, ajustes u observaciones.",
+  "delete": "Eliminar entrada",
+  "clearAll": "Eliminar todas las entradas"
+}

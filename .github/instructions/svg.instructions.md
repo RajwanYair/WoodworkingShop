@@ -1,11 +1,11 @@
 ---
 description: 'SVG rendering and standalone SVG asset conventions.'
-applyTo: 'src/components/**/*.tsx,src/components/**/*.ts,docs/*.svg,public/*.svg'
+applyTo: 'src/features/**/*.tsx,src/features/**/*.ts,src/ui/**/*.tsx,docs/*.svg,public/*.svg'
 ---
 
 # SVG Instructions — WoodworkingShop
 
-These instructions apply to all SVG rendering code in `src/components/` and all
+These instructions apply to all SVG rendering code in `src/features/` and all
 standalone `.svg` assets under `docs/` and `public/`.
 
 ## Core constraints

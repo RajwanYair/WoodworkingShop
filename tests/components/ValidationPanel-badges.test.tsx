@@ -3,7 +3,7 @@
  */
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { ValidationPanel } from '../../src/components/configurator/ValidationPanel';
+import { ValidationPanel } from '../../src/features/configurator/ValidationPanel';
 import type { ValidationIssue } from '../../src/engine/core/types';
 
 const ERROR_ISSUE: ValidationIssue = {

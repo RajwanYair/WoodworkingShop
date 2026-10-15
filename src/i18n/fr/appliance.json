@@ -1,0 +1,17 @@
+{
+  "title": "Dégagement des appareils électroménagers",
+  "oven": "Four",
+  "dishwasher": "Lave-vaisselle",
+  "refrigerator": "Réfrigérateur",
+  "cooktop": "Table de cuisson",
+  "microwave": "Micro-ondes",
+  "clearanceTop": "Dégagement supérieur",
+  "clearanceBottom": "Dégagement inférieur",
+  "clearanceLeft": "Dégagement à gauche",
+  "clearanceRight": "Dégagement à droite",
+  "clearanceRear": "Dégagement arrière",
+  "clearanceFront": "Dégagement avant (débattement de porte)",
+  "violation": "Dégagement insuffisant : il manque {{shortfall}} mm du côté {{side}} de l’appareil {{appliance}}",
+  "allClear": "Tous les dégagements requis pour les appareils sont respectés.",
+  "checkClearances": "Vérifier les dégagements"
+}

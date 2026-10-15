@@ -5,7 +5,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, beforeEach } from 'vitest';
-import { ValidationPanel } from '../../src/components/configurator/ValidationPanel';
+import { ValidationPanel } from '../../src/features/configurator/ValidationPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { validateConfig } from '../../src/engine/core/validation';
 import { cfg } from '../helpers';

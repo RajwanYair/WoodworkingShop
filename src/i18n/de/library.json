@@ -1,0 +1,13 @@
+{
+  "title": "Projektbibliothek",
+  "search": "Bibliothek durchsuchen…",
+  "noResults": "Keine passenden Projekte gefunden",
+  "tags": "Schlagwörter",
+  "save": "In Bibliothek speichern",
+  "load": "Aus Bibliothek laden",
+  "share": "Projekt teilen",
+  "sortBy": "Sortieren nach",
+  "sortName": "Name",
+  "sortDate": "Erstellungsdatum",
+  "sortUpdated": "Zuletzt aktualisiert"
+}

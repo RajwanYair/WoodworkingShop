@@ -1,0 +1,12 @@
+{
+  "panel": "Panneau",
+  "panelFailed": "Impossible d'afficher {{panel}}",
+  "recoveryHint": "Une erreur inattendue s'est produite. Vous pouvez recharger le panneau ou actualiser la page.",
+  "retry": "Réessayer",
+  "copyDetails": "Copier les détails de l'erreur",
+  "details": "Détails de l'erreur",
+  "copied": "Copié !",
+  "reloadPage": "Actualiser la page",
+  "warning": "Erreur",
+  "interactivePreview": "Aperçu 3D interactif"
+}

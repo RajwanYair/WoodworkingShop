@@ -17,7 +17,7 @@ Every new feature follows this layered pattern:
 
 1. **Engine** (`src/engine/${feature}.ts`) — Pure TS computation. No React, no DOM, no side effects.
 2. **Store** (if needed) — Add state/actions to the appropriate Zustand slice in `src/store/slices/`.
-3. **Component** (`src/components/${tab}/${Feature}Panel.tsx`) — React UI. Only component exports.
+3. **Component** (`src/features/${tab}/${Feature}Panel.tsx`) — React UI. Only component exports.
 4. **i18n** — Keys in both `src/i18n/en.json` AND `src/i18n/he.json` (parity required).
 5. **Mount** — Import and render in the parent panel (e.g. `ConfiguratorPanel.tsx`, `AssemblyGuide.tsx`).
 

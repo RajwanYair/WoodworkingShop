@@ -1,0 +1,10 @@
+{
+  "title": "📐 Maßprüfung",
+  "panelLabel": "Bedienfeld mit Vorschlägen zu Maßbeschränkungen",
+  "violations": "Verstöße gegen Fertigungsvorgaben",
+  "allValid": "Alle Maße liegen innerhalb der Fertigungsgrenzen.",
+  "rangeHints": "Übersicht der Maßbereiche",
+  "fix": "Korrigieren",
+  "fixField": "{{field}} korrigieren",
+  "fixAll": "Alle korrigieren"
+}

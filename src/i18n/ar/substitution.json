@@ -1,0 +1,15 @@
+{
+  "title": "اقتراحات المواد",
+  "switch": "التبديل إلى {{name}}",
+  "switchShort": "استخدام هذا",
+  "benefit": {
+    "deflection": "الانحناء",
+    "weight": "الوزن",
+    "cost": "التكلفة"
+  },
+  "quant": {
+    "savedKgPerSheet": "يوفر {{value}} كغ/لوح",
+    "deflectionReductionPct": "{{value}}% أقل انحناءً",
+    "costDeltaPct": "{{value}}% تغيير في التكلفة"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Estimation des coûts",
+  "edgeBanding": "Chant",
+  "hardware": "Quincaillerie",
+  "waste": "Chutes matière",
+  "perUnit": "Coût par unité",
+  "total": "Total estimé",
+  "disclaimer": "Les prix sont approximatifs et peuvent varier selon le fournisseur.",
+  "editPrice": "Cliquer pour remplacer le prix par panneau",
+  "resetPrice": "Réinitialiser au prix par défaut",
+  "editEbRate": "Cliquer pour définir le tarif du chant (₪/m)",
+  "totalWeight": "Poids estimé des panneaux",
+  "labour": "Main-d'œuvre",
+  "labourRate": "Tarif horaire",
+  "editLabourHours": "Cliquer pour définir les heures de travail estimées",
+  "editLabourRate": "Cliquer pour remplacer le tarif horaire (₪/h)",
+  "labourHoursAriaLabel": "Heures de travail",
+  "labourRateAriaLabel": "Tarif horaire",
+  "finish": "Finition / peinture",
+  "editFinish": "Cliquer pour définir le coût de finition/peinture",
+  "finishAriaLabel": "Coût finition/peinture",
+  "notSet": "—"
+}

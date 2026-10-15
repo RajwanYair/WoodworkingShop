@@ -1,0 +1,12 @@
+{
+  "title": "المساعد الذكي للتصميم",
+  "brief": "موجز التصميم",
+  "suggestions": "اقتراحات التخطيط",
+  "noSuggestions": "لا توجد اقتراحات — جميع القيود مستوفاة.",
+  "constraintsSatisfied": "القيود مستوفاة",
+  "constraintsViolated": "تم انتهاك القيود",
+  "overallScore": "النتيجة الإجمالية",
+  "applyAll": "تطبيق الكل",
+  "applySuggestion": "تطبيق",
+  "validateConstraints": "التحقق من القيود"
+}

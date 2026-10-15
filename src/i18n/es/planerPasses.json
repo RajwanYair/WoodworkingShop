@@ -1,0 +1,13 @@
+{
+  "title": "Calculadora de pasadas de cepillado",
+  "initialThickness": "Grosor inicial",
+  "targetThickness": "Grosor objetivo",
+  "maxPassDepth": "Profundidad máxima por pasada",
+  "snipeLength": "Longitud de la marca en el extremo (cada extremo)",
+  "boardLength": "Longitud del tablero",
+  "passCount": "Número de pasadas",
+  "depthPerPass": "Profundidad por pasada",
+  "totalRemoval": "Material retirado en total",
+  "snipeAllowance": "Margen por marcas en los extremos (ambos lados)",
+  "effectiveLength": "Longitud útil efectiva"
+}

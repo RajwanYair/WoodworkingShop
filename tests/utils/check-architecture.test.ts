@@ -9,8 +9,9 @@ import {
 describe('analyzeArchitecture', () => {
   it('accepts target architecture layer edges', () => {
     const violations = analyzeArchitecture({
-      'src/app/main.ts': "import '../features/panel';",
-      'src/features/panel.ts': "import './helpers'; import '../ui/button'; import '../store/cabinet';",
+      'src/app/main.ts': "import '../features/panel'; import '../ui/button'; import '../store/cabinet';",
+      'src/features/panel.ts':
+        "import './helpers'; import '../ui/button'; import '../store/cabinet'; import '../engine/index'; import '../workers/storage.worker';",
       'src/features/helpers.ts': 'export const helper = true;',
       'src/ui/button.ts': "import './tokens'; export const button = true;",
       'src/ui/tokens.ts': 'export const tokens = true;',
@@ -26,7 +27,8 @@ describe('analyzeArchitecture', () => {
 
   it('reports imports that violate target architecture layer edges', () => {
     const violations = analyzeArchitecture({
-      'src/app/main.ts': "import '../store/cabinet';",
+      'src/app/main.ts': "import '../platform/storage';",
+      'src/platform/storage.ts': 'export const storage = true;',
       'src/store/cabinet.ts': "import '../ui/button';",
       'src/ui/button.ts': 'export const button = true;',
     });
@@ -36,8 +38,8 @@ describe('analyzeArchitecture', () => {
         {
           rule: 'target-layer-boundary',
           file: 'src/app/main.ts',
-          target: 'src/store/cabinet.ts',
-          detail: 'app -> store',
+          target: 'src/platform/storage.ts',
+          detail: 'app -> platform',
         },
         {
           rule: 'target-layer-boundary',

@@ -1,6 +1,8 @@
 import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from './fixtures/app';
+import { parseUnreleasedChangelog } from '../../scripts/parse-changelog.js';
 
 test('command palette filters, runs a command, passes axe, and restores focus', async ({ appPage: page }) => {
   const triggers = page.getByRole('button', { name: 'Command Palette' });
@@ -42,6 +44,21 @@ test('opens a calculator from the palette and lists it in recent commands', asyn
   await page.keyboard.press('Control+k');
   const recentCommands = dialog.getByRole('group', { name: 'Recent commands' });
   await expect(recentCommands.getByRole('option', { name: 'Shelf Sag Calculator', exact: true })).toBeVisible();
+});
+
+test('opens changelog-backed release notes from the command palette', async ({ appPage: page }) => {
+  await page.keyboard.press('Control+k');
+  const palette = page.getByRole('dialog', { name: 'Command Palette' });
+  const search = palette.getByRole('combobox', { name: 'Search commands and actions...' });
+  await search.fill("what's new");
+  await search.press('Enter');
+
+  const whatsNew = page.getByRole('dialog', { name: "What's new" });
+  await expect(whatsNew).toBeVisible();
+  const changelog = await readFile(resolve(process.cwd(), 'CHANGELOG.md'), 'utf8');
+  const [firstEntry] = parseUnreleasedChangelog(changelog);
+  expect(firstEntry).toBeDefined();
+  await expect(whatsNew.getByText(firstEntry.summary, { exact: true })).toBeVisible();
 });
 
 test('Ctrl+K does not open the command palette while editing a dimension', async ({ appPage: page }) => {

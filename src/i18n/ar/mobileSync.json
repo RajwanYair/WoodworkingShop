@@ -1,0 +1,13 @@
+{
+  "title": "مزامنة الأجهزة المحمولة",
+  "online": "متصل",
+  "offline": "غير متصل",
+  "syncing": "جارٍ المزامنة…",
+  "pendingChanges": "{{count}} تغيير معلّق",
+  "pendingChanges_other": "{{count}} تغييرات معلّقة",
+  "conflicts": "{{count}} تعارض",
+  "conflicts_other": "{{count}} تعارضات",
+  "lastSynced": "آخر مزامنة: {{time}}",
+  "neverSynced": "لم تتم المزامنة من قبل",
+  "resolveConflict": "حلّ التعارض"
+}

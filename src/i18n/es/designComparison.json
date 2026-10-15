@@ -1,0 +1,20 @@
+{
+  "title": "Comparación de diseños",
+  "compare": "Comparar diseños",
+  "designA": "Diseño A",
+  "designB": "Diseño B",
+  "winner": "Ganador",
+  "tie": "Empate",
+  "criteria": "Criterios",
+  "score": "Puntuación",
+  "delta": "Diferencia",
+  "materialCost": "Coste de materiales",
+  "materialArea": "Superficie de materiales",
+  "partCount": "Número de piezas",
+  "cutComplexity": "Complejidad de corte",
+  "wastePercent": "Porcentaje de desperdicio",
+  "assemblySteps": "Pasos de montaje",
+  "structuralScore": "Puntuación de resistencia",
+  "radarChart": "Gráfico radial de puntuaciones",
+  "summary": "Resumen de la comparación"
+}

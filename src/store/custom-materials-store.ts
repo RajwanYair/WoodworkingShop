@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Material } from '../engine/core/types';
+import { versionedPersistOptions } from './slices/versionedPersist';
 
 interface CustomMaterialsState {
   materials: Material[];
@@ -20,7 +21,7 @@ export const useCustomMaterialsStore = create<CustomMaterialsState>()(
           materials: s.materials.map((m) => (m.key === key ? { ...m, ...patch } : m)),
         })),
     }),
-    { name: 'custom-materials' },
+    versionedPersistOptions('custom-materials'),
   ),
 );
 

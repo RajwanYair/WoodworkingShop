@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { StairStringerPanel } from '../../src/components/configurator/StairStringerPanel';
+import { StairStringerPanel } from '../../src/features/calculators/StairStringerPanel';
 
 describe('StairStringerPanel', () => {
   it('shows the default stair geometry and warns when tread depth is below IRC guidance', async () => {

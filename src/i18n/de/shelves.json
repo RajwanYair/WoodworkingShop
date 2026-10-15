@@ -1,0 +1,13 @@
+{
+  "customHeading": "Benutzerdefinierte Bodenpositionen (mm von unten)",
+  "resetEqual": "Auf gleichen Abstand zurücksetzen",
+  "position": "Boden {{n}}",
+  "internalHeight": "Innenhöhe: {{h}} mm",
+  "deflectionWarning": "Bodenspanne {{span}} mm: geschätzte Durchbiegung {{sag}} mm überschreitet L/360-Grenze ({{limit}} mm). Erwägen Sie eine dickere Platte, eine Mittelstütze oder eine kürzere Spanne.",
+  "deflectionSafe": "Bodenspanne OK — geschätzte Durchbiegung {{sag}} mm (weit innerhalb der L/360-Grenze {{limit}} mm)",
+  "deflectionDanger": "Durchbiegungsalarm: {{sag}} mm überschreitet L/240 — strukturelle Unterstützung oder dickere Platte für diese {{span}} mm Spanne erforderlich",
+  "deflectionRatingSafe": "Durchbiegung OK ({{sag}} mm)",
+  "deflectionRatingWarning": "Durchbiegungswarnung ({{sag}} mm)",
+  "deflectionRatingDanger": "Durchbiegungsgefahr ({{sag}} mm)",
+  "loadCapacity": "max. {{kg}} kg"
+}

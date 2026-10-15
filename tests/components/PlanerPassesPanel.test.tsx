@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { PlanerPassesPanel } from '../../src/components/configurator/PlanerPassesPanel';
+import { PlanerPassesPanel } from '../../src/features/calculators/PlanerPassesPanel';
 
 describe('PlanerPassesPanel', () => {
   it('recalculates planer passes and reports an invalid target thickness accessibly', async () => {

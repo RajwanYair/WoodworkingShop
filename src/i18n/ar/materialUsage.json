@@ -1,0 +1,15 @@
+{
+  "title": "تقرير استخدام المواد",
+  "totalArea": "إجمالي مساحة القطع",
+  "sheetArea": "إجمالي مساحة الألواح",
+  "wasteArea": "مساحة الهدر",
+  "wastePercent": "نسبة الهدر",
+  "sheetsRequired": "عدد الألواح المطلوبة",
+  "costPerSheet": "التكلفة لكل لوح",
+  "totalCost": "التكلفة الإجمالية",
+  "partCount": "عدد القطع",
+  "volume": "الحجم",
+  "mostWasteful": "الأكثر إهدارًا",
+  "mostExpensive": "الأعلى تكلفة",
+  "noMaterials": "لا توجد مواد في التقرير."
+}

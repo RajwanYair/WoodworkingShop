@@ -77,6 +77,41 @@ describe('cabinet-store', () => {
     });
   });
 
+  it('restores a versioned session that has no legacy flat cabinet fields', async () => {
+    const { createCabinetSessionRecord } = await import('../../src/store/slices/sessionPersistence');
+    window.localStorage.setItem(
+      'woodworkingshop:session',
+      JSON.stringify(
+        createCabinetSessionRecord({
+          cabinets: [{ name: 'Versioned cabinet', config: { ...DEFAULT_CONFIG, width: 640 } }],
+          activeCabinetIndex: 0,
+          projectName: 'Versioned project',
+          projectNotes: 'Slice notes',
+          sawKerf: 4,
+          materialPriceOverrides: {},
+          edgeBandingRate: 3,
+          hardwarePriceOverrides: {},
+          hardwareQtyOverrides: {},
+          sheetSizeOverrides: {},
+          labourRate: 75,
+          labourHours: 0,
+          finishCost: 0,
+          rotationLockedPartIds: {},
+        }),
+      ),
+    );
+
+    vi.resetModules();
+    const { useCabinetStore: restoredStore } = await import('../../src/store/cabinet-store');
+
+    expect(restoredStore.getState()).toMatchObject({
+      cabinets: [{ name: 'Versioned cabinet', config: { width: 640 } }],
+      config: { width: 640 },
+      projectName: 'Versioned project',
+      projectNotes: 'Slice notes',
+    });
+  });
+
   it('applies shared-link config over the restored cabinet session', async () => {
     window.localStorage.setItem(
       'woodworkingshop:session',

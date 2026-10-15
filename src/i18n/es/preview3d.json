@@ -1,0 +1,13 @@
+{
+  "title": "Vista previa 3D interactiva",
+  "resetCamera": "Restablecer cámara",
+  "zoomIn": "Acercar",
+  "zoomOut": "Alejar",
+  "explode": "Vista explosionada",
+  "wireframe": "Mostrar estructura alámbrica",
+  "edgeBanding": "Mostrar tapacantos",
+  "rendererTier": "Nivel del renderizador: {{tier}}",
+  "noGpu": "WebGPU no disponible; la escena está preparada",
+  "meshCount": "{{count}} pieza",
+  "meshCount_other": "{{count}} piezas"
+}

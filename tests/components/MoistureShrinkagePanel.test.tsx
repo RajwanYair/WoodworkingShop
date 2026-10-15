@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { MoistureShrinkagePanel } from '../../src/components/configurator/MoistureShrinkagePanel';
+import { MoistureShrinkagePanel } from '../../src/features/calculators/MoistureShrinkagePanel';
 
 describe('MoistureShrinkagePanel', () => {
   it('recalculates for grain direction and reports an invalid dimension accessibly', async () => {

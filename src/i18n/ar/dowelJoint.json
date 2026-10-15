@@ -1,0 +1,18 @@
+{
+  "title": "حاسبة وصلة الأوتاد",
+  "diameter": "قطر الوتد",
+  "spacing": "المسافة بين الأوتاد",
+  "depth": "عمق الحفر",
+  "drillBit": "ريشة الحفر",
+  "count": "عدد الأوتاد",
+  "clampTime": "مدة التثبيت بالملزمة",
+  "orientation": "اتجاه الوصلة",
+  "edgeToFace": "حافة إلى وجه",
+  "edgeToEdge": "حافة إلى حافة",
+  "mitre": "مائل",
+  "positions": "مواضع الأوتاد",
+  "jointLength": "طول الوصلة",
+  "boardThickness": "سماكة اللوح",
+  "edgeClearance": "المسافة عن الحافة",
+  "dowelLength": "طول الوتد"
+}

@@ -1,0 +1,15 @@
+{
+  "title": "ملخص التكاليف",
+  "category": "الفئة",
+  "amount": "المبلغ",
+  "share": "النسبة",
+  "total": "الإجمالي",
+  "materials": "المواد",
+  "edgeBanding": "تغليف الحواف",
+  "hardware": "المستلزمات",
+  "waste": "مخصص الهدر",
+  "finish": "التشطيب / الطلاء",
+  "labour": "العمالة",
+  "exportCsv": "تصدير CSV",
+  "tableAriaLabel": "جدول تفصيل التكاليف"
+}

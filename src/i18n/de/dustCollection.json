@@ -1,0 +1,17 @@
+{
+  "title": "Absauganlage",
+  "estimator": "Anlagenauslegung",
+  "machine": "Maschine",
+  "addMachine": "Maschine hinzufügen",
+  "portDiameter": "Durchmesser des Absaugstutzens",
+  "ductRun": "Rohrleitungsstrecke",
+  "elbows": "Rohrbögen",
+  "cfmRequired": "Erforderlicher Volumenstrom (CFM)",
+  "staticPressure": "Statischer Druck",
+  "trunkDiameter": "Durchmesser der Hauptleitung",
+  "recommendedHp": "Empfohlene Motorleistung (PS)",
+  "adequate": "Anlage ausreichend dimensioniert",
+  "inadequate": "Anlage unterdimensioniert",
+  "warnings": "Warnungen",
+  "noMachines": "Keine Maschinen hinzugefügt."
+}

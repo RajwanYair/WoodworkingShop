@@ -1,0 +1,11 @@
+{
+  "title": "Écart de coût",
+  "material": "Matériau",
+  "estimated": "Estimé",
+  "actual": "Réel",
+  "variance": "Écart",
+  "total": "Total",
+  "savings": "Économies grâce aux chutes et à l’imbrication : {{amount}}",
+  "tableAriaLabel": "Détail des écarts de coût",
+  "editActualAriaLabel": "Saisir le coût réel pour {{key}}"
+}

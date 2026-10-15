@@ -1,0 +1,15 @@
+{
+  "title": "Bodenträger-Abstandsrechner",
+  "spacing": "Lochabstand",
+  "positions": "Verstellbare Positionen",
+  "holeCount": "Anzahl der Bohrungen",
+  "drillDepth": "Bohrtiefe",
+  "edgeClearance": "Randabstand",
+  "pinDiameter": "Bodenträgerdurchmesser",
+  "adjustmentRange": "Verstellbereich",
+  "euro32": "Euro-32-System",
+  "singleRow": "Einzelreihe",
+  "doubleRow": "Doppelreihe",
+  "totalPins": "Benötigte Bodenträger insgesamt",
+  "pinsPerShelf": "Bodenträger pro Einlegeboden"
+}

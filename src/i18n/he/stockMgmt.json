@@ -1,0 +1,13 @@
+{
+  "title": "ניהול מלאי",
+  "addMaterial": "הוסף חומר",
+  "createOrder": "צור הזמנה",
+  "submitOrder": "שלח הזמנה",
+  "receiveOrder": "קבל סחורה",
+  "cancelOrder": "בטל הזמנה",
+  "recordWaste": "תעד פסולת",
+  "reorderAlerts": "התראות הזמנה חוזרת",
+  "totalValue": "שווי מלאי כולל",
+  "pendingOrders": "הזמנות ממתינות",
+  "wasteLog": "יומן פסולת"
+}

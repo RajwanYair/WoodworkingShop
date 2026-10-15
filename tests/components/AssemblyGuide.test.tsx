@@ -10,7 +10,7 @@
  */
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { AssemblyGuide } from '../../src/components/assembly/AssemblyGuide';
+import { AssemblyGuide } from '../../src/features/assembly/AssemblyGuide';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 import { generateAssemblySteps } from '../../src/engine/assembly/assembly';

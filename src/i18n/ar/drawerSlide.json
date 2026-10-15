@@ -1,0 +1,20 @@
+{
+  "title": "حاسبة منزلقات الأدراج",
+  "boxWidth": "عرض صندوق الدرج",
+  "boxHeight": "ارتفاع صندوق الدرج",
+  "boxDepth": "عمق صندوق الدرج",
+  "openingWidth": "عرض الفتحة",
+  "openingHeight": "ارتفاع الفتحة",
+  "cabinetDepth": "عمق الخزانة",
+  "mountStyle": "نمط التثبيت",
+  "sideMount": "تثبيت جانبي",
+  "underMount": "تثبيت سفلي",
+  "centerMount": "تثبيت مركزي",
+  "extension": "نوع الامتداد",
+  "fullExtension": "امتداد كامل",
+  "threeQuarter": "امتداد ثلاثة أرباع",
+  "overTravel": "امتداد زائد",
+  "clearance": "الخلوص لكل جانب",
+  "slideLength": "طول المنزلق الموصى به",
+  "totalGap": "إجمالي الخلوص الأفقي"
+}

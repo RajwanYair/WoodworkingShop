@@ -1,0 +1,16 @@
+{
+  "title": "Suivi de l’usure des outils",
+  "inventory": "Stock",
+  "tool": "Outil",
+  "condition": "État",
+  "usage": "Journal d’utilisation",
+  "addTool": "Ajouter un outil",
+  "logUsage": "Enregistrer l’utilisation",
+  "alerts": "Alertes d’entretien",
+  "costPerMeter": "Coût par mètre",
+  "replacement": "À remplacer",
+  "noTools": "Aucun outil en stock.",
+  "noAlerts": "Tous les outils sont en bon état.",
+  "tools": "Outils",
+  "remaining": "Durée de vie restante"
+}

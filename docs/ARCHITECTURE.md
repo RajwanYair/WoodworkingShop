@@ -33,47 +33,35 @@ graph LR
 
 ## 📁 Directory Layout
 
-Measured on 2026-10-11 (v5.35.0). The planned target layout is in [Target Architecture](#-target-architecture-phase-82).
+Measured for Sprint 434. The Phase 82 layout below is the current tree, not a proposal. Do not recreate `src/components/`.
 
 ```text
 src/
 ├── main.tsx                 # React 19 entry point
 ├── App.tsx                  # Root: 7 tabs, keyboard shortcuts, lazy panels, error boundaries
 ├── index.css                # Tailwind v4 theme (wood-* tokens), print styles, RTL support
-├── engine/                  # Pure TypeScript computation (no React, no DOM) — 182 .ts files
-│   ├── types.ts             # Domain types: CabinetConfig, Part, HardwareItem, …
-│   ├── dimensions.ts        # Derived dimensions from config
-│   ├── parts.ts             # Part list generation
-│   ├── hardware.ts          # Hardware BOM generation
-│   ├── cut-optimizer.ts     # MaxRects BSSF + guillotine bin-packing
-│   ├── smart-optimizer.ts   # 5 optimization strategies
-│   ├── assembly.ts          # Assembly step generation
-│   ├── cost-estimator.ts    # Cost breakdown
-│   ├── …                    # 24 mounted calculators and supporting modules (165 top-level files)
-│   ├── assembly/ geometry/ hardware/ materials/ optimizer/   # Domain barrels
-│   ├── export/              # glTF, STEP, IFC writers
-│   ├── validation/          # Dimension, door and shelf rules
-│   └── index.ts             # Public barrel (1,448 lines)
-├── components/              # 124 .tsx files
-│   ├── configurator/        # Config panel, presets, materials, calculators, room layout (53 files)
-│   ├── preview/             # SVG views, isometric, WebGL 3D panel (7 files)
-│   ├── optimizer/           # Cut sheets, smart optimizer, tables, G-code preview (23 files)
-│   ├── assembly/            # Step-by-step guide, build log (5 files)
-│   ├── pdf/                 # Document orchestrator + sections/ (14 files)
-│   └── layout/              # Header, sidebar, toasts, onboarding, error boundary (22 files)
-├── store/
-│   ├── cabinet-store.ts     # Main store: cabinets, derived state, undo/redo
-│   ├── slices/              # uiSlice · snapshotSlice · optimizerSettingsSlice · namedExpressionsSlice
-│   ├── custom-materials-store.ts · custom-hardware-store.ts · room-store.ts
-│   ├── stock-tracker-store.ts · cost-variance-store.ts · toast-store.ts
-│   ├── safe-persist-storage.ts   # Fault-tolerant persistence wrapper
-│   └── worker-schedule.ts   # Worker lifecycle, abort, timeout, stale-result suppression
-├── workers/                 # cut-optimizer, cost-estimator, assembly, bom-export, dxf-export
-├── hooks/                   # useFocusTrap, useTouchGestures, useCamera, useHaptics,
-│                            #   useSwUpdate, usePwaFileHandlers, useSystemDarkMode, useIntersectionVisible
-├── i18n/                    # index.ts + en, he, ar, de, es, fr (non-English lazy-loaded)
-├── services/                # capability-contracts, error-reporter
-└── utils/                   # 34 .ts files: BOM/DXF/G-code export, URL state, IndexedDB storage, ZIP, downloads
+├── app/                     # Shell: header, onboarding, command palette (13 .tsx, 5 .ts)
+├── features/                # Panels (120 .tsx, 18 .ts)
+│   ├── configurator/        # Config panel, presets, materials, room layout
+│   ├── preview/             # SVG views, isometric, WebGL 3D panel
+│   ├── optimizer/           # Cut sheets, smart optimizer, tables, G-code preview
+│   ├── assembly/            # Step-by-step guide, build log
+│   ├── pdf/                 # Document orchestrator + sections/
+│   ├── calculators/         # Lazy calculator panels
+│   └── workspace/           # Home, sidebar, marketplace
+├── ui/                      # Design-system primitives and shared icons (17 .tsx, 3 .ts)
+├── engine/                  # Pure TypeScript computation — 189 .ts files, 19 domain directories
+│   ├── core/ costing/ export/ geometry/ hardware/ materials/ optimizer/
+│   ├── assembly/ calculators/ comparison/ inventory/ joinery/ project/ room/
+│   ├── stock/ templates/ validation/ waste/ workshop/
+│   └── index.ts             # Public barrel (domain re-exports plus the deprecated Web Serial facade)
+├── store/                   # 22 .ts files: domain slices, patch history, worker schedule
+├── platform/                # 29 .ts files: storage, files, share, device, diagnostics, worker scheduler
+├── workers/                 # 9 .ts files: cut, cost, assembly, BOM, DXF
+├── hooks/                   # 8 .ts files
+├── i18n/                    # {en,he,ar,de,es,fr}/{namespace}.json — 146 namespaces per locale
+├── services/                # 3 .ts files: store-aware diagnostics still awaiting a target owner
+└── utils/                   # 35 .ts files: export helpers and compatibility facades
 
 public/
 ├── manifest.json            # PWA manifest with file handlers
@@ -82,9 +70,9 @@ public/
 ├── robots.txt · sitemap.xml
 └── fonts/                   # Self-hosted fonts
 
-tests/                       # 345 Vitest files plus 15 Playwright spec files
-├── engine/ store/ utils/ hooks/ services/ i18n/   # Vitest unit and property tests
-├── components/              # Testing Library behaviour tests (separate coverage ratchet)
+tests/                       # 465 files: 369 *.test.* files and 16 Playwright specs
+├── engine/ store/ utils/ hooks/ services/ i18n/ platform/ workers/
+├── components/              # Testing Library behaviour tests (historical coverage floor)
 ├── e2e/                     # Playwright journeys, accessibility, visual baselines
 ├── fixtures/                # Oracles, golden exports, project fixtures
 ├── bench/                   # Vitest benchmarks (budgets in config/bench-budget.json)
@@ -101,11 +89,11 @@ tests/                       # 345 Vitest files plus 15 Playwright spec files
 
 ### CNC Serial Ownership
 
-`src/engine/webserial-v2.ts` owns the pure stream-session state machine;
+`src/engine/workshop/webserial-v2.ts` owns the pure stream-session state machine.
 `src/utils/webserial-cnc.ts` owns browser Web Serial I/O and is used by the
-assembly panel. Keep device access out of the pure engine. The public
-`src/engine/webserial.ts` API remains as a deprecated compatibility adapter
-through v5.35.x and is scheduled for removal in v5.36.0.
+assembly panel. `src/engine/index.ts` still re-exports those browser helpers so
+the v5.36.0 public barrel stays intact. That re-export is the one remaining
+architecture violation. Do not remove it without a versioned public-API change.
 
 ## ⚙ Engine Module
 
@@ -122,14 +110,14 @@ The engine is a set of pure functions with no React dependency. All functions ta
 
 ## 🗄 State Management
 
-The main Zustand store (`cabinet-store.ts`) composes four slices (`uiSlice`, `snapshotSlice`, `optimizerSettingsSlice`, `namedExpressionsSlice`) and holds:
+The main Zustand store (`cabinet-store.ts`) composes domain slices (`project`, `cabinets`, `catalog`, `optimizerSettings`, `ui`, `snapshot`, `namedExpressions`) and holds:
 
 - **Project state**: array of `CabinetEntry` (name + config), active index
 - **Derived state**: dimensions and parts computed synchronously; optimization, cost and assembly scheduled on Web Workers by `worker-schedule.ts` (abort, timeout and stale-result suppression)
-- **Undo/redo**: past/future stacks of cabinet arrays (max 50 entries)
+- **Undo/redo**: structural patches in `slices/cabinetHistory.ts` (max 50 steps). Slider drags stay one step through `beginHistoryGroup` / `endHistoryGroup`
 - **UI state**: active tab, dark mode, high contrast, colour-blind mode, unit system, focus mode
 
-Satellite stores: `custom-materials-store.ts`, `custom-hardware-store.ts`, `room-store.ts`, `stock-tracker-store.ts`, `cost-variance-store.ts` and `toast-store.ts`. Phase 82 (Sprint 429) plans to fold them into domain slices with patch-based history.
+Satellite stores stay separate ([ADR-0006](decisions/0006-domain-store-slices.md)): `custom-materials-store.ts`, `custom-hardware-store.ts`, `room-store.ts`, `stock-tracker-store.ts`, and `cost-variance-store.ts` persist independently at version 1. `toast-store.ts` stays ephemeral. Session persistence uses `StorageAdapter` and writes versioned slices plus the legacy flat fields.
 
 Saved projects, configurations, and snapshots use IndexedDB through `idb-keyval` in
 `utils/indexed-db-storage.ts`. Existing localStorage project/config data migrates one-way on first
@@ -179,7 +167,7 @@ The Preview tab mounts an interactive 3D panel (`Preview3DPanel`) beside the six
 | `isWebGLAvailable()`  | Quick boolean gate                              |
 | `isWebGL2Available()` | Check for full shader support                   |
 
-**Component** — `src/components/preview/WebGLPreviewCanvas.tsx`:
+**Component** — `src/features/preview/WebGLPreviewCanvas.tsx`:
 
 - Renders a simplified 3-D box approximating the configured cabinet dimensions.
 - Uses raw WebGL (no external library) to keep bundle impact near zero.
@@ -419,9 +407,9 @@ and is explicitly outside browser-level acceptance.
 
 ```mermaid
 graph LR
-  init["src/i18n/index.ts<br/>i18next.init()"]
-  en["en.json<br/>bundled, LTR"]
-  lazy["he · ar · de · es · fr<br/>dynamic import on demand"]
+  init["src/i18n/index.ts<br/>boots eager English namespaces"]
+  en["src/i18n/en/*.json<br/>146 namespaces, merged into translation"]
+  lazy["he · ar · de · es · fr<br/>requested namespaces on demand"]
   init --> en
   init -. "changeLanguage" .-> lazy
 
@@ -512,17 +500,20 @@ Hebrew (`he`) and Arabic (`ar`) locales set `document.dir = 'rtl'`. Tailwind's l
 
 ## 🎯 Target Architecture (Phase 82)
 
-Phase 82 of the [roadmap](../ROADMAP.md) restructures the code without changing behaviour. Export goldens, visual baselines and E2E journeys must stay identical.
+Phase 82 of the [roadmap](../ROADMAP.md) is the current layout. `npm run ci` passed after the summary, dialog, and shortcut-listener edits: 5,308 tests in 181.27 s, 2,880.4 KB JS / 3,117.7 KB total, initial route 592.4 KB raw / 152.7 KB Brotli, and 16 benchmarks. A cold typecheck took 5.19 s. Export goldens passed 1/1 after the leftover `src/components/` tree was deleted.
+The G-code axe check passed in Chromium and Firefox, and three Chromium visual baselines matched with the sticky header kept. The latest full E2E suite was 1 failed, 519 passed, and 6 skipped, so the release is not accepted. The one miss was a Firefox offcut-catalog confirmation that passed 3/3 when rerun alone.
+A real race was then found and fixed: the always-visible Sidebar requested ten workspace namespaces at mount that were not in the eager English bundle, so every boot fetched the whole locale chunk, which raced a Firefox smoke test's second navigation.
+Those namespaces are now eager and the test now performs one direct navigation, matching real usage. `npm run ci` passed again (5,308 tests, bundle and benchmarks within budget) and two full Playwright runs each showed only one unrelated, pre-existing single-test miss that passed in isolation. Sprint 434 Accept is DONE.
 
 ```mermaid
 flowchart TB
-  App["app/<br/>shell · routes (Navigation API) · command registry · error boundaries"]
+  App["app/<br/>shell · History API tab writes · Navigation traverse · command registry"]
   Features["features/*<br/>configurator · preview · optimizer · assembly · pdf · calculators · workspace"]
   UI["ui/<br/>design-system primitives"]
   Store["store/<br/>domain slices · patch history"]
   Platform["platform/<br/>storage · files · share · device · diagnostics"]
   Workers["workers/<br/>typed WorkerJob pool"]
-  Engine["engine/*<br/>13 pure domains"]
+  Engine["engine/*<br/>19 domain directories"]
 
   App --> Features
   Features --> UI
@@ -552,10 +543,10 @@ Platform adapter contracts run with fakes in Vitest and with native browser APIs
 
 Architecture rules:
 
-- `engine/` imports only `engine/`: pure and DOM-free; enforced by S426.
-- Browser APIs only in `platform/` and `app/`: migration and enforcement remain open.
-- Cross-domain imports only through domain barrels: enforced by S426/S427.
-- No import cycles: enforced by S426.
-- Components ≤ 400 lines after Sprint 431: reviewable files with primitives instead of copy-paste UI.
+- `engine/` imports only `engine/`, except the locked public re-export of `src/utils/webserial-cnc.ts` from `src/engine/index.ts`.
+- Browser APIs only in `platform/` and `app/`: still open. UI and store code still touch browser APIs, so Sprint 428 Accept stays open.
+- Cross-domain imports only through domain barrels: no current violations.
+- No import cycles: the plugin, template and PDF type cycles are split into sibling modules.
+- Component budget is 396 lines. Do not lower the gate.
 
 Architecture decisions are recorded as ADRs in `docs/decisions/` from Sprint 426.

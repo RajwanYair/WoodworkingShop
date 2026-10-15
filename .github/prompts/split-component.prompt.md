@@ -19,7 +19,7 @@ Split the component at `${file}` (currently ${lineCount} lines) into focused sub
 - **RTL-safe layout**: Use Tailwind logical properties (`ms-*`, `me-*`, `start-*`, `end-*`) — never `ml-*`/`mr-*`.
 - **ARIA**: Do not add redundant `role="list"` on `<ul>` or attach `onKeyDown` to non-interactive `<div>`.
 - **i18n parity**: Any new `t('key')` call must have matching entries in both `en.json` **and** `he.json`.
-- Keep each new file ≤ 600 lines.
+- Keep each new file ≤ 396 lines, the measured component budget.
 
 ## Steps
 

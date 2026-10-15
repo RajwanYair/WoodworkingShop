@@ -1,0 +1,12 @@
+{
+  "copeDepth": "עומק הקערה",
+  "bladeDiameter": "קוטר הלהב",
+  "bladeKerf": "רוחב חיתוך הלהב",
+  "copeWidth": "רוחב הקערה",
+  "fenceAngle": "זווית המחסום",
+  "maxPassDepth": "עומק מקסימלי למעבר",
+  "title": "חיתוך קערה (מסור שולחן)",
+  "passCount": "מספר מעברים",
+  "depthPerPass": "עומק למעבר",
+  "bladeHeight": "גובה להב סופי"
+}

@@ -7,7 +7,7 @@ engine:
 
 components:
   - changed-files:
-      - any-glob-to-any-file: 'src/components/**'
+      - any-glob-to-any-file: ['src/app/**', 'src/features/**', 'src/ui/**']
 
 store:
   - changed-files:

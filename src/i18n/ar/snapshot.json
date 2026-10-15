@@ -1,0 +1,25 @@
+{
+  "title": "لقطات المشروع",
+  "save": "حفظ لقطة",
+  "namePlaceholder": "اسم اللقطة…",
+  "restore": "استعادة",
+  "delete": "حذف اللقطة",
+  "empty": "لم يتم حفظ أي لقطات بعد.",
+  "startFirst": "سمّ اللقطة الأولى",
+  "savedAt": "محفوظ {{when}}",
+  "cabinetCount": "{{count}} خزانة",
+  "cabinetCount_other": "{{count}} خزائن",
+  "compare": "مقارنة",
+  "diff": {
+    "title": "مقارنة اللقطات",
+    "before": "قبل",
+    "after": "بعد",
+    "close": "إغلاق",
+    "selectTwo": "حدد لقطتين مختلفتين للمقارنة.",
+    "identical": "هذه اللقطات متطابقة — لم تُرصد أي تغييرات.",
+    "cabinetsAdded": "تمت إضافة {{count}} خزانة",
+    "cabinetsAdded_other": "تمت إضافة {{count}} خزائن",
+    "cabinetsRemoved": "تم حذف {{count}} خزانة",
+    "cabinetsRemoved_other": "تم حذف {{count}} خزائن"
+  }
+}

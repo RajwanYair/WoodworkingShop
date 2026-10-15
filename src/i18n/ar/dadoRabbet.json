@@ -1,0 +1,14 @@
+{
+  "title": "حاسبة وصلات المجرى والكتف",
+  "jointType": "نوع الوصلة",
+  "dado": "مجرى",
+  "rabbet": "كتف حافي",
+  "throughDado": "مجرى نافذ",
+  "matingThickness": "سماكة اللوح المُركّب",
+  "boardThickness": "سماكة اللوح الحامل",
+  "cutWidth": "عرض القطع",
+  "cutDepth": "عمق القطع",
+  "offsetFromEdge": "المسافة من الحافة",
+  "bitsRecommendation": "لقمة / شفرة موصى بها",
+  "passCount": "عدد تمريرات الراوتر المطلوبة"
+}

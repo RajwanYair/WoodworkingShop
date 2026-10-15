@@ -1,0 +1,16 @@
+{
+  "furnitureType": "Type",
+  "width": "Largeur",
+  "height": "Hauteur",
+  "depth": "Profondeur",
+  "shelfCount": "Étagères",
+  "carcassMaterial": "Matériau de caisse",
+  "backPanelMaterial": "Matériau arrière",
+  "doorCount": "Portes",
+  "doorStyle": "Style de porte",
+  "drawerCount": "Tiroirs",
+  "kickHeight": "Hauteur du socle",
+  "handleStyle": "Style de poignée",
+  "edgeBanding": "Chant",
+  "hasBack": "A un panneau arrière"
+}

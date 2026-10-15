@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import * as projectStorage from '../../src/utils/project-storage';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { useToastStore } from '../../src/store/toast-store';
-import { resolvePdfLang } from '../../src/components/pdf/pdf-i18n';
+import { resolvePdfLang } from '../../src/features/pdf/pdf-i18n';
 
 const { pdfMock } = vi.hoisted(() => ({
   pdfMock: vi.fn(() => ({ toBlob: vi.fn().mockResolvedValue(new Blob(['pdf'])) })),
@@ -15,7 +15,7 @@ vi.mock('@react-pdf/renderer', async (importOriginal) => ({
   pdf: pdfMock,
 }));
 
-import { PdfExportPanel } from '../../src/components/pdf/PdfExportPanel';
+import { PdfExportPanel } from '../../src/features/pdf/PdfExportPanel';
 
 function ActiveTabHarness() {
   const activeTab = useCabinetStore((state) => state.activeTab);

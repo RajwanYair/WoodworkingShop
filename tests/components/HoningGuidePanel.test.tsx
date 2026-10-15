@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { HoningGuidePanel } from '../../src/components/configurator/HoningGuidePanel';
+import { HoningGuidePanel } from '../../src/features/calculators/HoningGuidePanel';
 
 describe('HoningGuidePanel', () => {
   it('updates the microbevel projection and reports invalid values accessibly', async () => {

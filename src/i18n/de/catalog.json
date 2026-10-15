@@ -1,0 +1,20 @@
+{
+  "title": "Materialkatalog",
+  "manufacturer": "Hersteller",
+  "manufacturers": "Hersteller",
+  "filterByRegion": "Nach Region filtern",
+  "filterByCategory": "Nach Kategorie filtern",
+  "filterByThickness": "Nach Stärke filtern",
+  "availableOnly": "Nur verfügbare Materialien",
+  "noResults": "Keine Materialien entsprechen den aktuellen Filtern.",
+  "mergeCatalogs": "Kataloge zusammenführen",
+  "sku": "Artikelnummer",
+  "category": "Kategorie",
+  "thickness": "Materialstärke",
+  "price": "Preis pro m²",
+  "regions": "Lieferregionen",
+  "inStock": "Auf Lager",
+  "outOfStock": "Nicht auf Lager",
+  "importCatalog": "Katalog importieren",
+  "invalidCatalog": "Ungültiges Katalogformat."
+}

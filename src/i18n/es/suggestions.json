@@ -1,0 +1,17 @@
+{
+  "title": "Sugerencias de diseño",
+  "noSuggestions": "No hay sugerencias; ¡la configuración está perfecta!",
+  "apply": "Aplicar",
+  "dismiss": "Descartar",
+  "shelfTooClose": "Los estantes están muy juntos (separación media: {{avgGapMm}} mm; se recomiendan al menos {{minMm}} mm)",
+  "shelfTooFar": "Considera añadir un estante (separación media: {{avgGapMm}} mm; máximo de {{maxMm}} mm para un uso práctico)",
+  "tooManyDrawers": "Puede que {{drawerCount}} cajones no quepan cómodamente en una altura de {{heightMm}} mm (máximo práctico: {{maxUseful}})",
+  "addDrawers": "Un cajón inferior mejora la accesibilidad en armarios de {{heightMm}} mm de alto",
+  "kitchenBaseHeight": "La altura del armario, {{current}} mm, difiere de la altura estándar de los muebles bajos de cocina: {{standard}} mm",
+  "kitchenBaseDepth": "La profundidad del armario, {{current}} mm, difiere de la profundidad estándar de los muebles bajos de cocina: {{standard}} mm",
+  "reachZone": "La parte superior del armario está a {{current}} mm, por encima de la altura cómoda de alcance de {{max}} mm",
+  "lowClearance": "Solo hay {{clearanceMm}} mm de espacio hasta el techo; deja al menos 50 mm para la instalación",
+  "exceedsCeiling": "El armario supera la altura de la habitación en {{overMm}} mm",
+  "wideSpanRisk": "Tramo amplio de {{widthMm}} mm; considera un soporte central para reducir la flexión del estante",
+  "costMaterialAlternative": "El tablero de melamina es una alternativa económica al contrachapado para acabados pintados"
+}

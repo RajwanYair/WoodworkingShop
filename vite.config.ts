@@ -6,6 +6,7 @@ import { relative, resolve } from 'node:path';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import { sriPlugin } from './scripts/vite-plugin-sri.ts';
+import { parseUnreleasedChangelog } from './scripts/parse-changelog.js';
 
 const { version } = JSON.parse(readFileSync('./package.json', 'utf-8')) as { version: string };
 
@@ -22,6 +23,26 @@ function cloudflareAnalyticsPlugin() {
     transformIndexHtml(html: string) {
       const snippet = `\n    <!-- Cloudflare Web Analytics (Phase 12 / Sprint 15) — no cookies, no PII -->\n    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"${token}"}'></script>`;
       return html.replace('</body>', `${snippet}\n  </body>`);
+    },
+  };
+}
+
+function unreleasedChangelogPlugin() {
+  const moduleId = 'virtual:unreleased-changelog';
+  const resolvedModuleId = `\0${moduleId}`;
+
+  return {
+    name: 'unreleased-changelog',
+    resolveId(id: string) {
+      return id === moduleId ? resolvedModuleId : null;
+    },
+    load(id: string) {
+      if (id !== resolvedModuleId) return null;
+      const changelog = readFileSync(resolve(process.cwd(), 'CHANGELOG.md'), 'utf-8');
+      const entries = parseUnreleasedChangelog(changelog)
+        .slice(0, 1)
+        .map(({ summary }) => summary);
+      return `export const UNRELEASED_CHANGELOG = ${JSON.stringify(entries)};`;
     },
   };
 }
@@ -61,6 +82,7 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    unreleasedChangelogPlugin(),
     capabilityChunkPlugin(),
     cloudflareAnalyticsPlugin(),
     sriPlugin(),

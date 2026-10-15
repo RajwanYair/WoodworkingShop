@@ -1,0 +1,14 @@
+{
+  "title": "وصلة بشريحة ربط منفصلة",
+  "boardThickness": "سماكة اللوح",
+  "splineThickness": "سماكة شريحة الربط",
+  "slotDepthPerBoard": "عمق المجرى في كل لوح",
+  "jointLength": "طول الوصلة",
+  "splineCount": "عدد شرائح الربط",
+  "recommendedSlotWidth": "عرض المجرى الموصى به",
+  "totalInsertionDepth": "عمق الإدخال الكلي",
+  "remainingWallThickness": "سماكة الخشب المتبقية",
+  "totalSplineLength": "الطول الإجمالي لشرائح الربط",
+  "glueAreaPerSpline": "مساحة اللصق لكل شريحة ربط",
+  "totalGlueArea": "إجمالي مساحة اللصق"
+}

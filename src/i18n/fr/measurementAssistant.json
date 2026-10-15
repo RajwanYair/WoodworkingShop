@@ -1,0 +1,15 @@
+{
+  "title": "Conseils de mesure",
+  "kitchenBaseHeight": "La hauteur standard d’un meuble bas de cuisine est de {{standard}} mm (la vôtre : {{current}} mm)",
+  "kitchenBaseDepth": "La profondeur standard d’un meuble bas de cuisine est de {{standard}} mm (la vôtre : {{current}} mm)",
+  "overheadGap": "Laissez un espace de {{gap}} mm entre le plan de travail et le meuble haut pour y accéder facilement",
+  "bookshelfDepthShallow": "Profondeur minimale pour des livres A4 dans une bibliothèque : {{min}} mm (la vôtre : {{current}} mm)",
+  "bookshelfDepthDeep": "Une bibliothèque de plus de {{recommended}} mm de profondeur gaspille du matériau (la vôtre : {{current}} mm)",
+  "bookshelfSpan": "La portée d’étagère de {{current}} mm dépasse la limite sûre de {{maxSpan}} mm pour un panneau de 18 mm — envisagez un support central",
+  "wardrobeDepthShallow": "La profondeur de l’armoire de {{current}} mm est inférieure aux {{min}} mm recommandés pour suspendre des vêtements",
+  "tallCabinet": "La hauteur de l’armoire de {{current}} mm dépasse la portée confortable en position debout ({{max}} mm)",
+  "deskHeight": "La hauteur ergonomique du bureau est de {{min}} à {{max}} mm (la vôtre : {{current}} mm)",
+  "deskDepth": "Profondeur minimale d’un bureau avec écran : {{min}} mm (la vôtre : {{current}} mm)",
+  "reachZone": "Le haut de l’armoire, à {{current}} mm, dépasse la zone de portée confortable ({{max}} mm)",
+  "sheetAlignment": "La largeur de {{current}} mm ne correspond pas au panneau standard de {{nearest}} mm — ajustez-la pour réduire les chutes"
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Beschlägeliste",
+  "name": "Artikel",
+  "qty": "Mge.",
+  "unit": "Einheit",
+  "supplier": "Lieferant",
+  "qtyHint": "Mengenzellen bearbeiten, um berechnete Werte zu überschreiben"
+}

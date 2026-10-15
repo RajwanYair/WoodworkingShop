@@ -1,0 +1,15 @@
+{
+  "title": "حاسبة تباعد دبابيس الرفوف",
+  "spacing": "تباعد الثقوب",
+  "positions": "مواضع قابلة للتعديل",
+  "holeCount": "إجمالي الثقوب",
+  "drillDepth": "عمق الحفر",
+  "edgeClearance": "المسافة عن الحافة",
+  "pinDiameter": "قطر الدبوس",
+  "adjustmentRange": "نطاق التعديل",
+  "euro32": "نظام يورو 32 مم",
+  "singleRow": "صف واحد",
+  "doubleRow": "صفان",
+  "totalPins": "إجمالي الدبابيس المطلوبة",
+  "pinsPerShelf": "دبابيس لكل رف"
+}

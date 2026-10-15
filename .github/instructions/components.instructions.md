@@ -1,11 +1,11 @@
 ---
 description: 'React component conventions: named exports, Tailwind logical properties, ARIA, i18n, size limits.'
-applyTo: 'src/components/**/*.tsx'
+applyTo: 'src/app/**/*.tsx,src/features/**/*.tsx,src/ui/**/*.tsx'
 ---
 
 # React Component Instructions
 
-These instructions apply to all `.tsx` files under `src/components/`.
+These instructions apply to all `.tsx` files under `src/app/`, `src/features/`, and `src/ui/`.
 
 ## Exports
 
@@ -30,9 +30,9 @@ These instructions apply to all `.tsx` files under `src/components/`.
 ## i18n
 
 - All user-visible strings must use `t('key')` from `useTranslation()`
-- Key must exist in both `src/i18n/en.json` AND `src/i18n/he.json` before committing
+- Key must exist in both `src/i18n/en/{namespace}.json` and `src/i18n/he/{namespace}.json` before committing
 
 ## Size limit
 
-- Components should be ≤ 600 lines
-- If a component exceeds 600 lines, split it into sub-components using the `split-component` prompt
+- Components should be ≤ 396 lines, the measured gate in `config/component-budget-exceptions.json`
+- If a component exceeds that gate, split it into sub-components using the `split-component` prompt

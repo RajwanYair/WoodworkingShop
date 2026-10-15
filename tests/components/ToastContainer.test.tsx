@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
-import { ToastContainer } from '../../src/components/layout/ToastContainer';
+import { ToastContainer } from '../../src/app/ToastContainer';
 import { useToastStore } from '../../src/store/toast-store';
 
 describe('ToastContainer ARIA regions', () => {

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { GlueCoveragePanel } from '../../src/components/configurator/GlueCoveragePanel';
+import { GlueCoveragePanel } from '../../src/features/calculators/GlueCoveragePanel';
 
 describe('GlueCoveragePanel', () => {
   it('recalculates volume for multiple joints and selected glue type', async () => {

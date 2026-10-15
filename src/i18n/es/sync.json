@@ -1,0 +1,10 @@
+{
+  "title": "Sincronización en la nube",
+  "status": "Estado de sincronización",
+  "pending": "{{count}} cambio pendiente",
+  "pending_other": "{{count}} cambios pendientes",
+  "synced": "Se han guardado todos los cambios",
+  "error": "Error de sincronización: pulsa para reintentar",
+  "lastSync": "Última sincronización: {{time}}",
+  "retry": "Reintentar sincronización"
+}

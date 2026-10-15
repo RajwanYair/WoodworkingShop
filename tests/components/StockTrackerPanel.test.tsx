@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { StockTrackerPanel } from '../../src/components/optimizer/StockTrackerPanel';
+import { StockTrackerPanel } from '../../src/features/optimizer/StockTrackerPanel';
 import { useStockTrackerStore } from '../../src/store/stock-tracker-store';
 
 describe('StockTrackerPanel', () => {

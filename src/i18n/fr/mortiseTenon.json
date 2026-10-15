@@ -1,0 +1,23 @@
+{
+  "title": "Calculateur tenon-mortaise",
+  "description": "Calculer les dimensions du tenon et de la mortaise selon la section du bois",
+  "stockThickness": "Épaisseur du bois",
+  "stockWidth": "Largeur du bois",
+  "jointType": "Type d’assemblage",
+  "through": "Traversant",
+  "blind": "Borgne",
+  "wedged": "Chevillé en coin",
+  "stub": "Tenon court",
+  "tenonThickness": "Épaisseur du tenon",
+  "tenonWidth": "Largeur du tenon",
+  "tenonLength": "Longueur du tenon",
+  "mortiseWidth": "Largeur de la mortaise",
+  "mortiseHeight": "Hauteur de la mortaise",
+  "mortiseDepth": "Profondeur de la mortaise",
+  "mortiseOffset": "Décalage de la mortaise",
+  "haunchDepth": "Profondeur de l’épaulement",
+  "shoulderSetback": "Retrait de l’épaulement",
+  "recommendedChisel": "Largeur de ciseau recommandée",
+  "glueSurfaceArea": "Surface de collage",
+  "thicknessRatio": "Rapport d’épaisseur"
+}

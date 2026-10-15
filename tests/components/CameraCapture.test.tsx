@@ -2,7 +2,7 @@ import { createRef } from 'react';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import { CameraCapture } from '../../src/components/assembly/CameraCapture';
+import { CameraCapture } from '../../src/features/assembly/CameraCapture';
 import { useCamera } from '../../src/hooks/useCamera';
 import type { UseCameraResult } from '../../src/hooks/useCamera';
 

@@ -1,0 +1,11 @@
+{
+  "title": "السمة",
+  "light": "فاتح",
+  "dark": "داكن",
+  "highContrast": "تباين عالٍ",
+  "highContrastDark": "داكن عالي التباين",
+  "systemPreference": "استخدام إعداد النظام",
+  "toggle": "تبديل السمة",
+  "colorScheme": "نظام الألوان",
+  "contrastFailures": "إخفاقات التباين"
+}

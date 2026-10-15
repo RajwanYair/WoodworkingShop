@@ -8,9 +8,9 @@
 
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
-import { ValidationPanel } from '../../src/components/configurator/ValidationPanel';
-import { DimensionSliders } from '../../src/components/configurator/DimensionSliders';
-import { ConfiguratorPanel } from '../../src/components/configurator/ConfiguratorPanel';
+import { ValidationPanel } from '../../src/features/configurator/ValidationPanel';
+import { DimensionSliders } from '../../src/features/configurator/DimensionSliders';
+import { ConfiguratorPanel } from '../../src/features/configurator/ConfiguratorPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 import type { ValidationIssue } from '../../src/engine/core/types';

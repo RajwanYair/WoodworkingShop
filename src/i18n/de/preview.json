@@ -1,0 +1,19 @@
+{
+  "title": "Schrankvorschau",
+  "front": "Vorderseite (geschlossen)",
+  "frontOpen": "Vorderseite (offen)",
+  "side": "Seite",
+  "top": "Oben",
+  "back": "Rückseite",
+  "iso": "3D",
+  "exportSvg": "SVG exportieren",
+  "exportPng": "PNG exportieren (2×)",
+  "dimensions": "Abmessungen",
+  "dimensionSummary": "Schrankabmessungen B × H × T",
+  "doors": "Türen",
+  "drawers": "Schubladen",
+  "dragToRotate": "Ziehen zum Drehen",
+  "webglToggle": "WebGL/SVG-Ansicht umschalten",
+  "webglAnimate": "Animieren",
+  "webglIsometric": "Isometrisch"
+}

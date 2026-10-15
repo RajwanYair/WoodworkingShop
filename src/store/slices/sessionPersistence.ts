@@ -94,6 +94,34 @@ export function createCabinetSessionRecord(snapshot: CabinetSessionSnapshot): Ca
   };
 }
 
+export function readLegacyCabinetSession(value: unknown): CabinetSessionSnapshot | null {
+  if (!isRecord(value) || !isCabinetList(value.cabinets) || value.cabinets.length === 0) return null;
+
+  const activeCabinetIndex =
+    Number.isInteger(value.activeCabinetIndex) && (value.activeCabinetIndex as number) >= 0
+      ? Math.min(value.activeCabinetIndex as number, value.cabinets.length - 1)
+      : 0;
+
+  return {
+    cabinets: value.cabinets,
+    activeCabinetIndex,
+    projectName: typeof value.projectName === 'string' ? value.projectName : '',
+    projectNotes: typeof value.projectNotes === 'string' ? value.projectNotes : undefined,
+    sawKerf: typeof value.sawKerf === 'number' && Number.isFinite(value.sawKerf) ? value.sawKerf : 4,
+    autoCoNest: typeof value.autoCoNest === 'boolean' ? value.autoCoNest : false,
+    materialPriceOverrides: isNumberRecord(value.materialPriceOverrides) ? value.materialPriceOverrides : {},
+    edgeBandingRate:
+      typeof value.edgeBandingRate === 'number' && Number.isFinite(value.edgeBandingRate) ? value.edgeBandingRate : 3,
+    hardwarePriceOverrides: isNumberRecord(value.hardwarePriceOverrides) ? value.hardwarePriceOverrides : {},
+    hardwareQtyOverrides: isNumberRecord(value.hardwareQtyOverrides) ? value.hardwareQtyOverrides : {},
+    sheetSizeOverrides: isSheetSizeRecord(value.sheetSizeOverrides) ? value.sheetSizeOverrides : {},
+    labourRate: typeof value.labourRate === 'number' && Number.isFinite(value.labourRate) ? value.labourRate : 75,
+    labourHours: typeof value.labourHours === 'number' && Number.isFinite(value.labourHours) ? value.labourHours : 0,
+    finishCost: typeof value.finishCost === 'number' && Number.isFinite(value.finishCost) ? value.finishCost : 0,
+    rotationLockedPartIds: isBooleanRecord(value.rotationLockedPartIds) ? value.rotationLockedPartIds : {},
+  };
+}
+
 export function readCabinetSessionRecord(value: unknown): CabinetSessionSnapshot | null {
   if (!isRecord(value) || value.formatVersion !== 1 || !isRecord(value.slices)) return null;
   const { project, optimizer, rotationLocks } = value.slices;

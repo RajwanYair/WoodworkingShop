@@ -1,0 +1,19 @@
+{
+  "title": "Vista previa del armario",
+  "front": "Frente (cerrado)",
+  "frontOpen": "Frente (abierto)",
+  "side": "Lateral",
+  "top": "Superior",
+  "back": "Trasero",
+  "iso": "3D",
+  "exportSvg": "Exportar SVG",
+  "exportPng": "Exportar PNG (2×)",
+  "dimensions": "Dimensiones",
+  "dimensionSummary": "Dimensiones del armario A × Al × P",
+  "doors": "puertas",
+  "drawers": "cajones",
+  "dragToRotate": "Arrastra para rotar",
+  "webglToggle": "Alternar vista WebGL / SVG",
+  "webglAnimate": "Animar",
+  "webglIsometric": "Isométrico"
+}

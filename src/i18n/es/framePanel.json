@@ -1,0 +1,13 @@
+{
+  "title": "Calculadora de bastidor y panel",
+  "frameWidth": "Ancho del bastidor",
+  "frameHeight": "Alto del bastidor",
+  "railWidth": "Ancho del travesaño",
+  "stileWidth": "Ancho del montante",
+  "grooveDepth": "Profundidad de la ranura",
+  "panelFloat": "Holgura del panel (cada lado)",
+  "panelWidth": "Ancho del panel",
+  "panelHeight": "Alto del panel",
+  "expansionAllowance": "Margen de dilatación",
+  "grooveWidth": "Ancho de la ranura"
+}

@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const repoRoot = process.cwd();
-const componentsRoot = path.join(repoRoot, 'src', 'components');
+const componentRoots = ['app', 'features', 'ui', 'components'].map((segment) => path.join(repoRoot, 'src', segment));
 const exceptionsConfigPath = path.join(repoRoot, 'config', 'component-budget-exceptions.json');
 
 function parseIsoDate(value) {
@@ -113,8 +113,9 @@ function countLines(filePath) {
 }
 
 function main() {
-  if (!fs.existsSync(componentsRoot)) {
-    throw new Error('Missing src/components directory');
+  const presentRoots = componentRoots.filter((rootPath) => fs.existsSync(rootPath));
+  if (presentRoots.length === 0) {
+    throw new Error('Missing src/app, src/features, src/ui, and src/components directories');
   }
 
   const { maxLinesDefault, exceptionsByPath, configErrors } = loadExceptionsConfig();
@@ -127,7 +128,7 @@ function main() {
     return;
   }
 
-  const files = collectTsxFiles(componentsRoot);
+  const files = presentRoots.flatMap((rootPath) => collectTsxFiles(rootPath));
   const violations = [];
   const expiredExceptions = [];
   const usedExceptions = new Set();

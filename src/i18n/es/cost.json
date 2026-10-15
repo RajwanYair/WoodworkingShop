@@ -1,0 +1,23 @@
+{
+  "title": "Estimación de costos",
+  "edgeBanding": "Canto",
+  "hardware": "Herrajes",
+  "waste": "Desperdicio de material",
+  "perUnit": "Costo por unidad",
+  "total": "Total estimado",
+  "disclaimer": "Los precios son aproximados y pueden variar según el proveedor.",
+  "editPrice": "Haga clic para anular el precio por tablero",
+  "resetPrice": "Restablecer al precio predeterminado",
+  "editEbRate": "Haga clic para establecer la tarifa de canto (₪/m)",
+  "totalWeight": "Peso estimado del panel",
+  "labour": "Mano de obra",
+  "labourRate": "Tarifa de mano de obra",
+  "editLabourHours": "Haga clic para establecer las horas de trabajo estimadas",
+  "editLabourRate": "Haga clic para anular la tarifa de mano de obra (₪/hr)",
+  "labourHoursAriaLabel": "Horas de trabajo",
+  "labourRateAriaLabel": "Tarifa de mano de obra por hora",
+  "finish": "Acabado / pintura",
+  "editFinish": "Haga clic para establecer el costo de acabado/pintura",
+  "finishAriaLabel": "Costo de acabado/pintura",
+  "notSet": "—"
+}

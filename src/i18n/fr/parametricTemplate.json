@@ -1,0 +1,23 @@
+{
+  "title": "Modèles paramétriques",
+  "create": "Créer un modèle",
+  "edit": "Modifier le modèle",
+  "instantiate": "Générer à partir d’un modèle",
+  "parameters": "Paramètres",
+  "constraints": "Contraintes",
+  "rules": "Règles",
+  "computed": "Champs calculés",
+  "preview": "Aperçu",
+  "min": "Valeur minimale",
+  "max": "Valeur maximale",
+  "step": "Pas d’incrémentation",
+  "default": "Valeur par défaut",
+  "unit": "Unité de mesure",
+  "condition": "Condition requise",
+  "expression": "Formule",
+  "validate": "Vérifier la validité",
+  "valid": "Le modèle est valide.",
+  "invalid": "Le modèle contient des erreurs.",
+  "category": "Catégorie",
+  "version": "Numéro de version"
+}

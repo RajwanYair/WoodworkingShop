@@ -1,0 +1,392 @@
+/** Sprint A3 (Phase 16.5) — extracted from OptimizerView.tsx */
+import { useState, useEffect } from 'react';
+import { getMaterial } from '../../engine/materials/materials';
+import { useCustomMaterialsStore } from '../../store/custom-materials-store';
+import { downloadDxfForSheet } from '../../utils/dxf-export';
+import { useToastStore } from '../../store/toast-store';
+import { IconDxf, IconGcode, IconGrainVertical } from '../../ui/Icons';
+import { YieldBar } from './OptimizerStats';
+import { formatNumberFixed } from '../../i18n/format';
+import { PartRect } from './sheet-card-part';
+import { S, cbColor } from './sheet-card-palette';
+import type { SheetCardProps } from './sheet-card-types';
+
+export function SheetCard({
+  sheet,
+  lang,
+  hoveredPartId,
+  onHoverPart,
+  colorBlindMode,
+  showPartNames,
+  showGrainHatch,
+  defectZones = [],
+  filePrefix,
+  partFilter,
+  preloadGcodePreview,
+  onGcodePreview,
+  rotationLockedPartIds,
+  onToggleRotationLock,
+  t,
+}: Readonly<SheetCardProps>) {
+  const customMaterials = useCustomMaterialsStore((state) => state.materials);
+  const mat = getMaterial(sheet.material, customMaterials);
+  const sw = sheet.sheetWidth * S;
+  const sl = sheet.sheetLength * S;
+  /** Sprint 70 — step-by-step nesting placement animation */
+  const partCount = sheet.parts.length;
+  const [animPlaying, setAnimPlaying] = useState(false);
+  const [animStep, setAnimStep] = useState(0);
+  const isAnimMode = animPlaying || animStep > 0;
+  useEffect(() => {
+    if (!animPlaying) return;
+    if (animStep >= partCount) {
+      setAnimPlaying(false);
+      return;
+    }
+    const timer = setTimeout(() => setAnimStep((s) => s + 1), 350);
+    return () => clearTimeout(timer);
+  }, [animPlaying, animStep, partCount]);
+  const filterTerm = partFilter.trim().toLowerCase();
+  const partsArea = sheet.parts.reduce((total, part) => total + part.width * part.length, 0);
+  const wasteArea = (sheet.sheetWidth * sheet.sheetLength - partsArea) / 1_000_000;
+  return (
+    <div className="border-wood-200 dark:border-wood-700 rounded border p-4">
+      <div className="mb-2 flex items-center justify-between gap-3">
+        <h3 className="text-wood-600 dark:text-wood-300 min-w-0 flex-1 truncate text-sm font-medium">
+          {t('optimizer.sheet')} #{sheet.sheetIndex + 1} — {mat.name[lang]} ({sheet.thickness} mm)
+          {/* Sprint 77 — part count badge */}
+          <span
+            className="text-wood-100 dark:text-wood-800 bg-wood-500 dark:bg-wood-400 ms-1.5 rounded-full px-1.5 py-0.5 text-[10px] font-semibold"
+            aria-label={`${sheet.parts.length} parts`}
+          >
+            {sheet.parts.length}
+          </span>
+          {/* Sprint 81 — per-sheet waste area label */}
+          <span className="text-wood-400 dark:text-wood-500 ms-1.5 text-[10px] font-normal">
+            · {t('optimizer.sheetWaste')}: {formatNumberFixed(wasteArea, lang, 3)} m²
+          </span>
+          {mat.hasGrain && (
+            <span
+              className="ml-1.5 inline-flex items-center gap-0.5 rounded bg-amber-100 px-1 text-[10px] font-normal text-amber-700 dark:bg-amber-900/30 dark:text-amber-300"
+              title="Grain direction preserved — parts were not rotated 90°"
+            >
+              <IconGrainVertical size={10} className="inline" /> grain
+            </span>
+          )}
+          {/* Sprint 42 — grain conflict badge on sheet header */}
+          {(() => {
+            const conflictCount = sheet.parts.filter((p) => p.grainConflict).length;
+            return conflictCount > 0 ? (
+              <span
+                className="ml-1.5 inline-flex items-center gap-0.5 rounded bg-red-100 px-1 text-[10px] font-normal text-red-700 dark:bg-red-900/30 dark:text-red-300"
+                title={`${conflictCount} part(s) had grain direction compromised to fit the sheet`}
+              >
+                ⚠ {t('optimizer.grainConflicts', { count: conflictCount })}
+              </span>
+            ) : null;
+          })()}
+        </h3>
+        <YieldBar yieldPercent={sheet.yieldPercent} />
+        {mat.pricePerSheet != null && (
+          <span
+            className="rounded border border-amber-200 bg-amber-50 px-1.5 py-0.5 text-[10px] whitespace-nowrap text-amber-700 dark:border-amber-700 dark:bg-amber-900/30 dark:text-amber-300"
+            title={t('optimizer.sheetWasteCostTitle')}
+          >
+            {t('optimizer.sheetWasteCost', {
+              cost: formatNumberFixed(mat.pricePerSheet * (1 - sheet.yieldPercent / 100), lang, 2),
+            })}
+          </span>
+        )}
+        <button
+          onClick={() => {
+            void downloadDxfForSheet(sheet, `${filePrefix}-sheet-${sheet.sheetIndex + 1}.dxf`);
+            useToastStore.getState().addToast(t('toast.dxfExported'), 'success');
+          }}
+          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1 rounded border px-2 py-0.5 text-[10px] transition-colors"
+          title={`Download DXF for sheet ${sheet.sheetIndex + 1}`}
+        >
+          <IconDxf size={11} /> DXF
+        </button>
+        <button
+          onPointerEnter={preloadGcodePreview}
+          onFocus={preloadGcodePreview}
+          onClick={() => {
+            const filename = `${filePrefix}-sheet-${sheet.sheetIndex + 1}.nc`;
+            onGcodePreview(filename, sheet);
+          }}
+          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1 rounded border px-2 py-0.5 text-[10px] transition-colors"
+          title={`Preview G-code for sheet ${sheet.sheetIndex + 1}`}
+          aria-label={`Preview G-code for sheet ${sheet.sheetIndex + 1}`}
+        >
+          <IconGcode size={11} /> G-code
+        </button>
+        {/* Sprint 70 — nesting placement animation controls */}
+        <button
+          type="button"
+          onClick={() => {
+            if (animStep >= partCount) setAnimStep(0);
+            setAnimPlaying((p) => !p);
+          }}
+          className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1 rounded border px-2 py-0.5 text-[10px] transition-colors"
+          title={animPlaying ? t('optimizer.animatePause') : t('optimizer.animatePlay')}
+          aria-label={animPlaying ? t('optimizer.animatePause') : t('optimizer.animatePlay')}
+          aria-pressed={animPlaying}
+        >
+          {animPlaying ? '\u23f8' : '\u25b6'}
+        </button>
+        {isAnimMode && (
+          <>
+            <span className="text-wood-400 dark:text-wood-500 text-[10px] tabular-nums">
+              {t('optimizer.animateStep', { current: Math.min(animStep, partCount), total: partCount })}
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                setAnimStep(0);
+                setAnimPlaying(false);
+              }}
+              className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1 rounded border px-2 py-0.5 text-[10px] transition-colors"
+              aria-label={t('optimizer.animateReset')}
+              title={t('optimizer.animateReset')}
+            >
+              &#x21BA;
+            </button>
+          </>
+        )}
+      </div>
+      <svg
+        viewBox={`-18 -18 ${sw + 36} ${sl + 36}`}
+        className="border-wood-100 dark:border-wood-800 dark:bg-wood-800 w-full max-w-lg rounded border bg-white"
+        style={{ maxHeight: 380 }}
+        role="img"
+        aria-label={`Cut sheet ${sheet.sheetIndex + 1}`}
+      >
+        {/* ── Defs ── */}
+        <defs>
+          <pattern
+            id={`waste-${sheet.sheetIndex}`}
+            width="6"
+            height="6"
+            patternUnits="userSpaceOnUse"
+            patternTransform="rotate(45)"
+          >
+            <line x1="0" y1="0" x2="0" y2="6" stroke="#C8B89A" strokeWidth="0.6" />
+          </pattern>
+          {/* Phase 12 / Sprint 11 — grain direction hatch patterns (green = aligned, amber = conflict) */}
+          <pattern
+            id={`grain-${sheet.sheetIndex}-v-ok`}
+            data-testid={`grain-pattern-${sheet.sheetIndex}-v-ok`}
+            width="4"
+            height="4"
+            patternUnits="userSpaceOnUse"
+          >
+            <line x1="2" y1="0" x2="2" y2="4" stroke="#16a34a" strokeWidth="0.9" />
+          </pattern>
+          <pattern
+            id={`grain-${sheet.sheetIndex}-h-ok`}
+            data-testid={`grain-pattern-${sheet.sheetIndex}-h-ok`}
+            width="4"
+            height="4"
+            patternUnits="userSpaceOnUse"
+          >
+            <line x1="0" y1="2" x2="4" y2="2" stroke="#16a34a" strokeWidth="0.9" />
+          </pattern>
+          <pattern
+            id={`grain-${sheet.sheetIndex}-v-conflict`}
+            data-testid={`grain-pattern-${sheet.sheetIndex}-v-conflict`}
+            width="4"
+            height="4"
+            patternUnits="userSpaceOnUse"
+          >
+            <line x1="2" y1="0" x2="2" y2="4" stroke="#d97706" strokeWidth="0.9" />
+          </pattern>
+          <pattern
+            id={`grain-${sheet.sheetIndex}-h-conflict`}
+            data-testid={`grain-pattern-${sheet.sheetIndex}-h-conflict`}
+            width="4"
+            height="4"
+            patternUnits="userSpaceOnUse"
+          >
+            <line x1="0" y1="2" x2="4" y2="2" stroke="#d97706" strokeWidth="0.9" />
+          </pattern>
+          {/* Phase 12 / Sprint 13 — defect zone cross-hatch pattern (red diagonal) */}
+          <pattern
+            id={`defect-${sheet.sheetIndex}`}
+            width="6"
+            height="6"
+            patternUnits="userSpaceOnUse"
+            patternTransform="rotate(45)"
+          >
+            <line x1="0" y1="0" x2="0" y2="6" stroke="#dc2626" strokeWidth="1.2" />
+            <line x1="3" y1="0" x2="3" y2="6" stroke="#dc2626" strokeWidth="0.5" />
+          </pattern>
+          {/* Drop shadow filter for part rects */}
+          <filter id={`shadow-${sheet.sheetIndex}`} x="-10%" y="-10%" width="120%" height="120%">
+            <feDropShadow dx="0.5" dy="0.5" stdDeviation="0.8" floodColor="#0003" />
+          </filter>
+        </defs>
+
+        {/* Sheet background (waste = visible background) */}
+        <rect x={0} y={0} width={sw} height={sl} fill="#EDE4D2" stroke="#999" strokeWidth={1} rx={1} />
+        <rect x={0} y={0} width={sw} height={sl} fill={`url(#waste-${sheet.sheetIndex})`} />
+
+        {/* ── Ruler ticks — top edge (every 100 mm) ── */}
+        {Array.from({ length: Math.floor(sheet.sheetWidth / 100) + 1 }).map((_, ti) => {
+          const tx = ti * 100 * S;
+          const isMajor = ti % 5 === 0;
+          return (
+            <g key={`tx-${ti}`}>
+              <line x1={tx} y1={-2} x2={tx} y2={isMajor ? -8 : -5} stroke="#888" strokeWidth={0.5} />
+              {isMajor && (
+                <text x={tx} y={-10} textAnchor="middle" fontSize={4} fill="#888">
+                  {ti * 100}
+                </text>
+              )}
+            </g>
+          );
+        })}
+        {/* ── Ruler ticks — left edge (every 100 mm) ── */}
+        {Array.from({ length: Math.floor(sheet.sheetLength / 100) + 1 }).map((_, ti) => {
+          const ty = ti * 100 * S;
+          const isMajor = ti % 5 === 0;
+          return (
+            <g key={`ty-${ti}`}>
+              <line x1={-2} y1={ty} x2={isMajor ? -8 : -5} y2={ty} stroke="#888" strokeWidth={0.5} />
+              {isMajor && (
+                <text x={-10} y={ty + 1.5} textAnchor="end" fontSize={4} fill="#888">
+                  {ti * 100}
+                </text>
+              )}
+            </g>
+          );
+        })}
+        {/* Sheet dimension labels */}
+        <text x={sw / 2} y={-12} textAnchor="middle" fontSize={5} fill="#666" fontWeight="500">
+          {sheet.sheetWidth} mm
+        </text>
+        <text
+          x={-14}
+          y={sl / 2}
+          textAnchor="middle"
+          fontSize={5}
+          fill="#666"
+          fontWeight="500"
+          transform={`rotate(-90, -14, ${sl / 2})`}
+        >
+          {sheet.sheetLength} mm
+        </text>
+
+        {/* Placed parts */}
+        {sheet.parts.map((p, i) => (
+          <PartRect
+            key={i}
+            part={p}
+            scale={S}
+            color={colorBlindMode ? cbColor(i) : mat.color}
+            isHovered={
+              hoveredPartId === p.partId ||
+              (filterTerm !== '' &&
+                (p.partId.toLowerCase().includes(filterTerm) || p.label.toLowerCase().includes(filterTerm)))
+            }
+            isFaded={
+              (hoveredPartId !== null && hoveredPartId !== p.partId) ||
+              (filterTerm !== '' &&
+                !p.partId.toLowerCase().includes(filterTerm) &&
+                !p.label.toLowerCase().includes(filterTerm))
+            }
+            onHover={onHoverPart}
+            showLabel={showPartNames}
+            shadowFilterId={`shadow-${sheet.sheetIndex}`}
+            showGrain={mat.hasGrain}
+            showGrainHatch={showGrainHatch}
+            grainHatchPatternIdBase={`grain-${sheet.sheetIndex}`}
+            isHiddenByAnim={isAnimMode && i >= animStep}
+          />
+        ))}
+
+        {/* Phase 12 / Sprint 13 — defect zones rendered as red cross-hatched overlays */}
+        {defectZones.map((dz, di) => (
+          <g key={`dz-${di}`}>
+            <rect
+              x={dz.x * S}
+              y={dz.y * S}
+              width={dz.width * S}
+              height={dz.length * S}
+              fill={`url(#defect-${sheet.sheetIndex})`}
+              opacity={0.75}
+            />
+            <rect
+              x={dz.x * S}
+              y={dz.y * S}
+              width={dz.width * S}
+              height={dz.length * S}
+              fill="none"
+              stroke="#dc2626"
+              strokeWidth={0.8}
+              strokeDasharray="2 1"
+            />
+          </g>
+        ))}
+
+        {/* ── Scale bar (Sprint 159): 100 mm reference at bottom-right ── */}
+        {/* 100 mm × S = 12 SVG units */}
+        <g transform={`translate(${sw - 14}, ${sl + 6})`}>
+          <line x1={0} y1={0} x2={12} y2={0} stroke="#888" strokeWidth={1} />
+          <line x1={0} y1={-2} x2={0} y2={2} stroke="#888" strokeWidth={0.8} />
+          <line x1={12} y1={-2} x2={12} y2={2} stroke="#888" strokeWidth={0.8} />
+          <text x={6} y={-3} textAnchor="middle" fontSize={3.5} fill="#888">
+            100 mm
+          </text>
+        </g>
+      </svg>
+
+      {/* Part legend below the sheet */}
+      <div className="mt-2 flex flex-wrap gap-x-4 gap-y-0.5">
+        {sheet.parts.map((p, i) => {
+          const isLocked = rotationLockedPartIds[p.partId] === true;
+          return (
+            <span
+              key={i}
+              className={`cursor-default text-[10px] transition-opacity ${
+                (hoveredPartId && hoveredPartId !== p.partId) ||
+                (filterTerm &&
+                  !p.partId.toLowerCase().includes(filterTerm) &&
+                  !p.label.toLowerCase().includes(filterTerm))
+                  ? 'opacity-30'
+                  : ''
+              } ${hoveredPartId === p.partId || (filterTerm && (p.partId.toLowerCase().includes(filterTerm) || p.label.toLowerCase().includes(filterTerm))) ? 'text-wood-700 dark:text-wood-100 font-bold' : 'text-wood-600 dark:text-wood-300'}`}
+              onMouseEnter={() => onHoverPart(p.partId)}
+              onMouseLeave={() => onHoverPart(null)}
+              title={
+                p.rationale
+                  ? `${p.partId}: ${p.label}\n${p.rationale}${p.grainConflict ? '\n⚠ Grain direction compromised' : ''}${isLocked ? '\n🔒 Rotation locked' : ''}`
+                  : undefined
+              }
+            >
+              {p.partId}: {p.label} ({p.width}×{p.length}){p.grainConflict ? ' ⚠' : ''}
+              {/* Sprint 16 — rotation lock toggle button */}
+              <button
+                type="button"
+                onClick={() => onToggleRotationLock(p.partId)}
+                className="hover:text-wood-900 dark:hover:text-wood-50 focus:ring-accent ms-1 inline-flex items-center rounded text-[10px] focus:ring-1 focus:outline-none"
+                aria-label={isLocked ? t('optimizer.unlockRotation') : t('optimizer.lockRotation')}
+                title={isLocked ? t('optimizer.unlockRotation') : t('optimizer.lockRotation')}
+                aria-pressed={isLocked}
+              >
+                {isLocked ? '🔒' : '🔓'}
+              </button>
+            </span>
+          );
+        })}
+      </div>
+
+      {/* Sprint 131 — Grain direction legend: only shown for grain-locked materials */}
+      {mat.hasGrain && (
+        <p className="mt-1.5 flex items-center gap-1 text-[10px] text-amber-800 dark:text-amber-300">
+          <IconGrainVertical size={12} className="inline" />
+          {t('optimizer.grainLegend')}
+        </p>
+      )}
+    </div>
+  );
+}

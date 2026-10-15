@@ -1,0 +1,8 @@
+{
+  "title": "Geschätzte Montagezeit",
+  "step": "Schritt",
+  "count": "Arbeitsschritte",
+  "time": "Geschätzte Zeit",
+  "totalTime": "Geschätzte Gesamtzeit",
+  "noSteps": "Keine Montageschritte für die aktuelle Konfiguration"
+}

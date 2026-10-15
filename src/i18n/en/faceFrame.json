@@ -1,0 +1,16 @@
+{
+  "title": "Face Frame Calculator",
+  "cabinetWidth": "Cabinet Width",
+  "cabinetHeight": "Cabinet Height",
+  "stileWidth": "Stile Width",
+  "railWidth": "Rail Width",
+  "openingCount": "Number of Openings",
+  "openingWidth": "Opening Width",
+  "openingHeight": "Opening Height",
+  "stileLength": "Stile Length",
+  "topRailLength": "Top Rail Length",
+  "bottomRailLength": "Bottom Rail Length",
+  "middleRailLength": "Middle Rail Length",
+  "totalGlueSurface": "Total Glue Surface",
+  "partList": "Parts List"
+}

@@ -1,0 +1,14 @@
+{
+  "title": "بث CNC الإصدار 2",
+  "startStream": "بدء البث",
+  "pauseStream": "إيقاف مؤقت",
+  "resumeStream": "استئناف",
+  "cancelStream": "إلغاء",
+  "retryLine": "إعادة محاولة السطر",
+  "progress": "التقدم",
+  "linesRemaining": "الأسطر المتبقية",
+  "estimatedTime": "الوقت التقديري",
+  "sessionState": "حالة الجلسة",
+  "errorLines": "الأسطر التي بها أخطاء",
+  "noErrors": "لا توجد أخطاء."
+}

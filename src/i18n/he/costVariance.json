@@ -1,0 +1,11 @@
+{
+  "title": "סטיית עלות עלויות",
+  "material": "חומר",
+  "estimated": "הערכה",
+  "actual": "בפועל",
+  "variance": "סטייה",
+  "total": "סך הכל",
+  "savings": "חיסכון משארית וקינון: {{amount}}",
+  "tableAriaLabel": "טבלת סטיית עלויות",
+  "editActualAriaLabel": "הזן עלות בפועל עבור {{key}}"
+}

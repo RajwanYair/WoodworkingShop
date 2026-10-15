@@ -1,0 +1,19 @@
+{
+  "title": "Bestandsübersicht",
+  "material": "Material",
+  "required": "Bedarf",
+  "onHand": "Auf Lager",
+  "reorderAt": "Nachbestellen bei",
+  "status": "Status",
+  "status_ok": "Ausreichend",
+  "status_low": "Niedrig",
+  "status_shortfall": "Fehlmenge",
+  "status_unknown": "Unbekannt",
+  "noDemand": "Noch werden keine Platten benötigt – richte zuerst einen Schrank ein.",
+  "addItem": "+ Lagerbestand hinzufügen",
+  "materialKey": "Materialschlüssel",
+  "add": "Hinzufügen",
+  "tableAriaLabel": "Tabelle zur Materialverfügbarkeit",
+  "editQtyAriaLabel": "Lagerbestand für {{key}} bearbeiten",
+  "removeAriaLabel": "{{key}} aus dem Lagerbestand entfernen"
+}

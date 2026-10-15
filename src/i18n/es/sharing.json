@@ -1,0 +1,23 @@
+{
+  "title": "Compartir proyecto",
+  "createLink": "Crear enlace para compartir",
+  "label": "Nombre del enlace",
+  "permission": "Permiso",
+  "viewOnly": "Solo lectura",
+  "viewExport": "Ver y exportar",
+  "full": "Acceso completo",
+  "expiration": "Caducidad",
+  "hours": "Horas",
+  "days": "Días",
+  "never": "Nunca",
+  "revoke": "Revocar enlace",
+  "renew": "Renovar enlace",
+  "copyLink": "Copiar enlace",
+  "linkCopied": "Enlace copiado al portapapeles.",
+  "viewCount": "Vistas",
+  "lastAccessed": "Último acceso",
+  "expired": "Caducado",
+  "revoked": "Revocado",
+  "active": "Activo",
+  "noLinks": "Aún no hay enlaces para compartir."
+}

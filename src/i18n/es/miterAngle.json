@@ -1,0 +1,16 @@
+{
+  "title": "Calculadora de ángulos de inglete",
+  "polygonSides": "Número de lados",
+  "miterAngle": "Ángulo de inglete",
+  "interiorAngle": "Ángulo interior",
+  "bevelAngle": "Ángulo de bisel",
+  "tiltAngle": "Ángulo de inclinación",
+  "cornerAngle": "Ángulo de esquina",
+  "springAngle": "Ángulo de resorte",
+  "wallAngle": "Ángulo de pared",
+  "insideCorner": "Esquina interior",
+  "outsideCorner": "Esquina exterior",
+  "compound": "Inglete compuesto",
+  "crownMolding": "Moldura de corona",
+  "polygon": "Unión poligonal"
+}

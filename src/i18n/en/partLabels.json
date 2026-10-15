@@ -1,0 +1,8 @@
+{
+  "title": "Part Label Sheet",
+  "noParts": "No parts — configure a cabinet first.",
+  "expandQty": "Expand multi-qty parts (one label per piece)",
+  "print": "Print Labels",
+  "printTitle": "Part Labels",
+  "gridAriaLabel": "Part label cards"
+}

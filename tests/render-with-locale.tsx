@@ -3,10 +3,12 @@ import { afterEach } from 'vitest';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import { render, type RenderResult } from '@testing-library/react';
 import type { ReactElement } from 'react';
-import en from '../src/i18n/en.json';
-import he from '../src/i18n/he.json';
-import ar from '../src/i18n/ar.json';
 import { RTL_LANGS } from '../src/i18n';
+import { loadLocaleFiles } from './i18n/load-locale-files';
+
+const en = loadLocaleFiles('en');
+const he = loadLocaleFiles('he');
+const ar = loadLocaleFiles('ar');
 
 export type TestLocale = 'en' | 'he' | 'ar';
 

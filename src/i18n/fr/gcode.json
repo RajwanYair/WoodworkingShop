@@ -1,0 +1,22 @@
+{
+  "previewTitle": "Aperçu de trajectoire G-code",
+  "previewRapid": "Rapide (G0)",
+  "previewCut": "Coupe (G1)",
+  "previewArc": "Arc (G2/G3)",
+  "moveCount_one": "{{count}} mouvement",
+  "moveCount_other": "{{count}} mouvements",
+  "downloadAnyway": "Télécharger",
+  "cncOptions": "Options CNC",
+  "machinePreset": "Préréglage machine",
+  "presetShapeoko3": "Shapeoko 3",
+  "presetXcarve1000": "X-Carve 1000",
+  "presetGenmitsu": "Genmitsu 3018 Pro",
+  "presetCustom": "Personnalisé",
+  "feedRate": "Avance (mm/min)",
+  "plungeRate": "Plongée (mm/min)",
+  "safeZ": "Z sécurisé (mm)",
+  "passDepth": "Prof. de passe (mm)",
+  "toolDiameter": "Ø outil (mm)",
+  "useArcs": "Mouvements arc (G2/G3)",
+  "emitToolChange": "Émettre changement d'outil M6 entre les pièces"
+}

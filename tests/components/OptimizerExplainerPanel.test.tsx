@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { OptimizerExplainerPanel } from '../../src/components/optimizer/OptimizerExplainerPanel';
+import { OptimizerExplainerPanel } from '../../src/features/optimizer/OptimizerExplainerPanel';
 import { makeCutRect, makeCutSheet } from '../helpers';
 
 const messages: Record<string, string> = {

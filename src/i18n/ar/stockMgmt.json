@@ -1,0 +1,13 @@
+{
+  "title": "إدارة المخزون",
+  "addMaterial": "إضافة مادة",
+  "createOrder": "إنشاء طلب",
+  "submitOrder": "تقديم الطلب",
+  "receiveOrder": "استلام البضائع",
+  "cancelOrder": "إلغاء الطلب",
+  "recordWaste": "تسجيل الهدر",
+  "reorderAlerts": "تنبيهات إعادة الطلب",
+  "totalValue": "القيمة الإجمالية للمخزون",
+  "pendingOrders": "الطلبات المعلقة",
+  "wasteLog": "سجل الهدر"
+}

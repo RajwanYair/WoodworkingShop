@@ -1,0 +1,14 @@
+{
+  "title": "Rechner für Verjüngungsschnitte",
+  "workpieceLength": "Werkstücklänge",
+  "startWidth": "Anfangsbreite (breites Ende)",
+  "endWidth": "Endbreite (schmales Ende)",
+  "taperedFaces": "Zu verjüngende Seiten",
+  "oneFace": "Eine Seite",
+  "twoFaces": "Zwei Seiten (symmetrisch)",
+  "taperAngle": "Verjüngungswinkel",
+  "jigOffset": "Anschlagversatz",
+  "materialRemoved": "Materialabtrag pro Seite",
+  "taperPerFoot": "Verjüngung pro Fuß",
+  "note": "Werkstück nach dem ersten Durchgang wenden, um eine symmetrische Verjüngung zu erhalten"
+}

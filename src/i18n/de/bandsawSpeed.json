@@ -1,0 +1,18 @@
+{
+  "title": "Rechner für Bandsägeblattgeschwindigkeit",
+  "wheelDiameter": "Raddurchmesser",
+  "wheelRpm": "Raddrehzahl (U/min)",
+  "material": "Werkstückmaterial",
+  "cutThickness": "Schnitthöhe",
+  "bladeWidth": "Bandbreite",
+  "toothType": "Zahnform",
+  "bladeSfpm": "Bandgeschwindigkeit (SFPM)",
+  "bladeMetersPerMin": "Bandgeschwindigkeit (m/min)",
+  "recommendedRange": "Empfohlener Bereich",
+  "isOptimal": "Geschwindigkeit im Sollbereich",
+  "recommendedTpi": "Empfohlene Zähne pro Zoll (TPI)",
+  "feedRate": "Vorschubgeschwindigkeit",
+  "regular": "Regelmäßige Zahnung",
+  "skip": "Weitgezahnte Zahnung",
+  "hook": "Hakenzahnung"
+}

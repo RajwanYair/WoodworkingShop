@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import { GcodePreviewModal } from '../../src/components/optimizer/GcodePreviewModal';
+import { GcodePreviewModal } from '../../src/features/optimizer/GcodePreviewModal';
 import { makeCutRect, makeCutSheet } from '../helpers';
 
 function renderModal(sheet = makeCutSheet()) {

@@ -1,0 +1,10 @@
+{
+  "title": "Zuschnittplan-Übersicht",
+  "material": "Material",
+  "sheets": "Platten",
+  "usedM2": "Genutzt (m²)",
+  "wastePercent": "Verschnitt %",
+  "totalSheets": "Platten gesamt",
+  "totalUsedM2": "Gesamtfläche genutzt (m²)",
+  "overallWaste": "Verschnitt gesamt"
+}

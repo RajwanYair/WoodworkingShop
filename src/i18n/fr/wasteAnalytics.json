@@ -1,0 +1,21 @@
+{
+  "title": "Analyse des chutes",
+  "totalSheets": "Total des panneaux",
+  "totalWaste": "Chutes totales",
+  "offcutCandidates": "Chutes réutilisables",
+  "recoverableArea": "Surface récupérable",
+  "byMaterial": "Par matériau",
+  "material": "Matériau",
+  "sheets": "Panneaux",
+  "used": "Surface utilisée",
+  "waste": "Chutes",
+  "worstSheets": "Panneaux avec le plus de chutes",
+  "offcutTag": "Chute",
+  "offcutHint": "Panneaux avec une surface restante suffisante pour être conservés et servir à de petites pièces : {{count}}",
+  "rating": {
+    "excellent": "Excellent",
+    "good": "Bon",
+    "fair": "Moyen",
+    "poor": "Faible"
+  }
+}

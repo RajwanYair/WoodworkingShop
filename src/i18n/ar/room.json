@@ -1,0 +1,21 @@
+{
+  "title": "تخطيط الغرفة",
+  "sectionLabel": "مخطط أرضية الغرفة",
+  "empty": "لا توجد تخطيطات غرفة مُهيَّأة",
+  "cabinets": "خزائن",
+  "utilized": "مستخدم",
+  "walls": "الجدران",
+  "wallNorth": "الجدار الخلفي",
+  "wallSouth": "الجدار الأمامي",
+  "wallEast": "الجدار الأيمن",
+  "wallWest": "الجدار الأيسر",
+  "hasOpening": "يحتوي على فتحة",
+  "snapToWall": "محاذاة إلى الجدار",
+  "collision": "تم رصد تداخل بين الخزائن",
+  "roomHeight": "ارتفاع الغرفة",
+  "floorPlan": "مخطط الأرضية",
+  "wallOccupancy": "إشغال الجدار",
+  "selectCabinet": "الخزانة",
+  "positionX": "موضع X (مم)",
+  "positionY": "موضع Y (مم)"
+}

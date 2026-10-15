@@ -1,0 +1,11 @@
+{
+  "title": "עיצוב",
+  "light": "בהיר",
+  "dark": "כהה",
+  "highContrast": "קונטרסט גבוה",
+  "highContrastDark": "קונטרסט גבוה כהה",
+  "systemPreference": "עצור לפי הגדרת המערכת",
+  "toggle": "החלף עיצוב",
+  "colorScheme": "סכימת צבעים",
+  "contrastFailures": "כשלונות קונטרסט"
+}

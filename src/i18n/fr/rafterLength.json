@@ -1,0 +1,15 @@
+{
+  "pitchRatio": "Rapport hauteur-projection",
+  "title": "Longueur du chevron et entaille d’assise",
+  "totalLength": "Longueur totale (avec débord de toit)",
+  "rafterLength": "Longueur du chevron (jusqu’à l’appui mural)",
+  "seatCut": "Angle de coupe d’assise",
+  "overhang": "Débord de toit",
+  "birdsmouthDepth": "Profondeur de l’entaille d’assise",
+  "rise": "Élévation verticale",
+  "run": "Projection horizontale",
+  "totalSpan": "Largeur totale du bâtiment",
+  "plateWidth": "Largeur de la lisse haute",
+  "plumbCut": "Angle de coupe d’aplomb",
+  "shedRoof": "Toit monopente"
+}

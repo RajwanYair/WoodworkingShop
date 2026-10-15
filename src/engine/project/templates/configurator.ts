@@ -8,25 +8,10 @@ import {
 } from '../../materials/catalog/index';
 import { evaluateTemplateExpr } from './expression';
 import { TEMPLATES } from './data';
+import type { CabinetTemplate } from './template-types';
+
+export type { CabinetTemplate } from './template-types';
 export { evaluateTemplateExpr, TEMPLATES };
-export interface CabinetTemplate {
-  id: string;
-  name: { en: string; he: string };
-  description: { en: string; he: string };
-  icon: string; // icon component name from Icons.tsx
-  config: CabinetConfig;
-  /**
-   * Optional map of CabinetConfig field name → arithmetic expression string.
-   * Evaluated by `instantiateTemplate()` after size overrides are applied.
-   * Expressions may reference any numeric CabinetConfig field plus:
-   *   - `internalHeight` = height − kickHeight − 36  (approx top+bottom panels)
-   *   - `internalWidth`  = width  − 36               (approx left+right sides)
-   * Only arithmetic (+−×÷), parentheses, number literals, and
-   * Math.{floor|ceil|round|min|max|abs|trunc} are permitted.
-   * @example { shelfCount: "Math.floor(internalHeight / 350)" }
-   */
-  readonly computedFields?: Readonly<Record<string, string>>;
-}
 
 export function getTemplate(id: string): CabinetTemplate | undefined {
   return TEMPLATES.find((t) => t.id === id);

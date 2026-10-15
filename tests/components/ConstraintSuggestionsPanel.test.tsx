@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { ConstraintSuggestionsPanel } from '../../src/components/configurator/ConstraintSuggestionsPanel';
+import { ConstraintSuggestionsPanel } from '../../src/features/configurator/ConstraintSuggestionsPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { cfg } from '../helpers';
 

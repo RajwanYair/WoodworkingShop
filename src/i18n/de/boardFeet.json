@@ -1,0 +1,17 @@
+{
+  "title": "Brettfuß-Rechner",
+  "boardFeet": "Brettfuß",
+  "totalBoardFeet": "Brettfuß gesamt",
+  "thickness": "Dicke",
+  "width": "Breite",
+  "length": "Länge",
+  "quantity": "Menge",
+  "useNominal": "Nennmaße verwenden",
+  "species": "Holzart",
+  "costPerBf": "Kosten je Brettfuß",
+  "estimatedCost": "Geschätzte Kosten",
+  "volume": "Volumen",
+  "weight": "Geschätztes Gewicht",
+  "linearFeet": "Laufende Fuß",
+  "nominalToActual": "Nennmaß → Istmaß"
+}

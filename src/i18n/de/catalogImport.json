@@ -1,0 +1,15 @@
+{
+  "title": "Community-Katalog importieren",
+  "urlLabel": "Katalog-URL",
+  "urlPlaceholder": "https://example.com/catalog.json",
+  "importButton": "Importieren",
+  "importing": "Wird importiert…",
+  "previewTitle": "{{count}} Material gefunden",
+  "previewTitle_other": "{{count}} Materialien gefunden",
+  "addSelected": "Ausgewählte zu meinen Materialien hinzufügen",
+  "added": "{{count}} Material hinzugefügt",
+  "added_other": "{{count}} Materialien hinzugefügt",
+  "alreadyExists": "Bereits in deiner Bibliothek",
+  "errorFetch": "Katalog konnte nicht geladen werden: {{message}}",
+  "noMaterials": "Der Katalog ist leer."
+}

@@ -1,7 +1,7 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { MarketplacePanel } from '../../src/components/layout/MarketplacePanel';
+import { MarketplacePanel } from '../../src/features/workspace/MarketplacePanel';
 import { clearInstalledPlugins, isPluginInstalled } from '../../src/utils/plugin-marketplace';
 
 describe('MarketplacePanel', () => {
@@ -32,14 +32,21 @@ describe('MarketplacePanel', () => {
     expect(within(pluginList).getByRole('button', { name: 'Uninstall' })).toBeInTheDocument();
   });
 
-  it('replaces the plugin list with an empty state when search has no matches', async () => {
+  it('clears search and category filters from the empty state', async () => {
     const user = userEvent.setup();
     render(<MarketplacePanel onClose={() => {}} />);
 
-    await user.type(screen.getByRole('searchbox', { name: 'Search plugins…' }), 'unlisted plugin');
+    const dialog = screen.getByRole('dialog', { name: 'Plugin Marketplace' });
+    const search = within(dialog).getByRole('searchbox', { name: 'Search plugins…' });
+    await user.click(within(dialog).getByRole('button', { name: 'Optimizer' }));
+    await user.type(search, 'unlisted plugin');
 
-    expect(screen.getByText('No plugins found')).toBeInTheDocument();
-    expect(screen.queryByRole('list')).not.toBeInTheDocument();
+    expect(within(dialog).getByText('No plugins found')).toBeInTheDocument();
+    const allButtons = within(dialog).getAllByRole('button', { name: 'All' });
+    await user.click(allButtons[allButtons.length - 1]);
+
+    expect(search).toHaveValue('');
+    expect(within(dialog).getAllByRole('listitem')).toHaveLength(6);
   });
 
   it('filters the catalog by a plugin name', async () => {

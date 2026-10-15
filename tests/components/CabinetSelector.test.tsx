@@ -7,7 +7,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, beforeEach } from 'vitest';
-import { CabinetSelector } from '../../src/components/configurator/CabinetSelector';
+import { CabinetSelector } from '../../src/features/configurator/CabinetSelector';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 import { generateParts } from '../../src/engine';

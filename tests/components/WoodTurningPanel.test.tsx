@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { WoodTurningPanel } from '../../src/components/configurator/WoodTurningPanel';
+import { WoodTurningPanel } from '../../src/features/calculators/WoodTurningPanel';
 
 describe('WoodTurningPanel', () => {
   it('recalculates advisory RPM by operation and blank diameter', async () => {

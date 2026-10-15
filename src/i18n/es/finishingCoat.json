@@ -1,0 +1,15 @@
+{
+  "title": "Calculadora de acabado",
+  "surfaceArea": "Superficie",
+  "coatCount": "Número de capas",
+  "finishType": "Tipo de acabado",
+  "polyurethane": "Poliuretano",
+  "lacquer": "Laca",
+  "shellac": "Goma laca",
+  "waterbased": "Al agua",
+  "oil": "Aceite / aceite danés",
+  "volumeNeeded": "Volumen necesario",
+  "dryTimeBetweenCoats": "Tiempo de secado entre capas",
+  "totalDryTime": "Tiempo total de secado",
+  "coveragePerLitre": "Rendimiento por litro"
+}

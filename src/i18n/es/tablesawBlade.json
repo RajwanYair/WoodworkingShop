@@ -1,0 +1,18 @@
+{
+  "title": "Calculadora de altura de hoja para sierra de mesa",
+  "bladeDiameter": "Diámetro de la hoja",
+  "kerf": "Ancho de corte",
+  "workpieceThickness": "Espesor de la pieza",
+  "cutType": "Tipo de corte",
+  "dadoDepth": "Profundidad de la ranura transversal",
+  "bladeHeight": "Altura de la hoja",
+  "maxCutDepth": "Profundidad máxima de corte",
+  "bladeExposure": "Saliente de la hoja sobre la pieza",
+  "kerfWaste": "Material perdido en el corte",
+  "isFeasible": "Corte realizable",
+  "safetyMargin": "Margen de seguridad",
+  "through": "Corte pasante",
+  "dado": "Ranura transversal",
+  "rabbet": "Rebajo de canto",
+  "groove": "Ranura longitudinal"
+}

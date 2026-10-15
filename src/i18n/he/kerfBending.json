@@ -1,0 +1,16 @@
+{
+  "title": "מחשבון כפיפת חריץ",
+  "thickness": "עובי לוח",
+  "bendRadius": "רדיוס כפיפה מבוקש",
+  "material": "סוג חומר",
+  "kerfWidth": "רוחב חריץ (להב)",
+  "kerfSpacing": "מרווח בין חריצים",
+  "kerfCount": "מספר חריצים",
+  "kerfDepth": "עומק חריץ",
+  "remainingThickness": "עובי דופן נותר",
+  "tooFewKerfs": "רדיוס כפיפה צמוד מדי — הגדל רדיוס או הפחת עובי",
+  "plywood": "לוח עץ",
+  "mdf": "MDF",
+  "softwood": "עץ רך",
+  "hardwood": "עץ קשה"
+}

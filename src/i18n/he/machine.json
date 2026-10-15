@@ -1,0 +1,12 @@
+{
+  "title": "פרופיל מכונה",
+  "selectProfile": "בחר פרופיל מכונה",
+  "firmware": "קושחה",
+  "baudRate": "קצב שידור",
+  "feedRate": "קצב הזנה (מ\"מ/דקה)",
+  "plungeRate": "קצב צלילה (מ\"מ/דקה)",
+  "spindleRpm": "ציר (סל\"ד)",
+  "passDepth": "עומק מעבר (מ\"מ)",
+  "toolDiameter": "קוטר כלי (מ\"מ)",
+  "workHolding": "אחיזת עבודה"
+}

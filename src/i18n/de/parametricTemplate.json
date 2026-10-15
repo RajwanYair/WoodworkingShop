@@ -1,0 +1,23 @@
+{
+  "title": "Parametrische Vorlagen",
+  "create": "Vorlage erstellen",
+  "edit": "Vorlage bearbeiten",
+  "instantiate": "Vorlage generieren",
+  "parameters": "Parameterwerte",
+  "constraints": "Einschränkungen",
+  "rules": "Regeln",
+  "computed": "Berechnete Felder",
+  "preview": "Vorschau",
+  "min": "Mindestwert",
+  "max": "Höchstwert",
+  "step": "Schrittweite",
+  "default": "Standardwert",
+  "unit": "Maßeinheit",
+  "condition": "Bedingung",
+  "expression": "Formel",
+  "validate": "Überprüfen",
+  "valid": "Die Vorlage ist gültig.",
+  "invalid": "Die Vorlage enthält Fehler.",
+  "category": "Kategorie",
+  "version": "Versionsnummer"
+}

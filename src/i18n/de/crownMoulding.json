@@ -1,0 +1,13 @@
+{
+  "springAngle": "Federwinkel",
+  "title": "Schnittrechner für Kranzleisten",
+  "methods": {
+    "flat": "Flach auf dem Sägetisch liegend",
+    "in_position": "In Einbaulage am Anschlag anliegend"
+  },
+  "cornerAngle": "Eckwinkel",
+  "bevelAngle": "Neigungswinkel",
+  "cuttingMethod": "Schnittmethode",
+  "miterAngle": "Gehrungswinkel",
+  "note38deg": "Häufiger Einstellwert: Die meisten Kranzleistenprofile haben einen Federwinkel von 38°."
+}

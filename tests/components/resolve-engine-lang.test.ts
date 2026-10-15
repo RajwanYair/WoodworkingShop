@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { resolveEngineLang } from '../../src/components/optimizer/resolve-engine-lang';
+import { resolveEngineLang } from '../../src/features/optimizer/resolve-engine-lang';
 
 describe('resolveEngineLang', () => {
   it.each([

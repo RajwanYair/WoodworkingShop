@@ -1,0 +1,16 @@
+{
+  "title": "Calculadora de marco frontal",
+  "cabinetWidth": "Ancho del armario",
+  "cabinetHeight": "Alto del armario",
+  "stileWidth": "Ancho del montante",
+  "railWidth": "Ancho del travesaño",
+  "openingCount": "Número de huecos",
+  "openingWidth": "Ancho del hueco",
+  "openingHeight": "Alto del hueco",
+  "stileLength": "Largo del montante",
+  "topRailLength": "Largo del travesaño superior",
+  "bottomRailLength": "Largo del travesaño inferior",
+  "middleRailLength": "Largo del travesaño central",
+  "totalGlueSurface": "Superficie total de encolado",
+  "partList": "Lista de piezas"
+}

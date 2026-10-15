@@ -1,0 +1,11 @@
+{
+  "title": "Layoutoptimierung",
+  "totalDistance": "Gesamte Laufdistanz",
+  "efficiencyScore": "Effizienzbewertung",
+  "suggestions": "Tauschvorschläge",
+  "swap": "Tauschen",
+  "saved": "Eingespart",
+  "improvement": "Verbesserung",
+  "noSuggestions": "Das Layout ist bereits optimal.",
+  "metres": "m"
+}

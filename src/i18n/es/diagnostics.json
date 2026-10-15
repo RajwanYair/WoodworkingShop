@@ -1,0 +1,21 @@
+{
+  "title": "Diagnóstico local",
+  "close": "Cerrar diagnóstico local",
+  "webVitals": "Métricas web vitales (sesión de esta página)",
+  "lcp": "Pintado del mayor elemento con contenido",
+  "cls": "Cambio acumulado del diseño",
+  "interaction": "Latencia de interacción hasta el siguiente renderizado (INP)",
+  "workers": "Disponibilidad de los trabajadores",
+  "cutWorker": "Optimizador de corte",
+  "costWorker": "Estimador de costes",
+  "assemblyWorker": "Guía de montaje",
+  "available": "Disponible",
+  "unavailable": "No disponible",
+  "storage": "Estimación del almacenamiento del navegador",
+  "storageUsage": "{{used}} bytes usados de {{quota}} bytes",
+  "loading": "Cargando estimación…",
+  "errorCount": "Errores saneados conservados en memoria: {{count}}",
+  "privacy": "El paquete excluye el contenido de los proyectos. Solo se guarda al exportarlo y nunca se envía automáticamente.",
+  "export": "Exportar paquete de diagnóstico",
+  "exported": "Paquete de diagnóstico descargado."
+}

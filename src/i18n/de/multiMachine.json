@@ -1,0 +1,18 @@
+{
+  "title": "CNC-Auftragsverteilung auf mehrere Maschinen",
+  "distribute": "Aufträge verteilen",
+  "strategy": "Verteilungsstrategie",
+  "leastLoaded": "Geringste Auslastung",
+  "fastestFirst": "Schnellste zuerst",
+  "roundRobin": "Reihum",
+  "assigned": "Zugewiesen",
+  "unassigned": "Nicht zugewiesen",
+  "dispatched": "Übertragen",
+  "complete": "Abgeschlossen",
+  "failed": "Fehlgeschlagen",
+  "progress": "Fortschritt",
+  "estimatedTime": "Geschätzte Gesamtdauer",
+  "machineLoad": "Maschinenauslastung",
+  "noCapable": "Keine geeignete Maschine verfügbar.",
+  "includeOffline": "Offline-Maschinen einbeziehen"
+}

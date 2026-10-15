@@ -1,0 +1,13 @@
+{
+  "title": "Calculateur de vitesse de tournage sur bois",
+  "blankDiameter": "Diamètre du brut",
+  "operation": "Opération",
+  "roughing": "Dégrossissage",
+  "finishing": "Finition",
+  "sanding": "Ponçage",
+  "minRpm": "Vitesse minimale (indicative)",
+  "maxRpm": "Vitesse maximale (indicative)",
+  "recommendedRpm": "Vitesse recommandée",
+  "surfaceSpeed": "Vitesse périphérique (m/min)",
+  "safetyNote": "Estimation indicative uniquement, ce n’est pas une limite de sécurité. Suivez le manuel du tour ; démarrez lentement et réduisez la vitesse si la pièce vibre. Les pièces déséquilibrées peuvent nécessiter une vitesse bien plus faible."
+}

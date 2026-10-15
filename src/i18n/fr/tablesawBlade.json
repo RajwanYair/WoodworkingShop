@@ -1,0 +1,18 @@
+{
+  "title": "Calculateur de hauteur de lame de scie sur table",
+  "bladeDiameter": "Diamètre de lame",
+  "kerf": "Largeur de trait de scie",
+  "workpieceThickness": "Épaisseur de la pièce",
+  "cutType": "Type de coupe",
+  "dadoDepth": "Profondeur de rainure transversale",
+  "bladeHeight": "Hauteur de lame",
+  "maxCutDepth": "Profondeur de coupe maximale",
+  "bladeExposure": "Dépassement de lame au-dessus de la pièce",
+  "kerfWaste": "Perte due au trait de scie",
+  "isFeasible": "Coupe réalisable",
+  "safetyMargin": "Marge de sécurité",
+  "through": "Coupe traversante",
+  "dado": "Rainure transversale",
+  "rabbet": "Feuillure",
+  "groove": "Rainure longitudinale"
+}

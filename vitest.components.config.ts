@@ -9,7 +9,13 @@ export default {
     include: ['tests/components/**/*.test.ts', 'tests/components/**/*.test.tsx'],
     coverage: {
       ...config.test.coverage,
-      include: ['src/components/**'],
+      include: [
+        'src/app/**',
+        'src/features/**',
+        'src/ui/Icons.tsx',
+        'src/ui/icon-base.tsx',
+        'src/ui/icons-extended.tsx',
+      ],
       exclude: [],
       reportsDirectory: path.join(os.tmpdir(), 'WoodworkingShop', 'coverage-components'),
       thresholds: {

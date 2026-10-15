@@ -1,0 +1,16 @@
+{
+  "title": "Werkzeugverschleiß-Tracker",
+  "inventory": "Bestand",
+  "tool": "Werkzeug",
+  "condition": "Zustand",
+  "usage": "Nutzungsprotokoll",
+  "addTool": "Werkzeug hinzufügen",
+  "logUsage": "Nutzung erfassen",
+  "alerts": "Wartungshinweise",
+  "costPerMeter": "Kosten pro Meter",
+  "replacement": "Muss ersetzt werden",
+  "noTools": "Keine Werkzeuge im Lager.",
+  "noAlerts": "Alle Werkzeuge sind in gutem Zustand.",
+  "tools": "Werkzeuge",
+  "remaining": "Lebensdauer"
+}

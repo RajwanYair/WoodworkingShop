@@ -1,0 +1,15 @@
+{
+  "title": "Calculadora de separación de soportes de estante",
+  "spacing": "Separación entre orificios",
+  "positions": "Posiciones ajustables",
+  "holeCount": "Número total de orificios",
+  "drillDepth": "Profundidad de perforación",
+  "edgeClearance": "Distancia al borde",
+  "pinDiameter": "Diámetro del soporte",
+  "adjustmentRange": "Rango de ajuste",
+  "euro32": "Sistema Euro de 32 mm",
+  "singleRow": "Una fila",
+  "doubleRow": "Doble fila",
+  "totalPins": "Total de soportes necesarios",
+  "pinsPerShelf": "Soportes por estante"
+}

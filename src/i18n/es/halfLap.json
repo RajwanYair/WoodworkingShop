@@ -1,0 +1,19 @@
+{
+  "title": "Ensamble a media madera",
+  "lapType": "Tipo de ensamble",
+  "board1Thickness": "Grosor de la tabla 1",
+  "board1Width": "Ancho de la tabla 1",
+  "board2Thickness": "Grosor de la tabla 2",
+  "board2Width": "Ancho de la tabla 2",
+  "board1NotchDepth": "Profundidad del rebaje en la tabla 1",
+  "board1NotchWidth": "Ancho del rebaje en la tabla 1",
+  "board2NotchDepth": "Profundidad del rebaje en la tabla 2",
+  "board2NotchWidth": "Ancho del rebaje en la tabla 2",
+  "totalGlueArea": "Superficie total de encolado",
+  "finishedThickness": "Grosor final",
+  "lapTypes": {
+    "end_lap": "Empalme a media madera",
+    "t_lap": "Unión en T a media madera",
+    "cross_lap": "Ensamble cruzado a media madera"
+  }
+}

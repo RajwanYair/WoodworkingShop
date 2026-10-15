@@ -1,6 +1,6 @@
 export type PseudoLocale = 'en-XA' | 'ar-XB';
 
-type LocaleNode = string | { readonly [key: string]: LocaleNode };
+export type LocaleNode = string | { readonly [key: string]: LocaleNode };
 type PseudoNode<T extends LocaleNode> = T extends string
   ? string
   : T extends { readonly [key: string]: LocaleNode }

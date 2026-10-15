@@ -1,0 +1,13 @@
+{
+  "title": "Frame and Panel Calculator",
+  "frameWidth": "Frame Width",
+  "frameHeight": "Frame Height",
+  "railWidth": "Rail Width",
+  "stileWidth": "Stile Width",
+  "grooveDepth": "Groove Depth",
+  "panelFloat": "Panel Float (each side)",
+  "panelWidth": "Panel Width",
+  "panelHeight": "Panel Height",
+  "expansionAllowance": "Expansion Allowance",
+  "grooveWidth": "Groove Width"
+}

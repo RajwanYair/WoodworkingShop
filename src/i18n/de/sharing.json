@@ -1,0 +1,23 @@
+{
+  "title": "Projektfreigabe",
+  "createLink": "Freigabelink erstellen",
+  "label": "Linkbezeichnung",
+  "permission": "Berechtigung",
+  "viewOnly": "Nur ansehen",
+  "viewExport": "Ansehen und exportieren",
+  "full": "Vollzugriff",
+  "expiration": "Ablauf",
+  "hours": "Stunden",
+  "days": "Tage",
+  "never": "Nie",
+  "revoke": "Link widerrufen",
+  "renew": "Link erneuern",
+  "copyLink": "Link kopieren",
+  "linkCopied": "Link in die Zwischenablage kopiert.",
+  "viewCount": "Aufrufe",
+  "lastAccessed": "Zuletzt aufgerufen",
+  "expired": "Abgelaufen",
+  "revoked": "Widerrufen",
+  "active": "Aktiv",
+  "noLinks": "Noch keine Freigabelinks."
+}

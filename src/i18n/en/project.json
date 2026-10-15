@@ -1,0 +1,13 @@
+{
+  "title": "Project",
+  "add": "Add Cabinet",
+  "remove": "Remove",
+  "duplicate": "Duplicate cabinet",
+  "mirror": "Mirror cabinet (create symmetric twin)",
+  "mirrorBadge": "mirror",
+  "moveUp": "Move cabinet up",
+  "moveDown": "Move cabinet down",
+  "hint": "Multiple cabinets share optimized cut sheets. Double-click to rename.",
+  "notes": "Notes",
+  "notesPlaceholder": "Optional notes for this cabinet…"
+}

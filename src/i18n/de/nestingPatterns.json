@@ -1,0 +1,18 @@
+{
+  "title": "Bibliothek für Zuschnittmuster",
+  "pattern": "Zuschnittmuster",
+  "addPattern": "Muster speichern",
+  "score": "Übereinstimmung",
+  "noPatterns": "Noch keine Muster gespeichert.",
+  "patterns": "Zuschnittmuster",
+  "category": "Kategorie",
+  "tags": "Schlagwörter",
+  "fillRate": "Ausnutzungsgrad",
+  "placements": "Platzierungen",
+  "sheetSize": "Plattenmaß",
+  "removePattern": "Muster entfernen",
+  "findBySheet": "Nach Platte suchen",
+  "waste": "Verschnitt",
+  "patternSaved": "Muster in der Bibliothek gespeichert.",
+  "bestMatch": "Beste Übereinstimmung"
+}

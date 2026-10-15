@@ -1,0 +1,23 @@
+{
+  "title": "Schlitz-und-Zapfen-Rechner",
+  "description": "Schlitz- und Zapfenmaße anhand des Rohholzquerschnitts berechnen",
+  "stockThickness": "Werkstückstärke",
+  "stockWidth": "Werkstückbreite",
+  "jointType": "Verbindungsart",
+  "through": "Durchgehend",
+  "blind": "Blind",
+  "wedged": "Verkeilt",
+  "stub": "Kurzer Zapfen",
+  "tenonThickness": "Zapfenstärke",
+  "tenonWidth": "Zapfenbreite",
+  "tenonLength": "Zapfenlänge",
+  "mortiseWidth": "Schlitzbreite",
+  "mortiseHeight": "Schlitzhöhe",
+  "mortiseDepth": "Schlitztiefe",
+  "mortiseOffset": "Schlitzversatz",
+  "haunchDepth": "Schultertiefe",
+  "shoulderSetback": "Schulterrücksprung",
+  "recommendedChisel": "Empfohlene Stechbeitelbreite",
+  "glueSurfaceArea": "Leimfläche",
+  "thicknessRatio": "Stärkenverhältnis"
+}

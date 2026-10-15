@@ -1,0 +1,13 @@
+{
+  "title": "تصدير ERP / MRP",
+  "system": "النظام المستهدف",
+  "sap": "SAP (IDOC CSV)",
+  "oracle": "Oracle SCM",
+  "webhook": "ويب هوك عام",
+  "export": "تصدير إلى ERP",
+  "projectName": "اسم المشروع",
+  "schemaVersion": "إصدار المخطط",
+  "lineCount": "عدد البنود",
+  "totalCost": "التكلفة الإجمالية",
+  "noItems": "لا توجد بنود للتصدير"
+}

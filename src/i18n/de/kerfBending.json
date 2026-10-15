@@ -1,0 +1,16 @@
+{
+  "title": "Rechner für Einschnittbiegungen",
+  "thickness": "Plattenstärke",
+  "bendRadius": "Gewünschter Biegeradius",
+  "material": "Materialart",
+  "kerfWidth": "Schnittbreite (Sägeblatt)",
+  "kerfSpacing": "Abstand zwischen den Einschnitten",
+  "kerfCount": "Anzahl der Einschnitte",
+  "kerfDepth": "Einschnitttiefe",
+  "remainingThickness": "Verbleibende Wandstärke",
+  "tooFewKerfs": "Biegeradius zu eng – Radius vergrößern oder Plattenstärke verringern",
+  "plywood": "Sperrholz",
+  "mdf": "MDF-Platte",
+  "softwood": "Weichholz",
+  "hardwood": "Hartholz"
+}

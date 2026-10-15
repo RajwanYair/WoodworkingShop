@@ -1,0 +1,9 @@
+{
+  "title": "Zusammenarbeit",
+  "connected": "Verbunden",
+  "offline": "Nicht verbunden",
+  "peers": "{{count}} Person",
+  "peers_other": "{{count}} Personen",
+  "you": "Sie",
+  "conflict": "Konflikt gelöst"
+}

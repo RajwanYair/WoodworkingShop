@@ -17,7 +17,10 @@
  * interface so the engine remains testable without browser APIs.
  */
 
-import { utf8ByteLength } from '../../utils/browser-compat';
+/** UTF-8 byte length. Lone surrogates and U+FFFD are both 3 bytes, matching `utf8ByteLength`. */
+function utf8ByteLength(value: string): number {
+  return new TextEncoder().encode(value).byteLength;
+}
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

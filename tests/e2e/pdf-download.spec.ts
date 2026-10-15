@@ -42,7 +42,7 @@ async function addNamedSecondCabinet(page: Page) {
   await expect(widthInput).toHaveValue('800');
 }
 
-async function downloadPdf(page: Page, options: PdfOptions = {}) {
+async function downloadPdf(page: Page, options: PdfOptions = {}, onDownload?: () => void) {
   if (options.fullProject) await addNamedSecondCabinet(page);
   if (options.locale) {
     await page.getByRole('banner').getByRole('combobox').first().selectOption(options.locale);
@@ -99,6 +99,7 @@ async function downloadPdf(page: Page, options: PdfOptions = {}) {
   page.off('requestfailed', onRequestFailed);
   const path = await download.path();
   if (!path) throw new Error('PDF export did not produce a downloadable file');
+  onDownload?.();
 
   const bytes = new Uint8Array(await readFile(path));
   const document = await getDocument({ data: new Uint8Array(bytes), useSystemFonts: true }).promise;
@@ -139,6 +140,48 @@ async function downloadPdf(page: Page, options: PdfOptions = {}) {
 
   return { filename: download.suggestedFilename(), bytes, pages, pageSizes, textBounds, diagnostics };
 }
+
+test('first-run tour reaches a PDF export in under one minute @chromium-only', async ({ browser }, testInfo) => {
+  test.setTimeout(120_000);
+  const baseURL = testInfo.project.use.baseURL;
+  if (typeof baseURL !== 'string') throw new Error('Playwright baseURL is required for the first-run journey');
+
+  const durations: number[] = [];
+  for (let sample = 0; sample < 3; sample += 1) {
+    const context = await browser.newContext({ baseURL, reducedMotion: 'reduce' });
+    try {
+      await context.addInitScript(() => {
+        localStorage.clear();
+        sessionStorage.clear();
+      });
+      const page = await context.newPage();
+      const startedAt = performance.now();
+      await page.goto('./');
+      await expect(page.getByRole('banner')).toBeVisible();
+
+      const tour = page.getByRole('dialog', { name: 'Configure your cabinet' });
+      await expect(tour).toBeVisible();
+      await tour.getByRole('button', { name: 'Next' }).click();
+      await expect(page.getByRole('dialog', { name: 'Optimise cut sheets' })).toBeVisible();
+      await page.getByRole('dialog').getByRole('button', { name: 'Next' }).click();
+      await expect(page.getByRole('dialog', { name: 'Export & build' })).toBeVisible();
+      await page.getByRole('dialog').getByRole('button', { name: 'Get Started' }).click();
+
+      let completedAt: number | undefined;
+      await downloadPdf(page, {}, () => {
+        completedAt = performance.now();
+      });
+      if (completedAt === undefined) throw new Error('PDF download did not complete');
+      durations.push(completedAt - startedAt);
+    } finally {
+      await context.close();
+    }
+  }
+
+  const medianDuration = durations.toSorted((left, right) => left - right)[1];
+  console.info(`First-run PDF median: ${Math.round(medianDuration)} ms (${durations.length} runs)`);
+  expect(medianDuration).toBeLessThan(60_000);
+});
 
 test('PDF browser download uses the current-cabinet filename pattern', async ({ appPage }) => {
   const artifact = await downloadPdf(appPage);

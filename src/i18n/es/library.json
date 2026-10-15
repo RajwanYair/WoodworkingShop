@@ -1,0 +1,13 @@
+{
+  "title": "Biblioteca de proyectos",
+  "search": "Buscar en la biblioteca…",
+  "noResults": "No se encontraron proyectos coincidentes",
+  "tags": "Etiquetas",
+  "save": "Guardar en la biblioteca",
+  "load": "Cargar de la biblioteca",
+  "share": "Compartir proyecto",
+  "sortBy": "Ordenar por",
+  "sortName": "Nombre",
+  "sortDate": "Fecha de creación",
+  "sortUpdated": "Última actualización"
+}

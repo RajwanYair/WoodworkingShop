@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect } from 'vitest';
-import { CalculatorsPanel } from '../../src/components/configurator/CalculatorsPanel';
-import { FaceFramePanel } from '../../src/components/configurator/FaceFramePanel';
-import { FinishCalculatorPanel } from '../../src/components/configurator/FinishCalculatorPanel';
+import { CalculatorsPanel } from '../../src/features/calculators/CalculatorsPanel';
+import { FaceFramePanel } from '../../src/features/calculators/FaceFramePanel';
+import { FinishCalculatorPanel } from '../../src/features/calculators/FinishCalculatorPanel';
 
 const calculatorNames = [
   'Finish Calculator',

@@ -1,0 +1,21 @@
+{
+  "title": "Raumplanung",
+  "sectionLabel": "Raumgrundriss",
+  "empty": "Keine Raumplanung konfiguriert",
+  "cabinets": "Schränke",
+  "utilized": "genutzt",
+  "walls": "Wände",
+  "wallNorth": "Rückwand",
+  "wallSouth": "Vorderwand",
+  "wallEast": "Rechte Wand",
+  "wallWest": "Linke Wand",
+  "hasOpening": "Öffnung vorhanden",
+  "snapToWall": "An Wand ausrichten",
+  "collision": "Überschneidung von Schränken erkannt",
+  "roomHeight": "Raumhöhe",
+  "floorPlan": "Grundriss",
+  "wallOccupancy": "Wandbelegung",
+  "selectCabinet": "Schrank",
+  "positionX": "X-Position (mm)",
+  "positionY": "Y-Position (mm)"
+}

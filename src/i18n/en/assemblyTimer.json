@@ -1,0 +1,8 @@
+{
+  "title": "Assembly Time Estimate",
+  "step": "Step",
+  "count": "Ops",
+  "time": "Est. time",
+  "totalTime": "Total estimated time",
+  "noSteps": "No assembly steps for current configuration"
+}

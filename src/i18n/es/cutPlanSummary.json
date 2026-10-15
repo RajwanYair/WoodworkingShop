@@ -1,0 +1,10 @@
+{
+  "title": "Resumen del plan de corte",
+  "material": "Material",
+  "sheets": "Tableros",
+  "usedM2": "Utilizado (m²)",
+  "wastePercent": "Desperdicio %",
+  "totalSheets": "Total de tableros",
+  "totalUsedM2": "Superficie total utilizada (m²)",
+  "overallWaste": "Desperdicio total"
+}

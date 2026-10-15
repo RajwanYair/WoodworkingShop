@@ -1,0 +1,14 @@
+{
+  "title": "מחשבון חריץ / ראבט",
+  "jointType": "סוג חיבור",
+  "dado": "חריץ",
+  "rabbet": "ראבט",
+  "throughDado": "חריץ מלא",
+  "matingThickness": "עובי לוח מתחבר",
+  "boardThickness": "עובי לוח מקבל",
+  "cutWidth": "רוחב חיתוך",
+  "cutDepth": "עומק חיתוך",
+  "offsetFromEdge": "מרחק מקצה",
+  "bitsRecommendation": "להב / ביט מומלץ",
+  "passCount": "מספר מעברים נדרש"
+}

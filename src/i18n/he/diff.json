@@ -1,0 +1,16 @@
+{
+  "furnitureType": "סוג",
+  "width": "רוחב",
+  "height": "גובה",
+  "depth": "עומק",
+  "shelfCount": "מדפים",
+  "carcassMaterial": "חומר גוף",
+  "backPanelMaterial": "חומר גב",
+  "doorCount": "דלתות",
+  "doorStyle": "סגנון דלת",
+  "drawerCount": "מגירות",
+  "kickHeight": "גובה רגלית",
+  "handleStyle": "סגנון ידית",
+  "edgeBanding": "חיפוי קצוות",
+  "hasBack": "פאנל גב"
+}

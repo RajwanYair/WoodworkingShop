@@ -5,6 +5,7 @@
  * modes, unit system, project identity fields.  Zero cross-slice dependencies:
  * none of these actions trigger re-optimization or re-derivation.
  */
+import type { AppRouteId } from '../../utils/route-table';
 import type { UnitSystem } from '../../utils/units';
 import { browserLocalStorage } from '../../platform/storage/index';
 
@@ -103,7 +104,7 @@ export function detectOsDarkModeUi(): boolean {
 
 // ─── Slice type ───────────────────────────────────────────────────────────────
 
-type ActiveTab = 'workspace' | 'configurator' | 'preview' | 'optimizer' | 'assembly' | 'pdf' | 'calculators';
+type ActiveTab = AppRouteId;
 
 export type UiSlice = {
   // State

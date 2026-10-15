@@ -1,0 +1,20 @@
+{
+  "title": "Calculateur de vitesse d’avance",
+  "cutterDiameter": "Diamètre de l’outil (mm)",
+  "flutes": "Nombre de dents",
+  "material": "Matériau",
+  "cutterType": "Type de fraise",
+  "depthOfCut": "Profondeur de passe (mm)",
+  "stepover": "Recouvrement latéral (mm)",
+  "maxRpm": "Vitesse maximale de broche (tr/min)",
+  "spindleRpm": "Vitesse de broche (tr/min)",
+  "feedRateMmMin": "Vitesse d’avance (mm/min)",
+  "chipLoad": "Charge de copeau (mm)",
+  "plungeRate": "Vitesse de plongée (mm/min)",
+  "mrr": "Débit d’enlèvement de matière",
+  "rpmClamped": "Vitesse limitée au maximum",
+  "depthPerPass": "Profondeur par passe",
+  "numberOfPasses": "Nombre de passes",
+  "roughing": "Ébauche",
+  "finishing": "Finition"
+}

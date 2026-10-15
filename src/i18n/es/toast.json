@@ -1,0 +1,14 @@
+{
+  "saved": "Configuración guardada",
+  "loaded": "Configuración cargada",
+  "deleted": "Configuración eliminada",
+  "exported": "JSON exportado",
+  "imported": "Configuración importada",
+  "invalidFile": "Archivo de configuración no válido",
+  "dxfExported": "Archivo DXF descargado",
+  "gcodeExported": "Archivo G-code descargado",
+  "bomExported": "BOM CSV descargado",
+  "hardwareExported": "CSV de herrajes descargado",
+  "linkCopied": "Enlace de compartición copiado al portapapeles",
+  "linkCopyFailed": "No se pudo copiar el enlace — copie la URL de la barra de direcciones"
+}

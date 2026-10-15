@@ -1,0 +1,11 @@
+{
+  "title": "Design",
+  "light": "Hell",
+  "dark": "Dunkel",
+  "highContrast": "Hoher Kontrast",
+  "highContrastDark": "Dunkel mit hohem Kontrast",
+  "systemPreference": "Systemeinstellung verwenden",
+  "toggle": "Design umschalten",
+  "colorScheme": "Farbschema",
+  "contrastFailures": "Kontrastfehler"
+}

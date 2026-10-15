@@ -5,6 +5,7 @@ import {
   applyCabinetPatch,
   createCabinetPatch,
   MAX_CABINET_HISTORY,
+  measureSerializedBytes,
 } from '../../../src/store/slices/cabinetHistory';
 import type { CabinetEntry } from '../../../src/store/cabinet-store';
 
@@ -20,7 +21,7 @@ describe('cabinet history patches', () => {
     const after = [cabinet('First', 800), unchanged];
     const patch = createCabinetPatch(before, after);
 
-    expect(patch.changes).toEqual([{ index: 0, before: before[0], after: after[0] }]);
+    expect(patch.changes).toEqual([{ op: 'set', index: 0, path: ['config', 'width'], before: 700, after: 800 }]);
     expect(applyCabinetPatch(before, patch, 'forward')).toEqual(after);
     expect(applyCabinetPatch(after, patch, 'backward')).toEqual(before);
   });
@@ -38,6 +39,17 @@ describe('cabinet history patches', () => {
     expect(applyCabinetPatch(after, patch, 'backward')).toEqual(before);
   });
 
+  it('records a reference reorder as a permutation instead of copying entries', () => {
+    const first = cabinet('First');
+    const second = cabinet('Second');
+    const patch = createCabinetPatch([first, second], [second, first]);
+
+    expect(patch.changes).toEqual([]);
+    expect(patch.permute).toEqual({ forward: [1, 0], backward: [1, 0] });
+    expect(applyCabinetPatch([first, second], patch, 'forward')).toEqual([second, first]);
+    expect(applyCabinetPatch([second, first], patch, 'backward')).toEqual([first, second]);
+  });
+
   it('returns an empty patch for an unchanged list', () => {
     const cabinets = [cabinet('First')];
     const patch = createCabinetPatch(cabinets, cabinets);
@@ -47,27 +59,33 @@ describe('cabinet history patches', () => {
     expect(applyCabinetPatch(cabinets, patch, 'backward')).toEqual(cabinets);
   });
 
-  it('bounds history to 50 patches and retains only changed entries for a 50-cabinet project', () => {
+  it('bounds history to 50 patches and stores field edits instead of cabinet snapshots', () => {
     const cabinets = Array.from({ length: 50 }, (_, index) => cabinet(`Cabinet ${index + 1}`));
+    let current = cabinets;
     let history = [] as ReturnType<typeof createCabinetPatch>[];
+    const arraySnapshots: CabinetEntry[][] = [];
+    const entrySnapshots: CabinetEntry[] = [];
 
     for (let edit = 0; edit < MAX_CABINET_HISTORY + 5; edit += 1) {
-      const next = cabinets.map((entry, index) =>
+      const next = current.map((entry, index) =>
         index === 0 ? { ...entry, config: { ...entry.config, width: entry.config.width + 1 } } : entry,
       );
-      history = appendCabinetPatch(history, cabinets, next);
+      if (arraySnapshots.length < MAX_CABINET_HISTORY) {
+        arraySnapshots.push(next);
+        entrySnapshots.push(current[0], next[0]);
+      }
+      history = appendCabinetPatch(history, current, next);
+      current = next;
     }
 
-    const retainedEntryReferences = history.reduce(
-      (count, patch) =>
-        count +
-        patch.changes.filter((change) => change.before).length +
-        patch.changes.filter((change) => change.after).length,
-      0,
-    );
+    const structuralBytes = measureSerializedBytes(history);
+    const entrySnapshotBytes = measureSerializedBytes(entrySnapshots);
+    const arraySnapshotBytes = measureSerializedBytes(arraySnapshots);
 
     expect(history).toHaveLength(MAX_CABINET_HISTORY);
-    expect(history.every((patch) => patch.changes.length === 1)).toBe(true);
-    expect(retainedEntryReferences).toBe(MAX_CABINET_HISTORY * 2);
+    expect(history.every((patch) => patch.changes.length === 1 && patch.changes[0]?.op === 'set')).toBe(true);
+    expect(structuralBytes).toBeLessThan(entrySnapshotBytes);
+    expect(structuralBytes).toBeLessThan(arraySnapshotBytes / 10);
+    expect(structuralBytes).toBeGreaterThan(0);
   });
 });

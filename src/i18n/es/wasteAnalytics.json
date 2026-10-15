@@ -1,0 +1,21 @@
+{
+  "title": "Análisis de desperdicio",
+  "totalSheets": "Total de tableros",
+  "totalWaste": "Desperdicio total",
+  "offcutCandidates": "Retales aprovechables",
+  "recoverableArea": "Área recuperable",
+  "byMaterial": "Por material",
+  "material": "Material",
+  "sheets": "Tableros",
+  "used": "Área utilizada",
+  "waste": "Desperdicio",
+  "worstSheets": "Tableros con más desperdicio",
+  "offcutTag": "Retal",
+  "offcutHint": "Tableros con superficie sobrante suficiente para reutilizar en piezas pequeñas: {{count}}",
+  "rating": {
+    "excellent": "Excelente",
+    "good": "Bueno",
+    "fair": "Regular",
+    "poor": "Deficiente"
+  }
+}

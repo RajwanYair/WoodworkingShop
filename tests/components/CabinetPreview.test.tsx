@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, beforeEach } from 'vitest';
-import { CabinetPreview } from '../../src/components/preview/CabinetPreview';
+import { CabinetPreview } from '../../src/features/preview/CabinetPreview';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 

@@ -1,0 +1,14 @@
+{
+  "title": "Inventario del taller",
+  "stock": "Existencias",
+  "inStock": "En existencias",
+  "lowStock": "Pocas existencias",
+  "outOfStock": "Agotado",
+  "reorderLevel": "Nivel de reposición",
+  "reorderList": "Lista de reposición",
+  "quantity": "Cantidad",
+  "available": "Disponible",
+  "needed": "Necesario",
+  "canFulfil": "Se puede suministrar",
+  "noItems": "No hay artículos en el inventario."
+}

@@ -1,0 +1,18 @@
+{
+  "title": "Drehzahlrechner für die Tischbohrmaschine",
+  "rpm": "Drehzahl (U/min)",
+  "sfm": "Schnittgeschwindigkeit (SFM)",
+  "feedRate": "Vorschub",
+  "drillTime": "Bohrzeit",
+  "speedSetting": "Drehzahleinstellung",
+  "bitDiameter": "Bohrerdurchmesser",
+  "bitType": "Bohrertyp",
+  "material": "Werkstoff",
+  "depth": "Bohrtiefe",
+  "twist": "Spiralbohrer",
+  "bradPoint": "Zentrierspitzenbohrer",
+  "forstner": "Forstnerbohrer",
+  "spade": "Flachfräsbohrer",
+  "holeSaw": "Lochsäge",
+  "countersink": "Kegelsenker"
+}

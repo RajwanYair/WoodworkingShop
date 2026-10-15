@@ -1,0 +1,18 @@
+{
+  "title": "Calculateur de vitesse de lame de scie à ruban",
+  "wheelDiameter": "Diamètre des volants",
+  "wheelRpm": "Vitesse de rotation des volants (tr/min)",
+  "material": "Matériau de la pièce",
+  "cutThickness": "Épaisseur de coupe",
+  "bladeWidth": "Largeur de lame",
+  "toothType": "Type de denture",
+  "bladeSfpm": "Vitesse linéaire de la lame (SFPM)",
+  "bladeMetersPerMin": "Vitesse de lame (m/min)",
+  "recommendedRange": "Plage recommandée",
+  "isOptimal": "Vitesse dans la plage recommandée",
+  "recommendedTpi": "Dents recommandées par pouce (TPI)",
+  "feedRate": "Vitesse d’avance",
+  "regular": "Denture régulière",
+  "skip": "Denture à pas sauté",
+  "hook": "Denture à crochet"
+}

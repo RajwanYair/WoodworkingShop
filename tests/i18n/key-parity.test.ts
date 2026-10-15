@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import en from '../../src/i18n/en.json';
-import he from '../../src/i18n/he.json';
+import { loadLocaleFiles } from './load-locale-files';
+
+const en = loadLocaleFiles('en');
+const he = loadLocaleFiles('he');
 
 function collectKeys(obj: Record<string, unknown>, prefix = ''): string[] {
   const keys: string[] = [];

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { RafterLengthPanel } from '../../src/components/configurator/RafterLengthPanel';
+import { RafterLengthPanel } from '../../src/features/calculators/RafterLengthPanel';
 
 describe('RafterLengthPanel', () => {
   it('recalculates run and total length when switching to a shed roof', async () => {

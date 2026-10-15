@@ -1,0 +1,5 @@
+{
+  "usageLabel": "{{used}} Ko / {{quota}} Mo",
+  "nearLimitWarning": "Stockage presque plein — envisagez d'exporter et de supprimer les anciens projets",
+  "unavailable": "L'utilisation du stockage n'est pas disponible dans ce navigateur."
+}

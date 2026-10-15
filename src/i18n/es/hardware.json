@@ -1,0 +1,8 @@
+{
+  "title": "Lista de herrajes",
+  "name": "Artículo",
+  "qty": "Cant.",
+  "unit": "Unidad",
+  "supplier": "Proveedor",
+  "qtyHint": "Edite las celdas de cantidad para anular los valores calculados"
+}

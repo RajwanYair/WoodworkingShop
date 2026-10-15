@@ -17,7 +17,14 @@ const lcovPaths = [
 ];
 const outputPath = path.join(reportRoot, 'coverage-map.csv');
 const functionStatusArtifactPath = path.join(repoRoot, 'tests', 'fixtures', 'engine-function-status.json');
-const inventoryDirectories = ['engine', 'utils', 'store', 'hooks', 'components'];
+export const COVERAGE_OWNERS = ['engine', 'utils', 'store', 'hooks', 'app', 'features', 'ui'];
+const inventoryDirectories = COVERAGE_OWNERS;
+
+/** Owner directory for a repository-relative source path, or null when it is outside the inventory. */
+export function coverageOwner(sourcePath) {
+  const [root, owner] = sourcePath.split('/');
+  return root === 'src' && COVERAGE_OWNERS.includes(owner) ? owner : null;
+}
 const coverageExclusions = new Map([
   ['src/engine/index.ts', 'Excluded from thresholds: public API barrel with re-exports only.'],
 ]);
@@ -382,8 +389,12 @@ async function main() {
           ? 'indirect integration-only'
           : 'uncovered';
 
+    const owner = coverageOwner(source);
+    if (!owner) throw new Error(`Coverage inventory has no owner for ${source}.`);
+
     return {
       source,
+      owner,
       classification,
       directTests: tests.join('; '),
       coverageNote: coverageExclusions.get(source) ?? '',
@@ -392,8 +403,10 @@ async function main() {
 
   fs.mkdirSync(reportRoot, { recursive: true });
   const csv = [
-    'source,classification,direct_test_files,coverage_note',
-    ...rows.map((row) => [row.source, row.classification, row.directTests, row.coverageNote].map(csvCell).join(',')),
+    'source,owner,classification,direct_test_files,coverage_note',
+    ...rows.map((row) =>
+      [row.source, row.owner, row.classification, row.directTests, row.coverageNote].map(csvCell).join(','),
+    ),
   ].join('\n');
   fs.writeFileSync(outputPath, `${csv}\n`, 'utf8');
 

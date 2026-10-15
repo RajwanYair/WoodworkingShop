@@ -1,0 +1,16 @@
+{
+  "title": "تبعيات التجميع",
+  "step": "خطوة",
+  "steps": "خطوات",
+  "dependsOn": "يعتمد على",
+  "duration": "المدة",
+  "totalDuration": "المدة الإجمالية",
+  "criticalPath": "المسار الحرج",
+  "parallelWaves": "مراحل متوازية",
+  "maxParallelism": "أقصى توازٍ",
+  "slack": "الهامش الزمني",
+  "noCycles": "لا توجد تبعيات دائرية.",
+  "cycleDetected": "تم اكتشاف تبعية دائرية!",
+  "earliestStart": "أبكر وقت للبدء",
+  "latestFinish": "أحدث وقت للانتهاء"
+}

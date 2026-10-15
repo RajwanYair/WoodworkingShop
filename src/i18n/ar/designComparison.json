@@ -1,0 +1,20 @@
+{
+  "title": "مقارنة التصميمات",
+  "compare": "مقارنة التصميمات",
+  "designA": "التصميم أ",
+  "designB": "التصميم ب",
+  "winner": "الفائز",
+  "tie": "تعادل",
+  "criteria": "المعايير",
+  "score": "النتيجة",
+  "delta": "الفرق",
+  "materialCost": "تكلفة المواد",
+  "materialArea": "مساحة المواد",
+  "partCount": "عدد القطع",
+  "cutComplexity": "تعقيد القطع",
+  "wastePercent": "نسبة الهدر",
+  "assemblySteps": "خطوات التجميع",
+  "structuralScore": "تقييم المتانة",
+  "radarChart": "مخطط راداري للدرجات",
+  "summary": "ملخص المقارنة"
+}

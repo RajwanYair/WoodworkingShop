@@ -1,0 +1,18 @@
+{
+  "title": "Drawer Box Sizing Calculator",
+  "openingWidth": "Opening Width",
+  "openingHeight": "Opening Height",
+  "openingDepth": "Cabinet Depth",
+  "slideType": "Slide Type",
+  "sideThickness": "Side Thickness",
+  "falseFrontThickness": "False Front Thickness",
+  "boxWidth": "Box Width",
+  "boxHeight": "Box Height",
+  "boxDepth": "Box Depth",
+  "falseFrontWidth": "False Front Width",
+  "falseFrontHeight": "False Front Height",
+  "bottom": "Bottom Mount",
+  "side": "Side Mount",
+  "center": "Centre Mount",
+  "noteShort": "Box depth is short — verify slide length"
+}

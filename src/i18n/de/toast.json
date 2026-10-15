@@ -1,0 +1,14 @@
+{
+  "saved": "Konfiguration gespeichert",
+  "loaded": "Konfiguration geladen",
+  "deleted": "Konfiguration gelöscht",
+  "exported": "JSON exportiert",
+  "imported": "Konfiguration importiert",
+  "invalidFile": "Ungültige Konfigurationsdatei",
+  "dxfExported": "DXF-Datei heruntergeladen",
+  "gcodeExported": "G-Code-Datei heruntergeladen",
+  "bomExported": "Stückliste CSV heruntergeladen",
+  "hardwareExported": "Beschläge-CSV heruntergeladen",
+  "linkCopied": "Freigabelink in Zwischenablage kopiert",
+  "linkCopyFailed": "Link konnte nicht kopiert werden — bitte URL aus der Adressleiste kopieren"
+}

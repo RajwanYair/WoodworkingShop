@@ -1,0 +1,10 @@
+{
+  "title": "Massenersatz von Materialien",
+  "short": "Ersetzen",
+  "description": "Ein Material durch ein anderes in allen Schränken dieses Projekts ersetzen. Diese Aktion ist rückgängig machbar.",
+  "from": "Ersetzen",
+  "to": "Mit",
+  "apply": "Auf alle anwenden",
+  "applied": "Fertig! Mit Ctrl+Z rückgängig machen.",
+  "summary": "{{count}} Schrank/Schränke werden aktualisiert: {{from}} → {{to}}"
+}

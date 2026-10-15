@@ -1,8 +1,10 @@
 import type { CabinetConfig, DrawerSlideType } from '../engine/core/types';
 import { DEFAULT_CONFIG, CONSTRAINTS } from '../engine/materials/materials';
 import { getConfiguratorTemplate } from '../engine/project/templates/index';
+import { commitAppUrl, listenForTraverse } from '../platform/navigation/app-navigation';
 import { getQueryValue, parseQueryString, serializeQueryRecord, type QueryRecord } from './browser-compat';
-import { getBrowserUrl, pushBrowserUrl, replaceBrowserUrl } from '../platform/share/index';
+import { getBrowserUrl, replaceBrowserUrl } from '../platform/share/index';
+import { isAppRouteId, type AppRouteId } from './route-table';
 
 /**
  * Encode a CabinetConfig into URL search params.
@@ -163,14 +165,23 @@ export function readProjectNameFromUrl(): string {
  * Returns `null` when the parameter is absent or invalid.
  * Sprint 298 — URL tab deep-linking.
  */
-export function readTabFromUrl():
-  'workspace' | 'configurator' | 'preview' | 'optimizer' | 'assembly' | 'pdf' | 'calculators' | null {
-  const raw = getQueryValue(getBrowserUrl().search, 'tab');
-  const VALID_TABS = new Set(['workspace', 'configurator', 'preview', 'optimizer', 'assembly', 'pdf', 'calculators']);
-  if (raw && VALID_TABS.has(raw)) {
-    return raw as 'workspace' | 'configurator' | 'preview' | 'optimizer' | 'assembly' | 'pdf' | 'calculators';
-  }
-  return null;
+export function readTabFromSearch(search: string): AppRouteId | null {
+  const raw = getQueryValue(search, 'tab');
+  return raw && isAppRouteId(raw) ? raw : null;
+}
+
+export function readTabFromHref(href: string): AppRouteId | null {
+  const queryIndex = href.indexOf('?');
+  return readTabFromSearch(queryIndex < 0 ? '' : href.slice(queryIndex));
+}
+
+export function readTabFromUrl(): AppRouteId | null {
+  return readTabFromSearch(getBrowserUrl().search);
+}
+
+/** Back/forward only. Push and replace navigations are ignored so tab changes do not loop. */
+export function subscribeToRouteTraverse(onHref: (href: string) => void): () => void {
+  return listenForTraverse(onHref);
 }
 
 /** Read a valid zero-based active-cabinet index from the current URL. */
@@ -204,8 +215,7 @@ export function pushTabToUrl(tab: string, replace = false): void {
   params.tab = tab;
   const qs = serializeQueryRecord(params);
   const url = qs ? `${currentUrl.pathname}?${qs}` : currentUrl.pathname;
-  if (replace) replaceBrowserUrl(url);
-  else pushBrowserUrl(url);
+  commitAppUrl(url, replace ? 'replace' : 'push');
 }
 
 /**

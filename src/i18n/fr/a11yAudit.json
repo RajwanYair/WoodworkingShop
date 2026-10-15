@@ -1,0 +1,12 @@
+{
+  "title": "Audit d'accessibilité",
+  "runAudit": "Lancer l'audit",
+  "compliant": "Conforme",
+  "nonCompliant": "Non conforme",
+  "violations": "Non-conformités",
+  "passes": "Réussites",
+  "incomplete": "Incomplet",
+  "severity": "Gravité",
+  "criterion": "Critère",
+  "suggestion": "Recommandation"
+}

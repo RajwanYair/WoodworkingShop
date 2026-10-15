@@ -3,6 +3,7 @@ import { DEFAULT_CONFIG } from '../../../src/engine/materials/materials';
 import {
   createCabinetSessionRecord,
   readCabinetSessionRecord,
+  readLegacyCabinetSession,
   type CabinetSessionSnapshot,
 } from '../../../src/store/slices/sessionPersistence';
 
@@ -56,5 +57,23 @@ describe('cabinet session persistence', () => {
     };
 
     expect(readCabinetSessionRecord(invalid)).toBeNull();
+  });
+
+  it('reads legacy localStorage sessions with defaults for absent settings', () => {
+    expect(
+      readLegacyCabinetSession({
+        cabinets: snapshot.cabinets,
+        activeCabinetIndex: 12,
+        projectName: 'Legacy workshop',
+      }),
+    ).toMatchObject({
+      cabinets: snapshot.cabinets,
+      activeCabinetIndex: 0,
+      projectName: 'Legacy workshop',
+      sawKerf: 4,
+      materialPriceOverrides: {},
+      rotationLockedPartIds: {},
+    });
+    expect(readLegacyCabinetSession({ cabinets: 'invalid' })).toBeNull();
   });
 });

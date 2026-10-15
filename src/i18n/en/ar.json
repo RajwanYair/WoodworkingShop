@@ -1,0 +1,6 @@
+{
+  "title": "AR Placement",
+  "startSession": "Start AR session",
+  "placeHere": "Place here",
+  "notSupported": "WebXR AR not supported on this device"
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Audit Trail",
+  "noEvents": "No audit events recorded",
+  "eventCount": "{{count}} event",
+  "eventCount_other": "{{count}} events",
+  "configChange": "Config changed",
+  "export": "Exported",
+  "history": "History",
+  "diffTitle": "Version Diff",
+  "noDiff": "Configurations are identical",
+  "changeCount": "{{count}} field changed",
+  "changeCount_other": "{{count}} fields changed"
+}

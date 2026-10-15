@@ -1,0 +1,10 @@
+{
+  "title": "Récapitulatif du plan de découpe",
+  "material": "Matériau",
+  "sheets": "Panneaux",
+  "usedM2": "Utilisé (m²)",
+  "wastePercent": "Chutes %",
+  "totalSheets": "Nombre total de panneaux",
+  "totalUsedM2": "Surface totale utilisée (m²)",
+  "overallWaste": "Total des chutes"
+}

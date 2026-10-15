@@ -1,0 +1,10 @@
+{
+  "title": "Indicadores de funciones",
+  "enabled": "Activado",
+  "disabled": "Desactivado",
+  "priority": "Prioridad",
+  "bundleSize": "Tamaño del paquete",
+  "chunks": "Fragmentos",
+  "loadOrder": "Orden de carga",
+  "totalImpact": "Impacto total del paquete"
+}

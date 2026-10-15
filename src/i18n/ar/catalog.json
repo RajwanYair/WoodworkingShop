@@ -1,0 +1,20 @@
+{
+  "title": "كتالوج المواد",
+  "manufacturer": "الشركة المصنّعة",
+  "manufacturers": "الشركات المصنّعة",
+  "filterByRegion": "تصفية حسب المنطقة",
+  "filterByCategory": "تصفية حسب الفئة",
+  "filterByThickness": "تصفية حسب السماكة",
+  "availableOnly": "المتاح فقط",
+  "noResults": "لا توجد مواد تطابق عوامل التصفية الحالية.",
+  "mergeCatalogs": "دمج الكتالوجات",
+  "sku": "رمز المنتج",
+  "category": "الفئة",
+  "thickness": "السماكة",
+  "price": "السعر لكل م²",
+  "regions": "مناطق التوريد",
+  "inStock": "متوفر في المخزون",
+  "outOfStock": "غير متوفر في المخزون",
+  "importCatalog": "استيراد كتالوج",
+  "invalidCatalog": "تنسيق الكتالوج غير صالح."
+}

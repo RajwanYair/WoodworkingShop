@@ -1,0 +1,13 @@
+{
+  "title": "Calculadora de velocidad para torneado de madera",
+  "blankDiameter": "Diámetro de la pieza en bruto",
+  "operation": "Operación",
+  "roughing": "Desbaste",
+  "finishing": "Acabado",
+  "sanding": "Lijado",
+  "minRpm": "RPM mínimas (orientativas)",
+  "maxRpm": "RPM máximas (orientativas)",
+  "recommendedRpm": "RPM recomendadas",
+  "surfaceSpeed": "Velocidad periférica (m/min)",
+  "safetyNote": "Es solo una estimación orientativa, no un límite de seguridad. Sigue el manual del torno; empieza despacio y reduce la velocidad si la pieza vibra. Las piezas desequilibradas pueden necesitar velocidades mucho menores."
+}

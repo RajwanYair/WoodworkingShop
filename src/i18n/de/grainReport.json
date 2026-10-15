@@ -1,0 +1,8 @@
+{
+  "title": "Bericht zur Faserrichtung",
+  "constrained": "mit Faservorgabe",
+  "grainSensitive": "Faserempfindliches Teil",
+  "grainBadge": "Faser",
+  "noParts": "Keine Teile – konfiguriere zuerst einen Schrank.",
+  "summary": "{{constrained}} von {{total}} Teilen haben eine Faserrichtungsvorgabe."
+}

@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from 'vitest';
-import { CALCULATOR_CATALOG } from '../../src/components/configurator/calculator-catalog';
+import { CALCULATOR_CATALOG } from '../../src/features/calculators/calculator-catalog';
 import {
   COMMANDS,
   formatShortcut,
   getCommand,
   matchesShortcut,
   type CommandExecutionContext,
-} from '../../src/components/layout/command-registry';
+} from '../../src/app/command-registry';
 
 describe('command registry', () => {
   it('registers a direct palette command for every calculator section', () => {

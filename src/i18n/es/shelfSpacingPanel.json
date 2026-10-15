@@ -1,0 +1,12 @@
+{
+  "title": "Preajustes de separación entre estantes",
+  "preset": "Tipo de almacenamiento",
+  "clearance": "Separación por estante",
+  "shelfCount": "Estantes que caben",
+  "noFit": "La altura interior del armario es demasiado baja para este ajuste",
+  "warning": "Advertencia",
+  "customClearance": "Separación personalizada (mm)",
+  "custom": "Personalizado",
+  "positions": "Posiciones de los estantes desde abajo",
+  "mm": "mm"
+}

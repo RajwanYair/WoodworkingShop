@@ -1,0 +1,15 @@
+{
+  "title": "מחשבון קרשי מדרגות",
+  "totalRise": "עלייה כוללת",
+  "treadDepth": "עומק שלב הדרגה",
+  "idealRiser": "גובה פסיעה אידאלי",
+  "riserCount": "מספר פסיעות",
+  "actualRiser": "גובה פסיעה בפועל",
+  "treadCount": "מספר שלבי דריכה",
+  "totalRun": "נידה כוללת",
+  "stringerLength": "אורך קרש",
+  "stringerAngle": "זווית קרש",
+  "ircPass": "עומד בדרישות IRC 2021",
+  "riserTooTall": "גובה פסיעה מעל מקסימום IRC",
+  "treadTooShallow": "עומק שלב הדריכה מתחת מינימום IRC"
+}

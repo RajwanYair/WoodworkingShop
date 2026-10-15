@@ -1,0 +1,21 @@
+{
+  "title": "Verschnittanalyse",
+  "totalSheets": "Platten gesamt",
+  "totalWaste": "Verschnitt gesamt",
+  "offcutCandidates": "Wiederverwendbare Reststücke",
+  "recoverableArea": "Wiederverwendbare Fläche",
+  "byMaterial": "Nach Material",
+  "material": "Werkstoff",
+  "sheets": "Platten",
+  "used": "Genutzte Fläche",
+  "waste": "Verschnitt",
+  "worstSheets": "Platten mit dem meisten Verschnitt",
+  "offcutTag": "Reststück",
+  "offcutHint": "Platten mit ausreichend Restfläche zum Aufheben für kleinere Teile: {{count}}",
+  "rating": {
+    "excellent": "Ausgezeichnet",
+    "good": "Gut",
+    "fair": "Mittel",
+    "poor": "Schlecht"
+  }
+}

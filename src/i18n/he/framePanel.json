@@ -1,0 +1,13 @@
+{
+  "title": "מחשבון מסגרת ולוח",
+  "frameWidth": "רוחב מסגרת",
+  "frameHeight": "גובה מסגרת",
+  "railWidth": "רוחב אופקי",
+  "stileWidth": "רוחב אנכי",
+  "grooveDepth": "עומק חריץ",
+  "panelFloat": "מרווח צף (כל צד)",
+  "panelWidth": "רוחב לוח",
+  "panelHeight": "גובה לוח",
+  "expansionAllowance": "מרווח התפשטות",
+  "grooveWidth": "רוחב חריץ"
+}

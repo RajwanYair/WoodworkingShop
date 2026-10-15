@@ -1,0 +1,14 @@
+{
+  "title": "Stock de l'atelier",
+  "stock": "Stock",
+  "inStock": "En stock",
+  "lowStock": "Stock faible",
+  "outOfStock": "Rupture de stock",
+  "reorderLevel": "Seuil de réapprovisionnement",
+  "reorderList": "Liste de réapprovisionnement",
+  "quantity": "Quantité",
+  "available": "Disponible",
+  "needed": "Nécessaire",
+  "canFulfil": "Peut être fourni",
+  "noItems": "Aucun article en stock."
+}

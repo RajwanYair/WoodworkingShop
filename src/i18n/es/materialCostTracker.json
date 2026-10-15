@@ -1,0 +1,14 @@
+{
+  "title": "Seguimiento de costes de materiales",
+  "bestPrice": "Mejor precio",
+  "supplier": "Proveedor",
+  "trend": "Tendencia",
+  "rising": "Al alza",
+  "falling": "A la baja",
+  "stable": "Estable",
+  "totalCost": "Coste total",
+  "anomaly": "Anomalía de precio",
+  "noPrice": "No hay datos de precios disponibles.",
+  "currency": "Moneda",
+  "perUnit": "por unidad"
+}

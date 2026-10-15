@@ -1,0 +1,15 @@
+{
+  "title": "Récapitulatif des coûts",
+  "category": "Catégorie",
+  "amount": "Montant",
+  "share": "Part",
+  "total": "Total",
+  "materials": "Matériaux",
+  "edgeBanding": "Chant",
+  "hardware": "Quincaillerie",
+  "waste": "Provision pour chutes",
+  "finish": "Finition / peinture",
+  "labour": "Main-d’œuvre",
+  "exportCsv": "Exporter en CSV",
+  "tableAriaLabel": "Répartition des coûts"
+}

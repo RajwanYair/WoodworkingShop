@@ -1,0 +1,14 @@
+{
+  "title": "Calculadora de uniones de ranura y rebaje",
+  "jointType": "Tipo de unión",
+  "dado": "Ranura",
+  "rabbet": "Rebaje",
+  "throughDado": "Ranura pasante",
+  "matingThickness": "Grosor del tablero encajado",
+  "boardThickness": "Grosor del tablero receptor",
+  "cutWidth": "Ancho del corte",
+  "cutDepth": "Profundidad del corte",
+  "offsetFromEdge": "Distancia desde el borde",
+  "bitsRecommendation": "Fresa / hoja recomendada",
+  "passCount": "Pasadas de fresadora necesarias"
+}

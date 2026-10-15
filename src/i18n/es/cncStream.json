@@ -1,0 +1,14 @@
+{
+  "title": "Transmisión CNC v2",
+  "startStream": "Iniciar transmisión",
+  "pauseStream": "Pausar",
+  "resumeStream": "Reanudar",
+  "cancelStream": "Cancelar",
+  "retryLine": "Reintentar línea",
+  "progress": "Progreso",
+  "linesRemaining": "Líneas restantes",
+  "estimatedTime": "Tiempo estimado",
+  "sessionState": "Estado de la sesión",
+  "errorLines": "Líneas con errores",
+  "noErrors": "No hay errores."
+}

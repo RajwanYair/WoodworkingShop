@@ -1,0 +1,20 @@
+{
+  "title": "Catálogo de materiales",
+  "manufacturer": "Fabricante",
+  "manufacturers": "Fabricantes",
+  "filterByRegion": "Filtrar por región",
+  "filterByCategory": "Filtrar por categoría",
+  "filterByThickness": "Filtrar por grosor",
+  "availableOnly": "Solo disponibles",
+  "noResults": "Ningún material coincide con los filtros actuales.",
+  "mergeCatalogs": "Combinar catálogos",
+  "sku": "Código del producto",
+  "category": "Categoría",
+  "thickness": "Grosor",
+  "price": "Precio por m²",
+  "regions": "Regiones de suministro",
+  "inStock": "En existencias",
+  "outOfStock": "Agotado",
+  "importCatalog": "Importar catálogo",
+  "invalidCatalog": "El formato del catálogo no es válido."
+}

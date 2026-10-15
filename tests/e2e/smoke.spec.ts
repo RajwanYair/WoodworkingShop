@@ -160,7 +160,16 @@ test('direct tab URLs select and render each requested panel', async ({ appPage:
   }
 });
 
-test('invalid tab URL falls back to the workspace tab', async ({ appPage: page }) => {
+test('invalid tab URL falls back to the workspace tab', async ({ page }) => {
+  // A single direct navigation, matching a user opening a bad ?tab= link. The shared `appPage`
+  // fixture's `goto('./')` plus this test's own navigation would race the sidebar's lazy chunk
+  // fetch against the second navigation, logging a benign Firefox "import aborted" console error.
+  await page.clock.setFixedTime(new Date('2026-09-28T12:00:00.000Z'));
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.addInitScript(() => {
+    localStorage.setItem('onboarding-seen', '1');
+    localStorage.setItem('woodworkingshop:preview-toured', '1');
+  });
   await page.goto('./?tab=invalid-tab');
 
   await expect(page.getByRole('tab', { name: 'Workspace' })).toHaveAttribute('aria-selected', 'true');

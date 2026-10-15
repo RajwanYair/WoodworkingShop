@@ -1,0 +1,12 @@
+{
+  "title": "Asistente de diseño con IA",
+  "brief": "Resumen del diseño",
+  "suggestions": "Sugerencias de distribución",
+  "noSuggestions": "No hay sugerencias: se cumplen todas las restricciones.",
+  "constraintsSatisfied": "Restricciones satisfechas",
+  "constraintsViolated": "Se incumplen las restricciones",
+  "overallScore": "Puntuación global",
+  "applyAll": "Aplicar todo",
+  "applySuggestion": "Aplicar",
+  "validateConstraints": "Validar restricciones"
+}

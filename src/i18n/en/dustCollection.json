@@ -1,0 +1,17 @@
+{
+  "title": "Dust Collection",
+  "estimator": "System Estimator",
+  "machine": "Machine",
+  "addMachine": "Add Machine",
+  "portDiameter": "Port Diameter",
+  "ductRun": "Duct Run",
+  "elbows": "Elbows",
+  "cfmRequired": "CFM Required",
+  "staticPressure": "Static Pressure",
+  "trunkDiameter": "Trunk Diameter",
+  "recommendedHp": "Recommended HP",
+  "adequate": "System Adequate",
+  "inadequate": "System Undersized",
+  "warnings": "Warnings",
+  "noMachines": "No machines added."
+}
