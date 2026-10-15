@@ -1,0 +1,19 @@
+{
+  "title": "Planificateur de maintenance",
+  "schedule": "Calendrier de maintenance",
+  "overdue": "En retard",
+  "due": "À effectuer",
+  "upcoming": "À venir",
+  "completed": "Terminée",
+  "healthScore": "Indice d’état",
+  "interval": "Intervalle de maintenance",
+  "hours": "Heures de fonctionnement",
+  "days": "Jours",
+  "cuts": "Coupes",
+  "priority": "Priorité",
+  "critical": "Critique",
+  "high": "Élevée",
+  "normal": "Normale",
+  "low": "Faible",
+  "noRules": "Aucune règle de maintenance n’est configurée."
+}

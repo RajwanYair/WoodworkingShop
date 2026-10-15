@@ -1,0 +1,13 @@
+{
+  "title": "Calculateur d'assemblage à entures multiples",
+  "boardWidth": "Largeur de la planche",
+  "boardThickness": "Épaisseur de la planche",
+  "fingerWidth": "Largeur de la dent",
+  "fingerCount": "Nombre de dents",
+  "socketDepth": "Profondeur de l'entaille",
+  "glueAllowance": "Marge pour la colle",
+  "glueSurface": "Surface de collage",
+  "layoutA": "Disposition de la planche A",
+  "layoutB": "Disposition de la planche B",
+  "auto": "Automatique"
+}

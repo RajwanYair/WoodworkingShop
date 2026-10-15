@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
-import { ProjectManagerModal } from '../../src/components/layout/ProjectManagerModal';
+import { ProjectManagerModal } from '../../src/features/workspace/ProjectManagerModal';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { listProjects, saveProject, type SavedProject } from '../../src/utils/project-storage';
 
@@ -71,5 +71,26 @@ describe('ProjectManagerModal', () => {
 
     await waitFor(() => expect(saveProject).toHaveBeenCalledWith('New Workshop', expect.any(Array)));
     expect(useCabinetStore.getState().projectName).toBe('New Workshop');
+  });
+
+  it('offers a direct save action when no projects exist', async () => {
+    const user = userEvent.setup();
+    vi.mocked(listProjects).mockResolvedValueOnce([]);
+    render(<ProjectManagerModal onClose={vi.fn()} />);
+
+    const saveAction = await screen.findByRole('button', { name: 'Save current project' });
+    await user.click(saveAction);
+    expect(screen.getByPlaceholderText('Project name…')).toHaveFocus();
+  });
+
+  it('clears the project filter from the no-results state', async () => {
+    const user = userEvent.setup();
+    render(<ProjectManagerModal onClose={vi.fn()} />);
+    const search = screen.getByRole('searchbox', { name: /search projects/i });
+    await user.type(search, 'missing');
+
+    await user.click(screen.getByRole('button', { name: 'Clear search' }));
+    expect(search).toHaveValue('');
+    expect(await screen.findByText('Alpha Workshop')).toBeInTheDocument();
   });
 });

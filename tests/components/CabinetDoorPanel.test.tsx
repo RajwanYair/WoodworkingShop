@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { CabinetDoorPanel } from '../../src/components/configurator/CabinetDoorPanel';
+import { CabinetDoorPanel } from '../../src/features/calculators/CabinetDoorPanel';
 
 describe('CabinetDoorPanel', () => {
   it('recalculates door leaves and hinges and reports an invalid opening', async () => {

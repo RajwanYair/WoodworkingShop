@@ -1,0 +1,18 @@
+{
+  "title": "Etiquetas de paneles",
+  "partId": "ID de pieza",
+  "dimensions": "Dimensiones",
+  "material": "Material de fabricación",
+  "grain": "Dirección de la veta",
+  "grainHorizontal": "En sentido horizontal",
+  "grainVertical": "En sentido vertical",
+  "grainNone": "Sin veta",
+  "cabinet": "Mueble",
+  "position": "Ubicación",
+  "edgeBanding": "Canteado",
+  "quantity": "Cantidad",
+  "notes": "Notas",
+  "totalPieces": "Piezas totales",
+  "uniqueParts": "Piezas distintas",
+  "materials": "Materiales utilizados"
+}

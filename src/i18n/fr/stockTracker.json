@@ -1,0 +1,19 @@
+{
+  "title": "Suivi du stock",
+  "material": "Matériau",
+  "required": "Requis",
+  "onHand": "En stock",
+  "reorderAt": "Réapprovisionner à",
+  "status": "Statut",
+  "status_ok": "Suffisant",
+  "status_low": "Faible",
+  "status_shortfall": "Insuffisant",
+  "status_unknown": "Inconnu",
+  "noDemand": "Aucun panneau n’est encore requis — configurez d’abord une armoire.",
+  "addItem": "+ Ajouter un article au stock",
+  "materialKey": "Clé du matériau",
+  "add": "Ajouter",
+  "tableAriaLabel": "Tableau de disponibilité des matériaux",
+  "editQtyAriaLabel": "Modifier la quantité en stock de {{key}}",
+  "removeAriaLabel": "Retirer {{key}} du stock"
+}

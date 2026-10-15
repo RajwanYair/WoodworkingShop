@@ -1,0 +1,12 @@
+{
+  "title": "Build Log",
+  "addPlaceholder": "Add a build note…",
+  "hint": "Ctrl/Cmd + Enter to save",
+  "add": "Add note",
+  "edit": "Edit entry",
+  "save": "Save note",
+  "cancel": "Cancel edit",
+  "empty": "No notes yet. Log steps, adjustments, or observations.",
+  "delete": "Delete entry",
+  "clearAll": "Clear all entries"
+}

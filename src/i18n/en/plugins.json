@@ -1,0 +1,11 @@
+{
+  "title": "Plugin Registry",
+  "empty": "No plugins registered",
+  "version": "v{{version}}",
+  "stability": "API stability: {{level}}",
+  "enable": "Enable plugin",
+  "disable": "Disable plugin",
+  "enabled": "Enabled",
+  "disabled": "Disabled",
+  "apiVersion": "API v{{version}}"
+}

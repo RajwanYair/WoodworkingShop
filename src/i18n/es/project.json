@@ -1,0 +1,13 @@
+{
+  "title": "Proyecto",
+  "add": "Añadir armario",
+  "remove": "Eliminar",
+  "duplicate": "Duplicar armario",
+  "moveUp": "Mover armario arriba",
+  "moveDown": "Mover armario abajo",
+  "hint": "Los múltiples armarios comparten hojas de corte optimizadas. Haga doble clic para renombrar.",
+  "notes": "Notas",
+  "notesPlaceholder": "Notas opcionales para este armario…",
+  "mirror": "Reflejar armario (crear una copia simétrica)",
+  "mirrorBadge": "reflejado"
+}

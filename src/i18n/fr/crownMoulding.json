@@ -1,0 +1,13 @@
+{
+  "springAngle": "Angle de ressort",
+  "title": "Calculateur de coupe de moulure de couronnement",
+  "methods": {
+    "flat": "À plat (posée sur la table)",
+    "in_position": "En position de pose (contre le guide)"
+  },
+  "cornerAngle": "Angle du coin",
+  "bevelAngle": "Angle d’inclinaison",
+  "cuttingMethod": "Méthode de coupe",
+  "miterAngle": "Angle d’onglet",
+  "note38deg": "Conseil de réglage courant : la plupart des profils de moulure de couronnement ont un angle de ressort de 38°."
+}

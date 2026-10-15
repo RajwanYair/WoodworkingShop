@@ -1,0 +1,21 @@
+{
+  "title": "Trabajo de mecanizado CNC",
+  "generateJob": "Generar trabajo de mecanizado",
+  "sendToMachine": "Enviar a la máquina",
+  "profileCut": "Corte de contorno",
+  "dado": "Ranura transversal",
+  "rabbet": "Rebaje",
+  "drill": "Taladrado",
+  "pocket": "Cajeado",
+  "totalTime": "Tiempo estimado",
+  "totalPasses": "Pasadas totales",
+  "operations": "Operaciones",
+  "toolSetup": "Configuración de herramientas",
+  "toolDiameter": "Diámetro de la herramienta",
+  "passDepth": "Profundidad por pasada",
+  "feedRate": "Velocidad de avance",
+  "spindleRpm": "Velocidad del husillo (RPM)",
+  "jobValid": "Trabajo validado y listo para enviar.",
+  "jobErrors": "El trabajo contiene {{count}} errores.",
+  "noMachine": "No se ha seleccionado un perfil de máquina."
+}

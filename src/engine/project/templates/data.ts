@@ -5,7 +5,7 @@
  * the private 	pl() factory, and the TEMPLATES array.
  */
 import type { CabinetConfig } from '../../core/contracts/index';
-import type { CabinetTemplate } from './configurator';
+import type { CabinetTemplate } from './template-types';
 import { DEFAULT_CONFIG } from '../../materials/catalog/index';
 
 /** Default edge-banding style applied to all built-in cabinet templates. */

@@ -1,0 +1,14 @@
+{
+  "title": "Calculateur d’assemblages à rainure et feuillure",
+  "jointType": "Type d’assemblage",
+  "dado": "Rainure",
+  "rabbet": "Feuillure",
+  "throughDado": "Rainure traversante",
+  "matingThickness": "Épaisseur du panneau à assembler",
+  "boardThickness": "Épaisseur du panneau receveur",
+  "cutWidth": "Largeur de coupe",
+  "cutDepth": "Profondeur de coupe",
+  "offsetFromEdge": "Distance depuis le bord",
+  "bitsRecommendation": "Fraise / lame recommandée",
+  "passCount": "Nombre de passes de défonceuse requis"
+}

@@ -1,0 +1,12 @@
+{
+  "copeDepth": "Profondeur de la moulure concave",
+  "bladeDiameter": "Diamètre de la lame de scie",
+  "bladeKerf": "Largeur de trait de scie",
+  "copeWidth": "Largeur de la moulure concave",
+  "fenceAngle": "Angle du guide",
+  "maxPassDepth": "Profondeur maximale par passe",
+  "title": "Coupe de moulure concave (scie sur table)",
+  "passCount": "Nombre de passes",
+  "depthPerPass": "Profondeur par passe",
+  "bladeHeight": "Hauteur finale de la lame"
+}

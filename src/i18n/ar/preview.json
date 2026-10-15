@@ -1,0 +1,19 @@
+{
+  "title": "معاينة الخزانة",
+  "front": "الأمام (مغلق)",
+  "frontOpen": "الأمام (مفتوح)",
+  "side": "الجانب",
+  "top": "الأعلى",
+  "back": "الخلف",
+  "iso": "ثلاثي الأبعاد",
+  "exportSvg": "تصدير SVG",
+  "exportPng": "تصدير PNG (2×)",
+  "dimensions": "الأبعاد",
+  "dimensionSummary": "أبعاد الخزانة ع × ار × ع",
+  "doors": "أبواب",
+  "drawers": "أدراج",
+  "dragToRotate": "اسحب للتدوير",
+  "webglToggle": "تبديل عرض WebGL / SVG",
+  "webglAnimate": "تحريك",
+  "webglIsometric": "إيزومتري"
+}

@@ -1,0 +1,20 @@
+{
+  "title": "Calculadora de guías para cajones",
+  "boxWidth": "Ancho de la caja del cajón",
+  "boxHeight": "Alto de la caja del cajón",
+  "boxDepth": "Fondo de la caja del cajón",
+  "openingWidth": "Ancho de la abertura",
+  "openingHeight": "Alto de la abertura",
+  "cabinetDepth": "Profundidad del armario",
+  "mountStyle": "Tipo de montaje",
+  "sideMount": "Montaje lateral",
+  "underMount": "Montaje inferior",
+  "centerMount": "Montaje central",
+  "extension": "Tipo de extensión",
+  "fullExtension": "Extensión total",
+  "threeQuarter": "Extensión de tres cuartos",
+  "overTravel": "Sobreextensión",
+  "clearance": "Holgura por lado",
+  "slideLength": "Longitud recomendada de la guía",
+  "totalGap": "Holgura horizontal total"
+}

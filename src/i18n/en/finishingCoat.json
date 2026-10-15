@@ -1,0 +1,15 @@
+{
+  "title": "Finishing Coat Calculator",
+  "surfaceArea": "Surface Area",
+  "coatCount": "Number of Coats",
+  "finishType": "Finish Type",
+  "polyurethane": "Polyurethane",
+  "lacquer": "Lacquer",
+  "shellac": "Shellac",
+  "waterbased": "Water-Based",
+  "oil": "Oil / Danish Oil",
+  "volumeNeeded": "Volume Needed",
+  "dryTimeBetweenCoats": "Dry Time Between Coats",
+  "totalDryTime": "Total Dry Time",
+  "coveragePerLitre": "Coverage per Litre"
+}

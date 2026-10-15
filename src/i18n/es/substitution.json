@@ -1,0 +1,15 @@
+{
+  "title": "Sugerencias de material",
+  "switch": "Cambiar a {{name}}",
+  "switchShort": "Usar este",
+  "benefit": {
+    "deflection": "Flexión",
+    "weight": "Peso",
+    "cost": "Costo"
+  },
+  "quant": {
+    "savedKgPerSheet": "Ahorra {{value}} kg/tablero",
+    "deflectionReductionPct": "{{value}}% menos flexión",
+    "costDeltaPct": "{{value}}% cambio en costo"
+  }
+}

@@ -35,13 +35,13 @@ const localStorageMock = {
 // ── helpers ───────────────────────────────────────────────────────────────────
 
 /** Build a UiSlice by wiring a simple patch-based set fn. */
-function makeSlice(prefs: UiPersistedPrefs = {}, projectName = '', projectNotes = '') {
+function makeSlice(prefs: UiPersistedPrefs = {}) {
   let state: UiSlice;
   const set = (partial: Partial<UiSlice> | ((s: UiSlice) => Partial<UiSlice>)) => {
     const patch = typeof partial === 'function' ? partial(state) : partial;
     state = { ...state, ...patch };
   };
-  state = createUiSlice(set as Parameters<typeof createUiSlice>[0], prefs, projectName, projectNotes, [], []);
+  state = createUiSlice(set as Parameters<typeof createUiSlice>[0], prefs, [], []);
   return { get: () => state, set };
 }
 
@@ -120,14 +120,6 @@ describe('createUiSlice — initial state', () => {
   it('applies saved units preference', () => {
     expect(makeSlice({ units: 'imperial' }).get().units).toBe('imperial');
   });
-
-  it('sets initial projectName', () => {
-    expect(makeSlice({}, 'My Kitchen').get().projectName).toBe('My Kitchen');
-  });
-
-  it('sets initial projectNotes', () => {
-    expect(makeSlice({}, '', 'Some notes').get().projectNotes).toBe('Some notes');
-  });
 });
 
 // ── createUiSlice — actions ───────────────────────────────────────────────────
@@ -144,20 +136,6 @@ describe('createUiSlice — setActiveTab', () => {
     get().setActiveTab('pdf');
     get().setActiveTab('configurator');
     expect(get().activeTab).toBe('configurator');
-  });
-});
-
-describe('createUiSlice — setProjectName / setProjectNotes', () => {
-  it('updates projectName', () => {
-    const { get } = makeSlice({}, 'Old');
-    get().setProjectName('New');
-    expect(get().projectName).toBe('New');
-  });
-
-  it('updates projectNotes', () => {
-    const { get } = makeSlice();
-    get().setProjectNotes('note text');
-    expect(get().projectNotes).toBe('note text');
   });
 });
 

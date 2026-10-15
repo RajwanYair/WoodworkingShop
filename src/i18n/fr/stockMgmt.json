@@ -1,0 +1,13 @@
+{
+  "title": "Gestion des stocks",
+  "addMaterial": "Ajouter un matériau",
+  "createOrder": "Créer une commande",
+  "submitOrder": "Envoyer la commande",
+  "receiveOrder": "Réceptionner les marchandises",
+  "cancelOrder": "Annuler la commande",
+  "recordWaste": "Enregistrer les chutes",
+  "reorderAlerts": "Alertes de réapprovisionnement",
+  "totalValue": "Valeur totale du stock",
+  "pendingOrders": "Commandes en attente",
+  "wasteLog": "Journal des chutes"
+}

@@ -1,15 +1,15 @@
 /**
  * worker-schedule.ts — Phase 17.3 / E5
  *
- * Extracted from cabinet-store.ts: Comlink worker proxies, latest-wins call
- * counters, module-level mirrors (_rotationLocks, _cutMode, _offcutCatalog,
- * _defectZones), and the four fire-and-forget schedule* functions.
+ * Extracted from cabinet-store.ts: latest-wins call counters, module-level
+ * mirrors (_rotationLocks, _cutMode, _offcutCatalog, _defectZones), and the
+ * four fire-and-forget schedule* functions. Worker acquisition lives in the
+ * platform scheduler so this module does not import worker files.
  *
  * Initialised once at store creation via `initWorkerSchedule`.  All mutations
  * to the mirrored vars are done through the exported setters so that
  * cabinet-store.ts has no direct reference to the module-level vars here.
  */
-import * as Comlink from 'comlink';
 import type {
   CabinetConfig,
   Part,
@@ -17,40 +17,52 @@ import type {
   OptimizationResult,
   OffcutEntry,
   DefectZone,
+  Material,
 } from '../engine/core/types';
 import { optimizeCutSheetsResult, findCoNestCandidates, applyCoNesting } from '../engine/optimizer/cut-optimizer';
 import { estimateCost } from '../engine/costing/cost-estimator';
+import type { CostBreakdown } from '../engine/costing/cost-estimator';
 import { generateAssemblySteps } from '../engine/assembly/assembly';
+import type { AssemblyStep } from '../engine/assembly/assembly';
 import { pluginEventBus } from '../engine/core/plugin';
-import CutOptimizerWorker from '../workers/cut-optimizer.worker?worker';
-import type { CutOptimizerWorkerApi, CutOptimizerInput } from '../workers/cut-optimizer.worker';
-import CostEstimatorWorker from '../workers/cost-estimator.worker?worker';
-import type { CostEstimatorWorkerApi, CostEstimatorInput } from '../workers/cost-estimator.worker';
-import AssemblyWorker from '../workers/assembly.worker?worker';
-import type { AssemblyWorkerApi } from '../workers/assembly.worker';
+import { getSchedulerWorkerHealth, runSchedulerWorker, terminateSchedulerWorker } from '../platform/workers/scheduler';
 // Type-only import — erased at runtime, so no circular dependency.
-import type { CabinetState } from './cabinet-store';
+import type { CabinetState } from './store-types';
 import { getCustomMaterials } from './custom-materials-store';
 
-// ── Worker proxies ────────────────────────────────────────────────────────────
-// Kept module-level to avoid serialisation into Zustand state.
-let _cutProxy: Comlink.Remote<CutOptimizerWorkerApi> | null = null;
-let _costProxy: Comlink.Remote<CostEstimatorWorkerApi> | null = null;
-let _assemblyProxy: Comlink.Remote<AssemblyWorkerApi> | null = null;
-let _cutWorker: Worker | null = null;
-let _costWorker: Worker | null = null;
-let _assemblyWorker: Worker | null = null;
+interface CutScheduleResult {
+  activeResult: OptimizationResult;
+  combinedResult: OptimizationResult;
+}
+
+interface AssemblyScheduleResult {
+  steps: AssemblyStep[];
+}
+
+interface CostScheduleInput {
+  optimization: OptimizationResult;
+  hardware: HardwareItem[];
+  edgeBandingTotal: number;
+  materialPriceOverrides: Record<string, number>;
+  edgeBandingRate: number;
+  hardwarePriceOverrides: Record<string, number>;
+  labourRate: number;
+  labourHours: number;
+  finishCost: number;
+  extraMaterials?: Material[];
+}
+
+interface CostScheduleResult {
+  cost: CostBreakdown;
+}
+
 /** Injected by `initWorkerSchedule`; callbacks post state patches here. */
 let _workerApplyFn: ((partial: Partial<CabinetState>) => void) | null = null;
 /** Injected by `initWorkerSchedule`; reads the latest state without importing the store. */
 let _getState: (() => CabinetState) | null = null;
 
 export function getWorkerHealth(): { cutOptimizer: boolean; costEstimator: boolean; assembly: boolean } {
-  return {
-    cutOptimizer: _cutWorker !== null,
-    costEstimator: _costWorker !== null,
-    assembly: _assemblyWorker !== null,
-  };
+  return getSchedulerWorkerHealth();
 }
 
 // Latest-wins counters: each scheduling call increments and captures its own
@@ -61,53 +73,6 @@ let _costCallId = 0;
 let _latestCostId = 0;
 let _assemblyCallId = 0;
 let _latestAssemblyId = 0;
-
-const WORKER_REQUEST_TIMEOUT_MS = 30_000;
-
-function withWorkerDeadline<T>(
-  request: Promise<T>,
-  signal: AbortSignal | undefined,
-  isLatest: () => boolean,
-  onTimeout: () => void,
-  onAbort: () => void,
-): Promise<T> {
-  return new Promise((resolve, reject) => {
-    let settled = false;
-
-    const cleanup = () => {
-      clearTimeout(timeoutId);
-      signal?.removeEventListener('abort', handleAbort);
-    };
-    const resolveOnce = (value: T) => {
-      if (settled) return;
-      settled = true;
-      cleanup();
-      resolve(value);
-    };
-    const rejectOnce = (reason: unknown) => {
-      if (settled) return;
-      settled = true;
-      cleanup();
-      reject(reason);
-    };
-    const handleAbort = () => {
-      if (isLatest()) onAbort();
-      rejectOnce(signal?.reason ?? new Error('Worker request aborted'));
-    };
-
-    const timeoutId = setTimeout(() => {
-      onTimeout();
-      rejectOnce(new Error('Worker request timed out'));
-    }, WORKER_REQUEST_TIMEOUT_MS);
-    signal?.addEventListener('abort', handleAbort, { once: true });
-
-    if (signal?.aborted) {
-      handleAbort();
-      return;
-    }
-    request.then(resolveOnce, rejectOnce);
-  });
-}
 
 // ── Module-level mirrors of Zustand state ────────────────────────────────────
 // These mirror the corresponding fields in CabinetState so the worker
@@ -166,67 +131,24 @@ export function setOffcutCatalog(catalog: OffcutEntry[]): void {
   _offcutCatalog = catalog;
 }
 
-export function getOffcutCatalog(): OffcutEntry[] {
-  return _offcutCatalog;
-}
-
 export function setDefectZones(zones: Record<string, DefectZone[]>): void {
   _defectZones = zones;
-}
-
-export function getDefectZones(): Record<string, DefectZone[]> {
-  return _defectZones;
 }
 
 export function setAutoCoNest(enabled: boolean): void {
   _autoCoNest = enabled;
 }
 
-// ── Proxy getters ─────────────────────────────────────────────────────────────
-
-function getCutProxy(): Comlink.Remote<CutOptimizerWorkerApi> | null {
-  if (typeof Worker === 'undefined') return null;
-  if (!_cutProxy) {
-    _cutWorker = new CutOptimizerWorker();
-    _cutProxy = Comlink.wrap<CutOptimizerWorkerApi>(_cutWorker);
-  }
-  return _cutProxy;
-}
-
-function getCostProxy(): Comlink.Remote<CostEstimatorWorkerApi> | null {
-  if (typeof Worker === 'undefined') return null;
-  if (!_costProxy) {
-    _costWorker = new CostEstimatorWorker();
-    _costProxy = Comlink.wrap<CostEstimatorWorkerApi>(_costWorker);
-  }
-  return _costProxy;
-}
-
-function getAssemblyProxy(): Comlink.Remote<AssemblyWorkerApi> | null {
-  if (typeof Worker === 'undefined') return null;
-  if (!_assemblyProxy) {
-    _assemblyWorker = new AssemblyWorker();
-    _assemblyProxy = Comlink.wrap<AssemblyWorkerApi>(_assemblyWorker);
-  }
-  return _assemblyProxy;
-}
-
 function terminateCutWorker(): void {
-  _cutWorker?.terminate();
-  _cutWorker = null;
-  _cutProxy = null;
+  terminateSchedulerWorker('cut');
 }
 
 function terminateCostWorker(): void {
-  _costWorker?.terminate();
-  _costWorker = null;
-  _costProxy = null;
+  terminateSchedulerWorker('cost');
 }
 
 function terminateAssemblyWorker(): void {
-  _assemblyWorker?.terminate();
-  _assemblyWorker = null;
-  _assemblyProxy = null;
+  terminateSchedulerWorker('assembly');
 }
 
 // ── applyLocks ────────────────────────────────────────────────────────────────
@@ -328,14 +250,7 @@ export function scheduleOptimization(
   const lockedActive = applyLocks(activeParts);
   const lockedAll = applyLocks(allParts);
   const extraMaterials = getCustomMaterials();
-  const proxy = getCutProxy();
-  if (!proxy) {
-    // Synchronous fallback (tests / browsers without Worker support).
-    runOptimizationSynchronously(lockedActive, lockedAll, sawKerfMm, sheetSizeOverrides, extraMaterials);
-    _latestCutId = 0;
-    return;
-  }
-  const input: CutOptimizerInput = {
+  const input = {
     activeParts: lockedActive,
     allParts: lockedAll,
     sawKerfMm,
@@ -347,7 +262,18 @@ export function scheduleOptimization(
     autoCoNest: _autoCoNest,
   };
   const stopRequest = () => handleCutOptimizationFailure(callId);
-  void withWorkerDeadline(proxy.run(input), signal, () => _latestCutId === callId, stopRequest, stopRequest)
+  const request = runSchedulerWorker<typeof input, CutScheduleResult>('cut', String(callId), input, signal, {
+    isLatest: () => _latestCutId === callId,
+    onTimeout: stopRequest,
+    onAbort: stopRequest,
+  });
+  if (!request) {
+    // Synchronous fallback (tests / browsers without Worker support).
+    runOptimizationSynchronously(lockedActive, lockedAll, sawKerfMm, sheetSizeOverrides, extraMaterials);
+    _latestCutId = 0;
+    return;
+  }
+  void request
     .then((result) => {
       if (!_workerApplyFn || _latestCutId !== callId) return; // stale
       _latestCutId = 0;
@@ -374,20 +300,30 @@ export function scheduleAssembly(config: CabinetConfig, signal?: AbortSignal): v
     _workerApplyFn?.({ assemblyPending: false });
     return;
   }
-  const proxy = getAssemblyProxy();
-  if (!proxy) {
-    if (_workerApplyFn) {
-      _workerApplyFn({ assemblySteps: generateAssemblySteps(config), assemblyPending: false });
-    }
-    return;
-  }
   const stopRequest = () => {
     if (_latestAssemblyId !== callId) return;
     _latestAssemblyId = 0;
     terminateAssemblyWorker();
     _workerApplyFn?.({ assemblyPending: false });
   };
-  void withWorkerDeadline(proxy.run({ config }), signal, () => _latestAssemblyId === callId, stopRequest, stopRequest)
+  const request = runSchedulerWorker<{ config: CabinetConfig }, AssemblyScheduleResult>(
+    'assembly',
+    String(callId),
+    { config },
+    signal,
+    {
+      isLatest: () => _latestAssemblyId === callId,
+      onTimeout: stopRequest,
+      onAbort: stopRequest,
+    },
+  );
+  if (!request) {
+    if (_workerApplyFn) {
+      _workerApplyFn({ assemblySteps: generateAssemblySteps(config), assemblyPending: false });
+    }
+    return;
+  }
+  void request
     .then((result) => {
       if (!_workerApplyFn || _latestAssemblyId !== callId) return; // stale
       _workerApplyFn({ assemblySteps: result.steps, assemblyPending: false });
@@ -397,15 +333,25 @@ export function scheduleAssembly(config: CabinetConfig, signal?: AbortSignal): v
     });
 }
 
-function scheduleCost(input: CostEstimatorInput, signal?: AbortSignal): void {
+function scheduleCost(input: CostScheduleInput, signal?: AbortSignal): void {
   const callId = ++_costCallId;
   _latestCostId = callId;
   if (signal?.aborted) {
     _workerApplyFn?.({ costPending: false });
     return;
   }
-  const proxy = getCostProxy();
-  if (!proxy) {
+  const stopRequest = () => {
+    if (_latestCostId !== callId) return;
+    _latestCostId = 0;
+    terminateCostWorker();
+    _workerApplyFn?.({ costPending: false });
+  };
+  const request = runSchedulerWorker<CostScheduleInput, CostScheduleResult>('cost', String(callId), input, signal, {
+    isLatest: () => _latestCostId === callId,
+    onTimeout: stopRequest,
+    onAbort: stopRequest,
+  });
+  if (!request) {
     if (_workerApplyFn) {
       _workerApplyFn({
         cost: estimateCost(
@@ -425,13 +371,7 @@ function scheduleCost(input: CostEstimatorInput, signal?: AbortSignal): void {
     }
     return;
   }
-  const stopRequest = () => {
-    if (_latestCostId !== callId) return;
-    _latestCostId = 0;
-    terminateCostWorker();
-    _workerApplyFn?.({ costPending: false });
-  };
-  void withWorkerDeadline(proxy.run(input), signal, () => _latestCostId === callId, stopRequest, stopRequest)
+  void request
     .then((result) => {
       if (!_workerApplyFn || _latestCostId !== callId) return; // stale
       _workerApplyFn({ cost: result.cost, costPending: false });

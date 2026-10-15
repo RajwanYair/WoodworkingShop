@@ -1,0 +1,19 @@
+{
+  "title": "Calculadora de trazado de cola de milano",
+  "boardWidth": "Ancho de la tabla",
+  "boardThickness": "Grosor de la tabla",
+  "tailCount": "Número de colas",
+  "angle": "Ángulo de cola de milano",
+  "slopeRatio": "Relación de pendiente",
+  "jointType": "Tipo de unión",
+  "through": "Cola de milano pasante",
+  "halfBlind": "Cola de milano semiciega",
+  "style": "Estilo de corte",
+  "handCut": "Corte a mano",
+  "machineCut": "Corte a máquina",
+  "pinWidth": "Ancho de clavija",
+  "tailWidth": "Ancho de cola",
+  "socketDepth": "Profundidad del alojamiento",
+  "pinToTailRatio": "Relación entre clavijas y colas",
+  "halfPin": "Media clavija"
+}

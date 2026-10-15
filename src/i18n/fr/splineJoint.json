@@ -1,0 +1,14 @@
+{
+  "title": "Assemblage à fausse languette",
+  "boardThickness": "Épaisseur de la planche",
+  "splineThickness": "Épaisseur de la fausse languette",
+  "slotDepthPerBoard": "Profondeur de rainure par planche",
+  "jointLength": "Longueur de l’assemblage",
+  "splineCount": "Nombre de fausses languettes",
+  "recommendedSlotWidth": "Largeur de rainure recommandée",
+  "totalInsertionDepth": "Profondeur totale d’insertion",
+  "remainingWallThickness": "Épaisseur de matière restante",
+  "totalSplineLength": "Longueur totale des fausses languettes",
+  "glueAreaPerSpline": "Surface de collage par fausse languette",
+  "totalGlueArea": "Surface totale de collage"
+}

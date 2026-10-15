@@ -1,0 +1,8 @@
+{
+  "title": "Rapport du sens du fil",
+  "constrained": "contraint par le fil",
+  "grainSensitive": "Pièce sensible au sens du fil",
+  "grainBadge": "fil",
+  "noParts": "Aucune pièce : configurez d’abord un meuble.",
+  "summary": "{{constrained}} pièces sur {{total}} sont soumises à une contrainte de sens du fil."
+}

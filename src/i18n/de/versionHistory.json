@@ -1,0 +1,17 @@
+{
+  "title": "Versionsverlauf",
+  "commit": "Version speichern",
+  "branch": "Zweig",
+  "branches": "Zweige",
+  "createBranch": "Zweig erstellen",
+  "switchBranch": "Zweig wechseln",
+  "merge": "Zusammenführen",
+  "diff": "Versionen vergleichen",
+  "tag": "Markierung",
+  "log": "Änderungsverlauf",
+  "message": "Versionsnachricht",
+  "noHistory": "Noch kein Versionsverlauf vorhanden.",
+  "mergeSuccess": "Zusammenführung erfolgreich abgeschlossen.",
+  "mergeConflict": "Beim Zusammenführen gibt es Konflikte, die gelöst werden müssen.",
+  "branchCreated": "Zweig erstellt."
+}

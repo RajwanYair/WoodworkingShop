@@ -1,0 +1,15 @@
+{
+  "title": "Waste Predictor",
+  "predictedWaste": "Predicted Waste",
+  "bestSheet": "Best Sheet Size",
+  "sheetsNeeded": "Sheets Needed",
+  "wastePercent": "Waste %",
+  "totalDemand": "Total Demand",
+  "confidence": "Confidence",
+  "high": "High",
+  "medium": "Medium",
+  "low": "Low",
+  "averageWaste": "Average Waste",
+  "recommendation": "Recommendation",
+  "noSheets": "No sheet sizes configured."
+}

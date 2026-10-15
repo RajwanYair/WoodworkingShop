@@ -1,7 +1,7 @@
 import { renderHook, render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { useSwUpdate } from '../../src/hooks/useSwUpdate';
-import { SwUpdateBanner } from '../../src/components/layout/SwUpdateBanner';
+import { SwUpdateBanner } from '../../src/app/SwUpdateBanner';
 
 const originalServiceWorkerDescriptor = Object.getOwnPropertyDescriptor(navigator, 'serviceWorker');
 

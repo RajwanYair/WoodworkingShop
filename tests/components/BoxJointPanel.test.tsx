@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { BoxJointPanel } from '../../src/components/configurator/BoxJointPanel';
+import { BoxJointPanel } from '../../src/features/calculators/BoxJointPanel';
 
 describe('BoxJointPanel', () => {
   it('shows calculated results and reports invalid input accessibly', async () => {

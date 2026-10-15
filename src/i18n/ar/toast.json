@@ -1,0 +1,14 @@
+{
+  "saved": "تم حفظ التهيئة",
+  "loaded": "تم تحميل التهيئة",
+  "deleted": "تم حذف التهيئة",
+  "exported": "تم تصدير JSON",
+  "imported": "تم استيراد التهيئة",
+  "invalidFile": "ملف تهيئة غير صالح",
+  "dxfExported": "تم تنزيل ملف DXF",
+  "gcodeExported": "تم تنزيل ملف G-code",
+  "bomExported": "تم تنزيل قائمة المواد CSV",
+  "hardwareExported": "تم تنزيل CSV الأجهزة",
+  "linkCopied": "تم نسخ رابط المشاركة إلى الحافظة",
+  "linkCopyFailed": "تعذّر نسخ الرابط — يرجى نسخ الرابط من شريط العنوان"
+}

@@ -1,0 +1,5 @@
+{
+  "usageLabel": "{{used}} KB / {{quota}} MB",
+  "nearLimitWarning": "Storage nearly full — consider exporting and deleting old projects",
+  "unavailable": "Storage usage is unavailable in this browser."
+}

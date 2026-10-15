@@ -1,0 +1,13 @@
+{
+  "title": "سجل التدقيق",
+  "noEvents": "لم تُسجّل أحداث تدقيق",
+  "eventCount": "{{count}} حدث",
+  "eventCount_other": "{{count}} أحداث",
+  "configChange": "تم تغيير الإعدادات",
+  "export": "تم التصدير",
+  "history": "السجل",
+  "diffTitle": "مقارنة الإصدارات",
+  "noDiff": "الإعدادات متطابقة",
+  "changeCount": "تم تغيير {{count}} حقل",
+  "changeCount_other": "تم تغيير {{count}} حقول"
+}

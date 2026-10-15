@@ -1,23 +1,26 @@
 import './i18n';
 import './index.css';
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Header } from './components/layout/Header';
-import { SkeletonPane } from './components/layout/SkeletonPane';
-import { Sidebar } from './components/layout/Sidebar';
-import { ErrorBoundary } from './components/layout/ErrorBoundary';
-import { ToastContainer } from './components/layout/ToastContainer';
-import { OnboardingManager } from './components/layout/OnboardingOverlay';
-import { TouchGestureTutorial } from './components/layout/TouchGestureTutorial';
-import { MobileTabBar } from './components/layout/MobileTabBar';
-import { ActiveCabinetSwitcher } from './components/layout/ActiveCabinetSwitcher';
-import type { CalculatorId } from './components/configurator/calculator-catalog';
-import { CALCULATOR_COMMANDS, type CalculatorCommandId } from './components/configurator/calculator-commands';
+import { Header } from './app/Header';
+import { FEATURE_NAMESPACES } from './i18n/namespace-catalog';
+import { lazyFeature } from './ui/lazy-feature';
+import { SkeletonPane } from './app/SkeletonPane';
+import { Sidebar } from './features/workspace/Sidebar';
+import { WorkspaceHome } from './features/workspace/WorkspaceHome';
+import { ErrorBoundary } from './app/ErrorBoundary';
+import { ToastContainer } from './app/ToastContainer';
+import { OnboardingManager } from './app/OnboardingOverlay';
+import { TouchGestureTutorial } from './app/TouchGestureTutorial';
+import { MobileTabBar } from './app/MobileTabBar';
+import { ActiveCabinetSwitcher } from './app/ActiveCabinetSwitcher';
+import type { CalculatorId } from './features/calculators/calculator-catalog';
+import { CALCULATOR_COMMANDS, type CalculatorCommandId } from './features/calculators/calculator-commands';
 import { listProjects } from './utils/project-storage';
-import { IconPrint } from './components/layout/Icons';
+import { IconPrint } from './ui/Icons';
 import { useCabinetStore } from './store/cabinet-store';
 import { useToastStore } from './store/toast-store';
-import { copyText } from './platform/share/index';
+import { copyText } from './store/platform-boundary';
 import { useSystemDarkMode } from './hooks/useSystemDarkMode';
 import { useSwUpdate } from './hooks/useSwUpdate';
 import { usePwaFileHandlers } from './hooks/usePwaFileHandlers';
@@ -26,7 +29,14 @@ import { useTouchGestures } from './hooks/useTouchGestures';
 import { generateParts } from './engine/geometry/parts';
 import { generateHardware } from './engine/hardware/hardware';
 import { getCustomMaterials } from './store/custom-materials-store';
-import { configToUrl, readTabFromUrl, pushTabToUrl } from './utils/url-state';
+import type { AppRouteId } from './utils/route-table';
+import {
+  configToUrl,
+  readTabFromHref,
+  readTabFromUrl,
+  pushTabToUrl,
+  subscribeToRouteTraverse,
+} from './utils/url-state';
 import { formatDate } from './i18n/format';
 import {
   APP_COMMAND_DEFINITIONS,
@@ -37,61 +47,84 @@ import {
 } from './utils/command-palette';
 import type { Lang } from './engine/core/types';
 import {
-  APP_TABS,
   COMMANDS,
   COMMAND_ACTION_EVENT,
   isCommandAction,
   matchesShortcut,
   type CommandAction,
-} from './components/layout/command-registry';
+} from './app/command-registry';
 
-const PdfExportPanel = lazy(() =>
-  import('./components/pdf/PdfExportPanel').then((module) => ({ default: module.PdfExportPanel })),
+const PdfExportPanel = lazyFeature(
+  () => import('./features/pdf/PdfExportPanel').then((module) => ({ default: module.PdfExportPanel })),
+  FEATURE_NAMESPACES.pdf,
 );
-const OptimizerView = lazy(() =>
-  import('./components/optimizer/OptimizerView').then((module) => ({ default: module.OptimizerView })),
+const OptimizerView = lazyFeature(
+  () => import('./features/optimizer/OptimizerView').then((module) => ({ default: module.OptimizerView })),
+  FEATURE_NAMESPACES.optimizer,
 );
-const AssemblyGuide = lazy(() =>
-  import('./components/assembly/AssemblyGuide').then((module) => ({ default: module.AssemblyGuide })),
+const AssemblyGuide = lazyFeature(
+  () => import('./features/assembly/AssemblyGuide').then((module) => ({ default: module.AssemblyGuide })),
+  FEATURE_NAMESPACES.assembly,
 );
-const RoomLayoutViewLazy = lazy(() =>
-  import('./components/layout/RoomLayoutView').then((module) => ({ default: module.RoomLayoutView })),
+const RoomLayoutViewLazy = lazyFeature(
+  () => import('./features/workspace/RoomLayoutView').then((module) => ({ default: module.RoomLayoutView })),
+  FEATURE_NAMESPACES.workspace,
 );
-const CalculatorsPanel = lazy(() =>
-  import('./components/configurator/CalculatorsPanel').then((module) => ({ default: module.CalculatorsPanel })),
+const CalculatorsPanel = lazyFeature(
+  () => import('./features/calculators/CalculatorsPanel').then((module) => ({ default: module.CalculatorsPanel })),
+  FEATURE_NAMESPACES.calculators,
 );
-const Preview3DPanel = lazy(() =>
-  import('./components/preview/Preview3DPanel').then((module) => ({ default: module.Preview3DPanel })),
+const Preview3DPanel = lazyFeature(
+  () => import('./features/preview/Preview3DPanel').then((module) => ({ default: module.Preview3DPanel })),
+  FEATURE_NAMESPACES.preview,
 );
-const ConfiguratorPanel = lazy(() =>
-  import('./components/configurator/ConfiguratorPanel').then((module) => ({ default: module.ConfiguratorPanel })),
+const ConfiguratorPanel = lazyFeature(
+  () => import('./features/configurator/ConfiguratorPanel').then((module) => ({ default: module.ConfiguratorPanel })),
+  FEATURE_NAMESPACES.configurator,
 );
-const CabinetPreview = lazy(() =>
-  import('./components/preview/CabinetPreview').then((module) => ({ default: module.CabinetPreview })),
+const CabinetPreview = lazyFeature(
+  () => import('./features/preview/CabinetPreview').then((module) => ({ default: module.CabinetPreview })),
+  FEATURE_NAMESPACES.preview,
 );
-const SmartOptimizerPanel = lazy(() =>
-  import('./components/optimizer/SmartOptimizerPanel').then((module) => ({ default: module.SmartOptimizerPanel })),
+const SmartOptimizerPanel = lazyFeature(
+  () => import('./features/optimizer/SmartOptimizerPanel').then((module) => ({ default: module.SmartOptimizerPanel })),
+  FEATURE_NAMESPACES.optimizer,
 );
-const PartsTable = lazy(() =>
-  import('./components/optimizer/Tables').then((module) => ({ default: module.PartsTable })),
+const PartsTable = lazyFeature(
+  () => import('./features/optimizer/Tables').then((module) => ({ default: module.PartsTable })),
+  FEATURE_NAMESPACES.optimizer,
 );
-const HardwareTable = lazy(() =>
-  import('./components/optimizer/Tables').then((module) => ({ default: module.HardwareTable })),
+const HardwareTable = lazyFeature(
+  () => import('./features/optimizer/Tables').then((module) => ({ default: module.HardwareTable })),
+  FEATURE_NAMESPACES.optimizer,
 );
-const ProjectSummaryPanel = lazy(() =>
-  import('./components/optimizer/ProjectSummaryPanel').then((module) => ({ default: module.ProjectSummaryPanel })),
+const ProjectSummaryPanel = lazyFeature(
+  () => import('./features/optimizer/ProjectSummaryPanel').then((module) => ({ default: module.ProjectSummaryPanel })),
+  FEATURE_NAMESPACES.optimizer,
 );
-const CommandPalette = lazy(() =>
-  import('./components/layout/CommandPalette').then((module) => ({ default: module.CommandPalette })),
+const CommandPalette = lazyFeature(
+  () => import('./app/CommandPalette').then((module) => ({ default: module.CommandPalette })),
+  FEATURE_NAMESPACES.shellDialogs,
 );
-const SwUpdateBanner = lazy(() =>
-  import('./components/layout/SwUpdateBanner').then((module) => ({ default: module.SwUpdateBanner })),
+const SwUpdateBanner = lazyFeature(
+  () => import('./app/SwUpdateBanner').then((module) => ({ default: module.SwUpdateBanner })),
+  FEATURE_NAMESPACES.shellDialogs,
 );
-const ShortcutsModal = lazy(() =>
-  import('./components/layout/ShortcutsModal').then((module) => ({ default: module.ShortcutsModal })),
+const ShortcutsModal = lazyFeature(
+  () => import('./app/ShortcutsModal').then((module) => ({ default: module.ShortcutsModal })),
+  FEATURE_NAMESPACES.shellDialogs,
 );
-const DiagnosticsModal = lazy(() =>
-  import('./components/layout/DiagnosticsModal').then((module) => ({ default: module.DiagnosticsModal })),
+const DiagnosticsModal = lazyFeature(
+  () => import('./app/DiagnosticsModal').then((module) => ({ default: module.DiagnosticsModal })),
+  FEATURE_NAMESPACES.shellDialogs,
+);
+const ExamplesGallery = lazyFeature(
+  () => import('./features/workspace/ExamplesGallery').then((module) => ({ default: module.ExamplesGallery })),
+  ['examples'],
+);
+const WhatsNewPanel = lazyFeature(
+  () => import('./features/workspace/WhatsNewPanel').then((module) => ({ default: module.WhatsNewPanel })),
+  ['whatsNew'],
 );
 
 function App() {
@@ -103,6 +136,8 @@ function App() {
   const { updateAvailable: swUpdateAvailable, reload: reloadSwUpdate } = useSwUpdate();
   const [showShortcuts, setShowShortcuts] = useState(false);
   const [showDiagnostics, setShowDiagnostics] = useState(false);
+  const [showExamples, setShowExamples] = useState(false);
+  const [showWhatsNew, setShowWhatsNew] = useState(false);
   const [showCommandPalette, setShowCommandPalette] = useState(false);
   const [calculatorRequest, setCalculatorRequest] = useState<{ id: CalculatorId; sequence: number } | null>(null);
   const calculatorRequestSequence = useRef(0);
@@ -216,21 +251,19 @@ function App() {
 
   const initialTabFromUrlRef = useRef(readTabFromUrl());
   const tabUrlInitialisedRef = useRef(false);
-  const popStateTabRef = useRef<(typeof APP_TABS)[number] | null>(null);
+  const popStateTabRef = useRef<AppRouteId | null>(null);
   useEffect(() => {
     const tab = initialTabFromUrlRef.current;
     if (tab) useCabinetStore.getState().setActiveTab(tab);
   }, []);
 
   useEffect(() => {
-    const handlePopState = () => {
-      const tab = readTabFromUrl() ?? 'workspace';
+    return subscribeToRouteTraverse((href) => {
+      const tab = readTabFromHref(href) ?? 'workspace';
       if (tab === useCabinetStore.getState().activeTab) return;
       popStateTabRef.current = tab;
       useCabinetStore.getState().setActiveTab(tab);
-    };
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    });
   }, []);
 
   useEffect(() => {
@@ -333,6 +366,12 @@ function App() {
         t(APP_COMMAND_DEFINITIONS.toggleFocusMode.categoryKey),
         toggleFocusMode,
       ),
+      createAppCommand(
+        APP_COMMAND_DEFINITIONS.openWhatsNew,
+        t(APP_COMMAND_DEFINITIONS.openWhatsNew.labelKey),
+        t(APP_COMMAND_DEFINITIONS.openWhatsNew.categoryKey),
+        () => setShowWhatsNew(true),
+      ),
     ];
     registerCommands(commands);
     return () => commands.forEach(({ id }) => unregisterCommand(id));
@@ -349,7 +388,8 @@ function App() {
   }, [activeTab]);
 
   // Keyboard shortcuts and palette actions share the command registry.
-  useEffect(() => {
+  // Layout, not passive effect: the banner is visible before useEffect, and a shortcut in that gap is lost.
+  useLayoutEffect(() => {
     const executeCommand = (action: CommandAction) => {
       const state = useCabinetStore.getState();
       switch (action) {
@@ -436,6 +476,9 @@ function App() {
         case 'marketplace.open':
           window.dispatchEvent(new Event('marketplace:open'));
           break;
+        case 'examples.open':
+          setShowExamples(true);
+          break;
         case 'help.open':
           localStorage.removeItem('onboarding-seen');
           window.dispatchEvent(new Event('show-onboarding'));
@@ -493,6 +536,8 @@ function App() {
       <div className="app-bg text-wood-800 dark:text-wood-100 min-h-screen">
         <a
           href="#main-content"
+          // WebKit does not tab to links unless tabindex is explicit.
+          tabIndex={0}
           className="bg-accent sr-only rounded-full px-3 py-1 text-sm text-white focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50"
         >
           {t('a11y.skipToContent')}
@@ -504,7 +549,7 @@ function App() {
             ref={mainRef}
             id="main-content"
             tabIndex={-1}
-            className="min-w-0 flex-1 p-3 pb-20 focus:outline-none sm:p-6 sm:pb-6 lg:pb-6"
+            className="panel-container min-w-0 flex-1 p-3 pb-20 focus:outline-none sm:p-6 sm:pb-6 lg:pb-6"
             role="main"
             aria-label={t('a11y.mainWorkspace')}
             onTouchStart={appSwipe.onTouchStart}
@@ -531,38 +576,7 @@ function App() {
               <ActiveCabinetSwitcher />
             )}
 
-            {activeTab === 'workspace' && (
-              <section
-                aria-label={t('tabs.workspace')}
-                className="mx-auto flex w-full max-w-6xl min-w-0 flex-col items-center gap-6 text-center"
-              >
-                <img
-                  src={`${import.meta.env.BASE_URL}workspace-banner.webp`}
-                  srcSet={`${import.meta.env.BASE_URL}workspace-banner-480.webp 480w, ${import.meta.env.BASE_URL}workspace-banner-800.webp 800w, ${import.meta.env.BASE_URL}workspace-banner.webp 1200w`}
-                  sizes="(min-width: 1456px) 1152px, (min-width: 1024px) calc(100vw - 304px), (min-width: 640px) calc(100vw - 48px), calc(100vw - 24px)"
-                  alt={t('tabs.workspace')}
-                  className="w-full rounded-3xl shadow-[0_20px_60px_rgb(0_0_0/0.12)]"
-                  width={1200}
-                  height={260}
-                  loading="eager"
-                  fetchPriority="high"
-                />
-                <div className="w-full min-w-0 space-y-3">
-                  <h2 className="text-wood-900 dark:text-wood-50 text-4xl font-semibold tracking-tight wrap-break-word sm:text-5xl">
-                    {t('app.title')}
-                  </h2>
-                  <p className="text-wood-600 dark:text-wood-300 mx-auto max-w-xl text-lg wrap-break-word">
-                    {t('app.subtitle')}
-                  </p>
-                </div>
-                <button
-                  onClick={() => useCabinetStore.getState().setActiveTab('configurator')}
-                  className="bg-accent rounded-full px-6 py-2.5 text-base font-medium text-white hover:brightness-110"
-                >
-                  {t('tabs.configurator')}
-                </button>
-              </section>
-            )}
+            {activeTab === 'workspace' && <WorkspaceHome />}
             {activeTab === 'configurator' && (
               <div className="space-y-6">
                 <ErrorBoundary panelName={t('tabs.configurator')}>
@@ -642,6 +656,16 @@ function App() {
         {showDiagnostics && (
           <Suspense fallback={null}>
             <DiagnosticsModal onClose={() => setShowDiagnostics(false)} />
+          </Suspense>
+        )}
+        {showExamples && (
+          <Suspense fallback={null}>
+            <ExamplesGallery onClose={() => setShowExamples(false)} />
+          </Suspense>
+        )}
+        {showWhatsNew && (
+          <Suspense fallback={null}>
+            <WhatsNewPanel onClose={() => setShowWhatsNew(false)} />
           </Suspense>
         )}
         {showCommandPalette && (

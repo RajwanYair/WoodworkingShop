@@ -1,0 +1,16 @@
+{
+  "title": "Correction de gabarit pour défonceuse",
+  "bushingOD": "Diamètre extérieur de la bague de copiage",
+  "bitDiameter": "Diamètre de la fraise",
+  "cutType": "Type de coupe",
+  "nominalDimension": "Dimension nominale de la pièce",
+  "optional": "facultatif",
+  "offset": "Décalage de la bague de copiage",
+  "adjustmentPerSide": "Correction du gabarit (par côté)",
+  "totalAdjustment": "Correction totale du gabarit",
+  "adjustedDimension": "Dimension corrigée du gabarit",
+  "cutTypes": {
+    "inside": "Intérieur (poche ou évidement)",
+    "outside": "Extérieur (îlot ou bossage)"
+  }
+}

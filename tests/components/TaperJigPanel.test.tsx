@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { TaperJigPanel } from '../../src/components/configurator/TaperJigPanel';
+import { TaperJigPanel } from '../../src/features/calculators/TaperJigPanel';
 
 describe('TaperJigPanel', () => {
   it('updates the jig setting and per-face removal for a symmetric taper', async () => {

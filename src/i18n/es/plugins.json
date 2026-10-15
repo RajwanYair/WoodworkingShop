@@ -1,0 +1,11 @@
+{
+  "title": "Registro de plugins",
+  "empty": "No hay plugins registrados",
+  "version": "Versión {{version}}",
+  "stability": "Estabilidad de API: {{level}}",
+  "enable": "Activar plugin",
+  "disable": "Desactivar plugin",
+  "enabled": "Activado",
+  "disabled": "Desactivado",
+  "apiVersion": "Versión de API {{version}}"
+}

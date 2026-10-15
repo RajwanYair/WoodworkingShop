@@ -1,0 +1,12 @@
+{
+  "title": "KI-Designassistent",
+  "brief": "Entwurfsbeschreibung",
+  "suggestions": "Layoutvorschläge",
+  "noSuggestions": "Keine Vorschläge – alle Einschränkungen sind erfüllt.",
+  "constraintsSatisfied": "Einschränkungen erfüllt",
+  "constraintsViolated": "Einschränkungen verletzt",
+  "overallScore": "Gesamtbewertung",
+  "applyAll": "Alle anwenden",
+  "applySuggestion": "Anwenden",
+  "validateConstraints": "Einschränkungen prüfen"
+}

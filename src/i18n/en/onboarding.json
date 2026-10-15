@@ -1,0 +1,17 @@
+{
+  "title": "Welcome to WoodworkingShop!",
+  "subtitle": "Design, optimize, and build your furniture in 3 easy steps.",
+  "wizardStep1Title": "Configure your cabinet",
+  "wizardStep1Desc": "Choose furniture type, dimensions, materials, doors, drawers, and shelves to match your space.",
+  "wizardStep2Title": "Optimise cut sheets",
+  "wizardStep2Desc": "The cut optimizer nests every part onto your sheet materials — minimising waste and producing a printable layout.",
+  "wizardStep3Title": "Export & build",
+  "wizardStep3Desc": "Download a PDF plan, DXF for CNC, G-code for machine tools, or a CSV bill of materials — then follow the assembly guide.",
+  "stepOf": "Step {{step}} of {{total}}",
+  "next": "Next",
+  "back": "Back",
+  "skip": "Skip",
+  "getStarted": "Get Started",
+  "help": "Help",
+  "dismissBackdrop": "Dismiss onboarding"
+}

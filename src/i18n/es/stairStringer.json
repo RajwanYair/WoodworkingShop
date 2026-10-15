@@ -1,0 +1,15 @@
+{
+  "title": "Calculadora de zancas de escalera",
+  "totalRise": "Altura total",
+  "treadDepth": "Profundidad de la huella",
+  "idealRiser": "Altura ideal de la contrahuella",
+  "riserCount": "Número de contrahuellas",
+  "actualRiser": "Altura real de la contrahuella",
+  "treadCount": "Número de huellas",
+  "totalRun": "Desarrollo horizontal total",
+  "stringerLength": "Longitud de la zanca",
+  "stringerAngle": "Ángulo de la zanca",
+  "ircPass": "Cumple los límites de contrahuella y huella del IRC 2021",
+  "riserTooTall": "La contrahuella supera el máximo del IRC de 7¾\" (196.85 mm)",
+  "treadTooShallow": "La huella es inferior al mínimo del IRC de 10\" (254 mm)"
+}

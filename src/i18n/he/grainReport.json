@@ -1,0 +1,8 @@
+{
+  "title": "דוח כיוון גריין",
+  "constrained": "נעול גריין",
+  "grainSensitive": "חלק רגיש לכיוון גריין",
+  "grainBadge": "גריין",
+  "noParts": "אין חלקים — קדם הגדר ארון.",
+  "summary": "{{constrained}} מתוך {{total}} מופעי חלקים טעונים כיוון גריין."
+}

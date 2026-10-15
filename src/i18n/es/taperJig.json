@@ -1,0 +1,14 @@
+{
+  "title": "Calculadora de guía para cortes cónicos",
+  "workpieceLength": "Longitud de la pieza",
+  "startWidth": "Ancho inicial (extremo ancho)",
+  "endWidth": "Ancho final (extremo estrecho)",
+  "taperedFaces": "Caras con conicidad",
+  "oneFace": "Una cara",
+  "twoFaces": "Dos caras (simétricas)",
+  "taperAngle": "Ángulo de conicidad",
+  "jigOffset": "Desplazamiento de la guía",
+  "materialRemoved": "Material retirado por cara",
+  "taperPerFoot": "Conicidad por pie",
+  "note": "Gira la pieza después de la primera pasada para obtener una conicidad simétrica"
+}

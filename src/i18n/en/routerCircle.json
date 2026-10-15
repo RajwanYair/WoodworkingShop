@@ -1,0 +1,15 @@
+{
+  "title": "Router Circle Jig Calculator",
+  "targetDiameter": "Target Diameter",
+  "bitDiameter": "Bit Diameter",
+  "pivotHoleDiameter": "Pivot Hole Diameter",
+  "cutMode": "Cut Mode",
+  "armLength": "Arm Length (Pivot to Bit Center)",
+  "circumference": "Circumference",
+  "area": "Area",
+  "pivotOffset": "Pivot Offset",
+  "modes": {
+    "disc": "Disc (outside cut)",
+    "hole": "Hole (inside cut)"
+  }
+}

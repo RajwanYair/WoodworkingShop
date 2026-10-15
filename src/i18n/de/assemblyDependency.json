@@ -1,0 +1,16 @@
+{
+  "title": "Montageabhängigkeiten",
+  "step": "Schritt",
+  "steps": "Schritte",
+  "dependsOn": "Abhängig von",
+  "duration": "Dauer",
+  "totalDuration": "Gesamtdauer",
+  "criticalPath": "Kritischer Pfad",
+  "parallelWaves": "Parallele Wellen",
+  "maxParallelism": "Maximale Parallelität",
+  "slack": "Pufferzeit",
+  "noCycles": "Keine zyklischen Abhängigkeiten.",
+  "cycleDetected": "Zyklische Abhängigkeit erkannt!",
+  "earliestStart": "Frühester Start",
+  "latestFinish": "Spätester Abschluss"
+}

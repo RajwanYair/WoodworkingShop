@@ -1,0 +1,18 @@
+{
+  "title": "Screw Pull-Out Strength Estimator",
+  "screwDiameter": "Screw Diameter",
+  "threadLength": "Thread Length in Wood",
+  "species": "Wood Species / Density",
+  "pulloutForceN": "Estimated Pull-Out Force",
+  "pulloutForceLbf": "Pull-Out Force (lbf)",
+  "withdrawalResistance": "Withdrawal Resistance",
+  "safetyRating": "Safety Rating",
+  "modelNote": "USDA equation 8-10a estimates short-term ultimate load for seasoned side-grain wood screws, not allowable design capacity. It does not apply to sheet goods; ratings are heuristic. Verify the actual connection.",
+  "low": "Low Density (Pine, Cedar)",
+  "medium": "Medium Density (Maple, Oak)",
+  "high": "High Density (Hickory, Teak)",
+  "sheet": "Sheet Goods (Plywood, MDF)",
+  "adequate": "Adequate",
+  "marginal": "Marginal — consider larger screw or pilot hole",
+  "insufficient": "Insufficient — use mechanical fastener"
+}

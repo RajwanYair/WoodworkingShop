@@ -1,0 +1,13 @@
+{
+  "title": "Fingerzinken-Rechner",
+  "boardWidth": "Brettbreite",
+  "boardThickness": "Brettstärke",
+  "fingerWidth": "Zinkenbreite",
+  "fingerCount": "Anzahl der Zinken",
+  "socketDepth": "Schlitztiefe",
+  "glueAllowance": "Leimzugabe",
+  "glueSurface": "Leimfläche",
+  "layoutA": "Anordnung Brett A",
+  "layoutB": "Anordnung Brett B",
+  "auto": "Automatisch"
+}

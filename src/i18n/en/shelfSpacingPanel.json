@@ -1,0 +1,12 @@
+{
+  "title": "Shelf Spacing Presets",
+  "preset": "Storage type",
+  "clearance": "Clearance per shelf",
+  "shelfCount": "Shelves that fit",
+  "noFit": "Cabinet internal height is too small for this preset",
+  "warning": "Warning",
+  "customClearance": "Custom clearance (mm)",
+  "custom": "Custom",
+  "positions": "Shelf positions from bottom",
+  "mm": "mm"
+}

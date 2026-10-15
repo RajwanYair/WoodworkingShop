@@ -1,0 +1,9 @@
+{
+  "title": "Travail collaboratif",
+  "connected": "Connecté",
+  "offline": "Hors ligne",
+  "peers": "{{count}} participant",
+  "peers_other": "{{count}} participants",
+  "you": "Vous",
+  "conflict": "Conflit résolu"
+}

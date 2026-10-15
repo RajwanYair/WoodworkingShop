@@ -1,0 +1,17 @@
+{
+  "title": "Abstände für Elektrogeräte",
+  "oven": "Backofen",
+  "dishwasher": "Geschirrspüler",
+  "refrigerator": "Kühlschrank",
+  "cooktop": "Kochfeld",
+  "microwave": "Mikrowelle",
+  "clearanceTop": "Oberer Abstand",
+  "clearanceBottom": "Unterer Abstand",
+  "clearanceLeft": "Linker Abstand",
+  "clearanceRight": "Rechter Abstand",
+  "clearanceRear": "Hinterer Abstand",
+  "clearanceFront": "Vorderer Abstand (Türschwenkbereich)",
+  "violation": "Beim Gerät {{appliance}} fehlen auf der Seite {{side}} noch {{shortfall}} mm Abstand",
+  "allClear": "Alle erforderlichen Geräteabstände sind eingehalten.",
+  "checkClearances": "Abstände prüfen"
+}

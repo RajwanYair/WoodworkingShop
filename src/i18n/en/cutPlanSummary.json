@@ -1,0 +1,10 @@
+{
+  "title": "Cut Plan Summary",
+  "material": "Material",
+  "sheets": "Sheets",
+  "usedM2": "Used (m²)",
+  "wastePercent": "Waste %",
+  "totalSheets": "Total sheets",
+  "totalUsedM2": "Total used (m²)",
+  "overallWaste": "Overall waste"
+}

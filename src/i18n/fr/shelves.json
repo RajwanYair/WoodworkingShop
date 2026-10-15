@@ -1,0 +1,13 @@
+{
+  "customHeading": "Positions personnalisées des étagères (mm depuis le bas)",
+  "resetEqual": "Rétablir l'espacement égal",
+  "position": "Étagère {{n}}",
+  "internalHeight": "Hauteur intérieure : {{h}} mm",
+  "deflectionWarning": "Portée de l'étagère {{span}} mm : flèche estimée {{sag}} mm dépasse la limite L/360 ({{limit}} mm). Envisagez un panneau plus épais, un support central ou une portée plus courte.",
+  "deflectionSafe": "Portée de l'étagère OK — flèche estimée {{sag}} mm (bien en dessous de la limite L/360 {{limit}} mm)",
+  "deflectionDanger": "Alerte flèche : {{sag}} mm dépasse L/240 — support structurel ou panneau plus épais requis pour cette portée de {{span}} mm",
+  "deflectionRatingSafe": "Flèche OK ({{sag}} mm)",
+  "deflectionRatingWarning": "Avertissement flèche ({{sag}} mm)",
+  "deflectionRatingDanger": "Danger flèche ({{sag}} mm)",
+  "loadCapacity": "max. {{kg}} kg"
+}

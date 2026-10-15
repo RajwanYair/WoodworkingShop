@@ -1,0 +1,16 @@
+{
+  "title": "Calculateur de cadre frontal",
+  "cabinetWidth": "Largeur du caisson",
+  "cabinetHeight": "Hauteur du caisson",
+  "stileWidth": "Largeur du montant",
+  "railWidth": "Largeur de la traverse",
+  "openingCount": "Nombre d’ouvertures",
+  "openingWidth": "Largeur de l’ouverture",
+  "openingHeight": "Hauteur de l’ouverture",
+  "stileLength": "Longueur du montant",
+  "topRailLength": "Longueur de la traverse supérieure",
+  "bottomRailLength": "Longueur de la traverse inférieure",
+  "middleRailLength": "Longueur de la traverse centrale",
+  "totalGlueSurface": "Surface totale de collage",
+  "partList": "Liste des pièces"
+}

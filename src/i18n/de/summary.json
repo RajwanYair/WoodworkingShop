@@ -1,0 +1,13 @@
+{
+  "title": "Projektzusammenfassung",
+  "sectionLabel": "Mehrteilige Projektzusammenfassung",
+  "totalCabinets": "Schränke",
+  "totalParts": "Teile gesamt",
+  "totalSheets": "Verwendete Platten",
+  "overallYield": "Gesamtausbeute",
+  "avgSheetYield": "Durchschn. Ausbeute",
+  "totalWaste": "Gesamtverschnitt",
+  "grainConflicts": "Maserungskonflikte",
+  "totalWeight": "Plattengewicht",
+  "estimatedLabour": "Geschätzte Arbeitszeit"
+}

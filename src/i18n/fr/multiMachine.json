@@ -1,0 +1,18 @@
+{
+  "title": "Flux de travail multi-machines",
+  "distribute": "Répartir les tâches",
+  "strategy": "Stratégie de répartition",
+  "leastLoaded": "Machine la moins chargée",
+  "fastestFirst": "Machine la plus rapide en premier",
+  "roundRobin": "À tour de rôle",
+  "assigned": "Attribuée",
+  "unassigned": "Non attribuée",
+  "dispatched": "Envoyée",
+  "complete": "Terminée",
+  "failed": "Échec",
+  "progress": "Progression",
+  "estimatedTime": "Durée totale estimée",
+  "machineLoad": "Charge de la machine",
+  "noCapable": "Aucune machine compatible n’est disponible.",
+  "includeOffline": "Inclure les machines hors ligne"
+}

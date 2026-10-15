@@ -1,0 +1,6 @@
+{
+  "reassignAll": "Apply to all cabinets",
+  "reassignAllTip": "Set this material on every cabinet in the project",
+  "reassignedAll": "Material applied to all cabinets",
+  "alreadyUniform": "All cabinets already use this material"
+}

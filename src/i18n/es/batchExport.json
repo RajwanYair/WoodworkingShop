@@ -1,0 +1,21 @@
+{
+  "title": "Exportación por lotes",
+  "create": "Crear lote",
+  "start": "Iniciar exportación",
+  "cancel": "Cancelar lote",
+  "progress": "Progreso",
+  "completed": "Completado",
+  "failed": "Fallido",
+  "pending": "Pendiente",
+  "cancelled": "Cancelado",
+  "format": "Formato",
+  "priority": "Prioridad",
+  "high": "Alta",
+  "normal": "Media",
+  "low": "Baja",
+  "manifest": "Resumen de exportación",
+  "totalSize": "Tamaño total",
+  "duration": "Duración",
+  "noItems": "No se han añadido elementos para exportar.",
+  "batchComplete": "La exportación por lotes ha terminado."
+}

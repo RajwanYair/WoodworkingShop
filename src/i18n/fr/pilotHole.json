@@ -1,0 +1,15 @@
+{
+  "title": "Calculateur de préperçage",
+  "screwGauge": "Calibre de vis",
+  "screwLength": "Longueur de vis",
+  "woodHardness": "Dureté du bois",
+  "pilotHoleDiameter": "Diamètre de l'avant-trou",
+  "clearanceHole": "Diamètre du trou de passage",
+  "countersinkDiameter": "Diamètre de fraisure",
+  "countersinkDepth": "Profondeur de fraisure",
+  "pilotDepth": "Profondeur de l'avant-trou",
+  "softwood": "Bois tendre",
+  "hardwood": "Bois dur",
+  "plywood": "Contreplaqué",
+  "mdf": "Panneau MDF"
+}

@@ -1,0 +1,11 @@
+{
+  "title": "فرق التكلفة",
+  "material": "المادة",
+  "estimated": "تقديري",
+  "actual": "فعلي",
+  "variance": "الفرق",
+  "total": "الإجمالي",
+  "savings": "التوفير من البقايا والتعشيش: {{amount}}",
+  "tableAriaLabel": "جدول تفصيل فروق التكلفة",
+  "editActualAriaLabel": "أدخل التكلفة الفعلية لـ {{key}}"
+}

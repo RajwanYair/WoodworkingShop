@@ -1,7 +1,7 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { Sidebar } from '../../src/components/layout/Sidebar';
+import { Sidebar } from '../../src/features/workspace/Sidebar';
 import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 import { generateHardware } from '../../src/engine/hardware/hardware';
 import { generateParts } from '../../src/engine/geometry/parts';

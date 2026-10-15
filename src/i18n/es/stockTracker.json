@@ -1,0 +1,19 @@
+{
+  "title": "Control de existencias",
+  "material": "Material",
+  "required": "Necesario",
+  "onHand": "En existencia",
+  "reorderAt": "Reponer cuando",
+  "status": "Estado",
+  "status_ok": "Correcto",
+  "status_low": "Bajo",
+  "status_shortfall": "Insuficiente",
+  "status_unknown": "Desconocido",
+  "noDemand": "Aún no se necesitan tableros: configura primero un armario.",
+  "addItem": "+ Añadir elemento al inventario",
+  "materialKey": "Clave del material",
+  "add": "Añadir",
+  "tableAriaLabel": "Tabla de disponibilidad de existencias de materiales",
+  "editQtyAriaLabel": "Editar cantidad disponible de {{key}}",
+  "removeAriaLabel": "Eliminar {{key}} del inventario"
+}

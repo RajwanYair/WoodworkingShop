@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { CrownMouldingPanel } from '../../src/components/configurator/CrownMouldingPanel';
+import { CrownMouldingPanel } from '../../src/features/calculators/CrownMouldingPanel';
 
 describe('CrownMouldingPanel', () => {
   it('updates the bevel for the selected cutting method and reports invalid angles', async () => {

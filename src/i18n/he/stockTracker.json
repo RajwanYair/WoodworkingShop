@@ -1,0 +1,19 @@
+{
+  "title": "עקב מלאי",
+  "material": "חומר",
+  "required": "נדרש",
+  "onHand": "במלאי",
+  "reorderAt": "הזמנה מחדש ב",
+  "status": "סטטוס",
+  "status_ok": "תקין",
+  "status_low": "נמוך",
+  "status_shortfall": "חוסר",
+  "status_unknown": "לא ידוע",
+  "noDemand": "אין דרישת גיליונות עדיין — קדם הגדר ארון.",
+  "addItem": "+ הוסף פריט מלאי",
+  "materialKey": "מפתח חומר",
+  "add": "הוסף",
+  "tableAriaLabel": "טבלת זמינות חומרים",
+  "editQtyAriaLabel": "ערוך כמות עבור {{key}}",
+  "removeAriaLabel": "הסר {{key}} מהמלאי"
+}

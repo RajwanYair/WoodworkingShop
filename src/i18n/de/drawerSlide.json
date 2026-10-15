@@ -1,0 +1,20 @@
+{
+  "title": "Schubladenauszug-Rechner",
+  "boxWidth": "Schubkastenbreite",
+  "boxHeight": "Schubkastenhöhe",
+  "boxDepth": "Schubkastentiefe",
+  "openingWidth": "Öffnungsbreite",
+  "openingHeight": "Öffnungshöhe",
+  "cabinetDepth": "Korpustiefe",
+  "mountStyle": "Montageart",
+  "sideMount": "Seitenmontage",
+  "underMount": "Unterflurmontage",
+  "centerMount": "Mittelmontage",
+  "extension": "Auszugsart",
+  "fullExtension": "Vollauszug",
+  "threeQuarter": "Dreiviertelauszug",
+  "overTravel": "Überauszug",
+  "clearance": "Seitlicher Abstand je Seite",
+  "slideLength": "Empfohlene Auszugslänge",
+  "totalGap": "Gesamtspiel in der Breite"
+}

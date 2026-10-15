@@ -1,0 +1,16 @@
+{
+  "title": "Dépendances d'assemblage",
+  "step": "Étape",
+  "steps": "Étapes",
+  "dependsOn": "Dépend de",
+  "duration": "Durée",
+  "totalDuration": "Durée totale",
+  "criticalPath": "Chemin critique",
+  "parallelWaves": "Vagues parallèles",
+  "maxParallelism": "Parallélisme maximal",
+  "slack": "Marge",
+  "noCycles": "Aucune dépendance circulaire.",
+  "cycleDetected": "Dépendance circulaire détectée !",
+  "earliestStart": "Début au plus tôt",
+  "latestFinish": "Fin au plus tard"
+}

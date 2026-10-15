@@ -1,0 +1,18 @@
+{
+  "title": "ملصقات الألواح",
+  "partId": "معرّف الجزء",
+  "dimensions": "الأبعاد",
+  "material": "مادة الصنع",
+  "grain": "اتجاه الألياف",
+  "grainHorizontal": "أفقي",
+  "grainVertical": "عمودي",
+  "grainNone": "لا ينطبق",
+  "cabinet": "الخزانة",
+  "position": "الموضع",
+  "edgeBanding": "تلبيس الحواف",
+  "quantity": "الكمية",
+  "notes": "ملاحظات",
+  "totalPieces": "إجمالي القطع",
+  "uniqueParts": "الأجزاء الفريدة",
+  "materials": "المواد المستخدمة"
+}

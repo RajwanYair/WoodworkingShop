@@ -1,0 +1,16 @@
+{
+  "title": "Calculateur de cintrage par rainures",
+  "thickness": "Épaisseur du panneau",
+  "bendRadius": "Rayon de courbure cible",
+  "material": "Type de matériau",
+  "kerfWidth": "Largeur du trait de scie",
+  "kerfSpacing": "Espacement des rainures",
+  "kerfCount": "Nombre de rainures",
+  "kerfDepth": "Profondeur des rainures",
+  "remainingThickness": "Épaisseur de paroi restante",
+  "tooFewKerfs": "Rayon de courbure trop serré : augmentez le rayon ou réduisez l’épaisseur",
+  "plywood": "Contreplaqué",
+  "mdf": "Panneau MDF",
+  "softwood": "Bois tendre",
+  "hardwood": "Bois dur"
+}

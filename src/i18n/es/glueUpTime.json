@@ -1,0 +1,18 @@
+{
+  "title": "Calculadora de tiempos de encolado",
+  "glueType": "Tipo de adhesivo",
+  "temperature": "Temperatura",
+  "humidity": "Humedad relativa",
+  "jointArea": "Superficie de la unión",
+  "jointCount": "Número de uniones",
+  "openTime": "Tiempo abierto",
+  "clampTime": "Tiempo de prensado",
+  "cureTime": "Tiempo de curado completo",
+  "recommendedPsi": "Presión recomendada",
+  "clampsNeeded": "Sargentos necesarios",
+  "pva": "PVA (cola amarilla/blanca)",
+  "polyurethane": "Adhesivo de poliuretano",
+  "epoxy": "Epoxi",
+  "hideGlue": "Cola animal",
+  "caGlue": "CA (cianoacrilato)"
+}

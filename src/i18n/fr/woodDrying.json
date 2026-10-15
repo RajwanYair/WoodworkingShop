@@ -1,0 +1,18 @@
+{
+  "title": "Estimateur du temps de séchage du bois",
+  "thickness": "Épaisseur de la planche",
+  "speciesClass": "Classe de densité de l’essence",
+  "softwood": "Résineux",
+  "mediumHardwood": "Feuillus de densité moyenne",
+  "denseHardwood": "Feuillus denses",
+  "initialMoisture": "Teneur en humidité initiale",
+  "targetMoisture": "Teneur en humidité cible",
+  "method": "Méthode de séchage",
+  "airDry": "Séchage à l’air",
+  "kilnDry": "Séchage en séchoir",
+  "estimatedDays": "Jours estimés",
+  "estimatedWeeks": "Semaines estimées",
+  "defectRisk": "Risque de défauts de séchage",
+  "equalization": "Jours d’égalisation",
+  "emc": "Teneur en humidité d’équilibre (EMC)"
+}

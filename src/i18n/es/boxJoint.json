@@ -1,0 +1,11 @@
+{
+  "title": "Calculadora de ensamble de caja",
+  "boardWidth": "Ancho del tablero",
+  "fingerWidth": "Ancho de dedo deseado",
+  "depth": "Profundidad de la unión (grosor del tablero)",
+  "fingerCount": "Número de dedos",
+  "actualFingerWidth": "Ancho real del dedo",
+  "socketCount": "Número de huecos (tablero de unión)",
+  "glueSurface": "Superficie de encolado",
+  "edgeWaste": "Desperdicio en el borde (cada lado)"
+}

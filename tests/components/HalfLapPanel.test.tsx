@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { HalfLapPanel } from '../../src/components/configurator/HalfLapPanel';
+import { HalfLapPanel } from '../../src/features/calculators/HalfLapPanel';
 
 describe('HalfLapPanel', () => {
   it('updates notch depth and finished thickness and reports invalid input accessibly', async () => {

@@ -1,0 +1,18 @@
+{
+  "title": "Biblioteca de patrones de anidado",
+  "pattern": "Patrón de anidado",
+  "addPattern": "Guardar patrón",
+  "score": "Puntuación de coincidencia",
+  "noPatterns": "Aún no hay patrones guardados.",
+  "patterns": "Patrones de anidado",
+  "category": "Categoría",
+  "tags": "Etiquetas",
+  "fillRate": "Aprovechamiento",
+  "placements": "Colocaciones",
+  "sheetSize": "Tamaño de tablero",
+  "removePattern": "Eliminar patrón",
+  "findBySheet": "Buscar por tablero",
+  "waste": "Desperdicio",
+  "patternSaved": "Patrón guardado en la biblioteca.",
+  "bestMatch": "Mejor coincidencia"
+}

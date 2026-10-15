@@ -1,0 +1,17 @@
+{
+  "title": "Historial de versiones",
+  "commit": "Guardar versión",
+  "branch": "Rama",
+  "branches": "Ramas",
+  "createBranch": "Crear rama",
+  "switchBranch": "Cambiar de rama",
+  "merge": "Fusionar",
+  "diff": "Comparar versiones",
+  "tag": "Etiqueta",
+  "log": "Registro de cambios",
+  "message": "Mensaje de versión",
+  "noHistory": "Aún no hay historial de versiones.",
+  "mergeSuccess": "La fusión se completó correctamente.",
+  "mergeConflict": "La fusión presenta conflictos que deben resolverse.",
+  "branchCreated": "Rama creada."
+}

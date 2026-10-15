@@ -1,0 +1,16 @@
+{
+  "title": "מעקב בלאי כלים",
+  "inventory": "Inventory",
+  "tool": "כלי",
+  "tools": "כלים",
+  "condition": "מצב",
+  "remaining": "חיים נותרים",
+  "usage": "יומן שימוש",
+  "addTool": "הוסף כלי",
+  "logUsage": "רשום שימוש",
+  "alerts": "התראות תחזוקה",
+  "costPerMeter": "עלות למטר",
+  "replacement": "דורש החלפה",
+  "noTools": "אין כלים במלאי.",
+  "noAlerts": "כל הכלים במצב תקין."
+}

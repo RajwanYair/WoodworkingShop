@@ -1,0 +1,18 @@
+{
+  "title": "Optimizador de aprovechamiento de material",
+  "optimize": "Optimizar el aprovechamiento",
+  "demands": "Necesidades de material",
+  "offCuts": "Retales disponibles",
+  "allocations": "Asignaciones",
+  "metrics": "Indicadores de aprovechamiento",
+  "totalArea": "Superficie total necesaria",
+  "areaSaved": "Superficie ahorrada",
+  "yieldPercentage": "Porcentaje de aprovechamiento",
+  "costSavings": "Ahorro estimado",
+  "fromOffCuts": "De retales reutilizados",
+  "fromNewSheets": "De tableros nuevos",
+  "rotated": "Girado",
+  "grainLocked": "Orientación de la veta fija",
+  "noOffCuts": "No hay retales disponibles para reutilizar.",
+  "optimizationComplete": "Se optimizó el aprovechamiento del material."
+}

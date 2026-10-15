@@ -1,0 +1,11 @@
+{
+  "title": "ISO 7171-Konformität",
+  "compliant": "Konform",
+  "nonCompliant": "Nicht konform",
+  "failCount": "{{count}} Fehler",
+  "failCount_other": "{{count}} Fehler",
+  "advisoryCount": "{{count}} Hinweis",
+  "advisoryCount_other": "{{count}} Hinweise",
+  "validate": "Prüfen",
+  "noViolations": "Keine Verstöße gefunden"
+}

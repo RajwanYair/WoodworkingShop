@@ -1,0 +1,12 @@
+{
+  "title": "Assistant de conception IA",
+  "brief": "Résumé du projet",
+  "suggestions": "Suggestions d'agencement",
+  "noSuggestions": "Aucune suggestion : toutes les contraintes sont respectées.",
+  "constraintsSatisfied": "Contraintes respectées",
+  "constraintsViolated": "Contraintes non respectées",
+  "overallScore": "Score global",
+  "applyAll": "Tout appliquer",
+  "applySuggestion": "Appliquer",
+  "validateConstraints": "Vérifier les contraintes"
+}

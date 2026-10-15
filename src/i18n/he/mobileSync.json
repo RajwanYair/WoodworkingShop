@@ -1,0 +1,13 @@
+{
+  "title": "סנכרון נייד",
+  "online": "מחובר",
+  "offline": "לא מחובר",
+  "syncing": "מסנכר…",
+  "pendingChanges": "שינוי {{count}} בהמתנה",
+  "pendingChanges_other": "{{count}} שינויים בהמתנה",
+  "conflicts": "התנגשות {{count}}",
+  "conflicts_other": "{{count}} התנגשויות",
+  "lastSynced": "סנכרון אחרון: {{time}}",
+  "neverSynced": "לא סונכר מעולם",
+  "resolveConflict": "פתר התנגשות"
+}

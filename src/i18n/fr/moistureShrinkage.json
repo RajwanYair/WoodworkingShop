@@ -1,0 +1,25 @@
+{
+  "species_cherry": "Merisier",
+  "dimension": "Dimension de la planche",
+  "coefficient": "Coefficient de retrait",
+  "species_oak": "Chêne",
+  "species_cedar": "Cèdre",
+  "species_pine": "Pin",
+  "grain": "Direction du fil du bois",
+  "species_maple": "Érable",
+  "initialMC": "Humidité initiale",
+  "changeAmount": "Variation dimensionnelle",
+  "species_douglas_fir": "Sapin de Douglas",
+  "species_generic_hardwood": "Feuillu générique",
+  "grains": {
+    "tangential": "Tangentiel",
+    "radial": "Radial (perpendiculaire aux cernes)"
+  },
+  "species": "Essence de bois",
+  "finalDimension": "Dimension finale",
+  "effectiveMCChange": "Variation effective de l’humidité",
+  "title": "Humidité et retrait du bois",
+  "targetMC": "Humidité cible",
+  "species_generic_softwood": "Résineux générique",
+  "species_walnut": "Noyer"
+}

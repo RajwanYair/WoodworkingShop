@@ -1,0 +1,13 @@
+{
+  "title": "Calculateur de passes de rabotage",
+  "initialThickness": "Épaisseur initiale",
+  "targetThickness": "Épaisseur cible",
+  "maxPassDepth": "Profondeur maximale par passe",
+  "snipeLength": "Longueur du talonnage (chaque extrémité)",
+  "boardLength": "Longueur de la planche",
+  "passCount": "Nombre de passes",
+  "depthPerPass": "Enlèvement par passe",
+  "totalRemoval": "Enlèvement total",
+  "snipeAllowance": "Marge de talonnage (aux deux extrémités)",
+  "effectiveLength": "Longueur utile effective"
+}

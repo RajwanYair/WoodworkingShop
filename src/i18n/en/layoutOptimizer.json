@@ -1,0 +1,11 @@
+{
+  "title": "Layout Optimizer",
+  "totalDistance": "Total Walking Distance",
+  "efficiencyScore": "Efficiency Score",
+  "suggestions": "Swap Suggestions",
+  "swap": "Swap",
+  "saved": "Saved",
+  "improvement": "Improvement",
+  "noSuggestions": "Layout is already optimal.",
+  "metres": "m"
+}

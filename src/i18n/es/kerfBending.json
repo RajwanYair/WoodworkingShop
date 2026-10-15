@@ -1,0 +1,16 @@
+{
+  "title": "Calculadora de curvado mediante ranuras",
+  "thickness": "Grosor del panel",
+  "bendRadius": "Radio de curvatura deseado",
+  "material": "Tipo de material",
+  "kerfWidth": "Ancho de corte (hoja de sierra)",
+  "kerfSpacing": "Separación entre ranuras",
+  "kerfCount": "Número de ranuras",
+  "kerfDepth": "Profundidad de la ranura",
+  "remainingThickness": "Grosor de pared restante",
+  "tooFewKerfs": "El radio de curvatura es demasiado cerrado: auméntalo o reduce el grosor",
+  "plywood": "Contrachapado",
+  "mdf": "Tablero MDF",
+  "softwood": "Madera blanda",
+  "hardwood": "Madera dura"
+}

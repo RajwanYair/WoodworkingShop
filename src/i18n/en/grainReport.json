@@ -1,0 +1,8 @@
+{
+  "title": "Grain Direction Report",
+  "constrained": "grain-locked",
+  "grainSensitive": "Grain-sensitive part",
+  "grainBadge": "grain",
+  "noParts": "No parts — configure a cabinet first.",
+  "summary": "{{constrained}} of {{total}} part instances have grain direction constraints."
+}

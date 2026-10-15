@@ -1,0 +1,15 @@
+{
+  "title": "Kreisschablonen-Rechner für die Oberfräse",
+  "targetDiameter": "Zieldurchmesser",
+  "bitDiameter": "Fräserdurchmesser",
+  "pivotHoleDiameter": "Durchmesser der Drehpunktbohrung",
+  "cutMode": "Schnittmodus",
+  "armLength": "Armlänge (Drehpunkt bis Fräsermitte)",
+  "circumference": "Kreisumfang",
+  "area": "Fläche",
+  "pivotOffset": "Drehpunktversatz",
+  "modes": {
+    "disc": "Scheibe (Außenschnitt)",
+    "hole": "Ausschnitt (Innenschnitt)"
+  }
+}

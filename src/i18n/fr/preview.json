@@ -1,0 +1,19 @@
+{
+  "title": "Aperçu de l'armoire",
+  "front": "Face avant (fermée)",
+  "frontOpen": "Face avant (ouverte)",
+  "side": "Côté",
+  "top": "Dessus",
+  "back": "Arrière",
+  "iso": "3D",
+  "exportSvg": "Exporter SVG",
+  "exportPng": "Exporter PNG (2×)",
+  "dimensions": "Dimensions",
+  "dimensionSummary": "Dimensions de l'armoire L × H × P",
+  "doors": "portes",
+  "drawers": "tiroirs",
+  "dragToRotate": "Faites glisser pour pivoter",
+  "webglToggle": "Basculer vue WebGL / SVG",
+  "webglAnimate": "Animer",
+  "webglIsometric": "Isométrique"
+}

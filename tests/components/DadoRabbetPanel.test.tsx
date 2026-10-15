@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { DadoRabbetPanel } from '../../src/components/configurator/DadoRabbetPanel';
+import { DadoRabbetPanel } from '../../src/features/calculators/DadoRabbetPanel';
 
 describe('DadoRabbetPanel', () => {
   it('shows rabbet-only controls and reports invalid mating thickness', async () => {

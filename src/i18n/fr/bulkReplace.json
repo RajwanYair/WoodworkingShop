@@ -1,0 +1,10 @@
+{
+  "title": "Remplacement en masse de matériaux",
+  "short": "Remplacer",
+  "description": "Remplacer un matériau par un autre dans toutes les armoires du projet. Cette action est annulable.",
+  "from": "Remplacer",
+  "to": "Par",
+  "apply": "Appliquer à tous",
+  "applied": "Fait ! Utilisez Ctrl+Z pour annuler.",
+  "summary": "{{count}} armoire(s) seront mises à jour : {{from}} → {{to}}"
+}

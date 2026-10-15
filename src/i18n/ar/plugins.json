@@ -1,0 +1,11 @@
+{
+  "title": "سجل الإضافات",
+  "empty": "لا توجد إضافات مسجَّلة",
+  "version": "الإصدار {{version}}",
+  "stability": "استقرار API: {{level}}",
+  "enable": "تفعيل الإضافة",
+  "disable": "تعطيل الإضافة",
+  "enabled": "مفعَّل",
+  "disabled": "معطَّل",
+  "apiVersion": "إصدار API {{version}}"
+}

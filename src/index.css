@@ -28,6 +28,7 @@
   --color-accent-text-dark: #2997ff;
   --color-surface: #f5f5f7;
   --color-surface-dark: #000;
+  --color-panel: light-dark(#f5f5f7, #000);
   --radius-sm: 0.375rem;
   --radius: 0.5rem;
   --radius-md: 0.625rem;
@@ -48,10 +49,49 @@
 .dark {
   --color-wood-400: #9fa0a6;
   --color-wood-500: #828389;
+
+  color-scheme: dark;
+}
+
+.panel-container {
+  container-name: panel;
+  container-type: inline-size;
+}
+
+@container panel (max-width: 24rem) {
+  .panel-stack {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+dialog.ui-dialog::backdrop {
+  background-color: rgb(0 0 0 / 50%);
+}
+
+dialog.ui-dialog.ui-dialog-top {
+  margin-block: 10vh auto;
+}
+
+dialog.ui-dialog.ui-dialog-sheet {
+  margin-block: auto 0;
+}
+
+dialog.ui-dialog.ui-dialog-dock {
+  width: 100%;
+  max-width: none;
+  margin-block: auto 0;
+}
+
+@media (width >= 40rem) {
+  dialog.ui-dialog.ui-dialog-sheet {
+    margin-block: auto;
+  }
 }
 
 @layer base {
   html {
+    color-scheme: light;
     accent-color: var(--color-accent);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -311,10 +351,11 @@
    theme. */
 @media (forced-colors: active) {
   :root {
-    --wood-50: Canvas;
-    --wood-100: Canvas;
-    --wood-800: CanvasText;
-    --wood-900: CanvasText;
+    --color-wood-50: Canvas;
+    --color-wood-100: Canvas;
+    --color-wood-800: CanvasText;
+    --color-wood-900: CanvasText;
+    --color-panel: Canvas;
   }
 
   /* Buttons get system accent colours */

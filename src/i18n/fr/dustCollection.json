@@ -1,0 +1,17 @@
+{
+  "title": "Aspiration des poussières",
+  "estimator": "Calculateur du système",
+  "machine": "Machine",
+  "addMachine": "Ajouter une machine",
+  "portDiameter": "Diamètre de la bouche d'aspiration",
+  "ductRun": "Longueur de conduit",
+  "elbows": "Coudes",
+  "cfmRequired": "Débit requis (CFM)",
+  "staticPressure": "Pression statique",
+  "trunkDiameter": "Diamètre du conduit principal",
+  "recommendedHp": "Puissance recommandée (HP)",
+  "adequate": "Système correctement dimensionné",
+  "inadequate": "Système sous-dimensionné",
+  "warnings": "Avertissements",
+  "noMachines": "Aucune machine ajoutée."
+}

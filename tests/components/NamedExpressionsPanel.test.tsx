@@ -1,7 +1,7 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { NamedExpressionsPanel } from '../../src/components/configurator/NamedExpressionsPanel';
+import { NamedExpressionsPanel } from '../../src/features/configurator/NamedExpressionsPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 
 function resetExpressions() {
@@ -16,6 +16,7 @@ describe('NamedExpressionsPanel', () => {
   it('rejects an invalid name, evaluates a valid expression, and removes it', async () => {
     const user = userEvent.setup();
     render(<NamedExpressionsPanel />);
+    expect(screen.getByText('No expressions defined yet.')).toBeInTheDocument();
 
     const name = screen.getByLabelText(/^name$/i);
     const expression = screen.getByLabelText(/^formula$/i);
@@ -30,6 +31,7 @@ describe('NamedExpressionsPanel', () => {
     await user.click(screen.getByRole('button', { name: /^add$/i }));
 
     expect(screen.getByText(/1,234\.00/)).toBeInTheDocument();
+    expect(screen.queryByText('No expressions defined yet.')).not.toBeInTheDocument();
     expect(useCabinetStore.getState().namedExpressions).toEqual([{ name: 'shelf_gap', expression: '1234' }]);
 
     await user.click(screen.getByRole('button', { name: /remove.*shelf_gap/i }));

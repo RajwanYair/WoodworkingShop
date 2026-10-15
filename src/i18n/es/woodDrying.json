@@ -1,0 +1,18 @@
+{
+  "title": "Estimador del tiempo de secado de madera",
+  "thickness": "Grosor de la tabla",
+  "speciesClass": "Clase de densidad de la especie",
+  "softwood": "Madera blanda",
+  "mediumHardwood": "Madera semidura",
+  "denseHardwood": "Madera dura densa",
+  "initialMoisture": "Contenido de humedad inicial",
+  "targetMoisture": "Contenido de humedad objetivo",
+  "method": "Método de secado",
+  "airDry": "Secado al aire",
+  "kilnDry": "Secado en horno",
+  "estimatedDays": "Días estimados",
+  "estimatedWeeks": "Semanas estimadas",
+  "defectRisk": "Riesgo de defectos de secado",
+  "equalization": "Días de igualación",
+  "emc": "Contenido de humedad de equilibrio"
+}

@@ -1,0 +1,15 @@
+{
+  "title": "Calculadora de agujeros guía",
+  "screwGauge": "Calibre del tornillo",
+  "screwLength": "Longitud del tornillo",
+  "woodHardness": "Dureza de la madera",
+  "pilotHoleDiameter": "Diámetro del agujero guía",
+  "clearanceHole": "Diámetro del orificio de paso",
+  "countersinkDiameter": "Diámetro del avellanado",
+  "countersinkDepth": "Profundidad del avellanado",
+  "pilotDepth": "Profundidad del agujero guía",
+  "softwood": "Madera blanda",
+  "hardwood": "Madera dura",
+  "plywood": "Contrachapado",
+  "mdf": "Tablero MDF"
+}

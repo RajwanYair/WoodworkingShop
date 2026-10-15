@@ -1,0 +1,18 @@
+{
+  "title": "Materialausnutzung optimieren",
+  "optimize": "Ausnutzung optimieren",
+  "demands": "Materialbedarf",
+  "offCuts": "Verfügbare Reststücke",
+  "allocations": "Zuteilungen",
+  "metrics": "Ausnutzungskennzahlen",
+  "totalArea": "Benötigte Gesamtfläche",
+  "areaSaved": "Eingesparte Fläche",
+  "yieldPercentage": "Materialausnutzung in Prozent",
+  "costSavings": "Geschätzte Einsparung",
+  "fromOffCuts": "Aus Reststücken",
+  "fromNewSheets": "Aus neuen Platten",
+  "rotated": "Gedreht",
+  "grainLocked": "Faserverlauf fixiert",
+  "noOffCuts": "Keine Reststücke zur Wiederverwendung verfügbar.",
+  "optimizationComplete": "Materialausnutzung erfolgreich optimiert."
+}

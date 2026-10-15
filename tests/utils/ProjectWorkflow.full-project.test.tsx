@@ -3,8 +3,8 @@ import { pdf } from '@react-pdf/renderer';
 
 import { useCabinetStore, type CabinetEntry } from '../../src/store/cabinet-store';
 import { cfg } from '../helpers';
-import { buildProjectExport, isProjectExport } from '../../src/components/configurator/save-load-json';
-import { CabinetPdfDocument, type CabinetPdfEntry } from '../../src/components/pdf/CabinetPdfDocument';
+import { buildProjectExport, isProjectExport } from '../../src/features/configurator/save-load-json';
+import { CabinetPdfDocument, type CabinetPdfEntry } from '../../src/features/pdf/CabinetPdfDocument';
 import { computeDimensions } from '../../src/engine/geometry/dimensions';
 import { computeEdgeBandingTotal, generateParts } from '../../src/engine/geometry/parts';
 import { generateHardware } from '../../src/engine/hardware/hardware';

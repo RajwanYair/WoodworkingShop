@@ -1,0 +1,14 @@
+{
+  "title": "Materialkostenverfolgung",
+  "bestPrice": "Bester Preis",
+  "supplier": "Lieferant",
+  "trend": "Trend",
+  "rising": "Steigend",
+  "falling": "Fallend",
+  "stable": "Stabil",
+  "totalCost": "Gesamtkosten",
+  "anomaly": "Preisabweichung",
+  "noPrice": "Keine Preisdaten verfügbar.",
+  "currency": "Währung",
+  "perUnit": "je Einheit"
+}

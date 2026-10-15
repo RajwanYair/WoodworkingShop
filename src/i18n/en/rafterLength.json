@@ -1,0 +1,15 @@
+{
+  "pitchRatio": "Pitch Ratio",
+  "title": "Rafter Length & Birdsmouth",
+  "totalLength": "Total Length (with overhang)",
+  "rafterLength": "Rafter Length (to heel)",
+  "seatCut": "Seat-Cut Angle",
+  "overhang": "Overhang",
+  "birdsmouthDepth": "Birdsmouth Depth",
+  "rise": "Vertical Rise",
+  "run": "Horizontal Run",
+  "totalSpan": "Total Building Span",
+  "plateWidth": "Wall Plate Width",
+  "plumbCut": "Plumb-Cut Angle",
+  "shedRoof": "Shed roof (single slope)"
+}

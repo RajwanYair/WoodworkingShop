@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { WasteAnalyticsPanel } from '../../src/components/optimizer/WasteAnalyticsPanel';
+import { WasteAnalyticsPanel } from '../../src/features/optimizer/WasteAnalyticsPanel';
 import { makeOptimizationResult } from '../helpers';
 
 describe('WasteAnalyticsPanel', () => {

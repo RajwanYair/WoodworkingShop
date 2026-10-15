@@ -1,0 +1,21 @@
+{
+  "title": "Calculadora de acabados",
+  "typeLabel": "Tipo de acabado",
+  "primer": "Imprimación",
+  "stain": "Tinte",
+  "paint": "Pintura",
+  "varnish": "Barniz",
+  "oil": "Aceite",
+  "lacquer": "Laca",
+  "coats": "Número de capas",
+  "surfaceArea": "Superficie total",
+  "litresNeeded": "Acabado necesario",
+  "recommendedCans": "Tamaños de envase sugeridos",
+  "totalCans": "total: {{litres}} L",
+  "notePrimer": "Aplica imprimación antes de las capas de acabado para mejorar la adherencia.",
+  "noteStain": "Lija suavemente entre capas de tinte. Limpia el exceso de inmediato.",
+  "notePaint": "Usa un rodillo de espuma en los paneles y una brocha en bordes y detalles.",
+  "noteVarnish": "Deja curar por completo cada capa de barniz antes de lijarla.",
+  "noteOil": "El aceite danés penetra en la veta; limpia el exceso después de 20 minutos.",
+  "noteLacquer": "Aplica la laca en capas finas y uniformes, en un entorno sin polvo."
+}

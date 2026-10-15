@@ -77,6 +77,41 @@ describe('cabinet-store', () => {
     });
   });
 
+  it('restores a versioned session that has no legacy flat cabinet fields', async () => {
+    const { createCabinetSessionRecord } = await import('../../src/store/slices/sessionPersistence');
+    window.localStorage.setItem(
+      'woodworkingshop:session',
+      JSON.stringify(
+        createCabinetSessionRecord({
+          cabinets: [{ name: 'Versioned cabinet', config: { ...DEFAULT_CONFIG, width: 640 } }],
+          activeCabinetIndex: 0,
+          projectName: 'Versioned project',
+          projectNotes: 'Slice notes',
+          sawKerf: 4,
+          materialPriceOverrides: {},
+          edgeBandingRate: 3,
+          hardwarePriceOverrides: {},
+          hardwareQtyOverrides: {},
+          sheetSizeOverrides: {},
+          labourRate: 75,
+          labourHours: 0,
+          finishCost: 0,
+          rotationLockedPartIds: {},
+        }),
+      ),
+    );
+
+    vi.resetModules();
+    const { useCabinetStore: restoredStore } = await import('../../src/store/cabinet-store');
+
+    expect(restoredStore.getState()).toMatchObject({
+      cabinets: [{ name: 'Versioned cabinet', config: { width: 640 } }],
+      config: { width: 640 },
+      projectName: 'Versioned project',
+      projectNotes: 'Slice notes',
+    });
+  });
+
   it('applies shared-link config over the restored cabinet session', async () => {
     window.localStorage.setItem(
       'woodworkingshop:session',
@@ -200,6 +235,47 @@ describe('cabinet-store', () => {
     expect(useCabinetStore.getState().canRedo).toBe(true);
     useCabinetStore.getState().redo();
     expect(useCabinetStore.getState().config.width).toBe(888);
+  });
+
+  it('groups repeated config updates into one reversible history patch', () => {
+    const originalWidth = useCabinetStore.getState().config.width;
+    const { beginHistoryGroup, endHistoryGroup, setConfig } = useCabinetStore.getState();
+
+    beginHistoryGroup();
+    setConfig({ width: 800 });
+    setConfig({ width: 900 });
+    endHistoryGroup();
+
+    expect(useCabinetStore.getState()._past).toHaveLength(1);
+    useCabinetStore.getState().undo();
+    expect(useCabinetStore.getState().config.width).toBe(originalWidth);
+    useCabinetStore.getState().redo();
+    expect(useCabinetStore.getState().config.width).toBe(900);
+  });
+
+  it('does not create history for a gesture without config changes', () => {
+    const { beginHistoryGroup, endHistoryGroup } = useCabinetStore.getState();
+
+    beginHistoryGroup();
+    endHistoryGroup();
+
+    expect(useCabinetStore.getState()._past).toHaveLength(0);
+    expect(useCabinetStore.getState().canUndo).toBe(false);
+  });
+
+  it('flushes a grouped edit before undoing it', () => {
+    const originalWidth = useCabinetStore.getState().config.width;
+    const { beginHistoryGroup, setConfig } = useCabinetStore.getState();
+
+    beginHistoryGroup();
+    setConfig({ width: 800 });
+    setConfig({ width: 900 });
+    useCabinetStore.getState().undo();
+
+    expect(useCabinetStore.getState().config.width).toBe(originalWidth);
+    expect(useCabinetStore.getState().canRedo).toBe(true);
+    useCabinetStore.getState().redo();
+    expect(useCabinetStore.getState().config.width).toBe(900);
   });
 
   // Multi-cabinet

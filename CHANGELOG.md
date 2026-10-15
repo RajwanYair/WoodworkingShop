@@ -11,6 +11,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Guided onboarding, release notes, marketplace recovery, and direct setup routes for part labels and cut lists.
+
+### Changed
+
+- Sprint 434 breaks the plugin, template and PDF type cycles by moving those types to sibling modules. Cloud-sync no longer imports `utils/`. The public engine barrel still re-exports the deprecated Web Serial helpers, so `architecture:check` has one remaining violation.
+  Docs and snippets now describe `src/app/`, `src/features/`, `src/ui/` and namespace locale files. Component tests load the merged English namespaces because the app singleton only boots the eager bundle. The engine-move codemod keeps non-source extensions such as `.json`.
+- Locale JSON now ships as one lazy chunk per language instead of one chunk per namespace. That cut emitted JS from 3,245.1 KB to 2,879.8 KB. Raw budgets are 2,895 KB JS and 3,130 KB total. Critical-route caps are unchanged. A namespace that is already registered is not loaded again.
+- The always-visible summary now requests `cost`, `costSummary`, `costVariance` and `shelfSpacingPanel` with the workspace shell, so those labels are translated before the panel renders.
+- `npm run ci` passed before the later summary and layout fixes: 5,305 tests, production build, bundle totals 2,879.8 KB JS and 3,117.2 KB, initial route 591.9 KB raw / 152.5 KB Brotli, and all 16 benchmarks. Golden exports passed 1/1. A one-worker rerun of the failed E2E set passed 50 and the visual baseline.
+- The G-code dialog axe check failed on 21px quantity inputs covered by the sticky header after the sheet scrolled. Those inputs are now 24px. A nested scrollport was reverted because it changed screenshots. The header stays sticky, and an open dialog marks the rest of the page inert. Focus returns to the opener after that inert state is cleared.
+  That axe check then passed in Chromium and Firefox. The configurator, preview, and optimizer Chromium screenshots matched. After the focus fix, a two-worker Playwright run failed 17, passed 503, and skipped 6. `npm run ci` was not rerun after it.
+- Alt+3 and Alt+6 can be pressed while the banner is already visible and before a passive effect attaches the shortcut listener. That listener now attaches in a layout effect. Isolated repeats of the three journeys that had stayed on Workspace then passed in Chromium. The full Playwright suite has not been rerun.
+- A leftover `src/components/` tree was still compiled and failed typecheck. It is deleted. The dialog inert walk names its parent element so the native compiler can type it. `npm run ci` then passed: 5,308 tests in 181.27 s, 2,880.4 KB JS / 3,117.7 KB total, initial route 592.4 KB raw / 152.7 KB Brotli, and 16 benchmarks. A cold typecheck took 5.19 s.
+- A two-worker Playwright run then failed 1, passed 519, and skipped 6. The miss was Firefox not showing the saved offcut catalog after the save click. That journey passed 3/3 when rerun alone.
+- The always-visible Sidebar requested `cost`, `costSummary`, `costVariance`, `diff`, `plugins`, `room`, `shelfSpacingPanel`, `snapshot`, `storage` and `validation` at mount, none of which were eager, so every boot fetched the whole English locale chunk.
+  That fetch raced a second navigation in one Firefox smoke test and logged an aborted-import console error. Those ten namespaces (5,286 bytes) are now eager; a fixed test that made an unrealistic double navigation now performs the single direct navigation a real user would.
+- `npm run ci` then passed again: 5,308 tests in 137.64 s, 2,880.9 KB JS / 3,118.2 KB total, initial route 597.1 KB raw / 154.1 KB Brotli, and 16 benchmarks. Two full Playwright runs after these fixes each showed one unrelated single-test miss (a Firefox PWA offline-reload service-worker race, and a Chromium Web Serial timeout) that passed in isolation; neither is part of this sprint's work.
+- Sprint 433 splits each locale into 146 feature namespace files under `src/i18n/{locale}/`. Call sites stay `t('feature.key')`; each file is merged into the `translation` bundle. Feature panels load their namespaces with the panel. English resources are typed, so an unknown literal key fails typecheck.
+- The split preserves all 2,175 leaf keys. Initial-route English JSON is 26,515 bytes across 46 eager files, down from 88,522 bytes in `en.json`. `npm run i18n:coverage` reports 100% parity. Full `npm run check` was not rerun.
+- Sprint 432 adds a typed worker pool (`src/workers/job-runner.ts`) with schema version, abort, progress, a 30-second timeout and a 5-slot cap. The store schedules cut, cost and assembly work through `src/platform/workers/scheduler.ts` and no longer imports workers.
+- BOM and DXF results use a transferable copy. `SharedArrayBuffer` writes stay behind `crossOriginIsolated`. The unchanged S317 recovery suite passed. Export loading flags clear on success, error and timeout. `OptimizerView.tsx` is 348 lines; the 396-line budget is unchanged because `Header.tsx` is 393.
+- Sprint 430 moves panel and shell files out of `src/components/` into `src/features/` and `src/app/`. Shared icons live in `src/ui/`. The workspace tab renders `WorkspaceHome`. `src/App.tsx` stays at the root. Tab ids, Alt+1…Alt+6, and the command registry now share one route table. Same-document tab writes stay on the History API because `navigation.navigate()` reloads the document. Back and forward still observe Navigation `traverse` events and `popstate`.
+- The coverage map now inventories `app`, `features`, and `ui`. The historical components coverage floor still aggregates those directories and was not lowered. Chromium and Firefox passed the unchanged S307 shell journeys, 15/15 each. WebKit passed the same journeys after one Alt+1 retry. The skip link uses an explicit tabindex so WebKit includes it in tab order, and Help and shortcuts focus the opener before opening a dialog.
+- Sprint 431 adds shared design-system controls under `src/ui/` (button, field, dialog, table, tabs, and related primitives). Header undo/redo and the centered dialogs use them, including shortcuts, snapshot diff, bulk replace, templates, marketplace, project manager, onboarding, G-code preview, command palette and the gesture tutorial.
+- The mobile summary sheet now uses the shared dialog. Every panel file is at or under 400 lines. The component budget is 396 lines, the measured size of `OptimizerView.tsx`.
+- Sprint 429 stores cabinet undo history as structural field patches instead of cabinet snapshots. A 50-cabinet project with 50 width edits measured 6,301 bytes of history, compared with 45,401 bytes for changed-entry snapshots and 1,137,151 bytes for full-array snapshots. Session persistence now uses the storage adapter with versioned slices and still writes the legacy flat session fields. Catalog, hardware, stock, cost-variance, and room stores stay separate and persist at version 1 ([ADR-0006](docs/decisions/0006-domain-store-slices.md)).
+
 ## [5.36.0] — 2026-10-13
 
 ### Toolchain Updates
@@ -24,6 +53,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added an examples gallery (`src/features/workspace/ExamplesGallery.tsx`) with six ready-made projects — kitchen base run, wall cabinets, bookcase, wardrobe, bathroom vanity, and workshop storage — defined as plain cabinet arrays in `src/engine/project/examples.ts`. Each card shows an SVG thumbnail built from the same stacked-rectangle technique as the existing template picker, and "Use this example" loads the project through the existing `loadProject`/`setProjectName` store actions.
+  The gallery opens from the command palette ("Open examples gallery"); `src/App.tsx` owns its state and lazy loading directly so `src/app/Header.tsx` is untouched. Raised the JS and total bundle caps from 2,895/3,130 KB to 2,900/3,140 KB after measuring 2,892.7 KB JS and 3,130.4 KB total with the feature included.
 - Added an opt-in local diagnostics dialog with buffered Web Vitals, worker availability, aggregate storage estimates, and bounded sanitized error history. Its explicit JSON export excludes project contents and makes no network requests.
 - Translated the local diagnostics interface into Arabic, German, Spanish, and French; added the strings to the pending locale-review tracker.
 - Deferred initial cut-sheet optimization to the existing Web Worker path in browsers that support workers; the sidebar and cost estimate show pending values until results arrive. Both BOM export entry points dynamically import the exporter, and the cold mobile browser path does not request its chunks until Ctrl+E is invoked. The workspace LCP banner is a preloaded responsive WebP; its LCP-discovery and responsive-image audits pass.

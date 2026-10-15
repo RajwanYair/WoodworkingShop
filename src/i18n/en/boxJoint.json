@@ -1,0 +1,11 @@
+{
+  "title": "Box Joint Calculator",
+  "boardWidth": "Board Width",
+  "fingerWidth": "Desired Finger Width",
+  "depth": "Joint Depth (board thickness)",
+  "fingerCount": "Finger Count",
+  "actualFingerWidth": "Actual Finger Width",
+  "socketCount": "Socket Count (mating board)",
+  "glueSurface": "Glue Surface Area",
+  "edgeWaste": "Edge Waste (each side)"
+}

@@ -1,5 +1,8 @@
 import type ts from 'typescript';
 
+export const COVERAGE_OWNERS: readonly ['engine', 'utils', 'store', 'hooks', 'app', 'features', 'ui'];
+export function coverageOwner(sourcePath: string): (typeof COVERAGE_OWNERS)[number] | null;
+
 export function getExportedFunctionNames(sourceFile: ts.SourceFile): string[];
 export function getExportedFunctionLineRanges(
   sourceFile: ts.SourceFile,

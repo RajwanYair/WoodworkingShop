@@ -1,0 +1,18 @@
+{
+  "title": "Calculateur de vitesse de perceuse à colonne",
+  "rpm": "Vitesse de rotation (tr/min)",
+  "sfm": "Vitesse de coupe superficielle (SFM)",
+  "feedRate": "Avance",
+  "drillTime": "Temps de perçage",
+  "speedSetting": "Réglage de vitesse",
+  "bitDiameter": "Diamètre du foret",
+  "bitType": "Type de foret",
+  "material": "Matériau",
+  "depth": "Profondeur de perçage",
+  "twist": "Foret hélicoïdal",
+  "bradPoint": "Foret à pointe de centrage",
+  "forstner": "Mèche Forstner",
+  "spade": "Mèche plate",
+  "holeSaw": "Scie cloche",
+  "countersink": "Fraise à chanfreiner"
+}

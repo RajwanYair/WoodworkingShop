@@ -1,0 +1,8 @@
+{
+  "title": "Liste de découpe des pièces",
+  "progress": "{{checked}} pièces découpées sur {{total}}",
+  "progressAriaLabel": "{{percent}} % des pièces découpées",
+  "complete": "Tout est découpé !",
+  "clearAll": "Réinitialiser la liste",
+  "empty": "Aucune pièce à découper — configurez d’abord une armoire."
+}

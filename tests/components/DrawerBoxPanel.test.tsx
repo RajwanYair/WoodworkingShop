@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { DrawerBoxPanel } from '../../src/components/configurator/DrawerBoxPanel';
+import { DrawerBoxPanel } from '../../src/features/calculators/DrawerBoxPanel';
 
 describe('DrawerBoxPanel', () => {
   it('updates slide clearance and warns when drawer depth is short', async () => {

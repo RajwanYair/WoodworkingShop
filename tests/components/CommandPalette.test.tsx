@@ -1,15 +1,33 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import App from '../../src/App';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { clearRecentCommands, getRecentCommandIds } from '../../src/utils/command-palette';
 
+const showPopoverDescriptor = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'showPopover');
+const hidePopoverDescriptor = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'hidePopover');
+
 describe('CommandPalette', () => {
   beforeEach(() => {
+    window.localStorage.clear();
+    Object.defineProperty(HTMLElement.prototype, 'showPopover', {
+      configurable: true,
+      value(this: HTMLElement) {
+        this.removeAttribute('popover');
+      },
+    });
+    Object.defineProperty(HTMLElement.prototype, 'hidePopover', { configurable: true, value() {} });
     clearRecentCommands();
     useCabinetStore.getState().resetConfig();
     useCabinetStore.getState().setActiveTab('configurator');
+  });
+
+  afterEach(() => {
+    if (showPopoverDescriptor) Object.defineProperty(HTMLElement.prototype, 'showPopover', showPopoverDescriptor);
+    else Reflect.deleteProperty(HTMLElement.prototype, 'showPopover');
+    if (hidePopoverDescriptor) Object.defineProperty(HTMLElement.prototype, 'hidePopover', hidePopoverDescriptor);
+    else Reflect.deleteProperty(HTMLElement.prototype, 'hidePopover');
   });
 
   it('opens a searched calculator directly and lists it in recent commands', async () => {

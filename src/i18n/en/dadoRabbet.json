@@ -1,0 +1,14 @@
+{
+  "title": "Dado / Rabbet Joint Calculator",
+  "jointType": "Joint Type",
+  "dado": "Dado",
+  "rabbet": "Rabbet",
+  "throughDado": "Through Dado",
+  "matingThickness": "Mating Panel Thickness",
+  "boardThickness": "Receiving Board Thickness",
+  "cutWidth": "Cut Width",
+  "cutDepth": "Cut Depth",
+  "offsetFromEdge": "Offset from Edge",
+  "bitsRecommendation": "Recommended Bit / Blade",
+  "passCount": "Router Passes Required"
+}

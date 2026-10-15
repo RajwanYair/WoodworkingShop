@@ -1,0 +1,8 @@
+{
+  "title": "Hoja de etiquetas de piezas",
+  "noParts": "No hay piezas: configura un armario primero.",
+  "expandQty": "Expandir piezas con varias unidades (una etiqueta por pieza)",
+  "print": "Imprimir etiquetas",
+  "printTitle": "Etiquetas de piezas",
+  "gridAriaLabel": "Tarjetas de etiquetas de piezas"
+}

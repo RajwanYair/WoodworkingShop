@@ -1,0 +1,12 @@
+{
+  "title": "Accessibility Audit",
+  "runAudit": "Run Audit",
+  "compliant": "Compliant",
+  "nonCompliant": "Non-Compliant",
+  "violations": "Violations",
+  "passes": "Passes",
+  "incomplete": "Incomplete",
+  "severity": "Severity",
+  "criterion": "Criterion",
+  "suggestion": "Suggestion"
+}

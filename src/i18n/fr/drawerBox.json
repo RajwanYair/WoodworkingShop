@@ -1,0 +1,18 @@
+{
+  "title": "Calculateur de dimensions du tiroir",
+  "openingWidth": "Largeur de l’ouverture",
+  "openingHeight": "Hauteur de l’ouverture",
+  "openingDepth": "Profondeur du caisson",
+  "slideType": "Type de coulisse",
+  "sideThickness": "Épaisseur du côté",
+  "falseFrontThickness": "Épaisseur de la façade de tiroir",
+  "boxWidth": "Largeur du caisson de tiroir",
+  "boxHeight": "Hauteur du caisson de tiroir",
+  "boxDepth": "Profondeur du caisson de tiroir",
+  "falseFrontWidth": "Largeur de la façade de tiroir",
+  "falseFrontHeight": "Hauteur de la façade de tiroir",
+  "bottom": "Montage sous le tiroir",
+  "side": "Montage latéral",
+  "center": "Montage central",
+  "noteShort": "Le tiroir est peu profond : vérifiez la longueur de la coulisse"
+}

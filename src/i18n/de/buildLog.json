@@ -1,0 +1,12 @@
+{
+  "title": "Bauprotokoll",
+  "addPlaceholder": "Baunotiz hinzufügen…",
+  "hint": "Strg/Cmd + Eingabe zum Speichern",
+  "add": "Notiz hinzufügen",
+  "edit": "Eintrag bearbeiten",
+  "save": "Notiz speichern",
+  "cancel": "Bearbeitung abbrechen",
+  "empty": "Noch keine Notizen. Protokolliere Arbeitsschritte, Anpassungen oder Beobachtungen.",
+  "delete": "Eintrag löschen",
+  "clearAll": "Alle Einträge löschen"
+}

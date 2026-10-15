@@ -1,0 +1,15 @@
+{
+  "title": "Materialverbrauchsbericht",
+  "totalArea": "Gesamtfläche der Teile",
+  "sheetArea": "Gesamtfläche der Platten",
+  "wasteArea": "Verschnittfläche",
+  "wastePercent": "Verschnittquote",
+  "sheetsRequired": "Benötigte Platten",
+  "costPerSheet": "Kosten je Platte",
+  "totalCost": "Gesamtkosten",
+  "partCount": "Anzahl der Teile",
+  "volume": "Volumen",
+  "mostWasteful": "Größter Verschnitt",
+  "mostExpensive": "Am teuersten",
+  "noMaterials": "Keine Materialien im Bericht."
+}

@@ -1,0 +1,17 @@
+{
+  "title": "حاسبة أقدام الألواح",
+  "boardFeet": "قدم لوح",
+  "totalBoardFeet": "إجمالي أقدام الألواح",
+  "thickness": "السُّمك",
+  "width": "العرض",
+  "length": "الطول",
+  "quantity": "الكمية",
+  "useNominal": "استخدام الأبعاد الاسمية",
+  "species": "نوع الخشب",
+  "costPerBf": "التكلفة لكل قدم لوح",
+  "estimatedCost": "التكلفة التقديرية",
+  "volume": "الحجم",
+  "weight": "الوزن التقديري",
+  "linearFeet": "الأقدام الطولية",
+  "nominalToActual": "من الاسمي إلى الفعلي"
+}

@@ -1,0 +1,14 @@
+{
+  "saved": "Configuration saved",
+  "loaded": "Configuration loaded",
+  "deleted": "Configuration deleted",
+  "exported": "JSON exported",
+  "imported": "Configuration imported",
+  "invalidFile": "Invalid configuration file",
+  "dxfExported": "DXF file downloaded",
+  "gcodeExported": "G-code file downloaded",
+  "bomExported": "BOM CSV downloaded",
+  "hardwareExported": "Hardware CSV downloaded",
+  "linkCopied": "Shareable link copied to clipboard",
+  "linkCopyFailed": "Could not copy link — please copy the URL from the address bar"
+}

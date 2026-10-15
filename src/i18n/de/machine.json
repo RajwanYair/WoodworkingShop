@@ -1,0 +1,12 @@
+{
+  "title": "Maschinenprofil",
+  "selectProfile": "Maschinenprofil auswählen",
+  "firmware": "Firmware",
+  "baudRate": "Baudrate",
+  "feedRate": "Vorschub (mm/min)",
+  "plungeRate": "Eintauchvorschub (mm/min)",
+  "spindleRpm": "Spindeldrehzahl (U/min)",
+  "passDepth": "Zustelltiefe pro Durchgang (mm)",
+  "toolDiameter": "Werkzeugdurchmesser (mm)",
+  "workHolding": "Werkstückspannung"
+}

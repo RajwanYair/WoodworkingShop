@@ -1,0 +1,23 @@
+{
+  "title": "שיתוף פרויקט",
+  "createLink": "צור קישור שיתוף",
+  "label": "תווית קישור",
+  "permission": "הרשאה",
+  "viewOnly": "צפייה בלבד",
+  "viewExport": "צפייה וייצוא",
+  "full": "גישה מלאה",
+  "expiration": "תפוגה",
+  "hours": "שעות",
+  "days": "ימים",
+  "never": "לעולם לא",
+  "revoke": "בטל",
+  "renew": "חדש",
+  "copyLink": "העתק קישור",
+  "linkCopied": "הקישור הועתק ללוח.",
+  "viewCount": "צפיות",
+  "lastAccessed": "גישה אחרונה",
+  "expired": "פג תוקף",
+  "revoked": "בוטל",
+  "active": "פעיל",
+  "noLinks": "אין קישורי שיתוף עדיין."
+}

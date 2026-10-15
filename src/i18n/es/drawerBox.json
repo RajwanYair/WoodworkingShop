@@ -1,0 +1,18 @@
+{
+  "title": "Calculadora de medidas del cajón",
+  "openingWidth": "Ancho de la abertura",
+  "openingHeight": "Alto de la abertura",
+  "openingDepth": "Fondo del armario",
+  "slideType": "Tipo de corredera",
+  "sideThickness": "Grosor del lateral",
+  "falseFrontThickness": "Grosor del frente del cajón",
+  "boxWidth": "Ancho de la caja",
+  "boxHeight": "Alto de la caja",
+  "boxDepth": "Fondo de la caja",
+  "falseFrontWidth": "Ancho del frente del cajón",
+  "falseFrontHeight": "Alto del frente del cajón",
+  "bottom": "Montaje inferior",
+  "side": "Montaje lateral",
+  "center": "Montaje central",
+  "noteShort": "La caja es poco profunda: comprueba la longitud de la corredera"
+}

@@ -1,0 +1,15 @@
+{
+  "title": "Importer un catalogue communautaire",
+  "urlLabel": "URL du catalogue",
+  "urlPlaceholder": "https://example.com/catalog.json",
+  "importButton": "Importer",
+  "importing": "Importation en cours…",
+  "previewTitle": "{{count}} matériau trouvé",
+  "previewTitle_other": "{{count}} matériaux trouvés",
+  "addSelected": "Ajouter la sélection à mes matériaux",
+  "added": "{{count}} matériau ajouté",
+  "added_other": "{{count}} matériaux ajoutés",
+  "alreadyExists": "Déjà présent dans votre bibliothèque",
+  "errorFetch": "Échec du chargement du catalogue : {{message}}",
+  "noMaterials": "Le catalogue est vide."
+}

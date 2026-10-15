@@ -1,0 +1,15 @@
+{
+  "title": "حاسبة الثقب الإرشادي",
+  "screwGauge": "مقاس البرغي",
+  "screwLength": "طول البرغي",
+  "woodHardness": "صلابة الخشب",
+  "pilotHoleDiameter": "قطر الثقب الإرشادي",
+  "clearanceHole": "قطر ثقب الخلوص",
+  "countersinkDiameter": "قطر ثقب التخويش",
+  "countersinkDepth": "عمق التخويش",
+  "pilotDepth": "عمق الثقب الإرشادي",
+  "softwood": "خشب لين",
+  "hardwood": "خشب صلب",
+  "plywood": "خشب رقائقي",
+  "mdf": "ألواح MDF"
+}

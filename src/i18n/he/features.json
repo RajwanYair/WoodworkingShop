@@ -1,0 +1,10 @@
+{
+  "title": "דגלי תכונות",
+  "enabled": "מופעל",
+  "disabled": "מושבת",
+  "priority": "עדיפות",
+  "bundleSize": "גודל חבילה",
+  "chunks": "קטעים",
+  "loadOrder": "סדר טעינה",
+  "totalImpact": "השפעת חבילה כוללת"
+}

@@ -1,6 +1,6 @@
 # WoodworkingShop — GitHub Copilot Instructions
 
-> **Current release: v5.36.0**; next: v5.37.0 (Phase 82). Active sprint/status: [AGENTS.md](../AGENTS.md); archived work: [docs/SPRINT-HISTORY.md](../docs/SPRINT-HISTORY.md). Until the owning Phase 82-85 sprint runs, keep the layout below; do not create `src/app/`, `src/features/`, `src/ui/` or `src/platform/` early.
+> **Current release: v5.36.0**; next: v5.37.0 (Phase 82). Active sprint/status: [AGENTS.md](../AGENTS.md); archived work: [docs/SPRINT-HISTORY.md](../docs/SPRINT-HISTORY.md). Sprint 430 owns `src/app/` and `src/features/`; do not recreate `src/components/`.
 
 ## Stack
 
@@ -10,8 +10,8 @@ React 19, TypeScript 7.0 (strict; TypeScript 6 API alias retained for tooling), 
 
 - `src/engine/`: pure TypeScript; no React or side effects. Engine tests use shared factories, never the store or React.
 - `src/store/`: Zustand store slices; use `getState().action()` outside React.
-- `src/components/`: feature-grouped React UI. Each `.tsx` exports React components only; move helpers/constants to sibling `.ts` files.
-- `src/utils/`, `src/workers/`, `src/i18n/`: exports/storage, `?worker` imports, and six locale JSON files. Unit tests use synchronous worker fallbacks.
+- `src/app/`, `src/features/`, `src/ui/`: shell, feature panels, and shared UI. Each `.tsx` exports React components only; move helpers/constants to sibling `.ts` files.
+- `src/utils/`, `src/workers/`, `src/i18n/`: exports/storage, `?worker` imports, and `src/i18n/{locale}/{namespace}.json`. Call sites stay `t('feature.key')`. Unit tests use synchronous worker fallbacks.
 - `tests/`: engine, store, utils, component, E2E and benchmark suites. Engine coverage is gated at 80%.
 - `.github/instructions/` contains path-scoped rules; follow the rules matching files you change.
 

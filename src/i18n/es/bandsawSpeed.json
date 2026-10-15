@@ -1,0 +1,18 @@
+{
+  "title": "Calculadora de velocidad de hoja de sierra de cinta",
+  "wheelDiameter": "Diámetro de la rueda",
+  "wheelRpm": "Velocidad de giro de la rueda (rpm)",
+  "material": "Material de la pieza",
+  "cutThickness": "Espesor de corte",
+  "bladeWidth": "Ancho de la hoja",
+  "toothType": "Tipo de dentado",
+  "bladeSfpm": "Velocidad lineal de la hoja (SFPM)",
+  "bladeMetersPerMin": "Velocidad de la hoja (m/min)",
+  "recommendedRange": "Rango recomendado",
+  "isOptimal": "Velocidad dentro del rango recomendado",
+  "recommendedTpi": "Dientes recomendados por pulgada (TPI)",
+  "feedRate": "Velocidad de avance",
+  "regular": "Dentado regular",
+  "skip": "Dentado de paso amplio",
+  "hook": "Dentado de gancho"
+}

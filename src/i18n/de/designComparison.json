@@ -1,0 +1,20 @@
+{
+  "title": "Konstruktionsvergleich",
+  "compare": "Konstruktionen vergleichen",
+  "designA": "Konstruktion A",
+  "designB": "Konstruktion B",
+  "winner": "Sieger",
+  "tie": "Unentschieden",
+  "criteria": "Kriterien",
+  "score": "Punktzahl",
+  "delta": "Differenz",
+  "materialCost": "Materialkosten",
+  "materialArea": "Materialfläche",
+  "partCount": "Anzahl der Bauteile",
+  "cutComplexity": "Schnittkomplexität",
+  "wastePercent": "Verschnittquote",
+  "assemblySteps": "Montageschritte",
+  "structuralScore": "Stabilitätswert",
+  "radarChart": "Punkteradar",
+  "summary": "Vergleichszusammenfassung"
+}

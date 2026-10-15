@@ -1,0 +1,12 @@
+{
+  "copeDepth": "Hohlkehlschnitttiefe",
+  "bladeDiameter": "Sägeblattdurchmesser",
+  "bladeKerf": "Schnittfugenbreite des Sägeblatts",
+  "copeWidth": "Hohlkehlenschnittbreite",
+  "fenceAngle": "Anschlagwinkel",
+  "maxPassDepth": "Maximale Tiefe pro Durchgang",
+  "title": "Hohlkehlenschnitt (Tischkreissäge)",
+  "passCount": "Anzahl der Durchgänge",
+  "depthPerPass": "Tiefe pro Durchgang",
+  "bladeHeight": "Endgültige Sägeblatthöhe"
+}

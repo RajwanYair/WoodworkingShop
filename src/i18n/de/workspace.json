@@ -1,0 +1,12 @@
+{
+  "title": "Mehrprojekt-Arbeitsbereich",
+  "newProject": "Neues Projekt",
+  "rename": "Umbenennen",
+  "remove": "Projekt entfernen",
+  "addTab": "Tab hinzufügen",
+  "noProjects": "Keine Projekte in diesem Arbeitsbereich",
+  "sharedMaterial": "Geteiltes Material",
+  "importWorkspace": "Arbeitsbereich importieren",
+  "exportWorkspace": "Arbeitsbereich exportieren",
+  "activeProject": "Aktives Projekt"
+}

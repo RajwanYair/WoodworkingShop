@@ -36,8 +36,10 @@ const value = useCabinetStore.getState().someField;
 
 ## Undo/redo
 
-- The main store in `cabinet-store.ts` has undo/redo middleware
-- Store slices that should participate in history must be registered in the temporal middleware config
+- Cabinet undo/redo lives in `slices/cabinetsSlice.ts` and `slices/cabinetHistory.ts`
+- History stores structural patches, not full cabinet snapshots, and is capped at 50 steps
+- Group slider drags with `beginHistoryGroup` / `endHistoryGroup` so they remain one undo step
+- Do not put catalog, hardware, stock, cost-variance, room, or toast edits on the cabinet history stack
 
 ## No side effects
 

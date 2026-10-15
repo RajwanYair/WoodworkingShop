@@ -1,0 +1,8 @@
+{
+  "title": "Etikettenbogen für Teile",
+  "noParts": "Keine Teile – konfiguriere zuerst einen Schrank.",
+  "expandQty": "Teile mit Mehrfachmenge aufteilen (ein Etikett pro Stück)",
+  "print": "Etiketten drucken",
+  "printTitle": "Teileetiketten",
+  "gridAriaLabel": "Karten mit Teileetiketten"
+}

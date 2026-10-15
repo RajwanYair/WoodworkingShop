@@ -1,17 +1,13 @@
 /**
- * DXF Export Web Worker (v3.22.0)
- *
- * Accepts: DxfWorkerInput
- * Responds: DxfWorkerOutput
- *
- * Running DXF generation off the main thread prevents UI jank when exporting
- * large multi-sheet cut lists. Supports two modes:
- *   - 'single': generate DXF for one specific sheet
- *   - 'all': generate combined DXF for all sheets
+ * DXF Export Web Worker.
+ * Comlink `run()` returns DXF bytes. SharedArrayBuffer is used only when the
+ * caller supplies one allocated under cross-origin isolation.
  */
 
+import * as Comlink from 'comlink';
 import { cutSheetToDxf } from '../utils/dxf-export';
 import type { CutSheet } from '../engine/core/types';
+import { WORKER_INPUT_SCHEMA_VERSION, packText, type PackedText, type WorkerProgress } from './text-payload';
 
 export interface DxfWorkerInput {
   mode: 'single' | 'all';
@@ -21,11 +17,10 @@ export interface DxfWorkerInput {
   projectName: string;
 }
 
-export interface DxfWorkerOutput {
-  type: 'done' | 'error';
-  dxf?: string;
-  filename?: string;
-  errorMessage?: string;
+interface ExportChannel {
+  inputSchemaVersion: number;
+  sharedBuffer?: SharedArrayBuffer;
+  reportProgress?: (progress: WorkerProgress) => void;
 }
 
 const SHEET_SPACING = 100; // mm gap between sheets in combined DXF
@@ -134,26 +129,32 @@ function addLabel(
   );
 }
 
-self.onmessage = (e: MessageEvent<DxfWorkerInput>) => {
-  const { mode, sheets, sheetIndex, projectName } = e.data;
-  try {
-    if (mode === 'single') {
-      const idx = sheetIndex ?? 0;
-      const sheet = sheets[idx];
-      if (!sheet) throw new Error(`Sheet index ${idx} out of range`);
-      const dxf = cutSheetToDxf(sheet);
-      const mat = sheet.material.replace(/\W/g, '-');
-      const filename = `${projectName}-sheet-${idx + 1}-${mat}.dxf`;
-      self.postMessage({ type: 'done', dxf, filename } satisfies DxfWorkerOutput);
-    } else {
-      const dxf = buildCombinedDxf(sheets);
-      const filename = `${projectName}-cut-sheets-all.dxf`;
-      self.postMessage({ type: 'done', dxf, filename } satisfies DxfWorkerOutput);
-    }
-  } catch (err) {
-    self.postMessage({
-      type: 'error',
-      errorMessage: err instanceof Error ? err.message : String(err),
-    } satisfies DxfWorkerOutput);
+function buildDxf(input: DxfWorkerInput): { dxf: string; filename: string } {
+  if (input.mode === 'single') {
+    const idx = input.sheetIndex ?? 0;
+    const sheet = input.sheets[idx];
+    if (!sheet) throw new Error(`Sheet index ${idx} out of range`);
+    const mat = sheet.material.replace(/\W/g, '-');
+    return {
+      dxf: cutSheetToDxf(sheet),
+      filename: `${input.projectName}-sheet-${idx + 1}-${mat}.dxf`,
+    };
   }
-};
+  return {
+    dxf: buildCombinedDxf(input.sheets),
+    filename: `${input.projectName}-cut-sheets-all.dxf`,
+  };
+}
+
+function run(input: DxfWorkerInput, channel?: ExportChannel): PackedText {
+  if (channel && channel.inputSchemaVersion !== WORKER_INPUT_SCHEMA_VERSION) {
+    throw new Error(`Unsupported worker input schema ${channel.inputSchemaVersion}`);
+  }
+  channel?.reportProgress?.({ jobId: 'dxf', completed: 0, total: 1 });
+  const { dxf, filename } = buildDxf(input);
+  channel?.reportProgress?.({ jobId: 'dxf', completed: 1, total: 1 });
+  const packed = packText(dxf, channel?.sharedBuffer, filename);
+  return packed.bytes ? Comlink.transfer(packed, [packed.bytes.buffer]) : packed;
+}
+
+Comlink.expose({ run });

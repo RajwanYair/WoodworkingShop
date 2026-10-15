@@ -1,0 +1,15 @@
+{
+  "title": "Kostenübersicht",
+  "category": "Kategorie",
+  "amount": "Betrag",
+  "share": "Anteil",
+  "total": "Gesamt",
+  "materials": "Materialien",
+  "edgeBanding": "Kantenumleimung",
+  "hardware": "Beschläge",
+  "waste": "Verschnittzuschlag",
+  "finish": "Oberfläche / Lack",
+  "labour": "Arbeitskosten",
+  "exportCsv": "CSV exportieren",
+  "tableAriaLabel": "Kostenaufschlüsselung"
+}

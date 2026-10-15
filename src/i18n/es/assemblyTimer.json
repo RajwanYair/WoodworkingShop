@@ -1,0 +1,8 @@
+{
+  "title": "Estimación del tiempo de montaje",
+  "step": "Paso",
+  "count": "Operaciones",
+  "time": "Tiempo estimado",
+  "totalTime": "Tiempo total estimado",
+  "noSteps": "No hay pasos de montaje para la configuración actual"
+}

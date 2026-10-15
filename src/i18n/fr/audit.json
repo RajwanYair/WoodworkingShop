@@ -1,0 +1,13 @@
+{
+  "title": "Journal d'audit",
+  "noEvents": "Aucun événement d'audit enregistré",
+  "eventCount": "{{count}} événement",
+  "eventCount_other": "{{count}} événements",
+  "configChange": "Configuration modifiée",
+  "export": "Exporté",
+  "history": "Historique",
+  "diffTitle": "Différence de versions",
+  "noDiff": "Les configurations sont identiques",
+  "changeCount": "{{count}} champ modifié",
+  "changeCount_other": "{{count}} champs modifiés"
+}

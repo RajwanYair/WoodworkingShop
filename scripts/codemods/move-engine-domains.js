@@ -337,14 +337,20 @@ function collectImportReferences(sourceText, filePath) {
   return references;
 }
 
+function sourceExtension(filePath) {
+  const extension = path.posix.extname(filePath);
+  return SOURCE_EXTENSIONS.includes(extension) ? extension : '';
+}
+
 function formatImportSpecifier(importer, target, originalSpecifier) {
   const queryStart = originalSpecifier.search(/[?#]/);
   const suffix = queryStart < 0 ? '' : originalSpecifier.slice(queryStart);
   const originalPath = queryStart < 0 ? originalSpecifier : originalSpecifier.slice(0, queryStart);
-  const originalExtension = path.posix.extname(originalPath);
-  const targetPath = originalExtension
-    ? `${target.slice(0, -path.posix.extname(target).length)}${originalExtension}`
-    : target.slice(0, -path.posix.extname(target).length);
+  const originalExtension = sourceExtension(originalPath);
+  const targetExtension = sourceExtension(target);
+  // Subtract from length. slice(0, -0) is slice(0, 0) and would drop a JSON path with no source extension.
+  const extensionlessTarget = target.slice(0, target.length - targetExtension.length);
+  const targetPath = originalExtension ? `${extensionlessTarget}${originalExtension}` : extensionlessTarget;
   if (originalPath.startsWith('@/') && target.startsWith('src/')) {
     return `@/${targetPath.slice('src/'.length)}${suffix}`;
   }
@@ -417,7 +423,7 @@ function rollbackMovePlan(repoRoot, rewrittenFiles, removedSources, createdTarge
   for (const filePath of createdTargets) fs.rmSync(path.join(repoRoot, filePath), { force: true });
 }
 
-function applyMovePlan(repoRoot, movePlan, rewritten) {
+export function applyMovePlan(repoRoot, movePlan, rewritten) {
   const createdTargets = [];
   const rewrittenFiles = [];
   const removedSources = [];

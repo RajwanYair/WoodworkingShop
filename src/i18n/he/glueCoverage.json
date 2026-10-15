@@ -1,0 +1,19 @@
+{
+  "title": "מחשבון כיסוי דבק עץ",
+  "surfaceArea": "שטח דבקה",
+  "glueType": "סוג דבק",
+  "jointCount": "מספר חיבורים",
+  "netVolume": "נפח נטו דרוש",
+  "recommendedVolume": "נפח מומלץ (+15% בזבוז)",
+  "openTime": "זמן פתוח",
+  "clampingTime": "זמן אחיזה",
+  "cureTime": "זמן ייבוש מלא",
+  "spreadRate": "קצב פיזור",
+  "types": {
+    "pva": "דבק PVA (לבן / צהוב)",
+    "polyurethane": "פוליאורתן",
+    "epoxy": "אפוקסי",
+    "hide": "דבק עור",
+    "ca": "דבק CA (ציאנואקרילאט)"
+  }
+}

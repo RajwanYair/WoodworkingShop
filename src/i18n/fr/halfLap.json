@@ -1,0 +1,19 @@
+{
+  "title": "Assemblage à mi-bois",
+  "lapType": "Type d’assemblage",
+  "board1Thickness": "Épaisseur de la planche 1",
+  "board1Width": "Largeur de la planche 1",
+  "board2Thickness": "Épaisseur de la planche 2",
+  "board2Width": "Largeur de la planche 2",
+  "board1NotchDepth": "Profondeur d’entaille de la planche 1",
+  "board1NotchWidth": "Largeur d’entaille de la planche 1",
+  "board2NotchDepth": "Profondeur d’entaille de la planche 2",
+  "board2NotchWidth": "Largeur d’entaille de la planche 2",
+  "totalGlueArea": "Surface totale de collage",
+  "finishedThickness": "Épaisseur finale",
+  "lapTypes": {
+    "end_lap": "Mi-bois en bout",
+    "t_lap": "Assemblage à mi-bois en T",
+    "cross_lap": "Assemblage à mi-bois croisé"
+  }
+}

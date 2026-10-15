@@ -1,0 +1,8 @@
+{
+  "title": "Zuschnitt-Checkliste",
+  "progress": "{{checked}} von {{total}} Teilen zugeschnitten",
+  "progressAriaLabel": "{{percent}} % der Teile zugeschnitten",
+  "complete": "Alles zugeschnitten!",
+  "clearAll": "Checkliste zurücksetzen",
+  "empty": "Noch keine Teile zum Zuschneiden — konfiguriere zuerst einen Schrank."
+}

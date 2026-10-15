@@ -1,0 +1,17 @@
+{
+  "title": "شفط الغبار",
+  "estimator": "مقدّر النظام",
+  "machine": "الآلة",
+  "addMachine": "إضافة آلة",
+  "portDiameter": "قطر منفذ الشفط",
+  "ductRun": "طول مجرى الهواء",
+  "elbows": "الأكواع",
+  "cfmRequired": "معدل تدفق الهواء المطلوب (CFM)",
+  "staticPressure": "الضغط الساكن",
+  "trunkDiameter": "قطر القناة الرئيسية",
+  "recommendedHp": "القدرة الحصانية الموصى بها",
+  "adequate": "النظام مناسب",
+  "inadequate": "حجم النظام غير كافٍ",
+  "warnings": "تحذيرات",
+  "noMachines": "لم تتم إضافة أي آلات."
+}

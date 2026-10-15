@@ -1,0 +1,8 @@
+{
+  "title": "רשימת בדיקת חיתוך חלקים",
+  "progress": "חתכו {{checked}} מתוך {{total}} חלקים",
+  "progressAriaLabel": "{{percent}}% מהחלקים נחתכו",
+  "complete": "הכל נחתך!",
+  "clearAll": "אפס רשימה",
+  "empty": "אין חלקים לחתוך עדיין — קדם הגדר ארון."
+}

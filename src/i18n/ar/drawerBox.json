@@ -1,0 +1,18 @@
+{
+  "title": "حاسبة أبعاد صندوق الدرج",
+  "openingWidth": "عرض الفتحة",
+  "openingHeight": "ارتفاع الفتحة",
+  "openingDepth": "عمق الخزانة",
+  "slideType": "نوع مجرى الدرج",
+  "sideThickness": "سماكة الجانب",
+  "falseFrontThickness": "سماكة واجهة الدرج",
+  "boxWidth": "عرض الصندوق",
+  "boxHeight": "ارتفاع الصندوق",
+  "boxDepth": "عمق الصندوق",
+  "falseFrontWidth": "عرض واجهة الدرج",
+  "falseFrontHeight": "ارتفاع واجهة الدرج",
+  "bottom": "تركيب سفلي",
+  "side": "تركيب جانبي",
+  "center": "تركيب مركزي",
+  "noteShort": "عمق الصندوق قصير — تحقّق من طول المجرى"
+}

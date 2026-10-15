@@ -1,0 +1,13 @@
+{
+  "title": "Envoyer le G-code via USB / port série",
+  "connect": "Connecter à la machine",
+  "disconnect": "Déconnecter",
+  "notSupported": "L'API Web Serial n'est pas prise en charge par ce navigateur. Utilisez Chrome 89+ ou Edge 89+.",
+  "noSheets": "Lancez d'abord l'optimisation de découpe pour générer le G-code.",
+  "streaming": "Envoi de la ligne {{current}} sur {{total}}…",
+  "pause": "Mettre l'envoi en pause",
+  "resume": "Reprendre l'envoi",
+  "paused": "En pause à la ligne {{current}} sur {{total}}.",
+  "done": "Terminé : les {{total}} lignes ont été envoyées.",
+  "error": "Erreur de connexion : {{message}}"
+}

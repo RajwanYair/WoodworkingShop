@@ -1,0 +1,17 @@
+{
+  "title": "Bienvenue dans le Planificateur d'Armoires !",
+  "subtitle": "Concevez, optimisez et construisez vos meubles en 3 étapes simples.",
+  "getStarted": "Commencer",
+  "help": "Aide",
+  "dismissBackdrop": "Fermer l'introduction",
+  "wizardStep1Title": "Configurer votre meuble",
+  "wizardStep1Desc": "Choisissez le type de meuble, les dimensions, les matériaux, les portes, les tiroirs et les étagères adaptés à votre espace.",
+  "wizardStep2Title": "Optimiser les plans de découpe",
+  "wizardStep2Desc": "L’optimiseur place chaque pièce sur vos panneaux, réduit les chutes et crée un plan imprimable.",
+  "wizardStep3Title": "Exporter et construire",
+  "wizardStep3Desc": "Téléchargez un plan PDF, un fichier DXF pour CNC, du G-code pour les machines ou une nomenclature CSV, puis suivez le guide de montage.",
+  "stepOf": "Étape {{step}} sur {{total}}",
+  "next": "Suivant",
+  "back": "Retour",
+  "skip": "Passer"
+}

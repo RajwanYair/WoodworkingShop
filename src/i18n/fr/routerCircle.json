@@ -1,0 +1,15 @@
+{
+  "title": "Calculateur de gabarit circulaire pour défonceuse",
+  "targetDiameter": "Diamètre souhaité",
+  "bitDiameter": "Diamètre de la fraise",
+  "pivotHoleDiameter": "Diamètre du trou de pivot",
+  "cutMode": "Mode de coupe",
+  "armLength": "Longueur du bras (du pivot au centre de la fraise)",
+  "circumference": "Circonférence",
+  "area": "Aire",
+  "pivotOffset": "Décalage du pivot",
+  "modes": {
+    "disc": "Disque (coupe extérieure)",
+    "hole": "Trou (coupe intérieure)"
+  }
+}

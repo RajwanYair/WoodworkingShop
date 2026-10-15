@@ -1,0 +1,17 @@
+{
+  "title": "Extracción de polvo",
+  "estimator": "Calculadora del sistema",
+  "machine": "Máquina",
+  "addMachine": "Añadir máquina",
+  "portDiameter": "Diámetro de la toma",
+  "ductRun": "Tramo de conducto",
+  "elbows": "Codos",
+  "cfmRequired": "Caudal requerido (CFM)",
+  "staticPressure": "Presión estática",
+  "trunkDiameter": "Diámetro del conducto principal",
+  "recommendedHp": "Potencia recomendada (HP)",
+  "adequate": "Sistema adecuado",
+  "inadequate": "Sistema insuficiente",
+  "warnings": "Advertencias",
+  "noMachines": "No se han añadido máquinas."
+}

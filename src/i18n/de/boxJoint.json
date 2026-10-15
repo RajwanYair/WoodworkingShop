@@ -1,0 +1,11 @@
+{
+  "title": "Rechner für Fingerzinkenverbindungen",
+  "boardWidth": "Brettbreite",
+  "fingerWidth": "Gewünschte Fingerbreite",
+  "depth": "Verbindungstiefe (Brettstärke)",
+  "fingerCount": "Anzahl der Finger",
+  "actualFingerWidth": "Tatsächliche Fingerbreite",
+  "socketCount": "Anzahl der Schlitze (Gegenbrett)",
+  "glueSurface": "Leimfläche",
+  "edgeWaste": "Randverschnitt (je Seite)"
+}

@@ -1,0 +1,17 @@
+{
+  "title": "Historique des versions",
+  "commit": "Enregistrer une version",
+  "branch": "Branche",
+  "branches": "Liste des branches",
+  "createBranch": "Créer une branche",
+  "switchBranch": "Changer de branche",
+  "merge": "Fusionner",
+  "diff": "Comparer les versions",
+  "tag": "Étiquette",
+  "log": "Journal des modifications",
+  "message": "Message de version",
+  "noHistory": "Aucun historique de versions pour le moment.",
+  "mergeSuccess": "La fusion a été effectuée avec succès.",
+  "mergeConflict": "La fusion comporte des conflits à résoudre.",
+  "branchCreated": "Branche créée."
+}

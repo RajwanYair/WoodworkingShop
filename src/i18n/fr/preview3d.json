@@ -1,0 +1,13 @@
+{
+  "title": "Aperçu 3D interactif",
+  "resetCamera": "Réinitialiser la caméra",
+  "zoomIn": "Zoomer",
+  "zoomOut": "Dézoomer",
+  "explode": "Vue éclatée",
+  "wireframe": "Afficher le maillage filaire",
+  "edgeBanding": "Afficher les bandes de chant",
+  "rendererTier": "Niveau du moteur de rendu : {{tier}}",
+  "noGpu": "WebGPU indisponible ; la scène est prête",
+  "meshCount": "{{count}} pièce",
+  "meshCount_other": "{{count}} pièces"
+}

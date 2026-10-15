@@ -1,0 +1,16 @@
+{
+  "title": "حاسبة إطار الواجهة",
+  "cabinetWidth": "عرض الخزانة",
+  "cabinetHeight": "ارتفاع الخزانة",
+  "stileWidth": "عرض القائم",
+  "railWidth": "عرض العارضة",
+  "openingCount": "عدد الفتحات",
+  "openingWidth": "عرض الفتحة",
+  "openingHeight": "ارتفاع الفتحة",
+  "stileLength": "طول القائم",
+  "topRailLength": "طول العارضة العلوية",
+  "bottomRailLength": "طول العارضة السفلية",
+  "middleRailLength": "طول العارضة الوسطى",
+  "totalGlueSurface": "إجمالي مساحة اللصق",
+  "partList": "قائمة القطع"
+}

@@ -1,0 +1,15 @@
+{
+  "title": "Stair Stringer Calculator",
+  "totalRise": "Total Rise",
+  "treadDepth": "Tread Depth",
+  "idealRiser": "Ideal Riser Height",
+  "riserCount": "Riser Count",
+  "actualRiser": "Actual Riser Height",
+  "treadCount": "Tread Count",
+  "totalRun": "Total Run",
+  "stringerLength": "Stringer Length",
+  "stringerAngle": "Stringer Angle",
+  "ircPass": "Passes IRC 2021 riser and tread limits",
+  "riserTooTall": "Riser height exceeds IRC maximum 7¾\" (196.85 mm)",
+  "treadTooShallow": "Tread depth below IRC minimum 10\" (254 mm)"
+}

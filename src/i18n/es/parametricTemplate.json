@@ -1,0 +1,23 @@
+{
+  "title": "Plantillas paramétricas",
+  "create": "Crear plantilla",
+  "edit": "Editar plantilla",
+  "instantiate": "Generar a partir de una plantilla",
+  "parameters": "Parámetros",
+  "constraints": "Restricciones",
+  "rules": "Reglas",
+  "computed": "Campos calculados",
+  "preview": "Vista previa",
+  "min": "Mínimo",
+  "max": "Máximo",
+  "step": "Incremento",
+  "default": "Valor predeterminado",
+  "unit": "Unidad de medida",
+  "condition": "Condición",
+  "expression": "Fórmula",
+  "validate": "Validar",
+  "valid": "La plantilla es válida.",
+  "invalid": "La plantilla contiene errores.",
+  "category": "Categoría",
+  "version": "Versión"
+}

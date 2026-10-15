@@ -1,0 +1,13 @@
+{
+  "customHeading": "مواضع الرفوف المخصصة (مم من الأسفل)",
+  "resetEqual": "إعادة تعيين التباعد المتساوي",
+  "position": "رف {{n}}",
+  "internalHeight": "الارتفاع الداخلي: {{h}} مم",
+  "deflectionWarning": "امتداد الرف {{span}} مم: الانحناء التقديري {{sag}} مم يتجاوز الحد L/360 ({{limit}} مم). فكر في لوح أسمك أو دعامة وسطى أو امتداد أقصر.",
+  "deflectionSafe": "امتداد الرف مناسب — الانحناء التقديري {{sag}} مم (ضمن حد L/360 {{limit}} مم)",
+  "deflectionDanger": "تنبيه انحناء: {{sag}} مم يتجاوز L/240 — مطلوب دعم هيكلي أو لوح أسمك لهذا الامتداد {{span}} مم",
+  "deflectionRatingSafe": "الانحناء مناسب ({{sag}} مم)",
+  "deflectionRatingWarning": "تحذير انحناء ({{sag}} مم)",
+  "deflectionRatingDanger": "خطر انحناء ({{sag}} مم)",
+  "loadCapacity": "حتى {{kg}} كغ"
+}

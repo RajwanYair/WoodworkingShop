@@ -1,0 +1,17 @@
+{
+  "title": "Calculadora de pies tablares",
+  "boardFeet": "Pie tablar",
+  "totalBoardFeet": "Total de pies tablares",
+  "thickness": "Grosor",
+  "width": "Ancho",
+  "length": "Largo",
+  "quantity": "Cantidad",
+  "useNominal": "Usar dimensiones nominales",
+  "species": "Especie de madera",
+  "costPerBf": "Costo por pie tablar",
+  "estimatedCost": "Costo estimado",
+  "volume": "Volumen",
+  "weight": "Peso estimado",
+  "linearFeet": "Pies lineales",
+  "nominalToActual": "Nominal → real"
+}

@@ -1,0 +1,11 @@
+{
+  "title": "Lista de piezas",
+  "id": "Código",
+  "name": "Nombre de pieza",
+  "qty": "Cant.",
+  "material": "Material utilizado",
+  "length": "Largo",
+  "width": "Ancho",
+  "thickness": "Grueso",
+  "edge": "Canto"
+}

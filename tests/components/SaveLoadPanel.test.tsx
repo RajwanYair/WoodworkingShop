@@ -1,12 +1,12 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { SaveLoadPanel } from '../../src/components/configurator/SaveLoadPanel';
+import { SaveLoadPanel } from '../../src/features/configurator/SaveLoadPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { deleteSavedConfig, loadSavedConfigs, saveConfig, type SavedConfig } from '../../src/utils/local-storage';
 import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 import * as projectStorage from '../../src/utils/project-storage';
-import * as saveLoadJson from '../../src/components/configurator/save-load-json';
+import * as saveLoadJson from '../../src/features/configurator/save-load-json';
 import { useToastStore } from '../../src/store/toast-store';
 
 vi.mock('../../src/utils/local-storage', () => ({
@@ -87,6 +87,8 @@ describe('SaveLoadPanel', () => {
   it('saves with a dimensions-based name when the name field is blank', async () => {
     const user = userEvent.setup();
     render(<SaveLoadPanel />);
+    await user.click(screen.getByRole('button', { name: 'My Saved Cabinets' }));
+    expect(screen.getByText('No saved configurations')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Save' }));
 
     const defaultName = `${DEFAULT_CONFIG.width}×${DEFAULT_CONFIG.height}×${DEFAULT_CONFIG.depth}`;

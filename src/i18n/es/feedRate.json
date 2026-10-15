@@ -1,0 +1,20 @@
+{
+  "title": "Calculadora de avance",
+  "cutterDiameter": "Diámetro de la herramienta (mm)",
+  "flutes": "Número de filos",
+  "material": "Material de trabajo",
+  "cutterType": "Tipo de herramienta de corte",
+  "depthOfCut": "Profundidad de corte (mm)",
+  "stepover": "Paso lateral (mm)",
+  "maxRpm": "Velocidad máxima del husillo (RPM)",
+  "spindleRpm": "Velocidad del husillo (RPM)",
+  "feedRateMmMin": "Velocidad de avance (mm/min)",
+  "chipLoad": "Carga de viruta (mm)",
+  "plungeRate": "Velocidad de penetración (mm/min)",
+  "mrr": "Tasa de arranque de material",
+  "rpmClamped": "Velocidad limitada al máximo",
+  "depthPerPass": "Profundidad por pasada",
+  "numberOfPasses": "Número de pasadas",
+  "roughing": "Desbaste",
+  "finishing": "Acabado"
+}

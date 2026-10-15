@@ -1,0 +1,18 @@
+{
+  "title": "Schubkastenmaß-Rechner",
+  "openingWidth": "Öffnungsbreite",
+  "openingHeight": "Öffnungshöhe",
+  "openingDepth": "Korpustiefe",
+  "slideType": "Auszugstyp",
+  "sideThickness": "Seitenstärke",
+  "falseFrontThickness": "Stärke der Schubladenblende",
+  "boxWidth": "Kastenbreite",
+  "boxHeight": "Kastenhöhe",
+  "boxDepth": "Kastentiefe",
+  "falseFrontWidth": "Breite der Schubladenblende",
+  "falseFrontHeight": "Höhe der Schubladenblende",
+  "bottom": "Unterflurmontage",
+  "side": "Seitenmontage",
+  "center": "Mittelmontage",
+  "noteShort": "Der Kasten ist zu kurz – Auszugslänge prüfen"
+}

@@ -1,0 +1,11 @@
+{
+  "title": "Exportación 3D",
+  "exportGltf": "Exportar glTF 2.0",
+  "exportIfc": "Exportar IFC 4.3",
+  "meshCount": "Mallas",
+  "nodeCount": "Nodos",
+  "entityCount": "Entidades",
+  "schemaVersion": "Versión del esquema",
+  "noData": "No hay piezas para exportar.",
+  "exportSize": "Tamaño estimado de exportación"
+}

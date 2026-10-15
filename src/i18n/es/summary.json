@@ -1,0 +1,13 @@
+{
+  "title": "Resumen del proyecto",
+  "sectionLabel": "Resumen del proyecto de múltiples armarios",
+  "totalCabinets": "Armarios",
+  "totalParts": "Total de piezas",
+  "totalSheets": "Tableros utilizados",
+  "overallYield": "Rendimiento general",
+  "avgSheetYield": "Rendimiento promedio",
+  "totalWaste": "Desperdicio total",
+  "grainConflicts": "Conflictos de veta",
+  "totalWeight": "Peso de los paneles",
+  "estimatedLabour": "Trabajo estimado"
+}

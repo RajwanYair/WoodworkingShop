@@ -1,0 +1,18 @@
+{
+  "title": "Flujo de trabajo con varias máquinas",
+  "distribute": "Distribuir trabajos",
+  "strategy": "Estrategia de distribución",
+  "leastLoaded": "Menor carga primero",
+  "fastestFirst": "Máquina más rápida primero",
+  "roundRobin": "Turnos rotativos",
+  "assigned": "Asignado",
+  "unassigned": "Sin asignar",
+  "dispatched": "Enviado",
+  "complete": "Completado",
+  "failed": "Fallido",
+  "progress": "Progreso",
+  "estimatedTime": "Tiempo total estimado",
+  "machineLoad": "Carga de la máquina",
+  "noCapable": "No hay ninguna máquina compatible disponible.",
+  "includeOffline": "Incluir máquinas desconectadas"
+}

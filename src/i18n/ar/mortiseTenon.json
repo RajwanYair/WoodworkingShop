@@ -1,0 +1,23 @@
+{
+  "title": "حاسبة وصلة النقر واللسان",
+  "description": "احسب أبعاد وصلة النقر واللسان من مقاس الخشب الخام",
+  "stockThickness": "سماكة الخشب الخام",
+  "stockWidth": "عرض الخشب الخام",
+  "jointType": "نوع الوصلة",
+  "through": "نافذ",
+  "blind": "مغلق",
+  "wedged": "مثبت بإسفين",
+  "stub": "قصير",
+  "tenonThickness": "سماكة اللسان",
+  "tenonWidth": "عرض اللسان",
+  "tenonLength": "طول اللسان",
+  "mortiseWidth": "عرض التجويف",
+  "mortiseHeight": "ارتفاع التجويف",
+  "mortiseDepth": "عمق التجويف",
+  "mortiseOffset": "إزاحة التجويف",
+  "haunchDepth": "عمق الكتف",
+  "shoulderSetback": "تراجع الكتف",
+  "recommendedChisel": "عرض الإزميل الموصى به",
+  "glueSurfaceArea": "مساحة سطح اللصق",
+  "thicknessRatio": "نسبة السماكة"
+}

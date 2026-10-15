@@ -1,0 +1,21 @@
+{
+  "title": "Oberflächenrechner",
+  "typeLabel": "Oberflächenbehandlung",
+  "primer": "Grundierung",
+  "stain": "Beize",
+  "paint": "Farbe",
+  "varnish": "Lack",
+  "oil": "Öl",
+  "lacquer": "Klarlack",
+  "coats": "Anzahl der Schichten",
+  "surfaceArea": "Gesamte Oberfläche",
+  "litresNeeded": "Benötigte Beschichtung",
+  "recommendedCans": "Empfohlene Gebindegrößen",
+  "totalCans": "insgesamt {{litres}} l",
+  "notePrimer": "Für bessere Haftung vor den Deckschichten grundieren.",
+  "noteStain": "Zwischen den Beizschichten leicht schleifen. Überschuss sofort abwischen.",
+  "notePaint": "Für Flächen eine Schaumstoffrolle, für Kanten und Details einen Pinsel verwenden.",
+  "noteVarnish": "Jede Lackschicht vollständig aushärten lassen, bevor sie angeschliffen wird.",
+  "noteOil": "Dänisches Öl dringt in die Holzmaserung ein; Überschuss nach 20 Minuten abwischen.",
+  "noteLacquer": "Klarlack in dünnen, gleichmäßigen Schichten und staubfreier Umgebung auftragen."
+}

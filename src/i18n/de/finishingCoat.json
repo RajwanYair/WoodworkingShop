@@ -1,0 +1,15 @@
+{
+  "title": "Rechner für Oberflächenbehandlung",
+  "surfaceArea": "Oberfläche",
+  "coatCount": "Anzahl der Anstriche",
+  "finishType": "Art der Oberflächenbehandlung",
+  "polyurethane": "Polyurethan",
+  "lacquer": "Lack",
+  "shellac": "Schellack",
+  "waterbased": "Wasserbasiert",
+  "oil": "Öl / dänisches Öl",
+  "volumeNeeded": "Benötigte Menge",
+  "dryTimeBetweenCoats": "Trocknungszeit zwischen den Anstrichen",
+  "totalDryTime": "Gesamte Trocknungszeit",
+  "coveragePerLitre": "Reichweite pro Liter"
+}

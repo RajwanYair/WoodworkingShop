@@ -1,0 +1,13 @@
+{
+  "title": "Rechner für Rahmen und Füllung",
+  "frameWidth": "Rahmenbreite",
+  "frameHeight": "Rahmenhöhe",
+  "railWidth": "Traversenbreite",
+  "stileWidth": "Rahmenschenkelbreite",
+  "grooveDepth": "Nuttiefe",
+  "panelFloat": "Füllungsspiel (je Seite)",
+  "panelWidth": "Füllungsbreite",
+  "panelHeight": "Füllungshöhe",
+  "expansionAllowance": "Dehnungszugabe",
+  "grooveWidth": "Nutbreite"
+}

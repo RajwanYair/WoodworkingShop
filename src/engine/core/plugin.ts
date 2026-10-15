@@ -1,6 +1,9 @@
 import type { CabinetConfig, Part, ValidationIssue, Result } from './types';
 import { ok, err } from './types';
+import type { CabinetPlannerPlugin } from './plugin-types';
 import { getActivePlugins, getRegistryEntries, registerPluginV2, unregisterPluginV2 } from './plugin-v2';
+
+export type { CabinetPlannerPlugin } from './plugin-types';
 
 export { pluginEventBus, PluginEventBus } from './plugin-events';
 export type { PluginEventMap, PluginEventName, PluginEventHandler } from './plugin-events';
@@ -185,47 +188,6 @@ export function getPluginContract(): PluginContract {
  * @deprecated Migrate to {@link CabinetPlannerPluginV2}; the v1 facade remains
  * supported through app v5.35.0 and is scheduled for removal in v5.36.0.
  */
-/** @deprecated Use {@link CabinetPlannerPluginV2}; the v1 adapter is retained through v5.35.x. */
-export interface CabinetPlannerPlugin {
-  /** Unique identifier (reverse-domain recommended: "com.example.myPlugin"). */
-  id: string;
-  /** Human-readable display name. */
-  name: string;
-  /** SemVer string of this plugin release. */
-  version: string;
-
-  /**
-   * Called after `generateParts()` has produced the initial part list.
-   * The plugin may return a modified copy; the original array must NOT be
-   * mutated. Return the same array reference to signal no change.
-   */
-  onPartsGenerated?: (parts: Part[], cfg: CabinetConfig) => Part[];
-
-  /**
-   * Called before a config change is committed to the store.
-   * May return a modified config; return the original object for no change.
-   */
-  onConfigChange?: (cfg: CabinetConfig) => CabinetConfig;
-
-  /**
-   * Phase 12 / Sprint 9 — Called after `validateConfig()` has run all
-   * built-in and custom rules. The plugin may add, remove, or modify
-   * validation issues. Return the same array reference to signal no change.
-   */
-  onValidate?: (issues: ValidationIssue[], cfg: CabinetConfig) => ValidationIssue[];
-
-  /**
-   * Phase 13 / Sprint 17 — Called after `cutSheetToGcode()` has assembled
-   * the raw G-code string for a single sheet. The plugin may rewrite the
-   * output to target a specific CNC controller dialect (Mach3, LinuxCNC,
-   * Fanuc, etc.). Return the modified string; return the same reference to
-   * signal no change.
-   *
-   * Stability: `experimental` — signature may change in v2.
-   */
-  onGcodeGenerated?: (raw: string) => string;
-}
-
 // ── Plugin registry ──────────────────────────────────────────────────────────
 
 /**

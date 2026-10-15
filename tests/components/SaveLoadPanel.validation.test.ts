@@ -4,7 +4,7 @@ import {
   buildProjectExport,
   isProjectExport,
   isValidConfig,
-} from '../../src/components/configurator/save-load-json';
+} from '../../src/features/configurator/save-load-json';
 import { cfg } from '../helpers';
 
 describe('SaveLoadPanel JSON guards', () => {

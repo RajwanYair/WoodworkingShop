@@ -1,0 +1,21 @@
+{
+  "title": "Stapelexport",
+  "create": "Stapel erstellen",
+  "start": "Export starten",
+  "cancel": "Stapel abbrechen",
+  "progress": "Fortschritt",
+  "completed": "Abgeschlossen",
+  "failed": "Fehlgeschlagen",
+  "pending": "Ausstehend",
+  "cancelled": "Abgebrochen",
+  "format": "Ausgabeformat",
+  "priority": "Priorität",
+  "high": "Hoch",
+  "normal": "Mittel",
+  "low": "Niedrig",
+  "manifest": "Exportübersicht",
+  "totalSize": "Gesamtgröße",
+  "duration": "Dauer",
+  "noItems": "Keine Exportelemente hinzugefügt.",
+  "batchComplete": "Stapelexport abgeschlossen."
+}

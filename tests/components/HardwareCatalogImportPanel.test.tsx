@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { HardwareCatalogImportPanel } from '../../src/components/configurator/HardwareCatalogImportPanel';
+import { HardwareCatalogImportPanel } from '../../src/features/configurator/HardwareCatalogImportPanel';
 import { HARDWARE_CATALOG_SCHEMA_VERSION, type HardwareItem } from '../../src/engine/hardware/hardware-catalog';
 import { useCustomHardwareStore } from '../../src/store/custom-hardware-store';
 
@@ -71,5 +71,13 @@ describe('HardwareCatalogImportPanel', () => {
 
     expect(await screen.findByRole('alert')).toHaveTextContent('Invalid hardware item at index 0');
     expect(useCustomHardwareStore.getState().items).toEqual([existingHardware]);
+  });
+
+  it('keeps the JSON import control visible when no custom hardware is stored', () => {
+    useCustomHardwareStore.setState({ items: [] });
+    render(<HardwareCatalogImportPanel />);
+
+    expect(screen.getByText('No custom hardware imported.')).toBeInTheDocument();
+    expect(screen.getByLabelText('Catalog JSON file')).toBeVisible();
   });
 });

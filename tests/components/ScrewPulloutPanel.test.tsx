@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { ScrewPulloutPanel } from '../../src/components/configurator/ScrewPulloutPanel';
+import { ScrewPulloutPanel } from '../../src/features/calculators/ScrewPulloutPanel';
 
 describe('ScrewPulloutPanel', () => {
   it('updates pull-out strength by wood density and validates screw diameter', async () => {

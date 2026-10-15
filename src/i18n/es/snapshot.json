@@ -1,0 +1,25 @@
+{
+  "title": "Instantáneas del proyecto",
+  "save": "Guardar instantánea",
+  "namePlaceholder": "Nombre de la instantánea…",
+  "restore": "Restaurar",
+  "delete": "Eliminar instantánea",
+  "empty": "Aún no se han guardado instantáneas.",
+  "startFirst": "Nombrar la primera instantánea",
+  "savedAt": "Guardado {{when}}",
+  "cabinetCount": "{{count}} armario",
+  "cabinetCount_other": "{{count}} armarios",
+  "compare": "Comparar",
+  "diff": {
+    "title": "Comparar instantáneas",
+    "before": "Antes",
+    "after": "Después",
+    "close": "Cerrar",
+    "selectTwo": "Seleccione dos instantáneas diferentes para comparar.",
+    "identical": "Estas instantáneas son idénticas — no se detectaron cambios.",
+    "cabinetsAdded": "{{count}} armario añadido",
+    "cabinetsAdded_other": "{{count}} armarios añadidos",
+    "cabinetsRemoved": "{{count}} armario eliminado",
+    "cabinetsRemoved_other": "{{count}} armarios eliminados"
+  }
+}

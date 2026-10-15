@@ -9,7 +9,7 @@
  */
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { ProjectSummaryPanel } from '../../src/components/optimizer/ProjectSummaryPanel';
+import { ProjectSummaryPanel } from '../../src/features/optimizer/ProjectSummaryPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 import type { OptimizationResult } from '../../src/engine/core/types';

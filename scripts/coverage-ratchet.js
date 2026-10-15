@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const repoRoot = process.cwd();
 const sourceRoot = path.join(repoRoot, 'src');
@@ -10,6 +11,18 @@ const reportPath = path.join(os.tmpdir(), 'WoodworkingShop', 'coverage', 'covera
 const componentReportPath = path.join(os.tmpdir(), 'WoodworkingShop', 'coverage-components', 'coverage-summary.json');
 const baselinePath = path.join(repoRoot, 'config', 'coverage-baseline.json');
 const areas = ['engine', 'utils', 'store', 'hooks', 'components'];
+export const COVERAGE_AREA_DIRECTORIES = {
+  engine: ['engine'],
+  utils: ['utils'],
+  store: ['store'],
+  hooks: ['hooks'],
+  components: ['app', 'features', 'ui'],
+};
+
+/** Historical coverage area for a source directory. `components` is the combined app, features, and ui floor. */
+export function coverageAreaForDirectory(directory) {
+  return areas.find((area) => COVERAGE_AREA_DIRECTORIES[area].includes(directory)) ?? null;
+}
 const metrics = ['statements', 'branches', 'functions', 'lines'];
 const isUpdate = process.argv.includes('--update');
 
@@ -38,7 +51,7 @@ function measureDirectories() {
       if (filePath === 'total') continue;
       const relativePath = path.relative(sourceRoot, path.resolve(filePath));
       if (relativePath.startsWith('..') || path.isAbsolute(relativePath)) continue;
-      if (relativePath.split(path.sep)[0] !== area) continue;
+      if (coverageAreaForDirectory(relativePath.split(path.sep)[0]) !== area) continue;
 
       for (const metric of metrics) {
         const measured = fileCoverage[metric];
@@ -99,7 +112,7 @@ function main() {
 
     const baseline = {
       _comment:
-        'Per-area coverage floor. Update only after intentional improvement; includes engine, utils, store, hooks, and components.',
+        'Per-area coverage floor. Update only after intentional improvement. The components floor covers src/app, src/features, and src/ui.',
       _updated: new Date().toISOString().slice(0, 10),
       directories,
     };
@@ -121,9 +134,11 @@ function main() {
   console.log('Coverage ratchet passed for engine, utils, store, hooks, and components.');
 }
 
-try {
-  main();
-} catch (error) {
-  console.error(error instanceof Error ? error.message : String(error));
-  process.exitCode = 1;
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  try {
+    main();
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : String(error));
+    process.exitCode = 1;
+  }
 }

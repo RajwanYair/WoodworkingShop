@@ -25,7 +25,7 @@ function reimportCanvas(webglFlag: string | undefined) {
   vi.resetModules();
   vi.stubEnv('VITE_ENABLE_WEBGL', webglFlag ?? '');
   // Re-import after stubbing so the module-level constant is re-evaluated.
-  return import('../../src/components/preview/WebGLPreviewCanvas');
+  return import('../../src/features/preview/WebGLPreviewCanvas');
 }
 
 // ── Tests ─────────────────────────────────────────────────────────────────────

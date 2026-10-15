@@ -1,0 +1,13 @@
+{
+  "springAngle": "Ángulo de apoyo",
+  "title": "Calculadora de cortes de moldura de corona",
+  "methods": {
+    "flat": "En plano (apoyada sobre la mesa)",
+    "in_position": "En posición instalada (contra la guía)"
+  },
+  "cornerAngle": "Ángulo de la esquina",
+  "bevelAngle": "Ángulo de inclinación",
+  "cuttingMethod": "Método de corte",
+  "miterAngle": "Ángulo de inglete",
+  "note38deg": "Consejo habitual de ajuste: la mayoría de las molduras de corona tienen un ángulo de apoyo de 38°."
+}

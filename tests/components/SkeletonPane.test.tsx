@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { SkeletonPane } from '../../src/components/layout/SkeletonPane';
+import { SkeletonPane } from '../../src/app/SkeletonPane';
 
 describe('SkeletonPane', () => {
   it('renders with default aria role "status"', () => {

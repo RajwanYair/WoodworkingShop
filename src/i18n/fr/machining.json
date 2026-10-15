@@ -1,0 +1,21 @@
+{
+  "title": "Tâche d’usinage CNC",
+  "generateJob": "Générer une tâche d’usinage",
+  "sendToMachine": "Envoyer à la machine",
+  "profileCut": "Découpe du contour",
+  "dado": "Rainure transversale",
+  "rabbet": "Feuillure",
+  "drill": "Perçage",
+  "pocket": "Usinage d’une poche",
+  "totalTime": "Durée estimée",
+  "totalPasses": "Nombre total de passes",
+  "operations": "Opérations",
+  "toolSetup": "Configuration des outils",
+  "toolDiameter": "Diamètre de l’outil",
+  "passDepth": "Profondeur par passe",
+  "feedRate": "Vitesse d’avance",
+  "spindleRpm": "Vitesse de broche (tr/min)",
+  "jobValid": "Tâche validée, prête à être envoyée.",
+  "jobErrors": "La tâche contient {{count}} erreur(s).",
+  "noMachine": "Aucun profil de machine sélectionné."
+}

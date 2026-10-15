@@ -1,0 +1,16 @@
+{
+  "furnitureType": "Type",
+  "width": "Width",
+  "height": "Height",
+  "depth": "Depth",
+  "shelfCount": "Shelves",
+  "carcassMaterial": "Carcass material",
+  "backPanelMaterial": "Back material",
+  "doorCount": "Doors",
+  "doorStyle": "Door style",
+  "drawerCount": "Drawers",
+  "kickHeight": "Kick height",
+  "handleStyle": "Handle style",
+  "edgeBanding": "Edge banding",
+  "hasBack": "Has back panel"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Wood Glue Coverage Calculator",
+  "surfaceArea": "Glue Surface Area",
+  "glueType": "Glue Type",
+  "jointCount": "Number of Joints",
+  "netVolume": "Net Volume Needed",
+  "recommendedVolume": "Recommended Volume (+15% waste)",
+  "openTime": "Open Time",
+  "clampingTime": "Clamping Time",
+  "cureTime": "Full Cure Time",
+  "spreadRate": "Spread Rate",
+  "types": {
+    "pva": "PVA (white / yellow glue)",
+    "polyurethane": "Polyurethane",
+    "epoxy": "Epoxy",
+    "hide": "Hide Glue",
+    "ca": "CA (cyanoacrylate)"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Plan de la pièce",
+  "sectionLabel": "Plan au sol de la pièce",
+  "empty": "Aucun aménagement de pièce configuré",
+  "cabinets": "armoires",
+  "utilized": "utilisé",
+  "walls": "Murs",
+  "wallNorth": "Mur du fond",
+  "wallSouth": "Mur avant",
+  "wallEast": "Mur de droite",
+  "wallWest": "Mur de gauche",
+  "hasOpening": "Présence d’une ouverture",
+  "snapToWall": "Aligner au mur",
+  "collision": "Chevauchement de meubles détecté",
+  "roomHeight": "Hauteur de la pièce",
+  "floorPlan": "Plan au sol",
+  "wallOccupancy": "Occupation du mur",
+  "selectCabinet": "Armoire",
+  "positionX": "Position X (mm)",
+  "positionY": "Position Y (mm)"
+}

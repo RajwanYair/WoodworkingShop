@@ -1,0 +1,13 @@
+{
+  "title": "G-code-Validierung",
+  "valid": "G-code sieht gut aus — keine Fehler gefunden.",
+  "errors_one": "{{count}} Fehler",
+  "errors_other": "{{count}} Fehler",
+  "warnings_one": "{{count}} Warnung",
+  "warnings_other": "{{count}} Warnungen",
+  "infos_one": "{{count}} Hinweis",
+  "infos_other": "{{count}} Hinweise",
+  "lineRef": "Zeile {{line}}",
+  "fileLevel": "Dateiebene",
+  "dismiss": "Schließen"
+}

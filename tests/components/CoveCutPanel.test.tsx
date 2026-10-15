@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { CoveCutPanel } from '../../src/components/configurator/CoveCutPanel';
+import { CoveCutPanel } from '../../src/features/calculators/CoveCutPanel';
 
 describe('CoveCutPanel', () => {
   it('shows the calculated fence angle and reports invalid input accessibly', async () => {

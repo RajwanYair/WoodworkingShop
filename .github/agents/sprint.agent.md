@@ -34,7 +34,7 @@ table) from first line of code to a passing CI gate.
 
 1. **Engine** (`src/engine/<feature>.ts`) — pure TS, no React, no DOM
 2. **Store** (`src/store/`) — Zustand slice if state is needed
-3. **Component** (`src/components/<area>/<Feature>.tsx`) — ≤ 600 lines, named
+3. **Component** (`src/features/<area>/<Feature>.tsx`) — ≤ 396 lines, named
    export only; utilities in sibling `.ts` file
 4. **i18n** — keys under `<feature>.*` in `src/i18n/en.json` AND `he.json`
    (and all 4 other locales with at least the English value)

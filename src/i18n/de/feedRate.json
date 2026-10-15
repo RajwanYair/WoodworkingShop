@@ -1,0 +1,20 @@
+{
+  "title": "Vorschubrechner",
+  "cutterDiameter": "Werkzeugdurchmesser (mm)",
+  "flutes": "Anzahl der Schneiden",
+  "material": "Werkstoff",
+  "cutterType": "Werkzeugtyp",
+  "depthOfCut": "Schnitttiefe (mm)",
+  "stepover": "Seitlicher Zustellabstand (mm)",
+  "maxRpm": "Maximale Spindeldrehzahl",
+  "spindleRpm": "Spindeldrehzahl (U/min)",
+  "feedRateMmMin": "Vorschub (mm/min)",
+  "chipLoad": "Spanlast (mm)",
+  "plungeRate": "Eintauchvorschub (mm/min)",
+  "mrr": "Materialabtragsrate",
+  "rpmClamped": "Drehzahl begrenzt",
+  "depthPerPass": "Schnitttiefe pro Durchgang",
+  "numberOfPasses": "Anzahl der Durchgänge",
+  "roughing": "Schruppen",
+  "finishing": "Schlichten"
+}

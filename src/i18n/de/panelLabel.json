@@ -1,0 +1,18 @@
+{
+  "title": "Etiketten für Plattenzuschnitte",
+  "partId": "Bauteil-ID",
+  "dimensions": "Abmessungen",
+  "material": "Werkstoff",
+  "grain": "Faserrichtung",
+  "grainHorizontal": "Waagerecht",
+  "grainVertical": "Senkrecht",
+  "grainNone": "Ohne",
+  "cabinet": "Schrank",
+  "position": "Einbauort",
+  "edgeBanding": "Kantenumleimung",
+  "quantity": "Menge",
+  "notes": "Hinweise",
+  "totalPieces": "Teile insgesamt",
+  "uniqueParts": "Unterschiedliche Teile",
+  "materials": "Verwendete Werkstoffe"
+}

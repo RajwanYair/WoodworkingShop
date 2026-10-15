@@ -1,0 +1,15 @@
+{
+  "title": "Informe de uso de materiales",
+  "totalArea": "Área total de piezas",
+  "sheetArea": "Área total de tableros",
+  "wasteArea": "Área de desperdicio",
+  "wastePercent": "% de desperdicio",
+  "sheetsRequired": "Tableros necesarios",
+  "costPerSheet": "Costo por tablero",
+  "totalCost": "Costo total",
+  "partCount": "Número de piezas",
+  "volume": "Volumen",
+  "mostWasteful": "Mayor desperdicio",
+  "mostExpensive": "Más costoso",
+  "noMaterials": "No hay materiales en el informe."
+}

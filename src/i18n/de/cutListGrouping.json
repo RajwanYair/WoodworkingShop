@@ -1,0 +1,15 @@
+{
+  "title": "Schnittlistengruppierung",
+  "group": "Gruppe",
+  "groups": "Gruppen",
+  "criteria": "Gruppierungskriterien",
+  "material": "Material",
+  "thickness": "Stärke",
+  "grain": "Faserrichtung",
+  "cabinet": "Schrank",
+  "totalCuts": "Schnitte insgesamt",
+  "totalArea": "Gesamtfläche",
+  "toolChanges": "Werkzeugwechsel",
+  "mergeFlexible": "Faserflexible Teile zusammenfassen",
+  "noGroups": "Keine Gruppen erstellt."
+}

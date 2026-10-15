@@ -1,0 +1,16 @@
+{
+  "title": "Schablonenkorrektur für Kopierringe",
+  "bushingOD": "Außendurchmesser des Kopierrings",
+  "bitDiameter": "Fräserdurchmesser",
+  "cutType": "Schnittart",
+  "nominalDimension": "Nennmaß des Werkstückmerkmals",
+  "optional": "freiwillige Angabe",
+  "offset": "Kopierringversatz",
+  "adjustmentPerSide": "Schablonenmaß je Seite anpassen",
+  "totalAdjustment": "Gesamte Schablonenanpassung",
+  "adjustedDimension": "Angepasstes Schablonenmaß",
+  "cutTypes": {
+    "inside": "Innen (Tasche oder Aussparung)",
+    "outside": "Außen (Insel oder Vorsprung)"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Liste de quincaillerie",
+  "name": "Article",
+  "qty": "Qté",
+  "unit": "Unité",
+  "supplier": "Fournisseur",
+  "qtyHint": "Modifier les cellules de quantité pour remplacer les valeurs calculées"
+}

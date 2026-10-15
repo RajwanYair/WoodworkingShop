@@ -46,6 +46,10 @@ export { batchReplaceMaterial, listMaterials, countByMaterial } from './batch-re
 
 export type { BatchPart, BatchReplaceOptions, BatchReplaceResult } from './batch-replace';
 
+export { EXAMPLE_PROJECTS } from './examples';
+
+export type { ExampleCabinet, ExampleProject } from './examples';
+
 export { DEFAULT_PROJECT_SETTINGS, mergeSettings, validateSettings, describeSettings } from './project-settings';
 
 export type { LengthUnit, CurrencyCode, SheetSortPreference, ProjectSettings } from './project-settings';

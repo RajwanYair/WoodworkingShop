@@ -1,0 +1,18 @@
+{
+  "title": "Étiquettes de panneaux",
+  "partId": "ID de pièce",
+  "dimensions": "Mesures",
+  "material": "Matériau",
+  "grain": "Sens du fil",
+  "grainHorizontal": "À l’horizontale",
+  "grainVertical": "À la verticale",
+  "grainNone": "Sans sens de fil",
+  "cabinet": "Meuble",
+  "position": "Emplacement",
+  "edgeBanding": "Placage des chants",
+  "quantity": "Quantité",
+  "notes": "Remarques",
+  "totalPieces": "Nombre total de pièces",
+  "uniqueParts": "Pièces distinctes",
+  "materials": "Matériaux utilisés"
+}

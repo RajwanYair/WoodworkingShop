@@ -1,19 +1,21 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { PartLabelSheet } from '../../src/components/optimizer/PartLabelSheet';
+import { PartLabelSheet } from '../../src/features/optimizer/PartLabelSheet';
 import type { Part } from '../../src/engine/core/types';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 
 let originalParts: Part[];
+let originalActiveTab = useCabinetStore.getState().activeTab;
 
 beforeEach(() => {
   originalParts = useCabinetStore.getState().allParts;
+  originalActiveTab = useCabinetStore.getState().activeTab;
 });
 
 afterEach(() => {
   vi.restoreAllMocks();
-  useCabinetStore.setState({ allParts: originalParts });
+  useCabinetStore.setState({ allParts: originalParts, activeTab: originalActiveTab });
 });
 
 describe('PartLabelSheet', () => {
@@ -47,5 +49,16 @@ describe('PartLabelSheet', () => {
     await user.click(screen.getByRole('button', { name: 'Print Labels' }));
     expect(write).toHaveBeenCalledWith(expect.stringContaining('P-001a'));
     await waitFor(() => expect(print).toHaveBeenCalledOnce());
+  });
+
+  it('routes from the empty state to cabinet configuration', async () => {
+    const user = userEvent.setup();
+    useCabinetStore.setState({ allParts: [], activeTab: 'preview' });
+    render(<PartLabelSheet />);
+
+    await user.click(screen.getByRole('button', { name: /Part Label Sheet/ }));
+    await user.click(screen.getByRole('button', { name: 'No parts — configure a cabinet first.' }));
+
+    expect(useCabinetStore.getState().activeTab).toBe('configurator');
   });
 });

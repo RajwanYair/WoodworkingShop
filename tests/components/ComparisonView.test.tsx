@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { ComparisonView } from '../../src/components/optimizer/ComparisonView';
+import { ComparisonView } from '../../src/features/optimizer/ComparisonView';
 import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 import type { OptimizationSuggestion } from '../../src/engine/core/types';
 import { makeOptimizationResult } from '../helpers';

@@ -115,7 +115,7 @@
 
   "github.copilot.chat.reviewSelection.instructions": [
     {
-      "text": "Flag any eslint-disable, @ts-ignore, as any, enum, namespace, ml-* / mr-* Tailwind classes, or hardcoded pixel values. Also check i18n parity: every t('key') must exist in both en.json and he.json."
+      "text": "Flag any eslint-disable, @ts-ignore, as any, enum, namespace, ml-* / mr-* Tailwind classes, or hardcoded pixel values. Also check i18n parity: every t('key') must exist in src/i18n/{locale}/{namespace}.json for en and he."
     }
   ],
   "github.copilot.chat.pullRequestDescriptionGeneration.instructions": [
@@ -230,6 +230,8 @@
   "coverage-gutters.showRulerCoverage": true,
   // ─── i18n Ally ──────────────────────────────────────────────────────────────
   "i18n-ally.localesPaths": ["src/i18n"],
+  "i18n-ally.pathMatcher": "{locale}/{namespace}.json",
+  "i18n-ally.namespace": true,
   "i18n-ally.keystyle": "nested",
   "i18n-ally.sourceLanguage": "en",
   "i18n-ally.displayLanguage": "en",

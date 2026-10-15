@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildPartLabelPrintHtml } from '../../src/components/optimizer/build-part-label-print-html';
+import { buildPartLabelPrintHtml } from '../../src/features/optimizer/build-part-label-print-html';
 import type { LabeledPart } from '../../src/engine/workshop/part-labeling';
 
 const part: LabeledPart = {

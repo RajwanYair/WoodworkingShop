@@ -1,0 +1,25 @@
+{
+  "species_cherry": "كرز",
+  "dimension": "أبعاد اللوح",
+  "coefficient": "معامل الانكماش",
+  "species_oak": "بلوط",
+  "species_cedar": "أرز",
+  "species_pine": "صنوبر",
+  "grain": "اتجاه الألياف",
+  "species_maple": "قيقب",
+  "initialMC": "محتوى الرطوبة الابتدائي",
+  "changeAmount": "التغير في الأبعاد",
+  "species_douglas_fir": "تنوب دوغلاس",
+  "species_generic_hardwood": "خشب صلب عام",
+  "grains": {
+    "tangential": "مماسي",
+    "radial": "شعاعي"
+  },
+  "species": "نوع الخشب",
+  "finalDimension": "البعد النهائي",
+  "effectiveMCChange": "التغير الفعلي في محتوى الرطوبة",
+  "title": "محتوى الرطوبة وانكماش الخشب",
+  "targetMC": "محتوى الرطوبة المستهدف",
+  "species_generic_softwood": "خشب لين عام",
+  "species_walnut": "جوز"
+}

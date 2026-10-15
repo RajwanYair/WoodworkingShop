@@ -1,0 +1,19 @@
+{
+  "title": "Rechner für Holzleimmenge",
+  "surfaceArea": "Klebefläche",
+  "glueType": "Leimart",
+  "jointCount": "Anzahl der Verbindungen",
+  "netVolume": "Benötigtes Nettovolumen",
+  "recommendedVolume": "Empfohlenes Volumen (+15 % Verschnitt)",
+  "openTime": "Offene Zeit",
+  "clampingTime": "Presszeit",
+  "cureTime": "Vollständige Aushärtezeit",
+  "spreadRate": "Auftragsmenge",
+  "types": {
+    "pva": "PVA (Weiß- / Gelbleim)",
+    "polyurethane": "Polyurethan",
+    "epoxy": "Epoxidharz",
+    "hide": "Hautleim",
+    "ca": "CA (Cyanacrylat)"
+  }
+}

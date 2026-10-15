@@ -1,0 +1,13 @@
+{
+  "title": "Drehzahlrechner fürs Drechseln",
+  "blankDiameter": "Durchmesser des Werkstückrohlings",
+  "operation": "Arbeitsgang",
+  "roughing": "Schruppen",
+  "finishing": "Schlichten",
+  "sanding": "Schleifen",
+  "minRpm": "Mindestdrehzahl (Richtwert)",
+  "maxRpm": "Höchstdrehzahl (Richtwert)",
+  "recommendedRpm": "Empfohlene Drehzahl",
+  "surfaceSpeed": "Schnittgeschwindigkeit (m/min)",
+  "safetyNote": "Nur ein Richtwert, keine Sicherheitsgrenze. Beachten Sie die Bedienungsanleitung der Drechselbank; beginnen Sie langsam und verringern Sie die Drehzahl bei Vibrationen. Unwuchtige Werkstücke erfordern möglicherweise deutlich niedrigere Drehzahlen."
+}

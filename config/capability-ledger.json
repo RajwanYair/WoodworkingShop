@@ -117,7 +117,7 @@
     },
     "src/engine/calculators/pocket-hole.ts": {
       "classification": "surfaced",
-      "rationale": "Mounted as a lazy calculator section in src/components/configurator/CalculatorsPanel.tsx."
+      "rationale": "Mounted as a lazy calculator section in src/features/calculators/CalculatorsPanel.tsx."
     },
     "src/engine/calculators/rafter-length.ts": {
       "classification": "surfaced",
@@ -137,7 +137,7 @@
     },
     "src/engine/calculators/shelf-deflection.ts": {
       "classification": "surfaced",
-      "rationale": "Mounted as a lazy calculator section in src/components/configurator/CalculatorsPanel.tsx."
+      "rationale": "Mounted as a lazy calculator section in src/features/calculators/CalculatorsPanel.tsx."
     },
     "src/engine/calculators/shelf-pin.ts": {
       "classification": "surfaced",
@@ -199,6 +199,10 @@
     "src/engine/core/plugin-events.ts": {
       "classification": "surfaced",
       "rationale": "Shared plugin event bus is exposed through the engine plugin API."
+    },
+    "src/engine/core/plugin-types.ts": {
+      "classification": "internal",
+      "rationale": "V1 plugin contract extracted so plugin.ts and plugin-v2.ts do not import each other."
     },
     "src/engine/core/plugin-v2.ts": {
       "classification": "surfaced",
@@ -394,11 +398,11 @@
     },
     "src/engine/joinery/dovetail-layout.ts": {
       "classification": "surfaced",
-      "rationale": "Mounted as a lazy calculator section in src/components/configurator/CalculatorsPanel.tsx."
+      "rationale": "Mounted as a lazy calculator section in src/features/calculators/CalculatorsPanel.tsx."
     },
     "src/engine/joinery/dowel-joint.ts": {
       "classification": "surfaced",
-      "rationale": "Mounted as a lazy calculator section in src/components/configurator/CalculatorsPanel.tsx."
+      "rationale": "Mounted as a lazy calculator section in src/features/calculators/CalculatorsPanel.tsx."
     },
     "src/engine/joinery/finger-joint.ts": {
       "classification": "surfaced",
@@ -419,7 +423,7 @@
     },
     "src/engine/joinery/mortise-tenon.ts": {
       "classification": "surfaced",
-      "rationale": "Mounted as a lazy calculator section in src/components/configurator/CalculatorsPanel.tsx."
+      "rationale": "Mounted as a lazy calculator section in src/features/calculators/CalculatorsPanel.tsx."
     },
     "src/engine/joinery/router-template.ts": {
       "classification": "surfaced",
@@ -559,6 +563,10 @@
       "classification": "surfaced",
       "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
     },
+    "src/engine/project/examples.ts": {
+      "classification": "surfaced",
+      "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
     "src/engine/project/comparison/design.ts": {
       "classification": "internal",
       "rationale": "Compatibility facade retained for existing engine consumers; the UI imports the consolidated comparison domain."
@@ -647,6 +655,10 @@
     "src/engine/project/templates/parametric.ts": {
       "classification": "surfaced",
       "rationale": "Reachable through the consolidated domain barrel and its existing application consumers."
+    },
+    "src/engine/project/templates/template-types.ts": {
+      "classification": "internal",
+      "rationale": "Configurator template contract extracted so template data and instantiation do not import each other."
     },
     "src/engine/project/version-history.ts": {
       "classification": "surfaced",
@@ -901,6 +913,10 @@
     "src/utils/project-storage.ts": {
       "classification": "surfaced",
       "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
+    },
+    "src/utils/route-table.ts": {
+      "classification": "surfaced",
+      "rationale": "Shared tab route table is consumed by the shell, command registry, and URL state."
     },
     "src/utils/step-download.ts": {
       "classification": "surfaced",

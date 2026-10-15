@@ -1,0 +1,13 @@
+{
+  "title": "יומן ביקורת",
+  "noEvents": "לא נרשמו אירועי ביקור",
+  "eventCount": "אירוע {{count}}",
+  "eventCount_other": "{{count}} אירועים",
+  "configChange": "תצורה שונתה",
+  "export": "יוייצא",
+  "history": "היסטוריה",
+  "diffTitle": "השוואת גרסאות",
+  "noDiff": "התצורות זהות",
+  "changeCount": "{{count}} שדה השתנה",
+  "changeCount_other": "{{count}} שדות שונו"
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Informe de dirección de la veta",
+  "constrained": "con restricción de veta",
+  "grainSensitive": "Pieza sensible a la veta",
+  "grainBadge": "veta",
+  "noParts": "No hay piezas: configura un armario primero.",
+  "summary": "{{constrained}} de {{total}} piezas tienen restricciones de dirección de la veta."
+}

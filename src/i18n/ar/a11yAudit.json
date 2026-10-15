@@ -1,0 +1,12 @@
+{
+  "title": "تدقيق إمكانية الوصول",
+  "runAudit": "إجراء التدقيق",
+  "compliant": "متوافق",
+  "nonCompliant": "غير متوافق",
+  "violations": "المخالفات",
+  "passes": "اجتيازات",
+  "incomplete": "غير مكتمل",
+  "severity": "الخطورة",
+  "criterion": "المعيار",
+  "suggestion": "اقتراح"
+}

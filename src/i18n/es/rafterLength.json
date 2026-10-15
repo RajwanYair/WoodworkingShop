@@ -1,0 +1,15 @@
+{
+  "pitchRatio": "Relación entre altura y proyección",
+  "title": "Longitud del cabio y muesca de apoyo",
+  "totalLength": "Longitud total (con alero)",
+  "rafterLength": "Longitud del cabio (hasta el apoyo en el muro)",
+  "seatCut": "Ángulo del corte de apoyo",
+  "overhang": "Alero",
+  "birdsmouthDepth": "Profundidad de la muesca de apoyo",
+  "rise": "Altura vertical",
+  "run": "Proyección horizontal",
+  "totalSpan": "Anchura total del edificio",
+  "plateWidth": "Anchura de la solera superior",
+  "plumbCut": "Ángulo del corte a plomo",
+  "shedRoof": "Tejado a un agua"
+}

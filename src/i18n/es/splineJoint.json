@@ -1,0 +1,14 @@
+{
+  "title": "Unión con lengüeta suelta",
+  "boardThickness": "Grosor de la tabla",
+  "splineThickness": "Grosor de la lengüeta",
+  "slotDepthPerBoard": "Profundidad de la ranura por tabla",
+  "jointLength": "Longitud de la unión",
+  "splineCount": "Número de lengüetas",
+  "recommendedSlotWidth": "Ancho recomendado de la ranura",
+  "totalInsertionDepth": "Profundidad total de inserción",
+  "remainingWallThickness": "Grosor de material restante",
+  "totalSplineLength": "Longitud total de las lengüetas",
+  "glueAreaPerSpline": "Superficie de encolado por lengüeta",
+  "totalGlueArea": "Superficie total de encolado"
+}

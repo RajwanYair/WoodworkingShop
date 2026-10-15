@@ -1,0 +1,11 @@
+{
+  "title": "Foto de referencia de la habitación",
+  "start": "Abrir cámara",
+  "capture": "Tomar foto",
+  "stop": "Detener cámara",
+  "retake": "Volver a tomar",
+  "capturedAlt": "Foto de la habitación capturada",
+  "videoFeed": "Vista en directo de la cámara",
+  "notSupported": "La cámara no es compatible con este dispositivo",
+  "error": "Error de cámara"
+}

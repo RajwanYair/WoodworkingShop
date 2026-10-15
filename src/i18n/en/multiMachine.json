@@ -1,0 +1,18 @@
+{
+  "title": "Multi-Machine Workflow",
+  "distribute": "Distribute Jobs",
+  "strategy": "Strategy",
+  "leastLoaded": "Least Loaded",
+  "fastestFirst": "Fastest First",
+  "roundRobin": "Round Robin",
+  "assigned": "Assigned",
+  "unassigned": "Unassigned",
+  "dispatched": "Dispatched",
+  "complete": "Complete",
+  "failed": "Failed",
+  "progress": "Progress",
+  "estimatedTime": "Est. Total Time",
+  "machineLoad": "Machine Load",
+  "noCapable": "No capable machine available.",
+  "includeOffline": "Include Offline Machines"
+}

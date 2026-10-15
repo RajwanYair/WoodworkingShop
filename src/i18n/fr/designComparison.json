@@ -1,0 +1,20 @@
+{
+  "title": "Comparaison des conceptions",
+  "compare": "Comparer les conceptions",
+  "designA": "Conception A",
+  "designB": "Conception B",
+  "winner": "Gagnant",
+  "tie": "Égalité",
+  "criteria": "Critères",
+  "score": "Note",
+  "delta": "Écart",
+  "materialCost": "Coût des matériaux",
+  "materialArea": "Surface des matériaux",
+  "partCount": "Nombre de pièces",
+  "cutComplexity": "Complexité de découpe",
+  "wastePercent": "Pourcentage de chutes",
+  "assemblySteps": "Étapes d'assemblage",
+  "structuralScore": "Score de solidité",
+  "radarChart": "Radar des scores",
+  "summary": "Synthèse de la comparaison"
+}

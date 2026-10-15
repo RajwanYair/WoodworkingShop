@@ -1,0 +1,13 @@
+{
+  "title": "Rechner für Dickenhobel-Durchgänge",
+  "initialThickness": "Ausgangsstärke",
+  "targetThickness": "Zielstärke",
+  "maxPassDepth": "Maximaler Abtrag pro Durchgang",
+  "snipeLength": "Hobelschlaglänge (je Ende)",
+  "boardLength": "Brettlänge",
+  "passCount": "Anzahl der Hobeldurchgänge",
+  "depthPerPass": "Abtrag pro Durchgang",
+  "totalRemoval": "Gesamtabtrag",
+  "snipeAllowance": "Hobelschlagzugabe (beide Enden)",
+  "effectiveLength": "Nutzbare Länge"
+}

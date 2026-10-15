@@ -1,0 +1,9 @@
+{
+  "workspace": "Workspace",
+  "configurator": "Configure",
+  "preview": "Preview",
+  "optimizer": "Cut Sheets",
+  "assembly": "Assembly",
+  "pdf": "Export PDF",
+  "calculators": "Calculators"
+}

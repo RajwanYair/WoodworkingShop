@@ -1,0 +1,21 @@
+{
+  "title": "Batch Export",
+  "create": "Create Batch",
+  "start": "Start Export",
+  "cancel": "Cancel Batch",
+  "progress": "Progress",
+  "completed": "Completed",
+  "failed": "Failed",
+  "pending": "Pending",
+  "cancelled": "Cancelled",
+  "format": "Format",
+  "priority": "Priority",
+  "high": "High",
+  "normal": "Normal",
+  "low": "Low",
+  "manifest": "Export Manifest",
+  "totalSize": "Total Size",
+  "duration": "Duration",
+  "noItems": "No export items added.",
+  "batchComplete": "Batch export complete."
+}

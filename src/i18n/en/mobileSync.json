@@ -1,0 +1,13 @@
+{
+  "title": "Mobile Sync",
+  "online": "Online",
+  "offline": "Offline",
+  "syncing": "Syncing…",
+  "pendingChanges": "{{count}} pending change",
+  "pendingChanges_other": "{{count}} pending changes",
+  "conflicts": "{{count}} conflict",
+  "conflicts_other": "{{count}} conflicts",
+  "lastSynced": "Last synced: {{time}}",
+  "neverSynced": "Never synced",
+  "resolveConflict": "Resolve conflict"
+}

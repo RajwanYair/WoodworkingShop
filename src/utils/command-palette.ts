@@ -1,5 +1,7 @@
 import { browserLocalStorage } from '../platform/storage/index';
 
+export { APP_TAB_COMMANDS } from './route-table';
+
 /**
  * Command Palette — Sprint 15
  *
@@ -86,6 +88,11 @@ export const APP_COMMAND_DEFINITIONS = {
     labelKey: 'marketplace.title',
     categoryKey: 'commandPalette.categories.actions',
   },
+  openWhatsNew: {
+    id: 'header.open-whats-new',
+    labelKey: 'commandPalette.openWhatsNew',
+    categoryKey: 'commandPalette.categories.actions',
+  },
   openShortcuts: {
     id: 'header.open-shortcuts',
     key: '?',
@@ -157,16 +164,6 @@ export const APP_SHORTCUTS = {
   toggleFocusMode: APP_COMMAND_DEFINITIONS.toggleFocusMode,
   shortcuts: APP_COMMAND_DEFINITIONS.openShortcuts,
 } as const;
-
-export const APP_TAB_COMMANDS = [
-  { id: 'workspace', labelKey: 'tabs.workspace', shortcut: null, shortcutKey: null },
-  { id: 'configurator', labelKey: 'tabs.configurator', shortcut: 'Alt+1', shortcutKey: '1' },
-  { id: 'preview', labelKey: 'tabs.preview', shortcut: 'Alt+2', shortcutKey: '2' },
-  { id: 'optimizer', labelKey: 'tabs.optimizer', shortcut: 'Alt+3', shortcutKey: '3' },
-  { id: 'assembly', labelKey: 'tabs.assembly', shortcut: 'Alt+4', shortcutKey: '4' },
-  { id: 'pdf', labelKey: 'tabs.pdf', shortcut: 'Alt+5', shortcutKey: '5' },
-  { id: 'calculators', labelKey: 'tabs.calculators', shortcut: 'Alt+6', shortcutKey: '6' },
-] as const;
 
 export interface PaletteCommand {
   /** Unique command identifier, e.g. 'export.gcode'. */

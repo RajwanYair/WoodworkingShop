@@ -1,0 +1,19 @@
+{
+  "title": "متتبع المخزون",
+  "material": "المادة",
+  "required": "المطلوب",
+  "onHand": "المتوفر",
+  "reorderAt": "إعادة الطلب عند",
+  "status": "الحالة",
+  "status_ok": "كافٍ",
+  "status_low": "منخفض",
+  "status_shortfall": "عجز",
+  "status_unknown": "غير معروف",
+  "noDemand": "لا توجد ألواح مطلوبة بعد — هيّئ خزانة أولاً.",
+  "addItem": "+ إضافة عنصر للمخزون",
+  "materialKey": "مفتاح المادة",
+  "add": "إضافة",
+  "tableAriaLabel": "جدول توفر مخزون المواد",
+  "editQtyAriaLabel": "تعديل الكمية المتوفرة لـ {{key}}",
+  "removeAriaLabel": "إزالة {{key}} من المخزون"
+}

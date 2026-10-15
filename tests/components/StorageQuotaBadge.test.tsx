@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor, act } from '@testing-library/react';
-import { StorageQuotaBadge } from '../../src/components/layout/StorageQuotaBadge';
+import { StorageQuotaBadge } from '../../src/features/workspace/StorageQuotaBadge';
 import type { StorageEstimate } from '../../src/utils/indexed-db-storage';
 
 // ── Mock indexed-db-storage so the component never touches IndexedDB ──────

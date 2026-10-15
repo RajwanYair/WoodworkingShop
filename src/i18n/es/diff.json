@@ -1,0 +1,16 @@
+{
+  "furnitureType": "Tipo",
+  "width": "Ancho",
+  "height": "Alto",
+  "depth": "Profundidad",
+  "shelfCount": "Estantes",
+  "carcassMaterial": "Material de carcasa",
+  "backPanelMaterial": "Material trasero",
+  "doorCount": "Puertas",
+  "doorStyle": "Estilo de puerta",
+  "drawerCount": "Cajones",
+  "kickHeight": "Altura del zócalo",
+  "handleStyle": "Estilo de tirador",
+  "edgeBanding": "Canto",
+  "hasBack": "Tiene panel trasero"
+}

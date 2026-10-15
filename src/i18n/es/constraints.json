@@ -1,0 +1,10 @@
+{
+  "title": "📐 Comprobación de restricciones",
+  "panelLabel": "Panel de sugerencias sobre restricciones dimensionales",
+  "violations": "Incumplimientos de restricciones",
+  "allValid": "Todas las dimensiones están dentro de los límites de fabricación.",
+  "rangeHints": "Resumen de rangos dimensionales",
+  "fix": "Corregir",
+  "fixField": "Corregir {{field}}",
+  "fixAll": "Corregir todo"
+}

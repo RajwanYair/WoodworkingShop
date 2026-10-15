@@ -1,0 +1,11 @@
+{
+  "title": "Liste des pièces",
+  "id": "Identifiant",
+  "name": "Nom de la pièce",
+  "qty": "Qté",
+  "material": "Matériau",
+  "length": "Longueur",
+  "width": "Largeur",
+  "thickness": "Épais.",
+  "edge": "Chant"
+}

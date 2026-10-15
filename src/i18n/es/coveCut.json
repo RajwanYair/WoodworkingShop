@@ -1,0 +1,12 @@
+{
+  "copeDepth": "Profundidad de la moldura cóncava",
+  "bladeDiameter": "Diámetro del disco de sierra",
+  "bladeKerf": "Ancho de corte del disco",
+  "copeWidth": "Ancho de la moldura cóncava",
+  "fenceAngle": "Ángulo de la guía",
+  "maxPassDepth": "Profundidad máxima por pasada",
+  "title": "Corte de moldura cóncava (sierra de mesa)",
+  "passCount": "Número de pasadas",
+  "depthPerPass": "Profundidad por pasada",
+  "bladeHeight": "Altura final del disco"
+}

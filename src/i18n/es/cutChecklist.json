@@ -1,0 +1,8 @@
+{
+  "title": "Lista de corte de piezas",
+  "progress": "{{checked}} de {{total}} piezas cortadas",
+  "progressAriaLabel": "{{percent}} % de las piezas cortadas",
+  "complete": "¡Todo cortado!",
+  "clearAll": "Restablecer lista",
+  "empty": "Aún no hay piezas que cortar; configura primero un armario."
+}

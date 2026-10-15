@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { RouterCirclePanel } from '../../src/components/configurator/RouterCirclePanel';
+import { RouterCirclePanel } from '../../src/features/calculators/RouterCirclePanel';
 
 describe('RouterCirclePanel', () => {
   it('updates arm length by cut mode and reports a bit wider than the target', async () => {

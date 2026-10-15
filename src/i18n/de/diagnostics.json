@@ -1,0 +1,21 @@
+{
+  "title": "Lokale Diagnose",
+  "close": "Lokale Diagnose schließen",
+  "webVitals": "Web Vitals (diese Seitensitzung)",
+  "lcp": "Größtes sichtbares Inhaltselement",
+  "cls": "Kumulative Layoutverschiebung",
+  "interaction": "Interaktionsverzögerung bis zum nächsten Paint (INP)",
+  "workers": "Verfügbarkeit der Worker",
+  "cutWorker": "Zuschnittoptimierer",
+  "costWorker": "Kostenschätzung",
+  "assemblyWorker": "Montageanleitung",
+  "available": "Verfügbar",
+  "unavailable": "Nicht verfügbar",
+  "storage": "Browser-Speicherplatz",
+  "storageUsage": "{{used}} Byte von {{quota}} Byte verwendet",
+  "loading": "Schätzung wird geladen…",
+  "errorCount": "Bereinigte Fehler im Arbeitsspeicher: {{count}}",
+  "privacy": "Das Paket enthält keine Projektdaten. Es wird nur beim Export gespeichert und niemals automatisch gesendet.",
+  "export": "Diagnosepaket exportieren",
+  "exported": "Diagnosepaket heruntergeladen."
+}

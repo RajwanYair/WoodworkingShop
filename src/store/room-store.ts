@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { versionedPersistOptions } from './slices/versionedPersist';
 import type { RoomCabinet, RoomLayout, RoomWall } from '../engine/core/types';
 import { generateDefaultWalls, snapToWall, clampToRoom } from '../engine/room/room-planner';
 
@@ -137,6 +138,6 @@ export const useRoomStore = create<RoomState>()(
         }));
       },
     }),
-    { name: 'room-layouts' },
+    versionedPersistOptions('room-layouts'),
   ),
 );

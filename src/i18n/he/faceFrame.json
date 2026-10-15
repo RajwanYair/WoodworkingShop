@@ -1,0 +1,16 @@
+{
+  "title": "מחשבון מסגרת פנים",
+  "cabinetWidth": "רוחב ארון",
+  "cabinetHeight": "גובה ארון",
+  "stileWidth": "רוחב עמוד",
+  "railWidth": "רוחב ריל",
+  "openingCount": "מספר פתחים",
+  "openingWidth": "רוחב פתח",
+  "openingHeight": "גובה פתח",
+  "stileLength": "אורך עמוד",
+  "topRailLength": "אורך ריל עליון",
+  "bottomRailLength": "אורך ריל תחתון",
+  "middleRailLength": "אורך ריל אמצעי",
+  "totalGlueSurface": "סה\"כ שטח הדבקה",
+  "partList": "רשימת חלקים"
+}

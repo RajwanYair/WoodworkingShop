@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { CatalogImportPanel } from '../../src/components/configurator/CatalogImportPanel';
+import { CatalogImportPanel } from '../../src/features/configurator/CatalogImportPanel';
 import { useCustomMaterialsStore } from '../../src/store/custom-materials-store';
 
 const communityCatalog = {
@@ -71,5 +71,22 @@ describe('CatalogImportPanel', () => {
       await screen.findByText(/Failed to fetch catalog: Network error fetching catalog: offline/),
     ).toBeInTheDocument();
     expect(useCustomMaterialsStore.getState().materials).toEqual([existingMaterial]);
+  });
+
+  it('keeps the catalog import control available when the fetched catalog is empty', async () => {
+    const user = userEvent.setup();
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(new Response(JSON.stringify({ ...communityCatalog, materials: [] }))),
+    );
+    render(<CatalogImportPanel />);
+
+    const url = screen.getByRole('textbox', { name: 'Catalog URL' });
+    await user.type(url, 'https://example.test/empty-catalog.json');
+    await user.click(screen.getByRole('button', { name: 'Import' }));
+
+    expect(await screen.findByText('Catalog is empty.')).toBeInTheDocument();
+    expect(url).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Import' })).toBeEnabled();
   });
 });

@@ -1,0 +1,14 @@
+{
+  "title": "מעקב עלויות חומרים",
+  "bestPrice": "מחיר הטוב ביותר",
+  "supplier": "ספק",
+  "trend": "מגמה",
+  "rising": "עולה",
+  "falling": "יורד",
+  "stable": "יציב",
+  "totalCost": "עלות כוללת",
+  "anomaly": "חריגת מחיר",
+  "noPrice": "אין נתוני מחיר.",
+  "currency": "מטבע",
+  "perUnit": "ליחידה"
+}

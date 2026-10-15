@@ -1,0 +1,13 @@
+{
+  "title": "Audit-Protokoll",
+  "noEvents": "Keine Audit-Ereignisse aufgezeichnet",
+  "eventCount": "{{count}} Ereignis",
+  "eventCount_other": "{{count}} Ereignisse",
+  "configChange": "Konfiguration geändert",
+  "export": "Exportiert",
+  "history": "Verlauf",
+  "diffTitle": "Versionsvergleich",
+  "noDiff": "Konfigurationen sind identisch",
+  "changeCount": "{{count}} Feld geändert",
+  "changeCount_other": "{{count}} Felder geändert"
+}

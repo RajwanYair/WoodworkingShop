@@ -84,7 +84,9 @@
     "GitHub",
     "CodeQL",
     "mdx",
-    "pdf"
+    "pdf",
+    "popstate",
+    "scrollport"
   ],
   "ignorePatterns": [],
   "ignoreWords": []

@@ -1,0 +1,15 @@
+{
+  "title": "Rapport d'utilisation des matériaux",
+  "totalArea": "Surface totale des pièces",
+  "sheetArea": "Surface totale des panneaux",
+  "wasteArea": "Surface des chutes",
+  "wastePercent": "% de chutes",
+  "sheetsRequired": "Panneaux requis",
+  "costPerSheet": "Coût par panneau",
+  "totalCost": "Coût total",
+  "partCount": "Nombre de pièces",
+  "volume": "Volume",
+  "mostWasteful": "Plus de chutes",
+  "mostExpensive": "Le plus coûteux",
+  "noMaterials": "Aucun matériau dans le rapport."
+}

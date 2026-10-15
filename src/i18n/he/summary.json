@@ -1,0 +1,13 @@
+{
+  "title": "סיכום פרויקט",
+  "sectionLabel": "סיכום פרויקט רב-ארונות",
+  "totalCabinets": "ארונות",
+  "totalParts": "סך חלקים",
+  "totalSheets": "לוחות בשימוש",
+  "overallYield": "נצילות כללית",
+  "avgSheetYield": "יבול ממוצע ללוח",
+  "totalWaste": "סך פסולת",
+  "grainConflicts": "קונפליקטי סיבוב",
+  "totalWeight": "משקל לוחות",
+  "estimatedLabour": "עבודה משוערת"
+}

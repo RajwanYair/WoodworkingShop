@@ -1,0 +1,16 @@
+{
+  "title": "Dependencias de montaje",
+  "step": "Paso",
+  "steps": "Pasos",
+  "dependsOn": "Depende de",
+  "duration": "Duración",
+  "totalDuration": "Duración total",
+  "criticalPath": "Ruta crítica",
+  "parallelWaves": "Etapas paralelas",
+  "maxParallelism": "Paralelismo máximo",
+  "slack": "Holgura",
+  "noCycles": "No hay dependencias circulares.",
+  "cycleDetected": "¡Se detectó una dependencia circular!",
+  "earliestStart": "Inicio más temprano",
+  "latestFinish": "Fin más tardío"
+}

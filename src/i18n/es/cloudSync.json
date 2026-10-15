@@ -1,0 +1,16 @@
+{
+  "title": "Sincronización en la nube",
+  "encrypt": "Cifrar",
+  "decrypt": "Descifrar",
+  "passphrase": "Frase de contraseña",
+  "passphraseHint": "Al menos 8 caracteres",
+  "syncing": "Sincronizando…",
+  "synced": "Sincronizado",
+  "conflict": "Conflicto de sincronización",
+  "conflictDesc": "Se detectaron cambios simultáneos; resuelve el conflicto.",
+  "acceptRemote": "Aceptar la versión remota",
+  "keepLocal": "Conservar la versión local",
+  "lastSynced": "Última sincronización",
+  "envelopeInvalid": "El paquete de sincronización no es válido.",
+  "noPassphrase": "Se requiere una frase de contraseña para sincronizar."
+}

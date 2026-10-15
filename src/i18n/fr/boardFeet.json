@@ -1,0 +1,17 @@
+{
+  "title": "Calculateur de pieds-planche",
+  "boardFeet": "Pied-planche",
+  "totalBoardFeet": "Total en pieds-planche",
+  "thickness": "Épaisseur",
+  "width": "Largeur",
+  "length": "Longueur",
+  "quantity": "Quantité",
+  "useNominal": "Utiliser les dimensions nominales",
+  "species": "Essence de bois",
+  "costPerBf": "Coût par pied-planche",
+  "estimatedCost": "Coût estimé",
+  "volume": "Volume",
+  "weight": "Poids estimé",
+  "linearFeet": "Pieds linéaires",
+  "nominalToActual": "Nominal → réel"
+}

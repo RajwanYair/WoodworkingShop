@@ -1,5 +1,5 @@
 {
-  "_comment": "Per-area coverage floor. Update only after intentional improvement; includes engine, utils, store, hooks, and components.",
+  "_comment": "Per-area coverage floor. Update only after intentional improvement. The components floor covers src/app, src/features, and src/ui; its counts were not split.",
   "_updated": "2026-10-02",
   "directories": {
     "engine": {

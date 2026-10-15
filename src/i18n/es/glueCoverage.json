@@ -1,0 +1,19 @@
+{
+  "title": "Calculadora de cantidad de cola para madera",
+  "surfaceArea": "Superficie a encolar",
+  "glueType": "Tipo de adhesivo",
+  "jointCount": "Número de uniones",
+  "netVolume": "Volumen neto necesario",
+  "recommendedVolume": "Volumen recomendado (+15% de desperdicio)",
+  "openTime": "Tiempo abierto",
+  "clampingTime": "Tiempo de prensado",
+  "cureTime": "Tiempo de curado completo",
+  "spreadRate": "Rendimiento de aplicación",
+  "types": {
+    "pva": "PVA (cola blanca / amarilla)",
+    "polyurethane": "Poliuretano",
+    "epoxy": "Epoxi",
+    "hide": "Cola animal",
+    "ca": "CA (cianoacrilato)"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Cabinet Preview",
+  "front": "Front (Closed)",
+  "frontOpen": "Front (Open)",
+  "side": "Side",
+  "top": "Top",
+  "back": "Back",
+  "iso": "3D",
+  "exportSvg": "Export SVG",
+  "exportPng": "Export PNG (2×)",
+  "dimensions": "Dimensions",
+  "dimensionSummary": "Cabinet dimensions W × H × D",
+  "doors": "doors",
+  "drawers": "drawers",
+  "dragToRotate": "Drag to rotate",
+  "webglToggle": "Toggle WebGL / SVG view",
+  "webglAnimate": "Animate",
+  "webglIsometric": "Isometric"
+}

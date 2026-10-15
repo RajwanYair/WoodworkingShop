@@ -1,0 +1,11 @@
+{
+  "title": "Kostenabweichung",
+  "material": "Material",
+  "estimated": "Geschätzt",
+  "actual": "Tatsächlich",
+  "variance": "Abweichung",
+  "total": "Gesamt",
+  "savings": "Ersparnis durch Reststücke und Verschachtelung: {{amount}}",
+  "tableAriaLabel": "Kostenabweichung nach Material",
+  "editActualAriaLabel": "Tatsächliche Kosten für {{key}} eingeben"
+}

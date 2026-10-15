@@ -1,0 +1,17 @@
+{
+  "title": "Planungsvorschläge",
+  "noSuggestions": "Keine Vorschläge – die Konfiguration sieht gut aus!",
+  "apply": "Anwenden",
+  "dismiss": "Verwerfen",
+  "shelfTooClose": "Die Regalböden liegen zu dicht (durchschnittlicher Abstand {{avgGapMm}} mm – empfohlen sind mindestens {{minMm}} mm)",
+  "shelfTooFar": "Ein zusätzlicher Regalboden wäre sinnvoll (durchschnittlicher Abstand {{avgGapMm}} mm – höchstens {{maxMm}} mm für praktische Nutzung)",
+  "tooManyDrawers": "{{drawerCount}} Schubladen passen möglicherweise nicht bequem in eine Höhe von {{heightMm}} mm (praktisches Maximum: {{maxUseful}})",
+  "addDrawers": "Eine untere Schublade erleichtert den Zugriff bei Schränken mit {{heightMm}} mm Höhe",
+  "kitchenBaseHeight": "Die Schrankhöhe von {{current}} mm weicht von der Standardhöhe für Küchenunterschränke ({{standard}} mm) ab",
+  "kitchenBaseDepth": "Die Schranktiefe von {{current}} mm weicht von der Standardtiefe für Küchenunterschränke ({{standard}} mm) ab",
+  "reachZone": "Die Schrankoberkante bei {{current}} mm liegt über der bequemen Reichhöhe von {{max}} mm",
+  "lowClearance": "Nur {{clearanceMm}} mm Abstand zur Decke – für die Montage mindestens 50 mm einplanen",
+  "exceedsCeiling": "Der Schrank überschreitet die Raumhöhe um {{overMm}} mm",
+  "wideSpanRisk": "Große Spannweite von {{widthMm}} mm – eine Mittelstütze kann die Durchbiegung des Regalbodens verringern",
+  "costMaterialAlternative": "Melaminharzplatten sind für lackierte Oberflächen eine kostengünstige Alternative zu Sperrholz"
+}

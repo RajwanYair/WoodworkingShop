@@ -1,0 +1,11 @@
+{
+  "title": "Variación de costes",
+  "material": "Material",
+  "estimated": "Estimado",
+  "actual": "Real",
+  "variance": "Variación",
+  "total": "Total",
+  "savings": "Ahorro por retales y anidamiento: {{amount}}",
+  "tableAriaLabel": "Desglose de variación de costes",
+  "editActualAriaLabel": "Introduce el coste real de {{key}}"
+}

@@ -1,0 +1,12 @@
+{
+  "title": "ביקורת נגישות",
+  "runAudit": "הפעל ביקורת",
+  "compliant": "תואם",
+  "nonCompliant": "אינו תואם",
+  "violations": "הפרות",
+  "passes": "תוצאות חיוביות",
+  "incomplete": "לא הושלם",
+  "severity": "חומרה",
+  "criterion": "קריטריון",
+  "suggestion": "הצעה"
+}

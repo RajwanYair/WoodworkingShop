@@ -1,0 +1,18 @@
+{
+  "title": "Dübelverbindungs-Rechner",
+  "diameter": "Dübel-Durchmesser",
+  "spacing": "Dübelabstand",
+  "depth": "Bohrtiefe",
+  "drillBit": "Bohrer",
+  "count": "Anzahl der Dübel",
+  "clampTime": "Spannzeit",
+  "orientation": "Ausrichtung der Verbindung",
+  "edgeToFace": "Kante an Fläche",
+  "edgeToEdge": "Kante an Kante",
+  "mitre": "Gehrung",
+  "positions": "Dübelpositionen",
+  "jointLength": "Verbindungslänge",
+  "boardThickness": "Brettstärke",
+  "edgeClearance": "Randabstand",
+  "dowelLength": "Dübellänge"
+}

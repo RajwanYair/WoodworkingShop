@@ -1,0 +1,23 @@
+{
+  "title": "Kostenschätzung",
+  "edgeBanding": "Kantenbeschichtung",
+  "hardware": "Beschläge",
+  "waste": "Materialverschnitt",
+  "perUnit": "Kosten pro Einheit",
+  "total": "Geschätzte Gesamtkosten",
+  "disclaimer": "Preise sind Näherungswerte und können je nach Lieferant variieren.",
+  "editPrice": "Klicken, um Preis pro Platte zu überschreiben",
+  "resetPrice": "Auf Standardpreis zurücksetzen",
+  "editEbRate": "Klicken, um Kantenbeschichtungsrate festzulegen (₪/m)",
+  "totalWeight": "Geschätztes Plattengewicht",
+  "labour": "Arbeitskosten",
+  "labourRate": "Arbeitskostensatz",
+  "editLabourHours": "Klicken, um geschätzte Arbeitsstunden festzulegen",
+  "editLabourRate": "Klicken, um Arbeitskostensatz zu überschreiben (₪/Std.)",
+  "labourHoursAriaLabel": "Arbeitsstunden",
+  "labourRateAriaLabel": "Arbeitskostensatz pro Stunde",
+  "finish": "Oberfläche / Anstrich",
+  "editFinish": "Klicken, um Oberflächenkosten festzulegen",
+  "finishAriaLabel": "Oberflächen-/Anstrichkosten",
+  "notSet": "—"
+}

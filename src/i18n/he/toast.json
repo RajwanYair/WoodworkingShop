@@ -1,0 +1,14 @@
+{
+  "saved": "תצורה נשמרה",
+  "loaded": "תצורה נטענה",
+  "deleted": "תצורה נמחקה",
+  "exported": "קובץ JSON יוצא",
+  "imported": "תצורה יובאה",
+  "invalidFile": "קובץ תצורה לא תקין",
+  "dxfExported": "קובץ DXF הורד",
+  "gcodeExported": "קובץ G-code הורד",
+  "bomExported": "רשימת חומרים CSV הורדה",
+  "hardwareExported": "קובץ CSV של פרזול הורד",
+  "linkCopied": "קישור שיתוף הועתק ללוח",
+  "linkCopyFailed": "לא ניתן להעתיק קישור — אנא העתק את הכתובת מסרגל הכתובות"
+}

@@ -6,7 +6,7 @@
  * optimizer/assembly workers are triggered through the same path as any other
  * cabinet-change action (single source of truth for scheduling).
  */
-import type { CabinetEntry } from '../cabinet-store';
+import type { CabinetEntry } from './cabinetTypes';
 import { idbSaveSnapshots } from '../../utils/indexed-db-storage';
 import { browserLocalStorage } from '../../platform/storage/index';
 

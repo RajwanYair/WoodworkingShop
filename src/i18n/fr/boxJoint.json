@@ -1,0 +1,11 @@
+{
+  "title": "Calculateur d’assemblage à doigts",
+  "boardWidth": "Largeur de la planche",
+  "fingerWidth": "Largeur de doigt souhaitée",
+  "depth": "Profondeur de l’assemblage (épaisseur de la planche)",
+  "fingerCount": "Nombre de doigts",
+  "actualFingerWidth": "Largeur réelle du doigt",
+  "socketCount": "Nombre d’alvéoles (planche correspondante)",
+  "glueSurface": "Surface de collage",
+  "edgeWaste": "Perte en bordure (de chaque côté)"
+}

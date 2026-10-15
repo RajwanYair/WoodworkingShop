@@ -1,0 +1,15 @@
+{
+  "title": "Suggestions de matériaux",
+  "switch": "Passer à {{name}}",
+  "switchShort": "Utiliser",
+  "benefit": {
+    "deflection": "Flèche",
+    "weight": "Poids",
+    "cost": "Coût"
+  },
+  "quant": {
+    "savedKgPerSheet": "Économise {{value}} kg/panneau",
+    "deflectionReductionPct": "{{value}}% moins de flèche",
+    "costDeltaPct": "{{value}}% de variation de coût"
+  }
+}

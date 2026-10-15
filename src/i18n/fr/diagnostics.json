@@ -1,0 +1,21 @@
+{
+  "title": "Diagnostics locaux",
+  "close": "Fermer les diagnostics locaux",
+  "webVitals": "Signaux Web Vitals (session de cette page)",
+  "lcp": "Plus grand élément de contenu visible",
+  "cls": "Décalage cumulatif de la mise en page",
+  "interaction": "Délai jusqu’au prochain affichage après interaction (INP)",
+  "workers": "Disponibilité des workers",
+  "cutWorker": "Optimiseur de découpe",
+  "costWorker": "Estimateur de coûts",
+  "assemblyWorker": "Guide d’assemblage",
+  "available": "Disponible",
+  "unavailable": "Indisponible",
+  "storage": "Estimation du stockage du navigateur",
+  "storageUsage": "{{used}} octets utilisés sur {{quota}} octets",
+  "loading": "Estimation en cours…",
+  "errorCount": "Erreurs assainies conservées en mémoire : {{count}}",
+  "privacy": "Le dossier exclut le contenu des projets. Il n’est enregistré que lors de l’exportation et n’est jamais envoyé automatiquement.",
+  "export": "Exporter le dossier de diagnostic",
+  "exported": "Dossier de diagnostic téléchargé."
+}

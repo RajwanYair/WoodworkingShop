@@ -1,0 +1,21 @@
+{
+  "title": "Calculateur de finition",
+  "typeLabel": "Type de finition",
+  "primer": "Apprêt",
+  "stain": "Teinture",
+  "paint": "Peinture",
+  "varnish": "Vernis",
+  "oil": "Huile",
+  "lacquer": "Laque",
+  "coats": "Nombre de couches",
+  "surfaceArea": "Surface totale",
+  "litresNeeded": "Quantité de finition nécessaire",
+  "recommendedCans": "Formats de pots conseillés",
+  "totalCans": "total : {{litres}} L",
+  "notePrimer": "Appliquez un apprêt avant les couches de finition pour une meilleure adhérence.",
+  "noteStain": "Poncez légèrement entre les couches de teinture. Essuyez immédiatement l’excédent.",
+  "notePaint": "Utilisez un rouleau en mousse sur les panneaux et un pinceau pour les chants et les détails.",
+  "noteVarnish": "Laissez chaque couche de vernis durcir complètement avant de la poncer.",
+  "noteOil": "L’huile danoise pénètre dans le fil du bois ; essuyez le surplus après 20 minutes.",
+  "noteLacquer": "Appliquez la laque en couches fines et régulières dans un environnement sans poussière."
+}

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { CutPlanSummaryPanel } from '../../src/components/optimizer/CutPlanSummaryPanel';
+import { CutPlanSummaryPanel } from '../../src/features/optimizer/CutPlanSummaryPanel';
 import { makeCutSheet, makeOptimizationResult } from '../helpers';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 

@@ -1,0 +1,19 @@
+{
+  "title": "Schwalbenschwanz-Aufmaßrechner",
+  "boardWidth": "Brettbreite",
+  "boardThickness": "Brettstärke",
+  "tailCount": "Anzahl der Schwalben",
+  "angle": "Schwalbenschwanzwinkel",
+  "slopeRatio": "Steigungsverhältnis",
+  "jointType": "Verbindungsart",
+  "through": "Durchgehende Schwalbenschwanzverbindung",
+  "halfBlind": "Halbverdeckte Schwalbenschwanzverbindung",
+  "style": "Schnittart",
+  "handCut": "Von Hand geschnitten",
+  "machineCut": "Maschinell geschnitten",
+  "pinWidth": "Stiftbreite",
+  "tailWidth": "Schwalbenbreite",
+  "socketDepth": "Taschentiefe",
+  "pinToTailRatio": "Verhältnis von Stiften zu Schwalben",
+  "halfPin": "Halber Stift"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Wartungsplaner",
+  "schedule": "Wartungsplan",
+  "overdue": "Überfällig",
+  "due": "Fällig",
+  "upcoming": "Bevorstehend",
+  "completed": "Abgeschlossen",
+  "healthScore": "Zustandsbewertung",
+  "interval": "Wartungsintervall",
+  "hours": "Betriebsstunden",
+  "days": "Tage",
+  "cuts": "Schnitte",
+  "priority": "Priorität",
+  "critical": "Kritisch",
+  "high": "Hoch",
+  "normal": "Mittel",
+  "low": "Niedrig",
+  "noRules": "Keine Wartungsregeln eingerichtet."
+}

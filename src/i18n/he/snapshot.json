@@ -1,0 +1,25 @@
+{
+  "title": "צילומי פרויקט",
+  "save": "שמור צילום",
+  "namePlaceholder": "שם צילום…",
+  "restore": "שחזור",
+  "delete": "מחק צילום",
+  "empty": "אין צילומים שמורים עדכה.",
+  "startFirst": "מתן שם לצילום הראשון",
+  "savedAt": "נשמר {{when}}",
+  "cabinetCount": "{{count}} ארון",
+  "cabinetCount_other": "{{count}} ארונות",
+  "compare": "השוואה",
+  "diff": {
+    "title": "השוואת צילומים",
+    "before": "לפני",
+    "after": "אחרי",
+    "close": "סגור",
+    "selectTwo": "בחר שני צילומים שונים להשוואה.",
+    "identical": "הצילומים זהים — לא זוהו שינויים.",
+    "cabinetsAdded": "{{count}} ארון נוסף",
+    "cabinetsAdded_other": "{{count}} ארונות נוספו",
+    "cabinetsRemoved": "{{count}} ארון הוסר",
+    "cabinetsRemoved_other": "{{count}} ארונות הוסרו"
+  }
+}

@@ -1,7 +1,9 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import en from './en.json';
+import { eagerEnglish } from './eager-en';
+import { loadMergedEnglish, loadRequestedNamespaces } from './load-namespaces';
 import { createPseudoLocale } from './pseudo-locales';
+import './resources';
 
 /** All supported UI languages. RTL locales: he, ar. */
 export const SUPPORTED_LANGUAGES = [
@@ -27,42 +29,28 @@ export const RTL_LANGS = new Set<SupportedLang>(
 );
 
 /**
- * Locale loader map — each entry is a dynamic import that Vite will code-split
- * into a separate chunk, loaded on first language switch (~45 KB saved on boot).
- */
-const LOCALE_LOADERS: Partial<Record<SupportedLang, () => Promise<Record<string, unknown>>>> = {
-  he: () => import('./he.json').then((m) => m.default as Record<string, unknown>),
-  es: () => import('./es.json').then((m) => m.default as Record<string, unknown>),
-  de: () => import('./de.json').then((m) => m.default as Record<string, unknown>),
-  fr: () => import('./fr.json').then((m) => m.default as Record<string, unknown>),
-  ar: () => import('./ar.json').then((m) => m.default as Record<string, unknown>),
-  ...(import.meta.env.MODE === 'e2e'
-    ? {
-        'en-XA': async () => createPseudoLocale(en, 'en-XA'),
-        'ar-XB': async () => createPseudoLocale(en, 'ar-XB'),
-      }
-    : {}),
-};
-
-/**
- * Load a locale on demand and add it to the i18next resource bundle.
- * Safe to call multiple times — skips if already loaded.
+ * Load a locale on demand and add the namespaces already requested by the shell.
+ * Feature panels load their own namespaces when they open. Safe to call more than once.
  */
 export async function loadLocale(lang: SupportedLang): Promise<void> {
-  if (lang === 'en' || i18n.hasResourceBundle(lang, 'translation')) return;
-  const loader = LOCALE_LOADERS[lang];
-  if (!loader) return;
-  const translations = await loader();
-  i18n.addResourceBundle(lang, 'translation', translations, true, true);
+  if (lang === 'en') return;
+  if (lang === 'en-XA' || lang === 'ar-XB') {
+    if (i18n.hasResourceBundle(lang, 'translation')) return;
+    const english = await loadMergedEnglish();
+    i18n.addResourceBundle(lang, 'translation', createPseudoLocale(english, lang), true, true);
+    return;
+  }
+  await loadRequestedNamespaces(lang);
 }
 
-// Boot with English only — non-en locales are lazy-loaded on first switch.
-i18n.use(initReactI18next).init({
+// Boot with the English namespaces used by the workspace route. Feature files load with their panels.
+void i18n.use(initReactI18next).init({
   resources: {
-    en: { translation: en },
+    en: { translation: eagerEnglish },
   },
   lng: 'en',
   fallbackLng: 'en',
+  returnNull: false,
   interpolation: { escapeValue: false },
 });
 

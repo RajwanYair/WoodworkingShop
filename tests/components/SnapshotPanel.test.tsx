@@ -3,7 +3,7 @@ import { within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
-import { SnapshotPanel } from '../../src/components/layout/SnapshotPanel';
+import { SnapshotPanel } from '../../src/features/workspace/SnapshotPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 import type { ProjectSnapshot } from '../../src/store/cabinet-store';
 

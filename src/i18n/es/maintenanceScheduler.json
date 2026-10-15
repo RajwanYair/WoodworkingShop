@@ -1,0 +1,19 @@
+{
+  "title": "Programador de mantenimiento",
+  "schedule": "Calendario de mantenimiento",
+  "overdue": "Atrasado",
+  "due": "Debe realizarse",
+  "upcoming": "Próximo",
+  "completed": "Completado",
+  "healthScore": "Puntuación del estado",
+  "interval": "Intervalo de mantenimiento",
+  "hours": "Horas de funcionamiento",
+  "days": "Días",
+  "cuts": "Cortes",
+  "priority": "Prioridad",
+  "critical": "Crítica",
+  "high": "Alta",
+  "normal": "Media",
+  "low": "Baja",
+  "noRules": "No hay reglas de mantenimiento configuradas."
+}

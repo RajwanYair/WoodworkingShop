@@ -1,0 +1,15 @@
+{
+  "title": "Material Suggestions",
+  "switch": "Switch to {{name}}",
+  "switchShort": "Use this",
+  "benefit": {
+    "deflection": "Deflection",
+    "weight": "Weight",
+    "cost": "Cost"
+  },
+  "quant": {
+    "savedKgPerSheet": "Saves {{value}} kg/sheet",
+    "deflectionReductionPct": "{{value}}% less deflection",
+    "costDeltaPct": "{{value}}% cost change"
+  }
+}

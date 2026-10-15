@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { FinishingCoatPanel } from '../../src/components/configurator/FinishingCoatPanel';
+import { FinishingCoatPanel } from '../../src/features/calculators/FinishingCoatPanel';
 
 describe('FinishingCoatPanel', () => {
   it('updates volume and drying schedule when the finish type changes', async () => {

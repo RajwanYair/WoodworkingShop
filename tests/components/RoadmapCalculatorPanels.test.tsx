@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { CalculatorsPanel } from '../../src/components/configurator/CalculatorsPanel';
+import { CalculatorsPanel } from '../../src/features/calculators/CalculatorsPanel';
 
 describe('roadmap calculator panels', () => {
   it('mounts the pocket-hole calculator and recalculates screw spacing', async () => {

@@ -1,0 +1,18 @@
+{
+  "title": "Calculadora de velocidad del taladro de columna",
+  "rpm": "Velocidad de rotación (rpm)",
+  "sfm": "Velocidad de corte superficial (SFM)",
+  "feedRate": "Avance",
+  "drillTime": "Tiempo de perforación",
+  "speedSetting": "Ajuste de velocidad",
+  "bitDiameter": "Diámetro de la broca",
+  "bitType": "Tipo de broca",
+  "material": "Material de perforación",
+  "depth": "Profundidad de perforación",
+  "twist": "Broca helicoidal",
+  "bradPoint": "Broca de punta centradora",
+  "forstner": "Broca Forstner",
+  "spade": "Broca de pala",
+  "holeSaw": "Sierra de corona",
+  "countersink": "Avellanador"
+}

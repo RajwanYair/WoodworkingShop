@@ -1,0 +1,15 @@
+{
+  "title": "Verschnittprognose",
+  "predictedWaste": "Prognostizierter Verschnitt",
+  "bestSheet": "Optimale Plattengröße",
+  "sheetsNeeded": "Benötigte Platten",
+  "wastePercent": "Verschnittquote",
+  "totalDemand": "Gesamtbedarf",
+  "confidence": "Prognosesicherheit",
+  "high": "Hoch",
+  "medium": "Mittel",
+  "low": "Niedrig",
+  "averageWaste": "Durchschnittlicher Verschnitt",
+  "recommendation": "Empfehlung",
+  "noSheets": "Keine Plattenformate konfiguriert."
+}

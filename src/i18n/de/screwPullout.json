@@ -1,0 +1,18 @@
+{
+  "title": "Schätzer für die Schraubenauszugskraft",
+  "screwDiameter": "Schraubendurchmesser",
+  "threadLength": "Gewindelänge im Holz",
+  "species": "Holzart / Dichte",
+  "pulloutForceN": "Geschätzte Auszugskraft",
+  "pulloutForceLbf": "Auszugskraft (lbf)",
+  "withdrawalResistance": "Ausziehwiderstand",
+  "safetyRating": "Eignungseinstufung",
+  "modelNote": "Die USDA-Gleichung 8-10a schätzt die kurzfristige Höchstlast für Holzschrauben in abgelagertem Holz bei Einschraubung quer zur Faser; sie ist keine zulässige Bemessungslast. Sie gilt nicht für Plattenwerkstoffe; die Einstufungen sind Näherungswerte. Prüfen Sie die tatsächliche Verbindung.",
+  "low": "Geringe Dichte (Kiefer, Zeder)",
+  "medium": "Mittlere Dichte (Ahorn, Eiche)",
+  "high": "Hohe Dichte (Hickory, Teak)",
+  "sheet": "Plattenwerkstoffe (Sperrholz, MDF)",
+  "adequate": "Ausreichend",
+  "marginal": "Grenzwertig – größere Schraube oder Vorbohrung erwägen",
+  "insufficient": "Nicht ausreichend – mechanisches Verbindungsmittel verwenden"
+}

@@ -20,7 +20,11 @@
   "i18n key usage": {
     "scope": "typescript,typescriptreact",
     "prefix": "t18",
-    "body": ["const { t } = useTranslation();", "// TODO: add '${1:key}' to en.json and he.json", "t('${1:key}')"],
+    "body": [
+      "const { t } = useTranslation();",
+      "// TODO: add '${1:namespace.key}' to src/i18n/en/${1:namespace}.json and the other five locales",
+      "t('${1:namespace.key}')",
+    ],
     "description": "i18next translation call with i18n-parity reminder",
   },
   "JSDoc block": {
@@ -132,8 +136,9 @@
     "scope": "typescript,typescriptreact",
     "prefix": "t18ns",
     "body": [
-      "const { t } = useTranslation('${1:namespace}');",
-      "// TODO: add '${1:namespace}.${2:key}' to en.json and he.json",
+      "const { t } = useTranslation();",
+      "// TODO: add '${1:namespace}.${2:key}' to src/i18n/en/${1:namespace}.json and the other five locales",
+      "t('${1:namespace}.${2:key}')",
     ],
     "description": "i18next namespaced translation hook with parity reminder",
   },

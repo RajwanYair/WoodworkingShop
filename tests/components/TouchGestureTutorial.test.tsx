@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { TouchGestureTutorial } from '../../src/components/layout/TouchGestureTutorial';
+import { TouchGestureTutorial } from '../../src/app/TouchGestureTutorial';
 
 const TOURED_KEY = 'woodworkingshop:preview-toured';
 const ONBOARDING_SEEN_KEY = 'onboarding-seen';

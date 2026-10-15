@@ -1,0 +1,12 @@
+{
+  "panel": "Panel",
+  "panelFailed": "{{panel}} failed to render",
+  "recoveryHint": "An unexpected error occurred. You can try reloading the panel or refreshing the page.",
+  "retry": "Retry",
+  "copyDetails": "Copy error details",
+  "details": "Error details",
+  "copied": "Copied!",
+  "reloadPage": "Reload page",
+  "warning": "Error",
+  "interactivePreview": "Interactive 3D preview"
+}

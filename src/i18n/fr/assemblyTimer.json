@@ -1,0 +1,8 @@
+{
+  "title": "Estimation du temps d'assemblage",
+  "step": "Étape",
+  "count": "Opérations",
+  "time": "Durée estimée",
+  "totalTime": "Durée totale estimée",
+  "noSteps": "Aucune étape d'assemblage pour la configuration actuelle"
+}

@@ -1,0 +1,25 @@
+{
+  "species_cherry": "Kirschbaum",
+  "dimension": "Brettmaß",
+  "coefficient": "Schwindmaßkoeffizient",
+  "species_oak": "Eiche",
+  "species_cedar": "Zeder",
+  "species_pine": "Kiefer",
+  "grain": "Holzfaserrichtung",
+  "species_maple": "Ahorn",
+  "initialMC": "Anfangs-Holzfeuchte",
+  "changeAmount": "Maßänderung",
+  "species_douglas_fir": "Douglasie",
+  "species_generic_hardwood": "Laubholz (allgemein)",
+  "grains": {
+    "tangential": "Tangentialrichtung",
+    "radial": "Radialrichtung"
+  },
+  "species": "Holzart",
+  "finalDimension": "Endmaß",
+  "effectiveMCChange": "Effektive Änderung der Holzfeuchte",
+  "title": "Holzfeuchte und Schwinden",
+  "targetMC": "Ziel-Holzfeuchte",
+  "species_generic_softwood": "Nadelholz (allgemein)",
+  "species_walnut": "Walnuss"
+}

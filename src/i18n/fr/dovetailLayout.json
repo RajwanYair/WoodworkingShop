@@ -1,0 +1,19 @@
+{
+  "title": "Calculateur de tracé de queues d’aronde",
+  "boardWidth": "Largeur de la planche",
+  "boardThickness": "Épaisseur de la planche",
+  "tailCount": "Nombre de queues",
+  "angle": "Angle de queue d’aronde",
+  "slopeRatio": "Rapport de pente",
+  "jointType": "Type d’assemblage",
+  "through": "Queue d’aronde traversante",
+  "halfBlind": "Queue d’aronde à demi-cachée",
+  "style": "Méthode de coupe",
+  "handCut": "Coupe à la main",
+  "machineCut": "Coupe à la machine",
+  "pinWidth": "Largeur des tenons",
+  "tailWidth": "Largeur des queues",
+  "socketDepth": "Profondeur d’emboîtement",
+  "pinToTailRatio": "Rapport tenons/queues",
+  "halfPin": "Demi-tenon"
+}

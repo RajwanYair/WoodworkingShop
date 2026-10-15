@@ -1,0 +1,18 @@
+{
+  "title": "Calculateur des temps de collage",
+  "glueType": "Type de colle",
+  "temperature": "Température",
+  "humidity": "Humidité relative",
+  "jointArea": "Surface du joint",
+  "jointCount": "Nombre de joints",
+  "openTime": "Temps ouvert",
+  "clampTime": "Temps de serrage",
+  "cureTime": "Temps de durcissement complet",
+  "recommendedPsi": "Pression de serrage recommandée",
+  "clampsNeeded": "Serre-joints nécessaires",
+  "pva": "PVA (colle jaune/blanche)",
+  "polyurethane": "Colle polyuréthane",
+  "epoxy": "Époxy",
+  "hideGlue": "Colle de peau",
+  "caGlue": "CA (cyanoacrylate)"
+}

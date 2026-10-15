@@ -1,0 +1,10 @@
+{
+  "title": "Reemplazo masivo de material",
+  "short": "Reemplazar",
+  "description": "Reemplazar un material con otro en todos los armarios de este proyecto. Esta acción se puede deshacer.",
+  "from": "Reemplazar",
+  "to": "Con",
+  "apply": "Aplicar a todos",
+  "applied": "¡Hecho! Use Ctrl+Z para deshacer.",
+  "summary": "Se actualizarán {{count}} armario(s): {{from}} → {{to}}"
+}

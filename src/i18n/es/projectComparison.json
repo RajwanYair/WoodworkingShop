@@ -1,0 +1,15 @@
+{
+  "title": "Comparación de proyectos",
+  "score": "Puntuación",
+  "rank": "Posición",
+  "best": "Mejor",
+  "worst": "Peor",
+  "cost": "Coste",
+  "waste": "Desperdicio",
+  "buildTime": "Tiempo de fabricación",
+  "materials": "Materiales",
+  "parts": "Piezas",
+  "sheets": "Tableros",
+  "weights": "Pesos",
+  "noProjects": "Añade al menos 2 proyectos para compararlos."
+}

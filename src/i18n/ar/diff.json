@@ -1,0 +1,16 @@
+{
+  "furnitureType": "النوع",
+  "width": "العرض",
+  "height": "الارتفاع",
+  "depth": "العمق",
+  "shelfCount": "الرفوف",
+  "carcassMaterial": "مادة الهيكل",
+  "backPanelMaterial": "المادة الخلفية",
+  "doorCount": "الأبواب",
+  "doorStyle": "طراز الباب",
+  "drawerCount": "الأدراج",
+  "kickHeight": "ارتفاع القاعدة",
+  "handleStyle": "طراز المقبض",
+  "edgeBanding": "تحزيم الحواف",
+  "hasBack": "يحتوي على لوح خلفي"
+}

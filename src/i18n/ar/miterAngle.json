@@ -1,0 +1,16 @@
+{
+  "title": "حاسبة زاوية القطع المائل",
+  "polygonSides": "عدد أضلاع المضلع",
+  "miterAngle": "زاوية القطع المائل",
+  "interiorAngle": "الزاوية الداخلية",
+  "bevelAngle": "زاوية الشطف",
+  "tiltAngle": "زاوية الميل",
+  "cornerAngle": "زاوية الركن",
+  "springAngle": "زاوية ارتكاز الكورنيش",
+  "wallAngle": "زاوية الجدار",
+  "insideCorner": "ركن داخلي",
+  "outsideCorner": "ركن خارجي",
+  "compound": "قطع مائل مركب",
+  "crownMolding": "قوالب التاج",
+  "polygon": "وصلة مضلعة"
+}

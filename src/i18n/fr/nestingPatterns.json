@@ -1,0 +1,18 @@
+{
+  "title": "Bibliothèque de modèles d’imbrication",
+  "pattern": "Modèle d’imbrication",
+  "addPattern": "Enregistrer le modèle",
+  "score": "Score de correspondance",
+  "noPatterns": "Aucun modèle enregistré.",
+  "patterns": "Modèles d’imbrication",
+  "category": "Catégorie",
+  "tags": "Étiquettes",
+  "fillRate": "Taux de remplissage",
+  "placements": "Placements",
+  "sheetSize": "Format du panneau",
+  "removePattern": "Supprimer le modèle",
+  "findBySheet": "Rechercher par panneau",
+  "waste": "Chutes",
+  "patternSaved": "Modèle enregistré dans la bibliothèque.",
+  "bestMatch": "Meilleure correspondance"
+}

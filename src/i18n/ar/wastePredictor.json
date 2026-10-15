@@ -1,0 +1,15 @@
+{
+  "title": "متنبئ الهدر",
+  "predictedWaste": "الهدر المتوقع",
+  "bestSheet": "أفضل مقاس للوح",
+  "sheetsNeeded": "الألواح المطلوبة",
+  "wastePercent": "نسبة الهدر",
+  "totalDemand": "إجمالي الطلب",
+  "confidence": "مستوى الثقة",
+  "high": "مرتفع",
+  "medium": "متوسط",
+  "low": "منخفض",
+  "averageWaste": "متوسط الهدر",
+  "recommendation": "التوصية",
+  "noSheets": "لم يتم إعداد مقاسات للألواح."
+}

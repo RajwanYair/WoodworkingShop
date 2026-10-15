@@ -1,0 +1,12 @@
+{
+  "title": "Voreinstellungen für Regalabstände",
+  "preset": "Aufbewahrungstyp",
+  "clearance": "Abstand pro Regalboden",
+  "shelfCount": "Passende Regalböden",
+  "noFit": "Die Schrankinnenhöhe ist für diese Voreinstellung zu gering",
+  "warning": "Warnung",
+  "customClearance": "Benutzerdefinierter Abstand (mm)",
+  "custom": "Benutzerdefiniert",
+  "positions": "Regalpositionen von unten",
+  "mm": "mm"
+}

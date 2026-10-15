@@ -1,0 +1,18 @@
+{
+  "title": "Estimateur de résistance à l’arrachement des vis",
+  "screwDiameter": "Diamètre de la vis",
+  "threadLength": "Longueur filetée dans le bois",
+  "species": "Essence de bois / densité",
+  "pulloutForceN": "Force d’arrachement estimée",
+  "pulloutForceLbf": "Force d’arrachement (lbf)",
+  "withdrawalResistance": "Résistance à l’arrachement",
+  "safetyRating": "Évaluation de la tenue",
+  "modelNote": "L’équation USDA 8-10a estime la charge ultime à court terme pour les vis à bois dans du bois sec, vissées dans le fil, et non une capacité admissible de calcul. Elle ne s’applique pas aux panneaux ; les valeurs sont indicatives. Vérifiez l’assemblage réel.",
+  "low": "Faible densité (pin, cèdre)",
+  "medium": "Densité moyenne (érable, chêne)",
+  "high": "Forte densité (noyer blanc, teck)",
+  "sheet": "Panneaux (contreplaqué, MDF)",
+  "adequate": "Adéquate",
+  "marginal": "Limite : envisagez une vis plus grosse ou un avant-trou",
+  "insufficient": "Insuffisante : utilisez une fixation mécanique"
+}

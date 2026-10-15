@@ -1,0 +1,12 @@
+{
+  "panel": "Panel",
+  "panelFailed": "No se pudo mostrar {{panel}}",
+  "recoveryHint": "Se produjo un error inesperado. Puedes volver a cargar el panel o actualizar la página.",
+  "retry": "Reintentar",
+  "copyDetails": "Copiar detalles del error",
+  "details": "Detalles del error",
+  "copied": "¡Copiado!",
+  "reloadPage": "Actualizar página",
+  "warning": "Error",
+  "interactivePreview": "Vista previa 3D interactiva"
+}

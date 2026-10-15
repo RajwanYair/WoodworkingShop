@@ -1,0 +1,12 @@
+{
+  "title": "Journal de fabrication",
+  "addPlaceholder": "Ajouter une note de fabrication…",
+  "hint": "Ctrl/Cmd + Entrée pour enregistrer",
+  "add": "Ajouter une note",
+  "edit": "Modifier l'entrée",
+  "save": "Enregistrer la note",
+  "cancel": "Annuler la modification",
+  "empty": "Aucune note pour le moment. Consignez les étapes, ajustements ou observations.",
+  "delete": "Supprimer l’entrée",
+  "clearAll": "Supprimer toutes les entrées"
+}

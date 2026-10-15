@@ -1,0 +1,16 @@
+{
+  "title": "Tool Wear Tracker",
+  "inventory": "Inventory",
+  "tool": "Tool",
+  "tools": "Tools",
+  "condition": "Condition",
+  "remaining": "Remaining Life",
+  "usage": "Usage Log",
+  "addTool": "Add Tool",
+  "logUsage": "Log Usage",
+  "alerts": "Maintenance Alerts",
+  "costPerMeter": "Cost per Meter",
+  "replacement": "Needs Replacement",
+  "noTools": "No tools in inventory.",
+  "noAlerts": "All tools in good condition."
+}

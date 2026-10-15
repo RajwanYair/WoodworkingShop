@@ -1,0 +1,15 @@
+{
+  "title": "Agrupación de listas de corte",
+  "group": "Grupo",
+  "groups": "Grupos",
+  "criteria": "Criterios de agrupación",
+  "material": "Material",
+  "thickness": "Grosor",
+  "grain": "Dirección de la veta",
+  "cabinet": "Armario",
+  "totalCuts": "Cortes totales",
+  "totalArea": "Área total",
+  "toolChanges": "Cambios de herramienta",
+  "mergeFlexible": "Agrupar piezas con veta flexible",
+  "noGroups": "No se generaron grupos."
+}

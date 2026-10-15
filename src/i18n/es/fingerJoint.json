@@ -1,0 +1,13 @@
+{
+  "title": "Calculadora de unión dentada",
+  "boardWidth": "Ancho de la tabla",
+  "boardThickness": "Grosor de la tabla",
+  "fingerWidth": "Ancho del diente",
+  "fingerCount": "Número de dientes",
+  "socketDepth": "Profundidad de la ranura",
+  "glueAllowance": "Margen para cola",
+  "glueSurface": "Superficie de pegado",
+  "layoutA": "Distribución de la tabla A",
+  "layoutB": "Distribución de la tabla B",
+  "auto": "Automático"
+}

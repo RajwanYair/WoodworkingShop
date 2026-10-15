@@ -31,8 +31,8 @@ const TARGET_LAYERS = new Map([
   ['engine', 'src/engine/'],
 ]);
 const ALLOWED_LAYER_IMPORTS = new Map([
-  ['app', new Set(['features'])],
-  ['features', new Set(['ui', 'store'])],
+  ['app', new Set(['features', 'ui', 'store'])],
+  ['features', new Set(['ui', 'store', 'engine', 'workers'])],
   ['ui', new Set()],
   ['store', new Set(['store', 'engine', 'platform'])],
   ['platform', new Set(['workers'])],

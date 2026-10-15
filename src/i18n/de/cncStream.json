@@ -1,0 +1,14 @@
+{
+  "title": "CNC-Streaming v2",
+  "startStream": "Stream starten",
+  "pauseStream": "Pausieren",
+  "resumeStream": "Fortsetzen",
+  "cancelStream": "Abbrechen",
+  "retryLine": "Zeile erneut senden",
+  "progress": "Fortschritt",
+  "linesRemaining": "Verbleibende Zeilen",
+  "estimatedTime": "Geschätzte Zeit",
+  "sessionState": "Sitzungsstatus",
+  "errorLines": "Fehlerzeilen",
+  "noErrors": "Keine Fehler."
+}

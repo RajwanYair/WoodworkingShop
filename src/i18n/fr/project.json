@@ -1,0 +1,13 @@
+{
+  "title": "Projet",
+  "add": "Ajouter une armoire",
+  "remove": "Supprimer",
+  "duplicate": "Dupliquer l'armoire",
+  "moveUp": "Déplacer l'armoire vers le haut",
+  "moveDown": "Déplacer l'armoire vers le bas",
+  "hint": "Plusieurs armoires partagent des plans de découpe optimisés. Double-cliquer pour renommer.",
+  "notes": "Notes",
+  "notesPlaceholder": "Notes optionnelles pour cette armoire…",
+  "mirror": "Miroir de l’armoire (créer un jumeau symétrique)",
+  "mirrorBadge": "miroir"
+}

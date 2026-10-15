@@ -1,0 +1,18 @@
+{
+  "title": "Calculadora de unión con espigas",
+  "diameter": "Diámetro de la espiga",
+  "spacing": "Separación entre espigas",
+  "depth": "Profundidad de perforación",
+  "drillBit": "Broca",
+  "count": "Número de espigas",
+  "clampTime": "Tiempo de apriete",
+  "orientation": "Orientación de la unión",
+  "edgeToFace": "Canto con cara",
+  "edgeToEdge": "Canto con canto",
+  "mitre": "Inglete",
+  "positions": "Posiciones de las espigas",
+  "jointLength": "Longitud de la unión",
+  "boardThickness": "Grosor del tablero",
+  "edgeClearance": "Distancia al canto",
+  "dowelLength": "Longitud de la espiga"
+}

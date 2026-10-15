@@ -1,0 +1,11 @@
+{
+  "title": "Photo de référence de la pièce",
+  "start": "Ouvrir la caméra",
+  "capture": "Prendre une photo",
+  "stop": "Arrêter la caméra",
+  "retake": "Reprendre",
+  "capturedAlt": "Photo de la pièce prise",
+  "videoFeed": "Flux vidéo en direct",
+  "notSupported": "Caméra non prise en charge sur cet appareil",
+  "error": "Erreur de caméra"
+}

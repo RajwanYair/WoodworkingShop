@@ -1,0 +1,15 @@
+{
+  "pitchRatio": "Steigungsverhältnis",
+  "title": "Sparrenlänge und Kerve",
+  "totalLength": "Gesamtlänge (mit Dachüberstand)",
+  "rafterLength": "Sparrenlänge (First bis Wandauflager)",
+  "seatCut": "Auflager-Schnittwinkel",
+  "overhang": "Dachüberstand",
+  "birdsmouthDepth": "Kerbentiefe",
+  "rise": "Senkrechter Anstieg",
+  "run": "Waagerechter Lauf",
+  "totalSpan": "Gesamte Gebäudebreite",
+  "plateWidth": "Breite der Wandpfette",
+  "plumbCut": "Lotrechter Schnittwinkel",
+  "shedRoof": "Pultdach (einseitige Neigung)"
+}

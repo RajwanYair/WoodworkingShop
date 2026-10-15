@@ -1,0 +1,15 @@
+{
+  "title": "Prévision des chutes",
+  "predictedWaste": "Chutes prévues",
+  "bestSheet": "Format de panneau optimal",
+  "sheetsNeeded": "Panneaux nécessaires",
+  "wastePercent": "% de chutes",
+  "totalDemand": "Demande totale",
+  "confidence": "Niveau de confiance",
+  "high": "Élevée",
+  "medium": "Moyenne",
+  "low": "Faible",
+  "averageWaste": "Chutes moyennes",
+  "recommendation": "Recommandation",
+  "noSheets": "Aucun format de panneau configuré."
+}

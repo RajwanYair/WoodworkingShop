@@ -1,0 +1,15 @@
+{
+  "title": "מחשבון שכבות גימור",
+  "surfaceArea": "שטח פנים",
+  "coatCount": "מספר שכבות",
+  "finishType": "סוג גימור",
+  "polyurethane": "פוליאוריתן",
+  "lacquer": "לכה",
+  "shellac": "שלק",
+  "waterbased": "על בסיס מים",
+  "oil": "שמן / שמן דני",
+  "volumeNeeded": "נפח נדרש",
+  "dryTimeBetweenCoats": "זמן יבוש בין שכבות",
+  "totalDryTime": "זמן יבוש כולל",
+  "coveragePerLitre": "כיסוי לליטר"
+}

@@ -1,0 +1,15 @@
+{
+  "title": "Regroupement des listes de débit",
+  "group": "Groupe",
+  "groups": "Groupes",
+  "criteria": "Critères de regroupement",
+  "material": "Matériau",
+  "thickness": "Épaisseur",
+  "grain": "Sens du fil",
+  "cabinet": "Caisson",
+  "totalCuts": "Total des coupes",
+  "totalArea": "Surface totale",
+  "toolChanges": "Changements d'outil",
+  "mergeFlexible": "Fusionner les pièces sans contrainte de fil",
+  "noGroups": "Aucun groupe généré."
+}

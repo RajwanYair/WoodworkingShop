@@ -1,0 +1,16 @@
+{
+  "title": "Synchronisation cloud",
+  "encrypt": "Chiffrer",
+  "decrypt": "Déchiffrer",
+  "passphrase": "Phrase secrète",
+  "passphraseHint": "Au moins 8 caractères",
+  "syncing": "Synchronisation en cours…",
+  "synced": "Synchronisé",
+  "conflict": "Conflit de synchronisation",
+  "conflictDesc": "Des modifications simultanées ont été détectées ; veuillez résoudre le conflit.",
+  "acceptRemote": "Accepter la version distante",
+  "keepLocal": "Conserver la version locale",
+  "lastSynced": "Dernière synchronisation",
+  "envelopeInvalid": "Enveloppe de synchronisation invalide.",
+  "noPassphrase": "Une phrase secrète est requise pour synchroniser."
+}

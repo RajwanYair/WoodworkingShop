@@ -1,0 +1,8 @@
+{
+  "title": "Hardware List",
+  "name": "Item",
+  "qty": "Qty",
+  "unit": "Unit",
+  "supplier": "Supplier",
+  "qtyHint": "Edit qty cells to override calculated amounts"
+}

@@ -1,0 +1,15 @@
+{
+  "title": "Maßhinweise",
+  "kitchenBaseHeight": "Die Standardhöhe eines Küchenunterschranks beträgt {{standard}} mm (bei dir: {{current}} mm)",
+  "kitchenBaseDepth": "Die Standardtiefe eines Küchenunterschranks beträgt {{standard}} mm (bei dir: {{current}} mm)",
+  "overheadGap": "Lasse {{gap}} mm Abstand zwischen Arbeitsplatte und Oberschrank für bequemen Zugriff",
+  "bookshelfDepthShallow": "Mindesttiefe für A4-Bücher im Bücherregal: {{min}} mm (bei dir: {{current}} mm)",
+  "bookshelfDepthDeep": "Eine Regaltiefe über {{recommended}} mm verschwendet Material (bei dir: {{current}} mm)",
+  "bookshelfSpan": "Die Regalspannweite von {{current}} mm überschreitet den sicheren Wert von {{maxSpan}} mm für 18-mm-Platten — erwäge eine Mittelstütze",
+  "wardrobeDepthShallow": "Die Schranktiefe von {{current}} mm liegt unter den empfohlenen {{min}} mm für hängende Kleidung",
+  "tallCabinet": "Die Schrankhöhe von {{current}} mm übersteigt die bequeme Reichhöhe im Stehen ({{max}} mm)",
+  "deskHeight": "Die ergonomische Schreibtischhöhe beträgt {{min}}–{{max}} mm (bei dir: {{current}} mm)",
+  "deskDepth": "Mindesttiefe für einen Schreibtisch mit Monitor: {{min}} mm (bei dir: {{current}} mm)",
+  "reachZone": "Die Schrankoberkante bei {{current}} mm liegt über der bequemen Reichhöhe ({{max}} mm)",
+  "sheetAlignment": "Die Breite von {{current}} mm passt nicht zum Standardplattenmaß von {{nearest}} mm — passe sie an, um Verschnitt zu verringern"
+}

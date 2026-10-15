@@ -1,0 +1,18 @@
+{
+  "title": "مكتبة أنماط التداخل",
+  "pattern": "نمط تداخل",
+  "addPattern": "حفظ النمط",
+  "score": "درجة المطابقة",
+  "noPatterns": "لم تُحفظ أنماط بعد.",
+  "patterns": "أنماط التداخل",
+  "category": "الفئة",
+  "tags": "الوسوم",
+  "fillRate": "نسبة الاستغلال",
+  "placements": "مواضع القطع",
+  "sheetSize": "مقاس اللوح",
+  "removePattern": "إزالة النمط",
+  "findBySheet": "البحث حسب اللوح",
+  "waste": "الهدر",
+  "patternSaved": "تم حفظ النمط في المكتبة.",
+  "bestMatch": "أفضل تطابق"
+}

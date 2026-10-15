@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { ShoppingListPanel } from '../../src/components/optimizer/optimizer-shopping-list-panel';
+import { ShoppingListPanel } from '../../src/features/optimizer/optimizer-shopping-list-panel';
 import { formatNumber } from '../../src/i18n/format';
 import { makeCutSheet } from '../helpers';
 

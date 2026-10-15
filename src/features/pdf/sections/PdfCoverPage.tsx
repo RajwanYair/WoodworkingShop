@@ -1,0 +1,120 @@
+import { Page, Text, View } from '@react-pdf/renderer';
+import type { CabinetConfig, OptimizationResult, HardwareItem } from '../../../engine/core/types';
+import { s } from '../pdf-tokens';
+import type { PdfCtx } from '../pdf-i18n';
+import i18n from '../../../i18n/index';
+import { formatNumber } from '../../../i18n/format';
+
+interface PdfCoverPageProps {
+  ctx: PdfCtx;
+  config: CabinetConfig;
+  cMatName: string;
+  cMatThickness: number;
+  optimization: OptimizationResult;
+  hardware: HardwareItem[];
+  cabinetCount: number;
+}
+
+export function PdfCoverPage({
+  ctx,
+  config,
+  cMatName,
+  cMatThickness,
+  optimization,
+  hardware,
+  cabinetCount,
+}: PdfCoverPageProps) {
+  const { T, fontFamily, fontFamilyBold, textAlign, isRTL, date, coverTitle, pageSize } = ctx;
+  const rowDir = isRTL ? ({ flexDirection: 'row-reverse' } as const) : {};
+  return (
+    <Page size={pageSize} style={[s.coverPage, { fontFamily }]}>
+      {/* Top dark band */}
+      <View style={s.coverTopBand}>
+        <Text style={s.coverBigEmoji}>🪚</Text>
+        <Text style={[s.coverMainTitle, { fontFamily: fontFamilyBold }]}>{T.coverTitle}</Text>
+        <View style={s.coverGoldLine} />
+        <Text style={[s.coverProjectName, { fontFamily: fontFamilyBold }]}>{coverTitle}</Text>
+      </View>
+
+      {/* Mid body with info box */}
+      <View style={s.coverMidBody}>
+        <View style={s.coverInfoBox}>
+          <View style={[s.coverInfoRow, rowDir]}>
+            <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }]}>
+              <Text style={[s.coverInfoLabel, { fontFamily: 'Helvetica', flex: 0 }]}>📐</Text>
+              <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>{T.dimensions}</Text>
+            </View>
+            <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>
+              {config.width} × {config.height} × {config.depth} mm
+            </Text>
+          </View>
+          <View style={[s.coverInfoRow, rowDir]}>
+            <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }]}>
+              <Text style={[s.coverInfoLabel, { fontFamily: 'Helvetica', flex: 0 }]}>🪵</Text>
+              <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>{T.carcassMaterial}</Text>
+            </View>
+            <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>
+              {cMatName} ({cMatThickness} mm)
+            </Text>
+          </View>
+          <View style={[s.coverInfoRow, rowDir]}>
+            <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }]}>
+              <Text style={[s.coverInfoLabel, { fontFamily: 'Helvetica', flex: 0 }]}>🚪</Text>
+              <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>{T.doorsShelves}</Text>
+            </View>
+            <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>
+              {i18n.t('pdf.coverDoor', { count: config.doorCount, lng: ctx.lang })} ·{' '}
+              {formatNumber(config.shelfCount, ctx.lang)} {T.specShelves}
+            </Text>
+          </View>
+          <View style={[s.coverInfoRow, rowDir]}>
+            <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }]}>
+              <Text style={[s.coverInfoLabel, { fontFamily: 'Helvetica', flex: 0 }]}>✂️</Text>
+              <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>{T.cutSheets}</Text>
+            </View>
+            <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>
+              {i18n.t('pdf.coverSheet', { count: optimization.totalSheets, lng: ctx.lang })} ·{' '}
+              {formatNumber(optimization.overallYield, ctx.lang)}% {T.yield}
+            </Text>
+          </View>
+          <View style={[s.coverInfoRow, rowDir]}>
+            <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }]}>
+              <Text style={[s.coverInfoLabel, { fontFamily: 'Helvetica', flex: 0 }]}>🔩</Text>
+              <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>{T.hardwareItems}</Text>
+            </View>
+            <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>
+              {i18n.t('pdf.coverHardware', { count: hardware.length, lng: ctx.lang })}
+            </Text>
+          </View>
+          {cabinetCount > 1 && (
+            <View style={[s.coverInfoRow, rowDir]}>
+              <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }]}>
+                <Text style={[s.coverInfoLabel, { fontFamily: 'Helvetica', flex: 0 }]}>🗄️</Text>
+                <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>{T.cabinetsInProject}</Text>
+              </View>
+              <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>
+                {formatNumber(cabinetCount, ctx.lang)} {T.cabinets}
+              </Text>
+            </View>
+          )}
+          <View style={[s.coverInfoRowLast, rowDir]}>
+            <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }]}>
+              <Text style={[s.coverInfoLabel, { fontFamily: 'Helvetica', flex: 0 }]}>📅</Text>
+              <Text style={[s.coverInfoLabel, { fontFamily, textAlign }]}>{T.generated}</Text>
+            </View>
+            <Text style={[s.coverInfoValue, { fontFamily: fontFamilyBold, textAlign }]}>{date}</Text>
+          </View>
+        </View>
+      </View>
+
+      {/* Bottom dark strip */}
+      <View style={[s.coverBottomStrip, rowDir]}>
+        <View style={[{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }]}>
+          <Text style={[s.coverBottomText, { fontFamily: 'Helvetica', flex: 0 }]}>🪵</Text>
+          <Text style={[s.coverBottomText, { fontFamily }]}>{T.brandFooter}</Text>
+        </View>
+        <Text style={[s.coverBottomDate, { fontFamily: fontFamilyBold }]}>{date}</Text>
+      </View>
+    </Page>
+  );
+}

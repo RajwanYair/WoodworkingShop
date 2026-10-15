@@ -1,0 +1,15 @@
+{
+  "title": "Vorbohrungs-Rechner",
+  "screwGauge": "Schraubengröße",
+  "screwLength": "Schraubenlänge",
+  "woodHardness": "Holzhärte",
+  "pilotHoleDiameter": "Vorbohrungsdurchmesser",
+  "clearanceHole": "Durchmesser des Durchgangslochs",
+  "countersinkDiameter": "Senkungsdurchmesser",
+  "countersinkDepth": "Senkungstiefe",
+  "pilotDepth": "Vorbohrtiefe",
+  "softwood": "Weichholz",
+  "hardwood": "Hartholz",
+  "plywood": "Sperrholz",
+  "mdf": "MDF-Platte"
+}

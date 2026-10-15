@@ -1,0 +1,12 @@
+{
+  "title": "Analytics Dashboard",
+  "sessions": "Sessions",
+  "totalEvents": "Total events",
+  "topMaterials": "Top materials",
+  "costTrends": "Cost trends",
+  "noData": "No analytics data available",
+  "exportData": "Export analytics",
+  "selectionCount": "{{count}} selection",
+  "selectionCount_other": "{{count}} selections",
+  "averageCost": "Avg. cost"
+}

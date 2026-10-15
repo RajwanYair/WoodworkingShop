@@ -1,0 +1,15 @@
+{
+  "title": "הצעות חומר",
+  "switch": "עבור ל-{{name}}",
+  "switchShort": "בחר זאת",
+  "benefit": {
+    "deflection": "כיווץ",
+    "weight": "משקל",
+    "cost": "עלות"
+  },
+  "quant": {
+    "savedKgPerSheet": "חוסך {{value}} ק\"ג/לוח",
+    "deflectionReductionPct": "{{value}}% פחות כיפוף",
+    "costDeltaPct": "{{value}}% שינוי עלות"
+  }
+}

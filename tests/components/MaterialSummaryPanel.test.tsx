@@ -1,7 +1,7 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import { MaterialSummaryPanel } from '../../src/components/optimizer/optimizer-material-summary-panel';
+import { MaterialSummaryPanel } from '../../src/features/optimizer/optimizer-material-summary-panel';
 import { formatNumber } from '../../src/i18n/format';
 import { makeCutSheet } from '../helpers';
 

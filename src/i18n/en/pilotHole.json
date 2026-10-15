@@ -1,0 +1,15 @@
+{
+  "title": "Pilot Hole Calculator",
+  "screwGauge": "Screw Gauge",
+  "screwLength": "Screw Length",
+  "woodHardness": "Wood Hardness",
+  "pilotHoleDiameter": "Pilot Hole Diameter",
+  "clearanceHole": "Clearance Hole Diameter",
+  "countersinkDiameter": "Countersink Diameter",
+  "countersinkDepth": "Countersink Depth",
+  "pilotDepth": "Pilot Hole Depth",
+  "softwood": "Softwood",
+  "hardwood": "Hardwood",
+  "plywood": "Plywood",
+  "mdf": "MDF"
+}

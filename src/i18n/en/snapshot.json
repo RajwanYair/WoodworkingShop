@@ -1,0 +1,25 @@
+{
+  "title": "Project Snapshots",
+  "save": "Save Snapshot",
+  "namePlaceholder": "Snapshot name…",
+  "restore": "Restore",
+  "delete": "Delete snapshot",
+  "empty": "No snapshots saved yet.",
+  "startFirst": "Name first snapshot",
+  "savedAt": "Saved {{when}}",
+  "cabinetCount": "{{count}} cabinet",
+  "cabinetCount_other": "{{count}} cabinets",
+  "compare": "Compare",
+  "diff": {
+    "title": "Compare Snapshots",
+    "before": "Before",
+    "after": "After",
+    "close": "Close",
+    "selectTwo": "Select two different snapshots to compare.",
+    "identical": "These snapshots are identical — no changes detected.",
+    "cabinetsAdded": "{{count}} cabinet added",
+    "cabinetsAdded_other": "{{count}} cabinets added",
+    "cabinetsRemoved": "{{count}} cabinet removed",
+    "cabinetsRemoved_other": "{{count}} cabinets removed"
+  }
+}

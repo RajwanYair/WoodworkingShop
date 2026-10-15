@@ -1,0 +1,15 @@
+{
+  "title": "استيراد كتالوج المجتمع",
+  "urlLabel": "عنوان URL للكتالوج",
+  "urlPlaceholder": "https://example.com/catalog.json",
+  "importButton": "استيراد",
+  "importing": "جارٍ الاستيراد…",
+  "previewTitle": "تم العثور على {{count}} مادة",
+  "previewTitle_other": "تم العثور على {{count}} مواد",
+  "addSelected": "إضافة المحدد إلى موادي",
+  "added": "تمت إضافة {{count}} مادة",
+  "added_other": "تمت إضافة {{count}} مواد",
+  "alreadyExists": "موجود بالفعل في مكتبتك",
+  "errorFetch": "تعذّر جلب الكتالوج: {{message}}",
+  "noMaterials": "الكتالوج فارغ."
+}

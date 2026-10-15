@@ -1,0 +1,15 @@
+{
+  "title": "Resumen de costes",
+  "category": "Categoría",
+  "amount": "Importe",
+  "share": "Proporción",
+  "total": "Total",
+  "materials": "Materiales",
+  "edgeBanding": "Canteado",
+  "hardware": "Herrajes",
+  "waste": "Margen por desperdicio",
+  "finish": "Acabado / pintura",
+  "labour": "Mano de obra",
+  "exportCsv": "Exportar CSV",
+  "tableAriaLabel": "Desglose de costes"
+}

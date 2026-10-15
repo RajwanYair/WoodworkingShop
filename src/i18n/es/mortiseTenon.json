@@ -1,0 +1,23 @@
+{
+  "title": "Calculadora de caja y espiga",
+  "description": "Calcula las dimensiones de la caja y la espiga según la sección de la madera",
+  "stockThickness": "Grosor de la madera",
+  "stockWidth": "Ancho de la madera",
+  "jointType": "Tipo de unión",
+  "through": "Pasante",
+  "blind": "Ciega",
+  "wedged": "Acuñada",
+  "stub": "Espiga corta",
+  "tenonThickness": "Grosor de la espiga",
+  "tenonWidth": "Ancho de la espiga",
+  "tenonLength": "Longitud de la espiga",
+  "mortiseWidth": "Ancho de la caja",
+  "mortiseHeight": "Alto de la caja",
+  "mortiseDepth": "Profundidad de la caja",
+  "mortiseOffset": "Desplazamiento de la caja",
+  "haunchDepth": "Profundidad del rebajo",
+  "shoulderSetback": "Retiro del hombro",
+  "recommendedChisel": "Ancho de formón recomendado",
+  "glueSurfaceArea": "Superficie de encolado",
+  "thicknessRatio": "Relación de grosor"
+}

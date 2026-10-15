@@ -1,0 +1,17 @@
+{
+  "title": "Suggestions d’agencement",
+  "noSuggestions": "Aucune suggestion : la configuration semble optimale !",
+  "apply": "Appliquer",
+  "dismiss": "Ignorer",
+  "shelfTooClose": "Les étagères sont trop rapprochées (écart moyen : {{avgGapMm}} mm ; minimum recommandé : {{minMm}} mm)",
+  "shelfTooFar": "Envisagez d’ajouter une étagère (écart moyen : {{avgGapMm}} mm ; maximum pratique : {{maxMm}} mm)",
+  "tooManyDrawers": "{{drawerCount}} tiroirs risquent de ne pas tenir confortablement dans une hauteur de {{heightMm}} mm (maximum pratique : {{maxUseful}})",
+  "addDrawers": "Un tiroir inférieur facilite l’accès dans les meubles de {{heightMm}} mm de haut",
+  "kitchenBaseHeight": "La hauteur du meuble, {{current}} mm, diffère de la hauteur standard d’un meuble bas de cuisine : {{standard}} mm",
+  "kitchenBaseDepth": "La profondeur du meuble, {{current}} mm, diffère de la profondeur standard d’un meuble bas de cuisine : {{standard}} mm",
+  "reachZone": "Le haut du meuble, à {{current}} mm, dépasse la hauteur de portée confortable de {{max}} mm",
+  "lowClearance": "Il ne reste que {{clearanceMm}} mm sous le plafond ; prévoyez au moins 50 mm pour l’installation",
+  "exceedsCeiling": "Le meuble dépasse la hauteur de la pièce de {{overMm}} mm",
+  "wideSpanRisk": "Portée importante de {{widthMm}} mm : envisagez un support central pour limiter la flèche de l’étagère",
+  "costMaterialAlternative": "Le panneau mélaminé est une solution économique au contreplaqué pour les finitions peintes"
+}

@@ -1,0 +1,15 @@
+{
+  "title": "סיכום עלויות",
+  "category": "קטגוריה",
+  "amount": "סכום",
+  "share": "אחוז",
+  "total": "סך הכל",
+  "materials": "חומרים",
+  "edgeBanding": "ספירת קצוות",
+  "hardware": "אבזרים",
+  "waste": "קצבת פסולת",
+  "finish": "צבע / גימור",
+  "labour": "עבודה",
+  "exportCsv": "ייצוא CSV",
+  "tableAriaLabel": "טבלת פירוט עלויות"
+}

@@ -1,0 +1,11 @@
+{
+  "title": "Tema",
+  "light": "Claro",
+  "dark": "Oscuro",
+  "highContrast": "Alto contraste",
+  "highContrastDark": "Oscuro de alto contraste",
+  "systemPreference": "Usar preferencia del sistema",
+  "toggle": "Cambiar tema",
+  "colorScheme": "Esquema de colores",
+  "contrastFailures": "Fallos de contraste"
+}

@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
-import { PresetsPanel } from '../../src/components/configurator/PresetsPanel';
+import { PresetsPanel } from '../../src/features/configurator/PresetsPanel';
 import { useCabinetStore } from '../../src/store/cabinet-store';
 
 describe('PresetsPanel', () => {

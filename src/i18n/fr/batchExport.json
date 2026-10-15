@@ -1,0 +1,21 @@
+{
+  "title": "Export groupé",
+  "create": "Créer un lot",
+  "start": "Lancer l'exportation",
+  "cancel": "Annuler le lot",
+  "progress": "Avancement",
+  "completed": "Terminé",
+  "failed": "Échoué",
+  "pending": "En attente",
+  "cancelled": "Annulé",
+  "format": "Type de fichier",
+  "priority": "Priorité",
+  "high": "Haute",
+  "normal": "Normale",
+  "low": "Basse",
+  "manifest": "Récapitulatif des exports",
+  "totalSize": "Taille totale",
+  "duration": "Durée",
+  "noItems": "Aucun élément à exporter n'a été ajouté.",
+  "batchComplete": "L'exportation groupée est terminée."
+}

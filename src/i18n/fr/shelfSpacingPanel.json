@@ -1,0 +1,12 @@
+{
+  "title": "Préréglages d’espacement des étagères",
+  "preset": "Type de rangement",
+  "clearance": "Espacement par étagère",
+  "shelfCount": "Étagères compatibles",
+  "noFit": "La hauteur intérieure du meuble est insuffisante pour ce préréglage",
+  "warning": "Avertissement",
+  "customClearance": "Espacement personnalisé (mm)",
+  "custom": "Personnalisé",
+  "positions": "Positions des étagères depuis le bas",
+  "mm": "mm"
+}

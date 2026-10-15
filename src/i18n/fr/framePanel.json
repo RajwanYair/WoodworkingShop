@@ -1,0 +1,13 @@
+{
+  "title": "Calculateur de cadre et panneau",
+  "frameWidth": "Largeur du cadre",
+  "frameHeight": "Hauteur du cadre",
+  "railWidth": "Largeur de la traverse",
+  "stileWidth": "Largeur du montant",
+  "grooveDepth": "Profondeur de la rainure",
+  "panelFloat": "Jeu du panneau (de chaque côté)",
+  "panelWidth": "Largeur du panneau",
+  "panelHeight": "Hauteur du panneau",
+  "expansionAllowance": "Marge de dilatation",
+  "grooveWidth": "Largeur de la rainure"
+}

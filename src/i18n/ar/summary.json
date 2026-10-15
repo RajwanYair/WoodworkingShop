@@ -1,0 +1,13 @@
+{
+  "title": "ملخص المشروع",
+  "sectionLabel": "ملخص مشروع متعدد الخزائن",
+  "totalCabinets": "الخزائن",
+  "totalParts": "إجمالي القطع",
+  "totalSheets": "الألواح المستخدمة",
+  "overallYield": "الاستغلال الكلي",
+  "avgSheetYield": "متوسط الاستغلال",
+  "totalWaste": "إجمالي الفاقد",
+  "grainConflicts": "تعارضات الحبيبة",
+  "totalWeight": "وزن الألواح",
+  "estimatedLabour": "العمل المقدر"
+}

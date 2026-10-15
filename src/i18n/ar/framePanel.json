@@ -1,0 +1,13 @@
+{
+  "title": "حاسبة الإطار والحشوة",
+  "frameWidth": "عرض الإطار",
+  "frameHeight": "ارتفاع الإطار",
+  "railWidth": "عرض العارضة",
+  "stileWidth": "عرض القائم",
+  "grooveDepth": "عمق المجرى",
+  "panelFloat": "خلوص الحشوة (لكل جانب)",
+  "panelWidth": "عرض الحشوة",
+  "panelHeight": "ارتفاع الحشوة",
+  "expansionAllowance": "سماحية التمدد",
+  "grooveWidth": "عرض المجرى"
+}

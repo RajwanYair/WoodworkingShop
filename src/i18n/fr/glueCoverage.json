@@ -1,0 +1,19 @@
+{
+  "title": "Calculateur de quantité de colle à bois",
+  "surfaceArea": "Surface à encoller",
+  "glueType": "Type de colle",
+  "jointCount": "Nombre d’assemblages",
+  "netVolume": "Volume net nécessaire",
+  "recommendedVolume": "Volume recommandé (+15 % de marge)",
+  "openTime": "Temps ouvert",
+  "clampingTime": "Temps de serrage",
+  "cureTime": "Temps de durcissement complet",
+  "spreadRate": "Rendement d’application",
+  "types": {
+    "pva": "PVA (colle blanche / jaune)",
+    "polyurethane": "Polyuréthane",
+    "epoxy": "Époxy",
+    "hide": "Colle animale",
+    "ca": "Cyanoacrylate (CA)"
+  }
+}

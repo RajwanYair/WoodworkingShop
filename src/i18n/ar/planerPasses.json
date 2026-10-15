@@ -1,0 +1,13 @@
+{
+  "title": "حاسبة تمريرات فارة تسوية الخشب",
+  "initialThickness": "السماكة الأولية",
+  "targetThickness": "السماكة المستهدفة",
+  "maxPassDepth": "أقصى عمق للقطع في التمريرة",
+  "snipeLength": "طول أثر الفارة عند الطرف (لكل طرف)",
+  "boardLength": "طول اللوح",
+  "passCount": "عدد التمريرات",
+  "depthPerPass": "عمق القطع لكل تمريرة",
+  "totalRemoval": "إجمالي المادة المزالة",
+  "snipeAllowance": "سماحية أثر الفارة (عند الطرفين)",
+  "effectiveLength": "الطول الصالح للاستخدام"
+}

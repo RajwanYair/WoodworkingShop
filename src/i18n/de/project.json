@@ -1,0 +1,13 @@
+{
+  "title": "Projekt",
+  "add": "Schrank hinzufügen",
+  "remove": "Entfernen",
+  "duplicate": "Schrank duplizieren",
+  "moveUp": "Schrank nach oben verschieben",
+  "moveDown": "Schrank nach unten verschieben",
+  "hint": "Mehrere Schränke teilen optimierte Zuschnittpläne. Doppelklick zum Umbenennen.",
+  "notes": "Notizen",
+  "notesPlaceholder": "Optionale Notizen für diesen Schrank…",
+  "mirror": "Schrank spiegeln (symmetrisches Gegenstück erstellen)",
+  "mirrorBadge": "gespiegelt"
+}

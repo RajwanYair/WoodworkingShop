@@ -1,0 +1,5 @@
+{
+  "usageLabel": "{{used}} KB belegt / Limit {{quota}} MB",
+  "nearLimitWarning": "Speicher fast voll — erwägen Sie, alte Projekte zu exportieren und zu löschen",
+  "unavailable": "Die Speichernutzung ist in diesem Browser nicht verfügbar."
+}

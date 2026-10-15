@@ -1,0 +1,15 @@
+{
+  "title": "Treppenwangen-Rechner",
+  "totalRise": "Gesamthöhe",
+  "treadDepth": "Auftrittstiefe",
+  "idealRiser": "Ideale Steigungshöhe",
+  "riserCount": "Anzahl der Steigungen",
+  "actualRiser": "Tatsächliche Steigungshöhe",
+  "treadCount": "Anzahl der Auftritte",
+  "totalRun": "Gesamtlauflänge",
+  "stringerLength": "Wangenlänge",
+  "stringerAngle": "Wangenwinkel",
+  "ircPass": "Erfüllt die IRC-2021-Grenzwerte für Steigung und Auftritt",
+  "riserTooTall": "Steigung überschreitet den IRC-Höchstwert von 7¾\" (196.85 mm)",
+  "treadTooShallow": "Auftritt unterschreitet den IRC-Mindestwert von 10\" (254 mm)"
+}

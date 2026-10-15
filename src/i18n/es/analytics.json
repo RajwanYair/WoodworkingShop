@@ -1,0 +1,12 @@
+{
+  "title": "Panel de análisis",
+  "sessions": "Sesiones",
+  "totalEvents": "Total de eventos",
+  "topMaterials": "Materiales más usados",
+  "costTrends": "Tendencias de costes",
+  "noData": "No hay datos de análisis disponibles",
+  "exportData": "Exportar análisis",
+  "selectionCount": "{{count}} selección",
+  "selectionCount_other": "{{count}} selecciones",
+  "averageCost": "Coste medio"
+}

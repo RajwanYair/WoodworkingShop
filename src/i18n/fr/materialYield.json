@@ -1,0 +1,18 @@
+{
+  "title": "Optimiseur de rendement matière",
+  "optimize": "Optimiser le rendement matière",
+  "demands": "Besoins en matériaux",
+  "offCuts": "Chutes disponibles",
+  "allocations": "Affectations",
+  "metrics": "Indicateurs de rendement",
+  "totalArea": "Surface totale nécessaire",
+  "areaSaved": "Surface économisée",
+  "yieldPercentage": "Taux de rendement matière",
+  "costSavings": "Économies estimées",
+  "fromOffCuts": "À partir de chutes",
+  "fromNewSheets": "À partir de panneaux neufs",
+  "rotated": "Tourné",
+  "grainLocked": "Sens du fil imposé",
+  "noOffCuts": "Aucune chute disponible pour être réutilisée.",
+  "optimizationComplete": "Optimisation du rendement matière terminée."
+}

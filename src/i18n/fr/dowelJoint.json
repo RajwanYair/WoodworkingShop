@@ -1,0 +1,18 @@
+{
+  "title": "Calculateur d’assemblage par tourillons",
+  "diameter": "Diamètre du tourillon",
+  "spacing": "Espacement des tourillons",
+  "depth": "Profondeur de perçage",
+  "drillBit": "Foret",
+  "count": "Nombre de tourillons",
+  "clampTime": "Temps de serrage",
+  "orientation": "Orientation de l’assemblage",
+  "edgeToFace": "Chant sur face",
+  "edgeToEdge": "Chant sur chant",
+  "mitre": "Onglet",
+  "positions": "Positions des tourillons",
+  "jointLength": "Longueur de l’assemblage",
+  "boardThickness": "Épaisseur du panneau",
+  "edgeClearance": "Distance au bord",
+  "dowelLength": "Longueur du tourillon"
+}

@@ -1,0 +1,15 @@
+{
+  "title": "Calculadora de plantilla circular para fresadora",
+  "targetDiameter": "Diámetro deseado",
+  "bitDiameter": "Diámetro de la fresa",
+  "pivotHoleDiameter": "Diámetro del orificio de pivote",
+  "cutMode": "Modo de corte",
+  "armLength": "Longitud del brazo (del pivote al centro de la fresa)",
+  "circumference": "Circunferencia",
+  "area": "Área",
+  "pivotOffset": "Desplazamiento del pivote",
+  "modes": {
+    "disc": "Disco (corte exterior)",
+    "hole": "Orificio (corte interior)"
+  }
+}

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { RouterTemplatePanel } from '../../src/components/configurator/RouterTemplatePanel';
+import { RouterTemplatePanel } from '../../src/features/calculators/RouterTemplatePanel';
 
 describe('RouterTemplatePanel', () => {
   it('reverses template adjustment for outside cuts and applies it to nominal size', async () => {

@@ -1,0 +1,15 @@
+{
+  "title": "Predicción de desperdicio",
+  "predictedWaste": "Desperdicio previsto",
+  "bestSheet": "Mejor tamaño de tablero",
+  "sheetsNeeded": "Tableros necesarios",
+  "wastePercent": "% de desperdicio",
+  "totalDemand": "Demanda total",
+  "confidence": "Nivel de confianza",
+  "high": "Alta",
+  "medium": "Media",
+  "low": "Baja",
+  "averageWaste": "Desperdicio medio",
+  "recommendation": "Recomendación",
+  "noSheets": "No hay tamaños de tablero configurados."
+}

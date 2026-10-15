@@ -1,0 +1,17 @@
+{
+  "title": "Willkommen beim Schrankplaner!",
+  "subtitle": "Entwerfen, optimieren und bauen Sie Ihre Möbel in 3 einfachen Schritten.",
+  "getStarted": "Loslegen",
+  "help": "Hilfe",
+  "dismissBackdrop": "Einführung schließen",
+  "wizardStep1Title": "Schrank konfigurieren",
+  "wizardStep1Desc": "Wählen Sie Möbeltyp, Maße, Materialien, Türen, Schubladen und Böden passend zu Ihrem Raum.",
+  "wizardStep2Title": "Zuschnittpläne optimieren",
+  "wizardStep2Desc": "Der Zuschnittoptimierer ordnet jedes Teil auf Ihren Platten an, minimiert Verschnitt und erstellt einen druckbaren Plan.",
+  "wizardStep3Title": "Exportieren und bauen",
+  "wizardStep3Desc": "Laden Sie einen PDF-Plan, eine DXF-Datei für CNC, G-Code für Maschinen oder eine CSV-Stückliste herunter und folgen Sie anschließend der Montageanleitung.",
+  "stepOf": "Schritt {{step}} von {{total}}",
+  "next": "Weiter",
+  "back": "Zurück",
+  "skip": "Überspringen"
+}
