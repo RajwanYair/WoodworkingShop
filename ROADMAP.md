@@ -11,12 +11,13 @@
 The measurements in the 2026-10-04 overview below are a dated historical baseline; the live status is summarized here.
 
 - **Release:** v5.36.0 was published on 2026-10-13 after its tag-triggered release workflow passed. Next: v5.37.0, Phase 82.
+- **v5.37.0 preflight:** quality, dead-code, bundle and production dependency checks pass. The full `npm audit --audit-level=moderate` remains blocked by GHSA-vfj7-8cjw-p6xm in dev-only `braces@3.0.3`, reached through Stylelint and markdownlint; npm reports no patched release. Do not tag until a patched upstream version or reviewed replacement is available.
 - **Main:** `b04ca107`; GitHub CI, Scorecard, and the v5.36.0 release workflow passed. The separate Stryker mutation workflow remains a known failure.
 - **Verification:** `npm run ci` passes with 5,195 Vitest tests, all bundle budgets, and 16 benchmark budgets. The full Stryker initial test run still exceeds its timeout; the focused Vitest adapter probe reports zero completed mutants.
 - **Localization:** `npm run i18n:completeness` reports 2,167 keys, no missing/extra/empty values or placeholder mismatches, and EN-identical rates of HE 1.02%, AR 1.20%, DE 1.38%, ES 1.34%, FR 1.66%.
 - **Phase 81:** S420's build/typecheck compiler switch is implemented. S421's Chromium project, ARIA snapshots, and runtime/flake measurements remain in open PRs #236, #238 and #244. S422 uses Playwright 1.64; blocking snapshots, E2E sharding, and temp-only Lighthouse output remain.
 - **Phase 83:** S435 T1 and T2 are complete. T3 is in progress: the build-generated changelog panel and actionable saved-project empty states are implemented; other panel empty states and timed first-run acceptance remain.
-- S423 React Compiler evaluation remains open. S424 T2 spell-check and T3 Oxlint evaluation are complete; T1 Knip-entry cleanup is blocked on public API classification, and T4 mutation baseline remains open. S425 supply-chain acceptance is complete.
+- S423 React Compiler evaluation remains open. S424 T1 dead-code/API classification, T2 spell-check and T3 Oxlint evaluation are complete; T4 mutation baseline remains open. S425 supply-chain acceptance is complete.
 - **GitHub work:** #226's compiler switch is on `main`; draft PR #227 retains additional ADR/evidence work. The Context7 skill is on `main`, but #228's exact-source acceptance is unverified and PR #229 proposes a broader variant. #232 remains in open PR #233.
 - #234's discovery branch has no issue-linked PR and its social-card acceptance is unmet. Superseded dependency PRs and the incompatible Babel 8 proposal were closed. Other sprint chains remain active pending acceptance and review.
 
@@ -1864,8 +1865,7 @@ flowchart LR
 
 **Sprint 424 — Lint, dead-code, spelling and mutation hardening** — P1 · M · S371–S373.
 
-- T1: IN PROGRESS — Declared `axe-core` directly, made the internal `preloadModule` helper private, removed five stale Knip entry paths, and retired the unused UI migration codemod and internal inventory aggregator. Knip entries now include all documented engine domain barrels.
-  Remaining: 2 unused files, 25 unused exports, and 20 exported types still need ownership/public-contract classification. `npm run dead:check` remains blocked; do not mask unresolved APIs with blanket suppressions.
+- T1: DONE — Declared `axe-core` directly, made internal helpers private, removed stale Knip entry paths, and retired unused migration codemods, compatibility wrappers without supported consumers, and duplicate inventory analytics/diff implementations. The supported engine/platform contracts are documented and exercised in `tests/platform/public-api.test.ts`; `npm run dead:check` reports zero findings without Knip suppressions.
 - T2: DONE — Corrected `cspell.json`, added pinned locale dictionaries and the reviewed project vocabulary, and enabled `npm run spell:check` in `quality:fast` and CI; 410 scoped files pass with zero findings.
 - T3: DONE — `docs/ENGINEERING-DECISIONS.md` records the Oxlint 1.83.0 local trial and defers adoption: the required ESLint gate remains, so a sequential pre-pass cannot shorten `quality:fast`.
 - T4: IN PROGRESS — The four-module Stryker config preserves static mutants and uses an OS-temp incremental file; `mutation.yml` restores/saves that cache and gives each weekly run a graceful 14-minute baseline slice while retaining the separate two-module 79% gate. The weekly dry run discovers 87 tests, but a two-mutant probe reports zero completed tests.

@@ -1,7 +1,7 @@
 import { createStore, del, entries, get, keys, set } from 'idb-keyval';
 import type { StorageAdapter } from './adapter';
 
-export function assertIndexedDBAvailable(): void {
+function assertIndexedDBAvailable(): void {
   if (typeof indexedDB === 'undefined') throw new Error('IndexedDB is unavailable');
 }
 

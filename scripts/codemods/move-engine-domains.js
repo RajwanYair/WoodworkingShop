@@ -423,7 +423,7 @@ function rollbackMovePlan(repoRoot, rewrittenFiles, removedSources, createdTarge
   for (const filePath of createdTargets) fs.rmSync(path.join(repoRoot, filePath), { force: true });
 }
 
-export function applyMovePlan(repoRoot, movePlan, rewritten) {
+function applyMovePlan(repoRoot, movePlan, rewritten) {
   const createdTargets = [];
   const rewrittenFiles = [];
   const removedSources = [];

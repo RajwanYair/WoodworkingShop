@@ -148,7 +148,7 @@ import type woodDrying from './en/woodDrying.json';
 import type woodTurning from './en/woodTurning.json';
 import type workspace from './en/workspace.json';
 
-export interface AppTranslationResources {
+interface AppTranslationResources {
   translation: {
     a11y: typeof a11y;
     a11yAudit: typeof a11yAudit;

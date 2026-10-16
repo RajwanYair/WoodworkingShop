@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Sprint 424 completes the Knip ownership pass: unsupported wrapper files and duplicate analytics/diff helpers are retired, internal helpers stay private, and supported engine/platform API contracts have a focused compile-time/runtime test. `npm run dead:check` now reports zero findings.
+- Markdownlint's transitive KaTeX dependency is pinned to 0.18.7, which includes the upstream prototype-pollution fix.
 - Sprint 435–437 recovery, workspace, and drawing flows measured 2,940.6 KB JS / 3,178.6 KB total. The raw output caps increase by 50 KB each to 2,950 KB JS / 3,190 KB total, retaining 9.4 KB / 11.4 KB headroom. Critical-route and per-file limits remain unchanged.
 - Sprint 434 breaks the plugin, template and PDF type cycles by moving those types to sibling modules. Cloud-sync no longer imports `utils/`. The public engine barrel still re-exports the deprecated Web Serial helpers, so `architecture:check` has one remaining violation.
   Docs and snippets now describe `src/app/`, `src/features/`, `src/ui/` and namespace locale files. Component tests load the merged English namespaces because the app singleton only boots the eager bundle. The engine-move codemod keeps non-source extensions such as `.json`.

@@ -13,7 +13,7 @@ import {
   type WorkerProgress,
 } from './text-payload';
 
-export const WORKER_REQUEST_TIMEOUT_MS = 30_000;
+const WORKER_REQUEST_TIMEOUT_MS = 30_000;
 export const MAX_POOL_SIZE = 5;
 
 interface WorkerSlot {
@@ -91,7 +91,7 @@ function acquire(kind: string, createWorker: () => Worker): WorkerSlot | null {
   return slot;
 }
 
-export function awaitWorkerCall<T>(
+function awaitWorkerCall<T>(
   request: Promise<T>,
   signal: AbortSignal | undefined,
   hooks: WorkerJobHooks,

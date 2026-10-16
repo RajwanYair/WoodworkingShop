@@ -567,17 +567,9 @@
       "classification": "surfaced",
       "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
     },
-    "src/engine/project/comparison/design.ts": {
-      "classification": "internal",
-      "rationale": "Compatibility facade retained for existing engine consumers; the UI imports the consolidated comparison domain."
-    },
     "src/engine/project/comparison/index.ts": {
       "classification": "surfaced",
       "rationale": "Transitive UI reachability is evidenced by src/App.tsx."
-    },
-    "src/engine/project/comparison/project.ts": {
-      "classification": "internal",
-      "rationale": "Compatibility facade retained for existing engine consumers; the UI imports the consolidated comparison domain."
     },
     "src/engine/project/comparison/snapshot-diff.ts": {
       "classification": "surfaced",
@@ -705,17 +697,9 @@
       "classification": "surfaced",
       "rationale": "Reachable through the consolidated inventory domain and its UI or public engine-barrel consumers."
     },
-    "src/engine/workshop/inventory/comparison/snapshot-diff.ts": {
-      "classification": "internal",
-      "rationale": "No direct UI-root importer remains after the domain module migration."
-    },
     "src/engine/workshop/inventory/waste/alerts.ts": {
       "classification": "surfaced",
       "rationale": "Reachable through the consolidated inventory domain and its UI or public engine-barrel consumers."
-    },
-    "src/engine/workshop/inventory/waste/analytics.ts": {
-      "classification": "internal",
-      "rationale": "No direct UI-root importer remains after the domain module migration."
     },
     "src/engine/workshop/inventory/waste/index.ts": {
       "classification": "internal",

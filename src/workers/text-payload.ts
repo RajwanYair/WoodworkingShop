@@ -20,14 +20,14 @@ export interface PackedText {
   readonly filename?: string;
 }
 
-export function encodeUtf8(text: string): Uint8Array {
+function encodeUtf8(text: string): Uint8Array {
   const encoded = new TextEncoder().encode(text);
   const copy = new Uint8Array(encoded.byteLength);
   copy.set(encoded);
   return copy;
 }
 
-export function decodeUtf8(bytes: Uint8Array): string {
+function decodeUtf8(bytes: Uint8Array): string {
   return new TextDecoder().decode(bytes);
 }
 

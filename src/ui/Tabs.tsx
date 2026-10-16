@@ -1,6 +1,6 @@
 import type { KeyboardEvent, ReactNode } from 'react';
 
-export interface TabItem {
+interface TabItem {
   id: string;
   label: string;
   panel: ReactNode;

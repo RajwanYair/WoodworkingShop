@@ -320,5 +320,3 @@ export const FEATURE_NAMESPACES = {
   ],
   shellDialogs: ['commandPalette', 'diagnostics', 'swUpdate'],
 } as const;
-
-export type FeatureNamespaceGroup = keyof typeof FEATURE_NAMESPACES;

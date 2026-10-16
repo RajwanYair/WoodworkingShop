@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 export type ToastType = 'success' | 'error' | 'info';
 
-export interface ToastAction {
+interface ToastAction {
   label: string;
   onClick: () => void;
 }

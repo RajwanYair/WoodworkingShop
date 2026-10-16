@@ -54,10 +54,6 @@ export function utf8Encode(value: string): Uint8Array {
   return new Uint8Array(bytes);
 }
 
-export function utf8ByteLength(value: string): number {
-  return utf8Encode(value).byteLength;
-}
-
 /**
  * Encode a string as an `ArrayBuffer` suitable for Web Crypto `digest` input.
  */

@@ -30,6 +30,3 @@ export type {
   ProjectScore,
   ComparisonResult as ProjectComparisonResult,
 } from './project';
-
-export { diffSnapshots } from './snapshot-diff';
-export type { FieldDelta, CabinetDiff, SnapshotDiff, SnapshotLike } from './snapshot-diff';

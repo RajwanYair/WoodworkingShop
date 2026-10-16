@@ -5,7 +5,7 @@ interface MediaRecorderConstructorLike {
   new (stream: MediaStream, options?: MediaRecorderOptions): MediaRecorder;
 }
 
-export function getMediaRecorderConstructor(): MediaRecorderConstructorLike | null {
+function getMediaRecorderConstructor(): MediaRecorderConstructorLike | null {
   const candidate = (globalThis as Record<string, unknown>)['MediaRecorder'];
   return typeof candidate === 'function' ? (candidate as MediaRecorderConstructorLike) : null;
 }
@@ -66,6 +66,6 @@ export async function startAudioRecording(preferredMimeTypes: readonly string[])
   };
 }
 
-export function requestAudioStream(): Promise<MediaStream> {
+function requestAudioStream(): Promise<MediaStream> {
   return navigator.mediaDevices.getUserMedia({ audio: true, video: false });
 }

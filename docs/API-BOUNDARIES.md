@@ -20,6 +20,16 @@ The following engine barrels are supported module boundaries for internal and do
 - `src/engine/room/index.ts`
 - `src/engine/workshop/index.ts`
 
+The platform contracts use the same barrel-only boundary:
+
+- `src/platform/device/index.ts`
+- `src/platform/diagnostics/index.ts`
+- `src/platform/share/index.ts`
+- `src/platform/storage/index.ts`
+
+Implementation helpers that are not re-exported by these boundaries are private. The public
+module contracts are exercised by `tests/platform/public-api.test.ts`.
+
 ## Boundary Rules
 
 1. Network-dependent capabilities are never on the critical path.
