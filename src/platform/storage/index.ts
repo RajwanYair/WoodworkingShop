@@ -1,5 +1,5 @@
 export type { StorageAdapter } from './adapter';
-export { createIndexedDbAdapter } from './indexed-db';
+export { assertIndexedDBAvailable, createIndexedDbAdapter } from './indexed-db';
 export { getStorageEstimate } from './estimate';
 export type { StorageEstimate } from './estimate';
 export { readLegacyArray } from './migration';

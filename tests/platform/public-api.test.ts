@@ -1,7 +1,15 @@
 import { getTemplatesByCategory } from '../../src/engine/project/index';
 import type { CabinetTemplate } from '../../src/engine/project/index';
+import {
+  getMediaRecorderConstructor,
+  isWakeLockSupported,
+  isWebGL2Available,
+  requestAudioStream,
+  resetWebGLProbeCache,
+} from '../../src/platform/device/index';
 import { pushBrowserUrl } from '../../src/platform/share/index';
 import type { BrowserUrlSnapshot, ShareLinkResult } from '../../src/platform/share/index';
+import { assertIndexedDBAvailable } from '../../src/platform/storage/index';
 import { getLocalErrorReports } from '../../src/services/error-reporter';
 import type { LocalErrorReport } from '../../src/services/error-reporter';
 import type { SerialConnectionProfile } from '../../src/platform/device/index';
@@ -35,5 +43,15 @@ describe('documented public module contracts', () => {
     expect(adapter).toHaveProperty('entries');
     expect(templates.length).toBeGreaterThan(0);
     expect(pushBrowserUrl).toBeTypeOf('function');
+    for (const supportedAdapter of [
+      getMediaRecorderConstructor,
+      isWakeLockSupported,
+      isWebGL2Available,
+      requestAudioStream,
+      resetWebGLProbeCache,
+      assertIndexedDBAvailable,
+    ]) {
+      expect(supportedAdapter).toBeTypeOf('function');
+    }
   });
 });
