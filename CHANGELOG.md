@@ -14,9 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Guided onboarding, release notes, marketplace recovery, and direct setup routes for part labels and cut lists.
+- A project home with recent-project search, generated previews, duplicate/delete with undo, and an explicit portable backup export alongside browser storage usage. Added a four-view shop drawing preview with metric and fractional-inch overall and chained dimensions; exploded callouts and PDF integration remain planned.
 
 ### Changed
 
+- Sprint 435–437 recovery, workspace, and drawing flows measured 2,940.6 KB JS / 3,178.6 KB total. The raw output caps increase by 50 KB each to 2,950 KB JS / 3,190 KB total, retaining 9.4 KB / 11.4 KB headroom. Critical-route and per-file limits remain unchanged.
 - Sprint 434 breaks the plugin, template and PDF type cycles by moving those types to sibling modules. Cloud-sync no longer imports `utils/`. The public engine barrel still re-exports the deprecated Web Serial helpers, so `architecture:check` has one remaining violation.
   Docs and snippets now describe `src/app/`, `src/features/`, `src/ui/` and namespace locale files. Component tests load the merged English namespaces because the app singleton only boots the eager bundle. The engine-move codemod keeps non-source extensions such as `.json`.
 - Locale JSON now ships as one lazy chunk per language instead of one chunk per namespace. That cut emitted JS from 3,245.1 KB to 2,879.8 KB. Raw budgets are 2,895 KB JS and 3,130 KB total. Critical-route caps are unchanged. A namespace that is already registered is not loaded again.
