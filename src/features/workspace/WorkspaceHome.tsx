@@ -158,7 +158,7 @@ export function WorkspaceHome({ onOpenExamples, onOpenProjects, onOpenTemplates 
     <section aria-labelledby="workspace-home-title" className="mx-auto w-full max-w-6xl min-w-0 space-y-6">
       <header className="bg-wood-50 dark:bg-wood-900 flex flex-col gap-5 rounded-3xl p-5 sm:flex-row sm:items-center sm:p-8">
         <div className="min-w-0 flex-1">
-          <p className="text-accent text-sm font-semibold">{t('app.title')}</p>
+          <p className="text-wood-800 dark:text-wood-100 text-sm font-semibold">{t('app.title')}</p>
           <h1
             id="workspace-home-title"
             className="text-wood-900 dark:text-wood-50 mt-2 text-3xl font-semibold tracking-tight sm:text-4xl"

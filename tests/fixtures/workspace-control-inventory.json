@@ -326,6 +326,12 @@
           "negativeWaiver": "View selection is navigation; no invalid scalar value applies."
         },
         {
+          "role": "tab",
+          "accessibleName": "Shop drawing",
+          "positiveTest": "shop drawing renders four technical views with overall and chained dimensions",
+          "negativeWaiver": "View selection is navigation; no invalid scalar value applies."
+        },
+        {
           "role": "checkbox",
           "accessibleName": "Dimensions",
           "positiveTest": "preview views render expected geometry and dimension visibility",

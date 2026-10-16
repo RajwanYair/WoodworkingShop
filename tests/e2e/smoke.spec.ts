@@ -65,17 +65,13 @@ test('app boots and renders header', async ({ appPage: page }) => {
   await expect(page).toHaveTitle(/cabinet|wood/i);
 });
 
-test('workspace banner preloads the responsive image candidate', async ({ appPage: page }) => {
+test('project home replaces the unused workspace banner on mobile', async ({ appPage: page }) => {
   await page.setViewportSize({ width: 412, height: 823 });
   await page.reload();
-  const image = page.getByRole('img', { name: 'Workspace' });
-  const preload = page.locator('link[rel="preload"][as="image"]');
-
-  await expect(image).toBeVisible();
-  await expect(preload).toHaveAttribute('imagesrcset', (await image.getAttribute('srcset')) ?? '');
-  await expect
-    .poll(() => image.evaluate((element) => (element instanceof HTMLImageElement ? element.currentSrc : '')))
-    .toContain('workspace-banner-480.webp');
+  await expect(page.getByRole('heading', { name: 'Pick up where you left off' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Browse examples' }).first()).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Export backup' })).toBeDisabled();
+  await expect(page.locator('link[rel="preload"][as="image"]')).toHaveCount(0);
 });
 
 test('configurator tab is reachable and renders dimension controls', async ({ appPage: page }) => {
@@ -144,7 +140,7 @@ test('tab navigation follows browser back and forward', async ({ appPage: page }
 
 test('direct tab URLs select and render each requested panel', async ({ appPage: page }) => {
   const journeys = [
-    ['workspace', 'Workspace', page.getByRole('main').getByRole('heading', { name: 'WoodworkingShop' })],
+    ['workspace', 'Workspace', page.getByRole('main').getByRole('heading', { name: 'Pick up where you left off' })],
     ['configurator', 'Configure', page.getByRole('spinbutton', { name: 'Width' })],
     ['preview', 'Preview', page.getByRole('main').getByRole('img').first()],
     ['optimizer', 'Cut Sheets', page.getByRole('heading', { name: 'Parts List' })],
@@ -173,7 +169,7 @@ test('invalid tab URL falls back to the workspace tab', async ({ page }) => {
   await page.goto('./?tab=invalid-tab');
 
   await expect(page.getByRole('tab', { name: 'Workspace' })).toHaveAttribute('aria-selected', 'true');
-  await expect(page.getByRole('main').getByRole('heading', { name: 'WoodworkingShop' })).toBeVisible();
+  await expect(page.getByRole('main').getByRole('heading', { name: 'Pick up where you left off' })).toBeVisible();
   await expect(page).toHaveURL(/tab=workspace/);
 });
 
@@ -357,8 +353,8 @@ test('keyboard-only navigation skips to content, activates controls, traps dialo
   appPage: page,
 }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  const configureAction = page.getByRole('button', { name: 'Configure' });
-  const transitionDurations = await configureAction.evaluate((element) =>
+  const examplesAction = page.getByRole('button', { name: 'Browse examples' }).first();
+  const transitionDurations = await examplesAction.evaluate((element) =>
     getComputedStyle(element)
       .transitionDuration.split(',')
       .map((duration) => (duration.endsWith('ms') ? Number.parseFloat(duration) : Number.parseFloat(duration) * 1000)),
@@ -413,8 +409,11 @@ test('keyboard-only navigation skips to content, activates controls, traps dialo
   await page.keyboard.press('Tab');
   await expect(printAction).toBeFocused();
   await page.keyboard.press('Tab');
-  await expect(configureAction).toBeFocused();
+  await expect(examplesAction).toBeFocused();
   await page.keyboard.press('Enter');
+  await expect(page.getByRole('dialog', { name: 'Examples Gallery' })).toBeVisible();
+  await page.keyboard.press('Escape');
+  await page.keyboard.press('Alt+1');
   await expect(page.getByRole('tab', { name: 'Configure' })).toHaveAttribute('aria-selected', 'true');
 
   const widthSlider = page.getByRole('slider', { name: 'Width (mm)' });

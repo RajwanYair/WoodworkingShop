@@ -1430,12 +1430,12 @@ test('project manager saves, loads, exports, imports, and rejects corrupt projec
   const widthInput = page.getByRole('spinbutton', { name: 'Width' });
   await widthInput.fill('800');
   await widthInput.press('Enter');
-  await page.getByRole('button', { name: 'Project Manager' }).click();
+  await page.getByRole('button', { name: 'Project Manager', exact: true }).click();
 
   const canceledDialog = page.getByRole('dialog', { name: 'Project Manager' });
   await canceledDialog.getByPlaceholder('Project name…').fill('Unsaved draft');
   await canceledDialog.getByText('Close', { exact: true }).click();
-  await page.getByRole('button', { name: 'Project Manager' }).click();
+  await page.getByRole('button', { name: 'Project Manager', exact: true }).click();
 
   const dialog = page.getByRole('dialog', { name: 'Project Manager' });
   await expect(dialog.getByText('No saved projects')).toBeVisible();
@@ -1449,7 +1449,7 @@ test('project manager saves, loads, exports, imports, and rejects corrupt projec
   await widthInput.fill('900');
   await widthInput.press('Enter');
   await page.clock.runFor(2_000);
-  await page.getByRole('button', { name: 'Project Manager' }).click();
+  await page.getByRole('button', { name: 'Project Manager', exact: true }).click();
   const duplicateDialog = page.getByRole('dialog', { name: 'Project Manager' });
   await duplicateDialog.getByPlaceholder('Project name…').fill('Kitchen Revision');
   await duplicateDialog.getByRole('button', { name: 'Save', exact: true }).click();
@@ -1475,7 +1475,7 @@ test('project manager saves, loads, exports, imports, and rejects corrupt projec
   await expect(page.getByRole('dialog', { name: 'Project Manager' })).toHaveCount(0);
   await expect(widthInput).toHaveValue('900');
 
-  await page.getByRole('button', { name: 'Project Manager' }).click();
+  await page.getByRole('button', { name: 'Project Manager', exact: true }).click();
   const importDialog = page.getByRole('dialog', { name: 'Project Manager' });
   await importDialog.getByLabel('Import JSON').setInputFiles({
     name: 'corrupt.cabinet-project.json',
@@ -1500,7 +1500,7 @@ test('project saving remains available near or without a storage estimate', asyn
       value: { estimate: async () => ({ usage: 90 * 1024 * 1024, quota: 100 * 1024 * 1024 }) },
     });
   });
-  await page.getByRole('button', { name: 'Project Manager' }).click();
+  await page.getByRole('button', { name: 'Project Manager', exact: true }).click();
   let dialog = page.getByRole('dialog', { name: 'Project Manager' });
   await expect(dialog.getByRole('status', { name: /Storage nearly full/i })).toBeVisible();
   await dialog.getByPlaceholder('Project name…').fill('Near limit project');
@@ -1516,7 +1516,7 @@ test('project saving remains available near or without a storage estimate', asyn
       value: { estimate: async () => ({ usage: 0, quota: 0 }) },
     });
   });
-  await page.getByRole('button', { name: 'Project Manager' }).click();
+  await page.getByRole('button', { name: 'Project Manager', exact: true }).click();
   dialog = page.getByRole('dialog', { name: 'Project Manager' });
   await expect(dialog.getByRole('status', { name: /unavailable/i })).toBeVisible();
   await expect(dialog.getByRole('button', { name: 'Save', exact: true })).toBeEnabled();
@@ -1526,7 +1526,7 @@ test('project saving remains available near or without a storage estimate', asyn
   await dialog.getByText('Close', { exact: true }).click();
 
   await page.reload();
-  await page.getByRole('button', { name: 'Project Manager' }).click();
+  await page.getByRole('button', { name: 'Project Manager', exact: true }).click();
   dialog = page.getByRole('dialog', { name: 'Project Manager' });
   await expect(dialog.getByText('Near limit project', { exact: true })).toBeVisible();
   await expect(dialog.getByText('Unavailable estimate project', { exact: true })).toBeVisible();

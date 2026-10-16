@@ -155,7 +155,7 @@ test('shortcuts, project import errors, and G-code export dialog pass axe WCAG 2
   await expectAccessibleState('keyboard shortcuts dialog');
   await page.keyboard.press('Escape');
 
-  await page.getByRole('button', { name: 'Project Manager' }).click();
+  await page.getByRole('button', { name: 'Project Manager', exact: true }).click();
   const projectDialog = page.getByRole('dialog', { name: 'Project Manager' });
   await expect(projectDialog).toBeVisible();
   await expectAccessibleState('project manager dialog');
