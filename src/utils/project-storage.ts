@@ -233,10 +233,49 @@ export function saveProject(name: string, cabinets: CabinetEntry[]): Promise<Sav
   });
 }
 
+export function duplicateProject(id: string): Promise<SavedProject> {
+  return withProjectWriteLock(async () => {
+    const projects = await load();
+    const source = projects.find((project) => project.id === id);
+    if (!source) {
+      throw new Error(`Cannot duplicate missing project: ${id}`);
+    }
+
+    const names = new Set(projects.map((project) => project.name.toLowerCase()));
+    const baseName = `${source.name} (copy)`;
+    let name = baseName;
+    let suffix = 2;
+    while (names.has(name.toLowerCase())) {
+      name = `${source.name} (copy ${suffix})`;
+      suffix += 1;
+    }
+
+    const duplicate: SavedProject = {
+      ...source,
+      id: createProjectId(new Set(projects.map((project) => project.id))),
+      name,
+      savedAt: new Date().toISOString(),
+    };
+    await save([...projects, duplicate]);
+    return duplicate;
+  });
+}
+
 export function deleteProject(id: string): Promise<void> {
   return withProjectWriteLock(async () => {
     const projects = (await load()).filter((p) => p.id !== id);
     await save(projects);
+  });
+}
+
+export function restoreProject(project: SavedProject): Promise<void> {
+  return withProjectWriteLock(async () => {
+    const restored = migrateProject(project);
+    const projects = await load();
+    if (projects.some((existingProject) => existingProject.id === restored.id)) {
+      throw new Error(`Cannot restore project with an existing id: ${restored.id}`);
+    }
+    await save([...projects, restored]);
   });
 }
 

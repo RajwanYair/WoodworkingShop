@@ -1,11 +1,11 @@
 {
   "title": "سوق الإضافات",
   "search": "ابحث عن الإضافات…",
-  "install": "تثبيت",
-  "uninstall": "إلغاء التثبيت",
+  "saveListing": "Save listing",
+  "removeSavedListing": "Remove saved listing",
+  "previewNotice": "Catalog entries are previews only. Saving a listing bookmarks its ID on this device; it does not download or activate plugin code.",
   "enable": "تفعيل",
   "disable": "تعطيل",
-  "installed": "مثبتة",
   "enabled": "مفعّلة",
   "noResults": "لم يتم العثور على إضافات",
   "installCount": "{{count}} عملية تثبيت",
@@ -22,5 +22,5 @@
   "by": "بواسطة {{author}}",
   "downloads": "{{count}} تنزيلات",
   "pluginCount": "{{count}} إضافة",
-  "installedCount": "{{count}}"
+  "savedCount": "{{count}} saved"
 }

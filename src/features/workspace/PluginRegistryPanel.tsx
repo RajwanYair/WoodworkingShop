@@ -1,11 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  getPlugins,
-  getPluginContract,
-  type CabinetPlannerPlugin,
-  type PluginStability,
-} from '../../engine/core/plugin';
+import { activatePlugin, deactivatePlugin, getRegistryEntries, type PluginRegistryEntry } from '../../engine/core';
+import { getPluginContract, pluginEventBus, type PluginStability } from '../../engine/core/plugin';
+import { dispatchBrowserEvent } from '../../store/platform-boundary';
+import { EmptyState } from '../../ui/EmptyState';
 
 // ── Stability badge colours ───────────────────────────────────────────────
 
@@ -18,28 +16,31 @@ const STABILITY_CLASSES: Record<PluginStability, string> = {
 // ── Component ─────────────────────────────────────────────────────────────
 
 /**
- * Displays registered WoodworkingShop plugins with an enable/disable toggle.
- * Plugin enable/disable state is local to this component — persisting it to
- * the store is a future enhancement (the engine already supports unregisterPlugin).
+ * Displays runtime-registered plugins and controls their engine lifecycle state.
  */
 export function PluginRegistryPanel() {
   const { t } = useTranslation();
-  const plugins = getPlugins();
   const contract = getPluginContract();
+  const [entries, setEntries] = useState<readonly PluginRegistryEntry[]>(() => getRegistryEntries());
+  const [actionError, setActionError] = useState<string | null>(null);
 
-  // Local disabled-set: ids of plugins the user has toggled off in this session.
-  const [disabledIds, setDisabledIds] = useState<ReadonlySet<string>>(new Set());
+  useEffect(() => {
+    const refresh = () => setEntries(getRegistryEntries());
+    const cleanupCallbacks = [
+      pluginEventBus.on('plugin:install', refresh),
+      pluginEventBus.on('plugin:uninstall', refresh),
+      pluginEventBus.on('plugin:activate', refresh),
+      pluginEventBus.on('plugin:deactivate', refresh),
+      pluginEventBus.on('plugin:error', refresh),
+    ];
+    refresh();
+    return () => cleanupCallbacks.forEach((cleanup) => cleanup());
+  }, []);
 
-  function toggle(plugin: CabinetPlannerPlugin) {
-    setDisabledIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(plugin.id)) {
-        next.delete(plugin.id);
-      } else {
-        next.add(plugin.id);
-      }
-      return next;
-    });
+  function toggle(entry: PluginRegistryEntry) {
+    const result = entry.state === 'active' ? deactivatePlugin(entry.plugin.id) : activatePlugin(entry.plugin.id);
+    setActionError(result.ok ? null : result.error);
+    setEntries(getRegistryEntries());
   }
 
   return (
@@ -56,45 +57,76 @@ export function PluginRegistryPanel() {
         </span>
       </div>
 
-      {plugins.length === 0 ? (
-        <p className="text-wood-500 dark:text-wood-400 text-xs italic">{t('plugins.empty')}</p>
+      {entries.length === 0 ? (
+        <EmptyState
+          title={t('plugins.empty')}
+          description={t('plugins.emptyDescription')}
+          action={
+            <button
+              type="button"
+              onClick={() => dispatchBrowserEvent('marketplace:open')}
+              className="bg-accent hover:bg-accent-hover rounded-lg px-3 py-1.5 text-xs font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              {t('plugins.browseMarketplace')}
+            </button>
+          }
+        />
       ) : (
-        <ul className="space-y-2" aria-label={t('plugins.title')}>
-          {plugins.map((plugin) => {
-            const isDisabled = disabledIds.has(plugin.id);
-            return (
-              <li
-                key={plugin.id}
-                className="border-wood-200 dark:border-wood-700 flex items-center justify-between gap-3 rounded-lg border px-3 py-2 text-sm"
-              >
-                <div className="min-w-0 flex-1">
-                  <span className="text-wood-800 dark:text-wood-200 block truncate font-medium">{plugin.name}</span>
-                  <span className="text-wood-500 dark:text-wood-400 font-mono text-xs">
-                    {plugin.id} · {t('plugins.version', { version: plugin.version })}
-                  </span>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => toggle(plugin)}
-                  aria-pressed={!isDisabled}
-                  aria-label={
-                    isDisabled
-                      ? t('plugins.enable', { name: plugin.name })
-                      : t('plugins.disable', { name: plugin.name })
-                  }
-                  className={`shrink-0 rounded px-2 py-0.5 text-xs font-medium transition-colors ${
-                    isDisabled
-                      ? 'bg-wood-100 text-wood-500 dark:bg-wood-700 dark:text-wood-400'
-                      : 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300'
-                  }`}
+        <>
+          {actionError && (
+            <p role="alert" className="text-xs text-red-700 dark:text-red-300">
+              {actionError}
+            </p>
+          )}
+          <ul className="space-y-2" aria-label={t('plugins.title')}>
+            {entries.map((entry) => {
+              const plugin = entry.plugin;
+              const isActive = entry.state === 'active';
+              const canToggle = isActive || entry.state === 'deactivated';
+              return (
+                <li
+                  key={plugin.id}
+                  className="border-wood-200 dark:border-wood-700 flex items-center justify-between gap-3 rounded-lg border px-3 py-2 text-sm"
                 >
-                  {isDisabled ? t('plugins.disabled') : t('plugins.enabled')}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+                  <div className="min-w-0 flex-1">
+                    <span className="text-wood-800 dark:text-wood-200 block truncate font-medium">{plugin.name}</span>
+                    <span className="text-wood-500 dark:text-wood-400 font-mono text-xs">
+                      {plugin.id} · {t('plugins.version', { version: plugin.version })}
+                    </span>
+                    <span className="text-wood-500 dark:text-wood-400 block text-xs">
+                      {entry.state === 'error'
+                        ? t('plugins.error')
+                        : isActive
+                          ? t('plugins.enabled')
+                          : t('plugins.disabled')}
+                    </span>
+                    {entry.lastError && (
+                      <span role="alert" className="block text-xs text-red-700 dark:text-red-300">
+                        {t('plugins.lifecycleError', { message: entry.lastError })}
+                      </span>
+                    )}
+                  </div>
+
+                  {canToggle && (
+                    <button
+                      type="button"
+                      onClick={() => toggle(entry)}
+                      aria-pressed={isActive}
+                      aria-label={t(isActive ? 'plugins.disable' : 'plugins.enable', { name: plugin.name })}
+                      className={`shrink-0 rounded px-2 py-0.5 text-xs font-medium transition-colors ${
+                        isActive
+                          ? 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300'
+                          : 'bg-wood-100 text-wood-500 dark:bg-wood-700 dark:text-wood-400'
+                      }`}
+                    >
+                      {isActive ? t('plugins.enabled') : t('plugins.disabled')}
+                    </button>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </>
       )}
     </section>
   );

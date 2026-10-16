@@ -3,6 +3,7 @@ import {
   isCameraSupported,
   isWakeLockSupported,
   isWebSerialSupported,
+  isWebGPUSupported,
   isWebVibrationSupported,
   requestEnvironmentCamera,
   stopMediaStream,
@@ -14,6 +15,17 @@ afterEach(() => {
 });
 
 describe('platform device capabilities', () => {
+  it('detects WebGPU only when an adapter can be acquired', async () => {
+    const requestAdapter = vi.fn().mockResolvedValue({});
+    vi.stubGlobal('navigator', { gpu: { requestAdapter } });
+
+    await expect(isWebGPUSupported()).resolves.toBe(true);
+    expect(requestAdapter).toHaveBeenCalledOnce();
+
+    requestAdapter.mockResolvedValue(null);
+    await expect(isWebGPUSupported()).resolves.toBe(false);
+  });
+
   it('detects browser device APIs and requests an environment-facing camera', async () => {
     const stream = {} as MediaStream;
     const getUserMedia = vi.fn().mockResolvedValue(stream);

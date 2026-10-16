@@ -13,6 +13,7 @@ import {
 } from '../../ui/Icons';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
+import { printBrowserDocument } from '../../store/platform-boundary';
 import { useToastStore } from '../../store/toast-store';
 import { generateHardware } from '../../engine/hardware/hardware';
 import { formatNumber } from '../../i18n/format';
@@ -292,7 +293,7 @@ export function OptimizerToolbar({
           </button>
 
           <button
-            onClick={() => window.print()}
+            onClick={printBrowserDocument}
             className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-medium transition-colors"
             title={t('optimizer.printSheets')}
             aria-label={t('optimizer.printSheets')}

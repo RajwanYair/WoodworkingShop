@@ -12,6 +12,16 @@ export function getBrowserUrl(): BrowserUrlSnapshot {
   };
 }
 
+export function getBrowserHref(): string {
+  return window.location.href;
+}
+
+export function setBrowserQueryParam(key: string, value: string): void {
+  const url = new URL(window.location.href);
+  url.searchParams.set(key, value);
+  window.history.replaceState(null, '', `${url.pathname}?${url.searchParams.toString()}`);
+}
+
 export function replaceBrowserUrl(url: string): void {
   window.history.replaceState(null, '', url);
 }

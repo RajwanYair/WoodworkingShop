@@ -1,6 +1,10 @@
 {
   "title": "Registro de plugins",
   "empty": "No hay plugins registrados",
+  "emptyDescription": "Saved catalog listings are not active plugins. A plugin appears here only after its code is loaded and registered by the app.",
+  "browseMarketplace": "Browse catalog",
+  "error": "Error",
+  "lifecycleError": "Plugin error: {{message}}",
   "version": "Versión {{version}}",
   "stability": "Estabilidad de API: {{level}}",
   "enable": "Activar plugin",

@@ -1,5 +1,6 @@
 import { getConfiguratorTemplate, TEMPLATES } from '../../engine/project/templates/index';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { setBrowserQueryParam } from '../../store/platform-boundary';
 
 export { TEMPLATES };
 
@@ -8,8 +9,6 @@ export function applyCabinetTemplate(templateId: string): boolean {
   if (!template) return false;
 
   useCabinetStore.getState().setConfig(template.config);
-  const url = new URL(window.location.href);
-  url.searchParams.set('tpl', templateId);
-  window.history.replaceState(null, '', `${url.pathname}?${url.searchParams.toString()}`);
+  setBrowserQueryParam('tpl', templateId);
   return true;
 }

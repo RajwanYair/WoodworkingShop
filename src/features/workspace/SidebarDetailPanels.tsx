@@ -3,6 +3,7 @@ import { CostSummaryPanel } from '../configurator/CostSummaryPanel';
 import { CostVariancePanel } from '../configurator/CostVariancePanel';
 import { ShelfSpacingPresetsPanel } from '../configurator/ShelfSpacingPresetsPanel';
 import { SnapshotPanel } from './SnapshotPanel';
+import { PluginRegistryPanel } from './PluginRegistryPanel';
 
 export function SidebarDetailPanels() {
   return (
@@ -12,6 +13,7 @@ export function SidebarDetailPanels() {
       <CostVariancePanel />
       <ShelfSpacingPresetsPanel />
       <SnapshotPanel />
+      <PluginRegistryPanel />
     </>
   );
 }

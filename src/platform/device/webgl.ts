@@ -30,6 +30,19 @@ export function isWebGL2Available(): boolean {
   return probeWebGLTier() === 'webgl2';
 }
 
+export function getWebGL2MaxTextureSize(): number | null {
+  if (typeof document === 'undefined') return null;
+  try {
+    const context = document.createElement('canvas').getContext('webgl2');
+    if (!context) return null;
+    const maxTextureSize = context.getParameter(context.MAX_TEXTURE_SIZE);
+    context.getExtension('WEBGL_lose_context')?.loseContext();
+    return maxTextureSize;
+  } catch {
+    return null;
+  }
+}
+
 export function resetWebGLProbeCache(): void {
   cachedTier = undefined;
 }

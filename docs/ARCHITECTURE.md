@@ -56,7 +56,7 @@ src/
 │   ├── stock/ templates/ validation/ waste/ workshop/
 │   └── index.ts             # Public barrel (domain re-exports plus the deprecated Web Serial facade)
 ├── store/                   # 22 .ts files: domain slices, patch history, worker schedule
-├── platform/                # 29 .ts files: storage, files, share, device, diagnostics, worker scheduler
+├── platform/                # 31 .ts files: storage, files, share, device, diagnostics, browser runtime, worker scheduler
 ├── workers/                 # 9 .ts files: cut, cost, assembly, BOM, DXF
 ├── hooks/                   # 8 .ts files
 ├── i18n/                    # {en,he,ar,de,es,fr}/{namespace}.json — 146 namespaces per locale
@@ -535,7 +535,8 @@ flowchart TB
   class Platform,Workers io
 ```
 
-Sprint 428's initial platform surface is under `src/platform/{storage,files,share,device,diagnostics}`. It currently owns IndexedDB CRUD and legacy migration, quota estimates, generic downloads and text-file reads, clipboard/native sharing and History API operations, camera/audio acquisition and MediaRecorder, Web Serial/XR access and device capability helpers, voice annotation persistence, Web Vitals observation, and error reporting.
+Sprint 428's platform surface is under `src/platform/{storage,files,share,device,diagnostics,browser}`.
+It owns IndexedDB CRUD and legacy migration, quota estimates, generic downloads and text-file reads, clipboard/native sharing and History API operations, camera/audio acquisition and MediaRecorder, Web Serial/XR/WebGPU access and device capability helpers, voice annotation persistence, Web Vitals observation, error reporting, and browser runtime operations for session storage, media queries, application events, URL parameters, printing, and animation frames.
 
 Compatibility facades and store-aware diagnostics remain in `utils/` and `services/`; retire `services/` when its app-level contracts and bundle aggregation have owners elsewhere.
 
@@ -544,7 +545,10 @@ Platform adapter contracts run with fakes in Vitest and with native browser APIs
 Architecture rules:
 
 - `engine/` imports only `engine/`, except the locked public re-export of `src/utils/webserial-cnc.ts` from `src/engine/index.ts`.
-- Browser APIs only in `platform/` and `app/`: still open. UI and store code still touch browser APIs, so Sprint 428 Accept stays open.
+- Application browser I/O is mediated by `platform/` adapters, exposed to app and feature code through
+  `src/store/platform-boundary.ts`. `architecture:check` rejects direct storage, network, device, URL,
+  print, media-query, animation-frame, and global event access in app, feature, and store modules.
+  React surfaces retain direct DOM interactions needed for element focus, measurement, and visual state.
 - Cross-domain imports only through domain barrels: no current violations.
 - No import cycles: the plugin, template and PDF type cycles are split into sibling modules.
 - Component budget is 396 lines. Do not lower the gate.

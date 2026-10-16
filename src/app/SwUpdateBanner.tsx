@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { browserSessionStorage } from '../store/platform-boundary';
 import { IconDownload, IconX } from '../ui/Icons';
 
 /**
@@ -15,12 +16,12 @@ const SESSION_DISMISS_KEY = 'swUpdate:dismissed';
 
 export function SwUpdateBanner({ reload }: Readonly<{ reload: () => void }>) {
   const { t } = useTranslation();
-  const [dismissed, setDismissed] = useState(() => sessionStorage.getItem(SESSION_DISMISS_KEY) === 'true');
+  const [dismissed, setDismissed] = useState(() => browserSessionStorage.getItem(SESSION_DISMISS_KEY) === 'true');
 
   if (dismissed) return null;
 
   const handleDismiss = () => {
-    sessionStorage.setItem(SESSION_DISMISS_KEY, 'true');
+    browserSessionStorage.setItem(SESSION_DISMISS_KEY, 'true');
     setDismissed(true);
   };
 

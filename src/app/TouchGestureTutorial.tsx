@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { translateKey } from '../i18n/translate';
-import { browserLocalStorage } from '../store/platform-boundary';
+import { browserLocalStorage, isTouchPrimaryInput, listenToBrowserEvent } from '../store/platform-boundary';
 import { Dialog } from '../ui/Dialog';
 import { IconX } from '../ui/Icons';
 
@@ -9,26 +9,17 @@ const TOURED_KEY = 'woodworkingshop:preview-toured';
 const ONBOARDING_SEEN_KEY = 'onboarding-seen';
 const ONBOARDING_DISMISSED_EVENT = 'onboarding-dismissed';
 
-/** True only when touch is the primary input; touch-capable laptops driven by a mouse are excluded. */
-function isTouchDevice(): boolean {
-  return (
-    navigator.maxTouchPoints > 0 &&
-    (typeof window.matchMedia !== 'function' || window.matchMedia('(pointer: coarse)').matches)
-  );
-}
-
 export function TouchGestureTutorial() {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const showTutorial = () => {
-      if (isTouchDevice() && !browserLocalStorage.getItem(TOURED_KEY)) setVisible(true);
+      if (isTouchPrimaryInput() && !browserLocalStorage.getItem(TOURED_KEY)) setVisible(true);
     };
 
     if (browserLocalStorage.getItem(ONBOARDING_SEEN_KEY)) showTutorial();
-    window.addEventListener(ONBOARDING_DISMISSED_EVENT, showTutorial);
-    return () => window.removeEventListener(ONBOARDING_DISMISSED_EVENT, showTutorial);
+    return listenToBrowserEvent(ONBOARDING_DISMISSED_EVENT, showTutorial);
   }, []);
 
   const dismiss = () => {

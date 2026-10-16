@@ -4,6 +4,7 @@ import { Dialog } from '../../ui/Dialog';
 import { IconBarChart, IconX } from '../../ui/Icons';
 import { lazyFeature } from '../../ui/lazy-feature';
 import { FEATURE_NAMESPACES } from '../../i18n/namespace-catalog';
+import { isMediaQueryMatched, listenToMediaQuery } from '../../store/platform-boundary';
 
 const SidebarDetailPanels = lazyFeature(
   () => import('./SidebarDetailPanels').then((module) => ({ default: module.SidebarDetailPanels })),
@@ -13,15 +14,11 @@ const SidebarDetailPanels = lazyFeature(
 export function Sidebar() {
   const { parts, hardware, optimization, optimizationPending } = useCabinetStore();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(() => window.matchMedia?.('(min-width: 1024px)').matches ?? true);
+  const [isDesktop, setIsDesktop] = useState(() => isMediaQueryMatched('(min-width: 1024px)', true));
   const closeMobile = useCallback(() => setMobileOpen(false), []);
 
   useEffect(() => {
-    if (typeof window.matchMedia !== 'function') return;
-    const desktopQuery = window.matchMedia('(min-width: 1024px)');
-    const handleChange = () => setIsDesktop(desktopQuery.matches);
-    desktopQuery.addEventListener('change', handleChange);
-    return () => desktopQuery.removeEventListener('change', handleChange);
+    return listenToMediaQuery('(min-width: 1024px)', setIsDesktop);
   }, []);
 
   const content = (

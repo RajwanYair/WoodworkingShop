@@ -2,7 +2,7 @@ import { Component, type ReactNode, type ErrorInfo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IconWarning } from '../ui/Icons';
 import { sendErrorReport } from '../services/error-reporter';
-import { copyText } from '../store/platform-boundary';
+import { copyText, reloadBrowserDocument } from '../store/platform-boundary';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -119,7 +119,7 @@ class ErrorBoundaryView extends Component<ErrorBoundaryViewProps, ErrorBoundaryS
           </button>
           <button
             type="button"
-            onClick={() => window.location.reload()}
+            onClick={reloadBrowserDocument}
             className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-50 dark:hover:bg-wood-800 rounded border px-4 py-2 text-sm font-medium transition-colors"
           >
             {messages.reloadPage}

@@ -2,7 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatDate } from '../../i18n/format';
 import { useCabinetStore } from '../../store/cabinet-store';
-import { shareLink } from '../../store/platform-boundary';
+import {
+  dispatchBrowserEvent,
+  getBrowserHref,
+  setBrowserDocumentTitle,
+  shareLink,
+} from '../../store/platform-boundary';
 import { useToastStore } from '../../store/toast-store';
 import { loadSavedConfigs, saveConfig, deleteSavedConfig, type SavedConfig } from '../../utils/local-storage';
 import { listProjects, exportProjectsBundle, importProjectsBundle } from '../../utils/project-storage';
@@ -29,7 +34,7 @@ export function SaveLoadPanel() {
 
   // Sprint 152 — sync project name to document title
   useEffect(() => {
-    document.title = projectName ? `${projectName} — WoodworkingShop` : 'WoodworkingShop';
+    setBrowserDocumentTitle(projectName ? `${projectName} — WoodworkingShop` : 'WoodworkingShop');
   }, [projectName]);
 
   useEffect(() => {
@@ -89,6 +94,7 @@ export function SaveLoadPanel() {
     importProjectsBundle(file)
       .then((added) => {
         addToast(t('saves.importedBundle', { count: added.length }), 'success');
+        dispatchBrowserEvent('projects:changed');
       })
       .catch(() => {
         addToast(t('toast.invalidFile'), 'error');
@@ -97,7 +103,7 @@ export function SaveLoadPanel() {
   };
 
   const handleShare = async () => {
-    const url = window.location.href;
+    const url = getBrowserHref();
     const title = projectName ? `${projectName} — WoodworkingShop` : 'WoodworkingShop';
     const result = await shareLink(title, url);
     if (result === 'copied') {

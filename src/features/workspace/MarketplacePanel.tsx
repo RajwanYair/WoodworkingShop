@@ -1,8 +1,8 @@
 /**
  * Sprint 87 — Plugin Marketplace Panel
  *
- * Browses, installs, and uninstalls WoodworkingShop plugins from a bundled
- * stub catalog.  Network fetching is intentionally deferred (offline-first).
+ * Browses and bookmarks listings in a bundled stub catalog. Saving a listing
+ * does not download or activate plugin code.
  */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -10,9 +10,9 @@ import { translateKey } from '../../i18n/translate';
 import { formatNumber } from '../../i18n/format';
 import { Dialog } from '../../ui/Dialog';
 import {
-  installPlugin,
-  uninstallPlugin,
-  isPluginInstalled,
+  savePluginListing,
+  removeSavedPluginListing,
+  isPluginListingSaved,
   searchPlugins,
   type MarketplacePlugin,
   type MarketplaceCatalog,
@@ -149,8 +149,8 @@ export function MarketplacePanel({ onClose }: Readonly<MarketplacePanelProps>) {
 
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState<FilterCategory>(CATEGORY_ALL);
-  const [installed, setInstalled] = useState<Set<string>>(
-    () => new Set(STUB_CATALOG.plugins.filter((p) => isPluginInstalled(p.id)).map((p) => p.id)),
+  const [savedListings, setSavedListings] = useState<Set<string>>(
+    () => new Set(STUB_CATALOG.plugins.filter((p) => isPluginListingSaved(p.id)).map((p) => p.id)),
   );
 
   const filtered = searchPlugins(
@@ -160,16 +160,16 @@ export function MarketplacePanel({ onClose }: Readonly<MarketplacePanelProps>) {
   ) as MarketplacePlugin[];
 
   const toggle = (id: string) => {
-    if (installed.has(id)) {
-      uninstallPlugin(id);
-      setInstalled((prev) => {
+    if (savedListings.has(id)) {
+      removeSavedPluginListing(id);
+      setSavedListings((prev) => {
         const next = new Set(prev);
         next.delete(id);
         return next;
       });
     } else {
-      installPlugin(id);
-      setInstalled((prev) => new Set(prev).add(id));
+      savePluginListing(id);
+      setSavedListings((prev) => new Set(prev).add(id));
     }
   };
 
@@ -191,6 +191,10 @@ export function MarketplacePanel({ onClose }: Readonly<MarketplacePanelProps>) {
           ✕
         </button>
       </div>
+
+      <p role="note" className="bg-wood-100 dark:bg-wood-800 text-wood-700 dark:text-wood-200 px-5 py-3 text-xs">
+        {t('marketplace.previewNotice')}
+      </p>
 
       {/* Search + filter */}
       <div className="border-wood-200 dark:border-wood-700 space-y-3 border-b px-5 py-3">
@@ -236,7 +240,7 @@ export function MarketplacePanel({ onClose }: Readonly<MarketplacePanelProps>) {
         ) : (
           <ul className="space-y-3">
             {filtered.map((plugin) => {
-              const isOn = installed.has(plugin.id);
+              const isSaved = savedListings.has(plugin.id);
               return (
                 <li
                   key={plugin.id}
@@ -263,14 +267,15 @@ export function MarketplacePanel({ onClose }: Readonly<MarketplacePanelProps>) {
                   </div>
                   <button
                     onClick={() => toggle(plugin.id)}
-                    aria-pressed={isOn}
+                    aria-pressed={isSaved}
+                    aria-label={t(isSaved ? 'marketplace.removeSavedListing' : 'marketplace.saveListing')}
                     className={`shrink-0 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-                      isOn
-                        ? 'bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900/40 dark:text-red-300'
+                      isSaved
+                        ? 'bg-wood-100 text-wood-700 hover:bg-wood-200 dark:bg-wood-800 dark:text-wood-200 dark:hover:bg-wood-700'
                         : 'bg-accent hover:bg-accent-hover text-white'
                     }`}
                   >
-                    {isOn ? t('marketplace.uninstall') : t('marketplace.install')}
+                    {isSaved ? t('marketplace.removeSavedListing') : t('marketplace.saveListing')}
                   </button>
                 </li>
               );
@@ -283,7 +288,7 @@ export function MarketplacePanel({ onClose }: Readonly<MarketplacePanelProps>) {
       <div className="border-wood-200 dark:border-wood-700 border-t px-5 py-3 text-center">
         <p className="text-wood-400 text-xs">
           {t('marketplace.pluginCount', { count: STUB_CATALOG.plugins.length })} ·{' '}
-          {t('marketplace.installedCount', { count: installed.size })} {t('marketplace.installed')}
+          {t('marketplace.savedCount', { count: savedListings.size })}
         </p>
       </div>
     </Dialog>

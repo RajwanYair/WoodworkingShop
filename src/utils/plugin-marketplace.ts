@@ -3,10 +3,11 @@ import { browserLocalStorage, createIndexedDbAdapter } from '../platform/storage
 /**
  * Plugin Marketplace — Sprint 18
  *
- * Browse, install, and manage WoodworkingShop plugins from a catalog.
+ * Browse catalog listings and manage saved listing IDs.
  * The marketplace catalog is fetched from a CDN (or loaded from a bundled
- * stub in tests/offline) and cached in IndexedDB.  Installed plugin IDs are
- * persisted to localStorage.
+ * stub in tests/offline) and cached in IndexedDB. Saved listing IDs are
+ * persisted to localStorage; saving a listing does not install or activate
+ * plugin code.
  *
  * This module is the data layer.  The React UI consumes the functions here
  * and renders the marketplace component.
@@ -20,7 +21,7 @@ const marketplaceStore = createIndexedDbAdapter('cabinet-planner-marketplace', '
 
 const CATALOG_KEY = 'catalog';
 const CATALOG_META_KEY = 'catalog-meta';
-const INSTALLED_KEY = 'cabinet-planner-marketplace-installed';
+const SAVED_LISTINGS_KEY = 'cabinet-planner-marketplace-installed';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -191,9 +192,9 @@ export function splitPluginsByCompatibility(
 
 // ── Install / uninstall ───────────────────────────────────────────────────────
 
-function _loadInstalledIds(): string[] {
+function _loadSavedListingIds(): string[] {
   try {
-    const raw = browserLocalStorage.getItem(INSTALLED_KEY);
+    const raw = browserLocalStorage.getItem(SAVED_LISTINGS_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw) as unknown;
     return Array.isArray(parsed) ? (parsed as string[]) : [];
@@ -202,40 +203,40 @@ function _loadInstalledIds(): string[] {
   }
 }
 
-function _saveInstalledIds(ids: string[]): void {
+function _saveSavedListingIds(ids: string[]): void {
   try {
-    browserLocalStorage.setItem(INSTALLED_KEY, JSON.stringify(ids));
+    browserLocalStorage.setItem(SAVED_LISTINGS_KEY, JSON.stringify(ids));
   } catch {
     // best-effort
   }
 }
 
-/** Return IDs of currently installed plugins. */
-export function getInstalledPluginIds(): string[] {
-  return _loadInstalledIds();
+/** Return IDs of saved catalog listings. */
+export function getSavedPluginListingIds(): string[] {
+  return _loadSavedListingIds();
 }
 
-/** Return true when a plugin is installed. */
-export function isPluginInstalled(id: string): boolean {
-  return _loadInstalledIds().includes(id);
+/** Return true when a catalog listing has been saved. */
+export function isPluginListingSaved(id: string): boolean {
+  return _loadSavedListingIds().includes(id);
 }
 
-/** Mark a plugin as installed. */
-export function installPlugin(id: string): void {
-  const current = _loadInstalledIds().filter((i) => i !== id);
-  _saveInstalledIds([...current, id]);
+/** Save a catalog listing without installing or activating its plugin code. */
+export function savePluginListing(id: string): void {
+  const current = _loadSavedListingIds().filter((i) => i !== id);
+  _saveSavedListingIds([...current, id]);
 }
 
-/** Mark a plugin as uninstalled. */
-export function uninstallPlugin(id: string): void {
-  const current = _loadInstalledIds().filter((i) => i !== id);
-  _saveInstalledIds(current);
+/** Remove a saved catalog listing. */
+export function removeSavedPluginListing(id: string): void {
+  const current = _loadSavedListingIds().filter((i) => i !== id);
+  _saveSavedListingIds(current);
 }
 
-/** Remove all installed plugin records (factory reset). */
-export function clearInstalledPlugins(): void {
+/** Remove all saved catalog listing IDs. */
+export function clearSavedPluginListings(): void {
   try {
-    browserLocalStorage.removeItem(INSTALLED_KEY);
+    browserLocalStorage.removeItem(SAVED_LISTINGS_KEY);
   } catch {
     // best-effort
   }

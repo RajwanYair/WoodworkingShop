@@ -208,6 +208,8 @@ export function registerPluginV2(plugin: CabinetPlannerPlugin | CabinetPlannerPl
     pluginEventBus.emit('plugin:activate', { pluginId: plugin.id });
   } else {
     entry.state = 'active';
+    pluginEventBus.emit('plugin:install', { pluginId: plugin.id });
+    pluginEventBus.emit('plugin:activate', { pluginId: plugin.id });
   }
 
   return { ok: true };

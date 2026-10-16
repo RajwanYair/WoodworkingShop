@@ -709,10 +709,6 @@
       "classification": "internal",
       "rationale": "No direct UI-root importer remains after the domain module migration."
     },
-    "src/engine/workshop/inventory/index.ts": {
-      "classification": "internal",
-      "rationale": "No direct UI-root importer remains after the domain module migration."
-    },
     "src/engine/workshop/inventory/waste/alerts.ts": {
       "classification": "surfaced",
       "rationale": "Reachable through the consolidated inventory domain and its UI or public engine-barrel consumers."

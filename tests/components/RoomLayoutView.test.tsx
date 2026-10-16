@@ -13,6 +13,8 @@ vi.mock('zustand/middleware', async () => {
 
 import { RoomLayoutView } from '../../src/features/workspace/RoomLayoutView';
 import { useRoomStore } from '../../src/store/room-store';
+import { useCabinetStore } from '../../src/store/cabinet-store';
+import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
 
 const LAYOUT = {
   id: 'l1',
@@ -34,6 +36,45 @@ describe('RoomLayoutView', () => {
     render(<RoomLayoutView />);
     expect(screen.getByRole('region', { name: /room floor plan/i })).toBeInTheDocument();
     expect(screen.getByText(/no room layouts configured/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Create room from current project' })).toBeInTheDocument();
+  });
+
+  it('creates an active floor plan containing every cabinet in the current project', async () => {
+    useCabinetStore.setState({
+      projectName: 'Kitchen',
+      cabinets: [
+        { name: 'Base Unit', config: { ...DEFAULT_CONFIG, width: 800, depth: 600 } },
+        { name: 'Wall Unit', config: { ...DEFAULT_CONFIG, width: 700, depth: 350 } },
+      ],
+    });
+    const user = userEvent.setup();
+    render(<RoomLayoutView />);
+
+    await user.click(screen.getByRole('button', { name: 'Create room from current project' }));
+
+    const layout = useRoomStore.getState().layouts[0];
+    expect(useRoomStore.getState().activeLayoutId).toBe(layout.id);
+    expect(layout).toMatchObject({
+      name: 'Kitchen',
+      cabinets: [
+        { name: 'Base Unit', x: 300, y: 300, width: 800, depth: 600 },
+        { name: 'Wall Unit', x: 1250, y: 300, width: 700, depth: 350 },
+      ],
+    });
+    expect(screen.getByRole('group', { name: /Kitchen/ })).toBeInTheDocument();
+  });
+
+  it('explains when project cabinets exceed the supported room size', async () => {
+    useCabinetStore.setState({
+      cabinets: [{ name: 'Oversized cabinet', config: { ...DEFAULT_CONFIG, width: 20000 } }],
+    });
+    const user = userEvent.setup();
+    render(<RoomLayoutView />);
+
+    await user.click(screen.getByRole('button', { name: 'Create room from current project' }));
+
+    expect(screen.getByRole('alert')).toHaveTextContent('This project is too large to fit in a supported room layout.');
+    expect(useRoomStore.getState().layouts).toHaveLength(0);
   });
 
   it('renders the section with aria-label', () => {

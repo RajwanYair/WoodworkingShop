@@ -1,11 +1,11 @@
 {
   "title": "Marché des extensions",
   "search": "Rechercher des extensions…",
-  "install": "Installer",
-  "uninstall": "Désinstaller",
+  "saveListing": "Save listing",
+  "removeSavedListing": "Remove saved listing",
+  "previewNotice": "Catalog entries are previews only. Saving a listing bookmarks its ID on this device; it does not download or activate plugin code.",
   "enable": "Activer",
   "disable": "Désactiver",
-  "installed": "Installé",
   "enabled": "Activé",
   "noResults": "Aucune extension trouvée",
   "installCount": "{{count}} installation",
@@ -22,5 +22,5 @@
   "by": "par {{author}}",
   "downloads": "{{count}} téléchargements",
   "pluginCount": "{{count}} extensions",
-  "installedCount": "{{count}}"
+  "savedCount": "{{count}} saved"
 }

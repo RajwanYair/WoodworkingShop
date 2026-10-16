@@ -1,6 +1,6 @@
 import { APP_TABS } from './command-registry';
 
-export function preloadModule(loader: () => Promise<unknown>) {
+function preloadModule(loader: () => Promise<unknown>) {
   void loader().catch(() => undefined);
 }
 

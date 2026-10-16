@@ -22,7 +22,20 @@ function ToastList({ toasts, removeToast }: { toasts: Toast[]; removeToast: (id:
         >
           <span className={`shrink-0 ${iconColors[t.type]}`}>{IconMap[t.type]}</span>
           <span className="flex-1">{t.message}</span>
+          {t.action && (
+            <button
+              type="button"
+              onClick={() => {
+                removeToast(t.id);
+                t.action?.onClick();
+              }}
+              className="min-h-11 rounded-lg px-3 text-sm font-semibold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              {t.action.label}
+            </button>
+          )}
           <button
+            type="button"
             onClick={() => removeToast(t.id)}
             className="ms-1 flex items-center opacity-70 hover:opacity-100"
             aria-label="Dismiss"

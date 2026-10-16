@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
+import { confirmBrowserAction } from '../../store/platform-boundary';
 import { validateConfig } from '../../engine/core/validation';
 import { getConfiguratorTemplateDefaults } from '../../engine/project/templates/index';
 import { ValidationPanel } from './ValidationPanel';
@@ -37,7 +38,7 @@ export function ConfiguratorPanel() {
   };
 
   const handleResetConfig = () => {
-    if (window.confirm(t('config.resetConfirm'))) resetConfig();
+    if (confirmBrowserAction(t('config.resetConfirm'))) resetConfig();
   };
 
   return (

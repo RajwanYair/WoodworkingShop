@@ -1,6 +1,7 @@
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../store/cabinet-store';
+import { listenToBrowserEvent } from '../store/platform-boundary';
 import { HelpButton } from './OnboardingOverlay';
 import { TemplatePicker } from '../features/configurator/TemplatePicker';
 import { ProjectManagerModal } from '../features/workspace/ProjectManagerModal';
@@ -173,13 +174,13 @@ export function Header() {
     const openTemplates = () => setShowTemplates(true);
     const openProjects = () => setShowProjects(true);
     const openMarketplace = () => setShowMarketplace(true);
-    window.addEventListener('templates:open', openTemplates);
-    window.addEventListener('projects:open', openProjects);
-    window.addEventListener('marketplace:open', openMarketplace);
+    const unsubscribeTemplates = listenToBrowserEvent('templates:open', openTemplates);
+    const unsubscribeProjects = listenToBrowserEvent('projects:open', openProjects);
+    const unsubscribeMarketplace = listenToBrowserEvent('marketplace:open', openMarketplace);
     return () => {
-      window.removeEventListener('templates:open', openTemplates);
-      window.removeEventListener('projects:open', openProjects);
-      window.removeEventListener('marketplace:open', openMarketplace);
+      unsubscribeTemplates();
+      unsubscribeProjects();
+      unsubscribeMarketplace();
     };
   }, []);
 

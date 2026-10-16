@@ -2,7 +2,9 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
   saveProject,
   listProjects,
+  duplicateProject,
   deleteProject,
+  restoreProject,
   migrateProject,
   exportProjectJson,
   exportProjectsBundle,
@@ -62,6 +64,35 @@ describe('project-storage', () => {
     expect((await listProjects())[0].name).toBe('My Cabinet');
     await deleteProject(p.id);
     expect(await listProjects()).toHaveLength(0);
+  });
+
+  it('duplicates projects with a unique name and new id without changing the source', async () => {
+    const source = await saveProject('Cabinet plan', sampleCabinets);
+    const firstCopy = await duplicateProject(source.id);
+    const secondCopy = await duplicateProject(source.id);
+
+    expect(firstCopy).toMatchObject({ name: 'Cabinet plan (copy)', cabinets: source.cabinets });
+    expect(firstCopy.id).not.toBe(source.id);
+    expect(secondCopy.name).toBe('Cabinet plan (copy 2)');
+    expect((await listProjects()).map((project) => project.id)).toEqual([source.id, firstCopy.id, secondCopy.id]);
+    expect((await listProjects())[0]).toMatchObject(source);
+  });
+
+  it('rejects duplicating a missing project without changing saved data', async () => {
+    const existing = await saveProject('Existing project', sampleCabinets);
+
+    await expect(duplicateProject('missing-project')).rejects.toThrow(/missing project/i);
+    expect(await listProjects()).toMatchObject([existing]);
+  });
+
+  it('restores a deleted project and rejects restoring an existing id', async () => {
+    const project = await saveProject('Undoable project', sampleCabinets);
+    await deleteProject(project.id);
+
+    await expect(restoreProject(project)).resolves.toBeUndefined();
+    expect(await listProjects()).toMatchObject([project]);
+    await expect(restoreProject(project)).rejects.toThrow(/existing id/i);
+    expect(await listProjects()).toMatchObject([project]);
   });
 
   it('preserves the project and recovers when deletion persistence fails', async () => {

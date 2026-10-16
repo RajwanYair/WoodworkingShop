@@ -8,6 +8,7 @@
 import type { AppRouteId } from '../../utils/route-table';
 import type { UnitSystem } from '../../utils/units';
 import { browserLocalStorage } from '../../platform/storage/index';
+import { isMediaQueryMatched } from '../../platform/browser/index';
 
 // ─── Persisted preference helpers (shared with cabinet-store.ts) ─────────────
 // NOTE: these are intentionally duplicated from cabinet-store.ts so the slice
@@ -98,8 +99,7 @@ function saveCutChecklist(ids: string[]): void {
  * Returns `true` when `(prefers-color-scheme: dark)` matches.
  */
 export function detectOsDarkModeUi(): boolean {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false;
-  return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  return isMediaQueryMatched('(prefers-color-scheme: dark)');
 }
 
 // ─── Slice type ───────────────────────────────────────────────────────────────

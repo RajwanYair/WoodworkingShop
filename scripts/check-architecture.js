@@ -54,6 +54,34 @@ const BROWSER_GLOBALS = new Set([
   'Worker',
   'fetch',
 ]);
+const FORBIDDEN_BROWSER_GLOBALS = new Set([
+  'cancelAnimationFrame',
+  'fetch',
+  'indexedDB',
+  'localStorage',
+  'navigator',
+  'requestAnimationFrame',
+  'sessionStorage',
+  'URL',
+]);
+const FORBIDDEN_BROWSER_PROPERTIES = new Map([
+  ['document', new Set(['title'])],
+  ['globalThis', new Set(['fetch', 'indexedDB', 'localStorage', 'sessionStorage'])],
+  [
+    'window',
+    new Set([
+      'addEventListener',
+      'confirm',
+      'dispatchEvent',
+      'history',
+      'location',
+      'matchMedia',
+      'open',
+      'print',
+      'removeEventListener',
+    ]),
+  ],
+]);
 const DOM_CONTRACT_TYPES = new Set([
   ...BROWSER_GLOBALS,
   'AbortController',
@@ -157,11 +185,14 @@ export function analyzeArchitecture(sources) {
   const graph = buildImportGraph(normalizedSources);
   const violations = new Map();
 
-  for (const [from, edges] of graph) {
+  for (const from of Object.keys(normalizedSources)) {
+    const edges = graph.get(from) ?? [];
     const inEngine = from.startsWith('src/engine/');
     const inPlatform = from.startsWith('src/platform/');
     const inFeatures = from.startsWith('src/features/');
     const sourceLayer = getTargetLayer(from);
+    const inApplicationSurface =
+      from === 'src/App.tsx' || sourceLayer === 'app' || sourceLayer === 'features' || sourceLayer === 'store';
 
     for (const { target } of edges) {
       const targetLayer = getTargetLayer(target);
@@ -197,7 +228,7 @@ export function analyzeArchitecture(sources) {
       }
     }
 
-    if (!inEngine && !inPlatform) continue;
+    if (!inEngine && !inPlatform && !inApplicationSurface) continue;
     const sourceFile = ts.createSourceFile(
       from,
       normalizedSources[from],
@@ -207,6 +238,7 @@ export function analyzeArchitecture(sources) {
     );
 
     function inspectModuleSpecifier(moduleSpecifier) {
+      if (!inEngine && !inPlatform) return;
       if (!ts.isStringLiteral(moduleSpecifier)) return;
       const specifier = moduleSpecifier.text;
       if (/^react(?:-dom)?(?:\/|$)/.test(specifier)) {
@@ -229,6 +261,22 @@ export function analyzeArchitecture(sources) {
       }
       if (inEngine && ts.isIdentifier(node) && BROWSER_GLOBALS.has(node.text)) {
         addViolation(violations, { rule: 'browser-api-in-pure-layer', file: from, target: node.text });
+      }
+      if (inApplicationSurface && !inPlatform) {
+        if (ts.isIdentifier(node) && FORBIDDEN_BROWSER_GLOBALS.has(node.text)) {
+          addViolation(violations, { rule: 'browser-platform-boundary', file: from, target: node.text });
+        }
+        if (
+          ts.isPropertyAccessExpression(node) &&
+          ts.isIdentifier(node.expression) &&
+          FORBIDDEN_BROWSER_PROPERTIES.get(node.expression.text)?.has(node.name.text)
+        ) {
+          addViolation(violations, {
+            rule: 'browser-platform-boundary',
+            file: from,
+            target: `${node.expression.text}.${node.name.text}`,
+          });
+        }
       }
       if (
         inPlatform &&

@@ -3,6 +3,7 @@ export type ArchitectureViolation =
   | {
       rule:
         | 'browser-api-in-pure-layer'
+        | 'browser-platform-boundary'
         | 'dom-type-in-platform-contract'
         | 'engine-boundary'
         | 'engine-domain-barrel'

@@ -107,5 +107,9 @@
   "allMaterials": "כל החומרים",
   "partsTableSearch": "חיפוש חלקים",
   "hardwareTableSearch": "חיפוש פרזול",
-  "noTableResults": "לא נמצאו שורות תואמות"
+  "noTableResults": "לא נמצאו שורות תואמות",
+  "clearTableFilters": "נקה מסננים",
+  "partsTableEmpty": "עדיין אין חלקים לחיתוך. הגדירו ארון כדי ליצור אותם.",
+  "hardwareTableEmpty": "עדיין לא נוצרה חומרה לפרויקט הזה.",
+  "configureCabinet": "הגדרת ארונות"
 }

@@ -1,7 +1,9 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { PluginRegistryPanel } from '../../src/features/workspace/PluginRegistryPanel';
 import { registerPlugin, unregisterPlugin, getPlugins, type CabinetPlannerPlugin } from '../../src/engine/core/plugin';
+import { getRegistryEntry } from '../../src/engine/core';
 
 // Reset the plugin registry before each test so tests are isolated.
 beforeEach(() => {
@@ -40,21 +42,40 @@ describe('PluginRegistryPanel', () => {
     expect(btn).toHaveAttribute('aria-pressed', 'true');
   });
 
-  it('toggles plugin to disabled on button click', () => {
+  it('deactivates the registered plugin in the engine on button click', async () => {
+    const user = userEvent.setup();
     registerPlugin(mockPlugin);
     render(<PluginRegistryPanel />);
-    fireEvent.click(screen.getByRole('button', { name: /disable plugin/i }));
-    const btn = screen.getByRole('button', { name: /enable plugin/i });
-    expect(btn).toHaveAttribute('aria-pressed', 'false');
+    await user.click(screen.getByRole('button', { name: /disable plugin/i }));
+    expect(getRegistryEntry(mockPlugin.id)?.state).toBe('deactivated');
+    expect(screen.getByRole('button', { name: /enable plugin/i })).toHaveAttribute('aria-pressed', 'false');
   });
 
-  it('toggles plugin back to enabled on second click', () => {
+  it('reactivates a deactivated plugin in the engine on second click', async () => {
+    const user = userEvent.setup();
     registerPlugin(mockPlugin);
     render(<PluginRegistryPanel />);
-    fireEvent.click(screen.getByRole('button', { name: /disable plugin/i }));
-    fireEvent.click(screen.getByRole('button', { name: /enable plugin/i }));
-    const btn = screen.getByRole('button', { name: /disable plugin/i });
-    expect(btn).toHaveAttribute('aria-pressed', 'true');
+    await user.click(screen.getByRole('button', { name: /disable plugin/i }));
+    await user.click(screen.getByRole('button', { name: /enable plugin/i }));
+    expect(getRegistryEntry(mockPlugin.id)?.state).toBe('active');
+    expect(screen.getByRole('button', { name: /disable plugin/i })).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  it('updates when a plugin is registered after the panel is open', async () => {
+    render(<PluginRegistryPanel />);
+    expect(screen.getByText(/no plugins/i)).toBeInTheDocument();
+    registerPlugin(mockPlugin);
+    expect(await screen.findByText('Demo Plugin')).toBeInTheDocument();
+  });
+
+  it('offers a browse-only catalog recovery action from the empty state', async () => {
+    const user = userEvent.setup();
+    const onMarketplaceOpen = vi.fn();
+    window.addEventListener('marketplace:open', onMarketplaceOpen);
+    render(<PluginRegistryPanel />);
+    await user.click(screen.getByRole('button', { name: 'Browse catalog' }));
+    expect(onMarketplaceOpen).toHaveBeenCalledOnce();
+    window.removeEventListener('marketplace:open', onMarketplaceOpen);
   });
 
   it('shows the API version badge', () => {

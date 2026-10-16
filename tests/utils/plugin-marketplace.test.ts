@@ -13,11 +13,11 @@ import {
   getMarketplacePluginCompatibility,
   isMarketplacePluginCompatible,
   splitPluginsByCompatibility,
-  getInstalledPluginIds,
-  isPluginInstalled,
-  installPlugin,
-  uninstallPlugin,
-  clearInstalledPlugins,
+  getSavedPluginListingIds,
+  isPluginListingSaved,
+  savePluginListing,
+  removeSavedPluginListing,
+  clearSavedPluginListings,
 } from '../../src/utils/plugin-marketplace';
 import type { MarketplaceCatalog, MarketplacePlugin } from '../../src/utils/plugin-marketplace';
 
@@ -242,36 +242,41 @@ describe('marketplace plugin API compatibility', () => {
   });
 });
 
-// ── install / uninstall ───────────────────────────────────────────────────────
+// ── saved catalog listings ────────────────────────────────────────────────────
 
-describe('installPlugin / uninstallPlugin', () => {
-  beforeEach(() => clearInstalledPlugins());
+describe('saved catalog listings', () => {
+  beforeEach(() => clearSavedPluginListings());
 
   it('returns empty list initially', () => {
-    expect(getInstalledPluginIds()).toHaveLength(0);
+    expect(getSavedPluginListingIds()).toHaveLength(0);
   });
 
-  it('installs a plugin', () => {
-    installPlugin('plugin-a');
-    expect(isPluginInstalled('plugin-a')).toBe(true);
+  it('saves a listing without implying plugin activation', () => {
+    savePluginListing('plugin-a');
+    expect(isPluginListingSaved('plugin-a')).toBe(true);
   });
 
-  it('uninstalls a plugin', () => {
-    installPlugin('plugin-b');
-    uninstallPlugin('plugin-b');
-    expect(isPluginInstalled('plugin-b')).toBe(false);
+  it('removes a saved listing', () => {
+    savePluginListing('plugin-b');
+    removeSavedPluginListing('plugin-b');
+    expect(isPluginListingSaved('plugin-b')).toBe(false);
   });
 
-  it('does not duplicate on re-install', () => {
-    installPlugin('plugin-c');
-    installPlugin('plugin-c');
-    expect(getInstalledPluginIds().filter((id) => id === 'plugin-c')).toHaveLength(1);
+  it('does not duplicate a saved listing', () => {
+    savePluginListing('plugin-c');
+    savePluginListing('plugin-c');
+    expect(getSavedPluginListingIds().filter((id) => id === 'plugin-c')).toHaveLength(1);
   });
 
-  it('clearInstalledPlugins removes all', () => {
-    installPlugin('a');
-    installPlugin('b');
-    clearInstalledPlugins();
-    expect(getInstalledPluginIds()).toHaveLength(0);
+  it('reads saved IDs from the existing storage key', () => {
+    localStorageMock.setItem('cabinet-planner-marketplace-installed', JSON.stringify(['legacy-id']));
+    expect(getSavedPluginListingIds()).toEqual(['legacy-id']);
+  });
+
+  it('clearSavedPluginListings removes all', () => {
+    savePluginListing('a');
+    savePluginListing('b');
+    clearSavedPluginListings();
+    expect(getSavedPluginListingIds()).toHaveLength(0);
   });
 });

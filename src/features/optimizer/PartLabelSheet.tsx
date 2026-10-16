@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { assignPartLabels } from '../../engine/workshop/part-labeling';
+import { openPrintDocument } from '../../store/platform-boundary';
 import type { LabeledPart } from '../../engine/workshop/part-labeling';
 import { buildPartLabelPrintHtml } from './build-part-label-print-html';
 
@@ -38,14 +39,7 @@ export function PartLabelSheet() {
   const labeled = useMemo(() => assignPartLabels(allParts, { expandMultiQty: expandQty }), [allParts, expandQty]);
 
   function handlePrint() {
-    const win = window.open('', '_blank', 'width=800,height=600');
-    if (!win) return;
-    win.document.write(buildPartLabelPrintHtml(labeled, t('partLabels.printTitle')));
-    win.document.close();
-    win.setTimeout(() => {
-      win.focus();
-      win.print();
-    }, 100);
+    openPrintDocument(buildPartLabelPrintHtml(labeled, t('partLabels.printTitle')));
   }
 
   return (

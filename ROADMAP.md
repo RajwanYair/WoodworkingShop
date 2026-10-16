@@ -1864,7 +1864,8 @@ flowchart LR
 
 **Sprint 424 — Lint, dead-code, spelling and mutation hardening** — P1 · M · S371–S373.
 
-- T1: BLOCKED — Removing the 28 current `entry` patterns makes Knip report 844 exported types as unused, including documented `public-api` barrels. The capability ledger also identifies roots as `surface-next`/`internal`, while workflow, test, worker, and i18n roots are not ledger modules. Reconcile each root's ownership and public contract before removing overrides; keep `npm run dead:check` passing in the meantime.
+- T1: IN PROGRESS — Declared `axe-core` directly, made the internal `preloadModule` helper private, removed five stale Knip entry paths, and retired the unused UI migration codemod and internal inventory aggregator. Knip entries now include all documented engine domain barrels.
+  Remaining: 2 unused files, 25 unused exports, and 20 exported types still need ownership/public-contract classification. `npm run dead:check` remains blocked; do not mask unresolved APIs with blanket suppressions.
 - T2: DONE — Corrected `cspell.json`, added pinned locale dictionaries and the reviewed project vocabulary, and enabled `npm run spell:check` in `quality:fast` and CI; 410 scoped files pass with zero findings.
 - T3: DONE — `docs/ENGINEERING-DECISIONS.md` records the Oxlint 1.83.0 local trial and defers adoption: the required ESLint gate remains, so a sequential pre-pass cannot shorten `quality:fast`.
 - T4: IN PROGRESS — The four-module Stryker config preserves static mutants and uses an OS-temp incremental file; `mutation.yml` restores/saves that cache and gives each weekly run a graceful 14-minute baseline slice while retaining the separate two-module 79% gate. The weekly dry run discovers 87 tests, but a two-mutant probe reports zero completed tests.
@@ -1903,7 +1904,12 @@ flowchart LR
 - T1: DONE — Created `src/platform/{storage,files,share,device,diagnostics}` with an engine-independent `StorageAdapter` and IndexedDB implementation, generic download and text-file readers, Web Share/clipboard helpers, camera/vibration/wake-lock/serial capability adapters, and the privacy-first error reporter. Initial adapter contracts are covered by focused unit tests.
 - T2: DONE — Browser I/O in `utils/` and `services/` now routes through `platform/`, including IndexedDB, localStorage, downloads, file reads, share/history, fetch, camera/audio/canvas, MediaRecorder, Web Serial/XR, WebGL probing, Web Vitals and error reporting. Shared component export/download paths also use `platform/files`. `services/` remains for store-aware diagnostic aggregation and capability metadata; retire it when those owners move to their target layers.
 - T3: DONE — Fake adapter contracts and a dedicated Playwright Chromium suite cover storage, files, URL history, device probes and diagnostics; the suite runs once in CI. Vitest Browser Mode is deferred because the available provider is 5.0.1 with an exact peer while the project uses Vitest 5.0.4; mixed versions fail, so the existing Playwright stack is used without downgrading Vitest.
-- Accept: IN PROGRESS — `utils/` and `services/` no longer access browser globals directly, and architecture reports zero new findings. UI components and store/bootstrap code still access browser APIs directly, so the source-wide `platform/` and `app/` boundary and its enforcement remain open for S430.
+- Accept: DONE — Browser I/O used by app, feature, and store modules now runs through `src/platform/`
+  adapters exposed by `src/store/platform-boundary.ts`. The architecture fitness function scans those
+  surfaces, including files without imports, and rejects direct storage, network, device, URL, print,
+  media-query, animation-frame, and global event access. Focused adapter and boundary tests pass;
+  `npm run architecture:check` reports zero new violations (one pre-existing locked engine re-export
+  remains). DOM element focus, measurement, and visual-state operations remain local to React surfaces.
 
 **Sprint 429 — Store refactor: domain slices and patch history** — P0 · L · S427, S428.
 
@@ -1985,21 +1991,23 @@ flowchart LR
   Tests: `tests/engine/project/examples.test.ts` (unique ids, unique cabinet names, every config produces parts/hardware) and `tests/components/ExamplesGallery.test.tsx` (lists all six translated names, loads the selected example into the store and closes). `npm run architecture:check` reports zero new violations (the data file imports `core`/`materials` through their barrels, matching `configurator.ts`).
   `npm run ci` passed: 373 files / 5,313 tests in 217.97 s, build, 2,892.7 KB JS / within the 2,900 KB JS and 3,140 KB total caps (raised from 2,895/3,130 for this feature, justified in CHANGELOG), initial route 598.1 KB raw / 154.2 KB Brotli, and 16 benchmarks.
 - T2: DONE — The skippable guided tour is anchored to real tabs using the Popover API and reopens from Help and the command palette. Component tests cover keyboard progression, focus containment, Escape dismissal, and RTL accessibility; the Chromium Help-to-tour journey passes.
-- T3: IN PROGRESS — The "What's new" dialog is generated at build time from the newest categorized bullet in the current `[Unreleased]` section and opens from the command palette.
+- T3: DONE — The "What's new" dialog is generated at build time from the newest categorized bullet in the current `[Unreleased]` section and opens from the command palette.
   Saved-project empty and filtered states use the shared `EmptyState` with a direct Save or Clear Search action. Grain-report and part-label empty prompts route to Configure; marketplace no-results clears both search and category filters.
   The build-log composer remains visible beside its empty message. Named-expression and saved-configuration panels keep their add/save forms available while empty; catalog import retains its URL action for empty previews, and hardware import keeps its file chooser visible when the stored list is empty.
   Component tests cover those existing recovery controls. Cost variance and cut checklist route their empty states to Configure.
-  The optimizer's no-suggestions state is an intentional positive result with its tolerance control still available. The plugin registry has no safe marketplace action: marketplace installation persists an ID but does not register an engine plugin.
-  Remaining: resolve the plugin-registry recovery path and continue the wider panel audit.
-- Tests: DONE for the tour and delivered T3 slice — component/parser tests cover empty-state actions, configure-first copy, and existing import recovery; Chromium command-palette and marketplace journeys pass. `npm run check` passes quality and all 5,329 Vitest tests. The first-run PDF journey passes with a 2,271 ms median over three isolated Chromium runs, timed through the saved file.
-  `npm run build` and bundle checks pass at 2,899.9 KB JS / 3,137.6 KB total; the initial route is 601.2 KB raw / 155.1 KB Brotli. The remaining panel empty-state journeys are open.
-- Accept: IN PROGRESS — the tour is keyboard accessible and median scripted time from first load through PDF download is 2,271 ms (under 60 s); the panel-wide empty-state sweep remains open.
+  The optimizer's no-suggestions state is an intentional positive result with its tolerance control still available. Marketplace entries are explicitly browse-only: saving a listing stores its ID without downloading or activating plugin code. The runtime plugin registry distinguishes saved listings from registered plugins, provides a catalog browse action when empty, and toggles registered plugins through the engine lifecycle API.
+  The room-plan empty state creates an active floor plan from the current project, arranging every cabinet with clear spacing and reporting projects that exceed supported room dimensions. Optimizer parts and hardware tables route genuinely data-empty states to Configure while keeping the existing clear-filter action for no-match searches.
+  The panel-wide audit is complete: empty states retain relevant create/import controls, route to the appropriate recovery action, offer filter recovery, or communicate an intentional no-result state.
+- Tests: DONE — Component/parser tests cover empty-state actions, configure-first copy, existing import recovery, saved-listing semantics, runtime plugin lifecycle controls, room-plan creation/error recovery, and optimizer table recovery; Chromium command-palette, marketplace, and first-run PDF journeys pass (2,271 ms median to PDF download).
+  Current `npm run check` passes quality and all 5,345 Vitest tests; `npm run build` passes. `npm run bundle:check` reports current working-tree totals of 2,914.0 KB JS / 3,151.6 KB total, over the 2,900 KB / 3,140 KB limits; no budget was raised.
+- Accept: DONE — the tour is keyboard accessible and the measured first-run journey reaches PDF download in 2,271 ms (under 60 s); the panel-wide empty-state recovery audit and follow-up tests are complete.
 
 **Sprint 436 — Project home** — P1 · M · S435, S429.
 
-- T1: Project home with recent projects, generated thumbnails, search, duplicate, delete with undo, and "start from example/template".
-- T2: Storage usage and backup reminder from the S321 health data.
-- Accept: every action reachable by keyboard and from the command palette.
+- T1: DONE — Workspace home shows recent saved projects with generated cabinet previews and name search; users can open, duplicate, and delete with an app-wide undo action. Example, template, and Project Manager flows are reused. Open/duplicate/delete actions for the ten most recent projects are available in the command palette; project-list changes stay synchronized across the home and manager.
+- T2: DONE — Project home displays the S321 browser storage estimate and an always-available reminder/action to export all saved projects as a portable backup. No backup age or reminder interval is claimed because the existing health data does not track completed exports.
+- Tests: DONE — Component and storage tests cover project search/open/duplicate/delete/undo, storage errors, external project-list refresh, backup export and failure feedback, and the existing example/template/manager entry points. `npm run quality:fast` and `npm run build` pass; `npm run bundle:check` still exceeds the existing budgets at 2,932.6 KB JS / 3,170.5 KB total. Browser QA verified the home and entry dialogs at 390px with no horizontal overflow or browser console errors.
+- Accept: DONE — T1 actions are keyboard reachable and recent-project actions are in the command palette. Project home exposes storage health and a usable export-all backup action with visible feedback.
 
 **Sprint 437 — Shop drawings with exploded callouts** — P1 · L · S427.
 

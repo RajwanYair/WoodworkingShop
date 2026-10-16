@@ -5,6 +5,7 @@ import { applyExplodeFactor, buildCabinetScene, centerScene, getSceneBounds } fr
 import { getPbrMaterial } from '../../engine/materials/pbr-materials';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
+import { getWebGL2MaxTextureSize, isWebGPUSupported } from '../../store/platform-boundary';
 import { generateParts } from '../../engine/geometry/parts';
 import type { CabinetScene } from '../../engine/room/webgpu-renderer';
 import type { RendererCapabilities } from '../../engine/room/webgpu-renderer';
@@ -26,25 +27,21 @@ function useRendererCapabilities(): RendererCapabilities {
 
     async function probe() {
       // WebGPU probe
-      if ('gpu' in navigator) {
-        try {
-          const adapter = await (navigator as { gpu: { requestAdapter(): Promise<unknown> } }).gpu.requestAdapter();
-          if (adapter && !cancelled) {
+      try {
+        if (await isWebGPUSupported()) {
+          if (!cancelled) {
             setCapabilities({ tier: 'webgpu', maxTextureSize: 8192, supportsHDR: true, supportsAR: true });
             return;
           }
-        } catch {
-          // WebGPU unavailable — fall through to WebGL2 check
         }
+      } catch {
+        // WebGPU unavailable — fall through to WebGL2 check.
       }
 
       // WebGL2 probe
-      const canvas = document.createElement('canvas');
-      const gl = canvas.getContext('webgl2');
-      if (gl && !cancelled) {
-        const maxTex = gl.getParameter(gl.MAX_TEXTURE_SIZE) as number;
-        setCapabilities({ tier: 'webgl2', maxTextureSize: maxTex, supportsHDR: false, supportsAR: false });
-        gl.getExtension('WEBGL_lose_context')?.loseContext();
+      const maxTextureSize = getWebGL2MaxTextureSize();
+      if (maxTextureSize !== null && !cancelled) {
+        setCapabilities({ tier: 'webgl2', maxTextureSize, supportsHDR: false, supportsAR: false });
         return;
       }
 

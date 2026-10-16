@@ -63,7 +63,7 @@ export function ExamplesGallery({ onClose }: Readonly<ExamplesGalleryProps>) {
       onClose={onClose}
       labelledBy="examples-title"
       showHeader={false}
-      className="dark:bg-wood-800 relative mx-4 flex max-h-[85vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl bg-white p-0 text-start shadow-2xl"
+      className="dark:bg-wood-800 mx-auto flex max-h-[85vh] w-[calc(100vw-2rem)] max-w-3xl flex-col overflow-hidden rounded-xl bg-white p-0 text-start shadow-2xl"
     >
       <div className="border-wood-200 dark:border-wood-700 flex items-center justify-between border-b p-4">
         <div>

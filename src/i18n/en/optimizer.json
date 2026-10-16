@@ -107,5 +107,9 @@
   "allMaterials": "All materials",
   "partsTableSearch": "Search parts",
   "hardwareTableSearch": "Search hardware",
-  "noTableResults": "No matching rows"
+  "noTableResults": "No matching rows",
+  "clearTableFilters": "Clear filters",
+  "partsTableEmpty": "No cut parts yet. Configure a cabinet to generate them.",
+  "hardwareTableEmpty": "No hardware generated for this project yet.",
+  "configureCabinet": "Configure cabinets"
 }

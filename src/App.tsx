@@ -16,11 +16,19 @@ import { MobileTabBar } from './app/MobileTabBar';
 import { ActiveCabinetSwitcher } from './app/ActiveCabinetSwitcher';
 import type { CalculatorId } from './features/calculators/calculator-catalog';
 import { CALCULATOR_COMMANDS, type CalculatorCommandId } from './features/calculators/calculator-commands';
-import { listProjects } from './utils/project-storage';
+import { deleteProject, duplicateProject, listProjects, restoreProject } from './utils/project-storage';
 import { IconPrint } from './ui/Icons';
 import { useCabinetStore } from './store/cabinet-store';
 import { useToastStore } from './store/toast-store';
-import { copyText } from './store/platform-boundary';
+import {
+  browserLocalStorage,
+  browserSessionStorage,
+  copyText,
+  dispatchBrowserEvent,
+  listenToBrowserEvent,
+  listenToKeyboardEvents,
+  printBrowserDocument,
+} from './store/platform-boundary';
 import { useSystemDarkMode } from './hooks/useSystemDarkMode';
 import { useSwUpdate } from './hooks/useSwUpdate';
 import { usePwaFileHandlers } from './hooks/usePwaFileHandlers';
@@ -172,6 +180,10 @@ function App() {
 
     let cancelled = false;
     const projectCommandIds: string[] = [];
+    const notifyProjectError = (reason: unknown) => {
+      const message = reason instanceof Error ? reason.message : String(reason);
+      useToastStore.getState().addToast(t('projects.actionError', { message }), 'error');
+    };
 
     void listProjects()
       .then((projects) => {
@@ -179,26 +191,69 @@ function App() {
         const commands = projects
           .sort((a, b) => new Date(b.savedAt).getTime() - new Date(a.savedAt).getTime())
           .slice(0, 10)
-          .map((project) => {
-            const id = `project.open.${project.id}`;
-            projectCommandIds.push(id);
-            return {
-              id,
-              label: project.name,
-              category: t('commandPalette.categories.projects'),
-              keywords: [project.id],
-              action: () => {
-                const store = useCabinetStore.getState();
-                store.loadProject(project.cabinets);
-                store.setProjectName(project.name);
-                useToastStore.getState().addToast(t('projects.loaded'), 'success');
+          .flatMap((project) => {
+            const category = t('commandPalette.categories.projects');
+            const projectCommands = [
+              {
+                id: `project.open.${project.id}`,
+                label: project.name,
+                category,
+                keywords: [project.id, t('projects.open')],
+                action: () => {
+                  const store = useCabinetStore.getState();
+                  store.loadProject(project.cabinets);
+                  store.setProjectName(project.name);
+                  useToastStore.getState().addToast(t('projects.loaded'), 'success');
+                },
               },
-            };
+              {
+                id: `project.duplicate.${project.id}`,
+                label: t('projects.duplicateNamed', { name: project.name }),
+                category,
+                keywords: [project.id, project.name, t('projects.duplicate')],
+                action: () => {
+                  void duplicateProject(project.id)
+                    .then(() => {
+                      dispatchBrowserEvent('projects:changed');
+                      useToastStore.getState().addToast(t('projects.duplicateSuccess'), 'success');
+                    })
+                    .catch(notifyProjectError);
+                },
+              },
+              {
+                id: `project.delete.${project.id}`,
+                label: t('projects.deleteNamed', { name: project.name }),
+                category,
+                keywords: [project.id, project.name, t('projects.delete')],
+                action: () => {
+                  void deleteProject(project.id)
+                    .then(() => {
+                      dispatchBrowserEvent('projects:changed');
+                      useToastStore.getState().addToast(t('projects.deleted'), 'info', {
+                        label: t('projects.undoDelete'),
+                        onClick: () => {
+                          void restoreProject(project)
+                            .then(() => {
+                              dispatchBrowserEvent('projects:changed');
+                              useToastStore.getState().addToast(t('projects.restored'), 'success');
+                            })
+                            .catch(notifyProjectError);
+                        },
+                      });
+                    })
+                    .catch(notifyProjectError);
+                },
+              },
+            ];
+            projectCommandIds.push(...projectCommands.map((command) => command.id));
+            return projectCommands;
           });
         registerCommands(commands);
         setProjectCommandsVersion((version) => version + 1);
       })
-      .catch(() => undefined);
+      .catch((reason: unknown) => {
+        if (!cancelled) notifyProjectError(reason);
+      });
 
     return () => {
       cancelled = true;
@@ -358,7 +413,7 @@ function App() {
         APP_COMMAND_DEFINITIONS.print,
         t(APP_COMMAND_DEFINITIONS.print.labelKey),
         t(APP_COMMAND_DEFINITIONS.print.categoryKey),
-        () => window.print(),
+        printBrowserDocument,
       ),
       createAppCommand(
         APP_COMMAND_DEFINITIONS.toggleFocusMode,
@@ -407,7 +462,7 @@ function App() {
           useToastStore.getState().addToast(t('shortcuts.saveSnapshot'), 'success');
           break;
         case 'print.run':
-          window.print();
+          printBrowserDocument();
           break;
         case 'export.bom': {
           const { cabinets, projectName: pName, config } = state;
@@ -462,10 +517,10 @@ function App() {
           state.toggleHighContrast();
           break;
         case 'templates.open':
-          window.dispatchEvent(new Event('templates:open'));
+          dispatchBrowserEvent('templates:open');
           break;
         case 'projects.open':
-          window.dispatchEvent(new Event('projects:open'));
+          dispatchBrowserEvent('projects:open');
           break;
         case 'shortcuts.toggle':
           setShowShortcuts((visible) => !visible);
@@ -474,14 +529,14 @@ function App() {
           setShowDiagnostics(true);
           break;
         case 'marketplace.open':
-          window.dispatchEvent(new Event('marketplace:open'));
+          dispatchBrowserEvent('marketplace:open');
           break;
         case 'examples.open':
           setShowExamples(true);
           break;
         case 'help.open':
-          localStorage.removeItem('onboarding-seen');
-          window.dispatchEvent(new Event('show-onboarding'));
+          browserLocalStorage.removeItem('onboarding-seen');
+          dispatchBrowserEvent('show-onboarding');
           break;
       }
     };
@@ -519,11 +574,11 @@ function App() {
         });
       }
     };
-    window.addEventListener(COMMAND_ACTION_EVENT, actionHandler);
-    window.addEventListener('keydown', handler);
+    const unsubscribeActions = listenToBrowserEvent(COMMAND_ACTION_EVENT, actionHandler);
+    const unsubscribeKeyboard = listenToKeyboardEvents(handler);
     return () => {
-      window.removeEventListener(COMMAND_ACTION_EVENT, actionHandler);
-      window.removeEventListener('keydown', handler);
+      unsubscribeActions();
+      unsubscribeKeyboard();
     };
   }, [haptics, i18n.language, t]);
 
@@ -559,7 +614,7 @@ function App() {
             <div className="mb-3 flex justify-end">
               <button
                 data-print="hide"
-                onClick={() => window.print()}
+                onClick={printBrowserDocument}
                 className="bg-wood-50/80 text-wood-700 hover:bg-wood-50 dark:bg-wood-800/80 dark:text-wood-100 dark:hover:bg-wood-800 flex h-11 w-11 items-center justify-center rounded-full shadow-[0_2px_10px_rgb(0_0_0/0.08)] backdrop-blur-xl print:hidden"
                 title="Print current view"
                 aria-label="Print current view"
@@ -576,7 +631,13 @@ function App() {
               <ActiveCabinetSwitcher />
             )}
 
-            {activeTab === 'workspace' && <WorkspaceHome />}
+            {activeTab === 'workspace' && (
+              <WorkspaceHome
+                onOpenExamples={() => setShowExamples(true)}
+                onOpenProjects={() => dispatchBrowserEvent('projects:open')}
+                onOpenTemplates={() => dispatchBrowserEvent('templates:open')}
+              />
+            )}
             {activeTab === 'configurator' && (
               <div className="space-y-6">
                 <ErrorBoundary panelName={t('tabs.configurator')}>
@@ -643,7 +704,7 @@ function App() {
         {!focusMode && <MobileTabBar />}
         <OnboardingManager />
         <TouchGestureTutorial />
-        {swUpdateAvailable && sessionStorage.getItem('swUpdate:dismissed') !== 'true' && (
+        {swUpdateAvailable && browserSessionStorage.getItem('swUpdate:dismissed') !== 'true' && (
           <Suspense fallback={null}>
             <SwUpdateBanner reload={reloadSwUpdate} />
           </Suspense>

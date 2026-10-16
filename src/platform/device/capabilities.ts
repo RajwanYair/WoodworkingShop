@@ -1,3 +1,16 @@
+interface WebGpuAdapterProvider {
+  requestAdapter: () => Promise<unknown>;
+}
+
+function isWebGpuAdapterProvider(value: unknown): value is WebGpuAdapterProvider {
+  return (
+    value !== null &&
+    typeof value === 'object' &&
+    'requestAdapter' in value &&
+    typeof value.requestAdapter === 'function'
+  );
+}
+
 export function isCameraSupported(): boolean {
   return typeof navigator !== 'undefined' && Boolean(navigator.mediaDevices?.getUserMedia);
 }
@@ -12,6 +25,13 @@ export function isWebVibrationSupported(): boolean {
 
 export function isWakeLockSupported(): boolean {
   return typeof navigator !== 'undefined' && 'wakeLock' in navigator;
+}
+
+export async function isWebGPUSupported(): Promise<boolean> {
+  if (typeof navigator === 'undefined') return false;
+  const gpu: unknown = Reflect.get(navigator, 'gpu');
+  if (!isWebGpuAdapterProvider(gpu)) return false;
+  return Boolean(await gpu.requestAdapter());
 }
 
 export async function requestEnvironmentCamera(): Promise<MediaStream> {

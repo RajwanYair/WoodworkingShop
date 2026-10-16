@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { translateKey } from '../i18n/translate';
-import { browserLocalStorage } from '../store/platform-boundary';
+import { browserLocalStorage, dispatchBrowserEvent, listenToBrowserEvent } from '../store/platform-boundary';
 import { useFocusTrap } from '../hooks/useFocusTrap';
 import { inertOutsideDialog } from '../ui/dialog-inert';
 import { dispatchCommandAction } from './command-registry';
@@ -97,8 +97,7 @@ function TourStepPanel({ step, onDismiss, onBack, onNext }: Readonly<TourStepPan
       });
     };
     place();
-    window.addEventListener('resize', place);
-    return () => window.removeEventListener('resize', place);
+    return listenToBrowserEvent('resize', place);
   }, [current.target]);
 
   useEffect(() => {
@@ -216,7 +215,7 @@ function OnboardingOverlay() {
   const dismiss = useCallback(() => {
     browserLocalStorage.setItem(SEEN_KEY, '1');
     setVisible(false);
-    window.dispatchEvent(new Event(DISMISSED_EVENT));
+    dispatchBrowserEvent(DISMISSED_EVENT);
   }, []);
 
   if (!visible) return null;
@@ -238,7 +237,7 @@ export function HelpButton() {
   const open = useCallback(() => {
     browserLocalStorage.removeItem(SEEN_KEY);
     // Force re-render by dispatching storage event
-    window.dispatchEvent(new Event('show-onboarding'));
+    dispatchBrowserEvent('show-onboarding');
   }, []);
 
   useEffect(() => {
@@ -269,8 +268,7 @@ export function OnboardingManager() {
 
   useEffect(() => {
     const handler = () => setKey((k) => k + 1);
-    window.addEventListener('show-onboarding', handler);
-    return () => window.removeEventListener('show-onboarding', handler);
+    return listenToBrowserEvent('show-onboarding', handler);
   }, []);
 
   return <OnboardingOverlay key={key} />;

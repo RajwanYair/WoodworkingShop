@@ -185,8 +185,30 @@ export function PartsTable() {
             <tr>
               <td colSpan={8} className="px-4 py-8 text-center">
                 <div role="status" aria-live="polite" className="text-wood-500 dark:text-wood-400">
-                  {t('optimizer.noTableResults')}
+                  {t(parts.length === 0 ? 'optimizer.partsTableEmpty' : 'optimizer.noTableResults')}
                 </div>
+                {parts.length === 0 ? (
+                  <button
+                    type="button"
+                    onClick={() => useCabinetStore.getState().setActiveTab('configurator')}
+                    className="text-wood-700 dark:text-wood-200 focus-visible:outline-wood-600 dark:focus-visible:outline-wood-300 mt-2 rounded-sm text-xs underline focus-visible:outline-2 focus-visible:outline-offset-2"
+                  >
+                    {t('optimizer.configureCabinet')}
+                  </button>
+                ) : (
+                  (query || materialFilter) && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSearch('');
+                        setMaterialFilter('');
+                      }}
+                      className="text-wood-700 dark:text-wood-200 focus-visible:outline-wood-600 dark:focus-visible:outline-wood-300 mt-2 rounded-sm text-xs underline focus-visible:outline-2 focus-visible:outline-offset-2"
+                    >
+                      {t('optimizer.clearTableFilters')}
+                    </button>
+                  )
+                )}
               </td>
             </tr>
           )}
@@ -326,8 +348,27 @@ export function HardwareTable() {
             <tr>
               <td colSpan={4} className="px-4 py-8 text-center">
                 <div role="status" aria-live="polite" className="text-wood-500 dark:text-wood-400">
-                  {t('optimizer.noTableResults')}
+                  {t(hardware.length === 0 ? 'optimizer.hardwareTableEmpty' : 'optimizer.noTableResults')}
                 </div>
+                {hardware.length === 0 ? (
+                  <button
+                    type="button"
+                    onClick={() => useCabinetStore.getState().setActiveTab('configurator')}
+                    className="text-wood-700 dark:text-wood-200 focus-visible:outline-wood-600 dark:focus-visible:outline-wood-300 mt-2 rounded-sm text-xs underline focus-visible:outline-2 focus-visible:outline-offset-2"
+                  >
+                    {t('optimizer.configureCabinet')}
+                  </button>
+                ) : (
+                  query && (
+                    <button
+                      type="button"
+                      onClick={() => setSearch('')}
+                      className="text-wood-700 dark:text-wood-200 focus-visible:outline-wood-600 dark:focus-visible:outline-wood-300 mt-2 rounded-sm text-xs underline focus-visible:outline-2 focus-visible:outline-offset-2"
+                    >
+                      {t('optimizer.clearTableFilters')}
+                    </button>
+                  )
+                )}
               </td>
             </tr>
           )}

@@ -39,6 +39,11 @@ describe('PartsTable', () => {
     const table = screen.getByRole('table');
     const search = screen.getByRole('searchbox', { name: 'Search parts' });
 
+    await user.type(search, 'no matching parts');
+    await user.click(screen.getByRole('button', { name: 'Clear filters' }));
+    expect(search).toHaveValue('');
+    expect(within(table).getAllByRole('row')).toHaveLength(useCabinetStore.getState().parts.length + 1);
+
     await user.type(search, 'Top Panel');
     expect(within(table).getAllByRole('row')).toHaveLength(2);
     expect(within(table).getByText('Top Panel')).toBeInTheDocument();
@@ -62,6 +67,17 @@ describe('PartsTable', () => {
       .slice(1)
       .map((row) => Number(within(row).getAllByRole('cell')[4].textContent));
     expect(descendingLengths).toEqual([...descendingLengths].sort((left, right) => right - left));
+  });
+
+  it('routes to Configure when the project has no cut parts', async () => {
+    useCabinetStore.setState({ parts: [], activeTab: 'optimizer' });
+    const user = userEvent.setup();
+    render(<PartsTable />);
+
+    expect(screen.getByRole('status')).toHaveTextContent('No cut parts yet. Configure a cabinet to generate them.');
+    await user.click(screen.getByRole('button', { name: 'Configure cabinets' }));
+
+    expect(useCabinetStore.getState().activeTab).toBe('configurator');
   });
 });
 
@@ -99,6 +115,20 @@ describe('HardwareTable', () => {
     await user.type(search, 'no matching hardware');
     expect(within(table).getAllByRole('row')).toHaveLength(2);
     expect(within(table).getByText('No matching rows')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Clear filters' }));
+    expect(search).toHaveValue('');
+    expect(within(table).getAllByRole('row')).toHaveLength(hardware.length + 1);
+  });
+
+  it('routes to Configure when the project has no hardware', async () => {
+    useCabinetStore.setState({ hardware: [], activeTab: 'optimizer' });
+    const user = userEvent.setup();
+    render(<HardwareTable />);
+
+    expect(screen.getByRole('status')).toHaveTextContent('No hardware generated for this project yet.');
+    await user.click(screen.getByRole('button', { name: 'Configure cabinets' }));
+
+    expect(useCabinetStore.getState().activeTab).toBe('configurator');
   });
 
   it('updates and clears a quantity override through the accessible quantity input', async () => {

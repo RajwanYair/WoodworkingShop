@@ -1,6 +1,10 @@
 {
   "title": "רישום תוספים",
   "empty": "אין תוספים רשומים",
+  "emptyDescription": "פריטים שנשמרו בקטלוג אינם תוספים פעילים. תוסף יופיע כאן רק לאחר שהאפליקציה תטען את הקוד שלו ותוסיף אותו לרישום.",
+  "browseMarketplace": "עיון בקטלוג",
+  "error": "שגיאה",
+  "lifecycleError": "שגיאת תוסף: {{message}}",
   "version": "v{{version}}",
   "stability": "יציבות API: {{level}}",
   "enable": "הפעל תוסף",

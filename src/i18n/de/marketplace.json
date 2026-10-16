@@ -1,11 +1,11 @@
 {
   "title": "Plugin-Marktplatz",
   "search": "Plugins suchen…",
-  "install": "Installieren",
-  "uninstall": "Deinstallieren",
+  "saveListing": "Save listing",
+  "removeSavedListing": "Remove saved listing",
+  "previewNotice": "Catalog entries are previews only. Saving a listing bookmarks its ID on this device; it does not download or activate plugin code.",
   "enable": "Aktivieren",
   "disable": "Deaktivieren",
-  "installed": "Installiert",
   "enabled": "Aktiviert",
   "noResults": "Keine Plugins gefunden",
   "installCount": "{{count}} Installation",
@@ -22,5 +22,5 @@
   "by": "von {{author}}",
   "downloads": "{{count}} Downloads",
   "pluginCount": "{{count}} Plugins",
-  "installedCount": "{{count}}"
+  "savedCount": "{{count}} saved"
 }

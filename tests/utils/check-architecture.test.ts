@@ -99,6 +99,29 @@ describe('analyzeArchitecture', () => {
       files: ['src/engine/cycle-a.ts', 'src/engine/cycle-b.ts'],
     });
   });
+
+  it('requires application surfaces to use platform adapters for browser I/O', () => {
+    const violations = analyzeArchitecture({
+      'src/App.tsx': 'window.print();',
+      'src/app/shell.ts': 'window.location.reload();',
+      'src/app/events.ts': "window.dispatchEvent(new Event('open'))",
+      'src/features/animation.ts': 'requestAnimationFrame(() => cancelAnimationFrame(1));',
+      'src/features/panel.tsx': 'const storage = localStorage; const touch = navigator.maxTouchPoints;',
+      'src/store/preferences.ts': 'document.title = "Workshop";',
+      'src/platform/runtime.ts': 'window.print();',
+    });
+
+    expect(violations.filter(({ rule }) => rule === 'browser-platform-boundary')).toEqual([
+      { rule: 'browser-platform-boundary', file: 'src/App.tsx', target: 'window.print' },
+      { rule: 'browser-platform-boundary', file: 'src/app/events.ts', target: 'window.dispatchEvent' },
+      { rule: 'browser-platform-boundary', file: 'src/app/shell.ts', target: 'window.location' },
+      { rule: 'browser-platform-boundary', file: 'src/features/animation.ts', target: 'cancelAnimationFrame' },
+      { rule: 'browser-platform-boundary', file: 'src/features/animation.ts', target: 'requestAnimationFrame' },
+      { rule: 'browser-platform-boundary', file: 'src/features/panel.tsx', target: 'localStorage' },
+      { rule: 'browser-platform-boundary', file: 'src/features/panel.tsx', target: 'navigator' },
+      { rule: 'browser-platform-boundary', file: 'src/store/preferences.ts', target: 'document.title' },
+    ]);
+  });
 });
 
 describe('compareArchitectureBaseline', () => {

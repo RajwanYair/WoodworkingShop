@@ -1,11 +1,11 @@
 {
   "title": "Mercado de complementos",
   "search": "Buscar complementos…",
-  "install": "Instalar",
-  "uninstall": "Desinstalar",
+  "saveListing": "Save listing",
+  "removeSavedListing": "Remove saved listing",
+  "previewNotice": "Catalog entries are previews only. Saving a listing bookmarks its ID on this device; it does not download or activate plugin code.",
   "enable": "Activar",
   "disable": "Desactivar",
-  "installed": "Instalado",
   "enabled": "Activado",
   "noResults": "No se encontraron complementos",
   "installCount": "{{count}} instalación",
@@ -22,5 +22,5 @@
   "by": "por {{author}}",
   "downloads": "{{count}} descargas",
   "pluginCount": "{{count}} complementos",
-  "installedCount": "{{count}}"
+  "savedCount": "{{count}} saved"
 }

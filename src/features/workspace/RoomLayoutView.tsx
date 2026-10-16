@@ -2,7 +2,9 @@ import { useRef, useState } from 'react';
 import type { KeyboardEvent, PointerEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRoomStore } from '../../store/room-store';
+import { useCabinetStore } from '../../store/cabinet-store';
 import type { RoomLayout, RoomCabinet } from '../../engine/core/types';
+import { createRoomLayoutFromProject } from './create-room-layout';
 
 /**
  * Sprint 55 — Room Layout Floor-Plan View
@@ -243,10 +245,29 @@ function FloorPlan({ layout, updateCabinetPosition }: FloorPlanProps) {
 export function RoomLayoutView() {
   const { t } = useTranslation();
   const { layouts, activeLayoutId, updateCabinetPosition } = useRoomStore();
+  const addLayout = useRoomStore((state) => state.addLayout);
+  const setActiveLayout = useRoomStore((state) => state.setActiveLayout);
+  const cabinets = useCabinetStore((state) => state.cabinets);
+  const projectName = useCabinetStore((state) => state.projectName);
+  const [createError, setCreateError] = useState(false);
 
   const layout = layouts.find((l) => l.id === activeLayoutId) ?? layouts[0];
 
   if (!layout) {
+    function createLayout() {
+      try {
+        const nextLayout = createRoomLayoutFromProject(projectName || t('room.defaultName'), cabinets, () =>
+          crypto.randomUUID(),
+        );
+        addLayout(nextLayout);
+        setActiveLayout(nextLayout.id);
+        setCreateError(false);
+      } catch (error) {
+        if (!(error instanceof RangeError)) throw error;
+        setCreateError(true);
+      }
+    }
+
     return (
       <section
         aria-label={t('room.sectionLabel')}
@@ -254,6 +275,18 @@ export function RoomLayoutView() {
       >
         <h3 className="text-wood-600 dark:text-wood-300 mb-2 text-sm font-semibold">{t('room.title')}</h3>
         <p className="text-wood-400 dark:text-wood-500 text-sm">{t('room.empty')}</p>
+        <button
+          type="button"
+          onClick={createLayout}
+          className="bg-accent hover:bg-accent-hover focus-visible:outline-accent mt-3 min-h-11 rounded-lg px-4 py-2 text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
+          {t('room.createFromProject')}
+        </button>
+        {createError && (
+          <p role="alert" className="mt-2 text-xs text-red-700 dark:text-red-300">
+            {t('room.createLayoutError')}
+          </p>
+        )}
       </section>
     );
   }

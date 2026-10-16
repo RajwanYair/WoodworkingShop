@@ -1,6 +1,7 @@
 import { asStringTranslator } from '../../i18n/translate';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { printBrowserDocument } from '../../store/platform-boundary';
 import { useCabinetStore } from '../../store/cabinet-store';
 import { useCustomMaterialsStore } from '../../store/custom-materials-store';
 import { computePartWeightKg, getMaterial } from '../../engine/materials/materials';
@@ -145,7 +146,7 @@ export function AssemblyGuide() {
           {/* Sprint 127 — print button */}
           <button
             type="button"
-            onClick={() => window.print()}
+            onClick={printBrowserDocument}
             className="border-wood-300 dark:border-wood-600 text-wood-600 dark:text-wood-300 hover:bg-wood-100 dark:hover:bg-wood-800 flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs transition-colors print:hidden"
             title={t('assembly.print')}
             aria-label={t('assembly.print')}

@@ -1,4 +1,5 @@
 import { CALCULATOR_CATALOG, type CalculatorId } from '../features/calculators/calculator-catalog';
+import { dispatchBrowserEvent } from '../store/platform-boundary';
 import { APP_ROUTES, type AppRouteId } from '../utils/route-table';
 
 export { APP_TABS } from '../utils/route-table';
@@ -327,5 +328,5 @@ export function isCommandAction(value: unknown): value is CommandAction {
 }
 
 export function dispatchCommandAction(action: CommandAction): void {
-  window.dispatchEvent(new CustomEvent(COMMAND_ACTION_EVENT, { detail: action }));
+  dispatchBrowserEvent(COMMAND_ACTION_EVENT, action);
 }

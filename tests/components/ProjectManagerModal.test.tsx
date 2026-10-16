@@ -2,15 +2,24 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { DEFAULT_CONFIG } from '../../src/engine/materials/materials';
+import { ToastContainer } from '../../src/app/ToastContainer';
 import { ProjectManagerModal } from '../../src/features/workspace/ProjectManagerModal';
 import { useCabinetStore } from '../../src/store/cabinet-store';
-import { listProjects, saveProject, type SavedProject } from '../../src/utils/project-storage';
+import { useToastStore } from '../../src/store/toast-store';
+import {
+  deleteProject,
+  listProjects,
+  restoreProject,
+  saveProject,
+  type SavedProject,
+} from '../../src/utils/project-storage';
 
 vi.mock('../../src/utils/project-storage', () => ({
   deleteProject: vi.fn(),
   exportProjectJson: vi.fn(),
   importProjectJson: vi.fn(),
   listProjects: vi.fn(),
+  restoreProject: vi.fn(),
   saveProject: vi.fn(),
 }));
 
@@ -32,7 +41,10 @@ const projects: SavedProject[] = [
 describe('ProjectManagerModal', () => {
   beforeEach(() => {
     vi.mocked(listProjects).mockResolvedValue(projects);
+    vi.mocked(deleteProject).mockResolvedValue(undefined);
+    vi.mocked(restoreProject).mockResolvedValue(undefined);
     vi.mocked(saveProject).mockResolvedValue(projects[0]);
+    useToastStore.setState({ toasts: [] });
     const config = { ...DEFAULT_CONFIG };
     useCabinetStore.setState({
       projectName: 'Current Workshop',
@@ -92,5 +104,24 @@ describe('ProjectManagerModal', () => {
     await user.click(screen.getByRole('button', { name: 'Clear search' }));
     expect(search).toHaveValue('');
     expect(await screen.findByText('Alpha Workshop')).toBeInTheDocument();
+  });
+
+  it('offers an undo action after deleting a saved project', async () => {
+    const user = userEvent.setup();
+    vi.mocked(listProjects).mockResolvedValueOnce([projects[0]]);
+    render(
+      <>
+        <ProjectManagerModal onClose={vi.fn()} />
+        <ToastContainer />
+      </>,
+    );
+    await screen.findByText('Alpha Workshop');
+
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await waitFor(() => expect(deleteProject).toHaveBeenCalledWith('project-alpha'));
+    await user.click(await screen.findByRole('button', { name: 'Undo' }));
+
+    expect(restoreProject).toHaveBeenCalledWith(projects[0]);
+    expect(await screen.findByText('Project restored')).toBeInTheDocument();
   });
 });

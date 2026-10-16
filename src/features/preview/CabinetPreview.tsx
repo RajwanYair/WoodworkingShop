@@ -16,9 +16,10 @@ import { CabinetPlanViews } from './cabinet-plan-views';
 import { FrontOpenView } from './FrontOpenView';
 import { FrontView } from './FrontView';
 import { IsometricView } from './IsometricView';
+import { ShopDrawingPanel } from './ShopDrawingPanel';
 import { useCabinetOrbit } from './use-cabinet-orbit';
 
-type ViewId = 'front' | 'frontOpen' | 'side' | 'top' | 'back' | '3d';
+type ViewId = 'front' | 'frontOpen' | 'side' | 'top' | 'back' | '3d' | 'drawing';
 
 interface TooltipInfo {
   label: string;
@@ -99,6 +100,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
       { id: 'top', label: t('preview.top') },
       { id: 'back', label: t('preview.back') },
       { id: '3d', label: t('preview.iso') },
+      { id: 'drawing', label: t('preview.shopDrawing') },
     ],
     [t],
   );
@@ -209,6 +211,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
             {tooltip.material && <div className="opacity-75">{tooltip.material}</div>}
           </div>
         )}
+        {activeView === 'drawing' && <ShopDrawingPanel />}
         {activeView === 'front' && (
           <FrontView
             W={W}

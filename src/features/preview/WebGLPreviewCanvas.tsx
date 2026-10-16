@@ -1,5 +1,10 @@
 import { useEffect, useRef } from 'react';
-import { isWebGLAvailable, probeWebGLTier } from '../../store/platform-boundary';
+import {
+  cancelBrowserAnimationFrame,
+  isWebGLAvailable,
+  probeWebGLTier,
+  requestBrowserAnimationFrame,
+} from '../../store/platform-boundary';
 import type { CabinetConfig } from '../../engine/core/types';
 
 /** Phase 12 / Sprint 14 — feature flag guard. Component renders nothing when the flag is absent. */
@@ -260,14 +265,14 @@ export function WebGLPreviewCanvas({
       gl.drawArrays(gl.TRIANGLES, 0, VERTEX_COUNT);
       if (!isometric && !hasControlledOrbit) {
         angleY += ROTATION_SPEED;
-        rafRef.current = requestAnimationFrame(draw);
+        rafRef.current = requestBrowserAnimationFrame(draw);
       }
     }
 
-    rafRef.current = requestAnimationFrame(draw);
+    rafRef.current = requestBrowserAnimationFrame(draw);
 
     return () => {
-      cancelAnimationFrame(rafRef.current);
+      cancelBrowserAnimationFrame(rafRef.current);
       gl.deleteBuffer(buf);
       gl.deleteProgram(program);
     };

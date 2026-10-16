@@ -3,11 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Dialog } from '../../ui/Dialog';
 import { formatDate } from '../../i18n/format';
 import { useCabinetStore } from '../../store/cabinet-store';
+import { dispatchBrowserEvent } from '../../store/platform-boundary';
 import { useToastStore } from '../../store/toast-store';
 import {
   listProjects,
   saveProject,
   deleteProject,
+  restoreProject,
   exportProjectJson,
   importProjectJson,
   type SavedProject,
@@ -45,8 +47,13 @@ export function ProjectManagerModal({ onClose }: Readonly<ProjectManagerModalPro
     );
 
   const refresh = useCallback(() => {
-    void listProjects().then(setProjects);
-  }, []);
+    void listProjects()
+      .then(setProjects)
+      .catch((reason: unknown) => {
+        const message = reason instanceof Error ? reason.message : String(reason);
+        addToast(t('projects.actionError', { message }), 'error');
+      });
+  }, [addToast, t]);
 
   // Load projects from IndexedDB on mount
   useEffect(() => {
@@ -55,11 +62,17 @@ export function ProjectManagerModal({ onClose }: Readonly<ProjectManagerModalPro
 
   const handleSave = () => {
     if (!saveName.trim()) return;
-    void saveProject(saveName.trim(), cabinets).then(() => {
-      setProjectName(saveName.trim());
-      addToast(t('projects.saved'), 'success');
-      refresh();
-    });
+    void saveProject(saveName.trim(), cabinets)
+      .then(() => {
+        setProjectName(saveName.trim());
+        addToast(t('projects.saved'), 'success');
+        dispatchBrowserEvent('projects:changed');
+        refresh();
+      })
+      .catch((reason: unknown) => {
+        const message = reason instanceof Error ? reason.message : String(reason);
+        addToast(t('projects.actionError', { message }), 'error');
+      });
   };
 
   const handleLoad = (project: SavedProject) => {
@@ -69,11 +82,33 @@ export function ProjectManagerModal({ onClose }: Readonly<ProjectManagerModalPro
     onClose();
   };
 
+  const handleUndoDelete = (project: SavedProject) => {
+    void restoreProject(project)
+      .then(() => {
+        dispatchBrowserEvent('projects:changed');
+        addToast(t('projects.restored'), 'success');
+        refresh();
+      })
+      .catch((reason: unknown) => {
+        const message = reason instanceof Error ? reason.message : String(reason);
+        addToast(t('projects.actionError', { message }), 'error');
+      });
+  };
+
   const handleDelete = (project: SavedProject) => {
-    void deleteProject(project.id).then(() => {
-      addToast(t('projects.deleted'), 'info');
-      refresh();
-    });
+    void deleteProject(project.id)
+      .then(() => {
+        dispatchBrowserEvent('projects:changed');
+        addToast(t('projects.deleted'), 'info', {
+          label: t('projects.undoDelete'),
+          onClick: () => handleUndoDelete(project),
+        });
+        refresh();
+      })
+      .catch((reason: unknown) => {
+        const message = reason instanceof Error ? reason.message : String(reason);
+        addToast(t('projects.actionError', { message }), 'error');
+      });
   };
 
   const handleExport = (project: SavedProject) => {
@@ -87,6 +122,7 @@ export function ProjectManagerModal({ onClose }: Readonly<ProjectManagerModalPro
     try {
       await importProjectJson(file);
       addToast(t('projects.imported'), 'success');
+      dispatchBrowserEvent('projects:changed');
       refresh();
     } catch {
       addToast(t('projects.importError'), 'error');
@@ -109,7 +145,7 @@ export function ProjectManagerModal({ onClose }: Readonly<ProjectManagerModalPro
       onClose={onClose}
       labelledBy="pm-title"
       showHeader={false}
-      className="dark:bg-wood-800 relative mx-4 flex max-h-[85vh] w-full max-w-xl flex-col overflow-hidden rounded-xl bg-white p-0 text-start shadow-2xl"
+      className="dark:bg-wood-800 mx-auto flex max-h-[85vh] w-[calc(100vw-2rem)] max-w-xl flex-col overflow-hidden rounded-xl bg-white p-0 text-start shadow-2xl"
     >
       {/* Header */}
       <div className="border-wood-200 dark:border-wood-700 flex items-center justify-between border-b p-4">

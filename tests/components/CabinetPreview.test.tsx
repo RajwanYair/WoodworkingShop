@@ -56,6 +56,45 @@ describe('CabinetPreview — isometric 3D view', () => {
   });
 });
 
+describe('CabinetPreview — shop drawing', () => {
+  beforeEach(() => {
+    useCabinetStore.setState({
+      config: { ...DEFAULT_CONFIG, width: 600, height: 720, depth: 580, doorStyle: 'none' },
+      darkMode: false,
+      units: 'metric',
+    });
+  });
+
+  it('shows four technical views with overall and chained metric dimensions', async () => {
+    const user = userEvent.setup();
+    render(<CabinetPreview />);
+
+    await user.click(screen.getByRole('tab', { name: 'Shop drawing' }));
+
+    const drawing = screen.getByRole('img', { name: 'Shop drawing' });
+    expect(within(drawing).getByText('Front elevation')).toBeInTheDocument();
+    expect(within(drawing).getByText('Side elevation')).toBeInTheDocument();
+    expect(within(drawing).getByText('Plan view')).toBeInTheDocument();
+    expect(within(drawing).getByText('Section A–A')).toBeInTheDocument();
+    expect(within(drawing).getAllByText('Overall width: 600 mm')).toHaveLength(3);
+    expect(within(drawing).getAllByText('Overall height: 720 mm')).toHaveLength(3);
+    expect(within(drawing).getAllByText('Overall depth: 580 mm')).toHaveLength(2);
+    expect(within(drawing).getAllByText(/mm · .* mm · .* mm/)).toHaveLength(2);
+  });
+
+  it('formats drawing dimensions as fractional inches when imperial units are active', async () => {
+    useCabinetStore.setState({ units: 'imperial' });
+    const user = userEvent.setup();
+    render(<CabinetPreview />);
+
+    await user.click(screen.getByRole('tab', { name: 'Shop drawing' }));
+
+    expect(screen.getAllByText('Overall width: 23-5/8"')).toHaveLength(3);
+    expect(screen.getAllByText('Overall height: 28-3/8"')).toHaveLength(3);
+    expect(screen.getAllByText('Overall depth: 22-13/16"')).toHaveLength(2);
+  });
+});
+
 describe('CabinetPreview — project cabinet switching and centre supports', () => {
   beforeEach(() => {
     useCabinetStore.setState({

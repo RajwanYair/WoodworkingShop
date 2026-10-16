@@ -3,6 +3,7 @@ import { TEMPLATES, type ConfiguratorCabinetTemplate } from '../../engine/projec
 import { useCabinetStore } from '../../store/cabinet-store';
 import { Dialog } from '../../ui/Dialog';
 import { IconX } from '../../ui/Icons';
+import { setBrowserQueryParam } from '../../store/platform-boundary';
 
 /** 80×60 schematic front-face SVG for a template card.
  *  Draws: outer carcass, optional toe-kick, door divider or shelves, handle dots. */
@@ -90,9 +91,7 @@ export function TemplatePicker({ onClose }: Readonly<TemplatePickerProps>) {
     if (!tpl) return;
     setConfig(tpl.config);
     // Reflect the template in the URL
-    const url = new URL(window.location.href);
-    url.searchParams.set('tpl', templateId);
-    window.history.replaceState(null, '', url.pathname + '?' + url.searchParams.toString());
+    setBrowserQueryParam('tpl', templateId);
     onClose();
   };
 
@@ -102,7 +101,7 @@ export function TemplatePicker({ onClose }: Readonly<TemplatePickerProps>) {
       onClose={onClose}
       labelledBy="tpl-title"
       showHeader={false}
-      className="dark:bg-wood-800 relative mx-4 flex max-h-[85vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl bg-white p-0 text-start shadow-2xl"
+      className="dark:bg-wood-800 mx-auto flex max-h-[85vh] w-[calc(100vw-2rem)] max-w-3xl flex-col overflow-hidden rounded-xl bg-white p-0 text-start shadow-2xl"
     >
       {/* Header */}
       <div className="border-wood-200 dark:border-wood-700 flex items-center justify-between border-b p-4">
