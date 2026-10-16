@@ -153,7 +153,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
             type="checkbox"
             checked={showDims}
             onChange={(e) => setShowDims(e.target.checked)}
-            className="accent-primary"
+            className="accent-primary size-6"
           />
           {t('preview.dimensions')}
         </label>
