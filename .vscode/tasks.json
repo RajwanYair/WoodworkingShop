@@ -1,6 +1,30 @@
 {
   "version": "2.0.0",
   "tasks": [
+    {
+      "label": "Audit Dependencies",
+      "type": "shell",
+      "command": "npm audit --audit-level=moderate",
+      "problemMatcher": []
+    },
+    {
+      "label": "Workflow Governance",
+      "type": "shell",
+      "command": "node scripts/validate-workflow-governance.js",
+      "problemMatcher": []
+    },
+    {
+      "label": "Release Status",
+      "type": "shell",
+      "command": "& { git status --short --branch; git log -5 --format='%h %G? %s'; git config --get-regexp '^(commit.gpgsign|tag.gpgsign|gpg.format|user.signingkey)$'; gh pr list --state open --limit 100 --json number,title,headRefName,isDraft,reviewDecision,mergeStateStatus,url; gh issue list --state open --limit 100 --json number,title,url; gh run list --limit 12 --json databaseId,headBranch,workflowName,status,conclusion,url; gh release list --limit 3; git branch -vv }",
+      "problemMatcher": []
+    },
+    {
+      "label": "GitHub Reconciliation Audit",
+      "type": "shell",
+      "command": "& { git fetch origin; $prs = gh pr list --state open --limit 100 --json number,headRefName,title | ConvertFrom-Json; $rows = foreach ($pr in $prs) { $ref = 'origin/' + $pr.headRefName; $patches = @(git cherry origin/main $ref 2>$null); [pscustomobject]@{ PR = $pr.number; UniquePatches = @($patches | Where-Object { $_ -like '+ *' }).Count; EquivalentPatches = @($patches | Where-Object { $_ -like '- *' }).Count; RefValid = ($LASTEXITCODE -eq 0); Branch = $pr.headRefName } }; $rows | Format-Table -AutoSize | Out-String; gh release view --json tagName,assets,publishedAt,url }",
+      "problemMatcher": []
+    },
     // ─── Build ────────────────────────────────────────────────────────────────
     {
       "label": "Typecheck",

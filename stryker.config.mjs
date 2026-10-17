@@ -9,10 +9,10 @@ export default {
   incrementalFile: process.env.STRYKER_INCREMENTAL_FILE ?? path.join(reportDirectory, 'stryker-incremental.json'),
   ignoreStatic: false,
   mutate: [
-    'src/engine/dimensions.ts',
-    'src/engine/parts.ts',
-    'src/engine/cut-optimizer.ts',
-    'src/engine/validation.ts',
+    'src/engine/geometry/dimensions.ts',
+    'src/engine/geometry/parts.ts',
+    'src/engine/optimizer/cut-optimizer.ts',
+    'src/engine/core/validation.ts',
   ],
   testRunner: 'vitest',
   vitest: {

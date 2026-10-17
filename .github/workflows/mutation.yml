@@ -18,8 +18,6 @@ jobs:
     permissions:
       contents: read
     timeout-minutes: 15
-    env:
-      STRYKER_INCREMENTAL_FILE: ${{ runner.temp }}/WoodworkingShop/mutation/stryker-incremental.json
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - uses: ./.github/actions/setup-node
@@ -29,10 +27,12 @@ jobs:
         uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: ${{ runner.temp }}/WoodworkingShop/mutation/stryker-incremental.json
-          key: stryker-baseline-${{ runner.os }}-${{ github.ref_name }}-${{ hashFiles('package-lock.json', 'stryker.config.mjs', 'vitest.config.ts', 'tests/**/*.{ts,tsx}', 'src/engine/dimensions.ts', 'src/engine/parts.ts', 'src/engine/cut-optimizer.ts', 'src/engine/validation.ts') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          key: stryker-baseline-${{ runner.os }}-${{ github.ref_name }}-${{ hashFiles('package-lock.json', 'stryker.config.mjs', 'vitest.config.ts', 'tests/**/*.{ts,tsx}', 'src/engine/geometry/dimensions.ts', 'src/engine/geometry/parts.ts', 'src/engine/optimizer/cut-optimizer.ts', 'src/engine/core/validation.ts') }}-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
-            stryker-baseline-${{ runner.os }}-${{ github.ref_name }}-${{ hashFiles('package-lock.json', 'stryker.config.mjs', 'vitest.config.ts', 'tests/**/*.{ts,tsx}', 'src/engine/dimensions.ts', 'src/engine/parts.ts', 'src/engine/cut-optimizer.ts', 'src/engine/validation.ts') }}-
+            stryker-baseline-${{ runner.os }}-${{ github.ref_name }}-${{ hashFiles('package-lock.json', 'stryker.config.mjs', 'vitest.config.ts', 'tests/**/*.{ts,tsx}', 'src/engine/geometry/dimensions.ts', 'src/engine/geometry/parts.ts', 'src/engine/optimizer/cut-optimizer.ts', 'src/engine/core/validation.ts') }}-
       - name: Run four-module incremental baseline slice
+        env:
+          STRYKER_INCREMENTAL_FILE: ${{ runner.temp }}/WoodworkingShop/mutation/stryker-incremental.json
         run: |
           set +e
           timeout --signal=INT --kill-after=60s 14m npm run test:mutation -- --incremental
@@ -47,7 +47,7 @@ jobs:
         uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: ${{ runner.temp }}/WoodworkingShop/mutation/stryker-incremental.json
-          key: stryker-baseline-${{ runner.os }}-${{ github.ref_name }}-${{ hashFiles('package-lock.json', 'stryker.config.mjs', 'vitest.config.ts', 'tests/**/*.{ts,tsx}', 'src/engine/dimensions.ts', 'src/engine/parts.ts', 'src/engine/cut-optimizer.ts', 'src/engine/validation.ts') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          key: stryker-baseline-${{ runner.os }}-${{ github.ref_name }}-${{ hashFiles('package-lock.json', 'stryker.config.mjs', 'vitest.config.ts', 'tests/**/*.{ts,tsx}', 'src/engine/geometry/dimensions.ts', 'src/engine/geometry/parts.ts', 'src/engine/optimizer/cut-optimizer.ts', 'src/engine/core/validation.ts') }}-${{ github.run_id }}-${{ github.run_attempt }}
       - if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:

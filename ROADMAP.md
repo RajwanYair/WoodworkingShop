@@ -2016,6 +2016,7 @@ flowchart LR
 - T3: DONE — Shop drawings are included in PDF and both shop-drawing and exploded preview tabs export as SVG. Added a reusable 100 mm PDF calibration ruler with exact point-space geometry; S340 had no existing implementation to reuse.
 - Tests: DONE — Focused SVG geometry and callout tests, parsed PDF page/cut-list comparisons, Hebrew RTL labels, 100 mm ruler geometry, PDF render budget, and key parity pass.
 - Accept: DONE — PDF and SVG exploded callouts are keyed to every generated cut-list row exactly once; parsed PDF IDs match the parts page, and the print-scale ruler measures 100 mm at 100% output.
+- Release verification (2026-10-17): local CI, bundle/critical-route budgets, all 16 benchmarks, dead-code and release build pass after repairing Windows task-shell detection and removing an unused type export. Publishing now enforces the dependency audit and exact package/tag identity. Issue #249 remains open: six high-severity transitive `braces` findings block publication. No release or cryptographic sign-off is claimed; no signing key is configured.
 
 **Sprint 438 — Design history timeline** — P2 · M · S429.
 

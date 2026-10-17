@@ -28,10 +28,29 @@ jobs:
       contents: write
       id-token: write
     steps:
+      - name: Validate release tag
+        id: version
+        env:
+          REQUESTED_VERSION: ${{ inputs.version }}
+        run: |
+          version="${REQUESTED_VERSION:-${GITHUB_REF#refs/tags/}}"
+          if [[ ! "$version" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Release version must be an existing vMAJOR.MINOR.PATCH tag."
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           fetch-depth: 0
+          ref: ${{ steps.version.outputs.version }}
       - uses: ./.github/actions/setup-node
+
+      - name: Verify release identity
+        env:
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          test "$(git describe --tags --exact-match HEAD)" = "$RELEASE_VERSION"
+          test "v$(node -p 'require("./package.json").version')" = "$RELEASE_VERSION"
 
       # Vite pre-bundle cache — key tracks only config + lockfile (source changes don't affect it)
       - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
@@ -45,6 +64,11 @@ jobs:
         # Explicitly gate release on pre-flight checks: typecheck, lint, test, coverage.
         # This ensures no soft-fail checks or suppressed diagnostics slip into releases.
         # See .github/GOVERNANCE-POLICY.md for claim verification rules.
+
+      - name: Release pre-flight gates
+        run: |
+          npm run dead:check
+          npm audit --audit-level=moderate
 
       # sbom reads only package files (no dist needed) — start it in the background
       # so it runs concurrently with the tsc+vite build for free.
@@ -71,16 +95,11 @@ jobs:
             woodworkingshop-dist.tar.gz.sha256
             sbom.json
 
-      - id: version
-        run: |
-          if [ -n "${{ github.event.inputs.version }}" ]; then
-            echo "version=${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
-          else
-            echo "version=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
-          fi
       - id: changelog
+        env:
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
         run: |
-          ver="${{ steps.version.outputs.version }}" && ver="${ver#v}"
+          ver="${RELEASE_VERSION#v}"
           notes=$(awk "/^## \\[${ver}\\]/{f=1;next} /^## \\[/{f=0} f" CHANGELOG.md)
           { echo "notes<<EOF"; echo "${notes:-Release ${ver}}"; echo "EOF"; } >> "$GITHUB_OUTPUT"
       - uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3

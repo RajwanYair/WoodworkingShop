@@ -25,6 +25,11 @@ const workflowPolicies = [
     requiredTokens: [
       'name: Release',
       'npm run check',
+      'npm run dead:check',
+      'npm audit --audit-level=moderate',
+      'name: Validate release tag',
+      'name: Verify release identity',
+      'ref: ${{ steps.version.outputs.version }}',
       'uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2',
       'uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3',
       'sbom.json',
@@ -92,7 +97,7 @@ const workflowPolicies = [
   {
     name: 'Weekly mutation threshold config',
     path: 'stryker.weekly.config.mjs',
-    requiredTokens: ["'src/engine/dimensions.ts'", "'src/utils/bom-export.ts'", 'break: 79'],
+    requiredTokens: ["'src/engine/geometry/dimensions.ts'", "'src/utils/bom-export.ts'", 'break: 79'],
   },
   {
     name: 'Weekly mutation test scope config',
@@ -130,6 +135,9 @@ function main() {
     const isWorkflow = relativePath.startsWith('.github/workflows/');
 
     if (isWorkflow) {
+      if (/^ {4}env:\s*\n(?:^ {6}.*\n)*?^ {6}.*\$\{\{\s*runner\./m.test(content)) {
+        errors.push(`Job-level env cannot use runner context in ${relativePath}; move it to a step env`);
+      }
       if (/^permissions:/m.test(content)) {
         errors.push(`Workflow-level permissions are forbidden in ${relativePath}; define permissions per job`);
       }

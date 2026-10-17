@@ -5,7 +5,7 @@ export interface DrawingPoint {
   y: number;
 }
 
-export interface ExplodedDrawingItem {
+interface ExplodedDrawingItem {
   partId: string;
   partName: string;
   quantity: number;
