@@ -48,7 +48,7 @@ jobs:
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with: { name: dist, path: dist, retention-days: 7 }
   e2e-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
     needs: quality
@@ -152,7 +152,7 @@ jobs:
   e2e-report:
     if: ${{ !cancelled() }}
     needs: [e2e, e2e-visual]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
     steps:

@@ -2,11 +2,12 @@ name: PR Title Lint
 
 on:
   pull_request:
-    types: [opened, edited, synchronize, reopened]
+    types: [opened, edited, synchronize, reopened, ready_for_review]
 
 jobs:
   pr-title:
     name: Validate PR title
+    if: ${{ !github.event.pull_request.draft }}
     runs-on: ubuntu-24.04
     permissions:
       pull-requests: read
