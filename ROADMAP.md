@@ -2013,9 +2013,9 @@ flowchart LR
 
 - T1: DONE — `ShopDrawingPanel` renders front, side, top and section views with overall and chained dimensions. `CabinetPreview.test.tsx` verifies all four views, metric dimensions and fractional-inch formatting.
 - T2: DONE — Preview includes an isometric panel drawing with one stable-ID balloon and localized part label/quantity per generated cut-list row; layout geometry verifies unique IDs and projected dimensions. Focused layout and CabinetPreview suites pass (20 tests).
-- T3: Add to PDF and SVG exports; print-scale checks reuse the S340 calibration ruler.
-- Tests: SVG geometry oracles; parsed PDF pages; RTL labels.
-- Accept: every part in the cut list appears exactly once with a matching callout number.
+- T3: DONE — Shop drawings are included in PDF and both shop-drawing and exploded preview tabs export as SVG. Added a reusable 100 mm PDF calibration ruler with exact point-space geometry; S340 had no existing implementation to reuse.
+- Tests: DONE — Focused SVG geometry and callout tests, parsed PDF page/cut-list comparisons, Hebrew RTL labels, 100 mm ruler geometry, PDF render budget, and key parity pass.
+- Accept: DONE — PDF and SVG exploded callouts are keyed to every generated cut-list row exactly once; parsed PDF IDs match the parts page, and the print-scale ruler measures 100 mm at 100% output.
 
 **Sprint 438 — Design history timeline** — P2 · M · S429.
 

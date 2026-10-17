@@ -14,6 +14,7 @@ import { PdfMultiCabSection, PdfMultiCabHardwarePage } from './sections/PdfMulti
 import { PdfCutSheetPage } from './sections/PdfCutSheetPage';
 import { PdfDrillingPage } from './sections/PdfDrillingPage';
 import { PdfExplodedPage, PdfAssemblyPage } from './sections/PdfAssemblyPage';
+import { PdfShopDrawingPage } from './sections/PdfShopDrawingPage';
 import { PdfShoppingPage } from './sections/PdfShoppingPage';
 import type { CabinetPdfEntry } from './pdf-entry';
 
@@ -68,7 +69,7 @@ export function CabinetPdfDocument({
   combinedOptimization,
   allHardware,
   labourHours = 0,
-}: CabinetPdfProps) {
+}: Readonly<CabinetPdfProps>) {
   const T = pdfI18n[lang];
   const isRTL = lang === 'he';
   const fontFamily = isRTL ? 'NotoSansHebrew' : 'Helvetica';
@@ -151,7 +152,8 @@ export function CabinetPdfDocument({
       ))}
 
       <PdfDrillingPage ctx={ctx} d={d} backPanelMaterial={config.backPanelMaterial} />
-      <PdfExplodedPage ctx={ctx} config={config} d={d} cMatName={cMat.name[lang]} bMatName={bMat.name[lang]} />
+      <PdfShopDrawingPage ctx={ctx} config={config} d={d} />
+      <PdfExplodedPage ctx={ctx} parts={parts} />
       <PdfAssemblyPage ctx={ctx} config={config} d={d} cMatName={cMat.name[lang]} bMatName={bMat.name[lang]} />
       <PdfShoppingPage
         ctx={ctx}
