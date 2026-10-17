@@ -332,6 +332,12 @@
           "negativeWaiver": "View selection is navigation; no invalid scalar value applies."
         },
         {
+          "role": "tab",
+          "accessibleName": "Exploded assembly",
+          "positiveTest": "preview exports contain the selected view with valid SVG and PNG data",
+          "negativeWaiver": "View selection is navigation; no invalid scalar value applies."
+        },
+        {
           "role": "checkbox",
           "accessibleName": "Dimensions",
           "positiveTest": "preview views render expected geometry and dimension visibility",

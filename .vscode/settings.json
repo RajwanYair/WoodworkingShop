@@ -84,7 +84,7 @@
     }
   },
   "terminal.integrated.automationProfile.windows": {
-    "path": "pwsh",
+    "path": "pwsh.exe",
     "args": ["-NoLogo", "-NonInteractive"]
   },
 

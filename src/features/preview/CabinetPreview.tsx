@@ -17,9 +17,10 @@ import { FrontOpenView } from './FrontOpenView';
 import { FrontView } from './FrontView';
 import { IsometricView } from './IsometricView';
 import { ShopDrawingPanel } from './ShopDrawingPanel';
+import { ExplodedDrawingPanel } from './ExplodedDrawingPanel';
 import { useCabinetOrbit } from './use-cabinet-orbit';
 
-type ViewId = 'front' | 'frontOpen' | 'side' | 'top' | 'back' | '3d' | 'drawing';
+type ViewId = 'front' | 'frontOpen' | 'side' | 'top' | 'back' | '3d' | 'drawing' | 'exploded';
 
 interface TooltipInfo {
   label: string;
@@ -31,7 +32,7 @@ interface TooltipInfo {
 
 export const CabinetPreview = memo(function CabinetPreview() {
   const { t } = useTranslation();
-  const { config, dimensions: d, setConfig, units } = useCabinetStore();
+  const { config, dimensions: d, setConfig, units, parts } = useCabinetStore();
   const customMaterials = useCustomMaterialsStore((state) => state.materials);
   /** Format a mm value using the active unit system */
   const fd = (mm: number) => formatDim(mm, units);
@@ -101,6 +102,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
       { id: 'back', label: t('preview.back') },
       { id: '3d', label: t('preview.iso') },
       { id: 'drawing', label: t('preview.shopDrawing') },
+      { id: 'exploded', label: t('preview.explodedDrawing') },
     ],
     [t],
   );
@@ -212,6 +214,7 @@ export const CabinetPreview = memo(function CabinetPreview() {
           </div>
         )}
         {activeView === 'drawing' && <ShopDrawingPanel />}
+        {activeView === 'exploded' && <ExplodedDrawingPanel parts={parts} />}
         {activeView === 'front' && (
           <FrontView
             W={W}

@@ -95,6 +95,34 @@ describe('CabinetPreview — shop drawing', () => {
   });
 });
 
+describe('CabinetPreview — exploded assembly drawing', () => {
+  beforeEach(() => {
+    useCabinetStore.setState({
+      config: { ...DEFAULT_CONFIG, shelfCount: 2, drawerCount: 1, doorStyle: 'none' },
+      darkMode: false,
+      units: 'metric',
+    });
+  });
+
+  it('shows a uniquely identified balloon and label for every cut-list row', async () => {
+    const user = userEvent.setup();
+    render(<CabinetPreview />);
+
+    await user.click(screen.getByRole('tab', { name: 'Exploded assembly' }));
+
+    const drawing = screen.getByRole('img', { name: 'Exploded assembly' });
+    const partIds = useCabinetStore.getState().parts.map((part) => part.id);
+    const balloonLabels = within(drawing)
+      .getAllByText(/^P\d+$/)
+      .map((label) => label.textContent);
+
+    expect(balloonLabels).toEqual(partIds);
+    for (const partId of partIds) {
+      expect(within(drawing).getByText(new RegExp(`^${partId}:`))).toBeInTheDocument();
+    }
+  });
+});
+
 describe('CabinetPreview — project cabinet switching and centre supports', () => {
   beforeEach(() => {
     useCabinetStore.setState({

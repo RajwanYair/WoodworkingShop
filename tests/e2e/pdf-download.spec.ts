@@ -251,6 +251,38 @@ test('PDF text extraction includes the drilling guide', async ({ appPage }) => {
   expect(pages.join(' ')).toContain('Drilling & Boring Guide');
 });
 
+test('PDF shop drawing includes four dimensioned views and the 100 mm print-scale ruler', async ({ appPage }) => {
+  const { pages } = await downloadPdf(appPage, { includeCover: false });
+  const drawingPage = pages.find((page) => page.includes('100 mm print-scale check'));
+
+  expect(drawingPage).toBeDefined();
+  expect(drawingPage).toContain('Front elevation');
+  expect(drawingPage).toContain('Side elevation');
+  expect(drawingPage).toContain('Plan view');
+  expect(drawingPage).toContain('Section view');
+  expect(drawingPage).toContain('Overall width');
+  expect(drawingPage).toContain('Print at 100%');
+});
+
+test('PDF exploded drawing has one balloon and localized label for every cut-list part', async ({ appPage }) => {
+  const { pages } = await downloadPdf(appPage, { includeCover: false });
+  const explodedPage = pages.find((page) => page.includes('Exploded Assembly View'));
+  const partsPage = pages.find((page) => page.includes('Parts List'));
+  if (!explodedPage) throw new Error('Exploded drawing page was not found in parsed PDF text');
+  if (!partsPage) throw new Error('Cut-list page was not found in parsed PDF text');
+
+  const calloutIds = [...explodedPage.matchAll(/\bP\d{2}\b/g)].map(([id]) => id);
+  const expectedPartIds = [...partsPage.matchAll(/\bP\d{2}\b/g)].map(([id]) => id);
+  expect(calloutIds).toEqual(expectedPartIds.flatMap((id) => [id, id]));
+});
+
+test('Hebrew PDF exploded drawing keeps RTL part labels and callout IDs', async ({ appPage }) => {
+  const { pages } = await downloadPdf(appPage, { locale: 'he' });
+  const explodedPage = pages.find((page) => page.includes('תצוגת הרכבה מפורקת'));
+  expect(explodedPage).toContain('P01');
+  expect(normalizePdfText(explodedPage ?? '')).toContain('דופן צד');
+});
+
 test('PDF text extraction includes the assembly sequence', async ({ appPage }) => {
   const { pages } = await downloadPdf(appPage);
   expect(pages.join(' ')).toContain('Assembly Sequence');

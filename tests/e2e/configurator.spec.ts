@@ -857,6 +857,32 @@ test('preview exports contain the selected view with valid SVG and PNG data', as
   expect(pngData.toString('ascii', 12, 16)).toBe('IHDR');
   expect(pngData.readUInt32BE(16)).toBe(580);
   expect(pngData.readUInt32BE(20)).toBe(420);
+
+  await page.getByRole('tab', { name: 'Shop drawing', exact: true }).click();
+  const shopDrawingDownloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Export SVG' }).click();
+  const shopDrawingDownload = await shopDrawingDownloadPromise;
+  expect(shopDrawingDownload.suggestedFilename()).toBe('cabinet-drawing.svg');
+  const shopDrawingSvg = await readFile(await shopDrawingDownload.path(), 'utf8');
+  expect(shopDrawingSvg).toContain('Front elevation');
+  expect(shopDrawingSvg).toContain('Overall width: 1000 mm');
+
+  await page.getByRole('tab', { name: 'Exploded assembly', exact: true }).click();
+  const explodedDownloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Export SVG' }).click();
+  const explodedDownload = await explodedDownloadPromise;
+  expect(explodedDownload.suggestedFilename()).toBe('cabinet-exploded.svg');
+  const explodedSvg = await readFile(await explodedDownload.path(), 'utf8');
+  const explodedDocument = await page.evaluate((source) => {
+    const document = new DOMParser().parseFromString(source, 'image/svg+xml');
+    return {
+      hasParserError: document.querySelector('parsererror') !== null,
+      calloutIds: [...document.querySelectorAll('text')].map((element) => element.textContent?.trim()),
+    };
+  }, explodedSvg);
+  expect(explodedDocument.hasParserError).toBe(false);
+  expect(explodedDocument.calloutIds).toContain('P01');
+  expect(explodedDocument.calloutIds.some((label) => label?.startsWith('P01:'))).toBe(true);
 });
 
 test('preview 3D orbit and touch gestures respect zoom bounds and cancellation', async ({ appPage: page }) => {
