@@ -140,6 +140,10 @@ function main() {
     const isWorkflow = relativePath.startsWith('.github/workflows/');
 
     if (isWorkflow) {
+      if (/^\s+runs-on:\s*ubuntu-latest\s*$/m.test(content)) {
+        errors.push(`Use a versioned Ubuntu runner in ${relativePath}`);
+      }
+
       if (/^permissions:/m.test(content)) {
         errors.push(`Workflow-level permissions are forbidden in ${relativePath}; define permissions per job`);
       }
