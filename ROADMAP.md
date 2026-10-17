@@ -2012,7 +2012,7 @@ flowchart LR
 **Sprint 437 — Shop drawings with exploded callouts** — P1 · L · S427.
 
 - T1: DONE — `ShopDrawingPanel` renders front, side, top and section views with overall and chained dimensions. `CabinetPreview.test.tsx` verifies all four views, metric dimensions and fractional-inch formatting.
-- T2: Exploded isometric with balloon callouts keyed to cut-list part numbers and labels.
+- T2: DONE — Preview includes an isometric panel drawing with one stable-ID balloon and localized part label/quantity per generated cut-list row; layout geometry verifies unique IDs and projected dimensions. Focused layout and CabinetPreview suites pass (20 tests).
 - T3: Add to PDF and SVG exports; print-scale checks reuse the S340 calibration ruler.
 - Tests: SVG geometry oracles; parsed PDF pages; RTL labels.
 - Accept: every part in the cut list appears exactly once with a matching callout number.
