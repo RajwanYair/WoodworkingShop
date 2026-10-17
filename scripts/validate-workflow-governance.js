@@ -20,6 +20,16 @@ const workflowPolicies = [
     ],
   },
   {
+    name: 'PR title workflow',
+    path: '.github/workflows/pr-title.yml',
+    requiredTokens: [
+      'name: PR Title Lint',
+      'types: [opened, edited, synchronize, reopened, ready_for_review]',
+      'if: ${{ !github.event.pull_request.draft }}',
+      'uses: amannn/action-semantic-pull-request@e32d7e603df1aa1ba07e981f2a23455dee596825 # v5',
+    ],
+  },
+  {
     name: 'Release workflow',
     path: '.github/workflows/release.yml',
     requiredTokens: [
