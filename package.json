@@ -187,7 +187,7 @@
     "@babel/core": "^7.29.7",
     "@cspell/dict-en-gb-mit": "^3.1.32",
     "@cspell/dict-fr-fr": "^2.3.2",
-    "@eslint-react/eslint-plugin": "5.26.1",
+    "@eslint-react/eslint-plugin": "5.28.6",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.64.1",
     "@stryker-mutator/core": "^10.0.0",
