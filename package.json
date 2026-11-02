@@ -184,7 +184,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
-    "@babel/core": "^7.29.7",
+    "@babel/core": "^8.0.10",
     "@cspell/dict-en-gb-mit": "^3.1.32",
     "@cspell/dict-fr-fr": "^2.3.2",
     "@eslint-react/eslint-plugin": "5.28.8",
