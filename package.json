@@ -220,7 +220,7 @@
     "knip": "6.44.0",
     "lint-staged": "^17.6.0",
     "markdownlint-cli2": "^0.24.0",
-    "pdfjs-dist": "^6.4.299",
+    "pdfjs-dist": "^6.5.438",
     "prettier": "^3.9.10",
     "prettier-plugin-tailwindcss": "0.8.1",
     "rimraf": "^6.1.4",
