@@ -32,7 +32,7 @@ Content-Security-Policy: default-src 'self'; script-src 'self'; ...
 X-Frame-Options: DENY
 X-Content-Type-Options: nosniff
 Referrer-Policy: strict-origin-when-cross-origin
-Permissions-Policy: geolocation=(), camera=(), microphone=()
+Permissions-Policy: camera=(self), microphone=(self), geolocation=(), payment=(), usb=(), bluetooth=(), serial=(self), hid=()
 ```
 
 - No `unsafe-eval` or `unsafe-inline` in CSP script-src unless justified with
